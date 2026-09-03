@@ -1,0 +1,3039 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>keyboard:{index:0}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Key Map</key>
+					<array>
+						<dict>
+							<key>Keycode</key>
+							<integer>55</integer>
+							<key>Name</key>
+							<string>Command</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>58</integer>
+							<key>Name</key>
+							<string>Option</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>126</integer>
+							<key>Name</key>
+							<string>Up Arrow</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>125</integer>
+							<key>Name</key>
+							<string>Down Arrow</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>123</integer>
+							<key>Name</key>
+							<string>Left Arrow</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>124</integer>
+							<key>Name</key>
+							<string>Right Arrow</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>6</integer>
+							<key>Name</key>
+							<string>z</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>0</integer>
+							<key>Name</key>
+							<string>a</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>1</integer>
+							<key>Name</key>
+							<string>s</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>36</integer>
+							<key>Name</key>
+							<string>Return</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>34</integer>
+							<key>Name</key>
+							<string>i</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>40</integer>
+							<key>Name</key>
+							<string>k</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>38</integer>
+							<key>Name</key>
+							<string>j</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>37</integer>
+							<key>Name</key>
+							<string>l</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>91</integer>
+							<key>Name</key>
+							<string>8</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>87</integer>
+							<key>Name</key>
+							<string>5</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>86</integer>
+							<key>Name</key>
+							<string>4</string>
+						</dict>
+						<dict>
+							<key>Keycode</key>
+							<integer>88</integer>
+							<key>Name</key>
+							<string>6</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Device Image</key>
+		<string>Controller-Device-Keyboard</string>
+	</dict>
+	<key>d:{v:121, p:6, p:1, u:4}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<real>0.95</real>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:7:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:9:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:8:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:5:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:6:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:10:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:1:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:3:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:4:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:2:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>4</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>8</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>2</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>RetroLink</string>
+		<key>Device Image</key>
+		<string>Controller-Device-Original</string>
+		<key>Device Name</key>
+		<string>N64 Controller</string>
+		<key>Element Names</key>
+		<dict>
+			<key>1:1:48:0</key>
+			<string>Control Stick</string>
+			<key>1:1:48:0:127:0</key>
+			<string>Control Stick ←</string>
+			<key>1:1:48:0:127:255</key>
+			<string>Control Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Control Stick</string>
+			<key>1:1:49:0:127:0</key>
+			<string>Control Stick ↑</string>
+			<key>1:1:49:0:127:255</key>
+			<string>Control Stick ↓</string>
+			<key>1:1:57:0</key>
+			<string>D-Pad</string>
+			<key>1:1:57:0:0:1</key>
+			<string>D-Pad ↑</string>
+			<key>1:1:57:0:0:2</key>
+			<string>D-Pad →</string>
+			<key>1:1:57:0:0:4</key>
+			<string>D-Pad ↓</string>
+			<key>1:1:57:0:0:8</key>
+			<string>D-Pad ←</string>
+			<key>2:9:1:0</key>
+			<string>C ↑</string>
+			<key>2:9:2:0</key>
+			<string>C →</string>
+			<key>2:9:3:0</key>
+			<string>C ↓</string>
+			<key>2:9:4:0</key>
+			<string>C ←</string>
+			<key>2:9:5:0</key>
+			<string>L Button</string>
+			<key>2:9:6:0</key>
+			<string>R Button</string>
+			<key>2:9:7:0</key>
+			<string>A Button</string>
+			<key>2:9:8:0</key>
+			<string>Z Button</string>
+			<key>2:9:9:0</key>
+			<string>B Button</string>
+			<key>2:9:10:0</key>
+			<string>Start Button</string>
+		</dict>
+	</dict>
+	<key>d:{v:1118, p:654, p:1, u:5}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<real>0.95</real>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:1:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:2:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>-32768</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>32767</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>-32768</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>32767</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:5:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:6:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:9:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:52:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>-32768</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:52:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>32767</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:51:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>-32768</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:51:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>32767</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:12:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:13:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:14:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:15:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:11:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>Microsoft</string>
+		<key>Device Image</key>
+		<string>Controller-Device-Xbox360</string>
+		<key>Device Name</key>
+		<string>Xbox 360 Controller</string>
+		<key>Element Names</key>
+		<dict>
+			<key>1:1:48:0</key>
+			<string>Left Stick</string>
+			<key>1:1:48:0:0:-32768</key>
+			<string>Left Stick ←</string>
+			<key>1:1:48:0:0:32767</key>
+			<string>Left Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Left Stick</string>
+			<key>1:1:49:0:0:-32768</key>
+			<string>Left Stick ↑</string>
+			<key>1:1:49:0:0:32767</key>
+			<string>Left Stick ↓</string>
+			<key>1:1:51:0</key>
+			<string>Right Stick</string>
+			<key>1:1:51:0:0:-32768</key>
+			<string>Right Stick ←</string>
+			<key>1:1:51:0:0:32767</key>
+			<string>Right Stick →</string>
+			<key>1:1:52:0</key>
+			<string>Right Stick</string>
+			<key>1:1:52:0:0:-32768</key>
+			<string>Right Stick ↑</string>
+			<key>1:1:52:0:0:32767</key>
+			<string>Right Stick ↓</string>
+			<key>1:1:50:0</key>
+			<string>Left Trigger</string>
+			<key>1:1:53:0</key>
+			<string>Right Trigger</string>
+			<key>2:9:1:0</key>
+			<string>A Button</string>
+			<key>2:9:2:0</key>
+			<string>B Button</string>
+			<key>2:9:3:0</key>
+			<string>X Button</string>
+			<key>2:9:4:0</key>
+			<string>Y Button</string>
+			<key>2:9:5:0</key>
+			<string>Left Bumper</string>
+			<key>2:9:6:0</key>
+			<string>Right Bumper</string>
+			<key>2:9:7:0</key>
+			<string>Left Stick Button</string>
+			<key>2:9:8:0</key>
+			<string>Right Stick Button</string>
+			<key>2:9:9:0</key>
+			<string>Start Button</string>
+			<key>2:9:10:0</key>
+			<string>Back Button</string>
+			<key>2:9:11:0</key>
+			<string>Xbox Button</string>
+			<key>2:9:12:0</key>
+			<string>D-Pad ↑</string>
+			<key>2:9:13:0</key>
+			<string>D-Pad ↓</string>
+			<key>2:9:14:0</key>
+			<string>D-Pad ←</string>
+			<key>2:9:15:0</key>
+			<string>D-Pad →</string>
+		</dict>
+	</dict>
+	<key>d:{v:1118, p:765, p:1, u:5}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<real>0.95</real>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Unique ID</key>
+							<string>2:9:1:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Unique ID</key>
+							<string>2:9:2:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Max</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>65535</integer>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>65535</integer>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>32767</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>1023</integer>
+							<key>Min</key>
+							<integer>511</integer>
+							<key>Unique ID</key>
+							<string>1:2:197:0</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:7:0</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:8:0</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:12:0</string>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+							<key>Min</key>
+							<integer>32767</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Max</key>
+							<integer>65535</integer>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Max</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Max</key>
+							<integer>65535</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>4</integer>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>8</integer>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>2</integer>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Unique ID</key>
+							<string>2:12:547:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>Microsoft</string>
+		<key>Device Image</key>
+		<string>Controller-Device-XboxOne</string>
+		<key>Device Name</key>
+		<string>Xbox One Controller</string>
+		<key>Element Names</key>
+		<dict>
+			<key>1:1:48:0</key>
+			<string>Left Stick</string>
+			<key>1:1:48:0:32767:0</key>
+			<string>Left Stick ←</string>
+			<key>1:1:48:0:32767:65535</key>
+			<string>Left Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Left Stick</string>
+			<key>1:1:49:0:32767:0</key>
+			<string>Left Stick ↑</string>
+			<key>1:1:49:0:32767:65535</key>
+			<string>Left Stick ↓</string>
+			<key>1:1:50:0</key>
+			<string>Right Stick</string>
+			<key>1:1:50:0:32767:0</key>
+			<string>Right Stick ←</string>
+			<key>1:1:50:0:32767:65535</key>
+			<string>Right Stick →</string>
+			<key>1:1:53:0</key>
+			<string>Right Stick</string>
+			<key>1:1:53:0:32767:0</key>
+			<string>Right Stick ↑</string>
+			<key>1:1:53:0:32767:65535</key>
+			<string>Right Stick ↓</string>
+			<key>1:1:57:0</key>
+			<string>D-Pad</string>
+			<key>1:1:57:0:0:1</key>
+			<string>D-Pad ↑</string>
+			<key>1:1:57:0:0:2</key>
+			<string>D-Pad →</string>
+			<key>1:1:57:0:0:4</key>
+			<string>D-Pad ↓</string>
+			<key>1:1:57:0:0:8</key>
+			<string>D-Pad ←</string>
+			<key>1:2:197:0</key>
+			<string>L Trigger</string>
+			<key>1:2:196:0</key>
+			<string>R Trigger</string>
+			<key>2:9:1:0</key>
+			<string>A Button</string>
+			<key>2:9:2:0</key>
+			<string>B Button</string>
+			<key>2:9:4:0</key>
+			<string>X Button</string>
+			<key>2:9:5:0</key>
+			<string>Y Button</string>
+			<key>2:9:7:0</key>
+			<string>L Bumper</string>
+			<key>2:9:8:0</key>
+			<string>R Bumper</string>
+			<key>2:9:12:0</key>
+			<string>Menu Button</string>
+			<key>2:9:14:0</key>
+			<string>Left Stick Button</string>
+			<key>2:9:15:0</key>
+			<string>Right Stick Button</string>
+			<key>2:12:547:0</key>
+			<string>Xbox Button</string>
+			<key>2:12:548:0</key>
+			<string>View Button</string>
+		</dict>
+	</dict>
+	<key>d:{v:1356, p:616, p:1, u:4}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<real>0.9</real>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:15:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:14:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:9:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:11:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:12:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:4:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:5:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:7:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:8:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:6:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:17:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>Sony</string>
+		<key>Device Image</key>
+		<string>Controller-Device-PS3</string>
+		<key>Device Name</key>
+		<string>PlayStation 3 Controller</string>
+		<key>Element Names</key>
+		<dict>
+			<key>1:1:48:0</key>
+			<string>Left Stick</string>
+			<key>1:1:48:0:127:0</key>
+			<string>Left Stick ←</string>
+			<key>1:1:48:0:127:255</key>
+			<string>Left Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Left Stick</string>
+			<key>1:1:49:0:127:0</key>
+			<string>Left Stick ↑</string>
+			<key>1:1:49:0:127:255</key>
+			<string>Left Stick ↓</string>
+			<key>1:1:50:0</key>
+			<string>Right Stick</string>
+			<key>1:1:50:0:127:0</key>
+			<string>Right Stick ←</string>
+			<key>1:1:50:0:127:255</key>
+			<string>Right Stick →</string>
+			<key>1:1:53:0</key>
+			<string>Right Stick</string>
+			<key>1:1:53:0:127:0</key>
+			<string>Right Stick ↑</string>
+			<key>1:1:53:0:127:255</key>
+			<string>Right Stick ↓</string>
+			<key>2:9:1:0</key>
+			<string>Select</string>
+			<key>2:9:2:0</key>
+			<string>L3</string>
+			<key>2:9:3:0</key>
+			<string>R3</string>
+			<key>2:9:4:0</key>
+			<string>Start</string>
+			<key>2:9:5:0</key>
+			<string>D-Pad ↑</string>
+			<key>2:9:6:0</key>
+			<string>D-Pad →</string>
+			<key>2:9:7:0</key>
+			<string>D-Pad ↓</string>
+			<key>2:9:8:0</key>
+			<string>D-Pad ←</string>
+			<key>2:9:9:0</key>
+			<string>L2</string>
+			<key>2:9:10:0</key>
+			<string>R2</string>
+			<key>2:9:11:0</key>
+			<string>L1</string>
+			<key>2:9:12:0</key>
+			<string>R1</string>
+			<key>2:9:13:0</key>
+			<string>Triangle</string>
+			<key>2:9:14:0</key>
+			<string>Circle</string>
+			<key>2:9:15:0</key>
+			<string>X</string>
+			<key>2:9:16:0</key>
+			<string>Square</string>
+			<key>2:9:17:0</key>
+			<string>PS Button</string>
+		</dict>
+	</dict>
+	<key>d:{v:1356, p:1476, p:1, u:5}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<real>0.9</real>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:2:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:1:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:7:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:5:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:6:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:10:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>4</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>8</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>2</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:13:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>Sony</string>
+		<key>Device Image</key>
+		<string>Controller-Device-PS4</string>
+		<key>Device Name</key>
+		<string>PlayStation 4 Controller</string>
+		<key>Element Names</key>
+		<dict>
+			<key>2:9:1:0</key>
+			<string>Square</string>
+			<key>2:9:2:0</key>
+			<string>X</string>
+			<key>2:9:3:0</key>
+			<string>Circle</string>
+			<key>2:9:4:0</key>
+			<string>Triangle</string>
+			<key>2:9:5:0</key>
+			<string>L1</string>
+			<key>2:9:6:0</key>
+			<string>R1</string>
+			<key>2:9:7:0</key>
+			<string>L2</string>
+			<key>2:9:8:0</key>
+			<string>R2</string>
+			<key>2:9:9:0</key>
+			<string>Share Button</string>
+			<key>2:9:10:0</key>
+			<string>Options Button</string>
+			<key>2:9:11:0</key>
+			<string>L3</string>
+			<key>2:9:12:0</key>
+			<string>R3</string>
+			<key>2:9:13:0</key>
+			<string>PS Button</string>
+			<key>2:9:14:0</key>
+			<string>Touchpad Button</string>
+			<key>1:1:48:0</key>
+			<string>Left Stick</string>
+			<key>1:1:48:0:127:0</key>
+			<string>Left Stick ←</string>
+			<key>1:1:48:0:127:255</key>
+			<string>Left Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Left Stick</string>
+			<key>1:1:49:0:127:0</key>
+			<string>Left Stick ↑</string>
+			<key>1:1:49:0:127:255</key>
+			<string>Left Stick ↓</string>
+			<key>1:1:50:0</key>
+			<string>Right Stick</string>
+			<key>1:1:50:0:127:0</key>
+			<string>Right Stick ←</string>
+			<key>1:1:50:0:127:255</key>
+			<string>Right Stick →</string>
+			<key>1:1:51:0</key>
+			<string>L2 Analog</string>
+			<key>1:1:52:0</key>
+			<string>R2 Analog</string>
+			<key>1:1:53:0</key>
+			<string>Right Stick</string>
+			<key>1:1:53:0:127:0</key>
+			<string>Right Stick ↑</string>
+			<key>1:1:53:0:127:255</key>
+			<string>Right Stick ↓</string>
+			<key>1:1:57:0</key>
+			<string>D-Pad</string>
+			<key>1:1:57:0:0:1</key>
+			<string>D-Pad ↑</string>
+			<key>1:1:57:0:0:2</key>
+			<string>D-Pad →</string>
+			<key>1:1:57:0:0:4</key>
+			<string>D-Pad ↓</string>
+			<key>1:1:57:0:0:8</key>
+			<string>D-Pad ←</string>
+		</dict>
+	</dict>
+	<key>d:{v:1356, p:2508, p:1, u:5}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<real>0.9</real>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:2:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:1:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:7:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:5:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:6:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:10:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>4</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>8</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>2</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:13:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>Sony</string>
+		<key>Device Image</key>
+		<string>Controller-Device-PS4</string>
+		<key>Device Name</key>
+		<string>PlayStation 4 Controller</string>
+		<key>Element Names</key>
+		<dict>
+			<key>2:9:1:0</key>
+			<string>Square</string>
+			<key>2:9:2:0</key>
+			<string>X</string>
+			<key>2:9:3:0</key>
+			<string>Circle</string>
+			<key>2:9:4:0</key>
+			<string>Triangle</string>
+			<key>2:9:5:0</key>
+			<string>L1</string>
+			<key>2:9:6:0</key>
+			<string>R1</string>
+			<key>2:9:7:0</key>
+			<string>L2</string>
+			<key>2:9:8:0</key>
+			<string>R2</string>
+			<key>2:9:9:0</key>
+			<string>Share Button</string>
+			<key>2:9:10:0</key>
+			<string>Options Button</string>
+			<key>2:9:11:0</key>
+			<string>L3</string>
+			<key>2:9:12:0</key>
+			<string>R3</string>
+			<key>2:9:13:0</key>
+			<string>PS Button</string>
+			<key>2:9:14:0</key>
+			<string>Touchpad Button</string>
+			<key>1:1:48:0</key>
+			<string>Left Stick</string>
+			<key>1:1:48:0:127:0</key>
+			<string>Left Stick ←</string>
+			<key>1:1:48:0:127:255</key>
+			<string>Left Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Left Stick</string>
+			<key>1:1:49:0:127:0</key>
+			<string>Left Stick ↑</string>
+			<key>1:1:49:0:127:255</key>
+			<string>Left Stick ↓</string>
+			<key>1:1:50:0</key>
+			<string>Right Stick</string>
+			<key>1:1:50:0:127:0</key>
+			<string>Right Stick ←</string>
+			<key>1:1:50:0:127:255</key>
+			<string>Right Stick →</string>
+			<key>1:1:51:0</key>
+			<string>L2 Analog</string>
+			<key>1:1:52:0</key>
+			<string>R2 Analog</string>
+			<key>1:1:53:0</key>
+			<string>Right Stick</string>
+			<key>1:1:53:0:127:0</key>
+			<string>Right Stick ↑</string>
+			<key>1:1:53:0:127:255</key>
+			<string>Right Stick ↓</string>
+			<key>1:1:57:0</key>
+			<string>D-Pad</string>
+			<key>1:1:57:0:0:1</key>
+			<string>D-Pad ↑</string>
+			<key>1:1:57:0:0:2</key>
+			<string>D-Pad →</string>
+			<key>1:1:57:0:0:4</key>
+			<string>D-Pad ↓</string>
+			<key>1:1:57:0:0:8</key>
+			<string>D-Pad ←</string>
+		</dict>
+	</dict>
+	<key>d:{v:1406, p:8201, p:1, u:5}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<real>0.975</real>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:2:0</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Unique ID</key>
+							<string>2:9:1:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Max</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Max</key>
+							<integer>65535</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>65535</integer>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>32767</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:7:0</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Unique ID</key>
+							<string>2:9:5:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:6:0</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Unique ID</key>
+							<string>2:9:10:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Unique ID</key>
+							<string>1:1:52:0</string>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>65535</integer>
+							<key>Unique ID</key>
+							<string>1:1:52:0</string>
+							<key>Min</key>
+							<integer>32767</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>32767</integer>
+							<key>Max</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>1:1:51:0</string>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>65535</integer>
+							<key>Unique ID</key>
+							<string>1:1:51:0</string>
+							<key>Min</key>
+							<integer>32767</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>4</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>8</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>2</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Unique ID</key>
+							<string>2:9:13:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>Nintendo</string>
+		<key>Device Name</key>
+		<string>Switch Pro Controller</string>
+		<key>Element Names</key>
+		<dict>
+			<key>1:1:48:0</key>
+			<string>Left Stick</string>
+			<key>1:1:48:0:32767:0</key>
+			<string>Left Stick ←</string>
+			<key>1:1:48:0:32767:65535</key>
+			<string>Left Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Left Stick</string>
+			<key>1:1:49:0:32767:0</key>
+			<string>Left Stick ↑</string>
+			<key>1:1:49:0:32767:65535</key>
+			<string>Left Stick ↓</string>
+			<key>1:1:51:0</key>
+			<string>Right Stick</string>
+			<key>1:1:51:0:32767:0</key>
+			<string>Right Stick ←</string>
+			<key>1:1:51:0:32767:65535</key>
+			<string>Right Stick →</string>
+			<key>1:1:52:0</key>
+			<string>Right Stick</string>
+			<key>1:1:52:0:32767:0</key>
+			<string>Right Stick ↑</string>
+			<key>1:1:52:0:32767:65535</key>
+			<string>Right Stick ↓</string>
+			<key>1:1:57:0</key>
+			<string>D-Pad</string>
+			<key>1:1:57:0:0:1</key>
+			<string>D-Pad ↑</string>
+			<key>1:1:57:0:0:2</key>
+			<string>D-Pad →</string>
+			<key>1:1:57:0:0:4</key>
+			<string>D-Pad ↓</string>
+			<key>1:1:57:0:0:8</key>
+			<string>D-Pad ←</string>
+			<key>2:9:1:0</key>
+			<string>B Button</string>
+			<key>2:9:2:0</key>
+			<string>A Button</string>
+			<key>2:9:3:0</key>
+			<string>Y Button</string>
+			<key>2:9:4:0</key>
+			<string>X Button</string>
+			<key>2:9:5:0</key>
+			<string>L Button</string>
+			<key>2:9:6:0</key>
+			<string>R Button</string>
+			<key>2:9:7:0</key>
+			<string>ZL Button</string>
+			<key>2:9:8:0</key>
+			<string>ZR Button</string>
+			<key>2:9:9:0</key>
+			<string>- Button</string>
+			<key>2:9:10:0</key>
+			<string>+ Button</string>
+			<key>2:9:11:0</key>
+			<string>Left Stick Button</string>
+			<key>2:9:12:0</key>
+			<string>Right Stick Button</string>
+			<key>2:9:13:0</key>
+			<string>Home Button</string>
+			<key>2:9:14:0</key>
+			<string>Capture Button</string>
+		</dict>
+	</dict>
+	<key>d:{v:1783, p:1, p:1, u:4}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<integer>1</integer>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:1:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:4:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>-1200</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1200</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>-1200</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1200</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:10:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:7:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:8:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:9:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:6:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:2:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:5:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:3:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:11:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:12:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:13:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:14:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>Wish Technologies</string>
+		<key>Device Image</key>
+		<string>Controller-Device-Original</string>
+		<key>Device Name</key>
+		<string>Adaptoid</string>
+		<key>Element Names</key>
+		<dict>
+			<key>1:1:48:0</key>
+			<string>Control Stick</string>
+			<key>1:1:48:0:0:-1200</key>
+			<string>Control Stick ←</string>
+			<key>1:1:48:0:0:1200</key>
+			<string>Control Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Control Stick</string>
+			<key>1:1:49:0:0:-1200</key>
+			<string>Control Stick ↑</string>
+			<key>1:1:49:0:0:1200</key>
+			<string>Control Stick ↓</string>
+			<key>2:9:1:0</key>
+			<string>A Button</string>
+			<key>2:9:2:0</key>
+			<string>C ↓</string>
+			<key>2:9:3:0</key>
+			<string>C →</string>
+			<key>2:9:4:0</key>
+			<string>B Button</string>
+			<key>2:9:5:0</key>
+			<string>C ←</string>
+			<key>2:9:6:0</key>
+			<string>C ↑</string>
+			<key>2:9:7:0</key>
+			<string>L Button</string>
+			<key>2:9:8:0</key>
+			<string>R Button</string>
+			<key>2:9:9:0</key>
+			<string>Start Button</string>
+			<key>2:9:10:0</key>
+			<string>Z Button</string>
+			<key>2:9:11:0</key>
+			<string>D-Pad ↑</string>
+			<key>2:9:12:0</key>
+			<string>D-Pad ↓</string>
+			<key>2:9:14:0</key>
+			<string>D-Pad →</string>
+			<key>2:9:13:0</key>
+			<string>D-Pad ←</string>
+		</dict>
+	</dict>
+	<key>d:{v:2341, p:1000, p:1, u:4}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<real>0.95</real>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:1:0</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:2:0</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>31</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>31</integer>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Max</key>
+							<integer>63</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>31</integer>
+							<key>Max</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>63</integer>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>31</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Max</key>
+							<integer>31</integer>
+							<key>Unique ID</key>
+							<string>1:1:54:0</string>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:7:0</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Max</key>
+							<integer>31</integer>
+							<key>Unique ID</key>
+							<string>1:1:55:0</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:10:0</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>0</integer>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Max</key>
+							<integer>31</integer>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Max</key>
+							<integer>31</integer>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>4</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>8</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>2</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:11:0</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Unique ID</key>
+							<string>2:9:1:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Unique ID</key>
+							<string>2:9:2:1</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>31</integer>
+							<key>Unique ID</key>
+							<string>1:1:49:1</string>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>31</integer>
+							<key>Unique ID</key>
+							<string>1:1:49:1</string>
+							<key>Max</key>
+							<integer>63</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>31</integer>
+							<key>Max</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>1:1:48:1</string>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>31</integer>
+							<key>Unique ID</key>
+							<string>1:1:48:1</string>
+							<key>Max</key>
+							<integer>63</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>1</integer>
+							<key>Unique ID</key>
+							<string>2:9:7:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Max</key>
+							<integer>31</integer>
+							<key>Unique ID</key>
+							<string>1:1:54:1</string>
+							<key>Min</key>
+							<integer>15</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Unique ID</key>
+							<string>1:1:55:1</string>
+							<key>Max</key>
+							<integer>31</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:10:1</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Unique ID</key>
+							<string>1:1:53:1</string>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Unique ID</key>
+							<string>1:1:53:1</string>
+							<key>Max</key>
+							<integer>31</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Unique ID</key>
+							<string>1:1:50:1</string>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>15</integer>
+							<key>Unique ID</key>
+							<string>1:1:50:1</string>
+							<key>Max</key>
+							<integer>31</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>4</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>8</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:57:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>2</integer>
+						</dict>
+						<dict>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Unique ID</key>
+							<string>2:9:11:1</string>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>Mayflash</string>
+		<key>Device Name</key>
+		<string>Wii Classic Controller</string>
+		<key>Element Names</key>
+		<dict>
+			<key>1:1:48:0</key>
+			<string>Left Stick</string>
+			<key>1:1:48:0:31:0</key>
+			<string>Left Stick ←</string>
+			<key>1:1:48:0:31:63</key>
+			<string>Left Stick →</string>
+			<key>1:1:48:1</key>
+			<string>Left Stick</string>
+			<key>1:1:48:1:31:0</key>
+			<string>Left Stick ←</string>
+			<key>1:1:48:1:31:63</key>
+			<string>Left Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Left Stick</string>
+			<key>1:1:49:0:31:0</key>
+			<string>Left Stick ↑</string>
+			<key>1:1:49:0:31:63</key>
+			<string>Left Stick ↓</string>
+			<key>1:1:49:1</key>
+			<string>Left Stick</string>
+			<key>1:1:49:1:31:0</key>
+			<string>Left Stick ↑</string>
+			<key>1:1:49:1:31:63</key>
+			<string>Left Stick ↓</string>
+			<key>1:1:50:0</key>
+			<string>Right Stick</string>
+			<key>1:1:50:0:15:0</key>
+			<string>Right Stick ←</string>
+			<key>1:1:50:0:15:31</key>
+			<string>Right Stick →</string>
+			<key>1:1:50:1</key>
+			<string>Right Stick</string>
+			<key>1:1:50:1:15:0</key>
+			<string>Right Stick ←</string>
+			<key>1:1:50:1:15:31</key>
+			<string>Right Stick →</string>
+			<key>1:1:53:0</key>
+			<string>Right Stick</string>
+			<key>1:1:53:0:15:0</key>
+			<string>Right Stick ↑</string>
+			<key>1:1:53:0:15:31</key>
+			<string>Right Stick ↓</string>
+			<key>1:1:53:1</key>
+			<string>Right Stick</string>
+			<key>1:1:53:1:15:0</key>
+			<string>Right Stick ↑</string>
+			<key>1:1:53:1:15:31</key>
+			<string>Right Stick ↓</string>
+			<key>1:1:54:0</key>
+			<string>L Button</string>
+			<key>1:1:54:1</key>
+			<string>L Button</string>
+			<key>1:1:55:0</key>
+			<string>R Button</string>
+			<key>1:1:55:1</key>
+			<string>R Button</string>
+			<key>1:1:57:0</key>
+			<string>D-Pad</string>
+			<key>1:1:57:0:0:1</key>
+			<string>D-Pad ↑</string>
+			<key>1:1:57:0:0:2</key>
+			<string>D-Pad →</string>
+			<key>1:1:57:0:0:4</key>
+			<string>D-Pad ↓</string>
+			<key>1:1:57:0:0:8</key>
+			<string>D-Pad ←</string>
+			<key>1:1:57:1</key>
+			<string>D-Pad</string>
+			<key>1:1:57:1:0:1</key>
+			<string>D-Pad ↑</string>
+			<key>1:1:57:1:0:2</key>
+			<string>D-Pad →</string>
+			<key>1:1:57:1:0:4</key>
+			<string>D-Pad ↓</string>
+			<key>1:1:57:1:0:8</key>
+			<string>D-Pad ←</string>
+			<key>2:9:1:0</key>
+			<string>A Button</string>
+			<key>2:9:1:1</key>
+			<string>A Button</string>
+			<key>2:9:2:0</key>
+			<string>B Button</string>
+			<key>2:9:2:1</key>
+			<string>B Button</string>
+			<key>2:9:3:0</key>
+			<string>X Button</string>
+			<key>2:9:3:1</key>
+			<string>X Button</string>
+			<key>2:9:4:0</key>
+			<string>Y Button</string>
+			<key>2:9:4:1</key>
+			<string>Y Button</string>
+			<key>2:9:7:0</key>
+			<string>ZL Button</string>
+			<key>2:9:7:1</key>
+			<string>ZL Button</string>
+			<key>2:9:8:0</key>
+			<string>ZR Button</string>
+			<key>2:9:8:1</key>
+			<string>ZR Button</string>
+			<key>2:9:9:0</key>
+			<string>Select Button</string>
+			<key>2:9:9:1</key>
+			<string>Select Button</string>
+			<key>2:9:10:0</key>
+			<string>Start Button</string>
+			<key>2:9:10:1</key>
+			<string>Start Button</string>
+			<key>2:9:11:0</key>
+			<string>Home Button</string>
+			<key>2:9:11:1</key>
+			<string>Home Button</string>
+		</dict>
+	</dict>
+	<key>d:{v:3727, p:12307, p:1, u:4}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<real>0.95</real>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:2:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:3:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:1</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:1</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:1</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:1</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:9:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:7:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:8:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:10:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:1</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:1</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:53:1</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:53:1</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:13:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:15:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:16:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:14:1</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:2:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:3:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:9:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:7:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:8:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:10:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:50:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:53:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:13:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:15:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:16:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:14:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>Mayflash</string>
+		<key>Device Image</key>
+		<string>Controller-Device-Original</string>
+		<key>Device Name</key>
+		<string>N64 Controller Adapter</string>
+		<key>Element Names</key>
+		<dict>
+			<key>1:1:48:0</key>
+			<string>Control Stick</string>
+			<key>1:1:48:0:127:0</key>
+			<string>Control Stick ←</string>
+			<key>1:1:48:0:127:255</key>
+			<string>Control Stick →</string>
+			<key>1:1:48:1</key>
+			<string>Control Stick</string>
+			<key>1:1:48:1:127:0</key>
+			<string>Control Stick ←</string>
+			<key>1:1:48:1:127:255</key>
+			<string>Control Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Control Stick</string>
+			<key>1:1:49:0:127:0</key>
+			<string>Control Stick ↑</string>
+			<key>1:1:49:0:127:255</key>
+			<string>Control Stick ↓</string>
+			<key>1:1:49:1</key>
+			<string>Control Stick</string>
+			<key>1:1:49:1:127:0</key>
+			<string>Control Stick ↑</string>
+			<key>1:1:49:1:127:255</key>
+			<string>Control Stick ↓</string>
+			<key>1:1:50:0</key>
+			<string>C-Pad</string>
+			<key>1:1:50:0:127:0</key>
+			<string>C ↑</string>
+			<key>1:1:50:0:127:255</key>
+			<string>C ↓</string>
+			<key>1:1:50:1</key>
+			<string>C-Pad</string>
+			<key>1:1:50:1:127:0</key>
+			<string>C ↑</string>
+			<key>1:1:50:1:127:255</key>
+			<string>C ↓</string>
+			<key>1:1:53:0</key>
+			<string>C-Pad</string>
+			<key>1:1:53:0:127:0</key>
+			<string>C →</string>
+			<key>1:1:53:0:127:255</key>
+			<string>C ←</string>
+			<key>1:1:53:1</key>
+			<string>C-Pad</string>
+			<key>1:1:53:1:127:0</key>
+			<string>C →</string>
+			<key>1:1:53:1:127:255</key>
+			<string>C ←</string>
+			<key>2:9:2:0</key>
+			<string>A Button</string>
+			<key>2:9:2:1</key>
+			<string>A Button</string>
+			<key>2:9:3:0</key>
+			<string>B Button</string>
+			<key>2:9:3:1</key>
+			<string>B Button</string>
+			<key>2:9:7:0</key>
+			<string>L Button</string>
+			<key>2:9:7:1</key>
+			<string>L Button</string>
+			<key>2:9:8:0</key>
+			<string>R Button</string>
+			<key>2:9:8:1</key>
+			<string>R Button</string>
+			<key>2:9:9:0</key>
+			<string>Z Button</string>
+			<key>2:9:9:1</key>
+			<string>Z Button</string>
+			<key>2:9:10:0</key>
+			<string>Start Button</string>
+			<key>2:9:10:1</key>
+			<string>Start Button</string>
+			<key>2:9:13:0</key>
+			<string>D-Pad ↑</string>
+			<key>2:9:13:1</key>
+			<string>D-Pad ↑</string>
+			<key>2:9:14:0</key>
+			<string>D-Pad →</string>
+			<key>2:9:14:1</key>
+			<string>D-Pad →</string>
+			<key>2:9:15:0</key>
+			<string>D-Pad ↓</string>
+			<key>2:9:15:1</key>
+			<string>D-Pad ↓</string>
+			<key>2:9:16:0</key>
+			<string>D-Pad ←</string>
+			<key>2:9:16:1</key>
+			<string>D-Pad ←</string>
+		</dict>
+	</dict>
+	<key>d:{v:10395, p:12, p:1, u:5}</key>
+	<dict>
+		<key>Default Configuration</key>
+		<dict>
+			<key>Analog Sensitivity</key>
+			<real>1</real>
+			<key>Mapping Array</key>
+			<array>
+				<dict>
+					<key>Control Mappings</key>
+					<array>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:1:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:2:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:49:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>0</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>1:1:48:0</string>
+							<key>Min</key>
+							<integer>127</integer>
+							<key>Max</key>
+							<integer>255</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:3:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:9:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:10:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:4:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:5:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:6:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:7:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:8:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:11:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:12:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:13:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+						<dict>
+							<key>Unique ID</key>
+							<string>2:9:14:0</string>
+							<key>Min</key>
+							<integer>0</integer>
+							<key>Max</key>
+							<integer>1</integer>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>Company Name</key>
+		<string>raphnet technologies</string>
+		<key>Device Image</key>
+		<string>Controller-Device-Original</string>
+		<key>Device Name</key>
+		<string>N64 Controller Adapter</string>
+		<key>Element Names</key>
+		<dict>
+			<key>1:1:48:0</key>
+			<string>Control Stick</string>
+			<key>1:1:48:0:127:0</key>
+			<string>Control Stick ←</string>
+			<key>1:1:48:0:127:255</key>
+			<string>Control Stick →</string>
+			<key>1:1:49:0</key>
+			<string>Control Stick</string>
+			<key>1:1:49:0:127:0</key>
+			<string>Control Stick ↑</string>
+			<key>1:1:49:0:127:255</key>
+			<string>Control Stick ↓</string>
+			<key>2:9:1:0</key>
+			<string>A Button</string>
+			<key>2:9:2:0</key>
+			<string>B Button</string>
+			<key>2:9:3:0</key>
+			<string>Z Button</string>
+			<key>2:9:4:0</key>
+			<string>Start Button</string>
+			<key>2:9:5:0</key>
+			<string>C ↑</string>
+			<key>2:9:6:0</key>
+			<string>C ↓</string>
+			<key>2:9:7:0</key>
+			<string>C ←</string>
+			<key>2:9:8:0</key>
+			<string>C →</string>
+			<key>2:9:9:0</key>
+			<string>L Button</string>
+			<key>2:9:10:0</key>
+			<string>R Button</string>
+			<key>2:9:11:0</key>
+			<string>D-Pad ↑</string>
+			<key>2:9:12:0</key>
+			<string>D-Pad ↓</string>
+			<key>2:9:13:0</key>
+			<string>D-Pad ←</string>
+			<key>2:9:14:0</key>
+			<string>D-Pad →</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

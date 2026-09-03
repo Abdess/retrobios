@@ -201,6 +201,7 @@ files:
     description: "crosshair bitmap for player 8"
     note: "MAX_PLAYERS is 8 in src/emu/inptport.h:29."
     source_ref: "src/emu/crsshair.c:169-174, src/emu/inptport.h:29"
+    aliases: ["cross7.png"]
 
   # BIOS root sets, one MAME archive each under the ROMs path
   - name: neogeo.zip

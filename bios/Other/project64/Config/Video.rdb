@@ -1,0 +1,4114 @@
+﻿// ============ Video RDB for Project64  ====================================
+// UCODE:
+// These are ucode crcs used in the uCode detector.
+// If a crc is not found here, the plugin will ask you
+// to add it. All these values are in hexadecimal.
+//
+// uCodes:
+// -1 - Unknown, display error
+// 0 - RSP SW 2.0X (Super Mario 64)
+// 1 - F3DEX 1.XX (Star Fox 64)
+// 2 - F3DEX 2.XX (The Legend of Zelda: Ocarina of Time)
+// 3 - F3DEX ? (WaveRace)
+// 4 - RSP SW 2.0D EXT (Star Wars: Shadows of the Empire)
+// 5 - RSP SW 2.0 (Diddy Kong Racing);
+// 6 - S2DEX 1.XX  (Yoshi's Story - SimCity 2000)
+// 7 - RSP SW PD (Perfect Dark)
+// 8 - F3DEXBG 2.08 (Conker's Bad Fur Day)
+// 9 - zSort
+// 10 - F3DTEXA (64 de Hakken)
+// 21 - Turbo 3D
+[ucode]
+006bd77f=0
+03044b84=2
+030f4b84=2
+05165579=1
+05777c62=1
+057e7c62=1
+07200895=0
+0bf36d36=9
+0d7bbffb=-1
+0d7cbffb=5
+0ff79527=2
+0ff795bf=-1
+1118b3e0=1
+1517a281=1
+168e9cd5=2
+1a1e18a0=2
+1a1e1920=2
+1a62dbaf=2
+1a62dc2f=2
+1de712ff=1
+1ea9e30f=6
+1f120bbb=21
+21f91834=2
+21f91874=2
+22099872=2
+24cd885b=1
+26a7879a=1
+299d5072=6
+2b291027=2
+2b5a89c2=6
+2c7975d6=1
+2d3fe3f1=1
+2f71d1d5=2
+2f7dd1d5=2
+327b933d=1
+339872a6=1
+377359b6=2
+3a1c2b34=0
+3a1cbac3=0
+3f7247fb=0
+3ff1a4ca=1
+4165e1fd=0
+4340ac9b=1
+440cfad6=1
+47d46e86=7
+485abff2=2
+4fe6df78=1
+5182f610=0
+5257cd2a=1
+5414030c=1
+5414030d=1
+559ff7d4=1
+5b5d36e3=4
+5b5d3763=3
+5d1d6f53=0
+5d3099f1=2
+5df1408c=1
+5ef4e34a=1
+6075e9eb=1
+60c1dcc4=1
+6124a508=2
+630a61fb=2
+63be08b1=5
+63be08b3=5
+64ed27e5=1
+65201989=2
+65201a09=2
+66c0b10a=1
+679e1205=2
+6bb745c9=6
+6d8f8f8a=2
+6e4d50af=0
+6eaa1da8=1
+72a4f34e=1
+73999a23=1
+74af0a74=6
+753be4a5=2
+794c3e28=6
+7df75834=1
+7f2d0a2e=1
+82f48073=1
+832fcb99=1
+841ce10f=1
+844b55b5=-1
+863e1ca7=1
+86b1593e=-1
+8805ffea=1
+8d5735b2=1
+8d5735b3=1
+8ec3e124=-1
+93d11f7b=2
+93d11ffb=2
+93d1ff7b=2
+9551177b=2
+955117fb=2
+95cd0062=2
+97d1b58a=1
+a2d0f88e=2
+a346a5cc=1
+aa86cb1d=2
+aae4a5b9=2
+ad0a6292=2
+ad0a6312=2
+ae08d5b9=0
+b1821ed3=1
+b4577b9c=1
+b54e7f93=0
+b62f900f=2
+ba65ea1e=2
+ba86cb1d=8
+bc03e969=0
+bc45382e=2
+be78677c=1
+bed8b069=1
+c2a01ecf=2
+c3704e41=1
+c46dbc3d=1
+c99a4c6c=1
+c901ce73=2
+c901cef3=2
+cb8c9b6c=2
+cee7920f=1
+cfa35a45=2
+d1663234=1
+d20dedbf=6
+d2a9f59c=1
+d41db5f7=1
+d5604971=0
+d57049a5=1
+d5c4dc96=-1
+d5d68b1f=0
+d67c2f8b=0
+d802ec04=1
+da13ab96=2
+de7d67d4=2
+e1290fa2=2
+e41ec47e=0
+e65cb4ad=2
+e89c2b92=1
+e9231df2=1
+ec040469=1
+ee47381b=1
+ef54ee35=10
+f9893f70=21
+fb816260=1
+ff372492=21
+
+// ---- END OF HEADER, START OF ROM ENTRIES --------------------------
+//================  0-9  ================
+[3B941695-F90A5EEB-C:50]
+Good Name=007 - The World is Not Enough (E) (M3)
+Internal Name=TWINE
+depthmode=0
+filtering=1
+
+[033F4C13-319EE7A7-C:45]
+Good Name=007 - The World is Not Enough (U)
+Internal Name=TWINE
+depthmode=0
+filtering=1
+
+[58FD3F25-D92EAA8D-C:50]
+Good Name=1080 Snowboarding (E) (M4)
+Internal Name=1080 SNOWBOARDING
+alt_tex_size=1
+depthmode=0
+fb_clear=1
+fb_render=1
+optimize_texrect=1
+swapmode=2
+
+[1FBAF161-2C1C54F1-C:41]
+Good Name=1080 Snowboarding (JU) (M2)
+Internal Name=1080 SNOWBOARDING
+depthmode=0
+fb_clear=1
+fb_render=1
+optimize_texrect=1
+swapmode=2
+
+[B98BA456-5B2B76AF-C:4A]
+Good Name=64 de Hakken!! Tamagotchi - Minna de Tamagotchi World (J)
+Internal Name=ÐÝÅÃÞÀÏºÞ¯ÁÜ°ÙÄÞ
+depthmode=0
+fog=0
+use_sts1_only=1
+
+//================  A  ================
+[8F12C096-45DC17E1-C:50]
+Good Name=A Bug's Life (E)
+Internal Name=A Bug's Life
+depthmode=0
+zmode_compare_less=1
+
+[2B38AEC0-6350B810-C:46]
+Good Name=A Bug's Life (F)
+Internal Name=A Bug's Life
+depthmode=0
+zmode_compare_less=1
+
+[DFF227D9-0D4D8169-C:44]
+Good Name=A Bug's Life (G)
+Internal Name=A Bug's Life
+depthmode=0
+zmode_compare_less=1
+
+[F63B89CE-4582D57D-C:49]
+Good Name=A Bug's Life (I)
+Internal Name=A Bug's Life
+depthmode=0
+zmode_compare_less=1
+
+[82DC04FD-CF2D82F4-C:45]
+Good Name=A Bug's Life (U)
+Internal Name=A Bug's Life
+depthmode=0
+zmode_compare_less=1
+
+[62F6BE95-F102D6D6-C:50]
+Good Name=AeroFighters Assault (E) (M3)
+Internal Name=AERO FIGHTERS ASSAUL
+clip_zmin=1
+
+[1B598BF1-ECA29B45-C:45]
+Good Name=AeroFighters Assault (U)
+Internal Name=AERO FIGHTERS ASSAUL
+clip_zmin=1
+
+[2DC4FFCC-C8FF5A21-C:50]
+Good Name=Aidyn Chronicles - The First Mage (E)
+Internal Name=AIDYN_CHRONICLES
+depthmode=1
+
+[E6A95A4F-BAD2EA23-C:45]
+Good Name=Aidyn Chronicles - The First Mage (U) (V1.0)
+Internal Name=AIDYN_CHRONICLES
+depthmode=1
+
+[112051D2-68BEF8AC-C:45]
+Good Name=Aidyn Chronicles - The First Mage (U) (V1.1)
+Internal Name=AIDYN_CHRONICLES
+depthmode=1
+
+[B6951A94-63C849AF-C:4A]
+Good Name=Akumajou Dracula Mokushiroku - Real Action Adventure (J)
+Internal Name=DRACULA MOKUSHIROKU
+depthmode=0
+fb_clear=1
+old_style_adither=1
+
+[A5533106-B9F25E5B-C:4A]
+Good Name=Akumajou Dracula Mokushiroku Gaiden - Legend of Cornell (J)
+Internal Name=DRACULA MOKUSHIROKU2
+depthmode=0
+fb_clear=1
+old_style_adither=1
+
+[D9EDD54D-6BB8E274-C:50]
+Good Name=All-Star Baseball '99 (E)
+Internal Name=All-Star Baseball 99
+buff_clear=0
+depthmode=1
+force_depth_compare=1
+
+[C43E23A7-40B1681A-C:45]
+Good Name=All-Star Baseball '99 (U)
+Internal Name=All Star Baseball 99
+buff_clear=0
+depthmode=1
+force_depth_compare=1
+
+[A19F8089-77884B51-C:50]
+Good Name=All-Star Baseball 2000 (E)
+Internal Name=All-Star Baseball '0
+depthmode=0
+force_depth_compare=1
+
+[5E547A4D-90E60795-C:45]
+Good Name=All-Star Baseball 2000 (U)
+Internal Name=All-Star Baseball '0
+depthmode=0
+force_depth_compare=1
+
+[5446C6EF-E18E47BB-C:45]
+Good Name=All-Star Baseball 2001 (U)
+Internal Name=All-Star Baseball 20
+force_depth_compare=1
+
+[4C52BBB2-CEAB0F6B-C:45]
+Good Name=Army Men - Air Combat (U)
+Internal Name=ARMYMENAIRCOMBAT
+depthmode=1
+increase_texrect_edge=1
+
+[FC7797BF-4A95E83C-C:50]
+Good Name=Automobili Lamborghini (E)
+Internal Name=LAMBORGHINI
+use_sts1_only=1
+
+[41B25DC4-1B726786-C:45]
+Good Name=Automobili Lamborghini (U)
+Internal Name=LAMBORGHINI
+use_sts1_only=1
+
+//================  B  ================
+[E340A49C-74318D41-C:4A]
+Good Name=Baku Bomberman (J)
+Internal Name=BAKU-BOMBERMAN
+depthmode=0
+
+[E73C7C4F-AF93B838-C:4A]
+Good Name=Baku Bomberman 2 (J)
+Internal Name=BAKUBOMB2
+depthmode=0
+filtering=1
+
+[DF98B95D-58840978-C:4A]
+Good Name=Bakuretsu Muteki Bangaioh (J)
+Internal Name=BANGAIOH
+depthmode=1
+
+[88CF980A-8ED52EB5-C:4A]
+Good Name=Bakushou Jinsei 64 - Mezase! Resort Ou (J)
+Internal Name=˞ؼγݞݾҶ4
+depthmode=0
+fb_info_disable=1
+
+[5168D520-CA5FCD0D-C:4A]
+Good Name=Banjo to Kazooie no Daibouken (J)
+Internal Name=Banjo-Kazooie
+depthmode=1
+filtering=1
+
+[514B6900-B4B19881-C:4A]
+Good Name=Banjo to Kazooie no Daibouken 2 (J)
+Internal Name=BANJO KAZOOIE 2
+depthmode=1
+filtering=1
+
+[733FCCB1-444892F9-C:50]
+Good Name=Banjo-Kazooie (E) (M3)
+Internal Name=Banjo-Kazooie
+depthmode=1
+filtering=1
+
+[A4BF9306-BF0CDFD1-C:45]
+Good Name=Banjo-Kazooie (U) (V1.0)
+Internal Name=Banjo-Kazooie
+depthmode=1
+filtering=1
+
+[CD7559AC-B26CF5AE-C:45]
+Good Name=Banjo-Kazooie (U) (V1.1)
+Internal Name=Banjo-Kazooie
+depthmode=1
+filtering=1
+
+[155B7CDF-F0DA7325-C:55]
+Good Name=Banjo-Tooie (A)
+Internal Name=BANJO TOOIE
+depthmode=1
+filtering=1
+
+[C9176D39-EA4779D1-C:50]
+Good Name=Banjo-Tooie (E) (M4)
+depthmode=1
+filtering=1
+
+[C2E9AA9A-475D70AA-C:45]
+Good Name=Banjo-Tooie (U)
+Internal Name=BANJO TOOIE
+depthmode=1
+filtering=1
+
+[B088FBB4-441E4B1D-C:50]
+Good Name=Bass Hunter 64 (E)
+Internal Name=BASS HUNTER 64
+buff_clear=0
+depthmode=1
+fix_tex_coord=1
+swapmode=2
+
+[55D4C4CE-7753C78A-C:45]
+Good Name=Battlezone - Rise of the Black Dogs (U)
+Internal Name=BATTLEZONE
+depthmode=1
+force_depth_compare=1
+
+[9C7318D2-24AE0DC1-C:4A]
+Good Name=Beetle Adventure Racing (J)
+Internal Name=BEETLE ADVENTURE JP
+depthmode=1
+filtering=1
+n64_z_scale=1
+wrap_big_tex=1
+
+[A1B64A61-D014940B-C:50]
+Good Name=Beetle Adventure Racing! (E) (M3)
+Internal Name=Beetle Adventure Rac
+depthmode=1
+filtering=1
+n64_z_scale=1
+wrap_big_tex=1
+
+[EDF419A8-BF1904CC-C:45]
+Good Name=Beetle Adventure Racing! (U) (M3)
+Internal Name=Beetle Adventure Rac
+depthmode=1
+filtering=1
+n64_z_scale=1
+wrap_big_tex=1
+
+[08FFA4B7-01F453B6-C:45]
+Good Name=Big Mountain 2000 (U)
+Internal Name=Big Mountain 2000
+depthmode=1
+
+[AB7C101D-EC58C8B0-C:50]
+Good Name=Bio F.R.E.A.K.S. (E)
+Internal Name=BIOFREAKS
+buff_clear=0
+depthmode=0
+
+[08123595-0510F1DE-C:45]
+Good Name=Bio F.R.E.A.K.S. (U)
+Internal Name=BIOFREAKS
+buff_clear=0
+depthmode=0
+
+[7EAE2488-9D40A35A-C:4A]
+Good Name=Biohazard 2 (J)
+Internal Name=BioHazard II
+adjust_aspect=0
+depthmode=0
+detect_cpu_write=1
+fix_tex_coord=128
+n64_z_scale=1
+swapmode=2
+fb_render=1
+
+[7C64E6DB-55B924DB-C:50]
+Good Name=Blast Corps (E)
+Internal Name=Blast Corps
+depthmode=1
+fb_read_alpha=1
+swapmode=0
+
+[7C647C25-D9D901E6-C:45]
+Good Name=Blast Corps (U) (V1.0)
+Internal Name=Blast Corps
+depthmode=1
+fb_read_alpha=1
+swapmode=0
+
+[7C647E65-1948D305-C:45]
+Good Name=Blast Corps (U) (V1.1)
+Internal Name=Blast Corps
+depthmode=1
+fb_read_alpha=1
+swapmode=0
+
+[65234451-EBD3346F-C:4A]
+Good Name=Blast Dozer (J)
+Internal Name=Blastdozer
+depthmode=1
+fb_read_alpha=1
+swapmode=0
+
+[0B58B8CD-B7B291D2-C:50]
+Good Name=Body Harvest (E) (M3)
+Internal Name=Body Harvest
+depthmode=1
+
+[5326696F-FE9A99C3-C:45]
+Good Name=Body Harvest (U)
+Internal Name=BODY HARVEST
+depthmode=1
+
+[B3D451C6-E1CB58E2-C:4A]
+Good Name=Bokujou Monogatari 2 (J) (V1.0)
+Internal Name=Ϟؼޮԓɶ߀ز
+depthmode=0
+fb_smart=0
+fog=0
+zmode_compare_less=1
+
+[7365D8F8-9ED9326F-C:4A]
+Good Name=Bokujou Monogatari 2 (J) (V1.1)  //Harvest Moon 64 JAP
+Internal Name=Ϟؼޮԓɶ߀ز
+depthmode=0
+fb_smart=0
+fog=0
+zmode_compare_less=1
+
+[736657F6-3C88A702-C:4A]
+Good Name=Bokujou Monogatari 2 (J) (V1.2)  //Harvest Moon 64 JAP
+Internal Name=Ϟؼޮԓɶ߀ز
+depthmode=0
+fb_smart=0
+fog=0
+zmode_compare_less=1
+
+[5A160336-BC7B37B0-C:50]
+Good Name=Bomberman 64 (E)
+Internal Name=BOMBERMAN64E
+depthmode=0
+
+[DF6FF0F4-29D14238-C:4A]
+Good Name=Bomberman 64 (J)
+Internal Name=BOMBERMAN64
+depthmode=0
+
+[F568D51E-7E49BA1E-C:45]
+Good Name=Bomberman 64 (U)
+Internal Name=BOMBERMAN64U
+depthmode=0
+
+[237E73B4-D63B6B37-C:45]
+Good Name=Bomberman 64 - The Second Attack! (U)
+Internal Name=BOMBERMAN64U2
+depthmode=0
+filtering=1
+
+[D72FD14D-1FED32C4-C:45]
+Good Name=Bottom of the 9th (U)
+Internal Name=Bottom of the 9th
+depthmode=0
+filtering=1
+optimize_texrect=0
+
+[1E22CF2E-42AAC813-C:45]
+Good Name=Brunswick Circuit Pro Bowling (U)
+Internal Name=BRUNSWICKBOWLING
+buff_clear=0
+depthmode=0
+swapmode=0
+
+[4222D89F-AFE0B637-C:45]
+Good Name=Bust-A-Move '99 (U)
+Internal Name=Bust A Move '99
+depthmode=1
+filtering=2
+
+[CEDCDE1E-513A0502-C:50]
+Good Name=Bust-A-Move 2 - Arcade Edition (E)
+Internal Name=Bust A Move 2
+depthmode=1
+filtering=2
+fix_tex_coord=1
+fog=0
+
+[8A86F073-CD45E54B-C:45]
+Good Name=Bust-A-Move 2 - Arcade Edition (U)
+Internal Name=Bust A Move 2
+depthmode=1
+filtering=2
+fix_tex_coord=1
+fog=0
+
+[E328B4FA-004A28E1-C:50]
+Good Name=Bust-A-Move 3 DX (E)
+Internal Name=Bust A Move 3 DX
+depthmode=1
+filtering=2
+
+//================  C  ================
+[580162EC-E3108BF1-C:58]
+Good Name=Carmageddon 64 (E) (M4) (Eng-Spa-Fre-Ger)
+Internal Name=CARMAGEDDON64
+depthmode=1
+filtering=1
+wrap_big_tex=1
+
+[E48E01F5-E6E51F9B-C:59]
+Good Name=Carmageddon 64 (E) (M4) (Eng-Spa-Fre-Ita)
+Internal Name=CARMAGEDDON64
+depthmode=1
+filtering=1
+wrap_big_tex=1
+
+[F00F2D4E-340FAAF4-C:45]
+Good Name=Carmageddon 64 (U)
+Internal Name=CARMAGEDDON64
+depthmode=1
+filtering=1
+wrap_big_tex=1
+
+[64F1B7CA-71A23755-C:50]
+Good Name=Castlevania (E) (M3)
+Internal Name=CASTLEVANIA
+depthmode=0
+fb_clear=1
+old_style_adither=1
+
+[F35D5F95-8AFE3D69-C:45]
+Good Name=Castlevania (U) (V1.0)
+Internal Name=CASTLEVANIA
+depthmode=0
+fb_clear=1
+old_style_adither=1
+
+[F35D5335-B7667CB7-C:45]
+Good Name=Castlevania (U) (V1.1)
+Internal Name=CASTLEVANIA
+depthmode=0
+fb_clear=1
+old_style_adither=1
+
+[4BCDFF47-AAA3AF8F-C:45]
+Good Name=Castlevania (U) (V1.2)
+Internal Name=CASTLEVANIA
+depthmode=0
+fb_clear=1
+old_style_adither=1
+
+[A2C54BE7-6719CBB2-C:50]
+Good Name=Castlevania - Legacy of Darkness (E) (M3)
+Internal Name=CASTLEVANIA2
+depthmode=0
+fb_clear=1
+old_style_adither=1
+
+[1CC06338-87388926-C:45]
+Good Name=Castlevania - Legacy of Darkness (U)
+Internal Name=CASTLEVANIA2
+depthmode=0
+fb_clear=1
+old_style_adither=1
+
+[DCCF2134-9DD63578-C:50]
+Good Name=Centre Court Tennis (E)
+Internal Name=CENTRE COURT TENNIS
+depthmode=0
+soft_depth_compare=1
+
+[07A69D01-9A7D41A1-C:50]
+Good Name=Chameleon Twist 2 (E)
+Internal Name=Chameleon Twist2
+depthmode=0
+filtering=1
+
+[0549765A-93B9D042-C:4A]
+Good Name=Chameleon Twist 2 (J)
+Internal Name=Chameleon Twist2
+depthmode=0
+filtering=1
+
+[CD538CE4-618AFCF9-C:45]
+Good Name=Chameleon Twist 2 (U)
+Internal Name=Chameleon Twist2
+depthmode=0
+filtering=1
+
+[2E359339-3FA5EDA6-C:50]
+Good Name=Chopper Attack (E)
+Internal Name=CHOPPER_ATTACK
+depthmode=0
+filtering=1
+
+[214CAD94-BE1A3B24-C:45]
+Good Name=Chopper Attack (U)
+Internal Name=CHOPPER_ATTACK
+depthmode=0
+filtering=1
+
+[A7941528-61F1199D-C:4A]
+Good Name=Chou Snobow Kids (J)
+Internal Name=Snobow Kids 2
+filtering=1
+swapmode=0
+
+[F8009DB0-6B291823-C:4A]
+Good Name=City Tour Grandprix - Zennihon GT Senshuken (J)
+Internal Name=CITY TOUR GP
+depthmode=1
+filtering=1
+force_microcheck=1
+
+[AE5B9465-C54D6576-C:50]
+Good Name=Command & Conquer (E) (M2)
+Internal Name=Command&Conquer
+aspect=2
+depthmode=1
+filtering=1
+fix_tex_coord=1
+fog=0
+
+[B5025BAD-D32675FD-C:44]
+Good Name=Command & Conquer (G)
+Internal Name=Command&Conquer
+aspect=2
+depthmode=1
+filtering=1
+fix_tex_coord=1
+fog=0
+
+[95286EB4-B76AD58F-C:45]
+Good Name=Command & Conquer (U)
+Internal Name=Command&Conquer
+aspect=2
+depthmode=1
+filtering=1
+fix_tex_coord=1
+fog=0
+
+[373F5889-9A6CA80A-C:50]
+Good Name=Conker's Bad Fur Day (E)
+Internal Name=CONKER BFD
+depthmode=0
+fb_clear=1
+filtering=1
+ignore_previous=1
+optimize_texrect=1
+
+[30C7AC50-7704072D-C:45]
+Good Name=Conker's Bad Fur Day (U)
+Internal Name=CONKER BFD
+depthmode=0
+fb_clear=1
+filtering=1
+ignore_previous=1
+optimize_texrect=1
+
+[46A3F7AF-0F7591D0-C:45]
+Good Name=Cruis'n Exotica (U)
+Internal Name=CruisnExotica
+buff_clear=0
+depthmode=1
+filtering=1
+swapmode=0
+
+[503EA760-E1300E96-C:50]
+Good Name=Cruis'n USA (E)
+Internal Name=Cruis'n USA
+depthmode=1
+fb_clear=1
+filtering=1
+
+[FF2F2FB4-D161149A-C:45]
+Good Name=Cruis'n USA (U) (V1.0)
+Internal Name=Cruis'n USA
+depthmode=1
+fb_clear=1
+filtering=1
+
+[5306CF45-CBC49250-C:45]
+Good Name=Cruis'n USA (U) (V1.1)
+Internal Name=Cruis'n USA
+depthmode=1
+fb_clear=1
+filtering=1
+
+[B3402554-7340C004-C:45]
+Good Name=Cruis'n USA (U) (V1.2)
+Internal Name=Cruis'n USA
+depthmode=1
+fb_clear=1
+filtering=1
+
+[83CB0B87-7E325457-C:4A]
+Good Name=Custom Robo (J)
+Internal Name=custom robo
+depthmode=0
+
+[079501B9-AB0232AB-C:4A]
+Good Name=Custom Robo V2 (J)
+Internal Name=CUSTOMROBOV2
+depthmode=0
+
+[D1A78A07-52A3DD3E-C:50]
+Good Name=CyberTiger (E)
+Internal Name=CyberTiger
+depthmode=0
+fix_tex_coord=16
+
+[E8FC8EA1-9F738391-C:45]
+Good Name=CyberTiger (U)
+Internal Name=CyberTiger
+depthmode=0
+fix_tex_coord=16
+
+//================  D  ================
+[7ED67CD4-B4415E6D-C:50]
+Good Name=Dark Rift (E)
+Internal Name=DARK RIFT
+fb_smart=0
+force_microcheck=1
+
+[A4A52B58-23759841-C:45]
+Good Name=Dark Rift (U)
+Internal Name=DARK RIFT
+fb_smart=0
+force_microcheck=1
+
+[F5363349-DBF9D21B-C:45]
+Good Name=Deadly Arts (U)
+Internal Name=DeadlyArts
+clip_zmin=1
+depthmode=0
+soft_depth_compare=1
+
+[3F66A9D9-9BCB5B00-C:46]
+Good Name=Defi au Tetris Magique (F)
+Internal Name=MAGICAL TETRIS
+depthmode=1
+fog=0
+force_microcheck=1
+
+[A5F667E1-DA1FBD1F-C:4A]
+Good Name=Derby Stallion 64 (J)
+Internal Name=DERBYSTALLION 64
+depthmode=0
+fix_tex_coord=1
+
+[C16C421B-A21580F7-C:45]
+Good Name=Disney's Donald Duck - Goin' Quackers (U) (M4)
+Internal Name=Donald Duck Goin' Qu
+depthmode=0
+detect_cpu_write=1
+
+[3DF17480-193DED5A-C:50]
+Good Name=Donald Duck - Quack Attack (E) (M5)
+Internal Name=Donald Duck Quack At
+depthmode=0
+detect_cpu_write=1
+
+[11936D8C-6F2C4B43-C:50]
+Good Name=Donkey Kong 64 (E)
+Internal Name=DONKEY KONG 64
+depth_bias=64
+depthmode=1
+fb_clear=1
+fb_render=1
+lodmode=1
+
+[053C89A7-A5064302-C:4A]
+Good Name=Donkey Kong 64 (J)
+Internal Name=DONKEY KONG 64
+depth_bias=64
+depthmode=1
+fb_clear=1
+fb_render=1
+lodmode=1
+
+[EC58EABF-AD7C7169-C:45]
+Good Name=Donkey Kong 64 (U)
+Internal Name=DONKEY KONG 64
+depth_bias=64
+depthmode=1
+fb_clear=1
+fb_render=1
+lodmode=1
+
+[0DD4ABAB-B5A2A91E-C:45]
+Good Name=Donkey Kong 64 (U) (Kiosk Demo)
+Internal Name=D K DISPLAY
+depthmode=1
+fb_clear=1
+fb_render=1
+
+[2C739EAC-9EF77726-C:50]
+Good Name=Doom 64 (E)
+Internal Name=Doom64
+depthmode=1
+fillcolor_fix=1
+
+[7AA65B36-FDCEE5AD-C:4A]
+Good Name=Doom 64 (J)
+Internal Name=DOOM64
+depthmode=1
+fillcolor_fix=1
+
+[A83E101A-E937B69D-C:45]
+Good Name=Doom 64 (U) (V1.0)
+Internal Name=Doom64
+depthmode=1
+fillcolor_fix=1
+
+[423E96F4-CE88F05B-C:45]
+Good Name=Doom 64 (U) (V1.1)
+Internal Name=Doom64
+depthmode=1
+fillcolor_fix=1
+
+[BFF7B1C2-AEBF148E-C:4A]
+Good Name=Doraemon - Nobita to 3tsu no Seireiseki (J)
+Internal Name=ÄÞ×´ÓÝ Ð¯ÂÉ¾²Ú²¾·
+depthmode=1
+read_back_to_screen=1
+
+[A8275140-B9B056E8-C:4A]
+Good Name=Doraemon 3 - Nobita no Machi SOS! (J)
+Internal Name=ÄÞ×´ÓÝ3 ÉËÞÀÉÏÁSOS!
+clip_zmin=1
+
+[769D4D13-DA233FFE-C:45]
+Good Name=Dr. Mario 64 (U)
+Internal Name=DR.MARIO 64
+depthmode=1
+fb_hires=0
+fix_tex_coord=256
+optimize_write=1
+read_back_to_screen=1
+
+[B6524461-ED6D04B1-C:50]
+Good Name=Dual Heroes (E)
+Internal Name=Dual heroes PAL
+depthmode=0
+filtering=1
+swapmode=0
+
+[056EAB63-C215FCD5-C:4A]
+Good Name=Dual Heroes (J)
+Internal Name=Dual heroes JAPAN
+depthmode=0
+filtering=1
+swapmode=0
+
+[A62230C3-F0834488-C:45]
+Good Name=Dual Heroes (U)
+Internal Name=Dual heroes USA
+depthmode=0
+filtering=1
+swapmode=0
+
+[FBB9F1FA-6BF88689-C:45]
+Good Name=Duck Dodgers Starring Daffy Duck (U) (M3)
+Internal Name=LT DUCK DODGERS
+depthmode=1
+wrap_big_tex=1
+
+[57BFF74D-DE747743-C:50]
+Good Name=Duke Nukem 64 (E)
+Internal Name=DUKE NUKEM
+depthmode=0
+increase_primdepth=1
+
+[1E12883D-D3B92718-C:46]
+Good Name=Duke Nukem 64 (F)
+Internal Name=DUKE NUKEM
+depthmode=0
+increase_primdepth=1
+
+[A273AB56-DA33DB9A-C:45]
+Good Name=Duke Nukem 64 (U)
+Internal Name=DUKE NUKEM
+depthmode=0
+increase_primdepth=1
+
+//================  E  ================
+[492B9DE8-C6CCC81C-C:50]
+Good Name=Earthworm Jim 3D (E) (M6)
+Internal Name=EARTHWORM JIM 3D
+buff_clear=0
+depthmode=0
+filtering=1
+increase_primdepth=1
+
+[DF574191-9EB5123D-C:45]
+Good Name=Earthworm Jim 3D (U)
+Internal Name=EARTHWORM JIM 3D
+buff_clear=0
+depthmode=0
+filtering=1
+increase_primdepth=1
+
+[0DED0568-1502515E-C:4A]
+Good Name=Eikou no Saint Andrews (J)
+Internal Name=´²º³É¾ÝÄ±ÝÄÞØ­°½
+correct_viewport=1
+
+[E13AE2DC-4FB65CE8-C:4A]
+Good Name=Eltale Monsters (J)
+Internal Name=Eltail
+depthmode=1
+filtering=2
+
+[202A8EE4-83F88B89-C:50]
+Good Name=Excitebike 64 (E)
+Internal Name=EXCITEBIKE64
+depthmode=0
+fb_render=1
+
+[861C3519-F6091CE5-C:4A]
+Good Name=Excitebike 64 (J)
+Internal Name=EXCITEBIKE64
+depthmode=0
+fb_render=1
+
+[07861842-A12EBC9F-C:45]
+Good Name=Excitebike 64 (U) (V1.0)
+Internal Name=EXCITEBIKE64
+depthmode=0
+fb_render=1
+
+[F9D411E3-7CB29BC0-C:45]
+Good Name=Excitebike 64 (U) (V1.1)
+Internal Name=EXCITEBIKE64
+depthmode=0
+fb_render=1
+
+[AF754F7B-1DD17381-C:45]
+Good Name=Excitebike 64 (U) (Kiosk Demo)
+Internal Name=EXCITEBIKE64
+depthmode=0
+fb_render=1
+
+[8E9D834E-1E8B29A9-C:50]
+Good Name=Extreme-G (E) (M5)
+depthmode=0
+
+[EE802DC4-690BD57D-C:4A]
+Good Name=Extreme-G (J)
+Internal Name=EXTREME-G
+depthmode=0
+
+[FDA245D2-A74A3D47-C:45]
+Good Name=Extreme-G (U)
+Internal Name=extremeg
+depthmode=0
+
+[1185EC85-4B5A7731-C:50]
+Good Name=Extreme-G XG2 (E) (M5)
+depthmode=0
+fb_clear=1
+
+[399B9B81-D533AD11-C:4A]
+Good Name=Extreme-G XG2 (J)
+Internal Name=´¸½ÄØ°ÑG2
+depthmode=0
+fb_clear=1
+
+[5CD4150B-470CC2F1-C:45]
+Good Name=Extreme-G XG2 (U)
+Internal Name=Extreme G 2
+depthmode=0
+fb_clear=1
+
+//================  F  ================
+[FDD248B2-569A020E-C:50]
+Good Name=F-1 Pole Position 64 (E) (M3)
+Internal Name=F1 POLE POSITION 64
+clip_zmin=1
+depthmode=1
+filtering=2
+
+[AE82687A-9A3F388D-C:45]
+Good Name=F-1 Pole Position 64 (U) (M3)
+Internal Name=F1 POLE POSITION 64
+clip_zmin=1
+depthmode=1
+filtering=2
+
+[C006E3C0-A67B4BBB-C:50]
+Good Name=F-1 World Grand Prix (E)
+Internal Name=F1 WORLD GRAND PRIX
+buff_clear=0
+depthmode=0
+soft_depth_compare=1
+wrap_big_tex=1
+
+[CC3CC8B3-0EC405A4-C:50]
+Good Name=F-1 World Grand Prix (E) (beta)
+Internal Name=F1 WORLD GRAND PRIX
+buff_clear=0
+depthmode=0
+soft_depth_compare=1
+wrap_big_tex=1
+
+[B70BAEE5-3A5005A8-C:46]
+Good Name=F-1 World Grand Prix (F)
+Internal Name=F1 WORLD GRAND PRIX
+buff_clear=0
+depthmode=0
+soft_depth_compare=1
+wrap_big_tex=1
+
+[38442634-66B3F060-C:44]
+Good Name=F-1 World Grand Prix (G)
+Internal Name=F1 WORLD GRAND PRIX
+buff_clear=0
+depthmode=0
+soft_depth_compare=1
+wrap_big_tex=1
+
+[64BF47C4-F4BD22BA-C:4A]
+Good Name=F-1 World Grand Prix (J)
+Internal Name=F1 WORLD GRAND PRIX
+buff_clear=0
+depthmode=0
+soft_depth_compare=1
+wrap_big_tex=1
+
+[CC3CC8B3-0EC405A4-C:45]
+Good Name=F-1 World Grand Prix (U)
+Internal Name=F1 WORLD GRAND PRIX
+buff_clear=0
+depthmode=0
+soft_depth_compare=1
+wrap_big_tex=1
+
+[07C1866E-5775CCDE-C:50]
+Good Name=F-1 World Grand Prix II (E) (M4)
+Internal Name=F1 WORLD GRAND PRIX2
+buff_clear=0
+depthmode=0
+soft_depth_compare=1
+wrap_big_tex=1
+
+[776646F6-06B9AC2B-C:50]
+Good Name=F-ZERO X (E)
+Internal Name=F-ZERO X
+depthmode=1
+
+[4D3E622E-9B828B4E-C:4A]
+Good Name=F-ZERO X (J)
+Internal Name=F-ZERO X
+depthmode=1
+
+[B30ED978-3003C9F9-C:45]
+Good Name=F-ZERO X (U)
+Internal Name=F-ZERO X
+depthmode=1
+
+[3CECBCB8-6126BF07-C:50]
+Good Name=F1 Racing Championship (E) (M5)
+Internal Name=F1RacingChampionship
+buff_clear=0
+depthmode=0
+swapmode=0
+
+[53CCAD28-AEA6EDA2-C:45]
+Good Name=F1 Racing Championship (U)
+Internal Name=F1RacingChampionship
+buff_clear=0
+depthmode=0
+swapmode=0
+
+[66CF0FFE-AD697F9C-C:50]
+Good Name=Fighting Force 64 (E)
+Internal Name=Fighting Force
+depthmode=1
+
+[32EFC7CB-C3EA3F20-C:45]
+Good Name=Fighting Force 64 (U)
+Internal Name=Fighting Force
+depthmode=1
+
+[F774EAEE-F0D8B13E-C:4A]
+Good Name=Fushigi no Dungeon - Fuurai no Shiren 2 - Oni Shuurai! Shiren Jou! (J)
+Internal Name=F3 Ì³×²É¼ÚÝ2
+decrease_fillrect_edge=1
+depthmode=0
+
+//================  G  ================
+[68FCF726-49658CBC-C:50]
+Good Name=G.A.S.P!! Fighters' NEXTream (E)
+Internal Name=G.A.S.P!!Fighters'NE
+clip_zmin=1
+depthmode=0
+soft_depth_compare=1
+
+[AF8679B6-5E1011BF-C:4A]
+Good Name=G.A.S.P!! Fighters' NEXTream (J)
+Internal Name=G.A.S.P!!Fighters'NE
+clip_zmin=1
+depthmode=0
+soft_depth_compare=1
+
+[457B9CD9-09C55352-C:4A]
+Good Name=Ganbare Goemon - Derodero Douchuu Obake Tenkomori (J)
+Internal Name=GOEMON2 DERODERO
+depthmode=1
+filtering=1
+
+[832C168B-56A2CDAE-C:4A]
+Good Name=Ganbare Goemon - Neo Momoyama Bakufu no Odori (J)
+Internal Name=GANBAKE GOEMON
+alt_tex_size=1
+depthmode=1
+filtering=1
+optimize_texrect=0
+
+[D543BCD6-2BA5E256-C:50]
+Good Name=Gauntlet Legends (E)
+Internal Name=GAUNTLET LEGENDS
+depthmode=1
+swapmode=2
+
+[70B0260E-6716D04C-C:4A]
+Good Name=Gauntlet Legends (J)
+Internal Name=GAUNTLET LEGENDS
+depthmode=1
+swapmode=2
+
+[729B5E32-B728D980-C:45]
+Good Name=Gauntlet Legends (U)
+Internal Name=GAUNTLET LEGENDS
+depthmode=1
+swapmode=2
+
+[489C84E6-4C6E49F9-C:4A]
+Good Name=Getter Love!! - Cho Ren-ai Party Game (J)
+Internal Name=Getter Love!!
+depthmode=1
+filtering=2
+texrect_compare_less=1
+zmode_compare_less=1
+
+[874733A4-A823745A-C:58]
+Good Name=Gex 3 - Deep Cover Gecko (E) (M2) (Fre-Ger)
+Internal Name=Gex 3 Deep Cover Gec
+depthmode=0
+filtering=1
+
+[99179359-2FE7EBC3-C:50]
+Good Name=Gex 3 - Deep Cover Gecko (E) (M3) (Eng-Spa-Ita)
+Internal Name=Gex 3 Deep Cover Gec
+depthmode=0
+filtering=1
+
+[3EDC7E12-E26C1CC9-C:45]
+Good Name=Gex 3 - Deep Cover Gecko (U)
+Internal Name=Gex 3 Deep Cover Gec
+depthmode=0
+filtering=1
+
+[E68A000E-639166DD-C:50]
+Good Name=Gex 64 - Enter the Gecko (E)
+Internal Name=GEX: ENTER THE GECKO
+depthmode=0
+filtering=1
+
+[89FED774-CAAFE21B-C:45]
+Good Name=Gex 64 - Enter the Gecko (U)
+Internal Name=GEX: ENTER THE GECKO
+depthmode=0
+filtering=1
+
+[F5237301-99E3EE93-C:50]
+Good Name=Glover (E) (M3)
+Internal Name=Glover
+depthmode=0
+filtering=1
+
+[25414DCA-FD553293-C:0]
+Good Name=Glover (U) (Beta)
+Internal Name=whack 'n' roll
+depthmode=0
+filtering=1
+
+[8E6E01FF-CCB4F948-C:45]
+Good Name=Glover (U)
+Internal Name=Glover
+depthmode=0
+filtering=1
+
+[4252A5AD-AE6FBF4E-C:45]
+Good Name=Goemon's Great Adventure (U)
+Internal Name=GOEMONS GREAT ADV
+depthmode=1
+filtering=1
+
+[4690FB1C-4CD56D44-C:45]
+Good Name=Golden Nugget 64 (U)
+Internal Name=GOLDEN NUGGET 64
+depthmode=1
+filtering=2
+
+[0414CA61-2E57B8AA-C:50]
+Good Name=GoldenEye 007 (E)
+Internal Name=GOLDENEYE
+depth_bias=40
+depthmode=0
+filtering=1
+lodmode=1
+
+[A24F4CF1-A82327BA-C:4A]
+Good Name=GoldenEye 007 (J)
+Internal Name=GOLDENEYE
+depth_bias=40
+depthmode=0
+filtering=1
+lodmode=1
+
+[DCBC50D1-09FD1AA3-C:45]
+Good Name=GoldenEye 007 (U)
+Internal Name=GOLDENEYE
+depth_bias=40
+depthmode=0
+filtering=1
+lodmode=1
+
+[EE4A0E33-8FD588C9-C:50]
+Good Name=GT 64 - Championship Edition (E) (M3)
+Internal Name=GT64
+depthmode=1
+filtering=1
+force_microcheck=1
+
+[C49ADCA2-F1501B62-C:45]
+Good Name=GT 64 - Championship Edition (U)
+Internal Name=GT64
+depthmode=1
+filtering=1
+force_microcheck=1
+
+//================  H  ================
+[95A80114-E0B72A7F-C:4A]
+Good Name=Hamster Monogatari 64 (J)
+Internal Name=ÊÑ½À°ÓÉ¶ÞÀØ64
+depthmode=0
+force_microcheck=1
+
+[09AE57B1-182A5637-C:4A]
+Good Name=Harukanaru Augusta - Masters '98 (J)
+Internal Name=MASTERS'98
+depthmode=0
+wrap_big_tex=1
+
+[98DF9DFC-6606C189-C:45]
+Good Name=Harvest Moon 64 (U)
+Internal Name=HARVESTMOON64
+depthmode=0
+fb_smart=0
+fog=0
+zmode_compare_less=1
+
+[3E70E866-4438BAE8-C:4A]
+Good Name=Heiwa Pachinko World 64 (J)
+Internal Name=HEIWA ÊßÁÝº Ü°ÙÄÞ64
+depthmode=0
+fog=0
+swapmode=2
+
+[95B2B30B-2B6415C1-C:50]
+Good Name=Hexen (E)
+Internal Name=HEXEN
+buff_clear=0
+depthmode=1
+detect_cpu_write=1
+filtering=1
+swapmode=2
+
+[5C1B5FBD-7E961634-C:46]
+Good Name=Hexen (F)
+Internal Name=HEXEN
+buff_clear=0
+depthmode=1
+detect_cpu_write=1
+filtering=1
+swapmode=2
+
+[9AB3B50A-BC666105-C:44]
+Good Name=Hexen (G)
+Internal Name=HEXEN
+buff_clear=0
+depthmode=1
+detect_cpu_write=1
+filtering=1
+swapmode=2
+
+[66751A57-54A29D6E-C:4A]
+Good Name=Hexen (J)
+Internal Name=HEXEN
+buff_clear=0
+depthmode=1
+detect_cpu_write=1
+filtering=1
+swapmode=2
+
+[9CAB6AEA-87C61C00-C:45]
+Good Name=Hexen (U)
+Internal Name=HEXEN
+buff_clear=0
+depthmode=1
+detect_cpu_write=1
+filtering=1
+swapmode=2
+
+[277B129D-DD3879FF-C:50]
+Good Name=Holy Magic Century (E)
+Internal Name=Holy Magic Century
+depthmode=1
+filtering=2
+
+[B35FEBB0-7427B204-C:46]
+Good Name=Holy Magic Century (F)
+Internal Name=Holy Magic Century
+depthmode=1
+filtering=2
+
+[75FA0E14-C9B3D105-C:44]
+Good Name=Holy Magic Century (G)
+Internal Name=Holy Magic Century
+depthmode=1
+filtering=2
+
+[C1D702BD-6D416547-C:4A]
+Good Name=Hoshi no Kirby 64 (J) (V1.0)
+Internal Name=Kirby64
+buff_clear=0
+depthmode=0
+filtering=1
+swapmode=0
+
+[0C581C7A-3D6E20E4-C:4A]
+Good Name=Hoshi no Kirby 64 (J) (V1.2)
+Internal Name=Kirby64
+buff_clear=0
+depthmode=0
+filtering=1
+swapmode=0
+
+[BCB1F89F-060752A2-C:4A]
+Good Name=Hoshi no Kirby 64 (J) (V1.3)
+Internal Name=Kirby64
+buff_clear=0
+depthmode=0
+filtering=1
+swapmode=0
+
+[72611D7D-9919BDD2-C:58]
+Good Name=HSV Adventure Racing (A)
+Internal Name=HSV ADVENTURE RACING
+depthmode=1
+filtering=1
+n64_z_scale=1
+wrap_big_tex=1
+
+[5535972E-BD8E3295-C:4A]
+Good Name=Human Grand Prix - New Generation (J)
+Internal Name=HUMAN GRAND PRIX
+depthmode=0
+filtering=2
+
+//================  I  ================
+[D692CC5E-EC58D072-C:50]
+Good Name=Iggy's Reckin' Balls (E)
+Internal Name=Iggy's Reckin' Balls
+depthmode=0
+fix_tex_coord=512
+
+[E616B5BC-C9658B88-C:45]
+Good Name=Iggy's Reckin' Balls (U)
+Internal Name=Iggy's Reckin' Balls
+depthmode=0
+fix_tex_coord=512
+
+[69458B9E-FC95F936-C:4A]
+Good Name=Iggy-kun no Bura Bura Poyon (J)
+Internal Name=BURABURA POYON
+depthmode=0
+fix_tex_coord=1
+
+[8C138BE0-95700E46-C:45]
+Good Name=In-Fisherman Bass Hunter 64 (U)
+Internal Name=BASS HUNTER 64
+buff_clear=0
+depthmode=1
+fix_tex_coord=1
+swapmode=2
+
+[E436467A-82DE8F9B-C:45]
+Good Name=Indy Racing 2000 (U)
+Internal Name=INDY RACING 2000
+fb_smart=0
+
+[336364A0-06C8D5BF-C:58]
+Good Name=International Superstar Soccer 2000 (E) (M2) (Eng-Ger)
+Internal Name=I.S.S.2000
+depthmode=1
+
+[BAE8E871-35FF944E-C:59]
+Good Name=International Superstar Soccer 2000 (E) (M2) (Fre-Ita)
+Internal Name=I.S.S.2000
+depthmode=1
+
+[8E835437-CD5748B4-C:45]
+Good Name=International Superstar Soccer 2000 (U) (M2)
+Internal Name=I.S.S.2000
+depthmode=1
+
+[E2D37CF0-F57E4EAE-C:50]
+Good Name=International Superstar Soccer 64 (E)
+Internal Name=I S S 64
+depthmode=1
+old_style_adither=1
+swapmode=2
+
+[5F2763C4-62412AE5-C:45]
+Good Name=International Superstar Soccer 64 (U)
+Internal Name=I S S 64
+depthmode=1
+old_style_adither=1
+swapmode=2
+
+[20073BC7-5E3B0111-C:45]
+Good Name=International Track & Field 2000 (U)
+Internal Name=ITF 2000
+depthmode=1
+filtering=1
+
+[6712C779-3B72781D-C:50]
+Good Name=International Track & Field Summer Games (E) (M3)
+Internal Name=IT&F SUMMERGAMES
+depthmode=1
+filtering=1
+
+//================  J  ================
+[4FBFA429-6920BB15-C:4A]
+Good Name=J.League Eleven Beat 1997 (J)
+Internal Name=J_league 1997
+depthmode=1
+fix_tex_coord=1
+swapmode=0
+
+[54554A42-E4985FFB-C:4A]
+Good Name=J.League Live 64 (J)
+Internal Name=J LEAGUE LIVE 64
+depthmode=1
+wrap_big_tex=1
+
+[21F7ABFB-6A8AA7E8-C:50]
+Good Name=Jeremy McGrath Supercross 2000 (E)
+Internal Name=Jeremy McGrath Super
+depthmode=0
+swapmode=0
+
+[BB30B1A5-FCF712CE-C:45]
+Good Name=Jeremy McGrath Supercross 2000 (U)
+Internal Name=Jeremy McGrath Super
+depthmode=0
+swapmode=0
+
+[68D7A1DE-0079834A-C:50]
+Good Name=Jet Force Gemini (E) (M4)
+Internal Name=JET FORCE GEMINI
+alt_tex_size=1
+decrease_fillrect_edge=1
+depthmode=1
+read_back_to_screen=1
+swapmode=2
+
+[8A6009B6-94ACE150-C:45]
+Good Name=Jet Force Gemini (U)
+Internal Name=JET FORCE GEMINI
+alt_tex_size=1
+decrease_fillrect_edge=1
+depthmode=1
+read_back_to_screen=1
+swapmode=2
+
+[DFD8AB47-3CDBEB89-C:45]
+Good Name=Jet Force Gemini (U) (Kiosk Demo)
+Internal Name=J F G DISPLAY
+alt_tex_size=1
+decrease_fillrect_edge=1
+depthmode=1
+read_back_to_screen=1
+swapmode=2
+
+[63112A53-A29FA88F-C:4A]
+Good Name=Jikkyou J.League 1999 - Perfect Striker 2 (J) (V1.0)
+Internal Name=PERFECT STRIKER2
+depthmode=1
+
+[6309FC17-1D4F5EF3-C:4A]
+Good Name=Jikkyou J.League 1999 - Perfect Striker 2 (J) (V1.1)
+Internal Name=PERFECT STRIKER2
+depthmode=1
+
+[146C4366-72A6DEB3-C:4A]
+Good Name=Jikkyou J.League Perfect Striker (J)
+Internal Name=PERFECT STRIKER
+depthmode=1
+swapmode=2
+
+[E0A79F8C-32CC97FA-C:4A]
+Good Name=Jikkyou World Soccer 3 (J)
+Internal Name=J WORLD SOCCER3
+depthmode=1
+swapmode=2
+
+//================  K  ================
+[36281F23-009756CF-C:45]
+Good Name=Ken Griffey Jr.'s Slugfest (U)
+Internal Name=KEN GRIFFEY SLUGFEST
+depthmode=1
+read_back_to_screen=2
+swapmode=0
+
+[979B263E-F8470004-C:50]
+Good Name=Killer Instinct Gold (E)
+Internal Name=Killer Instinct Gold
+buff_clear=0
+depthmode=0
+filtering=1
+fog=0
+
+[9E8FE2BA-8B270770-C:45]
+Good Name=Killer Instinct Gold (U) (V1.0)
+Internal Name=KILLER INSTINCT GOLD
+buff_clear=0
+depthmode=0
+filtering=1
+fog=0
+
+[9E8FCDFA-49F5652B-C:45]
+Good Name=Killer Instinct Gold (U) (V1.1)
+Internal Name=KILLER INSTINCT GOLD
+buff_clear=0
+depthmode=0
+filtering=1
+fog=0
+
+[F908CA4C-36464327-C:45]
+Good Name=Killer Instinct Gold (U) (V1.2)
+Internal Name=Killer Instinct Gold
+buff_clear=0
+depthmode=0
+filtering=1
+fog=0
+
+[75BC6AD6-78552BC9-C:4A]
+Good Name=Kiratto Kaiketsu! 64 Tanteidan (J)
+Internal Name=·×¯Ä¶²¹Â 64ÀÝÃ²ÀÞÝ
+buff_clear=0
+depthmode=0
+filtering=1
+
+[0D93BA11-683868A6-C:50]
+Good Name=Kirby 64 - The Crystal Shards (E)
+Internal Name=Kirby64
+buff_clear=0
+depthmode=0
+filtering=1
+swapmode=0
+
+[46039FB4-0337822C-C:45]
+Good Name=Kirby 64 - The Crystal Shards (U)
+Internal Name=Kirby64
+buff_clear=0
+depthmode=0
+filtering=1
+swapmode=0
+
+[4A997C74-E2087F99-C:50]
+Good Name=Knife Edge - Nose Gunner (E)
+Internal Name=KNIFE EDGE
+depthmode=1
+fast_crc=0
+filtering=1
+wrap_big_tex=1
+
+[931AEF3F-EF196B90-C:4A]
+Good Name=Knife Edge - Nose Gunner (J)
+Internal Name=KNIFE EDGE
+depthmode=1
+fast_crc=0
+filtering=1
+wrap_big_tex=1
+
+[FCE0D799-65316C54-C:45]
+Good Name=Knife Edge - Nose Gunner (U)
+Internal Name=KNIFE EDGE
+depthmode=1
+fast_crc=0
+filtering=1
+wrap_big_tex=1
+
+[E3D6A795-2A1C5D3C-C:50]
+Good Name=Knockout Kings 2000 (E)
+Internal Name=Knockout Kings 2000
+depthmode=1
+fb_clear=1
+fb_info_disable=1
+fb_read_alpha=1
+
+[0894909C-DAD4D82D-C:45]
+Good Name=Knockout Kings 2000 (U)
+Internal Name=Knockout Kings 2000
+depthmode=1
+fb_clear=1
+fb_info_disable=1
+fb_read_alpha=1
+
+//================  L  ================
+[F478D8B3-9716DD6D-C:50]
+Good Name=LEGO Racers (E) (M10)
+Internal Name=LEGORacers
+buff_clear=0
+depthmode=1
+detect_cpu_write=1
+fb_read_alpha=1
+
+[096A40EA-8ABE0A10-C:45]
+Good Name=LEGO Racers (U) (M10)
+Internal Name=LEGORacers
+buff_clear=0
+depthmode=1
+detect_cpu_write=1
+fb_read_alpha=1
+
+[3D67C62B-31D03150-C:4A]
+Good Name=Let's Smash (J)
+Internal Name=LET'S SMASH
+depthmode=0
+soft_depth_compare=1
+
+[60460680-305F0E72-C:50]
+Good Name=Lode Runner 3-D (E) (M5)
+Internal Name=Lode Runner 3D
+swapmode=0
+
+[964ADD0B-B29213DB-C:4A]
+Good Name=Lode Runner 3-D (J)
+Internal Name=Lode Runner 3D
+swapmode=0
+
+[255018DF-57D6AE3A-C:45]
+Good Name=Lode Runner 3-D (U)
+Internal Name=Lode Runner 3D
+swapmode=0
+
+[0AA0055B-7637DF65-C:50]
+Good Name=Looney Tunes - Duck Dodgers (E) (M6)
+Internal Name=DAFFY DUCK STARRING
+depthmode=1
+wrap_big_tex=1
+
+//================  M  ================
+[1145443D-11610EDB-C:50]
+Good Name=Mace - The Dark Age (E)
+Internal Name=MACE
+depthmode=1
+filtering=1
+fix_tex_coord=8
+
+[6B700750-29D621FE-C:45]
+Good Name=Mace - The Dark Age (U)
+Internal Name=MACE
+depthmode=1
+filtering=1
+fix_tex_coord=8
+
+[E4906679-9F243F05-C:50]
+Good Name=Magical Tetris Challenge (E)
+Internal Name=MAGICAL TETRIS
+depthmode=1
+fog=0
+force_microcheck=1
+
+[E1EF93F7-14908B0B-C:44]
+Good Name=Magical Tetris Challenge (G)
+Internal Name=MAGICAL TETRIS
+depthmode=1
+fog=0
+force_microcheck=1
+
+[75B61647-7ADABF78-C:45]
+Good Name=Magical Tetris Challenge (U)
+Internal Name=MAGICAL TETRIS
+depthmode=1
+fog=0
+force_microcheck=1
+
+[80C8564A-929C65AB-C:4A]
+Good Name=Magical Tetris Challenge featuring Mickey (J)
+Internal Name=MAGICAL TETRIS
+depthmode=1
+fog=0
+force_microcheck=1
+
+[0FC42C70-8754F1CD-C:4A]
+Good Name=Mahjong Master (J)
+Internal Name=Ï°¼Þ¬Ý Ï½À°
+n64_z_scale=1
+texrect_compare_less=1
+zmode_compare_less=1
+
+[CDB998BE-1024A5C8-C:50]
+Good Name=Major League Baseball Featuring Ken Griffey Jr. (E)
+Internal Name=MLB FEATURING K G JR
+depthmode=1
+read_back_to_screen=2
+
+[62E957D0-7FC15A5D-C:50]
+Good Name=Mario Golf (E)
+Internal Name=MarioGolf64
+buff_clear=0
+depthmode=0
+fb_clear=1
+fb_info_disable=1
+ignore_aux_copy=1
+
+[664BA3D4-678A80B7-C:45]
+Good Name=Mario Golf (U)
+Internal Name=MarioGolf64
+buff_clear=0
+depthmode=0
+fb_clear=1
+fb_info_disable=1
+ignore_aux_copy=1
+
+[D48944D1-B0D93A0E-C:4A]
+Good Name=Mario Golf 64 (J) (V1.0)
+Internal Name=MarioGolf64
+buff_clear=0
+depthmode=0
+fb_clear=1
+fb_info_disable=1
+ignore_aux_copy=1
+
+[734F816B-C6A6EB67-C:4A]
+Good Name=Mario Golf 64 (J) (V1.1)
+Internal Name=MarioGolf64
+buff_clear=0
+depthmode=0
+fb_clear=1
+fb_info_disable=1
+ignore_aux_copy=1
+
+[C3B6DE9D-65D2DE76-C:50]
+Good Name=Mario Kart 64 (E) (V1.0)
+Internal Name=MARIOKART64
+depthmode=1
+fast_crc=0
+stipple_mode=1
+stipple_pattern=4286595040
+fb_read_always=1
+fb_smart=0
+
+[2577C7D4-D18FAAAE-C:50]
+Good Name=Mario Kart 64 (E) (V1.1)
+Internal Name=MARIOKART64
+depthmode=1
+fast_crc=0
+stipple_mode=1
+stipple_pattern=4286595040
+fb_read_always=1
+fb_smart=0
+
+[6BFF4758-E5FF5D5E-C:4A]
+Good Name=Mario Kart 64 (J) (V1.0)
+Internal Name=MARIOKART64
+depthmode=1
+fast_crc=0
+stipple_mode=1
+stipple_pattern=4286595040
+fb_read_always=1
+fb_smart=0
+
+[C9C3A987-5810344C-C:4A]
+Good Name=Mario Kart 64 (J) (V1.1)
+Internal Name=MARIOKART64
+depthmode=1
+fast_crc=0
+stipple_mode=1
+stipple_pattern=4286595040
+fb_read_always=1
+fb_smart=0
+
+[3E5055B6-2E92DA52-C:45]
+Good Name=Mario Kart 64 (U)
+Internal Name=MARIOKART64
+depthmode=1
+fast_crc=0
+stipple_mode=1
+stipple_pattern=4286595040
+fb_read_always=1
+fb_smart=0
+
+[9C663069-80F24A80-C:50]
+Good Name=Mario Party (E) (M3)
+Internal Name=MarioParty
+clip_zmin=1
+depthmode=0
+swapmode=2
+
+[ADA815BE-6028622F-C:4A]
+Good Name=Mario Party (J)
+Internal Name=MarioParty
+clip_zmin=1
+depthmode=0
+swapmode=2
+
+[2829657E-A0621877-C:45]
+Good Name=Mario Party (U)
+Internal Name=MarioParty
+clip_zmin=1
+depthmode=0
+swapmode=2
+
+[82380387-DFC744D9-C:50]
+Good Name=Mario Party 2 (E) (M5)
+Internal Name=MarioParty2
+depthmode=0
+swapmode=2
+
+[ED567D0F-38B08915-C:4A]
+Good Name=Mario Party 2 (J)
+Internal Name=MarioParty2
+depthmode=0
+swapmode=2
+
+[9EA95858-AF72B618-C:45]
+Good Name=Mario Party 2 (U)
+Internal Name=MarioParty2
+depthmode=0
+swapmode=2
+
+[C5674160-0F5F453C-C:50]
+Good Name=Mario Party 3 (E) (M4)
+Internal Name=MarioParty3
+depthmode=0
+fix_tex_coord=1
+
+[0B0AB4CD-7B158937-C:4A]
+Good Name=Mario Party 3 (J)
+Internal Name=MarioParty3
+depthmode=0
+fix_tex_coord=1
+
+[7C3829D9-6E8247CE-C:45]
+Good Name=Mario Party 3 (U)
+Internal Name=MarioParty3
+depthmode=0
+fix_tex_coord=1
+
+[3BA7CDDC-464E52A0-C:4A]
+Good Name=Mario Story (J)
+Internal Name=MARIO STORY
+depthmode=1
+fb_read_alpha=1
+filtering=1
+hires_buf_clear=0
+optimize_texrect=0
+swapmode=2
+useless_is_useless=1
+
+[27C985A8-ED7CE5C6-C:0]
+Good Name=Mega Man 64 (Proto)
+Internal Name=Megaman 64
+depthmode=1
+increase_texrect_edge=1
+
+[0EC158F5-FB3E6896-C:45]
+Good Name=Mega Man 64 (U)
+Internal Name=Mega Man 64
+depthmode=1
+increase_texrect_edge=1
+
+[1001F10C-3D51D8C1-C:45]
+Good Name=Mia Hamm Soccer 64 (U) (M2)
+Internal Name=Mia Hamm Soccer 64
+buff_clear=0
+
+[E36166C2-8613A2E5-C:58]
+Good Name=Michael Owens WLS 2000 (E)
+Internal Name=MO WORLD LEAGUE SOCC
+buff_clear=0
+
+[736AE6AF-4117E9C7-C:4A]
+Good Name=Mickey no Racing Challenge USA (J)
+Internal Name=MICKEY USA
+alt_tex_size=1
+depthmode=1
+fb_clear=1
+
+[DED0DD9A-E78225A7-C:50]
+Good Name=Mickey's Speedway USA (E) (M5)
+Internal Name=MICKEY USA PAL
+alt_tex_size=1
+depthmode=1
+fb_clear=1
+
+[FA8C4571-BBE7F9C0-C:45]
+Good Name=Mickey's Speedway USA (U)
+Internal Name=MICKEY USA
+alt_tex_size=1
+depthmode=1
+fb_clear=1
+
+[2A49018D-D0034A02-C:50]
+Good Name=Micro Machines 64 Turbo (E) (M5)
+Internal Name=MICROMACHINES64TURBO
+depthmode=0
+
+[F1850C35-ACE07912-C:45]
+Good Name=Micro Machines 64 Turbo (U)
+Internal Name=MICROMACHINES64TURBO
+depthmode=0
+
+[E4B35E4C-1AC45CC9-C:45]
+Good Name=Midway's Greatest Arcade Hits Volume 1 (U)
+Internal Name=MGAH VOL1
+depthmode=1
+force_microcheck=1
+zmode_compare_less=1
+
+[418BDA98-248A0F58-C:50]
+Good Name=Mischief Makers (E)
+Internal Name=MISCHIEF MAKERS
+depthmode=1
+fog=0
+tex_wrap_hack=0
+
+[0B93051B-603D81F9-C:45]
+Good Name=Mischief Makers (U) (V1.0)
+Internal Name=MISCHIEF MAKERS
+depthmode=1
+fog=0
+tex_wrap_hack=0
+
+[BFA526B4-0691E430-C:45]
+Good Name=Mischief Makers (U) (V1.1)
+Internal Name=MISCHIEF MAKERS
+depthmode=1
+fog=0
+tex_wrap_hack=0
+
+[28768D6D-B379976C-C:45]
+Good Name=Monaco Grand Prix (U)
+Internal Name=Monaco Grand Prix
+buff_clear=0
+depthmode=0
+
+[28705FA5-B509690E-C:50]
+Good Name=Monaco Grand Prix - Racing Simulation 2 (E) (M4)
+Internal Name=Monaco GP Racing 2
+buff_clear=0
+depthmode=0
+
+[E8E8DD70-415DD198-C:4A]
+Good Name=Morita Shougi 64 (J)
+Internal Name=ÓØÀ¼®³·Þ64
+correct_viewport=1
+
+[FF44EDC4-1AAE9213-C:50]
+Good Name=Mortal Kombat Mythologies - Sub-Zero (E)
+Internal Name=MK_MYTHOLOGIES
+depthmode=1
+
+[C34304AC-2D79C021-C:45]
+Good Name=Mortal Kombat Mythologies - Sub-Zero (U)
+Internal Name=MK_MYTHOLOGIES
+depthmode=1
+
+[8C3D1192-BEF172E1-C:50]
+Good Name=Mortal Kombat Trilogy (E)
+Internal Name=MortalKombatTrilogy
+depthmode=1
+filtering=2
+
+[D9F75C12-A8859B59-C:45]
+Good Name=Mortal Kombat Trilogy (U) (V1.0)
+Internal Name=MortalKombatTrilogy
+depthmode=1
+filtering=2
+
+[19F55D46-73A27B34-C:45]
+Good Name=Mortal Kombat Trilogy (U) (V1.1)
+Internal Name=MortalKombatTrilogy
+depthmode=1
+filtering=2
+
+[83F33AA9-A901D40D-C:45]
+Good Name=Mortal Kombat Trilogy (U) (V1.2)
+Internal Name=MortalKombatTrilogy
+depthmode=1
+filtering=2
+
+[1938525C-586E9656-C:45]
+Good Name=Ms. Pac-Man Maze Madness (U)
+Internal Name=MS. PAC-MAN MM
+depthmode=1
+detect_cpu_write=1
+
+[7F9345D3-841ECADE-C:50]
+Good Name=Mystical Ninja 2 Starring Goemon (E) (M3)
+Internal Name=MYSTICAL NINJA2 SG
+alt_tex_size=1
+depthmode=1
+filtering=1
+optimize_texrect=0
+
+[F5360FBE-2BF1691D-C:50]
+Good Name=Mystical Ninja Starring Goemon (E)
+Internal Name=MYSTICAL NINJA
+alt_tex_size=1
+depthmode=1
+filtering=1
+optimize_texrect=0
+
+//================  N  ================
+[DF331A18-5FD4E044-C:45]
+Good Name=NASCAR 2000 (U)
+Internal Name=NASCAR 2000
+buff_clear=0
+depthmode=0
+swapmode=0
+
+[AE4992C9-9253B253-C:50]
+Good Name=NASCAR 99 (E) (M3)
+Internal Name=NASCAR 99
+buff_clear=0
+depthmode=0
+swapmode=0
+
+[23749578-80DC58FD-C:45]
+Good Name=NASCAR 99 (U)
+Internal Name=NASCAR 99
+buff_clear=0
+depthmode=0
+swapmode=0
+
+[916852D8-73DBEAEF-C:45]
+Good Name=NBA Courtside 2 - Featuring Kobe Bryant (U)
+Internal Name=NBA Courtside 2
+buff_clear=0
+depthmode=0
+swapmode=0
+
+[B6D0CAA0-E3F493C8-C:50]
+Good Name=NBA Jam 2000 (E)
+Internal Name=NBA JAM 2000
+buff_clear=0
+
+[EBEEA8DB-F2ECB23C-C:45]
+Good Name=NBA Jam 2000 (U)
+Internal Name=NBA JAM 2000
+buff_clear=0
+
+[E600831E-59F422A8-C:50]
+Good Name=NBA Jam 99 (E)
+Internal Name=NBA JAM 99
+buff_clear=0
+
+[810729F6-E03FCFC1-C:45]
+Good Name=NBA Jam 99 (U)
+Internal Name=NBA JAM 99
+buff_clear=0
+
+[EB499C8F-CD4567B6-C:50]
+Good Name=NBA Live 2000 (E) (M4)
+Internal Name=NBA LIVE 2000
+adjust_aspect=0
+
+[5F25B0EE-6227C1DB-C:45]
+Good Name=NBA Live 2000 (U) (M4)
+Internal Name=NBA LIVE 2000
+adjust_aspect=0
+
+[CF84F45F-00E4F6EB-C:50]
+Good Name=NBA Live 99 (E) (M5)
+Internal Name=NBA Live 99
+adjust_aspect=0
+swapmode=0
+
+[57F81C9B-1133FA35-C:45]
+Good Name=NBA Live 99 (U) (M5)
+Internal Name=NBA Live 99
+adjust_aspect=0
+swapmode=0
+
+[147E0EDB-36C5B12C-C:4A]
+Good Name=Neon Genesis Evangelion (J)
+Internal Name=EVANGELION
+depthmode=1
+
+[D094B170-D7C4B5CC-C:45]
+Good Name=NFL Blitz (U)
+Internal Name=NFL BLITZ
+lodmode=2
+
+[30EAD54F-31620BF6-C:45]
+Good Name=NFL Blitz - Special Edition (U)
+Internal Name=NFL BLITZ SPECIAL ED
+lodmode=2
+
+[15A00969-34E5A285-C:45]
+Good Name=NFL Blitz 2000 (U) (V1.0)
+Internal Name=blitz2k
+lodmode=2
+
+[5B755842-6CA39C7A-C:45]
+Good Name=NFL Blitz 2000 (U) (V1.1)
+Internal Name=blitz2k
+lodmode=2
+
+[36FA35EB-E85E2E36-C:45]
+Good Name=NFL Blitz 2001 (U)
+Internal Name=NFL BLITZ 2001
+lodmode=2
+
+[88BD5A9E-E81FDFBF-C:50]
+Good Name=NFL Quarterback Club 2000 (E)
+Internal Name=NFL QBC 2000
+depthmode=0
+swapmode=0
+wrap_big_tex=1
+
+[E3AB4ED0-83040DD2-C:45]
+Good Name=NFL Quarterback Club 2000 (U)
+Internal Name=NFL QBC 2000
+depthmode=0
+swapmode=0
+wrap_big_tex=1
+
+[28784622-FFB22985-C:45]
+Good Name=NFL Quarterback Club 2001 (U)
+Internal Name=NFL Quarterback Club
+depthmode=0
+swapmode=0
+wrap_big_tex=1
+
+[4B629EF4-99B21D9B-C:50]
+Good Name=NFL Quarterback Club 98 (E)
+Internal Name=quarterback_club_98
+buff_clear=0
+depthmode=1
+fb_read_alpha=1
+filtering=1
+hires_buf_clear=0
+optimize_texrect=0
+swapmode=0
+
+[D89BE2F8-99C97ADF-C:45]
+Good Name=NFL Quarterback Club 98 (U)
+Internal Name=quarterback_club_98
+buff_clear=0
+depthmode=1
+fb_read_alpha=1
+filtering=1
+hires_buf_clear=0
+optimize_texrect=0
+swapmode=0
+
+[52A3CF47-4EC13BFC-C:50]
+Good Name=NFL Quarterback Club 99 (E)
+Internal Name=NFL QBC '99
+depthmode=0
+force_depth_compare=1
+wrap_big_tex=1
+
+[BE76EDFF-20452D09-C:45]
+Good Name=NFL Quarterback Club 99 (U)
+Internal Name=NFL QBC '99
+depthmode=0
+force_depth_compare=1
+wrap_big_tex=1
+
+[CD3C3CDF-317793FA-C:4A]
+Good Name=Nintama Rantarou 64 Game Gallery (J)
+Internal Name=NINTAMAGAMEGALLERY64
+depthmode=0
+fb_smart=0
+force_microcheck=1
+
+[67D20729-F696774C-C:4A]
+Good Name=Nintendo All-Star! Dairantou Smash Brothers (J)
+Internal Name=SMASH BROTHERS
+fb_read_always=1
+fb_smart=0
+
+[8A97A197-272DF6C1-C:50]
+Good Name=Nuclear Strike 64 (E) (M2)
+Internal Name=NUCLEARSTRIKE64
+buff_clear=0
+
+[8F50B845-D729D22F-C:44]
+Good Name=Nuclear Strike 64 (G)
+Internal Name=NUCLEARSTRIKE64
+buff_clear=0
+
+[4998DDBB-F7B7AEBC-C:45]
+Good Name=Nuclear Strike 64 (U)
+Internal Name=NUCLEARSTRIKE64
+buff_clear=0
+
+[D83BB920-CC406416-C:4A]
+Good Name=Nushi Duri 64 (J) (V1.0)
+buff_clear=1
+depthmode=0
+force_microcheck=1
+wrap_big_tex=0
+
+[C5F1DE79-5D4BEB6E-C:4A]
+Good Name=Nushi Duri 64 (J) (V1.1)
+Internal Name=Ç¼ÂÞØ64
+buff_clear=0
+depthmode=0
+force_microcheck=1
+wrap_big_tex=0
+
+//================  O  ================
+[0375CF67-56A93FAA-C:4A]
+Good Name=Ogre Battle 64 - Person of Lordly Caliber (J) (V1.1)
+Internal Name=OgreBattle64
+depthmode=1
+fb_info_disable=1
+force_depth_compare=1
+
+[E6419BC5-69011DE3-C:45]
+Good Name=Ogre Battle 64 - Person of Lordly Caliber (U) (V1.0)
+Internal Name=OgreBattle64
+depthmode=1
+fb_info_disable=1
+force_depth_compare=1
+
+[0ADAECA7-B17F9795-C:45]
+Good Name=Ogre Battle 64 - Person of Lordly Caliber (U) (V1.1)
+Internal Name=OgreBattle64
+depthmode=1
+fb_info_disable=1
+force_depth_compare=1
+
+//================  P  ================
+[74554B3B-F4AEBCB5-C:4A]
+Good Name=Pachinko 365 Nichi (J)
+Internal Name=PACHINKO365NICHI
+correct_viewport=1
+
+[19AB29AF-C71BCD28-C:50]
+Good Name=Paper Mario (E) (M4)
+Internal Name=PAPER MARIO
+depthmode=1
+fb_read_alpha=1
+filtering=1
+hires_buf_clear=0
+optimize_texrect=0
+swapmode=2
+useless_is_useless=1
+
+[65EEE53A-ED7D733C-C:45]
+Good Name=Paper Mario (U)
+Internal Name=PAPER MARIO
+depthmode=1
+fb_read_alpha=1
+filtering=1
+hires_buf_clear=0
+optimize_texrect=0
+swapmode=2
+useless_is_useless=1
+
+[CFE2CB31-4D6B1E1D-C:4A]
+Good Name=Parlor! Pro 64 - Pachinko Jikki Simulation Game (J)
+Internal Name=Parlor PRO 64
+depthmode=1
+filtering=1
+force_microcheck=1
+
+[F468118C-E32EE44E-C:4A]
+Good Name=PD Ultraman Battle Collection 64 (J)
+Internal Name=Ultraman Battle JAPA
+depthmode=0
+fb_smart=0
+
+[E4B08007-A602FF33-C:50]
+Good Name=Perfect Dark (E) (M5)
+Internal Name=Perfect Dark
+decrease_fillrect_edge=1
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+optimize_texrect=0
+useless_is_useless=1
+
+[96747EB4-104BB243-C:4A]
+Good Name=Perfect Dark (J)
+Internal Name=PERFECT DARK
+decrease_fillrect_edge=1
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+optimize_texrect=0
+useless_is_useless=1
+
+[DDF460CC-3CA634C0-C:45]
+Good Name=Perfect Dark (U) (V1.0)
+Internal Name=Perfect Dark
+decrease_fillrect_edge=1
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+optimize_texrect=0
+useless_is_useless=1
+
+[41F2B98F-B458B466-C:45]
+Good Name=Perfect Dark (U) (V1.1)
+Internal Name=Perfect Dark
+decrease_fillrect_edge=1
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+optimize_texrect=0
+useless_is_useless=1
+
+[766309EA-3F64A369-C:45]
+Good Name=Perfect Dark XBLA Mp3 (1.0)
+decrease_fillrect_edge=1
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+optimize_texrect=0
+useless_is_useless=1
+
+[EE08C602-6BC2D5A6-C:50]
+Good Name=PGA European Tour (E) (M5)
+Internal Name=PGA European Tour
+buff_clear=0
+fb_read_always=1
+swapmode=0
+
+[B54CE881-BCCB6126-C:45]
+Good Name=PGA European Tour (U)
+Internal Name=PGA European Tour
+buff_clear=0
+fb_read_always=1
+swapmode=0
+
+[1AA05AD5-46F52D80-C:50]
+Good Name=Pilotwings 64 (E) (M3)
+Internal Name=Pilot Wings64
+buff_clear=0
+depthmode=1
+
+[09CC4801-E42EE491-C:4A]
+Good Name=Pilotwings 64 (J)
+Internal Name=Pilot Wings64
+buff_clear=0
+depthmode=1
+
+[C851961C-78FCAAFA-C:45]
+Good Name=Pilotwings 64 (U)
+Internal Name=Pilot Wings64
+buff_clear=0
+depthmode=1
+
+[4A1CD153-D830AEF8-C:50]
+Good Name=Pokemon Puzzle League (E)
+Internal Name=PUZZLE LEAGUE N64
+PPL=1
+buff_clear=0
+depthmode=1
+fb_hires=0
+fb_read_alpha=1
+filtering=2
+fix_tex_coord=1
+fog=0
+force_microcheck=1
+
+[3EB2E6F3-062F9EFE-C:46]
+Good Name=Pokemon Puzzle League (F)
+Internal Name=PUZZLE LEAGUE N64
+PPL=1
+buff_clear=0
+depthmode=1
+fb_hires=0
+fb_read_alpha=1
+filtering=2
+fix_tex_coord=1
+fog=0
+force_microcheck=1
+
+[7A4747AC-44EEEC23-C:44]
+Good Name=Pokemon Puzzle League (G)
+Internal Name=PUZZLE LEAGUE N64
+PPL=1
+buff_clear=0
+depthmode=1
+fb_hires=0
+fb_read_alpha=1
+filtering=2
+fix_tex_coord=1
+fog=0
+force_microcheck=1
+
+[19C553A7-A70F4B52-C:45]
+Good Name=Pokemon Puzzle League (U)
+Internal Name=PUZZLE LEAGUE N64
+PPL=1
+buff_clear=0
+depthmode=1
+fb_hires=0
+fb_read_alpha=1
+filtering=2
+fix_tex_coord=1
+fog=0
+force_microcheck=1
+
+[7BB18D40-83138559-C:55]
+Good Name=Pokemon Snap (A)
+Internal Name=POKEMON SNAP
+depthmode=1
+fast_crc=0
+fb_clear=1
+fb_hires=0
+
+[4FF5976F-ACF559D8-C:50]
+Good Name=Pokemon Snap (E)
+Internal Name=POKEMON SNAP
+depthmode=1
+fast_crc=0
+fb_clear=1
+fb_hires=0
+
+[BA6C293A-9FAFA338-C:46]
+Good Name=Pokemon Snap (F)
+Internal Name=POKEMON SNAP
+depthmode=1
+fast_crc=0
+fb_clear=1
+fb_hires=0
+
+[5753720D-2A8A884D-C:44]
+Good Name=Pokemon Snap (G)
+Internal Name=POKEMON SNAP
+depthmode=1
+fast_crc=0
+fb_clear=1
+fb_hires=0
+
+[C0C85046-61051B05-C:49]
+Good Name=Pokemon Snap (I)
+Internal Name=POKEMON SNAP
+depthmode=1
+fast_crc=0
+fb_clear=1
+fb_hires=0
+
+[EC0F690D-32A7438C-C:4A]
+Good Name=Pokemon Snap (J) (V1.0)
+Internal Name=POKEMON SNAP
+depthmode=1
+fast_crc=0
+fb_clear=1
+fb_hires=0
+
+[E0044E9E-CD659D0D-C:4A]
+Good Name=Pokemon Snap (J) (V1.1)
+Internal Name=POKEMON SNAP
+depthmode=1
+fast_crc=0
+fb_clear=1
+fb_hires=0
+
+[817D286A-EF417416-C:53]
+Good Name=Pokemon Snap (S)
+Internal Name=POKEMON SNAP
+depthmode=1
+fast_crc=0
+fb_clear=1
+fb_hires=0
+
+[CA12B547-71FA4EE4-C:45]
+Good Name=Pokemon Snap (U)
+Internal Name=POKEMON SNAP
+depthmode=1
+fast_crc=0
+fb_clear=1
+fb_hires=0
+
+[39119872-07722E9F-C:45]
+Good Name=Pokemon Snap Station (U)
+Internal Name=POKEMON SNAP
+depthmode=1
+fast_crc=0
+fb_clear=1
+fb_hires=0
+
+[84077275-57315B9C-C:50]
+Good Name=Pokemon Stadium (E) (V1.0)
+Internal Name=POKEMON STADIUM
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[91C9E05D-AD3AAFB9-C:50]
+Good Name=Pokemon Stadium (E) (V1.1)
+Internal Name=POKEMON STADIUM
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[A23553A3-42BF2D39-C:46]
+Good Name=Pokemon Stadium (F)
+Internal Name=POKEMON STADIUM
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[42011E1B-E3552DB5-C:44]
+Good Name=Pokemon Stadium (G)
+Internal Name=POKEMON STADIUM
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[A53FA82D-DAE2C15D-C:49]
+Good Name=Pokemon Stadium (I)
+Internal Name=POKEMON STADIUM
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[665E8259-D098BD1D-C:4A]
+Good Name=Pokemon Stadium (J)
+Internal Name=POKEMON STADIUM
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[B6E549CE-DC8134C0-C:53]
+Good Name=Pokemon Stadium (S)
+Internal Name=POKEMON STADIUM
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[90F5D9B3-9D0EDCF0-C:45]
+Good Name=Pokemon Stadium (U) (V1.0)
+Internal Name=POKEMON STADIUM
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[1A122D43-C17DAF0F-C:45]
+Good Name=Pokemon Stadium - Kiosk (U) (V1.1)
+Internal Name=POKEMON STADIUM
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[9C8FB2FA-9B84A09B-C:45]
+Good Name=Pokemon Stadium (U) (V1.2)
+Internal Name=POKEMON STADIUM
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[2952369C-B6E4C3A8-C:50]
+Good Name=Pokemon Stadium 2 (E)
+Internal Name=POKEMON STADIUM 2
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_read_alpha=1
+optimize_texrect=0
+swapmode=2
+
+[AC5AA5C7-A9B0CDC3-C:46]
+Good Name=Pokemon Stadium 2 (F)
+Internal Name=POKEMON STADIUM 2
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_read_alpha=1
+optimize_texrect=0
+swapmode=2
+
+[439B7E7E-C1A1495D-C:44]
+Good Name=Pokemon Stadium 2 (G)
+Internal Name=POKEMON STADIUM 2
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_read_alpha=1
+optimize_texrect=0
+swapmode=2
+
+[EFCEAF00-22094848-C:49]
+Good Name=Pokemon Stadium 2 (I)
+Internal Name=POKEMON STADIUM 2
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_read_alpha=1
+optimize_texrect=0
+swapmode=2
+
+[63775886-5FB80E7B-C:4A]
+Good Name=Pokemon Stadium 2 (J)
+Internal Name=POKEMON STADIUM 2
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_read_alpha=1
+optimize_texrect=0
+swapmode=2
+
+[D0A1FC5B-2FB8074B-C:53]
+Good Name=Pokemon Stadium 2 (S)
+Internal Name=POKEMON STADIUM 2
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_read_alpha=1
+optimize_texrect=0
+swapmode=2
+
+[03571182-892FD06D-C:45]
+Good Name=Pokemon Stadium 2 (U)
+Internal Name=POKEMON STADIUM 2
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_read_alpha=1
+optimize_texrect=0
+swapmode=2
+
+[EE4FD7C2-9CF1D938-C:4A]
+Good Name=Pokemon Stadium Kin Gin (J)
+Internal Name=POKEMON STADIUM G&S
+buff_clear=0
+depthmode=1
+fast_crc=0
+fb_crc_mode=2
+fb_hires=0
+fb_read_alpha=1
+optimize_texrect=0
+
+[41380792-A167E045-C:45]
+Good Name=Polaris SnoCross (U)
+Internal Name=POLARISSNOCROSS
+depthmode=1
+fix_tex_coord=5
+
+[D7A6DCFA-CCFEB6B7-C:4A]
+Good Name=Power League 64 (J)
+Internal Name=PowerLeague64
+force_quad3d=1
+
+[1BDCB30F-A132D876-C:4A]
+Good Name=Pro Mahjong Tsuwamono 64 - Jansou Battle ni Chousen (J)
+Internal Name=TSUWAMONO64
+depthmode=0
+fb_smart=0 //disabling FB is a horrible hack
+force_microcheck=1
+
+
+//================  Q  ================
+[16931D74-65DC6D34-C:50]
+Good Name=Quake 64 (E)
+Internal Name=Quake
+buff_clear=0
+force_microcheck=1
+swapmode=2
+
+[9F5BF79C-D2FE08A0-C:45]
+Good Name=Quake 64 (U)
+Internal Name=Quake
+buff_clear=0
+force_microcheck=1
+swapmode=2
+
+[7433D9D7-2C4322D0-C:50]
+Good Name=Quake II (E)
+Internal Name=QUAKE II
+
+[BDA8F143-B1AF2D62-C:45]
+Good Name=Quake II (U)
+Internal Name=QUAKE II
+
+[C8BB4DD9-CC5F430B-C:45]
+Good Name=Quest 64 (U)
+Internal Name=Quest 64
+depthmode=1
+filtering=2
+
+//================  R  ================
+[2877AC2D-C3DC139A-C:44]
+Good Name=Racing Simulation 2 (G)
+Internal Name=Racing Simulation 2
+buff_clear=0
+depthmode=0
+
+[35D9BA0C-DF485586-C:4A]
+Good Name=Rally '99 (J)
+Internal Name=Rally'99
+buff_clear=0
+depthmode=1
+filtering=1
+
+[73A88E3D-3AC5C571-C:45]
+Good Name=Rally Challenge 2000 (U)
+Internal Name=RALLY CHALLENGE
+buff_clear=0
+depthmode=1
+filtering=1
+
+[60D5E10B-8BEDED46-C:50]
+Good Name=Rayman 2 - The Great Escape (E) (M5)
+Internal Name=Rayman 2
+depthmode=0
+detect_cpu_write=1
+
+[F3C5BF9B-160F33E2-C:45]
+Good Name=Rayman 2 - The Great Escape (U) (M5)
+Internal Name=Rayman 2
+depthmode=0
+detect_cpu_write=1
+
+[C3E7E29E-5D7251CC-C:50]
+Good Name=Re-Volt (E) (M4)
+Internal Name=Re-Volt
+depthmode=1
+texture_correction=0
+
+[0F1FA987-BFC1AFA6-C:45]
+Good Name=Re-Volt (U)
+Internal Name=Re-Volt
+depthmode=1
+texture_correction=0
+
+[8BD4A334-1E138B05-C:50]
+Good Name=Ready 2 Rumble Boxing (E) (M3)
+Internal Name=READY 2 RUMBLE
+depthmode=0
+fix_tex_coord=64
+
+[EAB7B429-BAC92C57-C:45]
+Good Name=Ready 2 Rumble Boxing (U)
+Internal Name=READY 2 RUMBLE
+depthmode=0
+fix_tex_coord=64
+
+[E9219533-13FBAFBD-C:45]
+Good Name=Ready 2 Rumble Boxing Round 2 (U)
+Internal Name=Ready to Rumble
+depthmode=0
+fix_tex_coord=1
+
+[9B500E8E-E90550B3-C:50]
+Good Name=Resident Evil 2 (E) (M2)
+Internal Name=Resident Evil II
+adjust_aspect=0
+depthmode=0
+detect_cpu_write=1
+fix_tex_coord=128
+n64_z_scale=1
+swapmode=2
+fb_render=1
+
+[2F493DD0-2E64DFD9-C:45]
+Good Name=Resident Evil 2 (U) (V1.0)
+Internal Name=Resident Evil II
+adjust_aspect=0
+depthmode=0
+detect_cpu_write=1
+fix_tex_coord=128
+n64_z_scale=1
+swapmode=2
+fb_render=1
+
+[AA18B1A5-07DB6AEB-C:45]
+Good Name=Resident Evil 2 (U) (V1.1)
+adjust_aspect=0
+depthmode=0
+detect_cpu_write=1
+fix_tex_coord=128
+n64_z_scale=1
+swapmode=2
+fb_render=1
+
+[02D8366A-6CABEF9C-C:50]
+Good Name=Road Rash 64 (E)
+Internal Name=ROAD RASH 64
+depthmode=0
+swapmode=2
+
+[F050746C-247B820B-C:45]
+Good Name=Road Rash 64 (U)
+Internal Name=ROAD RASH 64
+depthmode=0
+swapmode=2
+
+[272B690F-AD0A7A77-C:4A]
+Good Name=Robot Ponkottsu 64 - 7tsu no Umi no Caramel (J)
+Internal Name=Robopon64
+depthmode=0
+
+[9FD375F8-45F32DC8-C:50]
+Good Name=Rocket - Robot on Wheels (M3)
+Internal Name=ROCKETROBOTONWHEELS
+clip_zmin=1
+
+[0C5EE085-A167DD3E-C:45]
+Good Name=Rocket - Robot on Wheels (U)
+Internal Name=ROCKETROBOTONWHEELS
+clip_zmin=1
+
+[D666593B-D7A25C07-C:4A]
+Good Name=Rockman Dash - Hagane no Boukenshin (J)
+Internal Name=RockMan Dash
+depthmode=1
+increase_texrect_edge=1
+
+[FEE97010-4E94A9A0-C:50]
+Good Name=RR64 - Ridge Racer 64 (E)
+Internal Name=RIDGE RACER 64
+depthmode=0
+force_calc_sphere=1
+
+[2500267E-2A7EC3CE-C:45]
+Good Name=RR64 - Ridge Racer 64 (U)
+Internal Name=RIDGE RACER 64
+depthmode=0
+force_calc_sphere=1
+
+[658F8F37-1813D28D-C:44]
+Good Name=RTL World League Soccer 2000 (G)
+Internal Name=RTL WLS2000
+buff_clear=0
+
+[0AC61D39-ABFA03A6-C:50]
+Good Name=Rugrats in Paris - The Movie (E)
+Internal Name=RUGRATS IN PARIS
+depthmode=1
+
+[1FC21532-0B6466D4-C:45]
+Good Name=Rugrats in Paris - The Movie (U)
+Internal Name=RUGRATS IN PARIS
+depthmode=1
+
+//================  S  ================
+[918E2D60-F865683E-C:50]
+Good Name=S.C.A.R.S. (E) (M3)
+Internal Name=SCARS
+depthmode=0
+filtering=1
+
+[769147F3-2033C10E-C:45]
+Good Name=S.C.A.R.S. (U)
+Internal Name=SCARS
+depthmode=0
+filtering=1
+
+[51D29418-D5B46AE3-C:50]
+Good Name=San Francisco Rush 2049 (E) (M6)
+Internal Name=RUSH 2049
+depthmode=0
+filtering=1
+force_texrect_zbuf=1
+
+[B9A9ECA2-17AAE48E-C:45]
+Good Name=San Francisco Rush 2049 (U)
+Internal Name=Rush 2049
+depthmode=0
+filtering=1
+force_texrect_zbuf=1
+
+[EBF5F6B7-C956D739-C:4A]
+Good Name=SD Hiryuu no Ken Densetsu (J)
+Internal Name=SD HIRYU STADIUM
+depthmode=0
+force_microcheck=1
+
+[93A625B9-2D6022E6-C:42]
+Good Name=Shadow Man (B)
+Internal Name=Shadowman
+depthmode=0
+
+[60C437E5-A2251EE3-C:50]
+Good Name=Shadow Man (E) (M3) [!]
+Internal Name=Shadowman
+depthmode=0
+
+[EA06F8C3-07C2DEED-C:46]
+Good Name=Shadow Man (F)
+Internal Name=Shadowman
+depthmode=0
+
+[84D5FD75-BBFD3CDF-C:44]
+Good Name=Shadow Man (G)
+Internal Name=Shadowman
+depthmode=0
+
+[3A4760B5-2D74D410-C:45]
+Good Name=Shadow Man (U)
+Internal Name=Shadowman
+depthmode=0
+
+[B73AB6F6-296267DD-C:45]
+Good Name=Sin & Punishment (J) [T]
+Internal Name=Sin and Punishment
+depthmode=1
+fb_clear=1
+filtering=1
+old_style_adither=1
+
+[C2751D1A-F8C19BFF-C:50]
+Good Name=Snowboard Kids 2 (E)
+Internal Name=SNOWBOARD KIDS2
+filtering=1
+swapmode=0
+
+[930C29EA-939245BF-C:45]
+Good Name=Snowboard Kids 2 (U)
+Internal Name=SNOWBOARD KIDS2
+filtering=1
+swapmode=0
+
+[C00CA948-8E60D34B-C:50]
+Good Name=South Park - Chef's Luv Shack (E)
+Internal Name=South Park Chef's Lu
+buff_clear=0
+depthmode=1
+filtering=1
+fix_tex_coord=4
+fog=0
+
+[C00CA948-8E60D34B-C:45]
+Good Name=South Park - Chef's Luv Shack (U)
+Internal Name=South Park: Chef's L
+buff_clear=0
+depthmode=1
+filtering=2
+fix_tex_coord=4
+fog=0
+
+[37463412-EAC5388D-C:4A]
+Good Name=Space Dynamites (J)
+Internal Name=SPACE DYNAMITES
+force_microcheck=1
+
+[FC70E272-08FFE7AA-C:50]
+Good Name=Space Station Silicon Valley (E) (M7)
+Internal Name=Silicon Valley
+depthmode=0
+filtering=1
+
+[BFE23884-EF48EAAF-C:4A]
+Good Name=Space Station Silicon Valley (J)
+Internal Name=Silicon Valley
+depthmode=0
+filtering=1
+
+[BFE23884-EF48EAAF-C:45]
+Good Name=Space Station Silicon Valley (U)
+Internal Name=Silicon Valley
+depthmode=0
+filtering=1
+
+[A60ED171-3D85D06E-C:45]
+Good Name=Spider-Man (U)
+Internal Name=SPIDERMAN
+fast_crc=0
+
+[B703EB23-28AAE53A-C:4A]
+Good Name=Star Soldier - Vanishing Earth (J)
+Internal Name=STAR SOLDIER
+depthmode=1
+filtering=1
+force_microcheck=1
+swapmode=0
+
+[DDD93C85-DAE381E8-C:45]
+Good Name=Star Soldier - Vanishing Earth (U)
+Internal Name=STAR SOLDIER
+depthmode=1
+filtering=1
+force_microcheck=1
+swapmode=0
+
+[F163A242-F2449B3B-C:4A]
+Good Name=Star Twins (J)
+Internal Name=STAR TWINS
+alt_tex_size=1
+decrease_fillrect_edge=1
+depthmode=1
+read_back_to_screen=1
+swapmode=2
+
+[4D486681-AB7D9245-C:50]
+Good Name=Star Wars - Shadows of the Empire (E)
+Internal Name=Shadow of the Empire
+swapmode=2
+
+[264D7E5C-18874622-C:45]
+Good Name=Star Wars - Shadows of the Empire (U) (V1.0)
+Internal Name=Shadow of the Empire
+swapmode=2
+
+[4147B091-63251060-C:45]
+Good Name=Star Wars - Shadows of the Empire (U) (V1.1)
+Internal Name=Shadow of the Empire
+swapmode=2
+
+[4DD7ED54-74F9287D-C:45]
+Good Name=Star Wars - Shadows of the Empire (U) (V1.2)
+Internal Name=Shadow of the Empire
+swapmode=2
+
+[FE24AC63-1B41AA17-C:4A]
+Good Name=Star Wars - Teikoku no Kage (J)
+Internal Name=Shadow of the Empire
+swapmode=2
+
+[53ED2DC4-06258002-C:50]
+Good Name=Star Wars Episode I - Racer (E) (M3)
+Internal Name=STAR WARS EP1 RACER
+fb_render=1
+swapmode=2
+
+[61F5B152-046122AB-C:4A]
+Good Name=Star Wars Episode I - Racer (J)
+Internal Name=STAR WARS EP1 RACER
+fb_render=1
+swapmode=2
+
+[72F70398-6556A98B-C:45]
+Good Name=Star Wars Episode I - Racer (U)
+Internal Name=STAR WARS EP1 RACER
+fb_render=1
+swapmode=2
+
+[42CF5EA3-9A1334DF-C:50]
+Good Name=StarCraft 64 (E)
+Internal Name=STARCRAFT 64
+aspect=2
+depthmode=1
+detect_cpu_write=1
+filtering=2
+fog=0
+
+[FD6907F0-83CBC160-C:44]
+Good Name=StarCraft 64 (G) (Beta)
+Internal Name=STARCRAFT 64
+aspect=2
+depthmode=1
+detect_cpu_write=1
+filtering=2
+fog=0
+
+[BC9B2CC3-4ED04DA5-C:37]
+Good Name=StarCraft 64 (U) (Beta)
+Internal Name=Á2ÙE8y)±tU…y7àÕ]¹9
+aspect=2
+depthmode=1
+detect_cpu_write=1
+filtering=2
+fog=0
+
+[0684FBFB-5D3EA8A5-C:45]
+Good Name=StarCraft 64 (U)
+Internal Name=STARCRAFT 64
+aspect=2
+depthmode=1
+detect_cpu_write=1
+filtering=2
+fog=0
+
+[A03CF036-BCC1C5D2-C:50]
+Good Name=Super Mario 64 (E) (M3)
+Internal Name=SUPER MARIO 64
+depth_bias=32
+depthmode=1
+filtering=0
+lodmode=1
+
+[4EAA3D0E-74757C24-C:4A]
+Good Name=Super Mario 64 (J)
+Internal Name=SUPER MARIO 64
+depth_bias=32
+depthmode=1
+filtering=0
+lodmode=1
+
+[635A2BFF-8B022326-C:45]
+Good Name=Super Mario 64 (U)
+Internal Name=SUPER MARIO 64
+depth_bias=32
+depthmode=1
+filtering=0
+lodmode=1
+
+[D6FBA4A8-6326AA2C-C:4A]
+Good Name=Super Mario 64 - Shindou Edition (J)
+Internal Name=SUPERMARIO64
+depth_bias=32
+depthmode=1
+filtering=0
+lodmode=1
+
+[66572080-28E348E1-C:4A]
+Good Name=Super Robot Spirits (J)
+Internal Name=SUPERROBOTSPIRITS
+aspect=2
+
+[1649D810-F73AD6D2-C:4A]
+Good Name=Super Robot Taisen 64 (J)
+Internal Name=½°Êß°ÛÎÞ¯ÄÀ²¾Ý64
+fast_crc=0
+use_sts1_only=1
+
+[DD26FDA1-CB4A6BE3-C:55]
+Good Name=Super Smash Bros. (A)
+Internal Name=SMASH BROTHERS
+fb_read_always=1
+fb_smart=0
+
+[93945F48-5C0F2E30-C:50]
+Good Name=Super Smash Bros. (E) (M3)
+Internal Name=SMASH BROTHERS
+fb_read_always=1
+fb_smart=0
+
+[916B8B5B-780B85A4-C:45]
+Good Name=Super Smash Bros. (U)
+Internal Name=SMASH BROTHERS
+fb_read_always=1
+fb_smart=0
+
+[2CBB127F-09C2BFD8-C:50]
+Good Name=Supercross 2000 (E) (M3)
+Internal Name=Supercross
+buff_clear=0
+depthmode=1
+
+[C1452553-5D7B24D9-C:45]
+Good Name=Supercross 2000 (U)
+Internal Name=Supercross
+buff_clear=0
+depthmode=1
+
+[B44CAB74-07029A29-C:50]
+Good Name=Superman (E) (M6)
+Internal Name=SUPERMAN
+detect_cpu_write=1
+
+[A2E8F35B-C9DC87D9-C:45]
+Good Name=Superman (U) (M3)
+Internal Name=SUPERMAN
+detect_cpu_write=1
+
+[35E811F3-99792724-C:4A]
+Good Name=Susume! Taisen Puzzle Dama - Toukon! Marutama Chou (J)
+Internal Name=½½Ò!À²¾ÝÊß½ÞÙÀÞÏ
+depthmode=1
+fog=0
+force_microcheck=1
+swapmode=0
+
+//================  T  ================
+[AEBCDD54-15FF834A-C:50]
+Good Name=Taz Express (E) (M6)
+Internal Name=Taz Express
+buff_clear=0
+depthmode=0
+filtering=1
+
+[6C2C6C49-9BE5CA66-C:45]
+Good Name=Taz Express (U) (Unreleased)
+Internal Name=Taz Express
+buff_clear=0
+depthmode=0
+filtering=1
+
+[D9042FBB-FCFF997C-C:46]
+Good Name=Telefoot Soccer 2000 (F)
+Internal Name=TELEFOOT SOCCER 2000
+buff_clear=0
+
+[0FE684A9-8BB77AC4-C:50]
+Good Name=Tetrisphere (E)
+Internal Name=TETRISPHERE
+alt_tex_size=1
+depthmode=1
+fb_crc_mode=2
+increase_texrect_edge=1
+use_sts1_only=1
+
+[3C1FDABE-02A4E0BA-C:45]
+Good Name=Tetrisphere (U)
+Internal Name=TETRISPHERE
+alt_tex_size=1
+depthmode=1
+fb_crc_mode=2
+increase_texrect_edge=1
+use_sts1_only=1
+
+[F82DD377-8C3FB347-C:58]
+Good Name=TG Rally 2 (E)
+Internal Name=TG RALLY 2
+buff_clear=0
+depthmode=1
+filtering=1
+swapmode=2
+
+[9FC385E5-3ECC05C7-C:50]
+Good Name=The Legend of Zelda - Majora's Mask (E) (M4) (Debug Version)
+Internal Name=ZELDA MAJORA'S MASK
+depthmode=1
+fb_clear=1
+fb_crc_mode=0
+fb_render=1
+filtering=1
+wrap_big_tex=1
+
+[E97955C6-BC338D38-C:50]
+Good Name=The Legend of Zelda - Majora's Mask (E) (M4) (V1.0)
+Internal Name=ZELDA MAJORA'S MASK
+depthmode=1
+fb_clear=1
+fb_crc_mode=0
+fb_render=1
+filtering=1
+wrap_big_tex=1
+
+[0A5D8F83-98C5371A-C:50]
+Good Name=The Legend of Zelda - Majora's Mask (E) (M4) (V1.1)
+Internal Name=ZELDA MAJORA'S MASK
+depthmode=1
+fb_clear=1
+fb_crc_mode=0
+fb_render=1
+filtering=1
+wrap_big_tex=1
+
+[5354631C-03A2DEF0-C:45]
+Good Name=The Legend of Zelda - Majora's Mask (U)
+Internal Name=ZELDA MAJORA'S MASK
+depthmode=1
+fb_clear=1
+fb_crc_mode=0
+fb_render=1
+filtering=1
+wrap_big_tex=1
+
+[6AECEC4F-F0924814-C:50]
+Good Name=The Legend of Zelda - Majora's Mask - Collector's Edition (E) (M4) (GC)
+Internal Name=ZELDA MAJORA'S MASK
+depthmode=1
+fb_clear=1
+fb_crc_mode=0
+fb_render=1
+filtering=1
+wrap_big_tex=1
+
+[B443EB08-4DB31193-C:45]
+Good Name=The Legend of Zelda - Majora's Mask - Collector's Edition (U) (GC)
+Internal Name=ZELDA MAJORA'S MASK
+depthmode=1
+fb_clear=1
+fb_crc_mode=0
+fb_render=1
+filtering=1
+wrap_big_tex=1
+
+[BF799345-39FF7A02-C:45]
+Good Name=The Legend of Zelda - Majora's Mask - Preview Demo (U)
+Internal Name=MAJORA'S MASK
+depthmode=1
+fb_clear=1
+fb_crc_mode=0
+fb_render=1
+filtering=1
+wrap_big_tex=1
+
+[09465AC3-F8CB501B-C:50]
+Good Name=The Legend of Zelda - Ocarina of Time (E) (GC)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[B044B569-373C1985-C:50]
+Good Name=The Legend of Zelda - Ocarina of Time (E) (M3) (V1.0)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[B2055FBD-0BAB4E0C-C:50]
+Good Name=The Legend of Zelda - Ocarina of Time (E) (M3) (V1.1)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[F3DD35BA-4152E075-C:45]
+Good Name=The Legend of Zelda - Ocarina of Time (U) (GC)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[EC7011B7-7616D72B-C:45]
+Good Name=The Legend of Zelda - Ocarina of Time (U) (V1.0)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[D43DA81F-021E1E19-C:45]
+Good Name=The Legend of Zelda - Ocarina of Time (U) (V1.1)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[693BA2AE-B7F14E9F-C:45]
+Good Name=The Legend of Zelda - Ocarina of Time (U) (V1.2)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[1D4136F3-AF63EEA9-C:50]
+Good Name=The Legend of Zelda - Ocarina of Time - Master Quest (E) (GC)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[27A3831D-B505A533-C:45]
+Good Name=The Legend of Zelda - Ocarina of Time - Master Quest (E) [f1] (NTSC)
+Internal Name=ZELDA MASTER QUEST
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[1D4136F3-AF63EEA9-C:45]
+Good Name=The Legend of Zelda - Ocarina of Time - Master Quest (E) [h1C]
+Internal Name=ZELDA MASTER QUEST
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[917D18F6-69BC5453-C:45]
+Good Name=The Legend of Zelda - Ocarina of Time - Master Quest (U) (Debug Version)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[F034001A-AE47ED06-C:45]
+Good Name=The Legend of Zelda - Ocarina of Time - Master Quest (U) (GC)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[E61CFF0A-CE1C0D71-C:50]
+Good Name=The New Tetris (E)
+Internal Name=NEWTETRIS
+depthmode=0
+fix_tex_coord=1
+fog=0
+increase_texrect_edge=1
+pal230=1
+
+[2153143F-992D6351-C:45]
+Good Name=The New Tetris (U)
+Internal Name=NEWTETRIS
+depthmode=0
+fix_tex_coord=1
+fog=0
+increase_texrect_edge=1
+pal230=1
+
+[E0C4F72F-769E1506-C:50]
+Good Name=Tigger's Honey Hunt (E) (M7)
+Internal Name=Tigger's Honey Hunt
+buff_clear=0
+depthmode=0
+zmode_compare_less=1
+
+[4EBFDD33-664C9D84-C:45]
+Good Name=Tigger's Honey Hunt (U)
+Internal Name=Tigger's Honey Hunt
+buff_clear=0
+depthmode=0
+zmode_compare_less=1
+
+[2B4F4EFB-43C511FE-C:50]
+Good Name=Tom and Jerry in Fists of Furry (E) (M6)
+Internal Name=TOM AND JERRY
+depth_bias=2
+depthmode=0
+filtering=1
+
+[63E7391C-E6CCEA33-C:45]
+Good Name=Tom and Jerry in Fists of Furry (U)
+Internal Name=TOM AND JERRY
+depth_bias=2
+depthmode=0
+filtering=1
+
+[4875AF3D-9A66D3A2-C:50]
+Good Name=Tom Clancy's Rainbow Six (E)
+Internal Name=RAINBOW SIX
+depthmode=1
+fb_render=1
+increase_texrect_edge=1
+swapmode=0
+
+[486BF335-034DCC81-C:46]
+Good Name=Tom Clancy's Rainbow Six (F)
+Internal Name=RAINBOW SIX
+depthmode=1
+fb_render=1
+increase_texrect_edge=1
+swapmode=0
+
+[8D412933-588F64DB-C:44]
+Good Name=Tom Clancy's Rainbow Six (G)
+Internal Name=RAINBOW SIX
+depthmode=1
+fb_render=1
+increase_texrect_edge=1
+swapmode=0
+
+[392A0C42-B790E77D-C:45]
+Good Name=Tom Clancy's Rainbow Six (U)
+Internal Name=RAINBOW SIX
+depthmode=1
+fb_render=1
+increase_texrect_edge=1
+swapmode=0
+
+[093F916E-4408B698-C:50]
+Good Name=Tonic Trouble (E) (M5)
+Internal Name=Tonic Trouble
+depthmode=0
+detect_cpu_write=1
+
+[EF9E9714-C03B2C7D-C:45]
+Good Name=Tonic Trouble (U) (V1.1)
+Internal Name=Tonic Trouble
+depthmode=0
+detect_cpu_write=1
+
+[9F8926A5-0587B409-C:50]
+Good Name=Tony Hawk's Pro Skater (E)
+Internal Name=TONY HAWK SKATEBOARD
+depthmode=0
+filtering=1
+
+[204EC022-B119D185-C:45]
+Good Name=Tony Hawk's Pro Skater (U) (V1.0)
+Internal Name=TONY HAWK PRO SKATER
+depthmode=0
+filtering=1
+
+[E0144180-650B78C9-C:45]
+Good Name=Tony Hawk's Pro Skater (U) (V1.1)
+Internal Name=TONY HAWK PRO SKATER
+depthmode=0
+filtering=1
+
+[84EAB557-C88A190F-C:50]
+Good Name=Tony Hawk's Pro Skater 2 (E)
+Internal Name=THPS2
+depthmode=0
+filtering=1
+
+[99150E18-1266E6A5-C:45]
+Good Name=Tony Hawk's Pro Skater 2 (U)
+Internal Name=THPS2
+depthmode=0
+filtering=1
+
+[1A7F70B5-00B7B9FD-C:45]
+Good Name=Tony Hawk's Pro Skater 3 (U)
+Internal Name=THPS3
+depthmode=0
+filtering=1
+
+[5F3F49C6-0DC714B0-C:50]
+Good Name=Top Gear Hyper Bike (E)
+Internal Name=Top Gear Hyper Bike
+depthmode=0
+fb_clear=1
+fb_info_disable=1
+swapmode=2
+
+[845B0269-57DE9502-C:4A]
+Good Name=Top Gear Hyper Bike (J)
+Internal Name=Top Gear Hyper Bike
+depthmode=0
+fb_clear=1
+fb_info_disable=1
+swapmode=2
+
+[8ECC02F0-7F8BDE81-C:45]
+Good Name=Top Gear Hyper Bike (U)
+Internal Name=Top Gear Hyper Bike
+depthmode=0
+fb_clear=1
+fb_info_disable=1
+swapmode=2
+
+[D09BA538-1C1A5489-C:50]
+Good Name=Top Gear Overdrive (E)
+Internal Name=Top Gear Overdrive
+buff_clear=0
+depthmode=0
+fb_info_disable=1
+
+[0578F24F-9175BF17-C:4A]
+Good Name=Top Gear Overdrive (J)
+Internal Name=Top Gear Overdrive
+buff_clear=0
+depthmode=0
+fb_info_disable=1
+
+[D741CD80-ACA9B912-C:45]
+Good Name=Top Gear Overdrive (U)
+Internal Name=Top Gear Overdrive
+buff_clear=0
+depthmode=0
+fb_info_disable=1
+
+[7F43E701-536328D1-C:50]
+Good Name=Top Gear Rally (E)
+Internal Name=TOP GEAR RALLY
+depth_bias=64
+depthmode=0
+fillcolor_fix=1
+
+[0E596247-753D4B8B-C:4A]
+Good Name=Top Gear Rally (J)
+Internal Name=TOP GEAR RALLY
+depth_bias=64
+depthmode=0
+fillcolor_fix=1
+
+[62269B3D-FE11B1E8-C:45]
+Good Name=Top Gear Rally (U)
+Internal Name=TOP GEAR RALLY
+depth_bias=64
+depthmode=0
+fillcolor_fix=1
+
+[BEBAB677-51B0B5E4-C:50]
+Good Name=Top Gear Rally 2 (E)
+Internal Name=TOP GEAR RALLY 2
+buff_clear=0
+depthmode=1
+filtering=1
+swapmode=2
+
+[CFEF2CD6-C9E973E6-C:4A]
+Good Name=Top Gear Rally 2 (J)
+Internal Name=TOP GEAR RALLY 2
+buff_clear=0
+depthmode=1
+filtering=1
+swapmode=2
+
+[BE5973E0-89B0EDB8-C:45]
+Good Name=Top Gear Rally 2 (U)
+Internal Name=TOP GEAR RALLY 2
+buff_clear=0
+depthmode=1
+filtering=1
+swapmode=2
+
+[CCEB3858-26952D97-C:50]
+Good Name=Toy Story 2 (E)
+zmode_compare_less=1
+
+[CB93DB97-7F5C63D5-C:46]
+Good Name=Toy Story 2 (F)
+zmode_compare_less=1
+
+[782A9075-E552631D-C:44]
+Good Name=Toy Story 2 (G)
+zmode_compare_less=1
+
+[BC4F2AB8-AA99E32E-C:44]
+Good Name=Toy Story 2 (G) (V1.1)
+zmode_compare_less=1
+
+[A150743E-CF2522CD-C:45]
+Good Name=Toy Story 2 (U)
+zmode_compare_less=1
+
+[C151AD61-280FFF22-C:45]
+Good Name=Toy Story 2 (U) (V1.1)
+zmode_compare_less=1
+
+[FE4B6B43-081D29A7-C:45]
+Good Name=Triple Play 2000 (U)
+Internal Name=TRIPLE PLAY 2000
+depthmode=0
+wrap_big_tex=1
+
+[B6BC0FB0-E3812198-C:4A]
+Good Name=Tsumi to Batsu - Hoshi no Keishousha (J)
+Internal Name=TSUMI TO BATSU
+depthmode=1
+fb_clear=1
+filtering=1
+old_style_adither=1
+
+[E688A5B8-B14B3F18-C:50]
+Good Name=Twisted Edge Extreme Snowboarding (E)
+Internal Name=TWISTED EDGE
+depthmode=1
+fb_clear=1
+fb_render=1
+
+[BBC99D32-117DAA80-C:45]
+Good Name=Twisted Edge Extreme Snowboarding (U)
+Internal Name=TWISTED EDGE
+depthmode=1
+fb_clear=1
+
+//================  V  ================
+[636E6B19-E57DDC5F-C:50]
+Good Name=V-Rally Edition 99 (E) (M3)
+Internal Name=V-RALLY
+buff_clear=0
+depthmode=0
+filtering=1
+fix_tex_coord=3
+swapmode=0
+
+[4D0224A5-1BEB5794-C:4A]
+Good Name=V-Rally Edition 99 (J)
+Internal Name=V-RALLY
+buff_clear=0
+depthmode=0
+filtering=1
+fix_tex_coord=3
+swapmode=0
+
+[3C059038-C8BF2182-C:45]
+Good Name=V-Rally Edition 99 (U)
+Internal Name=V-RALLY
+buff_clear=0
+depthmode=0
+filtering=1
+fix_tex_coord=3
+swapmode=0
+
+[98F9F2D0-03D9F09C-C:50]
+Good Name=Virtual Pool 64 (E)
+Internal Name=Virtual Pool 64
+buff_clear=0
+depthmode=1
+
+[4E4A7643-A37439D7-C:45]
+Good Name=Virtual Pool 64 (U)
+Internal Name=Virtual Pool 64
+buff_clear=0
+depthmode=1
+
+//================  W  ================
+[93053075-261E0F43-C:50]
+Good Name=Waialae Country Club - True Golf Classics (E) (M4) (V1.0)
+Internal Name=Waialae Country Club
+depthmode=0
+fb_smart=1
+wrap_big_tex=1
+
+[0C5057AD-046E126E-C:50]
+Good Name=Waialae Country Club - True Golf Classics (E) (M4) (V1.1)
+Internal Name=Waialae Country Club
+depthmode=0
+fb_smart=1
+wrap_big_tex=1
+
+[8066D58A-C3DECAC1-C:45]
+Good Name=Waialae Country Club - True Golf Classics (U) (V1.0)
+Internal Name=Waialae Country Club
+depthmode=0
+fb_smart=1
+wrap_big_tex=1
+
+[DD318CE2-B73798BA-C:45]
+Good Name=Waialae Country Club - True Golf Classics (U) (V1.1)
+Internal Name=Waialae Country Club
+depthmode=0
+fb_smart=1
+wrap_big_tex=1
+
+[D715CC70-271CF5D6-C:50]
+Good Name=War Gods (E)
+filtering=2
+
+[F7FE28F6-C3F2ACC3-C:45]
+Good Name=War Gods (U)
+filtering=2
+
+[650EFA96-30DDF9A7-C:50]
+Good Name=Wave Race 64 (E) (M2)
+Internal Name=WAVE RACE 64
+pal230=1
+
+[5C9191D6-B30AC306-C:4A]
+Good Name=Wave Race 64 (J) (V1.0)
+Internal Name=WAVE RACE 64
+pal230=1
+
+[44995484-20A5FC5E-C:4A]
+Good Name=Wave Race 64 (J) (V1.1)
+Internal Name=WAVE RACE 64
+pal230=1
+
+[7DE11F53-74872F9D-C:45]
+Good Name=Wave Race 64 (U) (V1.0)
+Internal Name=WAVE RACE 64
+pal230=1
+
+[492F4B61-04E5146A-C:45]
+Good Name=Wave Race 64 (U) (V1.1)
+Internal Name=WAVE RACE 64
+pal230=1
+
+[535DF3E2-609789F1-C:4A]
+Good Name=Wave Race 64 - Shindou Edition (J) (V1.2)
+Internal Name=WAVE RACE 64
+pal230=1
+
+[D4C45A1A-F425B25E-C:45]
+Good Name=WCW Nitro (U)
+Internal Name=NITRO64
+
+[0CEBC4C7-0C9CE932-C:4A]
+Good Name=Wild Choppers (J)
+Internal Name=WILD CHOPPERS
+depthmode=0
+filtering=1
+
+[54310E7D-6B5430D8-C:50]
+Good Name=Wipeout 64 (E)
+Internal Name=Wipeout 64
+depthmode=0
+filtering=1
+swapmode=2
+
+[132D2732-C70E9118-C:45]
+Good Name=Wipeout 64 (U)
+Internal Name=Wipeout 64
+depthmode=0
+filtering=1
+swapmode=2
+
+[E43C9765-05B1C1BE-C:4A]
+Good Name=Wonder Project J2 - Corlo no Mori no Josette (J)
+Internal Name=WONDER PROJECT J2
+buff_clear=0
+depthmode=0
+swapmode=0
+
+[4F1E88F7-4A5A3F96-C:4A]
+Good Name=Wonder Project J2 [T]
+buff_clear=0
+depthmode=0
+swapmode=0
+
+[F9FC3090-FF014EC2-C:50]
+Good Name=World Cup 98 (E) (M8)
+Internal Name=World Cup 98
+depthmode=0
+swapmode=0
+
+[BD636D6A-5D1F54BA-C:45]
+Good Name=World Cup 98 (U) (M8)
+Internal Name=World Cup 98
+depthmode=0
+swapmode=0
+
+[90A59003-31089864-C:45]
+Good Name=WWF WrestleMania 2000 (U)
+Internal Name=WRESTLEMANIA 2000
+depthmode=0
+
+//================  Y  ================
+[9F8B96C3-A01194DC-C:4A]
+Good Name=Yakouchuu II - Satsujin Kouro (J)
+Internal Name=YAKOUTYUU2
+depthmode=0
+
+[2DCFCA60-8354B147-C:4A]
+Good Name=Yoshi Story (J)
+Internal Name=YOSHI STORY
+depthmode=1
+fb_smart=0
+filtering=1
+fix_tex_coord=32
+fog=0
+
+[D3F97D49-6924135B-C:50]
+Good Name=Yoshi's Story (E) (M3)
+Internal Name=YOSHI STORY
+depthmode=1
+fb_smart=0
+filtering=1
+fix_tex_coord=32
+fog=0
+
+[2337D8E8-6B8E7CEC-C:45]
+Good Name=Yoshi's Story (U) (M2)
+Internal Name=YOSHI STORY
+depthmode=1
+fb_smart=0
+filtering=1
+fix_tex_coord=32
+fog=0
+
+[9FE6162D-E97E4037-C:4A]
+Good Name=Yuke Yuke!! Trouble Makers (J)
+Internal Name=TROUBLE MAKERS
+depthmode=1
+fog=0
+mischief_tex_hack=0
+
+//================  Z  ================
+[EC417312-EB31DE5F-C:4A]
+Good Name=Zelda no Densetsu - Mujura no Kamen (J) (V1.0)
+Internal Name=THE MASK OF MUJURA
+depthmode=1
+fb_clear=1
+fb_crc_mode=0
+fb_render=1
+filtering=1
+wrap_big_tex=1
+
+[69AE0438-2C63F3F3-C:4A]
+Good Name=Zelda no Densetsu - Mujura no Kamen (J) (V1.1)
+Internal Name=THE MASK OF MUJURA
+depthmode=1
+fb_clear=1
+fb_crc_mode=0
+fb_render=1
+filtering=1
+wrap_big_tex=1
+
+[8473D0C1-23120666-C:4A]
+Good Name=Zelda no Densetsu - Mujura no Kamen - Zelda Collection Version (J) (GC)
+Internal Name=ZELDA MAJORA'S MASK
+depthmode=1
+fb_clear=1
+fb_crc_mode=0
+fb_render=1
+filtering=1
+wrap_big_tex=1
+
+[EC7011B7-7616D72B-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina (J) (V1.0)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[D43DA81F-021E1E19-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina (J) (V1.1)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[693BA2AE-B7F14E9F-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina (J) (V1.2)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[F7F52DB8-2195E636-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina - Zelda Collection Version (J) (GC)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[F611F4BA-C584135C-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina GC (J) (GC)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+[F43B45BA-2F0E9B6F-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina GC URA (J) (GC)
+Internal Name=THE LEGEND OF ZELDA
+depth_bias=60
+depthmode=1
+fb_clear=1
+fb_render=1
+filtering=1
+
+//================  PD  ================
+//
+// ROMs below are PD/Intros/Emus and other Non Commercial
+
+[F828DF21-C5E83F66-C:0]
+Good Name=LCARS Demo by WT Riker (PD)
+Internal Name=LCARS - WT_Riker
+depthmode=1
+
+[21548CA9-9059F32C-C:0]
+Good Name=Mini Racers (Unreleased)
+Internal Name=Mini Racers
+buff_clear=0
+force_microcheck=1
+swapmode=0
+
+[37955E65-C6F2B7B3-C:0]
+Good Name=Tamiya Racing 64 (Unreleased)
+force_microcheck=1

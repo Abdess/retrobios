@@ -1,0 +1,96 @@
+<!--
+  Supermodel
+  A Sega Model 3 Arcade Emulator.
+  Copyright 2003-2026 The Supermodel Team
+
+  Music.xml
+
+  This file defines custom MPEG music tracks to be used in DSB1 and DSB2 games.
+  Make sure to use MP3 files sampled at 32 KHz. Normal sampling rates (e.g. 44.1
+  or 48 KHz) will sound slow.
+
+  The examples below are wrapped in dummy <comment></comment> blocks to render
+  them inactive. Remove these and add your own MP2 or MP3 files.
+-->
+<games>
+  <!-- Scud Race (Australian version)-->
+  <!-- Works for all versions of Scud Race. Copy this and change game name
+       accordingly (e.g., "scudplus", "scuddx", etc.) -->
+  <comment> <!-- Remove this tag -->
+  <game name="scudau">
+    <track mpeg_rom_start_offset="0x001d4b42" filepath="Rick Astley - Together Forever - 32 KHz.mp3" />         <!-- Beginner Day -->
+    <track mpeg_rom_start_offset="0x000e7e41" filepath="Rick Astley - Together Forever - 32 KHz.mp3" />         <!-- Beginner Night (initial start) -->
+    <track mpeg_rom_start_offset="0x00103981" filepath="Rick Astley - Together Forever - 32 KHz.mp3" />         <!-- Beginner Night (loop point) -->
+    <track mpeg_rom_start_offset="0x00000000" filepath="Rick Astley - Together Forever - 32 KHz.mp3" />         <!-- Medium (initial start) -->
+    <track mpeg_rom_start_offset="0x0001caff" filepath="Rick Astley - Together Forever - 32 KHz.mp3" />         <!-- Medium (loop point) -->
+    <track mpeg_rom_start_offset="0x0037a4c4" filepath="Rick Astley - Together Forever - 32 KHz.mp3" />         <!-- Expert (initial start) -->
+    <track mpeg_rom_start_offset="0x0037fc84" filepath="Rick Astley - Together Forever - 32 KHz.mp3" />         <!-- Expert (loop point) -->
+    <track mpeg_rom_start_offset="0x002afa83" filepath="Rick Astley - Together Forever - 32 KHz.mp3" />         <!-- Extra (initial start) -->
+    <track mpeg_rom_start_offset="0x002b4943" filepath="Rick Astley - Together Forever - 32 KHz.mp3" />         <!-- Extra (loop point) -->
+    <track mpeg_rom_start_offset="0x00463745" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Selector -->
+  </game>
+  </comment>  <!-- Remove this tag -->
+
+  <!-- Daytona USA 2: Battle on the Edge (daytona2) -->
+  <!-- For Power Edition, copy this and change game name to "dayto2pe" -->
+  <comment> <!-- Remove this tag -->
+  <game name="daytona2">
+    <track mpeg_rom_start_offset="0x000109e8" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Advertise, Dennis -->
+    <track mpeg_rom_start_offset="0x001214aa" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Beginner, Dennis (initial start) -->
+    <track mpeg_rom_start_offset="0x00124f2a" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Beginner, Dennis (loop point) -->
+    <track mpeg_rom_start_offset="0x002bc7ac" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Advanced, Dennis (initial start) -->
+    <track mpeg_rom_start_offset="0x002edd6c" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Advanced, Dennis (loop point) -->
+    <track mpeg_rom_start_offset="0x003cddae" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Expert, Dennis (initial start) -->
+    <track mpeg_rom_start_offset="0x003fe3ae" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Expert, Dennis (loop point) -->
+    <track mpeg_rom_start_offset="0x00d80e02" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Advertise, Mitsuyoshi -->
+    <track mpeg_rom_start_offset="0x005177b0" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Beginner, Mitsuyoshi (initial start) -->
+    <track mpeg_rom_start_offset="0x0051aff0" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Beginner, Mitsuyoshi (loop point) -->
+    <track mpeg_rom_start_offset="0x007cd0b4" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Advanced, Mitsuyoshi (initial start) -->
+    <track mpeg_rom_start_offset="0x007fe674" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Advanced, Mitsuyoshi (loop point) -->
+    <track mpeg_rom_start_offset="0x008df436" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Expert, Mitsuyoshi (initial start) -->
+    <track mpeg_rom_start_offset="0x008df676" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Expert, Mitsuyoshi (loop point) -->
+    <track mpeg_rom_start_offset="0x00a29978" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- How To (initial start) -->
+    <track mpeg_rom_start_offset="0x00a50438" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- How To (loop point) -->
+    <track mpeg_rom_start_offset="0x00b1427a" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Selector (initial start)  -->
+    <track mpeg_rom_start_offset="0x00b2f6fa" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Selector (loop point) -->
+    <track mpeg_rom_start_offset="0x00c4213e" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Name Entry -->
+    <track mpeg_rom_start_offset="0x00cc9380" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Ending (Beginner) -->
+    <track mpeg_rom_start_offset="0x006b2ab2" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Ending (Advanced) -->
+    <track mpeg_rom_start_offset="0x00e8de44" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Ending (Expert) -->
+    <track mpeg_rom_start_offset="0x00f458c6" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Ending (Expert 2) -->
+    <track mpeg_rom_start_offset="0x0076ff34" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Goal (Beginner) -->
+    <track mpeg_rom_start_offset="0x0078c136" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Goal (Advanced) -->
+    <track mpeg_rom_start_offset="0x007a7c78" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Goal (Expert) -->
+  </game>
+  </comment>  <!-- Remove this tag -->
+
+  <!-- Sega Rally 2 -->
+  <comment> <!-- Remove this tag -->
+  <game name="srally2">
+    <!--
+      Note: Some tracks are played as mono, sourced from a single audio channel.
+      For these, ensure that your audio file contains the appropriate song
+      rendered in mono in the correct stereo channel.
+    -->
+    <track mpeg_rom_start_offset="0x000109e8" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Left channel: BM_ADV1 (initial start), Right channel: BM_RESERVE2 -->
+    <track mpeg_rom_start_offset="0x00010c28" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Left channel: BM_ADV1 (loop point) -->
+    <track mpeg_rom_start_offset="0x001e576a" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_ADV2 (initial start) -->
+    <track mpeg_rom_start_offset="0x001e59aa" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_ADV2 (loop point) -->
+    <track mpeg_rom_start_offset="0x003452ac" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_MOUNTAIN (initial start) -->
+    <track mpeg_rom_start_offset="0x003accec" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_MOUNTAIN (loop point) -->
+    <track mpeg_rom_start_offset="0x00a60ff6" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_RESULT -->
+    <track mpeg_rom_start_offset="0x005d1ab0" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_SNOWY (initial start) -->
+    <track mpeg_rom_start_offset="0x006343f0" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_SNOWY (loop point) -->
+    <track mpeg_rom_start_offset="0x007b22f2" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Left channel: BM_N_MOUNTAIN (initial start), Right channel: BM_RESERVE1 (initial start) -->
+    <track mpeg_rom_start_offset="0x008162b2" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Left channel: BM_N_MOUNTAIN -->
+    <track mpeg_rom_start_offset="0x007fe672" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- Right channel: BM_RESERVE1 (loop point) -->
+    <track mpeg_rom_start_offset="0x00976934" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_ENDING -->
+    <track mpeg_rom_start_offset="0x00ade038" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_DESERT -->
+    <track mpeg_rom_start_offset="0x00cf517a" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_SELECT -->
+    <track mpeg_rom_start_offset="0x00cf53ba" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_SELECT -->
+    <track mpeg_rom_start_offset="0x00d9f87c" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_IGNITION -->
+    <track mpeg_rom_start_offset="0x00f95fbe" filepath="Rick Astley - Never Gonna Give You Up - 32 KHz.mp3" />  <!-- BM_GAMEOVER -->
+  </game>
+  </comment>  <!-- Remove this tag -->
+
+</games>

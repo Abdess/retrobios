@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>0x24</key>
+	<string>Return</string>
+	<key>0x30</key>
+	<string>Tab</string>
+	<key>0x35</key>
+	<string>Esc</string>
+	<key>0x31</key>
+	<string>Spacebar</string>
+	<key>0x33</key>
+	<string>Delete</string>
+	<key>0x37</key>
+	<string>Command</string>
+	<key>0x38</key>
+	<string>Shift</string>
+	<key>0x39</key>
+	<string>Caps Lock</string>
+	<key>0x3A</key>
+	<string>Option</string>
+	<key>0x3B</key>
+	<string>Control</string>
+	<key>0x7E</key>
+	<string>Up Arrow</string>
+	<key>0x7D</key>
+	<string>Down Arrow</string>
+	<key>0x7B</key>
+	<string>Left Arrow</string>
+	<key>0x7C</key>
+	<string>Right Arrow</string>
+	<key>0x7A</key>
+	<string>F1</string>
+	<key>0x78</key>
+	<string>F2</string>
+	<key>0x63</key>
+	<string>F3</string>
+	<key>0x76</key>
+	<string>F4</string>
+	<key>0x60</key>
+	<string>F5</string>
+	<key>0x61</key>
+	<string>F6</string>
+	<key>0x62</key>
+	<string>F7</string>
+	<key>0x64</key>
+	<string>F8</string>
+	<key>0x65</key>
+	<string>F9</string>
+	<key>0x6D</key>
+	<string>F10</string>
+	<key>0x67</key>
+	<string>F11</string>
+	<key>0x6F</key>
+	<string>F12</string>
+	<key>0x69</key>
+	<string>F13</string>
+	<key>0x6B</key>
+	<string>F14</string>
+	<key>0x71</key>
+	<string>F15</string>
+	<key>0x72</key>
+	<string>Help</string>
+	<key>0x73</key>
+	<string>Home</string>
+	<key>0x74</key>
+	<string>Page Up</string>
+	<key>0x75</key>
+	<string>Del</string>
+	<key>0x77</key>
+	<string>End</string>
+	<key>0x79</key>
+	<string>Page Down</string>
+	<key>0x52</key>
+	<string>Keypad 0</string>
+	<key>0x53</key>
+	<string>Keypad 1</string>
+	<key>0x54</key>
+	<string>Keypad 2</string>
+	<key>0x55</key>
+	<string>Keypad 3</string>
+	<key>0x56</key>
+	<string>Keypad 4</string>
+	<key>0x57</key>
+	<string>Keypad 5</string>
+	<key>0x58</key>
+	<string>Keypad 6</string>
+	<key>0x59</key>
+	<string>Keypad 7</string>
+	<key>0x5B</key>
+	<string>Keypad 8</string>
+	<key>0x5C</key>
+	<string>Keypad 9</string>
+	<key>0x41</key>
+	<string>Keypad .</string>
+	<key>0x45</key>
+	<string>Keypad +</string>
+	<key>0x4E</key>
+	<string>Keypad -</string>
+	<key>0x43</key>
+	<string>Keypad *</string>
+	<key>0x4B</key>
+	<string>Keypad /</string>
+	<key>0x51</key>
+	<string>Keypad =</string>
+	<key>0x47</key>
+	<string>Clear</string>
+	<key>0x4C</key>
+	<string>Enter</string>
+	<key>0x34</key>
+	<string>Enter</string>
+</dict>
+</plist>

@@ -1,0 +1,65 @@
+﻿// ============ Audio RDB for Project64  ====================================
+[5326696F-FE9A99C3-C:45]
+FPSBuffer=0
+Fixed Audio=0
+Good Name=Body Harvest (U)
+
+[07861842-A12EBC9F-C:45]
+Fixed Audio=0
+Good Name=Excitebike 64 (U) (V1.0)
+Sync Audio=0
+
+[776646F6-06B9AC2B-C:50]
+Fixed Audio=0
+Good Name=F-ZERO X (E)
+
+[4D3E622E-9B828B4E-C:4A]
+Fixed Audio=0
+Good Name=F-ZERO X (J)
+
+[B30ED978-3003C9F9-C:45]
+Fixed Audio=0
+Good Name=F-ZERO X (U)
+
+[BBFDEC37-D93B9EC0-C:4A]
+Fixed Audio=0
+Good Name=F-ZERO X + Expansion Kit (J) [CART HACK]
+
+[C6E39C0A-D2726676-C:45]
+Fixed Audio=0
+Good Name=F-ZERO X + Expansion Kit (U) [CART HACK]
+
+[AA18B1A5-07DB6AEB-C:45]
+Good Name=Resident Evil 2 (U) (V1.1)
+Sync Audio=0
+
+[9510D8D7-35100DD2-C:45]
+Fixed Audio=0
+Good Name=Stunt Racer 64 (U)
+Sync Audio=0
+
+[7F43E701-536328D1-C:50]
+Good Name=Top Gear Rally (E)
+Sync Audio=0
+
+[62269B3D-FE11B1E8-C:45]
+Good Name=Top Gear Rally (U)
+Sync Audio=0
+
+[AC062778-DFADFCB8-C:50]
+Fixed Audio=0
+Good Name=World Driver Championship (E) (M5)
+Sync Audio=0
+
+[308DFEC8-CE2EB5F6-C:45]
+Fixed Audio=0
+Good Name=World Driver Championship (U)
+Sync Audio=0
+
+[00000000-00000000-C:4A]
+Fixed Audio=0
+Good Name=64DD IPL (JPN)
+
+[00000000-00000000-C:45]
+Fixed Audio=0
+Good Name=64DD IPL (USA)

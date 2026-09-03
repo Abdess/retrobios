@@ -189,6 +189,7 @@ files:
     has_builtin: true
     description: "Sega Kaku Gothic console font texture"
     source_ref: "src/lindbergh/hook.c:718-730, src/lindbergh/hook.c:902-914"
+    aliases: ["LucidaConsole_12.tga"]
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
       The built-in is one shared 128x256 atlas (fontTGA) and one metrics
@@ -215,6 +216,7 @@ files:
     has_builtin: true
     description: "Sega Kaku Gothic console font metrics"
     source_ref: "src/lindbergh/hook.c:732-744, src/lindbergh/hook.c:916-928"
+    aliases: ["LucidaConsole_12.abc"]
     note: >-
       Read from the game directory only when DISABLE_BUILTIN_FONT is set.
       The built-in is one shared 128x256 atlas (fontTGA) and one metrics

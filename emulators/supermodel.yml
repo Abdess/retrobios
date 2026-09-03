@@ -46,7 +46,6 @@ files:
     size: 295992
     required: true
     bundled: true
-    unsourceable: "Ships in the release archive next to the binary that loads it"
     description: "Player 1 light gun crosshair texture"
     note: "Both bitmaps are read on every launch whatever CrosshairStyle holds, since the load runs before the style decides anything, and a null surface aborts startup ahead of the Model 3 object. 32 bit BMP with alpha, sides a multiple of 2."
     source_ref: "Src/OSD/SDL/Crosshair.cpp:34-51, Src/OSD/SDL/Main.cpp:2350-2356, Assets/DIR.txt"
@@ -56,7 +55,6 @@ files:
     size: 295992
     required: true
     bundled: true
-    unsourceable: "Ships in the release archive next to the binary that loads it"
     description: "Player 2 light gun crosshair texture"
     note: "Read in the same call as the player 1 bitmap and equally fatal when it fails to load."
     source_ref: "Src/OSD/SDL/Crosshair.cpp:35, 49-51, Src/OSD/SDL/Main.cpp:2350-2356"
@@ -65,7 +63,6 @@ files:
     path: "Config/Music.xml"
     required: false
     bundled: true
-    unsourceable: "Ships in the release archive as a template whose every example sits inside a dummy comment tag"
     description: "Custom MPEG music track map"
     note: "Consulted only for a game with a DSB1 or DSB2 board, and skipped when the file is absent. Maps an MPEG ROM offset to an MP3 the user supplies."
     source_ref: "Src/OSD/SDL/Main.cpp:115, 940, Src/Sound/MPEG/MpegAudio.cpp:88-108"

@@ -1,0 +1,7190 @@
+// PJ64 v2.2 Official RDX (Rom Database eXtension)
+// Not for use with PJ64 v1.6 or previous
+// ----------------------------------------------------
+
+[Meta]
+Author=Project64 team
+Version=2.2.0
+Date=2015/03/30
+Homepage=www.pj64-emu.com
+
+//-------------------------  0-9  --------------------------
+
+[3B941695-F90A5EEB-C:50]
+Good Name=007 - The World is Not Enough (E) (M3)
+Developer=Eurocom
+ReleaseDate=2000/10/17
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[033F4C13-319EE7A7-C:45]
+Good Name=007 - The World is Not Enough (U)
+Developer=Eurocom
+ReleaseDate=2000/10/17
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[58FD3F25-D92EAA8D-C:50]
+Good Name=1080 Snowboarding (E) [!]
+Developer=Nintendo
+ReleaseDate=1998/04/01
+Genre=Sport-Snowbd
+Players=2
+ForceFeedback=Yes
+
+[1FBAF161-2C1C54F1-C:41]
+Good Name=1080 Snowboarding (JU) [!]
+Developer=Nintendo
+ReleaseDate=1998/04/01
+Genre=Sport-Snowbd
+Players=2
+ForceFeedback=Yes
+[ABA51D09-C668BAD9-C:58]
+Good Name=40 Winks (E) (M3) (Beta)
+Developer=Eurocom
+ReleaseDate=Unreleased
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[B98BA456-5B2B76AF-C:4A]
+Good Name=64 de Hakken!! Tamagotchi Minna de Tamagotchi World (J)
+Developer=Nintendo
+ReleaseDate=1998/04/01
+Genre=Sport-Snowbd
+Players=2
+ForceFeedback=No
+
+[9C961069-F5EA488D-C:4A]
+Good Name=64 Oozumou (J)
+Developer=Nintendo
+ReleaseDate=1998/04/01
+Genre=Sport-Snowbd
+Players=2
+ForceFeedback=Yes
+
+[85C18B16-DF9622AF-C:4A]
+Good Name=64 Oozumou 2 (J)
+Developer=Nintendo
+ReleaseDate=1998/04/01
+Genre=Sport-Snowbd
+Players=2
+ForceFeedback=Yes
+
+[7A6081FC-FF8F7A78-C:4A]
+Good Name=64 Trump Collection - Alice no Wakuwaku Trump World (J) [!]
+Developer=Bottom Up
+ReleaseDate=1998/08/07
+Genre=Party
+Players=1
+ForceFeedback=No
+
+//-------------------------  A  --------------------------
+
+[8F12C096-45DC17E1-C:50]
+Good Name=A Bug's Life (E) [!]
+Developer=Traveller's Tales
+ReleaseDate=1999/05/26
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[2B38AEC0-6350B810-C:46]
+Good Name=A Bug's Life (F) [!]
+Developer=Traveller's Tales
+ReleaseDate=1999/05/26
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[DFF227D9-0D4D8169-C:44]
+Good Name=A Bug's Life (G) [!]
+Developer=Traveller's Tales
+ReleaseDate=1999/05/26
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[F63B89CE-4582D57D-C:49]
+Good Name=A Bug's Life (I)
+Developer=Traveller's Tales
+ReleaseDate=1999/05/26
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[82DC04FD-CF2D82F4-C:45]
+Good Name=A Bug's Life (U) [!]
+Developer=Traveller's Tales
+ReleaseDate=1999/05/26
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[62F6BE95-F102D6D6-C:50]
+Good Name=Aerofighter's Assault (E) [!]
+Developer=Paradigm Entertainment, Inc.
+ReleaseDate=1999/11/22
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[1B598BF1-ECA29B45-C:45]
+Good Name=Aerofighter's Assault (U) [!]
+Developer=Paradigm Entertainment, Inc.
+ReleaseDate=1999/11/22
+Genre=Action
+Players=2
+ForceFeedback=No
+
+[D83045C8-F29D3A36-C:50]
+Good Name=AeroGauge (E) [!]
+Developer=Locomotive
+ReleaseDate=1998/05/21
+Genre=Racing-Future
+Players=2
+ForceFeedback=No
+
+[B00903C9-3916C146-C:4A]
+Good Name=AeroGauge - Kiosk (J) (V1.0)
+Developer=Locomotive
+ReleaseDate=1998/05/21
+Genre=Racing-Future
+Players=2
+ForceFeedback=No
+
+[80F41131-384645F6-C:4A]
+Good Name=AeroGauge (J) (V1.1) [!]
+Developer=Locomotive
+ReleaseDate=1998/05/21
+Genre=Racing-Future
+Players=2
+ForceFeedback=No
+
+[AEBE463E-CC71464B-C:45]
+Good Name=AeroGauge (U) [!]
+Developer=Locomotive
+ReleaseDate=1998/05/21
+Genre=Racing-Future
+Players=2
+ForceFeedback=No
+
+[8CC182A6-C2D0CAB0-C:4A]
+Good Name=AI Shogi 3 (J) [!]
+Developer=ASCII Entretaiment
+ReleaseDate=1998/12/18
+Genre=Party
+Players=4
+ForceFeedback=No
+
+[2DC4FFCC-C8FF5A21-C:50]
+Good Name=Aidyn Chronicles - The First Mage (E) [!]
+Developer=H2O Entertainment
+ReleaseDate=2001/08/03
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[E6A95A4F-BAD2EA23-C:45]
+Good Name=Aidyn Chronicles - The First Mage (U) [!] (V1.0)
+Developer=H2O Entertainment
+ReleaseDate=2001/03/14
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[112051D2-68BEF8AC-C:45]
+Good Name=Aidyn Chronicles - The First Mage (U) [!] (V1.1)
+Developer=H2O Entertainment
+ReleaseDate=2001/??/??
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[27C425D0-8C2D99C1-C:50]
+Good Name=Airboarder 64 (E) [!]
+Developer=Human Entertainment
+ReleaseDate=1998/03/27
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[6C45B60C-DCE50E30-C:4A]
+Good Name=Airboarder 64 (J) [!]
+Developer=Human Entertainment
+ReleaseDate=1998/03/27
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[B6951A94-63C849AF-C:4A]
+Good Name=Akumajou Dracula Mokushiroku - Real Action Adventure (J) [!]
+Developer=Konami
+ReleaseDate=1999/03/11
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[A5533106-B9F25E5B-C:4A]
+Good Name=Akumajou Dracula Mokushiroku Gaiden-Legend of Cornell (J) [!]
+Developer=Konami
+ReleaseDate=1999/12/25
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[DFD784AD-AE426603-C:50]
+Good Name=All Star Tennis '99 (E) [!]
+Developer=Smart Dog
+ReleaseDate=1999/09/01
+Genre=Sport-Tennis
+Players=4
+ForceFeedback=No
+
+[E185E291-4E50766D-C:45]
+Good Name=All Star Tennis '99 (U) [!]
+Developer=Smart Dog
+ReleaseDate=1999/09/01
+Genre=Sport-Tennis
+Players=4
+ForceFeedback=No
+
+[67D20729-F696774C-C:4A]
+Good Name=All Star! Dairantou Smash Brothers (J) [!]
+Developer=Nintendo
+ReleaseDate=1999/01/21
+Genre=Fighting
+Players=4
+ForceFeedback=Yes
+
+[A19F8089-77884B51-C:50]
+Good Name=All-Star Baseball 2000 (E) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1999/04/07
+Genre=Sport-Baseball
+Players=4
+ForceFeedback=Yes
+
+[5E547A4D-90E60795-C:45]
+Good Name=All-Star Baseball 2000 (U) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1999/04/07
+Genre=Sport-Baseball
+Players=4
+ForceFeedback=Yes
+
+[5446C6EF-E18E47BB-C:45]
+Good Name=All-Star Baseball 2001 (U) [!]
+Developer=High Voltage Software
+ReleaseDate=2000/03/31
+Genre=Sport-Baseball
+Players=4
+ForceFeedback=Yes
+
+[D9EDD54D-6BB8E274-C:50]
+Good Name=All-Star Baseball 99 (E) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/05/29
+Genre=Sport-Baseball
+Players=4
+ForceFeedback=Yes
+
+[C43E23A7-40B1681A-C:45]
+Good Name=All-Star Baseball 99 (U) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/05/29
+Genre=Sport-Baseball
+Players=4
+ForceFeedback=Yes
+
+[3CC77150-21CDB987-C:50]
+Good Name=Armorines - Project S.W.A.R.M. (E) [!]
+Developer=Acclaim Studios London
+ReleaseDate=1999/02/12
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[C0F6DB17-80E0D532-C:44]
+Good Name=Armorines - Project S.W.A.R.M. (G) [!]
+Developer=Acclaim Studios London
+ReleaseDate=1999/02/12
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[1FB5D932-3BA9481B-C:45]
+Good Name=Armorines - Project S.W.A.R.M. (U) [!]
+Developer=Acclaim Studios London
+ReleaseDate=1999/02/12
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[4C52BBB2-CEAB0F6B-C:45]
+Good Name=Army Men - Air Combat (U) [!]
+Developer=3DO
+ReleaseDate=2000/07/24
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[B210DF19-98B58D1A-C:50]
+Good Name=Army Men - Sarge's Heroes (E) [!]
+Developer=3DO
+ReleaseDate=1999/09/29
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[862C0657-8DFD896D-C:45]
+Good Name=Army Men - Sarge's Heroes (U) [!]
+Developer=3DO
+ReleaseDate=1999/09/29
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[B20F73B6-2975FC34-C:45]
+Good Name=Army Men - Sarge's Heroes 2 (U) [!]
+Developer=3DO
+ReleaseDate=2000/09/27
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[D1F7D8AB-293B0446-C:45]
+Good Name=Asteroids Hyper 64 (U) [!]
+Developer=Syrox Developments
+ReleaseDate=1999/01/12
+Genre=Puzzle
+Players=1
+ForceFeedback=Yes
+
+[FC7797BF-4A95E83C-C:50]
+Good Name=Automobili Lamborghini (E) [!]
+Developer=Titus
+ReleaseDate=1997/11/22
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[41B25DC4-1B726786-C:45]
+Good Name=Automobili Lamborghini (U) [!]
+Developer=Titus
+ReleaseDate=1997/11/22
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  B  --------------------------
+[E340A49C-74318D41-C:4A]
+Good Name=Baku Bomberman (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1997/09/26
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[E73C7C4F-AF93B838-C:4A]
+Good Name=Baku Bomberman 2 (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1999/12/03
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[DF98B95D-58840978-C:4A]
+Good Name=Bakuretsu Muteki Bangaioh (J) [!]
+Developer=Treasure
+ReleaseDate=1999/08/31
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[88CF980A-8ED52EB5-C:4A]
+Good Name=Bakushou Jinsei 64 - Mezase! Resort Ou (J) [!]
+Developer=Taito
+ReleaseDate=1998/12/24
+Genre=Party
+Players=4
+ForceFeedback=No
+
+[5168D520-CA5FCD0D-C:4A]
+Good Name=Banjo to Kazooie no Dai Bouken (J) [!]
+Developer=Rare
+ReleaseDate=1998/12/06
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[514B6900-B4B19881-C:4A]
+Good Name=Banjo to Kazooie no Dai Bouken 2 (J) [!]
+Developer=Rare
+ReleaseDate=2000/11/27
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[733FCCB1-444892F9-C:50]
+Good Name=Banjo-Kazooie (E) [!]
+Developer=Rare
+ReleaseDate=1998/06/30
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[A4BF9306-BF0CDFD1-C:45]
+Good Name=Banjo-Kazooie (U) [!]
+Developer=Rare
+ReleaseDate=1998/06/30
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[155B7CDF-F0DA7325-C:55]
+Good Name=Banjo-Tooie (A) [!]
+Developer=Rare
+ReleaseDate=2000/11/20
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[C9176D39-EA4779D1-C:50]
+Good Name=Banjo-Tooie (E) [!]
+Developer=Rare
+ReleaseDate=2000/11/20
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[C2E9AA9A-475D70AA-C:45]
+Good Name=Banjo-Tooie (U) [!]
+Developer=Rare
+ReleaseDate=2000/11/20
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[B088FBB4-441E4B1D-C:50]
+Good Name=Bass Hunter 64 (E) [!]
+Developer=Gear Head Entertainment
+ReleaseDate=1999/07/28
+Genre=Sport-Fishing
+Players=1
+ForceFeedback=Yes
+
+[D76333AC-0CB6219D-C:4A]
+Good Name=Bass Rush - Ecogear Powerworm Championship (J)
+Developer=Visco Games
+ReleaseDate=2000/04/28
+Genre=Sport-Fishing
+Players=1
+ForceFeedback=Yes
+
+[D137A2CA-62B65053-C:4A]
+Good Name=Bass Tsuri No. 1 - Shigesato Itoi's Bass Fishing (J) [!]
+Developer=Nintendo HAL
+ReleaseDate=2000/03/31
+Genre=Sport-Fishing
+Players=1
+ForceFeedback=Yes
+
+[BCFACCAA-B814D8EF-C:45]
+Good Name=Bassmasters 2000 (U) [!]
+Developer=Mass Media
+ReleaseDate=1999/12/16
+Genre=Sport-Fishing
+Players=2
+ForceFeedback=Yes
+
+[259F7F84-7C9EED26-C:50]
+Good Name=Batman of the Future - Return of the Joker (E) [!]
+Developer=Kemco
+ReleaseDate=2000/12/13
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[204489C1-1286CF2B-C:45]
+Good Name=Batman Beyond - Return of the Joker (U) [!]
+Developer=Kemco
+ReleaseDate=2000/12/12
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[0CAD17E6-71A5B797-C:50]
+Good Name=BattleTanx - Global Assault (E) [!]
+Developer=3DO
+ReleaseDate=1999/10/12
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[75A4E247-6008963D-C:45]
+Good Name=BattleTanx - Global Assault (U) [!]
+Developer=3DO
+ReleaseDate=1999/12/12
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[6AA4DDE7-E3E2F4E7-C:45]
+Good Name=BattleTanx (U) [!]
+Developer=3DO
+ReleaseDate=1998/12/29
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[55D4C4CE-7753C78A-C:45]
+Good Name=Battlezone - Rise of the Black Dogs (U) [!]
+Developer=Climax (UK)
+ReleaseDate=2000/05/29
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[91691C3D-F4AC5B4D-C:4A]
+Good Name=Beast Wars Metals (J) [!]
+Developer=Takara
+ReleaseDate=2000/07/12
+Genre=Fighting
+Players=2
+ForceFeedback=Yes
+
+[4D79D316-E8501B33-C:45]
+Good Name=Beast Wars Transmetal (U) [!]
+Developer=Takara
+ReleaseDate=1999/10/01
+Genre=Fighting
+Players=2
+ForceFeedback=Yes
+
+[A1B64A61-D014940B-C:50]
+Good Name=Beetle Adventure Racing! (E) [!]
+Developer=Paradigm Entertainment, Inc. / Electronic Arts
+ReleaseDate=1999/03/24
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[9C7318D2-24AE0DC1-C:4A]
+Good Name=Beetle Adventure Racing! (J) [!]
+Developer=Paradigm Entertainment, Inc. / Electronic Arts
+ReleaseDate=1999/03/24
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[EDF419A8-BF1904CC-C:45]
+Good Name=Beetle Adventure Racing! (U) [!]
+Developer=Paradigm Entertainment, Inc. / Electronic Arts
+ReleaseDate=1999/03/24
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[08FFA4B7-01F453B6-C:45]
+Good Name=Big Mountain 2000 (U) [!]
+Developer=Imagineer
+ReleaseDate=2000/10/10
+Genre=Sports-Snowbd
+Players=2
+ForceFeedback=Yes
+
+[AB7C101D-EC58C8B0-C:50]
+Good Name=Bio F.R.E.A.K.S. (E) [!]
+Developer=Saffire
+ReleaseDate=1998/05/19
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[08123595-0510F1DE-C:45]
+Good Name=Bio F.R.E.A.K.S. (U) [!]
+Developer=Saffire
+ReleaseDate=1998/05/19
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[7EAE2488-9D40A35A-C:4A]
+Good Name=Bio Hazard 2 (J) [!]
+Developer=Capcom
+ReleaseDate=2000/01/28
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[7C64E6DB-55B924DB-C:50]
+Good Name=Blast Corps (E) [!]
+Developer=Rare
+ReleaseDate=1997/03/26
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[7C647C25-D9D901E6-C:45]
+Good Name=Blast Corps (U) (V1.0) [!]
+Developer=Rare
+ReleaseDate=1997/03/26
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[7C647E65-1948D305-C:45]
+Good Name=Blast Corps (U) (V1.1) [!]
+Developer=Rare
+ReleaseDate=1997/03/26
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[65234451-EBD3346F-C:4A]
+Good Name=Blast Dozer (J) [!]
+Developer=Rare
+ReleaseDate=1997/03/21
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[D571C883-822D3FCF-C:50]
+Good Name=Blues Brothers 2000 (E) [!]
+Developer=Player 1
+ReleaseDate=2000/11/17
+Genre=Platform
+Players=2
+ForceFeedback=Yes
+
+[7CD08B12-1153FF89-C:45]
+Good Name=Blues Brothers 2000 (U) [!]
+Developer=Player 1
+ReleaseDate=2000/11/17
+Genre=Platform
+Players=2
+ForceFeedback=Yes
+
+[0B58B8CD-B7B291D2-C:50]
+Good Name=Body Harvest (E) [!]
+Developer=DMA Design
+ReleaseDate=1998/10/20
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[5326696F-FE9A99C3-C:45]
+Good Name=Body Harvest (U) [!]
+Developer=DMA Design
+ReleaseDate=1998/10/20
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[B3D451C6-E1CB58E2-C:4A]
+Good Name=Bokujo Monogatari 2 (J) (V1.0) [!]
+Developer=Victor
+ReleaseDate=1999/02/05
+Genre=Simulation
+Players=1
+ForceFeedback=No
+
+[736657F6-3C88A702-C:4A]
+Good Name=Bokujo Monogatari 2 (J) (V1.1)
+Developer=Victor
+ReleaseDate=????/??/??
+Genre=Simulation
+Players=1
+ForceFeedback=No
+
+[7365D8F8-9ED9326F-C:4A]
+Good Name=Bokujo Monogatari 2 (J) (V1.2)
+Developer=Victor
+ReleaseDate=????/??/??
+Genre=Simulation
+Players=1
+ForceFeedback=No
+
+[DF6FF0F4-29D14238-C:4A]
+Good Name=Bomberman 64 - Arcade Edition (J) [!]
+Developer=Hudson Soft
+ReleaseDate=??/??/??
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[237E73B4-D63B6B37-C:45]
+Good Name=Bomberman 64 - The Second Attack! (U) [!]
+Developer=Hudson Soft
+ReleaseDate=2000/05/29
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[5A160336-BC7B37B0-C:50]
+Good Name=Bomberman 64 (E) [!]
+Developer=Hudson Soft
+ReleaseDate=1997/12/01
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[F568D51E-7E49BA1E-C:45]
+Good Name=Bomberman 64 (U) [!]
+Developer=Hudson Soft
+ReleaseDate=1997/12/01
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[D85C4E29-88E276AF-C:50]
+Good Name=Bomberman Hero (E) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/09/01
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[67FF12CC-76BF0212-C:4A]
+Good Name=Bomberman Hero (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/09/01
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[4446FDD6-E3788208-C:45]
+Good Name=Bomberman Hero (U) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/09/01
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[D72FD14D-1FED32C4-C:45]
+Good Name=Bottom of the 9th (U) [!]
+Developer=Konami OSA
+ReleaseDate=1999/04/14
+Genre=Sport-Baseball
+Players=2
+ForceFeedback=No
+
+[1E22CF2E-42AAC813-C:45]
+Good Name=Brunswick Circuit Pro Bowling (U) [!]
+Developer=Point of View
+ReleaseDate=1999/12/22
+Genre=Sport-Bowling
+Players=2
+ForceFeedback=No
+
+[D5B2339C-CABCCAED-C:50]
+Good Name=Buck Bumble (E) [!]
+Developer=Argonaut Games
+ReleaseDate=1998/11/20
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[D7C762B6-F83D9642-C:4A]
+Good Name=Buck Bumble (J) [!]
+Developer=Argonaut Games
+ReleaseDate=1998/11/20
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[85AE781A-C756F05D-C:45]
+Good Name=Buck Bumble (U) [!]
+Developer=Argonaut Games
+ReleaseDate=1998/11/20
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[CEDCDE1E-513A0502-C:50]
+Good Name=Bust-A-Move 2 - Arcade Edition (E) [!]
+Developer=Probe Entertainment
+ReleaseDate=1998/05/20
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[8A86F073-CD45E54B-C:45]
+Good Name=Bust-A-Move 2 - Arcade Edition (U) [!]
+Developer=Probe Entertainment
+ReleaseDate=1998/05/20
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[E328B4FA-004A28E1-C:50]
+Good Name=Bust-A-Move 3 DX (E) [!]
+Developer=Taito Corporation
+ReleaseDate=1998/11/27
+Genre=Puzzle
+Players=4
+ForceFeedback=Yes
+
+[4222D89F-AFE0B637-C:45]
+Good Name=Bust-A-Move '99 (U) [!]
+Developer=Taito Corporation
+ReleaseDate=1999/04/30
+Genre=Puzzle
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  C  --------------------------
+
+[AC16400E-CF5D071A-C:45]
+Good Name=California Speed (U) [!]
+Developer=Atari Games
+ReleaseDate=1999/03/16
+Genre=Racing-Car
+Players=2
+ForceFeedback=Yes
+
+[580162EC-E3108BF1-C:58]
+Good Name=Carmageddon 64 (G) [!]
+Developer=Software Creations
+ReleaseDate=2000/07/25
+Genre=Racing-Future
+Players=2
+ForceFeedback=Yes
+
+[E48E01F5-E6E51F9B-C:59]
+Good Name=Carmageddon 64 (E) [!]
+Developer=Software Creations
+ReleaseDate=2000/07/25
+Genre=Racing-Future
+Players=2
+ForceFeedback=Yes
+
+[F00F2D4E-340FAAF4-C:45]
+Good Name=Carmageddon 64 (U) [!]
+Developer=Software Creations
+ReleaseDate=2000/07/25
+Genre=Racing-Future
+Players=2
+ForceFeedback=Yes
+
+[A2C54BE7-6719CBB2-C:50]
+Good Name=Castlevania - Legacy of Darkness (E) [!]
+Developer=KCEK
+ReleaseDate=1999/12/08
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[1CC06338-87388926-C:45]
+Good Name=Castlevania - Legacy of Darkness (U) [!]
+Developer=KCEK
+ReleaseDate=1999/12/08
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[64F1B7CA-71A23755-C:50]
+Good Name=Castlevania (E) [!]
+Developer=KCEK
+ReleaseDate=1999/01/26
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[F35D5F95-8AFE3D69-C:45]
+Good Name=Castlevania (U) (V1.0) [!]
+Developer=KCEK
+ReleaseDate=1999/01/26
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[4BCDFF47-AAA3AF8F-C:45]
+Good Name=Castlevania (U) (V1.2) [!]
+Developer=KCEK
+ReleaseDate=1999/01/26
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[DCCF2134-9DD63578-C:50]
+Good Name=Centre Court Tennis (E) [!]
+Developer=BigBen
+ReleaseDate=1998/10/30
+Genre=Sport-Tennis
+Players=4
+ForceFeedback=No
+
+[B9AF8CC6-DEC9F19F-C:50]
+Good Name=Chameleon Twist (E) [!]
+Developer=Japan System Supply
+ReleaseDate=1997/12/06
+Genre=Platform
+Players=4
+ForceFeedback=Yes
+
+[A4F2F521-F0EB168E-C:4A]
+Good Name=Chameleon Twist (J) [!]
+Developer=Japan System Supply
+ReleaseDate=1997/12/06
+Genre=Platform
+Players=4
+ForceFeedback=Yes
+
+[6420535A-50028062-C:45]
+Good Name=Chameleon Twist (U) [!]
+Developer=Japan System Supply
+ReleaseDate=1997/12/06
+Genre=Platform
+Players=4
+ForceFeedback=Yes
+
+[07A69D01-9A7D41A1-C:50]
+Good Name=Chameleon Twist 2 (E) [!]
+Developer=Japan System Supply
+ReleaseDate=1999/04/14
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[0549765A-93B9D042-C:4A]
+Good Name=Chameleon Twist 2 (J) [!]
+Developer=Japan System Supply
+ReleaseDate=1999/04/14
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[CD538CE4-618AFCF9-C:45]
+Good Name=Chameleon Twist 2 (U) [!]
+Developer=Japan System Supply
+ReleaseDate=1999/04/14
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[FB3C48D0-8D28F69F-C:50]
+Good Name=Charlie Blast's Territory (E) [!]
+Developer=Realtime Associates
+ReleaseDate=1999/04/02
+Genre=Puzzle
+Players=4
+ForceFeedback=Yes
+
+[1E0E96E8-4E28826B-C:45]
+Good Name=Charlie Blast's Territory (U) [!]
+Developer=Realtime Associates
+ReleaseDate=1999/04/02
+Genre=Puzzle
+Players=4
+ForceFeedback=Yes
+
+[2E359339-3FA5EDA6-C:50]
+Good Name=Chopper Attack (E) [!]
+Developer=Seta Corporation
+ReleaseDate=1998/06/17
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[214CAD94-BE1A3B24-C:45]
+Good Name=Chopper Attack (U) [!]
+Developer=Seta Corporation
+ReleaseDate=1998/06/17
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[2BCCF9C4-403D9F6F-C:4A]
+Good Name=Choro Q 64 (J) [!]
+Developer=Takara
+ReleaseDate=1998/07/17
+Genre=Racing-Car
+Players=4
+ForceFeedback=No
+
+[26CD0F54-53EBEFE0-C:4A]
+Good Name=Choro Q 64 II (J) [!]
+Developer=Takara
+ReleaseDate=1999/12/24
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[8ACE6683-3FBA426E-C:4A]
+Good Name=Chou Kuukan Night Pro Yakyuu King (J)
+Developer=Imagineer/Genki
+ReleaseDate=1996/12/20
+Genre=Sport-Baseball
+Players=4
+ForceFeedback=No
+
+[3A180FF4-5C8E8AF7-C:4A]
+Good Name=Chou-Kuukan Night Pro Yakyuu King 2 (J)
+Developer=Imagineer/Genki
+ReleaseDate=1999/03/19
+Genre=Sport-Baseball
+Players=4
+ForceFeedback=No
+
+[A7941528-61F1199D-C:4A]
+Good Name=Chou Snowbow Kids (J) [!]
+Developer=Atlus
+ReleaseDate=1999/02/19
+Genre=Sport-Snowbd
+Players=4
+ForceFeedback=Yes
+
+[F8009DB0-6B291823-C:4A]
+Good Name=City-Tour GP-All Japan Grand Touring Car Championship (J) [!]
+Developer=Imaginner
+ReleaseDate=1998/10/30
+Genre=Racing-Car
+Players=2
+ForceFeedback=Yes
+
+[FA5A3DFF-B4C9CDB9-C:45]
+Good Name=Clay Fighter - Sculptor's Cut (U) [!]
+Developer=Interplay
+ReleaseDate=1998/06/30
+Genre=Figthing
+Players=2
+ForceFeedback=No
+
+[2B6FA7C0-09A71225-C:45]
+Good Name=Clay Fighter 63 1-3 (U) (beta)
+Developer=Interplay
+ReleaseDate=1997/10/21
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[8E9692B3-4264BB2A-C:50]
+Good Name=Clay Fighter 63 1-3 (E) [!]
+Developer=Interplay
+ReleaseDate=1997/10/21
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[F03C24CA-C5237BCC-C:45]
+Good Name=Clay Fighter 63 1-3 (U) [!]
+Developer=Interplay
+ReleaseDate=1997/10/21
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[AE5B9465-C54D6576-C:50]
+Good Name=Command & Conquer (E) [!]
+Developer=Looking Glass
+ReleaseDate=1999/06/29
+Genre=Strategy
+Players=1
+ForceFeedback=Yes
+
+[B5025BAD-D32675FD-C:44]
+Good Name=Command & Conquer (G) [!]
+Developer=Looking Glass
+ReleaseDate=1999/06/29
+Genre=Strategy
+Players=1
+ForceFeedback=Yes
+
+[95286EB4-B76AD58F-C:45]
+Good Name=Command & Conquer (U) [!]
+Developer=Looking Glass
+ReleaseDate=1999/06/29
+Genre=Strategy
+Players=1
+ForceFeedback=Yes
+
+[373F5889-9A6CA80A-C:50]
+Good Name=Conker's Bad Fur Day (E) [!]
+Developer=Rare
+ReleaseDate=2001/03/05
+Genre=Adventure
+Players=4
+ForceFeedback=Yes
+
+[30C7AC50-7704072D-C:45]
+Good Name=Conker's Bad Fur Day (U) [!]
+Developer=Rare
+ReleaseDate=2001/03/05
+Genre=Adventure
+Players=4
+ForceFeedback=Yes
+
+[46A3F7AF-0F7591D0-C:45]
+Good Name=Cruis'n Exotica (U) [!]
+Developer=Midway
+ReleaseDate=2000/10/19
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[503EA760-E1300E96-C:50]
+Good Name=Cruis'n USA (E) [!]
+Developer=Williams
+ReleaseDate=1996/12/03
+Genre=Racing-Car
+Players=2
+ForceFeedback=No
+
+[FF2F2FB4-D161149A-C:45]
+Good Name=Cruis'n USA (U) (V1.0) [!]
+Developer=Williams
+ReleaseDate=1996/12/03
+Genre=Racing-Car
+Players=2
+ForceFeedback=No
+
+[5306CF45-CBC49250-C:45]
+Good Name=Cruis'n USA (U) (V1.1) [!]
+Developer=Williams
+ReleaseDate=1996/12/03
+Genre=Racing-Car
+Players=2
+ForceFeedback=No
+
+[B3402554-7340C004-C:45]
+Good Name=Cruis'n USA (U) (V1.2) [!]
+Developer=Williams
+ReleaseDate=1996/12/03
+Genre=Racing-Car
+Players=2
+ForceFeedback=No
+
+[83F3931E-CB72223D-C:50]
+Good Name=Cruis'n World (E) [!]
+Developer=Eurocom
+ReleaseDate=1998/09/26
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[DFE61153-D76118E6-C:45]
+Good Name=Cruis'n World (U) [!]
+Developer=Eurocom
+ReleaseDate=1998/09/26
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[83CB0B87-7E325457-C:4A]
+Good Name=Custom Robo (J) [!]
+Developer=Noise (Marigul) / Marigul Management, Inc.
+ReleaseDate=1999/11/30
+Genre=Action
+Players=2
+ForceFeedback=No
+
+[079501B9-AB0232AB-C:4A]
+Good Name=Custom Robo V2 (J) [!]
+Developer=Noise (Marigul) / Marigul Management, Inc.
+ReleaseDate=2000/11/10
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[D1A78A07-52A3DD3E-C:50]
+Good Name=CyberTiger (E) [!]
+Developer=Saffire
+ReleaseDate=2000/03/08
+Genre=Sport-Golf
+Players=4
+ForceFeedback=Yes
+
+[E8FC8EA1-9F738391-C:45]
+Good Name=CyberTiger (U) [!]
+Developer=Saffire
+ReleaseDate=2000/03/08
+Genre=Sport-Golf
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  D  --------------------------
+
+[7188F445-84410A68-C:4A]
+Good Name=Dance Dance Revolution - Disney Dancing Museum (J) [!]
+Developer=KCEK
+ReleaseDate=2000/11/30
+Genre=Other
+Players=1
+ForceFeedback=No
+
+[7ED67CD4-B4415E6D-C:50]
+Good Name=Dark Rift (E) [!]
+Developer=Kronos Digital Entertainment Inc.
+ReleaseDate=1997/07/10
+Genre=Figthing
+Players=2
+ForceFeedback=No
+
+[A4A52B58-23759841-C:45]
+Good Name=Dark Rift (U) [!]
+Developer=Kronos Digital Entertainment Inc.
+ReleaseDate=1997/07/10
+Genre=Figthing
+Players=2
+ForceFeedback=No
+
+[F5363349-DBF9D21B-C:45]
+Good Name=Deadly Arts (U) [!]
+Developer=Konami
+ReleaseDate=1998/09/22
+Genre=Figthing
+Players=2
+ForceFeedback=Yes
+
+[3F66A9D9-9BCB5B00-C:46]
+Good Name=Defi au Tetris Magique (Magical Tetris Challenge) (F) [!]
+Developer=Capcom
+ReleaseDate=1998/12/31
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[17C54A61-4A83F2E7-C:4A]
+Good Name=Densha de GO! 64 (J) [!]
+Developer=Taito
+ReleaseDate=1999/07/30
+Genre=Simulation
+Players=1
+ForceFeedback=No
+
+[A5F667E1-DA1FBD1F-C:4A]
+Good Name=Derby Stallion (J) [!]
+Developer=ParityBit
+ReleaseDate=2001/08/10
+Genre=Simulation
+Players=4
+ForceFeedback=Yes
+
+[630AA37D-896BD7DB-C:50]
+Good Name=Destruction Derby 64 (E) [!]
+Developer=Looking Glass
+ReleaseDate=1999/10/02
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[DEE584A2-0F161187-C:45]
+Good Name=Destruction Derby 64 (U) [!]
+Developer=Looking Glass
+ReleaseDate=1999/10/02
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[76712159-35666812-C:0]
+Good Name=Dexanoid R1 by Protest Design (PD) [!]
+Developer=??
+ReleaseDate=??/??/??
+Genre=??
+Players=??
+ForceFeedback=No
+
+[8979169C-F189F6A0-C:4A]
+Good Name=Dezaemon 3D (J) [!]
+Developer=Athena
+ReleaseDate=1998/06/26
+Genre=Shooter-Editor
+Players=1
+ForceFeedback=Yes
+
+[FD73F775-9724755A-C:50]
+Good Name=Diddy Kong Racing (E) (V1.0) [!]
+Developer=Rare
+ReleaseDate=1997/11/24
+Genre=Racing-Misc
+Players=4
+ForceFeedback=Yes
+
+[596E145B-F7D9879F-C:50]
+Good Name=Diddy Kong Racing (E) (V1.1) [!]
+Developer=Rare
+ReleaseDate=1997/11/24
+Genre=Racing-Misc
+Players=4
+ForceFeedback=Yes
+
+[F389A35A-17785562-C:4A]
+Good Name=Diddy Kong Racing (J) [!]
+Developer=Rare
+ReleaseDate=1997/11/24
+Genre=Racing-Misc
+Players=4
+ForceFeedback=Yes
+
+[53D440E7-7519B011-C:45]
+Good Name=Diddy Kong Racing (U) (V1.0) [!]
+Developer=Rare
+ReleaseDate=1997/11/24
+Genre=Racing-Misc
+Players=4
+ForceFeedback=Yes
+
+[E402430D-D2FCFC9D-C:45]
+Good Name=Diddy Kong Racing (U) (V1.1) [!]
+Developer=Rare
+ReleaseDate=1997/11/24
+Genre=Racing-Misc
+Players=4
+ForceFeedback=Yes
+
+[906C3F77-CE495EA1-C:45]
+Good Name=Dinosaur Planet (U) (Beta) (Unreleased)
+Developer=Rare
+Genre=Adventure
+Players=1
+
+[C16C421B-A21580F7-C:45]
+Good Name=Disney's Donald Duck - Goin' Quackers (U) [!]
+Developer=Ubi Soft
+ReleaseDate=2000/12/13
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[D614E5BF-A76DBCC1-C:50]
+Good Name=Disney's Tarzan (E) [!]
+Developer=Eurocom
+ReleaseDate=2000/02/14
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[001A3BD0-AFB3DE1A-C:46]
+Good Name=Disney's Tarzan (F) [!]
+Developer=Eurocom
+ReleaseDate=2000/02/14
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[4C261323-4F295E1A-C:44]
+Good Name=Disney's Tarzan (G) [!]
+Developer=Eurocom
+ReleaseDate=2000/02/14
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[CBFE69C7-F2C0AB2A-C:45]
+Good Name=Disney's Tarzan (U) [!]
+Developer=Eurocom
+ReleaseDate=2000/02/14
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[BD8E206D-98C35E1C-C:4A]
+Good Name=Dobutsu no Mori (J) [!]
+Developer=Nintendo
+ReleaseDate=2001/04/14
+Genre=Adventure
+Players=1
+ForceFeedback=No
+
+[3DF17480-193DED5A-C:50]
+Good Name=Donald Duck - Quack Attack (E) [!]
+Developer=Ubi Soft
+ReleaseDate=2000/12/08
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[0DD4ABAB-B5A2A91E-C:45]
+Good Name=Donkey Kong 64 - Kiosk (U) [!]
+Developer=Rare
+ReleaseDate=1999/11/22
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[11936D8C-6F2C4B43-C:50]
+Good Name=Donkey Kong 64 (E) [!]
+Developer=Rare
+ReleaseDate=1999/11/22
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[053C89A7-A5064302-C:4A]
+Good Name=Donkey Kong 64 (J) [!]
+Developer=Rare
+ReleaseDate=1999/11/22
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[EC58EABF-AD7C7169-C:45]
+Good Name=Donkey Kong 64 (U) [!]
+Developer=Rare
+ReleaseDate=1999/11/22
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[2C739EAC-9EF77726-C:50]
+Good Name=Doom 64 (E) [!]
+Developer=Midway
+ReleaseDate=1997/04/02
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[7AA65B36-FDCEE5AD-C:4A]
+Good Name=Doom 64 (J) [!]
+Developer=Midway
+ReleaseDate=1997/04/02
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[A83E101A-E937B69D-C:45]
+Good Name=Doom 64 (U) (V1.0) [!]
+Developer=Midway
+ReleaseDate=1997/04/02
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[423E96F4-CE88F05B-C:45]
+Good Name=Doom 64 (U) (v1.1)
+Developer=Midway
+ReleaseDate=????/??4/??
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[BFF7B1C2-AEBF148E-C:4A]
+Good Name=Doraemon - Mittsu no Seireiseki (J) [!]
+Developer=Epoch
+ReleaseDate=1997/02/28
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[B6306E99-B63ED2B2-C:4A]
+Good Name=Doraemon 2 - Hikari no Shinden (J) [!]
+Developer=Epoch
+ReleaseDate=1998/12/11
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[A8275140-B9B056E8-C:4A]
+Good Name=Doraemon 3 - Nobi Dai no Machi SOS! (J) [!]
+Developer=Epoch
+ReleaseDate=2000/07/28
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[769D4D13-DA233FFE-C:45]
+Good Name=Dr. Mario 64 (U) [!]
+Developer=Newcom
+ReleaseDate=2001/04/09
+Genre=Puzzle
+Players=4
+ForceFeedback=No
+
+[B6524461-ED6D04B1-C:50]
+Good Name=Dual Heroes (E) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/11/05
+Genre=Fighthing
+Players=2
+ForceFeedback=No
+
+[056EAB63-C215FCD5-C:4A]
+Good Name=Dual Heroes (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/11/05
+Genre=Fighthing
+Players=2
+ForceFeedback=No
+
+[A62230C3-F0834488-C:45]
+Good Name=Dual Heroes (U) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/11/05
+Genre=Fighthing
+Players=2
+ForceFeedback=No
+
+[FBB9F1FA-6BF88689-C:45]
+Good Name=Duck Dodgers Starring Daffy Duck (U) [!]
+Developer=Paradigm Entertainment, Inc.
+ReleaseDate=2000/09/20
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[DC36626A-3F3770CB-C:50]
+Good Name=Duke Nukem - ZER0 H0UR (E) [!]
+Developer=Eurocom
+ReleaseDate=1999/09/01
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[32CA974B-B2C29C50-C:46]
+Good Name=Duke Nukem - ZER0 H0UR (F) [!]
+Developer=Eurocom
+ReleaseDate=1999/09/01
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[04DAF07F-0D18E688-C:45]
+Good Name=Duke Nukem - ZER0 H0UR (U) [!]
+Developer=Eurocom
+ReleaseDate=1999/09/01
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[57BFF74D-DE747743-C:50]
+Good Name=Duke Nukem 64 (E) [!]
+Developer=Eurocom
+ReleaseDate=1997/11/14
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[1E12883D-D3B92718-C:46]
+Good Name=Duke Nukem 64 (F)
+Developer=Eurocom
+ReleaseDate=1997/11/14
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[A273AB56-DA33DB9A-C:45]
+Good Name=Duke Nukem 64 (U) [!]
+Developer=Eurocom
+ReleaseDate=1997/11/14
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  E  --------------------------
+
+[492B9DE8-C6CCC81C-C:50]
+Good Name=Earthworm Jim 3D (E) [!]
+Developer=Vis
+ReleaseDate=1999/10/28
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[DF574191-9EB5123D-C:45]
+Good Name=Earthworm Jim 3D (U) [!]
+Developer=Vis
+ReleaseDate=1999/10/28
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[8C38E5DB-B37C27D7-C:50]
+Good Name=ECW Hardcore Revolution (E) [!]
+Developer=Acclaim Studios Salt Lake City
+ReleaseDate=2000/02/17
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[BDF9766D-BD068D70-C:45]
+Good Name=ECW Hardcore Revolution (U) [!]
+Developer=Acclaim Studios Salt Lake City
+ReleaseDate=2000/02/17
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[F2A653CB-60633B3B-C:45]
+Good Name=Elmo's Letter Adventure (U) [!]
+Developer=The Learning Company, Inc.
+ReleaseDate=1999/11/15
+Genre=Puzzle
+Players=1
+ForceFeedback=No
+
+[02B1538F-C94B88D0-C:45]
+Good Name=Elmo's Number Journey (U) [!]
+Developer=The Learning Company, Inc.
+ReleaseDate=1999/11/15
+Genre=Puzzle
+Players=1
+ForceFeedback=No
+
+[E13AE2DC-4FB65CE8-C:4A]
+Good Name=Eltale Monsters (J) [!]
+Developer=Imagineer
+ReleaseDate=1999/07/09
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[AF754F7B-1DD17381-C:45]
+Good Name=Excitebike 64 - Kiosk (U) [!]
+Developer=Left Field Productions, Inc.
+ReleaseDate=2000/05/02
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[202A8EE4-83F88B89-C:50]
+Good Name=Excitebike 64 (E) [!]
+Developer=Left Field Productions, Inc.
+ReleaseDate=2000/05/02
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[861C3519-F6091CE5-C:4A]
+Good Name=Excitebike 64 (J) [!]
+Developer=Left Field Productions, Inc.
+ReleaseDate=2000/05/02
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[07861842-A12EBC9F-C:45]
+Good Name=Excitebike 64 (U) [!]
+Developer=Left Field Productions, Inc.
+ReleaseDate=2000/05/02
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[8E9D834E-1E8B29A9-C:50]
+Good Name=Extreme-G (E) [!]
+Developer=Probe Entertainment
+ReleaseDate=1997/10/25
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[EE802DC4-690BD57D-C:4A]
+Good Name=Extreme-G (J) [!]
+Developer=Probe Entertainment
+ReleaseDate=1997/10/25
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[FDA245D2-A74A3D47-C:45]
+Good Name=Extreme-G (U) [!]
+Developer=Probe Entertainment
+ReleaseDate=1997/10/25
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[1185EC85-4B5A7731-C:50]
+Good Name=Extreme-G XG2 (E) [!]
+Developer=Probe Entertainment
+ReleaseDate=1998/11/18
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[399B9B81-D533AD11-C:4A]
+Good Name=Extreme-G XG2 (J) [!]
+Developer=Probe Entertainment
+ReleaseDate=1998/11/18
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[5CD4150B-470CC2F1-C:45]
+Good Name=Extreme-G XG2 (U) [!]
+Developer=Probe Entertainment
+ReleaseDate=1998/11/18
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  F  --------------------------
+
+[FDD248B2-569A020E-C:50]
+Good Name=F-1 Pole Position 64 (E) [!]
+Developer=Human Entertainment
+ReleaseDate=1997/10/15
+Genre=Racing-F1
+Players=1
+ForceFeedback=No
+
+[AE82687A-9A3F388D-C:45]
+Good Name=F-1 Pole Position 64 (U) [!]
+Developer=Human Entertainment
+ReleaseDate=1997/10/15
+Genre=Racing-F1
+Players=1
+ForceFeedback=No
+
+[CC3CC8B3-0EC405A4-C:50]
+Good Name=F-1 World Grand Prix (E) [!]
+Developer=Paradigm Entertainment, Inc. / Video System
+ReleaseDate=1998/07/27
+Genre=Racing-F1
+Players=2
+ForceFeedback=Yes
+
+[B70BAEE5-3A5005A8-C:46]
+Good Name=F-1 World Grand Prix (F) [!]
+Developer=Paradigm Entertainment, Inc. / Video System
+ReleaseDate=1998/07/27
+Genre=Racing-F1
+Players=2
+ForceFeedback=Yes
+
+[38442634-66B3F060-C:44]
+Good Name=F-1 World Grand Prix (G)
+Developer=Paradigm Entertainment, Inc. / Video System
+ReleaseDate=1998/07/27
+Genre=Racing-F1
+Players=2
+ForceFeedback=Yes
+
+[64BF47C4-F4BD22BA-C:4A]
+Good Name=F-1 World Grand Prix (J) [!]
+Developer=Paradigm Entertainment, Inc. / Video System
+ReleaseDate=1998/07/27
+Genre=Racing-F1
+Players=2
+ForceFeedback=Yes
+
+[CC3CC8B3-0EC405A4-C:45]
+Good Name=F-1 World Grand Prix (U) [!]
+Developer=Paradigm Entertainment, Inc. / Video System
+ReleaseDate=1998/07/27
+Genre=Racing-F1
+Players=2
+ForceFeedback=Yes
+
+[07C1866E-5775CCDE-C:50]
+Good Name=F-1 World Grand Prix II (E) [!]
+Developer=Paradigm Entertainment, Inc.
+ReleaseDate=1999/07
+Genre=Racing-F1
+Players=2
+ForceFeedback=Yes
+
+[6DFF4C37-B1B763FD-C:4A]
+Good Name=Famista 64 (J) [!]
+Developer=Namco
+ReleaseDate=1997/10/31
+Genre=Sport-Baseball
+Players=4
+ForceFeedback=No
+
+[3CECBCB8-6126BF07-C:50]
+Good Name=F1 Racing Championship (E) [!]
+Developer=Ubi Soft Morocco
+ReleaseDate=2000/12/08
+Genre=Racing-F1
+Players=2
+ForceFeedback=Yes
+
+[0E31EDF0-C37249D5-C:50]
+Good Name=FIFA - Road to World Cup 98 (E) [!]
+Developer=EA Canada
+ReleaseDate=1997/12/20
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[F5733C67-17A3973A-C:4A]
+Good Name=FIFA - Road to World Cup 98 (J) [!]
+Developer=EA Canada
+ReleaseDate=1997/12/20
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[CB1ACDDE-CF291DF2-C:45]
+Good Name=FIFA - Road to World Cup 98 (U) [!]
+Developer=EA Canada
+ReleaseDate=1997/12/20
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[0198A651-FC219D84-C:50]
+Good Name=FIFA 99 (E) [!]
+Developer=EA Sports
+ReleaseDate=1998/12/08
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[7613A630-3ED696F3-C:45]
+Good Name=FIFA 99 (U) [!]
+Developer=EA Sports
+ReleaseDate=1998/12/08
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[C3F19159-65D2BC5A-C:50]
+Good Name=FIFA Soccer 64 (E) [!]
+Developer=EA Canada
+ReleaseDate=1997/03/26
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[C3F19159-65D2BC5A-C:45]
+Good Name=FIFA Soccer 64 (U) [!]
+Developer=EA Canada
+ReleaseDate=1997/03/26
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[36F1C74B-F2029939-C:50]
+Good Name=Fighter's Destiny (E) [!]
+Developer=Imagineer
+ReleaseDate=1998/02/27
+Genre=Fighthing
+Players=2
+ForceFeedback=Yes
+
+[0C41F9C2-01717A0D-C:46]
+Good Name=Fighter's Destiny (F) [!]
+Developer=Imagineer
+ReleaseDate=1998/02/27
+Genre=Fighthing
+Players=2
+ForceFeedback=Yes
+
+[FE94E570-E4873A9C-C:44]
+Good Name=Fighter's Destiny (G) [!]
+Developer=Imagineer
+ReleaseDate=1998/02/27
+Genre=Fighthing
+Players=2
+ForceFeedback=Yes
+
+[52F78805-8B8FCAB7-C:45]
+Good Name=Fighter's Destiny (U) [!]
+Developer=Imagineer
+ReleaseDate=1998/02/27
+Genre=Fighthing
+Players=2
+ForceFeedback=Yes
+
+[AEEF2F45-F97E30F1-C:45]
+Good Name=Fighter's Destiny 2 (U) [!]
+Developer=Imagineer / {display_data}
+ReleaseDate=2000/06/22
+Genre=Fighthing
+Players=2
+ForceFeedback=Yes
+
+[49E46C2D-7B1A110C-C:4A]
+Good Name=Fighting Cup (J) [!]
+Developer=Imagineer
+ReleaseDate=1998/02/11
+Genre=Fighting
+Players=2
+ForceFeedback=Yes
+
+[66CF0FFE-AD697F9C-C:50]
+Good Name=Fighting Force 64 (E) [!]
+Developer=Core
+ReleaseDate=1999/05/26
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[32EFC7CB-C3EA3F20-C:45]
+Good Name=Fighting Force 64 (U) [!]
+Developer=Core
+ReleaseDate=1999/05/26
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[28D5562D-E4D5AE50-C:4A]
+Good Name=Fire Electric Pen (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1997/12/19
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[22E9623F-B60E52AD-C:50]
+Good Name=Flying Dragon (E) [!]
+Developer=Culture Brain
+ReleaseDate=1998/10/14
+Genre=Fighthing
+Players=2
+ForceFeedback=Yes
+
+[A92D52E5-1D26B655-C:45]
+Good Name=Flying Dragon (U) [!]
+Developer=Culture Brain
+ReleaseDate=1998/10/14
+Genre=Fighthing
+Players=2
+ForceFeedback=Yes
+
+[142A17AA-13028D96-C:50]
+Good Name=Forsaken 64 (E) [!]
+Developer=Probe Entertainment / Iguana UK
+ReleaseDate=1998/05/26
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[C3CD76FF-9B9DCBDE-C:44]
+Good Name=Forsaken 64 (G) [!]
+Developer=Probe Entertainment / Iguana UK
+ReleaseDate=1998/05/26
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[9E330C01-8C0314BA-C:45]
+Good Name=Forsaken 64 (U) [!]
+Developer=Probe Entertainment / Iguana UK
+ReleaseDate=1998/05/26
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[3261D479-ED0DBC25-C:45]
+Good Name=Fox Sports College Hoops '99 (U) [!]
+Developer=Z-Axis
+ReleaseDate=1998/11/23
+Genre=Sport-Basket
+Players=2
+ForceFeedback=No
+
+[E8E5B179-44AA30E8-C:45]
+Good Name=Frogger 2 (U) (Unreleased Alpha)
+Developer=Hasbro Interactive
+ReleaseDate=????/??/??
+Genre=Action-General
+Players=1
+ForceFeedback=No
+
+[F774EAEE-F0D8B13E-C:4A]
+Good Name=Fushigi no Dungeon - Furai no Shiren 2 (J) [!]
+Developer=ChunSoft
+ReleaseDate=2000/09/27
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[776646F6-06B9AC2B-C:50]
+Good Name=F-Zero X (E) [!]
+Developer=Nintendo
+ReleaseDate=1998/10/26
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[4D3E622E-9B828B4E-C:4A]
+Good Name=F-Zero X (J) [!]
+Developer=Nintendo
+ReleaseDate=1998/10/26
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[B30ED978-3003C9F9-C:45]
+Good Name=F-Zero X (U) [!]
+Developer=Nintendo
+ReleaseDate=1998/10/26
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  G  --------------------------
+
+[68FCF726-49658CBC-C:50]
+Good Name=G.A.S.P! Fighter's NEXTream (E) [!]
+Developer=Konami
+ReleaseDate=1998/03/26
+Genre=Fighting
+Players=2
+ForceFeedback=Yes
+
+[AF8679B6-5E1011BF-C:4A]
+Good Name=G.A.S.P! Fighter's NEXTream (J) [!]
+Developer=Konami
+ReleaseDate=1998/03/26
+Genre=Fighting
+Players=2
+ForceFeedback=Yes
+
+[8F89ABA0-C34C2610-C:70]
+Good Name=GameShark V3.3 (Unl)
+Developer=??
+ReleaseDate=??/??/??
+Genre=??
+Players=??
+ForceFeedback=No
+
+[832C168B-56A2CDAE-C:4A]
+Good Name=Ganbare Goemon (J)
+Developer=Konami
+ReleaseDate=1997/08/07
+Genre=Action-Adventure
+Players=1
+ForceFeedback=No
+
+[457B9CD9-09C55352-C:4A]
+Good Name=Ganbare Goemon 2 - Deorudero Douchuu Obake Tenkomori (J) [!]
+Developer=Konami
+ReleaseDate=1998/12/23
+Genre=Action-Adventure
+Players=1
+ForceFeedback=No
+
+[B2C6D27F-2DA48CFD-C:4A]
+Good Name=Ganbare Goemon - Mononoke Sugoroku (J)
+Developer=KCEK
+ReleaseDate=1999/12/25
+Genre=Puzzle
+Players=4
+ForceFeedback=No
+
+[21FFFD0A-FA0D1D98-C:4A]
+Good Name=Ganbare Nippon Olympics 2000 (J) [!]
+Developer=Konami
+ReleaseDate=2000/07/13
+Genre=Sport-Olympics
+Players=4
+ForceFeedback=Yes
+
+[D543BCD6-2BA5E256-C:50]
+Good Name=Gauntlet Legends (E) [!]
+Developer=Atari Games
+ReleaseDate=1999/09/29
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[70B0260E-6716D04C-C:4A]
+Good Name=Gauntlet Legends (J) [!]
+Developer=Atari Games
+ReleaseDate=1999/09/29
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[729B5E32-B728D980-C:45]
+Good Name=Gauntlet Legends (U) [!]
+Developer=Atari Games
+ReleaseDate=1999/09/29
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[489C84E6-4C6E49F9-C:4A]
+Good Name=Getter Love!! Cho Renai Party Game (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/12/04
+Genre=Simulation
+Players=1
+ForceFeedback=No
+
+[99179359-2FE7EBC3-C:50]
+Good Name=Gex 3 - Deep Cover Gecko (E) [!]
+Developer=Crystal Dynamics
+ReleaseDate=1999/09/29
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[874733A4-A823745A-C:58]
+Good Name=Gex 3 - Deep Cover Gecko (FG) [!]
+Developer=Crystal Dynamics
+ReleaseDate=1999/09/29
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[3EDC7E12-E26C1CC9-C:45]
+Good Name=Gex 3 - Deep Cover Gecko (U) [!]
+Developer=Crystal Dynamics
+ReleaseDate=1999/09/29
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[E68A000E-639166DD-C:50]
+Good Name=Gex 64 - Enter the Gecko (E) [!]
+Developer=Crystal Dynamics
+ReleaseDate=1998/08/26
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[89FED774-CAAFE21B-C:45]
+Good Name=Gex 64 - Enter the Gecko (U) [!]
+Developer=Crystal Dynamics
+ReleaseDate=1998/08/26
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[F5237301-99E3EE93-C:50]
+Good Name=Glover (E) [!]
+Developer=Interactive Studios
+ReleaseDate=1998/11/04
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[8E6E01FF-CCB4F948-C:45]
+Good Name=Glover (U) [!]
+Developer=Interactive Studios
+ReleaseDate=1998/11/04
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[4252A5AD-AE6FBF4E-C:45]
+Good Name=Goemon's Great Adventure (U) [!]
+Developer=Konami OSA
+ReleaseDate=1999/09/22
+Genre=Platform
+Players=2
+ForceFeedback=Yes
+
+[4690FB1C-4CD56D44-C:45]
+Good Name=Golden Nugget 64 (U) [!]
+Developer=Westwood Studios
+ReleaseDate=1998/12/08
+Genre=Simulation
+Players=4
+ForceFeedback=No
+
+[0414CA61-2E57B8AA-C:50]
+Good Name=GoldenEye 007 (E) [!]
+Developer=Rare
+ReleaseDate=1997/08/25
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[A24F4CF1-A82327BA-C:4A]
+Good Name=GoldenEye 007 (J) [!]
+Developer=Rare
+ReleaseDate=1997/08/25
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[DCBC50D1-09FD1AA3-C:45]
+Good Name=GoldenEye 007 (U) [!]
+Developer=Rare
+ReleaseDate=1997/08/25
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[EE4A0E33-8FD588C9-C:50]
+Good Name=GT 64 Championship Edition (E) [!]
+Developer=Infogrames
+ReleaseDate=1998/09/09
+Genre=Racing-Car
+Players=2
+ForceFeedback=Yes
+
+[C49ADCA2-F1501B62-C:45]
+Good Name=GT 64 Championship Edition (U) [!]
+Developer=Infogrames
+ReleaseDate=1998/09/09
+Genre=Racing-Car
+Players=2
+ForceFeedback=Yes
+
+//-------------------------  H  --------------------------
+
+[95A80114-E0B72A7F-C:4A]
+Good Name=Hamster Monogatari 64 (J)
+Developer=Culture Brain
+ReleaseDate=2001/04/06
+Genre=Growth Simulation
+Players=1
+ForceFeedback=No
+
+[36F22FBF-318912F2-C:4A]
+Good Name=Hanafuda 64 - Tenshi no Yakusoku (J) [!]
+Developer=Altron
+ReleaseDate=1999/11/05
+Genre=Party
+Players=1
+ForceFeedback=No
+
+[09AE57B1-182A5637-C:4A]
+Good Name=Harukanaru Augusta Masters 98 (J) [!]
+Developer=T&E Soft
+ReleaseDate=1997/12/26
+Genre=Sport-Golf
+Players=2
+ForceFeedback=Yes
+
+[98DF9DFC-6606C189-C:45]
+Good Name=Harvest Moon 64 (U) [!]
+Developer=Pack-in-Soft
+ReleaseDate=1999/12/22
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[3E70E866-4438BAE8-C:4A]
+Good Name=Heiwa Pachinko World (J) [!]
+Developer=Amtechs
+ReleaseDate=1997/11/28
+Genre=Party
+Players=1
+ForceFeedback=No
+
+[AE90DBEB-79B89123-C:50]
+Good Name=Hercules - The Legendary Journeys (E) [!]
+Developer=Player 1
+ReleaseDate=2000/11/17
+Genre=Adventure
+Players=1
+ForceFeedback=Yes
+
+[7F3CEB77-8981030A-C:45]
+Good Name=Hercules - The Legendary Journeys (U) [!]
+Developer=Player 1
+ReleaseDate=2000/11/17
+Genre=Adventure
+Players=1
+ForceFeedback=Yes
+
+[95B2B30B-2B6415C1-C:50]
+Good Name=Hexen (E) [!]
+Developer=Software Creations
+ReleaseDate=1997/06/24
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[5C1B5FBD-7E961634-C:46]
+Good Name=Hexen (F)
+Developer=Software Creations
+ReleaseDate=1997/06/24
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[9AB3B50A-BC666105-C:44]
+Good Name=Hexen (G) [!]
+Developer=Software Creations
+ReleaseDate=1997/06/24
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[66751A57-54A29D6E-C:4A]
+Good Name=Hexen (J) [!]
+Developer=Software Creations
+ReleaseDate=1997/06/24
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[9CAB6AEA-87C61C00-C:45]
+Good Name=Hexen (U) [!]
+Developer=Software Creations
+ReleaseDate=1997/06/24
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[D3F10E5D-052EA579-C:45]
+Good Name=Hey You, Pikachu! (U) [!]
+Developer=Ambrella (Marigul) / Marigul Management, Inc.
+ReleaseDate=2000/11/06
+Genre=Simulation
+Players=1
+ForceFeedback=Yes
+
+[35FF8F1A-6E79E3BE-C:4A]
+Good Name=Hiro no Ken Twin (J) [!]
+Developer=Natsume
+ReleaseDate=1998/10/01
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[277B129D-DD3879FF-C:50]
+Good Name=Holy Magic Century (E) [!]
+Developer=Konami
+ReleaseDate=1998/06/11
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[B35FEBB0-7427B204-C:46]
+Good Name=Holy Magic Century (F)
+Developer=Konami
+ReleaseDate=1998/06/11
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[75FA0E14-C9B3D105-C:44]
+Good Name=Holy Magic Century (G) [!]
+Developer=Konami
+ReleaseDate=1998/06/11
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[C1D702BD-6D416547-C:4A]
+Good Name=Hoshi no Kirby 64 (J) (v1.0)
+Developer=Nintendo
+ReleaseDate=2000/03/24
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[CA1BB86F-41CCA5C5-C:4A]
+Good Name=Hoshi no Kirby 64 (J) (V1.1)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[0C581C7A-3D6E20E4-C:4A]
+Good Name=Hoshi no Kirby 64 (J) (v1.2)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[BCB1F89F-060752A2-C:4A]
+Good Name=Hoshi no Kirby 64 (J) (v1.3)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[E7D20193-C1158E93-C:50]
+Good Name=Hot Wheels Turbo Racing (E) [!]
+Developer=Stormfront Studios
+ReleaseDate=1999/09/22
+Genre=Racing-Toy
+Players=2
+ForceFeedback=Yes
+
+[C7C98F8E-42145DDE-C:45]
+Good Name=Hot Wheels Turbo Racing (U) [!]
+Developer=Stormfront Studios
+ReleaseDate=1999/09/22
+Genre=Racing-Toy
+Players=2
+ForceFeedback=Yes
+
+[72611D7D-9919BDD2-C:58]
+Good Name=HSV Adventure Racing (A)
+Developer=Paradigm Entertainment, Inc.
+ReleaseDate=1999/11/26
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[5535972E-BD8E3295-C:4A]
+Good Name=Human Grand Prix (J) [!]
+Developer=Human Entertainment
+ReleaseDate=1997/03/28
+Genre=Racing-F1
+Players=2
+ForceFeedback=No
+
+[641D3A7F-86820466-C:50]
+Good Name=Hybrid Heaven (E) [!]
+Developer=Konami OSA
+ReleaseDate=1999/09/01
+Genre=RPG
+Players=2
+ForceFeedback=Yes
+
+[0DE2CE36-D41D29E6-C:4A]
+Good Name=Hybrid Heaven (J) [!]
+Developer=Konami OSA
+ReleaseDate=1999/09/01
+Genre=RPG
+Players=2
+ForceFeedback=Yes
+
+[102888BF-434888CA-C:45]
+Good Name=Hybrid Heaven (U) [!]
+Developer=Konami OSA
+ReleaseDate=1999/09/01
+Genre=RPG
+Players=2
+ForceFeedback=Yes
+
+[B58988E9-B1FC4BE8-C:50]
+Good Name=Hydro Thunder (E) [!]
+Developer=Eurocom / Midway
+ReleaseDate=2000/02/28
+Genre=Racing-Boat
+Players=4
+ForceFeedback=Yes
+
+[29A045CE-ABA9060E-C:46]
+Good Name=Hydro Thunder (F)
+Developer=Eurocom / Midway
+ReleaseDate=2000/02/28
+Genre=Racing-Boat
+Players=4
+ForceFeedback=Yes
+
+[C8DC65EB-3D8C8904-C:45]
+Good Name=Hydro Thunder (U) [!]
+Developer=Eurocom / Midway
+ReleaseDate=2000/02/28
+Genre=Racing-Boat
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  I  --------------------------
+
+[69458B9E-FC95F936-C:4A]
+Good Name=Iggy-kun no Bura Bura Poyon (J) [!]
+Developer=Acclaim Japan
+ReleaseDate=1998/08/28
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[D692CC5E-EC58D072-C:50]
+Good Name=Iggy's Reckin' Balls (E) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/08/24
+Genre=Platform
+Players=4
+ForceFeedback=Yes
+
+[E616B5BC-C9658B88-C:45]
+Good Name=Iggy's Reckin' Balls (U) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/08/24
+Genre=Platform
+Players=4
+ForceFeedback=Yes
+
+[AF9DCC15-1A723D88-C:45]
+Good Name=Indiana Jones and the Infernal Machine (U) [!]
+Developer=LucasArts / Factor 5
+ReleaseDate=2000/12/15
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[E436467A-82DE8F9B-C:45]
+Good Name=Indy Racing 2000 (U) [!]
+Developer=Paradigm Entertainment, Inc.
+ReleaseDate=2000/06/09
+Genre=Racing-Indycar
+Players=4
+ForceFeedback=Yes
+
+[8C138BE0-95700E46-C:45]
+Good Name=In-Fisherman Bass Hunter 64 (U) [!]
+Developer=Gear Head Entertainment
+ReleaseDate=1999/07/28
+Genre=Sport-Fishing
+Players=1
+ForceFeedback=Yes
+
+[336364A0-06C8D5BF-C:58]
+Good Name=International Superstar Soccer 2000 (E) [!]
+Developer=Konami OSA / Major A
+ReleaseDate=2000/08/03
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=Yes
+
+[BAE8E871-35FF944E-C:59]
+Good Name=International Superstar Soccer 2000 (FI)
+Developer=Konami OSA / Major A
+ReleaseDate=2000/08/03
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=Yes
+
+[8E835437-CD5748B4-C:45]
+Good Name=International Superstar Soccer 2000 (U) [!]
+Developer=Konami OSA / Major A
+ReleaseDate=2000/08/03
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=Yes
+
+[E2D37CF0-F57E4EAE-C:50]
+Good Name=International Superstar Soccer 64 (E) [!]
+Developer=Konami OSA / Major A
+ReleaseDate=1997/08/08
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[5F2763C4-62412AE5-C:45]
+Good Name=International Superstar Soccer 64 (U) [!]
+Developer=Konami OSA / Major A
+ReleaseDate=1997/08/08
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[F41B6343-C10661E6-C:50]
+Good Name=International Superstar Soccer '98 (E) [!]
+Developer=Konami OSA / Major A
+ReleaseDate=1998/09/15
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[7F0FDA09-6061CE0B-C:45]
+Good Name=International Superstar Soccer '98 (U) [!]
+Developer=Konami OSA / Major A
+ReleaseDate=1998/09/15
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[20073BC7-5E3B0111-C:45]
+Good Name=International Track and Field 2000 (U) [!]
+Developer=Konami OSA
+ReleaseDate=2000/06/01
+Genre=Sport-Olympics
+Players=4
+ForceFeedback=Yes
+
+[6712C779-3B72781D-C:50]
+Good Name=International Track and Field Summer Games (E) [!]
+Developer=Konami
+ReleaseDate=2000/09/07
+Genre=Sport-Olympics
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  J  --------------------------
+
+[87766747-91C27165-C:4A]
+Good Name=J. League Dynamite Soccer (J) [!]
+Developer=Imagineer
+ReleaseDate=1997/09/05
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[4FBFA429-6920BB15-C:4A]
+Good Name=J. League Eleven Beat 1997 (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1997/10/24
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[54554A42-E4985FFB-C:4A]
+Good Name=J. League Live 64 (J)
+Developer=Ascii Entertainment
+ReleaseDate=1997/03/28
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[E8D29DA0-15E61D94-C:4A]
+Good Name=J. League Tactics Soccer (J) [!]
+Developer=Ascii Entertainment
+ReleaseDate=1999/01/15
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[C73AD016-48C5537D-C:4A]
+Good Name=Jangou Simulation Mahjong Do 64 (J) [!]
+Developer=Video System
+ReleaseDate=1997/07/25
+Genre=Board Game
+Players=1
+ForceFeedback=No
+
+[69256460-B9A3F586-C:45]
+Good Name=Jeopardy! (U) [!]
+Developer=GameTek
+ReleaseDate=1998/02/25
+Genre=Simulation
+Players=3
+ForceFeedback=No
+
+[21F7ABFB-6A8AA7E8-C:50]
+Good Name=Jeremy McGrath Supercross 2000 (E) [!]
+Developer=Acclaim Studios Salt Lake City
+ReleaseDate=2000/02/28
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[BB30B1A5-FCF712CE-C:45]
+Good Name=Jeremy McGrath Supercross 2000 (U) [!]
+Developer=Acclaim Studios Salt Lake City
+ReleaseDate=2000/02/28
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[DFD8AB47-3CDBEB89-C:45]
+Good Name=Jet Force Gemini - Kiosk (U) [!]
+Developer=Rare
+ReleaseDate=1999/10/11
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[68D7A1DE-0079834A-C:50]
+Good Name=Jet Force Gemini (E) [!]
+Developer=Rare
+ReleaseDate=1999/10/11
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[8A6009B6-94ACE150-C:45]
+Good Name=Jet Force Gemini (U) [!]
+Developer=Rare
+ReleaseDate=1999/10/11
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[CDB8B4D0-8832352D-C:45]
+Good Name=Jet Force Gemini (U) [f1]
+Developer=Rare
+ReleaseDate=1999/10/11
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[AF19D9F5-B70223CC-C:4A]
+Good Name=Jikkyou G1 Stable (J) [!]
+Developer=Konami
+ReleaseDate=1999/04/28
+Genre=Sport-Horse
+Players=1
+ForceFeedback=No
+
+[63112A53-A29FA88F-C:4A]
+Good Name=Jikkyou J. League 1999 - Perfect Striker 2 (J) [!]
+Developer=Konami OSA / Major A
+ReleaseDate=1996/12/20
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=Yes
+
+[146C4366-72A6DEB3-C:4A]
+Good Name=Jikkyou J. League Perfect Striker (J) [!]
+Developer=Konami OSA / Major A
+ReleaseDate=1996/12/20
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[0AC244D1-1F0EC605-C:4A]
+Good Name=Jikkyou Powerful Pro Yakyuu 2000 (J) (V1.0) [!]
+Developer=Konami
+ReleaseDate=2000/04/29
+Genre=Sport-Baseball
+Players=2
+ForceFeedback=No
+
+[4264DF23-BE28BDF7-C:4A]
+Good Name=Jikkyou Powerful Pro Yakyuu 2000 (J) (V1.1) [!]
+Developer=Konami
+ReleaseDate=????/??/??
+Genre=Sport-Baseball
+Players=2
+ForceFeedback=No
+
+[6EDD4766-A93E9BA8-C:4A]
+Good Name=Jikkyou Powerful Pro Baseball Basic 2001 (J) [!]
+Developer=Konami OSA
+ReleaseDate=2001/03/29
+Genre=Sport-Baseball
+Players=2
+ForceFeedback=No
+
+[3FEA5620-7456DB40-C:4A]
+Good Name=Jikkyou World Cup France '98 (J) (v1.0)
+Developer=Konami
+ReleaseDate=1998/06/04
+Genre=Sport-Soccer
+Players=2
+ForceFeedback=No
+
+[C954B38C-6F62BEB3-C:4A]
+Good Name=Jikkyou World Cup France '98 (J) (v1.1)
+Developer=Konami
+ReleaseDate=1998/06/04
+Genre=Sport-Soccer
+Players=2
+ForceFeedback=No
+
+[E1C7ABD6-4E707F28-C:4A]
+Good Name=Jikkyou World Cup France '98 (J) (v1.2)
+Developer=Konami
+ReleaseDate=1998/06/04
+Genre=Sport-Soccer
+Players=2
+ForceFeedback=No
+
+[E0A79F8C-32CC97FA-C:4A]
+Good Name=Jikkyou World Soccer 3 (J) [!]
+Developer=Konami
+ReleaseDate=1997/09/18
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[4AAAF6ED-376428AD-C:4A]
+Good Name=Jinsei Game 64 (J) [!]
+Developer=Takara
+ReleaseDate=1999/03/19
+Genre=Party
+Players=4
+ForceFeedback=No
+
+[0F743195-D8A6DB95-C:50]
+Good Name=John Romero's Daikatana (E) [!]
+Developer=Kemco / Ion Storm
+ReleaseDate=2000/11/21
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[9D7E3C4B-E60F4A6C-C:4A]
+Good Name=John Romero's Daikatana (J) [!]
+Developer=Kemco / Ion Storm
+ReleaseDate=2000/11/21
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[D0151AB0-FE5CA14B-C:45]
+Good Name=John Romero's Daikatana (U) [!]
+Developer=Kemco / Ion Storm
+ReleaseDate=2000/11/21
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  K  --------------------------
+
+
+[4F29474F-30CB707A-C:4A]
+Good Name=Kakutou Denshou - F-Cup Maniax (J) [!]
+Developer=Imagineer
+ReleaseDate=1999/08/27
+Genre=Figthing
+Players=2
+ForceFeedback=Yes
+
+[36281F23-009756CF-C:45]
+Good Name=Ken Griffey Jr.'s Slugfest (U) [!]
+Developer=Angel Studios
+ReleaseDate=1999/05/11
+Genre=Sport-Baseball
+Players=4
+ForceFeedback=Yes
+
+[979B263E-F8470004-C:50]
+Good Name=Killer Instinct Gold (E) [!]
+Developer=Rare
+ReleaseDate=1996/11/25
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[9E8FE2BA-8B270770-C:45]
+Good Name=Killer Instinct Gold (U) (V1.0) [!]
+Developer=Rare
+ReleaseDate=1996/11/25
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[9E8FCDFA-49F5652B-C:45]
+Good Name=Killer Instinct Gold (U) (V1.1) [!]
+Developer=Rare
+ReleaseDate=1996/11/25
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[F908CA4C-36464327-C:45]
+Good Name=Killer Instinct Gold (U) (V1.2) [!]
+Developer=Rare
+ReleaseDate=1996/11/25
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[519EA4E1-EB7584E8-C:4A]
+Good Name=King Hill 64 - Extreme Snowboarding (J) [!]
+Developer=Kotobiki Systems
+ReleaseDate=1998/12/18
+Genre=Sport-Snowbd
+Players=2
+ForceFeedback=Yes
+
+[75BC6AD6-78552BC9-C:4A]
+Good Name=Kiratto Kaiketsu! 64 Tanteidan (J) [!]
+Developer=Imagineer
+ReleaseDate=1998/10/23
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[0D93BA11-683868A6-C:50]
+Good Name=Kirby 64 - The Crystal Shards (E) [!]
+Developer=HAL Laboratory
+ReleaseDate=2000/06/26
+Genre=Platform
+Players=4
+ForceFeedback=Yes
+
+[46039FB4-0337822C-C:45]
+Good Name=Kirby 64 - The Crystal Shards (U) [!]
+Developer=HAL Laboratory
+ReleaseDate=2000/06/26
+Genre=Platform
+Players=4
+ForceFeedback=Yes
+
+[4A997C74-E2087F99-C:50]
+Good Name=Knife Edge - Nose Gunner (E) [!]
+Developer=Kemco
+ReleaseDate=1998/10/10
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[931AEF3F-EF196B90-C:4A]
+Good Name=Knife Edge - Nose Gunner (J) [!]
+Developer=Kemco
+ReleaseDate=1998/10/10
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[FCE0D799-65316C54-C:45]
+Good Name=Knife Edge - Nose Gunner (U) [!]
+Developer=Kemco
+ReleaseDate=1998/10/10
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[E3D6A795-2A1C5D3C-C:50]
+Good Name=Knockout Kings 2000 (E) [!]
+Developer=Black Ops
+ReleaseDate=1999/10/03
+Genre=Sport-Boxing
+Players=2
+ForceFeedback=Yes
+
+[0894909C-DAD4D82D-C:45]
+Good Name=Knockout Kings 2000 (U) [!]
+Developer=Black Ops
+ReleaseDate=1999/10/03
+Genre=Sport-Boxing
+Players=2
+ForceFeedback=Yes
+
+[1739EFBA-D0B43A68-C:50]
+Good Name=Kobe Bryant's NBA Courtside (E) [!]
+Developer=Left Field Productions, Inc.
+ReleaseDate=1998/04/27
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[616B8494-8A509210-C:45]
+Good Name=Kobe Bryant's NBA Courtside (U) [!]
+Developer=Left Field Productions, Inc.
+ReleaseDate=1998/04/27
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[5E3E60E8-4AB5D495-C:4A]
+Good Name=Kuiki Uhabi Suigo (J) [!]
+Developer=Seta
+ReleaseDate=1996/06/23
+Genre=Puzzle
+Players=1
+ForceFeedback=No
+
+//-------------------------  L  --------------------------
+
+[7F304099-52CF5276-C:4A]
+Good Name=Last Legion UX (J) [!]
+Developer=Yuke's
+ReleaseDate=1999/05/28
+Genre=Action
+Players=2
+ForceFeedback=No
+
+[E97955C6-BC338D38-C:50]
+Good Name=Legend of Zelda 2, The - Majora's Mask (E) [!]
+Developer=Nintendo
+ReleaseDate=2000/10/26
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[0A5D8F83-98C5371A-C:50]
+Good Name=Legend of Zelda, The - Majora's Mask (E) (M4) (v1.1)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[5354631C-03A2DEF0-C:45]
+Good Name=Legend of Zelda 2, The - Majora's Mask (U) [!]
+Developer=Nintendo
+ReleaseDate=2000/04/27
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[B044B569-373C1985-C:50]
+Good Name=Legend of Zelda, The - Ocarina of Time (E) (V1.0) [!]
+Developer=Nintendo
+ReleaseDate=1998/11/23
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[B2055FBD-0BAB4E0C-C:50]
+Good Name=Legend of Zelda, The - Ocarina of Time (E) (M3) (V1.1)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[09465AC3-F8CB501B-C:50]
+Good Name=Legend of Zelda, The - Ocarina of Time (E) (GC Version)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[EC7011B7-7616D72B-C:45]
+Good Name=Legend of Zelda, The - Ocarina of Time (U) (V1.0) [!]
+Developer=Nintendo
+ReleaseDate=1998/11/23
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[D43DA81F-021E1E19-C:45]
+Good Name=Legend of Zelda, The - Ocarina of Time (U) (V1.1) [!]
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[693BA2AE-B7F14E9F-C:45]
+Good Name=Legend of Zelda, The - Ocarina of Time (U) (V1.2) [!]
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[F034001A-AE47ED06-C:45]
+Good Name=Legend of Zelda, The - Ocarina of Time - Master Quest (U) (GC Version)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[F3DD35BA-4152E075-C:45] //New entry in RDB 1.6x BETA13
+Good Name=Legend of Zelda, The - Ocarina of Time (U) (GC Version)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[1D4136F3-AF63EEA9-C:45]
+Good Name=Legend of Zelda, The - Ocarina of Time - Master Quest (E) [h1C]
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[1D4136F3-AF63EEA9-C:50]
+Good Name=Legend of Zelda, The - Ocarina of Time - Master Quest (E)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[27A3831D-B505A533-C:45]
+Good Name=Legend of Zelda, The - Ocarina of Time - Master Quest (E) [f1] (NTSC)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[B443EB08-4DB31193-C:45]
+Good Name=Legend of Zelda, The - Majora's Mask - Collector's Edition (U) (GC Version)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[B443EB08-4DB31193-C:45]
+Good Name=Legend of Zelda, The - Majora's Mask (U) (GC Version)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[917D18F6-69BC5453-C:45]
+Good Name=Legend of Zelda, The - Ocarina of Time - Master Quest (U) (Debug Rom)
+Developer=Nintendo
+ReleaseDate=Never
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[6AECEC4F-F0924814-C:50]
+Good Name=Legend of Zelda, The - Majora's Mask - Collector's Edition (E) (GC Version)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[BF799345-39FF7A02-C:45]
+Good Name=Legend of Zelda, The - Majora's Mask (U) (Demo)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[F478D8B3-9716DD6D-C:50]
+Good Name=LEGO Racers (E) [!]
+Developer=High Voltage Software
+ReleaseDate=1999/10/12
+Genre=Racing-Toy
+Players=2
+ForceFeedback=Yes
+
+[096A40EA-8ABE0A10-C:45]
+Good Name=LEGO Racers (U) [!]
+Developer=High Voltage Software
+ReleaseDate=1999/10/12
+Genre=Racing-Toy
+Players=2
+ForceFeedback=Yes
+
+[2B696CB4-7B93DCD8-C:46]
+Good Name=Les Razmoket - La Chasse Aux Tresors (F) [!]
+Developer=Infogrammes
+ReleaseDate=1999/11/09
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[3D67C62B-31D03150-C:4A]
+Good Name=Let's Smash Tennis (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/10/09
+Genre=Sport-Tennis
+Players=2
+ForceFeedback=No
+
+[60460680-305F0E72-C:50]
+Good Name=Lode Runner 3-D (E) [!]
+Developer=Big Bang
+ReleaseDate=1999/03/31
+Genre=Puzzle
+Players=1
+ForceFeedback=Yes
+
+[964ADD0B-B29213DB-C:4A]
+Good Name=Lode Runner 3-D (J) [!]
+Developer=Big Bang
+ReleaseDate=1999/03/31
+Genre=Puzzle
+Players=1
+ForceFeedback=Yes
+
+[255018DF-57D6AE3A-C:45]
+Good Name=Lode Runner 3-D (U) [!]
+Developer=Big Bang
+ReleaseDate=1999/03/31
+Genre=Puzzle
+Players=1
+ForceFeedback=Yes
+
+[0AA0055B-7637DF65-C:50]
+Good Name=Looney Tunes - Duck Dodgers (E) [!]
+Developer=Infogrames
+ReleaseDate=2000/09/19
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[2483F22B-136E025E-C:55]
+Good Name=Lylat Wars (A) [!]
+Developer=Nintendo
+ReleaseDate=1997/07/01
+Genre=Flight-Action
+Players=4
+ForceFeedback=Yes
+
+[F4CBE92C-B392ED12-C:50]
+Good Name=Lylat Wars (E) [!]
+Developer=Nintendo
+ReleaseDate=1997/07/01
+Genre=Fight-Action
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  M  --------------------------
+
+[1145443D-11610EDB-C:50]
+Good Name=Mace - The Dark Age (E) [!]
+Developer=Atari Games
+ReleaseDate=1997/10/01
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[6B700750-29D621FE-C:45]
+Good Name=Mace - The Dark Age (U) [!]
+Developer=Atari Games
+ReleaseDate=1997/10/01
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[0CB81686-5FD85A81-C:45]
+Good Name=Madden 2000 (U) [!]
+Developer=Tiburon
+ReleaseDate=1999/08/31
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[A197CB52-7520DE0E-C:50]
+Good Name=Madden Football 64 (E) [!]
+Developer=Tiburon
+ReleaseDate=1997/10/24
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[13836389-265B3C76-C:45]
+Good Name=Madden Football 64 (U) [!]
+Developer=Tiburon
+ReleaseDate=1997/10/24
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[EB38F792-190EA246-C:45]
+Good Name=Madden NFL 2001 (U) [!]
+Developer=EA Sports
+ReleaseDate=2000/09/05
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[D7134F8D-C11A00B5-C:45]
+Good Name=Madden NFL 2002 (U) [!]
+Developer=Tiburon
+ReleaseDate=2001/09/13
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[3925D625-8C83C75E-C:50]
+Good Name=Madden NFL 99 (E) [!]
+Developer=Tiburon
+ReleaseDate=1998/09/26
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[DEB78BBA-52F6BD9D-C:45]
+Good Name=Madden NFL 99 (U) [!]
+Developer=Tiburon
+ReleaseDate=1998/09/26
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[E4906679-9F243F05-C:50]
+Good Name=Magical Tetris Challenge (E) [!]
+Developer=Capcom Entertainment
+ReleaseDate=1999/01/15
+Genre=Puzzle
+Players=2
+ForceFeedback=Yes
+
+[E1EF93F7-14908B0B-C:44]
+Good Name=Magical Tetris Challenge (G) [!]
+Developer=Capcom Entertainment
+ReleaseDate=1999/01/15
+Genre=Puzzle
+Players=2
+ForceFeedback=Yes
+
+[80C8564A-929C65AB-C:4A]
+Good Name=Magical Tetris Challenge (J) [!]
+Developer=Capcom Entertainment
+ReleaseDate=1999/01/15
+Genre=Puzzle
+Players=2
+ForceFeedback=Yes
+
+[75B61647-7ADABF78-C:45]
+Good Name=Magical Tetris Challenge (U) [!]
+Developer=Capcom Entertainment
+ReleaseDate=1999/01/15
+Genre=Puzzle
+Players=2
+ForceFeedback=Yes
+
+[C53EDC41-ECE19359-C:4A]
+Good Name=Mahjong 64 (KOEI) (J) [!]
+Developer=Koei
+ReleaseDate=1997/04/04
+Genre=Board Game
+Players=1
+ForceFeedback=No
+
+[CCCC821E-96E88A83-C:4A]
+Good Name=Mahjong Hourouki Classic (J) [!]
+Developer=Imagineer
+ReleaseDate=1997/08/01
+Genre=Board Game
+Players=2
+ForceFeedback=No
+
+[0FC42C70-8754F1CD-C:4A]
+Good Name=Mahjong Master (J) [!]
+Developer=Konami
+ReleaseDate=1996/12/20
+Genre=Board Game
+Players=1
+ForceFeedback=No
+
+[CDB998BE-1024A5C8-C:50]
+Good Name=Major League Baseball Featuring Ken Griffey Jr. (E) [!]
+Developer=Angel Studios
+ReleaseDate=1998/05/25
+Genre=Sport-Baseball
+Players=2
+ForceFeedback=Yes
+
+[80C1C05C-EA065EF4-C:45]
+Good Name=Major League Baseball Featuring Ken Griffey Jr. (U) [!]
+Developer=Angel Studios
+ReleaseDate=1998/05/25
+Genre=Sport-Baseball
+Players=2
+ForceFeedback=Yes
+
+[9CCE5B1D-6351E283-C:0]
+Good Name=MAME 64 Emulator V1.0 (PD)
+Developer=??
+ReleaseDate=??/??/??
+Genre=??
+Players=??
+ForceFeedback=No
+
+[62E957D0-7FC15A5D-C:50]
+Good Name=Mario Golf (E) [!]
+Developer=Camelot Software Planning
+ReleaseDate=1999/07/27
+Genre=Sport-Golf
+Players=4
+ForceFeedback=Yes
+
+[664BA3D4-678A80B7-C:45]
+Good Name=Mario Golf (U) [!]
+Developer=Camelot Software Planning
+ReleaseDate=1999/07/27
+Genre=Sport-Golf
+Players=4
+ForceFeedback=Yes
+
+[D48944D1-B0D93A0E-C:4A]
+Good Name=Mario Golf 64 (J) [!]
+Developer=Camelot Software Planning
+ReleaseDate=1999/06/11
+Genre=Sport-Golf
+Players=4
+ForceFeedback=Yes
+
+[C3B6DE9D-65D2DE76-C:50]
+Good Name=Mario Kart 64 (E) (V1.0) [!]
+Developer=Nintendo
+ReleaseDate=1997/02/10
+Genre=Racing-Kart
+Players=4
+ForceFeedback=No
+
+[2577C7D4-D18FAAAE-C:50]
+Good Name=Mario Kart 64 (E) (V1.1) [!]
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Racing-Kart
+Players=4
+ForceFeedback=No
+
+[6BFF4758-E5FF5D5E-C:4A]
+Good Name=Mario Kart 64 (J) (V1.0) [!]
+Developer=Nintendo
+ReleaseDate=1997/02/10
+Genre=Racing-Kart
+Players=4
+ForceFeedback=No
+
+[C9C3A987-5810344C-C:4A]
+Good Name=Mario Kart 64 (J) (V1.1) [!]
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Racing-Kart
+Players=4
+ForceFeedback=No
+
+[3E5055B6-2E92DA52-C:45]
+Good Name=Mario Kart 64 (U) [!]
+Developer=Nintendo
+ReleaseDate=1997/02/10
+Genre=Racing-Kart
+Players=4
+ForceFeedback=No
+
+[9A9890AC-F0C313DF-C:4A]
+Good Name=Mario no Photopie (J) [!]
+Developer=Tokyo Electron
+ReleaseDate=1998/12/02
+Genre=Miscellaneous (Misc)
+Players=1
+ForceFeedback=No
+
+[9C663069-80F24A80-C:50]
+Good Name=Mario Party (E) [!]
+Developer=Hudson Soft
+ReleaseDate=1999/02/08
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[ADA815BE-6028622F-C:4A]
+Good Name=Mario Party (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1999/02/08
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[2829657E-A0621877-C:45]
+Good Name=Mario Party (U) [!]
+Developer=Hudson Soft
+ReleaseDate=1999/02/08
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[82380387-DFC744D9-C:50]
+Good Name=Mario Party 2 (E) [!]
+Developer=Hudson Soft
+ReleaseDate=2000/01/24
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[ED567D0F-38B08915-C:4A]
+Good Name=Mario Party 2 (J) [!]
+Developer=Hudson Soft
+ReleaseDate=2000/01/24
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[9EA95858-AF72B618-C:45]
+Good Name=Mario Party 2 (U) [!]
+Developer=Hudson Soft
+ReleaseDate=2000/01/24
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[C5674160-0F5F453C-C:50]
+Good Name=Mario Party 3 (E) [!]
+Developer=Hudson Soft
+ReleaseDate=2001/05/07
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[0B0AB4CD-7B158937-C:4A]
+Good Name=Mario Party 3 (J) [!]
+Developer=Hudson Soft
+ReleaseDate=2001/05/07
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[7C3829D9-6E8247CE-C:45]
+Good Name=Mario Party 3 (U) [!]
+Developer=Hudson Soft
+ReleaseDate=2001/05/07
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[3BA7CDDC-464E52A0-C:4A]
+Good Name=Mario Story (J) [!]
+Developer=Nintendo
+ReleaseDate=2000/08/11
+Genre=RPG
+Players=1
+ForceFeedback=Yes
+
+[839F3AD5-406D15FA-C:50]
+Good Name=Mario Tennis (E) [!]
+Developer=Camelot Software Planning
+ReleaseDate=2000/08/28
+Genre=Sport-Tennis
+Players=4
+ForceFeedback=Yes
+
+[3A6C42B5-1ACADA1B-C:4A]
+Good Name=Mario Tennis (J) [!]
+Developer=Camelot Software Planning
+ReleaseDate=2000/07/21
+Genre=Sport-Tennis
+Players=4
+ForceFeedback=Yes
+
+[5001CF4F-F30CB3BD-C:45]
+Good Name=Mario Tennis (U) [!]
+Developer=Camelot Software Planning
+ReleaseDate=2000/08/28
+Genre=Sport-Tennis
+Players=4
+ForceFeedback=Yes
+
+[0EC158F5-FB3E6896-C:45]
+Good Name=Mega Man 64 (U) [!]
+Developer=Capcom Entertainment
+ReleaseDate=2001/01/16
+Genre=Adventure
+Players=1
+ForceFeedback=Yes
+
+[1001F10C-3D51D8C1-C:45]
+Good Name=Mia Hamm Soccer 64 (U) [!]
+Developer=Silicon Dreams
+ReleaseDate=2000/11/09
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=Yes
+
+[E36166C2-8613A2E5-C:58]
+Good Name=Michael Owens WLS 2000 (E) [!]
+Developer=THQ
+ReleaseDate=1999/10/21
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[736AE6AF-4117E9C7-C:4A]
+Good Name=Mickey no Racing Challenge USA (J) [!]
+Developer=Rare
+ReleaseDate=2001/01/21
+Genre=Racing-Kart
+Players=4
+ForceFeedback=Yes
+
+[DED0DD9A-E78225A7-C:50]
+Good Name=Mickey's Speedway USA (E) [!]
+Developer=Rare
+ReleaseDate=2000/11/13
+Genre=Racing-Kart
+Players=4
+ForceFeedback=Yes
+
+[FA8C4571-BBE7F9C0-C:45]
+Good Name=Mickey's Speedway USA (U) [!]
+Developer=Rare
+ReleaseDate=2000/11/13
+Genre=Racing-Kart
+Players=4
+ForceFeedback=Yes
+
+[2A49018D-D0034A02-C:50]
+Good Name=Micro Machines 64 Turbo (E) [!]
+Developer=Codemasters
+ReleaseDate=1999/03/24
+Genre=Racing-Toy
+Players=8
+ForceFeedback=Yes
+
+[F1850C35-ACE07912-C:45]
+Good Name=Micro Machines 64 Turbo (U) [!]
+Developer=Codemasters
+ReleaseDate=1999/03/24
+Genre=Racing-Toy
+Players=8
+ForceFeedback=Yes
+
+[E4B35E4C-1AC45CC9-C:45]
+Good Name=Midway's Greatest Arcade Hits Volume 1 (U) [!]
+Developer=Digital Eclipse
+ReleaseDate=2000/11/14
+Genre=Compilation
+Players=2
+ForceFeedback=No
+
+[09D53E16-3AB268B9-C:45]
+Good Name=Mike Piazza's Strike Zone (U) [!]
+Developer=Devil's Thumb Entertainment
+ReleaseDate=1998/06/16
+Genre=Sport-Baseball
+Players=2
+ForceFeedback=Yes
+
+[9A490D9D-8F013ADC-C:50]
+Good Name=Milo's Astro Lanes (E) [!]
+Developer=Player 1
+ReleaseDate=1998/11/24
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[2E955ECD-F3000884-C:45]
+Good Name=Milo's Astro Lanes (U) [!]
+Developer=Player 1
+ReleaseDate=1998/11/24
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[418BDA98-248A0F58-C:50]
+Good Name=Mischief Makers (E) [!]
+Developer=Treasure
+ReleaseDate=1997/10/01
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[0B93051B-603D81F9-C:45]
+Good Name=Mischief Makers (U) [!]
+Developer=Treasure
+ReleaseDate=1997/10/01
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[2256ECDA-71AB1B9C-C:50]
+Good Name=Mission Impossible (E) [!]
+Developer=Infogrames
+ReleaseDate=1998/07/18
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[20095B34-343D9E87-C:46]
+Good Name=Mission Impossible (F) [!]
+Developer=Infogrames
+ReleaseDate=1998/07/18
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[93EB3F7E-81675E44-C:44]
+Good Name=Mission Impossible (G) [!]
+Developer=Infogrames
+ReleaseDate=1998/07/18
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[EBA949DC-39BAECBD-C:49]
+Good Name=Mission Impossible (I) [!]
+Developer=Infogrames
+ReleaseDate=1998/07/18
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[5F6A04E2-D4FA070D-C:53]
+Good Name=Mission Impossible (S) [!]
+Developer=Infogrames
+ReleaseDate=1998/07/18
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[26035CF8-802B9135-C:45]
+Good Name=Mission Impossible (U) [!]
+Developer=Infogrames
+ReleaseDate=1998/07/18
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[28768D6D-B379976C-C:45]
+Good Name=Monaco Grand Prix (U) [!]
+Developer=Ubi Soft
+ReleaseDate=1999/09/01
+Genre=Racing-F1
+Players=2
+ForceFeedback=Yes
+
+[5AC383E1-D712E387-C:45]
+Good Name=Monopoly (U) [!]
+Developer=Mind's Eye
+ReleaseDate=1999/12/18
+Genre=Board
+Players=4
+ForceFeedback=No
+
+[D3D806FC-B43AA2A8-C:50]
+Good Name=Monster Truck Madness 64 (E) [!]
+Developer=Edge of Reality
+ReleaseDate=1999/07/30
+Genre=Racing-Truck
+Players=4
+ForceFeedback=Yes
+
+[B19AD999-7E585118-C:45]
+Good Name=Monster Truck Madness 64 (U) [!]
+Developer=Edge of Reality
+ReleaseDate=1999/07/30
+Genre=Racing-Truck
+Players=4
+ForceFeedback=Yes
+
+[E8E8DD70-415DD198-C:4A]
+Good Name=Morita Shogi 64 (J) [!]
+Developer=Seta
+ReleaseDate=1998/04/03
+Genre=Board Game
+Players=2
+ForceFeedback=No
+
+[73036F3B-CE0D69E9-C:50]
+Good Name=Mortal Kombat 4 (E) [!]
+Developer=Eurocom
+ReleaseDate=1998/06/23
+Genre=Fighting
+Players=2
+ForceFeedback=Yes
+
+[417DD4F4-1B482FE2-C:45]
+Good Name=Mortal Kombat 4 (U) [!]
+Developer=Eurocom
+ReleaseDate=1998/06/23
+Genre=Fighting
+Players=2
+ForceFeedback=Yes
+
+[FF44EDC4-1AAE9213-C:50]
+Good Name=Mortal Kombat Mythologies - Sub-Zero (E) [!]
+Developer=Avalanche
+ReleaseDate=1997/12/08
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[C34304AC-2D79C021-C:45]
+Good Name=Mortal Kombat Mythologies - Sub-Zero (U) [!]
+Developer=Avalanche
+ReleaseDate=1997/12/08
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[8C3D1192-BEF172E1-C:50]
+Good Name=Mortal Kombat Trilogy (E) [!]
+Developer=Midway
+ReleaseDate=1996/11/14
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[D9F75C12-A8859B59-C:45]
+Good Name=Mortal Kombat Trilogy (U) (V1.0) [!]
+Developer=Midway
+ReleaseDate=1996/11/14
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[83F33AA9-A901D40D-C:45]
+Good Name=Mortal Kombat Trilogy (U) (V1.2) [!]
+Developer=Midway
+ReleaseDate=????/??/??
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[B8F0BD03-4479189E-C:50]
+Good Name=MRC - Multi Racing Championship (E) [!]
+Developer=Imagineer
+ReleaseDate=1997/09/05
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+[A6B6B413-15D113CC-C:4A]
+Good Name=MRC - Multi Racing Championship (J) [!]
+Developer=Imagineer
+ReleaseDate=1997/09/05
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+[2AF9B65C-85E2A2D7-C:45]
+Good Name=MRC - Multi Racing Championship (U) [!]
+Developer=Imagineer
+ReleaseDate=1997/09/05
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+[1938525C-586E9656-C:45]
+Good Name=Ms. Pac-Man Maze Madness (U) [!]
+Developer=Mass Media
+ReleaseDate=2000/11/12
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[F5360FBE-2BF1691D-C:50]
+Good Name=Mystical Ninja - Starring Goemon (E) [!]
+Developer=Konami
+ReleaseDate=1998/04/16
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[FCBCCB21-72903C6B-C:45]
+Good Name=Mystical Ninja - Starring Goemon (U) [!]
+Developer=Konami
+ReleaseDate=1998/04/16
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[7F9345D3-841ECADE-C:50]
+Good Name=Mystical Ninja 2 - Starring Goemon (E) [!]
+Developer=Konami
+ReleaseDate=1998/12/23
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+//-------------------------  N  --------------------------
+
+[AE2D3A35-24F0D41A-C:50]
+Good Name=Nagano Olympic Hockey '98 (E) [!]
+Developer=Atari Games
+ReleaseDate=1998/02/23
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=No
+
+[7EC22587-EF1AE323-C:45]
+Good Name=Nagano Olympic Hockey '98 (U) [!]
+Developer=Atari Games
+ReleaseDate=1998/02/23
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=No
+
+[90F43037-5C5370F5-C:4A]
+Good Name=Nagano Olympic Hockey '98 (J) [!]
+Developer=Atari Games
+ReleaseDate=1998/02/23
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=No
+
+[6D452016-713C09EE-C:50]
+Good Name=Nagano Winter Olympics '98 (E) [!]
+Developer=Treyarch
+ReleaseDate=1998/01/29
+Genre=Sport-Olympics
+Players=4
+ForceFeedback=No
+
+[2FC5C34C-7A05CC9D-C:4A]
+Good Name=Nagano Winter Olympics '98 (J) [!]
+Developer=Treyarch
+ReleaseDate=1998/01/29
+Genre=Sport-Olympics
+Players=4
+ForceFeedback=No
+
+[8D2BAE98-D73725BF-C:45]
+Good Name=Nagano Winter Olympics '98 (U) [!]
+Developer=Treyarch
+ReleaseDate=1998/01/29
+Genre=Sport-Olympics
+Players=4
+ForceFeedback=No
+
+[5129B6DA-9DEF3C8C-C:45]
+Good Name=Namco Museum 64 (U) [!]
+Developer=Mass Media
+ReleaseDate=1999/11/29
+Genre=Action
+Players=
+ForceFeedback=No
+
+[DF331A18-5FD4E044-C:45]
+Good Name=NASCAR 2000 (U) [!]
+Developer=Stormfront Studios
+ReleaseDate=1999/09/15
+Genre=Racing-Nascar
+Players=2
+ForceFeedback=Yes
+
+[AE4992C9-9253B253-C:50]
+Good Name=NASCAR 99 (E) [!]
+Developer=Stormfront Studios
+ReleaseDate=1998/09/11
+Genre=Racing-Nascar
+Players=2
+ForceFeedback=Yes
+
+[23749578-80DC58FD-C:45]
+Good Name=NASCAR 99 (U) [!]
+Developer=Stormfront Studios
+ReleaseDate=1998/09/11
+Genre=Racing-Nascar
+Players=2
+ForceFeedback=Yes
+
+[916852D8-73DBEAEF-C:45]
+Good Name=NBA Courtside 2 - Featuring Kobe Bryant (U) [!]
+Developer=Left Field Productions, Inc.
+ReleaseDate=1999/11/08
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[C788DCAE-BD03000A-C:50]
+Good Name=NBA Hangtime (E) [!]
+Developer=Funcom
+ReleaseDate=1997/01/17
+Genre=Sport-Basket
+Players=4
+ForceFeedback=No
+
+[4E69B487-FE18E290-C:45]
+Good Name=NBA Hangtime (U) [!]
+Developer=Funcom
+ReleaseDate=1997/01/17
+Genre=Sport-Basket
+Players=4
+ForceFeedback=No
+
+[AAE11F01-2625A045-C:4A]
+Good Name=NBA In the Zone 2 (J) [!]
+Developer=Konami OSA
+ReleaseDate=2000/02/23
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[B3054F9F-96B69EB5-C:50]
+Good Name=NBA In the Zone 2000 (E) [!]
+Developer=Konami OSA
+ReleaseDate=2000/02/23
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[8DF95B18-ECDA497B-C:45]
+Good Name=NBA In the Zone 2000 (U) [!]
+Developer=Konami OSA
+ReleaseDate=2000/02/23
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[36ACBA9B-F28D4D94-C:4A]
+Good Name=NBA In the Zone '98 (J) [!]
+Developer=Konami
+ReleaseDate=1998/02/10
+Genre=Sport-Basket
+Players=4
+ForceFeedback=No
+
+[6A121930-665CC274-C:45]
+Good Name=NBA In the Zone '98 (U) [!]
+Developer=Konami
+ReleaseDate=1998/02/10
+Genre=Sport-Basket
+Players=4
+ForceFeedback=No
+
+[A292524F-3D6C2A49-C:45]
+Good Name=NBA In the Zone '99 (U) [!]
+Developer=Konami OSA
+ReleaseDate=1999/04/07
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[B6D0CAA0-E3F493C8-C:50]
+Good Name=NBA Jam 2000 (E) [!]
+Developer=Acclaim
+ReleaseDate=1999/12/02
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[EBEEA8DB-F2ECB23C-C:45]
+Good Name=NBA Jam 2000 (U) [!]
+Developer=Acclaim
+ReleaseDate=1999/12/02
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[E600831E-59F422A8-C:50]
+Good Name=NBA Jam 99 (E) [!]
+Developer=Iguana West
+ReleaseDate=1998/12/04
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[810729F6-E03FCFC1-C:45]
+Good Name=NBA Jam 99 (U) [!]
+Developer=Iguana West
+ReleaseDate=1998/12/04
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[EB499C8F-CD4567B6-C:50]
+Good Name=NBA Live 2000 (E) [!]
+Developer=NuFX, Inc.
+ReleaseDate=1999/11/17
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[5F25B0EE-6227C1DB-C:45]
+Good Name=NBA Live 2000 (U) [!]
+Developer=NuFX, Inc.
+ReleaseDate=1999/11/17
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[CF84F45F-00E4F6EB-C:50]
+Good Name=NBA Live 99 (E) [!]
+Developer=EA Sports
+ReleaseDate=1998/11/04
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[57F81C9B-1133FA35-C:45]
+Good Name=NBA Live 99 (U) [!]
+Developer=EA Sports
+ReleaseDate=1998/11/04
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[ACDE962F-B2CBF87F-C:50]
+Good Name=NBA Pro 98 (E) [!]
+Developer=Konami
+ReleaseDate=1998/04/30
+Genre=Sport-Basket
+Players=4
+ForceFeedback=No
+
+[8D1780B6-57B3B976-C:50]
+Good Name=NBA Pro 99 (E) [!]
+Developer=Konami
+ReleaseDate=1999/10/01
+Genre=Sport-Basket
+Players=8
+ForceFeedback=No
+
+[3FFE80F4-A7C15F7E-C:45]
+Good Name=NBA Showtime - NBA on NBC (U) [!]
+Developer=Eurocom
+ReleaseDate=1999/11/07
+Genre=Sport-Basket
+Players=4
+ForceFeedback=Yes
+
+[147E0EDB-36C5B12C-C:4A]
+Good Name=Neon Genesis Evangelion (J) [!]
+Developer=Bandai
+ReleaseDate=1999/05/31
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[E61CFF0A-CE1C0D71-C:50]
+Good Name=New Tetris, The (E) [!]
+Developer=H2O Interactive
+ReleaseDate=1999/07/31
+Genre=Puzzle
+Players=4
+ForceFeedback=No
+
+[2153143F-992D6351-C:45]
+Good Name=New Tetris, The (U) [!]
+Developer=H2O Interactive
+ReleaseDate=1999/07/31
+Genre=Puzzle
+Players=4
+ForceFeedback=No
+
+[30EAD54F-31620BF6-C:45]
+Good Name=NFL Blitz - Special Edition (U) [!]
+Developer=Midway
+ReleaseDate=2001/11/30
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[D094B170-D7C4B5CC-C:45]
+Good Name=NFL Blitz (U) [!]
+Developer=Midway
+ReleaseDate=1999/09/09
+Genre=Sport-Football
+Players=2
+ForceFeedback=Yes
+
+[15A00969-34E5A285-C:45]
+Good Name=NFL Blitz 2000 (U) [!]
+Developer=Midway
+ReleaseDate=1999/08/17
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[36FA35EB-E85E2E36-C:45]
+Good Name=NFL Blitz 2001 (U) [!]
+Developer=Midway
+ReleaseDate=2000/09/12
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[88BD5A9E-E81FDFBF-C:50]
+Good Name=NFL Quarterback Club 2000 (E) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1999/08/26
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[E3AB4ED0-83040DD2-C:45]
+Good Name=NFL Quarterback Club 2000 (U) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1999/08/26
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[28784622-FFB22985-C:45]
+Good Name=NFL Quarterback Club 2001 (U) [!]
+Developer=High Voltage Software
+ReleaseDate=2000/08/23
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[4B629EF4-99B21D9B-C:50]
+Good Name=NFL Quarterback Club 98 (E) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1997/10/24
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[D89BE2F8-99C97ADF-C:45]
+Good Name=NFL Quarterback Club 98 (U) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1997/10/24
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[52A3CF47-4EC13BFC-C:50]
+Good Name=NFL Quarterback Club 99 (E) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/11/10
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[BE76EDFF-20452D09-C:45]
+Good Name=NFL Quarterback Club 99 (U) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/11/10
+Genre=Sport-Football
+Players=4
+ForceFeedback=Yes
+
+[287D601E-ABF4F8AE-C:50]
+Good Name=NHL 99 (E) [!]
+Developer=MBL Research / EA Canada
+ReleaseDate=1998/10/01
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=Yes
+
+[591A806E-A5E6921D-C:45]
+Good Name=NHL 99 (U) [!]
+Developer=MBL Research / EA Canada
+ReleaseDate=1998/10/01
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=Yes
+
+[82EFDC30-806A2461-C:45]
+Good Name=NHL Blades of Steel '99 (U) [!]
+Developer=Konami OSA
+ReleaseDate=1999/04/05
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=Yes
+
+[29CE7692-71C58579-C:50]
+Good Name=NHL Breakaway 98 (E) [!]
+Developer=Iguana West
+ReleaseDate=1998/02/26
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=Yes
+
+[6DFDCDC3-4DE701C8-C:45]
+Good Name=NHL Breakaway 98 (U) [!]
+Developer=Iguana West
+ReleaseDate=1998/02/26
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=Yes
+
+[874621CB-0031C127-C:50]
+Good Name=NHL Breakaway 99 (E) [!]
+Developer=Iguana West
+ReleaseDate=1998/11/27
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=Yes
+
+[441768D0-7D73F24F-C:45]
+Good Name=NHL Breakaway 99 (U) [!]
+Developer=Iguana West
+ReleaseDate=1998/11/27
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=Yes
+
+[A9895CD9-7020016C-C:50]
+Good Name=NHL Pro 99 (E) [!]
+Developer=Konami
+ReleaseDate=1999/09/16
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=No
+
+[2857674D-CC4337DA-C:45]
+Good Name=Nightmare Creatures (U) [!]
+Developer=Kalisto Entertainment
+ReleaseDate=1998/11/30
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[CD3C3CDF-317793FA-C:4A]
+Good Name=Nintama Rantarou 64 (J)
+Developer=Culture Brain
+ReleaseDate=2000/04/14
+Genre=Misc-Puzzle
+Players=1
+ForceFeedback=No
+
+[8A97A197-272DF6C1-C:50]
+Good Name=Nuclear Strike 64 (E) [!]
+Developer=Pacific Coast Power & Light
+ReleaseDate=1999/12/02
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[8F50B845-D729D22F-C:44]
+Good Name=Nuclear Strike 64 (G) [!]
+Developer=Pacific Coast Power & Light
+ReleaseDate=1999/12/02
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[4998DDBB-F7B7AEBC-C:45]
+Good Name=Nuclear Strike 64 (U) [!]
+Developer=Pacific Coast Power & Light
+ReleaseDate=1999/12/02
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[5B9B1618-1B43C649-C:4A]
+Good Name=Nushi Tsuri 64 - Shiokaze ni Notte (J) [!]
+Developer=Victor
+ReleaseDate=2000/05/26
+Genre=Sport-Fishing
+Players=1
+ForceFeedback=No
+
+[D83BB920-CC406416-C:4A]
+Good Name=Nushi Tsuri 64 (J) [!]
+Developer=Victor
+ReleaseDate=1998/11/27
+Genre=Sport-Fishing
+Players=1
+ForceFeedback=No
+
+//-------------------------  O  --------------------------
+
+[E86415A6-98395B53-C:50]
+Good Name=O.D.T (Or Die Trying) (E) (M5) (Unreleased Final)
+Developer=Infogrames
+ReleaseDate=Never
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[2655BB70-667D9925-C:45]
+Good Name=O.D.T (Or Die Trying) (U) (M3) (Unreleased Final)
+Developer=Infogrames
+ReleaseDate=Never
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[812289D0-C2E53296-C:50]
+Good Name=Off Road Challenge (E) [!]
+Developer=Avalanche
+ReleaseDate=1998/01/30
+Genre=Racing-Truck
+Players=2
+ForceFeedback=Yes
+
+[319093EC-0FC209EF-C:45]
+Good Name=Off Road Challenge (U) [!]
+Developer=Avalanche
+ReleaseDate=1998/01/30
+Genre=Racing-Truck
+Players=2
+ForceFeedback=Yes
+
+[0375CF67-56A93FAA-C:4A]
+Good Name=Ogre Battle 64 - Person of Lordly Caliber (J) (V1.1) [!]
+Developer=Quest
+ReleaseDate=????/??/??
+Genre=RT Strategy
+Players=1
+ForceFeedback=No
+
+[E6419BC5-69011DE3-C:45]
+Good Name=Ogre Battle 64 - Person of Lordly Caliber (U) [!]
+Developer=Quest
+ReleaseDate=2000/10/05
+Genre=RT Strategy
+Players=1
+ForceFeedback=No
+
+[DC649466-572FF0D9-C:4A]
+Good Name=Onegai Monsters (J) [!]
+Developer=Bottom Up
+ReleaseDate=1998/04/09
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+//-------------------------  P  --------------------------
+
+[74554B3B-F4AEBCB5-C:4A]
+Good Name=Pachinko 365 Nichi (J) [!]
+Developer=Seta Corporation
+ReleaseDate=1998/05/29
+Genre=Party
+Players=1
+ForceFeedback=No
+
+[19AB29AF-C71BCD28-C:50]
+Good Name=Paper Mario (E) [!]
+Developer=Intelligent Systems
+ReleaseDate=2001/02/05
+Genre=RPG
+Players=2
+ForceFeedback=Yes
+
+[65EEE53A-ED7D733C-C:45]
+Good Name=Paper Mario (U) [!]
+Developer=Intelligent Systems
+ReleaseDate=2001/02/05
+Genre=RPG
+Players=2
+ForceFeedback=Yes
+
+[AC976B38-C3A9C97A-C:50]
+Good Name=Paperboy (E) [!]
+Developer=High Voltage Software
+ReleaseDate=1999/11/01
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[3E198D9E-F2E1267E-C:45]
+Good Name=Paperboy (U) [!]
+Developer=High Voltage Software
+ReleaseDate=1999/11/01
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[CFE2CB31-4D6B1E1D-C:4A]
+Good Name=Parlor! Pro 64 Pachinko Jikki Simulation Game (J) [!]
+Developer=Telenet
+ReleaseDate=1999/01/29
+Genre=Party
+Players=1
+ForceFeedback=No
+
+[34495BAD-502E9D26-C:4A]
+Good Name=Jikkyou Powerful Pro Yakyuu 4 (J) [!]
+Developer=Konami
+ReleaseDate=1997/03/14
+Genre=Sport
+Players=2
+ForceFeedback=No
+
+[D7891F1C-C3E43788-C:4A]
+Good Name=Jikkyou Powerful Pro Yakyuu 4 (J) (V1.1) [!]
+Developer=Konami
+ReleaseDate=1997/03/14
+Genre=Sport
+Players=2
+ForceFeedback=No
+
+[D22943DA-AC2B77C0-C:4A]
+Good Name=Jikkyou Powerful Pro Yakyuu 5 (J) [!]
+Developer=Konami
+ReleaseDate=1998/03/26
+Genre=Sport
+Players=2
+ForceFeedback=No
+
+[B75E20B7-B3FEFDFD-C:4A]
+Good Name=Jikkyou Powerful Pro Yakyuu (J) [!]
+Developer=Konami
+ReleaseDate=1999/03/25
+Genre=Sport
+Players=2
+ForceFeedback=No
+
+[F468118C-E32EE44E-C:4A]
+Good Name=PD Ultraman Battle Collection 64 (J) [!]
+Developer=Bandai
+ReleaseDate=1999/07/16
+Genre=RPG
+Players=2
+ForceFeedback=No
+
+[C83CEB83-FDC56219-C:50]
+Good Name=Penny Racers (E) [!]
+Developer=Takara
+ReleaseDate=1999/02/10
+Genre=Racing-Car
+Players=4
+ForceFeedback=No
+
+[73ABB1FB-9CCA6093-C:45]
+Good Name=Penny Racers (U) [!]
+Developer=Takara
+ReleaseDate=1999/02/10
+Genre=Racing-Car
+Players=4
+ForceFeedback=No
+
+[E4B08007-A602FF33-C:50]
+Good Name=Perfect Dark (E) [!]
+Developer=Rare
+ReleaseDate=2000/05/22
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[96747EB4-104BB243-C:4A]
+Good Name=Perfect Dark (J) [!]
+Developer=Rare
+ReleaseDate=2000/05/22
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[DDF460CC-3CA634C0-C:45]
+Good Name=Perfect Dark (U) (V1.0) [!]
+Developer=Rare
+ReleaseDate=2000/05/22
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[41F2B98F-B458B466-C:45]
+Good Name=Perfect Dark (U) (V1.1) [!]
+Developer=Rare
+ReleaseDate=????/??/??
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[EE08C602-6BC2D5A6-C:50]
+Good Name=PGA European Tour (E) [!]
+Developer=Infogrames Sheffield House
+ReleaseDate=2000/06/15
+Genre=Sport-Golf
+Players=4
+ForceFeedback=Yes
+
+[B54CE881-BCCB6126-C:45]
+Good Name=PGA European Tour (U) [!]
+Developer=Infogrames Sheffield House
+ReleaseDate=2000/06/15
+Genre=Sport-Golf
+Players=4
+ForceFeedback=Yes
+
+[3F245305-FC0B74AA-C:4A]
+Good Name=Pikachu Genki Dechu (J) [!]
+Developer=Nintendo
+ReleaseDate=1998/12/12
+Genre=Simulation
+Players=1
+ForceFeedback=No
+
+[1AA05AD5-46F52D80-C:50]
+Good Name=Pilotwings 64 (E) [!]
+Developer=Paradigm Simulations
+ReleaseDate=1996/09/26
+Genre=Flight-Simulation
+Players=1
+ForceFeedback=No
+
+[09CC4801-E42EE491-C:4A]
+Good Name=Pilotwings 64 (J) [!]
+Developer=Paradigm Simulations
+ReleaseDate=1996/09/26
+Genre=Flight-Simulation
+Players=1
+ForceFeedback=No
+
+[C851961C-78FCAAFA-C:45]
+Good Name=Pilotwings 64 (U) [!]
+Developer=Paradigm Simulations
+ReleaseDate=1996/09/26
+Genre=Flight-Simulation
+Players=1
+ForceFeedback=No
+
+[EC0F690D-32A7438C-C:4A]
+Good Name=Pocket Monsters Snap (J) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/07/27
+Genre=Simulation
+Players=1
+ForceFeedback=Yes
+
+[665E8259-D098BD1D-C:4A]
+Good Name=Pocket Monsters Stadium (J) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2000/03/06
+Genre=Battle
+Players=4
+ForceFeedback=Yes
+
+[63775886-5FB80E7B-C:4A]
+Good Name=Pocket Monsters Stadium 2 (J) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2001/03/26
+Genre=Battle
+Players=4
+ForceFeedback=Yes
+
+[4A1CD153-D830AEF8-C:50]
+Good Name=Pokemon Puzzle League (E) [!]
+Developer=NST / Intelligent Systems
+ReleaseDate=2000/09/25
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[3EB2E6F3-062F9EFE-C:46]
+Good Name=Pokemon Puzzle League (F) [!]
+Developer=NST / Intelligent Systems
+ReleaseDate=2000/09/25
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[7A4747AC-44EEEC23-C:44]
+Good Name=Pokemon Puzzle League (G) [!]
+Developer=NST / Intelligent Systems
+ReleaseDate=2000/09/25
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[19C553A7-A70F4B52-C:45]
+Good Name=Pokemon Puzzle League (U) [!]
+Developer=NST / Intelligent Systems
+ReleaseDate=2000/09/25
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[7BB18D40-83138559-C:55]
+Good Name=Pokemon Snap (A) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/07/27
+Genre=Simulation
+Players=1
+ForceFeedback=Yes
+
+[4FF5976F-ACF559D8-C:50]
+Good Name=Pokemon Snap (E) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/07/27
+Genre=Simulation
+Players=1
+ForceFeedback=Yes
+
+[BA6C293A-9FAFA338-C:46]
+Good Name=Pokemon Snap (F) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/07/27
+Genre=Simulation
+Players=1
+ForceFeedback=Yes
+
+[5753720D-2A8A884D-C:44]
+Good Name=Pokemon Snap (G) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/07/27
+Genre=Simulation
+Players=1
+ForceFeedback=Yes
+
+[C0C85046-61051B05-C:49]
+Good Name=Pokemon Snap (I) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/07/27
+Genre=Simulation
+Players=1
+ForceFeedback=Yes
+
+[817D286A-EF417416-C:53]
+Good Name=Pokemon Snap (S) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/07/27
+Genre=Simulation
+Players=1
+ForceFeedback=Yes
+
+[CA12B547-71FA4EE4-C:45]
+Good Name=Pokemon Snap (U) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/07/27
+Genre=Simulation
+Players=1
+ForceFeedback=Yes
+
+[39119872-07722E9F-C:45]
+Good Name=Pokemon Snap Station (U) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/07/27
+Genre=Simulation
+Players=1
+ForceFeedback=Yes
+
+[1A122D43-C17DAF0F-C:45]
+Good Name=Pokemon Stadium - Kiosk (U) (V1.1) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=????/??/??
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[84077275-57315B9C-C:50]
+Good Name=Pokemon Stadium (E) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2000/03/06
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[91C9E05D-AD3AAFB9-C:50]
+Good Name=Pokemon Stadium (E) (V1.1)
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=????/??/??
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[A23553A3-42BF2D39-C:46]
+Good Name=Pokemon Stadium (F) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2000/03/06
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[42011E1B-E3552DB5-C:44]
+Good Name=Pokemon Stadium (G) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2000/03/06
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[A53FA82D-DAE2C15D-C:49]
+Good Name=Pokemon Stadium (I)
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2000/03/06
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[B6E549CE-DC8134C0-C:53]
+Good Name=Pokemon Stadium (S) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2000/03/06
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[90F5D9B3-9D0EDCF0-C:45]
+Good Name=Pokemon Stadium (U) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2000/03/06
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[2952369C-B6E4C3A8-C:50]
+Good Name=Pokemon Stadium 2 (E) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2001/03/26
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[AC5AA5C7-A9B0CDC3-C:46]
+Good Name=Pokemon Stadium 2 (F) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2001/03/26
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[439B7E7E-C1A1495D-C:44]
+Good Name=Pokemon Stadium 2 (G) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2001/03/26
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[EFCEAF00-22094848-C:49]
+Good Name=Pokemon Stadium 2 (I)
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2001/03/26
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[D0A1FC5B-2FB8074B-C:53]
+Good Name=Pokemon Stadium 2 (S) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2001/03/26
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[03571182-892FD06D-C:45]
+Good Name=Pokemon Stadium 2 (U) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2001/03/26
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[EE4FD7C2-9CF1D938-C:4A]
+Good Name=Pokemon Stadium GS (J) [!]
+Developer=Nintendo / HAL Laboratory
+ReleaseDate=2000/12/14
+Genre=Battle
+Players=4
+ForceFeedback=No
+
+[41380792-A167E045-C:45]
+Good Name=Polaris Sno Cross (U) [!]
+Developer=Vicarious Visions
+ReleaseDate=2000/12/27
+Genre=Racing-Snowbk
+Players=2
+ForceFeedback=Yes
+
+[D7A6DCFA-CCFEB6B7-C:4A]
+Good Name=Power League Baseball 64 (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1997/08/08
+Genre=Sport-Baseball
+Players=2
+ForceFeedback=No
+
+[39F60C11-AB2EBA7D-C:50]
+Good Name=Power Rangers - Lightspeed Rescue (E) [!]
+Developer=Mass Media
+ReleaseDate=2000/09/28
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[CF8957AD-96D57EA9-C:45]
+Good Name=Power Rangers - Lightspeed Rescue (U) [!]
+Developer=Mass Media
+ReleaseDate=2000/09/28
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[FC74D475-9A0278AB-C:45]
+Good Name=Powerpuff Girls, The - Chemical X-traction (U) [!]
+Developer=BAM! Entertainment
+ReleaseDate=2001/10/31
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[F3D27F54-C111ACF9-C:50]
+Good Name=Premier Manager 64 (E) [!]
+Developer=Gremlin Interactive Limited
+ReleaseDate=1999/08/27
+Genre=Simulation
+Players=1
+ForceFeedback=No
+
+[9BA10C4E-0408ABD3-C:4A]
+Good Name=Pro Mahjong Kiwame 64 (J) [!]
+Developer=Athena
+ReleaseDate=1997/11/21
+Genre=Board Game
+Players=1
+ForceFeedback=No
+
+[1BDCB30F-A132D876-C:4A]
+Good Name=Pro Mahjong Tsuwamono 64 (J)
+Developer=Culture Brain
+ReleaseDate=1999/11/05
+Genre=Board Game
+Players=1
+ForceFeedback=No
+
+[4B4672B9-2DBE5DE7-C:4A]
+Good Name=Puyo Puyo 4 - Puyo Puyo Party (J) [!]
+Developer=Compile
+ReleaseDate=1999/12/03
+Genre=Puzzle
+Players=4
+ForceFeedback=No
+
+[94807E6B-60CC62E4-C:4A]
+Good Name=Puyo Puyo Sun 64 (J) [!]
+Developer=Compile
+ReleaseDate=1997/10/31
+Genre=Puzzle
+Players=2
+ForceFeedback=Yes
+
+[C0DE0747-A2DF72D3-C:4A]
+Good Name=Puzzle Bobble 64 (J) [!]
+Developer=Taito
+ReleaseDate=1999/03/05
+Genre=Puzzle
+Players=4
+ForceFeedback=Yes
+
+[4BBBA2E2-8BF3BBB2-C:0]
+Good Name=Puzzle Master 64 by Michael Searl (PD)
+Developer=??
+ReleaseDate=??/??/??
+Genre=??
+Players=??
+ForceFeedback=No
+
+//-------------------------  Q  --------------------------
+
+[16931D74-65DC6D34-C:50]
+Good Name=Quake 64 (E) [!]
+Developer=Midway
+ReleaseDate=1998/03/24
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[9F5BF79C-D2FE08A0-C:45]
+Good Name=Quake 64 (U) [!]
+Developer=Midway
+ReleaseDate=1998/03/24
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[7433D9D7-2C4322D0-C:50]
+Good Name=Quake II (E) [!]
+Developer=Raster Productions
+ReleaseDate=1999/06/30
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[BDA8F143-B1AF2D62-C:45]
+Good Name=Quake II (U) [!]
+Developer=Raster Productions
+ReleaseDate=1999/06/30
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[C8BB4DD9-CC5F430B-C:45]
+Good Name=Quest 64 (U) [!]
+Developer=Imagineer
+ReleaseDate=1998/06/11
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+//-------------------------  R  --------------------------
+
+[28705FA5-B509690E-C:50]
+Good Name=Racing Simulation - Monaco Grand Prix (E) [!]
+Developer=Ubi Soft
+ReleaseDate=1999/04/30
+Genre=Racing-F1
+Players=2
+ForceFeedback=Yes
+
+[2877AC2D-C3DC139A-C:44]
+Good Name=Racing Simulation 2 (G) [!]
+Developer=Guillemot
+ReleaseDate=1999/09/01
+Genre=Racing-F1
+Players=2
+ForceFeedback=Yes
+
+[67D21868-C5424061-C:50]
+Good Name=Rakuga Kids (E) [!]
+Developer=Konami OSA
+ReleaseDate=1998/07/23
+Genre=Fighthing
+Players=2
+ForceFeedback=No
+
+[9F1ECAF0-EEC48A0E-C:4A]
+Good Name=Rakuga Kids (J) [!]
+Developer=Konami OSA
+ReleaseDate=1998/07/23
+Genre=Fighthing
+Players=2
+ForceFeedback=No
+
+[35D9BA0C-DF485586-C:4A]
+Good Name=Rally '99 (J) [!]
+Developer=Imagineer
+ReleaseDate=1999/08/06
+Genre=Racing-Rally
+Players=4
+ForceFeedback=Yes
+
+[73A88E3D-3AC5C571-C:45]
+Good Name=Rally Challenge 2000 (U) [!]
+Developer=Genki / Xicat Interactive
+ReleaseDate=2000/06/22
+Genre=Racing-Rally
+Players=4
+ForceFeedback=Yes
+
+[84D44448-67CA19B0-C:50]
+Good Name=Rampage - World Tour (E) [!]
+Developer=Saffire
+ReleaseDate=1998/03/30
+Genre=Action
+Players=3
+ForceFeedback=Yes
+
+[C29FF9E4-264BFE7D-C:45]
+Good Name=Rampage - World Tour (U) [!]
+Developer=Saffire
+ReleaseDate=1998/03/30
+Genre=Action
+Players=3
+ForceFeedback=Yes
+
+[5DFC4249-99529C07-C:50]
+Good Name=Rampage 2 - Universal Tour (E) [!]
+Developer=Avalanche
+ReleaseDate=1999/03/31
+Genre=Action
+Players=3
+ForceFeedback=Yes
+
+[673D099B-A4C808DE-C:45]
+Good Name=Rampage 2 - Universal Tour (U) [!]
+Developer=Avalanche
+ReleaseDate=1999/03/31
+Genre=Action
+Players=3
+ForceFeedback=Yes
+
+[20FD0BF1-F5CF1D87-C:50]
+Good Name=Rat Attack (E) [!]
+Developer=Pure
+ReleaseDate=2000/09/12
+Genre=Puzzle
+Players=4
+ForceFeedback=Yes
+
+[0304C48E-AC4001B8-C:45]
+Good Name=Rat Attack (U) [!]
+Developer=Pure
+ReleaseDate=2000/09/12
+Genre=Puzzle
+Players=4
+ForceFeedback=Yes
+
+[60D5E10B-8BEDED46-C:50]
+Good Name=Rayman 2 - The Great Escape (E) [!]
+Developer=Ubi Soft
+ReleaseDate=1999/11/08
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[F3C5BF9B-160F33E2-C:45]
+Good Name=Rayman 2 - The Great Escape (U) [!]
+Developer=Ubi Soft
+ReleaseDate=1999/11/08
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[3918834A-15B50C29-C:45]
+Good Name=Razor Freestyle Scooter (U) [!]
+Developer=Shaba Studios
+ReleaseDate=2001/10/15
+Genre=Action
+Players=2
+ForceFeedback=No
+
+[8BD4A334-1E138B05-C:50]
+Good Name=Ready 2 Rumble Boxing (E) [!]
+Developer=Point of View
+ReleaseDate=1999/11/10
+Genre=Sport-Boxing
+Players=2
+ForceFeedback=Yes
+
+[EAB7B429-BAC92C57-C:45]
+Good Name=Ready 2 Rumble Boxing (U) [!]
+Developer=Point of View
+ReleaseDate=1999/11/10
+Genre=Sport-Boxing
+Players=2
+ForceFeedback=Yes
+
+[E9219533-13FBAFBD-C:45]
+Good Name=Ready 2 Rumble Boxing Round 2 (U) [!]
+Developer=Point of View
+ReleaseDate=2000/11/01
+Genre=Sport-Boxing
+Players=2
+ForceFeedback=Yes
+
+[9B500E8E-E90550B3-C:50]
+Good Name=Resident Evil 2 (E) [!]
+Developer=Capcom Entertainment / Angel Studios
+ReleaseDate=1999/11/16
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[AA18B1A5-07DB6AEB-C:45]
+Good Name=Resident Evil 2 (U) [!]
+Developer=Capcom Entertainment / Angel Studios
+ReleaseDate=1999/11/16
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[C3E7E29E-5D7251CC-C:50]
+Good Name=Re-Volt (E) [!]
+Developer=Acclaim Studios London
+ReleaseDate=1999/08/19
+Genre=Racing-Toy
+Players=4
+ForceFeedback=Yes
+
+[0F1FA987-BFC1AFA6-C:45]
+Good Name=Re-Volt (U) [!]
+Developer=Acclaim Studios London
+ReleaseDate=1999/08/19
+Genre=Racing-Toy
+Players=4
+ForceFeedback=Yes
+
+[02D8366A-6CABEF9C-C:50]
+Good Name=Road Rash 64 (E) [!]
+Developer=Pacific Coast Power & Light
+ReleaseDate=1999/09/22
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[F050746C-247B820B-C:45]
+Good Name=Road Rash 64 (U) [!]
+Developer=Pacific Coast Power & Light
+ReleaseDate=1999/09/22
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[74E87A70-6293AED4-C:50]
+Good Name=Roadsters (E) [!]
+Developer=Titus
+ReleaseDate=1999/12/18
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[0B6B4DDB-9671E682-C:45]
+Good Name=Roadsters (U) [!]
+Developer=Titus
+ReleaseDate=1999/12/18
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[272B690F-AD0A7A77-C:4A]
+Good Name=Robot Ponkottsu 64 - Caramel of the 7 Seas (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1999/12/24
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[75A0B893-4CA321B5-C:0]
+Good Name=Robotech - Crystal Dreams (U) (beta)
+Developer=GemeTek
+ReleaseDate=??/??/??
+Genre=Flight Simulator
+Players=4
+ForceFeedback=No
+
+
+[9FF69D4F-195F0059-C:50]
+Good Name=Robotron 64 (E) [!]
+Developer=Player 1
+ReleaseDate=1998/01/06
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[AC8E4B32-E7B47326-C:45]
+Good Name=Robotron 64 (U) [!]
+Developer=Player 1
+ReleaseDate=1998/01/06
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[9FD375F8-45F32DC8-C:50]
+Good Name=Rocket - Robot on Wheels (E) [!]
+Developer=Sucker Punch
+ReleaseDate=1999/11/17
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[0C5EE085-A167DD3E-C:45]
+Good Name=Rocket - Robot on Wheels (U) [!]
+Developer=Sucker Punch
+ReleaseDate=1999/11/17
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[D666593B-D7A25C07-C:4A]
+Good Name=Rockman Dash (J) [!]
+Developer=Capcom Entertainment
+ReleaseDate=2000/11/22
+Genre=Adventure
+Players=1
+ForceFeedback=Yes
+
+[FEE97010-4E94A9A0-C:50]
+Good Name=RR64 - Ridge Racer 64 (E) [!]
+Developer=NST / Namco
+ReleaseDate=2000/02/14
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[2500267E-2A7EC3CE-C:45]
+Good Name=RR64 - Ridge Racer 64 (U) [!]
+Developer=NST / Namco
+ReleaseDate=2000/02/14
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[658F8F37-1813D28D-C:44]
+Good Name=RTL World League Soccer 2000 (G) [!]
+Developer=THQ
+ReleaseDate=1999/12/07
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[0C02B3C5-9E2511B8-C:45]
+Good Name=Rugrats - Scavenger Hunt (U) [!]
+Developer=Realtime Associates
+ReleaseDate=1999/06/29
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[4D3ADFDA-7598FCAE-C:50]
+Good Name=Rugrats - Treasure Hunt (E) [!]
+Developer=Infogrammes
+ReleaseDate=1999/06/01
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[451ACA0F-7863BC8A-C:44]
+Good Name=Rugrats - Die große Schatzsuche (G)
+Developer=Infogrammes
+ReleaseDate=1999/06/01
+Genre=Party
+Players=4
+ForceFeedback=Yes
+
+[0AC61D39-ABFA03A6-C:50]
+Good Name=Rugrats in Paris - The Movie (E) [!]
+Developer=Avalanche
+ReleaseDate=2000/11/12
+Genre=Platform
+Players=2
+ForceFeedback=Yes
+
+[1FC21532-0B6466D4-C:45]
+Good Name=Rugrats in Paris - The Movie (U) [!]
+Developer=Avalanche
+ReleaseDate=2000/11/12
+Genre=Platform
+Players=2
+ForceFeedback=Yes
+
+[B7CF2136-FA0AA715-C:50]
+Good Name=Rush 2 - Extreme Racing USA (E) [!]
+Developer=Atari Games
+ReleaseDate=1998/11/10
+Genre=Racing-Car
+Players=2
+ForceFeedback=Yes
+
+[EDD6E031-68136013-C:45]
+Good Name=Rush 2 - Extreme Racing USA (U) [!]
+Developer=Atari Games
+ReleaseDate=1998/11/10
+Genre=Racing-Car
+Players=2
+ForceFeedback=Yes
+
+//-------------------------  S  --------------------------
+
+[918E2D60-F865683E-C:50]
+Good Name=S.C.A.R.S. (E) [!]
+Developer=Vivid Image
+ReleaseDate=1998/12/04
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[769147F3-2033C10E-C:45]
+Good Name=S.C.A.R.S. (U) [!]
+Developer=Vivid Image
+ReleaseDate=1998/12/04
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[61D116B0-FA24D60C-C:50]
+Good Name=San Francisco Rush - Extreme Racing (E) [!]
+Developer=Atari Games
+ReleaseDate=2000/09/06
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[2A6B1820-6ABCF466-C:45]
+Good Name=San Francisco Rush - Extreme Racing (U) [!]
+Developer=Atari Games
+ReleaseDate=2000/09/06
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[51D29418-D5B46AE3-C:50]
+Good Name=San Francisco Rush 2049 (E) [!]
+Developer=Midway Games West
+ReleaseDate=2000/09/06
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[B9A9ECA2-17AAE48E-C:45]
+Good Name=San Francisco Rush 2049 (U) [!]
+Developer=Midway Games West
+ReleaseDate=2000/09/06
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[E3BD221D-3C0834D3-C:50]
+Good Name=Scooby-Doo - Classic Creep Capers (E) [!]
+Developer=TerraGlyph Interactive Studios
+ReleaseDate=2000/11/30
+Genre=Adventure
+Players=1
+ForceFeedback=No
+
+[0C814EC4-58FE5CA8-C:45]
+Good Name=Scooby-Doo - Classic Creep Capers (U) [!]
+Developer=TerraGlyph Interactive Studios
+ReleaseDate=2000/11/30
+Genre=Adventure
+Players=1
+ForceFeedback=No
+
+[EBF5F6B7-C956D739-C:4A]
+Good Name=SD Hiryuu no Ken Densetsu (J) [!]
+Developer=Culture Brain
+ReleaseDate=1999/01/29
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[60C437E5-A2251EE3-C:50]
+Good Name=Shadow Man (E) [!]
+Developer=Acclaim Studios Teeside
+ReleaseDate=1999/08/24
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[EA06F8C3-07C2DEED-C:46]
+Good Name=Shadow Man (F) [!]
+Developer=Acclaim Studios Teeside
+ReleaseDate=1999/08/24
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[84D5FD75-BBFD3CDF-C:44]
+Good Name=Shadow Man (G) [!]
+Developer=Acclaim Studios Teeside
+ReleaseDate=1999/08/24
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[3A4760B5-2D74D410-C:45]
+Good Name=Shadow Man (U) [!]
+Developer=Acclaim Studios Teeside
+ReleaseDate=1999/08/24
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[D84EEA84-45B2F1B4-C:50]
+Good Name=Shadowgate 64 - Trials of the Four Towers (E) [!]
+Developer=Infinite Ventures
+ReleaseDate=1999/06/09
+Genre=Adventure
+Players=1
+ForceFeedback=No
+
+[2BC1FCF2-7B9A0DF4-C:58]
+Good Name=Shadowgate 64 - Trials of the Four Towers (FGD) [!]
+Developer=Infinite Ventures
+ReleaseDate=1999/06/09
+Genre=Adventure
+Players=1
+ForceFeedback=No
+
+[02B46F55-61778D0B-C:59]
+Good Name=Shadowgate 64 - Trials of the Four Towers (IS)
+Developer=Infinite Ventures
+ReleaseDate=1999/06/09
+Genre=Adventure
+Players=1
+ForceFeedback=No
+
+[CCEDB696-D3883DB4-C:4A]
+Good Name=Shadowgate 64 - Trials of the Four Towers (J) [!]
+Developer=Infinite Ventures
+ReleaseDate=1999/06/09
+Genre=Adventure
+Players=1
+ForceFeedback=No
+
+[036897CE-E0D4FA54-C:45]
+Good Name=Shadowgate 64 - Trials of the Four Towers (U) [!]
+Developer=Infinite Ventures
+ReleaseDate=1999/06/09
+Genre=Adventure
+Players=1
+ForceFeedback=No
+
+[B1D5280C-4BA7BC2A-C:4A]
+Good Name=Sim City 2000 (J) [!]
+Developer=Imagineer
+ReleaseDate=1998/01/30
+Genre=Strategy
+Players=1
+ForceFeedback=No
+
+[B6BC0FB0-E3812198-C:4A]
+Good Name=Sin and Punishment - Tsumi To Batsu (J) [!]
+Developer=Treasure
+ReleaseDate=2000/11/21
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[2EF4D519-C64A0C5E-C:4A]
+Good Name=Snow Speeder (J) [!]
+Developer=Imagineer
+ReleaseDate=1998/12/26
+Genre=Racing-Snowbk
+Players=2
+ForceFeedback=Yes
+
+[5FD7CDA0-D9BB51AD-C:50]
+Good Name=Snowboard Kids (E) [!]
+Developer=Racdym
+ReleaseDate=1998/03/15
+Genre=Sport-Snowbd
+Players=4
+ForceFeedback=Yes
+
+[DBF4EA9D-333E82C0-C:45]
+Good Name=Snowboard Kids (U) [!]
+Developer=Racdym
+ReleaseDate=1998/03/15
+Genre=Sport-Snowbd
+Players=4
+ForceFeedback=Yes
+
+[84FC04FF-B1253CE9-C:4A]
+Good Name=Snowbow Kids (J) [!]
+Developer=Racdym
+ReleaseDate=1998/03/15
+Genre=Sport-Snowbd
+Players=4
+ForceFeedback=Yes
+
+[C2751D1A-F8C19BFF-C:50]
+Good Name=Snowboard Kids 2 (E) [!]
+Developer=Racdym
+ReleaseDate=1999/03/02
+Genre=Sport-Snowbd
+Players=4
+ForceFeedback=Yes
+
+[930C29EA-939245BF-C:45]
+Good Name=Snowboard Kids 2 (U) [!]
+Developer=Racdym
+ReleaseDate=1999/03/02
+Genre=Sport-Snowbd
+Players=4
+ForceFeedback=Yes
+
+[22212351-4046594B-C:4A]
+Good Name=Sonic Wings Assault (J) [!]
+Developer=Video System
+ReleaseDate=1998/03/19
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[C00CA948-8E60D34B-C:50]
+Good Name=South Park - Chef's Luv Shack (E) [!]
+Developer=Acclaim Studios Austin
+ReleaseDate=1999/12/10
+Genre=Puzzle
+Players=4
+ForceFeedback=No
+
+[C00CA948-8E60D34B-C:45]
+Good Name=South Park - Chef's Luv Shack (U) [!]
+Developer=Acclaim Studios Austin
+ReleaseDate=1999/12/10
+Genre=Puzzle
+Players=4
+ForceFeedback=No
+
+[20B53662-7B61899F-C:50]
+Good Name=South Park (E) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/12/22
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[91B66D42-16AC4E46-C:44]
+Good Name=South Park (G) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/12/22
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[7ECBE939-3C331795-C:45]
+Good Name=South Park (U) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/12/22
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[4F8AFC3A-F7912DF2-C:50]
+Good Name=South Park Rally (E) [!]
+Developer=Tantalus
+ReleaseDate=2000/03/01
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[07F3B276-EC8F3D39-C:45]
+Good Name=South Park Rally (U) [!]
+Developer=Tantalus
+ReleaseDate=2000/03/01
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[37463412-EAC5388D-C:4A]
+Good Name=Space Dynamites (J) [!]
+Developer=Vic Tokai
+ReleaseDate=1998/03/27
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[EBFE2397-FF74DA34-C:45]
+Good Name=Space Invaders (U) [!]
+Developer=Z-Axis
+ReleaseDate=1999/12/14
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[FC70E272-08FFE7AA-C:50]
+Good Name=Spacestation Silicon Valley (E)/(F) [!]
+Developer=DMA Design
+ReleaseDate=1998/10/21
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[BFE23884-EF48EAAF-C:4A]
+Good Name=Spacestation Silicon Valley (J) [!]
+Developer=DMA Design
+ReleaseDate=1998/10/21
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[BFE23884-EF48EAAF-C:45]
+Good Name=Spacestation Silicon Valley (U) [!]
+Developer=DMA Design
+ReleaseDate=1998/10/21
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[A60ED171-3D85D06E-C:45]
+Good Name=Spider-Man (U) [!]
+Developer=Neversoft Entertainment / Edge of Reality
+ReleaseDate=2000/11/21
+Genre=Adventure
+Players=1
+ForceFeedback=Yes
+
+[0DED0568-1502515E-C:4A]
+Good Name=St. Andrews Old Course (J) [!]
+Developer=Seta
+ReleaseDate=1996/11/29
+Genre=Sport-Golf
+Players=4
+ForceFeedback=No
+
+[FFCAA7C1-68858537-C:4A]
+Good Name=Star Fox 64 (J) [!]
+Developer=Nintendo
+ReleaseDate=1997/07/01
+Genre=Flight-Action
+Players=4
+ForceFeedback=Yes
+
+[A7D015F8-2289AA43-C:45]
+Good Name=Star Fox 64 (U) [!]
+Developer=Nintendo
+ReleaseDate=1997/07/01
+Genre=Flight-Action
+Players=4
+ForceFeedback=Yes
+
+[BA780BA0-0F21DB34-C:45]
+Good Name=Star Fox 64 (U) (V1.1)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Flight-Action
+Players=4
+ForceFeedback=Yes
+
+[B703EB23-28AAE53A-C:4A]
+Good Name=Star Soldier Vanishing Earth (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/12/15
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[DDD93C85-DAE381E8-C:45]
+Good Name=Star Soldier Vanishing Earth (U) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/12/15
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[F163A242-F2449B3B-C:4A]
+Good Name=Star Twins (J) [!]
+Developer=Rare
+ReleaseDate=1999/12/01
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[7EE0E8BB-49E411AA-C:50]
+Good Name=Star Wars - Rogue Squadron (E) [!]
+Developer=Factor 5 / LucasArts
+ReleaseDate=1998/12/07
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[219191C1-33183C61-C:50]
+Good Name=Star Wars - Rogue Squadron (E) (V1.1)
+Developer=Factor 5 / LucasArts
+ReleaseDate=????/??/??
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[66A24BEC-2EADD94F-C:45]
+Good Name=Star Wars - Rogue Squadron (U) [!]
+Developer=Factor 5 / LucasArts
+ReleaseDate=1998/12/07
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[4D486681-AB7D9245-C:50]
+Good Name=Star Wars - Shadows of the Empire (E) [!]
+Developer=LucasArts
+ReleaseDate=1997/03/01
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[FE24AC63-1B41AA17-C:4A]
+Good Name=Star Wars - Shadows of the Empire (J) [!]
+Developer=LucasArts
+ReleaseDate=1997/06/14
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[264D7E5C-18874622-C:45]
+Good Name=Star Wars - Shadows of the Empire (U) (V1.0) [!]
+Developer=LucasArts
+ReleaseDate=1996/12/03
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[4147B091-63251060-C:45]
+Good Name=Star Wars - Shadows of the Empire (U) (V1.1) [!]
+Developer=LucasArts
+ReleaseDate=199x
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[4DD7ED54-74F9287D-C:45]
+Good Name=Star Wars - Shadows of the Empire (U) (V1.2) [!]
+Developer=LucasArts
+ReleaseDate=1999/01/26
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[827E4890-958468DC-C:4A]
+Good Name=Star Wars - Shuggeki Rogue Chitai (J) [!]
+Developer=LucasArts
+ReleaseDate=1996/12/03
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[EAE6ACE2-020B4384-C:50]
+Good Name=Star Wars Episode I - Battle for Naboo (E) [!]
+Developer=Factor 5 / LucasArts
+ReleaseDate=2000/12/18
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[3D02989B-D4A381E2-C:45]
+Good Name=Star Wars Episode I - Battle for Naboo (U) [!]
+Developer=Factor 5 / LucasArts
+ReleaseDate=2000/12/18
+Genre=Action
+Players=1
+ForceFeedback=Yes
+
+[53ED2DC4-06258002-C:50]
+Good Name=Star Wars Episode I - Racer (E) [!]
+Developer=LucasArts
+ReleaseDate=1999/05/19
+Genre=Racing-Future
+Players=2
+ForceFeedback=Yes
+
+[61F5B152-046122AB-C:4A]
+Good Name=Star Wars Episode I - Racer (J) [!]
+Developer=LucasArts
+ReleaseDate=1999/05/19
+Genre=Racing-Future
+Players=2
+ForceFeedback=Yes
+
+[72F70398-6556A98B-C:45]
+Good Name=Star Wars Episode I - Racer (U) [!]
+Developer=LucasArts
+ReleaseDate=1999/05/19
+Genre=Racing-Future
+Players=2
+ForceFeedback=Yes
+
+[BC9B2CC3-4ED04DA5-C:37]
+Good Name=StarCraft 64 (Beta)
+Good Name=StarCraft 64 (E) [!]
+Developer=Blizzard / Mass Media
+ReleaseDate=????/??/??
+Genre=RT Strategy
+Players=2
+ForceFeedback=Yes
+
+[42CF5EA3-9A1334DF-C:50]
+Good Name=StarCraft 64 (E) [!]
+Developer=Blizzard / Mass Media
+ReleaseDate=2000/06/13
+Genre=RT Strategy
+Players=2
+ForceFeedback=Yes
+
+[0684FBFB-5D3EA8A5-C:45]
+Good Name=StarCraft 64 (U) [!]
+Developer=Blizzard / Mass Media
+ReleaseDate=2000/06/13
+Genre=RT Strategy
+Players=2
+ForceFeedback=Yes
+
+[BC9B2CC3-4ED04DA5-C:37]
+Good Name=StarCraft 64 (Beta)
+Developer=Blizzard / Mass Media
+ReleaseDate=2000/06/13
+Genre=RT Strategy
+Players=2
+ForceFeedback=Unknown
+
+[D89E0E55-B17AA99A-C:50]
+Good Name=Starshot - Space Circus Fever (E) [!]
+Developer=Infogames
+ReleaseDate=1999/06/24
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[94EDA5B8-8673E903-C:45]
+Good Name=Starshot - Space Circus Fever (U) [!]
+Developer=Infogames
+ReleaseDate=1999/06/24
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[9510D8D7-35100DD2-C:45]
+Good Name=Stunt Racer 64 (U) [!]
+Developer=Boss Game Studios
+ReleaseDate=2000/10/01
+Genre=Racing-Stunt
+Players=4
+ForceFeedback=Yes
+
+[F4646B69-C5751095-C:4A]
+Good Name=Super B-Daman - Battle Phoenix 64 (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/07/24
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[F3F2F385-6E490C7F-C:4A]
+Good Name=Super Bowling (J) [!]
+Developer=Athena
+ReleaseDate=2001/01/16
+Genre=Sport-Bowling
+Players=4
+ForceFeedback=Yes
+
+[AA1D215A-91CBBE9A-C:45]
+Good Name=Super Bowling 64 (U) [!]
+Developer=Athena
+ReleaseDate=2001/01/16
+Genre=Sport-Bowling
+Players=4
+ForceFeedback=Yes
+
+[A03CF036-BCC1C5D2-C:50]
+Good Name=Super Mario 64 (E) [!]
+Developer=Nintendo
+ReleaseDate=1996/09/26
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[4EAA3D0E-74757C24-C:4A]
+Good Name=Super Mario 64 (J) [!]
+Developer=Nintendo
+ReleaseDate=1996/09/26
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[635A2BFF-8B022326-C:45]
+Good Name=Super Mario 64 (U) [!]
+Developer=Nintendo
+ReleaseDate=1996/09/26
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[D6FBA4A8-6326AA2C-C:4A]
+Good Name=Super Mario 64 Shindou Edition (J) [!]
+Developer=Nintendo
+ReleaseDate=1996/09/26
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[66572080-28E348E1-C:4A]
+Good Name=Super Robot Spirits (J) [!]
+Developer=Banpresto
+ReleaseDate=1998/07/17
+Genre=Fighting
+Players=2
+ForceFeedback=Yes
+
+[1649D810-F73AD6D2-C:4A]
+Good Name=Super Robot Taisen 64 (J) [!]
+Developer=Banpresto
+ReleaseDate=1999/10/29
+Genre=Strategy
+Players=1
+ForceFeedback=No
+
+[DD26FDA1-CB4A6BE3-C:55]
+Good Name=Super Smash Bros. (A) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/04/27
+Genre=Fighting
+Players=4
+ForceFeedback=Yes
+
+[93945F48-5C0F2E30-C:50]
+Good Name=Super Smash Bros. (E) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/04/27
+Genre=Fighting
+Players=4
+ForceFeedback=Yes
+
+[916B8B5B-780B85A4-C:45]
+Good Name=Super Smash Bros. (U) [!]
+Developer=HAL Laboratory
+ReleaseDate=1999/04/27
+Genre=Fighting
+Players=4
+ForceFeedback=Yes
+
+[9CE02E22-206EF1B0-C:4A]
+Good Name=Super Speed Race 64 (J) [!]
+Developer=Taito
+ReleaseDate=1998/05/29
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[2CBB127F-09C2BFD8-C:50]
+Good Name=Supercross 2000 (E) [!]
+Developer=MBL Research
+ReleaseDate=1999/12/03
+Genre=Racing-Motorbk
+Players=2
+ForceFeedback=Yes
+
+[C1452553-5D7B24D9-C:45]
+Good Name=Supercross 2000 (U) [!]
+Developer=MBL Research
+ReleaseDate=1999/12/03
+Genre=Racing-Motorbk
+Players=2
+ForceFeedback=Yes
+
+[B44CAB74-07029A29-C:50]
+Good Name=Superman (E) [!]
+Developer=Titus
+ReleaseDate=1999/05/29
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[A2E8F35B-C9DC87D9-C:45]
+Good Name=Superman (U) [!]
+Developer=Titus
+ReleaseDate=1999/05/29
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[35E811F3-99792724-C:4A]
+Good Name=Susume! Taisen Puzzle Dama Toukon! Marumata Chou (J) [!]
+Developer=Konami
+ReleaseDate=1998/03/25
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+//-------------------------  T  --------------------------
+
+[AEBCDD54-15FF834A-C:50]
+Good Name=Taz Express (E) [!]
+Developer=Infogrames
+ReleaseDate=2000/08/01
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[D9042FBB-FCFF997C-C:46]
+Good Name=Telefoot Soccer 2000 (F) [!]
+Developer=Guillemot
+ReleaseDate=1999/12/16
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[963ADBA6-F7D5C89B-C:4A]
+Good Name=Tetris 64 (J) [!]
+Developer=Amtex
+ReleaseDate=1998/11/13
+Genre=Puzzle
+Players=4
+ForceFeedback=Yes
+
+[0FE684A9-8BB77AC4-C:50]
+Good Name=Tetrisphere (E) [!]
+Developer=H2O Entertainment
+ReleaseDate=1997/08/11
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[3C1FDABE-02A4E0BA-C:45]
+Good Name=Tetrisphere (U) [!]
+Developer=H2O Entertainment
+ReleaseDate=1997/08/11
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[E0C4F72F-769E1506-C:50]
+Good Name=Tigger's Honey Hunt (E) [!]
+Developer=Doki Denki Studio
+ReleaseDate=2000/11/01
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[4EBFDD33-664C9D84-C:45]
+Good Name=Tigger's Honey Hunt (U) [!]
+Developer=Doki Denki Studio
+ReleaseDate=2000/11/01
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[2B4F4EFB-43C511FE-C:50]
+Good Name=Tom and Jerry in Fists of Furry (E) [!]
+Developer=Vis
+ReleaseDate=2000/11/12
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[63E7391C-E6CCEA33-C:45]
+Good Name=Tom and Jerry in Fists of Furry (U) [!]
+Developer=Vis
+ReleaseDate=2000/11/12
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[4875AF3D-9A66D3A2-C:50]
+Good Name=Tom Clancy's Rainbow Six (E) [!]
+Developer=Saffire
+ReleaseDate=1999/11/17
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[486BF335-034DCC81-C:46]
+Good Name=Tom Clancy's Rainbow Six (F)
+Developer=Saffire
+ReleaseDate=1999/11/17
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[8D412933-588F64DB-C:44]
+Good Name=Tom Clancy's Rainbow Six (G) [!]
+Developer=Saffire
+ReleaseDate=1999/11/17
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[392A0C42-B790E77D-C:45]
+Good Name=Tom Clancy's Rainbow Six (U) [!]
+Developer=Saffire
+ReleaseDate=1999/11/17
+Genre=Action
+Players=2
+ForceFeedback=Yes
+
+[093F916E-4408B698-C:50]
+Good Name=Tonic Trouble (E) [!]
+Developer=Ubi Soft
+ReleaseDate=1999/09/07
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[EF9E9714-C03B2C7D-C:45]
+Good Name=Tonic Trouble (U) (V1.1) [!]
+Developer=Ubi Soft
+ReleaseDate=????/??/??
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+[9F8926A5-0587B409-C:50]
+Good Name=Tony Hawk's Pro Skater (E) [!]
+Developer=Neversoft Entertainment / Edge of Reality
+ReleaseDate=2000/03/15
+Genre=Sport-Skating
+Players=2
+ForceFeedback=Yes
+
+[204EC022-B119D185-C:45]
+Good Name=Tony Hawk's Pro Skater (U) [!]
+Developer=Neversoft Entertainment / Edge of Reality
+ReleaseDate=2000/03/15
+Genre=Sport-Skating
+Players=2
+ForceFeedback=Yes
+
+[E0144180-650B78C9-C:45]
+Good Name=Tony Hawk's Pro Skater (V1.1) [!]
+Developer=Neversoft Entertainment / Edge of Reality
+ReleaseDate=2000/03/15
+Genre=Sport-Skating
+Players=2
+ForceFeedback=Yes
+
+[84EAB557-C88A190F-C:50]
+Good Name=Tony Hawk's Pro Skater 2 (E) [!]
+Developer=Edge of Reality
+ReleaseDate=2001/08/15
+Genre=Sport-Skating
+Players=2
+ForceFeedback=Yes
+
+[99150E18-1266E6A5-C:45]
+Good Name=Tony Hawk's Pro Skater 2 (U) [!]
+Developer=Edge of Reality
+ReleaseDate=2001/08/15
+Genre=Sport-Skating
+Players=2
+ForceFeedback=Yes
+
+[1A7F70B5-00B7B9FD-C:45]
+Good Name=Tony Hawk's Pro Skater 3 (U)
+Developer=Activision
+ReleaseDate=2002/08/20
+Genre=Sport-Skating
+Players=2
+ForceFeedback=Yes
+
+[5F3F49C6-0DC714B0-C:50]
+Good Name=Top Gear Hyper-Bike (E) [!]
+Developer=Snowblind Studios
+ReleaseDate=2000/03/27
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[845B0269-57DE9502-C:4A]
+Good Name=Top Gear Hyper-Bike (J) [!]
+Developer=Snowblind Studios
+ReleaseDate=2000/03/27
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[8ECC02F0-7F8BDE81-C:45]
+Good Name=Top Gear Hyper-Bike (U) [!]
+Developer=Snowblind Studios
+ReleaseDate=2000/03/27
+Genre=Racing-Motorbk
+Players=4
+ForceFeedback=Yes
+
+[D09BA538-1C1A5489-C:50]
+Good Name=Top Gear Overdrive (E) [!]
+Developer=Snowblind Studios
+ReleaseDate=1998/11/23
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[0578F24F-9175BF17-C:4A]
+Good Name=Top Gear Overdrive (J) [!]
+Developer=Snowblind Studios
+ReleaseDate=1998/11/23
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[D741CD80-ACA9B912-C:45]
+Good Name=Top Gear Overdrive (U) [!]
+Developer=Snowblind Studios
+ReleaseDate=1998/11/23
+Genre=Racing-Car
+Players=4
+ForceFeedback=Yes
+
+[7F43E701-536328D1-C:50]
+Good Name=Top Gear Rally (E) [!]
+Developer=Boss Game Studios
+ReleaseDate=1997/10/01
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+[0E596247-753D4B8B-C:4A]
+Good Name=Top Gear Rally (J) [!]
+Developer=Boss Game Studios
+ReleaseDate=1997/10/01
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+[62269B3D-FE11B1E8-C:45]
+Good Name=Top Gear Rally (U) [!]
+Developer=Boss Game Studios
+ReleaseDate=1997/10/01
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+[BEBAB677-51B0B5E4-C:50]
+Good Name=Top Gear Rally 2 (E) [!]
+Developer=Saffire
+ReleaseDate=1999/12/03
+Genre=Racing-Rally
+Players=4
+ForceFeedback=Yes
+
+[F82DD377-8C3FB347-C:58]
+Good Name=TG Rally 2 (UK Version)
+Developer=Saffire
+ReleaseDate=1999/12/03
+Genre=Racing-Rally
+Players=4
+ForceFeedback=Yes
+
+[CFEF2CD6-C9E973E6-C:4A]
+Good Name=Top Gear Rally 2 (J) [!]
+Developer=Saffire
+ReleaseDate=1999/12/03
+Genre=Racing-Rally
+Players=4
+ForceFeedback=Yes
+
+[BE5973E0-89B0EDB8-C:45]
+Good Name=Top Gear Rally 2 (U) [!]
+Developer=Saffire
+ReleaseDate=1999/12/03
+Genre=Racing-Rally
+Players=4
+ForceFeedback=Yes
+
+[EF703CA4-4D4A9AC9-C:4A]
+Good Name=Toukon Road - Brave Spirits (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/01/04
+Genre=Wrestling
+Players=2
+ForceFeedback=No
+
+[551C7F43-9149831C-C:4A]
+Good Name=Toukon Road 2 - The Next Generation (J) [!]
+Developer=Hudson Soft
+ReleaseDate=1998/12/26
+Genre=Wrestling
+Players=2
+ForceFeedback=No
+
+[CCEB3858-26952D97-C:50]
+Good Name=Toy Story 2 (E) [!]
+Developer=Traveller's Tales
+ReleaseDate=1999/11/17
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[CB93DB97-7F5C63D5-C:46]
+Good Name=Toy Story 2 (F) [!]
+Developer=Traveller's Tales
+ReleaseDate=1999/11/17
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[782A9075-E552631D-C:44]
+Good Name=Toy Story 2 (G) [!]
+Developer=Traveller's Tales
+ReleaseDate=1999/11/17
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[A150743E-CF2522CD-C:45]
+Good Name=Toy Story 2 (U) [!]
+Developer=Traveller's Tales
+ReleaseDate=1999/11/17
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[FE4B6B43-081D29A7-C:45]
+Good Name=Triple Play 2000 (U) [!]
+Developer=Treyarch
+ReleaseDate=1999/03/22
+Genre=Sport-Baseball
+Players=2
+ForceFeedback=Yes
+
+[2F7009DD-FC3BAC53-C:50]
+Good Name=Turok - Dinosaur Hunter (E) (V1.0) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1997/02/28
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[665F09DD-FC3BAC53-C:50]
+Good Name=Turok - Dinosaur Hunter (E) (V1.0) [a1]
+Developer=Iguana Entertainment
+ReleaseDate=1997/02/28
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[2F700DCD-176CC5C9-C:50]
+Good Name=Turok - Dinosaur Hunter (E) (V1.1)/(V1.2) [!]
+Developer=Iguana Entertainment
+ReleaseDate=????/??/??
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[665FD963-B5CC6612-C:44]
+Good Name=Turok - Dinosaur Hunter (G) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1997/02/28
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[916AE6B8-8817AB22-C:4A]
+Good Name=Turok - Dinosaur Hunter (J) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1997/02/28
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[2F70F10D-5C4187FF-C:45]
+Good Name=Turok - Dinosaur Hunter (U) (V1.0) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1997/02/28
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[2F700DCD-176CC5C9-C:45]
+Good Name=Turok - Dinosaur Hunter (U) (V1.1)/(v1.2) [!]
+Developer=Iguana Entertainment
+ReleaseDate=????/??/??
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[66E4FA0F-DE88C7D0-C:44]
+Good Name=Turok - Legenden des Verlorenen Landes (Rage Wars) (G) [!]
+Developer=Acclaim Studios Austin
+ReleaseDate=1999/11/23
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[1EA26214-E790900F-C:50]
+Good Name=Turok - Rage Wars (E) [!]
+Developer=Acclaim Studios Austin
+ReleaseDate=1999/11/23
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[2E0E7749-B8B49D59-C:58]
+Good Name=Turok 2 - Seeds of Evil (FIS)
+Developer=Acclaim Studios Austin
+ReleaseDate=1999/11/23
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[ADB9498B-DAF28F55-C:45]
+Good Name=Turok - Rage Wars (U) [!]
+Developer=Acclaim Studios Austin
+ReleaseDate=1999/11/23
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[E8C95AFC-35D121DA-C:50]
+Good Name=Turok 2 - Seeds of Evil - Kiosk (E) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/12/10
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[E8C95AFC-35D121DA-C:45]
+Good Name=Turok 2 - Seeds of Evil - Kiosk (U) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/12/10
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[E0B92B94-80E87CBD-C:50]
+Good Name=Turok 2 - Seeds of Evil (E) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/12/10
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[FE05840B-9393320C-C:44]
+Good Name=Turok 2 - Seeds of Evil (G) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/12/10
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[2E0E7749-B8B49D59-C:58]
+Good Name=Turok 2 - Seeds of Evil (FIS)
+Developer=Iguana Entertainment
+ReleaseDate=1998/12/10
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[49088A11-6494957E-C:45]
+Good Name=Turok 2 - Seeds of Evil (U) [!]
+Developer=Iguana Entertainment
+ReleaseDate=1998/12/10
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[6A162FF2-2093704C-C:50]
+Good Name=Turok 3 - Shadow of Oblivion (E) [!]
+Developer=Acclaim Studios Austin
+ReleaseDate=2000/08/31
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[89A579F1-667E97EF-C:45]
+Good Name=Turok 3 - Shadow of Oblivion (U) [!]
+Developer=Acclaim Studios Austin
+ReleaseDate=2000/08/31
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[E688A5B8-B14B3F18-C:50]
+Good Name=Twisted Edge Extreme Snowboarding (E) [!]
+Developer=Boss Game Studios
+ReleaseDate=1998/11/10
+Genre=Sport-Snowbd
+Players=2
+ForceFeedback=Yes
+
+[BBC99D32-117DAA80-C:45]
+Good Name=Twisted Edge Extreme Snowboarding (U) [!]
+Developer=Boss Game Studios
+ReleaseDate=1998/11/10
+Genre=Sport-Snowbd
+Players=2
+ForceFeedback=Yes
+
+//-------------------------  V  --------------------------
+
+[DD10BC7E-F900B351-C:50]
+Good Name=Vigilante 8 - 2nd Offence (E) [!]
+Developer=Luxoflux Corp.
+ReleaseDate=2000/02/02
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[F5C5866D-052713D9-C:45]
+Good Name=Vigilante 8 - 2nd Offense (U) [!]
+Developer=Luxoflux Corp.
+ReleaseDate=2000/02/02
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[151F79F4-8EEDC8E5-C:50]
+Good Name=Vigilante 8 (E) [!]
+Developer=Luxoflux Corp.
+ReleaseDate=1999/03/17
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[E2BC82A2-591CD694-C:46]
+Good Name=Vigilante 8 (F) [!]
+Developer=Luxoflux Corp.
+ReleaseDate=1999/03/17
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[6EDA5178-D396FEC1-C:44]
+Good Name=Vigilante 8 (G) [!]
+Developer=Luxoflux Corp.
+ReleaseDate=1999/03/17
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[EA71056A-E4214847-C:45]
+Good Name=Vigilante 8 (U) [!]
+Developer=Luxoflux Corp.
+ReleaseDate=1999/03/17
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[60006C98-2605A381-C:4A]
+Good Name=Violence Killer - Turok New Generation (J) [!]
+Developer=Gen Soft
+ReleaseDate=1999/06/18
+Genre=Action
+Players=4
+ForceFeedback=No
+
+[2FDAA221-A588A7CE-C:50]
+Good Name=Virtual Chess 64 (E) [!]
+Developer=Titus
+ReleaseDate=1998/06/10
+Genre=Strategy
+Players=2
+ForceFeedback=No
+
+[82B3248B-E73E244D-C:45]
+Good Name=Virtual Chess 64 (U) [!]
+Developer=Titus
+ReleaseDate=1998/06/10
+Genre=Strategy
+Players=2
+ForceFeedback=No
+
+[98F9F2D0-03D9F09C-C:50]
+Good Name=Virtual Pool 64 (E) [!]
+Developer=Celeris Corporation
+ReleaseDate=1998/12/17
+Genre=Simulation
+Players=2
+ForceFeedback=Yes
+
+[4E4A7643-A37439D7-C:45]
+Good Name=Virtual Pool 64 (U) [!]
+Developer=Celeris Corporation
+ReleaseDate=1998/12/17
+Genre=Simulation
+Players=2
+ForceFeedback=Yes
+
+[045C08C4-4AFD798B-C:4A]
+Good Name=Virtual Pro Wrestling (J) [!]
+Developer=Aki Corporation / Asmik Ace Enterainment
+ReleaseDate=1997/12/19
+Genre=Sport-Wrestlng
+Players=4
+ForceFeedback=Yes
+
+[CD094235-88074B62-C:4A]
+Good Name=Virtual Pro Wrestling 2 (J) [!]
+Developer=Aki Corporation / Asmik Ace Enterainment
+ReleaseDate=2000/01/28
+Genre=Sport-Wrestlng
+Players=4
+ForceFeedback=Yes
+
+[636E6B19-E57DDC5F-C:50]
+Good Name=V-Rally Edition 99 (E) [!]
+Developer=Eden Studios
+ReleaseDate=1999/09/18
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+[4D0224A5-1BEB5794-C:4A]
+Good Name=V-Rally Edition 99 (J) [!]
+Developer=Eden Studios
+ReleaseDate=1999/09/18
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+[3C059038-C8BF2182-C:45]
+Good Name=V-Rally Edition 99 (U) [!]
+Developer=Eden Studios
+ReleaseDate=1999/09/18
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+//-------------------------  W  --------------------------
+
+[93053075-261E0F43-C:50]
+Good Name=Waialae Country Club-True Golf Classics (E) (V1.0) [!]
+Developer=T&E Soft
+ReleaseDate=1998/07/29
+Genre=Sport-Golf
+Players=2
+ForceFeedback=Yes
+
+[0C5057AD-046E126E-C:50]
+Good Name=Waialae Country Club-True Golf Classics (E) (V1.1) [!]
+Developer=T&E Soft
+ReleaseDate=????/??/??
+Genre=Sport-Golf
+Players=2
+ForceFeedback=Yes
+
+[8066D58A-C3DECAC1-C:45]
+Good Name=Waialae Country Club-True Golf Classics (U) [!]
+Developer=T&E Soft
+ReleaseDate=1998/07/29
+Genre=Sport-Golf
+Players=2
+ForceFeedback=Yes
+
+[D715CC70-271CF5D6-C:50]
+Good Name=War Gods (E) [!]
+Developer=Eurocom
+ReleaseDate=1997/05/21
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[F7FE28F6-C3F2ACC3-C:45]
+Good Name=War Gods (U) [!]
+Developer=Eurocom
+ReleaseDate=1997/05/21
+Genre=Fighting
+Players=2
+ForceFeedback=No
+
+[650EFA96-30DDF9A7-C:50]
+Good Name=Wave Race 64 (E) [!]
+Developer=Nintendo
+ReleaseDate=1996/11/05
+Genre=Racing-Waterbk
+Players=2
+ForceFeedback=No
+
+[5C9191D6-B30AC306-C:4A]
+Good Name=Wave Race 64 (J) [!]
+Developer=Nintendo
+ReleaseDate=1996/09/27
+Genre=Racing-Waterbk
+Players=2
+ForceFeedback=No
+
+[44995484-20A5FC5E-C:4A]
+Good Name=Wave Race 64 (J) (V1.1) [!]
+Developer=Nintendo
+ReleaseDate=1996/09/27
+Genre=Racing-Waterbk
+Players=2
+ForceFeedback=No
+
+[7DE11F53-74872F9D-C:45]
+Good Name=Wave Race 64 (U) (V1.0) [!]
+Developer=Nintendo
+ReleaseDate=1996/11/05
+Genre=Racing-Waterbk
+Players=2
+ForceFeedback=No
+
+[492F4B61-04E5146A-C:45]
+Good Name=Wave Race 64 (U) (V1.1) [!]
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Racing-Waterbk
+Players=2
+ForceFeedback=No
+
+[535DF3E2-609789F1-C:4A]
+Good Name=Wave Race 64 Shindou Edition (J) (V1.2) [!]
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Racing-Waterbk
+Players=2
+ForceFeedback=Yes
+
+[2209094B-2C9559AF-C:50]
+Good Name=Wayne Gretzky's 3D Hockey (E) [!]
+Developer=Williams
+ReleaseDate=1996/11/14
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=No
+
+[F1301043-FD80541A-C:4A]
+Good Name=Wayne Gretzky's 3D Hockey (J) [!]
+Developer=Williams
+ReleaseDate=1996/11/14
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=No
+
+[6B45223F-F00E5C56-C:45]
+Good Name=Wayne Gretzky's 3D Hockey (U) [!]
+Developer=Williams
+ReleaseDate=1996/11/14
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=No
+
+[DC3BAA59-0ABB456A-C:45]
+Good Name=Wayne Gretzky's 3D Hockey (U) (V1.1)
+Developer=Williams
+ReleaseDate=????/??/??
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=No
+
+[661B45F3-9ED6266D-C:50]
+Good Name=Wayne Gretzky's 3D Hockey '98 (E) [!]
+Developer=Software Creations
+ReleaseDate=1997/12/03
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=No
+
+[5A9D3859-97AAE710-C:45]
+Good Name=Wayne Gretzky's 3D Hockey '98 (U) [!]
+Developer=Software Creations
+ReleaseDate=1997/12/03
+Genre=Sport-Hockey
+Players=4
+ForceFeedback=No
+
+[396F5ADD-6693ECA7-C:45]
+Good Name=WCW Backstage Assault (U) [!]
+Developer=Kodiak Interactive
+ReleaseDate=2000/12/12
+Genre=Wrestling
+Players=2
+ForceFeedback=Yes
+
+[AA7B0658-9C96937B-C:50]
+Good Name=WCW Mayhem (E) [!]
+Developer=Kodiak Interactive
+ReleaseDate=1999/09/22
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[33BE8CD6-EC186912-C:45]
+Good Name=WCW Mayhem (U) [!]
+Developer=Kodiak Interactive
+ReleaseDate=1999/09/22
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[D4C45A1A-F425B25E-C:45]
+Good Name=WCW Nitro (U) [!]
+Developer=Inland Productions
+ReleaseDate=1999/02/10
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[8BDBAF68-345B4B36-C:50]
+Good Name=WCW vs. nWo - World Tour (E) [!]
+Developer=Asmik Ace Enterainment / Inland Productions
+ReleaseDate=1997/11/28
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[2C3E19BD-5113EE5E-C:45]
+Good Name=WCW vs. nWo - World Tour (U) (V1.0) [!]
+Developer=Asmik Ace Enterainment / Inland Productions
+ReleaseDate=1997/11/28
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[71BE60B9-1DDBFB3C-C:45]
+Good Name=WCW vs. nWo - World Tour (U) (V1.1) [!]
+Developer=Asmik Ace Enterainment / Inland Productions
+ReleaseDate=????/??/??
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[68E8A875-0CE7A486-C:50]
+Good Name=WCW-nWo Revenge (E) [!]
+Developer=Asmik Ace Enterainment / Aki Corporation
+ReleaseDate=1998/10/26
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[DEE596AB-AF3B7AE7-C:45]
+Good Name=WCW-nWo Revenge (U) [!]
+Developer=Asmik Ace Enterainment / Aki Corporation
+ReleaseDate=1998/10/26
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[CEA8B54F-7F21D503-C:50]
+Good Name=Wetrix (E) [!]
+Developer=Ocean
+ReleaseDate=1998/06/12
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[DCB6EAFA-C6BBCFA3-C:4A]
+Good Name=Wetrix (J) [!]
+Developer=Ocean
+ReleaseDate=1998/06/12
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[CEA8B54F-7F21D503-C:45]
+Good Name=Wetrix (U) [!]
+Developer=Ocean
+ReleaseDate=1998/06/12
+Genre=Puzzle
+Players=2
+ForceFeedback=No
+
+[E896092B-DC244D4E-C:45]
+Good Name=Wheel of Fortune (U) [!]
+Developer=GameTek
+ReleaseDate=1997/11/28
+Genre=Puzzle
+Players=3
+ForceFeedback=Yes
+
+[0CEBC4C7-0C9CE932-C:4A]
+Good Name=Wild Choppers (J) [!]
+Developer=Seta Corporation
+ReleaseDate=1997/11/28
+Genre=Action
+Players=1
+ForceFeedback=No
+
+[D5898CAF-6007B65B-C:50]
+Good Name=WinBack - Covert Operations (E) [!]
+Developer=Omega Force
+ReleaseDate=1999/10/20
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[1FA056E0-A4B9946A-C:4A]
+Good Name=WinBack - Covert Operations (J) [!]
+Developer=Omega Force
+ReleaseDate=1999/10/20
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[ED98957E-8242DCAC-C:45]
+Good Name=WinBack - Covert Operations (U) [!]
+Developer=Omega Force
+ReleaseDate=1999/10/20
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[54310E7D-6B5430D8-C:50]
+Good Name=Wipeout 64 (E) [!]
+Developer=Psygnosis
+ReleaseDate=1998/11/02
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[132D2732-C70E9118-C:45]
+Good Name=Wipeout 64 (U) [!]
+Developer=Psygnosis
+ReleaseDate=1998/11/02
+Genre=Racing-Future
+Players=4
+ForceFeedback=Yes
+
+[E43C9765-05B1C1BE-C:4A]
+Good Name=Wonder Project J2 (J) [!]
+Developer=Enix
+ReleaseDate=1996/10/31
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+[F9FC3090-FF014EC2-C:50]
+Good Name=World Cup 98 (E) [!]
+Developer=EA Sports
+ReleaseDate=1998/05/18
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[BD636D6A-5D1F54BA-C:45]
+Good Name=World Cup 98 (U) [!]
+Developer=EA Sports
+ReleaseDate=1998/05/18
+Genre=Sport-Soccer
+Players=4
+ForceFeedback=No
+
+[AC062778-DFADFCB8-C:50]
+Good Name=World Driver Championship (E) [!]
+Developer=Boss Game Studios
+ReleaseDate=1999/06/16
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+[308DFEC8-CE2EB5F6-C:45]
+Good Name=World Driver Championship (U) [!]
+Developer=Boss Game Studios
+ReleaseDate=1999/06/16
+Genre=Racing-Rally
+Players=2
+ForceFeedback=Yes
+
+[3B941695-F90A5EEB-C:50]
+Good Name=World is Not Enough, The (E) [!]
+Developer=Eurocom
+ReleaseDate=2000/10/17
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[033F4C13-319EE7A7-C:45]
+Good Name=World is Not Enough, The (U) [!]
+Developer=Eurocom
+ReleaseDate=2000/10/17
+Genre=Shooter FP
+Players=4
+ForceFeedback=Yes
+
+[2D21C57B-8FE4C58C-C:50]
+Good Name=Worms - Armageddon (E) [!]
+Developer=Infogrames Lyon / Team17 Software
+ReleaseDate=2000/03/16
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[13E959A0-0E93CAB0-C:45]
+Good Name=Worms - Armageddon (U) [!]
+Developer=Infogrames Lyon / Team17 Software
+ReleaseDate=2000/03/16
+Genre=Action
+Players=4
+ForceFeedback=Yes
+
+[33A275A4-B8504459-C:50]
+Good Name=WWF - War Zone (E) [!]
+Developer=Iguana West
+ReleaseDate=1998/08/11
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[CD5BEC0F-86FD1008-C:45]
+Good Name=WWF - War Zone (U) [!]
+Developer=Iguana West
+ReleaseDate=1998/08/11
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[5BF45B7B-596BEEE8-C:50]
+Good Name=WWF Attitude (E) [!]
+Developer=Iguana West
+ReleaseDate=1999/08/31
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[8F3151C8-4F3AF545-C:44]
+Good Name=WWF Attitude (G) [!]
+Developer=Iguana West
+ReleaseDate=1999/08/31
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[D2BE2F14-38453788-C:45]
+Good Name=WWF Attitude (U) [!]
+Developer=Iguana West
+ReleaseDate=1999/08/31
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[6D8DF08E-D008C3CF-C:50]
+Good Name=WWF No Mercy (E) (V1.0) [!]
+Developer=Asmik Ace Enterainment / Aki Corporation
+ReleaseDate=2000/11/14
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[8CDB94C2-CB46C6F0-C:50]
+Good Name=WWF No Mercy (E) (V1.1) [!]
+Developer=Asmik Ace Enterainment / Aki Corporation
+ReleaseDate=????/??/??
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[4E4B0640-1B49BCFB-C:45]
+Good Name=WWF No Mercy (U) [!]
+Developer=Asmik Ace Enterainment / Aki Corporation
+ReleaseDate=2000/11/14
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[C71353BE-AA09A6EE-C:50]
+Good Name=WWF WrestleMania 2000 (E) [!]
+Developer=Asmik Ace Enterainment / Aki Corporation
+ReleaseDate=1999/11/16
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[12737DA5-23969159-C:4A]
+Good Name=WWF Wrestlemania 2000 (J) [!]
+Developer=Asmik Ace Enterainment / Aki Corporation
+ReleaseDate=1999/11/16
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+[90A59003-31089864-C:45]
+Good Name=WWF WrestleMania 2000 (U) [!]
+Developer=Asmik Ace Enterainment / Aki Corporation
+ReleaseDate=1999/11/16
+Genre=Wrestling
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  X  --------------------------
+
+[0A1667C7-293346A6-C:50]
+Good Name=Xena Warrior Princess - Talisman of Fate (E) [!]
+Developer=Saffire
+ReleaseDate=1999/12/14
+Genre=Fighting
+Players=4
+ForceFeedback=Yes
+
+[0553AE9D-EAD8E0C1-C:45]
+Good Name=Xena Warrior Princess - Talisman of Fate (U) [!]
+Developer=Saffire
+ReleaseDate=1999/12/14
+Genre=Fighting
+Players=4
+ForceFeedback=Yes
+
+//-------------------------  Y  --------------------------
+
+[9F8B96C3-A01194DC-C:4A]
+Good Name=Yakouchuu II - Satsujun Kouru (J) [!]
+Developer=Athena
+ReleaseDate=1999/10/22
+Genre=Adventure
+Players=1
+ForceFeedback=No
+
+[D3F97D49-6924135B-C:50]
+Good Name=Yoshi's Story (E) [!]
+Developer=Nintendo
+ReleaseDate=1997/12/21
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[2DCFCA60-8354B147-C:4A]
+Good Name=Yoshi's Story (J) [!]
+Developer=Nintendo
+ReleaseDate=1998/03/10
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[2337D8E8-6B8E7CEC-C:45]
+Good Name=Yoshi's Story (U) [!]
+Developer=Nintendo
+ReleaseDate=1998/03/10
+Genre=Platform
+Players=1
+ForceFeedback=Yes
+
+[77DA3B8D-162B0D7C-C:4A]
+Good Name= Yousuke Ide's Mahjong School (J) [!]
+Developer=Seta
+ReleaseDate=2000/04/21
+Genre=Board Game
+Players=2
+ForceFeedback=No
+
+[9FE6162D-E97E4037-C:4A]
+Good Name=Yuke Yuke!! Trouble Makers (J) [!]
+Developer=Enix
+ReleaseDate=1997/06/27
+Genre=Platform
+Players=1
+ForceFeedback=No
+
+//-------------------------  Z  --------------------------
+
+[EC7011B7-7616D72B-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina (J) (V1.0)
+Developer=Nintendo
+ReleaseDate=1998/11/21
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[D43DA81F-021E1E19-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina (J) (V1.1)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[693BA2AE-B7F14E9F-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina (J) (V1.2)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[F7F52DB8-2195E636-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina - Zelda Collection Version (J) (GC Version)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[F43B45BA-2F0E9B6F-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina GC Ura (J) (GC Version)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[F611F4BA-C584135C-C:4A]
+Good Name=Zelda no Densetsu - Toki no Ocarina GC (J) (GC Version)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[EC417312-EB31DE5F-C:4A]
+Good Name=Zelda no Densetsu - Mujura no Kamen (J) (V1.0)
+Developer=Nintendo
+ReleaseDate=2000/04/27
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[69AE0438-2C63F3F3-C:4A]
+Good Name=Zelda no Densetsu - Mujura no Kamen (J) (V1.1)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[8473D0C1-23120666-C:4A]
+Good Name=Zelda no Densetsu - Mujura no Kamen - Zelda Collection Version (J) (GC Version)
+Developer=Nintendo
+ReleaseDate=????/??/??
+Genre=Action-Adventure
+Players=1
+ForceFeedback=Yes
+
+[1C010CCD-22D3B7FA-C:4A]
+Good Name=Zool - Majou Tsukai Densetsu (J) [!]
+Developer=Imagineer
+ReleaseDate=1999/06/11
+Genre=RPG
+Players=1
+ForceFeedback=No
+
+//-------------------------  EOF  --------------------------//
