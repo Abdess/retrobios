@@ -294,6 +294,7 @@ files:
     category: game_data
     description: "crosshair bitmap for player 8"
     source_ref: "src/emu/crsshair.cpp:201-215"
+    aliases: ["cross7.png"]
 
   - name: cross9.png
     path: crosshair/cross9.png
@@ -301,6 +302,7 @@ files:
     category: game_data
     description: "crosshair bitmap for player 9"
     source_ref: "src/emu/crsshair.cpp:201-215"
+    aliases: ["cross7.png"]
 
   - name: cross10.png
     path: crosshair/cross10.png
@@ -308,6 +310,7 @@ files:
     category: game_data
     description: "crosshair bitmap for player 10"
     source_ref: "src/emu/crsshair.cpp:201-215"
+    aliases: ["cross7.png"]
 
   # BIOS root sets, one MAME archive each under the ROMs path
   - name: 3dobios.zip
