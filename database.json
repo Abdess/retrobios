@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-23T11:41:38Z",
-  "total_files": 8925,
-  "total_size": 12326516021,
+  "generated_at": "2026-09-03T15:48:42Z",
+  "total_files": 8928,
+  "total_size": 12326614581,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -1042,6 +1042,16 @@
       "sha256": "f9df91af0aecb75edb7401a5cc47c87f57e82360f0acc1a8474b28aedaa60087",
       "crc32": "665cd50f",
       "adler32": "39cd4d98"
+    },
+    "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9": {
+      "path": "bios/Apple/Apple II/disk2-13seq.rom",
+      "name": "disk2-13seq.rom",
+      "size": 256,
+      "sha1": "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9",
+      "md5": "008568a8a28a79f795ad73a4b064de1e",
+      "sha256": "4234aed053c622b266014c4e06ab1ce9e0e085d94a28512aa4030462be0a3cb9",
+      "crc32": "5eabc7b9",
+      "adler32": "8f256a06"
     },
     "a57f14469867ce0d0865995a645b69f41a0ea718": {
       "path": "bios/Apple/Apple II/votrsc01.zip",
@@ -56567,6 +56577,26 @@
       "crc32": "97b38d16",
       "adler32": "a1e040df"
     },
+    "29dd0487dc5a96cd00966d074de8700ddd4ee18b": {
+      "path": "bios/Other/zesarux/cpc6128.rom",
+      "name": "cpc6128.rom",
+      "size": 49152,
+      "sha1": "29dd0487dc5a96cd00966d074de8700ddd4ee18b",
+      "md5": "fecfc79b67cf5b4b9593857e01f7bd56",
+      "sha256": "1923b3779ea73519ff3c931c29917f72322b66bcfe37eba7ceeb9e49d095c8ea",
+      "crc32": "b4ffa106",
+      "adler32": "68a29597"
+    },
+    "4a38f7f5bf7fd0a95cf882433c69e67251a46868": {
+      "path": "bios/Other/zesarux/cpc664.rom",
+      "name": "cpc664.rom",
+      "size": 49152,
+      "sha1": "4a38f7f5bf7fd0a95cf882433c69e67251a46868",
+      "md5": "8347c6bdddfd5623e753f17ae6768b18",
+      "sha256": "347c9458851329512e90bfd6524f758ed6ac4bdcdeb58546db2f35338b5e8f12",
+      "crc32": "0bae02ec",
+      "adler32": "95b18b97"
+    },
     "4c7d702e295a3383326606b805eab74affc501ba": {
       "path": "bios/Other/zesarux/defcon.rom",
       "name": "defcon.rom",
@@ -94412,6 +94442,7 @@
       "8f7ee14ccca8ae3dd8c759497af3f09b": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
       "2a68f049d44e326574b95c0ec638c1ca": "78008be557f643e956a106121bcc182c0fb9ea6d",
       "d3bef2755267a941f264fb5b288e3076": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
+      "008568a8a28a79f795ad73a4b064de1e": "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9",
       "c835eab06842e3c1d6e2e7dc19289828": "a57f14469867ce0d0865995a645b69f41a0ea718",
       "20a0334c447cb069a040ae5be1d938df": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
       "0d4b090d85e995ae8ce724b910c8cc15": "9c27bba32c0c7c70a87512282acd6729744a36f9",
@@ -99730,6 +99761,8 @@
       "83fe98bc33c276bd5214cabad9dc4b30": "7a37a248572689c8ac226c082b7026972d399b1c",
       "ec1e8290da040307d6b3174b7ace9453": "b2303b7200f5a17b54b841af9f0604db7bbdd1ab",
       "7b0ea47d9aba01d5c7466e65383d9b71": "fb305656769765224c58ca02445d4bf041891d18",
+      "fecfc79b67cf5b4b9593857e01f7bd56": "29dd0487dc5a96cd00966d074de8700ddd4ee18b",
+      "8347c6bdddfd5623e753f17ae6768b18": "4a38f7f5bf7fd0a95cf882433c69e67251a46868",
       "743703fbc1faa871009b044b41d565b6": "4c7d702e295a3383326606b805eab74affc501ba",
       "8d341a09c37a4b41426b381c8c5211b1": "f9c337782f9a4781548528841babd5bd13f2b745",
       "62d774d485f83e5b9f19cc0c13a5dd25": "7eaaf1ff19f74d5449033bacce9834d7b13022a9",
@@ -103427,10 +103460,12 @@
         "56d39c463da60968d93e58b4ba0e675829412a20"
       ],
       "cpc6128.rom": [
-        "5977adbad3f7c1e0e082cd02fe76a700d9860c30"
+        "5977adbad3f7c1e0e082cd02fe76a700d9860c30",
+        "29dd0487dc5a96cd00966d074de8700ddd4ee18b"
       ],
       "cpc664.rom": [
-        "073a7665527b5bd8a148747a3947dbd3328682c8"
+        "073a7665527b5bd8a148747a3947dbd3328682c8",
+        "4a38f7f5bf7fd0a95cf882433c69e67251a46868"
       ],
       "os464.rom": [
         "475c8080065a7aa9984daca0415a3d70a5305be2"
@@ -103528,6 +103563,9 @@
       "apple2p.zip": [
         "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
         "5ba8555f716bd48834858d8a7f42810ab7293b12"
+      ],
+      "disk2-13seq.rom": [
+        "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9"
       ],
       "votrsc01.zip": [
         "a57f14469867ce0d0865995a645b69f41a0ea718"
@@ -128009,9 +128047,6 @@
       "disk2-13boot.rom": [
         "afd060e6f35faf3bb0146fa889fc787adf56330a"
       ],
-      "disk2-13seq.rom": [
-        "afd060e6f35faf3bb0146fa889fc787adf56330a"
-      ],
       "disk2-16seq.rom": [
         "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4"
       ],
@@ -131960,6 +131995,7 @@
       "4f923a35": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
       "ba210588": "78008be557f643e956a106121bcc182c0fb9ea6d",
       "665cd50f": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
+      "5eabc7b9": "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9",
       "6105d2ee": "a57f14469867ce0d0865995a645b69f41a0ea718",
       "42f124b0": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
       "516164c0": "9c27bba32c0c7c70a87512282acd6729744a36f9",
@@ -137278,6 +137314,8 @@
       "3b49dc3b": "7a37a248572689c8ac226c082b7026972d399b1c",
       "9cf316a8": "b2303b7200f5a17b54b841af9f0604db7bbdd1ab",
       "97b38d16": "fb305656769765224c58ca02445d4bf041891d18",
+      "b4ffa106": "29dd0487dc5a96cd00966d074de8700ddd4ee18b",
+      "0bae02ec": "4a38f7f5bf7fd0a95cf882433c69e67251a46868",
       "390ee66e": "4c7d702e295a3383326606b805eab74affc501ba",
       "7c656043": "f9c337782f9a4781548528841babd5bd13f2b745",
       "1e5275ec": "7eaaf1ff19f74d5449033bacce9834d7b13022a9",
@@ -140887,6 +140925,7 @@
       "c2137ea284c104c44e01747888033bd79a1e5de136fef74d7f5b2f1e5b5bb6fc": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
       "68d9db6bb4c305d40c3fa89fa0f2d7b7f71516a9431e3138859f23bc5bddb2d1": "78008be557f643e956a106121bcc182c0fb9ea6d",
       "f9df91af0aecb75edb7401a5cc47c87f57e82360f0acc1a8474b28aedaa60087": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
+      "4234aed053c622b266014c4e06ab1ce9e0e085d94a28512aa4030462be0a3cb9": "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9",
       "14217ca8e25435ea8497b272d8963ebc79ae29cdc21e972817ab09115e2f1b2d": "a57f14469867ce0d0865995a645b69f41a0ea718",
       "34cd454c6201bfd26839d6ace2ff6b1231e09d6279e49b4890311756dc3825fb": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
       "2e9751fb87d0057e3e47ce9cd4eb3115f739d19206a01179b973a6430f9b4a79": "9c27bba32c0c7c70a87512282acd6729744a36f9",
@@ -146205,6 +146244,8 @@
       "637ab43a7305724c58b467f1125c3370ca4abaa6a4198de41359ddbbef619e95": "7a37a248572689c8ac226c082b7026972d399b1c",
       "444cd9503277112d002d66c90933ef97a50bfd5a2780c88505ee99e90d3e56b2": "b2303b7200f5a17b54b841af9f0604db7bbdd1ab",
       "8d22457319a5a4c594f126f9bebd6d6d16a2eb3d6b55772185ad0ccc0781d7cc": "fb305656769765224c58ca02445d4bf041891d18",
+      "1923b3779ea73519ff3c931c29917f72322b66bcfe37eba7ceeb9e49d095c8ea": "29dd0487dc5a96cd00966d074de8700ddd4ee18b",
+      "347c9458851329512e90bfd6524f758ed6ac4bdcdeb58546db2f35338b5e8f12": "4a38f7f5bf7fd0a95cf882433c69e67251a46868",
       "0bcc3b95c081598efed3c94ccd8fda2c7bd5b3d8b403d00278795d38fe6a63d6": "4c7d702e295a3383326606b805eab74affc501ba",
       "df7181b671ff9fa739bc9f1065e7cb9b04e3f0bd04c4064189dc11f07b761634": "f9c337782f9a4781548528841babd5bd13f2b745",
       "5fe5d6bb92b516b5f1696a52679b23cc8a5301badc033e419aedb08e7d6f8fca": "7eaaf1ff19f74d5449033bacce9834d7b13022a9",
