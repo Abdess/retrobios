@@ -5,7 +5,7 @@ are built, and how to run the process manually.
 
 ## CI workflows overview
 
-The project uses 4 GitHub Actions workflows. All use only official GitHub
+The project uses 3 GitHub Actions workflows. All use only official GitHub
 actions (`actions/checkout`, `actions/setup-python`, `actions/upload-pages-artifact`,
 `actions/deploy-pages`). No third-party actions.
 
@@ -16,7 +16,10 @@ Budget target: ~175 minutes/month on the GitHub free tier.
 | Build & Release | `build.yml` | Manual dispatch only |
 | Deploy Site | `deploy-site.yml` | Push to main (platforms, emulators, provenance, wiki, scripts, database.json, mkdocs.yml), manual |
 | PR Validation | `validate.yml` | PR touching `bios/**`, `platforms/**` or `emulators/**` |
-| Weekly Sync | `watch.yml` | Cron Monday 06:00 UTC, manual dispatch |
+
+Upstream BIOS lists are not scraped on a schedule. A maintainer runs the
+scrapers by hand (see [adding a scraper](adding-a-scraper.md)), reviews the
+diff, and commits the refreshed platform YAML.
 
 ## build.yml - Build & Release
 
@@ -131,23 +134,6 @@ merge.
 | `bios/{Manufacturer}/` | `system:{manufacturer}` |
 | `platforms/` | `platform-config` |
 | `scripts/` | `automation` |
-
-## watch.yml - Weekly Platform Sync
-
-**Trigger.** Cron schedule every Monday at 06:00 UTC, or manual dispatch.
-
-**Flow:**
-
-1. Scrape live upstream sources (System.dat, batocera-systems, es_bios.xml,
-   etc.) and regenerate platform YAML configs
-2. Auto-fetch missing BIOS files
-3. Refresh data directories
-4. Run dedup
-5. Regenerate `database.json`
-6. Create or update a PR with labels `automated` and `platform-update`
-
-The PR contains all changes from the scrape cycle. A maintainer reviews and
-merges.
 
 ## Large files management
 

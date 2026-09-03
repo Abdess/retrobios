@@ -350,7 +350,6 @@ pattern and how to add a test.
 | Build & Release | `build.yml` | manual dispatch only | restore large files, build packs, create GitHub release |
 | Deploy Site | `deploy-site.yml` | push to main (platforms, emulators, wiki, scripts) + manual | validate contracts, generate site, build with MkDocs, validate rendered HTML, deploy to Pages |
 | PR Validation | `validate.yml` | pull request on bios/, platforms/, emulators/, schemas/, scripts/, tests/ | validate BIOS hashes, schema check, run the full test suite, auto-label PR |
-| Weekly Sync | `watch.yml` | cron (Monday 6 AM UTC) + manual | scrape upstream sources, detect changes, create update PR |
 
 The build workflow has no push trigger: a release is dispatched by hand. It
 keeps a 7-day rate limit between releases and the 3 most recent tags. See the

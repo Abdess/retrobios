@@ -130,7 +130,7 @@ platforms:
     config: myplatform.yml           # platform YAML filename in platforms/
     status: active                   # active or archived
     scraper: myplatform              # matches PLATFORM_NAME, null if hand-maintained
-    schedule: weekly                 # weekly, monthly, or null for no auto-scrape
+    schedule: weekly                 # re-scrape cadence, run by hand: weekly, monthly, or null
     source_url: https://...          # upstream data URL
     source_format: json              # json, xml, clrmamepro_dat, python_dict,
                                      # bash_script+csv, csharp_firmware_database,
@@ -371,7 +371,7 @@ This executes in sequence:
 8. `generate_site.py` - regenerate documentation site and `mkdocs.yml`
 
 A new platform is archived-by-default nowhere: `status: active` puts it in
-`list_platforms.py`, the CI matrix, and the weekly scrape. Set
+`list_platforms.py`, the CI matrix, and the scrapers. Set
 `status: archived` to keep the configuration without the automation; archived
 platforms are excluded unless `--all` or `--include-archived` is passed.
 

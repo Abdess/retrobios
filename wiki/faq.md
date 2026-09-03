@@ -174,4 +174,4 @@ The packs differ per platform because each platform declares its own set of supp
 
 ## How often are packs updated?
 
-A weekly automated sync checks upstream sources (libretro System.dat, batocera-systems, etc.) for changes. If differences are found, a pull request is created automatically. Manual releases happen as needed when new BIOS files are added or profiles are updated.
+Upstream sources (libretro System.dat, batocera-systems, etc.) are re-scraped by hand and the diff is reviewed before it lands. Releases happen as needed when new BIOS files are added or profiles are updated.
