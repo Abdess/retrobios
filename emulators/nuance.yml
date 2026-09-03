@@ -1,0 +1,173 @@
+emulator: Nuance
+type: libretro
+core_classification: official_port
+source: "https://github.com/WizzardSK/nuance-libretro"
+upstream: "https://github.com/andkrau/NuanceResurrection"
+profiled_date: "2026-09-03"
+source_commit: "700d28553f3a06b16385ed9e48f194377e131b03"
+upstream_commit: "700d28553f3a06b16385ed9e48f194377e131b03"
+core_version: "0.6.7"
+display_name: "VM Labs - NUON (Nuance)"
+cores: [nuance]
+systems: [vm-labs-nuon]
+
+notes: |
+  NUON emulator written by Mike Perry (2002-2007) and continued as
+  NuanceResurrection by Carsten Waechter from the source archive released
+  after the author's death. The Linux and libretro ports were merged into the
+  upstream tree in 2026 (pull request 75), so the port and the upstream share
+  the same revision.
+
+  The three BIOS files are not firmware dumps. bios.cof, minibios.cof and
+  minibiosX.cof are Aries assembly implementations of BIOS routines,
+  assembled from bios.s, minibios.s and minibiosX.s in the source tree; every
+  other BIOS call is handled in C++ through BiosJumpTable (src/bios.cpp:395-547).
+  The entries left to the assembly code are the comm bus calls, TimeToSleep,
+  MPEWait and BiosGetInfo.
+
+  retro_load_game looks for <system>/nuance/bios.cof and changes the working
+  directory to <system>/nuance when it exists, else to the directory of the
+  core library when bios.cof sits beside it (src/libretro.cpp:313-352). Every
+  data file is then opened by bare name from the working directory. InitBios
+  loads bios.cof into MPE3 and MediaInitMPE loads minibios.cof into MPE0
+  (minibiosX.cof on MPEs 1 to 3). A failed load prints "Missing File!" and
+  emulation continues without the routines. LoadCoffFile checks the COFF magic
+  0x0120 and copies the sections to their physical addresses; no size or hash
+  is checked (src/coff.cpp:47-176).
+
+  Two builds of bios.cof exist. The source tree carries the NuanceExperimental
+  build (23938 bytes, 12 sections, with commrecv_vars and commrecv_queues);
+  the 0.6.6 and 0.6.7 release archives ship the 2007 build (19410 bytes, 10
+  sections). Both carry the same biosvars, haltab, biosinfo, halstub,
+  biosdata, halts and controllerdata sections and the C++ side references
+  neither extra section.
+
+  nuance.cfg is read from the working directory, then from the directory of
+  the running executable (src/NuonEnvironment.cpp:533-549); without it the
+  values set in NuonEnvironment::Init apply. The GLSL shaders are opened from
+  the working directory and fall back to the copies compiled into the binary
+  (src/ShaderProgram.cpp:85-135, src/embedded_shaders.h). FlashEEPROM.bin is
+  read by the FlashEEPROM constructor and written by the destructor, both
+  relative to the process working directory at load and unload of the core
+  (src/FlashEEPROM.h:36-51). Game data (nuon.run, nuon.dat) is read from the
+  loaded disc image or directory; no other fixed file is opened.
+
+files:
+  - name: "bios.cof"
+    path: "nuance/bios.cof"
+    description: "BIOS routines for MPE3, Aries COFF assembled from bios.s"
+    size: 23938
+    sha1: "515a3d9a9e43b7902d161ba27bf67aecee922e41"
+    md5: "23bf80c259f182f582beeb368aba98f5"
+    required: true
+    bundled: true
+    source_ref: "src/libretro.cpp:313-352, src/NuonEnvironment.cpp:581, src/NuonEnvironment.cpp:603-605, src/bios.cpp:566-582, src/coff.cpp:47-70"
+    note: >
+      Loaded into MPE3 by InitBios. The 2007 build shipped in the release
+      archives (19410 bytes, sha1 4f42ed8f5e171cc79112d1c1e201381e83b1fc0d)
+      loads the same way.
+
+  - name: "minibios.cof"
+    path: "nuance/minibios.cof"
+    description: "Media MPE minibios for MPE0, assembled from minibios.s"
+    size: 7873
+    sha1: "5265dbc871ada59dbd384104c578d807438af4c7"
+    md5: "1abc7f6265b82742154be881cff2cd3f"
+    required: true
+    bundled: true
+    source_ref: "src/media.cpp:243-321, src/bios.cpp:661, src/Bios.h:29-33"
+    note: >
+      Loaded by MediaInitMPE when the media MPE is MPE0, which InitBios does at
+      every BIOS initialisation. Entry point and interrupt vectors come from
+      the fixed addresses in Bios.h.
+
+  - name: "minibiosX.cof"
+    path: "nuance/minibiosX.cof"
+    description: "Media MPE minibios for MPEs 1 to 3, addresses shifted down by 4 KB"
+    size: 7873
+    sha1: "e45a96ce18486573c4d30efbc01658ce1ff8cd55"
+    md5: "ceb37f4e78c1f396b49bb6372c83fd7c"
+    required: true
+    bundled: true
+    source_ref: "src/media.cpp:277-296, src/Bios.h:35-38"
+    note: >
+      Loaded by MediaInitMPE when a program installs the minibios on an MPE
+      other than MPE0.
+
+  - name: "nuance.cfg"
+    path: "nuance/nuance.cfg"
+    description: "Emulator configuration (compiler options, audio interrupts, controller mappings)"
+    size: 3369
+    sha1: "dfbac2a22f17cf82c7cd40f3727eecf31b013d15"
+    md5: "20becfdb932042f8ab47c098e92a12ed"
+    required: false
+    bundled: true
+    source_ref: "src/NuonEnvironment.cpp:533-549, src/NuonEnvironment.cpp:917-1056"
+    note: >
+      Read from the working directory, then beside the running executable.
+      Absent file leaves the defaults of NuonEnvironment::Init in place.
+
+  - name: "video_generic.vs"
+    path: "nuance/video_generic.vs"
+    description: "GLSL vertex shader"
+    size: 491
+    sha1: "92fca43b92298d308e88edada93453a9ef21adbd"
+    md5: "5944fea1ff20645f10aecdda06235fb7"
+    required: false
+    bundled: true
+    has_builtin: true
+    source_ref: "src/video.cpp:119, src/ShaderProgram.cpp:85-135, src/embedded_shaders.h:31-52"
+    note: >
+      Opened from the working directory; the copy compiled into the binary is
+      used when the file is absent. The release archives ship the file without
+      the EMBED_HLSL guards (413 bytes).
+
+  - name: "video_m32_o32.fs"
+    path: "nuance/video_m32_o32.fs"
+    description: "GLSL fragment shader, YCrCb to RGB conversion"
+    size: 6168
+    sha1: "d0477bd73ba524bb74c1faf30fd8f32bd254f924"
+    md5: "e23f4668fea649cb14feab840fd8377f"
+    required: false
+    bundled: true
+    has_builtin: true
+    source_ref: "src/video.cpp:120, src/ShaderProgram.cpp:85-135, src/embedded_shaders.h:31-52"
+    note: >
+      Selected when UseCRTshader is disabled in nuance.cfg. Same lookup and
+      fallback as video_generic.vs; the release copy is 6090 bytes.
+
+  - name: "video_m32_o32_crt.fs"
+    path: "nuance/video_m32_o32_crt.fs"
+    description: "GLSL fragment shader with CRT post-processing"
+    size: 8130
+    sha1: "e57671f844c3bf96f0bf77ea4d550e13e077b0d2"
+    md5: "2e1335cd9b14165897eac031504abf8e"
+    required: false
+    bundled: true
+    has_builtin: true
+    source_ref: "src/video.cpp:120, src/ShaderProgram.cpp:85-135, src/embedded_shaders.h:31-52"
+    note: >
+      Selected when UseCRTshader is enabled, the shipped default. Same lookup
+      and fallback as video_generic.vs; the release copy is 8052 bytes.
+
+  - name: "FlashEEPROM.bin"
+    description: "Atmel AT49BV162A flash ROM image, 2 MB at 0xF0000000"
+    size: 2097152
+    required: false
+    bundled: true
+    source_ref: "src/FlashEEPROM.h:36-51, src/FlashEEPROM.cpp:273-292, src/dma.cpp:679-693"
+    note: >
+      Read by the FlashEEPROM constructor from the process working directory
+      when the core is loaded, truncated to 2 MB, and written back by the
+      destructor. The release archives ship one; its content is the flash
+      state of the session that produced it.
+
+  - name: "breakpoint.txt"
+    description: "Single breakpoint address, first line in hexadecimal"
+    required: false
+    mode: standalone
+    source_ref: "src/NuanceMain_linux.cpp:124, src/NuanceMain.cpp:446"
+    note: >
+      Read from the working directory by the standalone executables only;
+      NuanceMain.cpp and NuanceMain_linux.cpp are excluded from the libretro
+      build (CMakeLists.txt:190).

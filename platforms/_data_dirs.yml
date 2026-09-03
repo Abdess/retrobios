@@ -53,6 +53,18 @@ data_directories:
     local_cache: data/lrps2
     description: "LRPS2 GameIndex.yaml + resources"
 
+  # ref: pcee2-libretro/Libretro.cpp:426 - system/pcsx2/resources/
+  # PCSX2 bin/resources at the upstream revision the pcee2 core is merged up to
+  # (pcee2-libretro/upstream.version). patches.zip is a separate release asset
+  # of PCSX2/pcsx2_patches and is carried as a file entry of the profile.
+  pcsx2-resources:
+    source_url: "https://github.com/PCSX2/pcsx2/archive/{version}.tar.gz"
+    source_type: tarball
+    source_path: "pcsx2-{version}/bin/resources"
+    version: 6db638dc0373769b4c5d5b5dd7ed6da641b9a18e
+    local_cache: data/pcsx2-resources
+    description: "PCSX2 resources (GameIndex.yaml, RedumpDatabase.yaml, fonts, shaders, icons, sounds)"
+
   # ref: scummvm/backends/platform/libretro — system/scummvm/
   scummvm:
     source_url: "https://buildbot.libretro.com/assets/system/ScummVM.zip"

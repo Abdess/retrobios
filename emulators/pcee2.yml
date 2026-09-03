@@ -1,0 +1,161 @@
+emulator: PCEE2
+type: libretro
+core_classification: community_fork
+bios_mode: agnostic
+source: "https://github.com/WizzardSK/pcee2-libretro"
+upstream: "https://github.com/PCSX2/pcsx2"
+profiled_date: "2026-09-03"
+source_commit: "93aded21a46e60f3def27b2590eccb49d30d6a05"
+upstream_commit: "6db638dc0373769b4c5d5b5dd7ed6da641b9a18e"
+core_version: "v2.7.523"
+display_name: "Sony - PlayStation 2 (PCEE2)"
+cores: [pcee2]
+systems: [sony-playstation-2]
+
+bios_directory: "pcsx2/bios/"
+resources_directory: "pcsx2/resources/"
+
+data_directories:
+  - ref: pcsx2-resources
+    destination: "pcsx2/resources"
+    source_ref: "pcee2-libretro/Libretro.cpp:414-442, pcsx2/Pcsx2Config.cpp:2388-2400"
+
+notes: |
+  libretro port of current PCSX2, merged up to upstream 6db638dc (v2.7.523,
+  pcee2-libretro/upstream.version); the build reports that version as
+  library_version. Everything the port adds lives in pcee2-libretro/ and in
+  the libretro renderer bridges; the BIOS, CDVD, patch and database code is
+  upstream PCSX2.
+
+  InitializeConfig maps the PCSX2 folder layout under <system>/pcsx2:
+  AppRoot and DataRoot are that directory, Resources and UserResources are
+  pcsx2/resources, Settings is pcsx2/inis, and EmuFolders::LoadConfig
+  derives bios, memcards, cheats, patches, textures, gamesettings, cache,
+  snaps, sstates, logs, covers, inputprofiles and videos from DataRoot
+  (pcee2-libretro/Libretro.cpp:414-428, pcsx2/Pcsx2Config.cpp:2319-2336).
+  A standalone PCSX2.ini dropped in pcsx2/inis contributes nine emulation
+  sections as the baseline (Libretro.cpp:504-535); the core options and the
+  port overrides apply on top.
+
+  BIOS detection is filename-agnostic. The core option pcsx2_bios lists every
+  file of pcsx2/bios that IsBIOS accepts: a romdir whose RESET entry is
+  followed by a readable ROMVER, whose fifth character gives the zone (Japan,
+  USA, Europe, Asia, China, T10K, COH-H, Test, Free). With the option on
+  auto, SettingsOverride selects the first accepted file (Libretro.cpp:578-618,
+  pcsx2/ps2/BiosTools.cpp:80-197, 284-294). When no BIOS is configured or the
+  configured name is missing, LoadBIOS falls back to FindBiosImage, which
+  also filters on size between 4 and 8 MB (BiosTools.cpp:258-282, 317-369).
+  The image is read into the 4 MB ROM region; a file shorter than 2465792
+  bytes turns off the OSDSys parameter HLE. No hash is matched. Booting with
+  no content starts the BIOS (Libretro.cpp:2090-2096).
+
+  Companions derive from the selected image: rom1 and rom2 are tried as the
+  full name plus extension, then with the extension replaced, and are skipped
+  when absent; the nvm is read at the replaced extension and rebuilt with
+  region and language defaults when missing or blank; the mec is written back
+  as 0x00020603 when it cannot be read (BiosTools.cpp:214-241, 366-367,
+  pcsx2/CDVD/CDVD.cpp:136-205).
+
+  The shaders, four interface fonts and GameIndex.yaml are built into the
+  core (cmake/EmbedResources.cmake:19-31, pcsx2/CMakeLists.txt:1137-1157)
+  and win over the copies on disk unless PCEE2_EXTERNAL_RESOURCES is set in
+  the environment (pcsx2/EmbeddedResources.cpp:8-12, pcsx2/GS/Renderers/Common/GSDevice.cpp:372-387,
+  pcsx2/ImGui/ImGuiManager.cpp:470-492, pcsx2/GameDatabase.cpp:1021-1050,
+  Libretro.cpp:451-473). A missing resources directory is a warning, not a
+  failure (Libretro.cpp:433-442). What the directory still supplies to this
+  build is patches.zip. RedumpDatabase.yaml is read only by the Qt game
+  summary (pcsx2/GameDatabase.cpp:1197-1210 has no caller in the core),
+  game_controller_db.txt only by the SDL input source the port disables
+  (Libretro.cpp:561-562, pcsx2/Input/SDLInputSource.cpp:701-706), the
+  achievement sounds only with achievements enabled, which no core option or
+  adopted ini section does (pcsx2/Achievements.cpp:943-951), and
+  fullscreenui/no-save.png only by the save state selector, whose hotkeys the
+  port clears (Libretro.cpp:564, pcsx2/ImGui/ImGuiOverlays.cpp:1461-1462).
+  The port supplies Roboto alone to ImGui, so no emoji font is read.
+
+  Per-game user files keep their PCSX2 locations under <system>/pcsx2:
+  cheats and patches as <serial>_<crc>.pnach (pcsx2/Patch.cpp:333-363),
+  gamesettings/<serial>_<crc>.ini (pcsx2/VMManager.cpp:830-833),
+  textures/<serial>/replacements (pcsx2/GS/Renderers/HW/GSTextureReplacements.cpp:262-264),
+  memcards/*.ps2, which the core creates and lists in the memory card
+  options (Libretro.cpp:620-640). The DEV9 HDD image is named in the ini and
+  created on demand.
+
+files:
+  - name: "<bios>.bin"
+    path: "pcsx2/bios/"
+    description: "PS2 BIOS image"
+    min_size: 4194304
+    max_size: 8388608
+    required: true
+    validation: [size]
+    source_ref: "pcee2-libretro/Libretro.cpp:578-618, pcsx2/ps2/BiosTools.cpp:16-17, pcsx2/ps2/BiosTools.cpp:80-197, pcsx2/ps2/BiosTools.cpp:258-294, pcsx2/ps2/BiosTools.cpp:317-369"
+    note: >
+      Any file of pcsx2/bios whose romdir carries RESET and ROMVER. The 4 to
+      8 MB filter applies in FindBiosImage only; the core option scan and the
+      auto selection accept any size that passes the romdir check.
+
+  - name: "<bios>.rom1"
+    path: "pcsx2/bios/"
+    description: "DVD player ROM"
+    max_size: 4194304
+    required: false
+    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:366, pcsx2/MemoryTypes.h:13"
+    note: >
+      Tried as <bios>.bin.rom1 then <bios>.rom1, opened case-insensitively,
+      skipped with a console line when absent.
+
+  - name: "<bios>.rom2"
+    path: "pcsx2/bios/"
+    description: "Chinese ROM extension"
+    max_size: 4194304
+    required: false
+    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:367, pcsx2/MemoryTypes.h:14"
+    note: >
+      Same lookup as rom1. Present on Chinese region consoles only.
+
+  - name: "<bios>.nvm"
+    path: "pcsx2/bios/"
+    description: "Console NVRAM (region parameters, language, iLink ID, OSD settings)"
+    size: 1024
+    required: false
+    hle_fallback: true
+    source_ref: "pcsx2/CDVD/CDVD.cpp:47, pcsx2/CDVD/CDVD.cpp:136-188, pcsx2/CDVD/CDVD.cpp:207-238"
+    note: >
+      Read at <bios>.nvm, rebuilt in memory with region and language defaults
+      when it is missing, short, or has a blank config block, and written back
+      on save.
+
+  - name: "<bios>.mec"
+    path: "pcsx2/bios/"
+    description: "Mechacon version, one u32"
+    size: 4
+    required: false
+    hle_fallback: true
+    source_ref: "pcsx2/CDVD/CDVD.cpp:49, pcsx2/CDVD/CDVD.cpp:190-204"
+    note: >
+      Read at <bios>.mec; written as 0x00020603 when it cannot be read.
+
+  - name: "patches.zip"
+    path: "pcsx2/resources/patches.zip"
+    description: "Built-in game patch archive (pnach per serial and CRC)"
+    required: false
+    bundled: true
+    category: game_data
+    source_ref: "pcsx2/Patch.cpp:117, pcsx2/Patch.cpp:289-317, pcsx2/Patch.cpp:365-405"
+    note: >
+      Opened read only from the resources directory when a game's patches are
+      enumerated and searched for <serial>_<crc>.pnach, then <crc>.pnach. Files
+      in the patches folder take precedence. A failure to open is reported once
+      on screen. Not part of the PCSX2 source tree: PCSX2 builds fetch it from
+      the pcsx2_patches releases, a rolling asset rebuilt on every patch commit.
+
+  - name: "eeprom.dat"
+    description: "DEV9 network adapter EEPROM"
+    size: 64
+    required: false
+    hle_fallback: true
+    source_ref: "pcsx2/DEV9/DEV9.cpp:60-73, pcsx2/DEV9/DEV9.cpp:97-158"
+    note: >
+      Opened read-write and mapped from the process working directory by
+      DEV9init; the built-in eeprom table is used when it cannot be opened.

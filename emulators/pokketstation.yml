@@ -1,0 +1,54 @@
+emulator: pokketstation
+type: libretro
+core_classification: official_port
+source: "https://github.com/mentalfoundry/pokketstation"
+upstream: "https://github.com/mentalfoundry/pokketstation"
+profiled_date: "2026-09-03"
+source_commit: "11fb6de0139d5cbdbd44e37839571a0bf25e5ab2"
+core_version: "v1.11.1"
+display_name: "Sony - PocketStation (pokketstation)"
+cores: [pokketstation]
+systems: [sony-pocketstation]
+
+notes: |
+  PocketStation emulator with a portable C core (core/) shared by the libretro
+  core, an SDL2 desktop application and a PS Vita port. The libretro core
+  reports library_version "0.1"; the project version is the release tag,
+  v1.11.1 in the desktop frontend (frontends/desktop/main.c:40).
+
+  load_bios opens <system>/pocketstation.bin, reads 16384 bytes and fails when
+  fewer are read; a longer file is accepted and truncated. psemu_load_bios
+  copies the image and rejects any size other than PSEMU_BIOS_SIZE.
+  retro_load_game returns false when load_bios fails, and psemu_run executes
+  nothing while no BIOS is loaded: there is no HLE and no embedded copy.
+  Content (.mcr, .mcd, .mcs, .pss) is identified by its bytes, not by the
+  extension. Save RAM is the full 128 KB flash image.
+
+  psemu_settings_offsets_known hashes the loaded image with FNV-1a and compares
+  it with 0xB2E46838, the retail 110 revision the project traced; a match
+  enables the date, time and volume override writes into kernel RAM. Any
+  16 KB image boots. Two mask ROM revisions are documented: 061, from
+  prototype hardware, and 110, the retail one; the ASCII tags at offsets
+  0x1DFC (C061 or C110) and 0x3FFC (J061 or J110) identify them
+  (docs/hardware-notes.md:778-788). SWI 0Fh FlashWriteSerial works on 061
+  and locks the CPU on 110.
+
+  The desktop application takes the BIOS path from the command line, then
+  from the bios= key of settings.cfg beside the executable, then falls back
+  to bios.bin beside the executable; File > Load BIOS opens any path
+  (frontends/desktop/main.c:630-668, 1000-1035, 2380-2451). The Vita frontend
+  loads no BIOS yet (frontends/vita/main.c:31-33).
+
+files:
+  - name: "pocketstation.bin"
+    description: "PocketStation BIOS ROM, kernel and GUI, 16 KB"
+    size: 16384
+    required: true
+    validation: [size]
+    standalone_path: "bios.bin"
+    source_ref: "frontends/libretro/libretro.c:178-196, frontends/libretro/libretro.c:206-208, core/src/psemu.c:90-97, core/src/psemu.c:458-461, core/src/psemu.c:795-820, core/include/psemu/psemu.h:19"
+    note: >
+      Read from the frontend system directory. The desktop application reads
+      the whole file and psemu_load_bios rejects any size other than 16384;
+      the libretro core reads the first 16384 bytes. FNV-1a 0xB2E46838
+      identifies the retail 110 revision for the settings overrides only.
