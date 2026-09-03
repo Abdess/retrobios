@@ -597,14 +597,17 @@ def generate_pack(
     file_status: dict[str, str] = {}
     file_reasons: dict[str, str] = {}
 
-    # Build emulator-level validation index (same as verify.py)
-    validation_index = {}
-    if emu_profiles:
-        validation_index = _build_validation_index(emu_profiles)
-
-    # Filter systems by target if specified
+    # Build emulator-level validation index from the platform's own
+    # emulators (same scope as verify.py)
     from common import resolve_platform_cores
 
+    validation_index = {}
+    if emu_profiles:
+        validation_index = _build_validation_index(
+            {name: emu_profiles[name] for name in resolve_platform_cores(config, emu_profiles)}
+        )
+
+    # Filter systems by target if specified
     plat_cores = (
         resolve_platform_cores(config, emu_profiles or {}) if target_cores else None
     )

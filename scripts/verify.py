@@ -811,10 +811,18 @@ def verify_platform(
         for f in profile.get("files", []):
             if f.get("hle_fallback"):
                 hle_index[f.get("name", "")] = True
-    validation_index = _build_validation_index(profiles)
+    # Ground truth comes from the emulators the platform runs. A standalone
+    # profile that loads a same-named file of its own (ZEsarUX's 48K
+    # cpc6128.rom against cap32's 32K one) has nothing to say about a
+    # RetroArch pack.
+    plat_cores = resolve_platform_cores(config, profiles)
+    validation_index = _build_validation_index(
+        {name: profiles[name] for name in plat_cores}
+    )
 
     # Filter systems by target
-    plat_cores = resolve_platform_cores(config, profiles) if target_cores else None
+    if not target_cores:
+        plat_cores = None
     verify_systems = filter_systems_by_target(
         config.get("systems", {}),
         profiles,
