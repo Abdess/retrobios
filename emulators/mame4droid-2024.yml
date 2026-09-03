@@ -243,7 +243,7 @@ files:
     required: false
     category: game_data
     description: "crosshair bitmap for player 1"
-    note: "create_bitmap looks for the name set on the input, then crosshair/<gamename>/cross<N>.png, then crosshair/cross<N>.png, and falls back to the bitmap compiled into the binary. crosshair_manager builds one per player and MAX_PLAYERS is 10. No crosshair directory ships with the app."
+    note: "create_bitmap looks for the name set on the input, then crosshair/<gamename>/cross<N>.png, then crosshair/cross<N>.png, and falls back to the bitmap compiled into the binary. crosshair_manager builds one per player and MAX_PLAYERS is 10. No crosshair directory ships with the app: the files here are the compiled-in bitmap of src/emu/crsshair.cpp exported as 100x100 RGBA PNGs in each player colour, white from player 7 on."
     source_ref: "src/emu/crsshair.cpp:174-215,346-358, src/emu/ioport.h:48"
 
   - name: cross2.png

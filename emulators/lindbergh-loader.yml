@@ -262,6 +262,8 @@ files:
       rectangles its own metrics declare. Liberation carries a 2010 and 2012
       digitisation copyright, so it cannot be a 2005 Sega asset.
       Otherwise the fontTGA array in resources/font.h answers the read.
+      The copy here is the fontTGA array of resources/font.h written out, the bytes
+      fread returns for the built-in.
 
   - name: LucidaConsole_12.abc
     system: sega-lindbergh
@@ -290,6 +292,8 @@ files:
       Otherwise the fontABC array in resources/font.h answers the read.
 
   # -- Lindbergh runtime configuration --
+      The copy here is the fontABC array of resources/font.h written out, the bytes
+      fread returns for the built-in.
 
   - name: lindbergrc
     system: sega-lindbergh

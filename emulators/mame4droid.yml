@@ -141,7 +141,7 @@ files:
     required: false
     category: game_data
     description: "BDF font for the MAME menu overlay"
-    note: "Opened from fontpath, which defaults to the installation root. A miss falls back to the font compiled into the binary. A successful load writes a ui.bdc cache next to it."
+    note: "Opened from fontpath, which defaults to the installation root. A miss falls back to the font compiled into the binary. A successful load writes a ui.bdc cache next to it. The 0.139 tree carries no BDF: the built-in was generated from src/emu/uismall.png by png2bdc. The file here is the uismall.bdf MAME committed on 2016-03-20 from that same PNG, which differs in 8 of 191 glyphs (slashed zero, j, |, ~, 0xB4, ß, ø, ÿ) and passes every rule of render_font_load_bdf."
     source_ref: "src/emu/ui.c:245, src/emu/rendfont.c:139-163,430,453, src/emu/emuopts.c:47"
 
   - name: cross1.png
@@ -149,7 +149,7 @@ files:
     required: false
     category: game_data
     description: "crosshair bitmap for player 1"
-    note: "create_bitmap looks in crosshair/<gamename>/ first, then crosshair/, and falls back to the bitmap compiled into the binary. Loaded only for players whose input has a crosshair axis."
+    note: "create_bitmap looks in crosshair/<gamename>/ first, then crosshair/, and falls back to the bitmap compiled into the binary. Loaded only for players whose input has a crosshair axis. No external set was ever shipped: the files here are the compiled-in bitmap of src/emu/crsshair.c exported as 100x100 RGBA PNGs in each player colour."
     source_ref: "src/emu/crsshair.c:169-174, src/emu/emuopts.c:49"
 
   - name: cross2.png
@@ -199,7 +199,7 @@ files:
     required: false
     category: game_data
     description: "crosshair bitmap for player 8"
-    note: "MAX_PLAYERS is 8 in src/emu/inptport.h:29."
+    note: "MAX_PLAYERS is 8 in src/emu/inptport.h:29. crosshair_colors has seven entries, so player 8 reads past the table; the file follows the white that 0.289 assigns beyond the table."
     source_ref: "src/emu/crsshair.c:169-174, src/emu/inptport.h:29"
     aliases: ["cross7.png"]
 
