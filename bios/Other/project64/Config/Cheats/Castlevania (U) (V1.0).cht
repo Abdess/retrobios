@@ -1,0 +1,98 @@
+[F35D5F95-8AFE3D69-C:45]
+Name=Castlevania (U) (V1.0)
+
+$Have All Items
+50000501 0000
+80389C4A 0001
+50000301 0000
+80389C51 0001
+80389C5A 0001
+80389C5B 0001
+80389C5D 0001
+50000E01 0000
+80389C60 0001
+
+$Have Exp Points
+80389C49 0063
+
+$Have Invincibility
+80342BFE 000B
+
+$Infinite\Energy
+80389C3F 0064
+
+$Infinite\Funds
+80389C45 0001
+81389C46 869F
+
+$Infinite\Health
+81389C3E 0064
+
+$Infinite\Red Jewels
+80389C49 0063
+
+$Infinite\Throwing Weapon
+81389C48 0064
+
+$Level Select
+Note=You must use this code on a saved game, because the intro to the first level will mess up the game. Now select the saved game, and hold down the GS button until the level loads. Some of the boss stages will not let you fight the boss unless you re-enter the area. Also, with the part of stage modifier, the second code modifies the part of the level that you are in, and 0000 is the level's start.
+89389C90 ????
+89389C92 0000
+0000 Forest of Silence
+0002 Castle Wall
+0003 Villa
+0004 Inside Villa
+0006 Garden Maze
+0007 Tunnel
+0008 Underground Waterway
+0009 Castle Center
+0010 Tower of Execution
+0011 - Tower of Sorcery
+0012 - Tower of Science
+0013 - Duel Tower
+0014 - Fight With Death/Actrise
+0015 - Castle Keep
+0016 - Intro (Glitch)
+0017 - Clock Tower
+0018 - Final Dracula
+001A - Fight With Maze Boss
+001B - Room of Clocks
+001C - ??
+001D - ??
+
+$Max Power Up
+80389CED 0002
+
+$Never Get Poisoned
+81389C88 0000
+
+$Open All Doors and Gates,No Bosses
+50002A02 0000
+81389BD0 FFFF
+
+$Press L To Levitate
+D0387D7F 0020
+81350810 3FCB
+
+$Status
+80389C88 00??
+01 Good
+08 Vamp
+11 Poison
+22 Good but depressed
+66 Sto
+1F V+P
+
+$Switch From
+Note=This Switch From Cheat lets you switch characters on a saved game For example, if you are Reindhart and you want to be Carrie in the middle of your game save it and then enable this Cheat and press F1. when you start your saved game back up you'll be Carrie instead of Reindhart.
+80389C3D 00??
+00 Carrie to Reindhart
+01 Reindhart to Carrie
+
+$Throwing Weapon Modifier
+81389C42 00??
+00 Nothing
+01 Knives
+02 Exploding Potions
+03 Cross
+04 Axes

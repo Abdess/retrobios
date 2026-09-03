@@ -1,0 +1,56 @@
+[BADDF714-A1FF1B80-C:45]
+Name=Bomberman - Arcade Edition (J) [T-Eng]
+
+$Bomb Select
+8024A3A1 00??
+02 Power Bomb
+03 Jelly Bomb
+04 Shock Wave Bomb
+05 Blue Remote Bomb
+06 Red Beem Bomb
+07 Invisible Mine Bomb
+1D Crazy Bomb
+00 Clear All Special Bombs.
+
+$Bomberman Speed
+8024A3A0 00??
+04 Slow
+08 Normal
+0E Fast
+10 Turbo
+
+$Have\Infinite\Kick
+8024A3A6 0002
+
+$Have\Max Bombs
+8024A39F 00FF
+
+$Have\Max Fire
+8024A39E 00FF
+
+$Infinite\Health Hearts
+8024A3AE 00FF
+
+$Infinite\Lives
+802E1CE7 00FF
+
+$Infinite\Timer
+800FDD72 002A
+
+$Invincible
+Note=Enemies & Bomb Blasts cant harm you.But if you walk & keep laying Bombs it will most likly freeze.so try to avoid constant bombing while walking.Turn cheat to off to go back to normal.
+8024A3A8 00??
+00 Off
+01 On
+
+$Walk through\Blocks
+Note=Walk through Blocks like they are not there.Turn cheat to off to go back to normal.
+8024A3A5 00??
+00 Off
+01 On
+
+$Walk through\Bombs
+Note=Walk through Bombs like they are not there.Turn cheat to off to go back to normal.
+8024A3A6 00??
+00 Off
+01 On

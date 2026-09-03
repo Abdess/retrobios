@@ -1,0 +1,94 @@
+[D741CD80-ACA9B912-C:45]
+Name=Top Gear Overdrive
+
+$[Press F9]\All Cars (All Modes)
+880E990B 000E
+881022F1 000E
+
+$[Press F9]\Jump To Season 6
+881022E8 0005
+
+$Car Select
+D00F50C0 0000
+800F50C0 00??
+00 Default
+01 Mitsubishi Eclipse
+02 Jeep Wrangler
+03 Chevrolet Camaro
+04 Dodge Viper
+05 Hummer H1
+06 Porsche 911 Turbo
+07 Ferrari F40
+08 Chrysler Jeep Jeepster (Prototype)
+09 McLaren F1
+0A Hotdog
+0B Nintendo Power Car
+0C Nintendo 64 Logo
+0D Taco
+0E Donkey In Glass Box
+
+$Infinite\Max Acceleration\Player 1
+800F50CD 0005
+
+$Infinite\Max Acceleration\Player 2
+800F52B9 0005
+
+$Infinite\Max Acceleration\Player 3
+800F54A5 0005
+
+$Infinite\Max Acceleration\Player 4
+800F5691 0005
+
+$Infinite\Max Handling\Player 1
+800F50CC 0005
+
+$Infinite\Max Handling\Player 2
+800F52B8 0005
+
+$Infinite\Max Handling\Player 3
+800F54A4 0005
+
+$Infinite\Max Handling\Player 4
+800F5690 0005
+
+$Infinite\Max Money\Player 1
+800F50C5 000F
+
+$Infinite\Max Money\Player 2
+800F52B1 000F
+
+$Infinite\Max Money\Player 3
+800F549D 000F
+
+$Infinite\Max Money\Player 4
+800F5689 000F
+
+$Infinite\Max Top Speed\Player 1
+800F50CE 0005
+
+$Infinite\Max Top Speed\Player 2
+800F52BA 0005
+
+$Infinite\Max Top Speed\Player 3
+800F54A6 0005
+
+$Infinite\Max Top Speed\Player 4
+800F5692 0005
+
+$Infinite\Nitro\Player 1
+800F50CF 0009
+
+$Infinite\Nitro\Player 2
+800F52BB 0009
+
+$Laps 2 Race
+801186A0 00??
+01 1 Lap
+02 2 laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 6 Laps
+07 7 Laps
+08 8 Laps
+09 9 Laps

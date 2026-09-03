@@ -1,0 +1,37 @@
+[E2D37CF0-F57E4EAE-C:50]
+Name=International Superstar Soccer 64 (E)
+
+$Away Team Scores
+8011A9BF 00??
+00 0 Goal
+01 1 Goal
+02 2 Goals
+03 3 Goals
+04 4 Goals
+05 5 Goals
+06 6 Goals
+07 7 Goals
+08 8 Goals
+14 20 Goals
+1E 30 Goals
+28 40 Goals
+32 50 Goals
+
+$Home Team Scores
+80119F2B 00??
+00 0 Goal
+01 1 Goal
+02 2 Goals
+03 3 Goals
+04 4 Goals
+05 5 Goals
+06 6 Goals
+07 7 Goals
+08 8 Goals
+14 20 Goals
+1E 30 Goals
+28 40 Goals
+32 50 Goals
+
+$Infinite player creation points
+801AC581 003C

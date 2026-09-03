@@ -1,0 +1,578 @@
+﻿/ *************************************************** ********************************
+* Meta informacije *
+**************************************************** ******************************* /
+// O DLL-u
+# 1 # "Bosanski" // ID JEZIKA
+# 2 # "Alen Alic" // Autor
+# 3 # "2.3" // Verzija
+# 4 # "April, 2021" // Datum
+
+// O DLL dijalogu
+# 5 # "Trenutni jezik"
+# 6 # "Autor"
+# 7 # "Verzija"
+# 8 # "Datum"
+# 9 # "Posetite početnu stranicu"
+# 10 # "Baza podataka ROM-a (.RDB)"
+# 11 # "Datoteka šifre šifre (.CHT)"
+# 12 # "Prošireni ROM podaci (.RDX)"
+
+// O INI naslovu
+# 20 # "O konfiguriranju datoteka"
+
+/ *************************************************** ********************************
+* Meni                                                                           *
+**************************************************** ******************************* /
+// Izbornik Datoteke
+# 100 # "Datoteka"
+# 101 # "Otvori ROM"
+# 102 # "ROM i informacije..."
+# 103 # "Pokrenite emulaciju"
+# 104 # "Krajnja emulacija"
+# 105 # "Odaberite ROM direktorijum..."
+# 106 # "Osveži listu ROM-a"
+# 107 # "Najnoviji ROM"
+# 108 # "Najnoviji ROM direktoriji"
+# 109 # "Exit"
+# 110 # "Otvori i kombinovano"
+
+
+// Sistemski meni
+# 120 # "i sistem"
+# 121 # "Poništi"
+# 122 # "Pauza"
+# 123 # "Generiranje bitmape"
+# 124 # "Ograniči FPS"
+# 125 # "I sačuvaj državu"
+# 126 # "Spremi kao ..."
+# 127 # "Stanje opterećenja"
+# 128 # "Učitavanje ..."
+# 129 # "Trenutna ušteda i tata"
+# 130 # "Trikovi ..."
+# 131 # "GS dugme"
+# 132 # "Resume"
+# 133 # "Meko resetiranje"
+# 134 # "Tvrd Reset"
+# 135 # "Zamjena i disk"
+
+// Izbornik mogućnosti
+# 140 # "Opcije"
+# 141 # "i preko cijelog ekrana"
+# 142 # "i uvijek na vrhu"
+# 143 # "Konfiguriranje grafičkog dodatka..."
+# 144 # "Konfiguriranje audio dodatka..."
+# 145 # "Konfiguriranje dodatka kontrolera.."
+# 146 # "Konfiguriranje RSP dodatka..."
+# 147 # "Prikaži upotrebu CPU-a"
+# 148 # "Postavke.."
+
+// Meni za uklanjanje pogrešaka
+# 160 # "i ispravljanje pogrešaka"
+
+// Jezik meni
+# 175 # "Jezik"
+
+// Izbornik pomoći
+# 180 # "Pomoć"
+# 181 # "O Conf & ig datotekama"
+# 182 # "O Projektu64"
+# 183 # "Podrška i forum"
+# 184 # "i početna stranica"
+
+// Trenutni izbornik Slot za spremanje
+# 190 # "Zadano"
+# 191 # "Slot 1"
+# 192 # "Slot 2"
+# 193 # "Slot 3"
+# 194 # "Slot 4"
+# 195 # "Slot 5"
+# 196 # "Slot 6"
+# 197 # "Slot 7"
+# 198 # "Slot 8"
+# 199 # "Slot 9"
+# 200 # "Slot 10"
+# 201 # "Odabran je Slot (%ws)"
+
+// Pojavni meni
+# 210 # "Igraj igru"
+# 211 # "Informacije o ROM-u"
+# 212 # "Uređivanje postavki igre"
+# 213 # "Uredi šifre"
+# 214 # "Grafički dodatak"
+# 215 # "Igraj igru sa diskom"
+
+// Alternativno ime za spremanje mjesta
+# 220 # "Spremanje utora - zadano"
+# 221 # "Spremite utor - 1"
+# 222 # "Spremite utor - 2"
+# 223 # "Spremite utor - 3"
+# 224 # "Spremite utor - 4"
+# 225 # "Spremite utor - 5"
+# 226 # "Spremite utor - 6"
+# 227 # "Spremite utor - 7"
+# 228 # "Spremite utor - 8"
+# 229 # "Spremite utor - 9"
+# 230 # "Spremite utor - 10"
+
+// Opisi menija
+# 250 # "Otvori N64 ROM sliku"
+# 251 # "Prikaži informacije o učitanoj slici"
+# 252 # "Pokrenite emulaciju učitane ROM slike"
+# 253 # "Zaustavljanje emulacije učitane ROM slike"
+# 254 # "Odaberite ROM direktorijum"
+# 255 # "Osveži trenutni popis ROM-a u pregledaču ROM-a"
+# 256 # "Zatvorite ovu aplikaciju"
+# 257 # "Ponovo pokrenite trenutnu ROM sliku (ponovno učitajte sve promjene postavki)"
+# 258 # "Pauziranje / nastavak oponašanja trenutnog pokretačkog ROM-a"
+# 259 # "Stvaranje bitmap slike trenutnog ekrana"
+# 260 # "Ograniči FPS na ispravnu brzinu N64"
+# 261 # "Spremanje trenutnog stanja sustava"
+# 262 # "Spremanje trenutnog stanja sustava na odabranu lokaciju datoteke"
+# 263 # "Učitavanje spremljenog stanja sustava"
+# 264 # "Odaberite sačuvanu datoteku stanja sistema za učitavanje"
+# 265 # "Omogući / onemogući GameShark cheats"
+# 266 # "GameShark koristi se sa određenim varalicama."
+# 267 # "Promjena emulacije iz prozora u režim preko cijelog ekrana."
+# 268 # "Neka prozori ostanu iznad svih ostalih prozora"
+# 269 # "Promjena postavki unutar grafičkog dodatka"
+# 270 # "Promjena postavki unutar audio dodatka"
+# 271 # "Promjena postavki unutar dodatka kontrolera (tj. Postavljanje tipki)"
+# 272 # "Promjena postavki unutar RSP dodatka"
+# 273 # "Prikaži korištenje emulatora CPU-a podijeljeno na različite resurse"
+# 274 # "Pogledajte / promijenite postavke za ovu aplikaciju"
+# 275 # "Pogledajte priručnik za aplikaciju"
+# 276 # "Pogledajte FAQ za aplikaciju"
+# 278 # "O aplikaciji i autorima"
+# 277 # "O autorima datoteka za podršku"
+# 279 # "Otvori prethodno otvorenu ROM sliku"
+# 280 # "Odaberite ovaj direktorij kao svoj ROM direktorij"
+# 281 # "Promjena aplikacije za upotrebu ovog jezika"
+# 282 # "Odaberite ovu lokaciju za spremanje za sačuvano stanje"
+# 283 # "Igraj odabranu igru"
+# 284 # "Informacije o odabranoj igri"
+# 285 # "Uređivanje postavki za odabranu igru"
+# 286 # "Uredi varalice za odabranu igru"
+
+/ *************************************************** ********************************
+* ROM pregledač *
+**************************************************** ******************************* /
+// Polja preglednika ROM
+# 300 # "Naziv datoteke"
+# 301 # "Interno ime"
+# 302 # "Dobro ime"
+# 303 # "Status"
+# 304 # "Veličina ROM-a"
+# 305 # "Napomene (jezgro)"
+# 306 # "Bilješke (zadani dodaci)"
+# 307 # "Bilješke (korisnik)"
+# 308 # "Cartridge ID"
+# 309 # "Vrsta medija"
+# 310 # "Zemlja"
+# 311 # "Programer"
+# 312 # "CRC1"
+# 313 # "CRC2"
+# 314 # "CIC čip"
+# 315 # "Datum objavljivanja"
+# 316 # "Žanr"
+# 317 # "Igrači"
+# 318 # "Prisilne povratne informacije"
+# 319 # "Format datoteke"
+# 321 # "Ime"
+
+// Odaberite ROM
+# 320 # "Odaberi trenutni direktorij ROM-a"
+
+// Poruke
+# 340 # "Loš ROM? Upotrijebite GoodN64 i provjerite je li RDB ažuriran."
+
+/ *************************************************** ********************************
+* Opcije *
+**************************************************** ******************************* /
+// Opcije naslova
+# 400 # "Podešavanja"
+
+// Kartice
+# 401 # "Dodaci"
+# 402 # "Katalozi"
+# 403 # "Opcije"
+# 404 # "Izbor ROM-a"
+# 405 # "Napredno"
+# 406 # "Opće postavke"
+# 407 # "Integracija školjke"
+# 408 # "Napomene"
+# 409 # "Prečice na tastaturi"
+# 410 # "Status"
+# 411 # "Repipiler"
+# 412 # "Zadane vrednosti"
+# 413 # "64DD"
+
+// Dijalog dodataka
+# 420 # "O"
+# 421 # "RSP (procesor signala stvarnosti) dodatak:"
+# 422 # "Video (grafički) dodatak:"
+# 423 # "Audio (zvuk) dodatak:"
+# 424 # "Ulazni (regulator) dodatak:"
+# 425 # "Grafika HLE"
+# 426 # "Audio HLE"
+# 427 # "** Koristite Sistemski Dodatak **"
+
+// Dijalog direktorija
+# 440 # "Imenik dodataka:"
+# 441 # "ROM direktorij:"
+# 442 # "N64 izvorni spremanje imenika:"
+# 443 # "Imenik sačuvanih država:"
+# 444 # "Snimak ekrana:"
+# 445 # "Zadnja mapa iz koje je ROM otvoren"
+# 446 # "Odaberite direktorij dodataka"
+# 447 # "Odaberite ROM direktorijum"
+# 448 # "Odaberite N64 direktorijum izvornih sprema"
+# 449 # "Odabir direktorija spremljenih stanja"
+# 450 # "Odaberite direktorij slike ekrana"
+# 451 # "Imenik pakiranja teksture:"
+# 452 # "Odaberite direktorij paketa teksture"
+
+// Opcije (općenito) Kartica
+# 460 # "Pauziranje emulacije kada prozor nije aktivan"
+# 461 # "Uđite u režim preko cijelog zaslona prilikom umetanja ROM-a"
+# 462 # "Sakrij napredne postavke"
+# 463 # "Zapamti odabrane varalice"
+# 464 # "Onemogući čuvar zaslona prilikom pokretanja ROM-a"
+# 465 # "Brzina prikaza"
+# 466 # "Prikaz brzine:"
+# 467 # "Provjeri da li se Project64 već pokreće"
+# 468 # "Unique Game Save Directory"
+# 469 # "Japanski maloprodajni put 64DD IPL ROM-a:"
+# 470 # "Američki maloprodajni put 64DD IPL ROM-a:"
+# 471 # "Razvoj 64DD IPL ROM putanje:"
+# 472 # "Tip spremanja diska:"
+
+// Kartica Browser Browser
+# 480 # "Maks. Broj zapamćenih ROM-a (0-10):"
+# 481 # "ROM-ovi"
+# 482 # "Maks. Broj zapamćenih ROM-ova (0-10):"
+# 483 # "dirs"
+# 484 # "Koristite ROM pretraživač"
+# 485 # "Koristi rekurziju direktorija"
+# 486 # "Dostupna polja:"
+# 487 # "Redosled polja:"
+# 488 # "Dodaj ->"
+# 489 # "<- Ukloni"
+# 490 # "Gore"
+# 491 # "Dolje"
+# 492 # "Automatski osvježi pretraživač"
+
+// Napredne opcije
+# 500 # "Većina ovih promjena neće stupiti na snagu dok se ne otvori novi ROM ili ne resetira trenutni ROM."
+# 501 # "Osnovne zadane postavke"
+# 502 # "CPU jezgra stil:"
+# 503 # "Sebe mod metode"
+# 504 # "Zadana veličina memorije:"
+# 505 # "Napredno povezivanje blokova"
+# 506 # "Pokrenite emulaciju kada se otvori ROM"
+# 507 # "Uvek nadjačaj zadane postavke sa onima iz RDB-a"
+# 508 # "Automatski komprimiranje spremljenih stanja"
+# 509 # "Omogući uklanjanje pogrešaka"
+# 510 # "Predmemorija"
+# 511 # "PI DMA"
+# 512 # "Početak promijenjen"
+# 513 # "Zaštiti memoriju"
+# 514 # "TLB uklanjanje"
+
+// Opcije ROM-a
+# 520 # "Jezgra CPU jezgre:"
+# 521 # "VI nivo osvežavanja:"
+# 522 # "Veličina memorije:"
+# 523 # "Napredno povezivanje blokova"
+# 524 # "Podrazumevani tip čuvanja:"
+# 525 # "Faktor brojača:"
+# 526 # "Veći međuspremnik kompiliranja"
+# 527 # "Koristi TLB"
+# 528 # "Registriraj predmemoriju"
+# 529 # "Odgoda prekida SI:"
+# 530 # "Brzi SP"
+# 531 # "Zadano"
+# 532 # "RSP audio signal"
+# 533 # "Fiksni vremenski raspored zvuka"
+# 534 # "Metoda pretraživanja funkcije:"
+# 535 # "Prilagođena self mod metoda"
+# 536 # "Sinkronizacija pomoću zvuka"
+# 537 # "Broj AI po bajtu"
+# 538 # "32-bitni motor"
+# 539 # "Odgoda DP prekida"
+
+
+// Osnovni stilovi
+# 540 # "Interpreter"
+# 541 # "Repipiler"
+# 542 # "Sinkroniziranje jezgara"
+
+// Sebican Mod metode
+# 560 # "Nema"
+# 561 # "Predmemorija"
+# 562 # "Zaštiti memoriju"
+# 563 # "Provjera memorije i predmemorije"
+# 564 # "Promjena memorije i predmemorije"
+# 565 # "Provjera unaprijed memorije"
+# 566 # "Izbriši kod u predmemoriji"
+
+// Metoda pretraživanja funkcije
+# 570 # "Tablica fizičkog pretraživanja"
+# 571 # "Virtualna tablica za pretraživanje"
+# 572 # "Promenite memoriju"
+
+// Veličina RDRAM-a
+# 580 # "4 MB"
+# 581 # "8 MB"
+
+// Napredno povezivanje blokova
+# 600 # "Uključeno"
+# 601 # "Isključeno"
+
+// Spremi tip
+# 620 # "Koristi prvo korišten tip čuvanja"
+# 621 # "4-kbitni EEPROM"
+# 622 # "16-kbitni EEPROM"
+# 623 # "SRAM"
+# 624 # "Flash RAM-a"
+
+// Sheb Integration Shell
+# 640 # "Udruženje za proširenje datoteka:"
+
+// Bilješke o ROM-u
+# 660 # "ROM status:"
+# 661 # "Osnovna napomena:"
+# 662 # "Napomena o dodatku:"
+
+// Selektor ubrzivača
+# 680 # "CPU stanje:"
+# 681 # "Stavka iz menija:"
+# 682 # "Trenutni tasteri:"
+# 683 # "Odaberite novi prečac:"
+# 684 # "Trenutno dodeljeno:"
+# 685 # "Dodijeli"
+# 686 # "Ukloni"
+# 687 # "Poništi sve"
+# 688 # "Igra se ne igra"
+# 689 # "Igranje"
+# 690 # "Igra (prozora)"
+# 691 # "Igranje (preko cijelog ekrana)"
+# 692 # "Ključ za otkrivanje"
+
+// Opcija brzine kadrova
+# 700 # "Vertikalni prekidi u sekundi"
+# 701 # "Prikaži liste u sekundi"
+# 702 # "Postotak pune brzine"
+
+// Povećajte brzinu
+# 710 # "Povećajte brzinu igre"
+# 711 # "Smanjivanje brzine igre"
+
+// Dugmi na donjoj stranici
+# 720 # "Poništi stranicu"
+# 721 # "Poništi sve"
+# 722 # "Primjeni"
+# 723 # "Zatvori"
+
+// Disk Save Type
+# 730 # "Puna kopija diska"
+# 731 # "Samo sačuvaj područje"
+
+/ *************************************************** ********************************
+* Informacije o ROM-u *
+**************************************************** ******************************* /
+// Naslov informacije o ROM-u
+# 800 # "Informacije o ROM-u"
+
+// Tekst s informacijama o ROM-u
+# 801 # "Naziv ROM-a:"
+# 802 # "Naziv datoteke:"
+# 803 # "Lokacija:"
+# 804 # "Veličina ROM-a:"
+# 805 # "Cartridge ID:"
+# 806 # "Vrsta medija:"
+# 807 # "Zemlja:"
+# 808 # "CRC1:"
+# 809 # "CRC2:"
+# 810 # "CIC čip:"
+# 811 # "MD5:"
+
+/ *************************************************** ********************************
+* Trikovi *
+**************************************************** ******************************* /
+// Cheat Lista
+# 1000 # "Trikovi"
+# 1001 # "Trikovi:"
+# 1002 # "Napomene:"
+# 1003 # "Označi sve:"
+# 1004 # "Označi sve:"
+
+// Dodaj Cheat
+# 1005 # "Dodaj šifru:"
+# 1006 # "Ime:"
+# 1007 # "Kod:"
+# 1008 # "Umetni"
+# 1009 # "Obriši"
+# 1010 # "Beležnice:"
+# 1011 # "Dodaj u DB:"
+
+// Proširenje koda
+# 1012 # "Proširenja kodova"
+# 1013 # "Molimo odaberite vrijednost koja će se koristiti za:"
+# 1014 # "U redu"
+# 1015 # "Otkaži"
+
+// Digitalna vrijednost
+# 1016 # "Količina cifre"
+# 1017 # "Molimo odaberite vrijednost za:"
+# 1018 # "i vrednost"
+# 1019 # "od"
+# 1020 # "do"
+# 1021 # "i napomene:"
+# 1022 # "Dodaj šifru:"
+# 1023 # "Nova prevara"
+# 1024 # "<adresa> <vrijednost>"
+# 1025 # "Opcije:"
+# 1026 # "<vrijednost> <oznaka>"
+
+// Uredi Cheat
+# 1027 # "Uredi varalica"
+# 1028 # "Ažuriraj šifru"
+# 1029 # "Varalica je promijenjena. \ N \ Želite li ažurirati?"
+# 1030 # "Šifra ažurirana"
+
+// Cheat Popup Menu
+# 1040 # "Dodaj novu šifru..."
+# 1041 # "Uredi"
+# 1042 # "Obriši"
+
+// Uređivač prečaca
+# 1100 # "Poništi prečice"
+# 1101 # "Jeste li sigurni da želite resetirati prečice? \ N \ nOva akcija se ne može poništiti."
+# 1102 # "Meni datoteke"
+# 1103 # "Sistemski meni"
+# 1104 # "Opcije"
+# 1105 # "Spremi slotove"
+
+/ *************************************************** ********************************
+* Prozor za podršku *
+**************************************************** ******************************* /
+# 1200 # "Projekt podrške64"
+# 1201 # "Project64 je softverski paket dizajniran za oponašanje sistema Nintendo64 video igara na računaru sa sistemom Microsoft Windows. To vam omogućuje reprodukciju pravog N64 softvera na gotovo isti način kao što je to slučaj s originalnim hardverskim sistemom. \ N \ nAko vam se sviđa Project64 i izvukli ste neke vrijednosti iz toga, molimo vas da podržite project64 ili kao zahvalnost ili vašu želju da se stalno poboljšava. \ n \ nAko ste podržali project64:"
+# 1202 # "Unesite kôd obavijesti"
+# 1203 # "Projekt podrške64"
+# 1204 # "Nastavi"
+# 1205 # "Unesite kod za podršku"
+# 1206 # "Netačan kod podrške"
+# 1207 # "Hvala"
+# 1208 # "Unesite kod"
+# 1209 # "Unesite kod u e-poštu"
+# 1210 # "OK"
+# 1211 # "Otkaži"
+
+/ *************************************************** ********************************
+* Poruke *
+**************************************************** ******************************* /
+# 2000 # "*** CPU PAUZIRAN ***"
+# 2001 # "Nastavljen procesor"
+# 2002 # "U stalnoj petlji koja se ne može izaći. \ NEmulacija će se sada zaustaviti. \ N \ nProvjerite ROM i njegove postavke."
+# 2003 # "Nije uspela dodeliti memoriju"
+# 2004 # "Zadani ili odabrani video dodatak nedostaje ili je nevažeći. \ N \ nTrebate ući u Postavke i odabrati video (grafički) dodatak. \ NProvjerite da li imate najmanje jednu kompatibilnu datoteku dodataka u svojoj mapi dodataka."
+# 2005 # "Zadani ili odabrani audio dodatak nedostaje ili je neispravan. \ N \ nTrebate ući u Postavke i odabrati audio (zvučni) dodatak. \ NProverite da li imate mapu jedne kompatibilne datoteke dodataka u svojoj mapi dodataka."
+# 2006 # "Zadani ili odabrani RSP dodatak nedostaje ili je nevažeći. \ N \ nTrebate ući u Postavke i odabrati RSP (Reality Signal Processor) dodatak. \ NProvjerite da li imate najmanje jednu kompatibilnu datoteku dodataka u svojoj mapi dodataka. "
+# 2007 # "Zadani ili odabrani ulazni dodatak nedostaje ili je neispravan. \ N \ nTrebate ući u Postavke i odabrati ulazni (regulator) dodatak. \ NProverite da li imate mapu jedne kompatibilne datoteke dodataka u svojoj mapi dodataka."
+# 2008 # "Nije uspjelo učitavanje dodatka:"
+# 2009 # "Nije uspjelo učitavanje riječi. \ N \ nProvjerite ROM i njegove postavke."
+# 2010 # "Otvaranje datoteke za spremanje nije uspjelo"
+# 2011 # "Nije uspio otvoriti EEPROM"
+# 2012 # "Neuspešno otvaranje flash RAM-a"
+# 2013 # "Nije uspelo otvaranje mempak-a"
+# 2014 # "Pokušaj otvaranja zip datoteke nije uspio. \ N \ n Vjerojatno oštećena zip datoteka - pokušajte ručno raspakirati ROM."
+# 2015 # "Pokušaj otvaranja datoteke nije uspio."
+# 2016 # "Došlo je do pogreške prilikom pokušaja otvaranja zip datoteke."
+# 2017 # "Datoteka učitana ne čini se valjanim N64 ROM-om. \ N \ nOvjerite svoje ROM-ove s GoodN64."
+# 2018 # "Nepoznata zemlja"
+# 2019 # "Nepoznati CIC čip"
+# 2020 # "Nepoznati format datoteke"
+# 2021 # "Nepoznata radnja memorije \ n \ nEmulacija je zaustavljena"
+# 2022 # "Neodvršeni R4300i kod kod"
+# 2023 # "Izvođenje iz nekarpiranog prostora. \ N \ nProvjerite ROM i njegove postavke."
+# 2024 # "Čini se da ovo sačuvano stanje ne odgovara tekućem ROM-u. \ N \ nDržave moraju biti spremljene i učitane između 100% identičnih ROM-ova. \ NPosebno REGION i VERSION moraju biti isti. \ NUmetanje ovog stanja je vjerovatno će prouzrokovati pad igre i / ili emulatora. \ n \ n Jeste li sigurni da želite nastaviti s učitavanjem?"
+# 2025 # "Greška"
+# 2026 # "Slijed autorskih prava nije pronađen u LUT-u. Igra više neće funkcionirati."
+# 2027 # "Neuspjeh u zaštiti od kopiranja"
+# 2028 # "Promjena dodatka zahtijeva Project64 za resetiranje tekućeg ROM-a. \ NAko ne želite izgubiti svoje mjesto, odgovorite ne i prvo spremite trenutno stanje. \ N \ nPromijenite dodatke i resetirajte ROM sada?"
+# 2029 # "Promjena dodataka"
+# 2030 # "Emulacija je završena"
+# 2031 # "Emulacija je započela"
+# 2032 # "Nije moguće učitati stanje"
+# 2033 # "Opterećeno stanje"
+# 2034 # "Spremljeno trenutno stanje u"
+# 2035 # "Državni utor"
+# 2036 # "Slika zamjene bajtova"
+# 2037 # "Odabir slike N64"
+# 2038 # "Opterećen"
+# 2039 # "Učitavanje slike"
+# 2040 # "ROM se ne može otvoriti jer se dodaci nisu uspješno inicijalizirali."
+# 2041 # "Jeste li sigurni da zaista želite ovo izbrisati?"
+# 2042 # "Obriši varalice"
+# 2043 # "Naziv varalice se već koristi."
+# 2044 # "Dostigli ste maksimalnu količinu varalica za ovaj ROM."
+# 2045 # "Dodatak inicijalizaciji"
+# 2046 # "Niste odabrali virtualni ključ koji ćete dodijeliti stavci izbornika."
+# 2047 # "Morate odabrati stavku menija kojoj ćete dodijeliti ovaj ključ."
+# 2048 # "Prečac je već dodijeljen drugoj stavci izbornika."
+# 2049 # "Nije odabrana nijedna prečica za uklanjanje."
+# 2050 # "ROM učitan. Čeka da se pokrene emulacija."
+# 2051 # "beta64 verzije Project64 su samo za članove. \ N \ nAko imate račun na www.pj64-emu.com, ne biste trebali vidjeti ovu pogrešku !! \ nPolite da nas kontaktirate na web mjestu."
+# 2052 # "Greška u programu"
+# 2053 # "Nije pronađeno ime datoteke u datoteci 7z"
+# 2054 # "Grafička emulacija niskog nivoa"
+# 2055 # "Grafički LLE nije za opću upotrebu!!! \ nSavjetuje se da ovo koristite samo za testiranje, a ne za igranje igara. \ N \ nPromijenite na grafički LLE?"
+# 2056 # "Audio visoka emulacija"
+# 2057 # "Audio HLE zahtijeva dodatak treće strane!!! \ nAko ne upotrebljavate audio dodatak treće strane koji podržava HLE, nećete čuti zvuk. \ N \ nPromijenite na audio HLE?"
+# 2058 # "Učitana datoteka ne čini se valjanim 64DD IPL ROM-om. \ N \ nOvjerite svoje ROM-ove s GoodN64."
+# 2059 # "Nintendo 64DD Japanski maloprodajni IPL ROM nije pronađen. \ NTreba se reproducirati slike diska sa japanskom regijom 64DD. \ N \ n Molimo odaberite željeni ROM u postavkama."
+# 2061 # "Nintendo 64DD američki maloprodajni IPL ROM nije pronađen. \ NZatravan je za reprodukciju slika diska američke regije 64DD. \ N \ n Molimo odaberite željeni ROM u postavkama."
+# 2062 # "Nintendo 64DD razvojni IPL ROM nije pronađen. \ NZatravan je za reprodukciju slika diska sa razvojem 64DD. \ N \ n Molimo odaberite željeni ROM u postavkama."
+
+/ *************************************************** ********************************
+* Android *
+**************************************************** ******************************* /
+# 3000 # "Podešavanja"
+# 3001 # "Pomoć / Forum"
+# 3002 # "Izveštaj o problemu"
+# 3003 # "O"
+# 3004 # "Nedavno odigrano"
+# 3005 # "Igre"
+# 3006 # "Igra Dir"
+# 3007 # "Odaberite fasciklu za skeniranje"
+# 3008 # "Uključi poddirektoriju"
+# 3009 # "Roditeljska mapa"
+# 3010 # "Katalozi"
+# 3011 # "Interna memorija"
+# 3012 # "Skeniranje..."
+# 3013 # "OK"
+# 3014 # "Otkaži"
+# 3015 # "Informacije"
+# 3016 # "Project64 za Android"
+# 3017 # "Licenca"
+# 3018 # "Revizija"
+# 3019 # "Project64 za Android \ u2122 je luka za Windows verziju Projekta64. Verzija Android \ u2122 može igrati većinu N64 igara."
+# 3020 # "Autori Projekta64."
+# 3021 # "Razmirica"
+
+// U meniju igre
+# 3100 # "Podešavanja"
+# 3101 # "Spremi državu"
+# 3102 # "Stanje opterećenja"
+# 3103 # "Kraj emulacije"
+# 3104 # "Pauza"
+# 3105 # "Nastavi"
+# 3106 # "Brzina igre"
+# 3107 # "Trenutno stanje uštede..."
+# 3108 # "Automatski"
+# 3109 # "Slot"
+# 3110 # "Poništi"
+# 3111 # "Opcije za uklanjanje pogrešaka"
+# 3112 # "Resetovanje funkcija vremena"
+# 3113 # "Baci funkcija vremena"

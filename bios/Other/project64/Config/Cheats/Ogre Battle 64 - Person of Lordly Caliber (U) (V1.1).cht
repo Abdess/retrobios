@@ -1,0 +1,83 @@
+[0ADAECA7-B17F9795-C:45]
+Name=Ogre Battle 64 - Person of Lordly Caliber (U) (V1.1)
+
+$Always Have Retreat & Elem Pedra Opened
+Note=Do not put this on until in-game or the game will freeze.
+D01A1C92 0000
+811A1C92 0003
+
+$Day Always 00
+811F108C 0000
+
+$Finish All Levels
+81196AA6 5454
+81196AA8 5140
+81196AAA 4555
+81196AAC 9514
+81196AAE 5515
+
+$Hour Always
+80196A4D 00??
+00 (0 Hour - 24:00 PM - Midnight)
+01 (01:00 AM)
+02 (02:00 AM)
+03 (03:00 AM)
+04 (04:00 AM)
+05 (05:00 AM)
+06 (06:00 AM)
+07 (07:00 AM)
+08 (08:00 AM)
+09 (09:00 AM)
+0A (10:00 AM)
+0B (11:00 AM)
+0C (12:00 PM - Noon)
+0D (13:00 - 1 PM)
+0E (14:00 - 2 PM)
+0F (15:00 - 3 PM)
+10 (16:00 - 4 PM)
+11 (17:00 - 5 PM)
+12 (18:00 - 6 PM)
+13 (19:00 - 7 PM)
+14 (20:00 - 8 PM)
+15 (21:00 - 9 PM)
+16 (22:00 - 10 PM)
+17 (23:00 - 11 PM)
+
+$Infinite Goth
+81196A8E FFFF
+
+$Magnus\Infinite HP
+81193C30 03E7
+
+$Magnus\Level 99
+80193C2B 0063
+
+$Magnus\Max Agi
+81193C3C 03E7
+
+$Magnus\Max Dex
+81193C3E 03E7
+
+$Magnus\Max HP
+81193C2E 03E7
+
+$Magnus\Max Int
+81193C38 03E7
+
+$Magnus\Max Mem
+81193C3A 03E7
+
+$Magnus\Max Str
+81193C34 03E7
+
+$Magnus\Max Vit
+81193C36 03E7
+
+$Max Goth
+81196A8C 0098
+81196A8E 967F
+
+$Open All Paths
+81196AA0 01FF
+81196AA2 677F
+81196AA4 FCFF

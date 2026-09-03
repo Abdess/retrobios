@@ -1,0 +1,71 @@
+[1185EC85-4B5A7731-C:50]
+Name=Extreme-G XG2 (E) (M5)
+
+$[Screen Hud Clear]
+Note=If you are using a Plugin other then Jabos 1.5 and can not see through the Thick Hud on the Screen. then Let the game load 1st before Putting this code on,Or it will give an error and Freeze
+80092C6B 0004
+
+$Access\All Levels & Superbikes
+50000304 0000
+80183A0F 0001
+
+$Access\All Secret Characters
+Note=This code is Fantastic, You have 12 characters to choose from to you race without any bike, just on foot
+50000C04 0000
+80183A27 0001
+
+$Access\All Tracks
+50000BD8 0000
+80182FC7 0001
+50000CD8 0000
+80182EF3 0001
+50000CD8 0000
+80182EF7 0001
+50000CD8 0000
+80182EFB 0001
+50000CD8 0000
+80182EFF 0001
+50000CD8 0000
+80182F03 0001
+50000CD8 0000
+80182F07 0001
+
+$Infinite Lasers\Player 1
+80170BD9 00C8
+
+$Infinite Lasers\Player 2
+80171241 00C8
+
+$Infinite Lasers\Player 3
+801718A9 00C8
+
+$Infinite Lasers\Player 4
+80171F11 00C8
+
+$Infinite Nitros\Player 1
+80170BA3 0004
+80170BA7 0004
+
+$Infinite Nitros\Player 2
+8017120B 0004
+8017120F 0004
+
+$Infinite Nitros\Player 3
+80171873 0004
+80171877 0004
+
+$Infinite Nitros\Player 4
+80171EDB 0004
+80171EDF 0004
+
+$Infinite Shield\Player 1
+80170BCD 00C8
+
+$Infinite Shield\Player 2
+80171235 00C8
+
+$Infinite Shield\Player 3
+8017189D 00C8
+
+$Infinite Shield\Player 4
+80171F05 00C8

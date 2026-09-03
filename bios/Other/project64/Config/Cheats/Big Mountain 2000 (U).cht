@@ -1,0 +1,85 @@
+[08FFA4B7-01F453B6-C:45]
+Name=Big Mountain 2000 (U)
+
+$All Boards Complete
+50001802 0000
+810B3578 0001
+
+$Always 1st/Low Time
+81350C02 0000
+80350C17 0063
+
+$Free Ride Complete\Stage 1-Boarder
+800B357A 0001
+
+$Free Ride Complete\Stage 1-Skier
+800B3578 0001
+
+$Free Ride Complete\Stage 2-Boarder
+800B3586 0001
+
+$Free Ride Complete\Stage 2-Skier
+800B3584 0001
+
+$Free Ride Complete\Stage 3-Boarder
+800B3592 0001
+
+$Free Ride Complete\Stage 3-Skier
+800B3590 0001
+
+$Free Ride Complete\Stage 4-Boarder
+800B359E 0001
+
+$Free Ride Complete\Stage 4-Skier
+800B359C 0001
+
+$Giant Slalom Complete\Stage 1-Boarder
+800B3582 0001
+
+$Giant Slalom Complete\Stage 1-Skier
+800B3580 0001
+
+$Giant Slalom Complete\Stage 2-Boarder
+800B358E 0001
+
+$Giant Slalom Complete\Stage 2-Skier
+800B358C 0001
+
+$Giant Slalom Complete\Stage 3-Boarder
+800B359A 0001
+
+$Giant Slalom Complete\Stage 3-Skier
+800B3598 0001
+
+$Giant Slalom Complete\Stage 4-Boarder
+800B35A6 0001
+
+$Giant Slalom Complete\Stage 4-Skier
+800B35A4 0001
+
+$Infinite Stamina
+8034F798 0012
+
+$Slalom Complete\Stage 1-Boarder
+800B357E 0001
+
+$Slalom Complete\Stage 1-Skier
+800B357C 0001
+
+$Slalom Complete\Stage 2-Boarder
+800B358A 0001
+
+$Slalom Complete\Stage 2-Skier
+800B3588 0001
+
+$Slalom Complete\Stage 3-Boarder
+800B3596 0001
+
+$Slalom Complete\Stage 3-Skier
+800B3594 0001
+
+$Slalom Complete\Stage 4-Boarder
+800B35A2 0001
+
+$Slalom Complete\Stage 4-Skier
+800B35A0 0001

@@ -1,0 +1,44 @@
+[4C261323-4F295E1A-C:44]
+Name=Disney's Tarzan (G)
+
+$Access Level Select
+Note=On the main menu Scroll down to make CHEATS visible to go into Level Select.For in-Game Cheats,Pause gameplay.
+810DD50C 8001
+
+$Have\All TARZAN Letters
+800DD515 00FF
+
+$Have\Coins Collected 100%
+800DD547 0064
+
+$Have\Full Portrait
+800DD514 00FF
+
+$Have\Level & Tokens Completed 100%
+800DD51F 0000
+800DD520 0001
+800DD521 0000
+
+$Infinite\Bonus Timer
+Note=This is For All Timers on Bonus Levels
+801736DE 0025
+
+$Infinite\Green Weapon
+811921F6 0063
+
+$Infinite\Health
+81192320 0120
+
+$Infinite\Lives
+800DD542 00??
+03 3 Lives
+63 99 Lives
+
+$Infinite\Purple Weapon
+811921FA 0063
+
+$Infinite\Red Weapon
+811921F8 0063
+
+$Press GS For\Sabor Attacks\Sabor 1 Hit Kill
+8924A23E 0001

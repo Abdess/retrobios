@@ -1,0 +1,50 @@
+[19AB29AF-C71BCD28-C:50]
+Name=Paper Mario (E) (M4)
+
+$Access\all members in your party
+50000C08 0000
+8010DDAC 0001
+
+$Access\All Star Spirits
+Note=Disable this code as soon as you have reached level 8, or everything will be removed again
+8110E01E 0007
+
+$Access\Infinite Coins
+8110DD9C 03E7
+
+$Access\Infinite Star Spirits
+8010E020 0007
+
+$Access\Level 99
+8010DD99 0063
+
+$Access\Max Badge Points
+8010DD98 00??
+3C 60 Badge Points
+7F 127 Badge Points
+
+$Access\Max Star Energy
+8010E01E 0007
+
+$Access\Max Star Pieces
+8010DD9F 0063
+
+$Access\Max Star Points
+Note=You will level up, everytime you get a Star point
+8010DDA0 0063
+
+$Access\Ultra Rank
+Note=This will give you Goombario,Kooper,Bombette,Parakarry,Bow Watt, Sushie & Lakilester
+50000C08 0000
+8010DDAD 0002
+50000C08 0000
+8010DDED 0002
+
+$Infinite & Max HP + FP
+Note=Do not enable this code before you have made a save, when a new game is started up.
+50000601 0000
+8010DD91 0063
+
+$Press L Button  For Moon Jump
+D0071337 0020
+8010DAF4 0043

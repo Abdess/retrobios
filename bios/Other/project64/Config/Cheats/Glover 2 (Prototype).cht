@@ -1,0 +1,91 @@
+[B7F40BCF-553556A5-C:45]
+Name=Glover 2 (Prototype)
+
+$Have Spells\Ball Bearing
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA67C 0006
+
+$Have Spells\Balloon
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA7BC 0006
+
+$Have Spells\Bowling Ball
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA5FC 0006
+
+$Have Spells\Boxing Glove
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA8BC 000E
+
+$Have Spells\Bungee
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA77C 000E
+
+$Have Spells\Fat Glover
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA97C 001E
+
+$Have Spells\First Aid
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA93C 001E
+
+$Have Spells\Gauntlet
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA87C 001E
+
+$Have Spells\Glass Cutter
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA8FC 000E
+
+$Have Spells\Possess
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA83C 0006
+
+$Have Spells\Rubber Ball
+Note=Do not enable until you have spoken to the Cooking Pot and gone out side for the 1st time
+801DA5BC 0006
+
+$Have Spells\Speed-Up
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA6FC 000E
+
+$Have Spells\Sucker Ball
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA63C 000E
+
+$Have Spells\Super-Slam
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA7FC 0016
+
+$Have Spells\Teleport
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA73C 000E
+
+$Have Spells\Yo-Yo
+Note=Do not enable until you have spoken to the Cooking Pot and Collected all the ingredients and your Bro has made his first Spell and fled. It is now safe to turn on this cheat.
+801DA6BC 0016
+
+$Infinite\Max Health
+Note=Do not enable until you have spoken to the Cooking Pot and gone out side for the 1st time
+8027069B 0006
+8027069D 0006
+802881CB 0006
+
+$Infinite\Max Lives
+80288127 00FF
+80270697 00FF
+
+$Infinite\Max Magical\Ball Energy
+Note=Do not enable until you have spoken to the Cooking Pot and gone out side for the 1st time
+802706A3 00FF
+80288313 00FF
+
+$Infinite\Max Magical\Spell Energy
+Note=Do not enable until you have spoken to the Cooking Pot and gone out side for the 1st time
+802706A1 00FF
+8028826F 00FF
+
+$Infinite\Max Rank Bonus
+Note=Do not enable until you have spoken to the Cooking Pot and gone out side for the 1st time
+802706FD 00FF
+802883B7 00FF

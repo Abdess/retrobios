@@ -1,0 +1,26 @@
+[AEEF2F45-F97E30F1-C:45]
+Name=Fighter Destiny 2 (U)
+
+$Low Time
+800BA390 0001
+
+$Max Attack Power-Fighters Arena
+801FBF6E 00C7
+
+$Max Health Power-Fighters Arena
+801FBF6F 00C7
+
+$Max Recovery-Fighters Arena
+801FBF70 00C7
+
+$P1 Always Lose Judging
+801F727A 0000
+
+$P1 Always Win Judging
+801F727A 00FF
+
+$P2 Always Lose Judging
+801F53AE 0000
+
+$P2 Always Win Judging
+801F53AE 00FF

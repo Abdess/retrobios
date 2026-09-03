@@ -1,0 +1,75 @@
+[4C52BBB2-CEAB0F6B-C:45]
+Name=Army Men - Air Combat (U)
+
+$Always Play Level Modifier
+800B254C 00??
+00 Mission 1-Plastic Pandemonium
+01 Mission 2-Going Car-razy
+02 Mission 3-The Train That Could
+03 Mission 4-Tan Terror-Tory
+04 Mission 5-Bug Bath
+05 Mission 6-Uninvited Guests
+06 Mission 7-Ants In The Pants
+07 Mission 8-Saucer Attack
+08 Mission 9-The Heat is On
+09 Mission 10-The Melting Pot
+0A Mission 11-River Rapids Riot
+0B Mission 12-Nighttime Teddy
+0C Mission 13-Demolition Time
+0D Mission 14-Pick Up The Pieces
+0E Mission 15-Have An Ice Day
+0F Mission 16-Plastro's Revenge
+10 Mission 17-Bug Hunt: Chew Chew Bug-B-Q
+11 Mission 18-Bug Hunt: Crispy Critters
+12 Mission 19-Flag-Nab-It: Fort Frenzy
+13 Mission 20-Flag-Nab-it: Freezer Burn
+14 Mission 21-Food Fight: Picnic Panic
+15 Mission 22-Food Fight: Cherry Surprise
+16 Mission 23-Rescue: Don't Feed The Crabs
+17 Mission 24-Rescue: Tide Pool Terror
+
+$Co-Pilot Modifier
+800B245C 00??
+00 Lt. James Marshall "Woodstock"
+01 Lt. John Lawless "Hardcore"
+02 Lt. Dave Parker "Rawhide"
+03 Lt. Felicity Wannamaker "Bombshell"
+04 Sergeant Hawk "Sarge" (Hidden Character)
+
+$Helicopter Modifier
+800B2534 00??
+01 Huey
+02 Chinook (Hidden)
+03 Super Stallion (Hidden)
+04 Apache (Hidden)
+
+$Start On Play Level Modifier
+D00B254C 0000
+800B254C 00??
+00 Mission 1-Plastic Pandemonium
+01 Mission 2-Going Car-razy
+02 Mission 3-The Train That Could
+03 Mission 4-Tan Terror-Tory
+04 Mission 5-Bug Bath
+05 Mission 6-Uninvited Guests
+06 Mission 7-Ants In The Pants
+07 Mission 8-Saucer Attack
+08 Mission 9-The Heat is On
+09 Mission 10-The Melting Pot
+0A Mission 11-River Rapids Riot
+0B Mission 12-Nighttime Teddy
+0C Mission 13-Demolition Time
+0D Mission 14-Pick Up The Pieces
+0E Mission 15-Have An Ice Day
+0F Mission 16-Plastro's Revenge
+10 Mission 17-Bug Hunt: Chew Chew Bug-B-Q
+11 Mission 18-Bug Hunt: Crispy Critters
+12 Mission 19-Flag-Nab-It: Fort Frenzy
+13 Mission 20-Flag-Nab-it: Freezer Burn
+14 Mission 21-Food Fight: Picnic Panic
+15 Mission 22-Food Fight: Cherry Surprise
+16 Mission 23-Rescue: Don't Feed The Crabs
+17 Mission 24-Rescue: Tide Pool Terror
+
+$Unlock All Planes
+810B252A 0105

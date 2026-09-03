@@ -1,0 +1,41 @@
+[EAE6ACE2-020B4384-C:50]
+Name=Star Wars Episode I - Battle for Naboo (E)
+
+$2X Secondary Weapons
+8104C62A 0080
+
+$Access All Platinium Medals
+50001301 0000
+8004C63D 0004
+
+$Accuracy 100%
+8105C896 0064
+8105C89A 0064
+
+$Advanced Weapons,Shields & Extra Ships
+8104C636 00FF
+
+$Always Pass Mission
+8105C88E 0001
+
+$Bonus Collected
+Note=Where Bonus Are Available
+8005C89F 0002
+
+$Completion Time 0:00
+8105C892 0000
+
+$Enemies Destroyed 756
+8005C89D 03E7
+
+$Friendly Saves 756
+8005C89E 03E7
+
+$Infinite Lives
+80067553 03E7
+
+$Level Select
+8004C650 0013
+
+$Lives Remaining 756
+8005C8A0 03E7

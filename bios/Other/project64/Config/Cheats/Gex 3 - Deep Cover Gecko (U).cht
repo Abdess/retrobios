@@ -1,0 +1,13 @@
+[3EDC7E12-E26C1CC9-C:45]
+Name=Gex 3 - Deep Cover Gecko (U)
+
+$Extra Flies
+D00A54DF 0000
+800A54DF 0032
+
+$Infinite Health
+800A54D9 0004
+
+$Start With 50 Remotes
+D00A54EB 0000
+800A54EB 0032

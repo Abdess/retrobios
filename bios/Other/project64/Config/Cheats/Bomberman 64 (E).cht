@@ -1,0 +1,28 @@
+[5A160336-BC7B37B0-C:50]
+Name=Bomberman 64 (E)
+
+$All Levels & Stages Unlocked
+50001804 0000
+8008E5CF 0001
+
+$Have All Gold Cards
+8008E575 00FF
+8108E576 FFFF
+8108E578 FFFF
+8108E57A FFFF
+8108E57C FFFF
+
+$Infinite Red Pumped-Up Bombs
+802AC643 0004
+
+$Infinite\Credits
+802AC61B 0063
+
+$Infinite\Gems
+802AC61F 0063
+
+$Infinite\Lives
+802AC617 0063
+
+$Infinite\Time
+802AC633 0000

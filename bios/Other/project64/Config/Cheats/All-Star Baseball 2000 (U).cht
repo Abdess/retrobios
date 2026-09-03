@@ -1,0 +1,60 @@
+[5E547A4D-90E60795-C:45]
+Name=All-Star Baseball 2000 (U)
+
+$Character Creation\Max\Accuracy
+81115A20 4170
+
+$Character Creation\Max\Arm Str.
+81115A4C 4170
+
+$Character Creation\Max\Bunting
+81115A38 4170
+
+$Character Creation\Max\Clutch
+81115A54 4170
+
+$Character Creation\Max\Contact
+81115A28 4170
+
+$Character Creation\Max\Defense
+81115A48 4170
+
+$Character Creation\Max\Power
+81115A2C 4170
+
+$Character Creation\Max\Speed
+81115A44 4170
+
+$Character Creation\Max\Stamina
+81115A24 4170
+
+$Character Creation\Max\Streak
+81115A50 4170
+
+$Character Creation\Max\VS LHB
+81115A3C 4170
+
+$Character Creation\Max\VS LHP
+81115A30 4170
+
+$Character Creation\Max\VS RHB
+81115A40 4170
+
+$Character Creation\Max\VS RHP
+81115A34 4170
+
+$Infinite\Balls
+8006E4DF 0000
+
+$Infinite\Character Creation Points
+81103350 4170
+
+$Infinite\Outs
+8006E4E3 0000
+
+$Infinite\Pitch Type Creation Points
+811039BC 4170
+811039C0 4170
+
+$Infinite\Strikes
+8006E4E1 0000

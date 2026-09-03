@@ -1,0 +1,77 @@
+[4998DDBB-F7B7AEBC-C:45]
+Name=Nuclear Strike 64 (U)
+
+$Agility
+800A973D 0001
+
+$Auto Win Scenario
+800A9741 0001
+
+$Debug Menu
+800A9740 0001
+
+$Double MPG
+800A9735 0001
+
+$Infinite\Ammo
+800A9731 0001
+
+$Infinite\Attempts
+800A9732 0001
+
+$Infinite\Chaingun
+800A9737 0001
+
+$Infinite\Fuel
+800A9733 0001
+
+$Infinite\Lives
+800A5DF0 0009
+
+$Infinite\Missiles
+800A9739 0001
+
+$Infinite\Rockets
+800A9738 0001
+
+$Infinite\Wingtips
+800A973A 0001
+
+$Invulnerability
+800A9730 0001
+
+$Level Skip
+800A973F 0001
+
+$Max Armor Increased 50%
+800A973C 0001
+
+$Overhead View
+800A973E 0001
+
+$Play Mission\1
+800A5DF1 0000
+
+$Play Mission\2
+800A5DF1 0001
+
+$Play Mission\3
+800A5DF1 0002
+
+$Play Mission\4
+800A5DF1 0003
+
+$Play Mission\5
+800A5DF1 0004
+
+$Play Mission\6
+800A5DF1 0005
+
+$Quad Damage
+800A9736 0001
+
+$Stealth Mode
+800A9734 0001
+
+$Wingtips Do Double Damage
+800A973B 0001

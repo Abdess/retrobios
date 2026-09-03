@@ -1,0 +1,32 @@
+[D2BE2F14-38453788-C:45]
+Name=WWF Attitude (U)
+
+$0% in Move List
+81135620 0000
+
+$Enable Everything
+8112E21C F000
+8112E21E 09FF
+8112E220 FFFF
+8112E222 FFFF
+
+$Infinite Creation Points
+80161313 0000
+
+$Max\Charisma
+8014E3EC 000A
+
+$Max\Mat Skills
+8014E3ED 000A
+
+$Max\Recovery
+8014E3EB 000A
+
+$Max\Speed
+8014E3EA 000A
+
+$Max\Strength
+8014E3E8 000A
+
+$Max\Toughness
+8014E3E9 000A

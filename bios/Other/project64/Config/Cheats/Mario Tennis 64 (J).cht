@@ -1,0 +1,22 @@
+[3A6C42B5-1ACADA1B-C:4A]
+Name=Mario Tennis 64 (J)
+
+$Have All\Characters Available
+8105DEB8 FFFF
+
+$Have All\Courts Available
+8105DEBC FFFF
+
+$Score\Player 1
+8014B1DA 00??
+00 0
+01 15
+02 30
+03 40
+
+$Score\Player 2
+8014B1DB 00??
+00 0
+01 15
+02 30
+03 40

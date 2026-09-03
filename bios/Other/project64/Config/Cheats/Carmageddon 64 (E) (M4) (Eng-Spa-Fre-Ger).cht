@@ -1,0 +1,73 @@
+[580162EC-E3108BF1-C:58]
+Name=Carmageddon 64 (E) (M4) (Eng-Spa-Fre-Ger)
+
+$Freeze Timer at 04:59
+Note=Do not enable until count down to race is finished
+811BDB9E 3A70
+
+$Have All Groups Completed
+Note=This gives you all Cups for all Groups.
+50002801 0000
+801BDCDC 0002
+
+$Have Everything Unlocked
+Note=Pause Game: Use Control Stick, to scroll the Cheat Menu. Press A, to activate Cheats. This will unlock everything and also be replacing all the Zombies with Pre-Historic Dinosaurs.
+801BDDBD 000F
+
+$Have Infinite\Free Repairs
+81097844 ????
+0BBB On
+0000 Off
+
+$Have Infinite\Frozen Opponents
+810978A4 ????
+0BBB On
+0000 Off
+
+$Have Infinite\Grip-O-Matic Tires
+810979DC ????
+0BBB On
+0000 Off
+
+$Have Infinite\Hot Rod
+810977E4 ????
+0BBB On
+0000 Off
+
+$Have Infinite\Invunerability
+8109782C ????
+0BBB On
+0000 Off
+
+$Have Infinite\Mega Turbo
+810977CC ????
+0BBB On
+0000 Off
+
+$Have Infinite\Mine Dropping Ability
+81097A98 ????
+0064 On
+0000 Off
+
+$Have Infinite\Turbo
+810977B4 ????
+0BBB On
+0000 Off
+
+$Have Infinite\Turbo Nitrous
+810977FC ????
+0BBB On
+0000 Off
+
+$Have Infinite\Underwater Ability
+81097874 ????
+0BBB On
+0000 Off
+
+$Max Credits
+Note=This is also Infinite until disabled
+811BDC1B FFFF
+
+$Max Kills
+Note=This will automatically Clear the stage if enabled and go back to the stage menu
+81094596 01F4

@@ -1,0 +1,15 @@
+[07F3B276-EC8F3D39-C:45]
+Name=South Park Rally (U)
+
+$Have All\Races
+81088756 FFFF
+
+$Have All\Tracks
+8108875A FFFF
+
+$Infinite Credits
+8008D659 0063
+
+$Unlock All Characters & Extra Cheats
+81088750 FFFF
+81088752 FFFF

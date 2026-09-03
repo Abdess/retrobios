@@ -1,0 +1,41 @@
+[BE76EDFF-20452D09-C:45]
+Name=NFL Quarterback Club 99 (U)
+
+$Away Team\Infinite Time Outs
+8004C62E 0003
+
+$Away Team\No Time Outs
+8004C62E 0000
+
+$Home Team\Infinite Time Outs
+8004C0B6 0003
+
+$Home Team\No Time Outs
+8004C0B6 0000
+
+$Infinite\Character Creation Points
+81072F30 015E
+
+$Infinite\Time to Choose Play
+81080152 0028
+
+$Max\Accuracy
+8106FDB8 0064
+
+$Max\Catch
+8106FDC2 0064
+
+$Max\Endurance
+8106FDC4 0064
+
+$Max\Hands
+8106FDBE 0064
+
+$Max\Range
+8106FDBA 0064
+
+$Max\Scramble
+8106FDBC 0064
+
+$Max\Speed
+8106FDC0 0064

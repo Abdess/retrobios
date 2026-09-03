@@ -1,0 +1,13 @@
+[596E145B-F7D9879F-C:50]
+Name=Diddy Kong Racing (E) (M3) (V1.1)
+
+$Fifty Frames
+Note=Identical location to the NTSC address
+80079E7B 0003
+
+$Widescreen
+81066246 3FE3
+81066396 3FE3
+810663FE 3FE3
+8107037A 3740
+811267A4 3FCE

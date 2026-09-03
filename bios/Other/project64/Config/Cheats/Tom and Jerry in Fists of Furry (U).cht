@@ -1,0 +1,96 @@
+[63E7391C-E6CCEA33-C:45]
+Name=Tom and Jerry in Fists of Furry (U)
+
+$Always Have Weapon Options\Player 1
+810E2994 00??
+79 Anvil
+03 Club
+04 Bird bath
+08 Broom
+09 NCube knife
+0A NCube missiles
+0B Chair
+0C Champagne
+0E Chicken
+0F Crate
+14 Deck chair
+16 Egg
+1A Fish
+1D Gardeners Fork
+1E Frying Pan
+1F Wooden Chair
+29 Bouy
+2A Mallet
+2B Watermelon
+2D Milk Bottle
+39 Plank
+41 Rolling Pin
+46 Spade
+47 Stool
+48 Tennis Racket
+4E Spanner
+55 Stick
+63 Blue Swordfish
+64 Saucepan
+65 Wooden Spoon
+6B Stool
+6D Bee hive
+78 Mooses head
+
+$Always Have Weapon Options\Player 2
+810E2C6C 00??
+79 Anvil
+03 Club
+04 Bird bath
+08 Broom
+09 NCube knife
+0A NCube missiles
+0B Chair
+0C Champagne
+0E Chicken
+0F Crate
+14 Deck chair
+16 Egg
+1A Fish
+1D Gardeners Fork
+1E Frying Pan
+1F Wooden Chair
+29 Bouy
+2A Mallet
+2B Watermelon
+2D Milk Bottle
+39 Plank
+41 Rolling Pin
+46 Spade
+47 Stool
+48 Tennis Racket
+4E Spanner
+55 Stick
+63 Blue Swordfish
+64 Saucepan
+65 Wooden Spoon
+6B Stool
+6D Bee hive
+78 Mooses head
+
+$Infinite Health\Player 1
+810E279C 42C8
+
+$Infinite Health\Player 2
+810E2A74 42C8
+
+$Infinite Time
+810FED4C 42F0
+
+$One Hit To Kill\Player 1
+810E2A74 3F80
+
+$One Hit To Kill\Player 2
+810E2D4C 3F80
+
+$Open All Versus Arenas
+810E44F4 03FF
+
+$Unlock All Characters
+Note=This Gives you all Characters to choose from plus fixes A freeze on the Charecter Select Menu by having it on
+810E44F2 00FF

@@ -1,0 +1,106 @@
+[1FBAF161-2C1C54F1-C:41]
+Name=1080 Snowboarding (JU) (M2)
+
+$Enable All Levels & Boarders
+80255089 00FF
+8025508B 0005
+81255096 FCFF
+80255098 0007
+
+$Have All\Contest First Place Done
+80244098 0007
+
+$Have All\Match Levels Completed
+8025508A 0005
+
+$Have All\Trick Attacks Done
+81255096 FCFF
+
+$Infinite Damage All Players & Levels
+803F4C3D 0000
+
+$Infinite Lives & Continues
+8026B1CB 0003
+
+$Open Level Character Select
+Note=With these codes, you have to press the buttons listed below when you are viewing a certain boarders stats. Highlight Akari Hayami's stats, and then hold down the C-Left button and then press the A button to be the Crystal Boarder. Highlight Kensuke Kimachi's stats, and then hold down the C-Up button and then press the A button to be the Metal Boarder. Hightlight Rob Haywood's stats, and then hold down the C-Right button and then press the A button to be the Panda Boarder
+8125508A 00??
+01 Easy Level
+02 Easy & Normal Level
+03 Easy Normal & Hard Levels
+04 Easy Normal Hard Levels & Crystal Boarder
+05 Easy Normal Hard Levels & Crystal & Metal Boarders
+
+$Play As
+800200E7 00??
+00 Dion Blaster
+01 Kensuke Kimachi
+02 Akari Hayami
+03 Ricky Winterborn
+04 Rob Haywood
+05 Silver Boarder
+06 Gold Boarder
+07 Panda Boarder
+
+$Stop Timer\Contest\Air Make
+80319CCA 00C5
+
+$Stop Timer\Contest\Crystal Lake
+8029C1EA 00C5
+
+$Stop Timer\Contest\Crystal Peak
+802A89AA 00C5
+
+$Stop Timer\Contest\Golden Forest
+802A6E4A 00C5
+
+$Stop Timer\Contest\Half Pipe
+802F530A 00C5
+
+$Stop Timer\Time Attack\Air Make
+8031AB5A 0000
+
+$Stop Timer\Time Attack\Crystal Lake
+802A593A 0000
+
+$Stop Timer\Time Attack\Crystal Peak
+802B2CDA 0000
+
+$Stop Timer\Time Attack\Deadly Fall
+802CF67A 0000
+
+$Stop Timer\Time Attack\Dragon Cave
+802C148A 0000
+
+$Stop Timer\Time Attack\Golden Forrest
+802B146A 0000
+
+$Stop Timer\Time Attack\Half Pipe
+802F649A 0000
+
+$Stop Timer\Time Attack\Mountain Village
+802CBA6A 0000
+
+$Stop Timer\Trick Attack\Air Make
+8031ABCA 00C5
+
+$Stop Timer\Trick Attack\Crystal Lake
+8029F77A 00C5
+
+$Stop Timer\Trick Attack\Crystal Peak
+802AC9FA 00C5
+
+$Stop Timer\Trick Attack\Deadly Fall
+802C8F1A 00C5
+
+$Stop Timer\Trick Attack\Dragon Cave
+802BAE4A 00C5
+
+$Stop Timer\Trick Attack\Golden Forrest
+802AB06A 00C5
+
+$Stop Timer\Trick Attack\Half Pipe
+802F650A 00C5
+
+$Stop Timer\Trick Attack\Mountain Village
+802C51EA 00C5

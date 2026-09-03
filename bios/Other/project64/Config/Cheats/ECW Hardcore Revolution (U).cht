@@ -1,0 +1,696 @@
+[BDF9766D-BD068D70-C:45]
+Name=ECW Hardcore Revolution (U)
+
+$1 On 2 & 2 On 1 Modes\Player 1\Can't Be Counted Out
+D0296E4D 0029
+81296ECE 0384
+
+$1 On 2 & 2 On 1 Modes\Player 1\Can't Be Pinned
+D0296E4D 0029
+81296F5A FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 1\Infinite Health
+D0296E4D 0029
+81296FD0 0000
+D0296E4D 0029
+81296FD2 0000
+
+$1 On 2 & 2 On 1 Modes\Player 1\Instant Recovery
+D0296E4D 0029
+8129703A FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 1\Invincible
+D0296E4D 0029
+8129702E FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 1\Super Speed
+D0296E4D 0029
+81297032 FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 1\Super Stamina
+D0296E4D 0029
+81297036 FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 1\Super Strength
+D0296E4D 0029
+8129702A FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 2\Can't Be Counted Out
+D0296E4D 0029
+8129816E 0384
+
+$1 On 2 & 2 On 1 Modes\Player 2\Can't Be Pinned
+D0296E4D 0029
+812981FA FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 2\Infinite Health
+D0296E4D 0029
+81298270 0000
+D0296E4D 0029
+81298272 0000
+
+$1 On 2 & 2 On 1 Modes\Player 2\Instant Recovery
+D0296E4D 0029
+812982DA FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 2\Invincible
+D0296E4D 0029
+812982CE FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 2\Super Speed
+D0296E4D 0029
+812982D2 FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 2\Super Stamina
+D0296E4D 0029
+812982D6 FFFF
+
+$1 On 2 & 2 On 1 Modes\Player 2\Super Strength
+D0296E4D 0029
+812982CA FFFF
+
+$3 Way Dance Mode\Player 1\Can't Be Counted Out
+D0296C3D 0029
+81296CBE 0384
+
+$3 Way Dance Mode\Player 1\Can't Be Pinned
+D0296C3D 0029
+81296D4A FFFF
+
+$3 Way Dance Mode\Player 1\Infinite Health
+D0296C3D 0029
+81296DC0 0000
+D0296C3D 0029
+81296DC2 0000
+
+$3 Way Dance Mode\Player 1\Instant Recovery
+D0296C3D 0029
+81296E2A FFFF
+
+$3 Way Dance Mode\Player 1\Invincible
+D0296C3D 0029
+81296E1E FFFF
+
+$3 Way Dance Mode\Player 1\Super Speed
+D0296C3D 0029
+81296E22 FFFF
+
+$3 Way Dance Mode\Player 1\Super Stamina
+D0296C3D 0029
+81296E26 FFFF
+
+$3 Way Dance Mode\Player 1\Super Strength
+D0296C3D 0029
+81296E1A FFFF
+
+$3 Way Dance Mode\Player 2\Can't Be Counted Out
+D0296C3D 0029
+81297F5E 0384
+
+$3 Way Dance Mode\Player 2\Can't Be Pinned
+D0296C3D 0029
+81297FEA FFFF
+
+$3 Way Dance Mode\Player 2\Infinite Health
+D0296C3D 0029
+81298060 0000
+D0296C3D 0029
+81298062 0000
+
+$3 Way Dance Mode\Player 2\Instant Recovery
+D0296C3D 0029
+812980CA FFFF
+
+$3 Way Dance Mode\Player 2\Invincible
+D0296C3D 0029
+812980BE FFFF
+
+$3 Way Dance Mode\Player 2\Super Speed
+D0296C3D 0029
+812980C2 FFFF
+
+$3 Way Dance Mode\Player 2\Super Stamina
+D0296C3D 0029
+812980C6 FFFF
+
+$3 Way Dance Mode\Player 2\Super Strength
+D0296C3D 0029
+812980BA FFFF
+
+$3 Way Dance Mode\Player 3\Can't Be Counted Out
+D0296C3D 0029
+812991FE 0384
+
+$3 Way Dance Mode\Player 3\Can't Be Pinned
+D0296C3D 0029
+8129928A FFFF
+
+$3 Way Dance Mode\Player 3\Infinite Health
+D0296C3D 0029
+81299300 0000
+D0296C3D 0029
+81299302 0000
+
+$3 Way Dance Mode\Player 3\Instant Recovery
+D0296C3D 0029
+8129936A FFFF
+
+$3 Way Dance Mode\Player 3\Invincible
+D0296C3D 0029
+8129935E FFFF
+
+$3 Way Dance Mode\Player 3\Super Speed
+D0296C3D 0029
+81299362 FFFF
+
+$3 Way Dance Mode\Player 3\Super Stamina
+D0296C3D 0029
+81299366 FFFF
+
+$3 Way Dance Mode\Player 3\Super Strength
+D0296C3D 0029
+8129935A FFFF
+
+$All Tag Team Modes\Player 1\Can't Be Counted Out
+D029A98D 0029
+8129AA0E 0384
+
+$All Tag Team Modes\Player 1\Can't Be Pinned
+D029A98D 0029
+8129AA9A FFFF
+
+$All Tag Team Modes\Player 1\Infinite Health
+D029A98D 0029
+8129AB10 0000
+D029A98D 0029
+8129AB12 0000
+
+$All Tag Team Modes\Player 1\Instant Recovery
+D029A98D 0029
+8129AB7A FFFF
+
+$All Tag Team Modes\Player 1\Invincible
+D029A98D 0029
+8129AB6E FFFF
+
+$All Tag Team Modes\Player 1\Super Speed
+D029A98D 0029
+8129AB72 FFFF
+
+$All Tag Team Modes\Player 1\Super Stamina
+D029A98D 0029
+8129AB76 FFFF
+
+$All Tag Team Modes\Player 1\Super Strength
+D029A98D 0029
+8129AB6A FFFF
+
+$All Tag Team Modes\Player 2\Can't Be Counted Out
+D029A98D 0029
+8129BCAE 0384
+
+$All Tag Team Modes\Player 2\Can't Be Pinned
+D029A98D 0029
+8129BD3A FFFF
+
+$All Tag Team Modes\Player 2\Infinite Health
+D029A98D 0029
+8129BDB0 0000
+D029A98D 0029
+8129BDB2 0000
+
+$All Tag Team Modes\Player 2\Instant Recovery
+D029A98D 0029
+8129BE1A FFFF
+
+$All Tag Team Modes\Player 2\Invincible
+D029A98D 0029
+8129BE0E FFFF
+
+$All Tag Team Modes\Player 2\Super Speed
+D029A98D 0029
+8129BE12 FFFF
+
+$All Tag Team Modes\Player 2\Super Stamina
+D029A98D 0029
+8129BE16 FFFF
+
+$All Tag Team Modes\Player 2\Super Strength
+D029A98D 0029
+8129BE0A FFFF
+
+$All Tag Team Modes\Player 3\Can't Be Counted Out
+D029A98D 0029
+8129CF4E 0384
+
+$All Tag Team Modes\Player 3\Can't Be Pinned
+D029A98D 0029
+8129CFDA FFFF
+
+$All Tag Team Modes\Player 3\Infinite Health
+D029A98D 0029
+8129D050 0000
+D029A98D 0029
+8129D052 0000
+
+$All Tag Team Modes\Player 3\Instant Recovery
+D029A98D 0029
+8129D0BA FFFF
+
+$All Tag Team Modes\Player 3\Invincible
+D029A98D 0029
+8129D0AE FFFF
+
+$All Tag Team Modes\Player 3\Super Speed
+D029A98D 0029
+8129D0B2 FFFF
+
+$All Tag Team Modes\Player 3\Super Stamina
+D029A98D 0029
+8129D0B6 FFFF
+
+$All Tag Team Modes\Player 3\Super Strength
+D029A98D 0029
+8129D0AA FFFF
+
+$All Tag Team Modes\Player 4\Can't Be Counted Out
+D029A98D 0029
+8129E1EE 0384
+
+$All Tag Team Modes\Player 4\Can't Be Pinned
+D029A98D 0029
+8129E27A FFFF
+
+$All Tag Team Modes\Player 4\Infinite Health
+D029A98D 0029
+8129E2F0 0000
+D029A98D 0029
+8129E2F2 0000
+
+$All Tag Team Modes\Player 4\Instant Recovery
+D029A98D 0029
+8129E35A FFFF
+
+$All Tag Team Modes\Player 4\Invincible
+D029A98D 0029
+8129E34E FFFF
+
+$All Tag Team Modes\Player 4\Super Speed
+D029A98D 0029
+8129E352 FFFF
+
+$All Tag Team Modes\Player 4\Super Stamina
+D029A98D 0029
+8129E356 FFFF
+
+$All Tag Team Modes\Player 4\Super Strength
+D029A98D 0029
+8129E34A FFFF
+
+$Battle Royal Mode\Player 1\Can't Be Counted Out
+D029A66D 0029
+8129A6EE 0384
+
+$Battle Royal Mode\Player 1\Can't Be Pinned
+D029A66D 0029
+8129A77A FFFF
+
+$Battle Royal Mode\Player 1\Infinite Health
+D029A66D 0029
+8129A7F0 0000
+D029A66D 0029
+8129A7F2 0000
+
+$Battle Royal Mode\Player 1\Instant Recovery
+D029A66D 0029
+8129A85A FFFF
+
+$Battle Royal Mode\Player 1\Invincible
+D029A66D 0029
+8129A84E FFFF
+
+$Battle Royal Mode\Player 1\Super Speed
+D029A66D 0029
+8129A852 FFFF
+
+$Battle Royal Mode\Player 1\Super Stamina
+D029A66D 0029
+8129A856 FFFF
+
+$Battle Royal Mode\Player 1\Super Strength
+D029A66D 0029
+8129A84A FFFF
+
+$Battle Royal Mode\Player 2\Can't Be Counted Out
+D029A66D 0029
+8129B98E 0384
+
+$Battle Royal Mode\Player 2\Can't Be Pinned
+D029A66D 0029
+8129BA1A FFFF
+
+$Battle Royal Mode\Player 2\Infinite Health
+D029A66D 0029
+8129BA90 0000
+D029A66D 0029
+8129BA92 0000
+
+$Battle Royal Mode\Player 2\Instant Recovery
+D029A66D 0029
+8129BAFA FFFF
+
+$Battle Royal Mode\Player 2\Invincible
+D029A66D 0029
+8129BAEE FFFF
+
+$Battle Royal Mode\Player 2\Super Speed
+D029A66D 0029
+8129BAF2 FFFF
+
+$Battle Royal Mode\Player 2\Super Stamina
+D029A66D 0029
+8129BAF6 FFFF
+
+$Battle Royal Mode\Player 2\Super Strength
+D029A66D 0029
+8129BAEA FFFF
+
+$Battle Royal Mode\Player 3\Can't Be Counted Out
+D029A66D 0029
+8129CC2E 0384
+
+$Battle Royal Mode\Player 3\Can't Be Pinned
+D029A66D 0029
+8129CCBA FFFF
+
+$Battle Royal Mode\Player 3\Infinite Health
+D029A66D 0029
+8129CD30 0000
+D029A66D 0029
+8129CD32 0000
+
+$Battle Royal Mode\Player 3\Instant Recovery
+D029A66D 0029
+8129CD9A FFFF
+
+$Battle Royal Mode\Player 3\Invincible
+D029A66D 0029
+8129CD8E FFFF
+
+$Battle Royal Mode\Player 3\Super Speed
+D029A66D 0029
+8129CD92 FFFF
+
+$Battle Royal Mode\Player 3\Super Stamina
+D029A66D 0029
+8129CD96 FFFF
+
+$Battle Royal Mode\Player 3\Super Strength
+D029A66D 0029
+8129CD8A FFFF
+
+$Battle Royal Mode\Player 4\Can't Be Counted Out
+D029A66D 0029
+8129DECE 0384
+
+$Battle Royal Mode\Player 4\Can't Be Pinned
+D029A66D 0029
+8129DF5A FFFF
+
+$Battle Royal Mode\Player 4\Infinite Health
+D029A66D 0029
+8129DFD0 0000
+D029A66D 0029
+8129DFD2 0000
+
+$Battle Royal Mode\Player 4\Instant Recovery
+D029A66D 0029
+8129E03A FFFF
+
+$Battle Royal Mode\Player 4\Invincible
+D029A66D 0029
+8129E02E FFFF
+
+$Battle Royal Mode\Player 4\Super Speed
+D029A66D 0029
+8129E032 FFFF
+
+$Battle Royal Mode\Player 4\Super Stamina
+D029A66D 0029
+8129E036 FFFF
+
+$Battle Royal Mode\Player 4\Super Strength
+D029A66D 0029
+8129E02A FFFF
+
+$Character Modifier\Player 1
+80122773 00??
+0D Cyrus the Virus
+0F Mack Daddy
+15 Gertner
+19 Jeff Jones
+1C Beulah
+1D Mad Goat
+1F Nurse
+22 Tommy Rich
+25 Santoro
+27 Sound Guy
+28 The Sheik
+29 Skull
+2A H Slash
+2E Louie
+30 J Styles
+32 Taz
+33 Trainer
+36 Excel
+
+$Character Modifier\Player 2
+80122783 00??
+0D Cyrus the Virus
+0F Mack Daddy
+15 Gertner
+19 Jeff Jones
+1C Beulah
+1D Mad Goat
+1F Nurse
+22 Tommy Rich
+25 Santoro
+27 Sound Guy
+28 The Sheik
+29 Skull
+2A H Slash
+2E Louie
+30 J Styles
+32 Taz
+33 Trainer
+36 Excel
+
+$Create A Wrestler\Infinite Attribute Points
+8115DD52 0000
+
+$Create A Wrestler\Infinite Move %
+80131600 0024
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 1\Can't Be Counted Out
+D029A87D 0029
+8129A8FE 0384
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 1\Can't Be Pinned
+D029A87D 0029
+8129A98A FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 1\Infinite Health
+D029A87D 0029
+8129AA00 0000
+D029A87D 0029
+8129AA02 0000
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 1\Instant Recovery
+D029A87D 0029
+8129AA6A FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 1\Invincible
+D029A87D 0029
+8129AA5E FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 1\Super Speed
+D029A87D 0029
+8129AA62 FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 1\Super Stamina
+D029A87D 0029
+8129AA66 FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 1\Super Strength
+D029A87D 0029
+8129AA5A FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 2\Can't Be Counted Out
+D029A87D 0029
+8129BB9E 0384
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 2\Can't Be Pinned
+D029A87D 0029
+8129BC2A FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 2\Infinite Health
+D029A87D 0029
+8129BCA0 0000
+D029A87D 0029
+8129BCA2 0000
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 2\Instant Recovery
+D029A87D 0029
+8129BD0A FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 2\Invincible
+D029A87D 0029
+8129BCFE FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 2\Super Speed
+D029A87D 0029
+8129BD02 FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 2\Super Stamina
+D029A87D 0029
+8129BD06 FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 2\Super Strength
+D029A87D 0029
+8129BCFA FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 3\Can't Be Counted Out
+D029A87D 0029
+8129CE3E 0384
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 3\Can't Be Pinned
+D029A87D 0029
+8129CECA FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 3\Infinite Health
+D029A87D 0029
+8129CF40 0000
+D029A87D 0029
+8129CF42 0000
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 3\Instant Recovery
+D029A87D 0029
+8129CFAA FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 3\Invincible
+D029A87D 0029
+8129CF9E FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 3\Super Speed
+D029A87D 0029
+8129CFA2 FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 3\Super Stamina
+D029A87D 0029
+8129CFA6 FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 3\Super Strength
+D029A87D 0029
+8129CF9A FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 4\Can't Be Counted Out
+D029A87D 0029
+8129E0DE 0384
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 4\Can't Be Pinned
+D029A87D 0029
+8129E16A FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 4\Infinite Health
+D029A87D 0029
+8129E1E0 0000
+D029A87D 0029
+8129E1E2 0000
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 4\Instant Recovery
+D029A87D 0029
+8129E24A FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 4\Invincible
+D029A87D 0029
+8129E23E FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 4\Super Speed
+D029A87D 0029
+8129E242 FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 4\Super Stamina
+D029A87D 0029
+8129E246 FFFF
+
+$Tornado, Lumberjack, 1-On-3, 3-On-1 Modes\Player 4\Super Strength
+D029A87D 0029
+8129E23A FFFF
+
+$VS & Tournment Mode\Player 1\Can't Be Counted Out
+D02931FD 0029
+8129327E 0384
+
+$VS & Tournment Mode\Player 1\Can't Be Pinned
+D02931FD 0029
+8129330A FFFF
+
+$VS & Tournment Mode\Player 1\Infinite Health
+D02931FD 0029
+81293380 0000
+D02931FD 0029
+81293382 0000
+
+$VS & Tournment Mode\Player 1\Instant Recovery
+D02931FD 0029
+812933EA FFFF
+
+$VS & Tournment Mode\Player 1\Invincible
+D02931FD 0029
+812933DE FFFF
+
+$VS & Tournment Mode\Player 1\Super Speed
+D02931FD 0029
+812933E2 FFFF
+
+$VS & Tournment Mode\Player 1\Super Stamina
+D02931FD 0029
+812933E6 FFFF
+
+$VS & Tournment Mode\Player 1\Super Strength
+D02931FD 0029
+812933DA FFFF
+
+$VS & Tournment Mode\Player 2\Can't Be Counted Out
+D02931FD 0029
+8129451E 0384
+
+$VS & Tournment Mode\Player 2\Can't Be Pinned
+D02931FD 0029
+812945AA FFFF
+
+$VS & Tournment Mode\Player 2\Infinite Health
+D02931FD 0029
+81294620 0000
+D02931FD 0029
+81294622 0000
+
+$VS & Tournment Mode\Player 2\Instant Recovery
+D02931FD 0029
+8129468A FFFF
+
+$VS & Tournment Mode\Player 2\Invincible
+D02931FD 0029
+8129467E FFFF
+
+$VS & Tournment Mode\Player 2\Super Speed
+D02931FD 0029
+81294682 FFFF
+
+$VS & Tournment Mode\Player 2\Super Stamina
+D02931FD 0029
+81294686 FFFF
+
+$VS & Tournment Mode\Player 2\Super Strength
+D02931FD 0029
+8129467A FFFF

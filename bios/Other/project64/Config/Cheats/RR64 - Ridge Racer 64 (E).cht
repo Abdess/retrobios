@@ -1,0 +1,49 @@
+[FEE97010-4E94A9A0-C:50]
+Name=RR64 - Ridge Racer 64 (E)
+
+$Access All\Cars,Tracks & Golg Trophies
+50000402 0000
+81043AA0 FFFF
+
+$Access All\Platinum Trophies
+8102F70C FFFF
+8102F70E FFFF
+
+$Access\Galage '88 UFO Car
+810E2C20 0028
+
+$Always 1st
+810569B4 0001
+
+$Always Engine Class S
+81043AB0 0000
+
+$Easy Mode
+81057B10 0001
+
+$Easy Win
+810569BA 0007
+
+$Freeze Lap Timer
+Note=Select Car Attack, And You'll Have All The Cars At Your Disposal For A Quick Spin !!
+810569DE 014D
+
+$Infinite Time
+811280B2 0C00
+
+$Laps to Race
+Note=Here you can choose how many laps are in the race, 1-9. Do not use with Option 7-9.
+8111CA16 00??
+01 1 Lap to Race
+02 2 Laps to Race
+03 3 Laps to Race
+04 4 Laps to Race
+05 5 Laps to Race
+06 6 Laps to Race
+07 7 Laps to Race
+08 8 Laps to Race
+09 9 Laps to Race
+
+$Ultra 64
+Note=Pick any car, beat stage 8: RR Extreme Extra and the UFO car is yours to drive!
+8113DDBA 0018

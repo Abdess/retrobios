@@ -1,0 +1,30 @@
+[BE5973E0-89B0EDB8-C:45]
+Name=Top Gear Rally 2 (U)
+
+$100.000 Sponsor Credits & 950 Championship Points In Support Van
+Note=You Also Have Access To All Cars, Tracks & Extra Features
+80030D82 00F3
+
+$Always 1st
+810318E2 0001
+
+$Infinite Time & Always Place 1st
+Note=Championship Mode Only.
+810318EE 0001
+
+$Max Sponsor Credits
+81033816 270F
+
+$Max Sponsor Points & Extra Cars & Tracks
+Note=This code gives you all tracks and cars. once you activate this code, You must make an internal save (Native) in options & then load that internal save, & go to Drivers Board to pick your car, Then to Race to pick your track
+81033816 270F
+
+$No Cones Hit
+Note=In ARSG Rally School
+81031CEA 0000
+
+$No Damage Or Failures
+81030D76 0001
+
+$No Navigator
+80032677 0000

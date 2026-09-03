@@ -1,0 +1,33 @@
+[8979169C-F189F6A0-C:4A]
+Name=Dezaemon 3D (J)
+
+$Infinite\99 Lives
+8023648D 0063
+
+$Infinite\99 R Button Bombs
+8024BD89 0063
+
+$Infinite\Shield
+80250971 00??
+01 On
+00 Off
+
+$Infinite\Speed
+8024B6BC 00??
+00 Normal
+01 Slow
+02 Medium
+03 Fast
+07 Warp Drive
+
+$Infinite\Stream Laser
+80236CD0 00??
+00 2 Stream Laser
+01 4 Stream Laser
+02 6 Stream Laser
+
+$Max Score
+80249F91 00FF
+
+$Unlock Ramsie Mini-Game
+801FF43E 0001

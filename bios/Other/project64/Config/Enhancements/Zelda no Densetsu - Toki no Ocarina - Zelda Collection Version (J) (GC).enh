@@ -1,0 +1,14 @@
+[F7F52DB8-2195E636-C:4A]
+Name=Zelda no Densetsu - Toki no Ocarina - Zelda Collection Version (J) (GC)
+
+$End Credits Fix
+OnByDefault=1
+D109A814 0320
+8109A814 0000
+D109A816 F809
+8109A816 0000
+
+$Subscreen Delay Fix
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+801DB78B 0002

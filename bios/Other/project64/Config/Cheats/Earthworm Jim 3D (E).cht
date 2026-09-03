@@ -1,0 +1,58 @@
+[492B9DE8-C6CCC81C-C:50]
+Name=Earthworm Jim 3D (E) (M6)
+
+$Have 231 Marbles
+D00EBE53 0000
+800EBE53 03E7
+
+$Have All Gold Udders
+50002802 0000
+810C80BA 0101
+
+$Infinite\Ammo\Banana Peel Bomb
+810C6976 0064
+
+$Infinite\Ammo\Blaster
+810C6916 0064
+
+$Infinite\Ammo\Boomerang Knives
+810C691E 0064
+
+$Infinite\Ammo\Butcher Knife Gun
+800C887F 0064
+
+$Infinite\Ammo\Chickens
+810C69BE 0064
+
+$Infinite\Ammo\Green Slimer
+810C69A6 0064
+
+$Infinite\Ammo\Laser
+810C698E 0064
+
+$Infinite\Ammo\Lepricon Gun
+800C8897 0064
+
+$Infinite\Ammo\Mushrooms
+810C6936 0064
+
+$Infinite\Ammo\Music Gun
+810C6906 0064
+
+$Infinite\Ammo\Pistol
+800C8777 0064
+
+$Infinite\Ammo\Rocket Launcher
+810C6946 0064
+
+$Infinite\Ammo\Shotgun
+810C69EE 0064
+
+$Infinite\Ammo\Sniper Chicken
+800C881F 0064
+
+$Infinite\Health
+800C876F 0064
+
+$Infinite\Lives
+800C8773 0064

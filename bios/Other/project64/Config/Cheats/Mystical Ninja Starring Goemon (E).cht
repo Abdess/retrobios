@@ -1,0 +1,142 @@
+[F5360FBE-2BF1691D-C:50]
+Name=Mystical Ninja Starring Goemon (E)
+
+$Access\Always have Big Laser
+Note=Use only one of these codes at a time!
+802F706F FFFF
+
+$Access\Enemy Health Modifer attach Activator
+Note=Use only one of these codes at a time!
+812F7062 03E8
+
+$Access\Full Energy for Lazer
+Note=Use only one of these codes at a time!
+812F706E 0064
+
+$Access\Gold Helmet
+Note=Use only one of these codes at a time!
+8015D2F7 0003
+
+$Access\Infinite Health
+Note=Use only one of these codes at a time!
+802F706A 0999
+
+$Access\Infinite Impact Oil
+Note=Use only one of these codes at a time!
+812F706A 0154
+
+$Access\Infinite Ryo Impact Fighting
+Note=Use only one of these codes at a time!
+812F7066 0005
+
+$Access\Infinite Ryo Impact Running
+Note=Use only one of these codes at a time!
+812F70EA 270F
+
+$Access\Infy Ryo
+Note=Use only one of these codes at a time!
+802F7667 0999
+
+$Access\Japanese Sombrero
+Note=Use only one of these codes at a time!
+8015D2F7 0001
+
+$Access\Metal Helmet
+Note=Use only one of these codes at a time!
+8015D2F7 0002
+
+$Access\Move Lock
+8116AE6A 0000
+8120D84A 0000
+
+$Access\Mystical Ninja Skating team
+8120D620 4E20
+8120DEF4 4E20
+8116AE78 4E20
+
+$Access\Skating Team V2
+8120D620 4E20
+8120DEF4 4E20
+8116AE78 4E20
+8116AE6A 0001
+8120D84A 0001
+
+$Have\Bazooka
+8015D3CB 0001
+
+$Have\Blue Item
+8015D422 0001
+
+$Have\Blue Sausage
+8015D417 0001
+
+$Have\Brown Item
+8015D402 0001
+
+$Have\Brown Round Item
+8015D40F 0001
+
+$Have\Chain Pipe
+8015D3BF 0002
+
+$Have\Ebisumaru
+8015D3A3 0001
+
+$Have\Fire Cracker Bomb
+8015D3C4 0001
+
+$Have\Flute
+8015D3DB 0001
+
+$Have\Gold Item
+8015D41C 0001
+
+$Have\Gold Key
+8015D412 0001
+
+$Have\Kunai of Severe Cold
+8015D3D4 0001
+
+$Have\Magic Flying
+8015D3F4 0001
+
+$Have\Magic Mermaid
+8015D3FB 0001
+
+$Have\Magic Mini Ebisu
+8015D3F2 0001
+
+$Have\Magic Sudden Impact
+8015D3EC 0001
+
+$Have\Meat Saw Hammer
+8015D3C0 0001
+
+$Have\Medal of Flames
+8015D3DF 0001
+
+$Have\Pink Item
+8015D41B 0001
+
+$Have\Sasuke Character
+8015D3A4 0001
+
+$Have\Shell
+8015D3FC 0001
+
+$Have\Yae Character
+8015D3AB 0001
+
+$Infinite\Health
+8015D2E7 0028
+
+$Infinite\Lives
+8015D2EF 000A
+
+$Infinite\Ryo
+8015D2EA 0010
+
+$Keep Blue Fish
+8015D303 0003
+50000404 0000
+8015D2F3 0003

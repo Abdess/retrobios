@@ -1,0 +1,220 @@
+[0B58B8CD-B7B291D2-C:50]
+Name=Body Harvest (E) (M3)
+
+$Have Alien Artifact
+8004DC8F 0001
+
+$Infinite Ammo All Weapons
+50001102 0000
+81048176 8000
+
+$Infinite\Fuel
+8004E46C 0050
+
+$Infinite\Greece
+81052B48 0098
+81052B4A 967F
+
+$Infinite\Health
+8004DD1C 0002
+
+$Item Modifier
+8004DC7F ????
+0000 Nothing
+0002 Howitzer Shells
+0040 Crank
+0080 Windmill Cog
+0100 Heirglyph Map Piece
+0400 Hangar Key
+FFFF All Items
+
+$Level Select
+80047FC3 00??
+01 Greece
+02 Java
+03 America
+04 Siberia
+05 Comet
+
+$No Humans Killed
+8104819A 0000
+
+$Press L To Wall Over Water, Climb Hills
+D0047609 0020
+8104DD02 0808
+
+$Weapon Select\1st Position
+80048168 00??
+00 Nothing
+01 Fuel
+02 Pistol
+03 Shotgun
+04 Rifle
+05 Machine Gun
+06 Rocket Launcher
+07 TNT
+08 Sun Shield
+09 Grenades
+0A Tri-Spinner
+0B Vehicle Weapon 1
+0C Vehicle Weapon 2
+0D Arme 2
+0E Waffe 2
+10 Fragcannon
+11 Lazer Missiles
+12 Resonator
+13 Plasma Bombs
+
+$Weapon Select\2nd Position
+80048169 00??
+00 Nothing
+01 Fuel
+02 Pistol
+03 Shotgun
+04 Rifle
+05 Machine Gun
+06 Rocket Launcher
+07 TNT
+08 Sun Shield
+09 Grenades
+0A Tri-Spinner
+0B Vehicle Weapon 1
+0C Vehicle Weapon 2
+0D Arme 2
+0E Waffe 2
+10 Fragcannon
+11 Lazer Missiles
+12 Resonator
+13 Plasma Bombs
+
+$Weapon Select\3rd Position
+8004816A 00??
+00 Nothing
+01 Fuel
+02 Pistol
+03 Shotgun
+04 Rifle
+05 Machine Gun
+06 Rocket Launcher
+07 TNT
+08 Sun Shield
+09 Grenades
+0A Tri-Spinner
+0B Vehicle Weapon 1
+0C Vehicle Weapon 2
+0D Arme 2
+0E Waffe 2
+10 Fragcannon
+11 Lazer Missiles
+12 Resonator
+13 Plasma Bombs
+
+$Weapon Select\4th Position
+8004816B 00??
+00 Nothing
+01 Fuel
+02 Pistol
+03 Shotgun
+04 Rifle
+05 Machine Gun
+06 Rocket Launcher
+07 TNT
+08 Sun Shield
+09 Grenades
+0A Tri-Spinner
+0B Vehicle Weapon 1
+0C Vehicle Weapon 2
+0D Arme 2
+0E Waffe 2
+10 Fragcannon
+11 Lazer Missiles
+12 Resonator
+13 Plasma Bombs
+
+$Weapon Select\5th Position
+8004816C 00??
+00 Nothing
+01 Fuel
+02 Pistol
+03 Shotgun
+04 Rifle
+05 Machine Gun
+06 Rocket Launcher
+07 TNT
+08 Sun Shield
+09 Grenades
+0A Tri-Spinner
+0B Vehicle Weapon 1
+0C Vehicle Weapon 2
+0D Arme 2
+0E Waffe 2
+10 Fragcannon
+11 Lazer Missiles
+12 Resonator
+13 Plasma Bombs
+
+$Weapon Select\6th Position
+8004816D 00??
+00 Nothing
+01 Fuel
+02 Pistol
+03 Shotgun
+04 Rifle
+05 Machine Gun
+06 Rocket Launcher
+07 TNT
+08 Sun Shield
+09 Grenades
+0A Tri-Spinner
+0B Vehicle Weapon 1
+0C Vehicle Weapon 2
+0D Arme 2
+0E Waffe 2
+10 Fragcannon
+11 Lazer Missiles
+12 Resonator
+13 Plasma Bombs
+
+$Weapon Select\7th Position
+8004816E 00??
+00 Nothing
+01 Fuel
+02 Pistol
+03 Shotgun
+04 Rifle
+05 Machine Gun
+06 Rocket Launcher
+07 TNT
+08 Sun Shield
+09 Grenades
+0A Tri-Spinner
+0B Vehicle Weapon 1
+0C Vehicle Weapon 2
+0D Arme 2
+0E Waffe 2
+10 Fragcannon
+11 Lazer Missiles
+12 Resonator
+13 Plasma Bombs
+
+$Weapon Select\8th Position
+8004816F 00??
+00 Nothing
+01 Fuel
+02 Pistol
+03 Shotgun
+04 Rifle
+05 Machine Gun
+06 Rocket Launcher
+07 TNT
+08 Sun Shield
+09 Grenades
+0A Tri-Spinner
+0B Vehicle Weapon 1
+0C Vehicle Weapon 2
+0D Arme 2
+0E Waffe 2
+10 Fragcannon
+11 Lazer Missiles
+12 Resonator
+13 Plasma Bombs

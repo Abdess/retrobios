@@ -1,0 +1,23 @@
+[5AC383E1-D712E387-C:45]
+Name=Monopoly (U) (M2)
+
+$[Language Select]
+Note=To use this load the game then enable this cheat  and Reset (F1) you will now be on your chosen Language and Relative Local Language Board and Money.
+D009675F 0001
+80096758 00??
+00 American
+01 British
+02 France
+03 German
+
+$Infinite\Money\Player 1
+81324B46 270F
+
+$Infinite\Money\Player 2
+81324B5A 270F
+
+$Infinite\Money\Player 3
+81324B6E 270F
+
+$Infinite\Money\Player 4
+81324B82 270F

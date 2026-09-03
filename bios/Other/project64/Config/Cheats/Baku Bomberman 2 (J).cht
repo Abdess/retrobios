@@ -1,0 +1,27 @@
+[E73C7C4F-AF93B838-C:4A]
+Name=Baku Bomberman 2 (J)
+
+$Flashing Invincible
+Note=This cheat Makes you Flash But you cant be harmed,Once out of danger Turn the cheat off to stop the flashing.also do not put this on if you have already been hurt or you will stay on the floor.
+800AB5C7 000A
+
+$Have\Fire Bombs
+800AB59B 0003
+
+$Have\Kick Bombs Anytime
+800AB5A3 0003
+
+$Have\Max Fire Level
+800AB593 0003
+
+$Infinite\Bombs
+800AB5B8 0003
+
+$Infinite\Continue Time
+810B3B36 0090
+
+$Infinite\Health
+800AB5BF 0005
+
+$Infinite\Money
+810A9BB2 FFFF

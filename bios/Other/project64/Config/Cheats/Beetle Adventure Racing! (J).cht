@@ -1,0 +1,86 @@
+[9C7318D2-24AE0DC1-C:4A]
+Name=Beetle Adventure Racing! (J)
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\01 Coventry Cove
+8036B243 0064
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\02 Mount Mayhem
+80351283 0064
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\03 Inferno Isle
+80364153 0064
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\04 Sunset Sands
+8034242B 0064
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\05 Metro Madness
+8035CAFB 0064
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\06 Wicked Woods
+80354A33 0064
+
+$Access All\Cars
+8002CA97 000B
+
+$Access All\Difficulties
+8002CA9B 0004
+
+$Access All\Multiplayer Levels
+50000901 0000
+8002CAA0 0001
+
+$Access All\Tracks
+8002CA93 0006
+
+$Access In-Game Cheats
+50001301 0000
+8002CAA8 0001
+
+$Damage Select
+8002C833 00??
+00 Normal
+01 Half
+02 Double
+03 Triple
+
+$Health Select
+8002C81F 00??
+00 Normal
+01 Good Only
+02 Bad Only
+03 Off
+
+$Infinite Continues
+8002C6F7 0064
+
+$Low Timer
+81025874 3001
+
+$Power-Up Select
+8002C81B 00??
+00 Normal
+01 Mines
+02 Rockets
+03 Stealer
+04 Nitros
+05 ?
+06 Health
+07 Invincible
+08 Off
+
+$Radar
+8002C82F 00??
+00 On
+01 Off
+
+$Speed units\Kph or Mph
+81025908 ????
+0100 Kph
+0001 Mph
+
+$View Mode Select?
+8002C82B 00??
+00 Normal
+01 Fog
+02 Flip
+03 Fisheye

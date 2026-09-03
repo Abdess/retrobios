@@ -1,0 +1,45 @@
+[B088FBB4-441E4B1D-C:50]
+Name=Bass Hunter 64 (E)
+
+$Access\All Lures
+Note=Codes To Be Used With Save Slot 1
+8019A1A9 0003
+8119A1AA FFFF
+
+$Access\All Poles 2
+Note=Codes To Be Used With Slot 1
+8019A1AC 0007
+
+$Access\Extra Boat 2
+Note=Codes To Be Used With Slot 1
+8019A1AD 0001
+
+$All Lakes Available
+80119800 0001
+
+$Easy Win Current Tournament
+8011980F 0001
+
+$Extra $300
+8011980B 0001
+
+$Fish Are More Active
+80119807 0001
+
+$Large Fish
+80119806 0001
+
+$More fish in Lakes
+8011980D 0001
+
+$No Penalties During Tournamet
+80119808 0001
+
+$No Snags While Fishing
+80119809 0001
+
+$Super Lure
+8011980E 0001
+
+$Unbreakable Line
+80119805 0001

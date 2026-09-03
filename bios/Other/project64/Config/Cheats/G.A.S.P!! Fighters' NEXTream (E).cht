@@ -1,0 +1,76 @@
+[68FCF726-49658CBC-C:50]
+Name=G.A.S.P!! Fighters' NEXTream (E)
+
+$Have All Extras Open
+Note=This Code opens all extra stages in VS Battles,Team Battle 1P, Team Battles VS,Tag Battle and Practice Modes. Extra Male and Female Body in Create A Fighter Character and Have Extra Characters (Gouriki & Reiji)
+8009E31F 00FF
+
+$Music Modifier
+8009E21E 00??
+00 Stereo
+01 Monaural
+02 Music Off
+
+$Player 1\Character Modifier
+Note=This Allows you to play as any Character you choose in any Mode
+80105001 00??
+00 Azami
+01 Serina
+02 Miki
+03 Kai
+04 Sakai
+05 Kengon
+06 Kyeya
+07 Kaoru
+08 Gouriki
+09 Reiji
+0A Yami
+0B Hikari
+0C Invisible Fighter
+
+$Player 1\Infinite Energy
+81105026 03E8
+
+$Player 1\Need 1 Round to Win
+D009E334 0000
+8009E334 0001
+
+$Player 1\Player 2 Has No Energy
+Note=Press C-Button Up and Player 2 will lose All Health resulting in a Instant K.O.
+D0044461 0008
+8111B3BE 0000
+
+$Player 1\Player 2 Never Wins
+8009E3F5 0000
+
+$Player 2\Character Modifier
+Note=This Allows you to play as any Character you choose in any Mode
+8011B399 00??
+00 Azami
+01 Serina
+02 Miki
+03 Kai
+04 Sakai
+05 Kengon
+06 Kyeya
+07 Kaoru
+08 Gouriki
+09 Reiji
+0A Yami
+0B Hikari
+0C Invisible Fighter
+
+$Player 2\Infinite Energy
+8111B3BE 03E8
+
+$Player 2\Need 1 Round to Win
+D009E335 0000
+8009E335 0001
+
+$Player 2\Player 1 Has No Energy
+Note=Press C-Button Up and Player 1 will lose All Health resulting in a Instant K.O.
+D0044467 0008
+81105026 0000
+
+$Player 2\Player 1 Never Wins
+8009E3F4 0000

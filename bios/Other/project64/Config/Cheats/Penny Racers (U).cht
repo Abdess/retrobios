@@ -1,0 +1,20 @@
+[73ABB1FB-9CCA6093-C:45]
+Name=Penny Racers (U)
+
+$Always 1st
+8022AD06 0001
+
+$Class Select
+Note=This code is useful because you can play Class AA without having to beat a level!
+8021E1A7 00??
+00 Class C
+01 Class B
+03 Class AA
+04 1 Play
+05 2 Play
+06 3 Play
+07 4 Play
+
+$Super Speed
+Note=This is Turbo fast,So to slow it down a little more keep the B button pressed down
+8122AEB8 4800

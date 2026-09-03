@@ -1,0 +1,17 @@
+[32EFC7CB-C3EA3F20-C:45]
+Name=Fighting Force 64 (U)
+
+$Infinite Lives P1
+800CE0F3 0003
+
+$Infinite Lives P2
+800CE0F7 0003
+
+$Infinite Pistol Ammo
+8106006C 2400
+
+$Infinite Rocket Launcher Ammo
+81060130 2400
+
+$Infinite Shotgun Ammo
+810601D8 2400

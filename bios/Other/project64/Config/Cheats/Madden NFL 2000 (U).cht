@@ -1,0 +1,507 @@
+[0CB81686-5FD85A81-C:45]
+Name=Madden NFL 2000 (U)
+
+$Away Team\Always Has The Ball
+810590A8 0001
+810590AA 0000
+
+$Enable\Stadium\4th And Incas
+800591A0 00FF
+
+$Enable\Stadium\Alpha Blitz
+8005919E 00FF
+
+$Enable\Stadium\Cosmodome
+800591A2 00FF
+
+$Enable\Stadium\Dodge City
+80059198 00FF
+
+$Enable\Stadium\EA Sports
+800591A3 00FF
+
+$Enable\Stadium\Gridiron
+8005919D 00FF
+
+$Enable\Stadium\Maddenstein
+800591A1 00FF
+
+$Enable\Stadium\New Orleans
+800591A6 00FF
+
+$Enable\Stadium\Nile High
+8005919F 00FF
+
+$Enable\Stadium\Salvage Field
+8005919C 00FF
+
+$Enable\Stadium\San Diego
+800591A7 00FF
+
+$Enable\Stadium\Tampa Bay
+800591A5 00FF
+
+$Enable\Stadium\Tib Bros
+8005919A 00FF
+
+$Enable\Stadium\Tiberium
+8005919B 00FF
+
+$Enable\Stadium\Tiburon
+800591A4 00FF
+
+$Enable\Stadium\Xmas Rush
+80059199 00FF
+
+$Enable\Team\All 60's
+800598CC 00FF
+
+$Enable\Team\All 70's
+800598CD 00FF
+
+$Enable\Team\All 80's
+800598CE 00FF
+
+$Enable\Team\All 90's
+800598CF 00FF
+
+$Enable\Team\Clows
+800598D7 00FF
+
+$Enable\Team\Comets
+800598DF 00FF
+
+$Enable\Team\EA Sports
+800598D3 00FF
+
+$Enable\Team\Industrials
+800598DA 00FF
+
+$Enable\Team\Junkyard Dogs
+800598D9 00FF
+
+$Enable\Team\Madden 1999
+800598D0 00FF
+
+$Enable\Team\Madden Millenium
+800598D1 00FF
+
+$Enable\Team\Marshalls
+800598D5 00FF
+
+$Enable\Team\Monsters
+800598DE 00FF
+
+$Enable\Team\Mummies
+800598DC 00FF
+
+$Enable\Team\NFL Millenium
+800598D2 00FF
+
+$Enable\Team\Praetorians
+800598D8 00FF
+
+$Enable\Team\Sugarbuzz
+800598DB 00FF
+
+$Enable\Team\Tiburon
+800598D4 00FF
+
+$Enable\Team\Toymakers
+800598D6 00FF
+
+$Enable\Team\Vipers
+800598DD 00FF
+
+$Have All Secret Codes In Menu
+81070788 FFFF
+8107078A FFFF
+8107078C FFFF
+8107078E FFFF
+
+$Home Team\Always Has The Ball
+810590A8 0000
+810590AA 0001
+
+$Infinite\Time-Outs Away Team
+8006FE6F 0003
+
+$Infinite\Time-Outs Home Team
+8006CE7F 0003
+
+$Level 1\200 Yards Of Total Offense Or More
+800707C1 0040
+
+$Level 1\3 Tackles Or More By One Player
+800707B7 0040
+
+$Level 1\Complete A 20 Yard Run Or Longer
+800707B1 0040
+
+$Level 1\Complete A 30 Yard Pass Or Longer
+800707B0 0040
+
+$Level 1\Create A Player And use Him In A Game
+800707BA 0040
+
+$Level 1\Defeat Green Bay In Snow At Lambeau Field
+800707B8 0040
+
+$Level 1\Defeat San Francisco In Rain At 3COM Park
+800707B9 0040
+
+$Level 1\Have A Minimium Of Three Players ON Team Catch One Pass
+800707C3 0040
+
+$Level 1\Hold Your Oppnent to 7 Points Or Less In a Game
+800707B3 0040
+
+$Level 1\Intercept At Least One Pass
+800707BF 0040
+
+$Level 1\Kick A 40 Yard Field Goal Or Longer
+800707B5 0040
+
+$Level 1\Kick A 40 Yard Punt Or Longer
+800707B6 0040
+
+$Level 1\Play A Exhibition Game In A QTR Length Other Than 5 Minutes
+800707BB 0040
+
+$Level 1\Play a Exhibition Game In A Stadium Other Than The Default One
+800707BE 0040
+
+$Level 1\Play And Win One Game of The Tournment
+800707C2 0040
+
+$Level 1\QB Passes For Two TDS Or More
+800707BC 0040
+
+$Level 1\Recover At Least One Fumble
+800707C0 0040
+
+$Level 1\Sack The Opposing QB
+800707BD 0040
+
+$Level 1\Score 21 Points Or More With A QTR Length Of 6 Minutes Or Less
+800707B2 0040
+
+$Level 1\Throw 0 Interceptions In A Game
+800707B4 0040
+
+$Level 2\100 Recption Yards Or Greater By One Player
+800707C6 0040
+
+$Level 2\100 Yards Of Rushing Or Greater By One Player
+800707C5 0040
+
+$Level 2\2 TDS Or More By One Receiver
+800707D7 0040
+
+$Level 2\3 Field Goals Or More By One Player
+800707C8 0040
+
+$Level 2\6 Receptions Or Greater By One Player
+800707CE 0040
+
+$Level 2\Commit No Fumbles In A Game
+800707D2 0040
+
+$Level 2\Complete a 60 Yard Pass Or Longer
+800707D4 0040
+
+$Level 2\Do Not Allow Your QB To Be Sacked In A Game
+800707D3 0040
+
+$Level 2\Have A RB Who Rushes For 3 TDS Or More
+800707CF 0040
+
+$Level 2\Hold Opposing Team To 150 Yards Total Offense Or Less
+800707D0 0040
+
+$Level 2\Play And Win A Pro Bowl Game As The AFC Team
+800707D6 0040
+
+$Level 2\Play And Win A Pro Bowl Game As The NFC Team
+800707D5 0040
+
+$Level 2\Play And Win One Franchise Mode Game
+800707CA 0040
+
+$Level 2\Play And Win One Season Mode Game With Modified Divisions
+800707CC 0040
+
+$Level 2\Play And Win One Season Mode Game Without Modified Divisions
+800707CB 0040
+
+$Level 2\Play And Win Two Games In A Tournment With The Same Team
+800707CD 0040
+
+$Level 2\QB Passes 300 Yards Or More
+800707C7 0040
+
+$Level 2\QB Passes For 4 TDS Or More
+800707C9 0040
+
+$Level 2\QB Rushes For One Rushing TD Or More
+800707D1 0040
+
+$Level 2\Score 40 Points Or More Within A Quarter Length Of 6 Minutes Or Less
+800707C4 0040
+
+$Level 3\150 Reception Yards Or Greater By One Player
+800707D9 0040
+
+$Level 3\150 Yards Rushing Or Greater By One Player
+800707D8 0040
+
+$Level 3\2 Interceptions Or More By One Player
+800707DC 0040
+
+$Level 3\3 Knockdowns Or More By One PLayer
+800707DF 0040
+
+$Level 3\3 Sacks Or More By One Player
+800707DB 0040
+
+$Level 3\3 Tips Or More By One Player
+800707E0 0040
+
+$Level 3\400 Yards Of Total Defense Or More
+800707EA 0040
+
+$Level 3\5 Successful Field Goals Or More By One Player
+800707DE 0040
+
+$Level 3\8 Tackles Or More By One Player
+800707E9 0040
+
+$Level 3\Break 2 Different All-Time Records Or More In A Game
+800707E7 0040
+
+$Level 3\Commit No Penalties In A Game
+800707E6 0040
+
+$Level 3\Complete A 50 Yard Run Or Longer
+800707E5 0040
+
+$Level 3\Have A RB Rush For Over 100 Yards And 50 Yards Receiving
+800707EB 0040
+
+$Level 3\Play And Win A Superbowl In Franchise Mode
+800707E1 0040
+
+$Level 3\Play And Win A Superbowl In Season Mode
+800707E2 0040
+
+$Level 3\Play And Win An 8 Team Tournament
+800707E4 0040
+
+$Level 3\QB Who Passes For 400 Yards Or More
+800707DA 0040
+
+$Level 3\Recover 2 Fumbles Or More
+800707DD 0040
+
+$Level 3\Score 55 Points Or Greater
+800707E8 0040
+
+$Level 3\Successfully Kick 8 Extra Points Or More
+800707E3 0040
+
+$Level 4\200 Receptions Yards Or Greater By One Player
+800707ED 0040
+
+$Level 4\200 Yards Rushing Or Greater By One Player
+800707EC 0040
+
+$Level 4\25 Completions Or More By One QB
+800707F2 0040
+
+$Level 4\40 First Downs Or More
+800707FE 0040
+
+$Level 4\6 Successful Two Point Conversions Or More
+800707F1 0040
+
+$Level 4\650 Yards Of Total Offense Or More By One Team
+800707F9 0040
+
+$Level 4\7 Sacks Or More By One Player
+800707F8 0040
+
+$Level 4\Go Undefeated And Win A Superbowl In One Franchise Mode Season By Playing Every Game
+800707F3 0040
+
+$Level 4\Go Undefeated And Win A Superbowl In One Season Mode Season By Playing Every Game
+800707F4 0040
+
+$Level 4\Have A Minimum Of 7 Members Of Your Team Catch At Least 1 Pass
+800707F6 0040
+
+$Level 4\Have One Reciever With 150 RAC Yards Or Greater
+800707FA 0040
+
+$Level 4\Kick A Punt Of 55 Yards Or More
+800707FF 0040
+
+$Level 4\QB Who Passes For 500 Yards Or More
+800707EE 0040
+
+$Level 4\QB Who Rushes For 75 Yards Or More
+800707F5 0040
+
+$Level 4\Return A Punt For A Touchdown
+800707EF 0040
+
+$Level 4\Return An Interception For A Touchdown
+800707F0 0040
+
+$Level 4\Rush For 100 Yards Or More With 2 Different Running Backs
+800707FC 0040
+
+$Level 4\Rush The Ball 40 Time Or More With A QTR Length Of 6 Minutes Or Less
+800707FB 0040
+
+$Level 4\Win A 16 Team Tournament
+800707F7 0040
+
+$Level 4\Win By A Margin Of 50 Points Or More
+800707FD 0040
+
+$Level 5\200 Kick Return Yards Or Greater By One Player
+80070809 0040
+
+$Level 5\200 Punt Return Yards Or Greater By One Player
+80070806 0040
+
+$Level 5\250 Yards Rushing Or Greater By One Player
+80070813 0040
+
+$Level 5\3 Receivers With 100 Yards Or More Recieving
+80070805 0040
+
+$Level 5\Break 4 Different All-Time Records Or More In A Game
+8007080D 0040
+
+$Level 5\Complete A Run Play Of 80 Yards Or More
+8007080A 0040
+
+$Level 5\Convert 10 4th Down Conversions Or More
+8007080B 0040
+
+$Level 5\Convert To 3RD Down Conversions Or More
+80070812 0040
+
+$Level 5\Have A QB With A 100 Passing PCT While Throwing A Minimum Of 5 Passes
+8007080F 0040
+
+$Level 5\Have A QB With A Pass AVG Of 30 Yards Or Greater While Throwing At Least 5 Passes
+80070801 0040
+
+$Level 5\Have A RB With A Rushing AVG Of 20 Yards Or Greater While Rushing At least 3 Times
+80070804 0040
+
+$Level 5\Pass For 200 Yards Or More With 2 QBS
+80070803 0040
+
+$Level 5\Play And Win A Minimum Of Four Superbowls With The Same Team In Franchise Mode
+80070810 0040
+
+$Level 5\QB Rushes For 3 Touchdowns Or More
+80070807 0040
+
+$Level 5\QB With A Minimum Of 150 Yards Passing And 100 Yards Rushing
+8007080C 0040
+
+$Level 5\RB With A Minimum Of 100 Yards Receiving And 100 Yards Rushing
+80070811 0040
+
+$Level 5\Return A Kickoff For A Touchdown
+80070800 0040
+
+$Level 5\Score 80 Points Or Greater
+80070808 0040
+
+$Level 5\Shut Out Opposing Team With A QTR Length Of 5 Minutes
+80070802 0040
+
+$Level 5\Successfully Kick A FG Of 55 Yards Or More
+8007080E 0040
+
+$No Time-Outs\Away Team
+8006EF6F 0000
+
+$No Time-Outs\Home Team
+8006EC7F 0000
+
+$Particle Illusions\A
+8005F19B 00FE
+
+$Particle Illusions\B
+8005F199 0002
+
+$Players\Evil Crystal
+8005F183 000F
+
+$Players\Generic Black & White
+8005F233 0058
+
+$Players\Hallow
+8005F233 0047
+
+$Players\Jagged
+8005F180 0080
+
+$Players\Pixel
+8005F18D 0001
+
+$Players\Polygon
+8005F183 0001
+
+$Players\Super Red
+8005F43E 0002
+
+$Press GS For More Time To Choose Play
+890723E6 0024
+
+$Press L For First Down\Player 1
+D00753DD 0020
+81071B18 0001
+
+$Press L For First Down\Player 2
+D00753E5 0020
+81071B18 0001
+
+$Press L For First Down\Player 3
+D00753ED 0020
+81071B18 0001
+
+$Press L For First Down\Player 4
+D00753F5 0020
+81071B18 0001
+
+$Press R For Fourth Down\Player 1
+D00753DD 0010
+81071B18 0004
+
+$Press R For Fourth Down\Player 2
+D00753E5 0010
+81071B18 0004
+
+$Press R For Fourth Down\Player 3
+D00753ED 0010
+81071B18 0004
+
+$Press R For Fourth Down\Player 4
+D00753F5 0010
+81071B18 0004
+
+$Uniforms\Bare
+8005F188 008F
+
+$Uniforms\Future
+8005F207 0033
+
+$Uniforms\Ghetto
+8005F188 001F

@@ -1,0 +1,4793 @@
+[DED0DD9A-E78225A7-C:50]
+Name=Mickey's Speedway USA (E) (M5)
+
+$Always 1st & final time 00:00.00
+Note=All Levels
+50000301 0000
+801CE959 0000
+
+$Difficulty Select
+8007C1C0 00??
+00 Amateur
+01 Intermediate
+02 Professional
+03 Mirror Mode
+
+$Frantic Finale\Colorado\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801BDB3B 00FF
+
+$Frantic Finale\Colorado\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B7432 0063
+
+$Frantic Finale\Hawaii\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B75BB 00FF
+
+$Frantic Finale\Hawaii\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B7B12 0063
+
+$Frantic Finale\Oregon\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801BABEB 00FF
+
+$Frantic Finale\Oregon\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B44E2 0063
+
+$Frantic Finale\Texas\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801BB38B 00FF
+
+$Frantic Finale\Texas\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B4C82 0063
+
+$Freewayphobia\Chicago\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B758B 00FF
+
+$Freewayphobia\Chicago\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B7AE2 0063
+
+$Freewayphobia\Dakota\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B159B 00FF
+
+$Freewayphobia\Dakota\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B2CB2 0063
+
+$Freewayphobia\New York\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B4A5B 00FF
+
+$Freewayphobia\New York\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B4FB2 0063
+
+$Freewayphobia\Seattle\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B417B 00FF
+
+$Freewayphobia\Seattle\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B5892 0063
+
+$Level Select
+801AD159 00??
+00 Traffic Troubles
+01 Motor Way Mania
+02 Freewayphobia
+03 Vitory Vehicles
+04 Frantic Finale
+05 Time Trial
+06 Practice
+07 Contest
+08 Options
+
+$Motor Way Mania\Alaska\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B280B 00FF
+
+$Motor Way Mania\Alaska\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B3F22 0063
+
+$Motor Way Mania\Las Vegas\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B6E9B 00FF
+
+$Motor Way Mania\Las Vegas\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B85B2 0063
+
+$Motor Way Mania\Los Angeles\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B207B 00FF
+
+$Motor Way Mania\Los Angeles\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B3792 0063
+
+$Motor Way Mania\Philadelphia\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B7DEB 00FF
+
+$Motor Way Mania\Philadelphia\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B9502 0063
+
+$Play As
+800D33D1 00??
+00 Mickey Mouse
+01 Daisy Duck
+02 Goofy
+03 Pete
+04 Minnie Mouse
+05 Donald Duck
+06 Huey
+07 Dewey
+08 Louie
+09 Lugwig Von Drake
+
+$Re-name Characters\Daisy\Letter 1
+801E39CE 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Daisy\Letter 2
+801E39CF 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Daisy\Letter 3
+801E39D0 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Daisy\Letter 4
+801E39D1 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Daisy\Letter 5
+801E39D2 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Dewey\Letter 1
+801E39E4 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Dewey\Letter 2
+801E39E5 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Dewey\Letter 3
+801E39E6 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Dewey\Letter 4
+801E39E7 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Dewey\Letter 5
+801E39E8 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Donald\Letter 1
+801E39C7 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Donald\Letter 2
+801E39C8 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Donald\Letter 3
+801E39C9 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Donald\Letter 4
+801E39CA 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Donald\Letter 5
+801E39CB 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Donald\Letter 6
+801E39CC 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Goofy\Letter 1
+801E39D4 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Goofy\Letter 2
+801E39D5 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Goofy\Letter 3
+801E39D6 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Goofy\Letter 4
+801E39D7 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Goofy\Letter 5
+801E39D8 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Huey\Letter 1
+801E39DF 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Huey\Letter 2
+801E39E0 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Huey\Letter 3
+801E39E1 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Huey\Letter 4
+801E39E2 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Louie\Letter 1
+801E39EA 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Louie\Letter 2
+801E39EB 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Louie\Letter 3
+801E39EC 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Louie\Letter 4
+801E39ED 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Louie\Letter 5
+801E39EE 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Ludwig\Letter 1
+801E39F0 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Ludwig\Letter 2
+801E39F1 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Ludwig\Letter 3
+801E39F2 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Ludwig\Letter 4
+801E39F3 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Ludwig\Letter 5
+801E39F4 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Ludwig\Letter 6
+801E39F5 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Mickey\Letter 1
+801E39B9 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Mickey\Letter 2
+801E39BA 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Mickey\Letter 3
+801E39BB 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Mickey\Letter 4
+801E39BC 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Mickey\Letter 5
+801E39BD 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Mickey\Letter 6
+801E39BE 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Minnie\Letter 1
+801E39C0 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Minnie\Letter 2
+801E39C1 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Minnie\Letter 3
+801E39C2 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Minnie\Letter 4
+801E39C3 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Minnie\Letter 5
+801E39C4 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Minnie\Letter 6
+801E39C5 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Pete\Letter 1
+801E39DA 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Pete\Letter 2
+801E39DB 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Pete\Letter 3
+801E39DC 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Re-name Characters\Pete\Letter 4
+801E39DD 00??
+00 <end of word>
+20 <space>
+21 !
+22 "
+23 #
+24 <dollar sign>
+25 %
+26 &
+27 '
+28 (
+29 )
+2A *
+2B +
+2C <comma>
+2D -
+2E .
+2F /
+30 0
+31 1
+32 2
+33 3
+34 4
+35 5
+36 6
+37 7
+38 8
+39 9
+3A :
+3B ;
+3C <
+3D =
+3E >
+3F ?
+40 @
+41 A
+42 B
+43 C
+44 D
+45 E
+46 F
+47 G
+48 H
+49 I
+4A J
+4B K
+4C L
+4D M
+4E N
+4F O
+50 P
+51 Q
+52 R
+53 S
+54 T
+55 U
+56 V
+57 W
+58 X
+59 Y
+5A Z
+60 `
+61 st <as in 1st>
+62 nd <as in 2nd>
+63 rd <as in 3rd>
+64 th <as in 4th>
+67 g
+68 h
+69 i
+6A j
+6B k
+6C l
+6D m
+6E n
+6F o
+70 p
+71 q
+72 r
+73 s
+74 t
+75 u
+76 v
+77 w
+78 x
+79 y
+7A z
+
+$Traffic Troubles\Grand Canyon\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B8CCB 00FF
+
+$Traffic Troubles\Grand Canyon\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B8CF2 0063
+
+$Traffic Troubles\Indianapolis\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B430B 00FF
+
+$Traffic Troubles\Indianapolis\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B4332 0063
+
+$Traffic Troubles\New Mexico\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B58DB 00FF
+
+$Traffic Troubles\New Mexico\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B5902 0063
+
+$Traffic Troubles\San Fransisco\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B75DB 00FF
+
+$Traffic Troubles\San Fransisco\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B7602 0063
+
+$Unlock Everything
+Note=This will unlock all characters, tracks, mirror mode, all in-game cheats, postcards, pluto's collar and give you all Trophies for every track and difficulties. To have this cheat save to mempak, enable it and then go into the Options Menu and disable the cheat. Go to the Wide-Screen Settings and Change it to Wide-Screen [16.9] and then the B button to get back to Wide-Screen Settings, now go back into  Wide-Screen [16.9] and change it back to Normal [4.3].and press the B button until you come back to the main Options Menu.Close the game and load it again to see everything saved to the Mempak and unlocked.
+800D3478 008F
+800D3479 0094
+800D347A 0003
+800D347C 0001
+800D347F 0080
+50000502 0000
+800D3480 0009
+50000502 0000
+800D3481 0024
+800D348A 0015
+800D348B 007F
+800D348C 0001
+800D348D 00FF
+800D348E 0004
+800D348F 0022
+
+$Victory Vehicles\Everglades\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B516B 00FF
+
+$Victory Vehicles\Everglades\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B56C2 0063
+
+$Victory Vehicles\Malibu\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B6BFB 00FF
+
+$Victory Vehicles\Malibu\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B7152 0063
+
+$Victory Vehicles\Washington DC\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801BCBAB 00FF
+
+$Victory Vehicles\Washington DC\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801BD102 0063
+
+$Victory Vehicles\Yellowstone\Always Have Shield Shell
+Note=Only use one Always Have Shield Shell code of each Level at a time, if you enable all tracks Always Have Shield Shell on that level Or all levels and tracks it will crash.
+801B2A0B 00FF
+
+$Victory Vehicles\Yellowstone\Max Tokens
+Note=Only use one One Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801B2F62 0063

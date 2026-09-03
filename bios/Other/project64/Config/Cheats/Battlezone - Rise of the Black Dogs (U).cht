@@ -1,0 +1,56 @@
+[55D4C4CE-7753C78A-C:45]
+Name=Battlezone - Rise of the Black Dogs (U)
+
+$Add\Building
+8006A1C0 0001
+
+$Add\Satellite
+8006A1C3 0001
+
+$Have\All\Levels Unlocked & Completed For Americans
+8006A1F0 0011
+
+$Have\All\Levels Unlocked & Completed For Black Dogs
+8006A1F3 000A
+
+$Have\All\Levels Unlocked & Completed For Soviets
+8006A1F1 0008
+
+$Have\All\Missions Open And Complete For Americans
+8006A1EC 0011
+
+$Have\All\Missions Open And Complete For Black Dogs
+8006A1EF 000A
+
+$Have\All\Missions Open And Complete For Soviets
+8006A1ED 0008
+
+$Infinite\Ammo
+8006A1C1 0001
+
+$Infinite\Armor
+8006A1C2 0001
+
+$Infinite\Pilots
+811FBCCE FFFF
+
+$Infinite\Scrap Collected
+811FBCC6 FFFF
+
+$Infinite\Ship Health
+811DF6DE 0BA9
+
+$Infinite\Shots For Sniper Rifle
+811DA682 0003
+
+$Infinite\Weapons
+811DF6EA 04B0
+
+$Level Select
+8006A1F5 0001
+
+$Max\Pilot Limits
+811FBCD2 FFFF
+
+$Max\Scrap Limit
+811FBCCA FFFF

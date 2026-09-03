@@ -1,0 +1,135 @@
+[2388984C-DA7B3CC5-C:45]
+Name=Turok - Rage Wars (U) (V1.1)
+
+$Level Select\Proving Ground-Tightrope
+Note=Do Not use this with Level Select The Pit-Starlight. Only use One Level Select Option At A Time
+8014BD9F 00??
+00 Proving Grounds
+01 Basic Training
+02 Crossroads
+03 Grim Retreat
+04 Cathedral
+05 Fall Out
+06 Boxed Set
+07 Dire Straight
+08 Prey
+09 Warehouse
+0A Water Temple
+0B Bomb Shelter
+0C Tempered
+0D Earth Temple
+0E Fire Temple
+0F Mystic
+10 Bottleneck
+11 Tightrope
+
+$Level Select\The Pit-Starlight
+Note=Do Not use this with Level Select Proving Ground-Tightrope. Only use One Level Select Option At A Time
+8014BD9F 00??
+12 The Pit
+13 Leap Of Faith
+14 Wicked Dance
+15 Bunker
+16 Ampatheater
+17 Fire Walker
+18 Crypts
+19 Breakdown
+1A Retaliation
+1B Hopeless
+1C Matrix
+1D Fathom
+1E The Pedestal
+1F Defcon 5
+20 Spirit Temple
+21 Stronghold
+22 Courtyard
+23 Starlight
+
+$Player 1\Have All\Medals
+810FCB4A FFFF
+810FCB4C FFFF
+810FCB4E FFFF
+800FCB50 0003
+
+$Player 1\Have All\Mini Game Icons
+800FCB17 0024
+
+$Player 1\Infinite Ammo
+80336535 0063
+80336537 0063
+80336539 0063
+80692B95 0063
+80692B97 0063
+80692B99 0063
+80692B9B 0063
+80692B9D 0063
+80692B9F 0063
+80692BA1 0063
+
+$Player 1\Infinite\Cerebral Bores
+8033653B 00FF
+
+$Player 1\Infinite\Health
+81336526 6400
+80692B86 0064
+
+$Player 1\Infinite\Metal Claws
+80336541 00FF
+
+$Player 1\Infinite\Proximity Mines
+8033653D 00FF
+
+$Player 1\Infinite\Sentry Guns
+8033653F 00FF
+
+$Player 1\Infinite\Time
+811407F4 47AF
+811407F6 C4B1
+
+$Player 1\Play As
+80140358 00??
+00 Turok
+01 Mantid
+02 Drone
+03 Fireborn
+04 Soldier
+05 Adon
+06 Lord Of The Dead
+07 Elite Guard
+08 Blind One
+09 Juggernaut
+0A Death Guard
+0B Bastile
+0C Syra
+0D Symbiont
+0E Tail Set
+0F Pur-Lin
+10 Symbiont
+11 Raptor
+12 Mites
+13 Monkey
+
+$Player 1\Start With Weapon
+803366B0 00??
+00 Warhammer
+01 Boomerang
+02 Tek Crossbow
+03 Mag 60
+04 Shotgun
+05 Assault Rifle
+06 Mini Gun
+07 Plasma Rifle
+08 Freeze Gun
+09 Flaregun
+0A Grenade Launcher
+0B Scorpion Launcher
+0C Napalm Gel
+0D Emaciator
+0E Inflator
+0F Chest Burster
+10 Raptor Claw
+11 Mite Bite
+12 Cerebral Bore
+13 PFM Mine
+14 Iron Claw
+15 Sentry Turret

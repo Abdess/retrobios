@@ -1,0 +1,218 @@
+[0894909C-DAD4D82D-C:45]
+Name=Knockout Kings 2000 (U)
+
+$Big\Glove Mode
+800F401D 0001
+
+$Big\Head Mode
+800F401C 0001
+
+$Infinite\Creation Points
+81063742 0064
+
+$Player 1\Character Modifier
+800EC6F3 00??
+00 Ali
+01 Frazier
+02 Holmes
+03 Holyfield
+04 Lewis
+05 Tua
+06 Spinks
+07 Butterbean
+08 De La Hoya
+09 Leonard
+0A Hagler
+0B Duran
+0C Whitaker
+0D Quartey
+0E Carr
+0F Vargas
+10 Reid
+11 Moskey
+12 Pryor
+13 Argnello
+14 O'Grady
+15 Mayweather
+16 Manfredy
+17 Kelley
+18 Romero
+19 Random
+1A Created Boxer
+1B Creater Boxer
+1C Dempsey
+1D K. Orr
+1E IUppa
+1F S. Sandoval
+20 S. Broadhurst
+21 Pole
+22 Hasson
+23 Alameda
+24 Wahlberg
+25 Scott
+26 Hopra
+27 Eckhardt
+28 Parker
+29 Ruiz
+2A F. Sandoval
+2B Ang
+2C Bristov
+2D Botti
+2E S. Orr
+2F Zarifes
+30 Giolito
+31 Garrett
+32 Barclay
+33 Wynne
+34 Lupidi
+35 W. Aguitar
+36 Di Ricco
+37 Philippine
+38 M. Broadhurst
+39 Weaver
+3A Lajoie
+3B Greenberg
+3C Quinn
+3D Perone
+3E Tool
+3F Bunch
+40 St. Aubyn
+41 Wells
+42 Dexter
+43 Hsu
+44 Bazzel
+45 Thompson
+46 Eklund
+47 Tallarico
+48 de Leon
+49 Coallier
+
+$Player 1\Infinite\Health
+8106B974 42C8
+8106B976 0000
+
+$Player 1\Max\Power
+8106B980 0000
+8106B982 0BB2
+
+$Player 1\No Health
+8106B974 0000
+8106B976 0000
+
+$Player 1\No Power
+8106B980 0000
+8106B982 0000
+
+$Player 1\Power Punch After 1st Punch
+8006B983 0064
+
+$Player 2\Character Modifier
+800EC6F7 00??
+00 Ali
+01 Frazier
+02 Holmes
+03 Holyfield
+04 Lewis
+05 Tua
+06 Spinks
+07 Butterbean
+08 De La Hoya
+09 Leonard
+0A Hagler
+0B Duran
+0C Whitaker
+0D Quartey
+0E Carr
+0F Vargas
+10 Reid
+11 Moskey
+12 Pryor
+13 Argnello
+14 O'Grady
+15 Mayweather
+16 Manfredy
+17 Kelley
+18 Romero
+19 Random
+1A Created Boxer
+1B Creater Boxer
+1C Dempsey
+1D K. Orr
+1E IUppa
+1F S. Sandoval
+20 S. Broadhurst
+21 Pole
+22 Hasson
+23 Alameda
+24 Wahlberg
+25 Scott
+26 Hopra
+27 Eckhardt
+28 Parker
+29 Ruiz
+2A F. Sandoval
+2B Ang
+2C Bristov
+2D Botti
+2E S. Orr
+2F Zarifes
+30 Giolito
+31 Garrett
+32 Barclay
+33 Wynne
+34 Lupidi
+35 W. Aguitar
+36 Di Ricco
+37 Philippine
+38 M. Broadhurst
+39 Weaver
+3A Lajoie
+3B Greenberg
+3C Quinn
+3D Perone
+3E Tool
+3F Bunch
+40 St. Aubyn
+41 Wells
+42 Dexter
+43 Hsu
+44 Bazzel
+45 Thompson
+46 Eklund
+47 Tallarico
+48 de Leon
+49 Coallier
+
+$Player 2\Infinite\Health
+8106BA7C 42C8
+8106BA7E 0000
+
+$Player 2\Max\Power
+8106BA88 0000
+8106BA8A 0BB2
+
+$Player 2\No Health
+8106BA7C 0000
+8106BA7E 0000
+
+$Player 2\No Power
+8106BA88 0000
+8106BA8A 0000
+
+$Player 2\Power Punch After 1st Punch
+8006BA8B 0064
+
+$Ring Modifier
+800EC703 00??
+00 Great Western Forum
+01 Caesars Palace
+02 Ecko Sports Arena
+03 International Arena
+04 Local 440
+05 The Colosseum
+06 Roppongi Palace
+07 Wembley Arena
+08 Knockout Kings Arena
+
+$Stop Timer
+81067546 001C

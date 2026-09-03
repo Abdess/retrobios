@@ -1,0 +1,125 @@
+[8E9D834E-1E8B29A9-C:50]
+Name=Extreme-G (E) (M5)
+
+$All Tracks Unlocked
+80095F6E 0008
+50000264 0000
+80169347 0001
+50000264 0000
+80169473 0001
+50000564 0000
+8016959F 0001
+
+$Bike Modifier\Player 1
+8016983F 00??
+00 Raze
+01 Rana
+02 Khan
+03 Grimace
+04 Mooga
+05 Jolt
+06 Main
+07 Apollyon
+08 Roach
+09 Neon
+
+$Bike Modifier\Player 2
+8016988B 00??
+00 Raze
+01 Rana
+02 Khan
+03 Grimace
+04 Mooga
+05 Jolt
+06 Main
+07 Apollyon
+08 Roach
+09 Neon
+
+$Bike Modifier\Player 3
+801698D7 00??
+00 Raze
+01 Rana
+02 Khan
+03 Grimace
+04 Mooga
+05 Jolt
+06 Main
+07 Apollyon
+08 Roach
+09 Neon
+
+$Bike Modifier\Player 4
+80169923 00??
+00 Raze
+01 Rana
+02 Khan
+03 Grimace
+04 Mooga
+05 Jolt
+06 Main
+07 Apollyon
+08 Roach
+09 Neon
+
+$Extra Bikes Unlocked
+80167C13 0001
+80167C17 0003
+
+$Extra Levels Unlocked
+8016980B 0001
+8016980F 0001
+
+$Infinite Primary Weapon\Player 1
+801651FD 00C8
+
+$Infinite Primary Weapon\Player 2
+8016596D 00C8
+
+$Infinite Primary Weapon\Player 3
+801660DD 00C8
+
+$Infinite Primary Weapon\Player 4
+8016684D 00C8
+
+$Infinite Shields\Player 1
+801651F5 00C8
+
+$Infinite Shields\Player 2
+80165965 00C8
+
+$Infinite Shields\Player 3
+801660D5 00C8
+
+$Infinite Shields\Player 4
+80166845 00C8
+
+$Infinite Turbos\Player 1
+801651CB 0003
+801651CF 0003
+
+$Infinite Turbos\Player 2
+8016593B 0003
+8016593F 0003
+
+$Infinite Turbos\Player 3
+801660AB 0003
+801660AF 0003
+
+$Infinite Turbos\Player 4
+8016681B 0003
+8016681F 0003
+
+$Mode Select
+80097687 00??
+01 Boulder
+02 Fish Eye Lens
+03 Boulder & Fish Eye Lens
+04 Magnify
+08 Anti-Gravity
+0A Anti-Gravity & Fish Eye Lens
+10 Wireframe
+11 Boulder & Wireframe
+20 Stealth Mode
+40 Ghost Mode
+80 Ugly Mode

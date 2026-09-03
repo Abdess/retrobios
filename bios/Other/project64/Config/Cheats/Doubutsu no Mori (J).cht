@@ -1,0 +1,146 @@
+[BD8E206D-98C35E1C-C:4A]
+Name=Doubutsu no Mori (J)
+
+$Day
+80136FBF 00??
+01 Monday 1st
+02 Tuesday 2nd
+03 Wednesday 3rd
+04 Thursday 4th
+05 Friday 5th
+06 Saturday 6th
+07 Sunday 7th
+08 Monday 8th
+09 Tuesday 9th
+0A Wednesday 10th
+0B Thursday 11th
+0C Friday 12th
+0D Saturday 13th
+0E Sunday 14th
+0F Monday 15th
+10 Tuesday 16th
+11 Wednesday 17th
+12 Thursday 18th
+13 Friday 19th
+14 Saturday 30th
+15 Sunday 21st
+16 Monday 22nd
+17 Tuesday 23rd
+18 Wednesday 24th
+19 Thursday 25th
+1A Friday 26th
+1B Saturday 27th
+1C Sunday 28th
+1D Monday 29th
+1E Tuesday 30th
+1F Wednesday 31st
+
+$Hours
+80136FBE 00??
+00 00 AM
+01 01 AM
+02 02 AM
+03 03 AM
+04 04 AM
+05 05 AM
+06 06 AM
+07 07 AM
+08 08 AM
+09 09 AM
+0A 10 AM
+0B 11 AM
+0C 00 PM
+0D 01 PM
+0E 02 PM
+0F 03 PM
+10 04 PM
+11 05 PM
+12 06 PM
+13 07 PM
+14 08 PM
+15 09 PM
+16 10 PM
+17 11 PM
+
+$Item Select
+81126EE8 ????
+1011 Tall Red Cupboard
+1C00 Pet Cage
+1CA6 Fish Tank (Fish Included!)
+1D2B Orange NES Game
+1D2F Grey NES Game
+1D33 Red NES Game
+1D37 Light Blue NES Game
+1D3A Yellow NES Game
+1D3E Purple NES Game
+1D42 Blue NES Game
+1D47 Stereo NES Colour
+1D4C Record Player
+1D50 JukeBox
+1DA0 Grandfather Clock
+1DA6 Stereo Kinda Thing
+1DA9 Stereo
+1DAC CD Player
+1DB3 Alarm Clock
+1EA1 Lamp
+1EA5 Snowman Fridge
+1EAB Round Snowman Table
+1EAF Snowman Bed
+1EB0 Snowman Seat
+2100 1000 Bag
+2100 1000 Bag
+2101 10000 Bag
+2101 10000 Bag
+2102 30000 Bag
+2102 30000 Bag
+2103 100 Bag
+2103 100 Bag
+2410 Nook's Shirt
+2410 Nook's Shirt
+2514 Flat Shell
+2514 Flat Shell
+2515 Pointy Shell
+2515 Pointy Shell
+2804 Orange
+
+$Max Cash
+813BC34C FFFF
+
+$Minutes
+80136FBD 00??
+00 00
+05 05
+0A 10
+0F 15
+14 20
+19 25
+1E 30
+23 35
+28 40
+2D 45
+32 50
+37 55
+3B 59
+
+$Month
+80136FC1 00??
+01 Jan
+02 Feb
+03 March
+04 April
+05 May
+06 June
+07 July
+08 Aug
+09 Sept
+0A Oct
+0B Nov
+0C Dec
+
+$Time Passes
+80136FD2 00??
+00 Time Normal
+01 Mins Like Seconds
+05 Hours & Mins Medium
+10 Hours & Mins Fast
+FF Time Zooms By

@@ -1,0 +1,52 @@
+[1FA056E0-A4B9946A-C:4A]
+Name=WinBack (J) (V1.0)
+
+$All Bosses 1 Hit Deaths
+811BE182 0000
+
+$Enable\Max Power Mode
+8015D117 0001
+
+$Flashlight Mod
+80179148 00??
+01 On
+00 Off
+
+$Have All Characters In Multi
+8115D112 FFFF
+8115D110 0003
+8015D111 0003
+
+$Have\All\Weapons,Items & Infinite Ammo\Player 1
+8017A79F 001E
+8017A7B3 0008
+8017A7B7 0009
+801584C4 0009
+8015D117 0001
+801584C0 000C
+801584C1 0060
+801584C3 0001
+50000601 0000
+801584C5 0001
+801584CB 0009
+801584CD 000C
+
+$Infinite Health
+8017A7BB 0064
+
+$Start with Weapon\Player 1
+8017A7A8 00??
+00 HandGun
+01 Machinegun
+02 Shotgun
+03 Rocket Launcher
+04 M16 With Infinite Ammo
+05 New Cooler Handgun
+06 Invisible Gun 1 With Infinite Ammo
+07 Invisible Gun 2 With Infinite Ammo
+08 Odd Inviso ShotGun With Infinite Ammo
+09 Cool Rocket Launcher With Infinite Ammo
+14 Silenced Handgun
+
+$Time is Always 00:00:00
+8110DA62 0000

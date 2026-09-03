@@ -1,0 +1,20 @@
+[C8BB4DD9-CC5F430B-C:45]
+Name=Quest 64 (U)
+
+$Have All Elements
+8107BAA4 3232
+8107BAA6 3232
+
+$Infinite Health
+8107BA84 01F4
+8107BA86 01F4
+
+$Infinite Magic Points
+8107BA88 01F4
+8107BA8A 01F4
+
+$Super Agility
+8107BA8E 01F4
+
+$Super Defense
+8107BA8C 01F4

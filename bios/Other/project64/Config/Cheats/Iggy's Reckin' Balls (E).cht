@@ -1,0 +1,62 @@
+[D692CC5E-EC58D072-C:50]
+Name=Iggy's Reckin' Balls (E)
+
+$[Cheat Menu]
+Note=Press Pause to access cheats.
+800CD089 00FF
+800CD08A 00FF
+800CD08B 00FF
+
+$[Press F9]\Enable All Courses
+890CCEF2 0B00
+890CCEF4 0B00
+890CCEF6 0B00
+
+$[Press F9]\Extra Characters
+890C642F 01FF
+
+$[Press F9]\Progress 100%
+50000801 0000
+880CCF00 0003
+50000801 0000
+880CCF01 00FF
+
+$Have All\Cups Select
+50002C02 0000
+800CCF11 00??
+00 Gold Cup
+01 Silver Cup
+02 Bronze Cup
+04 None (Default)
+
+$Have All\Points
+810D8FE0 03E7
+
+$Have All\RB Medals
+810D8FF0 03E7
+
+$Infinite\Credits
+800BDFA5 0005
+
+$Infinite\Timer
+810D9088 44E9
+
+$Infinite\Turbos
+Note=To enable this just select On or Off and when you press Z you will use your Turbos accordantly. Warning you can only have Infinite if you have some turbo level to begin with
+D00F2D16 0020
+800CD091 00??
+00 Off
+08 On
+
+$Laps To Race
+Note=Here you can select how many laps you prefer.to race
+800C8909 00??
+01 1 Lap
+02 2 Laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 Laps
+07 7 Laps
+08 8 Laps
+09 9 Laps

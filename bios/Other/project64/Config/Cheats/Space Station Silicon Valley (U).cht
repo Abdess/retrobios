@@ -1,0 +1,124 @@
+[BFE23884-EF48EAAF-C:45]
+Name=Space Station Silicon Valley (U)
+
+$All Levels Open
+50002001 0000
+803F7DE0 0001
+
+$Always\Raining
+803F2D6F 0005
+
+$Always\Snowing
+803F2D6D 0005
+
+$Debug Mode
+803F642F 0001
+
+$Have All\Power Cells
+803F2D3D 000F
+
+$Have All\Secret Mini Game
+803F643D 0001
+
+$High Score
+813F2D30 007F
+813F2D32 FFFF
+
+$Infinite Health\Ship\in Asteroids Level
+803E4CDB 0003
+
+$Infinite\Ability\Fox
+811DF8F4 0400
+
+$Infinite\Ability\Heli-Rabbit
+811DF14C 0400
+
+$Infinite\Ability\Husky
+811DED78 0400
+
+$Infinite\Ability\Mouse
+811DFCC8 0400
+
+$Infinite\Ability\Penguin
+811E009C 0400
+
+$Infinite\Ability\Rabbit
+811DE5D0 0400
+
+$Infinite\Ability\Racing Dog
+811DF14C 0400
+
+$Infinite\Ability\Racing Fox
+811DF8F4 0082
+
+$Infinite\Ability\Ram
+811DE5D0 0400
+
+$Infinite\Ability\Sheep
+811DE9A0 0400
+
+$Infinite\Ability\Springy Thing
+811DF14C 0400
+
+$Infinite\Ability\Walrus
+811DE5D0 0400
+
+$Infinite\Boost\Fox
+811DF8F0 0400
+
+$Infinite\Boost\Mouse
+811DFCC4 0400
+
+$Infinite\Boost\Racing Dog
+811DF148 0400
+
+$Infinite\Boost\Racing Fox
+811DF8F0 0400
+
+$Infinite\Boost\Walrus
+811DED74 0400
+
+$Infinite\Energy\Dog
+811DFF04 0082
+
+$Infinite\Energy\EVO (Chip)
+801DE065 0082
+
+$Infinite\Energy\Evo\in Bonus Level 1 & Final Level
+801DE439 0082
+
+$Infinite\Energy\Evo\In Bonus Level 4
+801DEFB5 0082
+
+$Infinite\Energy\Fox
+811DF75C 0082
+
+$Infinite\Energy\Heli-Rabbit
+811DEFB4 0082
+
+$Infinite\Energy\Mouse,Hyena
+801DFB31 0082
+
+$Infinite\Energy\Normal Penguin
+811DFF04 0082
+
+$Infinite\Energy\Normal Rabbit
+811DE438 0082
+
+$Infinite\Energy\Racing Dog
+811DEFB4 0082
+
+$Infinite\Energy\Racing Fox
+811DF7FC 0082
+
+$Infinite\Energy\Ram
+811DE438 0082
+
+$Infinite\Energy\Sheep
+811DEBE0 0082
+
+$Infinite\Energy\Snow Husky
+811DFF04 0082
+
+$Infinite\Energy\Springy Thing
+811DEFB4 0082

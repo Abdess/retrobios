@@ -1,0 +1,9 @@
+[9E8FE2BA-8B270770-C:45]
+Name=Killer Instinct Gold (U) (V1.0)
+
+$Always 60fps
+Note=Intro with N logo is at 60fps now! Why is it a pointer address?!?
+
+D029571F 0002
+8029571F 0001
+

@@ -1,0 +1,19 @@
+[AE4992C9-9253B253-C:50]
+Name=NASCAR 99 (E) (M3)
+
+$Access All Secret NASCAR Legends
+Note=This will give you access to,Alan Kulwicki,Cale Yarborough,Bobby Allison,Davey Allison,Richard Petty,Benny Parsons
+50000602 0000
+810DF400 0101
+
+$Laps To Race
+81044B7E 00??
+01 1 Lap
+02 2 Laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 6 Laps
+07 7Laps
+08 8 Laps
+09 9 Laps

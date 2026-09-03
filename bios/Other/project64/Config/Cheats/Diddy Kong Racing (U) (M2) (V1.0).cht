@@ -1,0 +1,267 @@
+[53D440E7-7519B011-C:45]
+Name=Diddy Kong Racing (U) (M2) (V1.0)
+
+$Boss Cannot Move\Dino
+811DFCF4 44A0
+
+$Boss Cannot Move\Octo
+811E045C 44A0
+
+$Enable All Cheats
+Note=Go into Options & then Magic Codes. Then Code list to turn off & on what you want.
+50000401 0000
+810DFD9C FFFF
+
+$Have All\50 Bananas\Ancient Lake
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E32CD 0032
+
+$Have All\50 Bananas\Boulder Canyon
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E61ED 0032
+
+$Have All\50 Bananas\Crescent Island
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E3A2D 0032
+
+$Have All\50 Bananas\Darkmoon Caverns
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E5D0D 0032
+
+$Have All\50 Bananas\Everfrost Peak
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E4F5D 0032
+
+$Have All\50 Bananas\Fossil Canyon
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E676D 0032
+
+$Have All\50 Bananas\Frosty Village
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E5F4D 0032
+
+$Have All\50 Bananas\Greenwood Village
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E4AAD 0032
+
+$Have All\50 Bananas\Haunted Woods
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E4A1D 0032
+
+$Have All\50 Bananas\Hot Top Volcano
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E462D 0032
+
+$Have All\50 Bananas\Jungle Falls
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E44CD 0032
+
+$Have All\50 Bananas\Pirate Lagoon
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E295D 0032
+
+$Have All\50 Bananas\Snowball Valley
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E49FD 0032
+
+$Have All\50 Bananas\Spacedust Alley
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E654D 0032
+
+$Have All\50 Bananas\Spaceport Alpha
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E3C6D 0032
+
+$Have All\50 Bananas\Star City
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E578D 0032
+
+$Have All\50 Bananas\Treasure Caves
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E371D 0032
+
+$Have All\50 Bananas\Walrus Cove
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E4A7D 0032
+
+$Have All\50 Bananas\Whale Bay
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E3AFD 0032
+
+$Have All\50 Bananas\Windwill Plains
+Note=Do not use more than 1 50 Bananas up at a time or it will cause a crash
+801E9BBD 0032
+
+$Have All\99 Balloons
+810DFD9A FFFF
+801FCBED 0063
+
+$Have All\Amulets
+Note=Only put this code on once you are inside the lobby to choose a gate,or it will crash the game.
+811FC9E6 FFFF
+
+$Have All\Keys
+Note=Only put this code on once you are inside the lobby to choose a gate,or it will crash the game.
+811FC9D8 FFFF
+
+$Have All\Levels Completely Finished
+50000904 0000
+801FCAF7 00FF
+801FCB1F 00FF
+801FCB27 00FF
+50000404 0000
+801FCB2F 00FF
+801FCB4F 00FF
+50000804 0000
+801FCB53 00FF
+
+$Have All\Silver Coins\Ancient Lake
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E34AA 0008
+
+$Have All\Silver Coins\Boulder Canyon
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E63CA 0008
+
+$Have All\Silver Coins\Crescent Island
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E3C0A 0008
+
+$Have All\Silver Coins\Everfrost Peak
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E513A 0008
+
+$Have All\Silver Coins\Fossil Canyon
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E694A 0008
+
+$Have All\Silver Coins\Frosty Village
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E612A 0008
+
+$Have All\Silver Coins\Greenwood Village
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E4C8A 0008
+
+$Have All\Silver Coins\Haunted Woods
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E4BFA 0008
+
+$Have All\Silver Coins\Hot Top Volcano
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E480A 0008
+
+$Have All\Silver Coins\Jungle Falls
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E513A 0008
+
+$Have All\Silver Coins\Pirate Lagoon
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E2B3A 0008
+
+$Have All\Silver Coins\Snowball Valley
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E4BDA 0008
+
+$Have All\Silver Coins\Treasure Caves
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E38FA 0008
+
+$Have All\Silver Coins\Walrus Cove
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E4C5A 0008
+
+$Have All\Silver Coins\Whale Bay
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E3CDA 0008
+
+$Have All\Silver Coins\Windmill Plains
+Note=Do not use more than 1 Silver Coins up at a time or it will cause a crash
+801E9D9A 0008
+
+$Have All\The pieces of the TT thing
+801FC9E6 0004
+
+$Have All\Trophies
+Note=Only put this code on once you are inside the lobby to choose a gate,or it will crash the game.
+811FC9DE FFFF
+
+$Infinite\Power Ups\Ancient Lake
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E6A2B 0010
+
+$Infinite\Power Ups\Boulder Canyon
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E8D4B 0010
+
+$Infinite\Power Ups\Crescent Island
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E718B 0010
+
+$Infinite\Power Ups\Darkmoon Caverns
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E96AB 0010
+
+$Infinite\Power Ups\Everfrost Peak
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E871B 0010
+
+$Infinite\Power Ups\Fossil Canyon
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E9ECB 0010
+
+$Infinite\Power Ups\Frosty Village
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E96A6 0010
+
+$Infinite\Power Ups\Greenwood Village
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E820B 0010
+
+$Infinite\Power Ups\Haunted Woods
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E817B 0010
+
+$Infinite\Power Ups\Hot Top Volcano
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E477B 0010
+
+$Infinite\Power Ups\Jungle Falls
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E45BB 0010
+
+$Infinite\Power Ups\Pirate Lagoon
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E54B6 0010
+
+$Infinite\Power Ups\Snowball Valley
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E815B 0010
+
+$Infinite\Power Ups\Space Dust Alley
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E904B 0010
+
+$Infinite\Power Ups\Spaceport Alpha
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E676B 0010
+
+$Infinite\Power Ups\Starcity
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E8EEB 0010
+
+$Infinite\Power Ups\Treasure Cove
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E6E7B 0010
+
+$Infinite\Power Ups\Walrus Cove
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E81DB 0010
+
+$Infinite\Power Ups\Whale Bay
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801E665B 0010
+
+$Infinite\Power Ups\Windmill Plains
+Note=For Track Race Only.Do not use more than 1 Infinite Power up at a time or it will cause a crash
+801EC6BB 0010

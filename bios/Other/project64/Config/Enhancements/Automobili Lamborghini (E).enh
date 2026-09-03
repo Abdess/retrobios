@@ -1,0 +1,6 @@
+[FC7797BF-4A95E83C-C:50]
+Name=Automobili Lamborghini (E)
+
+$Framerate speed fix
+OnByDefault=1
+8000141F 0003

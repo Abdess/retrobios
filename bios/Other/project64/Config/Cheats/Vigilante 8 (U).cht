@@ -1,0 +1,55 @@
+[EA71056A-E4214847-C:45]
+Name=Vigilante 8 (U)
+
+$Have All Cars
+50000D01 0000
+80191298 001F
+
+$Have All Characters & Levels
+81181572 01C0
+
+$Level Select
+80190150 00??
+00 Super Dreamland 64
+01 Secret Base
+02 Sand Factory
+03 Oil Fields
+04 Aircraft Graveyard
+05 Ghost Town
+06 Hoover Dam
+07 Valley Farms
+08 Casino City
+09 Canyonlands
+0A Ski Resorts
+
+$Play As\Player 1
+80186AE0 00??
+00 Chassey Blue
+01 Slick Clyde
+02 Sheila
+03 John Torque
+04 Dave
+05 Convoy
+06 Loki
+07 Houston 3
+08 Boogie
+09 Beezwax
+0A Molo
+0B Sid Burn
+0C "Y" The Alien
+
+$Play As\Player 2
+80186AE1 00??
+00 Chassey Blue
+01 Slick Clyde
+02 Sheila
+03 John Torque
+04 Dave
+05 Convoy
+06 Loki
+07 Houston 3
+08 Boogie
+09 Beezwax
+0A Molo
+0B Sid Burn
+0C "Y" The Alien

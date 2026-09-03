@@ -1,0 +1,25 @@
+[519EA4E1-EB7584E8-C:4A]
+Name=King Hill 64 - Extreme Snowboarding (J)
+
+$exhalatio audio hack
+81052760 AD99
+
+$Have All\Boards
+8108C9C4 0003
+8108C9C6 FFFF
+
+$Have All\Characters
+8108C9B8 07FF
+
+$Have All\Difficulties
+8108C9B0 0700
+
+$Have All\Tracks
+8108C9BC BFFE
+
+$Low Timer
+8008C8A4 0000
+8008C8A6 0000
+
+$Max\50000 Stunt Points
+8108C978 C350

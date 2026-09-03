@@ -1,0 +1,43 @@
+[FC74D475-9A0278AB-C:45]
+Name=The Powerpuff Girls - Chemical X-traction (U)
+
+$1 Win Needed\Player 1
+D00BAD0F 0000
+800BAD0F 0001
+
+$1 Win Needed\Player 2
+D00BB04F 0000
+800BB04F 0001
+
+$Infinite Health\Player 1
+810BACDC 42C8
+
+$Infinite Health\Player 2
+810BB01C 42C8
+
+$Infinite Time
+810E69AC 42F0
+
+$Max Chemical X\Player 1
+800BAD28 0003
+
+$Max Chemical X\Player 2
+800BB068 0003
+
+$Never Win\Player 1
+800BAD0F 0000
+
+$Never Win\Player 2
+800BB04F 0000
+
+$No Chemical X\Player 1
+800BAD28 0000
+
+$No Chemical X\Player 2
+800BB068 0000
+
+$No Health\Player 1
+810BACDC 0000
+
+$No Health\Player 2
+810BB01C 0000

@@ -1,0 +1,52 @@
+[E3D6A795-2A1C5D3C-C:50]
+Name=Knockout Kings 2000 (E)
+
+$Big Options\Big Gloves Mode
+800F407D 0001
+
+$Big Options\Big Head Mode
+800F407C 0001
+
+$Empty Punch Meter\Player 1
+8106B9E8 0000
+8106B9EA 0000
+
+$Empty Punch Meter\Player 2
+8016BAF0 0000
+8016BAF2 0000
+
+$Full Punch Meter\Player 1
+8106B9E8 0000
+8106B9EA 0BB2
+
+$Full Punch Meter\Player 2
+8106B9E8 0000
+8106B9EA 0BB2
+
+$Have Full\Power Bar
+810637AE 0064
+
+$Have Full\Speed Bar
+810637B2 0064
+
+$Have Full\Stamina Bar
+810637B6 0064
+
+$Infinite Boxer Creation Points
+810637AA 0064
+
+$Infinite Health\Player 1
+8106B974 42C8
+8106B9DE 0000
+
+$Infinite Health\Player 2
+8106BAE4 42C8
+8106BAE6 0000
+
+$No Health\Player 1
+8106B9DC 0000
+8106B9DE 0000
+
+$No Health\Player 2
+8106BAE4 0000
+8106BAE6 0000

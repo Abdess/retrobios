@@ -1,0 +1,7 @@
+[11223344-55667788-C:45]
+Name=The Legend of Zelda - Ocarina of Time (U) (Randomizer)
+
+$Subscreen Delay Fix
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+801DA5CB 0002

@@ -1,0 +1,27 @@
+[E7D20193-C1158E93-C:50]
+Name=Hot Wheels Turbo Racing (E) (M3)
+
+$A Few Extra Cars
+811270AA FFFF
+
+$Access All Cars
+811270A4 FFFF
+811270A6 FFFF
+
+$Allways 1st
+8111B14A 0000
+
+$Bonus Tracks
+811270AE FFFF
+
+$Infinite Turbos
+8111B39C 0800
+
+$Max Tournament Points
+811270B6 03E7
+
+$Mirror Mode
+801270CE 0001
+
+$Race At Night
+801270CF 0080

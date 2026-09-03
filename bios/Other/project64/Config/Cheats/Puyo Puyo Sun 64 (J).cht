@@ -1,0 +1,51 @@
+[94807E6B-60CC62E4-C:4A]
+Name=Puyo Puyo Sun 64 (J)
+
+$1P Mode\Stage Select
+D0162FEB 0001
+80162FEB 00??
+0D Satan Arle game
+08 Satan Schezo game
+0E Car-kun Arle game
+09 Car-kun Schezo game
+
+$Endless Mode\Player Level 99 Player 1
+801632E7 0063
+
+$Endless Mode\Player Level 99 Player 2
+801632EB 0063
+
+$Instant 7th Step of Chain\Player 1
+D0163A2B 0001
+80163A2B 0007
+
+$Instant 7th Step of Chain\Player 2
+D0163E5B 0001
+80163E5B 0007
+
+$Maximum Score\Player 1
+811632CC 05F5
+811632CE E0FF
+
+$Maximum Score\Player 2
+811632D0 05F5
+811632D2 E0FF
+
+$Mode Total Continues 0
+801632AF 0000
+801632C7 0000
+
+$Nazo Puyo Mode\All Practice Stages Cleared 4
+50000402 0000
+811631E8 FFFF
+
+$No Warning Icons\Player 1
+80164EA3 0000
+
+$No Warning Icons\Player 2
+80164EA7 0000
+
+$Options Complete Demo Viewer
+8016320B 0007
+8116320C FFFF
+8116320E FFFF

@@ -1,0 +1,28 @@
+[66572080-28E348E1-C:4A]
+Name=Super Robot Spirits (J)
+
+$Infinite Hp
+802016A7 0000
+
+$Infinite Sp
+802016AB 005A
+
+$Infinite Time
+80260BDE 0000
+
+$Play As
+801B9D5C 00??
+00 FINAL BOSS
+01 R1
+02 DAITARN 3
+03 DANCOUGAR
+04 SHINING GUNDAM
+05 DUNBINE
+06 WALKER GALLIER
+07 VOLTES V
+08 1st BOSS
+
+$Player 2 Health Mod
+80206AF7 00??
+00 Infinite Health
+C8 Instant Death

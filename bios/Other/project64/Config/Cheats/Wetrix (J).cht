@@ -1,0 +1,56 @@
+[DCB6EAFA-C6BBCFA3-C:4A]
+Name=Wetrix (J)
+
+$Always Berserk Mode
+801ACA6F 00FF
+
+$Always Drop\Player 1
+801ACA7B 00??
+00 Bar
+01 T
+02 Corner
+03 Square
+04 Down Square
+05 Down Bar
+06 Big Water
+07 Medium Water
+08 Small Water
+09 Smallest Water
+0A Bomb
+0B Fireball
+
+$Always Drop\Player 2
+801DD1FB 00??
+00 Bar
+01 T
+02 Corner
+03 Square
+04 Down Square
+05 Down Bar
+06 Big Water
+07 Medium Water
+08 Small Water
+09 Smallest Water
+0A Bomb
+0B Fireball
+
+$Always Empty Drain
+801ACA51 0000
+811ACA52 0000
+811ACA54 0000
+
+$Infinite Ducks
+801ACA0B 0009
+
+$Infinite Lakes
+811AC9FE 0009
+
+$Mega Score
+801ACA18 00FF
+801DBDC4 00FF
+
+$Practice Lessons Open
+810C3AEA 0008
+
+$Stop Level Timer
+801ACA72 00FF

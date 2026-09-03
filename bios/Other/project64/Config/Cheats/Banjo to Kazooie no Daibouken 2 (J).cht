@@ -1,0 +1,411 @@
+[514B6900-B4B19881-C:4A]
+Name=Banjo to Kazooie no Daibouken 2 (J)
+
+$Beta Bottles Revenge Mode
+Note=Bottles Revenge is a Beta mode from Banjo Tooie that the RWP team recently uncovered after an extraordinary amount of effort. Bottles the Spirit transforms into Bottles the Devil and posses enemies nearby and allows a second player hooked up to Pad 2 to play as that Posses character to try to foil Banjos Plans. As player one goes about its business, player two uses every enemy nearby to try to nab Banjo and take away some life. This mode is incredible, and you can control almost every enemy in the game: slot machines, flying creatures, uggers, zubbas...and this is just the beginning. (Congrats Rare Witch Project)
+801255C2 0001
+80080881 0002
+
+$Infinite\Air
+80125222 42C8
+
+$Infinite\Energy\Banjo
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+8011591F 000A
+80115920 000A
+
+$Infinite\Energy\Banjo and Kazooie
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+81115A04 0A0A
+
+$Infinite\Energy\Bee
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+80115913 000A
+80115914 000A
+
+$Infinite\Energy\Detonator
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+8111592E 0A0A
+
+$Infinite\Energy\Kazooie
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+81115922 0A0A
+
+$Infinite\Energy\Mumbo
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+81115928 0A0A
+
+$Infinite\Energy\Snowball
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+80115907 0005
+
+$Infinite\Energy\Stony
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+80115919 000A
+8011591A 000A
+
+$Infinite\Energy\Submarine
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+80115925 000A
+80115926 000A
+
+$Infinite\Energy\T-Rex Baby
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+8011593F 000A
+80115940 000A
+
+$Infinite\Energy\Washing Machine
+Note=With Infinite Energy On Avoid Picking up the ! Or ? Stop Energy Honey Combs or you will be stuck.
+80115329 0063
+81115916 0A0A
+
+$Instant Warp\Options\Cauldron Keep
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+01 5D Cauldron Keep
+01 5E The gatehouse
+01 5F Tower of Tragedy Quiz
+01 60 Gun chamber
+01 6A Gun room still
+01 7B Crazy Castle Stockade balloon burst multi
+01 7C Crazy Castle Stockade Jump the hoops multi
+01 7D Grunty Industries packing game
+01 80 Colosseum kickball arena
+01 86 Dodgems
+
+$Instant Warp\Options\Cloud Cuckoo Land
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+01 36 Cloud Cuckoo Land 1
+01 37 Inside the trashcan
+01 38 Inside the cheesewedge
+01 39 Zubba's nest
+01 3A Central cavern
+01 3D Inside the pot o gold
+01 3E Mumbo's skull
+01 3F Mingy jongo's skull
+01 40 Humba wumba's wigwam
+01 61 Cloud Cuckoo Land 2
+01 88 Zubba's nest multi
+01 85 Trash can mini
+
+$Instant Warp\Options\Glitter Gulch Mine
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+00 C7 Mine
+00 CA Fuel depot
+00 CB Crushing shed
+00 CC Flooded caves
+00 CD Water storage
+00 CE Waterfall cavern
+00 CF Power hut basement
+00 D0 Chuffy's cab
+00 D1 Inside chuffy's boiler boss
+00 D2 Gloomy caverns
+00 D3 Generator caverns
+00 D4 Power hut
+00 D5 Wumba's wigwam
+00 D7 Train station
+00 D8 Prospectors hut
+00 D9 Mumbo's hut
+00 DA Toxic gas cave
+00 DB Canary cave
+00 DC Ordnance storage
+00 E9 Humba
+01 26 Water supply pipe
+01 63 Ordnance Storage entrance
+01 64 Ordnance Storage game
+01 65 Ordnance Storage game Multi
+01 6F Testing
+01 70 Testing
+01 71 Mumbo's skull
+
+$Instant Warp\Options\Grunty Industries
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+01 00 Outside
+01 01 Inside
+01 02 Train station
+01 03 Workers quarters
+01 04 Trash compactor
+01 05 Elevator shaft
+01 06 Floor 2
+01 07 Floor 2 "electromagnet chamber"
+01 08 Floor 3
+01 09 Floor 3 "boiler plant"
+01 0A Floor 3 "packing room"
+01 0B Floor 4
+01 0C Floor 4 "cable room"
+01 0D Floor 4 "quality control"
+01 0E Floor 5
+01 0F Basement
+01 10 Basement "repair depot
+01 11 Basement "waste disposal"
+01 25 Water supply pipe
+01 72 Mumbo's skull
+01 62 Floor 4 "clinkers cavern"
+01 87 Sewer entrance
+
+$Instant Warp\Options\Hailfire Peaks
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+01 27 Lava side
+01 28 Icy side
+01 29 Lava train station
+01 2A Ice train station
+01 2B Chilli billi
+01 2C Chilly willy
+01 2D Colosseum kickball stadium lobby
+01 31 Boggy's igloo
+01 32 Icicle grotto
+01 33 Inside the volcano
+01 68 Icy side still
+
+$Instant Warp\Options\Isle O Hags
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+01 4F Wooded Hollow
+01 50 Heggy's egg shed
+01 51 Jiggywiggy's temple
+01 52 Plateau
+01 53 Plateau "Honey B's Hive"
+01 54 Pine Grove
+01 55 Cliff top
+01 56 Cliff top Mumbo's skull
+01 5A wasteland
+01 5B inside another digger tunnel
+01 5C Quagmire
+
+$Instant Warp\Options\Jinjo Village
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+01 42 Jinjo Village
+01 44 King Jingalings throne room
+01 43 Bottles house
+01 45 Green Jinjo's House
+01 46 Black Jinjo's House
+01 47 Yellow Jinjo's House
+01 48 Blue Jinjo's House
+01 4A Brown Jinjo's House
+01 4B Orange Jinjo's House
+01 4C Purple Jinjo's House
+01 4D Red Jinjo's House
+01 4E White Jinjo's House
+
+$Instant Warp\Options\Jolly Roger's Lagoon
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+00 ED Jolly's
+00 EE Pawno's emporium
+00 EF mumbo's skull
+00 F4 Ancient Swimming Baths
+00 F6 Electric Eels lair
+00 F7 Seaweed Sanctum
+00 F8 Inside the big fish
+00 FA temple of the fishes
+01 A8 Atlantis
+01 A9 Seabottom
+01 81 sea bottom cavern
+01 82 submarine multi
+01 A7 Jolly Roger's Lagoon
+00 FF Blubber's wave race hire
+
+$Instant Warp\Options\Mayahem Temple
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+00 B6 Humba's Wigwam
+00 B7 Mumbo's skull
+00 B8 The Temple
+00 B9 Prison Compound
+00 BC Code chamber
+00 C4 Jade Snake Grove
+00 C5 Treasure Chamber
+00 C6 Kickball Arena
+01 77 Targitzan's Slighty Sacred Temple
+01 78 Inside Targitzans Temple
+01 79 Targitzan Temple Lobby
+01 7A Targitzan's Temple Boss
+01 7F Mayan Kickball Arena
+01 66 Multi
+01 67 Still
+00 C8 Kickball Arena
+00 C9 Kickball Arena
+
+$Instant Warp\Options\Not sure
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+00 FC Lord woo fak fak
+00 F9 Mr Patch
+01 21 Inside Chuffy's wagon
+01 34 Mumbo's Skull
+01 35 Humba Wumba's wigwam 1
+01 57 Humba Wumba's wigwam 2
+01 9B Jingalings Zombified Palace
+01 A6 Smuggler cavern
+01 41 Inside the digger tunnel
+01 43 Bottles house
+01 69 Bottles house still
+01 8A HAG Inside
+01 9A HAG1 Final Boss
+
+$Instant Warp\Options\Spiral Mountain
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+00 AD Grunty's Old Lair
+00 AE Behind The Waterfall
+00 AF Top Of Castle
+01 73 Banjo's house
+
+$Instant Warp\Options\Terrydacty Land
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+01 12 Terrydacty Land
+01 13 Terry's nest
+01 14 Train station
+01 15 Oogle boogles cave
+01 16 Inside the mountain
+01 17 River passage
+01 18 Styracosaurus family cave
+01 19 Unga bunga's cave
+01 1A Stomping plains
+01 1B Bonfire caverns
+01 1E Humba's Wigwam
+01 23 Inside chompa's belly
+01 83 Chompa's belly multi
+
+$Instant Warp\Options\Witchy World
+Note=Only use one Instant Warp Option At once, Make sure the other is off before putting this one on
+D1080844 0000
+811217F0 00??
+801217F3 0001
+00 D6 Witcy World
+00 DD Dodgem dome lobby
+00 DE Dodgem challenge "1 vs 1"
+00 DF Dodgem challenge "2 vs 1"
+00 E0 Dodgem challenge "3 vs 1"
+00 E1 Crazy castle stockade
+00 E2 Crazy castle lobby
+00 E3 Crazy castle pump room
+00 E4 Balloon burst game
+00 E5 Hoop hurry game
+00 E6 Star spinner
+00 E7 The inferno
+00 EA Cave of horrors
+00 EB Haunted cavern
+00 EC Train station
+01 24 Saucer of Peril
+01 3B Crazy castle stockade "sop"
+01 3C Star spinner "sop"
+01 76 Mumbo's skull
+
+$Multi-Player\Everyone Infinite All Eggs Multiplayer
+Note=All blaster modes specifically.[ Thanks retroben, awesome work on this!]
+810E5F38 0C04
+810E5F3A 5A80
+81116A00 3C08
+81116A02 8008
+81116A04 8108
+81116A06 3970
+81116A08 1100
+81116A0A 0010
+81116A0C 0000
+81116A0E 0000
+81116A10 3C08
+81116A12 8008
+81116A14 8D08
+81116A16 3970
+81116A18 0008
+81116A1A 4200
+81116A1C 0008
+81116A1E 4202
+81116A20 0008
+81116A22 4080
+81116A24 3C04
+81116A26 8000
+81116A28 0104
+81116A2A 4020
+81116A2C 3C04
+81116A2E 2406
+81116A30 2484
+81116A32 0064
+81116A34 AD04
+81116A36 31C4
+81116A38 3C04
+81116A3A 2408
+81116A3C 2484
+81116A3E FFFE
+81116A40 AD04
+81116A42 31CC
+81116A44 3C04
+81116A46 8013
+81116A48 8C84
+81116A4A CF94
+81116A4C 0802
+81116A4E 1DFE
+81116A50 0000
+81116A52 0000
+
+$Multi-Player\Infinite Health\Player 1
+8012F701 0064
+
+$Multi-Player\Infinite Health\Player 2
+8012F705 0064
+
+$Multi-Player\Infinite Health\Player 3
+8012F709 0064
+
+$Multi-Player\Infinite Health\Player 4
+8012F70D 0064
+
+$Play As
+Note=To use this cheat, put the cheat on, then press L as you walk through a door to become that chosen character
+D0080845 0020
+801211FC 00??
+01 Banjo and Kazooie
+02 Snowball
+06 Bee
+07 Washing machine
+08 Stony
+0A Banjo
+0B Kazooie
+0C Submarine
+0D Mumbo
+0E Golden Goliath
+0F Detonator
+10 Truck
+12 T-rex baby
+13 T-rex daddy

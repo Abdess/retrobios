@@ -1,0 +1,32 @@
+[D0151AB0-FE5CA14B-C:45]
+Name=John Romero's Daikatana (U)
+
+$Have All Weapons
+8120A8F6 FFFF
+
+$Infinite\Ammo (All Weapons)
+81261A40 A05B
+
+$Infinite\Armor
+8020A987 0064
+
+$Infinite\Experience
+8020A967 00FF
+
+$Infinite\Health
+8020A965 0064
+
+$Max\Acro
+8020A96F 0007
+
+$Max\Attack
+8020A96B 0007
+
+$Max\Power
+8020A971 0007
+
+$Max\Speed
+8020A96D 0007
+
+$Max\Vitality
+8020A969 0007

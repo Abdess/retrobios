@@ -1,0 +1,30 @@
+[62E957D0-7FC15A5D-C:50]
+Name=Mario Golf (E)
+
+$All Golf Courses Unlocked
+80130FED 0001
+
+$Always On 1st Stroke
+801B74F3 0000
+
+$Infinite Power Shots
+801B74F8 0042
+
+$Unlock all Characters and Birdy Badges
+Note=Unlocks Metal Mario, Maple, Luigi, Sonny, Wario, Harry, Bowser, Yoshi, Mario and DK
+50006C01 0000
+801304A4 0001
+50000901 0000
+80130518 0001
+50000901 0000
+80130521 0001
+
+$Weather Select
+800BACAB 00??
+00 Never Rains
+01 Always Rains
+
+$Wind Speed Select
+800BACA1 00??
+00 0 MPH
+14 20 MPH

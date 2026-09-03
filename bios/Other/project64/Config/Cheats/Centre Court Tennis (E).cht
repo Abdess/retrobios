@@ -1,0 +1,42 @@
+[DCCF2134-9DD63578-C:50]
+Name=Centre Court Tennis (E)
+
+$Infinite Character Creation Points
+8017BB17 000A
+
+$Left vs Right Side
+8017BB16 0005
+
+$Max Score In Mini Games
+81116230 05F5
+81116232 E0FF
+
+$Maximum\Back,Front,Left & Right Move
+8117BB14 000A
+
+$Maximum\Serve Smash
+8117BB0E 0A0A
+
+$Maximum\Stroke Spin
+8117BB12 0A0A
+
+$Maximum\Volley Lob
+8117BB10 0A0A
+
+$Practice\Balls Always Zero
+8011684F 0000
+
+$Practice\Time Always Zero
+8111684A 0000
+
+$Scoreboard\Max games bottom
+8011698F 0009
+
+$Scoreboard\Max games top
+8011698B 0009
+
+$Scoreboard\Max sets bottom
+80116987 0009
+
+$Scoreboard\Max sets top
+80116983 0009

@@ -1,0 +1,46 @@
+[C16C421B-A21580F7-C:45]
+Name=Disney's Donald Duck - Goin' Quackers (U) (M4)
+
+$Have All\Levels and Bonus Stages Unlocked
+Note=Press start in Gyro's Lab and then resume game to see all open
+801D72CC 00FF
+801D72CD 00FF
+801D72CE 00FF
+801D72CF 00FF
+801D72D3 00FF
+
+$Have All\Time Attack & Toy Hunting Comnpleated (All Levels)
+Note=Press start in Gyro's Lab and then resume game to see all open
+801D72D8 00FF
+801D72D9 00FF
+801D72DA 00FF
+801D72DB 00FF
+801D72DC 00FF
+801D72DD 00FF
+801D72DE 00FF
+801D72DF 00FF
+
+$Infinite\99 Lives
+801D72AE 0063
+
+$Infinite\99 Stars
+801D72AF 0063
+
+$Infinite\Time\Gladstones Time Attack
+801D72A7 00FF
+
+$Infinite\Time\Nephews Toy Hunting
+801D72A3 0063
+
+$Instant\Carrier Box [Moon Walk] (Press L)
+Note=Press and hold the L Button and you will run floating of any ledge slowing drifting down. If you keep pressing the A Button while Holding L it will act as a Moon Jump.
+D00CB2A1 0020
+801C939F 0001
+
+$Instant\Hyperactive State [Invincible] (Press C-Right)
+D00CB2A1 0001
+801CE616 0001
+
+$Instant\Rage Attack (Press C-Left)
+D00CB2A1 0002
+801CE5BD 0001

@@ -1,0 +1,30 @@
+[7CD08B12-1153FF89-C:45]
+Name=Blues Brothers 2000 (U)
+
+$Can Walk When The Game Is Paused
+810AB9B6 0001
+
+$Have All\Keys
+Note=This will give you the Grey & Red,Green & Gold Keys
+800BD0B8 00FF
+800BD0BE 00FF
+800BD0BD 00FF
+
+$Have All\Music Notes
+Note=This will give you all 10 Music Notes
+50000A01 0000
+800BD1F0 0001
+
+$Infinite\Health
+800BD0F7 0002
+
+$Infinite\Lives
+800BD0E3 0009
+
+$Max Money
+810BD0E6 03E7
+
+$Press L to Levitate
+Note=Press L to levitate & let go to come back down
+D017DBC5 0020
+810DAFD8 44CB

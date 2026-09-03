@@ -1,0 +1,33 @@
+[1E0E96E8-4E28826B-C:45]
+Name=Charlie Blast's Territory (U)
+
+$Level Select
+80046353 00??
+01 Level 1
+02 Level 2
+03 Level 3
+04 Level 4
+05 Level 5
+06 Level 6
+07 Level 7
+08 Level 8
+09 Level 9
+0A Level 10
+0B Level 11
+0C Level 12
+0D Level 13
+0E Level 14
+0F Level 15
+10 Level 16
+11 Level 17
+12 Level 18
+13 Level 19
+14 Level 20
+15 Level 21
+16 Level 22
+17 Level 23
+18 Level 24
+19 Level 25
+
+$Stop Timer From Counting Down (All Levels)
+8101D4FC 2400

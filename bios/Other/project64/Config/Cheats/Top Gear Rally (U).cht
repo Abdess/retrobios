@@ -1,0 +1,18 @@
+[62269B3D-FE11B1E8-C:45]
+Name=Top Gear Rally (U)
+
+$Always Place 1st
+8131C70E 0000
+
+$Extra Cars & Tracks
+50000201 0000
+8032690C 00FF
+8032690F 00FF
+813243CC FFFF
+
+$Have 1-6 Level Points
+50000602 0000
+8032685F 0064
+
+$Only Race 1 Lap Championship Mode
+8031EBDB 0002

@@ -1,0 +1,296 @@
+[0414CA61-2E57B8AA-C:50]
+Name=GoldenEye 007 (E)
+
+$Everything Unlocked\Save File 1
+Note=This Unlocks All Levels, Stages, Characters In Multi-Player and Cheat Menu Items (Enable Invincible on Cheats Menu for Infinite Health)
+50002902 0000
+8105892E FFFF
+
+$Everything Unlocked\Save File 2
+Note=This Unlocks All Levels, Stages, Characters In Multi-Player and Cheat Menu Items (Enable Invincible on Cheats Menu for Infinite Health)
+50002902 0000
+8105886E FFFF
+
+$Everything Unlocked\Save File 3
+Note=This Unlocks All Levels, Stages, Characters In Multi-Player and Cheat Menu Items (Enable Invincible on Cheats Menu for Infinite Health)
+50002902 0000
+8105898E FFFF
+
+$Everything Unlocked\Save File 4
+Note=This Unlocks All Levels, Stages, Characters In Multi-Player and Cheat Menu Items (Enable Invincible on Cheats Menu for Infinite Health)
+50002902 0000
+810588CE FFFF
+
+$In-Built Cheat Menu
+Note=This code gives you all Cheats in Menu
+50002001 0000
+800585A0 0001
+
+$Infinite\Ammo (All Levels)
+8006894B 0001
+
+$Mod Section\Cradle in multiplayer
+Note=Puts the cradle graphic in the levels screen where the facility normally is in the multiplayer levels screen.Warning it doesn't allow you to enter the multiplayer levels screen,it should automatically Have\selected cradle, which cannot be changed from the multiplayer menus
+8002666D 0092
+8002666F 0093
+80026677 0029
+80026673 0008
+803230C5 0052
+803230C6 0041
+803230C7 0044
+803230C8 004C
+803230C9 0045
+
+$Mod Section\Enemies Do Nothing
+80027E54 00FF
+
+$Mod Section\Enemy Options
+Note="These Codes Are very very cool but in most places pointless ! But great fun, try then. But remember to deactivate them before coming to the end of the level, otherwise, there will be nothing/no one, to meet or do (:"
+80032142 00??
+01 Enemies Come After You
+97 Enemies Move Around & Check
+FF Enemies Check Around Themselves
+
+$Mod Section\Facility Back Zone In Multiplayer\Part 1\2 players
+Note=All parts must be on for this code to work.this cheat allows you to play the Facility Back Zone In Multiplayer
+811E6554 45E4
+811E6558 43D5
+811E655C C5A7
+811E657C 801C
+811E657E 6774
+811E5164 45E4
+811E5168 C383
+811E516C 4492
+811E518C 801C
+811E518E D574
+811E78C0 45AD
+811E78C4 C383
+811E78C8 4440
+811E78E8 801C
+811E78EA E464
+811E4D18 45D0
+811E4D1C 4307
+811E4D20 C4FB
+811E4D40 801C
+811E4D42 75EC
+811E6738 45CD
+811E673C C383
+811E6740 43F4
+811E6760 801C
+811E6762 A0DC
+811E5450 45C2
+811E5454 4356
+811E5458 C598
+811E5478 801C
+811E547A 6A74
+811E5240 4608
+811E5244 4307
+811E5248 43DC
+811E5268 801C
+811E526A 962C
+811E691C 4606
+811E6920 4321
+811E6924 449D
+811E6944 801C
+811E6946 CBEC
+801ED447 008A
+801ED4DB 008B
+801ED56F 008C
+801ED603 008D
+801ED697 008E
+801ED72B 008F
+801ED7BF 007D
+801ED853 007E
+801ED443 002A
+801ED4D7 002A
+801ED56B 002A
+801ED5FF 002A
+801ED693 002A
+801ED727 002A
+801ED7BB 002A
+801ED84F 002A
+801ED449 0000
+801ED4DD 0000
+801ED571 0000
+801ED605 0000
+801ED699 0000
+801ED72D 0000
+801ED7C1 0000
+801ED855 0000
+801ED44D 0000
+801ED4E1 0000
+801ED575 0000
+801ED609 0000
+801ED69D 0000
+801ED731 0000
+801ED7C5 0000
+801ED859 0000
+801EB743 002A
+801EB745 0068
+811EB746 277F
+811EB748 1000
+811EB74A 0262
+811EB7C2 0190
+801EB7C5 0000
+811EB7C6 0258
+
+$Mod Section\Facility Back Zone In Multiplayer\Part 2\2 players
+Note=All parts must be on for this code to work.this cheat allows you to play the Facility Back Zone In Multiplayer
+811EB7C8 0000
+811EB7CC FFFF
+811EB7CE FFFF
+811EB7D2 0000
+801EB7D5 0000
+801EB7DB 0000
+811EB7E2 0000
+801EB7E7 0000
+801EB843 002A
+801EB845 0068
+811EB846 2780
+811EB848 1000
+811EB84A 0262
+811EB8C2 0190
+801EB8C5 0000
+811EB8C6 0258
+811EB8C8 0000
+811EB8CC FFFF
+811EB8CE FFFF
+811EB8D2 0000
+801EB8D5 0000
+801EB8DB 0000
+811EB8E2 0000
+801EB8E7 0000
+801EB943 002A
+801EB945 0068
+811EB946 2791
+811EB948 1000
+811EB94A 0262
+811EB9C2 0190
+801EB9C5 0000
+811EB9C6 0258
+811EB9C8 0000
+811EB9CC FFFF
+811EB9CE FFFF
+811EB9D2 0000
+801EB9D5 0000
+801EB9DB 0000
+811EB9E2 0000
+801EB9E7 0000
+801EBA43 002A
+801EBA45 0068
+811EBA46 2792
+811EBA48 1000
+811EBA4A 0262
+811EBAC2 0190
+801EBAC5 0000
+811EBAC6 0258
+811EBAC8 0000
+811EBACC FFFF
+811EBACE FFFF
+811EBAD2 0000
+801EBAD5 0000
+801EBADB 0000
+811EBAE2 0000
+801EBAE7 0000
+801EBB45 00A0
+801EBC45 00A0
+801EBD45 00A0
+801EBE45 00A0
+801EBB47 0075
+801EBC47 0076
+801EBD47 0077
+801EBE47 0078
+801EBBE7 0001
+801EBCE7 0001
+801EBDE7 0001
+801EBEE7 0001
+801EC247 0071
+801ECD47 0072
+801ECE47 0074
+801ECF47 006C
+801ED047 0079
+801ED147 0083
+D01EBFC5 005A
+801EBFC5 0000
+D11EBFC6 0000
+811EBFC6 F333
+D11EBFC8 03E8
+811EBFC8 0000
+
+$Mod Section\Facility Back Zone In Multiplayer\Part 3\2 players
+Note=All parts must be on for this code to work.this cheat allows you to play the Facility Back Zone In Multiplayer
+D11EBFCA 0000
+811EBFCA F0C4
+D11EBFCE 4CCC
+811EBFCE 000A
+D11EBFD2 4CCC
+811EBFD2 000A
+D11EBFD4 0003
+811EBFD4 0000
+D11EBFD6 0000
+811EBFD6 02C4
+801EBFD9 0004
+801EBFDB 0000
+811EBFE2 0384
+801EBFE7 0004
+801EBF45 009E
+801EBF47 0084
+801EBF48 0010
+801EC2D9 0000
+801EC447 0085
+801EC547 0086
+811EA6B6 2743
+811EA73E 0114
+811EA7F2 0115
+811EA8A6 00A3
+811EA92E 009D
+811EA9E2 00A4
+811EAA96 00DA
+811EAB1E 00DB
+811EABD2 00DF
+811EAC86 0130
+811EAD0E 008D
+811EADC2 012E
+811EAE76 0111
+811EAEFE 2740
+811EAFB2 2741
+811EB066 00A0
+811EB0EE 009E
+811EB1A2 009F
+811EB256 274F
+811EB2DE 2750
+811EB392 0117
+811EB446 0131
+811EB4CE 008E
+811EB582 0132
+811EB636 00A1
+811EB6BE 0119
+811EA62E 00FA
+801ED3DF 0000
+801ED2DF 0001
+D0024337 0007
+80024337 001F
+
+$Mod Section\Freeze Unfreeze enemies
+Note=Press C-Up To Freeze & C-Down To Unfreeze.
+D00572D1 0008
+80027E5C 000F
+D00572D1 0004
+80027E5C 0000
+
+$Mod Section\Replace Cradle with Citadell hidden level
+80025E47 0029
+8103DB6A D9B4
+8103DB70 3F44
+8103DB72 BDEA
+8103DB74 3F80
+8103DB76 0000
+8103DB78 4219
+8103DB7A D89D
+81058EC0 C470
+
+$Mod Section\Secret Island on Dam Level
+Note=For the above code to work,Get to the 2nd guard tower & go down the ladder on the left hand side & to the end of the Dock, Press L & GS and you will be transfered in the water. Just keep walking straight & you will get to it. Obviously you can't actually climb ladders or anything, you will simply walkthrough anything on that Part, if you want to walk back to the Dock, when you come near it click the cheat back on & keep pressing  L & GS untill you are back on it.
+D004C2D1 0020
+800BA78D 0050
+880BA78D 0000

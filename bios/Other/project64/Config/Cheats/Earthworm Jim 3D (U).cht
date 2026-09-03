@@ -1,0 +1,49 @@
+[DF574191-9EB5123D-C:45]
+Name=Earthworm Jim 3D (U)
+
+$Have 231 Marbles
+D00E9FF3 0000
+800E9FF3 03E7
+
+$Have All Gold Udders
+50002802 0000
+810C625A 0101
+
+$Infinite Banana Peel Ammo
+810C6976 03E7
+
+$Infinite Blaster Ammo
+810C6916 03E7
+
+$Infinite Boomerang Knives Ammo
+810C6A1E 03E7
+
+$Infinite Cleaver Ammo
+800C6A1F 00FA
+
+$Infinite Egg Chucker Ammo
+800C69BF 00FA
+
+$Infinite Green Slimer Ammo
+810C69A6 03E7
+
+$Infinite Health
+800C690F 0064
+
+$Infinite Laser Ammo
+800C6917 00FA
+
+$Infinite Lives
+800C6913 0063
+
+$Infinite Mushroom Ammo
+810C6E36 03E7
+
+$Infinite Music Gun Ammo
+810C6A06 03E7
+
+$Infinite Rocket Launcher Ammo
+810C6946 03E7
+
+$Infinite Shotgun Ammo
+810C69EE 03E7

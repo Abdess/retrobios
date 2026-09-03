@@ -1,0 +1,33 @@
+[A4A52B58-23759841-C:45]
+Name=Dark Rift (U)
+
+$Access Demitron Character
+80049DF4 0001
+
+$Access Sonork Character
+80049DF0 0001
+
+$Infinite Health\All Levels\Player 1
+81028988 0800
+8102898A 0018
+81000060 3C1B
+81000062 8008
+81000064 8F7B
+81000066 0228
+8100006C 03E0
+8100006E 0008
+81000070 A761
+81000072 0070
+
+$Music Modifier
+800816B2 00??
+00 Music Off
+2A Volume Low
+55 Volume Medium
+7F Volume Max
+
+$Press GS For 2 Rounds Won\Player 1
+890B6330 0002
+
+$Press GS For 2 Rounds Won\Player 2
+890B6342 0002

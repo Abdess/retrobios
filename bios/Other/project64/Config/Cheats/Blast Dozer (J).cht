@@ -1,0 +1,47 @@
+[65234451-EBD3346F-C:4A]
+Name=Blast Dozer (J)
+
+$Drive Through Anything\Ballista
+803F8BF8 0001
+
+$Drive Through Anything\Dump Truck
+813EEBE8 0101
+
+$Drive Through Anything\Police Car
+813F8FD8 0101
+
+$Drive Through Anything\Red Car
+813FC658 0101
+
+$Drive Through Anything\Red, White, & Blue Car
+813EEFC8 0101
+
+$Drive Through Anything\Skyfall
+813EE438 0101
+
+$Drive Through Anything\Van
+813F93A8 0101
+
+$Infinite\Boosts Buggy Vehicle
+803EE491 0064
+
+$Infinite\Hydraulics Sidesweeper
+803EDCE1 0063
+
+$Infinite\Missiles Motor Bike
+803F8C53 0063
+
+$J-Bomb Floats Through Anything
+803F7C5A 0001
+
+$Rapid Fire\Ballista
+803F8C5D 0000
+
+$Rapid Fire\Sideswipe
+803EDCE6 0000
+
+$Sidesweep\Can Go Through Anything
+803EDCE2 FFFF
+
+$Sideswipe\Can Go In Water
+803EDCE2 0063

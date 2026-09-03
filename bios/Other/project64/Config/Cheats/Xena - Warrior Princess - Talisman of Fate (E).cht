@@ -1,0 +1,50 @@
+[0A1667C7-293346A6-C:50]
+Name=Xena - Warrior Princess - Talisman of Fate (E)
+
+$1 Win To Win\Player 1
+D00C0983 0000
+800C0983 0001
+
+$1-Hit Death to Player 1\Player 2
+D10B5EF0 42C8
+810B5EF0 4080
+
+$1-Hit Death to Player 2\Player 1
+D10B60D4 42C8
+810B60D4 4080
+
+$Fight Forest Team
+Note=Select Hardest Difficulty + Quest Mode
+810BF482 0001
+
+$Infinite Health\Player 1
+810B5EF0 42C8
+
+$Infinite Health\Player 2
+810B60D4 42C8
+
+$Invisibility\Player 1
+810BF3A2 0001
+
+$Join River Team
+Note=Select Quest Mode
+810BF482 0001
+
+$Needs 1 Win To Win\Player 2
+D00C0985 0000
+800C0985 0001
+
+$P1 Never Wins\Player 2
+800C0983 0000
+
+$P2 Never Wins\Player 1
+800C0985 0000
+
+$Player 1 Has No Energy\Player 2
+810B5EF0 C080
+
+$Player 2 Has No Energy\Player 1
+810B60D4 C080
+
+$Unlock Titan Difficulty Level
+810BF4D2 0001

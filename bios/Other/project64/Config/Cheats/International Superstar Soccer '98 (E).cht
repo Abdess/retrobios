@@ -1,0 +1,38 @@
+[F41B6343-C10661E6-C:50]
+Name=International Superstar Soccer '98 (E)
+
+$Away Team Scores
+801A9579 00??
+00 0 Goal
+01 1 Goal
+02 2 Goals
+03 3 Goals
+04 4 Goals
+05 5 Goals
+06 6 Goals
+07 7 Goals
+08 8 Goals
+14 20 Goals
+1E 30 Goals
+28 40 Goals
+32 50 Goals
+
+$Home Team Scores
+801A86FD 00??
+00 0 Goal
+01 1 Goal
+02 2 Goals
+03 3 Goals
+04 4 Goals
+05 5 Goals
+06 6 Goals
+07 7 Goals
+08 8 Goals
+14 20 Goals
+1E 30 Goals
+28 40 Goals
+32 50 Goals
+
+$Infinite player creation points
+D03E0CF2 0001
+803E0CF2 0063

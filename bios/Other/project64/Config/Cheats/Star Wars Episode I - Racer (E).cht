@@ -1,0 +1,36 @@
+[53ED2DC4-06258002-C:50]
+Name=Star Wars Episode I - Racer (E) (M3)
+
+$Always 1st
+80121C8C 0001
+80125489 0001
+
+$Enable In-Game cheat Menu & Cheats
+Note=Here you can Activate the IN-Built Cheats Menu. At the Front Screen Just Press C-Button Right.This will open up All Tracks & Characters In Free Play & Time Attack. Also In A Race, Press The Start/Pause button to Access the In-Cheat-Menu Option.You can also choose how many Pod's Racers are in the Race & also how many Laps are in the Race in Free Play & Time Attack
+810A0D27 000A
+810A0D2A FFFF
+
+$Have All Tracks Completed
+8111CB0A FFFF
+8111CB0C 3FFF
+8111CB0E 3FFF
+8111CB10 3FFF
+8111CB12 00FF
+
+$Infinite Truguts
+8111CB1A FFFF
+8111CB18 7FFF
+
+$No Damage
+Note=If when Racing Your Pod Over heats & bursts into flames Press "R" & you will Repair the Damage.
+800AA5D7 0001
+
+$Unlock All Tracks & Characters
+Note=When using Unlock All Tracks & Characters For can to pick & choose what ever you want to play As & where ;)
+8011CB08 00FF
+8011CB09 00FF
+8011CB0B 00FF
+8111CB08 FFFF
+8111C80A FFFF
+8011CB14 007D
+8111CB16 FFFF

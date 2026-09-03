@@ -1,0 +1,69 @@
+[2483F22B-136E025E-C:55]
+Name=Lylat Wars (A) (M3)
+
+$999 Kills
+80163B03 00FF
+
+$Have All Medals
+Note=For Expert & Normal Modes
+50000802 0000
+8017A9D9 7777
+
+$Infinite\Armor\Falco
+80174187 00FF
+
+$Infinite\Armor\Peppy
+8017418F 00FF
+
+$Infinite\Armor\Slippy
+8017418B 00FF
+
+$Infinite\Dual Blue Lasers
+80163C13 0002
+
+$Infinite\Energy
+80141587 00FF
+8013E6A7 00FF
+
+$Infinite\Hyper Laser
+80163B13 0002
+
+$Infinite\Lives
+80163B09 0063
+
+$Level Select
+8017A29F 00??
+00 Corneria
+01 Meteo
+02 Sector X
+03 Area 6
+04 Glitch
+05 Sector Y
+06 Venom 1
+07 Solar
+08 Zoness
+09 Venom 2
+0A Training Mode Level
+0B Macbeth
+0C Titania
+0D Aquas
+0E Fortuna
+10 Katina
+11 Bolse
+12 Sector Z
+13 Venom With Starwolf
+14 Corneria (Multi)
+
+$Loads O' Hits
+80163B03 00FF
+
+$Unlimited\Boost
+8113E6FC 0000
+8113E6FE 0000
+811415DC 0000
+811415DE 0000
+8013E7FD 0000
+801416DD 0000
+
+$Unlimited\Smart Bombs
+80179E0B 0063

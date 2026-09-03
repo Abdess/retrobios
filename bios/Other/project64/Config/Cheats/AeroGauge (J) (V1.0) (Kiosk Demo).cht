@@ -1,0 +1,75 @@
+[B00903C9-3916C146-C:4A]
+Name=AeroGauge (J) (V1.0) (Kiosk Demo)
+
+$Always 1st
+8013CC10 0001
+
+$Freeze All Lap Timers
+8013CBD1 0001
+8013CBD5 0001
+8013CBD9 0001
+
+$Freeze Overall Timer
+Note=All of the Freeze All Lap Timers must be on. These codes will Stop the others from racing against you in Grand Prix mode. To win a race in Grand Prix you must finish at least one lap in the qualify round, then complete all laps in race for first.
+8013CBC5 0001
+
+$Laps Of Race
+8013CBBE 00??
+01 1 Lap
+02 2 Laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 Never Ending Laps
+
+$Level Select
+Note=For this cheat to work,as soon as you put the cheat on you must turn it back off,if not you wont beable to quit a Race or even finish one.
+8013CECB 00??
+00 Canyon Rush
+01 Bikini Island
+02 China Town
+03 Neo Arena
+04 China Town Jam
+05 Neo Speed Way
+
+$Music Modifier
+80106B7C 00??
+FF Music On
+00 Music Off
+
+$No Damage\Player 1
+50000402 0000
+8113CF08 0000
+
+$No Damage\Player 2
+50000402 0000
+8113EF98 0000
+
+$Play As\Player 1
+8013CEC5 00??
+00 N64 Control Pad
+01 Interceptor
+02 Hornet
+03 Avenger
+04 Shredder
+05 Black Lightning
+06 Vengeance
+07 Prowler
+08 Reaper
+09 Dominator
+
+$Play As\Player 2
+8013CEC6 00??
+00 N64 Control Pad
+01 Interceptor
+02 Hornet
+03 Avenger
+04 Shredder
+05 Black Lightning
+06 Vengeance
+07 Prowler
+08 Reaper
+09 Dominator
+
+$Unlock All Tracks and Vehicles
+8008D0AC 0001

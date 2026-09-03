@@ -1,0 +1,24 @@
+[D1F7D8AB-293B0446-C:45]
+Name=Asteroids Hyper 64 (U)
+
+$Extra Lives
+Note=Not to be used with CLassic Mode, or it will freeze
+8007F90E 0063
+
+$Extra Points
+Note=Not to be used with CLassic Mode, or it will freeze
+8107F8FE FFFF
+
+$Infinite Armageddon
+Note=Not to be used with CLassic Mode, or it will freeze
+8107F892 0001
+
+$Infinite Items On Pickup
+Note=Not to be used with CLassic Mode, or it will freeze
+8107F8A2 270F
+
+$Infinite Lives (Classic Asteroids)
+8007F90F 0009
+
+$Unlock Classic Asteroids
+8106DF5A 0001

@@ -1,0 +1,29 @@
+[4A997C74-E2087F99-C:50]
+Name=Knife Edge - Nose Gunner (E)
+
+$Extreme Mode
+8111D332 0003
+
+$Infinite Armour\Player One
+8011D65F 0064
+
+$Infinite Armour\Player Two
+8011D663 0064
+
+$Infinite Bombs\Player One
+8011D667 0003
+
+$Infinite Bombs\Player Two
+8011D66B 0003
+
+$Level 11 Vulcan Cannon\Player One
+80123BAB 000A
+
+$Level 11 Vulcan Cannon\Player Two
+80123BCB 000A
+
+$Level Select
+81123E16 000C
+
+$Max Score
+81123B82 FC9A

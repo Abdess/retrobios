@@ -1,0 +1,50 @@
+[A62230C3-F0834488-C:45]
+Name=Dual Heroes (U)
+
+$Infinite Time
+D0226724 0000
+81226724 003C
+
+$Only Play One Round
+D0226791 0000
+81226718 0001
+
+$Player 1\1 Win To Win
+D0226715 0000
+80226715 0001
+
+$Player 1\Infinite Energy
+D022671C 0000
+8122671C 00FA
+
+$Player 1\Infinite Time To Continue
+802267CB 0009
+803CF2A1 0009
+
+$Player 1\Never Wins
+D0226715 0001
+80226715 0000
+
+$Player 1\No Energy
+D022671C 0000
+8122671C 0000
+
+$Player 2\1 Win To Win
+D0226717 0000
+80226717 0001
+
+$Player 2\Infinite Energy
+D022671E 0000
+8122671E 00FA
+
+$Player 2\Lifebar Flashes Red
+D022672E 0000
+8122672E 00CF
+
+$Player 2\Never Wins
+D0226717 0001
+80226717 0000
+
+$Player 2\No Energy
+D022671E 0000
+8122671E 0000

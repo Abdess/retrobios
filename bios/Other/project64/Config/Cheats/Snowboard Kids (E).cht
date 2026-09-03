@@ -1,0 +1,27 @@
+[5FD7CDA0-D9BB51AD-C:50]
+Name=Snowboard Kids (E)
+
+$1 Lap To Race
+D01226C8 0000
+801226C8 0009
+
+$Access Everything
+Note="Have All Characters,Cups,Courses,&Boards"
+810B3160 0100
+810B3164 0F00
+
+$Infinite Cash
+8112272A 03E7
+
+$Infinite Tools Options
+801226D5 00??
+01 Fan
+02 Ghost
+03 Pan
+04 Rock
+05 Mouse
+06 Board
+
+$Infinite Weapons\Lucky Dip
+Note="Lucky Dip is Infinite Usage Of What Ever You Get From Each Red Box"
+801226D4 0003

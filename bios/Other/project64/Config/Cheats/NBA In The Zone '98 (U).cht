@@ -1,0 +1,223 @@
+[6A121930-665CC274-C:45]
+Name=NBA In the Zone '98 (U)
+
+$Away Team\Infinite Time-Outs
+Note=Do not use this with the No Time Out's Cheat
+8013C2D7 0009
+80140863 0009
+
+$Away Team\No Time-Outs
+Note=Do not use this with the Infinite Time Out's Cheat
+8013C2D7 0000
+80140863 0000
+
+$Away Team\Scores
+8013C2B3 00??
+00 No Points
+0A 10 Points
+14 20 Points
+28 40 Points
+3C 60 Points
+50 80 Points
+64 100 Points
+C8 200 Points
+FA 250 Points
+
+$Create A Player\Max 3 Point
+8013FF99 0063
+
+$Create A Player\Max Ball Control
+8013FFA1 0063
+
+$Create A Player\Max Block
+8013FF9D 0063
+
+$Create A Player\Max Field Goal
+8013FF98 0063
+
+$Create A Player\Max Free Throw
+8013FF9A 0063
+
+$Create A Player\Max Power
+8013FFA2 0063
+
+$Create A Player\Max Rebound
+8013FF9C 0063
+
+$Create A Player\Max Speed
+8013FF9F 0063
+
+$Create A Player\Max Steal
+8013FF9E 0063
+
+$Home Team\Infinite Time-Outs
+Note=Do not use this with the No Time Out's Cheat
+8013C2D6 0009
+80140862 0009
+
+$Home Team\No Time-Outs
+Note=Do not use this with the Infinite Time Out's Cheat
+8013C2D6 0000
+80140862 0000
+
+$Home Team\Scores
+8013C2B1 00??
+00 No Points
+0A 10 Points
+14 20 Points
+28 40 Points
+3C 60 Points
+50 80 Points
+64 100 Points
+C8 200 Points
+FA 250 Points
+
+$No Shot Clock
+81140E1E FFFF
+
+$Options\27 Time Out Limit
+8013D867 00??
+00 Yes
+01 No
+
+$Options\3 Second Violation
+80144994 00??
+00 1
+01 2
+02 3
+03 4
+04 5
+05 6
+06 7
+07 8
+08 9
+09 10
+
+$Options\5 Second Violation
+80144993 00??
+00 1
+01 2
+02 3
+03 4
+04 5
+05 6
+06 7
+07 8
+08 9
+09 10
+
+$Options\Back Court
+80144996 00??
+00 2
+01 4
+02 6
+03 No
+
+$Options\Camera View
+8013D86A 00??
+00 1
+01 2
+02 3
+03 4
+04 5
+05 6
+06 7
+07 8
+08 9
+09 10
+
+$Options\Foul Out
+80144995 00??
+00 2
+01 4
+02 6
+03 No
+
+$Options\FT. Penalty Situations
+80144999 00??
+00 2
+01 4
+02 6
+03 No
+
+$Options\Goal Tending
+80144998 00??
+00 2
+01 4
+02 6
+03 No
+
+$Options\Level
+8013D864 00??
+00 Enjoy
+01 Exciting
+02 Super Challenge
+
+$Options\Out Of Bounds
+80144990 00??
+00 1
+01 2
+02 3
+03 4
+04 5
+05 6
+06 7
+07 8
+08 9
+09 10
+
+$Options\Player Display
+8013D869 00??
+00 Name
+01 Number
+02 None
+
+$Options\Quarter Length
+8013D865 00??
+00 3:00
+01 5:00
+02 8:00
+03 12:00
+
+$Options\Replay
+8013D868 00??
+00 Yes
+01 No
+
+$Options\Second Violation
+80144992 00??
+00 1
+01 2
+02 3
+03 4
+04 5
+05 6
+06 7
+07 8
+08 9
+09 10
+
+$Options\Shot Clock Violation
+80144991 00??
+00 1
+01 2
+02 3
+03 4
+04 5
+05 6
+06 7
+07 8
+08 9
+09 10
+
+$Options\Stamina
+8013D866 00??
+00 On
+01 Off
+
+$Options\Traveling
+80144997 00??
+00 2
+01 4
+02 6
+03 No

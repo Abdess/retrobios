@@ -1,0 +1,50 @@
+[4222D89F-AFE0B637-C:45]
+Name=Bust-A-Move '99 (U)
+
+$Always Gets Bubbles\Player 1
+800ECE59 0007
+
+$Always Gets Bubbles\Player 2
+800ECF49 0007
+
+$Always Gets Bubbles\Player 3
+801588B1 0007
+
+$Always Gets Bubbles\Player 4
+801589A1 0007
+
+$Ceiling Never Drops\Player 1
+810ECDEE 0000
+
+$Ceiling Never Drops\Player 2
+810ECEDE 0000
+
+$Ceiling Never Drops\Player 3
+81158846 0000
+
+$Ceiling Never Drops\Player 4
+81158974 0000
+
+$Infinite Time To Set Pieces\Player 1
+810ECE2C 0000
+
+$Infinite Time To Set Pieces\Player 2
+810ECF1C 0000
+
+$Infinite Time To Set Pieces\Player 3
+81158884 0000
+
+$Infinite Time To Set Pieces\Player 4
+81158936 0000
+
+$Never Gets Bubbles\Player 1
+800ECE59 0000
+
+$Never Gets Bubbles\Player 2
+800ECF49 0000
+
+$Never Gets Bubbles\Player 3
+801588B1 0000
+
+$Never Gets Bubbles\Player 4
+801589A1 0000

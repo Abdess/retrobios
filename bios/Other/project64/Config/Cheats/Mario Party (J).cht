@@ -1,0 +1,117 @@
+[ADA815BE-6028622F-C:4A]
+Name=Mario Party (J)
+
+$Lower Left Character\Coin Options
+800F2769 00??
+00 0 Coins
+0A 10 Coins
+64 100 Coins
+FF 255 Coins
+
+$Lower Left Character\Dice Always
+Note=With this option you can calculate exactly how many you need to get on the position of your choice.
+800D580A 00??
+00 Rolls In Random
+01 Rolls In 1
+02 Rolls In 2
+03 Rolls In 3
+04 Rolls In 4
+05 Rolls In 5
+06 Rolls In 6
+07 Rolls In 7
+08 Rolls In 8
+09 Rolls In 9
+0A Rolls In 10
+
+$Lower Left Character\Star Options
+800F276D 00??
+00 0 Stars
+64 99 Stars
+
+$Lower Right Character\Coin Options
+800F2799 00??
+00 0 Coins
+0A 10 Coins
+64 100 Coins
+FF 255 Coins
+
+$Lower Right Character\Dice Always
+Note=With this option you can calculate exactly how many you need to get on the position of your choice.
+800D584E 00??
+00 Rolls In Random
+01 Rolls In 1
+02 Rolls In 2
+03 Rolls In 3
+04 Rolls In 4
+05 Rolls In 5
+06 Rolls In 6
+07 Rolls In 7
+08 Rolls In 8
+09 Rolls In 9
+0A Rolls In 10
+
+$Lower Right Character\Star Options
+800F279D 00??
+00 0 Stars
+64 99 Stars
+
+$Mini Game\Max 99 Coins
+800F2C0C 0063
+
+$Mini Game\Unlimited 99 lives
+800F2C03 0063
+
+$Top Left Character\Coin Options
+Note=If you want to have full 255 Coins,1st use the 100 Option then put on 255. this will stop the numbers from changing  & spoiling the result.
+800F2709 00??
+00 0 Coins
+0A 10 Coins
+64 100 Coins
+FF 255 Coins
+
+$Top Left Character\Dice Always
+Note=With this option you can calculate exactly how many you need to get on the position of your choice.
+800D5782 00??
+00 Rolls In Random
+01 Rolls In 1
+02 Rolls In 2
+03 Rolls In 3
+04 Rolls In 4
+05 Rolls In 5
+06 Rolls In 6
+07 Rolls In 7
+08 Rolls In 8
+09 Rolls In 9
+0A Rolls In 10
+
+$Top Left Character\Star Options
+800F270D 00??
+00 0 Stars
+64 99 Stars
+
+$Top Right Character\Coin Options
+800F2739 00??
+00 0 Coins
+0A 10 Coins
+64 100 Coins
+FF 255 Coins
+
+$Top Right Character\Dice Always
+Note=With this option you can calculate exactly how many you need to get on the position of your choice.
+800D57C6 00??
+00 Rolls In Random
+01 Rolls In 1
+02 Rolls In 2
+03 Rolls In 3
+04 Rolls In 4
+05 Rolls In 5
+06 Rolls In 6
+07 Rolls In 7
+08 Rolls In 8
+09 Rolls In 9
+0A Rolls In 10
+
+$Top Right Character\Star Options
+800F273D 00??
+00 0 Stars
+64 99 Stars

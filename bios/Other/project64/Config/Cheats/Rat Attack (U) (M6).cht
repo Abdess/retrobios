@@ -1,0 +1,50 @@
+[0304C48E-AC4001B8-C:45]
+Name=Rat Attack (U) (M6)
+
+$Max Score
+81158440 05F5
+81158442 E0FF
+
+$Play As/Player 1
+801514F3 00??
+00 Hai Jinx
+01 Sparky
+02 Manx
+03 Muffy Dupont
+04 Bob Cat
+05 Smokey
+06 Atomicat
+07 Pearl
+
+$Play As/Player 2
+80151503 00??
+00 Hai Jinx
+01 Sparky
+02 Manx
+03 Muffy Dupont
+04 Bob Cat
+05 Smokey
+06 Atomicat
+07 Pearl
+
+$Play As/Player 3
+80151513 00??
+00 Hai Jinx
+01 Sparky
+02 Manx
+03 Muffy Dupont
+04 Bob Cat
+05 Smokey
+06 Atomicat
+07 Pearl
+
+$Play As/Player 4
+80151523 00??
+00 Hai Jinx
+01 Sparky
+02 Manx
+03 Muffy Dupont
+04 Bob Cat
+05 Smokey
+06 Atomicat
+07 Pearl

@@ -1,0 +1,22 @@
+[29A045CE-ABA9060E-C:46]
+Name=Hydro Thunder (F)
+
+$Always 1st
+812C56A6 0001
+
+$Have All\Races
+50000702 0000
+812B66A4 0101
+
+$Have All\Ships
+50000702 0000
+812B66B2 0101
+
+$Infinite\Boosts\Player 1
+812C56AC 4190
+
+$Infinite\Boosts\Player 2
+812C59DC 4190
+
+$Infinite\Time
+812B52A0 42C8

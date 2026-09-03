@@ -1,0 +1,90 @@
+[2655BB70-667D9925-C:45]
+Name=O.D.T (Or Die Trying) (U) (M3) (Unreleased Final)
+
+$Have\All Magic
+800CE9C8 0010
+800CE9CD 0000
+800CE9D7 0001
+800CE9E1 0002
+800CE9EB 0003
+800CE9F5 0005
+800CE9FF 0006
+800CEA09 0008
+800CEA13 0009
+800CEA1D 000B
+800CEA27 000E
+800CEA31 000F
+800CEA3B 0010
+800CEA45 0011
+800CEA4F 000A
+800CEA59 000C
+800CEA63 000D
+
+$Have\Magic On Level 4
+810C8B5D FFFF
+810C8B5E FFFF
+810C8B5F FFFF
+810C8B60 FFFF
+810C8B61 FFFF
+810C8B62 FFFF
+
+$Have\Max Armour Level
+800C8B80 0064
+
+$Have\Max Experience Level
+800C8B7C 00FF
+
+$Have\Max Spirit Level
+800C8B84 0064
+
+$Have\Max Weapon Level
+800C8B82 0064
+
+$Have\Weapons On Max Upgrade
+50000408 0000
+800C8B2C 0009
+
+$Infinite Air Under Water
+800C8A64 0069
+
+$Infinite Max\999 Lives
+810C8B78 03E8
+
+$Infinite Max\Fire Ammo
+800C8B33 0066
+
+$Infinite Max\Fusion Ammo
+800C8B43 0066
+
+$Infinite Max\Health
+800C8959 0066
+
+$Infinite Max\Ionic Ammo
+800C8B3B 0066
+
+$Infinite Max\Light Ammo
+800C8B2B 0066
+
+$Infinite Max\Mana
+800C8B7F 0066
+
+$Matts
+D00C8A4A 0080
+810C8963 0100
+
+$Play As Select
+800FCD45 00??
+00 Ike Hawkings (Corporal)
+01 Sophia Hawkings (Stowaway)
+02 Julia Chase (Cartographer)
+03 Karma (The Ex-Deviant)
+04 Max Havok (Chief Enginer)
+05 Solaar (Archbishop)
+06 Mr Bodybolt (7th Passenger)
+
+$Press A For Bionic Jump
+Note=This will make you jump to a great height
+D00C8A4A 0080
+810C8968 ????
+0250 Medium Jump
+0800 Max Jump

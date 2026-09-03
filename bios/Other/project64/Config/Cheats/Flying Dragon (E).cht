@@ -1,0 +1,25 @@
+[22E9623F-B60E52AD-C:50]
+Name=Flying Dragon (E)
+
+$1 Win to Win\Player 1
+D020A84F 0000
+8020A84F 0001
+
+$1 Win to Win\Player 2
+D020A84F 0000
+8020A84F 0010
+
+$Infinite\Health\Player 1
+80209D81 00C8
+
+$Infinite\Health\Player 2
+81209780 0190
+
+$Infinite\Money
+8121106C 2704
+
+$Infinite\Special\Player 1
+81209484 0190
+
+$Infinite\Special\Player 2
+8120B1B0 0190

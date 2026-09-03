@@ -1,0 +1,21 @@
+[AE5B9465-C54D6576-C:50]
+Name=Command & Conquer (E) (M2)
+
+$Infinite Options\Health Commando
+810B5364 0080
+
+$Infinite Options\Money GDI
+810C55B6 FFFF
+
+$Infinite Options\Money NOD
+810C575E FFFF
+
+$Infinite Options\Power GDI
+810C55D6 FFFF
+
+$Infinite Options\Power NOD
+810C577E FFFF
+
+$Level Select
+Note=Select Replay Mission, Press L To Display All Missions,And Press R To Select Your Team You can now press R+L+Up To Win A Battle
+810901AA 0001

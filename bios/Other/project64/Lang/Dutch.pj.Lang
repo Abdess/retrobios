@@ -1,0 +1,555 @@
+﻿/*********************************************************************************
+* Meta Information                                                               *
+*********************************************************************************/
+//About DLL
+#1  #  "Nederlands"		// LANGUAGE ID
+#2  #  "Lex"			// Author
+#3  #  "1.1"				// Version
+#4  #  "August, 2002"		// Date
+
+//About DLL Dialog
+#5  #  "Gekozen taal"
+#6  #  "Auteur"
+#7  #  "Versie"
+#8  #  "Datum"
+#9  #  "Bezoek webpagina"
+#10 #  "ROM Database (.RDB)"
+#11 #  "Code bestand (.CHT)"
+#12 #  "Secundaire ROM informatie (.RDX)"
+
+//About INI title
+#20 #  "Over INI Files"
+
+/*********************************************************************************
+* Menu                                                                           *
+*********************************************************************************/
+//File Menu
+#100#  "Bestand"
+#101#  "Open ROM"
+#102#  "ROM &Info...."
+#103#  "Start Emulatie"
+#104#  "Stop Emulatie"
+#105#  "Kies ROM Directory..."
+#106#  "Vernieuw ROM Lijst"
+#107#  "Recent geopende ROM"
+#108#  "Recente ROM Directories"
+#109#  "Sluiten"
+
+//System Menu
+#120#  "Systeem"
+#121#  "Herstart"
+#122#  "Pauze"
+#123#  "Genereer Bitmap"
+#124#  "Beperk FPS"
+#125#  "Opslaan"
+#126#  "Opslaan Als..."
+#127#  "Hervat"
+#128#  "Laad..."
+#129#  "Nu geopende Save State"
+#130#  "Codes..."
+#131#  "GS Knop"
+#132#  "Ga verder"
+#133#  "Zachte Reset"
+#134#  "Harde Reset"
+#135#  "Swap &Disk"
+#136#  "&Enhancements..."
+
+//Options Menu
+#140#  "Opties"
+#141#  "Volledig scherm"
+#142#  "Altijd bovenaan"
+#143#  "Configureer Grafische Plugin..."
+#144#  "Configureer Geluids Plugin..."
+#145#  "Configureer Besturings Plugin..."
+#146#  "Configureer RSP Plugin..."
+#147#  "Toon het CPU gebruik..."
+#148#  "Instellingen..."
+
+//Debugger Menu
+#160#  "Debugger"
+
+//Language Menu
+#175#  "Taal"
+
+//Help Menu
+#180#  "Help"
+#181#  "Over INI Bestanden"
+#182#  "Over Project 64"
+#185#  "&Ondersteun Project64"
+#186#  "&Discord"
+
+//Current Save Slot menu
+#190#  "Standaard"
+#191#  "Slot 1"
+#192#  "Slot 2"
+#193#  "Slot 3"
+#194#  "Slot 4"
+#195#  "Slot 5"
+#196#  "Slot 6"
+#197#  "Slot 7"
+#198#  "Slot 8"
+#199#  "Slot 9"
+#200#  "Slot 10"
+#201#  "Save slot (%ws) is geselecteerd"
+
+//Pop up Menu
+#210#  "Speel spel"
+#211#  "ROM Informatie"
+#212#  "Verander Spel Instellingen"
+#213#  "Verander Codes"
+#214#  "Graphics Plugin"
+#215#  "Speel Spel met Disk"
+#216#  "Kies Enhancements..."
+
+// Alternate name to save slot
+#220#  "Save Slot - Standaard"
+#221#  "Save Slot - 1"
+#222#  "Save Slot - 2"
+#223#  "Save Slot - 3"
+#224#  "Save Slot - 4"
+#225#  "Save Slot - 5"
+#226#  "Save Slot - 6"
+#227#  "Save Slot - 7"
+#228#  "Save Slot - 8"
+#229#  "Save Slot - 9"
+#230#  "Save Slot - 10"
+
+// Menu Descriptions
+#250#  "Open een N64 ROM bestand"
+#251#  "Geef informatie weer over het geladen ROM bestand"
+#252#  "Start emulatie van het geladen ROM bestand"
+#253#  "Stop emulatie van het geladen ROM bestand"
+#254#  "Selecteer ROM Directory"
+#255#  "Vernieuw de huidige ROM lijst"
+#256#  "Sluit dit programma"
+#257#  "Herstart de huidige ROM (Herlaad de veranderde instellingen)"
+#258#  "Pauze/Hervat de emulatie van de geladen ROM"
+#259#  "Genereer een Bitmap Plaatje van het huidige scherm"
+#260#  "Beperk de FPS tot die van de normale N64"
+#261#  "Maak een instantie van het huidige systeem voor een quick save"
+#262#  "Maak een instantie van het huidige systeem en kies een locatie om op te slaan"
+#263#  "Laad een snelle instantie save"
+#264#  "Kies een instant save om te laden"
+#265#  "Aan/Uit Game shark codes"
+#266#  "Game shark knop is voor specifieke codes"
+#267#  "Schakel over naar volledig scherm"
+#268#  "Zet het scherm altijd bovenaan"
+#269#  "Verander de instellingen van de grafische plugin"
+#270#  "Verander de instellingen van de geluids plugin"
+#271#  "Verander de instellingen van de besturings plugin"
+#272#  "Verander de instellingen van de RSP plugin"
+#273#  "Geef het CPU gebruik van de emulator weer en split het in verschillende bronnen"
+#274#  "Geef weer/Verander de instellingen van het programma"
+#275#  "Geef de handleiding van het programma weer"
+#276#  "Geef de faq van het programma weer"
+#277#  "Over het programma en de auteurs"
+#278#  "over de auteurs van de ondersteunings bestanden"
+#279#  "Open het laatst geopende ROM bestand"
+#280#  "Kies deze map als ROM map"
+#281#  "Laat de applicatie deze taal gebruiken"
+#282#  "Kies deze save state locatie"
+#283#  "Speel het geselecteerde spel"
+#284#  "Informatie over het geselecteerde spel"
+#285#  "Verander de instellingen voor het geselecteerde spel"
+#286#  "Verander de codes voor het geselecteerde spel"
+
+/*********************************************************************************
+* ROM Browser                                                                    *
+*********************************************************************************/
+//ROM Browser Fields
+#300#  "Bestandsnaam"
+#301#  "Interne naam"
+#302#  "Goede naam"
+#303#  "Status"
+#304#  "ROM Grootte"
+#305#  "Notities (core)"
+#306#  "Notities (standaard plugins)"
+#307#  "Notities (gebruiker)"
+#308#  "Cartridge ID"
+#309#  "Mediatype"
+#310#  "Land"
+#311#  "Ontwikkelaar"
+#312#  "CRC1"
+#313#  "CRC2"
+#314#  "CIC Chip"
+#315#  "Datum van uitgifte"
+#316#  "Genre"
+#317#  "Spelers"
+#318#  "Force Feedback"
+#319#  "Bestandsformaat"
+#321#  "Naam"
+
+//Select ROM
+#320#  "Selecteer de huidige ROM directory"
+
+//Messages
+#340#  "Slechte ROM? Gebruik GoodN64 & kijk voor een geüpdate INI"
+
+/*********************************************************************************
+* Options                                                                        *
+*********************************************************************************/
+//Opties Titel
+#400#  "Instellingen"
+
+//Tabs
+#401#  "Plugins"
+#402#  "Mappen"
+#403#  "Opties"
+#404#  "ROM Selectie"
+#405#  "Geavanceerd"
+#406#  "ROM Instellingen"
+#407#  "Shell Intergratie"
+#408#  "ROM Notities"
+#409#  "Hotkeys"
+#410#  "Status"
+#411#  "Recompiler"
+#412#  "Standaarden"
+#413#  "64DD"
+#414#  "64DD"
+
+//Plugin Dialog
+#420#  "Over"
+#421#  " Reality Signal Processor plugin: "
+#422#  " Video (Grafisch) plugin: "
+#423#  " Geluid (Geluid) plugin: "
+#424#  " Invoer (Besturings) plugin: "
+#425#  "Graphics HLE"
+#426#  "Audio HLE"
+#427#  "** Gebruik Systeemsplugin **"
+
+//Directory Dialog
+#440#  " Plugin Map:: "
+#441#  " ROM Map: "
+#442#  " N64 Automatische saves: "
+#443#  " Instant saves: "
+#444#  " Screen Shots: "
+#445#  "Laatste map waaruit een ROM is geopend"
+#446#  "Selecteer Plugin map"
+#447#  "Selecteer ROM map"
+#448#  "Selecteer Automatische save map"
+#449#  "Selecteer Instant save map"
+#450#  "Selecteer snap shot map"
+#451#  " Texture pack map: "
+#452#  "Selecteer texture pack map"
+
+//Options Dialog
+#460#  "Pauzeer emulatie als de applicatie niet actief is"
+#461#  "Ga bij het laden van een ROM naar volledig scherm"
+#462#  "Verberg geavanceerde instellingen"
+#463#  "Onthoud geselecteerde codes"
+#465#  "Toon snelheid"
+#466#  "Snelheid display:"
+#467#  "Controleer of Project64 al draait"
+#468#  "Sla game saves op in losse mappen"
+#469#  "Japanse retail 64DD IPL ROM pad:"
+#470#  "Amerikaanse retail 64DD IPL ROM pad:"
+#471#  "Development 64DD IPL ROM pad:"
+#472#  "Disk opslagtype:"
+#473#  "Schakel enhancements aan"
+#474#  "Toon status balk"
+#475#  "Ga uit volledig scherm wanneer de applicatie niet actief is"
+#476#  "Schakel Discord Rich Presence aan"
+
+//ROM Browser Tab
+#480#  "Maximale # onthouden ROMs (Max 10):"
+#481#  "ROMs"
+#482#  "Maximale # onthouden mappen (Max 10):"
+#483#  "mappen"
+#484#  "Gebruik de ROM Browser"
+#485#  "Gebruik directory recursion"
+#486#  "Beschikbare velden:"
+#487#  "Geef velden in deze volgorde weer:"
+#488#  "Voeg toe ->"
+#489#  "<- Verwijder"
+#490#  "Omhoog"
+#491#  "Naar beneden"
+#492#  "Ververs je browser automatisch"
+
+//Advanced Options
+#500#  "Het meest van deze veranderingen worden pas gebruikt als een ROM opnieuw wordt geladen of wordt gereset."
+#501#  "Core Standaard"
+#502#  "CPU core stijl:"
+#503#  "Self-mod code methode:"
+#504#  "Normale geheugen grootte:"
+#505#  "Geavanceerde Block Linking:"
+#506#  "Start Emulatie als een ROM wordt geopend?"
+#507#  "Schrijf de instellingen van de ini over met de standaard?"
+#508#  "Comprimeer de instant saves"
+#509#  "Schakel debugger aan"
+#510#  "Cache"
+#511#  "PI DMA"
+#512#  "Start veranderd"
+#513#  "Bescherm geheugen"
+#514#  "TLB unmapping"
+#515#  "Gebruik altijd de interpreter kern"
+
+//ROM Options
+#520#  "CPU core stijl:"
+#521#  "Self-modifying code Methode:"
+#522#  "Geheugen grootte:"
+#523#  "Geavanceerde Block Linking:"
+#524#  "Standaard Save type:"
+#525#  "Counter Factor:"
+#526#  "Grootte Compile Buffer"
+#527#  "Gebruik TLB"
+#528#  "Register caching"
+#529#  "Vertraag SI Interrupt:"
+#530#  "SP Hack"
+#531#  "Standaard"
+#532#  "RSP audio signaal"
+#533#  "Gefixeerde audio timing"
+#534#  "Functie-lookup-methode:"
+#535#  "Custom zelf-mod methode"
+#536#  "Sync met gebruik van audio"
+#537#  "AI count per byte:"
+#538#  "32-bit engine"
+#539#  "Vertraag DP interrupt"
+
+//Core Styles
+#540#  "Interpreter"
+#541#  "Recompiler"
+#542#  "Synchroniseer Kernen"
+
+//Self Mod Methods
+#560#  "Geen"
+#561#  "Cache"
+#562#  "Bescherm Geheugen"
+#563#  "Check Geheugen & Cache"
+#564#  "Change Geheugen & Cache"
+#565#  "Check Geheugen Advance"
+#566#  "Clear code on cache"
+
+// Function lookup method
+#570#  "Physieke lookup tabel"
+#571#  "Virtuele lookup tabel"
+#572#  "Change memory"
+
+//RDRAM Size
+#580#  "4 MB"
+#581#  "8 MB"
+
+//Advanced Block Linking
+#600#  "Aan"
+#601#  "Uit"
+
+//Save Type
+#620#  "Gebruik de eerst gebruikte save"
+#621#  "4kbit EEPROM"
+#622#  "16kbit EEPROM"
+#623#  "SRAM"
+#624#  "Flashram"
+
+//Shell Integration Tab
+#640#  "Bestands extensie associatie:"
+
+//ROM Notes
+#660#  "ROM Status:"
+#661#  "Core Notitie:"
+#662#  "Plugin Notitie:"
+
+// Accelerator selector
+#680#  "CPU status:"
+#681#  "Menu item:"
+#682#  "Huidige toets:"
+#683#  "Kies nieuwe sneltoets:"
+#684#  "Nu toegekend aan:"
+#685#  "Toekennen"
+#686#  "Verwijderen"
+#687#  "Reset Alles"
+#688#  "Speel geen game"
+#689#  "Speelt game"
+#690#  "Speelt game (in venster)"
+#691#  "Speelt game (volledig scherm)"
+#692#  "Detecteer Toets"
+
+// Framerate option
+#700#  "Verticale onderbrekingen per seconde"
+#701#  "Toon lijsten per seconde"
+#702#  "Percentage volle snelheid"
+
+// Increase speed
+#710#  "Verhoog Game Snelheid"
+#711#  "Verlaag Game Snelheid"
+
+// Bottom page buttons
+#720#  "Reset Pagina"
+#721#  "Reset Alles"
+#722#  "Apply"
+#723#  "Sluit"
+
+// Disk save type
+#730#  "Full Disk Copy"
+#731#  "Save Area Only"
+
+/*********************************************************************************
+* ROM Information                                                                *
+*********************************************************************************/
+//ROM Info Titel
+#800#  "ROM Informatie"
+
+//ROM Info Text
+#801#  "ROM Naam:"
+#802#  "Bestandsnaam:"
+#803#  "Locatie:"
+#804#  "ROM Grootte:"
+#805#  "Cartridge ID:"
+#806#  "Mediatype:"
+#807#  "Land:"
+#808#  "CRC1:"
+#809#  "CRC2:"
+#810#  "CIC Chip:"
+#811#  "MD5:"
+
+/*********************************************************************************
+* Cheats                                                                         *
+*********************************************************************************/
+//Cheat List
+#1000#  "Codes"
+#1001#  "Codes:"
+#1002#  " Notities: "
+#1003#  "Kies alles"
+#1004#  "Kies niks"
+
+//Add Cheat
+#1005#  "Voeg code toe"
+#1006#  "Naam:"
+#1007#  "Code:"
+#1008#  "Voeg in"
+#1009#  "Wis"
+#1010#  " Code notities: "
+#1011#  "Voeg toe aan DB"
+#1022#  "Voeg code toe"
+#1023#  "Nieuwe code"
+#1024#  "<adressen> <waarde>"
+#1025#  "Opties:"
+#1026#  "<waarde> <label>"
+
+//Code extension
+#1012#  "Code Extensies"
+#1013#  "Kies een waarde om te gebruiken:"
+#1014#  "OK"
+#1015#  "Annuleren"
+
+//Digital Value
+#1016#  " getal"
+#1017#  "Kies een waarde om te gebruiken:"
+#1018#  "&Waarde"
+#1019#  "van"
+#1020#  "naar"
+#1021#  "&Notities:"
+
+//Edit Cheat
+#1027#  "Verander Code"
+#1028#  "Update code"
+
+//Cheat Popup Menu
+#1040#  "Voeg nieuwe code toe..."
+#1041#  "Verander"
+#1042#  "Verwijder"
+
+// Shortcut editor
+#1100#  "Reset shortcuts"
+#1101#  "Weet je zeker dat je de shortcuts wilt resetten?\n\nDit kan niet ongedaan gemaakt worden."
+#1102#  "Bestandsmenu"
+#1103#  "Systeem Menu"
+#1104#  "Opties"
+#1105#  "Save Slots"
+
+/*********************************************************************************
+* Messages                                                                       *
+*********************************************************************************/
+#2000#  "*** CPU GEPAUZEERD ***"
+#2001#  "CPU Hervat"
+#2002#  "Vast in een oneindige cirkel wat niet kan worden onderbroken (Meestal slechte ROM).
+De emulatie stopt nu.
+
+Bekijk de ROM instellingen en check de ROM met Goodn64"
+#2003#  "Gefaald om het geheugen te lokaliseren"
+#2004#  "De standaard video plugin mist of is beschadigd.
+
+Ga naar instellingen en verander de grafische plugin.
+En kijk of je in ieder geval 1 compatible plugin in de plugin map heb."
+#2005#  "De standaard geluids plugin mist of is beschadigd.
+
+Ga naar instellingen en verander de geluids plugin.
+En kijk of je in ieder geval 1 compatible plugin in de plugin map heb."
+#2006#  "De standaard RSP plugin mist of is beschadigd.
+
+Ga naar instellingen en verander de RSP plugin.
+En kijk of je in ieder geval 1 compatible plugin in de plugin map heb."
+#2007#  "De standaard invoer plugin mist of is beschadigd.
+
+Ga naar instellingen en verander de invoer plugin.
+En kijk of je in ieder geval 1 compatible plugin in de plugin map heb."
+#2008#  "Gefaald om de plugin te laden:"
+#2009#  "Gefaald om het woord te laden
+
+Bekijk de ROM instellingen en check de ROM met Goodn64."
+#2010#  "Gefaald om het Save bestand te openen"
+#2011#  "Gefaald om de EEPROM te openen"
+#2012#  "Gefaald het Flashram te openen"
+#2013#  "Gefaald om de Memory pack te openen"
+#2014#  "Poging om het zip bestand te openen gefaald.
+
+Schijnbaar een beschadigd zip bestand - Probeer de ROM handmatig te unzippen."
+#2015#  "Poging om het bestand te openen gefaald."
+#2016#  "Het openen van het zip bestand roepte 1 of meerdere fouten op."
+#2017#  "Het geladen bestand blijkt geen goed N64 ROM te zijn.
+
+Kijk met Goodn64 of het een goede ROM is."
+#2018#  "Onbekend land"
+#2019#  "Onbekende Cic Chip"
+#2020#  "Onbekend bestands formaat"
+#2021#  "Onbekende geheugen actie
+
+Emulatie stopt nu"
+#2022#  "Unhandled R4300i OpCode bij"
+#2023#  "Voer uit van een niet gemapte ruimte.
+
+Check de ROM instellingen."
+#2024#  "De save state is niet gemaakt met de huidige ROM en kan dus niet worden gebruikt
+en de emulator zal crashen als je door ging
+
+Weet je zeker dan je de state toch wilt laden?"
+#2025#  "Fout"
+#2026#  "Er is een Copyright gevonden op LUT.  Het spel zal niet langer functioneren."
+#2027#  "Kopieer bescherming gefaald"
+#2028#  "Het veranderen van plugin vereist Project 64 om de ROM te herstarten.
+Als je dat niet wilt kies dan nee en maak een save state.
+
+Verander de plugins en herstart het spel?"
+#2029#  "Verander plugins"
+#2030#  "Emulatie beëindigd"
+#2031#  "Emulatie gestart"
+#2032#  "Niet mogelijk om de save state te laden"
+#2033#  "De save state is geladen"
+#2034#  "Sla de huidige save state op in.."
+#2035#  "Save state slot"
+#2036#  "Byte swapping image"
+#2037#  "Kies een N64 image"
+#2038#  "Geladen"
+#2039#  "Bezig met het laden van de image"
+#2040#  "Kan de ROM niet laden omdat 1 van de plugins niet goed is geinitialiseerd"
+#2041#  "Weet je zeker dat je dit wilt verwijderen?"
+#2042#  "Verwijder code"
+#2043#  "Code naam wordt al gebruikt"
+#2044#  "Je heb het maximum toe te voegen aantal codes per ROM bereikt"
+#2045#  "Plugin wordt geinitialiseerd"
+#2046#  "Je hebt geen virtuele key geselecteerd om aan het menu item toe te kennen."
+#2047#  "Je moet een menu item selecteren om deze key aan toe te kennen."
+#2048#  "Short-cut is al toegekend aan een ander menu item."
+#2049#  "Geen short-cut is geselecteerd om te verwijderen."
+#2050#  "ROM geladen. Wachten tot de emulatie is gestart."
+#2051#  "Project64 beta versies zijn alleen voor leden.\n\nGeen account bij www.pj64-emu.com? Dan zou je deze error niet moeten kunnen zien!!\nNeem a.u.b. contact op met ons op the site."
+#2052#  "Program Error"
+#2053#  "Niet gelukt een bestand te vinden binnen het 7z bestand"
+#2054#  "Graphics Low-Level Emulatie"
+#2055#  "Graphics LLE is niet voor generaal gebruik!!!\nWe raden aan dit allen te gebruiken voor testen, niet voor gamen.\n\nVerander naar graphics LLE?"
+#2056#  "Audio High-Level Emulatie"
+#2057#  "Audio HLE heeft een third-party plugin nodig!!!\nAls je geen third-party audio plugin gebruikt dat HLE ondersteunt, zul je geen geluid horen.\n\nVerander naar audio HLE?"
+#2058#  "Geladen bestand lijkt geen valide 64DD IPL ROM te zijn.\n\nVerifieer je ROMs met GoodN64."
+#2059#  "Nintendo 64DD Japanse Retail IPL ROM niet gevonden.\n Een Japanse 64DD disk image is nodig.\n\nSelecteer a.u.b. de benodigde ROM in de Settings."
+#2061#  "Nintendo 64DD Amerikaanse Retail IPL ROM niet gevonden.\nEen Amerikaanse 64DD disk image is nodig.\n\nSelecteer a.u.b. de benodigde ROM in de Settings."
+#2062#  "Nintendo 64DD Development IPL ROM not found.\nEen development 64DD disk image is nodig.\n\nSelecteer a.u.b. de benodigde ROM in de Settings."
+#2063#  "Niet erin geslaagd om de cheat te updaten, het is niet valide"
+#2064#  "Niet Valide Cheat"

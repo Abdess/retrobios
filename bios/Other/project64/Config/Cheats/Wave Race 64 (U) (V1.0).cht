@@ -1,0 +1,65 @@
+[7DE11F53-74872F9D-C:45]
+Name=Wave Race 64 (U) (V1.0)
+
+$99 Points
+801CB0A3 0063
+
+$Always First Place
+801C269F 0000
+
+$Infinite Course Out Time
+801C2983 00FF
+
+$Infinite Time Stunt Mode
+801C295E 00FF
+
+$Maximum Power\Player 1
+801C27C7 0005
+
+$Maximum Power\Player 2
+801C2DEA 0005
+801C308A 0005
+
+$Misses Don't Count
+801C27CF 0000
+
+$Only Play Glacier Coast
+800DA753 0007
+
+$Open\Course Option
+Note=This works in all modes except for Championship Mode.
+801CAFEB 00??
+00 Dolphin Park
+01 Sunny Beach
+02 Sunset Bay
+03 Drake Lake
+04 Marian Fortress
+05 Port Blue
+06 Twilight City
+07 Glacier Coast
+08 Southern Island
+
+$Open\Difficulty Option
+801CAFE0 00??
+01 Hard
+02 Expert
+03 Hard & Expert
+10 Dolphin
+11 Dolphin & Hard
+12 Dolphin & Expert
+13 Dolphin Hard & Expert
+
+$Open\Level Option
+800DA753 00??
+02 Sunset Bay
+03 Above & Drake Lake
+04 All Above & Marine Fortress
+05 All Above & Port Blue
+06 All Above & Southern Island
+0D All Above & Twilight City
+16 All Above & Glacier Coast
+
+$Super Speed
+801C27C7 0005
+D0154051 0010
+801C27C7 0020

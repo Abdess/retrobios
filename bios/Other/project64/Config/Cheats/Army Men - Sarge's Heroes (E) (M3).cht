@@ -1,0 +1,46 @@
+[B210DF19-98B58D1A-C:50]
+Name=Army Men - Sarge's Heroes (E) (M3)
+
+$Access\All Guns
+8015E0CF 0001
+
+$Access\Max Ammo
+801646EF 0001
+
+$Enable Cheat Menu
+Note=Enable before you enter in game and you will find the cheat menu when you press the Start Button
+8003F36F 0003
+8004719F 0003
+
+$Enable Level Select Menu
+Note=This must be used with Enable Cheat Menu and enabled before you enter in game and you will find the level select menu replaces the cheat menu when you press the Start Button
+810AF0BA DC38
+
+$Have\Debug Mode
+Note=When this code is activated, a display of numbers will show on the screen as the players move around
+8015E417 0001
+
+$Have\Large Mode
+Note=Do not use with Mini Mode only use one at a time
+8016470F 0001
+
+$Have\Mini Mode
+Note=Do not use with Large Mode only use one at a time
+8015E0C9 0001
+
+$Infinite\Continues
+8015E0C3 0001
+
+$Infinite\Health
+8016471F 0001
+
+$Invisible Soldier
+Note=you are Invisible to most enimies who just can not dectect or see you.
+8015E0B3 0001
+
+$Play As
+Note=Here you can choose who you would like to play as. But Do not use this with any other play as option..
+811653D2 00??
+07 The Big Green One
+08 Vikki
+09 Plastro

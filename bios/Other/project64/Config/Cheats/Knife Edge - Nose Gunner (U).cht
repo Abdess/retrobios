@@ -1,0 +1,32 @@
+[FCE0D799-65316C54-C:45]
+Name=Knife Edge - Nose Gunner (U)
+
+$Infinite\Armor\Player 1
+8011D467 0064
+
+$Infinite\Armor\Player 2
+8011D46B 0064
+
+$Infinite\Bombs\Player 1
+8011D46F 0003
+
+$Infinite\Bombs\Player 2
+8011D473 0003
+
+$Level 11 Vulcan Cannon\Player 1
+801239B3 000A
+
+$Level 11 Vulcan Cannon\Player 2
+801239D3 000A
+
+$Press L For Rapid Fire Select\Player 1
+D011BE01 0020
+8011D497 00??
+14 On Flak
+28 On Nuke & Laser
+
+$Press L For Rapid Fire Select\Player 2
+D011BE09 0020
+8011D49B 00??
+14 On Flak
+28 On Nuke & Laser

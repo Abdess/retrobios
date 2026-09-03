@@ -1,0 +1,20 @@
+[36FA35EB-E85E2E36-C:45]
+Name=NFL Blitz 2001 (U)
+
+$Always On Fire Team 2\Player 2
+800EC0CF 00??
+01 Always On
+00 Never On
+
+$Fire Team 1\Player 1
+800EC0CB 00??
+01 Always On
+00 Never On
+
+$Infinite Turbo\Player 1
+810EC12C 42C8
+810EC12E 0000
+
+$Infinite Turbo\Player 2
+81DEC164 42C8
+81DEC166 0000

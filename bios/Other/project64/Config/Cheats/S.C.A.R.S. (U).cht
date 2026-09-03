@@ -1,0 +1,77 @@
+[769147F3-2033C10E-C:45]
+Name=S.C.A.R.S. (U)
+
+$Always Have Equipped\Player 1
+8039B144 00??
+8039B147 00??
+8039B149 0009
+00 Turbo
+01 Magnet
+03 Stinger
+04 Boomerang
+05 Seeker
+06 Stopper
+07 Bullets
+08 Shield
+
+$Always Have Equipped\Player 2
+8039B3E4 00??
+8039B3E7 00??
+8039B3E9 0009
+00 Turbo
+01 Magnet
+03 Stinger
+04 Boomerang
+05 Seeker
+06 Stopper
+07 Bullets
+08 Shield
+
+$Always Have Equipped\Player 3
+8039B684 00??
+8039B687 00??
+8039B689 0009
+00 Turbo
+01 Magnet
+03 Stinger
+04 Boomerang
+05 Seeker
+06 Stopper
+07 Bullets
+08 Shield
+
+$Always Have Equipped\Player 4
+8039B924 00??
+8039B927 00??
+8039B929 0009
+00 Turbo
+01 Magnet
+03 Stinger
+04 Boomerang
+05 Seeker
+06 Stopper
+07 Bullets
+08 Shield
+
+$Game Speed
+802C9339 00??
+00 Novice
+01 Default
+02 Advanced
+03 Master
+
+$Have All\Cars
+50000402 0000
+803DF94B 0001
+
+$Have All\Cups,Tracks & Challenges
+50000302 0000
+802CB4A9 0001
+50000402 0000
+803DD109 0001
+
+$Infinite Credits
+80388C1D 0009
+
+$Max Score Points
+8139AFB6 03E7

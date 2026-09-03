@@ -1,0 +1,11 @@
+[DBF4EA9D-333E82C0-C:45]
+Name=Snowboard Kids (U)
+
+$No Frameskip
+Note=Multiplayer is now smoother at 30fps.
+800DEED4 0000
+
+$No Frameskip (ASM)
+80099324 0024
+81099326 0000
+

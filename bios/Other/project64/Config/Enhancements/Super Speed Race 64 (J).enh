@@ -1,0 +1,6 @@
+[9CE02E22-206EF1B0-C:4A]
+Name=Super Speed Race 64 (J)
+
+$Framerate speed fix
+OnByDefault=1
+8000148F 0003

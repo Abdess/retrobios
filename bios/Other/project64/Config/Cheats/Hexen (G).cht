@@ -1,0 +1,214 @@
+[9AB3B50A-BC666105-C:44]
+Name=Hexen (G)
+
+$Access In-Game Cheat Menu
+Note=To Access Pause Game Play. This gives you access to In-game Cheats like God Mode,Level Select,All Items Etc
+81137CD6 07FF
+80137DB3 0005
+
+$Boots Of Speed Select\Player 1
+8113F538 ????
+0000 Off
+03FF On
+
+$Boots Of Speed Select\Player 2
+8113F6D4 ????
+0000 Off
+03FF On
+
+$Boots Of Speed Select\Player 3
+8113F870 ????
+0000 Off
+03FF On
+
+$Boots Of Speed Select\Player 4
+8113FA0C ????
+0000 Off
+03FF On
+
+$Have All\Armour
+8013F491 0019
+8013F495 0014
+8013F499 0014
+8013F49D 0014
+
+$Have All\Items And Artifacts\Player 1
+8013F4A1 0001
+8013F4A3 00FF
+8013F4A5 0002
+8013F4A7 00FF
+8013F4A9 0003
+8013F4AB 00FF
+8013F4AD 0004
+8013F4AF 00FF
+8013F4B1 0005
+8013F4B3 00FF
+8013F4B5 0006
+8013F4B7 00FF
+8013F4B9 0007
+8013F4BB 00FF
+8013F4BD 0008
+8013F4BF 00FF
+8013F4C1 0009
+8013F4C3 00FF
+8013F4C5 000A
+8013F4C7 00FF
+8013F4C9 000B
+8013F4CB 00FF
+8013F4CD 000C
+8013F4CF 00FF
+8013F4D1 000D
+8013F4D3 00FF
+8013F4D5 000E
+8013F4D7 00FF
+8013F4D9 0010
+8013F4DB 00FF
+8013F4DD 0011
+8013F4DF 00FF
+8013F4E1 0012
+8013F4E3 00FF
+8013F4E5 0013
+8013F4E7 00FF
+8013F4E9 0014
+8013F4EB 00FF
+8013F4ED 0015
+8013F4EF 00FF
+8013F4F1 0016
+8013F4F3 00FF
+8013F4F5 0017
+8013F4F7 00FF
+8013F4F9 0018
+8013F4FB 00FF
+8013F4FD 0019
+8013F4FF 00FF
+8013F501 001A
+8013F503 00FF
+8013F505 001B
+8013F507 00FF
+8013F509 001C
+8013F50B 00FF
+8013F50D 001D
+8013F50F 00FF
+8013F511 001E
+8013F513 00FF
+8013F515 001F
+8013F517 00FF
+8013F519 0020
+8013F51B 00FF
+8013F529 0020
+
+$Have All\Keys\Player 1
+8113F53C 07FF
+
+$Have All\Keys\Player 2
+8113F6D8 07FF
+
+$Have All\Keys\Player 3
+8113F874 07FF
+
+$Have All\Keys\Player 4
+8113FA10 07FF
+
+$Have All\Weapons\Player 1
+8013F555 00FF
+8013F557 00FF
+8013F559 00FF
+8013F55B 00FF
+
+$Have All\Weapons\Player 2
+8013F6F1 00FF
+8013F6F3 00FF
+8013F6F5 00FF
+8013F6F7 00FF
+
+$Have All\Weapons\Player 3
+8013F88D 00FF
+8013F88F 00FF
+8013F891 00FF
+8013F893 00FF
+
+$Have All\Weapons\Player 4
+8013FA29 00FF
+8013FA2B 00FF
+8013FA2D 00FF
+8013FA2F 00FF
+
+$Have Infinite\Blue Mana\Player 1
+8013F55D 00CF
+
+$Have Infinite\Blue Mana\Player 2
+8013F2E9 00CF
+
+$Have Infinite\Blue Mana\Player 3
+8013F485 00CF
+
+$Have Infinite\Blue Mana\Player 4
+8013F621 00CF
+
+$Have Infinite\Green Mana\Player 1
+8013F55F 00CF
+
+$Have Infinite\Green Mana\Player 2
+8013F2EB 00CF
+
+$Have Infinite\Green Mana\Player 3
+8013F487 00CF
+
+$Have Infinite\Green Mana\Player 4
+8013F623 00CF
+
+$Icon Of The Defender Select\Player 1
+Note=Do not use with Invincibillity Cheat
+8113F52C ????
+0000 Off
+03FF On
+
+$Icon Of The Defender Select\Player 2
+Note=Do not use with Invincibillity Cheat
+8113F6C8 ????
+0000 Off
+03FF On
+
+$Icon Of The Defender Select\Player 3
+Note=Do not use with Invincibillity Cheat
+8113F864 ????
+0000 Off
+03FF On
+
+$Icon Of The Defender Select\Player 4
+Note=Do not use with Invincibillity Cheat
+8113FA00 ????
+0000 Off
+03FF On
+
+$Invincibility\Player 1
+8113F52C FFFF
+
+$Invincibility\Player 2
+8113F2B8 FFFF
+
+$Invincibility\Player 3
+8113F454 FFFF
+
+$Invincibility\Player 4
+8113F5F0 FFFF
+
+$Wings Of Wraith Select\Player 1
+8113F533 ????
+0000 Off
+03FF On
+
+$Wings Of Wraith Select\Player 2
+8113F6CE ????
+0000 Off
+03FF On
+
+$Wings Of Wraith Select\Player 3
+8113F86A ????
+0000 Off
+03FF On
+
+$Wings Of Wraith Select\Player 4
+8113FA06 ????
+0000 Off
+03FF On

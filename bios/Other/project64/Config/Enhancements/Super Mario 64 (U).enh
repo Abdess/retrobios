@@ -1,0 +1,16 @@
+[635A2BFF-8B022326-C:45]
+Good Name=Super Mario 64 (U)
+
+$16:9 Widescreen
+Note=Menu Misalignments. For 16:9 aspect ratios. Do not use with other widescreen enhancements or hacks.
+81325034 3C07
+81325036 3FE3
+8127D6A0 1000
+8127D6D4 1000
+
+$21:9 Widescreen
+Note=Menu Misalignments. For 21:9 aspect ratios. Do not use with other widescreen enhancements or hacks.
+81325034 3C07
+81325036 4018
+8127D6A0 1000
+8127D6D4 1000

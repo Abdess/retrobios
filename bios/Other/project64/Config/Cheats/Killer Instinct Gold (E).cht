@@ -1,0 +1,23 @@
+[979B263E-F8470004-C:50]
+Name=Killer Instinct Gold (E)
+
+$Access Gargos Character
+80127DC8 0001
+
+$Access In-Game Cheats
+801283DC 0006
+
+$Fast Kick & Punch
+801D357E 0010
+
+$Infinite Health
+801D3584 0078
+
+$Invincible
+801D35D4 000A
+
+$Max Blood
+80127D5D 0003
+
+$No Time Limit
+80127D5B 0001

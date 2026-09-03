@@ -1,0 +1,22 @@
+[839F3AD5-406D15FA-C:50]
+Name=Mario Tennis (E)
+
+$Have All\Characters Available
+810657A0 FFFF
+
+$Have All\Courts Available
+810657A4 FFFF
+
+$Score\Player 1
+80152DFA 00??
+00 0
+01 15
+02 30
+03 40
+
+$Score\Player 2
+80152DFB 00??
+00 0
+01 15
+02 30
+03 40

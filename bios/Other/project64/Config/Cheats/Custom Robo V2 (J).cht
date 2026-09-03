@@ -1,0 +1,29 @@
+[079501B9-AB0232AB-C:4A]
+Name=Custom Robo V2 (J)
+
+$All Equipment Registered
+50001402 0000
+810F40D8 FFFF
+
+$All Equipment Unhighlighted
+50001402 0000
+810F4100 FFFF
+
+$All Equipment Unlocked
+50001402 0000
+810F40B0 FFFF
+
+$All Help Notes Available For Player 1
+50000602 0000
+810F409C FFFF
+
+$All Stuff Available For Player 1
+Note=This modifies your save file. That will make all the multiplayer stages available, as well as unlocking every part. The actual breakdown is:
+50003802 0000
+810F4230 FFFF
+
+$Side Invincible\Player 1
+811FC00C 447A
+
+$Side Invincible\Player 2
+811FC034 447A

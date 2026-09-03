@@ -1,0 +1,36 @@
+[A8275140-B9B056E8-C:4A]
+Name=Doraemon 3 - Nobita no Machi SOS! (J)
+
+$[Can Leave Town]
+Note=Start a new game, and immediately leave town without talking to anyone.
+811B362A FFFF
+
+$[Press L To Levitate
+Note=Jump first, then hold L-Button while in mid-air.
+D0082915 0020
+812456F4 418E
+D0082915 0020
+812456F6 38E2
+
+$Have All\Characters
+50000702 0000
+801B361B 0001
+
+$Have All\Key Items
+50001602 0000
+811B3714 0101
+
+$Have All\Normal Items
+50000902 0000
+811B3700 6363
+
+$Have All\Weapons
+50000702 0000
+811B3678 0101
+
+$Infinite\Air
+8121D4FA 04B0
+
+$Infinite\HP (All Characters)
+50000602 0000
+801B361C 000A

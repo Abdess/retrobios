@@ -1,0 +1,84 @@
+[4EAA3D0E-74757C24-C:4A]
+Name=Super Mario 64 (J)
+
+$Don't Hurt Mario\Monsters
+A0339E27 0001
+
+$Funny Mario Options\Mario's Cap\Off & in His Hand
+Note=Here you can Choose Options with Mario with His Cap off & in His Hand,Do not use with any other Mario with/without Options,Use only one at a time
+80339E07 00??
+20 Cap In Hand
+22 Invisible Mario Cap In Hand
+24 Metal Mario Cap In Hand
+26 Invisible Metal Mario Cap In Hand
+28 Flying Mario Cap In Hand
+
+$Funny Mario Options\Mario's Cap\On & An Extra in His Hand
+Note=Here you can Choose Options with Mario with His Cap on & An Extra in His Hand,Do not use with any other Mario with/without Options,Use only one at a time
+80339E07 00??
+30 Cap In Hand
+32 Invisible Mario Cap In Hand
+34 Metal Mario Cap In Hand
+36 Invisible Metal Mario Cap In Hand
+38 Flying Mario Cap In Hand
+
+$Have All\175 Stars
+Note=I have managed to put a have 175 Stars Option in for you,once the Code is activated, you will see it as a new option in Save Slot A.
+80207B0B 00FF
+50000D02 0000
+81207B0C FFFF
+
+$Have All\Maxed Out Coin Records For All Levels
+80207B25 00FF
+81207B26 FFFF
+81207B28 FFFF
+81207B2A FFFF
+81207B2C FFFF
+81207B2E FFFF
+81207B30 FFFF
+81207B32 FFFF
+
+$Have\Debug Mode
+8032C658 00??
+01 On
+00 Off
+
+$Have\Level Select
+8032C64C 0001
+
+$Infinite\Energy & Breath
+80339EAE 0008
+
+$Infinite\Lives
+80339EAD 0064
+
+$Mario's Cap\Off Options
+Note=Here you can Choose Options with Mario without His Cap on,Do not use with any other Mario with/without Options,Use only one at a time
+80339E07 00??
+01 Mario No Cap
+02 Invisible Mario
+04 Metal Mario
+08 Flying Mario
+0A Invisible Flying Mario
+0D Metal Flying Mario
+0F Invisible Metal Flying Mario
+
+$Mario's Cap\On Options
+Note=Here you can Choose Options with Mario with His Cap on,Do not use with any other Mario with/without Options,Use only one at a time
+80339E07 00??
+12 Invisible Mario
+15 Metal Mario
+16 Invisible Metal Mario
+19 Flying Mario
+
+$Press GS for 255 Coins
+89339EA8 00FF
+
+$Press L To Levitate
+Note=Press L to levitate & Let go to land
+D0339C31 0020
+81339E4C 4220
+D0339E4D 0020
+81339E0C 0300
+D0339E4D 0020
+81339E0E 0880

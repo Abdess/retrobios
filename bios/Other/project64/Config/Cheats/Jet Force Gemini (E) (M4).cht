@@ -1,0 +1,138 @@
+[68D7A1DE-0079834A-C:50]
+Name=Jet Force Gemini (E) (M4)
+
+$[Resolution Fix]
+800FE6F2 0003
+800FE6DE 0003
+800FEDEA 00D0
+
+$Access\All Characters
+80208910 FFFF
+
+$Access\All Floyd Awards
+Note=only enable One character at a time when using this code
+50000501 0000
+80208908 0005
+
+$All Single Player Levels Unlocked
+Note=All Charcters
+80208AA0 00FF
+80208AA1 00FF
+80208B16 00FF
+80208B17 00FF
+80208B8C 00FF
+80208B8D 00FF
+
+$Infinite Continues
+800A34F1 0063
+
+$Juno\Access\All Keys
+81208B18 FFF7
+
+$Juno\Access\All Objects
+81208B1A FFFF
+
+$Juno\Access\All Weapons
+Note=Do not put this code on until you collect one Extra Weapon then you will Have\all ready to use
+80208ABC 00FF
+80208ABD 00FF
+
+$Juno\All Single Player Levels Unlocked
+80208B16 00FF
+80208B17 00FF
+
+$Juno\Full & Max Health
+80208AB5 000C
+80208AB2 0040
+
+$Juno\Infinite\Max Ammo All Guns
+50000302 0000
+81208AC6 03E7
+50000802 0000
+81208ACC 03E7
+50000402 0000
+81208ADC 03E7
+
+$Juno\Infinite\Mizar Tokens
+81208AC4 03E7
+
+$Juno\Max Blue & White Heads
+81208ABA 03E7
+81208AB8 03E7
+
+$Lupus\Access\All Keys
+81208B8E FF70
+
+$Lupus\Access\All Objects
+81208B90 FFFF
+
+$Lupus\Access\All Weapons
+Note=Do not put this code on until you collect one Extra Weapon then you will Have\all ready to use
+80208B32 00FF
+80208B33 00FF
+
+$Lupus\All Single Player Levels Unlocked
+80208B8C 00FF
+80208B8D 00FF
+
+$Lupus\Full & Max Health
+80208B2B 000C
+80208B28 0040
+
+$Lupus\Infinite\Max Ammo All Guns
+50000302 0000
+81208B3C 03E7
+50000802 0000
+81208B42 03E7
+50000402 0000
+81208B52 03E7
+
+$Lupus\Infinite\Mizar Tokens
+81208B3A 03E7
+
+$Lupus\Max\Blue & White Heads
+81208B30 03E7
+81208B2E 03E7
+
+$Tribals\Gold Wood\Have All Tribals
+802088E4 000F
+
+$Tribals\Gold Wood\Have No Tribals Remaining
+802088E6 0000
+
+$Tribals\Gold Wood\No Tribals Killed
+802088E5 0000
+
+$Vela\Access\All Keys
+81208AA2 FF70
+
+$Vela\Access\All Objects
+81208AA4 FFFF
+
+$Vela\Access\All Weapons
+Note=Do not put this code on until you collect one Extra Weapon then you will Have\all ready to use
+80208A46 00FF
+80208A47 00FF
+
+$Vela\All Single Player Levels Unlocked
+80208AA0 00FF
+80208AA1 00FF
+
+$Vela\Full & Max Health
+80208A3F 000C
+80208A3C 0040
+
+$Vela\Infinite\Max Ammo All Guns
+50000302 0000
+81208A50 03E7
+50000802 0000
+81208A56 03E7
+50000402 0000
+81208A66 03E7
+
+$Vela\Infinite\Mizar Tokens
+81208A4E 03E7
+
+$Vela\Max\Blue & White Heads
+81208A44 03E7
+81208A42 03E7

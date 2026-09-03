@@ -1,0 +1,17 @@
+[B6524461-ED6D04B1-C:50]
+Name=Dual Heroes (E)
+
+$Infinite Health\Player 1
+80225E9D 00FA
+
+$Infinite Health\Player 2
+80225E9F 00FA
+
+$Infinite Time
+80225EA5 003C
+
+$Win Once To Win\Player 1
+80225E95 0001
+
+$Win Once To Win\Player 2
+80225E97 0001

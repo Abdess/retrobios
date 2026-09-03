@@ -1,0 +1,27 @@
+[99179359-2FE7EBC3-C:50]
+Name=Gex 3 - Deep Cover Gecko (E) (M3) (Eng-Spa-Ita)
+
+$Access All\Bonus Coins
+50000F02 0000
+810A6124 0007
+
+$Access All\ordinary Remote Controls
+50000F01 0000
+800A60A8 000F
+
+$Access All\Paw Coins
+50000F02 0000
+810A60E8 03FF
+
+$Access All\Special Remote Controls
+810A60E4 FFFF
+810A60E6 FFFF
+
+$Crazy Tail
+8110955E 0001
+
+$Infinite\Health
+810A60C8 0005
+
+$Infinite\Lives
+810A60C6 0064

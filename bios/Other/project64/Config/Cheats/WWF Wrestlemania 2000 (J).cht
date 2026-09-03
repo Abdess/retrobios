@@ -1,0 +1,205 @@
+[12737DA5-23969159-C:4A]
+Name=WWF Wrestlemania 2000 (J)
+
+$Always Normal Spirit\Player 1
+8015D075 0032
+
+$Always Normal Spirit\Player 2
+8015D509 0032
+
+$Always Normal Spirit\Player 3
+8015D99D 0032
+
+$Always Normal Spirit\Player 4
+8015DE31 0032
+
+$Always Special\Player 1
+8015D0B5 0004
+
+$Always Special\Player 2
+8015D549 0004
+
+$Always Special\Player 3
+8015D9DD 0004
+
+$Always Special\Player 4
+8015DE71 0004
+
+$Easy Pins & Longer Submissions\Player 1
+8015D074 0064
+
+$Easy Pins & Longer Submissions\Player 2
+8015D508 0064
+
+$Easy Pins & Longer Submissions\Player 3
+8015D99C 0064
+
+$Easy Pins & Longer Submissions\Player 4
+8015DE30 0064
+
+$Have All Characters
+81094BDA FFFF
+
+$Infinite Create-A-Wrestler Attribute Points
+8011069B 001E
+
+$Max Attributes
+80110691 0032
+80110693 0032
+80110695 0032
+80110697 0032
+80110699 0032
+
+$Max Spirit\Player 1
+8015D075 00FF
+
+$Max Spirit\Player 2
+8015D509 00FF
+
+$Max Spirit\Player 3
+8015D99D 00FF
+
+$Max Spirit\Player 4
+8015DE31 00FF
+
+$No Spirit\Player 1
+8015D075 0000
+
+$No Spirit\Player 2
+8015D509 0000
+
+$No Spirit\Player 3
+8015D99D 0000
+
+$No Spirit\Player 4
+8015DE31 0000
+
+$Specials Don't Run Out
+81120C14 2400
+
+$Timer Is Always 00:00
+80164F2F 0000
+
+$Ultimate Codes\Player 1
+8015D074 0064
+
+$Ultimate Codes\Player 2
+8015D508 0064
+
+$Ultimate Codes\Player 3
+8015D99C 0064
+
+$Ultimate Codes\Player 4
+8015DE30 0064
+
+$Weapon Select\Player 1
+8115D0B6 0300
+8115CC10 ????
+8115CC12 0000
+8015CCD0 0000
+0000 Broom
+0101 Shovel
+0202 Red And White Hockey Stick
+0303 Guitar
+0404 Night Stick
+0505 Head
+0606 Black Hockey Stick
+0707 Bottle
+0808 2x4
+0909 Big Purple Sheet
+0A0A White Jug
+0B0B Suit Case
+0C0C Stick
+0D0D Head
+0E0E Big Mallot
+0F0F Black Microphone
+1010 BaseBall Bat
+1111 Folding Chair
+1212 Board
+1313 Stairs
+1414 Trashcan
+FFFF Nothing
+
+$Weapon Select\Player 2
+8115D54A 0300
+8115CC40 ????
+8015CC42 0001
+8015CCD1 0001
+0000 Broom
+0101 Shovel
+0202 Red And White Hockey Stick
+0303 Guitar
+0404 Night Stick
+0505 Head
+0606 Black Hockey Stick
+0707 Bottle
+0808 2x4
+0909 Big Purple Sheet
+0A0A White Jug
+0B0B Suit Case
+0C0C Stick
+0D0D Head
+0E0E Big Mallot
+0F0F Black Microphone
+1010 BaseBall Bat
+1111 Folding Chair
+1212 Board
+1313 Stairs
+1414 Trashcan
+FFFF Nothing
+
+$Weapon Select\Player 3
+8115D9DE 0300
+8115CC70 ????
+8015CC72 0002
+8015CCD2 0002
+0000 Broom
+0101 Shovel
+0202 Red And White Hockey Stick
+0303 Guitar
+0404 Night Stick
+0505 Head
+0606 Black Hockey Stick
+0707 Bottle
+0808 2x4
+0909 Big Purple Sheet
+0A0A White Jug
+0B0B Suit Case
+0C0C Stick
+0D0D Head
+0E0E Big Mallot
+0F0F Black Microphone
+1010 BaseBall Bat
+1111 Folding Chair
+1212 Board
+1313 Stairs
+1414 Trashcan
+FFFF Nothing
+
+$Weapon Select\Player 4
+8115DE72 0300
+8115CC98 ????
+8115CC9A 0003
+8015CCD3 0003
+0000 Broom
+0101 Shovel
+0202 Red And White Hockey Stick
+0303 Guitar
+0404 Night Stick
+0505 Head
+0606 Black Hockey Stick
+0707 Bottle
+0808 2x4
+0909 Big Purple Sheet
+0A0A White Jug
+0B0B Suit Case
+0C0C Stick
+0D0D Head
+0E0E Big Mallot
+0F0F Black Microphone
+1010 BaseBall Bat
+1111 Folding Chair
+1212 Board
+1313 Stairs
+1414 Trashcan
+FFFF Nothing

@@ -1,0 +1,36 @@
+[0DE2CE36-D41D29E6-C:4A]
+Name=Hybrid Heaven (J)
+
+$Infinite\Max Body Stats
+81181788 270F
+811817C8 0063
+50000C02 0000
+81181790 270F
+50000502 0000
+811817C0 270F
+50000602 0000
+811817E8 270F
+50000602 0000
+811817F6 270F
+
+$Infinite\Max Health
+81181780 270F
+81181782 270F
+
+$Infinite\Weapons & Items
+Note=Do not put this on until in game. This gives you all Weapons, Items and Keys and infinite use of.
+50002508 0000
+80181B48 0063
+50000808 0000
+80181C70 0063
+
+$Level 999
+811817C8 270F
+
+$Level and Battle Select
+Note=The level and battle select screen can be accessed by pressing A at the main menu
+801CFB94 0005
+
+$Press L To Levitate
+D005D8D1 0020
+8124C710 3FCB

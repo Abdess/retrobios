@@ -1,0 +1,429 @@
+[B443EB08-4DB31193-C:45]
+Name=The Legend of Zelda - Majora's Mask - Collector's Edition (U) (GC)
+
+$All Equipment Upgrades
+801ED89D 0023
+811ED8EA 201B
+801ED87C 004F
+
+$Beta World 1
+Note=Put on the code on load up,After the Nintendo logo you will be in that place of Choice.you can also choose another place & then press F1 (reset) to go to that place this is for beta interest only it will not assist you in playing the game.
+D038127B 0000
+801ED832 00??
+00 Mama's House non Beta
+01 Fearful Spider House
+02 Beneaf the Graveyard
+03 Southern Swamp Mr Tingle Entry
+06 Outside Tourist Information Southern Swamp
+08 Outside Magic Hag's Potion Shop
+0A Southern Swamp Woods Of Mystery Entry
+24 Counter Of The Tresure Chest Shop
+2E Woodfall Temple non Beta
+32 Spider Hand
+35 Statue outside Gorman Track
+36 Statue outside Lair Of The Temples Boss
+38 Path to Romani Ranch non Beta
+4A outside The Royal Palace of the Deku Kingdom
+4C Ledge in The Royal Palace of the Deku Kingdom
+4E inside The Royal Palace of the Deku Kingdom 1
+71 Green Blobs
+74 Cave Portal to Last Boss Field
+7F Waterfall Sothern Swamp
+8A Giant Turtle In the Temple non beta
+8B Room of Miau & Tijo Zora Great Hall
+94 Recieving Gorans Mask non Beta
+95 ?
+96 Hungry Goran in the Snow
+A2 Statue in Stone Tower
+A6 Stone Tower non Beta
+B9 Recieving Deku Mask non Beta
+D9 Giant Lizards in a Cave
+DA Cave with Steaming Water
+FF Vamps House In Ikana Canyon
+
+$Bottles\Bottle 1 Modifier
+801ED8B2 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Bottles\Bottle 2 Modifier
+801ED8B3 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Bottles\Bottle 3 Modifier
+801ED8B4 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Bottles\Bottle 4 Modifier
+801ED8B5 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Bottles\Bottle 5 Modifier
+801ED8B6 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Bottles\Bottle 6 Modifier
+801ED8B7 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Event Item\Modifier 1
+801ED8A5 00??
+28 Moon's Tear
+29 Land Title Deed
+2A Swap Title Deed
+2B Mountain Title Deed
+2C Ocean Title Deed
+2D Room Key
+2E Special Delivery To Mama
+2F Letter To Kafei
+30 Pendant Of Memories
+
+$Event Item\Modifier 2
+801ED8AB 00??
+28 Moon's Tear
+29 Land Title Deed
+2A Swap Title Deed
+2B Mountain Title Deed
+2C Ocean Title Deed
+2D Room Key
+2E Special Delivery To Mama
+2F Letter To Kafei
+30 Pendant Of Memories
+
+$Event Item\Modifier 3
+801ED8B1 00??
+28 Moon's Tear
+29 Land Title Deed
+2A Swap Title Deed
+2B Mountain Title Deed
+2C Ocean Title Deed
+2D Room Key
+2E Special Delivery To Mama
+2F Letter To Kafei
+30 Pendant Of Memories
+
+$Fight Demo Majora's Mask
+Note=With this code,load the game & put the cheat on. then press start to apear in the Demo mode.
+801688D8 0020
+
+$Fog\Blue
+801642C8 0020
+
+$Fog\Pink
+801642CC 0020
+
+$Fog\Yellow
+801642D0 0020
+
+$Have\All Masks
+801ED8B8 003E
+801ED8B9 0038
+801ED8BA 0047
+801ED8BB 0045
+801ED8BC 0040
+801ED8BD 0032
+801ED8BE 003A
+801ED8BF 0046
+801ED8C0 0039
+801ED8C1 0042
+801ED8C2 0048
+801ED8C3 0033
+801ED8C4 003C
+801ED8C5 003D
+801ED8C6 0037
+801ED8C7 003F
+801ED8C8 0036
+801ED8C9 0034
+801ED8CA 0043
+801ED8CB 0041
+801ED8CC 003B
+801ED8CD 0044
+801ED8CE 0049
+801ED8CF 0035
+
+$Have\All Quest Status Items
+801ED8ED 0005
+811ED8EE F7CF
+
+$Have\Arrows\Fire Arrow
+801ED8A2 0002
+
+$Have\Arrows\Ice Arrow
+801ED8A3 0003
+
+$Have\Arrows\Light Arrow
+801ED8A4 0004
+
+$Have\Bombchu
+801ED8A7 0007
+
+$Have\Bombs
+801ED8A6 0006
+
+$Have\Deku Nuts
+801ED8A9 0009
+
+$Have\Deku Sticks
+801ED8A8 0008
+
+$Have\Great Fairy's Sword
+801ED8B0 0010
+
+$Have\Hero's Bow
+801ED8A1 0001
+
+$Have\Hookshot
+801ED8AF 000F
+
+$Have\Item Modifier
+801ED8B0 00??
+05 Japanese Flute?
+0B Japanese Item?
+10 Great Fairy's Sword
+11 Japanese Hookshot?
+31 Japanese Scroll?
+4A Japanese Bow?
+
+$Have\Lens of Truth
+801ED8AE 000E
+
+$Have\Magic Beans
+801ED8AA 000A
+
+$Have\Ocarina of Time
+801ED8A0 0000
+
+$Have\Pictograph
+801ED8AD 000D
+
+$Have\Powder Kegs
+801ED8AC 000C
+
+$Infinite\Health
+811ED866 0140
+
+$Infinite\Hearts Options
+Note=If you need to clear the Infinite Max Hearts from the screen just choose the 6 or 4 Heart Options, take off the cheat & then make a save.
+811ED864 ????
+0140 Max Hearts
+0063 6 Hearts
+0043 4 Hearts
+
+$Infinite\Items
+801ED8D1 0063
+50000501 0000
+801ED8D6 0063
+50000201 0000
+801ED8DC 0063
+
+$Infinite\Max & Double Magic Meter
+801ED869 0060
+811ED870 0101
+
+$Infinite\Rupees
+811ED86A 03E7
+
+$Maximum Visibility
+801642D8 0020
+
+$Play As
+801ED850 00??
+00 Fierce Deity Link
+01 Goron Link
+02 Zora Link
+03 Deku Link
+04 Normal Link
+
+$Press L To Levitate
+Note=Press L To Levitate & Let go to land
+D038127B 0020
+8139A558 40CB
+
+$Replace Sword With
+Note=Only put the Deity Link's Sword on, if using The Play As Fierce Deity Link Code, if not it will turn Fierce Deity Link into a crazed slashing Machine. You have been warned.
+801ED87C 00??
+4A Fire Arrow w/ Bow
+4B Ice Arrow w/ Bow
+4C Light Arrow w/ Bow
+4D Kokiri Sword
+4E Razor Sword
+4F Guilded Sword
+50 Deity Link's Sword
+
+$Use C-Buttons Anywhere
+Note=This code allows you to use C-Button Items where you normally can't use them.
+811F1748 0000
+811F174A 0000
+
+$Warp Modifier
+Note=Put this code on and it will now take where you wanted to go, turn it back off or it will infinite loop entering all the time.
+D03E4CFA 0000
+803FD555 0001
+813FD55A ????
+0010 Mayors Residence
+0008 Magic Hags Potion Shop
+000A Romani Ranch Barn
+000B Mama's House
+000E Honey & Darlings Shop
+0015 Final Boss Arena
+001F Beneath the Graveyard (left entrance)
+002F Beneath the Graveyard (right entrance)
+0030 Southern Swamp (Reg Entrance)
+004F Southern Swamp (from tour house)
+006E Southern Swamp (from Woodfall)
+006F Southern Swamp (from Deku Palace)
+0078 Path to Ikana Canyon
+009E Southern Swamp (from Deku Place 2)
+009F Southern Swamp (From Potion Shop)
+00AF Boat Cruise (picture taking)
+00CD Southern Swamp (From Woods of Mystery)
+00CE Southern Swamp (From Spider House)
+00CF Southern Swamp (From Ikana Canyon)
+00FE Southern Swamp (From Owl Warp)
+0E00 Curiosity Shop
+0E38 Ikana Canyon Entrance
+1500 Lens of Truth Cave (get it)
+2600 Stone Tower Temple (Upside down)
+2609 Stone Tower Temple (Boss Room Entrance)
+2604 Treasure Chest Shop
+2605 Treausre Chest Shop (counter)
+260E Clock Tower (w/ skull kid - silent)
+2610 Stone Tower Temple (endless fall)
+6214 Romani Ranch
+9214 Zora Shop
+B214 Snowhead (Path to temple - warp in)
+D214 East Clock Down
+
+$Time Control
+Note=Control the speed of time with the D-pad. Up stops the time, left enables double time, and down restores the notmal speed.
+D01F88A0 0008
+811ED846 FFFD
+D01F88A0 0004
+811ED846 0000
+D01F88A0 0002
+811ED846 FFFE

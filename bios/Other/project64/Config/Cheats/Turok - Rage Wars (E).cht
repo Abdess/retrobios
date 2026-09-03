@@ -1,0 +1,76 @@
+[1EA26214-E790900F-C:50]
+Name=Turok - Rage Wars (E)
+
+$All Characters
+50000301 0000
+8010EB51 00FF
+
+$All Levels Completed
+Note=Unlocks Frag Fest & Time Trial
+50000601 0000
+8010EB7D 00FF
+
+$Deaths Modifier
+8110EB76 ????
+000A 10
+0014 20
+001E 30
+0028 40
+0032 50
+0064 100
+00C8 200
+0190 400
+0320 800
+0640 1600
+03E7 Infinite
+
+$Have All\Medals
+Note=Unlocks the In-Game Cheat Menu.Only works with a Controller-Pak
+8010EB50 0003
+50000601 0000
+8010EB4A 00FF
+
+$Have All\Mini Game Icons
+Note=Only works with a Controller-Pak
+8010EB17 0024
+
+$Infinite Ammo All Guns\Player 1
+50000302 0000
+80336535 0063
+50000702 0000
+80692B95 0063
+
+$Infinite Health\Player 1
+80336527 0064
+80692B86 0064
+
+$Infinite Lives\Player 1
+8033637E 0064
+
+$Total Kills Modifier
+8110EB6E ????
+000A 10
+0014 20
+001E 30
+0028 40
+0032 50
+0064 100
+00C8 200
+0190 400
+0320 800
+0640 1600
+03E7 Infinite
+
+$Wins Modifier
+8110EB72 ????
+000A 10
+0014 20
+001E 30
+0028 40
+0032 50
+0064 100
+00C8 200
+0190 400
+0320 800
+0640 1600
+03E7 Infinite

@@ -1,0 +1,35 @@
+[F568D51E-7E49BA1E-C:45]
+Name=Bomberman 64 (U)
+
+$Carry 20 Bombs At A Time
+800AEE0F 0014
+
+$Have\Pumped up Red Remote Bombs
+802AC653 0004
+
+$Infinite\Credits
+802AC62B 0009
+
+$Infinite\Energy\Player 1
+800AEE07 0002
+
+$Infinite\Energy\Player 2
+800AEECF 0002
+
+$Infinite\Energy\Player 3
+800AEF97 0002
+
+$Infinite\Energy\Player 4
+800AF05F 0002
+
+$Infinite\Gems
+802AC62F 0063
+
+$Infinite\Lives
+802AC627 0063
+
+$Infinite\Time
+802AC643 0001
+
+$Invincible\Player 1
+800AEE01 0001

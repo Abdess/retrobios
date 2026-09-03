@@ -1,0 +1,83 @@
+[733FCCB1-444892F9-C:50]
+Name=Banjo-Kazooie (E) (M3)
+
+$Access All Moves
+8037CD70 0001
+8037CD71 007F
+8037CD72 00FF
+8037CD73 00FF
+
+$Do Anywhere Option\Take off anywhere
+Note=Press A
+D0285734 0080
+8037CBA1 0001
+
+$Have\All Jinjos
+8038695B 00FF
+
+$Have\Blubbers Gold
+80386973 00FF
+
+$Have\Chimpys Oranges
+80386977 00FF
+
+$Have\Eyries Caterpillars
+8038699B 00FF
+
+$Have\Nabnuts Acorns
+8038699F 00FF
+
+$Have\Present Option\Blue
+80386993 00FF
+
+$Have\Present Option\Green
+8038698F 00FF
+
+$Have\Present Option\Red
+80386997 00FF
+
+$Have\Running Shoes
+8137CA88 5019
+
+$Have\Zero Time all Levels
+50000B04 0000
+813869E4 3000
+
+$Infinite\255 Eggs
+80386947 00FF
+
+$Infinite\255 Gold Feathers
+80386953 00FF
+
+$Infinite\255 Jigsaws
+803869AB 00FF
+
+$Infinite\255 Notes
+80386943 00FF
+
+$Infinite\255 Red Feathers
+8038694F 00FF
+
+$Infinite\8 Skulls
+803869A7 0008
+
+$Infinite\Air
+8038696E 000B
+
+$Infinite\Health
+80386963 0008
+80386965 0001
+
+$Infinite\Lives
+8038696B 0009
+
+$Press L To Levitate
+Note=Press L To Levitate & Let go to land
+D0285735 0020
+8137CE8C 43E0
+
+$Yumblies Counter\Banjo
+8038697B 00FF
+
+$Yumblies Counter\Mr Vile
+8038697C 00FF

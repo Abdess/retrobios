@@ -1,0 +1,1529 @@
+[9B500E8E-E90550B3-C:50]
+Name=Resident Evil 2 (E) (M2)
+
+$[Saves Always 0]
+Note=No matter how many saves you do ithis makes the game think you Have\not saved.
+810E8B50 0000
+
+$Have All Guns In  Chest
+50000E04 0100
+810E59F4 05FF
+
+$Have All Main Items In Chest
+Note=If you want items that are not listed in the Chest, then just use the Have Item On Slot Select code to have what you desire.
+810E5A2C 17FF
+810E5A30 1EFF
+810E5A34 1FFF
+810E5A38 23FF
+50000404 0100
+810E5A3C 25FF
+810E5A4C 2AFF
+810E5A50 2BFF
+50000304 0100
+810E5A54 2EFF
+50000F04 0100
+810E5A60 32FF
+810E5A9C 43FF
+50000504 0100
+810E5AA0 47FF
+50000404 0100
+810E5AB4 53FF
+50000C04 0100
+810E5AC4 58FF
+
+$Have\Fine Condition Always
+810DDEE4 0000
+
+$Have\Item On Slot Select\Slot 01
+Note=This will give you the item of your choice and will be infinite on that chosen slot
+800E59C8 00??
+800E59C9 00FF
+00 Nothing
+01 Knife Hunk
+02 Handgun Hunk
+03 Handgun Different Ada
+04 Custom Handgun Hunk
+05 Magnum Hunk
+06 Custom Magnum Hunk
+07 Shotgun Hunk
+08 Custom Shotgun Hunk
+09 Grenade Launcher Claire
+0A Grenade Launcher (Flame Rounds) Claire
+0B Grenade Launcher (Acid Rounds) Claire
+0C Bowgun Claire
+0D Colt S.A.A. Claire
+0E Spark Shot Claire
+0F Sub Machine Gun Leon
+10 Flamethrower Leon
+11 Rocket Launcher Claire
+12 Gatling Gun Claire
+13 Machine Gun ???
+14 Handgun Bullets
+15 Shotgun Shells
+16 Magnum Bullets
+17 Fuel
+18 Grenade Rounds
+19 Flame Rounds
+1A Acid Rounds
+1B Machine Gun Bullets
+1C S. Shot Bullets
+1D Bow Gun Bolts
+1E Ink Ribbon
+1F Small Key
+20 Hand Gun Parts
+21 Magnum Parts
+22 Shotgun Parts
+23 First Aid Spray
+24 Chemical FR-W09
+25 Chemical AC-W24
+26 Green Herb
+27 Red Herb
+28 Blue Herb
+29 Mixed Herb (Green)
+2A Mixed Herb (Red&Green)
+2B Mixed Herb (Blue&Green)
+2C Mixed Herb (?)
+2D Mixed Herb (?)
+2E Mixed Herb (?)
+2F Lighter
+30 Lock Pick
+31 Picture
+32 Valve Handle
+33 Red Jewel
+34 Red Card Key
+35 Blue Card Key
+36 Serpent Stone
+37 Jaguar Stone
+38 Blue Stone
+39 Blue Stone (?)
+3A Eagle Stone
+3B Bishop Plug
+3C Rook Plug
+3D Knight Plug
+3E King Plug
+3F W. Box Key
+40 Detonator
+41 Plastic Bomb
+42 Bomb&Detonator
+43 Crank
+44 Film
+45 Film (?)
+46 Film (?)
+47 Unicorn Medal
+48 Eagle Medal
+49 Wolf Medal
+4A G. Cogwheel
+4B Manhole Opener
+4C Main Fuse
+4D Fuse Case
+4E Vaccine
+4F Vaccine Cart.
+50 Film
+51 Base Vaccine
+52 G-Virus
+53 Special Key
+54 Joint S Plug
+55 Joint N Plug
+56 Cord
+57 Film
+58 Cabin Key
+59 Precinct Key (blue)
+5A Precinct Key (red)
+5B Precinct Key (?)
+5C Precinct Key (green)
+5D C. Panel Key (red)
+5E C. Panel Key (yellow)
+5F P. Room Key
+60 MO Disk
+61 Lab Card Key
+62 Master Key
+63 Platform Key
+64 No Item
+65 No Item
+66 No Item
+67 No Item
+68 Chris's Diary
+69 Mail to Chris
+6A Memo to Leon
+6B Police Memorandum
+6C Operation Report 1
+6D Mail to the Chief
+6E Mail to the Chief (?)
+6F Secretary's Diary A
+70 Secretary's Diary B
+71 Operation Report 2
+72 User Registration
+73 Film A
+74 Film B
+75 Film C
+76 Patrol Report
+77 Watchman's Diary
+78 Chief's Diary
+79 Sewer Manager Diary
+7A Sewer Manager Fax
+7B Film D
+7C Vaccine Synthesis
+7D Lab Security Manual
+7E P-Epsilon Report
+7F Rookie Files
+80 Rookie Files (?)
+81 No Item
+82 Spade Key
+83 Diamond Key
+84 Desk Key
+85 Heart Key
+86 Club Key
+87 Virgin Heart
+88 Square Crank
+89 Down Key
+8A Up Key
+8B Locker Key
+
+$Have\Item On Slot Select\Slot 02
+Note=This will give you the item of your choice and will be infinite on that chosen slot
+800E59CC 00??
+800E59CD 00FF
+00 Nothing
+01 Knife Hunk
+02 Handgun Hunk
+03 Handgun Different Ada
+04 Custom Handgun Hunk
+05 Magnum Hunk
+06 Custom Magnum Hunk
+07 Shotgun Hunk
+08 Custom Shotgun Hunk
+09 Grenade Launcher Claire
+0A Grenade Launcher (Flame Rounds) Claire
+0B Grenade Launcher (Acid Rounds) Claire
+0C Bowgun Claire
+0D Colt S.A.A. Claire
+0E Spark Shot Claire
+0F Sub Machine Gun Leon
+10 Flamethrower Leon
+11 Rocket Launcher Claire
+12 Gatling Gun Claire
+13 Machine Gun ???
+14 Handgun Bullets
+15 Shotgun Shells
+16 Magnum Bullets
+17 Fuel
+18 Grenade Rounds
+19 Flame Rounds
+1A Acid Rounds
+1B Machine Gun Bullets
+1C S. Shot Bullets
+1D Bow Gun Bolts
+1E Ink Ribbon
+1F Small Key
+20 Hand Gun Parts
+21 Magnum Parts
+22 Shotgun Parts
+23 First Aid Spray
+24 Chemical FR-W09
+25 Chemical AC-W24
+26 Green Herb
+27 Red Herb
+28 Blue Herb
+29 Mixed Herb (Green)
+2A Mixed Herb (Red&Green)
+2B Mixed Herb (Blue&Green)
+2C Mixed Herb (?)
+2D Mixed Herb (?)
+2E Mixed Herb (?)
+2F Lighter
+30 Lock Pick
+31 Picture
+32 Valve Handle
+33 Red Jewel
+34 Red Card Key
+35 Blue Card Key
+36 Serpent Stone
+37 Jaguar Stone
+38 Blue Stone
+39 Blue Stone (?)
+3A Eagle Stone
+3B Bishop Plug
+3C Rook Plug
+3D Knight Plug
+3E King Plug
+3F W. Box Key
+40 Detonator
+41 Plastic Bomb
+42 Bomb&Detonator
+43 Crank
+44 Film
+45 Film (?)
+46 Film (?)
+47 Unicorn Medal
+48 Eagle Medal
+49 Wolf Medal
+4A G. Cogwheel
+4B Manhole Opener
+4C Main Fuse
+4D Fuse Case
+4E Vaccine
+4F Vaccine Cart.
+50 Film
+51 Base Vaccine
+52 G-Virus
+53 Special Key
+54 Joint S Plug
+55 Joint N Plug
+56 Cord
+57 Film
+58 Cabin Key
+59 Precinct Key (blue)
+5A Precinct Key (red)
+5B Precinct Key (?)
+5C Precinct Key (green)
+5D C. Panel Key (red)
+5E C. Panel Key (yellow)
+5F P. Room Key
+60 MO Disk
+61 Lab Card Key
+62 Master Key
+63 Platform Key
+64 No Item
+65 No Item
+66 No Item
+67 No Item
+68 Chris's Diary
+69 Mail to Chris
+6A Memo to Leon
+6B Police Memorandum
+6C Operation Report 1
+6D Mail to the Chief
+6E Mail to the Chief (?)
+6F Secretary's Diary A
+70 Secretary's Diary B
+71 Operation Report 2
+72 User Registration
+73 Film A
+74 Film B
+75 Film C
+76 Patrol Report
+77 Watchman's Diary
+78 Chief's Diary
+79 Sewer Manager Diary
+7A Sewer Manager Fax
+7B Film D
+7C Vaccine Synthesis
+7D Lab Security Manual
+7E P-Epsilon Report
+7F Rookie Files
+80 Rookie Files (?)
+81 No Item
+82 Spade Key
+83 Diamond Key
+84 Desk Key
+85 Heart Key
+86 Club Key
+87 Virgin Heart
+88 Square Crank
+89 Down Key
+8A Up Key
+8B Locker Key
+
+$Have\Item On Slot Select\Slot 03
+Note=This will give you the item of your choice and will be infinite on that chosen slot
+800E59D0 00??
+800E59D1 00FF
+00 Nothing
+01 Knife Hunk
+02 Handgun Hunk
+03 Handgun Different Ada
+04 Custom Handgun Hunk
+05 Magnum Hunk
+06 Custom Magnum Hunk
+07 Shotgun Hunk
+08 Custom Shotgun Hunk
+09 Grenade Launcher Claire
+0A Grenade Launcher (Flame Rounds) Claire
+0B Grenade Launcher (Acid Rounds) Claire
+0C Bowgun Claire
+0D Colt S.A.A. Claire
+0E Spark Shot Claire
+0F Sub Machine Gun Leon
+10 Flamethrower Leon
+11 Rocket Launcher Claire
+12 Gatling Gun Claire
+13 Machine Gun ???
+14 Handgun Bullets
+15 Shotgun Shells
+16 Magnum Bullets
+17 Fuel
+18 Grenade Rounds
+19 Flame Rounds
+1A Acid Rounds
+1B Machine Gun Bullets
+1C S. Shot Bullets
+1D Bow Gun Bolts
+1E Ink Ribbon
+1F Small Key
+20 Hand Gun Parts
+21 Magnum Parts
+22 Shotgun Parts
+23 First Aid Spray
+24 Chemical FR-W09
+25 Chemical AC-W24
+26 Green Herb
+27 Red Herb
+28 Blue Herb
+29 Mixed Herb (Green)
+2A Mixed Herb (Red&Green)
+2B Mixed Herb (Blue&Green)
+2C Mixed Herb (?)
+2D Mixed Herb (?)
+2E Mixed Herb (?)
+2F Lighter
+30 Lock Pick
+31 Picture
+32 Valve Handle
+33 Red Jewel
+34 Red Card Key
+35 Blue Card Key
+36 Serpent Stone
+37 Jaguar Stone
+38 Blue Stone
+39 Blue Stone (?)
+3A Eagle Stone
+3B Bishop Plug
+3C Rook Plug
+3D Knight Plug
+3E King Plug
+3F W. Box Key
+40 Detonator
+41 Plastic Bomb
+42 Bomb&Detonator
+43 Crank
+44 Film
+45 Film (?)
+46 Film (?)
+47 Unicorn Medal
+48 Eagle Medal
+49 Wolf Medal
+4A G. Cogwheel
+4B Manhole Opener
+4C Main Fuse
+4D Fuse Case
+4E Vaccine
+4F Vaccine Cart.
+50 Film
+51 Base Vaccine
+52 G-Virus
+53 Special Key
+54 Joint S Plug
+55 Joint N Plug
+56 Cord
+57 Film
+58 Cabin Key
+59 Precinct Key (blue)
+5A Precinct Key (red)
+5B Precinct Key (?)
+5C Precinct Key (green)
+5D C. Panel Key (red)
+5E C. Panel Key (yellow)
+5F P. Room Key
+60 MO Disk
+61 Lab Card Key
+62 Master Key
+63 Platform Key
+64 No Item
+65 No Item
+66 No Item
+67 No Item
+68 Chris's Diary
+69 Mail to Chris
+6A Memo to Leon
+6B Police Memorandum
+6C Operation Report 1
+6D Mail to the Chief
+6E Mail to the Chief (?)
+6F Secretary's Diary A
+70 Secretary's Diary B
+71 Operation Report 2
+72 User Registration
+73 Film A
+74 Film B
+75 Film C
+76 Patrol Report
+77 Watchman's Diary
+78 Chief's Diary
+79 Sewer Manager Diary
+7A Sewer Manager Fax
+7B Film D
+7C Vaccine Synthesis
+7D Lab Security Manual
+7E P-Epsilon Report
+7F Rookie Files
+80 Rookie Files (?)
+81 No Item
+82 Spade Key
+83 Diamond Key
+84 Desk Key
+85 Heart Key
+86 Club Key
+87 Virgin Heart
+88 Square Crank
+89 Down Key
+8A Up Key
+8B Locker Key
+
+$Have\Item On Slot Select\Slot 04
+Note=This will give you the item of your choice and will be infinite on that chosen slot
+800E59D4 00??
+800E59D5 00FF
+00 Nothing
+01 Knife Hunk
+02 Handgun Hunk
+03 Handgun Different Ada
+04 Custom Handgun Hunk
+05 Magnum Hunk
+06 Custom Magnum Hunk
+07 Shotgun Hunk
+08 Custom Shotgun Hunk
+09 Grenade Launcher Claire
+0A Grenade Launcher (Flame Rounds) Claire
+0B Grenade Launcher (Acid Rounds) Claire
+0C Bowgun Claire
+0D Colt S.A.A. Claire
+0E Spark Shot Claire
+0F Sub Machine Gun Leon
+10 Flamethrower Leon
+11 Rocket Launcher Claire
+12 Gatling Gun Claire
+13 Machine Gun ???
+14 Handgun Bullets
+15 Shotgun Shells
+16 Magnum Bullets
+17 Fuel
+18 Grenade Rounds
+19 Flame Rounds
+1A Acid Rounds
+1B Machine Gun Bullets
+1C S. Shot Bullets
+1D Bow Gun Bolts
+1E Ink Ribbon
+1F Small Key
+20 Hand Gun Parts
+21 Magnum Parts
+22 Shotgun Parts
+23 First Aid Spray
+24 Chemical FR-W09
+25 Chemical AC-W24
+26 Green Herb
+27 Red Herb
+28 Blue Herb
+29 Mixed Herb (Green)
+2A Mixed Herb (Red&Green)
+2B Mixed Herb (Blue&Green)
+2C Mixed Herb (?)
+2D Mixed Herb (?)
+2E Mixed Herb (?)
+2F Lighter
+30 Lock Pick
+31 Picture
+32 Valve Handle
+33 Red Jewel
+34 Red Card Key
+35 Blue Card Key
+36 Serpent Stone
+37 Jaguar Stone
+38 Blue Stone
+39 Blue Stone (?)
+3A Eagle Stone
+3B Bishop Plug
+3C Rook Plug
+3D Knight Plug
+3E King Plug
+3F W. Box Key
+40 Detonator
+41 Plastic Bomb
+42 Bomb&Detonator
+43 Crank
+44 Film
+45 Film (?)
+46 Film (?)
+47 Unicorn Medal
+48 Eagle Medal
+49 Wolf Medal
+4A G. Cogwheel
+4B Manhole Opener
+4C Main Fuse
+4D Fuse Case
+4E Vaccine
+4F Vaccine Cart.
+50 Film
+51 Base Vaccine
+52 G-Virus
+53 Special Key
+54 Joint S Plug
+55 Joint N Plug
+56 Cord
+57 Film
+58 Cabin Key
+59 Precinct Key (blue)
+5A Precinct Key (red)
+5B Precinct Key (?)
+5C Precinct Key (green)
+5D C. Panel Key (red)
+5E C. Panel Key (yellow)
+5F P. Room Key
+60 MO Disk
+61 Lab Card Key
+62 Master Key
+63 Platform Key
+64 No Item
+65 No Item
+66 No Item
+67 No Item
+68 Chris's Diary
+69 Mail to Chris
+6A Memo to Leon
+6B Police Memorandum
+6C Operation Report 1
+6D Mail to the Chief
+6E Mail to the Chief (?)
+6F Secretary's Diary A
+70 Secretary's Diary B
+71 Operation Report 2
+72 User Registration
+73 Film A
+74 Film B
+75 Film C
+76 Patrol Report
+77 Watchman's Diary
+78 Chief's Diary
+79 Sewer Manager Diary
+7A Sewer Manager Fax
+7B Film D
+7C Vaccine Synthesis
+7D Lab Security Manual
+7E P-Epsilon Report
+7F Rookie Files
+80 Rookie Files (?)
+81 No Item
+82 Spade Key
+83 Diamond Key
+84 Desk Key
+85 Heart Key
+86 Club Key
+87 Virgin Heart
+88 Square Crank
+89 Down Key
+8A Up Key
+8B Locker Key
+
+$Have\Item On Slot Select\Slot 05
+Note=This will give you the item of your choice and will be infinite on that chosen slot
+800E59D8 00??
+800E59D9 00FF
+00 Nothing
+01 Knife Hunk
+02 Handgun Hunk
+03 Handgun Different Ada
+04 Custom Handgun Hunk
+05 Magnum Hunk
+06 Custom Magnum Hunk
+07 Shotgun Hunk
+08 Custom Shotgun Hunk
+09 Grenade Launcher Claire
+0A Grenade Launcher (Flame Rounds) Claire
+0B Grenade Launcher (Acid Rounds) Claire
+0C Bowgun Claire
+0D Colt S.A.A. Claire
+0E Spark Shot Claire
+0F Sub Machine Gun Leon
+10 Flamethrower Leon
+11 Rocket Launcher Claire
+12 Gatling Gun Claire
+13 Machine Gun ???
+14 Handgun Bullets
+15 Shotgun Shells
+16 Magnum Bullets
+17 Fuel
+18 Grenade Rounds
+19 Flame Rounds
+1A Acid Rounds
+1B Machine Gun Bullets
+1C S. Shot Bullets
+1D Bow Gun Bolts
+1E Ink Ribbon
+1F Small Key
+20 Hand Gun Parts
+21 Magnum Parts
+22 Shotgun Parts
+23 First Aid Spray
+24 Chemical FR-W09
+25 Chemical AC-W24
+26 Green Herb
+27 Red Herb
+28 Blue Herb
+29 Mixed Herb (Green)
+2A Mixed Herb (Red&Green)
+2B Mixed Herb (Blue&Green)
+2C Mixed Herb (?)
+2D Mixed Herb (?)
+2E Mixed Herb (?)
+2F Lighter
+30 Lock Pick
+31 Picture
+32 Valve Handle
+33 Red Jewel
+34 Red Card Key
+35 Blue Card Key
+36 Serpent Stone
+37 Jaguar Stone
+38 Blue Stone
+39 Blue Stone (?)
+3A Eagle Stone
+3B Bishop Plug
+3C Rook Plug
+3D Knight Plug
+3E King Plug
+3F W. Box Key
+40 Detonator
+41 Plastic Bomb
+42 Bomb&Detonator
+43 Crank
+44 Film
+45 Film (?)
+46 Film (?)
+47 Unicorn Medal
+48 Eagle Medal
+49 Wolf Medal
+4A G. Cogwheel
+4B Manhole Opener
+4C Main Fuse
+4D Fuse Case
+4E Vaccine
+4F Vaccine Cart.
+50 Film
+51 Base Vaccine
+52 G-Virus
+53 Special Key
+54 Joint S Plug
+55 Joint N Plug
+56 Cord
+57 Film
+58 Cabin Key
+59 Precinct Key (blue)
+5A Precinct Key (red)
+5B Precinct Key (?)
+5C Precinct Key (green)
+5D C. Panel Key (red)
+5E C. Panel Key (yellow)
+5F P. Room Key
+60 MO Disk
+61 Lab Card Key
+62 Master Key
+63 Platform Key
+64 No Item
+65 No Item
+66 No Item
+67 No Item
+68 Chris's Diary
+69 Mail to Chris
+6A Memo to Leon
+6B Police Memorandum
+6C Operation Report 1
+6D Mail to the Chief
+6E Mail to the Chief (?)
+6F Secretary's Diary A
+70 Secretary's Diary B
+71 Operation Report 2
+72 User Registration
+73 Film A
+74 Film B
+75 Film C
+76 Patrol Report
+77 Watchman's Diary
+78 Chief's Diary
+79 Sewer Manager Diary
+7A Sewer Manager Fax
+7B Film D
+7C Vaccine Synthesis
+7D Lab Security Manual
+7E P-Epsilon Report
+7F Rookie Files
+80 Rookie Files (?)
+81 No Item
+82 Spade Key
+83 Diamond Key
+84 Desk Key
+85 Heart Key
+86 Club Key
+87 Virgin Heart
+88 Square Crank
+89 Down Key
+8A Up Key
+8B Locker Key
+
+$Have\Item On Slot Select\Slot 06
+Note=This will give you the item of your choice and will be infinite on that chosen slot
+800E59DC 00??
+800E59DD 00FF
+00 Nothing
+01 Knife Hunk
+02 Handgun Hunk
+03 Handgun Different Ada
+04 Custom Handgun Hunk
+05 Magnum Hunk
+06 Custom Magnum Hunk
+07 Shotgun Hunk
+08 Custom Shotgun Hunk
+09 Grenade Launcher Claire
+0A Grenade Launcher (Flame Rounds) Claire
+0B Grenade Launcher (Acid Rounds) Claire
+0C Bowgun Claire
+0D Colt S.A.A. Claire
+0E Spark Shot Claire
+0F Sub Machine Gun Leon
+10 Flamethrower Leon
+11 Rocket Launcher Claire
+12 Gatling Gun Claire
+13 Machine Gun ???
+14 Handgun Bullets
+15 Shotgun Shells
+16 Magnum Bullets
+17 Fuel
+18 Grenade Rounds
+19 Flame Rounds
+1A Acid Rounds
+1B Machine Gun Bullets
+1C S. Shot Bullets
+1D Bow Gun Bolts
+1E Ink Ribbon
+1F Small Key
+20 Hand Gun Parts
+21 Magnum Parts
+22 Shotgun Parts
+23 First Aid Spray
+24 Chemical FR-W09
+25 Chemical AC-W24
+26 Green Herb
+27 Red Herb
+28 Blue Herb
+29 Mixed Herb (Green)
+2A Mixed Herb (Red&Green)
+2B Mixed Herb (Blue&Green)
+2C Mixed Herb (?)
+2D Mixed Herb (?)
+2E Mixed Herb (?)
+2F Lighter
+30 Lock Pick
+31 Picture
+32 Valve Handle
+33 Red Jewel
+34 Red Card Key
+35 Blue Card Key
+36 Serpent Stone
+37 Jaguar Stone
+38 Blue Stone
+39 Blue Stone (?)
+3A Eagle Stone
+3B Bishop Plug
+3C Rook Plug
+3D Knight Plug
+3E King Plug
+3F W. Box Key
+40 Detonator
+41 Plastic Bomb
+42 Bomb&Detonator
+43 Crank
+44 Film
+45 Film (?)
+46 Film (?)
+47 Unicorn Medal
+48 Eagle Medal
+49 Wolf Medal
+4A G. Cogwheel
+4B Manhole Opener
+4C Main Fuse
+4D Fuse Case
+4E Vaccine
+4F Vaccine Cart.
+50 Film
+51 Base Vaccine
+52 G-Virus
+53 Special Key
+54 Joint S Plug
+55 Joint N Plug
+56 Cord
+57 Film
+58 Cabin Key
+59 Precinct Key (blue)
+5A Precinct Key (red)
+5B Precinct Key (?)
+5C Precinct Key (green)
+5D C. Panel Key (red)
+5E C. Panel Key (yellow)
+5F P. Room Key
+60 MO Disk
+61 Lab Card Key
+62 Master Key
+63 Platform Key
+64 No Item
+65 No Item
+66 No Item
+67 No Item
+68 Chris's Diary
+69 Mail to Chris
+6A Memo to Leon
+6B Police Memorandum
+6C Operation Report 1
+6D Mail to the Chief
+6E Mail to the Chief (?)
+6F Secretary's Diary A
+70 Secretary's Diary B
+71 Operation Report 2
+72 User Registration
+73 Film A
+74 Film B
+75 Film C
+76 Patrol Report
+77 Watchman's Diary
+78 Chief's Diary
+79 Sewer Manager Diary
+7A Sewer Manager Fax
+7B Film D
+7C Vaccine Synthesis
+7D Lab Security Manual
+7E P-Epsilon Report
+7F Rookie Files
+80 Rookie Files (?)
+81 No Item
+82 Spade Key
+83 Diamond Key
+84 Desk Key
+85 Heart Key
+86 Club Key
+87 Virgin Heart
+88 Square Crank
+89 Down Key
+8A Up Key
+8B Locker Key
+
+$Have\Item On Slot Select\Slot 07
+Note=This will give you the item of your choice and will be infinite on that chosen slot
+800E59E0 00??
+800E59E1 00FF
+00 Nothing
+01 Knife Hunk
+02 Handgun Hunk
+03 Handgun Different Ada
+04 Custom Handgun Hunk
+05 Magnum Hunk
+06 Custom Magnum Hunk
+07 Shotgun Hunk
+08 Custom Shotgun Hunk
+09 Grenade Launcher Claire
+0A Grenade Launcher (Flame Rounds) Claire
+0B Grenade Launcher (Acid Rounds) Claire
+0C Bowgun Claire
+0D Colt S.A.A. Claire
+0E Spark Shot Claire
+0F Sub Machine Gun Leon
+10 Flamethrower Leon
+11 Rocket Launcher Claire
+12 Gatling Gun Claire
+13 Machine Gun ???
+14 Handgun Bullets
+15 Shotgun Shells
+16 Magnum Bullets
+17 Fuel
+18 Grenade Rounds
+19 Flame Rounds
+1A Acid Rounds
+1B Machine Gun Bullets
+1C S. Shot Bullets
+1D Bow Gun Bolts
+1E Ink Ribbon
+1F Small Key
+20 Hand Gun Parts
+21 Magnum Parts
+22 Shotgun Parts
+23 First Aid Spray
+24 Chemical FR-W09
+25 Chemical AC-W24
+26 Green Herb
+27 Red Herb
+28 Blue Herb
+29 Mixed Herb (Green)
+2A Mixed Herb (Red&Green)
+2B Mixed Herb (Blue&Green)
+2C Mixed Herb (?)
+2D Mixed Herb (?)
+2E Mixed Herb (?)
+2F Lighter
+30 Lock Pick
+31 Picture
+32 Valve Handle
+33 Red Jewel
+34 Red Card Key
+35 Blue Card Key
+36 Serpent Stone
+37 Jaguar Stone
+38 Blue Stone
+39 Blue Stone (?)
+3A Eagle Stone
+3B Bishop Plug
+3C Rook Plug
+3D Knight Plug
+3E King Plug
+3F W. Box Key
+40 Detonator
+41 Plastic Bomb
+42 Bomb&Detonator
+43 Crank
+44 Film
+45 Film (?)
+46 Film (?)
+47 Unicorn Medal
+48 Eagle Medal
+49 Wolf Medal
+4A G. Cogwheel
+4B Manhole Opener
+4C Main Fuse
+4D Fuse Case
+4E Vaccine
+4F Vaccine Cart.
+50 Film
+51 Base Vaccine
+52 G-Virus
+53 Special Key
+54 Joint S Plug
+55 Joint N Plug
+56 Cord
+57 Film
+58 Cabin Key
+59 Precinct Key (blue)
+5A Precinct Key (red)
+5B Precinct Key (?)
+5C Precinct Key (green)
+5D C. Panel Key (red)
+5E C. Panel Key (yellow)
+5F P. Room Key
+60 MO Disk
+61 Lab Card Key
+62 Master Key
+63 Platform Key
+64 No Item
+65 No Item
+66 No Item
+67 No Item
+68 Chris's Diary
+69 Mail to Chris
+6A Memo to Leon
+6B Police Memorandum
+6C Operation Report 1
+6D Mail to the Chief
+6E Mail to the Chief (?)
+6F Secretary's Diary A
+70 Secretary's Diary B
+71 Operation Report 2
+72 User Registration
+73 Film A
+74 Film B
+75 Film C
+76 Patrol Report
+77 Watchman's Diary
+78 Chief's Diary
+79 Sewer Manager Diary
+7A Sewer Manager Fax
+7B Film D
+7C Vaccine Synthesis
+7D Lab Security Manual
+7E P-Epsilon Report
+7F Rookie Files
+80 Rookie Files (?)
+81 No Item
+82 Spade Key
+83 Diamond Key
+84 Desk Key
+85 Heart Key
+86 Club Key
+87 Virgin Heart
+88 Square Crank
+89 Down Key
+8A Up Key
+8B Locker Key
+
+$Have\Item On Slot Select\Slot 08
+Note=This will give you the item of your choice and will be infinite on that chosen slot
+800E59E4 00??
+800E59E5 00FF
+00 Nothing
+01 Knife Hunk
+02 Handgun Hunk
+03 Handgun Different Ada
+04 Custom Handgun Hunk
+05 Magnum Hunk
+06 Custom Magnum Hunk
+07 Shotgun Hunk
+08 Custom Shotgun Hunk
+09 Grenade Launcher Claire
+0A Grenade Launcher (Flame Rounds) Claire
+0B Grenade Launcher (Acid Rounds) Claire
+0C Bowgun Claire
+0D Colt S.A.A. Claire
+0E Spark Shot Claire
+0F Sub Machine Gun Leon
+10 Flamethrower Leon
+11 Rocket Launcher Claire
+12 Gatling Gun Claire
+13 Machine Gun ???
+14 Handgun Bullets
+15 Shotgun Shells
+16 Magnum Bullets
+17 Fuel
+18 Grenade Rounds
+19 Flame Rounds
+1A Acid Rounds
+1B Machine Gun Bullets
+1C S. Shot Bullets
+1D Bow Gun Bolts
+1E Ink Ribbon
+1F Small Key
+20 Hand Gun Parts
+21 Magnum Parts
+22 Shotgun Parts
+23 First Aid Spray
+24 Chemical FR-W09
+25 Chemical AC-W24
+26 Green Herb
+27 Red Herb
+28 Blue Herb
+29 Mixed Herb (Green)
+2A Mixed Herb (Red&Green)
+2B Mixed Herb (Blue&Green)
+2C Mixed Herb (?)
+2D Mixed Herb (?)
+2E Mixed Herb (?)
+2F Lighter
+30 Lock Pick
+31 Picture
+32 Valve Handle
+33 Red Jewel
+34 Red Card Key
+35 Blue Card Key
+36 Serpent Stone
+37 Jaguar Stone
+38 Blue Stone
+39 Blue Stone (?)
+3A Eagle Stone
+3B Bishop Plug
+3C Rook Plug
+3D Knight Plug
+3E King Plug
+3F W. Box Key
+40 Detonator
+41 Plastic Bomb
+42 Bomb&Detonator
+43 Crank
+44 Film
+45 Film (?)
+46 Film (?)
+47 Unicorn Medal
+48 Eagle Medal
+49 Wolf Medal
+4A G. Cogwheel
+4B Manhole Opener
+4C Main Fuse
+4D Fuse Case
+4E Vaccine
+4F Vaccine Cart.
+50 Film
+51 Base Vaccine
+52 G-Virus
+53 Special Key
+54 Joint S Plug
+55 Joint N Plug
+56 Cord
+57 Film
+58 Cabin Key
+59 Precinct Key (blue)
+5A Precinct Key (red)
+5B Precinct Key (?)
+5C Precinct Key (green)
+5D C. Panel Key (red)
+5E C. Panel Key (yellow)
+5F P. Room Key
+60 MO Disk
+61 Lab Card Key
+62 Master Key
+63 Platform Key
+64 No Item
+65 No Item
+66 No Item
+67 No Item
+68 Chris's Diary
+69 Mail to Chris
+6A Memo to Leon
+6B Police Memorandum
+6C Operation Report 1
+6D Mail to the Chief
+6E Mail to the Chief (?)
+6F Secretary's Diary A
+70 Secretary's Diary B
+71 Operation Report 2
+72 User Registration
+73 Film A
+74 Film B
+75 Film C
+76 Patrol Report
+77 Watchman's Diary
+78 Chief's Diary
+79 Sewer Manager Diary
+7A Sewer Manager Fax
+7B Film D
+7C Vaccine Synthesis
+7D Lab Security Manual
+7E P-Epsilon Report
+7F Rookie Files
+80 Rookie Files (?)
+81 No Item
+82 Spade Key
+83 Diamond Key
+84 Desk Key
+85 Heart Key
+86 Club Key
+87 Virgin Heart
+88 Square Crank
+89 Down Key
+8A Up Key
+8B Locker Key
+
+$Have\Item On Slot Select\Slot 09
+Note=This will give you the item of your choice and will be infinite on that chosen slot
+800E59E8 00??
+800E59E9 00FF
+00 Nothing
+01 Knife Hunk
+02 Handgun Hunk
+03 Handgun Different Ada
+04 Custom Handgun Hunk
+05 Magnum Hunk
+06 Custom Magnum Hunk
+07 Shotgun Hunk
+08 Custom Shotgun Hunk
+09 Grenade Launcher Claire
+0A Grenade Launcher (Flame Rounds) Claire
+0B Grenade Launcher (Acid Rounds) Claire
+0C Bowgun Claire
+0D Colt S.A.A. Claire
+0E Spark Shot Claire
+0F Sub Machine Gun Leon
+10 Flamethrower Leon
+11 Rocket Launcher Claire
+12 Gatling Gun Claire
+13 Machine Gun ???
+14 Handgun Bullets
+15 Shotgun Shells
+16 Magnum Bullets
+17 Fuel
+18 Grenade Rounds
+19 Flame Rounds
+1A Acid Rounds
+1B Machine Gun Bullets
+1C S. Shot Bullets
+1D Bow Gun Bolts
+1E Ink Ribbon
+1F Small Key
+20 Hand Gun Parts
+21 Magnum Parts
+22 Shotgun Parts
+23 First Aid Spray
+24 Chemical FR-W09
+25 Chemical AC-W24
+26 Green Herb
+27 Red Herb
+28 Blue Herb
+29 Mixed Herb (Green)
+2A Mixed Herb (Red&Green)
+2B Mixed Herb (Blue&Green)
+2C Mixed Herb (?)
+2D Mixed Herb (?)
+2E Mixed Herb (?)
+2F Lighter
+30 Lock Pick
+31 Picture
+32 Valve Handle
+33 Red Jewel
+34 Red Card Key
+35 Blue Card Key
+36 Serpent Stone
+37 Jaguar Stone
+38 Blue Stone
+39 Blue Stone (?)
+3A Eagle Stone
+3B Bishop Plug
+3C Rook Plug
+3D Knight Plug
+3E King Plug
+3F W. Box Key
+40 Detonator
+41 Plastic Bomb
+42 Bomb&Detonator
+43 Crank
+44 Film
+45 Film (?)
+46 Film (?)
+47 Unicorn Medal
+48 Eagle Medal
+49 Wolf Medal
+4A G. Cogwheel
+4B Manhole Opener
+4C Main Fuse
+4D Fuse Case
+4E Vaccine
+4F Vaccine Cart.
+50 Film
+51 Base Vaccine
+52 G-Virus
+53 Special Key
+54 Joint S Plug
+55 Joint N Plug
+56 Cord
+57 Film
+58 Cabin Key
+59 Precinct Key (blue)
+5A Precinct Key (red)
+5B Precinct Key (?)
+5C Precinct Key (green)
+5D C. Panel Key (red)
+5E C. Panel Key (yellow)
+5F P. Room Key
+60 MO Disk
+61 Lab Card Key
+62 Master Key
+63 Platform Key
+64 No Item
+65 No Item
+66 No Item
+67 No Item
+68 Chris's Diary
+69 Mail to Chris
+6A Memo to Leon
+6B Police Memorandum
+6C Operation Report 1
+6D Mail to the Chief
+6E Mail to the Chief (?)
+6F Secretary's Diary A
+70 Secretary's Diary B
+71 Operation Report 2
+72 User Registration
+73 Film A
+74 Film B
+75 Film C
+76 Patrol Report
+77 Watchman's Diary
+78 Chief's Diary
+79 Sewer Manager Diary
+7A Sewer Manager Fax
+7B Film D
+7C Vaccine Synthesis
+7D Lab Security Manual
+7E P-Epsilon Report
+7F Rookie Files
+80 Rookie Files (?)
+81 No Item
+82 Spade Key
+83 Diamond Key
+84 Desk Key
+85 Heart Key
+86 Club Key
+87 Virgin Heart
+88 Square Crank
+89 Down Key
+8A Up Key
+8B Locker Key
+
+$Have\Item On Slot Select\Slot 10
+Note=This will give you the item of your choice and will be infinite on that chosen slot
+800E59EC 00??
+800E59ED 00FF
+00 Nothing
+01 Knife Hunk
+02 Handgun Hunk
+03 Handgun Different Ada
+04 Custom Handgun Hunk
+05 Magnum Hunk
+06 Custom Magnum Hunk
+07 Shotgun Hunk
+08 Custom Shotgun Hunk
+09 Grenade Launcher Claire
+0A Grenade Launcher (Flame Rounds) Claire
+0B Grenade Launcher (Acid Rounds) Claire
+0C Bowgun Claire
+0D Colt S.A.A. Claire
+0E Spark Shot Claire
+0F Sub Machine Gun Leon
+10 Flamethrower Leon
+11 Rocket Launcher Claire
+12 Gatling Gun Claire
+13 Machine Gun ???
+14 Handgun Bullets
+15 Shotgun Shells
+16 Magnum Bullets
+17 Fuel
+18 Grenade Rounds
+19 Flame Rounds
+1A Acid Rounds
+1B Machine Gun Bullets
+1C S. Shot Bullets
+1D Bow Gun Bolts
+1E Ink Ribbon
+1F Small Key
+20 Hand Gun Parts
+21 Magnum Parts
+22 Shotgun Parts
+23 First Aid Spray
+24 Chemical FR-W09
+25 Chemical AC-W24
+26 Green Herb
+27 Red Herb
+28 Blue Herb
+29 Mixed Herb (Green)
+2A Mixed Herb (Red&Green)
+2B Mixed Herb (Blue&Green)
+2C Mixed Herb (?)
+2D Mixed Herb (?)
+2E Mixed Herb (?)
+2F Lighter
+30 Lock Pick
+31 Picture
+32 Valve Handle
+33 Red Jewel
+34 Red Card Key
+35 Blue Card Key
+36 Serpent Stone
+37 Jaguar Stone
+38 Blue Stone
+39 Blue Stone (?)
+3A Eagle Stone
+3B Bishop Plug
+3C Rook Plug
+3D Knight Plug
+3E King Plug
+3F W. Box Key
+40 Detonator
+41 Plastic Bomb
+42 Bomb&Detonator
+43 Crank
+44 Film
+45 Film (?)
+46 Film (?)
+47 Unicorn Medal
+48 Eagle Medal
+49 Wolf Medal
+4A G. Cogwheel
+4B Manhole Opener
+4C Main Fuse
+4D Fuse Case
+4E Vaccine
+4F Vaccine Cart.
+50 Film
+51 Base Vaccine
+52 G-Virus
+53 Special Key
+54 Joint S Plug
+55 Joint N Plug
+56 Cord
+57 Film
+58 Cabin Key
+59 Precinct Key (blue)
+5A Precinct Key (red)
+5B Precinct Key (?)
+5C Precinct Key (green)
+5D C. Panel Key (red)
+5E C. Panel Key (yellow)
+5F P. Room Key
+60 MO Disk
+61 Lab Card Key
+62 Master Key
+63 Platform Key
+64 No Item
+65 No Item
+66 No Item
+67 No Item
+68 Chris's Diary
+69 Mail to Chris
+6A Memo to Leon
+6B Police Memorandum
+6C Operation Report 1
+6D Mail to the Chief
+6E Mail to the Chief (?)
+6F Secretary's Diary A
+70 Secretary's Diary B
+71 Operation Report 2
+72 User Registration
+73 Film A
+74 Film B
+75 Film C
+76 Patrol Report
+77 Watchman's Diary
+78 Chief's Diary
+79 Sewer Manager Diary
+7A Sewer Manager Fax
+7B Film D
+7C Vaccine Synthesis
+7D Lab Security Manual
+7E P-Epsilon Report
+7F Rookie Files
+80 Rookie Files (?)
+81 No Item
+82 Spade Key
+83 Diamond Key
+84 Desk Key
+85 Heart Key
+86 Club Key
+87 Virgin Heart
+88 Square Crank
+89 Down Key
+8A Up Key
+8B Locker Key
+
+$Infinite\Health
+810DDE22 00C8
+
+$Infinite\Time
+800E57BF 0010
+
+$Play As
+Note=This allows you to select what character you wish to play as. Just slect on load and select as normal at the menu and when in game you will be the character of your choice
+810DDC38 ????
+0080 Leon Original
+0180 Claire Original
+0280 Leon Original
+0380 Claire Original
+0480 Leon Wounded
+0580 Claire without jacket
+0680 Leon Wounded
+0780 Claire without jacket
+0880 Leon as Stars
+0980 Claire as Biker
+0A80 Leon as Biker
+0B80 Claires body Leons outfit
+0C80 Hunk (can crash the game)
+0D80 To Fu
+0E80 Ada (can crash the game)
+0F80 Cheryl
+
+$Play Extra Mission
+Note=This allows you to select what extra mission you wish to play. Just slect on load and carry on as normal at the menu and when in game you will be the character of your choice Do not use at the same time as [Resident Evil 2 Mode]
+810DDBEE 00??
+48 The 4th Survior
+49 To-Fu
+
+$Quick Chest Access
+Note=With this code, all you have to do to access the chest, is hold L and Press Start.
+D1014FA4 0020
+81122598 0100
+
+$Quick Save Access
+Note=(1 Anytime, anywhere, press Z and B at the same time. You'll get the standard typewriter text: "It's an old typewriter. You can save your progress with this." Note that you must, of course, have an ink ribbon to save. 2) Choose "Yes" and you'll be able to save normally. Instead of the location name, your save file will say "Scenario 1st" or "Scenario 2nd." 3) When you load your save file, you'll have to skip through the intro, but when the game loads up you'll be exactly where you saved!
+D1014FA4 6000
+810E5428 8007
+D1014FA4 6000
+810E542A 0E30

@@ -1,0 +1,29 @@
+[67D21868-C5424061-C:50]
+Name=Rakuga Kids (E)
+
+$Infinite Energy\Player 1
+800ACB89 00??
+00 None
+40 Max
+
+$Infinite Energy\Player 2
+800ACC79 00??
+00 None
+3F Max
+
+$Infinite Match Time
+800ABC33 0000
+
+$Super Attacks\Player 1
+800ACB8D 00??
+00 None
+03 3
+
+$Super Attacks\Player 2
+800ACC7D 00??
+00 None
+03 3
+
+$Unlock Extras
+800ACD55 00FF
+800ACD57 00FF

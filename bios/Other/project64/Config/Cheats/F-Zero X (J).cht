@@ -1,0 +1,23 @@
+[4D3E622E-9B828B4E-C:4A]
+Name=F-ZERO X (J)
+
+$Always 1st Place
+802C4BC2 0001
+
+$Have Boost From Start
+D02C4DAC 003F
+802C4925 0050
+
+$Infinite Lives
+800E5AA9 0005
+
+$Player 1\Infinite Shield
+812C4B48 4336
+812C4B4C 4336
+
+$Time Always 00.00.00 1st Place
+802C4BC0 0000
+802C4BC2 0001
+
+$Unlock Everything
+800CD428 0001

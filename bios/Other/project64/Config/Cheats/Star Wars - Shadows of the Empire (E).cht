@@ -1,0 +1,36 @@
+[4D486681-AB7D9245-C:50]
+Name=Star Wars - Shadows of the Empire (E)
+
+$Access All Levels
+Note=Must be used with Access Wampa Stompa
+810DE2EA 0004
+
+$Access In-Game Cheat Menu
+Note=Pause gameplay and pink text will appear in top screen. scroll with multiple buttons and select with 'A'
+D10DDE2E 0001
+810D3F32 0001
+D10DDE14 0002
+810D3F32 0001
+D10E28D4 0011
+810D3F32 0001
+D10E28D4 0011
+810D3F32 0001
+
+$Access Wampa Stompa
+Note=Important To Get All Codes To Work! Select empty file "Wampa Stompa"  will now be your playername.
+8118D4E8 2057
+8118D4EA 616D
+8118D4EC 7061
+8118D4EE 2020
+8118D4F0 5374
+8118D4F2 6F6D
+8118D4F4 7061
+
+$Extra Jump Power
+810E2220 3F92
+
+$Freeze Timer
+810E2230 4018
+
+$Max Challenge Points
+8118F370 000F

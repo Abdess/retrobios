@@ -1,0 +1,37 @@
+[EB38F792-190EA246-C:45]
+Name=Madden NFL 2001 (U)
+
+$Away Team\Infinite Time-Outs
+800738E7 0003
+
+$Away Team\No Time-Outs
+800738E7 0000
+
+$Have 99 Tokens
+8115F9F0 0063
+
+$Have All\Cards
+50007802 0000
+8115F9F2 FFFF
+
+$Have All\Cheats
+50000402 0000
+81070788 FFFF
+
+$Have All\Levels Completed
+50001902 0000
+8115FB2C FFFF
+
+$Have All\Stadiums
+50000802 0000
+81061850 FFFF
+
+$Have All\Teams
+50001102 0000
+810C1628 FFFF
+
+$Home Team\Infinite Time-Outs
+80071617 0003
+
+$Home Team\No Time-Outs
+80071617 0000

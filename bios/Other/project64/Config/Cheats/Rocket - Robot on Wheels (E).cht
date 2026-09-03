@@ -1,0 +1,15 @@
+[9FD375F8-45F32DC8-C:50]
+Name=Rocket - Robot on Wheels (M3)
+
+$Access All Ticket Switches & Vehicles
+800A5E1F 0001
+50002004 0000
+810A5D70 FFFF
+
+$Activate All In-Game Cheats
+Note=With this code on, all rocket's abilities are now max
+810A6846 F5FF
+
+$Infinite & Max Health
+8109FB82 000C
+8109FB84 000A

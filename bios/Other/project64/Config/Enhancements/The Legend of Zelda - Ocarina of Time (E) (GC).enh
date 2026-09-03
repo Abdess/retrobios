@@ -1,0 +1,14 @@
+[09465AC3-F8CB501B-C:50]
+Name=The Legend of Zelda - Ocarina of Time (E) (GC)
+
+$End Credits Fix
+OnByDefault=1
+D109A8E4 0320
+8109A8E4 0000
+D109A8E6 F809
+8109A8E6 0000
+
+$Subscreen Delay Fix
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+801D8F8B 0002

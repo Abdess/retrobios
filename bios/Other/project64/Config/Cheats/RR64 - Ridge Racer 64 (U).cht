@@ -1,0 +1,111 @@
+[2500267E-2A7EC3CE-C:45]
+Name=RR64 - Ridge Racer 64 (U)
+
+$All Modes\Always Have 1st Place
+81056444 0001
+
+$All Modes\Infinite Time
+811269CA 0700
+
+$All Modes\Press R Button For Turbo
+D103E1EA 0010
+8105641A 0800
+
+$Grand Prix Mode\2 Tier Cars
+80119BB0 0039
+
+$Grand Prix Mode\All Cars Have Perfect Stats
+50008002 0000
+8102F314 05DC
+
+$Grand Prix Mode\Car Modifier
+8113CF5A 00??
+00 F/A Racing
+01 RT Ryukyu
+02 PAC Racing
+03 RT Solvalou
+04 RT Pink Mappy
+05 RT Blue Mappy
+06 Galaga RT Prid's
+07 Galaga RT Carrot
+08 RT Bosconian
+09 RT Nebulasray
+0A RT Xevious Red
+0B RT Xevious Green
+0C Dig Racing Team
+0D Micro Mouse Mappy
+0E 13th Racing Kid
+0F White Angel
+10 Digipen Racing
+11 Assoluto Infinito
+12 Age Solo Supernova
+13 Atomic Purple
+14 Extreme Green
+15 Terrazi Terrific
+16 Lizard Nightmare
+17 Screamin' Eagle
+18 Ultra 64 (Full Stats)
+19 00-Agent
+1A Galaga' 88
+1B Blinky
+1C Red Shirt Rage
+1D Crazy Canuck
+1E Caddy Car
+1F Pooka
+
+$Grand Prix Mode\Enlarge Cars
+81119758 3FC0
+811197AC 3FC0
+81119800 3FC0
+
+$Grand Prix Mode\Laps to Race
+8111B32E ????
+0101 lap
+0202 laps
+0303 laps
+0404 laps
+0505 laps
+0606 laps
+0707 laps
+0808 laps
+0909 laps
+
+$Grand Prix Mode\Microscopic Cars
+80119758 003D
+801197AC 003D
+80119800 003D
+
+$Grand Prix Mode\Press GS For Overhead View
+8811AB0F 0002
+
+$Grand Prix Mode\Shrink Cars
+80119758 003E
+801197AC 003E
+80119800 003E
+
+$Grand Prix Mode\Track Modifier
+8113CF6A 00??
+00 Ridge Racer Novice
+01 Revolution Novice
+02 Renegade Novice
+03 Ridge Racer Intermediate
+04 Revolution Intermediate
+05 Renegade Intermediate
+06 Ridge Racer Expert
+07 Revolution Expert
+08 Renegade Expert
+09 Ridge Racer Extreme
+
+$Grand Prix Mode\Unlock\All Cars
+8102F19C FFFF
+8102F19E FFFF
+
+$Grand Prix Mode\Unlock\All Engine Classes All Levels
+50001E08 0000
+8102FAB0 0004
+50001E08 0000
+8102FAB2 0403
+
+$Grand Prix Mode\Unlock\All Tracks & Trophies
+81043530 FFFF
+81043532 FFFF

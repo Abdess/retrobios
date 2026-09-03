@@ -1,0 +1,26 @@
+[2BCCF9C4-403D9F6F-C:4A]
+Name=Choro Q 64 (J)
+
+$Always 1st
+802133B6 0001
+
+$Always Win Race Heats
+802133B6 0001
+80377B60 0001
+8021455F 0001
+80381424 0001
+
+$Class Select
+Note=This code is useful because you can play Class AA without having to beat a level!
+80206857 00??
+00 Class C
+01 Class B
+03 Class AA
+04 1 Play
+05 2 Play
+06 3 Play
+07 4 Play
+
+$Super Speed
+Note=This is Turbo fast,So to slow it down a little more keep the B button pressed down
+81213568 4800

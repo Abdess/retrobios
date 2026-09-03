@@ -1,0 +1,48 @@
+[147E0EDB-36C5B12C-C:4A]
+Name=Neon Genesis Evangelion (J)
+
+$(Press GS)\To Kill Enemy
+Note=Don't Press GS after the Enemy is killed, only during the fight! and only use on Press GS Cheat at a time
+891F2454 0000
+891F2456 0000
+891F2458 0000
+891F245A 0000
+
+$(Press GS)\To Refill Health
+Note=Don't Press GS after the Enemy is killed, only during the fight!
+891F0F18 42C8
+891F0F1A 0000
+
+$(Press L)\ For One Hit Kill
+Note=Don't Press L after the Enemy is killed, only during the fight!
+D0149DD5 0020
+811F2458 0000
+D0149DD5 0020
+811F245A 0000
+
+$(Press R)\For Level Warp
+Note=Press Reset and enjoy!
+D00D5115 0015
+800D5115 00??
+2B Level 01
+2F Level 02
+33 Level 03
+37 Level 04
+3B Level 05
+3D Level 06
+40 Level 07
+43 Level 08
+46 Level 09
+49 Level 10
+4C Level 11
+4F Level 12
+51 Level 12.5
+53 Level 13
+18 Credits 1
+19 Credits 2
+1A Credits 3
+
+$Secret Beta 2 Player Test Mode
+Note=Press Reset and enjoy! Secret 2 Player Test Mode? The Second Player doesn't move ;(
+D00D5115 0015
+800D5115 0055

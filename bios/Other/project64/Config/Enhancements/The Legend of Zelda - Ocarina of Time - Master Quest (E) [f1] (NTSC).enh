@@ -1,0 +1,14 @@
+[27A3831D-B505A533-C:45]
+Name=The Legend of Zelda - Ocarina of Time - Master Quest (E) [f1] (NTSC)
+
+$End Credits Fix
+OnByDefault=1
+D109A8C4 0320
+8109A8C4 0000
+D109A8C6 F809
+8109A8C6 0000
+
+$Subscreen Delay Fix
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+801D8F4B 0002

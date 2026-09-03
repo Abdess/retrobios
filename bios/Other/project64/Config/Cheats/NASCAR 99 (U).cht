@@ -1,0 +1,25 @@
+[23749578-80DC58FD-C:45]
+Name=NASCAR 99 (U)
+
+$1 Lap to Race
+800438B3 0009
+D021FBAB 0000
+8021FBAB 0008
+D022359B 0000
+8022359B 0008
+
+$Max Gear Ratios
+810C9E90 7F1E
+810C9E82 707F
+
+$Total Laps to Race Modifier
+800438B3 00??
+01 1 lap
+02 2 lap
+03 3 lap
+04 4 lap
+05 5 lap
+06 6 lap
+07 7 lap
+08 8 lap
+09 9 lap

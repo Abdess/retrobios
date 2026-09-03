@@ -1,0 +1,100 @@
+[36F1C74B-F2029939-C:50]
+Name=Fighter's Destiny (E)
+
+$Always Win Judge's Decision\Player 1
+8020B777 FFFF
+802098AF 0000
+
+$Always Win Judge's Decision\Player 2
+802098AF FFFF
+8020B777 0000
+
+$Enable Boro
+80307349 0001
+
+$Have 1 Star\Abdul
+80307353 0001
+
+$Have 1 Star\Bob
+8030734F 0001
+
+$Have 1 Star\Leon
+80307352 0001
+
+$Have 1 Star\Meiling
+80307351 0001
+
+$Have 1 Star\Ninja
+80307354 0001
+
+$Have 1 Star\Pierre
+80307350 0001
+
+$Have 1 Star\Ryuji
+8030734E 0001
+
+$Have 1 Star\Tomahawk
+80307355 0001
+
+$Have 1 Star\Valerie
+80307356 0001
+
+$Infinite Health\Player 1
+802098A1 0000
+802047C3 0000
+
+$Infinite Health\Player 2
+802047C7 0000
+8020B769 0000
+
+$Level Select
+8022A84C 00??
+00 Fire Mountain
+01 Desert
+02 Highlands
+03 Hong Kong
+04 Coliseum
+05 Jungle
+06 Ninja Room
+07 Suspension Bridge
+08 Palace
+09 Observation
+0A Pasture
+0B Joker's Room
+0C Blue Hell Mountain
+0D Palace
+
+$Play As\Player 1
+802EF622 00??
+00 Ryuji
+01 Bob
+02 Pierre
+03 Meiling
+04 Leon
+05 Abdul
+06 Ninja
+07 Tomahawk
+08 Boro
+09 Valerie
+0A Ushi
+0B Joker
+0C The Master
+0D No Clue
+
+$Start on stage 100 on Survival to get Joker
+802EF67B 0063
+
+$Start with Stars Modifier\Player 1
+D0209757 0000
+80209757 00??
+00 No Stars
+06 Max Stars
+
+$Start with Stars Modifier\Player 2
+D020B61F 0000
+8020B61F 00??
+00 No Stars
+06 Max Stars
+
+$Stop timer for Fastest to get Robot
+810ADBDC 3F80

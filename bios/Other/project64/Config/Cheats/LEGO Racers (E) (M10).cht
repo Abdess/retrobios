@@ -1,0 +1,22 @@
+[F478D8B3-9716DD6D-C:50]
+Name=LEGO Racers (E) (M10)
+
+$Cheat Select
+8109ACBE ????
+0001 Maintain Speed Off Track
+0002 Rocket Cars
+0004 All Pick-Ups Are Red
+0008 All Pick-Ups Are Yellow
+0010 All Pick-Ups Are Green
+0020 Reversed Rocket Racer Run Track
+0040 All Pick-Ups Are Grapple
+0080 Pick-Ups Are Maximum
+0100 Turbo Mode
+0200 No Wheels
+0400 No Chassis
+0800 No Driver
+0FFF All Of The Above
+
+$Have All Tracks and Building Pieces
+812576D4 FFFF
+812576D6 FFFF

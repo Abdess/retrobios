@@ -1,0 +1,81 @@
+[641D3A7F-86820466-C:50]
+Name=Hybrid Heaven (E) (M3)
+
+$[Have Full Power and Max Combos]
+Note=Gives you full power and Max Combos in fights
+811C6052 03FC
+
+$[Unlock all Code Key Doors]
+Note=Code Key always Re-newed and Matching all Doors
+801C5C16 00FF
+
+$Difficulty Select Options
+811C5C1C ????
+0100 Normal
+0101 Hard
+0102 Ultimate
+
+$Have All\Keys
+50000410 0000
+80181B20 0063
+50000410 0000
+80181B28 0063
+
+$Have All\Moves
+50005306 0000
+811876D0 0100
+50005306 0000
+811876D2 00FF
+
+$Have All\Moves At Skill Level 250
+50000E06 0000
+8018C953 00FA
+50001306 0000
+8018C9AD 00FA
+50003006 0000
+8018CA37 00FA
+
+$Infinite\Max Body Stats
+81181638 270F
+81181678 0063
+50000C02 0000
+81181640 270F
+50000502 0000
+81181670 270F
+50000602 0000
+81181698 270F
+50000602 0000
+811816A6 270F
+
+$Infinite\Max Health
+81181630 270F
+81181632 270F
+
+$Infinite\Refresh Items
+50000E10 0000
+801819F8 0063
+50000D10 0000
+80181A00 0063
+
+$Infinite\Weapons & Items
+50000610 0000
+80181AD0 0063
+50000610 0000
+80181AD8 0063
+
+$Level 999
+81181678 270F
+
+$Level and Battle Select
+Note=The level and battle select screen can be accessed by pressing A at the main menu
+801D74A4 0005
+
+$Play As
+811C5CF6 00??
+01 The real Mr Diaz Baddie
+02 President Weller
+03 Alien
+
+$Press L To Levitate
+D00CCE25 0020
+812558F0 3FCB

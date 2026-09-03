@@ -1,0 +1,67 @@
+[4D79D316-E8501B33-C:45]
+Name=Transformers - Beast Wars Transmetal (U)
+
+$Bonus Menu Games\Infinite Time\Escape Race 100 & 200\Player 1
+811BD3B6 000A
+
+$Bonus Menu Games\Infinite Time\Escape Race 100 & 200\Player 2
+811BD3BA 000A
+
+$Bonus Menu Games\Max\Points\Disc Hunter\Player 1
+801BD3E9 00FF
+
+$Bonus Menu Games\Max\Points\Disc Hunter\Player 2
+801BD3EB 00FF
+
+$Bonus Menu Games\Max\Wins\Sunset & Sunrise Showdown\Player 1
+801BC25F 00FF
+
+$Choose Stage\VS. Mode
+800ED6CF 00??
+00 Stage 1
+01 Stage 2
+02 Stage 3
+03 Stage 4
+04 Stage 5
+05 Stage 6
+06 Stage 7
+07 Stage 8 (Hidden Stage)
+08 Stage 9 (Hidden Stage)
+09 Stage A (Hidden Stage)
+
+$Infinite\Health\Player 1
+8112CD46 270F
+
+$Infinite\Health\Player 2
+8114D2C6 270F
+
+$Infinite\Stun Meter\Player 1
+8012CD49 00FF
+
+$Infinite\Stun Meter\Player 2
+8014D2C9 00FF
+
+$Infinite\Time
+80102A94 000A
+
+$Play As\Player 1
+801BE2A4 00??
+00 Optimus Primal
+01 Rattrap
+02 Cheetor
+03 Airazor
+04 Megatron
+05 Tarantulas
+06 Waspinator
+07 Terrorsaur
+
+$Play As\Player 2
+801BE2A5 00??
+00 Optimus Primal
+01 Rattrap
+02 Cheetor
+03 Airazor
+04 Megatron
+05 Tarantulas
+06 Waspinator
+07 Terrorsaur

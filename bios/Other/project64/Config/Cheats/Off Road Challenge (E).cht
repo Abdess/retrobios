@@ -1,0 +1,33 @@
+[812289D0-C2E53296-C:50]
+Name=Off Road Challenge (E)
+
+$1 Player\Always Place 1st
+80103CD7 0000
+
+$1 Player\Max\Acceleration
+8012C51F 000A
+
+$1 Player\Max\Shocks
+8012C527 000A
+
+$1 Player\Max\Speed
+8012C523 000A
+
+$1 Player\Max\Tires
+8012C52B 000A
+
+$Multi and 1 Player\Infinite Turbos\Player 1
+Note=Can be used in 1 Player and Multiplayer Modes for Player 1
+81103F3A 03E7
+
+$Multi and 1 Player\Infinite Turbos\Player 2
+Note=Multiplayer Mode Only for Player 2
+8110422E 03E7
+
+$Multi and 1 Player\Max Crash Helmets\Player 1
+Note=Can be used in 1 Player and Multiplayer Modes for Player 1
+80103F33 0064
+
+$Multi and 1 Player\Max Crash Helmets\Player 2
+Note=Multiplayer Mode Only for Player 2
+80104227 0064

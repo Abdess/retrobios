@@ -1,0 +1,15 @@
+[B19AD999-7E585118-C:45]
+Name=Monster Truck Madness 64 (U)
+
+$Have\Alpine Challenge Track
+801256DF 0001
+
+$Have\Aztec Valley Track
+801256BF 0001
+
+$Have\Death Trap Track
+801256FF 0001
+
+$Infinite Missiles (Upon Pickup)
+D0164BBF 0001
+801A6054 0009

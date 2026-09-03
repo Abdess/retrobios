@@ -1,0 +1,21 @@
+[AE90DBEB-79B89123-C:50]
+Name=Hercules - The Legendary Journeys (E) (M6)
+
+$Infinite Dinars
+800B6663 00E8
+800B6662 00E8
+
+$Infinite Health & Max Health
+810CFF5E 03E7
+810CFF62 03E7
+
+$Infinite Magic
+810B6BEA 0063
+810B6BD2 0063
+810B6C02 0063
+810B6C1A 0063
+
+$Press L to Levitate
+Note=Press L Button to Levitate & Let go to come back down
+D017D8F5 0020
+810CFFB4 44CB

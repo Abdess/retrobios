@@ -1,0 +1,20 @@
+[CF8957AD-96D57EA9-C:45]
+Name=Power Rangers - Lightspeed Rescue (U)
+
+$Infinite\Health
+Note=For Overhead & Driving Levels
+81064DF0 42C8
+
+$Unlock All\Characters
+50000C01 0000
+8006252D 0001
+
+$Unlock All\Levels
+50000301 0000
+80062508 0001
+50000801 0000
+8006250C 0001
+50000801 0000
+80062516 0001
+50000A01 0000
+8006251F 0001

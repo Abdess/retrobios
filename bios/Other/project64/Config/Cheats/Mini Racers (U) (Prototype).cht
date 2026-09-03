@@ -1,0 +1,72 @@
+[21548CA9-9059F32C-C:00]
+Name=Mini Racers (U) (Prototype)
+
+$[Player 1]\Infinite\Lives
+800827BB 0006
+
+$[Player 1]\Infinite\Turbo
+80195CF3 00FF
+
+$[Player 1]\Press R to Come In 1st
+Note=Do not press this until you have finished the race and came in at whatever position. Then Press R Button to then Come In 1st
+D0093671 0010
+801460A3 0000
+
+$Everything Unlocked
+Note=Have All Grand Prix Levels Open And Completed
+8008270F 00FF
+8108277A 0FFF
+
+$Regional Class\Max Grip
+Note=Do not enable until you are at the Region Class Selection menu. Disbale before restarting.
+800B2529 003D
+800BC529 003D
+800C6529 003D
+
+$Regional Class\Max Motor
+Note=Do not enable until you are at the Region Class Selection menu. Disbale before restarting.
+800C6481 003D
+800BC481 003D
+800B2481 003D
+
+$Regional Class\Max Turbo
+Note=Do not enable until you are at the Region Class Selection menu. Disbale before restarting.
+800B25D1 003D
+800BC5D1 003D
+800C65D1 003D
+
+$World Challenge\Max Grip
+Note=Do not enable until you are at the World Challenge Selection menu. Disbale before restarting.
+800B28B1 003D
+800BC8B1 003D
+800C68B1 003D
+
+$World Challenge\Max Motor
+Note=Do not enable until you are at the World Challenge Selection menu. Disbale before restarting.
+800B2809 003D
+800BC809 003D
+800C6809 003D
+
+$World Challenge\Max Turbo
+Note=Do not enable until you are at the World Challenge Selection menu. Disbale before restarting.
+800B2959 003D
+800BC959 003D
+800C6959 003D
+
+$World Class\Max Grip
+Note=Do not enable until you are at the World Class Selection menu. Disbale before restarting.
+800B2861 003D
+800BC861 003D
+800C6861 003D
+
+$World Class\Max Motor
+Note=Do not enable until you are at the World Class Selection menu. Disbale before restarting.
+800B27B9 003D
+800BC7B9 003D
+800C67B9 003D
+
+$World Class\Max Turbo
+Note=Do not enable until you are at the World Class Selection menu. Disbale before restarting.
+800B2909 003D
+800BC909 003D
+800C6909 003D

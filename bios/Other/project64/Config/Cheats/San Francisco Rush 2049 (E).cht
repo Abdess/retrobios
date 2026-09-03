@@ -1,0 +1,77 @@
+[51D29418-D5B46AE3-C:50]
+Name=San Francisco Rush 2049 (E) (M6)
+
+$Access All In-Game Cheats
+81118E9A 0001
+
+$Activate All In-Game Cheats
+50000D02 0000
+81118E82 0101
+
+$All Silver & Gold Coins (Circuit - Using C/P)
+Note=Circuit Mode - Using Controller Pack
+50000660 0000
+811C542C FFFF
+
+$All Silver & Gold Coins (Single Race + Practice Mode)
+Note=Single, Practice & Circuit Mode
+50000660 0000
+8116375C FFFF
+
+$All Silver & Gold Coins (Stunt Mode)
+Note=Stunt Mode
+50000440 0000
+81163BBC FFFF
+
+$Always 1st
+80177D4E 0000
+
+$Easy Difficulty level
+80177A3C 0000
+
+$Extended Time In Battle & Stunt Mode To 2.05 Hours
+811633BA 457C
+811636EE 4514
+
+$Laps To Race
+81177A18 00??
+01 1 Lap
+02 2 laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 6 Laps
+07 7 Laps
+08 8 Laps
+09 9 Laps
+
+$Max Points Stunt Mode
+81177A55 3AFF
+81177A57 F3FA
+
+$Max Race Points
+8117CE22 03E7
+
+$Number Of Drones In Race
+81163240 00??
+01 1 Drone
+02 2 Drones
+03 3 Drones
+04 4 Drones
+05 5 Drones
+06 6 Drones
+07 7 Drones
+08 8 Drones
+09 9 Drones
+
+$Stunt Wings All Modes
+Note=Where Wings Are Available Press D-Pad Up On Wing Select
+D017055A 0004
+50000C02 0000
+811139D0 0202
+
+$Stunt Wings Circuit Mode
+Note=Press D-Pad Up On Wing Select
+D017055A 0004
+50000C02 0000
+801756A1 0202

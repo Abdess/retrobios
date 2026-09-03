@@ -1,0 +1,127 @@
+[C29FF9E4-264BFE7D-C:45]
+Name=Rampage - World Tour (U)
+
+$Boris\1-Hit Death
+D01543D5 0044
+811543D4 0001
+
+$Boris\Infinite\Health
+811543D4 0044
+
+$Boris\Infinite\Lives
+811543D0 0063
+
+$Boris\Infinite\Special
+811543DC 0044
+
+$Boris\Max Score
+81154404 000F
+81154406 423F
+
+$Curtis\1-Hit Death
+D01541B9 0044
+811541B8 0001
+
+$Curtis\Infinite\Health
+811541B8 0044
+
+$Curtis\Infinite\Lives
+811541B4 0063
+
+$Curtis\Infinite\Special
+811541C0 0044
+
+$Curtis\Max Score
+811541E8 000F
+811541EA 423F
+
+$George\1-Hit Death
+D015480D 0044
+8115480C 0001
+
+$George\Infinite\Health
+8115480C 0044
+
+$George\Infinite\Lives
+81154808 0063
+
+$George\Infinite\Special
+81154814 0044
+
+$George\Max Score
+8115483C 000F
+8115483E 423F
+
+$Infinite Time to Choose A Character
+8118CF9A 06CB
+
+$Lizzie\1-Hit Death
+D0154A29 0044
+81154A28 0001
+
+$Lizzie\Infinite\Health
+81154A28 0044
+
+$Lizzie\Infinite\Lives
+81154A24 0063
+
+$Lizzie\Infinite\Special
+81154A30 0044
+
+$Lizzie\Max Score
+81154A58 000F
+81154A5A 423F
+
+$Myukus Codes\1-Hit Death
+D0154E61 0044
+81154E60 0001
+
+$Myukus Codes\Infinite\Health
+81154E60 0044
+
+$Myukus Codes\Infinite\Lives
+81154E5C 0063
+
+$Myukus Codes\Infinite\Special
+81154E68 0044
+
+$Myukus Codes\Max Score
+81154E90 000F
+81154E92 423F
+
+$Ralph\1-Hit Death
+D0154C45 0044
+81154C44 0001
+
+$Ralph\Infinite\Health
+81154C44 0044
+
+$Ralph\Infinite\Lives
+81154C40 0063
+
+$Ralph\Infinite\Special
+81154C4C 0044
+
+$Ralph\Max Score
+81154C74 000F
+81154C76 423F
+
+$Ruby\1-Hit Death
+D01545F1 0044
+811545F0 0001
+
+$Ruby\Infinite\Health
+811545F0 0044
+
+$Ruby\Infinite\Lives
+811545EC 0063
+
+$Ruby\Infinite\Special
+811545F8 0044
+
+$Ruby\Max Score
+81154620 000F
+81154622 423F
+
+$Unlock Cheat Menu
+810D5710 0001

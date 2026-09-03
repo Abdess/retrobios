@@ -1,0 +1,315 @@
+[65EEE53A-ED7D733C-C:45]
+Name=Paper Mario (U)
+
+$Have All Spirits
+8010F51E 0007
+
+$Have hammer\Level 1
+Note=Do not use with other level hammer cheats
+8010F291 0000
+
+$Have hammer\Level 2
+Note=Do not use with other level hammer cheats
+8010F291 0001
+
+$Have hammer\Level 3
+Note=Do not use with other level hammer cheats
+8010F291 0002
+
+$Have jump boots\Level 1
+Note=Do not use with other level jump boots cheats
+8010F290 0000
+
+$Have jump boots\Level 2
+Note=Do not use with other level jump boots cheats
+8010F290 0001
+
+$Have jump boots\Level 3
+Note=Do not use with other level jump boots cheats
+8010F290 0002
+
+$Have member\Bombette
+8010F2BC 0001
+
+$Have member\Bow
+8010F2EC 0001
+
+$Have member\Goomario
+8010F2AC 0001
+
+$Have member\Kooper
+8010F2B4 0001
+
+$Have member\Lakitu
+8010F2E4 0001
+
+$Have member\Parrakary
+8010F2C4 0001
+
+$Have member\Sushie
+8010F2DC 0001
+
+$Have member\Watt
+8010F2D4 0001
+
+$Have\Attack item
+Note=Only use One Have item Option at one time.
+8110F444 ????
+0800 Fire Flower
+0081 Snowman Doll
+0082 Thunder Rage
+0083 Shooting Star
+0084 Thunder Bolt
+0085 Pebble
+0086 Dusty Hammer
+
+$Have\Defense item
+Note=Only use One Have item Option at one time.
+8110F444 ????
+0088 Stone Cap
+008A Mushroom
+008B Volt Shroom
+0097 Repel Gel
+
+$Have\Enemy Stats item
+Note=Only use One Have item Option at one time.
+8110F444 ????
+008F Sleep Sheep
+0090 POW Block
+0092 Stop Watch
+0098 Fright Jar
+009A Dizzy Dial
+
+$Have\Recovery Items Option 1
+Note=Only use One Have item Option at one time.
+8110F444 ????
+0094 Apple
+00B1 Apple Pie
+00C0 Big Cookie
+00BD Bland Meal
+009E Blue Berry
+00D8 Boiled Egg
+00A1 Bubble Berry
+00AA Cake Mix
+00AA Cake Mix
+00CF Coco Pop
+00BE Deluxe Feast
+00A8 Dried Fruit
+00A7 Dried Pasta
+008D Dried Shroom
+005F Egg
+00CC Electro Pop
+00CD Fire Pop
+00C9 Fried Egg
+00B6 Fried Shroom
+00D4 Frozen Fries
+00A5 Goomnut
+00BC Healthy Juice
+00CB Honey Candy
+00CA Honey Shroom
+00C4 Honey Super
+
+$Have\Recovery Items Option 2
+Note=Only use One Have item Option at one time.
+8110F444 ????
+00A4 Honey Syrup
+00B2 Honey Ultra
+00B9 Hot Shroom
+00AF Iced Potato
+00A2 Jammin' Jelly
+00D1 Jelly Pop
+00DA Jelly Shroom
+00C6 Jelly Super
+00B4 Jelly Ultra
+00D3 Kooky Cookie
+00A6 Koopa Leaf
+00C3 Koopa Tea
+00B5 KooPasta
+009C Lemon
+00D0 Lemon Candy
+0095 Life Shroom
+009D Lime
+0C0E Lime Candy
+00D7 Maple Shroom
+00C5 Maple Super
+00A3 Maple Syrup
+00B3 Maple Ultra
+00AD Melon
+00C2 Mistake
+008A Mushroom
+
+$Have\Recovery Items Option 3
+Note=Only use One Have item Option at one time.
+8110F444 ????
+00D6 Nutty Cake
+00D5 Potato Salad
+009F Red Berry
+00B7 Shroom Cake
+00B8 Shroom Steak
+00C7 Spaghetti
+00BF Special Shake
+00B0 Spicy Soup
+00AE Stinky Herb
+00A9 Strange Leaf
+008C Super Shroom
+009B Super Soda
+00BA Sweet Shroom
+0089 Tasty Tonic
+008E Ultra Shroom
+0093 Whacka's Bump
+00A0 Yellow Berry
+00D9 Yoshi Cookie
+00BB Yummy Meal
+
+$Have\Special Items Option 1
+Note=Only use One Have item Option at one time.
+8110F444 ????
+0030 Calculator
+0029 Cook Book
+001E Crystal Berry
+0017 Diamond Stone
+0024 Dictonary
+000E Diploma
+0032 Scarf
+000A First Degree Card
+000B Second Degree Card
+000C Third Degree Card
+000D Fourth Degree Card
+0023 Frying Pan
+0004 Hammer
+002A Jade Raven
+0019 Kooper's Shell
+0058 Magical Bean
+002B Magical Seed Red
+002D Magical Seed Green
+002E Magical Seed Brown-Orange
+0069 Mailbag
+0031 Bucket
+0021 Toy Train
+0068 Melody
+006C Star Stone
+005B Volcano Vase
+
+$Have\Special Items Options 1
+Note=Only use One Have item Option at one time
+8110F444 ????
+0101 Jump
+010E Diploma
+010F Ultra Stone
+0110 Fortress Key
+0115 Lunar Stone
+0118 Golden Jar
+0119 Kooper's Shell
+0122 Record
+0125 Mystery Note
+012A Jade Raven
+012C Magical Seed Purple
+012D Magical Seed Blue
+0131 Bucket
+0150 Letter
+0156 Dolly
+0157 Water Stone
+0158 Magical Bean
+0159 Fertile Soil
+015A Miracle Water
+015B Volcano Vase
+0053 Artifact
+0067 Lyrics
+001D Boo's Portrait
+
+$Infinite\FP
+8010F295 0063
+8010F296 0063
+
+$Infinite\HP
+8010F292 0063
+8010F293 0063
+
+$Infinite\Star Power
+8010F520 0007
+8010F521 0007
+
+$Lots Of Coins
+8110F29C 03E7
+
+$Max\Badge Points
+8010F298 00??
+3C 60 Badge Points
+7F 127 Badge Points
+
+$Max\Level
+8010F299 0063
+
+$Max\Star Pieces
+8010F29F 0063
+
+$Max\Star Points
+8010F2A0 0063
+
+$No Star Points (0)
+Note=If emulator hangs at level up, enable this cheat and don't disable it whatsoever!
+8010F2A0 0000
+
+$Upgrade member\Level 1\Bombette
+Note=Do not use with level 2 upgrade cheats
+8010F2BD 0001
+
+$Upgrade member\Level 1\Bow
+Note=Do not use with level 2 upgrade cheats
+8010F2ED 0001
+
+$Upgrade member\Level 1\Goomario
+Note=Do not use with level 2 upgrade cheats
+8010F2AD 0001
+
+$Upgrade member\Level 1\Kooper
+Note=Do not use with level 2 upgrade cheats
+8010F2B5 0001
+
+$Upgrade member\Level 1\Lakitu
+Note=Do not use with level 2 upgrade cheats
+8010F2E5 0001
+
+$Upgrade member\Level 1\Parrakary
+Note=Do not use with level 2 upgrade cheats
+8010F2C5 0001
+
+$Upgrade member\Level 1\Sushie
+Note=Do not use with level 2 upgrade cheats
+8010F2DD 0001
+
+$Upgrade member\Level 1\Watt
+Note=Do not use with level 2 upgrade cheats
+8010F2D5 0001
+
+$Upgrade member\Level 2\Bombette
+Note=Do not use with level 1 upgrade cheats
+8010F2BD 0002
+
+$Upgrade member\Level 2\Bow
+Note=Do not use with level 1 upgrade cheats
+8010F2ED 0002
+
+$Upgrade member\Level 2\Goomario
+Note=Do not use with level 1 upgrade cheats
+8010F2AD 0002
+
+$Upgrade member\Level 2\Kooper
+Note=Do not use with level 1 upgrade cheats
+8010F2B5 0002
+
+$Upgrade member\Level 2\Lakitu
+Note=Do not use with level 1 upgrade cheats
+8010F2E5 0002
+
+$Upgrade member\Level 2\Parrakary
+Note=Do not use with level 1 upgrade cheats
+8010F2C5 0002
+
+$Upgrade member\Level 2\Sushie
+Note=Do not use with level 1 upgrade cheats
+8010F2DD 0002
+
+$Upgrade member\Level 2\Watt
+Note=Do not use with level 1 upgrade cheats
+8010F2D5 0002

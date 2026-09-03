@@ -1,0 +1,11 @@
+[F1850C35-ACE07912-C:45]
+Name=Micro Machines 64 Turbo (U)
+
+$Always Place 1st
+802083F1 0001
+
+$Infinite\Lives
+800BAFD2 0009
+
+$Infinite\Specials On Pickup
+80208401 0005

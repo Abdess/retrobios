@@ -1,0 +1,81 @@
+[862C0657-8DFD896D-C:45]
+Name=Army Men - Sarge's Heroes (U)
+
+$(Multi-player)\Have All\Weapons and items\Player 1
+8133BA4E FFFE
+
+$(Multi-player)\Have All\Weapons and items\Player 2
+8133BC0A FFFE
+
+$(Multi-player)\Have All\Weapons and items\Player 3
+8133BDC6 FFFE
+
+$(Multi-player)\Have All\Weapons and items\Player 4
+8133BF82 FFFE
+
+$(Multi-player)\Max Kills\Player 1
+8033B9BC FFFF
+
+$(Multi-player)\Max Kills\Player 2
+8033BB78 FFFF
+
+$Access\All Guns
+8015969F 0001
+
+$Access\Max Ammo
+8015FCBF 0001
+
+$Can't Fail Missions
+810A04FA ED40
+
+$Enable\Cheat Menu
+Note=Enable before you enter in game and you will find the cheat menu when you press the Start Button
+8003E22F 0003
+8004609F 0003
+
+$Enable\Debug Mode
+Note=When this code is activated, a display of numbers will show on the screen as the players move around
+801599E7 0001
+
+$Enable\Level Select Menu
+Note=This must be used with Enable Cheat Menu and enabled before you enter in game and you will find the level select menu replaces the cheat menu when you press the Start Button
+810AA696 9214
+
+$Enemies Don't Recongnize You Easily
+8005742D 0001
+
+$Have\Invisible Soldier
+Note=you are Invisible to most enimies who just can not dectect or see you.
+80159683 0001
+
+$Have\Large Mode
+Note=Do not use with Mini Mode only use one at a time
+8015FCDF 0001
+
+$Have\Less Enemies In Levels
+Note=Do not use with No Enemies In Levels, only use one at a time
+80056688 0020
+
+$Have\Mini Mode
+Note=Do not use with Large Mode only use one at a time
+80159699 0001
+
+$Have\No Enemies In Levels
+Note=Do not use with Less Enemies In Levels, only use one at a time
+80056D4C 0020
+
+$Improved Gun Handling
+8009C014 003E
+
+$Infinite\Continues
+80159693 0001
+
+$Infinite\Health
+8015FCEF 0001
+
+$Play As
+Note=Here you can choose who you would like to play as. But Do not use this with any other play as option..
+801609A3 00??
+07 The Big Green One
+08 Vikki
+09 Plastro

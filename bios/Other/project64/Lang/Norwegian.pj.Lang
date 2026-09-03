@@ -1,0 +1,567 @@
+﻿// Meta Information
+#1  #  "Norsk"			// Language ID
+#2  #  "Jaxon"			// Author
+#3  #  "3.0"			// Version
+#4  #  "August, 2021"		// Date
+
+/*** Menu ***/
+
+// File Menu
+#100#  "&Fil"
+#101#  "Åpne R&OM"
+#102#  "ROM-&info..."
+#103#  "Start emulering"
+#104#  "Stopp &emulering"
+#105#  "Velg ROM-mappe..."
+#106#  "Oppdater ROM-liste"
+#107#  "Siste ROM"
+#108#  "Siste ROM-mapper"
+#109#  "&Avslutt"
+#110#  "Åpne &kombo"
+
+// System menu
+#120#  "&System"
+#121#  "Nullstill"
+#122#  "&Pause"
+#123#  "Ta skjermbilde"
+#124#  "Begrens FPS"
+#125#  "Lagre til&stand"
+#126#  "Lagre som..."
+#127#  "&Last inn tilstand"
+#128#  "Last inn..."
+#129#  "Nåværende &tilstand"
+#130#  "Jukse&koder..."
+#131#  "GS-knapp"
+#132#  "Forts&ett"
+#133#  "Myk re&set"
+#134#  "&Hard reset"
+#135#  "Bytt &disk"
+#136#  "Forb&edringer..."
+
+// Options menu
+#140#  "&Alternativer"
+#141#  "&Fullskjerm"
+#142#  "All&tid øverst"
+#143#  "&Grafikkinnstillinger"
+#144#  "&Lydinstillinger"
+#145#  "&Inputinnstillinger"
+#146#  "&RSP-instillinger"
+#147#  "&Vis CPU-bruk %"
+#148#  "Inns&tillinger..."
+
+// Debugger menu
+#160#  "&Debugger"
+
+// Language menu
+#175#  "&Språk"
+
+// Help menu
+#180#  "&Hjelp"
+#182#  "&Om Project64"
+#183# "Brukerstøtte&forum"
+#184# "&Hjemmeside"
+#185#  "&Støtt Project64"
+#186#  "&Discord"
+
+// Current save slot menu
+#190#  "&Standard (.pj)"
+#191#  "Plass 1"
+#192#  "Plass 2"
+#193#  "Plass 3"
+#194#  "Plass 4"
+#195#  "Plass 5"
+#196#  "Plass 6"
+#197#  "Plass 7"
+#198#  "Plass 8"
+#199#  "Plass 9"
+#200#  "Plass 10"
+#201#  "Langringsplass (%ws) valgt"
+
+// Pop-up menu
+#210#  "Start spill"
+#211#  "ROM-informasjon"
+#212#  "Endre spillinnstillinger"
+#213#  "Endre juksekoder..."
+#214#  "Grafikktillegg"
+#215#  "Start spill med disk"
+
+// Alternate name to save slot
+#220#  "Langringsplass - Standard"
+#221#  "Lagringsplass - 1"
+#222#  "Lagringsplass - 2"
+#223#  "Lagringsplass - 3"
+#224#  "Lagringsplass - 4"
+#225#  "Lagringsplass - 5"
+#226#  "Lagringsplass - 6"
+#227#  "Lagringsplass - 7"
+#228#  "Lagringsplass - 8"
+#229#  "Lagringsplass - 9"
+#230#  "Lagringsplass - 10"
+
+// Menu descriptions
+#250#  "Åpne et N64 ROM-bilde"
+#251#  "Vis informasjon om det innlastede ROM-bildet"
+#252#  "Start emulering av det innlastede ROM-bildet"
+#253#  "Stopp emulering av det innlastede ROM-bildet"
+#254#  "Velg ROM-mappe"
+#255#  "Oppdater ROM-listen i ROM-katalogen"
+#256#  "Avslutt dette programmet"
+#257#  "Start nåværende ROM-bilde på nytt (la eventuelle innstillingsendringer tre i kraft)"
+#258#  "Sett emulering på pause/fortsett emulering av nåværende ROM"
+#259#  "Generer ett bitmap-bilde av nåværende skjerm"
+#260#  "Begrens FPS til korrekt hastighet for N64"
+#261#  "Lagre emulert systemtilstand"
+#262#  "Lagre emulert systemtilstand på en bestemt filplassering"
+#263#  "Last inn den lagrede systemtilstanden"
+#264#  "Velg en systemtilstandsfil å laste inn"
+#265#  "Slå på/av GameShark-juksekoder"
+#266#  "GameShark-knappen brukes av enkelte juksekoder"
+#267#  "Skift fra vindusmodus til fullskjerm"
+#268#  "La vinduet vises på toppen av alle andre vinduer"
+#269#  "Endre innstillinger for grafikktillegg"
+#270#  "Endre innstillinger for lydtillegg"
+#271#  "Endre innstillinger for kontrollertillegg"
+#272#  "Endre innstillinger for RSP-tillegg"
+#273#  "Vis emulatorens CPU-bruk fordelt på forskjellige ressurser"
+#274#  "Se/endre instillinger for programmet"
+#275#  "Åpne brukermanual"
+#276#  "Vis ofte stile spørsmål"
+#278#  "Om programmet og forfatterne"
+#277#  "Om forfatterne av brukerstøttefilene"
+#279#  "Åpne sist brukte ROM-bilde"
+#280#  "Bruk denne mappen som din ROM-mappe"
+#281#  "Bytt Project64 til dette språket"
+#282#  "Velg denne lagringsplassen for systemtilstanden"
+#283#  "Start det valgte spillet"
+#284#  "Se informasjon om det valgte spillet"
+#285#  "Endre instillinger for det valgte spillet"
+#286#  "Endre juksekoder for det valgte spillet"
+
+/*** ROM browser ***/
+
+// ROM browser fields
+#300#  "Filnavn"
+#301#  "Internt navn"
+#302#  "Good Name"
+#303#  "Status"
+#304#  "ROM-størrelse"
+#305#  "Notater (kjerne)"
+#306#  "Notater (standardtillegg)"
+#307#  "Notater (bruker)"
+#308#  "Kassett-ID"
+#309#  "Medietype"
+#310#  "Region"
+#311#  "Utvikler"
+#312#  "CRC1"
+#313#  "CRC2"
+#314#  "CIC-chip"
+#315#  "Utgivelsesdato"
+#316#  "Sjanger"
+#317#  "Antall spillere"
+#318#  "Haptisk tilbakemelding"
+#319#  "Filformat"
+#321#  "Navn"
+
+// Select ROM
+#320#  "Velg nåværende ROM-mappe"
+
+// Messages
+#340#  "Dårlig ROM? Bruk GoodN64 og sjekk at RDB-en er oppdatert."
+
+/*** Options ***/
+
+// Options title
+#400#  "Innstillinger"
+
+// Tabs
+#401#  "Tillegg"
+#402#  "Mapper"
+#403#  "Generelle innstillinger"
+#404#  "ROM-katalog"
+#405#  "Avansert"
+#406#  "ROM-innstillinger"
+#408#  "Notater"
+#409#  "Hurtigtaster"
+#410#  "Status"
+#411#  "Rekompilator"
+#412#  "Standardinnstillinger"
+#413#  "64DD"
+
+// Plugin dialog
+#420#  "Om"
+#421#  " RSP (Reality Signal Processor)-tillegg: "
+#422#  " Video (grafikk)-tillegg: "
+#423#  " Lydtillegg: "
+#424#  " Input (kontroller)-tillegg: "
+#425#  "HLE-grafikk"
+#426#  "HLE-lyd"
+#427#  "** Bruk systemtillegg **"
+
+// Directory dialog
+#440#  " Tilleggsmappe: "
+#441#  " ROM-mappe: "
+#442#  " Mappe for N64-formatslagringer: "
+#443#  " Mappe for lagrede systemtilstander: "
+#444#  " Skjermbildemappe: "
+#445#  "Siste mappe en ROM ble åpnet fra"
+#446#  "Velg tilleggsmappe"
+#447#  "Velg ROM-mappe"
+#448#  "Velg mappe for N64-formatslagringer"
+#449#  "Velg mappe for lagrede systemtilstander"
+#450#  "Velg mappe for skjermbilder"
+#451#  " Teksturpakkemappe: "
+#452#  "Velg teksturpakkemappe"
+
+// Options (general) tab
+#460#  "Sett emuleringen på pause når vinduet er inaktivt"
+#461#  "Gå i fullskjerm når en ROM lastes inn"
+#462#  "Skjul avanserte innstillinger"
+#463#  "Husk valgte juksekoderkoder"
+#464#  "Slå av skjermsparer når en ROM kjører"
+#465#  "Vis hastighet"
+#466#  "Hastighetsvisning:"
+#467#  "Sjekk om Project64 allerede kjører"
+#468#  "Legg spillagringsfiler i separate mapper"
+#469#  "Japansk salgsversjons–64DD IPL ROM–sti:"
+#470#  "Amerikansk salgsversjons–64DD IPL ROM–sti:"
+#471#  "Utviklingsversjons–64DD IPL ROM–sti:"
+#472#  "Disklagringstype:"
+#473#  "Slå på forbedringer"
+#474#  "Vis statuslinje"
+#475#  "Gå ut av fullskjerm når fokus mistes"
+#476#  "Slå på Discord rich presence"
+
+// ROM browser tab
+#480#  "Maks antall ROMs å huske (0-10):"
+#481#  "ROMs"
+#482#  "Maks antall ROM-mapper å huske (0-10):"
+#483#  "mapper"
+#484#  "Bruk ROM-katalogen"
+#485#  "Bruk mapperekursjon"
+#486#  "Ledige felter:"
+#487#  "Feltrekkefølge:"
+#488#  "Legg til ->"
+#489#  "<- Fjern"
+#490#  "Opp"
+#491#  "Ned"
+#492#  "Oppfrisk katalogen automatisk"
+
+// Advanced options
+#500#  "De fleste av disse endringene vil ikke tre i kraft før en ny ROM åpnes eller den nåværende ROM-en tilbakestilles."
+#501#  "Standarer for kjernen"
+#502#  "CPU-kjernestil:"
+#503#  "Metoder for selvmodifiserende kode:"
+#504#  "Standard minnestørrelse:"
+#505#  "Avansert blokklenking:"
+#506#  "Start emulering når en ROM åpnes"
+#507#  "Alltid la innstillinger fra RDB overstyre standardinnstillinger"
+#508#  "Komprimer systemtilstander automatisk"
+#509#  "Slå på debugger"
+#510#  "Cache"
+#511#  "PI DMA"
+#512#  "Start endret"
+#513#  "Beskytt memory"
+#514#  "TLB-avkobling"
+#515#  "Alltid bruk tolkkjerne"
+
+// ROM options
+#520#  "CPU-kjernestil:"
+#521#  "VI-oppfriskingshastighet:"
+#522#  "Minnestørrelse:"
+#523#  "Avansert blokklenking:"
+#524#  "Standard lagringstype:"
+#525#  "Tellerfaktor:"
+#526#  "Større kompileringsbuffer"
+#527#  "Bruk TLB"
+#528#  "Registercaching"
+#529#  "Forsink SI-interrupt:"
+#530#  "Rask SP"
+#531#  "Standardinnstilling"
+#532#  "RSP-lydsignal"
+#533#  "Fast lydtiming"
+#534#  "Funksjonsoppslagsmetode:"
+#535#  "Egendefinert selvmodifiseringsmetode"
+#536#  "Synkroniser ved bruk av lyd"
+#537#  "AI-telling per byte:"
+#538#  "32-bitsmotor"
+#539#  "Forsink DP-interrupt"
+
+// Core styles
+#540#  "Tolk"
+#541#  "Rekompilator"
+#542#  "Synkroniser kjerner"
+
+// Self-mod methods
+#560#  "Ingen"
+#561#  "Cache"
+#562#  "Beskytt minne"
+#563#  "Sjekk minne og cache"
+#564#  "Endre minne og cache"
+#565#  "Sjekk minne avansering"
+#566#  "Tøm kode ved cache"
+
+// Function lookup method
+#570#  "Fysisk oppslagstabell"
+#571#  "Virtuell oppslagstabell"
+#572#  "Endre memory"
+
+// RDRAM size
+#580#  "4 MB"
+#581#  "8 MB"
+
+// Advanced block linking
+#600#  "På"
+#601#  "Av"
+
+// Save type
+#620#  "Bruk den første brukte lagringstypen"
+#621#  "4-kbits EEPROM"
+#622#  "16-kbits EEPROM"
+#623#  "SRAM"
+#624#  "Flash-RAM"
+
+// ROM notes
+#660#  "ROM-status:"
+#661#  "Kjernenotat:"
+#662#  "Tilleggsnotat:"
+
+// Accelerator selector
+#680#  "CPU-tilstand:"
+#681#  "Menyelement:"
+#682#  "Nåværende taster:"
+#683#  "Velg ny snarveistast:"
+#684#  "Satt til:"
+#685#  "Tilordne"
+#686#  "Fjern"
+#687#  "Tilbakestill alle"
+#688#  "Spill kjører ikke"
+#689#  "Spill kjører"
+#690#  "Spill kjører (vindusmodus)"
+#691#  "Spill kjører (fullskjerm)"
+#692#  "Fang opp tast"
+
+// Framerate option
+#700#  "Vertikale interrupts per sekund"
+#701#  "Display lists per sekund"
+#702#  "Prosent av full hastighet"
+
+// Increase speed
+#710#  "Øk spillhastighet"
+#711#  "Senk spillhastighet"
+
+// Bottom page buttons
+#720#  "Tilbakestill siden"
+#721#  "Tilbakestill alle"
+#722#  "Bruk"
+#723#  "Lukk"
+
+// Disk save type
+#730#  "Full diskkopi"
+#731#  "Kun lagringsområde"
+
+/*** ROM information ***/
+
+// ROM info title
+#800#  "ROM-informasjon"
+
+// ROM info text
+#801#  "ROM-navn:"
+#802#  "Filnavn:"
+#803#  "Filplassering:"
+#804#  "ROM-størrelse:"
+#805#  "Kassett-ID:"
+#806#  "Medietype:"
+#807#  "Land:"
+#808#  "CRC1:"
+#809#  "CRC2:"
+#810#  "CIC-chip:"
+#811#  "MD5:"
+
+/*** Cheats ***/
+
+// Cheat list
+#1000#  "Juksekoder"
+#1001#  "Juksekoder:"
+#1002#  " Notater: "
+#1003#  "Merk alle"
+#1004#  "Avmerk alle"
+
+// Add cheat
+#1005#  "Legg til juksekode"
+#1006#  "Navn:"
+#1007#  "Kode:"
+#1008#  "Sett inn"
+#1009#  "Tøm"
+#1010#  " Juksekodenotater:"
+#1011#  "Legg til i databasen"
+
+// Code extension
+#1012#  "Filendelse for juksekoder"
+#1013#  "Vennligst velg verdi som skal bli brukt for:"
+#1014#  "OK"
+#1015#  "Avbryt"
+
+// Digital value
+#1016#  "Mengdesiffer"
+#1017#  "Vennligst velg en verdi:"
+#1018#  "&Verdi"
+#1019#  "fra"
+#1020#  "til"
+#1021#  "&Notater:"
+#1022#  "Legg til juksekode"
+#1023#  "Ny juksekode"
+#1024#  "<adresse> <verdi>:<gammel>"
+#1025#  "Alternativer:"
+#1026#  "<verdi> <etikett>"
+
+// Edit cheat
+#1027#  "Rediger kode"
+#1028#  "Oppdater kode"
+#1029#  "Juksekoden har blitt endret.\n\nVil du oppdatere?"
+#1030#  "Juksekode oppdatert"
+
+// Cheat pop-up menu
+#1040#  "Legg til ny juksekode..."
+#1041#  "Rediger"
+#1042#  "Slett"
+
+// Shortcut editor
+#1100#  "Tilbakestill snarveier"
+#1101#  "Er du sikker på at du vil tilbakestille snarveiene?\n\nDette kan ikke angres."
+#1102#  "Filmeny"
+#1103#  "Systemmeny"
+#1104#  "Alternativer"
+#1105#  "Lagringsplasser"
+
+/*** Support window ***/
+
+#1200#  "Støtt Project64"
+#1201#  "Project64 er en gratis Nintendo 64-emulator med åpen kildekode. Det lar deg spille N64-programmvare likt slik det hadde vært på den originale konsollen.\n\nJeg beklager for ubeleiligheten ved denne meldingsboksen, men du blir bedt om å vente noen få sekunder før du nyter resultatet av hundrevis av timer med arbeid.\n\nHvis du kan og har lyst til å støtte Project64 eller har fått noe verdi ut av programmet så vær så snill og støtt Project64, enten som takk, eller av et ønske om å fjerne denne meldingsboksen.\n\nHvis du har støttet Project64:"
+#1202#  "Skriv inn/be om støttekode"
+#1203#  "Søtt Project64"
+#1204#  "Fortsett"
+#1205#  "Vennligst skriv inn støttekoden"
+#1206#  "Klarte ikke validere koden\n\nPass på at koden matcher med e-posten basert på enheten din"
+#1207#  "Tusen takk"
+#1208#  "Vennligst skriv inn støttekoden din"
+#1209#  "Vennligst skriv inn koden du mottok på e-post.\n\nDenne e-posten blir sendt til e-postadressen oppgitt ved støtting av Project64.\n\nMerk at koden kun virker på én unik enhet. Denne enhetens ID er:"
+#1210#  "OK"
+#1211#  "Avbryt"
+#1212#  "Be om kode"
+#1213#  "En kode har blitt sendt til e-postadressen din"
+#1214#  "Klarte ikke sende koden, vennligst pass på at du skrev inn samme e-postadresse som den som ble oppgitt ved støtting av Project64"
+
+/*** Enhancements ***/
+
+#1300#  "Forbedringer"
+
+/*** Messages ***/
+
+#2000#  "*** CPU PAUSET ***"
+#2001#  "CPU Gjenoppstartet"
+#2002#  "I en permanent loop som ikke kan bli avsluttet.\nEmulering vil nå stoppes.\n\nSjekk at ROM og dens innstillinger er korrekte."
+#2003#  "Klarte ikke allokere minne"
+#2004#  "Standard eller valgt grafikktillegg ble ikke funnet eller er ugyldig.\n\nDu må gå inn i Innstillinger og velge et video (grafikk)-tillegg.\nSjekk at du har minst én kompatibel tilleggsfil i tilleggsmappen din."
+#2005#  "Standard eller valgt grafikktillegg ble ikke funnet eller er ugyldig.\n\nDu må gå inn i Innstillinger og velge et lydtillegg.\nSjekk at du har minst én kompatibel tilleggsfil i tilleggsmappen din."
+#2006#  "Standard eller valgt grafikktillegg ble ikke funnet eller er ugyldig.\n\nDu må gå inn i Innstillinger og velge et RSP (Reality Signal Processor)-tillegg.\nSjekk at du har minst én kompatibel tilleggsfil i tilleggsmappen din."
+#2007#  "Standard eller valgt grafikktillegg ble ikke funnet eller er ugyldig.\n\nDu må gå inn i Innstillinger og velge et input (kontroller)-tillegg.\nSjekk at du har minst én kompatibel tilleggsfil i tilleggsmappen din."
+#2008#  "Klarte ikke laste inn tillegg:"
+#2009#  "Klarte ikke laste inn ord (word).\n\nSjekk at ROM og dens innstillinger er korrekte."
+#2010#  "Klarte ikke åpne lagringsfil"
+#2011#  "Klarte ikke åpne EEPROM"
+#2012#  "Klarte ikke åpne flash-RAM"
+#2013#  "Klarte ikke åpne mempak"
+#2014#  "Klarte ikke åpne zip-fil.\n\nZip-filen er sannsynligvis korrupt – prøv å pakke up ROM-en manuelt."
+#2015#  "Klarte ikke åpne fil."
+#2016#  "Feil ved åpning av zip-fil."
+#2017#  "Innlastet fil ser ikke ut til å være en gyldig N64-ROM.\n\nSjekk ROM-en din med GoodN64."
+#2018#  "Ukjent land"
+#2019#  "Ukjent CIC-chip"
+#2020#  "Ukjent filformat"
+#2021#  "Ukjent minnehandling\n\nEmulering stoppet"
+#2022#  "Uhåndtert R4300i opkode på"
+#2023#  "Eksekverer fra umappet lagring.\n\nSjekk at ROM og dens innstillinger er korrekte.."
+#2024#  "Denne lagrede tilstanden ser ikke ut til å passe med den kjørende ROM-en.\n\nSystemtilstander må lagres og lastes inn mellom 100% identiske ROM.\nSpesifikt må REGIONEN og VERSJONEN være de samme.\nÅ laste inn denne tilstanden vil mest sannsynlig forårsake at spillet og/eller emulatoren krasjer.\n\nEr du sikker på at du fortsatt vil laste inn den inn?"
+#2025#  "Feil"
+#2026#  "Opphavsrettssekvens ikke funnet i LUT. Spillet vil ikke lenger fungere."
+#2027#  "Kopibeskyttelsesfeil"
+#2028#  "Å endre et tillegg krever at Project64 tilbakestiller en kjørende ROM.\nSvar "Nei" og lagre den nåværende systemtilstanden først dersom du ikke ønsker å miste fremgangen din.\n\nEndre tillegg og tilbakestill ROM nå?"
+#2029#  "Endre tillegg"
+#2030#  "Emulering stoppet"
+#2031#  "Emulering startet"
+#2032#  "Kan ikke laste inn systemtilstand"
+#2033#  "Lastet inn systemtilstand"
+#2034#  "Lagret nåværende systemtilstand til"
+#2035#  "Systemtilstandsplass"
+#2036#  "Byte swap–er bilde"
+#2037#  "velger N64-bilde"
+#2038#  "Lastet inn"
+#2039#  "Laster inn bilde"
+#2040#  "Kan ikke åpne en ROM fordi tilleggene ikke har klart å initialisere."
+#2041#  "Er du helt sikker på at du vil slette dette?"
+#2042#  "Slett juksekode"
+#2043#  "Juksekodenavn er allerede i bruk."
+#2044#  "Du har nådd maksimalt antall juksejoder for denne ROM-en."
+#2045#  "Tillegg initialiserer"
+#2046#  "Du har ikke valgt en virtuell tast å tilordne menyelementet."
+#2047#  "Du må velge en virtuel tast å tilordne menyelementet."
+#2048#  "Snarveien har allerede blitt tilordnet et annet menyelement."
+#2049#  "Ingen snarveier har blitt markert for sletting."
+#2050#  "ROM lastet inn. Venter på at emulering skal starte."
+#2051#  "Project64-betaversjoner er kun for medlemmer.\n\nDersom du har en konto på www.pj64-emu.com burde du ikke se denne feilmeldingen!!\nVennligst kontakt oss på nettsiden."
+#2052#  "Programfeil"
+#2053#  "Klarte ikke finne filnavn i 7z-fil"
+#2054#  "Lavnivåemulering av grafikk"
+#2055#  "LLE-grafikk er ikke for generell bruk!!!\nDu rådes til å kun bruke dette for testing og ikke for å spille spill.\n\nBytt til LLE-grafikk?"
+#2056#  "Høynivåemulering av lyd"
+#2057#  "Høynivåemulering av lyd krever et tredjepartstillegg!!!\nHvis du ikke bruker et tredjepartstillegg som støtter HLE vil du ikke høre noe lyd.\n\nBytt til LLE-lyd?"
+#2058#  "Den innlastede filen ser ikke ut til å være en gyldig 64DD IPL ROM.\n\nSjekk ROM-en med GoodN64."
+#2059#  "Fant ikke japansk salgsversjons–Nintendo 64DD IPL ROM.\nDen er nødvendig for å spille 64DD-diskbilder med japansk region.\n\nVennligst velg den nødvendige ROM-en i innstillingene."
+#2061#  "Fant ikke amerikansk salgsversjons–Nintendo 64DD IPL ROM.\nDen er nødvendig for å spille 64DD-diskbilder med japansk region.\n\nVennligst velg den nødvendige ROM-en i innstillingene."
+#2062#  "Fant ikke utviklingsversjons–Nintendo 64DD IPL ROM.\nDen er nødvendig for å spille 64DD-diskbilder med japansk region.\n\nVennligst velg den nødvendige ROM-en i innstillingene."
+#2063#  "Klarte ikke oppdatere juksekode; den er ugyldig"
+#2064#  "Ugyldig juksekode"
+
+/*** Android ***/
+
+#3000#  "Innstillinger"
+#3001#  "Hjelp/forum"
+#3002#  "Rapporter problem"
+#3003#  "Om"
+#3004#  "Sist spilt"
+#3005#  "Spill"
+#3006#  "Spillmappe"
+#3007#  "Velg en mappe å skanne"
+#3008#  "Inkluder undermapper"
+#3009#  "Overmappe"
+#3010#  "Mapper"
+#3011#  "Internt minne"
+#3012#  "Skanner..."
+#3013#  "OK"
+#3014#  "Avbryt"
+#3015#  "Informasjon"
+#3016#  "Project64 for Android"
+#3017#  "Lisens"
+#3018#  "Revisjon"
+#3019#  "Project64 for Android\u2122 er en portering av Windows-versjonen av Project64. Android\u2122-versjonen kan spille de fleste N64-spill."
+#3020#  "Project64-forfatterne."
+#3021#  "Discord"
+
+// In-game menu
+#3100#  "Innstillinger"
+#3101#  "Lagre systemtilstand"
+#3102#  "Last inn systemtilstand"
+#3103#  "Avslutt emulering"
+#3104#  "Pause"
+#3105#  "Gjenoppta"
+#3106#  "Spillhastighet"
+#3107#  "Nåværende systemtilstandslagring..."
+#3108#  "Auto"
+#3109#  "Plass"
+#3110#  "Tilbakestill"
+#3111#  "Debuggingsvalg"
+#3112#  "Tilbakestill funksjonsteller"
+#3113#  "Dump funksjonsteller"
+
+// Video plugin
+#3200#  "Opprinnelig"

@@ -1,0 +1,63 @@
+[A292524F-3D6C2A49-C:45]
+Name=NBA In the Zone '99 (U)
+
+$Away Team\Score
+8129195C ????
+0000 o Points
+0A01 0 Points
+1402 0 Points
+2804 0 Points
+3C06 0 Points
+5008 0 Points
+6401 00 Points
+C802 00 Points
+FA02 50 Points
+
+$Away Team\Time Outs
+80291958 00??
+00 None
+07 Infinite
+
+$Create A Player Codes\Max 3 Point
+802C5EFC 0063
+
+$Create A Player Codes\Max Capaility
+802C5F02 0063
+
+$Create A Player Codes\Max Defensive
+802C5EFF 0063
+
+$Create A Player Codes\Max Free Throw
+802C5EFD 0063
+
+$Create A Player Codes\Max Offensive
+802C5EFE 0063
+
+$Create A Player Codes\Max Rebound
+802C5F00 0063
+
+$Create A Player Codes\Max Shooting
+802C5EFB 0063
+
+$Create A Player Codes\Max Techinque
+802C5F01 0063
+
+$Home Team\Score
+81290378 ????
+0000 o Points
+0A01 0 Points
+1402 0 Points
+2804 0 Points
+3C06 0 Points
+5008 0 Points
+6401 00 Points
+C802 00 Points
+FA02 50 Points
+
+$Home Team\Time Outs Home
+80290374 00??
+00 None
+07 Infinite
+
+$No Shot Clock
+812010C4 43FF

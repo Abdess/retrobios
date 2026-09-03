@@ -1,0 +1,27 @@
+[5F3F49C6-0DC714B0-C:50]
+Name=Top Gear Hyper Bike (E)
+
+$Access All\Bikes
+8107F6EE FFFF
+
+$Access All\Tracks
+8107F6F0 00FF
+8107F6F2 FFFF
+
+$Infinite\Nitro
+810BA540 4296
+
+$Infinite\Nitro Always On
+810BA52C 0010
+
+$Laps 2 Race
+800F36B8 00??
+01 1 Lap
+02 2 laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 6 Laps
+07 7 Laps
+08 8 Laps
+09 9 Laps

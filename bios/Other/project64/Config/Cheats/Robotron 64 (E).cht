@@ -1,0 +1,22 @@
+[9FF69D4F-195F0059-C:50]
+Name=Robotron 64 (E)
+
+$Easy Difficulty level
+800AD243 0000
+
+$Fast Run
+8009B14F 0003
+
+$Infinite Lives
+8109B0EE 03E7
+810AD24E 03E7
+
+$Level select
+Note=Set Up In Menu
+81076FB6 6F74
+
+$Rapid fire
+8009B15F 0003
+
+$Speed level 1 Slow
+800AD247 0000

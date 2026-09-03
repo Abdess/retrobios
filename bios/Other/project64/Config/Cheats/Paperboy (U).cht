@@ -1,0 +1,30 @@
+[3E198D9E-F2E1267E-C:45]
+Name=Paperboy (U)
+
+$99 Total Houses
+8106A56A 0063
+
+$Big Newspapers
+81268B5A 0001
+
+$Enable Level Select
+Note=Also accesses All Bonus Levels
+8006A5F7 0001
+
+$Infinite Health
+8006A5D2 0064
+
+$Infinite Newspapers
+81268B12 0001
+
+$Invincibility
+812688FE 0001
+
+$Rocket Boosters
+81268B3E 0001
+
+$Super Jump Springs
+81268B3A 0001
+
+$Turbo Mode
+81268B36 0001

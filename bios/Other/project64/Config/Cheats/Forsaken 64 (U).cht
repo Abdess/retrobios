@@ -1,0 +1,18 @@
+[9E330C01-8C0314BA-C:45]
+Name=Forsaken 64 (U)
+
+$Enable Battle Mode And Levels
+8008ED6E 0012
+
+$Gore Mode
+8008ED67 0012
+
+$GS Button For 255 Spare0 Missiles
+8814E648 00FF
+
+$Infinite Lives
+8004013C 0005
+
+$Infinite Shields
+D014E5E2 0011
+8114E5E0 1000

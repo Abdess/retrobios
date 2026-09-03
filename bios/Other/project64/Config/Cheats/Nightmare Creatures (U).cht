@@ -1,0 +1,238 @@
+[2857674D-CC4337DA-C:45]
+Name=Nightmare Creatures (U)
+
+$Brightness Modifier
+810B96EC ????
+7FFF Very Well Lit Up
+8000 Very Dark
+
+$Ignatius\Infinite Health\[Level 01]Chelsea
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+802EC6E6 0010
+
+$Ignatius\Infinite Health\[Level 02]Spitafields
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+803215FE 0010
+
+$Ignatius\Infinite Health\[Level 03]Thames Tunnel
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8031AB6E 0010
+
+$Ignatius\Infinite Health\[Level 04]Sewer Snake
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80255E46 0010
+
+$Ignatius\Infinite Health\[Level 05]India Docks
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80321546 0010
+
+$Ignatius\Infinite Health\[Level 06]Highgate Cemetery
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8031B2E6 0010
+
+$Ignatius\Infinite Health\[Level 07]Hampstead Heath
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+803218B6 0010
+
+$Ignatius\Infinite Health\[Level 08]Queenhite Docks
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80320C1E 0010
+
+$Ignatius\Infinite Health\[Level 09]City
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80328256 0010
+
+$Ignatius\Infinite Health\[Level 10]Smithfield
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8030B05E 0010
+
+$Ignatius\Infinite Health\[Level 11]Snowman
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80251496 0010
+
+$Ignatius\Infinite Health\[Level 12]Regent's
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80315326 0010
+
+$Ignatius\Infinite Health\[Level 13]London Zoo
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8031E00E 0010
+
+$Ignatius\Infinite Health\[Level 14]St. Marilebone
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8031CD4E 0010
+
+$Ignatius\Infinite Health\[Level 15]Bloomsbury
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8032C4F6 0010
+
+$Ignatius\Infinite Health\[Level 16]Pimlico
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8031F9CE 0010
+
+$Ignatius\Infinite Health\[Level 17]Jose Manuel
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8025F196 0010
+
+$Ignatius\Infinite Health\[Level 18]Westminister
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+802F4ECE 0010
+
+$Ignatius\Infinite Health\[Level 19]Westminister II
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+802F5DE6 0010
+
+$Ignatius\Infinite Health\[Level 20]The Roofs
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+802848FE 0010
+
+$Infinite\Ammo
+50000D02 0000
+800A4BAF 0009
+
+$Infinite\Berzerkers
+810A4BBE 0009
+
+$Infinite\Chaos
+810A4BC4 0009
+
+$Infinite\Dynamite
+810A4BB6 0009
+
+$Infinite\Fire Bombs
+810A4BBA 0009
+
+$Infinite\Flash
+810A4BB8 0009
+
+$Infinite\Freeze Spell
+810A4BB4 0009
+
+$Infinite\Gun
+810A4BC6 0009
+
+$Infinite\Healing
+810A4BC2 0009
+
+$Infinite\Lives
+800A4B53 0009
+
+$Infinite\Multi-Gun
+810A4BBC 0009
+
+$Infinite\Proximity Mines
+810A4BB0 0009
+
+$Infinite\Repulsive Smoke
+810A4BB2 0009
+
+$Infinite\Spider Cards
+810A4BAE 0009
+
+$Infinite\Super Healing
+810A4BC0 0009
+
+$Level Select
+D00978B1 0000
+810978B0 00??
+00 Chelsea
+01 Spitafields
+02 Thames Tunnel
+03 Sewer Snake
+04 India Docks
+05 Highgate Cemetery
+06 Hampstead Heath
+07 Queenhite Docks
+08 City
+09 Smithfield
+0A Snowman
+0B Regent's
+0C London Zoo
+0D St. Marilebone
+0E Bloomsbury
+0F Pimlico
+10 Jose Manuel
+11 Westminister
+12 Westminister II
+13 The Roofs
+14 Map
+
+$Nadia\Infinite Health\[Level 01]Chelsea
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+802EB6D6 000C
+
+$Nadia\Infinite Health\[Level 02]Spitafield
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80320116 000C
+
+$Nadia\Infinite Health\[Level 03]Thames Tunnel
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80319AC6 000C
+
+$Nadia\Infinite Health\[Level 04]Sewer Snake
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80254926 000C
+
+$Nadia\Infinite Health\[Level 05]India Docks
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+803202CE 000C
+
+$Nadia\Infinite Health\[Level 06]Highgate Cemetary
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8031A58E 000C
+
+$Nadia\Infinite Health\[Level 07]Hampstead Heath
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+803203D6 000C
+
+$Nadia\Infinite Health\[Level 08]Queenhite Dock's
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8031FB7E 000C
+
+$Nadia\Infinite Health\[Level 09]City
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80326A36 000C
+
+$Nadia\Infinite Health\[Level 10]Smithfield
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8030A0CE 000C
+
+$Nadia\Infinite Health\[Level 11]Snowman
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80250036 000C
+
+$Nadia\Infinite Health\[Level 12]Regent's Canal
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80313E36 000C
+
+$Nadia\Infinite Health\[Level 13]London Zoo
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8031CB66 000C
+
+$Nadia\Infinite Health\[Level 14]St. Marilebone
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8031B686 000C
+
+$Nadia\Infinite Health\[Level 15]Bloomsbury
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8032B256 000C
+
+$Nadia\Infinite Health\[Level 16]Pimlico
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8031E4B6 000C
+
+$Nadia\Infinite Health\[Level 17]Jose Manuel
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+8025DA0E 000C
+
+$Nadia\Infinite Health\[Level 18]Westminister
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+802F360E 000C
+
+$Nadia\Infinite Health\[Level 19]Westminister II
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+802F4C76 000C
+
+$Nadia\Infinite Health\[Level 20]The Roofs
+Note=Only use one Infinite Health cheat at a time or the game will freeze or suffer from sever GFX Errors.
+80282DB6 000C

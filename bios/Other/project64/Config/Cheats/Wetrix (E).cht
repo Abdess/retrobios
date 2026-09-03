@@ -1,0 +1,13 @@
+[CEA8B54F-7F21D503-C:50]
+Name=Wetrix (E) (M6)
+
+$Always Empty Drain
+801BF991 0000
+811BF992 0000
+811BF994 0000
+
+$Bezerk Mode
+801BF9AF 00FF
+
+$Stop Level Timer
+801BF9B2 00FF

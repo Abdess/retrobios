@@ -1,0 +1,16 @@
+[53D440E7-7519B011-C:45]
+Name=Diddy Kong Racing (U) (M2) (V1.0)
+
+$Alt Sixty Frames
+Note=A friend informed me this didn't freeze.
+80079A2A 0003
+
+$Sixty Frames
+Note=May freeze at some points,physics can get wonky with slopes on both codes
+80079A2B 0003
+
+$Widescreen
+81066006 3FE3
+81066156 3FE3
+810661BE 3FE3
+81126174 3FE3

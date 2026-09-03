@@ -1,0 +1,90 @@
+[ABA51D09-C668BAD9-C:58]
+Name=40 Winks (E) (M3) (Prototype)
+
+$Character Select
+801D535F 00??
+00 Ruff (Boy) (Default)
+01 Tumble (Girl)
+
+$Enable Cheat Menu
+801D5355 0001
+
+$Have All Levels Completed
+50000202 0000
+81207D6C FFFF
+
+$Have\All 40 Winks Collected
+Note=Combined with Have All Levels Completed cheat will open the door for Have All 40 Winks
+50000602 0000
+81207D60 FFFF
+
+$Have\All Dreamkeys Collected
+50000802 0000
+81207D70 FFFF
+
+$Infinite\40 Cogs
+Note=Disable when on Boss Modes as it can cause hanging!
+811D2A82 0028
+
+$Infinite\50 Health ZZZ's
+811D2A84 0032
+
+$Infinite\99 Lives
+Note=Disable when on Boss Modes as it can cause hanging!
+801D2A87 0063
+
+$Infinite\99 Moons
+801D2A81 0063
+
+$Infinite\99 Tokens
+Note=Disable when on Boss Modes as it can cause hanging!
+801D2A8D 0063
+
+$Infinite\Max Air
+811D2AA0 07C6
+811DA2F6 07C1
+
+$Setting Options\Controller Select
+801D5362 00??
+00 Preset 1 (Normal)
+01 Preset 2
+02 Preset 3
+
+$Setting Options\Difficulty Select
+801D534F 00??
+00 Easy
+01 Medium
+02 Hard
+
+$Setting Options\GFX Quality Select
+801D5354 00??
+00 Normal
+01 Medium
+02 HighCol
+
+$Setting Options\Langauge Select
+801D21AC 00??
+00 English
+01 Spanish
+02 Italian
+
+$Setting Options\Music Volume Select
+801D5351 00??
+00 Off
+05 Normal
+07 Max
+
+$Setting Options\Rumble Pak Strength Select
+801D5353 00??
+00 Off (Normal)
+05 Middle
+07 Max
+
+$Setting Options\SFX Volume Select
+801D5350 00??
+00 Off
+05 Normal
+07 Max
+
+$test health
+801D2A85 0032

@@ -1,0 +1,73 @@
+[09D53E16-3AB268B9-C:45]
+Name=Mike Piazza's Strike Zone (U)
+
+$Almost Always Hit A Home Run
+80195714 0001
+
+$Away Team\Score 0
+Note=Do not use with Away Team Scors 30
+801606B5 0000
+
+$Away Team\Score 30
+Note=Do not use with Away Team Scors 30
+801606B5 001E
+
+$Fast Game
+80195729 0001
+
+$Home Team\Score 0
+Note=Do not use with Home Team Scors 30
+801606B7 0000
+
+$Home Team\Score 30
+Note=Do not use with Home Team Scors 0
+801606B7 001E
+
+$Increased Gravity
+80195727 0001
+
+$Infinite\Balls
+801606D0 0000
+
+$Infinite\Strikes
+801606D1 0000
+
+$Low Gravity
+80195726 0001
+
+$Slow Game
+8019572A 0001
+
+$Stadium Modifier
+800DE7E5 00??
+00 Edison Into Field
+01 The Ball Park At Arlington
+02 The Astrodome
+03 Bank One Ballpark
+04 Milwaukee County Stadium
+05 Baltimore
+06 3com Park at Candle Stick Park
+07 Comiskey Park
+08 Coors Field
+09 Olympics Stadium
+0A Fenway Park
+0B Jacobs Field
+0C Proplayer Stadium
+0D Kauffman Stadium
+0E The Kingdom
+0F Dodger Stadium
+10 Oakland Alameda Country Stadium
+11 Qualcomm Stadium at Jack Murphy Field
+12 Cinergy Field
+13 Shea Stadium
+14 Skydome
+15 Bush Stadium
+16 3 Rivers Stadium
+17 Tiger Stadium
+18 Tropicane Field
+19 Turner Field
+1A Hubert Humphrey Metrodome
+1B Veterans Stadium
+1C Wrigley Field
+1D Yankee Stadium
+1E Devil's Thumb Stadium

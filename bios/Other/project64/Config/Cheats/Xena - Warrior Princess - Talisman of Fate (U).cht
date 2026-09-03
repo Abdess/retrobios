@@ -1,0 +1,31 @@
+[0553AE9D-EAD8E0C1-C:45]
+Name=Xena - Warrior Princess - Talisman of Fate (U)
+
+$1 Hit to Kill Opponent\Player 1
+D10B6354 42C8
+810B6354 4080
+
+$1 Hit to Kill Opponent\Player 2
+D10B6170 42C8
+810B6170 4080
+
+$Infinite Health\Player 1
+810B6170 42C8
+
+$Infinite Health\Player 2
+810B6354 42C8
+
+$Opponent Has No Energy\Player 1
+810B6354 C080
+
+$Opponent Has No Energy\Player 2
+810B6170 C080
+
+$Player 1 Never Wins
+800C0C03 0000
+
+$Player 2 Never Wins
+800C0C05 0000
+
+$Unlock Titan Difficulty Level
+810BF752 0001

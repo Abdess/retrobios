@@ -1,0 +1,70 @@
+[9F5BF79C-D2FE08A0-C:45]
+Name=Quake 64 (U)
+
+$Debug Mode
+8006C4C2 0001
+
+$Have\All Keys
+801639E9 000F
+
+$Have\All Weapons
+801639EB 007F
+
+$Have\Quad Damage
+8116397C 42C8
+
+$Have\Ring of Shadows
+811639E8 ????
+42C8 On
+0000 Off
+
+$Infinite\Ammo
+50000402 0000
+80163A2D 0064
+50000402 0000
+81163A2C 03E7
+
+$Infinite\Armor
+81163944 42C8
+
+$Infinite\Bio Suit
+81163980 42C8
+
+$Infinite\Health
+81163930 42C8
+
+$Multi\Have All Weapons\Player 1
+8016634B 007F
+
+$Multi\Have All Weapons\Player 2
+8016661B 007F
+
+$Multi\Infinite Ammo\Player 1
+50000402 0000
+8116638C 03E7
+
+$Multi\Infinite Ammo\Player 2
+50000402 0000
+8116665C 03E7
+
+$Multi\Infinite Armor\Player 1
+811662A4 42C8
+
+$Multi\Infinite Armor\Player 2
+81166574 42C8
+
+$Multi\Infinite Bio Suit\Player 1
+811662E0 42C8
+
+$Multi\Infinite Bio Suit\Player 2
+811665B0 42C8
+
+$Multi\Infinite Health\Player 1
+81166290 42C8
+
+$Multi\Infinite Health\Player 2
+81166560 42C8
+
+$Rapid Fire
+D00CA9E0 0020
+8016396D 0001

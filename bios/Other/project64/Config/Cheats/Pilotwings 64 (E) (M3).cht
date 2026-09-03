@@ -1,0 +1,74 @@
+[1AA05AD5-46F52D80-C:50]
+Name=Pilotwings 64 (E) (M3)
+
+$[Perfect Score] (All Class & Level's)
+Note=To make these codes save to Game-Pak; just pick a level and lose, choose Next then Quit. Enable Disable Perfect Score then save and disable before using the Extra Games Perfect Score Cheat.
+50000330 0000
+803683ED 0064
+50000330 0000
+80368A81 0064
+50000330 0000
+80368BD1 0064
+50000330 0000
+80369115 0064
+50000330 0000
+80369265 0064
+50000330 0000
+803693B5 0064
+50000330 0000
+803697A9 0064
+50000330 0000
+803698F9 0064
+50000330 0000
+80369A49 0064
+
+$[Perfect Score] Extra Games (All Class & Level's)
+Note=To make these codes save to Game-Pak; just pick a level and lose, choose Next then Quit. Enable Disable Perfect Score then save and disable before using the Extra Games Perfect Score Cheat.
+8036847D 0019
+803685CD 0019
+8036871D 0019
+8036886D 0019
+803684AD 0064
+803684DD 0064
+80368B11 0019
+80368C61 0019
+80368DB1 0019
+80368F01 0019
+80368B41 0064
+80368B71 0064
+803691A5 0019
+803692F5 0019
+80369445 0019
+80369595 0019
+803691D5 0064
+80369205 0064
+
+$Choose Vehicle
+Note=Make your Choice & then Press GS To Activate,But do not use with any other Press GS Cheat Codes.
+88366807 00??
+00 Hang Glider
+01 Rocket Belt
+02 Gyrocopter
+03 Cannonball
+04 Skydiving
+05 Jumble Hopper
+06 Birdman
+
+$Infinite Fuel\Gyrocopter
+80366989 0081
+
+$Infinite Fuel\Rocket Belt
+803669A9 0081
+
+$Infinite Photos
+813545EE 0000
+
+$Music Volume Select
+80250FA4 00??
+00 No Music
+3F Default Volume
+80 Max Volume
+
+$Time Always 00'00'10
+Note=This Cheat code is for All Events
+803668B8 0001

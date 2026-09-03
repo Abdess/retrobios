@@ -1,0 +1,3512 @@
+[CCEDB696-D3883DB4-C:4A]
+Name=Shadowgate 64 - Trials Of The Four Towers (J)
+
+$All Items
+50002402 0202
+810EC7E0 0001
+50004601 0000
+800EC861 0003
+
+$Item Modifier Codes\Position 01
+800EC7E0 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 02
+800EC7E1 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 03
+800EC7E2 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 04
+800EC7E3 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 05
+800EC7E4 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 06
+800EC7E5 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 07
+800EC7E6 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 08
+800EC7E7 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 09
+800EC7E8 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 10
+800EC7E9 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 11
+800EC7EA 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 12
+800EC7EB 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 13
+800EC7EC 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 14
+800EC7ED 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 15
+800EC7EE 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 16
+800EC7EF 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 17
+800EC7F0 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 18
+800EC7F1 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 19
+800EC7F2 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 20
+800EC7F3 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 21
+800EC7F4 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 22
+800EC7F5 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 23
+800EC7F6 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 24
+800EC7F7 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 25
+800EC7F8 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 26
+800EC7F9 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 27
+800EC7FA 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 28
+800EC7FB 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 29
+800EC7FC 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 30
+800EC7FD 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 31
+800EC7FE 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 32
+800EC7FF 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 33
+800EC800 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 34
+800EC801 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 35
+800EC802 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 36
+800EC803 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 37
+800EC804 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 38
+800EC805 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 39
+800EC806 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 40
+800EC807 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 41
+800EC808 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 42
+800EC809 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 43
+800EC80A 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 44
+800EC80B 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 45
+800EC80C 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 46
+800EC80D 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 47
+800EC80E 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance
+
+$Item Modifier Codes\Position 48
+800EC80F 00??
+01 Crest Key
+02 Bottle of Oil
+03 Fragments of A Crest
+04 Dragon Tears
+05 Pixie Flute
+06 Treasure
+07 Rusty Key
+08 Ornate Key
+09 The Ring of The Kingdom
+0A Orb
+0B Golden Key
+0C Liquid Sunset
+0D Night Elixir
+0E Forest Nectar
+0F Primitive Man Statue
+10 Apeman Sculpture
+11 Fairy Sculpture
+12 Elf Statue
+13 Ancient Coin
+14 Pick Axe
+15 The Ring of The Dead
+16 The Blue Ring
+17 The Green Ring
+18 Lever
+19 Slipper
+1A Dirty Slipper
+1B Pair of Slippers
+1C Jezibel's Pendant
+1D The Staff of Ages
+1E Rope
+1F Cemetery Key
+20 Flower
+21 Flint
+22 Fang
+23 Dragon Eye
+24 Dragon Flute
+25 Burning Candle
+26 Chipped Violin
+27 String-Less Violin
+28 Broken Violin
+29 Dungeon Key
+2A Map
+2B Bone
+2C Starcrest
+2D Iron Bar
+2E Crow Bar
+2F Hair of Giant
+30 Mug
+31 Water
+32 Water W/Dragon Tears
+33 Stone of Thirst
+34 Coin
+35 Coin
+36 Coin
+37 Coin
+38 Coin
+39 Nail
+3A Brooch
+3B Jewelry Box
+3C Fruit
+3D Gauntlet
+3E Cup
+3F Artwork
+40 Poisonous Herb
+41 Bracelet
+42 Precious Stone
+43 Broken Sword
+44 Quill
+45 Plate
+46 Broken Lance

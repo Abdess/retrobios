@@ -1,0 +1,372 @@
+[EC417312-EB31DE5F-C:4A]
+Name=Zelda no Densetsu - Mujura no Kamen (J) (V1.0)
+
+$All Equipment Upgrades
+801EF4CD 0023
+811EF51A 201B
+
+$Beta World 1
+Note=Put on the code on load up,After the Nintendo logo you will be in that place of Choice.you can also choose another place & then press F1 (reset) to go to that place this is for beta interest only it will not assist you in playing the game.
+D01FB9E1 0000
+801EF462 00??
+00 Mama's House non Beta
+01 Fearful Spider House
+02 Beneaf the Graveyard
+03 Southern Swamp Mr Tingle Entry
+06 Outside Tourist Information Southern Swamp
+08 Outside Magic Hag's Potion Shop
+0A Southern Swamp Woods Of Mystery Entry
+24 Counter Of The Tresure Chest Shop
+2E Woodfall Temple non Beta
+32 Spider Hand
+35 Statue outside Gorman Track
+36 Statue outside Lair Of The Temples Boss
+38 Path to Romani Ranch non Beta
+4A outside The Royal Palace of the Deku Kingdom
+4C Ledge in The Royal Palace of the Deku Kingdom
+4E inside The Royal Palace of the Deku Kingdom 1
+71 Green Blobs
+74 Cave Portal to Last Boss Field
+7F Waterfall Sothern Swamp
+8A Giant Turtle In the Temple non beta
+8B Room of Miau & Tijo Zora Great Hall
+94 Recieving Gorans Mask non Beta
+95 ?
+96 Hungry Goran in the Snow
+A2 Statue in Stone Tower
+A6 Stone Tower non Beta
+B9 Recieving Deku Mask non Beta
+D9 Giant Lizards in a Cave
+DA Cave with Steaming Water
+FF Vamps House In Ikana Canyon
+
+$Have All\Masks
+801EF4E8 005A
+801EF4E9 0055
+801EF4EA 0063
+801EF4EB 0061
+801EF4EC 005C
+801EF4ED 004E
+801EF4EE 0056
+801EF4EF 0062
+801EF4F0 0054
+801EF4F1 005E
+801EF4F2 0064
+801EF4F3 004F
+801EF4F4 0058
+801EF4F5 0059
+801EF4F6 0053
+801EF4F7 005B
+801EF4F8 0052
+801EF4F9 0050
+801EF4FA 005F
+801EF4FB 005D
+801EF4FC 0057
+801EF4FD 0060
+801EF4FE 0065
+801EF4FF 0051
+
+$Have All\Quest Status Items
+801EF51D 0005
+811EF51E F7CF
+
+$Have\Arrows\Fire Arrow
+801EF4D2 0002
+
+$Have\Arrows\Ice Arrow
+801EF4D3 0003
+
+$Have\Arrows\Light Arrow
+801EF4D4 0004
+
+$Have\Bombchu
+801EF4D7 0007
+
+$Have\Bombs
+801EF4D6 0006
+
+$Have\Bottle Modifier\1
+801EF4E2 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Have\Bottle Modifier\2
+801EF4E3 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Have\Bottle Modifier\3
+801EF4E4 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Have\Bottle Modifier\4
+801EF4E5 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Have\Bottle Modifier\5
+801EF4E6 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Have\Bottle Modifier\6
+801EF4E7 00??
+12 Empty Bottle
+13 Red Potion
+14 Green Potion
+15 Blue Potion
+16 Fairy
+17 Deku Princess
+18 Milk
+19 Milk (1/2)
+1A Fish
+1B Bug
+1C Blue Fire
+1D Poe
+1E Big Poe
+1F Spring Water
+20 Hot Spring Water
+21 Zora Egg
+22 Gold Dust
+23 Magical Mushroom
+24 Sea Horse
+25 Chateau Romani
+26 Japanese Bottle?
+27 Empty Japanese Bottle?
+
+$Have\Deku Nuts
+801EF4D9 0009
+
+$Have\Deku Sticks
+801EF4D8 0008
+
+$Have\Great Fairy's Sword
+801EF4E0 0010
+
+$Have\Hero's Bow
+801EF4D1 0001
+
+$Have\Hookshot
+801EF4DF 000F
+
+$Have\Lens of Truth
+801EF4DE 000E
+
+$Have\Magic Beans
+801EF4DA 000A
+
+$Have\Ocarina of Time
+801EF4D0 0000
+
+$Have\Pictograph
+801EF4DD 000D
+
+$Have\Powder Kegs
+801EF4DC 000C
+
+$Infinite\Arrows
+801EF501 0063
+
+$Infinite\Bombchus
+801EF507 0063
+
+$Infinite\Bombs
+801EF506 0063
+
+$Infinite\Deku Nuts
+801EF509 0063
+
+$Infinite\Deku Sticks
+801EF508 0063
+
+$Infinite\Health
+811EF496 0140
+
+$Infinite\Hearts Options
+811EF494 ????
+0140 Max Hearts
+0063 6 Hearts
+0043 4 Hearts
+
+$Infinite\Magic Beans
+801EF50A 0063
+
+$Infinite\Max & Double Magic Meter
+801EF499 0060
+811EF4A0 0101
+
+$Infinite\Powder Kegs
+801EF50C 0063
+
+$Infinite\Rupees
+811EF49A 03E7
+
+$Play As
+801EF480 00??
+00 Fierce Deity Link
+01 Goron Link
+02 Zora Link
+03 Deku Link
+04 Normal Link
+
+$Press L To Levitate
+Note=Press L To Levitate & Let go to land
+D03E6D0B 0020
+81400008 40CB
+
+$Replace Sword With
+801EF4AC 00??
+02 Fire Arrow w/ Bow
+03 Ice Arrow w/ Bow
+04 Light Arrow w/ Bow
+00 Hero's Bow
+10 Deity Link's Sword
+
+$Warp Modifier
+Note=Put this code on and press the start button and it will now take where you wanted to go, turn it back off after you have got there.
+D05EC55A 0000
+803FF545 0001
+813FF54A ????
+0010 Mayors Residence
+0008 Magic Hags Potion Shop
+000A Romani Ranch Barn
+000B Mama's House
+000E Honey & Darlings Shop
+0015 Final Boss Arena
+001F Beneath the Graveyard (left entrance)
+002F Beneath the Graveyard (right entrance)
+0030 Southern Swamp (Reg Entrance)
+004F Southern Swamp (from tour house)
+006E Southern Swamp (from Woodfall)
+006F Southern Swamp (from Deku Palace)
+0078 Path to Ikana Canyon
+009E Southern Swamp (from Deku Place 2)
+009F Southern Swamp (From Potion Shop)
+00AF Boat Cruise (picture taking)
+00CD Southern Swamp (From Woods of Mystery)
+00CE Southern Swamp (From Spider House)
+00CF Southern Swamp (From Ikana Canyon)
+00FE Southern Swamp (From Owl Warp)
+0E00 Curiosity Shop
+0E38 Ikana Canyon Entrance
+1500 Lens of Truth Cave (get it)
+2600 Stone Tower Temple (Upside down)
+2609 Stone Tower Temple (Boss Room Entrance)
+2604 Treasure Chest Shop
+2605 Treausre Chest Shop (counter)
+260E Clock Tower (w/ skull kid - silent)
+2610 Stone Tower Temple (endless fall)
+6214 Romani Ranch
+9214 Zora Shop
+B214 Snowhead (Path to temple - warp in)
+D214 East Clock Down
+
+$Time Control
+Note=Control the speed of time with the D-pad. Up stops the time, left enables double time, and down restores the notmal speed.
+D01FBA40 0008
+811EF476 FFFD
+D01FBA40 0004
+811EF476 0000
+D01FBA40 0002
+811EF476 FFFE

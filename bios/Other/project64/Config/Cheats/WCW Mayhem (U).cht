@@ -1,0 +1,56 @@
+[33BE8CD6-EC186912-C:45]
+Name=WCW Mayhem (U)
+
+$Character Creation\Max\Aerial
+80319675 0009
+
+$Character Creation\Max\Brawling
+8031F5B5 0009
+
+$Character Creation\Max\Dirtiness
+80321575 0009
+
+$Character Creation\Max\Impact
+803121B5 0009
+
+$Character Creation\Max\Mat Ability
+8031B635 0009
+
+$Character Creation\Max\Quickness
+803176B5 0009
+
+$Character Creation\Max\Speed
+803156F5 0009
+
+$Character Creation\Max\Strength
+802F16F5 0009
+
+$Character Creation\Max\Submission
+8031D5F5 0009
+
+$Enable Cheat
+800B115B 00??
+02 Super Created Wrestlers
+04 Stamina Meter
+08 Momentum Meter
+20 Play As Same Wrestler
+80 All Wrestlers
+
+$Freeze Timer
+810B3242 D300
+
+$Infinite Stamina\Player 1
+810E3998 0478
+
+$Infinite Stamina\Player 2
+810E3B34 03ED
+
+$Meter Select\Player 1
+800E399D 00??
+60 Full Meter Bar
+00 Empty Meter Bar
+
+$Meter Select\Player 2
+800AD80D 00??
+60 Full Meter Bar
+00 Empty Meter Bar

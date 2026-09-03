@@ -1,0 +1,21 @@
+[8A97A197-272DF6C1-C:50]
+Name=Nuclear Strike 64 (E) (M2)
+
+$Double MPG
+800ADB69 0001
+
+$infinite Ammo For All Guns
+800ADB65 0001
+
+$Infinite Attempts
+800ADB66 0001
+
+$Invincibility
+Note=Makes you also fly without any fuel
+800ADB64 0001
+
+$Level & Scenario Select
+800ACE5C 000B
+
+$No Quad Damage
+800ADB6B 0001

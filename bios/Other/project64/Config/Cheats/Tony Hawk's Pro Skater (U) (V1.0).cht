@@ -1,0 +1,288 @@
+[204EC022-B119D185-C:45]
+Name=Tony Hawk's Pro Skater (U) (V1.0)
+
+$Andrew Reynolds\Have All\Gold Medal\Burnside Portland
+800DDDBE 00FF
+
+$Andrew Reynolds\Have All\Gold Medal\Roswell
+800DDDC0 00FF
+
+$Andrew Reynolds\Have All\Gold Medal\Skate Park Chicago
+800DDDBB 00FF
+
+$Andrew Reynolds\Have All\Tapes
+50000901 0000
+800DDDB8 00FF
+
+$Bob Burnquist\Have All\Gold Medal\Burnside Portland
+800DDD5A 00FF
+
+$Bob Burnquist\Have All\Gold Medal\Roswell
+800DDD5C 00FF
+
+$Bob Burnquist\Have All\Gold Medal\Skate Park Chicago
+800DDD57 00FF
+
+$Bob Burnquist\Have All\Tapes
+50000901 0000
+800DDD54 00FF
+
+$Bucky Lasek\Have All\Gold Medal\Burnside Portland
+800DDD82 00FF
+
+$Bucky Lasek\Have All\Gold Medal\Roswell
+800DDD84 00FF
+
+$Bucky Lasek\Have All\Gold Medal\Skate Park Chicago
+800DDD7F 00FF
+
+$Bucky Lasek\Have All\Tapes
+50000901 0000
+800DDD7C 00FF
+
+$Chad Muska\Have All\Gold Medal\Burnside Portland
+800DDD96 00FF
+
+$Chad Muska\Have All\Gold Medal\Roswell
+800DDD98 00FF
+
+$Chad Muska\Have All\Gold Medal\Skate Park Chicago
+800DDD93 00FF
+
+$Chad Muska\Have All\Tapes
+50000901 0000
+800DDD90 00FF
+
+$Elissa Steamer\Have All\Gold Medal\Burnside Portland
+800DDDFA 00FF
+
+$Elissa Steamer\Have All\Gold Medal\Roswell
+800DDDFC 00FF
+
+$Elissa Steamer\Have All\Gold Medal\Skate Park Chicago
+800DDDF7 00FF
+
+$Elissa Steamer\Have All\Tapes
+50000901 0000
+800DDDF4 00FF
+
+$Geoff Rowley\Have All\Gold Medal\Burnside Portland
+800DDD6E 00FF
+
+$Geoff Rowley\Have All\Gold Medal\Roswell
+800DDD70 00FF
+
+$Geoff Rowley\Have All\Gold Medal\Skate Park Chicago
+800DDD6B 00FF
+
+$Geoff Rowley\Have All\Tapes
+50000901 0000
+800DDD68 00FF
+
+$Have All Tracks
+813D6E42 FFFF
+813D4FFA FFFF
+813D5D62 FFFF
+813D84E2 FFFF
+813D4FCA FFFF
+813D5F2A FFFF
+813D8C52 FFFF
+813D5602 FFFF
+813D6D3A FFFF
+
+$Jamie Thomas\Have All\Gold Medal\Burnside Portland
+800DDDE6 00FF
+
+$Jamie Thomas\Have All\Gold Medal\Roswell
+800DDDE8 00FF
+
+$Jamie Thomas\Have All\Gold Medal\Skate Park Chicago
+800DDDE3 00FF
+
+$Jamie Thomas\Have All\Tapes
+50000901 0000
+800DDDE0 00FF
+
+$Kareem Campbell\Have All\Gold Medal\Burnside Portland
+800DDDAA 00FF
+
+$Kareem Campbell\Have All\Gold Medal\Roswell
+800DDDAC 00FF
+
+$Kareem Campbell\Have All\Gold Medal\Skate Park Chicago
+800DDDA7 00FF
+
+$Kareem Campbell\Have All\Tapes
+50000901 0000
+800DDDA4 00FF
+
+$Officer Dick\Have All\Gold Medal\Burnside
+800DDE0E 00FF
+
+$Officer Dick\Have All\Gold Medal\Roswell
+800DDE10 00FF
+
+$Officer Dick\Have All\Gold Medal\Skate Park
+800DDE0B 00FF
+
+$Officer Dick\Have All\Tapes
+50000901 0000
+800DDE08 00FF
+
+$Player 1\Have\ Perfect Balance
+800DDB83 0001
+
+$Player 1\Max Points\Burnside
+813D8C52 FFFF
+
+$Player 1\Max Points\Downhill Jam
+813D5F2A FFFF
+
+$Player 1\Max Points\Downtown Chicago
+813D4FCA FFFF
+
+$Player 1\Max Points\Roswell New Mexico
+813D6D3A FFFF
+
+$Player 1\Max Points\Street
+813D5602 FFFF
+
+$Player 1\Max Points\The Mall
+813D5D62 FFFF
+
+$Player 1\Max Points\The School
+813D4FFA FFFF
+
+$Player 1\Max Points\The Skate Park
+813D84E2 FFFF
+
+$Player 1\Max Points\The Warehouse
+813D6E42 FFFF
+
+$Player 1\Max Trick Score\Burnside
+813D8C52 FFFF
+
+$Player 1\Max Trick Score\Downhill Jam
+813D5F2A FFFF
+
+$Player 1\Max Trick Score\Downtown
+813D4FCA FFFF
+
+$Player 1\Max Trick Score\Roswell
+813D6D3A FFFF
+
+$Player 1\Max Trick Score\The Mall
+813D5D62 FFFF
+
+$Player 1\Max Trick Score\The School
+813D4FFA FFFF
+
+$Player 1\Max Trick Score\The Skate Park Course
+813D84E2 FFFF
+
+$Player 1\Max Trick Score\The Streets
+813D5602 FFFF
+
+$Player 1\Play As
+800D03D4 00??
+00 Tony Hawk
+01 Bob Burnquist
+02 Geoff Rowley
+03 Bucky Lasek
+04 Chad Muska
+05 Kareem Campbell
+06 Andrew Reynolds
+07 Rune Glifberg
+08 Jamie Thomas
+09 Elissa Steamer
+0A Officer Dick
+
+$Player 1\Super Max\Air
+800D561E FFFF
+
+$Player 1\Super Max\Balance
+800D561F FFFF
+
+$Player 1\Super Max\Ollie
+800D561C FFFF
+
+$Player 1\Super Max\Speed
+800D561D FFFF
+
+$Player 1\Super Max\Turning
+800D5620 FFFF
+
+$Player 1\Tony Hawk\Full Special All Levels
+D00C0223 0000
+813D6576 02EE
+D00C0223 0001
+813D4728 02EE
+D00C0223 0002
+813D5496 02EE
+D00C0223 0003
+813D7C16 02EE
+D00C0223 0004
+813D467E 02EE
+D00C0223 0005
+813D565E 02EE
+D00C0223 0006
+813D8386 02EE
+D00C0223 0007
+813D4D36 02EE
+D00C0223 0008
+813D646E 02EE
+
+$Player 2\Play As
+800D03D5 00??
+00 Tony Hawk
+01 Bob Burnquist
+02 Geoff Rowley
+03 Bucky Lasek
+04 Chad Muska
+05 Kareem Campbell
+06 Andrew Reynolds
+07 Rune Glifberg
+08 Jamie Thomas
+09 Elissa Steamer
+0A Officer Dick
+
+$Player 2\Super Max\Air
+800D5623 FFFF
+
+$Player 2\Super Max\Balance
+800D5624 FFFF
+
+$Player 2\Super Max\Ollie
+800D5621 FFFF
+
+$Player 2\Super Max\Speed
+800D5622 FFFF
+
+$Player 2\Super Max\Turning
+800D5625 FFFF
+
+$Rune Glifberg\Have All\Gold Medal\Burnside Portland
+800DDDD2 00FF
+
+$Rune Glifberg\Have All\Gold Medal\Roswell
+800DDDD4 00FF
+
+$Rune Glifberg\Have All\Gold Medal\Skate Park Chicago
+800DDDCF 00FF
+
+$Rune Glifberg\Have All\Tapes
+50000901 0000
+800DDDCC 00FF
+
+$Tony Hawk\Have All\Gold Medal\Burnside Portland
+800DDD46 00FF
+
+$Tony Hawk\Have All\Gold Medal\Roswell
+800DDD48 00FF
+
+$Tony Hawk\Have All\Gold Medal\Skate Park Chicago
+800DDD43 00FF
+
+$Tony Hawk\Have All\Tapes
+50000901 0000
+800DDD40 00FF

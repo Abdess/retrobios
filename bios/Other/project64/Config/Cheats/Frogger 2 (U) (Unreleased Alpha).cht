@@ -1,0 +1,11 @@
+[E8E5B179-44AA30E8-C:45]
+Name=Frogger 2 (U) (Unreleased Alpha)
+
+$Freeze Timer
+80163ABF 000A
+
+$Infinite 99 Lives
+80163AC7 0063
+
+$Infinite Lives (Retro Frogger)
+8025AC2F 0005

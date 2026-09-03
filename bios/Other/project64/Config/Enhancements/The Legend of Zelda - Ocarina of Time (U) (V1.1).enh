@@ -1,0 +1,14 @@
+[D43DA81F-021E1E19-C:45]
+Name=The Legend of Zelda - Ocarina of Time (U) (V1.1)
+
+$Subscreen Delay Fix
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+801DA78B 0002
+
+$Widescreen
+Note=Originally by Darkludx
+81024A18 1000
+81024A1A 0023
+810920D8 3C07
+810920DA 3FE3

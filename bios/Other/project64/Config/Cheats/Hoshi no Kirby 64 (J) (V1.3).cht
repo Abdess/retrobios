@@ -1,0 +1,34 @@
+[BCB1F89F-060752A2-C:4A]
+Name=Hoshi no Kirby 64 (J) (V1.3)
+
+$All Stages Complete
+Note=You still have to beat the boss to continue onto the next world.
+50002B01 0000
+800D51F0 0002
+
+$Can Fly Forever
+8112CD2E 00F0
+
+$Game 100% Complete\Save Slot 1
+800EAFE8 0064
+
+$Get All Crystals
+50000701 0000
+800D51D0 0001
+50001701 0000
+800D51D8 0007
+
+$Infinite Health
+810D5460 40C0
+
+$Infinite Lives
+800D545F 0064
+
+$Unlock All Difficulty Levels\100 Yard Hop
+800D51C9 0003
+
+$Unlock All Difficulty Levels\Bumper Crop Bump
+800D51CA 0003
+
+$Unlock All Difficulty Levels\Checkerboard Chase
+800D51CB 0003

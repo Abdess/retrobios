@@ -1,0 +1,466 @@
+[DEE596AB-AF3B7AE7-C:45]
+Name=WCW-nWo Revenge (U)
+
+$Always Special\Player 1
+800F9D35 0008
+
+$Always Special\Player 2
+800FA0E5 0008
+
+$Always Special\Player 3
+800FA495 0008
+
+$Always Special\Player 4
+800FA845 0008
+
+$Character Select\Player 1
+Note=With this code, you will need to press the GS Button to be in the ring and have full access to getting in and out of the ring.
+890F9D36 0240
+890F9D60 42B4
+8107E8B2 ????
+0001 Sting
+0002 Giant
+0003 Lex Luger
+0004 Diamon Dallas Page
+0005 Rick Steiner
+0007 Roddy Piper
+0008 Bret Hart
+0009 Chris Benoit
+000A Goldberg
+000B Booker T
+000C Disco Inferno
+0101 Fit Finley
+0105 Meng
+0106 Barbarian
+0107 Larry Zbysko
+0108 Stevie Ray
+010B British Bulldog
+010D Yugi Nagata
+010E Jim Neidhart
+010F Alex Wright
+0201 Hollywood Hogan
+0202 Macho Man Randy Savage
+0203 Kevin Nash
+0204 Scott Hall
+0205 Buff Bagwell
+0206 Scott Stenier
+0207 Curt Hennig
+0208 Konnan
+0209 Scott Norton
+020C Brian Adams
+020D Eric Bishoff
+0301 Ultimo Dragon
+0302 Eddy Guerrero
+0303 Chris Jericho
+0304 Rey Mysterio Jr.
+0305 Juventud Guerrera
+0306 Dean Malenko
+0307 Chavo Guerrero Jr.
+0308 La Parka
+0309 Psychosis
+0401 Glacier
+0403 Wrath
+0404 Kanyon
+0501 Raven
+0502 Saturn
+0503 Kidman
+0504 Riggs
+0505 Van Hammer
+0506 Sick Boy
+0507 Lodi
+0508 Reese
+0601 AKI Man
+0602 Shogun
+0603 Executioner
+0604 Dr. Frank
+0605 Jekel
+0606 Maya Ineaby
+0701 Hawk Hana
+0702 Kimchee
+0703 Dakeken
+0704 Brickowski
+0705 Mingchee
+0706 Han Zomon
+0801 Eric Bischoff (Manager)
+0802 Onoo (Manager)
+0803 Jimmy Hart (Manager)
+0804 Rick Rude (Manager)
+0805 Dusty Rhodes (Manager)
+0806 Ted Debisas (Manager)
+0807 James Bandenderg (Manager)
+0808 Vincent (Manager)
+0901 Elizabeth (Manager)
+0902 Kimberly (Manager)
+0903 Jackreen (Manager)
+0904 Sister Sherri (Manager)
+0905 Woman (Manager)
+
+$Character Select\Player 2
+Note=With this code, you will need to press the GS Button to be in the ring and have full access to getting in and out of the ring.
+890FA0E6 0240
+890FA110 42B4
+8107E8B6 ????
+0001 Sting
+0002 Giant
+0003 Lex Luger
+0004 Diamon Dallas Page
+0005 Rick Steiner
+0007 Roddy Piper
+0008 Bret Hart
+0009 Chris Benoit
+000A Goldberg
+000B Booker T
+000C Disco Inferno
+0101 Fit Finley
+0105 Meng
+0106 Barbarian
+0107 Larry Zbysko
+0108 Stevie Ray
+010B British Bulldog
+010D Yugi Nagata
+010E Jim Neidhart
+010F Alex Wright
+0201 Hollywood Hogan
+0202 Macho Man Randy Savage
+0203 Kevin Nash
+0204 Scott Hall
+0205 Buff Bagwell
+0206 Scott Stenier
+0207 Curt Hennig
+0208 Konnan
+0209 Scott Norton
+020C Brian Adams
+020D Eric Bishoff
+0301 Ultimo Dragon
+0302 Eddy Guerrero
+0303 Chris Jericho
+0304 Rey Mysterio Jr.
+0305 Juventud Guerrera
+0306 Dean Malenko
+0307 Chavo Guerrero Jr.
+0308 La Parka
+0309 Psychosis
+0401 Glacier
+0403 Wrath
+0404 Kanyon
+0501 Raven
+0502 Saturn
+0503 Kidman
+0504 Riggs
+0505 Van Hammer
+0506 Sick Boy
+0507 Lodi
+0508 Reese
+0601 AKI Man
+0602 Shogun
+0603 Executioner
+0604 Dr. Frank
+0605 Jekel
+0606 Maya Ineaby
+0701 Hawk Hana
+0702 Kimchee
+0703 Dakeken
+0704 Brickowski
+0705 Mingchee
+0706 Han Zomon
+0801 Eric Bischoff (Manager)
+0802 Onoo (Manager)
+0803 Jimmy Hart (Manager)
+0804 Rick Rude (Manager)
+0805 Dusty Rhodes (Manager)
+0806 Ted Debisas (Manager)
+0807 James Bandenderg (Manager)
+0808 Vincent (Manager)
+0901 Elizabeth (Manager)
+0902 Kimberly (Manager)
+0903 Jackreen (Manager)
+0904 Sister Sherri (Manager)
+0905 Woman (Manager)
+
+$Character Select\Player 3
+Note=With this code, you will need to press the GS Button to be in the ring and have full access to getting in and out of the ring.
+890FA496 0240
+890FA4C0 42B4
+8107E8BA ????
+0001 Sting
+0002 Giant
+0003 Lex Luger
+0004 Diamon Dallas Page
+0005 Rick Steiner
+0007 Roddy Piper
+0008 Bret Hart
+0009 Chris Benoit
+000A Goldberg
+000B Booker T
+000C Disco Inferno
+0101 Fit Finley
+0105 Meng
+0106 Barbarian
+0107 Larry Zbysko
+0108 Stevie Ray
+010B British Bulldog
+010D Yugi Nagata
+010E Jim Neidhart
+010F Alex Wright
+0201 Hollywood Hogan
+0202 Macho Man Randy Savage
+0203 Kevin Nash
+0204 Scott Hall
+0205 Buff Bagwell
+0206 Scott Stenier
+0207 Curt Hennig
+0208 Konnan
+0209 Scott Norton
+020C Brian Adams
+020D Eric Bishoff
+0301 Ultimo Dragon
+0302 Eddy Guerrero
+0303 Chris Jericho
+0304 Rey Mysterio Jr.
+0305 Juventud Guerrera
+0306 Dean Malenko
+0307 Chavo Guerrero Jr.
+0308 La Parka
+0309 Psychosis
+0401 Glacier
+0403 Wrath
+0404 Kanyon
+0501 Raven
+0502 Saturn
+0503 Kidman
+0504 Riggs
+0505 Van Hammer
+0506 Sick Boy
+0507 Lodi
+0508 Reese
+0601 AKI Man
+0602 Shogun
+0603 Executioner
+0604 Dr. Frank
+0605 Jekel
+0606 Maya Ineaby
+0701 Hawk Hana
+0702 Kimchee
+0703 Dakeken
+0704 Brickowski
+0705 Mingchee
+0706 Han Zomon
+0801 Eric Bischoff (Manager)
+0802 Onoo (Manager)
+0803 Jimmy Hart (Manager)
+0804 Rick Rude (Manager)
+0805 Dusty Rhodes (Manager)
+0806 Ted Debisas (Manager)
+0807 James Bandenderg (Manager)
+0808 Vincent (Manager)
+0901 Elizabeth (Manager)
+0902 Kimberly (Manager)
+0903 Jackreen (Manager)
+0904 Sister Sherri (Manager)
+0905 Woman (Manager)
+
+$Character Select\Player 4
+Note=With this code, you will need to press the GS Button to be in the ring and have full access to getting in and out of the ring.
+890FA846 0240
+890FA870 42B4
+8107E8BE ????
+0001 Sting
+0002 Giant
+0003 Lex Luger
+0004 Diamon Dallas Page
+0005 Rick Steiner
+0007 Roddy Piper
+0008 Bret Hart
+0009 Chris Benoit
+000A Goldberg
+000B Booker T
+000C Disco Inferno
+0101 Fit Finley
+0105 Meng
+0106 Barbarian
+0107 Larry Zbysko
+0108 Stevie Ray
+010B British Bulldog
+010D Yugi Nagata
+010E Jim Neidhart
+010F Alex Wright
+0201 Hollywood Hogan
+0202 Macho Man Randy Savage
+0203 Kevin Nash
+0204 Scott Hall
+0205 Buff Bagwell
+0206 Scott Stenier
+0207 Curt Hennig
+0208 Konnan
+0209 Scott Norton
+020C Brian Adams
+020D Eric Bishoff
+0301 Ultimo Dragon
+0302 Eddy Guerrero
+0303 Chris Jericho
+0304 Rey Mysterio Jr.
+0305 Juventud Guerrera
+0306 Dean Malenko
+0307 Chavo Guerrero Jr.
+0308 La Parka
+0309 Psychosis
+0401 Glacier
+0403 Wrath
+0404 Kanyon
+0501 Raven
+0502 Saturn
+0503 Kidman
+0504 Riggs
+0505 Van Hammer
+0506 Sick Boy
+0507 Lodi
+0508 Reese
+0601 AKI Man
+0602 Shogun
+0603 Executioner
+0604 Dr. Frank
+0605 Jekel
+0606 Maya Ineaby
+0701 Hawk Hana
+0702 Kimchee
+0703 Dakeken
+0704 Brickowski
+0705 Mingchee
+0706 Han Zomon
+0801 Eric Bischoff (Manager)
+0802 Onoo (Manager)
+0803 Jimmy Hart (Manager)
+0804 Rick Rude (Manager)
+0805 Dusty Rhodes (Manager)
+0806 Ted Debisas (Manager)
+0807 James Bandenderg (Manager)
+0808 Vincent (Manager)
+0901 Elizabeth (Manager)
+0902 Kimberly (Manager)
+0903 Jackreen (Manager)
+0904 Sister Sherri (Manager)
+0905 Woman (Manager)
+
+$Extra Characters & Modes
+8107F07C FFFF
+
+$Get Title Belt In 1-Match
+80038AAB 0008
+
+$Infinite Time
+800FAF87 0000
+
+$Infinite Time Out Of Ring
+800FACE8 0014
+
+$Spirit Select\Player 1
+800F9D25 00??
+64 Have Max
+32 Have Normal
+00 Have None
+
+$Spirit Select\Player 2
+800FA0D5 00??
+64 Have Max
+32 Have Normal
+00 Have None
+
+$Spirit Select\Player 3
+800FA485 00??
+64 Have Max
+32 Have Normal
+00 Have None
+
+$Spirit Select\Player 4
+800FA835 00??
+64 Have Max
+32 Have Normal
+00 Have None
+
+$Ultimate Code\Player 1
+800F9D24 0064
+
+$Ultimate Code\Player 2
+800FA0D4 0064
+
+$Ultimate Code\Player 3
+800FA484 0064
+
+$Ultimate Code\Player 4
+800FA834 0064
+
+$Weapon Select\Player 1
+Note=With these codes, they do glitch a LOT! It will glitch when you hit certain people with certain weapons a certain way, but it is RANDOM somewhat too
+800F9D31 0003
+800F98E1 00??
+800F98E2 0000
+800F99A0 0000
+00 Mallot
+01 Blue Microphone
+02 Black Microphone
+03 Trophy
+04 Black Baseball Bat
+05 Spotted Baseball Bat
+06 Steel Chair
+07 Table Piece
+08 Trash Can
+09 Suitcase
+0A Stop Sign
+FF Nothing
+
+$Weapon Select\Player 2
+Note=With these codes, they do glitch a LOT! It will glitch when you hit certain people with certain weapons a certain way, but it is RANDOM somewhat too
+800FA0E1 0003
+800F9911 00??
+800F9912 0001
+800F99A1 0001
+00 Mallot
+01 Blue Microphone
+02 Black Microphone
+03 Trophy
+04 Black Baseball Bat
+05 Spotted Baseball Bat
+06 Steel Chair
+07 Table Piece
+08 Trash Can
+09 Suitcase
+0A Stop Sign
+FF Nothing
+
+$Weapon Select\Player 3
+Note=With these codes, they do glitch a LOT! It will glitch when you hit certain people with certain weapons a certain way, but it is RANDOM somewhat too
+800FA491 0003
+800F9941 00??
+800F9942 0002
+800F99A2 0002
+00 Mallot
+01 Blue Microphone
+02 Black Microphone
+03 Trophy
+04 Black Baseball Bat
+05 Spotted Baseball Bat
+06 Steel Chair
+07 Table Piece
+08 Trash Can
+09 Suitcase
+0A Stop Sign
+FF Nothing
+
+$Weapon Select\Player 4
+Note=With these codes, they do glitch a LOT! It will glitch when you hit certain people with certain weapons a certain way, but it is RANDOM somewhat too
+800FA841 0003
+800F9971 00??
+800F9972 0003
+800F99A3 0003
+00 Mallot
+01 Blue Microphone
+02 Black Microphone
+03 Trophy
+04 Black Baseball Bat
+05 Spotted Baseball Bat
+06 Steel Chair
+07 Table Piece
+08 Trash Can
+09 Suitcase
+0A Stop Sign
+FF Nothing

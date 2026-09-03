@@ -1,0 +1,17 @@
+[46A3F7AF-0F7591D0-C:45]
+Name=Cruis'n Exotica (U)
+
+$Always Place 1st\Player 1
+81065174 0000
+
+$Infinite\Continues
+8107F850 00FF
+
+$Infinite\Nitros\Player 1
+800BE7FD 00FF
+
+$Infinite\Time
+810802D4 4296
+
+$Unlock All Cars
+8104F10E FFFF

@@ -1,0 +1,109 @@
+[E86415A6-98395B53-C:50]
+Name=O.D.T (Or Die Trying) (E) (M5) (Unreleased Final)
+
+$Have Infinite\99 Blue Ammo
+800CEA16 0063
+
+$Have Infinite\99 Blue Power (1UP)
+800CEA2A 0063
+
+$Have Infinite\99 Engery Pickups
+800CEA0C 0063
+
+$Have Infinite\99 Gas
+800CEA3E 0063
+
+$Have Infinite\99 Grenades
+800CEA34 003F
+
+$Have Infinite\99 Yellow Ammo
+800CEA20 0063
+
+$Have\All Magic
+800CEB48 0010
+800CEB4D 0000
+800CEB57 0001
+800CEB61 0002
+800CEB6B 0003
+800CEB75 0005
+800CEB7F 0006
+800CEB89 0008
+800CEB93 0009
+800CEB9D 000B
+800CEBA7 000E
+800CEBB1 000F
+800CEBBB 0010
+800CEBC5 0011
+800CEBCF 000A
+800CEBD9 000C
+800CEBE3 000D
+
+$Have\Magic On Level 4
+810C8CDD FFFF
+810C8CDE FFFF
+810C8CDF FFFF
+810C8CE0 FFFF
+810C8CE1 FFFF
+810C8CE2 FFFF
+
+$Have\Max Armour Level
+800C8D00 0064
+
+$Have\Max Experience Level
+800C8CFC 00FF
+
+$Have\Max Spirit Level
+800C8D04 0064
+
+$Have\Max Weapon Level
+800C8D02 0064
+
+$Have\Weapons On Max Upgrade
+800C8CAC 0009
+800C8CB4 0009
+800C8CBC 0009
+800C8CC4 0009
+
+$Infinite Air Under Water
+800C8BE4 0069
+
+$Infinite Max\999 Lives
+810C8CF8 03E8
+
+$Infinite Max\Fire Ammo
+800C8CB3 0066
+
+$Infinite Max\Fusion Ammo
+800C8CC3 0066
+
+$Infinite Max\Health
+800C8AD9 0066
+
+$Infinite Max\Ionic Ammo
+800C8CBB 0066
+
+$Infinite Max\Light Ammo
+800C8CAB 0066
+
+$Infinite Max\Mana
+800C8CFF 0066
+
+$Infinite Throwing Weapon Ammo
+800CF57D 0063
+
+$Play As Select
+800FCEC5 00??
+00 Ike Hawkings (Corporal)
+01 Sophia Hawkings (Stowaway)
+02 Julia Chase (Cartographer)
+03 Karma (The Ex-Deviant)
+04 Max Havok (Chief Enginer)
+05 Solaar (Archbishop)
+06 Mr Bodybolt (7th Passenger)
+
+$Press A For Bionic Jump
+Note=This will make you jump to a great height
+D00C8BCA 0080
+810C8AE8 ????
+0250 Medium Jump
+0800 Max Jump

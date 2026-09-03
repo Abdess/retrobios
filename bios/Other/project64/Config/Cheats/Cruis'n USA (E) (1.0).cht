@@ -1,0 +1,16 @@
+[503EA760-E1300E96-C:50]
+Name=Cruis'n USA (E)
+
+$Access Options\All Car Upgrades
+50000704 0000
+801505DF 0003
+
+$Access Options\All Tracks
+80150602 001F
+80150603 00FF
+
+$Always Place 1st
+801502CB 0001
+
+$Unlimited Time
+801509ED 0045

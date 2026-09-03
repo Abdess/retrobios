@@ -1,0 +1,7 @@
+[3EDC7E12-E26C1CC9-C:45]
+Name=Gex 3 - Deep Cover Gecko (U)
+
+$Sixty Frames
+Note=Changes an ASM value,too fast.
+80031D27 0001
+

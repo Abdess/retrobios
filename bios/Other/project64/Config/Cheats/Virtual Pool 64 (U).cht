@@ -1,0 +1,40 @@
+[4E4A7643-A37439D7-C:45]
+Name=Virtual Pool 64 (U)
+
+$Aiming Sites Always Available
+812F0922 0004
+
+$Always Your Turn\Player 1
+802EF798 0000
+
+$Always Your Turn\Player 2
+802EF798 0001
+
+$Ball\Always In Hand
+802EF79C 0002
+
+$Foul Score Options\Player 1
+812EF784 ????
+0000 Zero Fouls
+FFFF Max Fouls
+
+$Foul Score Options\Player 2
+812EF786 ????
+0000 Zero Fouls
+FFFF Max Fouls
+
+$Max Ratings\Player 1
+81062C6A FFFF
+
+$Max Ratings\Player 2
+81062CEE FFFF
+
+$Wins Options\Player 1
+812EF780 ????
+0000 Zero Points
+FFFF Max Points
+
+$Wins Options\Player 2
+812EF782 ????
+0000 Zero Points
+FFFF Max Points

@@ -1,0 +1,44 @@
+[930C29EA-939245BF-C:45]
+Name=Snowboard Kids 2 (U)
+
+$All Gold Medals
+50000502 0000
+81259130 0101
+
+$Infinite\Tools Options
+8025A624 00??
+01 Frying Pan
+02 Ghost
+03 Super Ghost
+04 Fan
+05 Rocket
+06 Invisible
+07 Rock
+08 Rat Face
+09 Super Rat Face
+0A Wings
+
+$Infinite\Trick Game 300 Points
+8125A7F2 012C
+
+$Infinite\Weapons Options
+8025A622 00??
+8025A623 0009
+01 Slap Stick
+02 Parachute
+03 Freeze Shot
+04 Snowman
+05 Bomb
+06 Whirlwind
+
+$Max Coins
+8125A5BE 270F
+8025A5BF 00C8
+
+$Open Extra Characters & Snowboards
+Note=Battle Mode Only
+8125916E 0101
+80259170 0001
+8025915C 0001
+8125915E 0101
+81259160 0101

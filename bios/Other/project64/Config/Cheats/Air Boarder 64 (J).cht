@@ -1,0 +1,247 @@
+[26809B20-39A516A4-C:4A]
+Name=Air Boarder 64 (J)
+
+$Access All Boards & Characters
+800500C1 000C
+
+$All Street Work Levels Unlocked
+50007801 0000
+80050170 00??
+01 Courses unlocked
+03 Courses unlocked with C rank
+04 Courses unlocked with B rank
+05 Courses unlocked with A rank
+06 Courses unlocked with S rank
+
+$Class Score Select
+8016609E 00??
+20 Class C
+40 Class B
+64 Class A
+FF Class S
+
+$Coin Perfect Select
+Note=this is for Coin Mode to get Perfect Coin Collection Score straight away when you enter the level
+801660B3 00??
+14 Green Park Level 1
+1A Green park Level 2
+2B Green park Level 3
+4A Lost Forest Level 1
+59 Lost Forest Level 2
+80 Lost Forest Level 3
+7D Snow Festival 64 Levels 1 2 & 3
+6F Sunset Island  Level 1
+74 Sunset Island  Level 2
+81 Sunset Island  Level 3
+6E Giant House Level 1
+77 Giant House Level 2
+72 Giant House Level 3
+
+$Infinite Time\Attack Time Time 000000
+811137EA 0000
+
+$Infinite Time\Street Work & Coin
+801137E9 0028
+
+$Infinite Time\Time Attack
+801137EB 0000
+
+$Infinite Turbo\Player 1
+80166019 0009
+
+$Infinite Turbo\Player2
+80167991 0009
+
+$Maxed Out Turbo Bar
+811656E8 429F
+80166017 0051
+
+$Options\Camera Type Modifier
+810500A6 00??
+00 Roll On Near
+01 Roll On Mid
+02 Roll On Far
+03 Roll Off Near
+04 Roll Off Mid
+05 Roll Off Far
+
+$Options\DJ Function Modifier
+810500AC 00??
+01 DJ Function On
+00 DJ Function Off
+
+$Options\Music Modifier
+800500A9 00??
+FF BGM On
+00 BGM Off
+
+$Options\Sound Effects Modifier
+810500AA 00??
+FF SE On
+00 SE Off
+
+
+[6C45B60C-DCE50E30-C:4A]
+Name=Air Boarder 64 (J)
+
+$Access All Boards & Characters
+800500C1 000C
+
+$All Street Work Levels Unlocked
+50007801 0000
+80050170 00??
+01 Courses unlocked
+03 Courses unlocked with C rank
+04 Courses unlocked with B rank
+05 Courses unlocked with A rank
+06 Courses unlocked with S rank
+
+$Class Score Select
+8016609E 00??
+20 Class C
+40 Class B
+64 Class A
+FF Class S
+
+$Coin Perfect Select
+Note=this is for Coin Mode to get Perfect Coin Collection Score straight away when you enter the level
+801660B3 00??
+14 Green Park Level 1
+1A Green park Level 2
+2B Green park Level 3
+4A Lost Forest Level 1
+59 Lost Forest Level 2
+80 Lost Forest Level 3
+7D Snow Festival 64 Levels 1 2 & 3
+6F Sunset Island  Level 1
+74 Sunset Island  Level 2
+81 Sunset Island  Level 3
+6E Giant House Level 1
+77 Giant House Level 2
+72 Giant House Level 3
+
+$Infinite Time\Attack Time Time 000000
+811137EA 0000
+
+$Infinite Time\Street Work & Coin
+801137E9 0028
+
+$Infinite Time\Time Attack
+801137EB 0000
+
+$Infinite Turbo\Player 1
+80166019 0009
+
+$Infinite Turbo\Player2
+80167991 0009
+
+$Maxed Out Turbo Bar
+811656E8 429F
+80166017 0051
+
+$Options\Camera Type Modifier
+810500A6 00??
+00 Roll On Near
+01 Roll On Mid
+02 Roll On Far
+03 Roll Off Near
+04 Roll Off Mid
+05 Roll Off Far
+
+$Options\DJ Function Modifier
+810500AC 00??
+01 DJ Function On
+00 DJ Function Off
+
+$Options\Music Modifier
+800500A9 00??
+FF BGM On
+00 BGM Off
+
+$Options\Sound Effects Modifier
+810500AA 00??
+FF SE On
+00 SE Off
+
+
+[F255D6F1-B65D6728-C:4A]
+Name=Air Boarder 64 (J)
+
+$Access All Boards & Characters
+800500C1 000C
+
+$All Street Work Levels Unlocked
+50007801 0000
+80050170 00??
+01 Courses unlocked
+03 Courses unlocked with C rank
+04 Courses unlocked with B rank
+05 Courses unlocked with A rank
+06 Courses unlocked with S rank
+
+$Class Score Select
+8016609E 00??
+20 Class C
+40 Class B
+64 Class A
+FF Class S
+
+$Coin Perfect Select
+Note=this is for Coin Mode to get Perfect Coin Collection Score straight away when you enter the level
+801660B3 00??
+14 Green Park Level 1
+1A Green park Level 2
+2B Green park Level 3
+4A Lost Forest Level 1
+59 Lost Forest Level 2
+80 Lost Forest Level 3
+7D Snow Festival 64 Levels 1 2 & 3
+6F Sunset Island  Level 1
+74 Sunset Island  Level 2
+81 Sunset Island  Level 3
+6E Giant House Level 1
+77 Giant House Level 2
+72 Giant House Level 3
+
+$Infinite Time\Attack Time Time 000000
+811137EA 0000
+
+$Infinite Time\Street Work & Coin
+801137E9 0028
+
+$Infinite Time\Time Attack
+801137EB 0000
+
+$Infinite Turbo\Player 1
+80166019 0009
+
+$Infinite Turbo\Player2
+80167991 0009
+
+$Maxed Out Turbo Bar
+811656E8 429F
+80166017 0051
+
+$Options\Camera Type Modifier
+810500A6 00??
+00 Roll On Near
+01 Roll On Mid
+02 Roll On Far
+03 Roll Off Near
+04 Roll Off Mid
+05 Roll Off Far
+
+$Options\DJ Function Modifier
+810500AC 00??
+01 DJ Function On
+00 DJ Function Off
+
+$Options\Music Modifier
+800500A9 00??
+FF BGM On
+00 BGM Off
+
+$Options\Sound Effects Modifier
+810500AA 00??
+FF SE On
+00 SE Off

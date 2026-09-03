@@ -1,0 +1,29 @@
+[535DF3E2-609789F1-C:4A]
+Name=Wave Race 64 - Shindou Edition (J) (V1.2)
+
+$99 Points
+801CC273 0063
+
+$Always First Place
+801C386F 0000
+
+$Infinite Course Out Time
+801C3B53 00FF
+
+$Infinite Time Stunt Mode
+801C3B2E 00FF
+
+$Maximum Power\Player 1
+801C3997 0005
+
+$Maximum Power\Player 2
+801C3FBA 0005
+801C425A 0005
+
+$Misses Don't Count
+801C399F 0000
+
+$Super Speed
+801C3997 0005
+D0155221 0010
+801C3997 0020

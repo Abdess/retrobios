@@ -1,0 +1,35 @@
+[D85C4E29-88E276AF-C:50]
+Name=Bomberman Hero (E)
+
+$Extra Gems
+D0165241 0000
+80165241 004B
+
+$Full\Bomb Power
+8016523F 0003
+
+$Full\Fire Power
+80165240 0008
+
+$Infinite\Health
+80165244 0004
+
+$Infinite\Lives
+80165243 0009
+
+$Max\Bombs
+8016523F 0008
+
+$Max\Explosion
+80165240 0008
+
+$Max\Score
+80177608 FFFF
+
+$Press L to Levitate
+Note=Press L to levitate & let go to come back down
+D005A465 0020
+81154178 41CB
+D005A465 0020
+D0154154 0000
+80154154 0040

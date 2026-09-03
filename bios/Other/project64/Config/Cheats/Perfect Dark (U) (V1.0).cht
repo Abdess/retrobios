@@ -1,0 +1,203 @@
+[DDF460CC-3CA634C0-C:45]
+Name=Perfect Dark (U) (V1.0)
+
+$All levels Complete
+50004002 0000
+810A2218 0001
+
+$Carrington Institute\Have 255 targets destroyed
+810B1E34 00FF
+
+$Carrington Institute\Have 999 points in Firing Range
+810B1E32 03E7
+
+$Carrington Institute\Have Infinite time in Firing Range
+810B1E2E 004D
+
+$Have All\Weapons\Player 1
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+80207F10 0007
+801EEF10 0007
+801D5F10 0007
+
+$Have All\Weapons\Player 2
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+80209B80 0007
+801F0B80 0007
+801D7B80 0007
+
+$Infinite Ammo\Player 1
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+8020769F 00FF
+801EE69F 00FF
+801D569F 00FF
+80206EFB 00FF
+801EDEFB 00FF
+801D4EFB 00FF
+
+$Infinite Ammo\Player 2
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+8020930F 00FF
+801F030F 00FF
+801D730F 00FF
+80208B6B 00FF
+801EFB6B 00FF
+801D6B6B 00FF
+
+$Infinite Health\Player 1
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+8120677C 3F80
+811ED77C 3F80
+811D477C 3F80
+
+$Infinite Health\Player 2
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+812083EC 3F80
+811EF3EC 3F80
+811D63EC 3F80
+
+$Infinite Shield\Player 1
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+81206790 3F80
+811E4950 3F80
+811CB950 3F80
+
+$Infinite Shield\Player 2
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+811FF5C0 3F80
+811E65C0 3F80
+811CD5C0 3F80
+
+$Multi\Press B To Levitate\Player 1
+Note=To activate the moon jump you must Hold B while in the air. You can get in the air by going down steps, or hills or by going off the edge of something
+D009C7E4 0040
+811BB720 40F2
+D009C7E4 0040
+801BB6D3 0000
+
+$Multi\Press B To Levitate\Player 2
+Note=To activate the moon jump you must Hold B while in the air. You can get in the air by going down steps, or hills or by going off the edge of something
+D009C7EC 0040
+811BD390 40F2
+D009C7EC 0040
+801BD343 0000
+
+$Multi\Press B To Levitate\Player 3
+Note=To activate the moon jump you must Hold B while in the air. You can get in the air by going down steps, or hills or by going off the edge of something
+D009C7F4 0040
+811BF000 40F2
+D009C7F4 0040
+801BEFB3 0000
+
+$Multi\Press B To Levitate\Player 4
+Note=To activate the moon jump you must Hold B while in the air. You can get in the air by going down steps, or hills or by going off the edge of something
+D009C7FC 0040
+811C0C70 40F2
+D009C7FC 0040
+801C0C23 0000
+
+$Single & Co-Op\Press B To Levitate\Player 1
+Note=To activate the moon jump you must Hold B while in the air. You can get in the air by going down steps, or hills or by going off the edge of something
+D009C7E4 0040
+81206720 40F2
+D009C7E4 0040
+802066D3 0000
+D009C7E4 0040
+811ED720 40F2
+D009C7E4 0040
+801ED6D3 0000
+D009C7E4 0040
+811D4720 40F2
+D009C7E4 0040
+801D46D3 0000
+
+$Single & Co-Op\Press B To Levitate\Player 2
+Note=To activate the moon jump you must Hold B while in the air. You can get in the air by going down steps, or hills or by going off the edge of something
+D009C7EC 0040
+81208390 40F2
+D009C7EC 0040
+80208343 0000
+D009C7EC 0040
+811EF390 40F2
+D009C7EC 0040
+801EF343 0000
+D009C7EC 0040
+811D6390 40F2
+D009C7EC 0040
+801D6343 0000
+
+$The Ultimate All In One
+Note=The Ultimate All In One activate's solo missions, give all medals on solo missions, activate cheats, activate cinemas, and who knows what else. I just don't have the time to identify these codes. I know that some of this is creditted to Zap2. I don't have the time to cut those codes out.
+800884F3 0001
+8008850E 0001
+80088575 0001
+50000302 0000
+80088572 0001
+8008858C 0001
+8008858D 0001
+800885A6 0001
+800885A9 0001
+800885C0 0001
+800885DA 0001
+800885DC 0001
+800885F4 0001
+800885F5 0001
+8008860E 0001
+80088610 0001
+80088612 0001
+80088628 0001
+50000501 0000
+80088642 0001
+50000501 0000
+8008865C 0001
+50000501 0000
+80088676 0001
+50000501 0000
+80088690 0001
+50000501 0000
+800886AA 0001
+50000501 0000
+800886C4 0001
+50000501 0000
+800886DE 0001
+50000501 0000
+800886F8 0001
+50000501 0000
+80088712 0001
+50000501 0000
+8008872C 0001
+50000501 0000
+80088746 0001
+50000501 0000
+80088760 0001
+50000501 0000
+8008877A 0001
+50000501 0000
+80088794 0001
+50000501 0000
+800887AE 0001
+800A2219 0001
+50003E02 0000
+800A221D 0001
+50000B01 0000
+800ACCC9 0001
+50000901 0000
+800ACCD5 0001
+50000401 0000
+800ACCDF 0001
+50000301 0000
+800ACCE4 0001
+800ACCE8 0001
+800ACCE9 0001
+800ACCEB 0001
+800ACCEC 0001
+50000901 0000
+800ACCEE 0001
+800ACCF8 0001
+50002101 0000
+800ACCFA 0001
+800ACD12 0001
+800ACD15 0001
+800ACD16 0001
+800ACDEA 0001
+800ACD3A 0001

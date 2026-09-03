@@ -1,0 +1,592 @@
+﻿/*********************************************************************************
+* Meta Information                                                               *
+*********************************************************************************/
+//About DLL
+#1  #  "Svenska"		                        // LANGUAGE ID
+//#2  #  "Arnalion (arnalion@hotmail.com)"		// Original Author
+#2  #  "Daniel Nylander (github@danielnylander.se)"		// Reviewed and massive changes
+#3  #  "3.0"			                        // Version
+#4  #  "January, 2025"	                        // Date
+
+//About DLL Dialog
+#5  #  "Aktuellt språk"
+#6  #  "Översättare"
+#7  #  "Version"
+#8  #  "Datum"
+#9  #  "Besök webbsidan"
+#10 #  "ROM-databas (.RDB)"
+#11 #  "Fuskfil (.CHT)"
+#12 #  "ROM-information (.RDX)"
+
+//About INI title
+#20 #  "Om INI-filer"
+
+/*********************************************************************************
+* Menu                                                                           *
+*********************************************************************************/
+//File Menu
+#100#  "&Arkiv"
+#101#  "Ö&ppna ROM"
+#102#  "ROM-&information...."
+#103#  "Starta emulering"
+#104#  "A&vsluta emulering"
+#105#  "Välj ROM-katalog..."
+#106#  "Uppdatera ROM-listan"
+#107#  "Tidigare ROM"
+#108#  "Tidigare ROM-kataloger"
+#109#  "A&vsluta"
+#110#  "Öppna &kombination"
+
+//System Menu
+#120#  "&System"
+#121#  "&Starta om"
+#122#  "&Pausa"
+#123#  "Fånga skärmbild"
+#124#  "Begränsa bildfrekvens"
+#125#  "&Spara tillstånd"
+#126#  "Spara som..."
+#127#  "&Läs in tillstånd"
+#128#  "Läs in..."
+#129#  "Aktuellt sparat &tillstånd"
+#130#  "&Fusk..."
+#131#  "GS-knapp"
+#132#  "Återup&pta"
+#133#  "&Mjuk omstart"
+#134#  "&Hård omstart"
+#135#  "Byt &disk"
+#136#  "&Förbättringar..."
+
+//Options Menu
+#140#  "A&lternativ"
+#141#  "&Helskärm"
+#142#  "Alltid ö&verst"
+#143#  "&Grafikinställningar"
+#144#  "&Ljudinställningar"
+#145#  "&Inmatningsinställningar"
+#146#  "&RSP-inställningar"
+#147#  "Visa CPU-&statistik"
+#148#  "&Konfiguration"
+
+//Debugger Menu
+#160#  "&Felsökare"
+
+//Language Menu
+#175#  "&Språk"
+
+//Help Menu
+#180#  "&Hjälp"
+#182#  "&Om Project64"
+#184#  "&Webbsida"
+#185#  "&Stöd Project64"
+#186#  "&Discord"
+
+//Current Save Slot menu
+#190#  "Standard"
+#191#  "Plats 1"
+#192#  "Plats 2"
+#193#  "Plats 3"
+#194#  "Plats 4"
+#195#  "Plats 5"
+#196#  "Plats 6"
+#197#  "Plats 7"
+#198#  "Plats 8"
+#199#  "Plats 9"
+#200#  "Plats 10"
+#201#  "Sparad plats (%ws) vald"
+
+//Pop up Menu
+#210#  "Starta spel"
+#211#  "ROM-information"
+#212#  "Redigera spelinställningar"
+#213#  "Redigera fusk..."
+#214#  "Grafikinsticksmodul"
+#215#  "Spela spel med disk"
+#216#  "Välj förbättringar..."
+
+// Alternate name to save slot
+#220#  "Sparad plats - Standard"
+#221#  "Sparad plats - 1"
+#222#  "Sparad plats - 2"
+#223#  "Sparad plats - 3"
+#224#  "Sparad plats - 4"
+#225#  "Sparad plats - 5"
+#226#  "Sparad plats - 6"
+#227#  "Sparad plats - 7"
+#228#  "Sparad plats - 8"
+#229#  "Sparad plats - 9"
+#230#  "Sparad plats - 10"
+
+// Menu Descriptions
+#250#  "Öppna en N64 ROM-avbildning"
+#251#  "Visa information om inläst avbildning"
+#252#  "Starta emulering av inlästa ROM-avbildningen"
+#253#  "Stoppa emulering av inlästa ROM-avbildningen"
+#254#  "Välj ROM-katalog"
+#255#  "Uppdatera aktuell lista över ROMar i ROM-bläddraren"
+#256#  "Avsluta detta program"
+#257#  "Starta om aktuella ROM-avbildningen (läs om alla inställningsändringar)"
+#258#  "Pausa/återuppta emulering av aktuellt körande ROM"
+#259#  "Generera en bitmap-bild av aktuell skärm"
+#260#  "Begränsa bildfrekvens till korrekt hastighet för N64"
+#261#  "Spara aktuellt systemtillstånd"
+#262#  "Spara aktuellt systemtillstånd i en vald filplats"
+#263#  "Läs in sparat systemtillstånd"
+#264#  "Välj en sparad systemtillståndfil att läsa in"
+#265#  "Aktivera/inaktivera GameShark-fusk"
+#266#  "GameShark-knapp används med specifika fusk."
+#267#  "Ändra emulering från fönster till helskärmsläge."
+#268#  "Gör att fönstret ligger kvar över alla andra fönster"
+#269#  "Ändra inställningar inne i grafikinsticksmodulen"
+#270#  "Ändra inställningar inne i ljudinsticksmodulen"
+#271#  "Ändra inställningar inne i insticksmodulen för handkontroller (t.ex ställ in knappar)"
+#272#  "Ändra inställningar inne i RSP-insticksmodulen"
+#273#  "Visa CPU-användning för emulerator uppdelat på olika resurser"
+#274#  "Visa/ändra inställningar för detta program"
+#275#  "Visa handboken för programmet"
+#276#  "Visa frågor och svar för programmet"
+#278#  "Om programmet och upphovspersonerna"
+#277#  "Om upphovspersonerna för supportfilerna"
+#279#  "Öppna denna tidigare öppnade ROM-avbildning"
+#280#  "Välj denna katalog som din ROM-katalog"
+#281#  "Byt till detta språk för programmet"
+#282#  "Välj denna plats för att spara tillstånd till"
+#283#  "Spela markerat spel"
+#284#  "Information om markerat spel"
+#285#  "Redigera inställningar för markerat spel"
+#286#  "Redigera fusk för markerat spel"
+
+
+/*********************************************************************************
+* ROM Browser                                                                    *
+*********************************************************************************/
+//ROM Browser Fields
+#300#  "Filnamn"
+#301#  "Internt namn"
+#302#  "Versionsnamn"
+#303#  "Status"
+#304#  "ROM-storlek"
+#305#  "Anteckningar (kärna)"
+#306#  "Anteckningar (standardinsticksmoduler)"
+#307#  "Anteckningar (användare)"
+#308#  "Cartridge-id"
+#309#  "Mediatyp"
+#310#  "Land"
+#311#  "Utvecklare"
+#312#  "CRC1"
+#313#  "CRC2"
+#314#  "CIC Chip"
+#315#  "Utgivningsdatum"
+#316#  "Genre"
+#317#  "Spelare"
+#318#  "Force Feedback"
+#319#  "Filformat"
+#321#  "Namn"
+
+
+//Select ROM
+#320#  "Välj aktuell ROM-katalog"
+
+//Messages
+#340#  "Dålig ROM? Använd GoodN64 och leta efter uppdaterad RDB"
+
+/*********************************************************************************
+* Options                                                                        *
+*********************************************************************************/
+//Options Title
+#400#  "Konfiguration"
+
+//Tabs
+#401#  "Insticksmoduler"
+#402#  "Kataloger"
+#403#  "Allmänna inställningar"
+#404#  "ROM-bläddrare"
+#405#  "Avancerat"
+#406#  "ROM-inställningar"
+#408#  "Anteckningar"
+#409#  "Snabbtangenter"
+#410#  "Status"
+#411#  "Omkompilerare"
+#412#  "Standardvärden"
+#413#  "64DD"
+#414#  "64DD"
+
+
+//Plugin Dialog
+#420#  "Om"
+#421#  " RSP-insticksmodul (Reality Signal Processor): "
+#422#  " Videoinsticksmodul (grafik): "
+#423#  " Ljudinsticksmodul (ljud): "
+#424#  " Inmatningsinsticksmodul (handkontroller): "
+#425#  "Grafik-HLE"
+#426#  "Ljud-HLE"
+#427#  "** Använd systeminsticksmodul **"
+
+
+//Directory Dialog
+#440#  " Insticksmodulskatalog: "
+#441#  " ROM-katalog: "
+#442#  " Sparkatalog för N64: "
+#443#  " Katalog för sparade tillstånd: "
+#444#  " Katalog för skärmbilder: "
+#445#  "Senaste katalog som en ROM öppnades från"
+#446#  "Välj insticksmodulskatalog"
+#447#  "Välj ROM-katalog"
+#448#  "Välj sparkatalog för N64"
+#449#  "Välj katalog för sparade tillstånd"
+#450#  "Välj katalog för skärmbilder"
+#451#  " Katalog för texturpaket: "
+#452#  "Välj katalog för texturpaket"
+
+// Options (general) tab
+#460#  "Pausa emulatorn när fönstret inte är aktivt"
+#461#  "Gå in i helskärmsläget när en ROM läses in"
+#462#  "Dölj avancerade inställningar"
+#463#  "Kom ihåg valda fusk"
+#464#  "Inaktivera skärmsläckare när en ROM körs"
+#465#  "Visningshastighet"
+#466#  "Hastighetsvisning:"
+#467#  "Kontrollera om Project64 redan körs"
+#468#  "Lagra spelsparningar i separata mappar"
+#469#  "Sökväg för 64DD IPL ROM för japansk retail:"
+#470#  "Sökväg för 64DD IPL ROM för amerikansk retail:"
+#471#  "Sökväg för 64DD IPL ROM för utveckling:"
+#472#  "Typ för disksparning:"
+#473#  "Aktivera förbättringar"
+#474#  "Visa statusrad"
+#475#  "Avsluta helskärm när fokus flyttas"
+#476#  "Aktivera Discord Rich Presence"
+
+
+//ROM Browser Tab
+#480#  "Max # ROMar som minns (0-10):"
+#481#  "ROMar"
+#482#  "Max # ROM-kataloger som minns (0-10):"
+#483#  "kataloger"
+#484#  "Använd ROM-bläddrare"
+#485#  "Använd rekursiva kataloger"
+#486#  "Tillgängliga fält:"
+#487#  "Ordning för fälten:"
+#488#  "Lägg till ->"
+#489#  "<- Ta bort"
+#490#  "Upp"
+#491#  "Ner"
+#492#  "Uppdatera automatiskt bläddraren"
+
+
+//Advanced Options
+#500#  "De flesta av dessa ändringarna kommer att användas när en ny ROM öppnas eller den aktuella ROMen startas om."
+#501#  "Standardvärden för kärna"
+#502#  "Typ av CPU-kärna:"
+#503#  "Metoder för självmoddar:"
+#504#  "Standardstorlek för minne:"
+#505#  "Avancerad blocklänkning:"
+#506#  "Starta emulering när ROM öppnas"
+#507#  "Åsidosätt alltid standardinställningarna med de från RDB"
+#508#  "Komprimera automatiskt sparade tillstånd"
+#509#  "Aktivera felsökare"
+#510#  "Cache"
+#511#  "PI DMA"
+#512#  "Starta ändrad"
+#513#  "Skydda minnet"
+#514#  "TLB unmapping"
+#515#  "Använd alltid tolkningskärna"
+
+// ROM options
+#520#  "Typ av CPU-kärna:"
+#521#  "VI uppdateringsfrekvens:"
+#522#  "Minnesstorlek:"
+#523#  "Avancerad blocklänkning"
+#524#  "Standardtyp för sparning:"
+#525#  "Faktor för räknare:"
+#526#  "Större kompileringsbuffert"
+#527#  "Använd TLB"
+#528#  "Registrera cachning"
+#529#  "Fördröj SI-avbrott:"
+#530#  "Snabb SP"
+#531#  "Standard"
+#532#  "RSP-ljudsignal"
+#533#  "Fast ljudtid"
+#534#  "Metod för funktionsuppslag:"
+#535#  "Metod för anpassade självmoddar"
+#536#  "Synkronisera med ljud"
+#537#  "AI-antal per byte:"
+#538#  "32-bitars motor"
+#539#  "Fördröj DP-avbrott"
+
+//Core Styles
+#540#  "Tolk"
+#541#  "Omkompilerare"
+#542#  "Synkronisera kärnorna"
+
+//Self Mod Methods
+#560#  "Ingen"
+#561#  "Cache"
+#562#  "Skydda minnet"
+#563#  "Kontrollera minne och cache"
+#564#  "Ändra minne och cache"
+#565#  "Kontrollera memory advance"
+#566#  "Töm kod vid cache"
+
+// Function lookup method
+#570#  "Fysisk uppslagstabell"
+#571#  "Virtuell uppslagstabell"
+#572#  "Ändra minnet"
+
+//RDRAM Size
+#580#  "4 MB"
+#581#  "8 MB"
+
+//Advanced Block Linking
+#600#  "På"
+#601#  "Av"
+
+//Save Type
+#620#  "Använd första använda sparningstyp"
+#621#  "4-kbit EEPROM"
+#622#  "16-kbit EEPROM"
+#623#  "SRAM"
+#624#  "Flash RAM"
+
+// ROM notes
+#660#  "ROM-status:"
+#661#  "Kärnanteckning:"
+#662#  "Insticksanteckning:"
+
+// Accelerator selector
+#680#  "CPU-tillstånd:"
+#681#  "Menypost:"
+#682#  "Aktuella tangenter:"
+#683#  "Välj ny genvägstangent:"
+#684#  "För närvarande tilldelad till:"
+#685#  "Tilldela"
+#686#  "Ta bort"
+#687#  "Nollställ alla"
+#688#  "Spelet inte igång"
+#689#  "Spelet är igång"
+#690#  "Spelet är igång (fönsterläge)"
+#691#  "Spelet är igång (helskärmsläge)"
+#692#  "Upptäck tangenter"
+
+// Framerate option
+#700#  "Vertikala avbrott per sekund"
+#701#  "Visa listor per sekund"
+#702#  "Procenttal av full hastighet"
+
+// Increase speed
+#710#  "Öka spelhastigheten"
+#711#  "Sänk spelhastigheten"
+
+// Bottom page buttons
+#720#  "Nollställ sida"
+#721#  "Nollställ allt"
+#722#  "Tillämpa"
+#723#  "Stäng"
+
+// Disk save type
+#730#  "Fullständig diskkopia"
+#731#  "Spara endast område"
+
+/*** ROM information ***/
+#800#  "ROM-information"
+
+// ROM info text
+#801#  "ROM-namn:"
+#802#  "Filnamn:"
+#803#  "Plats:"
+#804#  "ROM-storlek:"
+#805#  "Cartridge-id:"
+#806#  "Mediatyp:"
+#807#  "Land:"
+#808#  "CRC1:"
+#809#  "CRC2:"
+#810#  "CIC Chip:"
+#811#  "MD5:"
+
+/*** Cheats ***/
+
+// Cheat list
+#1000#  "Fusk"
+#1001#  "Fusk:"
+#1002#  " Anteckningar: "
+#1003#  "Markera allt"
+#1004#  "Avmarkera allt"
+
+// Add cheat
+#1005#  "Lägg till fusk"
+#1006#  "Namn:"
+#1007#  "Kod:"
+#1008#  "Infoga"
+#1009#  "Töm"
+#1010#  " Fuskanteckningar: "
+#1011#  "Lägg till i databas"
+
+// Code extension
+#1012#  "Kodtillägg"
+#1013#  "Välj ett värde att användas för:"
+#1014#  "OK"
+#1015#  "Avbryt"
+
+// Digital value
+#1016#  "Kvantitetssiffra"
+#1017#  "Välj ett värde för:"
+#1018#  "&Värde"
+#1019#  "från"
+#1020#  "till"
+#1021#  "A&nteckningar:"
+#1022#  "Lägg till fusk"
+#1023#  "Nytt fusk"
+#1024#  "<adress> <värde>:<gammalt>"
+#1025#  "Alternativ:"
+#1026#  "<värde> <etikett>"
+
+// Edit cheat
+#1027#  "Redigera fusk"
+#1028#  "Uppdatera fusk"
+#1029#  "Fusket har ändrats.\n\nVill du uppdatera?"
+#1030#  "Fusket uppdaterades"
+
+// Cheat pop-up menu
+#1040#  "Lägg till nytt fusk..."
+#1041#  "Redigera"
+#1042#  "Ta bort"
+
+// Shortcut editor
+#1100#  "Nollställ genvägar"
+#1101#  "Är du säker på att du vill nollställa genvägarna?\n\nDenna åtgärd går inte att ångra."
+#1102#  "Filmeny"
+#1103#  "Systemmeny"
+#1104#  "Alternativ"
+#1105#  "Sparningsplatser"
+
+/*** Support window ***/
+
+#1200#  "Stöd Project64"
+#1201#  "Project64 är en fri Nintendo 64-emulator byggd på öppen källkod.\n\nDen låter dig spela riktiga N64-program på samma sätt som det skulle vara i den ursprunliga konsollen.\n\nJag är ledsen för att visa denna ruta men behöver be dig vänta några sekunder för att njuta av resultatet av hundratals timmars arbete.\n\nOm du kan och vill ge ditt stöd till Project64 eller att du har fått nytta av det så ge gärna ditt stöd till Project64 antingen som ett tack eller din önskan att ta bort denna ruta.\n\nOm du har gett ditt stöd till Project64:"
+#1202#  "Ange/begärd notifieringskod"
+#1203#  "Stöd Project64"
+#1204#  "Fortsätt"
+#1205#  "Ange supportkoden"
+#1206#  "Misslyckades med att validera koden\n\nFörsäkra dig om att koden i e-postmeddelandet matchar baserat på din maskin"
+#1207#  "Tack"
+#1208#  "Ange din supportkod"
+#1209#  "Ange koden som du fick i din e-post.\n\nE-postmeddelandet kommer att skickas till e-postadress som du använde för Project64.\n\nNotera att koden endast fungerar för en unik maskin. ID för denna dator är:"
+#1210#  "OK"
+#1211#  "Avbryt"
+#1212#  "Begär kod"
+#1213#  "Koden har skickats till dig via e-post"
+#1214#  "Misslyckades med att skicka koden. Försäkra dig om att din e-post är korrekt"
+
+/*** Enhancements ***/
+
+#1300#  "Förbättringar"
+
+/*** Messages ***/
+
+#2000#  "*** CPU PAUSAD ***"
+#2001#  "CPU återupptagen"
+#2002#  "I en permanent loop som inte kan avslutas.\nEmuleringen kommer nu att stoppas.\n\nVerifiera ROM och dess inställningar."
+#2003#  "Misslyckades att allokera minne"
+#2004#  "Standardinsticksmodulen eller den valda videoinsticksmodulen saknas eller är ogiltigt.\n\nDu måste gå till Inställningar och välja en videoinsticksmodul (grafik).\nKontrollera att du har minst en kompatibel insticksmodulfil i din insticksmodulmapp."
+#2005#  "Standardinsticksmodulen eller den valda ljudinsticksmodulen saknas eller är ogiltigt.\n\nDu måste gå till Inställningar och välja en ljudinsticksmodul (ljud).\nKontrollera att du har minst en kompatibel insticksmodulfil i din insticksmodulmapp."
+#2006#  "Standardinsticksmodulen eller den valda RSP-insticksmodulen saknas eller är ogiltigt.\n\nDu måste gå till Inställningar och välja en RSP-insticksmodul (Reality Signal Processor).\nKontrollera att du har minst en kompatibel insticksmodulfil i din insticksmodulmapp."
+#2007#  "Standardinsticksmodulen eller den valda inmatningsinsticksmodulen saknas eller är ogiltigt.\n\nDu måste gå till Inställningar och välja en inmatningsinsticksmodul (kontroller).\nKontrollera att du har minst en kompatibel insticksmodulfil i din insticksmodulmapp."
+#2008#  "Misslyckades med att läsa in insticksmodul:"
+#2009#  "Misslyckades med att läsa in ord.\n\nVerifiera ROM och dess inställningar."
+#2010#  "Misslyckades med att öppna sparad fil"
+#2011#  "Misslyckades med att öppna EEPROM"
+#2012#  "Misslyckades med att öppna flash RAM"
+#2013#  "Misslyckades med att öppna mempak"
+#2014#  "Försök att öppna zip-fil misslyckades.\n\nAntagligen en skadad zip-fil - prova att zippa upp ROM manuellt."
+#2015#  "Försök att öppna filen misslyckades."
+#2016#  "Fel inträffade vid försök att öppna zip-filen."
+#2017#  "Filen som lästes in verkar inte vara en giltig N64 ROM.\n\nVerifiera dina ROMar med GoodN64."
+#2018#  "Okänt land"
+#2019#  "Okänt CIC-chip"
+#2020#  "Okänt filformat"
+#2021#  "Okänd minnesåtgärd\n\nEmulationen stoppad"
+#2022#  "Ohanterad R4300i opcode vid"
+#2023#  "Körning från icke-mappat utrymme.\n\nVerifiera ROM och dess inställningar."
+#2024#  "Detta sparade tillstånd verkar inte matcha detta körande ROM.\n\nTillstånd måste sparas och läsas in mellan 100% identiska ROM.\nSpeciellt REGION och VERSION måste vara samma.\nInläsning av detta tillstånd kan orsaka att spelet och/eller emulatorn kraschar.\n\nÄr du säker på att du vill fortsätta inläsningen?"
+#2025#  "Fel"
+#2026#  "Copyright-sekvens hittades inte i LUT. Spelet kommer inte längre att fungera."
+#2027#  "Fel i kopieringsskydd"
+#2028#  "Byte av en insticksmodul kräver att Project64 startar om en körande ROM.\nOm du inte vill förlora din plats, svara Nej och spara det aktuella tillståndet först.\n\nByta insticksmoduler och starta om ROM nu?"
+#2029#  "Byt insticksmoduler"
+#2030#  "Emulation abslutad"
+#2031#  "Emulation startad"
+#2032#  "Kunde inte läsa in tillstånd"
+#2033#  "Läste in tillstånd"
+#2034#  "Sparade aktuellt tillstånd till"
+#2035#  "Tillståndsplats"
+#2036#  "Byte-swapping bild"
+#2037#  "Väljer N64-avbildning"
+#2038#  "Läste in"
+#2039#  "Läser in avbildning"
+#2040#  "Kan inte öppna en ROM därför att insticksmoduler inte har initierats korrekt."
+#2041#  "Är du säker på att du vill ta bort denna?"
+#2042#  "Ta bort fusk"
+#2043#  "Fusknamnet används redan."
+#2044#  "Du har nått maximalt antal fusk för denna ROM."
+#2045#  "Initiering av insticksmodul"
+#2046#  "Du har inte valt en virtuell tangent att tilldela till menyposten."
+#2047#  "Du behöver välja en menypost att tilldela denna tangent till."
+#2048#  "Genväg har redan tilldelats till en annan menypost."
+#2049#  "Ingen genväg har markerats för att tas bort."
+#2050#  "ROM inläst. Väntar på att emuleringen startas."
+#2051#  "Betaversioner av Project64 är endast för medlemmar.\n\nOm du har ett konto på www.pj64-emu.com så ska du inte se detta fel!!\nKontakta oss på webbplatsen."
+#2052#  "Programfel"
+#2053#  "Misslyckades med att hitta filnamn i 7z-filen"
+#2054#  "Lågnivåemulering för grafik"
+#2055#  "Grafik-LLE är inte för allmänt bruk!!!\nDet är rekommenderat att du endast använder detta för tester och inte för att spela spel.\n\nÄndra till grafik-LLE?"
+#2056#  "Högnivåemulering för ljud"
+#2057#  "Ljud-HLE kräver en insticksmodul från tredjepart!!!\nOm du inte använder en ljudinsticksmodul från tredjepart som har stöd för HLE kommer du inte höra något ljud.\n\nÄndra till ljud-HLE?"
+#2058#  "Filen som lästes in verkar inte vara en giltig 64DD IPL ROM.\n\nVerifiera dina ROMar med GoodN64."
+#2059#  "Nintendo 64DD Japanese Retail IPL ROM hittades inte.\nDen krävs för att spela 64DD-diskavbildningar för japanska regionen.\n\nVälj den nödvändiga ROM i inställningarna."
+#2061#  "Nintendo 64DD American Retail IPL ROM hittades inte.\nDen krävs för att spela 64DD-diskavbildningar för amerikanska regionen.\n\nVälj den nödvändiga ROM i inställningarna"
+#2062#  "Nintendo 64DD Development IPL ROM hittades inte.\nDen krävs för att spela 64DD-diskavbildningar för utveckling.\n\nVälj den nödvändiga ROM i inställningarna"
+#2063#  "Misslyckades med att uppdatera fusk. Fusket är ogiltigt"
+#2064#  "Ogiltig fusk"
+
+/*** Android ***/
+
+#3000#  "Inställningar"
+#3001#  "Hjälp/Forum"
+#3002#  "Rapportera fel"
+#3003#  "Om"
+#3004#  "Tidigare spelade"
+#3005#  "Spel"
+#3006#  "Spelkatalog"
+#3007#  "Välj en mapp att söka igenom"
+#3008#  "Inkludera underkataloger"
+#3009#  "Föräldramapp"
+#3010#  "Kataloger"
+#3011#  "Internt minne"
+#3012#  "Söker igenom..."
+#3013#  "OK"
+#3014#  "Avbryt"
+#3015#  "Information"
+#3016#  "Project64 för Android"
+#3017#  "Licens"
+#3018#  "Revision"
+#3019#  "Project64 för Android\u2122 är en portering av Windows-versionen av Project64. Android\u2122-versionen kan spela de flesta N64-spel."
+#3020#  "Upphovspersoner för Project64."
+#3021#  "Discord"
+
+// In-game menu
+#3100#  "Inställningar"
+#3101#  "Spara tillstånd"
+#3102#  "Läs in tillstånd"
+#3103#  "Avsluta emulering"
+#3104#  "Pausa"
+#3105#  "Återuppta"
+#3106#  "Spelhastighet"
+#3107#  "Aktuellt sparat tillstånd..."
+#3108#  "Auto"
+#3109#  "Plats"
+#3110#  "Starta om"
+#3111#  "Felsökningsalternativ"
+#3112#  "Nollställ funktionstider"
+#3113#  "Dumpa funktionstider"
+
+// Video plugin
+#3200#  "Inbyggd"

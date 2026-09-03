@@ -1,0 +1,48 @@
+[DF331A18-5FD4E044-C:45]
+Name=NASCAR 2000 (U)
+
+$1 Lap Race
+Note=Do not put this on with Total Number of Laps Code
+810495AE 0001
+
+$Beat Championship Mode Easily
+80223E3B 0255
+
+$Both Players Can Be Dale E
+80046538 0003
+
+$Have CPU Control Car Player 1
+D0092985 0020
+8015CC5C 0001
+D0092985 0010
+8015CC5C 0000
+
+$Infinite Fuel\Player 1
+81220502 3E80
+
+$Infinite Fuel\Player 2
+81230472 3E80
+
+$Maximum\Acceleration
+800C7113 0000
+
+$Maximum\Pit Distance
+800C7110 0000
+
+$Maximum\Top Speed
+800C7111 0000
+
+$Race Forever
+810465AE FDE8
+
+$Total Number Of Laps
+80046553 00??
+01 1 lap
+02 2 lap
+03 3 lap
+04 4 lap
+05 5 lap
+06 6 lap
+07 7 lap
+08 8 lap
+09 9 lap

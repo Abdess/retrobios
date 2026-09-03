@@ -1,0 +1,10 @@
+[E6A95A4F-BAD2EA23-C:45]
+Name=Aidyn Chronicles - The First Mage (U) [!] (V1.0)
+
+$Lagfix High Rez
+800D7F16 000D
+
+$Lagfix Lo Res
+Note=Game natively runs 60fps already,just needed that extra push.
+800E5392 000D
+

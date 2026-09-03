@@ -1,0 +1,72 @@
+[F00F2D4E-340FAAF4-C:45]
+Name=Carmageddon 64 (U)
+
+$Freeze Time at 02:00
+811C479E 1C40
+
+$Have All Groups Completed
+Note=This gives you all Cups for all Groups.
+50002801 0000
+801C48DC 0002
+
+$Have Everything Unlocked
+Note=This will unlock Cars, Races, Missions and the in-built Cheat Menu. This will also replace all the Zombies with  Dinosaurs. To access Cheat menu options: Pause Game: Use Control Stick, to scroll the Cheat Menu. Press A, to activate Cheats
+801C49BD 000F
+
+$Have Infinite\Free Repairs
+8109DEC4 ????
+0BBB On
+0000 Off
+
+$Have Infinite\Frozen Opponents
+8109DF24 ????
+0BBB On
+0000 Off
+
+$Have Infinite\Grip-O-Matic Tires
+8109E05C ????
+0BBB On
+0000 Off
+
+$Have Infinite\Hot Rod
+8109DE64 ????
+0BBB On
+0000 Off
+
+$Have Infinite\Invunerability
+8109DEAC ????
+0BBB On
+0000 Off
+
+$Have Infinite\Mega Turbo
+8109DE4C ????
+0BBB On
+0000 Off
+
+$Have Infinite\Mine Dropping Ability
+8009E119 ????
+0064 On
+0000 Off
+
+$Have Infinite\Turbo
+8109DE34 ????
+0BBB On
+0000 Off
+
+$Have Infinite\Turbo Nitrous
+8109DE7C ????
+0BBB On
+0000 Off
+
+$Have Infinite\Underwater Ability
+8109DEF4 ????
+0BBB On
+0000 Off
+
+$Max Credits
+Note=This is also Infinite until disabled
+811C481B FFFF
+
+$Max Kills
+Note=This will automatically Clear the stage if enabled and go back to the stage menu
+8109AC46 012C

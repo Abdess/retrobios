@@ -1,0 +1,44 @@
+[2952369C-B6E4C3A8-C:50]
+Name=Pokemon Stadium 2 (E)
+
+$Infinite Health Stadium & Gym Leader Castle
+801DD22D 0030
+
+$Mini Games\Player 1\Clear Cut Challenge gets perfect score
+801744C3 0063
+
+$Mini Games\Player 1\Delibird Delivery Perfect Score
+801AC2CC 0063
+
+$Mini Games\Player 1\Egg Emergency perfect score
+80191C3F 0064
+
+$Mini Games\Player 1\Furret Frolic Perfect Score
+801E9623 0063
+
+$Mini Games\Player 1\Gutsy Golbat has 99 Hearts
+D017711F 0001
+8017711F 0063
+
+$Mini Games\Player 1\Roll Out Rampage Always in 1st Place
+80103179 0001
+
+$Mini Games\Player 1\Streaming Stampede Perfect Score
+8018138B 0063
+
+$Mini Games\Player 1\Topsy Turvy
+Note=Immediatly wins
+D01769E7 0001
+801769E7 0005
+
+$Mini Games\Player 2\Gutsy Golbat has 99 hearts
+D017714B 0001
+8017714B 0063
+
+$Mini Games\Player 3\Gutsy Golbat has 99 hearts
+D0177177 0001
+80177177 0063
+
+$Mini Games\Player 4\Gutsy Golbat has 99 hearts
+D01771A3 0001
+801771A3 0063

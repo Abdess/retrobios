@@ -1,0 +1,77 @@
+[673D099B-A4C808DE-C:45]
+Name=Rampage 2 - Universal Tour (U)
+
+$Always Full Special\Boris
+811543DC 0044
+
+$Always Full Special\Curtis
+811541C0 0044
+
+$Always Full Special\George
+81154814 0044
+
+$Always Full Special\Lizzie
+81154A30 0044
+
+$Always Full Special\Myukus
+81554E68 0044
+
+$Always Full Special\Ralph
+81154C4C 0044
+
+$Always Full Special\Ruby
+811545F8 0044
+
+$Enable George
+8118CF92 0000
+
+$Enable\Lizzie
+8118CF94 0000
+
+$Enable\Myukus
+8118CF98 0000
+
+$Enable\Ralph
+8118CF96 0000
+
+$Infinite Health\George
+8115480C 0044
+
+$Infinite Health\Lizzie
+81154A28 0044
+
+$Infinite Health\Ralph
+81154C44 0044
+
+$Infinite Lives\George
+81154808 0063
+
+$Infinite Lives\Lizzie
+81154A24 0063
+
+$Infinite Lives\Ralph
+81154C40 0063
+
+$Infinite\Health\Boris
+811543D4 0044
+
+$Infinite\Health\Curtis
+811541B8 0044
+
+$Infinite\Health\Myukus
+81154E60 0044
+
+$Infinite\Health\Ruby
+811545F0 0044
+
+$Infinite\Lives\Boris
+811543D0 0063
+
+$Infinite\Lives\Curtis
+811541B4 0063
+
+$Infinite\Lives\Myukus
+81154EFC 0063
+
+$Infinite\Lives\Ruby
+811545EC 0063

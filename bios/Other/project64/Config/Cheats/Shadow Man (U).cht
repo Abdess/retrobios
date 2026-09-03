@@ -1,0 +1,70 @@
+[3A4760B5-2D74D410-C:45]
+Name=Shadow Man (U)
+
+$[Ammo Always Displayed On Screen]
+50000408 0000
+80075ACD 0007
+
+$[Health Meter Displayed On Screen]
+81075B10 0000
+81075B12 00FF
+
+$Character Select
+80075F52 00??
+00 Normal
+01 Play as Deadwing.
+04 Big Head.
+08 Flame Grilled
+
+$Have All\Cheats: Book of Shadows
+81075F4E 0FFF
+
+$Have All\Dark Souls Collected
+80075F49 0078
+
+$Have All\Gads & The Poign
+80030E57 000F
+
+$Have All\Items
+Note=Youll not miss out any part of the game for having all parts of LEclipsers with a new game
+50001B20 0000
+80030613 000B
+
+$Have All\L-Eclipser
+Note=You will not miss out any part of the game for having all parts of LEclipsers with a new game
+50000320 0000
+80030973 000B
+
+$Have All\Levels Unlocked
+5000101C 0000
+80030A0E 0001
+
+$Infinite\0.9mm Ammo
+81075B3A 0190
+
+$Infinite\Accumulators
+800306D7 0005
+
+$Infinite\Cadeaux'
+81075B36 03E7
+
+$Infinite\Max Health/Air/Shadow Charge & Voodoo Power
+50000604 0000
+81075B16 2710
+
+$Infinite\Prisms
+80030957 0003
+
+$Infinite\Retractors
+800308B7 0003
+
+$Infinite\Shotgun Shells
+80075B2F 0063
+
+$Infinite\Violator Ammo
+81075B32 03E7
+
+$Press L To Levitate
+Note=Press the L-Button to rise and let go and press again in stages to come back down.
+D0059097 0020
+80075578 0041

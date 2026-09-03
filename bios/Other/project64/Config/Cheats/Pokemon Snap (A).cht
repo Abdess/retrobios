@@ -1,0 +1,42 @@
+[7BB18D40-83138559-C:55]
+Name=Pokemon Snap (A)
+
+$Enable All Levels
+Note=This is needed to be able to Play all Levels of the Game
+810C2CD2 0006
+
+$Have\Apples Bombs and Flute
+803AE51F 0004
+
+$Have\Rapid Fire Apples and Bombs
+80382CB7 0000
+
+$Press L\To Stop On Level 1 Beach
+Note=To Activate this Cheat Code, Press L To Stop & Press Start to Continue Again.
+D00488A1 0020
+80202BB5 0001
+
+$Press L\To Stop On Level 2 Tunnel
+Note=To Activate this Cheat Code, Press L To Stop & Press Start to Continue Again.
+D00488A1 0020
+801DE715 0001
+
+$Press L\To Stop On Level 3 Volcano
+Note=To Activate this Cheat Code, Press L To Stop & Press Start to Continue Again.
+D00488A1 0020
+801FD085 0001
+
+$Press L\To Stop On Level 4 River
+Note=To Activate this Cheat Code, Press L To Stop & Press Start to Continue Again.
+D00488A1 0020
+801F042D 0001
+
+$Press L\To Stop On Level 5 Cave
+Note=To Activate this Cheat Code, Press L To Stop & Press Start to Continue Again.
+D00488A1 0020
+80202CE5 0001
+
+$Press L\To Stop On Level 6 Valley
+Note=To Activate this Cheat Code, Press L To Stop & Press Start to Continue Again.
+D00488A1 0020
+801DA57D 0001

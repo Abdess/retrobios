@@ -1,0 +1,423 @@
+﻿/*********************************************************************************
+* Meta Information                                                               *
+*********************************************************************************/
+//About DLL
+#1  #  "čeština"				// LANGUAGE ID
+#2  #  "Milan Hrubý (hruby@email.cz)"		// Author
+#3  #  "1.5.3"					// Version
+#4  #  "2002-09-13"				// Date
+
+//About DLL Dialog
+#5  #  "GUI pøeklad (.pj.Lang)"
+#6  #  "Autor"
+#7  #  "Verze"
+#8  #  "Datum"
+#9  #  "Autorova domovská stránka"
+#10 #  "ROM databáze (Project64.rdb)"
+#11 #  "Cheat kód soubor (Project64.cht)"
+#12 #  "Rozšíøené ROM informace (Project64.rdx)"
+
+//About INI title
+#20 #  "Project64 aktuálnì používá:"
+
+/*********************************************************************************
+* Menu                                                                           *
+*********************************************************************************/
+//File Menu
+#100#  "&Soubor"
+#101#  "&Otevøít ROM..."
+#102#  "ROM &informace...."
+#103#  "&Zaèít emulaci"
+#104#  "&Ukonèit emulaci"
+#105#  "&Vybrat ROM složku..."
+#106#  "Obnovit p&rohlížeè"
+#107#  "&Poslední ROM"
+#108#  "Poslední ROM &složka"
+#109#  "&Konec"
+
+//System Menu
+#120#  "Systé&m"
+#121#  "&Resetovat ROM"
+#122#  "Po&zastavit"
+#123#  "S&ejmout obrazovku"
+#124#  "&Omezovaè rychlosti"
+#125#  "&Uložit stav"
+#126#  "Uložit j&ako..."
+#127#  "&Nahrát stav"
+#128#  "Na&hrát..."
+#129#  "S&tavový sektor"
+#130#  "&Cheaty..."
+#131#  "Cheat tlaèít&ko"
+#132#  "&Pokraèovat"
+
+//Options Menu
+#140#  "M&ožnosti"
+#141#  "&Pøejít na celou obrazovku"
+#142#  "Vždy &navrchu"
+#143#  "&Video plugin..."
+#144#  "&Audio plugin..."
+#145#  "Vstupní plug&in..."
+#146#  "&RSP..."
+#147#  "&Ukázat CPU využití %"
+#148#  "Nas&tavení..."
+
+//Debugger Menu
+#160#  "&Debugger"
+
+//Language Menu
+#175#  "&Jazyk"
+
+//Help Menu
+#180#  "&Nápovìda"
+#181#  "O INI &souborech"
+#182#  "&O programu Project64"
+
+//Current Save Slot menu
+#190#  "&Standardní sektor (.pj)"
+#191#  "Sektor &1 (.pj1)"
+#192#  "Sektor &2 (.pj2)"
+#193#  "Sektor &3 (.pj3)"
+#194#  "Sektor &4 (.pj4)"
+#195#  "Sektor &5 (.pj5)"
+#196#  "Sektor &6 (.pj6)"
+#197#  "Sektor &7 (.pj7)"
+#198#  "Sektor &8 (.pj8)"
+#199#  "Sektor &9 (.pj9)"
+#200#  "Sektor 1&0 (.pj0)"
+
+//Pop up Menu
+#210#  "&Hrát hru"
+#211#  "&Vlastnosti"
+#212#  "&Editovat nastavení ROM"
+#213#  "Editovat &cheaty"
+
+// Menu Descriptions
+#250#  "Projde poèítaè pro nalezení a nahrání N64 ROM"
+#251#  "Zobrazí informace o nahrané ROM"
+#252#  "Zaène emulaci nahrané ROM"
+#253#  "Zastaví emulaci nahrané ROM a vrátí se do prohlížeèe"
+#254#  "Zmìní složku ROM prohlížeèe"
+#255#  "Obnoví okno prohlížeèe k promítnutí zmìn v ROM složce"
+#256#  "Ukonèí Project64"
+#257#  "Restartuje bìžící ROM a nechá nabýt úèinku jakýkoliv zmìn v nastavení"
+#258#  "Pozastaví/obnoví emulaci bìžící ROM"
+#259#  "Vygeneruje bitmapu skrz video plugin"
+#260#  "Omezí VI/s ke korekci rychlosti pro ROM region"
+#261#  "Uloží Project64 stav do nynìjšího sektoru"
+#262#  "Uloží Project64 stav do jakéhokoliv umístìní a názvu souboru"
+#263#  "Nahraje Project64 stav z nynìjšího sektoru"
+#264#  "Nahraje Project64 stav z jakéhokoliv umístìní a názvu souboru"
+#265#  "Vybere nebo pøidá cheat kódy pro bìžící ROM"
+#266#  "Emuluje stisk GameShark tlaèítka - pro použití s nìkterými cheaty"
+#267#  "Pøepne z okenního módu do celoobrazovkového módu (stisknìte Escape k návratu!)"
+#268#  "Drží okno Project64 pøed ostatními okny"
+#269#  "Nakonfiguruje vybraný video (grafický) plugin"
+#270#  "Nakonfiguruje vybraný audio (zvukový) plugin"
+#271#  "Nakonfiguruje vybraný vstupní (ovladaè) plugin"
+#272#  "Nakonfiguruje RSP plugin"
+#273#  "Ukáže/skryje zobrazení využití systému CPU rozdìlený mezi složky emulátoru"
+#274#  "Project64 hlavní nastavení aplikace (výbìr pluginu atd.)"
+#275#  "Otevøe uživatelský manuál Project64"
+#276#  "Otevøe Project64 herní FAQ"
+#278#  "O aplikaci a autorech"
+#277#  "O autorech podpùrných souborù"
+#279#  "Nahraje nedávno nahranou ROM"
+#280#  "Pøepne zobrazení prohlížeèe na tuto složku"
+#281#  "Pøepne Project64 GUI do jiného jazyka"
+#282#  "Pøepne do jiného stavu uloženého sektoru"
+#283#  "Nahraje a zaène emulaci vybrané hry"
+#284#  "Zobrazí informace o vybrané høe"
+#285#  "Edituje nastavení v RDB souboru pro vybranou hru"
+#286#  "Edituje cheaty v CHT souboru pro vybranou hru"
+
+/*********************************************************************************
+* ROM Browser                                                                    *
+*********************************************************************************/
+//ROM Browser Fields
+#300#  "Název souboru"
+#301#  "Vnitøní název"
+#302#  "Øádný název"
+#303#  "Stav"
+#304#  "Velikost ROM"
+#305#  "Poznámka jádra"
+#306#  "Poznámka pluginu"
+#307#  "Poznámky (uživatel)"
+#308#  "ID kazety"
+#309#  "Typ média"
+#310#  "Region"
+#311#  "Vývojáø"
+#312#  "CRC1"
+#313#  "CRC2"
+#314#  "CIC èip"
+#315#  "Datum uveøejnìní"
+#316#  "Žánr"
+#317#  "Hráèi"
+
+//Select ROM
+#320#  "Nastavte ROM složku pro ROM prohlížeè"
+
+//Messages
+#340#  "Špatná ROM? Použijte GoodN64, hledejte novou RDB"
+
+/*********************************************************************************
+* Options                                                                        *
+*********************************************************************************/
+//Options Title
+#400#  "Nastavení Project64"
+
+//Tabs
+#401#  "Pluginy"
+#402#  "Složky"
+#403#  "Možnosti"
+#404#  "Výbìr ROM"
+#405#  "Pokroèilé"
+#406#  "Nastavení ROM"
+#407#  "Integrace"
+#408#  "ROM poznámky"
+
+//Plugin Dialog
+#420#  "O pluginu"
+#421#  "&Reality Signal Processor plugin"
+#422#  "&Video (grafický) plugin"
+#423#  "&Audio (zvukový) plugin"
+#424#  "Vst&upní (ovladaè) plugin"
+
+//Directory Dialog
+#440#  "&Plugin složka"
+#441#  "&ROM složka"
+#442#  "Pùvod&ní N64 ukládací složka"
+#443#  "Projec&t64 ukládací složka stavù"
+#444#  "&Složka screenshotù"
+#445#  "Pa&matovat si poslední složku, z které byla otevøena"
+#446#  "Vyberte složku pro pluginy"
+#447#  "Vyberte složku pro ROM"
+#448#  "Vyberte složku pro pùvodní N64 uložení"
+#449#  "Vyberte složku pro Project64 uložení stavù"
+#450#  "Vyberte složku pro screenshoty"
+
+//Options Dialog
+#460#  "&Pozastavit, když okno ztratí zamìøení"
+#461#  "Pøepn&out na celou obrazovku automaticky po nahrání hry"
+#462#  "&Skrýt pokroèilé nastavení (doporuèeno)"
+#463#  "Pamatovat si vyb&rané cheaty pro hry"
+
+//ROM Browser Tab
+#480#  "&Poèet ROM k zapamatování (0-10)"
+#481#  "ROM"
+#482#  "Poèet slože&k ROM k zapamatování (0-10)"
+#483#  "složky"
+#484#  "P&rohlížeè ROM povolený"
+#485#  "R&ekurze adresáøe"
+#486#  "Do&stupná pole"
+#487#  "&Ukázat v tomto poøadí:"
+#488#  "Pøid&at ->"
+#489#  "<- &Odebrat"
+#490#  "&Nahoru"
+#491#  "&Dolù"
+
+//Advanced Options
+#500#  "Tato nastavení se používají, když RDB nemá urèenou hodnotu,
+RDB není pøítomno nebo volba dole 'pøepsat' je nezaškrtnutá"
+#501#  "Stan&dardy jádra"
+#502#  "R4300i &jádro"
+#503#  "&Samo-mod. kódovací metoda:"
+#504#  "RDRA&M velikost:"
+#505#  "&Pokroèilé blokové spojování:"
+#506#  "&Zaèít emulaci po nahrání ROM"
+#507#  "Pøepsat tat&o standardní nastavení údaji z RDB"
+#508#  "&Komprimovat všechna stavová ukládáni do zipu"
+
+//ROM Options
+#520#  "R4300i &jádro:"
+#521#  "&Samo-mod. kódovací metoda:"
+#522#  "RDRA&M velikost:"
+#523#  "&Pokroèilé blokové spojování:"
+#524#  "&Typ uložení:"
+#525#  "&Faktor èítaèe:"
+#526#  "&Vìtší kompilaèní buffer"
+#527#  "T&LB"
+#528#  "Caching &registru"
+#529#  "Zpozd&it SI pøerušení:"
+#530#  "SP &hack"
+#531#  "* užívat standardní"
+
+//Core Styles
+#540#  "Pøekladaè"
+#541#  "Rekompiler"
+#542#  "Seøízení jádra"
+
+//Self Mod Methods
+#560#  "Žádná"
+#561#  "Cache"
+#562#  "Chránit pamì"
+#563#  "Ovìøit pamì & cache"
+#564#  "Støídat pamì & cache"
+#565#  "Ovìøit postup pamìti"
+
+//RDRAM Size
+#580#  "4 MB"
+#581#  "8 MB"
+
+//Advanced Block Linking
+#600#  "Zapnuto"
+#601#  "Vypnuto"
+
+//Save Type
+#620#  "* detek. první užívaný typ"
+#621#  "4-kbit EEPROM"
+#622#  "16-kbit EEPROM"
+#623#  "SRAM"
+#624#  "128-kbajtù flash RAM"
+
+//Shell Intergration Tab
+#640#  "S Project64 asociovat soubory"
+
+//ROM Notes
+#660#  "&Stav:"
+#661#  "P&oznámka jádra:"
+#662#  "&Poznámka pluginu:"
+
+/*********************************************************************************
+* ROM Information                                                                *
+*********************************************************************************/
+//ROM Info Title Title
+#800#  "ROM informace"
+
+//ROM Info Text
+#801#  "Vnitøní název"
+#802#  "Název souboru"
+#803#  "Umístìní"
+#804#  "Velikost"
+#805#  "ID kazety"
+#806#  "Typ média"
+#807#  "Region"
+#808#  "CRC1"
+#809#  "CRC2"
+#810#  "CIC èip"
+
+/*********************************************************************************
+* Cheats                                                                         *
+*********************************************************************************/
+//Cheat List
+#1000#  "Cheaty"
+#1001#  "Cheaty:"
+#1002#  "Poznámky: "
+#1003#  "Oznaèit všechny"
+#1004#  "&Odznaèit všechny"
+
+//Add Cheat
+#1005#  "Pøidat cheat"
+#1006#  "Název:"
+#1007#  "Kód:"
+#1008#  "Vložit"
+#1009#  "Odstranit"
+#1010#  " Cheat poznámky: "
+#1011#  "Pøidat do DB"
+#1022#  "Pøidat cheat"
+#1023#  "Nový cheat"
+#1024#  "<adresa> <hodnota>"
+#1025#  "Možnosti:"
+#1026#  "<hodnota> <oznaèení>"
+
+//Code extension
+#1012#  "Rozšíøení kódu"
+#1013#  "Prosím vyberte hodnotu, která bude užívána pro:"
+#1014#  "OK"
+#1015#  "Zrušit"
+
+//Digital Value
+#1016#  "Èíslo kvantity"
+#1017#  "Prosím vyberte hodnotu pro:"
+#1018#  "&Hodnota"
+#1019#  "od"
+#1020#  "do"
+#1021#  "&Poznámky:"
+
+//Edit Cheat
+#1027#  "Editace cheatu"
+#1028#  "Aktualiz. cheat"
+
+//Cheat Popup Menu
+#1040#  "Pøidat nový cheat..."
+#1041#  "Editovat..."
+#1042#  "Vymazat"
+
+/*********************************************************************************
+* Messages                                                                       *
+*********************************************************************************/
+#2000#  "Pozastaveno"
+#2001#  "Obnoveno"
+#2002#  "Ve stálé smyèce kterou nelze opustit.
+Emulace bude nyní zastavena.
+
+Ovìøuji ROM a její nastavení."
+#2003#  "Selhalo pøidìlení pamìti"
+#2004#  "Standardní nebo vybraný video plugin chybí nebo je poškozený.
+
+Zkontrolujte, že máte alespoò jeden kompatibilní plugin soubor v plugin složce."
+#2005#  "Standardní nebo vybraný audio plugin chybí nebo je poškozený.
+
+Zkontrolujte, že máte alespoò jeden kompatibilní plugin soubor v plugin složce."
+#2006#  "Standardní nebo vybraný RSP plugin chybí nebo je poškozený.
+
+Zkontrolujte, zda máte Project64 øádnì nainstalovaný s platnou plugin cestou."
+#2007#  "Standardní nebo vybraný vstupní plugin chybí nebo je poškozený.
+
+Zkontrolujte, že máte alespoò jeden kompatibilní plugin soubor v plugin složce."
+#2008#  "Selhalo nahrání pluginu:"
+#2009#  "Selhalo nahrání slova
+
+Ovìøuji ROM a její nastavení."
+#2010#  "Selhalo otevøení uloženého souboru stavu"
+#2011#  "Selhalo otevøení EEPROM"
+#2012#  "Selhalo otevøení flash RAM"
+#2013#  "Selhalo otevøení mempaku"
+#2014#  "Pokus otevøít zip soubor selhal.
+Chybìjící nebo poškozený zip soubor - zkontrolujte cestu a soubor.
+
+Možná budete muset restartovat aplikaci."
+#2015#  "Pokus otevøít soubor selhal."
+#2016#  "Pøi pokusu otevøít zip soubor nastala chyba."
+#2017#  "Nahraný soubor se nezdá být platnou Nintendo 64 ROM.
+
+Provìøte Váš ROM s GoodN64."
+#2018#  "Neznámá zemì"
+#2019#  "Neznámý CIC èip"
+#2020#  "Neznámý formát souboru"
+#2021#  "Neznámá pamìová èinnost
+
+Emulace zastavena"
+#2022#  "Nevhodný R4300i OpKód na"
+#2023#  "Provedení z nenamapovaného prostoru.
+
+Ovìøuji ROM a její nastavení."
+#2024#  "Zdá se, že uložený stav neodpovídá bìžící ROM.
+
+Stavová uložení musí být uložena & nahrána mezi 100% stejnými ROM,
+zvláštì REGION a VERZE musí být stejné.
+Nahrání tohoto stavu je pravdìpodobnì pøíèinou pádu hry a/nebo emulátoru.
+
+Jste si jistý, že chcete pokraèovat v nahrávání?"
+#2025#  "Chyba aplikace/jádra"
+#2026#  "Copyright sekvence nenalezena v LUT.  Hra již nebude nadále funkèní."
+#2027#  "Selhala ochrana proti kopírování"
+#2028#  "Zmìna pluginu vyžaduje, aby Project64 resetoval bìžící ROM.
+Jestliže nechcete ztratit Vaši pozici, odpovìzte Ne a nejprve vytvoøte uložení stavu.
+
+Zmìnit pluginy a restartovat hru?"
+#2029#  "Zmìna pluginù"
+#2030#  "Emulace skonèila"
+#2031#  "Emulace zaèala"
+#2032#  "Nemohu nahrát uložený stav"
+#2033#  "Nahraný stav:"
+#2034#  "Uložený stav:"
+#2035#  "Aktuální sektor uloženého stavu"
+#2036#  "Bajt-vymìòující ROM"
+#2037#  "Èekám až si vyberete ROM"
+#2038#  "Nahráno"
+#2039#  "Nahrávám ROM"
+#2040#  "Nemùžete otevøít ROM, jestliže nebyly spuštìny pluginy všech typù (Video, Audio, Vstupní a RSP)"
+#2041#  "Jste si jistý, že chcete vymazat tento cheat?"
+#2042#  "Vymazat cheat"
+#2043#  "Název cheatu již existuje, prosím vyberte jiný"
+#2044#  "Dosáhli jste maximálního poètu cheatù na hru"

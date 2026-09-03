@@ -1,0 +1,71 @@
+[1B598BF1-ECA29B45-C:45]
+Name=AeroFighters Assault (U)
+
+$99 Accuracy
+80130B80 0063
+
+$99 Bonus
+80130B87 0063
+
+$Always Have\F-15J Eagle
+8027CCEC 0010
+
+$Always Have\X-29A A.T.D.
+8027CCED 0020
+
+$Extra Planes
+8127CCEC FFFF
+
+$Extra Points
+D027A20C 0000
+8027A20C 00FF
+
+$Gun Select
+8027E023 00??
+00 Chaff
+01 Jammings
+02 Air Mines
+03 Mahibishi
+0A 22mm BB Shot
+0B 22mm
+0C Hunai Shot
+0D Fireball
+0E Sabre
+14 Fire
+15 Tomahawk
+16 Ninja Glitch
+17 Fire Wave
+1E Rocket
+1F Phoenix
+20 Star
+21 Fire Arrow
+28 Ninjabeam
+
+$Infinite\99 Lives
+80348B98 0063
+
+$Infinite\Armor
+8127CFF4 44A0
+8127CFF8 44A0
+
+$Infinite\Chaffs
+8027E017 000A
+
+$Infinite\Gun
+8027E110 0001
+
+$Infinite\Health
+8027CFF5 00C8
+8027CFF9 00C8
+
+$Infinite\Special Weapons
+8027E4D2 0002
+
+$Rocket Squad
+8027E107 0001
+
+$Tomahawk Squad
+8027E109 0001
+
+$Ultra Fast Missile Recharge
+8027E300 0001

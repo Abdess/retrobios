@@ -1,0 +1,55 @@
+[0C41F9C2-01717A0D-C:46]
+Name=Fighter's Destiny (F)
+
+$Have 1 Star\Abdul
+80307433 0001
+
+$Have 1 Star\Bob
+8030742F 0001
+
+$Have 1 Star\Leon
+80307432 0001
+
+$Have 1 Star\Meiling
+80307431 0001
+
+$Have 1 Star\Ninja
+80307434 0001
+
+$Have 1 Star\Pierre
+80307430 0001
+
+$Have 1 Star\Ryuji
+8030742E 0001
+
+$Have 1 Star\Tomahawk
+80307435 0001
+
+$Have 1 Star\Valerie
+80307436 0001
+
+$Infinite Health\Player 1
+80209981 0000
+802048A3 0000
+
+$Infinite Health\Player 2
+802048A7 0000
+8020B849 0000
+
+$Start on stage 100 on Survival to get Joker
+802EF67B 0063
+
+$Start with Stars Modifier\Player 1
+D0209837 0000
+80209837 00??
+00 No Stars
+06 Max Stars
+
+$Start with Stars Modifier\Player 2
+D020B6FF 0000
+8020B6FF 00??
+00 No Stars
+06 Max Stars
+
+$Stop timer for Fastest to get Robot
+810ADBDC 3F80

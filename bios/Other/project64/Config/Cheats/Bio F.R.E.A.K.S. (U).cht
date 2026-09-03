@@ -1,0 +1,49 @@
+[08123595-0510F1DE-C:45]
+Name=Bio F.R.E.A.K.S. (U)
+
+$1-Hit Death\Player 1
+D01502AA 0064
+811502AA 0100
+
+$1-Hit Death\Player 2
+D0152926 0064
+81152926 0100
+
+$Infinite Health\Player 1
+811502AA 6400
+
+$Infinite Health\Player 2
+811502AA 6400
+
+$Infinite Jetpack\Player 1
+811502B2 3200
+
+$Infinite Jetpack\Player 2
+8115292E 3200
+
+$Infinite Shield\Player 1
+811502AE 6400
+
+$Infinite Shield\Player 2
+8115292A 6400
+
+$Needs 1 Match to Win\Player 1
+D015029B 0000
+8015029B 0001
+
+$Needs 1 Match to Win\Player 2
+D0152917 0000
+80152917 0001
+
+$Never Wins\Player 1
+8015029B 0000
+
+$Never Wins\Player 2
+80152917 0000
+
+$Play As\Player 1
+801ABB2B 00??
+0A She-Freak
+0B PainMaster
+0C Mutilator
+0D ChainSaw

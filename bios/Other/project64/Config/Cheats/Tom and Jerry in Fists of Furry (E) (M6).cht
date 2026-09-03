@@ -1,0 +1,99 @@
+[2B4F4EFB-43C511FE-C:50]
+Name=Tom and Jerry in Fists of Furry (E) (M6)
+
+$[Unlock All Characters]
+Note=This Gives you all Characters to choose from plus fixes A freeze on the Charecter Select Menu by having it on
+800E4933 00FF
+
+$Always Have Weapon Options\Player 1
+810E2DD4 00??
+79 Anvil
+03 Club
+04 Bird bath
+08 Broom
+09 NCube knife
+0A NCube missiles
+0B Chair
+0C Champagne
+0E Chicken
+0F Crate
+14 Deck chair
+16 Egg
+1A Fish
+1D Gardeners Fork
+1E Frying Pan
+1F Wooden Chair
+29 Bouy
+2A Mallet
+2B Watermelon
+2D Milk Bottle
+39 Plank
+41 Rolling Pin
+46 Spade
+47 Stool
+48 Tennis Racket
+4E Spanner
+55 Stick
+63 Blue Swordfish
+64 Saucepan
+65 Wooden Spoon
+6B Stool
+6D Bee hive
+78 Mooses head
+
+$Always Have Weapon Options\Player 2
+810E30AC 00??
+79 Anvil
+03 Club
+04 Bird bath
+08 Broom
+09 NCube knife
+0A NCube missiles
+0B Chair
+0C Champagne
+0E Chicken
+0F Crate
+14 Deck chair
+16 Egg
+1A Fish
+1D Gardeners Fork
+1E Frying Pan
+1F Wooden Chair
+29 Bouy
+2A Mallet
+2B Watermelon
+2D Milk Bottle
+39 Plank
+41 Rolling Pin
+46 Spade
+47 Stool
+48 Tennis Racket
+4E Spanner
+55 Stick
+63 Blue Swordfish
+64 Saucepan
+65 Wooden Spoon
+6B Stool
+6D Bee hive
+78 Mooses head
+
+$Infinite Health
+800E2BDD 00C8
+
+$Infinite time
+800FF18E 00F0
+
+$No music
+800B7718 0000
+
+$One Hit To Kill\Player 1
+Note=This Will Give Player 1 A One Hit Kill Over Player 2
+800E2EB4 0080
+
+$One Hit To Kill\Player 2
+Note=This Will Give Player 2 A One Hit Kill Over Player 1
+800E2BDC 0080
+
+$Open All Versus Arenas
+800E4934 00FF
+800E4935 00FF

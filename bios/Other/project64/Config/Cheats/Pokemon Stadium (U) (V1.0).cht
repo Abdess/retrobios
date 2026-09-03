@@ -1,0 +1,47 @@
+[90F5D9B3-9D0EDCF0-C:45]
+Name=Pokemon Stadium (U) (V1.0)
+
+$Have All Pikachus Magnemites
+801183BC 0000
+801183BD 0000
+801183BE 0000
+
+$Inf HP\In Battle All Pokemon\Player 1
+81285A18 03E7
+
+$Inf HP\In Battle All Pokemon\Player 2
+81286438 03E7
+
+$Pokemon\Inf Spells\Player 1
+810AE580 FFFF
+810AE582 FFFF
+810AE5D4 FFFF
+810AE5D6 FFFF
+810AE628 FFFF
+810AE62A FFFF
+
+$Pokemon\Inf Spells\Player 2
+810AE79C FFFF
+810AE79E FFFF
+810AE7F0 FFFF
+810AE7F2 FFFF
+810AE844 FFFF
+810AE846 FFFF
+
+$Pokemon\Max HP\Player 1
+810AE586 03E7
+810AE5DA 03E7
+810AE62E 03E7
+
+$Pokemon\Max HP\Player 2
+810AE7A2 03E7
+810AE7F6 03E7
+810AE84A 03E7
+
+$Ultimate Code
+Note=what's so ultimate about this code is it raises your Pokemon to its full potential. Even at Level 100, most Pokemon still have a way to go to raise their stats to the max. But with this code, you can instantly boost any Pokemon to its greatest potential!!!
+81171F3C FF01
+81171F3E FF01
+81171F40 FF01
+81171F42 FF01
+81171F44 FF01

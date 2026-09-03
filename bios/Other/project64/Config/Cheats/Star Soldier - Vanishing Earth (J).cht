@@ -1,0 +1,33 @@
+[B703EB23-28AAE53A-C:4A]
+Name=Star Soldier - Vanishing Earth (J)
+
+$Infinite\Lives
+800A37C8 0009
+
+$Infinite\Specials
+800A37C9 0003
+
+$Max\Combo
+810A37C4 7FFF
+
+$Max\Lower Level
+800A37D8 0003
+
+$Max\Score
+800A37A8 03E7
+800A37A9 03E7
+
+$Max\Upper Level
+800A37D9 0063
+
+$Play As
+800A37CC 00??
+00 Character 1
+01 Character 2
+02 Character 3
+
+$Status Modifier
+800A37CA 00??
+01 High
+02 Mid
+03 Low

@@ -1,0 +1,45 @@
+[F63B89CE-4582D57D-C:49]
+Name=A Bug's Life (I)
+
+$Always Have\50 pieces of corn
+801E2761 0032
+
+$Always Have\Super Jump
+811E2750 0020
+
+$Have All Goldberry Tokens
+811E274E 0000
+
+$Have F-L-I-K
+801E2762 000F
+
+$Infinite\Health
+801E2755 0004
+
+$Infinite\Lives
+801E2760 0009
+
+$Levitate
+Note="Press R To Levitate & Let go to land (:"
+D008FFA1 0010
+811E26C6 1000
+D008FFA1 0010
+811E26D6 1000
+
+$No Music
+801DD906 0000
+
+$Start with Berry Weapon
+801E2757 00??
+01 Blueberry
+02 Homing Berry
+03 Goldberry
+04 Super Berry ?
+
+$Subtitles On
+801DDB7B 00??
+00 Off
+01 On
+
+$Unlock All Levels
+81099E30 000F

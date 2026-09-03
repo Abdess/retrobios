@@ -1,0 +1,33 @@
+[B9AF8CC6-DEC9F19F-C:50]
+Name=Chameleon Twist (E)
+
+$Access All Levels
+8020860E 00FF
+80208610 00FF
+
+$Extended Tongue
+8133185E FFFF
+
+$Have 99 Crowns
+80251857 0063
+
+$Have All Levels Completed
+80208612 0019
+80208613 0019
+80208614 0015
+80208615 0018
+80208616 0017
+80208617 0017
+
+$Infinite Health
+80174DF3 000A
+
+$Level Select
+8029097B 00??
+00 Stage 1
+01 Stage 2
+02 Stage 3
+03 Stage 4
+04 Stage 5
+05 Stage 6
+06 Stage 7

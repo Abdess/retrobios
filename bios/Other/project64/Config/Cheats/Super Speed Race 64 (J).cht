@@ -1,0 +1,107 @@
+[9CE02E22-206EF1B0-C:4A]
+Name=Super Speed Race 64 (J)
+
+$1 Lap To Race
+Note=In Single and Chapionship Modes use the Laps In Race Cheat or use the in game setting to choose how many laps you want per race and them use this cheat and amount of Laps to have only have 1 left if needed.
+80098A5D 00??
+03 3 of 3 Laps
+06 6 of 6 Laps
+09 9 of 9 Laps
+0C 12 of 12 Laps
+0F 15 of 15 Laps
+12 18 of 18 Laps
+15 21 of 21 Laps
+18 24 of 24 Laps
+1B 27 of 27 Laps
+1E 30 of 30 Laps
+
+$Always 1st Place
+81098A58 0001
+
+$Car Select
+800C50B1 00??
+00 Car 1
+01 Car 2
+02 Car 3
+03 Car 4
+04 Car 5
+05 Car 6
+06 Car 7
+07 Car 8
+08 Car 9
+09 Car 10
+0A Car 11
+0B Car 12
+0C Car 13
+0D Car 14
+0E Car 15
+0F Car 16
+10 Car 17
+11 Car 18
+
+$Freeze\Lap Timer
+Note=Single and Chapionship Race Modes
+800967E5 0000
+800967E7 0000
+
+$Freeze\Pit Timer
+Note=Single and Chapionship Race Modes
+800968A5 0000
+800968A7 0000
+
+$Freeze\Timer Challenge Timer
+Note=Timer Challenge
+800C4F87 0050
+
+$Laps\In Race\Chapionship Race Mode
+800C4ED3 00??
+03 3 Laps In Race
+06 6 Laps In Race
+09 9 Laps In Race
+0C 12  Laps In Race
+0F 15 Laps In Race
+12 18 Laps In Race
+15 21 Laps In Race
+18 24 Laps In Race
+1B 27 Laps In Race
+1E 30 Laps In Race
+
+$Laps\In Race\Single Race Mode
+800C4ED1 00??
+03 3 Laps In Race
+06 6 Laps In Race
+09 9 Laps In Race
+0C 12  Laps In Race
+0F 15 Laps In Race
+12 18 Laps In Race
+15 21 Laps In Race
+18 24 Laps In Race
+1B 27 Laps In Race
+1E 30 Laps In Race
+
+$Pit Stops\Championship
+800C4F13 00??
+00 Off
+01 On
+
+$Pit Stops\Single Race Mode
+800C4F11 00??
+00 Off
+01 On
+
+$Track Direction\Championship
+800C4EF3 00??
+00 Normal
+01 Reverse
+
+$Weather\Championship
+800C4F33 00??
+00 Dry
+01 Wet
+03 Night
+
+$Weather\Single Race Mode
+800C4F31 00??
+00 Dry
+01 Wet
+03 Night

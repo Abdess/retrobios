@@ -1,0 +1,37 @@
+[A4F2F521-F0EB168E-C:4A]
+Name=Chameleon Twist (J)
+
+$Access All Levels
+80200B66 00FF
+
+$Extended Tongue
+8132790E FFFF
+
+$Have 99 Carrots
+Note=With all Carrots collected. You will be allowed into mini-games and secret areas
+80200B2F 0063
+
+$Have 99 Crowns
+8024790B 0063
+
+$Have All Levels Completed
+80200B6A 0019
+80200B6B 0019
+80200B6C 0015
+80200B6D 0018
+80200B6E 0017
+80200B6F 0017
+
+$Infinite Health
+80168E73 000A
+
+$Level Select
+Note=When you press Pause in-game and Stage Quit yo will go to the Stage Screen this cheat lets you choose what Stage you would like to go to but make sure you turn the cheat off and press A to continue to that stage.
+8029BF7B 00??
+00 Stage 1
+01 Stage 2
+02 Stage 3
+03 Stage 4
+04 Stage 5
+05 Stage 6
+06 Stage 7

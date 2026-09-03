@@ -1,0 +1,86 @@
+[72611D7D-9919BDD2-C:58]
+Name=HSV Adventure Racing (A)
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\01 Coventry Cove
+803653CB 0064
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\02 Mount Mayhem
+80355DB3 0064
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\03 Inferno Isle
+80366323 0064
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\04 Sunset Sands
+80345A93 0064
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\05 Metro Madness
+8035FF5B 0064
+
+$[Chamipionship Mode Only]\Have 100 Bonus Points\06 Wicked Woods
+80359043 0064
+
+$Access All\Cars
+8002CC07 000B
+
+$Access All\Difficulties
+8002CC0B 0004
+
+$Access All\Multiplayer Levels
+50000901 0000
+8002CC10 0001
+
+$Access All\Tracks
+8002CC03 0006
+
+$Access In-Game Cheats
+50001301 0000
+8002CC18 0001
+
+$Damage Select
+8002C9A3 00??
+00 Normal
+01 Half
+02 Double
+03 Triple
+
+$Health Select
+8002C98F 00??
+00 Normal
+01 Good Only
+02 Bad Only
+03 Off
+
+$Infinite Continues
+8002C867 0064
+
+$Low Timer
+810259E4 3001
+
+$Power-Up Select
+8002C98B 00??
+00 Normal
+01 Mines
+02 Rockets
+03 Stealer
+04 Nitros
+05 ?
+06 Health
+07 Invincible
+08 Off
+
+$Radar
+8002C99F 00??
+00 On
+01 Off
+
+$Speed units\Kph or Mph
+81025A78 ????
+0100 Kph
+0001 Mph
+
+$View Mode Select?
+8002C99B 00??
+00 Normal
+01 Fog
+02 Flip
+03 Fisheye

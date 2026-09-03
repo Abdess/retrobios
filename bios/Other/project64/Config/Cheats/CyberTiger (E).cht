@@ -1,0 +1,31 @@
+[D1A78A07-52A3DD3E-C:50]
+Name=CyberTiger (E)
+
+$Access Secret Characters\Bengal The Tiger
+800B4DB2 0011
+
+$Access Secret Characters\Festus
+800B0DC3 0001
+
+$Access Secret Characters\Kimmi & Cindy
+800B0DAA 0011
+
+$Access Secret Characters\Mark
+800B0DB7 0012
+
+$Access Secret Characters\Marvin The Alien
+800B0DC7 0001
+
+$Access Secret Characters\Robert & Delvis
+800B0DBA 0011
+
+$Access Secret Characters\Starr & Traci
+800B0DBE 0011
+
+$Access Secret Characters\Twfan & Eagamer
+800B0DAE 0011
+
+$Infinite & Max Power-Ups
+800B4612 00F0
+50000801 0000
+800B4600 00FF

@@ -1,0 +1,39 @@
+[C0F6DB17-80E0D532-C:44]
+Name=Armorines - Project S.W.A.R.M. (G)
+
+$[Press L For Levitate]
+D10F7550 0020
+816FE35C 43D5
+
+$Enable Cheat Select
+80115933 00??
+01 Invincible
+02 Have All Weapons
+04 Infinite Ammo
+06 All Weapons With Infinite Ammo
+07 Invincible With Infinite Ammo and All Weapons
+40 Fast run
+41 Invincible With Fast Run
+42 All Weapons With Fast Run
+43 Invincible With All Weapons And Fast Run
+44 Infinite Ammo With Fast Run
+47 Invincible With All Weapons and Ammo and Fast Run
+
+$Enable In-Game Cheat Menu & Level Select
+81115936 014F
+
+$Sound Select\Music Volume
+80115944 00??
+00 Off
+3C Low (5)
+78 Medium (1.0)
+BC Defualt (1.5)
+F0 Max (2.0)
+
+$Sound Select\SFX Volume
+80115945 00??
+00 Off
+3C Low (5)
+78 Medium (1.0)
+BC Defualt (1.5)
+F0 Max (2.0)

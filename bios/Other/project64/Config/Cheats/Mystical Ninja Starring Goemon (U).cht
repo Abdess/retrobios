@@ -1,0 +1,133 @@
+[FCBCCB21-72903C6B-C:45]
+Name=Mystical Ninja Starring Goemon (U)
+
+$Ebisumaru\Automatically Complete Ebisumaru's Training
+803B52F4 0008
+
+$Ebisumaru\Have\Magic Mini Ebisu
+8015C6F3 0001
+
+$Ebisumaru\Have\Meat Saw Hammer
+8015C6C3 0001
+
+$Ebisumaru\Have\Windup Camera
+8015C6D3 0001
+
+$Ebisumaru\Saw Hammer Modifier
+8015C6B3 00??
+00 Normal Saw Hammer
+01 Silver Saw Hammer
+02 Gold Saw Hammer
+
+$Goemon\D-Pad Left To Charge Laser
+D00C7D3A 0002
+802F706F 0064
+
+$Goemon\D-Pad Up To Refill Oil
+D0067D3A 0008
+812F706A 03E7
+
+$Goemon\Have\Chain Pipe
+8015C6BF 0002
+
+$Goemon\Have\Magic Sudden Impact
+8015C6EF 0001
+
+$Goemon\Have\Medal of Flames
+8015C6DF 0001
+
+$Goemon\Maximum Money
+812F70EA 03E7
+
+$Goemon\Pipe Modifier
+8015C6AF 00??
+00 Normal Pipe
+01 Silver Pipe
+02 Gold Pipe
+
+$Goemon\Robot Boss' Has No Health
+812F7062 0000
+
+$Have\Blue Fish
+8015C723 0001
+
+$Have\Blue Sausage
+8015C717 0001
+
+$Have\Brown Item
+8015C703 0001
+
+$Have\Brown Round Item
+8015C70F 0001
+
+$Have\Gold Fish
+8015C71F 0001
+
+$Have\Gold Key
+8015C713 0001
+
+$Have\Pink Fish
+8015C71B 0001
+
+$Have\Silver Fortune Doll
+8015C707 0001
+
+$Have\Triton Shell
+8015C6FF 0001
+
+$Infinite\Health
+8015C5E7 0028
+
+$Infinite\Lives
+8015C5EF 0009
+
+$Infinite\Money
+8115C5EA 270F
+
+$Max Heart Containers
+8015C5E3 0027
+
+$Play As
+8015C5DF 00??
+00 Goemon
+01 Ebisumaru
+02 Sasuke
+03 Yae
+
+$Press\L To Levitate
+D00C7D3B 0020
+8116A044 4000
+
+$Press\R To Use Chargeable Weapon
+D00C7D3B 0010
+8120C896 005D
+
+$Sasuke\Have\Fire Cracker Bomb
+8015C6C7 0001
+
+$Sasuke\Have\Kunai of Severe Cold
+8015C6D7 0001
+
+$Sasuke\Have\Magic Flying
+8015C6F7 0001
+
+$Sasuke\Kunai Modifier
+8015C6B7 00??
+00 Normal Kunai
+01 2 Kunai's
+02 Gold Kunai
+
+$Yae\Have\Bazooka
+8015C6DB 0001
+
+$Yae\Have\Flute
+8015C6CB 0001
+
+$Yae\Have\Magic Mermaid
+8015C6FB 0001
+
+$Yae\Katana Modifier
+8015C6BB 00??
+00 Normal Katana
+01 Silver Katana
+02 Gold Katana

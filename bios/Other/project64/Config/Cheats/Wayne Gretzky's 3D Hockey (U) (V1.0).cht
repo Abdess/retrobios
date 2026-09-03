@@ -1,0 +1,40 @@
+[6B45223F-F00E5C56-C:45]
+Name=Wayne Gretzky's 3D Hockey (U) (V1.0)
+
+$Crunched Players
+810EA078 3F00
+
+$Extra Teams
+800C7205 0001
+
+$Get In Fights Constantly
+800A442E 0020
+
+$Players\Head Size
+810EA070 ????
+3F00 Very Small
+3F80 Normal Size
+4080 Very Large
+
+$Players\Height Size
+810EA074 ????
+3F00 Midgets
+3F80 Normal Size
+3FC0 Large
+4080 Giants
+
+$Team 1\Score pts
+800E6AB1 00??
+00 Zero Points
+1E 30 Points
+23 50 Points
+4B 75 Points
+63 99 Points
+
+$Team 2\Score pts
+800E9F8D ????
+0000 ero Points
+1E03 0 Points
+2305 0 Points
+4B07 5 Points
+6309 9 Points

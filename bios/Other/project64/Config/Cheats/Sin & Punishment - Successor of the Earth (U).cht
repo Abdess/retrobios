@@ -1,0 +1,98 @@
+[4F48B0FD-8E7173F4-C:45]
+Name=Sin & Punishment - Successor of the Earth (U)
+
+$All Levels\Infinite\Energy
+800D5A9B 00FF
+
+$All Levels\Infinite\Max Credits
+80075DDC 00FF
+
+$All Levels\Infinite\Time
+800D5A97 0063
+
+$All Levels\Unlock All\Levels - Options Menu
+80075DD6 FFFF
+80075DD7 FFFF
+
+$All Levels\Unlock All\Option Menu Items
+80075DD8 FFFF
+80075DD9 FFFF
+
+$Level\0-0\Infinite Air Jumping
+Note=Only use one Infinite Air Jumping level Code at a time and only use for that specific level Cheat
+8010BB0C 0000
+
+$Level\0-0\Invincible
+Note=Only use one Ivincible level Code at a time for that specific level and only use for that specific level Cheat
+8010BB2B 0001
+
+$Level\1-1\Infinite Air Jumping
+Note=Only use one Infinite Air Jumping level Code at a time for that specific level and only use for that specific level Cheat
+801657DC 0000
+
+$Level\1-1\Invincible
+Note=Only use one Ivincible level Code at a time for that specific level and only use for that specific level Cheat
+801657FB 0001
+
+$Level\1-2\Infinite Air Jumping
+Note=Only use one Infinite Air Jumping level Code at a time for that specific level and only use for that specific level Cheat
+801BCF9C 0000
+
+$Level\1-2\Invincible
+Note=Only use one Ivincible level Code at a time for that specific level and only use for that specific level Cheat
+801BCFBB 0001
+
+$Level\1-3\Infinite Air Jumping
+Note=Only use one Infinite Air Jumping level Code at a time for that specific level and only use for that specific level Cheat
+801126EC 0000
+
+$Level\1-3\Invincible
+Note=Only use one Ivincible level Code at a time for that specific level and only use for that specific level Cheat
+8011270B 0001
+
+$Level\2-1\Infinite Air Jumping
+Note=Only use one Infinite Air Jumping level Code at a time for that specific level and only use for that specific level Cheat
+801BD29C 0000
+
+$Level\2-1\Invincible
+801BD2BB 0001
+
+$Level\2-2\Infinite Air Jumping
+Note=Only use one Infinite Air Jumping level Code at a time for that specific level and only use for that specific level Cheat
+801B911C 0000
+
+$Level\2-2\Invincible
+Note=Only use one Ivincible level Code at a time for that specific level and only use for that specific level Cheat
+801B913B 0001
+
+$Level\2-3\Infinite Air Jumping
+Note=Only use one Infinite Air Jumping level Code at a time for that specific level and only use for that specific level Cheat
+801A7CEC 0000
+
+$Level\2-3\Invincible
+Note=Only use one Ivincible level Code at a time for that specific level and only use for that specific level Cheat
+801A7D0B 0001
+
+$Level\3-1\Infinite Air Jumping
+Note=Only use one Infinite Air Jumping level Code at a time for that specific level and only use for that specific level Cheat
+801588EC 0000
+
+$Level\3-1\Invincible
+Note=Only use one Ivincible level Code at a time for that specific level and only use for that specific level Cheat
+8015890B 0001
+
+$Level\3-2\Infinite Air Jumping
+Note=Only use one Infinite Air Jumping level Code at a time for that specific level and only use for that specific level Cheat
+801B936C 0000
+
+$Level\3-2\Invincible
+Note=Only use one Ivincible level Code at a time for that specific level and only use for that specific level Cheat
+801B938B 0001
+
+$Level\3-3\Infinite Air Jumping
+Note=Only use one Infinite Air Jumping level Code at a time for that specific level and only use for that specific level Cheat
+801013CC 0000
+
+$Level\3-3\Invincible
+Note=Only use one Ivincible level Code at a time for that specific level and only use for that specific level Cheat
+81100E08 C350

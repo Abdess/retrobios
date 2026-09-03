@@ -1,0 +1,69 @@
+[9EA95858-AF72B618-C:45]
+Name=Mario Party 2 (U)
+
+$Infinite Coins Main Menu
+810F8CD2 FFFF
+
+$Lower Left Char\Item On Pick-Up
+800FD341 00??
+00 Mushroom
+01 Skeleton Key
+02 Plunder Chest
+03 Bowser Bomb
+04 Dueling Glove
+05 Warp Block
+06 Golden Mushroom
+07 Boo Bell
+08 Bowser Suit
+09 Magic Lamp
+
+$Lower Left Char\Rolls 10
+800DF55D 000A
+
+$Lower Right Char\Item On Pick-Up
+800FD375 00??
+00 Mushroom
+01 Skeleton Key
+02 Plunder Chest
+03 Bowser Bomb
+04 Dueling Glove
+05 Warp Block
+06 Golden Mushroom
+07 Boo Bell
+08 Bowser Suit
+09 Magic Lamp
+
+$Lower Right Char\Rolls 10
+800DF5A9 000A
+
+$Upper Left Char\Item On Pick-Up
+800FD2D9 00??
+00 Mushroom
+01 Skeleton Key
+02 Plunder Chest
+03 Bowser Bomb
+04 Dueling Glove
+05 Warp Block
+06 Golden Mushroom
+07 Boo Bell
+08 Bowser Suit
+09 Magic Lamp
+
+$Upper Left Char\Rolls 10
+800DF4C5 000A
+
+$Upper Right Char\Item On Pick-Up
+800DF30D 00??
+00 Mushroom
+01 Skeleton Key
+02 Plunder Chest
+03 Bowser Bomb
+04 Dueling Glove
+05 Warp Block
+06 Golden Mushroom
+07 Boo Bell
+08 Bowser Suit
+09 Magic Lamp
+
+$Upper Right Char\Rolls 10
+800DF511 000A

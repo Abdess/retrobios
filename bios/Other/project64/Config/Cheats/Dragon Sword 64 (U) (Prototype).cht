@@ -1,0 +1,70 @@
+[40DFEDA0-3AA09CB2-C:50]
+Name=Dragon Sword 64 (U) (Prototype)
+
+$[Character Select]
+800F84F3 00??
+01 Kailan
+00 Cutter
+02 Aisha
+03 Gouranga
+
+$[Have 999999 Score]
+811458C4 000F
+811458C6 423F
+
+$[Press Z for Levitate]
+D00DDF88 0020
+8014665D 00EF
+
+$Infinite Max\Armour
+80145E79 00??
+00 Off
+FF On
+
+$Infinite Max\Health
+81145E6C 4316
+
+$Infinite Max\Lives (Credits)
+8012920B 0009
+
+$Infinite Max\Sword Use (Press Z)
+Note=Press The Z Button on your controller to use the infinite Sword Flame effect
+80145E81 00??
+00 Off
+D0 On
+
+$Level Select
+801249B3 00??
+00 01 (Incarceration)
+01 02 (The Dead Shall Rise)
+02 03 (Crush Your Enemies)
+03 04 (Infestation)
+04 05 (The Law of Disorder)
+05 06 (The Abyss)
+06 07 (Darrc Pilgrimage)
+07 08 (Ultimate Sacrifice)
+08 09 (The Dragon Sword)
+
+$Setting Options\Sound\Format
+800FD428 00??
+00 Mono
+FF Stereo
+
+$Setting Options\Sound\Game FX
+800FD41F 00??
+00 Off
+19 Low
+32 Middle
+64 Max
+
+$Setting Options\Sound\Music Volume
+800FD423 00??
+00 Off
+19 Low
+32 Middle
+64 Max
+
+$Setting Options\Vibration Option
+80129202 00??
+00 Off
+FF On

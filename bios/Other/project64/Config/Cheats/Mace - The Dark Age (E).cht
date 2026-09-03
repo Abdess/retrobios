@@ -1,0 +1,73 @@
+[1145443D-11610EDB-C:50]
+Name=Mace - The Dark Age (E)
+
+$Extra Characters
+8007FA98 0001
+
+$Fight With Bunny Slippers On
+81138914 0100
+
+$Infinite Health Player 1
+8008B287 0064
+
+$Infinite Health Player 2
+8008AEFF 0064
+
+$Infinite\Continues
+8015183B 0006
+
+$Infinite\Time
+8113C5BA 0B9E
+
+$Infinite\Time To Choose Character
+D0137ABE 0001
+81137ABE 02A2
+
+$Ned The Janitor
+8013C281 0001
+
+$One Hit Death\Player 1
+D008B287 0064
+8008B287 0001
+
+$One Hit Death\Player 2
+D008AEFF 0064
+8008AEFF 0001
+
+$Play As Options\Player 1
+8113C6E2 ????
+3334 Executioner
+335C Lord Deimos
+33C4 Ragnar
+33AC Koyasha
+33D4 Taria
+33FC AL-Rashid
+3424 Takeshi
+344C Mordoskull
+3474 Xiao Lang
+449C Namira
+358C Dregan
+353C Hellnight
+34C4 Big Guy with spikes and a skull staff
+3514 Monk dude with sword
+3564 Pojo The Chicken
+35B4 War Mech
+
+$Play As Options\Player 2
+8113C6DE ????
+3334 Executioner
+335C Lord Deimos
+33C4 Ragnar
+33AC Koyasha
+33D4 Taria
+33FC AL-Rashid
+3424 Takeshi
+344C Mordoskull
+3474 Xiao Lang
+449C Namira
+358C Dregan
+353C Hellnight
+34C4 Big Guy with spikes and a skull staff
+3514 Monk dude with sword
+3564 Pojo The Chicken
+35B4 War Mech

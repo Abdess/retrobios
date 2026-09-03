@@ -1,0 +1,22 @@
+[E6A95A4F-BAD2EA23-C:45]
+Name=Aidyn Chronicles - The First Mage (U) [!] (V1.0)
+
+$Have\Max Gold
+50000401 0000
+80277335 00FF
+
+$Have\Max Total XP
+50000401 0000
+80278BAD 00FF
+
+$Have\Max Total XP Remaning to Start
+Note=This will give you 16777215 Total XP Remaning to start with and after your 1st batle will allow you to buy your Max Stats
+50000401 0000
+80278BB1 00FF
+
+$Infinite\99 Health Potions
+Note=Do Not put this cheat on until you have collected your 1st Health Potion from the 1st Cheat or you will not be able to get into the Sub menu and Continue the game.
+802785CB 0063
+
+$Infinite\Max Health
+80278B98 001E

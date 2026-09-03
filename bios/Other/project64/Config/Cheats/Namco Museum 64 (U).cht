@@ -1,0 +1,97 @@
+[5129B6DA-9DEF3C8C-C:45]
+Name=Namco Museum 64 (U)
+
+$Dig-Dug\Infinite\Credits
+800FE67E 0063
+
+$Dig-Dug\Infinite\Lives\Player 1
+800FE709 0002
+
+$Dig-Dug\Infinite\Lives\Player 2
+800FE76B 0004
+
+$Dig-Dug\Score\Player 1
+810FE704 9999
+
+$Dig-Dug\Score\Player 2
+810FE768 9999
+
+$Galaga\Infinite\Credits
+800D76A4 0063
+
+$Galaga\Infinite\Lives\Both Players
+800D7510 0002
+
+$Galaxian\Infinite\Credits
+800CD3D0 0063
+
+$Galaxian\Infinite\Lives
+800CD3AD 0003
+
+$Galaxian\Score\Player 1
+810BCE7C 9999
+
+$Galaxian\Score\Player 2
+810BC780 9999
+
+$Ms Pac-Man\Eat All Ghosts All The Time
+810BC100 0000
+810BC102 0000
+810BC12C 0000
+810BC12E 0000
+810BC158 0000
+810BC15A 0000
+810BC184 0000
+810BC186 0000
+
+$Ms Pac-Man\High Score Modifier
+810BC1F8 9999
+
+$Ms Pac-Man\Infinite\Credits
+800BBE4B 0063
+
+$Ms Pac-Man\Infinite\Lives\Player 2
+800BBE27 0004
+
+$Ms Pac-Man\Infinite\Lives\Player P1
+800BBE23 0004
+
+$Ms Pac-Man\Score Modifier\Player 1
+810BC7E8 9999
+
+$Ms Pac-Man\Score\Player 2
+810BC7EC 9999
+
+$Pac-Man\Eat All Ghosts All The Time
+810A8760 0000
+810A8762 0000
+810A878C 0000
+810A878E 0000
+810A87B8 0000
+810A87BA 0000
+810A87E4 0000
+810A87E6 0000
+
+$Pac-Man\High Score
+810A86F8 9999
+
+$Pac-Man\Infinite\Credits
+800A8817 0063
+
+$Pac-Man\Infinite\Lives\Player 1
+800BBE23 0004
+
+$Pac-Man\Infinite\Lives\Player 2
+800BBE27 0004
+
+$Pac-Man\Score\Player 1
+810A86F0 9999
+
+$Pac-Man\Score\Player 2
+810A86F4 9999
+
+$Pole Position\Infinite Time
+8010A243 0063
+
+$Pole Position\Score
+81107BF8 9999

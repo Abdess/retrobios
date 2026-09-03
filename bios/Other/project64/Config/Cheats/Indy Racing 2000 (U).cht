@@ -1,0 +1,51 @@
+[E436467A-82DE8F9B-C:45]
+Name=Indy Racing 2000 (U)
+
+$Always Place 1st
+8012955F 0001
+
+$Driver Modifier (Champsionship Mode)
+812CBEC6 00??
+00 Scott Goodyear #4
+01 Greg Ray #2
+02 Billy Boat #11
+03 Eddie Cheever Jr.#51
+04 Buddy Lazier #91
+05 Davey Hamilton #9
+06 Sam Schmidt #99
+07 Scott Sharp #8
+08 Buzz Calkins #12
+09 Kenny Brack #14
+0A Robbie Buyl #22
+0B Tyce Carison #20
+0C Mark Dismore #28
+0D Roberto Guerrero #50
+0E Johnny Unser #92
+0F Robby Unser #81
+10 Jeff Ward #21
+11 Stephan Gregoire #7
+12 Robby McGehee #55
+13 John Hollansworth Jr. #42
+
+$Max Exp (Gold Cup - All Classes Unlocked)
+Note=With the 'Max Exp' codes for the Gold Cup, start a new file and leave it and go back to it again.
+81033918 7FFF
+8103391A FFFF
+
+$Unlock\Formula Cars Part 1
+810230F0 0000
+810230F2 0000
+810230F4 0000
+810230F6 0000
+
+$Unlock\Gold Cup 1st Upgrade
+81023100 0000
+81023102 0000
+
+$Unlock\Gold Cup 2nd Upgrade
+81023104 0000
+81023106 0000
+
+$Unlock\Sprint Car Class
+810230EE 0000
+810230EC 0000

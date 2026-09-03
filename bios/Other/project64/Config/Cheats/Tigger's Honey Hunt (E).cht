@@ -1,0 +1,14 @@
+[E0C4F72F-769E1506-C:50]
+Name=Tigger's Honey Hunt (E) (M7)
+
+$Have Mouse Card\Night Tail
+800A2865 0001
+
+$Have Mouse Card\The Adventure Begins
+800A2864 0001
+
+$Infinite Lives
+810A2886 0009
+
+$Max Honey Pots
+810A288A 03E7

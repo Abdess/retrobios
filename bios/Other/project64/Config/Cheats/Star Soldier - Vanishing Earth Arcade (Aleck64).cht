@@ -1,0 +1,36 @@
+[315C7466-3A453265-C:4A]
+Name=Star Soldier - Vanishing Earth Arcade (Aleck64)
+
+$Infinite\99 Credits
+80085B03 0063
+
+$Infinite\Lives
+800A0CE8 0009
+
+$Infinite\Specials
+800A0CE9 0003
+
+$Max\Combo
+810A0CE4 7FFF
+
+$Max\Lower Level
+800A0CF8 0003
+
+$Max\Score
+800A0CD8 03E7
+800A0CD9 03E7
+
+$Max\Upper Level
+800A0CF9 0063
+
+$Play As
+800A0CEC 00??
+00 Character 1
+01 Character 2
+02 Character 3
+
+$Status Modifier
+800A0CEA 00??
+01 High
+02 Mid
+03 Low

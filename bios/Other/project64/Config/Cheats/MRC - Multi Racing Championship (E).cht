@@ -1,0 +1,17 @@
+[B8F0BD03-4479189E-C:50]
+Name=MRC - Multi Racing Championship (E) (M3)
+
+$Access all Gold Trophies
+Note=Championshp & Match Mode
+50000602 0000
+810A9078 0000
+
+$Access All Tracks In Match Mode
+50000602 0000
+810A9080 0001
+
+$Always 1st
+800A9107 0000
+
+$Infinite Time
+8009498F 003C

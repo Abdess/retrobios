@@ -1,0 +1,41 @@
+[D543BCD6-2BA5E256-C:50]
+Name=Gauntlet Legends (E)
+
+$Access All Rune Stones
+50000302 0000
+810AE6D6 07FF
+
+$Access All Window Shards
+50000302 0000
+810AE6C6 07FF
+
+$Access Skill Level 99
+Note=And Get A Familiar
+800FD38A FFFF
+
+$Always Max Turbo Attack
+810FD4AE FF64
+
+$Get All Stuff
+Note=Opens Up New Levels Etc,
+50001410 0000
+810C5DA6 FFFF
+
+$Infinite Use Of Items
+Note=On Pick-Ups Only
+50001310 0000
+800C5EC6 FFFF
+
+$New Player Name
+810FD36C 4249
+810FD36E 5443
+810FD370 4820
+810FD372 3639
+
+$Start With Big Familiar
+Note=Do not use this with Small Familiar Code
+810FD512 0202
+
+$Start With Small Familiar
+Note=Do not use this with Big Familiar Code
+810FD512 0102

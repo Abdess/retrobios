@@ -1,0 +1,17 @@
+[056EAB63-C215FCD5-C:4A]
+Name=Dual Heroes (J)
+
+$Infinite\Energy\Player 1
+81224DC4 00FF
+
+$Infinite\Energy\Player 2
+81224DC6 00FF
+
+$Infinite\Time
+81224DCC 00FF
+
+$Never Wins\Player 1
+80224DB5 0000
+
+$Never Wins\Player 2
+80224DB7 0000

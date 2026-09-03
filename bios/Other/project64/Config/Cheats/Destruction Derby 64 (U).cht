@@ -1,0 +1,148 @@
+[DEE584A2-0F161187-C:45]
+Name=Destruction Derby 64 (U)
+
+$Have All\Cars
+50000C01 0000
+80097A18 0001
+
+$Have All\Difficulty Levels
+80097A17 0003
+
+$Have All\Tracks
+50000C01 0000
+80095CC8 0001
+
+$Infinite Health\Player 1\Alpine Ridge
+D02BA164 0080
+802BA173 00EB
+
+$Infinite Health\Player 1\Aztec Ruins
+D01FC428 0080
+801FC437 00BE
+
+$Infinite Health\Player 1\Bayou Run
+D02862BC 0080
+802862CB 00EB
+
+$Infinite Health\Player 1\Destruction Junction
+D029A9B0 0080
+8029A9BF 00E1
+
+$Infinite Health\Player 1\Ground Zero
+D01F64C8 0080
+801F64D7 00BE
+
+$Infinite Health\Player 1\Junkyard
+D0205B7C 0080
+80205B8B 00BE
+
+$Infinite Health\Player 1\Metro Challenge
+D02EDB18 0080
+802EDB27 00E1
+
+$Infinite Health\Player 1\Midnyte Rumble
+D030CC0C 0080
+8030CC1B 00EB
+
+$Infinite Health\Player 1\Seascape Sprint
+D02D4C24 0080
+802D4C33 00E1
+
+$Infinite Health\Player 1\Sunset Canyon
+D0303EA8 0080
+80303EB7 00EB
+
+$Infinite Health\Player 1\Terminal Impact
+D02B5F2D 0080
+802B56B3 00E1
+
+$Infinite Health\Player 1\Urban Mayhem
+D0203F10 0080
+80203F1F 00C8
+
+$Infinite Health\Player 2\Alpine Ridge
+D02C8BD0 0080
+802C8BDF 00B4
+
+$Infinite Health\Player 2\Aztec Ruins
+D0217C50 0080
+80217C5F 00A0
+
+$Infinite Health\Player 2\Bayou Run
+D0295190 0080
+8029519F 00B4
+
+$Infinite Health\Player 2\Destruction Junction
+D02B61D0 0080
+802B61DF 00B4
+
+$Infinite Health\Player 2\Ground Zero
+D0211D10 0080
+80211D1F 00A0
+
+$Infinite Health\Player 2\Junkyard
+D0215050 0080
+8021505F 00A0
+
+$Infinite Health\Player 2\Metro Challenge
+D02FCC10 0080
+802FCC1F 00B4
+
+$Infinite Health\Player 2\Midnyte Rumble
+D032ADD0 0080
+8032ADDF 00B4
+
+$Infinite Health\Player 2\Seascape Sprint
+D02E2D50 0080
+802E2D5F 00E1
+
+$Infinite Health\Player 2\Sunset Canyon
+D0312810 0080
+8031281F 00B4
+
+$Infinite Health\Player 2\Terminal Impact
+D02C4550 0080
+802C455F 00E1
+
+$Infinite Health\Player 2\Urban Mayhem
+D0235E50 0080
+80235E5F 00A0
+
+$Max Bonus Points\01: Seascape Sprint
+812D4C3E 03E7
+
+$Max Bonus Points\02: Metro Challenge
+812EDB32 03E7
+
+$Max Bonus Points\03: Junkyard
+81205B9A 03E7
+
+$Max Bonus Points\04: Terminal Impact
+812B56BE 03E7
+
+$Max Bonus Points\05: Destruction Junction
+8129A9CA 03E7
+
+$Max Bonus Points\06: Aztec Ruins
+81095D36 03E7
+
+$Max Collisions Points\01: Seascape Sprint
+812D4C3A 03E7
+
+$Max Collisions Points\02: Metro Challenge
+812EDB2E 03E7
+
+$Max Collisions Points\03: Junkyard
+81205B92 03E7
+
+$Max Collisions Points\04: Terminal Impact
+812B56BA 03E7
+
+$Max Collisions Points\05: Destruction Junction
+8129A9C6 03E7
+
+$Max Collisions Points\06: Aztec Ruins
+81095D06 03E7
+
+$Max Points Aid
+8111EF4E 03E7

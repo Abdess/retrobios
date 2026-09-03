@@ -1,0 +1,33 @@
+[DDD93C85-DAE381E8-C:45]
+Name=Star Soldier - Vanishing Earth (U)
+
+$Infinite\Lives
+800A3648 0009
+
+$Infinite\Specials
+800A3649 0003
+
+$Max\Combo
+810A3644 7FFF
+
+$Max\Lower Level
+800A3658 0003
+
+$Max\Score
+800A3628 0063
+800A3629 0063
+
+$Max\Upper Level
+800A3659 0063
+
+$Play As
+800A364C 00??
+00 Character 1
+01 Character 2
+02 Character 3
+
+$Status Modifier
+800A364A 00??
+01 High
+02 Mid
+03 Low

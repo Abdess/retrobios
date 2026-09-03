@@ -1,0 +1,21 @@
+[3C059038-C8BF2182-C:45]
+Name=V-Rally Edition 99 (U)
+
+$Enable All\Cars
+80140D1F 003F
+
+$Enable All\Expert Times
+80140D1C 0031
+
+$Enable All\Tracks
+80140D1A 0070
+
+$Unlock Champ
+80140D28 0001
+
+$Unlock Cheat Menu
+D11B1F14 0000
+811B1F14 00FF
+811D530A 04FF
+D11B1F14 00FF
+811B0270 FF03

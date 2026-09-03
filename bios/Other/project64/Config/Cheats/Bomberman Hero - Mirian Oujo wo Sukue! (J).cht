@@ -1,0 +1,36 @@
+[67FF12CC-76BF0212-C:4A]
+Name=Bomberman Hero - Mirian Oujo wo Sukue! (J)
+
+$Extra Gems
+D016523B 0000
+8016523B 004B
+
+$Full\Bomb Power
+80165239 0003
+
+$Full\Fire Power
+8016523A 0003
+
+$Infinite\Health
+8016523E 0004
+
+$Infinite\Lives
+8016523D 0009
+
+$Max\Bombs
+80165239 0008
+
+$Max\Explosion
+8016523A 0008
+
+$Max\Score
+80177601 00FF
+80177602 00FF
+
+$Press L to Levitate
+Note=Press L to levitate & let go to come back down
+D005A2F5 0020
+81154178 41CB
+D005A2F5 0020
+D0154154 0000
+80154154 0040

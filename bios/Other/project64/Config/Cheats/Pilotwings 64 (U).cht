@@ -1,0 +1,83 @@
+[C851961C-78FCAAFA-C:45]
+Name=Pilotwings 64 (U)
+
+$Choose Vehicle
+Note=Make your Choice & then Press GS To Activate,But do not use with any other Press GS Cheat Codes.
+883626A7 00??
+00 Hang Glider
+01 Rocket Belt
+02 Gyrocopter
+03 Cannonball
+04 Skydiving
+05 Jumble Hopper
+06 Birdman
+
+$Fly As Gray Plane In USA Level
+Note=Press GS To Activate,But do not use with any other Press GS Cheat Codes.
+89362748 0008
+813627B0 3F30
+8024CDF5 006E
+
+$Fly As Yellow Plane In USA Level
+Note=Press GS To Activate,But do not use with any other Press GS Cheat Codes.
+89362748 0009
+813627B0 3EE0
+8024CDF5 006E
+
+$Have Perfect Score in all Class & Level's
+Note=With these codes, if you want them to save, you have to play a level, and lose and just choose quit after it tallies up your score. Also dont keep the code active once you save the level at 100%, turn the code off and continue with the other levels!
+8036427D 0064
+803642AD 0064
+803642DD 0064
+80364911 0064
+80364A61 0064
+80364941 0064
+80364A91 0064
+80364971 0064
+80364AC1 0064
+80364FA5 0064
+803650F5 0064
+80365245 0064
+80364FD5 0064
+80365125 0064
+80365275 0064
+80365005 0064
+80365155 0064
+803652A5 0064
+80365639 0064
+80365789 0064
+803658D9 0064
+80365669 0064
+803657B9 0064
+80365909 0064
+80365699 0064
+803657E9 0064
+80365939 0064
+8036430D 0019
+8036445D 0019
+803645AD 0019
+803646FD 0019
+8036433D 0064
+8036436D 0064
+803649A1 0019
+80364AF1 0019
+80364C41 0019
+80364D91 0019
+803649D1 0064
+80364A01 0064
+80365035 0019
+80365185 0019
+803652D5 0019
+80365425 0019
+80365065 0064
+80365095 0064
+
+$Infinite Fuel\Gyrocopter
+80362821 0081
+
+$Infinite Fuel\Rocket Belt
+80362841 0081
+
+$Time Always 00'00'10
+Note=This Cheat code is for All Events
+80362750 0001

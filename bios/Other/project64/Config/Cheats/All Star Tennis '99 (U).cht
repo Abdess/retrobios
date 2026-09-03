@@ -1,0 +1,66 @@
+[E185E291-4E50766D-C:45]
+Name=All Star Tennis '99 (U)
+
+$Game Win Select\Player 1
+801BBFA1 00??
+00 0 Games Won
+01 1 Game Won
+02 2 Games Won
+03 3 Games Won
+04 4 Games Won
+05 5 Games Won
+06 For Game Set & Match
+
+$Game Win Select\Player 2
+801BBFA2 00??
+00 0 Games Won
+01 1 Game Won
+02 2 Games Won
+03 3 Games Won
+04 4 Games Won
+05 5 Games Won
+06 For Game Set & Match
+
+$Play As\Player 1
+800BFFA5 00??
+00 Zoe Taylor
+01 Vanessa Child
+02 Amanda Coetzer
+03 Jana Novotna
+04 Conchita Martinez
+05 Leon Rodez
+06 Michael Chang
+07 Gustavo Kuerten
+08 Jonas Bjorkman
+09 Mark Philippoussis
+0A Randy Powell
+0B Richard Krajicek
+
+$Play As\Player 2
+800BFFA6 00??
+00 Zoe Taylor
+01 Vanessa Child
+02 Amanda Coetzer
+03 Jana Novotna
+04 Conchita Martinez
+05 Leon Rodez
+06 Michael Chang
+07 Gustavo Kuerten
+08 Jonas Bjorkman
+09 Mark Philippoussis
+0A Randy Powell
+0B Richard Krajicek
+
+$Points Select\Player 1
+801C7260 00??
+00 0 Points
+15 15 Points
+30 30 Points
+40 40 Points
+
+$Points Select\Player 2
+801C7261 00??
+00 0 Points
+15 15 Points
+30 30 Points
+40 40 Points

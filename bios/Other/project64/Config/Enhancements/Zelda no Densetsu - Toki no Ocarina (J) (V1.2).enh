@@ -1,0 +1,7 @@
+[693BA2AE-B7F14E9F-C:4A]
+Name=Zelda no Densetsu - Toki no Ocarina (J) (V1.2)
+
+$Subscreen Delay Fix
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+801DAE8B 0002

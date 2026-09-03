@@ -1,0 +1,31 @@
+[664BA3D4-678A80B7-C:45]
+Name=Mario Golf (U)
+
+$Enable All Courses
+81130CEE FFFF
+
+$Have All Characters
+50000E02 0001
+810C28E4 0000
+
+$Max Gold Mario Badges Player 1
+800C545B 0063
+
+$No Wind
+810BA9F1 0000
+800BA9F3 0000
+
+$Unlimited\Power Hits\Player 1
+801B71F8 0004
+
+$Unlimited\Power Hits\Player 2
+801B72B0 0004
+
+$Unlimited\Power Hits\Player 3
+801B7368 0004
+
+$Unlimited\Power Hits\Player 4
+801B7420 0004
+
+$Zero Strokes Taken
+801B71F3 0000

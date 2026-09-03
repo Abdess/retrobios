@@ -1,0 +1,227 @@
+[73A88E3D-3AC5C571-C:45]
+Name=Rally Challenge 2000 (U)
+
+$Arcade Mode\Car Modifier
+802818B3 00??
+00 Mitsubishi Lancer Evolution V
+01 Subaru Impreza WRC
+02 Toyota Corolla WRC
+03 Nissan Almera Kit Car
+04 Seat Cordoba WRC
+05 Skoda Octavia
+06 VW Golf GTI MK IV
+07 Proton WIRA
+08 Hyundai Coupe EVO 2
+
+$Championship Mode\Australia\Infinite Damage\Front End
+80178FA0 003E
+
+$Championship Mode\Australia\Infinite Damage\Left Side
+80178FA4 0040
+
+$Championship Mode\Australia\Infinite Damage\Right Side
+80178FA8 0040
+
+$Championship Mode\Australia\Infinite Damage\Tires
+80178FAC 0040
+
+$Championship Mode\Australia\Start On 3rd Lap
+D0178F6F 0001
+80178F6F 0003
+
+$Championship Mode\Brazil\Infinite Damage\Front End
+801748E0 0040
+
+$Championship Mode\Brazil\Infinite Damage\Left Side
+801748E4 0040
+
+$Championship Mode\Brazil\Infinite Damage\Right Side
+801748E8 0040
+
+$Championship Mode\Brazil\Infinite Damage\Tires
+801748EC 0040
+
+$Championship Mode\Brazil\Start On 3rd Lap
+D01748AF 0001
+801748AF 0003
+
+$Championship Mode\Canada\Infinite Damage\Front End
+8017CFA0 0040
+
+$Championship Mode\Canada\Infinite Damage\Left Side
+8017CFA4 0040
+
+$Championship Mode\Canada\Infinite Damage\Right Side
+8017CFA8 0040
+
+$Championship Mode\Canada\Infinite Damage\Tires
+8017CFAC 0040
+
+$Championship Mode\Canada\Start On 3rd Lap
+D017CF6F 0001
+8017CF6F 0003
+
+$Championship Mode\France\Infinite Damage\Front End
+80172490 0040
+
+$Championship Mode\France\Infinite Damage\Left Side
+80172494 0040
+
+$Championship Mode\France\Infinite Damage\Right Side
+80172498 0040
+
+$Championship Mode\France\Infinite Damage\Tires
+8017249C 0040
+
+$Championship Mode\France\Start On 3rd Lap
+D017245F 0001
+8017245F 0003
+
+$Championship Mode\Germany\Infinite Damage\Front End
+8017DFA0 0040
+
+$Championship Mode\Germany\Infinite Damage\Left Side
+8017DFA4 0040
+
+$Championship Mode\Germany\Infinite Damage\Right Side
+8017DFA8 0040
+
+$Championship Mode\Germany\Infinite Damage\Tires
+8017DFAC 0040
+
+$Championship Mode\Germany\Start On 3rd Lap
+D017DF6F 0001
+8017DF6F 0003
+
+$Championship Mode\Great Britain\Infinite Damage\Front End
+801766C0 0040
+
+$Championship Mode\Great Britain\Infinite Damage\Left Side
+801766C4 0040
+
+$Championship Mode\Great Britain\Infinite Damage\Right Side
+801766C8 0040
+
+$Championship Mode\Great Britain\Infinite Damage\Tires
+801766CC 0040
+
+$Championship Mode\Great Britain\Start On 3rd Lap
+D017668F 0001
+8017668F 0003
+
+$Championship Mode\Have 255 Race Points
+80101D1A 00FF
+
+$Championship Mode\Italy\Infinite Damage\Front End
+8017E500 0040
+
+$Championship Mode\Italy\Infinite Damage\Left Side
+8017E504 0040
+
+$Championship Mode\Italy\Infinite Damage\Right Side
+8017E508 0040
+
+$Championship Mode\Italy\Infinite Damage\Tires
+8017E50C 0040
+
+$Championship Mode\Italy\Start On 3rd Lap
+D017E4CF 0001
+8017E4CF 0003
+
+$Championship Mode\Spain\Infinite Damage\Front End
+801870F0 0040
+
+$Championship Mode\Spain\Infinite Damage\Left Side
+801870F4 0040
+
+$Championship Mode\Spain\Infinite Damage\Right Side
+801870F8 0040
+
+$Championship Mode\Spain\Infinite Damage\Tires
+801870FC 0040
+
+$Championship Mode\Spain\Start On 3rd Lap
+D01870BF 0001
+801870BF 0003
+
+$Championship Mode\USA\Infinite Damage\Front End
+8017EFA0 0040
+
+$Championship Mode\USA\Infinite Damage\Left Side
+8017EFA4 0040
+
+$Championship Mode\USA\Infinite Damage\Right Side
+8017EFA8 0040
+
+$Championship Mode\USA\Infinite Damage\Tires
+8017EFAC 0040
+
+$Championship Mode\USA\Start On 3rd Lap
+D017EF6F 0001
+8017EF6F 0003
+
+$Easy Courses\Australia\Always Low Lap Timer
+81178F90 0000
+81178F92 0000
+
+$Easy Courses\Australia\Have 1st
+80178F87 0000
+
+$Easy Courses\Great Britian\Always Low Lap Timer
+811766B0 0000
+811766B2 0000
+
+$Easy Courses\Great Britian\Have 1st
+801766A7 0000
+
+$Easy Courses\Spain\Always Low Lap Timer
+811870E0 0000
+811870E2 0000
+
+$Easy Courses\Spain\Have 1st
+801870D7 0000
+
+$Expert Courses\Canada\Always Low Lap Timer
+8117CF90 0000
+8117CF92 0000
+
+$Expert Courses\Canada\Have 1st
+8017CF87 0000
+
+$Expert Courses\Germany\Always Low Lap Timer
+8117DF90 0000
+8117DF92 0000
+
+$Expert Courses\Germany\Have 1st
+8017DF87 0000
+
+$Expert Courses\USA\Always Low Lap Timer
+8117EF90 0000
+8117EF92 0000
+
+$Expert Courses\USA\Have 1st
+8017EF87 0000
+
+$Infinite Time
+81104998 49F2
+
+$Medium Courses\Brazil\Always Low Lap Timer
+811748D0 0000
+811748D2 0000
+
+$Medium Courses\Brazil\Have 1st
+801748C7 0000
+
+$Medium Courses\France\Always Low Lap Timer
+81172480 0000
+81172482 0000
+
+$Medium Courses\France\Have 1st
+80172477 0000
+
+$Medium Courses\Italy\Always Low Lap Timer
+8117E4D0 0000
+8117E4D2 0000
+
+$Medium Courses\Italy\Have 1st
+8017E4E7 0000

@@ -1,0 +1,50 @@
+[7EE0E8BB-49E411AA-C:50]
+Name=Star Wars - Rogue Squadron (E) (M3) (V1.0)
+
+$Access AT-ST Level
+81130B38 1250
+
+$Access\69 Buick Electra
+Note=Replaces The V-Wing
+81130B3A 000E
+
+$Accesses\All Levels,Ships & Advanced Weapons
+80130B3B 00FF
+
+$Accuracy 100%
+80130B5F 0063
+
+$Always Pass Mission
+80130AF4 0001
+
+$Bonus Collected 756
+80130B67 03E7
+
+$Completion Time 0:00
+80130B85 3FCB
+
+$Enemies Destroyed 756
+81130B64 03E7
+
+$Friendly Saves 756
+80130B66 03E7
+
+$Infinite Lives
+Note=This Also accesses advanced Shields & Radar
+81130B38 01C0
+
+$Infinite Secondary Weapon
+8010CA02 0063
+80130B23 00??
+01 Ion Cannon
+02 Missiles
+03 Seeker Missiles
+04 Bombs
+05 Proton Bombs
+07 Cluster Missiles
+08 Seeker Torpedos
+09 Seeker Cluster Missiles
+
+$Invincibility
+Note=This Also Accesses All Levels And Makes All Crafts Available
+80130B2D 00FF

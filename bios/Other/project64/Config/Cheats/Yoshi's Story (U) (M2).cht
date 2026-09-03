@@ -1,0 +1,14 @@
+[2337D8E8-6B8E7CEC-C:45]
+Name=Yoshi's Story (U) (M2)
+
+$Infinite\Eggs Once You Get One
+Note=This is for All Yoshis All levels
+8103E89C 2400
+
+$Infinite\Health
+Note=This is for All Yoshis All levels
+8102B780 2400
+
+$Infinite\Lives
+Note=This is for All Yoshis All levels
+800F8DF7 00FF

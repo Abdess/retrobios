@@ -1,0 +1,156 @@
+[C9C3A987-5810344C-C:4A]
+Name=Mario Kart 64 (J) (V1.1)
+
+$Battle Mode\Infinite Balloons\Player 1
+8118A080 0003
+
+$Battle Mode\Infinite Balloons\Player 2
+8118A082 0003
+
+$Battle Mode\Infinite Balloons\Player 3
+8118A084 0003
+
+$Battle Mode\Infinite Balloons\Player 4
+8118A086 0003
+
+$Have\Bonus Mode and All Gold Cups
+8018B4D8 00??
+8018B4D9 00??
+8018B4DA 00??
+8018B4DB 00??
+00 Off
+FF On
+
+$Infinite Items\2 player Mode\Player 1
+8016271D 00??
+8016274A 00??
+0D Double Mushroom
+09 Fake Item Box
+0B Ghost
+0A Invincible Star
+08 Lightning
+01 Single Banana
+03 Single Green Shell
+0C Single Mushroom
+05 Single Red Shell
+0F Super Mushroom
+04 Triple Green Shell
+0E Triple Mushroom
+06 Triple Red Shell
+02 Banana Bunch
+07 Blue Spiny Shell
+
+$Infinite Items\2 player Mode\Player 2
+801627FD 00??
+8016282A 00??
+0D Double Mushroom
+09 Fake Item Box
+0B Ghost
+0A Invincible Star
+08 Lightning
+01 Single Banana
+03 Single Green Shell
+0C Single Mushroom
+05 Single Red Shell
+0F Super Mushroom
+04 Triple Green Shell
+0E Triple Mushroom
+06 Triple Red Shell
+02 Banana Bunch
+07 Blue Spiny Shell
+
+$Infinite Items\3-4 player Mode\Player 1
+801628DD 00??
+8016290A 00??
+0D Double Mushroom
+09 Fake Item Box
+0B Ghost
+0A Invincible Star
+08 Lightning
+01 Single Banana
+03 Single Green Shell
+0C Single Mushroom
+05 Single Red Shell
+0F Super Mushroom
+04 Triple Green Shell
+0E Triple Mushroom
+06 Triple Red Shell
+02 Banana Bunch
+07 Blue Spiny Shell
+
+$Infinite Items\3-4 player Mode\Player 2
+801629BD 00??
+801629EA 00??
+0D Double Mushroom
+09 Fake Item Box
+0B Ghost
+0A Invincible Star
+08 Lightning
+01 Single Banana
+03 Single Green Shell
+0C Single Mushroom
+05 Single Red Shell
+0F Super Mushroom
+04 Triple Green Shell
+0E Triple Mushroom
+06 Triple Red Shell
+02 Banana Bunch
+07 Blue Spiny Shell
+
+$Infinite Items\3-4 player Mode\Player 3
+80162A9D 00??
+80162ACA 00??
+0D Double Mushroom
+09 Fake Item Box
+0B Ghost
+0A Invincible Star
+08 Lightning
+01 Single Banana
+03 Single Green Shell
+0C Single Mushroom
+05 Single Red Shell
+0F Super Mushroom
+04 Triple Green Shell
+0E Triple Mushroom
+06 Triple Red Shell
+02 Banana Bunch
+07 Blue Spiny Shell
+
+$Infinite Items\3-4 player Mode\Player 4
+80162B7D 00??
+80162BAA 00??
+0D Double Mushroom
+09 Fake Item Box
+0B Ghost
+0A Invincible Star
+08 Lightning
+01 Single Banana
+03 Single Green Shell
+0C Single Mushroom
+05 Single Red Shell
+0F Super Mushroom
+04 Triple Green Shell
+0E Triple Mushroom
+06 Triple Red Shell
+02 Banana Bunch
+07 Blue Spiny Shell
+
+$Press GS\For Full Debug Menu
+Note=Press GS at the Press Start Menu to access the Debug Menu
+8818B5BF 0002
+
+$Press L To Levitate\Player 1
+D00F61B5 0020
+810F6268 4000
+
+$Press L To Levitate\Player 2
+D00F61C5 0020
+810F7040 4000
+
+$Press L To Levitate\Player 3
+D00F61D5 0020
+810F7E18 4000
+
+$Press L To Levitate\Player 4
+D00F61E5 0020
+810F8BF0 4000

@@ -1,0 +1,25 @@
+[E688A5B8-B14B3F18-C:50]
+Name=Twisted Edge Extreme Snowboarding (E)
+
+$[Audio Fix]
+81051840 AD99
+
+$Have All\Boards
+81082B24 0003
+81082B26 FFFF
+
+$Have All\Characters
+81082B18 07FF
+
+$Have All\Difficulties
+81082B10 0700
+
+$Have All\Tracks
+81082B1C BFFE
+
+$Low Timer
+80082A04 0000
+80182A06 0000
+
+$Max\50000 Stunt Points
+81082AD8 C350

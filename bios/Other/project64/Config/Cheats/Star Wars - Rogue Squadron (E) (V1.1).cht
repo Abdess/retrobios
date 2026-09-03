@@ -1,0 +1,159 @@
+[219191C1-33183C61-C:50]
+Name=Star Wars - Rogue Squadron (E) (V1.1)
+
+$1-Hit Death
+81137E7C 4136
+
+$Extra Shields
+81137E7C 4316
+
+$Have\99\Bonus Collected
+80130B87 0063
+
+$Have\99\Kills
+80130B85 0063
+
+$Have\99\Saves
+80130B86 0063
+
+$Have\Medals For\Ambush at Mos Eisley
+88130B1C 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Assault on Kile II
+88130B23 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Battle Above Taloraan
+88130B26 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Battle of Hoth
+88130B2E 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Beggar's Canyon
+88130B2C 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Blockade on Chandrila
+88130B28 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Defection At Corellia
+88130B1F 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Escape From Fest
+88130B27 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Imperial Construction Yard
+88130B22 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Liberation V
+88130B20 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Moff Seerdon's Revenge
+88130B2A 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Prisons on Kessel
+88130B25 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Raid on Sullust
+88130B29 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Rendezvou on Bankhesh
+88130B1D 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\Rescue on Kessel
+88130B24 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\The Battle of Calamari
+88130B2B 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\The Death Star Trench Run
+88130B2D 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\The Jade Moon
+88130B21 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Have\Medals For\The Search For The Noonnah
+88130B1E 00??
+00 None
+01 Bronze Medal
+02 Silver Medal
+03 Gold Medal
+
+$Infinite\Infinite Health
+81137E7C 4316
+
+$Infinite\Infinite Lives
+80130B10 0008
+
+$Infinite\Infinite Secondary Weapons
+8010CA32 0008

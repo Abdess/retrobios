@@ -1,0 +1,75 @@
+[62F6BE95-F102D6D6-C:50]
+Name=AeroFighters Assault (E) (M3)
+
+$99 Accuracy
+80131530 0063
+
+$99 Bonus
+80131537 0063
+
+$All Boss Attack levels unlocked
+Note=Unlocks all planes in death match
+80355701 003F
+
+$Always Have\F-15J Eagle
+8027D69C 0010
+
+$Always Have\X-29A A.T.D.
+8027D69D 0020
+
+$Extra Planes
+8127D69C FFFF
+
+$F-15J Eagle & X-29A A.T.D. planes unlocked
+8035575C 00??
+10 F-15J Eagle
+20 X-29A A.T.D.
+3F Both of the above planes
+
+$Gun Select
+8027E9D3 00??
+00 Chaff
+01 Jammings
+02 Air Mines
+03 Mahibishi
+0A 22mm BB Shot
+0B 22mm
+0C Hunai Shot
+0D Fireball
+0E Sabre
+14 Fire
+15 Tomahawk
+16 Ninja Glitch
+17 Fire Wave
+1E Rocket
+1F Phoenix
+20 Star
+21 Fire Arrow
+28 Ninjabeam
+
+$Infinite\99 Lives
+80355748 0063
+
+$Infinite\Armor
+8127D9A4 44A0
+8127D9A8 44A0
+
+$Infinite\Chaffs
+8027E9C7 000A
+
+$Infinite\Gun
+8027EAC0 0001
+
+$Infinite\Health
+8027D9A5 00C8
+8027D9A9 00C8
+
+$Infinite\Special Weapons
+8027EE82 0002
+
+$Stage Select screen unlocked
+Note=Hold L + R at the Game Mode screen and it will unlock every single level in the game; from Tokyo to Space. Do not hold L + R on any other screen, as this may cause game to freeze
+D0281691 0030
+8027D5C0 000A
+D0281691 0030
+8027D5DA 000A

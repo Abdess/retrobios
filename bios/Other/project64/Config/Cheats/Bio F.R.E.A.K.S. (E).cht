@@ -1,0 +1,40 @@
+[AB7C101D-EC58C8B0-C:50]
+Name=Bio F.R.E.A.K.S. (E)
+
+$Infinite Health\Player One
+811507FA 6400
+
+$Infinite Health\Player Two
+81152E76 6400
+
+$Infinite Jet Pack\Player One
+81150802 3200
+
+$Infinite Jet Pack\Player Two
+81152E7E 3200
+
+$Infinite Shields\Player One
+811507FE 6400
+
+$Infinite Shields\Player Two
+81152E7A 6400
+
+$Player 1 Easily Defeated\Player Two
+811507FA 0100
+811507FE 0100
+
+$Player 2 Easily Defeated\Player One
+81152E76 0100
+81152E7A 0100
+
+$Shields Always Active\Player One
+8015080A 0022
+
+$Shields Always Active\Player Two
+80152E86 0022
+
+$Smoke Trail\Player One
+80150804 0001
+
+$Smoke Trail\Player Two
+80152E80 0001

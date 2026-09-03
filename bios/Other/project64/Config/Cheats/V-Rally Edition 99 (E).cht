@@ -1,0 +1,20 @@
+[636E6B19-E57DDC5F-C:50]
+Name=V-Rally Edition 99 (E) (M3)
+
+$Access\All Cars
+8015EC13 003F
+
+$Access\All Tracks
+8015EC0E 0070
+
+$Access\Championship,World,Expert
+8015EC1C 0001
+
+$Access\Expert Times
+8015EC10 0031
+
+$Access\In-Game Cheat Menu
+Note=On The Title Screen, Hold Z Button  & Push L Button
+811CFE09 00FF
+811F31FF 04FF
+811CE165 FF03

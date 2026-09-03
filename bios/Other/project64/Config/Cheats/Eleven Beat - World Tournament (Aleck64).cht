@@ -1,0 +1,21 @@
+[6D9D1FE4-84D10BEA-C:4A]
+Name=Eleven Beat - World Tournament (Aleck64)
+
+$Freeze Timer
+810BCBD6 0BB8
+
+$Goal Select Player 1
+810B637C 00??
+00 No Goals
+0A 10 Goals
+14 20 Goals
+19 25 Goals
+32 50 Goals
+63 99 Goals
+
+$Infinite 99 Credits
+800B3961 0063
+
+$Other Team Scores no Goals
+Note=Disable to allow Other team to score
+810B6694 0000

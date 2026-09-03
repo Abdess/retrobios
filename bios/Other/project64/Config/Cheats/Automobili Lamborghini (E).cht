@@ -1,0 +1,37 @@
+[FC7797BF-4A95E83C-C:50]
+Name=Automobili Lamborghini (E)
+
+$Access All Bonus Cars
+50000302 0000
+80098583 0001
+50000302 0000
+8009858B 0001
+
+$Always 1st Place
+810A5F30 0001
+
+$Infinite Time
+810CE72E 03E7
+
+$Max Points
+810CE702 010A
+
+$Speedometer Select
+810CE7C2 00??
+00 KM/H
+01 MPH
+
+$Start On Lap Modifier
+D00A5F35 0000
+810A5F34 00??
+00 Normal
+01 Lap 1
+02 Lap 2
+03 Lap 3
+04 Lap 4
+06 Lap 5
+06 Lap 6
+07 Last Lap from Start
+
+$Track Direction Unlocked (All Levels)
+800A4131 0003

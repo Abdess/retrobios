@@ -1,0 +1,82 @@
+[D83045C8-F29D3A36-C:50]
+Name=AeroGauge (E) (M3)
+
+$Always 1st
+8013F040 0001
+
+$Freeze All Timers
+8013F001 0000
+8013F005 0000
+8013F00A 0000
+
+$Freeze Overall Timer
+Note=All of the Freeze All Lap Timers must be on. These codes will Stop the others from racing against you in Grand Prix mode. To win a race in Grand Prix you must finish at least one lap in the qualify round, then complete all laps in race for first.
+8013EFF5 0001
+
+$Language Select
+8008CF93 00??
+00 English
+01 French
+02 German
+
+$Laps Of Race
+8013EFEF 00??
+01 1 Lap
+02 2 Laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 Never Ending Laps
+
+$Level Select
+Note=For this cheat to work,as soon as you put the cheat on you must turn it back off,if not you wont beable to quit a Race or even finish one.
+8013F2FB 00??
+00 Canyon Rush
+01 Bikini Island
+02 China Town
+03 Neo Arena
+04 China Town Jam
+05 Neo Speed Way
+
+$Music Modifier
+800F715F 00??
+FF Music On
+00 Music Off
+
+$No Damage\Player 1
+50000402 0000
+8113F338 0000
+
+$No Damage\Player 2
+50000402 0000
+811413D8 0000
+
+$Play As\Player 1
+8013F2F5 00??
+00 N64 Control Pad
+01 Interceptor
+02 Hornet
+03 Avenger
+04 Shredder
+05 Black Lightning
+06 Vengeance
+07 Prowler
+08 Reaper
+09 Dominator
+
+$Play As\Player 2
+8013F2F6 00??
+00 N64 Control Pad
+01 Interceptor
+02 Hornet
+03 Avenger
+04 Shredder
+05 Black Lightning
+06 Vengeance
+07 Prowler
+08 Reaper
+09 Dominator
+
+$Unlock Hidden Tracks & Cars
+Note=All of the Freeze All Lap Timers must be on. These codes will Stop the others from racing against you in Grand Prix mode. To win a race in Grand Prix you must finish at least one lap in the qualify round, then complete all laps in race for first.
+8009127C 0001

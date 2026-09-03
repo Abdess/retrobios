@@ -1,0 +1,29 @@
+[E896092B-DC244D4E-C:45]
+Name=Wheel of Fortune (U)
+
+$Player 1\Infinite Free Spins
+800B999B 0001
+
+$Player 1\Max Cash
+810B9990 FFFF
+
+$Player 1\No Cash
+810B9992 0000
+
+$Player 2\Infinite Free Spins
+800B9AAF 0001
+
+$Player 2\Max Cash
+810B9AA4 FFFF
+
+$Player 2\No Cash
+810B9AA6 0000
+
+$Player 3\Infinite Free Spins
+800B9BC3 0001
+
+$Player 3\Max Cash
+810B9BB8 FFFF
+
+$Player 3\No Cash
+810B9BB8 0000

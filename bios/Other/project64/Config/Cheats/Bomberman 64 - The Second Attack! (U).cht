@@ -1,0 +1,27 @@
+[237E73B4-D63B6B37-C:45]
+Name=Bomberman 64 - The Second Attack! (U)
+
+$Flashing Invincible
+Note=This cheat Makes you Flash But you cant be harmed,Once out of danger Turn the cheat off to stop the flashing.also do not put this on if you have already been hurt or you will stay on the floor.
+800AD767 000A
+
+$Have\Fire Bombs
+800AD73B 0003
+
+$Have\Kick Bombs Anytime
+800AC743 0003
+
+$Have\Max Fire Level
+800AD733 0003
+
+$Infinite\Bombs
+800AD758 0003
+
+$Infinite\Continue Time
+810B5CD6 0090
+
+$Infinite\Health
+800AD75F 0005
+
+$Infinite\Money
+810ABD52 FFFF

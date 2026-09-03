@@ -1,0 +1,123 @@
+[95286EB4-B76AD58F-C:45]
+Name=Command & Conquer (U)
+
+$100% Efficiency
+80092E4B 0064
+
+$100% Leadership
+80092E47 0064
+
+$GDI\Instant\Air Strike
+800962A4 0032
+800C4E50 00FF
+
+$GDI\Instant\Build Aircraft
+810C4F12 FFFF
+
+$GDI\Instant\Build Buildings
+810C4F1E FFFF
+
+$GDI\Instant\Build Units
+810C4F16 FFFF
+
+$GDI\Instant\Build Vehicles
+810C4F1A FFFF
+
+$GDI\Instant\Ion Cannon
+800962A5 0033
+800C4E30 00FF
+
+$GDI\Instant\Nuclear Strike
+800962A6 0034
+800C4E70 00FF
+
+$GDI\Max Cash
+810C4F06 FFFF
+810C4F08 0001
+
+$GDI\Max Power
+810C4F26 FFFF
+810C4F28 0001
+
+$GDI\Maximum Buildings Lost
+80092E5F 00C8
+
+$GDI\Maximum Killed
+80092E53 00C8
+
+$GDI\Mission 4\Infinite Health APC #1
+800ABFB1 00C8
+
+$GDI\Mission 4\Infinite Health APC #2
+800AC03D 00C8
+
+$GDI\Mission 4\Infinite Health Hum-Vee
+800ABE99 0096
+
+$GDI\Mission 6\Infinite Health Commando
+800B56CD 0050
+
+$GDI\Mission 6\Infinite Health Transportational Helicopter
+800BFC95 005A
+
+$GDI\No Buildings Lost
+80092E5F 0000
+
+$GDI\None Killed
+80092E53 0000
+
+$Max Total Score
+81092E42 FFFF
+
+$NOD\Instant\Air Strike
+800962A4 0032
+800C4FF8 00FF
+
+$NOD\Instant\Build Aircraft
+810C50BA FFFF
+
+$NOD\Instant\Build Buildings
+810C50C6 FFFF
+
+$NOD\Instant\Build Units
+810C50BE FFFF
+
+$NOD\Instant\Build Vehicles
+810C50C2 FFFF
+
+$NOD\Instant\Ion Cannon
+800962A5 0033
+800C4FD8 00FF
+
+$NOD\Instant\Nuclear Strike
+800962A6 0034
+800C5018 00FF
+
+$NOD\Max Cash
+810C50AE FFFF
+810C50B0 0001
+
+$NOD\Max Power
+810C50CE FFFF
+810C50D0 0001
+
+$NOD\Maximum Buildings Lost
+80092E5B 00C8
+
+$NOD\Maximum Killed
+80092E4F 00C8
+
+$NOD\No Buildings Lost
+80092E5B 0000
+
+$NOD\None Killed
+80092E4F 0000
+
+$Time Spent On Mission
+80092E3B 00??
+00 No Time
+FF Max Time
+
+$Tons Of Ending Credits
+81092E3C 0FFF
+81092E3E FFFF

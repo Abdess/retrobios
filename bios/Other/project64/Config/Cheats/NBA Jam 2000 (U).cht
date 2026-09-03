@@ -1,0 +1,30 @@
+[EBEEA8DB-F2ECB23C-C:45]
+Name=NBA Jam 2000 (U)
+
+$Infinite Shot Clock
+801378DF 0016
+
+$Infinite Turbo\Team 1\Player 1
+8115B512 FF00
+
+$Infinite Turbo\Team 1\Player 2
+8115B516 FF00
+
+$Infinite Turbo\Team 2\Player 1
+8115B50A FF00
+
+$Infinite Turbo\Team 2\Player 2
+8115B50E FF00
+
+$Infinite Violation Clock
+8013783B 005D
+
+$Team 1 Score Select
+80137117 00??
+00 00
+96 150
+
+$Team 2 Score Select
+80137113 00??
+00 00
+96 150

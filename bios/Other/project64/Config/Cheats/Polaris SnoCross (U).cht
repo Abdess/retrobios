@@ -1,0 +1,31 @@
+[41380792-A167E045-C:45]
+Name=Polaris SnoCross (U)
+
+$[Continue Tournament]
+Note=This will allow you to Continue Tournament with All Tracks & Divisions Unlocked
+80083247 00FF
+
+$Have All\Divisions Complete
+8008323F 00FF
+
+$Have All\Sleds Unlocked
+8108324E FFFF
+
+$Have All\Tracks Unlocked
+81083252 03FF
+
+$Have\Max Race Points
+8108321E FFFF
+
+$Have\Max Wrenches (All Sleds)
+Note=This will give you 100 Wrench Points for all Sledges to boost your stats
+50000C01 0000
+80083168 0064
+50000201 0000
+80083177 0064
+50000206 0000
+8008317C 0064
+50000206 0000
+80083186 0064
+50000301 0000
+80083190 0064

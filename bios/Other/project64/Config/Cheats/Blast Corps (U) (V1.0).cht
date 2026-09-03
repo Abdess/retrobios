@@ -1,0 +1,29 @@
+[7C647C25-D9D901E6-C:45]
+Name=Blast Corps (U) (V1.0)
+
+$Ballista Can Drive Through Anything
+803F8A68 0001
+
+$Found All\RDUS
+8036E9CC C350
+
+$Found All\Scientists
+80364AD0 003F
+
+$Found All\Survivors
+8036E9C9 00FF
+
+$Infinite Time
+D0315610 0000
+81315610 0000
+D0315612 0001
+81315612 0000
+
+$Infinite\Boosts Buggy Vehicle
+803EE301 0064
+
+$Infinite\Hydraulics Sidesweeper
+803EDB51 0063
+
+$Infinite\Missiles Motor Bike
+803F8AC3 0063

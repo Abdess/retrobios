@@ -1,0 +1,78 @@
+[73036F3B-CE0D69E9-C:50]
+Name=Mortal Kombat 4 (E)
+
+$Choose A Costume\Player 1
+8104A612 00??
+00 Normal
+01 First
+02 Second
+03 Third
+
+$Choose A Costume\Player 2
+8104A616 00??
+00 Normal
+01 First
+02 Second
+03 Third
+
+$Enable Restart Match option
+800494BB 0002
+
+$Infinite Run\Player 1
+811050FC 0001
+811050FE 0000
+
+$Infinite Run\Player 2
+811051B0 0001
+811051B2 0000
+
+$Infinite Time
+8110524A 0063
+
+$Play As\Player 1
+800FE3C3 00??
+00 Scorpion
+01 Raiden
+02 Sonya
+03 Liu Kang
+04 Sub-Zero
+05 Fujin
+06 Shinnok
+07 Reiko
+08 Quan Chi
+09 Tanya
+0A Reptile
+0B Kai
+0C Jarek
+0D Jax
+0E Johnny Cage
+0F Goro
+11 Noob Saibot
+
+$Play As\Player 2
+80126FBF 00??
+00 Scorpion
+01 Raiden
+02 Sonya
+03 Liu Kang
+04 Sub-Zero
+05 Fujin
+06 Shinnok
+07 Reiko
+08 Quan Chi
+09 Tanya
+0A Reptile
+0B Kai
+0C Jarek
+0D Jax
+0E Johnny Cage
+0F Goro
+11 Noob Saibot
+
+$Unlimited Energy\Player 1
+810FE208 0001
+810FE20A 0000
+
+$Unlimited Energy\Player 2
+81127084 0001
+81127086 0000

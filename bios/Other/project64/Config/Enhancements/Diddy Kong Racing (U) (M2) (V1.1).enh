@@ -1,0 +1,26 @@
+[E402430D-D2FCFC9D-C:45]
+Name=Diddy Kong Racing (U) (M2) (V1.1)
+
+$16:9 Widescreen
+Note=For 16:9 aspect ratios. Do not use with other widescreen enhancements or hacks.
+81066246 3FE3
+81066396 3FE3
+810663FE 3FE3
+8107037A 3740
+81126714 3FE3
+
+$21:9 Widescreen
+Note=For 21:9 aspect ratios. Do not use with other widescreen enhancements or hacks.
+81066246 4018
+81066396 4018
+810663FE 4018
+8107037A 370F
+81126714 4018
+
+$Alt Sixty Frames
+Note=A friend informed me this didn't freeze
+80079E7A 0003
+
+$Sixty Frames
+Note=May freeze at some points,physics can get wonky with slopes on both codes.
+80079E7B 0003

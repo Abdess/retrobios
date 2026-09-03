@@ -1,0 +1,150 @@
+[30C7AC50-7704072D-C:45]
+Name=Conker's Bad Fur Day (U)
+
+$Access All\Chapters, Scenes,& Multi-Player Characters
+50000401 0000
+800E9D01 00FF
+
+$Access All\Characters & Weapons In Multi Race
+810E9D02 ??FF
+FF All Characters & Baseball bat
+FB All Characters & Frying Pan
+F3 All Characters & Bones
+
+$Conkers Speed Select
+810CC318 ????
+3F00 Slow Conker
+3F80 Normal Conker
+3FF0 Fast Conker
+4030 Super Fast Conker
+
+$Infinite\Accuracy Count Player 1
+Note=MULTI ONLY. Only put this code on once you are in the game
+800E0B67 0001
+
+$Infinite\Bags In Heist
+800E0BE4 00FF
+
+$Infinite\Bombs
+802055CA 0030
+
+$Infinite\Head Shot Count Player 1
+Note=MULTI ONLY. Only put this code on once you are in the game,Once you pick up a Gun a shoot once, you will 100%.
+800E0B6B 03E7
+
+$Infinite\Health\Player 1
+800CC49A 0006
+
+$Infinite\Health\Player 2
+800CC7C6 270F
+
+$Infinite\Health\Player 3
+800CCAF2 270F
+
+$Infinite\Health\Player 4
+800CCE1E 270F
+
+$Infinite\Lives Player 1
+800D2144 0064
+
+$Infinite\Max Kills Player 1
+800E0B47 03E7
+
+$Infinite\Oxygen
+800CC382 0001
+
+$Infinite\Pots of cash
+810D214A FFFF
+
+$Infinite\Time In Multi
+8108FD7A 7500
+
+$Matrix Mode (Anywhere)
+Note=Press R to activate and then Right-C to exit.
+D1042A14 0010
+800BEA0C 0001
+D1042A14 0010
+810BE574 D202
+D1042A14 0001
+800BEA0C 0000
+D1042A14 0001
+810BE574 0000
+
+$Play as Option 1
+Note=Here you can choose who you want to play as, but only one option at a time. Shadow will not be visible, except when playing as Conker.
+800D213F 00??
+01 Wessle
+02 Wessle (Black outfit)
+03 Tedi
+04 Combat Squirrel
+05 Conker
+08 Tank Vehicle (Cannot move)
+09 Dinosaur (Cannot move)
+0B Uga
+0C Bald Caveman
+0D Caveman
+0E Mohican Caveman
+0F Spikey Caveman
+10 Neo Conker
+11 Male Villager
+12 Male Villager (with glasses)
+13 Male Villager (with moustache)
+14 Male Villager (with glasses and moustache)
+15 Male Villager (with hat)
+16 Male Villager (with hat and glasses)
+17 Male Villager (with hat and moustache)
+18 Male Villager (with hat and glasses and moustache)
+19 Male Villager (with cap)
+1A Male Villager (with cap and glasses)
+1B Male Villager (with cap and moustache)
+1C Male Villager (with cap and glasses and moustache)
+1D Female Villager
+1F Female Villager (with hood and glasses)
+21 Male Zombie
+22 Female Zombie
+23 Enemy Bat
+24 Conker the Bat
+25 Army Captain
+26 Tedi Boss
+27 Gregg
+28 Skeleton Gregg
+
+$Press L To Levitate\Player 1
+Note=Press L Button to Levitate & Let go to come back down
+D0042A15 0020
+810CC2F0 41CB
+
+$Press L To Levitate\Player 2
+Note=Press L Button to Levitate & Let go to come back down
+D0042A1D 0020
+810CC61C 41CB
+
+$Press L To Levitate\Player 3
+Note=Press L Button to Levitate & Let go to come back down
+D0042A25 0020
+810CC948 41CB
+
+$Press L To Levitate\Player 4
+Note=Press L Button to Levitate & Let go to come back down
+D0042A2D 0020
+810CCC74 41CB
+
+$Wait Animation Trigger
+800CC5C8 00??
+00 Default at most
+02 Wait animations disabled
+
+$Weapon Select In Multi (On Pick Up)
+Note=Select what Weapon you would like in Multi Player and then on a Weapon Pickup you will have the weapon of your choice.to change for another just Enable the one of your choice to have that instead.(you must have a weapon already to change for the next.
+80180873 00??
+01 Sword
+02 Nothing
+03 Yellow Chain-Ssaw
+04 Throwing Knives
+05 Riffle
+06 Long Pistol with Sight
+07 Rocket Launcher
+08 Buck Shot
+0A High Powred Riffle With Scope
+0C Two Automatic Machine Guns
+13 Gas Mask

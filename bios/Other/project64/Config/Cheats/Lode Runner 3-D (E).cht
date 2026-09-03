@@ -1,0 +1,20 @@
+[60460680-305F0E72-C:50]
+Name=Lode Runner 3-D (E) (M5)
+
+$Access All In-Game Cheats
+Note=Pause Gameplay To Access
+81157E46 000F
+81157E56 FFFF
+
+$Access All Navigation Cards
+80157E9B 0005
+
+$Access Secret Worlds
+81152946 0064
+
+$Infinite Lives
+81157EAE 0063
+
+$Max & Total Gold
+80157E4B 0063
+80157E4F 0063

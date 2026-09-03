@@ -1,0 +1,7 @@
+[930C29EA-939245BF-C:45]
+Name=Snowboard Kids 2 (U)
+
+$No Frame Skip MP
+Note=Makes it run at 30fps instead of 15fps.
+8009AFD7 0000
+

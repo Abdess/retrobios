@@ -1,0 +1,14 @@
+[98F9F2D0-03D9F09C-C:50]
+Name=Virtual Pool 64 (E)
+
+$Foul score will stay at 0
+802EF725 0000
+
+$Have 5 games won
+802EF721 0005
+
+$Pot 1 to win Set points to 25 in straight pool
+802EF71D 0019
+
+$Score 0 points in shark skins
+802EF723 0000

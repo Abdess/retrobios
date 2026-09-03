@@ -1,0 +1,68 @@
+[7188F445-84410A68-C:4A]
+Name=Dance Dance Revolution - Disney Dancing Museum (J)
+
+$Can Skip End Credits
+8015627F 0001
+
+$Endless Mode
+800854CD 0000
+
+$Maximum Dance Gauge\Player 1
+810854DC 03E8
+
+$Maximum Dance Gauge\Player 2
+81085514 03E8
+
+$Maximum Song Score\Player 1
+8108A260 3B9A
+8108A262 C9FF
+
+$Maximum Song Score\Player 2
+8108A264 3B9A
+8108A266 C9FF
+
+$Maximum Total Score\Player 1
+810854E0 3B9A
+810854E2 C9FF
+
+$Maximum Total Score\Player 2
+81085518 3B9A
+8101551A C9FF
+
+$Results\0 Boo Steps\Player 1
+8108A22A 0000
+
+$Results\0 Boo Steps\Player 2
+8108A242 0000
+
+$Results\0 Good Steps\Player 1
+8108A226 0000
+
+$Results\0 Good Steps\Player 2
+8108A23E 0000
+
+$Results\0 Miss Steps\Player 1
+8108A22E 0000
+
+$Results\0 Miss Steps\Player 2
+8108A246 0000
+
+$Results\999 Great Steps\Player 1
+8108A222 03E7
+
+$Results\999 Great Steps\Player 2
+8108A23A 03E7
+
+$Results\999 Perfect Steps\Player 1
+8108A21E 03E7
+
+$Results\999 Perfect Steps\Player 2
+8108A236 03E7
+
+$Unlock All Puzzles
+50001902 0000
+81156228 FFFF
+
+$Unlock All Songs
+8015621D 00FF
+8115621E FFFF

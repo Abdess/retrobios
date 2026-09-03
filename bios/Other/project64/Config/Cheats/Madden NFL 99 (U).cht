@@ -1,0 +1,82 @@
+[DEB78BBA-52F6BD9D-C:45]
+Name=Madden NFL 99 (U)
+
+$Away Team\Scores 0
+8005FA47 0000
+
+$Away Team\Scores 50
+8005FA47 0032
+
+$Enable\All Stadiums
+50000801 0000
+8004A7F0 00FF
+
+$Enable\All Teams
+50000E01 0000
+8004ADD0 00FF
+
+$Home Team\Scores 0
+8005CF87 0000
+
+$Home Team\Scores 50
+8005CF87 0032
+
+$Infinite\Time Outs Away Team
+8005FA49 0003
+
+$Infinite\Time Outs Home Team
+8005CF89 0003
+
+$No Time-Outs\Away Team
+8005FA49 0000
+
+$No Time-Outs\Home Team
+8005CF89 0000
+
+$Press L For First Down\Player 1
+D0066F2D 0020
+810612E0 0001
+
+$Press L For First Down\Player 2
+D0066F35 0020
+810612E0 0001
+
+$Press L For First Down\Player 3
+D0066F3D 0020
+810612E0 0001
+
+$Press L For First Down\Player 4
+D0066F45 0020
+810612E0 0001
+
+$Press L For More Time To Choose Play\Player 1
+D0066F2D 0020
+80061245 0028
+
+$Press L For More Time To Choose Play\Player 2
+D0066F35 0020
+80061245 0028
+
+$Press L For More Time To Choose Play\Player 3
+D0066F3D 0020
+80061245 0028
+
+$Press L For More Time To Choose Play\Player 4
+D0066F45 0020
+80061245 0028
+
+$Press R For Fourth Down\Player 1
+D0066F2D 0010
+810612E0 0004
+
+$Press R For Fourth Down\Player 2
+D0066F35 0010
+810612E0 0004
+
+$Press R For Fourth Down\Player 3
+D0066F3D 0010
+810612E0 0004
+
+$Press R For Fourth Down\Player 4
+D0066F45 0010
+810612E0 0004

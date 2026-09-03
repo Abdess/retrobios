@@ -1,0 +1,26 @@
+[944FAFC4-B288266A-C:00]
+Name=Superman (U) (M2) (Prototype)
+
+$Infinite Health
+812128D0 42C8
+812128D2 0000
+
+$Infinite Heat Vision
+812128E0 42C8
+812128E2 0000
+
+$Infinite Ice Breath
+812128E4 42C8
+812128E6 0000
+
+$Infinite Speed Boost
+812128D8 42C8
+812128DA 0000
+
+$Infinite Timer\Level 2
+8119B927 003B
+8119B92B 0009
+
+$Infinite X-Ray
+812128F0 42C8
+812128F2 0000

@@ -1,0 +1,356 @@
+[A5533106-B9F25E5B-C:4A]
+Name=Akumajou Dracula Mokushiroku Gaiden - Legend of Cornell (J)
+
+$Enable All Characters
+D02E4082 0000
+802E4083 0004
+
+$Hard Mode Selected In A New Game
+Note=With this code, you will not see the hard level status until you save and restart the game file. No special items are required to access this feature with this code turned on.
+8032630F 0002
+
+$Have Max\Powerups
+801CC7D3 0002
+
+$Have Max\Weapon Power-Up
+801CC7D7 0002
+
+$Infinite\Bullets
+Note=For Henry
+801D5753 0006
+
+$Infinite\Gold
+811CC4F2 2710
+
+$Infinite\Health
+811CC4EA 2710
+
+$Infinite\Health Young Henry
+D11CA1A6 0010
+813A6D10 2800
+
+$Infinite\Items\Crest Half A
+801CC50B 000A
+
+$Infinite\Items\Crest Half B
+801CC50C 000A
+
+$Infinite\Items\Cure Ampoule
+801CC4FE 000A
+
+$Infinite\Items\Healing Kit
+801CC4FC 000A
+
+$Infinite\Items\Magical Nitro
+801CC505 000A
+
+$Infinite\Items\Mandragora
+801CC506 000A
+
+$Infinite\Items\Moon Card
+801CC508 000A
+
+$Infinite\Items\Oldrey's Diary
+801CC50A 000A
+
+$Infinite\Items\Powerup
+801CC4FF 000A
+
+$Infinite\Items\Purifying
+801CC4FD 000A
+
+$Infinite\Items\Red Jewels on Pick-Up
+801CC4F5 0068
+
+$Infinite\Items\Roast Beef
+801CC4FB 000A
+
+$Infinite\Items\Roast Chicken
+801CC4FA 000A
+
+$Infinite\Items\Rose Brooch
+801CC50D 000A
+
+$Infinite\Items\Sun Card
+801CC507 000A
+
+$Infinite\Items\The Contract
+801CC504 000A
+
+$Infinite\Items\Throwing Weapons
+801CC4F5 0064
+
+$Infinite\Items\Winch Lever
+801CC509 000A
+
+$Infinite\Keys\Archives
+801CC50E 000A
+
+$Infinite\Keys\Art Tower 1
+801CC51A 000A
+
+$Infinite\Keys\Art Tower 2
+801CC51B 000A
+
+$Infinite\Keys\Chamber
+801CC513 000A
+
+$Infinite\Keys\Clocktower A
+801CC51F 000A
+
+$Infinite\Keys\Clocktower B
+801CC520 000A
+
+$Infinite\Keys\Clocktower C
+801CC518 000A
+
+$Infinite\Keys\Clocktower D
+801CC519 000A
+
+$Infinite\Keys\Clocktower E
+801CC51E 000A
+
+$Infinite\Keys\Control Room
+801CC51C 000A
+
+$Infinite\Keys\Copper
+801CC512 000A
+
+$Infinite\Keys\Deck
+801CC515 000A
+
+$Infinite\Keys\Execution
+801CC514 000A
+
+$Infinite\Keys\Garden
+801CC511 000A
+
+$Infinite\Keys\Left Tower
+801CC50F 000A
+
+$Infinite\Keys\Rose Garden
+801CC516 000A
+
+$Infinite\Keys\Storeroom
+801CC510 000A
+
+$Infinite\Keys\Thorn
+801CC517 000A
+
+$Infinite\Keys\Wall
+801CC51D 000A
+
+$Infinite\Specials\Special 1
+801CC4F7 000A
+
+$Infinite\Specials\Special 2
+801CC4F8 000A
+
+$Infinite\Specials\Special 3
+801CC4F9 000A
+
+$Rapid Fire Gun (Henry-Hold B)
+Note=For Henry, Hold B
+811CA1A6 0040
+801D5753 0006
+
+$Selection Options\[Press F9 For Wolfman Can Use Weapons]
+Note=For Cornell
+881CC4E7 00??
+02 Yes
+04 No (Default)
+
+$Selection Options\Cut Scene Select
+Note=With this code, you must use the appropiate level mod before you attemp to run these cut scenes. Not doing so will ruin the cut scene as the graphics will be glitched.
+801CC843 0009
+801CC83B 00??
+03 Castle Drawbridge Lowers
+04 Character Enters Castle
+05 (?)
+0A (?)
+0C (?)
+20 (?)
+21 (?)
+22 (?)
+06 Vampire In Main Entrance Hall Of Villa
+07 One Of The Working Gears Cut Scenes
+08 "I Smell Poison" From Underground Waterway
+09 Castle Gate Closes In Villa Upon Entering Villa
+0B Renon Appears For First Time
+0D Village Vampire In Upstairs Villa
+0E Malus Appears For The First Time
+0F Malus Leaves Garden
+10 Character In Boat On Foggy Lake
+11 Seal Removed From Wall In Arena
+12 Bleeding Statue
+13 Cosmic Lights
+14 Explosion At Wall In Arena
+15 Explosion At Wall In Castle That Leads To Hidden Room
+16 Malus Appears Again In Upstairs Room Of Castle
+17 Bull Awakens
+18 Vincent The Vampire
+19 One Of The Working Gears Cut Scenes
+1A Gate Opens In Forest Of Silence
+1B Meet Renon For The Last Time In Castle Keep.
+1C This Cut Scene Runs Cut Scene 27 And 2E
+1E Castle Keep Destructs
+1F Malus On Flying Horse Outside Castle Keep
+24 Spider People In Tunnel
+25 Rosa In Garden
+27 Castel Destruction
+28 Space Warp
+29 Castle Destruction
+2A Malus Is Saved By Reinhardt
+2B Malus And Reinhardt On Horse
+2E Rosa Returns
+30 Ada
+31 Scrolling Text About Castle And Henry
+33 Vampire In Basement
+34 Vampire In Villa Basement Destroyed
+35 Finds Hidden Path In Villa Basement
+37 Lever & Gear In Castle
+38 Harpie
+39 Harpie Destroyed
+44 Death(Grim Reaper)
+45 Death Is Destroyed
+46 Castle Drawbridge Closes And Ortega Appears
+47 Thirsty Man
+48 Cornell Meets Henry In Garden
+49 Cornell And Henry Part In Garden
+51 Monster Dracula Appears
+52 Actrise Appears In Castle Center
+54 Actrise Appears Again With Cousin Fernandes Before Fight With Carrie
+55 Cousin Fernandes Is Destroyed
+56 Actrise Appears Again Before Fight With Carrie
+57 Actrise Defeated By Carrie
+
+$Selection Options\Day Select For Adult Henry
+801CC4CF 00??
+00 7 Days
+01 6 Days
+02 5 Days
+03 4 Days
+04 3 Days
+05 2 Days
+06 1 Day
+07 0 Days
+
+$Selection Options\Level Select\Inter
+801CC82B 00??
+00 Forest Of Silence
+01 Left Tower
+02 Castle Wall
+03 Villa
+04 Villa
+05 Villa
+06 Villa
+1A Villa
+07 Tunnel
+08 Underground Waterway
+09 Castle Center
+0A Castle Center
+0B Castle Center
+0C Castle Center
+0D Castle Center
+0E Castle Center
+0F Castle Center
+10 Foggy Lake
+11 Foggy Lake
+12 Foggy Lake
+13 Cave Of Spiderwomen
+14 Castle Keep
+15 Castle Keep
+16 Falls Into Space(?)
+17 Clock Tower
+18 Final Battle Site
+19 Castle Center
+1B Room Of Clocks
+1C Countryside Where Carrie's Mom Is Buried.(Fall Through Ground)
+2B Countryside Where Carrie's Mom Is Buried.(Fall Through Ground)
+1D Tower Of Sorcery
+1E Tower Of Execution
+1F Tower Of Execution
+20 Tower Of Execution
+21 Tower Of Science
+22 Tower Of Science
+23 Tower Of Ruins
+24 Tower Of Ruins
+25 Art Tower
+26 Art Tower
+27 Dual Tower
+28 Clock Tower
+29 Clock Tower
+2A Outer Wall
+2C Fall From Sky Ouside Of Castlevania Opening
+2D Another Free Fall. Forest Where Girl Runs In Opening
+2E Black Room(?)
+
+$Selection Options\Level Select\Main
+801CC829 00??
+00 Forest Of Silence
+01 Left Tower
+02 Castle Wall
+03 Villa
+04 Villa
+05 Villa
+06 Villa
+1A Villa
+07 Tunnel
+08 Underground Waterway
+09 Castle Center
+0A Castle Center
+0B Castle Center
+0C Castle Center
+0D Castle Center
+0E Castle Center
+0F Castle Center
+10 Foggy Lake
+11 Foggy Lake
+12 Foggy Lake
+13 Cave Of Spiderwomen
+14 Castle Keep
+15 Castle Keep
+16 Falls Into Space(?)
+17 Clock Tower
+18 Final Battle Site
+19 Castle Center
+1B Room Of Clocks
+1C Countryside Where Carrie's Mom Is Buried.(Fall Through Ground)
+2B Countryside Where Carrie's Mom Is Buried.(Fall Through Ground)
+1D Tower Of Sorcery
+1E Tower Of Execution
+1F Tower Of Execution
+20 Tower Of Execution
+21 Tower Of Science
+22 Tower Of Science
+23 Tower Of Ruins
+24 Tower Of Ruins
+25 Art Tower
+26 Art Tower
+27 Dual Tower
+28 Clock Tower
+29 Clock Tower
+2A Outer Wall
+2C Fall From Sky Ouside Of Castlevania Opening
+2D Another Free Fall. Forest Where Girl Runs In Opening
+2E Black Room(?)
+
+$Selection Options\Status Select
+801CC534 00??
+00 Never Get Poisoned or Vamped
+01 Normal
+04 Vamp
+08 Poison
+0C Vamped & Poisoned
+FF Instant Death
+
+$Selection Options\Weapon Select
+801CC4EF 00??
+00 Nothing
+01 Knife
+02 Potion
+03 Cross
+04 Axe
+
+$Stop Timer Input
+811CC4D2 0001

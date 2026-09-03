@@ -1,0 +1,113 @@
+[9E8FCDFA-49F5652B-C:45]
+Name=Killer Instinct Gold (U) (V1.1)
+
+$Player 1\1-Hit Death
+D01D3484 0078
+801D3484 0001
+
+$Player 1\Fast\Jump Walk
+801D347C 0001
+
+$Player 1\Fast\Punch Kick
+801D347E 0010
+
+$Player 1\Fight Gargos Immediately
+8012834B 000A
+
+$Player 1\Fulgore\Always Invisible
+Note=Do not use this with Fulgore Always Visible
+801D3478 0020
+801D3479 0090
+801D34C5 0092
+801D3527 005E
+
+$Player 1\Fulgore\Always Visible
+Note=Do not use this with Fulgore Always Invisible
+801D3478 0023
+801D3479 00F0
+801D34C5 0080
+801D3527 00AF
+
+$Player 1\Infinite Energy
+801D3484 0069
+
+$Player 1\Play As
+802C8CB8 00??
+00 Jago
+01 Combo
+02 Spinal
+03 Tusk
+04 Glacius
+05 Fulgore
+06 Kim Wu
+07 Sabrewulf
+08 Orchid
+09 Maya
+0A Gargos
+
+$Player 1\Slow Jump Walk
+801D347D 0050
+
+$Player 1\Spinal Always Has All Skulls
+801D3523 0006
+
+$Player 1\Undefeated Players Scroll By Quickly
+802C8CE8 0007
+
+$Player 1\Untouchable
+801D34D4 000A
+
+$Player 1\Wins Score
+8012830A 00FF
+
+$Player 2\Fast\Jump Walk
+801D357C 0001
+
+$Player 2\Fast\Punch Kick
+801D357E 0010
+
+$Player 2\Fulgore Always Invisible
+Note=Do not use this with Fulgore Always Visible
+801D3578 0020
+801D3579 0090
+801D35C5 0092
+801D3527 005E
+
+$Player 2\Fulgore Always Visible
+Note=Do not use this with Fulgore Always Invisible
+801D3578 0023
+801D3579 00F0
+801D35C5 0080
+801D3527 00AF
+
+$Player 2\Infinite Energy
+801D3584 0078
+
+$Player 2\Play As
+8004EA9D 00??
+00 Jago
+01 Combo
+02 Spinal
+03 Tusk
+04 Glacius
+05 Fulgore
+06 Kim Wu
+07 Sabrewulf
+08 Orchid
+09 Maya
+0A Gargos
+
+$Player 2\Slow\Jump Walk
+801D357D 0050
+
+$Player 2\Slow\Punch Kick
+801D357F 0050
+
+$Player 2\Spinal Always Has All Skulls
+801D3623 0006
+
+$Player 2\Untouchable
+801D34D5 000A
+
+$Unlock All Options
+8012834C 0006

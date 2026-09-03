@@ -1,0 +1,21 @@
+[82B3248B-E73E244D-C:45]
+Name=Virtual Chess 64 (U) (M3)
+
+$Always Play On\2D Board
+800E7257 0001
+
+$Always Play On\3D Board
+800E7257 0000
+
+$Debug Mode
+810E6290 0001
+
+$Player 1 Controls\Both Sides In 2-Player
+Note=This is only for Human VS. Human Game
+8012C508 0000
+
+$Time Always Counts Down\On Black Players Side
+8012C67D 0001
+
+$Time Always Counts Down\On White Players Side
+8012C67D 0000

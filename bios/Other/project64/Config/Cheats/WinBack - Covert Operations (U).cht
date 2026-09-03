@@ -1,0 +1,55 @@
+[ED98957E-8242DCAC-C:45]
+Name=WinBack - Covert Operations (U)
+
+$All Bosses 1 Hit Deaths
+811BE482 0000
+
+$Enable\Max Power Mode
+8015D417 0001
+
+$Flashlight Mod
+80179448 00??
+01 On
+00 Off
+
+$Have All\Weapons,Items & Infinite Ammo\Player 1
+8017AA9F 001E
+8017AAB3 0008
+8017AAB7 0009
+801587C4 0009
+8015D417 0001
+801587C0 000C
+801587C1 0060
+801587C3 0001
+50000601 0000
+801587C5 0001
+801587CB 0004
+801587CD 000C
+
+$Have Trial Mode Unlocked
+8110DCEE 0004
+
+$Have\All Characters In Multi
+8115D412 FFFF
+8115D410 0003
+8015D411 0003
+
+$Infinite Health
+8017AABB 0064
+
+$Start with Weapon\Player 1
+8017AAA8 00??
+00 HandGun
+01 Machinegun
+02 Shotgun
+03 Rocket Launcher
+04 M16 With Infinite Ammo
+05 New Cooler Handgun
+06 Invisible Gun 1 With Infinite Ammo
+07 Invisible Gun 2 With Infinite Ammo
+08 Odd Inviso ShotGun With Infinite Ammo
+09 Cool Rocket Launcher With Infinite Ammo
+14 Silenced Handgun
+
+$Time is Always 00:00:00
+8110DD62 0000

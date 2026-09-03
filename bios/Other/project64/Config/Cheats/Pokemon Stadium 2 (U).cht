@@ -1,0 +1,79 @@
+[03571182-892FD06D-C:45]
+Name=Pokemon Stadium 2 (U)
+
+$Infinite\Continues
+8114738C 0009
+
+$Infinite\Dirt Rollout Rampage\Player 1
+8017DFEB 0002
+
+$Instant\Win\Barrier Ball\Player 1
+8016EA97 0005
+
+$Instant\Win\Pichu's Power Plant\Player 1
+8016D64F 0050
+
+$Instant\Win\Topsy Turvy\Player 1
+80176887 0005
+
+$Max Score
+D117F812 03E7
+8117F812 03E7
+
+$One Hit KO
+Note=To Win you must get at least one hit or just return your pokemon.
+8014576F 0000
+801457C7 0000
+8014581F 0000
+
+$Press R To Reset Time
+Note=Press R To Reset Time
+801CE066 0010
+81183ACC 0063
+
+$Press R+L to KO Opponents
+Note=Press R+L Activate
+D10CE066 0030
+80145767 0000
+D10CE066 0030
+801457C7 0000
+D10CE066 0030
+8014576F 0000
+D10CE066 0030
+8014581F 0000
+
+$Press Z\for Max HP\1st Pokemon
+Note=This will give them Max HP when they are not in use. Just call a Pokemon out and he will then have Max HP. When your Pokemon faints, just press Z again and it will revive itIn Battle Only,Do not use with anyother Press Z Cheat Code.
+D112B554 2000
+8114528E 00FF
+D112B554 2000
+81145290 00FF
+
+$Press Z\for Max HP\2nd Pokemon\Player 1
+Note=This will give them Max HP when they are not in use. Just call a Pokemon out and he will then have Max HP. When your Pokemon faints, just press Z again and it will revive itIn Battle Only,Do not use with anyother Press Z Cheat Code.
+D112B554 2000
+811452E6 00FF
+D112B554 2000
+811452E8 00FF
+
+$Press Z\for Max HP\3rd Pokemon\Player 1
+Note=This will give them Max HP when they are not in use. Just call a Pokemon out and he will then have Max HP. When your Pokemon faints, just press Z again and it will revive itIn Battle Only,Do not use with anyother Press Z Cheat Code.
+D112B554 2000
+8114533E 00FF
+D112B554 2000
+81145340 00FF
+
+$Press Z\for Max L.\1st Pokemon\Player 1
+Note=Do not use with anyother Press Z Cheat Code.
+D112B554 2000
+81145284 0063
+
+$Press Z\for Max L.\2nd Pokemon\Player 1
+Note=Do not use with anyother Press Z Cheat Code.
+D112B554 2000
+811452DC 0063
+
+$Press Z\for Max L.\3rd Pokemon\Player 1
+Note=Do not use with anyother Press Z Cheat Code.
+D112B554 2000
+81145334 0063

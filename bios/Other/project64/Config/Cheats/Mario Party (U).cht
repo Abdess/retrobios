@@ -1,0 +1,172 @@
+[2829657E-A0621877-C:45]
+Name=Mario Party (U)
+
+$Board Select
+800ED5C3 00??
+00 DK's Jungle Adventure
+01 Peach's Birthday Cake
+02 Yoshi's Tropical Island
+03 Wario's Battle Canyon
+04 Luigi's Engine Room
+05 Mario's Rainbow Castle
+06 Bowser's Magma Mountain
+07 Eternal Star
+08 Explaination Map
+09 Mini Game Stadium
+
+$Lower Left Character\Coin Options
+800F3318 00??
+00 0 Coins
+0A 10 Coins
+64 100 Coins
+FF 255 Coins
+
+$Lower Left Character\Dice Always
+Note=With this option you can calculate exactly how many you need to get on the position of your choice.
+800D635B 00??
+00 Rolls In Random
+01 Rolls In 1
+02 Rolls In 2
+03 Rolls In 3
+04 Rolls In 4
+05 Rolls In 5
+06 Rolls In 6
+07 Rolls In 7
+08 Rolls In 8
+09 Rolls In 9
+0A Rolls In 10
+
+$Lower Left Character\Star Options
+800F331C 00??
+00 0 Stars
+64 99 Stars
+
+$Lower Right Character\Coin Options
+800F3348 00??
+00 0 Coins
+0A 10 Coins
+64 100 Coins
+FF 255 Coins
+
+$Lower Right Character\Dice Always
+Note=With this option you can calculate exactly how many you need to get on the position of your choice.
+800D639F 00??
+00 Rolls In Random
+01 Rolls In 1
+02 Rolls In 2
+03 Rolls In 3
+04 Rolls In 4
+05 Rolls In 5
+06 Rolls In 6
+07 Rolls In 7
+08 Rolls In 8
+09 Rolls In 9
+0A Rolls In 10
+
+$Lower Right Character\Star Options
+800F334C 00??
+00 0 Stars
+64 99 Stars
+
+$Mini Game Island\99 Coins
+800F37C4 0063
+
+$Mini Game Island\Always Clear Level
+800F32BB 0063
+
+$Mini Game Island\Press GS For 99 Lives
+880F37BB 0063
+
+$Mini Game Island\World Level Select
+Note=Select where you want to go then Enable the cheat. as soon as you enter turn the cheat back off so you can move on to the next level and not the same place.
+810F32C4 ????
+0000 Start Save and Return Space
+0001 1-1 Coin Block Blitz
+0002 1-2 Coin Block Bash
+0003 1-3 Coin Shower Flower
+0004 1-4 Paddle Battle
+0005 Save and Return Space 1
+0006 2-1 Memory Match
+0007 2-2 Ground Pound
+0008 2-3 Limbo Dance
+0009 2-4 Magical Mushroom
+000A 2-5 Piranha's Pursuit
+0018 3-1 Crazy Cutter
+0019 3-2 Buried Treasure
+001A 3-3 Desrt Dash
+001B 3-4 Tug O' War
+001C 3-5 Teetering Towers
+001D Save and Return Space 2
+001E World 4-1 to 4-3 - Entrance
+0028 World 4-4 Entrance
+0029 Save and Return Space 3
+002A World 6-1 to 6-6 Castle Entrance
+0048 World 8-6 to 8-1 Castle Entrance 2
+0049 Save and Return Space 4
+004A 9-1 Hammer Drop
+004B 9-2 Slot Car Derby
+004C 9-3 Shell Game
+004D 9-4 Knock Block Tower
+004E 9-5 Platform Peril
+004F Goal Space - Final Goal
+
+$Mini Game\Max 99 Coins
+800F3770 0063
+
+$Mini Game\Unlimited 99 lives
+800F3767 0063
+
+$Top Left Character\Coin Options
+Note=If you want to have full 255 Coins,1st use the 100 Option then put on 255. this will stop the numbers from changing  & spoiling the result.
+800F32B8 00??
+00 0 Coins
+0A 10 Coins
+64 100 Coins
+FF 255 Coins
+
+$Top Left Character\Dice Always
+Note=With this option you can calculate exactly how many you need to get on the position of your choice.
+800D62D3 00??
+00 Rolls In Random
+01 Rolls In 1
+02 Rolls In 2
+03 Rolls In 3
+04 Rolls In 4
+05 Rolls In 5
+06 Rolls In 6
+07 Rolls In 7
+08 Rolls In 8
+09 Rolls In 9
+0A Rolls In 10
+
+$Top Left Character\Star Options
+800F32BC 00??
+00 0 Stars
+64 99 Stars
+
+$Top Right Character\Coin Options
+800F32E8 00??
+00 0 Coins
+0A 10 Coins
+64 100 Coins
+FF 255 Coins
+
+$Top Right Character\Dice Always
+Note=With this option you can calculate exactly how many you need to get on the position of your choice.
+800D6317 00??
+00 Rolls In Random
+01 Rolls In 1
+02 Rolls In 2
+03 Rolls In 3
+04 Rolls In 4
+05 Rolls In 5
+06 Rolls In 6
+07 Rolls In 7
+08 Rolls In 8
+09 Rolls In 9
+0A Rolls In 10
+
+$Top Right Character\Star Options
+800F32EC 00??
+00 0 Stars
+64 99 Stars

@@ -1,0 +1,141 @@
+[FC70E272-08FFE7AA-C:50]
+Name=Space Station Silicon Valley (E) (M7)
+
+$0 Enemies To Kill In Big Celebration Parade
+803E4DBB 0000
+
+$All levels open
+50002001 0000
+803F7ED0 0001
+
+$Always in 2nd Camera Angle
+803F2B89 0001
+
+$Always Raining
+803F2E5F 0005
+
+$Always Snowing
+803F2E5D 0005
+
+$Debug Mode
+803F651F 0001
+
+$Enable Secret Mini Game
+803F652D 0001
+
+$Great Score
+813F2E22 03E7
+
+$High Score In Evo's Escape
+813E4DDA 7FFF
+
+$Infinite Health\2 Mouse,Hyena
+Note=Only Use Infinite Health Codes For Animals You Need
+801DFB51 0080
+
+$Infinite Health\A. Desert Rat, Vulture, Box, Kang
+Note=Only Use Infinite Health Codes For Animals You Need
+801DEFD5 0080
+
+$Infinite Health\Bunny, Racing Turtle
+Note=Only Use Infinite Health Codes For Animals You Need
+801DF3A9 0080
+
+$Infinite Health\Cool Cod
+Note=Only Use Infinite Health Codes For Animals You Need
+801E4039 0080
+
+$Infinite Health\Desert Fox
+Note=Only Use Infinite Health Codes For Animals You Need
+801E161D 0080
+
+$Infinite Health\Elephant
+Note=Only Use Infinite Health Codes For Animals You Need
+801DE82D 0080
+
+$Infinite Health\EVO
+801DE085 0080
+
+$Infinite Health\Fox, Pen, Husky, Tortoise Tank
+Note=Only Use Infinite Health Codes For Animals You Need
+801DFF25 0080
+
+$Infinite Health\King Rat
+Note=Only Use Infinite Health Codes For Animals You Need
+801E19F1 0080
+
+$Infinite Health\Lion, Camel
+Note=Only Use Infinite Health Codes For Animals You Need
+801E02F9 0080
+
+$Infinite Health\Rocket Dog
+Note=Only Use Infinite Health Codes For Animals You Need
+801DEC01 0080
+
+$Infinite Health\Rocket Husky
+Note=Only Use Infinite Health Codes For Animals You Need
+801E1DC5 0080
+
+$Infinite Health\Spit Dog, Bear, King Pen, FB EVO
+Note=Only Use Infinite Health Codes For Animals You Need
+801DE459 0080
+
+$Infinite Skill\A\King Penguin
+Note=Only Use Infinite Skill A Codes For Animals You Need
+801DE5EC 0004
+
+$Infinite Skill\A\King Rat
+Note=Only Use Infinite Skill A Codes For Animals You Need
+801E1B84 0004
+
+$Infinite Skill\A\Power Mouse
+Note=Only Use Infinite Skill A Codes For Animals You Need
+801DFCE4 0004
+
+$Infinite Skill\A\Rocket Dog
+Note=Only Use Infinite Skill A Codes For Animals You Need
+801E3A24 0004
+
+$Infinite Skill\B\Armed Desert Rat
+Note=Only Use Infinite Skill B Codes For Animals You Need
+801DF16C 0004
+
+$Infinite Skill\B\Bear
+Note=Only Use Infinite Skill B Codes For Animals You Need
+801DE5F0 0004
+
+$Infinite Skill\B\Boxing Kangeroo
+Note=Only Use Infinite Skill B Codes For Animals You Need
+801DF16C 0004
+
+$Infinite Skill\B\Bunny, Racing Turtle
+Note=Only Use Infinite Skill B Codes For Animals You Need
+801DF540 0004
+
+$Infinite Skill\B\Desert Fox
+Note=Only Use Infinite Skill B Codes For Animals You Need
+801E17B4 0004
+
+$Infinite Skill\B\Hyena
+Note=Only Use Infinite Skill B Codes For Animals You Need
+801DF914 0004
+
+$Infinite Skill\B\Lion
+Note=Only Use Infinite Skill B Codes For Animals You Need
+801E0490 0004
+
+$Infinite Skill\B\Power Pen, Husky, Fox, Tort Tank
+Note=Only Use Infinite Skill B Codes For Animals You Need
+801E00BC 0004
+
+$Infinite Skill\B\Rocket Dog
+Note=Only Use Infinite Skill B Codes For Animals You Need
+801E3A28 0004
+
+$Infinite Skill\B\Rocket Husky
+Note=Only Use Infinite Skill B Codes For Animals You Need
+801E1F5C 0004
+
+$Title Screen
+Note=Press the Pause Button to takes you to Title Screen
+803F6799 0000

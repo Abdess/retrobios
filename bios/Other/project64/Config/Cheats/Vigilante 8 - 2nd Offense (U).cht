@@ -1,0 +1,54 @@
+[F5C5866D-052713D9-C:45]
+Name=Vigilante 8 - 2nd Offense (U)
+
+$All Characters\Have Max\Acceleration\Player 1
+50000C0A 0000
+80197FF6 0064
+
+$All Characters\Have Max\Acceleration\Player 2
+5000120A 0000
+801980AA 0064
+
+$All Characters\Have Max\Armor\Player 1
+5000120A 0000
+80197FF8 0064
+
+$All Characters\Have Max\Armor\Player 2
+5000120A 0000
+801980AC 0064
+
+$All Characters\Have Max\Attributes\Player 1
+5000120A 0000
+81197FF6 6464
+5000120A 0000
+81197FF8 6464
+
+$All Characters\Have Max\Attributes\Player 2
+5000120A 0000
+811980AA 6464
+5000120A 0000
+811980AC 6464
+
+$All Characters\Have Max\Speed\Player 1
+5000120A 0000
+80197FF7 0064
+
+$All Characters\Have Max\Speed\Player 2
+5000120A 0000
+801980AB 0064
+
+$All Characters\Have Max\Target Avoidance\Player 1
+5000120A 0000
+80197FF9 0064
+
+$All Characters\Have Max\Target Avoidance\Player 2
+5000120A 0000
+801980AD 0064
+
+$All Quests Complete\Player 1
+5000120A 0000
+81197FF0 01FF
+
+$All Quests Complete\Player 2
+5000120A 0000
+811980A4 01FF

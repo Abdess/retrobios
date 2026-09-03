@@ -1,0 +1,137 @@
+[736AE6AF-4117E9C7-C:4A]
+Name=Mickey No Racing Challenge USA (J)
+
+$Always 1st & final time 00:00.00
+Note=All Levels
+50000301 0000
+801CE6E9 0000
+
+$Difficulty Select
+8007C000 00??
+00 Amateur
+01 Intermediate
+02 Professional
+03 Mirror Mode
+
+$Frantic Finale\Colorado\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+80191992 0063
+
+$Frantic Finale\Hawaii\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+80192072 0063
+
+$Frantic Finale\Oregon\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018EA42 0063
+
+$Frantic Finale\Texas\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018F1E2 0063
+
+$Freewayphobia\Chicago\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+80192042 0063
+
+$Freewayphobia\Dakota\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018D212 0063
+
+$Freewayphobia\New York\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018F512 0063
+
+$Freewayphobia\Seattle\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018FDF2 0063
+
+$Level Select
+801876B9 00??
+00 Traffic Troubles
+01 Motor Way Mania
+02 Freewayphobia
+03 Vitory Vehicles
+04 Frantic Finale
+05 Time Trial
+06 Practice
+07 Contest
+08 Options
+
+$Motor Way Mania\Alaska\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018E482 0063
+
+$Motor Way Mania\Las Vegas\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+80192B12 0063
+
+$Motor Way Mania\Los Angeles\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018DCF2 0063
+
+$Motor Way Mania\Philadelphia\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+80193992 0063
+
+$Play As
+800D3161 00??
+00 Mickey Mouse
+01 Daisy Duck
+02 Goofy
+03 Pete
+04 Minnie Mouse
+05 Donald Duck
+06 Huey
+07 Dewey
+08 Louie
+09 Lugwig Von Drake
+
+$Traffic Troubles\Grand Canyon\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+80193252 0063
+
+$Traffic Troubles\Indianapolis\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018E892 0063
+
+$Traffic Troubles\New Mexico\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018FD52 0063
+
+$Traffic Troubles\San Fransisco\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+80191B62 0063
+
+$Unlock Everything
+Note=This will unlock all characters, tracks, mirror mode, all in-game cheats, postcards, pluto's collar and give you all Trophies for every track and difficulties. To have this cheat save to mempak, enable it and then go into the Options Menu and disable the cheat. Go to the Wide-Screen Settings and Change it to Wide-Screen [16.9] and then the B button to get back to Wide-Screen Settings, now go back into  Wide-Screen [16.9] and change it back to Normal [4.3].and press the B button until you come back to the main Options Menu.Close the game and load it again to see everything saved to the Mempak and unlocked.
+800D3208 008F
+800D3209 0094
+800D320A 0003
+800D320C 0001
+800D320F 0080
+50000502 0000
+800D3210 0009
+50000502 0000
+800D3211 0024
+800D321A 0015
+800D321B 007F
+800D321C 0001
+800D321D 00FF
+800D321E 0004
+800D321F 0022
+
+$Victory Vehicles\Everglades\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018FC22 0063
+
+$Victory Vehicles\Malibu\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+801916B2 0063
+
+$Victory Vehicles\Washington DC\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+80197662 0063
+
+$Victory Vehicles\Yellowstone\Max Tokens
+Note=Only use one Max Token Track code of each Level at a time, if you enable all tracks Max Token on that level Or all levels and tracks it will crash.
+8018D4C2 0063

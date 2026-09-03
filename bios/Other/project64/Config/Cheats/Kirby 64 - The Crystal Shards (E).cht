@@ -1,0 +1,41 @@
+[0D93BA11-683868A6-C:50]
+Name=Kirby 64 - The Crystal Shards (E)
+
+$Access all crystals
+50000701 0000
+800D6EC0 0001
+50001701 0000
+800D6EC8 0007
+
+$Access all difficulty levels
+Note=100 yard hop, bumper crop bump & checkerboard chase
+50000301 0000
+800D6E69 0003
+
+$Access all enemy info
+50005101 0000
+800D6F10 0002
+
+$All Levels completed
+Note=You must still beat boss's to continue onto next level
+50002B01 0000
+800D6EE0 0002
+
+$All Save Slots 100% Completed\Save slot 1
+800ECD18 0064
+
+$All Save Slots 100% Completed\Save slot 2
+800ECD70 0064
+
+$All Save Slots 100% Completed\Save slot 3
+800ECDC8 0064
+
+$Infinite Max Health
+800D718F 0006
+800D7151 00C0
+
+$Infinite Max Lives
+800D714F 0064
+
+$Kirkby can fly unlimited
+8012EADF 00F0

@@ -1,0 +1,16 @@
+[90AF8D2C-E1AC1B37-C:00]
+Name=Tower & Shaft (Aleck64)
+
+$Freeze Timer
+80161E95 0000
+
+$Infinite 9 Credits
+8009F0DB 0009
+
+$Infinite Lives
+800A1059 0001
+
+$Infinite Max Energy
+Note=This give you the most engery to jump really high
+800A1067 000F
+800A106B 000F

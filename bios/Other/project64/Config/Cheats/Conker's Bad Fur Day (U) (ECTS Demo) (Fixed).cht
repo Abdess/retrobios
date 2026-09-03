@@ -1,0 +1,176 @@
+[A08D0F77-6F82E38C-C:45]
+Name=Conker's Bad Fur Day (U) (ECTS Demo) (Fixed)
+
+$(Tap L Twice) To Skip Intro
+Note=On game start up, as soon as you see the N64 Logo, Tap the L Button twice letting go eachtime.
+D00A6289 0020
+800A679F 0024
+
+$Infinite 99 Lives
+800B9B84 0063
+
+$Infinite 99999 Cash
+810B9B88 270F
+
+$Infinite Health\Player 1
+800BCFD7 0006
+
+$Infinite Health\Player 2
+800B42CE 0006
+
+$Infinite Health\Player 3
+800B45F2 0006
+
+$Infinite Health\Player 4
+800B4916 0006
+
+$Infinite Oxygen
+810B3E9A 0000
+
+$Infinite Time in Multi
+810770DA 8C9E
+
+$Press L To Levitate\Player 1
+D00D1055 0020
+810B3E08 4200
+
+$Start with Infinite  9  Granades or Bombs
+Note=This works for all Players, including player 1 in story mode.
+800B9B70 0009
+
+$Bypass locked menu
+800D0BD3 00??
+01 Options
+02 Chapters
+
+$Map Warp
+800A679F 00??
+00 Bull boss fight - room has all the targets placed all in the middle, and lacks any other objects
+01 Barn Boys interior - devoid of entities
+02 Uga Buga - cutscene where the caveman gets squashed
+03 Fish test room
+04 D-Day beach - lacks assets
+05 Black void
+06 Windy, Ms bee is not present
+07 Mrs catfish, lacks assets
+0A Big, big guy boss fight. Map seems to be the same as final.
+0B Bats tower. Lighting is different(?) Cannot do much since you spawn without the ability to swim underwater. Had a weird bug where all the cutscenes played.
+0C Barn boys outside, had a funny bug where Conker would hold money forever. Missing a lot of assets.
+0D Cheese test room. Lacks textures
+0F Fangy Test room.
+10 Haybot/water raising room. Dying will play all the cutscenes but will crash. Enabling the expansion pack shows weird broken red eye textures
+11 strange maze room. Has a switch, and a random grate.
+12 CRASHES GAME
+13 War plane crash area. Devoid of almost anything
+14 Bugga the Knuts arena. Doesn't have much in it. Is the hole normally there?
+15 Inside the Windmill?
+16 Tank test room
+17 Battery water helmet room? Can't tell as you can't swim, and you raise up into a warp that crashes the game.
+18 Panther King's throne
+19 Room after the bluff. No dinosaurs are present
+1A Heist multiplayer map
+1B First room inside the Tediz base. Devoid of Teddiz
+1C First room where you encounter Rodent. Devoid of anything, really.
+1D CRASH
+1E Upper floor of Teddiz Base UV and scripting issues. Devoid of almost anything
+1F Test room. Purpose unknown.
+20 Dupe of above
+21 N64 Chainsaw cutscene
+22 dying first time/meeting Gregg
+23 Experiment boss map, devoid of anything
+24 Tanks multiplayer map. Seems to be an asset dump for weird villager sprites.
+25 another test map
+26 Teddiz base turret room. Teddiz logo is different, as the turret sprite when using is is displaced (needs console proof this is a graphical error)
+27 Inside Wasps' hive. Devoid of anything.
+28 Teddiz base toxic waste room. Is filled with water for unknown reasons
+29 training
+2A Uga Bugga test room
+2B Beach multiplayer, You can fall off and die by exiting the turrets
+2C Inside the Poo Mountain cabin. Can't do much since there's no triggers/ability to escape.
+2E training key room. Can't do much in here.
+2F Causality Dept. Devoid of anything.
+30 Capture the flag multiplayer. Teddiz symbol was changed.
+31 Rock Solid. Devoid of anything
+32 Lava race/mugged
+33 Multiplayer race
+34 Bunker multiplayer, Teddiz symbols changed again
+35 Great Mighty Poo fight, devoid of anything
+36 Matrix scene, devoid of anything
+37 Bluff cutscene area, devoid of anything
+38 Don weasel cutscene map
+39 Outside the bank
+3A Second room of Matrix bank
+3B Windy at night
+3C Spooky Mansion inside
+3E CRASH
+3F dinosaur multiplayer
+40 final boss arena. Exiting will lead you into the vault where you can moonjump and find the Alien in the Matrix vault.
+41 Spooky mansion outside, devoid of anything
+42 Uga buga slime room, has some assets
+43 Uga buga baby dinosaur room. Devoid of anything, and has some missing textures.
+
+$Access Multiplayer mode setup menu
+Note=Enables bypassing the lock by pressing Left on the D-Pad to access character select on the only locked map in Deathmatch: Temple.
+D00D1054 0001
+800D0B60 0002
+
+$Restore Unused Title Screen
+Note=Pressing Up on the D-Pad enables a semi-working version of a title screen
+D00D1054 0008
+800D0D18 0002
+
+$Enable Unused Cheats\BEELZEBUBSBUM
+Note="Hitler" Easter egg.
+800DE623 0004
+
+$Enable Unused Cheats\SPUNKJOCKEY
+Note=Slow motion kills with katana/chainsaw.
+800DE623 0008
+
+$Enable Unused Cheats\EASTEREGGSRUS
+Note=Unlock Neo Conker in multiplayer.
+800DE623 0010
+
+$Enable Unused Cheats\WELLYTOP
+Note=Unlock Conker in multiplayer.
+800DE623 0020
+
+$Enable Unused Cheats\NUTBINGCOEDS
+Note=Unlock weasel guard in multiplayer.
+800DE623 0040
+
+$Enable Unused Cheats\BAPHOMETSVAN
+Note=Unlock cavemen in multiplayer.
+800DE623 0080
+
+$Enable Unused Cheats\BEEFCURTAINS
+Note=Unlock zombies in multiplayer.
+800DE622 0001
+
+$Enable Unused Cheats\BOVRILBULLETHOLE
+Note=Conker with caveman afro.
+800DE622 0002
+
+$Enable Unused Cheats\DRACULASTEABAGS
+Note=Conker with caveman mohawk.
+800DE622 0004
+
+$Enable Unused Cheats\DUTCHOVENS
+Note=Conker with caveman spiky hair.
+800DE622 0008
+
+$Enable Unused Cheats\KOJACKSROLLNECK
+Note=1 Player Multiplayer Resolution Option.
+800DE622 0010
+
+$Enable Unused Cheats\WELDERSBENCH
+Note=Unlock all chapters.
+800DE622 0080
+
+$Enable Unused Cheats\RUSTYSHERIFFSBADGE
+Note=Unlock Squirrel Sergeant and Tediz Leader in multiplayer.
+800DE621 0001
+
+$Enable Unused Cheats\BILLYMILLROUNDABOUT
+Note=Unlock Gregg in multiplayer.
+800DE621 0002

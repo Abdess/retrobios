@@ -1,0 +1,14 @@
+[3C1FDABE-02A4E0BA-C:45]
+Name=Tetrisphere (U)
+
+$Single & VS Mode\Infinite Misses\Player 1
+80112F9F 0003
+
+$Single & VS Mode\Infinite Misses\Player 2
+80116207 0003
+
+$Single & VS Modes\Secret Cheat Menu
+8011265F 00AD
+
+$Single Player Stage Select
+810E12DC 0001

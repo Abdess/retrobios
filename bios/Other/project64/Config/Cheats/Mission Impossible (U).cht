@@ -1,0 +1,69 @@
+[26035CF8-802B9135-C:45]
+Name=Mission Impossible (U)
+
+$Access All Levels
+8008A5C6 0001
+8008A5DA 0001
+8008A602 0001
+8008A652 0001
+8008A666 0001
+8008A67A 0001
+8008A68E 0001
+8008A6A2 0001
+8008A6B6 0011
+8008A6CA 0021
+8008A6DE 0001
+8008A706 0011
+8008A71A 0041
+8008A72E 0021
+8008A742 0081
+8008A756 0001
+8008A76A 0081
+8008A77E 0001
+8008A7A6 0001
+8008A7CE 0001
+8008A7E2 0011
+8008A7F6 0021
+8008A846 0001
+8008AB2A 0001
+8008AB3E 0001
+8008AB52 0001
+8008AB66 0001
+
+$Freeze All Timers
+81093D40 0063
+81093D42 0063
+81093D44 0063
+
+$Infinite\Ammo All Guns
+50000610 0000
+800A8EA7 00FF
+
+$Infinite\Health
+810862B2 FFFF
+
+$Invincibility
+810862B4 0101
+
+$Walk Through Walls & Objects
+Note=This will allow you to pass through anything & even walk on water.if you amerge somewhere in the ground just press the A button.
+80093EF5 00??
+80 On
+00 Off
+
+$Weapon Select
+800A8EA5 00??
+800A8EB5 00??
+800A8EC5 00??
+00 9MM Hi Power
+01 Silenced Pistol
+02 Uzi
+03 Fists
+32 Gas Spray
+36 Blow Torch
+1F Fire Extinguisher
+24 Spray Paint
+27 Electrostunner
+0B Blow Dart Gun
+0C Dart Hand Gun
+2D Mini Rocket Launcher

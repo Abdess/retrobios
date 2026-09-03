@@ -1,0 +1,46 @@
+[13836389-265B3C76-C:45]
+Name=Madden Football 64 (U)
+
+$Background\Coloured Madden
+810596E0 0003
+
+$Background\Gray Madden
+810596E0 0000
+
+$Background\Green & Black Madden
+810596E0 0002
+
+$Background\Pink & Purple Madden
+810596E0 0004
+
+$Background\Pink Madden
+810596E0 0001
+
+$Background\Pinker Madden
+810596E0 0006
+
+$Enable\All Stadiums
+50000901 0000
+80073510 00FF
+
+$Enable\All Teams
+50000901 0000
+80073CF8 00FF
+
+$Infinite\Time Outs Away Team
+80084EE3 0003
+
+$Infinite\Time Outs Home Team
+80082D97 0003
+
+$Invisible Players
+800545A0 0000
+800545A0 0001
+800545A0 0002
+800545A0 0003
+
+$No Time-Outs\Away Team
+80084EE3 0000
+
+$No Time-Outs\Home Team
+80082D97 0000

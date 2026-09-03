@@ -1,0 +1,14 @@
+[3CECBCB8-6126BF07-C:50]
+Name=F1 Racing Championship (E) (M5)
+
+$Big Score
+81164E58 8181
+81164E5A 8181
+
+$Instant 450kmh Boost
+Note=Press Trigger Button
+D10A1F50 2000
+8119D334 005A
+
+$No Checkpoint time
+81164E1C 0001

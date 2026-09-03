@@ -1,0 +1,48 @@
+[596E145B-F7D9879F-C:50]
+Name=Diddy Kong Racing (E) (M3) (V1.1)
+
+$Enable All Cheats
+Note=Go into Options & then Magic Codes. Then Code list to turn off & on what you want.
+800E03AC 001F
+50000301 0000
+800E03AD 00FF
+
+$Have All\50 Balloons
+8020807D 0032
+
+$Have All\Control Drumstick & Adventure Two mode unlocked
+80126CCC 0003
+80126CCF 0003
+80126CE2 0003
+80126CE3 0008
+
+$Have All\Keys
+Note=Only put this code on once you are inside the lobby to choose a gate,or it will crash the game.
+80208659 001F
+
+$Have All\None-Adventure tracks completed
+50001204 0000
+80208777 0007
+50000904 0000
+802087CF 0007
+80208658 0007
+8020865A 0007
+8020865B 0007
+8020865C 000F
+8020865D 00FF
+
+$Have All\T.T. Amulets
+Note=Only put this code on once you are inside the lobby to choose a gate,or it will crash the game.
+80208667 0004
+
+$Have All\T.T. time trial races beaten
+80208666 0004
+
+$Have All\Trophies
+Note=Only put this code on once you are inside the lobby to choose a gate,or it will crash the game.
+8020865E 0007
+8020865F 00FF
+
+$Have All\Trophy Adventure races unlocked
+50000502 0000
+8020886E 0007

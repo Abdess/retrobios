@@ -1,0 +1,43 @@
+[650EFA96-30DDF9A7-C:50]
+Name=Wave Race 64 (E) (M2)
+
+$Always Place 1st\Player 1
+801BFF4F 0000
+
+$Infinite Time Stunt Mode
+801C020E 00FF
+
+$Lap Timer Below 0'00'10\Player 1
+811C00E6 0000
+
+$Lap Timer Below 0'00'10\Player 2
+811C045E 0000
+
+$Maximum Power\Player 1
+801C0077 0005
+
+$Maximum Power\Player 2
+801C069A 0005
+801C093A 0005
+
+$Misses Don't Count\Player 1
+801C007F 0000
+
+$Misses Don't Count\Player 2
+811C03F6 0000
+
+$Only Play Glacier Coast
+800D8003 0007
+
+$Set\Speed Size
+801C0077 00??
+01 Slow
+0A Medium
+0F Fast
+
+$Set\Wave Size
+800E6B90 00??
+00 Smooth
+19 Medium
+64 Rough
+FF Oh My God

@@ -1,0 +1,102 @@
+[A4BF9306-BF0CDFD1-C:45]
+Name=Banjo-Kazooie (U) (V1.0)
+
+$Access All Moves
+8037C3A0 0001
+8037C3A1 007F
+8037C3A2 00FF
+8037C3A3 00FF
+
+$Character Select
+Note=When Mumbo transforms you hold:C-Up for the Termite,C-Right for the Pumpkin,C-Down for the Walrus,C-Left for the Crocc,R for the Bumble Bee,L for the Washing Machine,Press nothing to turn into Banjo
+D0281251 0008
+8037C2D3 0002
+D0281251 0001
+8037C2D3 0003
+D0281251 0004
+8037C2D3 0004
+D0281251 0002
+8037C2D3 0005
+D0281251 0010
+8037C2D3 0006
+D0281251 0020
+8037C2D3 0007
+
+$Do Shock Spring Jump From Anywhere
+Note=Press A Button. Do not use with Take Off And Fly From Anywhere
+8037C1D2 0002
+
+$Game 100% Complete
+8137C3A0 001F
+50000302 0000
+8137C3A2 FFFF
+50000602 0000
+813832C0 FFFF
+81383FCA 0064
+81383FDC 0064
+50000802 0000
+813832F0 FFFF
+81385FA0 0063
+81385FC4 0063
+81385FF0 0064
+50000602 0000
+81385FF2 6464
+50001002 0000
+813831A8 FFFF
+813831B0 FF7F
+813831B2 FFB0
+813831B4 3DA6
+813831B6 F264
+813831C6 FF7F
+
+$Have Zero Time all Levels
+50000B04 0000
+81386004 3000
+
+$Infinite\Air
+81385F8E 0E10
+
+$Infinite\Always Have All Jinjos
+80385F7B 00FF
+
+$Infinite\Eggs
+80385F67 00FF
+
+$Infinite\Gold Feathers
+80385F73 00FF
+
+$Infinite\Health
+80385F83 0008
+80385F87 0008
+
+$Infinite\Jiggies
+80385FCB 00FF
+
+$Infinite\Lives
+80385F8B 00FF
+
+$Infinite\Mumbo Tokens
+80385FC6 00FF
+80385FA2 00FF
+
+$Infinite\Notes
+Note=Just collect one Note to Have 255 Notes in all Worlds.
+80385FF2 00FF
+80385F62 0001
+
+$Infinite\Red Feathers
+80385F6F 00FF
+
+$Press L To Levitate
+Note=Press L To Levitate & Let go to land
+D0281251 0020
+8137C4BC 43E0
+
+$Secret Items
+81283400 ????
+FFFF Have All Collected
+0000 Have None
+
+$Take Off And Fly From Anywhere
+Note=Press A Button. Do not use with Do Shock Spring Jump From Anywhere
+8037C1D1 0002

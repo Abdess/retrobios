@@ -1,0 +1,29 @@
+[0B93051B-603D81F9-C:45]
+Name=Mischief Makers (U) (V1.0)
+
+$All 52 Gold Gems Collected
+8016F540 0003
+8016F541 007E
+8016F542 00FF
+8016F543 00EF
+8016F544 00FF
+8016F545 007F
+8016F546 00FF
+8016F547 00FC
+
+$All Stages & Chapters Unlocked
+8016F548 003B
+
+$Infinite Health\Marina
+810ED0E0 03E8
+
+$Infinite Health\Teran
+810F1D60 03E8
+
+$Infinite\Max Red Gems
+81175B66 270F
+
+$Level Select
+Note=To access this anytime during game, press L+R+Z to enable the menu.  Press D-Pad Up / Down to move through the menu, D-Pad Left / Right to change level digits and then press Start to enter level. Don not do this whhile in pause mode (Start Button Pause) or the game will freeze.
+D10BC4E8 2030
+800BC4E1 0004

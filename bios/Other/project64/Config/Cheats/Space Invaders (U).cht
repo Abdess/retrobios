@@ -1,0 +1,28 @@
+[EBFE2397-FF74DA34-C:45]
+Name=Space Invaders (U)
+
+$[Unlock All Modes}
+Note=Enable this as so as you load the game.This Unlocks Classic and Maniacle Mode. To get to Classic Mode you pr ess Right on Player 1. To get to Maniacle Mode, go to Options and press Left on Normal Mode. This can be disabled once saved to mempak.
+80070217 0003
+
+$Always Have Rapid Shot
+Note=This is a constant fire without a break as long as you keep pressing A
+800B51AB 0009
+
+$Infinite\Lives
+800B51DD 0063
+
+$Infinite\Points
+810B51E2 FFFF
+
+$Infinite\Shields
+810B51B6 0001
+
+$Secondary Weapon Select
+Note=B Button Weapon infinite ammo
+800B519F 00??
+06 Vertical Burst
+0D Horizontal Right
+0C Horizontal Left
+1A Swarm Missiles
+20 Diagonal Burst

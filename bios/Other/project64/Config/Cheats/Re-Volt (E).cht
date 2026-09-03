@@ -1,0 +1,125 @@
+[C3E7E29E-5D7251CC-C:50]
+Name=Re-Volt (E) (M4)
+
+$99 Points Player 1
+8010C33F 0063
+
+$Access All\Cars & Tracks
+8104ADF6 0001
+
+$Access All\Cups
+8005444B 0003
+8005442D 0000
+8005442E 0000
+8005442F 0000
+80054477 0003
+80054459 0000
+8005445A 0000
+8005445B 0000
+800544A3 0003
+80054485 0000
+80054486 0000
+80054487 0000
+
+$Always 1st
+811157AE 0001
+811157B6 0000
+8110C33E 03E7
+
+$Drones Have No Weapons
+8111CECE 0000
+
+$Infinite Continues
+8110C332 0006
+
+$Infinite Weapons\Player 1
+81115798 0000
+8111579A 00??
+8111579E 0001
+00 Green Missile
+01 Orange Missile
+02 Multi-Orange Missiles
+03 The Bomb
+04 Water Balloon
+05 Blue Protector
+06 Oil Slick
+07 Bowling Ball Mine
+08 Yellow Protector
+09 Lightning Bolt
+0A Orange Star
+0B Beach Ball
+
+$Infinite Weapons\Player 2
+81117C60 0000
+81117C62 00??
+81117C66 0001
+00 Green Missile
+01 Orange Missile
+02 Multi-Orange Missiles
+03 The Bomb
+04 Water Balloon
+05 Blue Protector
+06 Oil Slick
+07 Bowling Ball Mine
+08 Yellow Protector
+09 Lightning Bolt
+0A Orange Star
+0B Beach Ball
+
+$Infinite Weapons\Player 3
+8111A128 0000
+8111A12A 00??
+8111A12E 0001
+00 Green Missile
+01 Orange Missile
+02 Multi-Orange Missiles
+03 The Bomb
+04 Water Balloon
+05 Blue Protector
+06 Oil Slick
+07 Bowling Ball Mine
+08 Yellow Protector
+09 Lightning Bolt
+0A Orange Star
+0B Beach Ball
+
+$Infinite Weapons\Player 4
+8111C5F0 0000
+8111C5F2 00??
+8111C5F6 0001
+00 Green Missile
+01 Orange Missile
+02 Multi-Orange Missiles
+03 The Bomb
+04 Water Balloon
+05 Blue Protector
+06 Oil Slick
+07 Bowling Ball Mine
+08 Yellow Protector
+09 Lightning Bolt
+0A Orange Star
+0B Beach Ball
+
+$Laps To Race
+8107DD1E 00??
+01 1 Lap
+02 2 laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 6 Laps
+07 7 Laps
+08 8 Laps
+09 9 Laps
+
+$Number Of Drones In The Race
+8110FFF6 00??
+01 1 Drone
+02 2 Drones
+03 3 Drones
+04 4 Drones
+05 5 Drones
+06 6 Drones
+07 7 Drones
+08 8 Drones
+09 9 Drones

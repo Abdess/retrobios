@@ -1,0 +1,17 @@
+[782A9075-E552631D-C:44]
+Name=Toy Story 2 (G)
+
+$Have 99 coins
+810BBBDE 0063
+
+$Have All 5 Collectables
+801C8542 0005
+
+$Hold jump to fly
+810BBBCC 0002
+
+$Infinite Battery Power
+810BBBD6 000E
+
+$Infinite Lives
+800BBBDA 0009

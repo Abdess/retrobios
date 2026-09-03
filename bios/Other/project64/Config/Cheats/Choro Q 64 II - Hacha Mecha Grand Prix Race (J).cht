@@ -1,0 +1,84 @@
+[26CD0F54-53EBEFE0-C:4A]
+Name=Choro Q 64 II - Hacha Mecha Grand Prix Race (J)
+
+$Have\Max Car Strength
+Note=This has Graphical Issues when used.....
+A0165C21 00FF
+
+$Have\Max Car Upgrade
+80165BF8 00FF
+80165BF9 00FF
+80165BFA 00FF
+80165BFB 005F
+
+$Have\Max Gear Box Upgrades
+80165C00 00FF
+80165C01 00FF
+80165C02 007F
+
+$Have\Max Roof Upgrades
+81165C2A FFFF
+
+$Have\Max Steering Upgrades
+80165C1A 006F
+80165C1B 000F
+
+$Have\Max Tyre Tred Upgrades
+80165C10 00FF
+
+$Have\Max Weapons Upgrades
+81165C32 FFFF
+80165C33 00FF
+
+$Have\Max Wheel Parts Upgrades
+80165C0A 00FF
+80165C0B 007F
+
+$Infinite\Blue Pointa
+801F92A7 0009
+
+$Infinite\Red Weapons Use
+801F92A5 0009
+
+$Sound Select\Music Mod
+8014A558 00??
+00 Off
+0A Medium
+10 High
+
+$Sound Select\SFX Mod
+8014A559 00??
+00 Off
+0A Medium
+10 High
+
+$Sound Select\Sound Mod
+8014A55A 00??
+00 Stereo
+01 Mono
+
+${Always First With 1 Lap to Race}
+800F7A31 0003
+
+${Unlocked All Stages}
+801672EB 000F
+
+${Weapon Select}
+801F92A1 00??
+00 Nothing
+01 Turbo Boost
+02 Invincible
+03 Red Spinning Fish?
+04 Wind Attack
+05 Smoke Bomb
+06 Tyre Buster Tacks
+07 Iron Beam Drop
+08 Cannon
+09 Freeze Bombs
+0A Lightening Cloud Attack
+0B Crafy Mine
+0C Rocket Launcher (Hangs?)
+0D Hypno Spinning Birds
+0E 100 Ton Weight
+0F Bolt Launcher
+10 Blue Lazer Cloud

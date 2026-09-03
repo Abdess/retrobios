@@ -1,0 +1,13 @@
+[89FED774-CAAFE21B-C:45]
+Name=Gex 64 - Enter the Gecko (U)
+
+$Have All Artifacts
+800C56BF 0063
+800C56C3 0063
+800C56C7 0063
+
+$Infinite Health
+800C56BB 0005
+
+$Infinite Lives
+800C56B7 0005

@@ -1,0 +1,89 @@
+[8F12C096-45DC17E1-C:50]
+Name=A Bug's Life (E)
+
+$All enemies killed
+801E244E 0000
+801E244F 0000
+
+$Always Have\50 pieces of corn
+801E2461 0032
+
+$Always Have\Super Jump
+811E2450 0020
+
+$Have All Goldberry Tokens
+D01E244E 0000
+801E244E 0000
+
+$Have F-L-I-K
+801E2462 000F
+
+$Infinite\Health
+801E2455 0004
+
+$Infinite\Lives
+801E2460 0009
+
+$Levitate
+Note="Press R To Levitate & Let go to land (:"
+D008FCE1 0010
+801E23C6 0001
+D008FCE1 0010
+801E23D6 0001
+
+$Start with Berry Weapon
+801E2457 00??
+01 Blueberry
+02 Homing Berry
+03 Goldberry
+04 Super Berry ?
+
+$Unlock All Levels
+81099B70 000F
+
+
+[DFF227D9-0D4D8169-C:44]
+Name=A Bug's Life (G)
+
+$Always Have\50 pieces of corn
+801E2761 0032
+
+$Always Have\Super Jump
+811E2750 0020
+
+$Have All Goldberry Tokens
+811E274E 0000
+
+$Have F-L-I-K
+801E2762 000F
+
+$Infinite\Health
+801E2755 0004
+
+$Infinite\Lives
+801E2760 0009
+
+$Levitate
+Note="Press R To Levitate & Let go to land (:"
+D008FFA1 0010
+811E26C6 1000
+D008FFA1 0010
+811E26D6 1000
+
+$No Music
+801DD906 0000
+
+$Start with Berry Weapon
+801E2757 00??
+01 Blueberry
+02 Homing Berry
+03 Goldberry
+04 Super Berry ?
+
+$Subtitles On
+801DDB7B 00??
+00 Off
+01 On
+
+$Unlock All Levels
+81099E30 000F

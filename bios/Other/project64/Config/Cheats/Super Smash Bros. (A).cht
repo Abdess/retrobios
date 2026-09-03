@@ -1,0 +1,361 @@
+[DD26FDA1-CB4A6BE3-C:55]
+Name=Super Smash Bros. (A)
+
+$Bonus Stage Character Modifier (Training Mode)
+Note=Only put this on after you have alreay Chose your Character on the Main Menu,& Do not use more then 1 Character Modifier at a time.Using this Code This could also result freezing at the end of the Level.
+8018F913 00??
+00 Mario
+01 Fox
+02 DK
+03 Samus
+04 Luigi
+05 Link
+06 Yoshi
+07 C. Falcon
+08 Kirby
+09 Pikachu
+0A Jigglypuff
+0B Ness
+0C Master Hand
+0D Metal Mario
+0E Polygon Mario
+10 Polygon DK
+13 Polygon Link
+14 Polygon Yoshi
+15 Polygon Samus
+18 Polygon Kirby
+1A Giant Donkey Kong
+
+$Give Kirby A Wierd Blow-Up
+8025E898 000A
+
+$Have All Characters
+810A5078 0FF0
+
+$Jump off to win
+810A5282 0000
+
+$P1 Press Down On D-Pad To Make Items Appear In Random Spots
+D109F6E4 0400
+8118D7E2 0001
+
+$Story Mode\Always Get Pacifist (60,000 Points)
+810A52AE 0000
+
+$Story Mode\Infinite Time
+810A526E 43CB
+
+$Story Mode\Player 1\Character Modifier
+Note=Only put this on after you have alreay Chose your Character on the Main Menu,& Do not use more then 1 Character Modifier at a time.Using this Code could also result freezing at the end of the Level.
+800A527B 00??
+00 Mario
+01 Fox
+02 DK
+03 Samus
+04 Luigi
+05 Link
+06 Yoshi
+07 C. Falcon
+08 Kirby
+09 Pikachu
+0A Jigglypuff
+0B Ness
+0C Master Hand
+0D Metal Mario
+0E Polygon Mario
+10 Polygon DK
+13 Polygon Link
+14 Polygon Yoshi
+15 Polygon Samus
+18 Polygon Kirby
+1A Giant Donkey Kong
+
+$Story Mode\Player 1\Infinite Lives
+800A5283 0004
+
+$Story Mode\Player 1\Kirby B Button Move\Congo Jungle
+8027120F 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Kirby B Button Move\Fighting Polygon Team
+80262E5F 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Kirby B Button Move\Hyrule Castle
+8026924F 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Kirby B Button Move\Kirby's Dreamland
+8026E27F 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Kirby B Button Move\Master Hand Stage
+8027238F 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Kirby B Button Move\Metal Mario Stage
+80263CD7 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Kirby B Button Move\Peach's Castle
+802644DF 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Kirby B Button Move\Planet Zebes
+802706E7 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Kirby B Button Move\Saffron City
+802741D7 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Kirby B Button Move\Sector Z
+80271837 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Kirby B Button Move\Yoshi's Island
+8026958F 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$Story Mode\Player 1\Low % Health
+810A52C6 0000
+
+$Story Mode\Player 2\Character Modifier
+Note=Only put this on after you have alreay Chose your Character on the Main Menu,& Do not use more then 1 Character Modifier at a time.Using this Code This could also result freezing at the end of the Level.
+800A52EF 00??
+00 Mario
+01 Fox
+02 DK
+03 Samus
+04 Luigi
+05 Link
+06 Yoshi
+07 C. Falcon
+08 Kirby
+09 Pikachu
+0A Jigglypuff
+0B Ness
+0C Master Hand
+0D Metal Mario
+0E Polygon Mario
+10 Polygon DK
+13 Polygon Link
+14 Polygon Yoshi
+15 Polygon Samus
+18 Polygon Kirby
+1A Giant Donkey Kong
+
+$Story Mode\Player 2\Infinite Lives
+800A52F7 0004
+
+$Story Mode\Player 2\Low % Health
+810A533A 0000
+
+$Story Mode\Player 3\Character Modifier
+Note=Only put this on after you have alreay Chose your Character on the Main Menu,& Do not use more then 1 Character Modifier at a time.Using this Code This could also result freezing at the end of the Level.
+800A5363 00??
+00 Mario
+01 Fox
+02 DK
+03 Samus
+04 Luigi
+05 Link
+06 Yoshi
+07 C. Falcon
+08 Kirby
+09 Pikachu
+0A Jigglypuff
+0B Ness
+0C Master Hand
+0D Metal Mario
+0E Polygon Mario
+10 Polygon DK
+13 Polygon Link
+14 Polygon Yoshi
+15 Polygon Samus
+18 Polygon Kirby
+1A Giant Donkey Kong
+
+$Story Mode\Player 3\Infinite Lives
+800A536B 0004
+
+$Story Mode\Player 3\Low % Health
+810A53AE 0000
+
+$Story Mode\Player 4\Character Modifier
+Note=Only put this on after you have alreay Chose your Character on the Main Menu,& Do not use more then 1 Character Modifier at a time.Using this Code This could also result freezing at the end of the Level.
+800A53D7 00??
+00 Mario
+01 Fox
+02 DK
+03 Samus
+04 Luigi
+05 Link
+06 Yoshi
+07 C. Falcon
+08 Kirby
+09 Pikachu
+0A Jigglypuff
+0B Ness
+0C Master Hand
+0D Metal Mario
+0E Polygon Mario
+10 Polygon DK
+13 Polygon Link
+14 Polygon Yoshi
+15 Polygon Samus
+18 Polygon Kirby
+1A Giant Donkey Kong
+
+$Story Mode\Player 4\Infinite Lives
+800A53DF 0004
+
+$Story Mode\Player 4\Low % Health
+810A5422 0000
+
+$Story Mode\Skip Straight To Master Hand
+800A5227 000D
+
+$VS. Mode\Have Mushroom Kindom
+800A5077 00FF
+
+$VS. Mode\Infinite Time
+810A545E 43CB
+
+$VS. Mode\Player 1\Character Modifier
+Note=Only put this on after you have alreay Chose your Character on the Main Menu,& Do not use more then 1 Character Modifier at a time.Using this Code This could also result freezing at the end of the Level.
+800A546B 00??
+00 Mario
+01 Fox
+02 DK
+03 Samus
+04 Luigi
+05 Link
+06 Yoshi
+07 C. Falcon
+08 Kirby
+09 Pikachu
+0A Jigglypuff
+0B Ness
+0C Master Hand
+0D Metal Mario
+0E Polygon Mario
+10 Polygon DK
+13 Polygon Link
+14 Polygon Yoshi
+15 Polygon Samus
+18 Polygon Kirby
+1A Giant Donkey Kong
+
+$VS. Mode\Player 1\Kirby B Button Move\Hyrule Castle
+8026412F 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$VS. Mode\Player 1\Kirby B Button Move\Sector Z
+8026C6C7 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$VS. Mode\Player 1\Kirby B Button Move\Yoshi's Island
+8026E9F7 00??
+02 D.K. Wind-up Punch
+0A Jigglypuff Puff Punch
+
+$VS. Mode\Player 1\Low % Health
+810A54B6 0000
+
+$VS. Mode\Player 2\Character Modifier
+Note=Only put this on after you have alreay Chose your Character on the Main Menu,& Do not use more then 1 Character Modifier at a time.Using this Code This could also result freezing at the end of the Level.
+800A54DF 00??
+00 Mario
+01 Fox
+02 DK
+03 Samus
+04 Luigi
+05 Link
+06 Yoshi
+07 C. Falcon
+08 Kirby
+09 Pikachu
+0A Jigglypuff
+0B Ness
+0C Master Hand
+0D Metal Mario
+0E Polygon Mario
+10 Polygon DK
+13 Polygon Link
+14 Polygon Yoshi
+15 Polygon Samus
+18 Polygon Kirby
+1A Giant Donkey Kong
+
+$VS. Mode\Player 2\Low % Health
+810A552A 0000
+
+$VS. Mode\Player 3\Character Modifier
+Note=Only put this on after you have alreay Chose your Character on the Main Menu,& Do not use more then 1 Character Modifier at a time.Using this Code This could also result freezing at the end of the Level.
+800A5553 00??
+00 Mario
+01 Fox
+02 DK
+03 Samus
+04 Luigi
+05 Link
+06 Yoshi
+07 C. Falcon
+08 Kirby
+09 Pikachu
+0A Jigglypuff
+0B Ness
+0C Master Hand
+0D Metal Mario
+0E Polygon Mario
+10 Polygon DK
+13 Polygon Link
+14 Polygon Yoshi
+15 Polygon Samus
+18 Polygon Kirby
+1A Giant Donkey Kong
+
+$VS. Mode\Player 3\Low % Health
+810A559E 0000
+
+$VS. Mode\Player 4\Character Modifier
+Note=Only put this on after you have alreay Chose your Character on the Main Menu,& Do not use more then 1 Character Modifier at a time.Using this Code This could also result freezing at the end of the Level.
+800A55C7 00??
+00 Mario
+01 Fox
+02 DK
+03 Samus
+04 Luigi
+05 Link
+06 Yoshi
+07 C. Falcon
+08 Kirby
+09 Pikachu
+0A Jigglypuff
+0B Ness
+0C Master Hand
+0D Metal Mario
+0E Polygon Mario
+10 Polygon DK
+13 Polygon Link
+14 Polygon Yoshi
+15 Polygon Samus
+18 Polygon Kirby
+1A Giant Donkey Kong
+
+$VS. Mode\Player 4\Low % Health
+810A5612 0000

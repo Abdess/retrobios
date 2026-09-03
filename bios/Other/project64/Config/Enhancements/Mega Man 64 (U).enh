@@ -1,0 +1,10 @@
+[0EC158F5-FB3E6896-C45]
+Name=Mega Man 64 (U)
+
+$WTF? Sixty?!?
+Note=Too fast,uses the game rate addresses that are oddly defaulted to 02 this time,so Mega Man 64 actually runs at half speed.
+Stunning to see a game natively do this by default,audio stays the same but gets cut short due to faster speeds.
+This needs a slowdown code to accompany its overly-fastness.
+800D1013 0001
+800D1043 0001
+

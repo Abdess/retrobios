@@ -1,0 +1,576 @@
+﻿/*********************************************************************************
+* Meta Information                                                               *
+*********************************************************************************/
+//About DLL
+#1  #  "Turkish"		// LANGUAGE ID
+#2  #  ""			// Author
+#3  #  "2.3.2"			// Version
+#4  #  "10 November, 2019"	// Date
+
+//About DLL Dialog
+#5  #  "Mevcut Dil"
+#6  #  "Yazar"
+#7  #  "Sürüm"
+#8  #  "Tarih"
+#9  #  "Ana Sayfayı Ziyaret Et"
+#10 #  "ROM Veritabanı (.RDB)"
+#11 #  "Hile Kodu Dosyası (.CHT)"
+#12 #  "Genişletilmiş ROM Bilgisi (.RDX)"
+
+//About INI title
+#20 #  "Yapılandırma Dosyaları Hakkında"
+
+/*********************************************************************************
+* Menu                                                                           *
+*********************************************************************************/
+//File Menu
+#100#  "&Dosya"
+#101#  "&ROM Aç"
+#102#  "ROM &Bilgisi...."
+#103#  "Emülatörü Başlat"
+#104#  "&Emülatörü Sonlandır"
+#105#  "ROM Dizinini Seç..."
+#106#  "ROM Listesini Yenile"
+#107#  "Son kullanılan ROM"
+#108#  "Son kullanılan ROM Dizinleri"
+#109#  "Ç&ıkış"
+#110#  "Aç ve Birleştir"
+
+//System Menu
+#120#  "&Sistem"
+#121#  "&Yeniden Başlat"
+#122#  "&Duraklat"
+#123#  "Bitmap Oluştur"
+#124#  "FPS'yi Sınırla"
+#125#  "&Durumu Kaydet"
+#126#  "Farklı Kaydet..."
+#127#  "&Durumu Yüke"
+#128#  "Yükle..."
+#129#  "Mevcut durumu kaydet"
+#130#  "Hileler..."
+#131#  "Game Shark (GS) Butonu"
+#132#  "Devam Et"
+#133#  "&Soft Reset
+#134#  "&Hard Reset
+#135#  "Diski &Değiştir"
+
+//Options Menu
+#140#  "&Seçenekler"
+#141#  "&Tam Ekran"
+#142#  "&Her Zaman &Üstte"
+#143#  "Grafik Eklentilerini Yapılandır..."
+#144#  "Ses Eklentilerini Yapılandır..."
+#145#  "Denetleyici Eklentilerini Yapılandır..."
+#146#  "RSP Eklentilerini Yapılandır..."
+#147#  "CPU Kullanımını Göster"
+#148#  "&Ayarlar..."
+
+//Debugger Menu
+#160#  "&Hata Ayıklayıcı"
+
+//Language Menu
+#175#  "&Dil"
+
+//Help Menu
+#180#  "&Yardım"
+#181#  "Yapılandırma Dosyaları Hakkında"
+#182#  "&Project64 Hakkında"
+#183# "Destek &Forumu"
+#184# "&Ana Sayfa"
+
+//Current Save Slot menu
+#190#  "Varsayılan"
+#191#  "Yuva 1"
+#192#  "Yuva 2"
+#193#  "Yuva 3"
+#194#  "Yuva 4"
+#195#  "Yuva 5"
+#196#  "Yuva 6"
+#197#  "Yuva 7"
+#198#  "Yuva 8"
+#199#  "Yuva 9"
+#200#  "Yuva 10"
+#201#  "Kayıt Yuvası (%ws) seçildi"
+
+//Pop up Menu
+#210#  "Oyunu Oyna"
+#211#  "ROM Bilgileri"
+#212#  "Oyun Ayarlarını Düzenle"
+#213#  "Hileleri Düzenle"
+#214#  "Grafik Eklentisi"
+#215#  "Oyunu Disk ile Oyna"
+
+//Alternate Name to save Slot
+#220#  "Kayıt Yuvası - Varsayılan"
+#221#  "Kayıt Yuvası - 1"
+#222#  "Kayıt Yuvası - 2"
+#223#  "Kayıt Yuvası - 3"
+#224#  "Kayıt Yuvası - 4"
+#225#  "Kayıt Yuvası - 5"
+#226#  "Kayıt Yuvası - 6"
+#227#  "Kayıt Yuvası - 7"
+#228#  "Kayıt Yuvası - 8"
+#229#  "Kayıt Yuvası - 9"
+#230#  "Kayıt Yuvası - 10"
+
+// Menu Descriptions
+#250#  "Bir N64 ROM imajı aç"
+#251#  "Yüklenen imaj hakkındaki bilgileri görüntüle"
+#252#  "Yüklenen ROM imajının emülatörünü başlat"
+#253#  "Yüklenen ROM imajının emülatörünü durdur"
+#254#  "ROM dizinini seç"
+#255#  "ROM listesindeki mevcut ROM'ları yenile"
+#256#  "Bu uygulamadan çık"
+#257#  "Geçerli ROM imajını yeniden başlat (herhangi bir ayar değişikliğini yeniden yükle)"
+#258#  "Şu anda çalışan ROM emülatörünü durdur/başlat"
+#259#  "Şu anki ekranın bitmap görüntüsünü oluştur"
+#260#  "FPS'yi N64'ün doğru hızıyla sınırlandır"
+#261#  "Mevcut sistem durumunu kaydet" 
+#262#  "Mevcut sistem durumunu seçilen bir dosya konumuna kaydet"
+#263#  "Mevcut sistem durumunu yükle"
+#264#  "Yüklemek için kayıtlı olan bir sistem durum dosyası seç"
+#265#  "GameShark hilelerini etkinleştir/devre dışı bırak"
+#266#  "GameShark tuşu belirli hilelerle kullanılır."
+#267#  "Emülatörü pencere modundan tam ekran moduna değiştir."
+#268#  "Pencereyi diğer tüm pencerelerin üstünde tut"
+#269#  "Grafik eklentisinin içindeki ayarları değiştir"
+#270#  "Ses eklentisinin içindeki ayarları değiştir"
+#271#  "Denetleyici eklentisinin içindeki ayarları değiştir (yani tuşları ayarla)"
+#272#  "RSP eklentisinin içindeki ayarları değiştir"
+#273#  "Emülatörün CPU kullanımını farklı kaynaklara ayrılmış olarak göster"
+#274#  "Bu uygulamanın ayarlarını görüntüle/değiştir"
+#275#  "Uygulama kılavuzunu görüntüle"
+#276#  "Uygulamanın SSS bölümünü görüntüle"
+#278#  "Uygulama ve yazarlar hakkında"
+#277#  "Destek dosyalarının yazarları hakkında"
+#279#  "Önceden açılmış olan bu ROM görüntüsünü aç"
+#280#  "Bu dizini ROM dizini olarak seç"
+#281#  "Uygulamayı bu dili kullanarak değiştir"
+#282#  "Kaydedilen durum için bu kaydetme konumunu seçin"
+#283#  "Seçili oyunu oyna"  
+#284#  "Seçilen oyun hakkında bilgi"
+#285#  "Seçilen oyun için ayarları düzenle"
+#286#  "Seçilen oyun için hileleri düzenle"
+
+/*********************************************************************************
+* ROM Browser                                                                    *
+*********************************************************************************/
+//ROM Browser Fields
+#300#  "Dosya Adı"
+#301#  "Dahili Ad"
+#302#  "GoodN64 Adı"
+#303#  "Durum"
+#304#  "ROM Boyutu"
+#305#  "Notlar (çekirdek)"
+#306#  "Notlar (varsayılan eklentiler)"
+#307#  "Notlar (kullanıcı)"
+#308#  "Kartuş ID'si"
+#309#  "Ortam türü"
+#310#  "Ülke"
+#311#  "Geliştirici"
+#312#  "CRC1"
+#313#  "CRC2"
+#314#  "CIC Yongası"
+#315#  "Çıkış Tarihi"
+#316#  "Tür"
+#317#  "Oyuncular"
+#318#  "Force Feedback"
+#319#  "Dosya Formatı"
+#321#  "Ad"
+
+//Select ROM
+#320#  "Geçerli ROM dizinini seç"
+
+//Messages
+#340#  "ROM kötü mü? GoodN64 kullanın ve RDB'nin güncel olup olmadığını kontrol edin."
+
+/*********************************************************************************
+* Options                                                                        *
+*********************************************************************************/
+//Options Title
+#400#  "Ayarlar"
+
+//Tabs
+#401#  "Eklentiler"
+#402#  "Dizinler"
+#403#  "Seçenekler"
+#404#  "ROM Seçimi"
+#405#  "Gelişmiş"
+#406#  "Genel Ayarlar"
+#407#  "Kabuk Entegrasyonu"
+#408#  "Notlar"
+#409#  "Klavye Kısayolları"
+#410#  "Durum"
+#411#  "Recompiler"
+#412#  "Varsayılan"
+#413#  "64DD"
+
+//Plugin Dialog
+#420#  "Hakkında"
+#421#  " RSP (Gerçeklik Sinyal İşlemcisi) eklentisi: "
+#422#  " Video (grafik) eklentisi: "
+#423#  " Ses eklentisi: "
+#424#  " Girdi (denetleyici) eklentisi: "
+#425#  "Grafik YSE"
+#426#  "Ses YSE"
+#427#  "** Sistem Eklentisini Kullan **"
+
+//Directory Dialog
+#440#  " Eklenti dizini: "
+#441#  " ROM dizini: "
+#442#  " N64 yerel kayıt dizini: "
+#443#  " Kayıtlı durumların dizini: "
+#444#  " Ekran görüntüsü dizini: "
+#445#  "ROM’un açık olduğu son klasör"  
+#446#  "Eklenti dizini seçin"
+#447#  "ROM dizini seçin"
+#448#  "N64 yerel kayıt dizini seç"
+#449#  "Kayıtlı durumların dizinini seç"
+#450#  "Ekran görüntüsü dizini seç"
+#451#  " Doku paketi dizini: "
+#452#  "Doku paketi dizini seç"
+
+//Options (general) Tab
+#460#  "Pencere etkin değilken emülatörü durdur" 
+#461#  "ROM yüklenirken tam ekran moduna gir"
+#462#  "Gelişmiş ayarları gizle"
+#463#  "Seçilmiş hileleri hatırla"
+#464#  "ROM çalışırken ekran koruyucuyu devre dışı bırak"
+#465#  "Ekran hızı"
+#466#  "Hız göstergesi:"
+#467#  "Project64'ün zaten çalışır durumda olup olmadığını kontrol et"
+#468#  "Benzersiz Oyun Kayıt Dizini"
+#469#  "Japon 64DD IPL ROM Yolu:"
+#470#  "Amerikan 64DD IPL ROM Yolu:"
+#471#  "Geliştirme 64DD IPL ROM Yolu:"
+#472#  "Disk Kayıt Türü:"
+
+//ROM Browser Tab
+#480#  "Hatırlanan maksimum ROM sayısı (0-10):"
+#481#  "ROM'lar"
+#482#  "Hatırlanan maksimum ROM dizini sayısı (0-10):"
+#483#  "dizinler"
+#484#  "ROM listeleyicisini kullan"
+#485#  "Dizin özyinelemesini kullan"
+#486#  "Kullanılabilir alanlar:"
+#487#  "Alanların sırası:"
+#488#  "Ekle ->"
+#489#  "<- Kaldır"
+#490#  "Yukarı"
+#491#  "Aşağı"
+#492#  "Listeleyiciyi otomatik olarak yenile"
+
+//Advanced Options
+#500#  "Bu değişikliklerin çoğu yeni bir ROM açılana veya mevcut ROM yeniden başlatılıncaya kadar etkili olmaz."
+#501#  "Çekirdek Varsayılanları"
+#502#  "CPU çekirdeği stili:"
+#503#  "Kod işleme yöntemi"
+#504#  "Varsayılan bellek boyutu:"
+#505#  "Gelişmiş blok bağlantısı"
+#506#  "ROM açıldığında emülatörü başlat"
+#507#  "RDB ayarlarıyla daima varsayılan ayarları geçersiz kıl"
+#508#  "Kayıtlı durumları otomatik olarak sıkıştır"
+#509#  "Hata Ayıklayıcıyı etkinleştir"
+#510#  "Önbellek"
+#511#  "PI DMA"
+#512#  "Başlangıç değiştirildi" 
+#513#  "Belleği koru"
+#514#  "TLB unmapping"
+
+//ROM Options
+#520#  "CPU çekirdeği stili:"
+#521#  "VI yenileme oranı:"
+#522#  "Bellek boyutu:"
+#523#  "Gelişmiş blok bağlantısı"
+#524#  "Varsayılan kayıt türü:"
+#525#  "Sayım faktörü:"
+#526#  "Büyük derleme tamponu"
+#527#  "TLB kullan"
+#528#  "Kayıtları önbelleğe alma"
+#529#  "SI kesmesini geciktirme:"
+#530#  "Hızlı SP"
+#531#  "Varsayılan"
+#532#  "RSP ses sinyali"
+#533#  "Sabit ses zamanlaması"
+#534#  "Metot arama yöntemi:"
+#535#  "Özel kod işleme yöntemi"
+#536#  "Ses kullanarak senkronize et"
+#537#  "Bayt başına AI sayısı"
+#538#  "32 bit motor"
+#539#  "DP kesmesini geciktirme"
+
+//Core Styles
+#540#  "Yorumlayıcı"
+#541#  "Recompiler"
+#542#  "Çekirdekleri senkronize et"
+
+//Self Mod Methods
+#560#  "Yok"
+#561#  "Önbellek"
+#562#  "Belleği koru"
+#563#  "Belleği ve önbelleği kontrol et"
+#564#  "Belleği ve önbelleği değiştir"
+#565#  "Bellek ilerlemesini kontrol et"
+#566#  "Önbellekteki kodu temizle"
+
+//Function Lookup method
+#570#  "Fiziksel arama tablosu"
+#571#  "Sanal arama tablosu"
+#572#  "Belleği değiştir"
+
+//RDRAM Size
+#580#  "4 MB"
+#581#  "8 MB"
+
+//Advanced Block Linking
+#600#  "Açık"
+#601#  "Kapalı"
+
+//Save Type
+#620#  "İlk kullanılan kaydetme türünü kullan"
+#621#  "4-kbit EEPROM"
+#622#  "16-kbit EEPROM"
+#623#  "SRAM"
+#624#  "Flash RAM"
+
+//Shell Integration Tab
+#640#  "Dosya uzantısı ilişkilendirme:"
+
+//ROM Notes
+#660#  "ROM durumu:"
+#661#  "Çekirdek notu:"
+#662#  "Eklenti notu:"
+
+// Accelerator Selector
+#680#  "CPU durumu:"
+#681#  "Menü öğesi:"
+#682#  "Geçerli tuşlar:"
+#683#  "Yeni kısayol tuşu seç:"
+#684#  "Şu anda atanmış:"
+#685#  "Ata"
+#686#  "Kaldır"
+#687#  "Tümünü Sıfırla"
+#688#  "Oyun çalışmıyor"
+#689#  "Oyun çalışıyor"
+#690#  "Oyun çalışıyor (pencere modu)"
+#691#  "Oyun çalışıyor (tam ekran)"
+#692#  "Tuşu Algıla"
+
+// Frame Rate Option
+#700#  "Saniyedeki dikey işkesme sinyalleri"
+#701#  "Saniyedeki listeleri göster"
+#702#  "Tam hız yüzdesi"
+
+// Increase speed
+#710#  "Oyun Hızını Artır"
+#711#  "Oyun Hızını Azalt"
+
+//Bottom page buttons
+#720#  "Sayfayı Sıfırla"
+#721#  "Tümünü Sıfırla"
+#722#  "Uygula"
+#723#  "Kapat"
+
+//Disk Save Type
+#730#  "Tam Disk Kopyası"
+#731#  "Sadece Kayıtlı Alan"
+
+/*********************************************************************************
+* ROM Information                                                                *
+*********************************************************************************/
+//ROM Info Title
+#800#  "ROM Bilgileri"
+
+//ROM Info Text
+#801#  "ROM adı:"
+#802#  "Dosya adı:"
+#803#  "Bölge:"
+#804#  "ROM boyutu:"
+#805#  "Kartuş ID'si:"
+#806#  "Ortam türü:"
+#807#  "Ülke:"
+#808#  "CRC1:"
+#809#  "CRC2:"
+#810#  "CIC Yongası:"
+#811#  "MD5:"
+
+/*********************************************************************************
+* Cheats                                                                         *
+*********************************************************************************/
+//Cheat List
+#1000#  "Hileler"
+#1001#  "Hileler:"
+#1002#  " Notlar: "
+#1003#  "Tümünü İşaretle"
+#1004#  "Tümünün İşaretini Kaldır"
+
+//Add Cheat
+#1005#  "Hile Ekle"
+#1006#  "Ad:"
+#1007#  "Kod:"
+#1008#  "Ekle"
+#1009#  "Temizle"
+#1010#  " Hile Notları: "
+#1011#  "DB'ye Ekle"
+
+//Code extension
+#1012#  "Kod Uzantıları"
+#1013#  "Lütfen kullanılacak bir değer seçin:"
+#1014#  "Tamam"
+#1015#  "İptal"
+
+//Digital Value
+#1016#  "Rakam Miktarı"
+#1017#  "Lütfen bir değer seçin:"
+#1018#  "&Değer"
+#1019#  "itibaren"
+#1020#  "için"
+#1021#  "&Notlar:"
+#1022#  "Hile Ekle"
+#1023#  "Yeni Hile"
+#1024#  "<adres> <deger>"
+#1025#  "Seçenekler:"
+#1026#  "<deger> <etiket>"
+
+//Edit Cheat
+#1027#  "Hile Düzenle"
+#1028#  "Hile Güncelle"
+#1029#  "Hile değiştirildi.\n\nGüncellemek ister misiniz?"
+#1030#  "Hile güncellendi"
+
+//Cheat Popup Menu
+#1040#  "Yeni Hile Ekle..."
+#1041#  "Düzenle"
+#1042#  "Sil"
+
+// short-cut editor
+#1100#  "Kısayolları sıfırla"
+#1101#  "Kısayolları sıfırlamak istediğinize emin misiniz?\n\nBu işlem geri alınamaz."
+#1102#  "Dosya Menüsü"
+#1103#  "Sistem Menüsü"
+#1104#  "Seçenekler"
+#1105#  "Yuvaları Kaydet"
+
+/*********************************************************************************
+* Support Window                                                                 *
+*********************************************************************************/
+#1200#  "Project64'ü Destekle"
+#1201#  "Project64, Microsoft Windows tabanlı bir bilgisayarda Nintendo64 video oyun sistemini emüle etmek için tasarlanmış bir yazılım paketidir. Bu, gerçek N64 yazılımını, orijinal donanım sistemindeki gibi oynatmanızı sağlar.\n\nProject64'ten hoşlanıyorsanız ve onu kullanmaktan zevk alıyorsanız, lütfen project64'ü bir teşekkür olarak veya sürekli olarak iyileştirilme arzusuyla destekleyin.\n\nProject64'ü desteklediyseniz:"
+#1202#  "Bildirim kodunu giriniz"
+#1203#  "Project64'ü Destekle"
+#1204#  "Devam et"
+#1205#  "Lütfen destek kodunu giriniz"
+#1206#  "Yanlış destek kodu"
+#1207#  "Teşekkürler"
+#1208#  "Kodu giriniz"
+#1209#  "Lütfen e-postadaki kodu giriniz"
+#1210#  "Tamam"
+#1211#  "İptal"
+
+/*********************************************************************************
+* Messages                                                                       *
+*********************************************************************************/
+#2000#  "*** CPU DURAKLATILDI ***"
+#2001#  "CPU Başlatıldı"
+#2002#  "Program çıkış yapılamayan kalıcı bir döngüye girdi.\nEmülatör şimdi duracak.\n\nROM'u ve ayarlarını doğrulayın."
+#2003#  "Bellek ayrılamadı"
+#2004#  "Varsayılan veya seçilen video eklentisi eksik veya geçersiz.\n\nAyarlar'a girmeniz ve bir video (grafik) eklentisi seçmeniz gerekiyor.\nEklenti klasörünüzde en az bir tane uyumlu eklenti dosyanızın olup olmadığını kontrol edin."
+#2005#  "Varsayılan veya seçilen ses eklentisi eksik veya geçersiz.\n\nAyarlar'a girmeniz ve bir ses eklentisi seçmeniz gerekiyor.\nEklenti klasörünüzde en az bir tane uyumlu eklenti dosyanızın olup olmadığını kontrol edin."
+#2006#  "Varsayılan veya seçilen RSP eklentisi eksik veya geçersiz.\n\nAyarlar'a girmeniz ve bir RSP (Gerçeklik Sinyal İşlemcisi) eklentisi seçmeniz gerekiyor.\nEklenti klasörünüzde en az bir tane uyumlu eklenti dosyanızın olup olmadığını kontrol edin."
+#2007#  "Varsayılan veya seçilen girdi eklentisi eksik veya geçersiz.\n\nAyarlar'a girmeniz ve bir girdi (denetleyici) eklentisi seçmeniz gerekiyor.\nEklenti klasörünüzde en az bir tane uyumlu eklenti dosyanızın olup olmadığını kontrol edin."
+#2008#  "Eklenti yüklenemedi:"
+#2009#  "Kelime yüklenemedi.\n\nROM'u ve ayarlarını doğrulayın."
+#2010#  "Kayıt dosyası açılamadı"
+#2011#  "EEPROM açılamadı"
+#2012#  "Flash RAM açılamadı"
+#2013#  "Mempak açılamadı"
+#2014#  "Zip dosyası açılamadı.\n\nMuhtemelen zip dosyası bozuk. ROM'u manuel olarak zipten çıkarmayı deneyin."
+#2015#  "Dosya açma girişimi başarısız oldu."
+#2016#  "Zip dosyasını açmaya çalışırken hata oluştu."
+#2017#  "Yüklenen dosya geçerli bir N64 ROM'u gibi görünmüyor.\n\nROM'larınızı GoodN64 ile doğrulayın."
+#2018#  "Bilinmeyen ülke"
+#2019#  "Bilinmeyen CIC yongası"
+#2020#  "Bilinmeyen dosya formatı"
+#2021#  "Bilinmeyen bellek işlemi\n\nEmülatör durdu."
+#2022#  "İşlenmemiş R4300i işlem kodu(opcode)"
+#2023#  "Eşlenmemiş alandan yürütme.\n\nROM'u ve ayarlarını doğrulayın."
+#2024#  "Bu kayıtlı durum, çalışan ROM ile eşleşmiyor gibi görünüyor.\n\nDurumlar %100 aynı ROM'lar arasında kaydedilmeli ve yüklenmelidir.\nÖzellikle BÖLGE ve SÜRÜM aynı olmalıdır.\nBu durumu yüklemek, oyunun ve/veya emülatörün çökmesine neden olabilir.\n\nYüklemeye devam etmek istediğinize emin misiniz?"
+#2025#  "Hata"
+#2026#  "Telif hakkı dizisi LUT'ta bulunamadı. Oyun artık çalışmayacak."
+#2027#  "Kopya Koruma Hatası"
+#2028#  "Bir eklentiyi değiştirmek için Project64'ün çalışan bir ROM'u yeniden başlatması gerekiyor.\nEğer oyundaki yerinizi kaybetmek istemiyorsanız Hayır cevabını verin ve öncelikle mevcut durumu kaydedin.\n\nEklentiler değiştirilip ROM yeniden başlatılsın mı?"
+#2029#  "Eklentileri Değiştir"
+#2030#  "Emülatör sona erdi"
+#2031#  "Emülatör başladı"
+#2032#  "Durum yüklenemedi"
+#2033#  "Yüklü durum"
+#2034#  "Kaydedilen mevcut durum"
+#2035#  "Durum yuvası"
+#2036#  "İmaj byte değiştirme"
+#2037#  "N64 imajı seç"
+#2038#  "Yüklendi"
+#2039#  "İmaj yükleniyor"
+#2040#  "Eklentiler başarıyla başlatılmadığından ROM açılamıyor."
+#2041#  "Bunu gerçekten silmek istediğinize emin misiniz?"
+#2042#  "Hileyi Sil"
+#2043#  "Hile adı zaten kullanılıyor."
+#2044#  "Bu ROM için maksimum hile sınırına ulaştınız."
+#2045#  "Eklenti başlatılıyor"
+#2046#  "Menü öğesine atamak için bir sanal anahtar seçmediniz."
+#2047#  "Bu anahtarı atamak için bir menü öğesi seçmeniz gerekiyor."
+#2048#  "Kısayol zaten başka bir menü öğesine atanmış."
+#2049#  "Kaldırılacak kısayol seçilmedi."
+#2050#  "ROM yüklendi. Emülatörün başlaması bekleniyor."
+#2051#  "Project64'ün beta sürümleri sadece üyeler içindir.\n\nEğer www.pj64-emu.com adresinde bir hesabınız varsa bu hatayı görmemelisiniz!!\nLütfen siteden bize ulaşın."
+#2052#  "Program Hatası"
+#2053#  "7z dosyasında dosya adı bulunamadı"
+#2054#  "Grafik Düşük Seviye Emülatör"
+#2055#  "Grafik DSE genel kullanım için değildir!!!\nBunu sadece test yapmak için kullanmanız ve oyun oynamak için kullanmamanız önerilir.\n\nGrafik DSE'ye değiştirilsin mi?"
+#2056#  "Ses Yüksek Seviye Emülatör"
+#2057#  "Ses YSE üçüncü taraf bir eklenti gerektirir !!!\nEğer YSE'yi destekleyen bir üçüncü taraf ses eklentisi kullanmazsanız ses duyamazsınız.\n\nSes YSE'ye değiştirilsin mi?"
+#2058#  "Yüklenen dosya geçerli bir 64DD IPL ROM'u gibi görünmüyor.\n\nROM'larınızı GoodN64 ile doğrulayın."
+#2059#  "Nintendo 64DD Japon IPL ROM'u bulunamadı.\nBu, Japon 64DD imaj görüntülerini oynatmak için gerekir.\n\nLütfen Ayarlar'dan istediğiniz ROM'u seçin."
+#2061#  "Nintendo 64DD Amerikan IPL ROM'u bulunamadı.\nBu, Amerikan 64DD imaj görüntülerini oynatmak için gerekir.\n\nLütfen Ayarlar'dan istediğiniz ROM'u seçin."
+#2062#  "Nintendo 64DD Geliştirme IPL ROM'u bulunamadı.\nBu, Geliştirme 64DD imaj görüntülerini oynatmak için gerekir.\n\nLütfen Ayarlar'dan istediğiniz ROM'u seçin."
+
+/*********************************************************************************
+* Android                                                                        *
+*********************************************************************************/
+#3000#  "Ayarlar"
+#3001#  "Yardım/Forum"
+#3002#  "Sorun Bildir"
+#3003#  "Hakkında"
+#3004#  "Son oynanılan"
+#3005#  "Oyunlar"
+#3006#  "Oyun Dizini"
+#3007#  "Taranacak bir klasör seç"
+#3008#  "Alt dizinleri dahil et"
+#3009#  "Ana klasör"
+#3010#  "Dizinler"
+#3011#  "Dahili bellek"
+#3012#  "Taranıyor..."
+#3013#  "Tamam"
+#3014#  "İptal"
+#3015#  "Bilgi"
+#3016#  "Android için Project64"
+#3017#  "Lisans"
+#3018#  "Revizyon"
+#3019#  "Android\u2122 için Project64, project64'ün Windows sürümünün bir bağlantı noktasıdır. Android\u2122 sürümü çoğu N64 oyununu oynatabilir."
+#3020#  "Project64 Yazarları."
+#3021#  "Discord"
+
+//In game menu
+#3100#  "Ayarlar"
+#3101#  "Durumu Kaydet"
+#3102#  "Durumu Yükle"
+#3103#  "Emülatörü Sonlandır"
+#3104#  "Duraklat"
+#3105#  "Devam et"
+#3106#  "Oyun Hızı"
+#3107#  "Mevcut Durum Kaydı..."
+#3108#  "Otomatik"
+#3109#  "Yuva"
+#3110#  "Yeniden başlat"
+#3111#  "Hata Ayıklama Seçenekleri"
+#3112#  "Metot Zamanlayıcılarını Sıfırla"
+#3113#  "Döküm Metodu Zamanlayıcıları"

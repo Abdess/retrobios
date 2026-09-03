@@ -1,0 +1,30 @@
+[F82DD377-8C3FB347-C:58]
+Name=Top Gear Rally 2 (E)
+
+$100.000 Sponsor Credits & 950 Championship Points In Support Van
+Note=You Also Have Access To All Cars, Tracks & Extra Features
+80031433 00F3
+
+$Always 1st
+80031F93 0001
+
+$Freeze Timer
+80031F9F 0000
+
+$Infinite Cash
+803A418E 4000
+
+$Max Sponsor Credits
+803A6702 0010
+803A6704 0001
+
+$No Cones Hit
+Note=In ARSG Rally School
+80031FC3 0000
+8003239B 0000
+
+$No Damage Or Failures
+80031427 0001
+
+$No Navigator
+80031EF7 0000

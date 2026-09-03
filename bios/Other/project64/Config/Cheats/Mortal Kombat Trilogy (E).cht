@@ -1,0 +1,138 @@
+[8C3D1192-BEF172E1-C:50]
+Name=Mortal Kombat Trilogy (E)
+
+$Infinite Time
+8114C2FC 000A
+
+$Pick Your Kombat Zone
+812575A4 00??
+00 Subway
+01 Street
+02 Courtyard
+03 Pit
+04 Kahn's Tower
+05 Bridge
+06 Soul Chamber
+07 Bell Tower
+08 Kombat Temple
+09 Graveyard
+0A Pit 3
+0B River Kombat
+0C Scorpion's Lair
+0D Kahn's Kave
+0E Jade's Desert
+0F Lost Bridge
+10 Hidden Portal
+11 Dead Pool
+12 Wasteland
+13 Rooftop
+14 Armory
+15 Living Forest
+16 Tower
+17 Portal
+18 Lair
+19 Tomb
+1A Pit 2
+1B Star Bridge
+1C Pit Bottom
+
+$Player 1\Aggressor Energy Bar
+80169941 0030
+
+$Player 1\Energy is
+801698AD 00??
+00 Zero
+A6 Unlimited
+
+$Player 1\Infinite Run
+811698B4 0030
+
+$Player 1\Max Aggressor
+Note=Press L Button To Activate
+D02B5285 0020
+811698D4 5100
+D02B5285 0020
+811698DC 5100
+
+$Player 1\Play As
+8016989D 00??
+00 Kano
+01 Sonya
+02 Jax
+03 Nightwolf
+04 Cage
+05 Stryker
+06 Sindel
+07 Sektor
+08 Cyrax
+09 Kung Lao
+0A Kabal
+0B Sheeva
+0C Shang Tsung
+0D Liu Kang
+0E Smoke
+0F Kitana
+10 Jade
+11 Mileena
+12 Scorpion
+13 Reptile
+14 Ermac
+15 Sub-Zero
+16 Human Smoke
+17 Noob Saibot
+18 Rayden
+19 Baraka
+1A Rain
+1B Khameleon
+
+$Player 2\Aggressor Energy Bar
+80169943 0030
+
+$Player 2\Energy is
+80169B81 00??
+00 Zero
+A6 Unlimited
+
+$Player 2\Infinite Run
+81169B88 0030
+
+$Player 2\Max Aggressor
+Note=Press L Button To Activate
+D02B528D 0020
+811698D6 5100
+D02B528D 0020
+811698DE 5100
+
+$Player 2\Play As
+80169B41 00??
+00 Kano
+01 Sonya
+02 Jax
+03 Nightwolf
+04 Cage
+05 Stryker
+06 Sindel
+07 Sektor
+08 Cyrax
+09 Kung Lao
+0A Kabal
+0B Sheeva
+0C Shang Tsung
+0D Liu Kang
+0E Smoke
+0F Kitana
+10 Jade
+11 Mileena
+12 Scorpion
+13 Reptile
+14 Ermac
+15 Sub-Zero
+16 Human Smoke
+17 Noob Saibot
+18 Rayden
+19 Baraka
+1A Rain
+1B Khameleon
+
+$Unlock Secret
+80169F41 0004

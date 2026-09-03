@@ -1,0 +1,31 @@
+[0F743195-D8A6DB95-C:50]
+Name=John Romero's Daikatana (E) (M3)
+
+$Access\All Guns & Infinite Ammo
+81207AB4 007F
+81207AB6 FFFF
+81207B84 03E7
+50000A02 0000
+81207B70 03E7
+
+$Access\All Items
+Note=Press L Button Where Items Are available
+D0209D85 0020
+81207B8C 007F
+
+$Infinite\Armour
+81207B44 0001
+81207B46 03E7
+
+$Infinite\Health
+81207B24 03E7
+
+$Level Select
+811C6B4E 0001
+
+$Max\Attributes
+50000502 0000
+81207B28 0007
+
+$Max\Experience
+81207B26 03E7

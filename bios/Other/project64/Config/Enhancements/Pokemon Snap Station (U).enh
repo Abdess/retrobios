@@ -1,0 +1,17 @@
+[39119872-07722E9F-C:45]
+Name=Pokemon Snap Station (U)
+
+$Make Picture selectable
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+D11E30F4 2881
+811E30F4 2001
+D11E30F6 0098
+811E30F6 0001
+
+$Pass 1st Level and Controller Fix
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+D1382D1C 802C
+80382D0F 0000
+

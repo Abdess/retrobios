@@ -1,0 +1,272 @@
+[DFE61153-D76118E6-C:45]
+Name=Cruis'n World (U)
+
+$Championship Mode\Cannot Spin Out
+803CDD93 0000
+
+$Championship Mode\Disable Left Lane Traffic
+8033C95B 0001
+
+$Championship Mode\Disable Right Lane Traffic
+8033C95F 0001
+
+$Championship Mode\Max Points Per Race
+813BFBFE FFFF
+
+$Championship Mode\Max Points To Next Level
+813BFBFC FFFF
+
+$Championship Mode\Max Total Points
+813BFBFA FFFF
+
+$Championship Mode\Unlimited Nitro\Player 1
+803C75E7 0003
+
+$Championship Mode\Unlimited Nitro\Player 2
+803C7823 0003
+
+$Championship Mode\Unlimited Nitro\Player 3
+803C716F 0003
+
+$Dancing Girl Always On
+803BEE73 0001
+803C21CF 0054
+
+$Have All\Car Upgrades
+803BEE42 0005
+
+$Have All\Cars
+813BEE78 1FFF
+
+$Player 1\Always Place 1st
+803CE023 0001
+
+$Player 1\Car/Transmission Modifier
+803BEE40 00??
+00 Serpent (Auto)
+01 Serpent (Manual)
+02 Kamikaze (Auto)
+03 Kamikaze (Manual)
+04 ATV (Auto
+05 ATV (Manual)
+06 Scarab (Auto)
+07 Scarab (Manual)
+08 Stallion P6 (Auto)
+09 Stallion P6 (Manual)
+0A Banzai GTV (Auto)
+0B Banzai GTV (Manual)
+0C Zombie (Auto)
+0D Zombie (Manual)
+0E Orca (Auto)
+0F Orca (manual)
+10 El Nino (Auto)
+11 El Nino (Manual)
+12 Rhino 4x4 (Auto)
+13 Rhino 4x4 (Manual)
+14 Sardine Extreme (Auto)
+15 Sardine Extreme (Manual)
+16 Road King (Auto)
+17 Road King (Manual)
+18 Grass Hopper (Auto)
+19 Grass Hopper (Manual)
+1A Bulldog (Auto)
+1B Bulldog (Manual)
+1C Enforcer (Auto)
+1D Enforcer (Manual)
+1E NY Taxi (Auto)
+1F NY Taxi (Manual)
+20 School Bus (Auto)
+21 School Bus (Manual)
+22 Exec (Auto)
+23 Exec (Manual)
+24 Conductor (Auto)
+25 Conductor (Manual)
+26 Speed Demon (Auto)
+27 Speed Demon (Manual)
+28 Tommy (Auto)
+29 Tommy (Manual)
+2A Rocket (Auto)
+2B Rocket (Manual)
+2C The Surgeon (Auto)
+2D The Surgeon (Manual)
+2E Monsta (Auto)
+2F Monsta (Manual)
+30 Howler (Auto)
+31 Howler (Manual)
+
+$Player 1\Stop Elapsed Time
+813C7678 3C80
+
+$Player 2\Always Place 1st
+803CE4FB 0001
+
+$Player 2\Car/Transmission Modifier
+803BEE48 00??
+00 Serpent (Auto)
+01 Serpent (Manual)
+02 Kamikaze (Auto)
+03 Kamikaze (Manual)
+04 ATV (Auto
+05 ATV (Manual)
+06 Scarab (Auto)
+07 Scarab (Manual)
+08 Stallion P6 (Auto)
+09 Stallion P6 (Manual)
+0A Banzai GTV (Auto)
+0B Banzai GTV (Manual)
+0C Zombie (Auto)
+0D Zombie (Manual)
+0E Orca (Auto)
+0F Orca (manual)
+10 El Nino (Auto)
+11 El Nino (Manual)
+12 Rhino 4x4 (Auto)
+13 Rhino 4x4 (Manual)
+14 Sardine Extreme (Auto)
+15 Sardine Extreme (Manual)
+16 Road King (Auto)
+17 Road King (Manual)
+18 Grass Hopper (Auto)
+19 Grass Hopper (Manual)
+1A Bulldog (Auto)
+1B Bulldog (Manual)
+1C Enforcer (Auto)
+1D Enforcer (Manual)
+1E NY Taxi (Auto)
+1F NY Taxi (Manual)
+20 School Bus (Auto)
+21 School Bus (Manual)
+22 Exec (Auto)
+23 Exec (Manual)
+24 Conductor (Auto)
+25 Conductor (Manual)
+26 Speed Demon (Auto)
+27 Speed Demon (Manual)
+28 Tommy (Auto)
+29 Tommy (Manual)
+2A Rocket (Auto)
+2B Rocket (Manual)
+2C The Surgeon (Auto)
+2D The Surgeon (Manual)
+2E Monsta (Auto)
+2F Monsta (Manual)
+30 Howler (Auto)
+31 Howler (Manual)
+
+$Player 2\Stop Elapsed Time
+813C78B4 3C80
+
+$Player 3\Always Place 1st
+803CDB4B 0001
+
+$Player 3\Car/Transmission Modifier
+803BEE50 00??
+00 Serpent (Auto)
+01 Serpent (Manual)
+02 Kamikaze (Auto)
+03 Kamikaze (Manual)
+04 ATV (Auto
+05 ATV (Manual)
+06 Scarab (Auto)
+07 Scarab (Manual)
+08 Stallion P6 (Auto)
+09 Stallion P6 (Manual)
+0A Banzai GTV (Auto)
+0B Banzai GTV (Manual)
+0C Zombie (Auto)
+0D Zombie (Manual)
+0E Orca (Auto)
+0F Orca (manual)
+10 El Nino (Auto)
+11 El Nino (Manual)
+12 Rhino 4x4 (Auto)
+13 Rhino 4x4 (Manual)
+14 Sardine Extreme (Auto)
+15 Sardine Extreme (Manual)
+16 Road King (Auto)
+17 Road King (Manual)
+18 Grass Hopper (Auto)
+19 Grass Hopper (Manual)
+1A Bulldog (Auto)
+1B Bulldog (Manual)
+1C Enforcer (Auto)
+1D Enforcer (Manual)
+1E NY Taxi (Auto)
+1F NY Taxi (Manual)
+20 School Bus (Auto)
+21 School Bus (Manual)
+22 Exec (Auto)
+23 Exec (Manual)
+24 Conductor (Auto)
+25 Conductor (Manual)
+26 Speed Demon (Auto)
+27 Speed Demon (Manual)
+28 Tommy (Auto)
+29 Tommy (Manual)
+2A Rocket (Auto)
+2B Rocket (Manual)
+2C The Surgeon (Auto)
+2D The Surgeon (Manual)
+2E Monsta (Auto)
+2F Monsta (Manual)
+30 Howler (Auto)
+31 Howler (Manual)
+
+$Player 4\Always Place 1st
+803CD673 0001
+
+$Player 4\Car/Transmission Modifier
+803BEE58 00??
+00 Serpent (Auto)
+01 Serpent (Manual)
+02 Kamikaze (Auto)
+03 Kamikaze (Manual)
+04 ATV (Auto
+05 ATV (Manual)
+06 Scarab (Auto)
+07 Scarab (Manual)
+08 Stallion P6 (Auto)
+09 Stallion P6 (Manual)
+0A Banzai GTV (Auto)
+0B Banzai GTV (Manual)
+0C Zombie (Auto)
+0D Zombie (Manual)
+0E Orca (Auto)
+0F Orca (manual)
+10 El Nino (Auto)
+11 El Nino (Manual)
+12 Rhino 4x4 (Auto)
+13 Rhino 4x4 (Manual)
+14 Sardine Extreme (Auto)
+15 Sardine Extreme (Manual)
+16 Road King (Auto)
+17 Road King (Manual)
+18 Grass Hopper (Auto)
+19 Grass Hopper (Manual)
+1A Bulldog (Auto)
+1B Bulldog (Manual)
+1C Enforcer (Auto)
+1D Enforcer (Manual)
+1E NY Taxi (Auto)
+1F NY Taxi (Manual)
+20 School Bus (Auto)
+21 School Bus (Manual)
+22 Exec (Auto)
+23 Exec (Manual)
+24 Conductor (Auto)
+25 Conductor (Manual)
+26 Speed Demon (Auto)
+27 Speed Demon (Manual)
+28 Tommy (Auto)
+29 Tommy (Manual)
+2A Rocket (Auto)
+2B Rocket (Manual)
+2C The Surgeon (Auto)
+2D The Surgeon (Manual)
+2E Monsta (Auto)
+2F Monsta (Manual)
+30 Howler (Auto)
+31 Howler (Manual)
+
+$Time Counts Down Faster
+813D0D3E 0000

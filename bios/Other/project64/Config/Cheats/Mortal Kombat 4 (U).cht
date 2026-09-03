@@ -1,0 +1,32 @@
+[417DD4F4-1B482FE2-C:45]
+Name=Mortal Kombat 4 (U)
+
+$1 Round To Win Player 1
+D01050F3 0000
+801050F3 0001
+
+$99 Wins Player 1
+800FE27F 0063
+
+$Big Head Mode
+80048CB5 0001
+
+$Infinite\Credits
+800493BF 00FF
+
+$Infinite\Health Player 1
+810FE0D8 0001
+810FE0DA 0000
+
+$Infinite\Health Player 2
+81126F54 0001
+81126F56 0000
+
+$Infinite\Time
+8010511B 0063
+
+$Play\As Goro Player 1
+800FE293 000F
+
+$Play\As Noob Saibot Player 1
+800FE293 0011

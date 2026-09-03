@@ -1,0 +1,14 @@
+[9C961069-F5EA488D-C:4A]
+Name=64 Oozumou (J)
+
+$Player 1 Health
+Note=If you select the Low option, It will give your opponent an easy win over over you
+8110CF68 ????
+0000 Max
+4220 Low
+
+$Player 2 Health
+Note=If you select the Low option, It will give your opponent an easy win over over you
+8110CF6C ????
+0000 Max
+4220 Low

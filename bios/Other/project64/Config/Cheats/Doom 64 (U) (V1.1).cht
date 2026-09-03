@@ -1,0 +1,76 @@
+[423E96F4-CE88F05B-C:45]
+Name=Doom 64 (U) (V1.1)
+
+$[Max Brightness]
+Note=Enable this cheat on rom load to have Max Brightness (internal) and then put Jabo d3d8 on 160% Max for a extra brightness Boost.
+8005A878 0064
+
+$Always Have\BFG 9000
+8006338B 0001
+
+$Always Have\Bio Suite
+80063333 00??
+FF On
+00 Off
+
+$Always Have\Chain Gun
+8006337F 0001
+
+$Always Have\Chainsaw
+8006336B 0001
+
+$Always Have\Double Shotgun
+8006337B 0001
+
+$Always Have\Gun
+80063373 0001
+
+$Always Have\Have Rocket Launcher
+80063381 0001
+
+$Always Have\Laser Weapon
+8006338F FFFF
+
+$Always Have\Missile Launcher
+80063383 0001
+
+$Always Have\Plasma Rifle
+80063387 0001
+
+$Always Have\Shotgun
+80063377 0001
+
+$Berserk Mode
+8006332B 00FF
+
+$Enable Cheat Menu
+8005A883 0001
+
+$Have All Keys
+8006333F 0001
+80063343 0001
+80063344 0001
+80063353 0001
+8006334F 0001
+80063348 0001
+
+$Infinite\Ammo All Weapons
+80063393 00FF
+80063397 00FF
+8006339B 00FF
+8006339F 00FF
+
+$Infinite\Armor
+8006331F 00FF
+
+$Invincible
+800633BB 0002
+
+$Invincible And Map Markers
+800633BB 0006
+
+$Rapid Fire
+810633EA 0B94
+
+$Turn Map Markers On
+800633BB 0004

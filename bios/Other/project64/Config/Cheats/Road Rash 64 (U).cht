@@ -1,0 +1,43 @@
+[F050746C-247B820B-C:45]
+Name=Road Rash 64 (U)
+
+$Access\All Bikes & Tracks
+800A77D5 0063
+
+$Access\Infinite & All Weapons
+50000E02 0000
+811B8D7A 0505
+
+$Always 1st
+810D7856 0000
+
+$Always Have\Max Cash
+810D6A7A FFFF
+
+$Always Have\Weapon
+801C00B3 00??
+01 Fists
+02 Spiked Club
+03 Tiring Iron
+04 Bat
+05 Billie Club
+06 Sledge Hammer
+07 Pool Cue
+08 Monkey Wrench
+09 Banana
+0A Cattle Prod
+0B Taser
+0C Bace
+0D Nunchuk
+0E Chain
+
+$Infinite\Damage
+801C0D17 0002
+
+$Infinite\Health\To Bike
+811B8A38 42F0
+811B8A3C 42F0
+
+$Infinite\Health\To Character
+811BFE10 4489
+811BFE12 8000

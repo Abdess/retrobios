@@ -1,0 +1,17 @@
+[4FF5976F-ACF559D8-C:50]
+Name=Pokemon Snap (E)
+
+$Make Picture selectable
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+D11E3824 2881
+811E3824 2001
+D11E3826 0098
+811E3826 0001
+
+$Pass 1st Level and Controller Fix
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+D1381BFC 802C
+80381BEF 0000 
+

@@ -1,0 +1,32 @@
+[DBF4EA9D-333E82C0-C:45]
+Name=Snowboard Kids (U)
+
+$1 Lap Race
+D0122288 0000
+80122288 0009
+
+$999 Trick Game Pts
+81122040 03E7
+
+$Access Gold Medals
+50000602 0000
+810ECA22 0101
+
+$Enable Sinobin
+8110AE5E 0100
+
+$Infinite\Cash
+801222EA C350
+
+$Infinite\Lucky Dip
+Note="Lucky Dip is Infinite Usage Of What Ever You Get From Each Red Box"
+80122294 0003
+
+$Infinite\Tools Options
+80122295 00??
+01 Fan
+02 Ghost
+03 Pan
+04 Rock
+05 Mouse
+06 Board

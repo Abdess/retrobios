@@ -1,0 +1,256 @@
+[B30ED978-3003C9F9-C:45]
+Name=F-ZERO X (U)
+
+$Cool Camera
+800E523E 0000
+
+$Expert Mode
+800E5ED9 0000
+812C4B48 0000
+812C4B4C 0000
+
+$Have Boost From Start
+D02C4DAC 003F
+802C4925 0050
+
+$Hunk O' Junk
+802C4B3F 0040
+
+$Infinite Lives
+800E5ED9 0005
+
+$Max Grand Prix Points
+812C492A FFFF
+
+$Max Shield
+812C4B4C 4326
+
+$One Lap To Race
+D02C4BC9 0000
+812C4BC8 0002
+D02C4BCB 0001
+812C4BCA 0002
+
+$Player 1\Car Color Modifier
+802C4BED 00??
+00 1st Color
+01 2nd Color
+02 3rd Color
+03 4th Color
+05 Hidden Color
+
+$Player 1\Character Modifier
+800E5EE1 00??
+00 Captain Falcon
+01 Dr. Stewart
+02 Pico
+03 Samurai Goroh
+04 Jody Summer
+05 Mighty Gazelle
+06 Mr. EAD
+07 Baba
+08 Octoman
+09 Gomar + Shioh
+0A Kate Alen
+0B Roger Buster
+0C James McCloud
+0D Leon
+0E Antonio Guster
+0F Black Shadow
+10 Michael Chain
+11 Jack Levin
+12 Super Arrow
+13 Mrs. Arrow
+14 John Tanaka
+15 Beastman
+16 Zoda
+17 Dr. Clash
+18 Silver Neelsen
+19 Bio Rex
+1A Draq
+1B Billy
+1C The Skull
+1D Blood Falcon
+1E Perfect Captain Falcon
+
+$Player 1\Infinite Shield
+812C4B48 4326
+
+$Player 1\Invisible Car
+Note=Vs. Mode Only
+802C4CCB 0000
+
+$Player 2\Car Color Modifier
+802C4F95 00??
+00 1st Color
+01 2nd Color
+02 3rd Color
+03 4th Color
+05 Hidden Color
+
+$Player 2\Character Modifier
+802C4F90 00??
+00 Captain Falcon
+01 Dr. Stewart
+02 Pico
+03 Samurai Goroh
+04 Jody Summer
+05 Mighty Gazelle
+06 Mr. EAD
+07 Baba
+08 Octoman
+09 Gomar + Shioh
+0A Kate Alen
+0B Roger Buster
+0C James McCloud
+0D Leon
+0E Antonio Guster
+0F Black Shadow
+10 Michael Chain
+11 Jack Levin
+12 Super Arrow
+13 Mrs. Arrow
+14 John Tanaka
+15 Beastman
+16 Zoda
+17 Dr. Clash
+18 Silver Neelsen
+19 Bio Rex
+1A Draq
+1B Billy
+1C The Skull
+1D Blood Falcon
+1E Perfect Captain Falcon
+
+$Player 2\Infinite Shield
+812C4EF0 4326
+
+$Player 3\Car Color Modifier
+802C533D 00??
+00 1st Color
+01 2nd Color
+02 3rd Color
+03 4th Color
+05 Hidden Color
+
+$Player 3\Character Modifier
+802C5338 00??
+00 Captain Falcon
+01 Dr. Stewart
+02 Pico
+03 Samurai Goroh
+04 Jody Summer
+05 Mighty Gazelle
+06 Mr. EAD
+07 Baba
+08 Octoman
+09 Gomar + Shioh
+0A Kate Alen
+0B Roger Buster
+0C James McCloud
+0D Leon
+0E Antonio Guster
+0F Black Shadow
+10 Michael Chain
+11 Jack Levin
+12 Super Arrow
+13 Mrs. Arrow
+14 John Tanaka
+15 Beastman
+16 Zoda
+17 Dr. Clash
+18 Silver Neelsen
+19 Bio Rex
+1A Draq
+1B Billy
+1C The Skull
+1D Blood Falcon
+1E Perfect Captain Falcon
+
+$Player 3\Infinite Shield
+812C5298 4326
+
+$Player 4\Car Color Modifier
+802C56E5 00??
+00 1st Color
+01 2nd Color
+02 3rd Color
+03 4th Color
+05 Hidden Color
+
+$Player 4\Character Modifier
+802C56E0 00??
+00 Captain Falcon
+01 Dr. Stewart
+02 Pico
+03 Samurai Goroh
+04 Jody Summer
+05 Mighty Gazelle
+06 Mr. EAD
+07 Baba
+08 Octoman
+09 Gomar + Shioh
+0A Kate Alen
+0B Roger Buster
+0C James McCloud
+0D Leon
+0E Antonio Guster
+0F Black Shadow
+10 Michael Chain
+11 Jack Levin
+12 Super Arrow
+13 Mrs. Arrow
+14 John Tanaka
+15 Beastman
+16 Zoda
+17 Dr. Clash
+18 Silver Neelsen
+19 Bio Rex
+1A Draq
+1B Billy
+1C The Skull
+1D Blood Falcon
+1E Perfect Captain Falcon
+
+$Player 4\Infinite Shield
+812C5640 4326
+
+$Show 30 Cars Out Of 1 Position
+800E5FC7 001D
+
+$Super Ultimate Mega Fast Mode
+812C4984 2222
+
+$Time Always 00.00.00/1st Place
+802C4BC0 0000
+802C4BC2 0001
+
+$Track Modifier
+800F8517 00??
+00 Mute City
+01 Silence
+02 Sand Ocean
+03 Devils Forest
+04 Big Blue
+05 Port Town
+06 Sector Alpha
+07 Red Canyon
+08 Devils Forest 2
+09 Mute City 2
+0A Big Blue 2
+0B White Land
+0C Fire Field
+0D Silence 2
+0E Sector Beta
+0F Red Canyon
+10 White Land 2
+11 Mute City 2
+12 Rainbow Road
+13 Devils Forest 3
+14 Space Plant
+15 Sand Ocean 2
+16 Port Town 2
+17 Big Hand
+
+$Unlock Everything
+800CD3C8 0001

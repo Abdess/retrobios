@@ -1,0 +1,128 @@
+[2E359339-3FA5EDA6-C:50]
+Name=Chopper Attack (E)
+
+$Clear Mission Selector
+8112976C 00??
+01 1
+02 2
+03 3
+04 4
+05 5
+06 6
+07 7
+08 8
+
+$Gun 4-Way Shot
+80129A13 0004
+
+$Infinite Fuel
+81129A16 FFFF
+
+$Infinite Shield
+811299B8 03E8
+
+$Infinite Weapon\1st Position
+8012972B 0063
+
+$Infinite Weapon\2nd Position
+8012972F 0063
+
+$Infinite Weapon\3rd Position
+80129733 0063
+
+$Infinite Weapon\4th Position
+80129737 0063
+
+$Infinite Weapon\5th Position
+8012973B 0063
+
+$Max Score
+81129716 FFFF
+
+$Opens All 5 Item Slots
+8012974B 0005
+
+$Option On
+8112976A 0001
+
+$Score Attack Mode
+81129762 0001
+
+$Stage Select On
+81129766 0001
+
+$Texture Mode
+81129774 0001
+
+$Weapon Modifier\1st Position
+Note=Must to be used with the Infinite Weapon Codes & the open all 5 item slot code.
+80129729 00??
+00 Nothing
+01 AGM
+02 AAM
+03 AGAM
+04 Dummy
+05 Rocket
+06 Cluster
+07 H-Cluster
+08 H-Plasma
+
+$Weapon Modifier\2nd Position
+Note=Must to be used with the Infinite Weapon Codes & the open all 5 item slot code.
+8012972D 00??
+00 Nothing
+01 AGM
+02 AAM
+03 AGAM
+04 Dummy
+05 Rocket
+06 Cluster
+07 H-Cluster
+08 H-Plasma
+
+$Weapon Modifier\3rd Position
+Note=Must to be used with the Infinite Weapon Codes & the open all 5 item slot code.
+801297E1 00??
+00 Nothing
+01 AGM
+02 AAM
+03 AGAM
+04 Dummy
+05 Rocket
+06 Cluster
+07 H-Cluster
+08 H-Plasma
+
+$Weapon Modifier\4th Position
+Note=Must to be used with the Infinite Weapon Codes & the open all 5 item slot code.
+801297E5 00??
+00 Nothing
+01 AGM
+02 AAM
+03 AGAM
+04 Dummy
+05 Rocket
+06 Cluster
+07 H-Cluster
+08 H-Plasma
+
+$Weapon Modifier\5th Position
+Note=Must to be used with the Infinite Weapon Codes & the open all 5 item slot code.
+801297E9 00??
+00 Nothing
+01 AGM
+02 AAM
+03 AGAM
+04 Dummy
+05 Rocket
+06 Cluster
+07 H-Cluster
+08 H-Plasma
+
+$Weapon Modifier\Gun Weapon
+80129A13 00??
+00 No Weapon
+01 Normal Shot
+02 2-Way Shot
+03 3-Way Shot
+04 4-Way Shot

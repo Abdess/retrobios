@@ -1,0 +1,7 @@
+[2857674D-CC4337DA-C:45]
+Name=Nightmare Creatures (U)
+
+$Lagfix
+Note=Makes it stay at 60fps more,set CounterFactor/CountPerOp to 1.
+810C24B2 041A
+

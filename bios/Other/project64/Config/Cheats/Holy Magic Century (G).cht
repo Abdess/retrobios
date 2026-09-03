@@ -1,0 +1,27 @@
+[75FA0E14-C9B3D105-C:44]
+Name=Holy Magic Century (G)
+
+$Earn Spirits Faster
+8007D66D 0000
+
+$Have All Elements
+8107D65C 3232
+8107D65E 3232
+
+$Makes your HP 999-999
+8107D63C 03E7
+8107D63E 03E7
+
+$Makes your MP 999-999
+8107D640 03E7
+8107D642 03E7
+
+$No Random Battles
+8008E12C 0000
+8008E12E 0000
+
+$Set Agility to 999-999
+8107D644 03E7
+
+$Set Defence to 999-999
+8107D646 03E7

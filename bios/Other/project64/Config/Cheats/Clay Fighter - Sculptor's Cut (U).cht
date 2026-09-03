@@ -1,0 +1,474 @@
+[FA5A3DFF-B4C9CDB9-C:45]
+Name=Clay Fighter - Sculptor's Cut (U)
+
+$Aquadome\Player 1\Cant be Stunned
+80193D1F 0000
+
+$Aquadome\Player 1\Full Super Bar
+81193D2E 0200
+
+$Aquadome\Player 1\Infinite Health
+80193D27 00AA
+
+$Aquadome\Player 1\No Health
+80193D27 0000
+
+$Aquadome\Player 2\Cant be Stunned
+8019720F 0000
+
+$Aquadome\Player 2\Full Super Bar
+8119721E 0200
+
+$Aquadome\Player 2\Infinite Health
+80197217 00AA
+
+$Aquadome\Player 2\No Health
+80197217 0000
+
+$Backwash Bay\Player 1\Cant be Stunned
+8019447F 0000
+
+$Backwash Bay\Player 1\Full Super Bar
+8119448E 0200
+
+$Backwash Bay\Player 1\Infinite Health
+80194487 00AA
+
+$Backwash Bay\Player 1\No Health
+80194487 0000
+
+$Backwash Bay\Player 2\Cant be Stunned
+8019796F 0000
+
+$Backwash Bay\Player 2\Full Super Bar
+8119797E 0200
+
+$Backwash Bay\Player 2\Infinite Health
+80197977 00AA
+
+$Backwash Bay\Player 2\No Health
+80197977 0000
+
+$Boogerhenge, Tureen Toilet\Player 1\Cant be Stunned
+80194ECF 0000
+
+$Boogerhenge, Tureen Toilet\Player 1\Full Super Bar
+81194EDE 0200
+
+$Boogerhenge, Tureen Toilet\Player 1\Infinite Health
+80194ED7 00AA
+
+$Boogerhenge, Tureen Toilet\Player 1\No Health
+80194ED7 0000
+
+$Boogerhenge, Tureen Toilet\Player 2\Cant be Stunned
+801983BF 0000
+
+$Boogerhenge, Tureen Toilet\Player 2\Full Super Bar
+811983CE 0200
+
+$Boogerhenge, Tureen Toilet\Player 2\Infinite Health
+801983C7 00AA
+
+$Boogerhenge, Tureen Toilet\Player 2\No Health
+801983C7 0000
+
+$Camp Claynaveral, ClayNaveral Hangar, OutHouse\Player 1\Cant be Stunned
+8019422F 0000
+
+$Camp Claynaveral, ClayNaveral Hangar, OutHouse\Player 1\Full Super Bar
+8119423E 0200
+
+$Camp Claynaveral, ClayNaveral Hangar, OutHouse\Player 1\Infinite Health
+80194237 00AA
+
+$Camp Claynaveral, ClayNaveral Hangar, OutHouse\Player 1\No Health
+80194237 0000
+
+$Camp Claynaveral, ClayNaveral Hangar, OutHouse\Player 2\Cant be Stunned
+8019771F 0000
+
+$Camp Claynaveral, ClayNaveral Hangar, OutHouse\Player 2\Full Super Bar
+8119772E 0200
+
+$Camp Claynaveral, ClayNaveral Hangar, OutHouse\Player 2\Infinite Health
+80197727 00AA
+
+$Camp Claynaveral, ClayNaveral Hangar, OutHouse\Player 2\No Health
+80197727 0000
+
+$Candy Factory\Player 1\Cant be Stunned
+801945FF 0000
+
+$Candy Factory\Player 1\Full Super Bar
+8119460E 0200
+
+$Candy Factory\Player 1\Infinite Health
+80194607 00AA
+
+$Candy Factory\Player 1\No Health
+80194607 0000
+
+$Candy Factory\Player 2\Cant be Stunned
+80197AEF 0000
+
+$Candy Factory\Player 2\Full Super Bar
+81197AFE 0200
+
+$Candy Factory\Player 2\Infinite Health
+80197AF7 00AA
+
+$Candy Factory\Player 2\No Health
+80197AF7 0000
+
+$Clayribbean Cruise\Player 1\Cant be Stunned
+80193F3F 0000
+
+$Clayribbean Cruise\Player 1\Full Super Bar
+81193F4E 0200
+
+$Clayribbean Cruise\Player 1\Infinite Health
+80193F47 00AA
+
+$Clayribbean Cruise\Player 1\No Health
+80193F47 0000
+
+$Clayribbean Cruise\Player 2\Cant be Stunned
+8019742F 0000
+
+$Clayribbean Cruise\Player 2\Full Super Bar
+8119743E 0200
+
+$Clayribbean Cruise\Player 2\Infinite Health
+80197437 00AA
+
+$Clayribbean Cruise\Player 2\No Health
+80197437 0000
+
+$Dog House\Player 1\Cant be Stunned
+8019653F 0000
+
+$Dog House\Player 1\Full Super Bar
+8119654E 0200
+
+$Dog House\Player 1\Infinite Health
+80196547 00AA
+
+$Dog House\Player 1\No Health
+80196547 0000
+
+$Dog House\Player 2\Cant be Stunned
+80199A2F 0000
+
+$Dog House\Player 2\Full Super Bar
+81199A3E 0200
+
+$Dog House\Player 2\Infinite Health
+80199A37 00AA
+
+$Dog House\Player 2\No Health
+80199A37 0000
+
+$Dr. Kiln's Laboratory, Research Room, Kilns Hideout, Fiery Furnace\Player 1\Cant be Stunned
+80195AAF 0000
+
+$Dr. Kiln's Laboratory, Research Room, Kilns Hideout, Fiery Furnace\Player 1\Full Super Bar
+81195ABE 0200
+
+$Dr. Kiln's Laboratory, Research Room, Kilns Hideout, Fiery Furnace\Player 1\Infinite Health
+80195AB7 00AA
+
+$Dr. Kiln's Laboratory, Research Room, Kilns Hideout, Fiery Furnace\Player 1\No Health
+80195AB7 0000
+
+$Dr. Kiln's Laboratory, Research Room, Kilns Hideout, Fiery Furnace\Player 2\Cant be Stunned
+80198F9F 0000
+
+$Dr. Kiln's Laboratory, Research Room, Kilns Hideout, Fiery Furnace\Player 2\Full Super Bar
+81198FAE 0200
+
+$Dr. Kiln's Laboratory, Research Room, Kilns Hideout, Fiery Furnace\Player 2\Infinite Health
+80198FA7 00AA
+
+$Dr. Kiln's Laboratory, Research Room, Kilns Hideout, Fiery Furnace\Player 2\No Health
+80198FA7 0000
+
+$Freezing Fortress\Player 1\Cant be Stunned
+8019428F 0000
+
+$Freezing Fortress\Player 1\Full Super Bar
+8119429E 0200
+
+$Freezing Fortress\Player 1\Infinite Health
+80194297 00AA
+
+$Freezing Fortress\Player 1\No Health
+80194297 0000
+
+$Freezing Fortress\Player 2\Cant be Stunned
+8019777F 0000
+
+$Freezing Fortress\Player 2\Full Super Bar
+8119778E 0200
+
+$Freezing Fortress\Player 2\Infinite Health
+80197787 00AA
+
+$Freezing Fortress\Player 2\No Health
+80197787 0000
+
+$Ghastly Graveyard\Player 1\Cant be Stunned
+8019451F 0000
+
+$Ghastly Graveyard\Player 1\Full Super Bar
+8119452E 0200
+
+$Ghastly Graveyard\Player 1\Infinite Health
+80194527 00AA
+
+$Ghastly Graveyard\Player 1\No Health
+80194527 0000
+
+$Ghastly Graveyard\Player 2\Cant be Stunned
+80197A0F 0000
+
+$Ghastly Graveyard\Player 2\Full Super Bar
+81197A1E 0200
+
+$Ghastly Graveyard\Player 2\Infinite Health
+80197A17 00AA
+
+$Ghastly Graveyard\Player 2\No Health
+80197A17 0000
+
+$Kooky Courtyard\Player 1\Cant be Stunned
+801946FF 0000
+
+$Kooky Courtyard\Player 1\Full Super Bar
+8119470E 0200
+
+$Kooky Courtyard\Player 1\Infinite Health
+80194707 00AA
+
+$Kooky Courtyard\Player 1\No Health
+80194707 0000
+
+$Kooky Courtyard\Player 2\Cant be Stunned
+80197BEF 0000
+
+$Kooky Courtyard\Player 2\Full Super Bar
+81197BFE 0200
+
+$Kooky Courtyard\Player 2\Infinite Health
+80197BF7 00AA
+
+$Kooky Courtyard\Player 2\No Health
+80197BF7 0000
+
+$Other Codes\Debug Mode
+Note=With this code, Press C-Up & C-Down to pick your stage.
+810AA1A6 0001
+
+$Other Codes\Difficulty Modifier
+810AE40A 00??
+00 Cookie
+01 Easy
+02 Normal
+03 Dude
+04 Psycho
+
+$Other Codes\Have Booger Man
+810AA12A 0001
+
+$Other Codes\Have Earth Worm Jim
+810AA0E2 0001
+
+$Other Codes\Have High Five
+810AA0BE 0001
+
+$Other Codes\Have Sumo Santa
+810AA106 0001
+
+$Other Codes\Health Meters Modifier
+800AE5EF 00??
+00 Off
+01 On
+
+$Other Codes\Portraits Modifier
+800AE613 00??
+00 Off
+01 On
+
+$Other Codes\Spillits Modifier
+800AE447 00??
+00 Normal
+01 Psycho
+
+$Other Codes\Stun Meters Modifier
+800AE5FB 00??
+00 Off
+01 On
+
+$Other Codes\Super Meters Modifier
+800AE607 00??
+00 Off
+01 On
+
+$Other Codes\Throws & Holds Modifier
+800AE42F 00??
+00 On
+01 Off
+
+$Other Codes\Time Limit Modifier
+800AE423 00??
+00 On
+01 Off
+
+$Other Codes\VS. Arena Select Modifier
+800AE43B 00??
+00 Random
+01 Normal
+
+$Rubbage Reef Code\Player 1\Cant be Stunned
+8019430F 0000
+
+$Rubbage Reef Code\Player 1\Full Super Bar
+8119431E 0200
+
+$Rubbage Reef Code\Player 1\Infinite Health
+80194317 00AA
+
+$Rubbage Reef Code\Player 1\No Health
+80194317 0000
+
+$Rubbage Reef Code\Player 2\Cant be Stunned
+801977FF 0000
+
+$Rubbage Reef Code\Player 2\Full Super Bar
+8119780E 0200
+
+$Rubbage Reef Code\Player 2\Infinite Health
+80197807 00AA
+
+$Rubbage Reef Code\Player 2\No Health
+80197807 0000
+
+$Santa's Toy Factory\Player 1\Cant be Stunned
+80194B2F 0000
+
+$Santa's Toy Factory\Player 1\Full Super Bar
+81194B3E 0200
+
+$Santa's Toy Factory\Player 1\Infinite Health
+80194B37 00AA
+
+$Santa's Toy Factory\Player 1\No Health
+80194B37 0000
+
+$Santa's Toy Factory\Player 2\Cant be Stunned
+8019801F 0000
+
+$Santa's Toy Factory\Player 2\Full Super Bar
+8119802E 0200
+
+$Santa's Toy Factory\Player 2\Infinite Health
+80198027 00AA
+
+$Santa's Toy Factory\Player 2\No Health
+80198027 0000
+
+$Santa's Workshop, Refuse Room, Grotto Gulch\Player 1\Cant be Stunned
+801939FF 0000
+
+$Santa's Workshop, Refuse Room, Grotto Gulch\Player 1\Full Super Bar
+81193A0E 0200
+
+$Santa's Workshop, Refuse Room, Grotto Gulch\Player 1\Infinite Health
+80193A07 00AA
+
+$Santa's Workshop, Refuse Room, Grotto Gulch\Player 1\No Health
+80193A07 0000
+
+$Santa's Workshop, Refuse Room, Grotto Gulch\Player 2\Cant be Stunned
+80196EEF 0000
+
+$Santa's Workshop, Refuse Room, Grotto Gulch\Player 2\Full Super Bar
+81196EFE 0200
+
+$Santa's Workshop, Refuse Room, Grotto Gulch\Player 2\Infinite Health
+80196EF7 00AA
+
+$Santa's Workshop, Refuse Room, Grotto Gulch\Player 2\No Health
+80196EF7 0000
+
+$Spooky Spire, Happy Harry's Hut, Mudville Mansion\Player 1\Cant be Stunned
+8019433F 0000
+
+$Spooky Spire, Happy Harry's Hut, Mudville Mansion\Player 1\Full Super Bar
+8119434E 0200
+
+$Spooky Spire, Happy Harry's Hut, Mudville Mansion\Player 1\Infinite Health
+80194347 00AA
+
+$Spooky Spire, Happy Harry's Hut, Mudville Mansion\Player 1\No Health
+80194347 0000
+
+$Spooky Spire, Happy Harry's Hut, Mudville Mansion\Player 2\Cant be Stunned
+8019782F 0000
+
+$Spooky Spire, Happy Harry's Hut, Mudville Mansion\Player 2\Full Super Bar
+8119783E 0200
+
+$Spooky Spire, Happy Harry's Hut, Mudville Mansion\Player 2\Infinite Health
+80197837 00AA
+
+$Spooky Spire, Happy Harry's Hut, Mudville Mansion\Player 2\No Health
+80197837 0000
+
+$Tribal Tower\Player 1\Cant be Stunned
+80193A9F 0000
+
+$Tribal Tower\Player 1\Full Super Bar
+81193AAE 0200
+
+$Tribal Tower\Player 1\Infinite Health
+80193AA7 00AA
+
+$Tribal Tower\Player 1\No Health
+80193AA7 0000
+
+$Tribal Tower\Player 2\Cant be Stunned
+80196F8F 0000
+
+$Tribal Tower\Player 2\Full Super Bar
+81196F9E 0200
+
+$Tribal Tower\Player 2\Infinite Health
+80196F97 00AA
+
+$Tribal Tower\Player 2\No Health
+80196F97 0000
+
+$VS. Mode\Player 1\Cant be Stunned
+8019195F 0000
+
+$VS. Mode\Player 1\Full Super Bar
+8119916E 0200
+
+$VS. Mode\Player 1\Infinite Health
+80199167 00AA
+
+$VS. Mode\Player 1\No Health
+80199167 0000
+
+$VS. Mode\Player 2\Cant be Stunned
+80194E4F 0000
+
+$VS. Mode\Player 2\Full Super Bar
+81194E5E 0200
+
+$VS. Mode\Player 2\Infinite Health
+80194E57 00AA
+
+$VS. Mode\Player 2\No Health
+80194E57 0000

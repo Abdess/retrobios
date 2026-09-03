@@ -1,0 +1,60 @@
+[EAB7B429-BAC92C57-C:45]
+Name=Ready 2 Rumble Boxing (U)
+
+$Have All Characters
+5000125C 0000
+810EC938 0000
+5000125C 0000
+810EC93A 0003
+
+$Infinite\Money
+810EC932 FFFF
+
+$Infinite\Time
+810E7596 0E10
+
+$Player 1\Health
+810D9F78 0000
+810D9F7A 00??
+64 Infinite
+00 No Health
+
+$Player 1\RUMBLE
+810D9F84 0000
+810D9F86 00??
+30 Max
+00 Never Rumble
+
+$Player 1\Stamina
+810D9F7C 0000
+810D9F7E 00??
+64 Infinite
+00 No Stamina
+
+$Player 2\Health
+810DA790 0000
+810DA792 00??
+64 Infinite
+00 No Health
+
+$Player 2\RUMBLE
+810DA7A0 0000
+810DA7A2 00??
+30 Max
+00 Never Rumble
+
+$Player 2\Stamina
+810DA794 0000
+810DA796 00??
+64 Infinite
+00 No Stamina
+
+$Sudden Death Mode\Player 1
+D00E7596 03D7
+810DAF78 0000
+810D9F7A 0001
+
+$Sudden Death Mode\Player 2
+D00E7596 03D7
+810DA790 0000
+810DA792 0001

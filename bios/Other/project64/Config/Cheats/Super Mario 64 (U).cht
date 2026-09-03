@@ -1,0 +1,195 @@
+[635A2BFF-8B022326-C:45]
+Name=Super Mario 64 (U)
+
+$[Slot A Codes]\Have All\120 Stars
+Note=Have\120 Stars,once the Code is activated, you will see it as a new option in Save Slot A.This will Have\the Cannon open already to get upto Yoshi on the Roof. but make sure to save the game after collecting Red Coins and turn this code off before saving. you will now Have\it all saved to mempak
+80207723 0001
+8020770B 00C7
+50001101 0000
+8020770C 00FF
+
+$[Slot A Codes]\Have All\Key doors unlocked (and mote empty)
+8020770A 007E
+
+$[Slot A Codes]\Have All\Max 100 Coin Records For All Levels
+50000F01 0000
+80207725 0064
+
+$[Slot B Codes]\Have All\120 Stars
+Note=Have\120 Stars,once the Code is activated, you will see it as a new option in Save Slot A.This will Have\the Cannon open already to get upto Yoshi on the Roof. but make sure to save the game after collecting Red Coins and turn this code off before saving. you will now Have\it all saved to mempak
+80207793 0001
+8020777B 00C7
+50001101 0000
+8020777C 00FF
+
+$[Slot B Codes]\Have All\Key doors unlocked (and mote empty)
+8020777A 007E
+
+$[Slot B Codes]\Have All\Max 100 Coin Records For All Levels
+50000F01 0000
+80207795 0064
+
+$[Slot C Codes]\Have All\120 Stars
+Note=Have\120 Stars,once the Code is activated, you will see it as a new option in Save Slot A.This will Have\the Cannon open already to get upto Yoshi on the Roof. but make sure to save the game after collecting Red Coins and turn this code off before saving. you will now Have\it all saved to mempak
+80207803 0001
+802077EB 00C7
+50001101 0000
+802077EC 00FF
+
+$[Slot C Codes]\Have All\Key doors unlocked (and mote empty)
+802077EA 007E
+
+$[Slot C Codes]\Have All\Max 100 Coin Records For All Levels
+50000F01 0000
+80207805 0064
+
+$[Slot D Codes]\Have All\120 Stars
+Note=Have\120 Stars,once the Code is activated, you will see it as a new option in Save Slot A.This will Have\the Cannon open already to get upto Yoshi on the Roof. but make sure to save the game after collecting Red Coins and turn this code off before saving. you will now Have\it all saved to mempak
+80207873 0001
+8020785B 00C7
+50001101 0000
+8020785C 00FF
+
+$[Slot D Codes]\Have All\Key doors unlocked (and mote empty)
+8020785A 007E
+
+$[Slot D Codes]\Have All\Max 100 Coin Records For All Levels
+50000F01 0000
+80207875 0064
+
+$Don't Hurt Mario\Falling
+8033B22C 00E8
+8133B178 FFFF
+
+$Don't Hurt Mario\Monsters
+A033B197 0001
+
+$Funny Mario Options\Mario Walks On Lava
+81250900 1000
+
+$Funny Mario Options\Mario Walks On Sand
+81255490 1000
+8125572C 1000
+8125572E 0031
+
+$Funny Mario Options\Mario Walks On Water
+81381764 0800
+81381766 0024
+81000090 3C04
+81000092 8034
+81000094 8484
+81000096 B1E6
+81000098 4484
+8100009A 3000
+810000A0 4680
+810000A2 3120
+810000A4 4604
+810000A6 903C
+810000AC 4500
+810000AE 0002
+810000B4 4600
+810000B6 2486
+810000B8 080E
+810000BA 05DB
+810000BC E712
+
+$Funny Mario Options\Mario's Cap\Off & in His Hand
+Note=Here you can Choose Options with Mario with His Cap off & in His Hand,Do not use with any other Mario with/without Options,Use only one at a time
+8033B177 00??
+20 Cap In Hand
+22 Invisible Mario Cap In Hand
+24 Metal Mario Cap In Hand
+26 Invisible Metal Mario Cap In Hand
+28 Flying Mario Cap In Hand
+
+$Funny Mario Options\Mario's Cap\On & An Extra in His Hand
+Note=Here you can Choose Options with Mario with His Cap on & An Extra in His Hand,Do not use with any other Mario with/without Options,Use only one at a time
+8033B177 00??
+30 Cap In Hand
+32 Invisible Mario Cap In Hand
+34 Metal Mario Cap In Hand
+36 Invisible Metal Mario Cap In Hand
+38 Flying Mario Cap In Hand
+
+$Have\Debug Mode
+A032D598 0001:0000
+
+$Have\Level Select
+A032D58C 0001
+
+$Have\Turbo Running Speed
+8033B1C3 00FF
+
+$Infinite\Energy & Breath
+8033B21E 0008
+
+$Infinite\Lives
+8033B21D 0064
+
+$Level Select
+Note=Select a Level. Jump Into a Painting. Press A at the Stars Collected Screen. As Stats are fading hold L, and you'll jump to the level you've selected.
+D033AFA1 0020
+A032DDF9 00??
+01 Intro
+04 Big Boo's Haunt
+05 Cool Cool Mountain
+06 Mushroom Castle
+07 Hazy Maze Cave
+08 Shifting Sand Land
+09 Bob omb Battlefield
+0A Snowman's Land
+0B Wet Dry World
+0C Jolly Roger Bay
+0D Tiny Huge World
+0E Tick tock Clock
+0F Rainbow Ride
+10 Mushroom Castle Field
+11 Bowser In The Dark World
+12 Vanish Cap Under The Moat
+13 Bowser In The Fire Sea
+14 The Secret Aquarium
+15 Bowser In The Sky
+16 Lethal Lava Land
+17 Dire Dire Docks
+18 Whomp's Fortress
+19 The End
+1A Castle Courtyard
+1B The Princess's Secret Slide
+1C Cavern Of The Metal Cap
+1D Tower Of The Wing Cap
+1E Bowser In The Dark World Boss
+1F Wing Mario Over The Rainbow
+21 Bowser In The Fire Sea Boss
+22 Bowser In The Sky Boss
+24 Tall Tall Mountain
+
+$Mario's Cap\Off Options
+Note=Here you can Choose Options with Mario without His Cap on,Do not use with any other Mario with/without Options,Use only one at a time
+8033B177 00??
+01 Mario No Cap
+02 Invisible Mario
+04 Metal Mario
+08 Flying Mario
+0A Invisible Flying Mario
+0D Metal Flying Mario
+0F Invisible Metal Flying Mario
+
+$Mario's Cap\On Options
+Note=Here you can Choose Options with Mario with His Cap on,Do not use with any other Mario with/without Options,Use only one at a time
+8033B177 00??
+12 Invisible Mario
+15 Metal Mario
+16 Invisible Metal Mario
+19 Flying Mario
+
+$Press GS For 255 Coins
+8933B218 00FF
+
+$Press L To Levitate
+Note=Press L to levitate & Let go to land
+D033AFA1 0020
+8133B1BC 4220
+D033AFA1 0020
+8133B17C 0300
+D033AFA1 0020
+8133B17E 0880

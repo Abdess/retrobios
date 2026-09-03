@@ -1,0 +1,561 @@
+﻿/*********************************************************************************
+* Meta Information                                                               *
+*********************************************************************************/
+//About DLL
+#1  #  "Català"		// LANGUAGE ID
+#2  #  "Hiro5"			// Author
+#3  #  "2.2"			// Version
+#4  #  "18 de febrer de 2018"		// Date
+
+//About DLL Dialog
+#5  #  "Idioma actual"
+#6  #  "Autor"
+#7  #  "Versió"
+#8  #  "Data"
+#9  #  "Visiteu el lloc web"
+#10 #  "Base de dades de ROMs (.RDB)"
+#11 #  "Fitxer de Trucs (.CHT)"
+#12 #  "Informació estesa de la ROM (.RDX)"
+
+//About INI title
+#20 #  "Quant als fitxers de configuració"
+
+/*********************************************************************************
+* Menu                                                                           *
+*********************************************************************************/
+//File Menu
+#100#  "&Fitxer"
+#101#  "&Obre una ROM"
+#102#  "&Informació de la ROM...."
+#103#  "Comença l'emulació"
+#104#  "&Finalitza l'emulació"
+#105#  "Tria directori de ROMs..."
+#106#  "Actualitza llista de ROMs"
+#107#  "ROMs recents"
+#108#  "Directoris de ROMs recents"
+#109#  "&Surt"
+
+//System Menu
+#120#  "&Sistema"
+#121#  "&Reinicia"
+#122#  "&Pausa"
+#123#  "Captura pantalla"
+#124#  "Limitador de velocitat"
+#125#  "&Desa"
+#126#  "Anomena i desa..."
+#127#  "&Restaura"
+#128#  "Carrega..."
+#129#  "&Estat desat actual"
+#130#  "Trucs..."
+#131#  "Botó de GameShark"
+#132#  "Continua"
+#133#  "Reinicia el &Programari"
+#134#  "Reinicia el &Maquinari"
+#135#  "Intercanvia el &Disc"
+
+//Options Menu
+#140#  "&Opcions"
+#141#  "&Pantalla completa"
+#142#  "&Sempre a sobre"
+#143#  "Configura el complement de vídeo..."
+#144#  "Configura el complement d'àudio..."
+#145#  "Configura el complement del controlador..."
+#146#  "Configura el complement RSP..."
+#147#  "Mostra % d'ús de CPU"
+#148#  "&Paràmetres..."
+
+//Debugger Menu
+#160#  "&Depurador"
+
+//Language Menu
+#175#  "&Idioma"
+
+//Help Menu
+#180#  "&Ajuda"
+#181#  "Quant als fitxers &INI"
+#182#  "&Quant al Project 64"
+#183# "&Fòrum de suport"
+#184# "&Lloc web"
+
+//Current Save Slot menu
+#190#  "Per defecte"
+#191#  "Ranura 1"
+#192#  "Ranura 2"
+#193#  "Ranura 3"
+#194#  "Ranura 4"
+#195#  "Ranura 5"
+#196#  "Ranura 6"
+#197#  "Ranura 7"
+#198#  "Ranura 8"
+#199#  "Ranura 9"
+#200#  "Ranura 10"
+#201#  "Ranura de desat (%ws) seleccionada"
+
+//Pop up Menu
+#210#  "Juga el joc"
+#211#  "Informació de ROM"
+#212#  "Edita els paràmetres del joc"
+#213#  "Edita els trucs"
+#214#  "Complement de vídeo"
+#215#  "Juga el joc amb disc"
+
+//Alternate Name to save Slot
+#220#  "Desa a la ranura per defecte"
+#221#  "Desa a la ranura 1"
+#222#  "Desa a la ranura 2"
+#223#  "Desa a la ranura 3"
+#224#  "Desa a la ranura 4"
+#225#  "Desa a la ranura 5"
+#226#  "Desa a la ranura 6"
+#227#  "Desa a la ranura 7"
+#228#  "Desa a la ranura 8"
+#229#  "Desa a la ranura 9"
+#230#  "Desa a la ranura 10"
+
+// Menu Descriptions
+#250#  "Obre una imatge ROM de Nintendo 64"
+#251#  "Mostra informació de la imatge carregada"
+#252#  "Inicia l'emulació de la imatge ROM carregada"
+#253#  "Atura l'emulació de la imatge ROM carregada"
+#254#  "Selecciona el directori de ROMs"
+#255#  "Actualitza la llista de ROMs en l'explorador de ROMs"
+#256#  "Tanca aquesta aplicació"
+#257#  "Recarrega la imatge ROM actual (recarrega qualsevol canvi de paràmetres)"
+#258#  "Pausa/Continua l'emulació de la ROM en execució actual"
+#259#  "Genera una imatge Bitmap de la pantalla actual"
+#260#  "Limita els quadres per segon a la velocitat correcta de la n64"
+#261#  "Crea una instantània del sistema actual per un desat ràpid"
+#262#  "Crea una instantània del sistema actual seleccionant la ubicació del fitxer"
+#263#  "Carrega una instantània ràpida desada"
+#264#  "Tria un fitxer d'instantània per carregar"
+#265#  "Activa/Desactiva trucs del GameShark"
+#266#  "El botó de GameShark s'utilitza amb trucs específics"
+#267#  "Canvia l'emulació de mode en finestra a pantalla completa"
+#268#  "Fa que la finestra estigui per sobre de totes les altres"
+#269#  "Canvia els paràmetres dins del complement de vídeo"
+#270#  "Canvia els paràmetres dins del complement d'àudio"
+#271#  "Canvia els paràmetres dins del complement de controladors (i.e. assigna les tecles)"
+#272#  "Canvia els paràmetres dins del complement RSP"
+#273#  "Mostra l'ús de CPU de l'emulador dividit en diferents recursos"
+#274#  "Mostra/Canvia paràmetres per aquesta aplicació"
+#275#  "Mostra el Manual per l'aplicació"
+#276#  "Mostra les PMF per l'aplicació"
+#278#  "Quant a l'aplicació i als autors"
+#277#  "Quant als autors dels fitxers de suport"
+#279#  "Obre aquesta imatge de ROM oberta anteriorment"
+#280#  "Tria aquest directori com el directori de ROMs"
+#281#  "Canvia l'aplicació per utilitzar aquest idioma"
+#282#  "Tria aquesta ubicació de desat ràpid"
+#283#  "Comença el joc seleccionat"
+#284#  "Informació del joc seleccionat"
+#285#  "Edita els paràmetres pel joc seleccionat"
+#286#  "Edita els trucs per joc seleccionat"
+
+/*********************************************************************************
+* ROM Browser                                                                    *
+*********************************************************************************/
+//ROM Browser Fields
+#300#  "Nom de fitxer"
+#301#  "Nom intern"
+#302#  "Nom bo"
+#303#  "Estat"
+#304#  "Mida de ROM"
+#305#  "Notes (Nucli)"
+#306#  "Notes (complements per defecte)"
+#307#  "Notes (Usuari)"
+#308#  "ID de cartutx"
+#309#  "Tipus de suport"
+#310#  "País"
+#311#  "Desenvolupador"
+#312#  "CRC1"
+#313#  "CRC2"
+#314#  "Xip CIC"
+#315#  "Data de sortida"
+#316#  "Gènere"
+#317#  "Jugadors"
+#318#  "Força resposta"
+#319#  "Format de fitxer"
+
+//Select ROM
+#320#  "Selecciona directori de ROMs actual"
+
+//Messages
+#340#  "ROM malmesa? Utilitza GoodN64 i comprova que la RDB estigui actualitzada"
+
+/*********************************************************************************
+* Options                                                                        *
+*********************************************************************************/
+//Options Title
+#400#  "Paràmetres"
+
+//Tabs
+#401#  "Complements"
+#402#  "Directoris"
+#403#  "Opcions"
+#404#  "Selecció de ROM"
+#405#  "Avançat"
+#406#  "Paràmetres generals"
+#407#  "Integració del sistema"
+#408#  "Notes"
+#409#  "Dreceres de teclat"
+#410#  "Estat"
+#411#  "Recompilador"
+
+//Plugin Dialog
+#420#  "Quant a"
+#421#  " Complement de processador de senyal de realitat: "
+#422#  " Complement de vídeo (gràfics): "
+#423#  " Complement d'àudio (so): "
+#424#  " Complement d'entrada (controlador): "
+#425#  "HLE de vídeo"
+#426#  "HLE d'àudio"
+#427#  "** Utilitza complement del sistema **"
+
+//Directory Dialog
+#440#  " Directori de complements: "
+#441#  " Directori de ROMs: "
+#442#  " Autodesats de N64: "
+#443#  " Instantànies: "
+#444#  " Captures de pantalla: "
+#445#  "Carpeta des d'on es va obrir la darrera ROM."
+#446#  "Seleccioneu directori de complements"
+#447#  "Seleccioneu directori de ROMs"
+#448#  "Seleccioneu directori d'autodesats"
+#449#  "Seleccioneu directori de desats d'instantànies"
+#450#  "Seleccioneu directori d'imatges"
+#451#  " Directori de paquets de textures: "
+#452#  "Seleccioneu directori de paquets de textures"
+
+//Options Dialog
+#460#  "Posa en pausa quan la finestra no està activa"
+#461#  "Canvia a pantalla completa en carregar una ROM"
+#462#  "Amaga els paràmetres avançats"
+#463#  "Recorda els trucs seleccionats"
+#464#  "Desactiva l'estalvi de pantalla mentre s'executa una ROM"
+#465#  "Mostra la velocitat"
+#466#  "Mostra la velocitat:"
+#467#  "Comprova si Project64 ja s'està executant"
+#468#  "Directori únic de desats de joc"
+#469#  "Camí de la ROM 64DD IPL:"
+
+//ROM Browser Tab
+#480#  "Límit de ROMs recordades (Màx 10):"
+#481#  "ROMs"
+#482#  "Límit de Dirs de ROMs recordades (Màx 10):"
+#483#  "dirs"
+#484#  "Empra explorador de ROMs"
+#485#  "Cerca subdirectoris"
+#486#  "Camps disponibles:"
+#487#  "Mostra els camps en aquest ordre:"
+#488#  "Afegeix ->"
+#489#  "<- Esborra"
+#490#  "Amunt"
+#491#  "Avall"
+#492#  "Refresca el navegador automàticament"
+
+//Advanced Options
+#500#  "La majoria d'aquests canvis no faran efecte fins que s'obri una nova ROM o fins a reiniciar l'actual ROM."
+#501#  "Predeterminats de nucli"
+#502#  "Estil de nucli de CPU:"
+#503#  "Mètode de codi auto-mod:"
+#504#  "Mida de memòria per defecte:"
+#505#  "Enllaçat de bloc avançat:"
+#506#  "Iniciar l'emulació quan s'obri la ROM"
+#507#  "Sobreescriu sempre els paràmetres per defecte amb els de l'INI"
+#508#  "Comprimeix automàticament els estats desats"
+#509#  "Activa el depurador"
+#510#  "Mem. cau"
+#511#  "PI DMA"
+#512#  "Inici canviat"
+#513#  "Memòria protegida"
+#514#  "Desmapat TLB"
+
+//ROM Options
+#520#  "Estil de nucli de CPU:"
+#521#  "Refresc d'entrada de vídeo:"
+#522#  "Mida de memòria:"
+#523#  "Enllaçat de blocs avançat:"
+#524#  "Tipus de desat per defecte:"
+#525#  "Factor de comptador:"
+#526#  "Memòria de compilació més gran"
+#527#  "Empra TLB"
+#528#  "Registra la mem. cau"
+#529#  "Retard d'interrupció SI:"
+#530#  "Modificació d'SP"
+#531#  "Per defecte"
+#532#  "Senyal d'àudio RSP"
+#533#  "Sincr. d'àudio arreglada"
+#534#  "Funció de mètode de cerca:"
+#535#  "Mètode de codi auto-modificant"
+#536#  "Sincr. utilitzant l'àudio"
+#537#  "Compta AI per byte"
+#538#  "Màquina 32-bit"
+#539#  "Retard d'interrupció DP"
+
+//Core Styles
+#540#  "Intèrpret"
+#541#  "Recompilador"
+#542#  "Sincronitza nuclis"
+
+//Self Mod Methods
+#560#  "Cap"
+#561#  "Mem. cau"
+#562#  "Protegeix memòria"
+#563#  "Comprova memòria i mem. cau"
+#564#  "Canvia memòria i mem. cau"
+#565#  "Comprova memòria avançada"
+#566#  "Neteja codi en mem. cau"
+
+//Function Lookup method
+#570#  "Taula de cerca física"
+#571#  "Taula de cerca virtual"
+#572#  "Canvia la memòria"
+
+//RDRAM Size
+#580#  "4 MB"
+#581#  "8 MB"
+
+//Advanced Block Linking
+#600#  "Encès"
+#601#  "Apagat"
+
+//Save Type
+#620#  "Primer tipus de desat usat"
+#621#  "EEPROM de 4 kbits"
+#622#  "EEPROM de 16 kbits"
+#623#  "SRAM"
+#624#  "FlashRAM de 128kbytes"
+
+//Shell Integration Tab
+#640#  "Associació d'extensions de fitxer:"
+
+//ROM Notes
+#660#  "Estat de ROM:"
+#661#  "Nota de nucli:"
+#662#  "Nota de complement:"
+
+// Accelerator Selector
+#680#  "Estat de CPU:"
+#681#  "Element de menú:"
+#682#  "Claus actuals:"
+#683#  "Seleccioneu la nova clau de drecera:"
+#684#  "Assignada actualment a:"
+#685#  "Assigna"
+#686#  "Esborra"
+#687#  "Reinicia-ho tot"
+#688#  "No s'està jugant"
+#689#  "S'està jugant"
+#690#  "S'està jugant en finestra"
+#691#  "S'està jugant a pantalla completa"
+#692#  "Detecta tecla"
+
+// Frame Rate Option
+#700#  "Interrupcions vertical per segon"
+#701#  "Mostra llistes per segon"
+#702#  "% de velocitat completa"
+
+// Increase speed
+#710#  "Augmenta velocitat de joc"
+#711#  "Disminueix velocitat de joc"
+
+//Bottom page buttons
+#720#  "Reinicia pàg."
+#721#  "Reinicia tot"
+#722#  "Aplica"
+#723#  "Tanca"
+
+/*********************************************************************************
+* ROM Information                                                                *
+*********************************************************************************/
+//ROM Info Title
+#800#  "Informació de ROM"
+
+//ROM Info Text
+#801#  "Nom de ROM:"
+#802#  "Nom de fitxer:"
+#803#  "Ubicació:"
+#804#  "Mida de ROM:"
+#805#  "ID de cartutx:"
+#806#  "Tipus de suport:"
+#807#  "País:"
+#808#  "CRC1:"
+#809#  "CRC2:"
+#810#  "Xip CIC:"
+#811#  "MD5:"
+
+/*********************************************************************************
+* Cheats                                                                         *
+*********************************************************************************/
+//Cheat List
+#1000#  "Trucs"
+#1001#  "Trucs:"
+#1002#  " Notes: "
+#1003#  "Marca-ho tot"
+#1004#  "Desmarca-ho tot"
+
+//Add Cheat
+#1005#  "Afegeix truc"
+#1006#  "Nom:"
+#1007#  "Codi:"
+#1008#  "Insereix"
+#1009#  "Neteja"
+#1010#  " Notes del truc: "
+#1011#  "Afegeix a la DB"
+
+//Code extension
+#1012#  "Extensions de codi"
+#1013#  "Trieu un valor per:"
+#1014#  "D'acord"
+#1015#  "Cancel·la"
+
+//Digital Value
+#1016#  "Dígit de quantitat"
+#1017#  "Trieu un valor per:"
+#1018#  "&Valor"
+#1019#  "de"
+#1020#  "a"
+#1021#  "&Notes:"
+#1022#  "Afegeix truc"
+#1023#  "Nou truc"
+#1024#  "<adreça> <valor>"
+#1025#  "Opcions:"
+#1026#  "<valor> <etiqueta>"
+
+//Edit Cheat
+#1027#  "Edita el truc"
+#1028#  "Actualitza el truc"
+#1029#  "El truc s'ha modificat.\n\nVoleu actualitzar?"
+#1030#  "Truc actualitzat"
+
+//Cheat Popup Menu
+#1040#  "Afegeix nou truc..."
+#1041#  "Edita"
+#1042#  "Esborra"
+
+// short-cut editor
+#1100#  "Reinicia dreceres"
+#1101#  "Segur que voleu reiniciar les dreceres?\n\nAquesta acció no es podrà desfer."
+#1102#  "Menú de Fitxer"
+#1103#  "Menú de Sistema"
+#1104#  "Opcions"
+#1105#  "Ranures de desat"
+
+/*********************************************************************************
+* Support Window                                                                 *
+*********************************************************************************/
+#1200#  "Suport del Project64"
+#1201#  "Project64 és un paquet de programari dissenyat per emular el sistema de videojocs Nintendo64 en un PC basat en Microsoft Windows. Això permet reproduir programari N64 real de la mateixa manera que seria sota el sistema de maquinari original.\n\nSi us agrada Project64 i n'heu tret algun valor doneu suport a project64 com una manera de donar les gràcies, o per desitjar que continuï millorant.\n\nSi heu donat suport al project64:"
+#1202#  "Introdueix el codi de notificació"
+#1203#  "Suport del Project64"
+#1204#  "Continua"
+#1205#  "Introduïu el codi de suport"
+#1206#  "Codi de suport incorrecte"
+#1207#  "Gràcies"
+#1208#  "Introdueix el codi"
+#1209#  "Introduïu el codi en l'email"
+#1210#  "D'acord"
+#1211#  "Cancel·la"
+
+/*********************************************************************************
+* Messages                                                                       *
+*********************************************************************************/
+#2000#  "*** CPU EN PAUSA ***"
+#2001#  "CPU continuat"
+#2002#  "Es troba en un bucle permanent i no pot sortir.\nL'emulació s'aturarà ara.\n\nComproveu la ROM i els paràmetres de ROM."
+#2003#  "No s'ha pogut assignar memòria"
+#2004#  "Ha desaparegut o no és vàlid el complement de vídeo seleccionat o per defecte.\n\nComproveu que teniu com a mínim un fitxer de complement compatible en la carpeta de complements."
+#2005#  "Ha desaparegut o no és vàlid el complement d'àudio seleccionat o per defecte.\n\nComproveu que teniu com a mínim un fitxer de complement compatible en la carpeta de complements."
+#2006#  "Ha desaparegut o no és vàlid el complement d'RSP seleccionat o per defecte.\n\nComproveu que teniu Project64 instal·lat adequadament amb un camí de complements vàlid."
+#2007#  "Ha desaparegut o no és vàlid el complement d'entrada seleccionat o per defecte.\n\nComproveu que teniu com a mínim un fitxer de complement compatible en la carpeta de complements."
+#2008#  "No s'ha pogut carregar el complement:"
+#2009#  "No s'ha pogut carregar la paraula\n\nComproveu la ROM i els paràmetres de ROM."
+#2010#  "No s'ha pogut obrir el fitxer de desat"
+#2011#  "No s'ha pogut obrir l'EEPROM"
+#2012#  "No s'ha pogut obrir el FlashRAM"
+#2013#  "No s'ha pogut obrir el mempak"
+#2014#  "Ha fallat l'intent d'obrir el fitxer zip.\nFitxer zip desaparegut o malmès - comproveu el camí i el fitxer.\n\nPotser necessitareu reiniciar l'aplicació."
+#2015#  "Ha fallat l'intent d'obrir el fitxer."
+#2016#  "S'ha produït un error en provar d'obrir el fitxer zip."
+#2017#  "El fitxer carregat no sembla que sigui una ROM de Nintendo 64 vàlida.\n\nVerifiqueu les ROMs amb GoodN64."
+#2018#  "País desconegut"
+#2019#  "Xip CIC desconegut"
+#2020#  "Format de fitxer desconegut"
+#2021#  "Acció de memòria desconeguda\n\nEmulació aturada"
+#2022#  "OpCode R4300i no gestionat a"
+#2023#  "Executant des d'un espai no-mapat.\n\nVerifiqueu la ROM i els paràmetres de la ROM."
+#2024#  "Sembla que l'estat desat no correspon a la ROM en execució.\n\nEls estats desats s'han de desar i carregar entre ROMs 100% idèntiques,\nen particular la REGIÓ i la VERSIÓ han de ser les mateixes.\nCarregant aquest estat és com provocar una fallida al joc o a l'emulador.\n\nSegur que voleu continuar carregant?"
+#2025#  "Error"
+#2026#  "No s'ha trobat la seqüència de copyright en el LUT.  El joc deixarà de funcionar."
+#2027#  "Fallida de protecció de còpia"
+#2028#  "Canviar un complement cal que Project64 reinicii una ROM en execució.\nSi no vols perdre la teva posició, respon No i fes un desat d'estat primer.\n\nVoleu canviar els complements i reiniciar el joc ara?"
+#2029#  "Canvia complements"
+#2030#  "Emulació finalitzada"
+#2031#  "Emulació iniciada"
+#2032#  "No s'ha pogut carregar l'estat desat"
+#2033#  "S'ha carregat l'estat desat"
+#2034#  "S'ha desat l'estat actual a"
+#2035#  "Ranura d'estat desat"
+#2036#  "Imatge d'intercanvi d'octets"
+#2037#  "Triant imatge de N64"
+#2038#  "Carregat"
+#2039#  "Carregant imatge"
+#2040#  "No es pot obrir cap ROM perquè els complements no s'han iniciat correctament"
+#2041#  "Esteu realment segur que voleu esborrar això?"
+#2042#  "Esborra el truc"
+#2043#  "El nom del truc ja es troba en ús"
+#2044#  "Heu arribat al límit màxim de trucs per aquesta ROM"
+#2045#  "Inicialitzant complement"
+#2046#  "No heu seleccionat una clau virtual per assignar a l'element de menú."
+#2047#  "Necessiteu seleccionar un element de menú per assignar a aquesta acció."
+#2048#  "La drecera ja està assignada a un altre element de menú."
+#2049#  "No s'ha seleccionat cap drecera per esborrar."
+#2050#  "ROM carregada. Esperant per iniciar l'emulació."
+#2051#  "La versió beta de Project64 només és pels membres.\n\nSi teniu un compte a pj64.net, no hauríeu de veure aquest error!!\nContacteu amb nosaltres a la web."
+#2052#  "Error del programa"
+#2053#  "No s'ha pogut trobar el fitxer dins del fitxer 7z"
+#2054#  "Emulació de baix nivell (LLE) de vídeo"
+#2055#  "L'LLE de vídeo no és per un ús genèric!!!\nÉs aconsellable que només utilitzis això per fer proves i no per jugar.\n\nVoleu canviar a l'LLE de vídeo?"
+#2056#  "Emulació d'alt nivell (HLE) d'àudio"
+#2057#  "L'HLE d'àudio requereix un complement de tercers!!!\nSi s'utilitza cap complement de tercers que suporti HLE, no hi haurà cap so.\n\nVoleu canviar a l'HLE d'àudio?"
+
+
+/*********************************************************************************
+* Android                                                                        *
+*********************************************************************************/
+#3000#  "Opcions"
+#3001#  "Ajuda/Fòrum"
+#3002#  "Informa problema"
+#3003#  "Quant a"
+#3004#  "Jugat recentment"
+#3005#  "Jocs"
+#3006#  "Dir. Joc"
+#3007#  "Seleccioneu carpeta per cercar"
+#3008#  "Inclou subdirectoris"
+#3009#  "Carpeta parent"
+#3010#  "Directoris"
+#3011#  "Memòria interna"
+#3012#  "Cercant..."
+#3013#  "D'acord"
+#3014#  "Cancel·la"
+#3015#  "Informació"
+#3016#  "Project64 per l'Android"
+#3017#  "Llicència"
+#3018#  "Revisió"
+#3019#  "Project64 per l'Android\u2122 és un port de la versió per windows del project64. La versió d'Android\u2122 pot reproduir la majoria de jocs N64."
+#3020#  "Autors del Project64."
+
+//In game menu
+#3100#  "Opcions"
+#3101#  "Desa l'estat"
+#3102#  "Carrega l'estat"
+#3103#  "Finalitza l'emulació"
+#3104#  "Pausa"
+#3105#  "Continua"
+#3106#  "Velocitat de joc"
+#3107#  "Estat desat actual..."
+#3108#  "Auto"
+#3109#  "Ranura"
+#3110#  "Reinicia"
+#3111#  "Opcions de depuració"
+#3112#  "Reinicia els cops de funció"
+#3113#  "Bolca els cops de funció"

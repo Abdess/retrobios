@@ -1,0 +1,22 @@
+[2A49018D-D0034A02-C:50]
+Name=Micro Machines 64 Turbo (E) (M5)
+
+$Access All Tracks
+810B88DA 0001
+
+$Always 1st
+800BB1F7 0001
+
+$Always Turbo Level 1
+Note=In Easy Mode
+810B4070 3100
+810BBD30 0000
+
+$Always Win Head 2 Head
+810BD590 0008
+
+$Infinite 99 Lives
+800BB1C2 0064
+
+$One Lap To Race
+810B88DE 0101

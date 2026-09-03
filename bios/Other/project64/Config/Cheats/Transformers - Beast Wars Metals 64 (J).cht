@@ -1,0 +1,36 @@
+[91691C3D-F4AC5B4D-C:4A]
+Name=Transformers - Beast Wars Metals 64 (J)
+
+$Infinite\Health\Player 1
+8112A576 270F
+
+$Infinite\Health\Player 2
+8114AAF6 270F
+
+$Infinite\Stun Meter\Player 1
+8012A579 00FF
+
+$Infinite\Stun Meter\Player 2
+8014AAF9 00FF
+
+$Play As\Player 1
+801BBA54 00??
+00 Optimus Primal
+01 Rattrap
+02 Cheetor
+03 Airazor
+04 Megatron
+05 Tarantulas
+06 Waspinator
+07 Terrorsaur
+
+$Play As\Player 2
+801BBA55 00??
+00 Optimus Primal
+01 Rattrap
+02 Cheetor
+03 Airazor
+04 Megatron
+05 Tarantulas
+06 Waspinator
+07 Terrorsaur

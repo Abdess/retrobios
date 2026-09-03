@@ -1,0 +1,20 @@
+[776646F6-06B9AC2B-C:50]
+Name=F-ZERO X (E)
+
+$Boost From Start
+D02C4DA0 003F
+802C4925 0050
+
+$Infinite Lives
+800D8729 0005
+
+$Infinite Shield
+812C4B48 4326
+812C4B4C 4326
+
+$Time Always 00.00.00/1st Place
+812C4BC0 0000
+812C4BC2 0001
+
+$Unlock Everything
+810C01E8 0100

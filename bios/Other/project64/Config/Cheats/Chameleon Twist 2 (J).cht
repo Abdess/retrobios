@@ -1,0 +1,40 @@
+[0549765A-93B9D042-C:4A]
+Name=Chameleon Twist 2 (J)
+
+$Have 6 Carrots
+80160659 007E
+
+$Have All\Collectibles\Stage 1
+80160650 0014
+
+$Have All\Collectibles\Stage 2
+80160651 0014
+
+$Have All\Collectibles\Stage 3
+80160652 0014
+
+$Have All\Collectibles\Stage 4
+80160653 0014
+
+$Have All\Collectibles\Stage 5
+80160654 0014
+
+$Have All\Collectibles\Stage 6
+80160655 0014
+
+$Have All\Costumes
+8016065A 00FE
+
+$Have All\Levels
+80160648 003F
+
+$Infinite Health
+80187BBD 000F
+
+$Max Collectable Items
+80160641 0014
+
+$Press L To levitate
+Note=Press L To Levitate & Let go to land
+D0187BF5 0020
+81187B20 4200

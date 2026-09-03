@@ -1,0 +1,15 @@
+[D3F97D49-6924135B-C:50]
+Name=Yoshi's Story (E) (M3)
+
+$Infinite Eggs
+Note=This is for All Yoshis All levels
+80285078 0006
+
+$Infinite\Health
+Note=This is for All Yoshis All levels
+50000804 0000
+800F954F 0008
+
+$Infinite\Lives
+Note=This is for All Yoshis All levels
+800F958F 00FF

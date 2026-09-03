@@ -1,0 +1,90 @@
+[58FD3F25-D92EAA8D-C:50]
+Name=1080 Snowboarding (E) (M4)
+
+$Enable All Levels & Boarders
+80250AB9 00FF
+80250ABB 0005
+81250AC6 FCFF
+80250AC8 0007
+
+$Infinite Damage All Players and Levels
+803F4C01 0000
+
+$Play As
+8001A0E7 00??
+00 Dion Blaster
+01 Kensuke Kimachi
+02 Akari Hayami
+03 Ricky Winterborn
+04 Rob Haywood
+05 Silver Boarder
+06 Gold Boarder
+07 Panda Boarder
+
+$Prees L For Infinite Lives & Continues
+Note=Whenever you've lost a life, Press L.Do not press L when on the main menu or during the intro Only use this feature in Match Race
+D00556A9 0020
+8026B14B 0003
+
+$Stop Timer\Contest\Air Make
+80319BBA 00C5
+
+$Stop Timer\Contest\Crystal Lake
+8029C0DA 00C5
+
+$Stop Timer\Contest\Crystal Peak
+802A889A 00C5
+
+$Stop Timer\Contest\Golden Forest
+802A6D3A 00C5
+
+$Stop Timer\Contest\Half Pipe
+802F51FA 00C5
+
+$Stop Timer\Time Attack\Air Make
+8031AA4A 0000
+
+$Stop Timer\Time Attack\Crystal Lake
+802A582A 0000
+
+$Stop Timer\Time Attack\Crystal Peak
+802B2BCA 0000
+
+$Stop Timer\Time Attack\Deadly Fall
+802CF56A 0000
+
+$Stop Timer\Time Attack\Dragon Cave
+802C137A 0000
+
+$Stop Timer\Time Attack\Golden Forrest
+802B135A 0000
+
+$Stop Timer\Time Attack\Half Pipe
+802F638A 0000
+
+$Stop Timer\Time Attack\Mountain Village
+802CB95A 0000
+
+$Stop Timer\Trick Attack\Air Make
+8031AABA 00C5
+
+$Stop Timer\Trick Attack\Crystal Lake
+8029F66A 00C5
+
+$Stop Timer\Trick Attack\Crystal Peak
+802AC8EA 00C5
+
+$Stop Timer\Trick Attack\Deadly Fall
+802C8E0A 00C5
+
+$Stop Timer\Trick Attack\Dragon Cave
+802BAD3A 00C5
+
+$Stop Timer\Trick Attack\Golden Forrest
+802AAF5A 00C5
+
+$Stop Timer\Trick Attack\Half Pipe
+802F63FA 00C5
+
+$Stop Timer\Trick Attack\Mountain Village
+802C50DA 00C5

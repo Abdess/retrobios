@@ -1,0 +1,24 @@
+[91B66D42-16AC4E46-C:44]
+Name=South Park (G)
+
+$Have Cheats Menu
+Note=Go into the Cheats From the main Menu & put on the Ones you want
+810CF716 01FF
+
+$Infinite Balls
+802FD21F 0064
+
+$Infinite Credits
+802FD215 0064
+
+$Infinite Energy
+802FD209 0064
+
+$Infinite Sponge Darts
+802FD223 0064
+
+$Infinite Suckers
+802FD222 0064
+
+$Start with 9999 Monster Score
+812FD20E 270F

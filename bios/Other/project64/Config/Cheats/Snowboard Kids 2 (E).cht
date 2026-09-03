@@ -1,0 +1,56 @@
+[C2751D1A-F8C19BFF-C:50]
+Name=Snowboard Kids 2 (E)
+
+$Access Everything\Start New Game
+50000502 0002
+80204F3B 0013
+50000502 0002
+80204F42 0009
+50000402 0002
+80204F43 000A
+80204F4B 000D
+81204F4C 0E0F
+81204F4E 0101
+81204F5A 0100
+
+$Have All Snowboards
+80204F3C 0001
+81204F3E 0101
+81204F40 0101
+
+$Infinite Tools Options
+80206404 00??
+01 Frying Pan
+02 Ghost
+03 Super Ghost
+04 Fan
+05 Rocket
+06 Invisible
+07 Rock
+08 Rat Face
+09 Super Rat Face
+0A Wings
+
+$Infinite Weapons Options
+80206402 00??
+80206403 0009
+01 Slap Stick
+02 Parachute
+03 Freeze Shot
+04 Snowman
+05 Bomb
+06 Whirlwind
+
+$Max Coins
+8120639E 270F
+
+$Max Money(Story Mode)
+81204EB0 0098
+81204EB2 967F
+
+$Open Extra Characters
+81204F4E 0101
+80204F50 0001
+
+$Trick Game 300 Points
+812065D2 012C

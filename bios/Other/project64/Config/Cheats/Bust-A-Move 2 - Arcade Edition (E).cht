@@ -1,0 +1,18 @@
+[CEDCDE1E-513A0502-C:50]
+Name=Bust-A-Move 2 - Arcade Edition (E)
+
+$Access Another World
+Note=This is for Puzzle Mode
+8116D100 0001
+
+$Bubble Pointer 1P V CPU
+8017E1FD 0001
+
+$Bubble Pointer Puzzle
+801807CD 0001
+
+$Infinite Credit
+80120171 00FF
+
+$Max Points Aid
+81170E4A 25C2

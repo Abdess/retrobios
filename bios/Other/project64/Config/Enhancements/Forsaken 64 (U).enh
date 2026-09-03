@@ -1,0 +1,9 @@
+[9E330C01-8C0314BA-C:45]
+Name=Forsaken 64 (U)
+
+$Lagfix
+80028E22 000D
+
+$Sixty Frames
+800233C3 0001
+

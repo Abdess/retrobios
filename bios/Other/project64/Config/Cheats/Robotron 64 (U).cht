@@ -1,0 +1,11 @@
+[AC8E4B32-E7B47326-C:45]
+Name=Robotron 64 (U)
+
+$Infinite Lives
+8009B1AF 0009
+
+$Level Select In Setup Menu
+81076FF6 6F8C
+
+$Max Score
+8009B1AA 00FF

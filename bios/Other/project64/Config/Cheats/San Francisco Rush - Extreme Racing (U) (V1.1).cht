@@ -1,0 +1,81 @@
+[AC9F7DA7-A8C029D8-C:45]
+Name=San Francisco Rush - Extreme Racing (U) (V1.1)
+
+$Activate\Auto Abort Disable
+800F4078 0001
+
+$Activate\Cones to Mines
+800F3F88 0001
+
+$Activate\Disable Car 2 Car Control
+800F4050 0001
+
+$Activate\Resurrect in Place
+800F4080 0001
+
+$Activate\Stop Timer
+800F4090 0001
+
+$Activate\Upside Down Mode
+800F4061 0001
+
+$Always Place 1st
+80101339 0000
+
+$Car
+D00F40A5 0020
+800D9EC1 00??
+800D9F64 00??
+800DA078 00??
+800DA321 00??
+08 Taxi
+09 Hot Rod
+0A F1 Car
+
+$Car Type
+Note=It gets you from 0-150 in the the time it takes the F1 racer to. Don't use the F1 racer and only hold until you reach 150 or the game will freeze.
+800F40B1 00??
+00 Normal Car
+01 Flat Car
+02 Fat Car
+03 Giant Car
+0A Invisible Car
+44 Super-Tiny Car #2
+66 Paper-Thin Cars
+6E Screen-Talled Cars
+BB Super-Sky Car
+CD Invisible Car (Can See Wheels)
+DD Super-Sky Car #2
+FF Super-Tiny Car
+
+$Edge Boost
+Note=by pressing R you will get a small speed boost that pushes you ahead.
+D00F40A5 0010
+81101331 FFFF
+
+$Gravity
+800F3D91 00??
+00 A Balloon & 2 Weights
+01 Normal
+02 1 Weight
+03 2 Weights
+
+$Have Two Special Cars
+Note=You receive the Hotrod and Taxi with this code, but you may have to go through the cars from the "Beginning" past the "Extreme" for them to appear.
+810CAC82 FFFF
+810CAC98 FFFF
+810CACAE FFFF
+810CACC4 FFFF
+810CACDA FFFF
+810CACF0 FFFF
+
+$Press F9 For Track Select
+Note=With this code, press F9 when on the track selction screen and press A to select that track!
+88100050 00??
+00 Track 1
+01 Track 2
+02 Track 3
+03 Track 4
+04 Track 5
+05 Track 6
+06 Track 7

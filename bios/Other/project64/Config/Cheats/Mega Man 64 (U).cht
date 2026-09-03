@@ -1,0 +1,1376 @@
+[0EC158F5-FB3E6896-C:45]
+Name=Mega Man 64 (U)
+
+$Buster Parts Slot Select\Slot 01
+80204E03 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 02
+80204E04 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 03
+80204E05 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 04
+80204E06 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 05
+80204E07 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 06
+80204E08 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 07
+80204E09 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 08
+80204E0A 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 09
+80204E0B 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 10
+80204E0C 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 11
+80204E0D 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 12
+80204E0E 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 13
+80204E0F 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 14
+80204E10 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 15
+80204E11 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 16
+80204E12 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 17
+80204E13 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 18
+80204E14 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 19
+80204E15 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 20
+80204E16 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 21
+80204E17 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 22
+80204E18 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 23
+80204E19 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 24
+80204E1A 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 25
+80204E1B 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 26
+80204E1C 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 27
+80204E1D 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 28
+80204E1E 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 29
+80204E1F 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 30
+80204E20 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 31
+80204E21 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 32
+80204E22 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Buster Parts Slot Select\Slot 33
+80204E23 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Equipped Buster Parts\Slot 01
+80204E00 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Equipped Buster Parts\Slot 02
+80204E01 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Equipped Buster Parts\Slot 03
+80204E02 00??
+00 Nothing
+01 Blaster Unit Omega
+02 Sniper Unit Omega
+03 Laser
+04 Sniper Range
+05 Turbo Battery
+06 Power Raiser Omega
+07 Range Booster Omega
+08 Turbo Charger Omega
+09 Blast Unit
+0A Sniper Unit
+0B Power Raiser Alpha
+0C Range Booster Alpha
+0D Turbo Charger Alpha
+0E Power Raiser
+0F Range Booster
+10 Turbo Charger
+11 Buster Max
+12 Power Stream
+13 Blaster Unit R
+14 Buster Unit Omega
+15 Omni-Unit Omega
+16 Auto Battery
+17 Sniper Scope
+18 Rapid Striker
+19 Gatlin Gun
+1A Omni-Unit
+1B Power Blaster R
+1C Power Blaster L
+1D Machine Gun
+1E Triple Access
+1F Buster Unit
+20 Rapid Fire
+21 Helmet
+
+$Freeze Timer at 00:00
+811BC3F4 0000
+811BC3F6 0000
+
+$Have\All Special Weapons
+Note=With this code, Roll is the one that has to equip the weapons before you can use them.
+81205640 FFFF
+
+$Have\Normal Items
+81205650 FFFF
+81205652 FFFF
+81205654 FFFF
+81205656 FFFF
+
+$Have\Special Items
+8120564C FFFF
+8120564E FFFF
+
+$Infinite\Ammo
+81204EBA 0080
+81204EC2 0010
+81204ECA 0708
+81204ED2 0018
+81204EDA 0010
+81204EE2 0708
+81204EEA 0020
+81204EF2 0020
+81204EFA 0020
+81204F02 0018
+81204F0A 012C
+81204F12 0258
+
+$Infinite\Health
+81204A1E 0050
+
+$Infinite\Zenny
+811BC404 0098
+811BC406 967F
+
+$Rapid Fire
+80204EB3 0002

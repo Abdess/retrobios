@@ -1,0 +1,15 @@
+[66CF0FFE-AD697F9C-C:50]
+Name=Fighting Force 64 (E)
+
+$Infinite health
+810C8B0E 03E7
+
+$Infinite Lives
+810CE462 03E7
+
+$Level Select
+Note=Scroll With C-Left & C-Right Level Select Available, At The Player Select Top Screen
+810A590E 0001
+
+$Score Aid
+810CD912 29AA

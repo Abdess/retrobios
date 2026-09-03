@@ -1,0 +1,39 @@
+[5168D520-CA5FCD0D-C:4A]
+Name=Banjo to Kazooie no Daibouken (J)
+
+$Have Zero Time all Levels
+50000B04 0000
+81386B44 3000
+
+$Infinite\Air
+81386ACE 0E10
+
+$Infinite\Always Have All Jinjos
+80386ABB 00FF
+
+$Infinite\Eggs
+80386AA7 00FF
+
+$Infinite\Gold Feathers
+80386AB3 00FF
+
+$Infinite\Health
+80386AC3 0008
+80386AC7 0008
+
+$Infinite\Jiggies
+80386B0B 00FF
+
+$Infinite\Lives
+80386ACB 00FF
+
+$Infinite\Mumbo Tokens
+80386B07 00FF
+
+$Infinite\Notes
+Note=Just collect one Note to Have 255 Notes in all Worlds.
+80386B32 00FF
+80386AA2 0001
+
+$Infinite\Red Feathers
+80386AAF 00FF

@@ -1,0 +1,335 @@
+[6AA4DDE7-E3E2F4E7-C:45]
+Name=BattleTanx (U)
+
+$All Batteries Have Bad Aim
+800A1F7C 0001
+
+$All Batteries Have Hellfire
+800A34A2 0001
+
+$All Battletanx Are Invincible
+8009843D 0001
+
+$Area 51\Mines Are Invisible
+802D5ACB 00CC
+
+$Area 51\Mines Are Toxic Waste
+802D5ACB 007C
+
+$Area 51\Shock Wave Weapons
+802D5A7D 00AF
+
+$Area 51\Turn Ammo Pickup Picture To Flamer Picture
+802D5AAF 00AC
+
+$Area 51\Turn Nuke Into Toxic Waste Nuke
+802D5A7B 007C
+
+$Auto Lose All Queen Lord Levels
+800A6746 0001
+
+$Auto Win All Queen Lord Levels
+800A6745 0001
+
+$Buildings Fall Fast
+80091BBC 0001
+
+$Buildings Implode Instead Of Explode, And Remain Afire
+8009298E 0001
+
+$Can't Pick Up Queen Lords
+8008A2F0 0001
+
+$Frogs
+80135775 0001
+
+$Full Control Of Tank In Bonus,Extra Side Player In Battlelord Multi!
+800971EE 0001
+
+$Have All Levels
+80135767 0001
+
+$Have Storm Ravens Gang
+80135773 0001
+
+$Hurl Mode
+8013576B 0001
+
+$In Campaign 3 Enemy Tanks May Join You
+802D9AAC 0000
+802DB3D4 0000
+802DCCFC 0000
+
+$Invincible
+80135763 0001
+
+$Invisible
+8013576A 0001
+
+$Laser Fire Invisible
+800846ED 0001
+
+$Multiplayer\Balltlelord Mode\Player 1\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AD7EE FFFF
+
+$Multiplayer\Balltlelord Mode\Player 1\Infinite Secondary Weapons In Battlelord
+802D8609 00FF
+802D860B 00FF
+802D860D 00FF
+802D860F 00FF
+802D8611 00FF
+802D8615 00FF
+802D8617 00FF
+802D8619 00FF
+802D861B 00FF
+802D861D 00FF
+802D861F 00FF
+802D8621 00FF
+
+$Multiplayer\Balltlelord Mode\Player 2\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AE186 FFFF
+
+$Multiplayer\Balltlelord Mode\Player 2\Infinite Secondary Weapons In Battlelord
+802D9F31 00FF
+802D9F33 00FF
+802D9F35 00FF
+802D9F37 00FF
+802D9F39 00FF
+802D9F3D 00FF
+802D9F3F 00FF
+802D9F41 00FF
+802D9F43 00FF
+802D9F45 00FF
+802D9F47 00FF
+802D9F49 00FF
+
+$Multiplayer\Balltlelord Mode\Player 3\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AEB1E FFFF
+
+$Multiplayer\Balltlelord Mode\Player 4\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AF4B6 FFFF
+
+$Multiplayer\Deathmatch, Frenzy & Convoy Modes\Player 1\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AD322 FFFF
+
+$Multiplayer\Deathmatch, Frenzy & Convoy Modes\Player 2\All Special Weapons & Infinite Ammo
+50000E02 0000
+811ADCBA FFFF
+
+$Multiplayer\Deathmatch, Frenzy & Convoy Modes\Player 3\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AE652 FFFF
+
+$Multiplayer\Deathmatch, Frenzy & Convoy Modes\Player 4\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AEFEA FFFF
+
+$Multiplayer\Hold 'Em Mode\Player 1\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AD7EE FFFF
+
+$Multiplayer\Hold 'Em Mode\Player 2\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AE186 FFFF
+
+$Multiplayer\Hold 'Em Mode\Player 3\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AEB1E FFFF
+
+$Multiplayer\Hold 'Em Mode\Player 4\All Special Weapons & Infinite Ammo
+50000E02 0000
+811AF4B6 FFFF
+
+$Multiplayer\Plater 1\One Hit And You Bite It
+802D819F 0001
+
+$Multiplayer\Player 1\Always Has Cloaked On
+802D818D 0001
+
+$Multiplayer\Player 1\Always Have Radar
+802D8195 0080
+
+$Multiplayer\Player 1\Goalith Tank On Tracks Body Modifier
+802D86A3 00??
+00 Normal Tank
+01 Motor Tank
+02 Big Tank
+
+$Multiplayer\Player 1\Infinite Ammo
+802D8603 00FF
+
+$Multiplayer\Player 1\Main Weapon
+802D85EB 00??
+00 Nothing
+01 Normal Tank Shells
+02 Motor Tank Shells
+03 Big Tank Shells
+04 Rockets
+05 Laser
+06 Nuke
+07 Gernades
+08 ?
+09 ?
+0A Nuclear Lasers
+0B Remote Rockets
+0C Mines
+0D Gun Buddies
+0E Smoke Screen
+0F Cloaking
+10 Health
+
+$Multiplayer\Player 1\Secondary Weapon
+802D85F7 00??
+00 Nothing
+01 Normal Tank Shells
+02 Motor Tank Shells
+03 Big Tank Shells
+04 Rockets
+05 Laser
+06 Nuke
+07 Gernades
+08 ?
+09 ?
+0A Nuclear Lasers
+0B Remote Rockets
+0C Mines
+0D Gun Buddies
+0E Smoke Screen
+0F Cloaking
+10 Health
+
+$Multiplayer\Player 1\Tank Body Modifier
+802D819B 00??
+00 Normal Tank
+01 Motor Tank
+02 Big Tank
+
+$Multiplayer\Player 1\Tank Turret Always On (Use Right/Left C Button)
+802DE7FB 0011
+802DE7FF 0002
+
+$Multiplayer\Player 1\Your Goalith Tank On Tracks Always Has Cloaked On
+802D8695 0001
+
+$Multiplayer\Player 1\Your Goalith Tank On Tracks Always Has Radar
+802D869D 0080
+
+$Multiplayer\Player 2\Always Has Cloaked On
+802D9AB5 0001
+
+$Multiplayer\Player 2\Always Have Radar
+802D9ABD 0080
+
+$Multiplayer\Player 2\Goalith Tank On Tracks Body Modifier
+802D9FCB 00??
+00 Normal Tank
+01 Motor Tank
+02 Big Tank
+
+$Multiplayer\Player 2\Infinite Ammo
+802D9F2B 00FF
+
+$Multiplayer\Player 2\Main Weapon
+802D9F13 00??
+00 Nothing
+01 Normal Tank Shells
+02 Motor Tank Shells
+03 Big Tank Shells
+04 Rockets
+05 Laser
+06 Nuke
+07 Gernades
+08 ?
+09 ?
+0A Nuclear Lasers
+0B Remote Rockets
+0C Mines
+0D Gun Buddies
+0E Smoke Screen
+0F Cloaking
+10 Health
+
+$MultiPlayer\Player 2\One Hit And You Bite It
+802D9AC7 0001
+
+$Multiplayer\Player 2\Secondary Weapon
+802D9F1F 00??
+00 Nothing
+01 Normal Tank Shells
+02 Motor Tank Shells
+03 Big Tank Shells
+04 Rockets
+05 Laser
+06 Nuke
+07 Gernades
+08 ?
+09 ?
+0A Nuclear Lasers
+0B Remote Rockets
+0C Mines
+0D Gun Buddies
+0E Smoke Screen
+0F Cloaking
+10 Health
+
+$Multiplayer\Player 2\Tank Body Modifier
+802D9AC3 00??
+00 Normal Tank
+01 Motor Tank
+02 Big Tank
+
+$Multiplayer\Player 2\Tank Turret Always On
+802DEB43 0011
+802DEB47 0002
+
+$Multiplayer\Player 2\Your Goalith Tank On Tracks Always Has Cloaked On
+802D9FBD 0001
+
+$Multiplayer\Player 2\Your Goalith Tank On Tracks Always Has Radar
+802D9FC5 0080
+
+$Multiplayer\Player 3\Tank Turret Always On
+802DEE8B 0011
+802DEE8F 0002
+
+$Multiplayer\Player 4\Tank Turret Always On
+802DF1D3 0011
+802DF1D7 0002
+
+$Nuke Blast Leaves Air Yellow
+800F3333 0001
+
+$Nuke Blast Pink
+8008055F 0001
+
+$Regenerated Allied Tanks Are Indestrucible In Campaign
+8009FB2A 0001
+
+$Run Story
+80135770 0001
+
+$Shoot Through Walls
+8008E529 0001
+
+$Slow Battle Tanks
+8009A56A 0001
+
+$Start With All Weapons
+80135765 0001
+
+$Toads
+80135776 0001
+
+$Trippy
+80135771 0001
+
+$Unlimited Ammo
+80135760 0001
+
+$Unlimited Lives
+80135772 0001

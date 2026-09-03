@@ -1,0 +1,15 @@
+[1938525C-586E9656-C:45]
+Name=Ms. Pac-Man Maze Madness (U)
+
+$Have All Dots
+8111D55E 03E7
+
+$Infinite\Health
+8111D55C 003C
+
+$Infinite\Lives
+8010A3D7 0009
+
+$Max Score
+8111EF14 E0FF
+8111EF16 05F5

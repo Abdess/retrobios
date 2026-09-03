@@ -1,0 +1,27 @@
+[D571C883-822D3FCF-C:50]
+Name=Blues Brothers 2000 (E) (M6)
+
+$Have All\Keys
+Note=This will give you the Grey & Red,Green & Gold Keys
+800BE268 00FF
+800BE26D 00FF
+800BE26E 00FF
+
+$Have All\Music Notes
+Note=This will give you all 10 Music Notes
+50000A01 0000
+800BE3A0 0001
+
+$Infinite\Health
+800BE2A7 0002
+
+$Infinite\Lives
+800BE293 0009
+
+$Max Money
+810BE296 03E7
+
+$Press L to Levitate
+Note=Press L to levitate & let go to come back down
+D017E975 0020
+810DBD88 44CB

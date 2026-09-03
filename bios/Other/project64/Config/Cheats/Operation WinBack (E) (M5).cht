@@ -1,0 +1,60 @@
+[D5898CAF-6007B65B-C:50]
+Name=Operation WinBack (E) (M5)
+
+$All Multiplayer Characters
+8015C8E1 000F
+8015C8E2 00FF
+8015C8E3 00FF
+
+$C4 Detector
+Note=Slot 3
+80157C98 0001
+
+$C4 Explosives
+Note=Slot 1
+80157C93 0001
+
+$Card Key
+Note=Slot 3
+80157C9A 0001
+
+$Flash Light
+Note=Slot 2
+80157C95 0001
+
+$Infinite\Ammo and No Reloads
+80157C9B 0078
+80157C94 0078
+80157C90 0063
+80179F6F 001E
+80157C91 0063
+80179F83 0008
+
+$Infinite\Health
+80179F8B 0064
+
+$Key
+Note=Slot 2
+80157C99 0001
+
+$Max Power Mode
+8015C8E7 0001
+
+$Sudden death & trial modes unlocked
+8015C8E0 00A0
+
+$Time is always  00:20:38
+8010D342 0078
+
+$Walk Through Walls/Objects
+Note=Press Z Button And Joystick Forward Dont Stand Too Close To Wall/Object
+D0139BC4 0020
+8117964C 43C7
+
+$Weapon modifier
+80179F78 00??
+00 Handgun
+01 Submachine gun
+02 Shotgun
+03 Rocket launcher
+14 Handgun w/ silencer

@@ -1,0 +1,43 @@
+[A3A044B5-6DB1BF5E-C:0]
+Name=Spacer by Memir (POM '99) (PD)
+
+$Collect One Item For Portal
+802E4E47 00??
+03 Level 1
+0E Level 2
+0C Level 3
+0D Level 4
+
+$Freeze Timer
+802E4D5F 0000
+
+$Infinite Health\Player 1
+802E4E4A 0027
+
+$Infinite Health\Player 2
+802E4EA2 0027
+
+$Infinite Health\Player 3
+802E4EFA 0027
+
+$Infinite Health\Player 4
+802E4F52 0027
+
+$Paly As
+802E4E4C 00??
+00 Red Helic
+01 Green Helic
+02 Blue Helic
+03 Yellow Helic
+10 Red Rocket
+11 Green Rocket
+12 Blue Rocket
+13 Yellow Rocket
+20 Red Back Bee
+21 Green Back Bee
+22 Blue Back Bee
+23 Yellow Back Bee
+30 Red Stealth
+31 Green Stealth
+32 Blue Stealth
+33 Yellow Stealth

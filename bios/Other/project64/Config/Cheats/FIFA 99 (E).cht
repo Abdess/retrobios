@@ -1,0 +1,14 @@
+[0198A651-FC219D84-C:50]
+Name=FIFA 99 (E) (M8)
+
+$Team on the left of score board has 0 goals
+800375C7 0000
+
+$Team on the left of score board has 15 goals
+800375C7 000F
+
+$Team on the right of score board has 0 goals
+800375C3 0000
+
+$Team on the right of score board has 15 goals
+800375C3 000F

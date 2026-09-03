@@ -1,0 +1,107 @@
+[0B6B4DDB-9671E682-C:45]
+Name=Roadsters Trophy (U) (M3)
+
+$Cheats Enabled Modifier
+8008F840 ????
+0004 Fast Bucks (You Get 250
+0008 Easy Money (You Get 1
+0010 Trophies (Second And Third Championships Wins)
+0020 Smurfing (High Pitched Voices)
+0040 Big Wheels (Big Foot Cars)
+0080 Skywalker (Hover Cars)
+0100 Car Radio (Remote Control Cars)
+0200 Chopper (Top Down View)
+0400 Anyway (Race Circuits Backwards)
+0800 Extra Resolution (Able To Change Resolution In Options Screen)
+
+$Have\Access All Trophies
+Note=Also gives you all extra features in quick race & Trophy mode
+800BA9EB 0007
+800BABFF 0007
+
+$Have\Always 1st
+800C1ED1 0001
+800C1ED3 0001
+
+$Have\Easy Win
+Note=Right After Start,Go, Quit Race, And you Have Won
+800BABFD 000A
+
+$Have\Infinite Max Cash
+810BABF4 3AFF
+810BABF6 F454
+
+$Have\Infinite Supply Of Super Tires
+Note=For All Cars
+5000220C 0000
+810BACA8 0F0F
+5000220C 0000
+810BACAA 0F0F
+
+$Have\Lots Of Seasons
+810BABFA 03E7
+
+$Have\Max Race Points
+800BAC0E 00FF
+
+$Have\Max Upgrade
+Note=For All Cars
+5000220C 0200
+810BACA6 0270
+
+$Race Options\Laps To Race Select
+800A4599 00??
+01 1 Lap
+02 2 laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 6 Laps
+07 7 Laps
+08 8 Laps
+09 9 Laps
+
+$Race Options\Race Direction Select
+800A4551 00??
+00 Normal
+01 Reverse
+02 Mirrored Normal
+03 Mirrored Reverse
+
+$Race Options\Track Select
+8008F9AD 00??
+00 Rocket Base
+01 Temple
+02 Ski Resort
+03 Lumber Mill
+04 Area 51
+05 Oilfields
+06 Tudor Village
+07 Chateau
+08 Docklands
+09 Titus Park
+
+$Race Options\View Select
+Note=Select your View and then at start of Race press C-Up Button
+D00C20B1 0000
+800C20C1 00??
+00 Inside Car
+01 Behind View
+02 Further Behind View
+0B Distant Behind View
+FF Helicopter View
+
+$Special Category\A Car [Mind Star 600]
+810BADDE 3D70
+810BADE0 0F0F
+810BADE2 0F0F
+
+$Special Category\B Car [Vertige Stallion]
+800BAD66 2378
+810BAD68 0F0F
+810BAD6A 0F0F
+
+$Special Category\C Car [Mind Star 200R]
+810BACD6 0A78
+810BACD8 0F0F
+810BACDA 0F0F

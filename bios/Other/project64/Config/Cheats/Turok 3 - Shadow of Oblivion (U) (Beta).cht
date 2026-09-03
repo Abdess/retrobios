@@ -1,0 +1,27 @@
+[37FA8F16-5F824D37-C:44]
+Name=Turok 3 - Shadow of Oblivion (U) (Beta)
+
+$Active Cheat Select
+Note=If you want to just enable All Secrets, Select Nothing and then Uncheck it.
+811784E0 FFFF
+811784E2 FFFF
+811784E6 00??
+00 Nothing
+01 Invincibility
+02 All Weapons
+03 Invincible & All Weapons
+04 Unlimited Ammo
+05 Invincible & Unlimited Ammo
+06 All Weapons & Unlimited Ammo
+07 Invincible_All Weapons & Unlimited Ammo
+08 Have All Keys
+09 Invincible & All Keys
+0A All Weapons & All Keys
+0B Invincible_All Weapons & All Keys
+0C Unlimited Ammo & All Keys
+0D Invincible_Unlimited Ammo & All Keys
+0E All Weapons_Unlimited Ammo & All Keys
+0F Invincible_All Weapons_Unlimited Ammo & All Keys
+
+$Infinite 9999 Life Force Gems
+8168FCBC 270F

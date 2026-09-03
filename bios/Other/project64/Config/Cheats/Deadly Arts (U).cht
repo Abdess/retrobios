@@ -1,0 +1,63 @@
+[F5363349-DBF9D21B-C:45]
+Name=Deadly Arts (U)
+
+$Have Extra Characters (Gouriki & Reiji)
+8009E3DF 00FF
+
+$Player 1\Character Modifier
+80105001 00??
+00 Azami
+01 Serina
+02 Miki
+03 Kai
+04 Sakai
+05 Kengon
+06 Kyeya
+07 Kaoru
+08 Gouriki
+09 Reiji
+0A Yami
+0B Hikari
+0C Invisible Fighter
+
+$Player 1\Infinite Energy
+81105026 03E8
+
+$Player 1\Needs 1 Round to Win
+D009E3F4 0000
+8009E3F4 0001
+
+$Player 1\Never Wins
+8009E3F4 0000
+
+$Player 1\No Energy
+81105026 0000
+
+$Player 2\Character Modifier
+8011B399 00??
+00 Azami
+01 Serina
+02 Miki
+03 Kai
+04 Sakai
+05 Kengon
+06 Kyeya
+07 Kaoru
+08 Gouriki
+09 Reiji
+0A Yami
+0B Hikari
+0C Invisible Fighter
+
+$Player 2\Infinite Energy
+8111B3BE 03E8
+
+$Player 2\Needs 1 Round to Win
+D009E3F5 0000
+8009E3F5 0001
+
+$Player 2\No Energy
+8111B3BE 0000
+
+$Player 2\P2 Never Wins
+8009E3F5 0000

@@ -1,0 +1,26 @@
+[8BD4A334-1E138B05-C:50]
+Name=Ready 2 Rumble Boxing (E) (M3)
+
+$Have Max Rumble
+810D8E96 00??
+810E61B8 00??
+30 Max
+00 Never Rumble
+
+$Infinite\Cash
+810EB852 FC9A
+
+$Infinite\Health
+810D8E8A 00??
+810E6522 00??
+64 Infinite
+00 No Health
+
+$Infinite\Stamina
+810D8E8E 00??
+810E6526 00??
+64 Infinite
+00 No Stamina
+
+$Infinite\Time
+810E6486 0E10

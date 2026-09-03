@@ -1,0 +1,31 @@
+[399B9B81-D533AD11-C:4A]
+Name=Extreme-G XG2 (J)
+
+$[Screen Hud Clear]
+Note=This Fixes the Problem on all Plugins that have Hud covering the Screen.Let the game load 1st before Putting this code on,Or it will give an error and Freeze
+80092D1B 0004
+
+$Access\All Secret Characters
+50000C04 0000
+80183D6F 0001
+
+$Access\All Superbikes
+50000304 0000
+80183D6F 0001
+
+$Access\All Tracks
+50000BD8 0000
+80183327 0001
+
+$Always 1st
+80171063 0001
+
+$Infinite\Nitros
+81170F02 0003
+81170F06 0003
+
+$Infinite\Shield
+81170F2C 42C8
+
+$Max Points
+80183DD3 0064

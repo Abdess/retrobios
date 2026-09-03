@@ -1,0 +1,17 @@
+[6C2C6C49-9BE5CA66-C:45]
+Name=Taz Express (U) (Prototype)
+
+$Extra Bonuses
+810EBA6A 270F
+
+$Fake Max Spin Bar?
+800EBA43 0009
+
+$Infinite\Crate Attempts
+800A9D1B 0007
+
+$Infinite\Gold Pickups
+802EB9E8 0064
+
+$Infinite\Health
+800EBA47 0009

@@ -1,0 +1,33 @@
+[D81963C7-4271A3AA-C:45]
+Name=Chameleon Twist (U) (V1.1)
+
+$Access All Levels
+801FC5E6 00FF
+801FC5E8 00FF
+
+$Extended Tongue
+81323382 FFFF
+
+$Have 99 Crowns
+8024337B 0063
+
+$Have All Levels Completed
+801FC5EA 0019
+801FC5EB 0019
+801FC5EC 0015
+801FC5ED 0018
+801FC5EE 0017
+801FC5EF 0017
+
+$Infinite Health
+80164923 000A
+
+$Level Select
+80297A7B 00??
+00 Stage 1
+01 Stage 2
+02 Stage 3
+03 Stage 4
+04 Stage 5
+05 Stage 6
+06 Stage 7

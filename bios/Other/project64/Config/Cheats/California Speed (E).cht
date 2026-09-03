@@ -1,0 +1,16 @@
+[CA2A7444-71DAB71C-C:50]
+Name=California Speed (E)
+
+$Always Place 1st
+80152D61 0000
+
+$Have All\Cars
+50001504 0000
+800AAD4B 0001
+
+$Have All\Tracks
+8116A0EC FFFF
+
+$Press R For Nitrous Boost
+D01354BF 0010
+8112CE6C 43CB

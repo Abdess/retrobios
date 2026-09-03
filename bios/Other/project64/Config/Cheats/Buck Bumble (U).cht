@@ -1,0 +1,52 @@
+[85AE781A-C756F05D-C:45]
+Name=Buck Bumble (U)
+
+$Have\[All Guns & Infinite Ammo]
+Note=Press C Left to receive all Guns
+810FFF8A 0001
+50000B04 0000
+810E92E6 03E8
+
+$Have\[All Keys]
+810E92E0 0101
+800E92E2 0001
+
+$Have\[High Score]
+810E92CE FFFF
+
+$Have\Max Bonus
+810E964A 270F
+
+$Infinite\99 Lives
+810E9650 0005
+
+$Infinite\Health
+Note=If you fall into Water just turn off the Infinite Health & put back on after.
+810E92D8 42D8
+
+$Level Select
+810FFF92 00??
+01 Mission 1 Shock Strike
+02 Mission 2 Radar Run
+03 Mission 3 Return Fire
+04 Mission 4 The Sonar Tower
+05 Mission 5 Big Blips
+06 Mission 6 Short Fuse
+07 Mission 7 Outpost
+08 Mission 8 Sewer
+09 Mission 9 Clean Up
+0A Mission 10 Scramble Pylon
+0B Mission 11 Herding Research
+0C Mission 12 The Extractor
+0D Mission 13 Nuke Tower
+0E Mission 14 Mucus Storage
+0F Mission 15 Depot Attack
+10 Boss Mission Destroy Carrier Level
+11 Mission 16 Sterilization
+12 Mission 17 Scorpion Killer
+13 Mission 18 Core Nuke
+14 Mission 19 Gate Keeper
+15 Queen Mission
+
+$Level Select Menu
+810FE5AA D320

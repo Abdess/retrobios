@@ -1,0 +1,11 @@
+[2AF9B65C-85E2A2D7-C:45]
+Name=MRC - Multi Racing Championship (U)
+
+$Always Place 1st
+800A960F 0000
+
+$Infinite Time
+80094E97 0064
+
+$Low Course Time
+8009483B 0000

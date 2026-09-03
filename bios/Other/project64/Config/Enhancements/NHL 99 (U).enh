@@ -1,0 +1,8 @@
+[591A806E-A5E6921D-C:45]
+Name=NHL 99 (U)
+
+$Sixty Frames
+Note=Another ASM hack,too fast possibly?
+01=Default
+80019127 0002
+

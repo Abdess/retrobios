@@ -1,0 +1,56 @@
+[3261D479-ED0DBC25-C:45]
+Name=Fox Sports College Hoops '99 (U)
+
+$Away Team Scores 0
+8012A4EA 0000
+
+$Away Team Scores 150
+8012A4EA 0096
+
+$Big Head Mode
+81098E88 0100
+
+$Final Four Stadium
+80098E98 0089
+
+$GS Button For 1-Second Shot Clock
+8912A4BC 3FC0
+
+$Home Team Scores 0
+8012A4D2 0000
+
+$Home Team Scores 150
+8012A4D2 0096
+
+$Infinite Shot Clock
+8112A4BC 4210
+
+$Infinite Time Outs Away
+8012A4EC 0006
+
+$Infinite Time Outs Home
+8012A4D4 0006
+
+$No Fans In Crowd
+810CA520 0454
+
+$No Time Outs Away
+8012A4EC 0000
+
+$No Time Outs Home
+8012A4D4 0000
+
+$Partially Invisible Players
+81098E84 0100
+
+$Programmers Team
+81097088 0100
+
+$Shot Clock Disabled
+8109707C 0000
+
+$Trail Follows The Ball
+810B4600 4100
+
+$Z-Axis Stadium
+80098E98 0088

@@ -1,0 +1,31 @@
+[259F7F84-7C9EED26-C:50]
+Name=Batman of the Future - Return of the Joker (E) (M3)
+
+$Infinite\99 Dark Knight Discus
+801D7F4A 0063
+
+$Infinite\99 Lives
+801D7F3E 0064
+
+$Infinite\Health
+801D7F3D 0064
+
+$Infinite\Max Charge & Magnetic Nun Chaku
+801D7F06 0064
+
+$Press F9 to Have\Key
+881D7D70 0020
+
+$Suit Select
+801D7F40 00??
+00 Standard
+01 Offensive
+02 Defensive
+03 Nimble
+
+$Weapon Select
+801D7F43 00??
+00 Standard
+01 Dark Knight Discus
+02 Dark Knight Staff
+03 Magnetic Nun Chuku

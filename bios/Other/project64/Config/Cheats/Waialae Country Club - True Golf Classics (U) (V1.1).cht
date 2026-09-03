@@ -1,0 +1,55 @@
+[DD318CE2-B73798BA-C:45]
+Name=Waialae Country Club - True Golf Classics (U) (V1.1)
+
+$Always On First Shot
+811DA47A 0001
+
+$Club Type\Irons Mods
+8012A473 00??
+00 Cavity
+01 Conventional
+
+$Club Type\Sand Wedge Mods
+8012A474 00??
+00 58 Degrees
+01 60 Degrees
+02 62 Degrees
+
+$Club Type\Woods Mods
+8012A472 00??
+00 Titan
+01 Metal Wood
+02 Persimmon
+
+$Max Power
+8012A431 FFFF
+
+$Max Putt
+8012A435 FFFF
+
+$Max Recover
+8012A437 FFFF
+
+$Max Technique
+8012A433 FFFF
+
+$Select Club
+801DA496 00??
+00 1W
+01 2W
+02 3W
+03 4W
+04 5W
+05 1I
+06 2I
+07 3I
+08 4I
+09 5I
+0A 6I
+0B 7I
+0C 8I
+0D 9I
+0E PW
+0F AW
+10 SW
+11 Putter

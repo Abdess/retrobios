@@ -1,0 +1,117 @@
+[8A6009B6-94ACE150-C:45]
+Name=Jet Force Gemini (U)
+
+$Access\All Characters
+801E6040 FFFF
+
+$Access\All Floyd Awards
+Note=only enable One character at a time when using this code
+50000501 0000
+801E6038 0005
+
+$Juno\Access\All Keys
+811E6248 FFF7
+
+$Juno\Access\All Objects
+811E624A FFFF
+
+$Juno\Access\All Weapons
+Note=Do not put this code on until you collect one Extra Weapon then you will Have\all ready to use
+801E61EC 00FF
+801E61ED 00FF
+
+$Juno\Full & Max Health
+801BF976 0040
+801E61E5 000C
+801E61E2 0040
+
+$Juno\Infinite Continues
+800A3281 0002
+
+$Juno\Infinite\Max Ammo All Weapons
+50000302 0000
+811E61F6 03E7
+50000802 0000
+811E61FC 03E7
+50000402 0000
+811E620C 03E7
+
+$Juno\Infinite\Mizar Tokens
+811E61F4 03E7
+
+$Juno\Max Blue & White Heads
+811E61EA 03E7
+811E61E8 03E7
+
+$Lupus\Access\All Keys
+811E62BE FF70
+
+$Lupus\Access\All Objects
+811E62C0 FFFF
+
+$Lupus\Access\All Weapons
+Note=Do not put this code on until you collect one Extra Weapon then you will Have\all ready to use
+801E6262 00FF
+801E6263 00FF
+
+$Lupus\Full & Max Health
+801BF9EC 0040
+801E625B 000C
+801E6258 0040
+
+$Lupus\Infinite\Max Ammo All Weapons
+50000302 0000
+811E626C 03E7
+50000802 0000
+811E6272 03E7
+50000402 0000
+811E6282 03E7
+
+$Lupus\Infinite\Mizar Tokens
+811E626A 03E7
+
+$Lupus\Max\Blue & White Heads
+811E6260 03E7
+811E625E 03E7
+
+$Tribals\Gold Wood\Have All Tribals
+801E6014 000F
+
+$Tribals\Gold Wood\Have No Tribals Remaining
+801E6016 0000
+
+$Tribals\Gold Wood\No Tribals Killed
+801E6015 0000
+
+$Vela\Access\All Keys
+811E61D2 FF70
+
+$Vela\Access\All Objects
+811E61D4 FFFF
+
+$Vela\Access\All Weapons
+Note=Do not put this code on until you collect one Extra Weapon then you will Have\all ready to use
+801E6176 00FF
+801E6177 00FF
+
+$Vela\Full & Max Health
+801E616F 000C
+801E616C 0040
+
+$Vela\Infinite\Max Ammo All Weapons
+50000302 0000
+811E6180 03E7
+50000802 0000
+811E6186 03E7
+50000402 0000
+811E6196 03E7
+
+$Vela\Infinite\Mizar Tokens
+811E617E 03E7
+
+$Vela\Max\Blue & White Heads
+811E6174 03E7
+811E6172 03E7
+
+$Wide Screen Always Off
+800FECA8 0000

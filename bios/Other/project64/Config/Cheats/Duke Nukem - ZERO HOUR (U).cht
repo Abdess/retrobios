@@ -1,0 +1,36 @@
+[04DAF07F-0D18E688-C:45]
+Name=Duke Nukem - ZERO HOUR (U)
+
+$Cheat Menu\All Weapons Enabled
+801CC8B9 0001
+801CC925 0001
+801CD985 0001
+801CDA81 0001
+801CDB15 0001
+801CDB17 0001
+801CDB49 0001
+801CE479 0001
+801CE481 0001
+801CE4ED 0001
+801CF635 0001
+
+$Cheat Menu\Cheat Menu Enabled
+801CE4E8 0001
+
+$Cheat Menu\Have All Game Type & Other
+810E16BE FFFF
+
+$Cheat Menu\Have All Weapons
+811CE470 FFFF
+
+$Enable Debug Menu
+800DF990 0001
+
+$Infinite Ammo (All Guns)
+810A1E74 A65B
+
+$Invincibility
+800DEEC3 0001
+
+$Time Always 00:00
+801A19C6 0000

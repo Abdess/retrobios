@@ -1,0 +1,76 @@
+[0CEBC4C7-0C9CE932-C:4A]
+Name=Wild Choppers (J)
+
+$Gun 4-Way Shot
+801279B3 0004
+
+$Infinite Fuel
+811279B6 FFFF
+
+$Infinite Shield
+81127958 0264
+
+$Infinite Weapon\1st Position
+811276CA 03E7
+
+$Infinite Weapon\2nd Position
+811276CE 03E7
+
+$Infinite Weapon\3rd Position
+811276D2 03E7
+
+$Infinite Weapon\4th Position
+811276D6 03E7
+
+$Infinite Weapon\5th Position
+811276DA 03E7
+
+$Max Score
+811276B6 FFFF
+
+$Stage Select On
+81127706 0001
+
+$Weapon Modifier\Gun Weapon
+801279B3 00??
+00 No Weapon
+01 Normal Shot
+02 2-Way Shot
+03 3-Way Shot
+04 4-Way Shot
+
+$Weapon Modifier\Rockets\Slot 1
+801276C9 00??
+00 Nothing
+01 AGM
+02 AAM
+03 AGAM
+04 Dummy
+05 Rocket
+06 Cluster
+07 H-Cluster
+08 H-Plasma
+
+$Weapon Modifier\Rockets\Slot 2
+801276CD 00??
+00 Nothing
+01 AGM
+02 AAM
+03 AGAM
+04 Dummy
+05 Rocket
+06 Cluster
+07 H-Cluster
+08 H-Plasma
+
+$Weapon Modifier\Rockets\Slot 3
+801276D1 00??
+00 Nothing
+01 AGM
+02 AAM
+03 AGAM
+04 Dummy
+05 Rocket
+06 Cluster
+07 H-Cluster
+08 H-Plasma

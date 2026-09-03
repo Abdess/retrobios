@@ -1,0 +1,50 @@
+[142A17AA-13028D96-C:50]
+Name=Forsaken 64 (E) (M4)
+
+$Freeze Enemies
+8008EE3B 0012
+
+$Gore Mode
+8008EE37 0012
+
+$Infinite\Lives
+8008EE33 0012
+
+$Infinite\Primery Weapons
+8008EE30 0012
+
+$Infinite\Secondary Weapons
+8008EE31 0012
+
+$Infinite\Solaris
+Note=Solaris are included in code
+8008EE3D 0012
+
+$Infinite\Titans
+Note=Titans are included in code
+8008EE3C 0012
+
+$Infinite\Weapon Energy
+8008EE32 0012
+
+$Invulnerability
+8008EE35 0012
+
+$Level Select
+Note=Accesses all Missions & Battle mode
+8008EE3E 0012
+
+$One Shot Enemies
+8008EE3A 0012
+
+$Psychedelic Mode
+8008EE39 0012
+
+$Stealth Mode
+8008EE34 0012
+
+$Turbo Mode
+8008EE38 0012
+
+$Wireframe Mode
+8008EE36 0012

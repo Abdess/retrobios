@@ -1,0 +1,12 @@
+[7F9345D3-841ECADE-C:50]
+Name=Mystical Ninja 2 Starring Goemon (E) (M3)
+
+$Fifty Frames
+Note=Too fast,needs pacing code.
+80088E34 0001
+
+$Fifty Frames (ASM)
+Note=Still too fast.
+810012C4 240B
+810012C6 0001
+

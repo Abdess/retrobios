@@ -1,0 +1,51 @@
+[8E6E01FF-CCB4F948-C:45]
+Name=Glover (U)
+
+$GS Button For 40 Gems
+8829018F 0028
+
+$Infinite\Action Modifier
+802901E3 00??
+00 Freeze Enemy Spell
+01 Death Spell
+02 Frog Spell
+03 Walk On Walls Spell
+04 Big Glover Spell
+05 Tree Spell
+06 Helicopter Spell
+07 Enemy Ball Spell
+08 Purple Bouncy Ball Spell
+09 Tiny Black/Grey Ball Spell
+0A Beach Ball Spell
+0B Hovering Ball Spell
+0C Green Ball Spell
+0D Super Call Ball Spell
+0E Call Ball Spell
+
+$Infinite\Activate Cheat\Modifier 1
+81297BEC ????
+0080 Level Select
+0100 Open Portals
+0200 Open Levels
+0380 All Of The Above
+
+$Infinite\Activate Cheat\Modifier 2
+81297BEE ????
+0002 Call Ball (Press L)
+0008 Infinite Lives
+0040 Infinite Energy
+0200 Big Ball
+024A All Of The Above
+
+$Infinite\Double Jumps
+8028FC07 0000
+
+$Infinite\Health
+8029018F 0028
+
+$Infinite\Lives
+80290193 000A
+
+$Press L To Levitate
+D02AE905 0020
+81290334 43E0

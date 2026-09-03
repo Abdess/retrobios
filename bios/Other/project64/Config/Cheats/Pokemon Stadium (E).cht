@@ -1,0 +1,149 @@
+[84077275-57315B9C-C:50]
+Name=Pokemon Stadium (E) (V1.0)
+
+$All Pokemon Level 100\Player 1
+50000654 0000
+800AE654 0064
+
+$All Pokmon Have Max Hp
+81285AE8 0096
+
+$Catch\Mew on GB Tower
+80171E17 0015
+
+$Catch\Mewtwo on GB Tower
+80171E17 0083
+
+$Clefairy Says\Extended Life Bar\Player 1
+8118F43A 0049
+
+$Clefairy Says\Extended Life Bar\Player 2
+8118F5FA 0049
+
+$Clefairy Says\Extended Life Bar\Player 3
+8118F7BA 0049
+
+$Clefairy Says\Extended Life Bar\Player 4
+8118F97A 0049
+
+$Clefairy Says\Infinite Health\Player 1
+8118F438 0064
+
+$Clefairy Says\Infinite Health\Player 2
+8118F5F8 0064
+
+$Clefairy Says\Infinite Health\Player 3
+8118F7B8 0064
+
+$Clefairy Says\Infinite Health\Player 4
+8118F978 0064
+
+$Game Difficulty
+D312FC40 FD70
+D312FC40 A528
+8112FC40 00??
+00 Hard
+01 Normal
+02 Easy
+0F Extra Hard
+
+$Gym Leader Castle\Blaine
+80286B69 00A1
+
+$Gym Leader Castle\Brock
+80287539 00A1
+
+$Gym Leader Castle\Elite Four & Rival
+80286859 00A1
+
+$Gym Leader Castle\Erika
+80286BA9 00A1
+
+$Gym Leader Castle\Giovani
+80287169 00A1
+
+$Gym Leader Castle\Koga
+80287519 00A1
+
+$Gym Leader Castle\Misty
+80287E79 00A1
+
+$Gym Leader Castle\Sabrina
+802870A9 00A1
+
+$Gym Leader Castle\Surge
+80286BD9 00A1
+
+$Infinite Attacks All Pokemon\Player 1
+50000654 0000
+810AE650 6363
+50000654 0000
+810AE652 6363
+
+$Infinite Attacks All Pokemon\Player 2
+50000654 0000
+810AE86C FFFF
+50000654 0000
+810AE86E FFFF
+
+$Infinite Attacks All Pokemon\Player 3
+50000654 0000
+810AE86C FFFF
+50000654 0000
+810AE86E FFFF
+
+$Infinite Attacks All Pokemon\Player 4
+50000654 0000
+810AEA88 FFFF
+50000654 0000
+810AEA8A FFFF
+
+$Infinite cash
+81172186 9999
+
+$Infinite coins for coin case
+801723E3 0099
+
+$Infinite Health against Mew Two
+810AE632 FFFF
+812823E8 FFFF
+
+$Infinite Health\Player 1
+810AE686 03E7
+810AE6AA 03E7
+810AE6DA 03E7
+810AE6FE 03E7
+
+$Infinite Health\Stadium\Free Battle
+80287D79 0064
+
+$Infinite Health\Stadium\Mewto
+802825B9 0064
+
+$Infinite Health\Stadium\Petit Cup
+80286C29 0064
+
+$Infinite Health\Stadium\Pica Cup
+80284659 0064
+
+$Infinite Health\Stadium\Poke Cup
+80285399 0064
+
+$Infinite Health\Stadium\Prime Cup
+80285FE9 0064
+
+$Pokemon beach stop code
+D00488A1 0020
+80202BB5 0001
+
+$Rock Harden\Infinite Armour\Player 1
+81193B78 0190
+
+$Rock Harden\Infinite Armour\Player 2
+81193E2C 0190
+
+$Rock Harden\Infinite Armour\Player 3
+811940E0 0190
+
+$Rock Harden\Infinite Armour\Player 4
+81194394 0190

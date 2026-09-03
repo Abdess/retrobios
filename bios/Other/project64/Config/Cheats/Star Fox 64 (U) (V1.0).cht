@@ -1,0 +1,65 @@
+[A7D015F8-2289AA43-C:45]
+Name=Star Fox 64 (U) (V1.0)
+
+$Have All Medals
+Note=For Expert & Normal Modes
+50000802 0000
+8116E6E0 7777
+
+$Infinite\Armor\Falco
+8016D727 00FF
+
+$Infinite\Armor\Peppy
+8016D72F 00FF
+
+$Infinite\Armor\Slippy
+8016D72B 00FF
+
+$Infinite\Dual Blue Lasers
+8015791B 0002
+
+$Infinite\Energy
+8013AB27 00FF
+80137C47 00FF
+
+$Infinite\Hyper Laser
+8015791B 0002
+
+$Infinite\Lives
+80157911 0009
+
+$Level Select
+D016E0A7 0000
+8016E0A7 00??
+00 Corneria
+01 Meteo
+02 Sector X
+03 Area 6
+04 Glitch
+05 Sector Y
+06 Venom 1
+07 Solar
+08 Zoness
+09 Venom 2
+0A Training Mode Level
+0B Macbeth
+0C Titania
+0D Aquas
+0E Fortuna
+10 Katina
+11 Bolse
+12 Sector Z
+13 Venom With Starwolf
+14 Corneria (Multi)
+
+$Loads O' Hits
+8015790B 00FF
+
+$Unlimited\Boost
+81137C9C 0000
+81137C9E 0000
+8113AB7C 0000
+8113AB7E 0000
+
+$Unlimited\Smart Bombs
+8016DC13 0004

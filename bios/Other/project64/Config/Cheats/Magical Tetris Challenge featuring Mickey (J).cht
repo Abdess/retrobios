@@ -1,0 +1,34 @@
+[80C8564A-929C65AB-C:4A]
+Name=Magical Tetris Challenge featuring Mickey (J)
+
+$[Always Get Pieces Select]\Player 1
+801D25F4 00??
+00 Straight Piece
+01 Orange 'L'
+02 Blue 'L'
+03 Green 'Z'
+04 Purple 'Z'
+05 Blue 'T'
+06 Yellow Square
+
+$[Always Get Pieces Select]\Player 2
+801D7A44 00??
+00 Straight Piece
+01 Orange 'L'
+02 Blue 'L'
+03 Green 'Z'
+04 Purple 'Z'
+05 Blue 'T'
+06 Yellow Square
+
+$Max Score
+811D26A4 3B9A
+811D26A6 C9FF
+
+$Press L Button for Max Gauge\Player 1
+D00B2791 0020
+811D2602 0098
+
+$Press L Button for Max Gauge\Player 2
+D00B2797 0020
+811D7A52 0098

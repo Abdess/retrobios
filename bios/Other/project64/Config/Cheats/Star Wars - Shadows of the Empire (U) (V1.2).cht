@@ -1,0 +1,72 @@
+[4DD7ED54-74F9287D-C:45]
+Name=Star Wars - Shadows of the Empire (U) (V1.2)
+
+$All Levels\Dash Becomes Shorter & Wider
+800BA025 FFFF
+
+$All Levels\Infinite\Lives
+800E05CB 0064
+
+$All Levels\Infinite\Missiles
+800E1265 00FF
+
+$All Levels\Large Mutant Enemies
+800BB62B FFFF
+
+$All Levels\No Clipping\Off
+81111E67 0001
+
+$All Levels\No Clipping\On
+81111E67 0000
+
+$All Levels\See Through\Everything Except Specific Things
+800BC665 FFFF
+
+$All Levels\See Through\Some Walls
+800BC625 FFFF
+
+$All Levels\Time Always 0:00:02
+810E04E8 4000
+
+$All Levels\Visibililty\Maximum
+800BA62B FFFF
+
+$All Levels\Visibililty\Minimum
+800BA66B FFFF
+
+$All Stages\Infinite Health
+81072D0C 2400
+
+$All Stages\Infinite\Disruptor Ammo
+81073F04 2400
+
+$All Stages\Infinite\Flame Ammo
+81073720 2400
+
+$All Stages\Infinite\Jet Pack
+81076AAC 2400
+81076C58 2400
+81076B48 2400
+
+$All Stages\Infinite\Pulse Ammo
+81074204 2400
+
+$All Stages\Infinite\Seeker Ammo
+81073A94 2400
+
+$All Stages\Infinite\Stunner Ammo
+81073BD4 2400
+
+$All Stages\Invincible
+8107A770 2400
+
+$All Stages\Lasers Never Overheat
+81073948 2400
+
+$All Stages\Upper Lasers
+Note=Don't Use With Never Overheat Code
+81073944 3C06
+81073946 4EFF
+
+$Press F9 For Pink Cheat Debug Screen
+890D098B 0001

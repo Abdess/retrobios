@@ -1,0 +1,23 @@
+[8A86F073-CD45E54B-C:45]
+Name=Bust-A-Move 2 - Arcade Edition (U)
+
+$Computer\Always Gets Bubbles
+80173601 0006
+
+$Computer\Never Gets Bubbles
+80173601 0000
+
+$Infinite Credits
+80120171 0005
+
+$Player 1\Always Gets Bubbles
+80171131 0006
+
+$Player 1\Infinite Time To Set Pieces
+8117AAFC 0000
+
+$Player 1\Never Gets Bubbles
+80171131 0000
+
+$Player 1\Screen Never Fills Over Time
+80171125 000A

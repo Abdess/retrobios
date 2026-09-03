@@ -1,0 +1,7 @@
+[89FED774-CAAFE21B-C:45]
+Name=Gex 64 - Enter the Gecko (U)
+
+$Sixty Frames
+Note=Change ASM value,too fast.
+8003B8FB 0001
+

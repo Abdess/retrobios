@@ -1,0 +1,108 @@
+[E4B08007-A602FF33-C:50]
+Name=Perfect Dark (E) (M5)
+
+$Carrington Institute\Have 255 targets destroyed
+810AD714 00FF
+
+$Carrington Institute\Have 999 points in Firing Range
+810AD712 03E7
+
+$Carrington Institute\Have Infinite time in Firing Range
+810AD70E 004D
+
+$Have All\Levels Complete & All Challenges
+Note=Have All levels Complete on Solo Missions, & Acces all Challenges & CO-OP Levels
+50003C02 0000
+800A27C1 0001
+50001E1A 0000
+80088A0D 0001
+50001E1A 0000
+80088A0E 0001
+50001E1A 0000
+80088A0F 0001
+50001E1A 0000
+80088A10 0001
+
+$Have All\Weapons\Player 1
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+802037F0 0007
+801EA7F0 0007
+801D17F0 0007
+
+$Have All\Weapons\Player 2
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+80205460 0007
+801EC460 0007
+801D3460 0007
+
+$Infinite\Ammo\Player 1
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+80202F7F 00FF
+801E9F7F 00FF
+801D0F7F 00FF
+802027DB 00FF
+801E97DB 00FF
+801D07DB 00FF
+
+$Infinite\Ammo\Player 2
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+80204BEF 00FF
+801EBBEF 00FF
+801D2BEF 00FF
+8020444B 00FF
+801EB44B 00FF
+801D244B 00FF
+
+$Infinite\Health\Player 1
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+8120205C 3F80
+811E905C 3F80
+811D005C 3F80
+
+$Infinite\Health\Player 2
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+81203CCC 3F80
+811EACCC 3F80
+811D1CCC 3F80
+
+$Infinite\Shield\Player 1
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+81202070 3F80
+811E9070 3F80
+811D0070 3F80
+
+$Infinite\Shield\Player 2
+Note=This code is for all Low/High Res Solo & Multi-Player Level ;) Enjoy
+81203CE0 3F80
+811EACE0 3F80
+811D1CE0 3F80
+
+$Press B To Levitate\Single & Co-Op\Player 1
+Note=To activate the moon jump you must Hold B while in the air. You can get in the air by going down steps, or hills or by going off the edge of something
+D00980C4 0040
+81202000 40F2
+D00980C4 0040
+80201FB3 0000
+D00980C4 0040
+811E9000 40F2
+D00980C4 0040
+801E8FB3 0000
+D00980C4 0040
+811D0000 40F2
+D00980C4 0040
+801CFFB3 0000
+
+$Single & Co-Op\Press B To Levitate\Player 2
+Note=To activate the moon jump you must Hold B while in the air. You can get in the air by going down steps, or hills or by going off the edge of something
+D1099FB6 4000
+81203C70 40F2
+D1099FB6 4000
+81203C23 0000
+D1099FB6 4000
+811EAC70 40F2
+D1099FB6 4000
+811EAC23 0000
+D1099FB6 4000
+811D1C70 40F2
+D1099FB6 4000
+811D1C23 0000

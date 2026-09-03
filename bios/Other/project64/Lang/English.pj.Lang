@@ -1,0 +1,581 @@
+﻿// Meta information
+#1  #  "English"		// Language ID
+#2  #  "Zilmar"			// Author
+#3  #  "3.0"			// Version
+#4  #  "May, 2021"		// Date
+
+/*** Menu ***/
+
+// File menu
+#100#  "&File"
+#101#  "&Open ROM"
+#102#  "ROM &Info..."
+#103#  "Start Emulation"
+#104#  "&End Emulation"
+#105#  "Choose ROM Directory..."
+#106#  "Refresh ROM List"
+#107#  "Recent ROM"
+#108#  "Recent ROM Directories"
+#109#  "E&xit"
+#110#  "Open &Combo"
+
+// System menu
+#120#  "&System"
+#121#  "&Reset"
+#122#  "&Pause"
+#123#  "Capture screenshot"
+#124#  "Limit FPS"
+#125#  "&Save State"
+#126#  "Save As..."
+#127#  "&Load State"
+#128#  "Load..."
+#129#  "Current Saves&tate"
+#130#  "&Cheats..."
+#131#  "GS Button"
+#132#  "R&esume"
+#133#  "&Soft Reset"
+#134#  "&Hard Reset"
+#135#  "Swap &Disk"
+#136#  "&Enhancements..."
+
+// Options menu
+#140#  "&Options"
+#141#  "&Fullscreen"
+#142#  "Always on &top"
+#143#  "&Graphics Settings"
+#144#  "&Audio Settings"
+#145#  "&Input Settings"
+#146#  "&RSP Settings"
+#147#  "Show CPU &Stats"
+#148#  "Configura&tion"
+
+// Debugger menu
+#160#  "&Debugger"
+
+// Language menu
+#175#  "&Language"
+
+// Help menu
+#180#  "&Help"
+#182#  "&About Project64"
+#184#  "&Website"
+#185#  "&Support Project64"
+#186#  "&Discord"
+
+// Current save slot menu
+#190#  "Default"
+#191#  "Slot 1"
+#192#  "Slot 2"
+#193#  "Slot 3"
+#194#  "Slot 4"
+#195#  "Slot 5"
+#196#  "Slot 6"
+#197#  "Slot 7"
+#198#  "Slot 8"
+#199#  "Slot 9"
+#200#  "Slot 10"
+#201#  "Save slot (%ws) selected"
+
+// Pop-up menu
+#210#  "Play Game"
+#211#  "ROM Information"
+#212#  "Edit Game Settings"
+#213#  "Edit Cheats..."
+#214#  "Graphics Plugin"
+#215#  "Play Game with Disk"
+#216#  "Pick Enhancements..."
+
+// Alternate name to save slot
+#220#  "Save Slot - Default"
+#221#  "Save Slot - 1"
+#222#  "Save Slot - 2"
+#223#  "Save Slot - 3"
+#224#  "Save Slot - 4"
+#225#  "Save Slot - 5"
+#226#  "Save Slot - 6"
+#227#  "Save Slot - 7"
+#228#  "Save Slot - 8"
+#229#  "Save Slot - 9"
+#230#  "Save Slot - 10"
+
+// Menu descriptions
+#250#  "Open a N64 ROM image"
+#251#  "Display information about the loaded image"
+#252#  "Start emulation of the loaded ROM image"
+#253#  "Stop emulation of the loaded ROM image"
+#254#  "Select ROM directory"
+#255#  "Refresh current list of ROMs in the ROM browser"
+#256#  "Exit this application"
+#257#  "Reboot the current ROM image (reload any settings changes)"
+#258#  "Pause/resume emulation of the current running ROM"
+#259#  "Generate a bitmap image of the current screen"
+#260#  "Limit FPS to the correct speed of the N64"
+#261#  "Save the current system state"
+#262#  "Save the current system state in a selected file location"
+#263#  "Load the saved system state"
+#264#  "Choose a saved system state file to load"
+#265#  "Enable/disable GameShark cheats"
+#266#  "GameShark button is used with specific cheats."
+#267#  "Change emulation from windowed to full-screen mode."
+#268#  "Make window stay on top of all other windows"
+#269#  "Change settings inside the graphics plugin"
+#270#  "Change settings inside the audio plugin"
+#271#  "Change settings inside the controller plugin (i.e., set keys)"
+#272#  "Change settings inside the RSP plugin"
+#273#  "Show the CPU usage of the emulator split over different resources"
+#274#  "View/change settings for this application"
+#275#  "View manual for application"
+#276#  "View FAQ for application"
+#278#  "About the application and authors"
+#277#  "About the authors of the support files"
+#279#  "Open this previously opened ROM image"
+#280#  "Choose this directory as your ROM directory"
+#281#  "Change application to using this language"
+#282#  "Choose this save location for the saved state"
+#283#  "Play selected game"
+#284#  "Information about selected game"
+#285#  "Edit settings for selected game"
+#286#  "Edit cheats for selected game"
+
+/*** ROM browser ***/
+
+// ROM browser fields
+#300#  "File Name"
+#301#  "Internal Name"
+#302#  "Good Name"
+#303#  "Status"
+#304#  "ROM Size"
+#305#  "Notes (core)"
+#306#  "Notes (default plugins)"
+#307#  "Notes (user)"
+#308#  "Cartridge ID"
+#309#  "Media Type"
+#310#  "Country"
+#311#  "Developer"
+#312#  "CRC1"
+#313#  "CRC2"
+#314#  "CIC Chip"
+#315#  "Release Date"
+#316#  "Genre"
+#317#  "Players"
+#318#  "Force Feedback"
+#319#  "File Format"
+#321#  "Name"
+
+// Select ROM
+#320#  "Select current ROM directory"
+
+// Messages
+#340#  "Bad ROM? Use GoodN64 & check that the RDB is up-to-date."
+
+/*** Options ***/
+
+// Options title
+#400#  "Configuration"
+
+// Tabs
+#401#  "Plugins"
+#402#  "Directories"
+#403#  "General settings"
+#404#  "ROM browser"
+#405#  "Advanced"
+#406#  "ROM settings"
+#408#  "Notes"
+#409#  "Hotkeys"
+#410#  "Status"
+#411#  "Recompiler"
+#412#  "Defaults"
+#413#  "64DD"
+#414#  "64DD"
+
+// Plugin dialog
+#420#  "About"
+#421#  " RSP (Reality Signal Processor) plugin: "
+#422#  " Video (graphics) plugin: "
+#423#  " Audio (sound) plugin: "
+#424#  " Input (controller) plugin: "
+#425#  "Graphics HLE"
+#426#  "Audio HLE"
+#427#  "** Use System Plugin **"
+
+// Directory dialog
+#440#  " Plugin directory: "
+#441#  " ROM directory: "
+#442#  " N64 native saves directory: "
+#443#  " Saved states directory: "
+#444#  " Screenshot directory: "
+#445#  "Last folder that a ROM was open from"
+#446#  "Select plugin directory"
+#447#  "Select ROM directory"
+#448#  "Select N64 native saves directory"
+#449#  "Select saved states directory"
+#450#  "Select screenshot directory"
+#451#  " Texture pack directory: "
+#452#  "Select texture pack directory"
+
+// Options (general) tab
+#460#  "Pause emulation when window is not active"
+#461#  "Enter fullscreen mode when loading a ROM"
+#462#  "Hide advanced settings"
+#463#  "Remember selected cheats"
+#464#  "Disable screensaver when running a ROM"
+#465#  "Display speed"
+#466#  "Speed display:"
+#467#  "Check if Project64 is already running"
+#468#  "Store game saves in separate folders"
+#469#  "Japanese retail 64DD IPL ROM path:"
+#470#  "American retail 64DD IPL ROM path:"
+#471#  "Development 64DD IPL ROM path:"
+#472#  "Disk save type:"
+#473#  "Enable enhancements"
+#474#  "Show status bar"
+#475#  "Exit fullscreen on lose focus"
+#476#  "Enable Discord Rich Presence"
+
+// ROM browser tab
+#480#  "Max # of ROMs remembered (0-10):"
+#481#  "ROMs"
+#482#  "Max # of ROM dirs remembered (0-10):"
+#483#  "dirs"
+#484#  "Use ROM browser"
+#485#  "Use directory recursion"
+#486#  "Available fields:"
+#487#  "Order of fields:"
+#488#  "Add ->"
+#489#  "<- Remove"
+#490#  "Up"
+#491#  "Down"
+#492#  "Automatically refresh browser"
+#493#  "Show file extensions"
+
+// Advanced options
+#500#  "Most of these changes will not take effect until a new ROM is opened or current ROM is reset."
+#501#  "Core Defaults"
+#502#  "CPU core style:"
+#503#  "Self mod methods"
+#504#  "Default memory size:"
+#505#  "Advanced block linking"
+#506#  "Start emulation when ROM is opened"
+#507#  "Always override default settings with ones from RDB"
+#508#  "Automatically compress saved states"
+#509#  "Enable debugger"
+#510#  "Cache"
+#511#  "PI DMA"
+#512#  "Start changed"
+#513#  "Protect memory"
+#514#  "TLB unmapping"
+#515#  "Always use interpreter core"
+
+// ROM options
+#520#  "CPU core style:"
+#521#  "VI refresh rate:"
+#522#  "Memory size:"
+#523#  "Advanced block linking"
+#524#  "Default save type:"
+#525#  "Counter factor:"
+#526#  "Larger compile buffer"
+#528#  "Register caching"
+#529#  "Delay SI interrupt"
+#530#  "Fast SP"
+#531#  "Default"
+#532#  "RSP audio signal"
+#533#  "Fixed audio timing"
+#534#  "Function lookup method:"
+#535#  "Custom self-mod method"
+#536#  "Sync using audio"
+#537#  "AI count per byte:"
+#538#  "32-bit engine"
+#539#  "Delay DP interrupt"
+#5400# "Overclock modifier:"
+#5410# "Unaligned DMA"
+#5420# "Randomize SI/PI interrupts"
+#5440# "Disk seek timing:"
+#5441# "Turbo"
+#5442# "Slow"
+#5443# "Memory size (Known):"
+#5444# "Memory size (Unknown):"
+#5445# "FPU register caching"
+
+// Core styles
+#540#  "Interpreter"
+#541#  "Recompiler"
+#542#  "Synchronize cores"
+
+// Self-mod methods
+#560#  "None"
+#561#  "Cache"
+#562#  "Protect memory"
+#563#  "Check memory & cache"
+#564#  "Change memory & cache"
+#565#  "Check memory advance"
+#566#  "Clear code on cache"
+
+// Function lookup method
+#570#  "Physical lookup table"
+#571#  "Virtual lookup table"
+#572#  "Change memory"
+
+// RDRAM size
+#580#  "4 MB"
+#581#  "8 MB"
+
+// Advanced block linking
+#600#  "On"
+#601#  "Off"
+
+// Save type
+#620#  "Use first-used save type"
+#621#  "4-kbit EEPROM"
+#622#  "16-kbit EEPROM"
+#623#  "SRAM"
+#624#  "Flash RAM"
+
+// ROM notes
+#660#  "ROM status:"
+#661#  "Core note:"
+#662#  "Plugin note:"
+
+// Accelerator selector
+#680#  "CPU state:"
+#681#  "Menu item:"
+#682#  "Current keys:"
+#683#  "Select new shortcut key:"
+#684#  "Currently assigned to:"
+#685#  "Assign"
+#686#  "Remove"
+#687#  "Reset All"
+#688#  "Game not playing"
+#689#  "Game playing"
+#690#  "Game playing (windowed)"
+#691#  "Game playing (full-screen)"
+#692#  "Detect Key"
+
+// Framerate option
+#700#  "Vertical interrupts per second"
+#701#  "Display lists per second"
+#702#  "Percentage of full speed"
+
+// Increase speed
+#710#  "Increase Game Speed"
+#711#  "Decrease Game Speed"
+
+// Bottom page buttons
+#720#  "Reset Page"
+#721#  "Reset All"
+#722#  "Apply"
+#723#  "Close"
+
+// Disk save type
+#730#  "Full Disk Copy"
+#731#  "Save Area Only"
+
+/*** ROM information ***/
+
+// ROM info title
+#800#  "ROM Information"
+
+// ROM info text
+#801#  "ROM name:"
+#802#  "File name:"
+#803#  "Location:"
+#804#  "ROM size:"
+#805#  "Cartridge ID:"
+#806#  "Media Type:"
+#807#  "Country:"
+#808#  "CRC1:"
+#809#  "CRC2:"
+#810#  "CIC Chip:"
+#811#  "MD5:"
+
+/*** Cheats ***/
+
+// Cheat list
+#1000#  "Cheats"
+#1001#  "Cheats:"
+#1002#  " Notes: "
+#1003#  "Mark All"
+#1004#  "Unmark All"
+
+// Add cheat
+#1005#  "Add Cheat"
+#1006#  "Name:"
+#1007#  "Code:"
+#1008#  "Insert"
+#1009#  "Clear"
+#1010#  " Cheat Notes: "
+#1011#  "Add to DB"
+
+// Code extension
+#1012#  "Code Extensions"
+#1013#  "Please choose a value to be used for:"
+#1014#  "OK"
+#1015#  "Cancel"
+
+// Digital value
+#1016#  "Quantity Digit"
+#1017#  "Please choose a value for:"
+#1018#  "&Value"
+#1019#  "from"
+#1020#  "to"
+#1021#  "&Notes:"
+#1022#  "Add Cheat"
+#1023#  "New Cheat"
+#1024#  "<address> <value>:<old>"
+#1025#  "Options:"
+#1026#  "<value> <label>"
+
+// Edit cheat
+#1027#  "Edit Cheat"
+#1028#  "Update Cheat"
+#1029#  "Cheat has been changed.\n\nDo you want to update?"
+#1030#  "Cheat updated"
+
+// Cheat pop-up menu
+#1040#  "Add New Cheat..."
+#1041#  "Edit"
+#1042#  "Delete"
+
+// Shortcut editor
+#1100#  "Reset shortcuts"
+#1101#  "Are you sure you want to reset the shortcuts?\n\nThis action cannot be undone."
+#1102#  "File Menu"
+#1103#  "System Menu"
+#1104#  "Options"
+#1105#  "Save Slots"
+
+/*** Support window ***/
+
+#1200#  "Support Project64"
+#1201#  "Project64 is a free and open source Nintendo 64 emulator.\n\nIt allows you to play real N64 software in much the same way as it would be on the original console.\n\nI am sorry about the inconvenience of this prompt, but you are being asked to wait for a few seconds in order to enjoy the result of hundreds of hours of work.\n\nIf you can and would like to support Project64 or you have gotten some value out of it then please support Project64 as either a thank you, or your desire to remove this prompt.\n\nIf you have supported Project64:"
+#1202#  "Enter/Request Support Code"
+#1203#  "Support Project64"
+#1204#  "Continue"
+#1205#  "Please enter the support code"
+#1206#  "Failed to validate the code\n\nMake sure the code in email matches based on your device"
+#1207#  "Thank you"
+#1208#  "Please enter your support code"
+#1209#  "Please enter the code you received in the email.\n\nThe email will be sent to the email address used to support Project64.\n\nPlease note that the code will only work for a unique device. This device's ID is:"
+#1210#  "OK"
+#1211#  "Cancel"
+#1212#  "Request Code"
+#1213#  "Code has been sent to your email"
+#1214#  "Failed to send code, please make sure it is the email you supported with"
+
+/*** Enhancements ***/
+
+#1300#  "Enhancements"
+
+/*** Messages ***/
+
+#2000#  "*** CPU PAUSED ***"
+#2001#  "CPU Resumed"
+#2002#  "In a permanent loop that cannot be exited.\nEmulation will now stop.\n\nVerify ROM and its settings."
+#2003#  "Failed to allocate memory"
+#2004#  "The default or selected video plugin is missing or invalid.\n\nYou need to go into Settings and select a video (graphics) plugin.\nCheck that you have at least one compatible plugin file in your plugin folder."
+#2005#  "The default or selected audio plugin is missing or invalid.\n\nYou need to go into Settings and select a audio (sound) plugin.\nCheck that you have at least one compatible plugin file in your plugin folder."
+#2006#  "The default or selected RSP plugin is missing or invalid.\n\nYou need to go into Settings and select a RSP (Reality Signal Processor) plugin.\nCheck that you have at least one compatible plugin file in your plugin folder."
+#2007#  "The default or selected input plugin is missing or invalid.\n\nYou need to go into Settings and select an input (controller) plugin.\nCheck that you have at least one compatible plugin file in your plugin folder."
+#2008#  "Failed to load plugin:"
+#2009#  "Failed to load word.\n\nVerify ROM and its settings."
+#2010#  "Failed to open save file"
+#2011#  "Failed to open EEPROM"
+#2012#  "Failed to open flash RAM"
+#2013#  "Failed to open mempak"
+#2014#  "Attempt to open zip file failed.\n\nProbably a corrupt zip file - try unzipping ROM manually."
+#2015#  "Attempt to open file failed."
+#2016#  "Error occurred when trying to open zip file."
+#2017#  "File loaded does not appear to be a valid N64 ROM.\n\nVerify your ROMs with GoodN64."
+#2018#  "Unknown country"
+#2019#  "Unknown CIC chip"
+#2020#  "Unknown file format"
+#2021#  "Unknown memory action\n\nEmulation stopped"
+#2022#  "Unhandled R4300i opcode at"
+#2023#  "Executing from non-mapped space.\n\nVerify ROM and its settings."
+#2024#  "This saved state does not appear to match the running ROM.\n\nStates must be saved & loaded between 100% identical ROMs.\nIn particular, the REGION and VERSION need to be the same.\nLoading this state is likely to cause the game and/or emulator to crash.\n\nAre you sure you want to continue loading?"
+#2025#  "Error"
+#2026#  "Copyright sequence not found in LUT. Game will no longer function."
+#2027#  "Copy Protection Failure"
+#2028#  "Changing a plugin requires Project64 to reset a running ROM.\nIf you don't want to lose your place, answer No and save the current state first.\n\nChange plugins and reset ROM now?"
+#2029#  "Change Plugins"
+#2030#  "Emulation ended"
+#2031#  "Emulation started"
+#2032#  "Unable to load state"
+#2033#  "Loaded state"
+#2034#  "Saved current state to"
+#2035#  "State slot"
+#2036#  "Byte-swapping image"
+#2037#  "Choosing N64 image"
+#2038#  "Loaded"
+#2039#  "Loading image"
+#2040#  "Cannot open a ROM because plugins have not successfully initialized."
+#2041#  "Are you sure you really want to delete this?"
+#2042#  "Delete Cheat"
+#2043#  "Cheat name is already in use."
+#2044#  "You have reached the maximum amount of cheats for this ROM."
+#2045#  "Plugin initializing"
+#2046#  "You have not selected a virtual key to assign to the menu item."
+#2047#  "You need to select a menu item to assign this key to."
+#2048#  "Short-cut has already been assigned to another menu item."
+#2049#  "No shortcut has been selected to be removed."
+#2050#  "ROM loaded. Waiting for emulation to start."
+#2051#  "Project64 beta versions are for members only.\n\nIf you have an account at www.pj64-emu.com, you should not be seeing this error!!\nPlease contact us on the site."
+#2052#  "Program Error"
+#2053#  "Failed to find filename in 7z file"
+#2054#  "Graphics Low-Level Emulation"
+#2055#  "Graphics LLE is not for general use!!!\nIt is advisable that you only use this for testing and not for playing games.\n\nChange to graphics LLE?"
+#2056#  "Audio High-Level Emulation"
+#2057#  "Audio HLE requires a third-party plugin!!!\nIf you do not use a third-party audio plugin that supports HLE, you will hear no sound.\n\nChange to audio HLE?"
+#2058#  "File loaded does not appear to be a valid 64DD IPL ROM.\n\nVerify your ROMs with GoodN64."
+#2059#  "Nintendo 64DD Japanese Retail IPL ROM not found.\nIt is required to play japanese region 64DD disk images.\n\nPlease select the required ROM in the Settings."
+#2061#  "Nintendo 64DD American Retail IPL ROM not found.\nIt is required to play american region 64DD disk images.\n\nPlease select the required ROM in the Settings."
+#2062#  "Nintendo 64DD Development IPL ROM not found.\nIt is required to play development 64DD disk images.\n\nPlease select the required ROM in the Settings."
+#2063#  "Failed to update cheat, it is invalid"
+#2064#  "Invalid Cheat"
+#2065#  "Failed to read ident bytes"
+#2066#  "Invalid image file"
+#2067#  "Failed to allocate for rom"
+#2068#  "Failed to open rom"
+
+/*** Android ***/
+
+#3000#  "Settings"
+#3001#  "Help/Forum"
+#3002#  "Report Issue"
+#3003#  "About"
+#3004#  "Recently played"
+#3005#  "Games"
+#3006#  "Game Dir"
+#3007#  "Select an folder to scan"
+#3008#  "Include subdirectories"
+#3009#  "Parent folder"
+#3010#  "Directories"
+#3011#  "Internal memory"
+#3012#  "Scanning..."
+#3013#  "OK"
+#3014#  "Cancel"
+#3015#  "Information"
+#3016#  "Project64 for Android"
+#3017#  "License"
+#3018#  "Revision"
+#3019#  "Project64 for Android\u2122 is a port of the windows version of Project64.The Android\u2122 version can play most N64 games."
+#3020#  "Project64 Authors."
+#3021#  "Discord"
+
+// In-game menu
+#3100#  "Settings"
+#3101#  "Save State"
+#3102#  "Load State"
+#3103#  "End Emulation"
+#3104#  "Pause"
+#3105#  "Resume"
+#3106#  "Game Speed"
+#3107#  "Current Save State..."
+#3108#  "Auto"
+#3109#  "Slot"
+#3110#  "Reset"
+#3111#  "Debugging Options"
+#3112#  "Reset Function Times"
+#3113#  "Dump Function Times"
+
+// Video plugin
+#3200#  "Native"

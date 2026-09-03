@@ -1,0 +1,17 @@
+[C49ADCA2-F1501B62-C:45]
+Name=GT 64 - Championship Edition (U)
+
+$Always first position
+80162A80 0001
+
+$Always Have\99 points
+8015FD09 0063
+
+$Only race one lap
+8015FC35 0001
+
+$Press R For Nitrous Boost
+D01A10B5 0010
+81162F28 4077
+D01A10B5 0010
+81162F30 4077

@@ -1,0 +1,110 @@
+[BA780BA0-0F21DB34-C:45]
+Name=Star Fox 64 (U) (V1.1)
+
+$Have All Medals
+Note=For Expert & Normal Modes
+50000802 0000
+81178870 7777
+
+$Infinite Boost\Player 2
+8113CB6C 0000
+8113CB6E 0000
+8113FA4C 0000
+8113FA4E 0000
+
+$Infinite Boost\Player 3
+8113D04C 0000
+8113D04E 0000
+8113FF2C 0000
+8113FF2E 0000
+
+$Infinite Boost\Player 4
+8113D52C 0000
+8113D52E 0000
+8114040C 0000
+8114040E 0000
+
+$Infinite Dual Blue Lasers\Player 2
+80161AAF 0002
+
+$Infinite Dual Blue Lasers\Player 3
+80161AB3 0002
+
+$Infinite Dual Blue Lasers\Player 4
+80161AB7 0002
+
+$Infinite Health\Player 2
+8013CB17 00FF
+8013F9F7 00FF
+
+$Infinite Health\Player 3
+8013CFF7 00FF
+8013FED7 00FF
+
+$Infinite Health\Player 4
+8013D4D7 00FF
+801403B7 00FF
+
+$Infinite Smart Bombs\Player 2
+80177DA7 0004
+
+$Infinite Smart Bombs\Player 3
+80177DAB 0004
+
+$Infinite Smart Bombs\Player 4
+80177DAF 0004
+
+$Infinite\Armor\Falco
+801778B7 00FF
+
+$Infinite\Armor\Peppy
+801778BF 00FF
+
+$Infinite\Armor\Slippy
+801778BB 00FF
+
+$Infinite\Dual Blue Lasers
+80161AAB 0002
+
+$Infinite\Energy\Player 1
+Note=For Solo & Multi Player
+8013C637 00FF
+8013F517 00FF
+
+$Infinite\Lives
+80161AA1 0009
+
+$Level Select
+80178237 00??
+00 Corneria
+01 Meteo
+02 Sector X
+03 Area 6
+04 Glitch
+05 Sector Y
+06 Venom 1
+07 Solar
+08 Zoness
+09 Venom 2
+0A Training Mode Level
+0B Macbeth
+0C Titania
+0D Aquas
+0E Fortuna
+10 Katina
+11 Bolse
+12 Sector Z
+13 Venom With Starwolf
+14 Corneria (Multi)
+
+$Loads O' Hits
+80161A9B 00FF
+
+$Unlimited\Boost
+8113C68C 0000
+8113C68E 0000
+8113F56C 0000
+8113F56E 0000
+
+$Unlimited\Smart Bombs
+80177DA3 0004

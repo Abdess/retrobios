@@ -1,0 +1,51 @@
+[07861842-A12EBC9F-C:45]
+Name=Excitebike 64 (U) (V1.0)
+
+$Always Low Temp
+810E4F98 0000
+810E4F9A 0000
+
+$Auto-Pilot Always On Turbo (Original Excitebike Mode)
+810E3142 19AA
+
+$Earthquake Mode
+810D7010 3AD0
+
+$Fast\Movement (Drones)
+800D9D55 00A0
+
+$Fast\Movement (Player)
+800D9D65 00AF
+
+$Max Stunt Points
+810E4D18 0098
+810E4D1A 967F
+
+$No\Collision Drivers
+800D9D34 0040
+
+$No\Overheating
+800CA984 00C3
+
+$Power Turbo
+800CA99C 0040
+800CA99D 00E0
+
+$Slow\Movement (Drones)
+800D9D55 0060
+
+$Slow\Movement (Player)
+800D9D65 0060
+
+$Steering Control
+800C9E50 0040
+
+$Super Speed For All
+800CA9A0 0040
+800CA9A1 0070
+
+$Unlock\Difficulties & All Special Tracks
+810F2D50 FFFF
+
+$Unlock\Silver & Gold Cup
+810F2D4E 0003

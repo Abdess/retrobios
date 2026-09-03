@@ -1,0 +1,34 @@
+[5001CF4F-F30CB3BD-C:45]
+Name=Mario Tennis (U)
+
+$Have All\Characters Available
+810653C8 FFFF
+
+$Have All\Courts Available
+810653CC FFFF
+
+$Press C-Down Easy Win Ring Shot - Time,Balls,Points
+Note=Do Not use with Game Option
+D0066985 0004
+80153527 0082
+D0066985 0004
+80153523 0082
+
+$Press C-Down For Easy Win Ring Shot - Game
+Note=Do Not use with Time,Balls,Points Option
+D0066985 0004
+8015350B 0082
+
+$Score\Player 1
+8015344A 00??
+00 0
+01 15
+02 30
+03 40
+
+$Score\Player 2
+8015344B 00??
+00 0
+01 15
+02 30
+03 40

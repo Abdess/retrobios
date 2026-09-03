@@ -1,0 +1,9 @@
+[DC36626A-3F3770CB-C:50]
+Name=Duke Nukem - ZER0 H0UR (E)
+
+$Neko's Potential freeze fix
+PluginList=Glide64 For PJ64,Jabo's Direct3D8
+OnByDefault=1
+50000F04 0000
+811CBD00 0000
+

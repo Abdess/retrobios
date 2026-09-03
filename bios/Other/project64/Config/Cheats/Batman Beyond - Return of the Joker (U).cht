@@ -1,0 +1,31 @@
+[204489C1-1286CF2B-C:45]
+Name=Batman Beyond - Return of the Joker (U)
+
+$Infinite\99 Dark Knight Discus
+802086FE 0063
+
+$Infinite\99 Lives
+802086F1 0063
+
+$Infinite\Health
+802086F2 0064
+
+$Infinite\Max Charge & Magnetic Nun Chaku
+802086B9 0064
+
+$Press F9 to Have\Key
+88208524 0020
+
+$Suit Select
+802086F4 00??
+00 Standard
+01 Offensive
+02 Defensive
+03 Nimble
+
+$Weapon Select
+802086F7 00??
+00 Standard
+01 Dark Knight Discus
+02 Dark Knight Staff
+03 Magnetic Nun Chaku

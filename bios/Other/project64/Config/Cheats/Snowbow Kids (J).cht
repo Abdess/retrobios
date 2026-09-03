@@ -1,0 +1,33 @@
+[84FC04FF-B1253CE9-C:4A]
+Name=Snowbow Kids (J)
+
+$1 Lap Race
+D01215A8 0000
+801215A8 0009
+
+$999 Trick Game Pts
+Note=Press the A Button to stop Count,or it will continue to grow without stoping.
+81121360 03E7
+
+$Access Gold Medals
+50006002 0000
+810EBD42 0101
+
+$Enable Sinobin
+8110A17E 0100
+
+$Infinite\Cash
+8012160A C350
+
+$Infinite\Lucky Dip
+Note="Lucky Dip is Infinite Usage Of What Ever You Get From Each Red Box"
+801215B4 0003
+
+$Infinite\Tools Options
+801215B5 00??
+01 Fan
+02 Ghost
+03 Pan
+04 Rock
+05 Mouse
+06 Board

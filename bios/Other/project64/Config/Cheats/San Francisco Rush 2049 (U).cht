@@ -1,0 +1,61 @@
+[B9A9ECA2-17AAE48E-C:45]
+Name=San Francisco Rush 2049 (U)
+
+$Always Place 1st
+80152906 0000
+
+$Have\All\Gold & Silver Coins\Track 1
+8113A110 FFFF
+
+$Have\All\Gold & Silver Coins\Track 2
+8113A170 FFFF
+
+$Have\All\Gold & Silver Coins\Track 4
+8113A230 FFFF
+
+$Have\All\Gold & Silver Coins\Track 5
+8113A290 FFFF
+
+$Have\All\Gold & Silver Coins\Track 6
+8113A2F0 FFFF
+
+$Infinate Ammo\All Players In Battle
+80152B9D 0050
+80152F55 0050
+8015330D 0050
+801536C5 0050
+
+$Max Score\Stunt Mode
+8115204E 7FFF
+
+$Speed Activator
+D0037AA4 0020
+8114A298 ????
+4333 146 mph
+4350 170 mph
+4380 210 mph
+4393 270 mph
+
+$Start On Lap Modifier
+D014AA38 0000
+8014AA38 00??
+01 1 Lap
+02 2 laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 6 Laps
+07 7 Laps
+08 8 Laps
+09 9 Laps
+
+$Track Modifier
+8014978C 00??
+00 Track 1
+01 Track 2
+02 Track 3
+03 Track 4
+
+$Unlock All Cheats
+50000B02 0000
+8111648C 0101

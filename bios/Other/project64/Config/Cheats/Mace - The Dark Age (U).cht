@@ -1,0 +1,51 @@
+[6B700750-29D621FE-C:45]
+Name=Mace - The Dark Age (U)
+
+$1 Win to Win\Player 1
+D0138B47 0000
+80138B47 0001
+
+$1 Win to Win\Player 2
+D0138B43 0000
+80138B43 0001
+
+$Extra Characters
+8007F9F8 0001
+
+$Infinite Health\Player 1
+8008B1E7 0064
+
+$Infinite Health\Player 2
+8008AE5F 0064
+
+$Infinite Time
+81138B2A 0708
+
+$Infinite Time To Choose Character
+D01340F6 0001
+811340F6 0260
+
+$No Health\Player 1
+8008B1E7 0000
+
+$No Health\Player 2
+8008AE5F 0000
+
+$P2/CPU Never Wins
+80138B43 0000
+
+$R Button Health Restore\Player 1
+D007CD2B 0010
+8008B1E7 0064
+
+$Sudden Death Mode\Player 1
+D1138B2A 0120
+8008B1E7 0001
+
+$Sudden Death Mode\Player 2
+D1138B2A 0120
+8008AE5F 0001
+
+$Z Trigger Deathblow\Player 1
+D007CD2A 0020
+8008AE5F 0000

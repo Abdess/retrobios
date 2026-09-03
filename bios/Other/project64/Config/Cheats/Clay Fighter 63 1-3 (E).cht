@@ -1,0 +1,433 @@
+[8E9692B3-4264BB2A-C:50]
+Name=Clay Fighter 63 1-3 (E)
+
+$Aquadome Stage\Can't be Stunned\Player 1
+801F799B 0000
+
+$Aquadome Stage\Can't be Stunned\Player 2
+801FAE2B 0000
+
+$Aquadome Stage\Full Super Bar\Player 1
+811F799A 0200
+
+$Aquadome Stage\Full Super Bar\Player 2
+811FAE3A 0200
+
+$Aquadome Stage\Infinite Energy\Player 1
+801F7993 00AA
+
+$Aquadome Stage\Infinite Energy\Player 2
+801FAE33 00AA
+
+$Aquadome Stage\No Energy\Player 1
+801F7993 0000
+
+$Aquadome Stage\No Energy\Player 2
+801FAE33 0000
+
+$Backwash Bay Stage\Can't be Stunned\Player 1
+801F80EB 0000
+
+$Backwash Bay Stage\Can't be Stunned\Player 2
+801FB58B 0000
+
+$Backwash Bay Stage\Full Super Bar\Player 1
+811F80FA 0200
+
+$Backwash Bay Stage\Full Super Bar\Player 2
+811FB59A 0200
+
+$Backwash Bay Stage\Infinite Energy\Player 1
+801F80F3 00AA
+
+$Backwash Bay Stage\Infinite Energy\Player 2
+801FB593 00AA
+
+$Backwash Bay Stage\No Energy\Player 1
+801F80F3 0000
+
+$Backwash Bay Stage\No Energy\Player 2
+801FB593 0000
+
+$Boogerhenge, Tureen Toilet Stage\Can't be Stunned\Player 1
+801F8B3B 0000
+
+$Boogerhenge, Tureen Toilet Stage\Can't be Stunned\Player 2
+801FBFDB 0000
+
+$Boogerhenge, Tureen Toilet Stage\Full Super Bar\Player 1
+811F8B4A 0200
+
+$Boogerhenge, Tureen Toilet Stage\Full Super Bar\Player 2
+811FBFEA 0200
+
+$Boogerhenge, Tureen Toilet Stage\Infinite Energy\Player 1
+801F8B43 00AA
+
+$Boogerhenge, Tureen Toilet Stage\Infinite Energy\Player 2
+801FBFE3 00AA
+
+$Boogerhenge, Tureen Toilet Stage\No Energy\Player 1
+801F8B43 0000
+
+$Boogerhenge, Tureen Toilet Stage\No Energy\Player 2
+801FBFE3 0000
+
+$Candy Factory Stage\Can't be Stunned\Player 1
+801F826B 0000
+
+$Candy Factory Stage\Can't be Stunned\Player 2
+801FB70B 0000
+
+$Candy Factory Stage\Full Super Bar\Player 1
+811F827A 0200
+
+$Candy Factory Stage\Full Super Bar\Player 2
+811FB71A 0200
+
+$Candy Factory Stage\Infinite Energy\Player 1
+801F8273 00AA
+
+$Candy Factory Stage\Infinite Energy\Player 2
+801FB713 00AA
+
+$Candy Factory Stage\No Energy\Player 1
+801F8273 0000
+
+$Candy Factory Stage\No Energy\Player 2
+801FB713 0000
+
+$Clayribbean Cruise Stage\Can't be Stunned\Player 1
+801F805B 0000
+
+$Clayribbean Cruise Stage\Can't be Stunned\Player 2
+801FB4FB 0000
+
+$Clayribbean Cruise Stage\Full Super Bar\Player 1
+811F806A 0200
+
+$Clayribbean Cruise Stage\Full Super Bar\Player 2
+811FB50A 0200
+
+$Clayribbean Cruise Stage\Infinite Energy\Player 1
+801F8063 00AA
+
+$Clayribbean Cruise Stage\Infinite Energy\Player 2
+801FB503 00AA
+
+$Clayribbean Cruise Stage\No Energy\Player 1
+801F8063 0000
+
+$Clayribbean Cruise Stage\No Energy\Player 2
+801FB503 0000
+
+$Extra Characters and Secret Options
+801A86A1 000F
+
+$Freezing Fortress Stage\Can't be Stunned\Player 1
+801F7EFB 0000
+
+$Freezing Fortress Stage\Can't be Stunned\Player 2
+801FB39B 0000
+
+$Freezing Fortress Stage\Full Super Bar\Player 1
+811F7F0A 0200
+
+$Freezing Fortress Stage\Full Super Bar\Player 2
+811FB3AA 0200
+
+$Freezing Fortress Stage\Infinite Energy\Player 1
+801F7F03 00AA
+
+$Freezing Fortress Stage\Infinite Energy\Player 2
+801FB3A3 00AA
+
+$Freezing Fortress Stage\No Energy\Player 1
+801F7F03 0000
+
+$Freezing Fortress Stage\No Energy\Player 2
+801FB3A3 0000
+
+$Ghastly Graveyard Stage\Can't be Stunned\Player 1
+801F818B 0000
+
+$Ghastly Graveyard Stage\Can't be Stunned\Player 2
+801FB62B 0000
+
+$Ghastly Graveyard Stage\Full Super Bar\Player 1
+811F819A 0200
+
+$Ghastly Graveyard Stage\Full Super Bar\Player 2
+811FB63A 0200
+
+$Ghastly Graveyard Stage\Infinite Energy\Player 1
+801F8193 00AA
+
+$Ghastly Graveyard Stage\Infinite Energy\Player 2
+801FB633 00AA
+
+$Ghastly Graveyard Stage\No Energy\Player 1
+801F8193 0000
+
+$Ghastly Graveyard Stage\No Energy\Player 2
+801FB633 0000
+
+$Happy Harry's Hut, Spooky Spire, Mudville Mansion Stage\Can't be Stunned\Player 1
+801F7FAB 0000
+
+$Happy Harry's Hut, Spooky Spire, Mudville Mansion Stage\Can't be Stunned\Player 2
+801FB44B 0000
+
+$Happy Harry's Hut, Spooky Spire, Mudville Mansion Stage\Full Super Bar\Player 1
+811F7FBA 0200
+
+$Happy Harry's Hut, Spooky Spire, Mudville Mansion Stage\Full Super Bar\Player 2
+811FB45A 0200
+
+$Happy Harry's Hut, Spooky Spire, Mudville Mansion Stage\Infinite Energy\Player 1
+801F7FB3 00AA
+
+$Happy Harry's Hut, Spooky Spire, Mudville Mansion Stage\Infinite Energy\Player 2
+801FB453 00AA
+
+$Happy Harry's Hut, Spooky Spire, Mudville Mansion Stage\No Energy\Player 1
+801F7FB3 0000
+
+$Happy Harry's Hut, Spooky Spire, Mudville Mansion Stage\No Energy\Player 2
+801FB453 0000
+
+$Kiln's Laboratory, Kiln's Hideout, Fiery Furnace, Research Room Stage\Can't be Stunned\Player 1
+801F971B 0000
+
+$Kiln's Laboratory, Kiln's Hideout, Fiery Furnace, Research Room Stage\Can't be Stunned\Player 2
+801FCBBB 0000
+
+$Kiln's Laboratory, Kiln's Hideout, Fiery Furnace, Research Room Stage\Full Super Bar\Player 1
+811F972A 0200
+
+$Kiln's Laboratory, Kiln's Hideout, Fiery Furnace, Research Room Stage\Full Super Bar\Player 2
+811FCBCA 0200
+
+$Kiln's Laboratory, Kiln's Hideout, Fiery Furnace, Research Room Stage\Infinite Energy\Player 1
+801F9723 00AA
+
+$Kiln's Laboratory, Kiln's Hideout, Fiery Furnace, Research Room Stage\Infinite Energy\Player 2
+801FCBC3 00AA
+
+$Kiln's Laboratory, Kiln's Hideout, Fiery Furnace, Research Room Stage\No Energy\Player 1
+801F9723 0000
+
+$Kiln's Laboratory, Kiln's Hideout, Fiery Furnace, Research Room Stage\No Energy\Player 2
+801FCBC3 0000
+
+$Kooky Courtyard Stage\Can't be Stunned\Player 1
+801F836B 0000
+
+$Kooky Courtyard Stage\Can't be Stunned\Player 2
+801FB80B 0000
+
+$Kooky Courtyard Stage\Full Super Bar\Player 1
+811F837A 0200
+
+$Kooky Courtyard Stage\Full Super Bar\Player 2
+811FB81A 0200
+
+$Kooky Courtyard Stage\Infinite Energy\Player 1
+801F8373 00AA
+
+$Kooky Courtyard Stage\Infinite Energy\Player 2
+801FB813 00AA
+
+$Kooky Courtyard Stage\No Energy\Player 1
+801F8373 0000
+
+$Kooky Courtyard Stage\No Energy\Player 2
+801FB813 0000
+
+$Outhouse, Claynaveral Hanger, Camp Claynaveral Stages\Can't be Stunned\Player 1
+801F7E9B 0000
+
+$Outhouse, Claynaveral Hanger, Camp Claynaveral Stages\Can't be Stunned\Player 2
+801FB33B 0000
+
+$Outhouse, Claynaveral Hanger, Camp Claynaveral Stages\Full Super Bar\Player 1
+811F7EAA 0200
+
+$Outhouse, Claynaveral Hanger, Camp Claynaveral Stages\Full Super Bar\Player 2
+811FB34A 0200
+
+$Outhouse, Claynaveral Hanger, Camp Claynaveral Stages\Infinite Energy\Player 1
+801F7EA3 00AA
+
+$Outhouse, Claynaveral Hanger, Camp Claynaveral Stages\Infinite Energy\Player 2
+801FB343 00AA
+
+$Outhouse, Claynaveral Hanger, Camp Claynaveral Stages\No Energy\Player 1
+801F7EA3 0000
+
+$Outhouse, Claynaveral Hanger, Camp Claynaveral Stages\No Energy\Player 2
+801FB343 0000
+
+$Play As\Player1
+801A868F 00??
+00 Bad Mr. Frosty
+01 Blob
+02 Bonker
+03 Boogerman
+04 Dr. Kiln
+05 Earthworm Jim
+08 Houngan
+09 Icky Bod Clay
+0A Kung Pow
+0D Sumo Santa
+0E Taffy
+0F T-Hoppy
+
+$Refuse Room, Grotto Gulch, Santa's Workship Stages\Can't be Stunned\Player 1
+801F766B 0000
+
+$Refuse Room, Grotto Gulch, Santa's Workship Stages\Can't be Stunned\Player 2
+801FAB0B 0000
+
+$Refuse Room, Grotto Gulch, Santa's Workship Stages\Full Super Bar\Player 1
+811F767A 0200
+
+$Refuse Room, Grotto Gulch, Santa's Workship Stages\Full Super Bar\Player 2
+811FAB1A 0200
+
+$Refuse Room, Grotto Gulch, Santa's Workship Stages\Infinite Energy\Player 1
+801F7673 00AA
+
+$Refuse Room, Grotto Gulch, Santa's Workship Stages\Infinite Energy\Player 2
+801FAB13 00AA
+
+$Refuse Room, Grotto Gulch, Santa's Workship Stages\No Energy\Player 1
+801F7673 0000
+
+$Refuse Room, Grotto Gulch, Santa's Workship Stages\No Energy\Player 2
+801FAB13 0000
+
+$Rubbage Reef Stage\Can't be Stunned\Player 1
+801F7F7B 0000
+
+$Rubbage Reef Stage\Can't be Stunned\Player 2
+801FB41B 0000
+
+$Rubbage Reef Stage\Full Super Bar\Player 1
+811F7F8A 0200
+
+$Rubbage Reef Stage\Full Super Bar\Player 2
+811FB42A 0200
+
+$Rubbage Reef Stage\Infinite Energy\Player 1
+801F7F83 00AA
+
+$Rubbage Reef Stage\Infinite Energy\Player 2
+801FB423 00AA
+
+$Rubbage Reef Stage\No Energy\Player 1
+801F7F83 0000
+
+$Rubbage Reef Stage\No Energy\Player 2
+801FB423 0000
+
+$Rubbage Room Stage\Can't be Stunned\Player 1
+801FA1AB 0000
+
+$Rubbage Room Stage\Can't be Stunned\Player 2
+801FD64B 0000
+
+$Rubbage Room Stage\Full Super Bar\Player 1
+811FA1BA 0200
+
+$Rubbage Room Stage\Full Super Bar\Player 2
+811FD65A 0200
+
+$Rubbage Room Stage\Infinite Energy\Player 1
+801FA1B3 00AA
+
+$Rubbage Room Stage\Infinite Energy\Player 2
+801FD653 00AA
+
+$Rubbage Room Stage\No Energy\Player 1
+801FA1B3 0000
+
+$Rubbage Room Stage\No Energy\Player 2
+801FD653 0000
+
+$Santa's Toy Factory Stage\Can't be Stunned\Player 1
+801F879B 0000
+
+$Santa's Toy Factory Stage\Can't be Stunned\Player 2
+801FBC3B 0000
+
+$Santa's Toy Factory Stage\Full Super Bar\Player 1
+811F87AA 0200
+
+$Santa's Toy Factory Stage\Full Super Bar\Player 2
+811FBC4A 0200
+
+$Santa's Toy Factory Stage\Infinite Energy\Player 1
+801F87A3 00AA
+
+$Santa's Toy Factory Stage\Infinite Energy\Player 2
+801FBC43 00AA
+
+$Santa's Toy Factory Stage\No Energy\Player 1
+801F87A3 0000
+
+$Santa's Toy Factory Stage\No Energy\Player 2
+801FBC43 0000
+
+$Stage Select
+801A868B 00??
+00 Candy Factory
+01 Claynaveral Hangar
+02 Camp Claynaveral
+03 Outhouse
+04 Mudville Mansion
+05 Ghastly Graveyard
+06 Spooky Spire
+07 Happy Harry's Hut
+08 Freezing Fortress
+09 Refuse Room
+0A Grotto Gulch
+0B Rubbage Room
+0C Rubbage Reef
+0D Kiln's Laboratory
+0E Kiln's Hideout
+0F Fiery Furnace
+10 Research Room
+11 Clayribbean Cruise
+12 Santa's Workship
+13 Kooky Courtyard
+14 Santa's Toy Factory
+15 Boogerhenge
+16 Backwash Bay
+17 Tureen Toilet
+18 Tribal Tower
+19 Aquadome
+
+$Tribal Tower Stage\Can't be Stunned\Player 1
+801F770B 0000
+
+$Tribal Tower Stage\Can't be Stunned\Player 2
+801FABAB 0000
+
+$Tribal Tower Stage\Full Super Bar\Player 1
+811F771A 0200
+
+$Tribal Tower Stage\Full Super Bar\Player 2
+811FABBA 0200
+
+$Tribal Tower Stage\Infinite Energy\Player 1
+801F7713 00AA
+
+$Tribal Tower Stage\Infinite Energy\Player 2
+801FABB3 00AA
+
+$Tribal Tower Stage\No Energy\Player 1
+801F7713 0000
+
+$Tribal Tower Stage\No Energy\Player 2
+801FABB3 0000

@@ -1,0 +1,359 @@
+[EDD6E031-68136013-C:45]
+Name=Rush 2 - Extreme Racing USA (U)
+
+$Always Place 1st
+80112589 0000
+
+$Best Points\In Stunt Mode\Player 1
+8010C068 00FF
+
+$Best Points\In Stunt Mode\Player 2
+8010C069 00FF
+
+$Car Select\Player 1
+803CB362 00??
+00 Pickup
+01 Compact
+02 Muscle Car
+03 Mobster
+04 Sedan
+05 Bandit
+06 Coupe
+07 Exotic
+08 Van
+09 Sportster
+0A Subcompact
+0B Concept
+0C Stallion
+0D Cruiser
+0E Stallion
+0F 4x4
+10 Taxi
+11 Hot Rod
+12 Formula
+13 Prototype
+14 Rocket
+15 Mtn Dew
+
+$Car Select\Player 2
+803CB363 00??
+00 Pickup
+01 Compact
+02 Muscle Car
+03 Mobster
+04 Sedan
+05 Bandit
+06 Coupe
+07 Exotic
+08 Van
+09 Sportster
+0A Subcompact
+0B Concept
+0C Stallion
+0D Cruiser
+0E Stallion
+0F 4x4
+10 Taxi
+11 Hot Rod
+12 Formula
+13 Prototype
+14 Rocket
+15 Mtn Dew
+
+$Cruiser Front Tire Size\Player 1
+800C0AF9 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Cruiser Rear Tire Size\Player 1
+800C0C01 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Formula Front Tire Size\Player 1
+800C0B0D 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Formula Rear Tire Size\Player 1
+800C0C15 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Front Pickup Tire Size\Player 1
+800C0AC5 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Have All Keys Found\Alcatraz\Normal
+810C1DC4 FFFF
+
+$Have All Keys Found\Hawaii\Normal
+810C1DC0 FFFF
+
+$Have All Keys Found\Las Vegas Normal
+810C1DBC FFFF
+
+$Have All Keys Found\Los Angeles\Normal
+810C1DC6 FFFF
+
+$Have All Keys Found\New York-Downtown\Normal
+810C1DBE FFFF
+
+$Have All Keys Found\New York-Uptown\Normal
+810C1DC2 FFFF
+
+$Have All Keys Found\Seattle\Normal
+810C1DC8 FFFF
+
+$Have\All Keys & Cans\Midway Track
+810C1DD0 FFFF
+
+$Have\All Keys & Cans\Stunt Track
+810C1DD2 FFFF
+
+$Have\Extra Cars
+50000902 0000
+810C1DBC FFFF
+
+$Have\Game Timer Off
+800D9E88 0001
+
+$Have\Midway Track
+800E7D19 0001
+
+$Have\Stunts All Tracks
+8010C200 0001
+
+$Hot Rod Front Tire Size\Player 1
+800C0B09 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Hot Rod Rear Tire Size\Player 1
+800C0C11 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Misc\Auto Abort Disable
+8010C168 0001
+
+$Misc\Brakes Off
+80125C64 0001
+
+$Misc\Car Collisions Off
+8011249A 0001
+
+$Misc\Car Mines On
+8010C167 0001
+
+$Misc\Cone Mines On
+8010C166 0001
+
+$Misc\Damage Off
+8011CDB0 0001
+
+$Misc\Difficulty Mod
+8010C211 00??
+00 Very Easy
+01 Easy
+02 Medium
+03 Hard
+04 Very Hard
+05 Extremely Hard
+
+$Misc\Drones In Race
+800D5761 00??
+01 1 Lap
+02 2 Laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 6 Laps
+07 7 Laps
+
+$Misc\Have All Cars In Pipe
+810C1DCE FFFF
+
+$Misc\Heavy Gravity
+800E7D22 0002
+
+$Misc\Heavy Mass
+8010C179 0001
+
+$Misc\Inside-Out Car On
+801174E0 0001
+
+$Misc\Invincible
+80119634 0001
+
+$Misc\Invisible Cars
+8010C170 0001
+
+$Misc\Invisible Tracks
+8010C178 0001
+
+$Misc\Jovian Gravity
+800E7D22 0003
+
+$Misc\Killer Rats On
+8010C17C 0001
+
+$Misc\Laps to Race
+8010C0E3 00??
+01 1 Lap
+02 2 Laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 6 Laps
+07 7 Laps
+08 8 Laps
+09 9 Laps
+
+$Misc\Large Frame
+8010C43C 0003
+
+$Misc\Levitation
+8010C254 0001
+
+$Misc\Light Gravity
+800E7D22 0000
+
+$Misc\Massive Mass
+8010C179 0002
+
+$Misc\New York Cabs
+800D9E89 0001
+
+$Misc\Resurrect In Place
+8010C210 0001
+
+$Misc\Suicide Mode Humans On
+80119628 0002
+
+$Misc\Suicide Mode On
+80119628 0001
+
+$Misc\Super Speed
+80111950 0001
+
+$Misc\Super Tires
+8010D3A6 0002
+
+$Misc\Upside Down Mode
+800D0171 0001
+
+$Misc\Your Car Is Invisible
+801127A1 0001
+
+$Mt. Dew Front Tire Size\Player 1
+800C0B19 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Mt. Dew Rear Tire Size\Player 1
+800C0C21 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Pickup Front Tire Size\Player 2
+800C0B1D 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Press GS Activate Cheat Menu
+880C2132 0001
+
+$Press R For Nitrous Boost
+D00D0193 0010
+810F58DC 44CB
+D00D0193 0010
+810F5938 44CB
+
+$Press R to Shrink Car
+D00D0193 0010
+8010C43C 0001
+
+$Prototype Front Tire Size\Player 1
+800C0B11 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Prototype Rear Tire Size\Player 1
+800C0C19 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Rear Pickup Tire Size\Player 1
+800C0BCD 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Rear Tire Size\Player 2
+800C0C25 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Rocket Front Tire Size\Player 1
+800C0B15 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Rocket Rear Tire Size\Player 1
+800C0C1D 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Total Points\In Stunt Mode\Player 1
+8010C075 00FF
+
+$Total Points\In Stunt Mode\Player 2
+8010C077 00FF
+
+$Track Modifier
+8010C3F0 00??
+00 Las Vegas
+01 New York Downtown
+02 Hawaii
+03 New York Uptown
+04 Alcatraz
+05 Los Angeles
+06 Seattle
+07 Half Pipe
+08 Crash
+09 Pipe
+0A Midway
+0B Stunt
+
+$Unlock All Cheats
+50000E02 0000
+810C20E8 0101
+
+$Van Front Tire Size\Player 1
+800C0AE5 00??
+00 Tiny
+01 Medium
+FF Gigantic
+
+$Van Rear Tire Size\Player 1
+800C0BED 00??
+00 Tiny
+01 Medium
+FF Gigantic

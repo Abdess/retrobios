@@ -1,0 +1,596 @@
+﻿/*********************************************************************************
+* Meta Information                                                               *
+*********************************************************************************/
+//About DLL
+#1  #  "Français"		                                // LANGUAGE ID
+#2  #  "Benjamin Siskoo, corrections par Adri1"			// Author
+#3  #  "3.0"			                                  // Version
+#4  #  "19 janvier 2022"		                        // Date
+
+//About DLL Dialog
+#5  #  "Langue actuelle"
+#6  #  "Auteur"
+#7  #  "Version"
+#8  #  "Date"
+#9  #  "Visiter le site web"
+#10 #  "Base de données des ROM (.rdb)"
+#11 #  "Fichier des cheats (.cht)"
+#12 #  "Infos sur les ROM étendues (.rdx)"
+
+//About INI title
+#20 #  "À propos des fichiers de configuration"
+
+/*********************************************************************************
+* Menu                                                                           *
+*********************************************************************************/
+//File Menu
+#100#  "&Fichier"
+#101#  "&Ouvrir une ROM"
+#102#  "&Infos sur la ROM…"
+#103#  "Démarrer l’émulation"
+#104#  "Arrêter l’émulation"
+#105#  "Choisir le répertoire des ROM…"
+#106#  "Rafraîchir la liste des ROM"
+#107#  "ROM récentes"
+#108#  "Répertoires des ROM récentes"
+#109#  "&Quitter"
+#110#  "Ouvrir &Combo"
+
+//System Menu
+#120#  "&Système"
+#121#  "&Redémarrer"
+#122#  "&Pause"
+#123#  "&Capture d’écran"
+#124#  "Limiter les FPS"
+#125#  "&Sauvegarder l’état"
+#126#  "Sauvegarder sous…"
+#127#  "&Charger un état"
+#128#  "Charger…"
+#129#  "Sauvegarder l’&état actuel"
+#130#  "Cheats…"
+#131#  "Bouton GameShark (cheats)"
+#132#  "R&eprendre"
+#133#  "Redémarrage &logiciel"
+#134#  "Redémarrage &matériel"
+#135#  "Changer &disque"
+#136#  "&Améliorations..."
+
+//Options Menu
+#140#  "&Options"
+#141#  "&Plein écran"
+#142#  "&Toujours visible"
+#143#  "Configurer le plugin graphique…"
+#144#  "Configurer le plugin audio…"
+#145#  "Configurer le plugin contrôleur…"
+#146#  "Configurer le plugin RSP…"
+#147#  "Afficher l’utilisation du CPU"
+#148#  "&Paramètres…"
+
+//Debugger Menu
+#160#  "&Débogueur"
+
+//Language Menu
+#175#  "&Langue"
+
+//Help Menu
+#180#  "&Aide"
+#182#  "À &propos de Project64"
+#184#  "Site &web"
+#185#  "&Soutenir Project64"
+#186#  "&Discord"
+
+//Current Save Slot menu
+#190#  "Défaut"
+#191#  "Emplacement 1"
+#192#  "Emplacement 2"
+#193#  "Emplacement 3"
+#194#  "Emplacement 4"
+#195#  "Emplacement 5"
+#196#  "Emplacement 6"
+#197#  "Emplacement 7"
+#198#  "Emplacement 8"
+#199#  "Emplacement 9"
+#200#  "Emplacement 10"
+#201#  "Emplacement de sauvegarde (%ws) sélectionné"
+
+//Pop up Menu
+#210#  "Lancer le jeu"
+#211#  "Informations sur la ROM"
+#212#  "Éditer les paramètres du jeu"
+#213#  "Éditer les cheats"
+#214#  "Plugin graphique"
+#215#  "Lancer le jeu avec un disque"
+#216#  "Choisir des améliorations..."
+
+//Alternate Name to save Slot
+#220#  "Emplacement de sauvegarde - Défaut"
+#221#  "Emplacement de sauvegarde - 1"
+#222#  "Emplacement de sauvegarde - 2"
+#223#  "Emplacement de sauvegarde - 3"
+#224#  "Emplacement de sauvegarde - 4"
+#225#  "Emplacement de sauvegarde - 5"
+#226#  "Emplacement de sauvegarde - 6"
+#227#  "Emplacement de sauvegarde - 7"
+#228#  "Emplacement de sauvegarde - 8"
+#229#  "Emplacement de sauvegarde - 9"
+#230#  "Emplacement de sauvegarde - 10"
+
+// Menu Descriptions
+#250#  "Ouvrir une ROM N64"
+#251#  "Afficher les informations concernant l’image chargée"
+#252#  "Lancer l’émulation de l’image ROM chargée"
+#253#  "Arrêter l’émulation de l’image ROM chargée"
+#254#  "Sélectionner le répertoire des ROM"
+#255#  "Rafraîchir la liste actuelle des ROM dans le navigateur de ROM"
+#256#  "Quitter l’application"
+#257#  "Redémarrer l’image ROM actuelle (recharger tous les changements de paramètres)"
+#258#  "Mettre en pause/reprendre l’émulation de la ROM lancée"
+#259#  "Générer une image bitmap de l’écran actuel"
+#260#  "Limiter les FPS à la bonne vitesse de la N64"
+#261#  "Sauvegarder l’état actuel du système"
+#262#  "Sauvegarder l’état actuel du système à l’emplacement du fichier sélectionné"
+#263#  "Charger la sauvegarde d’état"
+#264#  "Choisir un fichier de sauvegarde d’état à charger"
+#265#  "Activer/désactiver les cheats GameShark"
+#266#  "Le bouton GameShark est utilisé avec des cheats spécifiques."
+#267#  "Basculer l’émulation du mode fenêtré vers le mode plein écran."
+#268#  "Permet de mettre la fenêtre Project64 toujours au premier plan"
+#269#  "Configurer le plugin graphique"
+#270#  "Configurer le plugin audio"
+#271#  "Configurer le plugin manettes (ex : choisir les touches)"
+#272#  "Configurer le plugin RSP"
+#273#  "Afficher l’utilisation du CPU de l’émulateur répartie sur les différentes ressources"
+#274#  "Voir/changer les paramètres pour cette application"
+#275#  "Voir le manuel pour l’application"
+#276#  "Voir la FAQ pour l’application"
+#278#  "À propos de l’application et des auteurs"
+#277#  "À propos des auteurs sur les fichiers de support"
+#279#  "Ouvrir la ROM ouverte précédemment"
+#280#  "Choisir ce répertoire comme votre répertoire de jeu"
+#281#  "Changer l’application pour utiliser cette langue"
+#282#  "Choisir l’emplacement de sauvegarde pour l’état sauvegardé"
+#283#  "Jouer au jeu sélectionné"
+#284#  "Informations concernant le jeu sélectionné"
+#285#  "Éditer les paramètres pour le jeu sélectionné"
+#286#  "Éditer les cheats pour le jeu sélectionné"
+
+/*********************************************************************************
+* ROM Browser                                                                    *
+*********************************************************************************/
+//ROM Browser Fields
+#300#  "Nom du fichier"
+#301#  "Nom interne"
+#302#  "Nom correct (GoodN64)"
+#303#  "Statut"
+#304#  "Taille de la ROM"
+#305#  "Notes (noyau)"
+#306#  "Notes (plugins par défaut)"
+#307#  "Notes (utilisateur)"
+#308#  "ID de la cartouche"
+#309#  "Type de support"
+#310#  "Pays"
+#311#  "Développeur"
+#312#  "CRC1"
+#313#  "CRC2"
+#314#  "Puce CIC"
+#315#  "Date de sortie"
+#316#  "Genre"
+#317#  "Joueurs"
+#318#  "Forcer le feedback"
+#319#  "Format de fichier"
+#321#  "Nom"
+
+//Select ROM
+#320#  "Sélectionner le répertoire de ROM actuel"
+
+//Messages
+#340#  "Mauvaise ROM ? Utilisez GoodN64 et vérifiez que le fichier RDB est à jour"
+
+/*********************************************************************************
+* Options                                                                        *
+*********************************************************************************/
+//Options Title
+#400#  "Paramètres"
+
+//Tabs
+#401#  "Plugins"
+#402#  "Répertoires"
+#403#  "Paramètres généraux"
+#404#  "Navigateur de ROM"
+#405#  "Avancé"
+#406#  "Paramètres de la ROM"
+#408#  "Notes"
+#409#  "Raccourcis clavier"
+#410#  "Statut"
+#411#  "Recompileur"
+#412#  "Par défaut"
+#413#  "64DD"
+
+//Plugin Dialog
+#420#  "À propos"
+#421#  " Plugin RSP (Reality Signal Processor) : "
+#422#  " Plugin vidéo (graphismes) : "
+#423#  " Plugin audio (son) : "
+#424#  " Plugin d'entées (manettes) : "
+#425#  "Graphismes HLE"
+#426#  "Audio HLE"
+#427#  "** Utiliser le plugin système **"
+
+//Directory Dialog
+#440#  " Répertoire des plugins : "
+#441#  " Répertoire des ROM : "
+#442#  " Répertoire des sauvegardes N64 natives : "
+#443#  " Répertoire des sauvegardes d’état : "
+#444#  " Répertoire des captures d’écran : "
+#445#  "Dernier répertoire d’où la ROM a été ouverte"
+#446#  "Sélectionner le répertoire des plugins"
+#447#  "Sélectionner le répertoire des ROM"
+#448#  "Sélectionner le répertoire des sauvegardes N64 natives"
+#449#  "Sélectionner le répertoire des sauvegardes d’état"
+#450#  "Sélectionner le répertoire des captures d’écran"
+#451#  " Répertoire du pack de textures : "
+#452#  "Sélectionner le répertoire du pack de texture"
+
+//Options (general) Tab
+#460#  "Émulation en pause quand la fenêtre est inactive"
+#461#  "Passer en plein écran au chargement d’une ROM"
+#462#  "Cacher les paramètres avancés"
+#463#  "Retenir les cheats sélectionnés"
+#464#  "Désactiver l’écran de veille quand une ROM est lancée"
+#465#  "Afficher la vitesse"
+#466#  "Vitesse affichée:"
+#467#  "Vérifier si Project64 est déjà lancé"
+#468#  "Répertoire de sauvegarde unique"
+#469#  "Chemin de ROM 64DD IPL Japonaise:"
+#470#  "Chemin de ROM 64DD IPL Américaine:"
+#471#  "Chemin de ROM 64DD IPL développement:"
+#472#  "Type de sauvegarde:"
+#473#  "Activer améliorations"
+#474#  "Afficher la barre de statut"
+#475#  "Quitter le plein écran si le logiciel n'est plus en avant"
+#476#  "Activer Discord Rich Presence"
+
+//ROM Browser Tab
+#480#  "Max de ROM à retenir (0-10) :"
+#481#  "ROM"
+#482#  "Max de répertoires ROM à retenir (0-10) :"
+#483#  "répertoires"
+#484#  "Utiliser le navigateur de ROM"
+#485#  "Utiliser également les sous-répertoires"
+#486#  "Champs disponibles :"
+#487#  "Champs dans l’ordre :"
+#488#  "Ajouter ->"
+#489#  "<- Supprimer"
+#490#  "Haut"
+#491#  "Bas"
+#492#  "Rafraichir automatiquement le navigateur"
+#493#  "Afficher les extensions"
+
+//Advanced Options
+#500#  "La plupart de ces changements ne prendront pas effet avant qu’une nouvelle ROM soit ouverte ou que la ROM actuelle soit redémarrée."
+#501#  "Noyau par défaut"
+#502#  "Style de noyau CPU :"
+#503#  "Méthodes Self Mod"
+#504#  "Taille de la mémoire par défaut :"
+#505#  "Liaison de blocs avancée"
+#506#  "Démarrer l’émulation au chargement d’une ROM"
+#507#  "Préférer les réglages du fichier RDB à ceux par défaut"
+#508#  "Compresser automatiquement les sauvegardes d’état"
+#509#  "Activer le débogueur"
+#510#  "Cache"
+#511#  "PI DMA"
+#512#  "Lancer si modifié"
+#513#  "Protéger la mémoire"
+#514#  "TLB unmapping"
+#515#  "TOujours utiliser l'interpréteur de cœur"
+
+//ROM Options
+#520#  "Style de noyau CPU :"
+#521#  "Taux de rafraichissement VI :"
+#522#  "Taille de la mémoire :"
+#523#  "Liaison de blocs avancée"
+#524#  "Type de sauvegarde :"
+#525#  "Facteur de comptage :"
+#526#  "Plus grand tampon de compilation"
+#527#  "Utiliser le TLB"
+#528#  "Mettre en cache les registres"
+#529#  "Retarder l’interruption SI:"
+#530#  "SP rapide"
+#531#  "Défaut"
+#532#  "Signal audio RSP"
+#533#  "Correction du timing audio"
+#534#  "Méthode de recherche de fonctions :"
+#535#  "Méthode self mod personnalisée"
+#536#  "Synchronisation audio"
+#537#  "Compteur AI par octet"
+#538#  "Moteur 32 bits"
+#539#  "Retarder l’interruption DP"
+#5440# "Vitesse d'accès disque:"
+#5441# "Rapide"
+#5442# "Lente"
+
+#5410# "DMA non alignée"
+
+//Core Styles
+#540#  "Interpréteur"
+#541#  "Recompilateur"
+#542#  "Synchroniser les noyaux"
+
+//Self Mod Methods
+#560#  "Aucun"
+#561#  "Cache"
+#562#  "Protéger la mémoire"
+#563#  "Vérifier la mémoire et le cache"
+#564#  "Changer la mémoire et le cache"
+#565#  "Vérifier la mémoire avancée"
+#566#  "Vider le code du cache"
+
+//Function Lookup method
+#570#  "Table de recherche physique"
+#571#  "Table de recherche virtuelle"
+#572#  "Changer la mémoire"
+
+//RDRAM Size
+#580#  "4 Mo"
+#581#  "8 Mo"
+
+//Advanced Block Linking
+#600#  "On"
+#601#  "Off"
+
+//Save Type
+#620#  "Par défaut"
+#621#  "4 kbit EEPROM"
+#622#  "16 kbit EEPROM"
+#623#  "SRAM"
+#624#  "Flash RAM"
+
+//Shell Integration Tab
+#640#  "Associer l’extension de fichier :"
+
+//ROM Notes
+#660#  "Statut ROM :"
+#661#  "Note noyau :"
+#662#  "Note plugin :"
+
+// Accelerator Selector
+#680#  "État du CPU :"
+#681#  "Menu objet :"
+#682#  "Touches actuelles :"
+#683#  "Sélectionner nouveau raccourci :"
+#684#  "Actuellement assigné à:"
+#685#  "Assigner"
+#686#  "Supprimer"
+#687#  "Tout réinitialiser"
+#688#  "Aucun jeu lancé"
+#689#  "Un jeu est lancé"
+#690#  "Un jeu est lancé (Fenêtré)"
+#691#  "Un jeu est lancé (Plein écran)"
+#692#  "Détecter la touche"
+
+// Frame Rate Option
+#700#  "Interruptions verticales par seconde"
+#701#  "Listes d’affichage par seconde"
+#702#  "Pourcentage de la vitesse de base"
+
+// Increase speed
+#710#  "Augmenter la vitesse du jeu"
+#711#  "Diminuer la vitesse du jeu"
+
+//Bottom page buttons
+#720#  "Réinitialiser la page"
+#721#  "Tout réinitialiser"
+#722#  "Appliquer"
+#723#  "Fermer"
+
+//Disk Save Type
+#730#  "Copie complète du disque"
+#731#  "Zone sauvegarde uniquement"
+
+/*********************************************************************************
+* ROM Information                                                                *
+*********************************************************************************/
+//ROM Info Title
+#800#  "Informations sur la ROM"
+
+//ROM Info Text
+#801#  "Nom de la ROM :"
+#802#  "Nom du fichier :"
+#803#  "Emplacement :"
+#804#  "Taille de la ROM :"
+#805#  "ID cartouche :"
+#806#  "Type de support :"
+#807#  "Pays :"
+#808#  "CRC1 :"
+#809#  "CRC2 :"
+#810#  "Puce CIC :"
+#811#  "MD5 :"
+
+/*********************************************************************************
+* Cheats                                                                         *
+*********************************************************************************/
+//Cheat List
+#1000#  "Cheats"
+#1001#  "Cheats :"
+#1002#  " Notes : "
+#1003#  "Tout cocher"
+#1004#  "Tout décocher"
+
+//Add Cheat
+#1005#  "Ajouter un cheat"
+#1006#  "Nom :"
+#1007#  "Code :"
+#1008#  "Insérer"
+#1009#  "Vider"
+#1010#  " Notes cheat : "
+#1011#  "Ajouter à la BDD"
+
+//Code extension
+#1012#  "Extensions de code"
+#1013#  "Veuillez choisir une valeur à utiliser pour :"
+#1014#  "OK"
+#1015#  "Annuler"
+
+//Digital Value
+#1016#  "Nombre quantité"
+#1017#  "Veuillez choisir une valeur pour :"
+#1018#  "&Valeur"
+#1019#  "depuis"
+#1020#  "vers"
+#1021#  "&Notes :"
+#1022#  "Ajouter un cheat"
+#1023#  "nouveau cheat"
+#1024#  "<adresse> <valeur>"
+#1025#  "Options :"
+#1026#  "<valeur> <label>"
+
+//Edit Cheat
+#1027#  "Éditer un cheat"
+#1028#  "Mettre à jour un cheat"
+#1029#  "Le cheat a été modifié.\n\nVoulez vous mettre à jour ?"
+#1030#  "Cheat mise à jour"
+
+//Cheat Popup Menu
+#1040#  "Ajouter un nouveau cheat…"
+#1041#  "Éditer"
+#1042#  "Effacer"
+
+// short-cut editor
+#1100#  "Réinitialiser les raccourcis"
+#1101#  "Êtes-vous sûr·e de vouloir réinitialiser les raccourcis?\n\nCette action sera irréversible."
+#1102#  "Menu fichier"
+#1103#  "Menu système"
+#1104#  "Options"
+#1105#  "Emplacements de sauvegarde"
+
+/*********************************************************************************
+* Support Window                                                                 *
+*********************************************************************************/
+#1200#  "Support Project64"
+#1201#  "Project64 est un émulateur open source de Nintendo 64.\n\nCelui-ci vous permet de jouer à des jeux N64 comme vous le feriez avec la vraie console.\n\nJe suis désolé de vous déranger avec cet encart, mais merci à vous de patienter quelques secondes dans le but d'apprécier le résultat de centaines d'heures de travail.\n\nSi vous le pouvez et le désirez soutenir Project64 ou en avez tiré quelque chose de son usage, merci de soutenir le projet soit avec de simples remerciments, ou votre volonter de supprimer cet encartn\n\nSi vous avez soutenu Project64 :"
+#1202#  "Entrer/Demander un Code de Soutien"
+#1203#  "Soutenir Project64"
+#1204#  "Continuer"
+#1205#  "Veuillez entrer le Code de Soutien"
+#1206#  "Échec de validation du Code. Assurez-vous que le code que vous avez reçu corresponde à celui de votre appareil."
+#1207#  "Remerciements"
+#1208#  "Entrez un Code"
+#1209#  "Veuillez entrer le code se trouvant dans l'email.\n\nL'email sera envoyé à l'adresse utilisée pour soutenir Project64.\n\nVeuillez noter que ce code ne fonctionnera que pour un seul appareil. L'ID de cet appareil est :"
+#1210#  "OK"
+#1211#  "Annuler"
+#1212#  "Demander un code"
+#1213#  "Le code a été envoyé à votre adresse email"
+#1214#  "Échec de l'envoi du code, assuez-vous que ce soit bien l'adresse email avec laquelle vous soutenez"
+
+/*********************************************************************************
+* Messages                                                                       *
+*********************************************************************************/
+#2000#  "*** CPU EN PAUSE ***"
+#2001#  "Reprise du CPU"
+#2002#  "Dans une boucle permanente dont il est impossible de sortir.\nL’émulation va maintenant s’arrêter.\n\nVérifiez la ROM et les paramètres de la ROM."
+#2003#  "L’allocation de mémoire a échoué"
+#2004#  "Le plugin vidéo sélectionné ou par défaut est manquant ou invalide.\n\nAllez dans les paramètres et sélectionnez un plugin vidéo (graphismes).\nVérifiez que vous avez au moins un fichier plugin compatible dans votre répertoire de plugins."
+#2005#  "Le plugin audio sélectionné ou par défaut est manquant ou invalide.\n\nAllez dans les paramètres et sélectionnez un plugin audio (son).\nVérifiez que vous avez au moins un fichier plugin compatible dans votre répertoire de plugins."
+#2006#  "Le plugin RSP sélectionné ou par défaut est manquant ou invalide.\n\nAllez dans les paramètres et sélectionnez un plugin RSP (Reality Signal Processor).\nVérifiez que vous avez au moins un fichier plugin compatible dans votre répertoire de plugins."
+#2007#  "Le plugin input sélectionné ou par défaut est manquant ou invalide.\n\nAllez dans les paramètres et sélectionnez un plugin d'entrées (manettes).\nVérifiez que vous avez au moins un fichier plugin compatible dans votre répertoire de plugins."
+#2008#  "Échec du chargement du plugin :"
+#2009#  "Échec du chargement word.\n\nVérifier la ROM et les paramètres de la ROM."
+#2010#  "Échec à l’ouverture du fichier de sauvegarde"
+#2011#  "Échec à l’ouverture de l’EEPROM"
+#2012#  "Échec à l’ouverture de la RAM flash"
+#2013#  "Échec à l’ouverture du mempak"
+#2014#  "La tentative d’ouverture du fichier zip a échoué.\n\nIl est possible que le fichier zip soit corrompu – essayez de décompresser la ROM manuellement."
+#2015#  "La tentative d’ouverture du fichier a échoué."
+#2016#  "Une erreur s’est produite pendant l’ouverture du fichier zip."
+#2017#  "Le fichier chargé ne semble pas être une ROM N64 valide.\n\nVérifiez vos ROM avec GoodN64."
+#2018#  "Pays inconnu"
+#2019#  "Puce CIC inconnu"
+#2020#  "Format de fichier inconnu"
+#2021#  "Action de la mémoire inconnue\n\nL’émulation s’est arrêtée."
+#2022#  "Opcode R4300i non pris en charge à"
+#2023#  "Exécution depuis un espace non mappé.\n\nVérifiez la ROM et les paramètres de ROM."
+#2024#  "Cette sauvegarde d’état ne semble pas correspondre à la ROM qui est lancée.\n\nLes sauvegardes d'états ne peuvent êtres chargés qu'entre des ROMs 100 % identiques.\nEParticulièrement la RÉGION et la VERSION doivent être identiques.\nLe chargement de cette sauvegarde va probablement faire planter le jeu et/ou l’émulateur.\n\nSouhaitez-vous la charger quand même ?"
+#2025#  "Erreur"
+#2026#  "La séquence de copyright n’a pas été trouvée dans la LUT. Le jeu ne fonctionnera plus."
+#2027#  "Échec de la protection de copie"
+#2028#  "Changer un plugin nécessite que Project64 redémarre la ROM lancée.\nSi vous ne voulez pas perdre votre progression, répondez non et sauvegardez.\n\nChanger les plugins et redémarrer maintenant ?"
+#2029#  "Changer les plugins"
+#2030#  "Émulation arrêtée"
+#2031#  "Émulation démarrée"
+#2032#  "Impossible de charger l’état"
+#2033#  "Sauvegarde d'état chargée"
+#2034#  "Sauvegarde d'état vers"
+#2035#  "Emplacement de sauvegarde d’état"
+#2036#  "Byte-swapping image"
+#2037#  "Choisir une image N64"
+#2038#  "Chargé"
+#2039#  "Chargement de l’image"
+#2040#  "Impossible d’ouvrir une ROM car les plugins n’ont pas été initialisés."
+#2041#  "Êtes-vous sûr·e de vouloir effacer ceci ?"
+#2042#  "Effacer le cheat"
+#2043#  "Le nom du cheat est déjà utilisé."
+#2044#  "Vous avez atteint le nombre maximum de codes cheats pour ce jeu"
+#2045#  "Initialisation du plugin"
+#2046#  "Vous n’avez pas sélectionné de touche virtuelle à assigner à l’entrée de menu."
+#2047#  "Vous avez besoin de sélectionner une entrée de menu à laquelle assigner cette touche."
+#2048#  "Le raccourci a déjà été assigné à une autre entrée de menu."
+#2049#  "Aucun raccourci n’a été sélectionné pour être supprimé."
+#2050#  "ROM chargée. Émulation en attente de lancement."
+#2051#  "Project64 beta est réservé aux membres seulement.\n\nSi vous avez un compte sur pj64-emu.com, vous ne devriez pas voir cette erreur !!\nVeuillez nous contacter sur le site."
+#2052#  "Erreur du programme"
+#2053#  "Impossible de trouver le nom de fichier dans l’archive 7z"
+#2054#  "Émulation des graphismes bas niveau (LLE)"
+#2055#  "Les graphismes LLE ne sont pas à utiliser par tout le monde !\nIl est recommandé d’utiliser seulement ceci à des fins de test et non pour jouer.\n\nChanger pour les graphismes en mode LLE ?"
+#2056#  "Émulation audio haut niveau (HLE)"
+#2057#  "L’audio HLE nécessite un plugin tiers !\nSi vous n’utilisez pas un plugin audio tiers qui supporte le HLE, vous n’entendrez aucun son.\n\nChanger pour l’audio en mode HLE ?"
+#2058#  "Le fichier chargé ne semble pas être une ROM IPL 64DD valide.\n\nVérifiez vos ROM avec GoodN64."
+#2059#  "La ROM IPL 64DD Japonaise n’a pas pu être trouvée.\nElle est nécéssaire pour jouer avec des disques 64DD japonais.\n\nVeuillez sélectionner la ROM requise dans les paramètres."
+#2061#  "La ROM IPL 64DD Américaine n’a pas pu être trouvée.\nElle est nécéssaire pour jouer avec des disques 64DD américains.\n\nVeuillez sélectionner la ROM requise dans les paramètres."
+#2062#  "La ROM IPL 64DD de développement n’a pas pu être trouvée.\nElle est nécéssaire pour jouer avec des disques 64DD de développement.\n\nVeuillez sélectionner la ROM requise dans les paramètres."
+#2063#  "Cheat erroné, échec de sa mise à jour"
+#2064#  "Cheat erroné"
+
+/*********************************************************************************
+* Android                                                                        *
+*********************************************************************************/
+#3000#  "Paramètres"
+#3001#  "Aide/Forum"
+#3002#  "Signaler un problème"
+#3003#  "À propos"
+#3004#  "Récemment joué"
+#3005#  "Jeux"
+#3006#  "Répertoire du jeu"
+#3007#  "Choisir un dossier à scanner"
+#3008#  "Inclure les sous-répertoires"
+#3009#  "Dossier parent"
+#3010#  "Répertoires"
+#3011#  "Mémoire interne"
+#3012#  "Scan en cours..."
+#3013#  "OK"
+#3014#  "Annuler"
+#3015#  "Information"
+#3016#  "Project64 pour Android"
+#3017#  "Licence"
+#3018#  "Révision"
+#3019#  "Project64 pour Android\u2122 est un portage de la version Windows de Project64. La version Android\u2122 peut lancer la plupart des jeux N64."
+#3020#  "Auteurs de Project64."
+#3021#  "Discord"
+
+//In game menu
+#3100#  "Paramètres"
+#3101#  "Sauvegarde d'état"
+#3102#  "Charger sauvegarde d'état"
+#3103#  "Arrêter l'émulation"
+#3104#  "Pause"
+#3105#  "Reprendre"
+#3106#  "Vitesse du jeu"
+#3107#  "Sauvegarde d'état actuelle..."
+#3108#  "Auto"
+#3109#  "Emplacement"
+#3110#  "Redémarrer"
+#3111#  "Options de débuguage"
+#3112#  "Temps de la Fonction Redémarrer"
+#3113#  "Temps de la Fonction de Copie"
+
+// Video plugin
+#3200#  "Natif"

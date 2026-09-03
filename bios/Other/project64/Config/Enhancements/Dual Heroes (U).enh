@@ -1,0 +1,7 @@
+[A62230C3-F0834488-C:45]
+Name=Dual Heroes (U)
+
+$Lagfix
+Note=fixes horrendous load-times,still 30fps
+8002E692 000D
+

@@ -1,0 +1,74 @@
+[5F25B0EE-6227C1DB-C:45]
+Name=NBA Live 2000 (U) (M4)
+
+$Away Team\Infinite Time Outs
+81135098 0700
+
+$Away Team\No Time Outs
+81135098 0000
+
+$Home Team\Infinite Time Outs
+811344D0 0700
+
+$Home Team\No Time Outs
+811344D0 0000
+
+$Infinite Shot Clock
+811318F2 05A0
+
+$Jump Shooting
+8017B7AD 0064
+
+$Max Inside Scoring
+8017B7AC 0064
+
+$Max\3 Pointers
+8017B7AE 0064
+
+$Max\Blocking
+8017B7B2 0064
+
+$Max\Def. Awareness
+8017B7B3 0064
+
+$Max\Def. Rebounds
+8017B7B6 0064
+
+$Max\Dribbling
+8017B7BC 0064
+
+$Max\Dunking
+8017B7B0 0064
+
+$Max\Endurance
+8017B7BD 0064
+
+$Max\Free Throws
+8017B7AF 0064
+
+$Max\Jumping
+8017B7B7 0064
+
+$Max\Off. Awareness
+8017B7BA 0064
+
+$Max\Off. Rebounds
+8017B7B5 0064
+
+$Max\Passing
+8017B7B9 0064
+
+$Max\Quickness
+8017B7B4 0064
+
+$Max\Shooting Range
+8017B7BE 0064
+
+$Max\Speed
+8017B7BB 0064
+
+$Max\Stealing
+8017B7B1 0064
+
+$Max\Strength
+8017B7B8 0064

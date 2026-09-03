@@ -1,0 +1,504 @@
+[EC7011B7-7616D72B-C:4A]
+Name=Zelda no Densetsu - Toki no Ocarina (J) (V1.0)
+
+$Always Have Wallet Size
+8011A672 00??
+47 Kid Wallet (Holds 99)
+57 Adult Wallet (Holds 200)
+67 Giant Wallet (Holds 500)
+
+$Beta\Appear in Strange Places (Hold R)
+Note=If you go to an area where Link is immobile or invisible, using the "appear in strange places" code will almost always fix it, but you'll start somewhere outside of the Arena and in air. I recommend using the infinite step Hover boots code already supplied with PJ64 so you can float back into the arena in the event that this happens.
+D01C84B5 0010
+8111B936 0001
+
+$Beta\Interface always off/on
+Note=If you go to an area where the interface is accessible, this signigfies that you're not in 'beta' mode anymore. Using the "interface always off/on" code, you can stay in 'beta' mode regardless of what happens. This may cause more crashes in SOME areas, but it's rare and is not too severe. If you need to explore a beta area with the interface, "use the interface always on" portion of the code. Don't use the codes as you start the game. If you need the interface on/off at a specific time, start the game, go to the area, activate the code, keep it on until next reset.
+8011B4B9 00FF
+8011B92F 00??
+00 Off
+01 On
+
+$Beta\Play Beta Quest Worlds
+Note=Put on the code on load up,After the Nintendo logo you will be in Beta Mode,There are no icons, energy bar etc. on the screen.When you press a C-Buttton you can use an object.Here the objects for the C-Buttons:C-left: arrows, C-down: bombs, C-right: Ocarina of Time. There is also no Navi and start menu.When you go to some places the game will freeze or you can't move.
+D01C84B5 0000
+8011B9E3 00??
+00 World 01
+01 World 02
+02 World 03
+03 World 04
+04 World 05
+07 World 06
+08 World 07
+16 World 08
+
+$Beta\Specific things lean
+Note=This code will cause all items on a specific plane to lean. This is helpful for areas in which the plane causes the crash (Ex. Weird Zora's Fountain Beta Quest 01).
+80025614 0001
+
+$Bottles\Bottle 1 Modifier
+8011A656 00??
+14 Empty Bottle
+15 Red Potion
+16 Green Potion
+17 Blue Potion
+18 Bottled Fairy
+19 Fish
+1A Lon Lon Milk
+1B Letter
+1C Blue Fire
+1D Bug
+1E Big Poe
+1F Lon Lon Milk (Half)
+20 Poe
+
+$Bottles\Bottle 2 Modifier
+8011A657 00??
+14 Empty Bottle
+15 Red Potion
+16 Green Potion
+17 Blue Potion
+18 Bottled Fairy
+19 Fish
+1A Lon Lon Milk
+1B Letter
+1C Blue Fire
+1D Bug
+1E Big Poe
+1F Lon Lon Milk (Half)
+20 Poe
+
+$Bottles\Bottle 3 Modifier
+8011A658 00??
+14 Empty Bottle
+15 Red Potion
+16 Green Potion
+17 Blue Potion
+18 Bottled Fairy
+19 Fish
+1A Lon Lon Milk
+1B Letter
+1C Blue Fire
+1D Bug
+1E Big Poe
+1F Lon Lon Milk (Half)
+20 Poe
+
+$Bottles\Bottle 4 Modifier
+8011A659 00??
+14 Empty Bottle
+15 Red Potion
+16 Green Potion
+17 Blue Potion
+18 Bottled Fairy
+19 Fish
+1A Lon Lon Milk
+1B Letter
+1C Blue Fire
+1D Bug
+1E Big Poe
+1F Lon Lon Milk (Half)
+20 Poe
+
+$Epona\Max Carrots\Lon Lon Raunch
+Note=This is For Practicing,Racing.Warning take this off before jumping the exit fence after winning Epona
+801D8BCA 0006
+801F2208 0001
+801EEC88 0001
+
+$Equipment Modifier 1
+Note=This modifies the equipment you are carrying.If you Use Black Gauntlets,They are as strong as the Golden Gauntlets. This code also gives you the Silver Scale and the Golden Scale and unlimited rupees.
+8011A672 00??
+02 Silver Scale
+04 Golden Scale
+06 Giant's Knife (Broken)
+35 Black Gauntlets
+40 Bullet Bag (Holds 30)
+80 Bullet Bag (Holds 40)
+C0 Bullet Bag (Holds 50)
+
+$Equipment Modifier 2
+Note=This modifies the equipment you are carrying.
+8011A673 00??
+08 Bomb Bag (Holds 20)
+10 Bomb Bag (Holds 30)
+18 Bomb Bag (Holds 40)
+20 Goron's Bracelet
+28 Silver Gauntlets
+30 Golden Gauntlets
+
+$Have Quiver (Holds 30)
+8011A671 0001
+
+$Have\All Equipment
+Note=This cheat causes the Goron Temple door not to open, but if you go to the very top of the mountain where the fairy is, next to her entrance is another one in to the fire temple.once inside put on the hover boots & infinite hover cheat to hover over to the ledge on the left hand side.From here you can carry on the game as normal
+8111A66C 7777
+
+$Have\All Quest Status Items
+Note=This cheat causes the Goron Temple door not to open, but if you go to the very top of the mountain where the fairy is, next to her entrance is another one in to the fire temple.once inside put on the hover boots & infinite hover cheat to hover over to the ledge on the left hand side.From here you can carry on the game as normal
+8111A674 30FF
+8111A676 FFFF
+
+$Have\Arrows\Fire Arrow
+8011A648 0004
+
+$Have\Arrows\Ice Arrow
+8011A64E 000C
+
+$Have\Arrows\Light Arrow
+8011A654 0012
+
+$Have\Bombchu
+8011A64C 0009
+
+$Have\Bombs
+8011A646 0002
+
+$Have\Boomerang
+8011A650 000E
+
+$Have\Deku Nut
+8011A645 0001
+
+$Have\Deku Stick
+8011A644 0000
+
+$Have\Fairy Bow
+8011A647 0003
+
+$Have\Fairy Slingshot
+8011A64A 0006
+
+$Have\Hookshot
+8011A64D 00??
+0A Hookshot
+0B Longshot
+
+$Have\Lens of Truth
+8011A651 000F
+
+$Have\Magic Beans
+8011A652 0010
+
+$Have\Magic\Din's Fire
+8011A649 0005
+
+$Have\Magic\Fairie's Wind
+8011A64F 000D
+
+$Have\Magic\Nayru's Love
+8011A655 0013
+
+$Have\Megaton Hammer
+8011A653 0011
+
+$Have\Ocarina
+8011A64B 00??
+07 Fairy Ocarina
+08 Ocarina Of Time
+
+$Infinite\Arrows
+8011A65F 0009
+
+$Infinite\Big Key,Small Keys,Compass,& Map
+8011A678 0007
+8011A679 0007
+8011A67A 0007
+8011A67B 0007
+8011A67C 0007
+8011A67D 0007
+8011A67E 0007
+8011A67F 0007
+8011A680 0007
+8011A681 0007
+8011A682 0007
+8011A68F 0009
+8011A690 0009
+8011A691 0009
+8011A692 0009
+8011A693 0009
+8011A699 0009
+8011A69C 0009
+8011A697 0009
+
+$Infinite\Bombchu's
+8011A664 0009
+
+$Infinite\Bombs
+8011A65E 0009
+
+$Infinite\Deku Nuts
+8011A65D 0009
+
+$Infinite\Deku Seeds
+8011A662 0009
+
+$Infinite\Deku Sticks
+8011A65C 0009
+
+$Infinite\Energy
+8111A600 0140
+
+$Infinite\Magic
+D011A609 0008
+8011A60A 0001
+8011A60C 0001
+8011A603 0060
+
+$Infinite\Magic Beans
+8011A66A 0009
+
+$Infinite\Rupees
+Note=This cheat allows you to have the max Rupees to the Wallet you currently Hold
+8111B99C 0001
+
+$Infinite\Timers\All other Timers
+Note=This cheat works on all Race Timers.Under Water with iron Boots etc.
+8011B9A1 0032
+
+$Infinite\Timers\Escape From Gannons Tower
+Note=This cheat works only on The Final Boss.
+8011B9A5 00B4
+
+$Instant Step Hoover Boots
+Note=Take off from Anywhere & to go higher just press L Once, this will lift you higher while walking.to come back Down Keep R pressed.Once you have enabled the code press Start & then start again.
+D01C84B5 0020
+811DAA90 40CB
+D01C84B5 0000
+811DB2B2 000D
+8011A640 00??
+31 Kokiri Tunic & Hover Boots
+32 Goron Tunic & Hover Boots
+33 Zora Tunic & Hover Boots
+34 Black Tunic & Hover Boots
+35 White Tunic & Hover Boots
+36 Yellow Tunic & Hover Boots
+
+$Max\Double Defense Power
+Note=This gives you White Border Hearts
+8011A69F 0014
+
+$Max\Gold Skulltulas Killed
+8011A6A1 0064
+
+$Max\Heart Containers
+8111A5FE 0140
+
+$Nayru's Love is Always
+Note=For this to work On Or off, you have to walk through a Doorway to activate the Change.
+8111B998 ????
+0000 OFF
+FFFF ON
+
+$Press L For infinite Hover Boots
+Note=Press L For Infinite Hover Boots & Let go to land,This Only works when you have the Boots on
+D01C84B5 0020
+811DB2B2 000D
+
+$Press L To Levitate
+Note=Press L To Levitate & Let go to land
+D01C84B5 0020
+811DAA90 40CB
+
+$Press R\For Old Or Young Link
+Note=To Activate this Cheat Hold The R Button when walking through a Doorway this will change you to the option on the other side, Disable this Cheat straight away after getting to the other side, in some places you might even get Access Violations. Just press ok untill you can carry on.
+D01C84B5 0010
+8011A5D7 00??
+01 Link Young
+00 Link Old
+
+$Time of Day Modifier
+8111A5DC ????
+4000 At Sunrise
+5800 Daylight Out
+7000 Very Bright Out
+C000 At Sunset
+D000 Fairly Dark
+
+$Trading\Adult Link Item
+8011A65A 00??
+2D Pocket Egg
+2E Pocket Cucco
+2F Cojiro
+30 Odd Mushroom
+31 Odd Potion
+32 Poacher's Saw
+33 Goron's Sword (Broken)
+34 Prescription
+35 Eyeball Frog
+36 Eye Drops
+37 Claim Check
+
+$Trading\Young Link Item
+8011A65B 00??
+21 Weird Egg
+22 Chicken
+23 Zelda's Letter
+24 Keaton Mask
+25 Skull Mask
+26 Spooky Mask
+27 Bunny Hood
+28 Goron Mask
+29 Zora Mask
+2A Gerudo Mask
+2B Mask of Truth
+2C SOLD OUT
+
+$Tunic & Boot Options
+Note=This changes what you are wearing,once you have enabled the code press Start & then start again.
+8011A640 00??
+11 Kokiri Tunic & Kokiri Boots
+12 Goron Tunic & Kokiri Boots
+13 Zora Tunic & Kokiri Boots
+14 Black Tunic & Kokiri Boots
+15 White Tunic & Kokiri Boots
+16 Yellow Tunic & Kokiri Boots
+21 Kokiri Tunic & Iron Boots
+22 Goron Tunic & Iron Boots
+23 Zora Tunic & Iron Boots
+24 Black Tunic & Iron Boots
+25 White Tunic & Iron Boots
+26 Yellow Tunic & Iron Boots
+31 Kokiri Tunic & Hover Boots
+32 Goron Tunic & Hover Boots
+33 Zora Tunic & Hover Boots
+34 Black Tunic & Hover Boots
+35 White Tunic & Hover Boots
+36 Yellow Tunic & Hover Boots
+
+$Turn Giant's Knife Into Biggoron's Sword
+8011A60E 0001
+
+$Use Any Item In Any House
+Note=do not use under or in water
+8111B7F2 0000
+8111B7F4 0000
+
+$Warp Song Location\Bolero of Fire
+Note=For this cheat to work,You have to have the Ocarina & Songs. make your choice & Play the song of the cheat name to get where you chose.
+8011B965 00??
+03 Castle Courtyard
+0B Dodongo's Cavern Boss
+10 Inside The Deku Tree Boss
+14 Shadow Temple Boss
+17 Water Temple Boss
+1C Ganon's Castle Tower
+1F Ganon First Battle
+28 Ganon's Castle Room Before Ganon
+2B Inside Ganon's Castle Room With Pillar
+2F Lon Lon Ranch
+33 Mido's House
+37 Saria's House
+4B Bearded Man's House
+40 Top of Ganon's Castle
+47 Outside Saria's House
+4F Dampe's Race
+57 Kokiri Forest
+5B Top of Death Mountain
+5F Fishing Pond
+68 Inside Ganon's Castle
+7F Hyrule Castle Gate
+BA Top of Ganon's Tower
+C2 Great Fairy Fountain
+D6 Lost Woods Goron Entrance
+DA Lost Woods River Entrance
+DE Lost Woods Bridge Field Entrance
+E3 Goron City Lost Woods Entrance
+F6 Death Mountain Crater
+FD Ganon's Castle
+
+$Warp Song Location\Minuet of Forest & Serenade of Water
+Note=For this cheat to work,You have to have the Ocarina & Songs. make your choice & Play the song of the cheat name to get where you chose.
+8011B965 00??
+00 Sacred Forest Meadow
+04 Lake Hylia
+15 Inside Jabu Jabu's Belly
+18 Dodongo's Cavern
+68 Inside The Deku Tree
+
+$Warp Song Location\Prelude of Light & Nocturne of Shadow
+Note=For this cheat to work,You have to have the Ocarina & Songs. make your choice & Play the song of the cheat name to get where you chose.
+8011B965 00??
+03 Kakariko Windmill
+07 Bombchu Bowling Alley
+0F Zelda & Impa Flee
+14 Kakariko Village
+17 Ganon Final Battle
+1D Top of Ganon's Tower
+28 Bombchu Shop
+2C Bazaar
+30 Happy Mask Shop
+34 Ganon's Tower
+38 Ganon's Castle
+4C Inside Spirit Door
+6C Burning Castle
+50 House of Skulltula
+64 Death Mountain Trail
+68 Graveyard
+70 Thieves' Hideout
+74 Royal Family's Tomb
+78 Great Fairy Fountain 1
+84 Forest Temple
+88 Great Fairy Fountain 2
+99 Grotto 01
+9D Grotto 02
+A4 Grotto 04
+A8 Grotto 05
+B3 Grotto 06
+B0 Grotto 07
+B4 Grotto 08
+B8 Grotto 09
+C3 Grotto 10
+C0 Grotto 11
+C4 Grotto 12
+FC Grotto 13
+D3 Bottom of the Well
+D0 Lon Lon Ranch Shed
+D3 Lon Lon Ranch Outside Shed
+D8 Ice Cavern
+E3 Outside Cow Pen
+E0 Lost Woods Bridge
+E4 Lon Lon Ranch Chicken Room
+E8 In Front of Deku Tree
+EB Spirit Temple Boss
+F1 Castle Courtyard
+F4 Temple of Time
+F8 Gerudo Fortress Jail
+
+$Warp Song Location\Requiem of Spirit
+Note=For this cheat to work,You have to have the Ocarina & Songs. make your choice & Play the song of the cheat name to get where you chose.
+8011B965 00??
+05 Lake Hylia
+08 Zora's Domain
+18 Gerudo Valley
+1E Lost Woods
+28 Gerudo Fortress
+30 Haunted Wasteland
+34 Ganon's Castle Inside Burning Castle
+38 Hyrule Castle
+3A Ganon's Castle
+3D Death Mountain Trail
+4D Goron City
+65 Fire Temple
+69 Forest Temple
+6E Shooting Gallery
+79 Ganon's Castle Inside Burning Castle
+7E Kakariko Village Entrance
+7B Zora's River Entrance
+85 Kokiri Forest Entrance
+8A Lake Hyrule Entrance
+8E Gerudo Valley Entrance
+92 Death Mountain Trail Entrance
+95 Graveyard Entrance
+9E Zora's Domain Entrance
+A2 Zora's Fountain Entrance
+BA Goron City Entrance
+BE Death Mountain Trail
+C1 Goron City
+C5 Lakeside Laboratory
+C9 Top of Ganon's Castle
+CD Hyrule Market (Child Link's)
+CF Hyrule Market (Adult Link's)
+F1 Desert Colossus
+FA Lon Lon Ranch Entrance
+FD Hyrule Field

@@ -1,0 +1,61 @@
+[B20F73B6-2975FC34-C:45]
+Name=Army Men - Sarge's Heroes 2 (U)
+
+$Enemies Fight Themselves
+8005EE9C 0020
+
+$Have\All Weapons & Ammo
+8115D06E 0001
+8116368E 0001
+
+$Have\Invisible Soldier
+Note=you are Invisible to most enimies who just can not dectect or see you.
+8115D052 0001
+
+$Have\Large Mode
+Note=Do not use with Mini Mode only use one at a time
+811636AE 0001
+
+$Have\Mini Mode
+Note=Do not use with Big Mode only use one at a time
+8115D06A 0001
+
+$Infinite\Continues
+8115D062 0001
+
+$Infinite\Health
+8135C516 0600
+
+$Move Faster
+800B9705 00FF
+800B9749 00FF
+
+$Play as
+81164372 00??
+07 Big Green One
+08 Vikki
+09 Plastro
+0B Mystery Women
+0C Hail Mendheimicus
+0D Mini Soldier
+
+$Play Level
+81172C0A 0001
+810B51AE 00??
+01 Dinner
+02 Bridge
+03 Fridge
+04 Freezer
+05 Insidewall
+06 Graveyard
+07 Castle
+08 Tanbase
+09 Revenge
+0A Desk
+0B Bed
+0C Town
+0D Cashier
+0E Train
+0F Rockets
+10 Pool
+11 Pinball

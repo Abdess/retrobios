@@ -1,0 +1,47 @@
+[E3AB4ED0-83040DD2-C:45]
+Name=NFL Quarterback Club 2000 (U)
+
+$Away Team\Infinite Time Outs
+80054ED6 0003
+
+$Away Team\No Time Outs Away
+80054ED6 0000
+
+$Home Team\Infinite Time Outs
+80054956 0003
+
+$Home Team\No Time Outs
+80054956 0000
+
+$Infinite Creation Points
+8107B36E 03E7
+
+$Infinite Time To Choose Play
+81081448 2800
+
+$Max Acc
+8007526D 0064
+
+$Max Cat
+8007527B 0063
+
+$Max Clu
+80075275 0063
+
+$Max End
+8007527D 0063
+
+$Max Hnd
+80075279 0063
+
+$Max Rcg
+80075273 0063
+
+$Max Rng
+8007526F 0063
+
+$Max Scr
+80075271 0063
+
+$Max Spd
+80075277 0063

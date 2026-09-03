@@ -1,0 +1,40 @@
+[46039FB4-0337822C-C:45]
+Name=Kirby 64 - The Crystal Shards (U)
+
+$All Stages Complete
+Note=You still have to beat the boss to continue onto the next world.
+50002B01 0000
+800D6BE0 0002
+
+$Can Fly Forever
+8112E7DE 00F0
+
+$Game 100% Complete\Save Slot 1
+800ECA18 0064
+
+$Game 100% Complete\Save Slot 2
+800ECA70 0064
+
+$Game 100% Complete\Save Slot 3
+800ECAC8 0064
+
+$Get All Crystals
+50000701 0000
+800D6BC0 0001
+50001701 0000
+800D6BC8 0007
+
+$Infinite Health
+810D6E50 40C0
+
+$Infinite Lives
+800D714F 0064
+
+$Unlock All Difficulty Levels\100 Yard Hop
+800D6BB9 0003
+
+$Unlock All Difficulty Levels\Bumper Crop Bump
+800D6BBA 0003
+
+$Unlock All Difficulty Levels\Checkerboard Chase
+800D6BBB 0003

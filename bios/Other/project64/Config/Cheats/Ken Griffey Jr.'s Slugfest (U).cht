@@ -1,0 +1,52 @@
+[36281F23-009756CF-C:45]
+Name=Ken Griffey Jr.'s Slugfest (U)
+
+$Infinite\Balls
+8021AC47 0000
+
+$Infinite\Creation Points
+81059408 420C
+
+$Infinite\Strikes
+8021AC48 0000
+
+$Inning Selection
+8021AC42 00??
+02 2nd Inning
+03 3rd Inning
+04 4th Inning
+05 5th Inning
+06 6th Inning
+07 7th Inning
+08 8th Inning
+09 9th Inning
+
+$Max\Arm Strength
+8105C5F8 4120
+
+$Max\Batting
+8105D6D8 4120
+
+$Max\Clutch
+8105BB98 4120
+
+$Max\Control
+8105B760 4120
+
+$Max\Defense
+8105CA60 4120
+
+$Max\Durability
+8105C098 4120
+
+$Max\Pitch Speed
+8105AE90 4120
+
+$Max\Power
+8105D270 4120
+
+$Max\Speed
+8105CE68 4120
+
+$Max\Stamina
+8105B2F8 4120

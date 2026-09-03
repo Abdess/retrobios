@@ -1,0 +1,26 @@
+[7F3CEB77-8981030A-C:45]
+Name=Hercules - The Legendary Journeys (U)
+
+$Infinite Dinars
+800B6043 00E8
+800B6042 00E8
+
+$Infinite Health
+810CF93E 03E7
+810CF942 03E7
+
+$Infinite Magic
+810B65CA 0063
+810B65B2 0063
+810B65E2 0063
+810B65FA 0063
+
+$Press L for 1 Hit Kill Punch
+Note=Press The L Button & Hold B & Then Let Go to Kill Enimies,Rocks,Tents etc with One Punch.
+D0103383 0020
+800D9BCE 0000
+
+$Press L to Levitate
+Note=Press L Button to Levitate & Let go to come back down
+D017D2D5 0020
+810CF994 44CB

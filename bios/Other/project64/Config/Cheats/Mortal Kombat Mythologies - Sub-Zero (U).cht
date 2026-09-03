@@ -1,0 +1,23 @@
+[C34304AC-2D79C021-C:45]
+Name=Mortal Kombat Mythologies - Sub-Zero (U)
+
+$Infinite Lives
+8010BCFF 0009
+
+$Invincible
+8009F742 0001
+
+$Level Select
+D009A913 0000
+8009A913 00??
+00 Level 1 - Shaolin Temple - China
+01 Level 2 - Wind Realm
+02 Level 3 - Earth Realm
+03 Level 4 - Water Realm
+04 Level 5 - Fire Ream
+05 Level 6 - Prison
+06 Level 7 - Bridge
+07 Level 8 - Fortress
+
+$Max Experience
+8111200E FC9A

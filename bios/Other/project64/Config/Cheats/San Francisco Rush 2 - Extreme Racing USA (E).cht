@@ -1,0 +1,65 @@
+[B7CF2136-FA0AA715-C:50]
+Name=Rush 2 - Extreme Racing USA (E) (M6)
+
+$Access All In-Game Cheats
+Note=In Set-Up Menu
+810C48F8 0100
+
+$Access Midway Track
+810C4890 03E7
+
+$Activate All In-Game Cheats
+50000E02 0000
+810C48A4 FFFF
+
+$All Keys,Cars & Cans
+50000E02 0000
+810C4574 FFFF
+
+$Always 1st
+80115499 0000
+
+$Best Stunt Points
+Note=On Track
+8110B438 03E7
+
+$Easy Difficulty
+8010FFAA 0000
+
+$Laps To Race
+811088D0 00??
+01 1 Lap
+02 2 laps
+03 3 Laps
+04 4 Laps
+05 5 Laps
+06 6 Laps
+07 7 Laps
+08 8 Laps
+09 9 Laps
+
+$Max & Best Score
+Note=On Stunt Track
+50000502 0000
+810C4702 FFFF
+
+$Max Points In Total
+810E235A 03E7
+
+$No\Checkpoints Extended Time
+8010FF47 0000
+
+$No\Wind
+80116E98 0000
+
+$Number Of Drones In Race
+810E1B88 00??
+01 1 Drone
+02 2 Drones
+03 3 Drones
+04 4 Drones
+05 5 Drones
+06 6 Drones
+07 7 Drones
+08 8 Drones
+09 9 Drones

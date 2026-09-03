@@ -1,0 +1,77 @@
+[5306CF45-CBC49250-C:45]
+Name=Cruis'n USA (U) (V1.1)
+
+$Car Upgrades\'63 Muscle Car
+8015053F 0005
+
+$Car Upgrades\All-Terrain Vehicle
+8015054F 0004
+
+$Car Upgrades\Devastator
+80150547 0005
+
+$Car Upgrades\Italia P69
+8015054B 0005
+
+$Car Upgrades\La Bomba
+80150543 0005
+
+$Car Upgrades\Police Car
+80150557 0004
+
+$Car Upgrades\School Bus
+80150553 0004
+
+$Infinite Time
+8015094D 0095
+
+$Play Level Modifier
+80150963 00??
+00 Golden Gate Park
+01 San Francisco
+02 US 101
+03 Redwood Forest
+04 Beverly Hills
+05 LA Freeway
+06 Death Valley
+07 Arizona
+08 Grand Canyon
+09 Iowa
+0A Chicago
+0B Indiana
+0C Appalachia
+0D Washington DC
+0E Cruise The USA
+
+$Player 1\Always First Place
+8015022B 0001
+
+$Player 1\Always Have Fastest Car
+8015021A 0001
+
+$Player 1\Gearbox Type Modifier
+80150213 00??
+00 Automatic
+01 Manual
+
+$Player 1\Lights & Sirens For Police Car & School Bus P1
+8115053A 0001
+8114E38A 0001
+
+$Player 2\Always First Place
+801505C7 0001
+
+$Player 2\Always Have Fastest Car
+801505B6 0001
+
+$Player 2\Gearbox Type Modifier
+801505AF 00??
+00 Automatic
+01 Manual
+
+$Player 2\Lights & Sirens For Police Car & School Bus P2
+811508D6 0001
+8114E3A2 0001
+
+$Stop Elapsed Time And No Traffic
+80150949 0000
