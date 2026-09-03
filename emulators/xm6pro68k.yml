@@ -151,6 +151,7 @@ files:
       bytes rather than 0x2000. Without it LoadROM(X68030) fails and the X68030
       machine is not offered. README.txt:25 calls it non-critical and notes that
       installing it can cost performance.
+      The copy here is the X68000 Firmware set's ROM30.DAT (SCSIIN, ROM Human 2.x, ROM FLOAT and the SCSI-IOCS binary), read out of an X68030 by the XM6 2.06 utility, which stamps its name at the tail of the image.
 
   # -- Font ROM, read at 0xc0000 bytes, CGROM.DAT first then CGROM.TMP --
 

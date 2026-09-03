@@ -142,6 +142,7 @@ files:
       Lower half of the X68030 boot ROM, loaded through the SCSI ROM slot and
       the only one of those read at 0x20000 bytes rather than 0x2000. Without it
       the X68030 machine does not load.
+      The copy here is the X68000 Firmware set's ROM30.DAT (SCSIIN, ROM Human 2.x, ROM FLOAT and the SCSI-IOCS binary), read out of an X68030 by the XM6 2.06 utility, which stamps its name at the tail of the image.
 
   - name: IPLROM30S.DAT
     system: sharp-x68000
@@ -154,6 +155,7 @@ files:
       Read in place of IPLROM30.DAT when Expansion ROM is checked on the X68030
       options tab, the setting stored as EXTROM. Paired with ROM30S.DAT and
       intended for ROMs patched for 060turbo.
+      The copy here is XEIJIPLROM30.DAT written by XEiJ 0.26.08.08 with -model=X68030 -iplrom16=on -memory=12 -cgrom=CGROM30.DAT: IPLROM 1.6 of 2025-08-03, the patched IPL its documentation names for the 060turbo, since no dump of the Mankai replacement ROM circulates.
 
   - name: ROM30S.DAT
     system: sharp-x68000
@@ -165,6 +167,7 @@ files:
     note: >-
       The other half of the expansion pair, loaded through the same SCSI ROM
       slot as ROM30.DAT and read at the same size.
+      The copy here is XEIJROM30.DAT from the same XEiJ run: SCSIINROM 16, ROM Human 2.60, ROM FLOAT 2.03 and ROM Debugger 3.60.
 
   # -- CG ROMs, read at 0xc0000 bytes, model specific first then CGROM.DAT then CGROM.TMP --
 
@@ -182,6 +185,8 @@ files:
 
   - name: CGROMXV.DAT
     system: sharp-x68000
+    aliases:
+      - CGROM.DAT
     required: false
     min_size: 786432
     validation: [size]
@@ -193,6 +198,8 @@ files:
 
   - name: CGROMCO.DAT
     system: sharp-x68000
+    aliases:
+      - CGROM.DAT
     required: false
     min_size: 786432
     validation: [size]
@@ -394,7 +401,7 @@ files:
   - name: pcidebug.dll
     system: sharp-x68000
     required: false
-    description: "PCI access library used by the debug interface"
+    description: "PCI bus bridge library, used to reach a ROMEO sound board"
     source_ref: "xm6g.exe:LoadLibraryW at 0x1404fa344, FreeLibrary at 0x1404fa2f5"
     note: >-
       Loaded on demand and freed again. Absent, the feature that needs it is
@@ -410,3 +417,4 @@ files:
       Hosted as the MIDI output device when the VSTi option is selected. The
       path is fixed to the Roland installation directory and the setting is
       stored as VstSCVA.
+      The plugin does not synthesise on its own: the Roland installer places SCCore.dll and eleven data files (GM, GM2 and SC-VSC .drk, .tnf and .drf sets, parameter1.dat to parameter3.dat) beside it, and the DLL loads them from its own directory.
