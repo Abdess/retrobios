@@ -588,6 +588,20 @@ def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
             if ra_dir:
                 found.append(("retroarch", ra_dir))
 
+        # RetroArch from Steam: a portable install under the default library
+        for var in ("ProgramFiles(x86)", "ProgramFiles"):
+            program_files = os.environ.get(var, "")
+            if not program_files:
+                continue
+            steam_cfg = (
+                Path(program_files) / "Steam" / "steamapps" / "common"
+                / "RetroArch" / "retroarch.cfg"
+            )
+            ra_dir = _parse_retroarch_system_dir(steam_cfg)
+            if ra_dir and not any(name == "retroarch" for name, _ in found):
+                found.append(("retroarch", ra_dir))
+                break
+
         # Portable RetroArch referenced by LaunchBox
         lb_root = launchbox_root(os_type)
         if lb_root and not any(name == "retroarch" for name, _ in found):
@@ -676,15 +690,16 @@ def _safe_target_dir(value: object, field: str) -> str:
 
 
 def _destination_path(root: Path, value: object) -> Path:
-    """Resolve a manifest destination and prove it remains below *root*."""
+    """Place a manifest destination below *root*.
+
+    The manifest cannot climb: _safe_relative_path refuses absolute paths,
+    drive letters and '..'. Symbolic links met under the root are the
+    user's own layout and are followed. EmuDeck links bios/shadps4/sys_modules
+    into shadPS4's data directory, and the file has to land where the
+    emulator reads it.
+    """
     relative = _safe_relative_path(value, "dest")
-    resolved_root = root.resolve()
-    candidate = (resolved_root / Path(*relative.parts)).resolve()
-    try:
-        candidate.relative_to(resolved_root)
-    except ValueError as exc:
-        raise ValueError(f"destination escapes BIOS directory: {value!r}") from exc
-    return candidate
+    return root.resolve() / Path(*relative.parts)
 
 
 def _validate_manifest(data: object, plat: str) -> dict:
@@ -1172,6 +1187,53 @@ def format_size(n: int) -> str:
     return f"{n / (1024 * 1024 * 1024):.1f} GB"
 
 
+def _prompt_manual_platform(os_type: str) -> list[tuple[str, Path]]:
+    """Ask for a platform and a BIOS directory when nothing was detected."""
+    print("\nChoose the platform to install for:")
+    for i, name in enumerate(AVAILABLE_PLATFORMS, 1):
+        print(f"  {i}) {name}")
+    print("  q) quit")
+    print()
+    plat = ""
+    while not plat:
+        try:
+            choice = input("> ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            sys.exit(0)
+        if choice == "q":
+            sys.exit(0)
+        if choice.isdigit() and 1 <= int(choice) <= len(AVAILABLE_PLATFORMS):
+            plat = AVAILABLE_PLATFORMS[int(choice) - 1]
+        elif choice in AVAILABLE_PLATFORMS:
+            plat = choice
+    default_dest = DEFAULT_DESTS.get(plat, Path.home() / "bios")
+    try:
+        raw = input(f"BIOS directory [{default_dest}]: ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print()
+        sys.exit(0)
+    dest = Path(raw).expanduser() if raw else default_dest
+    if os_type == "windows" and raw:
+        dest = Path(os.path.expandvars(raw))
+    return [(plat, dest)]
+
+
+def _manual_usage_hint(os_type: str) -> list[str]:
+    """How to name the platform and directory when nothing is detected."""
+    if os_type == "windows":
+        return [
+            "  Use --platform and --dest to specify manually, for example:",
+            "    & ([ScriptBlock]::Create((iwr -useb "
+            "https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1))) "
+            "--platform retroarch --dest 'C:\\RetroArch\\system'",
+        ]
+    return [
+        "  Use --platform and --dest to specify manually, for example:",
+        "    python3 install.py --platform retroarch --dest ~/.config/retroarch/system",
+    ]
+
+
 def _prompt_platform_choice(
     platforms: list[tuple[str, Path]],
 ) -> list[tuple[str, Path]]:
@@ -1301,8 +1363,11 @@ def main() -> None:
         platforms = detect_platforms(os_type)
         if not platforms:
             print("  No supported platform detected.")
-            print("  Use --platform and --dest to specify manually.")
-            sys.exit(1)
+            if not sys.stdin.isatty() or args.list_targets:
+                for line in _manual_usage_hint(os_type):
+                    print(line)
+                sys.exit(1)
+            platforms = _prompt_manual_platform(os_type)
         for name, path in platforms:
             print(f"  Found {name.capitalize()} at {path}")
 

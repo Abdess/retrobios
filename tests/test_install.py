@@ -730,6 +730,93 @@ class TestStandaloneCopyTargetsAreUntrusted(unittest.TestCase):
 
 
 @unittest.skipUnless(shutil.which("pwsh"), "pwsh not available")
+class TestDestinationFollowsUserLinks(unittest.TestCase):
+    """EmuDeck links bios/shadps4/sys_modules into shadPS4's own directory.
+
+    The manifest still cannot climb out of the BIOS root, but a link the
+    user's frontend placed under it is where the emulator reads the file.
+    """
+
+    def test_symlinked_directory_under_root_is_followed(self):
+        bios = Path(tempfile.mkdtemp())
+        elsewhere = Path(tempfile.mkdtemp()) / "sys_modules"
+        elsewhere.mkdir()
+        (bios / "shadps4").mkdir()
+        (bios / "shadps4" / "sys_modules").symlink_to(elsewhere)
+
+        dest = install._destination_path(bios, "shadps4/sys_modules/libSceLibcInternal.sprx")
+
+        self.assertEqual(dest, bios.resolve() / "shadps4" / "sys_modules" / "libSceLibcInternal.sprx")
+        self.assertEqual(dest.resolve().parent, elsewhere.resolve())
+
+    def test_check_local_survives_a_linked_directory(self):
+        bios = Path(tempfile.mkdtemp())
+        elsewhere = Path(tempfile.mkdtemp()) / "sys_modules"
+        elsewhere.mkdir()
+        (bios / "shadps4").mkdir()
+        (bios / "shadps4" / "sys_modules").symlink_to(elsewhere)
+        entry = {"dest": "shadps4/sys_modules/x.sprx", "size": 1, "sha1": "0" * 40}
+
+        to_download, up_to_date, mismatched = install.check_local([entry], bios)
+
+        self.assertEqual([e["dest"] for e in to_download], ["shadps4/sys_modules/x.sprx"])
+        self.assertEqual((up_to_date, mismatched), ([], []))
+
+    def test_climbing_is_still_refused(self):
+        bios = Path(tempfile.mkdtemp())
+        with self.assertRaises(ValueError):
+            install._destination_path(bios, "../outside.bin")
+        with self.assertRaises(ValueError):
+            install._destination_path(bios, "/etc/passwd")
+
+
+class TestManualPlatformPrompt(unittest.TestCase):
+    """With nothing detected, an interactive run asks instead of exiting."""
+
+    def test_number_picks_the_platform_and_default_directory(self):
+        answers = iter(["1", ""])
+        with unittest.mock.patch("builtins.input", lambda _prompt="": next(answers)):
+            chosen = install._prompt_manual_platform("linux")
+        self.assertEqual(chosen, [("retroarch", Path.home() / "bios")])
+
+    def test_name_and_explicit_directory(self):
+        answers = iter(["batocera", "~/my bios"])
+        with unittest.mock.patch("builtins.input", lambda _prompt="": next(answers)):
+            chosen = install._prompt_manual_platform("linux")
+        self.assertEqual(chosen, [("batocera", Path("~/my bios").expanduser())])
+
+    def test_default_directory_comes_from_the_table(self):
+        answers = iter(["batocera", ""])
+        with unittest.mock.patch("builtins.input", lambda _prompt="": next(answers)):
+            chosen = install._prompt_manual_platform("linux")
+        self.assertEqual(chosen, [("batocera", install.DEFAULT_DESTS["batocera"])])
+
+    def test_quit_exits_cleanly(self):
+        with unittest.mock.patch("builtins.input", lambda _prompt="": "q"):
+            with self.assertRaises(SystemExit) as raised:
+                install._prompt_manual_platform("linux")
+        self.assertEqual(raised.exception.code, 0)
+
+    def test_windows_hint_shows_the_one_liner_with_arguments(self):
+        hint = "\n".join(install._manual_usage_hint("windows"))
+        self.assertIn("--platform retroarch --dest", hint)
+        self.assertIn("install.ps1", hint)
+
+
+class TestSteamRetroarchDetection(unittest.TestCase):
+    """The Steam build is a portable install under the default library."""
+
+    def test_steam_library_is_found_on_windows(self):
+        program_files = Path(tempfile.mkdtemp())
+        ra_dir = program_files / "Steam" / "steamapps" / "common" / "RetroArch"
+        ra_dir.mkdir(parents=True)
+        (ra_dir / "retroarch.cfg").write_text('system_directory = ":\\system"\n')
+        env = {"ProgramFiles(x86)": str(program_files)}
+        with unittest.mock.patch.dict(os.environ, env, clear=True):
+            found = install.detect_platforms("windows")
+        self.assertIn(("retroarch", ra_dir / "system"), found)
+
+
 class TestLaunchboxDetectionPowershell(unittest.TestCase):
     """install.ps1 must resolve LaunchBox's portable RetroArch on its own."""
 
