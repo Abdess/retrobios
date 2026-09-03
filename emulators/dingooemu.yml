@@ -1,0 +1,46 @@
+emulator: DingooEmu
+type: standalone + libretro
+core_classification: pure_libretro
+source: "https://github.com/AloysHF/DingooEmu"
+upstream: "https://github.com/AloysHF/DingooEmu"
+profiled_date: "2026-09-03"
+source_commit: "746d6f116c707b9a2ede23c4b25468f90e26af26"
+core_version: "0.2.0"
+display_name: "Dingoo - A320 (DingooEmu)"
+cores:
+  - dingooemu
+systems:
+  - dingoo-a320
+
+notes: |
+  Dingoo A320 emulator written in Rust by AloysHF. The libretro core and
+  the dingoo-emu standalone binary share the dingooemu-core crate. A .app
+  file is parsed from its full path (need_fullpath = true,
+  crates/dingooemu-libretro/src/api.rs:87; Emulator::from_path,
+  crates/dingooemu-core/src/emulator.rs:316-319;
+  crates/dingooemu-core/src/app_loader.rs:119-122) and its imports are
+  bound to Rust implementations of the Dingoo SDK
+  (crates/dingooemu-core/src/emulator/sdk_hle/mod.rs:22-30). No firmware
+  image, font or system file backs those calls.
+
+  The guest file API (crates/dingooemu-core/src/emulator/sdk_hle/files.rs:43-129)
+  resolves a name in three steps: a file under the save directory, a
+  resource packed inside the .app, then a host file relative to the .app's
+  own directory (crates/dingooemu-core/src/emulator.rs:1684-1706,
+  crates/dingooemu-core/src/emulator.rs:1433-1501). fsys_findfirst
+  enumerates the .app's directory and refuses to leave it
+  (crates/dingooemu-core/src/emulator.rs:1545-1591). Files the game
+  creates land in the frontend save directory
+  (crates/dingooemu-libretro/src/api.rs:152-155) or, when the frontend
+  gives none, beside the .app (crates/dingooemu-core/src/emulator.rs:411).
+  The core queries RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY only
+  (crates/dingooemu-libretro/src/constants.rs:30); no system directory
+  constant exists in the crate.
+
+  With the diagnostic core option on, dingooemu-diagnostic.txt is written
+  to the save directory (crates/dingooemu-libretro/src/diagnostics.rs:83-89,
+  crates/dingooemu-libretro/src/diagnostics.rs:311-316). No include_bytes!
+  data is compiled in.
+
+exclusion_note: "No file is read outside the content: the .app path is the only input, guest file calls resolve to the save directory, the .app's resource table or the .app's own directory, nothing queries the system directory, no data is embedded with include_bytes!, and the .info declares firmware_count = 0."
+files: []

@@ -1,0 +1,61 @@
+emulator: SPMP8000Emu
+type: standalone + libretro
+core_classification: pure_libretro
+source: "https://github.com/AloysHF/SPMP8000Emu"
+upstream: "https://github.com/AloysHF/SPMP8000Emu"
+profiled_date: "2026-09-03"
+source_commit: "00f5985b639a036cd255770fb56abc98fcde7513"
+core_version: "1.0.0"
+display_name: "Sunplus - SPMP8000 (SPMP8000Emu)"
+cores:
+  - spmp8000emu
+systems:
+  - sunplus-spmp8000
+
+notes: |
+  Emulator for Sunplus SPMP8000 NGame1.0 games written in Rust by
+  AloysHF. The libretro core and the spmp8000-emu standalone binary share
+  the spmp8000emu-core crate. A .bin game is read from its full path
+  (need_fullpath = true, crates/spmp8000emu-libretro/src/libretro/api.rs:96;
+  from_path_with_config, crates/spmp8000emu-core/src/emulator.rs:63-68),
+  its header parsed, the payload DES-decrypted and LZ77/RLE-decompressed
+  with keys and tables compiled into the core, then loaded at the code
+  address. The system API (emuIf, NativeGE, eCos) is implemented in Rust
+  (crates/spmp8000emu-core/src/api/).
+
+  Guest file calls (emuIfFsFileOpen, NativeGE_fsOpen, NativeGE_readRecord,
+  NativeGE_writeRecord) resolve the guest path under the directory of the
+  loaded .bin (crates/spmp8000emu-core/src/emulator.rs:129-131,
+  crates/spmp8000emu-core/src/api/mod.rs:125-127,
+  crates/spmp8000emu-core/src/api/emu_fs.rs:9-13); what a game reads or
+  writes there is its own data and saves.
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY and GET_SAVE_DIRECTORY are
+  defined (crates/spmp8000emu-libretro/src/libretro/constants.rs:36,
+  crates/spmp8000emu-libretro/src/libretro/constants.rs:47) but nothing
+  calls them.
+
+  MIDI resources are rendered by a sample-based synthesiser whose tone
+  bank is the SPMP8000 firmware's own PCM tone library, compiled into the
+  core with include_bytes! (crates/spmp8000emu-core/src/tone_library.rs:8,
+  crates/spmp8000emu-core/src/audio_resource.rs:498-499). It is the only
+  embedded data and the only firmware-derived component; nothing is read
+  from disk for it.
+
+files:
+  - name: tonelib.bin
+    system: sunplus-spmp8000
+    required: false
+    embedded: true
+    size: 130500
+    md5: f276986a8ee7d29d9ba495c1cfe0b891
+    sha1: 6b52965081642630ef7aa30a90c9643f97c72410
+    sha256: 5924f1cea0a65086a48b10a6553e6493a43fcf63e265d974e447be1f4262c99a
+    crc32: 058a577b
+    description: "SPMP8000 firmware PCM tone bank"
+    note: >-
+      Compiled into the core from crates/spmp8000emu-core/assets/tonelib.bin
+      and never opened at run time. 256-entry patch table (128 melodic,
+      128 percussion) followed by per-zone PCM samples, read by the
+      NativeGE MIDI path. Hashes are of the file in the emulator
+      repository; the repository states the SHA-256.
+    source_ref: "crates/spmp8000emu-core/src/tone_library.rs:8, crates/spmp8000emu-core/src/tone_library.rs:24-26, crates/spmp8000emu-core/src/audio_resource.rs:498-499, crates/spmp8000emu-core/assets/README.md:3-9"

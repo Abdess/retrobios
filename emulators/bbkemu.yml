@@ -1,0 +1,124 @@
+emulator: BBKEmu
+type: standalone + libretro
+core_classification: pure_libretro
+source: "https://github.com/AloysHF/BBKEmu"
+upstream: "https://github.com/AloysHF/BBKEmu"
+profiled_date: "2026-09-03"
+source_commit: "479e52953344329810dc0305a4c160e4badfc9bc"
+core_version: "0.1.0"
+display_name: "BBK - Electronic Dictionary (BBKEmu)"
+cores:
+  - bbkemu
+systems:
+  - bbk-longman-4980
+  - bbk-longman-4988
+
+notes: |
+  BBK A-series electronic dictionary game emulator written in Rust by
+  AloysHF. The libretro core and the bbk-emu standalone binary share the
+  bbkemu-core crate. A .gam game is 6502 code that calls into the
+  dictionary's OS ROM for LCD, keyboard, audio, timer and file services.
+
+  Two ROM images are read from the system directory, in one subdirectory
+  per model: {system}/BBKEmu/<model>/8.BIN, the font ROM mapped at
+  physical 0x800000-0x9FFFFF, and E.BIN, the OS ROM mapped at
+  0xE00000-0xFFFFFF (crates/bbkemu-libretro/src/lib.rs:187-206,
+  crates/bbkemu-core/src/memory.rs:377-398). The libretro core always
+  loads content as the A4980 model (crates/bbkemu-libretro/src/lib.rs:470-471),
+  so only BBKEmu/A4980/ is ever read from RetroArch. Both reads are
+  std::fs::read guarded by `if let Ok`: a missing file is skipped without
+  any message to the frontend. The image is copied into a 2 MiB
+  zero-filled buffer (crates/bbkemu-core/src/memory.rs:197-209); nothing
+  checks its size or contents.
+
+  Without E.BIN, run_os_init (crates/bbkemu-core/src/emulator.rs:231-252)
+  sets PC to 0x350, reads zeros from the ROM window, never sees
+  _MTCT=0xFE and gives up after 10 million cycles; the bank registers
+  stay unmapped and the game exits at its first OS call. Measured by
+  running run_os_init from bbkemu-core against a dump: 1 092 023 cycles
+  to completion with E.BIN, timeout without it. Without 8.BIN the font
+  window reads as 0x00 and every glyph the OS draws is blank; execution
+  continues.
+
+  The standalone binary takes -8/--rom8 and -e/--rome explicit paths and
+  otherwise reads system/BBKEmu/<model>/8.BIN and E.BIN relative to the
+  working directory, --model 4980 (default) or 4988 selecting the
+  subdirectory (crates/bbkemu/src/main.rs:108-117, crates/bbkemu/src/main.rs:146-170).
+  The A4988 model differs by its flash save-area offset and key layout
+  (crates/bbkemu-core/src/emulator.rs:148-153,
+  crates/bbkemu-libretro/src/lib.rs:619-628).
+
+  During init the OS maps its own bank at logical bank D: 0xEA8 for the
+  A4980 OS, 0xE88 for the A4988 OS (crates/bbkemu-core/src/model.rs:11-13).
+  The core never reads that value back; detect_model
+  (crates/bbkemu-core/src/model.rs:37-49) has no caller. The
+  include_bytes! font in crates/bbkemu-core/src/font.rs is not declared in
+  lib.rs and is not compiled. Content arrives through the frontend buffer
+  (need_fullpath = false, crates/bbkemu-libretro/src/lib.rs:416). Save RAM
+  is the first 0x14000 bytes of the emulated flash
+  (crates/bbkemu-libretro/src/lib.rs:840-842).
+
+files:
+  - name: 8.BIN
+    path: BBKEmu/A4980/8.BIN
+    standalone_path: system/BBKEmu/A4980/8.BIN
+    system: bbk-longman-4980
+    size: 2097152
+    required: true
+    description: "BBK A-series font ROM"
+    note: >-
+      Read whole from {system}/BBKEmu/A4980/8.BIN into the 2 MiB window at
+      physical 0x800000. A missing file is skipped silently; the window
+      then reads as 0x00 and text drawn through the OS is blank. No size
+      or hash check; size is the window the image fills.
+    source_ref: "crates/bbkemu-libretro/src/lib.rs:187-199, crates/bbkemu-libretro/src/lib.rs:470-471, crates/bbkemu-core/src/memory.rs:8, crates/bbkemu-core/src/memory.rs:197-202, crates/bbkemu-core/src/memory.rs:384-390, crates/bbkemu/src/main.rs:147-158"
+
+  - name: E.BIN
+    path: BBKEmu/A4980/E.BIN
+    standalone_path: system/BBKEmu/A4980/E.BIN
+    system: bbk-longman-4980
+    size: 2097152
+    required: true
+    description: "BBK A-series OS ROM"
+    note: >-
+      Read whole from {system}/BBKEmu/A4980/E.BIN into the 2 MiB window at
+      physical 0xE00000; the last 256 bytes also serve as the interrupt
+      vector page at 0x0300. A missing file is skipped silently, the OS
+      init loop times out after 10 million cycles and no game runs. No
+      size or hash check; size is the window the image fills.
+    source_ref: "crates/bbkemu-libretro/src/lib.rs:187-193, crates/bbkemu-libretro/src/lib.rs:201-206, crates/bbkemu-libretro/src/lib.rs:470-471, crates/bbkemu-core/src/memory.rs:9, crates/bbkemu-core/src/memory.rs:204-209, crates/bbkemu-core/src/memory.rs:224-226, crates/bbkemu-core/src/memory.rs:391-397, crates/bbkemu-core/src/emulator.rs:231-252, crates/bbkemu/src/main.rs:159-170"
+
+  - name: 8.BIN
+    standalone_path: system/BBKEmu/A4988/8.BIN
+    mode: standalone
+    system: bbk-longman-4988
+    size: 2097152
+    required: true
+    description: "BBK A-series font ROM, A4988 slot"
+    note: >-
+      Read by the standalone binary with --model 4988 from
+      system/BBKEmu/A4988/8.BIN relative to the working directory. The
+      libretro core has no model option and never opens this directory.
+    source_ref: "crates/bbkemu/src/main.rs:108-117, crates/bbkemu/src/main.rs:147-158, crates/bbkemu-core/src/model.rs:28-34"
+
+  - name: E.BIN
+    standalone_path: system/BBKEmu/A4988/E.BIN
+    mode: standalone
+    system: bbk-longman-4988
+    size: 2097152
+    required: true
+    description: "BBK A-series OS ROM, A4988 slot"
+    note: >-
+      Read by the standalone binary with --model 4988 from
+      system/BBKEmu/A4988/E.BIN relative to the working directory. The
+      libretro core has no model option and never opens this directory.
+    source_ref: "crates/bbkemu/src/main.rs:108-117, crates/bbkemu/src/main.rs:159-170, crates/bbkemu-core/src/model.rs:28-34, crates/bbkemu-core/src/emulator.rs:148-153"
+
+platform_details:
+  memory_map:
+    source_ref: "crates/bbkemu-core/src/memory.rs:377-398"
+    note: |
+      Physical space seen through sixteen 4 KiB bank registers: RAM below
+      0x8000, 2 MiB flash at 0x200000, 8.BIN at 0x800000, E.BIN at
+      0xE00000. Reads outside a loaded image return 0x00; ROM windows
+      ignore writes.

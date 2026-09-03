@@ -1,0 +1,48 @@
+emulator: Native32Emu
+type: standalone + libretro
+core_classification: pure_libretro
+source: "https://github.com/AloysHF/Native32Emu"
+upstream: "https://github.com/AloysHF/Native32Emu"
+profiled_date: "2026-09-03"
+source_commit: "f445ea34ba42ecb5b3d7fe7b5f28d544a8b0a2ea"
+core_version: "1.3.0"
+display_name: "Sunplus - Native32 (Native32Emu)"
+cores:
+  - native32emu
+systems:
+  - sunplus-native32
+
+notes: |
+  Emulator for the Sunplus Native32 game format written in Rust by
+  AloysHF. The libretro core and the native32emu standalone binary share
+  the native32emu-core crate. Content (.smf, .sgm, .ssl or a .zip
+  package) is read from its full path (need_fullpath = true,
+  crates/native32emu-libretro/src/libretro/api.rs:107;
+  Emulator::from_path, crates/native32emu-core/src/emulator.rs:79-130).
+  The header is decrypted with DES keys compiled into the core
+  (crates/native32emu-core/src/header_decryptor.rs:136,
+  crates/native32emu-core/src/des_constants.rs).
+
+  A .zip package is extracted to a temporary directory
+  (crates/native32emu-core/src/archive_loader.rs:17-61) and booted from
+  the menu found at its root, FHUI.smf first, then NA32UI.smf
+  (crates/native32emu-core/src/archive_loader.rs:11,
+  crates/native32emu-core/src/archive_loader.rs:88-122). Every later file
+  is resolved relative to the running content and its parent directories,
+  case-insensitively with trailing spaces trimmed
+  (crates/native32emu-core/src/content_loader.rs:73-130): child .smf and
+  .ssl content (crates/native32emu-core/src/emulator.rs:597-607), .dat
+  thumbnails for the menu (crates/native32emu-core/src/emulator.rs:545-572),
+  .mpg cutscenes (crates/native32emu-core/src/emulator.rs:444-460) and
+  the menu's game listing (crates/native32emu-core/src/file_browser.rs:75-120).
+  All of them ship inside the game package. Saves are written to
+  <content>.ssl_sav beside the content
+  (crates/native32emu-core/src/save_manager.rs:10-46).
+
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY and GET_SAVE_DIRECTORY are
+  defined (crates/native32emu-libretro/src/libretro/constants.rs:36,
+  crates/native32emu-libretro/src/libretro/constants.rs:47) but nothing
+  calls them. No include_bytes! data is compiled in.
+
+exclusion_note: "No file is read outside the game package: content and every sibling it names (menu, child content, .dat thumbnails, .mpg cutscenes) resolve from the content's own directory tree, saves are written beside the content, the system directory is never queried, no data is embedded with include_bytes!, and the .info declares firmware_count = 0."
+files: []

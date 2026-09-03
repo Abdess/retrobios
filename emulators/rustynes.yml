@@ -1,0 +1,45 @@
+emulator: RustyNES
+type: libretro
+core_classification: official_port
+source: "https://github.com/doublegate/RustyNES"
+upstream: "https://github.com/doublegate/RustyNES"
+profiled_date: "2026-09-03"
+source_commit: "4e77905e045c0e971b53c5abee8d0a07a4b1bfdb"
+core_version: "2.6.12"
+display_name: "Nintendo - NES / Famicom (RustyNES)"
+cores:
+  - rustynes
+systems:
+  - nintendo-nes
+  - nintendo-fds
+
+notes: |
+  RustyNES is a NES and Famicom emulator written in Rust by DoubleGate.
+  The libretro core is the crates/rustynes-libretro crate of the same
+  repository, built from the main branch
+  (crates/rustynes-libretro/Makefile, .gitlab-ci.yml). The crate pulls
+  rustynes-core with default features off, so the HD pack loader is not
+  compiled into the core and nothing else is read from disk.
+
+  Cartridge content needs no external file. A .fds disk image goes to
+  Nes::from_disk, which needs the Famicom Disk System BIOS: the core joins
+  disksys.rom to the frontend system directory and reads the whole file
+  (crates/rustynes-libretro/src/lib.rs:921-938). A missing file, or a
+  frontend without a system directory, makes retro_load_game fail with an
+  error. Fds::new rejects a BIOS that is not exactly 8192 bytes
+  (crates/rustynes-mappers/src/fds.rs:1351-1357); no hash is checked. The
+  FDS device maps the BIOS and boots from its reset vector.
+
+  The version comes from the workspace Cargo.toml. The .info in
+  libretro-core-info says v2.3.5 and the copy in the repository v2.6.12;
+  the md5 in the .info notes is not enforced by the code.
+
+files:
+  - name: "disksys.rom"
+    system: nintendo-fds
+    description: "Famicom Disk System BIOS"
+    required: true
+    size: 8192
+    validation: [size]
+    source_ref: "crates/rustynes-libretro/src/lib.rs:921-945, crates/rustynes-core/src/nes.rs:356-358, crates/rustynes-core/src/bus.rs:1015-1021, crates/rustynes-mappers/src/fds.rs:121, crates/rustynes-mappers/src/fds.rs:1351-1357"
+    note: "Read only when the content extension is .fds. Any other size fails the load."

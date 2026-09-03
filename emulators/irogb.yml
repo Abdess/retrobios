@@ -1,0 +1,65 @@
+emulator: IroGB
+type: libretro
+core_classification: official_port
+source: "https://github.com/AlexSutila/IroGB"
+upstream: "https://github.com/AlexSutila/IroGB"
+profiled_date: "2026-09-03"
+source_commit: "7b6bb9b1f9cbf04e49eea0dc89c54635c2b54056"
+core_version: "1.0.0"
+display_name: "Nintendo - Game Boy / Color (IroGB)"
+cores:
+  - irogb
+systems:
+  - nintendo-gb
+  - nintendo-gbc
+
+notes: |
+  IroGB is a Game Boy and Game Boy Color emulator by Alex Sutila. The
+  libretro frontend lives in src/frontend/libretro of the same repository
+  as the SDL3, raylib and Python frontends. The buildbot builds the
+  repository default branch, release, with cmake -DBUILD_LIBRETRO=ON
+  -DNO_CORE_FILESYSTEM=ON (.gitlab-ci.yml:10-14).
+
+  Boot ROMs are read from the root of the system directory
+  (src/frontend/libretro/libretro_host.cpp:61-84). The irogb_bios core
+  option picks the file: dmg opens dmg_boot.bin, cgb opens cgb_boot.bin,
+  auto (the default) tries cgb_boot.bin then dmg_boot.bin, none opens
+  nothing (src/frontend/libretro/libretro_host.cpp:86-113). Under auto a
+  DMG cartridge boots through the CGB boot ROM whenever cgb_boot.bin is
+  present and gets the CGB colouring of monochrome games; the
+  irogb_monochrome_dmg option turns that off.
+
+  BootROM accepts a file of exactly 256 or 2304 bytes and rejects any
+  other size (src/memory/boot.cpp:10-24). The size also picks the machine:
+  a 2304-byte image starts in CGB mode (src/gbc.cpp:330-340). 256 bytes
+  covers DMG, DMG0, MGB and SGB dumps, 2304 bytes CGB, CGB0, AGB0 and AGB
+  dumps (includes/memory/boot.hpp:9-30); only the two names above are
+  ever opened. No hash is checked.
+
+  Without a boot ROM, or when the file fails to open or has another size,
+  the core continues with skip_bios(), which loads post-boot CPU and MMIO
+  values, unmaps the boot ROM and sets CGB mode from the cartridge header
+  (src/gbc.cpp:342-349, src/gbc.cpp:387-405, src/gbc.cpp:489-490).
+
+  The .info declares cgb_bios.bin; the code opens cgb_boot.bin.
+
+files:
+  - name: "dmg_boot.bin"
+    system: nintendo-gb
+    description: "Game Boy (DMG) boot ROM"
+    required: false
+    hle_fallback: true
+    size: 256
+    validation: [size]
+    source_ref: "src/frontend/libretro/libretro_host.cpp:91, src/frontend/libretro/libretro_host.cpp:106, src/frontend/libretro/libretro_host.cpp:61-84, src/memory/boot.cpp:10-24"
+    note: "Opened with irogb_bios set to dmg, or to auto when cgb_boot.bin is absent."
+
+  - name: "cgb_boot.bin"
+    system: nintendo-gbc
+    description: "Game Boy Color (CGB) boot ROM"
+    required: false
+    hle_fallback: true
+    size: 2304
+    validation: [size]
+    source_ref: "src/frontend/libretro/libretro_host.cpp:97, src/frontend/libretro/libretro_host.cpp:104, src/frontend/libretro/libretro_host.cpp:61-84, src/memory/boot.cpp:10-24, src/gbc.cpp:330-340"
+    note: "Opened with irogb_bios set to cgb or auto. Under auto it also boots DMG cartridges in CGB mode."

@@ -1,0 +1,158 @@
+emulator: Hatari 2014
+type: libretro
+core_classification: frozen_snapshot
+source: "https://github.com/libretro/hatari"
+source_branch: hitari2014-mercurial
+upstream: "https://github.com/hatari/hatari"
+profiled_date: "2026-09-03"
+source_commit: "3919d702b7013e8d05222345066747d4f8559c3f"
+upstream_commit: "c1a5c88bc06e56778b6b7f8483becfd58a7da2b4"
+core_version: "1.8.0"
+display_name: "Atari - ST/STE/TT/Falcon (Hatari 2014)"
+cores:
+  - hatari2014
+systems:
+  - atari-st
+  - atari-ste
+  - atari-tt
+  - atari-falcon
+
+notes: |
+  Hatari 2014 is the libretro port of Hatari 1.8.0 (src/includes/version.h:16),
+  the July 2014 release, kept on the hitari2014-mercurial branch of
+  libretro/hatari after the main branch moved to a new port. The branch
+  carries the Mercurial history up to the 1.8.0 release commit plus the
+  port commits started in November 2014; it builds as hatari2014
+  (Makefile.libretro:22, .gitlab-ci-libretro.yml:12) and reports
+  library_name Hatari2014, version 1.8 (libretro/libretro.c:1466-1468).
+  No hatari2014 .info exists in libretro-core-info yet.
+
+  Directory layout under the libretro system directory: the Hatari working
+  and data directories are <system>/hatari (src/paths.c:323-324; the
+  system directory itself on Vita and PS3, src/paths.c:313-319), the
+  default TOS is <system>/tos.img, extra TOS images go in
+  <system>/hatari/tos, BOOT.ST in <system>/hatari, floppy.raw and the
+  global hatari.cfg in <system> and <system>/hatari. The Hatari home
+  directory, which holds the user hatari.cfg and hatari.nvram, is
+  $HOME/.hatari on desktop builds (src/paths.c:40, src/paths.c:283-284),
+  <system>/hatari on Wii U and Vita (src/paths.c:209-212,
+  src/paths.c:223-225), the system directory itself on PS3
+  (src/paths.c:237-239).
+
+  TOS selection: retro_set_environment lists <system>/tos.img and every
+  entry of <system>/hatari/tos (libretro/libretro.c:393-411); the
+  hatari_tosimage option offers those ending in img
+  (libretro/libretro.c:270-299) and the choice becomes RETRO_TOS
+  (libretro/libretro.c:640-649). retro_load_game refuses content when that
+  path does not exist (libretro/libretro.c:1602-1607) and hmain writes it
+  into szTosImageFileName after the configuration files, so hatari.cfg
+  cannot override it (src/main.c:905-907). TOS_LoadImage reads the file
+  whole, strips the 256-byte (or 34-byte for 4.92) loader of a RAM TOS,
+  detects EmuTOS by ETOS at offset 0x2c, and rejects an image whose version
+  word is outside 0x100-0x4FF, whose load address is neither 0xE00000 nor
+  0xFC0000, or which exceeds 1 MB; a 16 KB image with version 0 is the TOS
+  0.00 boot loader (src/tos.c:575-651). Machine type and CPU are coerced to
+  the TOS version unless the image is EmuTOS (src/tos.c:459-566), and ROM
+  patches are applied for TOS 1.00, 1.02, 1.04, 1.06, 1.62, 2.05, 2.06,
+  3.06, 4.00 to 4.04 and 4.92 (src/tos.c:146-220). HFile_Read also accepts
+  .img, .rom and .tos as fallback extensions and reads the first member of
+  a .zip or a .gz (src/file.c:203-230, libretro/include/config.h:20), which
+  only matters for a path picked in the in-core ROM dialog
+  (libretro/gui-retro/dlgRom.c:69-76). EmuTOS is not embedded.
+
+  The cartridge slot is empty by default (src/configuration.c:592) and is
+  filled through hatari.cfg or the in-core ROM dialog
+  (libretro/gui-retro/dlgRom.c:82-89). Cart_ResetImage installs the
+  built-in GEMDOS trampoline instead of the external image whenever GEMDOS
+  hard disk emulation, extended VDI or OS tracing is on (src/cart.c:121-133).
+
+  Floppy, ACSI, IDE and GEMDOS images are content. When a .gem folder is
+  loaded, <system>/hatari/BOOT.ST is inserted into drive A so TOS boots
+  with the GEMDOS drive (libretro/libretro.c:1663-1671). Memory snapshots
+  for retro_serialize stay in memory (libretro/libretro.c:1768-1793);
+  hatari.sav, auto.sav, hatari.prn, hatari.wav and hatari.avi are output
+  names under <system>/hatari. DESKTOP.INF and NEWDESK.INF are created or
+  rewritten inside the emulated C: directory when extended VDI is on
+  (src/vdi.c:955-988).
+
+files:
+  - name: "tos.img"
+    path: "tos.img"
+    description: "Atari TOS ROM image"
+    required: true
+    max_size: 1048576
+    validation: [size]
+    source_ref: "libretro/libretro.c:393-411, libretro/libretro.c:640-649, libretro/libretro.c:1602-1607, src/main.c:905-907, src/tos.c:48-53, src/tos.c:575-651"
+    note: >
+      Any TOS 1.00 to 4.04, TOS 0.00, a RAM TOS or EmuTOS. Additional images
+      are read from <system>/hatari/tos and selected with the hatari_tosimage
+      option; only names ending in img are offered.
+
+  - name: "cartridge ROM"
+    path: null
+    config_key: "szCartridgeImageFileName"
+    description: "Atari ST cartridge image loaded at 0xFA0000"
+    required: false
+    min_size: 40
+    max_size: 131076
+    validation: [size]
+    source_ref: "src/cart.c:40-46, src/cart.c:53-88, src/cart.c:121-133, src/configuration.c:336, src/configuration.c:592, libretro/gui-retro/dlgRom.c:82-89"
+    note: >
+      Raw images up to 0x20000 bytes or .stc images of exactly 0x20004 bytes
+      whose 4-byte header is skipped; any other size is refused. Extensions
+      .img, .rom and .stc are tried when the configured path is missing.
+
+  - name: "BOOT.ST"
+    path: "hatari/BOOT.ST"
+    description: "Boot floppy inserted with GEMDOS hard disk folders"
+    required: false
+    source_ref: "libretro/libretro.c:1663-1671"
+    note: "Added as the first disk when the content is a .gem file."
+
+  - name: "floppy.raw"
+    path: "floppy.raw"
+    description: "Floppy drive seek sample, signed 16-bit little-endian stereo at 44100 Hz, no header"
+    required: false
+    has_builtin: true
+    storage: user_provided
+    unsourceable: "any headerless s16le stereo 44100 Hz sample the user records; no name or version the code expects beyond the filename"
+    source_ref: "libretro/floppy_sound.c:118-170, libretro/libretro.c:844-852, libretro/libretro.c:1379"
+    note: >
+      Read whole at retro_init; an empty or short read falls back to the
+      synthesised click (libretro/floppy_sound.c:31-95). Played on each drive
+      LED rising edge when hatari_floppy_sound is on.
+
+  - name: "hatari.cfg"
+    path: "hatari/hatari.cfg"
+    description: "Hatari configuration file"
+    required: false
+    storage: user_provided
+    unsourceable: "user settings in Hatari's INI format; no canonical contents"
+    source_ref: "libretro/libretro.c:945-951, src/main.c:805-831, src/main.c:892-894, src/configuration.c:630-633, src/configuration.c:768-777, src/paths.c:283-284"
+    note: >
+      Read only when the hatari_autoload_config option is on (off by default):
+      <system>/hatari/hatari.cfg first, then hatari.cfg in the Hatari home
+      directory. Every section is applied except the TOS path.
+
+  - name: "keymap file"
+    path: null
+    config_key: "szMappingFileName"
+    description: "Keyboard remap table, one PC key code and ST scan code pair per line"
+    required: false
+    storage: user_provided
+    unsourceable: "user-written mapping in the doc/keymap-sample.txt format; no canonical contents"
+    source_ref: "src/keymap.c:53-59, src/keymap.c:605-658, src/change.c:359, src/configuration.c:188, src/configuration.c:504"
+    note: "Empty by default; loaded at Keymap_Init and on configuration change when the path is set."
+
+  - name: "hatari.nvram"
+    path: null
+    description: "TT and Falcon NVRAM contents, 50 bytes"
+    required: false
+    has_builtin: true
+    min_size: 50
+    validation: [size]
+    unsourceable: "machine state the emulator writes itself at exit; no canonical contents"
+    source_ref: "src/falcon/nvram.c:63-85, src/falcon/nvram.c:186-216, src/falcon/nvram.c:223-226, src/main.c:752, src/paths.c:283-284"
+    note: >
+      Read from the Hatari home directory at NvRam_Init; a short read keeps
+      the built-in defaults adjusted to the monitor type. Saved back on exit.

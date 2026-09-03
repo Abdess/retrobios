@@ -1,0 +1,29 @@
+emulator: Tia
+type: libretro
+core_classification: pure_libretro
+source: "https://github.com/warmenhoven/tia"
+upstream: "https://github.com/warmenhoven/tia"
+profiled_date: "2026-09-03"
+source_commit: "6ae5bf998fe7a7842294089db17fc86fd73db1f0"
+core_version: "52+6ae5bf9"
+display_name: "Atari - 2600 (Tia)"
+cores:
+  - tia
+systems:
+  - atari-2600
+files: []
+exclusion_note: >
+  The core opens no file. src/ has no fopen, filestream or opendir call and
+  libretro.c never asks for RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY; its
+  environment calls cover options, logging, controller info, input
+  descriptors, messages, pixel format and AV info. The Supercharger BIOS is
+  a 294-byte routine compiled in (src/cart.c:195-235) and written into the
+  ROM bank of every AR tape image (src/cart.c:300-319), the default
+  tape-load header is a compiled table (src/cart.c:237-272), and the NTSC,
+  PAL and SECAM palettes in their standard and z26 variants are const tables
+  (src/palette.c). Content arrives in memory (src/libretro.c:596).
+notes: |
+  Tia is an Atari 2600 core written for libretro by Eric Warmenhoven, with
+  no standalone build; the repository is its own upstream. The version
+  string is the commit count and short hash the Makefile bakes in
+  (Makefile:36-37, src/libretro.c:595). The .info shows 26.
