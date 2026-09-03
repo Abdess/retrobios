@@ -5,7 +5,7 @@
   "platform": "misterfpga",
   "display_name": "MiSTer FPGA",
   "version": "1.0",
-  "generated": "2026-08-12T10:39:36Z",
+  "generated": "2026-09-03T20:45:52Z",
   "base_destination": "games",
   "detect": [
     {
@@ -16,8 +16,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 65,
-  "total_size": 24588745,
+  "total_files": 72,
+  "total_size": 25191625,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -126,6 +126,14 @@
       "cores": null
     },
     {
+      "dest": "GameKing/boot.rom",
+      "sha1": "e0d056f8ebfdf52ef6796d0375eba7fcc4a6a9d3",
+      "sha256": "7843fd082889cac046d446160f38755f7c8c4a8e4f9dd9d5104b185f0bc1dec4",
+      "size": 524288,
+      "repo_path": "bios/TimeTop/GameKing/boot.rom",
+      "cores": null
+    },
+    {
       "dest": "Interact/boot.rom",
       "sha1": "405806c97378abcf7c7b0d549430c78c7fc60ba2",
       "sha256": "e0888ba82382aabb7557aa4a3445e613bd7f33bae1af5ece211e2cb6bc9ffa82",
@@ -187,6 +195,22 @@
       "sha256": "b057e09822c3767120ba56f2ce02f089b5824d4b489ea3cd7ad9405b3a339a52",
       "size": 262144,
       "repo_path": "bios/NEC/PC Engine CD/Super CD 3.1.pce",
+      "cores": null
+    },
+    {
+      "dest": "NGPC/boot0.rom",
+      "sha1": "edc13192054a59be49c6d55f83b70e2510968e86",
+      "sha256": "8fb845a2f71514cec20728e2f0fecfade69444f8d50898b92c2259f1ba63e10d",
+      "size": 65536,
+      "repo_path": "bios/SNK/Neo Geo Pocket/SNK Neo-Geo Pocket Color BIOS (1999)(SNK)(en-ja).bin",
+      "cores": null
+    },
+    {
+      "dest": "NGPC/boot1.rom",
+      "sha1": "2f6429b68446536d8b03f35d02f1e98beb6460a0",
+      "sha256": "0293555b21c4fac516d25199df7809b26beeae150e1d4504a050db32264a6ad7",
+      "size": 65536,
+      "repo_path": "bios/SNK/Neo Geo Pocket/SNK Neo-Geo Pocket BIOS (1998)(SNK)(en-ja).bin",
       "cores": null
     },
     {
@@ -430,14 +454,6 @@
       "cores": null
     },
     {
-      "dest": "NeoGeoPocket/boot.rom",
-      "sha1": "06c000a8c64326cfa326c20a8ecc01313b643c4d",
-      "sha256": "06826527c61918ef35b67d9d49e9d689a985d7583d01d112e9975c6ee5547881",
-      "size": 65536,
-      "repo_path": "bios/SNK/Neo Geo Pocket/boot.rom",
-      "cores": null
-    },
-    {
       "dest": "PSX/boot.rom",
       "sha1": "14df4f6c1e367ce097c11deae21566b4fe5647a9",
       "sha256": "39dcc1a0717036c9b6ac52fefd1ee7a57d3808e8cfbc755879fa685a0a738278",
@@ -467,6 +483,46 @@
       "sha256": "32db7bb64131623fa912ef30a85f7d70cee2abbca56c21d360d2025e12b8aca9",
       "size": 218953,
       "repo_path": "bios/Sony/PlayStation/sbi.zip",
+      "cores": null
+    },
+    {
+      "dest": "Studio-II/boot0.rom",
+      "sha1": "f2650dacc9daab06b9fdf0e7748e977b2907010c",
+      "sha256": "1e7ae3cd972eb39681e6c6df5f1ac6f7d86c9e59788e40d6b4c948375e9ca5f7",
+      "size": 2048,
+      "repo_path": "bios/RCA/Studio II/boot0.rom",
+      "cores": null
+    },
+    {
+      "dest": "Studio-II/boot1.rom",
+      "sha1": "18b3849dacef6f6fb498d5d6d1f4329bdb08b833",
+      "sha256": "e90cb0c5be993689a2d4fa03e664f5943967160153520d435391aaefff06da35",
+      "size": 4096,
+      "repo_path": "bios/RCA/Studio II/boot1.rom",
+      "cores": null
+    },
+    {
+      "dest": "Studio-II/boot2.rom",
+      "sha1": "4d5552345dc5d0c51769b36d20895c3bfcebeed5",
+      "sha256": "a0d6c1852fb407f86d25c802441ff15ec7fd041683c6a9ae0d23db0ca0df8c0b",
+      "size": 4096,
+      "repo_path": "bios/RCA/Studio II/boot2.rom",
+      "cores": null
+    },
+    {
+      "dest": "Studio-II/boot3.rom",
+      "sha1": "a0a8be23f70621a2bd8010b1134e8a0019075bf1",
+      "sha256": "7a95530b9be7fe487e027a5ea7ffe4a7561762cc3fc8cdc535d6f36e5f23c8a0",
+      "size": 2048,
+      "repo_path": "bios/RCA/Studio II/boot3.rom",
+      "cores": null
+    },
+    {
+      "dest": "Studio-II/boot4.rom",
+      "sha1": "64e51bd50d7016665feb97866d66dee0af1613b5",
+      "sha256": "8764ba7e02fe00489997b45ac1f15f188f726cbcd5311e252225e62eb58d6d04",
+      "size": 768,
+      "repo_path": "bios/RCA/Studio II/boot4.rom",
       "cores": null
     },
     {

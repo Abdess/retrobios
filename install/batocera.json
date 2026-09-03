@@ -5,7 +5,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-08-23T11:06:18Z",
+  "generated": "2026-09-03T20:45:52Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,9 +237,9 @@
       }
     }
   ],
-  "total_files": 1828,
-  "total_size": 4314432234,
-  "total_omitted": 9,
+  "total_files": 1833,
+  "total_size": 4315260164,
+  "total_omitted": 11,
   "omitted_files": [
     {
       "dest": "Enterprise/basic21.bin",
@@ -259,6 +259,26 @@
       "reason": "not_found",
       "cores": [
         "clk"
+      ]
+    },
+    {
+      "dest": "SEGA_KakuGothic-DB-Roman_12.abc",
+      "name": "SEGA_KakuGothic-DB-Roman_12.abc",
+      "system": "sega-lindbergh",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "lindbergh-loader"
+      ]
+    },
+    {
+      "dest": "SEGA_KakuGothic-DB-Roman_12.tga",
+      "name": "SEGA_KakuGothic-DB-Roman_12.tga",
+      "system": "sega-lindbergh",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "lindbergh-loader"
       ]
     },
     {
@@ -5727,8 +5747,8 @@
     },
     {
       "dest": "AppleII/apple2eu-character.rom",
-      "sha1": "7060de104046736529c1e8a687a0dd7b84f8c51b",
-      "sha256": "0d54ff735c060c55d54b8a22d0112af78a6465ce9c9aae4a865d207e5c8ff1e7",
+      "sha1": "58ad0008df72896a18601e090ee0d58155ffa5be",
+      "sha256": "ed5bdd4afa509134e85f1d020685af7ff50e279226eb869a17825b471cc1634c",
       "size": 4096,
       "repo_path": "bios/Apple/Apple II/apple2eu-character.rom",
       "cores": [
@@ -8875,10 +8895,10 @@
     },
     {
       "dest": "gamecontrollerdb.txt",
-      "sha1": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
-      "sha256": "c8dd1e361ab3219a956b9b7879a17658b10273cc3569bf23cb9ffb23f55e5152",
-      "size": 603323,
-      "repo_path": "bios/Other/hakux/controller_map.txt",
+      "sha1": "b194b556763146786b994f606c8697ab8f1b5f47",
+      "sha256": "3397a6ffe79b1f3fdd6745746edfc004eb4a48c1569643ced6513a2b49fac91f",
+      "size": 589031,
+      "repo_path": "bios/Other/hakux/gamecontrollerdb.txt",
       "cores": [
         "hypseus-singe"
       ]
@@ -9679,6 +9699,26 @@
       "sha256": "da79ed393eef68050e5b8ce0f6823ba59ebfdee373f66c9ebda3934b928f3000",
       "size": 18059,
       "repo_path": "bios/Sega/Lindbergh/logo_red.tga",
+      "cores": [
+        "lindbergh-loader"
+      ]
+    },
+    {
+      "dest": "LucidaConsole_12.tga",
+      "sha1": "6fcc3fff53cdae7a8e035289801ea15cf7c95ffb",
+      "sha256": "abdc3034c2cf347c18641afd4ea46612c59a1a8d348c80e648b46ed671ab2e16",
+      "size": 131090,
+      "repo_path": "bios/Sega/Lindbergh/LucidaConsole_12.tga",
+      "cores": [
+        "lindbergh-loader"
+      ]
+    },
+    {
+      "dest": "LucidaConsole_12.abc",
+      "sha1": "e0814d3d0cdc92d66cf395ad3ef667a463a09b54",
+      "sha256": "dc7744e70dc8fb73c6fbbfb9e21225f4cbad8a84f0e1470dc945a3ad71ffeb78",
+      "size": 2332,
+      "repo_path": "bios/Sega/Lindbergh/LucidaConsole_12.abc",
       "cores": [
         "lindbergh-loader"
       ]
@@ -12268,7 +12308,7 @@
       "sha1": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "sha256": "bdba942ab9c633a3172fbf1a8579849df52c0eeb0da8a3411402f4564d035a27",
       "size": 131072,
-      "repo_path": "bios/Other/xm6pro68k/ROM30.DAT",
+      "repo_path": "bios/Sharp/X68000/iplrom30.dat",
       "cores": [
         "px68k"
       ]
@@ -13565,10 +13605,40 @@
     },
     {
       "dest": "Config/Games.xml",
-      "sha1": "681e3362f0251d2e26e6bc2e06157c027f5f3116",
-      "sha256": "a73b9f1c37d64532bf82d1d790a3e0cb81a9b2accb04d866901bb7ae1970473a",
-      "size": 152643,
-      "repo_path": "bios/Sega/Model 3/Config/Games.xml",
+      "sha1": "b41150f8cff409dde89939b80a980a20e853df0b",
+      "sha256": "6d79dba0ad101cdaf3311dc70c94ecd163856236b6883cb242ed2cf4e07bfc80",
+      "size": 154928,
+      "repo_path": "bios/Other/super3/Config/Games.xml",
+      "cores": [
+        "supermodel"
+      ]
+    },
+    {
+      "dest": "Assets/p1crosshair.bmp",
+      "sha1": "581cea232c296c7bd76f3101c3ae1bffdf5abf08",
+      "sha256": "60920f5a98f37f1e0348df0bda0430e20327bea86bced7024f72f4ffddafc930",
+      "size": 295992,
+      "repo_path": "bios/Sega/Model 3/Assets/p1crosshair.bmp",
+      "cores": [
+        "supermodel"
+      ]
+    },
+    {
+      "dest": "Assets/p2crosshair.bmp",
+      "sha1": "13c5e692c7acf2ec8243ac421d58fdf69c6c2370",
+      "sha256": "3dcc570b7728cfbff314a6305c9c0f933c5fa82153c6d50c3b1e780c3615f33e",
+      "size": 295992,
+      "repo_path": "bios/Sega/Model 3/Assets/p2crosshair.bmp",
+      "cores": [
+        "supermodel"
+      ]
+    },
+    {
+      "dest": "Config/Music.xml",
+      "sha1": "b44ed959fe2948a03d81b98e67ca32f2b4c37e78",
+      "sha256": "cf7555ca86e8640ee5bbb8e0c0897b073fc86647a93eda10b05065227610478c",
+      "size": 9224,
+      "repo_path": "bios/Sega/Model 3/Config/Music.xml",
       "cores": [
         "supermodel"
       ]
@@ -17576,6 +17646,16 @@
       ]
     },
     {
+      "dest": "patches.zip",
+      "sha1": "2562e542d66db945ccf158d7a221c2a28e3b6be4",
+      "sha256": "df2b384ec29221155e8151fa2ff2dc8f0eef2409a8dce5ee7f7514352ae4058a",
+      "size": 2165576,
+      "repo_path": "bios/Sony/PlayStation 2/.variants/patches.zip.5a4d0a00",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
       "dest": "ps2-dvd-110u.bin",
       "sha1": "0bc9143cb6839471d62b8fdd0b2fc05e941527d3",
       "sha256": "76918ccab7350149d8236c136c4df1fc7c5c7fcba245f92a0d8bbe81e82dd251",
@@ -17881,16 +17961,6 @@
       "sha256": "8667e718294e9e0df1d30600ba3eeb201f764aad2dad72748643e4a285e1d1f7",
       "size": 64,
       "repo_path": "bios/Sony/PlayStation 2/eeprom.dat",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "patches.zip",
-      "sha1": "541a74165496fb7ef35ce6ec03f711ebbe263e11",
-      "sha256": "91ae289d37ffcbf436e99c8cd9b661a8a9fb641a068721a63ea9f385345197bc",
-      "size": 2060269,
-      "repo_path": "bios/Sony/PlayStation 2/patches.zip",
       "cores": [
         "pcsx2"
       ]

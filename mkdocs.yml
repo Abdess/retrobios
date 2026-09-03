@@ -174,6 +174,7 @@ nav:
   - Philips: systems/philips.md
   - Pioneer: systems/pioneer.md
   - QEMU: systems/qemu.md
+  - RCA: systems/rca.md
   - RPG Maker: systems/rpg-maker.md
   - Ringo: systems/ringo.md
   - Roland: systems/roland.md
@@ -189,6 +190,7 @@ nav:
   - Texas Instruments: systems/texas-instruments.md
   - Thomson: systems/thomson.md
   - Tiger: systems/tiger.md
+  - TimeTop: systems/timetop.md
   - Timex: systems/timex.md
   - Tomy: systems/tomy.md
   - VTech: systems/vtech.md
@@ -198,7 +200,7 @@ nav:
   - sdlpal: systems/sdlpal.md
 - Emulators:
   - Overview: emulators/index.md
-  - Official ports (64):
+  - Official ports (69):
     - amiarcadia: emulators/amiarcadia.md
     - Amiberry: emulators/amiberry.md
     - Ardens: emulators/ardens.md
@@ -229,7 +231,9 @@ nav:
     - Gearlynx: emulators/gearlynx.md
     - Gearsystem: emulators/gearsystem.md
     - Geolith: emulators/geolith.md
+    - Hatari: emulators/hatari.md
     - Holani: emulators/holani.md
+    - IroGB: emulators/irogb.md
     - JAXE: emulators/jaxe.md
     - JollyCV: emulators/jollycv.md
     - Kronos: emulators/kronos.md
@@ -242,13 +246,16 @@ nav:
     - mesen-s: emulators/mesen-s.md
     - mGBA: emulators/mgba.md
     - Mr.Boom: emulators/mrboom.md
+    - Nuance: emulators/nuance.md
     - Panda3DS: emulators/panda3ds.md
     - PCSX2: emulators/pcsx2.md
     - PicoDrive: emulators/picodrive.md
     - play: emulators/play.md
+    - pokketstation: emulators/pokketstation.md
     - PPSSPP: emulators/ppsspp.md
     - RPCS3: emulators/rpcs3.md
     - Rustation: emulators/rustation.md
+    - RustyNES: emulators/rustynes.md
     - RVVM: emulators/rvvm.md
     - SameBoy: emulators/sameboy.md
     - sameduck: emulators/sameduck.md
@@ -263,7 +270,7 @@ nav:
     - vitaQuakeII: emulators/vitaquake2.md
     - yabasanshiro: emulators/yabasanshiro.md
     - Yuzu: emulators/yuzu.md
-  - Community forks (161):
+  - Community forks (163):
     - 2600.emu: emulators/2600-emu.md
     - EightyOne: emulators/81.md
     - a5200: emulators/a5200.md
@@ -324,6 +331,7 @@ nav:
     - GSplus: emulators/gsplus.md
     - hakuX: emulators/hakux.md
     - Handy: emulators/handy.md
+    - hatariB: emulators/hatarib.md
     - higan (SFC Accuracy): emulators/higan_sfc.md
     - Infinity: emulators/infinity.md
     - J2ME Loader: emulators/j2me-loader.md
@@ -370,6 +378,7 @@ nav:
     - Opera (4DO): emulators/opera.md
     - ParaLLEl N64: emulators/parallel_n64.md
     - pce-emu: emulators/pce-emu.md
+    - PCEE2: emulators/pcee2.md
     - PCem: emulators/pcem.md
     - PCSX1: emulators/pcsx1.md
     - PD777: emulators/pd777.md
@@ -425,15 +434,17 @@ nav:
     - XeniOS: emulators/xenios.md
     - yabause: emulators/yabause.md
     - ymir: emulators/ymir.md
-  - Pure libretro (42):
+  - Pure libretro (48):
     - 00_example: emulators/00_example.md
     - '2048': emulators/2048.md
     - 3DEngine: emulators/3dengine.md
     - advanced_tests: emulators/advanced_tests.md
     - Arduous: emulators/arduous.md
+    - BBKEmu: emulators/bbkemu.md
     - Beetle WonderSwan (Mednafen WonderSwan): emulators/beetle_wswan.md
     - Craft: emulators/craft.md
     - Cruzes: emulators/cruzes.md
+    - DingooEmu: emulators/dingooemu.md
     - DirectXBox: emulators/directxbox.md
     - FFmpeg: emulators/ffmpeg.md
     - FreeChaF: emulators/freechaf.md
@@ -446,12 +457,15 @@ nav:
     - MCSoftserve: emulators/mcsoftserve.md
     - MojoZork: emulators/mojozork.md
     - Mu: emulators/mu.md
+    - Native32Emu: emulators/native32emu.md
     - NeoCD: emulators/neocd.md
+    - NicaiEmu: emulators/nicaiemu.md
     - Pascal Pong: emulators/pascal_pong.md
     - PocketCDG: emulators/pocketcdg.md
     - Redbook: emulators/redbook.md
     - RemoteJoy: emulators/remotejoy.md
     - ROM Cleaner: emulators/romcleaner.md
+    - SPMP8000Emu: emulators/spmp8000emu.md
     - test_netplay: emulators/test_netplay.md
     - testaudio_callback: emulators/testaudio_callback.md
     - testaudio_no_callback: emulators/testaudio_no_callback.md
@@ -465,6 +479,7 @@ nav:
     - testvulkan_async_compute: emulators/testvulkan_async_compute.md
     - Theodore: emulators/theodore.md
     - The Powder Toy: emulators/thepowdertoy.md
+    - Tia: emulators/tia.md
     - MicroW8: emulators/uw8.md
     - uzem: emulators/uzem.md
     - VirtualXT: emulators/virtualxt.md
@@ -543,7 +558,7 @@ nav:
     - FB Alpha 2012 CPS-2: emulators/fbalpha2012_cps2.md
     - FB Alpha 2012 CPS-3: emulators/fbalpha2012_cps3.md
     - FB Alpha 2012 Neo Geo: emulators/fbalpha2012_neogeo.md
-    - Hatari: emulators/hatari.md
+    - Hatari 2014: emulators/hatari2014.md
     - MAME 2000: emulators/mame2000.md
     - MAME 2003: emulators/mame2003.md
     - MAME 2003 Midway: emulators/mame2003_midway.md

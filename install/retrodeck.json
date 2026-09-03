@@ -5,7 +5,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-08-23T11:06:18Z",
+  "generated": "2026-09-03T20:45:52Z",
   "base_destination": "",
   "detect": [
     {
@@ -237,10 +237,18 @@
       }
     }
   ],
-  "total_files": 3511,
-  "total_size": 6661468445,
-  "total_omitted": 9,
+  "total_files": 3517,
+  "total_size": 6656707765,
+  "total_omitted": 11,
   "omitted_files": [
+    {
+      "dest": "bios/dc/naomi2.zip",
+      "name": "naomi2.zip",
+      "system": "sega-dreamcast",
+      "required": false,
+      "reason": "hash_mismatch",
+      "cores": null
+    },
     {
       "dest": "bios/mkxp-z/Fonts/Fonts",
       "name": "Fonts",
@@ -330,6 +338,14 @@
       "cores": [
         "easyrpg"
       ]
+    },
+    {
+      "dest": "bios/yrw801.rom",
+      "name": "yrw801.rom",
+      "system": "microsoft-msx",
+      "required": false,
+      "reason": "hash_mismatch",
+      "cores": null
     }
   ],
   "files": [
@@ -13886,14 +13902,6 @@
       "cores": null
     },
     {
-      "dest": "bios/yrw801.rom",
-      "sha1": "32760893ce06dbe3930627755ba065cc3d8ec6ca",
-      "sha256": "0481e861f639fa3d6a64a75b735035a54b0875d57aaae33fdbe400146c80423f",
-      "size": 2097152,
-      "repo_path": "bios/Microsoft/MSX/openmsx/yrw801.rom",
-      "cores": null
-    },
-    {
       "dest": "bios/fs-a1wsx_kanjifont.rom",
       "sha1": "5aff2d9b6efc723bc395b0f96f0adfa83cc54a49",
       "sha256": "d87ce758a7171870a2a3e7893e09cbba2bd68ee70b4d0f0e49dd2ecd60aafdd1",
@@ -14845,14 +14853,6 @@
       "sha256": "9f3ff37a68bef27cd9ce8f5603ce44779b402cca40e653ae3633fff78d179392",
       "size": 9321533,
       "repo_path": "bios/Arcade/Arcade/.variants/naomi.zip",
-      "cores": null
-    },
-    {
-      "dest": "bios/dc/naomi2.zip",
-      "sha1": "2962e338ccc9f66f29b409f73ca27aeee79633ac",
-      "sha256": "a852233a97a2282e331dababb83d2dbf14bdef5253bf590adeaf02fbbfe3d64c",
-      "size": 7022501,
-      "repo_path": "bios/Arcade/Arcade/.variants/naomi2.zip.da79eca4",
       "cores": null
     },
     {
@@ -16372,7 +16372,7 @@
       "sha1": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "sha256": "bdba942ab9c633a3172fbf1a8579849df52c0eeb0da8a3411402f4564d035a27",
       "size": 131072,
-      "repo_path": "bios/Other/xm6pro68k/ROM30.DAT",
+      "repo_path": "bios/Sharp/X68000/iplrom30.dat",
       "cores": null
     },
     {
@@ -16687,6 +16687,26 @@
       "repo_path": "bios/Nintendo/3DS/Citra/nand/rw/sys/LocalFriendCodeSeed_B",
       "cores": [
         "azahar"
+      ]
+    },
+    {
+      "dest": "bios/BBKEmu/A4980/8.BIN",
+      "sha1": "dddb2d3b42e8d99911c6bfd523f0020a08f44f9d",
+      "sha256": "7663735609c416025b2738c80cedaf11528ff8cb5a7c74c7c31c1f46e43e9caf",
+      "size": 2097152,
+      "repo_path": "bios/BBK/GAM4980/gam4980/8.BIN",
+      "cores": [
+        "bbkemu"
+      ]
+    },
+    {
+      "dest": "bios/BBKEmu/A4980/E.BIN",
+      "sha1": "159b7e65f3f3dd67f435085be1e154316ba139e0",
+      "sha256": "3e12d40948fd50710cef8c6d14acea26ad69f47312125a61bd1003912893fcad",
+      "size": 2097152,
+      "repo_path": "bios/BBK/GAM4980/gam4980/E.BIN",
+      "cores": [
+        "bbkemu"
       ]
     },
     {
@@ -20266,6 +20286,36 @@
       ]
     },
     {
+      "dest": "bios/etos1024k.img",
+      "sha1": "38dc8baf5224229df55e7d0804b6b7b6bacfc7a0",
+      "sha256": "757c571b98b955887ea6d9034513555f4263040420e9d2195cd0c6f8de06c451",
+      "size": 1048576,
+      "repo_path": "bios/Atari/ST/hatarib/etos1024k.img",
+      "cores": [
+        "hatarib"
+      ]
+    },
+    {
+      "dest": "bios/etos192uk.img",
+      "sha1": "ef3a3ccffcb317bff7d0dceca0abacefc3a58abc",
+      "sha256": "5c679e6b1b8ed178fa079e4957ed66f9277094f0fe0a5b50c8cbea041e220250",
+      "size": 196608,
+      "repo_path": "bios/Atari/ST/hatarib/etos192uk.img",
+      "cores": [
+        "hatarib"
+      ]
+    },
+    {
+      "dest": "bios/etos192us.img",
+      "sha1": "bb98cd8a50df53afecfe183b049eda4014fc0d05",
+      "sha256": "ccccc420908012e03b4b38b8ed4530923bb04f27ab189eb2c694bf7e8509b666",
+      "size": 196608,
+      "repo_path": "bios/Atari/ST/hatarib/etos192us.img",
+      "cores": [
+        "hatarib"
+      ]
+    },
+    {
       "dest": "bios/Wii/sd.raw",
       "sha1": "8c8134f08b2e3baa603206ede30d3935365009b8",
       "sha256": "5709657d763f510f58792ca3ba080b0f663ec922149aa3ef5a0a4495ebabf8a6",
@@ -21937,6 +21987,86 @@
       "repo_path": "bios/NEC/PC-98/pci.rom",
       "cores": [
         "np2kai"
+      ]
+    },
+    {
+      "dest": "bios/nuance/bios.cof",
+      "sha1": "515a3d9a9e43b7902d161ba27bf67aecee922e41",
+      "sha256": "38e3ca07467dd7bdeb8312aaa1d9206483c60bcda2ba31fb4366ca00c7d92b5d",
+      "size": 23938,
+      "repo_path": "bios/Other/nuance/bios.cof",
+      "cores": [
+        "nuance"
+      ]
+    },
+    {
+      "dest": "bios/nuance/minibios.cof",
+      "sha1": "5265dbc871ada59dbd384104c578d807438af4c7",
+      "sha256": "704f73307c3932eb6088b3466794543e6383b12975949ae6894bb94e2c862512",
+      "size": 7873,
+      "repo_path": "bios/Other/nuance/minibios.cof",
+      "cores": [
+        "nuance"
+      ]
+    },
+    {
+      "dest": "bios/nuance/minibiosX.cof",
+      "sha1": "e45a96ce18486573c4d30efbc01658ce1ff8cd55",
+      "sha256": "1fd6f930e23802e831a37e097f8fdc65972cd6b81361e90fd7124e5e20467733",
+      "size": 7873,
+      "repo_path": "bios/Other/nuance/minibiosX.cof",
+      "cores": [
+        "nuance"
+      ]
+    },
+    {
+      "dest": "bios/nuance/nuance.cfg",
+      "sha1": "dfbac2a22f17cf82c7cd40f3727eecf31b013d15",
+      "sha256": "e299c9e88fb54bc1be2ab0aac3090c3cef9ef93ed5cd99fb1f703de76d95d27c",
+      "size": 3369,
+      "repo_path": "bios/Other/nuance/nuance.cfg",
+      "cores": [
+        "nuance"
+      ]
+    },
+    {
+      "dest": "bios/nuance/video_generic.vs",
+      "sha1": "92fca43b92298d308e88edada93453a9ef21adbd",
+      "sha256": "b71d41aca050d0f7798f49a0bfbcbda5dad06dbf585d8d0124edd741c52b011e",
+      "size": 491,
+      "repo_path": "bios/Other/nuance/video_generic.vs",
+      "cores": [
+        "nuance"
+      ]
+    },
+    {
+      "dest": "bios/nuance/video_m32_o32.fs",
+      "sha1": "d0477bd73ba524bb74c1faf30fd8f32bd254f924",
+      "sha256": "4656f5e562d5abb0a602e559aa0a9b08b03b696b3262e3b7e8a0418ecc99baa6",
+      "size": 6168,
+      "repo_path": "bios/Other/nuance/video_m32_o32.fs",
+      "cores": [
+        "nuance"
+      ]
+    },
+    {
+      "dest": "bios/nuance/video_m32_o32_crt.fs",
+      "sha1": "e57671f844c3bf96f0bf77ea4d550e13e077b0d2",
+      "sha256": "c2d368e44590c0351c502bdf4f137dc8584e250675e85d3fd362fcb2b7707138",
+      "size": 8130,
+      "repo_path": "bios/Other/nuance/video_m32_o32_crt.fs",
+      "cores": [
+        "nuance"
+      ]
+    },
+    {
+      "dest": "bios/FlashEEPROM.bin",
+      "sha1": "1fcc77c5bef6590d544783bfaa363ec559c0035d",
+      "sha256": "6e860b7241348e938c4f67c5f13d47a173cb564e04fa1aac90da29cc6fc25687",
+      "size": 2097152,
+      "repo_path": "bios/Other/nuance/FlashEEPROM.bin",
+      "cores": [
+        "nuance"
       ]
     },
     {
@@ -23900,6 +24030,16 @@
       ]
     },
     {
+      "dest": "bios/pocketstation.bin",
+      "sha1": "b29a77bd9f91ce72582015ee6f6b6a740f1cc505",
+      "sha256": "13db9fdf00ec3306f80d5c3faab6f9a4e5598b3b7d8d44024080ab3c8e14ac4d",
+      "size": 16384,
+      "repo_path": "bios/Sony/PocketStation/pocketstation.bin",
+      "cores": [
+        "pokketstation"
+      ]
+    },
+    {
       "dest": "bios/PPSSPP/ppge_atlas.meta",
       "sha1": "f99a13464a4dae347628f0ebb320e767e48e3a96",
       "sha256": "e3e8ab044b973137c9864f473f345849ecb4c0a9a3234eaba399dfa16c5f06f0",
@@ -24898,76 +25038,6 @@
       ]
     },
     {
-      "dest": "bios/scph_v11j.bin",
-      "sha1": "b06f4a861f74270be819aa2a07db8d0563a7cc4e",
-      "sha256": "5eb3aee495937558312b83b54323d76a4a015190decd4051214f1b6df06ac34b",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph3000.bin",
-      "cores": [
-        "rustation"
-      ]
-    },
-    {
-      "dest": "bios/scph7500.bin",
-      "sha1": "1b0dbdb23da9dc0776aac58d0755dc80fea20975",
-      "sha256": "b3aa63cf30c81e0a40641740f4a43e25fda0b21b792fa9aaef60ce1675761479",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph7000w.bin",
-      "cores": [
-        "rustation"
-      ]
-    },
-    {
-      "dest": "bios/scph9000.bin",
-      "sha1": "339a48f4fcf63e10b5b867b8c93cfd40945faf6c",
-      "sha256": "b29b4b5fcddef369bd6640acacda0865e0366fcf7ea54e40b2f1a8178004f89a",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph100.bin",
-      "cores": [
-        "rustation"
-      ]
-    },
-    {
-      "dest": "bios/scph5001.bin",
-      "sha1": "ca7af30b50d9756cbd764640126c454cff658479",
-      "sha256": "6ad5521d105a6b86741f1af8da2e6ea1c732d34459940618c70305a105e8ec10",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1001_v21.bin",
-      "cores": [
-        "rustation"
-      ]
-    },
-    {
-      "dest": "bios/scph_v22a.bin",
-      "sha1": "10155d8d6e6e832d6ea66db9bc098321fb5e8ebf",
-      "sha256": "71af94d1e47a68c11e8fdb9f8368040601514a42a5a399cda48c7d3bff1e99d3",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1001.bin",
-      "cores": [
-        "rustation"
-      ]
-    },
-    {
-      "dest": "bios/scph_v21e.bin",
-      "sha1": "76cf6b1b2a7c571a6ad07f2bac0db6cd8f71e2cc",
-      "sha256": "1efb0cfc5db8a8751a884c5312e9c6265ca1bc580dc0c2663eb2dea3bde9fcf7",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1002b.bin",
-      "cores": [
-        "rustation"
-      ]
-    },
-    {
-      "dest": "bios/scph_v22e.bin",
-      "sha1": "b6a11579caef3875504fcf3831b8e3922746df2c",
-      "sha256": "3d06d2c469313c2a2128d24fe2e0c71ff99bc2032be89a829a62337187f500b7",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/scph1002c.bin",
-      "cores": [
-        "rustation"
-      ]
-    },
-    {
       "dest": "bios/scph102.bin",
       "sha1": "beb0ac693c0dc26daf5665b3314db81480fa5c7c",
       "sha256": "5c0166da24e27deaa82246de8ff0108267fe4bb59f6df0fdec50e05e62448ca4",
@@ -25891,12 +25961,22 @@
     },
     {
       "dest": "bios/gamecontrollerdb.txt",
-      "sha1": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
-      "sha256": "c8dd1e361ab3219a956b9b7879a17658b10273cc3569bf23cb9ffb23f55e5152",
-      "size": 603323,
-      "repo_path": "bios/Other/hakux/controller_map.txt",
+      "sha1": "b194b556763146786b994f606c8697ab8f1b5f47",
+      "sha256": "3397a6ffe79b1f3fdd6745746edfc004eb4a48c1569643ced6513a2b49fac91f",
+      "size": 589031,
+      "repo_path": "bios/Other/hakux/gamecontrollerdb.txt",
       "cores": [
         "solarus"
+      ]
+    },
+    {
+      "dest": "bios/tonelib.bin",
+      "sha1": "6b52965081642630ef7aa30a90c9643f97c72410",
+      "sha256": "5924f1cea0a65086a48b10a6553e6493a43fcf63e265d974e447be1f4262c99a",
+      "size": 130500,
+      "repo_path": "bios/Other/spmp8000emu/tonelib.bin",
+      "cores": [
+        "spmp8000emu"
       ]
     },
     {
@@ -29728,7 +29808,7 @@
       "sha1": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "sha256": "bdba942ab9c633a3172fbf1a8579849df52c0eeb0da8a3411402f4564d035a27",
       "size": 131072,
-      "repo_path": "bios/Other/xm6pro68k/ROM30.DAT",
+      "repo_path": "bios/Sharp/X68000/iplrom30.dat",
       "cores": [
         "px68k"
       ]
@@ -31174,6 +31254,16 @@
       ]
     },
     {
+      "dest": "bios/patches.zip",
+      "sha1": "2562e542d66db945ccf158d7a221c2a28e3b6be4",
+      "sha256": "df2b384ec29221155e8151fa2ff2dc8f0eef2409a8dce5ee7f7514352ae4058a",
+      "size": 2165576,
+      "repo_path": "bios/Sony/PlayStation 2/.variants/patches.zip.5a4d0a00",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
       "dest": "bios/EROM.BIN",
       "sha1": "adb4dbb7feb8247811506a38896ddcb789c4b477",
       "sha256": "f7c4944e3001e3849cdead743e200e009d4d07bd5afb20fb937a7b201895f713",
@@ -31349,16 +31439,6 @@
       "sha256": "8667e718294e9e0df1d30600ba3eeb201f764aad2dad72748643e4a285e1d1f7",
       "size": 64,
       "repo_path": "bios/Sony/PlayStation 2/eeprom.dat",
-      "cores": [
-        "armsx2"
-      ]
-    },
-    {
-      "dest": "bios/patches.zip",
-      "sha1": "541a74165496fb7ef35ce6ec03f711ebbe263e11",
-      "sha256": "91ae289d37ffcbf436e99c8cd9b661a8a9fb641a068721a63ea9f385345197bc",
-      "size": 2060269,
-      "repo_path": "bios/Sony/PlayStation 2/patches.zip",
       "cores": [
         "armsx2"
       ]

@@ -5,7 +5,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-08-23T11:06:18Z",
+  "generated": "2026-09-03T20:45:52Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -15,8 +15,8 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 608,
-  "total_size": 1365129575,
+  "total_files": 615,
+  "total_size": 1366505831,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -989,6 +989,62 @@
       "cores": null
     },
     {
+      "dest": "turbografx-cd/gecard.pce",
+      "sha1": "014881a959e045e00f4db8f52955200865d40280",
+      "sha256": "4b86bb96a48a4ca8375fc0109631d0b1d64f255a03b01de70594d40788ba6c3d",
+      "size": 32768,
+      "repo_path": "bios/NEC/PC Engine/gecard.pce",
+      "cores": null
+    },
+    {
+      "dest": "turbografx-cd/gexpress.pce",
+      "sha1": "014881a959e045e00f4db8f52955200865d40280",
+      "sha256": "4b86bb96a48a4ca8375fc0109631d0b1d64f255a03b01de70594d40788ba6c3d",
+      "size": 32768,
+      "repo_path": "bios/NEC/PC Engine/gecard.pce",
+      "cores": null
+    },
+    {
+      "dest": "turbografx-cd/syscard1.pce",
+      "sha1": "a39a66da7de6ba94ab84d04eef7afeec7d4ee66a",
+      "sha256": "afe9f27f91ac918348555b86298b4f984643eafa2773196f2c5441ea84f0c3bb",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard1.pce",
+      "cores": null
+    },
+    {
+      "dest": "turbografx-cd/syscard2.pce",
+      "sha1": "88da02e2503f7c32810f5d93a34849d470742b6d",
+      "sha256": "0deb13845c7e44ea78a25bbbe324afd60a0ec29ea5a4cf5780349f1598d24cd3",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard2.pce",
+      "cores": null
+    },
+    {
+      "dest": "turbografx-cd/syscard2u.pce",
+      "sha1": "2bea3dac98f84b2f2f469fa77ea720b8770d598d",
+      "sha256": "edba5be43803b180e1d64ca678c3f8bdbf07180c9e2a65a5db69ad635951e6cc",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard2u.pce",
+      "cores": null
+    },
+    {
+      "dest": "turbografx-cd/syscard3.pce",
+      "sha1": "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c",
+      "sha256": "e11527b3b96ce112a037138988ca72fd117a6b0779c2480d9e03eaebece3d9ce",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard3.pce",
+      "cores": null
+    },
+    {
+      "dest": "turbografx-cd/syscard3u.pce",
+      "sha1": "d02611d99921986147c753df14c7349b31d71950",
+      "sha256": "cadac2725711b3c442bcf237b02f5a5210c96f17625c35fa58f009e0ed39e4db",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard3u.pce",
+      "cores": null
+    },
+    {
       "dest": "pc-fx/fx-scsi.rom",
       "sha1": "65482a23ac5c10a6095aee1db5824cca54ead6e5",
       "sha256": "7a2cf2cf33dc03e4520ad5ccd770ed967c0087fde540dca72b0e9ebd0e585623",
@@ -1745,7 +1801,7 @@
       "sha1": "239e9124568c862c31d9ec0605e32373ea74b86a",
       "sha256": "bdba942ab9c633a3172fbf1a8579849df52c0eeb0da8a3411402f4564d035a27",
       "size": 131072,
-      "repo_path": "bios/Other/xm6pro68k/ROM30.DAT",
+      "repo_path": "bios/Sharp/X68000/iplrom30.dat",
       "cores": null
     },
     {
