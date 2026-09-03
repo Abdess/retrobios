@@ -258,13 +258,32 @@ def fetch_file(
     return None if text is None else text.splitlines()
 
 
-def _api(url: str, cache_dir: str, offline: bool) -> object | None:
-    """Cached API call. The cache stores absence as well as payloads."""
+# How long an answer about a moving reference stays trusted. A branch tip, a
+# tag list or a release list changes under the profile: libretro/hatari grew
+# a new main branch after its tip was first cached, and every comparison
+# then ran against the old branch. Content addressed by a sha or a date
+# never changes and is cached for good.
+MOVING_TTL = 6 * 3600
+
+
+def _api(
+    url: str, cache_dir: str, offline: bool, max_age: float | None = None
+) -> object | None:
+    """Cached API call. The cache stores absence as well as payloads.
+
+    ``max_age`` bounds the trust in a cached answer, in seconds; a stale
+    answer is refreshed unless the run is offline, when it still serves.
+    """
     key = hashlib.sha256(url.encode()).hexdigest()
     target = Path(cache_dir) / "_api" / f"{key}.json"
     if target.is_file():
-        raw = target.read_text(encoding="utf-8")
-        return None if raw == ABSENT else json.loads(raw)
+        fresh = (
+            max_age is None
+            or time.time() - target.stat().st_mtime <= max_age
+        )
+        if fresh or offline:
+            raw = target.read_text(encoding="utf-8")
+            return None if raw == ABSENT else json.loads(raw)
     if offline:
         return None
     payload = _http_json(url)
@@ -312,7 +331,9 @@ def resolve_head(
     default branch, so the code a profile documents can be absent from the
     tip the forge serves by default.
     """
-    return _first_sha(_api(_commits_url(repo, None, branch), cache_dir, offline))
+    return _first_sha(
+        _api(_commits_url(repo, None, branch), cache_dir, offline, MOVING_TTL)
+    )
 
 
 def resolve_commit_at(
@@ -334,7 +355,7 @@ def _tags_url(repo: Repo) -> str:
 
 def list_tags(repo: Repo, cache_dir: str, offline: bool = False) -> list[str]:
     """Tag names, newest first as the forge orders them."""
-    payload = _api(_tags_url(repo), cache_dir, offline)
+    payload = _api(_tags_url(repo), cache_dir, offline, MOVING_TTL)
     if not isinstance(payload, list):
         return []
     return [t["name"] for t in payload if isinstance(t, dict) and t.get("name")]
@@ -344,7 +365,7 @@ def resolve_tag_commit(
     repo: Repo, tag: str, cache_dir: str, offline: bool = False
 ) -> str | None:
     """Commit a tag points at."""
-    payload = _api(_tags_url(repo), cache_dir, offline)
+    payload = _api(_tags_url(repo), cache_dir, offline, MOVING_TTL)
     if not isinstance(payload, list):
         return None
     for entry in payload:
@@ -399,7 +420,7 @@ def latest_release(
     repo: Repo, cache_dir: str, offline: bool = False
 ) -> Release | None:
     """Most recent release the forge exposes."""
-    payload = _api(_releases_url(repo), cache_dir, offline)
+    payload = _api(_releases_url(repo), cache_dir, offline, MOVING_TTL)
     if isinstance(payload, list):
         payload = payload[0] if payload else None
     if not isinstance(payload, dict):

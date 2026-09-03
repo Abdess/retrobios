@@ -365,6 +365,51 @@ class TestRevisions(unittest.TestCase):
         upstream.resolve_commit_at(self.repo, "2026-03-29", self.dir)
         self.assertEqual(len(self.calls), 1)
 
+    def test_a_branch_tip_is_refreshed_once_stale(self):
+        import os as _os
+        import hashlib as _hashlib
+        self.responses["/commits"] = [{"sha": "old"}]
+        self.assertEqual(upstream.resolve_head(self.repo, self.dir), "old")
+        url = upstream._commits_url(self.repo, None, None)
+        cached = (
+            Path(self.dir) / "_api"
+            / f"{_hashlib.sha256(url.encode()).hexdigest()}.json"
+        )
+        stale = _os.path.getmtime(cached) - upstream.MOVING_TTL - 1
+        _os.utime(cached, (stale, stale))
+        self.responses["/commits"] = [{"sha": "new"}]
+        self.assertEqual(upstream.resolve_head(self.repo, self.dir), "new")
+        self.assertEqual(len(self.calls), 2)
+
+    def test_a_stale_tip_still_serves_offline(self):
+        import os as _os
+        import hashlib as _hashlib
+        self.responses["/commits"] = [{"sha": "old"}]
+        upstream.resolve_head(self.repo, self.dir)
+        url = upstream._commits_url(self.repo, None, None)
+        cached = (
+            Path(self.dir) / "_api"
+            / f"{_hashlib.sha256(url.encode()).hexdigest()}.json"
+        )
+        stale = _os.path.getmtime(cached) - upstream.MOVING_TTL - 1
+        _os.utime(cached, (stale, stale))
+        self.assertEqual(upstream.resolve_head(self.repo, self.dir, offline=True), "old")
+        self.assertEqual(len(self.calls), 1)
+
+    def test_a_dated_lookup_is_cached_for_good(self):
+        import os as _os
+        import hashlib as _hashlib
+        self.responses["/commits"] = [{"sha": "abc"}]
+        upstream.resolve_commit_at(self.repo, "2026-03-29", self.dir)
+        url = upstream._commits_url(self.repo, "2026-03-29", None)
+        cached = (
+            Path(self.dir) / "_api"
+            / f"{_hashlib.sha256(url.encode()).hexdigest()}.json"
+        )
+        _os.utime(cached, (0, 0))
+        upstream.resolve_commit_at(self.repo, "2026-03-29", self.dir)
+        self.assertEqual(len(self.calls), 1)
+
     def test_offline_without_cache_returns_none(self):
         self.assertIsNone(upstream.resolve_head(self.repo, self.dir, offline=True))
         self.assertEqual(self.calls, [])
