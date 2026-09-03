@@ -1,8 +1,8 @@
 emulator: Skyline
 type: standalone
 core_classification: other
-source: "https://github.com/skyline-emu/skyline"
-upstream: "https://github.com/skyline-emu/skyline"
+source: "https://archive.softwareheritage.org/browse/revision/dc20a615275f66bee20a4fd851ef0231daca4f14/"
+upstream: "https://archive.softwareheritage.org/browse/revision/dc20a615275f66bee20a4fd851ef0231daca4f14/"
 profiled_date: "2026-08-12"
 source_commit: "dc20a615275f66bee20a4fd851ef0231daca4f14"
 core_version: "0.0.3"
@@ -15,6 +15,12 @@ systems:
 mode: standalone
 
 notes: |
+  The GitHub repository skyline-emu/skyline was replaced by an archival notice on
+  2026-08-18, so the pinned revision is served by Software Heritage; the same tree
+  is in the archive.org bundle github.com_skyline-emu_bundles_20230508, and the
+  signed edge-69 APK carries the built assets. Every path below reads against
+  that revision.
+
   Nintendo Switch emulator for ARMv8 Android, written from scratch in C++ and Kotlin.
   Android package skyline.emu, versionCode 3, minSdk 29, with the debug variant taking a
   .dev suffix (build.gradle:23,28-29,120-121). ES-DE reaches it through its SKYLINE find
