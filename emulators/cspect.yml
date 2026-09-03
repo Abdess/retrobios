@@ -118,17 +118,25 @@ files:
       0x6000. A .fw file named on the command line takes the same route.
     source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_0016-IL_00bb, A.h::A(string[]) IL_0164-IL_0197, a.d::C(string) IL_014b-IL_01db"
 
-  - name: "<sdcard>.img"
+  - name: "cspect-next-8gb.zip"
     system: sinclair-zx-spectrum-next
     required: true
-    description: "ZX Spectrum Next SD card image"
-    unsourceable: >-
-      A FAT image the user builds or downloads, under whatever name is passed to
-      -mmc= or given as the positional argument. CSpect fetches the current one
-      from https://zxnext.uk/hosted/ on demand, and the machine writes to it.
+    storage: large_file
+    size: 62112587
+    md5: "a01533a8fd22beb525af18bacfb21434"
+    sha1: "0e93b884b5eb9682171b9934327d2b01fd378821"
+    description: "ZX Spectrum Next SD card image, zipped as CSpect downloads it"
     note: >-
-      The only route to the ROMs above. SDCard.Open reads its MBR and boot
-      sector, which is also the test that decides whether a positional argument
-      is a card or a game, and the DivMMC opens the same path read write as its
-      card. A second image mounts on the second slot through -sd2=.
+      The only route to the ROMs above. Any FAT image serves, under whatever
+      name is passed to -mmc= or given as the positional argument: SDCard.Open
+      reads its MBR and boot sector, which is also the test that decides
+      whether a positional argument is a card or a game, and the DivMMC opens
+      the same path read write as its card. A second image mounts on the
+      second slot through -sd2=. When no card is given CSpect fetches
+      https://zxnext.uk/hosted/, takes the first link holding 8gb, which is
+      index_files/hdfimages/cspect-next-8gb.zip, and unpacks 8gb/cspect-next-8gb.img
+      (8589934592 bytes, one FAT32 partition of type 0x0C at LBA 63) beside a
+      version.txt. The site rebuilds the image nightly, so the hashes here
+      identify the 2026-09-03 build (System/Next 24.11, NextZXOS 2.09,
+      cores 3.02.01, 3.02.04 and 3.02.03, firmware 1.45).
     source_ref: "CSpect.exe 3.3.1.0 a.H::e() IL_000b-IL_0015, A.h::A(string) IL_0000-IL_00b6, A.h::A(string[]) IL_0697-IL_0773, B.R::.ctor(string), SDCardAccess.dll SDCard.cs:600-635"

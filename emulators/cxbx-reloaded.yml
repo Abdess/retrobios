@@ -185,9 +185,13 @@ files:
     note: >-
       Opened at startup and mapped read/write; the file is created and filled
       with defaults when it does not exist, and a file that is not 256 bytes ends
-      the run. Section checksums are recomputed on every load. The hard disk key
-      is taken from it, and the game region it carries becomes the factory
-      region. The GUI exposes an editor over the same file.
+      the run. Section checksums are recomputed on every load. The encrypted
+      section is read as plaintext: the stored checksum is compared with the
+      HMAC-SHA1 of the confounder, hard disk key and game region as they sit
+      in the file, keyed with the EEPROM key of keys.bin, so a retail dump has
+      to be RC4-decrypted first, which leaves the checksum unchanged. The hard
+      disk key is taken from it, and the game region it carries becomes the
+      factory region. The GUI exposes an editor over the same file.
     source_ref: "src/common/EmuEEPROM.cpp:93-193, src/common/FilePaths.cpp:125, src/core/kernel/init/CxbxKrnl.cpp:958, src/gui/DlgEepromConfig.cpp:212-230"
 
   - name: keys.bin

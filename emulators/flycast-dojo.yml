@@ -108,8 +108,8 @@ files:
     required: false
     min_size: 131072
     validation: [size]
-    note: "Flash memory used once Dojo mode is enabled, keeping netplay settings apart from local ones."
-    source_ref: "core/hw/holly/sb_mem.cpp:192-195"
+    note: "Flash memory used once Dojo mode is enabled, keeping netplay settings apart from local ones. Absent, the emulator logs that the flash is missing and creates it: the factory partition is rewritten, the user partition erased and ISP blocks and a random console id seeded (core/hw/flashrom/flashrom.h:494-524). Nothing distributed seeds it, and SaveRomFiles writes dc_nvmem.bin, never this name (core/hw/holly/sb_mem.cpp:279-286)."
+    source_ref: "core/hw/holly/sb_mem.cpp:189-230"
 
   - name: font.bin
     system: sega-dreamcast

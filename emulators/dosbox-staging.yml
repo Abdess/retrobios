@@ -607,7 +607,9 @@ files:
 
   - name: "system.rom"
     description: "IBM PCjr system ROM"
+    sha1: "1f5f7013f18c08ff50d7942e76c4fbd782412414"
     required: false
+    aliases: ["bios.rom"]
     min_size: 57344
     validation: [size]
     note: >
@@ -624,6 +626,8 @@ files:
   - name: "IBM PC Cassette BASIC ROM"
     description: "IBM BASIC ROM image mapped at F600:0"
     required: false
+    aliases: ["ibm-basic-1.10.rom", "IBMROMBASIC-F6000h-1982-10-27.ROM"]
+    sha1: "07449ebca18f979b9ab748582b736e402f2bf940"
     size: 32768
     validation: [size]
     note: >
@@ -631,8 +635,9 @@ files:
       carries the string IBM at offset 0x4CD4
     source_ref: "src/dos/programs/loadrom.cpp:56-80, src/dos/programs/loadrom.cpp:95"
 
-  - name: "Video BIOS ROM"
-    description: "Option ROM image mapped at C000:0 and initialised"
+  - name: "ibm-vga.bin"
+    description: "IBM VGA option ROM of 10/27/86, laid out as mapped at C000:0"
+    sha1: "dce6491424f1726203776dfae9a967a98a4ba7b5"
     required: false
     min_size: 16384
     max_size: 32768
