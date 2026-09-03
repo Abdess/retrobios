@@ -472,6 +472,10 @@ class TestBinaryCitation(unittest.TestCase):
     def test_section_name_is_binary(self):
         self.assertTrue(profile_sync.is_binary_citation(".rdata dialog filter"))
 
+    def test_bare_library_name_is_binary(self):
+        self.assertTrue(profile_sync.is_binary_citation("DesktopKinect.dll"))
+        self.assertFalse(profile_sync.is_binary_citation("Makefile"))
+
     def test_a_source_path_is_not_binary(self):
         for path in ("src/foo.c", "libs/libCg.so", "Source/Core/hook.c", "resources/font.h"):
             self.assertFalse(profile_sync.is_binary_citation(path), path)
@@ -497,6 +501,14 @@ class TestRepoWord(unittest.TestCase):
         self.assertEqual(
             profile_sync.strip_repo_word("BAM_FPloader FPLoader.cpp", {"bam_fploader"}),
             "FPLoader.cpp",
+        )
+
+    def test_release_version_after_the_repository_word_is_dropped(self):
+        self.assertEqual(
+            profile_sync.strip_repo_word(
+                "ArcadeFlashWeb v1.0.2 flash/flash.html", {"arcadeflashweb"}
+            ),
+            "flash/flash.html",
         )
 
     def test_undeclared_project_word_stays(self):

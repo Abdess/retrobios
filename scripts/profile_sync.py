@@ -237,6 +237,7 @@ _BINARY_SUFFIXES = (
     ".dll", ".exe", ".so", ".dylib", ".apk", ".elf", ".o", ".a", ".jar", ".dex",
 )
 _HEX_ADDRESS_RE = re.compile(r"\b0x[0-9a-fA-F]{2,}")
+_VERSION_WORD_RE = re.compile(r"v?\d+(\.\d+)+[\w.-]*")
 
 
 def is_binary_citation(path: str) -> bool:
@@ -250,7 +251,9 @@ def is_binary_citation(path: str) -> bool:
     if _HEX_ADDRESS_RE.search(path):
         return True
     if " " not in path:
-        return False
+        # A bare `DesktopKinect.dll` names a shipped library, never a source
+        # file: no directory, no line, only its import table to read.
+        return "/" not in path and path.lower().endswith(_BINARY_SUFFIXES)
     head = path.split(" ", 1)[0]
     if head.lower().endswith(_BINARY_SUFFIXES):
         return True
@@ -268,7 +271,13 @@ def strip_repo_word(path: str, known=frozenset()) -> str:
         return path
     head, _, tail = path.partition(" ")
     if head.lower() in known and tail and "/" not in head and "." not in head:
-        return tail.strip()
+        tail = tail.strip()
+        # `ArcadeFlashWeb v1.0.2 flash/flash.html` names the release the file
+        # was read from; the version is not part of the path either.
+        version, _, rest = tail.partition(" ")
+        if rest and _VERSION_WORD_RE.fullmatch(version):
+            return rest.strip()
+        return tail
     return path
 
 
@@ -1252,6 +1261,22 @@ def build_report(
                     matches = narrow_by_cited(matches, cited_dirs)
                 # A few survivors are told apart by the cited line below: a
                 # 266-line Windows configure.ac cannot carry line 754.
+                if len(matches) <= 4:
+                    candidates.extend(m for m in matches if m not in candidates)
+        elif not any(
+            upstream.fetch_file(v.repo, sha, path, cache_dir, offline) is not None
+            for v in views for sha in (v.pin, v.head)
+        ):
+            # A path written from a subproject directory of a monorepo:
+            # `src/main/Main.cc` in emu-ex-plus-alpha is PCE.emu/src/main/Main.cc
+            # for one profile and C64.emu/src/main/Main.cc for another. The
+            # tree is searched by suffix and the cited directories decide.
+            suffix = "/" + path
+            for view in views:
+                _, tree = _context_for(view)
+                matches = [p for p in tree or [] if p.endswith(suffix)]
+                if len(matches) > 1:
+                    matches = narrow_by_cited(matches, cited_dirs)
                 if len(matches) <= 4:
                     candidates.extend(m for m in matches if m not in candidates)
 
