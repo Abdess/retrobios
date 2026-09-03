@@ -214,7 +214,8 @@ files:
   - name: gamecontrollerdb.txt
     required: false
     bundled: true
-    unsourceable: "opened through the asset manager inside the package, so no file on disk reaches this load"
+    size: 589031
+    sha1: "b194b556763146786b994f606c8697ab8f1b5f47"
     description: "SDL controller mapping database"
     note: >-
       Read from the assets of the package as the game controller subsystem

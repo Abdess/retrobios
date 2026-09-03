@@ -81,7 +81,6 @@ files:
     system: flash
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     size: 344533
     md5: c0263e609d1aef85891d56d6467a429c
     sha1: c58c63e0ae8396018fd71f0fa7ebd4f8eb4f139f
@@ -98,7 +97,6 @@ files:
     system: flash
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     variant_group: "ruffle-core"
     size: 90386
     md5: 5b1d64812875a1341ebd2a611e9324a1
@@ -114,7 +112,6 @@ files:
     system: flash
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     variant_group: "ruffle-core"
     size: 13107470
     md5: 834f85979115fd740943a782887d0ab0
@@ -130,7 +127,6 @@ files:
     system: flash
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     variant_group: "ruffle-core"
     size: 94169
     md5: 5aee868a91c066cc15f8b06999af690b
@@ -146,7 +142,6 @@ files:
     system: flash
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     variant_group: "ruffle-core"
     size: 13323601
     md5: fe843bd0152c714f0449493b0193108f
@@ -161,7 +156,6 @@ files:
     system: flash
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     size: 2421
     md5: 39c997db73db15a6807b35f148fcc85a
     sha1: 0aaf20633888d2d0a2da38e82773cb5d44e840eb
@@ -178,7 +172,6 @@ files:
     system: flash
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     size: 1377
     md5: de36d0dc1b74a39be2313749138d4d00
     sha1: bc283d9ad8ad3bb99b632ca5b194a5bf27df1c22
@@ -195,7 +188,6 @@ files:
     system: flash
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     size: 20951456
     md5: 7fa4474455635584fa683167ee7e948f
     sha1: d6d91ca32cbceda054851e9aa78c2e9286bd8812
@@ -212,7 +204,6 @@ files:
     system: flash
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     size: 1058904
     md5: 77f7b0c9bba5c0b4c4339bc655d5613a
     sha1: 8db47ede06074dec3fbc05b69eb75f8c1c5e71a8
@@ -227,7 +218,6 @@ files:
     system: flash
     required: true
     bundled: true
-    unsourceable: "ships inside the application package"
     size: 3896
     md5: 1301640830c754d20384243c97bd7854
     sha1: 6118faa7947eb7abf4326f08f5ba94ab61e42808
@@ -244,7 +234,6 @@ files:
     system: flash
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     size: 5889
     md5: 3d801b57e0b9e1a84d9cf28ef7505b3c
     sha1: 5194da518b3bbc77204e481c2cfed0381cf5df41
@@ -259,7 +248,6 @@ files:
     system: flash
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     size: 54675
     md5: c583c7db1c5456c0d9307d5f510a63f0
     sha1: bef0ab96169418441f43b9dae2ec92a990b89ade
@@ -273,7 +261,6 @@ files:
     system: flash
     required: false
     bundled: true
-    unsourceable: "ships inside the application package"
     size: 23563
     md5: 505834e937b0bd061695ff34f40301cb
     sha1: f5992aebd3ba298f6564681592be8b4626e89158

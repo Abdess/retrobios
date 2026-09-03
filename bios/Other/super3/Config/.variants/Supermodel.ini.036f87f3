@@ -1,0 +1,227 @@
+[ Global ]
+;
+; Super3 Android default configuration.
+; Notes:
+; - Touch controls synthesize keyboard inputs. Keep a KEY_* mapping for these inputs.
+; - Some desktop options are ignored/overridden on Android for stability.
+;
+
+GameXMLFile = Config/Games.xml
+PowerPCFrequency = 50
+MultiThreaded = 1
+GPUMultiThreaded = 0
+EmulateSound = 1
+EmulateDSB = 1
+NbSoundChannels = 4
+SoundFreq = 57.6
+SoundVolume = 100
+MusicVolume = 150
+LegacySoundDSP = 0
+ForceFeedback = 0
+; Net board TCP link settings (for Android<->PC or Android<->Android).
+; Cab A default: PortIn=1970 PortOut=1971
+; Cab B default: PortIn=1971 PortOut=1970 and AddressOut=<Cab A IP>
+Network = 0
+SimulateNet = 1
+PortIn = 1970
+PortOut = 1971
+AddressOut = "127.0.0.1"
+Outputs = none
+LegacyReal3DTiming = 1
+
+; Rendering (Android GLES path)
+New3DEngine = 1
+QuadRendering = 0
+XResolution = 496
+YResolution = 384
+VSync = 1
+WideScreen = 0
+WideBackground = 0
+; Enhanced Real3D compositing (FBO transparency + scroll fog). More accurate but may be slower.
+New3DAccurate = 0
+
+; Input system (Android uses SDL input backend)
+InputSystem = sdl
+
+; Optional SDL GameController mapping database.
+; SDLGameControllerDB = "Config/gamecontrollerdb.txt"
+
+; Touch defaults:
+; - bottom-left: Coin1
+; - bottom-right: Start1
+; - top-left: ServiceA
+; - top-right: TestA
+; - left-middle: D-pad / steer
+; - right-middle: throttle (top) / brake (bottom)
+InputCoin1 = KEY_5,JOY1_BUTTON7
+InputStart1 = KEY_1,JOY1_BUTTON8
+InputServiceA = KEY_F1,JOY1_BUTTON13
+InputTestA = KEY_F2
+InputUISelectCrosshairs = KEY_F8
+InputJoyUp = KEY_UP,JOY1_POV1_UP,JOY1_YAXIS_NEG
+InputJoyDown = KEY_DOWN,JOY1_POV1_DOWN,JOY1_YAXIS_POS
+InputJoyLeft = KEY_LEFT,JOY1_POV1_LEFT,JOY1_XAXIS_NEG
+InputJoyRight = KEY_RIGHT,JOY1_POV1_RIGHT,JOY1_XAXIS_POS
+InputSteeringLeft = KEY_LEFT
+InputSteeringRight = KEY_RIGHT
+InputSteering = JOY1_XAXIS
+InputAccelerator = KEY_W,JOY1_RZAXIS_POS
+InputBrake = KEY_X,JOY1_ZAXIS_POS
+
+; Manual transmission (LB/RB + 4-speed on face buttons)
+InputGearShiftUp = KEY_I,JOY1_BUTTON6
+InputGearShiftDown = KEY_K,JOY1_BUTTON5
+InputGearShift1 = KEY_7,JOY1_BUTTON3
+InputGearShift2 = KEY_8,JOY1_BUTTON1
+InputGearShift3 = KEY_9,JOY1_BUTTON4
+InputGearShift4 = KEY_0,JOY1_BUTTON2
+InputGearShiftN = KEY_6
+
+; Fighting game buttons (X/A/B/Y)
+InputPunch = KEY_A,JOY1_BUTTON3
+InputKick = KEY_S,JOY1_BUTTON1
+InputGuard = KEY_D,JOY1_BUTTON2
+InputEscape = KEY_F,JOY1_BUTTON4
+
+; Spikeout buttons (A/X/Y + B/RB)
+InputShift = KEY_A,JOY1_BUTTON2,JOY1_BUTTON6
+InputBeat = KEY_S,JOY1_BUTTON1
+InputCharge = KEY_D,JOY1_BUTTON3
+InputJump = KEY_F,JOY1_BUTTON4
+
+; Virtua Striker buttons (A/B/X)
+InputShortPass = KEY_A,JOY1_BUTTON1
+InputLongPass = KEY_S,JOY1_BUTTON2
+InputShoot = KEY_D,JOY1_BUTTON3
+
+; View change (single-button games)
+InputViewChange = KEY_A,JOY1_BUTTON4
+
+; Handbrake (Sega Rally 2)
+InputHandBrake = KEY_S,JOY1_BUTTON2
+InputVR1 = KEY_A,JOY1_BUTTON1
+InputVR2 = KEY_S,JOY1_BUTTON2
+InputVR3 = KEY_D,JOY1_BUTTON3
+InputVR4 = KEY_F,JOY1_BUTTON4
+InputRearBrake = KEY_S,JOY1_BUTTON2
+InputMusicSelect = KEY_D,JOY1_BUTTON3
+InputTwinJoyTurnLeft = KEY_Q,JOY1_RXAXIS_NEG
+InputTwinJoyTurnRight = KEY_W,JOY1_RXAXIS_POS
+InputTwinJoyForward = KEY_UP,JOY1_YAXIS_NEG
+InputTwinJoyReverse = KEY_DOWN,JOY1_YAXIS_POS
+InputTwinJoyStrafeLeft = KEY_LEFT,JOY1_XAXIS_NEG
+InputTwinJoyStrafeRight = KEY_RIGHT,JOY1_XAXIS_POS
+InputTwinJoyJump = KEY_E,JOY1_BUTTON1
+InputTwinJoyCrouch = KEY_R,JOY1_BUTTON2
+InputTwinJoyLeft1 = NONE
+InputTwinJoyLeft2 = NONE
+InputTwinJoyRight1 = NONE
+InputTwinJoyRight2 = NONE
+InputTwinJoyUp1 = NONE
+InputTwinJoyUp2 = NONE
+InputTwinJoyDown1 = NONE
+InputTwinJoyDown2 = NONE
+InputTwinJoyShot1 = KEY_A,JOY1_BUTTON5
+InputTwinJoyShot2 = KEY_S,JOY1_BUTTON6
+InputTwinJoyTurbo1 = KEY_Z,JOY1_BUTTON7
+InputTwinJoyTurbo2 = KEY_X,JOY1_BUTTON8
+InputAnalogJoyLeft = KEY_LEFT
+InputAnalogJoyRight = KEY_RIGHT
+InputAnalogJoyUp = KEY_UP
+InputAnalogJoyDown = KEY_DOWN
+InputAnalogJoyX = JOY_XAXIS,MOUSE_XAXIS_INV
+InputAnalogJoyY = JOY_YAXIS,MOUSE_YAXIS_INV
+InputAnalogJoyTrigger = KEY_A,KEY_W,JOY1_BUTTON1,MOUSE_LEFT_BUTTON
+InputAnalogJoyEvent = KEY_S,KEY_X,JOY1_BUTTON2,MOUSE_RIGHT_BUTTON
+InputAnalogJoyTrigger2 = KEY_D,JOY_BUTTON2
+InputAnalogJoyEvent2 = NONE
+InputGunLeft = KEY_LEFT
+InputGunRight = KEY_RIGHT
+InputGunUp = KEY_UP
+InputGunDown = KEY_DOWN
+InputGunX = MOUSE_XAXIS,JOY1_RXAXIS,JOY1_XAXIS
+InputGunY = MOUSE_YAXIS,JOY1_RYAXIS,JOY1_YAXIS
+InputTrigger = KEY_A,JOY1_RZAXIS_POS,JOY1_BUTTON1,MOUSE_LEFT_BUTTON
+InputOffscreen = KEY_S,JOY1_ZAXIS_POS,JOY1_BUTTON2,MOUSE_RIGHT_BUTTON
+InputAutoTrigger = 1
+InputGunLeft2 = NONE
+InputGunRight2 = NONE
+InputGunUp2 = NONE
+InputGunDown2 = NONE
+InputGunX2 = JOY2_XAXIS
+InputGunY2 = JOY2_YAXIS
+InputTrigger2 = JOY2_BUTTON1
+InputOffscreen2 = JOY2_BUTTON2
+InputAutoTrigger2 = 1
+InputAnalogGunLeft = KEY_LEFT
+InputAnalogGunRight = KEY_RIGHT
+InputAnalogGunUp = KEY_UP
+InputAnalogGunDown = KEY_DOWN
+InputAnalogGunX = MOUSE_XAXIS,JOY1_RXAXIS,JOY1_XAXIS
+InputAnalogGunY = MOUSE_YAXIS,JOY1_RYAXIS,JOY1_YAXIS
+InputAnalogTriggerLeft = KEY_A,JOY1_RZAXIS_POS,JOY1_BUTTON1,MOUSE_LEFT_BUTTON
+InputAnalogTriggerRight = KEY_S,JOY1_ZAXIS_POS,JOY1_BUTTON2,MOUSE_RIGHT_BUTTON
+InputAnalogGunLeft2 = NONE
+InputAnalogGunRight2 = NONE
+InputAnalogGunUp2 = NONE
+InputAnalogGunDown2 = NONE
+InputAnalogGunX2 = JOY2_RXAXIS,JOY2_XAXIS
+InputAnalogGunY2 = JOY2_RYAXIS,JOY2_YAXIS
+InputAnalogTriggerLeft2 = JOY2_RZAXIS_POS,JOY2_BUTTON1
+InputAnalogTriggerRight2 = JOY2_ZAXIS_POS,JOY2_BUTTON2
+InputSkiLeft = KEY_LEFT
+InputSkiRight = KEY_RIGHT
+InputSkiUp = KEY_UP
+InputSkiDown = KEY_DOWN
+InputSkiX = JOY1_XAXIS
+InputSkiY = JOY1_YAXIS
+InputSkiPollLeft = KEY_A,JOY1_BUTTON1
+InputSkiPollRight = KEY_S,JOY1_BUTTON2
+InputSkiSelect1 = KEY_Q,JOY1_BUTTON3
+InputSkiSelect2 = KEY_W,JOY1_BUTTON4
+InputSkiSelect3 = KEY_E,JOY1_BUTTON5
+InputMagicalLeverUp1 = KEY_UP
+InputMagicalLeverDown1 = KEY_DOWN
+InputMagicalLeverUp2 = NONE
+InputMagicalLeverDown2 = NONE
+InputMagicalLever1 = JOY1_YAXIS
+InputMagicalLever2 = JOY2_YAXIS
+InputMagicalPedal1 = KEY_A,JOY1_BUTTON1
+InputMagicalPedal2 = KEY_S,JOY2_BUTTON1
+InputFishingRodLeft = KEY_LEFT
+InputFishingRodRight = KEY_RIGHT
+InputFishingRodUp = KEY_UP
+InputFishingRodDown = KEY_DOWN
+InputFishingStickLeft = KEY_A
+InputFishingStickRight = KEY_D
+InputFishingStickUp = KEY_W
+InputFishingStickDown = KEY_S
+InputFishingRodX = JOY1_XAXIS
+InputFishingRodY = JOY1_YAXIS
+InputFishingStickX = JOY1_RXAXIS
+InputFishingStickY = JOY1_RYAXIS
+InputFishingReel = KEY_SPACE,JOY1_ZAXIS_POS
+InputFishingCast = KEY_Z,JOY1_BUTTON1
+InputFishingSelect = KEY_X,JOY1_BUTTON2
+InputFishingTension = KEY_T,JOY1_ZAXIS_NEG
+
+[ lamachin ]
+InputAnalogGunLeft = JOY1_XAXIS_NEG
+InputAnalogGunRight = JOY1_XAXIS_POS
+InputAnalogGunUp = JOY1_YAXIS_NEG
+InputAnalogGunDown = JOY1_YAXIS_POS
+
+; Virtual On 2: force simple shader on Android to avoid GPU hangs.
+[ von2 ]
+AndroidSimpleShader = 1
+
+[ von254g ]
+AndroidSimpleShader = 1
+
+[ von2a ]
+AndroidSimpleShader = 1
+
+[ von2o ]
+AndroidSimpleShader = 1
+
+

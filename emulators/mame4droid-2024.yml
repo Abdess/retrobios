@@ -167,7 +167,6 @@ files:
     bundled: true
     size: 2623648
     sha1: "ce173b7341bb271da5bf47761f4bf3b4de8e9deb"
-    unsourceable: "cache MAME regenerates from unifont.bdf, installed from the app's asset bundle"
     category: game_data
     description: "compiled glyph cache for unifont.bdf"
     note: "load_cached_bdf derives the name by swapping the BDF extension and opens it before parsing the 9 MB source font, accepting it only when its stored size and hash match unifont.bdf. Shipped prebuilt; MAME writes it itself when it is absent."

@@ -122,7 +122,6 @@ files:
     path: "Config/Games.xml"
     required: true
     bundled: true
-    unsourceable: "Installed from the package assets on every launch and never obtained separately"
     size: 154928
     md5: fc26e2deaa532794d91fe33ca73f8e2c
     sha1: b41150f8cff409dde89939b80a980a20e853df0b
@@ -143,7 +142,6 @@ files:
     path: "Config/Supermodel.ini"
     required: false
     bundled: true
-    unsourceable: "Installed from the package assets on every launch and rewritten in place by the app"
     size: 6887
     md5: a468e45e005caa89356bd67b70e0d37d
     sha1: 6c38cc6fba14863bfbdc730e53d3274fd79a4544
@@ -164,7 +162,6 @@ files:
     path: "Config/gamecontrollerdb.txt"
     required: false
     bundled: true
-    unsourceable: "Installed from the package assets on every launch and never obtained separately"
     size: 587398
     md5: e8da2d033e90d6fefa884ee78690b4e0
     sha1: cb6be8206308470ecaa8b9cc882d82abe0ef3562

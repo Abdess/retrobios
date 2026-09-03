@@ -124,9 +124,7 @@ files:
     description: "Apple IIe keyboard ASCII mapping ROM, 342-0132-B"
     required: true
     min_size: 2048
-    sha256:
-      - "68198ae95923926b0307893d03ec286f00822c93a0b6dabfca565f6718dd5a56"
-      - "fbb9620e01f4f728e5a8ba86544900978d7803f6a7d577d384e288dfed9a4907"
+    sha256: "68198ae95923926b0307893d03ec286f00822c93a0b6dabfca565f6718dd5a56,fbb9620e01f4f728e5a8ba86544900978d7803f6a7d577d384e288dfed9a4907"
     validation: [size]
     source_ref: "apple2/apple2.cpp:2331-2351, 1498-1506"
     note: "The first hash is 342-0132-B, the second the revised IIe dump 342-0132-C; both are recognised at this filename and neither is checked. Read as 0x800 bytes."

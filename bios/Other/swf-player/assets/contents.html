@@ -1,0 +1,99 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=device-dpi" />
+
+	<style type="text/css">
+	<!--
+		body {
+			margin: 0;
+			width: 100%;
+			height: 100%;
+			background-color: #000000;
+			color: #FFFFFF;
+		}
+		#center {
+			width: 600px;
+			height: 300px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin: -150px 0 0 -300px;
+			border: 1px inset #ddd;
+		}
+		a {color: #E5E0B5;text-decoration:none;}
+	//-->
+	</style>
+<title>SWF Player</title>
+    <script src="/ruffle/ruffle/ruffle.js"></script>
+</head>
+<body>
+<center>
+<table width="" height="" cellpadding="0" cellspacing="0" border="0">
+	<tr>
+		<td align="center" valign="middle">
+		<object type="application/x-shockwave-flash"
+			id='myFlashMovie'
+			align="middle"
+			data=""
+			wmode=""
+			height=""
+			width="">
+				<param name="movie" value="">
+				<param name="quality" value="">
+				<param name="wmode" value="">
+				<param name="bgColor" value="#000000">
+				<param name="allowScriptAccess" value="always">
+				<param name="menu" value="false">
+				<param name="scale" value="">
+				<param name="allowFullScreen" value="true">
+				<div style="height: 100%; margin: 0; padding: 0; ">
+				<div id="center">
+				<center>
+				<br>
+				<h1><font color="#C23352">Flash Player Not Found!</font></h1>
+				<h1>
+				<script type='text/javascript'>
+					if (typeof CallJava !== 'undefined') {
+						CallJava.notInstalled();
+					}
+				</script>
+				</center>
+				</div>
+				</div>
+		</object>
+		<script type='text/javascript'>
+		    function getFlashInfo(){
+		    	if (typeof CallJava !== 'undefined') {
+		    		CallJava.SetFlashInfo(myFlashMovie.TotalFrames(),myFlashMovie.CurrentFrame());
+		    	}
+		    }
+		    function callPlay(){
+		    	myFlashMovie.Play();
+		    }
+		    function callStop(){
+		    	myFlashMovie.StopPlay();
+		    }
+		    function callRewind(){
+		    	myFlashMovie.Rewind();
+		    }
+		    function callFastforward(){
+		    	myFlashMovie.GotoFrame(myFlashMovie.TotalFrames()-1);
+		    }
+		    function zoomIn(){
+		    	myFlashMovie.Zoom(90);
+		    }
+		    function zoomOut(){
+		    	myFlashMovie.Zoom(110);
+		    }
+		    function gotoFrame(goframe){
+		    	myFlashMovie.GotoFrame(goframe);
+		    }
+		</script>
+		</td>
+	</tr>
+</table>
+</center>
+
+</body>
+</html>

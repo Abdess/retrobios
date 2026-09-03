@@ -63,14 +63,15 @@ files:
     path: "rootfs.tar.gz"
     required: true
     category: game_data
+    storage: large_file
     validation: [sha256]
     size: 582086462
     sha256: "a40dd11b24802325b37ab6454feb5fda84a6f1de9d769c84a2dd7b6fee8035e1"
-    unsourceable: "runtime image the app fetches into its own cache and unpacks into internal storage, leaving no path a user or a pack can write"
     description: "Debian bookworm ARM64 root filesystem the ports execute in"
     note: >-
-      Fetched from releases/latest/download of get-starboard/starboard-runtime,
-      written to the cache directory as rootfs.tar.gz, gunzipped into a rootfs
+      Fetched as the asset starboard-rootfs.tar.gz from releases/latest/download
+      of get-starboard/starboard-runtime, written to the cache directory as
+      rootfs.tar.gz, gunzipped into a rootfs
       directory under internal storage, then deleted. Nothing launches without
       it: the gate reads usr/bin/env and bin/sh in the extracted tree beside
       libproot.so in the native library directory. Integrity comes from a
