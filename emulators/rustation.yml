@@ -70,8 +70,8 @@ files:
     sha256: "cfc1fc38eb442f6f80781452119e931bcae28100c1c97e7e6c5f2725bbb0f8bb"
     source_ref: "src/bios/db.rs:38-47 (v1.0 Japan)"
 
-  - name: "scph_v11j.bin"
-    description: "v1.1 J"
+  - name: "scph3000.bin"
+    description: "SCPH-3000 (v1.1 J)"
     region: [japan]
     required: false
     size: 524288
@@ -79,8 +79,8 @@ files:
     sha256: "5eb3aee495937558312b83b54323d76a4a015190decd4051214f1b6df06ac34b"
     source_ref: "src/bios/db.rs:48-57 (v1.1 Japan)"
 
-  - name: "scph3000.bin"
-    description: "SCPH-3000 (v2.1 J)"
+  - name: "scph3500.bin"
+    description: "SCPH-3500 (v2.1 J)"
     region: [japan]
     required: false
     size: 524288
@@ -88,8 +88,8 @@ files:
     sha256: "6f71ca1e716da761dc53187bd39e00c213f566e55090708fd3e2b4b425c8c989"
     source_ref: "src/bios/db.rs:78-87 (v2.1 Japan)"
 
-  - name: "scph3500.bin"
-    description: "SCPH-3500 (v2.2 J)"
+  - name: "scph5000.bin"
+    description: "SCPH-5000 (v2.2 J)"
     region: [japan]
     required: false
     size: 524288
@@ -98,8 +98,8 @@ files:
     source_ref: "src/bios/db.rs:108-117 (v2.2 Japan)"
     note: "A known-bad v2.2 J dump also exists in the DB but is rejected."
 
-  - name: "scph5000.bin"
-    description: "v2.2 J (alt)"
+  - name: "dtlh1100.bin"
+    description: "DTL-H1100 (v2.2 J, debugging station)"
     region: [japan]
     required: false
     size: 524288
@@ -116,8 +116,8 @@ files:
     sha256: "e900504d1755f021f861b82c8258c5e6658c7b592f800cccd91f5d32ea380d28"
     source_ref: "src/bios/db.rs:198-207 (v4.0 Japan)"
 
-  - name: "scph7500.bin"
-    description: "SCPH-7500 (v4.1 J)"
+  - name: "scph7000w.bin"
+    description: "SCPH-7000W (v4.1 J)"
     region: [japan]
     required: false
     size: 524288
@@ -125,8 +125,8 @@ files:
     sha256: "b3aa63cf30c81e0a40641740f4a43e25fda0b21b792fa9aaef60ce1675761479"
     source_ref: "src/bios/db.rs:208-217 (v4.1 Japan)"
 
-  - name: "scph9000.bin"
-    description: "SCPH-9000 (v4.3 J)"
+  - name: "scph100.bin"
+    description: "SCPH-100 (v4.3 J)"
     region: [japan]
     required: false
     size: 524288
@@ -135,7 +135,7 @@ files:
     source_ref: "src/bios/db.rs:238-247 (v4.3 Japan)"
 
   # North America alternatives
-  - name: "scph1001.bin"
+  - name: "scph1001_v20.bin"
     description: "SCPH-1001 (v2.0 A)"
     region: [north-america]
     required: false
@@ -144,8 +144,8 @@ files:
     sha256: "42e4124be7623e2e28b1db0d8d426539646faee49d74b71166d8ba5bd7c472ed"
     source_ref: "src/bios/db.rs:58-67 (v2.0 NorthAmerica)"
 
-  - name: "scph5001.bin"
-    description: "SCPH-5001 (v2.1 A)"
+  - name: "scph1001_v21.bin"
+    description: "SCPH-1001 (v2.1 A)"
     region: [north-america]
     required: false
     size: 524288
@@ -153,8 +153,8 @@ files:
     sha256: "6ad5521d105a6b86741f1af8da2e6ea1c732d34459940618c70305a105e8ec10"
     source_ref: "src/bios/db.rs:88-97 (v2.1 NorthAmerica)"
 
-  - name: "scph_v22a.bin"
-    description: "v2.2 A"
+  - name: "scph1001.bin"
+    description: "SCPH-1001 (v2.2 A)"
     region: [north-america]
     required: false
     size: 524288
@@ -190,8 +190,8 @@ files:
     sha256: "0af2be3468d30b6018b3c3b0d98b8b64347e255e16d874d55f0363648973dbf0"
     source_ref: "src/bios/db.rs:68-77 (v2.0 Europe)"
 
-  - name: "scph_v21e.bin"
-    description: "v2.1 E"
+  - name: "scph1002b.bin"
+    description: "SCPH-1002 (v2.1 E)"
     region: [europe]
     required: false
     size: 524288
@@ -199,8 +199,8 @@ files:
     sha256: "1efb0cfc5db8a8751a884c5312e9c6265ca1bc580dc0c2663eb2dea3bde9fcf7"
     source_ref: "src/bios/db.rs:98-107 (v2.1 Europe)"
 
-  - name: "scph_v22e.bin"
-    description: "v2.2 E"
+  - name: "scph1002c.bin"
+    description: "SCPH-1002 (v2.2 E)"
     region: [europe]
     required: false
     size: 524288
