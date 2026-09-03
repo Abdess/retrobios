@@ -1,0 +1,276 @@
+SSW TONEFILE Ver 2.0																																																																																																																																
+MODULENAME=GM2																																																																																																																																
+BANKCONTROLCC#=32																																																																																																																																
+PAGECOUNT=2																																																																																																																																
+;																																																																																																																																
+;																																																																																																																																
+;																																																																																																																																
+PAGE=120	Drum																																																																																																																															
+KIND=1																																																																																																																																
+TONECOUNT=128																																																																																																																																
+;																																																																																																																																
+	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	75	76	77	78	79	80	81	82	83	84	85	86	87	88	89	90	91	92	93	94	95	96	97	98	99	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+1	Standard Set																																																																																																																															
+2																																																																																																																																
+3																																																																																																																																
+4																																																																																																																																
+5	
+6	
+7	
+8	
+9	Room Set
+10	
+11	
+12	
+13	
+14	
+15	
+16	
+17	Power Set
+18	
+19	
+20	
+21	
+22	
+23	
+24	
+25	Erectric Set
+26	Analog Set
+27	
+28	
+29	
+30	
+31	
+32	
+33	Jazz Set
+34	
+35	
+36	
+37	
+38	
+39	
+40	
+41	Brush Set
+42	
+43	
+44	
+45	
+46	
+47	
+48	
+49	OrchestraSet
+50	
+51	
+52	
+53	
+54	
+55	
+56	
+57	SFX Set
+58	
+59	
+60	
+61	
+62	
+63	
+64	
+65	
+66	
+67	
+68	
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117	
+118	
+119	
+120	
+121	
+122	
+123	
+124	
+125	
+126	
+127	
+128	
+;	
+;	
+;	
+PAGE=121	GM2
+KIND=0																																																																																																																																
+TONECOUNT=128																																																																																																																																
+;																																																																																																																																
+	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	75	76	77	78	79	80	81	82	83	84	85	86	87	88	89	90	91	92	93	94	95	96	97	98	99	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+1	Piano 1	Piano 1w	Piano 1d																																																																																																																													
+2	Piano 2	Piano 2w																																																																																																																														
+3	Piano 3	Piano 3w																																																																																																																														
+4	Honky-tonk	Honky-tonk w																																																																																																																														
+5	E.Piano 1	Detuned EP1	Dyno Rhodes	60's E.Piano																																																																																																																												
+6	E.Piano 2	Detuned EP2	E.Piano 2v	EP Legend	EP Phase																																																																																																																											
+7	Harpsichord	Coupl hps	Harpsi w	Harpsi o																																																																																																																												
+8	Clav	Pulse Clav																																																																																																																														
+9	Celesta																																																																																																																															
+10	Glockenspiel																																																																																																																															
+11	Music Box																																																																																																																															
+12	Vibraphone	Vibraphone w																																																																																																																														
+13	Marimba	Marimba w		
+14	Xylophone			
+15	Tubular-bell	Church Bell	Carillon	
+16	Dulcimer			
+17	Organ 1	Detuned Or1	Organ 60	Organ 4
+18	Organ 2	Detuned Or2	Organ 5	
+19	Organ 3			
+20	Church 1	Church 2	Church 3	
+21	Reed Organ	Puff Organ		
+22	Accordion	Accordion 2		
+23	Harmonica			
+24	Tango Accordion			
+25	Nylon Gt.	Ukulele	Nylon o	Nylon Gt.2
+26	Steel-str.Gt	12-Str.Gt	Mandolin	Steel+Body
+27	Jazz Gt.	Pedal Steel		
+28	Clean Gt.	Detuned Gt.	Mid Tone Gt.	
+29	Muted Gt.	Funk Gt.	velo-sw Gt.	Jazz Man	
+30	Overdrive Gt	Gt.Pinch			
+31	DistortionGt	Feedback Gt.	DistRythm Gt		
+32	Gt.Harmonics	Gt.Feedback			
+33	Acoustic Bs.				
+34	Fingered Bs.	FingerJ.Bass			
+35	Picked Bass				
+36	Fretless Bs.				
+37	Slap Bass 1				
+38	Slap Bass 2				
+39	Synth Bass 1	SynthBass w	Acid Bass	Clavi Bass	Hammer
+40	Synth Bass 2	Synth Bass 4	Rubber Bass	Attack Pulse	
+41	Violin	Slow Violin			
+42	Viola				
+43	Cello				
+44	Contrabass				
+45	Tremolo Str			
+46	Pizzicato			
+47	Harp	Yang Chin		
+48	Timpani			
+49	Strings	Strings Bs	60'Strings	
+50	Strings 2			
+51	Syn.Strings1	Syn.Strings3		
+52	Syn.Strings2			
+53	Choir Aahs	Choir Aahs 2		
+54	Voice Oohs	Hamming		
+55	SynVox	Ana Voice		
+56	Orchestrahit	Bass Hit	6th Hit	Euro Hit
+57	Trumpet	Dark Trumpet		
+58	Trombone	Trombone 2	Brite Bone	
+59	Tuba			
+60	Mt Trumpet	Mt Trumpet2		
+61	French Horns	French Horns 2		
+62	Brass 1	Brass 2		
+63	SynthBrass 1	SynthBrass 3	Ana.SynBrass	Jump Brass
+64	SynthBrass 2	SynthBrass 4	Ana.SynBrass 2	
+65	Soprano Sax			
+66	Alto Sax			
+67	Tenor Sax			
+68	Bariton Sax			
+69	Oboe			
+70	EnglishHorn			
+71	Bassoon			
+72	Clarinet			
+73	Piccolo			
+74	Flute			
+75	Recorder			
+76	Pan Flute			
+77	Bottle Blow				
+78	Shakuhachi				
+79	Whistle				
+80	Ocarina				
+81	Lead 1	Lead 1a	Lead 1b		
+82	Lead 2	Lead 2a	Lead 2b	Lead 2c	Lead 2d
+83	Lead 3				
+84	Lead 4				
+85	Lead 5	Lead 5a			
+86	Lead 6				
+87	Lead 7				
+88	Lead 8	Lead 8a			
+89	Pad 1				
+90	Pad 2	Pad 2a			
+91	Pad 3				
+92	Pad 4	Pad 4a			
+93	Pad 5		
+94	Pad 6		
+95	Pad 7		
+96	Pad 8		
+97	FX 1		
+98	FX 2		
+99	FX 3	FX 3a	
+100	FX 4		
+101	FX 5		
+102	FX 6		
+103	FX 7	FX 7a	FX 7b
+104	FX 8		
+105	Sitar	Sitar 2	
+106	Banjo		
+107	Shamisen		
+108	Koto	Taisho Koto	
+109	Kalimba					
+110	Bag Pipe					
+111	Fiddle					
+112	Shanai					
+113	Tinkle Bell					
+114	Agogo					
+115	Steel Drums					
+116	Woodblock	Castanet				
+117	Taiko	Concert BD				
+118	Melo.Tom 1	Melo.Tom 2				
+119	Synth Drum	RhyBoxTom	Elec Perc			
+120	Reverse Cym.					
+121	GtFret Noise	Gt.Cut Noise	Slap_St.Bass			
+122	Breath Noise	Fl.Key Click				
+123	Seashore	Rain	Thunder	Wind	Stream	Bubble
+124	Bird Tweet	Dog	Horse Gallop	Bird Tweet 2		
+125	Telephone	Telephone 2	Door Creak	Door	Scratch	Wind Chimes				
+126	Helicopter	Car-Engine	Car-Stop	Car-Pass	Car-Crash	Siren	Train	Jetplane	Starship	Burst Noise
+127	Applause	Laughing	Screaming	Punch	Heart Beat	Footsteps				
+128	Gunshot	Machine Gun	Lasergun	Explosion						

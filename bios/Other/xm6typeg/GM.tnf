@@ -1,0 +1,141 @@
+SSW TONEFILE Ver 2.0																																																																																																																																
+MODULENAME=GM																																																																																																																																
+BANKCONTROLCC#=0																																																																																																																																
+PAGECOUNT=1																																																																																																																																
+;																																																																																																																																
+;																																																																																																																																
+;																																																																																																																																
+;																																																																																																																																
+PAGE=0																																																																																																																																
+KIND=0																																																																																																																																
+TONECOUNT=128																																																																																																																																
+;																																																																																																																																
+ 	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	75	76	77	78	79	80	81	82	83	84	85	86	87	88	89	90	91	92	93	94	95	96	97	98	99	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+1	Grand Piano																																																																																																																															
+2	Brite Piano																																																																																																																															
+3	Electric Grand Piano																																																																																																																															
+4	Honky-tonk Piano
+5	Electric Piano 1
+6	Electric Piano 2
+7	Harpsichord
+8	Clavi
+9	Celesta
+10	Glockenspiel
+11	Music Box
+12	Vibraphone
+13	Marimba
+14	Xylophone
+15	Tubular Bells
+16	Dulcimer
+17	Drawbar Organ
+18	Percussive Organ
+19	Rock Organ
+20	Church Organ
+21	Reed Organ
+22	Accordion
+23	Harmonica
+24	Tango Accordion
+25	Nylon Guitar
+26	Steel Guitar
+27	Jazz Guitar
+28	Clean Guitar
+29	Muted Guitar
+30	Overdriven Guitar
+31	Distortion Guitar
+32	Guitar Harmonics
+33	Acoustic Bass
+34	Finger Bass
+35	Pick Bass
+36	Fretless Bass
+37	Slap Bass 1
+38	Slap Bass 2
+39	Synth Bass 1
+40	Synth Bass 2
+41	Violin
+42	Viola
+43	Cello
+44	Contrabass
+45	Tremolo Strings
+46	Pizzicato Strings
+47	Orchestral Harp
+48	Timpani
+49	Strings 1
+50	Strings 2
+51	Synth Strings 1
+52	Synth Strings 2
+53	Choir Aahs
+54	Voice Oohs
+55	Synth Voice
+56	Orchestra Hit
+57	Trumpet
+58	Trombone
+59	Tuba
+60	Muted Trampet
+61	French Horn
+62	Brass Section
+63	Synth Brass 1
+64	Synth Brass 2
+65	Soprano Sax
+66	Alto Sax
+67	Tenor Sax
+68	Baritone Sax
+69	Oboe
+70	English Horn
+71	Bassoon
+72	Clarinet
+73	Piccolo
+74	Flute
+75	Recorder
+76	Pan Flute
+77	Blown Bottle
+78	Shakuhachi
+79	Whistle
+80	Ocarina
+81	Square Lead
+82	Sawtooth Lead
+83	Calliope Lead
+84	Chiff Lead
+85	Charang Lead
+86	Voice Lead
+87	Fifths Lead
+88	Bass & Lead
+89	New Age Pad
+90	Warm Pad
+91	Poly Synth Pad
+92	Choir Pad
+93	Bowed Pad
+94	Metallic Pad
+95	Halo Pad
+96	Sweep Pad
+97	Rain
+98	SoundTrack
+99	Crystal
+100	Atmosphere
+101	Brightness
+102	Goblins
+103	Echoes
+104	Sci-Fi
+105	Sitar
+106	Banjo
+107	Shamisen
+108	Koto
+109	Kalimba
+110	Bagpipe
+111	Fiddle
+112	Shanai
+113	Tinkle Bell
+114	Agogo
+115	Steel Drums
+116	Woodblock
+117	Taiko Drum
+118	Melodic Tom
+119	Synth Drum
+120	Reverse Cymbal
+121	Fret Noise
+122	Breath Noise
+123	Seashore
+124	Bird Tweet
+125	Telephone Ring
+126	Helicopter
+127	Applause
+128	Gunshot

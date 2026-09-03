@@ -1,0 +1,138 @@
+SSW DRUMKEYFILE Ver 2.0
+MODULENAME=GM
+PAGECOUNT=1
+;
+;
+;
+PAGE=0
+DRUMKEYCOUNT=128
+;
+ 	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	75	76	77	78	79	80	81	82	83	84	85	86	87	88	89	90	91	92	93	94	95	96	97	98	99	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+000	---																																																																																																																															
+001	---																																																																																																																															
+002	---																																																																																																																															
+003	---																																																																																																																															
+004	---																																																																																																																															
+005	---																																																																																																																															
+006	---																																																																																																																															
+007	---																																																																																																																															
+008	---																																																																																																																															
+009	---																																																																																																																															
+010	---																																																																																																																															
+011	---																																																																																																																															
+012	---																																																																																																																															
+013	---																																																																																																																															
+014	---																																																																																																																															
+015	---																																																																																																																															
+016	---																																																																																																																															
+017	---																																																																																																																															
+018	---																																																																																																																															
+019	---																																																																																																																															
+020	---																																																																																																																															
+021	---																																																																																																																															
+022	---																																																																																																																															
+023	---																																																																																																																															
+024	---																																																																																																																															
+025	---																																																																																																																															
+026	---																																																																																																																															
+027	High Q																																																																																																																															
+028	Slap																																																																																																																															
+029	Scratch Push																																																																																																																															
+030	Scratch Pull																																																																																																																															
+031	Sticks																																																																																																																															
+032	Square Click																																																																																																																															
+033	Metronome Click																																																																																																																															
+034	Metronome Bell																																																																																																																															
+035	Bass Drum 2																																																																																																																															
+036	Bass Drum 1																																																																																																																															
+037	Side Stick																																																																																																																															
+038	Snare Drum 1																																																																																																																															
+039	Hand Clap																																																																																																																															
+040	Snare Drum 2																																																																																																																															
+041	Low Tom 2																																																																																																																															
+042	Closed Hi-hat																																																																																																																															
+043	Low Tom 1																																																																																																																															
+044	Pedal Hi-hat																																																																																																																															
+045	Mid Tom 2																																																																																																																															
+046	Open Hi-hat																																																																																																																															
+047	Mid Tom 1																																																																																																																															
+048	High Tom 2																																																																																																																															
+049	Crash Cymbal 1																																																																																																																															
+050	High Tom 1																																																																																																																															
+051	Ride Cymbal 1																																																																																																																															
+052	Chinese Cymbal																																																																																																																															
+053	Ride Bell																																																																																																																															
+054	Tambourine																																																																																																																															
+055	Splash Cymbal																																																																																																																															
+056	Cowbell																																																																																																																															
+057	Crash Cymbal 2																																																																																																																															
+058	Vibra-slap																																																																																																																															
+059	Ride Cymbal 2																																																																																																																															
+060	High Bongo																																																																																																																															
+061	Low Bongo																																																																																																																															
+062	Mute High Conga																																																																																																																															
+063	Open High Conga																																																																																																																															
+064	Low Conga																																																																																																																															
+065	High Timbale																																																																																																																															
+066	Low Timbale																																																																																																																															
+067	High Agogo																																																																																																																															
+068	Low Agogo																																																																																																																															
+069	Cabasa																																																																																																																															
+070	Maracas																																																																																																																															
+071	Short Whistle																																																																																																																															
+072	Long Whistle																																																																																																																															
+073	Short Guiro																																																																																																																															
+074	Long Guiro																																																																																																																															
+075	Claves																																																																																																																															
+076	High Wood Block																																																																																																																															
+077	Low Wood Block																																																																																																																															
+078	Mute Cuica																																																																																																																															
+079	Open Cuica																																																																																																																															
+080	Mute Triangle																																																																																																																															
+081	Open Triangle																																																																																																																															
+082	Shaker																																																																																																																															
+083	Jingle Bell																																																																																																																															
+084	Bell Tree																																																																																																																															
+085	Castanets																																																																																																																															
+086	Mute Surdo																																																																																																																															
+087	Open Surdo																																																																																																																															
+088	---																																																																																																																															
+089	---																																																																																																																															
+090	---																																																																																																																															
+091	---																																																																																																																															
+092	---																																																																																																																															
+093	---																																																																																																																															
+094	---																																																																																																																															
+095	---																																																																																																																															
+096	---																																																																																																																															
+097	---																																																																																																																															
+098	---																																																																																																																															
+099	---																																																																																																																															
+100	---																																																																																																																															
+101	---																																																																																																																															
+102	---																																																																																																																															
+103	---																																																																																																																															
+104	---																																																																																																																															
+105	---																																																																																																																															
+106	---																																																																																																																															
+107	---																																																																																																																															
+108	---																																																																																																																															
+109	---																																																																																																																															
+110	---																																																																																																																															
+111	---																																																																																																																															
+112	---																																																																																																																															
+113	---																																																																																																																															
+114	---																																																																																																																															
+115	---																																																																																																																															
+116	---																																																																																																																															
+117	---																																																																																																																															
+118	---																																																																																																																															
+119	---																																																																																																																															
+120	---																																																																																																																															
+121	---																																																																																																																															
+122	---																																																																																																																															
+123	---																																																																																																																															
+124	---																																																																																																																															
+125	---																																																																																																																															
+126	---																																																																																																																															
+127	---																																																																																																																															

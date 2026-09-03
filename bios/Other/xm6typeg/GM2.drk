@@ -1,0 +1,138 @@
+SSW DRUMKEYFILE Ver 2.0																																																																																																																																
+MODULENAME=GM2																																																																																																																																
+PAGECOUNT=1																																																																																																																																
+;																																																																																																																																
+;																																																																																																																																
+;																																																																																																																																
+PAGE=120																																																																																																																																
+DRUMKEYCOUNT=128																																																																																																																																
+;																																																																																																																																
+ 	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	75	76	77	78	79	80	81	82	83	84	85	86	87	88	89	90	91	92	93	94	95	96	97	98	99	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+0	---								---								---								---	---							---								---								---								---																																																																							
+1	---								---								---								---	---							---								---								---								---																																																																							
+2	---								---								---								---	---							---								---								---								---																																																																							
+3	---								---								---								---	---							---								---								---								---																																																																							
+4	---								---								---								---	---							---								---								---								---																																																																							
+5	---								---								---								---	---							---								---								---								---																																																																							
+6	---								---								---								---	---							---								---								---								---
+7	---								---								---								---	---							---								---								---								---
+8	---								---								---								---	---							---								---								---								---
+9	---								---								---								---	---							---								---								---								---
+10	---								---								---								---	---							---								---								---								---
+11	---								---								---								---	---							---								---								---								---
+12	---								---								---								---	---							---								---								---								---
+13	---								---								---								---	---							---								---								---								---
+14	---								---								---								---	---							---								---								---								---
+15	---								---								---								---	---							---								---								---								---
+16	---								---								---								---	---							---								---								---								---
+17	---								---								---								---	---							---								---								---								---
+18	---								---								---								---	---							---								---								---								---
+19	---								---								---								---	---							---								---								---								---
+20	---								---								---								---	---							---								---								---								---
+21	---								---								---								---	---							---								---								---								---
+22	---								---								---								---	---							---								---								---								---
+23	---								---								---								---	---							---								---								---								---
+24	---								---								---								---	---							---								---								---								---
+25	---								---								---								---	---							---								---								---								---
+26	---								---								---								---	---							---								---								---								---
+27	High Q								High Q								High Q								High Q	High Q							High Q								High Q								Closed Hi-hat 2								---
+28	Slap								Slap								Slap								Slap	Slap							Slap								Slap								Pedal Hi-hat								---
+29	Scratch Push								Scratch Push								Scratch Push								Scratch Push	Scratch Push							Scratch Push								Scratch Push								Open Hi-hat 2								---
+30	Scratch Pull								Scratch Pull								Scratch Pull								Scratch Pull	Scratch Pull							Scratch Pull								Scratch Pull								Ride Cymbal 1								---
+31	Sticks								Sticks								Sticks								Sticks	Sticks							Sticks								Sticks								Sticks								---
+32	Square Click								Square Click								Square Click								Square Click	Square Click							Square Click								Square Click								Square Click								---
+33	Metronome Click								Metronome Click								Metronome Click								Metronome Click	Metronome Click							Metronome Click								Metronome Click								Metronome Click								---
+34	Metronome Bell								Metronome Bell								Metronome Bell								Metronome Bell	Metronome Bell							Metronome Bell								Metronome Bell								Metronome Bell								---
+35	Acoustic Bass Drum								Acoustic Bass Drum								Acoustic Bass Drum								Acoustic Bass Drum	Acoustic Bass Drum							Jazz Kick 2								Jazz Kick 2								Concert BD 2								---
+36	Bass Drum 1								Bass Drum 1								Power Kick Drum								Electric Bass Drum	Ana.Bs Dr							Jazz Kick 1								Jazz Kick 1								Concert BD 1								---
+37	Side Stick								Side Stick								Side Stick								Side Stick	Ana.Rim Shot							Side Stick								Side Stick								Side Stick								---
+38	Acoustic Snare								Acoustic Snare								Power Snare Drum								Electric Snare 1	Ana.Snare 1							Acoustic Snare								Brush Tap								Concert SD  								---
+39	Hand Clap								Hand Clap								Hand Clap								Hand Clap	Hand Clap							Hand Clap								Brush Slap								Castanets   								High Q      
+40	Electric Snare								Electric Snare								Electric Snare								Electric Snare 2	Electric Snare							Electric Snare								Brush Swirl								Concert SD  								Slap        
+41	Low Floor Tom								Room Low Tom 2								Power Low Tom 2								Electric Low Tom 2	Ana.Low Tom2							Low Floor Tom								Low Floor Tom								Timpani F   								Scratch Push
+42	Closed Hi-hat								Closed Hi-hat								Closed Hi-hat								Closed Hi-hat	Ana.CHH 1							Closed Hi-hat								Closed Hi-hat								Timpani F#  								Scratch Pull
+43	High Floor Tom								Room Low Tom 1								Power Low Tom 1								Electric Low Tom 1	Ana.Low Tom1							High Floor Tom								High Floor Tom								Timpani G   								Sticks      
+44	Pedal Hi-hat								Pedal Hi-hat								Pedal Hi-hat								Pedal Hi-hat	Ana.CHH 2							Pedal Hi-hat								Pedal Hi-hat								Timpani G#  								Square Click
+45	Low Tom								Room Mid Tom 2								Power Mid Tom 2								Electric Mid Tom 2	Ana.Mid Tom2							Low Tom								Low Tom								Timpani A   								Metron Click
+46	Open Hi-hat								Open Hi-hat								Open Hi-hat								Open Hi-hat	Ana.OHH							Open Hi-hat								Open Hi-hat								Timpani A#  								Metron Bell 
+47	Low Mid Tom								Room Mid Tom 1								Power Mid Tom 1								Electric Mid Tom 1	Ana.Mid Tom1							Low Mid Tom								Low Mid Tom								Timpani B   								GtFret Noise
+48	High Mid Tom								Room High Tom 2								Power High Tom 2								Electric High Tom 2	Ana.Hi Tom2 							High Mid Tom								High Mid Tom								Timpani c   								Cut Noise Up
+49	Crash Cymbal 1								Crash Cymbal 1								Crash Cymbal 1								Crash Cymbal 1	Ana.Cymbal  							Crash Cymbal 1								Crash Cymbal 1								Timpani c#  								Cut Noise Dw
+50	High Tom								Room High Tom 1								Power High Tom 1								Electric High Tom 1	Ana.Hi Tom1 							High Tom								High Tom								Timpani d   								Slap_St.Bass
+51	Ride Cymbal 1								Ride Cymbal 1								Ride Cymbal 1								Ride Cymbal 1	Ride Cymbal 1							Ride Cymbal 1								Ride Cymbal 1								Timpani d#  								Fl.Key Click
+52	Chinese Cymbal								Chinese Cymbal								Chinese Cymbal								Reverse Cymbal	Chinese Cymbal							Chinese Cymbal								Chinese Cymbal								Timpani e   								Laughing    
+53	Ride Bell								Ride Bell								Ride Bell								Ride Bell	Ride Bell							Ride Bell								Ride Bell								Timpani f   								Scream      
+54	Tambourine								Tambourine								Tambourine								Tambourine	Tambourine							Tambourine								Tambourine								Tambourine								Punch       
+55	Splash Cymbal								Splash Cymbal								Splash Cymbal								Splash Cymbal	Splash Cymbal							Splash Cymbal								Splash Cymbal								Splash Cymbal								Heart Beat  
+56	Cowbell								Cowbell								Cowbell								Cowbell	Ana.Cowbell 							Cowbell								Cowbell								Cowbell								Footsteps 1 
+57	Crash Cymbal 2								Crash Cymbal 2								Crash Cymbal 2								Crash Cymbal 2	Crash Cymbal 2							Crash Cymbal 2								Crash Cymbal 2								Concert Cym2								Footsteps 2 
+58	Vibra-slap								Vibra-slap								Vibra-slap								Vibra-slap	Vibra-slap							Vibra-slap								Vibra-slap								Vibra-slap								Applause    
+59	Ride Cymbal 2								Ride Cymbal 2								Ride Cymbal 2								Ride Cymbal 2	Ride Cymbal 2							Ride Cymbal 2								Ride Cymbal 2								Concert Cym1								Door Creak  
+60	High Bongo								High Bongo								High Bongo								High Bongo	High Bongo							High Bongo								High Bongo								High Bongo								Door        
+61	Low Bongo								Low Bongo								Low Bongo								Low Bongo	Low Bongo							Low Bongo								Low Bongo								Low Bongo								Scratch     
+62	Mute High Conga								Mute High Conga								Mute High Conga								Mute High Conga	Ana.Hi Conga							Mute High Conga								Mute High Conga								Mute High Conga								Wind Chimes 
+63	Open High Conga								Open High Conga								Open High Conga								Open High Conga	Ana.MidConga							Open High Conga								Open High Conga								Open High Conga								Car-Engine  
+64	Low Conga								Low Conga								Low Conga								Low Conga	Ana.LowConga							Low Conga								Low Conga								Low Conga								Car-Stop    
+65	High Timbale								High Timbale								High Timbale								High Timbale	High Timbale							High Timbale								High Timbale								High Timbale								Car-Pass    
+66	Low Timbale								Low Timbale								Low Timbale								Low Timbale	Low Timbale							Low Timbale								Low Timbale								Low Timbale								Car-Crash   
+67	High Agogo								High Agogo								High Agogo								High Agogo	High Agogo							High Agogo								High Agogo								High Agogo								Siren       
+68	Low Agogo								Low Agogo								Low Agogo								Low Agogo	Low Agogo							Low Agogo								Low Agogo								Low Agogo								Train       
+69	Cabasa								Cabasa								Cabasa								Cabasa	Cabasa							Cabasa								Cabasa								Cabasa								Jetplane    
+70	Maracas								Maracas								Maracas								Maracas	Ana.Maracas 							Maracas								Maracas								Maracas								Helicopter  
+71	Short Whistle								Short Whistle								Short Whistle								Short Whistle	Short Whistle							Short Whistle								Short Whistle								Short Whistle								Starship    
+72	Long Whistle								Long Whistle								Long Whistle								Long Whistle	Long Whistle							Long Whistle								Long Whistle								Long Whistle								Gun Shot    
+73	Short Guiro								Short Guiro								Short Guiro								Short Guiro	Short Guiro							Short Guiro								Short Guiro								Short Guiro								Machine Gun 
+74	Long Guiro								Long Guiro								Long Guiro								Long Guiro	Long Guiro							Long Guiro								Long Guiro								Long Guiro								Lasergun    
+75	Claves								Claves								Claves								Claves	Ana.Claves  							Claves								Claves								Claves								Explosion   
+76	High Wood Block								High Wood Block								High Wood Block								High Wood Block	High Wood Block							High Wood Block								High Wood Block								High Wood Block								Dog         
+77	Low Wood Block								Low Wood Block								Low Wood Block								Low Wood Block	Low Wood Block							Low Wood Block								Low Wood Block								Low Wood Block								Horse-Gallop
+78	Mute Cuica								Mute Cuica								Mute Cuica								Mute Cuica	Mute Cuica							Mute Cuica								Mute Cuica								Mute Cuica								Birds       
+79	Open Cuica								Open Cuica								Open Cuica								Open Cuica	Open Cuica							Open Cuica								Open Cuica								Open Cuica								Rain        
+80	Mute Triangle								Mute Triangle								Mute Triangle								Mute Triangle	Mute Triangle							Mute Triangle								Mute Triangle								Mute Triangle								Thunder     
+81	Open Triangle								Open Triangle								Open Triangle								Open Triangle	Open Triangle							Open Triangle								Open Triangle								Open Triangle								Wind        
+82	Shaker								Shaker								Shaker								Shaker	Shaker							Shaker								Shaker								Shaker								Seashore    
+83	Jingle Bell								Jingle Bell								Jingle Bell								Jingle Bell	Jingle Bell							Jingle Bell								Jingle Bell								Jingle Bell								Stream      
+84	Bell Tree								Bell Tree								Bell Tree								Bell Tree	Bell Tree							Bell Tree								Bell Tree								Bell Tree								Bubble      
+85	Castanets								Castanets								Castanets								Castanets	Castanets							Castanets								Castanets								Castanets								---
+86	Mute Surdo								Mute Surdo								Mute Surdo								Mute Surdo	Mute Surdo							Mute Surdo								Mute Surdo								Mute Surdo								---
+87	Open Surdo								Open Surdo								Open Surdo								Open Surdo	Open Surdo							Open Surdo								Open Surdo								Open Surdo								---
+88	---								---								---								---	---							---								---								Applause								---
+89	---								---								---								---	---							---								---								---								---
+90	---								---								---								---	---							---								---								---								---
+91	---								---								---								---	---							---								---								---								---
+92	---								---								---								---	---							---								---								---								---
+93	---								---								---								---	---							---								---								---								---
+94	---								---								---								---	---							---								---								---								---
+95	---								---								---								---	---							---								---								---								---
+96	---								---								---								---	---							---								---								---								---
+97	---								---								---								---	---							---								---								---								---
+98	---								---								---								---	---							---								---								---								---
+99	---								---								---								---	---							---								---								---								---
+100	---								---								---								---	---							---								---								---								---
+101	---								---								---								---	---							---								---								---								---
+102	---								---								---								---	---							---								---								---								---
+103	---								---								---								---	---							---								---								---								---
+104	---								---								---								---	---							---								---								---								---
+105	---								---								---								---	---							---								---								---								---
+106	---								---								---								---	---							---								---								---								---
+107	---								---								---								---	---							---								---								---								---
+108	---								---								---								---	---							---								---								---								---
+109	---								---								---								---	---							---								---								---								---
+110	---								---								---								---	---							---								---								---								---
+111	---								---								---								---	---							---								---								---								---
+112	---								---								---								---	---							---								---								---								---
+113	---								---								---								---	---							---								---								---								---
+114	---								---								---								---	---							---								---								---								---
+115	---								---								---								---	---							---								---								---								---
+116	---								---								---								---	---							---								---								---								---
+117	---								---								---								---	---							---								---								---								---
+118	---								---								---								---	---							---								---								---								---
+119	---								---								---								---	---							---								---								---								---
+120	---								---								---								---	---							---								---								---								---
+121	---								---								---								---	---							---								---								---								---
+122	---								---								---								---	---							---								---								---								---
+123	---								---								---								---	---							---								---								---								---
+124	---								---								---								---	---							---								---								---								---
+125	---								---								---								---	---							---								---								---								---
+126	---								---								---								---	---							---								---								---								---
+127	---								---								---								---	---							---								---								---								---

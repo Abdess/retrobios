@@ -1,0 +1,679 @@
+SSW TONEFILE Ver 2.0
+MODULENAME=SC-8820
+BANKCONTROLCC#=0
+PAGECOUNT=5
+;
+;
+;
+PAGE=4	8820Map
+KIND=0
+TONECOUNT=128
+ 	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	75	76	77	78	79	80	81	82	83	84	85	86	87	88	89	90	91	92	93	94	95	96	97	98	99	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+1	Piano 1	UprightPiano	Mild Piano  						Upright P w 	Mild Piano w							European Pf 								Piano + Str.	Piano + Str2	Piano+Choir1	Piano+Choir2																																																																																																				
+2	Piano 2	Pop Piano   	Rock Piano  						Pop Piano w 	Rock Piano w							Dance Piano 																																																																																																															
+3	Piano 3	EG+EP 1	EG+EP 2						Piano 3w																																																																																																																							
+4	Honky-tonk  								Honky-tonk 2																																																																																																																							
+5	E.Piano 1   								St.Soft EP	Cho E.Piano	SilentEP						FM+SA EP	Dist E.Piano							Wurly       	Hard EP	MellowEP																																																																																																					
+6	E.Piano 2	E.Piano 3   							Detuned EP 2	Detuned EP 3	EP Legend   						St.FM EP								Hard FM EP								EP Phase    																																																																																															
+7	Harpsichord	Harpsichord2	Harpsichord3						Coupled Hps.								Harpsi.w								Harpsi.o								Synth Harpsi																																																																																															
+8	Clav.	Clav. 2     	Atk Clav.1  	Atk Clav.2  					Comp Clav.								Reso Clav.	Phase Clav  							Clav.o								Analog Clav.	JP8 Clav. 1		JP8 Clav. 2	SynRingClav.	SynDistClav.	JP8000 Clav.	Pulse Clav  																																																																																								
+9	Celesta	Pop Celesta																																																																																																																														
+10	Glockenspiel																																																																																																																															
+11	Music Box	Music Box 2 							St.Music Box																																																																																																																							
+12	Vibraphone	Pop Vibe.							Vibraphone w	Vibraphones																																																																																																																						
+13	Marimba								Marimba w								Barafon	Barafon 2							Log drum																																																																																																							
+14	Xylophone								Xylophone w 																																																																																																																							
+15	Tubular-bell								Church Bell	Carillon	Church Bell2						Tubularbellw																																																																																																															
+16	Santur	Santur 2 	Santur 3    						Cimbalom								Zither 1	Zither 2							Dulcimer																																																																																																							
+17	Organ 1	Organ 101	Ful Organ 1 	Ful Organ 2 	Ful Organ 3 	Ful Organ 4 	Ful Organ 5 	Ful Organ 6	Trem. Organ	Organ o	Ful Organ 7 	Ful Organ 8 	Ful Organ 9 				60's Organ 1	60's Organ 2	60's Organ 3	Farf Organ					Cheese Organ	D-50 Organ	JUNO Organ	Hybrid Organ 	VS Organ	Digi Church	JX8 Organ   	FM Organ    	70's E.Organ	Even Bar							Organ Bass								5th Organ																																																																															
+18	Organ 2	Jazz Organ	E.Organ 16+2	Jazz Organ 2	Jazz Organ 3	Jazz Organ 4	Jazz Organ 5	Jazz Organ 6	Chorus Or.2	Octave Organ																							Perc Organ	Perc.Organ 2	Perc.Organ 3	Perc.Organ 4																																																																																												
+19	Organ 3								Rotary Org.								Rotary Org.S	Rock Organ 1	Rock Organ 2						Rotary Org.F																																																																																																							
+20	Church Org.1								Church Org.2								Church Org.3								Organ Flute								Trem.Flute	Theater Org.																																																																																														
+21	Reed Organ								Wind Organ								Puff Organ  																																																																																																															
+22	Accordion Fr								Accordion It	Dist. Accord							Cho. Accord								Hard Accord	Soft Accord																																																																																																						
+23	Harmonica	Harmonica 2							B.Harp Basic	B.Harp Suppl																																																																																																																						
+24	Bandoneon								Bandoneon 2								Bandoneon 3																																																																																																															
+25	Nylon-str.Gt								Ukulele								Nylon Gtr.o								Velo Harmnix								Nylon Gt.2								Lequint Gt.																																																																																							
+26	Steel-str.Gt								12-str.Gt	Nylon+Steel	Atk Steel Gt						Mandolin	Mandolin 2	MandolinTrem														Steel Gt.2	Steel + Body																																																																																														
+27	Jazz Gt.	Mellow Gt.							Pedal Steel																																																																																																																							
+28	Clean Gt.	Clean Half	Open Hard 1	Open Hard 2	JC Clean Gt.	Atk CleanGt.			Chorus Gt.	JC Chorus Gt							TC FrontPick	TC Rear Pick	TC Clean ff	TC Clearn 2 :	LP Rear Pick	LP Rear 2   	LP RearAtack	Mid Tone GTR	Chung Ruan  	Chung Ruan 2																																																																																																						
+29	Muted Gt.	Muted Dis.Gt	TC Muted Gt.						Funk Pop								Funk Gt.2								Jazz Man    																																																																																																							
+30	OverdriveGt	Overdrive 2	Overdrive 3	More Drive	Guitar Pinch	Attack Drive			LP OverDrvGt	LP OverDrv :	LP Half Drv 	LP Half Drv2	LP Chorus   																																																																																																																			
+31	DistortionGt	Dist. Gt2 :	Dazed Guitar	Distortion :	Dist.Fast :	Attack Dist 			Feedback Gt.	Feedback Gt2							Power Guitar	Power Gt.2	5th Dist.						Rock Rhythm	Rock Rhythm2	Dist Rtm GTR																																																																																																					
+32	Gt.Harmonics								Gt. Feedback	Gt. Feedback2							Ac.Gt.Harmnx								E.Bass Harm.																																																																																																							
+33	AcousticBs.	Rockabilly							Wild A.Bass	Atk A.Bass  							Bass + OHH																																																																																																															
+34	FingeredBs.	Fingered Bs2	Jazz Bass	Jazz Bass 2	Rock Bass	Heart Bass  	AttackFinger	Finger Slap 	ChorusJazzBs								F.Bass/Harm.																																																																																																															
+35	Picked Bass	Picked Bass2	Picked Bass3	Picked Bass4	Double Pick 				Muted PickBs								P.Bass/Harm.																																																																																																															
+36	Fretless Bs.	Fretless Bs2	Fretless Bs3	Fretless Bs4	Syn Fretless	Mr.Smooth			Wood+FlessBs																																																																																																																							
+37	Slap Bass 1	Slap Pop							Reso Slap	Unison Slap																																																																																																																						
+38	Slap Bass 2	Slap Bass 3 							FM Slap																																																																																																																							
+39	Synth Bass 1	SynthBass101	CS Bass	JP-4 Bass	JP-8 Bass	P5 Bass	JPMG Bass		Acid Bass	TB303 Bass	Tekno Bass	TB303 Bass 2	Kicked TB303	TB303 Saw Bs	Rubber303 Bs	Reso. 303 Bs	Reso SH Bass	TB303 Sqr Bs	TB303 DistBs	Clavi Bass  	Hammer      	Jungle Bass 	Square Bass 	Square Bass2	Arpeggio Bs								Hit&Saw Bass	Ring Bass   	AtkSineBass 	OB sine Bass	Auxiliary Bs				303SqDistBs 	303SqDistBs2	303SqDistBs3	303Sqr.Rev  	TeeBee      																																																																																			
+40	Synth Bass 2	SynthBass201	Modular Bass	Seq Bass	MG Bass	Mg Oct Bs	MG Oct Bass2	MG Blip Bs :	Beef FM Bass	Dly Bass	X Wire Bass	WireStr Bass	Blip Bass :	RubberBass 1	Syn Bell Bs 	Odd Bass    	RubberBass 2	SH101 Bass 1	SH101 Bass 2	Smooth Bass	SH101 Bass 3	Spike Bass	House Bass :	KG Bass	Sync Bass	MG 5th Bass	RND Bass	WowMG Bass	Bubble Bass	Attack Pulse	Sync Bass 2 	Pulse Mix Bs	MG Dist Bass	Seq Bass 2  	3rd Bass    	MG Oct Bass 	SlowEnvBass 	Mild Bass   	DistEnvBass 	MG LightBass	DistSynBass 	Rise Bass   	Cyber Bass  																																																																																					
+41	Violin :	Vaiolin Atk. :							Slow Violin :																																																																																																																							
+42	Viola :	Viola Atk. :																																																																																																																														
+43	Cello :	Cello Atk. :																																																																																																																														
+44	Contrabass																																																																																																																															
+45	Tremolo Str		Trem Str.St.						Slow Tremolo	Suspense Str	SuspenseStr2																																																																																																																					
+46	PizzicatoStr	Vcs&Cbs Pizz	Chamber Pizz	St.Pizzicato					Solo Pizz.								Solo Spic.	StringsSpic.																																																																																																														
+47	Harp	Harp&Strings	Harp St.    						Uillean Harp								Synth Harp								Yang Qin    	Yang Qin 2  	SynthYangQin																																																																																																					
+48	Timpani																																																																																																																															
+49	Strings :	Bright Str :	ChamberStr :  	Cello sect.	Bright Str.2	Bright Str.3	Quad Strings	Mild Strings	Orchestra	Orchestra 2	Tremolo Orch	Choir Str.	Strings+Horn	Str.+Flute  	Choir Str.2	Choir Str.3 	St. Strings	St.Strings 2	St.Strings 3	Orchestra 3 	Orchestra 4 				Velo Strings								Oct Strings1	Oct Strings2	ContraBsSect						60s Strings 																																																																																							
+50	SlowStrings	SlowStrings2	SlowStrings3						Legato Str.	Warm Strings	St.Slow Str.	St.Slow Str2	S.Str+Choir 	S.Str+Choir2																																																																																																																		
+51	Syn.Strings1	OB Strings	StackStrings	JP Strings	Chorus Str. 				Syn.Strings3	Syn.Strings4	Syn.Strings6	Syn.Strings7	LoFi Strings				High Strings	Hybrid Str.							Tron Strings	Noiz Strings																																																																																																						
+52	Syn.Strings2	Syn.Strings5	JUNO Strings	FilteredOrch	JP Saw Str. 	Hybrid Str.2	DistStrings 	JUNOFullStr.	Air Strings	Atk Syn Str.	StraightStr.																																																																																																																					
+53	Choir Aahs								St.ChoirAahs	Melted Choir	Church Choir	Boys Choir 1	Boys Choir 2	St.BoysChoir	Rich Choir  		Choir Hahs								Chorus Lahs								Chorus Aahs	Male Aah+Str																																																																																														
+54	Voice Oohs	Chorus Oohs 	Voice Oohs 2	Chorus Oohs2	OohsCodeMaj7	OohsCodeSus4	Jazz Scat   		Voice Dah	JzVoice Dat 	JzVoice Bop 	JzVoice Dow	JzVoice Thum				VoiceLah Fem	ChorusLahFem	VoiceLuh Fem	ChorusLuhFem	VoiceLan Fem	ChorusLanFem	VoiceAah Fem	VoiceUuh Fem	Fem Lah&Lan 								VoiceWah Mal	ChorusWahMal	VoiceWoh Mal	ChorusWohMal	VoiceAah Mal	VoiceOoh Mal			Humming     																																																																																							
+55	SynVox	SynVox 2    	SynVox 3    						Syn.Voice	Silent Night	Syn.Voice 2 						VP330 Choir	Vinyl Choir	JX8P Vox    	Analog Voice																																																																																																												
+56	OrchestraHit	Bass Hit    	6th Hit     	Euro Hit    					Impact Hit	Philly Hit	Double Hit	Perc.  Hit	Shock Wave	Bounce Hit  	Drill Hit   	Thrill Hit  	Lo Fi Rave	Techno Hit	Dist Hit	Bam Hit	Bit Hit	Bim Hit	Technorg Hit	Rave Hit	Strings Hit	Stack Hit	Industry Hit	Clap Hit    																																																																																																				
+57	Trumpet	Trumpet 2	Trumpet :	Dark Trumpet	Trumpet & Nz				Flugel Horn								4th Trumpets								Bright Tp.	Warm Tp.	Warm Tp.2   	Twin Tp.    					Syn. Trumpet																																																																																															
+58	Trombone	Trombone 2	Twin bones	Bones & Tuba	Bright Tb   				Bs. Trombone								Euphonium   																																																																																																															
+59	Tuba	Tuba 2							Tuba + Horn 																																																																																																																							
+60	MutedTrumpet	Cup Mute Tp 	MuteTrumpet2	MuteTrumpet3					Muted Horns																																																																																																																							
+61	French Horns	Fr.Horn 2	Horn + Orche	Wide FreHrns					F.Hrn Slow :	Dual Horns							Synth Horn								F.Horn Rip																																																																																																							
+62	Brass 1	Brass ff	Bones Sect.	St. Brass ff	Quad Brass1 	Quad Brass2 			Brass 2	Brass 3	Brass sfz		Brass sfz 2 		FatPop Brass		Brass Fall	Trumpet Fall							Octave Brass	Brass + Reed	Fat + Reed  						Orch Brass  	Orch Brass 2		St.FatPopBrs	St.Orch Brs 	St.Orch Brs2	St.Orch Brs3																																																																																									
+63	SynthBrass1	JUNO Brass	Stack Brass	SH-5 Brass	MKS Brass	Jump Brass  			Pro Brass	P5 Brass	OrchSynBrass						Oct SynBrass	Hybrid Brass	OctSynBrass2	BPF Brass   																																																																																																												
+64	Synth Brass2	Soft Brass	Warm Brass	Synth Brass3	Sync Brass  	Fat SynBrass	DeepSynBrass		SynBrass sfz	OB Brass	Reso Brass	DistSqrBrass	JP8000SawBrs				Velo Brass 1	Transbrass																																																																																																														
+65	Soprano Sax								Soprano  Exp.																																																																																																																							
+66	Alto Sax								AltoSax  Exp.	Grow Sax							AltoSax + Tp	Sax Section 																																																																																																														
+67	Tenor Sax	Tenor Sax :							BreathyTn. :	St.Tenor Sax																																																																																																																						
+68	Baritone Sax	Bari. Sax :							Bari & Tenor																																																																																																																							
+69	Oboe								Oboe Exp.								Multi Reed																																																																																																															
+70	English Horn																																																																																																																															
+71	Bassoon																																																																																																																															
+72	Clarinet								Bs Clarinet								Multi Wind  	Quad Wind   																																																																																																														
+73	Piccolo	Piccolo :							Nay	Nay Tremoro							Di																																																																																																															
+74	Flute	Flute 2 :	Flute Exp.	Flt Travelso					Flute + Vln	Pipe & Reed							Tron Flute	Indian Flute																																																																																																														
+75	Recorder																																																																																																																															
+76	Pan Flute								Kawala								Zampona	Zampona Atk							Tin Whistle	TinWhistle Nm	TinWhistle Or																																																																																																					
+77	Bottle Blow																																																																																																																															
+78	Shakuhachi	Shakuhachi :																																																																																																																														
+79	Whistle	Whistle 2																																																																																																																														
+80	Ocarina																																																																																																																															
+81	Square Wave	MG Square	Hollow Mini	Mellow FM	CC Solo	Shmoog	LM Square	JP8000 TWM  	2600 Sine	Sine Lead	KG Lead	Twin Sine   					P5 Square	OB Square	JP-8 Square	Dist Square 	303SquarDst1	303SquarDst2	303 Mix Sqr 	Dual Sqr&Saw	Pluse Lead	JP8 PulseLd1	JP8 PulseLd2	MG Reso. Pls	JP8 PulseLd3	260RingLead 	303DistLead 	JP8000DistLd	HipHop SinLd	HipHop SqrLd	HipHop PlsLd	Flux Pulse  																																																																																												
+82	Saw Wave	OB2 Saw	Pulse Saw	Feline GR	Big Lead	Velo Lead	GR-300	LA Saw	Doctor Solo	Fat Saw Lead	JP8000 Saw  	D-50 Fat Saw	OB DoubleSaw	JP DoubleSaw	FatSawLead 2	JP SuperSaw 	Waspy Synth	PM Lead	CS Saw Lead						MG Saw 1	MG Saw 2	OB Saw 1	OB Saw 2	D-50 Saw	SH-101 Saw	CS Saw	MG Saw Lead	OB Saw Lead	P5 Saw Lead	MG unison	Oct Saw Lead	Natural Lead				SequenceSaw1	SequenceSaw2	Reso Saw	Cheese Saw 1	Cheese Saw 2	Rhythmic Saw	SequencedSaw	Techno Saw  																																																																																
+83	Syn.Calliope	Vent Synth	Pure PanLead						LM Pure Lead	LM Blow Lead																																																																																																																						
+84	Chiffer Lead	TB Lead	Hybrid Lead 	Unison SqrLd	FatSolo Lead	ForcefulLead	Oct.UnisonLd	Unison SawLd	Mad Lead	CrowdingLead	Double Sqr. 																																																																																																																					
+85	Charang	Wire Lead   	FB.Charang  	Fat GR Lead	Windy GR Ld	Mellow GR Ld	GR & Pulse		Dist.Lead	Acid Guitar1	Acid Guitar2	Dance Dst.Gt	DanceDst.Gt2				P5 Sync Lead	Fat SyncLead	Rock Lead	5th DecaSync	Dirty Sync	DualSyncLead	LA Brass Ld 		JUNO Sub Osc	2600 Sub Osc	JP8000Fd Osc																																																																																																					
+86	Solo Vox	Solo Vox 2  							Vox Lead	LFO Vox	Vox Lead 2  																																																																																																																					
+87	5th Saw Wave	Big Fives	5th Lead	5th Ana.Clav	5th Pulse   	JP 5th Saw  	JP8000 5thFB		4th Lead																																																																																																																							
+88	Bass & Lead	Big & Raw	Fat & Perky	JUNO Rave	JP8 BsLead 1	JP8 BsLead 2	SH-5 Bs.Lead	Delayed Lead																																																																																																																								
+89	Fantasia	Fantasia 2	New Age Pad	Bell Heaven	Fantasia 3  	Fantasia 4  	After D !   	260HarmPad  																																																																																																																								
+90	Warm Pad	Thick Matrix	Horn Pad	Rotary Strng	OB Soft Pad	Sine Pad    	OB Soft Pad2		Octave Pad	Stack Pad	Human Pad   	Sync Brs.Pad	Oct.PWM Pad 	JP Soft Pad 																																																																																																																		
+91	Polysynth	80's PolySyn	Polysynth 2	Poly King	Super Poly  				Power Stack	Octave Stack	Reso Stack	Techno Stack	Pulse Stack 	TwinOct.Rave	Oct.Rave    	Happy Synth 	ForwardSweep	ReverseSweep							Minor Rave  																																																																																																							
+92	Space Voice	Heaven II	SC Heaven	Itopia      	Water Space 	Cold Space  	Noise Peaker	Bamboo Hit  	Cosmic Voice	Auh Vox	AuhAuh	Vocorderman	Holy Voices 																																																																																																																			
+93	Bowed Glass	SoftBellPad	JP8 Sqr Pad	7thBelPad	Steel Glass 	Bottle Stack																																																																																																																										
+94	Metal Pad	Tine Pad	Panner Pad	Steel Pad   	Special Rave	Metal Pad 2 																																																																																																																										
+95	Halo Pad	Vox Pad	Vox Sweep						Horror Pad	SynVox Pad  	SynVox Pad 2	Breath&Rise 	Tears Voices																																																																																																																			
+96	Sweep Pad	Polar Pad	Ambient BPF 	Sync Pad    	Warriors    				Converge	Shwimmer	Celestial Pd	Bag Sweep	Sweep Pipe  	Sweep Stack 	Deep Sweep  	Stray Pad   																																																																																																																
+97	Ice Rain	Harmo Rain	African wood	Anklung Pad	Rattle Pad	Saw Impulse 	Strange Str.	FastFWD Pad 	Clavi Pad	EP Pad      	Tambra Pad  	CP Pad      																																																																																																																				
+98	Soundtrack	Ancestral	Prologue	Prologue 2	Hols Strings	HistoryWave 			Rave																																																																																																																							
+99	Crystal	Syn Mallet	Soft Crystal	Round Glock	Loud Glock	GlockenChime	Clear Bells	ChristmasBel	Vibra Bells	Digi Bells	Music Bell	Analog Bell	Blow Bell   	Hyper Bell  			Choral Bells	Air Bells	Bell Harp	Gamelimba	JUNO Bell	JP Bell     	Pizz Bell   	Bottom Bell 																																																																																																								
+100	Atmosphere	Warm Atmos	Nylon Harp	Harpvox	HollowReleas	Nylon+EP	Ambient Pad	Invisible	Pulsey Key	Noise Piano	Heaven Atmos	Tambra Atmos																																																																																																																				
+101	Brightness	Shining Star	OB Stab	Brass Star  	Choir Stab  	D-50 Retour 	SouthernWind	SymbolicBell	Org Bell																																																																																																																							
+102	Goblin	Goblinson	50's Sci-Fi	Abduction	Auhbient	LFO Pad	Random Str	Random Pad	LowBirds Pad	Falling Down	LFO RAVE	LFO Horror	LFO Techno	Alternative	UFO FX	Gargle Man	Sweep FX	LM Has Come 	FallinInsect	LFO Oct.Rave	Just Before 	RND Fl.Chord	RandomEnding	Random Sine 	EatingFilter	Noise&SawHit	Pour Magic  	DancingDrill	Dirty Stack 	Big Blue    	Static Hit	Atl.Mod.FX	Acid Copter																																																																																															
+103	Echo Drops	Echo Bell	Echo Pan	Echo Pan 2	Big Panner	Reso Panner	Water Piano	Echo SynBass	Pan Sequence	Aqua	Panning Lead	PanningBrass																																																																																																																				
+104	Star Theme	Star Theme 2	Star Mind   	Star Dust   	Rep.Trance  	Etherality  	Mystic Pad  		Dream Pad	Silky Pad	Dream Pad 2 	Silky Pad 2 					New Century	7th Atmos.	Galaxy Way	Rising OSC. 																																																																																																												
+105	Sitar	Sitar 2	Detune Sitar	Sitar 3	Sitar/Drone 	Sitar 4     			Tambra								Tamboura																																																																																																															
+106	Banjo	Muted Banjo							Rabab	San Xian							Gopichant								Oud				Oud+Strings				Pi Pa																																																																																															
+107	Shamisen	Tsugaru							Syn Shamisen																																																																																																																							
+108	Koto	Gu Zheng							Taisho Koto								Kanoon			Kanoon+Choir					Oct Harp																																																																																																							
+109	Kalimba								Sanza	Bodhran     	Bodhran Mute																																																																																																																					
+110	Bagpipe								Didgeridoo	Uillean Pipe	UillnPipe Nm	UillnPipe Or																																																																																																																				
+111	Fiddle								Er Hu	Gao Hu																																																																																																																						
+112	Shanai	Shanai 2							Pungi								Hichiriki								Mizmar								Suona 1	Suona 2																																																																																														
+113	Tinkle Bell								Bonang	Gender	Gamelan Gong	St.Gamelan	Jang-Gu	Jegogan     	Jublag      	Pemade      	RAMA Cymbal	Kajar       	Kelontuk    	Kelontuk Mt 	Kelontuk Sid	Kopyak Op   	Kopyak Mt   	Ceng Ceng   	Reyoung     	Kempur      							Jngl Crash  								Crash Menu  	RideCym Menu	RideBellMenu																																																																																					
+114	Agogo								Atarigane								Tambourine																																																																																																															
+115	Steel Drums	Island Mlt																																																																																																																														
+116	Woodblock								Castanets								Angklung	Angkl Rhythm							Finger Snaps								909 HandClap								HandClapMenu																																																																																							
+117	Taiko	Small Taiko							Concert BD	ConcertBD Mt							Jungle BD	Techno BD	Bounce						KendangWadon	Bebarongan  	Pelegongan  	Dholak 1    	Dholak 2    				Jngl BD Roll								Kick Menu 1 	Kick Menu 2 	Kick Menu 3 	Kick Menu 4 																																																																																				
+118	Melo. Tom 1	Real Tom	Real Tom 2  	Jazz Tom    	Brush Tom   				Melo. Tom 2	Rock Tom							Rash SD	House SD	Jungle SD	909 SD					Jngl SD Roll																SD Menu 1   	SD Menu 2   	SD Menu 3   	SD Menu 4   	SD Menu 5   																																																																																			
+119	Synth Drum								808 Tom	Elec Perc	Sine Prc	606 Tom	909 Tom	606 Dist. Tom     																																																																																																																		
+120	Reverse Cym.	Reverse Cym2	Reverse Cym3	Reverse Cym4					Rev.Snare 1	Rev.Snare 2							Rev.Kick 1	Rev.ConBD							Rev.Tom 1	Rev.Tom 2	Rev.Tom 3   	Rev.Tom 4   													Rev.SD Menu1	Rev.SD Menu2	Rev.SD Menu3	Rev.BD Menu1	Rev.BD Menu2	Rev.BD Menu3	Rev.ClapMenu																																																																																	
+121	Gt.FretNoise	Gt.Cut Noise	String Slap	Gt.CutNoise2	Dist.CutNoiz	Bass Slide	Pick Scrape		Gtr. FX Menu	Bartok Pizz.	Guitar Slap	Chord Stroke	Biwa Stroke	Biwa Tremolo			A.Bs.Nz Menu	D.Gt.Nz Menu	E.Gt.NzMenu1	E.Gt.NzMenu2	G.StrokeMenu	Gt.SlideMenu	A.Bs.Mute Nz	A.Bs.TouchNz	A.Bs.AtackNz	TC Up Nz    	TC DownMt.Nz	TC UpMt.Nz  	TC Dowm Nz  	DstGT.Up Nz 	DstGT.DwnNz1	DstGT.DwnNz2	DstGT.MuteNz		Gt.StrokeNz5	StlGt.SldNz1	StlGt.SldNz2	StlGt.SldNz3	StlGt.SldNz4	Gt.StrokeNz1	Gt.StrokeNz2	Gt.StrokeNz3	Gt.StrokeNz4																																																																																					
+122	Breath Noise	Fl.Key Click	Brth Nz Menu	Fl.Breath 1 	Fl.Breath 2 	Fl.Breath 3 	Vox Breath 1	Vox Breath 2	Trombone Nz 	Trumpet Nz  																																																																																																																						
+123	Seashore	Rain	Thunder	Wind	Stream	Bubble	Wind 2	Cricket     									Pink Noise	White Noise																																																																																																														
+124	Bird	Dog	Horse-Gallop	Bird 2	Kitty	Growl	Growl 2     	Fancy Animal	Seal        																																																																																																																							
+125	Telephone 1	Telephone 2	DoorCreaking	Door	Scratch	Wind Chimes		Scratch 2	ScratchKey	TapeRewind	Phono Noise	MC-500 Beep	Scratch 3   	Scratch 4   	Scratch 5   	Scratch 6   	Scratch 7   																																																																																																															
+126	Helicopter	Car-Engine	Car-Stop	Car-Pass	Car-Crash	Siren	Train	Jetplane	Starship	Burst Noise	Calculating	Perc. Bang	Burner      	Glass & Glam	Ice Ring    	Over Blow   	Crack Bottle	Pour Bottle 	Soda        	Open CD Tray	Audio Switch	Key Typing  	SL 1        	SL 2        	Car Engine 2	Car Horn    	Boeeeen     	R.Crossing  	Compresser  	Sword Boom! 	Sword Cross 	Stab! 1     	Stab! 2     																																																																																															
+127	Applause	Laughing	Screaming	Punch	Heart Beat	Footsteps	Applause 2	Small Club	ApplauseWave	BabyLaughing							Voice One	Voice Two	Voice Three	Voice Tah	Voice Whey		Voice Kikit 	Voice ComeOn	Voice Aou   	Voice Oou   	Voice Hie   																																																																																																					
+128	Gun Shot	Machine Gun	Lasergun	Explosion	Eruption	Big Shot	Explosion 2 																																																																																																																									
+;
+;
+;
+PAGE=3	88ProMap
+KIND=0
+TONECOUNT=128
+ 	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	75	76	77	78	79	80	81	82	83	84	85	86	87	88	89	90	91	92	93	94	95	96	97	98	99	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+1	Piano 1								Piano 1w								European Pf								Piano + Str.																																																																																																							
+2	Piano 2								Piano 2w								Dance Piano																																																																																																															
+3	Piano 3	EG+EP 1	EG+EP 2						Piano 3w																																																																																																																							
+4	Honky-tonk								Honky-tonk 2																																																																																																																							
+5	E.Piano 1								St.Soft EP	Cho E.Piano	SilentEP						FM+SA EP	Dist E.Piano							Wurly	Hard EP	MellowEP																																																																																																					
+6	E.Piano 2								Detuned EP 2								St.FM EP								Hard FM EP																																																																																																							
+7	Harpsichord	Harpsichord2							Coupled Hps.								Harpsi.w								Harpsi.o								Synth Harpsi																																																																																															
+8	Clav.								Comp Clav.								Reso Clav.								Clav.o								Analog Clav.	JP8 Clav. 1		JP8 Clav. 2																																																																																												
+9	Celesta	Pop Celesta																																																																																																																														
+10	Glockenspiel																																																																																																																															
+11	Music Box																																																																																																																															
+12	Vibraphone	Pop Vibe.							Vibraphone w	Vibraphones																																																																																																																						
+13	Marimba								Marimba w								Barafon	Barafon 2							Log drum																																																																																																							
+14	Xylophone																																																																																																																															
+15	Tubular-bell								Church Bell	Carillon																																																																																																																						
+16	Santur	Santur 2 							Cimbalom								Zither 1	Zither 2							Dulcimer																																																																																																							
+17	Organ 1	Organ 101							Trem. Organ	Organ o							60's Organ 1	60's Organ 2	60's Organ 3	Farf Organ					Cheese Organ	D-50 Organ	JUNO Organ	Hybrid Organ 	VS Organ	Digi Church			70's E.Organ	Even Bar							Organ Bass								5th Organ																																																																															
+18	Organ 2	Jazz Organ	E.Organ 16+2						Chorus Or.2	Octave Organ																							Perc Organ																																																																																															
+19	Organ 3								Rotary Org.								Rotary Org.S	Rock Organ 1	Rock Organ 2						Rotary Org.F																																																																																																							
+20	Church Org.1								Church Org.2								Church Org.3								Organ Flute								Trem.Flute	Theater Org.																																																																																														
+21	Reed Organ								Wind Organ																																																																																																																							
+22	Accordion Fr								Accordion It	Dist. Accord							Cho. Accord								Hard Accord	Soft Accord																																																																																																						
+23	Harmonica	Harmonica 2																																																																																																																														
+24	Bandoneon								Bandoneon 2								Bandoneon 3																																																																																																															
+25	Nylon-str.Gt								Ukulele								Nylon Gtr.o								Velo Harmnix								Nylon Gt.2								Lequint Gt.																																																																																							
+26	Steel-str.Gt								12-str.Gt	Nylon+Steel							Mandolin	Mandolin 2	MandolinTrem														Steel Gt.2																																																																																															
+27	Jazz Gt.	Mellow Gt.							Pedal Steel																																																																																																																							
+28	Clean Gt.	Clean Half	Open Hard 1	Open Hard 2	JC Clean Gt.				Chorus Gt.	JC Chorus Gt							TC FrontPick	TC Rear Pick	TC Clean ff	TC Clearn 2 :																																																																																																												
+29	Muted Gt.	Muted Dis.Gt	TC Muted Gt.						Funk Pop								Funk Gt.2																																																																																																															
+30	OverdriveGt	Overdrive 2	Overdrive 3	More Drive					LP OverDrvGt	LP OverDrv :																																																																																																																						
+31	DistortionGt	Dist. Gt2 :	Dazed Guitar	Distortion :	Dist.Fast :				Feedback Gt.	Feedback Gt2							Power Guitar	Power Gt.2	5th Dist.						Rock Rhythm	Rock Rhythm2																																																																																																						
+32	Gt.Harmonics								Gt. Feedback	Gt. Feedback2							Ac.Gt.Harmnx								E.Bass Harm.																																																																																																							
+33	AcousticBs.	Rockabilly							Wild A.Bass								Bass + OHH																																																																																																															
+34	FingeredBs.	Fingered Bs2	Jazz Bass	Jazz Bass 2	Rock Bass				ChorusJazzBs								F.Bass/Harm.																																																																																																															
+35	Picked Bass	Picked Bass2	Picked Bass3	Picked Bass4					Muted PickBs								P.Bass/Harm.																																																																																																															
+36	Fretless Bs.	Fretless Bs2	Fretless Bs3	Fretless Bs4	Syn Fretless	Mr.Smooth			Wood+FlessBs																																																																																																																							
+37	Slap Bass 1	Slap Pop							Reso Slap	Unison Slap																																																																																																																						
+38	Slap Bass 2								FM Slap																																																																																																																							
+39	Synth Bass 1	SynthBass101	CS Bass	JP-4 Bass	JP-8 Bass	P5 Bass	JPMG Bass		Acid Bass	TB303 Bass	Tekno Bass	TB303 Bass 2	Kicked TB303	TB303 Saw Bs	Rubber303 Bs	Reso. 303 Bs	Reso SH Bass	TB303 Sqr Bs	TB303 DistBs						Arpeggio Bs																																																																																																							
+40	Synth Bass 2	SynthBass201	Modular Bass	Seq Bass	MG Bass	Mg Oct Bs	MG Oct Bass2	MG Blip Bs :	Beef FM Bass	Dly Bass	X Wire Bass	WireStr Bass	Blip Bass :	RubberBass 1			RubberBass 2	SH101 Bass 1	SH101 Bass 2	Smooth Bass	SH101 Bass 3	Spike Bass	House Bass :	KG Bass	Sync Bass	MG 5th Bass	RND Bass	WowMG Bass	Bubble Bass																																																																																																			
+41	Violin :	Vaiolin Atk. :							Slow Violin																																																																																																																							
+42	Viola :	Viola Atk. :																																																																																																																														
+43	Cello :	Cello Atk. :																																																																																																																														
+44	Contrabass																																																																																																																															
+45	Tremolo Str								Slow Tremolo	Suspense Str																																																																																																																						
+46	PizzicatoStr	Vcs&Cbs Pizz	Chamber Pizz	St.Pizzicato					Solo Pizz.								Solo Spic.																																																																																																															
+47	Harp																Synth Harp																																																																																																															
+48	Timpani																																																																																																																															
+49	Strings :	Bright Str :	ChamberStr :	Cello sect.					Orchestra	Orchestra 2	Tremolo Orch	Choir Str.	Strings+Horn				St. Strings								Velo Strings								Oct Strings1	Oct Strings2																																																																																														
+50	SlowStrings	SlowStrings2							Legato Str.	Warm Strings	St.Slow Str.																																																																																																																					
+51	Syn.Strings1	OB Strings	StackStrings	JP Strings					Syn.Strings3	Syn.Strings4							High Strings	Hybrid Str.							Tron Strings	Noiz Strings																																																																																																						
+52	Syn.Strings2	Syn.Strings5	JUNO Strings						Air Strings																																																																																																																							
+53	Choir Aahs								St.ChoirAahs	Melted Choir	Church Choir						Choir Hahs								Chorus Lahs								Chorus Aahs	Male Aah+Str																																																																																														
+54	Voice Oohs								Voice Dah																																																																																																																							
+55	SynVox								Syn.Voice	Silent Night							VP330 Choir	Vinyl Choir																																																																																																														
+56	OrchestraHit								Impact Hit	Philly Hit	Double Hit	Perc.  Hit	Shock Wave				Lo Fi Rave	Techno Hit	Dist Hit	Bam Hit	Bit Hit	Bim Hit	Technorg Hit	Rave Hit	Strings Hit	Stack Hit																																																																																																						
+57	Trumpet	Trumpet 2	Trumpet :						Flugel Horn								4th Trumpets								Bright Tp.	Warm Tp.							Syn. Trumpet																																																																																															
+58	Trombone	Trombone 2	Twin bones						Bs. Trombone																																																																																																																							
+59	Tuba	Tuba 2																																																																																																																														
+60	MutedTrumpet								Muted Horns																																																																																																																							
+61	French Horns	Fr.Horn 2	Horn + Orche	Wide FreHrns					F.Hrn Slow :	Dual Horns							Synth Horn								F.Horn Rip																																																																																																							
+62	Brass 1	Brass ff	Bones Sect.						Brass 2	Brass 3	Brass sfz						Brass Fall	Trumpet Fall							Octave Brass	Brass + Reed																																																																																																						
+63	SynthBrass1	JUNO Brass	Stack Brass	SH-5 Brass	MKS Brass				Pro Brass	P5 Brass							Oct SynBrass	Hybrid Brass																																																																																																														
+64	Synth Brass2	Soft Brass	Warm Brass						SynBrass sfz	OB Brass	Reso Brass						Velo Brass 1	Transbrass																																																																																																														
+65	Soprano Sax								Soprano  Exp.																																																																																																																							
+66	Alto Sax								AltoSax  Exp.	Grow Sax							AltoSax + Tp																																																																																																															
+67	Tenor Sax	Tenor Sax :							BreathyTn. :	St.Tenor Sax																																																																																																																						
+68	Baritone Sax	Bari. Sax :																																																																																																																														
+69	Oboe								Oboe Exp.								Multi Reed																																																																																																															
+70	English Horn																																																																																																																															
+71	Bassoon																																																																																																																															
+72	Clarinet								Bs Clarinet								Multi Winds																																																																																																															
+73	Piccolo	Piccolo :							Nay	Nay Tremoro							Di																																																																																																															
+74	Flute	Flute 2 :	Flute Exp.	Flt Travelso					Flute + Vln								Tron Flute																																																																																																															
+75	Recorder																																																																																																																															
+76	Pan Flute								Kawala								Zampona	Zampona Atk																																																																																																														
+77	Bottle Blow																																																																																																																															
+78	Shakuhachi	Shakuhachi :																																																																																																																														
+79	Whistle	Whistle 2																																																																																																																														
+80	Ocarina																																																																																																																															
+81	Square Wave	MG Square	Hollow Mini	Mellow FM	CC Solo	Shmoog	LM Square		2600 Sine	Sine Lead	KG Lead						P5 Square	OB Square	JP-8 Square						Pluse Lead	JP8 PulseLd1	JP8 PulseLd2	MG Reso. Pls																																																																																																				
+82	Saw Wave	OB2 Saw	Pulse Saw	Feline GR	Big Lead	Velo Lead	GR-300	LA Saw	Doctor Solo	Fat Saw Lead		D-50 Fat Saw					Waspy Synth	PM Lead	CS Saw Lead						MG Saw 1	MG Saw 2	OB Saw 1	OB Saw 2	D-50 Saw	SH-101 Saw	CS Saw	MG Saw Lead	OB Saw Lead	P5 Saw Lead	MG unison	Oct Saw Lead					SequenceSaw1	SequenceSaw2	Reso Saw	Cheese Saw 1	Cheese Saw 2	Rhythmic Saw																																																																																		
+83	Syn.Calliope	Vent Synth	Pure PanLead																																																																																																																													
+84	Chiffer Lead	TB Lead							Mad Lead																																																																																																																							
+85	Charang								Dist.Lead	Acid Guitar1	Acid Guitar2						P5 Sync Lead	Fat SyncLead	Rock Lead	5th DecaSync	Dirty Sync				JUNO Sub Osc																																																																																																							
+86	Solo Vox								Vox Lead	LFO Vox																																																																																																																						
+87	5th Saw Wave	Big Fives	5th Lead	5th Ana.Clav					4th Lead																																																																																																																							
+88	Bass & Lead	Big & Raw	Fat & Perky	JUNO Rave	JP8 BsLead 1	JP8 BsLead 2	SH-5 Bs.Lead																																																																																																																									
+89	Fantasia	Fantasia 2	New Age Pad	Bell Heaven																																																																																																																												
+90	Warm Pad	Thick Matrix	Horn Pad	Rotary Strng	OB Soft Pad				Octave Pad	Stack Pad																																																																																																																						
+91	Polysynth	80's PolySyn	Polysynth 2	Poly King					Power Stack	Octave Stack	Reso Stack	Techno Stack																																																																																																																				
+92	Space Voice	Heaven II	SC Heaven						Cosmic Voice	Auh Vox	AuhAuh	Vocorderman																																																																																																																				
+93	Bowed Glass	SoftBellPad	JP8 Sqr Pad	7thBelPad																																																																																																																												
+94	Metal Pad	Tine Pad	Panner Pad																																																																																																																													
+95	Halo Pad	Vox Pad	Vox Sweep						Horror Pad																																																																																																																							
+96	Sweep Pad	Polar Pad							Converge	Shwimmer	Celestial Pd	Bag Sweep																																																																																																																				
+97	Ice Rain	Harmo Rain	African wood	Anklung Pad	Rattle Pad				Clavi Pad																																																																																																																							
+98	Soundtrack	Ancestral	Prologue	Prologue 2	Hols Strings				Rave																																																																																																																							
+99	Crystal	Syn Mallet	Soft Crystal	Round Glock	Loud Glock	GlockenChime	Clear Bells	ChristmasBel	Vibra Bells	Digi Bells	Music Bell	Analog Bell					Choral Bells	Air Bells	Bell Harp	Gamelimba	JUNO Bell																																																																																																											
+100	Atmosphere	Warm Atmos	Nylon Harp	Harpvox	HollowReleas	Nylon+EP	Ambient Pad	Invisible	Pulsey Key	Noise Piano																																																																																																																						
+101	Brightness	Shining Star	OB Stab						Org Bell																																																																																																																							
+102	Goblin	Goblinson	50's Sci-Fi	Abduction	Auhbient	LFO Pad	Random Str	Random Pad	LowBirds Pad	Falling Down	LFO RAVE	LFO Horror	LFO Techno	Alternative	UFO FX	Gargle Man	Sweep FX																																																																																																															
+103	Echo Drops	Echo Bell	Echo Pan	Echo Pan 2	Big Panner	Reso Panner	Water Piano		Pan Sequence	Aqua																																																																																																																						
+104	Star Theme	Star Theme 2							Dream Pad	Silky Pad							New Century	7th Atmos.	Galaxy Way																																																																																																													
+105	Sitar	Sitar 2	Detune Sitar	Sitar 3					Tambra								Tamboura																																																																																																															
+106	Banjo	Muted Banjo							Rabab	San Xian							Gopichant								Oud				Oud+Strings				Pi Pa																																																																																															
+107	Shamisen	Tsugaru							Syn Shamisen																																																																																																																							
+108	Koto	Gu Zheng							Taisho Koto								Kanoon			Kanoon+Choir					Oct Harp																																																																																																							
+109	Kalimba								Sanza																																																																																																																							
+110	Bagpipe								Didgeridoo																																																																																																																							
+111	Fiddle								Er Hu	Gao Hu																																																																																																																						
+112	Shanai	Shanai 2							Pungi								Hichiriki								Mizmar								Suona 1	Suona 2																																																																																														
+113	Tinkle Bell								Bonang	Gender	Gamelan Gong	St.Gamelan	Jang-Gu				RAMA Cymbal																																																																																																															
+114	Agogo								Atarigane								Tambourine																																																																																																															
+115	Steel Drums	Island Mlt																																																																																																																														
+116	Woodblock								Castanets								Angklung	Angkl Rhythm							Finger Snaps								909 HandClap																																																																																															
+117	Taiko	Small Taiko							Concert BD								Jungle BD	Techno BD	Bounce																																																																																																													
+118	Melo. Tom 1	Real Tom							Melo. Tom 2	Rock Tom							Rash SD	House SD	Jungle SD	909 SD																																																																																																												
+119	Synth Drum								808 Tom	Elec Perc	Sine Prc	606 Tom	909 Tom																																																																																																																			
+120	Reverse Cym.	Reverse Cym2	Reverse Cym3						Rev.Snare 1	Rev.Snare 2							Rev.Kick 1	Rev.ConBD							Rev.Tom 1	Rev.Tom 2																																																																																																						
+121	Gt.FretNoise	Gt.Cut Noise	String Slap	Gt.CutNoise2	Dist.CutNoiz	Bass Slide	Pick Scrape		Gtr. FX Menu	Bartok Pizz.	Guitar Slap	Chord Stroke	Biwa Stroke	Biwa Tremolo																																																																																																																		
+122	Breath Noise	Fl.Key Click																																																																																																																														
+123	Seashore	Rain	Thunder	Wind	Stream	Bubble	Wind 2										Pink Noise	White Noise																																																																																																														
+124	Bird	Dog	Horse-Gallop	Bird 2	Kitty	Growl																																																																																																																										
+125	Telephone 1	Telephone 2	DoorCreaking	Door	Scratch	Wind Chimes		Scratch 2	ScratchKey	TapeRewind	Phono Noise	MC-500 Beep																																																																																																																				
+126	Helicopter	Car-Engine	Car-Stop	Car-Pass	Car-Crash	Siren	Train	Jetplane	Starship	Burst Noise	Calculating	Perc. Bang																																																																																																																				
+127	Applause	Laughing	Screaming	Punch	Heart Beat	Footsteps	Applause 2	Small Club	ApplauseWave								Voice One	Voice Two	Voice Three	Voice Tah	Voice Whey																																																																																																											
+128	Gun Shot	Machine Gun	Lasergun	Explosion	Eruption	Big Shot																																																																																																																										
+;
+;
+;
+PAGE=2	88Map
+KIND=0
+TONECOUNT=128
+ 	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	75	76	77	78	79	80	81	82	83	84	85	86	87	88	89	90	91	92	93	94	95	96	97	98	99	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+1	Piano 1								Piano 1w								Piano 1d																																																																																																															
+2	Piano 2								Piano 2w																																																																																																																							
+3	Piano 3	EG+EP 1	EG+EP 2						Piano 3w																																																																																																																							
+4	Honky-tonk								Old Upright																																																																																																																							
+5	E.Piano 1								St.Soft EP								FM+SA EP								60's E.piano	Hard EP	MellowEP																																																																																																					
+6	E.Piano 2								Detuned EP2								St.FM EP								Hard FM EP																																																																																																							
+7	Harpsichord								Coupled Hps								Harpsi.w								Harpsi.o																																																																																																							
+8	Clav.																																																																																																																															
+9	Celesta																																																																																																																															
+10	Glockenspiel																																																																																																																															
+11	Music Box																																																																																																																															
+12	Vibraphone	Hard Vibe							Vib.w																																																																																																																							
+13	Marimba								Marimba w								Barafon	Barafon 2							Log drum																																																																																																							
+14	Xylophone																																																																																																																															
+15	Tubular-bell								Church Bell	Carillon																																																																																																																						
+16	Santur	Santur 2							Cimbalom																																																																																																																							
+17	Organ 1	Organ 101							Detuned Or1	Organ 109							60'sOrgan1	60'sOrgan2	60'sOrgan3						Cheese Organ								Organ 4	Even Bar							Organ Bass																																																																																							
+18	Organ 2	Organ 201							Detuned Or2																								Organ 5																																																																																															
+19	Organ 3								Rotary Org.								Rotary Org.S								Rotary Org.F																																																																																																							
+20	Church Org. 1								Church Org2								Church Org3								Organ Flute								Trem.Flute																																																																																															
+21	Reed Organ																																																																																																																															
+22	Accordion Fr								Accordion lt																																																																																																																							
+23	Harmonica	Harmonica 2																																																																																																																														
+24	Bandoneon																																																																																																																															
+25	Nylon-str. Gt.								Ukulele								Nylon Gt.o								Velo Harmnix								Nylon Gt.2								Lequint Gt.																																																																																							
+26	Steel-str. Gt.								12-str.Gt	Nylon+Steel							Mandolin																Steel Gt.2																																																																																															
+27	Jazz Gt.	Mellow Gt.							Pedal Steel																																																																																																																							
+28	Clean Gt.								Chorus Gt.																																																																																																																							
+29	Muted Gt.	Muted Dis.Gt							Funk Pop								Funk Gt.2																																																																																																															
+30	Overdrive Gt.																																																																																																																															
+31	Distortion Gt.	Dist.Gt2	Dazed Guitar						Feedback Gt.	Feedback Gt2							Power Guitar	Power Gt.2	5th Dist.						Rock Rhythm	Rock Rhythm2																																																																																																						
+32	Gt. Harmonics								Gt.Feedback								Ac.Gt.Harmnx																																																																																																															
+33	Acoustic Bs.																																																																																																																															
+34	Fingered Bs.	Fingered Bs2	Jazz Bass																																																																																																																													
+35	Picked Bass								Mute PickBs.																																																																																																																							
+36	Fretless Bs.	Fretless Bs2	Fretless Bs3 	Fretless Bs4	Syn Fretless	Mr.Smooth																																																																																																																										
+37	Slap Bass 1								Reso Slap																																																																																																																							
+38	Slap Bass 2																																																																																																																															
+39	SynthBass 1	SynthBass101							Acid Bass	TB303 Bass 	Tekno Bass						Reso SH Bass																																																																																																															
+40	Synth Bass 2	Syn.Bass201	Modular Bass	Seq Bass					Beef FM Bass	X Wire Bass							Rubber Bass	SH101 Bass 1	SH101 Bass 2	Smooth Bass																																																																																																												
+41	Violin								Slow Violin																																																																																																																							
+42	Viola																																																																																																																															
+43	Cello																																																																																																																															
+44	Contrabass																																																																																																																															
+45	Tremolo Str								Slow Tremolo	Suspense Str																																																																																																																						
+46	Pizzicato Str																																																																																																																															
+47	Harp																																																																																																																															
+48	Timpani																																																																																																																															
+49	Strings	Strings 2							Orchestra	Orchestra2 	Tremolo Orch	Choir Str.					St.Strings								Velo Strings																																																																																																							
+50	Slow Strings	SlowStrings2							Legato Str	Warm Strings 	St.Slow Str. 																																																																																																																					
+51	Syn. Strings 1	OB Strings							SynStrings3																																																																																																																							
+52	Syn. Strings 2																																																																																																																															
+53	Choir Aahs								St.Choir	Mello Choir																							Choir Aahs 2																																																																																															
+54	Voice Oohs																																																																																																																															
+55	SynVox								Syn.Voice																																																																																																																							
+56	Orchestra Hit								Impact Hit	Philly Hit	Double Hit						Lo Fi Rave																																																																																																															
+57	Trumpet	Trumpet 2							Flugel Horn																Bright Tp.	Warm Tp.																																																																																																						
+58	Trombone	Trombone2																																																																																																																														
+59	Tuba	Tuba 2																																																																																																																														
+60	Muted Trumpet																																																																																																																															
+61	French Horns	Fr.Horn2							Fr.HornSolo 								Horn Orch																																																																																																															
+62	Brass 1								Brass 2								Brass Fall																																																																																																															
+63	Synth Brass 1	Poly Brass							Syn.Brass3	Quack Brass							Octave Brass																																																																																																															
+64	Synth Brass 2	Soft Brass							Syn.Brass4								Velo Brass1	Velo Brass2																																																																																																														
+65	Soprano Sax																																																																																																																															
+66	Alto Sax								Hyper Alto																																																																																																																							
+67	Tenor Sax								Breathy Tenor																																																																																																																							
+68	Baritone Sax																																																																																																																															
+69	Oboe																																																																																																																															
+70	English Horn																																																																																																																															
+71	Bassoon																																																																																																																															
+72	Clarinet								Bs Clarinet																																																																																																																							
+73	Piccolo																																																																																																																															
+74	Flute																																																																																																																															
+75	Recorder																																																																																																																															
+76	Pan Flute								Kawala																																																																																																																							
+77	Bottle Blow																																																																																																																															
+78	Shakuhachi																																																																																																																															
+79	Whistle																																																																																																																															
+80	Ocarina																																																																																																																															
+81	Square Wave	Square	Hollow Mini	Mellow FM	CC Solo	Shmoog	LM Square		Sine Wave																																																																																																																							
+82	Saw Wave	Saw	Pulse Saw	Feline GR	Big Lead	Velo Lead	GR-300	LA Saw	Doctor Solo								Waspy Synth																																																																																																															
+83	Syn. Calliope	Vent Synth	Pure PanLead																																																																																																																													
+84	Chiffer Lead																																																																																																																															
+85	Charang								Dist.Lead																																																																																																																							
+86	Solo Vox																																																																																																																															
+87	5th Saw Wave	Big Fives																																																																																																																														
+88	Bass & Lead	Big & Raw	Fat & Perky																																																																																																																													
+89	Fantasia	Fantasia 2																																																																																																																														
+90	Warm Pad	Thick Pad	Horn Pad	RotaryStrng	Soft Pad																																																																																																																											
+91	Polysynth	80'sPloySyn																																																																																																																														
+92	Space Voice	Heaven II																																																																																																																														
+93	Bowed Glass																																																																																																																															
+94	Metal Pad	Tine Pad	Panner Pad																																																																																																																													
+95	Halo Pad																																																																																																																															
+96	Sweep Pad	Polar Pad							Converge	Shwimmer	Celestial Pd																																																																																																																					
+97	Ice Rain	Harmo Rain	African wood						Clavi Pad																																																																																																																							
+98	Soundtrack	Ancestral	Prologue						Rave																																																																																																																							
+99	Crystal	Syn Mallet	Soft Crystal	Round Glock	Loud Glock	GlockenChime	ClearBells	X'mas Bell	Vibra Bells	Digi Bells 							Choral Bells	Air Bells	Bell Harp	Gamelimba																																																																																																												
+100	Atmosphere	Warm Atmos	Nylon Harp	Harpvox	HollowReleas 	Nylon+EP	Ambient Pad																																																																																																																									
+101	Brightness																																																																																																																															
+102	Goblin	Goblinson	50's Sci-Fi																																																																																																																													
+103	Echo Drops	Echo Bell	Echo Pan	Echo Pan2	Big Panner	ResoPanner	Water Piano																																																																																																																									
+104	Star Theme	Star Theme2																																																																																																																														
+105	Sitar	Sitar2	Detune Sitar						Tambra								Tamboura																																																																																																															
+106	Banjo	Muted Banjo							Rabab								Gopichant								Oud																																																																																																							
+107	Shamisen	Tsugaru																																																																																																																														
+108	Koto								Taisho Koto								Kanoon																																																																																																															
+109	Kalimba																																																																																																																															
+110	Bag Pipe																																																																																																																															
+111	Fiddle																																																																																																																															
+112	Shanai	Shanai 2							Pungi								Hichiriki																																																																																																															
+113	Tinkle Bell								Bonang	Gender	Gamelan Gong	St.Gamelan					RAMA Cymbal																																																																																																															
+114	Agogo								Atarigane																																																																																																																							
+115	Steel Drums																																																																																																																															
+116	Woodblock								Castanets																																																																																																																							
+117	Taiko								Concert BD 																																																																																																																							
+118	Melo Tom 1	Real Tom							Melo.Tom2 	Rock Tom																																																																																																																						
+119	Synth Drum								808 Tom 	Elec Perc																																																																																																																						
+120	Reverse Cym.	Reverse Cym2							Rev.Snare 1	Rev.Snare 2							Rev.Kick 1	Rev.ConBD							Rev.Tom 1	Rev.Tom 2																																																																																																						
+121	Gt. FretNoise	Gt.CutNoise	String Slap	Gt.CutNoise2	Dist.CutNoiz	Bass Slide	Pick Scrape																																																																																																																									
+122	Breath Noise	Fl.KeyClick																																																																																																																														
+123	Seashore	Rain	Thunder	Wind	Stream	Bubble																																																																																																																										
+124	Bird	Dog	Horse-Gallop	Bird 2	Kitty	Growl																																																																																																																										
+125	Telephone 1	Telephone 2	Creaking	Door	Scratch	Wind Chimes		Scratch 2																																																																																																																								
+126	Helicopter	Car-Engine	Car-Stop	Car-Pass	Car-Crash	Siren	Train	JetPlane	Starship	Burst Noise																																																																																																																						
+127	Applause	Laughing	Screaming	Punch	HeartBeat	Footsteps	Applause2																																																																																																																									
+128	Gun Shot	Machine Gun	Lasergun	Explosion																																																																																																																												
+;
+;
+;
+PAGE=1	55Map
+KIND=0
+TONECOUNT=128
+ 	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	75	76	77	78	79	80	81	82	83	84	85	86	87	88	89	90	91	92	93	94	95	96	97	98	99	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+1	Piano 1								Piano 1w								Piano 1d																																																																																																														Piano2	Acou Piano1
+2	Piano 2								Piano 2w																																																																																																																						Piano2	Acou Piano2
+3	Piano 3								Piano 3w																																																																																																																						Piano2	Acou Piano3
+4	Honky-tonk								HonkyTonk w																																																																																																																						Honky-tonk	Elec Piano1
+5	E.Piano 1								Detuned EP1								E.Piano 1v								60's E.Piano																																																																																																						Piano1	Elec Piano2
+6	E.Piano 2								Detuned EP2								E.Paino 2v																																																																																																														Piano2	Elec Piano3
+7	Harpsichord								Coupled Hps								Harpsi.w								Harpsi.o																																																																																																						Piano2	Elec Piano4
+8	Clav.																																																																																																																														E.Piano1	Honkytonk
+9	Celesta																																																																																																																														Detuned EP1	Elec Org1
+10	Glockenspiel																																																																																																																														E.Piano2	Elec Org2
+11	Music Box																																																																																																																														Steel Gt.	Elec Org3
+12	Vibraphone								Vib.w																																																																																																																						Steel Gt.	Elec Org4
+13	Marimba								Marimba w																																																																																																																						12-str.Gt	Pipe Org1
+14	Xylophone																																																																																																																														Funk Gt.	Pipe Org2
+15	Tubular-bell								Church Bell	Carillon																																																																																																																					Muted Gt.	Pipe Org3
+16	Santur																																																																																																																														Slap Bass 1	Accordion
+17	Organ 1								Detuned Or1								60's Organ1																Organ 4																																																																																														Slap Bass 1	Harpsi1
+18	Organ 2								Detuned Or2																								Organ 5																																																																																														Slap Bass 1	Harpsi2
+19	Organ 3																																																																																																																														Slap Bass 1	Harpsi3
+20	Church Org. 1								Church Org2								Church Org3																																																																																																														Slap Bass 2	Clavi1
+21	Reed Organ																																																																																																																														Slap Bass 2	Clavi2
+22	Accordion Fr								Accordion l																																																																																																																						Slap Bass 2	Clavi3
+23	Harmonica																																																																																																																														Slap Bass 2	Celesta1
+24	Bandoneon																																																																																																																														Fingered Bs	Celesta2
+25	Nylon-str. Gt.								Ukulele								Nylon Gt.o																Nylon Gt.2																																																																																														Fingered Bs	Syn Brass1
+26	Steel-str. Gt.								12-str.Gt								Mandolin																																																																																																														Picked Bass	Syn Brass2
+27	Jazz Gt.								Hawaiian Gt																																																																																																																						Picked Bass	Syn Brass3
+28	Clean Gt.								Chorus Gt.																																																																																																																						Fretless Bs	Syn Brass4
+29	Muted Gt.								Funk Gt.								Funk Gt.2																																																																																																														Acoustic Bs	Syn Bass1
+30	Overdrive Gt.																																																																																																																														Choir Aahs	Syn Bass2
+31	Distortion Gt.								Feedback Gt																																																																																																																						Choir Aahs	Syn Bass3
+32	Gt. Harmonics								Gt.Feedback																																																																																																																						Choir Aahs	Syn Bass4
+33	Acoustic Bs.																																																																																																																														Choir Aahs	Fantasy
+34	Fingered Bs.																																																																																																																														SLowStrings	Harmo Pan
+35	Picked Bass																																																																																																																														Strings	Chorale
+36	Fretless Bs.																																																																																																																														SynStrings3	Glasses
+37	Slap Bass 1																																																																																																																														SynStrings3	Soundtrack
+38	Slap Bass 2																																																																																																																														Orgen 1	Atmosphere
+39	Synth Bass 1	Syn.Bass101							Syn.Bass 3																																																																																																																						Orgen 1	Warm Bell
+40	Synth Bass 2								Syn.Bass 4								Rubber Bass																																																																																																														Orgen 1	Funny Vox
+41	Violin								Slow Violin																																																																																																																						Orgen 2	Echo Bell
+42	Viola																																																																																																																														Orgen 1	Ice Rain
+43	Cello																																																																																																																														Orgen 1	Oboe 2001
+44	Contrabass																																																																																																																														Orgen 2	Echo Pan
+45	Tremolo Str																																																																																																																														Orgen 2	Doctor Solo
+46	Pizzicato Str																																																																																																																														Orgen 2	School Daze
+47	Harp																																																																																																																														Trumpet	Bellsinger
+48	Timpani																																																																																																																														Trumpet	Square Wave
+49	Strings								Orchestra																																																																																																																						Trombone	Str Sect1
+50	Slow Strings																																																																																																																														Trombone	Str Sect2
+51	Syn. Strings 1								SynStrings3																																																																																																																						Trombone	Str Sect3
+52	Syn. Strings 2																																																																																																																														Trombone	Pizzicato
+53	Choir Aahs																																Choir Aahs2																																																																																														Trombone	Violin1
+54	Voice Oohs																																																																																																																														Trombone	Violin2
+55	SynVox																																																																																																																														Alto Sax	Cello1
+56	Orchestra Hit																																																																																																																														Tenor Sax	Cello2
+57	Trumpet																																																																																																																														BaritoneSax	Contrabass
+58	Trombone	Trombone2																																																																																																																													Alto Sax	Harp1
+59	Tuba																																																																																																																														Brass 1	Harp2
+60	Muted Trumpet																																																																																																																														Brass 1	Guitar1
+61	French Horn	Fr.Horn2																																																																																																																													Brass 2	Guitar2
+62	Brass 1								Brass 2																																																																																																																						Brass 2	Elec Gtr1
+63	Synth Brass 1								Syn.Brass3								Analog Brs1																																																																																																														Brass 1	Elec Gtr2
+64	Synth Brass 2								Syn.Brass4								Analog Brs2																																																																																																														Orchest.Hit	Sitar
+65	Soprano Sax																																																																																																																															Acou Bass1
+66	Alto Sax																																																																																																																															Acou Bass2
+67	Tenor Sax																																																																																																																															Elec Bass1
+68	Baritone Sax																																																																																																																															Elec Bass2
+69	Oboe																																																																																																																															Slap Bass1
+70	English Horn																																																																																																																															Slap Bass2
+71	Bassoon																																																																																																																															Fretless1
+72	Clarinet																																																																																																																															Fretless2
+73	Piccolo																																																																																																																															Flute1
+74	Flute																																																																																																																															Flute2
+75	Recorder																																																																																																																															Piccolo1
+76	Pan Flute																																																																																																																															Piccolo2
+77	Bottle Blow																																																																																																																															Recorder
+78	Shakuhachi																																																																																																																															Pan Pipes
+79	Whistle																																																																																																																															Sax1
+80	Ocarina																																																																																																																															Sax2
+81	Square Wave	Square							Sine Wave																																																																																																																							Sax3
+82	Saw Wave	Saw							Doctor Solo																																																																																																																							Sax4
+83	Syn. Calliope																																																																																																																															Clarinet1
+84	Chiffer Lead																																																																																																																															Clarinet2
+85	Charang																																																																																																																															Oboe
+86	Solo Vox																																																																																																																															Engl Horn
+87	5th Saw Wave																																																																																																																															Bassoon
+88	Bass & Lead																																																																																																																															Harmonica
+89	Fantasia																																																																																																																															Trumpet1
+90	Warm Pad																																																																																																																															Trumpet2
+91	Polysynth																																																																																																																															Trombone1
+92	Space Voice																																																																																																																															Trombone2
+93	Bowed Glass																																																																																																																															Fr Horn1
+94	Metal Pad																																																																																																																															Fr Horn2
+95	Halo Pad																																																																																																																															Tuba
+96	Sweep Pad																																																																																																																															Brs Sect1
+97	Ice Rain																																																																																																																															Brs Sect2
+98	Soundtrack																																																																																																																															Vibe1
+99	Crystal	Syn Mallet																																																																																																																														Vibe2
+100	Atmosphere																																																																																																																															Syn Mallet
+101	Brightness																																																																																																																															Windbell
+102	Goblin																																																																																																																															Glock
+103	Echo Drops	Echo Bell	Echo Pan																																																																																																																													Tube Bell
+104	Star Theme																																																																																																																															Xylophone
+105	Sitar	Sitar2																																																																																																																														Marimba
+106	Banjo																																																																																																																															Koto
+107	Shamisen																																																																																																																															Sho
+108	Koto								Taisho Koto																																																																																																																							Shakuhachi
+109	Kalimba																																																																																																																															Whistle1
+110	Bag Pipe																																																																																																																															Whistle2
+111	Fiddle																																																																																																																															Bottleblow
+112	Shanai																																																																																																																															Breathpipe
+113	Tinkle Bell																																																																																																																															Timpani
+114	Agogo																																																																																																																															Melodic Tom
+115	Steel Drums																																																																																																																															Deep Snare
+116	Woodblock								Castanets																																																																																																																							Elec Perc1
+117	Taiko								Concert BD 																																																																																																																							Elec Perc2
+118	Melo Tom 1								Melo.Tom2 																																																																																																																							Taiko
+119	Synth Drum								808 Tom 	Elec Perc																																																																																																																						Taiko Rim
+120	Reverse Cym.																																																																																																																															Cymbal
+121	Gt. FretNoise	Gt.CutNoise	String Slap																																																																																																																													Castanets
+122	Breath Noise	Fl.KeyClick																																																																																																																														Triangle
+123	Seashore	Rain	Thunder	Wind	Stream	Bubble																																																																																																																										Orche Hit
+124	Bird	Dog	HorseGallop	Bird 2																																																																																																																												Telephone
+125	Telephone 1	Telephone 2	Creaking	Door	Scratch	Wind Chimes																																																																																																																										Bird Tweet
+126	Helicopter	Car-Engine	Car-Stop	Car-Pass	Car-Crash	Silen	Train	JetPlane	Starship	Burst Noise																																																																																																																						One Note Jam
+127	Applause	Laughing	Screaming	Punch	HeartBeat	Footsteps																																																																																																																										Water Bell
+128	Gun Shot	Machine Gun	Lasergun	Explosion																																																																																																																												Jungle Tune
+;
+;
+;
+PAGE=0	Default
+KIND=0
+TONECOUNT=128
+ 	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	75	76	77	78	79	80	81	82	83	84	85	86	87	88	89	90	91	92	93	94	95	96	97	98	99	100	101	102	103	104	105	106	107	108	109	110	111	112	113	114	115	116	117	118	119	120	121	122	123	124	125	126	127
+1	Piano 1	UprightPiano	Mild Piano  						Upright P w 	Mild Piano w							European Pf 								Piano + Str.	Piano + Str2	Piano+Choir1	Piano+Choir2																																																																																																				
+2	Piano 2	Pop Piano   	Rock Piano  						Pop Piano w 	Rock Piano w							Dance Piano 																																																																																																															
+3	Piano 3	EG+EP 1	EG+EP 2						Piano 3w																																																																																																																							
+4	Honky-tonk  								Honky-tonk 2																																																																																																																							
+5	E.Piano 1   								St.Soft EP	Cho E.Piano	SilentEP						FM+SA EP	Dist E.Piano							Wurly       	Hard EP	MellowEP																																																																																																					
+6	E.Piano 2	E.Piano 3   							Detuned EP 2	Detuned EP 3	EP Legend   						St.FM EP								Hard FM EP								EP Phase    																																																																																															
+7	Harpsichord	Harpsichord2	Harpsichord3						Coupled Hps.								Harpsi.w								Harpsi.o								Synth Harpsi																																																																																															
+8	Clav.	Clav. 2     	Atk Clav.1  	Atk Clav.2  					Comp Clav.								Reso Clav.	Phase Clav  							Clav.o								Analog Clav.	JP8 Clav. 1		JP8 Clav. 2	SynRingClav.	SynDistClav.	JP8000 Clav.	Pulse Clav  																																																																																								
+9	Celesta	Pop Celesta																																																																																																																														
+10	Glockenspiel																																																																																																																															
+11	Music Box	Music Box 2 							St.Music Box																																																																																																																							
+12	Vibraphone	Pop Vibe.							Vibraphone w	Vibraphones																																																																																																																						
+13	Marimba								Marimba w								Barafon	Barafon 2							Log drum																																																																																																							
+14	Xylophone								Xylophone w 																																																																																																																							
+15	Tubular-bell								Church Bell	Carillon	Church Bell2						Tubularbellw																																																																																																															
+16	Santur	Santur 2 	Santur 3    						Cimbalom								Zither 1	Zither 2							Dulcimer																																																																																																							
+17	Organ 1	Organ 101	Ful Organ 1 	Ful Organ 2 	Ful Organ 3 	Ful Organ 4 	Ful Organ 5 	Ful Organ 6	Trem. Organ	Organ o	Ful Organ 7 	Ful Organ 8 	Ful Organ 9 				60's Organ 1	60's Organ 2	60's Organ 3	Farf Organ					Cheese Organ	D-50 Organ	JUNO Organ	Hybrid Organ 	VS Organ	Digi Church	JX8 Organ   	FM Organ    	70's E.Organ	Even Bar							Organ Bass								5th Organ																																																																															
+18	Organ 2	Jazz Organ	E.Organ 16+2	Jazz Organ 2	Jazz Organ 3	Jazz Organ 4	Jazz Organ 5	Jazz Organ 6	Chorus Or.2	Octave Organ																							Perc Organ	Perc.Organ 2	Perc.Organ 3	Perc.Organ 4																																																																																												
+19	Organ 3								Rotary Org.								Rotary Org.S	Rock Organ 1	Rock Organ 2						Rotary Org.F																																																																																																							
+20	Church Org.1								Church Org.2								Church Org.3								Organ Flute								Trem.Flute	Theater Org.																																																																																														
+21	Reed Organ								Wind Organ								Puff Organ  																																																																																																															
+22	Accordion Fr								Accordion It	Dist. Accord							Cho. Accord								Hard Accord	Soft Accord																																																																																																						
+23	Harmonica	Harmonica 2							B.Harp Basic	B.Harp Suppl																																																																																																																						
+24	Bandoneon								Bandoneon 2								Bandoneon 3																																																																																																															
+25	Nylon-str.Gt								Ukulele								Nylon Gtr.o								Velo Harmnix								Nylon Gt.2								Lequint Gt.																																																																																							
+26	Steel-str.Gt								12-str.Gt	Nylon+Steel	Atk Steel Gt						Mandolin	Mandolin 2	MandolinTrem														Steel Gt.2	Steel + Body																																																																																														
+27	Jazz Gt.	Mellow Gt.							Pedal Steel																																																																																																																							
+28	Clean Gt.	Clean Half	Open Hard 1	Open Hard 2	JC Clean Gt.	Atk CleanGt.			Chorus Gt.	JC Chorus Gt							TC FrontPick	TC Rear Pick	TC Clean ff	TC Clearn 2	LP Rear Pick	LP Rear 2   	LP RearAtack	Mid Tone GTR	Chung Ruan  	Chung Ruan 2																																																																																																						
+29	Muted Gt.	Muted Dis.Gt	TC Muted Gt.						Funk Pop								Funk Gt.2								Jazz Man    																																																																																																							
+30	OverdriveGt	Overdrive 2	Overdrive 3	More Drive	Guitar Pinch	Attack Drive			LP OverDrvGt	LP OverDrv	LP Half Drv 	LP Half Drv2	LP Chorus   																																																																																																																			
+31	DistortionGt	Dist. Gt2	Dazed Guitar	Distortion	Dist.Fast	Attack Dist 			Feedback Gt.	Feedback Gt2							Power Guitar	Power Gt.2	5th Dist.						Rock Rhythm	Rock Rhythm2	Dist Rtm GTR																																																																																																					
+32	Gt.Harmonics								Gt. Feedback	Gt. Feedback2							Ac.Gt.Harmnx								E.Bass Harm.																																																																																																							
+33	AcousticBs.	Rockabilly							Wild A.Bass	Atk A.Bass  							Bass + OHH																																																																																																															
+34	FingeredBs.	Fingered Bs2	Jazz Bass	Jazz Bass 2	Rock Bass	Heart Bass  	AttackFinger	Finger Slap 	ChorusJazzBs								F.Bass/Harm.																																																																																																															
+35	Picked Bass	Picked Bass2	Picked Bass3	Picked Bass4	Double Pick 				Muted PickBs								P.Bass/Harm.																																																																																																															
+36	Fretless Bs.	Fretless Bs2	Fretless Bs3	Fretless Bs4	Syn Fretless	Mr.Smooth			Wood+FlessBs																																																																																																																							
+37	Slap Bass 1	Slap Pop							Reso Slap	Unison Slap																																																																																																																						
+38	Slap Bass 2	Slap Bass 3 							FM Slap																																																																																																																							
+39	Synth Bass 1	SynthBass101	CS Bass	JP-4 Bass	JP-8 Bass	P5 Bass	JPMG Bass		Acid Bass	TB303 Bass	Tekno Bass	TB303 Bass 2	Kicked TB303	TB303 Saw Bs	Rubber303 Bs	Reso. 303 Bs	Reso SH Bass	TB303 Sqr Bs	TB303 DistBs	Clavi Bass  	Hammer      	Jungle Bass 	Square Bass 	Square Bass2	Arpeggio Bs								Hit&Saw Bass	Ring Bass   	AtkSineBass 	OB sine Bass	Auxiliary Bs				303SqDistBs 	303SqDistBs2	303SqDistBs3	303Sqr.Rev  	TeeBee      																																																																																			
+40	Synth Bass 2	SynthBass201	Modular Bass	Seq Bass	MG Bass	Mg Oct Bs	MG Oct Bass2	MG Blip Bs	Beef FM Bass	Dly Bass	X Wire Bass	WireStr Bass	Blip Bass	RubberBass 1	Syn Bell Bs 	Odd Bass    	RubberBass 2	SH101 Bass 1	SH101 Bass 2	Smooth Bass	SH101 Bass 3	Spike Bass	House Bass	KG Bass	Sync Bass	MG 5th Bass	RND Bass	WowMG Bass	Bubble Bass	Attack Pulse	Sync Bass 2 	Pulse Mix Bs	MG Dist Bass	Seq Bass 2  	3rd Bass    	MG Oct Bass 	SlowEnvBass 	Mild Bass   	DistEnvBass 	MG LightBass	DistSynBass 	Rise Bass   	Cyber Bass  																																																																																					
+41	Violin	Vaiolin Atk.							Slow Violin																																																																																																																							
+42	Viola	Viola Atk.																																																																																																																														
+43	Cello	Cello Atk.																																																																																																																														
+44	Contrabass																																																																																																																															
+45	Tremolo Str		Trem Str.St.						Slow Tremolo	Suspense Str	SuspenseStr2																																																																																																																					
+46	PizzicatoStr	Vcs&Cbs Pizz	Chamber Pizz	St.Pizzicato					Solo Pizz.								Solo Spic.	StringsSpic.																																																																																																														
+47	Harp	Harp&Strings	Harp St.    						Uillean Harp								Synth Harp								Yang Qin    	Yang Qin 2  	SynthYangQin																																																																																																					
+48	Timpani																																																																																																																															
+49	Strings	Bright Str	ChamberStr  	Cello sect.	Bright Str.2	Bright Str.3	Quad Strings	Mild Strings	Orchestra	Orchestra 2	Tremolo Orch	Choir Str.	Strings+Horn	Str.+Flute  	Choir Str.2	Choir Str.3	St. Strings	St.Strings 2	St.Strings 3	Orchestra 3 	Orchestra 4 				Velo Strings								Oct Strings1	Oct Strings2	ContraBsSect						60s Strings 																																																																																							
+50	SlowStrings	SlowStrings2	SlowStrings3						Legato Str.	Warm Strings	St.Slow Str.	St.Slow Str2	S.Str+Choir 	S.Str+Choir2																																																																																																																		
+51	Syn.Strings1	OB Strings	StackStrings	JP Strings	Chorus Str. 				Syn.Strings3	Syn.Strings4	Syn.Strings6	Syn.Strings7	LoFi Strings				High Strings	Hybrid Str.							Tron Strings	Noiz Strings																																																																																																						
+52	Syn.Strings2	Syn.Strings5	JUNO Strings	FilteredOrch	JP Saw Str. 	Hybrid Str.2	DistStrings 	JUNOFullStr.	Air Strings	Atk Syn Str.	StraightStr.																																																																																																																					
+53	Choir Aahs								St.ChoirAahs	Melted Choir	Church Choir	Boys Choir 1	Boys Choir 2	St.BoysChoir	Rich Choir  		Choir Hahs								Chorus Lahs								Chorus Aahs	Male Aah+Str																																																																																														
+54	Voice Oohs	Chorus Oohs 	Voice Oohs 2	Chorus Oohs2	OohsCodeMaj7	OohsCodeSus4	Jazz Scat   		Voice Dah	JzVoice Dat 	JzVoice Bop 	JzVoice Dow	JzVoice Thum				VoiceLah Fem	ChorusLahFem	VoiceLuh Fem	ChorusLuhFem	VoiceLan Fem	ChorusLanFem	VoiceAah Fem	VoiceUuh Fem	Fem Lah&Lan 								VoiceWah Mal	ChorusWahMal	VoiceWoh Mal	ChorusWohMal	VoiceAah Mal	VoiceOoh Mal			Humming     																																																																																							
+55	SynVox	SynVox 2    	SynVox 3    						Syn.Voice	Silent Night	Syn.Voice 2 						VP330 Choir	Vinyl Choir	JX8P Vox    	Analog Voice																																																																																																												
+56	OrchestraHit	Bass Hit    	6th Hit     	Euro Hit    					Impact Hit	Philly Hit	Double Hit	Perc.  Hit	Shock Wave	Bounce Hit  	Drill Hit   	Thrill Hit  	Lo Fi Rave	Techno Hit	Dist Hit	Bam Hit	Bit Hit	Bim Hit	Technorg Hit	Rave Hit	Strings Hit	Stack Hit	Industry Hit	Clap Hit    																																																																																																				
+57	Trumpet	Trumpet 2	Trumpet	Dark Trumpet	Trumpet & Nz				Flugel Horn								4th Trumpets								Bright Tp.	Warm Tp.	Warm Tp.2   	Twin Tp.    					Syn. Trumpet																																																																																															
+58	Trombone	Trombone 2	Twin bones	Bones & Tuba	Bright Tb   				Bs. Trombone								Euphonium   																																																																																																															
+59	Tuba	Tuba 2							Tuba + Horn 																																																																																																																							
+60	MutedTrumpet	Cup Mute Tp 	MuteTrumpet2	MuteTrumpet3					Muted Horns																																																																																																																							
+61	French Horns	Fr.Horn 2	Horn + Orche	Wide FreHrns					F.Hrn Slow	Dual Horns							Synth Horn								F.Horn Rip																																																																																																							
+62	Brass 1	Brass ff	Bones Sect.	St. Brass ff	Quad Brass1 	Quad Brass2 			Brass 2	Brass 3	Brass sfz		Brass sfz 2 		FatPop Brass		Brass Fall	Trumpet Fall							Octave Brass	Brass + Reed	Fat + Reed  						Orch Brass  	Orch Brass 2		St.FatPopBrs	St.Orch Brs 	St.Orch Brs2	St.Orch Brs3																																																																																									
+63	SynthBrass1	JUNO Brass	Stack Brass	SH-5 Brass	MKS Brass	Jump Brass  			Pro Brass	P5 Brass	OrchSynBrass						Oct SynBrass	Hybrid Brass	OctSynBrass2	BPF Brass   																																																																																																												
+64	Synth Brass2	Soft Brass	Warm Brass	Synth Brass3	Sync Brass  	Fat SynBrass	DeepSynBrass		SynBrass sfz	OB Brass	Reso Brass	DistSqrBrass	JP8000SawBrs				Velo Brass 1	Transbrass																																																																																																														
+65	Soprano Sax								Soprano  Exp.																																																																																																																							
+66	Alto Sax								AltoSax  Exp.	Grow Sax							AltoSax + Tp	Sax Section 																																																																																																														
+67	Tenor Sax	Tenor Sax							BreathyTn.	St.Tenor Sax																																																																																																																						
+68	Baritone Sax	Bari. Sax							Bari & Tenor																																																																																																																							
+69	Oboe								Oboe Exp.								Multi Reed																																																																																																															
+70	English Horn																																																																																																																															
+71	Bassoon																																																																																																																															
+72	Clarinet								Bs Clarinet								Multi Wind  	Quad Wind   																																																																																																														
+73	Piccolo	Piccolo							Nay	Nay Tremoro							Di																																																																																																															
+74	Flute	Flute 2	Flute Exp.	Flt Travelso					Flute + Vln	Pipe & Reed							Tron Flute	Indian Flute																																																																																																														
+75	Recorder																																																																																																																															
+76	Pan Flute								Kawala								Zampona	Zampona Atk							Tin Whistle	TinWhistle Nm	TinWhistle Or																																																																																																					
+77	Bottle Blow																																																																																																																															
+78	Shakuhachi	Shakuhachi																																																																																																																														
+79	Whistle	Whistle 2																																																																																																																														
+80	Ocarina																																																																																																																															
+81	Square Wave	MG Square	Hollow Mini	Mellow FM	CC Solo	Shmoog	LM Square	JP8000 TWM  	2600 Sine	Sine Lead	KG Lead	Twin Sine   					P5 Square	OB Square	JP-8 Square	Dist Square 	303SquarDst1	303SquarDst2	303 Mix Sqr 	Dual Sqr&Saw	Pluse Lead	JP8 PulseLd1	JP8 PulseLd2	MG Reso. Pls	JP8 PulseLd3	260RingLead 	303DistLead 	JP8000DistLd	HipHop SinLd	HipHop SqrLd	HipHop PlsLd	Flux Pulse  																																																																																												
+82	Saw Wave	OB2 Saw	Pulse Saw	Feline GR	Big Lead	Velo Lead	GR-300	LA Saw	Doctor Solo	Fat Saw Lead	JP8000 Saw  	D-50 Fat Saw	OB DoubleSaw	JP DoubleSaw	FatSawLead 2	JP SuperSaw 	Waspy Synth	PM Lead	CS Saw Lead						MG Saw 1	MG Saw 2	OB Saw 1	OB Saw 2	D-50 Saw	SH-101 Saw	CS Saw	MG Saw Lead	OB Saw Lead	P5 Saw Lead	MG unison	Oct Saw Lead	Natural Lead				SequenceSaw1	SequenceSaw2	Reso Saw	Cheese Saw 1	Cheese Saw 2	Rhythmic Saw	SequencedSaw	Techno Saw  																																																																																
+83	Syn.Calliope	Vent Synth	Pure PanLead						LM Pure Lead	LM Blow Lead																																																																																																																						
+84	Chiffer Lead	TB Lead	Hybrid Lead 	Unison SqrLd	FatSolo Lead	ForcefulLead	Oct.UnisonLd	Unison SawLd	Mad Lead	CrowdingLead	Double Sqr. 																																																																																																																					
+85	Charang	Wire Lead   	FB.Charang  	Fat GR Lead	Windy GR Ld	Mellow GR Ld	GR & Pulse		Dist.Lead	Acid Guitar1	Acid Guitar2	Dance Dst.Gt	DanceDst.Gt2				P5 Sync Lead	Fat SyncLead	Rock Lead	5th DecaSync	Dirty Sync	DualSyncLead	LA Brass Ld 		JUNO Sub Osc	2600 Sub Osc	JP8000Fd Osc																																																																																																					
+86	Solo Vox	Solo Vox 2  							Vox Lead	LFO Vox	Vox Lead 2  																																																																																																																					
+87	5th Saw Wave	Big Fives	5th Lead	5th Ana.Clav	5th Pulse   	JP 5th Saw  	JP8000 5thFB		4th Lead																																																																																																																							
+88	Bass & Lead	Big & Raw	Fat & Perky	JUNO Rave	JP8 BsLead 1	JP8 BsLead 2	SH-5 Bs.Lead	Delayed Lead																																																																																																																								
+89	Fantasia	Fantasia 2	New Age Pad	Bell Heaven	Fantasia 3  	Fantasia 4  	After D !   	260HarmPad  																																																																																																																								
+90	Warm Pad	Thick Matrix	Horn Pad	Rotary Strng	OB Soft Pad	Sine Pad    	OB Soft Pad2		Octave Pad	Stack Pad	Human Pad   	Sync Brs.Pad	Oct.PWM Pad 	JP Soft Pad 																																																																																																																		
+91	Polysynth	80's PolySyn	Polysynth 2	Poly King	Super Poly  				Power Stack	Octave Stack	Reso Stack	Techno Stack	Pulse Stack 	TwinOct.Rave	Oct.Rave    	Happy Synth 	ForwardSweep	ReverseSweep							Minor Rave  																																																																																																							
+92	Space Voice	Heaven II	SC Heaven	Itopia      	Water Space 	Cold Space  	Noise Peaker	Bamboo Hit  	Cosmic Voice	Auh Vox	AuhAuh	Vocorderman	Holy Voices 																																																																																																																			
+93	Bowed Glass	SoftBellPad	JP8 Sqr Pad	7thBelPad	Steel Glass 	Bottle Stack																																																																																																																										
+94	Metal Pad	Tine Pad	Panner Pad	Steel Pad   	Special Rave	Metal Pad 2 																																																																																																																										
+95	Halo Pad	Vox Pad	Vox Sweep						Horror Pad	SynVox Pad  	SynVox Pad 2	Breath&Rise 	Tears Voices																																																																																																																			
+96	Sweep Pad	Polar Pad	Ambient BPF 	Sync Pad    	Warriors    				Converge	Shwimmer	Celestial Pd	Bag Sweep	Sweep Pipe  	Sweep Stack 	Deep Sweep  	Stray Pad   																																																																																																																
+97	Ice Rain	Harmo Rain	African wood	Anklung Pad	Rattle Pad	Saw Impulse 	Strange Str.	FastFWD Pad 	Clavi Pad	EP Pad      	Tambra Pad  	CP Pad      																																																																																																																				
+98	Soundtrack	Ancestral	Prologue	Prologue 2	Hols Strings	HistoryWave 			Rave																																																																																																																							
+99	Crystal	Syn Mallet	Soft Crystal	Round Glock	Loud Glock	GlockenChime	Clear Bells	ChristmasBel	Vibra Bells	Digi Bells	Music Bell	Analog Bell	Blow Bell   	Hyper Bell  			Choral Bells	Air Bells	Bell Harp	Gamelimba	JUNO Bell	JP Bell     	Pizz Bell   	Bottom Bell 																																																																																																								
+100	Atmosphere	Warm Atmos	Nylon Harp	Harpvox	HollowReleas	Nylon+EP	Ambient Pad	Invisible	Pulsey Key	Noise Piano	Heaven Atmos	Tambra Atmos																																																																																																																				
+101	Brightness	Shining Star	OB Stab	Brass Star  	Choir Stab  	D-50 Retour 	SouthernWind	SymbolicBell	Org Bell																																																																																																																							
+102	Goblin	Goblinson	50's Sci-Fi	Abduction	Auhbient	LFO Pad	Random Str	Random Pad	LowBirds Pad	Falling Down	LFO RAVE	LFO Horror	LFO Techno	Alternative	UFO FX	Gargle Man	Sweep FX	LM Has Come 	FallinInsect	LFO Oct.Rave	Just Before 	RND Fl.Chord	RandomEnding	Random Sine 	EatingFilter	Noise&SawHit	Pour Magic  	DancingDrill	Dirty Stack 	Big Blue    	Static Hit	Atl.Mod.FX	Acid Copter																																																																																															
+103	Echo Drops	Echo Bell	Echo Pan	Echo Pan 2	Big Panner	Reso Panner	Water Piano	Echo SynBass	Pan Sequence	Aqua	Panning Lead	PanningBrass																																																																																																																				
+104	Star Theme	Star Theme 2	Star Mind   	Star Dust   	Rep.Trance  	Etherality  	Mystic Pad  		Dream Pad	Silky Pad	Dream Pad 2 	Silky Pad 2 					New Century	7th Atmos.	Galaxy Way	Rising OSC. 																																																																																																												
+105	Sitar	Sitar 2	Detune Sitar	Sitar 3	Sitar/Drone 	Sitar 4     			Tambra								Tamboura																																																																																																															
+106	Banjo	Muted Banjo							Rabab	San Xian							Gopichant								Oud				Oud+Strings				Pi Pa																																																																																															
+107	Shamisen	Tsugaru							Syn Shamisen																																																																																																																							
+108	Koto	Gu Zheng							Taisho Koto								Kanoon			Kanoon+Choir					Oct Harp																																																																																																							
+109	Kalimba								Sanza	Bodhran     	Bodhran Mute																																																																																																																					
+110	Bagpipe								Didgeridoo	Uillean Pipe	UillnPipe Nm	UillnPipe Or																																																																																																																				
+111	Fiddle								Er Hu	Gao Hu																																																																																																																						
+112	Shanai	Shanai 2							Pungi								Hichiriki								Mizmar								Suona 1	Suona 2																																																																																														
+113	Tinkle Bell								Bonang	Gender	Gamelan Gong	St.Gamelan	Jang-Gu	Jegogan     	Jublag      	Pemade      	RAMA Cymbal	Kajar       	Kelontuk    	Kelontuk Mt 	Kelontuk Sid	Kopyak Op   	Kopyak Mt   	Ceng Ceng   	Reyoung     	Kempur      							Jngl Crash  								Crash Menu  	RideCym Menu	RideBellMenu																																																																																					
+114	Agogo								Atarigane								Tambourine																																																																																																															
+115	Steel Drums	Island Mlt																																																																																																																														
+116	Woodblock								Castanets								Angklung	Angkl Rhythm							Finger Snaps								909 HandClap								HandClapMenu																																																																																							
+117	Taiko	Small Taiko							Concert BD	ConcertBD Mt							Jungle BD	Techno BD	Bounce						KendangWadon	Bebarongan  	Pelegongan  	Dholak 1    	Dholak 2    				Jngl BD Roll								Kick Menu 1 	Kick Menu 2 	Kick Menu 3 	Kick Menu 4 																																																																																				
+118	Melo. Tom 1	Real Tom	Real Tom 2  	Jazz Tom    	Brush Tom   				Melo. Tom 2	Rock Tom							Rash SD	House SD	Jungle SD	909 SD					Jngl SD Roll																SD Menu 1   	SD Menu 2   	SD Menu 3   	SD Menu 4   	SD Menu 5   																																																																																			
+119	Synth Drum								808 Tom	Elec Perc	Sine Prc	606 Tom	909 Tom	606 Dist. Tom     																																																																																																																		
+120	Reverse Cym.	Reverse Cym2	Reverse Cym3	Reverse Cym4					Rev.Snare 1	Rev.Snare 2							Rev.Kick 1	Rev.ConBD							Rev.Tom 1	Rev.Tom 2	Rev.Tom 3   	Rev.Tom 4   													Rev.SD Menu1	Rev.SD Menu2	Rev.SD Menu3	Rev.BD Menu1	Rev.BD Menu2	Rev.BD Menu3	Rev.ClapMenu																																																																																	
+121	Gt.FretNoise	Gt.Cut Noise	String Slap	Gt.CutNoise2	Dist.CutNoiz	Bass Slide	Pick Scrape		Gtr. FX Menu	Bartok Pizz.	Guitar Slap	Chord Stroke	Biwa Stroke	Biwa Tremolo			A.Bs.Nz Menu	D.Gt.Nz Menu	E.Gt.NzMenu1	E.Gt.NzMenu2	G.StrokeMenu	Gt.SlideMenu	A.Bs.Mute Nz	A.Bs.TouchNz	A.Bs.AtackNz	TC Up Nz    	TC DownMt.Nz	TC UpMt.Nz  	TC Dowm Nz  	DstGT.Up Nz 	DstGT.DwnNz1	DstGT.DwnNz2	DstGT.MuteNz		Gt.StrokeNz5	StlGt.SldNz1	StlGt.SldNz2	StlGt.SldNz3	StlGt.SldNz4	Gt.StrokeNz1	Gt.StrokeNz2	Gt.StrokeNz3	Gt.StrokeNz4																																																																																					
+122	Breath Noise	Fl.Key Click	Brth Nz Menu	Fl.Breath 1 	Fl.Breath 2 	Fl.Breath 3 	Vox Breath 1	Vox Breath 2	Trombone Nz 	Trumpet Nz  																																																																																																																						
+123	Seashore	Rain	Thunder	Wind	Stream	Bubble	Wind 2	Cricket     									Pink Noise	White Noise																																																																																																														
+124	Bird	Dog	Horse-Gallop	Bird 2	Kitty	Growl	Growl 2     	Fancy Animal	Seal        																																																																																																																							
+125	Telephone 1	Telephone 2	DoorCreaking	Door	Scratch	Wind Chimes		Scratch 2	ScratchKey	TapeRewind	Phono Noise	MC-500 Beep	Scratch 3   	Scratch 4   	Scratch 5   	Scratch 6   	Scratch 7   																																																																																																															
+126	Helicopter	Car-Engine	Car-Stop	Car-Pass	Car-Crash	Siren	Train	Jetplane	Starship	Burst Noise	Calculating	Perc. Bang	Burner      	Glass & Glam	Ice Ring    	Over Blow   	Crack Bottle	Pour Bottle 	Soda        	Open CD Tray	Audio Switch	Key Typing  	SL 1        	SL 2        	Car Engine 2	Car Horn    	Boeeeen     	R.Crossing  	Compresser  	Sword Boom! 	Sword Cross 	Stab! 1     	Stab! 2     																																																																																															
+127	Applause	Laughing	Screaming	Punch	Heart Beat	Footsteps	Applause 2	Small Club	ApplauseWave	BabyLaughing							Voice One	Voice Two	Voice Three	Voice Tah	Voice Whey		Voice Kikit 	Voice ComeOn	Voice Aou   	Voice Oou   	Voice Hie   																																																																																																					
+128	Gun Shot	Machine Gun	Lasergun	Explosion	Eruption	Big Shot	Explosion 2 																																																																																																																									
