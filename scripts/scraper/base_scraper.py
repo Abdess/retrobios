@@ -6,6 +6,8 @@ import json
 import sys
 import urllib.error
 import urllib.request
+
+import yaml
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -198,6 +200,24 @@ def fetch_github_latest_version(repo: str) -> str | None:
         return None
 
 
+class _PlatformDumper(yaml.SafeDumper):
+    """Quote scalars that a YAML reader could misparse.
+
+    Names such as "7800 BIOS (E).rom" or "Bandai - WonderSwan: x" are plain
+    text, and a bare "01" would be read back as an integer.
+    """
+
+
+def _quoted_str(dumper: yaml.SafeDumper, data: str) -> yaml.ScalarNode:
+    style = None
+    if any(c in data for c in "()[]{}:#") or data.strip() != data or data.isdigit():
+        style = '"'
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data, style=style)
+
+
+_PlatformDumper.add_representer(str, _quoted_str)
+
+
 def scraper_cli(
     scraper_class: type, description: str = "Scrape BIOS requirements"
 ) -> None:
@@ -294,7 +314,10 @@ def scraper_cli(
                     if field in old_sys and field not in sys_data:
                         sys_data[field] = old_sys[field]
         with open(output_path, "w") as f:
-            yaml.dump(config, f, default_flow_style=False, sort_keys=False)
+            yaml.dump(
+                config, f, Dumper=_PlatformDumper,
+                default_flow_style=False, allow_unicode=True, sort_keys=False,
+            )
         print(f"Written {len(reqs)} entries to {args.output}")
         return
 

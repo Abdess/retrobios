@@ -1,8 +1,8 @@
 inherits: emulatorjs
 platform: RomM
-version: 5.1.0
+version: 5.2.0
 homepage: "https://romm.app"
-source: "https://raw.githubusercontent.com/rommapp/romm/5.1.0/backend/models/fixtures/known_bios_files.json"
+source: "https://raw.githubusercontent.com/rommapp/romm/5.2.0/backend/models/fixtures/known_bios_files.json"
 base_destination: bios
 hash_type: sha1
 verification_mode: md5
@@ -142,7 +142,7 @@ systems:
       required: true
       sha1: b6ff66dcb5547bd91760d239ddf428a655631c53
       md5: 547f3d12aed389058ca06148f1cca0ed
-      crc32: '17516536'
+      crc32: "17516536"
       size: 1394278
     - name: f355dlx.zip
       destination: arcade/f355dlx.zip
@@ -184,7 +184,7 @@ systems:
       required: true
       sha1: deb62b0074b8cae4f162c257662136733cfc76ad
       md5: 00dad01abdbf8ea9e79ad2fe11bdb182
-      crc32: '81315163'
+      crc32: "81315163"
       size: 1859335
     - name: nmk004.zip
       destination: arcade/nmk004.zip
@@ -391,7 +391,7 @@ systems:
       required: true
       sha1: d041456bea851c173f65ac6ab3f2ee61bb0b8b53
       md5: 0aaba212339c72250f8a53a0a2b6189e
-      crc32: '65816192'
+      crc32: "65816192"
       size: 15103212
     - name: TNT.WAD
       destination: doom/TNT.WAD
@@ -604,7 +604,7 @@ systems:
       required: true
       sha1: e2fbd56e42da637609d23ae9df9efd1b4241b18a
       md5: 6d8c0ca64e726c82a4b726e9b01cdf1e
-      crc32: 00870134
+      crc32: "00870134"
       size: 32768
     - name: MSX2PEXT.ROM
       destination: msx/MSX2PEXT.ROM
@@ -680,6 +680,57 @@ systems:
       size: 262144
     - name: syscard3u.pce
       destination: tg16/syscard3u.pce
+      required: true
+      sha1: d02611d99921986147c753df14c7349b31d71950
+      md5: 0754f903b52e3b3342202bdafb13efa5
+      crc32: 2b5b75fe
+      size: 262144
+  nec-pc-engine-cd:
+    files:
+    - name: gecard.pce
+      destination: turbografx-cd/gecard.pce
+      required: true
+      sha1: 014881a959e045e00f4db8f52955200865d40280
+      md5: 6d2cb14fc3e1f65ceb135633d1694122
+      crc32: 51a12d90
+      size: 32768
+    - name: gexpress.pce
+      destination: turbografx-cd/gexpress.pce
+      required: true
+      sha1: 014881a959e045e00f4db8f52955200865d40280
+      md5: 6d2cb14fc3e1f65ceb135633d1694122
+      crc32: 51a12d90
+      size: 32768
+    - name: syscard1.pce
+      destination: turbografx-cd/syscard1.pce
+      required: true
+      sha1: a39a66da7de6ba94ab84d04eef7afeec7d4ee66a
+      md5: 2b7ccb3d86baa18f6402c176f3065082
+      crc32: 3f9f95a4
+      size: 262144
+    - name: syscard2.pce
+      destination: turbografx-cd/syscard2.pce
+      required: true
+      sha1: 88da02e2503f7c32810f5d93a34849d470742b6d
+      md5: 3cdd6614a918616bfc41c862e889dd79
+      crc32: 283b74e0
+      size: 262144
+    - name: syscard2u.pce
+      destination: turbografx-cd/syscard2u.pce
+      required: true
+      sha1: 2bea3dac98f84b2f2f469fa77ea720b8770d598d
+      md5: 94279f315e8b52904f65ab3108542afe
+      crc32: ff2a5ec3
+      size: 262144
+    - name: syscard3.pce
+      destination: turbografx-cd/syscard3.pce
+      required: true
+      sha1: 79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c
+      md5: 38179df8f4ac870017db21ebcbf53114
+      crc32: 6d9a73ef
+      size: 262144
+    - name: syscard3u.pce
+      destination: turbografx-cd/syscard3u.pce
       required: true
       sha1: d02611d99921986147c753df14c7349b31d71950
       md5: 0754f903b52e3b3342202bdafb13efa5
@@ -833,7 +884,7 @@ systems:
       required: true
       sha1: 300c20df6731a33952ded8c436f7f186d25d3492
       md5: a860e8c0b6d573d191e4ec7db1b1e4f6
-      crc32: '81977335'
+      crc32: "81977335"
       size: 16384
   nintendo-gbc:
     files:
@@ -900,7 +951,7 @@ systems:
       required: true
       sha1: ef9194ab4804aa0aa8540d846caf291b28331165
       md5: b17148254a5799684c7d783206504926
-      crc32: '86573808'
+      crc32: "86573808"
       size: 2097152
     - name: gc-pal-10.bin
       destination: ngc/gc-pal-10.bin
@@ -1566,7 +1617,7 @@ systems:
       required: true
       sha1: 9a75ed4b293f968985be4c9aa893cd88276d1ced
       md5: 78e61a2a02121873c1756b21fd1398b1
-      crc32: '82047489'
+      crc32: "82047489"
       size: 8192
     - name: disk_plus3.szx
       destination: zxs/disk_plus3.szx
@@ -1876,7 +1927,7 @@ systems:
       required: true
       sha1: b0f1c4fa8d4492a04431805f6537138b842b549f
       md5: 11526d58d4c524daef7d5d677dc6b004
-      crc32: '33697892'
+      crc32: "33697892"
       size: 524288
     - name: top-sp1.bin
       destination: neo-geo-cd/top-sp1.bin
@@ -1920,7 +1971,7 @@ systems:
       required: true
       sha1: 10155d8d6e6e832d6ea66db9bc098321fb5e8ebf
       md5: 924e392ed05558ffdb115408c263dccf
-      crc32: '37157331'
+      crc32: "37157331"
       size: 524288
     - name: scph1002.bin
       destination: psx/scph1002.bin

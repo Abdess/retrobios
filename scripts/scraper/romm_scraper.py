@@ -90,12 +90,24 @@ SLUG_MAP: dict[str, str] = {
     "sufami-turbo": "nintendo-sufami-turbo",
     "super-gb": "nintendo-sgb",
     "tg16": "nec-pc-engine",
+    "turbografx-cd": "nec-pc-engine-cd",
     "tvc": "videoton-tvc",
     "videopac-g7400": "philips-videopac",
     "wolfenstein": "wolfenstein-3d",
     "x1": "sharp-x1",
     "xbox": "microsoft-xbox",
     "zxs": "sinclair-zx-spectrum",
+}
+
+
+# Slugs whose player runs the same core as another slug and reads firmware
+# from its own folder. RomM keys the fixture by tg16 only, but its player maps
+# both tg16 and turbografx-cd to mednafen_pce (frontend/src/utils/index.ts:540-541)
+# and lists firmware per platform folder (backend/handler/filesystem/
+# firmware_handler.py get_firmware_fs_structure), so a CD library without the
+# system cards under its own slug cannot boot a disc.
+FIRMWARE_MIRRORS: dict[str, tuple[str, ...]] = {
+    "tg16": ("turbografx-cd",),
 }
 
 
@@ -142,18 +154,19 @@ class Scraper(BaseScraper):
             crc32 = (entry.get("crc") or "").strip() or None
             size = int(entry["size"]) if entry.get("size") else None
 
-            requirements.append(
-                BiosRequirement(
-                    name=filename,
-                    system=system,
-                    sha1=sha1,
-                    md5=md5,
-                    crc32=crc32,
-                    size=size,
-                    destination=f"{igdb_slug}/{filename}",
-                    required=True,
+            for slug in (igdb_slug, *FIRMWARE_MIRRORS.get(igdb_slug, ())):
+                requirements.append(
+                    BiosRequirement(
+                        name=filename,
+                        system=SLUG_MAP[slug],
+                        sha1=sha1,
+                        md5=md5,
+                        crc32=crc32,
+                        size=size,
+                        destination=f"{slug}/{filename}",
+                        required=True,
+                    )
                 )
-            )
 
         return requirements
 
