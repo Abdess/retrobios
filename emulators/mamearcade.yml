@@ -219,7 +219,7 @@ files:
     required: true
     category: bios_zip
     system: igs-pgm
-    source_ref: "src/mame/igs/pgm.cpp:5548"
+    source_ref: "src/mame/igs/pgm.cpp:5545"
     contents:
       - name: pgm_p02s.u20
         size: 131072
@@ -502,7 +502,7 @@ files:
     required: true
     category: bios_zip
     system: sammy-atomiswave
-    source_ref: "src/mame/sega/dc_atomiswave.cpp:1519"
+    source_ref: "src/mame/sega/dc_atomiswave.cpp:1480"
     contents:
       - name: bios0.ic23
         size: 131072
@@ -643,7 +643,7 @@ files:
     required: true
     category: bios_zip
     system: sega-stv
-    source_ref: "src/mame/sega/stv.cpp:4067"
+    source_ref: "src/mame/sega/stv.cpp:3948"
     contents:
       - name: epr-23603.ic8
         size: 524288
@@ -1000,7 +1000,7 @@ files:
     required: true
     category: bios_zip
     system: nintendo-playch10
-    source_ref: "src/mame/nintendo/playch10.cpp:2981"
+    source_ref: "src/mame/nintendo/playch10.cpp:2980"
     contents:
       - name: pch1-c__8t_e-2.8t
         size: 16384
@@ -1168,7 +1168,7 @@ files:
     required: true
     category: bios_zip
     system: namco-system573
-    source_ref: "src/mame/konami/ksys573.cpp:6541"
+    source_ref: "src/mame/konami/ksys573.cpp:6415"
     contents:
       - name: 700a01.22g
         description: Standard
@@ -1217,7 +1217,7 @@ files:
     required: true
     category: bios_zip
     system: konami-gv
-    source_ref: "src/mame/konami/konamigv.cpp:1450"
+    source_ref: "src/mame/konami/konamigv.cpp:1447"
     contents:
       - name: 999a01.7e
         size: 524288
@@ -1247,7 +1247,7 @@ files:
     required: true
     category: bios_zip
     system: konami-twinkle
-    source_ref: "src/mame/konami/twinkle.cpp:1624"
+    source_ref: "src/mame/konami/twinkle.cpp:1643"
 
   - name: bubsys.zip
     required: true
@@ -1277,7 +1277,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn1
-    source_ref: "src/mame/sony/zn.cpp:5971"
+    source_ref: "src/mame/sony/zn.cpp:5969"
     contents:
       - name: m534002c-13.ic353
         description: japan
@@ -1298,7 +1298,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn2
-    source_ref: "src/mame/sony/zn.cpp:6057"
+    source_ref: "src/mame/sony/zn.cpp:6055"
     contents:
       - name: m534002c-59.ic353
         size: 524288
@@ -1313,7 +1313,7 @@ files:
     required: true
     category: bios_zip
     system: taito-fx1
-    source_ref: "src/mame/sony/zn.cpp:5991"
+    source_ref: "src/mame/sony/zn.cpp:5989"
     contents:
       - name: m534002c-14.ic353
         size: 524288
@@ -1328,7 +1328,7 @@ files:
     required: true
     category: bios_zip
     system: acclaim-zn1
-    source_ref: "src/mame/sony/zn.cpp:6017"
+    source_ref: "src/mame/sony/zn.cpp:6015"
     contents:
       - name: m534002c-15.ic353
         size: 524288
@@ -1343,7 +1343,7 @@ files:
     required: true
     category: bios_zip
     system: atari-zn1
-    source_ref: "src/mame/sony/zn.cpp:6039"
+    source_ref: "src/mame/sony/zn.cpp:6024"
     contents:
       - name: msm27c402zb.ic353
         size: 524288
@@ -1358,7 +1358,7 @@ files:
     required: true
     category: bios_zip
     system: atlus-zn1
-    source_ref: "src/mame/sony/zn.cpp:6043"
+    source_ref: "src/mame/sony/zn.cpp:6028"
     contents:
       - name: m534002c-17.ic353
         size: 524288
@@ -1373,7 +1373,7 @@ files:
     required: true
     category: bios_zip
     system: videosystem-zn1
-    source_ref: "src/mame/sony/zn.cpp:6034"
+    source_ref: "src/mame/sony/zn.cpp:6032"
     contents:
       - name: coh-1002v.ic353
         size: 524288
@@ -1388,7 +1388,7 @@ files:
     required: true
     category: bios_zip
     system: eighting-zn1
-    source_ref: "src/mame/sony/zn.cpp:6040"
+    source_ref: "src/mame/sony/zn.cpp:6038"
     contents:
       - name: m27c402cz-54.ic353
         size: 524288
@@ -1403,7 +1403,7 @@ files:
     required: true
     category: bios_zip
     system: tecmo-tps
-    source_ref: "src/mame/sony/zn.cpp:6091"
+    source_ref: "src/mame/sony/zn.cpp:6089"
     contents:
       - name: m534002c-61.ic353
         size: 524288
@@ -1754,7 +1754,7 @@ files:
     required: true
     category: bios_zip
     system: exidy-maxaflex
-    source_ref: "src/mame/atari/maxaflex.cpp:448"
+    source_ref: "src/mame/atari/maxaflex.cpp:447"
     contents:
       - name: atarixl.rom
         size: 16384
@@ -1774,7 +1774,7 @@ files:
     required: true
     category: bios_zip
     system: brezzasoft-crystal
-    source_ref: "src/mame/misc/crystal.cpp:854"
+    source_ref: "src/mame/misc/crystal.cpp:845"
     contents:
       - name: mx27l1000.u14
         description: AMG0110B PCB

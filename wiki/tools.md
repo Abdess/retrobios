@@ -238,6 +238,34 @@ to the files inside the archive, so the exported DAT lists those entries
 without a container sha1. Anyone submitting the DAT upstream should mention
 this.
 
+### mame_ref_audit.py
+
+Checks that each MAME romset ref names the line declaring its own set, at the
+profile's pinned revision.
+
+```bash
+python scripts/mame_ref_audit.py mame mamearcade mamemess groovymame
+python scripts/mame_ref_audit.py mame --write
+```
+
+`profile_sync` follows content: a ref that drifted still anchors wherever the
+cited text went, which is what drift detection is for. It cannot answer the
+only question a MAME ref asks, whether that line declares that set. Asking the
+stronger question found nineteen stale refs in one driver file where
+profile_sync had flagged five, and ninety-two across the four profiles whose
+upstream still moves.
+
+The set name is argument 1 of the machine macro, after the year: matching it
+anywhere on the line would also match every clone naming that set as its
+parent, which is most of a driver file. Comments are stripped first, since a
+declaration can sit behind one, as `/* Naomi */ GAME( 1998, naomi, ...)` does.
+
+A set no machine macro declares is reported as not judgeable rather than
+wrong: device ROMs take the shortname of their `DEFINE_DEVICE_TYPE`, and some
+archives are bare `ROM_START` blocks. The frozen generations, mame2009 through
+mame2016, come out clean, which is the check saying it finds drift only where
+drift can happen.
+
 ### profile_sync.py
 
 Confront a profile with its upstream. The pinned commit is the profile's

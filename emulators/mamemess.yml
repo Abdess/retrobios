@@ -482,7 +482,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2.cpp:665"
+    source_ref: "src/mame/apple/apple2.cpp:1310"
     contents:
       - name: a2.chr
         description: Character generator ROM
@@ -513,7 +513,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2.cpp:803"
+    source_ref: "src/mame/apple/apple2.cpp:1311"
     contents:
       - name: 341-0036.chr
         description: Character generator ROM
@@ -548,7 +548,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2e.cpp:5566"
+    source_ref: "src/mame/apple/apple2e.cpp:6345"
     contents:
       - name: 342-0133-a.chr
         description: Character generator ROM
@@ -571,7 +571,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2e.cpp:5688"
+    source_ref: "src/mame/apple/apple2e.cpp:6352"
     contents:
       - name: 342-0265-a.chr
         description: Enhanced character generator ROM
@@ -818,7 +818,7 @@ files:
     required: true
     category: bios_zip
     system: entex-advision
-    source_ref: "src/mame/entex/advision.cpp:357"
+    source_ref: "src/mame/entex/advision.cpp:471"
     contents:
       - name: ins8048-11kdp_n.u5
         description: Intel 8048 main CPU ROM
@@ -834,7 +834,7 @@ files:
     required: true
     category: bios_zip
     system: bandai-rx78
-    source_ref: "src/mame/bandai/rx78.cpp:559"
+    source_ref: "src/mame/bandai/rx78.cpp:577"
     note: "MACHINE_NOT_WORKING."
     contents:
       - name: ipl.rom

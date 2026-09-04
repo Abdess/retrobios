@@ -1499,7 +1499,7 @@ files:
     required: true
     category: bios_zip
     system: konami-twinkle
-    source_ref: "src/mame/konami/twinkle.cpp:1360"
+    source_ref: "src/mame/konami/twinkle.cpp:1655"
     contents:
       - name: 863a03.7b
         size: 524288
@@ -2121,7 +2121,7 @@ files:
   - name: aristmk5.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/acorn/aristmk5.cpp:2631"
+    source_ref: "src/mame/acorn/aristmk5.cpp:9293"
     contents:
       - name: setchip v4.04.09.u7
         size: 524288
