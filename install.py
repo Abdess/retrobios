@@ -106,7 +106,15 @@ DEFAULT_DESTS = {
 
 
 def detect_os() -> str:
-    """Return normalized OS identifier."""
+    """Return normalized OS identifier.
+
+    RETROBIOS_OS names the platform outright (linux, wsl, windows, darwin),
+    for a run that has to behave like another host: the PowerShell wrapper
+    tests drive a Windows layout on a Linux runner.
+    """
+    forced = os.environ.get("RETROBIOS_OS", "").strip().lower()
+    if forced in ("linux", "wsl", "windows", "darwin"):
+        return forced
     system = platform.system().lower()
     if system == "linux":
         proc_version = Path("/proc/version")

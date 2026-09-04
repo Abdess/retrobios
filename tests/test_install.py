@@ -852,6 +852,8 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
                 USERPROFILE=str(userprofile),
                 APPDATA=str(tempfile.mkdtemp()),
                 RETROBIOS_BASE_URL=f"http://127.0.0.1:{httpd.server_address[1]}",
+                # A LaunchBox layout is a Windows layout: the runner is Linux.
+                RETROBIOS_OS="wsl",
             )
             proc = subprocess.run(
                 [
@@ -951,6 +953,18 @@ class TestLaunchboxDetectionPowershell(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         landed = ra_dir.parent / "PCSX2" / "bios" / "ps2-0230a.bin"
         self.assertTrue(landed.exists(), proc.stdout)
+
+
+class TestForcedOs(unittest.TestCase):
+    """RETROBIOS_OS overrides detection with a known name only."""
+
+    def test_known_name_wins(self):
+        with unittest.mock.patch.dict(os.environ, {"RETROBIOS_OS": "Windows"}):
+            self.assertEqual(install.detect_os(), "windows")
+
+    def test_unknown_name_is_ignored(self):
+        with unittest.mock.patch.dict(os.environ, {"RETROBIOS_OS": "amiga"}):
+            self.assertIn(install.detect_os(), ("linux", "wsl", "windows", "darwin"))
 
 
 class TestDetectFrontends(unittest.TestCase):
