@@ -10,8 +10,6 @@ import json
 import urllib.request
 WIKI_SRC_DIR = "wiki"  # manually maintained wiki sources
 SYSTEM_ICON_BASE = "https://raw.githubusercontent.com/libretro/retroarch-assets/master/xmb/systematic/png"
-
-SYSTEM_ICON_BASE = "https://raw.githubusercontent.com/libretro/retroarch-assets/master/xmb/systematic/png"
 ICON_CACHE_PATH = Path(".cache") / "system_icons.json"
 
 # Icon names confirmed to exist upstream. A name absent from this map has not

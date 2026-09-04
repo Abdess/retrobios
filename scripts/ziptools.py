@@ -75,23 +75,21 @@ def build_zip_contents_index(db: dict, max_entry_size: int = 512 * 1024 * 1024) 
     _zip_contents_cache = (fingerprint, index)
     return index
 
+
 MAX_ZIP_MEMBERS = 100_000
 
 MAX_ZIP_MEMBER_SIZE = 8 * 1024 * 1024 * 1024
 
-MAX_ZIP_MEMBER_SIZE = 8 * 1024 * 1024 * 1024
 # The largest generated pack is already ~5 GB uncompressed and the collection
 # only grows; this bounds a malicious archive without capping a real one.
 MAX_ZIP_TOTAL_SIZE = 64 * 1024 * 1024 * 1024
 
-MAX_ZIP_TOTAL_SIZE = 64 * 1024 * 1024 * 1024
 # DEFLATE cannot exceed roughly 1,032:1, so this rejects a declared ratio no
 # real DEFLATE member can reach. Methods with a higher ceiling (bzip2, LZMA)
 # are exempt and bounded by the per-member and per-archive size limits alone.
 MAX_ZIP_COMPRESSION_RATIO = 1_100
-
-MAX_ZIP_COMPRESSION_RATIO = 1_100
 _BOUNDED_RATIO_METHODS = (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED)
+
 
 def safe_extract_zip(
     zip_path: str,

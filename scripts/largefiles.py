@@ -14,12 +14,9 @@ from hashing import compute_hashes
 
 
 LARGE_FILES_RELEASE = "large-files"
-
-LARGE_FILES_RELEASE = "large-files"
-LARGE_FILES_REPO = "Abdess/retrobios"
-
 LARGE_FILES_REPO = "Abdess/retrobios"
 LARGE_FILES_CACHE = ".cache/large"
+
 
 def fetch_large_file(
     name: str,

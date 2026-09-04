@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import contextlib
 import hashlib
 import io
@@ -1009,3 +1010,36 @@ class ContributorsSurviveAFailedRequest(unittest.TestCase):
             text.count('<a href="https://github.com/'), 0,
             "the section is present but empty",
         )
+
+
+class ModuleConstantsDeclaredOnce(unittest.TestCase):
+    """Splitting common.py into modules emitted some constants twice.
+
+    The values matched, so nothing broke, but the second assignment orphans
+    the comment written above the first and leaves two lines to keep in step
+    the day a value changes.
+    """
+
+    @staticmethod
+    def _redeclared(path: Path) -> list[str]:
+        seen: dict[str, str] = {}
+        again = []
+        for node in ast.parse(path.read_text()).body:
+            if not isinstance(node, ast.Assign) or len(node.targets) != 1:
+                continue
+            target = node.targets[0]
+            if not isinstance(target, ast.Name):
+                continue
+            value = ast.unparse(node.value)
+            if seen.get(target.id) == value:
+                again.append(target.id)
+            seen[target.id] = value
+        return again
+
+    def test_no_module_assigns_the_same_constant_twice(self):
+        offenders = {}
+        for path in sorted(ROOT.glob("scripts/**/*.py")) + [ROOT / "install.py"]:
+            again = self._redeclared(path)
+            if again:
+                offenders[path.name] = again
+        self.assertEqual(offenders, {})
