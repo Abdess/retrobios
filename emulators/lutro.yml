@@ -22,4 +22,9 @@ notes: |
   (filesystem.c:296) but does not load any files from it itself.
   No BIOS, firmware, or system files required.
 
+exclusion_note: >
+  The system directory is not read by the core but handed to the Lua game
+  through fs_getAppdataDirectory, so whatever is loaded from it is the game's
+  own content, not a file this core names (filesystem.c:291-303).
+
 files: []

@@ -22,6 +22,11 @@ notes: |
   dummy launcher files. The system directory is retrieved but never used
   for file loading (libretro.cpp:60-62).
 
+exclusion_note: >
+  The system directory is asked for and stored in retro_base_directory, which
+  is named in no other file of the tree and read nowhere: the answer is never
+  used (libretro.cpp:28,60-63).
+
 files: []
 
 analysis:

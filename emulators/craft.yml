@@ -9,6 +9,12 @@ core_version: "v1"
 display_name: "Minecraft (Craft)"
 cores: [craft]
 systems: []
+exclusion_note: >
+  The system directory is asked for, and what goes in it is written by the
+  core: g->db_path and g->db_auth_path, the world database and its auth
+  table. Nothing is read from it that the user has to supply
+  (src/main.c:2682-2697).
+
 files: []
 notes: >
   Libretro port of Craft, a simple Minecraft clone by Michael Fogleman.

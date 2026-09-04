@@ -238,6 +238,33 @@ to the files inside the archive, so the exported DAT lists those entries
 without a container sha1. Anyone submitting the DAT upstream should mention
 this.
 
+### fileless_audit.py
+
+Names the profiles that declare no files whose source asks for a directory to
+read from.
+
+```bash
+python scripts/fileless_audit.py craft dice lutro
+```
+
+An empty `files:` list is the one assertion in the repository that ages
+unwatched: there is no file to go missing and no ref to drift, so nothing
+notices when a core that embedded everything grows a path. virtualjaguar
+carried "No external BIOS files are required or loaded by this core" while its
+source had grown eleven filenames read from the system directory.
+
+The signal is the request itself, `RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY` and
+its spellings, looked for in the sources the profile already cites. Finding one
+does not prove a file is loaded, which is why this reports rather than
+concludes.
+
+Three answers settle a profile and it is not reported again: it declares files,
+it declares `data_directories` (dinothawr reads `system_dir/dinothawr/` and
+says so there), or it carries an `exclusion_note` saying what the directory is
+for. craft writes its world database in it, dice stores the answer in a
+variable no other file names, lutro hands it to the Lua game. What is left is
+the set nobody has read yet, which is the only set worth reading.
+
 ### mame_ref_audit.py
 
 Checks that each MAME romset ref names the line declaring its own set, at the
