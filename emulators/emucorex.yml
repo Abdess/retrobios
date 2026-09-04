@@ -4,8 +4,8 @@ core_classification: community_fork
 source: "https://github.com/sashkinbro/EmuCoreX"
 upstream: "https://github.com/PCSX2/pcsx2"
 author: "Oleksandr (sashkinbro)"
-profiled_date: "2026-08-11"
-source_commit: "7d103230adfa671a3e66b090b8a7fe8f44edc09c"
+profiled_date: "2026-09-04"
+source_commit: "f32393ae0dc1df81834e58873145cff5b8bc8175"
 upstream_commit: "53e3838c1dd59f611fa3d2fd36915903a1304c6e"
 core_version: "0.3.3"
 display_name: "Sony - PlayStation 2 (EmuCoreX)"
@@ -55,22 +55,34 @@ notes: |
   A BIOS image is required and boot stops without one: LoadBIOS returning false
   makes VMManager report that a PlayStation 2 BIOS is needed. Only a GS dump
   replay skips the load. Detection is by content: the folder scan keeps files
-  between 4 and 8 MB and accepts an image whose romdir carries a RESET entry
+  between 2 and 8 MB and accepts an image whose romdir carries a RESET entry
   followed by a readable ROMVER, the fifth ROMVER character giving the zone among
   Japan, USA, Europe, Asia, China, T10K, COH-H, Test and Free, with EXTINFO
   supplying the serial. An image named in the configuration is opened at its own
   path without the size filter. No name and no hash is matched.
+
+  MIN_BIOS_SIZE was halved to 2 MB to admit the Namco System 246/256 chip dumps,
+  which are 2 MB where a console image is 4. Three other changes came with it:
+  a COH-H board is region 11 rather than 8, its description is built from the
+  EXTINFO serial because Sony left the version and date fields identical across
+  those BIOSes, and the ROM window is zero-filled before the read so the unused
+  upper half cannot retain the previous image.
   ref: app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:16-17,
-       app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:80-197,
-       app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:258-294,
-       app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:317-369,
+       app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:80-217,
+       app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:150-151 (COH-H region),
+       app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:176-190 (serial description),
+       app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:278-314,
+       app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:337-391,
+       app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:365-367 (ROM window cleared),
        app/src/main/cpp/pcsx2/pcsx2/VMManager.cpp:1487-1499
 
   The app runs its own gate over the same test before launching. A candidate is
-  a .bin or .rom between 512 KB and 8 MB whose name carries scph, ps2, bios or
-  rom, and it is confirmed by isBiosPath or isBiosFd, both of which call the
-  core's IsBIOS on the path or on /proc/self/fd.
-  ref: app/src/main/java/com/sbro/emucorex/core/BiosValidator.kt:13-19,
+  a .bin, .rom, .7d or .8g between 512 KB and 8 MB whose name carries scph, ps2,
+  bios, rom or r27v1602f, and it is confirmed by isBiosPath or isBiosFd, both of
+  which call the core's IsBIOS on the path or on /proc/self/fd. The two extra
+  extensions are the board positions the Namco dumps carry instead of a
+  conventional one.
+  ref: app/src/main/java/com/sbro/emucorex/core/BiosValidator.kt:13-21,
        app/src/main/java/com/sbro/emucorex/core/BiosValidator.kt:110-137,
        app/src/main/cpp/ARM_ANDROID/src/jni/native_app_jni.cpp:414-436
 
@@ -119,16 +131,53 @@ files:
     system: sony-playstation-2
     agnostic: true
     required: true
-    min_size: 4194304
+    min_size: 2097152
     max_size: 8388608
     validation: [size]
     description: "PS2 BIOS image"
     note: >-
       Any image whose romdir holds RESET and ROMVER is accepted, whatever its
       name. The 4 to 8 MB range gates the folder scan; an image named in the
-      configuration skips that range. Read into the 4 MB ROM region and truncated
-      to it. Shorter than 2465792 bytes disables the OSDSys parameter HLE.
-    source_ref: "app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:16-17, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:80-197, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:258-294, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:317-369"
+      configuration skips that range. Read into the 4 MB ROM region, which is
+      zero-filled first, and truncated to it. Shorter than 2465792 bytes disables
+      the OSDSys parameter HLE.
+    source_ref: "app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:16-17, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:80-217, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:278-314, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:337-391"
+
+  - name: r27v1602f.7d
+    path: bios/r27v1602f.7d
+    system: sony-playstation-2
+    agnostic: true
+    required: false
+    size: 2097152
+    md5: 52cca0058626569c7a9699838baab2d8
+    sha1: f0a74bbcaf801f3fd0b7002ebd0118564aae3528
+    crc32: 2b2e41a2
+    description: "Namco System 246 COH-H BIOS chip dump"
+    note: >-
+      Admitted since MIN_BIOS_SIZE fell to 2 MB. The board position is the
+      extension, so the picker takes .7d alongside .bin and .rom, and the name
+      hint r27v1602f carries it past the name test. Read into the 4 MB ROM
+      window, whose upper half is cleared first. ROMVER marks it T with a fifth
+      character Z, which is what makes it COH-H and region 11; its description
+      comes from the EXTINFO serial. Byte-identical to the r27v1602f.7d member
+      of the MAME sys246 set.
+    source_ref: "app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:16-17, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:150-151, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:176-190, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:365-367, app/src/main/java/com/sbro/emucorex/core/BiosValidator.kt:13-21"
+
+  - name: r27v1602f.8g
+    path: bios/r27v1602f.8g
+    system: sony-playstation-2
+    agnostic: true
+    required: false
+    size: 2097152
+    md5: a58676c6bd79229bda967d07b4ec2e16
+    sha1: bc4fb4e1e53adbd92385f1726bd69663ff870f1e
+    crc32: b2a8eeb6
+    description: "Namco System 256 COH-H BIOS chip dump"
+    note: >-
+      The System 256 counterpart, taken by the same path and the same widened
+      size gate. Byte-identical to the r27v1602f.8g member of the MAME sys256
+      set.
+    source_ref: "app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:16-17, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:150-151, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:176-190, app/src/main/cpp/pcsx2/pcsx2/ps2/BiosTools.cpp:365-367, app/src/main/java/com/sbro/emucorex/core/BiosValidator.kt:13-21"
 
   - name: ps2-0230a-20080220.rom1
     path: bios/ps2-0230a-20080220.rom1
