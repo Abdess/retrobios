@@ -23,41 +23,41 @@ notes: |
   linked into the binary. MarianiFrame::GetResourceData maps each AppleWin
   resource id to a file name, NSBundle resolves it against Contents/Resources,
   and the file is read with open() then kept in a map for later requests
-  (MarianiFrame.cpp:156-232, AppDelegate.mm:1465-1469). LinuxFrame::GetResource
+  (source/frontends/mariani/MarianiFrame.cpp:156-232, source/frontends/mariani/AppDelegate.mm:1465-1469). LinuxFrame::GetResource
   throws when the file it gets back does not have the size the call site asked
-  for (linuxframe.cpp:133-145), so each entry below carries the size the code
+  for (source/linux/linuxframe.cpp:133-145), so each entry below carries the size the code
   demands. A name that resolves to nothing raises a "Resource not found" alert
   and returns a null pointer.
 
   Machine types offered in preferences: Apple II, II Plus, II J-Plus, //e,
   enhanced //e, Pravets 82, Pravets 8M, Pravets 8A, TK3000 //e and Base64A
-  (PreferencesViewController.mm:191-193, 741-751). MemInitializeROM picks the
-  system ROM from that setting (Memory.cpp:2052-2069). Default slots are the
+  (source/frontends/mariani/preferences/PreferencesViewController.mm:191-193, 741-751). MemInitializeROM picks the
+  system ROM from that setting (source/Memory.cpp:2052-2069). Default slots are the
   printer card in 1, Super Serial Card in 2, Mockingboard in 4 and Disk II in 6
-  (CardManager.cpp:325-334); the hard disk and mouse cards are chosen by the
+  (source/CardManager.cpp:325-334); the hard disk and mouse cards are chosen by the
   user.
 
   Two names in the resource map have no file in the bundle: the Resources build
   phase lists 49 items and neither appears (Mariani.xcodeproj/project.pbxproj).
   Hddrvr-v2.bin is requested when a save state written with hard disk card
-  version 4 is loaded (Harddisk.cpp:228, 1439-1443), and
+  version 4 is loaded (source/Harddisk.cpp:228, 1439-1443), and
   Freezes_Non-autostart_F8_Rom.rom when the configuration value "The Freeze's
-  F8 Rom" is set on an Apple II (Memory.cpp:2163-2168, Utilities.cpp:188-189,
-  Common.h:94). Contents/Resources is the only directory searched, so that is
+  F8 Rom" is set on an Apple II (source/Memory.cpp:2163-2168, source/Utilities.cpp:188-189,
+  source/Common.h:94). Contents/Resources is the only directory searched, so that is
   where the two belong.
 
   The debugger comes up with the emulator, not with its window
-  (context.cpp:116). CmdDebugStartup preloads four symbol tables
-  (Debug.cpp:9492-9520), each read first from
+  (source/linux/context.cpp:116). CmdDebugStartup preloads four symbol tables
+  (source/Debugger/Debug.cpp:9488-9516), each read first from
   ~/Library/Application Support/<bundle id>/ and then from the bundle
-  (Debugger_Symbols.cpp:774, 814-817, MarianiFrame.cpp:36-37,
-  AppDelegate.mm:1471-1491).
+  (source/Debugger/Debugger_Symbols.cpp:774, 814-817, source/frontends/mariani/MarianiFrame.cpp:36-37,
+  source/frontends/mariani/AppDelegate.mm:1471-1491).
 
   --rom and --f8rom install a 12k/16k and a 2k image from any path over the ROM
-  already loaded (argparser.cpp:197-198, programoptions.cpp:81-101,
-  Memory.cpp:2120-2213). AppleWin's -videorom and its hard disk firmware
+  already loaded (source/frontends/common2/argparser.cpp:205-206, source/frontends/common2/programoptions.cpp:82-102,
+  source/Memory.cpp:2120-2213). AppleWin's -videorom and its hard disk firmware
   switches are unreachable here: ParseCmdLine has no caller in this tree, and
-  UseHdcFirmwareV1/V2 are called only from Windows/AppleWin.cpp:783-785, which
+  UseHdcFirmwareV1/V2 are called only from source/Windows/AppleWin.cpp:783-785, which
   the Xcode project does not compile.
 
 files:
@@ -447,7 +447,7 @@ files:
     size: 13444
     md5: 034527d42a96d0f39977cb85c6a8f2d8
     sha1: fcfbbb25e06f58d13e762b02bfd468c834d98fc8
-    source_ref: "source/Debugger/Debugger_Symbols.cpp:46, 774, 814-817, source/Debugger/Debug.cpp:9499-9500"
+    source_ref: "source/Debugger/Debugger_Symbols.cpp:46, 774, 814-817, source/Debugger/Debug.cpp:9495-9496"
     note: >
       Preloaded into the Main table when the emulator starts. Read from the
       support directory first, then from the bundle. Parsed as lines of address
@@ -460,7 +460,7 @@ files:
     size: 15378
     md5: 7253a9ba7d7ca807016f5adc0207dd7b
     sha1: 496a0bd1af463fce81b362da9e4757a993e355d5
-    source_ref: "source/Debugger/Debugger_Symbols.cpp:47, 774, 814-817, source/Debugger/Debug.cpp:9502-9503"
+    source_ref: "source/Debugger/Debugger_Symbols.cpp:47, 774, 814-817, source/Debugger/Debug.cpp:9498-9499"
     note: "Preloaded into the Basic table when the emulator starts."
 
   - name: A2_DOS33.SYM2
@@ -469,7 +469,7 @@ files:
     size: 2380
     md5: 88bd69906b4b3109b3f31472fb4b47f4
     sha1: 51cc84e2cbd9bd61d50a0931cdae0a2ef0a57d6c
-    source_ref: "source/Debugger/Debugger_Symbols.cpp:53, 774-806, source/Debugger/Debug.cpp:9506-9507"
+    source_ref: "source/Debugger/Debugger_Symbols.cpp:53, 774-806, source/Debugger/Debug.cpp:9502-9503"
     note: >
       Preloaded into the DOS33 table when the emulator starts. The .SYM2
       extension routes it through the debugger script reader instead of the
@@ -546,7 +546,7 @@ analysis:
 
   debugger_scripts:
     - filename: DebuggerAutoRun.txt
-      source_ref: "source/Debugger/Debug.cpp:365, source/Debugger/Debug.cpp:9440-9473"
+      source_ref: "source/Debugger/Debug.cpp:365, source/Debugger/Debug.cpp:9436-9469"
       note: >
         Run once at the first DebugInitialize, from the current directory and
         then from the support directory. Holds debugger commands written by the
@@ -556,10 +556,10 @@ analysis:
     options:
       - option: "--rom"
         accepts: "12 KB image at $D000 or 16 KB image at $C000, any path"
-        source_ref: "source/frontends/common2/argparser.cpp:197, source/frontends/common2/programoptions.cpp:81-91, source/Memory.cpp:2173-2213"
+        source_ref: "source/frontends/common2/argparser.cpp:205, source/frontends/common2/programoptions.cpp:82-92, source/Memory.cpp:2173-2213"
       - option: "--f8rom"
         accepts: "2 KB image at $F800, any path"
-        source_ref: "source/frontends/common2/argparser.cpp:198, source/frontends/common2/programoptions.cpp:92-101, source/Memory.cpp:2139-2161"
+        source_ref: "source/frontends/common2/argparser.cpp:206, source/frontends/common2/programoptions.cpp:93-102, source/Memory.cpp:2139-2161"
     note: >
       Both are installed over the ROM already loaded from the bundle and neither
       has a fixed name. AppleWin's -videorom has no equivalent: ParseCmdLine is
