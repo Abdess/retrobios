@@ -162,10 +162,11 @@ done
 gh release view "v${DATE}" --json assets --jq '.assets | length'   # expect every file
 gh release edit "v${DATE}" --draft=false --latest
 
-# 6. Keep the three most recent releases plus large-files
+# 6. Keep only the new release plus large-files: an older pack carries hashes
+#    the platforms no longer check, so it misleads more than it helps
 gh release list --json tagName,createdAt \
   --jq 'sort_by(.createdAt) | reverse | .[].tagName' | grep -v '^large-files$' \
-  | tail -n +4 | while read tag; do gh release delete "$tag" --yes --cleanup-tag; done
+  | tail -n +2 | while read tag; do gh release delete "$tag" --yes --cleanup-tag; done
 ```
 
 One pack per platform, the full one: the platform's list plus everything its
