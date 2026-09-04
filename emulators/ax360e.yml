@@ -34,8 +34,8 @@ notes: |
 
   No Xbox 360 system file is loaded. The kernel, XAM and XBDM are HLE modules
   registered at startup, and every key the emulator needs is a constant in the
-  source: the XEX1 retail, XEX2 retail and XEX2 devkit keys tried in turn when an
-  image is read, the 0x19 key pair the profile blob is encrypted with, and the
+  source: the XEX1 retail, XEX1 devkit, XEX2 retail and XEX2 devkit keys tried in
+  turn when an image is read, the 0x19 key pair the profile blob is encrypted with, and the
   key vault map XeKeysGetKey answers from. There is no NAND, flash or keyvault
   path.
   ref: ax360e/app/src/main/cpp/xenia-canary/src/xenia/emulator.cc:316-318,
