@@ -235,6 +235,17 @@ def main():
     )
     args = parser.parse_args()
 
+    # A second run on the same output directory is refused before any work:
+    # the database rebuild alone takes minutes, and the reader holding the
+    # directory would otherwise see the answer only after all of it.
+    if not args.skip_packs and Path(args.output_dir).is_dir():
+        try:
+            with artifact_lock(args.output_dir):
+                pass
+        except ArtifactLockBusy as exc:
+            print(f"ERROR: {exc}")
+            sys.exit(1)
+
     results = {}
     all_ok = True
     total_start = time.monotonic()

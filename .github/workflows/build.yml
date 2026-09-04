@@ -34,7 +34,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install pyyaml
+      - run: pip install pyyaml jsonschema==4.23.0
 
       - name: Run tests
         run: python -m unittest discover tests
