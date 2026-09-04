@@ -97,28 +97,28 @@ files:
     required: false
     aliases: ["2608_SD.WAV"]
     note: "YM2608 OPNA rhythm sample: snare drum"
-    source_ref: "sound/rhythmc.c:12, sound/fmgen/fmgen_opna.cpp:1434"
+    source_ref: "sound/rhythmc.c:12, sound/fmgen/fmgen_opna.cpp:1433-1437"
 
   - name: "2608_top.wav"
     path: "np2kai/2608_top.wav"
     required: false
     aliases: ["2608_TOP.WAV"]
     note: "YM2608 OPNA rhythm sample: top cymbal"
-    source_ref: "sound/rhythmc.c:13, sound/fmgen/fmgen_opna.cpp:1434"
+    source_ref: "sound/rhythmc.c:13, sound/fmgen/fmgen_opna.cpp:1433-1437"
 
   - name: "2608_hh.wav"
     path: "np2kai/2608_hh.wav"
     required: false
     aliases: ["2608_HH.WAV"]
     note: "YM2608 OPNA rhythm sample: hi-hat"
-    source_ref: "sound/rhythmc.c:14, sound/fmgen/fmgen_opna.cpp:1434"
+    source_ref: "sound/rhythmc.c:14, sound/fmgen/fmgen_opna.cpp:1433-1437"
 
   - name: "2608_tom.wav"
     path: "np2kai/2608_tom.wav"
     required: false
     aliases: ["2608_TOM.WAV"]
     note: "YM2608 OPNA rhythm sample: tom"
-    source_ref: "sound/rhythmc.c:15, sound/fmgen/fmgen_opna.cpp:1434"
+    source_ref: "sound/rhythmc.c:15, sound/fmgen/fmgen_opna.cpp:1433-1437"
 
   - name: "2608_rim.wav"
     path: "np2kai/2608_rim.wav"
