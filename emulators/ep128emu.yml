@@ -232,7 +232,7 @@ files:
     system: videoton-tvc
     has_builtin: true
     note: "TVC extension ROM v2.2. Loaded alongside tvc22_sys.rom."
-    source_ref: "core/core.cpp:366-367"
+    source_ref: "core/core.cpp:330"
 
   - name: tvcfileio.rom
     path: ep128emu/roms/tvcfileio.rom
@@ -243,7 +243,7 @@ files:
     has_builtin: true
     bundled: true
     note: "TVC direct file I/O extension. Used for TVC64_FILE mode. Source included in roms/ directory."
-    source_ref: "core/core.cpp:370-371"
+    source_ref: "core/core.cpp:334"
 
   - name: tvc_dos12d.rom
     path: ep128emu/roms/tvc_dos12d.rom
@@ -253,7 +253,7 @@ files:
     system: videoton-tvc
     has_builtin: true
     note: "TVC DOS 1.2d. Loaded for TVC64_DISK mode."
-    source_ref: "core/core.cpp:375-376"
+    source_ref: "core/core.cpp:339"
 
   # ============================================================
   # Amstrad CPC

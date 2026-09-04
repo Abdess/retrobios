@@ -19,7 +19,7 @@ notes: |
 
   Accepts PS1 (512 KB), PS2 (4 MB), and PS3 (0x3E66F0) BIOS images.
   ref: src/core/bios.h:24-26 (BIOS_SIZE, BIOS_SIZE_PS2, BIOS_SIZE_PS3)
-  Only the first 512 KB are mapped (bios.cpp:212).
+  Only the first 512 KB are mapped (src/core/bios.cpp:212).
 
   105 known BIOS entries: 24 PS1 + 80 PS2 (identified by MD5) + 1 OpenBIOS (by signature).
   ref: src/core/bios.cpp:34-139 (s_image_info_by_hash)
@@ -30,7 +30,7 @@ notes: |
   only by the two settings screens, which fall back to the real filename when it
   is null.
   ref: src/core/bios.h:41-43 (field declarations)
-  ref: src/duckstation-qt/biossettingswidget.cpp:150, src/core/fullscreenui_settings.cpp:3219
+  ref: src/duckstation-qt/biossettingswidget.cpp:150, src/core/fullscreenui_settings.cpp:3239
   Lower priority = preferred. PS2 deprioritized (>= 100) for dynamic fast boot.
   Late PAL deprioritized (>= 150) due to additional regional checks.
   OpenBIOS detected by signature at offset 0x78, not by hash.

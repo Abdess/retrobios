@@ -5,7 +5,7 @@ bios_mode: agnostic
 source: "https://github.com/PS2Homebrew-arcade/pcsx2x6"
 upstream: "https://github.com/PCSX2/pcsx2"
 profiled_date: "2026-08-08"
-source_commit: "e69b265ef4bc98565deffb7c4a4b7d08143d4cf9"
+source_commit: "55e3b5a46faf0775b59109ba7d2db53d0268ee0f"
 upstream_commit: "5c611f85e13ba250a69c155c678482b219b10d48"
 core_version: "v0.2.20"
 display_name: "Namco - System 246 / 256 (PCSX2x6)"

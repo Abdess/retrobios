@@ -4,7 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/snes9x2005"
 upstream: "https://github.com/ShadauxCat/CATSFC"
 profiled_date: "2026-03-25"
-source_commit: "74d871db9b4dba6dbe6c5ecebc88cbf255be5349"
+source_commit: "deb49d80d1836e3e737480a326e31a54c46c04ae"
 core_version: "v1.36"
 display_name: "Nintendo - SNES / SFC (Snes9x 2005 Plus)"
 cores:
@@ -17,8 +17,8 @@ systems:
 notes: |
   Same codebase as Snes9x 2005 built with USE_BLARGG_APU=1 for more accurate audio.
   Frozen snapshot of Snes9x 1.43 via CATSFC (NDS/PSP port by ShadauxCat/Nebuleon).
-  SPC700 IPL ROM (64 bytes) embedded in apu_blargg.c:3272 as APUROM[64].
-  DSP-1 ROM data (1024 x uint16) embedded in dsp1emu.c:8 as DSP1ROM[1024].
+  SPC700 IPL ROM (64 bytes) embedded in source/apu_blargg.c:3272 as APUROM[64].
+  DSP-1 ROM data (1024 x uint16) embedded in source/dsp1emu.c:8 as DSP1ROM[1024].
   All coprocessors (DSP-1/2/4, CX4, ST010/011/018, SuperFX, SPC7110, SA-1, OBC-1)
   are pure HLE. The core never calls GET_SYSTEM_DIRECTORY and performs no file I/O
   from the system directory.

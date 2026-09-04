@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/io12/qemu-libretro"
 upstream: "https://github.com/qemu/qemu"
 profiled_date: "2026-03-25"
-source_commit: "486f2d58930f7f0bea5717b6fc06e7fa3dd109ed"
+source_commit: "aaba4471880587540314f82419d920431d55b769"
 core_version: "0.1.0"
 display_name: "QEMU"
 cores: [qemu]

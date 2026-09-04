@@ -4,7 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/citra2018"
 upstream: "https://github.com/citra-emu/citra"
 profiled_date: "2026-03-23"
-source_commit: "29183a99b9771b128a36304c7d734daf5bfd5051"
+source_commit: "04fafd55252072ba148b87f20d8509ff1a91086e"
 core_version: "Git"
 display_name: "Nintendo - 3DS (Citra 2018)"
 cores: [citra2018]

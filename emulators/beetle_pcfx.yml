@@ -5,7 +5,7 @@ cores: [mednafen_pcfx, pcfx]
 source: "https://github.com/libretro/beetle-pcfx-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
-source_commit: "650c30ea2203636a1716675854d11c608ed6eacc"
+source_commit: "0580dee757adfdb9bf8b9c24693dde5f3d0a78a1"
 core_version: "v0.9.36.5"
 display_name: "NEC - PC-FX (Beetle PC-FX)"
 systems:
@@ -13,7 +13,7 @@ systems:
 
 notes: >
   Libretro port of Mednafen's PC-FX module. Setting "pcfx.bios" resolves
-  to "pcfx.rom" (settings.c:92). LoadCommon() loads the file, validates
+  to "pcfx.rom" (mednafen/settings.c:92). LoadCommon() loads the file, validates
   size (1048576 bytes), and maps it at 0xFFF00000. Core won't start
   without it. No hash validation. Upstream Mednafen also supports an
   FX-SCSI ROM (pcfx.fxscsi setting, developer-only) not present in

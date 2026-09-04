@@ -4,17 +4,17 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/desmume2015"
 upstream: "https://github.com/TASEmulators/desmume"
 profiled_date: "2026-03-23"
-source_commit: "af397ff3d1f208c27f3922cc8f2b8e08884ba893"
+source_commit: "422b688009ccb9f2917c086a8fe79c8cecb030ae"
 core_version: "SVN (2015 snapshot)"
 display_name: "Nintendo - DS (DeSmuME 2015)"
 cores: [desmume2015]
 systems: [nintendo-ds]
-exclusion_note: ".info declares firmware_count=3 but libretro frontend never enables external BIOS loading (UseExtBIOS defaults false in NDSSystem.h:497, never set in libretro.cpp)"
+exclusion_note: ".info declares firmware_count=3 but libretro frontend never enables external BIOS loading (UseExtBIOS defaults false in desmume/src/NDSSystem.h:497, never set in libretro.cpp)"
 
 notes: |
   Frozen 2015 snapshot of DeSmuME. The core emulator code supports external
-  BIOS/firmware (PrepareBiosARM7/ARM9 in NDSSystem.cpp:1974-2050), but
-  UseExtBIOS defaults to false (NDSSystem.h:497) and the libretro frontend
+  BIOS/firmware (PrepareBiosARM7/ARM9 in desmume/src/NDSSystem.cpp:1957-2033), but
+  UseExtBIOS defaults to false (desmume/src/NDSSystem.h:497) and the libretro frontend
   never sets it — no desmume_use_external_bios core option exists in this
   version. Uses HLE BIOS stubs when external BIOS not loaded.
 

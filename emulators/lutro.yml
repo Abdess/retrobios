@@ -17,7 +17,7 @@ notes: |
   standalone upstream.
 
   retro_load_game() calls lutro_load(info->path) to load the game
-  directory or archive (libretro.c:216). The core exposes
+  directory or archive (libretro.c:241). The core exposes
   love.filesystem.getAppdataDirectory to games as the system_dir
   (filesystem.c:296) but does not load any files from it itself.
   No BIOS, firmware, or system files required.

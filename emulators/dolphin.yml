@@ -5,7 +5,7 @@ source: "https://github.com/libretro/dolphin"
 upstream: "https://github.com/dolphin-emu/dolphin"
 logo: "https://raw.githubusercontent.com/dolphin-emu/dolphin/master/Data/dolphin-emu.svg"
 profiled_date: "2026-03-23"
-source_commit: "b4c88b46ad26227ebde585111de691db1b0a151a"
+source_commit: "e1e6d25fa1392b7d1bc05bf800c71b807a2bd2e0"
 core_version: "Git"
 display_name: "Nintendo - GameCube / Wii (Dolphin)"
 cores:
@@ -111,7 +111,7 @@ files:
     system: sega-triforce
     required: true
     note: "SegaBoot, the Triforce system disc image. Read on every Triforce boot, min(size, 2 MiB) copied into the firmware buffer, nothing validated"
-    source_ref: "Source/Core/Core/HW/DVD/AMMediaboard.cpp:159,512,531-551, Source/Core/Core/HW/DVD/DVDInterface.cpp:292-294, Source/Core/Core/System.h:147"
+    source_ref: "Source/Core/Core/HW/DVD/AMMediaboard.cpp:160, 512, 531-551, Source/Core/Core/HW/DVD/DVDInterface.cpp:292-294, Source/Core/Core/System.h:147"
 
   # -- GBA BIOS (for GC-GBA link) --
   # Used by integrated mGBA core for GameCube-GBA connectivity.
@@ -217,7 +217,7 @@ files:
     required: false
     mode: standalone
     note: "Realtek 8723A BT firmware for Wiimote passthrough"
-    source_ref: "Source/Core/Core/IOS/USB/Bluetooth/RealtekFirmwareLoader.cpp:387"
+    source_ref: "Source/Core/Core/IOS/USB/Bluetooth/RealtekFirmwareLoader.cpp:414"
 
   - name: "rtl8723b_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8723b_fw.bin"
@@ -231,7 +231,7 @@ files:
     required: false
     mode: standalone
     note: "Realtek 8723D BT firmware for Wiimote passthrough"
-    source_ref: "Source/Core/Core/IOS/USB/Bluetooth/RealtekFirmwareLoader.cpp:391"
+    source_ref: "Source/Core/Core/IOS/USB/Bluetooth/RealtekFirmwareLoader.cpp:418"
 
   - name: "rtl8761a_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8761a_fw.bin"
@@ -259,14 +259,14 @@ files:
     required: false
     mode: standalone
     note: "Realtek 8821C BT firmware for Wiimote passthrough"
-    source_ref: "Source/Core/Core/IOS/USB/Bluetooth/RealtekFirmwareLoader.cpp:399"
+    source_ref: "Source/Core/Core/IOS/USB/Bluetooth/RealtekFirmwareLoader.cpp:426"
 
   - name: "rtl8822b_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8822b_fw.bin"
     required: false
     mode: standalone
     note: "Realtek 8822B BT firmware for Wiimote passthrough"
-    source_ref: "Source/Core/Core/IOS/USB/Bluetooth/RealtekFirmwareLoader.cpp:403"
+    source_ref: "Source/Core/Core/IOS/USB/Bluetooth/RealtekFirmwareLoader.cpp:430"
 
   - name: "rtl8822cu_fw.bin"
     path: "Load/Firmware/rtl_bt/rtl8822cu_fw.bin"

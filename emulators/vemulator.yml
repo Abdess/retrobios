@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/vemulator-libretro"
 upstream: "closed-source Android app (removed from Google Play ~2020)"
 profiled_date: "2026-03-25"
-source_commit: "45d7556667549bb1c1b84d27fbffb7d2a633f5d3"
+source_commit: "27a062f6ae532e5028e4fb54f523cc689e78146a"
 core_version: "0.1"
 display_name: "VeMUlator"
 cores:

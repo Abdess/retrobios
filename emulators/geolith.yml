@@ -21,13 +21,13 @@ notes: |
   from MAME-format ZIP archives in the system directory.
 
   Cartridge content opens aes.zip (System Type = AES, default) or neogeo.zip
-  (MVS and Universe BIOS) (libretro/libretro.c:1231-1234). CD content opens
+  (MVS and Universe BIOS) (libretro/libretro.c:1243-1246). CD content opens
   neocd.zip (Front/Top Loader) or neocdz.zip (CDZ, default, and CD Universe
-  BIOS) (libretro/libretro.c:1222-1230); Front/Top Loader additionally reads
+  BIOS) (libretro/libretro.c:1234-1242); Front/Top Loader additionally reads
   000-lo.lo from neocdz.zip, so neocdz.zip is needed in every CD mode
-  (libretro/libretro.c:1241-1248). The Irritating Maze in MVS mode loads
+  (libretro/libretro.c:1253-1260). The Irritating Maze in MVS mode loads
   236-bios.sp1 from irrmaze.zip for trackball support; without it the game
-  runs but the trackball does not work (libretro/libretro.c:1300-1311).
+  runs but the trackball does not work (libretro/libretro.c:1312-1323).
 
   Inside the opened archive, members are extracted by exact filename
   (src/geo.c:174-271). One 68K BIOS is selected by system type and region
@@ -50,9 +50,9 @@ notes: |
 
   The core performs no hash or size validation on System ROMs. CD BIOS family
   detection and the optional CD speed hack patches use byte patterns and
-  apply only when the 68K BIOS is at least 512 KiB (src/geo_cd.c:1837-1859,
+  apply only when the 68K BIOS is at least 512 KiB (src/geo_cd.c:1888-1910,
   1904-1924). Upstream declares the expected archive MD5s through the Jolly
-  Good API BIOS list (jg.c:212-223); the md5 fields on the archives below
+  Good API BIOS list (jg.c:220-231); the md5 fields on the archives below
   are copied from it.
 
 files:
@@ -64,35 +64,35 @@ files:
     required: true
     md5: "ad9585c72130c56f04ae26aae87c289d"
     note: "Neo Geo AES System ROMs. Opened when System Type is AES (default)."
-    source_ref: "libretro/libretro.c:1231-1234, jg.c:213-214"
+    source_ref: "libretro/libretro.c:1243-1246, jg.c:221-222"
 
   - name: "neogeo.zip"
     system: snk-neogeo-mvs
     required: true
     md5: "00dad01abdbf8ea9e79ad2fe11bdb182"
     note: "Neo Geo MVS System ROMs. Opened for MVS and Universe BIOS modes."
-    source_ref: "libretro/libretro.c:1231-1234, jg.c:215-216"
+    source_ref: "libretro/libretro.c:1243-1246, jg.c:223-224"
 
   - name: "neocd.zip"
     system: snk-neogeo-cd
     required: false
     md5: "006a881532f2caffc3fe9fb5593f2ed5"
     note: "Neo Geo CD Front/Top Loader System ROMs. Opened only when CD System is front or top loader."
-    source_ref: "libretro/libretro.c:1222-1229, jg.c:217-218"
+    source_ref: "libretro/libretro.c:1234-1241, jg.c:225-226"
 
   - name: "neocdz.zip"
     system: snk-neogeo-cd
     required: true
     md5: "b31a246b69493c35194fe0bac120dc37"
     note: "Neo Geo CDZ System ROMs. Opened for CDZ (default) and CD Universe BIOS; also supplies 000-lo.lo to Front/Top Loader mode."
-    source_ref: "libretro/libretro.c:1222-1248, jg.c:219-220"
+    source_ref: "libretro/libretro.c:1234-1260, jg.c:227-228"
 
   - name: "irrmaze.zip"
     system: snk-neogeo-mvs
     required: false
     md5: "0e369df30a70e45547cef9e4078dc511"
     note: "The Irritating Maze auxiliary BIOS. Loaded in MVS mode for trackball support; on failure the game runs without trackball."
-    source_ref: "libretro/libretro.c:1300-1311, jg.c:221-222"
+    source_ref: "libretro/libretro.c:1312-1323, jg.c:229-230"
 
   # -----------------------------------------------------------
   # aes.zip members
@@ -249,7 +249,7 @@ files:
     size: 131072
     crc32: "5a86cff2"
     note: "Zoom lookup table. Read from neocdz.zip in every CD mode, including Front/Top Loader."
-    source_ref: "src/geo.c:234-243, 273-285, libretro/libretro.c:1241-1248"
+    source_ref: "src/geo.c:234-243, 273-285, libretro/libretro.c:1253-1260"
 
   # -----------------------------------------------------------
   # irrmaze.zip member
@@ -259,4 +259,4 @@ files:
     system: snk-neogeo-mvs
     required: false
     note: "The Irritating Maze auxiliary 68K BIOS, replaces the MVS BIOS to enable trackball input."
-    source_ref: "src/geo.c:286-299, libretro/libretro.c:1300-1311"
+    source_ref: "src/geo.c:286-299, libretro/libretro.c:1312-1323"

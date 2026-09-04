@@ -6,7 +6,7 @@ source_branch: libretro
 source_ref: "PR #255 to mkxp-z/mkxp-z"
 upstream: "https://github.com/mkxp-z/mkxp-z"
 profiled_date: "2026-03-24"
-source_commit: "f4bc5aacee7875526ac7053cb61c0dc2357cac17"
+source_commit: "650cb0888a07d0b5044e131160ddfa53feaf595b"
 core_version: "f4bc5aa"
 display_name: "RPG Maker XP/VX/VX Ace (mkxp-z)"
 cores:
@@ -30,39 +30,39 @@ files:
     category: game_data
     path: "mkxp-z/RTP/Standard/"
     required: false
-    source_ref: "src/core.cpp:1042-1085, src/core.cpp:1087-1158"
+    source_ref: "src/core.cpp:1081-1124, src/core.cpp:1126-1197"
 
   - name: "RPGVX"
     description: "RPG Maker VX Run-Time Package"
     category: game_data
     path: "mkxp-z/RTP/RPGVX/"
     required: false
-    source_ref: "src/core.cpp:1042-1085, src/core.cpp:1087-1158"
+    source_ref: "src/core.cpp:1081-1124, src/core.cpp:1126-1197"
 
   - name: "RPGVXAce"
     description: "RPG Maker VX Ace Run-Time Package"
     category: game_data
     path: "mkxp-z/RTP/RPGVXAce/"
     required: false
-    source_ref: "src/core.cpp:1042-1085, src/core.cpp:1087-1158"
+    source_ref: "src/core.cpp:1081-1124, src/core.cpp:1126-1197"
 
   - name: "Fonts"
     description: "Fallback font directory (.otf/.ttf)"
     category: game_data
     path: "mkxp-z/Fonts/"
     required: false
-    source_ref: "src/core.cpp:1160-1172"
+    source_ref: "src/core.cpp:1199-1211"
 
   - name: "Preload"
     description: "Ruby scripts loaded before game scripts"
     category: game_data
     path: "mkxp-z/Scripts/Preload/"
     required: false
-    source_ref: "src/core.cpp:876-907"
+    source_ref: "src/core.cpp:891-934"
 
   - name: "Postload"
     description: "Ruby scripts loaded after game scripts (RGSS3 only)"
     category: game_data
     path: "mkxp-z/Scripts/Postload/"
     required: false
-    source_ref: "src/core.cpp:886-917"
+    source_ref: "src/core.cpp:901-956"

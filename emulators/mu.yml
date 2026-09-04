@@ -4,7 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/Mu"
 upstream: "https://github.com/meepingsnesroms/Mu"
 profiled_date: "2026-03-24"
-source_commit: "de05588fcb1adca6738dc4cf6a2e6e6c447bf2f2"
+source_commit: "f9d34a0006440aef8dca0db2a0d896438fcab2cb"
 core_version: "v1.3.3"
 display_name: "Palm OS (Mu)"
 cores: [mu]

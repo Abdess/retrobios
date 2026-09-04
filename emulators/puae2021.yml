@@ -60,8 +60,8 @@ notes: |
   capsimg.so/capsimg.dll is an optional shared library for IPF floppy image
   support (SPS/CAPS format). Not a BIOS file, loaded dynamically at runtime.
 
-  Source: libretro/libretro-core.h:140-245, libretro/libretro-core.c:5534-5700,
-  libretro/libretro-core.c:5786-5945
+  Source: libretro/libretro-core.h:140-245, libretro/libretro-core.c:5459-5625,
+  libretro/libretro-core.c:5711-5870
 
 files:
   # -------------------------------------------------------
@@ -247,20 +247,20 @@ files:
     system: commodore-amiga
     required: false
     note: "Amiga Forever ROM decryption key. Copied to saves/WHDLoad/Devs/Kickstarts/ for WHDLoad."
-    source_ref: "libretro/libretro-core.c:5885-5896"
+    source_ref: "libretro/libretro-core.c:5810-5821"
 
   - name: "WHDLoad.key"
     system: commodore-amiga
     required: false
     unsourceable: "per-user signed registration key, never distributed generically, WHDLoad free since v18.2"
     note: "WHDLoad license key. Copied to saves/WHDLoad/L/ for registered WHDLoad use."
-    source_ref: "libretro/libretro-core.c:5901-5914"
+    source_ref: "libretro/libretro-core.c:5826-5839"
 
   - name: "WHDLoad.prefs"
     system: commodore-amiga
     required: false
     note: "WHDLoad preferences. Copied to saves/WHDLoad/S/ when present."
-    source_ref: "libretro/libretro-core.c:5918-5941"
+    source_ref: "libretro/libretro-core.c:5843-5866"
 
 model_kickstart_map:
   A500:     {kickstart: "kick34005.A500", ext: null}
@@ -294,4 +294,4 @@ platform_details:
     amiga_forever: "amiga-os-{version}.rom"
     tosec: "Kickstart v{version} rev {rev} ({year})(Commodore)({model}).rom"
   scan_prefixes: ["kick", "amiga-os", "KS ROM"]
-  source_ref: "libretro/libretro-core.c:2617-2656"
+  source_ref: "libretro/libretro-core.c:2597-2636"

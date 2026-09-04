@@ -12,11 +12,11 @@ systems: [dos]
 notes: |
   No BIOS required. MT-32 and SoundFont support is optional for MIDI music.
   MT-32 ROMs loaded by exact filename from system directory.
-  mt32.romdir = system_dir (libretro.cpp:652). CM-32L is default type.
+  mt32.romdir = system_dir (libretro/src/libretro.cpp:653). CM-32L is default type.
   ref: src/gui/midi_mt32.cpp:35,51-66
-  MUNT identifies ROMs by SHA1+size (ROMInfo.cpp:171-180).
+  MUNT identifies ROMs by SHA1+size (libretro/deps/munt/mt32emu/src/ROMInfo.cpp:171-180).
   FluidSynth reads .sf2/.sf3/.dls/.gig from system/soundfonts/.
-  ref: libretro/src/libretro.cpp:1086-1097
+  ref: libretro/src/libretro.cpp:1099-1110
   BASSMIDI reads .sf2/.sfz from system/soundfonts/, requires BASS +
   BASSMIDI shared libs in system dir (dlopen'd at runtime).
   ref: libretro/src/midi_bassmidi.cpp:232-254

@@ -26,7 +26,7 @@ notes: |
 
   Even if a TMSS-enabled model were forced, read_bundled_file() in the
   libretro build only serves rom.db and returns NULL for tmss.md, so TMSS
-  ROM loading would fail (fatal_error at genesis.c:1923).
+  ROM loading would fail (fatal_error at genesis.c:1933).
 
   Sega CD / Mega CD is not supported (only a TODO comment in system.c:16).
   No BIOS files are required or loaded by the libretro core.
@@ -43,7 +43,7 @@ files:
     required: false
     hle_fallback: true
     note: "ROM feature database (game-specific mapper/save config). Embedded in core, external is optional override."
-    source_ref: "libblastem.c:532-542 read_bundled_file()"
+    source_ref: "libblastem.c:1149-1172 read_bundled_file()"
 
   # TMSS ROM — only used in standalone mode with tmss-enabled model
   # libretro build returns NULL for tmss.md (libblastem.c:541)
@@ -53,7 +53,7 @@ files:
     mode: standalone
     size: 2048
     note: "TMSS startup ROM. Standalone only (models md1va6, md2va1+). Libretro core uses md1va3 (tmss off), no way to change."
-    source_ref: "genesis.c:3027-3040"
+    source_ref: "genesis.c:3037-3050"
 
 analysis:
   tmss:
@@ -64,7 +64,7 @@ analysis:
     rom_filename: tmss.md
     rom_size: 2048  # 2 KB
     config_path: "system\0tmss_path\0"
-    source_ref: "genesis.c:1910"
+    source_ref: "genesis.c:1920"
     note: |
       TMSS ROM is loaded from tmss.md (configurable via system/tmss_path).
       Models with tmss=on: md1va6, md2va1, md2va2, md3va1, md3va2.

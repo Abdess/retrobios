@@ -4,7 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/shiiion/dolphin"
 upstream: "https://github.com/dolphin-emu/dolphin"
 profiled_date: "2026-03-26"
-source_commit: "5e7cc91d8c9a43ca189b288937f65c9763af9c22"
+source_commit: "53f53e0f5bad27ad62a807cb93b136d84f68777f"
 core_version: "1.0.8"
 display_name: "PrimeHack (Dolphin fork for Metroid Prime)"
 cores:
@@ -184,7 +184,7 @@ files:
     mode: standalone
     hle_fallback: true
     note: "Wii System Menu WAD. Installed to NAND via Tools > Install WAD, needed for Wii Menu boot"
-    source_ref: "Source/Core/DolphinQt/MenuBar.cpp:331, Source/Core/DolphinQt/MenuBar.cpp:1461-1469"
+    source_ref: "Source/Core/DolphinQt/MenuBar.cpp:335, Source/Core/DolphinQt/MenuBar.cpp:1582-1590"
 
   # -- NAND Certificates (auto-extracted) --
   - name: "clientca.pem"

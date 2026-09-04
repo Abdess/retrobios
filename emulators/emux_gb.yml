@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/emux"
 upstream: "https://github.com/sronsse/emux"
 profiled_date: "2026-03-23"
-source_commit: "02f7ba42bedad6882ce47f24c8fc3af7eaac79ae"
+source_commit: "3e558cb15157fcb1944846a845547d369605c963"
 core_version: "0.1"
 display_name: "Nintendo - Game Boy / Color (Emux GB)"
 cores:
@@ -14,13 +14,13 @@ systems:
 
 notes: |
   emux is a multi-system emulator by Sebastien Ronsse. The libretro port
-  renamed the boot ROM from DMG_ROM.bin (upstream, gb_mapper.c:32) to
-  dmg_boot.bin (libretro, gb_mapper.c:35) to match RetroArch conventions.
+  renamed the boot ROM from DMG_ROM.bin (upstream, controllers/mapper/gb_mapper.c:32) to
+  dmg_boot.bin (libretro, controllers/mapper/gb_mapper.c:35) to match RetroArch conventions.
 
   Boot ROM loaded via file_map(PATH_SYSTEM, "dmg_boot.bin", 0, 256) in
-  gb_mapper_init (gb_mapper.c:225-228). Returns false on failure — no HLE
+  gb_mapper_init (controllers/mapper/gb_mapper.c:225-228). Returns false on failure — no HLE
   fallback. Mapped at 0x0000-0x00FF, overlays ROM0 until BOOT_LOCK (0xFF50)
-  is written non-zero (lock_writeb, gb_mapper.c:97-106).
+  is written non-zero (lock_writeb, controllers/mapper/gb_mapper.c:97-106).
 
   No hash validation. Code accepts any 256+ byte file.
   is_experimental=true. No save states, rewind, or netplay.
@@ -33,4 +33,4 @@ files:
     required: true
     size: 256
     source_ref: "controllers/mapper/gb_mapper.c:35 (bootrom_path), controllers/mapper/gb_mapper.h:13 (BOOTROM_SIZE=256), controllers/mapper/gb_mapper.c:225-232 (file_map + error)"
-    note: "Upstream name DMG_ROM.bin, renamed by libretro port (gb_mapper.c:33-34)."
+    note: "Upstream name DMG_ROM.bin, renamed by libretro port (controllers/mapper/gb_mapper.c:33-34)."

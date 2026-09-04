@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/timoinutilis/lowres-nx"
 upstream: "https://github.com/timoinutilis/lowres-nx"
 profiled_date: "2026-03-25"
-source_commit: "85c80181d26bb5c2147ebc76bfc48bce9f8d73a8"
+source_commit: "35adc1a215e975be964b2ef4b652117acd7beba1"
 core_version: "v1.2"
 display_name: "LowRes NX"
 cores:
@@ -19,8 +19,8 @@ notes: |
   the same repository.
 
   retro_load_game() copies the .nx source code into memory
-  (libretro_main.c:490-493) and compiles it with the built-in interpreter.
-  The boot intro is a string constant embedded in boot_intro.c:26. Default
+  (libretro/libretro_main.c:490-493) and compiles it with the built-in interpreter.
+  The boot intro is a string constant embedded in core/boot_intro.c:26. Default
   characters and charsets are compiled-in C arrays. The core never calls
   RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. No BIOS, firmware, or external
   files required.

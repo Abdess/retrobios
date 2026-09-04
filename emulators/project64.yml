@@ -4,7 +4,7 @@ core_classification: other
 source: "https://github.com/project64/project64"
 upstream: "https://github.com/project64/project64"
 profiled_date: "2026-08-12"
-source_commit: "6188e9a88dd2e7487df346fecc445716654e18ec"
+source_commit: "7720a946203e67db58fbf27e23b6dc193e3cf485"
 core_version: "Dev-4.0.0"
 display_name: "Nintendo - Nintendo 64 (Project64)"
 cores:

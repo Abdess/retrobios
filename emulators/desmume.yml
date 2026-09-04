@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/desmume"
 upstream: "https://github.com/TASEmulators/desmume"
 profiled_date: "2026-03-23"
-source_commit: "ae0f7f51f96d9b5741b47b425505a4a4224b91fa"
+source_commit: "8f6b32cb9a5e310bd38520e7087ce7fa14765f15"
 core_version: "SVN"
 display_name: "Nintendo - DS (DeSmuME)"
 cores: [desmume]

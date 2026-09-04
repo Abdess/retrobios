@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/jtothebell/fake-08"
 upstream: "https://github.com/jtothebell/fake-08"
 profiled_date: "2026-03-23"
-source_commit: "3e89519ca4b4eaf65be9e8cb982ea2c1ccd34e5d"
+source_commit: "814991a2571ad3970e386cef48f3b148aa1c27b9"
 core_version: "v0.0.2.19"
 display_name: "PICO-8 (FAKE-08)"
 cores:
@@ -18,17 +18,17 @@ notes: |
   available (3DS, Vita, Switch, Wii U, various handhelds).
 
   The core retrieves RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY in
-  retro_set_environment() (libretro.cpp:162-163) but never uses the value.
+  retro_set_environment() (platform/libretro/libretro.cpp:162-163) but never uses the value.
   No file is loaded from the system directory. The PICO-8 boot sequence,
   global Lua functions, and default cart menu are compiled directly into the
   binary as string constants (p8GlobalLuaFunctions.h, DefaultCart.h).
 
   When no ROM is passed (supports_no_game = true), the core queues its
-  built-in BIOS cart "__FAKE08-BIOS.p8" (libretro.cpp:751). This is not
+  built-in BIOS cart "__FAKE08-BIOS.p8" (platform/libretro/libretro.cpp:751). This is not
   an external file -- it is generated internally by the VM.
 
   The core accepts .p8 (text) and .png (cartridge-as-image) formats
-  (libretro.cpp:258). Content is loaded either via the libretro data buffer
+  (platform/libretro/libretro.cpp:258). Content is loaded either via the libretro data buffer
   or full path depending on the _NEED_FULL_PATH_ compile flag.
 
 exclusion_note: "all engine resources compiled into binary via include_bytes!"
@@ -49,4 +49,4 @@ platform_details:
       The FAKE-08 VM reimplements the PICO-8 API (128x128 screen, 16 colors,
       4-channel audio, Lua scripting) entirely in C++. The built-in BIOS
       provides a cart browser and error display. Audio runs at 22050 Hz
-      with save state support via custom serialization (libretro.cpp:517-736).
+      with save state support via custom serialization (platform/libretro/libretro.cpp:517-736).

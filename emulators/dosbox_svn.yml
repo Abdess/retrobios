@@ -14,13 +14,13 @@ notes: |
   (WITH_FAKE_SDL=1) instead of real SDL, for broader platform compat.
   ref: libretro/Makefile.libretro, libretro/fakesdl/
 
-  No MT-32 emulation. src/midi/munt referenced in Makefile.common:15
+  No MT-32 emulation. src/midi/munt referenced in libretro/Makefile.common:15
   does not exist, no MUNT submodule. MIDI is hardware-only
   (ALSA, CoreAudio, CoreMIDI, Win32, OSS) + retro_midi_interface.
   ref: src/gui/midi.cpp
 
-  system_directory set and logged (libretro.cpp:1399-1401), never used
-  to load files. Config uses retro_save_directory (cross.cpp:61-71).
+  system_directory set and logged (libretro/libretro.cpp:1411-1413), never used
+  to load files. Config uses retro_save_directory (src/misc/cross.cpp:61-71).
   Keyboard layouts and codepages embedded in binary.
   ref: dos_keyboard_layout_data.h, dos_codepages.h
 

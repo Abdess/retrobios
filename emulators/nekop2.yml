@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-meowPC98"
 upstream: "https://np2.yui.ne.jp (dead; source preserved in libretro repo)"
 profiled_date: "2026-03-24"
-source_commit: "0ba5965247834317fd1026dc19d302677849b9e4"
+source_commit: "5fdbb2187f6b14ca7bf668dd52b36c820b989995"
 core_version: "0.86"
 display_name: "NEC - PC-98 (Neko Project II)"
 cores: [nekop2]
@@ -67,7 +67,7 @@ files:
       PC-98 font bitmap (288 KB). Required for correct Japanese kanji display.
       Without this, only basic ASCII renders using built-in 8x8 data.
       FONT.ROM (V98 format) is also accepted.
-    source_ref: "libretro/libretro.c:862, font/font.c:113, font/fontdata.c:12"
+    source_ref: "libretro/libretro.c:872, font/font.c:113, font/fontdata.c:12"
 
   # -- Sound BIOS ROM --
   # Loaded by soundrom_load() via loadsoundrom() in sound/soundrom.c:21-55.

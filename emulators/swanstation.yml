@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/swanstation"
 upstream: "https://github.com/stenzek/duckstation"
 profiled_date: "2026-03-25"
-source_commit: "5430a4a53b89fa5827c97b84ada29d23317245bc"
+source_commit: "7f69c199ed88d5723f71dd3a6e9c1b7a45b535a6"
 core_version: "v0.1"
 display_name: "Sony - PlayStation (SwanStation)"
 cores: [swanstation]
@@ -20,7 +20,7 @@ notes: |
   Auto-detects BIOS by scanning system_dir for files of known sizes.
   ref: src/core/host_interface.cpp:136-194 (FindBIOSImageInDirectory)
   Accepts PS1 (512 KB), PS2 (4 MB), and PS3 (0x3E66F0) BIOS images.
-  Only the first 512 KB are loaded (bios.cpp:84, Image(BIOS_SIZE)).
+  Only the first 512 KB are loaded (src/core/bios.cpp:84, Image(BIOS_SIZE)).
   ref: src/core/bios.h:9 (BIOS_SIZE=0x80000, BIOS_SIZE_PS2=0x400000, BIOS_SIZE_PS3=0x3E66F0)
 
   27 known BIOS entries identified by MD5 hash.

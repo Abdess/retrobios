@@ -16,12 +16,12 @@ files:
     required: false
     description: "64DD IPL ROM"
     note: "Only loaded when a 64DD disk image (.ndd) is present via subsystem API. Core fails to load disk games without it."
-    source_ref: "libretro/libretro.c:723"
+    source_ref: "libretro/libretro.c:848"
 
 notes:
   hle_available: true
   hle_note: >
-    PIF boot ROM is fully HLE'd (mupen64plus-core/src/device/pif/bootrom_hle.c:48). CIC
+    PIF boot ROM is fully HLE'd (mupen64plus-core/src/device/pif/bootrom_hle.c:51). CIC
     challenge/response handled in software (n64_cic_nus_6105.c). No BIOS
     files needed for standard cartridge games.
   dd_note: >

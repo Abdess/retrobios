@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/mame"
 upstream: "https://github.com/mamedev/mame"
 profiled_date: "2026-03-24"
-source_commit: "c1ff660dbddd5b134f549b4881499699cee1ebb6"
+source_commit: "4fc9a9312baaf34963847f884961ad9793fbbc1d"
 upstream_commit: "728d957663041fbc943806bf151584acd03e2160"
 core_version: "0.287"
 display_name: "Arcade (MAME/Arcade)"
@@ -219,7 +219,7 @@ files:
     required: true
     category: bios_zip
     system: igs-pgm
-    source_ref: "src/mame/igs/pgm.cpp:5545"
+    source_ref: "src/mame/igs/pgm.cpp:5548"
     contents:
       - name: pgm_p02s.u20
         size: 131072
@@ -643,7 +643,7 @@ files:
     required: true
     category: bios_zip
     system: sega-stv
-    source_ref: "src/mame/sega/stv.cpp:4068"
+    source_ref: "src/mame/sega/stv.cpp:4067"
     contents:
       - name: epr-23603.ic8
         size: 524288
@@ -1168,7 +1168,7 @@ files:
     required: true
     category: bios_zip
     system: namco-system573
-    source_ref: "src/mame/konami/ksys573.cpp:6415"
+    source_ref: "src/mame/konami/ksys573.cpp:6541"
     contents:
       - name: 700a01.22g
         description: Standard
@@ -1217,7 +1217,7 @@ files:
     required: true
     category: bios_zip
     system: konami-gv
-    source_ref: "src/mame/konami/konamigv.cpp:1447"
+    source_ref: "src/mame/konami/konamigv.cpp:1450"
     contents:
       - name: 999a01.7e
         size: 524288
@@ -1247,7 +1247,7 @@ files:
     required: true
     category: bios_zip
     system: konami-twinkle
-    source_ref: "src/mame/konami/twinkle.cpp:1636"
+    source_ref: "src/mame/konami/twinkle.cpp:1624"
 
   - name: bubsys.zip
     required: true
@@ -1277,7 +1277,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn1
-    source_ref: "src/mame/sony/zn.cpp:5969"
+    source_ref: "src/mame/sony/zn.cpp:5971"
     contents:
       - name: m534002c-13.ic353
         description: japan
@@ -1298,7 +1298,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn2
-    source_ref: "src/mame/sony/zn.cpp:6055"
+    source_ref: "src/mame/sony/zn.cpp:6057"
     contents:
       - name: m534002c-59.ic353
         size: 524288
@@ -1313,7 +1313,7 @@ files:
     required: true
     category: bios_zip
     system: taito-fx1
-    source_ref: "src/mame/sony/zn.cpp:5989"
+    source_ref: "src/mame/sony/zn.cpp:5991"
     contents:
       - name: m534002c-14.ic353
         size: 524288
@@ -1328,7 +1328,7 @@ files:
     required: true
     category: bios_zip
     system: acclaim-zn1
-    source_ref: "src/mame/sony/zn.cpp:6015"
+    source_ref: "src/mame/sony/zn.cpp:6017"
     contents:
       - name: m534002c-15.ic353
         size: 524288
@@ -1343,7 +1343,7 @@ files:
     required: true
     category: bios_zip
     system: atari-zn1
-    source_ref: "src/mame/sony/zn.cpp:6024"
+    source_ref: "src/mame/sony/zn.cpp:6039"
     contents:
       - name: msm27c402zb.ic353
         size: 524288
@@ -1358,7 +1358,7 @@ files:
     required: true
     category: bios_zip
     system: atlus-zn1
-    source_ref: "src/mame/sony/zn.cpp:6028"
+    source_ref: "src/mame/sony/zn.cpp:6043"
     contents:
       - name: m534002c-17.ic353
         size: 524288
@@ -1373,7 +1373,7 @@ files:
     required: true
     category: bios_zip
     system: videosystem-zn1
-    source_ref: "src/mame/sony/zn.cpp:6032"
+    source_ref: "src/mame/sony/zn.cpp:6034"
     contents:
       - name: coh-1002v.ic353
         size: 524288
@@ -1388,7 +1388,7 @@ files:
     required: true
     category: bios_zip
     system: eighting-zn1
-    source_ref: "src/mame/sony/zn.cpp:6038"
+    source_ref: "src/mame/sony/zn.cpp:6040"
     contents:
       - name: m27c402cz-54.ic353
         size: 524288
@@ -1403,7 +1403,7 @@ files:
     required: true
     category: bios_zip
     system: tecmo-tps
-    source_ref: "src/mame/sony/zn.cpp:6089"
+    source_ref: "src/mame/sony/zn.cpp:6091"
     contents:
       - name: m534002c-61.ic353
         size: 524288
@@ -1774,7 +1774,7 @@ files:
     required: true
     category: bios_zip
     system: brezzasoft-crystal
-    source_ref: "src/mame/misc/crystal.cpp:845"
+    source_ref: "src/mame/misc/crystal.cpp:854"
     contents:
       - name: mx27l1000.u14
         description: AMG0110B PCB

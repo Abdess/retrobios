@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/retro8"
 upstream: "https://github.com/Jakz/retro8"
 profiled_date: "2026-03-25"
-source_commit: "a235ff8e3ca1b44bcf88293748d5a492c76a2c7b"
+source_commit: "ddc06a142398ee9755894b3f0bb17c8dc428151d"
 core_version: "0.1b"
 display_name: "PICO-8 (Retro8)"
 cores:
@@ -15,9 +15,9 @@ systems:
 notes: |
   Open-source PICO-8 fantasy console reimplementation by Jacopo Santoni.
   Runs .p8 and .p8.png cartridge files. The PICO-8 font is compiled into the
-  binary as a byte array (gen/pico_font.h, loaded in gfx.cpp:9). The Lua API
+  binary as a byte array (gen/pico_font.h, loaded in src/vm/gfx.cpp:9). The Lua API
   shim is compiled as a string constant (gen/lua_api.h, loaded in
-  lua_bridge.cpp:1126). The core never calls GET_SYSTEM_DIRECTORY and performs
+  src/vm/lua_bridge.cpp:1126). The core never calls GET_SYSTEM_DIRECTORY and performs
   no file I/O from the system directory.
 
 exclusion_note: "all engine resources (font, Lua API, color palette, audio synth) compiled into the binary"

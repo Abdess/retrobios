@@ -4,7 +4,7 @@ core_classification: embedded_hle
 source: "https://github.com/ivanizag/izapple2"
 upstream: "https://github.com/ivanizag/izapple2"
 profiled_date: "2026-08-08"
-source_commit: "01deea8a97b19ac782a1d11fe1e8d07f07b6c835"
+source_commit: "1b563d7668b331bc06d6d11c093ee1a14fe242be"
 core_version: "v2.4.0"
 display_name: "Apple - Apple II (izapple2)"
 cores:

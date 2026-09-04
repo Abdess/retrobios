@@ -4,7 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/AloysHF/Native32Emu"
 upstream: "https://github.com/AloysHF/Native32Emu"
 profiled_date: "2026-09-03"
-source_commit: "f445ea34ba42ecb5b3d7fe7b5f28d544a8b0a2ea"
+source_commit: "59a918ac2a001dbae9cb279fe95e75f830793220"
 core_version: "1.3.0"
 display_name: "Sunplus - Native32 (Native32Emu)"
 cores:

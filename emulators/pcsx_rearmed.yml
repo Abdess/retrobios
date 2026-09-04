@@ -4,7 +4,7 @@ core_classification: embedded_hle
 source: "https://github.com/libretro/pcsx_rearmed"
 upstream: "https://github.com/notaz/pcsx_rearmed"
 profiled_date: "2026-03-25"
-source_commit: "da2cb8ecd17fd0932ab6d94774c0522beebce6e3"
+source_commit: "05c4dbfa8e4d994820b278345316ce8cbed4209f"
 core_version: "r25"
 display_name: "Sony - PlayStation (PCSX ReARMed)"
 cores: [pcsx_rearmed, pcsx_rearmed_neon, pcsx_rearmed_interpreter]

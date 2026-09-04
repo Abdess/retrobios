@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/icculus/DirkSimple"
 upstream: "https://github.com/icculus/DirkSimple"
 profiled_date: "2026-03-23"
-source_commit: "5aea3e2951ed641908a7bd2ca09019614003b5e3"
+source_commit: "d5d75f97af34690010166a786ee41e15dd142c15"
 core_version: "0.2"
 display_name: "Laserdisc arcade game (DirkSimple)"
 cores: [dirksimple]

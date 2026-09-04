@@ -28,7 +28,7 @@ notes: |
   jumps to 0x08000000 (ROM entry), skipping boot animation
   (src/gba.c:13134-13151).
 
-  Upstream VBA-M CPUInit (src/core/gba/gba.cpp:3674-3702) is functionally
+  Upstream VBA-M CPUInit (src/core/gba/gba.cpp:5137-5165) is functionally
   identical. No divergences in BIOS handling.
 
 files:

@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/emux"
 upstream: "https://github.com/sronsse/emux"
 profiled_date: "2026-03-23"
-source_commit: "02f7ba42bedad6882ce47f24c8fc3af7eaac79ae"
+source_commit: "3e558cb15157fcb1944846a845547d369605c963"
 core_version: "0.1"
 display_name: "Sega - Master System (Emux SMS)"
 cores:
@@ -18,9 +18,9 @@ notes: |
   adds g_ram_data/g_ram_size exposure in mach/sms.c for RETRO_MEMORY_SYSTEM_RAM).
 
   BIOS loaded via file_map(PATH_SYSTEM, "bios.sms", 0, BIOS_SIZE) in
-  sms_mapper_init (sms_mapper.c:162-165). Returns false on failure — no HLE
+  sms_mapper_init (controllers/mapper/sms_mapper.c:162-165). Returns false on failure — no HLE
   fallback. Mapped at 0x0000, overlays cartridge ROM until bios_disable bit
-  set in slot control register (sms_mapper.c:79-82).
+  set in slot control register (controllers/mapper/sms_mapper.c:79-82).
 
   No hash validation. Code accepts any file >= 8192 bytes.
   is_experimental=true. No save states, rewind, or netplay.
@@ -33,4 +33,4 @@ files:
     size: 8192
     validation: [size]
     source_ref: "controllers/mapper/sms_mapper.c:12 (BIOS_SIZE=0x2000), :61 (bios_path), :162-170 (file_map + NULL check → return false)"
-    note: "Mapped at 0x0000, overlays cartridge ROM until bios_disable bit set. file_map rejects files < 8192 bytes (file.c:59)."
+    note: "Mapped at 0x0000, overlays cartridge ROM until bios_disable bit set. file_map rejects files < 8192 bytes (main/file.c:59)."

@@ -23,7 +23,7 @@ notes: |
   in the repository root.
 
   Without prboom.wad the core falls back to hardcoded internal defaults
-  (d_main.c:1073-1074), so the file is technically optional but expected
+  (src/d_main.c:1084-1085), so the file is technically optional but expected
   for correct rendering of menus, HUD digits, and extended features.
 
   File search order (libretro.c I_FindFile, line 1742):
@@ -33,7 +33,7 @@ notes: |
   4. Parent folders of WAD directory (recursive, if enabled)
 
   The core accepts .wad, .iwad, .pwad, and .lmp extensions. Game IWADs
-  it recognizes (d_main.c:140-152): doom2f.wad, doom2.wad, plutonia.wad,
+  it recognizes (src/d_main.c:141-153): doom2f.wad, doom2.wad, plutonia.wad,
   tnt.wad, freedoom2.wad, doom.wad, doomu.wad, freedoom1.wad,
   freedoom.wad, doom1.wad.
 
@@ -51,5 +51,5 @@ files:
     md5: "72ae1b47820fcc93cc0df9c428d0face"
     sha1: "5f4aed208301449c2e9514edfd325fe9dead76fa"
     crc32: "a5751b99"
-    source_ref: "src/d_main.c:1402-1440 (PACKAGE .wad load), libretro/libretro.c:3974-4050 (I_FindFile search), src/config.h:39 (PACKAGE=prboom)"
+    source_ref: "src/d_main.c:1413-1451 (PACKAGE .wad load), libretro/libretro.c:4053-4129 (I_FindFile search), src/config.h:39 (PACKAGE=prboom)"
     note: "Searched in system/prboom/ then system/. Falls back to internal defaults if missing, but menus and HUD may render incorrectly without it."

@@ -4,7 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/fbalpha2012_neogeo"
 upstream: "https://www.fbalpha.com"
 profiled_date: "2026-03-23"
-source_commit: "ce4949b1557cc7134e736342801ed25b2f3bd790"
+source_commit: "e092097037d494c50d17c5144a2758d68538061b"
 core_version: "v0.2.97.29"
 display_name: "Arcade (FB Alpha 2012 Neo Geo)"
 cores:
@@ -17,7 +17,7 @@ notes: |
   Exists for RAM-constrained platforms. Most users should use FBNeo.
 
   Neo Geo requires a BIOS ROM set (neogeo.zip) placed alongside game ROMs.
-  The BIOS set contains ~35 variants (d_neogeo.cpp:903-981), all BRF_BIOS:
+  The BIOS set contains ~35 variants (src/burn/drv/neogeo/d_neogeo.cpp:903-981), all BRF_BIOS:
 
   68K main BIOS (BRF_SELECT, one active at a time):
     asia-s3.rom       0x91b64be3  MVS Asia/Europe ver. 6 (default)
@@ -50,7 +50,7 @@ notes: |
     neocd.bin          0xdf9de490  Neo Geo CD BIOS
 
   neogeo.zip is a parent ROM set, loaded from g_rom_dir alongside game ZIPs.
-  g_system_dir is set (libretro.cpp:3016) but never used for file loading.
+  g_system_dir is set (src/burner/libretro/libretro.cpp:3016) but never used for file loading.
 
   The .info note "BIOS files must be inside the ROM directory" is accurate here:
   neogeo.zip must be in the same directory as game ROM ZIPs.

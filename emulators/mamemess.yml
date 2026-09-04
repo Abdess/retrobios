@@ -251,7 +251,7 @@ files:
   - name: ekara.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2930"
+    source_ref: "src/mame/tvgames/xavix.cpp:2956"
     contents:
       - name: ekara.bin
         size: 1048576
@@ -271,7 +271,7 @@ files:
   - name: ekaraj.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2932"
+    source_ref: "src/mame/tvgames/xavix.cpp:2906"
     contents:
       - name: ekarajapan.bin
         size: 1048576
@@ -281,7 +281,7 @@ files:
   - name: ekarag.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2933"
+    source_ref: "src/mame/tvgames/xavix.cpp:2959"
     contents:
       - name: ekaragermany.bin
         size: 2097152
@@ -301,7 +301,7 @@ files:
   - name: isinger.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2936"
+    source_ref: "src/mame/tvgames/xavix.cpp:2962"
     contents:
       - name: kr_isinger.bin
         size: 1048576
@@ -311,7 +311,7 @@ files:
   - name: ekaraphs.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2939"
+    source_ref: "src/mame/tvgames/xavix.cpp:2965"
     contents:
       - name: ekaraheadset.bin
         size: 2097152
@@ -321,7 +321,7 @@ files:
   - name: epitch.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:3027"
+    source_ref: "src/mame/tvgames/xavix.cpp:3028"
     contents:
       - name: ekarajapan.bin
         size: 1048576
@@ -342,7 +342,7 @@ files:
   - name: ddrfammt.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2948"
+    source_ref: "src/mame/tvgames/xavix.cpp:2922"
     contents:
       - name: ekara_ddr_ha010_81947.bin
         size: 2097152
@@ -352,7 +352,7 @@ files:
   - name: popira.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2951"
+    source_ref: "src/mame/tvgames/xavix.cpp:2936"
     contents:
       - name: popira.bin
         size: 1048576
@@ -362,7 +362,7 @@ files:
   - name: popirak.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2953"
+    source_ref: "src/mame/tvgames/xavix.cpp:2927"
     contents:
       - name: kr_main.u2
         size: 1048576
@@ -372,7 +372,7 @@ files:
   - name: popira2.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2956"
+    source_ref: "src/mame/tvgames/xavix.cpp:2930"
     contents:
       - name: popira2.bin
         size: 2097152
@@ -382,7 +382,7 @@ files:
   - name: taikodp.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2959"
+    source_ref: "src/mame/tvgames/xavix.cpp:2933"
     contents:
       - name: taikodepopira.bin
         size: 2097152
@@ -392,7 +392,7 @@ files:
   - name: jpopira.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2962"
+    source_ref: "src/mame/tvgames/xavix.cpp:2936"
     contents:
       - name: jumpingpopira.bin
         size: 2097152
@@ -406,7 +406,7 @@ files:
   - name: evio.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2965"
+    source_ref: "src/mame/tvgames/xavix.cpp:2966"
     contents:
       - name: evio.bin
         size: 2097152
@@ -426,7 +426,7 @@ files:
   - name: gcslottv.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2972"
+    source_ref: "src/mame/tvgames/xavix.cpp:2946"
     contents:
       - name: sammyslotunit.bin
         size: 2097152
@@ -482,7 +482,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2.cpp:774"
+    source_ref: "src/mame/apple/apple2.cpp:665"
     contents:
       - name: a2.chr
         description: Character generator ROM
@@ -513,7 +513,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2.cpp:900"
+    source_ref: "src/mame/apple/apple2.cpp:803"
     contents:
       - name: 341-0036.chr
         description: Character generator ROM
@@ -548,7 +548,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2e.cpp:5563"
+    source_ref: "src/mame/apple/apple2e.cpp:5566"
     contents:
       - name: 342-0133-a.chr
         description: Character generator ROM
@@ -571,7 +571,7 @@ files:
     required: true
     category: bios_zip
     system: apple2
-    source_ref: "src/mame/apple/apple2e.cpp:5669"
+    source_ref: "src/mame/apple/apple2e.cpp:5688"
     contents:
       - name: 342-0265-a.chr
         description: Enhanced character generator ROM
@@ -656,7 +656,7 @@ files:
     required: true
     category: bios_zip
     system: apple2gs
-    source_ref: "src/mame/apple/apple2gs.cpp:3868-3882"
+    source_ref: "src/mame/apple/apple2gs.cpp:3853-3867"
     contents:
       - name: 341s0632-2.bin
         description: ADB microcontroller ROM (M50740/50741)
@@ -1325,7 +1325,7 @@ files:
     required: true
     category: bios_zip
     system: fm7
-    source_ref: "src/mame/fujitsu/fm7.cpp:2188-2209"
+    source_ref: "src/mame/fujitsu/fm7.cpp:2186-2207"
     contents:
       - name: fbasic300.rom
         description: F-BASIC 3.00 ROM
@@ -1352,7 +1352,7 @@ files:
     required: true
     category: bios_zip
     system: fm7
-    source_ref: "src/mame/fujitsu/fm7.cpp:2207-2228"
+    source_ref: "src/mame/fujitsu/fm7.cpp:2209-2230"
     contents:
       - name: initiate.rom
         description: Initiate ROM (boot sequencer)
@@ -1379,7 +1379,7 @@ files:
     required: false
     category: bios_zip
     system: fm7
-    source_ref: "src/mame/fujitsu/fm7.cpp:2170-2186"
+    source_ref: "src/mame/fujitsu/fm7.cpp:2169-2184"
     note: "FM-NEW7 clone, inherits shared ROMs from fm7.zip parent"
     contents:
       - name: fbasic302.rom
@@ -1578,7 +1578,7 @@ files:
     required: true
     category: bios_zip
     system: pc60
-    source_ref: "src/mame/nec/pc6001.cpp:1896-1916"
+    source_ref: "src/mame/nec/pc6001.cpp:1742-1765"
     contents:
       - name: basicrom.62
         description: BASIC ROM
@@ -1632,7 +1632,7 @@ files:
     required: true
     category: bios_zip
     system: pc60
-    source_ref: "src/mame/nec/pc6001.cpp:1938-1954"
+    source_ref: "src/mame/nec/pc6001.cpp:1793-1824"
     contents:
       - name: systemrom1.64
         description: System ROM 1
@@ -1651,7 +1651,7 @@ files:
     required: false
     category: bios_zip
     system: pc60
-    source_ref: "src/mame/nec/pc6001.cpp:1956-1987"
+    source_ref: "src/mame/nec/pc6001.cpp:1826-1870"
     contents:
       - name: systemrom1.68
         description: System ROM 1

@@ -9,7 +9,7 @@ bios_mode: agnostic
 source: "https://github.com/libretro/ps2"
 upstream: "https://github.com/PCSX2/pcsx2"
 profiled_date: "2026-03-25"
-source_commit: "60c9c5793efc46ddca70736f30f639a1d22674b8"
+source_commit: "0e9057b73bd128a775aa9e59310d68692838e96c"
 core_version: "Git"
 display_name: "Sony - PlayStation 2 (LRPS2)"
 cores: [lrps2, pcsx2]
@@ -89,7 +89,7 @@ files:
     path: "pcsx2/resources/GameIndex.yaml"
     required: false
     description: "game compatibility database"
-    source_ref: "pcsx2/GameDatabase.cpp:47, pcsx2/GameDatabase.cpp:904"
+    source_ref: "pcsx2/GameDatabase.cpp:48, pcsx2/GameDatabase.cpp:981"
     note: >
       YAML database of per-game patches, settings overrides, and compatibility fixes.
       OSD warning shown if missing. Some games may not boot or have issues without it.
@@ -98,7 +98,7 @@ files:
     path: "pcsx2/resources/cheats_ws.zip"
     required: false
     description: "widescreen patches archive"
-    source_ref: "pcsx2/VMManager.cpp:357-370"
+    source_ref: "pcsx2/VMManager.cpp:375-388"
     note: >
       ZIP archive of per-game widescreen (16:9) patches in pnach format.
       Only loaded when widescreen patches are enabled via core options.
@@ -108,7 +108,7 @@ files:
     path: "pcsx2/resources/cheats_ni.zip"
     required: false
     description: "no-interlacing patches archive"
-    source_ref: "pcsx2/VMManager.cpp:392-405"
+    source_ref: "pcsx2/VMManager.cpp:410-423"
     note: >
       ZIP archive of per-game no-interlacing patches in pnach format.
       Only loaded when no-interlacing patches are enabled via core options.

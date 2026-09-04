@@ -4,7 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/AloysHF/SPMP8000Emu"
 upstream: "https://github.com/AloysHF/SPMP8000Emu"
 profiled_date: "2026-09-03"
-source_commit: "00f5985b639a036cd255770fb56abc98fcde7513"
+source_commit: "350c965a9909c4515eeebd190a2a57d2d5bf707a"
 core_version: "1.0.0"
 display_name: "Sunplus - SPMP8000 (SPMP8000Emu)"
 cores:

@@ -4,7 +4,7 @@ core_classification: other
 source: "https://github.com/punesemu/puNES"
 upstream: "https://github.com/punesemu/puNES"
 profiled_date: "2026-08-08"
-source_commit: "2ed5b1b2cffcde48ff36f359091756d17d8fe193"
+source_commit: "b1758ec26a3d6da10abf50dc184fa837236c5f61"
 core_version: "0.112"
 display_name: "Nintendo - NES / Famicom (puNES)"
 cores:
@@ -41,7 +41,7 @@ notes: |
   the Vs. System PPU type and the region, so Vs. System titles need no
   external file. The uPD7756 ADPCM samples of mappers 018, 086 and 072 come
   from the Misc ROM area of the NES 2.0 dump itself
-  (src/core/mappers/mapper_018.c:51, mapper_086.c:56, mapper_072.c:45).
+  (src/core/mappers/mapper_018.c:51, src/core/mappers/mapper_086.c:56, src/core/mappers/mapper_072.c:45).
   loadWaveFiles, which would read <data>/samples/<name>/NN.wav
   (src/core/mappers/waveFile.cpp:76-84), is declared and defined but called
   from nowhere in the tree, so no wave file is ever opened.

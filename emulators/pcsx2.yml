@@ -7,7 +7,7 @@ upstream: "https://github.com/PCSX2/pcsx2"
 cores:
   - pcsx2
 profiled_date: "2026-03-30"
-source_commit: "5c611f85e13ba250a69c155c678482b219b10d48"
+source_commit: "aaf03c18b677905b3df4568d14efee7f58734049"
 core_version: "Git"
 display_name: "Sony - PlayStation 2 (PCSX2)"
 systems: [sony-playstation-2]
@@ -57,19 +57,19 @@ files:
     path: pcsx2/resources/GameIndex.yaml
     required: false
     mode: libretro
-    source_ref: "pcsx2/GameDatabase.cpp:46, pcsx2/GameDatabase.cpp:888"
+    source_ref: "pcsx2/GameDatabase.cpp:46, pcsx2/GameDatabase.cpp:896"
     note: "Game compatibility database. OSD warning if missing."
 
   - name: cheats_ws.zip
     path: pcsx2/resources/cheats_ws.zip
     required: false
     mode: libretro
-    source_ref: "pcsx2/VMManager.cpp:345-358"
+    source_ref: "pcsx2/VMManager.cpp:346-359"
     note: "Widescreen patches archive."
 
   - name: cheats_ni.zip
     path: pcsx2/resources/cheats_ni.zip
     required: false
     mode: libretro
-    source_ref: "pcsx2/VMManager.cpp:380-393"
+    source_ref: "pcsx2/VMManager.cpp:381-394"
     note: "No-interlacing patches archive."

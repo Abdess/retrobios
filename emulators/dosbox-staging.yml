@@ -3,7 +3,7 @@ type: standalone
 core_classification: enhanced_fork
 source: "https://github.com/dosbox-staging/dosbox-staging"
 upstream: "https://github.com/dosbox-staging/dosbox-staging"
-source_commit: "cd81dcbc72773a4bd559b305c8b6ad3196cd09dc"
+source_commit: "639aba29163f5acff84774bf4397dcfe53a4986d"
 profiled_date: "2026-08-08"
 core_version: "0.84.0-alpha"
 display_name: "DOS (DOSBox Staging)"
@@ -26,27 +26,27 @@ notes: |
 
   No system BIOS: the PC BIOS, video BIOS fonts, keyboard layouts and codepage
   tables are implemented in code.
-  ref: int10_memory.cpp:160, dos_keyboard_layout_data.h
+  ref: src/ints/int10_memory.cpp:160, dos_keyboard_layout_data.h
 
   MIDI devices that need external data are mt32, soundcanvas and fluidsynth.
   A device that fails to initialise throws, MIDI_Init warns and retries with
   mididevice = port, then disables MIDI output. Emulation continues either way.
-  ref: midi.cpp:794-850
+  ref: src/midi/midi.cpp:794-850
 
   MT-32/CM-32L: libmt32emu identifies every candidate by file size then SHA1,
   so file names carry no meaning; a directory scan caches which ROM ids each
   directory holds and logs anything unrecognised.
-  ref: mt32_lasynth_model.cpp:36-97, munt ROMInfo.cpp:206-213
+  ref: src/midi/mt32_lasynth_model.cpp:36-97, munt ROMInfo.cpp:206-213
   A model needs one control ROM and one PCM ROM, supplied either as a full
   image (addROMFile) or as the two chip dumps merged in memory
   (mergeAndAddROMFiles): control halves are byte-interleaved, PCM halves are
   concatenated.
-  ref: mt32_lasynth_model.cpp:114-151, munt ROMInfo.cpp:312-331
+  ref: src/midi/mt32_lasynth_model.cpp:114-151, munt ROMInfo.cpp:312-331
   model = auto resolves the first available of cm32l_102, cm32l_100,
   cm32ln_100, mt32_107, mt32_106, mt32_105, mt32_104, mt32_bluer, mt32_207,
   mt32_206, mt32_204, mt32_203; the aliases cm32l, mt32, mt32_old and mt32_new
   restrict that list. MIXER /LISTMIDI prints what was found.
-  ref: mt32.cpp:278-331, 504-557
+  ref: src/midi/mt32.cpp:278-331, 504-557
   Search order is romdir, then mt32-roms in the configuration directory, then
   the platform locations (C:\mt32-rom-data on Windows;
   ~/Library/Audio/Sounds/MT32-Roms and /usr/{local/,}share/mt32-rom-data on
@@ -54,7 +54,7 @@ notes: |
   $XDG_DATA_DIRS/mt32-rom-data and $XDG_CONFIG_HOME/dosbox/mt32-roms on Linux).
   A relative romdir resolves against the working directory, so a game folder
   can carry its own set.
-  ref: mt32.cpp:385-396, 416-485
+  ref: src/midi/mt32.cpp:385-396, 416-485
 
   Sound Canvas: the SC-55 is emulated by the Nuked SC55 CLAP plugin, loaded
   from a plugins directory next to the executable, in the configuration
@@ -62,7 +62,7 @@ notes: |
   directory candidates, canonicalises the ones that exist and exports them as
   SOUNDCANVAS_ROM_PATH; the plugin appends the per-model subdirectory, hashes
   every file under 4 MB it finds there and matches SHA256 against its table.
-  ref: soundcanvas.cpp:326-373, support.cpp:351-379,
+  ref: src/midi/soundcanvas.cpp:326-373, src/misc/support.cpp:351-379,
        Nuked-SC55-CLAP nuked_sc55.cpp:117-215,
        Nuked-SC55-CLAP rom_loader.cpp:32-63,
        Nuked-SC55-CLAP rom_io.cpp:271-564
@@ -70,22 +70,22 @@ notes: |
   sc55_200, sc55mk2_101, sc55mk2_100 in that order by matching plugin names.
   The plugin publishes six descriptors: SC-55 v1.00, v1.10, v1.20, v1.21,
   v2.00 and SC-55mk2 v1.01.
-  ref: soundcanvas.cpp:55-71, 80-147, Nuked-SC55-CLAP plugin.cpp:23-90
+  ref: src/midi/soundcanvas.cpp:55-71, 80-147, Nuked-SC55-CLAP plugin.cpp:23-90
 
   FluidSynth: the soundfont setting names a file, tried as given and with .sf2
   appended, in soundfont_dir, then soundfonts in the configuration directory,
   then the platform locations. fluid_synth_sfload is the only check. The
   SoundFont name from the RIFF INFO chunk and the file stem select reverb,
   chorus and filter presets for four known banks.
-  ref: fluidsynth.cpp:107-230, 672-689, 816-883, 1229-1252
+  ref: src/midi/fluidsynth.cpp:107-230, 672-689, 816-883, 1229-1252
 
   Bundled data ships with the program and is read from the resources directory
   next to the executable: FreeDOS codepages and keyboard layouts, translations,
   shaders and shader presets, CGA colour presets, drive noise samples, the
   mounted Y: drive utilities, the web interface and the manual pages.
-  ref: support.cpp:300-320, dos_code_page.cpp:1828, dos_keyboard_layout.cpp:70,
-       messages.cpp:1073, shader_manager.cpp:236,404, int10_modes.cpp:2302,
-       disk_noise.cpp:187, autoexec.cpp:759
+  ref: src/misc/support.cpp:300-320, src/dos/dos_code_page.cpp:1828, src/dos/dos_keyboard_layout.cpp:70,
+       src/misc/messages.cpp:1073, src/gui/render/shader_manager.cpp:236,404, src/ints/int10_modes.cpp:2302,
+       src/audio/disk_noise.cpp:187, src/shell/autoexec.cpp:759
 
   BIOSTEST.COM loads an arbitrary BIOS image at F000:0 and is compiled only
   when the debugger is enabled, which is off by default.

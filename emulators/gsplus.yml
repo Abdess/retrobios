@@ -31,7 +31,7 @@ files:
     aliases: [ROM.01, ROM.03, APPLE2GS.ROM, APPLE2GS.ROM2, xgs.rom, XGS.ROM, Rom03gd, 342-0077-b]
     required: true
     description: "Apple IIGS system ROM"
-    source_ref: "gsplus/src/config.c:131,403-406,1092-1149"
+    source_ref: "gsplus/src/config.c:136, gsplus/src/config.c:477-480, gsplus/src/config.c:1260-1317"
     note: "Accepted sizes: 32768 (Apple //e), 131072 (ROM 01), 262144 (ROM 03)"
     validation: [size]
 
@@ -42,5 +42,5 @@ files:
     size: 256
     description: "Disk II controller PROM (slot 6)"
     validation: [size]
-    source_ref: "gsplus/src/config.c:414-415,1168-1220"
+    source_ref: "gsplus/src/config.c:488-489, gsplus/src/config.c:1336-1388"
     note: "Built-in PROM generated from XOR diffs against main ROM"

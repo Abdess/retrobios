@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/blueMSX-libretro"
 upstream: "http://bluemsx.msxblue.com/"
 profiled_date: "2026-03-23"
-source_commit: "0f32f52c48d3e772bfdf0379756f81f00b4e08bc"
+source_commit: "e3086eb5d36d77fa11704cf53dc176686e70127d"
 core_version: "SVN"
 display_name: "MSX/SVI/ColecoVision/SG-1000 (blueMSX)"
 cores:
@@ -60,7 +60,7 @@ data_directories:
   # buildbot source: https://buildbot.libretro.com/assets/system/blueMSX.zip
   # ref: libretro.c:1118-1119 — system_dir/Machines/ + system_dir/Databases/
   - ref: bluemsx
-    source_ref: "libretro.c:1118-1119"
+    source_ref: "libretro.c:1119-1120"
 
 files:
   # ============================================================

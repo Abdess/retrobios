@@ -34,17 +34,17 @@ files:
   - name: "bios.sms"
     system: sega-mastersystem
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:534, platforms/libretro/libretro.cpp:537 (load_bootroms)"
+    source_ref: "platforms/libretro/libretro.cpp:568, platforms/libretro/libretro.cpp:571 (load_bootroms)"
 
   - name: "bios.gg"
     system: sega-gamegear
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:814, platforms/libretro/libretro.cpp:537 (load_bootroms)"
+    source_ref: "platforms/libretro/libretro.cpp:858, platforms/libretro/libretro.cpp:571 (load_bootroms)"
 
 platform_details:
   mastersystem:
     bios_filename: "bios.sms"
-    source_ref: "src/Memory.cpp:223-228"
+    source_ref: "src/Memory.cpp:225-230"
     note: |
       Boot ROM loaded via LoadBootromSMS() -> LoadBootroom(path, false).
       Raw binary read, stored in m_pBootromSMS. Bank count computed as
@@ -52,7 +52,7 @@ platform_details:
 
   gamegear:
     bios_filename: "bios.gg"
-    source_ref: "src/Memory.cpp:230-235"
+    source_ref: "src/Memory.cpp:232-237"
     note: |
       Boot ROM loaded via LoadBootromGG() -> LoadBootroom(path, true).
       Raw binary read, stored in m_pBootromGG. Same bank computation.
@@ -61,5 +61,5 @@ platform_details:
   sg1000:
     bios_filename: null
     note: |
-      No BIOS support. Memory.cpp:379 returns false from IsBootromEnabled()
+      No BIOS support. src/Memory.cpp:381 returns false from IsBootromEnabled()
       when IsSG1000() or IsGameGearInSMSMode() is true.

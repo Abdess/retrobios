@@ -4,7 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/nesdev-org/MesenCE"
 upstream: "https://github.com/SourMesen/Mesen2"
 profiled_date: "2026-08-06"
-source_commit: "bec4fe632cb21ec97ad2b39cd6fdc826ecd02753"
+source_commit: "af2342818ca81a93b346146802047760400fc7b1"
 core_version: "2.2.1"
 display_name: "Multi-System (MesenCE)"
 cores: [mesence, mesen2]
@@ -47,21 +47,21 @@ notes: |
   file listed below, or from a split pair <name>.program.rom + <name>.data.rom
   (FirmwareHelper.h AttemptLoadDspFirmware). ROM dumps with the firmware
   appended to the game ROM need no external file (LoadDspFirmware embedded
-  path, FirmwareHelper.h:131-135).
+  path, Core/Shared/FirmwareHelper.h:131-135).
 
   GB/GBC/SGB boot ROM images are compiled into the core
   (Core/Gameboy/GbBootRom.h:8,49,99); the external files below override them.
   Super Game Boy mode falls back to the plain GB core when SGB1.sfc/SGB2.sfc
-  is missing (BaseCartridge.cpp:698-717).
+  is missing (Core/SNES/BaseCartridge.cpp:698-717).
 
   Satellaview data broadcasts are read from <home>/Satellaview/ as
-  BSX<channel>-<index>.bin (BsxStream.cpp:67-74). Five stream files and
+  BSX<channel>-<index>.bin (Core/SNES/Coprocessors/BSX/BsxStream.cpp:67-74). Five stream files and
   MesenNesDB.txt ship inside the application binary (Dependencies.zip) and
   are extracted to the home folder at startup; user-provided replacements
   are preserved (UI/Utilities/DependencyHelper.cs:14-66). NES and SNES
   cheat databases (CheatDb.Nes.json, CheatDb.Snes.json) are read directly
   from the embedded archive and never touch the filesystem
-  (DependencyHelper.cs GetFileContent, CheatDatabaseViewModel.cs:33).
+  (DependencyHelper.cs GetFileContent, UI/ViewModels/CheatDatabaseViewModel.cs:33).
 
   HdPacks are per-game texture/audio replacements under <home>/HdPacks/,
   game content rather than system files.

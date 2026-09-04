@@ -3,7 +3,7 @@ type: standalone
 source: https://github.com/trzy/Supermodel
 upstream: https://github.com/trzy/Supermodel
 profiled_date: "2026-03-26"
-source_commit: "d6dec3dcf0922459801907950d966e5767c674de"
+source_commit: "24d2ffcfc7f14229337f05f4920fe26b56633d9d"
 core_version: "0.3a"
 display_name: "Supermodel (Sega Model 3)"
 cores:
@@ -39,7 +39,7 @@ files:
     bundled: true
     description: "ROM set definitions"
     note: "Parsed at startup into the game database. Every ROM region, file name and CRC32 the loader matches against comes from here, so an unreadable file leaves no set to resolve and the launch returns before the emulator is built. The path is a config key, so -game-xml-file moves it."
-    source_ref: "Src/OSD/SDL/Main.cpp:114, 1498, 1939, 2297-2307, Src/GameLoader.cpp:551-561, 1016-1019"
+    source_ref: "Src/OSD/SDL/Main.cpp:117, Src/OSD/SDL/Main.cpp:1506, Src/OSD/SDL/Main.cpp:1963, Src/OSD/SDL/Main.cpp:2326-2336, Src/GameLoader.cpp:549-559, Src/GameLoader.cpp:1014-1017"
 
   - name: p1crosshair.bmp
     path: "Assets/p1crosshair.bmp"
@@ -48,7 +48,7 @@ files:
     bundled: true
     description: "Player 1 light gun crosshair texture"
     note: "Both bitmaps are read on every launch whatever CrosshairStyle holds, since the load runs before the style decides anything, and a null surface aborts startup ahead of the Model 3 object. 32 bit BMP with alpha, sides a multiple of 2."
-    source_ref: "Src/OSD/SDL/Crosshair.cpp:34-51, Src/OSD/SDL/Main.cpp:2350-2356, Assets/DIR.txt"
+    source_ref: "Src/OSD/SDL/Crosshair.cpp:34-51, Src/OSD/SDL/Main.cpp:2379-2385, Assets/DIR.txt"
 
   - name: p2crosshair.bmp
     path: "Assets/p2crosshair.bmp"
@@ -57,7 +57,7 @@ files:
     bundled: true
     description: "Player 2 light gun crosshair texture"
     note: "Read in the same call as the player 1 bitmap and equally fatal when it fails to load."
-    source_ref: "Src/OSD/SDL/Crosshair.cpp:35, 49-51, Src/OSD/SDL/Main.cpp:2350-2356"
+    source_ref: "Src/OSD/SDL/Crosshair.cpp:35, 49-51, Src/OSD/SDL/Main.cpp:2379-2385"
 
   - name: Music.xml
     path: "Config/Music.xml"
@@ -65,7 +65,7 @@ files:
     bundled: true
     description: "Custom MPEG music track map"
     note: "Consulted only for a game with a DSB1 or DSB2 board, and skipped when the file is absent. Maps an MPEG ROM offset to an MP3 the user supplies."
-    source_ref: "Src/OSD/SDL/Main.cpp:115, 940, Src/Sound/MPEG/MpegAudio.cpp:88-108"
+    source_ref: "Src/OSD/SDL/Main.cpp:118, Src/OSD/SDL/Main.cpp:943, Src/Sound/MPEG/MpegAudio.cpp:88-108"
 
 exclusion_note: >
   The Sega Model 3 arcade hardware has no shared system BIOS. Each game board

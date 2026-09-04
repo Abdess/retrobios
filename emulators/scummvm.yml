@@ -89,7 +89,7 @@ files:
   - name: "Roland_SC-55.sf2"
     path: "scummvm/extra/Roland_SC-55.sf2"
     required: false
-    source_ref: "backends/platform/libretro/include/libretro-defs.h:32, backends/platform/libretro/src/libretro-os-utils.cpp:196"
+    source_ref: "backends/platform/libretro/include/libretro-defs.h:32, backends/platform/libretro/src/libretro-os-utils.cpp:197"
     note: >
       Roland SC-55 SoundFont for General MIDI playback. This is the default
       soundfont (DEFAULT_SOUNDFONT_FILENAME). Bundled in official ScummVM

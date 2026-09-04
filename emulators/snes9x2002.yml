@@ -4,7 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/snes9x2002"
 upstream: "https://github.com/snes9xgit/snes9x"
 profiled_date: "2026-03-25"
-source_commit: "a0709ec7dcd6de2fbebb43106bd757b649e3b7cf"
+source_commit: "5bd8bd6d449be8a2ef7909e1aeb2bd8c9c0da8cb"
 core_version: "7.2.0"
 display_name: "Nintendo - SNES / SFC (Snes9x 2002)"
 cores:
@@ -16,9 +16,9 @@ systems:
 
 notes: |
   Frozen snapshot of Snes9x 1.39 via PocketSNES, optimized for ARM.
-  SPC700 IPL ROM (64 bytes) embedded in globals.c:283 as APUROM[64].
+  SPC700 IPL ROM (64 bytes) embedded in src/globals.c:283 as APUROM[64].
   All ROM I/O via memstream (snes9x.h:54-57). The core never calls
   GET_SYSTEM_DIRECTORY and performs no file I/O from the system directory.
 
-exclusion_note: "SPC700 IPL ROM embedded in binary (globals.c:283); no system_directory access"
+exclusion_note: "SPC700 IPL ROM embedded in binary (src/globals.c:283); no system_directory access"
 files: []

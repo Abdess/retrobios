@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/meteor-libretro"
 upstream: "https://github.com/blastrock/meteor"
 profiled_date: "2026-03-24"
-source_commit: "e533d300d0561564451bde55a2b73119c768453c"
+source_commit: "9ea6c358eae6acd1a346647d96b832ccaffad0aa"
 core_version: "v1.4"
 display_name: "Nintendo - Game Boy Advance (Meteor)"
 cores:

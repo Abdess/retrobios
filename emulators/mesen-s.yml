@@ -8,7 +8,7 @@ core_classification: official_port
 source: "https://github.com/libretro/Mesen-S"
 upstream: "https://github.com/SourMesen/Mesen-S"
 profiled_date: "2026-03-24"
-source_commit: "d4fca31a6004041d99b02199688f84c009c55967"
+source_commit: "9e4fdeb9b336470bc96beb8765b2e79c86a2da1e"
 core_version: "0.4.0"
 cores: [mesen-s, mesen_s]
 systems: [nintendo-snes, nintendo-gb, nintendo-gbc, nintendo-super-game-boy, nintendo-satellaview]

@@ -74,7 +74,7 @@ notes: |
   Source: retrodep/embedded/*.c (embedded ROM tables),
   vice/src/*/rom.h (ROM name defines), vice/src/drive/driverom.h (drive ROMs),
   retrodep/ui.c:274-315 (JiffyDOS loading), retrodep/ui.c:258-271 (SCPU kernal),
-  libretro/libretro-core.c:2800-2865 (core options for JiffyDOS/SCPU)
+  libretro/libretro-core.c:2801-2866 (core options for JiffyDOS/SCPU)
 
 files:
   # -------------------------------------------------------
@@ -1082,7 +1082,7 @@ files:
     hle_fallback: true
     embedded: false
     note: "SuperCPU DOS v1.40 external kernal. Optional, selected via core option. Goes in system/vice/SCPU64/."
-    source_ref: "retrodep/ui.c:266, libretro/libretro-core.c:2825"
+    source_ref: "retrodep/ui.c:266, libretro/libretro-core.c:2826"
 
   - name: "vice/SCPU64/scpu-dos-2.04.bin"
     system: commodore-c64
@@ -1090,7 +1090,7 @@ files:
     hle_fallback: true
     embedded: false
     note: "SuperCPU DOS v2.04 external kernal. Optional, selected via core option. Goes in system/vice/SCPU64/."
-    source_ref: "retrodep/ui.c:263, libretro/libretro-core.c:2827"
+    source_ref: "retrodep/ui.c:263, libretro/libretro-core.c:2828"
 
   # -------------------------------------------------------
   # Drive ROMs (shared across all cores with True Drive Emulation)
@@ -1274,7 +1274,7 @@ files:
     hle_fallback: true
     embedded: false
     note: "JiffyDOS C64 kernal replacement. Optional, proprietary. Requires True Drive Emulation + 1541/1571/1581 drive."
-    source_ref: "retrodep/ui.c:302, libretro/libretro-core.c:2855"
+    source_ref: "retrodep/ui.c:302, libretro/libretro-core.c:2856"
 
   - name: "vice/JiffyDOS_SX-64.bin"
     system: commodore-c64
@@ -1290,7 +1290,7 @@ files:
     hle_fallback: true
     embedded: false
     note: "JiffyDOS C128 kernal replacement. Optional, proprietary. C128 core only."
-    source_ref: "retrodep/ui.c:309, libretro/libretro-core.c:2857"
+    source_ref: "retrodep/ui.c:309, libretro/libretro-core.c:2858"
 
   - name: "vice/JiffyDOS_1541-II.bin"
     system: commodore-c64

@@ -16,7 +16,7 @@ notes: |
   contributed by Joe Zbiciak (jzIntv), mask ROM embedded in source
   (src/ivoice.c:337-510, 4097-byte static array). No external ivoice ROM.
 
-  BIOS loading in retro_init() (src/libretro.c:1166-1174). Paths joined
+  BIOS loading in retro_init() (src/libretro.c:1175-1183). Paths joined
   directly to system directory, no subdirectory.
 
   loadExec() reads exec.bin as big-endian 16-bit words into 0x1000-0x1FFF.
@@ -35,11 +35,11 @@ files:
     required: true
     size: 8192
     note: "Executive ROM. Big-endian 16-bit words loaded at 0x1000-0x1FFF."
-    source_ref: "src/intv.c:47-71, src/libretro.c:1169"
+    source_ref: "src/intv.c:51-96, src/libretro.c:1178"
 
   - name: "grom.bin"
     system: intellivision
     required: true
     size: 2048
     note: "Graphics ROM. Raw bytes loaded at 0x3000-0x37FF."
-    source_ref: "src/intv.c:73-98, src/libretro.c:1173"
+    source_ref: "src/intv.c:98-144, src/libretro.c:1182"

@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-fceumm"
 upstream: "https://sourceforge.net/projects/fceumm/"
 profiled_date: "2026-03-23"
-source_commit: "b5e3566515c27dc66c9c20572171673126532e06"
+source_commit: "236ccdfc911e84c60fea6b9d0699c2d440a8de14"
 core_version: "SVN"
 display_name: "Nintendo - NES / Famicom (FCEUmm)"
 cores:

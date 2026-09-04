@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/vircon32/vircon32-libretro"
 upstream: "https://github.com/vircon32/ComputerSoftware"
 profiled_date: "2026-03-25"
-source_commit: "3a1b4ae3fb75c1216fab9cc8715e9a122c461a3a"
+source_commit: "dd78c5cea1fcaa382b7492d0d813d6c1534914d7"
 core_version: "2026.2.18"
 display_name: "Vircon32"
 cores:
@@ -33,7 +33,7 @@ notes: |
   (ROMFileFormat::BiosSignature). It must contain exactly 1 texture and
   1 sound. The loader validates the signature, file structure, and version
   compatibility before loading program ROM, video ROM and audio ROM
-  (V32Console.cpp:259-431).
+  (ConsoleLogic/V32Console.cpp:259-431).
 
   The external BIOS file allows users to replace the boot animation with
   a custom one. Game compatibility is not affected by BIOS choice.
@@ -70,7 +70,7 @@ platform_details:
       Console.LoadBiosData().
 
   bios_format:
-    source_ref: "VirconDefinitions/FileFormats.hpp, V32Console.cpp:259-431"
+    source_ref: "VirconDefinitions/FileFormats.hpp, ConsoleLogic/V32Console.cpp:259-431"
     note: |
       A V32 BIOS ROM file must have:
       - BiosSignature in the header (distinct from CartridgeSignature)
@@ -81,7 +81,7 @@ platform_details:
 
   cartridge_format:
     extensions: "v32"
-    source_ref: "V32Console.cpp:468-696"
+    source_ref: "ConsoleLogic/V32Console.cpp:468-696"
     note: |
       Cartridges use CartridgeSignature with up to 256 textures and
       1024 sounds. Program ROM can be up to 128M words (512 MB).

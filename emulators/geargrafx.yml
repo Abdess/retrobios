@@ -41,7 +41,7 @@ files:
     size: 262144
     required: true
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:581, platforms/libretro/libretro.cpp:599-601, src/media.cpp:339-436, src/defines.h:52, src/game_db.h:50, src/game_db.h:52"
+    source_ref: "platforms/libretro/libretro.cpp:608, platforms/libretro/libretro.cpp:623-625, src/media.cpp:387-484, src/defines.h:52, src/game_db.h:50, src/game_db.h:53"
     note: >
       Default BIOS for CD-ROM games (cdrom_bios Auto or System Card 3).
       game_db.h recognizes Japan (CRC32 6D9A73EF) and USA (CRC32 2B5B75FE)
@@ -52,7 +52,7 @@ files:
     size: 262144
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:580, platforms/libretro/libretro.cpp:590-591, src/media.cpp:339-436, src/game_db.h:48-49, src/game_db.h:51"
+    source_ref: "platforms/libretro/libretro.cpp:607, platforms/libretro/libretro.cpp:617-618, src/media.cpp:387-484, src/game_db.h:48-49, src/game_db.h:52"
     note: >
       cdrom_bios = 'System Card 2'. For older CD-ROM2 titles. game_db.h
       recognizes three variants: v2.0 Japan (CRC32 52520BC6), v2.1 Japan
@@ -63,7 +63,7 @@ files:
     size: 262144
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:579, platforms/libretro/libretro.cpp:587-588, src/media.cpp:339-436, src/game_db.h:47"
+    source_ref: "platforms/libretro/libretro.cpp:606, platforms/libretro/libretro.cpp:614-615, src/media.cpp:387-484, src/game_db.h:47"
     note: >
       cdrom_bios = 'System Card 1'. Very early CD-ROM2 games only.
       CRC32 3F9F95A4.
@@ -73,9 +73,9 @@ files:
     size: 32768
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:582, platforms/libretro/libretro.cpp:596-597, platforms/libretro/libretro.cpp:481-482, src/media.cpp:339-436, src/defines.h:53, src/game_db.h:53-54"
+    source_ref: "platforms/libretro/libretro.cpp:609, platforms/libretro/libretro.cpp:609-610, platforms/libretro/libretro.cpp:508-509, src/media.cpp:387-484, src/defines.h:53, src/game_db.h:54-55"
     note: >
-      Always loaded alongside the selected System Card BIOS (libretro.cpp:618).
+      Always loaded alongside the selected System Card BIOS (platforms/libretro/libretro.cpp:642).
       Required for Game Express CD-ROM titles. game_db.h recognizes Blue Version
       (CRC32 51A12D90) and Green Version (CRC32 16AAF05A).
 

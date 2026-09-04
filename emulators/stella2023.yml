@@ -4,7 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/stella2023"
 upstream: "https://github.com/stella-emu/stella"
 profiled_date: "2026-03-25"
-source_commit: "878a9c8d5f03ef0b7cd190b5713d6bf31c48df38"
+source_commit: "ba52c43b9eda950eb0c0eec69cda9b17dee8c39b"
 core_version: "7.0_pre"
 display_name: "Atari - 2600 (Stella 2023)"
 cores:
@@ -20,7 +20,7 @@ notes: |
 
   The Atari 2600 has no BIOS ROM; TIA, RIOT, and 6507 CPU are fully
   emulated in software. The SuperCharger (Starpath) BIOS is emulated via
-  a built-in dummy ROM (ourDummyROMCode in CartAR.cxx:279). The game
+  a built-in dummy ROM (ourDummyROMCode in src/emucore/CartAR.cxx:279). The game
   properties database is compiled into DefProps.hxx; external loading is
   disabled in the libretro port (OSystemLIBRETRO returns
   CompositeKeyValueRepositoryNoop for the property repository).

@@ -61,7 +61,7 @@ notes: |
   Firmware path resolution: settings.paths.firmware (user override) or
   {userData}/ares/Firmware/ (default). Per-system firmware assigned in
   Settings > Firmware dialog or via scan-by-hash.
-  ref: desktop-ui/settings/settings.hpp:85-97, desktop-ui/desktop-ui.cpp:68-75
+  ref: desktop-ui/settings/settings.hpp:87-99, desktop-ui/desktop-ui.cpp:68-75
 
   Systems with fully embedded firmware (no user files needed):
   Game Boy (boot.rom), Game Boy Color (boot.rom), Mega Drive (TMSS),

@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/mupen64plus-ae/mupen64plus-ae"
 upstream: "https://github.com/mupen64plus-ae/mupen64plus-ae"
 profiled_date: "2026-08-12"
-source_commit: "25cfb7a0cf27517f796fb2baf92606f3ae9417f3"
+source_commit: "33bf7021549d7873e976884370fbd1a8e7333bc7"
 core_version: "3.0.249 (beta)"
 display_name: "Nintendo - Nintendo 64 (Mupen64Plus AE)"
 cores:
@@ -25,94 +25,94 @@ notes: |
   audio, touchscreen and raphnet input plugins, and a miniupnp bridge for
   netplay (settings.gradle:1). ES-DE launches it for both n64 and n64dd with an
   ACTION_VIEW intent carrying a storage access uri, which the splash screen
-  forwards to the gallery (AndroidManifest.xml:80-101, SplashActivity.java:134).
+  forwards to the gallery (app/src/main/AndroidManifest.xml:80-101, app/src/main/java/paulscode/android/mupen64plusae/SplashActivity.java:134).
 
   Cartridge boot needs no boot ROM. The PIF boot sequence is simulated
-  (device/pif/bootrom_hle.c:48, entered from device/r4300/interrupt.c:445,496
-  and main/main.c:1875) and the CIC-NUS-6105 challenge is answered by an
-  algorithm rather than a stored table (device/pif/n64_cic_nus_6105.c:93).
+  (mupen64plus-core/upstream/src/device/pif/bootrom_hle.c:48, entered from mupen64plus-core/upstream/src/device/r4300/interrupt.c:445,496
+  and mupen64plus-core/upstream/src/main/main.c:1875) and the CIC-NUS-6105 challenge is answered by an
+  algorithm rather than a stored table (mupen64plus-core/upstream/src/device/pif/n64_cic_nus_6105.c:93).
   Nothing fills the PIF ROM window from a file.
 
   Which 64DD IPL is used is not decided by the code. Two settings hold a path
   and both end up as the same working file dd_rom.n64: the global one, titled
   64DD IPL (J), read when the launched file is itself a disk, and a per game
   one, titled 64DD IPL, read when a cartridge is launched with a disk attached
-  and only while the support64dd toggle is on (CoreService.java:606-620,
-  GlobalPrefs.java:421,727, GamePrefs.java:579-599,
-  CoreInterface.java:144,231,459-488). The core offers a callback that would
+  and only while the support64dd toggle is on (app/src/main/java/paulscode/android/mupen64plusae/jni/CoreService.java:606-620,
+  app/src/main/java/paulscode/android/mupen64plusae/persistent/GlobalPrefs.java:421,727, app/src/main/java/paulscode/android/mupen64plusae/persistent/GamePrefs.java:579-599,
+  app/src/main/java/paulscode/android/mupen64plusae/jni/CoreInterface.java:144,231,459-488). The core offers a callback that would
   name the image per disk region and the front end leaves it null
-  (CoreInterface.java:223, main/main.c:1082-1086), so whichever image sits in
+  (app/src/main/java/paulscode/android/mupen64plusae/jni/CoreInterface.java:223, mupen64plus-core/upstream/src/main/main.c:1082-1086), so whichever image sits in
   the slot is the one loaded. A disk is recognised only when its system data
   header matches and carries one of three region words, 0xe848d316 for Japan,
   0x2263ee56 for the United States and 0x00000000 for development
-  (RomHeader.java:180-220); the word sets a country code used for the ROM
+  (app/src/main/java/paulscode/android/mupen64plusae/util/RomHeader.java:180-220); the word sets a country code used for the ROM
   database and cheat lookup, never for picking the IPL. Launching a bare disk
   with the global slot empty stops before the core starts
-  (CoreService.java:638-639), and since disk only games still need a cartridge
+  (app/src/main/java/paulscode/android/mupen64plusae/jni/CoreService.java:638-639), and since disk only games still need a cartridge
   image the application feeds the m64p_test_rom.v64 asset in its place
-  (CoreService.java:643-644). Disk content inside a .zip or .7z is unpacked to
-  the working directory first (CoreInterface.java:490-522).
+  (app/src/main/java/paulscode/android/mupen64plusae/jni/CoreService.java:643-644). Disk content inside a .zip or .7z is unpacked to
+  the working directory first (app/src/main/java/paulscode/android/mupen64plusae/jni/CoreInterface.java:490-522).
 
   Transfer Pak carts come from four per player path settings copied into the
   working directory as playerN_gb_rom.gb and playerN_gb_ram.gb
-  (CoreService.java:566-575, GamePrefs.java:933-960,
-  CoreInterface.java:142-143,175-189,235-236,420-457). The core rejects a cart
-  under 32 KiB and an unknown type byte at 0x147 (device/gb/gb_cart.c:996-1009)
+  (app/src/main/java/paulscode/android/mupen64plusae/jni/CoreService.java:566-575, app/src/main/java/paulscode/android/mupen64plusae/persistent/GamePrefs.java:933-960,
+  app/src/main/java/paulscode/android/mupen64plusae/jni/CoreInterface.java:142-143,175-189,235-236,420-457). The core rejects a cart
+  under 32 KiB and an unknown type byte at 0x147 (mupen64plus-core/upstream/src/device/gb/gb_cart.c:996-1009)
   and fixes no name, size or hash, so neither the cart nor its save carries an
   entry here.
 
   Seven data files ship inside the package, each keyed to a version number and
   unpacked on first start into the private files directory, which is also what
-  the core is told is SharedDataPath (ExtractAssetsOrCleanupTask.java:63-73,
-  SplashActivity.java:90,399-402, AppData.java:391-403,
-  NativeConfigFiles.java:111). mupen64plus.ini is the ROM database, read by the
-  core (main/rom.c:473-490 from api/frontend.c:106) and by the gallery
-  (SplashActivity.java:447). mupencheat.default is copied over
+  the core is told is SharedDataPath (app/src/main/java/paulscode/android/mupen64plusae/task/ExtractAssetsOrCleanupTask.java:63-73,
+  app/src/main/java/paulscode/android/mupen64plusae/SplashActivity.java:90,399-402, app/src/main/java/paulscode/android/mupen64plusae/persistent/AppData.java:391-403,
+  app/src/main/java/paulscode/android/mupen64plusae/jni/NativeConfigFiles.java:111). mupen64plus.ini is the ROM database, read by the
+  core (mupen64plus-core/upstream/src/main/rom.c:473-490 from mupen64plus-core/upstream/src/api/frontend.c:106) and by the gallery
+  (app/src/main/java/paulscode/android/mupen64plusae/SplashActivity.java:447). mupencheat.default is copied over
   Profiles/customCheats.txt into mupencheat.txt and parsed in Java
-  (SplashActivity.java:443, CheatUtils.java:88-96, GamePrefsActivity.java:548);
+  (app/src/main/java/paulscode/android/mupen64plusae/SplashActivity.java:443, app/src/main/java/paulscode/android/mupen64plusae/cheat/CheatUtils.java:88-96, app/src/main/java/paulscode/android/mupen64plusae/persistent/GamePrefsActivity.java:548);
   the core's own cheat.c opens no file. font.ttf is reached by GLideN64 only
   after /system/fonts/DroidSans.ttf fails, that name being what the front end
-  writes as the configured font (TextDrawer.cpp:209-210,222-228,
-  NativeConfigFiles.java:291); the core's OSD, the other upstream reader of
-  that name (osd/osd.c:40), is absent from the Android source list
-  (mupen64plus-core.mk:24-101). RiceVideoLinux.ini holds rice's per ROM
+  writes as the configured font (mupen64plus-video-gliden64/upstream/src/TextDrawer.cpp:209-210,222-228,
+  app/src/main/java/paulscode/android/mupen64plusae/jni/NativeConfigFiles.java:291); the core's OSD, the other upstream reader of
+  that name (mupen64plus-core/upstream/src/osd/osd.c:40), is absent from the Android source list
+  (mupen64plus-core/mupen64plus-core.mk:24-101). RiceVideoLinux.ini holds rice's per ROM
   settings (rice Config.cpp:38,933-953), Glide64mk2.ini glide64mk2's
   (glide64mk2 Main.cpp:1581-1586), and gln64.conf with gln64rom.conf gln64's
   global and per ROM settings (gln64 Config.cpp:245-252,296-302).
 
   Two more assets are read straight out of the package and never unpacked:
   m64p_test_rom.v64, and GLideN64.custom.ini, whose per ROM overrides the front
-  end reads itself and writes into mupen64plus.cfg (AppData.java:396-397,
-  ConfigFile.java:225-229, NativeConfigFiles.java:223,227). GLideN64 also asks
+  end reads itself and writes into mupen64plus.cfg (app/src/main/java/paulscode/android/mupen64plusae/persistent/AppData.java:396-397,
+  app/src/main/java/paulscode/android/mupen64plusae/persistent/ConfigFile.java:225-229, app/src/main/java/paulscode/android/mupen64plusae/jni/NativeConfigFiles.java:223,227). GLideN64 also asks
   the core for GLideN64.custom.ini in SharedDataPath, where it was never
   placed, so that native lookup finds nothing
-  (mupenplus/Config_mupenplus.cpp:332-344). The touchscreen skins, the shader
+  (mupen64plus-video-gliden64/upstream/src/mupenplus/Config_mupenplus.cpp:332-344). The touchscreen skins, the shader
   sources and the controller, touchscreen and emulation profile templates are
-  used from the package the same way (AppData.java:392,401-403,
-  GlobalPrefs.java:530, ShaderLoader.java:85).
+  used from the package the same way (app/src/main/java/paulscode/android/mupen64plusae/persistent/AppData.java:392,401-403,
+  app/src/main/java/paulscode/android/mupen64plusae/persistent/GlobalPrefs.java:530, app/src/main/java/paulscode/android/mupen64plusae/game/ShaderLoader.java:85).
 
   Optional content with no canonical artifact: hi-res texture packs under the
-  user data directory, imported from a user archive (GlobalPrefs.java:469,
+  user data directory, imported from a user archive (app/src/main/java/paulscode/android/mupen64plusae/persistent/GlobalPrefs.java:469,
   ExtractTexturesFragment.java), the <ROM>_HIRESTEXTURES.htc and .hts caches
   the plugin builds from them, read back for their storage flag
-  (NativeConfigFiles.java:365-376), customCheats.txt, custom touchscreen skins
-  and cover art (GlobalPrefs.java:481,486-487), and alp_screen.vert with
+  (app/src/main/java/paulscode/android/mupen64plusae/jni/NativeConfigFiles.java:365-376), customCheats.txt, custom touchscreen skins
+  and cover art (app/src/main/java/paulscode/android/mupen64plusae/persistent/GlobalPrefs.java:481,486-487), and alp_screen.vert with
   alp_screen.frag, which angrylion-plus opens as working directory relative
   paths before falling back to its embedded shaders
   (angrylion-plus output/vdac.c:119-127,167-174,246-247).
 
   Written rather than obtained: mupen64plus.cfg and the plugin sections in it,
   the mempak, eeprom, flashram and sram saves given default content when absent
-  (main/main.c:1015-1078,1619-1622) and the 64DD disk save in whichever of the
-  two formats SaveDiskFormat selects (main/main.c:365,1176-1235), savestates
+  (mupen64plus-core/upstream/src/main/main.c:1015-1078,1619-1622) and the 64DD disk save in whichever of the
+  two formats SaveDiskFormat selects (mupen64plus-core/upstream/src/main/main.c:365,1176-1235), savestates
   with the rcheevos progress file written beside them
-  (CoreService.java:335,407-413), screenshots, the texture dump and cache
+  (app/src/main/java/paulscode/android/mupen64plusae/jni/CoreService.java:335,407-413), screenshots, the texture dump and cache
   directories, the GLideN64 shader cache and romInfoCache.cfg
-  (GlobalPrefs.java:466-487, NativeConfigFiles.java:108-111).
+  (app/src/main/java/paulscode/android/mupen64plusae/persistent/GlobalPrefs.java:466-487, app/src/main/java/paulscode/android/mupen64plusae/jni/NativeConfigFiles.java:108-111).
 
   Two files in the tree this build never reads. cxd4's rsp_conf.bin: its reader
   is the zilmar variant of update_conf behind #if !defined(M64P_PLUGIN_API),
-  and the build defines that macro (mupen64plus-rsp-cxd4.mk:8), so the variant
+  and the build defines that macro (mupen64plus-rsp-cxd4/mupen64plus-rsp-cxd4.mk:8), so the variant
   compiled takes its settings from the core config API and ignores the filename
   it is handed (mupen64plus-rsp-cxd4 module.c:83-93,239,637-659). And
   parallel-rdp's shader directory, registered as a filesystem protocol only

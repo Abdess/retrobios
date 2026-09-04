@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/fixGB"
 upstream: "https://github.com/FIX94/fixGB"
 profiled_date: "2026-03-23"
-source_commit: "ecbaee13b64a0308539e73d0eec1847925898e5d"
+source_commit: "3ab80f3ebf600664c81fa2b0f163ba3f558cf52e"
 core_version: "Alpha v0.8.2"
 display_name: "Nintendo - Game Boy / Color (fixGB)"
 cores:

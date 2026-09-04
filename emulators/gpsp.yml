@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/gpsp"
 upstream: "https://github.com/davidgfnet/gpsp"
 profiled_date: "2026-03-23"
-source_commit: "5b6e751f4abf368509146cd143c949c1946ac1ae"
+source_commit: "8d268a6bb2cd799f8f2791ebb544a7ef550cfc6f"
 core_version: "Git"
 display_name: "Nintendo - Game Boy Advance (gpSP)"
 cores:

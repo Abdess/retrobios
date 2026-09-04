@@ -24,7 +24,7 @@ notes: |
   Startup reads nothing. The two GLSL shaders sit in the tree as
   src/lightspark.frag and src/lightspark.vert but the preprocessor pulls them
   into string literals, "directly include shader source to avoid filesystem
-  access" (src/backends/rendering.cpp:1042-1045,1062-1065), which is also how
+  access" (src/backends/rendering.cpp:1039-1042,1059-1062), which is also how
   0.8.7 builds them. The face given to nanoVG for text is Roboto Medium, decoded
   at runtime from a base85 array in the binary (src/launcher.cpp:1567,
   src/platforms/engineutils.cpp:500-502), and the launcher icon face is embedded
@@ -35,7 +35,7 @@ notes: |
 
   Fonts named by the content go through fontconfig, which answers with whatever
   face the host has installed: FcFontMatch then FcPatternGetString(FC_FILE) hands
-  a path straight to nvgCreateFont (src/backends/cachedsurface.cpp:135-156). No
+  a path straight to nvgCreateFont (src/backends/cachedsurface.cpp:147-168). No
   name, path, size or hash is fixed anywhere, README:27-30 marks fontconfig
   itself optional, and an unmatched family leaves nanoVGFontID at -1 and falls
   back to the embedded face.
@@ -44,7 +44,7 @@ notes: |
   commit and at 0.8.7 (src/parsing/textfile.cpp:74-106). fontPath holds
   "TimesNewRoman.ttf" on Windows (src/backends/rendering.cpp:102) but reaches
   only cairo_select_font_face, which takes a family name rather than a path, and
-  only under ENABLE_CAIRO (src/backends/rendering.cpp:1277), left FALSE by
+  only under ENABLE_CAIRO (src/backends/rendering.cpp:1274), left FALSE by
   CMakeLists.txt.
 
   Files the player writes rather than expects: lightspark.conf, an INI carrying

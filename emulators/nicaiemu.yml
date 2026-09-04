@@ -4,7 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/AloysHF/NicaiEmu"
 upstream: "https://github.com/AloysHF/NicaiEmu"
 profiled_date: "2026-09-03"
-source_commit: "d0b1a959e3756209e6f56b167bb6e5509805b275"
+source_commit: "43d016098be7e468cabfd46fa6b45047637d6c3a"
 core_version: "0.1.0"
 display_name: "MStar - Nicai (NicaiEmu)"
 cores:

@@ -61,7 +61,7 @@ notes: |
   the JVM default soundbank in place. VlcDir points at a VLC installation that
   vlcj scans for libvlc.
   ref: src/media/emulator/media/EmulatorMIDI.java:26-36,
-       src/main/emulator/ui/swt/Property.java:1864-1905
+       src/main/emulator/ui/swt/Property.java:1860-1901
 
 files:
   - name: M7_EmuSmw7.dll
@@ -190,7 +190,7 @@ files:
     validation: [existence]
     description: "Device presets: screen sizes, key maps, platform identities"
     note: "Devices.load reads the PresetsPath setting, /res/presets.xml by default, as a jar resource and falls back to a disk read when the resource is absent, which is how a user-supplied preset file is picked up."
-    source_ref: "src/main/emulator/Settings.java:133, src/main/emulator/Devices.java:25-50, src/main/emulator/Emulator.java:641"
+    source_ref: "src/main/emulator/Settings.java:131, src/main/emulator/Devices.java:25-50, src/main/emulator/Emulator.java:638"
 
   - name: en.txt
     system: j2me

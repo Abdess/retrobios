@@ -24,11 +24,11 @@ notes: |
   "embedded" when that fails. The system directory is still passed to SelectGame,
   but for the game data search, not for the engine package.
   ref: src/libretro/ecwolf_pk3_data.c, src/wl_iwad.cpp:664-672,
-  src/libretro/libretro.cpp:990-992
+  src/libretro/libretro.cpp:1009-1011
 
   Standalone: ecwolf.pk3 searched in progdir (binary directory).
-  ref: wl_main.cpp:1295 (progdir passed to SelectGame)
-  Also: INSTALL_PREFIX/share/ecwolf/ on Linux (wl_iwad.cpp:648)
+  ref: src/libretro/wl_main.cpp:1271 (progdir passed to SelectGame)
+  Also: INSTALL_PREFIX/share/ecwolf/ on Linux (src/wl_iwad.cpp:648)
 
   Game data files (vswap, gamemaps, vgagraph, audiot) loaded from content
   directory, not system directory. Auto-detects game variant by scanning

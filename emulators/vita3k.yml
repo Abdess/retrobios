@@ -3,7 +3,7 @@ type: standalone
 source: "https://github.com/Vita3K/Vita3K"
 upstream: "https://github.com/Vita3K/Vita3K"
 profiled_date: "2026-03-29"
-source_commit: "80075ce556a9d5c2c8fbe27f70625fb539d3bbba"
+source_commit: "69fd32ef9d00be3f92330b7330d00225e06b598d"
 core_version: "0.2.1"
 display_name: "Vita3K (PS Vita)"
 cores:
@@ -47,7 +47,7 @@ files:
 notes: |
   Standalone PS Vita emulator. No libretro core.
   Firmware installed via File > Install Firmware or CLI --firmware flag.
-  PUP files validated by SCEUF magic header only (pup.cpp:119), no hash check.
+  PUP files validated by SCEUF magic header only (vita3k/packages/src/pup.cpp:119), no hash check.
   After install, four partitions are extracted:
     os0 (FAT, kernel modules), vs0 (FAT, system modules/apps),
     sa0 (FAT, fonts), pd0 (exFAT, system data/BGM).
@@ -55,6 +55,6 @@ notes: |
   vs0:sys/external/{name}.suprx (firmware). Auto-LLE modules include
   libhttp, libssl, libult, libsas, libpgf, libfios2, libsystemgesture,
   libSceXml, libSceSqlite, librudp, libatrac, libface, libsmart,
-  libsceavplayer, libSceJson, and more (load_module.cpp:142-162).
+  libsceavplayer, libSceJson, and more (vita3k/module/src/load_module.cpp:142-162).
   A third optional preinst firmware PUP (pd0 partition: system BGM, resources)
   is available from Sony but not commonly required for game compatibility.

@@ -4,7 +4,7 @@ core_classification: launcher
 source: "https://gitlab.com/parallel-launcher/parallel-launcher"
 upstream: "https://gitlab.com/parallel-launcher/parallel-n64"
 profiled_date: "2026-08-08"
-source_commit: "8f2924c213f7c98118ab5a86fc21c452b77a7057"
+source_commit: "8dc2a83770c57bc00e1b1fae0aed71f2120cc875"
 upstream_commit: "11574ac28d27faaaef4b5bc3c1ca50fb2ed98b83"
 core_version: "9.0.5"
 display_name: "Nintendo - Nintendo 64 (Parallel Launcher)"
@@ -18,42 +18,42 @@ systems:
 notes: |
   Qt front end that installs and drives its own RetroArch and its own fork of
   ParaLLEl N64. RetroArch is fetched from buildbot.libretro.com as a stable
-  release archive (retroarch-updater.cpp:24-30). The core,
+  release archive (src/updaters/retroarch-updater.cpp:24-30). The core,
   parallel_n64_next_libretro, is fetched from parallel-launcher.ca
-  (updates.cpp:190-213) into retro-data/cores. Core version at this profiling
+  (src/core/updates.cpp:190-213) into retro-data/cores. Core version at this profiling
   is 2.28.
 
   Neither lands in a user RetroArch install. The system directory the core
   reads from is retro-data/system under the launcher's own data directory,
-  written into a private retroarch.cfg on every launch (retroarch.cpp:100-129).
+  written into a private retroarch.cfg on every launch (src/core/retroarch.cpp:100-129).
   RetroArch is spawned as `-L <core> --config <cfg> <rom>`
-  (retroarch.cpp:760-781). The launcher also rewrites the core's .info into
-  retro-data/info at every startup (main.cpp:149-156), which is how RetroArch
+  (src/core/retroarch.cpp:760-781). The launcher also rewrites the core's .info into
+  retro-data/info at every startup (src/main.cpp:149-156), which is how RetroArch
   learns of the 64DD firmware entry.
 
   Content is restricted to cartridge formats at every entry point: command line
-  and file associations take .z64 .n64 .v64 .bps (main.cpp:65-94), the add-ROM
-  dialog the same (main-window.cpp:607-616), the library scanner *.[nvz]64
-  (rom-finder.cpp:271-278), romhacking.com downloads .z64 (sync.cpp:238). A .bps
-  is patched to a cartridge ROM before launch (play.cpp:721-757). No --subsystem
+  and file associations take .z64 .n64 .v64 .bps (src/main.cpp:65-94), the add-ROM
+  dialog the same (src/ui/main-window.cpp:607-616), the library scanner *.[nvz]64
+  (src/core/rom-finder.cpp:271-278), romhacking.com downloads .z64 (src/rhdc/core/sync.cpp:238). A .bps
+  is patched to a cartridge ROM before launch (src/ui/play.cpp:721-757). No --subsystem
   argument is passed either, so neither route into the core's disk path opens:
-  the header check at libretro.c:545-548 and the cart-and-disk subsystem at
-  libretro.c:104-114.
+  the header check at libretro/libretro.c:545-548 and the cart-and-disk subsystem at
+  libretro/libretro.c:104-114.
 
   Graphics plugin is chosen per ROM among ParaLLEl-RDP, Glide64, angrylion,
-  GLideN64, Rice, glN64 and OGRE (settings.hpp:13-22, retroarch.cpp:55-64).
+  GLideN64, Rice, glN64 and OGRE (src/core/settings.hpp:13-22, src/core/retroarch.cpp:55-64).
 
   Selecting glN64 also reads gles2n64.conf from the system directory root at
   plugin init, and writes it out with defaults when it is absent
-  (glN64Config.c:246-254, Config_WriteConfig at glN64Config.c:95).
+  (gles2n64/src/glN64Config.c:246-254, Config_WriteConfig at gles2n64/src/glN64Config.c:95).
 
   Three paths the fork computes but never reads. GLideN64 builds without
   FreeType here, so the font file name it resolves for on-screen text is
-  assigned and dropped (TextDrawer.cpp:145-188). Its per-game ini is compiled in
+  assigned and dropped (mupen64plus-video-gliden64/src/TextDrawer.cpp:145-188). Its per-game ini is compiled in
   as a header and the external copy is skipped because the launcher writes INI
-  Behaviour as disabled on every launch (retroarch.cpp:468,
-  Config_mupenplus.cpp:170-241, libretro.c:2030-2040). Rice's ini reader and
-  writer sit behind #if 0 (RiceConfig.cpp:453-463, Video.cpp:327-333).
+  Behaviour as disabled on every launch (src/core/retroarch.cpp:468,
+  mupen64plus-video-gliden64/src/mupenplus/Config_mupenplus.cpp:170-241, libretro/libretro.c:2030-2040). Rice's ini reader and
+  writer sit behind #if 0 (gles2rice/src/RiceConfig.cpp:453-463, gles2rice/src/Video.cpp:327-333).
 
 files:
   - name: "64DD_IPL.bin"

@@ -2,7 +2,7 @@ emulator: x16emu
 type: standalone
 upstream: "https://github.com/X16Community/x16-emulator"
 profiled_date: "2026-03-26"
-source_commit: "49b1fbd6d058cc8c6f126ed86d9b6ccfaaa8335b"
+source_commit: "77f2bab332e24c5456f9844a6c7ddd203f6198e6"
 core_version: "r50"
 display_name: "Commander X16 (x16emu)"
 cores:

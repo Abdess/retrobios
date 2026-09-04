@@ -48,21 +48,21 @@ notes: |
   Everything else under the configuration, data and cache directories is written
   by the emulator: config.json and cheats.json (src/ui/config.rs:99-111,134-146),
   retroachievements.json (src/lib.rs:209; src/retroachievements.rs:37,61),
-  ice_config.json from the netplay server response (src/ui/netplay.rs:713-716,
+  ice_config.json from the netplay server response (src/ui/netplay.rs:715-718,
   src/netplay.rs:419), the eeprom, sram, flash, mempak, sdcard and romsave saves
   and the savestates (src/ui/storage.rs:212-232; src/savestates.rs:179,236). For
   a netplay launch the GUI serialises the cheats to the cache directory, passes
   them to a re-exec of itself through the hidden --cheats flag and deletes the
   file afterwards (src/ui/gui.rs:583-593,600-615,630; src/lib.rs:141-147).
   portable.txt is tested for existence only, to move those three directories
-  beside the executable (src/ui.rs:164-178).
+  beside the executable (src/ui.rs:186-200).
 
   Compiled-in data: the cheat database (src/cheats.rs:31), the No-Intro
   Nintendo 64 export that names entries in the ROM browser
   (src/ui/gui.rs:688-690), the RobotoMono face handed to SDL_ttf from memory
   (src/ui/video.rs:109, src/ui/input_profile.rs:99), the parallel-rdp SPIR-V
   modules (parallel-rdp/spirv.hpp and parallel-rdp/spirv_crt.hpp, used at
-  parallel-rdp/interface.cpp:4-5,615) and the Slint translations bundled at
+  parallel-rdp/interface.cpp:4-5,619) and the Slint translations bundled at
   build time (build.rs:11).
 
 files: []

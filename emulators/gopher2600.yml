@@ -19,32 +19,32 @@ notes: |
   with nothing supplied.
 
   Supercharger emulation is the only path that reads a BIOS. NewSupercharger
-  branches three ways (supercharger.go:93-119). A tape held as WAV or MP3 sets
+  branches three ways (hardware/memory/cartridge/supercharger/supercharger.go:93-119). A tape held as WAV or MP3 sets
   Loader.IsSoundData and calls loadBIOS, and the error is returned, so the
   cartridge fails to attach without the file. A demo unit image calls loadBIOS
   and substitutes fastloadOnlyBIOS() on failure. Everything else, including the
   usual Supercharger BIN, takes fastloadOnlyBIOS() without ever looking for the
   file: a 2048 byte stub holding a touch of the tape load register and the CPU
-  jump table (bios.go:151-166).
+  jump table (hardware/memory/cartridge/supercharger/bios.go:151-166).
 
   loadBIOS reads the current working directory, then the directory holding the
-  tape or BIN, then the configuration directory (bios.go:53-116). Each candidate
+  tape or BIN, then the configuration directory (hardware/memory/cartridge/supercharger/bios.go:53-116). Each candidate
   name is tried in turn and the content is gated on MD5 before the caller checks
   the 2048 byte length, so a file under the right name with the wrong content is
-  refused. ReqSpec selects the PAL table and the PAL hash (bios.go:56-59);
+  refused. ReqSpec selects the PAL table and the PAL hash (hardware/memory/cartridge/supercharger/bios.go:56-59);
   ReqSpec comes from the television specification, the stella.pro entry or the
   filename (cartridgeloader/loader.go:194-201).
 
   The demo unit is recognised by MD5 of the 256 bytes at 0x300 of the loaded
-  image (demounit.go:58,78). When that image carries more than 2048 bytes it
+  image (hardware/memory/cartridge/supercharger/demounit.go:58,78). When that image carries more than 2048 bytes it
   holds the Schweber chip and the carousel together; otherwise the eight ROMs
   are read from the directory of the loaded file (demounit_controller.go:
   178-200). A read error or a length other than 8192 logs and returns nil, and
   the peripheral is left unplugged.
 
   stella.pro is Stella's cartridge properties database, read from the
-  configuration directory (properties.go:28,48-58). It is loaded by
-  NewDebugger (debugger.go:356), which drives play as well as debug
+  configuration directory (properties/properties.go:28,48-58). It is loaded by
+  NewDebugger (debugger/debugger.go:356), which drives play as well as debug
   (gopher2600.go:261,307,326), so it applies to the plain `gopher2600 <rom>`
   invocation. A missing file is logged and start-up continues; the ROM selector
   then falls back to the filename and no television specification is inferred
@@ -52,10 +52,10 @@ notes: |
 
   The ROM selector also reads a Named_Boxarts directory from the configuration
   directory, listing it at start-up and fuzzy matching the cartridge name
-  against the entries before reading one image (win_rom_select.go:92,127-138,
+  against the entries before reading one image (gui/sdlimgui/win_rom_select.go:92,127-138,
   678-689). It holds the box art of the libretro-thumbnails Atari 2600 set,
   pinned upstream at commit 4ea759821724d6c7bcf2f46020d79fc4270ed2f6
-  (win_rom_select.go:91). Its content is whatever the user copies in and no
+  (gui/sdlimgui/win_rom_select.go:91). Its content is whatever the user copies in and no
   name is fixed by the code, so it carries no file entry here.
 
   Fonts, shaders, bevels, the CPU instruction table and the Movie Cart core are
@@ -65,7 +65,7 @@ notes: |
   elf_nvram, regression, patches and setupDB. ARM map files and DWARF sources
   are read from a project build tree beside the ROM. AtariVox speech calls the
   festival binary as a process, with the path taken from preferences
-  (atarivox_preferences.go:51).
+  (hardware/preferences/atarivox_preferences.go:51).
 
 files:
   - name: "Supercharger BIOS.bin"
@@ -107,7 +107,7 @@ files:
       Recognised by the MD5 of the 256 bytes at 0x300, so the name is the one the
       dump carries rather than one the code fixes. The carousel ROMs are only
       read once this image has been accepted.
-    source_ref: "hardware/memory/cartridge/supercharger/demounit.go:56-78, hardware/memory/cartridge/supercharger/supercharger.go:107,115, hardware/memory/cartridge/fingerprint.go:333"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit.go:56-78, hardware/memory/cartridge/supercharger/supercharger.go:107, 115, hardware/memory/cartridge/fingerprint.go:346"
 
   - name: "Starpath Demonstration Unit 1P.bin"
     system: atari-2600

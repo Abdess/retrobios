@@ -19,12 +19,12 @@ notes: |
   Libretro: all boot ROMs compiled into binary as static byte arrays in
   src/data.rs. load_boot_static() copies from arrays. No filesystem
   access, no RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. No external files.
-  ref: core.rs:402 instance.load(true) -> gb.rs:1311 -> load_boot_static
+  ref: frontends/libretro/src/core.rs:402 instance.load(true) -> src/gb.rs:1361 -> load_boot_static
 
   Standalone (SDL): also defaults to embedded boot ROMs via load(true).
   User can override via --boot-rom-path CLI argument with any boot ROM
   file. load_boot_file() with hardcoded ./res/boot/*.bin paths exists in
-  gb.rs:1361 but is not called from any frontend.
+  src/gb.rs:1411 but is not called from any frontend.
 
   Boot ROM defaults: DmgBootix (DMG), CgbBoytacean (CGB) — open-source.
 
@@ -36,7 +36,7 @@ files:
     mode: standalone
     size: 256
     note: "Original Nintendo DMG boot ROM"
-    source_ref: "src/gb.rs:1400, src/data.rs:14"
+    source_ref: "src/gb.rs:1450, src/data.rs:14"
 
   - name: sgb_boot.bin
     system: nintendo-gb
@@ -45,7 +45,7 @@ files:
     mode: standalone
     size: 256
     note: "Super Game Boy boot ROM"
-    source_ref: "src/gb.rs:1401, src/data.rs:29"
+    source_ref: "src/gb.rs:1451, src/data.rs:29"
 
   - name: dmg_bootix.bin
     system: nintendo-gb
@@ -54,7 +54,7 @@ files:
     mode: standalone
     size: 256
     note: "Open-source DMG boot ROM from Bootix (default DMG)"
-    source_ref: "src/gb.rs:1402, src/data.rs:44"
+    source_ref: "src/gb.rs:1452, src/data.rs:44"
 
   - name: mgb_bootix.bin
     system: nintendo-gb
@@ -63,7 +63,7 @@ files:
     mode: standalone
     size: 256
     note: "Open-source MGB (Pocket) boot ROM from Bootix"
-    source_ref: "src/gb.rs:1403, src/data.rs:59"
+    source_ref: "src/gb.rs:1453, src/data.rs:59"
 
   - name: cgb_boot.bin
     system: nintendo-gbc
@@ -72,7 +72,7 @@ files:
     mode: standalone
     size: 2304
     note: "Original Nintendo CGB boot ROM"
-    source_ref: "src/gb.rs:1404, src/data.rs:74"
+    source_ref: "src/gb.rs:1454, src/data.rs:74"
 
   - name: cgb_boytacean.bin
     system: nintendo-gbc
@@ -81,4 +81,4 @@ files:
     mode: standalone
     size: 2304
     note: "Custom open-source CGB boot ROM (default CGB)"
-    source_ref: "src/gb.rs:1405, src/data.rs:177"
+    source_ref: "src/gb.rs:1418, src/data.rs:177"

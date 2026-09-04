@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/fixNES"
 upstream: "https://github.com/FIX94/fixNES"
 profiled_date: "2026-03-23"
-source_commit: "d5d8cba579e139fec823f64636a972d1acdf782c"
+source_commit: "a692bda786a5c6f3cdc10d5a263830990d25c627"
 core_version: "Alpha v1.3.1"
 display_name: "Nintendo - NES / Famicom (fixNES)"
 cores:

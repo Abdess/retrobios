@@ -5,7 +5,7 @@ cores: [uae4arm]
 source: "https://github.com/libretro/uae4arm-libretro"
 upstream: "https://github.com/PandTomB/uae4arm"
 profiled_date: "2026-03-25"
-source_commit: "16f63d30b98aa8070a996f25f64df6dfff82938b"
+source_commit: "26f444f01771f0dfa2fa652906ff8222e92e476e"
 core_version: "v0.5"
 display_name: "Commodore - Amiga (UAE4ARM)"
 systems:
@@ -30,34 +30,34 @@ files:
     description: "Amiga 500 Kickstart v1.3 rev 34.005"
     required: false
     hle_fallback: true
-    source_ref: "libretro/core/libretro-core.cpp:77, 828, src/memory.cpp:745-760"
+    source_ref: "libretro/core/libretro-core.cpp:82, libretro/core/libretro-core.cpp:833, src/memory.cpp:745-760"
 
   - name: "kick40063.A600"
     description: "Amiga 600 Kickstart v3.1 rev 40.063"
     required: false
     hle_fallback: true
-    source_ref: "libretro/core/libretro-core.cpp:78, 784"
+    source_ref: "libretro/core/libretro-core.cpp:83, libretro/core/libretro-core.cpp:789"
 
   - name: "kick40068.A1200"
     description: "Amiga 1200 Kickstart v3.1 rev 40.068"
     required: false
     hle_fallback: true
-    source_ref: "libretro/core/libretro-core.cpp:85, libretro/core/libretro-core.cpp:410"
+    source_ref: "libretro/core/libretro-core.cpp:84, libretro/core/libretro-core.cpp:415"
 
   - name: "kick34005.CDTV"
     description: "CDTV extended ROM v1.00 rev 34.005"
     required: false
-    source_ref: "libretro/core/libretro-core.cpp:80, 829, src/memory.cpp:640-662"
+    source_ref: "libretro/core/libretro-core.cpp:85, libretro/core/libretro-core.cpp:834, src/memory.cpp:640-662"
 
   - name: "kick40060.CD32"
     description: "CD32 Kickstart v3.1 rev 40.060"
     required: false
-    source_ref: "libretro/core/libretro-core.cpp:81, 851, src/memory.cpp:745-760"
+    source_ref: "libretro/core/libretro-core.cpp:86, libretro/core/libretro-core.cpp:856, src/memory.cpp:745-760"
 
   - name: "kick40060.CD32.ext"
     description: "CD32 extended ROM rev 40.060"
     required: false
-    source_ref: "libretro/core/libretro-core.cpp:82, 852, src/memory.cpp:644-662"
+    source_ref: "libretro/core/libretro-core.cpp:87, libretro/core/libretro-core.cpp:857, src/memory.cpp:644-662"
 
   - name: "rom.key"
     description: "Cloanto Amiga Forever decryption key"

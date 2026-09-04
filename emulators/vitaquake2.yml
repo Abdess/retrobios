@@ -16,14 +16,14 @@ notes: >
   (Ground Zero expansion, compiled with -DROGUE), vitaquake2-xatrix (The Reckoning,
   compiled with -DXATRIX), and vitaquake2-zaero (Zaero mod, compiled with -DZAERO).
   Each core validates that the content path contains its expected game directory name
-  (libretro.c:2073-2085,2173) and refuses to load mismatched content. The core
+  (libretro/libretro.c:2173-2185,2284) and refuses to load mismatched content. The core
   accepts .pak extensions (retro_get_system_info sets valid_extensions = "pak").
   Content is loaded from the PAK file path - the parent of the game subdirectory
-  becomes basedir (libretro.c:2206-2209), then FS_InitFilesystem (files.c:778)
+  becomes basedir (libretro/libretro.c:2317-2320), then FS_InitFilesystem (qcommon/files.c:871)
   adds baseq2/ and loads pak0.pak through pak9.pak sequentially from each game
   directory. For expansion cores, retro_run passes "+set game rogue|xatrix|zaero"
-  (libretro.c:2232-2239) so the engine loads both baseq2/ and the expansion
-  directory. PAK0_CHECKSUM 0x40e614e0 (files.c:30) matches the retail pak0.pak
+  (libretro/libretro.c:2461-2468) so the engine loads both baseq2/ and the expansion
+  directory. PAK0_CHECKSUM 0x40e614e0 (qcommon/files.c:30) matches the retail pak0.pak
   but is only used for directory CRC validation, not as a load gate.
   PAK files are game data (maps, textures, models, sounds) from the retail game,
   not engine firmware. No files are required in the RetroArch system directory.

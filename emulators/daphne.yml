@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/daphne"
 upstream: "https://github.com/mirror/daphne-emu"
 profiled_date: "2026-03-23"
-source_commit: "1586978f7b71f40675f8d0a08d9872ecd2415422"
+source_commit: "6f1695dd1f376060666eec0a416ff56bb6c9cccc"
 core_version: "Git"
 display_name: "Arcade (Daphne)"
 cores:
@@ -16,7 +16,7 @@ notes: |
   LaserDisc arcade game emulator. Port of Daphne 1.0 (Matt Ownby) to libretro.
   Each game loads its own arcade ROM set from a ZIP file named after the game
   (e.g. lair.zip). ROMs are loaded from a content-relative directory structure
-  (homedir/roms/) with CRC32 verification (game.cpp:767-781). The core never
+  (homedir/roms/) with CRC32 verification (daphne/daphne-1.0-src/game/game.cpp:767-781). The core never
   accesses the RetroArch system directory. Additional per-game data (framefiles,
   sound samples, overlay BMPs) is also loaded relative to the content directory.
 
@@ -26,4 +26,4 @@ exclusion_note: >
   .info declares no firmware (firmware_count absent). Code confirmed: the core
   never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. All files (ROM ZIPs,
   framefiles, sound, pics) load from the content directory via g_homedir
-  (libretro.cpp:1153, set to rom_path/..). No shared system BIOS or firmware.
+  (daphne/libretro/libretro.cpp:1153, set to rom_path/..). No shared system BIOS or firmware.

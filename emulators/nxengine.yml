@@ -17,23 +17,23 @@ notes: |
 
   The core requires the freeware Cave Story distribution placed in
   {system_dir}/nxengine/. When launched without content, it looks for
-  Doukutsu.exe there (libretro.cpp:257-262). When launched with a .exe
-  content file, it uses the parent directory of that file (libretro.cpp:240).
+  Doukutsu.exe there (nxengine/libretro/libretro.cpp:273-278). When launched with a .exe
+  content file, it uses the parent directory of that file (nxengine/libretro/libretro.cpp:256).
 
   At startup (main.cpp:75-90), the core opens Doukutsu.exe and extracts:
   ORG music (extractorg.c), PXT sound effects (extractpxt.c), stage tile
   attributes (extractstages.c), 18 credit BMPs + pixel.bmp (endpic/),
-  and the wavetable (cachefiles.c:464-485). All kept in memory.
+  and the wavetable (nxengine/extract-auto/cachefiles.c:464-485). All kept in memory.
 
   The data/ directory (399 files from the freeware release) is loaded into
-  an in-memory cache at init (cachefiles.c:38-439, 497-540). All subsequent
+  an in-memory cache at init (nxengine/extract-auto/cachefiles.c:38-439, 497-540). All subsequent
   file access goes through this cache. The core verifies data/ by checking
   for data/npc.tbl (main.cpp:47-58).
 
   The font is compiled-in (bitmap_font.h). The upstream standalone version
   uses font.ttf via SDL_ttf.
 
-  Valid content extension: .exe (libretro.cpp:112).
+  Valid content extension: .exe (nxengine/libretro/libretro.cpp:128).
 
 files:
   - name: "Doukutsu.exe"
@@ -45,7 +45,7 @@ files:
     size: 1478656
     md5: "38695d3d69d7a0ada8178072dad4c58b"
     sha1: "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf"
-    source_ref: "main.cpp:77-78 (opened for extraction), nxengine/libretro/libretro.cpp:258 (existence check)"
+    source_ref: "main.cpp:77-78 (opened for extraction), nxengine/libretro/libretro.cpp:274 (existence check)"
     note: "Placed in system/nxengine/. The core extracts ORG music, PXT sounds, stage tile attributes, BMP graphics, and wavetable from this binary at each launch."
 
   - name: "data/"

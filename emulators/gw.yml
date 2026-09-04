@@ -4,7 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/gw-libretro"
 upstream: "http://www.madrigaldesign.it/sim/"
 profiled_date: "2026-03-25"
-source_commit: "435e5cfd4bf6aea03a84259e9b8dba3daf3ff5bd"
+source_commit: "91d599b951e7bfe7e040347f58667cba20074adc"
 core_version: "Git"
 display_name: "Handheld Electronic (GW)"
 cores:
@@ -17,11 +17,11 @@ notes: |
   source code via pas2lua. Each game is a self-contained .mgw archive (bzip2
   compressed tar v7) containing Lua scripts, sprites, and sound data.
 
-  retro_get_system_info (libretro.c:187-194) sets valid_extensions to "mgw",
+  retro_get_system_info (src/libretro.c:187-194) sets valid_extensions to "mgw",
   need_fullpath to false, and block_extract to false. The core reads content
   entirely from the retro_game_info buffer passed by the frontend.
 
-  retro_load_game (libretro.c:256-310) passes the content buffer to
+  retro_load_game (src/libretro.c:256-310) passes the content buffer to
   gwrom_init() which decompresses and parses the tar archive in memory.
   gwlua_create() then initializes the Lua VM from the archive entries.
 
