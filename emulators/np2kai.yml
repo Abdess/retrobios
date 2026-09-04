@@ -4,7 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/NP2kai"
 upstream: "https://github.com/AZO234/NP2kai"
 profiled_date: "2026-03-24"
-source_commit: "76b354b72b7541115c8c5a79f14538370e65e1d4"
+source_commit: "ac05f003bf44f58a235f5b31de0cd42dabdbf1a8"
 core_version: "0.86"
 display_name: "NEC - PC-98 (Neko Project II Kai)"
 cores: [np2kai]
@@ -46,7 +46,7 @@ files:
     note: >
       PC-9801 system BIOS ROM (96 KB). The core boots without it using the
       built-in BIOS simulator, but some software requires the real BIOS.
-    source_ref: "bios/bios.c:440-446, common/strres.c:60"
+    source_ref: "bios/bios.c:450-456, common/strres.c:60"
 
   # -- Font file --
   # Path set in libretro.c:1813 as "<system>/np2kai/font.bmp".
@@ -90,42 +90,42 @@ files:
     required: false
     aliases: ["2608_BD.WAV"]
     note: "YM2608 OPNA rhythm sample: bass drum"
-    source_ref: "sound/rhythmc.c:11, 60-71, sound/fmgen/fmgen_opna.cpp:1433"
+    source_ref: "sound/rhythmc.c:11, 60-71, sound/fmgen/fmgen_opna.cpp:1435"
 
   - name: "2608_sd.wav"
     path: "np2kai/2608_sd.wav"
     required: false
     aliases: ["2608_SD.WAV"]
     note: "YM2608 OPNA rhythm sample: snare drum"
-    source_ref: "sound/rhythmc.c:12, sound/fmgen/fmgen_opna.cpp:1433-1437"
+    source_ref: "sound/rhythmc.c:12, sound/fmgen/fmgen_opna.cpp:1435-1439"
 
   - name: "2608_top.wav"
     path: "np2kai/2608_top.wav"
     required: false
     aliases: ["2608_TOP.WAV"]
     note: "YM2608 OPNA rhythm sample: top cymbal"
-    source_ref: "sound/rhythmc.c:13, sound/fmgen/fmgen_opna.cpp:1433-1437"
+    source_ref: "sound/rhythmc.c:13, sound/fmgen/fmgen_opna.cpp:1435-1439"
 
   - name: "2608_hh.wav"
     path: "np2kai/2608_hh.wav"
     required: false
     aliases: ["2608_HH.WAV"]
     note: "YM2608 OPNA rhythm sample: hi-hat"
-    source_ref: "sound/rhythmc.c:14, sound/fmgen/fmgen_opna.cpp:1433-1437"
+    source_ref: "sound/rhythmc.c:14, sound/fmgen/fmgen_opna.cpp:1435-1439"
 
   - name: "2608_tom.wav"
     path: "np2kai/2608_tom.wav"
     required: false
     aliases: ["2608_TOM.WAV"]
     note: "YM2608 OPNA rhythm sample: tom"
-    source_ref: "sound/rhythmc.c:15, sound/fmgen/fmgen_opna.cpp:1433-1437"
+    source_ref: "sound/rhythmc.c:15, sound/fmgen/fmgen_opna.cpp:1435-1439"
 
   - name: "2608_rim.wav"
     path: "np2kai/2608_rim.wav"
     required: false
     aliases: ["2608_RIM.WAV", "2608_RYM.WAV"]
     note: "YM2608 OPNA rhythm sample: rim shot. fmgen also accepts 2608_RYM.WAV."
-    source_ref: "sound/rhythmc.c:16, sound/fmgen/fmgen_opna.cpp:1433-1443"
+    source_ref: "sound/rhythmc.c:16, sound/fmgen/fmgen_opna.cpp:1435-1445"
 
   # -- IDE BIOS ROM --
   # Loaded by ideio.c:1913-1931. Tried in order: ide.rom, d8000.rom,
@@ -140,7 +140,7 @@ files:
     note: >
       IDE controller BIOS ROM (8 KB). For IDE HDD boot support.
       Without this, a simulated IDE BIOS is used.
-    source_ref: "cbus/ideio.c:1944-1972"
+    source_ref: "cbus/ideio.c:1975-2003"
 
   # -- SCSI BIOS ROM --
   # Loaded by scsiio.c:219. 16 KB (0x4000). Falls back to scsibios[] stub.
