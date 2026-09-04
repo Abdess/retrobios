@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-03T21:05:56Z",
-  "total_files": 10330,
-  "total_size": 13322782391,
+  "generated_at": "2026-09-04T12:58:17Z",
+  "total_files": 10331,
+  "total_size": 13322784493,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -53577,6 +53577,16 @@
       "sha256": "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113",
       "crc32": "18c0ff3e",
       "adler32": "7e6df93f"
+    },
+    "5aee3a718f3d541122b61b9b8203e8a28db97a34": {
+      "path": "bios/Other/linapple/icon.bmp",
+      "name": "icon.bmp",
+      "size": 2102,
+      "sha1": "5aee3a718f3d541122b61b9b8203e8a28db97a34",
+      "md5": "be7a389c5aa678f5e6ce4748593b0a29",
+      "sha256": "90e7ede6d0889020f5d2f23375f89d7cdae90b1ad5a79e5858cf144badc6ffbd",
+      "crc32": "43391a45",
+      "adler32": "dee843e8"
     },
     "d38572d22721eb5972f671cde54201d752dffe6b": {
       "path": "bios/Other/mame4droid/.variants/hiscore.dat.0ca8052d",
@@ -113517,6 +113527,7 @@
       "cd43b9f8ec8c742fca150f9666da47a0": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "034527d42a96d0f39977cb85c6a8f2d8": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "ee44560f34033efa3bb47b3e0aac1772": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
+      "be7a389c5aa678f5e6ce4748593b0a29": "5aee3a718f3d541122b61b9b8203e8a28db97a34",
       "0ca8052de426b7eadcb64da341eadec6": "d38572d22721eb5972f671cde54201d752dffe6b",
       "c0b17e87b2e1f239fd32545301f7e9cf": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
       "98924f51c1fd7d5619f513809d2053b7": "89d9b28d973eb8f869d45f412f7080f56c9275f8",
@@ -133152,6 +133163,9 @@
       ],
       "Master.dsk": [
         "7b03befac4fbcef8c649048fa3ff5d095fd48dd3"
+      ],
+      "icon.bmp": [
+        "5aee3a718f3d541122b61b9b8203e8a28db97a34"
       ],
       "Category.ini": [
         "75d31d949614b7d4e79de676c8a4b1c68b571f0a"
@@ -157105,6 +157119,7 @@
       "066d1348": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "8031ff02": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "18c0ff3e": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
+      "43391a45": "5aee3a718f3d541122b61b9b8203e8a28db97a34",
       "19a61bc4": "d38572d22721eb5972f671cde54201d752dffe6b",
       "c1c73f18": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
       "b15d070b": "89d9b28d973eb8f869d45f412f7080f56c9275f8",
@@ -167437,6 +167452,7 @@
       "c72a36bbd471daf5d12df9f7b85773771583ec960ff9ca17e66d2f7b22e5c8c3": "f72ebcb3ad771321e36cacb49779dca6f2b4db9e",
       "fcf442b26c492253dfb8d2146e215b7b84b3ba87443face9c94a1e9474aa3ca4": "fcfbbb25e06f58d13e762b02bfd468c834d98fc8",
       "0add32bcbd0e5b350437fa9d138b3c232368e36d8009852479fdb09d9db31113": "7b03befac4fbcef8c649048fa3ff5d095fd48dd3",
+      "90e7ede6d0889020f5d2f23375f89d7cdae90b1ad5a79e5858cf144badc6ffbd": "5aee3a718f3d541122b61b9b8203e8a28db97a34",
       "04bc41efa4be5b3cad4e7718cc8d686a3424d129bb768346333ed42491de5651": "d38572d22721eb5972f671cde54201d752dffe6b",
       "6e25b5a9021c18b738fbb0465446b4055bb2eff225a27a5827710ad464129631": "75d31d949614b7d4e79de676c8a4b1c68b571f0a",
       "b6a6a03c9b6d65f9c8fe7f0a90e14c5d4ff0a4231ebd893e4c5b2b81a37ddaff": "89d9b28d973eb8f869d45f412f7080f56c9275f8",

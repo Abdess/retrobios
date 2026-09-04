@@ -3,9 +3,9 @@ type: standalone
 core_classification: community_fork
 source: "https://github.com/linappleii/linapple"
 upstream: "https://github.com/AppleWin/AppleWin"
-profiled_date: "2026-08-08"
-source_commit: "b7a26b46773996130a602b9ac7ac2ebeae5c0b11"
-core_version: "2.3.0"
+profiled_date: "2026-09-04"
+source_commit: "be9d1d2f3e26c1ef1f1bdc13455ea02954cd2109"
+core_version: "3.0.0"
 display_name: "Apple - Apple II (LinApple)"
 cores:
   - linapple
@@ -16,45 +16,59 @@ mode: standalone
 notes: |
   SDL port of AppleWin for Linux. The tree was taken off SourceForge by
   maxolasersquad, forked further by several users, and now sits under the
-  linappleii namespace (README.md:8-22). Machine types are Apple ][,
-  Apple ][+, Apple //e and Enhanced Apple //e.
+  linappleii namespace (README.md:8-22). Five frontends build from one core:
+  sdl1, sdl2, sdl3, tui and headless (src/frontends/).
 
-  Every ROM is compiled into the binary as a C string literal. MemInitialize
-  picks one of four system ROM arrays by g_Apple2Type and copies it into
-  memrom, splitting off the first 4 KB as internal Cx ROM for the two //e
-  types (Memory.cpp:1012-1052). The four IDR_APPLE2*_ROM macros defined just
-  above that switch hold .rom filenames and are never referenced. Peripheral
-  firmware is embedded the same way and installed by MemInitialize: parallel
-  printer in slot 1, Super Serial Card in slot 2, mouse in slot 4, Disk II in
-  slot 6, hard disk in slot 7 (Memory.cpp:1057-1062). Slot 4 is filled only
-  when g_Slot4 is CT_MouseInterface, slot 7 only when the hard disk is
-  enabled (Harddisk.cpp:279-281).
+  Every ROM is still compiled into the binary, but no longer as a hand-written
+  byte array. scripts/generate_roms.sh turns res/roms/*.rom into EmbeddedRoms.h
+  and EmbeddedRoms.cpp at build time (CMakeLists.txt:280-297), each image behind
+  an ENABLE_ROM_* macro. The relocation preserved the bytes: every hash this
+  profile recorded against the old string literals matches the .rom file that
+  replaced it.
 
-  Character generators are res/charset40*.png, converted to XPM arrays by the
-  Makefile and included at Video.cpp:43-47. One of five is chosen from the
-  machine type and g_KeyboardLanguage (Video.cpp:1264-1291). The window icon,
-  status font and splash screen are XPM arrays as well (asset.cpp:29-31,61-75).
+  What that macro is set to decides whether a machine model runs at all.
+  CMakeLists.txt:43-148 leaves the Apple ][, ][+, J-Plus, //e and Enhanced //e
+  system ROMs ON, along with the Disk II, Super Serial Card, mouse,
+  Mockingboard, printer and clock firmware. The three clone options are OFF:
+  ENABLE_ROM_CLONE_BASE64A, ENABLE_ROM_CLONE_PRAVETS and
+  ENABLE_ROM_CLONE_TK3000E (CMakeLists.txt:81-83). Selecting one of those
+  machine types on a default build reaches mem_initialize with no rom_data,
+  which prints the model name and its cmake flag, destroys the context and
+  returns -1 (src/apple2/Memory.cpp:1252-1261). The message offers two ways
+  out, and the second is a file: -R, --rom <file> loads a system ROM at
+  runtime (src/frontends/common/AppArgs.cpp:87).
 
-  Master.dsk is the only data file the emulator searches for. Path::FindDataFile
-  walks ~/.local/share/linapple, the XDG config directory, the executable
-  directory, the compiled-in ASSET_DIR and the two share paths
-  (Util_Path.h:43-68). ImageOpen rejects an image that no format detector
-  claims, and for a .dsk the detector that runs first is DoDetect, which gates
-  on file size (DiskImage.cpp:424-427,977-1034).
+  A custom ROM takes precedence over anything embedded. mem_initialize accepts
+  it at exactly 16384 or 12288 bytes, or larger, taking the trailing 16384 for
+  the //e-class types and the trailing 12288 otherwise
+  (src/apple2/Memory.cpp:1165-1186). Below 12288 nothing is selected and the
+  machine fails to start. No hash or name is checked; the file is whatever the
+  user points at.
 
-  The debugger reads its symbol tables through g_sProgramDir, a buffer declared
-  empty at Applewin.cpp:87 and never assigned anywhere in the tree, so the
-  names resolve against the working directory. g_sFileNameSymbols lists nine
-  tables (Debugger_Symbols.cpp:48-58) and DebugInitialize preloads three with
-  missing-file reporting suppressed (Debug.cpp:8676-8696); the other six load
-  from the matching SYM command. A table that is absent leaves the debugger
-  running without its symbols (Debugger_Symbols.cpp:576-584).
+  Character generators are res/charset40*.png, converted to XPM by CMake and
+  included at src/apple2/Video.cpp:37-41. One of five is chosen from the
+  machine type and the keyboard language (src/apple2/Video.cpp:1242-1266).
+  The status font is an XPM as well (src/core/Asset.cpp:22,44).
 
-  linapple.conf carries preferences only, and is searched over ./, the XDG
-  config and data directories, every $XDG_CONFIG_DIRS entry and /etc
-  (Applewin.cpp:803-815). Each accessor returns a compiled-in default when a
-  key is missing (Registry.cpp:87-116), and Configuration::Save is compiled
-  out unless REGISTRY_WRITEABLE is defined (Registry.cpp:63-85).
+  Master.dsk is inserted into slot 6 drive 1 at startup. asset_find_master_disk
+  resolves it through Path::find_data_file (src/core/Asset.cpp:80-93), which
+  walks the user data and config directories, the executable directory and its
+  res/ neighbours, the share and etc prefixes, the compiled-in SOURCE_RES_DIR,
+  ASSET_DIR, SYSCONF_DIR and SYS_DIR, then every XDG_CONFIG_DIRS entry
+  (src/core/Util_Path.h:86-130). The same search serves icon.bmp.
+
+  The debugger reads its symbol tables through g_state.program_dir, declared at
+  src/core/LinAppleCore.h:159 and read in four places without ever being
+  assigned, so the names resolve against the working directory.
+  g_file_name_symbols lists nine tables (src/Debugger/Debugger_Symbols.cpp:64-74)
+  and CmdSymbolsLoad preloads a table when the debugger calls it with no
+  arguments (src/Debugger/Debugger_Symbols.cpp:664-681). ParseSymbolTable opens
+  the file with fopen and a missing one leaves the debugger running without its
+  symbols (src/Debugger/Debugger_Symbols.cpp:524).
+
+  linapple.conf carries preferences only (src/core/Registry.cpp,
+  src/frontends/common/AppEnvironment.cpp). Each accessor returns a compiled-in
+  default when a key is missing.
 
 files:
   - name: Master.dsk
@@ -63,120 +77,218 @@ files:
     min_size: 143105
     max_size: 143364
     validation: [size]
-    source_ref: "src/asset.cpp:33, src/asset.cpp:101-128, src/Applewin.cpp:626-633, src/DiskImage.cpp:424-427"
+    source_ref: "src/core/Asset.cpp:25,80-93,96-99"
     note: >
-      Inserted only when the Slot 6 Autoload preference is off; when it is on,
-      the two configured disk images are loaded instead. Asset_FindMasterDisk
-      prints a warning and returns 255 when no search path holds the file, and
-      the emulator starts with an empty drive. No hash or content check is
-      performed. DoDetect also accepts the discrete sizes 143403 and 143488 for
-      DOS-order images. LinApple and Batocera ship different images under this
-      name, both 143360 bytes.
+      asset_find_master_disk warns and returns non-zero when no search path
+      holds the file, and the emulator starts with an empty drive. No hash or
+      content check is performed. LinApple and Batocera ship different images
+      under this name, both 143360 bytes.
+
+  - name: icon.bmp
+    required: false
+    description: "Window icon read from disk by the SDL frontends"
+    size: 2102
+    md5: be7a389c5aa678f5e6ce4748593b0a29
+    sha1: 5aee3a718f3d541122b61b9b8203e8a28db97a34
+    source_ref: "src/frontends/sdl2/SDL_Asset.cpp:10-25,34-40"
+    note: >
+      asset_load_bmp resolves the name through Path::find_data_file, prints a
+      warning to stderr when no search path holds it and returns nullptr. The
+      sdl1 and sdl2 frontends load it; sdl3 declares the same helper. Absence
+      costs the window its icon and nothing else.
 
   - name: APPLE2E.SYM
     required: false
     description: "Debugger symbol table for the main ROM"
-    source_ref: "src/Debugger/Debugger_Symbols.cpp:49, src/Debugger/Debugger_Symbols.cpp:553-584, src/Debugger/Debugger_Symbols.cpp:751-767, src/Debugger/Debug.cpp:8679-8680"
+    source_ref: "src/Debugger/Debugger_Symbols.cpp:64-74,664-681"
     note: >
-      Preloaded into the Main table when the debugger initialises. Parsed as
-      text lines of address and symbol name, with no size or hash check.
+      Preloaded into the Main table when the debugger calls CmdSymbolsLoad with
+      no arguments. Parsed as text lines of address and symbol name, with no
+      size or hash check.
 
   - name: A2_BASIC.SYM
     required: false
     description: "Debugger symbol table for Applesoft BASIC"
-    source_ref: "src/Debugger/Debugger_Symbols.cpp:50, src/Debugger/Debugger_Symbols.cpp:553-584, src/Debugger/Debugger_Symbols.cpp:751-767, src/Debugger/Debug.cpp:8682-8683"
+    source_ref: "src/Debugger/Debugger_Symbols.cpp:64-74,664-681"
     note: >
-      Preloaded into the Basic table when the debugger initialises. Parsed as
-      text lines of address and symbol name, with no size or hash check.
+      Preloaded into the Basic table when the debugger calls CmdSymbolsLoad with
+      no arguments. Parsed as text lines of address and symbol name, with no
+      size or hash check.
+
+  # System ROMs the default build leaves out. ENABLE_ROM_CLONE_BASE64A,
+  # ENABLE_ROM_CLONE_PRAVETS and ENABLE_ROM_CLONE_TK3000E are OFF in
+  # CMakeLists.txt:81-83, so these machine types refuse to start unless the
+  # user passes the image with --rom. The names are the ones upstream gives
+  # the images in res/roms; the option takes a path and checks no name.
+  - name: Base64A.rom
+    required: false
+    description: "Copam Base 64A clone system ROM, supplied with --rom"
+    min_size: 12288
+    validation: [size]
+    size: 49152
+    md5: 352fdbcae14c6a8c0398822c7a273309
+    sha1: f1c779af480b5bda2bdd03950c1201a5c5143bea
+    source_ref: "CMakeLists.txt:81,85-89; src/apple2/Memory.cpp:96-97,1165-1186,1252-1261"
+    note: >
+      Larger than a system ROM: mem_initialize takes the trailing 12288 bytes
+      for this machine type.
+
+  - name: PRAVETS82.ROM
+    required: false
+    description: "Pravets 82 clone system ROM, supplied with --rom"
+    min_size: 12288
+    validation: [size]
+    size: 12288
+    md5: c619b7edfcf021f3b8fd20d9386676ba
+    sha1: 8bd7ced83e209a15e9b19a05a5ef4b8e996dc1a5
+    source_ref: "CMakeLists.txt:82,91-95; src/apple2/Memory.cpp:98-99,1165-1186,1252-1261"
+
+  - name: PRAVETS8M.ROM
+    required: false
+    description: "Pravets 8M clone system ROM, supplied with --rom"
+    min_size: 12288
+    validation: [size]
+    size: 12288
+    md5: 76c79535f7cf77973e2c711aa977a124
+    sha1: f1b4ff018acf95f3355f0d575b66a188d728b687
+    source_ref: "CMakeLists.txt:82,91-95; src/apple2/Memory.cpp:100-101,1165-1186,1252-1261"
+
+  - name: PRAVETS8C.ROM
+    required: false
+    description: "Pravets 8C clone system ROM, supplied with --rom"
+    min_size: 12288
+    validation: [size]
+    size: 16384
+    md5: 1896d7b98dd940c89f7c8ea899b71006
+    sha1: c976fe56e57706c161f513a82ba3e0d8cda83904
+    source_ref: "CMakeLists.txt:82,91-95; src/apple2/Memory.cpp:102-103,1165-1186,1252-1261"
+    note: >
+      A //e-class type: mem_initialize takes the trailing 16384 bytes when the
+      file is larger.
+
+  - name: TK3000e.rom
+    required: false
+    description: "Microdigital TK-3000 //e clone system ROM, supplied with --rom"
+    min_size: 12288
+    validation: [size]
+    size: 16384
+    md5: 8d84b614b545d4eec8799d3f325332cb
+    sha1: f163e5753c18ff0e812a448e8da406f102600edf
+    source_ref: "CMakeLists.txt:83,97-101; src/apple2/Memory.cpp:104-105,1165-1186,1252-1261"
+    note: >
+      A //e-class type: mem_initialize takes the trailing 16384 bytes when the
+      file is larger.
 
 analysis:
   embedded_roms:
-    mechanism: "C string literals compiled into the binary, installed with memcpy"
-    extraction: "hashes computed from the decoded hex-escape literals"
+    mechanism: >
+      res/roms/*.rom compiled into EmbeddedRoms.cpp by scripts/generate_roms.sh
+      at build time, each behind an ENABLE_ROM_* macro
+    source_ref: "CMakeLists.txt:43-148,280-297; scripts/generate_roms.sh"
+    extraction: "hashes computed from the res/roms images the generator reads"
 
     system_roms:
-      - symbol: Apple2_rom
+      - symbol: g_rom_apple2
         machine: "Apple ]["
         machine_type: A2TYPE_APPLE2
-        source_ref: "inc/resource.h:3; Memory.cpp:1015-1018"
+        image: res/roms/Apple2.rom
+        cmake_option: ENABLE_ROM_APPLE2
+        default: on
+        source_ref: "src/apple2/Memory.cpp:1189-1193"
         size: 12288
         md5: 3c406514b9806a7c57ee65fb0b0c39b4
         sha1: 09288be705464b608ff190519ab008d3dfcd1b05
 
-      - symbol: Apple2plus_rom
+      - symbol: g_rom_apple2_plus
         machine: "Apple ][+"
         machine_type: A2TYPE_APPLE2PLUS
-        source_ref: "inc/resource.h:774; Memory.cpp:1019-1022"
+        image: res/roms/Apple2_Plus.rom
+        cmake_option: ENABLE_ROM_APPLE2PLUS
+        default: on
+        source_ref: "src/apple2/Memory.cpp:1195-1199"
         size: 12288
         md5: 572b3005a4fa49bc54917b069b82c1ab
         sha1: 33a24f5489ba9195b44be77d9afb2252594cb5c7
 
-      - symbol: Apple2e_rom
-        machine: "Apple //e"
+      - symbol: g_rom_apple2_jplus
+        machine: "Apple ][ J-Plus"
+        machine_type: A2TYPE_APPLE2JPLUS
+        image: res/roms/Apple2_JPlus.rom
+        cmake_option: ENABLE_ROM_APPLE2_JPLUS
+        default: on
+        source_ref: "src/apple2/Memory.cpp:1201-1205"
+        size: 12288
+        md5: f3e8237eca3809bec2a42b984a1332a8
+        sha1: ad200b3263d08e7235d0871c8595963a07adc905
+
+      - symbol: g_rom_apple2e
+        machine: "Apple //e Unenhanced"
         machine_type: A2TYPE_APPLE2E
-        source_ref: "inc/resource.h:1545; Memory.cpp:1023-1026"
+        image: res/roms/Apple2e.rom
+        cmake_option: ENABLE_ROM_APPLE2E
+        default: on
+        source_ref: "src/apple2/Memory.cpp:1207-1211"
         size: 16384
         md5: 346bc782c6a08a531c460e33bc03daf4
         sha1: 61fa9254628e5bb7236fb474006116d67684d747
         note: "First 4 KB loaded as internal Cx ROM, remaining 12 KB at $D000"
 
-      - symbol: Apple2eEnhanced_rom
-        machine: "Enhanced Apple //e"
-        machine_type: A2TYPE_APPLE2EEHANCED
-        source_ref: "inc/resource.h:2573; Memory.cpp:1027-1030"
+      - symbol: g_rom_apple2e_enhanced
+        machine: "Apple //e Enhanced"
+        machine_type: A2TYPE_APPLE2EENHANCED
+        image: res/roms/Apple2e_Enhanced.rom
+        cmake_option: ENABLE_ROM_APPLE2ENHANCED
+        default: on
+        source_ref: "src/apple2/Memory.cpp:1213-1217"
         size: 16384
         md5: 38063e08c778503fc03ecebb979769e9
         sha1: b8ea90abe135a0031065e01697c4a3a20d51198b
         note: "First 4 KB loaded as internal Cx ROM, remaining 12 KB at $D000"
 
     peripheral_firmware:
-      - symbol: Parallel_bin
-        device: "Parallel printer card"
+      - device: "Parallel printer card"
         slot: 1
-        source_ref: "src/ParallelPrinter.cpp:33,61-65"
+        image: res/roms/Parallel.rom
+        cmake_option: ENABLE_ROM_PRINTER
+        default: on
+        source_ref: "CMakeLists.txt:134,136-140"
         size: 256
         md5: 5902996f16dc78fc013f6e1db14805b3
         sha1: c75c751589cbcc1ad4ab4f63676af7abadd86f5b
 
-      - symbol: SSC_rom
-        device: "Super Serial Card"
+      - device: "Super Serial Card"
         slot: 2
-        source_ref: "src/SerialComms.cpp:53,774-794"
+        image: res/roms/SSC.rom
+        cmake_option: ENABLE_ROM_SSC
+        default: on
+        source_ref: "CMakeLists.txt:105,112-116"
         size: 2048
         md5: 67c0d61ab0911183faf05270f881a97e
         sha1: 6dab633470c6bc4cb3e81d09fda46597caf8ee57
-        note: "Slot firmware taken from offset 0x700, full 2 KB kept as expansion ROM"
 
-      - symbol: MouseInterface_rom
-        device: "Mouse interface card"
+      - device: "Mouse interface card"
         slot: 4
-        source_ref: "src/MouseInterface.cpp:39,207-224"
+        image: res/roms/MouseInterface.rom
+        cmake_option: ENABLE_ROM_MOUSE
+        default: on
+        source_ref: "CMakeLists.txt:119,122-126"
         size: 2048
         md5: 22563ab338024dac7b03510371d49c57
         sha1: 3a9d881a8a8d30f55b9719aceebbcf717f829d6f
-        note: "Installed only when g_Slot4 is CT_MouseInterface"
 
-      - symbol: Disk2_rom
-        device: "Disk II controller, 16 sector"
+      - device: "Disk II controller, 16 sector"
         slot: 6
-        source_ref: "src/Disk.cpp:44,832-846"
+        image: res/roms/DISK2.rom
+        cmake_option: ENABLE_ROM_DISK2
+        default: on
+        source_ref: "CMakeLists.txt:104,107-111"
         size: 256
         md5: 2020aa1413ff77fe29353f3ee72dc295
         sha1: d4181c9f046aafc3fb326b381baac809d9e38d16
-        note: "Three bytes at $C64C are patched after the copy to drop a wait routine"
-
-      - symbol: Hddrvr_dat
-        device: "Hard disk controller"
-        slot: 7
-        source_ref: "src/Harddisk.cpp:108,279-288"
-        size: 256
-        md5: 9e5b56c2daf2a10bd8fd76db60273e08
-        sha1: b2430836d5fedb11ae9a680f14dedef0d41ed92e
-        note: "Installed only when the hard disk is enabled. Differs from the firmware carried by current AppleWin"
 
     character_generators:
-      mechanism: "PNG converted to XPM by the Makefile, included at Video.cpp:43-47"
-      selection: "machine type, then g_KeyboardLanguage (Video.cpp:1264-1291)"
+      mechanism: "PNG converted to XPM by CMake, included at src/apple2/Video.cpp:37-41"
+      selection: "machine type, then keyboard language (src/apple2/Video.cpp:1242-1266)"
       accepted_geometry: "128x128, or 128x256 for the Euro ROMs carrying a second language"
       images:
         - filename: charset40.png
@@ -206,8 +318,8 @@ analysis:
           sha1: f86bd5238604247e04d616850f244b489daef18d
 
   symbol_tables:
-    source_ref: "src/Debugger/Debugger_Symbols.cpp:48-58"
-    lookup: "g_sProgramDir + filename, and g_sProgramDir is never assigned"
+    source_ref: "src/Debugger/Debugger_Symbols.cpp:64-74"
+    lookup: "g_state.program_dir + filename, and g_state.program_dir is never assigned"
     preloaded_at_init:
       - APPLE2E.SYM
       - A2_BASIC.SYM
@@ -220,17 +332,8 @@ analysis:
       - A2_DOS33.SYM
       - A2_PRODOS.SYM
     note: >
-      Only APPLE2E.SYM and A2_BASIC.SYM are distributed with the emulator and
-      copied to the build output by the Makefile (:98-99,205-206). The user
-      slots and the remaining tables have no shipped counterpart.
-
-  debugger_scripts:
-    - filename: DebuggerAutoRun.txt
-      source_ref: "src/Debugger/Debug.cpp:8745-8755"
-      note: >
-        Run once through CmdOutputRun when the debugger first initialises, with
-        g_bReportMissingScripts cleared so absence is silent. Holds debugger
-        commands written by the user and has no counterpart in the source tree.
+      Only APPLE2E.SYM and A2_BASIC.SYM are distributed with the emulator, in
+      res/. The user slots and the remaining tables have no shipped counterpart.
 
   generated_files:
     written_only:
@@ -248,8 +351,6 @@ analysis:
 
   unused_resources:
     - filename: font.bmp
-      reason: "Asset_LoadBMP (asset.cpp:37-51) has no call sites and is not declared in asset.h"
-    - filename: icon.bmp
-      reason: "Asset_LoadBMP (asset.cpp:37-51) has no call sites and is not declared in asset.h"
+      reason: "shipped in res/ and named by no source file at this revision"
     - filename: fixedsys-excelsior-regular.ttf
-      reason: "no TTF symbol in the tree and no SDL_ttf in the Makefile link line"
+      reason: "shipped in res/ and named by no source file at this revision"
