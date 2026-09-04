@@ -3,8 +3,8 @@ type: standalone
 core_classification: game_engine
 source: "https://github.com/vpinball/vpinball"
 upstream: "https://github.com/vpinball/vpinball"
-profiled_date: "2026-08-08"
-source_commit: "a8087ea9a3be7208c7def16045e4b5cc0330f80c"
+profiled_date: "2026-09-04"
+source_commit: "d363edb180b8219b4ddd5ec94f87932141efb3b6"
 core_version: "10.8.0"
 display_name: "Visual Pinball X"
 cores:
@@ -27,21 +27,28 @@ notes: |
   <dir>/VPinballX.ini -Play <rom>`, RetroBat drives the Windows build with its
   registered VPinMAME COM server.
 
-  Two path roots decide where everything is read from. m_szMyPath is the
-  install directory, m_szMyPrefPath is ~/.vpinball or whatever -PrefPath names,
-  and loading a table sets the working directory to the table's own folder
-  (main.cpp:408, src/parts/pintable.cpp:2497,11165). Batocera's 001-default-path.patch
+  File location now sits in one class. FileLocator holds m_appPath, the
+  read-only installation folder, and m_prefPath, the preferences folder that
+  -PrefPath overrides, and it works in one of two layout modes: AppPrefData
+  splits static data, settings and table files across the three, AppOnly keeps
+  everything in the application folder, which is the legacy Windows 9x
+  behaviour. Which one applies is decided by where the application ini file is
+  found (src/core/FileLocator.h:11-25,57,63-66,
+  src/core/FileLocator.cpp:379-412). Batocera's 001-default-path.patch
   redirects the PinMAME root from $HOME/.pinmame to <prefpath>/pinmame.
 
-  Table scripts pull their libraries through GetTextFile, which walks seven
-  locations in order: the working directory, then user/, scripts/ and tables/
-  under the install directory, then the same three under the preferences path
-  (src/parts/pintable.cpp:470-480, main.h:118-119, main.cpp:890-892). The
+  Table scripts pull their libraries through SearchScript, which walks ten
+  locations in order, each case-insensitively: the table's own folder, then
+  user/ and scripts/ beside it, then the installation folder with user/,
+  scripts/ and tables/ under it, then the preferences folder with user/ and
+  scripts/ under it (src/core/FileLocator.cpp:379-412,
+  src/parts/pintable.cpp:470-480, src/core/main.h:118-119). The
   scripts/ directory the build ships carries the ~70 .vbs files tables include
   by name, core.vbs and controller.vbs beside the per-manufacturer machine
   scripts (WPC.vbs, sam.vbs, s11.vbs, zac.vbs and the rest), and the editor's
-  completion parser reads core.vbs over the same search order
-  (codeview.cpp:3233-3247, CMakeLists.txt:948).
+  completion parser no longer shares that search: ParseVPCore opens core.vbs
+  at one place, the Scripts application subfolder, and shows a warning box when
+  it is not there (src/ui/win/codeview.cpp:2171-2179, CMakeLists.txt:948).
   The same four roots are handed to table scripts as the UserDirectory,
   TablesDirectory, MusicDirectory and ScriptsDirectory properties, each falling
   back from the install directory to the table folder to the preferences path
@@ -52,7 +59,7 @@ notes: |
   the bumper and kicker textures (src/parts/bumper.cpp:244,
   src/parts/kicker.cpp:274), TableSizes.csv, which the live UI reads to
   guess the glass position of a table that does not declare one
-  (src/core/TableDB.cpp:16, LiveUI.cpp:1705-1706), vpx.html for the built-in
+  (src/core/TableDB.cpp:16), vpx.html for the built-in
   web server (lib/src/WebServer.cpp:94) and
   Default_gamecontrollerdb.txt; shader10.8.0/ holds the .glfx and .fxh sources
   compiled at runtime (src/renderer/Shader.cpp:1419); flexdmd/ holds the bitmap
@@ -70,7 +77,7 @@ notes: |
   PinMAME is where the emulation happens. Tables that recreate a real solid
   state machine hand a ROM name to the controller, which resolves its root as
   the pinmame folder beside the table, else the PinMAMEPath setting, else
-  $HOME/.pinmame (plugins/pinmame/PinMAMEPlugin.cpp:448-451). libpinmame then hangs roms,
+  $HOME/.pinmame (plugins/pinmame/PinMAMEPlugin.cpp:326-356). libpinmame then hangs roms,
   nvram, samples, cfg, hi, inp, memcard and sta off that root
   (pinmame src/libpinmame/libpinmame.cpp:816-823). Every ROM set is a game, one
   zip per machine; PinMAME declares no BIOS root set anywhere in its tree, and
@@ -86,7 +93,7 @@ notes: |
   src/windows/config.c and src/unix/sound.c and neither is in the libpinmame
   source list, and PinmameSetConfig zeroes the whole options struct
   (pinmame src/libpinmame/libpinmame.cpp:807); independently, SAMPLESINTERFACE
-  is defined at pinmame src/wpc/wpcsam.h:23 and no driver in the tree
+  is defined in the PinMAME tree (pinmame src/wpc/wpcsam.h:23) and no driver
   references it. history.dat and mameinfo.dat (pinmame src/datafile.c:619-623,
   649-653) are read only by displayhistory, a page of the MAME on-screen menu
   (pinmame src/usrintrf.c:2846-2851), and by the listing path in
@@ -138,9 +145,9 @@ analysis:
     source_ref: "CMakeLists.txt:948"
     entries:
       - what: "scripts/, the .vbs library tables include"
-        source_ref: "src/parts/pintable.cpp:470-480, main.h:118-119, main.cpp:890-892, codeview.cpp:3233-3247"
+        source_ref: "src/parts/pintable.cpp:470-480, src/core/main.h:118-119, src/core/FileLocator.cpp:379-412, src/ui/win/codeview.cpp:2171-2179"
       - what: "assets/, textures, TableSizes.csv, vpx.html, the two defaults"
-        source_ref: "src/renderer/Renderer.cpp:204, src/parts/bumper.cpp:244, src/parts/kicker.cpp:274, src/core/TableDB.cpp:16, LiveUI.cpp:1705-1706, lib/src/WebServer.cpp:94"
+        source_ref: "src/renderer/Renderer.cpp:204, src/parts/bumper.cpp:244, src/parts/kicker.cpp:274, src/core/TableDB.cpp:16, lib/src/WebServer.cpp:94,100"
       - what: "shader10.8.0/, .glfx and .fxh compiled at runtime"
         source_ref: "src/renderer/Shader.cpp:1419"
       - what: "flexdmd/, the bitmap fonts UltraDMD names as FlexDMD.Resources.*"
@@ -162,7 +169,7 @@ analysis:
     note: "Per table, keyed on the table folder or the ROM name, with no fixed filename"
     entries:
       - what: "PinMAME ROM sets, <pinmame root>/roms/<romname>.zip"
-        source_ref: "plugins/pinmame/PinMAMEPlugin.cpp:448-451, pinmame src/libpinmame/libpinmame.cpp:816"
+        source_ref: "plugins/pinmame/PinMAMEPlugin.cpp:326-356, pinmame src/libpinmame/libpinmame.cpp:816"
         note: >-
           One zip per machine. The root is the pinmame folder beside the table
           when present, else the PinMAMEPath setting, else $HOME/.pinmame;
@@ -190,7 +197,7 @@ analysis:
         binary when one is there. Batocera seeds it from
         assets/Default_VPinballX.ini and rewrites it before every launch.
     - what: "VPReg.ini, per-table settings; vpinball.log"
-      source_ref: "src/utils/Logger.cpp:167, standalone/README.md:512-534"
+      source_ref: "src/utils/Logger.cpp:167"
     - what: "PinMAME state: nvram/, cfg/, hi/, inp/, memcard/, sta/ and ini/"
       source_ref: "pinmame src/libpinmame/libpinmame.cpp:817-823, plugins/pinmame/Controller.cpp:166-171"
       note: "The ini directory is created when missing; the others are written by PinMAME as the machine runs."
