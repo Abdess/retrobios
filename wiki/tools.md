@@ -82,6 +82,7 @@ python scripts/verify.py --emulator dolphin        # single emulator
 python scripts/verify.py --emulator dolphin --standalone  # standalone mode only
 python scripts/verify.py --system atari-lynx       # single system
 python scripts/verify.py --platform retroarch --target switch  # filter by hardware
+python scripts/verify.py --platform recalbox --region us   # regional priority list
 python scripts/verify.py --list-emulators          # list all emulators
 python scripts/verify.py --list-systems            # list all systems
 python scripts/verify.py --platform retroarch --list-targets  # list available targets
@@ -102,6 +103,12 @@ Verification modes per platform:
 | BizHawk | sha1 | SHA1 per firmware from `FirmwareDatabase.cs` |
 
 Full details and severity mapping: [verification modes](verification-modes.md).
+`--region` narrows the report to the file set a regional pack would carry, and a
+mode that cannot apply it refuses it rather than ignoring it: see
+[region filtering](advanced-usage.md#region-filtering).
+
+`--db`, `--platforms-dir` and `--emulators-dir` point the run at another
+database or source tree, which is how the tests drive it against fixtures.
 
 ### generate_pack.py
 
@@ -128,6 +135,11 @@ python scripts/generate_pack.py --platform retroarch --list-systems
 # Hardware target filtering
 python scripts/generate_pack.py --all --target x86_64
 python scripts/generate_pack.py --platform retroarch --target switch
+
+# Regional filtering
+python scripts/generate_pack.py --platform retroarch --region us
+python scripts/generate_pack.py --platform retroarch --region us,eu,jp
+python scripts/generate_pack.py --platform retroarch --region us --one-per-slot
 
 # Source variants
 python scripts/generate_pack.py --platform retroarch --source platform  # YAML baseline only
@@ -172,9 +184,21 @@ would have loaded.
 - `--from-md5`: look up a hash in the database, or build a custom pack with `--platform`/`--emulator`
 - `--from-md5-file`: same, reading hashes from a file (one per line, comments with #)
 - `--target`: filter by hardware target (e.g. `switch`, `rpi4`, `x86_64`)
+- `--region`: ordered priority list, best first. Regions nest, a system with no
+  regional split keeps everything, and a group with no candidate in any named
+  region is kept whole rather than emptied
+- `--one-per-slot`: keep one file per system and declared region, ranked by the
+  `priority:` the emulator source states, lowest first
+- `--include-extras`: with `--emulator` or `--system`, add the files the cores
+  pull in beyond the selection
+- `--db`, `--platforms-dir`, `--emulators-dir`: read another database or source
+  tree instead of the repository's
 - `--source {platform,truth,full}`: select file source (platform YAML only, emulator profiles only, or both)
 - `--all-variants`: generate all 6 combinations of source x required_only
 - `--refresh-data`: force re-download all data directories before packing
+
+How regions are ordered, what a slot is and what each narrowing adds to the
+pack name: [region filtering](advanced-usage.md#region-filtering).
 
 ### cross_reference.py
 
@@ -327,9 +351,10 @@ python scripts/refresh_data_dirs.py --registry path/to/_data_dirs.yml
 | `common.py` | Shared library: hash computation, file resolution, platform config loading, emulator profiles, target filtering |
 | `dedup.py` | Deduplicate `bios/` (`--dry-run`, `--bios-dir`), move duplicates to `.variants/`. RPG Maker and ScummVM excluded (NODEDUP) |
 | `validate_pr.py` | Validate BIOS files in pull requests, post markdown report |
+| `validate_schemas.py` | Validate the data contracts: schemas and semantic invariants. `--source-only` checks `emulators/` and `platforms/` alone, which is what PR validation runs |
 | `auto_fetch.py` | Fetch missing BIOS files from known sources (4-step pipeline) |
 | `list_platforms.py` | List active platforms (`--all` includes archived, used by CI) |
-| `download.py` | Download packs from GitHub releases (Python, multi-threaded) |
+| `download.py` | Download a pack from GitHub releases, split volumes joined and checked (Python, stdlib only) |
 | `download.sh` | Same, as a shell one-liner (`curl` + `unzip`) |
 | `provenance_report.py` | Dump-catalog coverage and acquisition targets (see above) |
 | `generate_readme.py` | Generate README.md and CONTRIBUTING.md from database |
@@ -370,7 +395,16 @@ same-named file.
 
 `scripts/download.sh` remains available for downloading a prebuilt platform
 ZIP when a manually reviewed pack release contains it; it is separate from the
-per-file automatic installer above.
+per-file automatic installer above. A pack over 2 GB is published as numbered
+volumes: both downloaders group them under one platform name, download each
+one, join them and check the result against the release's `SHA256SUMS.txt`.
+Volumes are staged inside the destination directory rather than the system
+temp directory, which is a RAM disk on Batocera, ROCKNIX and RetroDECK.
+`RETROBIOS_API` points them at another releases endpoint, HTTPS only, plain
+HTTP allowed to loopback for end-to-end tests.
+
+Options, environment overrides, platform detection and the trust boundary are
+documented on the [Installer](installer.md) page.
 
 ## Romset recipes
 
