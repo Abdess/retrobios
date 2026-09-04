@@ -151,10 +151,18 @@ for f in dist/*.zip; do
   split --bytes=1900M --numeric-suffixes=1 --suffix-length=3 "$f" "$f." && rm "$f"
 done
 
-# 5. Create the release, then keep the three most recent plus large-files
+# 5. Create the release as a DRAFT, upload every asset, and only then publish it.
+#    A public release with half its assets is a broken download for everyone
+#    during the whole upload.
 DATE=$(date +%Y.%m.%d)
-gh release create "v${DATE}" dist/*.zip* dist/SHA256SUMS.txt \
-  --title "BIOS Pack v${DATE}" --notes-file notes.md --latest
+gh release create "v${DATE}" --draft --title "BIOS Pack v${DATE}" --notes-file notes.md
+for f in dist/SHA256SUMS.txt dist/*.zip dist/*.zip.0*; do
+  [ -f "$f" ] && gh release upload "v${DATE}" "$f#$(basename "$f")" --clobber
+done
+gh release view "v${DATE}" --json assets --jq '.assets | length'   # expect every file
+gh release edit "v${DATE}" --draft=false --latest
+
+# 6. Keep the three most recent releases plus large-files
 gh release list --json tagName,createdAt \
   --jq 'sort_by(.createdAt) | reverse | .[].tagName' | grep -v '^large-files$' \
   | tail -n +4 | while read tag; do gh release delete "$tag" --yes --cleanup-tag; done
