@@ -1499,6 +1499,21 @@ class TestRefsAheadOfTheirPin(TestBuildReport):
             part.reason, "written against HEAD, pin names an older revision"
         )
 
+    def test_a_range_past_the_pin_file_but_inside_head_names_the_pin(self):
+        """nestopia's shape: the file is there, the line is not yet.
+
+        Palette and database loads sat at 2041 and 2063, which is where HEAD
+        carries them; the pinned revision was four hundred lines shorter.
+        """
+        self.files[("pinsha", "a.c")] = ["x"] * 10
+        self.files[("headsha", "a.c")] = ["x"] * 40 + ["the cited line"] + ["y"]
+        report = build_report("test", self._profile(["a.c:41"]), self.dir)
+        part = report.entries[0].parts[0]
+        self.assertEqual(part.status, "GONE")
+        self.assertEqual(
+            part.reason, "written against HEAD, pin names an older revision"
+        )
+
     def test_a_range_beyond_head_is_still_just_missing(self):
         """Not every pin miss is a stale pin; only one that fits HEAD."""
         self.files[("headsha", "a.c")] = ["x"]

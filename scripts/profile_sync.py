@@ -740,6 +740,15 @@ def locate_by_declared_value(
     return None
 
 
+def _written_against_head(part, head_lines) -> bool:
+    """Whether the cited line exists at HEAD, which is where it was written."""
+    return (
+        head_lines is not None
+        and part.start is not None
+        and part.start <= len(head_lines)
+    )
+
+
 def anchor_part(
     part: RefPart, fetch, rename_getter, describe=None, tokens=()
 ) -> PartResult:
@@ -820,9 +829,19 @@ def anchor_part(
         # still names an older revision. Saying "missing" sends the reader
         # hunting for a move that never happened; the fix is the pin.
         reason = "pin revision missing"
-        if head_lines is not None and part.start <= len(head_lines):
+        if _written_against_head(part, head_lines):
             reason = "written against HEAD, pin names an older revision"
         return PartResult(part, "GONE", None, None, None, [], reason, slug, url)
+
+    if part.start > len(pin_lines) and _written_against_head(part, head_lines):
+        # The file is there and the line is not yet: the pinned revision is
+        # shorter than the one the ref was written against. nestopia cited
+        # the palette and database loads at 2041 and 2063, which is where
+        # HEAD carries them, over a pin four hundred lines shorter.
+        return PartResult(
+            part, "GONE", None, None, None, [],
+            "written against HEAD, pin names an older revision", slug, url,
+        )
 
     end = part.end or part.start
     anchored = anchor_block(pin_lines, head_lines, part.start, end)

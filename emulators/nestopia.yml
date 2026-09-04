@@ -5,7 +5,7 @@ source: "https://github.com/libretro/nestopia"
 upstream: "https://gitlab.com/jgemu/nestopia"
 logo: "https://raw.githubusercontent.com/0ldsk00l/nestopia/master/icons/svg/nestopia.svg"
 profiled_date: "2026-03-24"
-source_commit: "d0f461cee801c509748606e91c8ff0563ef62cd6"
+source_commit: "5a1cd378cb46ca9ccc2dd6f8b2b6a79ab986052e"
 core_version: "1.53.1"
 display_name: "Nintendo - NES / Famicom (Nestopia)"
 cores: [nestopia]
