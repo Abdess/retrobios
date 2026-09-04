@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/boom3"
 upstream: "https://github.com/dhewm/dhewm3"
 profiled_date: "2026-03-23"
-source_commit: "b810234ea1e3b498fa6ff5f51efaaa9433b21060"
+source_commit: "132dfddbc216af8b5196a61e815219b531f7c1b4"
 core_version: "git"
 display_name: "Doom 3 (boom3)"
 cores: [boom3, boom3_xp]
