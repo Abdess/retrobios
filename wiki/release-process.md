@@ -226,12 +226,11 @@ the same collection yields the same archive, and its checksum can be compared
 against the signed list without trusting either.
 
 The private half lives on the maintainer's machine and is generated with
-`ssh-keygen -t ed25519 -f ~/.ssh/retrobios_signing -C releases@retrobios`.
-Registering its public half at
-[GitHub signing keys](https://github.com/settings/keys) is optional
-redundancy: it lets a verifier cross-check `allowed_signers` against
-`https://api.github.com/users/Abdess/ssh_signing_keys`, and needs
-`gh auth refresh -h github.com -s admin:ssh_signing_key` first.
+`ssh-keygen -t ed25519 -f ~/.ssh/retrobios_signing -C releases@retrobios`. Its
+public half is registered as a GitHub signing key, so a verifier who would
+rather not take `allowed_signers` on trust can cross-check it against
+`https://api.github.com/users/Abdess/ssh_signing_keys`: the two carry the same
+fingerprint, `SHA256:jUcTBhDS5DhmheXuVhAzh3pb04uI0caOAaiZzWXvrk4`.
 
 Rotating the key means committing the new public half to `allowed_signers`
 and keeping the retired line, so signatures on past releases keep verifying.
