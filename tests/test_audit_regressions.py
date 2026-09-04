@@ -724,12 +724,6 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
         self.assertLess(self._index(steps, "restore_large_files.py"), generate)
         self.assertLess(self._index(steps, "refresh_data_dirs.py"), generate)
 
-    def test_pack_build_completes_the_checkout_before_building(self):
-        steps = self._steps("build.yml", "release")
-        build = self._index(steps, "Build packs")
-        self.assertLess(self._index(steps, "restore_large_files.py"), build)
-        self.assertLess(self._index(steps, "refresh_data_dirs.py"), build)
-
     def test_restore_matches_assets_by_content_not_by_name(self):
         from scripts.restore_large_files import restore
 

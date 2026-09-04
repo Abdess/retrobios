@@ -261,8 +261,6 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "</p>",
         "",
         '<p align="center">',
-        '  <a href="https://github.com/Abdess/retrobios/actions/workflows/build.yml">'
-        '<img src="https://github.com/Abdess/retrobios/actions/workflows/build.yml/badge.svg" alt="Build"></a>',
         '  <a href="https://github.com/Abdess/retrobios/actions/workflows/deploy-site.yml">'
         '<img src="https://github.com/Abdess/retrobios/actions/workflows/deploy-site.yml/badge.svg" alt="Site"></a>',
         "</p>",

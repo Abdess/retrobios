@@ -5,7 +5,7 @@ are built, and how to run the process manually.
 
 ## CI workflows overview
 
-The project uses 3 GitHub Actions workflows. All use only official GitHub
+The project uses 2 GitHub Actions workflows. All use only official GitHub
 actions (`actions/checkout`, `actions/setup-python`, `actions/upload-pages-artifact`,
 `actions/deploy-pages`). No third-party actions.
 
@@ -13,49 +13,15 @@ Budget target: ~175 minutes/month on the GitHub free tier.
 
 | Workflow | File | Trigger |
 |----------|------|---------|
-| Build & Release | `build.yml` | Manual dispatch only |
 | Deploy Site | `deploy-site.yml` | Push to main (platforms, emulators, provenance, wiki, scripts, database.json, mkdocs.yml), manual |
 | PR Validation | `validate.yml` | PR touching `bios/**`, `platforms/**` or `emulators/**` |
 
 Upstream BIOS lists are not scraped on a schedule. A maintainer runs the
 scrapers by hand (see [adding a scraper](adding-a-scraper.md)), reviews the
-diff, and commits the refreshed platform YAML.
-
-## build.yml - Build & Release
-
-Releasing is deliberate. Pushing never cuts one: somebody decides the
-collection is worth publishing and dispatches the workflow.
-
-**Trigger.** `workflow_dispatch` only, with an optional `force_release` flag to
-bypass the rate limit.
-
-**Concurrency.** Group `build`, queued rather than cancelled: a run that is
-already uploading assets must finish.
-
-**Steps:**
-
-1. Checkout, Python 3.12, install `pyyaml`
-2. Run `test_e2e`
-3. Rate limit check: skip if last release was less than 7 days ago (unless
-   `force_release` is set)
-4. Restore large files from the `large-files` release into `.cache/large/`
-5. Refresh data directories (`refresh_data_dirs.py`)
-6. Build packs (`generate_pack.py --all --output-dir dist/`)
-7. Split any pack over 2 GB into `.zip.001`, `.zip.002`, ... volumes. GitHub
-   caps release assets at 2 GB, and the `.001` convention is what 7-Zip and
-   PeaZip open directly (they reject `.partNN` names as corrupt)
-8. Create GitHub release with tag `v{YYYY.MM.DD}` (appends `.N` suffix if
-   a same-day release already exists)
-9. Clean up old releases, keeping the 3 most recent plus `large-files`
-
-**Release notes** include file count, total size, per-pack sizes, the extract
-path per platform, and the last 15 non-merge commits touching `bios/` or
-`platforms/`.
-
-**Pack variants.** The workflow builds full packs only. Releases that also
-carry `*_Platform_BIOS_Pack.zip` had a second `--source platform` run added by
-hand, as in the manual process below. See
-[advanced usage](advanced-usage.md#pack-source-variants).
+diff, and commits the refreshed platform YAML. Releases are built on the
+maintainer's machine and uploaded with `gh`, see
+[cutting a release](#cutting-a-release): the packs weigh 25 GB, more than a
+hosted runner should rebuild and re-upload.
 
 ## deploy-site.yml - Deploy Documentation Site
 
@@ -163,52 +129,44 @@ gh release upload large-files "bios/Sony/PS3/PS3UPDAT.PUP#PS3UPDAT.PUP"
 **Local cache.** `generate_pack.py` calls `fetch_large_file()` which downloads
 from the release and caches in `.cache/large/` for subsequent runs.
 
-## Manual release process
+## Cutting a release
 
-When `build.yml` is disabled, build and release manually:
+Releasing is deliberate and local. Nothing on GitHub builds a pack: the
+pipeline runs here, the archives are checked here, and `gh` uploads them.
 
 ```bash
-# Run the full pipeline (DB + verify + packs + manifests + integrity + docs)
+# 1. Full pipeline, online, so data directories and MAME/FBNeo hashes are fresh
 python scripts/pipeline.py
 
-# Or step by step:
-python scripts/generate_db.py --force --bios-dir bios --output database.json
-python scripts/verify.py --all
-python scripts/generate_pack.py --all --output-dir dist/                    # full packs
-python scripts/generate_pack.py --all --source platform --output-dir dist/  # platform packs
+# 2. The platform-only packs, and RetroPie, which is archived but still served
+python scripts/generate_pack.py --all --source platform --output-dir dist/
+python scripts/generate_pack.py --platform retropie --output-dir dist/
+python scripts/generate_pack.py --platform retropie --source platform --output-dir dist/
+
+# 3. The standalone emulators that no frontend bundles
+python scripts/generate_pack.py --emulator mesence --output-dir dist/
+python scripts/generate_pack.py --emulator lexaloffle --output-dir dist/
+
+# 4. Every archive in dist/ extracted and hashed the way its platform checks it
 python scripts/generate_pack.py --all --verify-packs --output-dir dist/
 
-# Split anything over 2 GB (GitHub asset cap)
+# 5. Split anything over 2 GB (GitHub asset cap); 7-Zip and PeaZip open .001 directly
 for f in dist/*.zip; do
   [ "$(stat -c%s "$f")" -gt 2000000000 ] || continue
   split --bytes=1900M --numeric-suffixes=1 --suffix-length=3 "$f" "$f." && rm "$f"
 done
 
-# Create the release
+# 6. Create the release, then keep the three most recent plus large-files
 DATE=$(date +%Y.%m.%d)
-gh release create "v${DATE}" dist/*.zip* \
-  --title "BIOS Pack v${DATE}" \
-  --notes "Release notes here" \
-  --latest
+gh release create "v${DATE}" dist/*.zip* dist/SHA256SUMS.txt \
+  --title "BIOS Pack v${DATE}" --notes-file notes.md --latest
+gh release list --json tagName,createdAt \
+  --jq 'sort_by(.createdAt) | reverse | .[].tagName' | grep -v '^large-files$' \
+  | tail -n +4 | while read tag; do gh release delete "$tag" --yes --cleanup-tag; done
 ```
 
-The two `generate_pack.py` runs are what puts both `*_BIOS_Pack.zip` and
-`*_Platform_BIOS_Pack.zip` on the release. `--all-variants` builds all six
-combinations instead, which is more than a release needs.
-
-Run the pipeline online for a release: `--offline` skips the data directory
-refresh and the MAME/FBNeo hash refresh, so the packs would ship stale data
-directories.
-
-The workflow carries no push trigger, so there is nothing to disable and no
-guard to remove. Cutting a release means dispatching `build.yml` from the
-Actions tab, or:
-
-```bash
-gh workflow run build.yml
-gh workflow run build.yml -f force_release=true   # within 7 days of the last
-```
-
-The rate limit refuses a second release inside seven days unless
-`force_release` is set, which is what keeps a stray dispatch from publishing
-twice in a day.
+The release notes follow the previous release: the quick install commands, the
+full and platform pack tables with file counts and sizes, the standalone
+packs, what changed since the previous tag, and the contributors of the
+closed issues. `SHA256SUMS.txt` lists the checksums of the full ZIPs before
+splitting.
