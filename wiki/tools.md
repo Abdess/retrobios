@@ -297,6 +297,21 @@ the recale would have left rather than the one on disk; a pin held back by
 prose that the same pass would have moved is not reported as blocked. Drop
 `--dry-run` and the same pass writes, recale before bump on each profile.
 
+A forge can also go for good. A 451, a 410 or a host that stops resolving
+is reported as `upstream gone` in its own bucket rather than retried and
+printed as a failure every pass, and the profile leaves the review backlog,
+where nothing could be done about it. A 403 is not that: small Forgejo
+instances behind anti-bot filters answer 403 to a script and 200 to a
+browser, so it stays a refusal.
+
+`source_mirror` names a repository carrying the same tree, consulted after
+`source` and `upstream` so a live primary always decides attribution. It is
+what keeps a profile checkable once its own forge stops answering: eden
+reads from its Codeberg copy, which holds the same head and the pinned
+commit. A repository that refuses is muted for the rest of the pass instead
+of ending it, keyed by host as well as slug, since a mirror carries the same
+slug on another forge.
+
 `--accept-changed` recales `CHANGED` refs too, for a profile whose diff
 has been read and judged benign. It applies to one profile at a time and
 is refused with `--all`.
