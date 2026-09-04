@@ -18,8 +18,8 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
-    GAME_DATA_TOPS,
     compute_composition,
+    count_catalog_matched,
     list_registered_platforms,
     load_database,
     load_emulator_profiles,
@@ -184,25 +184,13 @@ _CATALOG_LABELS = {"redump": "Redump", "no-intro": "No-Intro", "tosec": "TOSEC"}
 
 
 def _catalog_matched_line(db: dict) -> list[str]:
-    """Bullet line for files matched to dump-preservation catalogs.
-
-    Counted against the system files alone: those catalogs index console and
-    computer dumps, so arcade ROM sets and engine data sit outside their
-    scope and would only dilute the ratio.
-    """
-    sources: set[str] = set()
-    matched = 0
-    for entry in db.get("files", {}).values():
-        provenance = entry.get("provenance")
-        if not provenance:
-            continue
-        sources.update(provenance)
-        parts = entry.get("path", "").split("/")
-        top = parts[1] if len(parts) > 1 else ""
-        if top != "Arcade" and top not in GAME_DATA_TOPS:
-            matched += 1
+    """Bullet line for files matched to dump-preservation catalogs."""
+    matched = count_catalog_matched(db)
     if not matched:
         return []
+    sources: set[str] = set()
+    for entry in db.get("files", {}).values():
+        sources.update(entry.get("provenance") or ())
     system_files = compute_composition(db)["systems"]["files"]
     labels = ", ".join(_CATALOG_LABELS.get(s, s) for s in sorted(sources))
     return [

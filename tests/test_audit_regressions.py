@@ -69,6 +69,137 @@ class ReadmeRegressions(unittest.TestCase):
         self.assertEqual(unknown, set(), f"README advertises unknown flags: {unknown}")
 
 
+class FaqRegressions(unittest.TestCase):
+    """The FAQ states facts the code owns; these tie it back to the source.
+
+    Three of its claims had drifted: a pinned MAME version, Adler-32
+    attributed to Dolphin's IPL instead of its DSP ROMs, and a verbose
+    per-emulator report described as the only way to catch a bad file on an
+    existence platform. Readers act on all three.
+    """
+
+    _MAME_GENERATIONS = {
+        "MAME 2000": "mame2000",
+        "MAME 2003": "mame2003",
+        "MAME 2009": "mame2009",
+        "MAME 2010": "mame2010",
+        "MAME 2015": "mame2015",
+        "MAME 2016": "mame2016",
+        "current MAME": "mame",
+    }
+
+    @staticmethod
+    def _faq() -> str:
+        return (ROOT / "wiki" / "faq.md").read_text(encoding="utf-8")
+
+    @staticmethod
+    def _profile(key: str) -> dict:
+        with (ROOT / "emulators" / f"{key}.yml").open(encoding="utf-8") as handle:
+            return yaml.safe_load(handle)
+
+    def test_mame_versions_match_their_profiles(self):
+        # The list is wrapped, so a label and its version can straddle a line.
+        faq = " ".join(self._faq().split())
+        for label, key in self._MAME_GENERATIONS.items():
+            match = re.search(rf"{re.escape(label)} \(([^)]+)\)", faq)
+            self.assertIsNotNone(match, f"FAQ no longer states a version for {label}")
+            self.assertEqual(
+                match.group(1),
+                self._profile(key)["core_version"],
+                f"FAQ version for {label} has drifted from emulators/{key}.yml",
+            )
+
+    def test_adler32_is_attributed_to_the_files_that_carry_it(self):
+        dolphin = self._profile("dolphin")
+        carriers = {
+            f["name"] for f in dolphin["files"] if f.get("known_hash_adler32")
+        }
+        self.assertTrue(carriers, "dolphin.yml declares no Adler-32 hash")
+        sentence = self._faq().split("Adler-32", 1)[1].split("\n\n", 1)[0]
+        for name in carriers:
+            self.assertIn(name, sentence, f"FAQ omits the Adler-32 file {name}")
+        self.assertNotIn(
+            "IPL.bin",
+            {f["name"] for f in dolphin["files"] if f.get("known_hash_adler32")},
+            "IPL.bin gained an Adler-32 hash; the FAQ says it has none",
+        )
+
+    def test_existence_platforms_are_not_told_the_verbose_report_is_the_only_check(self):
+        self.assertIn(
+            "DISCREPANCY",
+            self._faq(),
+            "the FAQ must name the check the platform report performs itself",
+        )
+        self.assertIn(
+            'result["discrepancy"]',
+            (ROOT / "scripts" / "verify.py").read_text(encoding="utf-8"),
+            "verify.py no longer raises the discrepancy the FAQ advertises",
+        )
+
+
+class CatalogRatioRegressions(unittest.TestCase):
+    """The catalog-matched count must read the same on every surface.
+
+    The home page, the provenance page, the README and the stats export each
+    used to count matches on their own. Two of them dropped the systems
+    scope, so the site published 566 and 553 for the same quantity, one click
+    apart, and the export paired the wider number with composition.systems as
+    its denominator.
+    """
+
+    _SURFACES = ("scripts/generate_site.py", "scripts/generate_readme.py")
+
+    def test_no_surface_counts_matches_on_its_own(self):
+        for relative in self._SURFACES:
+            tree = ast.parse((ROOT / relative).read_text(encoding="utf-8"))
+            inline = [
+                node.lineno
+                for node in ast.walk(tree)
+                if isinstance(node, ast.Call)
+                and getattr(node.func, "id", "") == "sum"
+                and "provenance" in ast.dump(node)
+            ]
+            self.assertEqual(
+                inline,
+                [],
+                f"{relative} counts provenance matches inline at {inline}; "
+                "call common.count_catalog_matched instead",
+            )
+
+    def test_arcade_and_engine_data_stay_out_of_the_ratio(self):
+        from scripts.common import compute_composition, count_catalog_matched
+
+        db = {
+            "files": {
+                "a": {"path": "bios/Sony/PlayStation/scph5501.bin", "size": 1,
+                      "provenance": {"redump": {}}},
+                "b": {"path": "bios/Arcade/Arcade/neogeo.zip", "size": 1,
+                      "provenance": {"no-intro": {}}},
+                "c": {"path": "bios/ScummVM/soundfonts/Roland.sf2", "size": 1,
+                      "provenance": {"tosec": {}}},
+                "d": {"path": "bios/Sega/Saturn/sega_101.bin", "size": 1},
+            }
+        }
+        self.assertEqual(count_catalog_matched(db), 1)
+        self.assertEqual(compute_composition(db)["systems"]["files"], 2)
+
+    def test_readme_ratio_matches_the_database(self):
+        from scripts.common import compute_composition, count_catalog_matched, load_database
+
+        database = ROOT / "database.json"
+        if not database.exists():
+            self.skipTest("database.json not generated")
+        db = load_database(str(database))
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        match = re.search(
+            r"\*\*([\d,]+) of ([\d,]+) system files\*\* matched to", readme
+        )
+        self.assertIsNotNone(match, "README no longer states the catalog ratio")
+        matched, total = (int(g.replace(",", "")) for g in match.groups())
+        self.assertEqual(matched, count_catalog_matched(db))
+        self.assertEqual(total, compute_composition(db)["systems"]["files"])
+
+
 class PipelineRegressions(unittest.TestCase):
     def test_pack_parser_removes_source_metadata(self):
         output = "\n".join(

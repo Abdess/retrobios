@@ -32,7 +32,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     compute_composition,
-    GAME_DATA_TOPS,
+    count_catalog_matched,
     list_registered_platforms,
     load_database,
     load_emulator_profiles,
@@ -296,16 +296,16 @@ def generate_home(
         ]
     )
 
-    catalog_matched = sum(
-        1 for f in db.get("files", {}).values() if f.get("provenance")
-    )
+    catalog_matched = count_catalog_matched(db)
     if catalog_matched:
+        system_files = compute_composition(db)["systems"]["files"]
         lines.extend(
             [
                 "",
-                f"**{catalog_matched:,}** files are byte-identical to a dump "
-                "catalogued by No-Intro, Redump, or TOSEC, and say so on their "
-                "system page. [What that means](provenance.md).",
+                f"**{catalog_matched:,}** of {system_files:,} system files are "
+                "byte-identical to a dump catalogued by No-Intro, Redump, or "
+                "TOSEC, and say so on their system page. "
+                "[What that means](provenance.md).",
             ]
         )
 
@@ -404,9 +404,7 @@ def compute_stats(db: dict, coverages: dict, profiles: dict) -> dict:
         "platforms": len(coverages),
         "emulators": len(unique),
         "systems": len(systems),
-        "catalog_matched": sum(
-            1 for f in db.get("files", {}).values() if f.get("provenance")
-        ),
+        "catalog_matched": count_catalog_matched(db),
         "source": REPO_URL,
         "downloads": RELEASE_URL,
     }
@@ -1504,17 +1502,7 @@ def _prov_title(data: dict) -> str:
 
 def generate_provenance_page(db: dict, report: dict) -> str:
     """Page explaining the verified dump badges and listing catalog gaps."""
-    # Scoped to system files: these catalogs index console and computer dumps,
-    # so arcade ROM sets and engine data can never match and would only make
-    # the ratio look worse than the work behind it.
-    matched_files = 0
-    for entry in db.get("files", {}).values():
-        if not entry.get("provenance"):
-            continue
-        parts = entry.get("path", "").split("/")
-        top = parts[1] if len(parts) > 1 else ""
-        if top != "Arcade" and top not in GAME_DATA_TOPS:
-            matched_files += 1
+    matched_files = count_catalog_matched(db)
     total_files = compute_composition(db)["systems"]["files"]
 
     lines = [

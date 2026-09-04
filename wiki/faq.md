@@ -72,10 +72,13 @@ per catalog and the full list of catalogued dumps still missing.
 Arcade BIOS sets are coupled to the romset version, so there is one
 profile per MAME core generation: MAME 2000 (0.37b5), MAME 2003 (0.78),
 MAME 2003-Plus, MAME 2009 (0.135u4), MAME 2010 (0.139), MAME 2015
-(0.160), MAME 2016 (0.174), and current MAME (0.287), each read from that
+(0.160), MAME 2016 (0.174), and current MAME (0.289), each read from that
 version's own source tree, because the BIOS root sets differ between
-versions. The pack ships the sets matching the core you run; a generic
-unversioned arcade pack cannot do that.
+versions. Derivatives and ports carry their own profiles on top of those
+generations: `mamearcade`, `mamemess`, `mame2003_midway`, the three
+`mame4droid` drops, `advancemame`, `groovymame` and `hbmame`. The pack
+ships the sets matching the core you run; a generic unversioned arcade
+pack cannot do that.
 
 ## How do I know which BIOS I need?
 
@@ -189,7 +192,8 @@ A hash is a fixed-length fingerprint computed from a file's contents. If even on
 | CRC32 | 8 hex chars | `2F468B96` | ROM-set matching, arcade DATs |
 
 Emulator profiles add Adler-32 where the code checks it, which is how Dolphin
-validates its IPL files.
+checks its DSP ROMs (`dsp_rom.bin` and `dsp_coef.bin`, hashed byte-swapped).
+`IPL.bin` is not one of them: Dolphin loads it without a hash check.
 
 Verification uses whichever one the platform itself uses: MD5 for Batocera,
 RetroBat, Recalbox, EmuDeck, RetroDECK, RomM, ROCKNIX and MiSTer FPGA, SHA1 for
@@ -202,7 +206,9 @@ that the file exists.
 
 On existence-mode platforms (RetroArch, Lakka, RetroPie), files are never `untested` because the platform only checks presence, not content. Those files show as `ok` if present, whatever they contain.
 
-Running `verify.py --emulator <core> --verbose` shows the emulator-level ground truth, which can confirm whether the file's hash matches what the source code expects. On an existence platform, that verbose report is the only thing that can tell you the file is wrong.
+Running `verify.py --emulator <core> --verbose` shows the emulator-level ground truth, which can confirm whether the file's hash matches what the source code expects. The platform report applies the same check on its own: `verify.py --platform retroarch` prints a `DISCREPANCY` line for every file the platform accepts and a profiled emulator rejects.
+
+It reaches only as far as the profiles do. Files no profile states a value for are platform-only, and nothing can be said about their content; the footer of the platform report gives that ratio as `Ground truth: N/M files have emulator validation`.
 
 ## Can I use BIOS from one platform on another?
 
