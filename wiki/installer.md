@@ -110,6 +110,7 @@ Checking existing files...
 | `--jobs N`, `-j N` | Parallel downloads, 1 to 32, default 8 |
 | `--verbose`, `-v` | Print per-attempt failures and hash mismatches |
 | `--standalone-copies` | Also copy into detected standalone emulator directories |
+| `--help`, `-h` | Print the option list and exit |
 
 `--check` reads the same file list, hashes the destination and exits. Without
 it, a file already present with the expected hash is left untouched, and one
@@ -125,7 +126,7 @@ Files the list does not name are never read, moved or deleted.
 | `RETROBIOS_OS` | Names the host outright (`linux`, `wsl`, `windows`, `darwin`) instead of detecting it |
 | `RETROBIOS_INSTALL_URL` | Where the bootstrap fetches `install.py`. HTTPS only |
 | `RETROBIOS_INSTALL_SHA256` | The SHA-256 the bootstrap requires of that installer, 64 hex characters |
-| `HTTPS_PROXY` | Honoured for every download, through the standard library's default proxy handling |
+| `HTTPS_PROXY`, `NO_PROXY` | Honoured for every download through the standard library's default proxy handling: one names the proxy, the other the hosts to reach directly |
 
 ## Platform detection
 
@@ -182,6 +183,46 @@ for anything else. Pass `--dest` to say where instead of relying on that.
 With nothing detected, the installer lists the platforms and asks. With several
 detected, it asks which one. Both prompts need a terminal: piped into a script
 with no platform to install for, it prints the manual invocation and exits 1.
+
+## Standalone copies
+
+Some files are read by a standalone emulator from its own data directory
+rather than from the platform's BIOS tree. `--standalone-copies` copies them
+there after the install, and only then: without the flag nothing is written
+outside the selected tree.
+
+The manifest carries the list, fifteen entries on the six platforms that
+declare them (Batocera, EmuDeck, Recalbox, RetroArch, RetroBat, RetroDECK):
+
+| Files | Copied to |
+|-------|-----------|
+| `prod.keys`, `title.keys` | yuzu, eden, citron, suyu and Ryujinx key directories |
+| `Citra/sysdata/aes_keys.txt`, `Citra/sysdata/boot9.bin` | Azahar `sysdata` |
+| `scph*.bin` | DuckStation `bios` |
+| `ps2-*.bin` | PCSX2 `bios`, native and Flatpak |
+| `GC/USA/IPL.bin`, `GC/EUR/IPL.bin`, `GC/JAP/IPL.bin`, `dsp_rom.bin`, `dsp_coef.bin` | Dolphin, per region for the IPL |
+| `PPSSPP/ppge_atlas.zim` | PPSSPP `PSP/SYSTEM` |
+| `dc/dc_boot.bin`, `dc/dc_nvmem.bin` | Flycast `data`, native and Flatpak |
+
+An entry names one file or a glob, and one entry carries no file at all: when
+an RPCS3 configuration directory is present it prints that `PS3UPDAT.PUP` is
+installed through RPCS3's own File menu, since that firmware is an installer to
+run rather than a file to copy.
+
+Targets are per OS, WSL falling back to the Linux ones. A directory that does
+not exist is skipped rather than created, so nothing is copied for an emulator
+that is not installed. A destination that is already a symbolic link is skipped
+too: the copy leaves the tree the user opted into, and a link there would
+redirect the write somewhere else again.
+
+## Android
+
+There is no Android detection. Termux reports itself as Linux, so nothing is
+found and the platform has to be named along with where it writes:
+
+```bash
+python install.py --platform retroarch --dest /storage/emulated/0/RetroArch/system
+```
 
 ## Where the files come from
 

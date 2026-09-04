@@ -92,6 +92,48 @@ python scripts/verify.py --emulator beetle_psx --verbose
 
 The `--verbose` flag shows source references and expected values from the emulator's source code.
 
+## Is piping the installer into a shell safe?
+
+The one-liner runs a small bootstrap, not the installer. That bootstrap fetches
+`install.py` over HTTPS only, refuses anything over 2 MB, and requires its
+SHA-256 to equal the value written inside the bootstrap itself. A substituted
+installer aborts with `install.py SHA-256 mismatch` before a single line of it
+runs.
+
+The installer then verifies every file it downloads against the size, SHA-256
+and SHA-1 the manifest declares, and moves it into place only once those match.
+The manifest is treated as untrusted: a destination cannot be absolute, carry a
+drive letter or climb out of the BIOS directory.
+
+Reading the bootstrap before running it is two lines:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh -o install.sh
+less install.sh && sh install.sh
+```
+
+See [Installer](installer.md) for the full behaviour.
+
+## Can I run the installer again?
+
+Yes, and re-running is the normal way to update. A file already present with
+the expected hash is left untouched, one whose contents do not match is
+replaced by the verified copy, and files the manifest does not name are never
+read, moved or deleted. `--check` does the same inspection and exits without
+writing.
+
+## Can I install onto an SD card or another machine's drive?
+
+Yes, `--dest` takes any path and the one-liner forwards arguments:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh \
+  | sh -s -- --platform retroarch --dest /path/to/sdcard
+```
+
+On Windows the arguments need a script block, since `iex` would read them as
+its own; the form is on the [Installer](installer.md#passing-options) page.
+
 ## Is this legal?
 
 Redistributing firmware is not settled law, and this page does not pretend otherwise. What follows is the reasoning the project acts on, with the strength of each argument stated plainly so anyone can weigh it. None of it is legal advice, and none of it has been tested in court.
