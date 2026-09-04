@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/drhelius/Geargrafx"
 upstream: "https://github.com/drhelius/Geargrafx"
 profiled_date: "2026-03-23"
-source_commit: "b6a81478b54e27af7076b57fd6a8974a1c3f7137"
+source_commit: "0a68ce8f6d3d787e84d7bc9efa30e982fa3d4c77"
 core_version: "1.6.0"
 display_name: "NEC - PC Engine / SuperGrafx / CD (Geargrafx)"
 cores:
@@ -41,7 +41,7 @@ files:
     size: 262144
     required: true
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:608, platforms/libretro/libretro.cpp:623-625, src/media.cpp:387-484, src/defines.h:52, src/game_db.h:50, src/game_db.h:53"
+    source_ref: "platforms/libretro/libretro.cpp:632, platforms/libretro/libretro.cpp:647-649, src/media.cpp:435-532, src/defines.h:52, src/game_db.h:50, src/game_db.h:54"
     note: >
       Default BIOS for CD-ROM games (cdrom_bios Auto or System Card 3).
       game_db.h recognizes Japan (CRC32 6D9A73EF) and USA (CRC32 2B5B75FE)
@@ -52,7 +52,7 @@ files:
     size: 262144
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:607, platforms/libretro/libretro.cpp:617-618, src/media.cpp:387-484, src/game_db.h:48-49, src/game_db.h:52"
+    source_ref: "platforms/libretro/libretro.cpp:631, platforms/libretro/libretro.cpp:641-642, src/media.cpp:435-532, src/game_db.h:48-49, src/game_db.h:53"
     note: >
       cdrom_bios = 'System Card 2'. For older CD-ROM2 titles. game_db.h
       recognizes three variants: v2.0 Japan (CRC32 52520BC6), v2.1 Japan
@@ -63,7 +63,7 @@ files:
     size: 262144
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:606, platforms/libretro/libretro.cpp:614-615, src/media.cpp:387-484, src/game_db.h:47"
+    source_ref: "platforms/libretro/libretro.cpp:630, platforms/libretro/libretro.cpp:638-639, src/media.cpp:435-532, src/game_db.h:47"
     note: >
       cdrom_bios = 'System Card 1'. Very early CD-ROM2 games only.
       CRC32 3F9F95A4.
@@ -73,7 +73,7 @@ files:
     size: 32768
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:609, platforms/libretro/libretro.cpp:609-610, platforms/libretro/libretro.cpp:508-509, src/media.cpp:387-484, src/defines.h:53, src/game_db.h:54-55"
+    source_ref: "platforms/libretro/libretro.cpp:633, platforms/libretro/libretro.cpp:633-634, platforms/libretro/libretro.cpp:535-536, src/media.cpp:435-532, src/defines.h:53, src/game_db.h:55-56"
     note: >
       Always loaded alongside the selected System Card BIOS (platforms/libretro/libretro.cpp:642).
       Required for Game Express CD-ROM titles. game_db.h recognizes Blue Version
