@@ -151,7 +151,31 @@ for f in dist/*.zip; do
   split --bytes=1900M --numeric-suffixes=1 --suffix-length=3 "$f" "$f." && rm "$f"
 done
 
-# 5. Create the release as a DRAFT, upload every asset, and only then publish it.
+# 5. The two sizes a pack has. Extracted runs well above downloaded, so the
+#    notes table names the one it carries.
+python3 - <<'PY'
+import json, pathlib, sys
+sys.path.insert(0, "scripts")
+from download import _match_key
+
+parts = {}
+for path in sorted(pathlib.Path("dist").glob("*_BIOS_Pack.zip*")):
+    parts.setdefault(path.name.split(".zip")[0] + ".zip", []).append(path)
+
+def size(n):
+    return f"{n / 1024 ** 3:.1f} GB" if n >= 1024 ** 3 else f"{n / 1024 ** 2:.0f} MB"
+
+for manifest in sorted(pathlib.Path("install").glob("*.json")):
+    base = next((b for b in parts if _match_key(manifest.stem) in _match_key(b)), None)
+    if not base:
+        continue
+    data = json.loads(manifest.read_text())
+    download = sum(p.stat().st_size for p in parts[base])
+    print(f"{base:<42} download {size(download):>8}"
+          f"   extracted {size(data['total_size']):>8}   {data['total_files']} files")
+PY
+
+# 6. Create the release as a DRAFT, upload every asset, and only then publish it.
 #    A public release with half its assets is a broken download for everyone
 #    during the whole upload.
 DATE=$(date +%Y.%m.%d)
@@ -162,7 +186,7 @@ done
 gh release view "v${DATE}" --json assets --jq '.assets | length'   # expect every file
 gh release edit "v${DATE}" --draft=false --latest
 
-# 6. Keep only the new release plus large-files: an older pack carries hashes
+# 7. Keep only the new release plus large-files: an older pack carries hashes
 #    the platforms no longer check, so it misleads more than it helps
 gh release list --json tagName,createdAt \
   --jq 'sort_by(.createdAt) | reverse | .[].tagName' | grep -v '^large-files$' \
@@ -173,6 +197,10 @@ One pack per platform, the full one: the platform's list plus everything its
 cores load. Platform-only and per-emulator packs are build options, not
 release assets, since a lighter pack means a core that fails with no message.
 The release notes follow the previous release: the quick install commands,
-the pack table with file counts and sizes, what changed since the previous
-tag, and the contributors of the closed issues. `SHA256SUMS.txt` lists the
-checksums of the full ZIPs before splitting.
+the pack table, what changed since the previous tag, and the contributors of
+the closed issues. A pack has two sizes and they are far apart: Batocera
+downloads as 2.4 GB and extracts to 4.0 GB. Step 5 prints both, and whichever
+one the table carries, the header names it. Someone sizing a USB drive is
+reading that column. The README table is the extracted size, from the install
+manifests. `SHA256SUMS.txt` lists the checksums of the full ZIPs before
+splitting.
