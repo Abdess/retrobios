@@ -33,7 +33,7 @@ notes: |
   plugin entry from the two switches alone and the library never names that
   file. The manifest is still what identifies the build, Pepper Flash
   32.0.0.371 for win/ia32.
-  ref: src/main.cpp:37-44, ArcadeFlashWeb v1.0.2 manifest.json:2-7,
+  ref: src/main.cpp:37-44, ArcadeFlashWeb-release manifest.json:2-7,
        qtwebengine 5.13 src/core/content_client_qt.cpp AddPepperFlashFromCommandLine
 
   A local movie is not handed to the view. The url becomes
@@ -44,7 +44,7 @@ notes: |
   plugin reports at least that. A -source: containing "http" loads in the view
   unchanged and uses none of this.
   ref: src/main.qml:317-347, src/Navigateur.qml:144-155,
-       ArcadeFlashWeb v1.0.2 flash/flash.html:38-104
+       ArcadeFlashWeb-release flash/flash.html:38-104
 
   Natural dimensions come from swfdump. When -swfwidth: and -swfheight: are
   not both given, which is the case for both ES-DE and RetroBat, the program
@@ -68,7 +68,7 @@ notes: |
   which flash.html disables by passing false for the express install url, and
   flash/swfobject/test.swf, which nothing names.
   ref: src/qml.qrc:1-33, src/Sauvegarde.js:1-30, src/main.qml:132-159,
-       ArcadeFlashWeb v1.0.2 flash/flash.html:102
+       ArcadeFlashWeb-release flash/flash.html:102
 
   The remainder of the release is the Qt 5.13.2 deployment of the program
   itself. VCRUNTIME140.dll and the UCRT stubs sit in the executable's import
@@ -86,7 +86,7 @@ files:
       working directory. Without it no plugin is registered, SWFObject finds no
       player and the movie is never embedded. The page asks for a reported
       version of at least 32.0.0; the build that ships is the 32-bit 32.0.0.371.
-    source_ref: "src/main.cpp:40, ArcadeFlashWeb v1.0.2 flash/flash.html:102"
+    source_ref: "src/main.cpp:40, ArcadeFlashWeb-release flash/flash.html:102"
 
   - name: flash.html
     path: flash/flash.html
@@ -109,7 +109,7 @@ files:
       that calls embedSWF. It reads the player version from the Shockwave Flash
       plugin description, refines it from a probe object's $version, and refuses
       to embed below the version the page asks for.
-    source_ref: "ArcadeFlashWeb v1.0.2 flash/flash.html:38, ArcadeFlashWeb v1.0.2 flash/swfobject/swfobject.js:1-4"
+    source_ref: "ArcadeFlashWeb-release flash/flash.html:38, ArcadeFlashWeb-release flash/swfobject/swfobject.js:1-4"
 
   - name: background.jpg
     path: flash/images/background.jpg
@@ -119,7 +119,7 @@ files:
     note: >-
       Drawn behind the movie by the page's bg div. The same image is compiled
       into the binary for the QML side, so only this copy is read from disk.
-    source_ref: "ArcadeFlashWeb v1.0.2 flash/flash.html:110, src/qml.qrc:23"
+    source_ref: "ArcadeFlashWeb-release flash/flash.html:110, src/qml.qrc:23"
 
   - name: swfdump.exe
     required: false
