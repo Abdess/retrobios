@@ -304,6 +304,12 @@ where nothing could be done about it. A 403 is not that: small Forgejo
 instances behind anti-bot filters answer 403 to a script and 200 to a
 browser, so it stays a refusal.
 
+When no mirror serves it either, `upstream_gone` states why, and the profile
+stops being an open problem: the refs describe the last revision anyone could
+reach and nothing further is possible. The declaration is guarded rather than
+trusted, since a forge can come back: a profile that declares it while the
+forge answers is reported as the contradiction it is.
+
 `source_mirror` names a repository carrying the same tree, consulted after
 `source` and `upstream` so a live primary always decides attribution. It is
 what keeps a profile checkable once its own forge stops answering: eden

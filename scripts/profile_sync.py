@@ -1218,7 +1218,25 @@ def build_report(
         report.skipped = f"unsupported host: {declared or 'none declared'}"
         return report
 
-    views = select_views(profile, cache_dir, offline)
+    stated_gone = str(profile.get("upstream_gone") or "").strip()
+
+    try:
+        views = select_views(profile, cache_dir, offline)
+    except upstream.GoneError as exc:
+        if stated_gone:
+            # The profile says the forge is gone and the forge agrees. That is
+            # a recorded fact, not an open problem: the refs describe the last
+            # revision anyone can reach, and nothing further is possible.
+            report.skipped = f"upstream gone (declared): {stated_gone}"
+            return report
+        raise
+    if stated_gone and views:
+        # Declared dead, yet it answered. A profile that keeps saying so stops
+        # being read, so the contradiction is the finding.
+        report.skipped = (
+            f"upstream_gone is declared but the forge answers: {stated_gone}"
+        )
+        return report
     if not views:
         report.skipped = (
             "no source_commit and no resolvable profiled_date "

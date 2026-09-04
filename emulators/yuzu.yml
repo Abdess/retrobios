@@ -4,6 +4,7 @@ core_classification: official_port
 source: "https://github.com/yuzu-emu-mirror/yuzu"
 upstream: "https://github.com/yuzu-emu/yuzu"
 profiled_date: "2026-03-26"
+upstream_gone: "GitHub withdrew the repository for legal reasons: the API answers HTTP 451 for both yuzu-emu/yuzu and the yuzu-emu-mirror copy. Observed 2026-09-04; no mirror found that serves file content."
 core_version: "EA 4176"
 display_name: "Yuzu (Nintendo Switch)"
 cores:

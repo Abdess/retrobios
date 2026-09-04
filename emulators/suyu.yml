@@ -4,6 +4,7 @@ core_classification: community_fork
 source: "https://github.com/suyu-emu/suyu"
 upstream: "https://github.com/suyu-emu/suyu"
 profiled_date: "2026-03-26"
+upstream_gone: "GitHub withdrew the repository for legal reasons: the API answers HTTP 451. git.suyu.dev still serves a Forgejo page, but its API answers 403 and its raw paths 404, so it carries no readable tree. Observed 2026-09-04."
 core_version: "Yuzu EA 4176 based"
 display_name: "Suyu (Nintendo Switch)"
 cores:

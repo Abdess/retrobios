@@ -1435,6 +1435,52 @@ def _sample_report():
     )
 
 
+class TestDeclaredDeadUpstream(TestBuildReport):
+    """A forge that is gone can be stated, which closes the question.
+
+    yuzu and suyu were withdrawn, citron's domain was taken by a squatter.
+    Leaving those profiles to fail every pass reports an open problem where
+    there is a settled fact. Declaring it records the death; the guard is
+    that a declaration must stop being true the moment the forge answers.
+    """
+
+    def _profile_with(self, note):
+        profile = self._profile(["a.c:1"])
+        profile["upstream_gone"] = note
+        return profile
+
+    def test_a_declared_death_is_reported_as_declared(self):
+        def boom(*a, **k):
+            raise profile_sync.upstream.GoneError("https://h/x: HTTP 451")
+
+        profile_sync.upstream.resolve_head = boom
+        report = build_report(
+            "test", self._profile_with("withdrawn, HTTP 451"), self.dir
+        )
+        self.assertIsNotNone(report.skipped)
+        self.assertIn("declared", report.skipped)
+        self.assertIn("withdrawn, HTTP 451", report.skipped)
+        self.assertEqual(report.needs_review(), 0)
+
+    def test_a_declaration_the_forge_contradicts_is_reported(self):
+        """The forge answered: the declaration has outlived its truth."""
+        self.files[("pinsha", "a.c")] = ["hit"]
+        self.files[("headsha", "a.c")] = ["hit"]
+        report = build_report(
+            "test", self._profile_with("withdrawn, HTTP 451"), self.dir
+        )
+        self.assertIsNotNone(report.skipped)
+        self.assertIn("answers", report.skipped)
+
+    def test_an_undeclared_death_is_unchanged(self):
+        def boom(*a, **k):
+            raise profile_sync.upstream.GoneError("https://h/x: HTTP 451")
+
+        profile_sync.upstream.resolve_head = boom
+        with self.assertRaises(profile_sync.upstream.GoneError):
+            build_report("test", self._profile(["a.c:1"]), self.dir)
+
+
 class TestRefsAheadOfTheirPin(TestBuildReport):
     """Say when a ref describes HEAD and the pin still names an older tree.
 
