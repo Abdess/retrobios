@@ -398,6 +398,9 @@ ZIP when a manually reviewed pack release contains it; it is separate from the
 per-file automatic installer above. A pack over 2 GB is published as numbered
 volumes: both downloaders group them under one platform name, download each
 one, join them and check the result against the release's `SHA256SUMS.txt`.
+That list carries a detached signature, `SHA256SUMS.txt.sig`, verifiable
+against `allowed_signers` at the repository root; the
+[release process](release-process.md#verifying-a-release) gives the commands.
 Volumes are staged inside the destination directory rather than the system
 temp directory, which is a RAM disk on Batocera, ROCKNIX and RetroDECK.
 `RETROBIOS_API` points them at another releases endpoint, HTTPS only, plain

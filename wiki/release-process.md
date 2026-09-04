@@ -145,8 +145,12 @@ python scripts/pipeline.py
 python scripts/generate_pack.py --platform retropie --output-dir dist/
 python scripts/generate_pack.py --platform retropie --verify-packs --output-dir dist/
 
-# 3. Checksums of the full ZIPs, before splitting
+# 3. Checksums of the full ZIPs, before splitting, then sign the list. The
+#    checksums answer corruption; the signature answers a rewritten release,
+#    which is the one thing a checksum published beside its own artifacts
+#    cannot answer.
 (cd dist && sha256sum *.zip > SHA256SUMS.txt)
+ssh-keygen -Y sign -f ~/.ssh/retrobios_signing -n file dist/SHA256SUMS.txt
 
 # 4. Split anything over 2 GB (GitHub asset cap); 7-Zip and PeaZip open .001 directly
 for f in dist/*.zip; do
@@ -183,7 +187,7 @@ PY
 #    during the whole upload.
 DATE=$(date +%Y.%m.%d)
 gh release create "v${DATE}" --draft --title "BIOS Pack v${DATE}" --notes-file notes.md
-for f in dist/SHA256SUMS.txt dist/*.zip dist/*.zip.0*; do
+for f in dist/SHA256SUMS.txt dist/SHA256SUMS.txt.sig dist/*.zip dist/*.zip.0*; do
   [ -f "$f" ] && gh release upload "v${DATE}" "$f#$(basename "$f")" --clobber
 done
 gh release view "v${DATE}" --json assets --jq '.assets | length'   # expect every file
@@ -195,6 +199,42 @@ gh release list --json tagName,createdAt \
   --jq 'sort_by(.createdAt) | reverse | .[].tagName' | grep -v '^large-files$' \
   | tail -n +2 | while read tag; do gh release delete "$tag" --yes --cleanup-tag; done
 ```
+
+## Verifying a release
+
+`SHA256SUMS.txt` is signed with a key used for nothing else. Its public half
+is `allowed_signers` at the repository root, so anyone can check a download
+without trusting the release page it came from:
+
+```bash
+gh release download --pattern 'SHA256SUMS.txt*' --pattern 'RetroArch_BIOS_Pack.zip*'
+curl -fsSLO https://raw.githubusercontent.com/Abdess/retrobios/main/allowed_signers
+
+ssh-keygen -Y verify -f allowed_signers -I releases@retrobios -n file \
+  -s SHA256SUMS.txt.sig < SHA256SUMS.txt
+sha256sum --check --ignore-missing SHA256SUMS.txt
+```
+
+The first command must print `Good "file" signature for releases@retrobios`.
+Order matters: verify the list before trusting the sums in it, and join split
+volumes before checking, since the sums are of the full ZIPs.
+
+The signature and the reproducible build answer different questions. The
+signature says the list came from the holder of the release key. The build
+says the bytes are derivable: packs are deterministic, so rebuilding one from
+the same collection yields the same archive, and its checksum can be compared
+against the signed list without trusting either.
+
+The private half lives on the maintainer's machine and is generated with
+`ssh-keygen -t ed25519 -f ~/.ssh/retrobios_signing -C releases@retrobios`.
+Registering its public half at
+[GitHub signing keys](https://github.com/settings/keys) is optional
+redundancy: it lets a verifier cross-check `allowed_signers` against
+`https://api.github.com/users/Abdess/ssh_signing_keys`, and needs
+`gh auth refresh -h github.com -s admin:ssh_signing_key` first.
+
+Rotating the key means committing the new public half to `allowed_signers`
+and keeping the retired line, so signatures on past releases keep verifying.
 
 One pack per platform, the full one: the platform's list plus everything its
 cores load. Platform-only and per-emulator packs are build options, not

@@ -69,6 +69,52 @@ class ReadmeRegressions(unittest.TestCase):
         self.assertEqual(unknown, set(), f"README advertises unknown flags: {unknown}")
 
 
+class ReleaseSigningRegressions(unittest.TestCase):
+    """A checksum list published beside its own artifacts proves nothing.
+
+    SHA256SUMS.txt answers corruption; whoever can rewrite a release rewrites
+    the list with it. The signature is what a third party checks, and it is
+    only checkable while allowed_signers, the signing step and the upload
+    list stay in agreement.
+    """
+
+    PRINCIPAL = "releases@retrobios"
+
+    def test_allowed_signers_names_one_usable_key(self):
+        path = ROOT / "allowed_signers"
+        self.assertTrue(path.exists(), "allowed_signers is the published trust root")
+        lines = [
+            line for line in path.read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.startswith("#")
+        ]
+        self.assertTrue(lines, "allowed_signers carries no key")
+        for line in lines:
+            principal, keytype, blob = line.split()[:3]
+            self.assertEqual(principal, self.PRINCIPAL)
+            self.assertTrue(keytype.startswith(("ssh-", "sk-", "ecdsa-")), keytype)
+            self.assertTrue(len(blob) > 40, "key material looks truncated")
+
+    def test_the_release_signs_the_list_and_ships_the_signature(self):
+        process = (ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
+        self.assertIn(
+            "ssh-keygen -Y sign", process, "the release no longer signs the list"
+        )
+        upload = next(
+            line for line in process.splitlines()
+            if line.startswith("for f in dist/SHA256SUMS.txt")
+        )
+        self.assertIn(
+            "dist/SHA256SUMS.txt.sig", upload,
+            "the signature is produced but never uploaded",
+        )
+
+    def test_the_documented_verification_matches_the_published_principal(self):
+        process = (ROOT / "wiki" / "release-process.md").read_text(encoding="utf-8")
+        self.assertIn("ssh-keygen -Y verify", process)
+        self.assertIn(f"-I {self.PRINCIPAL}", process)
+        self.assertIn("allowed_signers", process)
+
+
 class WorkflowRegressions(unittest.TestCase):
     """The test suite must sit on every road into main.
 

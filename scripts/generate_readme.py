@@ -292,6 +292,12 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         " (`cat Pack.zip.0* > Pack.zip`, or"
         " `copy /b Pack.zip.001+Pack.zip.002 Pack.zip` on Windows).",
         "",
+        "Every release ships `SHA256SUMS.txt` and a detached signature of it,"
+        " checkable against `allowed_signers` in this repository:"
+        " [verifying a release]"
+        "(https://abdess.github.io/retrobios/wiki/release-process/"
+        "#verifying-a-release).",
+        "",
         "| Platform | Extracted size | Extract to | Download |",
         "|----------|---------------:|-----------|----------|",
     ]

@@ -160,6 +160,9 @@ regional files are never collapsed merely because their display label matches.
 A pack is a function of its inputs. Two builds from the same collection and
 the same `database.json` produce the same bytes, so a third party can rebuild
 a published pack and compare it against the checksum in `SHA256SUMS.txt`.
+That list is signed with a release key whose public half is `allowed_signers`
+at the repository root, so the comparison does not rest on the release page
+being intact: see [verifying a release](release-process.md#verifying-a-release).
 
 Three things make that hold. Generated members (`README.txt`, `manifest.json`)
 carry a fixed date rather than the wall clock, and the manifest's `generated`

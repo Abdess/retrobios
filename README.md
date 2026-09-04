@@ -32,6 +32,8 @@ The script auto-detects your platform, downloads only missing files, and verifie
 One pack per platform, and it holds everything the platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. The installer above does the same file by file, and `--target` narrows it to one machine; for a region or a bare minimum, build your own pack below.
 The size is what the files occupy once extracted; the ZIP itself downloads smaller, and anything over 2 GB arrives split into `.zip.001`, `.zip.002` volumes. Open the `.001` with 7-Zip or PeaZip, or join them first (`cat Pack.zip.0* > Pack.zip`, or `copy /b Pack.zip.001+Pack.zip.002 Pack.zip` on Windows).
 
+Every release ships `SHA256SUMS.txt` and a detached signature of it, checkable against `allowed_signers` in this repository: [verifying a release](https://abdess.github.io/retrobios/wiki/release-process/#verifying-a-release).
+
 | Platform | Extracted size | Extract to | Download |
 |----------|---------------:|-----------|----------|
 | Batocera | 4.0 GB | `/userdata/bios/` | [Download](../../releases/latest) |
@@ -169,4 +171,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-09-04T05:36:10Z*
+*Auto-generated on 2026-09-04T11:52:53Z*
