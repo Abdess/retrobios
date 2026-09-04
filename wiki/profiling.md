@@ -352,7 +352,7 @@ which CI validates every profile against.
 | `size` | expected size in bytes; a list when the code accepts several exact sizes |
 | `min_size`, `max_size` | size range when the code accepts a range |
 | `md5`, `sha1`, `crc32`, `sha256` | expected hashes from source code |
-| `known_hash_adler32` | expected Adler-32 hash (used by Dolphin IPL files) |
+| `known_hash_adler32` | expected Adler-32 hash (Dolphin's DSP ROMs); pair with `adler32_byteswap` when the code hashes 16-bit byte-swapped data |
 | `validation` | checks the code performs: `size`, `crc32`, `md5`, `sha1`, `adler32`, `signature`, `crypto`. Can be a list or dict `{core: [...], upstream: [...]}` for divergent checks |
 | `aliases` | alternate filenames for the same file |
 | `mode` | `libretro`, `standalone`, or `both` |

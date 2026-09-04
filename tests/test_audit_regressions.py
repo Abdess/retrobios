@@ -119,10 +119,17 @@ class FaqRegressions(unittest.TestCase):
         for name in carriers:
             self.assertIn(name, sentence, f"FAQ omits the Adler-32 file {name}")
         self.assertNotIn(
-            "IPL.bin",
-            {f["name"] for f in dolphin["files"] if f.get("known_hash_adler32")},
-            "IPL.bin gained an Adler-32 hash; the FAQ says it has none",
+            "IPL.bin", carriers,
+            "IPL.bin gained an Adler-32 hash; the docs say it has none",
         )
+        for page in ("faq.md", "profiling.md"):
+            text = (ROOT / "wiki" / page).read_text(encoding="utf-8")
+            for line in text.splitlines():
+                if "Adler-32" in line or "adler32" in line:
+                    self.assertNotIn(
+                        "IPL", line,
+                        f"wiki/{page} ties Adler-32 back to IPL: {line.strip()}",
+                    )
 
     def test_existence_platforms_are_not_told_the_verbose_report_is_the_only_check(self):
         self.assertIn(
