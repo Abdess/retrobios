@@ -106,6 +106,10 @@ python scripts/generate_pack.py --platform batocera --output-dir dist/
 python scripts/generate_pack.py --emulator dolphin
 python scripts/generate_pack.py --system sony-playstation-2
 
+# One region, best first, one file per system and region
+python scripts/generate_pack.py --platform retroarch --region us,eu,jp
+python scripts/generate_pack.py --platform retroarch --region us --one-per-slot
+
 # List available emulators and systems
 python scripts/generate_pack.py --list-emulators
 python scripts/generate_pack.py --list-systems
@@ -165,4 +169,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-09-04T02:08:41Z*
+*Auto-generated on 2026-09-04T05:36:10Z*

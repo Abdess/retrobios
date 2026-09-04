@@ -19,7 +19,7 @@ If you just want to download BIOS packs, see the [home page](../index.md).
 
 - **[Architecture](architecture.md)** - directory structure, data flow, platform inheritance, pack grouping, security, edge cases, CI workflows
 - **[Tools](tools.md)** - CLI reference for every script, pipeline usage, scrapers
-- **[Advanced usage](advanced-usage.md)** - custom packs, target filtering, truth generation, emulator verification, offline workflow
+- **[Advanced usage](advanced-usage.md)** - custom packs, region filtering, one file per slot, target filtering, truth generation, emulator verification, offline workflow
 - **[Verification modes](verification-modes.md)** - how each platform verifies BIOS files, severity matrix, resolution chain
 - **[Data model](data-model.md)** - database.json structure, indexes, file resolution order, YAML formats
 - **[Troubleshooting](troubleshooting.md)** - diagnosis by symptom: missing BIOS, hash mismatch, pack issues, verify errors
@@ -57,6 +57,7 @@ See [contributing](../contributing.md) for submission guidelines.
 - **scraper** - a script that fetches BIOS requirement data from an upstream source (System.dat, es_bios.xml, etc.)
 - **exporter** - a script that converts ground truth data back into a platform's native format
 - **target** - a hardware architecture that a platform runs on (e.g. switch, rpi4, x86_64, steamos)
+- **region** - the territory an emulator's code branches on to select a file; `--region` builds a pack from an ordered priority list, `--one-per-slot` keeps one file per system and region
 - **variant** - an alternative version of a BIOS file (different revision, region, or dump), stored in `.variants/`
 - **required** - a file the core needs to function; determined by source code behavior
 - **optional** - a file the core functions without, possibly with reduced accuracy or missing features
