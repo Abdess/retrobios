@@ -282,6 +282,21 @@ recaling is all or nothing per profile: a profile that still needs a
 re-read is left untouched and moves as a whole once resolved. Rewrites
 preserve the prose of annotated refs, replacing only the location.
 
+Those two writes belong in one pass, because a profile whose refs moved
+without its pin describes two revisions at once:
+
+```bash
+python scripts/profile_sync.py --all --rebase-refs --bump-commit --dry-run
+python scripts/profile_sync.py --all --rebase-refs --bump-commit
+```
+
+The first prints the plan and changes nothing: `would recale` per ref and
+`would set source_commit` per profile. It reaches that plan by running the
+real write path over a throwaway copy, so the planned bump reads the text
+the recale would have left rather than the one on disk; a pin held back by
+prose that the same pass would have moved is not reported as blocked. Drop
+`--dry-run` and the same pass writes, recale before bump on each profile.
+
 `--accept-changed` recales `CHANGED` refs too, for a profile whose diff
 has been read and judged benign. It applies to one profile at a time and
 is refused with `--all`.

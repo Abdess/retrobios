@@ -9,6 +9,7 @@ recalable from what needs the code read again.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import difflib
 import json
 import os
@@ -16,6 +17,7 @@ import posixpath
 import re
 import subprocess
 import sys
+import tempfile
 from dataclasses import asdict, dataclass
 from datetime import date
 from pathlib import Path
@@ -2175,6 +2177,10 @@ def bump_commit(
     if pending_recale(report, accept_changed, text):
         return False
     document = yaml.safe_load(text)
+    if document.get("source_commit") == report.head:
+        # Rewriting the pin to the value it already holds is not a bump, and
+        # announcing it buries the profiles that did move.
+        return False
     expected = dict(document)
     expected["source_commit"] = report.head
     if document.get("source_commit"):
@@ -2525,15 +2531,24 @@ def _apply_writes(args, name: str, profile: dict, report: ProfileReport) -> None
             print(f"{name}: would write source_commit {report.pin[:7]}")
         elif backfill_commit(path, report.pin):
             print(f"{name}: source_commit {report.pin[:7]}")
-    if args.rebase_refs and not args.dry_run and not report.skipped:
-        for line in rebase_refs(path, report, args.accept_changed):
-            print(f"{name}: {line}")
-    if (
-        args.bump_commit
-        and not args.dry_run
-        and bump_commit(path, report, args.accept_changed)
-    ):
-        print(f"{name}: source_commit -> {report.head[:7]}")
+    if not (args.rebase_refs or args.bump_commit):
+        return
+    with contextlib.ExitStack() as stack:
+        if args.dry_run:
+            # Plan on a copy through the production write path rather than a
+            # parallel branch: the bump then reads the text the rebase would
+            # have left, which is the only text under which it is reachable.
+            scratch = stack.enter_context(tempfile.TemporaryDirectory())
+            target = Path(scratch) / path.name
+            target.write_bytes(path.read_bytes())
+            recale, bumped = "would recale ", "would set source_commit ->"
+        else:
+            target, recale, bumped = path, "", "source_commit ->"
+        if args.rebase_refs and not report.skipped:
+            for line in rebase_refs(target, report, args.accept_changed):
+                print(f"{name}: {recale}{line}")
+        if args.bump_commit and bump_commit(target, report, args.accept_changed):
+            print(f"{name}: {bumped} {report.head[:7]}")
 
 
 def _cited_paths(report: ProfileReport) -> list[str]:

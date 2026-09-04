@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import contextlib
 import io
 import json
@@ -1832,6 +1833,128 @@ class TestRebaseRefs(unittest.TestCase):
         text = self.path.read_text()
         self.assertIn('source_ref: "a.c:20-22"', text)
         self.assertIn('source_ref: "b.c:5"', text)
+
+
+class TestWriteDryRun(unittest.TestCase):
+    """--dry-run has to plan a write, not stay silent about it.
+
+    --backfill-commits and --realign-prose have always reported what they
+    would write. --rebase-refs and --bump-commit accepted the flag and said
+    nothing, so the only way to read the plan was to let it happen.
+    """
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self.tmp.name)
+        self.path = self.dir / "p.yml"
+        self.path.write_text(SAMPLE, encoding="utf-8")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def _args(self, **over):
+        base = dict(
+            emulators_dir=str(self.dir), backfill_commits=False,
+            rebase_refs=False, bump_commit=False, accept_changed=False,
+            dry_run=True,
+        )
+        base.update(over)
+        return argparse.Namespace(**base)
+
+    def _run(self, args, report, sample=SAMPLE):
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            profile_sync._apply_writes(
+                args, "p", yaml.safe_load(sample), report
+            )
+        return buffer.getvalue()
+
+    def _shifted(self):
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "SHIFTED", None, 30, 32, []
+        )
+        return ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[EntryReport("a.bin", "a.c:10-12", "SHIFTED", [part])],
+            counts={"SHIFTED": 1},
+        )
+
+    def test_rebase_states_the_move_and_leaves_the_file(self):
+        before = self.path.read_text()
+        output = self._run(self._args(rebase_refs=True), self._shifted())
+        self.assertIn("would recale", output)
+        self.assertIn("a.c:10-12 -> a.c:30-32", output)
+        self.assertEqual(self.path.read_text(), before)
+
+    def test_a_pin_already_at_head_is_not_announced(self):
+        """A write that changes nothing must not be reported as one.
+
+        126 of 232 announced bumps on the corpus rewrote the pin to the
+        value it already held, so the plan overstated the work by more than
+        double and no reader could tell which entries meant anything.
+        """
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "ANCHORED", None, 10, 12, []
+        )
+        self.path.write_text(
+            insert_after_line(SAMPLE, "profiled_date", 'source_commit: "newhead"'),
+            encoding="utf-8",
+        )
+        report = ProfileReport(
+            name="p", repo="o/n", pin="newhead", head="newhead",
+            entries=[EntryReport("a.bin", "a.c:10-12", "ANCHORED", [part])],
+            counts={"ANCHORED": 1},
+        )
+        self.assertFalse(bump_commit(self.path, report))
+        self.assertEqual(self._run(self._args(bump_commit=True), report), "")
+
+    def test_bump_states_the_pin_and_leaves_the_file(self):
+        before = self.path.read_text()
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "ANCHORED", None, 10, 12, []
+        )
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[EntryReport("a.bin", "a.c:10-12", "ANCHORED", [part])],
+            counts={"ANCHORED": 1},
+        )
+        output = self._run(self._args(bump_commit=True), report)
+        self.assertIn("would set source_commit -> newhead", output)
+        self.assertEqual(self.path.read_text(), before)
+
+    def test_writes_still_happen_without_the_flag(self):
+        output = self._run(
+            self._args(rebase_refs=True, dry_run=False), self._shifted()
+        )
+        self.assertNotIn("would", output)
+        self.assertIn('source_ref: "a.c:30-32"', self.path.read_text())
+
+    def test_a_planned_bump_reads_the_prose_the_rebase_would_have_left(self):
+        """The pin is blocked by prose until the rebase moves it.
+
+        Planning the bump against the file on disk would report a refusal
+        that the real run, where the rebase lands first, never produces.
+        """
+        self.path.write_text(PROSE_SAMPLE, encoding="utf-8")
+        before = self.path.read_text()
+        part = PartResult(RefPart("a.c", 10, 10, "10"), "SHIFTED", None, 14, 14, [])
+        entry = EntryReport(
+            "notes", "a.c:10", "SHIFTED", [part], "prose", "notes"
+        )
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[entry], counts={"SHIFTED": 1},
+        )
+        self.assertEqual(
+            profile_sync.pending_recale(report, False, before), 1,
+            "the prose still describes the pinned revision",
+        )
+        output = self._run(
+            self._args(rebase_refs=True, bump_commit=True), report, PROSE_SAMPLE
+        )
+        self.assertIn("would recale", output)
+        self.assertIn("would set source_commit -> newhead", output)
+        self.assertEqual(self.path.read_text(), before)
 
 
 class TestBumpCommit(unittest.TestCase):
