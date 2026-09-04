@@ -14,19 +14,19 @@ notes: >
   Android and desktop application by Robert Broglia built on EmuFramework,
   vendoring Mednafen's pce_fast and pce modules. Both are compiled and
   selectable at runtime; pce_fast is what an unset core option resolves to
-  (system.ccm:125).
+  (PCE.emu/src/main/system.ccm:125).
 
   HuCard content (.pce, .sgx) loads with no external file. CD content
   (.cue, .toc, .ccd, .chd) requires a System Card image: loadContent throws
   "No System Card Set" when the path is unset or the file is gone
-  (Main.cc:88-91).
+  (PCE.emu/src/main/Main.cc:88-91).
 
   The System Card is a single path the user picks through a file browser
-  filtered to .pce and .sgx (EmuMenuViews.cc:176-191), stored as
+  filtered to .pce and .sgx (PCE.emu/src/main/EmuMenuViews.cc:176-191), stored as
   CFGKEY_SYSCARD_PATH. No filename is fixed and no directory is scanned.
   MDFN_GetSettingS returns an empty string for pce.cdbios, pce_fast.cdbios
   and pce.gecdbios, and MDFN_MakeFName answers every MDFNMKF_FIRMWARE
-  request with that one path (options.cc:275-301), so the Games Express
+  request with that one path (PCE.emu/src/main/options.cc:275-301), so the Games Express
   branch reads whichever image the setting points at. Mednafen's settings
   table still carries the syscard3.pce and gecard.pce defaults but
   settings.cpp is not compiled, so they are never read.
@@ -43,7 +43,7 @@ notes: >
   SuperGrafx is enabled by the .sgx extension, by a CRC match against the
   built-in sgx_table (pce.cpp:345, 382-395), or by DetectSGXCD on disc.
   HES playback is compiled out (pce.cpp:76) and cheats are disabled
-  (options.cc:245-246).
+  (PCE.emu/src/main/options.cc:245-246).
 
 files:
   - name: "syscard3.pce"
@@ -52,7 +52,7 @@ files:
     validation: [existence, size]
     min_size: 262144
     category: bios
-    source_ref: "src/main/Main.cc:80-91 (throws without it), src/main/options.cc:275-301 (path resolution), src/main/EmuMenuViews.cc:176-191 (selection), src/pce_fast/pce.cpp:477-483 + src/pce_fast/huc.cpp:284-304 (default module load), src/pce/pce.cpp:645-653 (accurate module load), src/pce_fast/pce.cpp:663 + src/pce/pce.cpp:1094 (name)"
+    source_ref: "PCE.emu/src/main/Main.cc:80-91 (throws without it), PCE.emu/src/main/options.cc:275-301 (path resolution), PCE.emu/src/main/EmuMenuViews.cc:176-191 (selection), src/pce_fast/pce.cpp:477-483 + src/pce_fast/huc.cpp:284-304 (default module load), src/pce/pce.cpp:645-653 (accurate module load), src/pce_fast/pce.cpp:663 + src/pce/pce.cpp:1094 (name)"
     note: >
       min_size comes from the fixed 262144-byte read in pce_fast
       (huc.cpp:302) with Stream::read throwing on a short file
