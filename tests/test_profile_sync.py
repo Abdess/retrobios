@@ -1435,6 +1435,39 @@ def _sample_report():
     )
 
 
+class TestRefsAheadOfTheirPin(TestBuildReport):
+    """Say when a ref describes HEAD and the pin still names an older tree.
+
+    Reprofiling against HEAD and forgetting to advance source_commit leaves
+    the profile describing two revisions at once. The symptom was "pin
+    revision missing", which reads as code that vanished and sends the
+    reader hunting for a move that never happened. The cause is the pin.
+    """
+
+    def test_present_at_head_and_absent_at_the_pin_names_the_pin(self):
+        self.files[("headsha", "a.c")] = ["x", "the cited line", "y"]
+        report = build_report("test", self._profile(["a.c:2"]), self.dir)
+        part = report.entries[0].parts[0]
+        self.assertEqual(part.status, "GONE")
+        self.assertEqual(
+            part.reason, "written against HEAD, pin names an older revision"
+        )
+
+    def test_a_range_beyond_head_is_still_just_missing(self):
+        """Not every pin miss is a stale pin; only one that fits HEAD."""
+        self.files[("headsha", "a.c")] = ["x"]
+        report = build_report("test", self._profile(["a.c:40"]), self.dir)
+        part = report.entries[0].parts[0]
+        self.assertEqual(part.status, "GONE")
+        self.assertNotEqual(
+            part.reason, "written against HEAD, pin names an older revision"
+        )
+
+    def test_a_file_missing_from_both_is_unchanged(self):
+        report = build_report("test", self._profile(["ghost.c:2"]), self.dir)
+        self.assertEqual(report.entries[0].parts[0].status, "GONE")
+
+
 class TestBareNameResolvedAtThePin(TestBuildReport):
     """A bare filename belongs to the revision the ref was written against.
 

@@ -815,9 +815,14 @@ def anchor_part(
         # the old path at the pin, which is why that one is tried first.
         pin_lines = fetch(PIN, path, part.start, tokens)
     if pin_lines is None:
-        return PartResult(
-            part, "GONE", None, None, None, [], "pin revision missing", slug, url
-        )
+        # Present at HEAD, absent at the pin, and the cited range fits the
+        # HEAD file: the ref was written against HEAD while source_commit
+        # still names an older revision. Saying "missing" sends the reader
+        # hunting for a move that never happened; the fix is the pin.
+        reason = "pin revision missing"
+        if head_lines is not None and part.start <= len(head_lines):
+            reason = "written against HEAD, pin names an older revision"
+        return PartResult(part, "GONE", None, None, None, [], reason, slug, url)
 
     end = part.end or part.start
     anchored = anchor_block(pin_lines, head_lines, part.start, end)
