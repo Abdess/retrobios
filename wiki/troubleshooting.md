@@ -261,3 +261,26 @@ bash scripts/download.sh --list
 Some platforms share packs (Lakka uses the RetroArch pack). The installer handles
 this mapping automatically, but if you're downloading manually, check which pack
 name corresponds to your platform.
+
+**A split pack will not extract:**
+
+A pack over 2 GB is published as `.zip.001`, `.zip.002`. Put every part in one
+folder; 7-Zip and PeaZip open the `.001` directly. A frontend's own extractor
+may refuse it, Batocera among them:
+
+```
+Archive type: '001' is not yet supported
+```
+
+The volumes are plain byte ranges, so joining them from a shell rebuilds the
+ZIP:
+
+```bash
+cat Pack.zip.0* > Pack.zip
+unzip Pack.zip -d /userdata/bios/
+rm Pack.zip
+```
+
+`scripts/download.sh` and `scripts/download.py` do this on their own, checksum
+included. Both stage inside the destination directory, never in `/tmp`, which
+is a RAM disk on most of these systems.
