@@ -74,36 +74,28 @@ notes: |
 files:
   # -- Direct3D 12 runtime, Windows only --
 
-  - name: dxcompiler.dll
-    path: "D3D12/dxcompiler.dll"
-    system: microsoft-xbox-360
-    required: true
-    description: "DirectX Shader Compiler 1.9.2602.24, DXIL compilation for the Direct3D 12 backend"
-    source_ref: "src/xenia/ui/d3d12/d3d12_provider.cc:279-322, src/xenia/gpu/d3d12/pipeline_cache.cc:121-134, src/xenia/ui/redist_installer_wx.cc:79-85, 119-122, 594-629"
-    note: >-
-      Loaded by full path from the D3D12 folder next to the executable, then by
-      plain name from the system search path. PipelineCache::Initialize returns
-      false without it because guest and system shaders are all DXIL, and that
-      failure propagates to "Failed to setup graphics_system!"
-      (emulator.cc:430-435). Windows defaults to gpu = "d3d12"
-      (src/xenia/app/xenia_main.cc:70) and the backend factory only falls back when
-      D3D12GraphicsSystem::IsAvailable() is false, which tests the D3D12 API
-      itself, not the redistributable. Taken from bin/x64/dxcompiler.dll in
-      dxc_2026_05_27.zip of DirectXShaderCompiler release v1.9.2602.24, pinned
-      at sha256 cf658aacf070d3045e31b8f1f8a696c2945f37c1095019481ef7c513368db3b4;
-      bin/arm64 on ARM64 builds.
-
   - name: dxil.dll
     path: "D3D12/dxil.dll"
     system: microsoft-xbox-360
     required: true
-    description: "DXIL signing and validation library shipped with DirectX Shader Compiler 1.9.2602.24"
-    source_ref: "src/xenia/ui/d3d12/d3d12_provider.cc:286-292, src/xenia/gpu/d3d12/spirv_to_dxil_compiler.cc:154-169, 194-200, src/xenia/ui/redist_installer_wx.cc:79-85, 119-122"
+    description: "DXIL signer and validator from DirectX Shader Compiler 1.9.2602.24"
+    source_ref: "src/xenia/ui/d3d12/d3d12_provider.cc:236-260, src/xenia/gpu/d3d12/pipeline_cache.cc:113-121, src/xenia/ui/redist_installer_wx.cc:79-86, 120-122, 174-186, 588-621"
     note: >-
-      Preloaded by full path so dxcompiler's own plain-name load resolves to it
-      and the DXIL leaves signed; spirv_to_dxil queries its validator version to
-      stamp the container the validator will accept. Same archive and pin as
-      dxcompiler.dll, from bin/x64 or bin/arm64.
+      The only shader library the backend still needs. Loaded by full path from
+      the D3D12 folder next to the executable, then by plain name from the
+      system search path, because the signer's own plain-name load skips
+      D3D12/. D3D12 rejects an unsigned shader, so PipelineCache::Initialize
+      stops when IsSignerAvailable() is false and asks for a recent dxil.dll in
+      the D3D12 folder; that failure propagates to "Failed to setup
+      graphics_system!" (src/xenia/emulator.cc:427-431). Windows defaults to
+      gpu = "d3d12" (src/xenia/app/xenia_main.cc:70) and the backend factory
+      only falls back when D3D12GraphicsSystem::IsAvailable() is false, which
+      tests the D3D12 API itself, not the redistributable. Taken from
+      bin/x64/dxil.dll in dxc_2026_05_27.zip of DirectXShaderCompiler release
+      v1.9.2602.24, pinned at sha256
+      cf658aacf070d3045e31b8f1f8a696c2945f37c1095019481ef7c513368db3b4;
+      bin/arm64 on ARM64 builds. It is the single entry the installer extracts
+      from that archive.
 
   - name: D3D12Core.dll
     path: "D3D12/D3D12Core.dll"
