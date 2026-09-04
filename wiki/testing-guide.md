@@ -246,10 +246,17 @@ Ideally, tests, code, and documentation ship together. When profiles and platfor
 
 ## CI integration
 
-The `validate.yml` workflow runs `python -m unittest discover tests -v` on every
-pull request that touches `bios/`, `platforms/`, `emulators/`, `schemas/`,
-`scripts/`, `tests/` or `install.py`. The test job (`run-tests`) runs in parallel
-with BIOS validation, schema validation, and auto-labeling.
+The `validate.yml` workflow runs `python -m unittest discover tests -v` on both
+roads into main: every pull request, and every direct push, that touches
+`bios/`, `platforms/`, `emulators/`, `schemas/`, `scripts/`, `tests/` or
+`install.py`. Work reaches main by push as often as by pull request, so a suite
+wired to pull requests alone would guard the road nobody takes. The test job
+(`run-tests`) runs in parallel with schema validation, and on a pull request
+with BIOS validation and auto-labeling too; those two read pull request context
+and stay behind an event guard.
+
+A push series collapses to the tip, so what a green run states is that the head
+of main passes, not every commit under it.
 
 Modules that need real artifacts skip themselves when those artifacts are absent,
 so `test_pack_integrity` is a no-op in CI (no `dist/`) and a real check locally.

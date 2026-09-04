@@ -348,7 +348,7 @@ pattern and how to add a test.
 | Workflow | File | Trigger | Role |
 |----------|------|---------|------|
 | Deploy Site | `deploy-site.yml` | push to main (platforms, emulators, wiki, scripts) + manual | validate contracts, generate site, build with MkDocs, validate rendered HTML, deploy to Pages |
-| PR Validation | `validate.yml` | pull request on bios/, platforms/, emulators/, schemas/, scripts/, tests/ | validate BIOS hashes, schema check, run the full test suite, auto-label PR |
+| Validation | `validate.yml` | pull request and push to main on bios/, platforms/, emulators/, schemas/, scripts/, tests/ | schema check and full test suite on both; BIOS hash validation and auto-label on pull requests |
 
 Releases are not built in CI: the packs are generated and checked on the
 maintainer's machine and uploaded with `gh`, see the

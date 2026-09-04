@@ -69,6 +69,75 @@ class ReadmeRegressions(unittest.TestCase):
         self.assertEqual(unknown, set(), f"README advertises unknown flags: {unknown}")
 
 
+class WorkflowRegressions(unittest.TestCase):
+    """The test suite must sit on every road into main.
+
+    run-tests lived in a pull_request-only workflow while the work landed by
+    direct push, so 1,318 cases guarded a road almost nothing took. What is
+    asserted here is reachability, not the workflow's shape.
+    """
+
+    @staticmethod
+    def _workflow(name: str) -> dict:
+        with (ROOT / ".github" / "workflows" / name).open(encoding="utf-8") as f:
+            document = yaml.safe_load(f)
+        # PyYAML resolves the bare `on:` key to the boolean True.
+        document["on"] = document.pop(True, document.get("on"))
+        return document
+
+    def test_the_suite_runs_on_a_direct_push_to_main(self):
+        workflow = self._workflow("validate.yml")
+        triggers = workflow["on"]
+        self.assertIn("push", triggers, "validate.yml no longer runs on push")
+        self.assertIn("main", triggers["push"]["branches"])
+        job = next(
+            (
+                name
+                for name, body in workflow["jobs"].items()
+                if any(
+                    "unittest discover" in str(step.get("run", ""))
+                    for step in body.get("steps", [])
+                )
+            ),
+            None,
+        )
+        self.assertIsNotNone(job, "no job runs the test suite")
+        self.assertIsNone(
+            workflow["jobs"][job].get("if"),
+            f"{job} carries a condition; the suite must run on push and on PR",
+        )
+
+    def test_both_events_watch_the_same_paths(self):
+        triggers = self._workflow("validate.yml")["on"]
+        self.assertEqual(
+            triggers["pull_request"]["paths"],
+            triggers["push"]["paths"],
+            "the two path lists have drifted; a push would skip what a PR checks",
+        )
+
+    def test_pull_request_only_jobs_are_guarded(self):
+        workflow = self._workflow("validate.yml")
+        for name, body in workflow["jobs"].items():
+            uses_pr_context = "github.event.pull_request" in yaml.dump(body)
+            if uses_pr_context:
+                self.assertEqual(
+                    body.get("if"),
+                    "github.event_name == 'pull_request'",
+                    f"{name} reads pull request context and would run on a push",
+                )
+
+    def test_no_workflow_relies_on_a_yaml_anchor(self):
+        """The workflow parser reads no anchor; PyYAML would hide the break."""
+        for path in sorted((ROOT / ".github" / "workflows").glob("*.yml")):
+            for number, line in enumerate(
+                path.read_text(encoding="utf-8").splitlines(), 1
+            ):
+                self.assertIsNone(
+                    re.search(r"(?:^|\s)[&*][A-Za-z_]", line),
+                    f"{path.name}:{number} uses a YAML anchor: {line.strip()}",
+                )
+
+
 class FaqRegressions(unittest.TestCase):
     """The FAQ states facts the code owns; these tie it back to the source.
 

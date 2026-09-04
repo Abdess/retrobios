@@ -14,7 +14,7 @@ Budget target: ~175 minutes/month on the GitHub free tier.
 | Workflow | File | Trigger |
 |----------|------|---------|
 | Deploy Site | `deploy-site.yml` | Push to main (platforms, emulators, provenance, wiki, scripts, database.json, mkdocs.yml), manual |
-| PR Validation | `validate.yml` | PR touching `bios/**`, `platforms/**` or `emulators/**` |
+| Validation | `validate.yml` | PR and push to main touching `bios/**`, `platforms/**` or `emulators/**` |
 
 Upstream BIOS lists are not scraped on a schedule. A maintainer runs the
 scrapers by hand (see [adding a scraper](adding-a-scraper.md)), reviews the
@@ -70,18 +70,21 @@ The theme version is pinned on both sides: `>=9.7.5` because that is the
 release which caps `mkdocs < 2` (MkDocs 2.0 ships without a license), `<10`
 so a major theme release cannot change the site without a deliberate bump.
 
-## validate.yml - PR Validation
+## validate.yml - Validation
 
-**Trigger.** Pull requests that modify `bios/**`, `platforms/**`,
-`emulators/**`, `schemas/**`, `scripts/**`, `tests/**` or `install.py`.
+**Trigger.** Pull requests and direct pushes to main that modify `bios/**`,
+`platforms/**`, `emulators/**`, `schemas/**`, `scripts/**`, `tests/**` or
+`install.py`. The path lists are spelled out once per event because the
+workflow parser reads no YAML anchor.
 
-**Concurrency.** Per-PR group, cancel in-progress.
+**Concurrency.** Per-PR group on a pull request, per-ref on a push, cancel
+in-progress either way: a push series collapses to the tip.
 
-Four parallel jobs:
+Four jobs, two of which read pull request context and carry an event guard:
 
-**validate-bios.** Diffs the PR to find changed BIOS files, runs
-`validate_pr.py --markdown` on each, and posts the validation report as a PR
-comment (hash verification, database match status).
+**validate-bios** (pull requests only). Diffs the PR to find changed BIOS
+files, runs `validate_pr.py --markdown` on each, and posts the validation
+report as a PR comment (hash verification, database match status).
 
 **validate-configs.** Runs `python scripts/validate_schemas.py --source-only`,
 which validates every platform YAML against `schemas/platform.schema.json` and
@@ -89,10 +92,10 @@ every emulator profile against `schemas/emulator.schema.json`. Both schemas set
 `additionalProperties: false`, so a typo in a field name fails the job instead
 of being silently ignored.
 
-**run-tests.** Runs `python -m unittest discover tests -v`. Must pass before
-merge.
+**run-tests.** Runs `python -m unittest discover tests -v`. Must pass before a
+merge, and again on the commit a direct push puts at the head of main.
 
-**label-pr.** Auto-labels the PR based on changed paths:
+**label-pr** (pull requests only). Auto-labels the PR based on changed paths:
 
 | Path pattern | Label |
 |-------------|-------|

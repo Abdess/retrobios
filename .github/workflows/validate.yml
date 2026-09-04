@@ -1,5 +1,8 @@
-name: PR Validation
+name: Validation
 
+# The same checks on both roads into main. Work lands here by direct push as
+# often as by pull request, and a test suite reachable only from a PR guards
+# the road nobody takes.
 on:
   pull_request:
     paths:
@@ -14,18 +17,35 @@ on:
       - "install.py"
       - "install.sh"
       - "install.ps1"
+  # Spelled out twice because the workflow parser reads no YAML anchor; a test
+  # holds the two lists equal.
+  push:
+    branches: [main]
+    paths:
+      - "bios/**"
+      - "platforms/**"
+      - "emulators/**"
+      - "schemas/**"
+      - "scripts/**"
+      - "tests/**"
+      - "install.py"
+      - "install.sh"
+      - "install.ps1"
 
 permissions:
   contents: read
   pull-requests: write
 
 concurrency:
-  group: validate-${{ github.event.pull_request.number }}
+  # A push series collapses to the tip: what has to stay verified is the head
+  # of main, not every commit that passed under it.
+  group: validate-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   validate-bios:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
         with:
@@ -100,6 +120,7 @@ jobs:
 
   label-pr:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     permissions:
       pull-requests: write
     steps:
