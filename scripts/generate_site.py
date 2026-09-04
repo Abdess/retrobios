@@ -3389,13 +3389,16 @@ curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | 
 **Windows (PowerShell):**
 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
 ```
 
 That is the complete default flow. Extra copies into detected standalone
 emulator directories are deliberately opt-in with `--standalone-copies`, so
 automatic setup never writes outside the selected platform tree unexpectedly.
 Use `python install.py --check` from a checkout for a read-only verification.
+
+Options, environment overrides, how each platform is detected and what the
+installer is allowed to write: [Installer](wiki/installer.md).
 
 ---
 
@@ -3570,6 +3573,7 @@ def generate_mkdocs_nav(
     wiki_nav = [
         {"Overview": "wiki/index.md"},
         {"Getting started": "wiki/getting-started.md"},
+        {"Installer": "wiki/installer.md"},
         {"FAQ": "wiki/faq.md"},
         {"Troubleshooting": "wiki/troubleshooting.md"},
         {"Architecture": "wiki/architecture.md"},

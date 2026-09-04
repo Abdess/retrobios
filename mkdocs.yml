@@ -665,6 +665,7 @@ nav:
 - Wiki:
   - Overview: wiki/index.md
   - Getting started: wiki/getting-started.md
+  - Installer: wiki/installer.md
   - FAQ: wiki/faq.md
   - Troubleshooting: wiki/troubleshooting.md
   - Architecture: wiki/architecture.md

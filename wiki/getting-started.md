@@ -24,7 +24,7 @@ irm https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
 ```
 
 Running `install.py` directly works the same way and needs nothing beyond
-Python 3.10+:
+Python 3.8+, the floor both bootstraps enforce before they hand over:
 
 ```bash
 python install.py
@@ -45,10 +45,10 @@ python install.py --standalone-copies  # opt in to extra standalone-emulator pat
 
 The default flow writes inside the detected platform tree only. Copies into
 separate standalone-emulator directories are opt-in, so discovery cannot cause
-unexpected writes elsewhere on the machine.
-Entries the collection cannot satisfy are reported as safely omitted and the
-run continues; the installer never substitutes a same-named file for one a
-hash-verifying platform would reject.
+unexpected writes elsewhere on the machine. Entries the collection cannot
+satisfy are reported as safely omitted and the run continues; the installer
+never substitutes a same-named file for one a hash-verifying platform would
+reject.
 
 Arguments pass through the one-liner too, which is how you target an SD card
 mounted on another machine:
@@ -57,6 +57,10 @@ mounted on another machine:
 curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh \
   | sh -s -- --platform retroarch --dest /path/to/sdcard
 ```
+
+PowerShell needs another form, the environment overrides and the detection
+rules are listed per platform, and the trust boundary is described in full on
+the [Installer](installer.md) page.
 
 ### Option 2: download.sh (Linux/macOS, from a clone)
 
@@ -67,6 +71,10 @@ bash scripts/download.sh retroarch ~/RetroArch/system/
 bash scripts/download.sh --list  # show available packs
 ```
 
+A pack published in several volumes is downloaded part by part, joined, and
+checked against the SHA-256 the release publishes before anything is
+extracted. `python scripts/download.py` does the same on Windows.
+
 ### Option 3: manual download
 
 1. Go to the [releases page](https://github.com/Abdess/retrobios/releases)
@@ -74,9 +82,15 @@ bash scripts/download.sh --list  # show available packs
 3. Extract to the BIOS directory listed below
 
 Packs over 2 GB are split into numbered volumes (`.zip.001`, `.zip.002`).
-Download every part and open the `.001` file with 7-Zip or PeaZip, which
-extracts the whole set. See [Download](../which-pack.md) for the
-per-setup instructions.
+Download every part into the same folder, then open the `.001` with 7-Zip or
+PeaZip, which read the whole set. To join them into one ZIP first:
+
+- Linux/macOS: `cat Pack.zip.0* > Pack.zip`
+- Windows (cmd): `copy /b Pack.zip.001+Pack.zip.002 Pack.zip`
+
+A frontend's own extractor may refuse a volume: Batocera answers `Archive
+type: '001' is not yet supported`. Join the parts from a shell there. See
+[Download](../which-pack.md) for the per-setup instructions.
 
 ## BIOS directory by platform
 

@@ -10,6 +10,7 @@ each page takes one job from start to finish.
 ## For users
 
 - **[Getting started](getting-started.md)** - installation, BIOS directory paths per platform, verification
+- **[Installer](installer.md)** - the one-liner in full: bootstrap, options, environment overrides, platform detection, trust boundary
 - **[FAQ](faq.md)** - common questions, troubleshooting, hash explanations
 
 If you just want to download BIOS packs, see the [home page](../index.md).
