@@ -5,7 +5,7 @@ source: "https://github.com/aenu1/ax360e"
 source_branch: main
 upstream: "https://github.com/xenia-canary/xenia-canary"
 profiled_date: "2026-08-11"
-source_commit: "a451abd20ae0660bc53bcf90473ac0e6c6c0d86d"
+source_commit: "b8c1838f21761ac463724e24105eda97b990e704"
 upstream_commit: "dc561e4df578c903087f9bdf56ff61d9ef9f2a93"
 core_version: "1.18"
 display_name: "Microsoft - Xbox 360 (aX360e)"
@@ -22,15 +22,15 @@ notes: |
   replaces the desktop front end: its own windowed app and window, AAudio and
   OpenSLES audio systems, an Android input driver, and disc image, disc archive,
   STFS and XEX devices backed by the Storage Access Framework.
-  ref: ax360e/app/src/main/cpp/version.h:4-5,
-       ax360e/app/src/main/cpp/CMakeLists.txt:39-74,
-       ax360e/app/src/main/cpp/ax360e_emu.cpp:615
+  ref: app/src/main/cpp/version.h:4-5,
+       app/src/main/cpp/CMakeLists.txt:39-75,
+       app/src/main/cpp/ax360e_emu.cpp:616
 
   The version is read from the commit subjects, which carry it: 1.18 is the head
   of main, 1.17 the drop before it. The repository has no tags, and the only
   gradle file committed is app/build.gradle.bak, which still declares versionName
   0.14 and is renamed and completed with the signing block at build time.
-  ref: ax360e/README.md, ax360e/app/build.gradle.bak:13-14
+  ref: ax360e/README.md, app/build.gradle.bak:13-14
 
   No Xbox 360 system file is loaded. The kernel, XAM and XBDM are HLE modules
   registered at startup, and every key the emulator needs is a constant in the
@@ -38,11 +38,11 @@ notes: |
   turn when an image is read, the 0x19 key pair the profile blob is encrypted with, and the
   key vault map XeKeysGetKey answers from. There is no NAND, flash or keyvault
   path.
-  ref: ax360e/app/src/main/cpp/xenia-canary/src/xenia/emulator.cc:316-318,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/cpu/xex_module.cc:54-62,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/cpu/xex_module.cc:953-963,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/kernel/util/crypto_utils.cc:20-31,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/kernel/xboxkrnl/xboxkrnl_crypt.cc:164-168
+  ref: app/src/main/cpp/xenia-canary/src/xenia/emulator.cc:316-321,
+       app/src/main/cpp/xenia-canary/src/xenia/cpu/xex_module.cc:54-65,
+       app/src/main/cpp/xenia-canary/src/xenia/cpu/xex_module.cc:982-994,
+       app/src/main/cpp/xenia-canary/src/xenia/kernel/util/crypto_utils.cc:20-31,
+       app/src/main/cpp/xenia-canary/src/xenia/kernel/xboxkrnl/xboxkrnl_crypt.cc:169-173
 
   The storage root is the external files directory of the package and is passed
   as a launch argument beside the config path and the log path. Content, cache,
@@ -51,35 +51,35 @@ notes: |
   custom_config/<title_id>.config.toml. The custom driver directory sits in
   internal storage instead, because the external filesystem cannot carry an
   executable mapping.
-  ref: ax360e/app/src/main/java/aenu/ax360e/Application.java:14-53,
-       ax360e/app/src/main/java/aenu/ax360e/EmulatorActivity.java:67-73,
-       ax360e/app/src/main/cpp/ax360e_emu.cpp:273-316
+  ref: app/src/main/java/aenu/ax360e/Application.java:14-53,
+       app/src/main/java/aenu/ax360e/EmulatorActivity.java:164-170,
+       app/src/main/cpp/ax360e_emu.cpp:274-317
 
   ES-DE starts the emulator with the aenu.intent.action.AX360E action and a
   game_uri extra. The native side dispatches on the name the descriptor resolves
   to: .xex, .iso and .zar each go to their own loader, and anything else is taken
   for an STFS container and launched beside a sibling directory named after the
   file with .data appended.
-  ref: ax360e/app/src/main/AndroidManifest.xml:57-59,
-       ax360e/app/src/main/cpp/ax360e_emu.cpp:554-575
+  ref: app/src/main/AndroidManifest.xml:57-59,
+       app/src/main/cpp/ax360e_emu.cpp:555-576
 
   A default profile ships with the application. Its Account blob is extracted
   from the assets on first run under XUID E0300000A360E000, and the shipped
   configuration logs that XUID into slot 0. Further profiles are created by the
   emulator itself, which writes the blob it encrypts.
-  ref: ax360e/app/src/main/java/aenu/ax360e/Application.java:30-34,
-       ax360e/app/src/main/java/aenu/ax360e/Application.java:92-96,
-       ax360e/app/src/main/assets/config/default_config.toml:314,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/kernel/xam/profile_manager.cc:502-558
+  ref: app/src/main/java/aenu/ax360e/Application.java:30-34,
+       app/src/main/java/aenu/ax360e/Application.java:92-96,
+       app/src/main/assets/config/default_config.toml:371,
+       app/src/main/cpp/xenia-canary/src/xenia/kernel/xam/profile_manager.cc:501-557
 
   477 game patches ship inside the APK. The patch database reads the patches
   directory only, so a bundled patch reaches the emulator once the user opens the
   patch dialog for that title and presses Apply, which writes the asset out under
   the same name.
   ref: ax360e/app/src/main/assets/game-patches,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/patcher/patch_db.cc:30-56,
-       ax360e/app/src/main/java/aenu/ax360e/Emulator.java:121-151,
-       ax360e/app/src/main/java/aenu/ax360e/MainActivity.java:503-512
+       app/src/main/cpp/xenia-canary/src/xenia/patcher/patch_db.cc:30-56,
+       app/src/main/java/aenu/ax360e/Emulator.java:119-149,
+       app/src/main/java/aenu/ax360e/MainActivity.java:505-514
 
 files:
   - name: "<driver>.zip"
@@ -95,7 +95,7 @@ files:
       configured path is read before the instance is created and opened through
       adrenotools when it exists, otherwise the system libvulkan.so is used. The
       setting is greyed out on devices without /dev/kgsl-3d0.
-    source_ref: "ax360e/app/src/main/java/aenu/ax360e/EmulatorSettings.java:709-713, ax360e/app/src/main/java/aenu/ax360e/Utils.java:150-215, ax360e/app/src/main/cpp/xenia-canary/src/xenia/ui/vulkan/vulkan_instance.cc:34, ax360e/app/src/main/cpp/xenia-canary/src/xenia/ui/vulkan/vulkan_instance.cc:71-91, ax360e/app/src/main/java/aenu/emulator/Emulator.java:116-122"
+    source_ref: "app/src/main/java/aenu/ax360e/EmulatorSettings.java:732-736, app/src/main/java/aenu/ax360e/Utils.java:165-230, app/src/main/cpp/xenia-canary/src/xenia/ui/vulkan/vulkan_instance.cc:34, app/src/main/cpp/xenia-canary/src/xenia/ui/vulkan/vulkan_instance.cc:71-91, app/src/main/java/aenu/emulator/Emulator.java:116-122"
 
   - name: "<font>.ttf"
     required: false
@@ -107,7 +107,7 @@ files:
       Supplement, Extended Latin, Greek, Cyrillic, punctuation, superscript,
       letterlike and number form ranges. A face that fails to build is cleared and
       the embedded ProggyTiny is used instead, so the absence is covered.
-    source_ref: "ax360e/app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_drawer.cc:42-44, ax360e/app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_drawer.cc:340-374, ax360e/app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_drawer.cc:507-514"
+    source_ref: "app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_drawer.cc:43-45, app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_drawer.cc:355-394, app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_drawer.cc:527-534"
 
   - name: "<title_id> - <title>.patch.toml"
     required: false
@@ -120,7 +120,7 @@ files:
       without them, and each entry of the patch array is applied only when its
       is_enabled flag is set and the module hash matches. Patching is on by
       default.
-    source_ref: "ax360e/app/src/main/cpp/xenia-canary/src/xenia/patcher/patch_db.cc:17-18, ax360e/app/src/main/cpp/xenia-canary/src/xenia/patcher/patch_db.cc:30-98, ax360e/app/src/main/cpp/xenia-canary/src/xenia/patcher/patch_db.h:121-122, ax360e/app/src/main/cpp/xenia-canary/src/xenia/patcher/patcher.cc:22-35, ax360e/app/src/main/cpp/xenia-canary/src/xenia/emulator.cc:308"
+    source_ref: "app/src/main/cpp/xenia-canary/src/xenia/patcher/patch_db.cc:17-18, app/src/main/cpp/xenia-canary/src/xenia/patcher/patch_db.cc:30-98, app/src/main/cpp/xenia-canary/src/xenia/patcher/patch_db.h:121-122, app/src/main/cpp/xenia-canary/src/xenia/patcher/patcher.cc:22-35, app/src/main/cpp/xenia-canary/src/xenia/emulator.cc:308"
 
   - name: plugins.toml
     required: false
@@ -132,7 +132,7 @@ files:
       name is eight hexadecimal digits. Each entry of the plugin array needs a
       hash node, and an entry without one is skipped. Plugin loading is off by
       default, so nothing under plugins is scanned until it is turned on.
-    source_ref: "ax360e/app/src/main/cpp/xenia-canary/src/xenia/patcher/plugin_loader.cc:16-21, ax360e/app/src/main/cpp/xenia-canary/src/xenia/patcher/plugin_loader.cc:40-127, ax360e/app/src/main/cpp/xenia-canary/src/xenia/emulator.cc:320-321"
+    source_ref: "app/src/main/cpp/xenia-canary/src/xenia/patcher/plugin_loader.cc:16-21, app/src/main/cpp/xenia-canary/src/xenia/patcher/plugin_loader.cc:40-127, app/src/main/cpp/xenia-canary/src/xenia/emulator.cc:324-325"
 
   - name: "<plugin>.xex"
     required: false
@@ -142,7 +142,7 @@ files:
       The title directory is mounted as the plugins device and each enabled entry
       whose hash matches the running module is loaded as a user module on its own
       thread. A directory that cannot be mounted is a fatal error.
-    source_ref: "ax360e/app/src/main/cpp/xenia-canary/src/xenia/patcher/plugin_loader.cc:175-257, ax360e/app/src/main/cpp/xenia-canary/src/xenia/emulator.cc:1996-1999"
+    source_ref: "app/src/main/cpp/xenia-canary/src/xenia/patcher/plugin_loader.cc:175-257, app/src/main/cpp/xenia-canary/src/xenia/emulator.cc:1900-1903"
 
   - name: Account
     required: false
@@ -156,7 +156,7 @@ files:
       bytes carry. The application extracts the one it ships for XUID
       E0300000A360E000 on first run, and the emulator writes its own when a
       profile is created.
-    source_ref: "ax360e/app/src/main/cpp/xenia-canary/src/xenia/kernel/xam/profile_manager.cc:188-230, ax360e/app/src/main/cpp/xenia-canary/src/xenia/kernel/xam/profile_manager.cc:40-68, ax360e/app/src/main/java/aenu/ax360e/Application.java:30-34, ax360e/app/src/main/java/aenu/ax360e/Application.java:92-96"
+    source_ref: "app/src/main/cpp/xenia-canary/src/xenia/kernel/xam/profile_manager.cc:187-229, app/src/main/cpp/xenia-canary/src/xenia/kernel/xam/profile_manager.cc:39-67, app/src/main/java/aenu/ax360e/Application.java:30-34, app/src/main/java/aenu/ax360e/Application.java:92-96"
 
 exclusion_note: >
   Six file loads present in the vendored tree are not reached by this build and
@@ -172,12 +172,12 @@ exclusion_note: >
   by the standalone shader compiler and needs VULKAN_SDK in the environment.
   librenderdoc.so is opened with RTLD_NOLOAD, which returns a handle only when
   the library is already mapped and never reads the file.
-  ref: ax360e/app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_guest_notification.cc:49-60,
-       ax360e/app/src/main/cpp/emulator_ax360e.cpp:356,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_drawer.cc:376-407,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_drawer.cc:409-493,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/base/platform.h:34-37,
-       ax360e/app/src/main/cpp/CMakeLists.txt:91-131,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/app/xenia_main.cc:480,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/ui/vulkan/spirv_tools_context.cc:28-37,
-       ax360e/app/src/main/cpp/xenia-canary/src/xenia/ui/renderdoc_api.cc:35-41
+  ref: app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_guest_notification.cc:49-60,
+       app/src/main/cpp/emulator_ax360e.cpp:359,
+       app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_drawer.cc:396-427,
+       app/src/main/cpp/xenia-canary/src/xenia/ui/imgui_drawer.cc:429-513,
+       app/src/main/cpp/xenia-canary/src/xenia/base/platform.h:34-37,
+       app/src/main/cpp/CMakeLists.txt:92-132,
+       app/src/main/cpp/xenia-canary/src/xenia/app/xenia_main.cc:485,
+       app/src/main/cpp/xenia-canary/src/xenia/ui/vulkan/spirv_tools_context.cc:28-37,
+       app/src/main/cpp/xenia-canary/src/xenia/ui/renderdoc_api.cc:35-48
