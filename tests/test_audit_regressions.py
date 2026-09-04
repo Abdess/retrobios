@@ -184,6 +184,53 @@ class WorkflowRegressions(unittest.TestCase):
                 )
 
 
+class UnreachableCitationRegressions(unittest.TestCase):
+    """A citation must name a place a declared repository can hold.
+
+    kenji-nx carried tmp/es-de/ANDROID.md:470-474, a path from the machine
+    of whoever profiled it. No revision of any declared repository holds it,
+    so profile_sync could only report it missing, every pass, forever. The
+    check is offline and runs on every push.
+    """
+
+    def _hits(self, text: str) -> bool:
+        import validate_schemas
+
+        return bool(validate_schemas._UNREACHABLE_REF.search(" " + text))
+
+    def test_a_scratch_directory_is_rejected(self):
+        self.assertTrue(self._hits("tmp/es-de/ANDROID.md:470-474"))
+
+    def test_an_absolute_path_is_rejected(self):
+        self.assertTrue(self._hits("/home/someone/src/a.c:12"))
+        self.assertTrue(self._hits(r"C:\work\src\a.c:12"))
+
+    def test_a_path_climbing_out_of_the_tree_is_rejected(self):
+        self.assertTrue(self._hits("../outside/src/a.c:12"))
+
+    def test_ordinary_citations_pass(self):
+        for good in (
+            "src/core/main.cpp:210",
+            "libretro.c:5293-5337",
+            "PCE.emu/src/main/Main.cc:80-91",
+            "es-de ANDROID.md:470-474",
+            "see tmp files for details",
+        ):
+            with self.subTest(citation=good):
+                self.assertFalse(self._hits(good))
+
+    def test_the_corpus_carries_none(self):
+        import validate_schemas
+
+        errors = []
+        for path in sorted((ROOT / "emulators").glob("*.yml")):
+            with path.open(encoding="utf-8") as handle:
+                errors.extend(
+                    validate_schemas._unreachable_citations(path, yaml.safe_load(handle))
+                )
+        self.assertEqual(errors, [])
+
+
 class FaqRegressions(unittest.TestCase):
     """The FAQ states facts the code owns; these tie it back to the source.
 

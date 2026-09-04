@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import zipfile
 from pathlib import Path, PurePosixPath
@@ -55,6 +56,7 @@ def _validate_yaml_directory(
             out.append(f"{path.relative_to(ROOT)}: {exc}")
             continue
         out.extend(_errors(validator, data, str(path.relative_to(ROOT))))
+        out.extend(_unreachable_citations(path, data))
     return out
 
 
@@ -129,6 +131,37 @@ def _scan_pack_manifests(dist: Path) -> list[str]:
                     out.extend(_errors(validator, document, label))
         except (OSError, zipfile.BadZipFile) as exc:
             out.append(f"{_label(archive)}: {exc}")
+    return out
+
+
+_UNREACHABLE_REF = re.compile(
+    r"(?:^|[\s,;(])(?:tmp/|/|[A-Za-z]:[\\/]|\.{1,2}/)[\w.\\/+-]*[\w+-]:\d+(?:-\d+)?"
+)
+
+
+def _unreachable_citations(path: Path, document: object) -> list[str]:
+    """Refs naming a place no repository can hold.
+
+    A citation is read against a revision of a declared repository, so a
+    scratch directory, an absolute path or one climbing out of the tree can
+    never resolve and never will. kenji-nx carried tmp/es-de/ANDROID.md:470,
+    a path from whoever profiled it, which profile_sync could only report
+    missing forever.
+    """
+    out: list[str] = []
+    stack: list[object] = [document]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, dict):
+            stack.extend(node.values())
+        elif isinstance(node, list):
+            stack.extend(node)
+        elif isinstance(node, str):
+            for match in _UNREACHABLE_REF.finditer(node):
+                out.append(
+                    f"{path.relative_to(ROOT)}: citation names a path outside "
+                    f"any repository: {match.group().strip(' ,;(')}"
+                )
     return out
 
 

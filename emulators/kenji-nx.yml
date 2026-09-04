@@ -5,7 +5,7 @@ source: "https://git.ryujinx.app/projects/Kenji-NX"
 source_branch: libryujinx_bionic
 upstream: "https://git.ryujinx.app/projects/Ryubing"
 profiled_date: "2026-08-11"
-source_commit: "8d7d8f344cb01257c5bc59bb02a74bb89ab9bb5f"
+source_commit: "53d32a761e61dc8e9b5c0744199a890fc8d934d5"
 core_version: "2.1.0-pr.2"
 display_name: "Nintendo - Switch (Kenji-NX)"
 cores:
@@ -35,7 +35,7 @@ notes: |
   ~/.switch fallback that ReloadKeySet consults in UserProfile mode never fires
   there. games, profiles and system are created under the root on every start.
   ref: src/Ryujinx.Common/Configuration/AppDataManager.cs:11-17,47,50-104,223-230,
-       src/LibKenjinx/LibKenjinx.cs:54-95,
+       src/LibKenjinx/LibKenjinx.cs:59-100,
        src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/MainActivity.kt:264-298
 
   Firmware is installed rather than placed. ContentManager takes a directory, a
@@ -46,7 +46,7 @@ notes: |
   homebrew NRO goes through ProcessLoader without touching the key set, and the
   failure is deferred to the first service that needs a system archive.
   ref: src/Ryujinx.HLE/FileSystem/ContentManager.cs:431-498,675-749,893-903,
-       src/LibKenjinx/Android/JniExportedMethods.cs:459-495,
+       src/LibKenjinx/Android/JniExportedMethods.cs:462-498,
        src/Ryujinx.HLE/Loaders/Processes/ProcessLoader.cs:189-205
 
   Two read paths belong to the desktop build alone, because the Android build
@@ -59,7 +59,7 @@ notes: |
   key_retail.bin, while the Android entry buffers the raw tag in
   KenjinxAmiiboShim and INfp reads the figure id straight out of offset 0x1DC.
   ref: src/LibKenjinx/LibKenjinx.csproj:11-13,
-       src/LibKenjinx/Android/JniExportedMethods.cs:347-348,1046-1060,
+       src/LibKenjinx/Android/JniExportedMethods.cs:350-351,1049-1063,
        src/LibKenjinx/LibKenjinx.Input.cs:28-39,
        src/Ryujinx.HLE/Kenjinx/AmiiboBridge.cs:10-44,
        src/Ryujinx.HLE/HOS/Services/Nfc/Nfp/NfpManager/KenjinxAmiiboShim.cs:15-41,
@@ -79,7 +79,7 @@ notes: |
   under the Nintendo notice of 2026-02-12, and both the source and the builds
   are served by the Forgejo instance, which is where ES-DE points as well.
   ref: https://github.com/github/dmca/blob/master/2026/02/2026-02-12-nintendo.md,
-       tmp/es-de/ANDROID.md:470-474
+       es-de ANDROID.md:470-474
 
 files:
   - name: prod.keys
@@ -142,7 +142,7 @@ files:
       of title 0100000000000809. The NCAs are then registered under
       bis/system/Contents/registered and read from there, never as loose files.
       No digest of the package itself is compared against anything.
-    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:431-498,675-749,751-1045, src/LibKenjinx/Android/JniExportedMethods.cs:459-495, src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/SettingsViewModel.kt:308-364"
+    source_ref: "src/Ryujinx.HLE/FileSystem/ContentManager.cs:431-498, 675-749, 751-1045, src/LibKenjinx/Android/JniExportedMethods.cs:462-498, src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/SettingsViewModel.kt:308-364"
 
   - name: key_retail.bin
     required: false
@@ -183,7 +183,7 @@ files:
       Android slots read the bytes through the content resolver and buffer them
       for the NFP service, which takes the figure id from offset 0x1DC without
       decrypting anything.
-    source_ref: "src/Ryujinx.HLE/HOS/Horizon.cs:355-363, src/Ryujinx.HLE/HOS/Services/Nfc/AmiiboDecryption/AmiiboBinReader.cs:22-44,151-283, src/LibKenjinx/LibKenjinx.cs:700-729, src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/views/GameViews.kt:328-349"
+    source_ref: "src/Ryujinx.HLE/HOS/Horizon.cs:355-363, src/Ryujinx.HLE/HOS/Services/Nfc/AmiiboDecryption/AmiiboBinReader.cs:22-44, 151-283, src/LibKenjinx/LibKenjinx.cs:705-734, src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/views/GameViews.kt:328-349"
 
   - name: "<CaCertificateId>.der"
     required: false
@@ -211,7 +211,7 @@ files:
       because the external filesystem cannot carry an executable mapping, loaded
       through the rootless Adreno driver loader, and the resulting handle is
       passed to the Vulkan loader. An empty selection uses the system loader.
-    source_ref: "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/VulkanDriverViewModel.kt:13-167, src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/MainViewModel.kt:202-243, src/LibKenjinx/Android/JniExportedMethods.cs:532-555, src/LibKenjinx/VulkanLoader.cs:27-29"
+    source_ref: "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/VulkanDriverViewModel.kt:13-167, src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/MainViewModel.kt:202-243, src/LibKenjinx/Android/JniExportedMethods.cs:535-558, src/LibKenjinx/VulkanLoader.cs:27-29"
 
 # System archives read out of the installed firmware, never as loose files.
 firmware_titles:
