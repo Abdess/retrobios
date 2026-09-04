@@ -1230,6 +1230,7 @@ def build_report(
 
     owners: dict[tuple[str, int | None], tuple[RepoView, str]] = {}
     context: dict[str, object] = {}
+    pin_trees: dict[str, list[str] | None] = {}
 
     def _locate(
         path: str, start: int | None = None, tokens: tuple = ()
@@ -1251,20 +1252,27 @@ def build_report(
         if tail and any(head == v.repo.name for v in views):
             candidates.append(tail)
         if "/" not in path:
-            # A bare filename, the way prose cites files. The HEAD tree of
-            # each repository resolves it when exactly one path carries it.
+            # A bare filename, the way prose cites files. Resolved against the
+            # pin before HEAD: the ref was written at the pin, and a file that
+            # moved since would otherwise be resolved to a HEAD path that does
+            # not exist at the pin, reporting GONE for the one reason it never
+            # should. The rename search then carries the pin path to HEAD.
             for view in views:
-                _, tree = _context_for(view)
-                matches = [
-                    p for p in tree or []
-                    if posixpath.basename(p) == path
-                ]
-                if len(matches) > 1:
-                    matches = narrow_by_cited(matches, cited_dirs)
-                # A few survivors are told apart by the cited line below: a
-                # 266-line Windows configure.ac cannot carry line 754.
-                if len(matches) <= 4:
-                    candidates.extend(m for m in matches if m not in candidates)
+                for tree in (_pin_tree_for(view), _context_for(view)[1]):
+                    matches = [
+                        p for p in tree or []
+                        if posixpath.basename(p) == path
+                    ]
+                    if len(matches) > 1:
+                        matches = narrow_by_cited(matches, cited_dirs)
+                    # A few survivors are told apart by the cited line below: a
+                    # 266-line Windows configure.ac cannot carry line 754.
+                    if len(matches) <= 4:
+                        candidates.extend(
+                            m for m in matches if m not in candidates
+                        )
+                    if matches:
+                        break
         elif not any(
             upstream.fetch_file(v.repo, sha, path, cache_dir, offline) is not None
             for v in views for sha in (v.pin, v.head)
@@ -1338,6 +1346,14 @@ def build_report(
         if key not in owners:
             owners[key] = _locate(path, start, tokens)
         return owners[key]
+
+    def _pin_tree_for(view: RepoView):
+        """Tree at the revision the refs were written against, memoised."""
+        key = view.repo.slug
+        if key not in pin_trees:
+            tree, _ = upstream.list_tree(view.repo, view.pin, cache_dir, offline)
+            pin_trees[key] = tree
+        return pin_trees[key]
 
     def _context_for(view: RepoView):
         key = view.repo.slug

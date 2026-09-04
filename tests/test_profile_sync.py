@@ -1367,6 +1367,47 @@ def _sample_report():
     )
 
 
+class TestBareNameResolvedAtThePin(TestBuildReport):
+    """A bare filename belongs to the revision the ref was written against.
+
+    Resolution searched the HEAD tree only, so a file that moved between the
+    pin and HEAD was resolved to its HEAD path and then read at the pin,
+    where that path does not exist yet: the ref reported GONE for the one
+    reason it should never report, its own success at HEAD. linapple cites
+    Memory.cpp, src/Memory.cpp at its pin and src/apple2/Memory.cpp today.
+    """
+
+    def _tree_per_revision(self):
+        def list_tree(repo, sha, cache_dir, offline=False):
+            return sorted({path for rev, path in self.files if rev == sha}), False
+
+        profile_sync.upstream.list_tree = list_tree
+
+    def test_a_bare_name_follows_the_file_that_moved_after_the_pin(self):
+        self._tree_per_revision()
+        self.files[("pinsha", "src/Memory.cpp")] = ["x", "the cited line", "y"]
+        self.files[("headsha", "src/apple2/Memory.cpp")] = [
+            "pad", "x", "the cited line", "y",
+        ]
+        report = build_report("test", self._profile(["Memory.cpp:2"]), self.dir)
+        part = report.entries[0].parts[0]
+        self.assertNotEqual(
+            part.status, "GONE",
+            "the bare name resolved at HEAD and was then read at the pin",
+        )
+        self.assertEqual(part.new_path, "src/apple2/Memory.cpp")
+
+    def test_a_bare_name_present_at_both_revisions_resolves_once(self):
+        """A resolved bare name reads RENAMED so the recale writes the path."""
+        self._tree_per_revision()
+        self.files[("pinsha", "src/New.cpp")] = ["x", "the cited line"]
+        self.files[("headsha", "src/New.cpp")] = ["x", "the cited line"]
+        report = build_report("test", self._profile(["New.cpp:2"]), self.dir)
+        part = report.entries[0].parts[0]
+        self.assertEqual(part.status, "RENAMED")
+        self.assertEqual(part.new_path, "src/New.cpp")
+
+
 class TestFormatReport(unittest.TestCase):
     def test_header_shows_both_revisions(self):
         text = format_report(_sample_report())
