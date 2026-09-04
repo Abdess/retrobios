@@ -251,7 +251,7 @@ files:
   - name: ekara.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2956"
+    source_ref: "src/mame/tvgames/xavix.cpp:2878"
     contents:
       - name: ekara.bin
         size: 1048576
@@ -261,7 +261,7 @@ files:
   - name: ekaraa.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2905"
+    source_ref: "src/mame/tvgames/xavix.cpp:2879"
     contents:
       - name: ekara2.bin
         size: 1048576
@@ -271,7 +271,7 @@ files:
   - name: ekaraj.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2906"
+    source_ref: "src/mame/tvgames/xavix.cpp:2880"
     contents:
       - name: ekarajapan.bin
         size: 1048576
@@ -281,7 +281,7 @@ files:
   - name: ekarag.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2959"
+    source_ref: "src/mame/tvgames/xavix.cpp:2881"
     contents:
       - name: ekaragermany.bin
         size: 2097152
@@ -291,7 +291,7 @@ files:
   - name: ekaras.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2908"
+    source_ref: "src/mame/tvgames/xavix.cpp:2882"
     contents:
       - name: ekaraspanish.bin
         size: 2097152
@@ -301,7 +301,7 @@ files:
   - name: isinger.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2962"
+    source_ref: "src/mame/tvgames/xavix.cpp:2884"
     contents:
       - name: kr_isinger.bin
         size: 1048576
@@ -311,7 +311,7 @@ files:
   - name: ekaraphs.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2965"
+    source_ref: "src/mame/tvgames/xavix.cpp:2887"
     contents:
       - name: ekaraheadset.bin
         size: 2097152
@@ -321,7 +321,7 @@ files:
   - name: epitch.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:3028"
+    source_ref: "src/mame/tvgames/xavix.cpp:2890"
     contents:
       - name: ekarajapan.bin
         size: 1048576
@@ -331,7 +331,7 @@ files:
   - name: ekaramix.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2919"
+    source_ref: "src/mame/tvgames/xavix.cpp:2893"
     contents:
       - name: ekaramix.bin
         size: 2097152
@@ -342,7 +342,7 @@ files:
   - name: ddrfammt.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2922"
+    source_ref: "src/mame/tvgames/xavix.cpp:2896"
     contents:
       - name: ekara_ddr_ha010_81947.bin
         size: 2097152
@@ -352,7 +352,7 @@ files:
   - name: popira.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2936"
+    source_ref: "src/mame/tvgames/xavix.cpp:2899"
     contents:
       - name: popira.bin
         size: 1048576
@@ -362,7 +362,7 @@ files:
   - name: popirak.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2927"
+    source_ref: "src/mame/tvgames/xavix.cpp:2901"
     contents:
       - name: kr_main.u2
         size: 1048576
@@ -372,7 +372,7 @@ files:
   - name: popira2.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2930"
+    source_ref: "src/mame/tvgames/xavix.cpp:2904"
     contents:
       - name: popira2.bin
         size: 2097152
@@ -382,7 +382,7 @@ files:
   - name: taikodp.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2933"
+    source_ref: "src/mame/tvgames/xavix.cpp:2907"
     contents:
       - name: taikodepopira.bin
         size: 2097152
@@ -392,7 +392,7 @@ files:
   - name: jpopira.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2936"
+    source_ref: "src/mame/tvgames/xavix.cpp:2910"
     contents:
       - name: jumpingpopira.bin
         size: 2097152
@@ -406,7 +406,7 @@ files:
   - name: evio.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2966"
+    source_ref: "src/mame/tvgames/xavix.cpp:2913"
     contents:
       - name: evio.bin
         size: 2097152
@@ -416,7 +416,7 @@ files:
   - name: tak_daig.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2944"
+    source_ref: "src/mame/tvgames/xavix.cpp:2918"
     contents:
       - name: robottransformer_unit.bin
         size: 2097152
@@ -426,7 +426,7 @@ files:
   - name: gcslottv.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2946"
+    source_ref: "src/mame/tvgames/xavix.cpp:2920"
     contents:
       - name: sammyslotunit.bin
         size: 2097152
@@ -436,7 +436,7 @@ files:
   - name: hikara.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2951"
+    source_ref: "src/mame/tvgames/xavix.cpp:2925"
     contents:
       - name: hikara.u3
         size: 1048576
