@@ -3,6 +3,9 @@ type: standalone
 core_classification: community_fork
 source: "https://git.eden-emu.dev/eden-emu/eden"
 upstream: "https://git.eden-emu.dev/eden-emu/eden"
+# git.eden-emu.dev answers 403 to anything that is not a browser, so the
+# Codeberg copy is what keeps this profile checkable.
+source_mirror: "https://codeberg.org/eden-emu/eden"
 profiled_date: "2026-03-26"
 source_commit: "c0ffc900cdf19b9373549c59a7e6b22c33615ea4"
 core_version: "0.1.1"

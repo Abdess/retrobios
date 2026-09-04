@@ -218,6 +218,74 @@ class TestCollectTokens(unittest.TestCase):
         )
 
 
+class TestSourceMirror(unittest.TestCase):
+    """A profile whose forge is gone can name a mirror and stay checkable.
+
+    Nothing else recovers yuzu, suyu or citron: their trees exist, the host
+    that served them does not. The mirror is consulted last so a live
+    primary always decides attribution.
+    """
+
+    def test_mirror_is_declared_after_source_and_upstream(self):
+        profile = {
+            "source": "https://github.com/o/port",
+            "upstream": "https://github.com/o/up",
+            "source_mirror": "https://codeberg.org/o/mirror",
+        }
+        self.assertEqual(
+            [url for _, _, url in profile_sync.declared_repositories(profile)],
+            [
+                "https://github.com/o/port",
+                "https://github.com/o/up",
+                "https://codeberg.org/o/mirror",
+            ],
+        )
+
+    def test_mirror_alone_is_enough(self):
+        profile = {"source_mirror": "https://codeberg.org/o/mirror"}
+        self.assertEqual(
+            profile_sync.declared_repositories(profile),
+            [("source_mirror", "", "https://codeberg.org/o/mirror")],
+        )
+
+    def test_a_profile_without_a_mirror_is_unchanged(self):
+        profile = {"source": "https://github.com/o/port"}
+        self.assertEqual(
+            profile_sync.declared_repositories(profile),
+            [("source", "", "https://github.com/o/port")],
+        )
+
+
+class TestGoneUpstreamIsNotAnError(unittest.TestCase):
+    """A withdrawn forge is reported once, in its own bucket.
+
+    yuzu and suyu answer 451, citron's host no longer resolves. Printing
+    that on stderr every pass is noise nobody can act on, and counting it
+    with real upstream failures hides the forges that are merely having a
+    bad minute.
+    """
+
+    def test_a_gone_forge_is_skipped_not_errored(self):
+        report = ProfileReport(
+            name="yuzu", entries=[], counts={},
+            skipped="upstream gone: https://host/x: HTTP 451, withdrawn for legal reasons",
+        )
+        self.assertEqual(report.needs_review(), 0)
+        self.assertTrue(report.skipped.startswith("upstream gone:"))
+
+    def test_gone_and_failing_forges_land_in_different_buckets(self):
+        gone = ProfileReport(name="a", entries=[], counts={},
+                             skipped="upstream gone: h: HTTP 451, withdrawn for legal reasons")
+        failing = ProfileReport(name="b", entries=[], counts={},
+                                skipped="upstream error: h: HTTP 403")
+        buffer = io.StringIO()
+        with contextlib.redirect_stdout(buffer):
+            profile_sync._print_elided([gone, failing], 0)
+        out = buffer.getvalue()
+        self.assertIn("upstream gone", out)
+        self.assertIn("upstream error", out)
+
+
 class TestWorstStatus(unittest.TestCase):
     def test_gone_beats_everything(self):
         self.assertEqual(worst_status(["ANCHORED", "GONE", "SHIFTED"]), "GONE")

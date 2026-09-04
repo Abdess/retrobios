@@ -7,6 +7,7 @@ import http.client
 import os
 import sys
 import tempfile
+import socket
 import unittest
 import urllib.error
 import urllib.request
@@ -243,6 +244,73 @@ class TestFetchRetry(unittest.TestCase):
         with self.assertRaises(upstream.RateLimitError):
             upstream._fetch("https://host/x")
         self.assertEqual(self.calls, 1)
+
+
+class TestGoneUpstream(unittest.TestCase):
+    """A forge that will not come back is a fact, not a failure to retry.
+
+    yuzu and suyu answer 451, citron's host no longer resolves. Retrying
+    those three times with backoff costs a minute per pass and still ends
+    in the same place, and calling them errors buries the profiles that
+    have something to say.
+    """
+
+    def setUp(self):
+        self._orig = (urllib.request.urlopen, upstream._sleep)
+        self.slept: list[float] = []
+        upstream._sleep = self.slept.append
+        self.calls = 0
+
+    def tearDown(self):
+        urllib.request.urlopen, upstream._sleep = self._orig
+
+    def _serve(self, outcome):
+        def opener(req, timeout=None):
+            self.calls += 1
+            raise outcome
+
+        urllib.request.urlopen = opener
+
+    def test_legal_takedown_is_gone_and_not_retried(self):
+        self._serve(_http_error(451))
+        with self.assertRaises(upstream.GoneError):
+            upstream._fetch("https://host/x")
+        self.assertEqual(self.calls, 1)
+        self.assertEqual(self.slept, [])
+
+    def test_http_gone_is_gone(self):
+        self._serve(_http_error(410))
+        with self.assertRaises(upstream.GoneError):
+            upstream._fetch("https://host/x")
+        self.assertEqual(self.calls, 1)
+
+    def test_unresolvable_host_is_gone_and_not_retried(self):
+        self._serve(
+            urllib.error.URLError(socket.gaierror(-2, "Name or service not known"))
+        )
+        with self.assertRaises(upstream.GoneError):
+            upstream._fetch("https://host/x")
+        self.assertEqual(self.calls, 1)
+        self.assertEqual(self.slept, [])
+
+    def test_a_gone_error_is_still_an_upstream_error(self):
+        self._serve(_http_error(451))
+        with self.assertRaises(upstream.UpstreamError):
+            upstream._fetch("https://host/x")
+
+    def test_refused_request_is_not_gone(self):
+        """403 is a forge refusing a request, which anti-bot filters do."""
+        self._serve(_http_error(403))
+        with self.assertRaises(upstream.UpstreamError) as caught:
+            upstream._fetch("https://host/x")
+        self.assertNotIsInstance(caught.exception, upstream.GoneError)
+
+    def test_a_dropped_connection_is_not_gone(self):
+        self._serve(http.client.RemoteDisconnected("closed"))
+        with self.assertRaises(upstream.UpstreamError) as caught:
+            upstream._fetch("https://host/x")
+        self.assertNotIsInstance(caught.exception, upstream.GoneError)
+        self.assertEqual(self.calls, upstream.RETRIES)
 
 
 class TestCache(unittest.TestCase):

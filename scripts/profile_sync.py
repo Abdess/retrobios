@@ -1004,9 +1004,14 @@ def declared_repositories(profile: dict) -> list[tuple[str, str, str]]:
     `source` and `upstream` are usually plain strings. `ymir` keys them by
     build mode instead, because its standalone and libretro builds live in
     different repositories.
+
+    `source_mirror` comes last and is the only thing that keeps a profile
+    checkable once its forge is gone: yuzu and suyu answer 451, citron's
+    host stopped resolving. Being last, it never decides attribution while
+    a declared repository still answers.
     """
     urls: list[tuple[str, str, str]] = []
-    for field in ("source", "upstream"):
+    for field in ("source", "upstream", "source_mirror"):
         value = profile.get(field)
         if isinstance(value, dict):
             urls.extend((field, str(k), str(v)) for k, v in value.items() if v)
@@ -1274,7 +1279,7 @@ def build_report(
                     if matches:
                         break
         elif not any(
-            upstream.fetch_file(v.repo, sha, path, cache_dir, offline) is not None
+            fetch_from(v.repo, sha, path) is not None
             for v in views for sha in (v.pin, v.head)
         ):
             # A path written from a subproject directory of a monorepo:
@@ -1319,16 +1324,12 @@ def build_report(
         for candidate in candidates:
             for sha_of in (lambda v: v.pin, lambda v: v.head):
                 for view in views:
-                    found = upstream.fetch_file(
-                        view.repo, sha_of(view), candidate, cache_dir, offline
-                    )
+                    found = fetch_from(view.repo, sha_of(view), candidate)
                     if found is None:
                         continue
                     target = symlink_target(candidate, found)
                     if target:
-                        found = upstream.fetch_file(
-                            view.repo, sha_of(view), target, cache_dir, offline
-                        )
+                        found = fetch_from(view.repo, sha_of(view), target)
                         if found is None:
                             continue
                         candidate = target
@@ -1354,6 +1355,33 @@ def build_report(
             tree, _ = upstream.list_tree(view.repo, view.pin, cache_dir, offline)
             pin_trees[key] = tree
         return pin_trees[key]
+
+    mute: set[tuple[str, str]] = set()
+
+    def fetch_from(repo, sha, wanted):
+        """Read a file, treating a repository that refuses as one that lacks it.
+
+        A profile can name several repositories, and a mirror exists exactly
+        because one of them stopped answering: git.eden-emu.dev returns 403 to
+        anything that is not a browser. Letting the first refusal abort the
+        report leaves the mirror unread and the profile unverifiable, so the
+        repository is muted for the rest of the pass instead. A quota signal
+        still stops everything, because continuing would only burn the rest of
+        the budget on the same wall.
+        """
+        # Keyed by host as well as slug: a mirror carries the same slug on
+        # another forge, and muting one must not silence the other.
+        key = (repo.host, repo.slug)
+        if key in mute:
+            return None
+        try:
+            return upstream.fetch_file(repo, sha, wanted, cache_dir, offline)
+        except upstream.RateLimitError:
+            raise
+        except upstream.UpstreamError as exc:
+            mute.add(key)
+            print(f"{name}: {repo.host}/{repo.slug} muted, {exc}", file=sys.stderr)
+            return None
 
     def _context_for(view: RepoView):
         key = view.repo.slug
@@ -1409,9 +1437,14 @@ def build_report(
                 (forced, path) if forced else resolve_path(path, start, tokens)
             )
             sha = view.pin if which == PIN else view.head
-            lines_cache[key] = upstream.fetch_file(
-                view.repo, sha, actual, cache_dir, offline
-            )
+            found = fetch_from(view.repo, sha, actual)
+            if found is None:
+                # Not cached: the miss may be a repository that has just been
+                # muted, and the next call resolves the path to a mirror that
+                # does carry it. upstream.fetch_file holds its own cache, so
+                # asking again costs a lookup rather than a request.
+                return None
+            lines_cache[key] = found
         return lines_cache[key]
 
     def describe(path: str, start=None, tokens=(), forced=None):
@@ -1431,9 +1464,7 @@ def build_report(
         """
         best = None
         for view in views:
-            if upstream.fetch_file(
-                view.repo, view.pin, part.path, cache_dir, offline
-            ) is None:
+            if fetch_from(view.repo, view.pin, part.path) is None:
                 continue
             result = anchor_part(
                 part,
@@ -2780,6 +2811,14 @@ def main() -> None:
             report = build_report(name, profile, args.cache_dir, args.offline)
         except upstream.RateLimitError:
             raise
+        except upstream.GoneError as exc:
+            # The forge is not coming back: a takedown, or a host that no
+            # longer resolves. Saying so once in the summary beats repeating
+            # it on stderr every pass, and it keeps the profile out of the
+            # backlog, where nobody can act on it anyway.
+            report = ProfileReport(
+                name=name, entries=[], counts={}, skipped=f"upstream gone: {exc}"
+            )
         except upstream.UpstreamError as exc:
             # One unreachable forge must not abandon the other profiles.
             print(f"{name}: {exc}", file=sys.stderr)

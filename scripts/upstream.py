@@ -11,6 +11,7 @@ import hashlib
 import http.client
 import json
 import os
+import socket
 import tempfile
 import time
 import urllib.error
@@ -67,6 +68,17 @@ class UpstreamError(Exception):
 
 class RateLimitError(UpstreamError):
     """The forge refused the request for quota reasons."""
+
+
+class GoneError(UpstreamError):
+    """The upstream is not coming back.
+
+    A legal takedown, a resource the forge reports as gone, or a host that
+    no longer resolves. Retrying costs time and ends in the same place, and
+    a caller sweeping every profile wants this told apart from a forge
+    having a bad minute: one is a fact about the project, the other is
+    weather.
+    """
 
 
 @dataclass(frozen=True)
@@ -161,11 +173,31 @@ def _http_failure(url: str, exc: urllib.error.HTTPError) -> UpstreamError:
     """
     if exc.code == 429:
         return RateLimitError(f"{url}: HTTP 429")
+    if exc.code in (410, 451):
+        reason = "withdrawn for legal reasons" if exc.code == 451 else "gone"
+        return GoneError(f"{url}: HTTP {exc.code}, {reason}")
     if exc.code == 403 and exc.headers is not None:
         remaining = exc.headers.get("X-RateLimit-Remaining")
         if remaining is not None and remaining.strip() == "0":
             return RateLimitError(f"{url}: HTTP 403, quota exhausted")
     return UpstreamError(f"{url}: HTTP {exc.code}")
+
+
+def _host_is_unresolvable(exc: BaseException) -> bool:
+    """Whether a connection failure is the name itself, not the network.
+
+    URLError carries the cause in `reason`, and a wrapped one carries it in
+    `__cause__`; the walk is bounded because either chain can be cyclic.
+    """
+    seen: BaseException | None = exc
+    for _ in range(8):
+        if seen is None:
+            break
+        if isinstance(seen, socket.gaierror):
+            return True
+        nested = getattr(seen, "reason", None)
+        seen = nested if isinstance(nested, BaseException) else seen.__cause__
+    return False
 
 
 def _fetch(url: str, accept_json: bool = False) -> bytes | None:
@@ -188,6 +220,8 @@ def _fetch(url: str, accept_json: bool = False) -> bytes | None:
             if isinstance(failure, RateLimitError) or exc.code < 500:
                 raise failure from exc
         except (urllib.error.URLError, http.client.HTTPException, OSError) as exc:
+            if _host_is_unresolvable(exc):
+                raise GoneError(f"{url}: host does not resolve") from exc
             failure = UpstreamError(f"{url}: {exc}")
         if attempt + 1 < RETRIES:
             _sleep(RETRY_BACKOFF[attempt])
