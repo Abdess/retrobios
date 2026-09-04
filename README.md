@@ -29,7 +29,7 @@ The script auto-detects your platform, downloads only missing files, and verifie
 
 ## Download BIOS packs
 
-Pick your platform, download the ZIP, extract to the BIOS path.
+One pack per platform, and it holds everything the platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. The installer above does the same file by file, and `--target` narrows it to one machine; for a region or a bare minimum, build your own pack below.
 The size is what the files occupy once extracted; the ZIP itself downloads smaller, and anything over 2 GB arrives split into `.zip.001`, `.zip.002` volumes. Open the `.001` with 7-Zip or PeaZip, or join them first (`cat Pack.zip.0* > Pack.zip`, or `copy /b Pack.zip.001+Pack.zip.002 Pack.zip` on Windows).
 
 | Platform | Extracted size | Extract to | Download |
@@ -98,7 +98,7 @@ Checked by is the test your platform runs on its own, replicated here from its s
 Clone the repo and generate packs for any platform, emulator, or system:
 
 ```bash
-# Full platform pack
+# The pack of a platform, as released
 python scripts/generate_pack.py --platform retroarch --output-dir dist/
 python scripts/generate_pack.py --platform batocera --output-dir dist/
 
@@ -165,4 +165,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-09-04T01:36:37Z*
+*Auto-generated on 2026-09-04T02:08:41Z*

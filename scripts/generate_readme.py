@@ -296,7 +296,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "",
         "## Download BIOS packs",
         "",
-        "Pick your platform, download the ZIP, extract to the BIOS path.",
+        "One pack per platform, and it holds everything the platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. The installer above does the same file by file, and `--target` narrows it to one machine; for a region or a bare minimum, build your own pack below.",
         "The size is what the files occupy once extracted; the ZIP itself"
         " downloads smaller, and anything over 2 GB arrives split into"
         " `.zip.001`, `.zip.002` volumes. Open the `.001` with 7-Zip or"
@@ -490,7 +490,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             "Clone the repo and generate packs for any platform, emulator, or system:",
             "",
             "```bash",
-            "# Full platform pack",
+            "# The pack of a platform, as released",
             "python scripts/generate_pack.py --platform retroarch --output-dir dist/",
             "python scripts/generate_pack.py --platform batocera --output-dir dist/",
             "",

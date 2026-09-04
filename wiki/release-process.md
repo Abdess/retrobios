@@ -138,25 +138,20 @@ pipeline runs here, the archives are checked here, and `gh` uploads them.
 # 1. Full pipeline, online, so data directories and MAME/FBNeo hashes are fresh
 python scripts/pipeline.py
 
-# 2. The platform-only packs, and RetroPie, which is archived but still served
-python scripts/generate_pack.py --all --source platform --output-dir dist/
+# 2. RetroPie, which is archived but still served
 python scripts/generate_pack.py --platform retropie --output-dir dist/
-python scripts/generate_pack.py --platform retropie --source platform --output-dir dist/
+python scripts/generate_pack.py --platform retropie --verify-packs --output-dir dist/
 
-# 3. The standalone emulators that no frontend bundles
-python scripts/generate_pack.py --emulator mesence --output-dir dist/
-python scripts/generate_pack.py --emulator lexaloffle --output-dir dist/
+# 3. Checksums of the full ZIPs, before splitting
+(cd dist && sha256sum *.zip > SHA256SUMS.txt)
 
-# 4. Every archive in dist/ extracted and hashed the way its platform checks it
-python scripts/generate_pack.py --all --verify-packs --output-dir dist/
-
-# 5. Split anything over 2 GB (GitHub asset cap); 7-Zip and PeaZip open .001 directly
+# 4. Split anything over 2 GB (GitHub asset cap); 7-Zip and PeaZip open .001 directly
 for f in dist/*.zip; do
   [ "$(stat -c%s "$f")" -gt 2000000000 ] || continue
   split --bytes=1900M --numeric-suffixes=1 --suffix-length=3 "$f" "$f." && rm "$f"
 done
 
-# 6. Create the release, then keep the three most recent plus large-files
+# 5. Create the release, then keep the three most recent plus large-files
 DATE=$(date +%Y.%m.%d)
 gh release create "v${DATE}" dist/*.zip* dist/SHA256SUMS.txt \
   --title "BIOS Pack v${DATE}" --notes-file notes.md --latest
@@ -165,8 +160,10 @@ gh release list --json tagName,createdAt \
   | tail -n +4 | while read tag; do gh release delete "$tag" --yes --cleanup-tag; done
 ```
 
-The release notes follow the previous release: the quick install commands, the
-full and platform pack tables with file counts and sizes, the standalone
-packs, what changed since the previous tag, and the contributors of the
-closed issues. `SHA256SUMS.txt` lists the checksums of the full ZIPs before
-splitting.
+One pack per platform, the full one: the platform's list plus everything its
+cores load. Platform-only and per-emulator packs are build options, not
+release assets, since a lighter pack means a core that fails with no message.
+The release notes follow the previous release: the quick install commands,
+the pack table with file counts and sizes, what changed since the previous
+tag, and the contributors of the closed issues. `SHA256SUMS.txt` lists the
+checksums of the full ZIPs before splitting.

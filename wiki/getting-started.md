@@ -75,8 +75,8 @@ bash scripts/download.sh --list  # show available packs
 
 Packs over 2 GB are split into numbered volumes (`.zip.001`, `.zip.002`).
 Download every part and open the `.001` file with 7-Zip or PeaZip, which
-extracts the whole set. See [Download](../which-pack.md) for the pack
-variants and per-setup instructions.
+extracts the whole set. See [Download](../which-pack.md) for the
+per-setup instructions.
 
 ## BIOS directory by platform
 

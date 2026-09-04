@@ -3476,26 +3476,22 @@ extract the whole archive directly. To join the parts manually instead:
 
 ---
 
-## Full pack or Platform pack?
+## One pack per platform
 
-Each platform has two pack types on the [latest release]({rel}).
+The [latest release]({rel}) carries one pack for each platform, and that
+pack holds everything the platform runs: the BIOS list it publishes, plus
+every file its emulator cores load, read from their source code. There is no
+lighter variant to choose, because a pack that leaves out a file a core needs
+means a game that does not boot, with no message saying why. It is not a
+guarantee either: source profiles can document files nobody has dumped or
+that only the user can provide, all of them visible in the
+[gap analysis](gaps.md).
 
-**Full pack** (recommended)
-
-Contains the platform's own BIOS list plus all files needed by each
-emulator core available on that platform. This covers alternate cores,
-optional firmware that improves accuracy, and edge cases. Larger download,
-and the best default when storage is not constrained. It is not a guarantee:
-source profiles can document missing, user-provided or unsourceable files, all
-of which remain visible in the [gap analysis](gaps.md).
-
-**Platform pack**
-
-Contains only the files the platform officially checks for. Much smaller
-download. Good for limited storage (SD cards, handhelds) or setups that
-only use default cores.
-
-When in doubt, take the full pack and verify it against the platform page.
+Want less than everything? The installer takes `--target switch` to install
+only what one machine's cores need. From a clone of the repository,
+`python scripts/generate_pack.py --platform retroarch --region us` keeps one
+BIOS per region and `--required-only` the bare minimum each core needs to
+start; `--help` lists every way to build your own.
 
 ---
 
