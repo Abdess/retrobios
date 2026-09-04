@@ -345,6 +345,14 @@ python scripts/profile_sync.py --all --rebase-refs --bump-commit --dry-run
 python scripts/profile_sync.py --all --rebase-refs --bump-commit
 ```
 
+Asking for both makes the pass atomic. The work happens on a copy, and the
+copy is promoted only when the pin follows the refs; a profile whose refs
+describe one revision while its pin names another is the state the
+all-or-nothing rule exists to prevent, and recaling alone produces it. What
+holds a pin back is an annotated ref, one under a mode key, or a prose run the
+pass cannot rewrite without guessing: those are repaired first, by hand or
+with `--realign-prose`.
+
 The first prints the plan and changes nothing: `would recale` per ref and
 `would set source_commit` per profile. It reaches that plan by running the
 real write path over a throwaway copy, so the planned bump reads the text

@@ -2093,6 +2093,33 @@ def _replace_spans(line: str, replacements: list[tuple[int, int, str]]) -> str:
     return line
 
 
+def blocks_the_pin(report: ProfileReport, accept_changed: bool = False) -> int:
+    """What would keep source_commit where it is after a recale.
+
+    Two kinds. A ref the writer never regenerates, annotated or under a mode
+    key, whose parts have moved. And a prose run whose tokens cannot be
+    located well enough to rewrite, which stays describing the pinned
+    revision whatever else moves. Either one makes bump_commit refuse, so
+    either one has to stop the recale as well.
+    """
+    movable = REBASE_STATUSES + (("CHANGED",) if accept_changed else ())
+    blocked = pending_recale(report, accept_changed)
+    for entry in report.entries or []:
+        if entry.kind != "prose" or _prose_moves(entry, movable):
+            continue
+        if any(
+            part.status in movable
+            and part.start is not None
+            and (
+                (part.start, part.end) != (part.part.start, part.part.end)
+                or part.new_path
+            )
+            for part in entry.parts
+        ):
+            blocked += 1
+    return blocked
+
+
 def rebase_refs(
     path: Path, report: ProfileReport, accept_changed: bool = False
 ) -> list[str]:
@@ -2110,6 +2137,13 @@ def rebase_refs(
     statuses = REBASE_STATUSES + (("CHANGED",) if accept_changed else ())
     blocking = [s for s in REVIEW_STATUSES if s not in statuses]
     if any((report.counts or {}).get(s) for s in blocking):
+        return []
+    if blocks_the_pin(report, accept_changed):
+        # Something here will not move: an annotated ref, one under a mode
+        # key, or a prose run this pass cannot rewrite without guessing.
+        # bump_commit will refuse while it stands, and recaling the rest
+        # would leave the profile describing two revisions at once. All or
+        # nothing means the pin too, not only the refs.
         return []
     text = path.read_text(encoding="utf-8")
     document = yaml.safe_load(text)
@@ -2603,22 +2637,38 @@ def _apply_writes(args, name: str, profile: dict, report: ProfileReport) -> None
             print(f"{name}: source_commit {report.pin[:7]}")
     if not (args.rebase_refs or args.bump_commit):
         return
-    with contextlib.ExitStack() as stack:
-        if args.dry_run:
-            # Plan on a copy through the production write path rather than a
-            # parallel branch: the bump then reads the text the rebase would
-            # have left, which is the only text under which it is reachable.
-            scratch = stack.enter_context(tempfile.TemporaryDirectory())
-            target = Path(scratch) / path.name
-            target.write_bytes(path.read_bytes())
-            recale, bumped = "would recale ", "would set source_commit ->"
-        else:
-            target, recale, bumped = path, "", "source_commit ->"
+    both = args.rebase_refs and args.bump_commit
+    with tempfile.TemporaryDirectory() as scratch:
+        # Always work on a copy. A dry run reports what it left there; a real
+        # run promotes it. Asking for both writes makes the pass atomic: the
+        # pin has to follow the refs or neither moves, because a profile whose
+        # refs describe one revision and whose pin names another is exactly
+        # what the all-or-nothing rule exists to prevent.
+        target = Path(scratch) / path.name
+        target.write_bytes(path.read_bytes())
+        recale, bumped = (
+            ("would recale ", "would set source_commit ->") if args.dry_run
+            else ("", "source_commit ->")
+        )
+        applied = []
         if args.rebase_refs and not report.skipped:
-            for line in rebase_refs(target, report, args.accept_changed):
-                print(f"{name}: {recale}{line}")
-        if args.bump_commit and bump_commit(target, report, args.accept_changed):
+            applied = rebase_refs(target, report, args.accept_changed)
+        moved = bool(args.bump_commit) and bump_commit(
+            target, report, args.accept_changed
+        )
+        if both and applied and not moved:
+            print(
+                f"{name}: refs recaled but the pin will not follow, so nothing "
+                "was written; the prose or an annotated ref has to move first",
+                file=sys.stderr,
+            )
+            return
+        for line in applied:
+            print(f"{name}: {recale}{line}")
+        if moved:
             print(f"{name}: {bumped} {report.head[:7]}")
+        if not args.dry_run and (applied or moved):
+            path.write_bytes(target.read_bytes())
 
 
 def _cited_paths(report: ProfileReport) -> list[str]:

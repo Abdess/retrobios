@@ -2145,6 +2145,77 @@ class TestWriteDryRun(unittest.TestCase):
         self.assertEqual(self.path.read_text(), before)
 
 
+class TestRebaseWaitsForThePin(unittest.TestCase):
+    """Recaling refs the pin cannot follow manufactures the desync.
+
+    An annotated ref is never rewritten, because regenerating it would drop
+    the author's prose, so its parts stay on the pinned line numbers and
+    bump_commit refuses. Moving the other refs anyway leaves the profile
+    describing two revisions at once, which is the state the all-or-nothing
+    rule exists to prevent. mariani was left in it.
+    """
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.path = Path(self.tmp.name) / "p.yml"
+        self.path.write_text(SAMPLE, encoding="utf-8")
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def _report(self, entries, counts):
+        return ProfileReport(
+            name="p", repo="o/n", pin="pin", head="head",
+            entries=entries, counts=counts,
+        )
+
+    def test_nothing_moves_while_an_annotated_ref_holds_the_pin(self):
+        movable = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 30, 32, [])
+        stuck = PartResult(
+            RefPart("b.c", 5, 5, "b.c:5"), "SHIFTED", None, 9, 9, []
+        )
+        report = self._report(
+            [
+                EntryReport("a.bin", "a.c:10-12", "SHIFTED", [movable]),
+                EntryReport("b.bin", "b.c:5, (just a note)", "SHIFTED", [stuck]),
+            ],
+            {"SHIFTED": 2},
+        )
+        self.assertTrue(profile_sync.pending_recale(report))
+        self.assertEqual(rebase_refs(self.path, report), [])
+        self.assertIn('source_ref: "a.c:10-12"', self.path.read_text())
+
+    def test_asking_for_both_writes_nothing_when_the_pin_cannot_follow(self):
+        """The pass is atomic: refs and pin move together or not at all."""
+        movable = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 30, 32, [])
+        report = self._report(
+            [EntryReport("a.bin", "a.c:10-12", "SHIFTED", [movable])],
+            {"SHIFTED": 1},
+        )
+        report.head = None  # bump_commit refuses without a head
+        before = self.path.read_text()
+        args = argparse.Namespace(
+            emulators_dir=str(self.path.parent), backfill_commits=False,
+            rebase_refs=True, bump_commit=True, accept_changed=False,
+            dry_run=False,
+        )
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            profile_sync._apply_writes(args, "p", yaml.safe_load(SAMPLE), report)
+        self.assertEqual(self.path.read_text(), before)
+        self.assertIn("nothing was written", err.getvalue())
+        self.assertNotIn("a.c:30-32", out.getvalue())
+
+    def test_a_profile_the_pin_can_follow_still_moves(self):
+        movable = PartResult(RefPart("a.c", 10, 12), "SHIFTED", None, 30, 32, [])
+        report = self._report(
+            [EntryReport("a.bin", "a.c:10-12", "SHIFTED", [movable])],
+            {"SHIFTED": 1},
+        )
+        self.assertFalse(profile_sync.pending_recale(report))
+        self.assertEqual(rebase_refs(self.path, report), ["a.c:10-12 -> a.c:30-32"])
+
+
 class TestBumpCommit(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
