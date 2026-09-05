@@ -4,7 +4,7 @@ core_classification: other
 source: "https://github.com/jsgroth/jgenesis"
 upstream: "https://github.com/jsgroth/jgenesis"
 profiled_date: "2026-08-08"
-source_commit: "aba5813336765825e3e96b3059cfe49173c4faa5"
+source_commit: "0b26611fa23007f2632d32b7cdbdb6369b01eb91"
 core_version: "0.14.0"
 display_name: "Multi-System (jgenesis)"
 cores:
@@ -28,7 +28,7 @@ notes: |
   Multi-system emulator written in Rust by James Groth. One binary covers
   thirteen hardware modes: Master System, Game Gear, SG-1000, Genesis, Sega CD,
   32X, Sega CD 32X, NES, SNES, Game Boy, Game Boy Color, Game Boy Advance and
-  PC Engine (frontend/jgenesis-native-driver/src/extensions.rs:172-186).
+  PC Engine (frontend/jgenesis-native-driver/src/extensions.rs:172-187).
 
   No path is hardcoded. Every BIOS, boot ROM and coprocessor ROM is an
   Option<PathBuf> in the config, defaulting to None and set through a file
@@ -41,8 +41,8 @@ notes: |
 
   Sega CD selects the BIOS by disc region and per_region_bios defaults to true,
   so the US, European and Japanese images are each reachable
-  (frontend/jgenesis-native-driver/src/mainloop/genesis.rs:233-262,
-  frontend/jgenesis-native-config/src/genesis.rs:115). Setting "Use US BIOS for
+  (frontend/jgenesis-native-driver/src/mainloop/genesis.rs:230-259,
+  frontend/jgenesis-native-config/src/genesis.rs:117). Setting "Use US BIOS for
   all regions" collapses all three onto the US slot.
 
   SNES coprocessor ROMs use the merged layout, program ROM followed by data ROM
@@ -82,7 +82,7 @@ files:
     mode: standalone
     size: 131072
     validation: [size]
-    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:41-51 (read), :256-262 (bios_path_for_region), backend/segacd-core/src/api.rs:77-79 (BIOS_LEN check)"
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:40-50 (read), frontend/jgenesis-native-driver/src/mainloop/genesis.rs:253-259 (bios_path_for_region), backend/segacd-core/src/api.rs:77-79 (BIOS_LEN check)"
     note: "Selected when the disc region is Americas, and for every region when per_region_bios is off."
 
   - name: "bios_CD_E.bin"
@@ -93,7 +93,7 @@ files:
     mode: standalone
     size: 131072
     validation: [size]
-    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:256-262 (eu_bios_path), backend/segacd-core/src/api.rs:77-79"
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:253-259 (eu_bios_path), backend/segacd-core/src/api.rs:77-79"
 
   - name: "bios_CD_J.bin"
     system: sega-megacd
@@ -103,7 +103,7 @@ files:
     mode: standalone
     size: 131072
     validation: [size]
-    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:256-262 (jp_bios_path), backend/segacd-core/src/api.rs:77-79"
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:253-259 (jp_bios_path), backend/segacd-core/src/api.rs:77-79"
 
   # -------------------------------------------------------
   # Game Boy Advance
@@ -228,7 +228,7 @@ files:
     min_size: 2048
     max_size: 2304
     validation: [size]
-    source_ref: "frontend/jgenesis-native-driver/src/mainloop/gb.rs:34-38,77-89, backend/gb-core/src/memory.rs:10,45-63,168 (CGB_BOOT_ROM_LEN check and pad_cgb_boot_rom)"
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/gb.rs:34-38, 77-89, backend/gb-core/src/memory.rs:10, 45-63, backend/gb-core/src/memory.rs:164 (CGB_BOOT_ROM_LEN check and pad_cgb_boot_rom)"
     note: "Loaded only when cgb_boot_rom is enabled, off by default. 2304 bytes is taken as is, 2048 bytes gets the filler page inserted."
 
   # -------------------------------------------------------
