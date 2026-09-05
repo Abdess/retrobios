@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/garglk/garglk"
 upstream: "https://github.com/garglk/garglk"
 profiled_date: "2026-08-08"
-source_commit: "5717fbf3f9d6f2341773d0cc03f19d96c463af72"
+source_commit: "520c3cbca2d8956d9f4b7e4e9ca2a92dce59778d"
 core_version: "2026.1"
 display_name: "Interactive Fiction (Gargoyle)"
 cores:
@@ -31,7 +31,7 @@ notes: |
   shipping one interpreter binary per story format. The gargoyle binary reads
   the first 32 bytes of the file, matches it against a magic-number table,
   falls back to the extension, and executes the matching interpreter.
-  ref: garglk/launcher.cpp:100-177 (probe, extensions, interpreters), 379-419 (rungame)
+  ref: garglk/launcher.cpp:114-189 (probe, extensions, interpreters), 379-419 (rungame)
 
   Formats and the interpreter each one runs: Adrift 4 and Adrift 5 both
   default to scarier, which handles the two; scare takes Adrift 4 and
@@ -41,13 +41,13 @@ notes: |
   Scrolls (magnetic), Scott Adams Graphic Adventures Plus (plus), Scott Adams
   (scott), TADS 2 and 3 (tadsr), TaylorMade (taylor), Z-machine (bocfel).
   Blorb files are unwrapped first and dispatched on the Exec chunk type.
-  ref: garglk/launcher.cpp:45-60 (interpreter names), 276-328 (runblorb)
+  ref: garglk/launcher.cpp:50-74 (interpreter names), 276-328 (runblorb)
 
   Adrift 5 needs the FrankenDrift runner, a .NET build option that is off by
   default, including in the official AppImage. Without it the launcher reports
   that Adrift 5 is unsupported and stops.
-  ref: CMakeLists.txt:63 (WITH_FRANKENDRIFT), gargoyle-appimage.sh:14,
-       garglk/launcher.cpp:160-162,202-206
+  ref: CMakeLists.txt:77 (WITH_FRANKENDRIFT), gargoyle-appimage.sh:14,
+       garglk/launcher.cpp:174-175,212
 
   Every glyph is drawn through FreeType rather than by the operating system,
   so a font file has to be reachable. The default config asks for the families
@@ -55,8 +55,8 @@ notes: |
   interpreter loads the shipped TTF files by name from the data directory,
   then the executable directory, then the working directory, and calls
   winabort() when all three miss.
-  ref: garglk.h:661-662 (defaults), garglk.ini:195,198, fontfc.cpp:83-154
-       (fontconfig lookup), draw.cpp:260-287 (path fallbacks), 300-350
+  ref: garglk/garglk.h:675-676 (defaults), garglk/garglk.ini:205,208, garglk/fontfc.cpp:83-154
+       (fontconfig lookup), garglk/draw.cpp:381-408 (path fallbacks), 300-350
        (make_font, abort), 490-498 (file names)
 
   Gargoyle Serif is Charis SIL and Gargoyle Mono is Go Mono, both renamed so
@@ -71,28 +71,28 @@ notes: |
   and themes in its themes subdirectory. macOS keeps the eight Gargoyle faces
   in Resources/Fonts and Unifont in Resources; the Windows installer also
   registers the eight faces as system fonts.
-  ref: sysqt.cpp:898-942, sysmac.mm:986-1003, garglk/CMakeLists.txt:136,144,
-       510-534, gargoyle_osx.sh:120-121,207-209, installer.nsi:89-90,200-207
+  ref: garglk/sysqt.cpp:931-975, garglk/sysmac.mm:1001-1018, garglk/CMakeLists.txt:137,145,
+       510-534, gargoyle_osx.sh:124-125,211-213, installer.nsi:89-90,208-215
 
   Themes are read from every *.json in the theme directories, which are the
   Qt application data locations plus the executable directory on Windows and
   the data directory for the AppImage. A parse failure is reported and the
   file skipped. The light and dark themes are also compiled into the binary,
   so the on-disk copies of those two replace identical entries.
-  ref: theme.cpp:266-319, sysqt.cpp:920-942, garglk/CMakeLists.txt:80-92
+  ref: garglk/theme.cpp:266-319, garglk/sysqt.cpp:953-975, garglk/CMakeLists.txt:81-93
 
   garglk.ini is not distributed: the default config is compiled in as a string
   and written to the highest-priority user location on demand. Installing a
   system copy is an off-by-default build option.
-  ref: config.cpp:399-449, garglk/CMakeLists.txt:14 (INSTALL_GARGLKINI),
-       garglk/CMakeLists.txt:60-78 (vtk_encode_string)
+  ref: garglk/config.cpp:443-493, garglk/CMakeLists.txt:15 (INSTALL_GARGLKINI),
+       garglk/CMakeLists.txt:61-79 (vtk_encode_string)
 
   MIDI in Blorb resources goes through FluidSynth, which needs a SoundFont.
   Gargoyle names none: the soundfont list is empty unless the user sets it in
   garglk.ini or the build hardcodes one, and the fallback is whatever
   FluidSynth reports as its own default.
-  ref: config.cpp:245-249,787-795, snddecode.cpp:373-395,
-       garglk/CMakeLists.txt:57 (DEFAULT_SOUNDFONT), INSTALL.md:137-141
+  ref: garglk/config.cpp:294-298,864-872, garglk/snddecode.cpp:373-395,
+       garglk/CMakeLists.txt:58 (DEFAULT_SOUNDFONT), INSTALL.md:153-157
 
   Story files are content. Formats that carry companion data read it from the
   story file's own name or directory, so it travels with the game: Level 9
@@ -100,8 +100,8 @@ notes: |
   .hnt, Alan 3 resources as .a3r, TADS resources as .t3r, and the extra disk
   sides the Scott Adams, Plus and TaylorMade interpreters read from C64,
   Atari 8-bit and Apple II images.
-  ref: level9/Glk/glk.c:6415-6450, magnetic/Glk/glk.c:5758-5855,
-       terps/CMakeLists.txt:69,73,359,404,500 (c64diskimage, unp64)
+  ref: terps/level9/Glk/glk.c:6415-6450, terps/magnetic/Glk/glk.c:5758-5855,
+       terps/CMakeLists.txt:69,73,359,469,565 (c64diskimage, unp64)
 
 exclusion_note: >
   TADS character mapping files are not loaded by this build. The Glk port
@@ -110,8 +110,8 @@ exclusion_note: >
   automatic .tcp lookup never runs; cmap_load() only fires for a path given
   with -ctab. The agil.cfg read by AGiliTy lives in os_dos.c and os_dos16.c,
   while the build compiles os_glk.c.
-  ref: tads/glk/osmisc.c:69-72,316-334, tads/tads2/cmap.c:290-315,
-  tads/tads2/trd.c:513-517, terps/CMakeLists.txt:111-119
+  ref: terps/tads/glk/osmisc.c:69-72,316-334, terps/tads/tads2/cmap.c:290-315,
+  terps/tads/tads2/trd.c:513-517, terps/CMakeLists.txt:111-119
 
 files:
   # -- Text fonts, data directory root --
@@ -120,49 +120,49 @@ files:
   - name: "Gargoyle-Mono.ttf"
     description: "Gargoyle Mono regular (Go Mono)"
     required: true
-    source_ref: "garglk/draw.cpp:491 (make_entry monor), garglk/draw.cpp:300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:657 (make_entry monor), garglk/draw.cpp:421-471 (make_font, winabort)"
 
   - name: "Gargoyle-Mono-Bold.ttf"
     description: "Gargoyle Mono bold (Go Mono)"
     required: true
-    source_ref: "garglk/draw.cpp:492 (make_entry monob), garglk/draw.cpp:300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:658 (make_entry monob), garglk/draw.cpp:421-471 (make_font, winabort)"
 
   - name: "Gargoyle-Mono-Italic.ttf"
     description: "Gargoyle Mono italic (Go Mono)"
     required: true
-    source_ref: "garglk/draw.cpp:493 (make_entry monoi), garglk/draw.cpp:300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:659 (make_entry monoi), garglk/draw.cpp:421-471 (make_font, winabort)"
 
   - name: "Gargoyle-Mono-Bold-Italic.ttf"
     description: "Gargoyle Mono bold italic (Go Mono)"
     required: true
-    source_ref: "garglk/draw.cpp:494 (make_entry monoz), garglk/draw.cpp:300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:660 (make_entry monoz), garglk/draw.cpp:421-471 (make_font, winabort)"
 
   - name: "Gargoyle-Serif.ttf"
     description: "Gargoyle Serif regular (Charis SIL)"
     required: true
-    source_ref: "garglk/draw.cpp:495 (make_entry propr), garglk/draw.cpp:300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:661 (make_entry propr), garglk/draw.cpp:421-471 (make_font, winabort)"
 
   - name: "Gargoyle-Serif-Bold.ttf"
     description: "Gargoyle Serif bold (Charis SIL)"
     required: true
-    source_ref: "garglk/draw.cpp:496 (make_entry propb), garglk/draw.cpp:300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:662 (make_entry propb), garglk/draw.cpp:421-471 (make_font, winabort)"
 
   - name: "Gargoyle-Serif-Italic.ttf"
     description: "Gargoyle Serif italic (Charis SIL)"
     required: true
-    source_ref: "garglk/draw.cpp:497 (make_entry propi), garglk/draw.cpp:300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:663 (make_entry propi), garglk/draw.cpp:421-471 (make_font, winabort)"
 
   - name: "Gargoyle-Serif-Bold-Italic.ttf"
     description: "Gargoyle Serif bold italic (Charis SIL)"
     required: true
-    source_ref: "garglk/draw.cpp:498 (make_entry propz), garglk/draw.cpp:300-350 (make_font, winabort)"
+    source_ref: "garglk/draw.cpp:664 (make_entry propz), garglk/draw.cpp:421-471 (make_font, winabort)"
 
   # -- Glyph substitution fonts, data directory root --
   # Tried for every face after the main fonts; a load failure is skipped.
   - name: "unifont.otf"
     description: "GNU Unifont, Basic Multilingual Plane glyph fallback"
     required: false
-    source_ref: "garglk/draw.cpp:352-375 (make_substitution_fonts), garglk/draw.cpp:476-478"
+    source_ref: "garglk/draw.cpp:473-496 (make_substitution_fonts), garglk/draw.cpp:642-644"
     note: >
       Covers glyphs missing from the text fonts. Loaded directly rather than
       through the system font mechanism, so it is not installed system-wide.
@@ -170,7 +170,7 @@ files:
   - name: "unifont_upper.otf"
     description: "GNU Unifont, planes above the BMP"
     required: false
-    source_ref: "garglk/draw.cpp:352-375 (make_substitution_fonts), garglk/draw.cpp:476-478"
+    source_ref: "garglk/draw.cpp:473-496 (make_substitution_fonts), garglk/draw.cpp:642-644"
 
   # -- Color themes, themes subdirectory --
   # Every *.json in the theme directories is parsed, keyed on its name field.
@@ -178,54 +178,54 @@ files:
     path: "themes/Blue.json"
     description: "Blue color theme"
     required: false
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:524"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:564"
 
   - name: "Breeze Darker.json"
     path: "themes/Breeze Darker.json"
     description: "Breeze Darker color theme"
     required: false
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:525"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:565"
 
   - name: "Lectrote Dark.json"
     path: "themes/Lectrote Dark.json"
     description: "Lectrote Dark color theme"
     required: false
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:526"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:566"
 
   - name: "Lectrote Sepia.json"
     path: "themes/Lectrote Sepia.json"
     description: "Lectrote Sepia color theme"
     required: false
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:527"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:567"
 
   - name: "Lectrote Slate.json"
     path: "themes/Lectrote Slate.json"
     description: "Lectrote Slate color theme"
     required: false
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:528"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:568"
 
   - name: "Pencil.json"
     path: "themes/Pencil.json"
     description: "Pencil color theme"
     required: false
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:529"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:569"
 
   - name: "Zoom.json"
     path: "themes/Zoom.json"
     description: "Zoom color theme"
     required: false
-    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:530"
+    source_ref: "garglk/theme.cpp:304-316, garglk/CMakeLists.txt:570"
 
   - name: "dark.json"
     path: "themes/dark.json"
     description: "Dark color theme"
     required: false
-    source_ref: "garglk/theme.cpp:268-282, garglk/theme.cpp:304-316, garglk/CMakeLists.txt:80-85, garglk/CMakeLists.txt:531"
+    source_ref: "garglk/theme.cpp:268-282, garglk/theme.cpp:304-316, garglk/CMakeLists.txt:81-86, garglk/CMakeLists.txt:571"
     note: "Also compiled in as the built-in dark theme."
 
   - name: "light.json"
     path: "themes/light.json"
     description: "Light color theme"
     required: false
-    source_ref: "garglk/theme.cpp:268-282, garglk/theme.cpp:304-316, garglk/CMakeLists.txt:87-92, garglk/CMakeLists.txt:532"
+    source_ref: "garglk/theme.cpp:268-282, garglk/theme.cpp:304-316, garglk/CMakeLists.txt:88-93, garglk/CMakeLists.txt:572"
     note: "Also compiled in as the built-in light theme."
