@@ -6,7 +6,7 @@ upstream: "https://github.com/RPCS3/rpcs3"
 cores:
   - rpcs3
 profiled_date: "2026-03-30"
-source_commit: "3d587726a23f514be0e7c3ac43e2db0cf2fe931a"
+source_commit: "de6c1b526d930e938b06b237731cbbf491076783"
 core_version: "0.0.35"
 display_name: "Sony - PlayStation 3 (RPCS3)"
 systems: [sony-playstation-3]
@@ -176,7 +176,7 @@ dev_flash:
   # -- vsh/ : Visual Shell (XMB) --
   vsh:
     path: "dev_flash/vsh/"
-    source_ref: "rpcs3/rpcs3qt/main_window.cpp:272,734"
+    source_ref: "rpcs3/rpcs3qt/main_window.cpp:276, rpcs3/rpcs3qt/main_window.cpp:750"
     note: "PS3 XMB interface. vsh.self is the main executable, booted via 'Boot VSH' menu."
     files:
       - path: "vsh/module/vsh.self"
@@ -236,7 +236,7 @@ dev_flash:
   # -- ps1emu/ : PS1 backward compatibility --
   ps1emu:
     path: "dev_flash/ps1emu/"
-    source_ref: "rpcs3/Emu/System.cpp:2114"
+    source_ref: "rpcs3/Emu/System.cpp:2190"
     note: "PS1 Classics emulator. Booted when running PS1 game via ps1_newemu.self"
     files:
       - {name: "ps1_newemu.self", purpose: "PS1 emulator binary"}
@@ -252,7 +252,7 @@ dev_flash:
   # -- pspemu/ : PSP backward compatibility --
   pspemu:
     path: "dev_flash/pspemu/"
-    source_ref: "rpcs3/Emu/System.cpp:2142, rpcs3/Crypto/key_vault.h:285-290"
+    source_ref: "rpcs3/Emu/System.cpp:2218, rpcs3/Crypto/key_vault.h:285-290"
     note: "PSP emulator for PS3. Contains psp_emulator.self, psp_translator.self, and release/*.sprx"
     files:
       - {name: "psp_emulator.self",  purpose: "PSP emulator main binary"}
