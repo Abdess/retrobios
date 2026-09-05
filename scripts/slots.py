@@ -180,6 +180,67 @@ def find_conflicts(
     ]
 
 
+# A frontend that never reads the bytes cannot be made unhappy by better ones.
+CONTENT_CHECKING_MODES = frozenset({"md5", "sha1"})
+
+
+@dataclass
+class Decision:
+    """Which claim a pack should honour at a contested destination, and why."""
+
+    conflict: Conflict
+    winner: Claim
+    reason: str
+
+    @property
+    def serves_both(self) -> bool:
+        """Whether honouring the winner still satisfies the other layer."""
+        return self.reason == "existence"
+
+
+def arbitrate(conflict: Conflict, mode: str, addressee: str = "platform") -> Decision:
+    """Decide a contested destination for the pack being built.
+
+    A pack answers to whoever asked for it. A platform pack must leave the
+    frontend's own check green, because a user reading red concludes the pack
+    is broken; a pack built for one emulator answers to that emulator. The
+    other layer is served as well whenever the destination allows it.
+
+    In ``existence`` mode the frontend only looks for a path, so the emulator's
+    file satisfies both sides at once and there is nothing to trade away. In a
+    content-checking mode the two answers cannot share one path, and the pack's
+    addressee decides; the loss is reported rather than absorbed, because the
+    cause is an upstream declaration that needs fixing at its source.
+    """
+    profile = conflict.profile_claims[0]
+    if addressee == "emulator":
+        return Decision(conflict, profile, "addressee")
+    if mode not in CONTENT_CHECKING_MODES:
+        return Decision(conflict, profile, "existence")
+    return Decision(conflict, conflict.platform_claim, "frontend_checks_content")
+
+
+def format_decision(decision: Decision) -> str:
+    """One line naming the contested slot, the winner and the ground for it."""
+    conflict = decision.conflict
+    if decision.serves_both:
+        return (
+            f"{conflict.destination}: serve {decision.winner.local_path} "
+            f"({', '.join(conflict.emulators) or 'profile'}); the frontend only "
+            "checks the path, so both are satisfied"
+        )
+    if decision.reason == "addressee":
+        return (
+            f"{conflict.destination}: serve {decision.winner.local_path}, "
+            "the pack answers to the emulator"
+        )
+    return (
+        f"{conflict.destination}: keep {decision.winner.local_path}, the frontend "
+        f"verifies content and would reject "
+        f"{conflict.profile_claims[0].local_path}; upstream declaration is wrong"
+    )
+
+
 def format_conflict(conflict: Conflict) -> str:
     """One line per conflict, naming both answers and who gave them."""
     emus = ", ".join(conflict.emulators) or "profile"
@@ -207,7 +268,11 @@ def main() -> int:
     import argparse
     import json
 
-    from common import list_registered_platforms, load_emulator_profiles
+    from common import (
+        list_registered_platforms,
+        load_emulator_profiles,
+        load_platform_config,
+    )
 
     parser = argparse.ArgumentParser(
         description="Report destinations where an emulator profile contradicts "
@@ -256,12 +321,20 @@ def main() -> int:
             )
         )
     else:
+        fixable = 0
         for platform, conflicts in found.items():
-            print(f"{platform}: {len(conflicts)} contradicted")
+            config = load_platform_config(platform, args.platforms_dir)
+            mode = config.get("verification_mode", "existence")
+            print(f"{platform}: {len(conflicts)} contradicted [{mode}]")
             for conflict in conflicts:
-                print(f"  {format_conflict(conflict)}")
+                decision = arbitrate(conflict, mode)
+                fixable += decision.serves_both
+                print(f"  {format_decision(decision)}")
         total = sum(len(c) for c in found.values())
-        print(f"\n{total} destinations where a profile contradicts what ships.")
+        print(
+            f"\n{total} contested destinations. {fixable} the pack can settle on "
+            f"its own, {total - fixable} rest on an upstream declaration."
+        )
 
     return 1 if found else 0
 

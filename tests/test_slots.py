@@ -198,6 +198,46 @@ class TestConflicts(unittest.TestCase):
         self.assertIn("dolphin", line)
 
 
+class TestArbitration(unittest.TestCase):
+    """A pack answers to whoever asked for it, and serves both when it can."""
+
+    def _conflict(self):
+        platform = slots.Claim(
+            "platform", "GC/JAP/IPL.bin", "IPL.bin",
+            local_path="bios/Console/GC/USA/IPL.bin", status="md5_exact",
+        )
+        profile = slots.Claim(
+            "profile", "GC/JAP/IPL.bin", "IPL.bin", emulator="dolphin",
+            local_path="bios/Console/GC/JAP/IPL.bin", status="path_exact",
+        )
+        return slots.Conflict("GC/JAP/IPL.bin", platform, [profile])
+
+    def test_existence_mode_serves_both(self):
+        decision = slots.arbitrate(self._conflict(), "existence")
+        self.assertEqual(decision.winner.origin, "profile")
+        self.assertTrue(decision.serves_both)
+
+    def test_md5_mode_keeps_the_frontend_green(self):
+        decision = slots.arbitrate(self._conflict(), "md5")
+        self.assertEqual(decision.winner.origin, "platform")
+        self.assertFalse(decision.serves_both)
+
+    def test_sha1_mode_is_content_checking_too(self):
+        decision = slots.arbitrate(self._conflict(), "sha1")
+        self.assertEqual(decision.winner.origin, "platform")
+
+    def test_an_emulator_pack_answers_to_the_emulator(self):
+        decision = slots.arbitrate(self._conflict(), "md5", addressee="emulator")
+        self.assertEqual(decision.winner.origin, "profile")
+        self.assertFalse(decision.serves_both)
+
+    def test_the_reported_line_gives_the_ground_for_the_decision(self):
+        kept = slots.format_decision(slots.arbitrate(self._conflict(), "md5"))
+        self.assertIn("verifies content", kept)
+        served = slots.format_decision(slots.arbitrate(self._conflict(), "existence"))
+        self.assertIn("both are satisfied", served)
+
+
 class TestProvenEvidence(unittest.TestCase):
     """What counts as proof that a claim is about content, not about a name."""
 
