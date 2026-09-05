@@ -2160,6 +2160,34 @@ class TestWriteDryRun(unittest.TestCase):
         self.assertEqual(self.path.read_text(), before)
 
 
+class TestLargeFileCeiling(unittest.TestCase):
+    """The fallback mapping bails above a ceiling, and it sits high enough.
+
+    openbor.c is the largest file any profile cites, 55k lines against 57k
+    at HEAD, and the ref that mattered mapped only once the ceiling cleared
+    it. The guard stays so a pathological pair cannot stall a sweep.
+    """
+
+    def test_a_pair_over_the_ceiling_is_not_diffed(self):
+        big = ["x"] * (profile_sync.MAX_MATCH_LINES + 1)
+        result = profile_sync._map_changed(big, big, 1, 2)
+        self.assertEqual(result.status, "CHANGED")
+        self.assertIn("over", result.reason)
+
+    def test_a_pair_under_the_ceiling_is_mapped(self):
+        pin = ["a", "subject", "b"]
+        head = ["pad", "pad", "a", "subject", "b"]
+        result = profile_sync._map_changed(pin, head, 2, 2)
+        self.assertIsNotNone(result.start, "a small pair has to be diffed")
+        self.assertNotIn("over", result.reason or "")
+
+    def test_the_ceiling_clears_the_largest_file_any_profile_cites(self):
+        self.assertGreater(
+            profile_sync.MAX_MATCH_LINES, 57000,
+            "openbor.c is 57k lines at HEAD and its ref has to map",
+        )
+
+
 class TestRebaseWaitsForThePin(unittest.TestCase):
     """Recaling refs the pin cannot follow manufactures the desync.
 

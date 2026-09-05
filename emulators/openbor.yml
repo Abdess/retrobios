@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/DCurrent/openbor"
 upstream: "https://github.com/DCurrent/openbor"
 profiled_date: "2026-08-12"
-source_commit: "0ece95d1c113c1ce86f2da826b3c25b521ee116d"
+source_commit: "9d81480f8481fbb9e76b0b5f2a5dfa408376761a"
 core_version: "4.0 Build 7949"
 display_name: "OpenBOR Game Engine"
 cores:
@@ -35,18 +35,18 @@ notes: |
   such argument the built in menu lists Paks/ and the player picks one
   (engine/sdl/sdlport.c:25,124-135, engine/sdl/menu.c:172-203,802).
   packfile_supported accepts any name containing .pak and skips menu.pak
-  (engine/source/gamelib/packfile.c:1577-1584).
+  (engine/source/gamelib/packfile.c:1595-1602).
 
   Everything read for a running game comes out of that module. buffer_pakfile
   tries the real filesystem first through fopen, then the same path inside the
-  archive (engine/openbor.c:921-965,969-1018), so data/models.txt,
+  archive (engine/openbor.c:935-979,983-1032), so data/models.txt,
   data/levels.txt, data/video.txt, data/menu.txt, the scene scripts and the
   sprites and sounds under data/ resolve either from an unpacked data/ directory
   beside the binary (engine/source/gamelib/packfile.c:781-810) or from the pak.
   Four names take precedence over their in-pak copy when they exist on disk:
   translation/translation.txt and translation/menu.txt over data/translation.txt
-  (engine/source/gamelib/translation.c:102-106, engine/openbor.c:5975,53240),
-  saves/lifebar.txt over data/lifebar.txt (engine/openbor.c:4965-4972), and on
+  (engine/source/gamelib/translation.c:102-106, engine/openbor.c:6744,54707),
+  saves/lifebar.txt over data/lifebar.txt (engine/openbor.c:5734-5741), and on
   Android Saves/<module>/touch.txt then Saves/touch.txt over data/touch.txt
   (engine/android/app/jni/openbor/video.c:210-218). Each holds text or a control
   layout written for one module. The engine/translation.txt copied into the
@@ -67,12 +67,12 @@ notes: |
   Files the engine writes rather than expects: Paks, Saves, Logs and ScreenShots
   are created at startup when missing (engine/sdl/sdlport.c:30-33,119-122),
   settings and progress land in Saves as <module>.cfg, .sav, .hi, .scr and .inp
-  alongside default.cfg (engine/source/utils.c:284-312,
-  engine/openbor.c:2675-3040), and the viewer reads back Logs/OpenBorLog.txt and
+  alongside default.cfg (engine/source/utils.c:324-352,
+  engine/openbor.c:2940-3482), and the viewer reads back Logs/OpenBorLog.txt and
   Logs/ScriptLog.txt (engine/source/utils.c:47-62, engine/sdl/menu.c:652-700).
   paks/logoff.txt is a marker whose existence alone skips the startup logo, so
   the player creates it empty (engine/sdl/menu.c:707-716). Module script can
   open any path it names through openfilestream
-  (engine/openborscript.c:10505-10600).
+  (engine/openborscript.c:10573-10668).
 
 files: []

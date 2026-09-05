@@ -45,7 +45,12 @@ WIDEN_STEPS = (0, 3, 6, 12, 25, 50)
 # A 30k-line driver diffs in about five seconds, and the biggest files the
 # corpus cites sit just above that. The cap stays as a guard against
 # pathological inputs, not as a limit on real source files.
-MAX_MATCH_LINES = 40000
+# The fallback mapping is a full sequence diff, and it only runs once exact
+# anchoring has failed, which is rare. openbor.c is the largest file any
+# profile cites, 55k lines against 57k, and diffing the pair takes nine
+# seconds; the ceiling sits above it so that one resolves, and still stops a
+# pathological pair from stalling a sweep of every profile.
+MAX_MATCH_LINES = 60000
 
 PIN = "pin"
 HEAD = "head"
