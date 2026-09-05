@@ -1272,7 +1272,14 @@ def build_report(
     report.repos = [v.repo.slug for v in views]
     report.pin, report.pin_origin = primary.pin, primary.origin
     report.head = primary.head
-    report.pinned_tag = detect_pinned_tag(profile, views, cache_dir, offline)
+    # A profile can hold its pin on purpose, documenting a build that is that
+    # revision. Comparing it to HEAD says nothing and recaling would repoint
+    # its refs at code the build never had, so it is judged like a frozen tag:
+    # against itself.
+    frozen = str(profile.get("pin_frozen") or "").strip()
+    report.pinned_tag = frozen or detect_pinned_tag(
+        profile, views, cache_dir, offline
+    )
 
     # A profile carrying no source_ref still has a pin worth writing and a
     # version worth checking, so the revisions above are resolved first.

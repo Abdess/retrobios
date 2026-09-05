@@ -598,6 +598,10 @@
       "type": "string",
       "description": "Branch the port was read from, when it is not the default one."
     },
+    "pin_frozen": {
+      "type": "string",
+      "description": "Why source_commit is held on purpose rather than followed. The profile is then judged against its own revision, like one pinned to a superseded tag: comparing it to HEAD says nothing and recaling would repoint its refs at code the build it documents never had."
+    },
     "upstream_gone": {
       "type": "string",
       "description": "Why the declared upstream can no longer be reached, when that is settled rather than transient. Records the death instead of leaving the profile failing every pass; profile_sync reports the contradiction if the forge answers again."

@@ -2160,6 +2160,43 @@ class TestWriteDryRun(unittest.TestCase):
         self.assertEqual(self.path.read_text(), before)
 
 
+class TestDeliberatelyFrozenPin(TestBuildReport):
+    """A pin held on purpose is judged against itself, like a frozen tag.
+
+    nethersx2-turnip-classic documents the shim rules of the revision it
+    pins and says so: recaling would repoint its refs at rules the classic
+    build never had. Without a way to say the freeze is deliberate, it
+    reports the same drift every pass and nobody can act on it.
+    """
+
+    def _frozen(self, reason="the classic build is this revision"):
+        profile = self._profile(["a.c:2"])
+        profile["source_commit"] = "pinned"
+        profile["pin_frozen"] = reason
+        return profile
+
+    def test_a_frozen_pin_is_checked_against_itself(self):
+        self.files[("pinned", "a.c")] = ["x", "the cited line"]
+        self.files[("headsha", "a.c")] = ["y"] * 40
+        report = build_report("test", self._frozen(), self.dir)
+        self.assertTrue(report.pinned_tag)
+        self.assertEqual(report.entries[0].parts[0].status, "ANCHORED")
+
+    def test_a_frozen_profile_is_never_recaled(self):
+        self.files[("pinned", "a.c")] = ["x", "the cited line"]
+        report = build_report("test", self._frozen(), self.dir)
+        path = Path(self.dir) / "p.yml"
+        path.write_text(SAMPLE, encoding="utf-8")
+        self.assertEqual(rebase_refs(path, report), [])
+        self.assertFalse(bump_commit(path, report))
+
+    def test_an_ordinary_profile_is_unaffected(self):
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["pad", "x", "hit"]
+        report = build_report("test", self._profile(["a.c:2"]), self.dir)
+        self.assertFalse(report.pinned_tag)
+
+
 class TestProseSpacingIsNotADifference(unittest.TestCase):
     """A recale keeps the author's spacing; the check has to allow for it.
 

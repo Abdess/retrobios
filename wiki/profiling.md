@@ -353,6 +353,7 @@ which CI validates every profile against.
 | `min_size`, `max_size` | size range when the code accepts a range |
 | `md5`, `sha1`, `crc32`, `sha256` | expected hashes from source code |
 | `known_hash_adler32` | expected Adler-32 hash (Dolphin's DSP ROMs); pair with `adler32_byteswap` when the code hashes 16-bit byte-swapped data |
+| `pin_frozen` | why `source_commit` is held on purpose rather than followed. The profile is then judged against its own revision, like one pinned to a superseded tag |
 | `upstream_gone` | why the declared upstream can no longer be reached, when that is settled rather than transient. Records the death instead of leaving the profile failing every pass; profile_sync reports it as declared, and reports the contradiction if the forge answers again |
 | `source_mirror` | a repository carrying the same tree, consulted after `source` and `upstream`. What keeps a profile checkable once its own forge stops answering |
 | `validation` | checks the code performs: `size`, `crc32`, `md5`, `sha1`, `adler32`, `signature`, `crypto`. Can be a list or dict `{core: [...], upstream: [...]}` for divergent checks |
