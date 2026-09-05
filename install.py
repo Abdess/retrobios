@@ -23,6 +23,7 @@ import re
 import shutil
 import sys
 import tempfile
+import threading
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -103,6 +104,14 @@ DEFAULT_DESTS = {
     "misterfpga": Path("/media/fat/games"),
     "retropie": Path.home() / "RetroPie" / "BIOS",
 }
+
+# Set when the run is interrupted, so queued downloads end instead of draining
+# the pool: every future is submitted before the first one completes.
+_stop = threading.Event()
+
+class _Interrupted(Exception):
+    """Raised inside a worker once the run has been stopped."""
+
 
 # The three RetroArch packages published for Android, newest ABI first.
 ANDROID_RETROARCH_PACKAGES = (
@@ -1052,6 +1061,8 @@ def _download_one(
     f: dict, bios_path: Path, verbose: bool = False
 ) -> tuple[str, bool]:
     """Download a single file. Returns (dest, success)."""
+    if _stop.is_set():
+        return str(f.get("dest", "?")), False
     try:
         dest = _destination_path(bios_path, f["dest"])
     except ValueError:
@@ -1083,6 +1094,8 @@ def _download_one(
                     tmp_path = Path(out.name)
                     downloaded = 0
                     while True:
+                        if _stop.is_set():
+                            raise _Interrupted()
                         chunk = resp.read(1024 * 1024)
                         if not chunk:
                             break
@@ -1113,6 +1126,13 @@ def _download_one(
             os.replace(tmp_path, dest)
             return f["dest"], True
 
+        except _Interrupted:
+            # Stopped mid-transfer: drop the scratch file rather than leaving
+            # it beside the destination, and do not retry.
+            if tmp_path is not None:
+                tmp_path.unlink(missing_ok=True)
+            return f["dest"], False
+
         except (
             urllib.error.URLError,
             urllib.error.HTTPError,
@@ -1127,12 +1147,94 @@ def _download_one(
     return f["dest"], False
 
 
+def _locations(paths: list[Path]) -> str:
+    """Where the run wrote, naming every destination when it served several."""
+    return ", ".join(str(p) for p in paths) if paths else "nowhere"
+
+
+def _plural(count: int, word: str) -> str:
+    """Count and noun, so a run of one file does not read as machine output."""
+    return f"{count} {word}" if count == 1 else f"{count} {word}s"
+
+
+def _report_outcome(
+    paths: list[Path],
+    downloaded: int,
+    up_to_date: int,
+    errors: int,
+    omitted: int,
+    interrupted: bool,
+) -> None:
+    """Close the run on what happened, and leave with a status that says so.
+
+    A run that installed nothing used to end on the word Done and a zero exit,
+    which reads as success to a person and to a script alike.
+    """
+    if interrupted:
+        print(f"\nStopped. {_plural(downloaded, 'file')} installed.")
+        print("Run the same command again to carry on from here. Nothing is lost.")
+        sys.exit(130)
+
+    if errors and not downloaded:
+        print(f"\nNothing was installed. {_plural(errors, 'file')} failed.")
+        print(f"Location that was being written to: {_locations(paths)}")
+        print("Run the same command again once that is resolved. "
+              "Files already installed are kept.")
+        sys.exit(2)
+
+    if errors:
+        print(f"\nFinished with errors. {_plural(downloaded, 'file')} installed, "
+              f"{_plural(errors, 'file')} failed.")
+        print(f"Location: {_locations(paths)}")
+        print("Run the same command again to retry only those.")
+        sys.exit(1)
+
+    print(f"\nDone. {_plural(downloaded, 'file')} installed, "
+          f"{_plural(up_to_date, 'file')} already up to date.")
+    print(f"Location: {_locations(paths)}")
+    if omitted:
+        print(f"{_plural(omitted, 'file')} are not in the collection yet "
+              "and were skipped.")
+    print("To check this later, run the same command with --check.")
+
+
+def _check_free_space(bios_path: Path, needed: int) -> None:
+    """Stop before writing when the volume cannot hold the download.
+
+    Reported against the nearest existing ancestor, since the destination
+    itself may have just been created on a volume that is already full.
+    """
+    probe = bios_path
+    while not probe.exists() and probe != probe.parent:
+        probe = probe.parent
+    try:
+        free = shutil.disk_usage(probe).free
+    except OSError:
+        return
+    if free >= needed:
+        return
+    print(f"\nNot enough space on the drive holding {bios_path}.", file=sys.stderr)
+    print(f"  Needed: {format_size(needed)}. Free: {format_size(free)}.",
+          file=sys.stderr)
+    print(f"  Free up {format_size(needed - free)}, or use --dest to install "
+          "to another drive.", file=sys.stderr)
+    sys.exit(1)
+
+
 def download_files(
     files: list[dict], bios_path: Path, jobs: int = 8, verbose: bool = False
-) -> list[str]:
-    """Download files in parallel. Returns list of failed file names."""
+) -> tuple[list[str], bool]:
+    """Download files in parallel.
+
+    Returns the destinations that failed and whether the run was interrupted.
+    Every future is submitted up front, so a bare KeyboardInterrupt would let
+    the pool drain the queue in full: the stop flag is what makes Ctrl+C end
+    the run rather than only stop the reporting.
+    """
     failed: list[str] = []
     total = len(files)
+    interrupted = False
+    _stop.clear()
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as pool:
         future_map = {
@@ -1140,15 +1242,20 @@ def download_files(
             for f in files
         }
         done_count = 0
-        for future in concurrent.futures.as_completed(future_map):
-            done_count += 1
-            dest, success = future.result()
-            status = "ok" if success else "FAILED"
-            print(f"  [{done_count}/{total}] {dest} {status}")
-            if not success:
-                failed.append(dest)
+        try:
+            for future in concurrent.futures.as_completed(future_map):
+                done_count += 1
+                dest, success = future.result()
+                status = "ok" if success else "FAILED"
+                print(f"  [{done_count}/{total}] {dest} {status}")
+                if not success:
+                    failed.append(dest)
+        except KeyboardInterrupt:
+            interrupted = True
+            _stop.set()
+            print("\n  Stopping. Files already installed are kept.")
 
-    return failed
+    return failed, interrupted
 
 
 def do_standalone_copies(
@@ -1460,8 +1567,12 @@ def main() -> None:
     total_up_to_date = 0
     total_errors = 0
     total_omitted = 0
+    total_interrupted = False
+    installed_paths: list[Path] = []
 
     for plat_name, bios_path in platforms:
+        if bios_path not in installed_paths:
+            installed_paths.append(bios_path)
         print(f"\nFetching file index for {plat_name}...")
         manifest = fetch_manifest(plat_name)
         files = manifest.get("files", [])
@@ -1554,12 +1665,26 @@ def main() -> None:
         if to_download:
             dl_size = sum(f.get("size", 0) for f in to_download)
             print(f"\nDownloading {len(to_download)} files ({format_size(dl_size)})...")
-            bios_path.mkdir(parents=True, exist_ok=True)
-            failed = download_files(
+            print("  Press Ctrl+C to stop. Running the same command again "
+                  "carries on from here.")
+            try:
+                bios_path.mkdir(parents=True, exist_ok=True)
+            except OSError as exc:
+                print(f"\nCannot create {bios_path}.", file=sys.stderr)
+                print(f"  {exc.strerror}.", file=sys.stderr)
+                print("  On Batocera, Recalbox and ROCKNIX the BIOS folder "
+                      "belongs to root: run the same command with sudo.",
+                      file=sys.stderr)
+                sys.exit(1)
+            _check_free_space(bios_path, dl_size)
+            failed, interrupted = download_files(
                 to_download, bios_path, jobs=args.jobs, verbose=args.verbose
             )
             total_downloaded += len(to_download) - len(failed)
             total_errors += len(failed)
+            if interrupted:
+                total_interrupted = True
+                break
         else:
             print("\n  All files up to date.")
 
@@ -1586,10 +1711,13 @@ def main() -> None:
             )
 
     if not args.check and not args.list_targets:
-        print(
-            f"\nDone. {total_downloaded} downloaded, "
-            f"{total_up_to_date} up to date, {total_errors} errors, "
-            f"{total_omitted} safely omitted."
+        _report_outcome(
+            installed_paths,
+            total_downloaded,
+            total_up_to_date,
+            total_errors,
+            total_omitted,
+            total_interrupted,
         )
 
 

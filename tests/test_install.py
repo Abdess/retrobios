@@ -1,10 +1,12 @@
 """Tests for install.py platform detection and config parsing."""
 from __future__ import annotations
 
+import contextlib
 import functools
 import hashlib
 import http.server
 import importlib.util
+import io
 import json
 import os
 import re
@@ -13,6 +15,7 @@ import subprocess
 import tempfile
 import threading
 import unittest
+from types import SimpleNamespace
 import unittest.mock
 from pathlib import Path
 
@@ -212,6 +215,121 @@ class TestEmbeddedDetection(unittest.TestCase):
 
     def test_no_embedded_os_detected(self):
         self.assertEqual(self._detect_with(set()), [])
+
+
+class TestRunOutcome(unittest.TestCase):
+    """A run says what happened and leaves with a status that matches."""
+
+    def _report(self, **kw):
+        defaults = dict(
+            paths=[Path("/userdata/bios")],
+            downloaded=0,
+            up_to_date=0,
+            errors=0,
+            omitted=0,
+            interrupted=False,
+        )
+        defaults.update(kw)
+        buf = io.StringIO()
+        code = 0
+        with contextlib.redirect_stdout(buf):
+            try:
+                install._report_outcome(**defaults)
+            except SystemExit as exc:
+                code = exc.code
+        return buf.getvalue(), code
+
+    def test_success_names_the_location_and_the_way_to_check(self):
+        out, code = self._report(downloaded=12, up_to_date=3)
+        self.assertEqual(code, 0)
+        self.assertIn("12 files installed", out)
+        self.assertIn("/userdata/bios", out)
+        self.assertIn("--check", out)
+
+    def test_total_failure_does_not_say_done_and_exits_two(self):
+        out, code = self._report(errors=7)
+        self.assertEqual(code, 2)
+        self.assertNotIn("Done.", out)
+        self.assertIn("Nothing was installed", out)
+
+    def test_partial_failure_exits_one(self):
+        out, code = self._report(downloaded=5, errors=2)
+        self.assertEqual(code, 1)
+        self.assertIn("5 files installed", out)
+        self.assertIn("2 files failed", out)
+
+    def test_interruption_is_resumable_and_exits_130(self):
+        out, code = self._report(downloaded=431, interrupted=True)
+        self.assertEqual(code, 130)
+        self.assertIn("carry on", out)
+        self.assertIn("Nothing is lost", out)
+
+    def test_one_file_reads_as_one_file(self):
+        out, _ = self._report(downloaded=1)
+        self.assertIn("1 file installed", out)
+        self.assertNotIn("1 files", out)
+
+    def test_every_destination_is_named(self):
+        out, _ = self._report(
+            paths=[Path("/a/bios"), Path("/b/bios")], downloaded=2
+        )
+        self.assertIn("/a/bios", out)
+        self.assertIn("/b/bios", out)
+
+
+class TestFreeSpaceGuard(unittest.TestCase):
+    """The run refuses before writing when the volume cannot hold it."""
+
+    def setUp(self):
+        self.root = Path(tempfile.mkdtemp())
+        self.real = install.shutil.disk_usage
+
+    def tearDown(self):
+        install.shutil.disk_usage = self.real
+        shutil.rmtree(self.root, ignore_errors=True)
+
+    def _run(self, free: int, needed: int, path: Path | None = None):
+        install.shutil.disk_usage = lambda _p: SimpleNamespace(free=free)
+        buf = io.StringIO()
+        code = 0
+        with contextlib.redirect_stderr(buf):
+            try:
+                install._check_free_space(path or self.root, needed)
+            except SystemExit as exc:
+                code = exc.code
+        return buf.getvalue(), code
+
+    def test_enough_space_says_nothing(self):
+        out, code = self._run(free=10_000, needed=1_000)
+        self.assertEqual((out, code), ("", 0))
+
+    def test_short_of_space_names_both_numbers_and_stops(self):
+        out, code = self._run(free=1_000, needed=5_000)
+        self.assertEqual(code, 1)
+        self.assertIn("Needed", out)
+        self.assertIn("Free", out)
+        self.assertIn("--dest", out)
+
+    def test_probe_climbs_to_an_existing_ancestor(self):
+        missing = self.root / "not" / "created" / "yet"
+        out, code = self._run(free=1, needed=2, path=missing)
+        self.assertEqual(code, 1)
+
+
+class TestStopFlag(unittest.TestCase):
+    """Ctrl+C ends the run instead of letting the queue drain."""
+
+    def tearDown(self):
+        install._stop.clear()
+
+    def test_worker_returns_immediately_once_stopped(self):
+        install._stop.set()
+        dest, ok = install._download_one({"dest": "x.bin"}, Path("/nowhere"))
+        self.assertEqual((dest, ok), ("x.bin", False))
+
+    def test_download_files_reports_no_interruption_normally(self):
+        failed, interrupted = install.download_files([], Path("/nowhere"))
+        self.assertEqual((failed, interrupted), ([], False))
 
 
 class TestAndroidDetection(unittest.TestCase):
