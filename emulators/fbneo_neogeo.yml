@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
 profiled_date: "2026-03-23"
-source_commit: "ef1f64b7023bc511858e96b8961f99c18a09f112"
+source_commit: "a251c76229f1637e433b93e29845039752771b6d"
 core_version: "v1.0.0.2"
 display_name: "Arcade (FinalBurn Neo) (Neo-Geo)"
 cores:
@@ -21,14 +21,16 @@ notes: |
 
   Neo Geo games reference "neogeo" as parent ROM set. The BIOS ZIP
   must be alongside game ZIPs or in system_dir/fbneo/.
-  Search order (libretro.cpp:930-1083):
+  Search order (libretro.cpp:881-949):
     1. {system_dir}/fbneo/patched/{romName}
     2. {rom_dir}/{romName}
-    3. {rom_dir}/{arcade|consoles}/{romName}
-    4. {system_dir}/fbneo/{romName}
-    5. {system_dir}/fbneo/{arcade|consoles}/{romName}
-    6. {system_dir}/{romName}
-    7. directories listed in rom_path.opt, plain then per-type subdirectories
+    3. {system_dir}/fbneo/{romName}
+    4. {system_dir}/{romName}
+    5. directories listed in rom_path.opt
+
+  The per-type subdirectories the core used to try under {rom_dir} and
+  {system_dir}/fbneo, arcade and consoles, are gone: a BIOS ZIP has to sit
+  directly in one of the four directories above.
 
   neogeo.zip contains multiple selectable 68K BIOS variants (MVS, AES,
   Universe BIOS). One 68K BIOS active at a time (dipswitch). Z80 BIOS,

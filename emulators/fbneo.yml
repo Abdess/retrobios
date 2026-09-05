@@ -5,7 +5,7 @@ source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
 logo: "https://raw.githubusercontent.com/finalburnneo/FBNeo/master/projectfiles/xcode/Emulator/Assets.xcassets/AppIcon.appiconset/icon_512.png"
 profiled_date: "2026-03-23"
-source_commit: "ef1f64b7023bc511858e96b8961f99c18a09f112"
+source_commit: "a251c76229f1637e433b93e29845039752771b6d"
 core_version: "v1.0.0.2"
 display_name: "Arcade (FinalBurn Neo)"
 cores:
@@ -48,14 +48,16 @@ notes: |
   FinalBurn Neo is a multi-system arcade and console emulator. BIOS files are
   expected as MAME-format ZIP archives containing individual ROM chips. The
   libretro core searches for BIOS ZIPs in this order
-  (src/burner/libretro/libretro.cpp:930-1083):
+  (src/burner/libretro/libretro.cpp:881-949):
     1. {system_dir}/fbneo/patched/{romName}
     2. {rom_dir}/{romName}
-    3. {rom_dir}/{arcade|consoles}/{romName}
-    4. {system_dir}/fbneo/{romName}
-    5. {system_dir}/fbneo/{arcade|consoles}/{romName}
-    6. {system_dir}/{romName}
-    7. directories listed in rom_path.opt, plain then per-type subdirectories
+    3. {system_dir}/fbneo/{romName}
+    4. {system_dir}/{romName}
+    5. directories listed in rom_path.opt
+
+  The per-type subdirectories the core used to try under {rom_dir} and
+  {system_dir}/fbneo, arcade and consoles, are gone: a BIOS ZIP has to sit
+  directly in one of the four directories above.
 
   Each game driver specifies a parent BIOS set via BurnDriver. The BIOS ZIP
   must contain the individual ROM chip files listed below. CRC32 values from
@@ -1496,7 +1498,7 @@ files:
     required: true
     size: 16384
     crc32: "81977335"
-    source_ref: "src/burn/drv/gba/d_gba.cpp:328"
+    source_ref: "src/burn/drv/gba/d_gba.cpp:538"
 
   - name: "st018.bin"
     archive: st018.zip
