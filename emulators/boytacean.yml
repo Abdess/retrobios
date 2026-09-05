@@ -72,7 +72,7 @@ files:
     mode: standalone
     size: 2304
     note: "Original Nintendo CGB boot ROM"
-    source_ref: "src/gb.rs:1454, src/data.rs:74"
+    source_ref: "src/gb.rs:1354, src/data.rs:74"
 
   - name: cgb_boytacean.bin
     system: nintendo-gbc

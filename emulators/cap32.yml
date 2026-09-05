@@ -36,7 +36,7 @@ notes: |
   The standalone (non-libretro) version references external filenames
   cpc464.rom, cpc664.rom, cpc6128.rom, amsdos.rom in cap32/cap32.c:352-355
   via config file loading (cap32/cap32.c:1831-1843), but the libretro port
-  does not use this path. The libretro init (libretro/libretro-core.c:1526) has
+  does not use this path. The libretro init (libretro/libretro-core.c:1509-1515) has
   a "TODO: future use to load custom bios" comment that is not
   implemented.
 

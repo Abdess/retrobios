@@ -19,7 +19,7 @@ notes: |
   ref: zoltanvb/b2-libretro, tom-seddon/b2
 
   Standalone loads ROMs from etc/roms/ via GetAssetPath() + LoadFile().
-  ref: tom-seddon/b2/src/b2/roms.cpp:9-10
+  ref: src/b2/roms.cpp:9-10
 
   Libretro port embeds all ROMs as hex arrays in src/libretro/roms.hpp.
   create_core() loads OS and sideways ROMs from static machine_types[] arrays.

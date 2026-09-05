@@ -5,7 +5,7 @@ bios_mode: agnostic
 source: "https://github.com/ARMSX2/ARMSX2"
 upstream: "https://github.com/PCSX2/pcsx2"
 profiled_date: "2026-08-11"
-source_commit: "e509b17e7a8f741f89c1e2a36539c32122467d34"
+source_commit: "6e884f11f486bca258efd2470ac09ad4c36a5a4b"
 core_version: "2.6.6.5"
 display_name: "Sony - PlayStation 2 (ARMSX2)"
 cores:
