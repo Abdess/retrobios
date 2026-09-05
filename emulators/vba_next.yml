@@ -3,8 +3,9 @@ type: libretro
 core_classification: frozen_snapshot
 source: "https://github.com/libretro/vba-next"
 upstream: "https://github.com/visualboyadvance-m/visualboyadvance-m"
+upstream_commit: "28b5156f21f2127945e0ad7e85f1545635431292"
 profiled_date: "2026-03-25"
-source_commit: "2b96fd3a77025f3083daf61126b1852d5e0eace7"
+source_commit: "788192f215ad0a1413f1625b40ebba3423fa0ade"
 core_version: "SVN"
 display_name: "Nintendo - Game Boy Advance (VBA Next)"
 cores:
