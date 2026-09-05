@@ -83,4 +83,4 @@ files:
       starboard-rootfs-20260604.1, the one that URL served at profiling time, and
       the app follows whatever release is latest. Its own version is read back
       from etc/starboard-release, which carries release, commit and built keys.
-    source_ref: "Starboard 0.23.0 ze0.java:75,421-422 (base and asset URL), xe0.java:66-70 (download, verify, extract, delete), ze0.java:236-342 (sha256 sidecar and comparison), ze0.java:130-144 (gunzip into place), ze0.java:416-418 (install directory), ze0.java:426-428 and t20.java:125 (launch gate), ze0.java:439-463 (etc/starboard-release)"
+    source_ref: "Starboard-release ze0.java:75,421-422 (base and asset URL), Starboard-release xe0.java:66-70 (download, verify, extract, delete), Starboard-release ze0.java:236-342 (sha256 sidecar and comparison), Starboard-release ze0.java:130-144 (gunzip into place), Starboard-release ze0.java:416-418 (install directory), Starboard-release ze0.java:426-428 and Starboard-release t20.java:125 (launch gate), Starboard-release ze0.java:439-463 (etc/starboard-release)"

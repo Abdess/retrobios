@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/RACE"
 upstream: "https://github.com/8bitpsp/race"
 profiled_date: "2026-03-25"
-source_commit: "171950ea64c96ead503340ed60fa7ba18f56325c"
+source_commit: "c7810dd7f172827bfa2004813bc000b13786636b"
 core_version: "v2.16"
 display_name: "SNK - Neo Geo Pocket / Color (RACE)"
 cores: [race]

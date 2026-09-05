@@ -3,7 +3,7 @@ type: standalone
 core_classification: other
 source: "https://github.com/chernandezba/zesarux"
 upstream: "https://github.com/chernandezba/zesarux"
-source_commit: "ffccfcd819654d6237b6e1c1df7e261a22e8b728"
+source_commit: "91cce79eb7eea9cc4f5e56b6cc0949d2164a0977"
 profiled_date: "2026-08-10"
 core_version: "13.1-SN"
 display_name: "Sinclair - ZX Spectrum and clones (ZEsarUX)"

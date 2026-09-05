@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://gitlab.com/jengun/sdltrs"
 upstream: "http://sdltrs.sourceforge.net"
 profiled_date: "2026-08-08"
-source_commit: "4ba6cd076fd0c966c0dcb384663211cf691d6649"
+source_commit: "b008486afe41813fd2225ebb807a3e672d544f79"
 core_version: "1.2.35"
 display_name: "Tandy - TRS-80 (SDL2TRS)"
 cores:
