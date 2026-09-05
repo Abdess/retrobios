@@ -2160,6 +2160,34 @@ class TestWriteDryRun(unittest.TestCase):
         self.assertEqual(self.path.read_text(), before)
 
 
+class TestProseSpacingIsNotADifference(unittest.TestCase):
+    """A recale keeps the author's spacing; the check has to allow for it.
+
+    _run_after_moves renders `a.c:228,1439-1443` while the writer leaves the
+    sentence as written, `a.c:228, 1439-1443`. Comparing the two literally
+    made the run look unwritten, so bump_commit refused for ever: mariani
+    was held back by three of them.
+    """
+
+    def test_a_written_run_counts_as_written_whatever_the_spacing(self):
+        self.assertEqual(
+            profile_sync._citation_key("src/Harddisk.cpp:228, 1439-1443"),
+            profile_sync._citation_key("src/Harddisk.cpp:228,1439-1443"),
+        )
+
+    def test_different_citations_still_differ(self):
+        self.assertNotEqual(
+            profile_sync._citation_key("a.c:1, 2"),
+            profile_sync._citation_key("a.c:1, 3"),
+        )
+
+    def test_a_path_change_still_differs(self):
+        self.assertNotEqual(
+            profile_sync._citation_key("a.c:1"),
+            profile_sync._citation_key("src/a.c:1"),
+        )
+
+
 class TestLargeFileCeiling(unittest.TestCase):
     """The fallback mapping bails above a ceiling, and it sits high enough.
 

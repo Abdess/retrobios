@@ -2224,6 +2224,17 @@ def rebase_refs(
     return applied
 
 
+def _citation_key(ref: str) -> str:
+    """A citation compared without the spacing the author chose.
+
+    A recale rewrites the located tokens and leaves the sentence alone, so
+    `a.c:228, 1439-1443` keeps its space while the rendered form drops it.
+    They are the same citation, and comparing them literally makes a run
+    that was written look unwritten, which holds the pin back for ever.
+    """
+    return re.sub(r"\s+", "", ref)
+
+
 def pending_recale(
     report: ProfileReport, accept_changed: bool = False, text: str | None = None
 ) -> int:
@@ -2259,7 +2270,7 @@ def pending_recale(
     pool: dict[tuple[str, str], int] = {}
     for citation in collect_citations(document):
         if citation.kind == "prose":
-            slot = (citation.field, citation.ref)
+            slot = (citation.field, _citation_key(citation.ref))
             pool[slot] = pool.get(slot, 0) + 1
     for entry in report.entries or []:
         if entry.kind != "prose":
@@ -2280,9 +2291,9 @@ def pending_recale(
                 pending += 1
             continue
         rendered = _run_after_moves([p.part for p in entry.parts], moves)
-        if rendered == entry.source_ref:
+        if _citation_key(rendered) == _citation_key(entry.source_ref):
             continue
-        slot = (entry.field, rendered)
+        slot = (entry.field, _citation_key(rendered))
         if pool.get(slot, 0) > 0:
             pool[slot] -= 1
             continue
