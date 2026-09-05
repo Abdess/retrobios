@@ -260,7 +260,7 @@ files:
     note: >
       any SF2 or SF3 file loads; fluid.soundfont names it and
       fluid_synth_sfload is the only check
-    source_ref: "src/gui/midi_synth.h:346-384, src/gui/midi_synth.h:462-473, src/dosbox.cpp:3716"
+    source_ref: "src/gui/midi_synth.h:346-384, src/gui/midi_synth.h:462-473, src/dosbox.cpp:3710"
 
   # -- PC-98 character generator --
 

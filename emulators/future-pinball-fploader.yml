@@ -718,7 +718,7 @@ files:
     bundled: true
     size: 240216
     description: "PuPCOM script object drawing PinUP Player video onto table textures"
-    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c, PuPPlugin.dll .rdata IPuPCOM, PuPVideo"
+    source_ref: "BAM.dll 1.5-408 .text:0x100cf400-0x100cf75c, PuPPlugin.dll .rdata IPuPCOM, PuPPlugin.dll PuPVideo"
     note: "Takes BAM_GetTextureId and BAM_ReplaceTexture from the plugin API."
 
   - name: icom.dll

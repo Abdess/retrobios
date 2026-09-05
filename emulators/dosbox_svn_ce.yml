@@ -12,7 +12,7 @@ systems: [dos]
 notes: |
   Same codebase as dosbox_svn, builds against real SDL 1.2 + SDL_net
   instead of the fake SDL shim (WITH_FAKE_SDL not set).
-  ref: libretro/Makefile.libretro:244
+  ref: libretro/Makefile.libretro:104-105
 
   No MT-32 emulation. src/midi/munt referenced in libretro/Makefile.common:15
   does not exist, no MUNT submodule. MIDI is hardware-only
