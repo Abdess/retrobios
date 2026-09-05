@@ -5,7 +5,7 @@ source: "https://github.com/glKarin/com.n0n3m4.diii4a"
 upstream: "https://github.com/glKarin/com.n0n3m4.diii4a"
 author: "glKarin"
 profiled_date: "2026-08-11"
-source_commit: "683afc7aa181ec4b7ee69424ce9fdb1a8fac5ba9"
+source_commit: "dea1eb9f122cfae042961cfc32a3474e59354589"
 core_version: "1.1.0harmattan72"
 display_name: "id Tech engine collection (idTech4A++)"
 cores:
@@ -330,13 +330,15 @@ files:
     required: true
     bundled: true
     category: game_data
-    size: 136061
-    md5: 2f5c49dca4993da5911d632d3962c1f3
-    sha1: 0d4dee46085ced0fd117030a13533d903265301c
+    size: 141815
+    md5: 5b72ab7bb1c295c30b9cbb274a4bd6e9
+    sha1: e37810f05cc9a2e40b47a274184fe9347fef1393
     description: "ETQW shader set and megatexture patches"
     note: >-
       Unpacked into the ETQW base folder. The name sorts last so the entries
-      override the ones the retail archives carry.
+      override the ones the retail archives carry. ETQW_GLSL_SHADER_VERSION
+      names the set the build expects and reads .6 here; the .3 pack it
+      replaced is kept as a variant for older builds.
     source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:208-217, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:747-766, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:400"
 
   - name: legacy_v2.83.2.pk3
@@ -369,7 +371,7 @@ files:
       XASH3D_EXTRAS_PAK1. It carries the touch-control textures the mobile build
       draws and the gamecontrollerdb.txt the SDL joystick layer reads through the
       virtual filesystem.
-    source_ref: "Q3E/src/main/jni/xash3d/xash3d-fwgs/filesystem/filesystem.c:1376-1378, Q3E/src/main/jni/xash3d/xash3d-fwgs/engine/platform/sdl2/joy_sdl2.c:346, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:142-151"
+    source_ref: "xash3d-fwgs filesystem/filesystem.c:1376-1378, xash3d-fwgs engine/platform/sdl2/joy_sdl2.c:346, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:142-151"
 
   - name: cs16client-extras.pk3
     required: false
@@ -383,7 +385,7 @@ files:
     note: >-
       Extracted right after the base extras and mounted the same way, for the
       cs16 and cs16_yapb server classes the launcher offers.
-    source_ref: "Q3E/src/main/jni/xash3d/xash3d-fwgs/filesystem/filesystem.c:1380-1382, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:153-162, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:815-843, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:412"
+    source_ref: "xash3d-fwgs filesystem/filesystem.c:1380-1382, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:153-162, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:815-843, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:412"
 
   - name: extras.zip
     required: true
@@ -584,7 +586,7 @@ exclusion_note: >
   and an `idtech4amm.version` stamp is written beside each extracted resource.
   ref: doom3/neo/framework/FileSystem.cpp:2052, 3397-3399,
        Q3E/src/main/jni/quake2/yquake2/src/common/filesystem.c:1801-1850,
-       Q3E/src/main/jni/serioussam/SamTFE/Sources/Engine/Base/Stream.cpp:212-247,
+       SeriousSamClassic SamTFE/Sources/Engine/Base/Stream.cpp:212-247,
        Q3E/src/main/jni/ecwolf/src/wl_iwad.cpp:766,
        Q3E/src/main/jni/q3e/q3emisc.c:23-25,
        idTech4Amm/src/main/java/com/n0n3m4/DIII4A/GameLauncher.java:2899, 2916,

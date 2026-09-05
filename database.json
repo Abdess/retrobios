@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-04T12:58:17Z",
-  "total_files": 10331,
-  "total_size": 13322784493,
+  "generated_at": "2026-09-05T02:48:01Z",
+  "total_files": 10332,
+  "total_size": 13322926308,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -52658,6 +52658,16 @@
       "crc32": "63d381a2",
       "adler32": "6884bfec"
     },
+    "0d4dee46085ced0fd117030a13533d903265301c": {
+      "path": "bios/Other/idtech4a++/.variants/zzz_etqwbase.pk4.2f5c49dc",
+      "name": "zzz_etqwbase.pk4",
+      "size": 136061,
+      "sha1": "0d4dee46085ced0fd117030a13533d903265301c",
+      "md5": "2f5c49dca4993da5911d632d3962c1f3",
+      "sha256": "994886a47a7e4f542bc0824758f122004887e19ddbdf83909bca635748f50c64",
+      "crc32": "89fa9730",
+      "adler32": "f2042e52"
+    },
     "2c6cd92cfa97becc7e729c6469a441c7e7b851c7": {
       "path": "bios/Other/idtech4a++/autoexec.cfg",
       "name": "autoexec.cfg",
@@ -52908,15 +52918,15 @@
       "crc32": "b36e485b",
       "adler32": "bb4ae956"
     },
-    "0d4dee46085ced0fd117030a13533d903265301c": {
+    "e37810f05cc9a2e40b47a274184fe9347fef1393": {
       "path": "bios/Other/idtech4a++/zzz_etqwbase.pk4",
       "name": "zzz_etqwbase.pk4",
-      "size": 136061,
-      "sha1": "0d4dee46085ced0fd117030a13533d903265301c",
-      "md5": "2f5c49dca4993da5911d632d3962c1f3",
-      "sha256": "994886a47a7e4f542bc0824758f122004887e19ddbdf83909bca635748f50c64",
-      "crc32": "89fa9730",
-      "adler32": "f2042e52"
+      "size": 141815,
+      "sha1": "e37810f05cc9a2e40b47a274184fe9347fef1393",
+      "md5": "5b72ab7bb1c295c30b9cbb274a4bd6e9",
+      "sha256": "9e413f84695823fb04e4628b0c52f1a5bbdf04492b00e708cc77e850df98938a",
+      "crc32": "317423f7",
+      "adler32": "42e0aca8"
     },
     "486eede1bb748d95efc8a2a3d46ef1a530100559": {
       "path": "bios/Other/ines/CART.NES",
@@ -113435,6 +113445,7 @@
       "eac8ae47e95f77cc1c5328a48ff5ed50": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
       "41eed0bf6aad777e6583ecb2ff0907b8": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "0a6b681bd9ff1a94174db2373d60f60f": "b194b556763146786b994f606c8697ab8f1b5f47",
+      "2f5c49dca4993da5911d632d3962c1f3": "0d4dee46085ced0fd117030a13533d903265301c",
       "a5ab2ada57d1df5e51097e8c974fa078": "2c6cd92cfa97becc7e729c6469a441c7e7b851c7",
       "813afc64dc116dbcffdbe51873555a44": "d35c75fcbf972bb72230ba3a0d2e6b5afa993dc4",
       "9f6f5073fda93251f7a48a91a6d4c5d1": "5be92df9e74843bc6071e3627f4fd876d499a490",
@@ -113460,7 +113471,7 @@
       "d3f231863ee2973dbc9291e853d1eb4a": "dd2364da2cc8b49e32330ba9abff80727b4ea0a0",
       "15bf94e95c94c301f92270b6775b9a3d": "ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2",
       "1a65bf279b969c017a34497d183e5544": "971249b94cb62fbca2f42c8ab7a7d29d30e5b368",
-      "2f5c49dca4993da5911d632d3962c1f3": "0d4dee46085ced0fd117030a13533d903265301c",
+      "5b72ab7bb1c295c30b9cbb274a4bd6e9": "e37810f05cc9a2e40b47a274184fe9347fef1393",
       "c1db31a2aa8a12432705fc8bd3c1156a": "486eede1bb748d95efc8a2a3d46ef1a530100559",
       "f8a3b82f873132e312764807346182c6": "dbbaa1e149d1e3bbf62b1b16c9e23ecf5924636d",
       "d4323f40067263496f19ab7745481fd7": "bb1a86caeb1b6351da6e7d46ed2051e8e5ec5a15",
@@ -132912,6 +132923,10 @@
         "cb6be8206308470ecaa8b9cc882d82abe0ef3562",
         "231b29ef9d6314930eb18e57240e27ae81a6e88f"
       ],
+      "zzz_etqwbase.pk4": [
+        "0d4dee46085ced0fd117030a13533d903265301c",
+        "e37810f05cc9a2e40b47a274184fe9347fef1393"
+      ],
       "autoexec.cfg": [
         "2c6cd92cfa97becc7e729c6469a441c7e7b851c7"
       ],
@@ -132983,9 +132998,6 @@
       ],
       "extras.pk3": [
         "971249b94cb62fbca2f42c8ab7a7d29d30e5b368"
-      ],
-      "zzz_etqwbase.pk4": [
-        "0d4dee46085ced0fd117030a13533d903265301c"
       ],
       "CART.NES": [
         "486eede1bb748d95efc8a2a3d46ef1a530100559"
@@ -157027,6 +157039,7 @@
       "58c1f5e0": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
       "bef6e55c": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "63d381a2": "b194b556763146786b994f606c8697ab8f1b5f47",
+      "89fa9730": "0d4dee46085ced0fd117030a13533d903265301c",
       "96847af2": "2c6cd92cfa97becc7e729c6469a441c7e7b851c7",
       "cbb0a5c0": "d35c75fcbf972bb72230ba3a0d2e6b5afa993dc4",
       "08acb79b": "5be92df9e74843bc6071e3627f4fd876d499a490",
@@ -157052,7 +157065,7 @@
       "d20b2240": "dd2364da2cc8b49e32330ba9abff80727b4ea0a0",
       "7c9bf65a": "ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2",
       "b36e485b": "971249b94cb62fbca2f42c8ab7a7d29d30e5b368",
-      "89fa9730": "0d4dee46085ced0fd117030a13533d903265301c",
+      "317423f7": "e37810f05cc9a2e40b47a274184fe9347fef1393",
       "2e03cb7f": "486eede1bb748d95efc8a2a3d46ef1a530100559",
       "d2814640": "dbbaa1e149d1e3bbf62b1b16c9e23ecf5924636d",
       "07465cc4": "bb1a86caeb1b6351da6e7d46ed2051e8e5ec5a15",
@@ -167360,6 +167373,7 @@
       "7f7325b9d5681abda6b26d641f13bf059d25af97c7b4ddeabc7ce7071c60d84e": "2e8d9f0a8ff08896674badeba8aa3ac5245304c3",
       "c8dd1e361ab3219a956b9b7879a17658b10273cc3569bf23cb9ffb23f55e5152": "231b29ef9d6314930eb18e57240e27ae81a6e88f",
       "3397a6ffe79b1f3fdd6745746edfc004eb4a48c1569643ced6513a2b49fac91f": "b194b556763146786b994f606c8697ab8f1b5f47",
+      "994886a47a7e4f542bc0824758f122004887e19ddbdf83909bca635748f50c64": "0d4dee46085ced0fd117030a13533d903265301c",
       "33767ae63d7e16f5b6786eeb0fdfe53e7af7d7abd3b544fcd91936c9483661aa": "2c6cd92cfa97becc7e729c6469a441c7e7b851c7",
       "1a8339df67295ef7169765ec440d0a1b07e1d61058c12dc68ae79122321b413a": "d35c75fcbf972bb72230ba3a0d2e6b5afa993dc4",
       "a987aabd5a29ebc169c679c6ffebb2329ef0a00f1e37cc25cdbde2569d1ef6f6": "5be92df9e74843bc6071e3627f4fd876d499a490",
@@ -167385,7 +167399,7 @@
       "8f77ab41b540f08caa817ad039db2920b28547de261a971306ffae5c19647bfc": "dd2364da2cc8b49e32330ba9abff80727b4ea0a0",
       "7ced212637e450f95a956fcf05cc8607d21eb2a2f487cc49b38a8c4ecfb880bc": "ab0c9f66e9e9be4af96c20d5ce3a9d684eeff2c2",
       "55c0639f23038683e9ea479bf8390f4785c710e1d174349cd7a2769f8aea48ba": "971249b94cb62fbca2f42c8ab7a7d29d30e5b368",
-      "994886a47a7e4f542bc0824758f122004887e19ddbdf83909bca635748f50c64": "0d4dee46085ced0fd117030a13533d903265301c",
+      "9e413f84695823fb04e4628b0c52f1a5bbdf04492b00e708cc77e850df98938a": "e37810f05cc9a2e40b47a274184fe9347fef1393",
       "942f36376246dbdff99a0b94aad930b2cccf1f534e5390468ac9c0d50752d7dd": "486eede1bb748d95efc8a2a3d46ef1a530100559",
       "17da9c5feeba7177f19159d9e835242daeff0c829e61e203d82e5f540bb123f3": "dbbaa1e149d1e3bbf62b1b16c9e23ecf5924636d",
       "39a9c99bb666c9fcf0533997151af2659e8b7b02a5894b55b915d0a3ae4a1fe3": "bb1a86caeb1b6351da6e7d46ed2051e8e5ec5a15",
@@ -179366,6 +179380,9 @@
       ],
       "C/xboxdash.xbe": [
         "8b6e63f86dfd31821df210f5da73f8428b4fff15"
+      ],
+      ".variants/zzz_etqwbase.pk4.2f5c49dc": [
+        "0d4dee46085ced0fd117030a13533d903265301c"
       ],
       "doom3/base/doom3_chinese_translation_doom3bfg.pk4": [
         "8c06159ab1012b271d39d624b45c55c2360dc443"
