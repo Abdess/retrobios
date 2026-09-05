@@ -9,9 +9,11 @@ each page takes one job from start to finish.
 
 ## For users
 
+- **[First install](first-install.md)** - one path from an empty folder to working files, with what each step prints
 - **[Getting started](getting-started.md)** - installation, BIOS directory paths per platform, verification
 - **[Installer](installer.md)** - the one-liner in full: bootstrap, options, environment overrides, platform detection, trust boundary
-- **[FAQ](faq.md)** - common questions, troubleshooting, hash explanations
+- **[Troubleshooting](troubleshooting.md)** - diagnosis by symptom: missing BIOS, hash mismatch, pack issues
+- **[FAQ](faq.md)** - common questions, hash explanations
 
 If you just want to download BIOS packs, see the [home page](../index.md).
 
@@ -22,7 +24,6 @@ If you just want to download BIOS packs, see the [home page](../index.md).
 - **[Advanced usage](advanced-usage.md)** - custom packs, region filtering, one file per slot, target filtering, truth generation, emulator verification, offline workflow
 - **[Verification modes](verification-modes.md)** - how each platform verifies BIOS files, severity matrix, resolution chain
 - **[Data model](data-model.md)** - database.json structure, indexes, file resolution order, YAML formats
-- **[Troubleshooting](troubleshooting.md)** - diagnosis by symptom: missing BIOS, hash mismatch, pack issues, verify errors
 
 See also [dump provenance](../provenance.md) for how the collection lines up
 against the No-Intro, Redump and TOSEC catalogs.

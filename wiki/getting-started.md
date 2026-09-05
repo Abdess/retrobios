@@ -6,7 +6,10 @@ BIOS files are firmware dumps from original console hardware. Emulators need the
 
 ## Installation
 
-Three ways to get BIOS files in place, from easiest to most manual.
+Three ways to get BIOS files in place. The installer is the one to use;
+the two sections after it are for when it cannot run. For a walkthrough of a
+first install with what each step prints, see
+[First install](first-install.md).
 
 ### Option 1: the installer (recommended)
 
@@ -214,20 +217,30 @@ BIOS files live in the RomM library under `bios/{platform_slug}/`, one
 subfolder per system, and are managed through the web interface. Check the
 [RomM documentation](https://github.com/rommapp/romm) for setup details.
 
-## Verifying your setup
+## Checking what you installed
 
-`install.py --check` verifies an existing install without downloading anything.
-For the full report, run `verify.py` from a clone of the repository:
+`--check` reads the BIOS folder, hashes what is there and writes nothing:
 
 ```bash
-python scripts/verify.py --platform retroarch
-python scripts/verify.py --platform batocera
-python scripts/verify.py --platform recalbox
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh -s -- --check
 ```
 
-The output shows each expected file with its status: `ok`, `missing`, or
-`untested`. `untested` means the file is there but its hash is not the expected
-one, which is how a wrong revision or a bad dump shows up.
+It ends on a count:
+
+```
+Checking existing files...
+  1872/1872 present (1872 verified, 0 wrong hash)
+
+  All files up to date.
+```
+
+`0 wrong hash` is the line that matters. A number there means a file is present
+whose contents the platform will reject, which is how a wrong revision or a bad
+dump shows up.
+
+`scripts/verify.py` answers a different question, how complete this
+repository's collection is. It reads `database.json`, never your BIOS folder,
+and needs a clone.
 
 Only hash-checking platforms can catch a wrong version: Batocera, RetroBat,
 Recalbox, EmuDeck, RetroDECK, RomM, ROCKNIX and MiSTer FPGA compare MD5,

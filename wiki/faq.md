@@ -2,13 +2,16 @@
 
 ## My game shows a black screen
 
-Most likely a missing or incorrect BIOS file. Run verification for your platform:
+Most likely a missing or incorrect BIOS file. Check what is in the BIOS folder:
 
 ```bash
-python scripts/verify.py --platform retroarch
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh -s -- --check
 ```
 
-Look for `missing` or `untested` entries. `missing` means the file is not there at all. `untested` means the file is there but its hash is not the expected one, so it is the wrong version or a bad dump: replace it with one matching the hash listed on the system page.
+The count it ends on says what is wrong. A number after `wrong hash` means a
+file is there whose contents the platform will reject, so it is the wrong
+version or a bad dump, and running the install again replaces it. Files that
+are absent are counted as needing downloading.
 
 Some cores also support HLE (see below), so a missing BIOS may not always be the cause. Check the emulator's logs for error messages.
 

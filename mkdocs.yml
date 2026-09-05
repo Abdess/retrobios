@@ -664,6 +664,7 @@ nav:
 - Data & API: data.md
 - Wiki:
   - Overview: wiki/index.md
+  - First install: wiki/first-install.md
   - Getting started: wiki/getting-started.md
   - Installer: wiki/installer.md
   - FAQ: wiki/faq.md

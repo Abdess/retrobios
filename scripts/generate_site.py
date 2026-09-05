@@ -3560,6 +3560,7 @@ def generate_mkdocs_nav(
 
     wiki_nav = [
         {"Overview": "wiki/index.md"},
+        {"First install": "wiki/first-install.md"},
         {"Getting started": "wiki/getting-started.md"},
         {"Installer": "wiki/installer.md"},
         {"FAQ": "wiki/faq.md"},

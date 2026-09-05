@@ -6,15 +6,24 @@ Diagnosis guide organized by symptom. Each section describes what to check and h
 
 Most launch failures are caused by a missing or incorrect BIOS file.
 
-**Check if the BIOS exists:**
+**Check what is in your BIOS folder:**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh -s -- --check
+```
+
+It hashes what is there and writes nothing. Anything counted as needing
+downloading is absent, and a required file that is absent means the core cannot
+start games for that system at all.
+
+`scripts/verify.py` answers a different question, how complete this
+repository's collection is. It reads `database.json`, never your BIOS folder,
+and needs a clone:
 
 ```bash
 python scripts/verify.py --platform retroarch --verbose
 python scripts/verify.py --system sony-playstation
 ```
-
-Look for `MISSING` entries in the output. A missing required BIOS means the core
-cannot start games for that system at all.
 
 **Check if the hash matches:**
 
