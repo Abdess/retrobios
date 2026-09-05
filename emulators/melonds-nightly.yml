@@ -3,7 +3,7 @@ type: standalone
 core_classification: community_fork
 source: "https://github.com/rafaelvcaetano/melonDS-android"
 upstream: "https://github.com/rafaelvcaetano/melonDS-android-lib"
-source_commit: "ae8790bdb4bf01555c2f168ab9bc77fbeb5dceb6"
+source_commit: "3f3a1c8260850ce5f5ffe2b25ee4274b8674fa5f"
 upstream_commit: "431ab4bd0003c4356e25fce89640ae1004579b9b"
 profiled_date: "2026-08-12"
 core_version: "2.0.1 (NIGHTLY)"

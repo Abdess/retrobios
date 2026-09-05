@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/p2000t/M2000"
 upstream: "https://github.com/p2000t/M2000"
 profiled_date: "2026-03-24"
-source_commit: "fb0c1162de393608d339132d7200b1a4c3b95b72"
+source_commit: "da0b8cbef2007c907f5db2166847c3209643865d"
 core_version: "0.9.4"
 display_name: "Philips - P2000T (M2000)"
 cores:
@@ -22,7 +22,7 @@ notes: |
     - SAA5050 teletext font in m2000_saa5050.h
 
   retro_init() calls InitP2000(monitor_rom, basic_nl_rom) which copies
-  the embedded arrays into ROM memory (P2000.c:282-311). LoadFont() uses
+  the embedded arrays into ROM memory (src/P2000.c:292-328). LoadFont() uses
   the embedded saa5050_fnt array (m2000_libretro.c:103-161). No system
   directory access. The standalone version loads P2000ROM.bin, BASIC.bin
   and Default.fnt from disk, but the libretro port embeds all three.
