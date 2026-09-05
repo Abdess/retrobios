@@ -75,7 +75,7 @@ files:
     size: 524288
     description: "Saturn BIOS"
     note: "Any dump of the 512 KiB console ROM, the compatible machines included. Area code is chosen by [Peripheral] Areacode and AutoAreacode, not by the image, so no region selects this file."
-    source_ref: "SSF.exe 0x43d770 (SaturnBIOS 0x129b1f8), SSF.exe 0x129a2f8 with the filter at 0x129a310, SSF.exe 0x43ff96 (NoBIOS 0x129b4cc), libnative-lib.so SSF::CStateSaveBase::_GetBIOSHash 0x134b8ec-0x134b924, Document/Readme.txt BIOSファイルについて"
+    source_ref: "SSF.exe 0x43d770 (SaturnBIOS 0x129b1f8), SSF.exe 0x129a2f8 with the filter at 0x129a310, SSF.exe 0x43ff96 (NoBIOS 0x129b4cc), libnative-lib.so SSF::CStateSaveBase::_GetBIOSHash 0x134b8ec-0x134b924, SSF-archive Document/Readme.txt BIOSファイルについて"
 
   - name: "epr-20091.ic8"
     aliases:
@@ -95,7 +95,7 @@ files:
     size: 524288
     description: "ST-V BIOS"
     note: "Loose 512 KiB EPROM image, read outside the cartridge ZIP. Any of the board revisions is accepted, the code branching on none of them."
-    source_ref: "SSF.exe 0x43d91f (STVBIOS 0x129b218), SSF.exe 0x129a328, Document/Readme.txt ST-V BIOS option, Document/Readme.txt No BIOS option"
+    source_ref: "SSF.exe 0x43d91f (STVBIOS 0x129b218), SSF.exe 0x129a328, SSF-archive Document/Readme.txt ST-V BIOS option, SSF-archive Document/Readme.txt No BIOS option"
 
   - name: "<cartridge>.bin"
     system: sega-saturn
@@ -103,7 +103,7 @@ files:
     category: game_data
     description: "cartridge image mapped at A-Bus CS0"
     note: "[Peripheral] DataCartridge, gated by DataCartridgeEnable and off by default. SSF reads the file at the configured path into the 32 MiB A-Bus CS0 window and identifies it in no way; the dumps that belong there are the two Saturn ROM carts, mpr-18811-mx.ic1 for The King of Fighters '95 and mpr-19367-mx.ic1 for Ultraman. Readme.txt records the option as unverified."
-    source_ref: "SSF.exe 0x43e26b (DataCartridge 0x1298838), SSF.exe 0x43e178 (DataCartridgeEnable 0x1298820), SSF.exe 0x129a340, SSF.exe 0x916e5e-0x916e84, Document/Readme.txt Data Cartridge option"
+    source_ref: "SSF.exe 0x43e26b (DataCartridge 0x1298838), SSF.exe 0x43e178 (DataCartridgeEnable 0x1298820), SSF.exe 0x129a340, SSF.exe 0x916e5e-0x916e84, SSF-archive Document/Readme.txt Data Cartridge option"
 
   - name: "<name>.cht"
     path: "Cheat/<product id>/<name>.cht"

@@ -33,7 +33,7 @@ notes: |
   folder of the data directory, Library/Application Support/AetherSX2 on macOS
   and Android/data/xyz.aethersx2.android on Android, and the Folders section of
   PCSX2.ini names another path when set.
-  ref: aethersx2 v1.5-3939 MacOS/AetherSX2, aethersx2 archive/desktop/mac/README.md
+  ref: AetherSX2-release MacOS/AetherSX2, aethersx2 archive/desktop/mac/README.md
 
   Detection is by content. The scan lists the BIOS folder with a *.* mask, keeps
   files between 4 and 8 MB, and accepts an image whose romdir carries a RESET
@@ -48,7 +48,7 @@ notes: |
        aethersx2/pcsx2/ps2/BiosTools.cpp:235-260,
        aethersx2/pcsx2/ps2/BiosTools.cpp:272-316,
        aethersx2 v1.5-3606 usr/share/aethersx2 0xa45ffc,
-       aethersx2 v1.5-3939 MacOS/AetherSX2 0x1006e7650
+       AetherSX2-release MacOS/AetherSX2 0x1006e7650
 
   Companions derive from the selected image. rom1 and rom2 are appended to the
   full name first, then substituted for the existing extension, so an image at
@@ -78,7 +78,7 @@ notes: |
   sounds. The macOS build keeps the folder at AetherSX2.app/Contents/Resources
   and adds its Metal libraries; the Android build carries the shaders, fonts,
   icons and sounds as APK assets and draws its own interface.
-  ref: aethersx2 v1.5-3939 AetherSX2.app/Contents/Resources,
+  ref: AetherSX2-release AetherSX2.app/Contents/Resources,
        aethersx2 v1.5-3668 xyz.aethersx2.android assets
 
 files:
@@ -98,7 +98,7 @@ files:
     max_size: 4194304
     description: "DVD player ROM"
     note: "Tried as {bios}.rom1 then {biosbase}.rom1. Read at 0x2404000 of the EE memory block and truncated to 4 MB. Logged and skipped when absent."
-    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:192-218, aethersx2 v1.5-3606 usr/share/aethersx2 0xa45b44, aethersx2 v1.5-3939 MacOS/AetherSX2 0x1006e7184"
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:192-218, aethersx2 v1.5-3606 usr/share/aethersx2 0xa45b44, AetherSX2-release MacOS/AetherSX2 0x1006e7184"
 
   - name: ps2-0230a-20080220.rom2
     aliases:
@@ -108,7 +108,7 @@ files:
     max_size: 524288
     description: "Chinese ROM extension"
     note: "Same two-step naming as rom1. Read at 0x2804000 of the EE memory block and truncated to 512 KB. Only present on Chinese region consoles."
-    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:192-218, aethersx2 v1.5-3606 usr/share/aethersx2 0xa45d50, aethersx2 v1.5-3939 MacOS/AetherSX2 0x1006e7338"
+    source_ref: "aethersx2/pcsx2/ps2/BiosTools.cpp:192-218, aethersx2 v1.5-3606 usr/share/aethersx2 0xa45d50, AetherSX2-release MacOS/AetherSX2 0x1006e7338"
 
   - name: ps2-0230a-20080220.nvm
     path: bios/ps2-0230a-20080220.nvm
@@ -157,14 +157,14 @@ files:
     required: false
     description: "Widescreen patch archive"
     note: "Per-game pnach entries matched on the disc CRC, loaded when widescreen patches are enabled. The cheats_ws folder takes precedence and the archive is skipped when it holds a match. Shipped by the Linux and Android builds; the macOS build looks for it without carrying one."
-    source_ref: "aethersx2/pcsx2/Patch.cpp:202-231, aethersx2 v1.5-3939 MacOS/AetherSX2"
+    source_ref: "aethersx2/pcsx2/Patch.cpp:202-231, AetherSX2-release MacOS/AetherSX2"
 
   - name: cheats_ni.zip
     path: resources/cheats_ni.zip
     required: false
     description: "No-interlacing patch archive"
     note: "Same form as cheats_ws.zip, loaded when no-interlacing patches are enabled, with the cheats_ni folder taking precedence. Shipped by the Linux and Android builds; the macOS build looks for it without carrying one."
-    source_ref: "aethersx2/pcsx2/Patch.cpp:202-231, aethersx2 v1.5-3939 MacOS/AetherSX2"
+    source_ref: "aethersx2/pcsx2/Patch.cpp:202-231, AetherSX2-release MacOS/AetherSX2"
 
   - name: game_controller_db.txt
     path: resources/game_controller_db.txt
@@ -172,4 +172,4 @@ files:
     bundled: true
     description: "SDL controller mapping database"
     note: "Read from the resources folder and fed to SDL at input init. SDL falls back to its built-in mappings when the file cannot be read."
-    source_ref: "aethersx2/pcsx2/PAD/Host/SDLJoystick.cpp:46, aethersx2 v1.5-3939 AetherSX2.app/Contents/Resources"
+    source_ref: "aethersx2/pcsx2/PAD/Host/SDLJoystick.cpp:46, AetherSX2-release AetherSX2.app/Contents/Resources"
