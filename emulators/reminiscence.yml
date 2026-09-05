@@ -3,6 +3,7 @@ type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/REminiscence"
 upstream: "https://github.com/cyxx/REminiscence"
+upstream_commit: "947a4dce261aacc4f6ec0c2c90cb9d7e37712c7b"
 profiled_date: "2026-03-25"
 source_commit: "e80d7b1aa287010e30c54f72252a9303173f1c7e"
 core_version: "0.3.6"
@@ -39,7 +40,7 @@ notes: |
 
   All game data files are loaded from the content directory via FileSystem (fs.cpp),
   which scans the directory and matches filenames case-insensitively (strcasecmp at
-  fs.cpp:52). The resource system (resource.cpp) loads files by constructing names
+  fs.cpp:53-56). The resource system (resource.cpp) loads files by constructing names
   like "LEVEL1.MAP", "GLOBAL.ICN", "PERSO.SPR", "FB_TXT.FNT", etc.
 
   The core never calls RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY. All data files must live
