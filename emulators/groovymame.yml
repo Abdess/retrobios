@@ -3,7 +3,7 @@ type: standalone
 core_classification: enhanced_fork
 source: "https://github.com/antonioginer/GroovyMAME"
 upstream: "https://github.com/mamedev/mame"
-source_commit: "e3fa130578a12f332f5e403d52a0be1e0395103e"
+source_commit: "953db38f4aaab1d75faa4ac79e1b45686214f987"
 logo: "https://raw.githubusercontent.com/mamedev/mame/master/docs/source/images/MAMElogo.svg"
 profiled_date: "2026-08-08"
 core_version: "0.288"
@@ -95,8 +95,8 @@ notes: |
   because device_t::searchpath() puts shortname() first (src/emu/device.cpp:150):
   segaai_soundbox.zip holds ROM_START(soundbox).
 
-  required follows romload.cpp:547-566. A missing ROM increments m_errors and
-  aborts with EMU_ERR_MISSING_FILES (romload.cpp:667), except when it is
+  required follows src/emu/romload.cpp:550-569. A missing ROM increments m_errors and
+  aborts with EMU_ERR_MISSING_FILES (src/emu/romload.cpp:670), except when it is
   ROM_OPTIONAL or NO_DUMP, which only warn and let the machine run. mac2bios is
   the one set with no good dump known, so it warns rather than aborts.
 
@@ -118,7 +118,7 @@ files:
     required: true
     category: bios_zip
     system: snk-neogeo-mvs
-    source_ref: "src/mame/neogeo/neogeo.cpp:2432"
+    source_ref: "src/mame/snk/neogeo.cpp:2428"
     contents:
       - name: sp-s2.sp1
         size: 131072
@@ -682,7 +682,7 @@ files:
     required: true
     category: bios_zip
     system: sega-stv
-    source_ref: "src/mame/sega/stv.cpp:3949"
+    source_ref: "src/mame/sega/stv.cpp:3948"
     contents:
       - name: epr-23603.ic8
         size: 524288
@@ -900,7 +900,7 @@ files:
     required: true
     category: bios_zip
     system: sega-triforce
-    source_ref: "src/mame/sega/triforce.cpp:1308"
+    source_ref: "src/mame/sega/triforce.cpp:1310"
     contents:
       - name: triforce_bootrom.bin
         size: 2097152
@@ -910,7 +910,7 @@ files:
   - name: shtzone.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sega/shtzone.cpp:378"
+    source_ref: "src/mame/sega/shtzone.cpp:376"
     contents:
       - name: epr10894a.20
         size: 16384
@@ -920,7 +920,7 @@ files:
   - name: sammymdl.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sigma/sammymdl.cpp:1027"
+    source_ref: "src/mame/sigma/sammymdl.cpp:1025"
     contents:
       - name: vm1211l01.u2
         description: "IPL Ver. 5.0"
@@ -942,7 +942,7 @@ files:
     required: true
     category: bios_zip
     system: sega-megaplay
-    source_ref: "src/mame/sega/megaplay.cpp:1016"
+    source_ref: "src/mame/sega/megaplay.cpp:1018"
     contents:
       - name: ep15294.ic2
         size: 131072
@@ -982,7 +982,7 @@ files:
     required: true
     category: bios_zip
     system: sega-megatech
-    source_ref: "src/mame/sega/megatech.cpp:1442"
+    source_ref: "src/mame/sega/megatech.cpp:1430"
     contents:
       - name: epr-12664.20
         description: "Ver 1"
@@ -1216,7 +1216,7 @@ files:
     required: true
     category: bios_zip
     system: nintendo-playch10
-    source_ref: "src/mame/nintendo/playch10.cpp:2982"
+    source_ref: "src/mame/nintendo/playch10.cpp:2980"
     contents:
       - name: pch1-c__8t_e-2.8t
         size: 16384
@@ -1423,7 +1423,7 @@ files:
     required: true
     category: bios_zip
     system: namco-system573
-    source_ref: "src/mame/konami/ksys573.cpp:6470"
+    source_ref: "src/mame/konami/ksys573.cpp:6415"
     contents:
       - name: 700a01.22g
         description: "Standard"
@@ -1459,7 +1459,7 @@ files:
   - name: konamigx.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/konami/konamigx.cpp:4193"
+    source_ref: "src/mame/konami/konamigx.cpp:4191"
     contents:
       - name: 300a01.34k
         size: 131072
@@ -1470,7 +1470,7 @@ files:
     required: true
     category: bios_zip
     system: konami-gv
-    source_ref: "src/mame/konami/konamigv.cpp:1444"
+    source_ref: "src/mame/konami/konamigv.cpp:1447"
     contents:
       - name: 999a01.7e
         size: 524288
@@ -1480,7 +1480,7 @@ files:
   - name: kviper.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/konami/viper.cpp:3269"
+    source_ref: "src/mame/konami/viper.cpp:3213"
     contents:
       - name: 941b01.u25
         size: 262144
@@ -1499,7 +1499,7 @@ files:
     required: true
     category: bios_zip
     system: konami-twinkle
-    source_ref: "src/mame/konami/twinkle.cpp:1655"
+    source_ref: "src/mame/konami/twinkle.cpp:1643"
     contents:
       - name: 863a03.7b
         size: 524288
@@ -1513,7 +1513,7 @@ files:
   - name: bubsys.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/konami/nemesis.cpp:3269"
+    source_ref: "src/mame/konami/nemesis.cpp:3140"
     contents:
       - name: boot.bin
         size: 480
@@ -1566,7 +1566,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn1
-    source_ref: "src/mame/sony/zn.cpp:5967"
+    source_ref: "src/mame/sony/zn.cpp:5969"
     contents:
       - name: m534002c-13.ic353
         description: "japan"
@@ -1587,7 +1587,7 @@ files:
     required: true
     category: bios_zip
     system: capcom-zn2
-    source_ref: "src/mame/sony/zn.cpp:6053"
+    source_ref: "src/mame/sony/zn.cpp:6055"
     contents:
       - name: m534002c-59.ic353
         size: 524288
@@ -1601,7 +1601,7 @@ files:
   - name: coh1000t.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:5987"
+    source_ref: "src/mame/sony/zn.cpp:5989"
     contents:
       - name: m534002c-14.ic353
         size: 524288
@@ -1615,7 +1615,7 @@ files:
   - name: coh1000a.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6013"
+    source_ref: "src/mame/sony/zn.cpp:6015"
     contents:
       - name: m534002c-15.ic353
         size: 524288
@@ -1629,7 +1629,7 @@ files:
   - name: coh1000w.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6022"
+    source_ref: "src/mame/sony/zn.cpp:6024"
     contents:
       - name: msm27c402zb.ic353
         size: 524288
@@ -1643,7 +1643,7 @@ files:
   - name: coh1001l.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6026"
+    source_ref: "src/mame/sony/zn.cpp:6028"
     contents:
       - name: m534002c-17.ic353
         size: 524288
@@ -1657,7 +1657,7 @@ files:
   - name: coh1002v.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6030"
+    source_ref: "src/mame/sony/zn.cpp:6032"
     contents:
       - name: coh-1002v.ic353
         size: 524288
@@ -1671,7 +1671,7 @@ files:
   - name: coh1002e.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6036"
+    source_ref: "src/mame/sony/zn.cpp:6038"
     contents:
       - name: m27c402cz-54.ic353
         size: 524288
@@ -1685,7 +1685,7 @@ files:
   - name: coh1002m.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/zn.cpp:6087"
+    source_ref: "src/mame/sony/zn.cpp:6089"
     contents:
       - name: m534002c-61.ic353
         size: 524288
@@ -1699,7 +1699,7 @@ files:
   - name: coh3002t.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/taitogn.cpp:1349"
+    source_ref: "src/mame/sony/taitogn.cpp:1341"
     contents:
       - name: m534002c-60.ic353
         size: 524288
@@ -1741,7 +1741,7 @@ files:
   - name: coh1002t.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/sony/taitogn.cpp:1350"
+    source_ref: "src/mame/sony/taitogn.cpp:1342"
     contents:
       - name: m534002c-14.ic353
         size: 524288
@@ -1763,7 +1763,7 @@ files:
   - name: taitotz.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/taito/taitotz.cpp:3014"
+    source_ref: "src/mame/taito/taitotz.cpp:3016"
     contents:
       - name: e68-05-1.ic6
         size: 524288
@@ -1778,7 +1778,7 @@ files:
     required: true
     category: bios_zip
     system: super-kaneko-nova
-    source_ref: "src/mame/kaneko/suprnova.cpp:2133"
+    source_ref: "src/mame/kaneko/suprnova.cpp:2135"
     contents:
       - name: sknsj1.u10
         size: 524288
@@ -1874,7 +1874,7 @@ files:
     required: true
     category: bios_zip
     system: hyper-neogeo64
-    source_ref: "src/mame/snk/hng64.cpp:3241"
+    source_ref: "src/mame/snk/hng64.cpp:3238"
     contents:
       - name: brom1.bin
         size: 524288
@@ -2087,7 +2087,7 @@ files:
   - name: maxaflex.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/atari/maxaflex.cpp:450"
+    source_ref: "src/mame/atari/maxaflex.cpp:447"
     contents:
       - name: atarixl.rom
         size: 16384
@@ -2105,7 +2105,7 @@ files:
   - name: crysbios.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/misc/crystal.cpp:847"
+    source_ref: "src/mame/misc/crystal.cpp:845"
     contents:
       - name: mx27l1000.u14
         description: "AMG0110B PCB"
@@ -2121,7 +2121,7 @@ files:
   - name: aristmk5.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/acorn/aristmk5.cpp:9293"
+    source_ref: "src/mame/acorn/aristmk5.cpp:9298"
     contents:
       - name: setchip v4.04.09.u7
         size: 524288
@@ -2632,7 +2632,7 @@ files:
   - name: allied.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/pinball/allied.cpp:775"
+    source_ref: "src/mame/pinball/allied.cpp:772"
     contents:
       - name: 6530-009.u5
         size: 1024
@@ -2650,7 +2650,7 @@ files:
   - name: gp_110.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/pinball/gp_1.cpp:577"
+    source_ref: "src/mame/pinball/gp_1.cpp:575"
     contents:
       - name: a-110.u12
         size: 2048
@@ -2664,7 +2664,7 @@ files:
   - name: gts1.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/pinball/gts1.cpp:1074"
+    source_ref: "src/mame/pinball/gts1.cpp:1070"
     contents:
       - name: a1752cf.u5
         size: 2048
@@ -2678,7 +2678,7 @@ files:
   - name: recel.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/pinball/recel.cpp:547"
+    source_ref: "src/mame/pinball/recel.cpp:546"
     contents:
       - name: a2361.b1
         size: 1024
@@ -2692,7 +2692,7 @@ files:
   - name: slvrball.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/misc/silverball.cpp:258"
+    source_ref: "src/mame/misc/silverball.cpp:259"
     contents:
       - name: bios47.bin
         description: "BIOS47 (Acorp 694XT/694XT1)"
@@ -3150,7 +3150,7 @@ files:
   - name: v4bios.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/barcrest/mpu4vid.cpp:8696"
+    source_ref: "src/mame/barcrest/mpu4vid.cpp:8698"
     contents:
       - name: vid.p1
         size: 65536
@@ -3170,7 +3170,7 @@ files:
   - name: pumpitup.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/misc/xtom3d.cpp:996"
+    source_ref: "src/mame/misc/xtom3d.cpp:997"
     contents:
       - name: mk3_1.0_bios.u22
         description: "mk3 v1.0"
@@ -3195,7 +3195,7 @@ files:
     required: true
     category: bios_zip
     system: astrocde
-    source_ref: "src/mame/midway/astrohome.cpp:295"
+    source_ref: "src/mame/bally/astrohome.cpp:295"
     contents:
       - name: astro.bin
         size: 8192
@@ -3206,7 +3206,7 @@ files:
     required: true
     category: bios_zip
     system: astrocde
-    source_ref: "src/mame/midway/astrohome.cpp:296"
+    source_ref: "src/mame/bally/astrohome.cpp:296"
     contents:
       - name: ballyhlc.bin
         size: 8192
@@ -3217,7 +3217,7 @@ files:
     required: true
     category: bios_zip
     system: astrocde
-    source_ref: "src/mame/midway/astrohome.cpp:297"
+    source_ref: "src/mame/bally/astrohome.cpp:297"
     contents:
       - name: bioswhit.bin
         size: 8192
@@ -3228,7 +3228,7 @@ files:
     required: true
     category: bios_zip
     system: apple2gs
-    source_ref: "src/mame/apple/apple2gs.cpp:4004"
+    source_ref: "src/mame/apple/apple2gs.cpp:4012"
     contents:
       - name: 341s0632-2.bin
         size: 4096
@@ -3460,7 +3460,7 @@ files:
     required: true
     category: bios_zip
     system: sega-beena
-    source_ref: "src/mame/sega/sega_beena.cpp:2264"
+    source_ref: "src/mame/sega/sega_beena.cpp:2266"
     contents:
       - name: 9h0-0008.bios.ic1
         size: 131072
@@ -3673,7 +3673,7 @@ files:
     required: true
     category: bios_zip
     system: vtech-socrates
-    source_ref: "src/mame/vtech/socrates.cpp:1663"
+    source_ref: "src/mame/vtech/socrates.cpp:1662"
     contents:
       - name: 27-00817-000-000.u1
         size: 262144
@@ -3700,7 +3700,7 @@ files:
     required: true
     category: bios_zip
     system: vtech-vsmile
-    source_ref: "src/mame/vtech/vsmile.cpp:403"
+    source_ref: "src/mame/vtech/vsmile.cpp:398"
     contents:
       - name: vsmile_v103.bin
         description: "v103"
@@ -4357,7 +4357,7 @@ files:
     required: true
     category: bios_zip
     system: tutor
-    source_ref: "src/mame/tomy/tutor.cpp:820"
+    source_ref: "src/mame/tomy/tutor.cpp:818"
     contents:
       - name: tutor1.bin
         size: 32768
