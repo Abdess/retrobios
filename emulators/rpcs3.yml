@@ -236,7 +236,7 @@ dev_flash:
   # -- ps1emu/ : PS1 backward compatibility --
   ps1emu:
     path: "dev_flash/ps1emu/"
-    source_ref: "rpcs3/Emu/System.cpp:1954"
+    source_ref: "rpcs3/Emu/System.cpp:2114"
     note: "PS1 Classics emulator. Booted when running PS1 game via ps1_newemu.self"
     files:
       - {name: "ps1_newemu.self", purpose: "PS1 emulator binary"}
@@ -252,7 +252,7 @@ dev_flash:
   # -- pspemu/ : PSP backward compatibility --
   pspemu:
     path: "dev_flash/pspemu/"
-    source_ref: "rpcs3/Emu/System.cpp:1982, rpcs3/Crypto/key_vault.h:285-290"
+    source_ref: "rpcs3/Emu/System.cpp:2142, rpcs3/Crypto/key_vault.h:285-290"
     note: "PSP emulator for PS3. Contains psp_emulator.self, psp_translator.self, and release/*.sprx"
     files:
       - {name: "psp_emulator.self",  purpose: "PSP emulator main binary"}
