@@ -104,19 +104,39 @@ DEFAULT_DESTS = {
     "retropie": Path.home() / "RetroPie" / "BIOS",
 }
 
+# The three RetroArch packages published for Android, newest ABI first.
+ANDROID_RETROARCH_PACKAGES = (
+    "com.retroarch.aarch64",
+    "com.retroarch",
+    "com.retroarch.ra32",
+)
+
+
+def _is_android() -> bool:
+    """Android reports itself as Linux, so the runtime is named instead.
+
+    Termux inherits the two variables the Android runtime exports, and
+    /system/build.prop covers a shell that was started without them.
+    """
+    if os.environ.get("ANDROID_ROOT") and os.environ.get("ANDROID_DATA"):
+        return True
+    return Path("/system/build.prop").exists()
+
 
 def detect_os() -> str:
     """Return normalized OS identifier.
 
-    RETROBIOS_OS names the platform outright (linux, wsl, windows, darwin),
-    for a run that has to behave like another host: the PowerShell wrapper
-    tests drive a Windows layout on a Linux runner.
+    RETROBIOS_OS names the platform outright (linux, wsl, windows, darwin,
+    android), for a run that has to behave like another host: the PowerShell
+    wrapper tests drive a Windows layout on a Linux runner.
     """
     forced = os.environ.get("RETROBIOS_OS", "").strip().lower()
-    if forced in ("linux", "wsl", "windows", "darwin"):
+    if forced in ("linux", "wsl", "windows", "darwin", "android"):
         return forced
     system = platform.system().lower()
     if system == "linux":
+        if _is_android():
+            return "android"
         proc_version = Path("/proc/version")
         if proc_version.exists():
             try:
@@ -326,6 +346,40 @@ def _detect_embedded() -> list[tuple[str, Path]]:
     return found
 
 
+def _android_storage_root() -> Path:
+    """Shared storage root, the parent RetroArch builds its defaults from."""
+    value = os.environ.get("EXTERNAL_STORAGE", "").strip()
+    return Path(value) if value else Path("/storage/emulated/0")
+
+
+def _detect_android() -> list[tuple[str, Path]]:
+    """Find the RetroArch system directory on Android.
+
+    The config is read from the app external files directory first, then from
+    the internal one (platform_unix.c:1327-1395). A system_directory left at
+    default resolves against <shared storage>/RetroArch, which is also where
+    the directory sits when no config has been written yet
+    (platform_unix.c:2836-2851).
+    """
+    found: list[tuple[str, Path]] = []
+    storage = _android_storage_root()
+    default_root = storage / "RetroArch"
+
+    for package in ANDROID_RETROARCH_PACKAGES:
+        for cfg in (
+            storage / "Android" / "data" / package / "files" / "retroarch.cfg",
+            Path("/data/data") / package / "files" / "retroarch.cfg",
+        ):
+            system_dir = _parse_retroarch_system_dir(cfg, default_root)
+            if system_dir:
+                found.append(("retroarch", system_dir))
+                return found
+
+    if default_root.exists():
+        found.append(("retroarch", default_root / "system"))
+    return found
+
+
 def _lnk_target(lnk_path: Path, exe_name: str) -> Path | None:
     """Read the target path of a Windows shortcut.
 
@@ -529,6 +583,9 @@ def detect_frontends(os_type: str, home: Path | None = None) -> list[str]:
 def detect_platforms(os_type: str) -> list[tuple[str, Path]]:
     """Detect installed emulator platforms and their BIOS directories."""
     found: list[tuple[str, Path]] = []
+
+    if os_type == "android":
+        found.extend(_detect_android())
 
     if os_type in ("linux", "wsl"):
         found.extend(_detect_embedded())
@@ -1227,6 +1284,17 @@ def _prompt_manual_platform(os_type: str) -> list[tuple[str, Path]]:
     return [(plat, dest)]
 
 
+def _default_dest(os_type: str, platform_name: str) -> Path:
+    """Fall back path for a platform named on the command line but not found.
+
+    A home directory is meaningless for RetroArch on Android, where Termux
+    owns the home and the frontend reads from shared storage.
+    """
+    if os_type == "android" and platform_name == "retroarch":
+        return _android_storage_root() / "RetroArch" / "system"
+    return DEFAULT_DESTS.get(platform_name, Path.home() / "bios")
+
+
 def _manual_usage_hint(os_type: str) -> list[str]:
     """How to name the platform and directory when nothing is detected."""
     if os_type == "windows":
@@ -1235,6 +1303,12 @@ def _manual_usage_hint(os_type: str) -> list[str]:
             "    & ([ScriptBlock]::Create((iwr -useb "
             "https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1))) "
             "--platform retroarch --dest 'C:\\RetroArch\\system'",
+        ]
+    if os_type == "android":
+        return [
+            "  Use --platform and --dest to specify manually, for example:",
+            "    python3 install.py --platform retroarch "
+            "--dest /storage/emulated/0/RetroArch/system",
         ]
     return [
         "  Use --platform and --dest to specify manually, for example:",
@@ -1352,7 +1426,7 @@ def main() -> None:
         if matched:
             platforms = matched
         else:
-            default_dest = DEFAULT_DESTS.get(args.platform, Path.home() / "bios")
+            default_dest = _default_dest(os_type, args.platform)
             print(
                 f"  Platform '{args.platform}' not detected, "
                 f"using default path: {default_dest}"

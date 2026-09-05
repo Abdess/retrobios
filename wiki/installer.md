@@ -217,8 +217,29 @@ redirect the write somewhere else again.
 
 ## Android
 
-There is no Android detection. Termux reports itself as Linux, so nothing is
-found and the platform has to be named along with where it writes:
+Android reports itself as Linux, so the runtime is named from its own
+variables instead: `ANDROID_ROOT` and `ANDROID_DATA`, which Termux inherits,
+with `/system/build.prop` covering a shell started without them.
+
+Detection then looks for RetroArch, the only Android frontend keeping a shared
+BIOS directory. `retroarch.cfg` is read from the app external files directory
+and then from the internal one, the order the frontend itself follows
+(`platform_unix.c:1327-1395`), and a `system_directory` left at `default`
+resolves against `<shared storage>/RetroArch`, where the directory also sits
+when no config has been written yet (`platform_unix.c:2836-2851`).
+
+Under scoped storage those two config paths are unreadable from Termux on
+Android 11 and later, so on current devices the shared directory is what
+answers. Running `termux-setup-storage` once is what makes it reachable:
+
+```bash
+pkg install python
+termux-setup-storage
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh
+```
+
+`EXTERNAL_STORAGE` overrides the storage root for a device that mounts it
+elsewhere. A custom BIOS directory is still named directly:
 
 ```bash
 python install.py --platform retroarch --dest /storage/emulated/0/RetroArch/system

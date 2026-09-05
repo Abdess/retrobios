@@ -214,6 +214,109 @@ class TestEmbeddedDetection(unittest.TestCase):
         self.assertEqual(self._detect_with(set()), [])
 
 
+class TestAndroidDetection(unittest.TestCase):
+    """Android reports itself as Linux, and RetroArch is the frontend there."""
+
+    def setUp(self):
+        self.saved = {
+            key: os.environ.get(key)
+            for key in ("ANDROID_ROOT", "ANDROID_DATA", "EXTERNAL_STORAGE", "RETROBIOS_OS")
+        }
+        for key in self.saved:
+            os.environ.pop(key, None)
+
+    def tearDown(self):
+        for key, value in self.saved.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
+
+    def test_runtime_variables_name_android(self):
+        os.environ["ANDROID_ROOT"] = "/system"
+        os.environ["ANDROID_DATA"] = "/data"
+        self.assertTrue(install._is_android())
+
+    def test_plain_linux_is_not_android(self):
+        self.assertFalse(
+            install._is_android() and not Path("/system/build.prop").exists()
+        )
+
+    def test_forced_os_accepts_android(self):
+        os.environ["RETROBIOS_OS"] = "android"
+        self.assertEqual(install.detect_os(), "android")
+
+    def test_default_directory_found_without_a_config(self):
+        storage = Path(tempfile.mkdtemp())
+        (storage / "RetroArch" / "system").mkdir(parents=True)
+        os.environ["EXTERNAL_STORAGE"] = str(storage)
+        self.assertEqual(
+            install._detect_android(),
+            [("retroarch", storage / "RetroArch" / "system")],
+        )
+        shutil.rmtree(storage)
+
+    def test_config_default_resolves_against_the_retroarch_root(self):
+        storage = Path(tempfile.mkdtemp())
+        files = storage / "Android" / "data" / "com.retroarch.aarch64" / "files"
+        files.mkdir(parents=True)
+        (files / "retroarch.cfg").write_text('system_directory = "default"\n')
+        os.environ["EXTERNAL_STORAGE"] = str(storage)
+        self.assertEqual(
+            install._detect_android(),
+            [("retroarch", storage / "RetroArch" / "system")],
+        )
+        shutil.rmtree(storage)
+
+    def test_custom_system_directory_wins(self):
+        storage = Path(tempfile.mkdtemp())
+        files = storage / "Android" / "data" / "com.retroarch" / "files"
+        files.mkdir(parents=True)
+        custom = storage / "Emulation" / "bios"
+        (files / "retroarch.cfg").write_text(f'system_directory = "{custom}"\n')
+        os.environ["EXTERNAL_STORAGE"] = str(storage)
+        self.assertEqual(install._detect_android(), [("retroarch", custom)])
+        shutil.rmtree(storage)
+
+    def test_nothing_found_on_a_bare_device(self):
+        storage = Path(tempfile.mkdtemp())
+        os.environ["EXTERNAL_STORAGE"] = str(storage)
+        self.assertEqual(install._detect_android(), [])
+        shutil.rmtree(storage)
+
+    def test_detect_platforms_routes_android(self):
+        storage = Path(tempfile.mkdtemp())
+        (storage / "RetroArch" / "system").mkdir(parents=True)
+        os.environ["EXTERNAL_STORAGE"] = str(storage)
+        self.assertEqual(
+            install.detect_platforms("android"),
+            [("retroarch", storage / "RetroArch" / "system")],
+        )
+        shutil.rmtree(storage)
+
+    def test_manual_hint_names_the_android_path(self):
+        hint = "\n".join(install._manual_usage_hint("android"))
+        self.assertIn("/storage/emulated/0/RetroArch/system", hint)
+
+    def test_named_platform_falls_back_to_shared_storage(self):
+        storage = Path(tempfile.mkdtemp())
+        os.environ["EXTERNAL_STORAGE"] = str(storage)
+        self.assertEqual(
+            install._default_dest("android", "retroarch"),
+            storage / "RetroArch" / "system",
+        )
+        self.assertEqual(
+            install._default_dest("linux", "batocera"), Path("/userdata/bios")
+        )
+        shutil.rmtree(storage)
+
+    def test_packages_match_the_published_flavors(self):
+        self.assertEqual(
+            install.ANDROID_RETROARCH_PACKAGES,
+            ("com.retroarch.aarch64", "com.retroarch", "com.retroarch.ra32"),
+        )
+
+
 class TestLaunchboxDetection(unittest.TestCase):
     """LaunchBox references its emulators in Data/Emulators.xml."""
 
