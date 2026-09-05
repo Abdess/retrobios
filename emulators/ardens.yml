@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/tiberiusbrown/ardens"
 upstream: "https://github.com/tiberiusbrown/ardens"
 profiled_date: "2026-03-23"
-source_commit: "8237fb9ecfe413abcdb2cc865ada80755486dfa9"
+source_commit: "661a7dd4febc8d00e790a4ecde44b936295adf97"
 core_version: "Git"
 display_name: "Arduboy (Ardens)"
 cores:
@@ -23,7 +23,7 @@ files: []
 
 platform_details:
   embedded_bootloaders:
-    source_ref: "src/boot/_make.bat, src/absim_arduboy.cpp:115-161"
+    source_ref: "src/boot/_make.bat, src/absim_arduboy.cpp:127-181"
     variants:
       - name: "arduboy3k-bootloader-game-sda"
         array: "ARDENS_BOOT_GAME_D1"
@@ -53,7 +53,7 @@ platform_details:
       All bootloaders are compiled from Intel HEX into C arrays at build
       time. The core selects the game or menu variant at reset depending
       on whether a flashcart image was loaded and the boot_to_menu config
-      flag (absim_arduboy.cpp:142-158). The bootloader is written to the
+      flag (absim_arduboy.cpp:151-181). The bootloader is written to the
       top of the ATmega32U4 program memory at the address defined by the
       BOOTSZ fuse bits (absim.hpp:811).
 
