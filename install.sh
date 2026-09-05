@@ -56,7 +56,8 @@ if [ -z "$INSTALLER" ] || [ ! -f "$INSTALLER" ]; then
   elif command -v wget >/dev/null 2>&1; then
     wget --https-only --output-document="$TEMP_INSTALLER" "$install_url"
   else
-    echo "Error: curl or wget is required." >&2
+    echo "Error: curl or wget is required to download the installer." >&2
+    echo "  On Debian or Ubuntu: sudo apt install curl" >&2
     exit 1
   fi
   actual_size=$(wc -c < "$TEMP_INSTALLER" | tr -d ' ')
@@ -74,7 +75,9 @@ if [ -z "$INSTALLER" ] || [ ! -f "$INSTALLER" ]; then
   fi
   expected=$(printf '%s' "$expected" | tr '[:upper:]' '[:lower:]')
   if [ "$actual" != "$expected" ]; then
-    echo "Error: install.py SHA-256 mismatch." >&2
+    echo "Error: the downloaded installer does not match its expected fingerprint." >&2
+    echo "  Nothing was run and nothing was written." >&2
+    echo "  The download was most likely cut short. Try again, on another network if possible." >&2
     exit 1
   fi
   INSTALLER="$TEMP_INSTALLER"
@@ -89,7 +92,8 @@ for command_name in python3 python; do
   fi
 done
 if [ -z "$PYTHON" ]; then
-  echo "Error: Python 3 is required." >&2
+  echo "Error: Python 3.8 or newer is required." >&2
+  echo "  Install it, then run this command again. On Debian or Ubuntu: sudo apt install python3" >&2
   exit 1
 fi
 

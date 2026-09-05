@@ -38,7 +38,7 @@ try {
         }
         $actual = (Get-FileHash -LiteralPath $temporary -Algorithm SHA256).Hash.ToLowerInvariant()
         if ($actual -ne $expected.ToLowerInvariant()) {
-            throw "install.py SHA-256 mismatch."
+            throw "The downloaded installer does not match its expected fingerprint. Nothing was run and nothing was written. The download was most likely cut short; try again, on another network if possible."
         }
         $installer = $temporary
     }

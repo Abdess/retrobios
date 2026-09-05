@@ -148,16 +148,16 @@ its BIOS folder, see [Getting started](getting-started.md).
 
 ### Error: Python 3.8 or newer is required.
 
-Python is missing from the machine. On Debian and Ubuntu, `sudo apt install
-python3`; on a handheld running Batocera or Recalbox it is already there, so
+Python is missing from the machine. The message names the command that installs
+it, `sudo apt install python3` on Debian and Ubuntu; on a handheld running Batocera or Recalbox it is already there, so
 this message usually means the command ran on the computer rather than on the
 console.
 
-### Error: install.py SHA-256 mismatch.
+### Error: the downloaded installer does not match its expected fingerprint.
 
-Nothing was run. The download did not match the fingerprint the script expects,
-which is almost always a truncated or intercepted transfer. Running the command
-again, on another network if possible, is the answer.
+Nothing was run and nothing was written. The download did not match the
+fingerprint the script carries, which is almost always a transfer cut short.
+Running the command again, on another network if possible, is the answer.
 
 ### Cannot create ...
 
