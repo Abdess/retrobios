@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/ruffle-rs/ruffle"
 upstream: "https://github.com/ruffle-rs/ruffle"
 profiled_date: "2026-08-08"
-source_commit: "f3a1263e164dc4cb56211ab1f113e1907730ce89"
+source_commit: "1636c780671f5f751504240c462524ae6cfcc4bb"
 core_version: "0.5.0"
 display_name: "Adobe Flash (Ruffle)"
 cores:
@@ -24,15 +24,15 @@ notes: |
   /var/data/ruffle --save-directory <saves>/ruffle <rom>`. The ActionScript
   class library is compiled by build_playerglobal into playerglobal_avm1.swf and
   playerglobal_avm2.swf and linked into the binary from OUT_DIR
-  (core/src/avm1/globals.rs:89, core/src/avm2/globals.rs:546), so startup reads
+  (core/src/avm1/globals.rs:89, core/src/avm2/globals.rs:548), so startup reads
   nothing. Locale texts, wgsl shaders, the window icon and the OpenH264 license
   are embedded the same way (desktop/src/gui/locale.rs:7-12,
-  desktop/src/app.rs:449, render/wgpu/src/shaders.rs:28-76).
+  desktop/src/app.rs:464, render/wgpu/src/shaders.rs:28-76).
 
   H.264 video is the one external dependency. external_video is a default
   feature and pulls ruffle_video_external with openh264
   (desktop/Cargo.toml:26,83,90), and enable_openh264 defaults to true
-  (desktop/src/preferences.rs:283,307). OpenH264Codec::load first dlopens the
+  (desktop/src/preferences.rs:291,316). OpenH264Codec::load first dlopens the
   system sonames libopenh264.so.7, libopenh264.so.2.4.1 and libopenh264.so on
   Linux, then falls back to <cache>/ruffle/video/ and fetches the Cisco binary
   from ciscobinary.openh264.org bz2-compressed into it
@@ -49,26 +49,26 @@ notes: |
   (video/external/src/backend.rs:41,51-69,73-80).
 
   Text uses system fonts. fontdb::Database::load_system_fonts() fills the
-  database at startup (desktop/src/app.rs:418-419), and both the Flash device
+  database at startup (desktop/src/app.rs:433-434), and both the Flash device
   fonts and the egui menu bar resolve family names against it and take whatever
   face the host answers with. How that face is read now depends on the renderer:
   freetype joined the desktop default features, so on Linux it goes through
   FreetypeFontRenderer, and the plain memory map of the file is the other branch
-  (desktop/src/backends/ui.rs:321-359,442-484,
-  desktop/src/gui/controller.rs:690-733). The families asked for are Times New
+  (desktop/src/backends/ui.rs:366-406,518-562,
+  desktop/src/gui/controller.rs:760-803). The families asked for are Times New
   Roman, Arial, Courier New and their metric-compatible substitutes, plus the
   CJK, Hebrew, Arabic and Thai faces (desktop/src/player.rs:361-412,
-  desktop/src/gui/controller.rs:569-641), and on Unix fontconfig sorts the
-  fallback chain (desktop/src/backends/ui.rs:318-329,460-472). No name, path,
+  desktop/src/gui/controller.rs:639-711), and on Unix fontconfig sorts the
+  fallback chain (desktop/src/backends/ui.rs:363-376,536-550). No name, path,
   size or hash is fixed anywhere. The compiled-in Noto Sans subset sits behind
   the default_font feature, which the desktop build does not enable
-  (core/src/player.rs:82-83, core/Cargo.toml:82,96, desktop/Cargo.toml:22), so
+  (core/src/player.rs:84-85, core/Cargo.toml:82,95, desktop/Cargo.toml:22), so
   an unmatched family leaves the run without that face rather than falling back
   to a bundled one.
 
   Files the player writes rather than expects: preferences.toml, bookmarks.toml
   and recents.toml under --config, each defaulted when absent
-  (desktop/src/preferences.rs:53-95), .sol SharedObjects under --save-directory
+  (desktop/src/preferences.rs:54-96), .sol SharedObjects under --save-directory
   (frontend-utils/src/backends/storage.rs:31-60), and the log file
   (desktop/src/main.rs:156-166). ruffle-bundle.toml is the manifest inside a
   .ruf bundle, which is content alongside the .swf rather than a runtime input
