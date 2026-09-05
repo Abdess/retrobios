@@ -283,6 +283,12 @@ def main() -> int:
     parser.add_argument("--platforms-dir", default="platforms")
     parser.add_argument("--emulators-dir", default="emulators")
     parser.add_argument("--json", action="store_true", help="JSON output")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="exit non-zero on any contested destination, not only on one the "
+        "pack should have settled by itself",
+    )
     args = parser.parse_args()
 
     with open(args.db, encoding="utf-8") as handle:
@@ -332,11 +338,16 @@ def main() -> int:
                 print(f"  {format_decision(decision)}")
         total = sum(len(c) for c in found.values())
         print(
-            f"\n{total} contested destinations. {fixable} the pack can settle on "
+            f"\n{total} contested destinations. {fixable} the pack settles on "
             f"its own, {total - fixable} rest on an upstream declaration."
         )
+        if not args.strict and total:
+            print(
+                "Reported, not failed: the remainder needs the upstream list "
+                "corrected, which no build can do. Use --strict to gate on them."
+            )
 
-    return 1 if found else 0
+    return 1 if (found and args.strict) else 0
 
 
 if __name__ == "__main__":

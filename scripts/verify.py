@@ -30,6 +30,8 @@ import os
 import sys
 import zipfile
 
+import slots
+
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     build_target_cores_cache,
@@ -793,6 +795,23 @@ def verify_platform(
     mode = normalize_mode(config.get("verification_mode"))
     platform = config.get("platform", "unknown")
 
+    # The builder settles a destination claimed by both layers; this must read
+    # the same decision, or the two tools describe different packs.
+    slot_overrides: dict[str, str] = {}
+    if emu_profiles:
+        base_dest = config.get("base_destination", "")
+        arbitrated = {
+            name: emu_profiles[name]
+            for name in resolve_platform_cores(config, emu_profiles)
+        }
+        for conflict in slots.find_conflicts(config, arbitrated, db, base_dest):
+            decision = slots.arbitrate(conflict, mode)
+            if decision.serves_both and decision.winner.local_path:
+                key = conflict.destination
+                if base_dest and key.startswith(f"{base_dest}/"):
+                    key = key[len(base_dest) + 1:]
+                slot_overrides[key] = decision.winner.local_path
+
     has_zipped = any(
         fe.get("zipped_file")
         for sys in config.get("systems", {}).values()
@@ -876,6 +895,13 @@ def verify_platform(
                 zip_contents,
                 data_dir_registry=data_dir_registry,
             )
+            override = slot_overrides.get(
+                sanitize_pack_path(
+                    file_entry.get("destination", file_entry.get("name", ""))
+                )
+            )
+            if override:
+                local_path, resolve_status = override, "slot_arbitrated"
             if not reads_file_contents(mode):
                 result = verify_entry_existence(
                     file_entry,

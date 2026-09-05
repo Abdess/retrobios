@@ -60,6 +60,7 @@ from common import (
 import packresolve
 import region as region_mod
 import slot as slot_mod
+import slots
 from deterministic_zip import _FIXED_DATE_TIME, rebuild_zip_deterministic
 from nativemode import (
     digest_algorithm,
@@ -602,10 +603,24 @@ def generate_pack(
     from common import resolve_platform_cores
 
     validation_index = {}
+    slot_overrides: dict[str, str] = {}
     if emu_profiles:
-        validation_index = _build_validation_index(
-            {name: emu_profiles[name] for name in resolve_platform_cores(config, emu_profiles)}
-        )
+        platform_profiles = {
+            name: emu_profiles[name]
+            for name in resolve_platform_cores(config, emu_profiles)
+        }
+        validation_index = _build_validation_index(platform_profiles)
+        # Where a source-verified profile contradicts the scraped baseline on
+        # one destination, the pack answers to the platform it is built for.
+        # In existence mode the frontend never reads the bytes, so serving the
+        # emulator's file satisfies both sides and nothing is traded away.
+        mode = config.get("verification_mode", "existence")
+        for conflict in slots.find_conflicts(
+            config, platform_profiles, db, base_dest
+        ):
+            decision = slots.arbitrate(conflict, mode)
+            if decision.serves_both and decision.winner.local_path:
+                slot_overrides[conflict.destination] = decision.winner.local_path
 
     # Filter systems by target if specified
     plat_cores = (
@@ -728,6 +743,10 @@ def generate_pack(
                     data_dir_registry=data_registry,
                     offline=offline,
                 )
+
+                override = slot_overrides.get(full_dest)
+                if override and status not in ("external", "release_asset"):
+                    local_path, status = override, "slot_arbitrated"
 
                 if status == "external":
                     file_ext = os.path.splitext(file_entry["name"])[1] or ""

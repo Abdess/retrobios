@@ -238,6 +238,31 @@ class TestArbitration(unittest.TestCase):
         self.assertIn("both are satisfied", served)
 
 
+class TestBuilderAndVerifierAgree(unittest.TestCase):
+    """The two tools must settle a contested destination the same way."""
+
+    def test_both_read_the_same_decision_function(self):
+        # The rule lives in one place. A second copy would let the pack and the
+        # report describe different files, which the project forbids outright.
+        builder = Path(__file__).resolve().parents[1] / "scripts" / "generate_pack.py"
+        verifier = Path(__file__).resolve().parents[1] / "scripts" / "verify.py"
+        for source in (builder, verifier):
+            text = source.read_text(encoding="utf-8")
+            self.assertIn("slots.find_conflicts(", text, source.name)
+            self.assertIn("slots.arbitrate(", text, source.name)
+            self.assertIn("decision.serves_both", text, source.name)
+
+    def test_neither_reimplements_the_mode_test(self):
+        # A local "if mode == md5" beside the override would drift from the
+        # arbitration rule the moment either side is edited.
+        for name in ("generate_pack.py", "verify.py"):
+            source = Path(__file__).resolve().parents[1] / "scripts" / name
+            body = source.read_text(encoding="utf-8")
+            marker = body.find("decision.serves_both")
+            window = body[max(0, marker - 600):marker]
+            self.assertNotIn('verification_mode") == "md5"', window, name)
+
+
 class TestProvenEvidence(unittest.TestCase):
     """What counts as proof that a claim is about content, not about a name."""
 

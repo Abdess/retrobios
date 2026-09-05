@@ -392,6 +392,14 @@ def main():
     results["verify"] = ok
     all_ok = all_ok and ok
 
+    # Step 3b: Destinations both layers claim, and how each was settled. The
+    # ones the pack settles by itself must stay at zero cost; the rest name an
+    # upstream declaration no build can repair, so this reports and never gates.
+    run(
+        [sys.executable, "scripts/slots.py"],
+        "3b/8 slot arbitration",
+    )
+
     # Step 4: Generate packs
     pack_output = ""
     if not args.skip_packs:
