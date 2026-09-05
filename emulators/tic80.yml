@@ -36,7 +36,7 @@ platform_details:
       encoded as cover images (code stored in PNG metadata).
 
   runtime:
-    source_ref: "nesbox/TIC-80 (submodule at core/)"
+    source_ref: ".gitmodules, nesbox TIC-80 runtime (the core submodule)"
     note: |
       Entire runtime compiled into the binary. No external dependencies.
       State serialization uses TIC_PERSISTENT_SIZE * 4 bytes of pmem()

@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/tyrquake"
 upstream: "http://disenchant.net/tyrquake/"
 profiled_date: "2026-03-25"
-source_commit: "471f2a72d2a7b0416f6a21eb945e5af831df06a4"
+source_commit: "e57bb11597e8a00380f30f2627d219da960cf69a"
 core_version: "v0.62"
 display_name: "Quake (TyrQuake)"
 cores: [tyrquake]
@@ -16,7 +16,7 @@ notes: >
   PAK file path — the directory containing the PAK becomes basedir
   (libretro.c:988,1050). The engine auto-detects game variant by checking the
   content path for id1, hipnotic, rogue, or quoth substrings
-  (libretro.c:1030-1070). All engine assets (gfx/palette.lmp, gfx/colormap.lmp,
+  (common/libretro.c:1313-1377). All engine assets (gfx/palette.lmp, gfx/colormap.lmp,
   gfx.wad, textures, models, sounds) are loaded from within PAK files via
   COM_AddGameDirectory (common.c:1709), which tries pak0.pak through pak9.pak in
   both lowercase and uppercase. The core never calls

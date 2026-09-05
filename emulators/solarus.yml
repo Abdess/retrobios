@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://gitlab.com/solarus-games/solarus"
 upstream: "https://gitlab.com/solarus-games/solarus"
 profiled_date: "2026-08-08"
-source_commit: "c817554d21e4fcbf726e74b0e402f34d95286a9e"
+source_commit: "9cafa994b10f64ce2cad8a34c9da062feab6002d"
 core_version: "2.2.0"
 display_name: "Solarus Game Engine"
 cores:
@@ -44,7 +44,7 @@ notes: |
 
   Files the engine writes rather than expects: settings.dat and savegames under
   the quest write directory named in quest.dat (Settings.cpp:149-166,240-280,
-  Savegame.cpp:114), the write root from SDL_GetPrefPath (QuestFiles.cpp:540),
+  Savegame.cpp:114), the write root from SDL_GetPrefPath (src/core/QuestFiles.cpp:721),
   and error.txt under SOLARUS_FILE_LOGGING (Logger.cpp:29-45). Batocera's
   002-pad.patch adds a read of /userdata/system/configs/solarus/pads.ini, which
   its own generator rewrites at every launch. The editor and launcher subtrees
