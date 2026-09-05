@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/blastem"
 upstream: "https://www.retrodev.com/blastem/"
 profiled_date: "2026-03-23"
-source_commit: "84e567e17b6fb3cea23146c4209c18d50d46cbf0"
+source_commit: "b4d75247ebad8852fd9bc385b423df704c6c5af5"
 core_version: "v0.6.3-pre"
 display_name: "Sega - Mega Drive - Genesis (BlastEm)"
 cores:
@@ -26,13 +26,13 @@ notes: |
 
   Even if a TMSS-enabled model were forced, read_bundled_file() in the
   libretro build only serves rom.db and returns NULL for tmss.md, so TMSS
-  ROM loading would fail (fatal_error at genesis.c:1933).
+  ROM loading would fail (fatal_error at genesis.c:3043).
 
   Sega CD / Mega CD is not supported (only a TODO comment in system.c:16).
   No BIOS files are required or loaded by the libretro core.
 
 files:
-  # rom.db is embedded in the libretro binary (libblastem.c:532-542,
+  # rom.db is embedded in the libretro binary (libblastem.c:1295,1302-1303,
   # extern const char rom_db_data[]). The external file is an optional
   # override — .info lists it as firmware0_opt=true.
   # .info sha1 E5414FB1C4CC7D7F5101C07E4547316779BA3D97 does not match
@@ -43,7 +43,7 @@ files:
     required: false
     hle_fallback: true
     note: "ROM feature database (game-specific mapper/save config). Embedded in core, external is optional override."
-    source_ref: "libblastem.c:1149-1172 read_bundled_file()"
+    source_ref: "libblastem.c:1297-1314 read_bundled_file()"
 
   # TMSS ROM — only used in standalone mode with tmss-enabled model
   # libretro build returns NULL for tmss.md (libblastem.c:541)
@@ -64,7 +64,7 @@ analysis:
     rom_filename: tmss.md
     rom_size: 2048  # 2 KB
     config_path: "system\0tmss_path\0"
-    source_ref: "genesis.c:1920"
+    source_ref: "genesis.c:1919-1929"
     note: |
       TMSS ROM is loaded from tmss.md (configurable via system/tmss_path).
       Models with tmss=on: md1va6, md2va1, md2va2, md3va1, md3va2.
