@@ -107,7 +107,7 @@ files:
       Recognised by the MD5 of the 256 bytes at 0x300, so the name is the one the
       dump carries rather than one the code fixes. The carousel ROMs are only
       read once this image has been accepted.
-    source_ref: "hardware/memory/cartridge/supercharger/demounit.go:56-78, hardware/memory/cartridge/supercharger/supercharger.go:107, 115, hardware/memory/cartridge/fingerprint.go:346"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit.go:56-78, hardware/memory/cartridge/supercharger/supercharger.go:107, 115, hardware/memory/cartridge/fingerprint.go:345"
 
   - name: "Starpath Demonstration Unit 1P.bin"
     system: atari-2600

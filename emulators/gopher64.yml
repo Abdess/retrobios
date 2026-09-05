@@ -4,7 +4,7 @@ core_classification: other
 source: "https://github.com/gopher64/gopher64"
 upstream: "https://github.com/gopher64/gopher64"
 profiled_date: "2026-08-08"
-source_commit: "efe78e544a96ac6724a2c2651d8f0a62044e7467"
+source_commit: "bb050baeb6c299b1259031e44623f593f8094a10"
 core_version: "v1.1.34"
 display_name: "Nintendo - Nintendo 64 (gopher64)"
 cores:

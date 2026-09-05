@@ -27,8 +27,8 @@ notes: |
   placed in {system_dir}/fuse/ by the user.
 
   Default ROM filenames are set in fuse/settings.c:209-260. Each machine
-  type loads its ROMs during reset via machine_load_rom() calls in
-  fuse/machines/*.c files. All ROMs are size-validated at load time
+  type loads its ROMs during reset via machine_load_rom() calls in the
+  fuse/machines directory. All ROMs are size-validated at load time
   (fuse/machine.c:289).
 
   The +2A reuses the +3 ROMs (plus3-0/1/2/3.rom) per settings.c:234-237.
@@ -440,7 +440,7 @@ platform_details:
       from the filesystem only.
 
   machine_rom_map:
-    source_ref: "fuse/settings.c:209-260, fuse/machines/*.c"
+    source_ref: "fuse/settings.c:209-260, fuse/machines/spec48.c, fuse/machines/spec128.c"
     note: |
       Spectrum 16K:       48.rom (1 ROM)
       Spectrum 48K:       48.rom (1 ROM)

@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/geolith-libretro"
 upstream: "https://gitlab.com/jgemu/geolith"
 profiled_date: "2026-08-07"
-source_commit: "d0297113924848c60866e980a420d14ca7208d56"
+source_commit: "57622ca5aee387867637d51ec553e0d745f6f210"
 upstream_commit: "7ed2ef95a446ffb9bf17b6536d24c108310c94da"
 core_version: "0.4.1"
 display_name: "SNK - Neo Geo AES/MVS (Geolith)"

@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/digarok/gsplus"
 upstream: "https://kegs.sourceforge.net/"
 profiled_date: "2026-03-29"
-source_commit: "47389939d652bb1e773f8dc686d8b0403ea3760f"
+source_commit: "41e71031debbde98e66ea5c5c67498e9b4726a6d"
 core_version: "KEGS 1.38"
 display_name: "Apple - Apple IIGS (GSplus)"
 cores:
