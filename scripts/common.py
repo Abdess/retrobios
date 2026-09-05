@@ -637,9 +637,33 @@ def resolve_local_file(
         # layout, so the two meet on a tail rather than on the whole string.
         # Longest tail first, and never down to the bare filename: that is the
         # weaker step below, and five files answer to GameIndex.yaml.
+        # Two kinds of ambiguity appear once every tail is indexed. A
+        # shortened tail can be claimed by several emulators shipping the same
+        # asset tree, and it then proves nothing: skip it. The full tail can be
+        # claimed twice as well, one storing it at the root of its own
+        # directory and one nested deeper; there the file whose path carries
+        # the least on top of the destination is the one that IS the
+        # destination.
+        # The descent drops at most one leading segment. A destination and the
+        # tree differ by the wrapper directory at most; beyond that the tail
+        # stops describing this file and starts describing whichever emulator
+        # happens to store the same asset tree.
         hint_parts = dest_hint.split("/")
-        for start in range(len(hint_parts) - 1):
-            for match_sha1 in by_path_suffix.get("/".join(hint_parts[start:]), []):
+        for start in range(min(2, len(hint_parts) - 1)):
+            tail = "/".join(hint_parts[start:])
+            candidates = by_path_suffix.get(tail, [])
+            if start and len(candidates) > 1:
+                continue
+            if len(candidates) > 1:
+                depth = len(tail.split("/"))
+                candidates = sorted(
+                    candidates,
+                    key=lambda h: len(
+                        files_db.get(h, {}).get("path", "").split("/")
+                    )
+                    - depth,
+                )
+            for match_sha1 in candidates:
                 if match_sha1 not in files_db:
                     continue
                 path = files_db[match_sha1]["path"]
@@ -704,15 +728,24 @@ def resolve_local_file(
                 path = entry["path"]
                 if os.path.exists(path) and path not in seen_paths:
                     seen_paths.add(path)
-                    candidates.append((path, entry.get("md5", "")))
+                    candidates.append(
+                        (path, entry.get("md5", ""), entry.get("size"))
+                    )
+
+    if zipped_file:
+        candidates = [c for c in candidates if ".zip" in os.path.basename(c[0])]
+    # A size the emulator itself verifies settles a name collision, so a
+    # candidate that fits is preferred over one that does not: "ROM" answers
+    # both an Apple IIgs image and a Macintosh one. It ranks rather than
+    # excludes, because a present file of the wrong size is reported as
+    # present and untested, and dropping it would report it as absent.
+    sized = [c for c in candidates if name_match_size_ok(file_entry, c[2])]
+    if sized:
+        candidates = sized
 
     if candidates:
-        if zipped_file:
-            candidates = [
-                (p, m) for p, m in candidates if ".zip" in os.path.basename(p)
-            ]
         if md5_set and not (sha1_candidates or sha256_candidates or crc_raw):
-            for path, db_md5 in candidates:
+            for path, db_md5, _size in candidates:
                 if ".zip" in os.path.basename(path):
                     try:
                         composite = md5_composite(path).lower()
@@ -725,20 +758,20 @@ def resolve_local_file(
         # When zipped_file is set, only accept candidates that contain it
         if zipped_file:
             valid = []
-            for path, m in candidates:
+            for path, m, size in candidates:
                 try:
                     with zipfile.ZipFile(path) as zf:
                         inner_names = {n.casefold() for n in zf.namelist()}
                         if zipped_file.casefold() in inner_names:
-                            valid.append((path, m))
+                            valid.append((path, m, size))
                 except (zipfile.BadZipFile, OSError):
                     pass
             if valid:
-                primary = [p for p, _ in valid if "/.variants/" not in p]
+                primary = [c[0] for c in valid if "/.variants/" not in c[0]]
                 return (primary[0] if primary else valid[0][0]), "hash_mismatch"
             # No candidate contains the zipped_file -fall through to step 5
         elif not unsourceable:
-            primary = [p for p, _ in candidates if "/.variants/" not in p]
+            primary = [c[0] for c in candidates if "/.variants/" not in c[0]]
             return (primary[0] if primary else candidates[0][0]), "hash_mismatch"
 
     # 5. zipped_file content match via pre-built index (last resort:

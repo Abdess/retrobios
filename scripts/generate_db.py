@@ -165,17 +165,24 @@ def scan_bios_dir(bios_dir: Path, cache: dict, force: bool) -> tuple[dict, dict,
     return files, aliases, new_cache
 
 
-def _path_suffix(rel_path: str) -> str:
-    """Extract the path suffix after bios/Manufacturer/Console/.
+def _path_suffixes(rel_path: str) -> list[str]:
+    """Every tail of a stored path that can answer a declared destination.
 
-    bios/Nintendo/GameCube/GC/USA/IPL.bin -> GC/USA/IPL.bin
-    bios/Sony/PlayStation/scph5501.bin -> scph5501.bin
+    A destination and the tree meet on a tail, and which tail is unknowable
+    from here: one profile writes GC/USA/IPL.bin, another writes the whole
+    nand/.../00000000.app.romfs. Indexing only the tail after
+    bios/Manufacturer/Console answered the first and never the second, so
+    every same-named file collapsed onto one entry.
+
+    The bare filename is left out on purpose. by_name already holds it, and a
+    name alone is the weakest evidence there is.
+
+    bios/Nintendo/GameCube/GC/USA/IPL.bin -> GC/USA/IPL.bin, USA/IPL.bin
     """
-    parts = rel_path.replace("\\", "/").split("/")
-    # Skip: bios / Manufacturer / Console (3 segments)
-    if len(parts) > 3 and parts[0] == "bios":
-        return "/".join(parts[3:])
-    return parts[-1]
+    parts = [p for p in rel_path.replace("\\", "/").split("/") if p]
+    if parts and parts[0] == "bios":
+        parts = parts[1:]
+    return ["/".join(parts[-depth:]) for depth in range(len(parts), 1, -1)]
 
 
 def build_indexes(files: dict, aliases: dict) -> dict:
@@ -198,12 +205,13 @@ def build_indexes(files: dict, aliases: dict) -> dict:
         by_sha256[entry["sha256"]] = sha1
 
         # Path suffix index for regional variant resolution
-        suffix = _path_suffix(entry["path"])
-        if suffix != name:
-            # Only index when suffix adds info beyond the filename
+        for suffix in _path_suffixes(entry["path"]):
+            if suffix == name:
+                continue
             if suffix not in by_path_suffix:
                 by_path_suffix[suffix] = []
-            by_path_suffix[suffix].append(sha1)
+            if sha1 not in by_path_suffix[suffix]:
+                by_path_suffix[suffix].append(sha1)
 
     # Add alias names to by_name index (aliases have different filenames for same SHA1)
     for sha1, alias_list in aliases.items():
@@ -214,8 +222,9 @@ def build_indexes(files: dict, aliases: dict) -> dict:
             if sha1 not in by_name[name]:
                 by_name[name].append(sha1)
             # Also index alias paths in by_path_suffix
-            suffix = _path_suffix(alias["path"])
-            if suffix != name:
+            for suffix in _path_suffixes(alias["path"]):
+                if suffix == name:
+                    continue
                 if suffix not in by_path_suffix:
                     by_path_suffix[suffix] = []
                 if sha1 not in by_path_suffix[suffix]:
