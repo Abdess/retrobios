@@ -33,7 +33,7 @@ notes: |
   The font is compiled-in (bitmap_font.h). The upstream standalone version
   uses font.ttf via SDL_ttf.
 
-  Valid content extension: .exe (nxengine/libretro/libretro.cpp:128).
+  Valid content extension: .exe (nxengine/libretro/libretro.cpp:126).
 
 files:
   - name: "Doukutsu.exe"

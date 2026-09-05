@@ -15,7 +15,7 @@ systems:
 notes: |
   Complete rewrite of NeoCD in C++11. Scans {system_dir}/neocd/ for any .rom
   or .bin file, also inside .zip archives (src/libretro_bios.cpp:70-106,
-  src/path.cpp:6 NEOCD_SYSTEM_SUBDIR = "neocd").
+  src/path.cpp:7 NEOCD_SYSTEM_SUBDIR = "neocd").
 
   BIOS identified by binary pattern matching at fixed ROM addresses, not by
   filename (src/bios.cpp:167-206). Files are auto byte-swapped if needed

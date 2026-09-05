@@ -37,7 +37,7 @@ notes: |
 
   32X BIOS files (m68k, master SH2, slave SH2) are fully optional. The engine
   has built-in HLE that generates replacement code at startup when the BIOS
-  pointers are NULL (pico/32x/memory.c:2199 get_bios(), pico/32x/32x.c:172).
+  pointers are NULL (pico/32x/memory.c:2200 get_bios(), pico/32x/32x.c:172).
   No current frontend (libretro or standalone) loads these files; the standalone
   loading code is disabled (#if 0 in platform/common/emu.c:1529).
 
