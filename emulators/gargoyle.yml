@@ -31,21 +31,23 @@ notes: |
   shipping one interpreter binary per story format. The gargoyle binary reads
   the first 32 bytes of the file, matches it against a magic-number table,
   falls back to the extension, and executes the matching interpreter.
-  ref: launcher.cpp:100-177 (probe, extensions, interpreters), 379-419 (rungame)
+  ref: garglk/launcher.cpp:100-177 (probe, extensions, interpreters), 379-419 (rungame)
 
-  Formats and the interpreter each one runs: Adrift 4 (scare), Adrift 5
-  (FrankenDrift), AdvSys (advsys), AGT (agility), Alan 2 (alan2), Alan 3
+  Formats and the interpreter each one runs: Adrift 4 and Adrift 5 both
+  default to scarier, which handles the two; scare takes Adrift 4 and
+  FrankenDrift takes Adrift 5 only where the build asked for them, since each
+  covers a single format. Then AdvSys (advsys), AGT (agility), Alan 2 (alan2), Alan 3
   (alan3), Glulx (git), Hugo (hugo), JACL (jacl), Level 9 (level9), Magnetic
   Scrolls (magnetic), Scott Adams Graphic Adventures Plus (plus), Scott Adams
   (scott), TADS 2 and 3 (tadsr), TaylorMade (taylor), Z-machine (bocfel).
   Blorb files are unwrapped first and dispatched on the Exec chunk type.
-  ref: launcher.cpp:45-60 (interpreter names), 276-328 (runblorb)
+  ref: garglk/launcher.cpp:45-60 (interpreter names), 276-328 (runblorb)
 
   Adrift 5 needs the FrankenDrift runner, a .NET build option that is off by
   default, including in the official AppImage. Without it the launcher reports
   that Adrift 5 is unsupported and stops.
   ref: CMakeLists.txt:63 (WITH_FRANKENDRIFT), gargoyle-appimage.sh:14,
-       launcher.cpp:160-162,202-206
+       garglk/launcher.cpp:160-162,202-206
 
   Every glyph is drawn through FreeType rather than by the operating system,
   so a font file has to be reachable. The default config asks for the families
