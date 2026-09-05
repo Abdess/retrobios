@@ -188,7 +188,7 @@ analysis:
       the RetroDECK recipe copies the whole images directory
       (RetroDECK/components archive_later/oricutron/component_recipe.json) and
       the ES-DE guide has Linux users take images and roms out of the Windows
-      archive (USERGUIDE.md:3377-3391).
+      archive (es-de USERGUIDE.md:3377-3391).
     files:
       - statusbar.bmp
       - disk_ejected.bmp

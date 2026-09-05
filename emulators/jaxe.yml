@@ -41,7 +41,7 @@ files: []
 platform_details:
   bios_mapping:
     target: "none"
-    source_ref: "jaxe_libretro.info:17, src/chip8.c:118-168"
+    source_ref: "libretro-core-info jaxe_libretro.info:17, src/chip8.c:118-168"
     note: |
       All font/sprite data is compiled into the binary. The standard
       CHIP-8 hex font (5 bytes per character, 16 characters) and the

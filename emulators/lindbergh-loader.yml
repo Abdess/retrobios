@@ -45,7 +45,7 @@ notes: |
   (scripts/appimage/make-appimage.sh,
   scripts/flatpak/com.github.lindberghloader.yml:181-189, 242-245). Batocera
   copies per-game Cg variants into the ROM directory
-  (lindberghGenerator.py:1027-1050).
+  (batocera lindberghGenerator.py:1027-1050).
 
   Shaders come from the game dump, not from the loader. cacheModedShaderFiles()
   reads ../fs/shader and /data/Shader relative to the ELF, patches the Cg
