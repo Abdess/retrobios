@@ -37,7 +37,7 @@ notes: |
   size and layout, never by name or hash, so the names below are the ones the
   dumps circulate under rather than strings read from the source. RetroBat
   writes bios_CD_U/E/J.bin and gba_bios.bin into the TOML directly
-  (emulatorLauncher/Generators/Jgenesis.Generator.cs:226-229,283-294).
+  (retrobat emulatorLauncher/Generators/Jgenesis.Generator.cs:226-229,283-294).
 
   Sega CD selects the BIOS by disc region and per_region_bios defaults to true,
   so the US, European and Japanese images are each reachable

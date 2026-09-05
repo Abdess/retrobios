@@ -111,7 +111,7 @@ notes: |
   database table it drops on startup (plugins/data/data_history.lua:5,10-13).
 
   Batocera builds its mame package from this fork
-  (package/batocera/emulators/mame/mame.mk:8).
+  (batocera package/batocera/emulators/mame/mame.mk:8).
 
 files:
   - name: neogeo.zip
