@@ -5,7 +5,7 @@ source: "https://github.com/libretro/REminiscence"
 upstream: "https://github.com/cyxx/REminiscence"
 upstream_commit: "947a4dce261aacc4f6ec0c2c90cb9d7e37712c7b"
 profiled_date: "2026-03-25"
-source_commit: "e80d7b1aa287010e30c54f72252a9303173f1c7e"
+source_commit: "e6c0b0039258004f8bc377ddb88c0e931db131ce"
 core_version: "0.3.6"
 display_name: "Flashback (REminiscence)"
 cores:
@@ -17,11 +17,11 @@ notes: |
   Game engine re-implementation of Flashback (Delphine Software, 1992) by Gregory Montoir,
   ported to libretro by Stuart Carnie. Version 0.3.6 (upstream is at 0.5.5).
 
-  The core sets need_fullpath = true and valid_extensions = "map" (libretro.cpp:66).
+  The core sets need_fullpath = true and valid_extensions = "map" (src/libretro.cpp:66).
   Content loading (retro_load_game) extracts the parent directory from the provided .MAP
-  file path and uses it as the data root via FileSystem (libretro.cpp:194-196).
+  file path and uses it as the data root via FileSystem (src/libretro.cpp:186-188).
 
-  Version detection (libretro.cpp:125-148) probes for these files in order:
+  Version detection (src/libretro.cpp:117-140) probes for these files in order:
     DEMO_UK.ABA -> DOS Demo
     INTRO.SEQ   -> DOS CD
     LEVEL1.MAP  -> DOS
@@ -29,7 +29,7 @@ notes: |
     DEMO.LEV    -> Amiga Demo
   Only kResourceTypeDOS is accepted (line 199); Amiga data is rejected.
 
-  Language detection (libretro.cpp:150-174) probes for:
+  Language detection (src/libretro.cpp:142-166) probes for:
     ENGCINE.TXT -> English
     FR_CINE.TXT -> French
     GERCINE.TXT -> German
