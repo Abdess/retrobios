@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/OpenLara"
 upstream: "https://github.com/XProger/OpenLara"
 profiled_date: "2026-03-24"
-source_commit: "8574118ddd87d47d41c1cd1d34393760b618957d"
+source_commit: "e4ce52edec5a9a6ad22b69d08c687bf070e68876"
 core_version: "v1"
 display_name: "Tomb Raider (OpenLara)"
 cores: [openlara]
@@ -16,8 +16,8 @@ notes: >
   the core resolves game assets relative to the content directory.
   retro_load_game (src/platform/libretro/main.cpp:602) derives contentDir from the level file path
   and strips level/ if present. Game version auto-detected by probing for
-  known level files (gameflow.h:1047-1071). Audio tracks loaded from audio/
-  subdirectories as .ogg/.mp3/.wav files or cdaudio.wad (gameflow.h:1272-1356).
+  known level files (src/gameflow.h:1047-1071). Audio tracks loaded from audio/
+  subdirectories as .ogg/.mp3/.wav files or cdaudio.wad (src/gameflow.h:1272-1356).
   System directory used only for shader cache at {system_dir}/openlara/cache/
   (src/platform/libretro/main.cpp:177-197). No BIOS, firmware, or engine data files required in
   system directory. .info omits sat from supported_extensions (code declares it).
