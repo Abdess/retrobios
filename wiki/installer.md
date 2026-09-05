@@ -123,7 +123,8 @@ Files the list does not name are never read, moved or deleted.
 |----------|--------|
 | `RETROBIOS_REF` | Branch or tag the file list and the payloads are read from. Defaults to `main`; a release tag pins a reproducible file set |
 | `RETROBIOS_BASE_URL` | Base URL for the manifest and the files it declares. HTTPS only, plain HTTP allowed to loopback for end-to-end tests. Whoever controls this base controls the expected hashes, hence the check |
-| `RETROBIOS_OS` | Names the host outright (`linux`, `wsl`, `windows`, `darwin`) instead of detecting it |
+| `RETROBIOS_OS` | Names the host outright (`linux`, `wsl`, `windows`, `darwin`, `android`) instead of detecting it |
+| `EXTERNAL_STORAGE` | Android only, the shared storage root RetroArch builds its default directories from. Defaults to `/storage/emulated/0` |
 | `RETROBIOS_INSTALL_URL` | Where the bootstrap fetches `install.py`. HTTPS only |
 | `RETROBIOS_INSTALL_SHA256` | The SHA-256 the bootstrap requires of that installer, 64 hex characters |
 | `HTTPS_PROXY`, `NO_PROXY` | Honoured for every download through the standard library's default proxy handling: one names the proxy, the other the hosts to reach directly |
@@ -167,6 +168,21 @@ home directory, a leading `:` is the application directory, and `default` means
 `system` next to the application. The LaunchBox installation is located through
 its Start menu shortcut, the only record of where its installer was pointed.
 
+Android has one frontend with a shared BIOS directory, and the app-private
+directories of the standalone emulators are unreachable from outside the app
+under scoped storage.
+
+| Evidence | Platform | BIOS directory |
+|----------|----------|----------------|
+| `<shared storage>/Android/data/<package>/files/retroarch.cfg` | RetroArch (Android) | `system_directory` |
+| `/data/data/<package>/files/retroarch.cfg` | RetroArch (Android) | `system_directory` |
+| `<shared storage>/RetroArch/` | RetroArch (Android) | `<shared storage>/RetroArch/system` |
+
+The packages are `com.retroarch.aarch64`, `com.retroarch` and
+`com.retroarch.ra32`, the flavours the frontend publishes. Both config paths
+are unreadable from Termux on Android 11 and later, so the directory itself is
+what answers on current devices.
+
 ES-DE and LaunchBox are reported when present and nothing is written to them:
 they reference emulators rather than owning a BIOS directory. ES-DE is looked
 up at `$ESDE_APPDATA_DIR` or `~/ES-DE`, the two locations its own
@@ -178,7 +194,10 @@ destination falls back to `/userdata/bios` for Batocera, `/recalbox/share/bios`
 for Recalbox, `/storage/system` for Lakka, `~/retrodeck` for RetroDECK,
 `~/Emulation/bios` for EmuDeck, `/storage/roms/bios` for ROCKNIX,
 `/media/fat/games` for MiSTer, `~/RetroPie/BIOS` for RetroPie, and `~/bios`
-for anything else. Pass `--dest` to say where instead of relying on that.
+for anything else. On Android a forced `--platform retroarch` falls back to
+`<shared storage>/RetroArch/system` instead, a home directory there belonging
+to Termux rather than to the frontend. Pass `--dest` to say where instead of
+relying on that.
 
 With nothing detected, the installer lists the platforms and asks. With several
 detected, it asks which one. Both prompts need a terminal: piped into a script

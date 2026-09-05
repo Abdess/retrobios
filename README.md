@@ -21,6 +21,9 @@ curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | 
 # Windows (PowerShell)
 irm https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
 
+# Android (Termux, after pkg install python and termux-setup-storage)
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh
+
 # Handheld (SD card mounted on PC)
 curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh -s -- --platform retroarch --dest /path/to/sdcard
 ```
@@ -171,4 +174,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-09-05T02:48:47Z*
+*Auto-generated on 2026-09-05T05:01:56Z*

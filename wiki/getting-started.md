@@ -21,6 +21,9 @@ curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | 
 
 # Windows (PowerShell)
 irm https://raw.githubusercontent.com/Abdess/retrobios/main/install.ps1 | iex
+
+# Android, from Termux, after pkg install python and termux-setup-storage
+curl -fsSL https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh | sh
 ```
 
 Running `install.py` directly works the same way and needs nothing beyond
