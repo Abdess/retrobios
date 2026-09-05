@@ -1,0 +1,270 @@
+"""Who decides what goes at a destination.
+
+A destination is a slot. Two layers can claim it: the platform YAML, scraped
+from what the frontend declares and therefore able to carry an upstream error,
+and the emulator profile, read from the emulator's own source. Until this
+module existed nothing compared the two: the builder resolves the platform
+entry first and drops the profile entry on a bare filename match, so a profile
+that names the right file for a slot could never win and never even be heard.
+
+The index is keyed by destination AND by name, the name carrying the union of
+what every same-named entry claims. Dolphin declares three IPL.bin separated
+only by their path, so a name-only key merges them; a path-only key answers
+nothing when a candidate is known by name alone. Ambiguity resolves to the
+union and is never discarded, the same rule region.py already applies.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+
+from common import (
+    resolution_is_hash_exact,
+    resolve_local_file,
+)
+
+# A profile entry can prove a slot without declaring a hash: Dolphin names no
+# checksum for the GameCube boot ROM because its source names none, and the
+# proof is then the path the repository stores the file at.
+PROVEN_STATUSES = frozenset({"path_exact"})
+
+
+@dataclass
+class Claim:
+    """One layer's answer to what belongs at a destination."""
+
+    origin: str
+    destination: str
+    name: str
+    emulator: str = ""
+    entry: dict = field(default_factory=dict)
+    local_path: str | None = None
+    status: str = ""
+
+    @property
+    def is_proven(self) -> bool:
+        """Whether the claim rests on evidence rather than on a bare name."""
+        return resolution_is_hash_exact(self.status) or self.status in PROVEN_STATUSES
+
+
+@dataclass
+class Conflict:
+    """Two proven claims on one destination that resolve to different files."""
+
+    destination: str
+    platform_claim: Claim
+    profile_claims: list[Claim]
+
+    @property
+    def emulators(self) -> list[str]:
+        return sorted({c.emulator for c in self.profile_claims if c.emulator})
+
+
+def _normalize(destination: str) -> str:
+    """Comparable form of a destination, since layers write it differently."""
+    return destination.strip().strip("/").replace("\\", "/").casefold()
+
+
+def build_claim_index(claims: list[Claim]) -> dict[str, list[Claim]]:
+    """Index claims by destination and by name, the name carrying the union.
+
+    A lookup by full destination answers for one slot. A lookup by bare name
+    answers with every slot that shares it, which is what a candidate known
+    only by its filename needs in order not to be dropped.
+    """
+    index: dict[str, list[Claim]] = {}
+    for claim in claims:
+        keys = {_normalize(claim.destination)}
+        if claim.name:
+            keys.add(_normalize(claim.name))
+        base = claim.destination.rsplit("/", 1)[-1]
+        if base:
+            keys.add(_normalize(base))
+        for key in keys - {""}:
+            index.setdefault(key, []).append(claim)
+    return index
+
+
+def platform_claims(config: dict, db: dict, base_dest: str = "") -> list[Claim]:
+    """What the platform YAML says belongs at each of its destinations."""
+    claims: list[Claim] = []
+    for system in (config.get("systems") or {}).values():
+        for entry in system.get("files") or []:
+            if not isinstance(entry, dict):
+                continue
+            dest = entry.get("destination") or entry.get("name") or ""
+            if not dest:
+                continue
+            full = f"{base_dest}/{dest}" if base_dest else dest
+            local, status = resolve_local_file(entry, db, dest_hint=dest)
+            claims.append(
+                Claim(
+                    origin="platform",
+                    destination=full,
+                    name=entry.get("name", ""),
+                    entry=entry,
+                    local_path=local,
+                    status=status,
+                )
+            )
+    return claims
+
+
+def profile_claims(
+    profiles: dict, db: dict, base_dest: str = ""
+) -> list[Claim]:
+    """What each emulator profile says belongs at each destination it names."""
+    claims: list[Claim] = []
+    for emu_name, profile in sorted(profiles.items()):
+        if profile.get("type") in ("launcher", "alias"):
+            continue
+        for entry in profile.get("files") or []:
+            if not isinstance(entry, dict):
+                continue
+            dest = entry.get("path") or entry.get("name") or ""
+            if not dest:
+                continue
+            full = f"{base_dest}/{dest}" if base_dest else dest
+            local, status = resolve_local_file(entry, db, dest_hint=dest)
+            claims.append(
+                Claim(
+                    origin="profile",
+                    destination=full,
+                    name=entry.get("name", ""),
+                    emulator=emu_name,
+                    entry=entry,
+                    local_path=local,
+                    status=status,
+                )
+            )
+    return claims
+
+
+def find_conflicts(
+    config: dict, profiles: dict, db: dict, base_dest: str = ""
+) -> list[Conflict]:
+    """Destinations where a proven profile claim contradicts what ships.
+
+    Only proven claims are compared. A claim resolved by filename alone
+    asserts nothing about content and cannot contradict anything.
+    """
+    by_dest: dict[str, Claim] = {}
+    for claim in platform_claims(config, db, base_dest):
+        by_dest.setdefault(_normalize(claim.destination), claim)
+
+    # Grouped before judging: a profile may declare several revisions that are
+    # all acceptable at one destination, and the platform choosing one of them
+    # is agreement, not contradiction. Only a destination where no profile
+    # claim at all matches what ships is a disagreement.
+    by_slot: dict[str, list[Claim]] = {}
+    for claim in profile_claims(profiles, db, base_dest):
+        key = _normalize(claim.destination)
+        platform = by_dest.get(key)
+        if platform is None or not platform.is_proven or not claim.is_proven:
+            continue
+        by_slot.setdefault(key, []).append(claim)
+
+    disputed = {
+        key: claims
+        for key, claims in by_slot.items()
+        if all(c.local_path != by_dest[key].local_path for c in claims)
+    }
+
+    return [
+        Conflict(
+            destination=by_dest[key].destination,
+            platform_claim=by_dest[key],
+            profile_claims=claims,
+        )
+        for key, claims in sorted(disputed.items())
+    ]
+
+
+def format_conflict(conflict: Conflict) -> str:
+    """One line per conflict, naming both answers and who gave them."""
+    emus = ", ".join(conflict.emulators) or "profile"
+    return (
+        f"{conflict.destination}: pack ships {conflict.platform_claim.local_path} "
+        f"({conflict.platform_claim.status}), {emus} says "
+        f"{conflict.profile_claims[0].local_path} "
+        f"({conflict.profile_claims[0].status})"
+    )
+
+
+def scan_platform(
+    platform: str, profiles: dict, db: dict, platforms_dir: str = "platforms"
+) -> list[Conflict]:
+    """Conflicts on one platform, using the cores that platform actually runs."""
+    from common import load_platform_config, resolve_platform_cores
+
+    config = load_platform_config(platform, platforms_dir)
+    keys = resolve_platform_cores(config, profiles)
+    relevant = {k: profiles[k] for k in keys if k in profiles}
+    return find_conflicts(config, relevant, db, config.get("base_destination", ""))
+
+
+def main() -> int:
+    import argparse
+    import json
+
+    from common import list_registered_platforms, load_emulator_profiles
+
+    parser = argparse.ArgumentParser(
+        description="Report destinations where an emulator profile contradicts "
+        "the file a platform baseline would ship.",
+    )
+    parser.add_argument("--platform", help="one platform instead of all")
+    parser.add_argument("--db", default="database.json")
+    parser.add_argument("--platforms-dir", default="platforms")
+    parser.add_argument("--emulators-dir", default="emulators")
+    parser.add_argument("--json", action="store_true", help="JSON output")
+    args = parser.parse_args()
+
+    with open(args.db, encoding="utf-8") as handle:
+        db = json.load(handle)
+    profiles = load_emulator_profiles(args.emulators_dir)
+    names = (
+        [args.platform]
+        if args.platform
+        else list_registered_platforms(args.platforms_dir)
+    )
+
+    found: dict[str, list[Conflict]] = {}
+    for name in names:
+        conflicts = scan_platform(name, profiles, db, args.platforms_dir)
+        if conflicts:
+            found[name] = conflicts
+
+    if args.json:
+        print(
+            json.dumps(
+                {
+                    platform: [
+                        {
+                            "destination": c.destination,
+                            "ships": c.platform_claim.local_path,
+                            "ships_evidence": c.platform_claim.status,
+                            "emulators": c.emulators,
+                            "expected": c.profile_claims[0].local_path,
+                            "expected_evidence": c.profile_claims[0].status,
+                        }
+                        for c in conflicts
+                    ]
+                    for platform, conflicts in found.items()
+                },
+                indent=2,
+            )
+        )
+    else:
+        for platform, conflicts in found.items():
+            print(f"{platform}: {len(conflicts)} contradicted")
+            for conflict in conflicts:
+                print(f"  {format_conflict(conflict)}")
+        total = sum(len(c) for c in found.values())
+        print(f"\n{total} destinations where a profile contradicts what ships.")
+
+    return 1 if found else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
