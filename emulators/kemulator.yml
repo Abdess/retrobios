@@ -5,7 +5,7 @@ source: "https://github.com/shinovon/KEmulator"
 upstream: "https://github.com/shinovon/KEmulator"
 author: "shinovon"
 profiled_date: "2026-08-11"
-source_commit: "4230a6af24e8e5d60e00e760750cfd9f195f0bd5"
+source_commit: "0101182"
 core_version: "2.21.5"
 display_name: "Mobile - J2ME (KEmulator nnmod)"
 cores:
@@ -143,24 +143,6 @@ files:
     description: "Mascot Capsule V3 renderer"
     note: "Pulled in by the Windows loader when java_micro3d_v3_32.dll loads; no Java code names it."
     source_ref: "micro3d_dll/src/com/mascotcapsule/micro3d/v3/Figure.java:163"
-
-  - name: amrdecoder.dll
-    aliases:
-      - amrdecoder_64.dll
-      - amrdecoder_arm64.dll
-      - libamrdecoder.so
-      - libamrdecoder_64.so
-      - libamrdecoder_arm32.so
-      - libamrdecoder_arm64.so
-      - libamrdecoder.dylib
-      - libamrdecoder_arm64.dylib
-    system: j2me
-    required: false
-    bundled: true
-    validation: [existence]
-    description: "opencore-amr decoder for AMR audio"
-    note: "System.load on a name composed from os.name and os.arch, resolved against the executable's directory. The 32-bit Windows build asks for amrdecoder.dll unconditionally. A load failure is printed and swallowed."
-    source_ref: "win/src/main/emulator/EmulatorPlatform.java:91-97, x64/src/main/emulator/EmulatorPlatform.java:173-212"
 
   - name: s60snr.ttf
     system: j2me

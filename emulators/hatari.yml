@@ -46,7 +46,7 @@ notes: |
   0xFC0000, and coerces machine type and CPU to the TOS version unless
   the image is a 512 KB or larger EmuTOS (src/tos.c:976-1097,
   src/tos.c:838-969). ROM patches apply when the hatari_patch_tos option
-  is on (src/retro/options.c:250-263, src/retro/options.c:784). No TOS is
+  is on (src/retro/options.c:250-263, src/retro/options.c:783). No TOS is
   embedded. Because nSymbolsAutoLoad defaults to SYM_AUTOLOAD_DEBUGGER
   (src/configuration.c:621, src/includes/configuration.h:29-31), every TOS
   load also reads a <tos>.sym symbol table when one exists
