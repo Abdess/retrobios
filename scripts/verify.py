@@ -804,7 +804,13 @@ def verify_platform(
             name: emu_profiles[name]
             for name in resolve_platform_cores(config, emu_profiles)
         }
-        for conflict in slots.find_conflicts(config, arbitrated, db, base_dest):
+        for conflict in slots.find_conflicts(
+            config,
+            arbitrated,
+            db,
+            base_dest,
+            {str(c) for c in config.get("standalone_cores", [])},
+        ):
             decision = slots.arbitrate(conflict, mode)
             if decision.serves_both and decision.winner.local_path:
                 key = conflict.destination

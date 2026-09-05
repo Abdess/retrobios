@@ -318,6 +318,76 @@ class TestSelfContradictingDestinations(unittest.TestCase):
         self.assertIn("JAP/IPL.bin", line)
 
 
+class TestBuildModeDecidesWhoClaims(unittest.TestCase):
+    """A platform runs some emulators as cores and others standalone."""
+
+    def _config(self, standalone=None) -> dict:
+        config = {
+            "systems": {
+                "console": {
+                    "files": [
+                        {"name": "IPL.bin", "destination": "GC/JAP/IPL.bin",
+                         "md5": "m" * 32}
+                    ]
+                }
+            }
+        }
+        if standalone:
+            config["standalone_cores"] = standalone
+        return config
+
+    def _profile(self, mode=None, standalone_path=None) -> dict:
+        entry = {"name": "IPL.bin", "path": "GC/JAP/IPL.bin"}
+        if mode:
+            entry["mode"] = mode
+        if standalone_path:
+            entry["standalone_path"] = standalone_path
+        return {"ares": {"cores": ["ares"], "files": [entry]}}
+
+    def test_a_standalone_only_file_does_not_claim_a_core_slot(self):
+        conflicts = slots.find_conflicts(
+            self._config(), self._profile(mode="standalone"), REGIONS_DB
+        )
+        self.assertEqual(conflicts, [])
+
+    def test_it_claims_when_the_platform_runs_that_emulator_standalone(self):
+        conflicts = slots.find_conflicts(
+            self._config(standalone=["ares"]),
+            self._profile(mode="standalone"),
+            REGIONS_DB,
+            standalone_cores={"ares"},
+        )
+        self.assertEqual(len(conflicts), 1)
+
+    def test_a_libretro_only_file_is_silent_in_standalone_mode(self):
+        conflicts = slots.find_conflicts(
+            self._config(standalone=["ares"]),
+            self._profile(mode="libretro"),
+            REGIONS_DB,
+            standalone_cores={"ares"},
+        )
+        self.assertEqual(conflicts, [])
+
+    def test_standalone_mode_reads_the_standalone_destination(self):
+        claims = slots.profile_claims(
+            self._profile(standalone_path="elsewhere/IPL.bin"),
+            REGIONS_DB,
+            standalone_cores={"ares"},
+        )
+        self.assertEqual(claims[0].destination, "elsewhere/IPL.bin")
+
+    def test_the_mode_follows_a_core_alias_not_only_the_profile_name(self):
+        profile = {"ares_core": {"cores": ["ares"],
+                                 "files": [{"name": "IPL.bin",
+                                            "path": "GC/JAP/IPL.bin",
+                                            "mode": "standalone"}]}}
+        conflicts = slots.find_conflicts(
+            self._config(standalone=["ares"]), profile, REGIONS_DB,
+            standalone_cores={"ares"},
+        )
+        self.assertEqual(len(conflicts), 1)
+
+
 class TestProvenEvidence(unittest.TestCase):
     """What counts as proof that a claim is about content, not about a name."""
 

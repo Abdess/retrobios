@@ -616,7 +616,11 @@ def generate_pack(
         # emulator's file satisfies both sides and nothing is traded away.
         mode = config.get("verification_mode", "existence")
         for conflict in slots.find_conflicts(
-            config, platform_profiles, db, base_dest
+            config,
+            platform_profiles,
+            db,
+            base_dest,
+            {str(c) for c in config.get("standalone_cores", [])},
         ):
             decision = slots.arbitrate(conflict, mode)
             if decision.serves_both and decision.winner.local_path:

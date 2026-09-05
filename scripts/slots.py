@@ -112,17 +112,42 @@ def platform_claims(config: dict, db: dict, base_dest: str = "") -> list[Claim]:
 
 
 def profile_claims(
-    profiles: dict, db: dict, base_dest: str = ""
+    profiles: dict,
+    db: dict,
+    base_dest: str = "",
+    standalone_cores: set[str] | None = None,
 ) -> list[Claim]:
-    """What each emulator profile says belongs at each destination it names."""
+    """What each emulator profile says belongs at each destination it names.
+
+    A file can exist in one build of an emulator and not the other, and the
+    two builds read from different directories. The mode is decided per
+    emulator, not per pack: a platform runs some of its emulators as libretro
+    cores and others standalone, naming the latter in ``standalone_cores``.
+    An entry the standalone build alone loads does not address a platform
+    running that emulator as a core, and where it does, the destination is
+    ``standalone_path``. This is the gate verify already applies.
+    """
+    standalone_cores = standalone_cores or set()
     claims: list[Claim] = []
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):
             continue
+        is_standalone = emu_name in standalone_cores or bool(
+            standalone_cores & {str(c) for c in profile.get("cores", [])}
+        )
         for entry in profile.get("files") or []:
             if not isinstance(entry, dict):
                 continue
-            dest = entry.get("path") or entry.get("name") or ""
+            entry_mode = entry.get("mode")
+            if entry_mode == "standalone" and not is_standalone:
+                continue
+            if entry_mode == "libretro" and is_standalone:
+                continue
+            dest = (
+                (entry.get("standalone_path") or entry.get("path"))
+                if is_standalone
+                else entry.get("path")
+            ) or entry.get("name") or ""
             if not dest:
                 continue
             full = f"{base_dest}/{dest}" if base_dest else dest
@@ -142,7 +167,11 @@ def profile_claims(
 
 
 def find_conflicts(
-    config: dict, profiles: dict, db: dict, base_dest: str = ""
+    config: dict,
+    profiles: dict,
+    db: dict,
+    base_dest: str = "",
+    standalone_cores: set[str] | None = None,
 ) -> list[Conflict]:
     """Destinations where a proven profile claim contradicts what ships.
 
@@ -158,7 +187,7 @@ def find_conflicts(
     # is agreement, not contradiction. Only a destination where no profile
     # claim at all matches what ships is a disagreement.
     by_slot: dict[str, list[Claim]] = {}
-    for claim in profile_claims(profiles, db, base_dest):
+    for claim in profile_claims(profiles, db, base_dest, standalone_cores):
         key = _normalize(claim.destination)
         platform = by_dest.get(key)
         if platform is None or not platform.is_proven or not claim.is_proven:
@@ -334,7 +363,13 @@ def scan_platform(
     config = load_platform_config(platform, platforms_dir)
     keys = resolve_platform_cores(config, profiles)
     relevant = {k: profiles[k] for k in keys if k in profiles}
-    return find_conflicts(config, relevant, db, config.get("base_destination", ""))
+    return find_conflicts(
+        config,
+        relevant,
+        db,
+        config.get("base_destination", ""),
+        {str(c) for c in config.get("standalone_cores", [])},
+    )
 
 
 def main() -> int:
