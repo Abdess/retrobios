@@ -119,7 +119,7 @@ files:
       SCEPKG keys and their inner TARs extracted over dev_flash. The Java layer
       creates dev_flash/.installed once the native call returns true. No digest
       of the file itself is compared against anything.
-    source_ref: "app/src/main/cpp/aps3e_emu.cpp:657-827, app/src/main/cpp/emulator_aps3e.cpp:1078, app/src/main/java/aenu/aps3e/MainActivity.java:591-623, app/src/main/res/values/strings.xml:120-122"
+    source_ref: "app/src/main/cpp/aps3e_emu.cpp:657-827, app/src/main/cpp/emulator_aps3e.cpp:1045, app/src/main/java/aenu/aps3e/MainActivity.java:591-623, app/src/main/res/values/strings.xml:120-122"
 
   - name: "<game>.dkey"
     aliases: ["<game>.key"]
@@ -158,7 +158,7 @@ files:
       Imported through the same entry. The NPD header is read and the file
       refused below 0x90 bytes or when the magic is not NPD, then written whole
       to dev_hdd0/home/00000001/exdata under the content id the header declares.
-    source_ref: "app/src/main/java/aenu/aps3e/MainActivity.java:654-658, app/src/main/cpp/aps3e_emu.cpp:871-899, app/src/main/cpp/emulator_aps3e.cpp:1085, app/src/main/cpp/rpcs3/rpcs3/Emu/system_utils.cpp:413"
+    source_ref: "app/src/main/java/aenu/aps3e/MainActivity.java:654-658, app/src/main/cpp/aps3e_emu.cpp:871-899, app/src/main/cpp/emulator_aps3e.cpp:1052, app/src/main/cpp/rpcs3/rpcs3/Emu/system_utils.cpp:413"
 
   - name: "<font>.ttf"
     aliases: ["<font>.ttc", "<font>.otf"]
