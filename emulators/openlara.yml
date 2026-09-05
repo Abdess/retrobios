@@ -12,14 +12,14 @@ systems: [tomb-raider]
 verification: existence
 notes: >
   Open-source reimplementation of the classic Tomb Raider engine (TR1-TR4).
-  Accepts phd|psx|tr2|sat extensions (main.cpp:246). need_fullpath is true -
+  Accepts phd|psx|tr2|sat extensions (src/platform/libretro/main.cpp:246). need_fullpath is true -
   the core resolves game assets relative to the content directory.
-  retro_load_game (main.cpp:602) derives contentDir from the level file path
+  retro_load_game (src/platform/libretro/main.cpp:602) derives contentDir from the level file path
   and strips level/ if present. Game version auto-detected by probing for
   known level files (gameflow.h:1047-1071). Audio tracks loaded from audio/
   subdirectories as .ogg/.mp3/.wav files or cdaudio.wad (gameflow.h:1272-1356).
   System directory used only for shader cache at {system_dir}/openlara/cache/
-  (main.cpp:177-197). No BIOS, firmware, or engine data files required in
+  (src/platform/libretro/main.cpp:177-197). No BIOS, firmware, or engine data files required in
   system directory. .info omits sat from supported_extensions (code declares it).
 
 files: []
