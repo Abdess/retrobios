@@ -245,6 +245,75 @@ def format_decision(decision: Decision) -> str:
     )
 
 
+@dataclass
+class Collision:
+    """One destination a platform fills with two different files."""
+
+    destination: str
+    resolved: list[str]
+
+
+def find_collisions(config: dict, db: dict) -> list[Collision]:
+    """Destinations a platform declares twice and resolves two ways.
+
+    One path holds one file, so whichever declaration the builder reaches
+    first decides in silence. Declaring an archive several times to name its
+    inner ROMs is the documented zipped_file pattern and resolves to one
+    archive; two declarations landing on two files is a contradiction the
+    upstream list carries. RetroDECK aims a PC-88 disk subsystem ROM and a
+    CoCo disk ROM at one bios/disk.rom.
+    """
+    by_dest: dict[str, list[dict]] = {}
+    for system in (config.get("systems") or {}).values():
+        for entry in system.get("files") or []:
+            if not isinstance(entry, dict):
+                continue
+            dest = entry.get("destination") or entry.get("name") or ""
+            if dest:
+                by_dest.setdefault(_normalize(dest), []).append(entry)
+
+    collisions = []
+    for key, entries in sorted(by_dest.items()):
+        if len(entries) < 2:
+            continue
+        resolved = []
+        for entry in entries:
+            local, _ = resolve_local_file(
+                entry, db, dest_hint=entry.get("destination", "")
+            )
+            if local and local not in resolved:
+                resolved.append(local)
+        if len(resolved) > 1 and not _same_file_family(resolved):
+            collisions.append(Collision(destination=key, resolved=resolved))
+    return collisions
+
+
+def _same_file_family(paths: list[str]) -> bool:
+    """Whether the paths are one file and its own pinned variants.
+
+    A platform list built on an older romset pins bytes the primary no longer
+    carries, which the repository keeps side by side under .variants. That is
+    the documented multi-version case, not two machines fighting for a path.
+    """
+    canonical = set()
+    for path in paths:
+        if "/.variants/" in path:
+            directory, _, name = path.rpartition("/")
+            directory = directory[: -len("/.variants")]
+            name = name.rsplit(".", 1)[0]
+            path = f"{directory}/{name}"
+        canonical.add(path.casefold())
+    return len(canonical) == 1
+
+
+def format_collision(collision: Collision) -> str:
+    """One line naming the destination and the files fighting for it."""
+    return (
+        f"{collision.destination}: declared for "
+        + " and for ".join(collision.resolved)
+    )
+
+
 def format_conflict(conflict: Conflict) -> str:
     """One line per conflict, naming both answers and who gave them."""
     emus = ", ".join(conflict.emulators) or "profile"
@@ -305,10 +374,16 @@ def main() -> int:
     )
 
     found: dict[str, list[Conflict]] = {}
+    collided: dict[str, list[Collision]] = {}
     for name in names:
         conflicts = scan_platform(name, profiles, db, args.platforms_dir)
         if conflicts:
             found[name] = conflicts
+        collisions = find_collisions(
+            load_platform_config(name, args.platforms_dir), db
+        )
+        if collisions:
+            collided[name] = collisions
 
     if args.json:
         print(
@@ -345,13 +420,17 @@ def main() -> int:
             f"\n{total} contested destinations. {fixable} the pack settles on "
             f"its own, {total - fixable} rest on an upstream declaration."
         )
+        for platform, collisions in collided.items():
+            print(f"{platform}: {len(collisions)} destinations declared twice")
+            for collision in collisions:
+                print(f"  {format_collision(collision)}")
         if not args.strict and total:
             print(
                 "Reported, not failed: the remainder needs the upstream list "
                 "corrected, which no build can do. Use --strict to gate on them."
             )
 
-    return 1 if (found and args.strict) else 0
+    return 1 if ((found or collided) and args.strict) else 0
 
 
 if __name__ == "__main__":

@@ -263,6 +263,61 @@ class TestBuilderAndVerifierAgree(unittest.TestCase):
             self.assertNotIn('verification_mode") == "md5"', window, name)
 
 
+class TestSelfContradictingDestinations(unittest.TestCase):
+    """One path holds one file, whatever the upstream list says."""
+
+    def _config(self, *entries: dict) -> dict:
+        return {"systems": {"console": {"files": list(entries)}}}
+
+    def test_two_declarations_landing_on_two_files_are_reported(self):
+        config = self._config(
+            {"name": "IPL.bin", "destination": "disk.rom", "md5": "m" * 32},
+            {"name": "IPL.bin", "destination": "disk.rom", "md5": "n" * 32},
+        )
+        collisions = slots.find_collisions(config, REGIONS_DB)
+        self.assertEqual(len(collisions), 1)
+        self.assertEqual(len(collisions[0].resolved), 2)
+
+    def test_one_archive_named_by_its_inner_roms_is_not_a_collision(self):
+        # The documented zipped_file pattern: several md5s, one archive.
+        config = self._config(
+            {"name": "IPL.bin", "destination": "a.zip", "md5": "m" * 32,
+             "zipped_file": "one.bin"},
+            {"name": "IPL.bin", "destination": "a.zip", "md5": "m" * 32,
+             "zipped_file": "two.bin"},
+        )
+        self.assertEqual(slots.find_collisions(config, REGIONS_DB), [])
+
+    def test_a_primary_and_its_pinned_variant_are_one_family(self):
+        self.assertTrue(
+            slots._same_file_family(
+                ["bios/M/C/rom.zip", "bios/M/C/.variants/rom.zip.abcd1234"]
+            )
+        )
+
+    def test_two_machines_are_not_one_family(self):
+        self.assertFalse(
+            slots._same_file_family(
+                ["bios/Microsoft/MSX/DISK.ROM", "bios/Tandy/CoCo/disk.rom"]
+            )
+        )
+
+    def test_a_destination_declared_once_is_never_a_collision(self):
+        config = self._config(
+            {"name": "IPL.bin", "destination": "disk.rom", "md5": "m" * 32}
+        )
+        self.assertEqual(slots.find_collisions(config, REGIONS_DB), [])
+
+    def test_the_line_names_every_file_claiming_the_path(self):
+        config = self._config(
+            {"name": "IPL.bin", "destination": "disk.rom", "md5": "m" * 32},
+            {"name": "IPL.bin", "destination": "disk.rom", "md5": "n" * 32},
+        )
+        line = slots.format_collision(slots.find_collisions(config, REGIONS_DB)[0])
+        self.assertIn("USA/IPL.bin", line)
+        self.assertIn("JAP/IPL.bin", line)
+
+
 class TestProvenEvidence(unittest.TestCase):
     """What counts as proof that a claim is about content, not about a name."""
 
