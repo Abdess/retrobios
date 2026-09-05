@@ -50,8 +50,11 @@ notes: |
 
   Text uses system fonts. fontdb::Database::load_system_fonts() fills the
   database at startup (desktop/src/app.rs:418-419), and both the Flash device
-  fonts and the egui menu bar resolve family names against it, mmapping whatever
-  face the host answers with (desktop/src/backends/ui.rs:281-314,395-421,
+  fonts and the egui menu bar resolve family names against it and take whatever
+  face the host answers with. How that face is read now depends on the renderer:
+  freetype joined the desktop default features, so on Linux it goes through
+  FreetypeFontRenderer, and the plain memory map of the file is the other branch
+  (desktop/src/backends/ui.rs:321-359,442-484,
   desktop/src/gui/controller.rs:690-733). The families asked for are Times New
   Roman, Arial, Courier New and their metric-compatible substitutes, plus the
   CJK, Hebrew, Arabic and Thai faces (desktop/src/player.rs:361-412,
