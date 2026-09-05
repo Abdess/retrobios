@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-05T02:48:01Z",
-  "total_files": 10332,
-  "total_size": 13322926308,
+  "generated_at": "2026-09-05T07:15:44Z",
+  "total_files": 10330,
+  "total_size": 13322705446,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -5222,16 +5222,6 @@
       "sha256": "6b676fb746115a29b077577b5fdeca3e188c6db3e76af08ac513a222c8e76068",
       "crc32": "66f9e8a5",
       "adler32": "489e6db8"
-    },
-    "ca501ac94ea38962285b8c21ab8f3bf6c02a79ac": {
-      "path": "bios/Arcade/Arcade/info.txt",
-      "name": "info.txt",
-      "size": 39654,
-      "sha1": "ca501ac94ea38962285b8c21ab8f3bf6c02a79ac",
-      "md5": "123b5b511ad970d95bb820fd977d036f",
-      "sha256": "bd78a84e32c0dfddc01b5bca403da5027c0fb9968fb45366448231ddcbb9675a",
-      "crc32": "3100e7ba",
-      "adler32": "8a8dd04c"
     },
     "3b5ee7a13782d5c34cf57d5fdac4f2778a431f27": {
       "path": "bios/Arcade/Arcade/interpod.zip",
@@ -100083,16 +100073,6 @@
       "crc32": "cc8b8e1e",
       "adler32": "0d3ff848"
     },
-    "56b2a1ca68bf3519f01abde00c22e7a3425494e5": {
-      "path": "bios/Sega/Dreamcast/.variants/naomi_boot.bin",
-      "name": "naomi_boot.bin",
-      "size": 181208,
-      "sha1": "56b2a1ca68bf3519f01abde00c22e7a3425494e5",
-      "md5": "b5475847ee3a3ef2b12cda48dd49370d",
-      "sha256": "27d407edcd485d81aec58a8e28081327aeb3e0cc7195f4c53c264ec192657098",
-      "crc32": "da4fbc94",
-      "adler32": "0ee30367"
-    },
     "09f1ed9e0f8ece181a1850ec89361cef78f37c9e": {
       "path": "bios/Sega/Dreamcast/Atomiswave-0.220_NoClones_V1.0 barhi.dat.7z",
       "name": "Atomiswave-0.220_NoClones_V1.0 barhi.dat.7z",
@@ -108931,7 +108911,6 @@
       "e59c435692b8c47edc8b0294c455379b": "39bb1c723bce68b5362f8ee230bd34d3bdc0fd3e",
       "2b82a64317e2ae769d80c04681be35c7": "6547373ebf1a6d367eb7716f6d958f26c504cc6a",
       "420599ef0bed5208d0e9f2085034d4d3": "7b389947275df4c9933ae6992a0c2a3ae2bf2b0f",
-      "123b5b511ad970d95bb820fd977d036f": "ca501ac94ea38962285b8c21ab8f3bf6c02a79ac",
       "f02e7a8830cd68a9d43f02283141bb62": "3b5ee7a13782d5c34cf57d5fdac4f2778a431f27",
       "9391d44477a531668bfd233f0809eebd": "3e40503739f15d459a7a964af310abb7faac4a5c",
       "591ee49cd947fffd24332814717ad2d0": "c2bd6351238d0b75fa36587ef183f32dcd91bd1a",
@@ -118149,7 +118128,6 @@
       "9c755171b222fb1f4e1439d5b709dbf1": "b3a86809857fe9ce575da73f6ed6c5441d558e3d",
       "ee362dd63d7ff01f6d579ad53f3bfe69": "889d239ac41f25622164609367b713dd33bd5bde",
       "8bab1ba136d0cb6ebcc05a27c4dfc185": "43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a",
-      "b5475847ee3a3ef2b12cda48dd49370d": "56b2a1ca68bf3519f01abde00c22e7a3425494e5",
       "2593bcd4ba33a4974344af27ca371a1a": "09f1ed9e0f8ece181a1850ec89361cef78f37c9e",
       "1c3337f3f267e9aaab2652ab8aa6c335": "a43960ea7ba25dd823f5e0567d8d0296b960e47e",
       "cbc5d25c183ca3eb44af1d44418f52bd": "8841e8e15c65fd94ccad95588eb71ef6b2d3d3c9",
@@ -119304,8 +119282,7 @@
         "de463b0577dfd1027bf7de523ff67a0fff861cdb"
       ],
       "ROM1": [
-        "6a1e8ba328beba94e215bec92b077f4c8bc453fc",
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+        "6a1e8ba328beba94e215bec92b077f4c8bc453fc"
       ],
       "a1000kbd_de.zip": [
         "93d36de4d5d376c521a9ca99722f659e60d177f2"
@@ -120355,9 +120332,6 @@
       ],
       "indusgt.zip": [
         "7b389947275df4c9933ae6992a0c2a3ae2bf2b0f"
-      ],
-      "info.txt": [
-        "ca501ac94ea38962285b8c21ab8f3bf6c02a79ac"
       ],
       "interpod.zip": [
         "3b5ee7a13782d5c34cf57d5fdac4f2778a431f27"
@@ -145973,10 +145947,6 @@
         "2b5a72381c900b438910983f62efd1cbdbefa80d",
         "72c65f2a11ee7b72b77b9945187b7a332632e14a"
       ],
-      "naomi_boot.bin": [
-        "56b2a1ca68bf3519f01abde00c22e7a3425494e5",
-        "6d27d71aec4dfba98f66316ae74a1426d567698a"
-      ],
       "Atomiswave-0.220_NoClones_V1.0 barhi.dat.7z": [
         "09f1ed9e0f8ece181a1850ec89361cef78f37c9e"
       ],
@@ -146021,6 +145991,9 @@
       ],
       "font.bin": [
         "94c6ff701f79742ee23c0a028ac0be5aead77c73"
+      ],
+      "naomi_boot.bin": [
+        "6d27d71aec4dfba98f66316ae74a1426d567698a"
       ],
       "vmu_save_A1.bin": [
         "44c9f00deccca2bfe2f3b41693b70662ff2c2256"
@@ -147613,12 +147586,6 @@
       "a2iwm.zip": [
         "d9bb189730e15d46c27e7246d7bb23137e7d761e"
       ],
-      "mctv.bin": [
-        "ca501ac94ea38962285b8c21ab8f3bf6c02a79ac"
-      ],
-      "tmctv.bin": [
-        "ca501ac94ea38962285b8c21ab8f3bf6c02a79ac"
-      ],
       "nb_824gc.zip": [
         "734efa75815502d58898599359cf55f8003a03a5"
       ],
@@ -147731,9 +147698,6 @@
         "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1"
       ],
       "kick33180.A500": [
-        "11f9e62cf299f72184835b7b2a70a16333fc0d88"
-      ],
-      "satar4mp.bin": [
         "11f9e62cf299f72184835b7b2a70a16333fc0d88"
       ],
       "kick40063.A600": [
@@ -147996,36 +147960,6 @@
       ],
       "n88knj1.rom": [
         "82e11a177af6a5091dd67f50a2f4bafda84d6556"
-      ],
-      "apple2gs1.rom": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "APPLE2GS.ROM": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "ROM.01": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "ROM.03": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "APPLE2GS.ROM2": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "xgs.rom": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "XGS.ROM": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "Rom03gd": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "342-0077-b": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
-      ],
-      "Mac OS ROM": [
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
       ],
       "fx-scsi.rom": [
         "65482a23ac5c10a6095aee1db5824cca54ead6e5"
@@ -150351,6 +150285,36 @@
       "uni-bios.rom": [
         "938a0bda7d9a357240718c2cec319878d36b8f72"
       ],
+      "apple2gs1.rom": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "APPLE2GS.ROM": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "ROM.01": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "ROM.03": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "APPLE2GS.ROM2": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "xgs.rom": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "XGS.ROM": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "Rom03gd": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "342-0077-b": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
+      "Mac OS ROM": [
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37"
+      ],
       "svi328a.rom": [
         "10349ce675f6d6d47f0976e39cb7188eba858d89"
       ],
@@ -152525,7 +152489,6 @@
       "05ae36f6": "39bb1c723bce68b5362f8ee230bd34d3bdc0fd3e",
       "b647b0c6": "6547373ebf1a6d367eb7716f6d958f26c504cc6a",
       "66f9e8a5": "7b389947275df4c9933ae6992a0c2a3ae2bf2b0f",
-      "3100e7ba": "ca501ac94ea38962285b8c21ab8f3bf6c02a79ac",
       "858338ca": "3b5ee7a13782d5c34cf57d5fdac4f2778a431f27",
       "c34533c6": "3e40503739f15d459a7a964af310abb7faac4a5c",
       "7b270fec": "c2bd6351238d0b75fa36587ef183f32dcd91bd1a",
@@ -161743,7 +161706,6 @@
       "277c7fee": "b3a86809857fe9ce575da73f6ed6c5441d558e3d",
       "9521330f": "889d239ac41f25622164609367b713dd33bd5bde",
       "cc8b8e1e": "43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a",
-      "da4fbc94": "56b2a1ca68bf3519f01abde00c22e7a3425494e5",
       "18ecc714": "09f1ed9e0f8ece181a1850ec89361cef78f37c9e",
       "312459a8": "a43960ea7ba25dd823f5e0567d8d0296b960e47e",
       "28e5fc81": "8841e8e15c65fd94ccad95588eb71ef6b2d3d3c9",
@@ -162859,7 +162821,6 @@
       "c6c0d0d89ff5e23adbf8f20db61d531b8e1c9387228f10d6b182e91ef1ae53ae": "39bb1c723bce68b5362f8ee230bd34d3bdc0fd3e",
       "4fdbae7dd75e4f6b382af45b8f8fcefae3781fda0f628f876217a4db005eaefd": "6547373ebf1a6d367eb7716f6d958f26c504cc6a",
       "6b676fb746115a29b077577b5fdeca3e188c6db3e76af08ac513a222c8e76068": "7b389947275df4c9933ae6992a0c2a3ae2bf2b0f",
-      "bd78a84e32c0dfddc01b5bca403da5027c0fb9968fb45366448231ddcbb9675a": "ca501ac94ea38962285b8c21ab8f3bf6c02a79ac",
       "e5828edb2707a65e15c34be43fb4816beeb6cd8f4f1d80bb48654106ee54fd21": "3b5ee7a13782d5c34cf57d5fdac4f2778a431f27",
       "12292c2bbc271aed563b8cce533d82aae5dd546cb94bb653fe3ca14dd1977ab3": "3e40503739f15d459a7a964af310abb7faac4a5c",
       "2db7d5c2fb083f53b78c0ae3f887b3f2be412e62ee76e05301ab23f8bbf84a5e": "c2bd6351238d0b75fa36587ef183f32dcd91bd1a",
@@ -172077,7 +172038,6 @@
       "766c3823b2c3512817628dbb5d6b05aa39322c3c97b8ee244ce4e47d84593084": "b3a86809857fe9ce575da73f6ed6c5441d558e3d",
       "6b5dac03ab1a08340b8f5e2c041b407730cc5517c315396b78369c76295a2734": "889d239ac41f25622164609367b713dd33bd5bde",
       "19e80855afc0f3cf60d4f232891cbf94dce29cdfcbdd602b056b3cbc4e8082f9": "43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a",
-      "27d407edcd485d81aec58a8e28081327aeb3e0cc7195f4c53c264ec192657098": "56b2a1ca68bf3519f01abde00c22e7a3425494e5",
       "aa0fa7ebc9f3fabf6d20477c9b71cac9ef4f146598900147db74d8ea8c7f1556": "09f1ed9e0f8ece181a1850ec89361cef78f37c9e",
       "8f4f3f521dfb5c89560f777ad2909394e13df2ed2bbd85600f2ab179abcdad62": "a43960ea7ba25dd823f5e0567d8d0296b960e47e",
       "6b8e46d83b37d5e0d575105d2eac5236f10e0d59d373da4753d72151386073cd": "8841e8e15c65fd94ccad95588eb71ef6b2d3d3c9",
@@ -191680,9 +191640,6 @@
       ".variants/naomi.zip.43f0018c": [
         "43f0018c32dd6d166c3b6d8ed2ffa672f398fa3a"
       ],
-      ".variants/naomi_boot.bin": [
-        "56b2a1ca68bf3519f01abde00c22e7a3425494e5"
-      ],
       ".variants/hikaru.zip": [
         "de2734b2110864ada20f85ca6ba7874ed1e6ecb1"
       ],
@@ -192225,7 +192182,6 @@
         "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c",
         "014881a959e045e00f4db8f52955200865d40280",
         "82e11a177af6a5091dd67f50a2f4bafda84d6556",
-        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
         "65482a23ac5c10a6095aee1db5824cca54ead6e5",
         "1a77fd83e337f906aecab27a1604db064cf10074",
         "57fe1bdee955bb48d357e463ccbf129496930b62",
@@ -192420,6 +192376,7 @@
         "4891d739a8a8b67923681bad4fb67edab2e90e50",
         "1b3b22092f30c4d1b2c15f04d1670eb1e9fbea07",
         "938a0bda7d9a357240718c2cec319878d36b8f72",
+        "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
         "10349ce675f6d6d47f0976e39cb7188eba858d89",
         "04990aa1c3a3fc7294ec884b81deaa89832df614",
         "8a2ddc37df2366d4e205e9904cd8bac22db2afd5",

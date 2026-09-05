@@ -18,6 +18,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+import nativemode
 from common import (
     resolution_is_hash_exact,
     resolve_local_file,
@@ -180,8 +181,11 @@ def find_conflicts(
     ]
 
 
-# A frontend that never reads the bytes cannot be made unhappy by better ones.
-CONTENT_CHECKING_MODES = frozenset({"md5", "sha1"})
+# Why a decision went the way it did. Not the mode's own name: the mode is
+# spelt in one place only, and nativemode answers whether it reads content.
+SERVES_BOTH = "path_only_check"
+ADDRESSEE = "addressee"
+FRONTEND_CHECKS_CONTENT = "frontend_checks_content"
 
 
 @dataclass
@@ -195,7 +199,7 @@ class Decision:
     @property
     def serves_both(self) -> bool:
         """Whether honouring the winner still satisfies the other layer."""
-        return self.reason == "existence"
+        return self.reason == SERVES_BOTH
 
 
 def arbitrate(conflict: Conflict, mode: str, addressee: str = "platform") -> Decision:
@@ -214,10 +218,10 @@ def arbitrate(conflict: Conflict, mode: str, addressee: str = "platform") -> Dec
     """
     profile = conflict.profile_claims[0]
     if addressee == "emulator":
-        return Decision(conflict, profile, "addressee")
-    if mode not in CONTENT_CHECKING_MODES:
-        return Decision(conflict, profile, "existence")
-    return Decision(conflict, conflict.platform_claim, "frontend_checks_content")
+        return Decision(conflict, profile, ADDRESSEE)
+    if not nativemode.reads_file_contents(mode):
+        return Decision(conflict, profile, SERVES_BOTH)
+    return Decision(conflict, conflict.platform_claim, FRONTEND_CHECKS_CONTENT)
 
 
 def format_decision(decision: Decision) -> str:
@@ -229,7 +233,7 @@ def format_decision(decision: Decision) -> str:
             f"({', '.join(conflict.emulators) or 'profile'}); the frontend only "
             "checks the path, so both are satisfied"
         )
-    if decision.reason == "addressee":
+    if decision.reason == ADDRESSEE:
         return (
             f"{conflict.destination}: serve {decision.winner.local_path}, "
             "the pack answers to the emulator"
