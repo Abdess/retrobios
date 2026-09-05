@@ -5,7 +5,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-09-03T20:45:52Z",
+  "generated": "2026-09-05T09:26:20Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,9 +237,9 @@
       }
     }
   ],
-  "total_files": 1833,
-  "total_size": 4315260164,
-  "total_omitted": 11,
+  "total_files": 1832,
+  "total_size": 4314998020,
+  "total_omitted": 9,
   "omitted_files": [
     {
       "dest": "Enterprise/basic21.bin",
@@ -282,13 +282,13 @@
       ]
     },
     {
-      "dest": "nxengine/data/data",
-      "name": "data/",
-      "system": "cave-story",
-      "required": true,
+      "dest": "jagboot.rom",
+      "name": "jagboot.rom",
+      "system": "atari-jaguar",
+      "required": false,
       "reason": "not_found",
       "cores": [
-        "nxengine"
+        "virtualjaguar"
       ]
     },
     {
@@ -322,26 +322,6 @@
       "required": true,
       "reason": "hash_mismatch",
       "cores": null
-    },
-    {
-      "dest": "rtp/2000/RPG Maker 2000 RTP",
-      "name": "RPG Maker 2000 RTP",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "easyrpg"
-      ]
-    },
-    {
-      "dest": "rtp/2003/RPG Maker 2003 RTP",
-      "name": "RPG Maker 2003 RTP",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "easyrpg"
-      ]
     }
   ],
   "files": [
@@ -3466,16 +3446,6 @@
       ]
     },
     {
-      "dest": "satar4mp.bin",
-      "sha1": "11f9e62cf299f72184835b7b2a70a16333fc0d88",
-      "sha256": "87cddb1f499e32758de20145e73031a84bab299e3f6e5c8487e76d02b2ee9d16",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-120.rom",
-      "cores": [
-        "beetle_saturn"
-      ]
-    },
-    {
       "dest": "bk/TERAK.ROM",
       "sha1": "273a9933b68a290c5aedcd6d69faa7b1d22c0344",
       "sha256": "a8cf685bd1c60ed722b956ae0d203da546c4249fe89639c44f2f294a4651ab34",
@@ -6047,10 +6017,10 @@
     },
     {
       "dest": "MSX/MSX.ROM",
-      "sha1": "e998f0c441f4f1800ef44e42cd1659150206cf79",
-      "sha256": "1c85dac5536fa3ba6f2cb70deba02ff680b34ac6cc787d2977258bd663a99555",
+      "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
+      "sha256": "999564a371dd2fdf7fbe8d853e82a68d557c27b7d87417639b2fa17704b83f78",
       "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX_8020-20bios.rom",
+      "repo_path": "bios/Microsoft/MSX/MSX.ROM",
       "cores": [
         "clk"
       ]

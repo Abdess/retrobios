@@ -22,6 +22,7 @@ import re
 
 try:
     from .base_scraper import (
+        requirement_entry,
         BaseScraper,
         BiosRequirement,
         fetch_github_latest_version,
@@ -29,6 +30,7 @@ try:
     )
 except ImportError:
     from base_scraper import (
+        requirement_entry,
         BaseScraper,
         BiosRequirement,
         fetch_github_latest_version,
@@ -352,6 +354,8 @@ class Scraper(BaseScraper):
                 sha1=rec["sha1"],
                 size=rec["size"] if rec["size"] else None,
                 required=rec.get("status") != "Bad",
+                destination=rec["name"],
+                native_id=rec["system"],
             )
             requirements.append(req)
 
@@ -366,17 +370,7 @@ class Scraper(BaseScraper):
             if req.system not in systems:
                 systems[req.system] = {"files": []}
 
-            entry: dict = {
-                "name": req.name,
-                "destination": req.name,
-                "required": req.required,
-            }
-            if req.sha1:
-                entry["sha1"] = req.sha1.lower()
-            if req.size:
-                entry["size"] = req.size
-
-            systems[req.system]["files"].append(entry)
+            systems[req.system]["files"].append(requirement_entry(req))
 
         version = _STABLE_TAG if _STABLE_TAG != "master" else ""
 

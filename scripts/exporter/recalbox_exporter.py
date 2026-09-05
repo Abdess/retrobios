@@ -1,135 +1,165 @@
-"""Exporter for Recalbox es_bios.xml format.
+"""Exporter for Recalbox's es_bios.xml.
 
-Produces XML matching the exact format of recalbox's es_bios.xml:
-- XML namespace declaration
-- <system fullname="..." platform="...">
-- <bios path="system/file" md5="..." core="..." /> with optional mandatory, hashMatchMandatory, note
-- mandatory absent = true (only explicit when false)
-- 2-space indentation
+The file is validated by es_bios.xsd, which makes path, md5 and core
+required on every bios element. An entry we cannot give all three to is not
+written: Recalbox would reject the file whole.
+
+mandatory and hashMatchMandatory are separate axes. Recalbox reads a missing
+attribute as true for both, so each is written only when it is false, or
+when the platform stated it explicitly.
 """
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+from xml.etree.ElementTree import ParseError
+from xml.sax.saxutils import quoteattr
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from common import parse_untrusted_xml
 
 from .base_exporter import BaseExporter
+from .baseline import NativeFile, NativeSystem, Report
+
+SOURCE_URL = (
+    "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay"
+    "/recalbox/share_init/system/.emulationstation/es_bios.xml"
+)
+SCHEMA_URL = (
+    "https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay"
+    "/recalbox/share_init/system/.emulationstation/es_bios.xsd"
+)
 
 
 class Exporter(BaseExporter):
-    """Export truth data to Recalbox es_bios.xml format."""
+    """Write Recalbox's es_bios.xml, corrected."""
 
     @staticmethod
     def platform_name() -> str:
         return "recalbox"
 
-    def export(
-        self,
-        truth_data: dict,
-        output_path: str,
-        scraped_data: dict | None = None,
-    ) -> None:
-        native_map: dict[str, str] = {}
-        if scraped_data:
-            for sys_id, sys_data in scraped_data.get("systems", {}).items():
-                nid = sys_data.get("native_id")
-                if nid:
-                    native_map[sys_id] = nid
+    @staticmethod
+    def native_filename() -> str:
+        return "es_bios.xml"
 
-        lines: list[str] = [
+    @staticmethod
+    def carries() -> frozenset[str]:
+        return frozenset({"md5", "required"})
+
+    @staticmethod
+    def native_sources() -> dict[str, str]:
+        return {"es_bios.xml": SOURCE_URL, "es_bios.xsd": SCHEMA_URL}
+
+    def _path(self, fe: NativeFile, native_id: str) -> str:
+        """The path Recalbox reads, pipe-joined when it accepts several.
+
+        A path Recalbox already states is reproduced exactly: several of its
+        entries sit at the BIOS root with no directory at all, and prefixing
+        them with the system would point the frontend somewhere else.
+        """
+        if fe.platform is not None:
+            path = str(fe.platform.get("destination") or fe.name)
+            alternatives = fe.platform.get("alt_paths") or []
+            if alternatives:
+                return "|".join([path, *[str(a) for a in alternatives]])
+            return path
+        dest = fe.destination or fe.name
+        return dest if "/" in dest else f"{native_id}/{dest}"
+
+    def _bios_element(self, fe: NativeFile, native_id: str) -> str:
+        attrs = [f"path={quoteattr(self._path(fe, native_id))}"]
+        attrs.append(f'md5={quoteattr(",".join(fe.hashes("md5")))}')
+        attrs.append(f'core={quoteattr(",".join(fe.cores()))}')
+
+        if not fe.required:
+            attrs.append('mandatory="false"')
+        elif fe.native("mandatory_declared", None) is True:
+            attrs.append('mandatory="true"')
+
+        hash_match = fe.native("hash_match_mandatory", None)
+        if hash_match is False:
+            attrs.append('hashMatchMandatory="false"')
+        elif hash_match is True:
+            attrs.append('hashMatchMandatory="true"')
+
+        note = " ".join(str(fe.native("note", "")).split())
+        if note:
+            attrs.append(f"note={quoteattr(note)}")
+
+        return f"    <bios {' '.join(attrs)} />"
+
+    @classmethod
+    def writable(cls, fe: NativeFile, require: str = "") -> bool:
+        """es_bios.xsd makes md5 and core required; without them, no element.
+
+        An entry Recalbox already ships has both, so this only ever gates
+        what we would be adding.
+        """
+        return bool(fe.hashes("md5")) and bool(fe.cores())
+
+    def render(
+        self,
+        systems: dict[str, NativeSystem],
+        report: Report,
+        originals: dict[str, str],
+        scraped: dict | None = None,
+    ) -> dict[str, str]:
+        lines = [
             '<?xml version="1.0" encoding="UTF-8"?>',
             '<biosList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
             ' xsi:noNamespaceSchemaLocation="es_bios.xsd">',
         ]
 
-        systems = truth_data.get("systems", {})
-        for sys_id in sorted(systems):
-            sys_data = systems[sys_id]
-            files = sys_data.get("files", [])
-            if not files:
+        for system in sorted(systems.values(), key=lambda s: s.native_id):
+            writable = [fe for fe in system.files if self.writable(fe)]
+            if not writable:
                 continue
-
-            native_id = native_map.get(sys_id, sys_id)
-            scraped_sys = (
-                scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
-            )
-            display_name = self._display_name(sys_id, scraped_sys)
-
-            lines.append(f'  <system fullname="{display_name}" platform="{native_id}">')
-
-            # Build path lookup from scraped data for this system
-            scraped_paths: dict[str, str] = {}
-            if scraped_data:
-                s_sys = scraped_data.get("systems", {}).get(sys_id, {})
-                for sf in s_sys.get("files", []):
-                    sname = sf.get("name", "").lower()
-                    spath = sf.get("destination", sf.get("name", ""))
-                    if sname and spath:
-                        scraped_paths[sname] = spath
-
-            for fe in files:
-                name = fe.get("name", "")
-                if name.startswith("_") or self._is_pattern(name):
-                    continue
-
-                # Use scraped path when available (preserves original format)
-                path = scraped_paths.get(name.lower())
-                if not path:
-                    dest = self._dest(fe)
-                    path = f"{native_id}/{dest}" if "/" not in dest else dest
-
-                md5 = fe.get("md5", "")
-                if isinstance(md5, list):
-                    md5 = ",".join(md5)
-
-                required = fe.get("required", True)
-
-                # Build cores string from _cores
-                cores_list = fe.get("_cores", [])
-                core_str = (
-                    ",".join(f"libretro/{c}" for c in cores_list) if cores_list else ""
-                )
-
-                attrs = [f'path="{path}"']
-                if md5:
-                    attrs.append(f'md5="{md5}"')
-                if not required:
-                    attrs.append('mandatory="false"')
-                if not required:
-                    attrs.append('hashMatchMandatory="true"')
-                if core_str:
-                    attrs.append(f'core="{core_str}"')
-
-                lines.append(f"    <bios {' '.join(attrs)} />")
-
+            fullname = quoteattr(self.display_name(system))
+            platform = quoteattr(system.native_id)
+            lines.append(f"  <system fullname={fullname} platform={platform}>")
+            for fe in writable:
+                lines.append(self._bios_element(fe, system.native_id))
             lines.append("  </system>")
 
         lines.append("</biosList>")
         lines.append("")
-        Path(output_path).write_text("\n".join(lines), encoding="utf-8")
+        return {self.native_filename(): "\n".join(lines)}
 
-    def validate(self, truth_data: dict, output_path: str) -> list[str]:
-        from xml.etree.ElementTree import parse as xml_parse
-
-        tree = xml_parse(output_path)
-        root = tree.getroot()
-
-        exported_paths: set[str] = set()
-        for bios_el in root.iter("bios"):
-            path = bios_el.get("path", "")
-            if path:
-                exported_paths.add(path.lower())
-                exported_paths.add(path.split("/")[-1].lower())
-
+    def validate(
+        self,
+        systems: dict[str, NativeSystem],
+        produced: dict[str, str],
+    ) -> list[str]:
+        content = produced[self.native_filename()]
         issues: list[str] = []
-        for sys_data in truth_data.get("systems", {}).values():
-            for fe in sys_data.get("files", []):
-                name = fe.get("name", "")
-                if name.startswith("_") or self._is_pattern(name):
+        try:
+            root = parse_untrusted_xml(content, self.native_filename())
+        except (ParseError, ValueError) as exc:
+            return [f"the XML does not parse: {exc}"]
+
+        for element in root.iter("bios"):
+            for attribute in ("path", "md5", "core"):
+                if not element.get(attribute):
+                    issues.append(
+                        f"es_bios.xsd requires {attribute}: "
+                        f"{element.get('path', '?')}"
+                    )
+        for element in root.iter("system"):
+            if not list(element):
+                issues.append(f"empty system: {element.get('platform', '?')}")
+            for attribute in ("fullname", "platform"):
+                if not element.get(attribute):
+                    issues.append(f"es_bios.xsd requires {attribute} on system")
+
+        exported = {
+            element.get("path", "").casefold() for element in root.iter("bios")
+        }
+        for system in systems.values():
+            for fe in system.files:
+                if not self.writable(fe):
                     continue
-                dest = self._dest(fe)
-                if (
-                    name.lower() not in exported_paths
-                    and dest.lower() not in exported_paths
-                ):
-                    issues.append(f"missing: {name}")
+                if self._path(fe, system.native_id).casefold() not in exported:
+                    issues.append(f"absent: {system.native_id}/{fe.name}")
         return issues

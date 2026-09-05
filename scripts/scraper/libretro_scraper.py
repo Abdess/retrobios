@@ -11,7 +11,12 @@ from __future__ import annotations
 import urllib.error
 import urllib.request
 
-from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    fetch_github_latest_version,
+    requirement_entry,
+)
 from .dat_parser import parse_dat, parse_dat_metadata, validate_dat_format
 
 PLATFORM_NAME = "libretro"
@@ -132,6 +137,7 @@ class Scraper(BaseScraper):
                     destination=destination,
                     required=True,
                     native_id=native_system,
+                    native_path=rom.name,
                 )
             )
 
@@ -247,21 +253,7 @@ class Scraper(BaseScraper):
                         system_entry["docs"] = cm["docs"]
                 systems[req.system] = system_entry
 
-            entry = {
-                "name": req.name,
-                "destination": req.destination,
-                "required": req.required,
-            }
-            if req.sha1:
-                entry["sha1"] = req.sha1
-            if req.md5:
-                entry["md5"] = req.md5
-            if req.crc32:
-                entry["crc32"] = req.crc32
-            if req.size:
-                entry["size"] = req.size
-
-            systems[req.system]["files"].append(entry)
+            systems[req.system]["files"].append(requirement_entry(req))
 
         # Systems not in System.dat but needed for RetroArch -added via
         # shared groups in _shared.yml. The includes directive is resolved

@@ -1,8 +1,4 @@
-"""Exporter for Lakka (System.dat format, same as RetroArch).
-
-Lakka inherits RetroArch cores and uses the same System.dat format.
-Delegates to systemdat_exporter for export and validation.
-"""
+"""Exporter for Lakka, which reads RetroArch's System.dat unchanged."""
 
 from __future__ import annotations
 
@@ -10,7 +6,7 @@ from .systemdat_exporter import Exporter as SystemDatExporter
 
 
 class Exporter(SystemDatExporter):
-    """Export truth data to Lakka System.dat format."""
+    """Write Lakka's System.dat, corrected."""
 
     @staticmethod
     def platform_name() -> str:

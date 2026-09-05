@@ -1,7 +1,7 @@
 """Exporter for libretro System.dat (clrmamepro DAT format).
 
-Produces a single 'game' block with all ROMs grouped by system,
-matching the exact format of libretro-database/dat/System.dat.
+One 'game' block, systems separated by a comment line carrying the name
+libretro gives them, matching libretro-database/dat/System.dat.
 """
 
 from __future__ import annotations
@@ -14,43 +14,71 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scraper.dat_parser import parse_dat
 
 from .base_exporter import BaseExporter
+from .baseline import NativeSystem, Report
+
+SOURCE_URL = (
+    "https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat"
+)
 
 
-def _slug_to_native(slug: str) -> str:
-    """Convert a system slug to 'Manufacturer - Console' format."""
-    parts = slug.split("-", 1)
-    if len(parts) == 1:
-        return parts[0].title()
-    manufacturer = parts[0].replace("-", " ").title()
-    console = parts[1].replace("-", " ").title()
-    return f"{manufacturer} - {console}"
+def _quote(name: str) -> str:
+    """Quote a ROM name the way the original does: only when it must be."""
+    return f'"{name}"' if any(c in name for c in ' ()') else name
 
 
 class Exporter(BaseExporter):
-    """Export truth data to libretro System.dat format."""
+    """Write libretro's System.dat, corrected."""
 
     @staticmethod
     def platform_name() -> str:
         return "retroarch"
 
-    def export(
-        self,
-        truth_data: dict,
-        output_path: str,
-        scraped_data: dict | None = None,
-    ) -> None:
-        native_map: dict[str, str] = {}
-        if scraped_data:
-            for sys_id, sys_data in scraped_data.get("systems", {}).items():
-                nid = sys_data.get("native_id")
-                if nid:
-                    native_map[sys_id] = nid
+    @staticmethod
+    def native_filename() -> str:
+        return "System.dat"
 
-        # Match exact header format of libretro-database/dat/System.dat
+    @staticmethod
+    def carries() -> frozenset[str]:
+        return frozenset({"size", "crc32", "md5", "sha1"})
+
+    @staticmethod
+    def native_sources() -> dict[str, str]:
+        return {"System.dat": SOURCE_URL}
+
+    @classmethod
+    def writable(cls, fe, require: str = "") -> bool:
+        """A clrmamepro rom line is a hash record, and the DAT has no other.
+
+        The original never states a rom it cannot hash, so neither do we.
+        """
+        if fe.platform is not None:
+            return True
+        return any(fe.hash(h) for h in ("crc32", "md5", "sha1"))
+
+    @staticmethod
+    def _rom_name(fe) -> str:
+        """The name the DAT gives a rom.
+
+        libretro writes the path for some entries (ep128emu/roms/cpc464.rom)
+        and the bare name for others whose destination has a directory all
+        the same (iplromco.dat, which lives under keropi/), so its own
+        spelling is recorded rather than derived.
+        """
+        declared = fe.native("native_path", "")
+        return str(declared) if declared else fe.name
+
+    def _header(self, originals: dict[str, str], scraped: dict | None) -> list[str]:
+        """Reuse the original header verbatim when we have the original."""
+        original = originals.get(self.native_filename(), "")
+        if original:
+            head, sep, _ = original.partition("\ngame (")
+            if sep:
+                return head.split("\n")
+
         version = ""
-        if scraped_data:
-            version = scraped_data.get("dat_version", scraped_data.get("version", ""))
-        lines: list[str] = [
+        if scraped:
+            version = scraped.get("dat_version", scraped.get("version", ""))
+        lines = [
             "clrmamepro (",
             '\tname "System"',
             '\tdescription "System"',
@@ -61,73 +89,76 @@ class Exporter(BaseExporter):
         lines.extend(
             [
                 '\tauthor "libretro"',
-                '\thomepage "https://github.com/libretro/libretro-database/blob/master/dat/System.dat"',
-                '\turl "https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat"',
+                '\thomepage "https://github.com/libretro/libretro-database/blob/master'
+                '/dat/System.dat"',
+                '\turl "https://raw.githubusercontent.com/libretro/libretro-database'
+                '/master/dat/System.dat"',
                 ")",
                 "",
-                "game (",
-                '\tname "System"',
-                '\tcomment "System"',
             ]
         )
+        return lines
 
-        systems = truth_data.get("systems", {})
-        for sys_id in sorted(systems):
-            sys_data = systems[sys_id]
-            files = sys_data.get("files", [])
-            if not files:
-                continue
+    def render(
+        self,
+        systems: dict[str, NativeSystem],
+        report: Report,
+        originals: dict[str, str],
+        scraped: dict | None = None,
+    ) -> dict[str, str]:
+        lines = self._header(originals, scraped)
+        lines.extend(["game (", '\tname "System"', '\tcomment "System"'])
 
-            native_name = native_map.get(sys_id, _slug_to_native(sys_id))
-            lines.append("")
-            lines.append(f'\tcomment "{native_name}"')
-
+        for system, files in sorted(
+            self.exportable(systems), key=lambda pair: pair[0].native_id
+        ):
+            rendered: list[str] = []
             for fe in files:
-                name = fe.get("name", "")
-                if name.startswith("_") or self._is_pattern(name):
+                if not any(fe.hash(h) for h in ("crc32", "md5", "sha1")):
                     continue
-
-                # Quote names with spaces or special chars (matching original format)
-                needs_quote = " " in name or "(" in name or ")" in name
-                name_str = f'"{name}"' if needs_quote else name
-                rom_parts = [f"name {name_str}"]
-                size = fe.get("size")
+                parts = [f"name {_quote(self._rom_name(fe))}"]
+                size = fe.size()
                 if size:
-                    rom_parts.append(f"size {size}")
-                crc = fe.get("crc32", "")
+                    parts.append(f"size {size}")
+                crc = fe.hash("crc32")
                 if crc:
-                    rom_parts.append(f"crc {str(crc).upper()}")
-                md5 = fe.get("md5", "")
-                if isinstance(md5, list):
-                    md5 = md5[0] if md5 else ""
+                    parts.append(f"crc {crc.upper()}")
+                md5 = fe.hash("md5")
                 if md5:
-                    rom_parts.append(f"md5 {md5}")
-                sha1 = fe.get("sha1", "")
-                if isinstance(sha1, list):
-                    sha1 = sha1[0] if sha1 else ""
+                    parts.append(f"md5 {md5}")
+                sha1 = fe.hash("sha1")
                 if sha1:
-                    rom_parts.append(f"sha1 {sha1}")
+                    parts.append(f"sha1 {sha1}")
+                rendered.append(f"\trom ( {' '.join(parts)} )")
 
-                lines.append(f"\trom ( {' '.join(rom_parts)} )")
+            if not rendered:
+                continue
+            lines.append("")
+            # libretro's comment is the system name as the DAT spells it,
+            # "Atari - 400-800". Prettifying it drops the separator.
+            lines.append(f'\tcomment "{system.native_id}"')
+            lines.extend(rendered)
 
         lines.append(")")
         lines.append("")
-        Path(output_path).write_text("\n".join(lines), encoding="utf-8")
+        return {self.native_filename(): "\n".join(lines)}
 
-    def validate(self, truth_data: dict, output_path: str) -> list[str]:
-        content = Path(output_path).read_text(encoding="utf-8")
+    def validate(
+        self,
+        systems: dict[str, NativeSystem],
+        produced: dict[str, str],
+    ) -> list[str]:
+        content = produced[self.native_filename()]
         parsed = parse_dat(content)
-
-        exported_names: set[str] = set()
-        for rom in parsed:
-            exported_names.add(rom.name)
+        exported = {rom.name for rom in parsed}
 
         issues: list[str] = []
-        for sys_data in truth_data.get("systems", {}).values():
-            for fe in sys_data.get("files", []):
-                name = fe.get("name", "")
-                if name.startswith("_") or self._is_pattern(name):
+        for system in systems.values():
+            for fe in system.files:
+                if not any(fe.hash(h) for h in ("crc32", "md5", "sha1")):
                     continue
-                if name not in exported_names:
-                    issues.append(f"missing: {name}")
+                if self._rom_name(fe) not in exported:
+                    issues.append(f"absent from the DAT: {system.native_id}/{fe.name}")
+        if not content.rstrip().endswith(")"):
+            issues.append("the game block is not closed")
         return issues

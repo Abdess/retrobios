@@ -5,7 +5,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-09-03T20:45:52Z",
+  "generated": "2026-09-05T09:26:20Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,9 +237,9 @@
       }
     }
   ],
-  "total_files": 1326,
-  "total_size": 3898770140,
-  "total_omitted": 5,
+  "total_files": 1328,
+  "total_size": 3900250204,
+  "total_omitted": 4,
   "omitted_files": [
     {
       "dest": "Machines/MSX2+ - European/Msx2pe.rom",
@@ -258,33 +258,21 @@
       "cores": null
     },
     {
-      "dest": "nxengine/data/data",
-      "name": "data/",
-      "system": "cave-story",
+      "dest": "geolith/neocd.zip",
+      "name": "neocd.zip",
+      "system": "snk-neogeo-cd",
       "required": true,
-      "reason": "not_found",
-      "cores": [
-        "nxengine"
-      ]
+      "reason": "hash_mismatch",
+      "cores": null
     },
     {
-      "dest": "rtp/2000/RPG Maker 2000 RTP",
-      "name": "RPG Maker 2000 RTP",
-      "system": "rpgmaker",
+      "dest": "jagboot.rom",
+      "name": "jagboot.rom",
+      "system": "atari-jaguar",
       "required": false,
       "reason": "not_found",
       "cores": [
-        "easyrpg"
-      ]
-    },
-    {
-      "dest": "rtp/2003/RPG Maker 2003 RTP",
-      "name": "RPG Maker 2003 RTP",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "easyrpg"
+        "virtualjaguar"
       ]
     }
   ],
@@ -2418,14 +2406,6 @@
       "cores": null
     },
     {
-      "dest": "saturn/stvbios.zip",
-      "sha1": "7783ab663bb1a8d62ff60d583674355c2af556b1",
-      "sha256": "38ceb2792c72770f56aadb1865cf66dc33a3017db1ee05e11c2b2dff397ad39e",
-      "size": 2955630,
-      "repo_path": "bios/Arcade/MAME/stvbios.zip",
-      "cores": null
-    },
-    {
       "dest": "saturn/sega_101.bin",
       "sha1": "df94c5b4d47eb3cc404d88b33a8fda237eaf4720",
       "sha256": "dcfef4b99605f872b6c3b6d05c045385cdea3d1b702906a0ed930df7bcb7deac",
@@ -2690,6 +2670,14 @@
       "cores": null
     },
     {
+      "dest": "geolith/neocdz.zip",
+      "sha1": "80c9a25ccf39c6b85d1a7c9c0d6fe527ab45ec1c",
+      "sha256": "ce9df4f0e7706c485713a143802ddcc43e13c533944ef29054bfe1cbab5f0c5b",
+      "size": 598775,
+      "repo_path": "bios/SNK/Neo Geo CD/neocdz.zip",
+      "cores": null
+    },
+    {
       "dest": "scph5500.bin",
       "sha1": "b05def971d8ec59f346f2d9ac21fb742e3eb6917",
       "sha256": "9c0421858e217805f4abe18698afea8d5aa36ff0727eb8484944e00eb5e7eadb",
@@ -2839,6 +2827,38 @@
       "sha256": "f26339802bccd3c09657a8c1de89005570c3a23bcf8a5e8d4b5b23904c2f2e29",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/SVI - Spectravideo SVI-328/svi328.rom",
+      "cores": null
+    },
+    {
+      "dest": "stv/epr-20091.ic8",
+      "sha1": "eff0f54c70bce05ff3a289bf30b1027e1c8cd117",
+      "sha256": "ac778ec04aaa4df296d30743536da3de31281f8ae5c94d7be433dcc84e25d85b",
+      "size": 524288,
+      "repo_path": "bios/Sega/ST-V/epr-20091.ic8",
+      "cores": null
+    },
+    {
+      "dest": "stv/epr-17952a.ic8",
+      "sha1": "eaf1c3e5d602e1139d2090a78d7e19f04f916794",
+      "sha256": "bac5a52794cf424271f073df228e0b0eb042dede6a3b829eb49abf155e7e0137",
+      "size": 524288,
+      "repo_path": "bios/Sega/ST-V/epr-17952a.ic8",
+      "cores": null
+    },
+    {
+      "dest": "stv/epr-17954a.ic8",
+      "sha1": "af79cff317e5b57d49e463af16a9f616ed1eee08",
+      "sha256": "3e6f91506031badc4ebdf7fe5b4f33180222a369b575522861688d3b27322a68",
+      "size": 524288,
+      "repo_path": "bios/Sega/ST-V/epr-17954a.ic8",
+      "cores": null
+    },
+    {
+      "dest": "stv/stvbios.zip",
+      "sha1": "7783ab663bb1a8d62ff60d583674355c2af556b1",
+      "sha256": "38ceb2792c72770f56aadb1865cf66dc33a3017db1ee05e11c2b2dff397ad39e",
+      "size": 2955630,
+      "repo_path": "bios/Arcade/MAME/stvbios.zip",
       "cores": null
     },
     {
@@ -4079,16 +4099,6 @@
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
       "cores": [
         "beetle_psx"
-      ]
-    },
-    {
-      "dest": "satar4mp.bin",
-      "sha1": "11f9e62cf299f72184835b7b2a70a16333fc0d88",
-      "sha256": "87cddb1f499e32758de20145e73031a84bab299e3f6e5c8487e76d02b2ee9d16",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-120.rom",
-      "cores": [
-        "beetle_saturn"
       ]
     },
     {
@@ -6437,16 +6447,6 @@
       "repo_path": "bios/Sega/Mega Drive/sk2chip.bin",
       "cores": [
         "genesis_plus_gx"
-      ]
-    },
-    {
-      "dest": "neocd.zip",
-      "sha1": "cef6a6e78989a595700337c15b79155523935333",
-      "sha256": "a0cdb87bb7753c9a1a1d99b83f58ace4bcd54dee41211d9d2c96fe06098b3590",
-      "size": 429431,
-      "repo_path": "bios/SNK/Neo Geo CD/neocd.zip",
-      "cores": [
-        "geolith"
       ]
     },
     {

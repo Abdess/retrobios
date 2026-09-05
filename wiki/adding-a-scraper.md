@@ -403,19 +403,28 @@ manipulation rather than load-dump to maintain human-readable formatting.
 
 ### Round-trip testing
 
-If an exporter exists for the platform, validate the scrape-export-compare cycle:
+The scrape and the export are two directions of the same transcription, so
+run them against each other: scrape upstream, export it back, and diff the
+result against the file you started from. Nothing the platform declares may
+be missing from the round trip.
 
 ```bash
 # Scrape upstream -> platform YAML
-python -m scripts.scraper.myplatform_scraper --output /tmp/scraped.yml
+python -m scripts.scraper.myplatform_scraper --output platforms/myplatform.yml
 
-# Export truth data -> native format
-python scripts/export_native.py --platform myplatform --output /tmp/exported.json
+# Rewrite the platform's own file, corrected
+python scripts/export_native.py --platform myplatform --fetch \
+    --output-dir tmp/native
 
-# Compare
-diff <(python -m scripts.scraper.myplatform_scraper --json | python -m json.tool) \
-     /tmp/exported.json
+# Compare with the file upstream publishes, cached by --fetch
+diff .cache/upstream-native/myplatform/<their file> \
+     tmp/native/myplatform/<their file>
 ```
+
+Every line in that diff should be a correction you can defend. A line that
+merely reshapes their formatting means the scraper lost something the
+exporter then had to invent: add it to the requirement instead, through
+`native_path`, `native_system` or the `native` dict.
 
 ### Common issues
 

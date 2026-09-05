@@ -5,7 +5,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-09-03T20:45:52Z",
+  "generated": "2026-09-05T09:26:20Z",
   "base_destination": "",
   "detect": [
     {
@@ -237,9 +237,9 @@
       }
     }
   ],
-  "total_files": 3517,
-  "total_size": 6656707765,
-  "total_omitted": 11,
+  "total_files": 3515,
+  "total_size": 6656314549,
+  "total_omitted": 4,
   "omitted_files": [
     {
       "dest": "bios/dc/naomi2.zip",
@@ -250,93 +250,21 @@
       "cores": null
     },
     {
-      "dest": "bios/mkxp-z/Fonts/Fonts",
-      "name": "Fonts",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "bios/mkxp-z/RTP/RPGVX/RPGVX",
-      "name": "RPGVX",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "bios/mkxp-z/RTP/RPGVXAce/RPGVXAce",
-      "name": "RPGVXAce",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "bios/mkxp-z/RTP/Standard/Standard",
-      "name": "Standard",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "bios/mkxp-z/Scripts/Postload/Postload",
-      "name": "Postload",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "bios/mkxp-z/Scripts/Preload/Preload",
-      "name": "Preload",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "bios/nxengine/data/data",
-      "name": "data/",
-      "system": "cave-story",
+      "dest": "bios/dsifirmware.bin",
+      "name": "dsifirmware.bin",
+      "system": "nintendo-ds",
       "required": true,
-      "reason": "not_found",
-      "cores": [
-        "nxengine"
-      ]
+      "reason": "hash_mismatch",
+      "cores": null
     },
     {
-      "dest": "bios/rtp/2000/RPG Maker 2000 RTP",
-      "name": "RPG Maker 2000 RTP",
-      "system": "rpgmaker",
+      "dest": "bios/jagboot.rom",
+      "name": "jagboot.rom",
+      "system": "atari-jaguar",
       "required": false,
       "reason": "not_found",
       "cores": [
-        "easyrpg"
-      ]
-    },
-    {
-      "dest": "bios/rtp/2003/RPG Maker 2003 RTP",
-      "name": "RPG Maker 2003 RTP",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "easyrpg"
+        "virtualjaguar"
       ]
     },
     {
@@ -14422,14 +14350,6 @@
       "cores": null
     },
     {
-      "dest": "bios/dsifirmware.bin",
-      "sha1": "3773f52559d5ac4fc6d8aefe35bce58730ae8181",
-      "sha256": "a52e281c4dfc8f2da61e7a193d0f40e15eff6f6142ba80bf48ffe755624e2017",
-      "size": 131072,
-      "repo_path": "bios/Nintendo/Nintendo DS/dsifirmware.bin",
-      "cores": null
-    },
-    {
       "dest": "bios/gb_bios.bin",
       "sha1": "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
       "sha256": "cf053eccb4ccafff9e67339d4e78e98dce7d1ed59be819d2a1ba2232c6fce1c7",
@@ -16737,16 +16657,6 @@
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
       "cores": [
         "beetle_psx"
-      ]
-    },
-    {
-      "dest": "bios/satar4mp.bin",
-      "sha1": "11f9e62cf299f72184835b7b2a70a16333fc0d88",
-      "sha256": "87cddb1f499e32758de20145e73031a84bab299e3f6e5c8487e76d02b2ee9d16",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-120.rom",
-      "cores": [
-        "beetle_saturn"
       ]
     },
     {

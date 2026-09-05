@@ -1219,6 +1219,27 @@ class FreshnessGuardMechanics(unittest.TestCase):
             self.assertIn("Generated on B", handle.read())
 
 
+
+class PipelineReportsWhatItDid(unittest.TestCase):
+    """A step that did not run must not be summarised as OK.
+
+    --offline skips the network steps and --with-export gates three more.
+    Reporting them as OK claims work nobody did, and a run whose export
+    never happened read exactly like one where it had.
+    """
+
+    def test_a_skipped_step_is_not_reported_as_done(self):
+        import pipeline
+
+        self.assertTrue(bool(pipeline.SKIPPED), "a skip must not fail the run")
+        self.assertEqual(repr(pipeline.SKIPPED), "SKIPPED")
+        self.assertIsNot(pipeline.SKIPPED, True)
+
+    def test_every_skip_branch_uses_the_sentinel(self):
+        source = (ROOT / "scripts" / "pipeline.py").read_text()
+        stale = re.findall(r'results\["(\w+)"\] = True', source)
+        self.assertEqual(stale, [], f"steps still claiming OK when skipped: {stale}")
+
 if __name__ == "__main__":
     unittest.main()
 

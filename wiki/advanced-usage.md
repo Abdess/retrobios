@@ -324,15 +324,33 @@ The diff reports:
 
 ### Export to native formats
 
-Convert truth data to the native format each platform consumes:
+Rewrite a platform's own BIOS file, corrected. The output is the file its
+maintainers keep, not our data in their syntax: hashes the truth can prove
+are applied, entries the truth says nothing about are left alone, and files
+the truth knows and the platform lacks are added.
 
 ```bash
-python scripts/export_native.py --platform batocera    # Python dict (batocera-systems)
-python scripts/export_native.py --platform recalbox    # XML (es_bios.xml)
-python scripts/export_native.py --all --output-dir dist/upstream/
+python scripts/export_native.py --platform batocera --fetch   # batocera-systems
+python scripts/export_native.py --platform recalbox --fetch   # es_bios.xml
+python scripts/export_native.py --all --fetch --output-dir dist/upstream/
 ```
 
-This allows submitting corrections upstream in the format maintainers expect.
+Seven of the formats carry code as well as data - Batocera's and ROCKNIX's
+scripts, EmuDeck's shell library, BizHawk's C# database, RetroDECK's
+component manifests, MiSTer's BiosDB, RetroPie's scriptmodules. Those are
+patched from the platform's own file, which `--fetch` downloads once into
+`.cache/upstream-native/`. Without it the export fails rather than
+publishing a fragment.
+
+RetroPie is the odd one: it publishes no BIOS list at all, and the only
+declaration is the sentence in each package's `rp_module_help`. The export
+adds a missing file name to a list a maintainer already wrote, never
+removes one, and never drafts a sentence where there was none.
+
+The run reports what it changed, and what it had to leave out: an entry a
+format cannot express is named, never written half-formed. `es_bios.xsd`
+makes md5 and core required on every element, and RomM compares the file
+size before any hash, so an entry missing either could never verify.
 
 
 ## Emulator-Level Verification

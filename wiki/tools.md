@@ -226,12 +226,26 @@ python scripts/diff_truth.py --all                        # diff all platforms
 
 ### export_native.py
 
-Export truth data to native platform formats (System.dat, es_bios.xml, checkBIOS.sh, etc.).
+Rewrite each platform's own BIOS file, corrected: System.dat, es_bios.xml,
+batocera-systems, checkBIOS.sh, FirmwareDatabase.cs, the RetroDECK manifests,
+MiSTer's BiosDB, RetroPie's scriptmodules. Every platform in the registry,
+archived included.
 
 ```bash
-python scripts/export_native.py --platform batocera
-python scripts/export_native.py --all --output-dir dist/upstream/
+python scripts/export_native.py --platform batocera --fetch
+python scripts/export_native.py --all --fetch --output-dir dist/upstream/
 ```
+
+`--fetch` downloads the platform's own file once into
+`.cache/upstream-native/`, at the revision the platform YAML's `source:`
+names. Formats that carry code are patched from it rather than
+regenerated, and the export fails without it.
+
+A list is written in the order the code looks: `priority:` first (lowest
+wins), then the profile's own declaration order. What a format cannot
+state is reported rather than written — EmuDeck's arrays are shared
+between emulators its file does not name, so a hash is corrected in place
+and never added.
 
 MAME and FBNeo entries are `.zip` ROM sets: their meaningful hashes belong
 to the files inside the archive, so the exported DAT lists those entries

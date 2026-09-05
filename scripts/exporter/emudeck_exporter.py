@@ -1,215 +1,166 @@
-"""Exporter for EmuDeck checkBIOS.sh format.
+"""Exporter for EmuDeck's checkBIOS.sh.
 
-Produces a bash script matching the exact pattern of EmuDeck's
-functions/checkBIOS.sh: per-system check functions with MD5 arrays
-inside the function body, iterating over $biosPath/* files.
-
-Two patterns:
-- MD5 pattern: systems with known hashes, loop $biosPath/*, md5sum each, match
-- File-exists pattern: systems with specific paths, check -f
+checkBIOS.sh is a shell library: each system is a function EmuDeck calls by
+name, and the only data in it is the MD5 list each function matches against.
+Writing the functions from a table would publish a file missing whichever
+checks the table forgot, so the original is patched instead and every
+function it defines keeps its shape, its scan directory and its output.
 """
 
 from __future__ import annotations
 
 import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from scraper.emudeck_scraper import FUNCTION_HASH_MAP, _RE_FUNC, _RE_LOCAL_HASHES
+
 from .base_exporter import BaseExporter
+from .baseline import NativeSystem, Report
 
-# Map our system IDs to EmuDeck function naming conventions
-_SYSTEM_CONFIG: dict[str, dict] = {
-    "sony-playstation": {
-        "func": "checkPS1BIOS",
-        "var": "PSXBIOS",
-        "array": "PSBios",
-        "pattern": "md5",
-    },
-    "sony-playstation-2": {
-        "func": "checkPS2BIOS",
-        "var": "PS2BIOS",
-        "array": "PS2Bios",
-        "pattern": "md5",
-    },
-    "sega-mega-cd": {
-        "func": "checkSegaCDBios",
-        "var": "SEGACDBIOS",
-        "array": "CDBios",
-        "pattern": "md5",
-    },
-    "sega-saturn": {
-        "func": "checkSaturnBios",
-        "var": "SATURNBIOS",
-        "array": "SaturnBios",
-        "pattern": "md5",
-    },
-    "sega-dreamcast": {
-        "func": "checkDreamcastBios",
-        "var": "BIOS",
-        "array": "hashes",
-        "pattern": "md5",
-    },
-    "nintendo-ds": {
-        "func": "checkDSBios",
-        "var": "BIOS",
-        "array": "hashes",
-        "pattern": "md5",
-    },
-    "nintendo-switch": {
-        "func": "checkCitronBios",
-        "pattern": "file-exists",
-        "firmware_path": "$biosPath/citron/firmware",
-        "keys_path": "$biosPath/citron/keys/prod.keys",
-    },
-}
-
-
-def _make_md5_function(cfg: dict, md5s: list[str]) -> list[str]:
-    """Generate a MD5-checking function matching EmuDeck's exact pattern."""
-    func = cfg["func"]
-    var = cfg["var"]
-    array = cfg["array"]
-    md5_str = " ".join(md5s)
-
-    return [
-        f"{func}(){{",
-        "",
-        f'\t{var}="NULL"',
-        "",
-        '\tfor entry in "$biosPath/"*',
-        "\tdo",
-        '\t\tif [ -f "$entry" ]; then',
-        '\t\t\tmd5=($(md5sum "$entry"))',
-        f'\t\t\tif [[ "${var}" != true ]]; then',
-        f"\t\t\t\t{array}=({md5_str})",
-        f'\t\t\t\tfor i in "${{{array}[@]}}"',
-        "\t\t\t\tdo",
-        '\t\t\t\tif [[ "$md5" == *"${i}"* ]]; then',
-        f"\t\t\t\t\t{var}=true",
-        "\t\t\t\t\tbreak",
-        "\t\t\t\telse",
-        f"\t\t\t\t\t{var}=false",
-        "\t\t\t\tfi",
-        "\t\t\t\tdone",
-        "\t\t\tfi",
-        "\t\tfi",
-        "\tdone",
-        "",
-        "",
-        f"\tif [ ${var} == true ]; then",
-        '\t\techo "$entry true";',
-        "\telse",
-        '\t\techo "false";',
-        "\tfi",
-        "}",
-    ]
-
-
-def _make_file_exists_function(cfg: dict) -> list[str]:
-    """Generate a file-exists function matching EmuDeck's pattern."""
-    func = cfg["func"]
-    firmware = cfg.get("firmware_path", "")
-    keys = cfg.get("keys_path", "")
-
-    return [
-        f"{func}(){{",
-        "",
-        f'\tlocal FIRMWARE="{firmware}"',
-        f'\tlocal KEYS="{keys}"',
-        '\tif [[ -f "$KEYS" ]] && [[ "$( ls -A "$FIRMWARE")" ]]; then',
-        '\t\t\techo "true";',
-        "\telse",
-        '\t\t\techo "false";',
-        "\tfi",
-        "}",
-    ]
+SOURCE_URL = (
+    "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main"
+    "/functions/checkBIOS.sh"
+)
+_MD5 = re.compile(r"^[0-9a-f]{32}$")
 
 
 class Exporter(BaseExporter):
-    """Export truth data to EmuDeck checkBIOS.sh format."""
+    """Write EmuDeck's checkBIOS.sh, corrected."""
 
     @staticmethod
     def platform_name() -> str:
         return "emudeck"
 
-    def export(
-        self,
-        truth_data: dict,
-        output_path: str,
-        scraped_data: dict | None = None,
-    ) -> None:
-        lines: list[str] = ["#!/bin/bash"]
+    @staticmethod
+    def native_filename() -> str:
+        return "checkBIOS.sh"
 
-        systems = truth_data.get("systems", {})
+    @staticmethod
+    def requires() -> str:
+        return "md5"
 
-        for sys_id, cfg in sorted(_SYSTEM_CONFIG.items(), key=lambda x: x[1]["func"]):
-            sys_data = systems.get(sys_id)
-            if not sys_data:
+    @staticmethod
+    def carries() -> frozenset[str]:
+        return frozenset({"md5"})
+
+    @staticmethod
+    def native_sources() -> dict[str, str]:
+        return {"checkBIOS.sh": SOURCE_URL}
+
+    @staticmethod
+    def needs_original() -> bool:
+        # The checks are code, and EmuDeck calls them by name.
+        return True
+
+    @staticmethod
+    def can_add() -> bool:
+        """A hash is corrected in place, never added to an array.
+
+        EmuDeck's frontend calls one check for several emulators
+        (EmulatorsDetailPage.jsx: 'ra' asks checkPS1BIOS, checkSegaCDBios,
+        checkSaturnBios, checkDSBios and checkDreamcastBios, and
+        'duckstation' asks checkPS1BIOS as well), and nothing in
+        checkBIOS.sh names them. Growing an array therefore changes answers
+        for consumers the array does not list: DuckStation boots from a PS2
+        image, the RetroArch PSX cores do not, so adding the ones
+        DuckStation accepts would report a BIOS to a card that has none.
+        Correcting a value in place changes no consumer's set.
+        """
+        return False
+
+    @classmethod
+    def _md5s(cls, systems: dict[str, NativeSystem], system_id: str) -> list[str]:
+        """Every MD5 the system accepts, in a stable order, deduplicated."""
+        seen: list[str] = []
+        for system in systems.values():
+            if system.native_id != system_id:
                 continue
+            for fe in system.files:
+                if not cls.writable(fe):
+                    continue
+                for value in fe.hashes("md5"):
+                    if _MD5.match(value) and value not in seen:
+                        seen.append(value)
+        return seen
 
-            lines.append("")
+    def _function_spans(self, script: str) -> list[tuple[str, int, int]]:
+        """Name and byte span of every check the script defines."""
+        matches = list(_RE_FUNC.finditer(script))
+        spans: list[tuple[str, int, int]] = []
+        for index, match in enumerate(matches):
+            end = (
+                matches[index + 1].start()
+                if index + 1 < len(matches)
+                else len(script)
+            )
+            spans.append((match.group(1), match.start(), end))
+        return spans
 
-            if cfg["pattern"] == "md5":
-                md5s: list[str] = []
-                for fe in sys_data.get("files", []):
-                    name = fe.get("name", "")
-                    if self._is_pattern(name) or name.startswith("_"):
-                        continue
-                    md5 = fe.get("md5", "")
-                    if isinstance(md5, list):
-                        md5s.extend(
-                            m for m in md5 if m and re.fullmatch(r"[a-f0-9]{32}", m)
-                        )
-                    elif md5 and re.fullmatch(r"[a-f0-9]{32}", md5):
-                        md5s.append(md5)
-                if md5s:
-                    lines.extend(_make_md5_function(cfg, md5s))
-            elif cfg["pattern"] == "file-exists":
-                lines.extend(_make_file_exists_function(cfg))
+    def render(
+        self,
+        systems: dict[str, NativeSystem],
+        report: Report,
+        originals: dict[str, str],
+        scraped: dict | None = None,
+    ) -> dict[str, str]:
+        script = originals.get(self.native_filename(), "")
+        if not script:
+            raise ValueError(
+                "checkBIOS.sh cannot be written without EmuDeck's own file: "
+                "the checks are code, not data"
+            )
 
-        lines.append("")
-        Path(output_path).write_text("\n".join(lines), encoding="utf-8")
+        pieces: list[str] = []
+        cursor = 0
+        for name, start, end in self._function_spans(script):
+            pieces.append(script[cursor:start])
+            body = script[start:end]
+            system_id = FUNCTION_HASH_MAP.get(name)
+            md5s = self._md5s(systems, system_id) if system_id else []
+            match = _RE_LOCAL_HASHES.search(body)
+            if md5s and match:
+                # An array compared by membership says nothing about order,
+                # so the same set is left as the maintainer wrote it.
+                if set(md5s) != set(match.group(1).split()):
+                    body = (
+                        body[: match.start(1)]
+                        + " ".join(md5s)
+                        + body[match.end(1) :]
+                    )
+            pieces.append(body)
+            cursor = end
+        pieces.append(script[cursor:])
 
-    def validate(self, truth_data: dict, output_path: str) -> list[str]:
-        content = Path(output_path).read_text(encoding="utf-8")
+        return {self.native_filename(): "".join(pieces)}
+
+    def validate(
+        self,
+        systems: dict[str, NativeSystem],
+        produced: dict[str, str],
+    ) -> list[str]:
+        content = produced[self.native_filename()]
         issues: list[str] = []
 
-        systems = truth_data.get("systems", {})
-        for sys_id, cfg in _SYSTEM_CONFIG.items():
-            if cfg["pattern"] != "md5":
+        defined = {name for name, _, _ in self._function_spans(content)}
+        for name, system_id in FUNCTION_HASH_MAP.items():
+            if name not in defined:
+                issues.append(f"check absent from the output: {name}")
                 continue
-            sys_data = systems.get(sys_id)
-            if not sys_data:
+            md5s = self._md5s(systems, system_id)
+            if not md5s:
                 continue
-            for fe in sys_data.get("files", []):
-                # export skips placeholders and private entries, so looking
-                # for them here makes the exporter reject its own output.
-                name = fe.get("name", "")
-                if self._is_pattern(name) or name.startswith("_"):
-                    continue
-                md5 = fe.get("md5", "")
-                if isinstance(md5, list):
-                    md5 = md5[0] if md5 else ""
-                if md5 and re.fullmatch(r"[a-f0-9]{32}", md5) and md5 not in content:
-                    issues.append(f"missing md5: {md5} ({name})")
-
-        for sys_id, cfg in _SYSTEM_CONFIG.items():
-            func = cfg["func"]
-            if func in content:
+            body = next(
+                content[start:end]
+                for fname, start, end in self._function_spans(content)
+                if fname == name
+            )
+            if not _RE_LOCAL_HASHES.search(body):
+                # A check with no hash list is a path check, not a hash check.
                 continue
-            sys_data = systems.get(sys_id)
-            if not sys_data or not sys_data.get("files"):
-                continue
-            # Only flag if the system has usable data for the function type
-            if cfg["pattern"] == "md5":
-                has_md5 = any(
-                    fe.get("md5")
-                    and isinstance(fe.get("md5"), str)
-                    and re.fullmatch(r"[a-f0-9]{32}", fe["md5"])
-                    for fe in sys_data["files"]
-                )
-                if has_md5:
-                    issues.append(f"missing function: {func}")
-            elif cfg["pattern"] == "file-exists":
-                issues.append(f"missing function: {func}")
-
+            for md5 in md5s:
+                if md5 not in body:
+                    issues.append(f"absent from {name}: {md5}")
         return issues

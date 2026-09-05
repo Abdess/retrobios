@@ -12,41 +12,74 @@ systems:
       destination: panafz1.bin
       required: true
       md5: f47264dd47fe30f73ab3c010015c155b
+      native_system: 3do
+      native_path: bios/panafz1.bin
+      native_name: 3DO
     - name: panafz10.bin
       destination: panafz10.bin
       required: true
       md5: 51f2f43ae2f3508a14d9f56597e2d3ce
+      native_system: 3do
+      native_path: bios/panafz10.bin
+      native_name: 3DO
     - name: goldstar.bin
       destination: goldstar.bin
       required: true
       md5: 8639fd5e549bd6238cfee79e3e749114
+      native_system: 3do
+      native_path: bios/goldstar.bin
+      native_name: 3DO
     name: 3DO
   adam:
     files:
     - name: adam.zip
       destination: adam.zip
       required: true
+      native_system: adam
+      native_path: bios/adam.zip
+      native_name: Coleco Adam
     - name: adam_ddp.zip
       destination: adam_ddp.zip
       required: true
+      native_system: adam
+      native_path: bios/adam_ddp.zip
+      native_name: Coleco Adam
     - name: adam_fdc.zip
       destination: adam_fdc.zip
       required: true
+      native_system: adam
+      native_path: bios/adam_fdc.zip
+      native_name: Coleco Adam
     - name: adam_kb.zip
       destination: adam_kb.zip
       required: true
+      native_system: adam
+      native_path: bios/adam_kb.zip
+      native_name: Coleco Adam
     - name: adam_prn.zip
       destination: adam_prn.zip
       required: true
+      native_system: adam
+      native_path: bios/adam_prn.zip
+      native_name: Coleco Adam
     - name: adam_cart.xml
       destination: mame/hash/adam_cart.xml
       required: true
+      native_system: adam
+      native_path: bios/mame/hash/adam_cart.xml
+      native_name: Coleco Adam
     - name: adam_cass.xml
       destination: mame/hash/adam_cass.xml
       required: true
+      native_system: adam
+      native_path: bios/mame/hash/adam_cass.xml
+      native_name: Coleco Adam
     - name: adam_flop.xml
       destination: mame/hash/adam_flop.xml
       required: true
+      native_system: adam
+      native_path: bios/mame/hash/adam_flop.xml
+      native_name: Coleco Adam
     name: Coleco Adam
   advision:
     files:
@@ -54,9 +87,15 @@ systems:
       destination: advision.zip
       required: true
       md5: 1c08606408029751fd30ac91d2bf30d5
+      native_system: advision
+      native_path: bios/advision.zip
+      native_name: Adventure Vision
     - name: advision.xml
       destination: mame/hash/advision.xml
       required: true
+      native_system: advision
+      native_path: bios/mame/hash/advision.xml
+      native_name: Adventure Vision
     name: Adventure Vision
   amiga500:
     files:
@@ -64,14 +103,23 @@ systems:
       destination: kick33180.A500
       required: true
       md5: 85ad74194e87c08904327de1a9443b7a
+      native_system: amiga500
+      native_path: bios/kick33180.A500
+      native_name: Amiga 500
     - name: kick34005.A500
       destination: kick34005.A500
       required: true
       md5: 82a21c1890cae844b3df741f2762d48d
+      native_system: amiga500
+      native_path: bios/kick34005.A500
+      native_name: Amiga 500
     - name: kick37175.A500
       destination: kick37175.A500
       required: true
       md5: dc10d7bdd1b6f450773dfb558477c230
+      native_system: amiga500
+      native_path: bios/kick37175.A500
+      native_name: Amiga 500
     name: Amiga 500
   amiga1200:
     files:
@@ -79,6 +127,9 @@ systems:
       destination: kick40068.A1200
       required: true
       md5: 646773759326fbac3b2311fd8c8793ee
+      native_system: amiga1200
+      native_path: bios/kick40068.A1200
+      native_name: Amiga 1200
     name: Amiga 1200
   amiga4000:
     files:
@@ -86,6 +137,9 @@ systems:
       destination: kick40068.A4000
       required: true
       md5: 9bdedde6a4f33555b4a270c8ca53297d
+      native_system: amiga4000
+      native_path: bios/kick40068.A4000
+      native_name: Amiga 4000
     name: Amiga 4000
   amigacdtv:
     files:
@@ -93,10 +147,16 @@ systems:
       destination: kick40060.CD32.ext
       required: true
       md5: bb72565701b1b6faece07d68ea5da639
+      native_system: amigacdtv
+      native_path: bios/kick40060.CD32.ext
+      native_name: Amiga CDTV
     - name: kick34005.CDTV
       destination: kick34005.CDTV
       required: true
       md5: 89da1838a24460e4b93f4f0c5d92d48d
+      native_system: amigacdtv
+      native_path: bios/kick34005.CDTV
+      native_name: Amiga CDTV
     name: Amiga CDTV
   amigacd32:
     files:
@@ -104,10 +164,16 @@ systems:
       destination: kick40060.CD32.ext
       required: true
       md5: bb72565701b1b6faece07d68ea5da639
+      native_system: amigacd32
+      native_path: bios/kick40060.CD32.ext
+      native_name: Amiga CD32
     - name: kick40060.CD32
       destination: kick40060.CD32
       required: true
       md5: 5f8924d013dd57a89cf349f4cdedc6b1
+      native_system: amigacd32
+      native_path: bios/kick40060.CD32
+      native_name: Amiga CD32
     name: Amiga CD32
   apfm1000:
     files:
@@ -115,72 +181,138 @@ systems:
       destination: apfm1000.zip
       required: true
       md5: b197db12f7a13827717bbeb7cfd9542a
+      native_system: apfm1000
+      native_path: bios/apfm1000.zip
+      native_name: APF M-1000
     - name: apfm1000.xml
       destination: mame/hash/apfm1000.xml
       required: true
+      native_system: apfm1000
+      native_path: bios/mame/hash/apfm1000.xml
+      native_name: APF M-1000
     name: APF M-1000
   apple2:
     files:
     - name: apple2.zip
       destination: apple2.zip
       required: true
+      native_system: apple2
+      native_path: bios/apple2.zip
+      native_name: Apple II
     - name: apple2e.zip
       destination: apple2e.zip
       required: true
+      native_system: apple2
+      native_path: bios/apple2e.zip
+      native_name: Apple II
     - name: apple2ee.zip
       destination: apple2ee.zip
       required: true
+      native_system: apple2
+      native_path: bios/apple2ee.zip
+      native_name: Apple II
     - name: apple2p.zip
       destination: apple2p.zip
       required: true
+      native_system: apple2
+      native_path: bios/apple2p.zip
+      native_name: Apple II
     - name: a2diskiing.zip
       destination: a2diskiing.zip
       required: true
+      native_system: apple2
+      native_path: bios/a2diskiing.zip
+      native_name: Apple II
     - name: votrsc01a.zip
       destination: votrsc01a.zip
       required: true
+      native_system: apple2
+      native_path: bios/votrsc01a.zip
+      native_name: Apple II
     - name: votrsc01.zip
       destination: votrsc01.zip
       required: true
+      native_system: apple2
+      native_path: bios/votrsc01.zip
+      native_name: Apple II
     - name: d2fdc.zip
       destination: d2fdc.zip
       required: true
+      native_system: apple2
+      native_path: bios/d2fdc.zip
+      native_name: Apple II
     - name: AppleIIe_DiskII.rom
       destination: AppleIIe_DiskII.rom
       required: true
+      native_system: apple2
+      native_path: bios/AppleIIe_DiskII.rom
+      native_name: Apple II
     - name: AppleIIe.rom
       destination: AppleIIe.rom
       required: true
+      native_system: apple2
+      native_path: bios/AppleIIe.rom
+      native_name: Apple II
     - name: apple2-int-auto.rom
       destination: apple2-int-auto.rom
       required: true
+      native_system: apple2
+      native_path: bios/apple2-int-auto.rom
+      native_name: Apple II
     - name: apple2-asoft-auto.rom
       destination: apple2-asoft-auto.rom
       required: true
+      native_system: apple2
+      native_path: bios/apple2-asoft-auto.rom
+      native_name: Apple II
     - name: disk2-13boot.rom
       destination: disk2-13boot.rom
       required: true
+      native_system: apple2
+      native_path: bios/disk2-13boot.rom
+      native_name: Apple II
     - name: disk2-13seq.rom
       destination: disk2-13seq.rom
       required: true
+      native_system: apple2
+      native_path: bios/disk2-13seq.rom
+      native_name: Apple II
     - name: disk2-16boot.rom
       destination: disk2-16boot.rom
       required: true
+      native_system: apple2
+      native_path: bios/disk2-16boot.rom
+      native_name: Apple II
     - name: disk2-16seq.rom
       destination: disk2-16seq.rom
       required: true
+      native_system: apple2
+      native_path: bios/disk2-16seq.rom
+      native_name: Apple II
     - name: apple2_cass.xml
       destination: mame/hash/apple2_cass.xml
       required: true
+      native_system: apple2
+      native_path: bios/mame/hash/apple2_cass.xml
+      native_name: Apple II
     - name: apple2_flop_clcracked.xml
       destination: mame/hash/apple2_flop_clcracked.xml
       required: true
+      native_system: apple2
+      native_path: bios/mame/hash/apple2_flop_clcracked.xml
+      native_name: Apple II
     - name: apple2_flop_misc.xml
       destination: mame/hash/apple2_flop_misc.xml
       required: true
+      native_system: apple2
+      native_path: bios/mame/hash/apple2_flop_misc.xml
+      native_name: Apple II
     - name: apple2_flop_orig.xml
       destination: mame/hash/apple2_flop_orig.xml
       required: true
+      native_system: apple2
+      native_path: bios/mame/hash/apple2_flop_orig.xml
+      native_name: Apple II
     name: Apple II
   apple2gs:
     files:
@@ -188,39 +320,72 @@ systems:
       destination: APPLE2GS.ROM
       required: true
       md5: 20a0334c447cb069a040ae5be1d938df
+      native_system: apple2gs
+      native_path: bios/APPLE2GS.ROM
+      native_name: Apple II GS
     - name: apple2gs.zip
       destination: apple2gs.zip
       required: true
+      native_system: apple2gs
+      native_path: bios/apple2gs.zip
+      native_name: Apple II GS
     - name: apple2gs_flop_clcracked.xml
       destination: mame/hash/apple2gs_flop_clcracked.xml
       required: true
+      native_system: apple2gs
+      native_path: bios/mame/hash/apple2gs_flop_clcracked.xml
+      native_name: Apple II GS
     - name: apple2gs_flop_misc.xml
       destination: mame/hash/apple2gs_flop_misc.xml
       required: true
+      native_system: apple2gs
+      native_path: bios/mame/hash/apple2gs_flop_misc.xml
+      native_name: Apple II GS
     - name: apple2gs_flop_orig.xml
       destination: mame/hash/apple2gs_flop_orig.xml
       required: true
+      native_system: apple2gs
+      native_path: bios/mame/hash/apple2gs_flop_orig.xml
+      native_name: Apple II GS
     name: Apple II GS
   aquarius:
     files:
     - name: aquarius.zip
       destination: aquarius.zip
       required: true
+      native_system: aquarius
+      native_path: bios/aquarius.zip
+      native_name: Aquarius
     - name: aquariusp.zip
       destination: aquariusp.zip
       required: true
+      native_system: aquarius
+      native_path: bios/aquariusp.zip
+      native_name: Aquarius
     - name: aquarius2.zip
       destination: aquarius2.zip
       required: true
+      native_system: aquarius
+      native_path: bios/aquarius2.zip
+      native_name: Aquarius
     - name: aquarius_ar.zip
       destination: aquarius_ar.zip
       required: true
+      native_system: aquarius
+      native_path: bios/aquarius_ar.zip
+      native_name: Aquarius
     - name: aquarius_cart.xml
       destination: mame/hash/aquarius_cart.xml
       required: true
+      native_system: aquarius
+      native_path: bios/mame/hash/aquarius_cart.xml
+      native_name: Aquarius
     - name: aquarius_cass.xml
       destination: mame/hash/aquarius_cass.xml
       required: true
+      native_system: aquarius
+      native_path: bios/mame/hash/aquarius_cass.xml
+      native_name: Aquarius
     name: Aquarius
   arcadia:
     files:
@@ -228,21 +393,36 @@ systems:
       destination: ar_bios.zip
       required: true
       md5: 37e9746f4491aa2df9a83729d1a93620
+      native_system: arcadia
+      native_path: bios/ar_bios.zip
+      native_name: Arcadia 2001
     - name: arcadia.xml
       destination: mame/hash/arcadia.xml
       required: true
+      native_system: arcadia
+      native_path: bios/mame/hash/arcadia.xml
+      native_name: Arcadia 2001
     name: Arcadia 2001
   archimedes:
     files:
     - name: aa310.zip
       destination: aa310.zip
       required: true
+      native_system: archimedes
+      native_path: bios/aa310.zip
+      native_name: Acorn Archimedes
     - name: archimedes_keyboard.zip
       destination: archimedes_keyboard.zip
       required: true
+      native_system: archimedes
+      native_path: bios/archimedes_keyboard.zip
+      native_name: Acorn Archimedes
     - name: archimedes.xml
       destination: mame/hash/archimedes.xml
       required: true
+      native_system: archimedes
+      native_path: bios/mame/hash/archimedes.xml
+      native_name: Acorn Archimedes
     name: Acorn Archimedes
   astrocde:
     files:
@@ -250,9 +430,15 @@ systems:
       destination: astrocde.zip
       required: true
       md5: f58a3823ab308ef0a02b498d126e5d96
+      native_system: astrocde
+      native_path: bios/astrocde.zip
+      native_name: Astrocade
     - name: astrocde.xml
       destination: mame/hash/astrocde.xml
       required: true
+      native_system: astrocde
+      native_path: bios/mame/hash/astrocde.xml
+      native_name: Astrocade
     name: Astrocade
   atari800:
     files:
@@ -260,18 +446,30 @@ systems:
       destination: ATARIXL.ROM
       required: true
       md5: 06daac977823773a3eea3422fd26a703
+      native_system: atari800
+      native_path: bios/ATARIXL.ROM
+      native_name: Atari 800
     - name: ATARIBAS.ROM
       destination: ATARIBAS.ROM
       required: true
       md5: 0bac0c6a50104045d902df4503a4c30b
+      native_system: atari800
+      native_path: bios/ATARIBAS.ROM
+      native_name: Atari 800
     - name: ATARIOSA.ROM
       destination: ATARIOSA.ROM
       required: true
       md5: eb1f32f5d9f382db1bbfb8d7f9cb343a
+      native_system: atari800
+      native_path: bios/ATARIOSA.ROM
+      native_name: Atari 800
     - name: ATARIOSB.ROM
       destination: ATARIOSB.ROM
       required: true
       md5: a3e8d617c95d08031fe1b20d541434b2
+      native_system: atari800
+      native_path: bios/ATARIOSB.ROM
+      native_name: Atari 800
     name: Atari 800
   atari5200:
     files:
@@ -279,6 +477,9 @@ systems:
       destination: 5200.rom
       required: true
       md5: 281f20ea4320404ec820fb7ec0693b38
+      native_system: atari5200
+      native_path: bios/5200.rom
+      native_name: Atari 5200
     name: Atari 5200
   atari7800:
     files:
@@ -286,68 +487,125 @@ systems:
       destination: "7800 BIOS (E).rom"
       required: true
       md5: 397bb566584be7b9764e7a68974c4263
+      native_system: atari7800
+      native_path: "bios/7800 BIOS (E).rom"
+      native_name: Atari 7800
     - name: "7800 BIOS (U).rom"
       destination: "7800 BIOS (U).rom"
       required: true
       md5: 0763f1ffb006ddbe32e52d497ee848ae
+      native_system: atari7800
+      native_path: "bios/7800 BIOS (U).rom"
+      native_name: Atari 7800
     - name: ProSystem.dat
       destination: ProSystem.dat
       required: true
       md5: ce6a86574d0c9de9075705f14e99d090
+      native_system: atari7800
+      native_path: bios/ProSystem.dat
+      native_name: Atari 7800
     - name: A78_highscore.bin
       destination: A78_highscore.bin
       required: true
+      native_system: atari7800
+      native_path: bios/A78_highscore.bin
+      native_name: Atari 7800
     name: Atari 7800
   atarist:
     files:
     - name: tos.img
       destination: tos.img
       required: true
+      native_system: atarist
+      native_path: bios/tos.img
+      native_name: Atari ST
     - name: emutos.img
       destination: hatari/tos/emutos.img
       required: true
+      native_system: atarist
+      native_path: bios/hatari/tos/emutos.img
+      native_name: Atari ST
     - name: tos102.img
       destination: hatari/tos/tos102.img
       required: true
+      native_system: atarist
+      native_path: bios/hatari/tos/tos102.img
+      native_name: Atari ST
     - name: tos106.img
       destination: hatari/tos/tos106.img
       required: true
+      native_system: atarist
+      native_path: bios/hatari/tos/tos106.img
+      native_name: Atari ST
     - name: tos104.img
       destination: hatari/tos/tos104.img
       required: true
+      native_system: atarist
+      native_path: bios/hatari/tos/tos104.img
+      native_name: Atari ST
     - name: tos206.img
       destination: hatari/tos/tos206.img
       required: true
+      native_system: atarist
+      native_path: bios/hatari/tos/tos206.img
+      native_name: Atari ST
     - name: emutos.img
       destination: hatarib/emutos.img
       required: true
+      native_system: atarist
+      native_path: bios/hatarib/emutos.img
+      native_name: Atari ST
     - name: tos102.img
       destination: hatarib/tos102.img
       required: true
+      native_system: atarist
+      native_path: bios/hatarib/tos102.img
+      native_name: Atari ST
     - name: tos106.img
       destination: hatarib/tos106.img
       required: true
+      native_system: atarist
+      native_path: bios/hatarib/tos106.img
+      native_name: Atari ST
     - name: tos104.img
       destination: hatarib/tos104.img
       required: true
+      native_system: atarist
+      native_path: bios/hatarib/tos104.img
+      native_name: Atari ST
     - name: tos206.img
       destination: hatarib/tos206.img
       required: true
+      native_system: atarist
+      native_path: bios/hatarib/tos206.img
+      native_name: Atari ST
     name: Atari ST
   atom:
     files:
     - name: atom.zip
       destination: atom.zip
       required: true
+      native_system: atom
+      native_path: bios/atom.zip
+      native_name: Acorn Atom
     - name: atom_cass.xml
       destination: mame/hash/atom_cass.xml
       required: true
+      native_system: atom
+      native_path: bios/mame/hash/atom_cass.xml
+      native_name: Acorn Atom
     - name: atom_flop.xml
       destination: mame/hash/atom_flop.xml
       required: true
+      native_system: atom
+      native_path: bios/mame/hash/atom_flop.xml
+      native_name: Acorn Atom
     - name: atom_rom.xml
       destination: mame/hash/atom_rom.xml
       required: true
+      native_system: atom
+      native_path: bios/mame/hash/atom_rom.xml
+      native_name: Acorn Atom
     name: Acorn Atom
   atomiswave:
     files:
@@ -355,60 +613,114 @@ systems:
       destination: dc/awbios.zip
       required: true
       md5: 0ec5ae5b5a5c4959fa8b43fcf8687f7c
+      native_system: atomiswave
+      native_path: bios/dc/awbios.zip
+      native_name: Atomiswave
     name: Atomiswave
   bbcmicro:
     files:
     - name: bbcb.zip
       destination: bbcb.zip
       required: true
+      native_system: bbcmicro
+      native_path: bios/bbcb.zip
+      native_name: BBC
     - name: bbc_acorn8271.zip
       destination: bbc_acorn8271.zip
       required: true
+      native_system: bbcmicro
+      native_path: bios/bbc_acorn8271.zip
+      native_name: BBC
     - name: saa5050.zip
       destination: saa5050.zip
       required: true
+      native_system: bbcmicro
+      native_path: bios/saa5050.zip
+      native_name: BBC
     - name: bbc_tube_80186.zip
       destination: bbc_tube_80186.zip
       required: true
+      native_system: bbcmicro
+      native_path: bios/bbc_tube_80186.zip
+      native_name: BBC
     - name: bbcm.zip
       destination: bbcm.zip
       required: true
+      native_system: bbcmicro
+      native_path: bios/bbcm.zip
+      native_name: BBC
     - name: bbcmc.zip
       destination: bbcmc.zip
       required: true
+      native_system: bbcmicro
+      native_path: bios/bbcmc.zip
+      native_name: BBC
     - name: bbc_bitstik1.zip
       destination: bbc_bitstik1.zip
       required: true
+      native_system: bbcmicro
+      native_path: bios/bbc_bitstik1.zip
+      native_name: BBC
     - name: bbc_bitstik2.zip
       destination: bbc_bitstik2.zip
       required: true
+      native_system: bbcmicro
+      native_path: bios/bbc_bitstik2.zip
+      native_name: BBC
     - name: bbc.zip
       destination: mame/samples/bbc.zip
       required: true
+      native_system: bbcmicro
+      native_path: bios/mame/samples/bbc.zip
+      native_name: BBC
     - name: bbc_cass.xml
       destination: mame/hash/bbc_cass.xml
       required: true
+      native_system: bbcmicro
+      native_path: bios/mame/hash/bbc_cass.xml
+      native_name: BBC
     - name: bbc_rom.xml
       destination: mame/hash/bbc_rom.xml
       required: true
+      native_system: bbcmicro
+      native_path: bios/mame/hash/bbc_rom.xml
+      native_name: BBC
     - name: bbcb_flop.xml
       destination: mame/hash/bbcb_flop.xml
       required: true
+      native_system: bbcmicro
+      native_path: bios/mame/hash/bbcb_flop.xml
+      native_name: BBC
     - name: bbcb_flop_orig.xml
       destination: mame/hash/bbcb_flop_orig.xml
       required: true
+      native_system: bbcmicro
+      native_path: bios/mame/hash/bbcb_flop_orig.xml
+      native_name: BBC
     - name: bbcb_flop_us.xml
       destination: mame/hash/bbcb_flop_us.xml
       required: true
+      native_system: bbcmicro
+      native_path: bios/mame/hash/bbcb_flop_us.xml
+      native_name: BBC
     - name: bbcm_cart.xml
       destination: mame/hash/bbcm_cart.xml
       required: true
+      native_system: bbcmicro
+      native_path: bios/mame/hash/bbcm_cart.xml
+      native_name: BBC
     - name: bbcm_flop.xml
       destination: mame/hash/bbcm_flop.xml
       required: true
+      native_system: bbcmicro
+      native_path: bios/mame/hash/bbcm_flop.xml
+      native_name: BBC
     - name: bbcmc_flop.xml
       destination: mame/hash/bbcmc_flop.xml
       required: true
+      native_system: bbcmicro
+      native_path: bios/mame/hash/bbcmc_flop.xml
+      native_name: BBC
     name: BBC
   bk:
     files:
@@ -416,34 +728,58 @@ systems:
       destination: bk/B11M_BOS.ROM
       required: true
       md5: fe4627d1e3a1535874085050733263e7
+      native_system: bk
+      native_path: bios/bk/B11M_BOS.ROM
+      native_name: Elektronika BK
     - name: B11M_EXT.ROM
       destination: bk/B11M_EXT.ROM
       required: true
       md5: dc52f365d56fa1951f5d35b1101b9e3f
+      native_system: bk
+      native_path: bios/bk/B11M_EXT.ROM
+      native_name: Elektronika BK
     - name: BAS11M_0.ROM
       destination: bk/BAS11M_0.ROM
       required: true
       md5: 946f6f23ded03c0e26187f0b3ca75993
+      native_system: bk
+      native_path: bios/bk/BAS11M_0.ROM
+      native_name: Elektronika BK
     - name: BAS11M_1.ROM
       destination: bk/BAS11M_1.ROM
       required: true
       md5: 1e6637f32aa7d1de03510030cac40bcf
+      native_system: bk
+      native_path: bios/bk/BAS11M_1.ROM
+      native_name: Elektronika BK
     - name: DISK_327.ROM
       destination: bk/DISK_327.ROM
       required: true
       md5: 5015228eeeb238e65da8edcd1b6dfac7
+      native_system: bk
+      native_path: bios/bk/DISK_327.ROM
+      native_name: Elektronika BK
     - name: BASIC10.ROM
       destination: bk/BASIC10.ROM
       required: true
       md5: 3fa774326d75410a065659aea80252f0
+      native_system: bk
+      native_path: bios/bk/BASIC10.ROM
+      native_name: Elektronika BK
     - name: FOCAL10.ROM
       destination: bk/FOCAL10.ROM
       required: true
       md5: 5737f972e8638831ab71e9139abae052
+      native_system: bk
+      native_path: bios/bk/FOCAL10.ROM
+      native_name: Elektronika BK
     - name: MONIT10.ROM
       destination: bk/MONIT10.ROM
       required: true
       md5: 95f8c41c6abf7640e35a6a03cecebd01
+      native_system: bk
+      native_path: bios/bk/MONIT10.ROM
+      native_name: Elektronika BK
     name: Elektronika BK
   loopy:
     files:
@@ -451,33 +787,60 @@ systems:
       destination: casloopy.zip
       required: true
       md5: 0e1d8dc0110ecf8201c0cef11ef4a858
+      native_system: loopy
+      native_path: bios/casloopy.zip
+      native_name: Casio Loopy
     - name: casloopy.xml
       destination: mame/hash/casloopy.xml
       required: true
+      native_system: loopy
+      native_path: bios/mame/hash/casloopy.xml
+      native_name: Casio Loopy
     name: Casio Loopy
   cdi:
     files:
     - name: cdibios.zip
       destination: cdibios.zip
       required: true
+      native_system: cdi
+      native_path: bios/cdibios.zip
+      native_name: Philips CD-I
     - name: cdimono1.zip
       destination: cdimono1.zip
       required: true
+      native_system: cdi
+      native_path: bios/cdimono1.zip
+      native_name: Philips CD-I
     - name: cdimono2.zip
       destination: cdimono2.zip
       required: true
+      native_system: cdi
+      native_path: bios/cdimono2.zip
+      native_name: Philips CD-I
     - name: cdi.xml
       destination: mame/hash/cdi.xml
       required: true
+      native_system: cdi
+      native_path: bios/mame/hash/cdi.xml
+      native_name: Philips CD-I
     - name: cdibios.zip
       destination: same_cdi/bios/cdibios.zip
       required: true
+      native_system: cdi
+      native_path: bios/same_cdi/bios/cdibios.zip
+      native_name: Philips CD-I
     - name: cdimono1.zip
       destination: same_cdi/bios/cdimono1.zip
       required: true
+      native_system: cdi
+      native_path: bios/same_cdi/bios/cdimono1.zip
+      native_name: Philips CD-I
     - name: cdimono2.zip
       destination: same_cdi/bios/cdimono2.zip
       required: true
+      native_system: cdi
+      native_path: bios/same_cdi/bios/cdimono2.zip
+      native_name: Philips CD-I
     name: Philips CD-I
   channelf:
     files:
@@ -485,38 +848,68 @@ systems:
       destination: sl31253.bin
       required: true
       md5: ac9804d4c0e9d07e33472e3726ed15c3
+      native_system: channelf
+      native_path: bios/sl31253.bin
+      native_name: Fairchild ChannelF
     - name: sl31254.bin
       destination: sl31254.bin
       required: true
       md5: da98f4bb3242ab80d76629021bb27585
+      native_system: channelf
+      native_path: bios/sl31254.bin
+      native_name: Fairchild ChannelF
     - name: sl90025.bin
       destination: sl90025.bin
       required: true
       md5: 95d339631d867c8f1d15a5f2ec26069d
+      native_system: channelf
+      native_path: bios/sl90025.bin
+      native_name: Fairchild ChannelF
     name: Fairchild ChannelF
   coco:
     files:
     - name: coco.zip
       destination: coco.zip
       required: true
+      native_system: coco
+      native_path: bios/coco.zip
+      native_name: Color Computer
     - name: coco2.zip
       destination: coco2.zip
       required: true
+      native_system: coco
+      native_path: bios/coco2.zip
+      native_name: Color Computer
     - name: coco2b.zip
       destination: coco2b.zip
       required: true
+      native_system: coco
+      native_path: bios/coco2b.zip
+      native_name: Color Computer
     - name: coco3.zip
       destination: coco3.zip
       required: true
+      native_system: coco
+      native_path: bios/coco3.zip
+      native_name: Color Computer
     - name: coco3p.zip
       destination: coco3p.zip
       required: true
+      native_system: coco
+      native_path: bios/coco3p.zip
+      native_name: Color Computer
     - name: coco_cart.xml
       destination: mame/hash/coco_cart.xml
       required: true
+      native_system: coco
+      native_path: bios/mame/hash/coco_cart.xml
+      native_name: Color Computer
     - name: coco_flop.xml
       destination: mame/hash/coco_flop.xml
       required: true
+      native_system: coco
+      native_path: bios/mame/hash/coco_flop.xml
+      native_name: Color Computer
     name: Color Computer
   colecovision:
     files:
@@ -524,14 +917,23 @@ systems:
       destination: coleco.rom
       required: true
       md5: 2c66f5911e5b42b8ebe113403548eee7
+      native_system: colecovision
+      native_path: bios/coleco.rom
+      native_name: ColecoVision
     - name: colecovision.rom
       destination: colecovision.rom
       required: true
       md5: 2c66f5911e5b42b8ebe113403548eee7
+      native_system: colecovision
+      native_path: bios/colecovision.rom
+      native_name: ColecoVision
     - name: coleco.rom
       destination: openMSX/share/systemroms/coleco.rom
       required: true
       md5: 2c66f5911e5b42b8ebe113403548eee7
+      native_system: colecovision
+      native_path: bios/openMSX/share/systemroms/coleco.rom
+      native_name: ColecoVision
     name: ColecoVision
   crvision:
     files:
@@ -539,12 +941,21 @@ systems:
       destination: bioscv.rom
       required: true
       md5: 3b1ef759d8e3fb4071582efd33dd05f9
+      native_system: crvision
+      native_path: bios/bioscv.rom
+      native_name: Creativision
     - name: crvision.zip
       destination: crvision.zip
       required: true
+      native_system: crvision
+      native_path: bios/crvision.zip
+      native_name: Creativision
     - name: crvision.xml
       destination: mame/hash/crvision.xml
       required: true
+      native_system: crvision
+      native_path: bios/mame/hash/crvision.xml
+      native_name: Creativision
     name: Creativision
   dragon32:
     files:
@@ -552,14 +963,23 @@ systems:
       destination: dragon/d32.rom
       required: true
       md5: 3420b96031078a4ef408cad7bf21a33f
+      native_system: dragon32
+      native_path: bios/dragon/d32.rom
+      native_name: Dragon
     - name: d64_1.rom
       destination: dragon/d64_1.rom
       required: true
       md5: 5f0bee59710e55f5880e74890912ed78
+      native_system: dragon32
+      native_path: bios/dragon/d64_1.rom
+      native_name: Dragon
     - name: d64_2.rom
       destination: dragon/d64_2.rom
       required: true
       md5: fd91edce7be5e7c2d88e46b76956a8aa
+      native_system: dragon32
+      native_path: bios/dragon/d64_2.rom
+      native_name: Dragon
     name: Dragon
   dreamcast:
     files:
@@ -567,37 +987,67 @@ systems:
       destination: dc/dc_boot.bin
       required: true
       md5: e10c53c2f8b90bab96ead2d368858623
+      native_system: dreamcast
+      native_path: bios/dc/dc_boot.bin
+      native_name: Dreamcast
     - name: dc_flash.bin
       destination: dc/dc_flash.bin
       required: true
       md5: 0a93f7940c455905bea6e392dfde92a4
+      native_system: dreamcast
+      native_path: bios/dc/dc_flash.bin
+      native_name: Dreamcast
     - name: dc.zip
       destination: dc/dc.zip
       required: true
+      native_system: dreamcast
+      native_path: bios/dc/dc.zip
+      native_name: Dreamcast
     name: Dreamcast
   electron:
     files:
     - name: electron.zip
       destination: electron.zip
       required: true
+      native_system: electron
+      native_path: bios/electron.zip
+      native_name: Acorn Electron
     - name: electron_plus1.zip
       destination: electron_plus1.zip
       required: true
+      native_system: electron
+      native_path: bios/electron_plus1.zip
+      native_name: Acorn Electron
     - name: electron_plus3.zip
       destination: electron_plus3.zip
       required: true
+      native_system: electron
+      native_path: bios/electron_plus3.zip
+      native_name: Acorn Electron
     - name: electron64.zip
       destination: electron64.zip
       required: true
+      native_system: electron
+      native_path: bios/electron64.zip
+      native_name: Acorn Electron
     - name: electron_cass.xml
       destination: mame/hash/electron_cass.xml
       required: true
+      native_system: electron
+      native_path: bios/mame/hash/electron_cass.xml
+      native_name: Acorn Electron
     - name: electron_cart.xml
       destination: mame/hash/electron_cart.xml
       required: true
+      native_system: electron
+      native_path: bios/mame/hash/electron_cart.xml
+      native_name: Acorn Electron
     - name: electron_flop.xml
       destination: mame/hash/electron_flop.xml
       required: true
+      native_system: electron
+      native_path: bios/mame/hash/electron_flop.xml
+      native_name: Acorn Electron
     name: Acorn Electron
   fds:
     files:
@@ -605,6 +1055,9 @@ systems:
       destination: disksys.rom
       required: true
       md5: ca30b50f880eb660a320674ed365ef7a
+      native_system: fds
+      native_path: bios/disksys.rom
+      native_name: Nintendo Family Computer Disk System
     name: Nintendo Family Computer Disk System
   ecwolf:
     files:
@@ -612,65 +1065,116 @@ systems:
       destination: ecwolf.pk3
       required: true
       md5: dbaa5c4e20a11000d1c4db3a2a28f374
+      native_system: ecwolf
+      native_path: bios/ecwolf.pk3
+      native_name: ECWolf
     name: ECWolf
   fm7:
     files:
     - name: fm7.zip
       destination: fm7.zip
       required: true
+      native_system: fm7
+      native_path: bios/fm7.zip
+      native_name: FM-7
     - name: fm77av.zip
       destination: fm77av.zip
       required: true
+      native_system: fm7
+      native_path: bios/fm77av.zip
+      native_name: FM-7
     - name: fm7_cass.xml
       destination: mame/hash/fm7_cass.xml
       required: true
+      native_system: fm7
+      native_path: bios/mame/hash/fm7_cass.xml
+      native_name: FM-7
     - name: fm7_disk.xml
       destination: mame/hash/fm7_disk.xml
       required: true
+      native_system: fm7
+      native_path: bios/mame/hash/fm7_disk.xml
+      native_name: FM-7
     - name: fm77av.xml
       destination: mame/hash/fm77av.xml
       required: true
+      native_system: fm7
+      native_path: bios/mame/hash/fm77av.xml
+      native_name: FM-7
     name: FM-7
   fmtowns:
     files:
     - name: fmtowns.zip
       destination: fmtowns.zip
       required: true
+      native_system: fmtowns
+      native_path: bios/fmtowns.zip
+      native_name: FMTowns
     - name: fmtownsux.zip
       destination: fmtownsux.zip
       required: true
+      native_system: fmtowns
+      native_path: bios/fmtownsux.zip
+      native_name: FMTowns
     - name: FMT_DIC.ROM
       destination: fmtowns/FMT_DIC.ROM
       required: true
       md5: 8fa4e553f28cfc0c30a0a1e589799942
+      native_system: fmtowns
+      native_path: bios/fmtowns/FMT_DIC.ROM
+      native_name: FMTowns
     - name: FMT_DOS.ROM
       destination: fmtowns/FMT_DOS.ROM
       required: true
       md5: 0585b19930d4a7f4c71bcc8a33746588
+      native_system: fmtowns
+      native_path: bios/fmtowns/FMT_DOS.ROM
+      native_name: FMTowns
     - name: FMT_F20.ROM
       destination: fmtowns/FMT_F20.ROM
       required: true
       md5: ac0c7021e9bf48ca84b51ab651169a88
+      native_system: fmtowns
+      native_path: bios/fmtowns/FMT_F20.ROM
+      native_name: FMTowns
     - name: FMT_FNT.ROM
       destination: fmtowns/FMT_FNT.ROM
       required: true
       md5: b91300e55b70227ce98b59c5f02fa8dd
+      native_system: fmtowns
+      native_path: bios/fmtowns/FMT_FNT.ROM
+      native_name: FMTowns
     - name: FMT_SYS.ROM
       destination: fmtowns/FMT_SYS.ROM
       required: true
       md5: 86fb6f7280689259f0ca839dd3dd6cde
+      native_system: fmtowns
+      native_path: bios/fmtowns/FMT_SYS.ROM
+      native_name: FMTowns
     - name: fmtowns_cd.xml
       destination: mame/hash/fmtowns_cd.xml
       required: true
+      native_system: fmtowns
+      native_path: bios/mame/hash/fmtowns_cd.xml
+      native_name: FMTowns
     - name: fmtowns_flop_cracked.xml
       destination: mame/hash/fmtowns_flop_cracked.xml
       required: true
+      native_system: fmtowns
+      native_path: bios/mame/hash/fmtowns_flop_cracked.xml
+      native_name: FMTowns
     - name: fmtowns_flop_misc.xml
       destination: mame/hash/fmtowns_flop_misc.xml
       required: true
+      native_system: fmtowns
+      native_path: bios/mame/hash/fmtowns_flop_misc.xml
+      native_name: FMTowns
     - name: fmtowns_flop_orig.xml
       destination: mame/hash/fmtowns_flop_orig.xml
       required: true
+      native_system: fmtowns
+      native_path: bios/mame/hash/fmtowns_flop_orig.xml
+      native_name: FMTowns
     name: FMTowns
   gamate:
     files:
@@ -678,9 +1182,15 @@ systems:
       destination: gamate.zip
       required: true
       md5: 320bf3d4142fa1043255db7ff87d17c7
+      native_system: gamate
+      native_path: bios/gamate.zip
+      native_name: Gamate
     - name: gamate.xml
       destination: mame/hash/gamate.xml
       required: true
+      native_system: gamate
+      native_path: bios/mame/hash/gamate.xml
+      native_name: Gamate
     name: Gamate
   gamecom:
     files:
@@ -688,9 +1198,15 @@ systems:
       destination: gamecom.zip
       required: true
       md5: f2087ed09f7fa8d8856cfafb20dd00dc
+      native_system: gamecom
+      native_path: bios/gamecom.zip
+      native_name: Game.com
     - name: gamecom.xml
       destination: mame/hash/gamecom.xml
       required: true
+      native_system: gamecom
+      native_path: bios/mame/hash/gamecom.xml
+      native_name: Game.com
     name: Game.com
   gamepock:
     files:
@@ -698,9 +1214,15 @@ systems:
       destination: gamepock.zip
       required: true
       md5: 887479fe3c69a0b935c57a7a738e26c4
+      native_system: gamepock
+      native_path: bios/gamepock.zip
+      native_name: Game Pocket
     - name: gamepock.xml
       destination: mame/hash/gamepock.xml
       required: true
+      native_system: gamepock
+      native_path: bios/mame/hash/gamepock.xml
+      native_name: Game Pocket
     name: Game Pocket
   gb:
     files:
@@ -708,6 +1230,9 @@ systems:
       destination: gb_bios.bin
       required: true
       md5: 32fbbd84168d3482956eb3c5051637f5
+      native_system: gb
+      native_path: bios/gb_bios.bin
+      native_name: Game Boy
     name: Game Boy
   gba:
     files:
@@ -715,6 +1240,9 @@ systems:
       destination: gba_bios.bin
       required: true
       md5: a860e8c0b6d573d191e4ec7db1b1e4f6
+      native_system: gba
+      native_path: bios/gba_bios.bin
+      native_name: Game Boy Advance
     name: Game Boy Advance
   gbc:
     files:
@@ -722,6 +1250,9 @@ systems:
       destination: gbc_bios.bin
       required: true
       md5: dbfce9db9deaa2567f6a84fde55f9680
+      native_system: gbc
+      native_path: bios/gbc_bios.bin
+      native_name: Game Boy Color
     name: Game Boy Color
   gmaster:
     files:
@@ -729,9 +1260,15 @@ systems:
       destination: gmaster.zip
       required: true
       md5: 4239d6f44a0d78d27c69f9b95885f48e
+      native_system: gmaster
+      native_path: bios/gmaster.zip
+      native_name: Game Master
     - name: gmaster.xml
       destination: mame/hash/gmaster.xml
       required: true
+      native_system: gmaster
+      native_path: bios/mame/hash/gmaster.xml
+      native_name: Game Master
     name: Game Master
   gp32:
     files:
@@ -739,9 +1276,15 @@ systems:
       destination: gp32.zip
       required: true
       md5: 8c392f475834218d88533150d36cc84c
+      native_system: gp32
+      native_path: bios/gp32.zip
+      native_name: Game Park 32
     - name: gp32.xml
       destination: mame/hash/gp32.xml
       required: true
+      native_system: gp32
+      native_path: bios/mame/hash/gp32.xml
+      native_name: Game Park 32
     name: Game Park 32
   hikaru:
     files:
@@ -749,10 +1292,16 @@ systems:
       destination: hikaru.zip
       required: true
       md5: aac601811a25d7b31a3d5f3f1f82f338
+      native_system: hikaru
+      native_path: bios/hikaru.zip
+      native_name: Hikaru
     - name: mie.zip
       destination: mie.zip
       required: true
       md5: e95415b161121bef35ade12367138c63
+      native_system: hikaru
+      native_path: bios/mie.zip
+      native_name: Hikaru
     name: Hikaru
   intellivision:
     files:
@@ -760,10 +1309,16 @@ systems:
       destination: exec.bin
       required: true
       md5: 62e761035cb657903761800f4437b8af
+      native_system: intellivision
+      native_path: bios/exec.bin
+      native_name: Mattel Intellivision
     - name: grom.bin
       destination: grom.bin
       required: true
       md5: 0cd5946c6473e42e8e4c2137785e427f
+      native_system: intellivision
+      native_path: bios/grom.bin
+      native_name: Mattel Intellivision
     name: Mattel Intellivision
   j2me:
     files:
@@ -771,6 +1326,9 @@ systems:
       destination: freej2me-lr.jar
       required: true
       md5: a6f31483d1da4558cc19025e21f95c1d
+      native_system: j2me
+      native_path: bios/freej2me-lr.jar
+      native_name: Java
     name: Java
   jaguar:
     files:
@@ -778,6 +1336,9 @@ systems:
       destination: "[BIOS] Atari Jaguar (World).j64"
       required: true
       md5: bcfe348c565d9dedb173822ee6850dea
+      native_system: jaguar
+      native_path: "bios/[BIOS] Atari Jaguar (World).j64"
+      native_name: Jaguar
     name: Jaguar
   laseractive:
     files:
@@ -785,20 +1346,35 @@ systems:
       destination: "laseractive/[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin"
       required: true
       md5: f69f173b251d8bf7649b10a9167a10bf
+      native_system: laseractive
+      native_path: "bios/laseractive/[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin"
+      native_name: Pioneer Laseractive
     - name: "[BIOS] LaserActive PAC-N10 (US) (v1.02).bin"
       destination: "laseractive/[BIOS] LaserActive PAC-N10 (US) (v1.02).bin"
       required: true
       md5: f0fb8a4605ac7eefbafd4f2d5a793cc8
+      native_system: laseractive
+      native_path: "bios/laseractive/[BIOS] LaserActive PAC-N10 (US) (v1.02).bin"
+      native_name: Pioneer Laseractive
     - name: "[BIOS] LaserActive PCE-LP1 (Japan) (v1.02).bin"
       destination: "laseractive/[BIOS] LaserActive PCE-LP1 (Japan) (v1.02).bin"
       required: true
       md5: 761fea207d0eafd4cfd78da7c44cac88
+      native_system: laseractive
+      native_path: "bios/laseractive/[BIOS] LaserActive PCE-LP1 (Japan) (v1.02).bin"
+      native_name: Pioneer Laseractive
     - name: "[BIOS] LaserActive PAC-S10 (US) (v1.04).bin"
       destination: "laseractive/[BIOS] LaserActive PAC-S10 (US) (v1.04).bin"
       required: true
+      native_system: laseractive
+      native_path: "bios/laseractive/[BIOS] LaserActive PAC-S10 (US) (v1.04).bin"
+      native_name: Pioneer Laseractive
     - name: "[BIOS] LaserActive PAC-S1 (Japan) (v1.05).bin"
       destination: "laseractive/[BIOS] LaserActive PAC-S1 (Japan) (v1.05).bin"
       required: true
+      native_system: laseractive
+      native_path: "bios/laseractive/[BIOS] LaserActive PAC-S1 (Japan) (v1.05).bin"
+      native_name: Pioneer Laseractive
     name: Pioneer Laseractive
   lynx:
     files:
@@ -806,51 +1382,93 @@ systems:
       destination: lynxboot.img
       required: true
       md5: fcd403db69f54290b51035d82f835e7b
+      native_system: lynx
+      native_path: bios/lynxboot.img
+      native_name: Lynx
     name: Lynx
   camplynx:
     files:
     - name: lynx48k.zip
       destination: lynx48k.zip
       required: true
+      native_system: camplynx
+      native_path: bios/lynx48k.zip
+      native_name: Camputers Lynx
     - name: lynx96k.zip
       destination: lynx96k.zip
       required: true
+      native_system: camplynx
+      native_path: bios/lynx96k.zip
+      native_name: Camputers Lynx
     - name: lynx128k.zip
       destination: lynx128k.zip
       required: true
+      native_system: camplynx
+      native_path: bios/lynx128k.zip
+      native_name: Camputers Lynx
     - name: lynx48-1.rom
       destination: emulators/jynx/lynx48-1.rom
       required: true
+      native_system: camplynx
+      native_path: emulators/jynx/lynx48-1.rom
+      native_name: Camputers Lynx
     - name: lynx48-2.rom
       destination: emulators/jynx/lynx48-2.rom
       required: true
+      native_system: camplynx
+      native_path: emulators/jynx/lynx48-2.rom
+      native_name: Camputers Lynx
     - name: lynx96-1.rom
       destination: emulators/jynx/lynx96-1.rom
       required: true
+      native_system: camplynx
+      native_path: emulators/jynx/lynx96-1.rom
+      native_name: Camputers Lynx
     - name: lynx96-2.rom
       destination: emulators/jynx/lynx96-2.rom
       required: true
+      native_system: camplynx
+      native_path: emulators/jynx/lynx96-2.rom
+      native_name: Camputers Lynx
     - name: lynx96-3.rom
       destination: emulators/jynx/lynx96-3.rom
       required: true
+      native_system: camplynx
+      native_path: emulators/jynx/lynx96-3.rom
+      native_name: Camputers Lynx
     - name: lynx96-3-scorpion.rom
       destination: emulators/jynx/lynx96-3-scorpion.rom
       required: true
+      native_system: camplynx
+      native_path: emulators/jynx/lynx96-3-scorpion.rom
+      native_name: Camputers Lynx
     - name: camplynx_cass.xml
       destination: mame/hash/camplynx_cass.xml
       required: true
+      native_system: camplynx
+      native_path: bios/mame/hash/camplynx_cass.xml
+      native_name: Camputers Lynx
     - name: camplynx_flop.xml
       destination: mame/hash/camplynx_flop.xml
       required: true
+      native_system: camplynx
+      native_path: bios/mame/hash/camplynx_flop.xml
+      native_name: Camputers Lynx
     name: Camputers Lynx
   mastersystem:
     files:
     - name: "[BIOS] Sega Master System (USA, Europe) (v1.3).sms"
       destination: "[BIOS] Sega Master System (USA, Europe) (v1.3).sms"
       required: true
+      native_system: mastersystem
+      native_path: "bios/[BIOS] Sega Master System (USA, Europe) (v1.3).sms"
+      native_name: Master System
     - name: "[BIOS] Sega Master System (Japan) (v2.1).sms"
       destination: "[BIOS] Sega Master System (Japan) (v2.1).sms"
       required: true
+      native_system: mastersystem
+      native_path: "bios/[BIOS] Sega Master System (Japan) (v2.1).sms"
+      native_name: Master System
     name: Master System
   msx:
     files:
@@ -858,54 +1476,93 @@ systems:
       destination: MSX.ROM
       required: true
       md5: 364a1a579fe5cb8dba54519bcfcdac0d
+      native_system: msx
+      native_path: bios/MSX.ROM
+      native_name: MSX
     - name: DISK.ROM
       destination: DISK.ROM
       required: true
       md5: 80dcd1ad1a4cf65d64b7ba10504e8190
+      native_system: msx
+      native_path: bios/DISK.ROM
+      native_name: MSX
     - name: FMPAC.ROM
       destination: FMPAC.ROM
       required: true
       md5: 6f69cc8b5ed761b03afd78000dfb0e19
+      native_system: msx
+      native_path: bios/FMPAC.ROM
+      native_name: MSX
     - name: MSXDOS2.ROM
       destination: MSXDOS2.ROM
       required: true
       md5: 6418d091cd6907bbcf940324339e43bb
+      native_system: msx
+      native_path: bios/MSXDOS2.ROM
+      native_name: MSX
     - name: PAINTER.ROM
       destination: PAINTER.ROM
       required: true
       md5: 403cdea1cbd2bb24fae506941f8f655e
+      native_system: msx
+      native_path: bios/PAINTER.ROM
+      native_name: MSX
     - name: KANJI.ROM
       destination: KANJI.ROM
       required: true
       md5: febe8782b466d7c3b16de6d104826b34
+      native_system: msx
+      native_path: bios/KANJI.ROM
+      native_name: MSX
     - name: cf-3300_basic-bios1.rom
       destination: openMSX/share/systemroms/cf-3300_basic-bios1.rom
       required: true
       md5: f873f1260b14f1468fa118778ae1c3d2
+      native_system: msx
+      native_path: bios/openMSX/share/systemroms/cf-3300_basic-bios1.rom
+      native_name: MSX
     - name: cf-3300_disk.rom
       destination: openMSX/share/systemroms/cf-3300_disk.rom
       required: true
       md5: 318b6aa76da71c54ccad7734356e1902
+      native_system: msx
+      native_path: bios/openMSX/share/systemroms/cf-3300_disk.rom
+      native_name: MSX
     - name: vg8020_basic-bios1.rom
       destination: openMSX/share/systemroms/vg8020_basic-bios1.rom
       required: true
       md5: a0452dbf5ace7d2e49d0a8029efed09a
+      native_system: msx
+      native_path: bios/openMSX/share/systemroms/vg8020_basic-bios1.rom
+      native_name: MSX
     - name: px-7_basic-bios1.rom
       destination: openMSX/share/systemroms/px-7_basic-bios1.rom
       required: true
       md5: 9218f6dd89f7ba01e3090d44721b4260
+      native_system: msx
+      native_path: bios/openMSX/share/systemroms/px-7_basic-bios1.rom
+      native_name: MSX
     - name: px-7_pbasic.rom
       destination: openMSX/share/systemroms/px-7_pbasic.rom
       required: true
       md5: 281809cafe63437fc4bffb3033fbd0db
+      native_system: msx
+      native_path: bios/openMSX/share/systemroms/px-7_pbasic.rom
+      native_name: MSX
     - name: fmpac.rom
       destination: openMSX/share/systemroms/fmpac.rom
       required: true
       md5: 6f69cc8b5ed761b03afd78000dfb0e19
+      native_system: msx
+      native_path: bios/openMSX/share/systemroms/fmpac.rom
+      native_name: MSX
     - name: yrw801.rom
       destination: openMSX/share/systemroms/yrw801.rom
       required: true
       md5: 42af93619160ef2116416f74a6cb12f2
+      native_system: msx
+      native_path: bios/openMSX/share/systemroms/yrw801.rom
+      native_name: MSX
     name: MSX
   msx2:
     files:
@@ -913,58 +1570,100 @@ systems:
       destination: MSX2.ROM
       required: true
       md5: ec3a01c91f24fbddcbcab0ad301bc9ef
+      native_system: msx2
+      native_path: bios/MSX2.ROM
+      native_name: MSX2
     - name: MSX2EXT.ROM
       destination: MSX2EXT.ROM
       required: true
       md5: 2183c2aff17cf4297bdb496de78c2e8a
+      native_system: msx2
+      native_path: bios/MSX2EXT.ROM
+      native_name: MSX2
     - name: fs-5500_basic-bios2.rom
       destination: openMSX/share/systemroms/fs-5500_basic-bios2.rom
       required: true
       md5: 5bf4fdfd3c3ffea3e573b386550cb3fa
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/fs-5500_basic-bios2.rom
+      native_name: MSX2
     - name: fs-5500_disk.rom
       destination: openMSX/share/systemroms/fs-5500_disk.rom
       required: true
       md5: 86269da485e852d9f581ac27f4ba32ff
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/fs-5500_disk.rom
+      native_name: MSX2
     - name: fs-5500_kanjibasic.rom
       destination: openMSX/share/systemroms/fs-5500_kanjibasic.rom
       required: true
       md5: afbe6ba903453902540ae988cc89dc7b
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/fs-5500_kanjibasic.rom
+      native_name: MSX2
     - name: fs-5500_kanjifont.rom
       destination: openMSX/share/systemroms/fs-5500_kanjifont.rom
       required: true
       md5: 090539674630c1338a90a1df943a93e2
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/fs-5500_kanjifont.rom
+      native_name: MSX2
     - name: fs-5500_msx2sub.rom
       destination: openMSX/share/systemroms/fs-5500_msx2sub.rom
       required: true
       md5: dcd5e2388115172f2fb48875b2089dbf
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/fs-5500_msx2sub.rom
+      native_name: MSX2
     - name: fs-5500_superimp.rom
       destination: openMSX/share/systemroms/fs-5500_superimp.rom
       required: true
       md5: 7eb6ae0fbe9736b20dda8dcbd5064f67
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/fs-5500_superimp.rom
+      native_name: MSX2
     - name: nms8245_basic-bios2.rom
       destination: openMSX/share/systemroms/nms8245_basic-bios2.rom
       required: true
       md5: ec3a01c91f24fbddcbcab0ad301bc9ef
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/nms8245_basic-bios2.rom
+      native_name: MSX2
     - name: nms8245_disk.rom
       destination: openMSX/share/systemroms/nms8245_disk.rom
       required: true
       md5: 3525ea046ddedc66991790eeae32acfd
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/nms8245_disk.rom
+      native_name: MSX2
     - name: nms8245_disk_1.06.rom
       destination: openMSX/share/systemroms/nms8245_disk_1.06.rom
       required: true
       md5: 57509815f93e2817d3eb57e20286c7fb
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/nms8245_disk_1.06.rom
+      native_name: MSX2
     - name: nms8245_msx2sub.rom
       destination: openMSX/share/systemroms/nms8245_msx2sub.rom
       required: true
       md5: 248514aba82a0ec7fe2a9106862b05cd
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/nms8245_msx2sub.rom
+      native_name: MSX2
     - name: fmpac.rom
       destination: openMSX/share/systemroms/fmpac.rom
       required: true
       md5: 6f69cc8b5ed761b03afd78000dfb0e19
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/fmpac.rom
+      native_name: MSX2
     - name: yrw801.rom
       destination: openMSX/share/systemroms/yrw801.rom
       required: true
       md5: 42af93619160ef2116416f74a6cb12f2
+      native_system: msx2
+      native_path: bios/openMSX/share/systemroms/yrw801.rom
+      native_name: MSX2
     name: MSX2
   msx2+:
     files:
@@ -972,46 +1671,79 @@ systems:
       destination: MSX2P.ROM
       required: true
       md5: 847cc025ffae665487940ff2639540e5
+      native_system: msx2+
+      native_path: bios/MSX2P.ROM
+      native_name: MSX2+
     - name: MSX2PEXT.ROM
       destination: MSX2PEXT.ROM
       required: true
       md5: 7c8243c71d8f143b2531f01afa6a05dc
+      native_system: msx2+
+      native_path: bios/MSX2PEXT.ROM
+      native_name: MSX2+
     - name: fs-a1wsx_basic-bios2p.rom
       destination: openMSX/share/systemroms/fs-a1wsx_basic-bios2p.rom
       required: true
       md5: c5c26c3e8bc6c485424818057f0507b9
+      native_system: msx2+
+      native_path: bios/openMSX/share/systemroms/fs-a1wsx_basic-bios2p.rom
+      native_name: MSX2+
     - name: fs-a1wsx_disk.rom
       destination: openMSX/share/systemroms/fs-a1wsx_disk.rom
       required: true
       md5: 00aa02b6077de40a0b51d71a3c3e1d5f
+      native_system: msx2+
+      native_path: bios/openMSX/share/systemroms/fs-a1wsx_disk.rom
+      native_name: MSX2+
     - name: fs-a1wsx_firmware.rom
       destination: openMSX/share/systemroms/fs-a1wsx_firmware.rom
       required: true
       md5: fa8e7d4b999af058fe2864a5f2e014ec
+      native_system: msx2+
+      native_path: bios/openMSX/share/systemroms/fs-a1wsx_firmware.rom
+      native_name: MSX2+
     - name: fs-a1wsx_fmbasic.rom
       destination: openMSX/share/systemroms/fs-a1wsx_fmbasic.rom
       required: true
       md5: 0c40e7db1c1fcc2405e4d0cdd215adb4
+      native_system: msx2+
+      native_path: bios/openMSX/share/systemroms/fs-a1wsx_fmbasic.rom
+      native_name: MSX2+
     - name: fs-a1wsx_kanjibasic.rom
       destination: openMSX/share/systemroms/fs-a1wsx_kanjibasic.rom
       required: true
       md5: 9dfdebfaa6b547222a40aab8bb2e29f8
+      native_system: msx2+
+      native_path: bios/openMSX/share/systemroms/fs-a1wsx_kanjibasic.rom
+      native_name: MSX2+
     - name: fs-a1wsx_kanjifont.rom
       destination: openMSX/share/systemroms/fs-a1wsx_kanjifont.rom
       required: true
       md5: acf53887c2d2783dc059a9b442c86b90
+      native_system: msx2+
+      native_path: bios/openMSX/share/systemroms/fs-a1wsx_kanjifont.rom
+      native_name: MSX2+
     - name: fs-a1wsx_msx2psub.rom
       destination: openMSX/share/systemroms/fs-a1wsx_msx2psub.rom
       required: true
       md5: 7c8243c71d8f143b2531f01afa6a05dc
+      native_system: msx2+
+      native_path: bios/openMSX/share/systemroms/fs-a1wsx_msx2psub.rom
+      native_name: MSX2+
     - name: fmpac.rom
       destination: openMSX/share/systemroms/fmpac.rom
       required: true
       md5: 6f69cc8b5ed761b03afd78000dfb0e19
+      native_system: msx2+
+      native_path: bios/openMSX/share/systemroms/fmpac.rom
+      native_name: MSX2+
     - name: yrw801.rom
       destination: openMSX/share/systemroms/yrw801.rom
       required: true
       md5: 42af93619160ef2116416f74a6cb12f2
+      native_system: msx2+
+      native_path: bios/openMSX/share/systemroms/yrw801.rom
+      native_name: MSX2+
     name: MSX2+
   msxturbor:
     files:
@@ -1019,18 +1751,30 @@ systems:
       destination: openMSX/share/systemroms/fs-a1gt_firmware.rom
       required: true
       md5: af17a344bcc177b97a4888c4c559f3ae
+      native_system: msxturbor
+      native_path: bios/openMSX/share/systemroms/fs-a1gt_firmware.rom
+      native_name: MSX Turbo R
     - name: fs-a1gt_kanjifont.rom
       destination: openMSX/share/systemroms/fs-a1gt_kanjifont.rom
       required: true
       md5: acf53887c2d2783dc059a9b442c86b90
+      native_system: msxturbor
+      native_path: bios/openMSX/share/systemroms/fs-a1gt_kanjifont.rom
+      native_name: MSX Turbo R
     - name: fmpac.rom
       destination: openMSX/share/systemroms/fmpac.rom
       required: true
       md5: 6f69cc8b5ed761b03afd78000dfb0e19
+      native_system: msxturbor
+      native_path: bios/openMSX/share/systemroms/fmpac.rom
+      native_name: MSX Turbo R
     - name: yrw801.rom
       destination: openMSX/share/systemroms/yrw801.rom
       required: true
       md5: 42af93619160ef2116416f74a6cb12f2
+      native_system: msxturbor
+      native_path: bios/openMSX/share/systemroms/yrw801.rom
+      native_name: MSX Turbo R
     name: MSX Turbo R
   n64dd:
     files:
@@ -1038,23 +1782,38 @@ systems:
       destination: Mupen64plus/IPL_JAP.n64
       required: true
       md5: 8d3d9f294b6e174bc7b1d2fd1c727530
+      native_system: n64dd
+      native_path: bios/Mupen64plus/IPL_JAP.n64
+      native_name: Nintendo 64 DD
     - name: IPL_USA.n64
       destination: Mupen64plus/IPL_USA.n64
       required: true
       md5: 37c36e4286d36892a9fc70eafe4104be
+      native_system: n64dd
+      native_path: bios/Mupen64plus/IPL_USA.n64
+      native_name: Nintendo 64 DD
     - name: IPL_DEV.n64
       destination: Mupen64plus/IPL_DEV.n64
       required: true
       md5: aad37b1492886b892f1821f37fd3ae34
+      native_system: n64dd
+      native_path: bios/Mupen64plus/IPL_DEV.n64
+      native_name: Nintendo 64 DD
     name: Nintendo 64 DD
   namco2x6:
     files:
     - name: r27v1602f.7d
       destination: pcsx2/bios/r27v1602f.7d
       required: true
+      native_system: namco2x6
+      native_path: bios/pcsx2/bios/r27v1602f.7d
+      native_name: Namco2x6
     - name: r27v1602f.8g
       destination: pcsx2/bios/r27v1602f.8g
       required: true
+      native_system: namco2x6
+      native_path: bios/pcsx2/bios/r27v1602f.8g
+      native_name: Namco2x6
     name: Namco2x6
   naomi:
     files:
@@ -1062,35 +1821,59 @@ systems:
       destination: dc/naomi.zip
       required: true
       md5: eb4099aeb42ef089cfe94f8fe95e51f6
+      native_system: naomi
+      native_path: bios/dc/naomi.zip
+      native_name: Naomi
     name: Naomi
   naomi2:
     files:
     - name: naomi2.zip
       destination: dc/naomi2.zip
       required: true
+      native_system: naomi2
+      native_path: bios/dc/naomi2.zip
+      native_name: Naomi2
     name: Naomi2
   nds:
     files:
     - name: firmware.bin
       destination: firmware.bin
       required: true
+      native_system: nds
+      native_path: bios/firmware.bin
+      native_name: Nintendo DS
     - name: bios7.bin
       destination: bios7.bin
       required: true
       md5: df692a80a5b1bc90728bc3dfc76cd948
+      native_system: nds
+      native_path: bios/bios7.bin
+      native_name: Nintendo DS
     - name: bios9.bin
       destination: bios9.bin
       required: true
       md5: a392174eb3e572fed6447e956bde4b25
+      native_system: nds
+      native_path: bios/bios9.bin
+      native_name: Nintendo DS
     - name: dsi_bios9.bin
       destination: dsi_bios9.bin
       required: true
+      native_system: nds
+      native_path: bios/dsi_bios9.bin
+      native_name: Nintendo DS
     - name: dsi_bios7.bin
       destination: dsi_bios7.bin
       required: true
+      native_system: nds
+      native_path: bios/dsi_bios7.bin
+      native_name: Nintendo DS
     - name: dsi_firmware.bin
       destination: dsi_firmware.bin
       required: true
+      native_system: nds
+      native_path: bios/dsi_firmware.bin
+      native_name: Nintendo DS
     name: Nintendo DS
   neogeo:
     files:
@@ -1098,6 +1881,9 @@ systems:
       destination: neogeo.zip
       required: true
       md5: dffb72f116d36d025068b23970a4f6df
+      native_system: neogeo
+      native_path: bios/neogeo.zip
+      native_name: NeoGeo
     name: NeoGeo
   neogeo64:
     files:
@@ -1105,6 +1891,9 @@ systems:
       destination: neogeo.zip
       required: true
       md5: dffb72f116d36d025068b23970a4f6df
+      native_system: neogeo64
+      native_path: bios/neogeo.zip
+      native_name: Hyper NeoGeo 64
     name: Hyper NeoGeo 64
   neogeocd:
     files:
@@ -1112,40 +1901,76 @@ systems:
       destination: neogeo.zip
       required: true
       md5: dffb72f116d36d025068b23970a4f6df
+      native_system: neogeocd
+      native_path: bios/neogeo.zip
+      native_name: NeoGeo CD
     - name: neocdz.zip
       destination: neocdz.zip
       required: true
       md5: c733b4b7bd30fa849874d96c591c8639
+      native_system: neogeocd
+      native_path: bios/neocdz.zip
+      native_name: NeoGeo CD
     - name: neocd_f.rom
       destination: neocd/neocd_f.rom
       required: true
+      native_system: neogeocd
+      native_path: bios/neocd/neocd_f.rom
+      native_name: NeoGeo CD
     - name: neocd_sf.rom
       destination: neocd/neocd_sf.rom
       required: true
+      native_system: neogeocd
+      native_path: bios/neocd/neocd_sf.rom
+      native_name: NeoGeo CD
     - name: neocd_t.rom
       destination: neocd/neocd_t.rom
       required: true
+      native_system: neogeocd
+      native_path: bios/neocd/neocd_t.rom
+      native_name: NeoGeo CD
     - name: neocd_st.rom
       destination: neocd/neocd_st.rom
       required: true
+      native_system: neogeocd
+      native_path: bios/neocd/neocd_st.rom
+      native_name: NeoGeo CD
     - name: neocd_z.rom
       destination: neocd/neocd_z.rom
       required: true
+      native_system: neogeocd
+      native_path: bios/neocd/neocd_z.rom
+      native_name: NeoGeo CD
     - name: neocd_sz.rom
       destination: neocd/neocd_sz.rom
       required: true
+      native_system: neogeocd
+      native_path: bios/neocd/neocd_sz.rom
+      native_name: NeoGeo CD
     - name: front-sp1.bin
       destination: neocd/front-sp1.bin
       required: true
+      native_system: neogeocd
+      native_path: bios/neocd/front-sp1.bin
+      native_name: NeoGeo CD
     - name: top-sp1.bin
       destination: neocd/top-sp1.bin
       required: true
+      native_system: neogeocd
+      native_path: bios/neocd/top-sp1.bin
+      native_name: NeoGeo CD
     - name: neocd.bin
       destination: neocd/neocd.bin
       required: true
+      native_system: neogeocd
+      native_path: bios/neocd/neocd.bin
+      native_name: NeoGeo CD
     - name: uni-bioscd.rom
       destination: neocd/uni-bioscd.rom
       required: true
+      native_system: neogeocd
+      native_path: bios/neocd/uni-bioscd.rom
+      native_name: NeoGeo CD
     name: NeoGeo CD
   ngage:
     files:
@@ -1153,18 +1978,27 @@ systems:
       destination: eka2l1/data/roms/NEM-4/SYM.ROM
       required: true
       md5: 64a95a4a884cf4cc15a566b856603193
+      native_system: ngage
+      native_path: bios/eka2l1/data/roms/NEM-4/SYM.ROM
+      native_name: Nokia N-gage
     name: Nokia N-gage
   ngp:
     files:
     - name: "[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp"
       destination: "[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp"
       required: true
+      native_system: ngp
+      native_path: "bios/[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp"
+      native_name: Neo Geo Pocket
     name: Neo Geo Pocket
   ngpc:
     files:
     - name: "[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp"
       destination: "[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp"
       required: true
+      native_system: ngpc
+      native_path: "bios/[BIOS] SNK Neo Geo Pocket (Japan, Europe) (En,Ja).ngp"
+      native_name: Neo Geo Pocket Color
     name: Neo Geo Pocket Color
   odyssey2:
     files:
@@ -1172,18 +2006,30 @@ systems:
       destination: o2rom.bin
       required: true
       md5: 562d5ebf9e030a40d6fabfc2f33139fd
+      native_system: odyssey2
+      native_path: bios/o2rom.bin
+      native_name: Odyssey 2
     - name: c52.bin
       destination: c52.bin
       required: true
       md5: f1071cdb0b6b10dde94d3bc8a6146387
+      native_system: odyssey2
+      native_path: bios/c52.bin
+      native_name: Odyssey 2
     - name: g7400.bin
       destination: g7400.bin
       required: true
       md5: c500ff71236068e0dc0d0603d265ae76
+      native_system: odyssey2
+      native_path: bios/g7400.bin
+      native_name: Odyssey 2
     - name: jopac.bin
       destination: jopac.bin
       required: true
       md5: 279008e4a0db2dc5f1c048853b033828
+      native_system: odyssey2
+      native_path: bios/jopac.bin
+      native_name: Odyssey 2
     name: Odyssey 2
   pc88:
     files:
@@ -1191,30 +2037,51 @@ systems:
       destination: quasi88/N88.ROM
       required: true
       md5: 4f984e04a99d56c4cfe36115415d6eb8
+      native_system: pc88
+      native_path: bios/quasi88/N88.ROM
+      native_name: NEC PC-8800
     - name: N88SUB.ROM
       destination: quasi88/N88SUB.ROM
       required: true
       md5: 793f86784e5608352a5d7f03f03e0858
+      native_system: pc88
+      native_path: bios/quasi88/N88SUB.ROM
+      native_name: NEC PC-8800
     - name: N88N.ROM
       destination: quasi88/N88N.ROM
       required: true
       md5: 2ff07b8769367321128e03924af668a0
+      native_system: pc88
+      native_path: bios/quasi88/N88N.ROM
+      native_name: NEC PC-8800
     - name: N88EXT0.ROM
       destination: quasi88/N88EXT0.ROM
       required: true
       md5: d675a2ca186c6efcd6277b835de4c7e5
+      native_system: pc88
+      native_path: bios/quasi88/N88EXT0.ROM
+      native_name: NEC PC-8800
     - name: N88EXT1.ROM
       destination: quasi88/N88EXT1.ROM
       required: true
       md5: e844534dfe5744b381444dbe61ef1b66
+      native_system: pc88
+      native_path: bios/quasi88/N88EXT1.ROM
+      native_name: NEC PC-8800
     - name: N88EXT2.ROM
       destination: quasi88/N88EXT2.ROM
       required: true
       md5: 6548fa45061274dee1ea8ae1e9e93910
+      native_system: pc88
+      native_path: bios/quasi88/N88EXT2.ROM
+      native_name: NEC PC-8800
     - name: N88EXT3.ROM
       destination: quasi88/N88EXT3.ROM
       required: true
       md5: fc4b76a402ba501e6ba6de4b3e8b4273
+      native_system: pc88
+      native_path: bios/quasi88/N88EXT3.ROM
+      native_name: NEC PC-8800
     name: NEC PC-8800
   pc98:
     files:
@@ -1222,22 +2089,37 @@ systems:
       destination: np2kai/BIOS.ROM
       required: true
       md5: e246140dec5124c5e404869a84caefce
+      native_system: pc98
+      native_path: bios/np2kai/BIOS.ROM
+      native_name: NEC PC-9800
     - name: FONT.ROM
       destination: np2kai/FONT.ROM
       required: true
       md5: 2af6179d7de4893ea0b705c00e9a98d6
+      native_system: pc98
+      native_path: bios/np2kai/FONT.ROM
+      native_name: NEC PC-9800
     - name: SOUND.ROM
       destination: np2kai/SOUND.ROM
       required: true
       md5: caf90f22197aed6f14c471c21e64658d
+      native_system: pc98
+      native_path: bios/np2kai/SOUND.ROM
+      native_name: NEC PC-9800
     - name: ITF.ROM
       destination: np2kai/ITF.ROM
       required: true
       md5: e9fc3890963b12cf15d0a2eea5815b72
+      native_system: pc98
+      native_path: bios/np2kai/ITF.ROM
+      native_name: NEC PC-9800
     - name: font.bmp
       destination: np2kai/font.bmp
       required: true
       md5: 7da1e5b7c482d4108d22a5b09631d967
+      native_system: pc98
+      native_path: bios/np2kai/font.bmp
+      native_name: NEC PC-9800
     name: NEC PC-9800
   pcengine:
     files:
@@ -1245,6 +2127,9 @@ systems:
       destination: syscard3.pce
       required: true
       md5: 38179df8f4ac870017db21ebcbf53114
+      native_system: pcengine
+      native_path: bios/syscard3.pce
+      native_name: PC Engine
     name: PC Engine
   pcenginecd:
     files:
@@ -1252,6 +2137,9 @@ systems:
       destination: syscard3.pce
       required: true
       md5: 38179df8f4ac870017db21ebcbf53114
+      native_system: pcenginecd
+      native_path: bios/syscard3.pce
+      native_name: PC Engine CD
     name: PC Engine CD
   pcfx:
     files:
@@ -1259,9 +2147,15 @@ systems:
       destination: pcfx.rom
       required: true
       md5: 08e36edbea28a017f79f8d4f7ff9b6d7
+      native_system: pcfx
+      native_path: bios/pcfx.rom
+      native_name: PC-FX
     - name: fx-scsi.rom
       destination: fx-scsi.rom
       required: true
+      native_system: pcfx
+      native_path: bios/fx-scsi.rom
+      native_name: PC-FX
     name: PC-FX
   pegasus:
     files:
@@ -1269,9 +2163,15 @@ systems:
       destination: pegasus.zip
       required: true
       md5: fee37d8140e4fab48aac4fdab2847f7d
+      native_system: pegasus
+      native_path: bios/pegasus.zip
+      native_name: Aamber Pegasus
     - name: pegasus_cart.xml
       destination: mame/hash/pegasus_cart.xml
       required: true
+      native_system: pegasus
+      native_path: bios/mame/hash/pegasus_cart.xml
+      native_name: Aamber Pegasus
     name: Aamber Pegasus
   pokemini:
     files:
@@ -1279,6 +2179,9 @@ systems:
       destination: bios.min
       required: true
       md5: 1e4fb124a3a886865acb574f388c803d
+      native_system: pokemini
+      native_path: bios/bios.min
+      native_name: Nintendo Pokemon Mini
     name: Nintendo Pokemon Mini
   sony-playstation-2:
     files:
@@ -1286,6 +2189,9 @@ systems:
       destination: pcsx2/bios/ps2-0230a-20080220.bin
       required: true
       md5: 21038400dc633070a78ad53090c53017
+      native_system: ps2
+      native_path: bios/pcsx2/bios/ps2-0230a-20080220.bin
+      native_name: PS2
     name: PS2
   psx:
     files:
@@ -1293,12 +2199,18 @@ systems:
       destination: psxonpsp660.bin
       required: true
       md5: c53ca5908936d412331790f4426c6c33
+      native_system: psx
+      native_path: bios/psxonpsp660.bin
+      native_name: PSX
     name: PSX
   pv1000:
     files:
     - name: pv1000.xml
       destination: mame/hash/pv1000.xml
       required: true
+      native_system: pv1000
+      native_path: bios/mame/hash/pv1000.xml
+      native_name: PV-1000
     name: PV-1000
   satellaview:
     files:
@@ -1306,6 +2218,9 @@ systems:
       destination: BS-X.bin
       required: true
       md5: fed4d8242cfbed61343d53d48432aced
+      native_system: satellaview
+      native_path: bios/BS-X.bin
+      native_name: Satellaview
     name: Satellaview
   saturn:
     files:
@@ -1313,26 +2228,44 @@ systems:
       destination: sega_101.bin
       required: true
       md5: 85ec9ca47d8f6807718151cbcca8b964
+      native_system: saturn
+      native_path: bios/sega_101.bin
+      native_name: Sega Saturn
     - name: mpr-17933.bin
       destination: mpr-17933.bin
       required: true
       md5: 3240872c70984b6cbfda1586cab68dbe
+      native_system: saturn
+      native_path: bios/mpr-17933.bin
+      native_name: Sega Saturn
     - name: mpr-18811-mx.ic1
       destination: mpr-18811-mx.ic1
       required: true
       md5: 255113ba943c92a54facd25a10fd780c
+      native_system: saturn
+      native_path: bios/mpr-18811-mx.ic1
+      native_name: Sega Saturn
     - name: mpr-19367-mx.ic1
       destination: mpr-19367-mx.ic1
       required: true
       md5: 1cd19988d1d72a3e7caa0b73234c96b4
+      native_system: saturn
+      native_path: bios/mpr-19367-mx.ic1
+      native_name: Sega Saturn
     - name: saturn_bios.bin
       destination: saturn_bios.bin
       required: true
       md5: af5828fdff51384f99b3c4926be27762
+      native_system: saturn
+      native_path: bios/saturn_bios.bin
+      native_name: Sega Saturn
     - name: saturn_bios.bin
       destination: kronos/saturn_bios.bin
       required: true
       md5: af5828fdff51384f99b3c4926be27762
+      native_system: saturn
+      native_path: bios/kronos/saturn_bios.bin
+      native_name: Sega Saturn
     name: Sega Saturn
   scummvm:
     files:
@@ -1340,10 +2273,16 @@ systems:
       destination: scummvm/extra/MT32_CONTROL.ROM
       required: true
       md5: 5626206284b22c2734f3e9efefcd2675
+      native_system: scummvm
+      native_path: bios/scummvm/extra/MT32_CONTROL.ROM
+      native_name: ScummVM
     - name: MT32_PCM.ROM
       destination: scummvm/extra/MT32_PCM.ROM
       required: true
       md5: 89e42e386e82e0cacb4a2704a03706ca
+      native_system: scummvm
+      native_path: bios/scummvm/extra/MT32_PCM.ROM
+      native_name: ScummVM
     name: ScummVM
   scv:
     files:
@@ -1351,25 +2290,43 @@ systems:
       destination: scv.zip
       required: true
       md5: 33df021613fb12abe2ad14b9eb17c7fe
+      native_system: scv
+      native_path: bios/scv.zip
+      native_name: Super Cassette Vision
     - name: upd7801g.s01
       destination: upd7801g.s01
       required: true
       md5: 635a978fd40db9a18ee44eff449fc126
+      native_system: scv
+      native_path: bios/upd7801g.s01
+      native_name: Super Cassette Vision
     - name: scv.xml
       destination: mame/hash/scv.xml
       required: true
+      native_system: scv
+      native_path: bios/mame/hash/scv.xml
+      native_name: Super Cassette Vision
     name: Super Cassette Vision
   sega32x:
     files:
     - name: 32X_G_BIOS.BIN
       destination: 32X_G_BIOS.BIN
       required: true
+      native_system: sega32x
+      native_path: bios/32X_G_BIOS.BIN
+      native_name: Sega 32X
     - name: 32X_M_BIOS.BIN
       destination: 32X_M_BIOS.BIN
       required: true
+      native_system: sega32x
+      native_path: bios/32X_M_BIOS.BIN
+      native_name: Sega 32X
     - name: 32X_S_BIOS.BIN
       destination: 32X_S_BIOS.BIN
       required: true
+      native_system: sega32x
+      native_path: bios/32X_S_BIOS.BIN
+      native_name: Sega 32X
     name: Sega 32X
   megacd:
     files:
@@ -1377,20 +2334,32 @@ systems:
       destination: bios_CD_E.bin
       required: true
       md5: e66fa1dc5820d254611fdcdba0662372
+      native_system: megacd
+      native_path: bios/bios_CD_E.bin
+      native_name: Sega CD
     - name: bios_CD_U.bin
       destination: bios_CD_U.bin
       required: true
       md5: 854b9150240a198070150e4566ae1290
+      native_system: megacd
+      native_path: bios/bios_CD_U.bin
+      native_name: Sega CD
     - name: bios_CD_J.bin
       destination: bios_CD_J.bin
       required: true
       md5: 278a9397d192149e84e820ac621a8edd
+      native_system: megacd
+      native_path: bios/bios_CD_J.bin
+      native_name: Sega CD
     name: Sega CD
   segastv:
     files:
     - name: stvbios.zip
       destination: kronos/stvbios.zip
       required: true
+      native_system: segastv
+      native_path: bios/kronos/stvbios.zip
+      native_name: Sega ST-V
     name: Sega ST-V
   sgb:
     files:
@@ -1398,18 +2367,30 @@ systems:
       destination: sgb_boot.bin
       required: true
       md5: d574d4f9c12f305074798f54c091a8b4
+      native_system: sgb
+      native_path: bios/sgb_boot.bin
+      native_name: Super Game Boy
     - name: sgb2_boot.bin
       destination: sgb2_boot.bin
       required: true
       md5: e0430bca9925fb9882148fd2dc2418c1
+      native_system: sgb
+      native_path: bios/sgb2_boot.bin
+      native_name: Super Game Boy
     - name: SGB1.sfc
       destination: SGB1.sfc
       required: true
       md5: b15ddb15721c657d82c5bab6db982ee9
+      native_system: sgb
+      native_path: bios/SGB1.sfc
+      native_name: Super Game Boy
     - name: SGB2.sfc
       destination: SGB2.sfc
       required: true
       md5: 8ecd73eb4edf7ed7e81aef1be80031d5
+      native_system: sgb
+      native_path: bios/SGB2.sfc
+      native_name: Super Game Boy
     name: Super Game Boy
   sufami:
     files:
@@ -1417,6 +2398,9 @@ systems:
       destination: STBIOS.bin
       required: true
       md5: d3a44ba7d42a74d3ac58cb9c14c6a5ca
+      native_system: sufami
+      native_path: bios/STBIOS.bin
+      native_name: Sufami
     name: Sufami
   supergrafx:
     files:
@@ -1424,84 +2408,141 @@ systems:
       destination: syscard3.pce
       required: true
       md5: 38179df8f4ac870017db21ebcbf53114
+      native_system: supergrafx
+      native_path: bios/syscard3.pce
+      native_name: Supergrafx
     name: Supergrafx
   supracan:
     files:
     - name: supracan.zip
       destination: supracan.zip
       required: true
+      native_system: supracan
+      native_path: bios/supracan.zip
+      native_name: Super A Can
     - name: umc6650.zip
       destination: umc6650.zip
       required: true
+      native_system: supracan
+      native_path: bios/umc6650.zip
+      native_name: Super A Can
     - name: supracan.xml
       destination: mame/hash/supracan.xml
       required: true
+      native_system: supracan
+      native_path: bios/mame/hash/supracan.xml
+      native_name: Super A Can
     name: Super A Can
   ti99:
     files:
     - name: ti99_4a.zip
       destination: ti99_4a.zip
       required: true
+      native_system: ti99
+      native_path: bios/ti99_4a.zip
+      native_name: TI/99
     - name: ti99_speech.zip
       destination: ti99_speech.zip
       required: true
+      native_system: ti99
+      native_path: bios/ti99_speech.zip
+      native_name: TI/99
     - name: ti99_cart.xml
       destination: mame/hash/ti99_cart.xml
       required: true
+      native_system: ti99
+      native_path: bios/mame/hash/ti99_cart.xml
+      native_name: TI/99
     name: TI/99
   triforce:
     files:
     - name: segaboot.gcm
       destination: emulators/dolphin-emu/User/Triforce/segaboot.gcm
       required: true
+      native_system: triforce
+      native_path: emulators/dolphin-emu/User/Triforce/segaboot.gcm
+      native_name: Triforce
     name: Triforce
   tutor:
     files:
     - name: tutor.zip
       destination: tutor.zip
       required: true
+      native_system: tutor
+      native_path: bios/tutor.zip
+      native_name: APF M-1000
     - name: tutor.xml
       destination: mame/hash/tutor.xml
       required: true
+      native_system: tutor
+      native_path: bios/mame/hash/tutor.xml
+      native_name: APF M-1000
     name: APF M-1000
   vc4000:
     files:
     - name: vc4000.xml
       destination: mame/hash/vc4000.xml
       required: true
+      native_system: vc4000
+      native_path: bios/mame/hash/vc4000.xml
+      native_name: VC4000
     name: VC4000
   vectrex:
     files:
     - name: Vectrex_Bios.bin
       destination: Vectrex_Bios.bin
       required: true
+      native_system: vectrex
+      native_path: bios/Vectrex_Bios.bin
+      native_name: Vectrex
     name: Vectrex
   vg5k:
     files:
     - name: vg5k.zip
       destination: vg5k.zip
       required: true
+      native_system: vg5k
+      native_path: bios/vg5k.zip
+      native_name: VG5000
     - name: vg5k.xml
       destination: mame/hash/vg5k.xml
       required: true
+      native_system: vg5k
+      native_path: bios/mame/hash/vg5k.xml
+      native_name: VG5000
     name: VG5000
   vsmile:
     files:
     - name: vsmile.zip
       destination: vsmile.zip
       required: true
+      native_system: vsmile
+      native_path: bios/vsmile.zip
+      native_name: V. Smile
     - name: vsmile_cart.xml
       destination: mame/hash/vsmile_cart.xml
       required: true
+      native_system: vsmile
+      native_path: bios/mame/hash/vsmile_cart.xml
+      native_name: V. Smile
     - name: vsmile_cd.xml
       destination: mame/hash/vsmile_cd.xml
       required: true
+      native_system: vsmile
+      native_path: bios/mame/hash/vsmile_cd.xml
+      native_name: V. Smile
     - name: vsmilem_cart.xml
       destination: mame/hash/vsmilem_cart.xml
       required: true
+      native_system: vsmile
+      native_path: bios/mame/hash/vsmilem_cart.xml
+      native_name: V. Smile
     - name: vsmileb_cart.xml
       destination: mame/hash/vsmileb_cart.xml
       required: true
+      native_system: vsmile
+      native_path: bios/mame/hash/vsmileb_cart.xml
+      native_name: V. Smile
     name: V. Smile
   x1:
     files:
@@ -1509,10 +2550,16 @@ systems:
       destination: xmil/IPLROM.X1
       required: true
       md5: eeeea1cd29c6e0e8b094790ae969bfa7
+      native_system: x1
+      native_path: bios/xmil/IPLROM.X1
+      native_name: Sharp x1
     - name: iplrom.x1t
       destination: xmil/iplrom.x1t
       required: true
       md5: 56c28adcf1f3a2f87cf3d57c378013f5
+      native_system: x1
+      native_path: bios/xmil/iplrom.x1t
+      native_name: Sharp x1
     name: Sharp x1
   x68000:
     files:
@@ -1520,10 +2567,16 @@ systems:
       destination: keropi/iplrom.dat
       required: true
       md5: 7fd4caabac1d9169e289f0f7bbf71d8e
+      native_system: x68000
+      native_path: bios/keropi/iplrom.dat
+      native_name: Sharp x68000
     - name: cgrom.dat
       destination: keropi/cgrom.dat
       required: true
       md5: cb0a5cfcf7247a7eab74bb2716260269
+      native_system: x68000
+      native_path: bios/keropi/cgrom.dat
+      native_name: Sharp x68000
     name: Sharp x68000
   xbox:
     files:
@@ -1531,17 +2584,29 @@ systems:
       destination: mcpx_1.0.bin
       required: true
       md5: d49c52a4102f6df7bcf8d0617ac475ed
+      native_system: xbox
+      native_path: bios/mcpx_1.0.bin
+      native_name: XBox
     - name: Complex_4627.bin
       destination: Complex_4627.bin
       required: true
       md5: 39cee882148a87f93cb440b99dde3ceb
+      native_system: xbox
+      native_path: bios/Complex_4627.bin
+      native_name: XBox
     name: XBox
   xegs:
     files:
     - name: xegs.zip
       destination: xegs.zip
       required: true
+      native_system: xegs
+      native_path: bios/xegs.zip
+      native_name: Atari XEGS
     - name: xegs.xml
       destination: mame/hash/xegs.xml
       required: true
+      native_system: xegs
+      native_path: bios/mame/hash/xegs.xml
+      native_name: Atari XEGS
     name: Atari XEGS

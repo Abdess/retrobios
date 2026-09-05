@@ -18,9 +18,19 @@ import urllib.error
 import urllib.request
 
 try:
-    from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+    from .base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        fetch_github_latest_version,
+        requirement_entry,
+    )
 except ImportError:
-    from base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+    from base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        fetch_github_latest_version,
+        requirement_entry,
+    )
 
 PLATFORM_NAME = "emudeck"
 
@@ -54,9 +64,18 @@ HASH_ARRAY_MAP = {
     "SaturnBios": "sega-saturn",
 }
 
+# Every check checkBIOS.sh defines, and the system it stands for. A function
+# missing here is a check whose hashes nothing would carry.
 FUNCTION_HASH_MAP = {
+    "checkPS1BIOS": "sony-playstation",
+    "checkPS2BIOS": "sony-playstation-2",
+    "checkSegaCDBios": "sega-mega-cd",
+    "checkSaturnBios": "sega-saturn",
     "checkDreamcastBios": "sega-dreamcast",
     "checkDSBios": "nintendo-ds",
+    "checkCitronBios": "nintendo-switch",
+    "checkRyujinxBios": "nintendo-switch",
+    "checkYuzuBios": "nintendo-switch",
 }
 
 SYSTEM_SLUG_MAP = {
@@ -171,13 +190,17 @@ _RE_ARRAY = re.compile(
     re.MULTILINE,
 )
 
+# checkBIOS.sh declares its checks as `checkPS1BIOS(){`, with no `function`
+# keyword and no settled casing for BIOS.
 _RE_FUNC = re.compile(
-    r"function\s+(check\w+Bios)\s*\(\)",
+    r"^[ \t]*(?:function\s+)?(check\w*(?:BIOS|Bios))\s*\(\)\s*\{",
     re.MULTILINE,
 )
 
+# The hash list is named differently in each check (PSBios, hashes, ...), so
+# it is found by shape rather than by name.
 _RE_LOCAL_HASHES = re.compile(
-    r"local\s+hashes=\(\s*((?:[0-9a-fA-F]+\s*)+)\)",
+    r"(?:local\s+)?\w+=\(\s*((?:[0-9a-fA-F]{32}\s*)+)\)",
     re.MULTILINE,
 )
 
@@ -346,6 +369,7 @@ class Scraper(BaseScraper):
                         system=system,
                         destination=f.get("destination", f["name"]),
                         required=True,
+                        native_id=system,
                     )
                 )
 
@@ -357,6 +381,7 @@ class Scraper(BaseScraper):
                         md5=md5,
                         destination="",
                         required=True,
+                        native_id=system,
                     )
                 )
 
@@ -379,6 +404,7 @@ class Scraper(BaseScraper):
                             system=system,
                             destination=f.get("destination", f["name"]),
                             required=True,
+                            native_id=system,
                         )
                     )
 
@@ -398,14 +424,7 @@ class Scraper(BaseScraper):
             if req.system not in systems:
                 systems[req.system] = {"files": []}
 
-            entry: dict = {
-                "name": req.name,
-                "destination": req.destination,
-                "required": req.required,
-            }
-            if req.md5:
-                entry["md5"] = req.md5
-            systems[req.system]["files"].append(entry)
+            systems[req.system]["files"].append(requirement_entry(req))
 
         version = ""
         try:

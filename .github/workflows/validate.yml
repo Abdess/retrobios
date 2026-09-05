@@ -115,6 +115,14 @@ jobs:
       - name: Install dependencies
         run: pip install pyyaml jsonschema==4.23.0
 
+      # The exporter fidelity cases compare what we hand back against the
+      # file each platform publishes, so they need those files. They skip
+      # without them rather than fail, which is why an unreachable upstream
+      # must not stop the run: the rest of the suite still has to report.
+      - name: Fetch the platforms' own files
+        continue-on-error: true
+        run: python scripts/export_native.py --all --fetch --output-dir "$RUNNER_TEMP/native"
+
       - name: Run test suite
         run: python -m unittest discover tests -v
 

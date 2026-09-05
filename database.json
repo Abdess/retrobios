@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-05T07:19:53Z",
+  "generated_at": "2026-09-05T09:26:20Z",
   "total_files": 10330,
   "total_size": 13322705446,
   "files": {
@@ -148048,10 +148048,16 @@
       "bios7.bin": [
         "24f67bdea115a2c847c8813a262502ee1607b7df"
       ],
+      "nintendo-ds:df692a80a5b1bc90728bc3dfc76cd948": [
+        "24f67bdea115a2c847c8813a262502ee1607b7df"
+      ],
       "nds9.bin": [
         "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
       ],
       "bios9.bin": [
+        "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
+      ],
+      "nintendo-ds:a392174eb3e572fed6447e956bde4b25": [
         "bfaac75f101c135e32e2aaf541de6b1be4c8c62d"
       ],
       "cx4.data.rom": [
@@ -149308,6 +149314,9 @@
       "dc_boot.bin": [
         "8951d1bb219ab2ff8583033d2119c899cc81f18c"
       ],
+      "sega-dreamcast:e10c53c2f8b90bab96ead2d368858623": [
+        "8951d1bb219ab2ff8583033d2119c899cc81f18c"
+      ],
       "boot.bin": [
         "8951d1bb219ab2ff8583033d2119c899cc81f18c"
       ],
@@ -150273,6 +150282,15 @@
       "sega-saturn:0306c0e408d6682dd2d86324bd4ac661": [
         "8c031bf9908fd0142fdd10a9cdd79389f8a3f2fc"
       ],
+      "sega-dreamcast:0a93f7940c455905bea6e392dfde92a4": [
+        "94d44d7f9529ec1642ba3771ed3c5f756d5bc872"
+      ],
+      "flash.bin": [
+        "94d44d7f9529ec1642ba3771ed3c5f756d5bc872"
+      ],
+      "nintendo-ds:145eaef5bd3037cbc247c213bb3da1b3": [
+        "8497afdd16af92d6887b71582846c40514e9039f"
+      ],
       "bsx_bios.rom": [
         "4891d739a8a8b67923681bad4fb67edab2e90e50"
       ],
@@ -150332,9 +150350,6 @@
       ],
       "squirreljme-slow.jar": [
         "8a2ddc37df2366d4e205e9904cd8bac22db2afd5"
-      ],
-      "flash.bin": [
-        "94d44d7f9529ec1642ba3771ed3c5f756d5bc872"
       ],
       "a1000kbd_fr.zip": [
         "93d36de4d5d376c521a9ca99722f659e60d177f2"
@@ -151692,30 +151707,6 @@
       ],
       "naomi2_bios.bin.bin": [
         "a8b7dce572b74e02e65cb949b2c366c87625157f"
-      ],
-      "amrdecoder_64.dll": [
-        "aedd333c565ccf05fb062289e5fab4722883712c"
-      ],
-      "amrdecoder_arm64.dll": [
-        "aedd333c565ccf05fb062289e5fab4722883712c"
-      ],
-      "libamrdecoder.so": [
-        "aedd333c565ccf05fb062289e5fab4722883712c"
-      ],
-      "libamrdecoder_64.so": [
-        "aedd333c565ccf05fb062289e5fab4722883712c"
-      ],
-      "libamrdecoder_arm32.so": [
-        "aedd333c565ccf05fb062289e5fab4722883712c"
-      ],
-      "libamrdecoder_arm64.so": [
-        "aedd333c565ccf05fb062289e5fab4722883712c"
-      ],
-      "libamrdecoder.dylib": [
-        "aedd333c565ccf05fb062289e5fab4722883712c"
-      ],
-      "libamrdecoder_arm64.dylib": [
-        "aedd333c565ccf05fb062289e5fab4722883712c"
       ],
       "FluidR3_GM.sf2": [
         "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848"

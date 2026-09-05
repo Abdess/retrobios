@@ -190,6 +190,20 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
     return all_ok
 
 
+class _Skipped:
+    """A step that did not run. Truthy, so it never fails the pipeline, and
+    distinct, so the summary does not report it as work that was done."""
+
+    def __bool__(self) -> bool:
+        return True
+
+    def __repr__(self) -> str:
+        return "SKIPPED"
+
+
+SKIPPED = _Skipped()
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run the full retrobios pipeline")
     parser.add_argument(
@@ -296,7 +310,7 @@ def main():
         all_ok = all_ok and ok
     else:
         print("\n--- 2/8 refresh data directories: SKIPPED (--offline) ---")
-        results["refresh_data"] = True
+        results["refresh_data"] = SKIPPED
 
     # Step 2a: Refresh MAME BIOS hashes
     if not args.offline:
@@ -308,7 +322,7 @@ def main():
         all_ok = all_ok and ok
     else:
         print("\n--- 2a refresh MAME hashes: SKIPPED (--offline) ---")
-        results["mame_hashes"] = True
+        results["mame_hashes"] = SKIPPED
 
     # Step 2a2: Refresh FBNeo BIOS hashes
     if not args.offline:
@@ -320,7 +334,7 @@ def main():
         all_ok = all_ok and ok
     else:
         print("\n--- 2a2 refresh FBNeo hashes: SKIPPED (--offline) ---")
-        results["fbneo_hashes"] = True
+        results["fbneo_hashes"] = SKIPPED
 
     # Step 2b: Check buildbot system directory (non-blocking)
     if args.check_buildbot and not args.offline:
@@ -341,27 +355,23 @@ def main():
             "--output-dir",
             str(Path(args.output_dir) / "truth"),
         ]
-        if args.include_archived:
-            truth_cmd.append("--include-archived")
         if args.target:
             truth_cmd.extend(["--target", args.target])
         ok, _ = run(truth_cmd, "2c generate truth")
         results["generate_truth"] = ok
         all_ok = all_ok and ok
     else:
-        results["generate_truth"] = True
+        results["generate_truth"] = SKIPPED
 
     # Step 2d: Diff truth vs scraped
     if args.with_truth or args.with_export:
         diff_cmd = [sys.executable, "scripts/diff_truth.py", "--all"]
-        if args.include_archived:
-            diff_cmd.append("--include-archived")
         diff_cmd.extend(["--truth-dir", str(Path(args.output_dir) / "truth")])
         ok, _ = run(diff_cmd, "2d diff truth")
         results["diff_truth"] = ok
         all_ok = all_ok and ok
     else:
-        results["diff_truth"] = True
+        results["diff_truth"] = SKIPPED
 
     # Step 2e: Export native formats
     if args.with_export:
@@ -374,13 +384,16 @@ def main():
             "--truth-dir",
             str(Path(args.output_dir) / "truth"),
         ]
-        if args.include_archived:
-            export_cmd.append("--include-archived")
+        # Seven of the formats carry code, so the export patches the
+        # platform's own file rather than regenerating it. Offline that
+        # file has to be in the cache already.
+        if not args.offline:
+            export_cmd.append("--fetch")
         ok, _ = run(export_cmd, "2e export native")
         results["export_native"] = ok
         all_ok = all_ok and ok
     else:
-        results["export_native"] = True
+        results["export_native"] = SKIPPED
 
     # Step 3: Verify
     verify_cmd = [sys.executable, "scripts/verify.py", "--all"]
@@ -457,7 +470,7 @@ def main():
         all_ok = all_ok and ok
     else:
         print("\n--- 4/8 generate packs: SKIPPED (--skip-packs) ---")
-        results["generate_packs"] = True
+        results["generate_packs"] = SKIPPED
 
     # Step 4b: Generate install manifests
     if not args.skip_packs:
@@ -480,7 +493,7 @@ def main():
         all_ok = all_ok and ok
     else:
         print("\n--- 4b/8 generate install manifests: SKIPPED (--skip-packs) ---")
-        results["generate_manifests"] = True
+        results["generate_manifests"] = SKIPPED
 
     # Step 4c: Generate target manifests
     if not args.skip_packs:
@@ -496,7 +509,7 @@ def main():
         all_ok = all_ok and ok
     else:
         print("\n--- 4c/8 generate target manifests: SKIPPED (--skip-packs) ---")
-        results["generate_target_manifests"] = True
+        results["generate_target_manifests"] = SKIPPED
 
     # Step 5: Consistency check
     if pack_output and verify_output:
@@ -505,7 +518,7 @@ def main():
         all_ok = all_ok and ok
     else:
         print("\n--- 5/8 consistency check: SKIPPED ---")
-        results["consistency"] = True
+        results["consistency"] = SKIPPED
 
     # Step 6: Pack integrity (extract + hash verification)
     if not args.skip_packs:
@@ -524,7 +537,7 @@ def main():
         all_ok = all_ok and ok
     else:
         print("\n--- 6/8 pack integrity: SKIPPED (--skip-packs) ---")
-        results["pack_integrity"] = True
+        results["pack_integrity"] = SKIPPED
 
     # Step 7: Generate README
     if not args.skip_docs:
@@ -543,7 +556,7 @@ def main():
         all_ok = all_ok and ok
     else:
         print("\n--- 7/8 generate readme: SKIPPED (--skip-docs) ---")
-        results["generate_readme"] = True
+        results["generate_readme"] = SKIPPED
 
     # Step 8: Generate site pages
     if not args.skip_docs:
@@ -555,13 +568,17 @@ def main():
         all_ok = all_ok and ok
     else:
         print("\n--- 8/8 generate site: SKIPPED (--skip-docs) ---")
-        results["generate_site"] = True
+        results["generate_site"] = SKIPPED
 
     # Summary
     total_elapsed = time.monotonic() - total_start
     print(f"\n{'=' * 60}")
-    for step, ok in results.items():
-        print(f"  {step:.<40} {'OK' if ok else 'FAILED'}")
+    for step, outcome in results.items():
+        if outcome is SKIPPED:
+            label = "SKIPPED"
+        else:
+            label = "OK" if outcome else "FAILED"
+        print(f"  {step:.<40} {label}")
     print(f"  {'total':.<40} {total_elapsed:.1f}s")
     print(f"{'=' * 60}")
     print(f"  Pipeline {'COMPLETE' if all_ok else 'FINISHED WITH ERRORS'}")

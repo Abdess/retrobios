@@ -5,7 +5,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-08-12T10:39:36Z",
+  "generated": "2026-09-05T09:26:20Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -20,10 +20,21 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 540,
-  "total_size": 2328953247,
-  "total_omitted": 0,
-  "omitted_files": [],
+  "total_files": 539,
+  "total_size": 2328691103,
+  "total_omitted": 1,
+  "omitted_files": [
+    {
+      "dest": "jagboot.rom",
+      "name": "jagboot.rom",
+      "system": "atari-jaguar",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "virtualjaguar"
+      ]
+    }
+  ],
   "files": [
     {
       "dest": "panafz1.bin",
@@ -1217,16 +1228,6 @@
       "sha256": "6e3b35af6e45d9005460cfe44e3907563bde7a4636926ebd316dc84913efdd1b",
       "size": 2097152,
       "repo_path": "bios/Sega/Saturn/SAT_Ultraman.bin",
-      "cores": [
-        "beetle_saturn"
-      ]
-    },
-    {
-      "dest": "satar4mp.bin",
-      "sha1": "11f9e62cf299f72184835b7b2a70a16333fc0d88",
-      "sha256": "87cddb1f499e32758de20145e73031a84bab299e3f6e5c8487e76d02b2ee9d16",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-120.rom",
       "cores": [
         "beetle_saturn"
       ]

@@ -26,9 +26,19 @@ import json
 import sys
 
 try:
-    from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+    from .base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        fetch_github_latest_version,
+        requirement_entry,
+    )
 except ImportError:
-    from base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+    from base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        fetch_github_latest_version,
+        requirement_entry,
+    )
 
 PLATFORM_NAME = "romm"
 
@@ -165,6 +175,7 @@ class Scraper(BaseScraper):
                         size=size,
                         destination=f"{slug}/{filename}",
                         required=True,
+                        native_id=slug,
                     )
                 )
 
@@ -183,7 +194,6 @@ class Scraper(BaseScraper):
         for key in list(data.keys())[:5]:
             if ":" not in key:
                 return False
-            _, _entry = key.split(":", 1), data[key]
             if not isinstance(data[key], dict):
                 return False
             if "md5" not in data[key] and "sha1" not in data[key]:
@@ -200,21 +210,7 @@ class Scraper(BaseScraper):
             if req.system not in systems:
                 systems[req.system] = {"files": []}
 
-            entry: dict = {
-                "name": req.name,
-                "destination": req.destination,
-                "required": req.required,
-            }
-            if req.sha1:
-                entry["sha1"] = req.sha1
-            if req.md5:
-                entry["md5"] = req.md5
-            if req.crc32:
-                entry["crc32"] = req.crc32
-            if req.size:
-                entry["size"] = req.size
-
-            systems[req.system]["files"].append(entry)
+            systems[req.system]["files"].append(requirement_entry(req))
 
         version = _STABLE_TAG if _STABLE_TAG != "master" else ""
 

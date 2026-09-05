@@ -276,16 +276,19 @@ class Exporter(BaseExporter):
 
 ### Round-trip validation
 
-The exporter enables a scrape-export-compare workflow:
-
 ```bash
-# Scrape upstream
-python -m scripts.scraper.myplatform_scraper --output /tmp/scraped.yml
-# Export truth data
-python scripts/export_native.py --platform myplatform --output /tmp/exported.json
-# Compare exported file with upstream
-diff /tmp/scraped.yml /tmp/exported.json
+python -m scripts.scraper.myplatform_scraper --output platforms/myplatform.yml
+python scripts/export_native.py --platform myplatform --fetch --output-dir tmp/native
+diff .cache/upstream-native/myplatform/<their file> \
+     tmp/native/myplatform/<their file>
 ```
+
+The export must not lose anything the platform already declares. If your
+format carries code as well as data - a script, a C# database, a manifest
+whose BIOS list sits beside launch configuration - say so with
+`needs_original()` and patch their file rather than writing a new one. An
+exporter that regenerates such a file from BIOS data alone hands the
+maintainer something that no longer runs.
 
 ## Step 6: Create a target scraper (optional)
 

@@ -36,10 +36,10 @@ import urllib.request
 from pathlib import Path
 
 try:
-    from .base_scraper import BaseScraper, BiosRequirement
+    from .base_scraper import BaseScraper, BiosRequirement, requirement_entry
 except ImportError:
     sys.path.insert(0, str(Path(__file__).parent.parent))
-    from scraper.base_scraper import BaseScraper, BiosRequirement
+    from scraper.base_scraper import BaseScraper, BiosRequirement, requirement_entry
 
 PLATFORM_NAME = "retrodeck"
 COMPONENTS_REPO = "RetroDECK/components"
@@ -385,13 +385,25 @@ class Scraper(BaseScraper):
                         continue
                     seen.add(key)
 
+                    native: dict[str, object] = {"component": comp_key}
+                    description = str(entry.get("description", "")).strip()
+                    if description:
+                        native["description"] = description
+                    if required_raw not in (None, ""):
+                        native["required_label"] = str(required_raw)
+
+                    sha256 = str(entry.get("sha256", "")).strip().lower()
+
                     requirements.append(
                         BiosRequirement(
                             name=filename,
                             system=system,
                             destination=destination,
                             md5=md5,
+                            sha256=sha256 or None,
                             required=required,
+                            native_id=str(raw_system),
+                            native=native,
                         )
                     )
 
@@ -413,14 +425,7 @@ class Scraper(BaseScraper):
         systems: dict[str, dict] = {}
         for req in reqs:
             sys_entry = systems.setdefault(req.system, {"files": []})
-            file_entry: dict = {
-                "name": req.name,
-                "destination": req.destination,
-                "required": req.required,
-            }
-            if req.md5:
-                file_entry["md5"] = req.md5
-            sys_entry["files"].append(file_entry)
+            sys_entry["files"].append(requirement_entry(req))
 
         try:
             from .base_scraper import fetch_github_latest_version

@@ -51,11 +51,6 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="hardware target filter",
     )
     parser.add_argument(
-        "--include-archived",
-        action="store_true",
-        help="include archived platforms with --all",
-    )
-    parser.add_argument(
         "--platforms-dir",
         default=DEFAULT_PLATFORMS_DIR,
     )
@@ -87,7 +82,7 @@ def main(argv: list[str] | None = None) -> None:
     if args.all:
         platforms = list_registered_platforms(
             args.platforms_dir,
-            include_archived=args.include_archived,
+            include_archived=True,
         )
     else:
         platforms = [args.platform]

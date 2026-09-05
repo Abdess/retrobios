@@ -5,7 +5,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-09-03T20:45:52Z",
+  "generated": "2026-09-05T09:26:20Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -238,7 +238,7 @@
   ],
   "total_files": 1464,
   "total_size": 4733583386,
-  "total_omitted": 5,
+  "total_omitted": 3,
   "omitted_files": [
     {
       "dest": "SEGA_KakuGothic-DB-Roman_12.abc",
@@ -261,33 +261,13 @@
       ]
     },
     {
-      "dest": "nxengine/data/data",
-      "name": "data/",
-      "system": "cave-story",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "nxengine"
-      ]
-    },
-    {
-      "dest": "rtp/2000/RPG Maker 2000 RTP",
-      "name": "RPG Maker 2000 RTP",
-      "system": "rpgmaker",
+      "dest": "jagboot.rom",
+      "name": "jagboot.rom",
+      "system": "atari-jaguar",
       "required": false,
       "reason": "not_found",
       "cores": [
-        "easyrpg"
-      ]
-    },
-    {
-      "dest": "rtp/2003/RPG Maker 2003 RTP",
-      "name": "RPG Maker 2003 RTP",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "easyrpg"
+        "virtualjaguar"
       ]
     }
   ],

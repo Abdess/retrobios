@@ -5,7 +5,9 @@
   "description": "Schema for retrogaming platform BIOS configuration files",
   "type": "object",
   "additionalProperties": false,
-  "required": ["platform"],
+  "required": [
+    "platform"
+  ],
   "properties": {
     "inherits": {
       "type": "string",
@@ -19,16 +21,28 @@
       "type": "string",
       "description": "Platform version"
     },
-    "dat_version": { "type": "string" },
+    "dat_version": {
+      "type": "string"
+    },
     "cores": {
       "oneOf": [
-        { "type": "string" },
-        { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
       ]
     },
     "standalone_cores": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "uniqueItems": true
     },
     "homepage": {
@@ -46,12 +60,21 @@
     },
     "hash_type": {
       "type": "string",
-      "enum": ["sha1", "md5", "crc32", "sha256"],
+      "enum": [
+        "sha1",
+        "md5",
+        "crc32",
+        "sha256"
+      ],
       "description": "Primary hash algorithm used by this platform"
     },
     "verification_mode": {
       "type": "string",
-      "enum": ["existence", "md5", "sha1"],
+      "enum": [
+        "existence",
+        "md5",
+        "sha1"
+      ],
       "default": "existence",
       "description": "How the platform verifies BIOS at runtime: existence (file exists), md5 (checks MD5 hash), sha1 (checks SHA1 hash)"
     },
@@ -89,8 +112,12 @@
           "type": "string",
           "description": "Hardware manufacturer"
         },
-        "name": { "type": "string" },
-        "native_id": { "type": "string" },
+        "name": {
+          "type": "string"
+        },
+        "native_id": {
+          "type": "string"
+        },
         "dat_version": {
           "type": "string",
           "description": "Version of the DAT file used as source for BIOS hashes"
@@ -112,7 +139,9 @@
         },
         "includes": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Shared BIOS groups to include (from _shared.yml)"
         },
         "data_directories": {
@@ -120,10 +149,16 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["ref"],
+            "required": [
+              "ref"
+            ],
             "properties": {
-              "ref": { "type": "string" },
-              "destination": { "type": "string" }
+              "ref": {
+                "type": "string"
+              },
+              "destination": {
+                "type": "string"
+              }
             }
           }
         },
@@ -133,13 +168,45 @@
             "$ref": "#/$defs/bios_file"
           },
           "description": "BIOS files required for this system"
+        },
+        "native_check": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "EmuDeck: the shape of the shell check written for this system",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "md5",
+                "file-exists"
+              ]
+            },
+            "function": {
+              "type": "string"
+            },
+            "var": {
+              "type": "string"
+            },
+            "array": {
+              "type": "string"
+            },
+            "firmware": {
+              "type": "string"
+            },
+            "keys": {
+              "type": "string"
+            }
+          }
         }
       }
     },
     "bios_file": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "destination"],
+      "required": [
+        "name",
+        "destination"
+      ],
       "properties": {
         "name": {
           "type": "string",
@@ -186,7 +253,13 @@
         },
         "storage": {
           "type": "string",
-          "enum": ["embedded", "external", "user_provided", "large_file", "release"],
+          "enum": [
+            "embedded",
+            "external",
+            "user_provided",
+            "large_file",
+            "release"
+          ],
           "default": "embedded",
           "description": "Storage tier: embedded (in repo), external (download at build), user_provided (manual)"
         },
@@ -202,6 +275,58 @@
         "zipped_file": {
           "type": "string",
           "description": "If set, the MD5 hash refers to this file inside the ZIP, not the ZIP itself"
+        },
+        "native_system": {
+          "type": "string",
+          "description": "System id the platform itself uses for this file"
+        },
+        "native_name": {
+          "type": "string",
+          "description": "Display name the platform gives its own system"
+        },
+        "alt_md5": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{32}(,[a-fA-F0-9]{32})*$",
+          "description": "Second accepted MD5 (Batocera altmd5, ROCKNIX altmd5)"
+        },
+        "core": {
+          "type": "string",
+          "description": "Cores the platform names for this file (comma-separated)"
+        },
+        "note": {
+          "type": "string",
+          "description": "Free-text note the platform attaches to this file"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description the platform attaches to this file"
+        },
+        "hash_match_mandatory": {
+          "type": "boolean",
+          "description": "Recalbox: a hash mismatch is an error, not a warning"
+        },
+        "mandatory_declared": {
+          "type": "boolean",
+          "description": "Recalbox: mandatory was stated explicitly, not defaulted"
+        },
+        "required_label": {
+          "type": "string",
+          "description": "RetroDECK: the requirement wording, which is free text"
+        },
+        "component": {
+          "type": "string",
+          "description": "RetroDECK: the component whose manifest declares this file"
+        },
+        "alt_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Further paths the platform accepts for the same file"
+        },
+        "native_path": {
+          "type": "string",
+          "description": "How the platform itself writes this file reference"
         }
       }
     }

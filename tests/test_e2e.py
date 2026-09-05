@@ -3996,19 +3996,19 @@ class TestE2E(unittest.TestCase):
             },
         }
 
-        out_path = os.path.join(self.root, "System.dat")
-        exporter = SystemDatExporter()
-        exporter.export(truth, out_path, scraped_data=scraped)
+        from exporter.baseline import build_native_model
 
-        with open(out_path) as fh:
-            content = fh.read()
+        systems, report = build_native_model(truth, scraped)
+        exporter = SystemDatExporter()
+        produced = exporter.render(systems, report, {}, scraped)
+        content = produced["System.dat"]
         self.assertIn("Sony - PlayStation", content)
         self.assertIn("scph5501.bin", content)
         self.assertIn("b056ee5a4d65937e1a3a17e1e78f3258ea49c38e", content)
         self.assertIn('name "System"', content)
         self.assertIn("71AF80B4", content)  # CRC uppercase
 
-        issues = exporter.validate(truth, out_path)
+        issues = exporter.validate(systems, produced)
         self.assertEqual(issues, [])
 
         # Discovery finds the systemdat exporter
@@ -4037,12 +4037,11 @@ class TestE2E(unittest.TestCase):
             },
         }
 
-        out_path = os.path.join(self.root, "System_numeric.dat")
-        SystemDatExporter().export(truth, out_path, scraped_data={"systems": {}})
+        from exporter.baseline import build_native_model
 
-        with open(out_path) as fh:
-            content = fh.read()
-        self.assertIn("crc 70295038", content)
+        systems, report = build_native_model(truth, {"systems": {}})
+        produced = SystemDatExporter().render(systems, report, {}, {"systems": {}})
+        self.assertIn("crc 70295038", produced["System.dat"])
 
     # ---------------------------------------------------------------
     # Full truth + diff integration test
@@ -4417,15 +4416,28 @@ class TestE2E(unittest.TestCase):
                 "sony-playstation": {"native_id": "psx", "files": []},
             }
         }
-        out = os.path.join(self.root, "batocera-systems")
-        exp = Exporter()
-        exp.export(truth, out, scraped_data=scraped)
+        from exporter.baseline import build_native_model
 
-        content = Path(out).read_text(encoding="utf-8")
+        # The systems dict is one block inside the checker Batocera runs, so
+        # the exporter is handed the script it patches.
+        skeleton = (
+            "#!/usr/bin/env python\n"
+            "systems = {\n"
+            "}\n"
+            "def checkBios(systems, prefix, filterROMs):\n"
+            "    return {}\n"
+        )
+        systems, report = build_native_model(truth, scraped)
+        exp = Exporter()
+        produced = exp.render(
+            systems, report, {"batocera-systems": skeleton}, scraped
+        )
+        content = produced["batocera-systems"]
         self.assertIn('"psx"', content)
         self.assertIn("scph5501.bin", content)
         self.assertIn("b" * 32, content)
-        self.assertEqual(exp.validate(truth, out), [])
+        self.assertIn("def checkBios(", content)
+        self.assertEqual(exp.validate(systems, produced), [])
 
     def test_180_recalbox_exporter_round_trip(self):
         """Recalbox exporter produces valid es_bios.xml."""
@@ -4453,11 +4465,12 @@ class TestE2E(unittest.TestCase):
                 "sony-playstation": {"native_id": "psx", "files": []},
             }
         }
-        out = os.path.join(self.root, "es_bios.xml")
-        exp = Exporter()
-        exp.export(truth, out, scraped_data=scraped)
+        from exporter.baseline import build_native_model
 
-        content = Path(out).read_text(encoding="utf-8")
+        systems, report = build_native_model(truth, scraped)
+        exp = Exporter()
+        produced = exp.render(systems, report, {}, scraped)
+        content = produced["es_bios.xml"]
         self.assertIn("<biosList", content)
         self.assertIn('platform="psx"', content)
         self.assertIn("fullname=", content)
@@ -4465,7 +4478,7 @@ class TestE2E(unittest.TestCase):
         # mandatory="true" is the default, not emitted (matching Recalbox format)
         self.assertNotIn('mandatory="false"', content)
         self.assertIn('core="libretro/c"', content)
-        self.assertEqual(exp.validate(truth, out), [])
+        self.assertEqual(exp.validate(systems, produced), [])
 
     def test_181_retrobat_exporter_round_trip(self):
         """RetroBat exporter produces valid JSON."""
@@ -4495,16 +4508,17 @@ class TestE2E(unittest.TestCase):
                 "sony-playstation": {"native_id": "psx", "files": []},
             }
         }
-        out = os.path.join(self.root, "batocera-systems.json")
-        exp = Exporter()
-        exp.export(truth, out, scraped_data=scraped)
+        from exporter.baseline import build_native_model
 
-        data = _json.loads(Path(out).read_text(encoding="utf-8"))
+        systems, report = build_native_model(truth, scraped)
+        exp = Exporter()
+        produced = exp.render(systems, report, {}, scraped)
+        data = _json.loads(produced["batocera-systems.json"])
         self.assertIn("psx", data)
         self.assertTrue(
             any("scph5501" in bf["file"] for bf in data["psx"]["biosFiles"])
         )
-        self.assertEqual(exp.validate(truth, out), [])
+        self.assertEqual(exp.validate(systems, produced), [])
 
     def test_182_exporter_discovery(self):
         """All exporters are discovered by the plugin system."""

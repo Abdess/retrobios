@@ -1,210 +1,182 @@
-"""Exporter for RetroDECK component_manifest.json format.
+"""Exporter for RetroDECK's component manifests.
 
-Produces a JSON file compatible with RetroDECK's component manifests.
-Each system maps to a component with BIOS entries containing filename,
-md5 (comma-separated if multiple), paths ($bios_path default), and
-required status.
-
-Path tokens: $bios_path for bios/, $roms_path for roms/.
-Entries without an explicit path default to $bios_path.
+RetroDECK has no single BIOS file. Each component carries its own
+component_manifest.json, and the BIOS list sits inside it next to the
+component's name, description and presets, at one of three keys. Only that
+list is rewritten, in the component's own file, so everything else the
+manifest drives is left alone.
 """
 
 from __future__ import annotations
 
 import json
-import re
 from collections import OrderedDict
-from pathlib import Path
 
 from .base_exporter import BaseExporter
+from .baseline import NativeFile, NativeSystem, Report
 
-# retrobios slug -> RetroDECK system ID (reverse of scraper SYSTEM_SLUG_MAP)
-_REVERSE_SLUG: dict[str, str] = {
-    "nintendo-nes": "nes",
-    "nintendo-snes": "snes",
-    "nintendo-64": "n64",
-    "nintendo-64dd": "n64dd",
-    "nintendo-gamecube": "gc",
-    "nintendo-wii": "wii",
-    "nintendo-wii-u": "wiiu",
-    "nintendo-switch": "switch",
-    "nintendo-gb": "gb",
-    "nintendo-gbc": "gbc",
-    "nintendo-gba": "gba",
-    "nintendo-ds": "nds",
-    "nintendo-3ds": "3ds",
-    "nintendo-fds": "fds",
-    "nintendo-sgb": "sgb",
-    "nintendo-virtual-boy": "virtualboy",
-    "nintendo-pokemon-mini": "pokemini",
-    "sony-playstation": "psx",
-    "sony-playstation-2": "ps2",
-    "sony-playstation-3": "ps3",
-    "sony-psp": "psp",
-    "sony-psvita": "psvita",
-    "sega-mega-drive": "megadrive",
-    "sega-mega-cd": "megacd",
-    "sega-saturn": "saturn",
-    "sega-dreamcast": "dreamcast",
-    "sega-dreamcast-arcade": "naomi",
-    "sega-game-gear": "gamegear",
-    "sega-master-system": "mastersystem",
-    "nec-pc-engine": "pcengine",
-    "nec-pc-fx": "pcfx",
-    "nec-pc-98": "pc98",
-    "nec-pc-88": "pc88",
-    "3do": "3do",
-    "amstrad-cpc": "amstradcpc",
-    "arcade": "arcade",
-    "atari-400-800": "atari800",
-    "atari-5200": "atari5200",
-    "atari-7800": "atari7800",
-    "atari-jaguar": "atarijaguar",
-    "atari-lynx": "atarilynx",
-    "atari-st": "atarist",
-    "commodore-c64": "c64",
-    "commodore-amiga": "amiga",
-    "philips-cdi": "cdimono1",
-    "fairchild-channel-f": "channelf",
-    "coleco-colecovision": "colecovision",
-    "mattel-intellivision": "intellivision",
-    "microsoft-msx": "msx",
-    "microsoft-xbox": "xbox",
-    "doom": "doom",
-    "j2me": "j2me",
-    "apple-macintosh-ii": "macintosh",
-    "apple-ii": "apple2",
-    "apple-iigs": "apple2gs",
-    "enterprise-64-128": "enterprise",
-    "tiger-game-com": "gamecom",
-    "hartung-game-master": "gmaster",
-    "epoch-scv": "scv",
-    "watara-supervision": "supervision",
-    "bandai-wonderswan": "wonderswan",
-    "snk-neogeo-cd": "neogeocd",
-    "tandy-coco": "coco",
-    "tandy-trs-80": "trs80",
-    "dragon-32-64": "dragon",
-    "pico8": "pico8",
-    "wolfenstein-3d": "wolfenstein",
-    "sinclair-zx-spectrum": "zxspectrum",
-}
-
-
-def _dest_to_path_token(destination: str) -> str:
-    """Convert a truth destination path to a RetroDECK path token."""
-    if destination.startswith("roms/"):
-        return "$roms_path/" + destination.removeprefix("roms/")
-    if destination.startswith("bios/"):
-        return "$bios_path/" + destination.removeprefix("bios/")
-    # Default: bios path
-    return "$bios_path/" + destination
+COMPONENTS_REPO = "RetroDECK/components"
+COMPONENTS_BRANCH = "main"
+RAW_BASE = f"https://raw.githubusercontent.com/{COMPONENTS_REPO}/{COMPONENTS_BRANCH}"
+MANIFEST = "component_manifest.json"
 
 
 class Exporter(BaseExporter):
-    """Export truth data to RetroDECK component_manifest.json format."""
+    """Write RetroDECK's component manifests, corrected."""
 
     @staticmethod
     def platform_name() -> str:
         return "retrodeck"
 
-    def export(
+    @staticmethod
+    def native_filename() -> str:
+        return MANIFEST
+
+    @staticmethod
+    def carries() -> frozenset[str]:
+        return frozenset({"md5", "sha256", "required"})
+
+    @staticmethod
+    def needs_original() -> bool:
+        # A manifest is mostly presets and launch configuration; rebuilding
+        # one from BIOS data alone would throw the component away.
+        return True
+
+    @staticmethod
+    def component_url(component: str) -> str:
+        return f"{RAW_BASE}/{component}/{MANIFEST}"
+
+    def components(self, systems: dict[str, NativeSystem]) -> list[str]:
+        """Components the corrected data touches."""
+        found: set[str] = set()
+        for system in systems.values():
+            for fe in system.files:
+                component = str(fe.native("component", ""))
+                if component:
+                    found.add(component)
+        return sorted(found)
+
+    @staticmethod
+    def _entry(fe: NativeFile) -> OrderedDict:
+        entry: OrderedDict[str, object] = OrderedDict()
+        entry["filename"] = fe.name
+        md5 = ",".join(fe.hashes("md5"))
+        if md5:
+            entry["md5"] = md5
+        sha256 = fe.hash("sha256")
+        if sha256:
+            entry["sha256"] = sha256
+        entry["system"] = fe.native_system
+        description = fe.native("description", "")
+        if description:
+            entry["description"] = str(description)
+        # RetroDECK words the requirement in prose ("Required", "At least one
+        # BIOS file required"), so the platform's own wording is kept and a
+        # boolean is only rendered when there is none to keep.
+        label = fe.native("required_label", "")
+        if label:
+            entry["required"] = str(label)
+        elif fe.required:
+            entry["required"] = "Required"
+        destination = fe.destination
+        if destination and destination not in (fe.name, f"bios/{fe.name}"):
+            directory = destination.rsplit("/", 1)[0]
+            entry["paths"] = "$bios_path/" + directory.removeprefix("bios/")
+        return entry
+
+    def _by_component(
+        self, systems: dict[str, NativeSystem]
+    ) -> dict[str, list[NativeFile]]:
+        grouped: dict[str, list[NativeFile]] = {}
+        for system in systems.values():
+            for fe in system.files:
+                component = str(fe.native("component", ""))
+                if component:
+                    grouped.setdefault(component, []).append(fe)
+        return grouped
+
+    @staticmethod
+    def _bios_holder(component_value: dict) -> tuple[dict, str] | None:
+        """Where in a manifest the BIOS list lives, if it has one."""
+        if "bios" in component_value:
+            return component_value, "bios"
+        for key in ("preset_actions", "cores"):
+            nested = component_value.get(key)
+            if isinstance(nested, dict) and "bios" in nested:
+                return nested, "bios"
+        return None
+
+    def render(
         self,
-        truth_data: dict,
-        output_path: str,
-        scraped_data: dict | None = None,
-    ) -> None:
-        native_map: dict[str, str] = {}
-        if scraped_data:
-            for sys_id, sys_data in scraped_data.get("systems", {}).items():
-                nid = sys_data.get("native_id")
-                if nid:
-                    native_map[sys_id] = nid
+        systems: dict[str, NativeSystem],
+        report: Report,
+        originals: dict[str, str],
+        scraped: dict | None = None,
+    ) -> dict[str, str]:
+        grouped = self._by_component(systems)
+        produced: dict[str, str] = {}
 
-        manifest: OrderedDict[str, dict] = OrderedDict()
-
-        systems = truth_data.get("systems", {})
-        for sys_id in sorted(systems):
-            sys_data = systems[sys_id]
-            files = sys_data.get("files", [])
-            if not files:
+        for component, files in sorted(grouped.items()):
+            path = f"{component}/{MANIFEST}"
+            original = originals.get(path)
+            if not original:
+                continue
+            try:
+                manifest = json.loads(original, object_pairs_hook=OrderedDict)
+            except json.JSONDecodeError:
                 continue
 
-            native_id = native_map.get(sys_id, _REVERSE_SLUG.get(sys_id, sys_id))
-
-            bios_entries: list[OrderedDict] = []
-            for fe in files:
-                name = fe.get("name", "")
-                if name.startswith("_") or self._is_pattern(name):
+            entries = [self._entry(fe) for fe in files]
+            for component_value in manifest.values():
+                if not isinstance(component_value, dict):
                     continue
-
-                dest = self._dest(fe)
-                path_token = _dest_to_path_token(dest)
-
-                md5 = fe.get("md5", "")
-                if isinstance(md5, list):
-                    md5 = ",".join(m for m in md5 if m)
-
-                required = fe.get("required", True)
-
-                entry: OrderedDict[str, object] = OrderedDict()
-                entry["filename"] = name
-                if md5:
-                    # Validate MD5 entries
-                    parts = [
-                        m.strip().lower()
-                        for m in str(md5).split(",")
-                        if re.fullmatch(r"[0-9a-f]{32}", m.strip())
-                    ]
-                    if parts:
-                        entry["md5"] = ",".join(parts) if len(parts) > 1 else parts[0]
-                entry["paths"] = path_token
-                entry["required"] = required
-
-                system_val = native_id
-                entry["system"] = system_val
-
-                bios_entries.append(entry)
-
-            if bios_entries:
-                if native_id in manifest:
-                    # Merge into existing component (multiple truth systems
-                    # may map to the same native ID)
-                    existing_names = {
-                        e["filename"] for e in manifest[native_id]["bios"]
-                    }
-                    for entry in bios_entries:
-                        if entry["filename"] not in existing_names:
-                            manifest[native_id]["bios"].append(entry)
+                holder = self._bios_holder(component_value)
+                if holder is None:
+                    component_value["bios"] = entries
                 else:
-                    component = OrderedDict()
-                    component["system"] = native_id
-                    component["bios"] = bios_entries
-                    manifest[native_id] = component
+                    container, key = holder
+                    container[key] = entries
+                break
 
-        Path(output_path).write_text(
-            json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
+            produced[path] = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
 
-    def validate(self, truth_data: dict, output_path: str) -> list[str]:
-        data = json.loads(Path(output_path).read_text(encoding="utf-8"))
+        return produced
 
-        exported_names: set[str] = set()
-        for comp_data in data.values():
-            bios = comp_data.get("bios", [])
-            if isinstance(bios, list):
-                for entry in bios:
-                    fn = entry.get("filename", "")
-                    if fn:
-                        exported_names.add(fn)
-
+    def validate(
+        self,
+        systems: dict[str, NativeSystem],
+        produced: dict[str, str],
+    ) -> list[str]:
         issues: list[str] = []
-        for sys_data in truth_data.get("systems", {}).values():
-            for fe in sys_data.get("files", []):
-                name = fe.get("name", "")
-                if name.startswith("_") or self._is_pattern(name):
+        grouped = self._by_component(systems)
+
+        for component, files in grouped.items():
+            path = f"{component}/{MANIFEST}"
+            if path not in produced:
+                issues.append(f"manifest not written: {path}")
+                continue
+            try:
+                manifest = json.loads(produced[path])
+            except json.JSONDecodeError as exc:
+                issues.append(f"{path} does not parse: {exc}")
+                continue
+
+            declared: set[str] = set()
+            for component_value in manifest.values():
+                if not isinstance(component_value, dict):
                     continue
-                if name not in exported_names:
-                    issues.append(f"missing: {name}")
+                holder = self._bios_holder(component_value)
+                if holder is None:
+                    continue
+                container, key = holder
+                for entry in container[key]:
+                    declared.add(entry.get("filename", ""))
+                if not component_value.get("name") and not component_value.get(
+                    "system"
+                ):
+                    issues.append(f"{path}: the component lost its identity")
+
+            for fe in files:
+                if fe.name not in declared:
+                    issues.append(f"absent from {path}: {fe.name}")
         return issues

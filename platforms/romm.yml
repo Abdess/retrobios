@@ -16,6 +16,7 @@ systems:
       md5: 8970fc987ab89a7f64da9f8a8c4333ff
       crc32: b832da9a
       size: 524288
+      native_system: 3do
     - name: goldstar.bin
       destination: 3do/goldstar.bin
       required: true
@@ -23,6 +24,7 @@ systems:
       md5: 8639fd5e549bd6238cfee79e3e749114
       crc32: b6f5028b
       size: 1048576
+      native_system: 3do
     - name: panafz1-kanji.bin
       destination: 3do/panafz1-kanji.bin
       required: true
@@ -30,6 +32,7 @@ systems:
       md5: b8dc97f778a6245c58e064b0312e8281
       crc32: a8e9447c
       size: 933636
+      native_system: 3do
     - name: panafz1.bin
       destination: 3do/panafz1.bin
       required: true
@@ -37,6 +40,7 @@ systems:
       md5: f47264dd47fe30f73ab3c010015c155b
       crc32: c8c8ff89
       size: 1048576
+      native_system: 3do
     - name: panafz10-norsa.bin
       destination: 3do/panafz10-norsa.bin
       required: true
@@ -44,6 +48,7 @@ systems:
       md5: 1477bda80dc33731a65468c1f5bcbee9
       crc32: 230e6feb
       size: 1048576
+      native_system: 3do
     - name: panafz10.bin
       destination: 3do/panafz10.bin
       required: true
@@ -51,6 +56,7 @@ systems:
       md5: 51f2f43ae2f3508a14d9f56597e2d3ce
       crc32: 58242cee
       size: 1048576
+      native_system: 3do
     - name: panafz10e-anvil-norsa.bin
       destination: 3do/panafz10e-anvil-norsa.bin
       required: true
@@ -58,6 +64,7 @@ systems:
       md5: cf11bbb5a16d7af9875cca9de9a15e09
       crc32: 9a186221
       size: 1048576
+      native_system: 3do
     - name: panafz10e-anvil.bin
       destination: 3do/panafz10e-anvil.bin
       required: true
@@ -65,6 +72,7 @@ systems:
       md5: a48e6746bd7edec0f40cff078f0bb19f
       crc32: 2495c500
       size: 1048576
+      native_system: 3do
     - name: panafz10ja-anvil-kanji.bin
       destination: 3do/panafz10ja-anvil-kanji.bin
       required: true
@@ -72,6 +80,7 @@ systems:
       md5: 428577250f43edc902ea239c50d2240d
       crc32: ff7393de
       size: 1048576
+      native_system: 3do
     - name: panafz1j-kanji.bin
       destination: 3do/panafz1j-kanji.bin
       required: true
@@ -79,6 +88,7 @@ systems:
       md5: c23fb5d5e6bb1c240d02cf968972be37
       crc32: 45f478b1
       size: 1048576
+      native_system: 3do
     - name: panafz1j-norsa.bin
       destination: 3do/panafz1j-norsa.bin
       required: true
@@ -86,6 +96,7 @@ systems:
       md5: f6c71de7470d16abe4f71b1444883dc8
       crc32: 82ce67c6
       size: 1048576
+      native_system: 3do
     - name: panafz1j.bin
       destination: 3do/panafz1j.bin
       required: true
@@ -93,6 +104,7 @@ systems:
       md5: a496cfdded3da562759be3561317b605
       crc32: d9493adc
       size: 1048576
+      native_system: 3do
     - name: sanyotry.bin
       destination: 3do/sanyotry.bin
       required: true
@@ -100,6 +112,7 @@ systems:
       md5: 35fa1a1ebaaeea286dc5cd15487c13ea
       crc32: d5cbc509
       size: 1048576
+      native_system: 3do
   arcade:
     files:
     - name: airlbios.zip
@@ -109,6 +122,7 @@ systems:
       md5: 7a11bfe0cc72886d032e386db68f890c
       crc32: f83ec60f
       size: 715730
+      native_system: arcade
     - name: awbios.zip
       destination: arcade/awbios.zip
       required: true
@@ -116,6 +130,7 @@ systems:
       md5: 85254fbe320ca82a768ec2c26bb08def
       crc32: 67a14ad5
       size: 42296
+      native_system: arcade
     - name: bubsys.zip
       destination: arcade/bubsys.zip
       required: true
@@ -123,6 +138,7 @@ systems:
       md5: f81298afd68a1a24a49a1a2d9f087964
       crc32: 8fc2fd2e
       size: 7950
+      native_system: arcade
     - name: cchip.zip
       destination: arcade/cchip.zip
       required: true
@@ -130,6 +146,7 @@ systems:
       md5: df6f8a3d83c028a5cb9f2f2be60773f3
       crc32: 23debecb
       size: 2700
+      native_system: arcade
     - name: decocass.zip
       destination: arcade/decocass.zip
       required: true
@@ -137,6 +154,7 @@ systems:
       md5: b7e1189b341bf6a8e270017c096d21b0
       crc32: 5de524e5
       size: 16107
+      native_system: arcade
     - name: f355bios.zip
       destination: arcade/f355bios.zip
       required: true
@@ -144,6 +162,7 @@ systems:
       md5: 547f3d12aed389058ca06148f1cca0ed
       crc32: "17516536"
       size: 1394278
+      native_system: arcade
     - name: f355dlx.zip
       destination: arcade/f355dlx.zip
       required: true
@@ -151,6 +170,7 @@ systems:
       md5: 1028615bcac4c31634a3364ce5c04044
       crc32: 23ac17be
       size: 2328436
+      native_system: arcade
     - name: hod2bios.zip
       destination: arcade/hod2bios.zip
       required: true
@@ -158,6 +178,7 @@ systems:
       md5: f4011d3116500354edf7302a90402711
       crc32: 0ddc6daf
       size: 1479106
+      native_system: arcade
     - name: isgsm.zip
       destination: arcade/isgsm.zip
       required: true
@@ -165,6 +186,7 @@ systems:
       md5: 4a56d56e2219c5e2b006b66a4263c01c
       crc32: 26856bf9
       size: 10207
+      native_system: arcade
     - name: midssio.zip
       destination: arcade/midssio.zip
       required: true
@@ -172,6 +194,7 @@ systems:
       md5: 5904b0de768d1d506e766aa7e18994c1
       crc32: 7620bd32
       size: 163
+      native_system: arcade
     - name: naomi.zip
       destination: arcade/naomi.zip
       required: true
@@ -179,6 +202,7 @@ systems:
       md5: 526eda1e2a7920c92c88178789d71d84
       crc32: 6ee50181
       size: 9321533
+      native_system: arcade
     - name: neogeo.zip
       destination: arcade/neogeo.zip
       required: true
@@ -186,6 +210,7 @@ systems:
       md5: 00dad01abdbf8ea9e79ad2fe11bdb182
       crc32: "81315163"
       size: 1859335
+      native_system: arcade
     - name: nmk004.zip
       destination: arcade/nmk004.zip
       required: true
@@ -193,6 +218,7 @@ systems:
       md5: bfacf1a68792d5348f93cf724d2f1dda
       crc32: a6099353
       size: 3556
+      native_system: arcade
     - name: pgm.zip
       destination: arcade/pgm.zip
       required: true
@@ -200,6 +226,7 @@ systems:
       md5: 87cc944eef4c671aa2629a8ba48a08e0
       crc32: bf3dd2ef
       size: 2094636
+      native_system: arcade
     - name: skns.zip
       destination: arcade/skns.zip
       required: true
@@ -207,6 +234,7 @@ systems:
       md5: 3f956c4e7008804cb47cbde49bd5b908
       crc32: 5692af22
       size: 924762
+      native_system: arcade
     - name: ym2608.zip
       destination: arcade/ym2608.zip
       required: true
@@ -214,6 +242,7 @@ systems:
       md5: 79ae0d2bb1901b7e606b6dc339b79a97
       crc32: 5b4c29c4
       size: 7609
+      native_system: arcade
     - name: naomi2.zip
       destination: arcade/naomi2.zip
       required: true
@@ -221,6 +250,7 @@ systems:
       md5: 0ea5bf0345e27b1cf51bbde1bd398eca
       crc32: f25cf3a8
       size: 2189528
+      native_system: arcade
   atari-400-800:
     files:
     - name: ATARIBAS.ROM
@@ -230,6 +260,7 @@ systems:
       md5: 0bac0c6a50104045d902df4503a4c30b
       crc32: 7d684184
       size: 8192
+      native_system: atari8bit
     - name: ATARIOSA.ROM
       destination: atari8bit/ATARIOSA.ROM
       required: true
@@ -237,6 +268,7 @@ systems:
       md5: eb1f32f5d9f382db1bbfb8d7f9cb343a
       crc32: 72b3fed4
       size: 10240
+      native_system: atari8bit
     - name: ATARIOSB.ROM
       destination: atari8bit/ATARIOSB.ROM
       required: true
@@ -244,6 +276,7 @@ systems:
       md5: a3e8d617c95d08031fe1b20d541434b2
       crc32: 3e28a1fe
       size: 10240
+      native_system: atari8bit
     - name: ATARIXL.ROM
       destination: atari8bit/ATARIXL.ROM
       required: true
@@ -251,6 +284,7 @@ systems:
       md5: 06daac977823773a3eea3422fd26a703
       crc32: 1f9cd270
       size: 16384
+      native_system: atari8bit
   atari-5200:
     files:
     - name: 5200.rom
@@ -260,6 +294,7 @@ systems:
       md5: 281f20ea4320404ec820fb7ec0693b38
       crc32: 4248d3e3
       size: 2048
+      native_system: atari5200
   atari-7800:
     files:
     - name: "7800 BIOS (E).rom"
@@ -269,6 +304,7 @@ systems:
       md5: 397bb566584be7b9764e7a68974c4263
       crc32: d5b61170
       size: 16384
+      native_system: atari7800
     - name: "7800 BIOS (U).rom"
       destination: "atari7800/7800 BIOS (U).rom"
       required: true
@@ -276,6 +312,7 @@ systems:
       md5: 0763f1ffb006ddbe32e52d497ee848ae
       crc32: 5d13730c
       size: 4096
+      native_system: atari7800
   atari-lynx:
     files:
     - name: lynxboot.img
@@ -285,6 +322,7 @@ systems:
       md5: fcd403db69f54290b51035d82f835e7b
       crc32: 0d973c9d
       size: 512
+      native_system: lynx
   atari-st:
     files:
     - name: tos.img
@@ -294,6 +332,7 @@ systems:
       md5: c1c57ce48e8ee4135885cee9e63a68a2
       crc32: d3c32283
       size: 196608
+      native_system: atari-st
   coleco-colecovision:
     files:
     - name: colecovision.rom
@@ -303,6 +342,7 @@ systems:
       md5: 2c66f5911e5b42b8ebe113403548eee7
       crc32: 3aa93ef3
       size: 8192
+      native_system: colecovision
   commodore-amiga:
     files:
     - name: kick34005.A500
@@ -312,6 +352,7 @@ systems:
       md5: 82a21c1890cae844b3df741f2762d48d
       crc32: c4f0f55f
       size: 262144
+      native_system: amiga
     - name: kick40063.A600
       destination: amiga/kick40063.A600
       required: true
@@ -319,6 +360,7 @@ systems:
       md5: e40a5dfb3d017ba8779faba30cbd1c8e
       crc32: fc24ae0d
       size: 524288
+      native_system: amiga
     - name: kick40068.A1200
       destination: amiga/kick40068.A1200
       required: true
@@ -326,6 +368,7 @@ systems:
       md5: 646773759326fbac3b2311fd8c8793ee
       crc32: 1483a091
       size: 524288
+      native_system: amiga
   fairchild-channel-f:
     files:
     - name: sl31253.bin
@@ -335,6 +378,7 @@ systems:
       md5: ac9804d4c0e9d07e33472e3726ed15c3
       crc32: 04694ed9
       size: 1024
+      native_system: fairchild-channel-f
     - name: sl31254.bin
       destination: fairchild-channel-f/sl31254.bin
       required: true
@@ -342,6 +386,7 @@ systems:
       md5: da98f4bb3242ab80d76629021bb27585
       crc32: 9c047ba3
       size: 1024
+      native_system: fairchild-channel-f
     - name: sl90025.bin
       destination: fairchild-channel-f/sl90025.bin
       required: true
@@ -349,6 +394,7 @@ systems:
       md5: 95d339631d867c8f1d15a5f2ec26069d
       crc32: 015c1e38
       size: 1024
+      native_system: fairchild-channel-f
   doom:
     files:
     - name: prboom.wad
@@ -358,6 +404,7 @@ systems:
       md5: 72ae1b47820fcc93cc0df9c428d0face
       crc32: a5751b99
       size: 143312
+      native_system: doom
     - name: DOOM1.WAD
       destination: doom/DOOM1.WAD
       required: true
@@ -365,6 +412,7 @@ systems:
       md5: f0cefca49926d00903cf57551d901abe
       crc32: 162b696a
       size: 4196020
+      native_system: doom
     - name: DOOM.WAD
       destination: doom/DOOM.WAD
       required: true
@@ -372,6 +420,7 @@ systems:
       md5: 4461d4511386518e784c647e3128e7bc
       crc32: cff03d9f
       size: 12733492
+      native_system: doom
     - name: DOOM2.WAD
       destination: doom/DOOM2.WAD
       required: true
@@ -379,6 +428,7 @@ systems:
       md5: 9aa3cbf65b961d0bdac98ec403b832e1
       crc32: 09b8a6ae
       size: 14802506
+      native_system: doom
     - name: DOOM2F.WAD
       destination: doom/DOOM2F.WAD
       required: true
@@ -386,6 +436,7 @@ systems:
       md5: 3cb02349b3df649c86290907eed64e7b
       crc32: 27eaae69
       size: 14607420
+      native_system: doom
     - name: DOOM64.WAD
       destination: doom/DOOM64.WAD
       required: true
@@ -393,6 +444,7 @@ systems:
       md5: 0aaba212339c72250f8a53a0a2b6189e
       crc32: "65816192"
       size: 15103212
+      native_system: doom
     - name: TNT.WAD
       destination: doom/TNT.WAD
       required: true
@@ -400,6 +452,7 @@ systems:
       md5: 8974e3117ed4a1839c752d5e11ab1b7b
       crc32: 15f18ddb
       size: 18304630
+      native_system: doom
     - name: PLUTONIA.WAD
       destination: doom/PLUTONIA.WAD
       required: true
@@ -407,6 +460,7 @@ systems:
       md5: 24037397056e919961005e08611623f4
       crc32: 650b998d
       size: 17531493
+      native_system: doom
     - name: HERETIC1.WAD
       destination: doom/HERETIC1.WAD
       required: true
@@ -414,6 +468,7 @@ systems:
       md5: ae779722390ec32fa37b0d361f7d82f8
       crc32: 22d3f0ca
       size: 5120920
+      native_system: doom
     - name: HERETIC.WAD
       destination: doom/HERETIC.WAD
       required: true
@@ -421,6 +476,7 @@ systems:
       md5: 66d686b1ed6d35ff103f15dbd30e0341
       crc32: 5b16049e
       size: 14189976
+      native_system: doom
     - name: HEXEN.WAD
       destination: doom/HEXEN.WAD
       required: true
@@ -428,6 +484,7 @@ systems:
       md5: abb033caf81e26f12a2103e1fa25453f
       crc32: dca9114c
       size: 20083672
+      native_system: doom
     - name: HEXDD.WAD
       destination: doom/HEXDD.WAD
       required: true
@@ -435,6 +492,7 @@ systems:
       md5: 78d5898e99e220e4de64edaa0e479593
       crc32: fd5eb11d
       size: 4440584
+      native_system: doom
     - name: STRIFE0.WAD
       destination: doom/STRIFE0.WAD
       required: true
@@ -442,6 +500,7 @@ systems:
       md5: bb545b9c4eca0ff92c14d466b3294023
       crc32: 93c144dd
       size: 9934413
+      native_system: doom
     - name: STRIFE1.WAD
       destination: doom/STRIFE1.WAD
       required: true
@@ -449,6 +508,7 @@ systems:
       md5: 2fed2031a5b03892106e0f117f17901f
       crc32: 4234ace5
       size: 28377364
+      native_system: doom
     - name: VOICES.WAD
       destination: doom/VOICES.WAD
       required: true
@@ -456,6 +516,7 @@ systems:
       md5: 082234d6a3f7086424856478b5aa9e95
       crc32: cd12ebcf
       size: 27319149
+      native_system: doom
     - name: CHEX.WAD
       destination: doom/CHEX.WAD
       required: true
@@ -463,6 +524,7 @@ systems:
       md5: 25485721882b050afa96a56e5758dd52
       crc32: 298dd5b5
       size: 12361532
+      native_system: doom
   j2me:
     files:
     - name: freej2me-lr.jar
@@ -472,6 +534,7 @@ systems:
       md5: ccd92e7156ce2f0ce14c88ffb68a16eb
       crc32: 96a1babf
       size: 552042
+      native_system: j2me
     - name: freej2me-sdl.jar
       destination: j2me/freej2me-sdl.jar
       required: true
@@ -479,6 +542,7 @@ systems:
       md5: 4da74084fc1b1bd3d776ed8d3ee648de
       crc32: 5cca0f35
       size: 552043
+      native_system: j2me
     - name: freej2me.jar
       destination: j2me/freej2me.jar
       required: true
@@ -486,6 +550,7 @@ systems:
       md5: 29a92d0867da2917275b7c6c805d256f
       crc32: ffb98ffa
       size: 552039
+      native_system: j2me
   apple-macintosh-ii:
     files:
     - name: MacII.ROM
@@ -495,6 +560,7 @@ systems:
       md5: 66223be1497460f1e60885eeb35e03cc
       crc32: 4df6d054
       size: 262144
+      native_system: mac
   magnavox-odyssey2:
     files:
     - name: o2rom.bin
@@ -504,6 +570,7 @@ systems:
       md5: 562d5ebf9e030a40d6fabfc2f33139fd
       crc32: 8016a315
       size: 1024
+      native_system: odyssey-2-slash-videopac-g7000
   mattel-intellivision:
     files:
     - name: exec.bin
@@ -513,6 +580,7 @@ systems:
       md5: 62e761035cb657903761800f4437b8af
       crc32: cbce86f7
       size: 8192
+      native_system: intellivision
     - name: grom.bin
       destination: intellivision/grom.bin
       required: true
@@ -520,6 +588,7 @@ systems:
       md5: 0cd5946c6473e42e8e4c2137785e427f
       crc32: 683a4158
       size: 2048
+      native_system: intellivision
   microsoft-msx:
     files:
     - name: CARTS.SHA
@@ -529,6 +598,7 @@ systems:
       md5: 74b0f217fa0e2b8bb5a2f8e2ecc69da3
       crc32: d42f4444
       size: 33152
+      native_system: msx
     - name: CYRILLIC.FNT
       destination: msx/CYRILLIC.FNT
       required: true
@@ -536,6 +606,7 @@ systems:
       md5: 85b38e4128bbc300e675f55b278683a8
       crc32: 73af9bc3
       size: 2048
+      native_system: msx
     - name: DISK.ROM
       destination: msx/DISK.ROM
       required: true
@@ -543,6 +614,7 @@ systems:
       md5: 80dcd1ad1a4cf65d64b7ba10504e8190
       crc32: 721f61df
       size: 16384
+      native_system: msx
     - name: DISK.ROM
       destination: msx2/DISK.ROM
       required: true
@@ -550,6 +622,7 @@ systems:
       md5: 80dcd1ad1a4cf65d64b7ba10504e8190
       crc32: 721f61df
       size: 16384
+      native_system: msx2
     - name: FMPAC.ROM
       destination: msx/FMPAC.ROM
       required: true
@@ -557,6 +630,7 @@ systems:
       md5: 6f69cc8b5ed761b03afd78000dfb0e19
       crc32: 0e84505d
       size: 65536
+      native_system: msx
     - name: FMPAC16.ROM
       destination: msx/FMPAC16.ROM
       required: true
@@ -564,6 +638,7 @@ systems:
       md5: af8537262df8df267072f359399a7635
       crc32: 5d6c4d27
       size: 16384
+      native_system: msx
     - name: ITALIC.FNT
       destination: msx/ITALIC.FNT
       required: true
@@ -571,6 +646,7 @@ systems:
       md5: c83e50e9f33b8dd893c414691822740d
       crc32: c90ec498
       size: 2048
+      native_system: msx
     - name: KANJI.ROM
       destination: msx/KANJI.ROM
       required: true
@@ -578,6 +654,7 @@ systems:
       md5: febe8782b466d7c3b16de6d104826b34
       crc32: c9651b32
       size: 131072
+      native_system: msx
     - name: MSX.ROM
       destination: msx/MSX.ROM
       required: true
@@ -585,6 +662,7 @@ systems:
       md5: aa95aea2563cd5ec0a0919b44cc17d47
       crc32: 94ee12f3
       size: 32768
+      native_system: msx
     - name: MSX2.ROM
       destination: msx/MSX2.ROM
       required: true
@@ -592,6 +670,7 @@ systems:
       md5: ec3a01c91f24fbddcbcab0ad301bc9ef
       crc32: 6cdaf3a5
       size: 32768
+      native_system: msx
     - name: MSX2EXT.ROM
       destination: msx/MSX2EXT.ROM
       required: true
@@ -599,6 +678,7 @@ systems:
       md5: 2183c2aff17cf4297bdb496de78c2e8a
       crc32: 66237ecf
       size: 16384
+      native_system: msx
     - name: MSX2P.ROM
       destination: msx/MSX2P.ROM
       required: true
@@ -606,6 +686,7 @@ systems:
       md5: 6d8c0ca64e726c82a4b726e9b01cdf1e
       crc32: "00870134"
       size: 32768
+      native_system: msx
     - name: MSX2PEXT.ROM
       destination: msx/MSX2PEXT.ROM
       required: true
@@ -613,6 +694,7 @@ systems:
       md5: 7c8243c71d8f143b2531f01afa6a05dc
       crc32: b8ba44d3
       size: 16384
+      native_system: msx
     - name: MSXDOS2.ROM
       destination: msx/MSXDOS2.ROM
       required: true
@@ -620,6 +702,7 @@ systems:
       md5: 6418d091cd6907bbcf940324339e43bb
       crc32: 1c430991
       size: 65536
+      native_system: msx
     - name: PAINTER.ROM
       destination: msx/PAINTER.ROM
       required: true
@@ -627,6 +710,7 @@ systems:
       md5: 403cdea1cbd2bb24fae506941f8f655e
       crc32: 1bda68a3
       size: 65536
+      native_system: msx
     - name: RS232.ROM
       destination: msx/RS232.ROM
       required: true
@@ -634,6 +718,7 @@ systems:
       md5: 279efd1eae0d358eecd4edc7d9adedf3
       crc32: ab6874f8
       size: 16640
+      native_system: msx
   nec-pc-engine:
     files:
     - name: gecard.pce
@@ -643,6 +728,7 @@ systems:
       md5: 6d2cb14fc3e1f65ceb135633d1694122
       crc32: 51a12d90
       size: 32768
+      native_system: tg16
     - name: gexpress.pce
       destination: tg16/gexpress.pce
       required: true
@@ -650,6 +736,7 @@ systems:
       md5: 6d2cb14fc3e1f65ceb135633d1694122
       crc32: 51a12d90
       size: 32768
+      native_system: tg16
     - name: syscard1.pce
       destination: tg16/syscard1.pce
       required: true
@@ -657,6 +744,7 @@ systems:
       md5: 2b7ccb3d86baa18f6402c176f3065082
       crc32: 3f9f95a4
       size: 262144
+      native_system: tg16
     - name: syscard2.pce
       destination: tg16/syscard2.pce
       required: true
@@ -664,6 +752,7 @@ systems:
       md5: 3cdd6614a918616bfc41c862e889dd79
       crc32: 283b74e0
       size: 262144
+      native_system: tg16
     - name: syscard2u.pce
       destination: tg16/syscard2u.pce
       required: true
@@ -671,6 +760,7 @@ systems:
       md5: 94279f315e8b52904f65ab3108542afe
       crc32: ff2a5ec3
       size: 262144
+      native_system: tg16
     - name: syscard3.pce
       destination: tg16/syscard3.pce
       required: true
@@ -678,6 +768,7 @@ systems:
       md5: 38179df8f4ac870017db21ebcbf53114
       crc32: 6d9a73ef
       size: 262144
+      native_system: tg16
     - name: syscard3u.pce
       destination: tg16/syscard3u.pce
       required: true
@@ -685,6 +776,7 @@ systems:
       md5: 0754f903b52e3b3342202bdafb13efa5
       crc32: 2b5b75fe
       size: 262144
+      native_system: tg16
   nec-pc-engine-cd:
     files:
     - name: gecard.pce
@@ -694,6 +786,7 @@ systems:
       md5: 6d2cb14fc3e1f65ceb135633d1694122
       crc32: 51a12d90
       size: 32768
+      native_system: turbografx-cd
     - name: gexpress.pce
       destination: turbografx-cd/gexpress.pce
       required: true
@@ -701,6 +794,7 @@ systems:
       md5: 6d2cb14fc3e1f65ceb135633d1694122
       crc32: 51a12d90
       size: 32768
+      native_system: turbografx-cd
     - name: syscard1.pce
       destination: turbografx-cd/syscard1.pce
       required: true
@@ -708,6 +802,7 @@ systems:
       md5: 2b7ccb3d86baa18f6402c176f3065082
       crc32: 3f9f95a4
       size: 262144
+      native_system: turbografx-cd
     - name: syscard2.pce
       destination: turbografx-cd/syscard2.pce
       required: true
@@ -715,6 +810,7 @@ systems:
       md5: 3cdd6614a918616bfc41c862e889dd79
       crc32: 283b74e0
       size: 262144
+      native_system: turbografx-cd
     - name: syscard2u.pce
       destination: turbografx-cd/syscard2u.pce
       required: true
@@ -722,6 +818,7 @@ systems:
       md5: 94279f315e8b52904f65ab3108542afe
       crc32: ff2a5ec3
       size: 262144
+      native_system: turbografx-cd
     - name: syscard3.pce
       destination: turbografx-cd/syscard3.pce
       required: true
@@ -729,6 +826,7 @@ systems:
       md5: 38179df8f4ac870017db21ebcbf53114
       crc32: 6d9a73ef
       size: 262144
+      native_system: turbografx-cd
     - name: syscard3u.pce
       destination: turbografx-cd/syscard3u.pce
       required: true
@@ -736,6 +834,7 @@ systems:
       md5: 0754f903b52e3b3342202bdafb13efa5
       crc32: 2b5b75fe
       size: 262144
+      native_system: turbografx-cd
   nec-pc-98:
     files:
     - name: 2608_bd.wav
@@ -745,6 +844,7 @@ systems:
       md5: d94546e70f17fd899be8df3544ab6cbb
       crc32: bb038714
       size: 19192
+      native_system: pc-9800-series
     - name: 2608_hh.wav
       destination: pc-9800-series/2608_hh.wav
       required: true
@@ -752,6 +852,7 @@ systems:
       md5: 08c54a0c1f774a5538a848a6665a34b4
       crc32: 9898b372
       size: 36722
+      native_system: pc-9800-series
     - name: 2608_rim.wav
       destination: pc-9800-series/2608_rim.wav
       required: true
@@ -759,6 +860,7 @@ systems:
       md5: 465ea0768b27da404aec45dfc501404b
       crc32: 638864c1
       size: 5288
+      native_system: pc-9800-series
     - name: 2608_sd.wav
       destination: pc-9800-series/2608_sd.wav
       required: true
@@ -766,6 +868,7 @@ systems:
       md5: d71004351c8bbfdad53b18222c061d49
       crc32: 542cc58c
       size: 15558
+      native_system: pc-9800-series
     - name: 2608_tom.wav
       destination: pc-9800-series/2608_tom.wav
       required: true
@@ -773,6 +876,7 @@ systems:
       md5: 96a4ead13f364734f79b0c58af2f0e1f
       crc32: 93c57bba
       size: 23092
+      native_system: pc-9800-series
     - name: 2608_top.wav
       destination: pc-9800-series/2608_top.wav
       required: true
@@ -780,6 +884,7 @@ systems:
       md5: 593cff6597ab9380d822b8f824fd2c28
       crc32: ab73a296
       size: 57016
+      native_system: pc-9800-series
     - name: bios.rom
       destination: pc-9800-series/bios.rom
       required: true
@@ -787,6 +892,7 @@ systems:
       md5: cd237e16e7e77c06bb58540e9e9fca68
       crc32: 0a682b93
       size: 98304
+      native_system: pc-9800-series
     - name: font.bmp
       destination: pc-9800-series/font.bmp
       required: true
@@ -794,6 +900,7 @@ systems:
       md5: 7da1e5b7c482d4108d22a5b09631d967
       crc32: d271798b
       size: 524350
+      native_system: pc-9800-series
     - name: font.rom
       destination: pc-9800-series/font.rom
       required: true
@@ -801,6 +908,7 @@ systems:
       md5: 38d32748ae49d1815b0614970849fd40
       crc32: 456d9fc7
       size: 288768
+      native_system: pc-9800-series
     - name: itf.rom
       destination: pc-9800-series/itf.rom
       required: true
@@ -808,6 +916,7 @@ systems:
       md5: 72ea51443070f0e9212bfc9b793ee28e
       crc32: c1815325
       size: 32768
+      native_system: pc-9800-series
     - name: sound.rom
       destination: pc-9800-series/sound.rom
       required: true
@@ -815,6 +924,7 @@ systems:
       md5: 524473c1a5a03b17e21d86a0408ff827
       crc32: fe9f57f2
       size: 16384
+      native_system: pc-9800-series
   nec-pc-fx:
     files:
     - name: fx-scsi.rom
@@ -824,6 +934,7 @@ systems:
       md5: 430e9745f9235c515bc8e652d6ca3004
       crc32: f3e60e5e
       size: 524288
+      native_system: pc-fx
     - name: pcfx.rom
       destination: pc-fx/pcfx.rom
       required: true
@@ -831,6 +942,7 @@ systems:
       md5: 08e36edbea28a017f79f8d4f7ff9b6d7
       crc32: 76ffb97a
       size: 1048576
+      native_system: pc-fx
     - name: pcfxbios.bin
       destination: pc-fx/pcfxbios.bin
       required: true
@@ -838,6 +950,7 @@ systems:
       md5: 08e36edbea28a017f79f8d4f7ff9b6d7
       crc32: 76ffb97a
       size: 1048576
+      native_system: pc-fx
     - name: pcfxga.rom
       destination: pc-fx/pcfxga.rom
       required: true
@@ -845,6 +958,7 @@ systems:
       md5: 5885bc9a64bf80d4530b9b9b978ff587
       crc32: 41c3776b
       size: 1048576
+      native_system: pc-fx
     - name: pcfxv101.bin
       destination: pc-fx/pcfxv101.bin
       required: true
@@ -852,6 +966,7 @@ systems:
       md5: e2fb7c7220e3a7838c2dd7e401a7f3d8
       crc32: 236102c9
       size: 1048576
+      native_system: pc-fx
   nintendo-fds:
     files:
     - name: disksys.rom
@@ -861,6 +976,7 @@ systems:
       md5: ca30b50f880eb660a320674ed365ef7a
       crc32: 5e607dcf
       size: 8192
+      native_system: fds
   nintendo-gb:
     files:
     - name: dmg_boot.bin
@@ -870,6 +986,7 @@ systems:
       md5: 32fbbd84168d3482956eb3c5051637f5
       crc32: 59c8598e
       size: 256
+      native_system: gb
     - name: gb_bios.bin
       destination: gb/gb_bios.bin
       required: true
@@ -877,6 +994,7 @@ systems:
       md5: 32fbbd84168d3482956eb3c5051637f5
       crc32: 59c8598e
       size: 256
+      native_system: gb
   nintendo-gba:
     files:
     - name: gba_bios.bin
@@ -886,6 +1004,7 @@ systems:
       md5: a860e8c0b6d573d191e4ec7db1b1e4f6
       crc32: "81977335"
       size: 16384
+      native_system: gba
   nintendo-gbc:
     files:
     - name: cgb_boot.bin
@@ -895,6 +1014,7 @@ systems:
       md5: dbfce9db9deaa2567f6a84fde55f9680
       crc32: 41884e46
       size: 2304
+      native_system: gbc
     - name: gbc_bios.bin
       destination: gbc/gbc_bios.bin
       required: true
@@ -902,6 +1022,7 @@ systems:
       md5: dbfce9db9deaa2567f6a84fde55f9680
       crc32: 41884e46
       size: 2304
+      native_system: gbc
   nintendo-gamecube:
     files:
     - name: gc-dvd-20010608.bin
@@ -911,6 +1032,7 @@ systems:
       md5: 561532ad496f644897952d2cef5bb431
       crc32: c047465a
       size: 131072
+      native_system: ngc
     - name: gc-dvd-20010831.bin
       destination: ngc/gc-dvd-20010831.bin
       required: true
@@ -918,6 +1040,7 @@ systems:
       md5: b953eb1a8fc9922b3f7051c1cdc451f1
       crc32: 54c7d10e
       size: 131072
+      native_system: ngc
     - name: gc-dvd-20020402.bin
       destination: ngc/gc-dvd-20020402.bin
       required: true
@@ -925,6 +1048,7 @@ systems:
       md5: 413154dd0e2c824c9b18b807fd03ec4e
       crc32: 8bbef508
       size: 131072
+      native_system: ngc
     - name: gc-dvd-20020823.bin
       destination: ngc/gc-dvd-20020823.bin
       required: true
@@ -932,6 +1056,7 @@ systems:
       md5: c03f6bbaf644eb9b3ee261dbe199eb42
       crc32: 5205222b
       size: 131072
+      native_system: ngc
     - name: gc-ntsc-10.bin
       destination: ngc/gc-ntsc-10.bin
       required: true
@@ -939,6 +1064,7 @@ systems:
       md5: fc924a7c879b661abc37cec4f018fdf3
       crc32: 6dac1f2a
       size: 2097152
+      native_system: ngc
     - name: gc-ntsc-11.bin
       destination: ngc/gc-ntsc-11.bin
       required: true
@@ -946,6 +1072,7 @@ systems:
       md5: 019e39822a9ca3029124f74dd4d55ac4
       crc32: d5e6feea
       size: 2097152
+      native_system: ngc
     - name: gc-ntsc-12.bin
       destination: ngc/gc-ntsc-12.bin
       required: true
@@ -953,6 +1080,7 @@ systems:
       md5: b17148254a5799684c7d783206504926
       crc32: "86573808"
       size: 2097152
+      native_system: ngc
     - name: gc-pal-10.bin
       destination: ngc/gc-pal-10.bin
       required: true
@@ -960,6 +1088,7 @@ systems:
       md5: 0cdda509e2da83c85bfe423dd87346cc
       crc32: 4f319f43
       size: 2097152
+      native_system: ngc
     - name: gc-pal-11.bin
       destination: ngc/gc-pal-11.bin
       required: true
@@ -967,6 +1096,7 @@ systems:
       md5: 339848a0b7c2124cf155276c1e79cbd0
       crc32: 667d0b64
       size: 2097152
+      native_system: ngc
     - name: gc-pal-12.bin
       destination: ngc/gc-pal-12.bin
       required: true
@@ -974,6 +1104,7 @@ systems:
       md5: db92574caab77a7ec99d4605fd6f2450
       crc32: ad1b7f16
       size: 2097152
+      native_system: ngc
   nintendo-64dd:
     files:
     - name: 64DD_IPL.bin
@@ -983,6 +1114,7 @@ systems:
       md5: 8d3d9f294b6e174bc7b1d2fd1c727530
       crc32: 7f933ce2
       size: 4194304
+      native_system: 64dd
   nintendo-ds:
     files:
     - name: bios7.bin
@@ -992,6 +1124,7 @@ systems:
       md5: df692a80a5b1bc90728bc3dfc76cd948
       crc32: 1280f0d5
       size: 16384
+      native_system: nds
     - name: bios9.bin
       destination: nds/bios9.bin
       required: true
@@ -999,6 +1132,7 @@ systems:
       md5: a392174eb3e572fed6447e956bde4b25
       crc32: 2ab23573
       size: 4096
+      native_system: nds
     - name: firmware.bin
       destination: nds/firmware.bin
       required: true
@@ -1006,6 +1140,7 @@ systems:
       md5: e45033d9b0fa6b0de071292bba7c9d13
       crc32: 945f9dc9
       size: 262144
+      native_system: nds
   nintendo-nes:
     files:
     - name: NstDatabase.xml
@@ -1015,6 +1150,7 @@ systems:
       md5: 7bfe8c0540ed4bd6a0f1e2a0f0118ced
       crc32: ebb2196c
       size: 1009534
+      native_system: nes
   nintendo-pokemon-mini:
     files:
     - name: bios.min
@@ -1024,6 +1160,7 @@ systems:
       md5: 1e4fb124a3a886865acb574f388c803d
       crc32: aed3c14d
       size: 4096
+      native_system: pokemon-mini
   nintendo-satellaview:
     files:
     - name: BS-X.bin
@@ -1033,6 +1170,7 @@ systems:
       md5: fed4d8242cfbed61343d53d48432aced
       crc32: f51f07a0
       size: 1048576
+      native_system: satellaview
     - name: "BS-X (En).bin"
       destination: "satellaview/BS-X (En).bin"
       required: true
@@ -1040,6 +1178,7 @@ systems:
       md5: 33b62505da6ca4525e3839db4e1a7bca
       crc32: 347e1c4e
       size: 1048576
+      native_system: satellaview
     - name: "BS-X (En) (DRM-Free).bin"
       destination: "satellaview/BS-X (En) (DRM-Free).bin"
       required: true
@@ -1047,6 +1186,7 @@ systems:
       md5: 4ed9648505ab33a4daec93707b16caba
       crc32: 8c573c7e
       size: 1048576
+      native_system: satellaview
   nintendo-sufami-turbo:
     files:
     - name: STBIOS.bin
@@ -1056,6 +1196,7 @@ systems:
       md5: d3a44ba7d42a74d3ac58cb9c14c6a5ca
       crc32: 9b4ca911
       size: 262144
+      native_system: sufami-turbo
   nintendo-sgb:
     files:
     - name: SGB1.sfc
@@ -1065,6 +1206,7 @@ systems:
       md5: b15ddb15721c657d82c5bab6db982ee9
       crc32: 8a4a174f
       size: 262144
+      native_system: super-gb
     - name: SGB2.sfc
       destination: super-gb/SGB2.sfc
       required: true
@@ -1072,6 +1214,7 @@ systems:
       md5: 8ecd73eb4edf7ed7e81aef1be80031d5
       crc32: cb176e45
       size: 524288
+      native_system: super-gb
     - name: sgb1.boot.rom
       destination: super-gb/sgb1.boot.rom
       required: true
@@ -1079,6 +1222,7 @@ systems:
       md5: d574d4f9c12f305074798f54c091a8b4
       crc32: ec8a83b9
       size: 256
+      native_system: super-gb
     - name: sgb1.program.rom
       destination: super-gb/sgb1.program.rom
       required: true
@@ -1086,6 +1230,7 @@ systems:
       md5: b15ddb15721c657d82c5bab6db982ee9
       crc32: 8a4a174f
       size: 262144
+      native_system: super-gb
     - name: sgb2.boot.rom
       destination: super-gb/sgb2.boot.rom
       required: true
@@ -1093,6 +1238,7 @@ systems:
       md5: e0430bca9925fb9882148fd2dc2418c1
       crc32: 53d0dd63
       size: 256
+      native_system: super-gb
     - name: sgb2.program.rom
       destination: super-gb/sgb2.program.rom
       required: true
@@ -1100,6 +1246,7 @@ systems:
       md5: 8ecd73eb4edf7ed7e81aef1be80031d5
       crc32: cb176e45
       size: 524288
+      native_system: super-gb
     - name: sgb2_bios.bin
       destination: super-gb/sgb2_bios.bin
       required: true
@@ -1107,6 +1254,7 @@ systems:
       md5: e0430bca9925fb9882148fd2dc2418c1
       crc32: 53d0dd63
       size: 256
+      native_system: super-gb
     - name: sgb_bios.bin
       destination: super-gb/sgb_bios.bin
       required: true
@@ -1114,6 +1262,7 @@ systems:
       md5: d574d4f9c12f305074798f54c091a8b4
       crc32: ec8a83b9
       size: 256
+      native_system: super-gb
   nintendo-snes:
     files:
     - name: cx4.data.rom
@@ -1123,6 +1272,7 @@ systems:
       md5: 037ac4296b6b6a5c47c440188d3c72e3
       crc32: b6e76a6a
       size: 3072
+      native_system: snes
     - name: dsp1.data.rom
       destination: snes/dsp1.data.rom
       required: true
@@ -1130,6 +1280,7 @@ systems:
       md5: 3d81b45fa0c2aa8b852dfb1ece7c0971
       crc32: c8347cbd
       size: 2048
+      native_system: snes
     - name: dsp1.program.rom
       destination: snes/dsp1.program.rom
       required: true
@@ -1137,6 +1288,7 @@ systems:
       md5: ae209fbe789fbf11a48aea5ab1197321
       crc32: db9a4c92
       size: 6144
+      native_system: snes
     - name: dsp1b.data.rom
       destination: snes/dsp1b.data.rom
       required: true
@@ -1144,6 +1296,7 @@ systems:
       md5: 1e3f568634a7d8284020dddc0ae905bc
       crc32: 37a252c6
       size: 2048
+      native_system: snes
     - name: dsp1b.program.rom
       destination: snes/dsp1b.program.rom
       required: true
@@ -1151,6 +1304,7 @@ systems:
       md5: d10f446888e097cbf500f3f663cf4f6d
       crc32: 66a73998
       size: 6144
+      native_system: snes
     - name: dsp2.data.rom
       destination: snes/dsp2.data.rom
       required: true
@@ -1158,6 +1312,7 @@ systems:
       md5: e9417e29223b139c3c4b635a2a3b8744
       crc32: b3893c70
       size: 2048
+      native_system: snes
     - name: dsp2.program.rom
       destination: snes/dsp2.program.rom
       required: true
@@ -1165,6 +1320,7 @@ systems:
       md5: aa6e5922a3ed5ded54f24247c11143c5
       crc32: 0c1cf838
       size: 6144
+      native_system: snes
     - name: dsp3.data.rom
       destination: snes/dsp3.data.rom
       required: true
@@ -1172,6 +1328,7 @@ systems:
       md5: 0a81210c0a940b997dd9843281008ee6
       crc32: 8b41a2bd
       size: 2048
+      native_system: snes
     - name: dsp3.program.rom
       destination: snes/dsp3.program.rom
       required: true
@@ -1179,6 +1336,7 @@ systems:
       md5: d99ca4562818d49cee1f242705bba6f8
       crc32: f29be51c
       size: 6144
+      native_system: snes
     - name: dsp4.data.rom
       destination: snes/dsp4.data.rom
       required: true
@@ -1186,6 +1344,7 @@ systems:
       md5: ee4990879eb68e3cbca239c5bc20303d
       crc32: efa8b9b2
       size: 2048
+      native_system: snes
     - name: dsp4.program.rom
       destination: snes/dsp4.program.rom
       required: true
@@ -1193,6 +1352,7 @@ systems:
       md5: a151023b948b90ffc23a5b594bb6fef2
       crc32: 14b77ae3
       size: 6144
+      native_system: snes
     - name: st010.data.rom
       destination: snes/st010.data.rom
       required: true
@@ -1200,6 +1360,7 @@ systems:
       md5: 254d70762b6f59f99c27c395aba7d07d
       crc32: 216081b2
       size: 4096
+      native_system: snes
     - name: st010.program.rom
       destination: snes/st010.program.rom
       required: true
@@ -1207,6 +1368,7 @@ systems:
       md5: 1d70019179a59a566a0bb5d3f2845544
       crc32: 691cbb4f
       size: 49152
+      native_system: snes
     - name: st011.data.rom
       destination: snes/st011.data.rom
       required: true
@@ -1214,6 +1376,7 @@ systems:
       md5: 10bd3f4aa949737ab9836512c35bcc29
       crc32: 803256a7
       size: 4096
+      native_system: snes
     - name: st011.program.rom
       destination: snes/st011.program.rom
       required: true
@@ -1221,6 +1384,7 @@ systems:
       md5: 95222ebf1c0c2990bcf25db43743f032
       crc32: a741e9fb
       size: 49152
+      native_system: snes
     - name: st018.data.rom
       destination: snes/st018.data.rom
       required: true
@@ -1228,6 +1392,7 @@ systems:
       md5: 49c898b60d0f15e90d0ba780dd12f366
       crc32: b5255459
       size: 32768
+      native_system: snes
     - name: st018.program.rom
       destination: snes/st018.program.rom
       required: true
@@ -1235,6 +1400,7 @@ systems:
       md5: dda40ccd57390c96e49d30a041f9a9e7
       crc32: f73d5e10
       size: 131072
+      native_system: snes
   philips-videopac:
     files:
     - name: c52.bin
@@ -1244,6 +1410,7 @@ systems:
       md5: f1071cdb0b6b10dde94d3bc8a6146387
       crc32: a318e8d6
       size: 1024
+      native_system: videopac-g7400
     - name: g7400.bin
       destination: videopac-g7400/g7400.bin
       required: true
@@ -1251,6 +1418,7 @@ systems:
       md5: c500ff71236068e0dc0d0603d265ae76
       crc32: e20a9f41
       size: 1024
+      native_system: videopac-g7400
     - name: jopac.bin
       destination: videopac-g7400/jopac.bin
       required: true
@@ -1258,6 +1426,7 @@ systems:
       md5: 279008e4a0db2dc5f1c048853b033828
       crc32: 11647ca5
       size: 1024
+      native_system: videopac-g7400
   sega-dreamcast:
     files:
     - name: dc_boot.bin
@@ -1267,6 +1436,7 @@ systems:
       md5: e10c53c2f8b90bab96ead2d368858623
       crc32: 89f2b1a1
       size: 2097152
+      native_system: dc
     - name: boot.bin
       destination: dc/boot.bin
       required: true
@@ -1274,6 +1444,7 @@ systems:
       md5: e10c53c2f8b90bab96ead2d368858623
       crc32: 89f2b1a1
       size: 2097152
+      native_system: dc
     - name: dc_flash.bin
       destination: dc/dc_flash.bin
       required: true
@@ -1281,6 +1452,7 @@ systems:
       md5: 0a93f7940c455905bea6e392dfde92a4
       crc32: c611b498
       size: 131072
+      native_system: dc
     - name: flash.bin
       destination: dc/flash.bin
       required: true
@@ -1288,6 +1460,7 @@ systems:
       md5: 0a93f7940c455905bea6e392dfde92a4
       crc32: c611b498
       size: 131072
+      native_system: dc
     - name: naomi_boot.bin
       destination: dc/naomi_boot.bin
       required: true
@@ -1295,6 +1468,7 @@ systems:
       md5: 3bffafac42a7767d8dcecf771f5552ba
       crc32: d2a1c6bf
       size: 2097152
+      native_system: dc
   sega-game-gear:
     files:
     - name: bios.gg
@@ -1304,6 +1478,7 @@ systems:
       md5: 672e104c3be3a238301aceffc3b23fd6
       crc32: 0ebea9d4
       size: 1024
+      native_system: gamegear
   sega-master-system:
     files:
     - name: bios.sms
@@ -1313,6 +1488,7 @@ systems:
       md5: 840481177270d5642a14ca71ee72844c
       crc32: 0072ed54
       size: 8192
+      native_system: sms
     - name: bios_E.sms
       destination: sms/bios_E.sms
       required: true
@@ -1320,6 +1496,7 @@ systems:
       md5: 840481177270d5642a14ca71ee72844c
       crc32: 0072ed54
       size: 8192
+      native_system: sms
     - name: bios_J.sms
       destination: sms/bios_J.sms
       required: true
@@ -1327,6 +1504,7 @@ systems:
       md5: 24a519c53f67b00640d0048ef7089105
       crc32: 48d44a13
       size: 8192
+      native_system: sms
     - name: bios_U.sms
       destination: sms/bios_U.sms
       required: true
@@ -1334,6 +1512,7 @@ systems:
       md5: 840481177270d5642a14ca71ee72844c
       crc32: 0072ed54
       size: 8192
+      native_system: sms
   sega-mega-cd:
     files:
     - name: bios_CD_E.bin
@@ -1343,6 +1522,7 @@ systems:
       md5: e66fa1dc5820d254611fdcdba0662372
       crc32: 529ac15a
       size: 131072
+      native_system: segacd
     - name: bios_CD_J.bin
       destination: segacd/bios_CD_J.bin
       required: true
@@ -1350,6 +1530,7 @@ systems:
       md5: 278a9397d192149e84e820ac621a8edd
       crc32: 9d2da8f2
       size: 131072
+      native_system: segacd
     - name: bios_CD_U.bin
       destination: segacd/bios_CD_U.bin
       required: true
@@ -1357,6 +1538,7 @@ systems:
       md5: 2efd74e3232ff260e371b99f84024f7f
       crc32: c6d10268
       size: 131072
+      native_system: segacd
   sega-mega-drive:
     files:
     - name: areplay.bin
@@ -1366,6 +1548,7 @@ systems:
       md5: a0028b3043f9d59ceeb03da5b073b30d
       crc32: 95ff7c3e
       size: 32768
+      native_system: genesis
     - name: bios_MD.bin
       destination: genesis/bios_MD.bin
       required: true
@@ -1373,6 +1556,7 @@ systems:
       md5: d3293ebaaa7f4eb2a6766b68a0fb4609
       crc32: 3f888cf4
       size: 2048
+      native_system: genesis
     - name: ggenie.bin
       destination: genesis/ggenie.bin
       required: true
@@ -1380,6 +1564,7 @@ systems:
       md5: e8af7fe115a75c849f6aab3701e7799b
       crc32: 14dbce4a
       size: 32768
+      native_system: genesis
     - name: rom.db
       destination: genesis/rom.db
       required: true
@@ -1387,6 +1572,7 @@ systems:
       md5: ff4a3572475236e859e3e9ac5c87d1f1
       crc32: c94e8c8b
       size: 17742
+      native_system: genesis
     - name: sk.bin
       destination: genesis/sk.bin
       required: true
@@ -1394,6 +1580,7 @@ systems:
       md5: 4ea493ea4e9f6c9ebfccbdb15110367e
       crc32: 0658f691
       size: 2097152
+      native_system: genesis
     - name: sk2chip.bin
       destination: genesis/sk2chip.bin
       required: true
@@ -1401,6 +1588,7 @@ systems:
       md5: b4e76e416b887f4e7413ba76fa735f16
       crc32: 4dcfd55c
       size: 262144
+      native_system: genesis
   sega-saturn:
     files:
     - name: hisaturn.bin
@@ -1410,6 +1598,7 @@ systems:
       md5: 3ea3202e2634cb47cb90f3a05c015010
       crc32: 721e1b60
       size: 524288
+      native_system: saturn
     - name: mpr-17933.bin
       destination: saturn/mpr-17933.bin
       required: true
@@ -1417,6 +1606,7 @@ systems:
       md5: 3240872c70984b6cbfda1586cab68dbe
       crc32: 4afcf0fa
       size: 524288
+      native_system: saturn
     - name: mpr-18100.bin
       destination: saturn/mpr-18100.bin
       required: true
@@ -1424,6 +1614,7 @@ systems:
       md5: cb2cebc1b6e573b7c44523d037edcd45
       crc32: 3408dbf4
       size: 524288
+      native_system: saturn
     - name: mpr-18811-mx.ic1
       destination: saturn/mpr-18811-mx.ic1
       required: true
@@ -1431,6 +1622,7 @@ systems:
       md5: 255113ba943c92a54facd25a10fd780c
       crc32: 90412e10
       size: 2097152
+      native_system: saturn
     - name: mpr-19367-mx.ic1
       destination: saturn/mpr-19367-mx.ic1
       required: true
@@ -1438,6 +1630,7 @@ systems:
       md5: 1cd19988d1d72a3e7caa0b73234c96b4
       crc32: b9644b52
       size: 2097152
+      native_system: saturn
     - name: saturn_bios.bin
       destination: saturn/saturn_bios.bin
       required: true
@@ -1445,6 +1638,7 @@ systems:
       md5: af5828fdff51384f99b3c4926be27762
       crc32: 2aba43c2
       size: 524288
+      native_system: saturn
     - name: sega1003.bin
       destination: saturn/sega1003.bin
       required: true
@@ -1452,6 +1646,7 @@ systems:
       md5: 74570fed4d44b2682b560c8cd44b8b6a
       crc32: b3c63c25
       size: 524288
+      native_system: saturn
     - name: sega_100.bin
       destination: saturn/sega_100.bin
       required: true
@@ -1459,6 +1654,7 @@ systems:
       md5: af5828fdff51384f99b3c4926be27762
       crc32: 2aba43c2
       size: 524288
+      native_system: saturn
     - name: sega_100a.bin
       destination: saturn/sega_100a.bin
       required: true
@@ -1466,6 +1662,7 @@ systems:
       md5: f273555d7d91e8a5a6bfd9bcf066331c
       crc32: f90f0089
       size: 524288
+      native_system: saturn
     - name: sega_101.bin
       destination: saturn/sega_101.bin
       required: true
@@ -1473,6 +1670,7 @@ systems:
       md5: 85ec9ca47d8f6807718151cbcca8b964
       crc32: 224b752c
       size: 524288
+      native_system: saturn
     - name: vsaturn.bin
       destination: saturn/vsaturn.bin
       required: true
@@ -1480,6 +1678,7 @@ systems:
       md5: ac4e4b6522e200c0d23d371a8cecbfd3
       crc32: e4d61811
       size: 524288
+      native_system: saturn
   sharp-x1:
     files:
     - name: iplrom.x1
@@ -1489,6 +1688,7 @@ systems:
       md5: eeeea1cd29c6e0e8b094790ae969bfa7
       crc32: e70011d3
       size: 4096
+      native_system: x1
     - name: iplrom.x1t
       destination: x1/iplrom.x1t
       required: true
@@ -1496,6 +1696,7 @@ systems:
       md5: 851e4a5936f17d13f8c39a980cf00d77
       crc32: e3995a57
       size: 2048
+      native_system: x1
   sharp-x68000:
     files:
     - name: cgrom.dat
@@ -1505,6 +1706,7 @@ systems:
       md5: cb0a5cfcf7247a7eab74bb2716260269
       crc32: 9f3195f1
       size: 786432
+      native_system: sharp-x68000
     - name: iplrom.dat
       destination: sharp-x68000/iplrom.dat
       required: true
@@ -1512,6 +1714,7 @@ systems:
       md5: 7fd4caabac1d9169e289f0f7bbf71d8e
       crc32: 72bdf532
       size: 131072
+      native_system: sharp-x68000
     - name: iplrom30.dat
       destination: sharp-x68000/iplrom30.dat
       required: true
@@ -1519,6 +1722,7 @@ systems:
       md5: f373003710ab4322642f527f567e020a
       crc32: e8f8fdad
       size: 131072
+      native_system: sharp-x68000
     - name: iplromco.dat
       destination: sharp-x68000/iplromco.dat
       required: true
@@ -1526,6 +1730,7 @@ systems:
       md5: cc78d4f4900f622bd6de1aed7f52592f
       crc32: 6c7ef608
       size: 131072
+      native_system: sharp-x68000
     - name: iplromxv.dat
       destination: sharp-x68000/iplromxv.dat
       required: true
@@ -1533,6 +1738,7 @@ systems:
       md5: 0617321daa182c3f3d6f41fd02fb3275
       crc32: 00eeb408
       size: 131072
+      native_system: sharp-x68000
   sinclair-zx-spectrum:
     files:
     - name: 128-0.rom
@@ -1542,6 +1748,7 @@ systems:
       md5: b4d2692115a9f2924df92a3cbfb358fb
       crc32: e76799d2
       size: 16384
+      native_system: zxs
     - name: 128-1.rom
       destination: zxs/128-1.rom
       required: true
@@ -1549,6 +1756,7 @@ systems:
       md5: 6e09e5d3c4aef166601669feaaadc01c
       crc32: b96a36be
       size: 16384
+      native_system: zxs
     - name: 128-spanish-0.rom
       destination: zxs/128-spanish-0.rom
       required: true
@@ -1556,6 +1764,7 @@ systems:
       md5: c1231a70b8129311216acb7479b031d5
       crc32: 453d86b2
       size: 16384
+      native_system: zxs
     - name: 128-spanish-1.rom
       destination: zxs/128-spanish-1.rom
       required: true
@@ -1563,6 +1772,7 @@ systems:
       md5: 4f341936594cbcab75cfa62ce96e3682
       crc32: 6010e796
       size: 16384
+      native_system: zxs
     - name: 128p-0.rom
       destination: zxs/128p-0.rom
       required: true
@@ -1570,6 +1780,7 @@ systems:
       md5: a249565f03b98d004ee7f019570069cd
       crc32: 124ad9e0
       size: 16384
+      native_system: zxs
     - name: 128p-1.rom
       destination: zxs/128p-1.rom
       required: true
@@ -1577,6 +1788,7 @@ systems:
       md5: 6e09e5d3c4aef166601669feaaadc01c
       crc32: b96a36be
       size: 16384
+      native_system: zxs
     - name: 256s-0.rom
       destination: zxs/256s-0.rom
       required: true
@@ -1584,6 +1796,7 @@ systems:
       md5: b9fda5b6a747ff037365b0e2d8c4379a
       crc32: 0eb40a09
       size: 16384
+      native_system: zxs
     - name: 256s-1.rom
       destination: zxs/256s-1.rom
       required: true
@@ -1591,6 +1804,7 @@ systems:
       md5: 643861ad34831b255bf2eb64e8b6ecb8
       crc32: 9d513013
       size: 16384
+      native_system: zxs
     - name: 256s-2.rom
       destination: zxs/256s-2.rom
       required: true
@@ -1598,6 +1812,7 @@ systems:
       md5: d8ad507b1c915a9acfe0d73957082926
       crc32: fd0d3ce1
       size: 16384
+      native_system: zxs
     - name: 256s-3.rom
       destination: zxs/256s-3.rom
       required: true
@@ -1605,6 +1820,7 @@ systems:
       md5: ce0723f9bc02f4948c15d3b3230ae831
       crc32: 1fe1d003
       size: 16384
+      native_system: zxs
     - name: 48.rom
       destination: zxs/48.rom
       required: true
@@ -1612,6 +1828,7 @@ systems:
       md5: 4c42a2f075212361c3117015b107ff68
       crc32: ddee531f
       size: 16384
+      native_system: zxs
     - name: disciple.rom
       destination: zxs/disciple.rom
       required: true
@@ -1619,6 +1836,7 @@ systems:
       md5: 78e61a2a02121873c1756b21fd1398b1
       crc32: "82047489"
       size: 8192
+      native_system: zxs
     - name: disk_plus3.szx
       destination: zxs/disk_plus3.szx
       required: true
@@ -1626,6 +1844,7 @@ systems:
       md5: e6db6b9f6ad15012851115a7bc4b31d8
       crc32: c2c6cba7
       size: 1568
+      native_system: zxs
     - name: gluck.rom
       destination: zxs/gluck.rom
       required: true
@@ -1633,6 +1852,7 @@ systems:
       md5: d5869034604dbfd2c1d54170e874fd0a
       crc32: ca321d79
       size: 16384
+      native_system: zxs
     - name: if1-1.rom
       destination: zxs/if1-1.rom
       required: true
@@ -1640,6 +1860,7 @@ systems:
       md5: 5c11c61a2dd2ca4bf39328d9ff42d289
       crc32: e72a12ae
       size: 8192
+      native_system: zxs
     - name: if1-2.rom
       destination: zxs/if1-2.rom
       required: true
@@ -1647,6 +1868,7 @@ systems:
       md5: 31b704ae925305e74f50699271fddd9a
       crc32: bb66dd1e
       size: 8192
+      native_system: zxs
     - name: plus2-0.rom
       destination: zxs/plus2-0.rom
       required: true
@@ -1654,6 +1876,7 @@ systems:
       md5: 4ed7af4636308b8a48d7a35e6c5b546b
       crc32: 5d2e8c66
       size: 16384
+      native_system: zxs
     - name: plus2-1.rom
       destination: zxs/plus2-1.rom
       required: true
@@ -1661,6 +1884,7 @@ systems:
       md5: b3db95931cc844efaeb82db9c171b9f3
       crc32: 98b1320b
       size: 16384
+      native_system: zxs
     - name: plus3-0.rom
       destination: zxs/plus3-0.rom
       required: true
@@ -1668,6 +1892,7 @@ systems:
       md5: 9833b8b73384dd5fa3678377ff00a2bb
       crc32: 17373da2
       size: 16384
+      native_system: zxs
     - name: plus3-1.rom
       destination: zxs/plus3-1.rom
       required: true
@@ -1675,6 +1900,7 @@ systems:
       md5: 0f711ceb5ab801b4701989982e0f334c
       crc32: f1d1d99e
       size: 16384
+      native_system: zxs
     - name: plus3-2.rom
       destination: zxs/plus3-2.rom
       required: true
@@ -1682,6 +1908,7 @@ systems:
       md5: 3b6dd659d5e4ec97f0e2f7878152c987
       crc32: 3dbf351d
       size: 16384
+      native_system: zxs
     - name: plus3-3.rom
       destination: zxs/plus3-3.rom
       required: true
@@ -1689,6 +1916,7 @@ systems:
       md5: a148bcc575e51389e84fdf5d555c3196
       crc32: 04448eaa
       size: 16384
+      native_system: zxs
     - name: plus3e-0.rom
       destination: zxs/plus3e-0.rom
       required: true
@@ -1696,6 +1924,7 @@ systems:
       md5: 3abdc20e72890a750dd3c745d286dfba
       crc32: a10230c0
       size: 16384
+      native_system: zxs
     - name: plus3e-1.rom
       destination: zxs/plus3e-1.rom
       required: true
@@ -1703,6 +1932,7 @@ systems:
       md5: 8361a1d9c8bcef89c0c39293776564ad
       crc32: 09b9c3ca
       size: 16384
+      native_system: zxs
     - name: plus3e-2.rom
       destination: zxs/plus3e-2.rom
       required: true
@@ -1710,6 +1940,7 @@ systems:
       md5: f36c5c2d1f2a682caadeaa6f947db0da
       crc32: a60285a0
       size: 16384
+      native_system: zxs
     - name: plus3e-3.rom
       destination: zxs/plus3e-3.rom
       required: true
@@ -1717,6 +1948,7 @@ systems:
       md5: a148bcc575e51389e84fdf5d555c3196
       crc32: 04448eaa
       size: 16384
+      native_system: zxs
     - name: plusd.rom
       destination: zxs/plusd.rom
       required: true
@@ -1724,6 +1956,7 @@ systems:
       md5: 42e5de16fb5e50082bb954ec7ce45851
       crc32: 569f7e55
       size: 8192
+      native_system: zxs
     - name: se-0.rom
       destination: zxs/se-0.rom
       required: true
@@ -1731,6 +1964,7 @@ systems:
       md5: fb3f86eb1e5a695d9c50c124e7cfb875
       crc32: 8f1047d2
       size: 16384
+      native_system: zxs
     - name: se-1.rom
       destination: zxs/se-1.rom
       required: true
@@ -1738,6 +1972,7 @@ systems:
       md5: 88de4a3129086f34bb9ca559acc51e6c
       crc32: 16ed3a9b
       size: 16384
+      native_system: zxs
     - name: speccyboot-1.4.rom
       destination: zxs/speccyboot-1.4.rom
       required: true
@@ -1745,6 +1980,7 @@ systems:
       md5: c54aa8f374b0971f51546c29d5d1eba1
       crc32: 37c591b2
       size: 8192
+      native_system: zxs
     - name: tape_128.szx
       destination: zxs/tape_128.szx
       required: true
@@ -1752,6 +1988,7 @@ systems:
       md5: 8942b43b73ed4eb7f32bd1741709a4dc
       crc32: 8d1c41f4
       size: 1464
+      native_system: zxs
     - name: tape_16.szx
       destination: zxs/tape_16.szx
       required: true
@@ -1759,6 +1996,7 @@ systems:
       md5: fec97eb9ea1b017cae84de78508feb4a
       crc32: ccda9cc2
       size: 591
+      native_system: zxs
     - name: tape_2048.szx
       destination: zxs/tape_2048.szx
       required: true
@@ -1766,6 +2004,7 @@ systems:
       md5: 116f732bbae4e49d625aaf2f311474d0
       crc32: dbc1a386
       size: 720
+      native_system: zxs
     - name: tape_2068.szx
       destination: zxs/tape_2068.szx
       required: true
@@ -1773,6 +2012,7 @@ systems:
       md5: 0b0f267b95d556318bb652af2e8dc25c
       crc32: 659b428d
       size: 1799
+      native_system: zxs
     - name: tape_48.szx
       destination: zxs/tape_48.szx
       required: true
@@ -1780,6 +2020,7 @@ systems:
       md5: ee2ae810711594db3a134a7432baabff
       crc32: f56f230d
       size: 708
+      native_system: zxs
     - name: tape_pentagon.szx
       destination: zxs/tape_pentagon.szx
       required: true
@@ -1787,6 +2028,7 @@ systems:
       md5: bd7698603bd9079d337cdedfb04942d9
       crc32: c7a272b6
       size: 1479
+      native_system: zxs
     - name: tape_plus2.szx
       destination: zxs/tape_plus2.szx
       required: true
@@ -1794,6 +2036,7 @@ systems:
       md5: 166d4aa1a5aa4fbd99cc963b4e7c19cc
       crc32: 93195e18
       size: 1571
+      native_system: zxs
     - name: tape_plus2a.szx
       destination: zxs/tape_plus2a.szx
       required: true
@@ -1801,6 +2044,7 @@ systems:
       md5: 445d4817d5557bb363a216fbd6eeaa84
       crc32: 45727b82
       size: 1617
+      native_system: zxs
     - name: tape_plus3.szx
       destination: zxs/tape_plus3.szx
       required: true
@@ -1808,6 +2052,7 @@ systems:
       md5: 0dc8828ac1db2e0efa915ac55191e96f
       crc32: 1a825690
       size: 1856
+      native_system: zxs
     - name: tape_plus3e.szx
       destination: zxs/tape_plus3e.szx
       required: true
@@ -1815,6 +2060,7 @@ systems:
       md5: bf07537f028bbcb3309464bd30da779c
       crc32: 4ce6538f
       size: 1970
+      native_system: zxs
     - name: tape_scorpion.szx
       destination: zxs/tape_scorpion.szx
       required: true
@@ -1822,6 +2068,7 @@ systems:
       md5: c10e677d3deb5a445689d3a599880745
       crc32: eb6a7a83
       size: 3500
+      native_system: zxs
     - name: tape_se.szx
       destination: zxs/tape_se.szx
       required: true
@@ -1829,6 +2076,7 @@ systems:
       md5: 2518f9334bef8c44804a4185085579b5
       crc32: 92bc2f43
       size: 2146
+      native_system: zxs
     - name: tape_ts2068.szx
       destination: zxs/tape_ts2068.szx
       required: true
@@ -1836,6 +2084,7 @@ systems:
       md5: 1d360c09d370bb52a9a44b30cc7c59e6
       crc32: 06ad712e
       size: 1840
+      native_system: zxs
     - name: tc2048.rom
       destination: zxs/tc2048.rom
       required: true
@@ -1843,6 +2092,7 @@ systems:
       md5: 9dd7ecf784a6c04265c073c236f5fadb
       crc32: f1b5fa67
       size: 16384
+      native_system: zxs
     - name: tc2068-0.rom
       destination: zxs/tc2068-0.rom
       required: true
@@ -1850,6 +2100,7 @@ systems:
       md5: 55d462fccc6c536037404ef4ced08bec
       crc32: bf44ec3f
       size: 16384
+      native_system: zxs
     - name: tc2068-1.rom
       destination: zxs/tc2068-1.rom
       required: true
@@ -1857,6 +2108,7 @@ systems:
       md5: 575d203c6e15e679fba0b73f854ec7a2
       crc32: ae16233a
       size: 8192
+      native_system: zxs
     - name: trdos.rom
       destination: zxs/trdos.rom
       required: true
@@ -1864,6 +2116,7 @@ systems:
       md5: 0da70a5d2a0e733398e005b96b7e4ba6
       crc32: 10751aba
       size: 16384
+      native_system: zxs
   snk-neogeo-cd:
     files:
     - name: 000-lo.lo
@@ -1873,6 +2126,7 @@ systems:
       md5: fc7599f3f871578fe9a0453662d1c966
       crc32: 5a86cff2
       size: 131072
+      native_system: neo-geo-cd
     - name: front-sp1.bin
       destination: neo-geo-cd/front-sp1.bin
       required: true
@@ -1880,6 +2134,7 @@ systems:
       md5: 5c2366f25ff92d71788468ca492ebeca
       crc32: cac62307
       size: 524288
+      native_system: neo-geo-cd
     - name: neocd.bin
       destination: neo-geo-cd/neocd.bin
       required: true
@@ -1887,6 +2142,7 @@ systems:
       md5: f39572af7584cb5b3f70ae8cc848aba2
       crc32: df9de490
       size: 524288
+      native_system: neo-geo-cd
     - name: neocd_f.rom
       destination: neo-geo-cd/neocd_f.rom
       required: true
@@ -1894,6 +2150,7 @@ systems:
       md5: 8834880c33164ccbe6476b559f3e37de
       crc32: 6fd2a520
       size: 524288
+      native_system: neo-geo-cd
     - name: neocd_sf.rom
       destination: neo-geo-cd/neocd_sf.rom
       required: true
@@ -1901,6 +2158,7 @@ systems:
       md5: 043d76d5f0ef836500700c34faef774d
       crc32: 1101f313
       size: 524288
+      native_system: neo-geo-cd
     - name: neocd_st.rom
       destination: neo-geo-cd/neocd_st.rom
       required: true
@@ -1908,6 +2166,7 @@ systems:
       md5: f6325a33c6d63ea4b9162a3fa8c32727
       crc32: 01c299cc
       size: 524288
+      native_system: neo-geo-cd
     - name: neocd_sz.rom
       destination: neo-geo-cd/neocd_sz.rom
       required: true
@@ -1915,6 +2174,7 @@ systems:
       md5: 971ee8a36fb72da57aed01758f0a37f5
       crc32: 42f6b6c4
       size: 524288
+      native_system: neo-geo-cd
     - name: neocd_t.rom
       destination: neo-geo-cd/neocd_t.rom
       required: true
@@ -1922,6 +2182,7 @@ systems:
       md5: de3cf45d227ad44645b22aa83b49f450
       crc32: 56c9ecba
       size: 524288
+      native_system: neo-geo-cd
     - name: neocd_z.rom
       destination: neo-geo-cd/neocd_z.rom
       required: true
@@ -1929,6 +2190,7 @@ systems:
       md5: 11526d58d4c524daef7d5d677dc6b004
       crc32: "33697892"
       size: 524288
+      native_system: neo-geo-cd
     - name: top-sp1.bin
       destination: neo-geo-cd/top-sp1.bin
       required: true
@@ -1936,6 +2198,7 @@ systems:
       md5: 122aee210324c72e8a11116e6ef9c0d0
       crc32: c36a47c0
       size: 524288
+      native_system: neo-geo-cd
     - name: uni-bioscd.rom
       destination: neo-geo-cd/uni-bioscd.rom
       required: true
@@ -1943,6 +2206,7 @@ systems:
       md5: 08ca8b2dba6662e8024f9e789711c6fc
       crc32: ff3abc59
       size: 524288
+      native_system: neo-geo-cd
     - name: neocdz.zip
       destination: neo-geo-cd/neocdz.zip
       required: true
@@ -1950,6 +2214,7 @@ systems:
       md5: c38cb8e50321783e413dc5ff292a3ff8
       crc32: 19681e91
       size: 214876
+      native_system: neo-geo-cd
   sony-playstation:
     files:
     - name: PSXONPSP660.BIN
@@ -1959,6 +2224,7 @@ systems:
       md5: c53ca5908936d412331790f4426c6c33
       crc32: 5660f34f
       size: 524288
+      native_system: psx
     - name: scph1000.bin
       destination: psx/scph1000.bin
       required: true
@@ -1966,6 +2232,7 @@ systems:
       md5: 239665b1a3dade1b5a52c06338011044
       crc32: 3b601fc8
       size: 524288
+      native_system: psx
     - name: scph1001.bin
       destination: psx/scph1001.bin
       required: true
@@ -1973,6 +2240,7 @@ systems:
       md5: 924e392ed05558ffdb115408c263dccf
       crc32: "37157331"
       size: 524288
+      native_system: psx
     - name: scph1002.bin
       destination: psx/scph1002.bin
       required: true
@@ -1980,6 +2248,7 @@ systems:
       md5: 54847e693405ffeb0359c6287434cbef
       crc32: 9bb87c4b
       size: 524288
+      native_system: psx
     - name: scph100.bin
       destination: psx/scph100.bin
       required: true
@@ -1987,6 +2256,7 @@ systems:
       md5: 8abc1b549a4a80954addc48ef02c4521
       crc32: f2af798b
       size: 524288
+      native_system: psx
     - name: scph101.bin
       destination: psx/scph101.bin
       required: true
@@ -1994,6 +2264,7 @@ systems:
       md5: 6e3735ff4c7dc899ee98981385f6f3d0
       crc32: 171bdcec
       size: 524288
+      native_system: psx
     - name: scph102A.bin
       destination: psx/scph102A.bin
       required: true
@@ -2001,6 +2272,7 @@ systems:
       md5: b10f5e0e3d9eb60e5159690680b1e774
       crc32: 0bad7ea9
       size: 524288
+      native_system: psx
     - name: scph102B.bin
       destination: psx/scph102B.bin
       required: true
@@ -2008,6 +2280,7 @@ systems:
       md5: de93caec13d1a141a40a79f5c86168d6
       crc32: 76b880e5
       size: 524288
+      native_system: psx
     - name: scph102C.bin
       destination: psx/scph102C.bin
       required: true
@@ -2015,6 +2288,7 @@ systems:
       md5: de93caec13d1a141a40a79f5c86168d6
       crc32: 76b880e5
       size: 524288
+      native_system: psx
     - name: scph3000.bin
       destination: psx/scph3000.bin
       required: true
@@ -2022,6 +2296,7 @@ systems:
       md5: 849515939161e62f6b866f6853006780
       crc32: 3539def6
       size: 524288
+      native_system: psx
     - name: scph3500.bin
       destination: psx/scph3500.bin
       required: true
@@ -2029,6 +2304,7 @@ systems:
       md5: cba733ceeff5aef5c32254f1d617fa62
       crc32: bc190209
       size: 524288
+      native_system: psx
     - name: scph5000.bin
       destination: psx/scph5000.bin
       required: true
@@ -2036,6 +2312,7 @@ systems:
       md5: eb201d2d98251a598af467d4347bb62f
       crc32: 8c93a399
       size: 524288
+      native_system: psx
     - name: scph5500.bin
       destination: psx/scph5500.bin
       required: true
@@ -2043,6 +2320,7 @@ systems:
       md5: 8dd7d5296a650fac7319bce665a6a53c
       crc32: ff3eeb8c
       size: 524288
+      native_system: psx
     - name: scph5501.bin
       destination: psx/scph5501.bin
       required: true
@@ -2050,6 +2328,7 @@ systems:
       md5: 490f666e1afb15b7362b406ed1cea246
       crc32: 8d8cb7e4
       size: 524288
+      native_system: psx
     - name: scph5502.bin
       destination: psx/scph5502.bin
       required: true
@@ -2057,6 +2336,7 @@ systems:
       md5: 32736f17079d0b2b7024407c39bd3050
       crc32: d786f0b9
       size: 524288
+      native_system: psx
     - name: scph5552.bin
       destination: psx/scph5552.bin
       required: true
@@ -2064,6 +2344,7 @@ systems:
       md5: 32736f17079d0b2b7024407c39bd3050
       crc32: d786f0b9
       size: 524288
+      native_system: psx
     - name: scph7001.bin
       destination: psx/scph7001.bin
       required: true
@@ -2071,6 +2352,7 @@ systems:
       md5: 1e68c231d0896b7eadcad1d7d8e76129
       crc32: 502224b6
       size: 524288
+      native_system: psx
     - name: scph7002.bin
       destination: psx/scph7002.bin
       required: true
@@ -2078,6 +2360,7 @@ systems:
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
       crc32: 318178bf
       size: 524288
+      native_system: psx
     - name: scph7003.bin
       destination: psx/scph7003.bin
       required: true
@@ -2085,6 +2368,7 @@ systems:
       md5: 490f666e1afb15b7362b406ed1cea246
       crc32: 8d8cb7e4
       size: 524288
+      native_system: psx
     - name: scph7502.bin
       destination: psx/scph7502.bin
       required: true
@@ -2092,6 +2376,7 @@ systems:
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
       crc32: 318178bf
       size: 524288
+      native_system: psx
     - name: "scph9002(7502).bin"
       destination: "psx/scph9002(7502).bin"
       required: true
@@ -2099,6 +2384,7 @@ systems:
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
       crc32: 318178bf
       size: 524288
+      native_system: psx
   sony-psp:
     files:
     - name: ppge_atlas.zim
@@ -2108,6 +2394,7 @@ systems:
       md5: 866855cc330b9b95cc69135fb7b41d38
       crc32: 7b57fa78
       size: 666530
+      native_system: psp
   wolfenstein-3d:
     files:
     - name: ecwolf.pk3
@@ -2117,6 +2404,7 @@ systems:
       md5: c011b428819eea4a80b455c245a5a04d
       crc32: 26dc3fba
       size: 178755
+      native_system: wolfenstein
   scummvm:
     files:
     - name: scummvm.zip
@@ -2126,6 +2414,7 @@ systems:
       md5: a17e0e0150155400d8cced329563d9c8
       crc32: a93f1c4b
       size: 9523360
+      native_system: scummvm
   amstrad-cpc:
     files:
     - name: cpc464.rom
@@ -2135,6 +2424,7 @@ systems:
       md5: a993f85b88ac4350cf4d41554e87fe4f
       crc32: 40852f25
       size: 32768
+      native_system: acpc
     - name: cpc664.rom
       destination: acpc/cpc664.rom
       required: true
@@ -2142,6 +2432,7 @@ systems:
       md5: 5a384a2310f472c7857888371c00ed66
       crc32: 9ab5a036
       size: 32768
+      native_system: acpc
     - name: cpc6128.rom
       destination: acpc/cpc6128.rom
       required: true
@@ -2149,6 +2440,7 @@ systems:
       md5: b96280dc6c95a48857b4b8eb931533ae
       crc32: 9e827fe1
       size: 32768
+      native_system: acpc
     - name: cpc_amsdos.rom
       destination: acpc/cpc_amsdos.rom
       required: true
@@ -2156,6 +2448,7 @@ systems:
       md5: 25629dfe870d097469c217b95fdc1c95
       crc32: 1fe22ecd
       size: 16384
+      native_system: acpc
   enterprise-64-128:
     files:
     - name: hun.rom
@@ -2165,6 +2458,7 @@ systems:
       md5: 22167938f142c222f40992839aa21a06
       crc32: 596ab6d6
       size: 16384
+      native_system: enterprise
     - name: brd.rom
       destination: enterprise/brd.rom
       required: true
@@ -2172,6 +2466,7 @@ systems:
       md5: 6af0402906944fd134004b85097c8524
       crc32: 6999d6a3
       size: 16384
+      native_system: enterprise
     - name: exos20.rom
       destination: enterprise/exos20.rom
       required: true
@@ -2179,6 +2474,7 @@ systems:
       md5: 5ad3baaad3b5156d6b60b34229a676fb
       crc32: d421795f
       size: 32768
+      native_system: enterprise
     - name: exos21.rom
       destination: enterprise/exos21.rom
       required: true
@@ -2186,6 +2482,7 @@ systems:
       md5: f36f24cbb87745fbd2714e4df881db09
       crc32: 982a3b44
       size: 32768
+      native_system: enterprise
     - name: zt19uk.rom
       destination: enterprise/zt19uk.rom
       required: true
@@ -2193,6 +2490,7 @@ systems:
       md5: 228540b6be83ae2acd7569c8ff0f91d0
       crc32: d6deedf1
       size: 32768
+      native_system: enterprise
     - name: basic20.rom
       destination: enterprise/basic20.rom
       required: true
@@ -2200,6 +2498,7 @@ systems:
       md5: 8e18edce4a7acb2c33cc0ab18f988482
       crc32: 1228de34
       size: 16384
+      native_system: enterprise
     - name: basic21.rom
       destination: enterprise/basic21.rom
       required: true
@@ -2207,6 +2506,7 @@ systems:
       md5: e972fe42b398c9ff1d93ff014786aec6
       crc32: 55f96251
       size: 16384
+      native_system: enterprise
     - name: exdos13.rom
       destination: enterprise/exdos13.rom
       required: true
@@ -2214,6 +2514,7 @@ systems:
       md5: ddff70c014d1958dc75378b6c9aab6f8
       crc32: e0135929
       size: 32768
+      native_system: enterprise
     - name: epd19hft.rom
       destination: enterprise/epd19hft.rom
       required: true
@@ -2221,6 +2522,7 @@ systems:
       md5: 12cfc9c7e48c8a16c2e09edbd926d467
       crc32: bd503eeb
       size: 32768
+      native_system: enterprise
     - name: zt18hfnt.rom
       destination: enterprise/zt18hfnt.rom
       required: true
@@ -2228,6 +2530,7 @@ systems:
       md5: 3082dc488d32f30a612761b99074199b
       crc32: 76c9dbf6
       size: 32768
+      native_system: enterprise
     - name: epfileio.rom
       destination: enterprise/epfileio.rom
       required: true
@@ -2235,6 +2538,7 @@ systems:
       md5: a68ebcbc73a4d2178d755b7755bf18fe
       crc32: 60c79925
       size: 16384
+      native_system: enterprise
     - name: exos24uk.rom
       destination: enterprise/exos24uk.rom
       required: true
@@ -2242,6 +2546,7 @@ systems:
       md5: 55af78f877a21ca45eb2df68a74fcc60
       crc32: c099a5e3
       size: 65536
+      native_system: enterprise
   sony-playstation-2:
     files:
     - name: ps2-0100jd-20000117.bin
@@ -2251,6 +2556,7 @@ systems:
       md5: 32f2e4d5ff5ee11072a6bc45530f5765
       crc32: 5a04500c
       size: 4194304
+      native_system: ps2
     - name: ps2-0100j-20000117.bin
       destination: ps2/ps2-0100j-20000117.bin
       required: true
@@ -2258,6 +2564,7 @@ systems:
       md5: acf4730ceb38ac9d8c7d8e21f2614600
       crc32: b7ef81a9
       size: 4194304
+      native_system: ps2
     - name: ps2-0101jd-20000217.bin
       destination: ps2/ps2-0101jd-20000217.bin
       required: true
@@ -2265,6 +2572,7 @@ systems:
       md5: acf9968c8f596d2b15f42272082513d1
       crc32: 4f8b4205
       size: 4194304
+      native_system: ps2
     - name: ps2-0101j-20000217.bin
       destination: ps2/ps2-0101j-20000217.bin
       required: true
@@ -2272,6 +2580,7 @@ systems:
       md5: b1459d7446c69e3e97e6ace3ae23dd1c
       crc32: 211dfb6a
       size: 4194304
+      native_system: ps2
     - name: ps2-0101xd-20000224.bin
       destination: ps2/ps2-0101xd-20000224.bin
       required: true
@@ -2279,6 +2588,7 @@ systems:
       md5: d3f1853a16c2ec18f3cd1ae655213308
       crc32: 2fef9faf
       size: 4194304
+      native_system: ps2
     - name: ps2-0110ad-20000727.bin
       destination: ps2/ps2-0110ad-20000727.bin
       required: true
@@ -2286,6 +2596,7 @@ systems:
       md5: 63e6fd9b3c72e0d7b920e80cf76645cd
       crc32: 795578c1
       size: 4194304
+      native_system: ps2
     - name: ps2-0110a-20000727.bin
       destination: ps2/ps2-0110a-20000727.bin
       required: true
@@ -2293,6 +2604,7 @@ systems:
       md5: a20c97c02210f16678ca3010127caf36
       crc32: 9678ad6a
       size: 4194304
+      native_system: ps2
     - name: ps2-0120a-20000902.bin
       destination: ps2/ps2-0120a-20000902.bin
       required: true
@@ -2300,6 +2612,7 @@ systems:
       md5: 8db2fbbac7413bf3e7154c1e0715e565
       crc32: 1ae71e5d
       size: 4194304
+      native_system: ps2
     - name: ps2-0120ed-20000902.bin
       destination: ps2/ps2-0120ed-20000902.bin
       required: true
@@ -2307,6 +2620,7 @@ systems:
       md5: 91c87cb2f2eb6ce529a2360f80ce2457
       crc32: 25495aa7
       size: 4194304
+      native_system: ps2
     - name: ps2-0120ed-20000902-20030110.bin
       destination: ps2/ps2-0120ed-20000902-20030110.bin
       required: true
@@ -2314,6 +2628,7 @@ systems:
       md5: 3016b3dd42148a67e2c048595ca4d7ce
       crc32: e2f78425
       size: 4194304
+      native_system: ps2
     - name: ps2-0120e-20000902.bin
       destination: ps2/ps2-0120e-20000902.bin
       required: true
@@ -2321,6 +2636,7 @@ systems:
       md5: b7fa11e87d51752a98b38e3e691cbf17
       crc32: 7b08c33b
       size: 4194304
+      native_system: ps2
     - name: ps2-0120j-20001027-185015.bin
       destination: ps2/ps2-0120j-20001027-185015.bin
       required: true
@@ -2328,6 +2644,7 @@ systems:
       md5: f63bc530bd7ad7c026fcd6f7bd0d9525
       crc32: 9b096622
       size: 4194304
+      native_system: ps2
     - name: ps2-0120j-20001027-191435.bin
       destination: ps2/ps2-0120j-20001027-191435.bin
       required: true
@@ -2335,6 +2652,7 @@ systems:
       md5: cee06bd68c333fc5768244eae77e4495
       crc32: c1ccf3f6
       size: 4194304
+      native_system: ps2
     - name: ps2-0150ad-20001228-20030520.bin
       destination: ps2/ps2-0150ad-20001228-20030520.bin
       required: true
@@ -2342,6 +2660,7 @@ systems:
       md5: 0bf988e9c7aaa4c051805b0fa6eb3387
       crc32: 0380c2ce
       size: 4194304
+      native_system: ps2
     - name: ps2-0150a-20001228.bin
       destination: ps2/ps2-0150a-20001228.bin
       required: true
@@ -2349,6 +2668,7 @@ systems:
       md5: 8accc3c49ac45f5ae2c5db0adc854633
       crc32: bce74746
       size: 4194304
+      native_system: ps2
     - name: ps2-0150ed-20001228-20030520.bin
       destination: ps2/ps2-0150ed-20001228-20030520.bin
       required: true
@@ -2356,6 +2676,7 @@ systems:
       md5: 6f9a6feb749f0533aaae2cc45090b0ed
       crc32: 60bc0031
       size: 4194304
+      native_system: ps2
     - name: ps2-0150e-20001228.bin
       destination: ps2/ps2-0150e-20001228.bin
       required: true
@@ -2363,6 +2684,7 @@ systems:
       md5: 838544f12de9b0abc90811279ee223c8
       crc32: 1559fd43
       size: 4194304
+      native_system: ps2
     - name: ps2-0150jd-20010118.bin
       destination: ps2/ps2-0150jd-20010118.bin
       required: true
@@ -2370,6 +2692,7 @@ systems:
       md5: bb6bbc850458fff08af30e969ffd0175
       crc32: 0b3ec2bc
       size: 4194304
+      native_system: ps2
     - name: ps2-0150j-20010118.bin
       destination: ps2/ps2-0150j-20010118.bin
       required: true
@@ -2377,6 +2700,7 @@ systems:
       md5: 815ac991d8bc3b364696bead3457de7d
       crc32: 4fc3b495
       size: 4194304
+      native_system: ps2
     - name: ps2-0160a-20010427.bin
       destination: ps2/ps2-0160a-20010427.bin
       required: true
@@ -2384,6 +2708,7 @@ systems:
       md5: b107b5710042abe887c0f6175f6e94bb
       crc32: 4008ac18
       size: 4194304
+      native_system: ps2
     - name: ps2-0160j-20010427.bin
       destination: ps2/ps2-0160j-20010427.bin
       required: true
@@ -2391,6 +2716,7 @@ systems:
       md5: ab55cceea548303c22c72570cfd4dd71
       crc32: c268ef47
       size: 4194304
+      native_system: ps2
     - name: ps2-0160a-20010704.bin
       destination: ps2/ps2-0160a-20010704.bin
       required: true
@@ -2398,6 +2724,7 @@ systems:
       md5: 18bcaadb9ff74ed3add26cdf709fff2e
       crc32: c506c693
       size: 4194304
+      native_system: ps2
     - name: ps2-0160e-20010704.bin
       destination: ps2/ps2-0160e-20010704.bin
       required: true
@@ -2405,6 +2732,7 @@ systems:
       md5: 491209dd815ceee9de02dbbc408c06d6
       crc32: f1ac735f
       size: 4194304
+      native_system: ps2
     - name: ps2-0160a-20011004.bin
       destination: ps2/ps2-0160a-20011004.bin
       required: true
@@ -2412,6 +2740,7 @@ systems:
       md5: 7200a03d51cacc4c14fcdfdbc4898431
       crc32: a01ec625
       size: 4194304
+      native_system: ps2
     - name: ps2-0160e-20011004.bin
       destination: ps2/ps2-0160e-20011004.bin
       required: true
@@ -2419,6 +2748,7 @@ systems:
       md5: 8359638e857c8bc18c3c18ac17d9cc3c
       crc32: 82aa5055
       size: 4194304
+      native_system: ps2
     - name: ps2-0160h-20010730.bin
       destination: ps2/ps2-0160h-20010730.bin
       required: true
@@ -2426,6 +2756,7 @@ systems:
       md5: 352d2ff9b3f68be7e6fa7e6dd8389346
       crc32: 75f83c67
       size: 4194304
+      native_system: ps2
     - name: ps2-0160a-20020207.bin
       destination: ps2/ps2-0160a-20020207.bin
       required: true
@@ -2433,6 +2764,7 @@ systems:
       md5: d5ce2c7d119f563ce04bc04dbc3a323e
       crc32: a19e0bf5
       size: 4194304
+      native_system: ps2
     - name: ps2-0160e-20020319.bin
       destination: ps2/ps2-0160e-20020319.bin
       required: true
@@ -2440,6 +2772,7 @@ systems:
       md5: 0d2228e6fd4fb639c9c39d077a9ec10c
       crc32: 2fe21e4d
       size: 4194304
+      native_system: ps2
     - name: ps2-0160j-20020426.bin
       destination: ps2/ps2-0160j-20020426.bin
       required: true
@@ -2447,6 +2780,7 @@ systems:
       md5: 72da56fccb8fcd77bba16d1b6f479914
       crc32: c9363baf
       size: 4194304
+      native_system: ps2
     - name: ps2-0160e-20020426.bin
       destination: ps2/ps2-0160e-20020426.bin
       required: true
@@ -2454,6 +2788,7 @@ systems:
       md5: 5b1f47fbeb277c6be2fccdd6344ff2fd
       crc32: dad0baec
       size: 4194304
+      native_system: ps2
     - name: ps2-0160h-20020426.bin
       destination: ps2/ps2-0160h-20020426.bin
       required: true
@@ -2461,6 +2796,7 @@ systems:
       md5: 315a4003535dfda689752cb25f24785c
       crc32: 3355623e
       size: 4194304
+      native_system: ps2
     - name: ps2-0170j-20030206.bin
       destination: ps2/ps2-0170j-20030206.bin
       required: true
@@ -2468,6 +2804,7 @@ systems:
       md5: 312ad4816c232a9606e56f946bc0678a
       crc32: 9457f64e
       size: 4194304
+      native_system: ps2
     - name: ps2-0170ed-20030227.bin
       destination: ps2/ps2-0170ed-20030227.bin
       required: true
@@ -2475,6 +2812,7 @@ systems:
       md5: 666018ffec65c5c7e04796081295c6c7
       crc32: 970a9c56
       size: 4194304
+      native_system: ps2
     - name: ps2-0170e-20030227.bin
       destination: ps2/ps2-0170e-20030227.bin
       required: true
@@ -2482,6 +2820,7 @@ systems:
       md5: 6e69920fa6eef8522a1d688a11e41bc6
       crc32: 51b5fb8b
       size: 4194304
+      native_system: ps2
     - name: ps2-0170ad-20030325.bin
       destination: ps2/ps2-0170ad-20030325.bin
       required: true
@@ -2489,6 +2828,7 @@ systems:
       md5: eb960de68f0c0f7f9fa083e9f79d0360
       crc32: 0e1ece79
       size: 4194304
+      native_system: ps2
     - name: ps2-0170a-20030325.bin
       destination: ps2/ps2-0170a-20030325.bin
       required: true
@@ -2496,6 +2836,7 @@ systems:
       md5: 8aa12ce243210128c5074552d3b86251
       crc32: 9a99e3f4
       size: 4194304
+      native_system: ps2
     - name: ps2-0180cd-20030224.bin
       destination: ps2/ps2-0180cd-20030224.bin
       required: true
@@ -2503,6 +2844,7 @@ systems:
       md5: 240d4c5ddd4b54069bdc4a3cd2faf99d
       crc32: 8c1a04cf
       size: 4194304
+      native_system: ps2
     - name: ps2-0180j-20031028.bin
       destination: ps2/ps2-0180j-20031028.bin
       required: true
@@ -2510,6 +2852,7 @@ systems:
       md5: 1c6cd089e6c83da618fbf2a081eb4888
       crc32: 585fd27c
       size: 4194304
+      native_system: ps2
     - name: ps2-0190j-20030623.bin
       destination: ps2/ps2-0190j-20030623.bin
       required: true
@@ -2517,6 +2860,7 @@ systems:
       md5: 463d87789c555a4a7604e97d7db545d1
       crc32: 7c10a967
       size: 4194304
+      native_system: ps2
     - name: ps2-0190a-20030623.bin
       destination: ps2/ps2-0190a-20030623.bin
       required: true
@@ -2524,6 +2868,7 @@ systems:
       md5: 35461cecaa51712b300b2d6798825048
       crc32: b3e87709
       size: 4194304
+      native_system: ps2
     - name: ps2-0190e-20030623.bin
       destination: ps2/ps2-0190e-20030623.bin
       required: true
@@ -2531,6 +2876,7 @@ systems:
       md5: bd6415094e1ce9e05daabe85de807666
       crc32: 1752a52e
       size: 4194304
+      native_system: ps2
     - name: ps2-0190h-20030623.bin
       destination: ps2/ps2-0190h-20030623.bin
       required: true
@@ -2538,6 +2884,7 @@ systems:
       md5: 2e70ad008d4ec8549aada8002fdf42fb
       crc32: 41391dd3
       size: 4194304
+      native_system: ps2
     - name: ps2-0190r-20030623.bin
       destination: ps2/ps2-0190r-20030623.bin
       required: true
@@ -2545,6 +2892,7 @@ systems:
       md5: b53d51edc7fc086685e31b811dc32aad
       crc32: 25f6212a
       size: 4194304
+      native_system: ps2
     - name: ps2-0190c-20030623.bin
       destination: ps2/ps2-0190c-20030623.bin
       required: true
@@ -2552,6 +2900,7 @@ systems:
       md5: 1b6e631b536247756287b916f9396872
       crc32: d2347ee7
       size: 4194304
+      native_system: ps2
     - name: ps2-0190j-20030822.bin
       destination: ps2/ps2-0190j-20030822.bin
       required: true
@@ -2559,6 +2908,7 @@ systems:
       md5: 00da1b177096cfd2532c8fa22b43e667
       crc32: 79d60546
       size: 4194304
+      native_system: ps2
     - name: ps2-0190e-20030822.bin
       destination: ps2/ps2-0190e-20030822.bin
       required: true
@@ -2566,6 +2916,7 @@ systems:
       md5: afde410bd026c16be605a1ae4bd651fd
       crc32: 3afd1d1e
       size: 4194304
+      native_system: ps2
     - name: ps2-0190a-20040329.bin
       destination: ps2/ps2-0190a-20040329.bin
       required: true
@@ -2573,6 +2924,7 @@ systems:
       md5: 81f4336c1de607dd0865011c0447052e
       crc32: 9ba4c32f
       size: 4194304
+      native_system: ps2
     - name: ps2-0200ed-20040614.bin
       destination: ps2/ps2-0200ed-20040614.bin
       required: true
@@ -2580,6 +2932,7 @@ systems:
       md5: 63ead1d74893bf7f36880af81f68a82d
       crc32: 881c9aa9
       size: 4194304
+      native_system: ps2
     - name: ps2-0200h-20040614.bin
       destination: ps2/ps2-0200h-20040614.bin
       required: true
@@ -2587,6 +2940,7 @@ systems:
       md5: 3e3e030c0f600442fa05b94f87a1e238
       crc32: b57201bf
       size: 4194304
+      native_system: ps2
     - name: ps2-0210j-20040917.bin
       destination: ps2/ps2-0210j-20040917.bin
       required: true
@@ -2594,6 +2948,7 @@ systems:
       md5: 1ad977bb539fc9448a08ab276a836bbc
       crc32: 55710d11
       size: 4194304
+      native_system: ps2
     - name: ps2-0220j-20050620.bin
       destination: ps2/ps2-0220j-20050620.bin
       required: true
@@ -2601,6 +2956,7 @@ systems:
       md5: eb4f40fcf4911ede39c1bbfe91e7a89a
       crc32: d27fc41d
       size: 4194304
+      native_system: ps2
     - name: ps2-0220ad-20050620.bin
       destination: ps2/ps2-0220ad-20050620.bin
       required: true
@@ -2608,6 +2964,7 @@ systems:
       md5: 9959ad7a8685cad66206e7752ca23f8b
       crc32: 181f1bda
       size: 4194304
+      native_system: ps2
     - name: ps2-0220a-20050620.bin
       destination: ps2/ps2-0220a-20050620.bin
       required: true
@@ -2615,6 +2972,7 @@ systems:
       md5: 929a14baca1776b00869f983aa6e14d2
       crc32: d305a97a
       size: 4194304
+      native_system: ps2
     - name: ps2-0220e-20050620.bin
       destination: ps2/ps2-0220e-20050620.bin
       required: true
@@ -2622,6 +2980,7 @@ systems:
       md5: 573f7d4a430c32b3cc0fd0c41e104bbd
       crc32: e2862e39
       size: 4194304
+      native_system: ps2
     - name: ps2-0220h-20050620.bin
       destination: ps2/ps2-0220h-20050620.bin
       required: true
@@ -2629,6 +2988,7 @@ systems:
       md5: df63a604e8bff5b0599bd1a6c2721bd0
       crc32: e27c4a6c
       size: 4194304
+      native_system: ps2
     - name: ps2-0220j-20060210.bin
       destination: ps2/ps2-0220j-20060210.bin
       required: true
@@ -2636,6 +2996,7 @@ systems:
       md5: 5b1ba4bb914406fae75ab8e38901684d
       crc32: 1303918e
       size: 4194304
+      native_system: ps2
     - name: ps2-0220a-20060210.bin
       destination: ps2/ps2-0220a-20060210.bin
       required: true
@@ -2643,6 +3004,7 @@ systems:
       md5: cb801b7920a7d536ba07b6534d2433ca
       crc32: 1279fce9
       size: 4194304
+      native_system: ps2
     - name: ps2-0220e-20060210.bin
       destination: ps2/ps2-0220e-20060210.bin
       required: true
@@ -2650,6 +3012,7 @@ systems:
       md5: af60e6d1a939019d55e5b330d24b1c25
       crc32: 23fa7baa
       size: 4194304
+      native_system: ps2
     - name: ps2-0220h-20060210.bin
       destination: ps2/ps2-0220h-20060210.bin
       required: true
@@ -2657,6 +3020,7 @@ systems:
       md5: 549a66d0c698635ca9fa3ab012da7129
       crc32: 23001fff
       size: 4194304
+      native_system: ps2
     - name: ps2-0220j-20060905.bin
       destination: ps2/ps2-0220j-20060905.bin
       required: true
@@ -2664,6 +3028,7 @@ systems:
       md5: 5de9d0d730ff1e7ad122806335332524
       crc32: 1d6d879b
       size: 4194304
+      native_system: ps2
     - name: ps2-0220ad-20060905.bin
       destination: ps2/ps2-0220ad-20060905.bin
       required: true
@@ -2671,6 +3036,7 @@ systems:
       md5: 21fe4cad111f7dc0f9af29477057f88d
       crc32: 431d9b7f
       size: 4194304
+      native_system: ps2
     - name: ps2-0220a-20060905.bin
       destination: ps2/ps2-0220a-20060905.bin
       required: true
@@ -2678,6 +3044,7 @@ systems:
       md5: 40c11c063b3b9409aa5e4058e984e30c
       crc32: 1c17eafc
       size: 4194304
+      native_system: ps2
     - name: ps2-0220e-20060905.bin
       destination: ps2/ps2-0220e-20060905.bin
       required: true
@@ -2685,6 +3052,7 @@ systems:
       md5: 80bbb237a6af9c611df43b16b930b683
       crc32: 2d946dbf
       size: 4194304
+      native_system: ps2
     - name: ps2-0220h-20060905.bin
       destination: ps2/ps2-0220h-20060905.bin
       required: true
@@ -2692,6 +3060,7 @@ systems:
       md5: c37bce95d32b2be480f87dd32704e664
       crc32: 2d6e09ea
       size: 4194304
+      native_system: ps2
     - name: ps2-0230j-20080220.bin
       destination: ps2/ps2-0230j-20080220.bin
       required: true
@@ -2699,6 +3068,7 @@ systems:
       md5: 80ac46fa7e77b8ab4366e86948e54f83
       crc32: 2912faa5
       size: 4194304
+      native_system: ps2
     - name: ps2-0230a-20080220.bin
       destination: ps2/ps2-0230a-20080220.bin
       required: true
@@ -2706,6 +3076,7 @@ systems:
       md5: 21038400dc633070a78ad53090c53017
       crc32: 286897c2
       size: 4194304
+      native_system: ps2
     - name: ps2-0230e-20080220.bin
       destination: ps2/ps2-0230e-20080220.bin
       required: true
@@ -2713,6 +3084,7 @@ systems:
       md5: dc69f0643a3030aaa4797501b483d6c4
       crc32: 19eb1081
       size: 4194304
+      native_system: ps2
     - name: ps2-0230h-20080220.bin
       destination: ps2/ps2-0230h-20080220.bin
       required: true
@@ -2720,6 +3092,7 @@ systems:
       md5: 30d56e79d89fbddf10938fa67fe3f34e
       crc32: 191174d4
       size: 4194304
+      native_system: ps2
     - name: ps2-0250e-20100415.bin
       destination: ps2/ps2-0250e-20100415.bin
       required: true
@@ -2727,6 +3100,7 @@ systems:
       md5: 93ea3bcee4252627919175ff1b16a1d9
       crc32: 7e75fc28
       size: 4194304
+      native_system: ps2
     - name: ps2-0250j-20100415.bin
       destination: ps2/ps2-0250j-20100415.bin
       required: true
@@ -2734,6 +3108,7 @@ systems:
       md5: d3e81e95db25f5a86a7b7474550a2155
       crc32: 4e8c160c
       size: 4194304
+      native_system: ps2
   videoton-tvc:
     files:
     - name: tvcfileio.rom
@@ -2743,6 +3118,7 @@ systems:
       md5: a2cf86ba8e7fc58b242137fe59036832
       crc32: 950e32fd
       size: 8192
+      native_system: tvc
     - name: tvc22_ext.rom
       destination: tvc/tvc22_ext.rom
       required: true
@@ -2750,6 +3126,7 @@ systems:
       md5: 5ce95a26ceed5bec73995d83568da9cf
       crc32: 05e1c3a8
       size: 8192
+      native_system: tvc
     - name: tvc22_sys.rom
       destination: tvc/tvc22_sys.rom
       required: true
@@ -2757,6 +3134,7 @@ systems:
       md5: 8c54285f541930cde766069942bad0f2
       crc32: 79fa818c
       size: 16384
+      native_system: tvc
     - name: tvc_dos12d.rom
       destination: tvc/tvc_dos12d.rom
       required: true
@@ -2764,6 +3142,7 @@ systems:
       md5: 88dc7876d584f90e4106f91444ab23b7
       crc32: 1466aed4
       size: 16384
+      native_system: tvc
   microsoft-xbox:
     files:
     - name: Complex_4627.bin
@@ -2773,6 +3152,7 @@ systems:
       md5: ec00e31e746de2473acfe7903c5a4cb7
       crc32: ccb97a84
       size: 1048576
+      native_system: xbox
     - name: mcpx_1.0.bin
       destination: xbox/mcpx_1.0.bin
       required: true
@@ -2780,3 +3160,4 @@ systems:
       md5: d49c52a4102f6df7bcf8d0617ac475ed
       crc32: 0b07d1f1
       size: 512
+      native_system: xbox

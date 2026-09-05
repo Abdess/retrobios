@@ -1,116 +1,118 @@
-"""Exporter for RetroBat batocera-systems.json format.
+"""Exporter for RetroBat's batocera-systems.json.
 
-Produces JSON matching the exact format of
-RetroBat-Official/emulatorlauncher/batocera-systems/Resources/batocera-systems.json:
-- System keys with "name" and "biosFiles" fields
-- Each biosFile has "md5" before "file" (matching original key order)
+Pure data: a system key carrying a name and a biosFiles array whose entries
+state md5 then file, in that order.
 """
 
 from __future__ import annotations
 
 import json
 from collections import OrderedDict
-from pathlib import Path
 
 from .base_exporter import BaseExporter
+from .baseline import NativeSystem, Report
+
+SOURCE_URL = (
+    "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/master"
+    "/batocera-systems/Resources/batocera-systems.json"
+)
 
 
 class Exporter(BaseExporter):
-    """Export truth data to RetroBat batocera-systems.json format."""
+    """Write RetroBat's batocera-systems.json, corrected."""
 
     @staticmethod
     def platform_name() -> str:
         return "retrobat"
 
-    def export(
+    @staticmethod
+    def native_filename() -> str:
+        return "batocera-systems.json"
+
+    @staticmethod
+    def requires() -> str:
+        return "md5"
+
+    @staticmethod
+    def carries() -> frozenset[str]:
+        return frozenset({"md5"})
+
+    @staticmethod
+    def native_sources() -> dict[str, str]:
+        return {"batocera-systems.json": SOURCE_URL}
+
+    def render(
         self,
-        truth_data: dict,
-        output_path: str,
-        scraped_data: dict | None = None,
-    ) -> None:
-        native_map: dict[str, str] = {}
-        if scraped_data:
-            for sys_id, sys_data in scraped_data.get("systems", {}).items():
-                nid = sys_data.get("native_id")
-                if nid:
-                    native_map[sys_id] = nid
+        systems: dict[str, NativeSystem],
+        report: Report,
+        originals: dict[str, str],
+        scraped: dict | None = None,
+    ) -> dict[str, str]:
+        # Keep the platform's own key order when we have its file, so the
+        # diff a maintainer reads is the corrections and nothing else.
+        order: list[str] = []
+        original = originals.get(self.native_filename(), "")
+        if original:
+            try:
+                order = list(json.loads(original))
+            except json.JSONDecodeError:
+                order = []
 
-        output: OrderedDict[str, dict] = OrderedDict()
+        exportable = {
+            system.native_id: (system, files)
+            for system, files in self.exportable(systems, require="md5")
+        }
+        keys = [k for k in order if k in exportable]
+        keys.extend(sorted(k for k in exportable if k not in keys))
 
-        systems = truth_data.get("systems", {})
-        for sys_id in sorted(systems):
-            sys_data = systems[sys_id]
-            files = sys_data.get("files", [])
-            if not files:
-                continue
-
-            native_id = native_map.get(sys_id, sys_id)
-            scraped_sys = (
-                scraped_data.get("systems", {}).get(sys_id) if scraped_data else None
-            )
-            display_name = self._display_name(sys_id, scraped_sys)
-            bios_files: list[OrderedDict] = []
-
+        output: OrderedDict[str, object] = OrderedDict()
+        for key in keys:
+            system, files = exportable[key]
+            bios_files = []
             for fe in files:
-                name = fe.get("name", "")
-                if name.startswith("_") or self._is_pattern(name):
-                    continue
-                dest = self._dest(fe)
-                md5 = fe.get("md5", "")
-                if isinstance(md5, list):
-                    md5 = md5[0] if md5 else ""
-
-                # Original format requires md5 for every entry
-                if not md5:
-                    continue
                 entry: OrderedDict[str, str] = OrderedDict()
-                entry["md5"] = md5
-                entry["file"] = f"bios/{dest}"
+                entry["md5"] = fe.hash("md5")
+                declared = fe.native("native_path", "")
+                entry["file"] = str(declared) if declared else f"bios/{fe.destination}"
                 bios_files.append(entry)
+            system_entry: OrderedDict[str, object] = OrderedDict()
+            system_entry["name"] = self.display_name(system)
+            system_entry["biosFiles"] = bios_files
+            output[key] = system_entry
 
-            if bios_files:
-                if native_id in output:
-                    existing_files = {
-                        e.get("file") for e in output[native_id]["biosFiles"]
-                    }
-                    for entry in bios_files:
-                        if entry.get("file") not in existing_files:
-                            output[native_id]["biosFiles"].append(entry)
-                else:
-                    sys_entry: OrderedDict[str, object] = OrderedDict()
-                    sys_entry["name"] = display_name
-                    sys_entry["biosFiles"] = bios_files
-                    output[native_id] = sys_entry
+        text = json.dumps(output, indent=2, ensure_ascii=False) + "\n"
+        return {self.native_filename(): text}
 
-        Path(output_path).write_text(
-            json.dumps(output, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
-        )
-
-    def validate(self, truth_data: dict, output_path: str) -> list[str]:
-        data = json.loads(Path(output_path).read_text(encoding="utf-8"))
-
-        exported_files: set[str] = set()
-        for sys_data in data.values():
-            for bf in sys_data.get("biosFiles", []):
-                path = bf.get("file", "")
-                stripped = path.removeprefix("bios/")
-                exported_files.add(stripped)
-                basename = path.split("/")[-1] if "/" in path else path
-                exported_files.add(basename)
+    def validate(
+        self,
+        systems: dict[str, NativeSystem],
+        produced: dict[str, str],
+    ) -> list[str]:
+        try:
+            data = json.loads(produced[self.native_filename()])
+        except json.JSONDecodeError as exc:
+            return [f"the JSON does not parse: {exc}"]
 
         issues: list[str] = []
-        for sys_data in truth_data.get("systems", {}).values():
-            for fe in sys_data.get("files", []):
-                name = fe.get("name", "")
-                if name.startswith("_") or self._is_pattern(name):
-                    continue
-                md5 = fe.get("md5", "")
-                if isinstance(md5, list):
-                    md5 = md5[0] if md5 else ""
-                if not md5:
-                    continue
-                dest = self._dest(fe)
-                if name not in exported_files and dest not in exported_files:
-                    issues.append(f"missing: {name}")
+        for key, entry in data.items():
+            if not entry.get("name"):
+                issues.append(f"system without a name: {key}")
+            if not entry.get("biosFiles"):
+                issues.append(f"empty entry: {key}")
+            for bios in entry.get("biosFiles", []):
+                # RetroBat states an unhashed file with an empty md5, so only
+                # a missing path makes an entry unusable.
+                if "md5" not in bios or not bios.get("file"):
+                    issues.append(f"incomplete entry: {key}/{bios.get('file', '?')}")
+
+        for system, files in self.exportable(systems, require="md5"):
+            entry = data.get(system.native_id)
+            if entry is None:
+                issues.append(f"system absent: {system.native_id}")
+                continue
+            declared = {bios.get("file") for bios in entry.get("biosFiles", [])}
+            for fe in files:
+                path = str(fe.native("native_path", "")) or f"bios/{fe.destination}"
+                if path not in declared:
+                    issues.append(f"absent: {system.native_id}/{fe.name}")
         return issues

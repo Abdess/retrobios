@@ -116,5 +116,77 @@ class TestConnection(unittest.TestCase):
             _StubScraper(error=KeyError("bug")).test_connection()
 
 
+class RetroPiePackageList(unittest.TestCase):
+    """RetroPie states its packages, and nothing else states them for it."""
+
+    @staticmethod
+    def _archive(modules: dict[str, str]) -> bytes:
+        import io
+        import tarfile
+
+        buffer = io.BytesIO()
+        with tarfile.open(fileobj=buffer, mode="w:gz") as archive:
+            for path, body in modules.items():
+                payload = body.encode()
+                info = tarfile.TarInfo(f"RetroPie-Setup-master/{path}")
+                info.size = len(payload)
+                archive.addfile(info, io.BytesIO(payload))
+        return buffer.getvalue()
+
+    def _scraper(self, modules: dict[str, str]):
+        from scraper.retropie_scraper import Scraper
+
+        scraper = Scraper()
+        scraper.module_ids(self._archive(modules))
+        return scraper
+
+    def test_a_package_is_read_from_the_id_its_script_declares(self):
+        scraper = self._scraper(
+            {
+                "scriptmodules/libretrocores/lr-mgba.sh": 'rp_module_id="lr-mgba"\n',
+                "scriptmodules/emulators/openmsx.sh": 'rp_module_id="openmsx"\n',
+            }
+        )
+        self.assertEqual(scraper.module_ids(), ["lr-mgba", "openmsx"])
+
+    def test_a_script_outside_the_package_directories_is_not_a_package(self):
+        """Setup helpers, themes and drivers carry no core."""
+        scraper = self._scraper(
+            {
+                "scriptmodules/libretrocores/lr-mgba.sh": 'rp_module_id="lr-mgba"\n',
+                "scriptmodules/supplementary/autostart.sh": (
+                    'rp_module_id="autostart"\n'
+                ),
+                "scriptmodules/admin/setup.sh": 'rp_module_id="setup"\n',
+            }
+        )
+        self.assertEqual(scraper.module_ids(), ["lr-mgba"])
+
+    def test_the_core_list_drops_the_libretro_prefix(self):
+        scraper = self._scraper(
+            {
+                "scriptmodules/libretrocores/lr-mgba.sh": 'rp_module_id="lr-mgba"\n',
+                "scriptmodules/emulators/openmsx.sh": 'rp_module_id="openmsx"\n',
+            }
+        )
+        config = scraper.generate_platform_yaml()
+        self.assertEqual(config["cores"], ["mgba", "openmsx"])
+        self.assertEqual(config["inherits"], "retroarch")
+        self.assertEqual(config["base_destination"], "BIOS")
+
+    def test_no_requirement_is_invented_from_prose(self):
+        """RetroPie names BIOS in prose, without a hash to transcribe."""
+        scraper = self._scraper(
+            {
+                "scriptmodules/libretrocores/lr-mgba.sh": (
+                    'rp_module_id="lr-mgba"\n'
+                    'rp_module_help="Copy the required BIOS file gba_bios.bin'
+                    ' to $biosdir"\n'
+                ),
+            }
+        )
+        self.assertEqual(scraper.fetch_requirements(), [])
+
+
 if __name__ == "__main__":
     unittest.main()

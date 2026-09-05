@@ -5,7 +5,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-09-03T20:45:52Z",
+  "generated": "2026-09-05T09:26:20Z",
   "base_destination": "system",
   "detect": [
     {
@@ -16,98 +16,18 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1872,
-  "total_size": 5865708838,
-  "total_omitted": 9,
+  "total_files": 1871,
+  "total_size": 5865446694,
+  "total_omitted": 1,
   "omitted_files": [
     {
-      "dest": "mkxp-z/Fonts/Fonts",
-      "name": "Fonts",
-      "system": "rpgmaker",
+      "dest": "jagboot.rom",
+      "name": "jagboot.rom",
+      "system": "atari-jaguar",
       "required": false,
       "reason": "not_found",
       "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "mkxp-z/RTP/RPGVX/RPGVX",
-      "name": "RPGVX",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "mkxp-z/RTP/RPGVXAce/RPGVXAce",
-      "name": "RPGVXAce",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "mkxp-z/RTP/Standard/Standard",
-      "name": "Standard",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "mkxp-z/Scripts/Postload/Postload",
-      "name": "Postload",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "mkxp-z/Scripts/Preload/Preload",
-      "name": "Preload",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mkxp_z"
-      ]
-    },
-    {
-      "dest": "nxengine/data/data",
-      "name": "data/",
-      "system": "cave-story",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "nxengine"
-      ]
-    },
-    {
-      "dest": "rtp/2000/RPG Maker 2000 RTP",
-      "name": "RPG Maker 2000 RTP",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "easyrpg"
-      ]
-    },
-    {
-      "dest": "rtp/2003/RPG Maker 2003 RTP",
-      "name": "RPG Maker 2003 RTP",
-      "system": "rpgmaker",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "easyrpg"
+        "virtualjaguar"
       ]
     }
   ],
@@ -4606,16 +4526,6 @@
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
       "cores": [
         "beetle_psx"
-      ]
-    },
-    {
-      "dest": "satar4mp.bin",
-      "sha1": "11f9e62cf299f72184835b7b2a70a16333fc0d88",
-      "sha256": "87cddb1f499e32758de20145e73031a84bab299e3f6e5c8487e76d02b2ee9d16",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-120.rom",
-      "cores": [
-        "beetle_saturn"
       ]
     },
     {

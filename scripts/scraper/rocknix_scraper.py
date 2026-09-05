@@ -18,9 +18,19 @@ from __future__ import annotations
 import re
 
 try:
-    from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+    from .base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        fetch_github_latest_version,
+        requirement_entry,
+    )
 except ImportError:
-    from base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+    from base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        fetch_github_latest_version,
+        requirement_entry,
+    )
 
 PLATFORM_NAME = "rocknix"
 
@@ -136,16 +146,15 @@ class Scraper(BaseScraper):
                 # Declared paths are relative to the storage root: strip the
                 # leading bios/ so destinations match base_destination
                 destination = path[len("bios/"):] if path.startswith("bios/") else path
-                md5_values = [bios.get("md5", ""), bios.get("altmd5", "")]
-                md5 = ",".join(m for m in md5_values if m) or None
-
                 req = BiosRequirement(
                     name=destination.rsplit("/", 1)[-1],
                     system=system_slug,
-                    md5=md5,
+                    md5=bios.get("md5", "") or None,
+                    alt_md5=bios.get("altmd5", "") or None,
                     destination=destination,
                     required=True,
                     native_id=key,
+                    native={"native_name": entry["name"]},
                 )
                 if bios.get("zippedFile"):
                     req.zipped_file = bios["zippedFile"]
@@ -168,16 +177,7 @@ class Scraper(BaseScraper):
                     "name": names.get(req.native_id, req.system),
                 },
             )
-            file_entry: dict = {
-                "name": req.name,
-                "destination": req.destination,
-                "required": req.required,
-            }
-            if req.md5:
-                file_entry["md5"] = req.md5
-            if getattr(req, "zipped_file", None):
-                file_entry["zipped_file"] = req.zipped_file
-            entry["files"].append(file_entry)
+            entry["files"].append(requirement_entry(req))
 
         return {
             "platform": "ROCKNIX",

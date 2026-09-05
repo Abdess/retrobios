@@ -55,8 +55,8 @@ emulators/*.yml          verify.py checks      generate_pack.py resolves
   from code               verification          packs per platform
 
 truth.py generates       diff_truth.py         export_native.py
-  ground truth from       compares truth vs     exports to native formats
-  emulator profiles       scraped platform      (DAT, XML, JSON, Bash)
+  ground truth from       compares truth vs     rewrites each platform's
+  emulator profiles       scraped platform      own file, corrected
 ```
 
 Pipeline runs all steps in sequence: DB, provenance report, data dirs,

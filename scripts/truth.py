@@ -180,9 +180,24 @@ def _merge_file_into_system(
             "note",
             "aliases",
             "contents",
+            "region",
         ):
             if file_entry.get(field) is not None and existing.get(field) is None:
                 existing[field] = file_entry[field]
+        # Search order is a fact of the code, so it travels with the entry.
+        # The best rank any core gives it is kept and the disagreement is
+        # recorded beside it, the way slot.py already does: the rank says
+        # how early to read the file, the conflict says the order cannot
+        # decide which single file to keep.
+        theirs = file_entry.get("priority")
+        if theirs is not None:
+            ours = existing.get("priority")
+            if ours is None:
+                existing["priority"] = theirs
+            else:
+                if ours != theirs:
+                    existing["priority_conflict"] = True
+                existing["priority"] = min(ours, theirs)
         return
 
     entry: dict = {"name": file_entry["name"]}
@@ -204,6 +219,8 @@ def _merge_file_into_system(
         "max_size",
         "aliases",
         "contents",
+        "priority",
+        "region",
     ):
         val = file_entry.get(field)
         if val is not None:

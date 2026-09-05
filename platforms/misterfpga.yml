@@ -14,11 +14,13 @@ systems:
       required: true
       md5: f47264dd47fe30f73ab3c010015c155b
       size: 1048576
+      native_system: 3DO
     - name: kanji.rom
       destination: 3DO/kanji.rom
       required: true
       md5: c23fb5d5e6bb1c240d02cf968972be37
       size: 1048576
+      native_system: 3DO
     native_id: 3DO
     name: 3DO Interactive Multiplayer
     docs: "https://github.com/MiSTer-devel/3DO_MiSTer"
@@ -29,11 +31,13 @@ systems:
       required: true
       md5: ba89edf2729a28a17cd9e0f7a0ac9a39
       size: 262144
+      native_system: Apple-IIgs
     - name: boot1.rom
       destination: Apple-IIgs/boot1.rom
       required: true
       md5: 20a0334c447cb069a040ae5be1d938df
       size: 131072
+      native_system: Apple-IIgs
     native_id: Apple-IIgs
     name: Apple IIGS
     docs: "https://github.com/MiSTer-devel/Apple-IIgs_MiSTer"
@@ -44,16 +48,19 @@ systems:
       required: true
       md5: 6e844759720226e58d55ecaf33608a13
       size: 131072
+      native_system: Jaguar
     - name: boot1.rom
       destination: Jaguar/boot1.rom
       required: true
       md5: 18f0741bdb8bb9b6bb99393cb90426a2
       size: 262144
+      native_system: Jaguar
     - name: boot2.rom
       destination: Jaguar/boot2.rom
       required: true
       md5: 4af00f1c26898cf04585e1693d25faba
       size: 131072
+      native_system: Jaguar
     native_id: Jaguar
     name: Atari Jaguar
     docs: "https://github.com/MiSTer-devel/Jaguar_MiSTer"
@@ -64,6 +71,7 @@ systems:
       required: true
       md5: fcd403db69f54290b51035d82f835e7b
       size: 512
+      native_system: AtariLynx
     native_id: AtariLynx
     name: Atari Lynx
     docs: "https://github.com/MiSTer-devel/AtariLynx_MiSTer"
@@ -74,6 +82,7 @@ systems:
       required: true
       md5: 7d25a26e5c4841b364cfe6b1735eaf03
       size: 8192
+      native_system: Astrocade
     native_id: Astrocade
     name: Bally Astrocade
     docs: "https://github.com/MiSTer-devel/Astrocade_MiSTer"
@@ -84,6 +93,7 @@ systems:
       required: true
       md5: 558540c5c6f776d88a897f2f3b8fec8f
       size: 16384
+      native_system: Casio_PV-2000
     native_id: Casio_PV-2000
     name: Casio PV-2000
     docs: "https://github.com/MiSTer-devel/Casio_PV-2000_MiSTer"
@@ -94,6 +104,7 @@ systems:
       required: true
       md5: 4dfadfb1158f84e2df2b85b13f303986
       size: 16384
+      native_system: CreatiVision
     native_id: CreatiVision
     name: VTech CreatiVision
     docs: "https://github.com/MiSTer-devel/CreatiVision_MiSTer"
@@ -104,6 +115,7 @@ systems:
       required: true
       md5: b596975be2e0360232bbeb1e492ab873
       size: 6144
+      native_system: SCV
     native_id: SCV
     name: Epoch Super Cassette Vision
     docs: "https://github.com/MiSTer-devel/SuperCassetteVision_MiSTer"
@@ -114,6 +126,7 @@ systems:
       required: true
       md5: ef67993a94503c4b7798b5901c7dda52
       size: 4096
+      native_system: Gamate
     native_id: Gamate
     name: Bit Corporation Gamate
     docs: "https://github.com/MiSTer-devel/Gamate_MiSTer"
@@ -124,6 +137,7 @@ systems:
       required: true
       md5: 1c7e3cb2df4af8ce3eff187c4155d1a7
       size: 524288
+      native_system: GameKing
     native_id: GameKing
     name: gameking
   interact:
@@ -133,6 +147,7 @@ systems:
       required: true
       md5: aa9fb0e9697a009dfb9d876351dd8f48
       size: 2048
+      native_system: Interact
     native_id: Interact
     name: Interact Home Computer
     docs: "https://github.com/MiSTer-devel/Interact_MiSTer"
@@ -143,21 +158,25 @@ systems:
       required: true
       md5: 62e761035cb657903761800f4437b8af
       size: 8192
+      native_system: Intellivision
     - name: boot1.rom
       destination: Intellivision/boot1.rom
       required: true
       md5: 0cd5946c6473e42e8e4c2137785e427f
       size: 2048
+      native_system: Intellivision
     - name: boot2.rom
       destination: Intellivision/boot2.rom
       required: true
       md5: d5530f74681ec6e0f282dab42e6b1c5f
       size: 2048
+      native_system: Intellivision
     - name: boot3.rom
       destination: Intellivision/boot3.rom
       required: true
       md5: 2e72a9a2b897d330a35c8b07a6146c52
       size: 24576
+      native_system: Intellivision
     native_id: Intellivision
     name: Mattel Intellivision
     docs: "https://github.com/MiSTer-devel/Intv_MiSTer"
@@ -168,6 +187,7 @@ systems:
       required: true
       md5: a0452dbf5ace7d2e49d0a8029efed09a
       size: 32768
+      native_system: MSX1
     native_id: MSX1
     name: MSX1
     docs: "https://github.com/MiSTer-devel/MSX1_MiSTer"
@@ -178,6 +198,7 @@ systems:
       required: true
       md5: f1ce4d5f83717093982e5f75516b8f3c
       size: 393216
+      native_system: PC8801
     native_id: PC8801
     name: NEC PC-8801
     docs: "https://github.com/MiSTer-devel/PC88_MiSTer"
@@ -188,6 +209,7 @@ systems:
       required: true
       md5: 98d43a097a165b03df170fd5c2ad2c2f
       size: 262144
+      native_system: TGFX16-CD
     native_id: TGFX16-CD
     name: PC Engine CD / TurboGrafx-CD
     docs: "https://github.com/MiSTer-devel/TurboGrafx16_MiSTer"
@@ -198,11 +220,13 @@ systems:
       required: true
       md5: 3655aacebb43a963607d4cf821fc1301
       size: 65536
+      native_system: NGPC
     - name: boot1.rom
       destination: NGPC/boot1.rom
       required: true
       md5: d87d876c4391935c9d48ef352a3ff02d
       size: 65536
+      native_system: NGPC
     native_id: NGPC
     name: ngpc
   nintendo-64:
@@ -212,26 +236,31 @@ systems:
       required: true
       md5: 5c124e7948ada85da603a522782940d0
       size: 1984
+      native_system: N64
     - name: boot1.rom
       destination: N64/boot1.rom
       required: true
       md5: d4232dc935cad0650ac2664d52281f3a
       size: 1984
+      native_system: N64
     - name: boot3.rom
       destination: N64/boot3.rom
       required: true
       md5: 8d3d9f294b6e174bc7b1d2fd1c727530
       size: 4194304
+      native_system: N64
     - name: boot4.rom
       destination: N64/boot4.rom
       required: true
       md5: aad37b1492886b892f1821f37fd3ae34
       size: 4194304
+      native_system: N64
     - name: boot5.rom
       destination: N64/boot5.rom
       required: true
       md5: 37c36e4286d36892a9fc70eafe4104be
       size: 4194304
+      native_system: N64
     native_id: N64
     name: Nintendo 64
     docs: "https://github.com/MiSTer-devel/N64_MiSTer"
@@ -242,6 +271,7 @@ systems:
       required: true
       md5: dbfce9db9deaa2567f6a84fde55f9680
       size: 2304
+      native_system: GAMEBOY
     native_id: GAMEBOY
     name: Game Boy / Game Boy Color
     docs: "https://github.com/MiSTer-devel/Gameboy_MiSTer"
@@ -252,6 +282,7 @@ systems:
       required: true
       md5: a860e8c0b6d573d191e4ec7db1b1e4f6
       size: 16384
+      native_system: GBA
     native_id: GBA
     name: Game Boy Advance
     docs: "https://github.com/MiSTer-devel/GBA_MiSTer"
@@ -262,6 +293,7 @@ systems:
       required: true
       md5: ca30b50f880eb660a320674ed365ef7a
       size: 8192
+      native_system: NES
     native_id: NES
     name: NES / Famicom Disk System
     docs: "https://github.com/MiSTer-devel/NES_MiSTer"
@@ -272,6 +304,7 @@ systems:
       required: true
       md5: 1e4fb124a3a886865acb574f388c803d
       size: 4096
+      native_system: PokemonMini
     native_id: PokemonMini
     name: Pokemon Mini
     docs: "https://github.com/MiSTer-devel/PokemonMini_MiSTer"
@@ -282,11 +315,13 @@ systems:
       required: true
       md5: 8ecd73eb4edf7ed7e81aef1be80031d5
       size: 524288
+      native_system: SGB
     - name: Super Game Boy.sfc
       destination: SGB/Super Game Boy.sfc
       required: true
       md5: b15ddb15721c657d82c5bab6db982ee9
       size: 262144
+      native_system: SGB
     native_id: SGB
     name: Super Game Boy
     docs: "https://github.com/MiSTer-devel/SGB_MiSTer"
@@ -297,6 +332,7 @@ systems:
       required: true
       md5: 96cf17bf589fcbfa6f8de2dc84f19fa2
       size: 1048576
+      native_system: SNES
     native_id: SNES
     name: Super NES / Super Famicom
     docs: "https://github.com/MiSTer-devel/SNES_MiSTer"
@@ -307,16 +343,19 @@ systems:
       required: true
       md5: ac0d468be366779c9df633be98da250a
       size: 524288
+      native_system: CD-i
     - name: boot1.rom
       destination: CD-i/boot1.rom
       required: true
       md5: 3d20cf7550f1b723158b42a1fd5bac62
       size: 8192
+      native_system: CD-i
     - name: boot2.rom
       destination: CD-i/boot2.rom
       required: true
       md5: 9694c466f9b65c1990a81b7a6280546b
       size: 131072
+      native_system: CD-i
     native_id: CD-i
     name: Philips CD-i
     docs: "https://github.com/MiSTer-devel/CDi_MiSTer"
@@ -327,11 +366,13 @@ systems:
       required: true
       md5: 54b915694731cc22e07d3fb8a00ee2db
       size: 4096
+      native_system: PocketChallengeV2
     - name: boot1.rom
       destination: PocketChallengeV2/boot1.rom
       required: true
       md5: 880893bd5a7d53fff826bd76a83d566e
       size: 8192
+      native_system: PocketChallengeV2
     native_id: PocketChallengeV2
     name: Benesse Pocket Challenge V2
     docs: "https://github.com/MiSTer-devel/WonderSwan_MiSTer"
@@ -342,21 +383,25 @@ systems:
       required: true
       md5: 9b562ebf2d095bf1dabadbc1881f519a
       size: 131072
+      native_system: MegaCD
     - name: cd_bios.rom
       destination: MegaCD/Japan/cd_bios.rom
       required: true
       md5: 683a8a9e273662561172468dfa2858eb
       size: 131072
+      native_system: MegaCD
     - name: cd_bios.rom
       destination: MegaCD/USA/cd_bios.rom
       required: true
       md5: 310a9081d2edf2d316ab38813136725e
       size: 131072
+      native_system: MegaCD
     - name: boot.rom
       destination: MegaCD/boot.rom
       required: true
       md5: 14db9657bbaa6fbb9249752424dc0ce4
       size: 131072
+      native_system: MegaCD
     native_id: MegaCD
     name: Sega CD / Mega-CD
     docs: "https://github.com/MiSTer-devel/MegaCD_MiSTer"
@@ -367,6 +412,7 @@ systems:
       required: true
       md5: 0306c0e408d6682dd2d86324bd4ac661
       size: 524288
+      native_system: Saturn
     native_id: Saturn
     name: Sega Saturn
     docs: "https://github.com/MiSTer-devel/Saturn_MiSTer"
@@ -377,26 +423,31 @@ systems:
       required: true
       md5: fc7599f3f871578fe9a0453662d1c966
       size: 131072
+      native_system: NEOGEO
     - name: neo-epo.sp1
       destination: NEOGEO/neo-epo.sp1
       required: true
       md5: b11751ad42879c461d64ad2b7b2b0129
       size: 131072
+      native_system: NEOGEO
     - name: sfix.sfix
       destination: NEOGEO/sfix.sfix
       required: true
       md5: aa2b5d0eae4158ffc0d7d63481c7830b
       size: 131072
+      native_system: NEOGEO
     - name: sp-s2.sp1
       destination: NEOGEO/sp-s2.sp1
       required: true
       md5: 2968f59f44bf328639aa79391aeeeab4
       size: 131072
+      native_system: NEOGEO
     - name: uni-bios.rom
       destination: NEOGEO/uni-bios.rom
       required: true
       md5: 4f0aeda8d2d145f596826b62d563c4ef
       size: 131072
+      native_system: NEOGEO
     native_id: NEOGEO
     name: Neo Geo AES / MVS
     docs: "https://github.com/MiSTer-devel/NeoGeo_MiSTer"
@@ -407,16 +458,19 @@ systems:
       required: true
       md5: f39572af7584cb5b3f70ae8cc848aba2
       size: 524288
+      native_system: NeoGeo-CD
     - name: top-sp1.bin
       destination: NeoGeo-CD/top-sp1.bin
       required: true
       md5: 122aee210324c72e8a11116e6ef9c0d0
       size: 524288
+      native_system: NeoGeo-CD
     - name: uni-bioscd.rom
       destination: NeoGeo-CD/uni-bioscd.rom
       required: true
       md5: 08ca8b2dba6662e8024f9e789711c6fc
       size: 524288
+      native_system: NeoGeo-CD
     native_id: NeoGeo-CD
     name: Neo Geo CD
     docs: "https://github.com/MiSTer-devel/NeoGeo_MiSTer"
@@ -427,21 +481,25 @@ systems:
       required: true
       md5: 1e68c231d0896b7eadcad1d7d8e76129
       size: 524288
+      native_system: PSX
     - name: boot1.rom
       destination: PSX/boot1.rom
       required: true
       md5: 8e4c14f567745eff2f0408c8129f72a6
       size: 524288
+      native_system: PSX
     - name: boot2.rom
       destination: PSX/boot2.rom
       required: true
       md5: b9d9a0286c33dc6b7237bb13cd46fdee
       size: 524288
+      native_system: PSX
     - name: sbi.zip
       destination: PSX/sbi.zip
       required: true
       md5: 706d60ab2dfdbfdd53be2069cb85a1fe
       size: 218953
+      native_system: PSX
     native_id: PSX
     name: Sony PlayStation
     docs: "https://github.com/MiSTer-devel/PSX_MiSTer"
@@ -452,26 +510,31 @@ systems:
       required: true
       md5: b37205bf19b197682f00619d05da194b
       size: 2048
+      native_system: Studio-II
     - name: boot1.rom
       destination: Studio-II/boot1.rom
       required: true
       md5: a6b94e449bc9ec58a30e1f75d590c558
       size: 4096
+      native_system: Studio-II
     - name: boot2.rom
       destination: Studio-II/boot2.rom
       required: true
       md5: 849a484aa4b2784ece5c35c39d9d51a8
       size: 4096
+      native_system: Studio-II
     - name: boot3.rom
       destination: Studio-II/boot3.rom
       required: true
       md5: aeec6fe3934481e20eb7db6d5ff56a54
       size: 2048
+      native_system: Studio-II
     - name: boot4.rom
       destination: Studio-II/boot4.rom
       required: true
       md5: 9f037435b6721be9ee91dc93293e52ce
       size: 768
+      native_system: Studio-II
     native_id: Studio-II
     name: studio-ii
   tandy-coco:
@@ -481,16 +544,19 @@ systems:
       required: true
       md5: 7233c6c429f3ce1c7392f28a933e0b6f
       size: 32768
+      native_system: COCO3
     - name: boot1.rom
       destination: COCO3/boot1.rom
       required: true
       md5: 8cab28f4b7311b8df63c07bb3b59bfd5
       size: 8192
+      native_system: COCO3
     - name: boot2.rom
       destination: COCO3/boot2.rom
       required: true
       md5: 171fb7a5d3b808565295b45c773abaaf
       size: 8192
+      native_system: COCO3
     native_id: COCO3
     name: Tandy Color Computer 3
     docs: "https://github.com/MiSTer-devel/CoCo3_MiSTer"
@@ -501,6 +567,7 @@ systems:
       required: true
       md5: a75bb208176c0aed1b6a04b2dcf4770c
       size: 196608
+      native_system: TI-99_4A
     native_id: TI-99_4A
     name: Texas Instruments TI-99/4A
     docs: "https://github.com/MiSTer-devel/TI-99_4A_MiSTer"
@@ -511,6 +578,7 @@ systems:
       required: true
       md5: 3f2178d717dd309ed7424d49ef92987f
       size: 262144
+      native_system: GameCom
     native_id: GameCom
     name: Tiger Game.com
   wonderswan:
@@ -520,11 +588,13 @@ systems:
       required: true
       md5: 54b915694731cc22e07d3fb8a00ee2db
       size: 4096
+      native_system: WonderSwan
     - name: boot1.rom
       destination: WonderSwan/boot1.rom
       required: true
       md5: 880893bd5a7d53fff826bd76a83d566e
       size: 8192
+      native_system: WonderSwan
     native_id: WonderSwan
     name: Bandai WonderSwan
     docs: "https://github.com/MiSTer-devel/WonderSwan_MiSTer"
@@ -535,11 +605,13 @@ systems:
       required: true
       md5: 54b915694731cc22e07d3fb8a00ee2db
       size: 4096
+      native_system: WonderSwanColor
     - name: boot1.rom
       destination: WonderSwanColor/boot1.rom
       required: true
       md5: 880893bd5a7d53fff826bd76a83d566e
       size: 8192
+      native_system: WonderSwanColor
     native_id: WonderSwanColor
     name: Bandai WonderSwan Color
     docs: "https://github.com/MiSTer-devel/WonderSwan_MiSTer"

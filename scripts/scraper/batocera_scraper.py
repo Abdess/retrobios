@@ -19,7 +19,7 @@ from pathlib import Path
 
 from common import yaml_load
 
-from .base_scraper import BaseScraper, BiosRequirement
+from .base_scraper import BaseScraper, BiosRequirement, requirement_entry
 
 PLATFORM_NAME = "batocera"
 
@@ -309,7 +309,8 @@ class Scraper(BaseScraper):
             bios_files = sys_data.get("biosFiles", [])
 
             for bios in bios_files:
-                file_path = bios.get("file", "")
+                declared_path = bios.get("file", "")
+                file_path = declared_path
                 md5 = _resolve_truncated_md5(bios.get("md5", ""), md5_index)
                 zipped_file = bios.get("zippedFile", "")
 
@@ -324,9 +325,11 @@ class Scraper(BaseScraper):
                         system=system_slug,
                         md5=md5 or None,
                         destination=file_path,
+                        native_path=declared_path,
                         required=True,
                         zipped_file=zipped_file or None,
                         native_id=sys_key,
+                        native={"native_name": sys_data.get("name", "")},
                     )
                 )
 
@@ -365,17 +368,7 @@ class Scraper(BaseScraper):
                     sys_entry["name"] = dname
                 systems[req.system] = sys_entry
 
-            entry = {
-                "name": req.name,
-                "destination": req.destination,
-                "required": req.required,
-            }
-            if req.md5:
-                entry["md5"] = req.md5
-            if req.zipped_file:
-                entry["zipped_file"] = req.zipped_file
-
-            systems[req.system]["files"].append(entry)
+            systems[req.system]["files"].append(requirement_entry(req))
 
         batocera_version = ""
         if _STABLE_TAG != "master":

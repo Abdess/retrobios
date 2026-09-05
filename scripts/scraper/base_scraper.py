@@ -28,6 +28,15 @@ class BiosRequirement:
     required: bool = True
     zipped_file: str | None = None  # If set, md5 is for this ROM inside the ZIP
     native_id: str | None = None  # Original system name before normalization
+    sha256: str | None = None
+    alt_md5: str | None = None
+    # How the platform itself writes the file reference. Its own spelling
+    # is not always derivable from ours: libretro writes iplromco.dat bare
+    # but ep128emu/roms/cpc464.rom with its directory.
+    native_path: str | None = None
+    # Fields the platform declares that have no equivalent in our model.
+    # Kept verbatim so the native file can be written back unchanged.
+    native: dict[str, object] = field(default_factory=dict)
 
 
 @dataclass
@@ -56,6 +65,40 @@ class ChangeSet:
 
 
 MAX_RESPONSE_SIZE = 50 * 1024 * 1024  # 50 MB
+
+
+def requirement_entry(req: BiosRequirement) -> dict:
+    """Serialize a requirement to a platform YAML file entry.
+
+    Carries the platform's own system id and any field that has no place in
+    our model. Without them the transcription is lossy in one direction:
+    several native systems collapse onto one slug, and the exporter can no
+    longer tell which of them a file came from.
+    """
+    entry: dict = {
+        "name": req.name,
+        "destination": req.destination,
+        "required": req.required,
+    }
+    for field_name in ("sha1", "md5", "sha256", "crc32"):
+        value = getattr(req, field_name, None)
+        if value:
+            entry[field_name] = str(value).lower()
+    if req.size:
+        entry["size"] = req.size
+    if req.zipped_file:
+        entry["zipped_file"] = req.zipped_file
+    if req.alt_md5:
+        entry["alt_md5"] = str(req.alt_md5).lower()
+    if req.native_id:
+        entry["native_system"] = req.native_id
+    if req.native_path and req.native_path != req.name:
+        entry["native_path"] = req.native_path
+    for key in sorted(req.native):
+        value = req.native[key]
+        if value not in (None, "", [], {}):
+            entry[key] = value
+    return entry
 
 
 def _read_limited(resp: object, max_bytes: int = MAX_RESPONSE_SIZE) -> bytes:

@@ -29,9 +29,19 @@ import zipfile
 from datetime import datetime, timezone
 
 try:
-    from .base_scraper import BaseScraper, BiosRequirement, _read_limited
+    from .base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        _read_limited,
+        requirement_entry,
+    )
 except ImportError:
-    from base_scraper import BaseScraper, BiosRequirement, _read_limited
+    from base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        _read_limited,
+        requirement_entry,
+    )
 
 PLATFORM_NAME = "misterfpga"
 
@@ -193,15 +203,7 @@ class Scraper(BaseScraper):
                     "docs": f"https://github.com/MiSTer-devel/{repo}" if repo else "",
                 },
             )
-            file_entry: dict = {
-                "name": req.name,
-                "destination": req.destination,
-                "required": req.required,
-                "md5": req.md5,
-            }
-            if req.size is not None:
-                file_entry["size"] = req.size
-            entry["files"].append(file_entry)
+            entry["files"].append(requirement_entry(req))
 
         for entry in systems.values():
             if not entry["docs"]:

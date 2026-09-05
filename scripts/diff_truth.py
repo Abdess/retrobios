@@ -168,12 +168,11 @@ def main() -> None:
     )
     parser.add_argument("--truth-dir", default="dist/truth")
     parser.add_argument("--platforms-dir", default="platforms")
-    parser.add_argument("--include-archived", action="store_true")
     args = parser.parse_args()
 
     if args.all:
         platforms = list_registered_platforms(
-            args.platforms_dir, include_archived=args.include_archived
+            args.platforms_dir, include_archived=True
         )
     else:
         platforms = [args.platform]

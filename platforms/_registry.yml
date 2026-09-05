@@ -956,8 +956,10 @@ platforms:
     config: retropie.yml
     status: archived
     logo: https://avatars.githubusercontent.com/u/11378204
-    scraper: null
-    cores: all_libretro
+    scraper: retropie
+    source: https://github.com/RetroPie/RetroPie-Setup
+    # No cores here: the registry overrides the config, and RetroPie's own
+    # scriptmodules are what say which packages it ships.
     schedule: null
     target_scraper: retropie_targets
     target_source: https://retropie.org.uk/stats/pkgflags/

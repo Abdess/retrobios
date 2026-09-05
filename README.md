@@ -63,7 +63,7 @@ These are the files an emulator loads from disk instead of carrying inside itsel
 
 Each file is checked the way your platform checks it. Most compare a checksum, the fingerprint of a file's contents, which catches a corrupt or unexpected copy. RetroArch, Lakka and RetroPie only look for the filename, because that is all their code does: the Coverage table says which applies to you. Independently of that, the collection records five fingerprints per file, and wherever an emulator's code states an expected size or hash, that value is read from its source and rechecked here.
 
-- **6 files** the platforms' emulators load are still to be found, and 15 more cannot be sourced at all (per-user keys, user-filled slots, dumps nobody has made); both are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
+- **6 files** the platforms' emulators load are still to be found, and 21 more cannot be sourced at all (per-user keys, user-filled slots, dumps nobody has made); both are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/)
 - **12 platforms** supported with platform-specific verification
 - **449 emulators** profiled from source (RetroArch cores + standalone)
 - **470 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
@@ -83,15 +83,15 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 |----------|-----------------:|-------------------------:|------------|
 | Batocera | 353/353 | 1,299/1,316 | MD5 hash |
 | BizHawk | 118/118 | 370/375 | SHA1 hash |
-| EmuDeck | 161/161 | 427/427 | MD5 hash |
+| EmuDeck | 166/168 | 427/427 | MD5 hash |
 | Lakka | 530/530 | 1,206/1,224 | file presence |
 | MiSTer FPGA | 72/72 | - | MD5 hash |
 | ROCKNIX | 38/38 | 1,636/1,654 | MD5 hash |
-| Recalbox | 346/346 | 828/843 | MD5 hash |
+| Recalbox | 351/351 | 827/842 | MD5 hash |
 | RetroArch | 530/530 | 1,206/1,224 | file presence |
 | RetroBat | 343/343 | 938/953 | MD5 hash |
 | RetroDECK | 2,008/2,008 | 1,250/1,269 | MD5 hash |
-| RetroPie * | 530/530 | 1,206/1,224 | file presence |
+| RetroPie * | 530/530 | 1,529/1,554 | file presence |
 | RomM | 381/381 | 284/293 | MD5 hash |
 
 Each fraction is what the pack has over what is needed, counting required and optional files alike since both ship. The first column is the BIOS list the platform publishes. The second counts files its emulators load that this list never mentions, found by reading their source code, and it is routinely several times larger. A short fraction means files are still missing, and they are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
@@ -174,4 +174,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-09-05T07:33:35Z*
+*Auto-generated on 2026-09-05T11:57:09Z*

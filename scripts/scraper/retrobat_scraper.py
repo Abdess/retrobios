@@ -11,9 +11,19 @@ from __future__ import annotations
 import json
 
 try:
-    from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+    from .base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        fetch_github_latest_version,
+        requirement_entry,
+    )
 except ImportError:
-    from base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+    from base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        fetch_github_latest_version,
+        requirement_entry,
+    )
 
 PLATFORM_NAME = "retrobat"
 
@@ -73,7 +83,8 @@ class Scraper(BaseScraper):
                 if not isinstance(bios, dict):
                     continue
 
-                file_path = bios.get("file", "")
+                declared_path = bios.get("file", "")
+                file_path = declared_path
                 md5 = bios.get("md5", "")
 
                 if not file_path:
@@ -85,6 +96,11 @@ class Scraper(BaseScraper):
 
                 name = file_path.split("/")[-1] if "/" in file_path else file_path
 
+                native: dict[str, object] = {}
+                sys_name = sys_data.get("name", "") if isinstance(sys_data, dict) else ""
+                if sys_name:
+                    native["native_name"] = sys_name
+
                 requirements.append(
                     BiosRequirement(
                         name=name,
@@ -92,6 +108,9 @@ class Scraper(BaseScraper):
                         md5=md5 or None,
                         destination=file_path,
                         required=True,
+                        native_id=sys_key,
+                        native_path=declared_path,
+                        native=native,
                     )
                 )
 
@@ -139,15 +158,7 @@ class Scraper(BaseScraper):
                     sys_entry["name"] = dname
                 systems[req.system] = sys_entry
 
-            entry = {
-                "name": req.name,
-                "destination": req.destination,
-                "required": req.required,
-            }
-            if req.md5:
-                entry["md5"] = req.md5
-
-            systems[req.system]["files"].append(entry)
+            systems[req.system]["files"].append(requirement_entry(req))
 
         version = ""
         tag = fetch_github_latest_version(GITHUB_REPO)
