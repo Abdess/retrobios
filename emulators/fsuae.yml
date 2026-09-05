@@ -16,7 +16,7 @@ notes: |
   FS-UAE is an Amiga emulator by Frode Solheim, based on UAE/WinUAE.
 
   Standalone: scans --kickstarts_dir for .rom/.bin files (default: Documents/FS-UAE/Kickstarts/).
-  Batocera overrides to bios/amiga/ via --kickstarts_dir (fsuaePaths.py:8, fsuaeGenerator.py:68).
+  Batocera overrides to bios/amiga/ via --kickstarts_dir (batocera fsuaePaths.py:8, batocera fsuaeGenerator.py:68).
   Libretro port: scans save_dir/fsuae/Kickstarts/ (frozen at v2.7.15).
   Identification by SHA-1 checksum, not filename (rommgr.cpp:92-151, romservice.py:78-91).
   AROS kickstart (1 MB) compiled into binary as fallback for all models (rommgr.cpp:112).

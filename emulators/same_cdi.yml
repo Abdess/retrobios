@@ -30,8 +30,10 @@ notes: |
   protection MCU dumps). Upstream MAME has additional ROM sets not present
   in this fork (gpi1200, Italian Quizard variants, cdimono2 alternate BIOS).
 
-  ROM definitions: src/mame/drivers/cdi.cpp:574-640.
-  Quizard game ROMs: src/mame/drivers/cdi.cpp:662-820.
+  ROM definitions: src/mame/drivers/cdi.cpp:428-489. The fork carries four
+  sets, cdimono1, cdi910, cdimono2 and cdi490a, declared at
+  src/mame/drivers/cdi.cpp:491-494; the Quizard game ROMs upstream MAME
+  keeps in this driver are not in it.
   System forced: src/osd/libretro/libretro-internal/retro_init.cpp:86,454,525.
   BIOS path: src/osd/libretro/libretro-internal/retro_init.cpp:534.
 
