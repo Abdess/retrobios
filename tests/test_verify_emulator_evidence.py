@@ -154,6 +154,87 @@ class HashMismatchIsNotCoverage(unittest.TestCase):
         self.assertEqual(detail["status"], verify.Status.MISSING)
 
 
+class ArchiveHashMismatchIsNotCoverage(unittest.TestCase):
+    """The archive branch of the same report applied a different policy.
+
+    It discarded the status resolve_local_file returns and called any
+    non-empty path OK, while the loose-file branch beside it reported the
+    divergence. Eighteen archive entries declare a container hash, so an
+    archive whose bytes contradict it would have read as covered.
+    """
+
+    def setUp(self):
+        import zipfile
+
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.emulators = self.root / "emulators"
+        self.emulators.mkdir()
+        self.archive = self.root / "romset.zip"
+        with zipfile.ZipFile(self.archive, "w") as zf:
+            zf.writestr("inner.rom", b"THE MEMBER THE EMULATOR LOADS")
+        self.db = _db(self.archive, "romset.zip")
+        from common import _emulator_profiles_cache
+
+        _emulator_profiles_cache.clear()
+
+    def tearDown(self):
+        from common import _emulator_profiles_cache
+
+        _emulator_profiles_cache.clear()
+        self._tmp.cleanup()
+
+    def _profile(self, declared_md5: str) -> None:
+        (self.emulators / "demo.yml").write_text(
+            "emulator: demo\n"
+            "type: standalone\n"
+            "display_name: Demo\n"
+            "systems: [demo-system]\n"
+            "files:\n"
+            "  - name: romset.zip\n"
+            "    system: demo-system\n"
+            "    category: bios_zip\n"
+            "    required: true\n"
+            f"    md5: \"{declared_md5}\"\n"
+            "  - name: inner.rom\n"
+            "    system: demo-system\n"
+            "    archive: romset.zip\n"
+            "    required: true\n"
+        )
+
+    def _run(self):
+        cwd = os.getcwd()
+        os.chdir(self.root)
+        try:
+            return verify.verify_emulator(["demo"], str(self.emulators), self.db)
+        finally:
+            os.chdir(cwd)
+
+    def _statuses(self, result):
+        """Every verdict on the archive.
+
+        The container is reported twice, once by the branch that walks the
+        profile's files and once by the branch that walks its archives. Keying
+        by name keeps only the last, which is how a passing test can hide the
+        branch under examination.
+        """
+        return [d["status"] for d in result["details"] if d["name"] == "romset.zip"]
+
+    def test_a_contradicted_container_hash_is_not_reported_ok(self):
+        self._profile("f" * 32)
+        statuses = self._statuses(self._run())
+        self.assertEqual(len(statuses), 2, statuses)
+        self.assertNotIn(
+            verify.Status.OK,
+            statuses,
+            "an archive whose bytes contradict its declared hash counted as covered",
+        )
+
+    def test_a_matching_container_hash_is_still_ok(self):
+        self._profile(hashlib.md5(self.archive.read_bytes()).hexdigest())
+        self.assertEqual(set(self._statuses(self._run())), {verify.Status.OK})
+
+
 class UnsourceableIsNotAGap(unittest.TestCase):
     """An entry nobody can supply is absent by design, not by omission.
 

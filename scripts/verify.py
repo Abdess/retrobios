@@ -1402,7 +1402,7 @@ def verify_emulator(
                     ),
                     {"name": archive},
                 )
-                local_path, _ = resolve_local_file(
+                local_path, resolve_status = resolve_local_file(
                     archive_entry,
                     db,
                     zip_contents,
@@ -1412,7 +1412,19 @@ def verify_emulator(
                     f.get("archive") == archive and f.get("required", True)
                     for f in files
                 )
-                if local_path:
+                if local_path and resolve_status == "hash_mismatch":
+                    # Same policy as the loose-file branch below: the name
+                    # matched while the bytes contradict the hash the profile
+                    # declares on the container. Reporting it covered says the
+                    # collection holds an archive it does not.
+                    result = {
+                        "name": archive,
+                        "status": Status.UNTESTED,
+                        "required": required,
+                        "path": local_path,
+                        "reason": "declared hash contradicted by the local file",
+                    }
+                elif local_path:
                     result = {
                         "name": archive,
                         "status": Status.OK,
