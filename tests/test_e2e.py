@@ -5814,13 +5814,10 @@ struct BurnDriver BurnDrvneogeo = {
              "refuse"),
             (["--platform", "retroarch", "--from-md5", "d8f1"], ["--one-per-slot"],
              "refuse"),
-            # --verify-packs returns before the argument checks run, so it used
-            # to accept all four of these -- an unknown target name included --
-            # and answer about the pack sitting in the output directory.
-            (["--platform", "retroarch", "--verify-packs"], ["--target", "switch"],
-             "refuse"),
-            (["--platform", "retroarch", "--verify-packs"], ["--target", "no-such-xyz"],
-             "refuse"),
+            # --verify-packs returns before the argument checks run, so it
+            # used to accept these and answer about the pack sitting in the
+            # output directory. --target is honoured instead of refused: the
+            # check narrows by it.
             (["--platform", "retroarch", "--verify-packs"], ["--one-per-slot"],
              "refuse"),
             (["--platform", "retroarch", "--verify-packs"], ["--required-only"],
@@ -5842,27 +5839,45 @@ struct BurnDriver BurnDrvneogeo = {
                 )
                 self.assertIn("error:", combined)
 
-    def test_a_targeted_pack_skips_full_platform_conformance(self):
-        """A target-filtered pack is narrower, so the full expectation is off.
+    def test_conformance_narrows_by_target_like_it_does_by_region(self):
+        """A targeted pack is checked against the targeted expectation.
 
-        The tag was missing from the skip list, so every targeted pack was
-        checked against the platform's whole system list and reported the
-        systems the target itself had removed as missing: a correct build
-        exited non-zero on hundreds of files it was never asked to carry.
+        --target narrowed the build and nothing else: the conformance stage
+        held every targeted pack to the platform's whole system list and
+        core set, so a correct build exited non-zero on hundreds of files it
+        was never asked to carry. Region was already passed to the check;
+        target has to travel the same way, which is why the pack is not in
+        the skip list.
         """
-        from generate_pack import _narrowings, _narrows_contents
+        import inspect
 
+        import packverify
+        from generate_pack import _narrows_contents, _narrowings
+
+        source = inspect.getsource(packverify.verify_pack_against_platform)
+        self.assertIn(
+            "target_cores",
+            inspect.signature(packverify.verify_pack_against_platform).parameters,
+            "the pack verifier takes no target, so it cannot narrow by one",
+        )
+        self.assertIn(
+            "filter_systems_by_target(",
+            source,
+            "the baseline expectation is not narrowed by the target",
+        )
+        self.assertIn(
+            "target_cores=target_cores",
+            source,
+            "the core-extras expectation is not narrowed by the target",
+        )
+
+        # And the pack must not be skipped instead: skipping checks nothing.
         for target in ("nintendo-switch", "switch", "rpi4"):
-            with self.subTest(target=target):
-                applied = _narrowings("full", None, target, False, False)
-                self.assertEqual(len(applied), 1, target)
-                tag = applied[0][0]
-                self.assertTrue(
-                    _narrows_contents(f"Platform_1.0{tag}_BIOS_Pack.zip"),
-                    f"a pack built for {target} would be held to the full list",
-                )
-
-        self.assertFalse(_narrows_contents("Platform_1.0_BIOS_Pack.zip"))
+            tag = _narrowings("full", None, target, False, False)[0][0]
+            self.assertFalse(
+                _narrows_contents(f"Platform_1.0{tag}_BIOS_Pack.zip"),
+                f"a pack built for {target} would skip conformance entirely",
+            )
 
     def test_standalone_mode_names_itself(self):
         """--emulator --standalone ships a different file set; without a tag it

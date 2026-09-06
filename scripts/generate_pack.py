@@ -2149,6 +2149,9 @@ def _run_verify_packs(args):
             emu_profiles=verify_profiles,
             regions=verify_regions,
             data_registry=verify_data_registry,
+            target_cores=_target_cores_for(
+                platform_name, args.target, args.platforms_dir
+            ),
         )
         ok, errors = result[0], result[3]
         bl_checked, bl_present = result[4], result[5]
@@ -2283,6 +2286,7 @@ def _run_platform_packs(
         skip_conformance=skip_conf,
         data_registry=data_registry,
         regions=getattr(args, "regions", None),
+        target_name=args.target,
     )
     if args.split:
         for entry in os.listdir(args.output_dir):
@@ -2422,12 +2426,10 @@ def main():
     # Combined with --all-variants, generation runs first then verify
     if args.verify_packs and not args.all_variants:
         # This mode checks packs already on disk against the platform's own
-        # list. It reads the region priority above and nothing else, so a
+        # list, narrowed by the region priority above and by --target. A
         # narrowing flag it cannot honour is refused rather than dropped: a
-        # dropped flag answers about an artifact the caller did not name, and
-        # an unknown target name reads as accepted.
+        # dropped flag answers about an artifact the caller did not name.
         for flag, given in (
-            ("--target", args.target),
             ("--one-per-slot", args.one_per_slot),
             ("--required-only", args.required_only),
             ("--source", args.source != "full"),
@@ -3087,71 +3089,33 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
 
 
 
-_TARGET_TAGS_CACHE: set[str] | None = None
+def _target_cores_for(
+    platform_name: str, target_name: str | None, platforms_dir: str
+) -> set[str] | None:
+    """Cores a target leaves available, or None when no target was asked for.
 
-
-def _known_target_tags(platforms_dir: str = "platforms") -> set[str]:
-    """Every filename tag a hardware target can put in a pack name.
-
-    A target tag is derived from the target's own name, so unlike the other
-    narrowings it cannot be a literal list.
+    None means no narrowing, which is what an unfiltered pack expects.
     """
-    global _TARGET_TAGS_CACHE
-    if _TARGET_TAGS_CACHE is not None:
-        return _TARGET_TAGS_CACHE
-    tags: set[str] = set()
-    targets_dir = os.path.join(platforms_dir, "targets")
-    if os.path.isdir(targets_dir):
-        for entry in sorted(os.listdir(targets_dir)):
-            if not entry.endswith(".yml") or entry.startswith("_"):
-                continue
-            try:
-                with open(os.path.join(targets_dir, entry)) as fh:
-                    data = yaml_load(fh) or {}
-            except OSError as exc:
-                print(f"warning: cannot read {entry}: {exc}", file=sys.stderr)
-                continue
-            for name in (data.get("targets") or {}):
-                tags.add(f"_{_target_tag(str(name))}")
-    # A pack is named after what the caller typed, and an alias is a name a
-    # caller may type: --target switch names the pack _Switch while the target
-    # file only knows nintendo-switch.
-    overrides_path = os.path.join(targets_dir, "_overrides.yml")
-    if os.path.exists(overrides_path):
-        try:
-            with open(overrides_path) as fh:
-                overrides = yaml_load(fh) or {}
-        except OSError as exc:
-            print(f"warning: cannot read _overrides.yml: {exc}", file=sys.stderr)
-            overrides = {}
-        for platform in overrides.values():
-            if not isinstance(platform, dict):
-                continue
-            for target in (platform.get("targets") or {}).values():
-                if not isinstance(target, dict):
-                    continue
-                for alias in target.get("aliases") or []:
-                    tags.add(f"_{_target_tag(str(alias))}")
-    _TARGET_TAGS_CACHE = tags
-    return tags
+    if not target_name:
+        return None
+    cache, _kept = build_target_cores_cache(
+        [platform_name], target_name, platforms_dir
+    )
+    return cache.get(platform_name)
 
 
 def _narrows_contents(pack_name: str) -> bool:
     """True when a pack holds fewer files than the platform declares.
 
-    A source-restricted, required-only or target-filtered build is narrower by
-    design, so the full platform expectation does not apply to it and
-    conformance is skipped. Without the target tag here, every targeted pack
-    was checked against the platform's whole system list and reported the
-    systems the target itself had removed as missing.
-    Region is not listed: the region filter is passed to the check itself.
+    A source-restricted or required-only build is narrower by design, so the
+    full platform expectation does not apply to it and conformance is skipped.
+    Region is not listed: the region filter is passed to the check itself, and
+    a hardware target is passed the same way.
     """
-    if any(
+    return any(
         tag in pack_name
         for tag in ("_Platform_", "_Truth_", "_Required", "_OnePerSlot")
-    ):
-        return True
-    return any(f"{tag}_" in pack_name for tag in _known_target_tags())
+    )
 
 
 def verify_and_finalize_packs(
@@ -3161,6 +3125,7 @@ def verify_and_finalize_packs(
     skip_conformance: bool = False,
     data_registry: dict | None = None,
     regions: list[str] | None = None,
+    target_name: str | None = None,
 ) -> bool:
     """Verify all packs, inject manifests, generate SHA256SUMS.
 
@@ -3227,6 +3192,7 @@ def verify_and_finalize_packs(
                 db=db,
                 regions=regions,
                 data_registry=data_registry,
+                target_cores=_target_cores_for(pname, target_name, platforms_dir),
             )
             status = "OK" if p_ok else "FAILED"
             exclusion_note = (

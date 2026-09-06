@@ -532,6 +532,11 @@ def main():
         ]
         if args.include_archived:
             integrity_cmd.append("--include-archived")
+        # Step 4 built with the target, so step 6 has to check against the
+        # same expectation. Without it a targeted run reported every system
+        # the target removed as missing from a pack that was exactly right.
+        if args.target:
+            integrity_cmd.extend(["--target", args.target])
         ok, _ = run(integrity_cmd, "6/8 pack integrity")
         results["pack_integrity"] = ok
         all_ok = all_ok and ok

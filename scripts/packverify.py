@@ -19,6 +19,7 @@ from ziptools import check_inside_zip
 from nativemode import digest_algorithm
 from nativemode import hash_mismatch_excludes_file
 import hashlib
+from common import filter_systems_by_target
 from common import load_emulator_profiles
 from common import load_platform_config
 import os
@@ -26,6 +27,7 @@ from packextras import platform_region_groups
 from nativemode import reads_file_contents
 import region as region_mod
 from packresolve import resolve_file
+from common import resolve_platform_cores
 from common import sanitize_pack_path
 import zipfile
 def verify_pack(
@@ -449,11 +451,14 @@ def verify_pack_against_platform(
     emu_profiles: dict | None = None,
     regions: list[str] | None = None,
     data_registry: dict | None = None,
+    target_cores: set[str] | None = None,
 ) -> tuple[bool, int, int, list[str], int, int, int, int, int]:
     """Verify a pack ZIP against its platform config and core requirements.
 
     A region priority list narrows the expectation to what the builder would
-    have packed, using the same selection function.
+    have packed, using the same selection function. A hardware target narrows
+    it the same way and for the same reason: the systems it removes are not
+    missing from the pack, they were never asked for.
 
     Checks:
     1. Every baseline file declared by the platform exists in the ZIP
@@ -477,12 +482,21 @@ def verify_pack_against_platform(
     if emu_profiles is None:
         emu_profiles = load_emulator_profiles(emulators_dir)
 
+    expected_systems = config.get("systems", {})
+    if target_cores is not None:
+        expected_systems = filter_systems_by_target(
+            expected_systems,
+            emu_profiles,
+            target_cores,
+            resolve_platform_cores(config, emu_profiles),
+        )
+
     region_drops: set[str] = set()
     if regions:
         region_index = region_mod.build_region_index(emu_profiles)
         region_groups, _extra_dests = platform_region_groups(
             config,
-            config.get("systems", {}),
+            expected_systems,
             emulators_dir,
             db,
             base_dest,
@@ -520,7 +534,7 @@ def verify_pack_against_platform(
             for i in range(1, len(parts)):
                 zip_parents.add("/".join(parts[:i]))
         baseline_groups: dict[str, list[dict]] = {}
-        for _sys_id, system in config.get("systems", {}).items():
+        for _sys_id, system in expected_systems.items():
             for fe in system.get("files", []):
                 dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
                 if not dest:
@@ -600,6 +614,7 @@ def verify_pack_against_platform(
                 set(),
                 base_dest,
                 emu_profiles,
+                target_cores=target_cores,
             )
             seen_conformance: set[str] = set(zip_set)
             seen_parents: set[str] = set()
