@@ -3406,6 +3406,44 @@ class TestE2E(unittest.TestCase):
             registry["platforms"]["emudeck"]["install"],
         )
 
+    def test_91_manifest_required_only_drops_optional_files(self):
+        """A manifest named _required must hold only the required files.
+
+        The filename carried the narrowing while the content did not, so
+        install.py fetched every optional file for a user who asked for the
+        required set, and --all-variants wrote three manifests that duplicated
+        their non-required twins.
+        """
+        from generate_pack import generate_manifest
+
+        registry_path = os.path.join(self.platforms_dir, "_test_registry.yml")
+        with open(registry_path, "w") as fh:
+            yaml.dump({"platforms": {"test_existence": {"install": {}}}}, fh)
+
+        def names(required_only):
+            manifest = generate_manifest(
+                "test_existence",
+                self.platforms_dir,
+                self.db,
+                self.bios_dir,
+                registry_path,
+                emulators_dir=self.emulators_dir,
+                offline=True,
+                required_only=required_only,
+            )
+            return {entry["dest"] for entry in manifest["files"]}
+
+        every = names(False)
+        required = names(True)
+        self.assertIn("present_req.bin", every)
+        self.assertIn("present_opt.bin", every)
+        self.assertIn("present_req.bin", required)
+        self.assertNotIn(
+            "present_opt.bin",
+            required,
+            "an optional file reached a manifest built with required_only",
+        )
+
     def test_91_generate_manifest(self):
         """generate_manifest returns valid manifest dict with expected fields."""
         from generate_pack import generate_manifest

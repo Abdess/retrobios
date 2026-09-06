@@ -2041,6 +2041,7 @@ def _run_manifest_mode(
                     regions=getattr(args, "regions", None),
                     target_name=args.target,
                     offline=args.offline,
+                    required_only=required_only,
                 )
                 narrow_suffix = "".join(
                     tag.lower()
@@ -2660,6 +2661,7 @@ def _manifest_core_entries(
     manifest_files: list,
     omitted_by_destination: dict,
     record_omission,
+    required_only: bool = False,
 ) -> int:
     """Add the files a platform's cores need but its list does not name.
 
@@ -2671,6 +2673,8 @@ def _manifest_core_entries(
     total_size = 0
     extras_pfx = _detect_extras_prefix(config, base_dest)
     for fe in core_files:
+        if required_only and fe.get("required") is False:
+            continue
         dest = sanitize_pack_path(fe.get("destination", fe["name"]))
         if not dest:
             continue
@@ -2770,6 +2774,7 @@ def generate_manifest(
     regions: list[str] | None = None,
     target_name: str | None = None,
     offline: bool | None = None,
+    required_only: bool = False,
 ) -> dict:
     """Generate a JSON manifest for a platform (same resolution as generate_pack).
 
@@ -2871,6 +2876,8 @@ def generate_manifest(
         )
         for sys_id, system in sorted(pack_systems.items()):
             for file_entry in system.get("files", []):
+                if required_only and file_entry.get("required") is False:
+                    continue
                 dest = sanitize_pack_path(file_entry.get("destination", file_entry["name"]))
                 if not dest:
                     continue
@@ -2985,7 +2992,7 @@ def generate_manifest(
         core_files, config, db, bios_dir, base_dest, repo_root,
         zip_contents, offline, region_drops, case_insensitive,
         seen_destinations, seen_lower, seen_parents, manifest_files,
-        omitted_by_destination, record_omission,
+        omitted_by_destination, record_omission, required_only,
     )
 
     # No phase 3 (data directories) -skipped for manifest
