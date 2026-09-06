@@ -182,6 +182,35 @@ class TestJoinVolumes(unittest.TestCase):
             self.assertEqual(zf.testzip(), None)
 
 
+class TestStagingIsolation(unittest.TestCase):
+    """Two downloads into one BIOS folder must not share a staging directory."""
+
+    def setUp(self):
+        self.dest = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.dest, True)
+
+    def test_two_runs_stage_in_separate_directories(self):
+        first = download.make_staging(self.dest)
+        second = download.make_staging(self.dest)
+        self.assertNotEqual(first, second)
+        for staging in (first, second):
+            self.assertEqual(staging.parent, self.dest)
+            self.assertTrue(staging.name.startswith(download.STAGING_PREFIX))
+
+    def test_one_run_cleaning_up_leaves_the_other_transfer_alone(self):
+        finished = download.make_staging(self.dest)
+        in_flight = download.make_staging(self.dest)
+        (in_flight / "Batocera_BIOS_Pack.zip").write_bytes(b"still downloading")
+
+        # What main() does in its finally clause once a pack is extracted.
+        shutil.rmtree(finished, ignore_errors=True)
+
+        self.assertTrue(
+            (in_flight / "Batocera_BIOS_Pack.zip").is_file(),
+            "a finished download removed an archive another run was still writing",
+        )
+
+
 class ReleaseServer:
     """Serves a release index and its assets over loopback."""
 

@@ -20,6 +20,7 @@ import os
 import re
 import shutil
 import sys
+import tempfile
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -33,7 +34,7 @@ DEFAULT_API = "https://api.github.com"
 REPO = "Abdess/retrobios"
 PACK_SUFFIX = "_BIOS_Pack.zip"
 CHECKSUMS_ASSET = "SHA256SUMS.txt"
-STAGING_DIR = ".retrobios-download"
+STAGING_PREFIX = ".retrobios-download-"
 MAX_CHECKSUMS_BYTES = 1 << 20
 CHUNK = 1 << 20
 
@@ -199,6 +200,19 @@ def join_volumes(parts: list[Path], dest: Path) -> None:
                 shutil.copyfileobj(src, out, CHUNK)
 
 
+def make_staging(dest: Path) -> Path:
+    """Return a staging directory of this run's own, on the destination volume.
+
+    A pack is gigabytes and that is the filesystem the user picked for them:
+    the system temp directory is a RAM disk on the appliances these packs
+    target. The name is unique per run because two downloads into one BIOS
+    folder used to share a fixed path, so whichever finished first removed the
+    other's archive mid-transfer and the second died on the missing file with
+    nothing installed.
+    """
+    return Path(tempfile.mkdtemp(prefix=STAGING_PREFIX, dir=dest))
+
+
 def fetch_pack(pack: Pack, staging: Path, checksums: dict[str, str]) -> Path:
     """Download every volume of a pack and return the assembled archive."""
     staging.mkdir(parents=True, exist_ok=True)
@@ -317,10 +331,7 @@ To check files already in place, use: python install.py --check
     dest = Path(os.path.expanduser(args.dest))
     dest.mkdir(parents=True, exist_ok=True)
 
-    # Staged inside the destination: a pack is gigabytes, and that is the
-    # filesystem the user picked for them. The system temp directory is a RAM
-    # disk on the appliances these packs target.
-    staging = dest / STAGING_DIR
+    staging = make_staging(dest)
     try:
         archive = fetch_pack(pack, staging, fetch_checksums(release))
         print(f"Extracting to {dest}/...")
