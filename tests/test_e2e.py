@@ -5814,6 +5814,19 @@ struct BurnDriver BurnDrvneogeo = {
              "refuse"),
             (["--platform", "retroarch", "--from-md5", "d8f1"], ["--one-per-slot"],
              "refuse"),
+            # --verify-packs returns before the argument checks run, so it used
+            # to accept all four of these -- an unknown target name included --
+            # and answer about the pack sitting in the output directory.
+            (["--platform", "retroarch", "--verify-packs"], ["--target", "switch"],
+             "refuse"),
+            (["--platform", "retroarch", "--verify-packs"], ["--target", "no-such-xyz"],
+             "refuse"),
+            (["--platform", "retroarch", "--verify-packs"], ["--one-per-slot"],
+             "refuse"),
+            (["--platform", "retroarch", "--verify-packs"], ["--required-only"],
+             "refuse"),
+            (["--platform", "retroarch", "--verify-packs"], ["--source", "truth"],
+             "refuse"),
         ]
         for mode, flag, expected in matrix:
             with self.subTest(mode=mode, flag=flag):

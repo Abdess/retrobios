@@ -2421,6 +2421,19 @@ def main():
     # Quick-exit modes: --verify-packs alone = verify existing packs only
     # Combined with --all-variants, generation runs first then verify
     if args.verify_packs and not args.all_variants:
+        # This mode checks packs already on disk against the platform's own
+        # list. It reads the region priority above and nothing else, so a
+        # narrowing flag it cannot honour is refused rather than dropped: a
+        # dropped flag answers about an artifact the caller did not name, and
+        # an unknown target name reads as accepted.
+        for flag, given in (
+            ("--target", args.target),
+            ("--one-per-slot", args.one_per_slot),
+            ("--required-only", args.required_only),
+            ("--source", args.source != "full"),
+        ):
+            if given:
+                parser.error(f"{flag} is incompatible with --verify-packs")
         with _pack_output_lock(args.output_dir, exclusive=False):
             _run_verify_packs(args)
         return
