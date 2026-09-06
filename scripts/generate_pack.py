@@ -3087,17 +3087,71 @@ def inject_manifest(zip_path: str, manifest: dict) -> None:
 
 
 
+_TARGET_TAGS_CACHE: set[str] | None = None
+
+
+def _known_target_tags(platforms_dir: str = "platforms") -> set[str]:
+    """Every filename tag a hardware target can put in a pack name.
+
+    A target tag is derived from the target's own name, so unlike the other
+    narrowings it cannot be a literal list.
+    """
+    global _TARGET_TAGS_CACHE
+    if _TARGET_TAGS_CACHE is not None:
+        return _TARGET_TAGS_CACHE
+    tags: set[str] = set()
+    targets_dir = os.path.join(platforms_dir, "targets")
+    if os.path.isdir(targets_dir):
+        for entry in sorted(os.listdir(targets_dir)):
+            if not entry.endswith(".yml") or entry.startswith("_"):
+                continue
+            try:
+                with open(os.path.join(targets_dir, entry)) as fh:
+                    data = yaml_load(fh) or {}
+            except OSError as exc:
+                print(f"warning: cannot read {entry}: {exc}", file=sys.stderr)
+                continue
+            for name in (data.get("targets") or {}):
+                tags.add(f"_{_target_tag(str(name))}")
+    # A pack is named after what the caller typed, and an alias is a name a
+    # caller may type: --target switch names the pack _Switch while the target
+    # file only knows nintendo-switch.
+    overrides_path = os.path.join(targets_dir, "_overrides.yml")
+    if os.path.exists(overrides_path):
+        try:
+            with open(overrides_path) as fh:
+                overrides = yaml_load(fh) or {}
+        except OSError as exc:
+            print(f"warning: cannot read _overrides.yml: {exc}", file=sys.stderr)
+            overrides = {}
+        for platform in overrides.values():
+            if not isinstance(platform, dict):
+                continue
+            for target in (platform.get("targets") or {}).values():
+                if not isinstance(target, dict):
+                    continue
+                for alias in target.get("aliases") or []:
+                    tags.add(f"_{_target_tag(str(alias))}")
+    _TARGET_TAGS_CACHE = tags
+    return tags
+
+
 def _narrows_contents(pack_name: str) -> bool:
     """True when a pack holds fewer files than the platform declares.
 
-    A source-restricted or required-only build is narrower by design, so the
-    full platform expectation does not apply to it and conformance is skipped.
+    A source-restricted, required-only or target-filtered build is narrower by
+    design, so the full platform expectation does not apply to it and
+    conformance is skipped. Without the target tag here, every targeted pack
+    was checked against the platform's whole system list and reported the
+    systems the target itself had removed as missing.
     Region is not listed: the region filter is passed to the check itself.
     """
-    return any(
+    if any(
         tag in pack_name
         for tag in ("_Platform_", "_Truth_", "_Required", "_OnePerSlot")
-    )
+    ):
+        return True
+    return any(f"{tag}_" in pack_name for tag in _known_target_tags())
 
 
 def verify_and_finalize_packs(

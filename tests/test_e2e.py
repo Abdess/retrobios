@@ -5842,6 +5842,28 @@ struct BurnDriver BurnDrvneogeo = {
                 )
                 self.assertIn("error:", combined)
 
+    def test_a_targeted_pack_skips_full_platform_conformance(self):
+        """A target-filtered pack is narrower, so the full expectation is off.
+
+        The tag was missing from the skip list, so every targeted pack was
+        checked against the platform's whole system list and reported the
+        systems the target itself had removed as missing: a correct build
+        exited non-zero on hundreds of files it was never asked to carry.
+        """
+        from generate_pack import _narrowings, _narrows_contents
+
+        for target in ("nintendo-switch", "switch", "rpi4"):
+            with self.subTest(target=target):
+                applied = _narrowings("full", None, target, False, False)
+                self.assertEqual(len(applied), 1, target)
+                tag = applied[0][0]
+                self.assertTrue(
+                    _narrows_contents(f"Platform_1.0{tag}_BIOS_Pack.zip"),
+                    f"a pack built for {target} would be held to the full list",
+                )
+
+        self.assertFalse(_narrows_contents("Platform_1.0_BIOS_Pack.zip"))
+
     def test_standalone_mode_names_itself(self):
         """--emulator --standalone ships a different file set; without a tag it
         overwrote the pack built without it."""
