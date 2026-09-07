@@ -70,14 +70,22 @@ jobs:
           git diff --name-only --diff-filter=AMR -z "$BASE_SHA"..."$HEAD_SHA" \
             -- bios/ > changed_files.zlist
 
+      # The report has to reach the pull request whatever the outcome, so the
+      # exit code is recorded here and acted on after the comment is posted.
+      # Swallowing it outright left the job green on a file that failed its
+      # hash check.
       - name: Validate BIOS files
         id: validate
         run: |
           if [ -s changed_files.zlist ]; then
+            set +e
             xargs -0 python scripts/validate_pr.py --markdown -- \
-              < changed_files.zlist > report.md 2>&1 || true
+              < changed_files.zlist > report.md 2>&1
+            echo "rc=$?" >> "$GITHUB_OUTPUT"
+            set -e
           else
             echo "No BIOS files changed" > report.md
+            echo "rc=0" >> "$GITHUB_OUTPUT"
           fi
           cat report.md
 
@@ -87,6 +95,12 @@ jobs:
           gh pr comment "${{ github.event.pull_request.number }}" --body-file report.md
         env:
           GH_TOKEN: ${{ github.token }}
+
+      - name: Fail when a file did not validate
+        if: steps.validate.outputs.rc != '0'
+        run: |
+          echo "validate_pr.py exited ${{ steps.validate.outputs.rc }}" >&2
+          exit 1
 
   validate-configs:
     runs-on: ubuntu-latest

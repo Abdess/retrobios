@@ -131,6 +131,41 @@ class WorkflowRegressions(unittest.TestCase):
         document["on"] = document.pop(True, document.get("on"))
         return document
 
+    def test_no_validation_step_discards_its_exit_code(self):
+        """A check whose result is thrown away is not a check.
+
+        The BIOS validation step ended in `|| true`, so validate_pr.py could
+        exit 1 on a file that failed its hash and the job stayed green. The
+        report still has to reach the pull request, so the code is recorded
+        and acted on afterwards rather than swallowed. A best-effort side
+        action such as adding a label is not a check and keeps its `|| true`.
+        """
+        checks = ("python scripts/", "unittest", "mkdocs build")
+        for name in ("validate.yml", "deploy-site.yml"):
+            workflow = self._workflow(name)
+            for job_name, job in workflow["jobs"].items():
+                for step in job.get("steps", []):
+                    # A shell continuation puts the command and its `|| true`
+                    # on different lines, so they are rejoined before scanning.
+                    body = str(step.get("run", "")).replace("\\\n", " ")
+                    for line in body.splitlines():
+                        if not any(marker in line for marker in checks):
+                            continue
+                        self.assertNotIn(
+                            "|| true",
+                            line,
+                            f"{name}:{job_name}:{step.get('name', '?')} runs a "
+                            f"check and discards its exit code: {line.strip()}",
+                        )
+
+        workflow = self._workflow("validate.yml")
+        steps = workflow["jobs"]["validate-bios"]["steps"]
+        gate = [s for s in steps if "rc != " in str(s.get("if", ""))]
+        self.assertTrue(
+            gate,
+            "nothing in validate-bios acts on the validation exit code",
+        )
+
     def test_the_suite_runs_on_a_direct_push_to_main(self):
         workflow = self._workflow("validate.yml")
         triggers = workflow["on"]
