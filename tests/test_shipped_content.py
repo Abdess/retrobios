@@ -17,6 +17,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import re
 import sys
 import unittest
 import zipfile
@@ -179,6 +181,40 @@ class ProfileContradictionsAreKnown(unittest.TestCase):
             len(unsatisfied), 20,
             "profile declarations no held file satisfies grew past the known "
             f"set ({len(unsatisfied)}):\n  " + "\n  ".join(sorted(unsatisfied)),
+        )
+
+
+class ArchiveNamesDesignateArchives(unittest.TestCase):
+    """A name ending in .zip must not designate a loose file.
+
+    The alias collector matched a platform entry's name against the SHA1 its
+    md5 pointed at without looking at zipped_file, and a zipped_file md5 is
+    the member's, not the container's. d2fdc.zip became an alias of a loose
+    256-byte state-machine-16.rom, and three platforms were served that ROM
+    where they had asked for the archive.
+    """
+
+    def test_no_archive_name_resolves_to_a_loose_file(self):
+        database = ROOT / "database.json"
+        if not database.is_file():
+            self.skipTest("database.json not built")
+        db = common.load_database(str(database))
+        loose = []
+        for name, ids in db["indexes"]["by_name"].items():
+            if not name.lower().endswith(".zip"):
+                continue
+            for sha1 in ids:
+                path = db["files"].get(sha1, {}).get("path", "")
+                base = os.path.basename(path).lower()
+                # <name>.zip, or the repo's variant form <name>.zip.<md5prefix>
+                if not re.match(r".*\.zip(\.[0-9a-f]{6,})?$", base):
+                    loose.append(f"{name} -> {path}")
+        self.assertLessEqual(
+            len(loose),
+            1,
+            "an archive name designates a loose file; the only accepted case is "
+            "ngpc.zip, whose md5 RetroDECK itself declares against the loose "
+            f"Neo Geo Pocket Color BIOS:\n  " + "\n  ".join(sorted(loose)),
         )
 
 

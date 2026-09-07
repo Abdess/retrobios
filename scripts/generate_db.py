@@ -437,6 +437,15 @@ def _collect_all_aliases(files: dict) -> dict:
                         sha1 = file_entry.get("sha1", "")
                         md5 = file_entry.get("md5", "")
 
+                        # A zipped_file entry verifies a ROM INSIDE the
+                        # archive, so its hash describes the member and not
+                        # the file the name designates. Registering the name
+                        # against that hash made d2fdc.zip an alias of a
+                        # loose 256-byte state-machine-16.rom, which three
+                        # platforms were then served in place of the archive.
+                        if file_entry.get("zipped_file"):
+                            continue
+
                         matched = None
                         if sha1 and sha1 in files:
                             matched = sha1
