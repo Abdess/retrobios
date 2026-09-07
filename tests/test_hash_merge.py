@@ -485,9 +485,6 @@ class TestDiff(unittest.TestCase):
             self.assertEqual(diff["unchanged"], 1)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 class TestSourceRefDrift(unittest.TestCase):
     """A set whose ROMs are unchanged but whose driver line moved is an update."""
 
@@ -586,3 +583,6 @@ class TestDerivativeVersion(unittest.TestCase):
             entry = self._run(add_new)["files"][0]
             self.assertEqual(entry["source_ref"], "src/mame/philips/cdi.cpp:484")
 
+
+if __name__ == "__main__":
+    unittest.main()

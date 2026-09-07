@@ -2579,6 +2579,9 @@ def main():
         updated = sum(1 for v in results.values() if v)
         if updated:
             print(f"Refreshed {updated} data director{'ies' if updated > 1 else 'y'}")
+        failed = sorted(k for k, v in results.items() if v is None)
+        if failed:
+            print(f"WARNING: data directory refresh failed: {', '.join(failed)}")
 
     emu_profiles = load_emulator_profiles(args.emulators_dir)
 

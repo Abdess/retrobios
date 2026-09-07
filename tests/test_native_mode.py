@@ -257,10 +257,6 @@ class GapAnalysisAgreesWithTheBuilder(unittest.TestCase):
                 )
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class CandidateVerdict(unittest.TestCase):
     """Whether a profile entry can be a gap, and whether it is settled.
 
@@ -479,3 +475,7 @@ class OneProfileSelector(unittest.TestCase):
                 'is a launcher -use the emulator it launches', text,
                 f"{name} still spells the refusal itself",
             )
+
+
+if __name__ == "__main__":
+    unittest.main()

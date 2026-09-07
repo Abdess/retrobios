@@ -252,8 +252,6 @@ class PathTailBeatsABareName(unittest.TestCase):
         self.assertEqual(status, "name_exact")
 
 
-if __name__ == "__main__":
-    unittest.main()
 
 
 class ArchivePrefixCopies(unittest.TestCase):
@@ -303,3 +301,7 @@ class ArchivePrefixCopies(unittest.TestCase):
             {"neogeo.zip": ["abc"]},
         )
         self.assertEqual(extras, [])
+
+
+if __name__ == "__main__":
+    unittest.main()

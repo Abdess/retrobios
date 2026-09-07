@@ -408,10 +408,12 @@ def main():
     # Step 3a: One content answering to two identities. Walks the tree rather
     # than the index, which keeps a single path per content and therefore
     # cannot see a file copied under another machine's name.
-    run(
+    ok, _ = run(
         [sys.executable, "scripts/identity.py", "--strict"],
         "3a/8 file identity",
     )
+    results["identity"] = ok
+    all_ok = all_ok and ok
 
     # Step 3b: Destinations both layers claim, and how each was settled. The
     # ones the pack settles by itself must stay at zero cost; the rest name an

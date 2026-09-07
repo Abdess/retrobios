@@ -309,7 +309,7 @@ def refresh_entry(
     force: bool = False,
     dry_run: bool = False,
     versions_path: str = VERSIONS_FILE,
-) -> bool:
+) -> bool | None:
     """Refresh a single data directory entry.
 
     Returns True if the entry was refreshed (or would be in dry-run mode).
@@ -334,7 +334,7 @@ def refresh_entry(
             remote_tag = get_remote_sha(entry["source_url"], version)
         if remote_tag is None:
             log.warning("[%s] could not check remote, skipping", key)
-            return False
+            return None
         needs_refresh = remote_tag != cached_tag
 
     if not needs_refresh:
@@ -368,7 +368,7 @@ def refresh_entry(
         zipfile.BadZipFile,
     ) as exc:
         log.warning("[%s] download failed: %s", key, exc)
-        return False
+        return None
 
     if remote_tag is None:
         if source_type == "zip":
@@ -390,12 +390,15 @@ def refresh_all(
     dry_run: bool = False,
     versions_path: str = VERSIONS_FILE,
     platform: str | None = None,
-) -> dict[str, bool]:
+) -> dict[str, bool | None]:
     """Refresh all entries in the registry.
 
     If platform is set, only refresh entries whose for_platforms
     includes that platform (or entries with no for_platforms restriction).
-    Returns a dict mapping key -> whether it was refreshed.
+    Returns a dict mapping key -> True when refreshed, False when already up
+    to date, None when the refresh failed. A single boolean conflated the last
+    two, so a run that reached no remote at all exited 0 like a run with
+    nothing to do.
     """
     results = {}
     for key, entry in registry.items():
@@ -440,13 +443,20 @@ def main() -> None:
         if args.key not in registry:
             log.error("unknown key: %s (available: %s)", args.key, ", ".join(registry))
             raise SystemExit(1)
-        refresh_entry(
-            args.key, registry[args.key], force=args.force, dry_run=args.dry_run
-        )
+        outcomes = {
+            args.key: refresh_entry(
+                args.key, registry[args.key], force=args.force, dry_run=args.dry_run
+            )
+        }
     else:
-        refresh_all(
+        outcomes = refresh_all(
             registry, force=args.force, dry_run=args.dry_run, platform=args.platform
         )
+
+    failed = sorted(key for key, outcome in outcomes.items() if outcome is None)
+    if failed:
+        log.error("refresh failed: %s", ", ".join(failed))
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

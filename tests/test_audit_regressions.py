@@ -1275,8 +1275,36 @@ class PipelineReportsWhatItDid(unittest.TestCase):
         stale = re.findall(r'results\["(\w+)"\] = True', source)
         self.assertEqual(stale, [], f"steps still claiming OK when skipped: {stale}")
 
-if __name__ == "__main__":
-    unittest.main()
+class TestEntryPointsRunEveryClass(unittest.TestCase):
+    """`unittest.main()` has to sit after the last test class.
+
+    In this file it sat in the middle, so running it directly discovered only
+    the classes defined above it: eight cases never ran that way, while
+    `python -m unittest discover` ran all of them. The two roads have to agree.
+    """
+
+    def test_no_module_calls_main_before_its_last_class(self):
+        for path in sorted((ROOT / "tests").glob("test_*.py")):
+            lines = path.read_text(encoding="utf-8").splitlines()
+            # Column zero only: the same text appears inside this very test as
+            # a string literal, and a substring search matched that instead.
+            entry = next(
+                (n for n, line in enumerate(lines)
+                 if line.startswith("if __name__ ==")),
+                None,
+            )
+            if entry is None:
+                continue
+            last_class = max(
+                (n for n, line in enumerate(lines) if line.startswith("class ")),
+                default=-1,
+            )
+            self.assertGreater(
+                entry,
+                last_class,
+                f"{path.name} calls unittest.main() before its last class, so "
+                "running the file directly skips what follows",
+            )
 
 
 class ScriptsImportThreeWays(unittest.TestCase):
@@ -1399,3 +1427,7 @@ class ModuleConstantsDeclaredOnce(unittest.TestCase):
             if again:
                 offenders[path.name] = again
         self.assertEqual(offenders, {})
+
+
+if __name__ == "__main__":
+    unittest.main()
