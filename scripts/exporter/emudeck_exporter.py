@@ -113,6 +113,7 @@ class Exporter(BaseExporter):
                 "the checks are code, not data"
             )
 
+        self._withdrawn: dict[str, set[str]] = {}
         pieces: list[str] = []
         cursor = 0
         for name, start, end in self._function_spans(script):
@@ -124,7 +125,15 @@ class Exporter(BaseExporter):
             if md5s and match:
                 # An array compared by membership says nothing about order,
                 # so the same set is left as the maintainer wrote it.
-                if set(md5s) != set(match.group(1).split()):
+                theirs = set(match.group(1).split())
+                # The array was replaced wholesale, so any value EmuDeck holds
+                # and our model does not was deleted: a user whose dump matched
+                # it would stop passing the check. A rewrite that withdraws one
+                # is refused and reported instead.
+                withdrawn = theirs - set(md5s)
+                if withdrawn:
+                    self._withdrawn.setdefault(name, set()).update(withdrawn)
+                elif set(md5s) != theirs:
                     body = (
                         body[: match.start(1)]
                         + " ".join(md5s)

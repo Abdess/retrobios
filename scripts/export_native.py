@@ -15,6 +15,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import urllib.error
 import urllib.request
@@ -31,9 +32,28 @@ _USER_AGENT = "retrobios-exporter/1.0"
 _MAX_BYTES = 64 * 1024 * 1024
 
 
-def fetch(url: str, destination: Path) -> bytes:
-    """Download an original once, then read it from the cache."""
-    if destination.exists():
+def _load_sources(index: Path | None) -> dict[str, str]:
+    if index is None or not index.is_file():
+        return {}
+    try:
+        return json.loads(index.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def fetch(url: str, destination: Path, index: Path | None = None) -> bytes:
+    """Download an original once, then read it from the cache.
+
+    The cache path carries the file's own name and nothing of the revision it
+    came from, so a file fetched under one pin was served under every later
+    one and pinned_base() stopped having any effect after the first run. The
+    URL that produced each cached file is recorded beside the cache, and a
+    different URL refetches. A cache written before this index existed keeps
+    being served: nothing recorded means nothing contradicted.
+    """
+    recorded = _load_sources(index)
+    key = str(destination)
+    if destination.exists() and recorded.get(key, url) == url:
         return destination.read_bytes()
     request = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT})
     with urllib.request.urlopen(request, timeout=60) as response:
@@ -42,6 +62,12 @@ def fetch(url: str, destination: Path) -> bytes:
         raise ValueError(f"{url}: response larger than {_MAX_BYTES} bytes")
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_bytes(payload)
+    if index is not None:
+        recorded[key] = url
+        index.parent.mkdir(parents=True, exist_ok=True)
+        index.write_text(
+            json.dumps(recorded, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
     return payload
 
 
@@ -98,7 +124,7 @@ def collect_originals(
             payload = path.read_bytes()
         elif allow_fetch:
             try:
-                payload = fetch(url, path)
+                payload = fetch(url, path, upstream_dir / ".sources.json")
             except (urllib.error.URLError, urllib.error.HTTPError, OSError) as exc:
                 missing.append(f"{relative}: {exc}")
                 continue

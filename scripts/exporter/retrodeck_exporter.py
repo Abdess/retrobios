@@ -106,6 +106,42 @@ class Exporter(BaseExporter):
                 return nested, "bios"
         return None
 
+    @staticmethod
+    def _merge(existing: object, ours: list[OrderedDict]) -> list[OrderedDict]:
+        """Correct the component's own list; never replace it.
+
+        Assigning our entries wholesale dropped every file RetroDECK declares
+        that our model does not carry -- 177 of them across the components.
+        An entry the platform declares is kept, its fields corrected where the
+        truth has something to say and left alone where it does not, and what
+        the platform does not declare is appended.
+        """
+        by_name: OrderedDict[str, OrderedDict] = OrderedDict()
+        for entry in ours:
+            name = str(entry.get("filename", ""))
+            if name and name not in by_name:
+                by_name[name] = entry
+
+        merged: list[OrderedDict] = []
+        corrected: set[str] = set()
+        for entry in existing if isinstance(existing, list) else []:
+            if not isinstance(entry, dict):
+                continue
+            name = str(entry.get("filename", ""))
+            ours_entry = by_name.get(name)
+            if ours_entry is None:
+                merged.append(OrderedDict(entry))
+                continue
+            combined = OrderedDict(entry)
+            combined.update(ours_entry)
+            merged.append(combined)
+            corrected.add(name)
+
+        merged.extend(
+            entry for name, entry in by_name.items() if name not in corrected
+        )
+        return merged
+
     def render(
         self,
         systems: dict[str, NativeSystem],
@@ -132,10 +168,10 @@ class Exporter(BaseExporter):
                     continue
                 holder = self._bios_holder(component_value)
                 if holder is None:
-                    component_value["bios"] = entries
+                    component_value["bios"] = self._merge(None, entries)
                 else:
                     container, key = holder
-                    container[key] = entries
+                    container[key] = self._merge(container.get(key), entries)
                 break
 
             produced[path] = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"

@@ -624,6 +624,47 @@ class UpstreamFidelity(unittest.TestCase):
         self.assertEqual(exporter.validate(systems, produced), [])
         return produced, originals
 
+    def test_retrodeck_keeps_every_bios_entry_it_declares(self):
+        """The component list is corrected in place, never replaced.
+
+        Assigning our entries wholesale dropped 114 distinct filenames that
+        RetroDECK's own manifests declare.
+        """
+        produced, originals = self._export("retrodeck")
+
+        def names(text: str) -> set[str]:
+            manifest = json.loads(text)
+            for value in manifest.values():
+                if not isinstance(value, dict):
+                    continue
+                listing = value.get("bios")
+                if listing is None:
+                    for key in ("preset_actions", "cores"):
+                        nested = value.get(key)
+                        if isinstance(nested, dict) and "bios" in nested:
+                            listing = nested["bios"]
+                            break
+                if listing is None:
+                    continue
+                return {
+                    str(e.get("filename", ""))
+                    for e in listing
+                    if isinstance(e, dict)
+                }
+            return set()
+
+        lost: set[str] = set()
+        compared = 0
+        for path, text in produced.items():
+            if path not in originals:
+                continue
+            compared += 1
+            lost |= names(originals[path]) - names(text)
+        self.assertGreater(compared, 0, "no component manifest was compared")
+        self.assertEqual(
+            lost, set(), "the export dropped entries RetroDECK declares"
+        )
+
     def test_recalbox_keeps_every_system_and_every_path(self):
         produced, originals = self._export("recalbox")
         before = parse_untrusted_xml(originals["es_bios.xml"], "es_bios.xml")
@@ -744,6 +785,26 @@ class UpstreamFidelity(unittest.TestCase):
                 ["bash", "-n", str(script)], capture_output=True, text=True, timeout=60
             )
         self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_emudeck_keeps_every_md5_it_declares(self):
+        """An md5 the platform holds is never withdrawn from its array.
+
+        The array was assigned wholesale, so any value our model did not
+        carry disappeared and a user whose dump matched it stopped passing
+        EmuDeck's own check.
+        """
+        produced, originals = self._export("emudeck")
+        pattern = re.compile(r"local\s+hashes=\(([^)]*)\)")
+        before = pattern.findall(originals["checkBIOS.sh"])
+        after = pattern.findall(produced["checkBIOS.sh"])
+        self.assertEqual(len(before), len(after), "an md5 array vanished")
+        for index, (was, now) in enumerate(zip(before, after)):
+            with self.subTest(array=index):
+                self.assertEqual(
+                    set(was.split()) - set(now.split()),
+                    set(),
+                    "the export withdrew an md5 EmuDeck declares",
+                )
 
     def test_retrobat_keeps_every_system_and_every_file(self):
         produced, originals = self._export("retrobat")
