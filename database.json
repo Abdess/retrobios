@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-05T09:26:20Z",
+  "generated_at": "2026-09-07T02:25:37Z",
   "total_files": 10330,
   "total_size": 13322705446,
   "files": {
@@ -4293,16 +4293,6 @@
       "crc32": "37d022f9",
       "adler32": "4e621a26"
     },
-    "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3": {
-      "path": "bios/Arcade/Arcade/dsi_firmware.bin",
-      "name": "dsi_firmware.bin",
-      "size": 131072,
-      "sha1": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
-      "md5": "d6b7664ffdc1cffdb1d3560988ecbf8a",
-      "sha256": "1f89935da2888cd3e401af2774e06a6b587ca059e85f922826494f317d31c6ae",
-      "crc32": "a630a071",
-      "adler32": "ce76771f"
-    },
     "c720161b382fbc6b36e58b9df67f4a872d9bebc1": {
       "path": "bios/Arcade/Arcade/dsp1.zip",
       "name": "dsp1.zip",
@@ -4882,16 +4872,6 @@
       "sha256": "838a69a55719afcf3ea3def6756144ff5692462ccc6934ebe32653989e8092e3",
       "crc32": "5d893ac5",
       "adler32": "8891838c"
-    },
-    "5b2acbd499b39fb1af1b36ef7de5eb047d83401c": {
-      "path": "bios/Arcade/Arcade/firmware.bin",
-      "name": "firmware.bin",
-      "size": 262144,
-      "sha1": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
-      "md5": "4db10164021478e41eca59dd056ee15f",
-      "sha256": "7ea4f06ca110f8b7ff7c946f6e4e228d94977dadd4bb51570d14c68488edb32a",
-      "crc32": "12c02de6",
-      "adler32": "0cc93681"
     },
     "57dc1e29729d79c8097a7dee2616ad8cb8099588": {
       "path": "bios/Arcade/Arcade/fsd1.zip",
@@ -44771,6 +44751,26 @@
       "sha256": "1dc99c9c3f771ee27b6a43813fc1f0c19054fca56b54f53d4490f87a1ab7a60e",
       "crc32": "451efb01",
       "adler32": "1b492f7d"
+    },
+    "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3": {
+      "path": "bios/Nintendo/Nintendo DS/.variants/dsi_firmware.bin.d6b7664f",
+      "name": "dsi_firmware.bin",
+      "size": 131072,
+      "sha1": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
+      "md5": "d6b7664ffdc1cffdb1d3560988ecbf8a",
+      "sha256": "1f89935da2888cd3e401af2774e06a6b587ca059e85f922826494f317d31c6ae",
+      "crc32": "a630a071",
+      "adler32": "ce76771f"
+    },
+    "5b2acbd499b39fb1af1b36ef7de5eb047d83401c": {
+      "path": "bios/Nintendo/Nintendo DS/.variants/firmware.bin.4db10164",
+      "name": "firmware.bin",
+      "size": 262144,
+      "sha1": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
+      "md5": "4db10164021478e41eca59dd056ee15f",
+      "sha256": "7ea4f06ca110f8b7ff7c946f6e4e228d94977dadd4bb51570d14c68488edb32a",
+      "crc32": "12c02de6",
+      "adler32": "0cc93681"
     },
     "8497afdd16af92d6887b71582846c40514e9039f": {
       "path": "bios/Nintendo/Nintendo DS/.variants/firmware.bin.8497afdd",
@@ -108818,7 +108818,6 @@
       "40b935912f349e94d9d3fadff303a8d3": "d67e0699141078e5c96a55387b794b42f2344321",
       "c46d6ff30d3b74da9f920e492b78714d": "77bb4c81d1078d7bd0b2378bbf831c007e2252ff",
       "e14405c0c0840a28609dd62b112ffe14": "dfc736079c04e859d2ed7b41d83f5c8be3ebb6a4",
-      "d6b7664ffdc1cffdb1d3560988ecbf8a": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
       "e874f5cd082f7764dcd23f9cf029a695": "c720161b382fbc6b36e58b9df67f4a872d9bebc1",
       "1d0ff4c8e7c9489f9906ef872e7f42a2": "71b5e30189de3df990f2500ba932bbc815a71010",
       "64f3e61a109edab734cc59544c71012c": "2dfb572191187acdaeacb6f128bf8b0acc065bdb",
@@ -108877,7 +108876,6 @@
       "5ef0afe6bb68c678e8ccd1193d211d0b": "6110280b5b492e13c5348ec9bbd05dd9df1be7c2",
       "d45ddd546e12fc413360fbfb4f46e7c2": "199e05ebd1966d23877c8aed60f3502115b70a2e",
       "9e2f987a3c41fdfc81bfdaf89786b9ed": "88f1fc9434d377cde3a0e3133ba2dc1599a1702f",
-      "4db10164021478e41eca59dd056ee15f": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
       "6e344b2b29c4b071677f77cf594e44bb": "57dc1e29729d79c8097a7dee2616ad8cb8099588",
       "f74971f2cdc5ff41ba321a8e45fe8099": "208586e1971f3e6d310bcc8c5f378c7b561a13f6",
       "a832488251f892f961a9afe125320adf": "9ec50f79c5fd6eaddd88542aa18b6c5bb81a9ed4",
@@ -112639,6 +112637,8 @@
       "a0d02bbdf7910c706f226eddba42f9d5": "f64190e28c9bc9013b4d267825818f5d1f2cde30",
       "389c5a776907057ee4ad1dcc31824f6c": "dd842826759525e94ae808d880e9524543a99a96",
       "758ad9874925c54e04db50f11385f515": "683a8fca9a782de05e8f6b1fcc5573ad9011a032",
+      "d6b7664ffdc1cffdb1d3560988ecbf8a": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
+      "4db10164021478e41eca59dd056ee15f": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
       "145eaef5bd3037cbc247c213bb3da1b3": "8497afdd16af92d6887b71582846c40514e9039f",
       "559dae4ea78eb9d67702c56c1d791e81": "a3aa751eb6bdaaf8a827ba9e03576a6f1ab0f547",
       "87b665fce118f76251271c3732532777": "7bf549b8be9e48ab0cdc9b0fdadd49a5131f97eb",
@@ -120041,11 +120041,6 @@
       "dragon_jcbsnd.zip": [
         "dfc736079c04e859d2ed7b41d83f5c8be3ebb6a4"
       ],
-      "dsi_firmware.bin": [
-        "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
-        "b61d72863932b3918aec5a2262beaffd74b69770",
-        "d2a5af338f09c5cbdd5d7628db5b9c075c69b616"
-      ],
       "dsp1.zip": [
         "c720161b382fbc6b36e58b9df67f4a872d9bebc1"
       ],
@@ -120222,11 +120217,6 @@
       ],
       "filetto_cga.zip": [
         "88f1fc9434d377cde3a0e3133ba2dc1599a1702f"
-      ],
-      "firmware.bin": [
-        "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
-        "8497afdd16af92d6887b71582846c40514e9039f",
-        "cfe072921ee3fb93f688743f8beef89043c3e9ad"
       ],
       "fsd1.zip": [
         "57dc1e29729d79c8097a7dee2616ad8cb8099588"
@@ -130173,6 +130163,11 @@
       "64DD_IPL_v12_JPN.bin": [
         "bf861922dcb78c316360e3e742f4f70ff63c9bc3"
       ],
+      "dsi_firmware.bin": [
+        "b61d72863932b3918aec5a2262beaffd74b69770",
+        "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
+        "d2a5af338f09c5cbdd5d7628db5b9c075c69b616"
+      ],
       "dsi_nand.bin": [
         "2b972cec368e83a2699e6ab38165638b1bc1302c",
         "b48f44194fe918aaaec5298861479512b581d661"
@@ -130667,6 +130662,11 @@
       ],
       "GLideN64.adc115e7.OpenGL.shaders": [
         "683a8fca9a782de05e8f6b1fcc5573ad9011a032"
+      ],
+      "firmware.bin": [
+        "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
+        "8497afdd16af92d6887b71582846c40514e9039f",
+        "cfe072921ee3fb93f688743f8beef89043c3e9ad"
       ],
       "biosdsi7.bin": [
         "a3aa751eb6bdaaf8a827ba9e03576a6f1ab0f547"
@@ -147573,10 +147573,6 @@
       "disk2-16seq.rom": [
         "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4"
       ],
-      "d2fdc.zip": [
-        "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
-        "af56c948598291b284a528f3fce06b961dba55e3"
-      ],
       "a2diskii.zip": [
         "d9bb189730e15d46c27e7246d7bb23137e7d761e"
       ],
@@ -151092,6 +151088,9 @@
       "cpc_serams.zip": [
         "949b9b362e1dc615a2e5783016207ff0d87de465"
       ],
+      "d2fdc.zip": [
+        "af56c948598291b284a528f3fce06b961dba55e3"
+      ],
       "d9090.zip": [
         "d375f64dc02703eee6751bd9723978c6633348c9"
       ],
@@ -152387,7 +152386,6 @@
       "88e5399f": "d67e0699141078e5c96a55387b794b42f2344321",
       "5cee9385": "77bb4c81d1078d7bd0b2378bbf831c007e2252ff",
       "37d022f9": "dfc736079c04e859d2ed7b41d83f5c8be3ebb6a4",
-      "a630a071": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
       "46405339": "c720161b382fbc6b36e58b9df67f4a872d9bebc1",
       "aec221d1": "71b5e30189de3df990f2500ba932bbc815a71010",
       "2a7c95cc": "2dfb572191187acdaeacb6f128bf8b0acc065bdb",
@@ -152446,7 +152444,6 @@
       "e15e4828": "6110280b5b492e13c5348ec9bbd05dd9df1be7c2",
       "e3b101a1": "199e05ebd1966d23877c8aed60f3502115b70a2e",
       "5d893ac5": "88f1fc9434d377cde3a0e3133ba2dc1599a1702f",
-      "12c02de6": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
       "aa73663e": "57dc1e29729d79c8097a7dee2616ad8cb8099588",
       "d6c39e58": "208586e1971f3e6d310bcc8c5f378c7b561a13f6",
       "3890ead5": "9ec50f79c5fd6eaddd88542aa18b6c5bb81a9ed4",
@@ -156208,6 +156205,8 @@
       "16940ddc": "f64190e28c9bc9013b4d267825818f5d1f2cde30",
       "873a1aad": "dd842826759525e94ae808d880e9524543a99a96",
       "451efb01": "683a8fca9a782de05e8f6b1fcc5573ad9011a032",
+      "a630a071": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
+      "12c02de6": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
       "41599ec9": "8497afdd16af92d6887b71582846c40514e9039f",
       "9f1840d9": "a3aa751eb6bdaaf8a827ba9e03576a6f1ab0f547",
       "3d64d498": "7bf549b8be9e48ab0cdc9b0fdadd49a5131f97eb",
@@ -162719,7 +162718,6 @@
       "80f9d7567863115bbc9d5d63d977f7fdcd275a58b33441a63aaab83fa7589f3c": "d67e0699141078e5c96a55387b794b42f2344321",
       "44141d4b2b48dba9f5b5bfa75fdff1701011df6e8e262cb80561ea87e5e67d32": "77bb4c81d1078d7bd0b2378bbf831c007e2252ff",
       "0cd056bad4c69d6a81f75cd5e3ac6fadcda23d27bdc345ccf7f5a7146ba40c64": "dfc736079c04e859d2ed7b41d83f5c8be3ebb6a4",
-      "1f89935da2888cd3e401af2774e06a6b587ca059e85f922826494f317d31c6ae": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
       "3443129eecb19be2bc3f7df34bd8fc476388adea323ee8b6a8cadaff99b283b0": "c720161b382fbc6b36e58b9df67f4a872d9bebc1",
       "72b06b1f7dbbcc7d0d5df95a098ddb37166feb6a469fa4019da4eb7b78247be4": "71b5e30189de3df990f2500ba932bbc815a71010",
       "e0ea4e68d82d39ea54649bbd9f5f00553c32edebd49a75c9441053633cf5f6af": "2dfb572191187acdaeacb6f128bf8b0acc065bdb",
@@ -162778,7 +162776,6 @@
       "ebf96b92b2ecf9231930063bca07df3dcae8dda21bf5525bde663fb6fdc2a937": "6110280b5b492e13c5348ec9bbd05dd9df1be7c2",
       "72149ca0a0c07126b0731c3a39a68e7f579693322a2f48ee94e1db72b3e13e65": "199e05ebd1966d23877c8aed60f3502115b70a2e",
       "838a69a55719afcf3ea3def6756144ff5692462ccc6934ebe32653989e8092e3": "88f1fc9434d377cde3a0e3133ba2dc1599a1702f",
-      "7ea4f06ca110f8b7ff7c946f6e4e228d94977dadd4bb51570d14c68488edb32a": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
       "736924bc9f8628c028bbd77c154bc2e7326c6733772450ae9697c4ca998bf26f": "57dc1e29729d79c8097a7dee2616ad8cb8099588",
       "e58fc4dd745574366a2066f2334b6d39825e8cbf44236ab5a11c055a51717581": "208586e1971f3e6d310bcc8c5f378c7b561a13f6",
       "0132a956caa5705177688d2ee454aaf919b9cc3ed1ee6c4ae331f006292b59f0": "9ec50f79c5fd6eaddd88542aa18b6c5bb81a9ed4",
@@ -166540,6 +166537,8 @@
       "9c8eca2a3648b24681262fb0e67ca212517b63a82157d5642964aad4c38a0f2d": "f64190e28c9bc9013b4d267825818f5d1f2cde30",
       "eb0c03da5fe877043a573df036dadc274a83121d27966a7ebea60318d2a72dce": "dd842826759525e94ae808d880e9524543a99a96",
       "1dc99c9c3f771ee27b6a43813fc1f0c19054fca56b54f53d4490f87a1ab7a60e": "683a8fca9a782de05e8f6b1fcc5573ad9011a032",
+      "1f89935da2888cd3e401af2774e06a6b587ca059e85f922826494f317d31c6ae": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
+      "7ea4f06ca110f8b7ff7c946f6e4e228d94977dadd4bb51570d14c68488edb32a": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
       "30e1b3475172f0366b21db7ac96c163be2a3e53a7797d164d35fe68f95354a61": "8497afdd16af92d6887b71582846c40514e9039f",
       "2946281e730e71f7cafdb125f5cb60fed944ca5d610ee1e082c441b602b5f4e2": "a3aa751eb6bdaaf8a827ba9e03576a6f1ab0f547",
       "47538922a8e8a8e79b922ff1203863ef5c40d9c54656a8d2c89c56ece52029ce": "7bf549b8be9e48ab0cdc9b0fdadd49a5131f97eb",
@@ -175333,12 +175332,6 @@
       "Arcade/dragon_jcbsnd.zip": [
         "dfc736079c04e859d2ed7b41d83f5c8be3ebb6a4"
       ],
-      "Arcade/Arcade/dsi_firmware.bin": [
-        "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3"
-      ],
-      "Arcade/dsi_firmware.bin": [
-        "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3"
-      ],
       "Arcade/Arcade/dsp1.zip": [
         "c720161b382fbc6b36e58b9df67f4a872d9bebc1"
       ],
@@ -175716,12 +175709,6 @@
       ],
       "Arcade/filetto_cga.zip": [
         "88f1fc9434d377cde3a0e3133ba2dc1599a1702f"
-      ],
-      "Arcade/Arcade/firmware.bin": [
-        "5b2acbd499b39fb1af1b36ef7de5eb047d83401c"
-      ],
-      "Arcade/firmware.bin": [
-        "5b2acbd499b39fb1af1b36ef7de5eb047d83401c"
       ],
       "Arcade/Arcade/fsd1.zip": [
         "57dc1e29729d79c8097a7dee2616ad8cb8099588"
@@ -205285,6 +205272,24 @@
       ],
       "shaders/GLideN64.adc115e7.OpenGL.shaders": [
         "683a8fca9a782de05e8f6b1fcc5573ad9011a032"
+      ],
+      "Nintendo/Nintendo DS/.variants/dsi_firmware.bin.d6b7664f": [
+        "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3"
+      ],
+      "Nintendo DS/.variants/dsi_firmware.bin.d6b7664f": [
+        "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3"
+      ],
+      ".variants/dsi_firmware.bin.d6b7664f": [
+        "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3"
+      ],
+      "Nintendo/Nintendo DS/.variants/firmware.bin.4db10164": [
+        "5b2acbd499b39fb1af1b36ef7de5eb047d83401c"
+      ],
+      "Nintendo DS/.variants/firmware.bin.4db10164": [
+        "5b2acbd499b39fb1af1b36ef7de5eb047d83401c"
+      ],
+      ".variants/firmware.bin.4db10164": [
+        "5b2acbd499b39fb1af1b36ef7de5eb047d83401c"
       ],
       "Nintendo/Nintendo DS/.variants/firmware.bin.8497afdd": [
         "8497afdd16af92d6887b71582846c40514e9039f"
