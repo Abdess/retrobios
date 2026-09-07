@@ -3,8 +3,10 @@ name = "retrobios"
 version = "1.0.0"
 description = "BIOS collection manager for retrogaming platforms"
 # install.py is the only entry point a user runs before cloning, and both
-# bootstraps accept 3.8. Nothing here needs a newer runtime, so the floor
-# stays where the bootstraps put it.
+# bootstraps accept 3.8, so the floor stays where the bootstraps put it. That
+# floor covers install.py alone: the build scripts under scripts/ use syntax
+# CPython 3.12 introduced, which is the version CI pins and the version a
+# contributor needs to run the pipeline or the test suite.
 requires-python = ">=3.8"
 dependencies = [
     "pyyaml",
@@ -15,6 +17,14 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "jsonschema>=4.23",
+]
+# The site build the repo generates and documents. Both were hard
+# requirements of deploy-site.yml and of wiki/release-process.md while being
+# declared nowhere, so a contributor following either had to read the
+# workflow to learn what to install.
+docs = [
+    "mkdocs-material>=9.7.5,<10",
+    "pymdown-extensions>=10.14",
 ]
 
 [project.urls]

@@ -1285,6 +1285,49 @@ class PipelineReportsWhatItDid(unittest.TestCase):
         stale = re.findall(r'results\["(\w+)"\] = True', source)
         self.assertEqual(stale, [], f"steps still claiming OK when skipped: {stale}")
 
+class DeclaredDependenciesMatchTheDocumentedWorkflows(unittest.TestCase):
+    """What the workflows install has to be what the project declares.
+
+    mkdocs-material and pymdown-extensions were hard requirements of the site
+    build in CI and in the release guide while pyproject declared neither, so
+    a contributor following either had to read the workflow to find out.
+    """
+
+    @staticmethod
+    def _pyproject() -> dict:
+        import tomllib
+
+        with (ROOT / "pyproject.toml").open("rb") as handle:
+            return tomllib.load(handle)
+
+    def test_every_package_ci_installs_is_declared(self):
+        extras = self._pyproject()["project"]["optional-dependencies"]
+        declared = {
+            name.split(">")[0].split("=")[0].split("<")[0].strip('"')
+            for group in extras.values()
+            for name in group
+        }
+        declared |= set(self._pyproject()["project"]["dependencies"])
+        installed: set[str] = set()
+        for workflow in ("validate.yml", "deploy-site.yml"):
+            body = (ROOT / ".github" / "workflows" / workflow).read_text(
+                encoding="utf-8"
+            )
+            for line in body.splitlines():
+                if "pip install" not in line:
+                    continue
+                for token in line.split("pip install", 1)[1].split():
+                    name = token.strip('"').split(">")[0].split("=")[0]
+                    name = name.split("<")[0].strip()
+                    if name:
+                        installed.add(name)
+        self.assertEqual(
+            installed - declared,
+            set(),
+            "CI installs packages pyproject does not declare",
+        )
+
+
 class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
     """Exiting zero says the question was answered and the answer was yes.
 
