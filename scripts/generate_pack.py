@@ -1545,9 +1545,16 @@ def generate_system_pack(
         offline=offline,
     )
     if result:
-        # Rename to system-based name
-        rgn_tag = f"_{region_mod.region_tag(regions)}" if regions else ""
-        new_name = f"{sys_display}{rgn_tag}_BIOS_Pack.zip"
+        # Rename to system-based name. Every dimension goes through the one
+        # list: keeping only the region tag made --system X --required-only
+        # overwrite the pack built without it.
+        tags = "".join(
+            tag
+            for tag, _label in _narrowings(
+                "full", regions, None, False, required_only, standalone=standalone
+            )
+        )
+        new_name = f"{sys_display}{tags}_BIOS_Pack.zip"
         new_path = os.path.join(output_dir, new_name)
         if new_path != result:
             os.rename(result, new_path)
@@ -1616,8 +1623,12 @@ def generate_split_packs(
             source, regions, target_name, one_per_slot, required_only
         )
     )
+    # Two groupings write different files; without the tag they accumulate in
+    # one directory under one SHA256SUMS.txt.
+    group_tag = "" if group_by == "system" else f"_By{group_by.title()}"
     split_dir = os.path.join(
-        output_dir, f"{platform_display.replace(' ', '_')}{split_tags}_Split"
+        output_dir,
+        f"{platform_display.replace(' ', '_')}{split_tags}{group_tag}_Split",
     )
     os.makedirs(split_dir, exist_ok=True)
 
@@ -1768,7 +1779,17 @@ def generate_md5_pack(
                     plat_file_index[alias.lower()] = fe
 
     context_name = plat_display if platform_name else (emu_display or "Custom")
-    zip_name = f"{context_name.replace(' ', '_')}_Custom_BIOS_Pack.zip"
+    # --standalone changes the destination layout, so a run with it must not
+    # take the name of a run without it.
+    custom_tags = "".join(
+        tag
+        for tag, _label in _narrowings(
+            "full", None, None, False, False, standalone=standalone
+        )
+    )
+    zip_name = (
+        f"{context_name.replace(' ', '_')}_Custom{custom_tags}_BIOS_Pack.zip"
+    )
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -3149,6 +3170,37 @@ def _target_cores_for(
     return cache.get(platform_name)
 
 
+def _content_narrowing_tags() -> tuple[str, ...]:
+    """Tags naming a pack that holds fewer files than the platform declares.
+
+    Read from the name builder rather than retyped, so the two cannot drift.
+    Region and target are absent on purpose: both are handed to the check
+    itself, which narrows its expectation instead of skipping it.
+    """
+    dimensions = (
+        {"source": "platform"},
+        {"source": "truth"},
+        {"one_per_slot": True},
+        {"required_only": True},
+    )
+    tags: list[str] = []
+    for dimension in dimensions:
+        tags.extend(
+            tag
+            for tag, _label in _narrowings(
+                dimension.get("source", "full"),
+                None,
+                None,
+                dimension.get("one_per_slot", False),
+                dimension.get("required_only", False),
+            )
+        )
+    return tuple(tags)
+
+
+_CONTENT_NARROWING_TAGS = _content_narrowing_tags()
+
+
 def _narrows_contents(pack_name: str) -> bool:
     """True when a pack holds fewer files than the platform declares.
 
@@ -3157,10 +3209,7 @@ def _narrows_contents(pack_name: str) -> bool:
     Region is not listed: the region filter is passed to the check itself, and
     a hardware target is passed the same way.
     """
-    return any(
-        tag in pack_name
-        for tag in ("_Platform_", "_Truth_", "_Required", "_OnePerSlot")
-    )
+    return any(f"{tag}_" in pack_name for tag in _CONTENT_NARROWING_TAGS)
 
 
 def verify_and_finalize_packs(

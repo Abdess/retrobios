@@ -347,6 +347,15 @@ def main():
         print("\n--- 2b check buildbot system: SKIPPED (--offline) ---")
 
     # Step 2c: Generate truth YAMLs
+    # A targeted run writes its model in a subdirectory of its own, and the
+    # diff has to read the same one or it compares a narrowed model against
+    # the whole scrape.
+    truth_dir = Path(args.output_dir) / "truth"
+    if args.target:
+        truth_dir = truth_dir / re.sub(
+            r"[^a-z0-9]+", "-", args.target.strip().lower()
+        ).strip("-")
+
     if args.with_truth or args.with_export:
         truth_cmd = [
             sys.executable,
@@ -366,7 +375,7 @@ def main():
     # Step 2d: Diff truth vs scraped
     if args.with_truth or args.with_export:
         diff_cmd = [sys.executable, "scripts/diff_truth.py", "--all"]
-        diff_cmd.extend(["--truth-dir", str(Path(args.output_dir) / "truth")])
+        diff_cmd.extend(["--truth-dir", str(truth_dir)])
         ok, _ = run(diff_cmd, "2d diff truth")
         results["diff_truth"] = ok
         all_ok = all_ok and ok

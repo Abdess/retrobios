@@ -9,6 +9,7 @@ discrepancy that does not exist. Content decides, as everywhere else here.
 
 from __future__ import annotations
 
+import pathlib
 import sys
 import unittest
 from pathlib import Path
@@ -21,6 +22,38 @@ from truth import _match_renames  # noqa: E402
 
 def _entry(name: str, **hashes) -> dict:
     return {"name": name, **hashes}
+
+
+class ATargetedModelIsItsOwnArtifact(unittest.TestCase):
+    """A narrowed truth model must not take the full model's place.
+
+    generate_truth wrote dist/truth/<platform>.yml whatever --target said, so
+    a targeted run overwrote the full model and diff_truth then compared a
+    narrowed model against the whole scrape.
+    """
+
+    def test_a_target_writes_beside_the_full_model(self):
+        import subprocess
+        import tempfile
+
+        repo = pathlib.Path(__file__).resolve().parent.parent
+        with tempfile.TemporaryDirectory(dir=str(repo / "tmp")) as directory:
+            for extra in ([], ["--target", "browser"]):
+                proc = subprocess.run(
+                    [sys.executable, "scripts/generate_truth.py", "--platform",
+                     "romm", *extra, "--output-dir", directory],
+                    capture_output=True, text=True, cwd=str(repo), timeout=400,
+                )
+                self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            produced = sorted(
+                str(p.relative_to(directory))
+                for p in pathlib.Path(directory).rglob("*.yml")
+            )
+            self.assertEqual(
+                produced,
+                ["browser/romm.yml", "romm.yml"],
+                "the targeted model did not land beside the full one",
+            )
 
 
 class RenameMatching(unittest.TestCase):

@@ -5917,9 +5917,41 @@ struct BurnDriver BurnDrvneogeo = {
             'source_tag = {"platform": "_Platform"',
             'req_suffix = "_required"',
             'slot_tag = "_OnePerSlot"',
+            # The --system rename kept the region tag alone, the custom pack
+            # took no tag at all, and the skip list retyped four of them.
+            '_Custom_BIOS_Pack.zip"',
+            '{rgn_tag}_BIOS_Pack.zip"',
+            '("_Platform_", "_Truth_"',
         ):
             self.assertNotIn(hand_rolled, source, hand_rolled)
-        self.assertGreaterEqual(source.count("_narrowings("), 5)
+        self.assertGreaterEqual(source.count("_narrowings("), 8)
+
+    def test_a_narrowed_system_pack_does_not_take_the_full_name(self):
+        """Every dimension has to show in the filename or two builds collide.
+
+        --system X --required-only produced the same name as --system X and
+        overwrote it, because the rename kept only the region tag.
+        """
+        import subprocess
+
+        repo = os.path.join(os.path.dirname(__file__), "..")
+        names = {}
+        for label, extra in (("full", []), ("required", ["--required-only"])):
+            out = os.path.join(self.root, f"sysname_{label}")
+            proc = subprocess.run(
+                [sys.executable, "scripts/generate_pack.py", "--system",
+                 "atari-lynx", "--offline", *extra, "--output-dir", out],
+                capture_output=True, text=True, cwd=repo, timeout=300,
+            )
+            self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            names[label] = sorted(
+                f for f in os.listdir(out) if f.endswith("_BIOS_Pack.zip")
+            )
+        self.assertTrue(names["full"] and names["required"])
+        self.assertNotEqual(
+            names["full"], names["required"],
+            "a required-only system pack took the name of the full one",
+        )
 
     def test_a_full_pack_is_not_announced_as_narrowed(self):
         from generate_pack import _build_readme, _narrowings

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -87,7 +88,14 @@ def main(argv: list[str] | None = None) -> None:
     else:
         platforms = [args.platform]
 
-    os.makedirs(args.output_dir, exist_ok=True)
+    # A target-narrowed model is a different artifact: written under the
+    # platform's own name it overwrote the full one, and diff_truth then
+    # compared a narrowed model against the whole scrape.
+    output_dir = args.output_dir
+    if args.target:
+        slug = re.sub(r"[^a-z0-9]+", "-", args.target.strip().lower()).strip("-")
+        output_dir = os.path.join(output_dir, slug or "target")
+    os.makedirs(output_dir, exist_ok=True)
 
     for name in platforms:
         # Resolve target cores
@@ -120,7 +128,7 @@ def main(argv: list[str] | None = None) -> None:
             target_cores=target_cores,
         )
 
-        out_path = os.path.join(args.output_dir, f"{name}.yml")
+        out_path = os.path.join(output_dir, f"{name}.yml")
         with open(out_path, "w") as f:
             yaml.dump(
                 result,
