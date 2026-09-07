@@ -621,6 +621,8 @@ def generate_pack(
             db,
             base_dest,
             {str(c) for c in config.get("standalone_cores", [])},
+            zip_contents,
+            data_registry,
         ):
             decision = slots.arbitrate(conflict, mode)
             if decision.serves_both and decision.winner.local_path:

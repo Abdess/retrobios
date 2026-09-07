@@ -797,6 +797,13 @@ def verify_platform(
 
     # The builder settles a destination claimed by both layers; this must read
     # the same decision, or the two tools describe different packs.
+    has_zipped = any(
+        fe.get("zipped_file")
+        for sys in config.get("systems", {}).values()
+        for fe in sys.get("files", [])
+    )
+    zip_contents = build_zip_contents_index(db) if has_zipped else {}
+
     slot_overrides: dict[str, str] = {}
     if emu_profiles:
         base_dest = config.get("base_destination", "")
@@ -810,6 +817,8 @@ def verify_platform(
             db,
             base_dest,
             {str(c) for c in config.get("standalone_cores", [])},
+            zip_contents,
+            data_dir_registry,
         ):
             decision = slots.arbitrate(conflict, mode)
             if decision.serves_both and decision.winner.local_path:
@@ -817,13 +826,6 @@ def verify_platform(
                 if base_dest and key.startswith(f"{base_dest}/"):
                     key = key[len(base_dest) + 1:]
                 slot_overrides[key] = decision.winner.local_path
-
-    has_zipped = any(
-        fe.get("zipped_file")
-        for sys in config.get("systems", {}).values()
-        for fe in sys.get("files", [])
-    )
-    zip_contents = build_zip_contents_index(db) if has_zipped else {}
 
     # Build HLE + validation indexes from emulator profiles
     profiles = (

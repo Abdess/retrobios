@@ -179,6 +179,37 @@ class TestConflicts(unittest.TestCase):
             slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB), []
         )
 
+    def test_the_arbitration_reads_the_same_evidence_as_the_builder(self):
+        """A verdict decided on less evidence than its consumers apply.
+
+        slots resolved without the ZIP index and without the data-directory
+        registry, while generate_pack and verify pass both, so an entry only
+        a ZIP member or a data directory can satisfy looked unproven here and
+        proven there.
+        """
+        import inspect
+
+        import generate_pack
+        import verify
+
+        for function in (
+            slots.platform_claims,
+            slots.profile_claims,
+            slots.find_conflicts,
+            slots.find_collisions,
+        ):
+            parameters = inspect.signature(function).parameters
+            with self.subTest(function=function.__name__):
+                self.assertIn("zip_contents", parameters)
+                self.assertIn("data_dir_registry", parameters)
+
+        # And both consumers hand theirs over rather than letting it default.
+        for module in (generate_pack, verify):
+            source = inspect.getsource(module)
+            call = source[source.index("slots.find_conflicts(") :][:400]
+            with self.subTest(module=module.__name__):
+                self.assertIn("zip_contents", call)
+
     def test_a_rom_inside_a_romset_claims_nothing_of_its_own(self):
         """The archive occupies the destination, not the ROM it holds.
 

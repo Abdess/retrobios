@@ -20,6 +20,8 @@ from dataclasses import dataclass, field
 
 import nativemode
 from common import (
+    build_zip_contents_index,
+    load_data_dir_registry,
     resolution_is_hash_exact,
     resolve_local_file,
 )
@@ -86,7 +88,13 @@ def build_claim_index(claims: list[Claim]) -> dict[str, list[Claim]]:
     return index
 
 
-def platform_claims(config: dict, db: dict, base_dest: str = "") -> list[Claim]:
+def platform_claims(
+    config: dict,
+    db: dict,
+    base_dest: str = "",
+    zip_contents: dict | None = None,
+    data_dir_registry: dict | None = None,
+) -> list[Claim]:
     """What the platform YAML says belongs at each of its destinations."""
     claims: list[Claim] = []
     for system in (config.get("systems") or {}).values():
@@ -97,7 +105,13 @@ def platform_claims(config: dict, db: dict, base_dest: str = "") -> list[Claim]:
             if not dest:
                 continue
             full = f"{base_dest}/{dest}" if base_dest else dest
-            local, status = resolve_local_file(entry, db, dest_hint=dest)
+            local, status = resolve_local_file(
+                entry,
+                db,
+                zip_contents,
+                dest_hint=dest,
+                data_dir_registry=data_dir_registry,
+            )
             claims.append(
                 Claim(
                     origin="platform",
@@ -116,6 +130,8 @@ def profile_claims(
     db: dict,
     base_dest: str = "",
     standalone_cores: set[str] | None = None,
+    zip_contents: dict | None = None,
+    data_dir_registry: dict | None = None,
 ) -> list[Claim]:
     """What each emulator profile says belongs at each destination it names.
 
@@ -157,7 +173,13 @@ def profile_claims(
             if not dest:
                 continue
             full = f"{base_dest}/{dest}" if base_dest else dest
-            local, status = resolve_local_file(entry, db, dest_hint=dest)
+            local, status = resolve_local_file(
+                entry,
+                db,
+                zip_contents,
+                dest_hint=dest,
+                data_dir_registry=data_dir_registry,
+            )
             claims.append(
                 Claim(
                     origin="profile",
@@ -178,6 +200,8 @@ def find_conflicts(
     db: dict,
     base_dest: str = "",
     standalone_cores: set[str] | None = None,
+    zip_contents: dict | None = None,
+    data_dir_registry: dict | None = None,
 ) -> list[Conflict]:
     """Destinations where a proven profile claim contradicts what ships.
 
@@ -185,7 +209,9 @@ def find_conflicts(
     asserts nothing about content and cannot contradict anything.
     """
     by_dest: dict[str, Claim] = {}
-    for claim in platform_claims(config, db, base_dest):
+    for claim in platform_claims(
+        config, db, base_dest, zip_contents, data_dir_registry
+    ):
         by_dest.setdefault(_normalize(claim.destination), claim)
 
     # Grouped before judging: a profile may declare several revisions that are
@@ -193,7 +219,9 @@ def find_conflicts(
     # is agreement, not contradiction. Only a destination where no profile
     # claim at all matches what ships is a disagreement.
     by_slot: dict[str, list[Claim]] = {}
-    for claim in profile_claims(profiles, db, base_dest, standalone_cores):
+    for claim in profile_claims(
+        profiles, db, base_dest, standalone_cores, zip_contents, data_dir_registry
+    ):
         key = _normalize(claim.destination)
         platform = by_dest.get(key)
         if platform is None or not platform.is_proven or not claim.is_proven:
@@ -295,7 +323,12 @@ def _collision_json(collision: Collision) -> dict:
     }
 
 
-def find_collisions(config: dict, db: dict) -> list[Collision]:
+def find_collisions(
+    config: dict,
+    db: dict,
+    zip_contents: dict | None = None,
+    data_dir_registry: dict | None = None,
+) -> list[Collision]:
     """Destinations a platform declares twice and resolves two ways.
 
     One path holds one file, so whichever declaration the builder reaches
@@ -321,7 +354,11 @@ def find_collisions(config: dict, db: dict) -> list[Collision]:
         resolved = []
         for entry in entries:
             local, _ = resolve_local_file(
-                entry, db, dest_hint=entry.get("destination", "")
+                entry,
+                db,
+                zip_contents,
+                dest_hint=entry.get("destination", ""),
+                data_dir_registry=data_dir_registry,
             )
             if local and local not in resolved:
                 resolved.append(local)
@@ -376,12 +413,17 @@ def scan_platform(
     config = load_platform_config(platform, platforms_dir)
     keys = resolve_platform_cores(config, profiles)
     relevant = {k: profiles[k] for k in keys if k in profiles}
+    # The same evidence the builder and the verifier resolve with: without
+    # the ZIP index and the data-directory registry the arbitration judged
+    # with less than the tools that read its verdict.
     return find_conflicts(
         config,
         relevant,
         db,
         config.get("base_destination", ""),
         {str(c) for c in config.get("standalone_cores", [])},
+        build_zip_contents_index(db),
+        load_data_dir_registry(platforms_dir),
     )
 
 
@@ -428,7 +470,10 @@ def main() -> int:
         if conflicts:
             found[name] = conflicts
         collisions = find_collisions(
-            load_platform_config(name, args.platforms_dir), db
+            load_platform_config(name, args.platforms_dir),
+            db,
+            build_zip_contents_index(db),
+            load_data_dir_registry(args.platforms_dir),
         )
         if collisions:
             collided[name] = collisions
