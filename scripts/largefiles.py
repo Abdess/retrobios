@@ -5,6 +5,7 @@ against the hash the caller declares."""
 
 from __future__ import annotations
 
+import contextlib
 import os
 import tempfile
 import urllib.error
@@ -28,17 +29,29 @@ def fetch_large_file(
 ) -> str | None:
     """Return a verified cached large file, downloading it only when allowed."""
     cached = os.path.join(dest_dir, name)
+    # Between the existence test and the hash, a concurrent run can drop the
+    # same stale entry: the file is gone by the time this one reads it, and
+    # both of them try to unlink it.
+    def _drop(path: str) -> None:
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(path)
+
     if os.path.exists(cached):
-        if expected_sha1 or expected_md5:
-            hashes = compute_hashes(cached)
+        try:
+            hashes = compute_hashes(cached) if (expected_sha1 or expected_md5) else {}
+        except FileNotFoundError:
+            hashes = None
+        if hashes is None:
+            pass
+        elif expected_sha1 or expected_md5:
             if expected_sha1 and hashes["sha1"].lower() != expected_sha1.lower():
-                os.unlink(cached)
+                _drop(cached)
             elif expected_md5:
                 md5_list = [
                     m.strip().lower() for m in expected_md5.split(",") if m.strip()
                 ]
                 if hashes["md5"].lower() not in md5_list:
-                    os.unlink(cached)
+                    _drop(cached)
                 else:
                     return cached
             else:

@@ -96,6 +96,36 @@ class PackLockCliTest(unittest.TestCase):
         self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
         self.assertIn("is in use by another run", proc.stdout)
 
+    def test_every_writing_mode_refuses_a_locked_output(self):
+        """Two of seven modes took the lock; five wrote straight into it.
+
+        A mode that writes packs or manifests into a directory another run
+        holds produces the half-written artifact the lock exists to prevent.
+        """
+        modes = [
+            (["--emulator", "handy", "--offline"], "emulator"),
+            (["--system", "atari-lynx", "--offline"], "system"),
+            (["--manifest-targets"], "manifest-targets"),
+            (["--platform", "misterfpga", "--manifest", "--offline"], "manifest"),
+            (
+                ["--platform", "misterfpga", "--from-md5",
+                 "d8f1206299c48946e6ec5ef96d014eaa", "--offline"],
+                "from-md5",
+            ),
+        ]
+        with artifact_lock(self.dir):
+            for argv, label in modes:
+                with self.subTest(mode=label):
+                    proc = self._run(
+                        ["scripts/generate_pack.py", *argv,
+                         "--output-dir", self.dir]
+                    )
+                    self.assertNotEqual(
+                        proc.returncode, 0,
+                        f"{label} wrote into a directory held by another run",
+                    )
+                    self.assertIn("in use", (proc.stdout + proc.stderr).lower())
+
     def test_verify_packs_refuses_a_writer(self):
         with artifact_lock(self.dir):
             proc = self._run(

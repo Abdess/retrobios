@@ -282,10 +282,24 @@ def _download_and_extract_zip(
                     shutil.copyfileobj(src, dst)
                 file_count += 1
 
-        if cache_dir.exists():
-            shutil.rmtree(cache_dir)
+        # The old tree is stepped aside rather than deleted: removing it
+        # first and then failing to move the new one in left the cache with
+        # nothing at all, and the next run reads that as "never fetched".
         cache_dir.parent.mkdir(parents=True, exist_ok=True)
-        shutil.move(str(extract_dir), str(cache_dir))
+        previous = None
+        if cache_dir.exists():
+            previous = cache_dir.with_name(cache_dir.name + ".previous")
+            if previous.exists():
+                shutil.rmtree(previous)
+            os.replace(cache_dir, previous)
+        try:
+            shutil.move(str(extract_dir), str(cache_dir))
+        except BaseException:
+            if previous is not None:
+                os.replace(previous, cache_dir)
+            raise
+        if previous is not None:
+            shutil.rmtree(previous, ignore_errors=True)
 
     return file_count
 

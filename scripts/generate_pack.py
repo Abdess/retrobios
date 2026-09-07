@@ -2445,9 +2445,10 @@ def main():
             _run_verify_packs(args)
         return
     if args.manifest_targets:
-        generate_target_manifests(
-            os.path.join(args.platforms_dir, "targets"), args.output_dir
-        )
+        with _pack_output_lock(args.output_dir):
+            generate_target_manifests(
+                os.path.join(args.platforms_dir, "targets"), args.output_dir
+            )
         return
     if args.list:
         for p in list_platforms(args.platforms_dir):
@@ -2498,18 +2499,19 @@ def main():
             )
             return
         zip_contents = build_zip_contents_index(db)
-        result = generate_md5_pack(
-            hashes=hashes,
-            db=db,
-            bios_dir=args.bios_dir,
-            output_dir=args.output_dir,
-            zip_contents=zip_contents,
-            platform_name=args.platform,
-            platforms_dir=args.platforms_dir,
-            emulator_name=args.emulator,
-            emulators_dir=args.emulators_dir,
-            standalone=getattr(args, "standalone", False),
-        )
+        with _pack_output_lock(args.output_dir):
+            result = generate_md5_pack(
+                hashes=hashes,
+                db=db,
+                bios_dir=args.bios_dir,
+                output_dir=args.output_dir,
+                zip_contents=zip_contents,
+                platform_name=args.platform,
+                platforms_dir=args.platforms_dir,
+                emulator_name=args.emulator,
+                emulators_dir=args.emulators_dir,
+                standalone=getattr(args, "standalone", False),
+            )
         if not result:
             sys.exit(1)
         return
@@ -2520,36 +2522,40 @@ def main():
     # Emulator mode
     if args.emulator:
         names = [n.strip() for n in args.emulator.split(",") if n.strip()]
-        if not generate_emulator_pack(
-            names,
-            args.emulators_dir,
-            db,
-            args.bios_dir,
-            args.output_dir,
-            args.standalone,
-            zip_contents,
-            required_only=args.required_only,
-            regions=getattr(args, "regions", None),
-            offline=args.offline,
-        ):
+        with _pack_output_lock(args.output_dir):
+            built = generate_emulator_pack(
+                names,
+                args.emulators_dir,
+                db,
+                args.bios_dir,
+                args.output_dir,
+                args.standalone,
+                zip_contents,
+                required_only=args.required_only,
+                regions=getattr(args, "regions", None),
+                offline=args.offline,
+            )
+        if not built:
             sys.exit(1)
         return
 
     # System mode (standalone, without platform context)
     if args.system and not args.platform and not args.all:
         system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
-        if not generate_system_pack(
-            system_ids,
-            args.emulators_dir,
-            db,
-            args.bios_dir,
-            args.output_dir,
-            args.standalone,
-            zip_contents,
-            required_only=args.required_only,
-            regions=getattr(args, "regions", None),
-            offline=args.offline,
-        ):
+        with _pack_output_lock(args.output_dir):
+            built = generate_system_pack(
+                system_ids,
+                args.emulators_dir,
+                db,
+                args.bios_dir,
+                args.output_dir,
+                args.standalone,
+                zip_contents,
+                required_only=args.required_only,
+                regions=getattr(args, "regions", None),
+                offline=args.offline,
+            )
+        if not built:
             sys.exit(1)
         return
 
@@ -2608,9 +2614,10 @@ def main():
     )
 
     if args.manifest:
-        _run_manifest_mode(
-            args, groups, db, zip_contents, emu_profiles, target_cores_cache
-        )
+        with _pack_output_lock(args.output_dir):
+            _run_manifest_mode(
+                args, groups, db, zip_contents, emu_profiles, target_cores_cache
+            )
     else:
         with _pack_output_lock(args.output_dir):
             _run_platform_packs(

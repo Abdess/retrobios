@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import contextlib
 import os
+import tempfile
 import re
 
 
@@ -42,8 +43,23 @@ def write_if_changed(path: str, content: str, normalize=None) -> bool:
         )
         if _strip_timestamps(before) == _strip_timestamps(after):
             return False
-    with open(path, "w") as f:
-        f.write(content)
+    # Truncate-then-write leaves a half-written artifact behind an interrupt,
+    # and every generator in the repo funnels through here: a partial
+    # database.json or README.md is committed-looking and silently wrong.
+    # The scratch file sits beside the target so the rename stays on one
+    # filesystem, which is what makes it atomic.
+    directory = os.path.dirname(os.path.abspath(path))
+    handle, scratch = tempfile.mkstemp(
+        dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
+    )
+    try:
+        with os.fdopen(handle, "w") as f:
+            f.write(content)
+        os.replace(scratch, path)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            os.unlink(scratch)
+        raise
     return True
 
 def _strip_timestamps(text: str) -> str:
