@@ -504,6 +504,26 @@ class TestExternalCitation(unittest.TestCase):
             profile_sync.is_external_citation("EmuDeck emuDeckares.sh")
         )
 
+    def test_a_file_without_an_extension_is_still_a_citation(self):
+        """A repository carries files with no dot in their name.
+
+        The pattern required a dotted extension, so `Makefile:36-37` and
+        `README:27` were never collected and rotted unnoticed while every
+        dotted citation was anchored.
+        """
+        for text in ("Makefile:36-37", "src/Makefile:36", "README:27",
+                     "configure:120"):
+            with self.subTest(text=text):
+                match = profile_sync.PROSE_CITE_RE.search(text)
+                self.assertIsNotNone(match, text)
+                self.assertEqual(match.group("path"), text.split(":")[0])
+
+    def test_a_constant_or_an_address_is_not_a_citation(self):
+        """Widening the pattern to any dotless word swallows these."""
+        for text in ("ALTERNATEROMS:23", "F000:12", "C000:4"):
+            with self.subTest(text=text):
+                self.assertIsNone(profile_sync.PROSE_CITE_RE.search(text), text)
+
     def test_plain_paths_are_not_citations(self):
         for path in ("src/midi/mt32.cpp", "libretro.c", "a/b/c.h"):
             self.assertFalse(profile_sync.is_external_citation(path), path)

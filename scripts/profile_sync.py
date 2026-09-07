@@ -345,8 +345,27 @@ def _anchor_tokens(entry: dict) -> list[str]:
     return tokens
 
 
+# Files a repository carries without an extension and that prose cites by
+# name. Widening the pattern to any dotless word instead would swallow the
+# hex addresses and the constants profiles write the same way: ALTERNATEROMS,
+# F000, C000 all read as `name:number`.
+PROSE_EXTENSIONLESS = (
+    "Makefile",
+    "makefile",
+    "GNUmakefile",
+    "CMakeLists",
+    "Kconfig",
+    "Dockerfile",
+    "configure",
+    "README",
+    "LICENSE",
+    "COPYING",
+    "CHANGELOG",
+)
 PROSE_CITE_RE = re.compile(
-    r"(?P<path>[A-Za-z0-9_][\w./+-]*\.[A-Za-z]\w*):(?P<range>\d+(?:-\d+)?)"
+    r"(?P<path>[A-Za-z0-9_][\w./+-]*\.[A-Za-z]\w*"
+    r"|(?:[\w./+-]*/)?(?:" + "|".join(PROSE_EXTENSIONLESS) + r"))"
+    r":(?P<range>\d+(?:-\d+)?)"
 )
 PROSE_CONT_RE = re.compile(r",(?P<range>\d+(?:-\d+)?)(?![\w-])(?!\.\d)")
 # A spaced continuation is accepted only for a range: `x.c:55-71, 80-147`
