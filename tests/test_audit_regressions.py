@@ -899,6 +899,37 @@ class ArchiveSecurityRegressions(unittest.TestCase):
                 )
 
 
+class NoMd5IsNotNothingChecked(unittest.TestCase):
+    """A declared hash that is not an md5 still contradicts.
+
+    verify_entry_md5 returned OK the moment the entry declared no md5, so an
+    entry whose sha256 the local file contradicts read as covered while the
+    builder was already excluding it. RetroDECK's dsifirmware.bin declares a
+    sha256 and no md5.
+    """
+
+    def setUp(self):
+        import verify
+
+        self.verify = verify
+
+    def _entry(self):
+        return {"name": "dsifirmware.bin", "sha256": "b" * 64}
+
+    def test_a_contradicted_sha256_is_not_reported_ok(self):
+        result = self.verify.verify_entry_md5(
+            self._entry(), "bios/whatever.bin", "hash_mismatch"
+        )
+        self.assertNotEqual(result["status"], self.verify.Status.OK)
+        self.assertIn("contradicted", result.get("reason", ""))
+
+    def test_a_clean_resolution_is_still_ok(self):
+        result = self.verify.verify_entry_md5(
+            self._entry(), "bios/whatever.bin", "sha256_exact"
+        )
+        self.assertEqual(result["status"], self.verify.Status.OK)
+
+
 class InstallerBoundaryRegressions(unittest.TestCase):
     def _manifest(self, dest: str) -> dict:
         return {

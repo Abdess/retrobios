@@ -189,6 +189,17 @@ def verify_entry_md5(
         }
 
     if not md5_list:
+        if resolve_status == "hash_mismatch":
+            # No md5 to compare does not mean nothing was compared: the entry
+            # declares a sha1 or a crc32 the local file contradicts, and the
+            # builder drops it for exactly that. Reporting OK here said the
+            # collection holds bytes it does not.
+            return {
+                **base,
+                "status": Status.UNTESTED,
+                "path": local_path,
+                "reason": "declared hash contradicted by the local file",
+            }
         return {**base, "status": Status.OK, "path": local_path}
 
     if resolve_status == "md5_exact":
