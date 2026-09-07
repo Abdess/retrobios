@@ -1974,6 +1974,26 @@ def _validate_args(args, parser):
         parser.error("--manifest is incompatible with --split")
     if getattr(args, "region", None) and has_from_md5:
         parser.error("--region and --from-md5 are mutually exclusive")
+    # A mode either applies a narrowing flag or refuses it. Swallowing one
+    # answers about an artifact the caller did not ask for, and the name on
+    # disk then asserts a narrowing the contents do not carry.
+    source_given = getattr(args, "source", "full") != "full"
+    if source_given and (has_emulator or (has_system and not has_platform)):
+        parser.error("--source requires --platform or --all")
+    if has_from_md5:
+        for flag, given in (
+            ("--target", args.target),
+            ("--required-only", args.required_only),
+            ("--source", source_given),
+        ):
+            if given:
+                parser.error(f"{flag} is incompatible with --from-md5")
+    if has_system and has_platform:
+        if args.manifest:
+            parser.error("--system is incompatible with --manifest")
+        if args.split:
+            parser.error("--system is incompatible with --split")
+
     if getattr(args, "one_per_slot", False):
         if has_from_md5:
             parser.error("--one-per-slot and --from-md5 are mutually exclusive")
@@ -2445,6 +2465,16 @@ def main():
             _run_verify_packs(args)
         return
     if args.manifest_targets:
+        # This mode writes one manifest per hardware target from the target
+        # files themselves; it reads none of the narrowing flags. --region and
+        # --one-per-slot are refused above, and these three the same way.
+        for flag, given in (
+            ("--target", args.target),
+            ("--required-only", args.required_only),
+            ("--source", args.source != "full"),
+        ):
+            if given:
+                parser.error(f"{flag} is incompatible with --manifest-targets")
         with _pack_output_lock(args.output_dir):
             generate_target_manifests(
                 os.path.join(args.platforms_dir, "targets"), args.output_dir

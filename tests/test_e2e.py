@@ -5824,6 +5824,23 @@ struct BurnDriver BurnDrvneogeo = {
              "refuse"),
             (["--platform", "retroarch", "--verify-packs"], ["--source", "truth"],
              "refuse"),
+            # Modes that read none of these: the flag reached the filename or
+            # nothing at all, never the selection.
+            (["--emulator", "duckstation"], ["--source", "truth"], "refuse"),
+            (["--system", "sony-playstation"], ["--source", "truth"], "refuse"),
+            (["--manifest-targets"], ["--target", "switch"], "refuse"),
+            (["--manifest-targets"], ["--required-only"], "refuse"),
+            (["--manifest-targets"], ["--source", "truth"], "refuse"),
+            (["--platform", "retroarch", "--from-md5", "d8f1"],
+             ["--target", "switch"], "refuse"),
+            (["--platform", "retroarch", "--from-md5", "d8f1"],
+             ["--required-only"], "refuse"),
+            (["--platform", "retroarch", "--from-md5", "d8f1"],
+             ["--source", "truth"], "refuse"),
+            (["--platform", "retroarch", "--manifest"],
+             ["--system", "sony-playstation"], "refuse"),
+            (["--platform", "retroarch", "--split"],
+             ["--system", "sony-playstation"], "refuse"),
         ]
         for mode, flag, expected in matrix:
             with self.subTest(mode=mode, flag=flag):
