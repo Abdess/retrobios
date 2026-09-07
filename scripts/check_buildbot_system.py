@@ -196,6 +196,11 @@ def main() -> None:
     if args.update:
         update_changed(report)
 
+    # Unreachable upstream means the freshness question was not answered, and
+    # a zero exit says it was answered "fresh".
+    if report.get("error"):
+        raise SystemExit(1)
+
 
 if __name__ == "__main__":
     main()

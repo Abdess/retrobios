@@ -10,6 +10,7 @@ import json
 import os
 import re
 import stat
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -1078,10 +1079,16 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
             cwd = os.getcwd()
             os.chdir(root)
             try:
-                self.assertEqual(restore(str(cache), "database.json", ".gitignore"), 1)
+                restored, unsatisfied = restore(
+                    str(cache), "database.json", ".gitignore"
+                )
+                self.assertEqual((restored, unsatisfied), (1, []))
                 self.assertEqual((root / "bios/Sony/big.pup").read_bytes(), payload)
                 # A path already in the checkout is never overwritten.
-                self.assertEqual(restore(str(cache), "database.json", ".gitignore"), 0)
+                restored, unsatisfied = restore(
+                    str(cache), "database.json", ".gitignore"
+                )
+                self.assertEqual((restored, unsatisfied), (0, []))
             finally:
                 os.chdir(cwd)
 
@@ -1103,7 +1110,10 @@ class CheckoutCompletenessRegressions(unittest.TestCase):
             cwd = os.getcwd()
             os.chdir(root)
             try:
-                self.assertEqual(restore(str(cache), "database.json", ".gitignore"), 0)
+                restored, unsatisfied = restore(
+                    str(cache), "database.json", ".gitignore"
+                )
+                self.assertEqual((restored, unsatisfied), (0, []))
                 self.assertFalse((root / "bios/tracked.bin").exists())
             finally:
                 os.chdir(cwd)
@@ -1274,6 +1284,82 @@ class PipelineReportsWhatItDid(unittest.TestCase):
         source = (ROOT / "scripts" / "pipeline.py").read_text()
         stale = re.findall(r'results\["(\w+)"\] = True', source)
         self.assertEqual(stale, [], f"steps still claiming OK when skipped: {stale}")
+
+class ACheckThatCannotAnswerDoesNotPass(unittest.TestCase):
+    """Exiting zero says the question was answered and the answer was yes.
+
+    Four scripts said that without answering: a refresh that reached no
+    remote, a freshness check whose upstream was unreachable, a restore whose
+    cache could not supply a declared path, and a pack verification asked
+    about one platform whose pack was not there.
+    """
+
+    def test_naming_a_platform_with_no_pack_is_not_a_pass(self):
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            named = subprocess.run(
+                [sys.executable, "scripts/generate_pack.py", "--platform",
+                 "retroarch", "--verify-packs", "--output-dir", directory],
+                capture_output=True, text=True, cwd=str(ROOT), timeout=300,
+            )
+            self.assertNotEqual(
+                named.returncode, 0,
+                "a named platform with no pack reported success:\n"
+                + named.stdout + named.stderr,
+            )
+            # --all is a sweep: a platform nobody built is out of scope.
+            swept = subprocess.run(
+                [sys.executable, "scripts/generate_pack.py", "--all",
+                 "--verify-packs", "--output-dir", directory],
+                capture_output=True, text=True, cwd=str(ROOT), timeout=300,
+            )
+            self.assertEqual(swept.returncode, 0, swept.stdout + swept.stderr)
+
+    def test_an_unsatisfiable_declared_path_is_reported(self):
+        from scripts.restore_large_files import restore
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = Path(directory)
+            cache = root / "cache"
+            cache.mkdir()
+            (root / ".gitignore").write_text("bios/absent.bin\n", encoding="utf-8")
+            (root / "database.json").write_text(
+                json.dumps({"files": {"a" * 40: {"path": "bios/absent.bin"}}}),
+                encoding="utf-8",
+            )
+            cwd = os.getcwd()
+            os.chdir(root)
+            try:
+                restored, unsatisfied = restore(
+                    str(cache), "database.json", ".gitignore"
+                )
+            finally:
+                os.chdir(cwd)
+            self.assertEqual(restored, 0)
+            self.assertEqual(unsatisfied, ["bios/absent.bin"])
+
+    def test_an_unreachable_buildbot_is_not_a_fresh_verdict(self):
+        source = (ROOT / "scripts" / "check_buildbot_system.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            'if report.get("error"):',
+            source.split("def main(")[-1],
+            "main() ignores the error the report carries",
+        )
+
+    def test_a_missing_profile_directory_says_so(self):
+        import io as _io
+
+        from scripts import common as _common
+
+        stderr = _io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            profiles = _common.load_emulator_profiles(
+                str(ROOT / "no-such-emulator-dir")
+            )
+        self.assertEqual(profiles, {})
+        self.assertIn("no emulator profile directory", stderr.getvalue())
+
 
 class TestEntryPointsRunEveryClass(unittest.TestCase):
     """`unittest.main()` has to sit after the last test class.

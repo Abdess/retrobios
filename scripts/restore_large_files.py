@@ -52,27 +52,39 @@ def index_cache(cache_dir: str) -> dict[str, str]:
     return index
 
 
-def restore(cache_dir: str, db_path: str, gitignore: str) -> int:
+def restore(
+    cache_dir: str, db_path: str, gitignore: str
+) -> tuple[int, list[str]]:
     if not os.path.isdir(cache_dir):
         print(f"No cache at {cache_dir}, nothing to restore")
-        return 0
+        return 0, []
     ignored = gitignored_paths(gitignore)
     index = index_cache(cache_dir)
     db = load_database(db_path)
     restored = 0
+    unsatisfied: list[str] = []
     for sha1, entry in db.get("files", {}).items():
         path = entry.get("path", "")
         if path not in ignored or os.path.exists(path):
             continue
         source = index.get(sha1)
         if not source:
+            unsatisfied.append(path)
             continue
         os.makedirs(os.path.dirname(path), exist_ok=True)
         shutil.copy2(source, path)
         print(f"Restored: {path}")
         restored += 1
     print(f"Total: {restored} files restored")
-    return restored
+    if unsatisfied:
+        # Every consumer downstream resolves against the disk, so a path the
+        # cache cannot supply is not a smaller restore: it drops entries from
+        # the manifest and inflates the missing count the README publishes.
+        print(f"Unsatisfied: {len(unsatisfied)} declared paths the cache "
+              "cannot supply", file=sys.stderr)
+        for path in sorted(unsatisfied)[:10]:
+            print(f"  {path}", file=sys.stderr)
+    return restored, unsatisfied
 
 
 def main() -> None:
@@ -81,7 +93,9 @@ def main() -> None:
     parser.add_argument("--db", default="database.json")
     parser.add_argument("--gitignore", default=".gitignore")
     args = parser.parse_args()
-    restore(args.cache, args.db, args.gitignore)
+    _restored, unsatisfied = restore(args.cache, args.db, args.gitignore)
+    if unsatisfied:
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

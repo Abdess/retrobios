@@ -2134,6 +2134,11 @@ def _run_verify_packs(args):
                     break
         if not zip_path:
             print(f"  {platform_name}: SKIP (no pack in {args.output_dir})")
+            # Naming a platform is asking about its pack. Answering SKIP and
+            # exiting 0 says the pack passed; with --all, a platform whose pack
+            # was not built is genuinely out of scope.
+            if args.platform:
+                all_ok = False
             continue
 
         if _narrows_contents(os.path.basename(zip_path)):

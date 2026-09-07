@@ -11,6 +11,7 @@ import functools
 import json
 import os
 import re
+import sys
 import zipfile
 from pathlib import Path
 
@@ -930,10 +931,21 @@ def load_emulator_profiles(
     try:
         import yaml
     except ImportError:
+        # Every consumer reads {} as "this repo documents no emulator", which
+        # is what a broken install looks like from the outside: zero coverage,
+        # no gap, nothing to fix.
+        print(
+            "warning: pyyaml is not installed, no emulator profile was loaded",
+            file=sys.stderr,
+        )
         return {}
     profiles = {}
     emu_path = Path(emulators_dir)
     if not emu_path.exists():
+        print(
+            f"warning: no emulator profile directory at {emulators_dir}",
+            file=sys.stderr,
+        )
         return profiles
     for f in sorted(emu_path.glob("*.yml")):
         if f.name.endswith(".old.yml"):
