@@ -179,6 +179,26 @@ class TestConflicts(unittest.TestCase):
             slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB), []
         )
 
+    def test_a_rom_inside_a_romset_claims_nothing_of_its_own(self):
+        """The archive occupies the destination, not the ROM it holds.
+
+        FBNeo declares msx.rom and kanji.rom with archive: msx.zip and no
+        path, so the member was claimed at the platform's BIOS root and
+        contradicted whatever really lives there.
+        """
+        profile = {
+            "fbneo": {
+                "type": "libretro",
+                "files": [
+                    {"name": "IPL.bin", "archive": "romset.zip"},
+                ],
+            }
+        }
+        self.assertEqual(
+            slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB), []
+        )
+        self.assertEqual(slots.profile_claims(profile, REGIONS_DB), [])
+
     def test_base_destination_prefixes_both_sides(self):
         conflicts = slots.find_conflicts(
             self._config("m" * 32),

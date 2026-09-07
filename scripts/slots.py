@@ -143,6 +143,12 @@ def profile_claims(
                 continue
             if entry_mode == "libretro" and is_standalone:
                 continue
+            # A member of a romset is not a file at the BIOS root: the archive
+            # holding it is what occupies a destination, and it is declared
+            # separately. Claiming the member put FBNeo's msx.zip contents
+            # loose at the platform's root.
+            if entry.get("archive"):
+                continue
             dest = (
                 (entry.get("standalone_path") or entry.get("path"))
                 if is_standalone
@@ -280,6 +286,13 @@ class Collision:
 
     destination: str
     resolved: list[str]
+
+
+def _collision_json(collision: Collision) -> dict:
+    return {
+        "destination": collision.destination,
+        "resolved": list(collision.resolved),
+    }
 
 
 def find_collisions(config: dict, db: dict) -> list[Collision]:
@@ -421,25 +434,29 @@ def main() -> int:
             collided[name] = collisions
 
     if args.json:
-        print(
-            json.dumps(
-                {
-                    platform: [
-                        {
-                            "destination": c.destination,
-                            "ships": c.platform_claim.local_path,
-                            "ships_evidence": c.platform_claim.status,
-                            "emulators": c.emulators,
-                            "expected": c.profile_claims[0].local_path,
-                            "expected_evidence": c.profile_claims[0].status,
-                        }
-                        for c in conflicts
-                    ]
-                    for platform, conflicts in found.items()
-                },
-                indent=2,
-            )
-        )
+        # --strict gates on collisions too, so a document that carries only
+        # conflicts hands a consumer an empty answer and a non-zero exit.
+        payload = {
+            "conflicts": {
+                platform: [
+                    {
+                        "destination": c.destination,
+                        "ships": c.platform_claim.local_path,
+                        "ships_evidence": c.platform_claim.status,
+                        "emulators": c.emulators,
+                        "expected": c.profile_claims[0].local_path,
+                        "expected_evidence": c.profile_claims[0].status,
+                    }
+                    for c in conflicts
+                ]
+                for platform, conflicts in found.items()
+            },
+            "collisions": {
+                platform: [_collision_json(c) for c in platform_collisions]
+                for platform, platform_collisions in collided.items()
+            },
+        }
+        print(json.dumps(payload, indent=2))
     else:
         fixable = 0
         for platform, conflicts in found.items():
