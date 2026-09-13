@@ -5,7 +5,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-09-03T20:45:52Z",
+  "generated": "2026-09-13T17:22:08Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -313,10 +313,10 @@
     },
     {
       "dest": "firmware.bin",
-      "sha1": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
-      "sha256": "7ea4f06ca110f8b7ff7c946f6e4e228d94977dadd4bb51570d14c68488edb32a",
+      "sha1": "cfe072921ee3fb93f688743f8beef89043c3e9ad",
+      "sha256": "57a1d6b43c1399d219ea18644240c4d4c6787c829f0a67ded216472867857cd0",
       "size": 262144,
-      "repo_path": "bios/Arcade/Arcade/firmware.bin",
+      "repo_path": "bios/Nintendo/Nintendo DS/firmware.bin",
       "cores": null
     },
     {
@@ -3991,10 +3991,10 @@
     },
     {
       "dest": "dsi_firmware.bin",
-      "sha1": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
-      "sha256": "1f89935da2888cd3e401af2774e06a6b587ca059e85f922826494f317d31c6ae",
+      "sha1": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
+      "sha256": "1d7c771de535e6e07182fc9820ac32e76c6f0b5bcefd256a861fdfab144761ec",
       "size": 131072,
-      "repo_path": "bios/Arcade/Arcade/dsi_firmware.bin",
+      "repo_path": "bios/Nintendo/Nintendo DS/dsi_firmware.bin",
       "cores": [
         "melonds"
       ]

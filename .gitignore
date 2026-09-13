@@ -15,10 +15,6 @@ node_modules/
 docs/
 
 # Large files stored as GitHub Release assets (> 50MB)
-bios/Arcade/Arcade/Firmware.19.0.0.zip
-bios/Arcade/Arcade/maclc3.zip
-bios/Nintendo/Nintendo DS/dsi_nand.bin
-bios/Other/Batocera42/dsi_nand.bin
 bios/Sony/PlayStation 3/PS3UPDAT.PUP
 bios/Sony/PlayStation 3/.variants/PS3UPDAT.PUP.ed8ab192
 bios/Sony/PlayStation Vita/PSVUPDAT.PUP
@@ -66,11 +62,7 @@ tmp/
 # FBA2012 Toaplan samples (>100MB)
 bios/Arcade/fba2012/samples/fireshrk.zip
 bios/Arcade/fba2012/samples/ghox.zip
-bios/Arcade/fba2012/samples/samesame.zip
 bios/Arcade/fba2012/samples/tekipaki.zip
-bios/Arcade/fba2012/samples/vimana.zip
-bios/Arcade/fba2012/samples/fireshrk.zip
-bios/Arcade/fba2012/samples/samesame.zip
 bios/Arcade/fba2012/samples/vimana.zip
 bios/Nintendo/Switch/Firmware_batocera43.zip
 bios/Nintendo/DS/.variants/dsi_nand.bin.8b79a73c
@@ -78,8 +70,12 @@ bios/Nintendo/DS/.variants/dsi_nand.bin.8b79a73c
 # Wii NAND backup (528MB, fetched from large-files release)
 bios/Nintendo/Wii/nand.bin
 
-# FBNeo audio samples (97MB and 155MB, fetched from large-files release)
+# FBNeo audio samples (96MB, 148MB and 199MB, fetched from large-files release)
+bios/Other/fbneo/fbneo/samples/donpachi.zip
 bios/Other/fbneo/fbneo/samples/sfz3mix.zip
 bios/Other/fbneo/fbneo/samples/twotiger.zip
 bios/Other/starboard/starboard-rootfs.tar.gz
 bios/Other/cspect/cspect-next-8gb.zip
+
+# Output-directory locks (artifact_lock)
+.lock

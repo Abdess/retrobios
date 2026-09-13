@@ -2707,13 +2707,16 @@ def _load_gitignore_entries(repo_root: str) -> set[str]:
     return entries
 
 
-def _is_large_file(local_path: str, repo_root: str) -> bool:
-    """Check if a file is a large file (>50MB or in .gitignore)."""
-    if local_path and os.path.exists(local_path):
-        if os.path.getsize(local_path) > 50_000_000:
-            return True
+def _is_release_asset(local_path: str, repo_root: str) -> bool:
+    """Whether the installer fetches this file from the large-files release.
+
+    The repository serves every committed file from its raw URL; only the
+    files kept out of git live as release assets, and .gitignore is the
+    ledger of those. Size is not the criterion: a committed file over 50 MB
+    is still served by the repository, and announcing it as a release asset
+    sends the installer to an asset nobody uploaded.
+    """
     gitignore = _load_gitignore_entries(repo_root)
-    # Check if the path relative to repo root is in .gitignore
     try:
         rel = os.path.relpath(local_path, repo_root)
     except ValueError:
@@ -2826,7 +2829,7 @@ def _manifest_core_entries(
             "cores": [source_emu] if source_emu else [],
         }
 
-        if _is_large_file(local_path or "", repo_root):
+        if _is_release_asset(local_path or "", repo_root):
             entry["storage"] = "release"
             entry["release_asset"] = (
                 os.path.basename(local_path) if local_path else fe["name"]
@@ -3021,7 +3024,7 @@ def generate_manifest(
                     sha256 = hashes["sha256"]
 
                 repo_path = _get_repo_path(sha1, db) if sha1 else ""
-                is_release_asset = _is_large_file(local_path or "", repo_root)
+                is_release_asset = _is_release_asset(local_path or "", repo_root)
 
                 # An entry needs somewhere to be fetched from. Resolution can
                 # land on a file the database does not index -- a data

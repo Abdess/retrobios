@@ -132,6 +132,22 @@ gh release upload large-files "bios/Sony/PS3/PS3UPDAT.PUP#PS3UPDAT.PUP"
 **Local cache.** `generate_pack.py` calls `fetch_large_file()` which downloads
 from the release and caches in `.cache/large/` for subsequent runs.
 
+**Check.** The installer refuses a download whose `Content-Length` differs
+from the manifest size, and the manifest size is that of the local file. A
+file rebuilt locally after its upload therefore fails every install until it
+is uploaded again (`--clobber`). `python scripts/check_release_assets.py`
+compares every gitignored `bios/` path in the database with the asset of the
+same name, and the release page with the one it renders from the collection;
+the online pipeline runs it as step 2b2. To refresh the page:
+
+```bash
+python scripts/check_release_assets.py --notes tmp/notes.md
+gh release edit large-files --notes-file tmp/notes.md
+```
+
+An asset no database entry names is listed on the page under "Not indexed",
+with its size only: the collection vouches for no hash it does not hold.
+
 ## Cutting a release
 
 Releasing is deliberate and local. Nothing on GitHub builds a pack: the

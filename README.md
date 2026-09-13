@@ -39,18 +39,18 @@ Every release ships `SHA256SUMS.txt` and a detached signature of it, checkable a
 
 | Platform | Extracted size | Extract to | Download |
 |----------|---------------:|-----------|----------|
-| Batocera | 4.0 GB | `/userdata/bios/` | [Download](../../releases/latest) |
-| BizHawk | 2.2 GB | `Firmware/` | [Download](../../releases/latest) |
+| Batocera | 4.2 GB | `/userdata/bios/` | [Download](../../releases/latest) |
+| BizHawk | 2.4 GB | `Firmware/` | [Download](../../releases/latest) |
 | EmuDeck | 3.2 GB | `~/Emulation/bios/` | [Download](../../releases/latest) |
-| Lakka | 5.5 GB | `/storage/system/` | [Download](../../releases/latest) |
+| Lakka | 5.7 GB | `/storage/system/` | [Download](../../releases/latest) |
 | MiSTer FPGA | 24 MB | `/media/fat/games/` | [Download](../../releases/latest) |
-| ROCKNIX | 5.3 GB | `/storage/roms/bios/` | [Download](../../releases/latest) |
-| Recalbox | 3.6 GB | `/recalbox/share/bios/` | [Download](../../releases/latest) |
-| RetroArch | 5.5 GB | `system/` | [Download](../../releases/latest) |
-| RetroBat | 4.4 GB | `bios/` | [Download](../../releases/latest) |
-| RetroDECK | 6.2 GB | `~/retrodeck/` | [Download](../../releases/latest) |
-| RetroPie * | 5.5 GB | `~/RetroPie/BIOS/` | [Download](../../releases/latest) |
-| RomM | 1.3 GB | `bios/{platform_slug}/` | [Download](../../releases/latest) |
+| ROCKNIX | 5.5 GB | `/storage/roms/bios/` | [Download](../../releases/latest) |
+| Recalbox | 3.8 GB | `/recalbox/share/bios/` | [Download](../../releases/latest) |
+| RetroArch | 5.7 GB | `system/` | [Download](../../releases/latest) |
+| RetroBat | 4.6 GB | `bios/` | [Download](../../releases/latest) |
+| RetroDECK | 6.4 GB | `~/retrodeck/` | [Download](../../releases/latest) |
+| RetroPie * | 5.7 GB | `~/RetroPie/BIOS/` | [Download](../../releases/latest) |
+| RomM | 1.5 GB | `bios/{platform_slug}/` | [Download](../../releases/latest) |
 
 The RetroDECK pack already contains its own `bios/` folder, so it extracts into `~/retrodeck/` rather than into the BIOS folder.
 
@@ -67,9 +67,9 @@ Each file is checked the way your platform checks it. Most compare a checksum, t
 - **12 platforms** supported with platform-specific verification
 - **449 emulators** profiled from source (RetroArch cores + standalone)
 - **470 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **10,330 files**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 4,985 system files, 2,806 arcade ROM sets, 2,539 game and engine data files
-- **553 of 4,985 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
-- **12706 MB** total collection size
+- **10,331 files**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 4,986 system files, 2,806 arcade ROM sets, 2,539 game and engine data files
+- **553 of 4,986 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
+- **12909 MB** total collection size
 
 ## Supported systems
 
@@ -174,4 +174,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-09-07T02:33:05Z*
+*Auto-generated on 2026-09-13T22:17:47Z*

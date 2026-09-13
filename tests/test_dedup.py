@@ -204,6 +204,23 @@ class CloneMapSurvivesASecondRun(_Bios):
         path = Path(self._tmp.name) / "_mame_clones.json"
         return json.loads(path.read_text()) if path.exists() else {}
 
+    def test_the_map_is_written_beside_the_scanned_tree_not_the_cwd(self):
+        """A test or a run from another directory must not touch the repo's map.
+
+        The map was written to the working directory. The test suite runs
+        from the repo root, so a fixture scan of a temporary tree rewrote the
+        committed _mame_clones.json with two fixture entries, and a later
+        rewrite left 2 of its 71 parents.
+        """
+        elsewhere = Path(self._tmp.name) / "elsewhere"
+        elsewhere.mkdir()
+        os.chdir(elsewhere)
+        self.write("Arcade/MAME/bbc_m87.zip")
+        self.write("Arcade/MAME/bbc_24bbc.zip")
+        self.run_dedup()
+        self.assertFalse((elsewhere / "_mame_clones.json").exists())
+        self.assertIn("bbc_m87.zip", self._map())
+
     def test_a_recorded_mapping_survives_a_later_run(self):
         self.write("Arcade/MAME/bbc_m87.zip")
         self.write("Arcade/MAME/bbc_24bbc.zip")

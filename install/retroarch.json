@@ -5,7 +5,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-09-05T09:26:20Z",
+  "generated": "2026-09-13T22:10:18Z",
   "base_destination": "system",
   "detect": [
     {
@@ -256,7 +256,7 @@
     }
   ],
   "total_files": 1871,
-  "total_size": 5865446694,
+  "total_size": 6072666103,
   "total_omitted": 1,
   "omitted_files": [
     {
@@ -1865,10 +1865,10 @@
     },
     {
       "dest": "dsi_firmware.bin",
-      "sha1": "93c0598b08192a1f630e5edb2cd9f60d1e3ea7b3",
-      "sha256": "1f89935da2888cd3e401af2774e06a6b587ca059e85f922826494f317d31c6ae",
+      "sha1": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
+      "sha256": "1d7c771de535e6e07182fc9820ac32e76c6f0b5bcefd256a861fdfab144761ec",
       "size": 131072,
-      "repo_path": "bios/Arcade/Arcade/dsi_firmware.bin",
+      "repo_path": "bios/Nintendo/Nintendo DS/dsi_firmware.bin",
       "cores": null
     },
     {
@@ -7151,19 +7151,21 @@
     },
     {
       "dest": "fbneo/samples/donpachi.zip",
-      "sha1": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
-      "sha256": "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c",
-      "size": 5641310,
-      "repo_path": "bios/Other/fbneo/donpachi.zip",
+      "sha1": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
+      "sha256": "78a237f1e2774eb396e2f14999f1270597e0767a392729e7a4539455888b6fe0",
+      "size": 208549253,
+      "repo_path": "bios/Other/fbneo/fbneo/samples/donpachi.zip",
       "cores": [
         "fbneo"
-      ]
+      ],
+      "storage": "release",
+      "release_asset": "donpachi.zip"
     },
     {
       "dest": "fbneo/samples/sfz3mix.zip",
-      "sha1": "227815ce9e55db427d68e075182caffe6ad60ad1",
-      "sha256": "6a720035646b3488a047ab163a6975b7be82fe75c5eec88155c8503c93a631fe",
-      "size": 96705917,
+      "sha1": "e39ee9abb19076ef095f67469ca95ff5e7f600dc",
+      "sha256": "2c2e67ab762102f50df641280721164ddff0316e71081d5fa62f2a67365dea66",
+      "size": 101017377,
       "repo_path": "bios/Other/fbneo/fbneo/samples/sfz3mix.zip",
       "cores": [
         "fbneo"
@@ -9607,10 +9609,10 @@
     },
     {
       "dest": "d2fdc.zip",
-      "sha1": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
-      "sha256": "e5e30615040567c1e7a2d21599681f8dac820edbdcda177b816a64d74b3a12f2",
-      "size": 256,
-      "repo_path": "bios/Apple/Apple II/DiskII/state-machine-16.rom",
+      "sha1": "af56c948598291b284a528f3fce06b961dba55e3",
+      "sha256": "69ee0f8f0862e1a623bcbe9870f9531f7976312f292a20d1aff7ed61b6085a69",
+      "size": 262,
+      "repo_path": "bios/Arcade/Arcade/a3fdc.zip",
       "cores": [
         "mamemess"
       ]
@@ -13619,9 +13621,7 @@
       "repo_path": "bios/Other/sdlpal/sdlpal/5.avi",
       "cores": [
         "sdlpal"
-      ],
-      "storage": "release",
-      "release_asset": "5.avi"
+      ]
     },
     {
       "dest": "sdlpal/6.avi",
@@ -16205,10 +16205,10 @@
     },
     {
       "dest": "SkyEmu/firmware.bin",
-      "sha1": "5b2acbd499b39fb1af1b36ef7de5eb047d83401c",
-      "sha256": "7ea4f06ca110f8b7ff7c946f6e4e228d94977dadd4bb51570d14c68488edb32a",
+      "sha1": "cfe072921ee3fb93f688743f8beef89043c3e9ad",
+      "sha256": "57a1d6b43c1399d219ea18644240c4d4c6787c829f0a67ded216472867857cd0",
       "size": 262144,
-      "repo_path": "bios/Arcade/Arcade/firmware.bin",
+      "repo_path": "bios/Nintendo/Nintendo DS/firmware.bin",
       "cores": [
         "skyemu"
       ]

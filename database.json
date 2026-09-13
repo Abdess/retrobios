@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-07T02:25:37Z",
-  "total_files": 10330,
-  "total_size": 13322705446,
+  "generated_at": "2026-09-13T22:10:18Z",
+  "total_files": 10331,
+  "total_size": 13535566159,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -51128,15 +51128,25 @@
       "crc32": "1294ff68",
       "adler32": "27661d30"
     },
-    "227815ce9e55db427d68e075182caffe6ad60ad1": {
+    "d380fb29287eb7fc9ff901a7653ad40785f7deb1": {
+      "path": "bios/Other/fbneo/fbneo/samples/donpachi.zip",
+      "name": "donpachi.zip",
+      "size": 208549253,
+      "sha1": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
+      "md5": "aa8c5e742ba27cb30ce7a872edd684bf",
+      "sha256": "78a237f1e2774eb396e2f14999f1270597e0767a392729e7a4539455888b6fe0",
+      "crc32": "8651ffbb",
+      "adler32": "2f229899"
+    },
+    "e39ee9abb19076ef095f67469ca95ff5e7f600dc": {
       "path": "bios/Other/fbneo/fbneo/samples/sfz3mix.zip",
       "name": "sfz3mix.zip",
-      "size": 96705917,
-      "sha1": "227815ce9e55db427d68e075182caffe6ad60ad1",
-      "md5": "486c88c15387b4bd83514899e68dec3f",
-      "sha256": "6a720035646b3488a047ab163a6975b7be82fe75c5eec88155c8503c93a631fe",
-      "crc32": "c6ab431d",
-      "adler32": "ecbdccac"
+      "size": 101017377,
+      "sha1": "e39ee9abb19076ef095f67469ca95ff5e7f600dc",
+      "md5": "ce49f09c41c1c4b59078b2350ff1acaf",
+      "sha256": "2c2e67ab762102f50df641280721164ddff0316e71081d5fa62f2a67365dea66",
+      "crc32": "ed686ecb",
+      "adler32": "498e0209"
     },
     "b286035624978c94194ef5b83b5d784ec00c3a3c": {
       "path": "bios/Other/fbneo/fbneo/samples/twotiger.zip",
@@ -113272,7 +113282,8 @@
       "0eb6b12f36508b24f285ffd793438ef3": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "c78ac640fcf02eb866b79718f5ed15fa": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "5bcfc3374fc9b0c16070f1ac42f3dc63": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
-      "486c88c15387b4bd83514899e68dec3f": "227815ce9e55db427d68e075182caffe6ad60ad1",
+      "aa8c5e742ba27cb30ce7a872edd684bf": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
+      "ce49f09c41c1c4b59078b2350ff1acaf": "e39ee9abb19076ef095f67469ca95ff5e7f600dc",
       "733f951177e613819deef4c8f6feb4e7": "b286035624978c94194ef5b83b5d784ec00c3a3c",
       "659d579ba9aef5b025d87323044e83f4": "a8b7dce572b74e02e65cb949b2c366c87625157f",
       "e612770bc5da7ee1a21d499ce419ce2c": "8251a8e151e31201dcc346d75158ee3996895e74",
@@ -132449,10 +132460,11 @@
         "20fdca7131478e1ee12691bdafd2d5bb74cbd16f"
       ],
       "donpachi.zip": [
-        "c0c0b5db93a61276a6fe6842049cb53e564b8413"
+        "c0c0b5db93a61276a6fe6842049cb53e564b8413",
+        "d380fb29287eb7fc9ff901a7653ad40785f7deb1"
       ],
       "sfz3mix.zip": [
-        "227815ce9e55db427d68e075182caffe6ad60ad1"
+        "e39ee9abb19076ef095f67469ca95ff5e7f600dc"
       ],
       "twotiger.zip": [
         "b286035624978c94194ef5b83b5d784ec00c3a3c"
@@ -156840,7 +156852,8 @@
       "88d0be26": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "3c79ef05": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "1294ff68": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
-      "c6ab431d": "227815ce9e55db427d68e075182caffe6ad60ad1",
+      "8651ffbb": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
+      "ed686ecb": "e39ee9abb19076ef095f67469ca95ff5e7f600dc",
       "b5d5b941": "b286035624978c94194ef5b83b5d784ec00c3a3c",
       "353fdbcd": "a8b7dce572b74e02e65cb949b2c366c87625157f",
       "31669117": "8251a8e151e31201dcc346d75158ee3996895e74",
@@ -167172,7 +167185,8 @@
       "f76b62e73e7410ab63813b9db36839be12213e4adfd3ee513eb382b7bc3a4a39": "d124045eccc562ff0423b23a240e27ad740fa0c9",
       "6597f75e97e5337198736b42a4d1ea66d4fdf01d685772482811a55e1eddf8f1": "20fdca7131478e1ee12691bdafd2d5bb74cbd16f",
       "a686ebf893d511b5b7667176cd6844593e914595a8bb9ab656b2c66969013b5c": "c0c0b5db93a61276a6fe6842049cb53e564b8413",
-      "6a720035646b3488a047ab163a6975b7be82fe75c5eec88155c8503c93a631fe": "227815ce9e55db427d68e075182caffe6ad60ad1",
+      "78a237f1e2774eb396e2f14999f1270597e0767a392729e7a4539455888b6fe0": "d380fb29287eb7fc9ff901a7653ad40785f7deb1",
+      "2c2e67ab762102f50df641280721164ddff0316e71081d5fa62f2a67365dea66": "e39ee9abb19076ef095f67469ca95ff5e7f600dc",
       "fe5408e3f513c44a64f573e7a8b68885bce9b263bc9c67bfef13fef13f3e976e": "b286035624978c94194ef5b83b5d784ec00c3a3c",
       "569541852ed3ff8fdacd04b1c6a57fd491a361ab6c41339bbddfd916bced241e": "a8b7dce572b74e02e65cb949b2c366c87625157f",
       "ea2e9f8eccb2d590a0d004e0eaffa95ca4eea36f15466b5aa1a9e47393bc004f": "8251a8e151e31201dcc346d75158ee3996895e74",
@@ -211209,17 +211223,29 @@
       "fbneo/donpachi.zip": [
         "c0c0b5db93a61276a6fe6842049cb53e564b8413"
       ],
+      "Other/fbneo/fbneo/samples/donpachi.zip": [
+        "d380fb29287eb7fc9ff901a7653ad40785f7deb1"
+      ],
+      "fbneo/fbneo/samples/donpachi.zip": [
+        "d380fb29287eb7fc9ff901a7653ad40785f7deb1"
+      ],
+      "fbneo/samples/donpachi.zip": [
+        "d380fb29287eb7fc9ff901a7653ad40785f7deb1"
+      ],
+      "samples/donpachi.zip": [
+        "d380fb29287eb7fc9ff901a7653ad40785f7deb1"
+      ],
       "Other/fbneo/fbneo/samples/sfz3mix.zip": [
-        "227815ce9e55db427d68e075182caffe6ad60ad1"
+        "e39ee9abb19076ef095f67469ca95ff5e7f600dc"
       ],
       "fbneo/fbneo/samples/sfz3mix.zip": [
-        "227815ce9e55db427d68e075182caffe6ad60ad1"
+        "e39ee9abb19076ef095f67469ca95ff5e7f600dc"
       ],
       "fbneo/samples/sfz3mix.zip": [
-        "227815ce9e55db427d68e075182caffe6ad60ad1"
+        "e39ee9abb19076ef095f67469ca95ff5e7f600dc"
       ],
       "samples/sfz3mix.zip": [
-        "227815ce9e55db427d68e075182caffe6ad60ad1"
+        "e39ee9abb19076ef095f67469ca95ff5e7f600dc"
       ],
       "Other/fbneo/fbneo/samples/twotiger.zip": [
         "b286035624978c94194ef5b83b5d784ec00c3a3c"

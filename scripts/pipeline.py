@@ -6,6 +6,7 @@ Steps:
   1b. provenance_report.py      (dump-catalog coverage from provenance/)
   1c. romset_recipes.py         (archive identification, reconstruction targets)
   2. refresh_data_dirs.py       (update Dolphin Sys, PPSSPP, etc.)
+  2b2. check_release_assets.py  (large-files release vs gitignored files, online)
   3. verify.py --all            (check all platforms)
   4. generate_pack.py --all     (build ZIP packs)
   4b. generate install manifests
@@ -345,6 +346,20 @@ def main():
         results["check_buildbot"] = ok
     elif args.check_buildbot:
         print("\n--- 2b check buildbot system: SKIPPED (--offline) ---")
+
+    # Step 2b2: The release must serve the bytes the manifests describe. The
+    # installer compares Content-Length with the manifest size, so an asset
+    # uploaded before its local file was rebuilt fails every install of it.
+    if not args.offline:
+        ok, _ = run(
+            [sys.executable, "scripts/check_release_assets.py"],
+            "2b2 check release assets",
+        )
+        results["check_release_assets"] = ok
+        all_ok = all_ok and ok
+    else:
+        print("\n--- 2b2 check release assets: SKIPPED (--offline) ---")
+        results["check_release_assets"] = SKIPPED
 
     # Step 2c: Generate truth YAMLs
     # A targeted run writes its model in a subdirectory of its own, and the

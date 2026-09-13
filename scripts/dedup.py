@@ -230,7 +230,12 @@ def deduplicate(bios_dir: str, dry_run: bool = False) -> dict:
 
     # Write MAME clone mapping
     if mame_clones:
-        clone_path = "_mame_clones.json"
+        # Beside the scanned tree, where get_mame_clone_map() reads it for
+        # the real layout. A path relative to the working directory let a
+        # scan of a fixture tree rewrite the repository's own map.
+        clone_path = os.path.join(
+            os.path.dirname(os.path.abspath(bios_dir)), "_mame_clones.json"
+        )
         # A group is only visible while both copies are on disk, and this run
         # has just deleted the clone. Writing only what was seen this time
         # therefore erases every mapping an earlier run recorded, and the

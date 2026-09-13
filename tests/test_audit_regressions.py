@@ -1184,6 +1184,211 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
                 for entry in data.get("omitted_files", []):
                     self.assertIn(entry.get("reason"), allowed)
 
+    def _manifests(self) -> list[Path]:
+        paths = sorted((ROOT / "install").glob("*.json"))
+        paths += sorted((ROOT / "install" / "targets").glob("*.json"))
+        self.assertTrue(paths, "no install manifests to check")
+        return paths
+
+    def test_repo_paths_name_the_file_the_database_holds(self):
+        """A manifest written before a file moved sends the installer to 404.
+
+        database.json is regenerated whenever a file is refiled; the manifests
+        are a separate artefact and were left behind once (the two DS
+        firmware dumps of the 7 September refile). The installer fetches
+        repo_path from raw.githubusercontent.com, so a stale one is a
+        download that can never succeed.
+        """
+        database = ROOT / "database.json"
+        if not database.is_file():
+            self.skipTest("database.json not generated")
+        files = json.loads(database.read_text(encoding="utf-8"))["files"]
+        for path in self._manifests():
+            with self.subTest(manifest=path.name):
+                data = json.loads(path.read_text(encoding="utf-8"))
+                stale = [
+                    (entry["dest"], entry["repo_path"], files.get(entry["sha1"], {}).get("path"))
+                    for entry in data.get("files", [])
+                    if entry.get("repo_path")
+                    and files.get(entry.get("sha1", ""), {}).get("path") != entry["repo_path"]
+                ]
+                self.assertEqual(stale, [], f"{path.name} names moved files: {stale[:3]}")
+
+    def test_release_entries_are_exactly_the_files_git_does_not_hold(self):
+        """The installer has two sources, and the manifest must pick the right one.
+
+        A committed file is served by the repository; a gitignored one by
+        the large-files release. Marking a committed file as a release asset
+        sends the installer to an asset nobody uploaded (sdlpal/5.avi, 83 MB
+        in git, was announced as release asset `5.avi`). Marking a gitignored
+        file as a repo file sends it to a raw URL that has no content.
+        """
+        tracked = set(
+            subprocess.run(
+                ["git", "ls-files", "-z", "--", "bios"],
+                capture_output=True, text=True, cwd=ROOT, check=True,
+            ).stdout.split("\0")
+        )
+        if not tracked:
+            self.skipTest("not a git checkout")
+        for path in self._manifests():
+            with self.subTest(manifest=path.name):
+                data = json.loads(path.read_text(encoding="utf-8"))
+                wrong = []
+                for entry in data.get("files", []):
+                    repo_path = entry.get("repo_path")
+                    if not repo_path:
+                        continue
+                    committed = repo_path in tracked
+                    if bool(entry.get("release_asset")) == committed:
+                        wrong.append((entry["dest"], repo_path, "committed" if committed else "gitignored"))
+                self.assertEqual(wrong, [], f"{path.name} picks the wrong source: {wrong[:3]}")
+
+
+class ReleaseAssetCriterion(unittest.TestCase):
+    """What decides whether the installer fetches from the release is git, not size.
+
+    Files over 50 MB are supposed to be gitignored and uploaded to the
+    large-files release, but four committed files break that rule and one of
+    them reached a manifest as a release asset that does not exist. The
+    truthful question is whether the repository serves the bytes, and the
+    ledger of what it does not serve is .gitignore.
+    """
+
+    def _repo(self, directory: str, ignored: str) -> str:
+        Path(directory, ".gitignore").write_text(ignored + "\n", encoding="utf-8")
+        return directory
+
+    def test_a_large_committed_file_is_served_by_the_repository(self):
+        from scripts import generate_pack
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = self._repo(directory, "bios/elsewhere.bin")
+            big = Path(root, "bios", "big.avi")
+            big.parent.mkdir()
+            with big.open("wb") as handle:
+                handle.truncate(60_000_000)
+            generate_pack._GITIGNORE_ENTRIES = None
+            try:
+                self.assertFalse(generate_pack._is_release_asset(str(big), root))
+            finally:
+                generate_pack._GITIGNORE_ENTRIES = None
+
+    def test_a_gitignored_file_is_served_by_the_release_whatever_its_size(self):
+        from scripts import generate_pack
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            root = self._repo(directory, "bios/small.zip")
+            small = Path(root, "bios", "small.zip")
+            small.parent.mkdir()
+            small.write_bytes(b"PK")
+            generate_pack._GITIGNORE_ENTRIES = None
+            try:
+                self.assertTrue(generate_pack._is_release_asset(str(small), root))
+            finally:
+                generate_pack._GITIGNORE_ENTRIES = None
+
+
+class ReleaseAssetsMatchTheCollection(unittest.TestCase):
+    """The bytes the release serves must be the bytes the manifests describe.
+
+    install.py checks Content-Length against the manifest size before it
+    downloads, and the manifest size is that of the local copy. Both FBNeo
+    sample archives were rebuilt locally after their upload and never
+    re-uploaded: same members, different container, every install of them
+    failed. The comparison is offline here on a fixture; the script runs it
+    against the live release.
+    """
+
+    def test_missing_and_resized_assets_are_reported_and_nothing_else(self):
+        from scripts import check_release_assets
+
+        expected = {
+            "bios/Other/fbneo/fbneo/samples/twotiger.zip": 154985212,
+            "bios/Arcade/MAME/MAME 0.174 Arcade XML.dat": 53677408,
+            "bios/Other/sdlpal/sdlpal/5.avi": 82833972,
+        }
+        assets = {
+            "twotiger.zip": 154888877,
+            "MAME.0.174.Arcade.XML.dat": 53677408,
+            "unrelated.zip": 1,
+        }
+        findings = check_release_assets.compare(expected, assets)
+        self.assertEqual(
+            findings,
+            [
+                ("missing", "bios/Other/sdlpal/sdlpal/5.avi", 82833972, None),
+                ("size", "bios/Other/fbneo/fbneo/samples/twotiger.zip", 154985212, 154888877),
+            ],
+        )
+
+    def test_expected_assets_are_the_gitignored_database_entries(self):
+        from scripts import check_release_assets
+
+        db = {
+            "files": {
+                "a" * 40: {"path": "bios/Other/x/big.zip", "size": 10},
+                "b" * 40: {"path": "bios/Other/x/small.bin", "size": 2},
+            }
+        }
+        gitignore = "# large\nbios/Other/x/big.zip\ntmp/\n"
+        self.assertEqual(
+            check_release_assets.expected_assets(db, gitignore),
+            {"bios/Other/x/big.zip": 10},
+        )
+
+    def test_release_notes_are_rendered_from_the_collection(self):
+        """The release page is written by hand and drifts; it is rendered instead.
+
+        Three assets had no row, three rows carried the SHA1 of an asset
+        that had since been replaced, and the footer counted 41 files for 44.
+        Hand-written descriptions survive by name; a new row takes its
+        description from the profile that declares the file; an asset the
+        collection does not index is listed apart, with its size only.
+        """
+        from scripts import check_release_assets
+
+        db = {"files": {
+            "a" * 40: {"path": "bios/Nintendo/Wii/nand.bin", "size": 553649152},
+            "b" * 40: {"path": "bios/Other/fbneo/fbneo/samples/twotiger.zip", "size": 154985212},
+            "c" * 40: {"path": "bios/Other/x/small.bin", "size": 2},
+        }}
+        gitignore = "bios/Nintendo/Wii/nand.bin\nbios/Other/fbneo/fbneo/samples/twotiger.zip\n"
+        assets = {"nand.bin": 553649152, "twotiger.zip": 154985212,
+                  "sdlpal-data.zip": 140773720, "whoopee.zip": 222665810}
+        previous = (
+            "## Arcade\n\n| File | Description | Size | SHA1 |\n|---|---|---|---|\n"
+            "| [twotiger.zip](u) | Two Tigers samples | 148 MB | `" + "0" * 40 + "` |\n"
+            "| [whoopee.zip](u) | Toaplan Whoopee samples | 212 MB | `" + "9" * 40 + "` |\n"
+        )
+        descriptions = {"nand.bin": "BootMii NAND backup"}
+        bundles = {"sdlpal-data.zip": "SDLPAL Chinese Paladin game data (.mkf archives)"}
+        body = check_release_assets.render_notes(
+            db, gitignore, assets, previous, descriptions, bundles, {"sdlpal-data.zip": "d" * 40}
+        )
+        self.assertIn("| [twotiger.zip](https://github.com/Abdess/retrobios/releases/download/large-files/twotiger.zip) | Two Tigers samples | 148 MB | `" + "b" * 40 + "` |", body)
+        self.assertIn("| [nand.bin](https://github.com/Abdess/retrobios/releases/download/large-files/nand.bin) | BootMii NAND backup | 528 MB | `" + "a" * 40 + "` |", body)
+        self.assertIn("| [sdlpal-data.zip](https://github.com/Abdess/retrobios/releases/download/large-files/sdlpal-data.zip) | SDLPAL Chinese Paladin game data (.mkf archives) | 134 MB | `" + "d" * 40 + "` |", body)
+        self.assertIn("## Not indexed", body)
+        self.assertIn("| [whoopee.zip](https://github.com/Abdess/retrobios/releases/download/large-files/whoopee.zip) | Toaplan Whoopee samples | 212 MB |", body)
+        self.assertNotIn("9" * 40, body)
+        self.assertNotIn("small.bin", body)
+        self.assertIn("4 files, 1.0 GB total", body)
+        self.assertEqual(body.index("## Console firmware"), min(
+            body.index(h) for h in ("## Console firmware", "## Arcade", "## Not indexed")
+        ))
+
+    def test_stale_notes_are_a_finding(self):
+        from scripts import check_release_assets
+
+        findings = check_release_assets.compare({}, {}, notes_current=False)
+        self.assertEqual(findings, [("notes", "release description", 0, None)])
+
+    def test_pipeline_runs_the_check_online_and_marks_it_skipped_offline(self):
+        source = (ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        self.assertIn("check_release_assets.py", source)
+        self.assertIn('results["check_release_assets"] = SKIPPED', source)
+
 
 class PreservedBytesAreNeverNormalised(unittest.TestCase):
     """git must not rewrite a preserved file's line endings.
