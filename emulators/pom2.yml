@@ -403,6 +403,7 @@ files:
     aliases: ["ae transwarp rom v1.4.bin"]
     size: 4096
     crc32: "afe37f55"
+    sha1: "7b75534e7895e04859a0b1337801c6eeb0cef52a"
     validation: [size, crc32]
     source_ref: "src/TranswarpCard.h:166, src/TranswarpCard.cpp:200-218, src/RomCatalog.h:119-125"
     note: "Not shipped by POM2. The card accelerates without it and only shadows $F000-$FFFF with the speed-corrected monitor when the dump is present."

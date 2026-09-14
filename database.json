@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-13T23:43:03Z",
-  "total_files": 10331,
-  "total_size": 13535566159,
+  "generated_at": "2026-09-14T03:21:47Z",
+  "total_files": 10357,
+  "total_size": 13535978785,
   "files": {
     "520d3d1b5897800af47f92efd2444a26b7a7dead": {
       "path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
@@ -813,6 +813,16 @@
       "crc32": "f6b267e3",
       "adler32": "266bfd44"
     },
+    "440c3f84176c7b9f542da0b6ddf4fb13ec326c46": {
+      "path": "bios/Apple/Apple II/341-0438-a.bin",
+      "name": "341-0438-a.bin",
+      "size": 32768,
+      "sha1": "440c3f84176c7b9f542da0b6ddf4fb13ec326c46",
+      "md5": "309a21f2ed932d43e35f53edf3cddcc3",
+      "sha256": "084587835c1d2c92f5708a9745fdd43ba32136fcdb861a12ee7d690de22dc172",
+      "crc32": "c73ff25b",
+      "adler32": "f7b98f09"
+    },
     "141d18c36a617ab9dce668445440d34354be0672": {
       "path": "bios/Apple/Apple II/341s0632-2",
       "name": "341s0632-2",
@@ -892,6 +902,16 @@
       "sha256": "e73eee381d01faecb0fa7f767b0d999f38692f023bcdbe1f9f8d57ad87941f6d",
       "crc32": "1dcd4719",
       "adler32": "abf487a6"
+    },
+    "7b75534e7895e04859a0b1337801c6eeb0cef52a": {
+      "path": "bios/Apple/Apple II/ae_transwarp_1.4.bin",
+      "name": "ae_transwarp_1.4.bin",
+      "size": 4096,
+      "sha1": "7b75534e7895e04859a0b1337801c6eeb0cef52a",
+      "md5": "a0167b5db5a5a393c66af37142647106",
+      "sha256": "bcbb1a3bab083b0c2988b502f5e024ff4346fab5dbf09276b32724693bcbd0e9",
+      "crc32": "afe37f55",
+      "adler32": "8c4a92ad"
     },
     "33a24f5489ba9195b44be77d9afb2252594cb5c7": {
       "path": "bios/Apple/Apple II/apple2-asoft-auto.rom",
@@ -973,6 +993,23 @@
       "crc32": "726b604c",
       "adler32": "19e62e15"
     },
+    "f79815457437e50404f4f537d8aabe34bff3a220": {
+      "path": "bios/Apple/Apple II/apple2e_char_ft_blockascii.rom",
+      "name": "apple2e_char_ft_blockascii.rom",
+      "size": 8192,
+      "sha1": "f79815457437e50404f4f537d8aabe34bff3a220",
+      "md5": "c8cee6ce29c59af9038984650b3e3184",
+      "sha256": "c69c8e1eb26923c5df03d3507fdf86c5f768283a924a5fffdd80377cf2339321",
+      "crc32": "1eae3944",
+      "adler32": "1c42e658",
+      "provenance": {
+        "tosec": {
+          "dat": "Apple II - Firmware",
+          "name": "Custom Video ROM for Block ASCII Anthology (2014-06-05)(French Touch)[eprom2164].bin",
+          "description": "Custom Video ROM for Block ASCII Anthology (2014-06-05)(French Touch)[eprom2164]"
+        }
+      }
+    },
     "0bd2026795d117c33a5967b68fed8c54b3d95502": {
       "path": "bios/Apple/Apple II/apple2ee.zip",
       "name": "apple2ee.zip",
@@ -1053,6 +1090,16 @@
       "crc32": "665cd50f",
       "adler32": "39cd4d98"
     },
+    "d600692ed9626668233a22a48236af639410cb7b": {
+      "path": "bios/Apple/Apple II/cffa20ee02.bin",
+      "name": "cffa20ee02.bin",
+      "size": 4096,
+      "sha1": "d600692ed9626668233a22a48236af639410cb7b",
+      "md5": "80adbc2d79f347ec63f4b771ea32984d",
+      "sha256": "3d7f6918f9af3828f5a6299299a817df0d354ee62e547bc0238755de66162a88",
+      "crc32": "3ecafce5",
+      "adler32": "abb531dc"
+    },
     "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9": {
       "path": "bios/Apple/Apple II/disk2-13seq.rom",
       "name": "disk2-13seq.rom",
@@ -1062,6 +1109,26 @@
       "sha256": "4234aed053c622b266014c4e06ab1ce9e0e085d94a28512aa4030462be0a3cb9",
       "crc32": "5eabc7b9",
       "adler32": "8f256a06"
+    },
+    "829072cc19a58b24d36c2af972abaad6f9ba35d9": {
+      "path": "bios/Apple/Apple II/grappler_plus.bin",
+      "name": "grappler_plus.bin",
+      "size": 4096,
+      "sha1": "829072cc19a58b24d36c2af972abaad6f9ba35d9",
+      "md5": "266255809c2fca4ea9aac658197e6c38",
+      "sha256": "9be4dea7722ad8928aee64c2ae708f365a6d66c50a63bff8a3c1a4e7596d44c6",
+      "crc32": "c4781f97",
+      "adler32": "b05feb1a"
+    },
+    "3a2baa6648efe4456d3ec3721216e57c64f7acfc": {
+      "path": "bios/Apple/Apple II/mouse_341-0269.bin",
+      "name": "mouse_341-0269.bin",
+      "size": 2048,
+      "sha1": "3a2baa6648efe4456d3ec3721216e57c64f7acfc",
+      "md5": "1518752ba8444b950b76f14163cbb6a1",
+      "sha256": "66480812edad5f6bd70349949cf8bd8fbafee2dc8bf396541d4e78bac2629ec0",
+      "crc32": "94067f16",
+      "adler32": "6c5a7684"
     },
     "a57f14469867ce0d0865995a645b69f41a0ea718": {
       "path": "bios/Apple/Apple II/votrsc01.zip",
@@ -56345,6 +56412,206 @@
       "crc32": "eef26072",
       "adler32": "e4d08362"
     },
+    "c6b34fc61496943134ac45cc836a24e743caf794": {
+      "path": "bios/Other/pom2/roms/floppy_samples/35_seek_12ms.wav",
+      "name": "35_seek_12ms.wav",
+      "size": 26540,
+      "sha1": "c6b34fc61496943134ac45cc836a24e743caf794",
+      "md5": "ed17d90d1b8667ad1e8f0e774ce42b24",
+      "sha256": "6466171c4084ec8ac1e127964919388c601dda0f64ab57dd42c95c35f3366fa5",
+      "crc32": "a6729355",
+      "adler32": "8f3f0f10"
+    },
+    "b2fe4c3a4185146a7d11483d92d4412dd79dbc78": {
+      "path": "bios/Other/pom2/roms/floppy_samples/35_seek_20ms.wav",
+      "name": "35_seek_20ms.wav",
+      "size": 44144,
+      "sha1": "b2fe4c3a4185146a7d11483d92d4412dd79dbc78",
+      "md5": "ffa59cb209831d8b8277b9c1079bba26",
+      "sha256": "cdea539613ff5952c8b6a5d84b18574a54dc7c549aa7e1feca4ef27ce55ed223",
+      "crc32": "ad3e1616",
+      "adler32": "cbac476d"
+    },
+    "55caafbd19486b8d517e4b33a6fa65250df55e25": {
+      "path": "bios/Other/pom2/roms/floppy_samples/35_seek_2ms.wav",
+      "name": "35_seek_2ms.wav",
+      "size": 7450,
+      "sha1": "55caafbd19486b8d517e4b33a6fa65250df55e25",
+      "md5": "a8b357d6d5a7ad8e908efe075629de1c",
+      "sha256": "3c21e53eb3c6220d782bf65a1ed74c8b6ef529df7ec9adc1a997409c48c30577",
+      "crc32": "ec02d2d2",
+      "adler32": "534cd725"
+    },
+    "87e5dec269e67497681c15849777ebfc301131c1": {
+      "path": "bios/Other/pom2/roms/floppy_samples/35_seek_6ms.wav",
+      "name": "35_seek_6ms.wav",
+      "size": 22230,
+      "sha1": "87e5dec269e67497681c15849777ebfc301131c1",
+      "md5": "07ffab62a3e15bb725834d4e7ecf773f",
+      "sha256": "58626ef5b683e4776781e29d6ce5abfdf23d7d9e043996e3cfd83c0fda06721f",
+      "crc32": "5f8ee82d",
+      "adler32": "2c449997"
+    },
+    "db04fc097bdd0411cff232f57525ded491b48c6c": {
+      "path": "bios/Other/pom2/roms/floppy_samples/35_spin_empty.wav",
+      "name": "35_spin_empty.wav",
+      "size": 17708,
+      "sha1": "db04fc097bdd0411cff232f57525ded491b48c6c",
+      "md5": "08cafd2255c7a0bf07050f16cc4a0960",
+      "sha256": "416ffe111b715fde8404a331f7b4be7bfa79e681b2523c8404d2224cbf4c4ffe",
+      "crc32": "0f784d6d",
+      "adler32": "a4a3aebf"
+    },
+    "a8901b692de15eb7a9052f61283f0e7a2b63d67d": {
+      "path": "bios/Other/pom2/roms/floppy_samples/35_spin_end.wav",
+      "name": "35_spin_end.wav",
+      "size": 17684,
+      "sha1": "a8901b692de15eb7a9052f61283f0e7a2b63d67d",
+      "md5": "1d31fb23cb53a73dbc4e661c373c25f8",
+      "sha256": "a33ca21e9cbe04e10f22c2fb81962fac0586fddc2bb211a36e3404565e93e10d",
+      "crc32": "cc1bb32b",
+      "adler32": "1b1249b6"
+    },
+    "96ce04a5b02af0da6d311f06fc4906a3cf71c78f": {
+      "path": "bios/Other/pom2/roms/floppy_samples/35_spin_loaded.wav",
+      "name": "35_spin_loaded.wav",
+      "size": 17708,
+      "sha1": "96ce04a5b02af0da6d311f06fc4906a3cf71c78f",
+      "md5": "53270dd078877e0a3931da4b1eacd0b6",
+      "sha256": "76cdc44aedf7ddfb54c4f51699a32934ba1af4a8f5c1faa16a1b60580d0d0607",
+      "crc32": "b1397924",
+      "adler32": "6b308e66"
+    },
+    "af770fd9261a8efee23d66cd39b27be7b2ab7853": {
+      "path": "bios/Other/pom2/roms/floppy_samples/35_spin_start_empty.wav",
+      "name": "35_spin_start_empty.wav",
+      "size": 17708,
+      "sha1": "af770fd9261a8efee23d66cd39b27be7b2ab7853",
+      "md5": "803b6cdf5baeca233588424c62919213",
+      "sha256": "3f4e2f77ecaf330a91a15c0212e7b3f20ddbf98e04dc72b13d63f6cf79e58ce3",
+      "crc32": "a6c21e9c",
+      "adler32": "9c2e73f9"
+    },
+    "c82b1714378bf2507ed86dea1e9fe743c380abab": {
+      "path": "bios/Other/pom2/roms/floppy_samples/35_spin_start_loaded.wav",
+      "name": "35_spin_start_loaded.wav",
+      "size": 35308,
+      "sha1": "c82b1714378bf2507ed86dea1e9fe743c380abab",
+      "md5": "53cf5b1f444f8ba9f775520ad0b84613",
+      "sha256": "5fc70021ba3f0d91429cb1c9e6946d64c73779cd7246f521ae0f557d4af3dc19",
+      "crc32": "41c95787",
+      "adler32": "14719ad1"
+    },
+    "40d756d0cb5f7998ca26ac1de142a96a83fa2b97": {
+      "path": "bios/Other/pom2/roms/floppy_samples/35_step_1_1.wav",
+      "name": "35_step_1_1.wav",
+      "size": 6878,
+      "sha1": "40d756d0cb5f7998ca26ac1de142a96a83fa2b97",
+      "md5": "19801aca9dafe86e0625d80cd54d5041",
+      "sha256": "dd441da69fd0e70d650f4100f3c6da352f9a9338a6165d6db66bcc0025169ebb",
+      "crc32": "36f1bce1",
+      "adler32": "c50b7b04"
+    },
+    "fbbbb5e8724c076d194e66a4443d299d54a8efd6": {
+      "path": "bios/Other/pom2/roms/floppy_samples/525_seek_12ms.wav",
+      "name": "525_seek_12ms.wav",
+      "size": 22764,
+      "sha1": "fbbbb5e8724c076d194e66a4443d299d54a8efd6",
+      "md5": "bebcaa730102d09091f903efeba1de3b",
+      "sha256": "481cb385b96e2d7602616a633b7fa83144d9e6df08e1ec34df8ca6f948069f0f",
+      "crc32": "c3ce223f",
+      "adler32": "8cbd558f"
+    },
+    "b6cd14944454c743861196edb4fcab1cc9b586d4": {
+      "path": "bios/Other/pom2/roms/floppy_samples/525_seek_20ms.wav",
+      "name": "525_seek_20ms.wav",
+      "size": 30060,
+      "sha1": "b6cd14944454c743861196edb4fcab1cc9b586d4",
+      "md5": "ef949610b4b5be40d7eb125973a626ec",
+      "sha256": "900b663d7d4baefa4e2f7e796d0a5bf23ae9730ebe1c69d0ab264b041d917d25",
+      "crc32": "f28ec3c1",
+      "adler32": "d02734fc"
+    },
+    "2d046a880476218685ed738fe8c8381962afd74a": {
+      "path": "bios/Other/pom2/roms/floppy_samples/525_seek_2ms.wav",
+      "name": "525_seek_2ms.wav",
+      "size": 5336,
+      "sha1": "2d046a880476218685ed738fe8c8381962afd74a",
+      "md5": "201b1a70efbbe22990de8d1f32e06754",
+      "sha256": "44b7a7beeaa5df24b1e59fdd2917c5854e7000bae57e4576cd7592a749dc606a",
+      "crc32": "921cecd2",
+      "adler32": "2a0167cf"
+    },
+    "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9": {
+      "path": "bios/Other/pom2/roms/floppy_samples/525_seek_6ms.wav",
+      "name": "525_seek_6ms.wav",
+      "size": 14860,
+      "sha1": "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9",
+      "md5": "e54ff7988c2c8a89a7cdf3f8db9bada7",
+      "sha256": "4724f3bebb91c507126663e7e2c3236268f7fe41dbfe13b5b1893e0b279855cd",
+      "crc32": "d20d6121",
+      "adler32": "f56cd1e6"
+    },
+    "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7": {
+      "path": "bios/Other/pom2/roms/floppy_samples/525_spin_empty.wav",
+      "name": "525_spin_empty.wav",
+      "size": 8864,
+      "sha1": "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7",
+      "md5": "e7faacbafd450f435fdbd9cf34451b48",
+      "sha256": "3bbe8607c42277765eb917d7dc42c862fe6010dd31c90b94cf0fbe1335418586",
+      "crc32": "4ed889ce",
+      "adler32": "82bb3139"
+    },
+    "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f": {
+      "path": "bios/Other/pom2/roms/floppy_samples/525_spin_end.wav",
+      "name": "525_spin_end.wav",
+      "size": 8864,
+      "sha1": "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f",
+      "md5": "f8399a06c8e34f05a35f5c6f25bc5adf",
+      "sha256": "b3785c86125638ccfd042da818ea8a0a73f3461644324eff71122a692f45dad1",
+      "crc32": "146f3608",
+      "adler32": "9bb7db3c"
+    },
+    "875f90538a3ff5db863ad4c384e1808841ddea9b": {
+      "path": "bios/Other/pom2/roms/floppy_samples/525_spin_loaded.wav",
+      "name": "525_spin_loaded.wav",
+      "size": 17708,
+      "sha1": "875f90538a3ff5db863ad4c384e1808841ddea9b",
+      "md5": "76452ca73fb17ddd6cb04ac85ba318f1",
+      "sha256": "9f6f49f62fa39dcdd30c4e7fb7c4b8872b739f0cadc2370fdb2e95c1bd063cd7",
+      "crc32": "a11309d4",
+      "adler32": "9f5557ab"
+    },
+    "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9": {
+      "path": "bios/Other/pom2/roms/floppy_samples/525_spin_start_empty.wav",
+      "name": "525_spin_start_empty.wav",
+      "size": 11180,
+      "sha1": "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9",
+      "md5": "9174c33dcdf90278de73bb181968ec71",
+      "sha256": "83ba203f737c76a38e0ee8c8d22a702360060768a649cd97177586eac66378ef",
+      "crc32": "9038fbf4",
+      "adler32": "42be3f8e"
+    },
+    "510476098848e2b5cdfe9f1608f8dfa3207fe9b4": {
+      "path": "bios/Other/pom2/roms/floppy_samples/525_spin_start_loaded.wav",
+      "name": "525_spin_start_loaded.wav",
+      "size": 17708,
+      "sha1": "510476098848e2b5cdfe9f1608f8dfa3207fe9b4",
+      "md5": "dc339bb490c6636068ea5dfe37066a35",
+      "sha256": "3774c7ad6b3e327b0b7733e7a7c1f6dbef1619b251a73753a5814d6c3df57582",
+      "crc32": "f7988a18",
+      "adler32": "f176ffa5"
+    },
+    "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8": {
+      "path": "bios/Other/pom2/roms/floppy_samples/525_step_1_1.wav",
+      "name": "525_step_1_1.wav",
+      "size": 6628,
+      "sha1": "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8",
+      "md5": "1840cb146a17022e1e60d63667793700",
+      "sha256": "8124719ce27d105d241158e4a747802340c852dd6f05a4e984dcfb75e6648389",
+      "crc32": "6ede125f",
+      "adler32": "a12f2fee"
+    },
     "f99a13464a4dae347628f0ebb320e767e48e3a96": {
       "path": "bios/Other/ppsspp/PPSSPP/ppge_atlas.meta",
       "name": "ppge_atlas.meta",
@@ -108480,6 +108747,7 @@
       "c6618768730c75aec14316842f110d15": "b8663f4e178176830cf2a76544f17d358912a80d",
       "e6d453d8738e6df4f73df8c8051df3e8": "7060de104046736529c1e8a687a0dd7b84f8c51b",
       "e43302d686bafe6007a1175bc7d562ae": "af2fce0d7349c0afc15b4293e53d048fbd605b11",
+      "309a21f2ed932d43e35f53edf3cddcc3": "440c3f84176c7b9f542da0b6ddf4fb13ec326c46",
       "c9e0e059faec0393fc429131a3af4ee9": "141d18c36a617ab9dce668445440d34354be0672",
       "38063e08c778503fc03ecebb979769e9": "b8ea90abe135a0031065e01697c4a3a20d51198b",
       "2020aa1413ff77fe29353f3ee72dc295": "d4181c9f046aafc3fb326b381baac809d9e38d16",
@@ -108488,6 +108756,7 @@
       "5f1be0c1cdff26f5956eef9643911886": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
       "c192973c9a3c06594f87908abaec0b66": "e8af33c0904b422841080a5ee25935f5ea1f3781",
       "e07ffce4500ffeac9750c427d8309d9b": "d9bb189730e15d46c27e7246d7bb23137e7d761e",
+      "a0167b5db5a5a393c66af37142647106": "7b75534e7895e04859a0b1337801c6eeb0cef52a",
       "572b3005a4fa49bc54917b069b82c1ab": "33a24f5489ba9195b44be77d9afb2252594cb5c7",
       "9ac0dc8c4d0002eb45b0b84be0bde5ec": "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659",
       "cde36c6b519a628509eb3dc4e4897845": "2dfaf376fc6a0b106320911c1ebfc1512601dc6c",
@@ -108496,6 +108765,7 @@
       "9123fff3442c0e688cc6816be88dd4ab": "b2b5d87f52693817fc747df087a4aa1ddcdb1f10",
       "003a780b461c96ae3e72861ed0f4d3d9": "d756eba578a6c5a4807510dfee30ee585c63755e",
       "d96a5b4370d665300802970c35cf1b7f": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "c8cee6ce29c59af9038984650b3e3184": "f79815457437e50404f4f537d8aabe34bff3a220",
       "5096735438308631fac54ab7e229d21e": "0bd2026795d117c33a5967b68fed8c54b3d95502",
       "2fbc2be2a84ea742de37be9925c7d7cd": "58ad0008df72896a18601e090ee0d58155ffa5be",
       "e14eae591b3569f54802f99c0355c817": "9b041a861ae6ff99e466ad428700269db509ced6",
@@ -108504,7 +108774,10 @@
       "8f7ee14ccca8ae3dd8c759497af3f09b": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
       "2a68f049d44e326574b95c0ec638c1ca": "78008be557f643e956a106121bcc182c0fb9ea6d",
       "d3bef2755267a941f264fb5b288e3076": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
+      "80adbc2d79f347ec63f4b771ea32984d": "d600692ed9626668233a22a48236af639410cb7b",
       "008568a8a28a79f795ad73a4b064de1e": "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9",
+      "266255809c2fca4ea9aac658197e6c38": "829072cc19a58b24d36c2af972abaad6f9ba35d9",
+      "1518752ba8444b950b76f14163cbb6a1": "3a2baa6648efe4456d3ec3721216e57c64f7acfc",
       "c835eab06842e3c1d6e2e7dc19289828": "a57f14469867ce0d0865995a645b69f41a0ea718",
       "20a0334c447cb069a040ae5be1d938df": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
       "0d4b090d85e995ae8ce724b910c8cc15": "9c27bba32c0c7c70a87512282acd6729744a36f9",
@@ -113803,6 +114076,26 @@
       "5f30d9c6cabc2d121bd1c22df016e7a5": "579d3b402f27189ccb4965082e8e5de097513a81",
       "7844c637dc246ec5f0e760ea33475073": "2f5ac8921b7cba56b02122ef772f5f11bbf6d8a2",
       "37ce488ec574ba351c2dcf90a13d8fed": "b624812e3aa0ef2f75847f47907296e1f370cecd",
+      "ed17d90d1b8667ad1e8f0e774ce42b24": "c6b34fc61496943134ac45cc836a24e743caf794",
+      "ffa59cb209831d8b8277b9c1079bba26": "b2fe4c3a4185146a7d11483d92d4412dd79dbc78",
+      "a8b357d6d5a7ad8e908efe075629de1c": "55caafbd19486b8d517e4b33a6fa65250df55e25",
+      "07ffab62a3e15bb725834d4e7ecf773f": "87e5dec269e67497681c15849777ebfc301131c1",
+      "08cafd2255c7a0bf07050f16cc4a0960": "db04fc097bdd0411cff232f57525ded491b48c6c",
+      "1d31fb23cb53a73dbc4e661c373c25f8": "a8901b692de15eb7a9052f61283f0e7a2b63d67d",
+      "53270dd078877e0a3931da4b1eacd0b6": "96ce04a5b02af0da6d311f06fc4906a3cf71c78f",
+      "803b6cdf5baeca233588424c62919213": "af770fd9261a8efee23d66cd39b27be7b2ab7853",
+      "53cf5b1f444f8ba9f775520ad0b84613": "c82b1714378bf2507ed86dea1e9fe743c380abab",
+      "19801aca9dafe86e0625d80cd54d5041": "40d756d0cb5f7998ca26ac1de142a96a83fa2b97",
+      "bebcaa730102d09091f903efeba1de3b": "fbbbb5e8724c076d194e66a4443d299d54a8efd6",
+      "ef949610b4b5be40d7eb125973a626ec": "b6cd14944454c743861196edb4fcab1cc9b586d4",
+      "201b1a70efbbe22990de8d1f32e06754": "2d046a880476218685ed738fe8c8381962afd74a",
+      "e54ff7988c2c8a89a7cdf3f8db9bada7": "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9",
+      "e7faacbafd450f435fdbd9cf34451b48": "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7",
+      "f8399a06c8e34f05a35f5c6f25bc5adf": "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f",
+      "76452ca73fb17ddd6cb04ac85ba318f1": "875f90538a3ff5db863ad4c384e1808841ddea9b",
+      "9174c33dcdf90278de73bb181968ec71": "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9",
+      "dc339bb490c6636068ea5dfe37066a35": "510476098848e2b5cdfe9f1608f8dfa3207fe9b4",
+      "1840cb146a17022e1e60d63667793700": "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8",
       "03336a2165522a9493190e3873beebbd": "f99a13464a4dae347628f0ebb320e767e48e3a96",
       "1f1ad87ae6f87033d9a591eca567d919": "63e4eab3162ef10ffd99e89f13e4e67f751e9900",
       "3dff921882350953a32fee6af5611668": "1727e16cb9a6a59c01e18f6694ef70dee87e3a7b",
@@ -118963,6 +119256,9 @@
         "af2fce0d7349c0afc15b4293e53d048fbd605b11",
         "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1"
       ],
+      "341-0438-a.bin": [
+        "440c3f84176c7b9f542da0b6ddf4fb13ec326c46"
+      ],
       "341s0632-2": [
         "141d18c36a617ab9dce668445440d34354be0672"
       ],
@@ -118989,6 +119285,9 @@
         "d9bb189730e15d46c27e7246d7bb23137e7d761e",
         "bd02f6a0ce8accba7ea5415fd22c2e8f23ec4b10"
       ],
+      "ae_transwarp_1.4.bin": [
+        "7b75534e7895e04859a0b1337801c6eeb0cef52a"
+      ],
       "apple2-asoft-auto.rom": [
         "33a24f5489ba9195b44be77d9afb2252594cb5c7"
       ],
@@ -119010,6 +119309,9 @@
       "apple2e.rom": [
         "d756eba578a6c5a4807510dfee30ee585c63755e"
       ],
+      "apple2e_char_ft_blockascii.rom": [
+        "f79815457437e50404f4f537d8aabe34bff3a220"
+      ],
       "apple2ee.zip": [
         "0bd2026795d117c33a5967b68fed8c54b3d95502"
       ],
@@ -119029,8 +119331,17 @@
         "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
         "5ba8555f716bd48834858d8a7f42810ab7293b12"
       ],
+      "cffa20ee02.bin": [
+        "d600692ed9626668233a22a48236af639410cb7b"
+      ],
       "disk2-13seq.rom": [
         "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9"
+      ],
+      "grappler_plus.bin": [
+        "829072cc19a58b24d36c2af972abaad6f9ba35d9"
+      ],
+      "mouse_341-0269.bin": [
+        "3a2baa6648efe4456d3ec3721216e57c64f7acfc"
       ],
       "votrsc01.zip": [
         "a57f14469867ce0d0865995a645b69f41a0ea718"
@@ -133839,6 +134150,66 @@
       ],
       "tandy1t1.020": [
         "2f5ac8921b7cba56b02122ef772f5f11bbf6d8a2"
+      ],
+      "35_seek_12ms.wav": [
+        "c6b34fc61496943134ac45cc836a24e743caf794"
+      ],
+      "35_seek_20ms.wav": [
+        "b2fe4c3a4185146a7d11483d92d4412dd79dbc78"
+      ],
+      "35_seek_2ms.wav": [
+        "55caafbd19486b8d517e4b33a6fa65250df55e25"
+      ],
+      "35_seek_6ms.wav": [
+        "87e5dec269e67497681c15849777ebfc301131c1"
+      ],
+      "35_spin_empty.wav": [
+        "db04fc097bdd0411cff232f57525ded491b48c6c"
+      ],
+      "35_spin_end.wav": [
+        "a8901b692de15eb7a9052f61283f0e7a2b63d67d"
+      ],
+      "35_spin_loaded.wav": [
+        "96ce04a5b02af0da6d311f06fc4906a3cf71c78f"
+      ],
+      "35_spin_start_empty.wav": [
+        "af770fd9261a8efee23d66cd39b27be7b2ab7853"
+      ],
+      "35_spin_start_loaded.wav": [
+        "c82b1714378bf2507ed86dea1e9fe743c380abab"
+      ],
+      "35_step_1_1.wav": [
+        "40d756d0cb5f7998ca26ac1de142a96a83fa2b97"
+      ],
+      "525_seek_12ms.wav": [
+        "fbbbb5e8724c076d194e66a4443d299d54a8efd6"
+      ],
+      "525_seek_20ms.wav": [
+        "b6cd14944454c743861196edb4fcab1cc9b586d4"
+      ],
+      "525_seek_2ms.wav": [
+        "2d046a880476218685ed738fe8c8381962afd74a"
+      ],
+      "525_seek_6ms.wav": [
+        "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9"
+      ],
+      "525_spin_empty.wav": [
+        "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7"
+      ],
+      "525_spin_end.wav": [
+        "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f"
+      ],
+      "525_spin_loaded.wav": [
+        "875f90538a3ff5db863ad4c384e1808841ddea9b"
+      ],
+      "525_spin_start_empty.wav": [
+        "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9"
+      ],
+      "525_spin_start_loaded.wav": [
+        "510476098848e2b5cdfe9f1608f8dfa3207fe9b4"
+      ],
+      "525_step_1_1.wav": [
+        "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8"
       ],
       "ppge_atlas.meta": [
         "f99a13464a4dae347628f0ebb320e767e48e3a96"
@@ -151975,6 +152346,15 @@
       "342-0135-b.64.rom": [
         "61fa9254628e5bb7236fb474006116d67684d747"
       ],
+      "grappler+.bin": [
+        "829072cc19a58b24d36c2af972abaad6f9ba35d9"
+      ],
+      "grappler.bin": [
+        "829072cc19a58b24d36c2af972abaad6f9ba35d9"
+      ],
+      "ae transwarp rom v1.4.bin": [
+        "7b75534e7895e04859a0b1337801c6eeb0cef52a"
+      ],
       "nds_sd_card.bin": [
         "3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3"
       ],
@@ -152062,6 +152442,7 @@
       "b6598c90": "b8663f4e178176830cf2a76544f17d358912a80d",
       "b081df66": "7060de104046736529c1e8a687a0dd7b84f8c51b",
       "f6b267e3": "af2fce0d7349c0afc15b4293e53d048fbd605b11",
+      "c73ff25b": "440c3f84176c7b9f542da0b6ddf4fb13ec326c46",
       "e1c11fb0": "141d18c36a617ab9dce668445440d34354be0672",
       "1d70b193": "b8ea90abe135a0031065e01697c4a3a20d51198b",
       "ce7144f6": "d4181c9f046aafc3fb326b381baac809d9e38d16",
@@ -152070,6 +152451,7 @@
       "b72a2c70": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
       "669f3e91": "e8af33c0904b422841080a5ee25935f5ea1f3781",
       "1dcd4719": "d9bb189730e15d46c27e7246d7bb23137e7d761e",
+      "afe37f55": "7b75534e7895e04859a0b1337801c6eeb0cef52a",
       "1d05c1b1": "33a24f5489ba9195b44be77d9afb2252594cb5c7",
       "64f415c6": "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659",
       "2dcec5cb": "2dfaf376fc6a0b106320911c1ebfc1512601dc6c",
@@ -152078,6 +152460,7 @@
       "2651014d": "b2b5d87f52693817fc747df087a4aa1ddcdb1f10",
       "65989942": "d756eba578a6c5a4807510dfee30ee585c63755e",
       "726b604c": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "1eae3944": "f79815457437e50404f4f537d8aabe34bff3a220",
       "505407fe": "0bd2026795d117c33a5967b68fed8c54b3d95502",
       "816a86f1": "58ad0008df72896a18601e090ee0d58155ffa5be",
       "e12be18d": "9b041a861ae6ff99e466ad428700269db509ced6",
@@ -152086,7 +152469,10 @@
       "4f923a35": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
       "ba210588": "78008be557f643e956a106121bcc182c0fb9ea6d",
       "665cd50f": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
+      "3ecafce5": "d600692ed9626668233a22a48236af639410cb7b",
       "5eabc7b9": "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9",
+      "c4781f97": "829072cc19a58b24d36c2af972abaad6f9ba35d9",
+      "94067f16": "3a2baa6648efe4456d3ec3721216e57c64f7acfc",
       "6105d2ee": "a57f14469867ce0d0865995a645b69f41a0ea718",
       "42f124b0": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
       "516164c0": "9c27bba32c0c7c70a87512282acd6729744a36f9",
@@ -157385,6 +157771,26 @@
       "ef4efa89": "579d3b402f27189ccb4965082e8e5de097513a81",
       "0e016ecf": "2f5ac8921b7cba56b02122ef772f5f11bbf6d8a2",
       "eef26072": "b624812e3aa0ef2f75847f47907296e1f370cecd",
+      "a6729355": "c6b34fc61496943134ac45cc836a24e743caf794",
+      "ad3e1616": "b2fe4c3a4185146a7d11483d92d4412dd79dbc78",
+      "ec02d2d2": "55caafbd19486b8d517e4b33a6fa65250df55e25",
+      "5f8ee82d": "87e5dec269e67497681c15849777ebfc301131c1",
+      "0f784d6d": "db04fc097bdd0411cff232f57525ded491b48c6c",
+      "cc1bb32b": "a8901b692de15eb7a9052f61283f0e7a2b63d67d",
+      "b1397924": "96ce04a5b02af0da6d311f06fc4906a3cf71c78f",
+      "a6c21e9c": "af770fd9261a8efee23d66cd39b27be7b2ab7853",
+      "41c95787": "c82b1714378bf2507ed86dea1e9fe743c380abab",
+      "36f1bce1": "40d756d0cb5f7998ca26ac1de142a96a83fa2b97",
+      "c3ce223f": "fbbbb5e8724c076d194e66a4443d299d54a8efd6",
+      "f28ec3c1": "b6cd14944454c743861196edb4fcab1cc9b586d4",
+      "921cecd2": "2d046a880476218685ed738fe8c8381962afd74a",
+      "d20d6121": "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9",
+      "4ed889ce": "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7",
+      "146f3608": "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f",
+      "a11309d4": "875f90538a3ff5db863ad4c384e1808841ddea9b",
+      "9038fbf4": "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9",
+      "f7988a18": "510476098848e2b5cdfe9f1608f8dfa3207fe9b4",
+      "6ede125f": "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8",
       "c6bebfc6": "f99a13464a4dae347628f0ebb320e767e48e3a96",
       "d6ff6f31": "63e4eab3162ef10ffd99e89f13e4e67f751e9900",
       "d08a4694": "1727e16cb9a6a59c01e18f6694ef70dee87e3a7b",
@@ -162395,6 +162801,7 @@
       "6ecfd57f181355d5868e55cb912fa4ad4a3ad298f7eef36f3cfeebe377d2b80b": "b8663f4e178176830cf2a76544f17d358912a80d",
       "0d54ff735c060c55d54b8a22d0112af78a6465ce9c9aae4a865d207e5c8ff1e7": "7060de104046736529c1e8a687a0dd7b84f8c51b",
       "eddce4a9f9f6e73ffed06c5aede6fbcdaa01dda5568b81f90d865858a3d7d9bc": "af2fce0d7349c0afc15b4293e53d048fbd605b11",
+      "084587835c1d2c92f5708a9745fdd43ba32136fcdb861a12ee7d690de22dc172": "440c3f84176c7b9f542da0b6ddf4fb13ec326c46",
       "d7d2b0bbf3724b50afceba9434cab24e5f6cd3f9896db3af16a3a4d097a49f35": "141d18c36a617ab9dce668445440d34354be0672",
       "aab38a03ca8deabbb2f868733148c2efd6f655a59cd9c5d058ef3e0b7aa86a1a": "b8ea90abe135a0031065e01697c4a3a20d51198b",
       "de1e3e035878bab43d0af8fe38f5839c527e9548647036598ee6fe7ec74d2a7d": "d4181c9f046aafc3fb326b381baac809d9e38d16",
@@ -162403,6 +162810,7 @@
       "e5e30615040567c1e7a2d21599681f8dac820edbdcda177b816a64d74b3a12f2": "bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4",
       "94c0e830ca881760361cabdbb5f8b195a72a2ea98d5ef4d186eeeca54a1a738e": "e8af33c0904b422841080a5ee25935f5ea1f3781",
       "e73eee381d01faecb0fa7f767b0d999f38692f023bcdbe1f9f8d57ad87941f6d": "d9bb189730e15d46c27e7246d7bb23137e7d761e",
+      "bcbb1a3bab083b0c2988b502f5e024ff4346fab5dbf09276b32724693bcbd0e9": "7b75534e7895e04859a0b1337801c6eeb0cef52a",
       "fc3e9d41e9428534a883df5aa10eb55b73ea53d2fcbb3ee4f39bed1b07a82905": "33a24f5489ba9195b44be77d9afb2252594cb5c7",
       "08f5d22230481019844492dde0a29a018cb193712a9e4a43770a3870608f28de": "f9d312f128c9557d9d6ac03bfad6c3ddf83e5659",
       "cb52b212a62f808c2f59600b2823491ee12bd91cab8e0260fe34b5f14c47552f": "2dfaf376fc6a0b106320911c1ebfc1512601dc6c",
@@ -162411,6 +162819,7 @@
       "52c3b87900ac939f6525402cab1ccfd8f8259290fc6df54da48fb4c98ae3ed0f": "b2b5d87f52693817fc747df087a4aa1ddcdb1f10",
       "c17bc38c75ba96c33a30c688a1efd60144811073423533fe7f8453cdd9457aab": "d756eba578a6c5a4807510dfee30ee585c63755e",
       "82e28c1d338990afba6027e4d208963d01789f1ef3597e2bd3761fa00963a836": "891f44b09ab1a948d3d887f8a30b9c9265849ada",
+      "c69c8e1eb26923c5df03d3507fdf86c5f768283a924a5fffdd80377cf2339321": "f79815457437e50404f4f537d8aabe34bff3a220",
       "d34701d62bbd91e2fcb3b4aa22f835c0d5676be5f7583ca5366f2591c8e804a6": "0bd2026795d117c33a5967b68fed8c54b3d95502",
       "ed5bdd4afa509134e85f1d020685af7ff50e279226eb869a17825b471cc1634c": "58ad0008df72896a18601e090ee0d58155ffa5be",
       "b10f553c50daf34aa305087179104f55111a5f6d2b425109ae95cb1d2dcd2ff9": "9b041a861ae6ff99e466ad428700269db509ced6",
@@ -162419,7 +162828,10 @@
       "c2137ea284c104c44e01747888033bd79a1e5de136fef74d7f5b2f1e5b5bb6fc": "799e2fc90d6bfd8cb74e331e04d5afd36f2f21a1",
       "68d9db6bb4c305d40c3fa89fa0f2d7b7f71516a9431e3138859f23bc5bddb2d1": "78008be557f643e956a106121bcc182c0fb9ea6d",
       "f9df91af0aecb75edb7401a5cc47c87f57e82360f0acc1a8474b28aedaa60087": "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086",
+      "3d7f6918f9af3828f5a6299299a817df0d354ee62e547bc0238755de66162a88": "d600692ed9626668233a22a48236af639410cb7b",
       "4234aed053c622b266014c4e06ab1ce9e0e085d94a28512aa4030462be0a3cb9": "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9",
+      "9be4dea7722ad8928aee64c2ae708f365a6d66c50a63bff8a3c1a4e7596d44c6": "829072cc19a58b24d36c2af972abaad6f9ba35d9",
+      "66480812edad5f6bd70349949cf8bd8fbafee2dc8bf396541d4e78bac2629ec0": "3a2baa6648efe4456d3ec3721216e57c64f7acfc",
       "14217ca8e25435ea8497b272d8963ebc79ae29cdc21e972817ab09115e2f1b2d": "a57f14469867ce0d0865995a645b69f41a0ea718",
       "34cd454c6201bfd26839d6ace2ff6b1231e09d6279e49b4890311756dc3825fb": "e4fc7560b69d062cb2da5b1ffbe11cd1ca03cc37",
       "2e9751fb87d0057e3e47ce9cd4eb3115f739d19206a01179b973a6430f9b4a79": "9c27bba32c0c7c70a87512282acd6729744a36f9",
@@ -167718,6 +168130,26 @@
       "cac33fe9739f97e1fcb7af00494ebfb83d5bbc200cc065f32012fc16f0b5fbdc": "579d3b402f27189ccb4965082e8e5de097513a81",
       "f68a569f71fc090cec61bc5f699d0553dca7c5d012166709e74fc6c72568fdc2": "2f5ac8921b7cba56b02122ef772f5f11bbf6d8a2",
       "49f94f7bc9fc605cbf60457937429e3c8499e515d8164b7dd7cd0345844fc86a": "b624812e3aa0ef2f75847f47907296e1f370cecd",
+      "6466171c4084ec8ac1e127964919388c601dda0f64ab57dd42c95c35f3366fa5": "c6b34fc61496943134ac45cc836a24e743caf794",
+      "cdea539613ff5952c8b6a5d84b18574a54dc7c549aa7e1feca4ef27ce55ed223": "b2fe4c3a4185146a7d11483d92d4412dd79dbc78",
+      "3c21e53eb3c6220d782bf65a1ed74c8b6ef529df7ec9adc1a997409c48c30577": "55caafbd19486b8d517e4b33a6fa65250df55e25",
+      "58626ef5b683e4776781e29d6ce5abfdf23d7d9e043996e3cfd83c0fda06721f": "87e5dec269e67497681c15849777ebfc301131c1",
+      "416ffe111b715fde8404a331f7b4be7bfa79e681b2523c8404d2224cbf4c4ffe": "db04fc097bdd0411cff232f57525ded491b48c6c",
+      "a33ca21e9cbe04e10f22c2fb81962fac0586fddc2bb211a36e3404565e93e10d": "a8901b692de15eb7a9052f61283f0e7a2b63d67d",
+      "76cdc44aedf7ddfb54c4f51699a32934ba1af4a8f5c1faa16a1b60580d0d0607": "96ce04a5b02af0da6d311f06fc4906a3cf71c78f",
+      "3f4e2f77ecaf330a91a15c0212e7b3f20ddbf98e04dc72b13d63f6cf79e58ce3": "af770fd9261a8efee23d66cd39b27be7b2ab7853",
+      "5fc70021ba3f0d91429cb1c9e6946d64c73779cd7246f521ae0f557d4af3dc19": "c82b1714378bf2507ed86dea1e9fe743c380abab",
+      "dd441da69fd0e70d650f4100f3c6da352f9a9338a6165d6db66bcc0025169ebb": "40d756d0cb5f7998ca26ac1de142a96a83fa2b97",
+      "481cb385b96e2d7602616a633b7fa83144d9e6df08e1ec34df8ca6f948069f0f": "fbbbb5e8724c076d194e66a4443d299d54a8efd6",
+      "900b663d7d4baefa4e2f7e796d0a5bf23ae9730ebe1c69d0ab264b041d917d25": "b6cd14944454c743861196edb4fcab1cc9b586d4",
+      "44b7a7beeaa5df24b1e59fdd2917c5854e7000bae57e4576cd7592a749dc606a": "2d046a880476218685ed738fe8c8381962afd74a",
+      "4724f3bebb91c507126663e7e2c3236268f7fe41dbfe13b5b1893e0b279855cd": "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9",
+      "3bbe8607c42277765eb917d7dc42c862fe6010dd31c90b94cf0fbe1335418586": "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7",
+      "b3785c86125638ccfd042da818ea8a0a73f3461644324eff71122a692f45dad1": "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f",
+      "9f6f49f62fa39dcdd30c4e7fb7c4b8872b739f0cadc2370fdb2e95c1bd063cd7": "875f90538a3ff5db863ad4c384e1808841ddea9b",
+      "83ba203f737c76a38e0ee8c8d22a702360060768a649cd97177586eac66378ef": "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9",
+      "3774c7ad6b3e327b0b7733e7a7c1f6dbef1619b251a73753a5814d6c3df57582": "510476098848e2b5cdfe9f1608f8dfa3207fe9b4",
+      "8124719ce27d105d241158e4a747802340c852dd6f05a4e984dcfb75e6648389": "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8",
       "e3e8ab044b973137c9864f473f345849ecb4c0a9a3234eaba399dfa16c5f06f0": "f99a13464a4dae347628f0ebb320e767e48e3a96",
       "c5378b62028c920cb11e4803327983fee2f2cdff5dc89c708e39da417e51c854": "63e4eab3162ef10ffd99e89f13e4e67f751e9900",
       "f9a37b36655f23e167c66ec91bef6097c8e99be29286219a54062919eb41aeae": "1727e16cb9a6a59c01e18f6694ef70dee87e3a7b",
@@ -173132,6 +173564,12 @@
       ".variants/apple2gs.zip.f6b267e3": [
         "af2fce0d7349c0afc15b4293e53d048fbd605b11"
       ],
+      "Apple/Apple II/341-0438-a.bin": [
+        "440c3f84176c7b9f542da0b6ddf4fb13ec326c46"
+      ],
+      "Apple II/341-0438-a.bin": [
+        "440c3f84176c7b9f542da0b6ddf4fb13ec326c46"
+      ],
       "Apple/Apple II/341s0632-2": [
         "141d18c36a617ab9dce668445440d34354be0672"
       ],
@@ -173189,6 +173627,12 @@
       "Apple II/a2diskiing.zip": [
         "d9bb189730e15d46c27e7246d7bb23137e7d761e"
       ],
+      "Apple/Apple II/ae_transwarp_1.4.bin": [
+        "7b75534e7895e04859a0b1337801c6eeb0cef52a"
+      ],
+      "Apple II/ae_transwarp_1.4.bin": [
+        "7b75534e7895e04859a0b1337801c6eeb0cef52a"
+      ],
       "Apple/Apple II/apple2-asoft-auto.rom": [
         "33a24f5489ba9195b44be77d9afb2252594cb5c7"
       ],
@@ -173236,6 +173680,12 @@
       ],
       "Apple II/apple2e.zip": [
         "891f44b09ab1a948d3d887f8a30b9c9265849ada"
+      ],
+      "Apple/Apple II/apple2e_char_ft_blockascii.rom": [
+        "f79815457437e50404f4f537d8aabe34bff3a220"
+      ],
+      "Apple II/apple2e_char_ft_blockascii.rom": [
+        "f79815457437e50404f4f537d8aabe34bff3a220"
       ],
       "Apple/Apple II/apple2ee.zip": [
         "0bd2026795d117c33a5967b68fed8c54b3d95502"
@@ -173285,11 +173735,29 @@
       "Apple II/apple2p.zip": [
         "e8c40d3a44a41a9b6b5dd3a993d7057b3bfb4086"
       ],
+      "Apple/Apple II/cffa20ee02.bin": [
+        "d600692ed9626668233a22a48236af639410cb7b"
+      ],
+      "Apple II/cffa20ee02.bin": [
+        "d600692ed9626668233a22a48236af639410cb7b"
+      ],
       "Apple/Apple II/disk2-13seq.rom": [
         "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9"
       ],
       "Apple II/disk2-13seq.rom": [
         "af0ce2e5427a3dd1ea1836496e6fa05ad2ce6fd9"
+      ],
+      "Apple/Apple II/grappler_plus.bin": [
+        "829072cc19a58b24d36c2af972abaad6f9ba35d9"
+      ],
+      "Apple II/grappler_plus.bin": [
+        "829072cc19a58b24d36c2af972abaad6f9ba35d9"
+      ],
+      "Apple/Apple II/mouse_341-0269.bin": [
+        "3a2baa6648efe4456d3ec3721216e57c64f7acfc"
+      ],
+      "Apple II/mouse_341-0269.bin": [
+        "3a2baa6648efe4456d3ec3721216e57c64f7acfc"
       ],
       "Apple/Apple II/votrsc01.zip": [
         "a57f14469867ce0d0865995a645b69f41a0ea718"
@@ -215676,6 +216144,246 @@
       ],
       "pcsx2x6/game_controller_db.txt": [
         "b624812e3aa0ef2f75847f47907296e1f370cecd"
+      ],
+      "Other/pom2/roms/floppy_samples/35_seek_12ms.wav": [
+        "c6b34fc61496943134ac45cc836a24e743caf794"
+      ],
+      "pom2/roms/floppy_samples/35_seek_12ms.wav": [
+        "c6b34fc61496943134ac45cc836a24e743caf794"
+      ],
+      "roms/floppy_samples/35_seek_12ms.wav": [
+        "c6b34fc61496943134ac45cc836a24e743caf794"
+      ],
+      "floppy_samples/35_seek_12ms.wav": [
+        "c6b34fc61496943134ac45cc836a24e743caf794"
+      ],
+      "Other/pom2/roms/floppy_samples/35_seek_20ms.wav": [
+        "b2fe4c3a4185146a7d11483d92d4412dd79dbc78"
+      ],
+      "pom2/roms/floppy_samples/35_seek_20ms.wav": [
+        "b2fe4c3a4185146a7d11483d92d4412dd79dbc78"
+      ],
+      "roms/floppy_samples/35_seek_20ms.wav": [
+        "b2fe4c3a4185146a7d11483d92d4412dd79dbc78"
+      ],
+      "floppy_samples/35_seek_20ms.wav": [
+        "b2fe4c3a4185146a7d11483d92d4412dd79dbc78"
+      ],
+      "Other/pom2/roms/floppy_samples/35_seek_2ms.wav": [
+        "55caafbd19486b8d517e4b33a6fa65250df55e25"
+      ],
+      "pom2/roms/floppy_samples/35_seek_2ms.wav": [
+        "55caafbd19486b8d517e4b33a6fa65250df55e25"
+      ],
+      "roms/floppy_samples/35_seek_2ms.wav": [
+        "55caafbd19486b8d517e4b33a6fa65250df55e25"
+      ],
+      "floppy_samples/35_seek_2ms.wav": [
+        "55caafbd19486b8d517e4b33a6fa65250df55e25"
+      ],
+      "Other/pom2/roms/floppy_samples/35_seek_6ms.wav": [
+        "87e5dec269e67497681c15849777ebfc301131c1"
+      ],
+      "pom2/roms/floppy_samples/35_seek_6ms.wav": [
+        "87e5dec269e67497681c15849777ebfc301131c1"
+      ],
+      "roms/floppy_samples/35_seek_6ms.wav": [
+        "87e5dec269e67497681c15849777ebfc301131c1"
+      ],
+      "floppy_samples/35_seek_6ms.wav": [
+        "87e5dec269e67497681c15849777ebfc301131c1"
+      ],
+      "Other/pom2/roms/floppy_samples/35_spin_empty.wav": [
+        "db04fc097bdd0411cff232f57525ded491b48c6c"
+      ],
+      "pom2/roms/floppy_samples/35_spin_empty.wav": [
+        "db04fc097bdd0411cff232f57525ded491b48c6c"
+      ],
+      "roms/floppy_samples/35_spin_empty.wav": [
+        "db04fc097bdd0411cff232f57525ded491b48c6c"
+      ],
+      "floppy_samples/35_spin_empty.wav": [
+        "db04fc097bdd0411cff232f57525ded491b48c6c"
+      ],
+      "Other/pom2/roms/floppy_samples/35_spin_end.wav": [
+        "a8901b692de15eb7a9052f61283f0e7a2b63d67d"
+      ],
+      "pom2/roms/floppy_samples/35_spin_end.wav": [
+        "a8901b692de15eb7a9052f61283f0e7a2b63d67d"
+      ],
+      "roms/floppy_samples/35_spin_end.wav": [
+        "a8901b692de15eb7a9052f61283f0e7a2b63d67d"
+      ],
+      "floppy_samples/35_spin_end.wav": [
+        "a8901b692de15eb7a9052f61283f0e7a2b63d67d"
+      ],
+      "Other/pom2/roms/floppy_samples/35_spin_loaded.wav": [
+        "96ce04a5b02af0da6d311f06fc4906a3cf71c78f"
+      ],
+      "pom2/roms/floppy_samples/35_spin_loaded.wav": [
+        "96ce04a5b02af0da6d311f06fc4906a3cf71c78f"
+      ],
+      "roms/floppy_samples/35_spin_loaded.wav": [
+        "96ce04a5b02af0da6d311f06fc4906a3cf71c78f"
+      ],
+      "floppy_samples/35_spin_loaded.wav": [
+        "96ce04a5b02af0da6d311f06fc4906a3cf71c78f"
+      ],
+      "Other/pom2/roms/floppy_samples/35_spin_start_empty.wav": [
+        "af770fd9261a8efee23d66cd39b27be7b2ab7853"
+      ],
+      "pom2/roms/floppy_samples/35_spin_start_empty.wav": [
+        "af770fd9261a8efee23d66cd39b27be7b2ab7853"
+      ],
+      "roms/floppy_samples/35_spin_start_empty.wav": [
+        "af770fd9261a8efee23d66cd39b27be7b2ab7853"
+      ],
+      "floppy_samples/35_spin_start_empty.wav": [
+        "af770fd9261a8efee23d66cd39b27be7b2ab7853"
+      ],
+      "Other/pom2/roms/floppy_samples/35_spin_start_loaded.wav": [
+        "c82b1714378bf2507ed86dea1e9fe743c380abab"
+      ],
+      "pom2/roms/floppy_samples/35_spin_start_loaded.wav": [
+        "c82b1714378bf2507ed86dea1e9fe743c380abab"
+      ],
+      "roms/floppy_samples/35_spin_start_loaded.wav": [
+        "c82b1714378bf2507ed86dea1e9fe743c380abab"
+      ],
+      "floppy_samples/35_spin_start_loaded.wav": [
+        "c82b1714378bf2507ed86dea1e9fe743c380abab"
+      ],
+      "Other/pom2/roms/floppy_samples/35_step_1_1.wav": [
+        "40d756d0cb5f7998ca26ac1de142a96a83fa2b97"
+      ],
+      "pom2/roms/floppy_samples/35_step_1_1.wav": [
+        "40d756d0cb5f7998ca26ac1de142a96a83fa2b97"
+      ],
+      "roms/floppy_samples/35_step_1_1.wav": [
+        "40d756d0cb5f7998ca26ac1de142a96a83fa2b97"
+      ],
+      "floppy_samples/35_step_1_1.wav": [
+        "40d756d0cb5f7998ca26ac1de142a96a83fa2b97"
+      ],
+      "Other/pom2/roms/floppy_samples/525_seek_12ms.wav": [
+        "fbbbb5e8724c076d194e66a4443d299d54a8efd6"
+      ],
+      "pom2/roms/floppy_samples/525_seek_12ms.wav": [
+        "fbbbb5e8724c076d194e66a4443d299d54a8efd6"
+      ],
+      "roms/floppy_samples/525_seek_12ms.wav": [
+        "fbbbb5e8724c076d194e66a4443d299d54a8efd6"
+      ],
+      "floppy_samples/525_seek_12ms.wav": [
+        "fbbbb5e8724c076d194e66a4443d299d54a8efd6"
+      ],
+      "Other/pom2/roms/floppy_samples/525_seek_20ms.wav": [
+        "b6cd14944454c743861196edb4fcab1cc9b586d4"
+      ],
+      "pom2/roms/floppy_samples/525_seek_20ms.wav": [
+        "b6cd14944454c743861196edb4fcab1cc9b586d4"
+      ],
+      "roms/floppy_samples/525_seek_20ms.wav": [
+        "b6cd14944454c743861196edb4fcab1cc9b586d4"
+      ],
+      "floppy_samples/525_seek_20ms.wav": [
+        "b6cd14944454c743861196edb4fcab1cc9b586d4"
+      ],
+      "Other/pom2/roms/floppy_samples/525_seek_2ms.wav": [
+        "2d046a880476218685ed738fe8c8381962afd74a"
+      ],
+      "pom2/roms/floppy_samples/525_seek_2ms.wav": [
+        "2d046a880476218685ed738fe8c8381962afd74a"
+      ],
+      "roms/floppy_samples/525_seek_2ms.wav": [
+        "2d046a880476218685ed738fe8c8381962afd74a"
+      ],
+      "floppy_samples/525_seek_2ms.wav": [
+        "2d046a880476218685ed738fe8c8381962afd74a"
+      ],
+      "Other/pom2/roms/floppy_samples/525_seek_6ms.wav": [
+        "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9"
+      ],
+      "pom2/roms/floppy_samples/525_seek_6ms.wav": [
+        "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9"
+      ],
+      "roms/floppy_samples/525_seek_6ms.wav": [
+        "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9"
+      ],
+      "floppy_samples/525_seek_6ms.wav": [
+        "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9"
+      ],
+      "Other/pom2/roms/floppy_samples/525_spin_empty.wav": [
+        "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7"
+      ],
+      "pom2/roms/floppy_samples/525_spin_empty.wav": [
+        "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7"
+      ],
+      "roms/floppy_samples/525_spin_empty.wav": [
+        "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7"
+      ],
+      "floppy_samples/525_spin_empty.wav": [
+        "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7"
+      ],
+      "Other/pom2/roms/floppy_samples/525_spin_end.wav": [
+        "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f"
+      ],
+      "pom2/roms/floppy_samples/525_spin_end.wav": [
+        "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f"
+      ],
+      "roms/floppy_samples/525_spin_end.wav": [
+        "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f"
+      ],
+      "floppy_samples/525_spin_end.wav": [
+        "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f"
+      ],
+      "Other/pom2/roms/floppy_samples/525_spin_loaded.wav": [
+        "875f90538a3ff5db863ad4c384e1808841ddea9b"
+      ],
+      "pom2/roms/floppy_samples/525_spin_loaded.wav": [
+        "875f90538a3ff5db863ad4c384e1808841ddea9b"
+      ],
+      "roms/floppy_samples/525_spin_loaded.wav": [
+        "875f90538a3ff5db863ad4c384e1808841ddea9b"
+      ],
+      "floppy_samples/525_spin_loaded.wav": [
+        "875f90538a3ff5db863ad4c384e1808841ddea9b"
+      ],
+      "Other/pom2/roms/floppy_samples/525_spin_start_empty.wav": [
+        "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9"
+      ],
+      "pom2/roms/floppy_samples/525_spin_start_empty.wav": [
+        "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9"
+      ],
+      "roms/floppy_samples/525_spin_start_empty.wav": [
+        "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9"
+      ],
+      "floppy_samples/525_spin_start_empty.wav": [
+        "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9"
+      ],
+      "Other/pom2/roms/floppy_samples/525_spin_start_loaded.wav": [
+        "510476098848e2b5cdfe9f1608f8dfa3207fe9b4"
+      ],
+      "pom2/roms/floppy_samples/525_spin_start_loaded.wav": [
+        "510476098848e2b5cdfe9f1608f8dfa3207fe9b4"
+      ],
+      "roms/floppy_samples/525_spin_start_loaded.wav": [
+        "510476098848e2b5cdfe9f1608f8dfa3207fe9b4"
+      ],
+      "floppy_samples/525_spin_start_loaded.wav": [
+        "510476098848e2b5cdfe9f1608f8dfa3207fe9b4"
+      ],
+      "Other/pom2/roms/floppy_samples/525_step_1_1.wav": [
+        "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8"
+      ],
+      "pom2/roms/floppy_samples/525_step_1_1.wav": [
+        "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8"
+      ],
+      "roms/floppy_samples/525_step_1_1.wav": [
+        "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8"
+      ],
+      "floppy_samples/525_step_1_1.wav": [
+        "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8"
       ],
       "Other/ppsspp/PPSSPP/ppge_atlas.meta": [
         "f99a13464a4dae347628f0ebb320e767e48e3a96"
