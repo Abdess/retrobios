@@ -67,8 +67,8 @@ Each file is checked the way your platform checks it. Most compare a checksum, t
 - **12 platforms** supported with platform-specific verification
 - **450 emulators** profiled from source (RetroArch cores + standalone)
 - **470 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **10,357 files**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 5,012 system files, 2,806 arcade ROM sets, 2,539 game and engine data files
-- **554 of 5,012 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
+- **10,375 files**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 5,030 system files, 2,806 arcade ROM sets, 2,539 game and engine data files
+- **554 of 5,030 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
 - **12909 MB** total collection size
 
 ## Supported systems
@@ -156,6 +156,7 @@ Hashes document what emulator code loads and accepts, not dump provenance; that 
 <a href="https://github.com/PixNyb"><img src="https://avatars.githubusercontent.com/u/40770831?v=4" width="50" alt="PixNyb" title="PixNyb"></a>
 <a href="https://github.com/Takiiiiiii"><img src="https://avatars.githubusercontent.com/u/40776277?v=4" width="50" alt="Takiiiiiii" title="Takiiiiiii"></a>
 <a href="https://github.com/Takiiiiiiii"><img src="https://avatars.githubusercontent.com/u/43725718?v=4" width="50" alt="Takiiiiiiii" title="Takiiiiiiii"></a>
+<a href="https://github.com/habib256"><img src="https://avatars.githubusercontent.com/u/1260156?v=4" width="50" alt="habib256" title="habib256"></a>
 <a href="https://github.com/monster-penguin"><img src="https://avatars.githubusercontent.com/u/266009589?v=4" width="50" alt="monster-penguin" title="monster-penguin"></a>
 <a href="https://github.com/zjl88858"><img src="https://avatars.githubusercontent.com/u/29473998?v=4" width="50" alt="zjl88858" title="zjl88858"></a>
 
@@ -174,4 +175,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-09-14T03:24:09Z*
+*Auto-generated on 2026-09-14T08:42:18Z*
