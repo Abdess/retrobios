@@ -601,7 +601,7 @@ nav:
     - Dolphin Launcher: emulators/dolphin_launcher.md
     - Parallel Launcher: emulators/parallel-launcher.md
     - SWF Player: emulators/swf-player.md
-  - Other (56):
+  - Other (57):
     - ares: emulators/ares.md
     - Basilisk II: emulators/basiliskii.md
     - beebem: emulators/beebem.md
@@ -635,6 +635,7 @@ nav:
     - Oricutron: emulators/oricutron.md
     - Pizza Boy SC: emulators/pizza-boy-sc.md
     - Plastic: emulators/plastic.md
+    - POM2: emulators/pom2.md
     - project64: emulators/project64.md
     - puNES: emulators/punes.md
     - Real3DOPlayer: emulators/real3doplayer.md

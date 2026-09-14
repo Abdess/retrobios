@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-13T22:10:18Z",
+  "generated_at": "2026-09-13T23:43:03Z",
   "total_files": 10331,
   "total_size": 13535566159,
   "files": {
@@ -148180,8 +148180,17 @@
       "apple2e-enh-video.rom": [
         "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
       ],
+      "apple2e_char_us.rom": [
+        "b2b5d87f52693817fc747df087a4aa1ddcdb1f10"
+      ],
       "apple2e-enh.rom": [
         "b8ea90abe135a0031065e01697c4a3a20d51198b"
+      ],
+      "apple2e_char_2k.rom": [
+        "58ad0008df72896a18601e090ee0d58155ffa5be"
+      ],
+      "341-0265-a.chr.rom": [
+        "58ad0008df72896a18601e090ee0d58155ffa5be"
       ],
       "20pSlide.wav": [
         "f92d854f017d154c9ae0a2351629876515ba48d7"
@@ -151962,6 +151971,9 @@
       ],
       "libnfs.so": [
         "73fc328ddfaa5cec953107904e006c0d9d0de6dc"
+      ],
+      "342-0135-b.64.rom": [
+        "61fa9254628e5bb7236fb474006116d67684d747"
       ],
       "nds_sd_card.bin": [
         "3b71f43ff30f4b15b5cd85dd9e95ebc7e84eb5a3"
