@@ -1,0 +1,250 @@
+emulator: Raze
+type: standalone
+core_classification: game_engine
+source: "https://github.com/ZDoom/Raze"
+upstream: "https://github.com/ZDoom/Raze"
+profiled_date: "2026-10-04"
+source_commit: "76fe82f5eb318fdeb30ba9fb27093a9a10bc3821"
+display_name: "Raze"
+cores: []
+systems: [duke3d, blood, shadow-warrior, powerslave, exhumed, redneck, nam, ww2gi]
+
+notes: |
+  Build-engine source port derived from EDuke32 and NBlood, maintained
+  by the ZDoom team. Runs Duke Nukem 3D, Blood, Shadow Warrior,
+  Powerslave/Exhumed, Redneck Rampage, Nam, Napalm, WWII GI through a
+  shared Build renderer.
+
+  Engine resource (built via add_pk3):
+    raze.pk3   ENGINERES_FILE, fatal if absent
+    ref: source/core/version.h:66, source/core/gamecontrol.cpp:1020-1023,
+         source/core/initfs.cpp:335-336, wadsrc/CMakeLists.txt:2
+
+  Game detection reads wadsrc/static/engine/grpinfo.txt. Each entry maps
+  a size+CRC32 (or mustcontain lump set) to a game id, flags and
+  optional `loadgrp` / `loadart` dependencies.
+  ref: source/core/gamecontrol.cpp (GrpScan), wadsrc/static/engine/grpinfo.txt
+
+  At least one game's GRP (or equivalent archive) must be present for
+  Raze to run. Addons depend on the base game CRC via `dependency`.
+
+files:
+  # ================================================================
+  # Engine resource
+  # ================================================================
+
+  - name: "raze.pk3"
+    category: game_data
+    required: true
+    source_ref: "source/core/version.h:66, source/core/gamecontrol.cpp:1020-1023"
+    note: "I_FatalError(\"Cannot find raze.pk3\") if absent."
+
+  # ================================================================
+  # Duke Nukem 3D family
+  # ================================================================
+
+  - name: "DUKE3D.GRP"
+    category: game_data
+    system: duke3d
+    required: false
+    size: 26524524
+    crc32: "BBC9CE44"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Nukem 3D)"
+
+  - name: "DUKE3D.GRP"
+    category: game_data
+    system: duke3d
+    path: ".variants/DUKE3D.GRP.aa4f6a40"
+    required: false
+    size: 26385383
+    crc32: "AA4F6A40"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Nukem 3D South Korean Censored)"
+
+  - name: "DUKE3D.GRP"
+    category: game_data
+    system: duke3d
+    path: ".variants/DUKE3D.GRP.fd3dcff1"
+    required: false
+    size: 44356548
+    crc32: "FD3DCFF1"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Nukem 3D: Atomic Edition)"
+
+  - name: "DUKE3D.GRP"
+    category: game_data
+    system: duke3d
+    path: ".variants/DUKE3D.GRP.f514a6ac"
+    required: false
+    size: 44348015
+    crc32: "F514A6AC"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Nukem 3D: Plutonium Pak)"
+
+  - name: "DUKE3D.GRP"
+    category: game_data
+    system: duke3d
+    path: ".variants/DUKE3D.GRP.982afe4a"
+    required: false
+    size: 44356548
+    crc32: "982AFE4A"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Atomic Edition World Tour)"
+
+  - name: "DUKEDC.GRP"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke it out in D.C.)"
+    note: "Expansion; dependency DUKE15_CRC (Atomic Edition)."
+
+  - name: "VACATION.GRP"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Caribbean: Life's a Beach)"
+    note: "Expansion; dependency DUKE15_CRC."
+
+  - name: "NWINTER.GRP"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke: Nuclear Winter)"
+
+  - name: "DUKE3D.GRP"
+    category: game_data
+    system: duke3d
+    path: ".variants/DUKE3D.GRP.983ad923"
+    required: false
+    size: 11035779
+    crc32: "983AD923"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Nukem 3D Shareware 1.3D)"
+
+  # ================================================================
+  # Blood
+  # ================================================================
+
+  - name: "BLOOD.RFF"
+    category: game_data
+    system: blood
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt (BLOOD: One Unit Whole Blood - mustcontain blood.pal; loadgrp BLOOD.GRP)"
+    note: "Blood main resource. Shipped as part of One Unit Whole Blood / Fresh Supply."
+
+  - name: "BLOOD.GRP"
+    category: game_data
+    system: blood
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt (BLOOD: One Unit Whole Blood loadgrp)"
+
+  - name: "SOUNDS.RFF"
+    category: game_data
+    system: blood
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt (BLOOD loadgrp \"SOUNDS.RFF\")"
+
+  - name: "GUI.RFF"
+    category: game_data
+    system: blood
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt (BLOOD loadgrp \"GUI.RFF\")"
+
+  - name: "CRYPTIC.INI"
+    category: game_data
+    system: blood
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt (BLOOD: Cryptic Passage addon)"
+
+  # ================================================================
+  # Shadow Warrior
+  # ================================================================
+
+  - name: "SW.GRP"
+    category: game_data
+    system: shadow-warrior
+    required: false
+    size: 47536148
+    crc32: "7545319F"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Shadow Warrior registered)"
+
+  - name: "WD.GRP"
+    category: game_data
+    system: shadow-warrior
+    required: false
+    size: 48698128
+    crc32: "A9AAA7B7"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Shadow Warrior: Wanton Destruction)"
+
+  - name: "TD.GRP"
+    category: game_data
+    system: shadow-warrior
+    required: false
+    size: 12499012
+    crc32: "A1A65BE8"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Shadow Warrior: Twin Dragon)"
+
+  # ================================================================
+  # Powerslave / Exhumed
+  # ================================================================
+
+  - name: "STUFF.DAT"
+    category: game_data
+    system: exhumed
+    required: false
+    size: 27020745
+    crc32: "303CBD89"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Powerslave)"
+
+  - name: "STUFF.DAT"
+    category: game_data
+    system: exhumed
+    path: ".variants/STUFF.DAT.e3b172f1"
+    required: false
+    size: 27108170
+    crc32: "E3B172F1"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Exhumed)"
+
+  # ================================================================
+  # Redneck Rampage
+  # ================================================================
+
+  - name: "REDNECK.GRP"
+    category: game_data
+    system: redneck
+    required: false
+    size: 141174222
+    crc32: "19D9BC79"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Redneck Rampage)"
+
+  - name: "REDNECK.GRP"
+    category: game_data
+    system: redneck
+    path: ".variants/REDNECK.GRP.958018c6"
+    required: false
+    size: 191798609
+    crc32: "958018C6"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (Redneck Rampage Rides Again)"
+
+  # ================================================================
+  # Nam / Napalm / WWII GI
+  # ================================================================
+
+  - name: "NAM.GRP"
+    category: game_data
+    system: nam
+    required: false
+    size: 43448927
+    crc32: "75C1F07B"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (NAM)"
+
+  - name: "NAPALM.GRP"
+    category: game_data
+    system: nam
+    required: false
+    size: 44365728
+    crc32: "3DE1589A"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (NAPALM)"
+
+  - name: "WW2GI.GRP"
+    category: game_data
+    system: ww2gi
+    required: false
+    size: 77939508
+    crc32: "907B82BF"
+    source_ref: "wadsrc/static/engine/grpinfo.txt (WWII GI)"

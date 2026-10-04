@@ -1,0 +1,122 @@
+emulator: dhewm3
+type: standalone
+core_classification: community_fork
+source: "https://github.com/dhewm/dhewm3"
+upstream: "https://github.com/dhewm/dhewm3"
+profiled_date: "2026-10-04"
+source_commit: "455b88e8dff2be822f08eb498f51b383e851fa38"
+core_version: "1.5.5"
+display_name: "dhewm3"
+cores: []
+systems: [doom3]
+
+notes: |
+  Doom 3 source port based on the id Software GPL release of the
+  Doom 3 engine (idTech 4). Carries the original Doom 3 1.3.1 game
+  code plus bug fixes, SDL abstraction and 64-bit cleanup.
+
+  The engine refuses to run without a `base/` directory containing
+  the retail pak files. Resurrection of Evil goes in `d3xp/`.
+  ref: neo/framework/FileSystem.cpp:88-112 ("either base or demo"),
+       neo/framework/FileSystem.cpp:2089 AddGameDirectory,
+       neo/framework/FileSystem.cpp:2235 SetupGameDirectories(BASE_GAMEDIR)
+  BASE_GAMEDIR is defined as "base" (neo/framework/Common.cpp:2724).
+
+  Pak loading scans the gamedir for *.pk4 and loads them in descending
+  order so a later pak overrides earlier ones.
+  ref: neo/framework/FileSystem.cpp:2125-2143 (ListOSFiles ".pk4").
+
+files:
+  # ================================================================
+  # base/ - Doom 3 retail paks
+  # README.md:136 names "pak000.pk4 to pak008.pk4"; the engine itself
+  # loads every .pk4 found in the gamedir, so the exact set depends on
+  # which patch level the user owns (1.3.1 ships 008).
+  # ================================================================
+
+  - name: "pak000.pk4"
+    category: game_data
+    system: doom3
+    path: "base/pak000.pk4"
+    required: true
+    source_ref: "neo/framework/FileSystem.cpp:2125 (ListOSFiles pakfile .pk4)"
+
+  - name: "pak001.pk4"
+    category: game_data
+    system: doom3
+    path: "base/pak001.pk4"
+    required: true
+    source_ref: "neo/framework/FileSystem.cpp:2125"
+
+  - name: "pak002.pk4"
+    category: game_data
+    system: doom3
+    path: "base/pak002.pk4"
+    required: true
+    source_ref: "neo/framework/FileSystem.cpp:2125"
+
+  - name: "pak003.pk4"
+    category: game_data
+    system: doom3
+    path: "base/pak003.pk4"
+    required: true
+    source_ref: "neo/framework/FileSystem.cpp:2125"
+
+  - name: "pak004.pk4"
+    category: game_data
+    system: doom3
+    path: "base/pak004.pk4"
+    required: true
+    source_ref: "neo/framework/FileSystem.cpp:2125"
+
+  - name: "pak005.pk4"
+    category: game_data
+    system: doom3
+    path: "base/pak005.pk4"
+    required: false
+    source_ref: "neo/framework/FileSystem.cpp:2125"
+    note: "Shipped with 1.1 patch; absent on 1.0 install."
+
+  - name: "pak006.pk4"
+    category: game_data
+    system: doom3
+    path: "base/pak006.pk4"
+    required: false
+    source_ref: "neo/framework/FileSystem.cpp:2125"
+    note: "Shipped with 1.2 patch."
+
+  - name: "pak007.pk4"
+    category: game_data
+    system: doom3
+    path: "base/pak007.pk4"
+    required: false
+    source_ref: "neo/framework/FileSystem.cpp:2125"
+    note: "Shipped with 1.3 patch."
+
+  - name: "pak008.pk4"
+    category: game_data
+    system: doom3
+    path: "base/pak008.pk4"
+    required: false
+    source_ref: "neo/framework/FileSystem.cpp:2125, neo/framework/FileSystem.cpp:893-897"
+    note: "Shipped with 1.3.1 patch; path handling explicitly names it."
+
+  - name: "zpak001.pk4"
+    category: game_data
+    system: doom3
+    path: "base/zpak001.pk4"
+    required: false
+    source_ref: "neo/framework/FileSystem.cpp:232 (\"russian zpak001.pk4\")"
+    note: "Russian localization pak."
+
+  # ================================================================
+  # d3xp/ - Resurrection of Evil expansion (optional)
+  # ================================================================
+
+  - name: "pak000.pk4"
+    category: game_data
+    system: doom3
+    path: "d3xp/pak000.pk4"
+    required: false
+    source_ref: "neo/framework/FileSystem.cpp:3744-3754 (explicit d3xp/pak000.pk4 probe)"
+    note: "Resurrection of Evil main pak."

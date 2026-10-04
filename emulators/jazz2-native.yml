@@ -1,0 +1,205 @@
+emulator: Jazz² Resurrection
+type: standalone
+core_classification: game_engine
+source: "https://github.com/deathkiller/jazz2-native"
+upstream: "https://github.com/deathkiller/jazz2-native"
+profiled_date: "2026-10-04"
+source_commit: "cc06bdac1b957a069e1d05761c7437cd59886552"
+core_version: "3.8.0"
+display_name: "Jazz Jackrabbit 2 (Jazz² Resurrection)"
+cores: []
+systems: [jazz-jackrabbit-2]
+
+notes: |
+  Open-source reimplementation of Jazz Jackrabbit 2 by Dan R. The engine
+  ships its own Content/ tree (animations, metadata, translations,
+  shaders) that must sit next to the executable.
+  ref: Sources/Jazz2/ContentResolver.cpp:187-240 (GetContentPath per
+       platform), ContentResolver.cpp:415-452 (desktop fallbacks)
+
+  Original Jazz Jackrabbit 2 data is read from Source/ and converted
+  on first launch into the engine's own pak format under Cache/.
+  ref: Sources/Jazz2/ContentResolver.cpp:279-310 (GetSourcePath),
+       Sources/Jazz2/Compatibility/AssetConverter.cpp:139-170
+       (ConvertSourceAssets, iterates .j2e / .j2l / .j2t / .j2b)
+
+  Content/ is the engine runtime — it is shipped with the release
+  package. Source/ holds the user's own copy of the 1998 game data.
+  The engine runs its UI with Content/ alone; levels and episodes
+  require Source/ to carry JJ2 files.
+
+files:
+  # ================================================================
+  # Content/ (bundled runtime data, shipped with each release)
+  # These are generated at build time from the Content/ tree in the
+  # repo; the engine refuses to render its UI without them.
+  # ================================================================
+
+  - name: "Animations/"
+    category: game_data
+    path: "Content/Animations"
+    required: true
+    source_ref: "Sources/Jazz2/ContentResolver.cpp:2651 (CombinePath Content/Animations)"
+    note: "Native animation sheets, loaded by ContentResolver for every actor."
+
+  - name: "Metadata/"
+    category: game_data
+    path: "Content/Metadata"
+    required: true
+    source_ref: "Sources/Jazz2/ContentResolver.cpp (metadata loader for actors, UI, bosses)"
+    note: "Actor .res descriptors (Common, Enemy, Player, UI, Boss, ...)."
+
+  - name: "Translations/"
+    category: game_data
+    path: "Content/Translations"
+    required: false
+    source_ref: "Sources/Jazz2/ContentResolver.cpp (translation loader)"
+    note: "Language bundles. Engine falls back to English if absent."
+
+  - name: "Shaders/"
+    category: game_data
+    path: "Content/Shaders"
+    required: false
+    source_ref: "Sources/nCine (shader loader)"
+    note: "GLSL shaders used by the Jazz² renderer. Shipped with the engine."
+
+  # ================================================================
+  # Source/ (original Jazz Jackrabbit 2 data, user-supplied)
+  # Converted into Content/Cache on first launch.
+  # ================================================================
+
+  - name: "Anims.j2a"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/Anims.j2a"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Anims.cpp (JJ2Anims::Open)"
+    note: "Main animation archive. Required to generate the first-run cache."
+
+  - name: "Data.j2d"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/Data.j2d"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:162 (data.Open \"Data.j2d\")"
+
+  - name: "Plus.j2d"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/Plus.j2d"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp (JJ2+ data block)"
+    note: "JJ2+ extended data (optional)."
+
+  - name: "Jazz2.exe"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/Jazz2.exe"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Strings.cpp (localization extracted from executable)"
+    note: "Original executable used only to extract localized strings. The engine does not run it."
+
+  # Episode descriptors (.j2e) and level files (.j2l) are optional per
+  # episode. Any present in Source/ get discovered at scan time.
+  # ref: Sources/Jazz2/Compatibility/AssetConverter.cpp:338-437
+
+  - name: "prince.j2e"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/prince.j2e"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:412 (episodesPath enumeration)"
+    note: "Episode 1 - Formerly a Prince."
+
+  - name: "rescue.j2e"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/rescue.j2e"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:412"
+    note: "Episode 2 - Rescue of the Princess (Shareware episode)."
+
+  - name: "flash.j2e"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/flash.j2e"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:412"
+    note: "Episode 3 - Flashback to the Past."
+
+  - name: "monk.j2e"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/monk.j2e"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:412"
+    note: "Episode 4 - Clash of the Jazz & Monk."
+
+  - name: "funky.j2e"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/funky.j2e"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:412"
+    note: "Episode 5 - Jazz in Time (The Secret Files)."
+
+  - name: "share.j2e"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/share.j2e"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:412"
+    note: "Shareware episode descriptor."
+
+  - name: "xmas99.j2e"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/xmas99.j2e"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:182 (hasChristmasChronicles probe)"
+    note: "Holiday Hare 99. Also auto-renamed from xmas98.j2e by the converter."
+
+  - name: "secretf.j2e"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/secretf.j2e"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:412"
+    note: "The Secret Files (TSF) episode."
+
+  # Audio tracks
+  - name: "menu.j2b"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/menu.j2b"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:536 (MainMenu::PlayMenuMusic)"
+    note: "Main menu music."
+
+  - name: "intro.j2b"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/intro.j2b"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:537 (Cinematics::Initialize)"
+
+  - name: "ending.j2b"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/ending.j2b"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:537"
+
+  - name: "bonus2.j2b"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/bonus2.j2b"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:536"
+
+  - name: "bonus3.j2b"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "Source/bonus3.j2b"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:536"

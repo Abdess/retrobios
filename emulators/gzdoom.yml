@@ -1,0 +1,342 @@
+emulator: GZDoom
+type: standalone
+core_classification: game_engine
+source: "https://github.com/ZDoom/gzdoom"
+upstream: "https://github.com/ZDoom/gzdoom"
+profiled_date: "2026-10-04"
+source_commit: "c26ce2e6ca2a0c770f140cb25dde0d30073ca8f7"
+core_version: "4.15pre"
+display_name: "GZDoom"
+cores: []
+systems: [doom, heretic, hexen, strife, chex]
+
+notes: |
+  Doom-engine source port by Christoph Oelckers. Supports Doom, Heretic,
+  Hexen, Strife, Chex Quest and derived games through a unified IWAD
+  identification pass.
+
+  Engine resources (built from wadsrc*/static/ via add_pk3):
+    gzdoom.pk3            BASEWAD, searched by BaseFileSearch
+                          ref: src/version.h:90, src/d_main.cpp
+    game_support.pk3      OPTIONALWAD, filter/game assets per IWAD
+                          ref: src/version.h:92
+    lights.pk3            dynamic light definitions
+    brightmaps.pk3        brightmap textures
+    game_widescreen_gfx.pk3  widescreen HUD/menu replacements
+
+  Game data is a user-supplied IWAD. iwadinfo.txt declares each known IWAD
+  with its IWADName, MustContain lumps and support files.
+  ref: wadsrc_extra/static/iwadinfo.txt
+
+  Startup refuses to run if BASEWAD (gzdoom.pk3) is absent. The other
+  engine pk3s and the IWAD selection are read from the same base search
+  (fs_basepath, home dir, system paths).
+
+files:
+  # ================================================================
+  # Engine resources (shipped with the port, add_pk3 in CMakeLists)
+  # ================================================================
+
+  - name: "gzdoom.pk3"
+    category: game_data
+    required: true
+    source_ref: "src/version.h:90 (BASEWAD), wadsrc/CMakeLists.txt:1"
+    note: "Fonts, menus, zscript, textures. Fatal if absent."
+
+  - name: "game_support.pk3"
+    category: game_data
+    required: false
+    source_ref: "src/version.h:92 (OPTIONALWAD), wadsrc_extra/CMakeLists.txt:1"
+    note: "Per-game filters under static/filter/ (doom.id, strife, hexen, heretic, chex...)."
+
+  - name: "lights.pk3"
+    category: game_data
+    required: false
+    source_ref: "src/d_main.cpp:2055, wadsrc_lights/CMakeLists.txt:1"
+
+  - name: "brightmaps.pk3"
+    category: game_data
+    required: false
+    source_ref: "src/d_main.cpp:2061, wadsrc_bm/CMakeLists.txt:1"
+
+  - name: "game_widescreen_gfx.pk3"
+    category: game_data
+    required: false
+    source_ref: "src/d_main.cpp:2067, wadsrc_widepix/CMakeLists.txt:1"
+
+  # ================================================================
+  # IWADs (user-supplied). At least one is needed to launch a game.
+  # All source refs point to wadsrc_extra/static/iwadinfo.txt entries.
+  # ================================================================
+
+  # ---- Doom ----
+
+  - name: "doom.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (The Ultimate DOOM / DOOM Registered)"
+    note: "Ultimate Doom (version 2) or Doom Registered (version 1)."
+
+  - name: "doom2.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM 2: Hell on Earth)"
+
+  - name: "doom2f.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM 2: L'Enfer sur Terre)"
+
+  - name: "doombfg.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM: BFG Edition)"
+
+  - name: "doom2bfg.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM 2: BFG Edition)"
+
+  - name: "doomunity.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM: Unity Edition)"
+
+  - name: "doom2unity.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM 2: Unity Edition)"
+
+  - name: "doomkex.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM: KEX Edition)"
+
+  - name: "doom2kex.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM 2: KEX Edition)"
+
+  - name: "doomxbox.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM: XBox Edition)"
+
+  - name: "doom2xbox.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM 2: XBox Edition)"
+
+  - name: "doom_complete.pk3"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (DOOM: Complete: WadSmoosh)"
+
+  - name: "plutonia.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Final Doom: Plutonia Experiment)"
+
+  - name: "plutoniaunity.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Plutonia Unity Edition)"
+
+  - name: "plutoniakex.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Plutonia KEX Edition)"
+
+  - name: "tnt.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Final Doom: TNT - Evilution)"
+
+  - name: "tntunity.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (TNT Unity Edition)"
+
+  - name: "tntkex.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (TNT KEX Edition)"
+
+  - name: "nerve.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Load = \"nerve.wad\" under DOOM 2: BFG/XBox)"
+    note: "No Rest for the Living. Autoloaded by Doom 2 BFG and Xbox editions."
+
+  - name: "nerveunity.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Load under DOOM 2: Unity Edition)"
+
+  - name: "extras.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Load under KEX/Unity editions)"
+
+  - name: "id24res.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (SupportWAD on every id iwad)"
+    note: "id24 resource WAD. Loaded with any id IWAD when present."
+
+  # ---- Freedoom (free) ----
+
+  - name: "freedoom1.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Freedoom: Phase 1)"
+
+  - name: "freedoom2.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Freedoom: Phase 2)"
+
+  - name: "freedm.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (FreeDM)"
+
+  # ---- Heretic ----
+
+  - name: "heretic.wad"
+    category: game_data
+    system: heretic
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Heretic / Heretic: Shadow of the Serpent Riders)"
+    note: "Both Heretic 1.0 and Shadow of the Serpent Riders use this name; distinguished by EXTENDED lump."
+
+  - name: "blasphem.wad"
+    category: game_data
+    system: heretic
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Blasphemer)"
+
+  # ---- Hexen ----
+
+  - name: "hexen.wad"
+    category: game_data
+    system: hexen
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Hexen: Beyond Heretic)"
+
+  - name: "hexdd.wad"
+    category: game_data
+    system: hexen
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Hexen: Deathkings of the Dark Citadel)"
+    note: "Deathkings expansion. Requires hexen.wad (Required = Hexen: Beyond Heretic)."
+
+  # ---- Strife ----
+
+  - name: "strife1.wad"
+    category: game_data
+    system: strife
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Strife: Quest for the Sigil)"
+
+  - name: "sve.wad"
+    category: game_data
+    system: strife
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Strife: Veteran Edition)"
+    note: "Veteran Edition. Required = Strife: Quest for the Sigil (loads voices.wad)."
+
+  - name: "voices.wad"
+    category: game_data
+    system: strife
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Load = \"voices.wad\" on Strife entries)"
+
+  # ---- Chex Quest ----
+
+  - name: "chex.wad"
+    category: game_data
+    system: chex
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Chex(R) Quest)"
+
+  - name: "chex3.wad"
+    category: game_data
+    system: chex
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Chex(R) Quest 3)"
+
+  # ---- Standalone commercial / community IWADs ----
+
+  - name: "hacx.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Hacx: Twitch'n Kill)"
+
+  - name: "hacx2.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Hacx 2.0)"
+
+  - name: "action2.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Action Doom 2: Urban Brawl)"
+
+  - name: "harm1.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Harmony)"
+
+  - name: "square.pk3"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (The Adventures of Square)"
+
+  - name: "square1.pk3"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (The Adventures of Square - Squareware)"
+
+  - name: "delaweare.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Delaweare)"
+
+  - name: "rotwb.wad"
+    category: game_data
+    system: doom
+    required: false
+    source_ref: "wadsrc_extra/static/iwadinfo.txt (Rise Of The Wool Ball)"

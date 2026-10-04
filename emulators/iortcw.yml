@@ -1,0 +1,154 @@
+emulator: ioRTCW
+type: standalone
+core_classification: community_fork
+source: "https://github.com/iortcw/iortcw"
+upstream: "https://github.com/iortcw/iortcw"
+profiled_date: "2026-10-04"
+source_commit: "438e7d413b5f7277187c35b032eb0ef9093ae778"
+display_name: "ioRTCW"
+cores: []
+systems: [return-to-castle-wolfenstein]
+
+notes: |
+  Return to Castle Wolfenstein source port derived from the ioquake3
+  codebase and the id Software GPL release of RTCW. Ships as two
+  separate executables: Single-player and Multiplayer, each with its
+  own filesystem layer under SP/code/ and MP/code/.
+
+  BASEGAME is "main" for both builds.
+  ref: SP/code/qcommon/qcommon.h:628, MP/code/qcommon/qcommon.h:656
+
+  Single-player (SP/code/qcommon/files.c):
+    main/pak0.pk3    retail base, checksum 1886207346
+                     fatal if present with wrong checksum
+    main/sp_pak1.pk3 patch pak, five localized checksums (en/fr/gm/it/sp)
+    main/sp_pak2.pk3 patch pak, same localization split
+    main/sp_pak3.pk3 patch pak, same localization split
+    main/sp_pak4.pk3 GOTY edition pak, single checksum across languages
+  ref: SP/code/qcommon/files.c:183-230 (checksum arrays),
+       SP/code/qcommon/qcommon.h:637 (NUM_ID_PAKS 6),
+       SP/code/qcommon/files.c:3859-3883 (pak0 fatal check)
+
+  Multiplayer (MP/code/qcommon/files.c):
+    main/pak0.pk3     shared base, checksum 1886207346
+    main/mp_pak0.pk3  checksum 764840216
+    main/mp_pak1.pk3  checksum -1023558518
+    main/mp_pak2.pk3  checksum 125907563
+    main/mp_pak3.pk3  checksum 131270674
+    main/mp_pak4.pk3  checksum -137448799
+    main/mp_pak5.pk3  checksum 2149774797
+    main/mp_bin.pk3   or mp_bin0.pk3 (1.51c) - VM/binary pak, optional
+  ref: MP/code/qcommon/files.c:188-225 (mppak_checksums, binpak_checksums)
+
+  The SP build's pak0 fatal-error check only fires when a mismatched
+  pak0 is present; a missing pak0 ends up as "no game data found".
+
+files:
+  # ================================================================
+  # main/ - shared base
+  # ================================================================
+
+  - name: "pak0.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/pak0.pk3"
+    required: true
+    source_ref: "SP/code/qcommon/files.c:183-184 (pak_checksums), SP/code/qcommon/files.c:3859 (fatal check)"
+    note: "RTCW retail base. Checksum 1886207346; same checksum used by SP and MP."
+
+  # ================================================================
+  # main/ - single-player patches (localized sp_pak1-3, universal sp_pak4)
+  # ================================================================
+
+  - name: "sp_pak1.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/sp_pak1.pk3"
+    required: false
+    source_ref: "SP/code/qcommon/files.c:187-224 (en/fr/gm/it/sp_sppak_checksums[0])"
+    note: "Localization-specific patch pak. One of five checksums expected."
+
+  - name: "sp_pak2.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/sp_pak2.pk3"
+    required: false
+    source_ref: "SP/code/qcommon/files.c:188-225 (sppak_checksums[1])"
+
+  - name: "sp_pak3.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/sp_pak3.pk3"
+    required: false
+    source_ref: "SP/code/qcommon/files.c:189-226 (sppak_checksums[2])"
+
+  - name: "sp_pak4.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/sp_pak4.pk3"
+    required: false
+    source_ref: "SP/code/qcommon/files.c:190 (\"sp_pak4.pk3 from GOTY edition\"), checksum 4131017020"
+    note: "GOTY-edition patch; single checksum shared across languages."
+
+  # ================================================================
+  # main/ - multiplayer patches
+  # ================================================================
+
+  - name: "mp_pak0.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/mp_pak0.pk3"
+    required: false
+    source_ref: "MP/code/qcommon/files.c:188 (mppak_checksums[0]=764840216)"
+    note: "Multiplayer base. MP build warns if absent but continues."
+
+  - name: "mp_pak1.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/mp_pak1.pk3"
+    required: false
+    source_ref: "MP/code/qcommon/files.c:189 (mppak_checksums[1])"
+
+  - name: "mp_pak2.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/mp_pak2.pk3"
+    required: false
+    source_ref: "MP/code/qcommon/files.c:190 (mppak_checksums[2])"
+
+  - name: "mp_pak3.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/mp_pak3.pk3"
+    required: false
+    source_ref: "MP/code/qcommon/files.c:191 (mppak_checksums[3])"
+
+  - name: "mp_pak4.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/mp_pak4.pk3"
+    required: false
+    source_ref: "MP/code/qcommon/files.c:192 (mppak_checksums[4])"
+
+  - name: "mp_pak5.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/mp_pak5.pk3"
+    required: false
+    source_ref: "MP/code/qcommon/files.c:193 (mppak_checksums[5])"
+
+  - name: "mp_bin.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/mp_bin.pk3"
+    required: false
+    source_ref: "MP/code/qcommon/files.c:199 (binpak_checksums, \"mp_bin.pk3 (1.4/1.41)\")"
+    note: "VM/binary pak, 1.4/1.41 retail."
+
+  - name: "mp_bin0.pk3"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "main/mp_bin0.pk3"
+    required: false
+    source_ref: "MP/code/qcommon/files.c:200 (binpak_checksums, \"mp_bin0.pk3 (1.51c)\")"
+    note: "VM/binary pak, 1.51c variant."
