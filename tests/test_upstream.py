@@ -53,6 +53,12 @@ class TestParseRepo(unittest.TestCase):
         repo = parse_repo("https://gitlab.com/recalbox/recalbox")
         self.assertEqual(repo.family, "gitlab")
 
+    def test_libretro_gitlab_is_a_gitlab(self):
+        repo = parse_repo("https://git.libretro.com/libretro/wqxemu.git")
+        self.assertEqual(repo.family, "gitlab")
+        self.assertEqual(repo.api_base, "https://git.libretro.com/api/v4")
+        self.assertEqual(repo.slug, "libretro/wqxemu")
+
     def test_codeberg_is_forgejo(self):
         self.assertEqual(parse_repo("https://codeberg.org/a/b").family, "forgejo")
 

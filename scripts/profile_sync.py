@@ -35,8 +35,8 @@ ANON_QUOTA = 60
 TRIAGE_PATH_SAMPLE = 5
 
 STATUS_ORDER = (
-    "ANCHORED", "EXTERNAL", "BINARY", "SHIFTED", "RENAMED", "MOVED", "AMBIGUOUS",
-    "CHANGED", "GONE",
+    "ANCHORED", "UNCHECKED", "EXTERNAL", "BINARY", "SHIFTED", "RENAMED", "MOVED",
+    "AMBIGUOUS", "CHANGED", "GONE",
 )
 REVIEW_STATUSES = ("CHANGED", "GONE", "AMBIGUOUS")
 REBASE_STATUSES = ("SHIFTED", "RENAMED", "MOVED")
@@ -973,6 +973,10 @@ class ProfileReport:
     entries: list[EntryReport] = None
     skipped: str | None = None
     counts: dict[str, int] = None
+    # Declared repositories whose forge the tool cannot read. They are named
+    # rather than dropped: a `source` on an unknown host used to fall back to
+    # `upstream` in silence, and a divergence between the two went unseen.
+    unread: list[str] = None
 
     def needs_review(self) -> int:
         counts = self.counts or {}
@@ -1109,7 +1113,14 @@ def verify_at_pin(part: RefPart, pin_lines, tokens, hash_tokens=()) -> PartResul
             part, "GONE", None, None, None, [], "beyond the end of the file"
         )
     if not tokens:
-        return PartResult(part, "ANCHORED", None, None, None, [])
+        # Nothing to look for: an entry with neither a hash nor a name (an
+        # analysis block, a `filename:` field) cannot be checked against its
+        # own revision. Calling it anchored made the check vacuously true, and
+        # a pin advanced without a recale hid a ref that had become false.
+        return PartResult(
+            part, "UNCHECKED", None, None, None, [],
+            "entry declares no value to look for",
+        )
     # An archive ref cites the line declaring the set; its members follow, one
     # per line, so the window reaches forward as far as the entry has members.
     reach = SELF_CHECK_CONTEXT + len(tokens)
@@ -1256,6 +1267,11 @@ def build_report(
                 cited_dirs.add(directory)
                 directory = posixpath.dirname(directory)
 
+    report.unread = [
+        url
+        for _, _, url in declared_repositories(profile)
+        if upstream.parse_repo(url) is None
+    ]
     if select_repo(profile) is None:
         declared = str(profile.get("source") or profile.get("upstream") or "")
         report.skipped = f"unsupported host: {declared or 'none declared'}"
@@ -1651,6 +1667,8 @@ def format_report(report: ProfileReport, changed_only: bool = False) -> str:
         )
     elif report.pin and report.pin == report.head:
         lines.append("  pin is HEAD: checked for self-consistency")
+    for url in report.unread or []:
+        lines.append(f"  not read (unsupported host): {url}")
     if report.skipped:
         lines.append(f"  skipped: {report.skipped}")
         return "\n".join(lines)
@@ -2629,8 +2647,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--tree-diff", action="store_true")
     parser.add_argument("--triage", action="store_true")
     parser.add_argument("--backfill-commits", action="store_true")
-    parser.add_argument("--rebase-refs", action="store_true")
-    parser.add_argument("--bump-commit", action="store_true")
+    parser.add_argument(
+        "--rebase-refs",
+        action="store_true",
+        help="rewrite shifted refs for HEAD and move source_commit with them, "
+        "all or nothing",
+    )
+    parser.add_argument(
+        "--bump-commit",
+        action="store_true",
+        help="move source_commit to HEAD when every ref already anchors there",
+    )
     parser.add_argument(
         "--realign-prose",
         action="store_true",
@@ -2698,13 +2725,14 @@ def _apply_writes(args, name: str, profile: dict, report: ProfileReport) -> None
             print(f"{name}: source_commit {report.pin[:7]}")
     if not (args.rebase_refs or args.bump_commit):
         return
-    both = args.rebase_refs and args.bump_commit
     with tempfile.TemporaryDirectory() as scratch:
         # Always work on a copy. A dry run reports what it left there; a real
-        # run promotes it. Asking for both writes makes the pass atomic: the
-        # pin has to follow the refs or neither moves, because a profile whose
-        # refs describe one revision and whose pin names another is exactly
-        # what the all-or-nothing rule exists to prevent.
+        # run promotes it. A recale rewrites the refs for HEAD, so the pin
+        # has to follow or neither moves: a profile whose refs describe one
+        # revision and whose pin names another is exactly what the
+        # all-or-nothing rule exists to prevent. Recaling alone used to
+        # leave that state behind, and a later bump then read the recaled
+        # refs at the old pin and saw them shifted again.
         target = Path(scratch) / path.name
         target.write_bytes(path.read_bytes())
         recale, bumped = (
@@ -2714,10 +2742,8 @@ def _apply_writes(args, name: str, profile: dict, report: ProfileReport) -> None
         applied = []
         if args.rebase_refs and not report.skipped:
             applied = rebase_refs(target, report, args.accept_changed)
-        moved = bool(args.bump_commit) and bump_commit(
-            target, report, args.accept_changed
-        )
-        if both and applied and not moved:
+        moved = bump_commit(target, report, args.accept_changed)
+        if args.rebase_refs and applied and not moved:
             print(
                 f"{name}: refs recaled but the pin will not follow, so nothing "
                 "was written; the prose or an annotated ref has to move first",
@@ -2783,7 +2809,13 @@ def _print_detection(args, profile: dict, report: ProfileReport, repo) -> None:
 
 
 def _print_extras(args, profile: dict, report: ProfileReport) -> None:
-    """Optional per-profile sections beyond the ref report."""
+    """Optional per-profile sections beyond the ref report.
+
+    The ref report mutes a forge that refuses; the extras read the same
+    forge again, so a refusal here is reported on the profile's own line
+    instead of ending a pass over every profile. A quota signal still
+    stops everything.
+    """
     wants = (
         args.check_version
         or args.detect_new_files
@@ -2796,7 +2828,15 @@ def _print_extras(args, profile: dict, report: ProfileReport) -> None:
     repo = select_repo(profile)
     if repo is None:
         return
+    try:
+        _print_extras_from(args, profile, report, repo)
+    except upstream.RateLimitError:
+        raise
+    except upstream.UpstreamError as exc:
+        print(f"  extras skipped: {exc}")
 
+
+def _print_extras_from(args, profile: dict, report: ProfileReport, repo) -> None:
     if args.check_version:
         _print_version(args, profile, report, repo)
     if args.detect_new_files or args.watch_hashes:
@@ -2855,6 +2895,9 @@ def _print_triage(args, selected: dict, reports: list[ProfileReport]) -> None:
         ranked.append((drift_score(report, version, commits), report))
     for score, report in sorted(ranked, key=lambda item: -item[0]):
         state = report.skipped or f"{report.needs_review()} to review"
+        unchecked = (report.counts or {}).get("UNCHECKED", 0)
+        if unchecked and not report.skipped:
+            state += f", {unchecked} unchecked"
         print(f"{score:5d}  {report.name:30s}  {state}")
 
 

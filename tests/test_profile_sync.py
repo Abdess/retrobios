@@ -58,6 +58,7 @@ from profile_sync import (
     watch_hashes,
     worst_status,
 )
+import upstream
 from upstream import CompareResult, FileChange
 
 
@@ -474,6 +475,17 @@ class TestVerifyAtPin(unittest.TestCase):
             profile_sync.verify_at_pin(part, None, ["deadbeef"]).status, "GONE"
         )
 
+    def test_an_entry_with_nothing_to_look_for_is_unchecked_not_anchored(self):
+        """race's analysis.npbios entry carries a `filename:` and no hash: at a
+        pin equal to HEAD its ref was reported anchored while the cited block
+        had been deleted upstream. No token means no verdict."""
+        part = RefPart("a.c", 3, 3, "a.c:3")
+        result = profile_sync.verify_at_pin(part, self.LINES, [])
+        self.assertEqual(result.status, "UNCHECKED")
+        self.assertNotIn("UNCHECKED", profile_sync.REVIEW_STATUSES)
+        self.assertEqual(profile_sync.worst_status(["ANCHORED", "UNCHECKED"]), "UNCHECKED")
+        self.assertEqual(profile_sync.worst_status(["UNCHECKED", "SHIFTED"]), "SHIFTED")
+
     def test_line_beyond_the_file(self):
         part = RefPart("a.c", 99, 99, "a.c:99")
         self.assertEqual(
@@ -487,11 +499,13 @@ class TestVerifyAtPin(unittest.TestCase):
             "ANCHORED",
         )
 
-    def test_an_entry_declaring_nothing_is_accepted(self):
+    def test_an_entry_declaring_nothing_is_accepted_but_not_called_anchored(self):
+        # Nothing to re-read, so no review is demanded; but the verdict says
+        # that nothing was checked rather than claiming the ref anchors.
         part = RefPart("a.c", 1, 1, "a.c:1")
-        self.assertEqual(
-            profile_sync.verify_at_pin(part, self.LINES, []).status, "ANCHORED"
-        )
+        result = profile_sync.verify_at_pin(part, self.LINES, [])
+        self.assertEqual(result.status, "UNCHECKED")
+        self.assertNotIn(result.status, profile_sync.REVIEW_STATUSES)
 
 
 class TestExternalCitation(unittest.TestCase):
@@ -1176,6 +1190,21 @@ class TestBuildReport(unittest.TestCase):
             "test", {"emulator": "T", "source": "https://www.6809.org.uk/"}, self.dir
         )
         self.assertIn("unsupported host", report.skipped)
+        self.assertEqual(report.unread, ["https://www.6809.org.uk/"])
+
+    def test_unsupported_source_is_named_when_upstream_answers(self):
+        profile = self._profile(["a.c:1"])
+        profile["source"] = "https://forge.example.invalid/o/n"
+        profile["upstream"] = "https://github.com/o/n"
+        self.files[("pinsha", "a.c")] = ["x"]
+        self.files[("headsha", "a.c")] = ["x"]
+        report = build_report("test", profile, self.dir)
+        self.assertIsNone(report.skipped)
+        self.assertEqual(report.unread, ["https://forge.example.invalid/o/n"])
+        self.assertIn(
+            "not read (unsupported host): https://forge.example.invalid/o/n",
+            format_report(report),
+        )
 
     def test_profile_without_refs_is_reported_not_empty(self):
         profile = {
@@ -1705,6 +1734,49 @@ class TestElidedSummary(unittest.TestCase):
         self.assertEqual(buffer.getvalue(), "")
 
 
+class TestExtrasSurviveARefusingForge(unittest.TestCase):
+    """A pass over every profile used to die on the first forge answering
+    403 to the detection reads, after the ref report had already muted it."""
+
+    def _args(self):
+        return argparse.Namespace(
+            check_version=False, detect_new_files=True, watch_hashes=False,
+            full_diff=False, tree_diff=False, cache_dir="x", offline=False,
+            ref=None, context=3,
+        )
+
+    def _profile(self):
+        return {"emulator": "T", "source": "https://github.com/o/n", "files": []}
+
+    def test_a_refusal_is_printed_on_the_profile_not_raised(self):
+        original = upstream.fetch_file
+
+        def refuse(*_args, **_kwargs):
+            raise upstream.UpstreamError("https://x/y: HTTP 403")
+
+        upstream.fetch_file = refuse
+        try:
+            buffer = io.StringIO()
+            with contextlib.redirect_stdout(buffer):
+                profile_sync._print_extras(self._args(), self._profile(), _sample_report())
+        finally:
+            upstream.fetch_file = original
+        self.assertIn("extras skipped: https://x/y: HTTP 403", buffer.getvalue())
+
+    def test_a_quota_signal_still_stops_the_pass(self):
+        original = upstream.fetch_file
+
+        def quota(*_args, **_kwargs):
+            raise upstream.RateLimitError("quota")
+
+        upstream.fetch_file = quota
+        try:
+            with self.assertRaises(upstream.RateLimitError):
+                profile_sync._print_extras(self._args(), self._profile(), _sample_report())
+        finally:
+            upstream.fetch_file = original
+
+
 class TestReportToDict(unittest.TestCase):
     def test_round_trips_through_json(self):
         payload = report_to_dict(_sample_report())
@@ -2151,6 +2223,36 @@ class TestWriteDryRun(unittest.TestCase):
         )
         self.assertNotIn("would", output)
         self.assertIn('source_ref: "a.c:30-32"', self.path.read_text())
+
+    def test_a_recale_carries_the_pin(self):
+        """Refs rewritten for HEAD describe HEAD, so the pin follows in the
+        same write. Left behind, the profile named one revision and cited
+        another, and the next pass read the new refs at the old pin."""
+        output = self._run(
+            self._args(rebase_refs=True, dry_run=False), self._shifted()
+        )
+        self.assertIn("source_commit -> newhead", output)
+        self.assertIn('source_commit: "newhead"', self.path.read_text())
+
+    def test_a_recale_the_pin_cannot_follow_writes_nothing(self):
+        """One ref recales, another is CHANGED and unread: neither the refs
+        nor the pin move, and the file is left as it was."""
+        before = self.path.read_text()
+        shifted = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "SHIFTED", None, 30, 32, []
+        )
+        changed = PartResult(RefPart("b.c", 5, 5, "b.c:5"), "CHANGED", None, 7, 7, [])
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[
+                EntryReport("a.bin", "a.c:10-12", "SHIFTED", [shifted]),
+                EntryReport("b.bin", "b.c:5", "CHANGED", [changed]),
+            ],
+            counts={"SHIFTED": 1, "CHANGED": 1},
+        )
+        output = self._run(self._args(rebase_refs=True, dry_run=False), report)
+        self.assertNotIn("source_commit", output)
+        self.assertEqual(self.path.read_text(), before)
 
     def test_a_planned_bump_reads_the_prose_the_rebase_would_have_left(self):
         """The pin is blocked by prose until the rebase moves it.

@@ -36,6 +36,13 @@ _HOSTS: dict[str, tuple[str, str, str]] = {
         "https://raw.githubusercontent.com",
     ),
     "gitlab.com": ("gitlab", "https://gitlab.com/api/v4", "https://gitlab.com"),
+    # libretro builds a growing share of its cores from its own GitLab, and
+    # several ports (wqxemu, cemu-libretro, libretro-radio) live only there.
+    "git.libretro.com": (
+        "gitlab",
+        "https://git.libretro.com/api/v4",
+        "https://git.libretro.com",
+    ),
     "codeberg.org": (
         "forgejo",
         "https://codeberg.org/api/v1",
