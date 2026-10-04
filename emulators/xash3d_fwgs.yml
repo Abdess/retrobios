@@ -68,6 +68,7 @@ files:
     required: false
     source_ref: "filesystem/pak.c"
     note: "Patch pak, present on Steam Half-Life installs."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # Counter-Strike 1.6 (cstrike/)
@@ -80,6 +81,7 @@ files:
     required: true
     source_ref: "filesystem/gameinfo.c:617, filesystem/searchpath.c:327 (cstrike -> valve chain)"
     note: "Declares fallback_dir \"valve\". Counter-Strike 1.6 retail descriptor."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak0.pak"
     category: game_data
@@ -88,11 +90,11 @@ files:
     required: false
     source_ref: "filesystem/pak.c"
     note: "Loose files (maps/, sprites/, sound/, models/) are the usual retail layout; a bundled pak0.pak is optional."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # Condition Zero (czero/)
   # ================================================================
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "liblist.gam"
     category: game_data
@@ -100,6 +102,7 @@ files:
     path: "czero/liblist.gam"
     required: true
     source_ref: "filesystem/searchpath.c:327 (czero -> cstrike -> valve chain)"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak0.pak"
     category: game_data
@@ -107,11 +110,11 @@ files:
     path: "czero/pak0.pak"
     required: false
     source_ref: "filesystem/pak.c"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # Condition Zero: Deleted Scenes (czeror/)
   # ================================================================
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "liblist.gam"
     category: game_data
@@ -119,6 +122,7 @@ files:
     path: "czeror/liblist.gam"
     required: true
     source_ref: "filesystem/searchpath.c:327 (czeror -> czero -> cstrike -> valve chain)"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak0.pak"
     category: game_data
@@ -126,11 +130,11 @@ files:
     path: "czeror/pak0.pak"
     required: false
     source_ref: "filesystem/pak.c"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # Deathmatch Classic (dmc/)
   # ================================================================
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "liblist.gam"
     category: game_data
@@ -145,11 +149,11 @@ files:
     path: "dmc/pak0.pak"
     required: false
     source_ref: "filesystem/pak.c"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # Opposing Force (gearbox/)
   # ================================================================
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "liblist.gam"
     category: game_data
@@ -165,12 +169,12 @@ files:
     path: "gearbox/pak0.pak"
     required: false
     source_ref: "filesystem/pak.c"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # Blue Shift (bshift/)
   # Half-Life source dir still called "bshift" in Steam depot.
   # ================================================================
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "liblist.gam"
     category: game_data
@@ -178,6 +182,7 @@ files:
     path: "bshift/liblist.gam"
     required: true
     source_ref: "filesystem/gameinfo.c:617"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak0.pak"
     category: game_data
@@ -185,11 +190,11 @@ files:
     path: "bshift/pak0.pak"
     required: false
     source_ref: "filesystem/pak.c"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # Ricochet (ricochet/)
   # ================================================================
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "liblist.gam"
     category: game_data
@@ -204,11 +209,11 @@ files:
     path: "ricochet/pak0.pak"
     required: false
     source_ref: "filesystem/pak.c"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # Team Fortress Classic (tfc/)
   # ================================================================
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "liblist.gam"
     category: game_data
@@ -223,4 +228,3 @@ files:
     path: "tfc/pak0.pak"
     required: false
     source_ref: "filesystem/pak.c"
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"

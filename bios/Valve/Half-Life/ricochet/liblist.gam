@@ -1,0 +1,14 @@
+// Team Fortress Classes Game .dll Listing File
+// Load order is determined by file order.
+game "Ricochet"
+url_info "www.valvesoftware.com"
+url_dl ""
+version "1"
+size "14200000"
+svonly "0"
+cldll "0"
+type "multiplayer_only"
+nomodels "1"  // Don't show models in browser, since you don't pick them there anyway.
+mpentity "info_ricochet"
+gamedll "dlls\mp.dll"
+gamedll_linux "dlls/ricochet_i386.so"

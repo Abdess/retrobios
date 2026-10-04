@@ -29,6 +29,12 @@ notes: |
   entry, never to refuse an unknown GRP. CON / RTS / addon files are
   referenced from the chosen entry but their contents are not validated.
 
+  The scan checksums every *.grp, *.ssi, *.dat and *.zip file of the
+  search path and matches size and CRC32 against the table; the table
+  holds no file name (source/duke3d/src/grpscan.cpp:360-370, 486-492).
+  An addon whose dependency is not found is removed from the list
+  (source/duke3d/src/grpscan.cpp:503-517).
+
 files:
   # ================================================================
   # Duke Nukem 3D (base game, GAMEFLAG_DUKE)
@@ -79,10 +85,25 @@ files:
     source_ref: "source/duke3d/src/grpscan.cpp:60-64 (Duke Caribbean: Life's a Beach, GAMEFLAG_ADDON)"
 
   - name: "NWINTER.GRP"
+    description: "Duke: Nuclear Winter"
     category: game_data
     system: duke3d
     required: false
-    source_ref: "source/duke3d/src/grpscan.cpp:65-66 (Duke: Nuclear Winter, GAMEFLAG_ADDON)"
+    size: 16169365
+    crc32: "f1cae8e4"
+    validation: [size, crc32]
+    source_ref: "source/duke3d/src/grpscan.cpp:65 (Duke: Nuclear Winter, GAMEFLAG_ADDON), 366 (crc and size compare), source/duke3d/src/grpscan.h:51 (DUKENW_CRC)"
+
+  - name: "NWINTER.GRP"
+    description: "Duke: Nuclear Winter Demo"
+    category: game_data
+    system: duke3d
+    required: false
+    size: 10965909
+    crc32: "c7efbfa9"
+    validation: [size, crc32]
+    source_ref: "source/duke3d/src/grpscan.cpp:66 (Duke: Nuclear Winter Demo, GAMEFLAG_ADDON), 366 (crc and size compare)"
+    note: "Addon of the Atomic Edition (dependency DUKE15_CRC); dropped from the list when that GRP is not found."
 
   - name: "DZ2.GRP"
     category: game_data
@@ -90,11 +111,26 @@ files:
     required: false
     source_ref: "source/duke3d/src/grpscan.cpp:67-69 (Duke!ZONE II, GAMEFLAG_ADDON)"
 
-  - name: "PENTP.GRP"
+  - name: "penthous.zip"
+    description: "Duke Nukem's Penthouse Paradise"
     category: game_data
     system: duke3d
     required: false
-    source_ref: "source/duke3d/src/grpscan.cpp:70-71 (Penthouse Paradise, GAMEFLAG_ADDON)"
+    size: 2112419
+    crc32: "7cd82a3b"
+    validation: [size, crc32]
+    source_ref: "source/duke3d/src/grpscan.cpp:70 (Penthouse Paradise, original .zip release), 366 (crc and size compare), 486-492 (scanned extensions)"
+    note: "The original ZIP release, identified as a whole file by its size and CRC32. Addon of the Atomic Edition (dependency DUKE15_CRC)."
+
+  - name: "PENTP.GRP"
+    description: "Duke Nukem's Penthouse Paradise"
+    category: game_data
+    system: duke3d
+    required: false
+    size: 4247491
+    crc32: "cf928a58"
+    validation: [size, crc32]
+    source_ref: "source/duke3d/src/grpscan.cpp:71 (Penthouse Paradise, ZOOM Platform repacked .grp), 366 (crc and size compare)"
 
   # ================================================================
   # NAM (GAMEFLAG_NAM)

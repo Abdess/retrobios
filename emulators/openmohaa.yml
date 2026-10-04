@@ -47,6 +47,11 @@ notes: |
   comment at 3710-3712 notes that MOHAA ships in too many localised pak
   versions to pin a checksum, so no CRC / MD5 is enforced on the paks.
 
+  com_target_demo 1 selects the demo protocol. The Allied Assault demo
+  is read from main/ like the full game; the Spearhead and Breakthrough
+  demos are read from demota/ and demott/
+  (code/qcommon/common.c:3168-3182, 3203, 3230, 3249).
+
 files:
   # ================================================================
   # Medal of Honor: Allied Assault retail (BASEGAME = "main")
@@ -84,6 +89,7 @@ files:
     path: "main/Pak3.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:329 (fs_originalPaks_main[3])"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "Pak4.pk3"
     category: game_data
@@ -91,6 +97,7 @@ files:
     path: "main/Pak4.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:330 (fs_originalPaks_main[4])"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "Pak5.pk3"
     category: game_data
@@ -98,6 +105,7 @@ files:
     path: "main/Pak5.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:331 (fs_originalPaks_main[5])"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "Pak6.pk3"
     category: game_data
@@ -105,6 +113,7 @@ files:
     path: "main/Pak6.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:332 (fs_originalPaks_main[6])"
+    note: "Added by the 1.11 patch."
 
   # ================================================================
   # Spearhead expansion (fs_basegame = "mainta", TG_MOHTA)
@@ -135,6 +144,8 @@ files:
     path: "mainta/pak3.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:339 (fs_originalPaks_mainta[2])"
+    note: "Added by the 2.11 patch."
+    unsourceable: "patch data the collection does not hold yet; a same-named file of another game must not stand in"
 
   - name: "pak4.pk3"
     category: game_data
@@ -142,6 +153,7 @@ files:
     path: "mainta/pak4.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:340 (fs_originalPaks_mainta[3])"
+    note: "Added by the 2.15 patch."
 
   - name: "pak5.pk3"
     category: game_data
@@ -149,6 +161,7 @@ files:
     path: "mainta/pak5.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:341 (fs_originalPaks_mainta[4])"
+    note: "Added by the 2.15 patch, one build per language."
 
   # ================================================================
   # Breakthrough expansion (fs_basegame = "maintt", TG_MOHTT)
@@ -179,6 +192,7 @@ files:
     path: "maintt/pak3.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:348 (fs_originalPaks_maintt[2])"
+    note: "Added by the 2.40b patch."
 
   - name: "pak4.pk3"
     category: game_data
@@ -186,3 +200,4 @@ files:
     path: "maintt/pak4.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:349 (fs_originalPaks_maintt[3])"
+    note: "Added by the 2.40b patch, one build per language."

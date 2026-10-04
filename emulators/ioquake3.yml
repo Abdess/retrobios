@@ -26,13 +26,21 @@ notes: |
   not correct" (code/qcommon/files.c:3574) and keeps running: the loader
   does not refuse the file, so no md5/sha1 is written below.
 
-  Missing paks are only fatal when neither com_standalone nor fs_basegame
-  override the base game (code/qcommon/files.c:3697, 3738).
+  A missing baseq3 pak is fatal unless the engine runs standalone, which
+  it does when no id pak is found and com_basegame is not baseq3
+  (code/qcommon/files.c:3652-3657, 3697). Team Arena paks are checked the
+  same way once fs_game or fs_basegame is missionpack
+  (code/qcommon/files.c:3738-3739).
+
+  A pak0.pk3 loaded from demoq3/ with checksum DEMO_PAK0_CHECKSUM stands
+  in for baseq3/pak0.pk3 with a warning (code/qcommon/files.c:3557-3562,
+  3661-3674).
 
 files:
   # ================================================================
   # Quake III Arena (baseq3/, 9 numbered paks)
-  # Retail v1.32 ships pak0.pk3 through pak8.pk3 under baseq3.
+  # pak0.pk3 comes from the retail disc, pak1.pk3 through pak8.pk3 from
+  # the 1.32 point release (code/qcommon/files.c:3715-3717).
   # pak_checksums[0..8] = { 1566731103, 298122907, 412165236,
   #                         2991495316, 1197932710, 4087071573,
   #                         3709064859, 908855077, 977125798 }
@@ -43,7 +51,7 @@ files:
     system: quake3
     path: "baseq3/pak0.pk3"
     required: true
-    source_ref: "code/qcommon/files.c:179 (pak_checksums[0]=1566731103u), 3568 (per-index checksum compare)"
+    source_ref: "code/qcommon/files.c:180 (pak_checksums[0]=1566731103u), 3568 (per-index checksum compare), 3697 (fatal when a baseq3 pak is absent)"
     note: "Retail Quake III Arena base pak. Engine prints a warning on checksum mismatch, does not refuse the file."
     unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
@@ -51,59 +59,70 @@ files:
     category: game_data
     system: quake3
     path: "baseq3/pak1.pk3"
-    required: false
-    source_ref: "code/qcommon/files.c:180 (pak_checksums[1]=298122907u)"
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    required: true
+    source_ref: "code/qcommon/files.c:181 (pak_checksums[1]=298122907u), 3697 (fatal when a baseq3 pak is absent)"
 
   - name: "pak2.pk3"
     category: game_data
     system: quake3
     path: "baseq3/pak2.pk3"
-    required: false
-    source_ref: "code/qcommon/files.c:181 (pak_checksums[2]=412165236u)"
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    required: true
+    source_ref: "code/qcommon/files.c:182 (pak_checksums[2]=412165236u), 3697 (fatal when a baseq3 pak is absent)"
 
   - name: "pak3.pk3"
     category: game_data
     system: quake3
     path: "baseq3/pak3.pk3"
-    required: false
-    source_ref: "code/qcommon/files.c:182 (pak_checksums[3]=2991495316u)"
+    required: true
+    source_ref: "code/qcommon/files.c:183 (pak_checksums[3]=2991495316u), 3697 (fatal when a baseq3 pak is absent)"
 
   - name: "pak4.pk3"
     category: game_data
     system: quake3
     path: "baseq3/pak4.pk3"
-    required: false
-    source_ref: "code/qcommon/files.c:183 (pak_checksums[4]=1197932710u)"
+    required: true
+    source_ref: "code/qcommon/files.c:184 (pak_checksums[4]=1197932710u), 3697 (fatal when a baseq3 pak is absent)"
 
   - name: "pak5.pk3"
     category: game_data
     system: quake3
     path: "baseq3/pak5.pk3"
-    required: false
-    source_ref: "code/qcommon/files.c:184 (pak_checksums[5]=4087071573u)"
+    required: true
+    source_ref: "code/qcommon/files.c:185 (pak_checksums[5]=4087071573u), 3697 (fatal when a baseq3 pak is absent)"
 
   - name: "pak6.pk3"
     category: game_data
     system: quake3
     path: "baseq3/pak6.pk3"
-    required: false
-    source_ref: "code/qcommon/files.c:185 (pak_checksums[6]=3709064859u)"
+    required: true
+    source_ref: "code/qcommon/files.c:186 (pak_checksums[6]=3709064859u), 3697 (fatal when a baseq3 pak is absent)"
 
   - name: "pak7.pk3"
     category: game_data
     system: quake3
     path: "baseq3/pak7.pk3"
-    required: false
-    source_ref: "code/qcommon/files.c:186 (pak_checksums[7]=908855077u)"
+    required: true
+    source_ref: "code/qcommon/files.c:187 (pak_checksums[7]=908855077u), 3697 (fatal when a baseq3 pak is absent)"
 
   - name: "pak8.pk3"
     category: game_data
     system: quake3
     path: "baseq3/pak8.pk3"
+    required: true
+    source_ref: "code/qcommon/files.c:188 (pak_checksums[8]=977125798u), 3697 (fatal when a baseq3 pak is absent)"
+
+  # ================================================================
+  # Quake III Arena demo (demoq3/)
+  # DEMO_PAK0_CHECKSUM = 2985612116
+  # ================================================================
+
+  - name: "pak0.pk3"
+    category: game_data
+    system: quake3
+    path: "demoq3/pak0.pk3"
     required: false
-    source_ref: "code/qcommon/files.c:187 (pak_checksums[8]=977125798u)"
+    source_ref: "code/qcommon/files.c:178 (DEMO_PAK0_CHECKSUM=2985612116u), 3557-3562 (demoq3 pak0 checksum compare), 3661-3674 (accepted in place of baseq3/pak0.pk3)"
+    note: "Demo pak. Recognised only under demoq3/ and only with this checksum; the engine then prints a warning and counts baseq3/pak0.pk3 as found."
 
   # ================================================================
   # Team Arena (missionpack/, 4 numbered paks)
@@ -116,7 +135,7 @@ files:
     system: teamarena
     path: "missionpack/pak0.pk3"
     required: false
-    source_ref: "code/qcommon/files.c:192 (missionpak_checksums[0]=2430342401u)"
+    source_ref: "code/qcommon/files.c:193 (missionpak_checksums[0]=2430342401u)"
     note: "Team Arena base pak. Required only when launching +set fs_game missionpack."
     unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
@@ -125,20 +144,18 @@ files:
     system: teamarena
     path: "missionpack/pak1.pk3"
     required: false
-    source_ref: "code/qcommon/files.c:193 (missionpak_checksums[1]=511014160u)"
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    source_ref: "code/qcommon/files.c:194 (missionpak_checksums[1]=511014160u)"
 
   - name: "pak2.pk3"
     category: game_data
     system: teamarena
     path: "missionpack/pak2.pk3"
     required: false
-    source_ref: "code/qcommon/files.c:194 (missionpak_checksums[2]=2662638993u)"
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    source_ref: "code/qcommon/files.c:195 (missionpak_checksums[2]=2662638993u)"
 
   - name: "pak3.pk3"
     category: game_data
     system: teamarena
     path: "missionpack/pak3.pk3"
     required: false
-    source_ref: "code/qcommon/files.c:195 (missionpak_checksums[3]=1438664554u)"
+    source_ref: "code/qcommon/files.c:196 (missionpak_checksums[3]=1438664554u)"

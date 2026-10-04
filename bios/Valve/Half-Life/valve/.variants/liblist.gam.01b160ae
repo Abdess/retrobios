@@ -1,0 +1,8 @@
+// Valve Game .dll Listing File
+// Load order is determined by file order.
+// The first line is the descriptive title of the game
+//  and is used to display modified games in the server create
+//  dialog of the front end.  The "game" token is ignored and
+//  the double quotes are removed.
+game "Half-Life"
+d:\quiver\valve\dlls\hl.dll

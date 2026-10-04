@@ -1,0 +1,13 @@
+// Quake Classic Game .dll Listing File
+// Load order is determined by file order.
+game "Deathmatch Classic "
+url_info "www.valvesoftware.com"
+url_dl ""
+version "1"
+size "37000000"
+svonly "0"
+cldll "0"
+type "multiplayer_only"
+mpentity "info_player_deathmatch"
+gamedll "dlls\dmc.dll"
+gamedll_linux "dlls/dmc_i386.so"

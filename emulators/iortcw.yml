@@ -59,11 +59,11 @@ files:
     required: true
     source_ref: "SP/code/qcommon/files.c:183-185, 3865-3882, 3950-3967, MP/code/qcommon/files.c:194-196, 3859-3876, 3944-3961"
     note: "RTCW retail base. Checksum 1886207346 in both builds; fatal when missing or when the checksum differs."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # main/ - single-player point-release paks
   # ================================================================
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "sp_pak1.pk3"
     category: game_data
@@ -155,8 +155,7 @@ files:
     path: "main/mp_bin.pk3"
     required: false
     source_ref: "MP/code/qcommon/files.c:209, 1596-1613"
-    note: "VM/binary pak, 1.4/1.41 retail. The client extracts game dlls only from paks whose checksum is listed."
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    note: "VM/binary pak, 1.4/1.41. The client extracts game dlls only from paks whose checksum is listed."
 
   - name: "mp_bin0.pk3"
     category: game_data
@@ -165,3 +164,27 @@ files:
     required: false
     source_ref: "MP/code/qcommon/files.c:210, 1596-1613"
     note: "VM/binary pak, 1.51c variant."
+
+  # ================================================================
+  # demomain/ - demo paks, one per build
+  # ================================================================
+
+  - name: "pak0.pk3"
+    description: "Single-player demo"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "demomain/pak0.pk3"
+    required: false
+    source_ref: "SP/code/qcommon/files.c:181, 3858-3863, 3933-3946, 3969-3970"
+    note: "Single-player build: a pak0 under demomain/ with checksum 2985661941 stands in for main/pak0.pk3 with a warning, and the point-release check is skipped."
+    unsourceable: "demo data the collection does not hold yet; a same-named file of another game must not stand in"
+
+  - name: "pak0.pk3"
+    description: "Multiplayer demo"
+    category: game_data
+    system: return-to-castle-wolfenstein
+    path: "demomain/pak0.pk3"
+    required: false
+    source_ref: "MP/code/qcommon/files.c:192, 3852-3857, 3927-3940, 3963-3964"
+    note: "Multiplayer build: a pak0 under demomain/ with checksum 2031778175 stands in for main/pak0.pk3 with a warning, and the point-release check is skipped."
+    unsourceable: "demo data the collection does not hold yet; a same-named file of another game must not stand in"

@@ -1,0 +1,14 @@
+// Team Fortress Classes Game .dll Listing File
+// Load order is determined by file order.
+game "Team Fortress"
+url_info "www.teamfortressclassic.com"
+url_dl ""
+version "1.5"
+size "37000000"
+svonly "0"
+cldll "0"
+type "multiplayer_only"
+nomodels "1"  // Don't show models in browser, since you don't pick them there anyway.
+mpentity "info_tfdetect"
+gamedll "dlls\tfc.dll"
+gamedll_linux "dlls/tfc_i386.so"

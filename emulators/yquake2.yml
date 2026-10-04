@@ -15,8 +15,8 @@ notes: |
   :36). FS_AddDirToSearchPath (src/common/filesystem.c:1646) loops
   pak%d.<ext> from 0 to MAX_PAKS-1 (=99) across fs_packtypes = { pak, pk3 }
   for the active game directory, loading each one as a protected pak.
-  retail Quake II ships only pak0.pak and pak1.pak; later paks are
-  consumed by community mods and the Nightdive remaster.
+  baseq2/pak0.pak is the retail data; id's 3.20 point release adds
+  baseq2/pak1.pak, baseq2/pak2.pak and the Three Wave CTF data under ctf/.
 
   Supported official mods are listed in first_mods[]
   (src/common/filesystem.c:1331) = { "baseq2", "xatrix", "rogue", "ctf" }.
@@ -37,8 +37,9 @@ notes: |
 files:
   # ================================================================
   # Quake II (baseq2/)
-  # Retail v3.20 ships pak0.pak (max 2 GiB PAK, holds everything) and
-  # pak1.pak (demo-related). Patched installations may add pak2.pak+.
+  # pak0.pak is the retail data. The 3.20 point release adds pak1.pak
+  # (deathmatch maps q2dm1 to q2dm8 and their textures) and pak2.pak
+  # (two weapon skins).
   # ================================================================
 
   - name: "pak0.pak"
@@ -55,6 +56,7 @@ files:
     path: "baseq2/pak1.pak"
     required: false
     source_ref: "src/common/filesystem.c:1688"
+    note: "Shipped by the 3.20 point release."
 
   - name: "pak2.pak"
     category: game_data
@@ -62,7 +64,7 @@ files:
     path: "baseq2/pak2.pak"
     required: false
     source_ref: "src/common/filesystem.c:1688"
-    note: "Added by community re-releases and the KMQuake2 content pack."
+    note: "Shipped by the 3.20 point release."
 
   # ================================================================
   # The Reckoning (xatrix/), official Mission Pack 1
@@ -76,12 +78,12 @@ files:
     required: false
     source_ref: "src/common/filesystem.c:1331 (first_mods[1]=xatrix), 1688"
     note: "The Reckoning data. Loaded when `+set game xatrix` is passed."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # Ground Zero (rogue/), official Mission Pack 2
   # Separate yquake2 game library repo: yquake2/rogue.
   # ================================================================
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak0.pak"
     category: game_data
@@ -90,12 +92,12 @@ files:
     required: false
     source_ref: "src/common/filesystem.c:1331 (first_mods[2]=rogue), 1688"
     note: "Ground Zero data. Loaded when `+set game rogue` is passed."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
   # Three Wave Capture The Flag (ctf/), official free addon
   # Separate yquake2 game library repo: yquake2/ctf.
   # ================================================================
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak0.pak"
     category: game_data
@@ -103,5 +105,4 @@ files:
     path: "ctf/pak0.pak"
     required: false
     source_ref: "src/common/filesystem.c:1331 (first_mods[3]=ctf), 1688"
-    note: "Three Wave CTF data. Loaded when `+set game ctf` is passed."
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    note: "Three Wave CTF data, shipped by the 3.20 point release. Loaded when `+set game ctf` is passed."

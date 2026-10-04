@@ -38,9 +38,16 @@ notes: |
   At least one game's GRP (or equivalent archive) must be present for
   Raze to run. An addon block names the CRC of its base game in
   `dependency`. grpinfo.txt also identifies the Mac demos of Duke Nukem
-  3D and Shadow Warrior, the Nuclear Winter demo, Duke!ZONE II,
+  3D and Shadow Warrior, Duke!ZONE II, the ZOOM Platform repack of
   Penthouse Paradise, Alien World Order, Platoon Leader, the ProAsm
   build of Wanton Destruction and the SSI build of Cryptic Passage.
+
+  The directory of the first identified resource is mounted as well, so
+  loose files beside it are read by name. Tiles come from
+  tiles000.art to tiles199.art, from the `loadart` list of the block and
+  from the -art switch; no other ART name is looked up.
+  ref: source/core/initfs.cpp:342-372, source/core/textures/tiletexture.cpp:468-481,
+       source/core/gamecontrol.cpp:424
 
 files:
   # ================================================================
@@ -52,6 +59,14 @@ files:
     required: true
     source_ref: "source/core/version.h:66, source/core/gamecontrol.cpp:1020-1023"
     note: "I_FatalError(\"Cannot find raze.pk3\") if absent."
+
+  - name: "raze.sf2"
+    aliases: ["Roland_SC-55.sf2"]
+    category: game_data
+    path: "soundfonts/raze.sf2"
+    required: false
+    source_ref: "source/common/audio/music/i_soundfont.cpp:334-352, 427-430, 439-459, source/CMakeLists.txt:1452"
+    note: "Default soundfont, used when the soundfont directories hold none. Every file of those directories is taken by its content; when no soundfont is named raze the first SF2 found is used."
 
   # ================================================================
   # Duke Nukem 3D family
@@ -328,6 +343,30 @@ files:
     source_ref: "wadsrc/static/engine/grpinfo.txt:21, 375-388"
     note: "Addon of the Atomic Edition (dependency DUKE15_CRC)."
 
+  - name: "NWINTER.GRP"
+    description: "Duke: Nuclear Winter Demo"
+    category: game_data
+    system: duke3d
+    path: "NWINTER.GRP"
+    required: false
+    size: 10965909
+    crc32: "c7efbfa9"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:390-402"
+    note: "Addon of the Atomic Edition (dependency DUKE15_CRC)."
+
+  - name: "penthous.zip"
+    description: "Duke Nukem's Penthouse Paradise"
+    category: game_data
+    system: duke3d
+    path: "penthous.zip"
+    required: false
+    size: 2112419
+    crc32: "7cd82a3b"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:459-470"
+    note: "The original ZIP release, identified as a whole file. Addon of the Atomic Edition (dependency DUKE15_CRC)."
+
   # ================================================================
   # Blood
   # ================================================================
@@ -364,7 +403,15 @@ files:
     crc32: "a8fdda84"
     validation: [size, crc32]
     source_ref: "wadsrc/static/engine/grpinfo.txt:34, 517-531"
-    note: "Any other archive holding help1.qav, normal.plu, inverse.clu, cosine.dat and blood.pal is taken as an unknown Blood version (lines 533-544)."
+
+  - name: "BLOOD.RFF"
+    description: "BLOOD: Unknown Version"
+    category: game_data
+    system: blood
+    path: "BLOOD.RFF"
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt:533-544, source/core/searchpaths.cpp:772-828"
+    note: "Any archive holding help1.qav, normal.plu, inverse.clu, cosine.dat and blood.pal whose size and CRC32 match no block. The shareware release is identified this way."
 
   - name: "SOUNDS.RFF"
     category: game_data
@@ -389,6 +436,30 @@ files:
     required: false
     source_ref: "wadsrc/static/engine/grpinfo.txt:494, 510, 526, 542"
     note: "Named by loadgrp in every Blood block; loaded with the main resource."
+
+  - name: "SURFACE.DAT"
+    category: game_data
+    system: blood
+    path: "SURFACE.DAT"
+    required: false
+    source_ref: "source/games/blood/src/tile.cpp:67-75, source/core/initfs.cpp:351-372"
+    note: "Surface type of each tile. Read from the directory of the main resource; skipped when absent."
+
+  - name: "VOXEL.DAT"
+    category: game_data
+    system: blood
+    path: "VOXEL.DAT"
+    required: false
+    source_ref: "source/games/blood/src/tile.cpp:77-93, source/core/initfs.cpp:351-372"
+    note: "Voxel index of each tile. Read from the directory of the main resource; skipped when absent."
+
+  - name: "SHADE.DAT"
+    category: game_data
+    system: blood
+    path: "SHADE.DAT"
+    required: false
+    source_ref: "source/games/blood/src/tile.cpp:95-103, source/core/initfs.cpp:351-372"
+    note: "Shade offset of each tile. Read from the directory of the main resource; skipped when absent."
 
   - name: "CRYPTIC.INI"
     category: game_data
