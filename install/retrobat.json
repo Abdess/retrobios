@@ -5,7 +5,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-10-04T15:54:42Z",
+  "generated": "2026-10-04T20:41:16Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -236,11 +236,11 @@
       }
     }
   ],
-  "total_files": 3038,
-  "total_size": 7858610812,
-  "pack_files": 3040,
-  "pack_size": 7858610812,
-  "total_omitted": 6,
+  "total_files": 3040,
+  "total_size": 7859143292,
+  "pack_files": 3042,
+  "pack_size": 7859143292,
+  "total_omitted": 4,
   "omitted_files": [
     {
       "dest": "SEGA_KakuGothic-DB-Roman_12.abc",
@@ -261,22 +261,6 @@
       "cores": [
         "lindbergh-loader"
       ]
-    },
-    {
-      "dest": "chihiro/chihiro_xbox_bios.bin",
-      "name": "chihiro_xbox_bios.bin",
-      "system": "chihiro",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "chihiro/ic10_g24lc64",
-      "name": "ic10_g24lc64",
-      "system": "chihiro",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
     },
     {
       "dest": "jagboot.rom",
@@ -1357,11 +1341,27 @@
       "cores": null
     },
     {
+      "dest": "chihiro/chihiro_xbox_bios.bin",
+      "sha1": "b700b0041af8f84835e45d1d1250247bf7077188",
+      "sha256": "8a2ff4ef627ed4cffd4546ac6b99e39e32ea39041dc188fe785d8caed0458631",
+      "size": 524288,
+      "repo_path": "bios/Other/cxbx-reloaded/EmuMediaBoard/Chihiro/chihiro_xbox_bios.bin",
+      "cores": null
+    },
+    {
       "dest": "chihiro/fpr21042_m29w160et.bin",
       "sha1": "a13cf9c5cdfe8605d82150b7573652f419b30197",
       "sha256": "82e02a1c48ef74e449b75081d3d118bd935b81d52634dd7c6a8c95686fd83fd1",
       "size": 2097152,
       "repo_path": "bios/Other/cxbx-reloaded/EmuMediaBoard/fpr21042_m29w160et.bin",
+      "cores": null
+    },
+    {
+      "dest": "chihiro/ic10_g24lc64",
+      "sha1": "3ababd4334d8d57abb22dd98bd2d347df39648d9",
+      "sha256": "df9c57cc2ad43c4563609b75d3a3be40dd844fcc69e8b3a368616b9811dc776f",
+      "size": 8192,
+      "repo_path": "bios/Other/cxbx-reloaded/EmuMediaBoard/Chihiro/ic10_g24lc64",
       "cores": null
     },
     {

@@ -5,7 +5,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-10-04T15:54:42Z",
+  "generated": "2026-10-04T20:41:16Z",
   "base_destination": "system",
   "detect": [
     {
@@ -17,9 +17,9 @@
   ],
   "standalone_copies": [],
   "total_files": 5582,
-  "total_size": 6638454203,
+  "total_size": 6638364091,
   "pack_files": 8225,
-  "pack_size": 6678987367,
+  "pack_size": 6678897255,
   "total_omitted": 13,
   "omitted_files": [
     {
@@ -4612,20 +4612,20 @@
     },
     {
       "dest": "BBKEmu/A4980/8.BIN",
-      "sha1": "dddb2d3b42e8d99911c6bfd523f0020a08f44f9d",
-      "sha256": "7663735609c416025b2738c80cedaf11528ff8cb5a7c74c7c31c1f46e43e9caf",
+      "sha1": "062067e6d661c3d3e10d910435be4a59db1bee9f",
+      "sha256": "1c8f0b75f478cc42b1cc4292ff6c3b022b11384f0b6fc1b9601873a9da656d6f",
       "size": 2097152,
-      "repo_path": "bios/BBK/GAM4980/gam4980/8.BIN",
+      "repo_path": "bios/BBK/A4980/BBKEmu/A4980/8.BIN",
       "cores": [
         "bbkemu"
       ]
     },
     {
       "dest": "BBKEmu/A4980/E.BIN",
-      "sha1": "159b7e65f3f3dd67f435085be1e154316ba139e0",
-      "sha256": "3e12d40948fd50710cef8c6d14acea26ad69f47312125a61bd1003912893fcad",
+      "sha1": "b486b6eda5cd7e79bb5605d1fbe36eb88bfc6724",
+      "sha256": "9d13aa4593d97b790afc37d73da8be985e7a3aa7f3dcfe6b91c798671067aa5e",
       "size": 2097152,
-      "repo_path": "bios/BBK/GAM4980/gam4980/E.BIN",
+      "repo_path": "bios/BBK/A4980/BBKEmu/A4980/E.BIN",
       "cores": [
         "bbkemu"
       ]
@@ -19193,7 +19193,7 @@
       "sha1": "159b7e65f3f3dd67f435085be1e154316ba139e0",
       "sha256": "3e12d40948fd50710cef8c6d14acea26ad69f47312125a61bd1003912893fcad",
       "size": 2097152,
-      "repo_path": "bios/BBK/GAM4980/gam4980/E.BIN",
+      "repo_path": "bios/BBK/A4988/BBKEmu/A4988/E.BIN",
       "cores": [
         "gam4980"
       ]
@@ -42702,9 +42702,9 @@
     },
     {
       "dest": "np2/bios9821.rom",
-      "sha1": "2e92346727b0355bc1ec9a7ded1b444a4917f2b9",
-      "sha256": "e76e0642e2edee9d395fa6ef3050cc51eebb21b7cfca2aa875dbd4b855e107b9",
-      "size": 98304,
+      "sha1": "48b35384cd148c0cc10ec52d308af50d33916c7c",
+      "sha256": "cf0e73cb4072d14e15da5686a5bf2b7657570d592684e3d6b76f7ff610dc6e2d",
+      "size": 8192,
       "repo_path": "bios/NEC/PC-98/bios9821.rom",
       "cores": [
         "nekop2"

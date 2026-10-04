@@ -5,7 +5,7 @@
   "platform": "misterfpga",
   "display_name": "MiSTer FPGA",
   "version": "1.0",
-  "generated": "2026-10-04T15:54:42Z",
+  "generated": "2026-10-04T20:41:16Z",
   "base_destination": "games",
   "detect": [
     {
@@ -16,45 +16,12 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 77,
-  "total_size": 25769161,
-  "pack_files": 79,
-  "pack_size": 25769161,
-  "total_omitted": 4,
-  "omitted_files": [
-    {
-      "dest": "Marty/mrom.m36",
-      "name": "mrom.m36",
-      "system": "marty",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "Marty/mrom.m37",
-      "name": "mrom.m37",
-      "system": "marty",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "Studio-II/openstudio2.bin",
-      "name": "openstudio2.bin",
-      "system": "studio-ii",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "VideoBrain/boot.rom",
-      "name": "boot.rom",
-      "system": "videobrain",
-      "required": true,
-      "reason": "hash_mismatch",
-      "cores": null
-    }
-  ],
+  "total_files": 81,
+  "total_size": 29969609,
+  "pack_files": 83,
+  "pack_size": 29969609,
+  "total_omitted": 0,
+  "omitted_files": [],
   "files": [
     {
       "dest": "3DO/boot.rom",
@@ -190,6 +157,22 @@
       "sha256": "7540ff64268e500a34fb83c8642510d341440ac6258f6c36851e182870e40f75",
       "size": 524288,
       "repo_path": "bios/Casio/Loopy/boot1.rom",
+      "cores": null
+    },
+    {
+      "dest": "Marty/mrom.m36",
+      "sha1": "ee44bb11ce65086e9a982a375d23b3a50e9c4517",
+      "sha256": "2cd7466183ba965259df35ff078b7b057a99086feea0050ddf87aebc6932f429",
+      "size": 2097152,
+      "repo_path": "bios/Fujitsu/FM Towns/mrom.m36",
+      "cores": null
+    },
+    {
+      "dest": "Marty/mrom.m37",
+      "sha1": "0f2ccf38a5e1b8d96251d66b61a953a3617546b4",
+      "sha256": "10fc6d984d0a440c3410d805f4bea247fb5dd5a509befff481164923f883797d",
+      "size": 2097152,
+      "repo_path": "bios/Fujitsu/FM Towns/mrom.m37",
       "cores": null
     },
     {
@@ -577,6 +560,14 @@
       "cores": null
     },
     {
+      "dest": "Studio-II/openstudio2.bin",
+      "sha1": "1491a958d184d3090d109b0f03f9f84f301e440b",
+      "sha256": "36ddd9ffa17a194bd8103efb807e104a529134685502839a4f14ea4d5de648ad",
+      "size": 2048,
+      "repo_path": "bios/RCA/Studio II/openstudio2.bin",
+      "cores": null
+    },
+    {
       "dest": "SuperAcan/boot0.rom",
       "sha1": "a8e75633662978d0a885f16a4ed0f898f278a10a",
       "sha256": "2e4d88bec69b5e7e4803368c233ce0d20f6dd107c5af0cfcc0089d310c695d7c",
@@ -638,6 +629,14 @@
       "sha256": "64cbaa1a5e8bae8fae90a7affd6743df5d23edfc4e1e23002ca77c8b7ec1bb64",
       "size": 262144,
       "repo_path": "bios/Tiger/Game.com/GameCom External BIOS (Kitrinx v0.03).bin",
+      "cores": null
+    },
+    {
+      "dest": "VideoBrain/boot.rom",
+      "sha1": "0364007319dee6106715f4462adee531bfba3d34",
+      "sha256": "545b466e7cc0c2cce7e9479857dbedee1476fc56245f0de45f816c1b99b75562",
+      "size": 4096,
+      "repo_path": "bios/VideoBrain/Family Computer/boot.rom",
       "cores": null
     },
     {
