@@ -1,0 +1,239 @@
+emulator: dxx-rebirth
+type: standalone
+core_classification: game_engine
+source: "https://github.com/dxx-rebirth/dxx-rebirth"
+upstream: ~
+profiled_date: "2026-10-04"
+source_commit: "db1996a7fd18c7bf11c9b18b881aa4f11a84f017"
+core_version: "git"
+display_name: "Descent 1 & 2 (DXX-Rebirth)"
+cores: [dxx-rebirth, d1x-rebirth, d2x-rebirth]
+systems: [descent, descent2]
+verification: existence
+
+notes: |
+  DXX-Rebirth is a dual-engine source port of Descent 1 and Descent 2
+  built from the Parallax-released sources. The repository builds two
+  executables, d1x-rebirth and d2x-rebirth, sharing the similar/ tree
+  guarded by DXX_BUILD_DESCENT = 1 or 2.
+
+  Each build mounts its data via PhysFS. The game folder (defaulted to
+  the executable directory on Windows/macOS, DXX_SHAREPATH or
+  ~/.d1x-rebirth / ~/.d2x-rebirth on Unix) is searched for the HOG and
+  PIG files; -hogdir on the command line adds another search path. On
+  startup similar/main/inferno.cpp mounts descent.hog (D1) or
+  descent2.hog / d2demo.hog (D2) via make_PHYSFSX_ComputedPathMount at
+  lines 472-479. If neither hog is found the engine aborts with
+  UserError "Could not find a valid hog file".
+
+  The size of the HOG picks the data edition (common/main/mission.h:58):
+    6856701 / 6856183 / 7261423 bytes = PC Descent 1 retail v1.4-v1.5 / v1.0
+    4492107 / 4494862 bytes          = PC Descent 1 OEM v1.4a / v1.0
+    2339773 / 2365676 bytes          = PC Descent 1 shareware v1.4 / v1.0
+    7456179 / 3370339 bytes          = Mac Descent 1 retail / shareware
+    2292566 bytes                    = d2demo.hog v1.0 (D2 PC shareware)
+    4292746 bytes                    = D2 Mac shareware
+    6132957 bytes                    = D2 PC OEM v1.1
+    7595079 / 7107354 bytes          = D2 PC full v1.1-1.2 / v1.0
+    7110007 bytes                    = D2 Mac full v1.1-1.2
+
+  For Descent 2 the engine also expects descent2.ham (binary tables) and
+  one of the PIG graphics families (groupa.pig / alien1.pig / alien2.pig
+  / fire.pig / ice.pig / water.pig for retail, d2demo.pig for shareware)
+  plus the sampled sound bank (descent2.s11 for 11 kHz or descent2.s22
+  for 22 kHz; piggy.cpp:79). Mac shareware additionally bundles exit.ham.
+  d2x.hog is the Descent 2: Vertigo expansion mission, probed in the
+  MISSION_DIR by inferno.cpp:542 to toggle the "Vertigo Enhanced" title.
+  Movies (intro-h.mvl, robots-h.mvl, other-h.mvl or their -l low-res
+  counterparts) are optional; the game plays without them.
+
+  Only the free PC shareware pair (desc14sw.tar.gz = descent.hog +
+  descent.pig; d2shar10.tar.gz = d2demo.hog/pig/ham) is redistributable;
+  the retail archives listed below are commercial GOG files.
+
+files:
+  # ------ Descent 1 shareware (free) ------
+  - name: descent.hog
+    path: dxx-rebirth/d1/shareware/descent.hog
+    system: descent
+    category: game_data
+    required: false
+    size: 2339773
+    validation: [size]
+    description: "Descent 1 PC shareware v1.4 HOG"
+    variant_group: d1-hog
+    note: "freely redistributable (icculus.org/d2x/data/desc14sw.tar.gz)"
+    source_ref: "similar/main/mission.cpp:80; common/main/mission.h:67"
+
+  - name: descent.pig
+    path: dxx-rebirth/d1/shareware/descent.pig
+    system: descent
+    category: game_data
+    required: false
+    description: "Descent 1 PC shareware PIG (ships with desc14sw.tar.gz)"
+    source_ref: "common/main/fwd-piggy.h:55"
+
+  # ------ Descent 1 retail ------
+  - name: descent.hog
+    path: dxx-rebirth/d1/retail/descent.hog
+    system: descent
+    category: game_data
+    required: false
+    size: 6856701
+    validation: [size]
+    description: "Descent 1 PC retail v1.5 HOG (GOG)"
+    variant_group: d1-hog
+    note: "commercial; alternative sizes 6856183 (v1.5 alt), 7261423 (v1.0), 7456179 (Mac retail)"
+    source_ref: "common/main/mission.h:61-64"
+
+  - name: descent.pig
+    path: dxx-rebirth/d1/retail/descent.pig
+    system: descent
+    category: game_data
+    required: false
+    description: "Descent 1 PC retail PIG"
+    source_ref: "similar/main/piggy.cpp:69"
+
+  # ------ Descent 2 shareware (free) ------
+  - name: d2demo.hog
+    path: dxx-rebirth/d2/shareware/d2demo.hog
+    system: descent2
+    category: game_data
+    required: false
+    size: 2292566
+    validation: [size]
+    description: "Descent 2 PC shareware HOG"
+    variant_group: d2-hog
+    note: "freely redistributable (icculus.org/d2x/data/d2shar10.tar.gz)"
+    source_ref: "similar/main/mission.cpp:107-108; common/main/mission.h:71"
+
+  - name: d2demo.pig
+    path: dxx-rebirth/d2/shareware/d2demo.pig
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 shareware PIG"
+    source_ref: "similar/main/piggy.cpp:73"
+
+  - name: d2demo.ham
+    path: dxx-rebirth/d2/shareware/d2demo.ham
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 shareware HAM"
+    source_ref: "similar/main/piggy.cpp:75"
+
+  # ------ Descent 2 retail ------
+  - name: descent2.hog
+    path: dxx-rebirth/d2/retail/descent2.hog
+    system: descent2
+    category: game_data
+    required: false
+    size: 7595079
+    validation: [size]
+    description: "Descent 2 PC full v1.1-1.2 HOG (GOG)"
+    variant_group: d2-hog
+    note: "commercial; alternative sizes 7107354 (v1.0), 7110007 (Mac full), 6132957 (OEM v1.1), 4292746 (Mac shareware)"
+    source_ref: "common/main/mission.h:73-76"
+
+  - name: descent2.ham
+    path: dxx-rebirth/d2/retail/descent2.ham
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 retail HAM (tables)"
+    source_ref: "similar/main/piggy.cpp:74"
+
+  - name: groupa.pig
+    path: dxx-rebirth/d2/retail/groupa.pig
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 retail default PIG (loaded by piggy_init_pigfile)"
+    source_ref: "similar/main/piggy.cpp:72; similar/main/inferno.cpp:689"
+
+  - name: alien1.pig
+    path: dxx-rebirth/d2/retail/alien1.pig
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 Alien-1 textures PIG"
+    source_ref: "similar/main/piggy.cpp:87"
+
+  - name: alien2.pig
+    path: dxx-rebirth/d2/retail/alien2.pig
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 Alien-2 textures PIG"
+    source_ref: "similar/main/piggy.cpp:88"
+
+  - name: fire.pig
+    path: dxx-rebirth/d2/retail/fire.pig
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 Fire textures PIG"
+    source_ref: "similar/main/piggy.cpp:89"
+
+  - name: ice.pig
+    path: dxx-rebirth/d2/retail/ice.pig
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 Ice textures PIG"
+    source_ref: "similar/main/piggy.cpp:91"
+
+  - name: water.pig
+    path: dxx-rebirth/d2/retail/water.pig
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 Water textures PIG"
+    source_ref: "similar/main/piggy.cpp:92"
+
+  - name: descent2.s22
+    path: dxx-rebirth/d2/retail/descent2.s22
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 22 kHz digital sound bank (default for retail)"
+    source_ref: "similar/main/piggy.cpp:79"
+
+  - name: descent2.s11
+    path: dxx-rebirth/d2/retail/descent2.s11
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 11 kHz digital sound bank (shareware/Mac default)"
+    source_ref: "similar/main/piggy.cpp:79"
+
+  - name: d2x.hog
+    path: dxx-rebirth/d2/retail/missions/d2x.hog
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2: Vertigo expansion mission HOG"
+    source_ref: "similar/main/inferno.cpp:542"
+
+  - name: intro-h.mvl
+    path: dxx-rebirth/d2/retail/intro-h.mvl
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 intro cinematic (high-res)"
+    source_ref: "similar/main/titles.cpp:292"
+
+  - name: robots-h.mvl
+    path: dxx-rebirth/d2/retail/robots-h.mvl
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 robot briefings (high-res); recommended for single-player"
+
+  - name: other-h.mvl
+    path: dxx-rebirth/d2/retail/other-h.mvl
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 misc cinematics (high-res)"

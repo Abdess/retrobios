@@ -1,0 +1,86 @@
+emulator: corsixth
+type: standalone
+core_classification: game_engine
+source: "https://github.com/CorsixTH/CorsixTH"
+upstream: ~
+profiled_date: "2026-10-04"
+source_commit: "2d4671e267cae25847432a2e7d4f814b44f91e35"
+core_version: "0.70.1"
+display_name: "Theme Hospital (CorsixTH)"
+cores: [corsixth]
+systems: [theme-hospital]
+verification: existence
+
+notes: |
+  CorsixTH is a Lua + C++ reimplementation of Bullfrog's Theme Hospital
+  engine. It reads graphics, sprites, levels and sounds from an
+  untouched Theme Hospital install (full retail/GOG or the shareware
+  demo).
+
+  App:checkInstallFolder() in CorsixTH/Lua/app.lua:1450 drives the
+  install discovery:
+    1. config.theme_hospital_install (user override) is tried first
+       (:1453). If unset or wrong, the loader scans a list of common
+       paths (:1471-1489) looking for a folder that passes
+       App:isThemeHospitalPath, which demands three subdirectories
+       named data, levels and qdata (:1435-1447).
+    2. Once a candidate is accepted, three sentinel files MUST exist
+       (:1521-1523):
+         DATA/VBlk-0.tab
+         LEVELS/Level.L1
+         QDATA/SPointer.dat
+       Any missing file aborts init with "Invalid Theme Hospital
+       folder specified in config file..." (:1526).
+    3. DataM/Demo.dat (:1535) marks the shareware demo install; its
+       presence switches a different corruption-size check on
+       ANIMS/WINLEVEL.SMK (243188), LEVELS/LEVEL.L1 (163948) and
+       DATA/BUTTON01.DAT (252811) at :1559-1561. Full installs instead
+       get soft size checks on ANIMS/AREA01V.SMK, WINGAME.SMK,
+       WINLEVEL.SMK, LOSE1.SMK and INTRO/INTRO.SM4 (:1563-1567).
+    4. QData/Font00V.dat is read unconditionally (:1576) and its CRC32
+       picks the charset (mik vs cp437).
+
+  Only the four files the loader *reads unconditionally* are tracked
+  below. The sound/music path uses the game's XMI tracks when a
+  SoundFont is available (App:findSoundFont at :1589 probes
+  GeneralUser-GS.sf2, FluidR3_GM.sf2, FluidR3.sf3 and three Linux
+  system paths); the SoundFont is a user preference, not game data.
+
+  Everything else (hundreds of SPR/TAB/DAT files, SMK movies, ADL /
+  XMI music) is loaded on demand from the install directory and is
+  not individually verified by the engine; a user who sets up the
+  Theme Hospital folder once has them all.
+
+exclusion_note: "Theme Hospital install is scanned folder-wide; the engine only hard-checks a handful of sentinel files"
+files:
+  - name: VBlk-0.tab
+    path: corsixth/Data/VBlk-0.tab
+    system: theme-hospital
+    category: game_data
+    required: true
+    description: "Theme Hospital core sprite index; sentinel checked at startup"
+    source_ref: "CorsixTH/Lua/app.lua:1521"
+
+  - name: Level.L1
+    path: corsixth/Levels/Level.L1
+    system: theme-hospital
+    category: game_data
+    required: true
+    description: "First Theme Hospital level file; sentinel checked at startup"
+    source_ref: "CorsixTH/Lua/app.lua:1522"
+
+  - name: SPointer.dat
+    path: corsixth/QData/SPointer.dat
+    system: theme-hospital
+    category: game_data
+    required: true
+    description: "Sprite pointer table; sentinel checked at startup"
+    source_ref: "CorsixTH/Lua/app.lua:1523"
+
+  - name: Font00V.dat
+    path: corsixth/QData/Font00V.dat
+    system: theme-hospital
+    category: game_data
+    required: true
+    description: "Theme Hospital font; CRC32 selects charset (mik vs cp437)"
+    source_ref: "CorsixTH/Lua/app.lua:1576-1584"

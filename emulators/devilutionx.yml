@@ -1,0 +1,123 @@
+emulator: devilutionx
+type: standalone
+core_classification: game_engine
+source: "https://github.com/diasurgical/DevilutionX"
+upstream: ~
+profiled_date: "2026-10-04"
+source_commit: "dac104babfb6187415432f428ac2516747ffc154"
+core_version: "1.6.0-dev"
+display_name: "Diablo (DevilutionX)"
+cores: [devilutionx]
+systems: [diablo]
+verification: md5
+
+notes: |
+  DevilutionX is a reimplementation of the Diablo 1 engine built from
+  the leaked Diablo source. It plays the original retail Diablo and the
+  Hellfire expansion from their shipped MPQ archives, or the shareware
+  Spawn edition. The code loads MPQs from the game folder (next to the
+  executable) and from a few platform-specific locations (XDG data home,
+  macOS Application Support, etc.) via GetMPQSearchPaths().
+
+  Load order is defined in Source/engine/assets.cpp:
+    LoadCoreArchives() (:505)   - devilutionx.mpq, fonts.mpq (optional)
+    LoadGameArchives() (:530)   - diabdat.mpq or spawn.mpq (required)
+                                  hfbard.mpq, hfbarb.mpq (always probed)
+    LoadHellfireArchives() (:570) - hellfire.mpq + hfmonk/hfmusic/hfvoice
+
+  diabdat.mpq is matched uppercase first ("DIABDAT.MPQ", GOG/retail CD
+  convention, line 538), then lowercase (line 542); if neither is found
+  the loader falls back to spawn.mpq (line 544). Missing BOTH triggers
+  the "diabdat.mpq or spawn.mpq" InsertCDDlg dialog and the game cannot
+  start.
+
+  Hellfire is optional: the engine advertises Diablo even when hellfire
+  files are absent. If hellfire.mpq is loaded, hfmonk.mpq + hfmusic.mpq
+  + hfvoice.mpq must also be present (line 588) or the game aborts.
+
+  devilutionx.mpq is a build artefact packed from the repo's assets/
+  directory with the smpq tool (CMake option BUILD_ASSETS_MPQ,
+  CMakeLists.txt:192-204). The compiled binary expects it next to the
+  executable on every platform except Android, Apple and 3DS/Switch
+  (:509-516), where its contents are shipped loose. retrobios ships
+  the game engine's own MPQ as a release asset so a vanilla install
+  does not need the devilutionx-assets release.
+
+  fonts.mpq is the CJK + language assets add-on from the
+  devilutionx-assets release; English installs do not need it.
+
+files:
+  - name: diabdat.mpq
+    path: devilutionx/diabdat.mpq
+    system: diablo
+    category: game_data
+    required: true
+    description: "Diablo retail or GOG MPQ (contains all game data)"
+    aliases: [DIABDAT.MPQ]
+    note: "primary game archive; GOG CD convention uses uppercase"
+    source_ref: "Source/engine/assets.cpp:537-542"
+
+  - name: spawn.mpq
+    path: devilutionx/spawn.mpq
+    system: diablo
+    category: game_data
+    required: false
+    description: "Diablo shareware archive, used when diabdat.mpq is absent"
+    note: "freely redistributable shareware; triggers gbIsSpawn mode"
+    source_ref: "Source/engine/assets.cpp:544"
+
+  - name: hellfire.mpq
+    path: devilutionx/hellfire.mpq
+    system: diablo
+    category: game_data
+    required: false
+    description: "Hellfire expansion main archive"
+    source_ref: "Source/engine/assets.cpp:573"
+
+  - name: hfmonk.mpq
+    path: devilutionx/hfmonk.mpq
+    system: diablo
+    category: game_data
+    required: false
+    description: "Hellfire monk class assets; mandatory when hellfire.mpq is present"
+    source_ref: "Source/engine/assets.cpp:583"
+
+  - name: hfmusic.mpq
+    path: devilutionx/hfmusic.mpq
+    system: diablo
+    category: game_data
+    required: false
+    description: "Hellfire music; mandatory when hellfire.mpq is present"
+    source_ref: "Source/engine/assets.cpp:584"
+
+  - name: hfvoice.mpq
+    path: devilutionx/hfvoice.mpq
+    system: diablo
+    category: game_data
+    required: false
+    description: "Hellfire voices; mandatory when hellfire.mpq is present"
+    source_ref: "Source/engine/assets.cpp:585"
+
+  - name: hfbard.mpq
+    path: devilutionx/hfbard.mpq
+    system: diablo
+    category: game_data
+    required: false
+    description: "Hellfire bard class assets (community add-on)"
+    source_ref: "Source/engine/assets.cpp:565"
+
+  - name: hfbarb.mpq
+    path: devilutionx/hfbarb.mpq
+    system: diablo
+    category: game_data
+    required: false
+    description: "Hellfire barbarian class assets (community add-on)"
+    source_ref: "Source/engine/assets.cpp:566"
+
+  - name: fonts.mpq
+    path: devilutionx/fonts.mpq
+    system: diablo
+    category: game_data
+    required: false
+    description: "CJK and extended-language font pack from devilutionx-assets release"
+    source_ref: "Source/engine/assets.cpp:517"

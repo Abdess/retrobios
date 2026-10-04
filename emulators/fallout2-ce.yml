@@ -1,0 +1,63 @@
+emulator: fallout2-ce
+type: standalone
+core_classification: game_engine
+source: "https://github.com/alexbatalov/fallout2-ce"
+upstream: ~
+profiled_date: "2026-10-04"
+source_commit: "e97087b9582f37075db347a89898887320753f8b"
+core_version: "1.2"
+display_name: "Fallout 2 (Community Edition)"
+cores: [fallout2-ce]
+systems: [fallout2]
+verification: existence
+
+notes: |
+  Fallout 2 Community Edition is Alex Batalov's cross-platform rebuild of
+  the Fallout 2 engine. Like Fallout 1 CE it reads master.dat (resources)
+  and critter.dat (animations), plus optional patch000.dat..patch999.dat
+  overlays and the high-resolution patch's f2_res.dat.
+
+  The engine resolves master_dat / critter_dat paths from fallout2.cfg
+  via Settings (src/settings.h:12-14, src/game_config.cc:61-63). On
+  startup, gameDbInit() in src/game.cc:1322 opens the master database
+  (dbOpen call line 1343) and the critter database (line 1359). Either
+  missing raises the "Could not find the master/critter datafile"
+  message box (lines 1345, 1361) and the game exits.
+
+  patch%03d.dat (patch000.dat..patch999.dat) are opportunistic: the loop
+  at src/game.cc:1372-1378 opens them with dbOpen if compat_access
+  succeeds and silently continues otherwise. Sfall's patch_file setting
+  can override the "patch%03d.dat" template (line 1367).
+
+  f2_res.dat is the High Resolution Patch data file. Loaded only if
+  present (src/game.cc:1380-1382). Not required for the base game.
+
+  Music (ACM), movies (MVE) and sound effects live in sound/, movies/,
+  and data/ overlays; the engine runs without them, so they are not
+  tracked here.
+
+exclusion_note: "data/, sound/ and movies/ load from the retail install folder, not from a shared BIOS tree"
+files:
+  - name: master.dat
+    path: fallout2-ce/master.dat
+    system: fallout2
+    category: game_data
+    required: true
+    description: "Fallout 2 master game resource archive (retail/GOG)"
+    source_ref: "src/game.cc:1333-1347"
+
+  - name: critter.dat
+    path: fallout2-ce/critter.dat
+    system: fallout2
+    category: game_data
+    required: true
+    description: "Fallout 2 critter animations archive (retail/GOG)"
+    source_ref: "src/game.cc:1349-1363"
+
+  - name: f2_res.dat
+    path: fallout2-ce/f2_res.dat
+    system: fallout2
+    category: game_data
+    required: false
+    description: "High Resolution Patch resource archive, loaded when present"
+    source_ref: "src/game.cc:1380-1382"

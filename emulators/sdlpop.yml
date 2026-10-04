@@ -1,0 +1,49 @@
+emulator: sdlpop
+type: standalone
+core_classification: game_engine
+source: "https://github.com/NagyD/SDLPoP"
+upstream: ~
+profiled_date: "2026-10-04"
+source_commit: "3c5add5fb7f83d4ceb542823ab66d00146c4271b"
+core_version: "1.24 RC"
+display_name: "Prince of Persia (SDLPoP)"
+cores: [sdlpop]
+systems: [prince-of-persia]
+verification: existence
+
+notes: |
+  SDLPoP is NagyD's open-source port of the DOS Prince of Persia (1989),
+  rebuilt from the leaked Jordan Mechner source and refined through
+  years of community reverse engineering. Unlike the other engines in
+  this directory, SDLPoP ships with ALL game data in-tree; no retail
+  data file is required or useful.
+
+  open_dat() (src/seg009.c:438) reads an archive named FOO.DAT if
+  present, otherwise falls back to a loose folder data/FOO/ containing
+  the extracted resources (lines 440-456 and 488-500). The repository
+  ships both forms:
+
+    data/*.DAT files committed:
+      DIGISND1.DAT, DIGISND2.DAT, DIGISND3.DAT  (digitized SFX)
+      MIDISND1.DAT, MIDISND2.DAT                (MIDI SFX)
+      GUARD.DAT, GUARD1.DAT, GUARD2.DAT         (guard graphics variants)
+
+    data/<name>/ folders committed (extracted resources):
+      PRINCE, KID, SHADOW, SKEL, GUARD, GUARD1, GUARD2,
+      VIZIER, VPALACE, VDUNGEON, PV, FAT, TITLE,
+      IBM_SND1, IBM_SND2, LEVELS, font, music
+
+  The named folders are the fall-back for the DAT files the loader
+  actually requests: PRINCE.DAT (seg000.c:123, 1030-1037, 1067-1072),
+  LEVELS.DAT (seg000.c:1153), TITLE.DAT (seg000.c:2298), KID / GUARD /
+  SHADOW / SKEL / FAT / VPALACE / VDUNGEON / VIZIER / PV at level
+  switch (seg000.c:1656, 1690). The data/music folder holds the
+  OGG/MP3 soundtrack files added by the port.
+
+  Consequence: retrobios does not supply any file to run the base game.
+  Users can drop MOD folders under mods/<MODNAME>/ to layer custom
+  level packs on top (open_dat lines 448-452); those are user content,
+  not shared BIOS data, and are not tracked here.
+
+exclusion_note: "all required game data ships inside the source repository (data/ and data/<folder>/ trees)"
+files: []

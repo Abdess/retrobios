@@ -1,0 +1,53 @@
+emulator: fallout1-ce
+type: standalone
+core_classification: game_engine
+source: "https://github.com/alexbatalov/fallout1-ce"
+upstream: ~
+profiled_date: "2026-10-04"
+source_commit: "0609bcfd0ec40ff0571d0f57fab2821eb461dc8b"
+core_version: "1.1"
+display_name: "Fallout (Community Edition)"
+cores: [fallout1-ce]
+systems: [fallout]
+verification: existence
+
+notes: |
+  Fallout 1 Community Edition is Alex Batalov's cross-platform rebuild of
+  the original Fallout engine. It reads the same data files the retail
+  installer dropped: master.dat holds the game resources, critter.dat the
+  animation frames, and the data/ directory holds loose patch overrides.
+
+  The main executable loads config fallout.cfg from its own directory
+  (src/game/gconfig.cc:122-137). Keys master_dat / critter_dat /
+  master_patches / critter_patches default to "master.dat", "critter.dat",
+  "data" and "data" when the file is missing (gconfig.cc:58-61). On
+  startup, game_init_databases() in src/game/game.cc:1223 opens both
+  DAT files with db_init(); either missing raises GNWSystemError
+  "Could not find the master/critter datafile" (lines 1249, 1266) and the
+  game exits.
+
+  The data/ directory is a user-writable patch overlay; it is empty on a
+  clean retail install, so retrobios does not ship an empty tree. Music
+  (ACM files under data/sound/music/) and movies (sound/MOVIES/) are
+  loaded on demand and the engine runs without them, so they are marked
+  optional. Font and resolution tweaks live in f1_res.ini and are a user
+  preference, not game data.
+
+exclusion_note: "data/, sound/ and movies/ load from the retail install folder, not from a shared BIOS tree"
+files:
+  - name: master.dat
+    path: fallout1-ce/master.dat
+    system: fallout
+    category: game_data
+    required: true
+    description: "Fallout 1 master game resource archive (retail/GOG)"
+    note: "db_init call fails with GNWSystemError if missing"
+    source_ref: "src/game/game.cc:1237-1251"
+
+  - name: critter.dat
+    path: fallout1-ce/critter.dat
+    system: fallout
+    category: game_data
+    required: true
+    description: "Fallout 1 critter animations archive (retail/GOG)"
+    source_ref: "src/game/game.cc:1253-1267"
