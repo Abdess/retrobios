@@ -1,0 +1,81 @@
+emulator: Sonic 3 A.I.R.
+type: standalone
+core_classification: game_engine
+source: "https://github.com/Eukaryot/sonic3air"
+upstream: "https://github.com/Eukaryot/sonic3air"
+source_commit: "de0fd6a7c07b399c9a612cb7cb8d61b54cb339d1"
+profiled_date: "2026-10-04"
+display_name: "Sonic 3 - Angel Island Revisited"
+cores: []
+systems: [sonic3-air]
+
+notes: |
+  Sonic 3 - Angel Island Revisited by Eukaryot. The Oxygen Engine runs the
+  decompiled game logic (lemon scripts) against the original Genesis ROM
+  loaded at runtime; the ROM is not shipped with the engine.
+
+  ROM search order (ResourcesCache::loadRom):
+    1. GameAppData/<SteamRomName>
+    2. Last known ROM path (settings.json RomPath)
+    3. Configured RomPath (config.json)
+    4. SteamRomName in the install directory
+    5. Steam library .../Sega Classics/uncompressed ROMs/<SteamRomName>
+    6. User-picked file via native file dialog (filter *.bin)
+  ref: Oxygen/oxygenengine/source/oxygen/resources/ResourcesCache.cpp:19-115,
+       Oxygen/oxygenengine/source/oxygen/application/GameLoader.cpp:60-94,
+       Oxygen/oxygenengine/source/oxygen/platform/PlatformFunctions.cpp:379-408
+
+  ROM validation (ResourcesCache::loadRomFile + checkRomContent):
+    1. Read file into memory.
+    2. applyRomModifications: XOR optional diff file, blank regions, then
+       byte overwrites from the active RomInfo. The default S3K_Steam entry
+       sets offset 0x2001f0 = 0x4a (patches the ROM header checksum field
+       so the Steam dump matches the authoritative hash).
+    3. Size check: must equal 0x400000 (4 MiB).
+    4. Content check: Murmur2_64 of the full post-modification ROM must
+       equal 0x344983ffcfeff8cb.
+  ref: Oxygen/oxygenengine/source/oxygen/resources/ResourcesCache.cpp:152-282,
+       Oxygen/sonic3air/source/sonic3air/ConfigurationImpl.cpp:33-47,
+       Oxygen/sonic3air/oxygenproject.json:9-20
+
+  The engine ships four data packages built from Oxygen/sonic3air/data/
+  (enginedata.bin, gamedata.bin, audiodata.bin, audioremaster.bin). Three
+  are required and part of the release; audioremaster.bin is optional and
+  downloaded on demand from https://sonic3air.org/download/audioremaster.bin
+  (126 MB) when the user enables the remastered soundtrack.
+  ref: Oxygen/sonic3air/oxygenproject.json:32-38,
+       Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:115-118,
+       Oxygen/sonic3air/source/sonic3air/audio/RemasteredMusicDownload.cpp:48-62
+
+  Only one RomInfo is declared (S3K_Steam). The engine does not support
+  on-the-fly Sonic 3 + Sonic & Knuckles lock-on concatenation at run time;
+  the user must supply the 4 MiB combined ROM (as distributed with Sega
+  Mega Drive & Genesis Classics / Sonic Origins).
+
+files:
+  - name: "Sonic_Knuckles_wSonic3.bin"
+    category: game_data
+    system: sonic3-air
+    required: true
+    size: 4194304
+    validation: [size]
+    source_ref: "Oxygen/sonic3air/source/sonic3air/ConfigurationImpl.cpp:39-46 (fillDefaultGameProfile), Oxygen/oxygenengine/source/oxygen/resources/ResourcesCache.cpp:262-277 (checkRomContent)"
+    note: |
+      Sonic 3 & Knuckles combined ROM as shipped on Steam (Sega Mega Drive
+      and Genesis Classics / Sonic Origins). Expected size 0x400000 bytes.
+      After the engine overwrites offset 0x2001f0 with 0x4a, Murmur2_64 of
+      the whole buffer must equal 0x344983ffcfeff8cb (not CRC32; the hash
+      is computed with rmx::getMurmur2_64 over mRom). The engine also
+      accepts a user-picked .bin via the native file-selection dialog that
+      satisfies the same post-modification check.
+
+  - name: "audioremaster.bin"
+    category: game_data
+    system: sonic3-air
+    required: false
+    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:118 (mDataPackages, Required=false), Oxygen/sonic3air/source/sonic3air/audio/RemasteredMusicDownload.cpp:48-62"
+    note: |
+      Remastered soundtrack package (approx 126 MB). Downloaded on demand
+      from https://sonic3air.org/download/audioremaster.bin and reloaded
+      via EngineMain::reloadFilePackage. Absent at first launch; the
+      engine falls back to the emulated FM soundtrack.

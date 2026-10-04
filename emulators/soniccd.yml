@@ -1,0 +1,43 @@
+emulator: Sonic CD Decompilation
+type: standalone
+core_classification: game_engine
+source: "https://github.com/Rubberduckycooly/Sonic-CD-11-Decompilation"
+upstream: "https://github.com/Rubberduckycooly/Sonic-CD-11-Decompilation"
+source_commit: "a99e16ad15f4f824c1b9f96a61b3f8576ab648e2"
+profiled_date: "2026-10-04"
+display_name: "Sonic CD (RSDKv3 Decomp)"
+cores: []
+systems: [soniccd]
+
+notes: |
+  Retro Engine v3 decompilation of Sonic CD (2011 Christian Whitehead
+  mobile/Steam port). Single binary; one data pack per install.
+
+  CheckRSDKFile only fopen()s the pack; there is no signature test. If
+  the file is absent the engine falls back to a loose Data/ + Bytecode/
+  tree and, on first run, writes usage.txt describing the layout it
+  wants.
+  ref: RSDKv3/Reader.cpp:26-87 (CheckRSDKFile), RSDKv3/RetroEngine.cpp:280-321,
+       RSDKv3/RetroEngine.cpp:328-363
+
+  settings.ini key Dev:DataFile overrides the default "Data.rsdk".
+  ref: RSDKv3/Userdata.cpp:352-353,467-468, RSDKv3/RetroEngine.hpp:437
+
+  Bytecode detection probes two layouts in order after the pack opens:
+  Data/Scripts/ByteCode/GlobalCode.bin (BYTECODE_MOBILE) or GS000.bin
+  (BYTECODE_PC). Either lives inside Data.rsdk when the official pack
+  is present.
+  ref: RSDKv3/Reader.cpp:54-82
+
+files:
+  - name: "Data.rsdk"
+    category: game_data
+    system: soniccd
+    required: true
+    source_ref: "RSDKv3/RetroEngine.cpp:305 (CheckRSDKFile(dest)), RSDKv3/Userdata.cpp:352"
+    note: |
+      Sonic CD assets (RSDK v3 container). Shipped with the official
+      Sonic CD release (Steam, iOS, Android, Sonic Origins). The engine
+      opens the file with fopen(); content is validated by trying to
+      load Data/Scripts/ByteCode/GlobalCode.bin or GS000.bin from
+      inside, not by hashing the pack.

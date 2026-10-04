@@ -10,6 +10,7 @@ display_name: "Xenia Canary (Xbox 360)"
 cores:
   - xenia
   - xenia-canary
+  - xenianative
 systems:
   - microsoft-xbox-360
 analysis_date: "2026-03-26"
