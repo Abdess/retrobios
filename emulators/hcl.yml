@@ -18,11 +18,11 @@ notes: |
 
   The engine opens every data file from a relative "data/" prefix hard-coded
   in the sources:
-    - qda.c:19   — strcpy(fullPath, "data/") before appending qda chunk names
-    - hero.c:202 — fopen("data/save.tmp", "rb")
-    - sdl2/audio.c:30 — strcpy(buff, "data/") before midi/wav loads
-    - sdl2/graphics.c, sdl3/graphics.c — fopen("data/bmp.qda", "rb")
-    - game.h:184 — savename macro = "data/save.tmp"
+    - qda.c:19, strcpy(fullPath, "data/") before appending qda chunk names
+    - hero.c:202, fopen("data/save.tmp", "rb")
+    - sdl2/audio.c:30, strcpy(buff, "data/") before midi/wav loads
+    - sdl2/graphics.c, sdl3/graphics.c: fopen("data/bmp.qda", "rb")
+    - game.h:184, savename macro = "data/save.tmp"
   Save files are rewritten in that same relative data/ tree, so the game must
   be launched from a working directory that contains data/ (batocera copies
   the shipped data/ beside the binary).

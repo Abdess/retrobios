@@ -21,7 +21,7 @@ notes: |
   is set in src/sdlport/setup.cpp:
     1. -datadir <path> CLI argument (setup.cpp:327-332)
     2. datadir= in abuse.cfg (setup.cpp:182)
-    3. ASSETDIR compile-time constant, filled by CMakeLists.txt:45-54 — "." on
+    3. ASSETDIR compile-time constant, filled by CMakeLists.txt:45-54, "." on
        Windows, abuse.app/Contents/Resources/data on macOS, share/games/abuse on
        Linux (setup.cpp:441-474)
   Loader1 reads abuse.lsp via lisp (loader2.cpp:284), which chain-loads

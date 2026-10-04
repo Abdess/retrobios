@@ -24,20 +24,20 @@ notes: |
   Recalbox's standalone ARM port of Final Burn Alpha, lineage pifba (originally
   by Franxis / Oopsware for the GP2X, modernised to SDL2 by Recalbox). The
   binary is installed as fba2x and runs with a ZIP path on the command line
-  (rpi/main.cpp:187 — "Usage: fba2x <path to rom><shortname>.zip").
+  (rpi/main.cpp:187, "Usage: fba2x <path to rom><shortname>.zip").
 
   BIOS and ROM archives are resolved relative to szAppRomPath, hardcoded to
   "roms/" in rpi/bzip.cpp:4 and overridden only through the rom path argument.
   BzipOpen (rpi/bzip.cpp:355-394) iterates BurnDrvGetZipName(z) for every
-  BIOS/parent slot and opens "<roms/><name>" directly — no fallback
+  BIOS/parent slot and opens "<roms/><name>" directly: no fallback
   directory walking.
 
   Shared BIOS ROM sets flagged BDF_BOARDROM in the driver source:
-    - neogeo (burn/neogeo/d_neogeo.cpp)  — SNK Neo Geo system BIOS
-    - pgm    (burn/pgm/d_pgm.cpp)        — IGS PGM board BIOS
+    - neogeo (burn/neogeo/d_neogeo.cpp), SNK Neo Geo system BIOS
+    - pgm    (burn/pgm/d_pgm.cpp), IGS PGM board BIOS
 
   CPS1 and CPS2 titles embed their program/encryption ROMs directly in each
-  game archive — no CPS board BIOS zip. CPS3 (burn/cps3/d_cps3.cpp) carries
+  game archive: no CPS board BIOS zip. CPS3 (burn/cps3/d_cps3.cpp) carries
   the SH-2 BIOS as a BRF_BIOS member of each game's archive (red-earth,
   jojo, sfiii, etc.), so there is no shared cps3.zip here either.
 

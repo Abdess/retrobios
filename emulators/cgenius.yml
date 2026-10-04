@@ -43,7 +43,7 @@ notes: |
   8497b5696c92b13ede4f5ad01dfb577b208404cb by cgenius.mk).
 
   Game directories are searched under the user's roms root. The engine then
-  loads from vfsroot/global/ at startup — fonts, trophy UI, generic sounds —
+  loads from vfsroot/global/ at startup (fonts, trophy UI, generic sounds),
   which is bundled with the install, not with the Keen data.
 
 files:

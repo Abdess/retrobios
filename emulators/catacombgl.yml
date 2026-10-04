@@ -14,7 +14,7 @@ verification: existence
 notes: |
   OpenGL source port by Arno Ansems of id Software's Catacomb Adventure series:
     - Catacomb 3-D: The Descent (.C3D)
-    - Catacomb Abyss (.ABS) — three releases v1.12 / v1.13 / v1.24
+    - Catacomb Abyss (.ABS), three releases v1.12 / v1.13 / v1.24
     - Catacomb Armageddon (.ARM)
     - Catacomb Apocalypse (.APC)
 
@@ -32,7 +32,7 @@ notes: |
 
   Each supported game sits in its own directory, picked by the user through
   the game selection menu (src/Engine/GameSelection.cpp). No separate BIOS is
-  needed — the retail / shareware DOS data files are the only requirement.
+  needed: the retail / shareware DOS data files are the only requirement.
 
   The Catacomb Adventure Series releases (Abyss shareware, Armageddon,
   Apocalypse) were made freeware by Flat Rock Software and are distributed by

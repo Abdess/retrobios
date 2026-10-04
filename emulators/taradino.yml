@@ -38,7 +38,7 @@ notes: |
   REMOTE1.RTS carries the "Remote Ridicule" speech bank; its absence is
   silently tolerated (rott/rt_main.c:830-834).
 
-  No hash is validated — the loader relies on WAD lump names and the
+  No hash is validated: the loader relies on WAD lump names and the
   SHAREWARE_TAG magic number inside the RTL (rott/rt_ted.c:1432).
 
 files:

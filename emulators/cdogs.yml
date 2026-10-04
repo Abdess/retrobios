@@ -24,16 +24,16 @@ notes: |
 
   Top-level sub-trees the game pulls files from (every path is relative to
   CDOGS_DATA_DIR, resolved through GetDataFilePath):
-    data/           — ammo.json, bullets.json, guns.json, pickups.json,
-                      map_objects.json, character_classes.json, particles.json,
-                      gamecontrollerdb.txt, prefixes.txt (configuration data)
-    graphics/       — sprites, font, icons; grafx.c:92 (cdogs_icon.bmp),
-                      grafx.c:156 (font.png + font.json)
-    missions/       — single-player campaigns, mission packs (JSON)
-    music/          — menu, briefing, game, end, lose, victory tracks
-                      (music.c:45-50 LoadMusic calls)
-    sounds/         — sfx wavs
-    dogfights/      — deathmatch arenas
+    data/: ammo.json, bullets.json, guns.json, pickups.json,
+      map_objects.json, character_classes.json, particles.json,
+      gamecontrollerdb.txt, prefixes.txt (configuration data)
+    graphics/: sprites, font, icons; grafx.c:92 (cdogs_icon.bmp),
+      grafx.c:156 (font.png + font.json)
+    missions/: single-player campaigns, mission packs (JSON)
+    music/: menu, briefing, game, end, lose, victory tracks
+      (music.c:45-50 LoadMusic calls)
+    sounds/: sfx wavs
+    dogfights/: deathmatch arenas
 
   All open-source content (GPL-2.0). No separate BIOS or retail data required.
 

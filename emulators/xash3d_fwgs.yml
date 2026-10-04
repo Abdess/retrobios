@@ -41,7 +41,7 @@ notes: |
 
 files:
   # ================================================================
-  # Half-Life (valve/) — base game, chained parent of every HL1 mod
+  # Half-Life (valve/), base game, chained parent of every HL1 mod
   # ================================================================
 
   - name: "liblist.gam"

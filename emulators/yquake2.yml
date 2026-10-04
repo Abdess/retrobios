@@ -65,7 +65,7 @@ files:
     note: "Added by community re-releases and the KMQuake2 content pack."
 
   # ================================================================
-  # The Reckoning (xatrix/) — official Mission Pack 1
+  # The Reckoning (xatrix/), official Mission Pack 1
   # Separate yquake2 game library repo: yquake2/xatrix.
   # ================================================================
 
@@ -78,7 +78,7 @@ files:
     note: "The Reckoning data. Loaded when `+set game xatrix` is passed."
 
   # ================================================================
-  # Ground Zero (rogue/) — official Mission Pack 2
+  # Ground Zero (rogue/), official Mission Pack 2
   # Separate yquake2 game library repo: yquake2/rogue.
   # ================================================================
 
@@ -91,7 +91,7 @@ files:
     note: "Ground Zero data. Loaded when `+set game rogue` is passed."
 
   # ================================================================
-  # Three Wave Capture The Flag (ctf/) — official free addon
+  # Three Wave Capture The Flag (ctf/), official free addon
   # Separate yquake2 game library repo: yquake2/ctf.
   # ================================================================
 

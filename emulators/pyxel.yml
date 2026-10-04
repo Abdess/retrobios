@@ -19,10 +19,10 @@ notes: |
 
   There is no external BIOS, firmware, or retail data to collect. Everything
   the engine needs ships inside the Python wheel:
-    python/pyxel/              — Python API, fonts, shader, examples
-    crates/pyxel-core/         — Rust engine (compiled as pyxel_extension)
-    crates/pyxel-platform/     — SDL2 wrapper
-    crates/pyxel-wrapper/      — Python ↔ Rust glue (PyO3)
+    python/pyxel/: Python API, fonts, shader, examples
+    crates/pyxel-core/: Rust engine (compiled as pyxel_extension)
+    crates/pyxel-platform/: SDL2 wrapper
+    crates/pyxel-wrapper/: Python to Rust glue (PyO3)
 
   Batocera's packaging (package/batocera/emulators/python-pyxel/python-pyxel.mk)
   installs the wheel into site-packages, drops the examples, and provides a
