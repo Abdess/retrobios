@@ -81,6 +81,7 @@ files:
     source_ref: "libretro.c:1162-1167"
 
   - name: "voice/"
+    type: directory
     required: false
     category: game_data
     note: "The Voice speech synthesis WAV samples. 9 banks (E4, E8-EF) × 128 samples."

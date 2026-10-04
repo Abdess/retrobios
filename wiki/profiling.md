@@ -372,6 +372,7 @@ which CI validates every profile against.
 | `load_from` | directory the core reads the file from when it is not the system directory |
 | `source_ref` | source file and line number (e.g. `boot.cpp:42`), read at the profile's `source_commit` when set. A dict splits `standalone` from `libretro` when they diverge |
 | `path` | destination path relative to system directory |
+| `type` | `directory` when the code reads a whole tree (an RTP, a folder of speech samples). `path` is then the directory, written with its trailing slash, and the entry stands for every file the collection holds under it. A name ending in `/` requires it |
 | `description` | what this file is |
 | `note` | additional context |
 | `contents` | structure of files inside a BIOS ZIP (`name`, `description`, `size`, `crc32`) |

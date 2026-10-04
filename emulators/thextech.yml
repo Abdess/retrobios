@@ -90,18 +90,21 @@ files:
   # ================================================================
 
   - name: "graphics/"
+    type: directory
     category: game_data
     required: true
     source_ref: "src/main/asset_pack.cpp:274, 326-327, src/gfx.cpp:121-229, src/load_gfx.cpp:120-123"
     note: "graphics/ui/ must exist for a directory to be scanned as a pack; GFX_t::load rejects the pack when a required UI image is missing."
 
   - name: "sound/"
+    type: directory
     category: game_data
     required: false
     source_ref: "src/sound.cpp:1319"
     note: "SFX directory, files named by sounds.ini. Game runs without sounds."
 
   - name: "music/"
+    type: directory
     category: game_data
     required: false
     source_ref: "src/sound.cpp:1318"
@@ -132,6 +135,7 @@ files:
     note: "Read when intro.lvlx is absent."
 
   - name: "introset/"
+    type: directory
     category: game_data
     required: false
     source_ref: "src/game_main.cpp:194-222, 247"
@@ -150,12 +154,14 @@ files:
     note: "Read when outro.lvlx is absent."
 
   - name: "worlds/"
+    type: directory
     category: game_data
     required: false
     source_ref: "src/main/menu_main.cpp:361-370"
     note: "Episodes shipped with the pack, listed next to the user's worlds directory."
 
   - name: "battle/"
+    type: directory
     category: game_data
     required: false
     source_ref: "src/main/menu_main.cpp:701-706"

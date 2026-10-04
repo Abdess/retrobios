@@ -67,6 +67,7 @@ files:
 
   # --- ADPCM audio samples (optional, game-specific) ---
   - name: "nestopia/samples/moepro/"
+    type: directory
     system: nintendo-nes
     description: "Moero Pro Yakyuu audio samples (16 .wav files, 00.wav-15.wav)"
     required: false
@@ -74,6 +75,7 @@ files:
     source_ref: "libretro/libretro.cpp:183-391 (load_wav), libretro/libretro.cpp:451 (LOAD_SAMPLE_MOERO_PRO_YAKYUU callback), source/core/NstSoundPlayer.hpp:49 (16 samples)"
 
   - name: "nestopia/samples/moepro88/"
+    type: directory
     system: nintendo-nes
     description: "Moero Pro Yakyuu '88 audio samples (20 .wav files, 00.wav-19.wav)"
     required: false
@@ -81,6 +83,7 @@ files:
     source_ref: "libretro/libretro.cpp:183-391 (load_wav), libretro/libretro.cpp:453 (LOAD_SAMPLE_MOERO_PRO_YAKYUU_88 callback), source/core/NstSoundPlayer.hpp:50 (20 samples)"
 
   - name: "nestopia/samples/mptennis/"
+    type: directory
     system: nintendo-nes
     description: "Moero Pro Tennis audio samples (19 .wav files, 00.wav-18.wav)"
     required: false
@@ -88,6 +91,7 @@ files:
     source_ref: "libretro/libretro.cpp:183-391 (load_wav), libretro/libretro.cpp:455 (LOAD_SAMPLE_MOERO_PRO_TENNIS callback), source/core/NstSoundPlayer.hpp:51 (19 samples)"
 
   - name: "nestopia/samples/terao/"
+    type: directory
     system: nintendo-nes
     description: "Terao no Dosukoi Oozumou audio samples (6 .wav files, 00.wav-05.wav)"
     required: false
@@ -95,6 +99,7 @@ files:
     source_ref: "libretro/libretro.cpp:183-391 (load_wav), libretro/libretro.cpp:457 (LOAD_SAMPLE_TERAO_NO_DOSUKOI_OOZUMOU callback), source/core/NstSoundPlayer.hpp:52 (6 samples)"
 
   - name: "nestopia/samples/ftaerobi/"
+    type: directory
     system: nintendo-nes
     description: "Aerobics Studio audio samples (8 .wav files, 00.wav-07.wav)"
     required: false

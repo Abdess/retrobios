@@ -38,6 +38,7 @@ from common import (
     build_zip_contents_index,
     check_inside_zip,
     compute_hashes,
+    expand_directory_entries,
     expand_platform_declared_names,
     filter_systems_by_target,
     group_identical_platforms,
@@ -458,7 +459,9 @@ def find_undeclared_files(
 
         is_standalone = runs_standalone(emu_name, profile, standalone_set)
 
-        for f in profile.get("files", []):
+        for f in expand_directory_entries(
+            profile.get("files", []), db, is_standalone
+        ):
             fname = f.get("name", "")
             effective_path = (
                 f.get("standalone_path") if is_standalone else f.get("path")
@@ -1363,7 +1366,11 @@ def verify_emulator(
         )
 
     for emu_name, profile in selected:
-        files = filter_files_by_mode(profile.get("files", []), standalone)
+        files = expand_directory_entries(
+            filter_files_by_mode(profile.get("files", []), standalone),
+            db,
+            standalone,
+        )
         if region_drops:
             files = [
                 fe

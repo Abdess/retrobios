@@ -50,6 +50,7 @@ files:
 
   - name: "data/"
     path: "nxengine/data/"
+    type: directory
     category: game_data
     system: cave-story
     description: "Full game asset directory tree (399 files: sprites, NPC sheets, stage maps, scripts, backgrounds)"

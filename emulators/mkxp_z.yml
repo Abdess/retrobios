@@ -26,6 +26,7 @@ notes: |
 
 files:
   - name: "Standard"
+    type: directory
     description: "RPG Maker XP Run-Time Package"
     category: game_data
     path: "mkxp-z/RTP/Standard/"
@@ -33,6 +34,7 @@ files:
     source_ref: "src/core.cpp:1081-1124, src/core.cpp:1126-1197"
 
   - name: "RPGVX"
+    type: directory
     description: "RPG Maker VX Run-Time Package"
     category: game_data
     path: "mkxp-z/RTP/RPGVX/"
@@ -40,6 +42,7 @@ files:
     source_ref: "src/core.cpp:1081-1124, src/core.cpp:1126-1197"
 
   - name: "RPGVXAce"
+    type: directory
     description: "RPG Maker VX Ace Run-Time Package"
     category: game_data
     path: "mkxp-z/RTP/RPGVXAce/"
@@ -47,6 +50,7 @@ files:
     source_ref: "src/core.cpp:1081-1124, src/core.cpp:1126-1197"
 
   - name: "Fonts"
+    type: directory
     description: "Fallback font directory (.otf/.ttf)"
     category: game_data
     path: "mkxp-z/Fonts/"
@@ -54,6 +58,7 @@ files:
     source_ref: "src/core.cpp:1199-1211"
 
   - name: "Preload"
+    type: directory
     description: "Ruby scripts loaded before game scripts"
     category: game_data
     path: "mkxp-z/Scripts/Preload/"
@@ -61,6 +66,7 @@ files:
     source_ref: "src/core.cpp:891-934"
 
   - name: "Postload"
+    type: directory
     description: "Ruby scripts loaded after game scripts (RGSS3 only)"
     category: game_data
     path: "mkxp-z/Scripts/Postload/"

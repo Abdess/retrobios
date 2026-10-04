@@ -36,6 +36,7 @@ from common import (
     build_zip_contents_index,
     check_inside_zip,
     compute_hashes,
+    expand_directory_entries,
     expand_platform_declared_names,
     fetch_large_file,
     filter_systems_by_target,
@@ -1288,7 +1289,11 @@ def generate_emulator_pack(
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         for emu_name, profile in sorted(selected):
             pack_structure = profile.get("pack_structure")
-            files = filter_files_by_mode(profile.get("files", []), standalone)
+            files = expand_directory_entries(
+                filter_files_by_mode(profile.get("files", []), standalone),
+                db,
+                standalone,
+            )
             # A tree only one build reads follows that build, like a file.
             for dd in filter_files_by_mode(
                 profile.get("data_directories", []), standalone

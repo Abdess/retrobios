@@ -45,6 +45,7 @@ files:
   # ================================================================
 
   - name: "Animations/"
+    type: directory
     category: game_data
     path: "jazz2/Content/Animations/"
     standalone_path: "Content/Animations/"
@@ -54,6 +55,7 @@ files:
     note: "Native graphics, sounds and the UI fonts, opened through OpenContentFile."
 
   - name: "Metadata/"
+    type: directory
     category: game_data
     path: "jazz2/Content/Metadata/"
     standalone_path: "Content/Metadata/"
@@ -63,6 +65,7 @@ files:
     note: "Actor .res descriptors (Common, Enemy, Player, UI, Boss, ...)."
 
   - name: "Translations/"
+    type: directory
     category: game_data
     path: "jazz2/Content/Translations/"
     standalone_path: "Content/Translations/"

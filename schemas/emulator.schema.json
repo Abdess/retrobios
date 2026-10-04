@@ -425,7 +425,11 @@
             "type": "string"
           },
           "type": {
-            "type": "string"
+            "description": "Set on an entry that names a directory the code reads whole. The entry then stands for every file under path.",
+            "type": "string",
+            "enum": [
+              "directory"
+            ]
           },
           "variant_group": {
             "type": "string",
@@ -599,7 +603,38 @@
           "unsourceable": {
             "type": "string"
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "name": {
+                  "pattern": "/$"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "type"
+              ]
+            }
+          },
+          {
+            "if": {
+              "required": [
+                "type"
+              ]
+            },
+            "then": {
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "pattern": "/$"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "source_branch": {
