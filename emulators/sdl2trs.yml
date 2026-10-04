@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://gitlab.com/jengun/sdltrs"
 upstream: "http://sdltrs.sourceforge.net"
 profiled_date: "2026-08-08"
-source_commit: "b008486afe41813fd2225ebb807a3e672d544f79"
+source_commit: "cb68ce3167ae9b8e2c87f69d3a8c34ffa176a993"
 core_version: "1.2.35"
 display_name: "Tandy - TRS-80 (SDL2TRS)"
 cores:
@@ -24,37 +24,37 @@ notes: |
 
   Three ROM slots exist, one per model family, and trs_rom_init picks one from
   trs_model. Model I takes romfile1, Model III and Model 4 share romfile3, and
-  Model 4P takes romfile4p (trs_cmd_rom.c:868-894). The defaults are level2.rom,
-  model3.rom and model4p.rom, each prefixed by ROM_PATH (trs_options.c:896-898).
+  Model 4P takes romfile4p (src/trs_cmd_rom.c:868-894). The defaults are level2.rom,
+  model3.rom and model4p.rom, each prefixed by ROM_PATH (src/trs_options.c:897-899).
   ROM_PATH is a build define left empty unless a packager sets it
-  (trs_options.c:53-54, CMakeLists.txt:42), so a stock build resolves the names
+  (src/trs_options.c:53-54, CMakeLists.txt:42), so a stock build resolves the names
   against the working directory.
 
   -rom, -r and -romfile write to the slot of the model selected at the moment
-  they are parsed (trs_options.c:609-619). Options are applied in command-line
-  order after the config file has been read (trs_options.c:1016-1036), so -m has
+  they are parsed (src/trs_options.c:609-619). Options are applied in command-line
+  order after the config file has been read (src/trs_options.c:1017-1037), so -m has
   to come first to redirect them, and a model key in the config file otherwise
   decides. -rom1, -rom3 and -rom4p address a slot directly. The GUI ROM browser
-  filters on .bin, .hex, .iii and .rom (trs_sdl_gui.h:63, trs_sdl_gui.c:2591-2597).
+  filters on .bin, .hex, .iii and .rom (src/trs_sdl_gui.h:63, src/trs_sdl_gui.c:2591-2597).
 
   trs_load_rom sniffs the first byte. A colon means Intel hex, and load_hex
   rejects the file on a line checksum mismatch. A 1 or a 5 on Model III or later
   means a MODELA/III CMD file, rejected above 14 KB. Anything else is read as
-  raw binary with no check (trs_cmd_rom.c:720-767, 779-843), which is the path a
+  raw binary with no check (src/trs_cmd_rom.c:720-767, 779-843), which is the path a
   dump takes. No hash is computed anywhere in the tree. rom_write drops any byte
-  at or past MAX_ROM_SIZE, 18432 (trs_memory.c:63, 742-745), and trs_rom_size,
-  the extent of the plain ROM mapping, is capped at 14336 (trs_cmd_rom.c:896-898).
+  at or past MAX_ROM_SIZE, 18432 (src/trs_memory.c:63, 728-732), and trs_rom_size,
+  the extent of the plain ROM mapping, is capped at 14336 (src/trs_cmd_rom.c:896-898).
 
   A failed load is not fatal. Model I and Model III/4 fall back to trs_fakerom,
   which prints "You do not have a ROM image installed for Model" and spins.
   Model 4P falls back to trs_rom4p, Pete Cervasio's free boot ROM, which boots
-  Model 4 operating systems from floppy (trs_cmd_rom.c:871-893). -stringy
+  Model 4 operating systems from floppy (src/trs_cmd_rom.c:871-893). -stringy
   overlays the built-in Exatron Stringy Floppy ROM at 0x3000 over the Model I
-  image (trs_cmd_rom.c:875-876), and -hdboot rewrites the loaded Model I ROM in
-  place to boot from a hard drive (trs_cmd_rom.c:447-610, 882-883).
+  image (src/trs_cmd_rom.c:875-876), and -hdboot rewrites the loaded Model I ROM in
+  place to boot from a hard drive (src/trs_cmd_rom.c:447-610, 882-883).
 
   The clones run off the same three slots and are recognised from the ROM data
-  rather than from an option (trs_clones.c:8-20, html/Features.html), so their
+  rather than from an option (src/trs_clones.c:8-20, html/Features.html), so their
   larger images load as a Model I or a Model III ROM. None has a filename of its
   own anywhere in the tree.
 
@@ -63,9 +63,9 @@ files:
     description: "TRS-80 Model I ROM"
     required: true
     max_size: 18432
-    source_ref: "src/trs_options.c:81 (romfile1), src/trs_options.c:896 (default name), src/trs_cmd_rom.c:871-884 (trs_model 1)"
+    source_ref: "src/trs_options.c:81 (romfile1), src/trs_options.c:897 (default name), src/trs_cmd_rom.c:871-884 (trs_model 1)"
     note: >
-      Model I is the model a stock configuration selects (trs_options.c:923), so
+      Model I is the model a stock configuration selects (src/trs_options.c:924), so
       this is the slot an unconfigured run reads. Without it the machine runs the
       compiled-in diagnostic stub and nothing else. max_size is the shared ROM
       buffer ceiling: a longer file is truncated, never rejected, and only the
@@ -75,10 +75,10 @@ files:
     description: "TRS-80 Model III and Model 4 ROM"
     required: true
     max_size: 18432
-    source_ref: "src/trs_options.c:82 (romfile3), src/trs_options.c:897 (default name), src/trs_cmd_rom.c:885-889 (trs_model 3 and 4)"
+    source_ref: "src/trs_options.c:82 (romfile3), src/trs_options.c:898 (default name), src/trs_cmd_rom.c:885-889 (trs_model 3 and 4)"
     note: >
       Serves Model III and Model 4 alike; the stub text spells out that Model 4
-      mode needs a Model 3 image (trs_cmd_rom.c:110-115). This is the one slot
+      mode needs a Model 3 image (src/trs_cmd_rom.c:110-115). This is the one slot
       that also accepts a MODELA/III CMD file, which html/index.html presents as
       the substitute for a real Model III ROM. Same truncating ceiling as the
       Model I slot. The image is the Model III memory map: ROM A 8041364.u104
@@ -89,7 +89,7 @@ files:
     description: "TRS-80 Model 4P boot ROM"
     required: false
     max_size: 18432
-    source_ref: "src/trs_options.c:83 (romfile4p), src/trs_options.c:898 (default name), src/trs_cmd_rom.c:890-893 (trs_model 5)"
+    source_ref: "src/trs_options.c:83 (romfile4p), src/trs_options.c:899 (default name), src/trs_cmd_rom.c:890-893 (trs_model 5)"
     note: >
       Optional because the compiled-in replacement is a working boot ROM rather
       than a stub. html/index.html states the free ROM boots only Model 4
@@ -102,7 +102,7 @@ files:
 
 analysis:
   embedded_roms:
-    mechanism: "Uint8 arrays in trs_cmd_rom.c, copied into the ROM buffer by trs_load_compiled_rom (trs_cmd_rom.c:769-777)"
+    mechanism: "Uint8 arrays in trs_cmd_rom.c, copied into the ROM buffer by trs_load_compiled_rom (src/trs_cmd_rom.c:769-777)"
     extraction: "hashes computed from the decoded byte literals"
 
     entries:
@@ -159,7 +159,7 @@ analysis:
       - machine: "Prologica CP-300, CP-500 and CP-500 M80"
         slot: model3.rom
         image_size: 16384
-        source_ref: "src/trs_cp500.c:1-22, src/trs_cp500.c:153-160, src/trs_memory.c:1052-1054"
+        source_ref: "src/trs_cp500.c:1-22, src/trs_cp500.c:153-160, src/trs_memory.c:1038-1041"
         note: >
           14 KB of patched Model III ROM plus a 2 KB resident monitor read back
           from 0x3800-0x3FFF and banked into 0x3000-0x37FF. README.md:21 and
@@ -168,41 +168,41 @@ analysis:
       - machine: "Holmes VID-80 (VX-3) on Model III"
         slot: model3.rom
         image_size: 18432
-        source_ref: "src/trs_memory.c:577-586, src/trs_memory.c:1057-1080"
+        source_ref: "src/trs_memory.c:570-580, src/trs_memory.c:1043-1065"
         note: "4 KB VID-80 ROM with the Model III ROM appended behind it; this pairing is what sets MAX_ROM_SIZE."
 
       - machine: "TCS SpeedMaster, also sold as Genie IIs"
         slot: level2.rom
         image_size: 16384
-        source_ref: "src/trs_memory.c:1025-1048"
+        source_ref: "src/trs_memory.c:1011-1033"
         note: "BASIC at 0x0000-0x2FFF and a ROM card read from 0x1000-0x3FFF into 0x4000-0xBFFF. Needs -speedup tcs (html/Features.html)."
 
       - machine: "Aster CT-80"
         slot: level2.rom
         image_size: 14336
-        source_ref: "src/trs_memory.c:962-994"
+        source_ref: "src/trs_memory.c:948-979"
         note: "BASIC at 0x0000-0x2FFF plus a 2 KB boot ROM at 0x3000-0x37FF, mirrored into 0xEC00 in CP/M mode."
 
       - machine: "EACA EG 3200 Genie III"
         slot: level2.rom
         image_size: 14336
-        source_ref: "src/trs_memory.c:909-931"
+        source_ref: "src/trs_memory.c:895-916"
         note: "Bank 1 is read through trs_rom_size, so the 14 KB cap on the plain mapping is the ceiling."
 
       - machine: "TCS Genie IIIs"
         slot: level2.rom
         image_size: 12288
-        source_ref: "src/trs_memory.c:932-961"
+        source_ref: "src/trs_memory.c:918-946"
         note: "Reads 0x0000-0x2FFF only; the rest of the address space is banked RAM, video and the HRG window."
 
       - machine: "LNW Research LNW80/II"
         slot: level2.rom
         image_size: 12288
-        source_ref: "src/trs_memory.c:995-1024"
+        source_ref: "src/trs_memory.c:981-1009"
         note: "Reads 0x0000-0x2FFF only. -speedup lnw sets the 4 MHz clock and the low 16 KB banking."
 
   character_generators:
-    source_ref: "src/trs_chars.c:12 (trs_char_data), src/trs_options.c:404-436 (charset names), src/trs_sdl_interface.c:585"
+    source_ref: "src/trs_chars.c:12 (trs_char_data), src/trs_options.c:404-436 (charset names), src/trs_sdl_interface.c:1903-1908"
     note: >
       Every character set is a compiled-in bitmap table selected by -charset1,
       -charset3 and -charset4. The tree holds no external font file and reads
@@ -250,24 +250,24 @@ analysis:
     note: "Named on the command line, in the config file or in a disk set, with no fixed filename"
     entries:
       - what: "floppy images in drives 0-7, JV1, JV3 and DMK"
-        source_ref: "src/trs_options.c:589-594, src/trs_disk.c:789-921"
+        source_ref: "src/trs_options.c:587-592, src/trs_disk.c:789-921"
       - what: "hard drive images, units 0-3"
-        source_ref: "src/trs_options.c:595-600, src/trs_hard.c:212-220, src/trs_hard.c:528-609"
+        source_ref: "src/trs_options.c:593-598, src/trs_hard.c:311-320, src/trs_hard.c:579-665"
       - what: "cassette images, .cas, .cpt and .wav"
-        source_ref: "src/trs_options.c:583-588, src/trs_cassette.c:526-553"
+        source_ref: "src/trs_options.c:581-586, src/trs_cassette.c:522-549"
       - what: "stringy floppy wafers in drives 0-7, .esf"
-        source_ref: "src/trs_options.c:601-606, src/trs_stringy.c:278-316, src/trs_stringy.c:342-346"
+        source_ref: "src/trs_options.c:599-604, src/trs_stringy.c:278-316, src/trs_stringy.c:342-346"
       - what: "disk set, a plain list of the paths above"
-        source_ref: "src/trs_options.c:607-610, src/trs_disk.c:3765-3802"
+        source_ref: "src/trs_options.c:605-608, src/trs_disk.c:3759-3796"
       - what: "CMD program loaded straight into memory, from a bare argument"
-        source_ref: "src/trs_options.c:1014-1015, src/trs_cmd_rom.c:845-866"
+        source_ref: "src/trs_options.c:1011-1012, src/trs_cmd_rom.c:845-866"
       - what: "serial port tty, defaulting to /dev/ttyS0 on Linux"
         source_ref: "src/trs_uart.c:54-56, src/trs_uart.c:144-202"
 
   generated_files:
     written_and_read_back:
       - filename: ".sdltrs.t8c"
-        source_ref: "src/trs_options.c:939-955, src/trs_options.c:1049"
+        source_ref: "src/trs_options.c:936-949, src/trs_options.c:1043-1046"
         note: "Configuration, written to the home directory on first run when none is found."
       - filename: "<name>.t8s"
         source_ref: "src/trs_state_save.c:38-66, src/trs_state_save.c:68-113"

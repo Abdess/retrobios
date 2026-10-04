@@ -3,34 +3,57 @@ type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/dosbox-libretro"
 upstream: "https://sourceforge.net/projects/dosbox/"
-profiled_date: "2026-03-23"
-source_commit: "4024bf0048c261db58ef98cb5e16de291c429f4e"
-core_version: "0.74"
+profiled_date: "2026-10-04"
+source_commit: "a563bb5e9753f207d74e9d8c417d793b784fa4be"
+core_version: "SVN"
 display_name: "DOS (DOSBox)"
 cores: [dosbox]
 systems: [dos]
 notes: |
-  Based on DOSBox 0.74 snapshot. MUNT MT-32 emulation added by libretro port.
-  Upstream DOSBox 0.74 has no MUNT — only OS-level MIDI (ALSA, CoreMIDI, Win32).
-  Hardware MIDI drivers removed, replaced with retro_midi_interface passthrough.
-  MT-32 activated via mididevice=mt32 in dosbox config section [midi].
-  Older MUNT version: no MT-32 v2.x ROMs, no CM-32LN support.
-  Both ROMs loaded by fixed filename from system directory root.
-  ref: midi_mt32.h:82-106
-  Keyboard layouts and codepages embedded in binary.
-  ref: dos_keyboard_layout_data.h, dos_codepages.h
-  .info declares firmware_count=0 but code loads 2 files (MUNT ROMs).
-  dosbox-libretro.conf optional config searched in system_directory/DOSbox/.
-  ref: libretro.cpp:751
+  Rebuilt on the dosbox-core tree (DOSBox SVN r4494) with ZIP content and the
+  Nuked-SC55 driver. No BIOS. Every file below belongs to a MIDI driver picked
+  by the core option; the default driver is "none".
+  ref: libretro/src/libretro_core_options.cpp:1684-1702
+  A driver that fails to open is replaced by the first handler that opens.
+  ref: src/gui/midi.cpp:241-243
+  mt32: mt32.romdir is the system directory. The type option (default cm32l)
+  picks CM32L_CONTROL.ROM + CM32L_PCM.ROM or MT32_CONTROL.ROM + MT32_PCM.ROM.
+  ref: libretro/src/libretro.cpp:720, src/gui/midi_mt32.cpp:51-68
+  MUNT identifies each file by size and SHA1 against its full-ROM list, so
+  any full control ROM is accepted under either control name and split
+  half-ROMs are refused. The PCM ROM must be the size the control ROM expects.
+  ref: libretro/deps/munt/mt32emu/src/ROMInfo.cpp:171-179
+  ref: libretro/deps/munt/mt32emu/src/c_interface/c_interface.cpp:425
+  ref: libretro/deps/munt/mt32emu/src/Synth.cpp:599
+  sc55: the driver is given SC-55.zip from the system directory when that
+  file exists, the system directory otherwise.
+  ref: libretro/src/libretro.cpp:903-913
+  In a directory it looks for SC-55/ROM1.BIN, SC-55/rom1.bin, ROM1.BIN then
+  rom1.bin, and opens ROM2, ROM2_ST, ROM_SM and WAVEROM1-3 next to it with the
+  same capitalization and extension. In a ZIP the members are assigned by
+  size, wave ROMs by the last 1, 2 or 3 in their name. No hash is checked.
+  ref: src/gui/midi_sc55.h:43-52, src/gui/midi_sc55.h:98-133
+  Byte 67 of ROM1 selects the model and the sizes the other ROMs must have:
+  SC-55mkII/SC-55st need ROM_SM, a 2 MiB WAVEROM1 and a 1 MiB WAVEROM2;
+  SC-55/SC-155 and CM-300/SCC-1 need a 256 KiB ROM2 and three 1 MiB wave
+  ROMs; JV-880 needs a 256 KiB ROM2 and two 2 MiB wave ROMs; SCB-55 needs a
+  2 MiB WAVEROM1.
+  ref: src/gui/midi_sc55.h:151-175
+  fluidsynth and bassmidi: the soundfont option lists the files found in
+  soundfonts/ under the system directory (.sf2 for both, .sfz for BASSMIDI,
+  .sf3/.dls/.gig for FluidSynth). No file name is fixed.
+  ref: libretro/src/libretro.cpp:1673-1689
+  bassmidi also loads the BASS and BASSMIDI libraries from the system
+  directory.
+  ref: libretro/src/midi_bassmidi.cpp:230-258
+  Keyboard layouts and codepages are compiled in.
+  ref: src/dos/dos_keyboard_layout_data.h, src/dos/dos_codepages.h
+  DOSBox.conf in the save directory is read as the configuration when the
+  content is not a .conf file.
+  ref: libretro/src/libretro.cpp:1777-1782
 
 files:
-  # -- MT-32 Control ROM --
-  # Loaded from system_directory/MT32_CONTROL.ROM.
-  # MUNT validates by SHA1+size against known ROM database.
-  # Unrecognized ROMs rejected: ROMInfo::getROMInfo returns NULL,
-  # loadControlROM/loadPCMROM abort, Synth::open fails.
-  # ref: munt/ROMInfo.cpp:175, munt/Synth.cpp:556-562,590-594
-  # CM-32L control ROMs also accepted under this filename.
+  # -- MT-32 control ROMs (mt32.type = mt32) --
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.04"
@@ -40,7 +63,7 @@ files:
     sha1: "5a5cb5a77d7d55ee69657c2f870416daed52dea7"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:30"
+    source_ref: "src/gui/midi_mt32.cpp:55, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:58"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.05"
@@ -50,7 +73,7 @@ files:
     sha1: "e17a3a6d265bf1fa150312061134293d2b58288c"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:31"
+    source_ref: "src/gui/midi_mt32.cpp:55, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:61"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.06"
@@ -60,7 +83,7 @@ files:
     sha1: "a553481f4e2794c10cfe597fef154eef0d8257de"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:32"
+    source_ref: "src/gui/midi_mt32.cpp:55, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:64"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control v1.07"
@@ -70,7 +93,7 @@ files:
     sha1: "b083518fffb7f66b03c23b7eb4f868e62dc5a987"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:33"
+    source_ref: "src/gui/midi_mt32.cpp:55, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:67"
 
   - name: "MT32_CONTROL.ROM"
     description: "MT-32 Control BlueRidge"
@@ -80,12 +103,41 @@ files:
     sha1: "7b8c2a5ddb42fd0732e2f22b3340dcf5360edf92"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:34"
-
-  # -- CM-32L / LAPC-I Control ROMs --
-  # Same fixed filename MT32_CONTROL.ROM — no CM32L_CONTROL.ROM in this core.
+    source_ref: "src/gui/midi_mt32.cpp:55, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:70"
 
   - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.04"
+    required: false
+    hle_fallback: true
+    size: 131072
+    sha1: "2c16432b6c73dd2a3947cba950a0f4c19d6180eb"
+    validation: [sha1, size]
+    mode: libretro
+    source_ref: "src/gui/midi_mt32.cpp:55, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:72"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.06"
+    required: false
+    hle_fallback: true
+    size: 131072
+    sha1: "2869cf4c235d671668cfcb62415e2ce8323ad4ed"
+    validation: [sha1, size]
+    mode: libretro
+    source_ref: "src/gui/midi_mt32.cpp:55, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:73"
+
+  - name: "MT32_CONTROL.ROM"
+    description: "MT-32 Control v2.07"
+    required: false
+    hle_fallback: true
+    size: 131072
+    sha1: "47b52adefedaec475c925e54340e37673c11707c"
+    validation: [sha1, size]
+    mode: libretro
+    source_ref: "src/gui/midi_mt32.cpp:55, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:74"
+
+  # -- CM-32L control ROMs (mt32.type = cm32l, the default) --
+
+  - name: "CM32L_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.00"
     required: false
     hle_fallback: true
@@ -93,9 +145,9 @@ files:
     sha1: "73683d585cd6948cc19547942ca0e14a0319456d"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:36"
+    source_ref: "src/gui/midi_mt32.cpp:53, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:75"
 
-  - name: "MT32_CONTROL.ROM"
+  - name: "CM32L_CONTROL.ROM"
     description: "CM-32L/LAPC-I Control v1.02"
     required: false
     hle_fallback: true
@@ -103,11 +155,19 @@ files:
     sha1: "a439fbb390da38cada95a7cbb1d6ca199cd66ef8"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "src/midi/midi_mt32.h:92, src/midi/munt/ROMInfo.cpp:37"
+    source_ref: "src/gui/midi_mt32.cpp:53, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:76"
+
+  - name: "CM32L_CONTROL.ROM"
+    description: "CM-32LN/CM-500/LAPC-N Control v1.00"
+    required: false
+    hle_fallback: true
+    size: 65536
+    sha1: "dc1c5b1b90a4646d00f7daf3679733c7badc7077"
+    validation: [sha1, size]
+    mode: libretro
+    source_ref: "src/gui/midi_mt32.cpp:53, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:77"
 
   # -- PCM ROMs --
-  # Loaded from system_directory/MT32_PCM.ROM.
-  # CM-32L PCM ROM also accepted under this filename.
 
   - name: "MT32_PCM.ROM"
     description: "MT-32 PCM ROM"
@@ -117,9 +177,9 @@ files:
     sha1: "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "src/midi/midi_mt32.h:99, src/midi/munt/ROMInfo.cpp:39"
+    source_ref: "src/gui/midi_mt32.cpp:66, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:81"
 
-  - name: "MT32_PCM.ROM"
+  - name: "CM32L_PCM.ROM"
     description: "CM-32L/CM-64/LAPC-I PCM ROM"
     required: false
     hle_fallback: true
@@ -127,4 +187,106 @@ files:
     sha1: "289cc298ad532b702461bfc738009d9ebe8025ea"
     validation: [sha1, size]
     mode: libretro
-    source_ref: "src/midi/midi_mt32.h:99, src/midi/munt/ROMInfo.cpp:40"
+    source_ref: "src/gui/midi_mt32.cpp:64, libretro/deps/munt/mt32emu/src/ROMInfo.cpp:85"
+
+  # -- Roland SC-55 family ROMs (Nuked-SC55 driver) --
+
+  - name: "ROM1.BIN"
+    path: "SC-55/ROM1.BIN"
+    aliases: ["rom1.bin"]
+    description: "SC-55 family program ROM 1"
+    required: false
+    size: 32768
+    validation: [size]
+    mode: libretro
+    source_ref: "src/gui/midi_sc55.h:98, src/gui/midi_sc55.h:113-115"
+    note: "Byte 67 selects the emulated model."
+
+  - name: "ROM2.BIN"
+    path: "SC-55/ROM2.BIN"
+    aliases: ["rom2.bin", "ROM2_ST.BIN", "rom2_st.bin"]
+    description: "SC-55 family program ROM 2"
+    required: false
+    size_options: [262144, 524288]
+    validation: [size]
+    mode: libretro
+    source_ref: "src/gui/midi_sc55.h:46, src/gui/midi_sc55.h:120, src/gui/midi_sc55.h:135"
+    note: "The driver does not open without ROM1 and ROM2. ROM2_ST fills the same slot when ROM2 did not."
+
+  - name: "ROM_SM.BIN"
+    path: "SC-55/ROM_SM.BIN"
+    aliases: ["rom_sm.bin"]
+    description: "SC-55mkII/SC-55st sub-MCU ROM"
+    required: false
+    size: 4096
+    validation: [size]
+    mode: libretro
+    source_ref: "src/gui/midi_sc55.h:47, src/gui/midi_sc55.h:120, src/gui/midi_sc55.h:155"
+
+  - name: "WAVEROM1.BIN"
+    path: "SC-55/WAVEROM1.BIN"
+    aliases: ["waverom1.bin"]
+    description: "SC-55 family wave ROM 1"
+    required: false
+    size_options: [1048576, 2097152]
+    validation: [size]
+    mode: libretro
+    source_ref: "src/gui/midi_sc55.h:48-50, src/gui/midi_sc55.h:120"
+
+  - name: "WAVEROM2.BIN"
+    path: "SC-55/WAVEROM2.BIN"
+    aliases: ["waverom2.bin"]
+    description: "SC-55 family wave ROM 2"
+    required: false
+    size_options: [1048576, 2097152]
+    validation: [size]
+    mode: libretro
+    source_ref: "src/gui/midi_sc55.h:48-50, src/gui/midi_sc55.h:120"
+
+  - name: "WAVEROM3.BIN"
+    path: "SC-55/WAVEROM3.BIN"
+    aliases: ["waverom3.bin"]
+    description: "SC-55/SC-155/CM-300 wave ROM 3"
+    required: false
+    size: 1048576
+    validation: [size]
+    mode: libretro
+    source_ref: "src/gui/midi_sc55.h:48-50, src/gui/midi_sc55.h:120, src/gui/midi_sc55.h:160"
+
+  # -- BASS libraries (BASSMIDI driver) --
+
+  - name: "libbass.so"
+    description: "BASS library (Linux)"
+    required: false
+    mode: libretro
+    source_ref: "libretro/src/midi_bassmidi.cpp:238, libretro/src/midi_bassmidi.cpp:246"
+
+  - name: "libbassmidi.so"
+    description: "BASSMIDI library (Linux)"
+    required: false
+    mode: libretro
+    source_ref: "libretro/src/midi_bassmidi.cpp:239, libretro/src/midi_bassmidi.cpp:254"
+
+  - name: "bass.dll"
+    description: "BASS library (Windows)"
+    required: false
+    mode: libretro
+    source_ref: "libretro/src/midi_bassmidi.cpp:232, libretro/src/midi_bassmidi.cpp:246"
+
+  - name: "bassmidi.dll"
+    description: "BASSMIDI library (Windows)"
+    required: false
+    mode: libretro
+    source_ref: "libretro/src/midi_bassmidi.cpp:233, libretro/src/midi_bassmidi.cpp:254"
+
+  - name: "libbass.dylib"
+    description: "BASS library (macOS)"
+    required: false
+    mode: libretro
+    source_ref: "libretro/src/midi_bassmidi.cpp:235, libretro/src/midi_bassmidi.cpp:246"
+
+  - name: "libbassmidi.dylib"
+    description: "BASSMIDI library (macOS)"
+    required: false
+    mode: libretro
+    source_ref: "libretro/src/midi_bassmidi.cpp:236, libretro/src/midi_bassmidi.cpp:254"

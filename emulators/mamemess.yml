@@ -216,7 +216,7 @@ notes: |
   MACHINE_IMPERFECT_GRAPHICS. Software list "supracan".
   Driver in umc/supracan.cpp, in mess.flt.
 
-  TI-99/4A family: 6 machines in ti99_4x.cpp — ti99_4 parent (TI-99/4
+  TI-99/4A family: 6 machines in ti99_4x.cpp: ti99_4 parent (TI-99/4
   1979), ti99_4e clone (Europe 50Hz), ti99_4a parent (TI-99/4A 1981),
   ti99_4ae clone (Europe), ti99_4qi clone (QI version 1983), ti99_4ev
   clone (with EVPC 1994). Related separate drivers: ti99_4p (SGCPU, in
@@ -231,7 +231,7 @@ notes: |
   SNUG BwG FDC, CorComp DCC/FDC, RS232/PIO, EVPC, Myarc HFDC, P-Code
   Card, Myarc DDCC-1, Myarc Memory Expansion, TIPI, WHT SCSI, GRAM
   Kracker (gromport), Arcturus (sidecar). No PEB devices loaded by
-  default — all require user configuration. Software list "ti99_cart".
+  default: all require user configuration. Software list "ti99_cart".
   MACHINE_SUPPORTS_SAVE on all machines.
   Drivers in ti/ti99_4x.cpp, in mess.flt.
 
@@ -247,7 +247,7 @@ files:
         crc32: "2ff7ec96"
         sha1: "633365fd19a3d0f2ce56cb499b2577a5fb53e466"
 
-  # XaviX TV games — e-kara family
+  # XaviX TV games: e-kara family
   - name: ekara.zip
     required: true
     category: bios_zip
@@ -271,7 +271,7 @@ files:
   - name: ekaraj.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2880"
+    source_ref: "src/mame/tvgames/xavix.cpp:2906"
     contents:
       - name: ekarajapan.bin
         size: 1048576
@@ -311,7 +311,7 @@ files:
   - name: ekaraphs.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2887"
+    source_ref: "src/mame/tvgames/xavix.cpp:2913"
     contents:
       - name: ekaraheadset.bin
         size: 2097152
@@ -321,7 +321,7 @@ files:
   - name: epitch.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2890"
+    source_ref: "src/mame/tvgames/xavix.cpp:2916"
     contents:
       - name: ekarajapan.bin
         size: 1048576
@@ -338,7 +338,7 @@ files:
         crc32: "ee71576e"
         sha1: "26f8c9edcbbed77e86a1cb5a0b91c92a16fef433"
 
-  # XaviX TV games — DDR / Popira / misc
+  # XaviX TV games: DDR / Popira / misc
   - name: ddrfammt.zip
     required: true
     category: bios_zip
@@ -362,7 +362,7 @@ files:
   - name: popirak.zip
     required: true
     category: bios_zip
-    source_ref: "src/mame/tvgames/xavix.cpp:2901"
+    source_ref: "src/mame/tvgames/xavix.cpp:2927"
     contents:
       - name: kr_main.u2
         size: 1048576
@@ -477,7 +477,7 @@ files:
         size: 8192
         crc32: "6eb53e79"
 
-  # Apple II family — machine ROM sets
+  # Apple II family: machine ROM sets
   - name: apple2.zip
     required: true
     category: bios_zip
@@ -590,7 +590,7 @@ files:
         size: 2048
         crc32: "c506efb9"
 
-  # Apple II — peripheral device ROM sets
+  # Apple II: peripheral device ROM sets
   - name: a2diskiing.zip
     required: true
     category: bios_zip
@@ -1074,7 +1074,7 @@ files:
         size: 8192
         crc32: "011e106a"
 
-  # EACA Colour Genie — parent machine ROM set
+  # EACA Colour Genie: parent machine ROM set
   - name: cgenie.zip
     required: true
     category: bios_zip
@@ -1106,7 +1106,7 @@ files:
         size: 2048
         crc32: "4fed774a"
 
-  # EACA Colour Genie — clone: New Zealand
+  # EACA Colour Genie: clone: New Zealand
   - name: cgenienz.zip
     required: false
     category: bios_zip
@@ -1126,7 +1126,7 @@ files:
         size: 2048
         crc32: "4fed774a"
 
-  # EACA Colour Genie — expansion: FDC
+  # EACA Colour Genie: expansion: FDC
   - name: cgenie_fdc.zip
     required: false
     category: bios_zip
@@ -1151,7 +1151,7 @@ files:
         size: 8192
         crc32: "9dace9c1"
 
-  # Acorn Atom — parent machine ROM set
+  # Acorn Atom: parent machine ROM set
   - name: atom.zip
     required: true
     category: bios_zip
@@ -1167,7 +1167,7 @@ files:
         size: 4096
         crc32: "81d86af7"
 
-  # Acorn Atom — clone: Atom with BBC Basic
+  # Acorn Atom: clone: Atom with BBC Basic
   - name: atombbc.zip
     required: false
     category: bios_zip
@@ -1183,7 +1183,7 @@ files:
         size: 16384
         crc32: "79434781"
 
-  # Acorn Atom — clone: Busicomputers Prophet 2
+  # Acorn Atom: clone: Busicomputers Prophet 2
   - name: prophet2.zip
     required: false
     category: bios_zip
@@ -1203,7 +1203,7 @@ files:
         size: 4096
         crc32: "ecd2d08b"
 
-  # Acorn Atom — bus device: Disc Pack (default on pl6)
+  # Acorn Atom: bus device: Disc Pack (default on pl6)
   - name: atom_discpack.zip
     required: false
     category: bios_zip
@@ -1216,7 +1216,7 @@ files:
         size: 4096
         crc32: "c431a9b7"
 
-  # Acorn Atom — bus device: GDOS
+  # Acorn Atom: bus device: GDOS
   - name: atom_gdos.zip
     required: false
     category: bios_zip
@@ -1228,7 +1228,7 @@ files:
         size: 4096
         crc32: "935407cb"
 
-  # Acorn Atom — bus device: GDOS-2015
+  # Acorn Atom: bus device: GDOS-2015
   - name: atom_gdos2015.zip
     required: false
     category: bios_zip
@@ -1240,7 +1240,7 @@ files:
         size: 65536
         crc32: "fc790657"
 
-  # Acorn Atom — bus device: Speech Module
+  # Acorn Atom: bus device: Speech Module
   - name: atom_speech.zip
     required: false
     category: bios_zip
@@ -1252,7 +1252,7 @@ files:
         size: 2048
         crc32: "b504ac15"
 
-  # Acorn Atom — bus device: 80 Column VDU
+  # Acorn Atom: bus device: 80 Column VDU
   - name: atom_vdu80.zip
     required: false
     category: bios_zip
@@ -1559,7 +1559,7 @@ files:
     required: false
     category: bios_zip
     system: pc60
-    source_ref: "src/mame/nec/pc6001.cpp:1883-1894"
+    source_ref: "src/mame/nec/pc6001.cpp:1728-1740"
     contents:
       - name: basicrom.60a
         description: BASIC ROM (US)
@@ -1605,7 +1605,7 @@ files:
     required: false
     category: bios_zip
     system: pc60
-    source_ref: "src/mame/nec/pc6001.cpp:1919-1936"
+    source_ref: "src/mame/nec/pc6001.cpp:1768-1791"
     contents:
       - name: basicrom.66
         description: BASIC ROM
@@ -1695,7 +1695,7 @@ files:
     required: true
     category: bios_zip
     system: pegasus
-    source_ref: "src/mame/ausnz/pegasus.cpp:ROM_START"
+    source_ref: "src/mame/ausnz/pegasus.cpp:544-565"
     note: "6809-based home computer (1981, New Zealand). 8 monitor BIOS variants, 5 cartridge expansion slots."
     contents:
       - name: mon11_2674.bin
@@ -2042,7 +2042,7 @@ files:
         size: 2048
         crc32: "1765931e"
 
-  # TI-99/4A family — machine ROM sets
+  # TI-99/4A family: machine ROM sets
   - name: ti99_4a.zip
     required: true
     category: bios_zip
@@ -2099,7 +2099,7 @@ files:
         size: 4096
         crc32: "491c21d1"
 
-  # TI-99/4A — peripheral device ROM sets
+  # TI-99/4A: peripheral device ROM sets
   - name: ti99_speech.zip
     required: false
     category: bios_zip
