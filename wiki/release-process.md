@@ -272,8 +272,8 @@ is needed, each is an ordinary ZIP, and they extract into the same folder.
 Until v2026.09.04 the parts were byte ranges cut by `split`, named
 `.zip.001`, and the sentence explaining them sat under the table. A range
 opened alone is not an archive and no tool says a part is missing, so five
-reports in six months took one for a broken download (#45, #51, #66, #77,
-#79). The README, the download page and the troubleshooting page describe
+reports in six months took one for a broken download (issues 45, 51, 66, 77
+and 79). The README, the download page and the troubleshooting page describe
 both layouts for as long as a release cut that way is still published; once
 step 7 has deleted it, the `.zip.001` paragraph leaves those three pages.
 

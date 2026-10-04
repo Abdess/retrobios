@@ -53,6 +53,26 @@ class ProsePlaceholders(unittest.TestCase):
         self.assertEqual(_escape_tags("size < 4096"), "size &lt; 4096")
 
 
+class WikiSourceHeadings(unittest.TestCase):
+    def test_no_prose_line_starts_with_a_hash(self):
+        """Python-Markdown reads `#79).` at the start of a line as a heading:
+        it asks for no space after the hash. A wrapped issue reference gave
+        the release page a second H1 and failed the site build."""
+        offenders = []
+        for page in sorted((ROOT / "wiki").glob("*.md")):
+            fenced = False
+            for number, line in enumerate(
+                page.read_text(encoding="utf-8").splitlines(), start=1
+            ):
+                if line.lstrip().startswith("```"):
+                    fenced = not fenced
+                elif not fenced and line.startswith("#") and not line.startswith(
+                    ("# ", "## ", "### ", "#### ", "##### ", "###### ")
+                ):
+                    offenders.append(f"{page.name}:{number}")
+        self.assertEqual(offenders, [])
+
+
 class RenderedSiteValidation(unittest.TestCase):
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
