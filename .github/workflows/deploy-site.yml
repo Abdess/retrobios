@@ -19,6 +19,8 @@ on:
       - "install/**"
       - "install.py"
       - "database.json"
+      - "release.json"
+      - "scripts/release_record.py"
       - "mkdocs.yml"
       - ".github/workflows/deploy-site.yml"
   workflow_dispatch:

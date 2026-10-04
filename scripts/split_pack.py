@@ -45,6 +45,12 @@ def is_part(name: str) -> bool:
     return _PART_NAME.match(name) is not None
 
 
+def pack_of(name: str) -> str:
+    """The pack a published file belongs to, a part folded into its archive."""
+    part = _PART_NAME.match(name)
+    return f"{part['stem']}.zip" if part else name
+
+
 def part_name(pack_name: str, index: int, count: int) -> str:
     return f"{pack_name[: -len('.zip')]}.part{index}of{count}.zip"
 

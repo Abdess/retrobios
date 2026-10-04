@@ -28,6 +28,8 @@ import generate_db  # noqa: E402
 import generate_pack as builder  # noqa: E402
 import generate_readme  # noqa: E402
 import generate_site  # noqa: E402
+import release_record  # noqa: E402
+import split_pack  # noqa: E402
 
 PROFILE = """\
 emulator: Demo
@@ -156,38 +158,119 @@ class ManifestStatesWhatThePackHolds(PackCountFixture):
         self.assertEqual(errors, [])
 
 
-class ReadmeTotals(unittest.TestCase):
+RECORD = {
+    "tag": "v2026.09.04",
+    "packs": {
+        "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip": {
+            "files": 4525,
+            "extracted_size": 5882727352,
+            "download_size": 3349430771,
+            "assets": [
+                "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip.001",
+                "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip.002",
+            ],
+        },
+        "MiSTer_FPGA_2026-08-29_BIOS_Pack.zip": {
+            "files": 74,
+            "extracted_size": 17000000,
+            "download_size": 16769418,
+            "assets": ["MiSTer_FPGA_2026-08-29_BIOS_Pack.zip"],
+        },
+    },
+}
+
+
+class TheTableDescribesTheRelease(unittest.TestCase):
+    """The Download link gives the last release, not what main would build.
+
+    The install manifest of main already counted 8 225 files for RetroArch
+    while the published pack held 4 525: printed beside the link, the newer
+    figure would have sent the next reader looking for 3 700 missing files.
+    """
+
+    def test_a_platform_reads_the_pack_that_serves_it(self):
+        for platform in ("retroarch", "lakka"):
+            self.assertEqual(
+                generate_readme.release_totals(platform, RECORD),
+                (4525, 5882727352),
+            )
+        self.assertEqual(
+            generate_readme.release_totals("misterfpga", RECORD), (74, 17000000)
+        )
+
+    def test_a_platform_the_release_does_not_carry_has_no_figure(self):
+        self.assertEqual(
+            generate_readme.release_totals("vita3k", RECORD), (None, None)
+        )
+        self.assertEqual(generate_readme.release_totals("retroarch", {}), (None, None))
+
+    def test_the_download_table_gives_the_file_count_of_each_pack(self):
+        rows = generate_readme.download_table(
+            {"retroarch": {"platform": "RetroArch"}, "vita3k": {"platform": "Vita3K"}},
+            set(),
+            {"RetroArch": "`system/`"},
+            RECORD,
+        )
+        self.assertIn("| Platform | Files | Extracted size |", rows[0])
+        self.assertIn("| RetroArch | 4,525 | 5.5 GB | `system/` |", rows[2])
+        self.assertIn("| Vita3K | - | - |", rows[3])
+
+    def test_the_committed_record_is_the_one_the_readme_prints(self):
+        record_path = REPO_ROOT / "release.json"
+        if not record_path.is_file():
+            self.skipTest("no release.json")
+        record = json.loads(record_path.read_text(encoding="utf-8"))
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        files, _size = generate_readme.release_totals("retroarch", record)
+        self.assertTrue(f"| RetroArch | {files:,} |" in readme)
+
+
+class ReleaseRecord(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
-        self.install = Path(self._tmp.name)
+        self.dist = Path(self._tmp.name) / "dist"
+        self.dist.mkdir()
+        self.install = Path(self._tmp.name) / "install"
+        self.install.mkdir()
+        self._pack("Whole_1.0_BIOS_Pack.zip", {"a.bin": b"a" * 10, "README.txt": b"r"})
+        big = self._pack(
+            "Demo_2.0_BIOS_Pack.zip",
+            {f"dir/file{n}.bin": bytes([n]) * 700 + bytes(range(256)) for n in range(6)},
+        )
+        self.parts = split_pack.split_pack(big, limit=big.stat().st_size - 1)
 
     def tearDown(self):
         self._tmp.cleanup()
 
-    def _write(self, **fields) -> None:
-        (self.install / "demo.json").write_text(json.dumps(fields))
+    def _pack(self, name: str, members: dict[str, bytes]) -> Path:
+        path = self.dist / name
+        with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as archive:
+            for member, data in members.items():
+                archive.writestr(member, data)
+        return path
 
-    def test_the_pack_figures_win(self):
-        self._write(total_files=1872, total_size=10, pack_files=4525, pack_size=20)
+    def test_a_pack_in_parts_is_counted_once_across_them(self):
+        record = release_record.build_record(self.dist, "v1")
+        self.assertEqual(record["tag"], "v1")
+        demo = record["packs"]["Demo_2.0_BIOS_Pack.zip"]
+        self.assertEqual(demo["files"], 6)
+        self.assertEqual(demo["extracted_size"], 6 * (700 + 256))
+        self.assertEqual(demo["assets"], [part.name for part in self.parts])
         self.assertEqual(
-            generate_readme.manifest_totals("demo", str(self.install)), (4525, 20)
+            demo["download_size"], sum(part.stat().st_size for part in self.parts)
         )
+        self.assertEqual(record["packs"]["Whole_1.0_BIOS_Pack.zip"]["files"], 2)
 
-    def test_a_manifest_written_before_them_still_answers(self):
-        self._write(total_files=1872, total_size=10)
+    def test_a_pack_that_disagrees_with_its_manifest_is_named(self):
+        """The count main predicts and the count the archive holds are two
+        computations of one thing. Apart, one of them is wrong."""
+        record = release_record.build_record(self.dist, "v1")
+        (self.install / "demo.json").write_text(json.dumps({"pack_files": 6}))
+        (self.install / "whole.json").write_text(json.dumps({"pack_files": 5}))
         self.assertEqual(
-            generate_readme.manifest_totals("demo", str(self.install)), (1872, 10)
+            release_record.manifest_mismatches(record, self.install),
+            ["Whole_1.0_BIOS_Pack.zip holds 2 files, install/whole.json expects 5"],
         )
-
-    def test_the_download_table_gives_the_file_count_of_each_pack(self):
-        self._write(total_files=1872, total_size=10, pack_files=4525,
-                    pack_size=5882727352)
-        rows = generate_readme.download_table(
-            {"demo": {"platform": "Demo"}}, set(), {"Demo": "`system/`"},
-            str(self.install),
-        )
-        self.assertIn("| Platform | Files | Extracted size |", rows[0])
-        self.assertIn("| Demo | 4,525 | 5.5 GB | `system/` |", rows[2])
 
 
 class TheCollectionTotalNamesTheCollection(unittest.TestCase):

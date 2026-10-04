@@ -51,9 +51,10 @@ from nativemode import reads_file_contents
 
 
 yaml = require_yaml()
-from generate_readme import compute_coverage, manifest_totals
+from generate_readme import compute_coverage, release_totals
 from profile_sync import source_ref_values, split_source_ref
 from provenance_report import build_report
+import release_record
 import upstream
 
 DOCS_DIR = "docs"
@@ -281,7 +282,7 @@ def generate_home(
 
         lines.append(
             f"| {logo_md} | [{display}](platforms/{name}.md) | "
-            f"{manifest_totals(name)[0] or cov['present']:,} | {mode_label} | "
+            f"{_released_files(name)} | {mode_label} | "
             f"[Pack]({RELEASE_URL}){{ .md-button .md-button--primary }} |"
         )
 
@@ -408,6 +409,12 @@ def compute_stats(db: dict, coverages: dict, profiles: dict) -> dict:
         "source": REPO_URL,
         "downloads": RELEASE_URL,
     }
+
+
+def _released_files(platform_name: str) -> str:
+    """File count of the pack the latest release serves, as a table cell."""
+    files, _size = release_totals(platform_name, release_record.load_record())
+    return f"{files:,}" if files else "-"
 
 
 # The home tile counts the whole collection. Labelled "Files" above a table
@@ -1181,7 +1188,7 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
 
         lines.append(
             f"| [{display}]({name}.md) | "
-            f"{cov['present']:,} | {manifest_totals(name)[0] or cov['present']:,} | "
+            f"{cov['present']:,} | {_released_files(name)} | "
             f"{mode_html} | {status_html} | "
             f"[Pack]({RELEASE_URL}){{ .md-button .md-button--primary }} |"
         )

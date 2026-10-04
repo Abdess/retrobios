@@ -29,6 +29,7 @@ from common import (
     unique_emulator_profiles,
     write_if_changed,
 )
+import release_record
 from verify import verify_platform
 
 
@@ -94,37 +95,28 @@ def compute_coverage(
     }
 
 
-def manifest_totals(
-    platform_name: str, install_dir: str = "install"
-) -> tuple[int | None, int | None]:
-    """Files and bytes a platform's pack holds once extracted.
+def release_totals(platform_name: str, record: dict) -> tuple[int | None, int | None]:
+    """Files and bytes of the pack the latest release serves for a platform.
 
-    The install manifest lists what the installer fetches, and states apart
-    what the pack adds to that: the data directories and its own documents.
-    The pack figures are the ones a reader can check against an extraction.
-    Returns (None, None) when no manifest exists yet.
+    The Download link gives that release, so these are the figures a reader
+    can check against an extraction. The install manifests describe what
+    main would build today, which is a different pack as soon as a commit
+    lands after the release. Returns (None, None) for a platform the release
+    carries no pack for.
     """
-    path = os.path.join(install_dir, f"{platform_name}.json")
-    if not os.path.exists(path):
+    pack = release_record.pack_for(platform_name, record)
+    if not pack:
         return None, None
-    try:
-        with open(path) as f:
-            manifest = json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return None, None
-    return (
-        manifest.get("pack_files", manifest.get("total_files")),
-        manifest.get("pack_size", manifest.get("total_size")),
-    )
+    return pack["files"], pack["extracted_size"]
 
 
 def download_table(
     coverages: dict,
     archived: set[str],
     extract_paths: dict[str, str],
-    install_dir: str = "install",
+    record: dict,
 ) -> list[str]:
-    """One row per platform: what its pack holds and where it extracts."""
+    """One row per platform: what its released pack holds and where it extracts."""
     lines = [
         "| Platform | Files | Extracted size | Extract to | Download |",
         "|----------|------:|---------------:|-----------|----------|",
@@ -133,7 +125,7 @@ def download_table(
         display = cov["platform"]
         if name in archived:
             display = f"{display} *"
-        files, size = manifest_totals(name, install_dir)
+        files, size = release_totals(name, record)
         lines.append(
             f"| {display} | {f'{files:,}' if files else '-'} |"
             f" {format_size(size) if size else '-'} |"
@@ -384,7 +376,11 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         if entry.get("status") == "archived"
     }
 
-    lines.extend(download_table(coverages, archived, extract_paths))
+    lines.extend(
+        download_table(
+            coverages, archived, extract_paths, release_record.load_record()
+        )
+    )
 
     if archived:
         lines.extend(

@@ -44,18 +44,18 @@ Every release ships `SHA256SUMS.txt` and a detached signature of it, checkable a
 
 | Platform | Files | Extracted size | Extract to | Download |
 |----------|------:|---------------:|-----------|----------|
-| Batocera | 3,570 | 6.9 GB | `/userdata/bios/` | [Download](../../releases/latest) |
-| BizHawk | 811 | 2.4 GB | `Firmware/` | [Download](../../releases/latest) |
-| EmuDeck | 584 | 3.2 GB | `~/Emulation/bios/` | [Download](../../releases/latest) |
-| Lakka | 8,225 | 6.2 GB | `/storage/system/` | [Download](../../releases/latest) |
-| MiSTer FPGA | 79 | 25 MB | `/media/fat/games/` | [Download](../../releases/latest) |
-| ROCKNIX | 5,452 | 6.1 GB | `/storage/roms/bios/` | [Download](../../releases/latest) |
-| Recalbox | 2,850 | 3.9 GB | `/recalbox/share/bios/` | [Download](../../releases/latest) |
-| RetroArch | 8,225 | 6.2 GB | `system/` | [Download](../../releases/latest) |
-| RetroBat | 3,040 | 7.3 GB | `bios/` | [Download](../../releases/latest) |
-| RetroDECK | 7,194 | 7.6 GB | `~/retrodeck/` | [Download](../../releases/latest) |
-| RetroPie * | 8,630 | 7.6 GB | `~/RetroPie/BIOS/` | [Download](../../releases/latest) |
-| RomM | 960 | 1.5 GB | `bios/{platform_slug}/` | [Download](../../releases/latest) |
+| Batocera | 1,839 | 4.0 GB | `/userdata/bios/` | [Download](../../releases/latest) |
+| BizHawk | 542 | 2.2 GB | `Firmware/` | [Download](../../releases/latest) |
+| EmuDeck | 624 | 3.2 GB | `~/Emulation/bios/` | [Download](../../releases/latest) |
+| Lakka | 4,525 | 5.5 GB | `/storage/system/` | [Download](../../releases/latest) |
+| MiSTer FPGA | 74 | 24 MB | `/media/fat/games/` | [Download](../../releases/latest) |
+| ROCKNIX | 1,741 | 5.3 GB | `/storage/roms/bios/` | [Download](../../releases/latest) |
+| Recalbox | 1,330 | 3.6 GB | `/recalbox/share/bios/` | [Download](../../releases/latest) |
+| RetroArch | 4,525 | 5.5 GB | `system/` | [Download](../../releases/latest) |
+| RetroBat | 1,466 | 4.4 GB | `bios/` | [Download](../../releases/latest) |
+| RetroDECK | 3,519 | 6.2 GB | `~/retrodeck/` | [Download](../../releases/latest) |
+| RetroPie * | 4,525 | 5.5 GB | `~/RetroPie/BIOS/` | [Download](../../releases/latest) |
+| RomM | 617 | 1.3 GB | `bios/{platform_slug}/` | [Download](../../releases/latest) |
 
 The RetroDECK pack already contains its own `bios/` folder, so it extracts into `~/retrodeck/` rather than into the BIOS folder.
 
@@ -180,4 +180,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-10-04T16:12:24Z*
+*Auto-generated on 2026-10-04T18:24:32Z*

@@ -28,7 +28,7 @@ hosted runner should rebuild and re-upload.
 **Trigger.** Push to `main` when any of these paths change: `platforms/`,
 `emulators/`, `provenance/`, `wiki/`, `scripts/generate_site.py`,
 `scripts/generate_readme.py`, `scripts/verify.py`, `scripts/common.py`,
-`database.json`, `mkdocs.yml`. Also manual dispatch.
+`database.json`, `release.json`, `mkdocs.yml`. Also manual dispatch.
 
 The list is the set of inputs the site is generated from. Adding a new input to
 `generate_site.py` means adding its path here, or the site silently goes stale.
@@ -174,41 +174,30 @@ python scripts/split_pack.py dist/
 (cd dist && sha256sum *.zip > SHA256SUMS.txt)
 ssh-keygen -Y sign -f ~/.ssh/retrobios_signing -n file dist/SHA256SUMS.txt
 
-# 5. The two sizes a pack has, and its file count. Extracted runs well above
-#    downloaded, so the notes table names the one it carries. The count is
-#    what a file manager shows once the pack is extracted.
-python3 - <<'PY'
-import json, pathlib, sys
-sys.path.insert(0, "scripts")
-from download import _match_key
-
-parts = {}
-for path in sorted(pathlib.Path("dist").glob("*_BIOS_Pack*.zip")):
-    parts.setdefault(path.name.split("_BIOS_Pack")[0], []).append(path)
-
-def size(n):
-    return f"{n / 1024 ** 3:.1f} GB" if n >= 1024 ** 3 else f"{n / 1024 ** 2:.0f} MB"
-
-for manifest in sorted(pathlib.Path("install").glob("*.json")):
-    base = next((b for b in parts if _match_key(manifest.stem) in _match_key(b)), None)
-    if not base:
-        continue
-    data = json.loads(manifest.read_text())
-    download = sum(p.stat().st_size for p in parts[base])
-    print(f"{base:<42} download {size(download):>8}"
-          f"   extracted {size(data['pack_size']):>8}   {data['pack_files']:,} files")
-PY
+# 5. Record what each pack holds, read from the archives just checked:
+#    file count, extracted size, download size, published files. The README
+#    and the site print these beside the download links, and the notes table
+#    takes its Size and Files columns from the same lines. The command stops
+#    if an archive does not hold the count its install manifest expects.
+DATE=$(date +%Y.%m.%d)
+python scripts/release_record.py dist/ --tag "v${DATE}"
+python scripts/generate_readme.py --db database.json --platforms-dir platforms
+python scripts/generate_site.py
 
 # 6. Create the release as a DRAFT, upload every asset, and only then publish it.
 #    A public release with half its assets is a broken download for everyone
 #    during the whole upload.
-DATE=$(date +%Y.%m.%d)
 gh release create "v${DATE}" --draft --title "BIOS Pack v${DATE}" --notes-file notes.md
 for f in dist/SHA256SUMS.txt dist/SHA256SUMS.txt.sig dist/*.zip; do
   [ -f "$f" ] && gh release upload "v${DATE}" "$f#$(basename "$f")" --clobber
 done
 gh release view "v${DATE}" --json assets --jq '.assets | length'   # expect every file
 gh release edit "v${DATE}" --draft=false --latest
+
+#    The record and the pages it feeds go to main with the release, so the
+#    table never describes a pack other than the one the link serves.
+git add release.json README.md mkdocs.yml
+git commit -m "chore: record release v${DATE}" && git push
 
 # 7. Keep only the new release plus large-files: an older pack carries hashes
 #    the platforms no longer check, so it misleads more than it helps
@@ -263,9 +252,16 @@ the pack table, what changed since the previous tag, and the contributors of
 the closed issues. A pack has two sizes and they are far apart: Batocera
 downloads as 2.4 GB and extracts to 4.0 GB. Step 5 prints both, and whichever
 one the table carries, the header names it. Someone sizing a USB drive is
-reading that column. The README table is the extracted size, from the install
-manifests. `SHA256SUMS.txt` lists the checksums of the files as published,
-parts included.
+reading that column. The README table is the extracted size of the released
+pack, from `release.json`. `SHA256SUMS.txt` lists the checksums of the files
+as published, parts included.
+
+`release.json` is the record step 5 writes: per pack, the files it holds, its
+two sizes and the files it is published in. It exists because the pages are
+regenerated on every push while a release is cut every few weeks. Read from
+the install manifests, the table gave the count main would build that day:
+a commit adding 3 700 files to the RetroArch pack moved it to 8 225 while
+the download still held 4 525.
 
 A pack in parts is said so above the table, where the links are: every part
 is needed, each is an ordinary ZIP, and they extract into the same folder.
@@ -277,7 +273,7 @@ and 79). The README, the download page and the troubleshooting page describe
 both layouts for as long as a release cut that way is still published; once
 step 7 has deleted it, the `.zip.001` paragraph leaves those three pages.
 
-The table carries a Files column, the `pack_files` step 5 prints, and the
+The table carries a Files column, the count step 5 prints, and the
 notes never open on the size of the collection. That total covers every
 platform and emulator together and no pack holds it: v2026.09.04 led with
 "10,330 files" right after "one pack per platform", and someone who extracted

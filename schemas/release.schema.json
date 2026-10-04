@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Abdess/retrobios/schemas/release.schema.json",
+  "title": "RetroBIOS release record",
+  "description": "What the packs of the latest release hold, read from the archives when the release is cut.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tag", "packs"],
+  "properties": {
+    "tag": { "type": "string", "pattern": "^v[0-9]{4}\\.[0-9]{2}\\.[0-9]{2}$" },
+    "packs": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "_BIOS_Pack\\.zip$" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["files", "extracted_size", "download_size", "assets"],
+        "properties": {
+          "files": { "type": "integer", "minimum": 1 },
+          "extracted_size": { "type": "integer", "minimum": 0 },
+          "download_size": { "type": "integer", "minimum": 1 },
+          "assets": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

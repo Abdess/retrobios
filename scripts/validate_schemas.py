@@ -259,6 +259,10 @@ def main() -> int:
             _validate_json_files(target_paths, "target-manifest.schema.json")
         )
 
+        release_path = ROOT / "release.json"
+        if release_path.exists():
+            errors.extend(_validate_json_files([release_path], "release.schema.json"))
+
         stats_path = ROOT / "docs" / "stats.json"
         if stats_path.exists():
             errors.extend(_validate_json_files([stats_path], "stats.schema.json"))
