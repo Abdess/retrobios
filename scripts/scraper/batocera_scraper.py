@@ -41,18 +41,20 @@ def pick_stable_tag(names: list[str]) -> str | None:
 def fetch_stable_tag() -> str | None:
     """Return the newest stable batocera-N(.M) tag name."""
     import json
+    import os
     import urllib.error
     import urllib.request
 
     url = "https://api.github.com/repos/batocera-linux/batocera.linux/tags?per_page=100"
+    headers = {
+        "User-Agent": "retrobios-scraper/1.0",
+        "Accept": "application/vnd.github.v3+json",
+    }
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
     try:
-        req = urllib.request.Request(
-            url,
-            headers={
-                "User-Agent": "retrobios-scraper/1.0",
-                "Accept": "application/vnd.github.v3+json",
-            },
-        )
+        req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=15) as resp:
             tags = json.loads(resp.read())
     except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError):

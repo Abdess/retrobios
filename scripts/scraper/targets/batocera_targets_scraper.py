@@ -43,6 +43,9 @@ _HEADERS = {
     "User-Agent": "retrobios-scraper/1.0",
     "Accept": "application/vnd.github.v3+json",
 }
+import os as _os
+if _os.environ.get("GITHUB_TOKEN"):
+    _HEADERS["Authorization"] = f"Bearer {_os.environ['GITHUB_TOKEN']}"
 
 _TARGET_FLAG_RE = re.compile(r"^(BR2_PACKAGE_BATOCERA_TARGET_\w+)=y", re.MULTILINE)
 

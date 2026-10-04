@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import sys
 import urllib.error
@@ -59,11 +60,12 @@ _MODULE_FLAGS_RE = re.compile(r'rp_module_flags\s*=\s*["\']([^"\']*)["\']')
 
 
 def _fetch(url: str, accept: str = "text/plain") -> str | None:
+    headers = {"User-Agent": "retrobios-scraper/1.0", "Accept": accept}
+    token = os.environ.get("GITHUB_TOKEN")
+    if token and "api.github.com" in url:
+        headers["Authorization"] = f"Bearer {token}"
     try:
-        req = urllib.request.Request(
-            url,
-            headers={"User-Agent": "retrobios-scraper/1.0", "Accept": accept},
-        )
+        req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=30) as resp:
             return resp.read().decode("utf-8")
     except urllib.error.URLError as e:
