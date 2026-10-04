@@ -47,7 +47,7 @@ jobs:
 
       # mkdocs-material >= 9.7.5 caps mkdocs < 2; the upper bound keeps a major
       # theme release from changing the site without a deliberate bump here.
-      - run: pip install pyyaml jsonschema==4.23.0 "mkdocs-material>=9.7.5,<10" "pymdown-extensions>=10.14"
+      - run: pip install pyyaml jsonschema==4.26.0 "mkdocs-material>=9.7.5,<10" "pymdown-extensions>=10.14"
 
       - name: Validate data contracts
         run: python scripts/validate_schemas.py
@@ -96,4 +96,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128  # v5
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346  # v5.0.1
