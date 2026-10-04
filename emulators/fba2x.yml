@@ -18,8 +18,6 @@ systems:
   - igs-pgm
 verification: md5
 
-archive_prefix: fbneo
-
 notes: |
   Recalbox's standalone ARM port of Final Burn Alpha, lineage pifba (originally
   by Franxis / Oopsware for the GP2X, modernised to SDL2 by Recalbox). The
@@ -28,9 +26,11 @@ notes: |
 
   BIOS and ROM archives are resolved relative to szAppRomPath, hardcoded to
   "roms/" in rpi/bzip.cpp:4 and overridden only through the rom path argument.
-  BzipOpen (rpi/bzip.cpp:355-394) iterates BurnDrvGetZipName(z) for every
+  BzipOpen (rpi/bzip.cpp:360-394) iterates BurnDrvGetZipName for every
   BIOS/parent slot and opens "<roms/><name>" directly: no fallback
-  directory walking.
+  directory walking. Inside the opened archives each ROM is located by its
+  CRC32 first and by its names only when no member carries that CRC
+  (rpi/bzip.cpp:82-111), so member names are free.
 
   Shared BIOS ROM sets flagged BDF_BOARDROM in the driver source:
     - neogeo (burn/neogeo/d_neogeo.cpp), SNK Neo Geo system BIOS
@@ -56,8 +56,7 @@ files:
     system: snk-neogeo-mvs
     description: "SNK Neo Geo system BIOS ROM set"
     required: true
-    archive: neogeo
-    source_ref: "burn/neogeo/d_neogeo.cpp:923 (BurnDrvneogeo, BDF_BOARDROM)"
+    source_ref: "burn/neogeo/d_neogeo.cpp:679-731 (neogeoRomDesc), burn/neogeo/d_neogeo.cpp:880-884 (BurnDrvNeoGeo, BDF_BOARDROM)"
     contents:
       - name: "vs-bios.rom"
         size: 131072
@@ -123,8 +122,8 @@ files:
     system: igs-pgm
     description: "IGS PGM (Polygame Master) System BIOS ROM set"
     required: true
-    archive: pgm
-    source_ref: "burn/pgm/d_pgm.cpp:255 (BurnDrvpgm, BDF_BOARDROM)"
+    source_ref: "burn/pgm/d_pgm.cpp:245-258 (pgmRomDesc, BurnDrvpgm, BDF_BOARDROM), rpi/bzip.cpp:94-99 (CRC before name)"
+    note: "The three ROMs are matched by CRC32 before any name, so an archive holding them as pgm_p01s.u20, pgm_t01s.rom and pgm_m01s.rom is accepted."
     contents:
       - name: "pgm_p01s.rom"
         size: 131072

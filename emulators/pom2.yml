@@ -844,7 +844,6 @@ files:
     category: game_data
     required: false
     bundled: true
-    unsourceable: "host program component shipped inside every POM2 package, not emulation data"
     size: 759720
     sha1: "3061cf7af25793a655a1ff5a509385f3620f3eb3"
     source_ref: "src/main.cpp:533-546"
@@ -855,7 +854,6 @@ files:
     category: game_data
     required: false
     bundled: true
-    unsourceable: "host program component shipped inside every POM2 package, not emulation data"
     size: 426112
     sha1: "0c8c9706abc0116f08b66d11a69da6aa9ef7e6bf"
     source_ref: "src/main.cpp:593-611"
@@ -866,7 +864,6 @@ files:
     category: game_data
     required: false
     bundled: true
-    unsourceable: "host program component shipped inside every POM2 package, not emulation data"
     size: 102046
     sha1: "69358dd499148deae4112b49cedb7bec220584e2"
     source_ref: "src/MainWindow_MiscPanels.cpp:621"
@@ -876,7 +873,6 @@ files:
     category: game_data
     required: false
     bundled: true
-    unsourceable: "host program component shipped inside every POM2 package, not emulation data"
     size: 794259
     sha1: "a178f37661078739637ff7642cd6450c762993aa"
     source_ref: "src/MainWindow_MiscPanels.cpp:480"

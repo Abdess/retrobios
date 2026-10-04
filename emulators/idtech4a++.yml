@@ -549,18 +549,81 @@ files:
     source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EContextUtils.java:305-345, idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/SetupControlsThemeFunc.java:136-179"
 
   - name: gameaarch64.so
+    path: "doom3/base/gameaarch64.so"
     required: false
-    aliases: [gamearm.so]
-    unsourceable: "compiled per mod against the published SDK, with no released binary to collect"
-    description: "External idTech 4 mod game library"
+    description: "DOOM 3 game library for arm64, built from the DOOM 3 SDK the README links"
     note: >-
       Looked for in the mod folder of DOOM 3, Quake 4, Prey or ETQW when the
       external-library preference is on, copied to a private cache and named to
-      the engine through harm_fs_gameLibPath. The suffix follows the running
-      architecture, gameaarch64.so on arm64 and gamearm.so on armv7. Without it
-      the engine keeps the game code built into the apk. The launcher also
-      accepts a full path to any libxxxxx.so instead.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:342-372, 429-434, idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/AddExternalLibraryFunc.java:71-86, README.md:240-244, README.md:252-262"
+      the engine through harm_fs_gameLibPath. The folder is the one fs_game
+      names, the base folder of the game when it names none. The file name
+      follows the running architecture, gameaarch64.so on arm64 and gamearm.so
+      on armv7. Without it the engine keeps the game code built into the apk.
+      The launcher also accepts a full path to any libxxxxx.so instead.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:386-416, 472-479, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGlobals.java:276, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:147-150, idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/AddExternalLibraryFunc.java:71-86, README.md:240-244, README.md:252-262"
+
+  - name: gamearm.so
+    path: "doom3/base/gamearm.so"
+    required: false
+    description: "DOOM 3 game library for armv7, built from the DOOM 3 SDK the README links"
+    note: "Looked for in the DOOM 3 base folder under the same preference, armv7 builds only."
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:386-416, 472-479"
+
+  - name: gameaarch64.so
+    path: "doom3/d3xp/gameaarch64.so"
+    required: false
+    description: "DOOM 3 Resurrection of Evil game library for arm64, built from the DOOM 3 SDK the README links"
+    note: "Looked for in the d3xp mod folder of DOOM 3 under the same preference, arm64 builds only."
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:386-416, 472-479"
+
+  - name: gamearm.so
+    path: "doom3/d3xp/gamearm.so"
+    required: false
+    description: "DOOM 3 Resurrection of Evil game library for armv7, built from the DOOM 3 SDK the README links"
+    note: "Looked for in the d3xp mod folder of DOOM 3 under the same preference, armv7 builds only."
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:386-416, 472-479"
+
+  - name: gameaarch64.so
+    path: "doom3/bloodmod/gameaarch64.so"
+    required: false
+    description: "DOOM 3 Blood Mod game library for arm64, released from the DOOM 3 SDK repository"
+    note: "Looked for in the bloodmod mod folder of DOOM 3 under the same preference, arm64 builds only."
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:386-416, 472-479"
+
+  - name: gamearm.so
+    path: "doom3/bloodmod/gamearm.so"
+    required: false
+    description: "DOOM 3 Blood Mod game library for armv7, released from the DOOM 3 SDK repository"
+    note: "Looked for in the bloodmod mod folder of DOOM 3 under the same preference, armv7 builds only."
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:386-416, 472-479"
+
+  - name: gameaarch64.so
+    path: "quake4/q4base/gameaarch64.so"
+    required: false
+    description: "Quake 4 game library for arm64, built from the Quake 4 SDK the README links"
+    note: "Looked for in the Quake 4 base folder under the same preference, arm64 builds only."
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:386-416, 472-479"
+
+  - name: gamearm.so
+    path: "quake4/q4base/gamearm.so"
+    required: false
+    description: "Quake 4 game library for armv7, built from the Quake 4 SDK the README links"
+    note: "Looked for in the Quake 4 base folder under the same preference, armv7 builds only."
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:386-416, 472-479"
+
+  - name: gameaarch64.so
+    path: "prey/preybase/gameaarch64.so"
+    required: false
+    description: "Prey game library for arm64, built from the Prey SDK the README links"
+    note: "Looked for in the Prey base folder under the same preference, arm64 builds only."
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:386-416, 472-479"
+
+  - name: gamearm.so
+    path: "prey/preybase/gamearm.so"
+    required: false
+    description: "Prey game library for armv7, built from the Prey SDK the README links"
+    note: "Looked for in the Prey base folder under the same preference, armv7 builds only."
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:386-416, 472-479"
 
   - name: server.so
     required: false
@@ -573,7 +636,7 @@ files:
       as the dll, clientlib and menulib parameters with gamelibdir pointing at
       the cache. The three default names are used unless the command line names
       others, and any further libraries in the folder are copied alongside.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:373-414, 445-475"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:417-458, 488-520"
 
 exclusion_note: >
   The retail game data is not listed. Every engine here loads it by globbing the

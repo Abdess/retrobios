@@ -6,17 +6,18 @@ source: "https://github.com/libretro/beetle-saturn-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
 source_commit: "65f05fa66f83e65e33be83aa433d883b4fd9509a"
-core_version: "v0.9.45.1"
+core_version: "v1.32.1"
 display_name: "Sega - Saturn (Beetle Saturn)"
 cores:
   - mednafen_saturn
   - beetle-saturn
 systems:
   - sega-saturn
+  - sega-stv
 
 notes: |
-  Libretro port of Mednafen's Saturn emulation module, frozen circa v0.9.45.1
-  (2017) with some later backports. Region auto-detection reads the disc header
+  Libretro port of Mednafen's Saturn emulation module, converted to C and
+  reporting v1.32.1 (libretro.c:57). Region auto-detection reads the disc header
   and selects the matching BIOS. Manual override via beetle_saturn_region option.
 
   InitCommon() returns false if the BIOS file is missing or not exactly 512 KB.
@@ -25,8 +26,24 @@ notes: |
   KOF95 and Ultraman ROM carts are loaded when the cart type is set via core
   option or auto-detected from the internal game database.
 
-  Upstream Mednafen (1.32.x) has ST-V arcade board support (3 additional BIOS
-  files) and bootable ROM cart support, both absent from this libretro port.
+  ST-V content is a game ZIP or a bare ROM matched against the ST-V game
+  table (libretro.c:1207-1227, libretro.c:1261-1281). The cabinet region of
+  the matched game selects one of three ST-V BIOS images
+  (mednafen/ss/ss.c:1829-1843), read as a bare file from the system directory
+  or, when that file is absent, as the member of the same name in stvbios.zip
+  there (mednafen/ss/ss.c:1875-1942). Either form may be 131072 or 524288
+  bytes (mednafen/ss/ss.c:1911-1912, mednafen/ss/ss.c:1962).
+
+  The Video CD Card is driven through the CD block. With the
+  beetle_saturn_mpeg_card option enabled, CDB_Init opens mpeg_card.bin in the
+  system directory and MPEG_Init keeps up to 0x80000 bytes of it; without the
+  ROM the card answers commands but does not authenticate
+  (libretro.c:578-586, mednafen/settings.c:68-69, mednafen/ss/cdb.c:1315-1332,
+  mednafen/ss/mpeg.c:423-450).
+
+  No setting names a file for the bootable ROM cart: ss.cart.bootrom_path
+  has no value in the port (mednafen/ss/cart.c:242-262,
+  mednafen/settings.c:60-71).
 
 files:
   - name: "sega_101.bin"
@@ -61,9 +78,43 @@ files:
     note: "Ultraman expansion ROM cart. Loaded when cart type set to Ultraman."
     source_ref: "mednafen/ss/cart.c:200-215 (firmware path + open), mednafen/ss/cart/rom.c:51 (CART_ROM_Init)"
 
+  - name: "epr-20091.ic8"
+    system: sega-stv
+    region: [japan, asia-ntsc]
+    required: true
+    size: [131072, 524288]
+    validation: [size]
+    note: "ST-V BIOS for Japan and Asia NTSC cabinets. Read from stvbios.zip when the bare file is absent."
+    source_ref: "mednafen/ss/ss.c:1838-1839 (region filename), mednafen/ss/ss.c:1871-1988 (open, zip fallback, size check, read, sha256)"
+
+  - name: "epr-17952a.ic8"
+    system: sega-stv
+    region: [north-america, brazil, latin-america]
+    required: true
+    size: [131072, 524288]
+    validation: [size]
+    note: "ST-V BIOS for North America and Central and South America cabinets. Read from stvbios.zip when the bare file is absent."
+    source_ref: "mednafen/ss/ss.c:1840-1841 (region filename), mednafen/ss/ss.c:1871-1988 (open, zip fallback, size check, read, sha256)"
+
+  - name: "epr-17954a.ic8"
+    system: sega-stv
+    region: [europe, south-korea, asia-pal]
+    required: true
+    size: [131072, 524288]
+    validation: [size]
+    note: "ST-V BIOS for every other cabinet region. Read from stvbios.zip when the bare file is absent."
+    source_ref: "mednafen/ss/ss.c:1842-1843 (region filename), mednafen/ss/ss.c:1871-1988 (open, zip fallback, size check, read, sha256)"
+
+  - name: "mpeg_card.bin"
+    system: sega-saturn
+    required: false
+    note: "Video CD Card firmware, opened when beetle_saturn_mpeg_card is enabled. At most 0x80000 bytes are kept and nothing is checked; without it the card does not authenticate."
+    source_ref: "mednafen/settings.c:68-69 (filename), mednafen/ss/cdb.c:1315-1332 (open), mednafen/ss/mpeg.c:423-450 (read)"
+
   - name: "satar4mp.bin"
     system: sega-saturn
     required: false
-    size: 262144
-    note: "Action Replay 4M Plus firmware. Unfinished in source (mednafen/ss/cart/ar4mp.c:22-24), needs CPU UBC emulation. Cart type not exposed in core options."
-    source_ref: "mednafen/ss/cart.c:218 (CART_AR4MP case), mednafen/ss/cart/ar4mp.c:150 (CART_AR4MP_Init)"
+    min_size: 262144
+    validation: [size]
+    note: "Action Replay 4M Plus firmware. The first 0x40000 bytes are read as big-endian words and a shorter file leaves the cart slot empty; no hash is checked. Unfinished in source (mednafen/ss/cart/ar4mp.c:22-24), needs CPU UBC emulation. Neither the beetle_saturn_cart option (libretro.c:512-530) nor the game table of mednafen/ss/db.c yields CART_AR4MP, so the case is not reached."
+    source_ref: "mednafen/settings.c:66-67 (filename), mednafen/ss/cart.c:218-236 (CART_AR4MP case), mednafen/ss/cart/ar4mp.c:181 (0x40000-byte read)"

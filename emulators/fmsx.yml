@@ -241,12 +241,13 @@ files:
   - name: CARTS.CRC
     required: false
     bundled: false
-    unsourceable: "dead legacy code path, never created or distributed, replaced by CARTS.SHA"
-    note: "CRC database for cartridge identification and mapper detection. Tried first, before CARTS.SHA (fMSX/MSX.c:2701)."
+    unsourceable: "no fMSX release examined ships one; the mapper database the author distributes is CARTS.SHA"
+    source_ref: "fMSX/MSX.c:2697-2713"
+    note: "Mapper database opened in the system directory before CARTS.SHA. Each line holds the sum of the ROM bytes as eight hexadecimal digits and a mapper number (%08X %d); a matching line sets the mapper and CARTS.SHA is not read."
 
   - name: CARTS.SHA
     required: false
     bundled: true
     md5: 74b0f217fa0e2b8bb5a2f8e2ecc69da3
-    note: "SHA1 database for cartridge identification and mapper detection. Fallback when CARTS.CRC absent (fMSX/MSX.c:2716)."
+    note: "SHA1 database for cartridge identification and mapper detection. Read when CARTS.CRC is absent or holds no matching line (fMSX/MSX.c:2716)."
     source_ref: "fMSX/ROMs/CARTS.SHA"

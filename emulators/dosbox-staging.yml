@@ -73,10 +73,15 @@ notes: |
   ref: src/midi/soundcanvas.cpp:55-71, 80-147, Nuked-SC55-CLAP plugin.cpp:23-90
 
   FluidSynth: the soundfont setting names a file, tried as given and with .sf2
-  appended, in soundfont_dir, then soundfonts in the configuration directory,
-  then the platform locations. fluid_synth_sfload is the only check. The
-  SoundFont name from the RIFF INFO chunk and the file stem select reverb,
-  chorus and filter presets for four known banks.
+  appended, in soundfont_dir, then in the platform locations. Those are
+  soundfonts in the configuration directory and C:\soundfonts on Windows, the
+  same directory and ~/Library/Audio/Sounds/Banks on macOS, and elsewhere
+  dosbox/soundfonts, soundfonts and sounds/sf2 under the XDG data home,
+  soundfonts and sounds/sf2 under each XDG data directory, then soundfonts in
+  the configuration directory. fluid_synth_sfload is the only check. The
+  SoundFont name from the RIFF INFO chunk and the stem of the file, symbolic
+  links resolved, select reverb, chorus and filter presets for four known
+  banks.
   ref: src/midi/fluidsynth.cpp:107-230, 672-689, 816-883, 1229-1252
 
   Bundled data ships with the program and is read from the resources directory
@@ -590,14 +595,17 @@ files:
     path: "soundfonts/default.sf2"
     description: "SoundFont named by the default soundfont setting"
     required: false
-    unsourceable: "name the operating system gives the SoundFont it installs as default, not shipped with the program; a same-named file of another program must not stand in"
+    unsourceable: "a link the operating system creates to the SoundFont it installs as default, FluidR3_GM.sf2 on Fedora; no file of this name is distributed, and a same-named file of another program must not stand in"
     note: >
       default value of the soundfont setting: the name picks the default
       SoundFont when the operating system installs one, usually Fluid R3.
+      Where it exists the name is a link, found as soundfonts/default.sf2
+      under an XDG data directory; the link is resolved before the name
+      test, so a link to FluidR3_GM.sf2 is identified as Fluid R3.
       Any SoundFont loads; GeneralUser GS, Fluid R3, the AWE32 4MB GM/GS/MT
       bank and the Trevor0402 SC-55 SoundFont are recognised by filename or
       RIFF INFO name and get their own reverb, chorus and filter presets
-    source_ref: "src/midi/fluidsynth.cpp:672-689, src/midi/fluidsynth.cpp:816-883, src/midi/fluidsynth.cpp:1227-1242"
+    source_ref: "src/midi/fluidsynth.cpp:133-154, src/midi/fluidsynth.cpp:672-689, src/midi/fluidsynth.cpp:816-883, src/midi/fluidsynth.cpp:1227-1242"
 
   - name: "GeneralUser-GS.sf2"
     path: "soundfonts/GeneralUser-GS.sf2"

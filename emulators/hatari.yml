@@ -126,11 +126,12 @@ files:
     description: "Symbol table for the TOS image, nm-style text or a program symbol table"
     required: false
     storage: user_provided
-    unsourceable: "matches whichever image is installed as tos.img; EmuTOS releases ship one per ROM, Atari TOS has none"
+    unsourceable: "one table per TOS build, valid only beside the image it was linked with: each EmuTOS release archive carries the table of its ROM, etos512k.sym beside etos512k.img, and Atari TOS has none"
     source_ref: "src/tos.c:1094, src/debug/symbols.c:1095-1113, src/debug/symbols.c:1002-1020, src/debug/symbols.c:372-407, src/configuration.c:621, src/includes/configuration.h:29-31"
     note: >
-      Read next to tos.img at every TOS load when present; the symbols
-      serve the built-in debugger.
+      The name is the TOS image path with its last three characters
+      replaced by sym, and the image path is always tos.img here. Read at
+      every TOS load when present; the symbols serve the built-in debugger.
 
   - name: "cartridge ROM"
     path: null

@@ -39,8 +39,14 @@ notes: |
   directly, skipping the boot animation.
 
   Nothing here is required: every path falls back to an embedded copy, and a
-  file only replaces it. What the files buy is the real dump rather than the
-  reimplementation, which is why they are collected.
+  file only replaces it. The embedded arrays are the dumps themselves:
+  jaguarBootROM and jaguarBootROM_M hash to the CRC32 values biosdb.c names
+  Series K and Model M, jaguarCDBootROM and jaguarDevCDBootROM to the two
+  values the CD BIOS test accepts (src/bios/jagbios.c, src/bios/jagbios_m.c,
+  src/bios/jagcdbios.c, src/bios/jagdevcdbios.c, src/core/biosdb.c:20-21,
+  libretro.c:4964-4965). A file changes what runs only under BT_CUSTOM,
+  where any image of 0x20000 bytes is loaded and an unrecognised checksum
+  is logged (libretro.c:5245-5284).
 
 files:
   - name: "[BIOS] Atari Jaguar CD (World).j64"
@@ -106,18 +112,20 @@ files:
     required: false
     size: 131072
     validation: [size]
+    aliases:
+      - boot.rom
     description: "Model-M cart boot ROM, read when the BIOS type is Model M"
     source_ref: "libretro.c:5358-5380"
     note: >-
-      Read from the system directory only, under that exact name, and only
-      when biosType is BT_M_SERIES. A short read falls back to the embedded
-      Model M array.
+      Read from the system directory only, as jagboot_m.rom, and only when
+      biosType is BT_M_SERIES. A short read falls back to the embedded
+      Model M array, which carries the same bytes as the Model M dump.
 
 analysis:
   embedded_bios:
     k_series_boot_rom:
-      source_file: src/jagbios.c
-      header: src/jagbios.h
+      source_file: src/bios/jagbios.c
+      header: src/bios/jagbios.h
       symbol: jaguarBootROM
       size: 131072  # 0x20000, 128 KB
       description: "Jaguar K-series boot ROM"
@@ -125,42 +133,26 @@ analysis:
       filedb_name: "[BIOS] Atari Jaguar (World)"
 
     m_series_boot_rom:
-      source_file: src/jagbios2.c
-      header: src/jagbios2.h
-      symbol: jaguarBootROM2
+      source_file: src/bios/jagbios_m.c
+      header: src/bios/jagbios_m.h
+      symbol: jaguarBootROM_M
       size: 131072  # 0x20000, 128 KB
       description: "Jaguar M-series boot ROM"
+      biosdb_crc: "0xAE25BDF5"
+      biosdb_name: "Model M boot ROM"
 
     cd_boot_rom:
-      source_file: src/jagcdbios.c
-      header: src/jagcdbios.h
+      source_file: src/bios/jagcdbios.c
+      header: src/bios/jagcdbios.h
       symbol: jaguarCDBootROM
       size: 262144  # 0x40000, 256 KB
       description: "Jaguar CD boot ROM"
       filedb_crc: "0x687068D5"
       filedb_name: "[BIOS] Atari Jaguar CD (World)"
 
-    stubulator_93:
-      source_file: src/jagstub1bios.c
-      header: src/jagstub1bios.h
-      symbol: jaguarDevBootROM1
-      size: 131072  # 0x20000, 128 KB
-      description: "Jaguar Stubulator '93 dev BIOS"
-      filedb_crc: "0xE60277BB"
-      filedb_name: "[BIOS] Atari Jaguar Stubulator '93 (World)"
-
-    stubulator_94:
-      source_file: src/jagstub2bios.c
-      header: src/jagstub2bios.h
-      symbol: jaguarDevBootROM2
-      size: 131072  # 0x20000, 128 KB
-      description: "Jaguar Stubulator '94 dev BIOS"
-      filedb_crc: "0x8D15DBC6"
-      filedb_name: "[BIOS] Atari Jaguar Stubulator '94 (World)"
-
     dev_cd_boot_rom:
-      source_file: src/jagdevcdbios.c
-      header: src/jagdevcdbios.h
+      source_file: src/bios/jagdevcdbios.c
+      header: src/bios/jagdevcdbios.h
       symbol: jaguarDevCDBootROM
       size: 262144  # 0x40000, 256 KB
       description: "Jaguar Developer CD boot ROM"
@@ -178,16 +170,16 @@ analysis:
 
   core_option:
     key: virtualjaguar_bios
-    label: "BIOS"
-    description: "Use the Jaguar BIOS, required for some games."
+    label: "BIOS (Cartridges)"
+    description: "Which BIOS a cartridge boots with: disabled is HLE, enabled runs the boot ROM."
     default: disabled
-    source_ref: "libretro_core_options.h:123"
+    source_ref: "libretro_core_options.h:588-600"
 
   bios_loading:
     mechanism: embedded
     load_address: "0xE00000"
     load_size: "0x20000"
-    source_ref: "libretro.c:5339-5382, libretro.c:6331"
+    source_ref: "libretro.c:5339-5383, libretro.c:6332"
     selection_logic: "BT_CUSTOM reads a file, BT_M_SERIES tries jagboot_m.rom, otherwise the embedded array"
     external_loading: true
     note: |

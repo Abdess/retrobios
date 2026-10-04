@@ -207,7 +207,7 @@ files:
     aliases: ["rom2.bin", "ROM2_ST.BIN", "rom2_st.bin"]
     description: "SC-55 family program ROM 2"
     required: false
-    size_options: [262144, 524288]
+    size: [262144, 524288]
     validation: [size]
     mode: libretro
     source_ref: "src/gui/midi_sc55.h:46, src/gui/midi_sc55.h:120, src/gui/midi_sc55.h:135"
@@ -228,7 +228,7 @@ files:
     aliases: ["waverom1.bin"]
     description: "SC-55 family wave ROM 1"
     required: false
-    size_options: [1048576, 2097152]
+    size: [1048576, 2097152]
     validation: [size]
     mode: libretro
     source_ref: "src/gui/midi_sc55.h:48-50, src/gui/midi_sc55.h:120"
@@ -238,20 +238,21 @@ files:
     aliases: ["waverom2.bin"]
     description: "SC-55 family wave ROM 2"
     required: false
-    size_options: [1048576, 2097152]
+    size: [1048576, 2097152]
     validation: [size]
     mode: libretro
     source_ref: "src/gui/midi_sc55.h:48-50, src/gui/midi_sc55.h:120"
 
   - name: "WAVEROM3.BIN"
     path: "SC-55/WAVEROM3.BIN"
-    aliases: ["waverom3.bin"]
+    aliases: ["waverom3.bin", "sc55_waverom3.bin"]
     description: "SC-55/SC-155/CM-300 wave ROM 3"
     required: false
     size: 1048576
     validation: [size]
     mode: libretro
-    source_ref: "src/gui/midi_sc55.h:48-50, src/gui/midi_sc55.h:120, src/gui/midi_sc55.h:160"
+    source_ref: "src/gui/midi_sc55.h:48-50, src/gui/midi_sc55.h:120, src/gui/midi_sc55.h:155, src/gui/midi_sc55.h:160"
+    note: "Next to ROM1.BIN the name is fixed. In SC-55.zip any 1 MiB or 2 MiB member fills the wave slot of the last 1, 2 or 3 in its name, so sc55_waverom3.bin is taken as wave ROM 3. The size test of an SC-55mkII ROM1 does not cover it."
 
   # -- BASS libraries (BASSMIDI driver) --
 

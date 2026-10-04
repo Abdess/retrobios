@@ -267,13 +267,15 @@ files:
   - name: "default.sf2"
     description: "SoundFont the operating system installs as FluidSynth default"
     required: false
-    unsourceable: "probed at fixed operating system paths, where the system's own SoundFont sits; a same-named file of another program must not stand in"
+    unsourceable: "a link the operating system creates to the SoundFont it installs as default, FluidR3_GM.sf2 on Fedora; no file of this name is distributed, and a same-named file of another program must not stand in"
     note: >
       first probe when fluid.soundfont is empty:
       /usr/share/soundfonts/default.sf2, or C:\soundfonts\default.sf2 on
-      Windows. Any SF2 or SF3 file loads; fluid.soundfont names it and
+      Windows. The source marks the first path as the Red Hat and Fedora
+      one, where the name links to FluidR3_GM.sf2, the file of the second
+      probe. Any SF2 or SF3 file loads; fluid.soundfont names it and
       fluid_synth_sfload is the only check
-    source_ref: "src/gui/midi_synth.h:346-352, src/gui/midi_synth.h:366-368, src/gui/midi_synth.h:381-384, src/gui/midi_synth.h:462-473, src/dosbox.cpp:3746-3747"
+    source_ref: "src/gui/midi_synth.h:346-352, src/gui/midi_synth.h:364-368, src/gui/midi_synth.h:381-384, src/gui/midi_synth.h:462-473, src/dosbox.cpp:3746-3747"
 
   - name: "FluidR3_GM.sf2"
     description: "Fluid R3 GM SoundFont by Frank Wen"
