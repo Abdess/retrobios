@@ -1,0 +1,347 @@
+;-------------------------------------------------------------------------------
+[Characters]
+ ;How to add characters
+ ;---------------------
+ ;Use the format:
+ ;    charname, stagefilename1, stagefilename2, ...
+ ;
+ ;e.g. For a player with filename "kfm", and stage filename
+ ;"stages/mybg.def" type (without the semicolon):
+ ;    kfm, stages/mybg.def
+ ;IKEMEN feature: There can be more than 1 stage assigned to character. In such
+ ;case stage will be chosen randomly.
+ ;
+ ;If you want to load a different def file, you can enter it as a directory plus
+ ;the def file. This example loads chars/kfm/alt-kfm.def:
+ ;    kfm/alt-kfm.def, stages/mybg.def
+ ;
+ ;If you put "random" as the stagefilename, then a random stage will be selected
+ ;for that player. e.g.
+ ;    kfm, random
+ ;IKEMEN feature: Unlike mugen, stage declaration (including random, which is
+ ;default assignment) can be skipped without affecting other parameters.
+ ;
+ ;Zipped characters are also supported.
+ ;Place the ZIP file in the chars/ directory. The syntax is as
+ ;follows:
+ ;    zipname.zip/defname.def, stages/mybg.def
+ ;For example, if you have newsuave.def in suave.zip, the syntax is:
+ ;    suave.zip/newsuave.def, stages/mybg.def
+ ;If your def file has the same name as the zip file (eg. suave.def
+ ;in suave.zip), you can just put the name of the zip file alone:
+ ;    suave.zip, stages/mybg.def
+ ;
+ ;Optional parameters should follow on the same line (except 'slot' parameter),
+ ;separated by commas. Each parameter has the form:
+ ;    paramname = paramvalue
+ ;where paramname is the name of the parameter type, and paramvalue is the value
+ ;(data) that should be assigned to that parameter.
+ ;With the exception of 'unlock' (which always has to be last parameter in line)
+ ;parameters can be assigned in any order (after char and stage declaration).
+ ;
+ ;The optional parameters are:
+ ;
+ ; - music
+ ;   Set the paramvalue to the music file path that should be used at the start
+ ;   of the first round when facing this character. Paramvalue can be followed
+ ;   by optional space-separated int values: volume, loopstart and loopend.
+ ;   This overrides the stage DEF bgmusic (and related bgmusic.*) assignment so
+ ;   you can re-use the same stage with unique music for multiple characters.
+ ;   Multiple parameters of the same type may be defined; one will be chosen
+ ;   at random. Unless stated otherwise, these rules also apply to other *.music
+ ;   parameters.
+
+ ; - round<roundno>.music
+ ;   IKEMEN feature: Music used at the start of the chosen round when facing this
+ ;   character.
+
+ ; - final.music
+ ;   IKEMEN feature: Music used at the start of the final round.
+
+ ; - life.music
+ ;   IKEMEN feature: Music used when the player-controlled character has
+ ;   (by default) less than 30% life during the deciding round (only affects
+ ;   the side that is at risk of being defeated). Further adjustments are
+ ;   available via the stage DEF file.
+
+ ; - victory.music
+ ;   IKEMEN feature: Music that starts right after this character scores the
+ ;   final round K.O. and continues throughout the victory screen. Unlike other
+ ;   music character parameters, victory.music also works in Versus-type modes.
+ ;
+ ; - ai
+ ;   IKEMEN feature: Set the paramvalue between 1 and 8 to force AI Level
+ ;   regardless of difficulty and AI ramping settings.
+ ;
+ ; - vsscreen
+ ;   IKEMEN feature: Set the paramvalue to 0 to avoid displaying versus screen
+ ;   when facing this character.
+ ;
+ ; - victoryscreen
+ ;   IKEMEN feature: Set the paramvalue to 0 to avoid displaying victory screen
+ ;   when this character wins a match.
+ ;
+ ; - rounds
+ ;   IKEMEN feature: Set the paramvalue to the number of rounds in order to
+ ;   overwrite rounds number chosen in the settings.
+ ;
+ ; - time
+ ;   IKEMEN feature: Set the paramvalue to the time (in seconds) in order to
+ ;   overwrite round time chosen in the settings.
+ ;
+ ; - single
+ ;   IKEMEN feature: Set the paramvalue to 1 to force facing this character
+ ;   individually in team modes.
+ ;
+ ; - includestage
+ ;   Set the paramvalue to 0 to avoid including this stage in the stage select
+ ;   list (in VS, training modes, etc). The stage is also blocked from being
+ ;   randomly selected for a match.
+ ;   IKEMEN feature: Setting paramvalue to -1 prevents stage from being randomly
+ ;   selected for a match, while still allowing you to choose it from the stage
+ ;   select list.
+ ;
+ ; - bonus
+ ;   IKEMEN feature: Set the paramvalue to 1 to include this character in "Bonus
+ ;   Games" mode. At least 1 character needs this parameter for the mode to show
+ ;   up in modes selection menu.
+ ;
+ ; - exclude
+ ;   IKEMEN feature: Set the paramvalue to 1 to avoid including this character
+ ;   in 'rows' and 'columns' screenpack selection grid. (similar result as
+ ;   hiding unselectable AI only characters in mugen without need to create tons
+ ;   of unnecessary select.def slots to do so). Excluded characters are not
+ ;   added to randomselect pool and won't show up in VS 100 Kumite mode.
+ ;
+ ; - hidden
+ ;   IKEMEN feature: Set the paramvalue to hide a character:
+ ;   1: cursor can move to this cell, cursor, face and face background are not
+ ;      rendered (same result as hiding selectable characters in mugen by
+ ;      placing them outside visible grid, but without need to create lots of
+ ;      unnecessary select.def slots to do so),
+ ;   2: cell can't be selected, art is not rendered (slot is ignored until
+ ;      character is unlocked).
+ ;   3: cell behaves like randomselect slot until character is unlocked
+ ;
+ ; - order
+ ;   Set the paramvalue to the default ordering priority to give the
+ ;   character in roster-building modes. A smaller value means you will fight
+ ;   the character sooner. The default order value is 1, if you omit this
+ ;   param. Edit *.maxmatches settings under [Options] to customize amount of
+ ;   matches per order priority.
+ ;   IKEMEN feature: Max 30 orders mugen limitation is lifted. Negative order
+ ;   is reversed if character becomes unlocked (see 'unlock' parameter)
+ ;
+ ; - order<gamemode>
+ ;   IKEMEN feature: Set the paramvalue to the ordering priority to give the
+ ;   character in a specific game mode, for example ordersurvival or
+ ;   ordertimeattack. Roster generation checks order<active mode>, then
+ ;   order<base mode>, then order. If none is found, default order value is 1.
+ ;   Base modes are used by aliases, for example survivalcoop uses survival.
+ ;   To exclude a character from a mode, set it to an order group outside the
+ ;   configured <gamemode>.maxmatches range, for example ordersurvival=0.
+ ;   Negative order is reversed if character becomes unlocked (see 'unlock'
+ ;   parameter)
+ ;
+ ; - arcadepath
+ ;   IKEMEN feature: Set the paramvalue to the lua file (file path relative to
+ ;   game directory) containing custom arcade path. This parameter makes the
+ ;   character ignore default *.maxmatches settings under [Options] section and
+ ;   use arcade path coded entirely in lua, which allows implementing
+ ;   functionality normally not possible in mugen (rival matches, branching
+ ;   paths, secret bosses etc.)
+ ;   https://github.com/ikemen-engine/Ikemen-GO/wiki/Miscellaneous-Info#arcs
+ ;
+ ; - slot
+ ;   IKEMEN feature: Assigns multiple characters to a single select screen slot.
+ ;   Enclose character declarations in 'slot = { ... }'. Braces may share lines
+ ;   with character declarations. Use '|' to separate multiple character
+ ;   declarations on the same physical line. Characters added this way can use
+ ;   extra parameters:
+ ;   - select: Set the paramvalue to the command that selects this character.
+ ;     If multiple chars in this slot have the same paramvalue assigned, they
+ ;     will be selected randomly.
+ ;   - next: Set the paramvalue to the command that swaps the current slot
+ ;     character with the next character that shares the same paramvalue.
+ ;   - previous: Set the paramvalue to the command that swaps the current slot
+ ;     character with the previous character that shares the same paramvalue.
+ ;   Commands use the same syntax as mugen CMD files (comma is permitted)
+ ;
+ ; - unlock
+ ;   IKEMEN feature: paramvalue is executed as Lua code condition, right after
+ ;   new game mode is initiated and upon returning to main menu. If it evaluates
+ ;   to boolean 'true' the character locked via 'hidden' parameter will become
+ ;   selectable. On 'false' it will be hidden. Due to parameters syntax,
+ ;   'unlock' has to be the very last parameter used in line (everything that
+ ;   follows is treated as a pure Lua code). Default: true (if character is not
+ ;   hidden, otherwise: false)
+ ;   https://github.com/ikemen-engine/Ikemen-GO/wiki/Miscellaneous-Info#lua_unlock
+ ;
+ ;You can also add a randomize icon to the select screen. To do this, put the
+ ;word "randomselect" on a line of its own, with no extra parameters.
+ ;
+ ;Examples:
+ ; kfm, stages/mybg.def, includestage=0
+ ; kfm, stages/mybg.def, arcadepath=data/arcade.lua
+ ; kfm, stages/mybg.def, music=sound/song.mp3, order=3, ai=8, hidden=2
+ ; slot = {kfm, previous=d, next=w | SuaveDude, previous=d, next=w}
+ ; slot = {
+ ;      kfm, stages/mybg.def, previous=d, next=w
+ ;      SuaveDude, previous=d, next=w, select=/s+a
+ ; }
+ ;
+ ;Insert your characters below.
+
+kfm_zss, stages/kfm.def
+kfm720, stages/kfm.def, order=0
+kfm_zaxis, stages/kfm.def, order=0
+randomselect
+
+;-------------------------------------------------------------------------------
+[ExtraStages]
+ ;Put extra stages here. They will be available in modes that allow selecting
+ ;stage manually. For example, you can insert "stages/mybg.def".
+ ;
+ ;Zipped stages are also supported.
+ ;Place the ZIP file in the stages/ directory. The syntax is as
+ ;follows:
+ ;    zipname.zip/defname.def
+ ;For example, if you have suavestage.def in suave.zip, the syntax is:
+ ;    suave.zip/suavestage.def
+ ;If your def file has the same name as the zip file (eg. suave.def
+ ;in suave.zip), you can just put the name of the zip file alone:
+ ;    suave.zip
+ ;
+ ;Optional parameters may follow on the same line, separated by commas.
+ ;Each parameter has the form:
+ ;    paramname = paramvalue
+ ;where paramname is the name of the parameter type, and paramvalue is the value
+ ;to assign that parameter. The optional parameters are:
+ ;
+ ; - music
+ ;   Set the paramvalue to the music file path that should be used at the start
+ ;   of the first round. Paramvalue can be followed by optional space-separated
+ ;   int values: volume, loopstart and loopend.
+ ;   This appends the stage DEF bgmusic (and related bgmusic.*) assignment.
+ ;   Multiple parameters of the same type may be defined; one will be chosen
+ ;   at random. Unless stated otherwise, these rules also apply to other *.music
+ ;   parameters.
+
+ ; - round<roundno>.music
+ ;   IKEMEN feature: Music used at the start of the chosen round.
+
+ ; - final.music
+ ;   IKEMEN feature: Music used at the start of the final round.
+
+ ; - life.music
+ ;   IKEMEN feature: Music used when the player-controlled character has
+ ;   (by default) less than 30% life during the deciding round (only affects
+ ;   the side that is at risk of being defeated). Further adjustments are
+ ;   available via the stage DEF file.
+
+ ; - victory.music
+ ;   IKEMEN feature: Music that starts right after winner character scores the
+ ;   final round K.O. and continues throughout the victory screen. Unlike other
+ ;   music parameters, victory.music also works in Versus-type modes.
+ ;
+ ; - order
+ ;   IKEMEN feature: Set the paramvalue to the ordering priority to give the
+ ;   stage in modes where stage order is enabled. If there is at least 1 stage
+ ;   with assigned order, facing opponent with the exact order paramvalue will
+ ;   result in stage being randomly chosen from stages with the matching order.
+ ;   Stages can have multiple order parameters assigned at the same time.
+ ;
+ ; - unlock
+ ;   IKEMEN feature: paramvalue is executed as Lua code condition, right after
+ ;   new game mode is initiated and upon returning to main menu. If it evaluates
+ ;   to boolean 'true' the stage will become manually selectable. On 'false' it
+ ;   will be hidden. Due to parameters syntax, 'unlock' has to be the very last
+ ;   parameter used in line (everything that follows is treated as a pure Lua
+ ;   code). Default: true.
+ ;   https://github.com/ikemen-engine/Ikemen-GO/wiki/Miscellaneous-Info#lua_unlock
+ ;
+ ;Examples:
+ ; stages/mybg.def, music=sound/song.mp3, music=sound/song2.mp3
+ ; stages/mybg.def, order=3
+ ;
+ ;Insert your stages below.
+
+stages/stage1.def
+stages/stage3d.def
+stages/stage3d_outline.def
+stages/stageZ.def
+stages/interactivestage.def
+stages/kfm.def
+stages/stage0.def
+stages/stage0-720.def
+
+;-------------------------------------------------------------------------------
+[Options]
+ ;Here you set the maximum number of matches to fight before the game ends in
+ ;roster-building modes. Each value maps to an order priority from the order
+ ;table selected for the active mode. For example, for 4,3,1 you will fight up
+ ;to 4 randomly-picked characters with order=1, followed by 3 with order=2 and
+ ;1 with order=3.
+ ;IKEMEN feature: Max 30 orders mugen limitation is lifted.
+ ;IKEMEN feature: Characters can use mode-specific order<gamemode> parameters.
+ ;Roster generation checks order<active mode>, then order<base mode>, then
+ ;order. If no mode-specific order exists, the default order parameter is used.
+ ;IKEMEN feature: Characters can use individual maxmatches settings (see
+ ;'maxmatches' parameter in [Characters] section)
+
+ ;Maximum number of matches to fight before game ends in Arcade single mode.
+arcade.maxmatches = 6,1,1,0,0,0,0,0,0,0
+
+ ;Like arcade.maxmatches, but applies to Arcade team modes.
+team.maxmatches = 4,1,1,0,0,0,0,0,0,0
+
+ ;Maximum number of matches to fight before game ends in Time Attack mode.
+ ;Uses ordertimeattack if defined, otherwise falls back to order.
+timeattack.maxmatches = 6,1,1,0,0,0,0,0,0,0
+
+ ;IKEMEN feature: Similar to arcade.maxmatches, but applies to Survival modes.
+ ;Uses ordersurvival if defined, otherwise falls back to order.
+ ;Use -1 value to choose which order number should have unlimited matches.
+ ;By omitting -1 survival mode will end after particular amount of matches set
+ ;below (in such case you can actually "complete" the mode).
+survival.maxmatches = -1,0,0,0,0,0,0,0,0,0
+
+;-------------------------------------------------------------------------------
+[StoryMode]
+ ;Story Mode arcs declaration. Assigned arcs are selectable via Story Mode
+ ;submenu ('menu.itemname.storymode' parameter in screenpack DEF file)
+ ;
+ ;Declaring arcs consists of setting up following parameters:
+ ; - name
+ ;   IKEMEN feature: Set to name that should be returned by GameMode trigger.
+ ;   This parameter also initiates new story arc declaration, so it has to be
+ ;   assigned before any other parameter used by the same arc. All arcs should
+ ;   have unique names.
+ ;
+ ; - displayname
+ ;   IKEMEN feature: Set to name that should be displayed in Story Mode submenu.
+ ;
+ ; - path
+ ;   IKEMEN feature: Path to file with lua extension (relative to game
+ ;   directory), containing story mode arc coded in Lua language.
+ ;   https://github.com/ikemen-engine/Ikemen-GO/wiki/Miscellaneous-Info#arcs
+ ;
+ ; - unlock
+ ;   IKEMEN feature: Pure Lua code, executed exactly as is, each time upon
+ ;   loading main menu. If it evaluates to boolean 'true' the story arc will be
+ ;   selectable from story mode submenu, or hidden on 'false'. Default: true.
+ ;   https://github.com/ikemen-engine/Ikemen-GO/wiki/Miscellaneous-Info#lua_unlock
+ ;
+ ;Examples:
+ ; name = arc1
+ ; displayname = Kung Fu Story Part I
+ ; path = data/story/arc1.lua
+ ; unlock = true
+ ;
+ ; name = arc2
+ ; displayname = Kung Fu Story Part II
+ ; path = data/story/arc2.lua
+ ; unlock = true
+ ;
+ ;Declare your Story Mode arcs below.
+

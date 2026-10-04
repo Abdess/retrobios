@@ -1,0 +1,11 @@
+{
+	"Version": 16,
+	"Title": "Sound Test",
+	"Author": "",
+	"Description": "",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": false,
+	"RandomPickups": true,
+	"Missions": 1
+}

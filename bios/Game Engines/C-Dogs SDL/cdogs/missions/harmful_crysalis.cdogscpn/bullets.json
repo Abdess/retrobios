@@ -1,0 +1,133 @@
+{
+  "Version": 2,
+  "Bullets": [
+    {
+      "Name": "laser_point",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "laser_trail_green",
+        "Width": 3.0
+      },
+      "Speed": 40960,
+      "Range": 1,
+      "Power": 1,
+      "Mass": 0.0,
+      "Size": [1, 1],
+      "Special": "Flame",
+      "Spark": "laser_point",
+      "HitSounds": {
+        "Object": "laser_burn",
+        "Flesh": "laser_burn",
+        "Wall": ""
+      }
+    },
+    {
+      "Name": "chainsaw",
+      "Power": 3,
+      "HitSounds": {
+        "Object": "chainsaw",
+        "Flesh": "chainsaw"
+      }
+    },
+    {
+      "Name": "yellow_needle",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "pulsey"
+      },
+      "Speed": 1500,
+      "Range": 15,
+      "Power": 2,
+      "SeekFactor": 10
+    },
+    {
+      "Name": "red_laser",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "rapidr"
+      },
+      "Speed": 1100,
+      "Range": 27,
+      "Power": 12
+    },
+    {
+      "Name": "yellow_particle",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "pulsey"
+      },
+      "Speed": 1500,
+      "Range": 12,
+      "Power": 8,
+      "SeekFactor": 5
+    },
+    {
+      "Name": "monster_bite",
+      "Power": 1,
+      "HitSounds": {
+        "Object": "hits/knife_hard",
+        "Flesh": "monster-2"
+      }
+    },
+    {
+      "Name": "monster_gas",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "gas_cloud",
+        "TicksPerFrame": 4,
+        "Tint": [0.0, 0.33, 0.9]
+      },
+      "Speed": 384,
+      "Friction": 4,
+      "Range": 35,
+      "Size": [20, 20],
+      "Special": "Confuse",
+      "Persists": true,
+      "Power" : 1,
+      "Spark" :  "",
+      "HitSounds": {
+        "Object": "hits/gas",
+        "Flesh": "hits/gas",
+        "Wall": "hits/gas"
+      },
+      "WallBounces": true
+    },
+    {
+      "Name": "cryo_gas",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "gas_cloud",
+        "TicksPerFrame": 4,
+        "Tint": [180.0, 0.33, 2.0]
+      },
+      "Speed": 384,
+      "Friction": 4,
+      "Range": 35,
+      "Size": [20, 20],
+      "Special": "Petrify",
+      "Persists": true,
+      "Power" : 1,
+      "Spark" :  "",
+      "HitSounds": {
+        "Object": "hits/gas",
+        "Flesh": "hits/gas",
+        "Wall": "hits/gas"
+      },
+      "WallBounces": true
+    },
+    {
+      "Name": "psywave",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "pulsey",
+        "Mask": "88ff88"
+      },
+      "Speed": 400,
+      "Range": 350,
+      "Power": 4
+    }
+  ]
+}

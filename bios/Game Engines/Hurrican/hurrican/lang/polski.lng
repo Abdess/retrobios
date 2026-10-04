@@ -1,0 +1,260 @@
+--------------------------------
+>   Plik Jezykowy Hurrican     <
+>                              <
+>          - polski -          <
+>            Romano            <
+>          29.06.2007          <
+>                              <
+>                              <
+--------------------------------
+//---------- Starter ----------//
+Pelny ekran
+Standardowa
+Uruchom gre
+Wyjdz
+Porzuc
+Jezyk
+Sprawdz uaktualnienia
+Jest dostepna nowa wersja. Czy chcesz teraz odwiedzic strone internetowa Hurrican?
+Nie ma nowszej wersji.
+Dostepne poziomy na serwerze
+Pobierz aktualna liste poziomow z serwera
+Wybierz paczke poziomow
+Pobierz wybrane
+//---------- Miscellaneous ----------//
+0
+Ladowanie pliku jezykowego
+Ladowanie bitmapy :
+Ladowanie dzwieku :
+Ladowanie modulu :
+ ... OK
+Ladowanie danych poziomu dla \n
+//---------- Tutorial Texts ----------//
+Witam na poziomie treningowym Hurrican. Tu nauczysz sie podstawowego sterowania. Mozesz poruszac sie w lewo i prawo przyciskajac KEY_LEFT lub KEY_RIGHT. Mozesz kleczec przyciskajac KEY_CROUCH. Teraz rozejrzyj sie troche. Jest wiecej podpowiedzi tego typu na tym poziomie.
+Wcisnij KEY_JUMP by skoczyc. Im dluzej przytrzymasz klawisz, tym wyzej skoczysz. Mozesz zmieniac kierunek podczas skoku wciskajac KEY_LEFT lub KEY_RIGHT.
+Mozesz sie rozgladac przyciskami KEY_UP i KEY_DOWN. To pomoze ci znalezc ukryte przedmioty. Jak na przyklad, popatrz sie teraz na sufit nad toba...
+Te diamenty sa porozsiewane po poziomach. Za zbieranie ich dostajesz punkty. Dodatkowo za kazde 50 diamentow twoj czas sie uzupelnia.
+Wcisnij KEY_SHOOT by strzelic, i przytrzymaj by strzelac powolnym ogniem automatycznym. Powtarzalnie wciskajac ten klawisz mozesz strzelac szybciej niz normalnym ogniem automatycznym.
+Teraz popatrz na sciane na prawo. Nie wyglada zbyt solidnie. Sprobuj ja zniszczyc strzelajac do niej ze swojej broni.
+Bardzo dobrze. Jest wiele miejsc w ktorych mozesz niszczyc sciany. Jednak w wiekszosci wypadkow, znajdziesz za nimi rozne sekrety.
+Teraz czas pocwiczyc celnosc. Mozesz celowac w gore wciskajac KEY_UP. Mieszajac to z KEY_LEFT lub KEY_RIGHT mozesz tez strzelac po skosie. Teraz sprobuj zestrzelic te krysztaly nad toba.
+Robi sie coraz ciekawiej... Tam w dole znajdziesz pierwszych wrogow, lub jak kto woli, pierwsze latajace zasobniki wzmocnien.
+-leer-
+Bardzo dobrze. Zbierz teraz wszystkie wzmocnienia.
+Ten efekt to wskaznik oznaczajacy, ze twoja bron zostala wzmocniona. To ktora bron zostala wzmocniona zalezy od koloru efektu. Czerwony to karabin rozpryskowy, niebieski to laser a zielony to kule plazmowe. Paski (przy strzalce) pokazuja aktualny poziom broni.
+Teraz pora na pierwszego, prawdziwego wroga: robot kroczacy. Tym co je odroznia jest to, ze mozesz na nie naskoczyc, i w ten sposob ogluszyc je.
+I znowu droga jest zablokowana, tym razem zniszczalna sciana jest POD toba. Przytrzymaj KEY_BLITZ i obroc piorun przy pomocy KEY_LEFT i KEY_RIGHT tak by zniszczyc sciane.
+Bardzo dobrze. Przy okazji, piorun moze tez niszczyc wrogow. Niestety jest nieco za krotki... Ale nie martw sie, to kwestia techniki :) Na prawo od ciebie jest kilka wzmocnien ktore to zmienia.
+Piorun jest teraz dluzszy. Wyprobuj go! A najlepsze jest to, ze moze byc jeszcze dluzszy. Pasek przy symbolu blyskawicy na HUDzie pokazuje jego aktualny poziom. Gdy stracisz zycie, stracisz tez jeden poziom pioruna.
+Bonusy nie sa zawarte tylko w latajacych zasobnikach. Moga tez byc w blokach wzmocnien ktore pojawiaja sie tylko gdy zostana juz chociaz raz trafione. Sprobuj postrzelac wokol siebie dopoki jednego nie znajdziesz (Obracanie piorunem powinno ci to ulatwic...)
+Oto jest. Teraz ostrzelaj go, dopoki nie wyleca z niego wszystkie przedmioty.
+To byly tak zwane "linie mocy", to bron specjalna. Liczbe linii mocy mozna ujrzec na HUDzie (patrz strzalka). Przejdz sie troche w prawo by uzyskac informacje jak ich uzywac, i zobaczyc je w akcji.
+Stan na srodku mostu i wcisnij KEY_POWERLINE by aktywowac linie mocy.
+Siuuu! Mali wrogowie zostaja zmieceni a wieksi zostaja uszkodzeni, dzieki tej broni. Zbierz teraz unoszace sie wzmocnienia.
+Te wzmocnienia to byly granaty. Robia BUUM! Brzmi smiesznie, ale to prawda :) Ponownie, idac w prawo nauczysz sie uzytkowania tych przedmiotow.
+Uwaga, sa tu dwa gniazda ktore wytrzymuja duze obrazenia! Wcisnij KEY_GRANATE by wystrzelic granat. Moga one razic wszystkich wrogow bedacych w promieniu wybuchu. By zniszczyc drugie gniazdo bedziesz musial stanac pod nim i wystrzelic w gore.
+Wyglada na kolejny slepy zaulek. Ukleknij (KEY_CROUCH) i jednoczesnie aktywuj linie mocy (KEY_POWERLINE). Dzieki temu zmienisz sie w stalowe kolo. Na koncu tunelu, zwyczajnie wcisnij klawisz skoku (KEY_JUMP) by znow stanac na nogi.
+Jak juz pewnie zauwazyles, niebieski pierscien (patrz strzalka) bedzie malal gdy bedziesz sie krecil wokol jako kolo. Ale mozesz napelnic go z powrotem dzieki wzmocnieniom. Dodatkowo sam sie powoli napelnia.
+Tak, to bylo wzmocnienie kola. Kiedy jestes w trybie kola, jestes niezwyciezony i uszkadzasz wrogow. I jakby tego bylo malo, mozesz nawet rozrzucac bomby wciskajac KEY_SHOOT. Wyprobuj to na gniazdach znajdujacych sie na prawo od ciebie.
+Wow, jestes teraz czyms w rodzaju maszyny do zabijania! Ale twoj arsenal nie jest jeszcze pelny. Dojdzie ci jeszcze kilka broni...
+Te strzalki na twojej drodze wskazuja ci kierunek w ktorym musisz podazac, by dojsc do wyjscia z poziomu.
+Znowu sciana? Moglibysmy uzyc pioruna... ale czekaj! Stan blisko tej sciany i wcisnij KEY_SHOCKWAVE...
+Wow, ta fala uderzeniowa zniszczyla cala sciane, zabila robota kroczacego, a nawet oproznila blok wzmocnien. Ale mozesz nosic tylko jedna taka bombe i musisz zdobyc odpowiednie wzmocnienie by znow ja odzyskac. Jezeli symbol na HUDzie swieci (patrz strzalka), bomba jest gotowa do uzycia.
+Jeszcze jedno cwiczenie celnosci... Przytrzymaj KEY_SHOOT i KEY_BLITZ jednoczesnie, by naladowac swoja bron promieniem. W czasie ladowania mozesz zmienic kierunek celowania przy pomocy KEY_LEFT i KEY_RIGHT. Pusc klawisze, by wystrzelic promien. Im dluzej bedziesz ladowal promien, tym wiekszy pocisk wystrzelisz. Stan na srodku i sprobuj zestrzelic w ten sposob diamenty nad toba.
+Im dluzszy masz piorun, tym szybciej naladujesz promien. Jeszcze jedno: idac w lewo dowiesz sie o dwoch innych podstawowych broniach, poza karabinem rozpryskowym.
+To byly bonusy kuli plazmowej. Jak widzisz, wzmocnienia moga nawet lezec ot tak sobie. Ten pocisk moze dzielic sie na dwa kolejne pociski, zaleznie od poziomu twojej broni. Bardzo przydatne w tunelach lub korytarzach jak ten tutaj.
+Ostatnia bronia na dzis jest laser. Zbierz wzmocnienia i przetestuj go. Jego specjalna wlasciwoscia jest to ze potrafi przeszywac kilku wrogow jednym pociskiem. Mozesz zmieniac bronie za pomoca KEY_WAFFE_CYCLE. Pobaw sie troche.
+To koniec treningu. W grze dowiesz sie wiecej o wzmocnieniach i innych rzeczach. Tylko zapamietaj sobie, poeksperymentuj troche ze wszystkim by to zrozumiec. Ten trening byl nieco latwiejszy niz normalne poziomy: gniazda nie tworzyly wrogow a ty byles niezniszczalny. Ale teraz powinienes byc gotowy do walki. Powodzenia!
+36
+37
+38
+39
+//---------- Konsolen Text ----------//
+Hurrican
+
+(c) 2007
+Poke53280
+www.poke53280.de
+
+Wpisz "help" by uzyskac informacje o komendach konsoli
+
+
+//---------- Summary Box ----------//
+Podsumowanie
+Sekrety
+Odblokowane cheaty:
+- Wcisnij dowolny klawisz -
+//---------- Main Menu ----------//
+LADOWANIE
+ZAPISZ GRE
+ZACZNIJ GRE
+POWROT DO GRY
+OPCJE
+HALA SLAWY
+LISTA PLAC
+WYJDZ
+ROZPOCZNIJ TRENING
+ROZPOCZNIJ NOWA GRE
+KONTYNUUJ GRE
+LATWY
+NORMALNY
+TRUDNY
+HURRICAN
+kursor : wybierz - enter : zatwierdz - ESC : cofnij
+RANGA
+IMIE
+WYNIK
+POZ.
+UMIEJ.
+GLOSNOSC
+DZWIEK
+MUZYKA
+KONFIGURUJ STEROWANIE
+WYBIERZ JEZYK
+TRYB:
+Wibracja
+Ustawienia poczatkowe
+Joypad
+Joystick
+NIESAMOWITE
+NOWY WYNIK W RANDZE
+WPISZ SWOJE IMIE
+KONTYNUUJ
+Zurück
+idz w lewo
+idz w prawo
+klecz
+patrz w gore
+patrz w dol
+skocz
+strzel
+aktywuj piorun
+linia mocy
+granat
+fala uderzeniowa
+zmien bron
+idz
+patrz
+Os X/Y
+D-pad
+-wcisnij klawisz-
+-wcisnij przycisk-
+DETALE: NISKIE
+DETALE: SREDNIE
+DETALE: WYSOKIE
+DETALE: NAJWYZSZE
+JEDEN GRACZ
+DWOCH GRACZY
+Pierwszy gracz
+Drugi gracz
+typ
+tryb
+Czulosc
+klawiatura
+nie zdefiniowano
+poziom
+gracze
+data
+- brak wpisu -
+SEKRET
+lewo
+prawo
+gora
+dol
+przycisk
+//---------- Hints ----------//
+Jezeli zbierzesz wszystkie diamenty w poziomie, odblokujesz cheat.
+Tracac zycie, stracisz tez poziom broni ktorej aktualnie uzywasz.
+Dotykajac wroga bedac w trybie kola, energia kola bedzie spadac szybciej.
+Stojac w bezruchu, energia kola zregeneruje sie szybciej.
+Wciskajac przycisk skoku gdy jestes w trybie kola oraz jestes w powietrzu, wykonasz kolo-skok.
+Zebranie 50 diamentow odnowi limit czasu.
+Nie mozesz miec wiecej niz 9 granatow i 9 linii mocy.
+Niektore sekrety sa schowane za zniszczalnymi scianami.
+Istnieja przepuszczalne sciany za ktorymi mozesz znalezc sekrety.
+Wjezdzajac na wybuchajaca bombe w trybie kola zostaniesz wyrzucony nieco w gore.
+Gdy ugryzie ciebie wielka ryba wyskocz na suchy lad by sie jej pozbyc.
+Para i dym moga ciebie uniesc nieco wyzej kiedy skaczesz.
+Niektorzy bossowie sa bardzo trudni do pokonania przy uzyciu czystej sily ognia.
+Ogien z nasciennych miotaczy ognia moze tez krzywdzic wrogow.
+Wytworniki oslon moga uszkadzac wrogow gdy ich dotkna.
+Niektorych wrogow lepiej unikac niz niszczyc.
+Granaty uszkadzaja kazdego wroga w promieniu wybuchu.
+Linie mocy najlatwiej znalezc w ukrytych blokach wzmocnien.
+Obrazenia zadawane przez kule plazmowe zmniejsza sie za kazdym razem gdy kula odbije sie od sciany.
+Powtarzalnie wciskajac przycisk strzalu strzelasz szybciej niz zwyklym ogniem automatycznym.
+Mozesz wskakiwac na bloki mocy by wspiac sie na wyzsze obszary.
+Mozesz zapisac gre po kazdym skonczonym poziomie.
+Im dluzszy jest twoj piorun, tym szybciej promien sie laduje.
+Gdy tracisz zycie, eksplozja tym wywolana przypomina wybuch granatu.
+Laserem mozesz przestrzeliwac kilku wrogow pod rzad.
+Bronie podstawowe, karabin rozpryskowy, laser i kule plazmowe mozna rozbudowac do 8 poziomu.
+Mozesz zapisac gre po kazdym skonczonym poziomie.
+Mozesz zmienic poziom detali efektow specjalnych w menu opcji.
+Niektorych wrogow mozesz zranic tylko gdy sa w okreslonym stanie.
+Poke53280 NIGDY nie poprosi cie o twoj adres e-mail lub o twoje haslo...
+//---------- Pissen ----------//
+Cholera, musze gdzies isc...
+Argh! Nie wytrzymam juz dluzej!
+Czemu ten blaszany kubel nie ma klapki w rozkroku???
+Kto do diabla to zaprojektowal?
+Dlaczego nikt nie pomyslal o takiej sytuacji?
+Typowe...
+Nie testowali tej rzeczy w odpowiedni sposob...
+Cholera, to zaczyna sie robic niezreczne!
+Kiedy wroce na Ziemie...
+...Bede na to narzekal!
+To nie mozliwe.
+Ten kombinezon bojowy ma wszelkie techniczne gwizdki i dzwonki...
+Ale o najwazniejszej rzeczy to juz zapomnieli.
+Co teraz moge zrobic?
+No chodz, graj dalej!
+Grmblfxt ... Zaczynam swirowac.
+Musze to ukrywac...
+...az gra bedzie skonczona!
+//---------- Intro Screen 1 ----------//
+2138, gdzies w przestrzeni
+"Pancernik" jest w drodze powrotnej z pomyslnej misji.
+Nastepnym przystankiem transportowca jest Ziemia.
+Nagle, zolnierze dostaja alarmowe wolanie z blekitnej planety.
+"Ziemia jest atakowana! Wszystkie jednostki przygotowac sie do obrony!"
+"Rakiety nieznanego pochodzenia trafiaja w Ziemie!"
+Sekundy pozniej pochodzenie zabojczych pociskow zostalo zlokalizowane.
+Planeta Takatis.
+Ludzie nie wierza swoim oczom patrzac sie na hologram w sali odpraw.
+Nikt inny jak sam Dr. Geng X rozpoczal atak.
+Lata temu wiadomosc o jego smierci rozbiegla sie po galaktyce, ale on wrocil.
+Bez wahania "Pancernik" ustanawia kurs na niezbadana planete.
+Po krotkim locie statek osiaga miejsce swojego przeznaczenia.
+Obca planeta blyszczy zdradzieckim pieknem.
+Zaloga rozpoczyna proces ladowania.
+Skanery wskazuja na atmosfere podobna do ziemskiej.
+Nagle, liczne dziala na powierzchni otwieraja ogien.
+System oslon zawodzi i wielkie pociski rozrywaja kadlub statku na strzepy.
+Bezradni, zolnierze spadaja na powierzchnie planety.
+Statek prawie splonal gdy wchodzili w atmosfere.
+Sekundy po uderzeniu.
+Wiekszosc zalogi nie przetrwala awaryjnego ladowania "Pancernika".
+Przezyl tylko jeden zolnierz. Powoli podnosi sie i wychodzi na zewnatrz.
+Przezylo tylko dwoch zolnierzy. Powoli podnosza sie i wychodza na zewnatrz.
+Czas odnalesc Dr. Geng X i uwolnic swiat z jego zlej obecnosci.
+//---------- Outtro ----------//
+Niesamowite stalo sie prawdziwe.
+Po dlugiej walce, Dr. Geng X zostal pokonany!
+Cokolwiek po nim zostalo lezy ukryte pod dymiacymi resztkami jego
+zrujnowanej twierdzy. Wszystkie jego zlowrogie twory leza pogrzebane tu razem z nim,
+w dole wiecznej ciemnosci.
+Pokoj we wszechswiecie zostal przywrocony, lecz nikt nie wie
+jak dlugo ten pokoj zapanuje.
+Przyszlosc dopisze ta historie.
+
+
+
+//---------- Warpzone ----------//
+A teraz, dla tych cierpliwych z was, mala podpowiedz
+Dobrze sie rozejrzyjcie w poziomie treningowym by znalezc
+tajne wejscie hydraulika...
+Uzywanie kola na samym poczatku to BOMBOWY pomysl...
+Trzymaj sie blisko lewej strony i nie zapomnij: hydraulicy ida po rury ;)
+
+//--- ENDE ---//

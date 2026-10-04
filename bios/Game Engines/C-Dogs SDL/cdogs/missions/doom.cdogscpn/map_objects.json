@@ -1,0 +1,81 @@
+{
+  "Version": 3,
+  "MapObjects": [
+    {
+      "Name": "barrel_nukage",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "barrel_nukage",
+        "TicksPerFrame": 10
+      },
+      "Wreck": "barrel_nukage_wreck",
+      "Health": 20,
+      "DestroyGuns": [
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ]
+    },
+    {
+      "Name": "barrel_nukage_wreck",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "barrel_nukage_wreck"
+      },
+      "Health": 0,
+      "DrawBelow": true
+    },
+    {
+      "Name": "pillar",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "pillar"
+      },
+      "Wreck": "safe_wreck",
+      "Health": 500
+    },
+    {
+      "Name": "candelabra",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "candelabra",
+        "TicksPerFrame": 6
+      },
+      "Wreck": "table_wood_round_wreck",
+      "Health": 40
+    },
+    {
+      "Name": "warning_sign",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "warning_sign"
+      },
+      "Offset": [-6, -9],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "firestick",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "firestick",
+        "TicksPerFrame": 6
+      },
+      "Wreck": "chair_wreck",
+      "Size": [8, 5],
+      "Offset": [-6, -28],
+      "Health": 40
+    },
+    {
+      "Name": "candle",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "candle",
+        "TicksPerFrame": 6
+      },
+      "Size": [8, 5],
+      "Offset": [-5, -12],
+      "Health": 0
+    }
+  ]
+}

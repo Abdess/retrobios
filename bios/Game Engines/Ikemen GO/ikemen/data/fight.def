@@ -1,0 +1,4011 @@
+; Definition of fight screen
+
+; Motif: IKEMEN1
+; Optimal resolution: 1280x720
+; Requires: IKEMEN GO 1.0 (Ikemen nightly)
+
+; Notes about fonts:
+;   - fonts can be specified in the [Files] section (no limit to how many),
+;   - fonts indexed here do not refer to the ones in system.def
+;   - fonts are search in directories in the following order:
+;     1. system directory
+;     2. mugen program directory (not recommended to keep custom fonts here)
+;     3. data/ (not recommended to keep custom fonts here)
+;     4. font/
+;
+; See the section "How to Customize" at the end of this file.
+
+;-----------------------------------------------------------
+; Ikemen feature
+[Info]
+name = IKEMEN1              ;Name of motif
+author = Ohmga Shironeko    ;Motif author name
+versiondate = 03,14,2026    ;Version date of motif (MM-DD-YYYY) 
+ikemenversion = 1.0         ;Version of I.K.E.M.E.N motif is compatible with (Ikemen nightly)
+localcoord = 1280,720 	;Local coordinate space width and height
+
+;-----------------------------------------------------------
+;Directories are checked in this order:
+;1. current directory fight.def is in
+;2. data/
+;3. your MUGEN directory
+;eg. If you write "spr = system.sff", and this system.def file
+;    is in ~/ikemen/data/mymotif/, then Ikemen will first look
+;    for ~/ikemen/data/mymotif/system.sff. If it does not find
+;    it there, it looks for ~/ikemen/data/system.sff (the default).
+;    Finally, if that is not found, it will look for
+;    ~/ikemen/system.sff.
+
+[Files]
+sff = fight.sff
+snd = fight.snd
+font1 = ikemen1/fonts/Menu2.def
+font2 = ikemen1/fonts/Timer.def
+font3 = ikemen1/fonts/Menu2Small.def
+font4 = ikemen1/fonts/PowerbarNum.def
+font5 = ikemen1/fonts/Action.def
+font6 = ikemen1/fonts/ComboCounter.def
+font7 = ikemen1/fonts/HitNum.def
+font8 = ikemen1/fonts/Pixel.def
+font9 = ikemen1/fonts/Round.def
+fightfx.sff = fightfx.sff ;Legacy Mugen common effects
+fightfx.air = fightfx.air ;Legacy Mugen common effects
+common.snd = common.snd   ;Legacy Mugen common effects
+;fx1 =                    ;Extra common effects .def file
+
+;-----------------------------------------------------------
+[FightFx]
+scale = 4
+
+;-----------------------------------------------------------
+[Lifebar]
+
+;Player 1
+p1.pos    = 595,40
+p1.bg0.spr = 10,0
+p1.bg0.offset = 0,0
+p1.bg0.xshear = 3
+p1.top.spr = 11,0
+p1.top.xshear = 3
+p1.mid.spr = 12, 0
+p1.mid.offset = 0,0
+p1.mid.xshear = 3
+p1.mid.palfx.mul = 200, 200, 200
+p1.mid.palfx.sinmul = 32, 32, 32, 5
+p1.front100.spr = 13,0
+p1.front100.offset = 0,0
+p1.front100.xshear = 3
+p1.front50.spr = 13,1
+p1.front50.offset = 0,0
+p1.front50.xshear = 3
+p1.front25.spr = 13,2
+p1.front25.offset = 0,0
+p1.front25.xshear = 3
+p1.front.spr = 13, 3
+p1.front.offset = 0,0
+p1.front.palfx.sinmul = 128, 128, 128, 15
+p1.front.xshear = 3
+;p1.shift.spr = 13,2          
+;p1.shift.offset = 0,0       
+;p1.shift.xshear = 3
+p1.range.x  = 15,-460
+p1.scalefill = 1
+
+;Player 2
+p2.pos    = 684,40
+p2.bg0.spr = 10,0
+p2.bg0.offset = 0,0
+p2.bg0.xshear = -3
+p2.bg0.facing = -1
+p2.top.spr = 11,0
+p2.top.facing = -1
+p2.top.xshear = -3
+p2.mid.spr = 12, 0
+p2.mid.offset = 0,0
+p2.mid.facing = -1
+p2.mid.xshear = -3
+p2.mid.palfx.mul = 200, 200, 200
+p2.mid.palfx.sinmul = 32, 32, 32, 5
+p2.front100.spr = 13,0
+p2.front100.offset = 0,0
+p2.front100.xshear = -3
+p2.front100.facing = -1
+p2.front50.spr = 13,1
+p2.front50.offset = 0,0
+p2.front50.xshear = -3
+p2.front50.facing = -1
+p2.front25.spr = 13,2
+p2.front25.offset = 0,0
+p2.front25.xshear = -3
+p2.front25.facing = -1
+p2.front.spr = 13, 3
+p2.front.offset = 0,0
+p2.front.palfx.sinmul = 128, 128, 128, 15
+p2.front.xshear = -3
+p2.front.facing = -1
+;p2.shift.spr = 13,2          
+;p2.shift.offset = 0,0        
+;p2.shift.xshear = -3
+;p2.shift.facing = -1         
+p2.range.x  = -15,460
+p2.scalefill = 1
+
+[Simul Lifebar]
+;Player 1
+p1.pos    = 595,46
+p1.bg0.spr = 10,0
+p1.bg0.offset = 0,0
+p1.bg0.xshear = 3
+p1.top.spr = 11,0
+p1.top.xshear = 3
+p1.mid.spr = 12, 0
+p1.mid.offset = 0,0
+p1.mid.xshear = 3
+p1.mid.palfx.mul = 200, 200, 200
+p1.mid.palfx.sinmul = 32, 32, 32, 5
+p1.front100.spr = 13,0
+p1.front100.offset = 0,0
+p1.front100.xshear = 3
+p1.front50.spr = 13,1
+p1.front50.offset = 0,0
+p1.front50.xshear = 3
+p1.front25.spr = 13,2
+p1.front25.offset = 0,0
+p1.front25.xshear = 3
+p1.front.spr = 13, 3
+p1.front.offset = 0,0
+p1.front.palfx.sinmul = 128, 128, 128, 15
+p1.front.xshear = 3
+;p1.shift.spr = 13,2          
+;p1.shift.offset = 0,0       
+;p1.shift.xshear = 3
+p1.range.x  = 15,-460
+p1.scalefill = 1
+
+;Player 2
+p2.pos    = 684,46
+p2.bg0.spr = 10,0
+p2.bg0.offset = 0,0
+p2.bg0.xshear = -3
+p2.bg0.facing = -1
+p2.top.spr = 11,0
+p2.top.facing = -1
+p2.top.xshear = -3
+p2.mid.spr = 12, 0
+p2.mid.offset = 0,0
+p2.mid.facing = -1
+p2.mid.xshear = -3
+p2.mid.palfx.mul = 200, 200, 200
+p2.mid.palfx.sinmul = 32, 32, 32, 5
+p2.front100.spr = 13,0
+p2.front100.offset = 0,0
+p2.front100.xshear = -3
+p2.front100.facing = -1
+p2.front50.spr = 13,1
+p2.front50.offset = 0,0
+p2.front50.xshear = -3
+p2.front50.facing = -1
+p2.front25.spr = 13,2
+p2.front25.offset = 0,0
+p2.front25.xshear = -3
+p2.front25.facing = -1
+p2.front.spr = 13, 3
+p2.front.offset = 0,0
+p2.front.palfx.sinmul = 128, 128, 128, 15
+p2.front.xshear = -3
+p2.front.facing = -1
+;p2.shift.spr = 13,2          
+;p2.shift.offset = 0,0        
+;p2.shift.xshear = -3
+;p2.shift.facing = -1         
+p2.range.x  = -15,460
+p2.scalefill = 1
+
+;Player 3
+p3.pos    = 607,34
+p3.bg0.spr = 20,0
+p3.bg0.offset = 0,0
+p3.bg0.xshear = 3
+p3.top.spr = 21,0
+p3.top.xshear = 3
+p3.mid.spr = 22, 0
+p3.mid.offset = 0,0
+p3.mid.xshear = 3
+p3.mid.palfx.mul = 200, 200, 200
+p3.mid.palfx.sinmul = 32, 32, 32, 5
+p3.front100.spr = 23,0
+p3.front100.offset = 0,0
+p3.front100.xshear = 3
+p3.front50.spr = 23,1
+p3.front50.offset = 0,0
+p3.front50.xshear = 3
+p3.front25.spr = 23,2
+p3.front25.offset = 0,0
+p3.front25.xshear = 3
+p3.front.spr = 23, 3
+p3.front.offset = 0,0
+p3.front.palfx.sinmul = 128, 128, 128, 15
+p3.front.xshear = 3
+;p3.shift.spr = 23,2          
+;p3.shift.offset = 0,0       
+;p3.shift.xshear = 3
+p3.range.x  = 15,-460
+p3.scalefill = 1
+
+;Player 4
+p4.pos    = 672,34
+p4.bg0.spr = 20,0
+p4.bg0.offset = 0,0
+p4.bg0.xshear = -3
+p4.bg0.facing = -1
+p4.top.spr = 21,0
+p4.top.facing = -1
+p4.top.xshear = -3
+p4.mid.spr = 22, 0
+p4.mid.offset = 0,0
+p4.mid.facing = -1
+p4.mid.xshear = -3
+p4.mid.palfx.mul = 200, 200, 200
+p4.mid.palfx.sinmul = 32, 32, 32, 5
+p4.front100.spr = 23,0
+p4.front100.offset = 0,0
+p4.front100.xshear = -3
+p4.front100.facing = -1
+p4.front50.spr = 23,1
+p4.front50.offset = 0,0
+p4.front50.xshear = -3
+p4.front50.facing = -1
+p4.front25.spr = 23,2
+p4.front25.offset = 0,0
+p4.front25.xshear = -3
+p4.front25.facing = -1
+p4.front.spr = 23, 3
+p4.front.offset = 0,0
+p4.front.palfx.sinmul = 128, 128, 128, 15
+p4.front.xshear = -3
+p4.front.facing = -1
+;p4.shift.spr = 23,2          
+;p4.shift.offset = 0,0        
+;p4.shift.xshear = -3
+;p4.shift.facing = -1         
+p4.range.x  = -15,460
+p4.scalefill = 1
+
+[Simul_3P Lifebar]
+;Player 1
+p1.pos    = 595,50
+p1.bg0.spr = 10,0
+p1.bg0.offset = 0,0
+p1.bg0.xshear = 3
+p1.top.spr = 11,0
+p1.top.xshear = 3
+p1.mid.spr = 12, 0
+p1.mid.offset = 0,0
+p1.mid.xshear = 3
+p1.mid.palfx.mul = 200, 200, 200
+p1.mid.palfx.sinmul = 32, 32, 32, 5
+p1.front100.spr = 13,0
+p1.front100.offset = 0,0
+p1.front100.xshear = 3
+p1.front50.spr = 13,1
+p1.front50.offset = 0,0
+p1.front50.xshear = 3
+p1.front25.spr = 13,2
+p1.front25.offset = 0,0
+p1.front25.xshear = 3
+p1.front.spr = 13, 3
+p1.front.offset = 0,0
+p1.front.palfx.sinmul = 128, 128, 128, 15
+p1.front.xshear = 3
+;p1.shift.spr = 13,2          
+;p1.shift.offset = 0,0       
+;p1.shift.xshear = 3
+p1.range.x  = 15,-460
+p1.scalefill = 1
+
+;Player 2
+p2.pos    = 684,50
+p2.bg0.spr = 10,0
+p2.bg0.offset = 0,0
+p2.bg0.xshear = -3
+p2.bg0.facing = -1
+p2.top.spr = 11,0
+p2.top.facing = -1
+p2.top.xshear = -3
+p2.mid.spr = 12, 0
+p2.mid.offset = 0,0
+p2.mid.facing = -1
+p2.mid.xshear = -3
+p2.mid.palfx.mul = 200, 200, 200
+p2.mid.palfx.sinmul = 32, 32, 32, 5
+p2.front100.spr = 13,0
+p2.front100.offset = 0,0
+p2.front100.xshear = -3
+p2.front100.facing = -1
+p2.front50.spr = 13,1
+p2.front50.offset = 0,0
+p2.front50.xshear = -3
+p2.front50.facing = -1
+p2.front25.spr = 13,2
+p2.front25.offset = 0,0
+p2.front25.xshear = -3
+p2.front25.facing = -1
+p2.front.spr = 13, 3
+p2.front.offset = 0,0
+p2.front.palfx.sinmul = 128, 128, 128, 15
+p2.front.xshear = -3
+p2.front.facing = -1
+;p2.shift.spr = 13,2          
+;p2.shift.offset = 0,0        
+;p2.shift.xshear = -3
+;p2.shift.facing = -1         
+p2.range.x  = -15,460
+p2.scalefill = 1
+
+;Player 3
+p3.pos    = 607,38
+p3.bg0.spr = 20,0
+p3.bg0.offset = 0,0
+p3.bg0.xshear = 3
+p3.top.spr = 21,0
+p3.top.xshear = 3
+p3.mid.spr = 22, 0
+p3.mid.offset = 0,0
+p3.mid.xshear = 3
+p3.mid.palfx.mul = 200, 200, 200
+p3.mid.palfx.sinmul = 32, 32, 32, 5
+p3.front100.spr = 23,0
+p3.front100.offset = 0,0
+p3.front100.xshear = 3
+p3.front50.spr = 23,1
+p3.front50.offset = 0,0
+p3.front50.xshear = 3
+p3.front25.spr = 23,2
+p3.front25.offset = 0,0
+p3.front25.xshear = 3
+p3.front.spr = 23, 3
+p3.front.offset = 0,0
+p3.front.palfx.sinmul = 128, 128, 128, 15
+p3.front.xshear = 3
+;p3.shift.spr = 23,2          
+;p3.shift.offset = 0,0       
+;p3.shift.xshear = 3
+p3.range.x  = 15,-460
+p3.scalefill = 1
+
+;Player 4
+p4.pos    = 672,38
+p4.bg0.spr = 20,0
+p4.bg0.offset = 0,0
+p4.bg0.xshear = -3
+p4.bg0.facing = -1
+p4.top.spr = 21,0
+p4.top.facing = -1
+p4.top.xshear = -3
+p4.mid.spr = 22, 0
+p4.mid.offset = 0,0
+p4.mid.facing = -1
+p4.mid.xshear = -3
+p4.mid.palfx.mul = 200, 200, 200
+p4.mid.palfx.sinmul = 32, 32, 32, 5
+p4.front100.spr = 23,0
+p4.front100.offset = 0,0
+p4.front100.xshear = -3
+p4.front100.facing = -1
+p4.front50.spr = 23,1
+p4.front50.offset = 0,0
+p4.front50.xshear = -3
+p4.front50.facing = -1
+p4.front25.spr = 23,2
+p4.front25.offset = 0,0
+p4.front25.xshear = -3
+p4.front25.facing = -1
+p4.front.spr = 23, 3
+p4.front.offset = 0,0
+p4.front.palfx.sinmul = 128, 128, 128, 15
+p4.front.xshear = -3
+p4.front.facing = -1
+;p4.shift.spr = 23,2          
+;p4.shift.offset = 0,0        
+;p4.shift.xshear = -3
+;p4.shift.facing = -1         
+p4.range.x  = -15,460
+p4.scalefill = 1
+
+;Player 5
+p5.pos    = 619,26
+p5.bg0.spr = 20,0
+p5.bg0.offset = 0,0
+p5.bg0.xshear = 3
+p5.top.spr = 21,0
+p5.top.xshear = 3
+p5.mid.spr = 22, 0
+p5.mid.offset = 0,0
+p5.mid.xshear = 3
+p5.mid.palfx.mul = 200, 200, 200
+p5.mid.palfx.sinmul = 32, 32, 32, 5
+p5.front100.spr = 23,0
+p5.front100.offset = 0,0
+p5.front100.xshear = 3
+p5.front50.spr = 23,1
+p5.front50.offset = 0,0
+p5.front50.xshear = 3
+p5.front25.spr = 23,2
+p5.front25.offset = 0,0
+p5.front25.xshear = 3
+p5.front.spr = 23, 3
+p5.front.offset = 0,0
+p5.front.palfx.sinmul = 128, 128, 128, 15
+p5.front.xshear = 3
+;p5.shift.spr = 23,2          
+;p5.shift.offset = 0,0       
+;p5.shift.xshear = 3
+p5.range.x  = 15,-460
+p5.scalefill = 1
+
+;Player 6
+p6.pos    = 660,26
+p6.bg0.spr = 20,0
+p6.bg0.offset = 0,0
+p6.bg0.xshear = -3
+p6.bg0.facing = -1
+p6.top.spr = 21,0
+p6.top.facing = -1
+p6.top.xshear = -3
+p6.mid.spr = 22, 0
+p6.mid.offset = 0,0
+p6.mid.facing = -1
+p6.mid.xshear = -3
+p6.mid.palfx.mul = 200, 200, 200
+p6.mid.palfx.sinmul = 32, 32, 32, 5
+p6.front100.spr = 23,0
+p6.front100.offset = 0,0
+p6.front100.xshear = -3
+p6.front100.facing = -1
+p6.front50.spr = 23,1
+p6.front50.offset = 0,0
+p6.front50.xshear = -3
+p6.front50.facing = -1
+p6.front25.spr = 23,2
+p6.front25.offset = 0,0
+p6.front25.xshear = -3
+p6.front25.facing = -1
+p6.front.spr = 23, 3
+p6.front.offset = 0,0
+p6.front.palfx.sinmul = 128, 128, 128, 15
+p6.front.xshear = -3
+p6.front.facing = -1
+;p6.shift.spr = 23,2          
+;p6.shift.offset = 0,0        
+;p6.shift.xshear = -3
+;p6.shift.facing = -1         
+p6.range.x  = -15,460
+p6.scalefill = 1
+
+[Simul_4P Lifebar]
+;Player 1
+p1.pos    = 583,62
+p1.bg0.spr = 20,0
+p1.bg0.offset = 0,0
+p1.bg0.xshear = 3
+p1.top.spr = 21,0
+p1.top.xshear = 3
+p1.mid.spr = 22, 0
+p1.mid.offset = 0,0
+p1.mid.xshear = 3
+p1.mid.palfx.mul = 200, 200, 200
+p1.mid.palfx.sinmul = 32, 32, 32, 5
+p1.front100.spr = 23,0
+p1.front100.offset = 0,0
+p1.front100.xshear = 3
+p1.front50.spr = 23,1
+p1.front50.offset = 0,0
+p1.front50.xshear = 3
+p1.front25.spr = 23,2
+p1.front25.offset = 0,0
+p1.front25.xshear = 3
+p1.front.spr = 23, 3
+p1.front.offset = 0,0
+p1.front.palfx.sinmul = 128, 128, 128, 15
+p1.front.xshear = 3
+;p1.shift.spr = 23,2          
+;p1.shift.offset = 0,0       
+;p1.shift.xshear = 3
+p1.range.x  = 15,-460
+p1.scalefill = 1
+
+;Player 2
+p2.pos    = 696,62
+p2.bg0.spr = 20,0
+p2.bg0.offset = 0,0
+p2.bg0.xshear = -3
+p2.bg0.facing = -1
+p2.top.spr = 21,0
+p2.top.facing = -1
+p2.top.xshear = -3
+p2.mid.spr = 22, 0
+p2.mid.offset = 0,0
+p2.mid.facing = -1
+p2.mid.xshear = -3
+p2.mid.palfx.mul = 200, 200, 200
+p2.mid.palfx.sinmul = 32, 32, 32, 5
+p2.front100.spr = 23,0
+p2.front100.offset = 0,0
+p2.front100.xshear = -3
+p2.front100.facing = -1
+p2.front50.spr = 23,1
+p2.front50.offset = 0,0
+p2.front50.xshear = -3
+p2.front50.facing = -1
+p2.front25.spr = 23,2
+p2.front25.offset = 0,0
+p2.front25.xshear = -3
+p2.front25.facing = -1
+p2.front.spr = 23, 3
+p2.front.offset = 0,0
+p2.front.palfx.sinmul = 128, 128, 128, 15
+p2.front.xshear = -3
+p2.front.facing = -1
+;p2.shift.spr = 23,2          
+;p2.shift.offset = 0,0        
+;p2.shift.xshear = -3
+;p2.shift.facing = -1         
+p2.range.x  = -15,460
+p2.scalefill = 1
+
+;Player 3
+p3.pos    = 595,50
+p3.bg0.spr = 20,0
+p3.bg0.offset = 0,0
+p3.bg0.xshear = 3
+p3.top.spr = 21,0
+p3.top.xshear = 3
+p3.mid.spr = 22, 0
+p3.mid.offset = 0,0
+p3.mid.xshear = 3
+p3.mid.palfx.mul = 200, 200, 200
+p3.mid.palfx.sinmul = 32, 32, 32, 5
+p3.front100.spr = 23,0
+p3.front100.offset = 0,0
+p3.front100.xshear = 3
+p3.front50.spr = 23,1
+p3.front50.offset = 0,0
+p3.front50.xshear = 3
+p3.front25.spr = 23,2
+p3.front25.offset = 0,0
+p3.front25.xshear = 3
+p3.front.spr = 23, 3
+p3.front.offset = 0,0
+p3.front.palfx.sinmul = 128, 128, 128, 15
+p3.front.xshear = 3
+;p3.shift.spr = 23,2          
+;p3.shift.offset = 0,0       
+;p3.shift.xshear = 3
+p3.range.x  = 15,-460
+p3.scalefill = 1
+
+;Player 4
+p4.pos    = 684,50
+p4.bg0.spr = 20,0
+p4.bg0.offset = 0,0
+p4.bg0.xshear = -3
+p4.bg0.facing = -1
+p4.top.spr = 21,0
+p4.top.facing = -1
+p4.top.xshear = -3
+p4.mid.spr = 22, 0
+p4.mid.offset = 0,0
+p4.mid.facing = -1
+p4.mid.xshear = -3
+p4.mid.palfx.mul = 200, 200, 200
+p4.mid.palfx.sinmul = 32, 32, 32, 5
+p4.front100.spr = 23,0
+p4.front100.offset = 0,0
+p4.front100.xshear = -3
+p4.front100.facing = -1
+p4.front50.spr = 23,1
+p4.front50.offset = 0,0
+p4.front50.xshear = -3
+p4.front50.facing = -1
+p4.front25.spr = 23,2
+p4.front25.offset = 0,0
+p4.front25.xshear = -3
+p4.front25.facing = -1
+p4.front.spr = 23, 3
+p4.front.offset = 0,0
+p4.front.palfx.sinmul = 128, 128, 128, 15
+p4.front.xshear = -3
+p4.front.facing = -1
+;p4.shift.spr = 23,2          
+;p4.shift.offset = 0,0        
+;p4.shift.xshear = -3
+;p4.shift.facing = -1         
+p4.range.x  = -15,460
+p4.scalefill = 1
+
+;Player 5
+p5.pos    = 607,38
+p5.bg0.spr = 20,0
+p5.bg0.offset = 0,0
+p5.bg0.xshear = 3
+p5.top.spr = 21,0
+p5.top.xshear = 3
+p5.mid.spr = 22, 0
+p5.mid.offset = 0,0
+p5.mid.xshear = 3
+p5.mid.palfx.mul = 200, 200, 200
+p5.mid.palfx.sinmul = 32, 32, 32, 5
+p5.front100.spr = 23,0
+p5.front100.offset = 0,0
+p5.front100.xshear = 3
+p5.front50.spr = 23,1
+p5.front50.offset = 0,0
+p5.front50.xshear = 3
+p5.front25.spr = 23,2
+p5.front25.offset = 0,0
+p5.front25.xshear = 3
+p5.front.spr = 23, 3
+p5.front.offset = 0,0
+p5.front.palfx.sinmul = 128, 128, 128, 15
+p5.front.xshear = 3
+;p5.shift.spr = 23,2          
+;p5.shift.offset = 0,0       
+;p5.shift.xshear = 3
+p5.range.x  = 15,-460
+p5.scalefill = 1
+
+;Player 6
+p6.pos    = 672,38
+p6.bg0.spr = 20,0
+p6.bg0.offset = 0,0
+p6.bg0.xshear = -3
+p6.bg0.facing = -1
+p6.top.spr = 21,0
+p6.top.facing = -1
+p6.top.xshear = -3
+p6.mid.spr = 22, 0
+p6.mid.offset = 0,0
+p6.mid.facing = -1
+p6.mid.xshear = -3
+p6.mid.palfx.mul = 200, 200, 200
+p6.mid.palfx.sinmul = 32, 32, 32, 5
+p6.front100.spr = 23,0
+p6.front100.offset = 0,0
+p6.front100.xshear = -3
+p6.front100.facing = -1
+p6.front50.spr = 23,1
+p6.front50.offset = 0,0
+p6.front50.xshear = -3
+p6.front50.facing = -1
+p6.front25.spr = 23,2
+p6.front25.offset = 0,0
+p6.front25.xshear = -3
+p6.front25.facing = -1
+p6.front.spr = 23, 3
+p6.front.offset = 0,0
+p6.front.palfx.sinmul = 128, 128, 128, 15
+p6.front.xshear = -3
+p6.front.facing = -1
+;p6.shift.spr = 23,2          
+;p6.shift.offset = 0,0        
+;p6.shift.xshear = -3
+;p6.shift.facing = -1         
+p6.range.x  = -15,460
+p6.scalefill = 1
+
+;Player 7
+p7.pos    = 619,26
+p7.bg0.spr = 20,0
+p7.bg0.offset = 0,0
+p7.bg0.xshear = 3
+p7.top.spr = 21,0
+p7.top.xshear = 3
+p7.mid.spr = 22, 0
+p7.mid.offset = 0,0
+p7.mid.xshear = 3
+p7.mid.palfx.mul = 200, 200, 200
+p7.mid.palfx.sinmul = 32, 32, 32, 5
+p7.front100.spr = 23,0
+p7.front100.offset = 0,0
+p7.front100.xshear = 3
+p7.front50.spr = 23,1
+p7.front50.offset = 0,0
+p7.front50.xshear = 3
+p7.front25.spr = 23,2
+p7.front25.offset = 0,0
+p7.front25.xshear = 3
+p7.front.spr = 23, 3
+p7.front.offset = 0,0
+p7.front.palfx.sinmul = 128, 128, 128, 15
+p7.front.xshear = 3
+;p7.shift.spr = 23,2          
+;p7.shift.offset = 0,0       
+;p7.shift.xshear = 3
+p7.range.x  = 15,-460
+p7.scalefill = 1
+
+;Player 8
+p8.pos    = 660,26
+p8.bg0.spr = 20,0
+p8.bg0.offset = 0,0
+p8.bg0.xshear = -3
+p8.bg0.facing = -1
+p8.top.spr = 21,0
+p8.top.facing = -1
+p8.top.xshear = -3
+p8.mid.spr = 22, 0
+p8.mid.offset = 0,0
+p8.mid.facing = -1
+p8.mid.xshear = -3
+p8.mid.palfx.mul = 200, 200, 200
+p8.mid.palfx.sinmul = 32, 32, 32, 5
+p8.front100.spr = 23,0
+p8.front100.offset = 0,0
+p8.front100.xshear = -3
+p8.front100.facing = -1
+p8.front50.spr = 23,1
+p8.front50.offset = 0,0
+p8.front50.xshear = -3
+p8.front50.facing = -1
+p8.front25.spr = 23,2
+p8.front25.offset = 0,0
+p8.front25.xshear = -3
+p8.front25.facing = -1
+p8.front.spr = 23, 3
+p8.front.offset = 0,0
+p8.front.palfx.sinmul = 128, 128, 128, 15
+p8.front.xshear = -3
+p8.front.facing = -1
+;p8.shift.spr = 23,2          
+;p8.shift.offset = 0,0        
+;p8.shift.xshear = -3
+;p8.shift.facing = -1         
+p8.range.x  = -15,460
+p8.scalefill = 1
+
+
+[Tag Lifebar]
+mid.shift = 0                ; makes the shift element also affect mid element (default: 0)
+mid.freeze = 0               ; controls mid element freezing during gethit/combo (default: 1)
+mid.delay = 0                ; frames before mid element starts decreasing (default: 30)
+mid.mult = 1.0               ; moving relation between mid value and life (default: 1.0)
+mid.steps = 16               ; mid value decreasing steps (default: 8)
+
+;Player 1
+p1.pos    = 595,46
+p1.bg0.spr = 10,0
+p1.bg0.offset = 0,0
+p1.bg0.xshear = 3
+p1.top.spr = 11,0
+p1.top.xshear = 3
+p1.mid.spr = 12, 0
+p1.mid.offset = 0,0
+p1.mid.xshear = 3
+p1.mid.palfx.mul = 200, 200, 200
+p1.mid.palfx.sinmul = 32, 32, 32, 5
+p1.red.spr = 14,0            
+p1.red.offset = 0,0         
+p1.red.xshear = 3
+p1.front100.spr = 13,0
+p1.front100.offset = 0,0
+p1.front100.xshear = 3
+p1.front50.spr = 13,1
+p1.front50.offset = 0,0
+p1.front50.xshear = 3
+p1.front25.spr = 13,2
+p1.front25.offset = 0,0
+p1.front25.xshear = 3
+p1.front.spr = 13, 3
+p1.front.offset = 0,0
+p1.front.palfx.sinmul = 128, 128, 128, 15
+p1.front.xshear = 3
+;p1.shift.spr = 13,2          
+;p1.shift.offset = 0,0       
+;p1.shift.xshear = 3
+p1.range.x  = 15,-460
+p1.scalefill = 1
+
+;Player 2
+p2.pos    = 684,46
+p2.bg0.spr = 10,0
+p2.bg0.offset = 0,0
+p2.bg0.xshear = -3
+p2.bg0.facing = -1
+p2.top.spr = 11,0
+p2.top.facing = -1
+p2.top.xshear = -3
+p2.mid.spr = 12, 0
+p2.mid.offset = 0,0
+p2.mid.facing = -1
+p2.mid.xshear = -3
+p2.mid.palfx.mul = 200, 200, 200
+p2.mid.palfx.sinmul = 32, 32, 32, 5
+p2.red.spr = 14,0            
+p2.red.offset = 0,0         
+p2.red.xshear = -3
+p2.red.facing = -1
+p2.front100.spr = 13,0
+p2.front100.offset = 0,0
+p2.front100.xshear = -3
+p2.front100.facing = -1
+p2.front50.spr = 13,1
+p2.front50.offset = 0,0
+p2.front50.xshear = -3
+p2.front50.facing = -1
+p2.front25.spr = 13,2
+p2.front25.offset = 0,0
+p2.front25.xshear = -3
+p2.front25.facing = -1
+p2.front.spr = 13, 3
+p2.front.offset = 0,0
+p2.front.palfx.sinmul = 128, 128, 128, 15
+p2.front.xshear = -3
+p2.front.facing = -1
+;p2.shift.spr = 13,2          
+;p2.shift.offset = 0,0        
+;p2.shift.xshear = -3
+;p2.shift.facing = -1         
+p2.range.x  = -15,460
+p2.scalefill = 1
+
+;Player 3
+p3.pos    = 607,34
+p3.bg0.spr = 20,0
+p3.bg0.offset = 0,0
+p3.bg0.xshear = 3
+p3.top.spr = 21,0
+p3.top.xshear = 3
+p3.mid.spr = 22, 0
+p3.mid.offset = 0,0
+p3.mid.xshear = 3
+p3.mid.palfx.mul = 200, 200, 200
+p3.mid.palfx.sinmul = 32, 32, 32, 5
+p3.red.spr = 24,1            
+p3.red.offset = 0,0         
+p3.red.palfx.sinmul = 64, 64, 64, 60
+p3.red.xshear = 3
+p3.front100.spr = 23,0
+p3.front100.offset = 0,0
+p3.front100.xshear = 3
+p3.front50.spr = 23,1
+p3.front50.offset = 0,0
+p3.front50.xshear = 3
+p3.front25.spr = 23,2
+p3.front25.offset = 0,0
+p3.front25.xshear = 3
+p3.front.spr = 23, 3
+p3.front.offset = 0,0
+p3.front.palfx.sinmul = 128, 128, 128, 15
+p3.front.xshear = 3
+;p3.shift.spr = 23,2          
+;p3.shift.offset = 0,0       
+;p3.shift.xshear = 3
+p3.range.x  = 15,-460
+p3.scalefill = 1
+
+;Player 4
+p4.pos    = 672,34
+p4.bg0.spr = 20,0
+p4.bg0.offset = 0,0
+p4.bg0.xshear = -3
+p4.bg0.facing = -1
+p4.top.spr = 21,0
+p4.top.facing = -1
+p4.top.xshear = -3
+p4.mid.spr = 22, 0
+p4.mid.offset = 0,0
+p4.mid.facing = -1
+p4.mid.xshear = -3
+p4.mid.palfx.mul = 200, 200, 200
+p4.mid.palfx.sinmul = 32, 32, 32, 5
+p4.red.spr = 24,1            
+p4.red.offset = 0,0         
+p4.red.xshear = -3
+p4.red.facing = -1
+p4.red.palfx.sinmul = 64, 64, 64, 60
+p4.front100.spr = 23,0
+p4.front100.offset = 0,0
+p4.front100.xshear = -3
+p4.front100.facing = -1
+p4.front50.spr = 23,1
+p4.front50.offset = 0,0
+p4.front50.xshear = -3
+p4.front50.facing = -1
+p4.front25.spr = 23,2
+p4.front25.offset = 0,0
+p4.front25.xshear = -3
+p4.front25.facing = -1
+p4.front.spr = 23, 3
+p4.front.offset = 0,0
+p4.front.palfx.sinmul = 128, 128, 128, 15
+p4.front.xshear = -3
+p4.front.facing = -1
+;p4.shift.spr = 23,2          
+;p4.shift.offset = 0,0        
+;p4.shift.xshear = -3
+;p4.shift.facing = -1         
+p4.range.x  = -15,460
+p4.scalefill = 1
+
+[Tag_3P Lifebar]
+mid.shift = 0                ; makes the shift element also affect mid element (default: 0)
+mid.freeze = 0               ; controls mid element freezing during gethit/combo (default: 1)
+mid.delay = 0                ; frames before mid element starts decreasing (default: 30)
+mid.mult = 1.0               ; moving relation between mid value and life (default: 1.0)
+mid.steps = 16               ; mid value decreasing steps (default: 8)
+
+;Player 1
+p1.pos    = 595,50
+p1.bg0.spr = 10,0
+p1.bg0.offset = 0,0
+p1.bg0.xshear = 3
+p1.top.spr = 11,0
+p1.top.xshear = 3
+p1.mid.spr = 12, 0
+p1.mid.offset = 0,0
+p1.mid.xshear = 3
+p1.mid.palfx.mul = 200, 200, 200
+p1.mid.palfx.sinmul = 32, 32, 32, 5
+;p1.red200.spr = 14,0            
+;p1.red200.offset = 0,0
+;p1.red200.xshear = 3
+;p1.red200.palfx.sinmul = 128, 128, 128, 5
+p1.red.spr = 14,0            
+p1.red.offset = 0,0         
+p1.red.xshear = 3
+p1.front100.spr = 13,0
+p1.front100.offset = 0,0
+p1.front100.xshear = 3
+p1.front50.spr = 13,1
+p1.front50.offset = 0,0
+p1.front50.xshear = 3
+p1.front25.spr = 13,2
+p1.front25.offset = 0,0
+p1.front25.xshear = 3
+p1.front.spr = 13, 3
+p1.front.offset = 0,0
+p1.front.palfx.sinmul = 128, 128, 128, 15
+p1.front.xshear = 3
+;p1.shift.spr = 13,2          
+;p1.shift.offset = 0,0       
+;p1.shift.xshear = 3
+p1.range.x  = 15,-460
+p1.scalefill = 1
+
+;Player 2
+p2.pos    = 684,50
+p2.bg0.spr = 10,0
+p2.bg0.offset = 0,0
+p2.bg0.xshear = -3
+p2.bg0.facing = -1
+p2.top.spr = 11,0
+p2.top.facing = -1
+p2.top.xshear = -3
+p2.mid.spr = 12, 0
+p2.mid.offset = 0,0
+p2.mid.facing = -1
+p2.mid.xshear = -3
+p2.mid.palfx.mul = 200, 200, 200
+p2.mid.palfx.sinmul = 32, 32, 32, 5
+;p2.red200.spr = 14,0            
+;p2.red200.offset = 0,0         
+;p2.red200.xshear = -3
+;p2.red200.facing = -1
+;p2.red200.palfx.sinmul = 128, 128, 128, 15
+p2.red.spr = 14,0            
+p2.red.offset = 0,0         
+p2.red.xshear = -3
+p2.red.facing = -1
+p2.front100.spr = 13,0
+p2.front100.offset = 0,0
+p2.front100.xshear = -3
+p2.front100.facing = -1
+p2.front50.spr = 13,1
+p2.front50.offset = 0,0
+p2.front50.xshear = -3
+p2.front50.facing = -1
+p2.front25.spr = 13,2
+p2.front25.offset = 0,0
+p2.front25.xshear = -3
+p2.front25.facing = -1
+p2.front.spr = 13, 3
+p2.front.offset = 0,0
+p2.front.palfx.sinmul = 128, 128, 128, 15
+p2.front.xshear = -3
+p2.front.facing = -1
+;p2.shift.spr = 13,2          
+;p2.shift.offset = 0,0        
+;p2.shift.xshear = -3
+;p2.shift.facing = -1         
+p2.range.x  = -15,460
+p2.scalefill = 1
+
+;Player 3
+p3.pos    = 607,38
+p3.bg0.spr = 20,0
+p3.bg0.offset = 0,0
+p3.bg0.xshear = 3
+p3.top.spr = 21,0
+p3.top.xshear = 3
+p3.mid.spr = 22, 0
+p3.mid.offset = 0,0
+p3.mid.xshear = 3
+p3.mid.palfx.mul = 200, 200, 200
+p3.mid.palfx.sinmul = 32, 32, 32, 5
+p3.red.spr = 24,1            
+p3.red.offset = 0,0         
+p3.red.xshear = 3
+p3.red.palfx.sinmul = 64, 64, 64, 60
+p3.front100.spr = 23,0
+p3.front100.offset = 0,0
+p3.front100.xshear = 3
+p3.front50.spr = 23,1
+p3.front50.offset = 0,0
+p3.front50.xshear = 3
+p3.front25.spr = 23,2
+p3.front25.offset = 0,0
+p3.front25.xshear = 3
+p3.front.spr = 23, 3
+p3.front.offset = 0,0
+p3.front.palfx.sinmul = 128, 128, 128, 15
+p3.front.xshear = 3
+;p3.shift.spr = 23,2          
+;p3.shift.offset = 0,0       
+;p3.shift.xshear = 3
+p3.range.x  = 15,-460
+p3.scalefill = 1
+
+;Player 4
+p4.pos    = 672,38
+p4.bg0.spr = 20,0
+p4.bg0.offset = 0,0
+p4.bg0.xshear = -3
+p4.bg0.facing = -1
+p4.top.spr = 21,0
+p4.top.facing = -1
+p4.top.xshear = -3
+p4.mid.spr = 22, 0
+p4.mid.offset = 0,0
+p4.mid.facing = -1
+p4.mid.xshear = -3
+p4.mid.palfx.mul = 200, 200, 200
+p4.mid.palfx.sinmul = 32, 32, 32, 5
+p4.red.palfx.sinmul = 64, 64, 64, 60
+p4.red.spr = 24,1            
+p4.red.offset = 0,0         
+p4.red.xshear = -3
+p4.red.facing = -1
+p4.front100.spr = 23,0
+p4.front100.offset = 0,0
+p4.front100.xshear = -3
+p4.front100.facing = -1
+p4.front50.spr = 23,1
+p4.front50.offset = 0,0
+p4.front50.xshear = -3
+p4.front50.facing = -1
+p4.front25.spr = 23,2
+p4.front25.offset = 0,0
+p4.front25.xshear = -3
+p4.front25.facing = -1
+p4.front.spr = 23, 3
+p4.front.offset = 0,0
+p4.front.palfx.sinmul = 128, 128, 128, 15
+p4.front.xshear = -3
+p4.front.facing = -1
+;p4.shift.spr = 23,2          
+;p4.shift.offset = 0,0        
+;p4.shift.xshear = -3
+;p4.shift.facing = -1         
+p4.range.x  = -15,460
+p4.scalefill = 1
+
+;Player 5
+p5.pos    = 619,26
+p5.bg0.spr = 20,0
+p5.bg0.offset = 0,0
+p5.bg0.xshear = 3
+p5.top.spr = 21,0
+p5.top.xshear = 3
+p5.mid.spr = 22, 0
+p5.mid.offset = 0,0
+p5.mid.xshear = 3
+p5.mid.palfx.mul = 200, 200, 200
+p5.mid.palfx.sinmul = 32, 32, 32, 5
+p5.red.spr = 24,1            
+p5.red.offset = 0,0         
+p5.red.xshear = 3
+p5.red.palfx.sinmul = 64, 64, 64, 60
+p5.front100.spr = 23,0
+p5.front100.offset = 0,0
+p5.front100.xshear = 3
+p5.front50.spr = 23,1
+p5.front50.offset = 0,0
+p5.front50.xshear = 3
+p5.front25.spr = 23,2
+p5.front25.offset = 0,0
+p5.front25.xshear = 3
+p5.front.spr = 23, 3
+p5.front.offset = 0,0
+p5.front.palfx.sinmul = 128, 128, 128, 15
+p5.front.xshear = 3
+;p5.shift.spr = 23,2          
+;p5.shift.offset = 0,0       
+;p5.shift.xshear = 3
+p5.range.x  = 15,-460
+p5.scalefill = 1
+
+;Player 6
+p6.pos    = 660,26
+p6.bg0.spr = 20,0
+p6.bg0.offset = 0,0
+p6.bg0.xshear = -3
+p6.bg0.facing = -1
+p6.top.spr = 21,0
+p6.top.facing = -1
+p6.top.xshear = -3
+p6.mid.spr = 22, 0
+p6.mid.offset = 0,0
+p6.mid.facing = -1
+p6.mid.xshear = -3
+p6.mid.palfx.mul = 200, 200, 200
+p6.mid.palfx.sinmul = 32, 32, 32, 5
+p6.red.palfx.sinmul = 64, 64, 64, 60
+p6.red.spr = 24,1            
+p6.red.offset = 0,0         
+p6.red.xshear = -3
+p6.red.facing = -1
+p6.front100.spr = 23,0
+p6.front100.offset = 0,0
+p6.front100.xshear = -3
+p6.front100.facing = -1
+p6.front50.spr = 23,1
+p6.front50.offset = 0,0
+p6.front50.xshear = -3
+p6.front50.facing = -1
+p6.front25.spr = 23,2
+p6.front25.offset = 0,0
+p6.front25.xshear = -3
+p6.front25.facing = -1
+p6.front.spr = 23, 3
+p6.front.offset = 0,0
+p6.front.palfx.sinmul = 128, 128, 128, 15
+p6.front.xshear = -3
+p6.front.facing = -1
+;p6.shift.spr = 23,2          
+;p6.shift.offset = 0,0        
+;p6.shift.xshear = -3
+;p6.shift.facing = -1         
+p6.range.x  = -15,460
+p6.scalefill = 1
+
+[Tag_4P Lifebar]
+mid.shift = 0                ; makes the shift element also affect mid element (default: 0)
+mid.freeze = 0               ; controls mid element freezing during gethit/combo (default: 1)
+mid.delay = 0                ; frames before mid element starts decreasing (default: 30)
+mid.mult = 1.0               ; moving relation between mid value and life (default: 1.0)
+mid.steps = 16               ; mid value decreasing steps (default: 8)
+
+;Player 1
+p1.pos    = 583,62
+p1.bg0.spr = 20,0
+p1.bg0.offset = 0,0
+p1.bg0.xshear = 3
+p1.top.spr = 21,0
+p1.top.xshear = 3
+p1.mid.spr = 22, 0
+p1.mid.offset = 0,0
+p1.mid.xshear = 3
+p1.mid.palfx.mul = 200, 200, 200
+p1.mid.palfx.sinmul = 32, 32, 32, 5
+p1.red.spr = 24,0           
+p1.red.offset = 0,0         
+p1.red.xshear = 3
+p1.front100.spr = 23,0
+p1.front100.offset = 0,0
+p1.front100.xshear = 3
+p1.front50.spr = 23,1
+p1.front50.offset = 0,0
+p1.front50.xshear = 3
+p1.front25.spr = 23,2
+p1.front25.offset = 0,0
+p1.front25.xshear = 3
+p1.front.spr = 23, 3
+p1.front.offset = 0,0
+p1.front.palfx.sinmul = 128, 128, 128, 15
+p1.front.xshear = 3
+;p1.shift.spr = 23,2          
+;p1.shift.offset = 0,0       
+;p1.shift.xshear = 3
+p1.range.x  = 15,-460
+p1.scalefill = 1
+
+;Player 2
+p2.pos    = 696,62
+p2.bg0.spr = 20,0
+p2.bg0.offset = 0,0
+p2.bg0.xshear = -3
+p2.bg0.facing = -1
+p2.top.spr = 21,0
+p2.top.facing = -1
+p2.top.xshear = -3
+p2.mid.spr = 22, 0
+p2.mid.offset = 0,0
+p2.mid.facing = -1
+p2.mid.xshear = -3
+p2.mid.palfx.mul = 200, 200, 200
+p2.mid.palfx.sinmul = 32, 32, 32, 5
+p2.red.spr = 24,0        
+p2.red.offset = 0,0         
+p2.red.xshear = -3
+p2.red.facing = -1
+p2.front100.spr = 23,0
+p2.front100.offset = 0,0
+p2.front100.xshear = -3
+p2.front100.facing = -1
+p2.front50.spr = 23,1
+p2.front50.offset = 0,0
+p2.front50.xshear = -3
+p2.front50.facing = -1
+p2.front25.spr = 23,2
+p2.front25.offset = 0,0
+p2.front25.xshear = -3
+p2.front25.facing = -1
+p2.front.spr = 23, 3
+p2.front.offset = 0,0
+p2.front.palfx.sinmul = 128, 128, 128, 15
+p2.front.xshear = -3
+p2.front.facing = -1
+;p2.shift.spr = 23,2          
+;p2.shift.offset = 0,0        
+;p2.shift.xshear = -3
+;p2.shift.facing = -1         
+p2.range.x  = -15,460
+p2.scalefill = 1
+
+;Player 3
+p3.pos    = 595,50
+p3.bg0.spr = 20,0
+p3.bg0.offset = 0,0
+p3.bg0.xshear = 3
+p3.top.spr = 21,0
+p3.top.xshear = 3
+p3.mid.spr = 22, 0
+p3.mid.offset = 0,0
+p3.mid.xshear = 3
+p3.mid.palfx.mul = 200, 200, 200
+p3.mid.palfx.sinmul = 32, 32, 32, 5
+p3.red.spr = 24,1            
+p3.red.offset = 0,0         
+p3.red.xshear = 3
+p3|p4|p5|p6|p7|p8.red.palfx.sinmul = 64, 64, 64, 60
+p3.front100.spr = 23,0
+p3.front100.offset = 0,0
+p3.front100.xshear = 3
+p3.front50.spr = 23,1
+p3.front50.offset = 0,0
+p3.front50.xshear = 3
+p3.front25.spr = 23,2
+p3.front25.offset = 0,0
+p3.front25.xshear = 3
+p3.front.spr = 23, 3
+p3.front.offset = 0,0
+p3.front.palfx.sinmul = 128, 128, 128, 15
+p3.front.xshear = 3
+;p3.shift.spr = 23,2          
+;p3.shift.offset = 0,0       
+;p3.shift.xshear = 3
+p3.range.x  = 15,-460
+p3.scalefill = 1
+
+;Player 4
+p4.pos    = 684,50
+p4.bg0.spr = 20,0
+p4.bg0.offset = 0,0
+p4.bg0.xshear = -3
+p4.bg0.facing = -1
+p4.top.spr = 21,0
+p4.top.facing = -1
+p4.top.xshear = -3
+p4.mid.spr = 22, 0
+p4.mid.offset = 0,0
+p4.mid.facing = -1
+p4.mid.xshear = -3
+p4.mid.palfx.mul = 200, 200, 200
+p4.mid.palfx.sinmul = 32, 32, 32, 5
+p4.red.spr = 24,1            
+p4.red.offset = 0,0         
+p4.red.xshear = -3
+p4.red.facing = -1
+p4.front100.spr = 23,0
+p4.front100.offset = 0,0
+p4.front100.xshear = -3
+p4.front100.facing = -1
+p4.front50.spr = 23,1
+p4.front50.offset = 0,0
+p4.front50.xshear = -3
+p4.front50.facing = -1
+p4.front25.spr = 23,2
+p4.front25.offset = 0,0
+p4.front25.xshear = -3
+p4.front25.facing = -1
+p4.front.spr = 23, 3
+p4.front.offset = 0,0
+p4.front.palfx.sinmul = 128, 128, 128, 15
+p4.front.xshear = -3
+p4.front.facing = -1
+;p4.shift.spr = 23,2          
+;p4.shift.offset = 0,0        
+;p4.shift.xshear = -3
+;p4.shift.facing = -1         
+p4.range.x  = -15,460
+p4.scalefill = 1
+
+;Player 5
+p5.pos    = 607,38
+p5.bg0.spr = 20,0
+p5.bg0.offset = 0,0
+p5.bg0.xshear = 3
+p5.top.spr = 21,0
+p5.top.xshear = 3
+p5.mid.spr = 22, 0
+p5.mid.offset = 0,0
+p5.mid.xshear = 3
+p5.mid.palfx.mul = 200, 200, 200
+p5.mid.palfx.sinmul = 32, 32, 32, 5
+p5.red.spr = 24,1            
+p5.red.offset = 0,0         
+p5.red.xshear = 3
+p5.front100.spr = 23,0
+p5.front100.offset = 0,0
+p5.front100.xshear = 3
+p5.front50.spr = 23,1
+p5.front50.offset = 0,0
+p5.front50.xshear = 3
+p5.front25.spr = 23,2
+p5.front25.offset = 0,0
+p5.front25.xshear = 3
+p5.front.spr = 23, 3
+p5.front.offset = 0,0
+p5.front.palfx.sinmul = 128, 128, 128, 15
+p5.front.xshear = 3
+;p5.shift.spr = 23,2          
+;p5.shift.offset = 0,0       
+;p5.shift.xshear = 3
+p5.range.x  = 15,-460
+p5.scalefill = 1
+
+;Player 6
+p6.pos    = 672,38
+p6.bg0.spr = 20,0
+p6.bg0.offset = 0,0
+p6.bg0.xshear = -3
+p6.bg0.facing = -1
+p6.top.spr = 21,0
+p6.top.facing = -1
+p6.top.xshear = -3
+p6.mid.spr = 22, 0
+p6.mid.offset = 0,0
+p6.mid.facing = -1
+p6.mid.xshear = -3
+p6.mid.palfx.mul = 200, 200, 200
+p6.mid.palfx.sinmul = 32, 32, 32, 5
+p6.red.spr = 24,1            
+p6.red.offset = 0,0         
+p6.red.xshear = -3
+p6.red.facing = -1
+p6.front100.spr = 23,0
+p6.front100.offset = 0,0
+p6.front100.xshear = -3
+p6.front100.facing = -1
+p6.front50.spr = 23,1
+p6.front50.offset = 0,0
+p6.front50.xshear = -3
+p6.front50.facing = -1
+p6.front25.spr = 23,2
+p6.front25.offset = 0,0
+p6.front25.xshear = -3
+p6.front25.facing = -1
+p6.front.spr = 23, 3
+p6.front.offset = 0,0
+p6.front.palfx.sinmul = 128, 128, 128, 15
+p6.front.xshear = -3
+p6.front.facing = -1
+;p6.shift.spr = 23,2          
+;p6.shift.offset = 0,0        
+;p6.shift.xshear = -3
+;p6.shift.facing = -1         
+p6.range.x  = -15,460
+p6.scalefill = 1
+
+;Player 7
+p7.pos    = 619,26
+p7.bg0.spr = 20,0
+p7.bg0.offset = 0,0
+p7.bg0.xshear = 3
+p7.top.spr = 21,0
+p7.top.xshear = 3
+p7.mid.spr = 22, 0
+p7.mid.offset = 0,0
+p7.mid.xshear = 3
+p7.mid.palfx.mul = 200, 200, 200
+p7.mid.palfx.sinmul = 32, 32, 32, 5
+p7.red.spr = 24,1            
+p7.red.offset = 0,0         
+p7.red.xshear = 3
+p7.front100.spr = 23,0
+p7.front100.offset = 0,0
+p7.front100.xshear = 3
+p7.front50.spr = 23,1
+p7.front50.offset = 0,0
+p7.front50.xshear = 3
+p7.front25.spr = 23,2
+p7.front25.offset = 0,0
+p7.front25.xshear = 3
+p7.front.spr = 23, 3
+p7.front.offset = 0,0
+p7.front.palfx.sinmul = 128, 128, 128, 15
+p7.front.xshear = 3
+;p7.shift.spr = 23,2          
+;p7.shift.offset = 0,0       
+;p7.shift.xshear = 3
+p7.range.x  = 15,-460
+p7.scalefill = 1
+
+;Player 8
+p8.pos    = 660,26
+p8.bg0.spr = 20,0
+p8.bg0.offset = 0,0
+p8.bg0.xshear = -3
+p8.bg0.facing = -1
+p8.top.spr = 21,0
+p8.top.facing = -1
+p8.top.xshear = -3
+p8.mid.spr = 22, 0
+p8.mid.offset = 0,0
+p8.mid.facing = -1
+p8.mid.xshear = -3
+p8.mid.palfx.mul = 200, 200, 200
+p8.mid.palfx.sinmul = 32, 32, 32, 5
+p8.red.spr = 24,1            
+p8.red.offset = 0,0         
+p8.red.xshear = -3
+p8.red.facing = -1
+p8.front100.spr = 23,0
+p8.front100.offset = 0,0
+p8.front100.xshear = -3
+p8.front100.facing = -1
+p8.front50.spr = 23,1
+p8.front50.offset = 0,0
+p8.front50.xshear = -3
+p8.front50.facing = -1
+p8.front25.spr = 23,2
+p8.front25.offset = 0,0
+p8.front25.xshear = -3
+p8.front25.facing = -1
+p8.front.spr = 23, 3
+p8.front.offset = 0,0
+p8.front.palfx.sinmul = 128, 128, 128, 15
+p8.front.xshear = -3
+p8.front.facing = -1
+;p8.shift.spr = 23,2          
+;p8.shift.offset = 0,0        
+;p8.shift.xshear = -3
+;p8.shift.facing = -1         
+p8.range.x  = -15,460
+p8.scalefill = 1
+
+[Turns Lifebar]
+;Player 1
+p1.pos    = 595,40
+p1.bg0.spr = 10,0
+p1.bg0.offset = 0,0
+p1.bg0.xshear = 3
+p1.top.spr = 11,0
+p1.top.xshear = 3
+p1.mid.spr = 12, 0
+p1.mid.offset = 0,0
+p1.mid.xshear = 3
+p1.mid.palfx.mul = 200, 200, 200
+p1.mid.palfx.sinmul = 32, 32, 32, 5
+p1.front100.spr = 13,0
+p1.front100.offset = 0,0
+p1.front100.xshear = 3
+p1.front50.spr = 13,1
+p1.front50.offset = 0,0
+p1.front50.xshear = 3
+p1.front25.spr = 13,2
+p1.front25.offset = 0,0
+p1.front25.xshear = 3
+p1.front.spr = 13, 3
+p1.front.offset = 0,0
+p1.front.palfx.sinmul = 128, 128, 128, 15
+p1.front.xshear = 3
+;p1.shift.spr = 13,2          
+;p1.shift.offset = 0,0       
+;p1.shift.xshear = 3
+p1.range.x  = 15,-460
+p1.scalefill = 1
+
+;Player 2
+p2.pos    = 684,40
+p2.bg0.spr = 10,0
+p2.bg0.offset = 0,0
+p2.bg0.xshear = -3
+p2.bg0.facing = -1
+p2.top.spr = 11,0
+p2.top.facing = -1
+p2.top.xshear = -3
+p2.mid.spr = 12, 0
+p2.mid.offset = 0,0
+p2.mid.facing = -1
+p2.mid.xshear = -3
+p2.mid.palfx.mul = 200, 200, 200
+p2.mid.palfx.sinmul = 32, 32, 32, 5
+p2.front100.spr = 13,0
+p2.front100.offset = 0,0
+p2.front100.xshear = -3
+p2.front100.facing = -1
+p2.front50.spr = 13,1
+p2.front50.offset = 0,0
+p2.front50.xshear = -3
+p2.front50.facing = -1
+p2.front25.spr = 13,2
+p2.front25.offset = 0,0
+p2.front25.xshear = -3
+p2.front25.facing = -1
+p2.front.spr = 13, 3
+p2.front.offset = 0,0
+p2.front.palfx.sinmul = 128, 128, 128, 15
+p2.front.xshear = -3
+p2.front.facing = -1
+;p2.shift.spr = 13,2          
+;p2.shift.offset = 0,0        
+;p2.shift.xshear = -3
+;p2.shift.facing = -1         
+p2.range.x  = -15,460
+p2.scalefill = 1
+
+;-----------------------------------------------------------
+[Powerbar]
+;Player 1
+p1.pos    = 568,83
+p1.bg0.spr = 40,0
+p1.bg0.offset = 0,3
+p1.bg1.spr = 41,0
+;p1.mid.spr = 42,0
+p1.front.spr = 43,0
+p1.front.offset = -4,4
+p1.front.palfx.mul = 178, 178, 178
+p1.range.x = -4, -206
+
+; Multiple Front Elements can be added depending on the amount of power, including maximum power
+
+p1.front500.spr = 43, 0
+p1.front500.offset = -4,4
+p1.front500.palfx.mul = 178, 178, 178 
+p1.front500.palfx.sinmul = 20, 20, 20, 90
+
+p1.front1000.spr = 43, 0
+p1.front1000.offset = -4,4
+p1.front1000.palfx.mul = 0, 122, 255 
+p1.front1000.palfx.sinmul = 20, 20, 20, 60
+
+p1.front2000.spr = 43, 0
+p1.front2000.offset = -4,4
+p1.front2000.palfx.mul = 254, 254, 55
+p1.front2000.palfx.sinmul = 32, 32, 32, 50
+
+p1.front3000.spr = 43, 0
+p1.front3000.offset = -4,4
+p1.front3000.palfx.mul = 255, 55, 55
+p1.front3000.palfx.sinmul = 32, 32, 32, 45
+
+p1.front4000.spr = 43, 0
+p1.front4000.offset = -4,4
+p1.front4000.palfx.mul = 0, 250, 0
+p1.front4000.palfx.sinmul = 32, 32, 32, 40
+
+p1.front5000.spr = 43, 0
+p1.front5000.offset = -4,4
+p1.front5000.palfx.mul = 256, 155, 64
+p1.front5000.palfx.sinmul = 32, 32, 32, 35
+
+p1.front6000.spr = 43, 0
+p1.front6000.offset = -4,4
+p1.front6000.palfx.mul = 75, 250, 150
+p1.front6000.palfx.sinmul = 32, 32, 32, 30
+
+p1.front7000.spr = 43, 0
+p1.front7000.offset = -4,4
+p1.front7000.palfx.mul = 0, 200, 225
+p1.front7000.palfx.sinmul = 32, 32, 32, 25
+
+p1.front8000.spr = 43, 0
+p1.front8000.offset = -4,4
+p1.front8000.palfx.mul = 200, 78, 240
+p1.front8000.palfx.sinmul = 32, 32, 32, 20
+
+p1.front9000.spr = 43, 0
+p1.front9000.offset = -4,4
+p1.front9000.palfx.mul = 255, 32, 135
+p1.front9000.palfx.sinmul = 32, 32, 32, 15
+
+p1.front10000.spr = 43, 0
+p1.front10000.offset = -4,4
+p1.front10000.palfx.mul = 236, 236, 236
+p1.front10000.palfx.sinmul = 20, 20, 20, 10
+
+p1.frontMax.spr = 44, 0
+p1.frontMax.offset = -4,4
+p1.frontMax.palfx.sinmul = 30, 30, 30, 10
+
+; Multiple Counter elements can be added depending on the level of the bar, including maximum power
+
+p1.counterMax.text = M
+p1.counterMax.offset = -241,31
+p1.counterMax.font = 4, 0, 0
+p1.counterMax.palfx.mul = 226, 226, 226
+p1.counterMax.palfx.sinmul = 30, 30, 30, 10
+
+p1.counter10000.offset = -241,31
+p1.counter10000.font = 4, 0, 0
+p1.counter10000.palfx.mul = 226, 226, 226
+p1.counter10000.palfx.sinmul = 30, 30, 30, 10
+
+p1.counter9000.offset = -241,31
+p1.counter9000.font = 4, 0, 0
+p1.counter9000.palfx.mul = 255, 32, 135
+
+p1.counter8000.offset = -241,31
+p1.counter8000.font = 4, 0, 0
+p1.counter8000.palfx.mul = 200, 78, 240
+
+p1.counter7000.offset = -241,31
+p1.counter7000.font = 4, 0, 0
+p1.counter7000.palfx.mul = 102, 250, 250
+
+p1.counter6000.offset = -241,31
+p1.counter6000.font = 4, 0, 0
+p1.counter6000.palfx.mul = 0, 204, 153
+
+p1.counter5000.offset = -241,31
+p1.counter5000.font = 4, 0, 0
+p1.counter5000.palfx.mul = 255, 153, 0
+
+p1.counter4000.offset = -241,31
+p1.counter4000.font = 4, 0, 0
+p1.counter4000.palfx.mul = 102, 255, 51
+
+p1.counter3000.offset = -241,31
+p1.counter3000.font = 4, 0, 0
+p1.counter3000.palfx.mul = 255, 70, 70
+
+p1.counter2000.offset = -241,31
+p1.counter2000.font = 4, 0, 0
+p1.counter2000.palfx.mul = 255, 255, 51
+
+p1.counter1000.offset = -241,31
+p1.counter1000.font = 4, 0, 0
+p1.counter1000.palfx.mul = 0, 153, 255
+
+p1.counter.palfx.mul = 125, 125, 125
+p1.counter.offset = -241,31
+p1.counter.font = 4, 0, 0
+p1.levelbars = 1             
+
+;Player 2
+p2.pos    = 712,83
+p2.bg0.spr = 40,0
+p2.bg0.offset = 0,3
+p2.bg0.facing = -1
+p2.bg1.spr = 41,0
+p2.bg1.facing = -1
+;p2.mid.spr = 42,0
+;p2.mid.facing = -1
+p2.front.spr = 43,0
+p2.front.palfx.mul = 178, 178, 178
+p2.front.offset = 4,4
+p2.front.facing = -1
+p2.range.x  = 4,206
+
+; Multiple Front Elements can be added depending on the amount of power, including maximum power
+
+p2.front500.spr = 43, 0
+p2.front500.offset = 4,4
+p2.front500.palfx.mul = 178, 178, 178 
+p2.front500.palfx.sinmul = 20, 20, 20, 90
+p2.front500.facing = -1
+
+p2.front1000.spr = 43, 0
+p2.front1000.offset = 4,4
+p2.front1000.palfx.mul = 0, 122, 255 
+p2.front1000.palfx.sinmul = 20, 20, 20, 60
+p2.front1000.facing = -1
+
+p2.front2000.spr = 43, 0
+p2.front2000.offset = 4,4
+p2.front2000.palfx.mul = 254, 254, 55
+p2.front2000.palfx.sinmul = 32, 32, 32, 50
+p2.front2000.facing = -1
+
+p2.front3000.spr = 43, 0
+p2.front3000.offset = 4,4
+p2.front3000.palfx.mul = 255, 55, 55
+p2.front3000.palfx.sinmul = 32, 32, 32, 45
+p2.front3000.facing = -1
+
+p2.front4000.spr = 43, 0
+p2.front4000.offset = 4,4
+p2.front4000.palfx.mul = 0, 250, 0
+p2.front4000.palfx.sinmul = 32, 32, 32, 40
+p2.front4000.facing = -1
+
+p2.front5000.spr = 43, 0
+p2.front5000.offset = 4,4
+p2.front5000.palfx.mul = 256, 155, 64
+p2.front5000.palfx.sinmul = 32, 32, 32, 35
+p2.front5000.facing = -1
+
+p2.front6000.spr = 43, 0
+p2.front6000.offset = 4,4
+p2.front6000.palfx.mul = 75, 250, 150
+p2.front6000.palfx.sinmul = 32, 32, 32, 30
+p2.front6000.facing = -1
+
+p2.front7000.spr = 43, 0
+p2.front7000.offset = 4,4
+p2.front7000.palfx.mul = 0, 200, 225
+p2.front7000.palfx.sinmul = 32, 32, 32, 25
+p2.front7000.facing = -1
+
+p2.front8000.spr = 43, 0
+p2.front8000.offset = 4,4
+p2.front8000.palfx.mul = 200, 78, 240
+p2.front8000.palfx.sinmul = 32, 32, 32, 20
+p2.front8000.facing = -1
+
+p2.front9000.spr = 43, 0
+p2.front9000.offset = 4,4
+p2.front9000.palfx.mul = 255, 32, 135
+p2.front9000.palfx.sinmul = 32, 32, 32, 15
+p2.front9000.facing = -1
+
+p2.front10000.spr = 43, 0
+p2.front10000.offset = 4,4
+p2.front10000.palfx.mul = 236, 236, 236
+p2.front10000.palfx.sinmul = 20, 20, 20, 10
+p2.front10000.facing = -1
+
+p2.frontMax.spr = 44, 0
+p2.frontMax.offset = 208,4
+p2.frontMax.palfx.sinmul = 30, 30, 30, 10
+p2.frontMax.facing = 1
+
+; Multiple Counter elements can be added depending on the level of the bar, including maximum power
+
+p2.counterMax.text = M
+p2.counterMax.offset = 241,31
+p2.counterMax.font = 4, 0, 0
+p2.counterMax.palfx.mul = 226, 226, 226
+p2.counterMax.palfx.sinmul = 30, 30, 30, 10
+
+p2.counter10000.offset = 243,31
+p2.counter10000.font = 4, 0, 0
+p2.counter10000.palfx.mul = 226, 226, 226
+p2.counter10000.palfx.sinmul = 30, 30, 30, 10
+
+p2.counter9000.offset = 243,31
+p2.counter9000.font = 4, 0, 0
+p2.counter9000.palfx.mul = 255, 32, 135
+
+p2.counter8000.offset = 243,31
+p2.counter8000.font = 4, 0, 0
+p2.counter8000.palfx.mul = 200, 78, 240
+
+p2.counter7000.offset = 243,31
+p2.counter7000.font = 4, 0, 0
+p2.counter7000.palfx.mul = 102, 250, 250
+
+p2.counter6000.offset = 243,31
+p2.counter6000.font = 4, 0, 0
+p2.counter6000.palfx.mul = 0, 204, 153
+
+p2.counter5000.offset = 243,31
+p2.counter5000.font = 4, 0, 0
+p2.counter5000.palfx.mul = 255, 153, 0
+
+p2.counter4000.offset = 243,31
+p2.counter4000.font = 4, 0, 0
+p2.counter4000.palfx.mul = 102, 255, 51
+
+p2.counter3000.offset = 243,31
+p2.counter3000.font = 4, 0, 0
+p2.counter3000.palfx.mul = 255, 70, 70
+
+p2.counter2000.offset = 243,31
+p2.counter2000.font = 4, 0, 0
+p2.counter2000.palfx.mul = 255, 255, 51
+
+p2.counter1000.offset = 243,31
+p2.counter1000.font = 4, 0, 0
+p2.counter1000.palfx.mul = 0, 153, 255
+
+p2.counter.offset = 243,31
+p2.counter.font = 4, 0, 0
+p2.counter.palfx.mul = 125, 125, 125
+p2.levelbars = 1             
+
+; --level sounds---
+level1.snd = 21,0
+level2.snd = 21,0
+level3.snd = 21,0
+level4.snd = 21,0
+level5.snd = 21,0
+level6.snd = 21,0
+level7.snd = 21,0
+level8.snd = 21,0
+level9.snd = 21,0
+level10.snd = 21,0
+levelMax.snd = 21, 1
+;==================================================================================================
+
+[Guardbar]
+;Player 1
+p1.pos = 16, 16
+p1.top.spr = 91, 0
+p1.top.layerno = 0
+p1.bg1.spr = 90, 0
+p1.bg1.offset =  -3,5
+p1.bg1.layerno = 0
+p1.front.spr = 92, 0
+p1.front.offset = -4,5
+p1.front.layerno = 0
+p1.range.y = 104, 4
+p1.warn.range = 0, 0
+p1.warn.spr = 93, 0
+p1.warn.palfx.sinadd = 128, 128, 128, 5
+p1.warn.palfx.mul = 256, 128, 128
+p1.warn.palfx.sinmul = 0, 128, 128, 5
+p1.warn.offset = 3,3
+p1.warn.scale = 2,2
+p1.warn.layerno = 1
+
+;Player 2
+p2.pos = 1264, 16
+p2.top.spr = 91, 0
+p2.top.layerno = 0
+p2.top.facing = -1
+p2.bg1.spr = 90, 0
+p2.bg1.offset =  4,5
+p2.bg1.layerno = 0
+p2.bg1.facing = -1
+p2.front.spr = 92, 0
+p2.front.offset =  4,5
+p2.front.layerno = 0
+p2.front.facing = -1
+p2.range.y = 102, 4
+p2.warn.range = 0, 0
+p2.warn.spr = 93, 0
+p2.warn.palfx.sinadd = 128, 128, 128, 5
+p2.warn.palfx.mul = 256, 128, 128
+p2.warn.palfx.sinmul = 0, 128, 128, 5
+p2.warn.offset = 16,3
+p2.warn.scale = 2,2
+p2.warn.layerno = 1
+
+[Simul Guardbar]
+[Simul_3P Guardbar]
+[Simul_4P Guardbar]
+;Disabled in these modes
+[Tag Guardbar]
+;Player 1
+p1.pos = 16, 16
+p1.top.spr = 91, 0
+p1.top.layerno = 0
+p1.bg1.spr = 90, 0
+p1.bg1.offset =  -3,5
+p1.bg1.layerno = 0
+p1.front.spr = 92, 0
+p1.front.offset = -4,5
+p1.front.layerno = 0
+p1.range.y = 103, 4
+p1.warn.range = 0, 0
+p1.warn.spr = 93, 0
+p1.warn.palfx.sinadd = 128, 128, 128, 5
+p1.warn.palfx.mul = 256, 128, 128
+p1.warn.palfx.sinmul = 0, 128, 128, 5
+p1.warn.offset = 3,3
+p1.warn.scale = 2,2
+p1.warn.layerno = 1
+
+;Player 2
+p2.pos = 1264, 16
+p2.top.spr = 91, 0
+p2.top.layerno = 0
+p2.top.facing = -1
+p2.bg1.spr = 90, 0
+p2.bg1.offset =  4,5
+p2.bg1.layerno = 0
+p2.bg1.facing = -1
+p2.front.spr = 92, 0
+p2.front.offset =  4,5
+p2.front.layerno = 0
+p2.front.facing = -1
+p2.range.y = 103, 4
+p2.warn.range = 0, 0
+p2.warn.spr = 93, 0
+p2.warn.palfx.sinadd = 128, 128, 128, 5
+p2.warn.palfx.mul = 256, 128, 128
+p2.warn.palfx.sinmul = 0, 128, 128, 5
+p2.warn.offset = 16,3
+p2.warn.scale = 2,2
+p2.warn.layerno = 1
+
+[Tag_3P Guardbar]
+;Player 1
+p1.pos = 16, 16
+p1.top.spr = 91, 0
+p1.top.layerno = 0
+p1.bg1.spr = 90, 0
+p1.bg1.offset =  -3,5
+p1.bg1.layerno = 0
+p1.front.spr = 92, 0
+p1.front.offset = -4,5
+p1.front.layerno = 0
+p1.range.y = 103, 4
+p1.warn.range = 0, 0
+p1.warn.spr = 93, 0
+p1.warn.palfx.sinadd = 128, 128, 128, 5
+p1.warn.palfx.mul = 256, 128, 128
+p1.warn.palfx.sinmul = 0, 128, 128, 5
+p1.warn.offset = 3,3
+p1.warn.scale = 2,2
+p1.warn.layerno = 1
+
+;Player 2
+p2.pos = 1264, 16
+p2.top.spr = 91, 0
+p2.top.layerno = 0
+p2.top.facing = -1
+p2.bg1.spr = 90, 0
+p2.bg1.offset =  4,5
+p2.bg1.layerno = 0
+p2.bg1.facing = -1
+p2.front.spr = 92, 0
+p2.front.offset =  4,5
+p2.front.layerno = 0
+p2.front.facing = -1
+p2.range.y = 103, 4
+p2.warn.range = 0, 0
+p2.warn.spr = 93, 0
+p2.warn.palfx.sinadd = 128, 128, 128, 5
+p2.warn.palfx.mul = 256, 128, 128
+p2.warn.palfx.sinmul = 0, 128, 128, 5
+p2.warn.offset = 16,3
+p2.warn.scale = 2,2
+p2.warn.layerno = 1
+
+[Tag_4P Guardbar]
+;Player 1
+p1.pos = 16, 16
+p1.top.spr = 91, 0
+p1.top.layerno = 0
+p1.bg1.spr = 90, 0
+p1.bg1.offset =  -3,5
+p1.bg1.layerno = 0
+p1.front.spr = 92, 0
+p1.front.offset = -4,5
+p1.front.layerno = 0
+p1.range.y = 103, 4
+p1.warn.range = 0, 0
+p1.warn.spr = 93, 0
+p1.warn.palfx.sinadd = 128, 128, 128, 5
+p1.warn.palfx.mul = 256, 128, 128
+p1.warn.palfx.sinmul = 0, 128, 128, 5
+p1.warn.offset = 3,3
+p1.warn.scale = 2,2
+p1.warn.layerno = 1
+
+;Player 2
+p2.pos = 1264, 16
+p2.top.spr = 91, 0
+p2.top.layerno = 0
+p2.top.facing = -1
+p2.bg1.spr = 90, 0
+p2.bg1.offset =  4,5
+p2.bg1.layerno = 0
+p2.bg1.facing = -1
+p2.front.spr = 92, 0
+p2.front.offset =  4,5
+p2.front.layerno = 0
+p2.front.facing = -1
+p2.range.y = 103, 4
+p2.warn.range = 0, 0
+p2.warn.spr = 93, 0
+p2.warn.palfx.sinadd = 128, 128, 128, 5
+p2.warn.palfx.mul = 256, 128, 128
+p2.warn.palfx.sinmul = 0, 128, 128, 5
+p2.warn.offset = 16,3
+p2.warn.scale = 2,2
+p2.warn.layerno = 1
+
+
+;-----------------------------------------------------------
+[Stunbar]
+;Player 1
+p1.pos = 123, 3
+p1.top.spr = 96, 0
+p1.top.layerno = 0
+p1.bg1.spr = 95, 0
+p1.bg1.offset = -4, 4
+p1.bg1.layerno = 0
+p1.front.spr = 97, 0
+p1.front.offset = -3, 3
+p1.front.layerno = 0
+p1.warn.range = 0, 0
+p1.warn.spr = 98, 0
+p1.warn.palfx.sinadd = 128, 128, 128, 5
+p1.warn.palfx.mul = 256, 128, 128
+p1.warn.palfx.sinmul = 0, 128, 128, 5
+p1.warn.offset = -15, 0
+p1.warn.layerno = 1
+p1.warn.scale = 2,2
+p1.range.x = -103, -3
+
+;Player 2
+p2.pos = 1157, 3
+p2.top.spr = 96, 0
+p2.top.layerno = 0
+p2.top.facing = -1
+p2.bg1.spr = 95, 0
+p2.bg1.offset = 4, 4
+p2.bg1.layerno = 0
+p2.bg1.facing = -1
+p2.front.spr = 97, 0
+p2.front.offset = 4, 3
+p2.front.layerno = 0
+p2.front.facing = -1
+p2.warn.range = 0, 0
+p2.warn.spr = 98, 0
+p2.warn.palfx.sinadd = 128, 128, 128, 5
+p2.warn.palfx.mul = 256, 128, 128
+p2.warn.palfx.sinmul = 0, 128, 128, 5
+p2.warn.offset = 93, 0
+p2.warn.layerno = 1
+p2.warn.scale = 2,2
+p2.range.x = 105, 5
+
+[Simul Stunbar]
+[Simul_3P Stunbar]
+[Simul_4P Stunbar]
+;Disabled in these modes
+[Tag Stunbar]
+;Player 1
+p1.pos = 123, 3
+p1.top.spr = 96, 0
+p1.top.layerno = 0
+p1.bg1.spr = 95, 0
+p1.bg1.offset = -4, 4
+p1.bg1.layerno = 0
+p1.front.spr = 97, 0
+p1.front.offset = -3, 3
+p1.front.layerno = 0
+p1.warn.range = 0, 0
+p1.warn.spr = 98, 0
+p1.warn.palfx.sinadd = 128, 128, 128, 5
+p1.warn.palfx.mul = 256, 128, 128
+p1.warn.palfx.sinmul = 0, 128, 128, 5
+p1.warn.offset = -15, 0
+p1.warn.layerno = 1
+p1.warn.scale = 2,2
+p1.range.x = -103, -3
+
+;Player 2
+p2.pos = 1157, 3
+p2.top.spr = 96, 0
+p2.top.layerno = 0
+p2.top.facing = -1
+p2.bg1.spr = 95, 0
+p2.bg1.offset = 4, 4
+p2.bg1.layerno = 0
+p2.bg1.facing = -1
+p2.front.spr = 97, 0
+p2.front.offset = 4, 3
+p2.front.layerno = 0
+p2.front.facing = -1
+p2.warn.range = 0, 0
+p2.warn.spr = 98, 0
+p2.warn.palfx.sinadd = 128, 128, 128, 5
+p2.warn.palfx.mul = 256, 128, 128
+p2.warn.palfx.sinmul = 0, 128, 128, 5
+p2.warn.offset = 93, 0
+p2.warn.layerno = 1
+p2.warn.scale = 2,2
+p2.range.x = 105, 5
+
+[Tag_3P Stunbar]
+;Player 1
+p1.pos = 123, 3
+p1.top.spr = 96, 0
+p1.top.layerno = 0
+p1.bg1.spr = 95, 0
+p1.bg1.offset = -4, 4
+p1.bg1.layerno = 0
+p1.front.spr = 97, 0
+p1.front.offset = -3, 3
+p1.front.layerno = 0
+p1.warn.range = 0, 0
+p1.warn.spr = 98, 0
+p1.warn.palfx.sinadd = 128, 128, 128, 5
+p1.warn.palfx.mul = 256, 128, 128
+p1.warn.palfx.sinmul = 0, 128, 128, 5
+p1.warn.offset = -15, 0
+p1.warn.layerno = 1
+p1.warn.scale = 2,2
+p1.range.x = -103, -3
+
+;Player 2
+p2.pos = 1157, 3
+p2.top.spr = 96, 0
+p2.top.layerno = 0
+p2.top.facing = -1
+p2.bg1.spr = 95, 0
+p2.bg1.offset = 4, 4
+p2.bg1.layerno = 0
+p2.bg1.facing = -1
+p2.front.spr = 97, 0
+p2.front.offset = 4, 3
+p2.front.layerno = 0
+p2.front.facing = -1
+p2.warn.range = 0, 0
+p2.warn.spr = 98, 0
+p2.warn.palfx.sinadd = 128, 128, 128, 5
+p2.warn.palfx.mul = 256, 128, 128
+p2.warn.palfx.sinmul = 0, 128, 128, 5
+p2.warn.offset = 93, 0
+p2.warn.layerno = 1
+p2.warn.scale = 2,2
+p2.range.x = 105, 5
+
+[Tag_4P Stunbar]
+;Player 1
+p1.pos = 123, 3
+p1.top.spr = 96, 0
+p1.top.layerno = 0
+p1.bg1.spr = 95, 0
+p1.bg1.offset = -4, 4
+p1.bg1.layerno = 0
+p1.front.spr = 97, 0
+p1.front.offset = -3, 3
+p1.front.layerno = 0
+p1.warn.range = 0, 0
+p1.warn.spr = 98, 0
+p1.warn.palfx.sinadd = 128, 128, 128, 5
+p1.warn.palfx.mul = 256, 128, 128
+p1.warn.palfx.sinmul = 0, 128, 128, 5
+p1.warn.offset = -15, 0
+p1.warn.layerno = 1
+p1.warn.scale = 2,2
+p1.range.x = -103, -3
+
+;Player 2
+p2.pos = 1157, 3
+p2.top.spr = 96, 0
+p2.top.layerno = 0
+p2.top.facing = -1
+p2.bg1.spr = 95, 0
+p2.bg1.offset = 4, 4
+p2.bg1.layerno = 0
+p2.bg1.facing = -1
+p2.front.spr = 97, 0
+p2.front.offset = 4, 3
+p2.front.layerno = 0
+p2.front.facing = -1
+p2.warn.range = 0, 0
+p2.warn.spr = 98, 0
+p2.warn.palfx.sinadd = 128, 128, 128, 5
+p2.warn.palfx.mul = 256, 128, 128
+p2.warn.palfx.sinmul = 0, 128, 128, 5
+p2.warn.offset = 93, 0
+p2.warn.layerno = 1
+p2.warn.scale = 2,2
+p2.range.x = 105, 5
+
+
+
+;-----------------------------------------------------------
+[Face]
+;Player 1
+p1.pos    = 20,20
+p1.bg0.spr = 50,0
+p1.bg1.spr = 51,0
+p1.face.spr = 9000,0
+p1.face.facing = 1
+p1.face.offset = 0,0
+;Player 2
+p2.pos    = 1260,20
+p2.bg0.spr = 50,0
+p2.bg0.facing = -1
+p2.bg1.spr = 51,0
+p2.bg1.facing = -1
+p2.face.spr = 9000,0
+p2.face.facing = -1
+p2.face.offset = 0,0
+
+[Simul Face]
+;Player 1
+p1.pos    = 20,20
+p1.bg0.spr = 50,0
+p1.bg1.spr = 51,0
+p1.face.spr = 9000,0
+p1.face.facing = 1
+p1.face.offset = 0,0
+;Player 2
+p2.pos    = 1260,20
+p2.bg0.spr = 50,0
+p2.bg0.facing = -1
+p2.bg1.spr = 51,0
+p2.bg1.facing = -1
+p2.face.spr = 9000,0
+p2.face.facing = -1
+p2.face.offset = 0,0
+;Player 3
+p3.pos    = 144,84
+p3.bg0.spr = 70,0
+p3.bg1.spr = 71
+p3.face.spr = 9000,0
+p3.face.scale = 0.35,0.35
+p3.face.facing = 1
+;Player 4
+p4.pos    = 1136,84
+p4.bg0.spr = 70,0
+p4.bg0.facing = -1
+p4.bg1.spr = 71,0
+p4.bg1.facing = -1
+p4.face.spr = 9000,0
+p4.face.scale = 0.35,0.35
+p4.face.facing = -1
+;Player 5
+p5.pos    = 194,84
+p5.bg0.spr = 70,0
+p5.bg1.spr = 71,0
+p5.face.spr = 9000,0
+p5.face.scale = 0.35,0.35
+p5.face.facing = 1
+;Player 6
+p6.pos    = 1086,84
+p6.bg0.spr = 70,0
+p6.bg0.facing = -1
+p6.bg1.spr = 71,0
+p6.bg1.facing = -1
+p6.face.spr = 9000,0
+p6.face.scale = 0.35,0.35
+p6.face.facing = -1
+;Player 7
+p7.pos    = 244,84
+p7.bg0.spr = 70,0
+p7.bg1.spr = 71,0
+p7.face.spr = 9000,0
+p7.face.scale = 0.35,0.35
+p7.face.facing = 1
+;Player 8
+p8.pos    = 1036,84
+p8.bg0.spr = 70,0
+p8.bg0.facing = -1
+p8.bg1.spr = 71,0
+p8.bg1.facing = -1
+p8.face.spr = 9000,0
+p8.face.scale = 0.35,0.35
+p8.face.facing = -1
+
+[Tag Face]
+;Player 1
+p1.pos    = 20,20
+p1.bg0.spr = 50,0
+p1.bg1.spr = 51,0
+p1.face.spr = 9000,0
+p1.face.facing = 1
+;Player 2
+p2.pos    = 1260,20
+p2.bg0.spr = 50,0
+p2.bg0.facing = -1
+p2.bg1.spr = 51,0
+p2.bg1.facing = -1
+p2.face.spr = 9000,0
+p2.face.facing = -1
+;Player 3
+p3.pos    = 144,84
+p3.bg0.spr = 70,0
+p3.bg1.spr = 71,0
+p3.ko.spr = 72,0
+p3.face.spr = 9000,0
+p3.face.scale = 0.35,0.35
+p3.face.facing = 1
+;Player 4
+p4.pos    = 1136,84
+p4.bg0.spr = 70,0
+p4.bg0.facing = -1
+p4.bg1.spr = 71,0
+p4.bg1.facing = -1
+p4.ko.spr = 72,0
+p4.ko.facing = -1
+p4.face.spr = 9000,0
+p4.face.scale = 0.35,0.35
+p4.face.facing = -1
+;Player 5
+p5.pos    = 194,84
+p5.bg0.spr = 70,0
+p5.bg1.spr = 71,0
+p5.ko.spr = 72,0
+p5.face.spr = 9000,0
+p5.face.scale = 0.35,0.35
+p5.face.facing = 1
+;Player 6
+p6.pos    = 1086,84
+p6.bg0.spr = 70,0
+p6.bg0.facing = -1
+p6.bg1.spr = 71,0
+p6.bg1.facing = -1
+p6.ko.spr = 72,0
+p6.ko.facing = -1
+p6.face.spr = 9000,0
+p6.face.scale = 0.35,0.35
+p6.face.facing = -1
+;Player 7
+p7.pos    = 244,84
+p7.bg0.spr = 70,0
+p7.bg1.spr = 71,0
+p7.ko.spr = 72,0
+p7.face.spr = 9000,0
+p7.face.scale = 0.35,0.35
+p7.face.facing = 1
+;Player 8
+p8.pos    = 1036,84
+p8.bg0.spr = 70,0
+p8.bg0.facing = -1
+p8.bg1.spr = 71,0
+p8.bg1.facing = -1
+p8.ko.spr = 72,0
+p8.ko.facing = -1
+p8.face.spr = 9000,0
+p8.face.scale = 0.35,0.35
+p8.face.facing = -1
+
+[Turns Face]
+;Player 1
+p1.pos    = 20,20
+p1.bg0.spr = 50,0
+p1.bg1.spr = 51,0
+p1.face.spr = 9000,0
+p1.face.facing = 1
+;Player 1's teammates
+p1.teammate.pos = 144,84
+p1.teammate.spacing = 50,0
+p1.teammate.bg0.spr = 70,0
+p1.teammate.bg1.spr = 71,0
+p1.teammate.ko.spr = 72,0
+p1.teammate.face.spr = 9000,0
+p1.teammate.face.scale = 0.35,0.35
+p1.teammate.face.facing = 1
+;Player 2
+p2.pos    = 1260,20
+p2.bg0.spr = 50,0
+p2.bg0.facing = -1
+p2.bg1.spr = 51,0
+p2.bg1.facing = -1
+p2.face.spr = 9000,0
+p2.face.facing = -1
+;Player 2's teammates
+p2.teammate.pos = 1136,84
+p2.teammate.spacing = -50,0
+p2.teammate.bg0.spr = 70,0
+p2.teammate.bg0.facing = -1
+p2.teammate.bg1.spr = 71,0
+p2.teammate.bg1.facing = -1
+p2.teammate.ko.spr = 72,0
+p2.teammate.ko.facing = -1
+p2.teammate.face.spr = 9000,0
+p2.teammate.face.scale = 0.35,0.35
+p2.teammate.face.facing = -1
+
+;-----------------------------------------------------------
+[Name]
+
+;Player 1
+p1.pos = 13,145
+p1.name.scale = 1,1
+;p1.bg. =
+p1.name.font = 3,0, 1
+
+;Player 2
+p2.name.scale = 1,1
+p2.pos = 1267,145
+;p2.bg. =
+p2.name.font = 3,0, -1
+
+[Simul Name]
+leaderontop = 1 ; This allows the names to render from top to bottom.
+
+;Player 1
+p1.pos = 13,145
+;p1.bg. =
+p1.name.font = 3,0, 1
+
+;Player 2
+p2.pos = 1267,145
+;p2.bg. =
+p2.name.font = 3,0, -1
+
+;Player 3
+p3.pos = 28,165
+;p3.bg. =
+p3.name.font = 3,0, 1
+p3.name.scale = 1,1
+p3.name.palfx.mul = 178, 178, 178
+
+;Player 4
+p4.pos = 1252,165
+;p4.bg. =
+p4.name.font = 3,0, -1
+p4.name.scale = 1,1
+p4.name.palfx.mul = 178, 178, 178
+
+
+[Simul_3P Name]
+leaderontop = 1
+
+;Player 1
+p1.pos = 13,145
+;p1.bg. =
+p1.name.font = 3,0, 1
+p1.name.layerno = 0
+
+;Player 2
+p2.pos = 1267,145
+;p2.bg. =
+p2.name.font = 3,0, -1
+
+;Player 3
+p3.pos = 28, 160
+;p3.bg. =
+p3.name.font = 3,0, 1
+p3.name.scale = 0.8,0.8
+p3.name.palfx.mul = 178, 178, 178
+p3.name.layerno = 0
+
+;Player 4
+p4.pos = 1252, 160
+;p4.bg. =
+p4.name.font = 3,0, -1
+p4.name.scale = 0.8,0.8
+p4.name.palfx.mul = 178, 178, 178
+
+;Player 5
+p5.pos = 43,175
+;p5.bg. =
+p5.name.font = 3,0, 1
+p5.name.scale = 0.8,0.8
+p5.name.palfx.mul = 178, 178, 178
+
+;Player 6
+p6.pos = 1237,175
+;p6.bg. =
+p6.name.font = 3,0, -1
+p6.name.scale = 0.8,0.8
+p6.name.palfx.mul = 178, 178, 178
+
+
+
+[Simul_4P Name]
+leaderontop = 1
+
+;Player 1
+p1.pos = 13,145
+;p1.bg. =
+p1.name.font = 3,0, 1
+p1.name.layerno = 0
+
+;Player 2
+p2.pos = 1267,145
+;p2.bg. =
+p2.name.font = 3,0, -1
+
+;Player 3
+p3.pos = 28,158
+;p3.bg. =
+p3.name.font = 3,0, 1
+p3.name.scale = 0.8,0.8
+p3.name.palfx.mul = 178, 178, 178
+
+;Player 4
+p4.pos = 1252,158
+;p4.bg. =
+p4.name.font = 3,0, -1
+p4.name.scale = 0.8,0.8
+p4.name.palfx.mul = 178, 178, 178
+
+;Player 5
+p5.pos = 43,171
+;p5.bg. =
+p5.name.font = 3,0, 1
+p5.name.scale = 0.8,0.8
+p5.name.palfx.mul = 178, 178, 178
+
+;Player 6
+p6.pos = 1237,171
+;p6.bg. =
+p6.name.font = 3,0, -1
+p6.name.scale = 0.8,0.8
+p6.name.palfx.mul = 178, 178, 178
+
+;Player 7
+p7.pos = 58,184
+;p7.bg. =
+p7.name.font = 3,0, 1
+p7.name.scale = 0.8,0.8
+p7.name.palfx.mul = 178, 178, 178
+
+;Player 8
+p8.pos = 1222,184
+;p8.bg. =
+p8.name.font = 3,0, -1
+p8.name.scale = 0.8,0.8
+p8.name.palfx.mul = 178, 178, 178
+
+[Tag Name]
+leaderontop = 1
+
+;Player 1
+p1.pos = 13,145
+;p1.bg. =
+p1.name.font = 3,0, 1
+
+;Player 2
+p2.pos = 1267,145
+;p2.bg. =
+p2.name.font = 3,0, -1
+
+;Player 3
+p3.pos = 28,165
+;p3.bg. =
+p3.name.font = 3,0, 1
+p3.name.scale = 1,1
+p3.name.palfx.mul = 178, 178, 178
+
+;Player 4
+p4.pos = 1252,165
+;p4.bg. =
+p4.name.font = 3,0, -1
+p4.name.scale = 1,1
+p4.name.palfx.mul = 178, 178, 178
+
+[Tag_3P Name]
+leaderontop = 1
+
+;Player 1
+p1.pos = 13,145
+;p1.bg. =
+p1.name.font = 3,0, 1
+p1.name.layerno = 0
+
+;Player 2
+p2.pos = 1267,145
+;p2.bg. =
+p2.name.font = 3,0, -1
+
+;Player 3
+p3.pos = 28, 160
+;p3.bg. =
+p3.name.font = 3,0, 1
+p3.name.scale = 0.8,0.8
+p3.name.palfx.mul = 178, 178, 178
+
+;Player 4
+p4.pos = 1252, 160
+;p4.bg. =
+p4.name.font = 3,0, -1
+p4.name.scale = 0.8,0.8
+p4.name.palfx.mul = 178, 178, 178
+
+;Player 5
+p5.pos = 43,175
+;p5.bg. =
+p5.name.font = 3,0, 1
+p5.name.scale = 0.8,0.8
+p5.name.palfx.mul = 178, 178, 178
+
+;Player 6
+p6.pos = 1237,175
+;p6.bg. =
+p6.name.font = 3,0, -1
+p6.name.scale = 0.8,0.8
+p6.name.palfx.mul = 178, 178, 178
+
+
+[Tag_4p Name]
+leaderontop = 1
+
+;Player 1
+p1.pos = 13,145
+;p1.bg. =
+p1.name.font = 3,0, 1
+p1.name.layerno = 0
+
+;Player 2
+p2.pos = 1267,145
+;p2.bg. =
+p2.name.font = 3,0, -1
+
+;Player 3
+p3.pos = 28,158
+;p3.bg. =
+p3.name.font = 3,0, 1
+p3.name.scale = 0.8,0.8
+p3.name.palfx.mul = 178, 178, 178
+
+;Player 4
+p4.pos = 1252,158
+;p4.bg. =
+p4.name.font = 3,0, -1
+p4.name.scale = 0.8,0.8
+p4.name.palfx.mul = 178, 178, 178
+
+;Player 5
+p5.pos = 43,171
+;p5.bg. =
+p5.name.font = 3,0, 1
+p5.name.scale = 0.8,0.8
+p5.name.palfx.mul = 178, 178, 178
+
+;Player 6
+p6.pos = 1237,171
+;p6.bg. =
+p6.name.font = 3,0, -1
+p6.name.scale = 0.8,0.8
+p6.name.palfx.mul = 178, 178, 178
+
+;Player 7
+p7.pos = 58,184
+;p7.bg. =
+p7.name.font = 3,0, 1
+p7.name.scale = 0.8,0.8
+p7.name.palfx.mul = 178, 178, 178
+
+;Player 8
+p8.pos = 1222,184
+;p8.bg. =
+p8.name.font = 3,0, -1
+p8.name.scale = 0.8,0.8
+p8.name.palfx.mul = 178, 178, 178
+
+
+[Turns Name]
+;Player 1
+p1.pos = 13,145
+;p1.bg. =
+p1.name.font = 3,3, 1
+;Player 2
+p2.pos = 1267,145
+;p2.bg. =
+p2.name.font = 3,1, -1
+
+;Player 1 Teammates
+p1.teammate.pos = 28,160
+p1.teammate.spacing = 15, 15
+;p1.teammate.bg. =
+p1.teammate.name.font = 3,3, 1
+p1.teammate.name.scale = 0.8, 0.8
+p1.teammate.name.palfx.mul = 178, 178, 178
+
+;Player 2 Teammates
+p2.teammate.pos = 1252,160
+p2.teammate.spacing = -15, 15
+;p2.teammate.bg. =
+p2.teammate.name.font = 3,1, -1
+p2.teammate.name.scale = 0.8, 0.8
+p2.teammate.name.palfx.mul = 178, 178, 178
+
+p*.teammate.ko.hide = 1
+
+;-----------------------------------------------------------
+[Time]
+pos = 640,105
+; Uncomment the following line to use a bg component
+;bg.spr = 
+; Time count display
+counter.offset = 0,30
+counter.font = 2,0, 0
+counter.scale = 2, 2
+counter.palfx.mul = 256, 0, 0
+; Ticks for each count
+framespercount = 60
+
+counter1.scale = 2, 2
+counter1.offset = 0, 30
+counter1.font = 2, 0, 0
+counter1.palfx.mul = 256, 128, 128
+counter1.palfx.sinmul = 0, 128, 128, 20
+counter1.layerno = 0
+
+counter10.font = 2, 0, 0
+counter10.offset = 0, 0
+counter10.scale = 1, 1
+counter10.palfx.mul = 256, 128, 128
+counter10.palfx.sinmul = 0, 128, 128, 20
+counter10.layerno = 0
+
+counter11.offset = 0, 0
+counter11.font = 2, 0, 0, 255, 255, 255
+counter11.scale = 1, 1
+;counter11.palfx.mul = 256, 128, 128
+counter11.layerno = 0
+;counter11.palfx.sinmul = 0, 128, 128, 20
+
+;-----------------------------------------------------------
+[Combo]
+team1.pos = 130,260        ;Coords to show
+team1.start.x = -240      ;Starting x-coords
+team1.counter.layerno = 2
+team1.counter.font = 6,0,0
+team1.counter10.font = 6,0,0
+team1.counter10.palfx.mul = 255, 217, 179
+team1.counter20.font = 6,0,0
+team1.counter20.palfx.mul = 255, 153, 51
+team1.counter30.font = 6,0,0
+team1.counter30.palfx.mul = 255, 255, 77
+team1.counter40.font = 6,0,0
+team1.counter40.palfx.mul = 102, 255, 51
+team1.counter50.font = 6,0,0
+team1.counter50.palfx.mul = 51, 255, 214
+team1.counter60.font = 6,0,0
+team1.counter60.palfx.mul = 0, 153, 255
+team1.counter70.font = 6,0,0
+team1.counter70.palfx.mul = 204, 51, 255
+team1.counter80.font = 6,0,0
+team1.counter80.palfx.mul = 255, 26, 117
+team1.counter90.font = 6,0,0
+team1.counter90.palfx.mul = 255, 26, 26
+team1.counter100.font = 6,0,0
+team1.counter100.palfx.mul = 255, 26, 26
+team1.counter100.palfx.sinmul = 90, 90, 90, 15
+team1.counter.shake = 1   ;Set to 1 to shake count on hit
+team1.counter.shake.time = 20
+team1.counter.shake.freq = 90
+team1.counter.shake.ampl = 5
+team1.counter.shake.scale = 1.3
+team1.counter.shake.decay = 1
+team1.counter.shake.dir = 90
+team1.counter.shake.diradd = 0
+team1.text.shake.time = 20
+team1.text.shake.freq = 90
+team1.text.shake.ampl = 10
+team1.text.shake.scale = 1
+team1.text.shake.decay = 1
+team1.text.shake.dir = 90
+team1.text.layerno = 2
+; (text format %i = combo count, %d = combo damage, %p = combo damage percentage)
+team1.text.text = "HITS!\n%p%" ;You can use %i to show count in the text, eg "%i Hit!" ; ( %d d for damage, %p% for hit)
+team1.text.font = 7,0,0
+team1.text.offset = 6,42  ;Offset of text
+team1.text10.text = "HITS!!\n%p%" ;By inputting a number next to text, You can change certain elements of the combo text when a combo reaches a certain point.
+team1.text10.font = 7,0,0
+team1.text10.offset = 6,42
+team1.text20.text = "HITS!!!\n%p%"
+team1.text20.font = 7,0,0
+team1.text20.offset = 6,42
+team1.text30.text = "HITS!!!!\n%p%"
+team1.text30.font = 7,0,0
+team1.text30.offset = 6,42
+team1.text40.text = "HITS!!!!!\n%p%"
+team1.text40.font = 7,0,0
+team1.text40.offset = 6,42
+team1.text50.text = "HITS!!!!!!\n%p%"
+team1.text50.font = 7,0,0
+team1.text50.offset = 6,42
+team1.text60.text = "HITS!!!!!!!\n%p%"
+team1.text60.font = 7,0,0
+team1.text60.offset = 6,42
+team1.text70.text = "HITS!!!!!!!!\n%p%"
+team1.text70.font = 7,0,0
+team1.text70.offset = 6,42
+team1.text80.text = "HITS!!!!!!!!!\n%p%"
+team1.text80.font = 7,0,0
+team1.text80.offset = 6,42
+team1.text90.text = "HITS!!!!!!!!!!\n%p%"
+team1.text90.font = 7,0,0
+team1.text90.offset = 6,42
+team1.text100.text = "HITS!!!!!!!!!!!\n%p%"
+team1.text100.font = 7,0,0
+team1.text100.offset = 6,42
+team1.text100.palfx.mul = 256, 256, 256
+team1.text100.palfx.sinmul = 90, 90, 90, 15
+team1.displaytime = 90    ;Time to show text
+team1.showspeed = 8       ; text showing up speed (1 = instant)
+team1.hidespeed = 4       ; text hiding speed (the larger value, the faster speed)
+team1.autoalign = 0
+
+team2.pos = 1150,260      ;Coords to show
+team2.start.x = 1520      ;Starting x-coords
+team2.counter.layerno = 2
+team2.counter.font = 6,0,0
+team2.counter10.font = 6,0,0
+team2.counter10.palfx.mul = 255, 217, 179
+team2.counter20.font = 6,0,0
+team2.counter20.palfx.mul = 255, 153, 51
+team2.counter30.font = 6,0,0
+team2.counter30.palfx.mul = 255, 255, 77
+team2.counter40.font = 6,0,0
+team2.counter40.palfx.mul = 102, 255, 51
+team2.counter50.font = 6,0,0
+team2.counter50.palfx.mul = 51, 255, 214
+team2.counter60.font = 6,0,0
+team2.counter60.palfx.mul = 0, 153, 255
+team2.counter70.font = 6,0,0
+team2.counter70.palfx.mul = 204, 51, 255
+team2.counter80.font = 6,0,0
+team2.counter80.palfx.mul = 255, 26, 117
+team2.counter90.font = 6,0,0
+team2.counter90.palfx.mul = 255, 26, 26
+team2.counter100.font = 6,0,0
+team2.counter100.palfx.mul = 255, 26, 26
+team2.counter100.palfx.sinmul = 90, 90, 90, 15
+team2.counter.shake = 1   ;Set to 1 to shake count on hit
+team2.counter.shake.time = 20
+team2.counter.shake.freq = 90
+team2.counter.shake.ampl = 5
+team2.counter.shake.scale = 1.3
+team2.counter.shake.decay = 1
+team2.counter.shake.dir = 90
+team2.counter.shake.diradd = 0
+team2.text.shake.time = 20
+team2.text.shake.freq = 90
+team2.text.shake.ampl = 10
+team2.text.shake.scale = 1
+team2.text.shake.decay = 1
+team2.text.shake.dir = 90
+team2.text.layerno = 2
+;(text format %i = combo count, %d = combo damage, %p = combo damage percentage)
+team2.text.text = "HITS!\n%p%" ;You can use %i to show count in the text, eg "%i Hit!"
+team2.text.font = 7,0,0
+team2.text.offset = 6,42  ;Offset of text
+team2.text10.text = "HITS!!\n%p%" ;By inputting a number next to text, You can change certain elements of the combo text when a combo reaches a certain point.
+team2.text10.font = 7,0,0
+team2.text10.offset = 6,42
+team2.text20.text = "HITS!!!\n%p%"
+team2.text20.font = 7,0,0
+team2.text20.offset = 6,42
+team2.text30.text = "HITS!!!!\n%p%"
+team2.text30.font = 7,0,0
+team2.text30.offset = 6,42
+team2.text40.text = "HITS!!!!!\n%p%"
+team2.text40.font = 7,0,0
+team2.text40.offset = 6,42
+team2.text50.text = "HITS!!!!!!\n%p%"
+team2.text50.font = 7,0,0
+team2.text50.offset = 6,42
+team2.text60.text = "HITS!!!!!!!\n%p%"
+team2.text60.font = 7,0,0
+team2.text60.offset = 6,42
+team2.text70.text = "HITS!!!!!!!!\n%p%"
+team2.text70.font = 7,0,0
+team2.text70.offset = 6,42
+team2.text80.text = "HITS!!!!!!!!!\n%p%"
+team2.text80.font = 7,0,0
+team2.text80.offset = 6,42
+team2.text90.text = "HITS!!!!!!!!!!\n%p%"
+team2.text90.font = 7,0,0
+team2.text90.offset = 6,42
+team2.text100.text = "HITS!!!!!!!!!!!\n%p%"
+team2.text100.font = 7,0,0
+team2.text100.offset = 6,42
+team2.text100.palfx.mul = 256, 256, 256
+team2.text100.palfx.sinmul = 90, 90, 90, 15
+team2.displaytime = 90    ;Time to show text
+team2.showspeed = 8       ;text showing up speed (1 = instant)
+team2.hidespeed = 4       ;text hiding speed (the larger value, the faster speed)
+team2.autoalign = 0
+
+; (format combo damage percentage presentation)
+format.decimal.places = 0
+format.decimal.separator = .
+
+;-----------------------------------------------------------
+[Action]
+team1.pos = 30,377        ;Coords to show
+team1.max = 8             ;Maximum simultaneous messages
+team1.spacing = 0,32      ;Spacing between messages
+team1.start.x = -240      ;Starting x-coords
+team1.bg.layerno = 2
+team1.bg.offset = 75,0
+team1.bg.anim = 400
+team1.bg.scale = 1.0,1.0
+team1.bg.spr = 
+team1.front.layerno = 2
+team1.front.offset = 75,0
+team1.front.scale = 1.0,1.0
+team1.text.layerno = 2
+team1.text.font = 5,0,0
+team1.text.offset = 80,20   ;Offset of text
+team1.text.scale = 0.85,0.95
+team1.displaytime = 60    ;Time to show message
+team1.showspeed = 2       ;Message showing up speed (1 = instant)
+team1.hidespeed = 8       ;Message hiding speed (the larger value, the faster speed)
+
+team2.pos = 1250,377
+team2.max = 8
+team2.spacing = 0,32
+team2.start.x = 1520
+team2.bg.layerno = 2
+team2.bg.offset = -75,0
+team2.bg.anim = 400
+team2.bg.scale = 1.0,1.0
+team2.bg.spr = 
+team2.front.layerno = 2
+team2.front.offset = -75,0
+team2.front.scale = 1.0,1\\
+team2.text.layerno = 2
+team2.text.font = 5,0,0
+team2.text.offset = -80,20
+team2.text.scale = 0.85,0.95
+team2.displaytime = 60
+team2.showspeed = 2
+team2.hidespeed = 8
+
+[Begin Action 400]
+400,0, 0,0, -1, , AS80D128
+
+;-----------------------------------------------------------
+[Round]
+match.wins = 2              ;Rounds needed to win a match (Depreciated, this setting can be configured in in-game options)
+match.maxdrawgames = 1      ;Max number of drawgames allowed (-1 for infinite)
+start.waittime = 30         ;Time to wait before starting intro
+
+; Default position for all components
+pos = 0,0
+
+; ROUND X
+round.time = 0              ;Time to show round display
+;round.default.offset = 680, 380    ;Offset for anim
+round.default.offset = 630, 480
+; Default component to show for each round. Text can include a %i to
+; the round number. Use "round.default.anim" for animation instead of
+; text.
+round.default.text = "R   %i"
+;round.default.anim = 500
+round.default.font = 9,0,0
+round.default.displaytime = 55
+round.default.scale = 1,1
+round.default.snd = 0, 11
+; Sounds to play for each round (optional, specify up to round 9)
+round1.snd = 0,1
+round2.snd = 0,2
+round3.snd = 0,3
+round4.snd = 0,4
+round5.snd = 0,5
+round6.snd = 0,6
+round7.snd = 0,7
+round8.snd = 0,8
+round9.snd = 0,9
+round.sndtime = 0           ;Time to play the sounds
+; Components to show for each round (optional, specify up to round 9)
+; Uncomment to use
+round1.offset = 640, 380
+;round1.anim = 501
+round2.offset = 640, 380
+;round2.anim = 502
+round3.offset = 640, 380
+;round3.anim = 503
+round4.offset = 640, 380
+;round4.anim = 504
+round5.offset = 640, 380
+;round5.anim = 505
+round6.offset = 640, 380
+;round6.anim = 506
+round7.offset = 640, 380
+;round7.anim = 507
+round8.offset = 640, 380
+;round8.anim = 508
+round9.offset = 640, 380
+;round9.anim = 509
+
+
+round.single.offset = 640, 480
+round.single.font = 9, 0, 0
+round.single.text = "G   r"
+round.single.displaytime = 55
+round.single.scale = 1, 1
+round.single.snd = 0, 11
+
+round.final.offset = 640, 480
+round.final.font = 9, 0, 0
+round.final.text = "F   R"
+round.final.text = " "
+;round.final.anim = 510
+;round.final.bg0.anim = 511
+;round.final.bg0.offset = 640, 380
+round.final.displaytime = 55
+round.final.scale = 1, 1
+round.final.snd = 0, 10
+
+; FIGHT
+fight.time = 0              ;Time to show FIGHT component
+fight.offset = 640, 400     ;Component for FIGHT display
+fight.anim = 520
+fight.bg1.offset = 640, 400
+fight.bg1.anim = 521
+fight.bg2.offset = 640, 400 
+fight.bg2.anim = 522
+fight.bg3.offset = 640, 400
+fight.bg3.anim = 523     
+fight.snd = 1,0             ;Sound to play
+fight.sndtime = 5           ;Time to play sound
+
+callfight.time = 60         ;Time to wait before starting fight
+ctrl.time = 50              ;Time players get control after starting fight
+
+; KO
+KO.time    = 0              ;Time to show KO component
+KO.offset  = 540, 400       ;Component for KO display
+KO.anim    = 529 		;Dummy Animation to let bg play out
+KO.bg0.anim = 533
+KO.bg0.offset  = 830, 400
+KO.bg1.anim = 532
+KO.bg1.offset  = 430, 400
+KO.bg2.anim = 531
+KO.bg2.offset  = 830, 400      
+KO.bg3.anim = 530
+KO.bg3.offset  = 430, 400          
+KO.snd     = 2,0            ;Sound to play for KO announcement
+
+; Double KO
+DKO.offset = 640, 400
+DKO.anim    = 534		;Dummy animation to let bg play out
+DKO.bg0.anim = 535
+DKO.bg0.offset  = 640, 400
+DKO.bg1.anim = 536
+DKO.bg1.offset  = 640, 400
+DKO.displaytime = 120
+DKO.snd    = 2,1
+
+; Time Over
+TO.offset  = 640, 400
+TO.anim = 540
+TO.bg1.anim = 541
+TO.bg1.offset  = 640, 400
+TO.displaytime = 70
+TO.snd     = 2,2
+KO.sndtime = 0           ;Time to play sound for KO, DKO and TO.
+
+slow.time = 60             ;Total KO slowdown length (in ticks)
+slow.fadetime = 45         ;KO slowdown fade length (default: 75% of slow.time)
+slow.speed = 0.25          ;KO slowdown game speed adjustment (default: 0.25)
+
+over.hittime = 10          ;Time after KO that players can still damage each other (for double KO)
+over.waittime = 45         ;Time to wait after KO before player control is stopped
+over.wintime = 45          ;Time to wait before players change to win states
+over.forcewintime = 900    ;Time to wait before forcing win states if any player is frozen
+over.time = 300            ;Time to wait before round ends
+
+; Win text
+win.time = 60              ;Time to wait before showing win/draw message
+p1.win.offset = 80, 705 
+p1.win.bg1.anim = 580
+p1.win.bg1.offset = 540, 610
+p1.win.bg0.anim = 586
+p1.win.bg0.offset = 640, 690
+p1.win.font = 1,0,1
+p1.win.text = "%s"
+p1.win.displaytime = 180
+p1.win.snd     = 2,3
+
+p2.win.offset = 1200, 705 
+p2.win.bg1.anim = 581
+p2.win.bg1.offset = 740, 610
+p2.win.bg0.anim = 586
+p2.win.bg0.offset = 640, 690
+p2.win.font = 1,0,-1
+p2.win.text = "%s"
+p2.win.displaytime = 180
+p2.win.snd     = 2,3
+
+; 2-player win text
+p1.win2.offset = 80, 705 
+p1.win2.bg1.anim = 580
+p1.win2.bg1.offset = 540, 610
+p1.win2.bg0.anim = 586
+p1.win2.bg0.offset = 640, 690
+p1.win2.font = 1,0,1
+p1.win2.text = "%s and %s"
+p1.win2.displaytime = 180
+p1.win2.snd     = 2,3
+
+p2.win2.offset = 1200, 705 
+p2.win2.bg1.anim = 581
+p2.win2.bg1.offset = 740, 610
+p2.win2.bg0.anim = 586
+p2.win2.bg0.offset = 640, 690
+p2.win2.font = 1,0,-1
+p2.win2.text = "%s and %s"
+p2.win2.displaytime = 180
+p2.win2.snd     = 2,3
+
+; 3-player win text
+p1.win3.offset = 80, 705 
+p1.win3.bg1.anim = 580
+p1.win3.bg1.offset = 540, 610
+p1.win3.bg0.anim = 586
+p1.win3.bg0.offset = 640, 690
+p1.win3.font = 1,0,1
+p1.win3.text = "Team %s"
+p1.win3.displaytime = 180
+p1.win3.snd     = 2,3
+
+p2.win3.offset = 1200, 705 
+p2.win3.bg1.anim = 581
+p2.win3.bg1.offset = 740, 610
+p2.win3.bg0.anim = 586
+p2.win3.bg0.offset = 640, 690
+p2.win3.font = 1,0,-1
+p2.win3.text = "Team %s"
+p2.win3.displaytime = 180
+p2.win3.snd     = 2,3
+
+; 4-player win text
+p1.win4.offset = 80, 705 
+p1.win4.bg1.anim = 580
+p1.win4.bg1.offset = 540, 610
+p1.win4.bg0.anim = 586
+p1.win4.bg0.offset = 640, 690
+p1.win4.font = 1,0,1
+p1.win4.text = "Team %s"
+p1.win4.displaytime = 180
+p1.win4.snd     = 2,3
+
+p2.win4.offset = 1200, 705 
+p2.win4.bg1.anim = 581
+p2.win4.bg1.offset = 740, 610
+p2.win4.bg0.anim = 586
+p2.win4.bg0.offset = 640, 690
+p2.win4.font = 1,0,-1
+p2.win4.text = "Team %s"
+p2.win4.displaytime = 180
+p2.win4.snd     = 2,3
+
+; AI Win
+ai.win.displaytime = 170
+ai.win.offset = 640, 610
+ai.win.font = 4,0
+ai.win.scale = 1, 1
+ai.win.anim = 583
+ai.win.snd     = 2,4
+
+ai.win2.displaytime = 170
+ai.win2.offset = 640, 610
+ai.win2.font = 4,0
+ai.win2.scale = 1, 1
+ai.win2.anim = 583
+ai.win2.snd     = 2,4
+
+ai.win3.displaytime = 170
+ai.win3.offset = 640, 610
+ai.win3.font = 4,0
+ai.win3.scale = 1, 1
+ai.win3.anim = 583
+ai.win3.snd     = 2,4
+
+ai.win4.displaytime = 170
+ai.win4.offset = 640, 610
+ai.win4.font = 4,0
+ai.win4.scale = 1, 1
+ai.win4.anim = 583
+ai.win4.snd     = 2,4
+
+; AI Lose
+ai.lose.displaytime = 170
+ai.lose.offset = 640, 610
+ai.lose.font = 4,0
+ai.lose.scale = 1, 1
+ai.lose.anim = 582
+ai.lose.snd     = 2,3
+
+ai.lose2.displaytime = 170
+ai.lose2.offset = 640, 610
+ai.lose2.font = 4,0
+ai.lose2.scale = 1, 1
+ai.lose2.anim = 582
+ai.lose2.snd     = 2,3
+
+ai.lose3.displaytime = 170
+ai.lose3.offset = 640, 610
+ai.lose3.font = 4,0
+ai.lose3.scale = 1, 1
+ai.lose3.anim = 582
+ai.lose3.snd     = 2,3
+
+ai.lose4.displaytime = 170
+ai.lose4.offset = 640, 610
+ai.lose4.font = 4,0
+ai.lose4.scale = 1, 1
+ai.lose4.anim = 582
+ai.lose4.snd     = 2,3
+
+; Draw text
+draw.offset  = 640, 400
+draw.anim = 544
+draw.bg0.anim = 545
+draw.bg0.offset  = 640, 400
+draw.bg1.anim = 546
+draw.bg1.offset  = 640, 400
+draw.displaytime = 80
+draw.snd     = 2,5
+; Perfect text
+p1.perfect.pos = 640, 380
+p1.perfect.bg.anim = 550
+p1.perfect.bg.layerno = 1
+p1.perfect.time = 86
+p1.perfect.displaytime = 125
+p1.perfect.snd = 2, 6
+p1.perfect.sndtime = 125
+
+p2.perfect.pos = 640, 380
+p2.perfect.bg.anim = 550
+p2.perfect.bg.layerno = 1
+p2.perfect.time = 86
+p2.perfect.displaytime = 125
+p2.perfect.snd = 2, 6
+p2.perfect.sndtime = 125
+
+p1.clutch.pos = 640, 380
+p1.clutch.bg.anim = 551
+p1.clutch.bg.layerno = 1
+p1.clutch.time = 125
+p1.clutch.displaytime = 110
+p1.clutch.snd = 2, 7
+p1.clutch.sndtime = 125
+
+p2.clutch.pos = 640, 380
+p2.clutch.bg.anim = 551
+p2.clutch.bg.layerno = 1
+p2.clutch.time = 125
+p2.clutch.displaytime = 110
+p2.clutch.snd = 2, 7
+p2.clutch.sndtime = 125
+
+; Fade
+fadein.time = 30           ;round start fade time (default: 30)
+fadein.col = 0, 0, 0       ;round start fade color (default: 0,0,0)
+fadeout.time = 30          ;round end fade time (default: 30, extends over.time if fadeout.time is longer)
+fadeout.col = 0, 0, 0      ;round end fade color (default: 0,0,0)
+shutter.time = 15          ;skip intro fade time (default: 15, whole anim is twice as long)
+shutter.col = 0, 0, 0      ;skip intro fade color (default: 0,0,0)
+
+; Animations
+
+; ROUND
+[Begin Action 500]
+Interpolate Offset
+500,0, -1200,0, 10
+Interpolate Offset
+500,0, -200,0, 45
+Interpolate Offset
+500,0, -150,0, 10
+Interpolate Offset
+500,0, 1000,0, 1
+
+; 1
+[Begin Action 501]
+Interpolate Offset
+500,1, 1000,0, 10
+Interpolate Offset
+500,1, 200,0, 45
+Interpolate Offset
+500,1, 150,0, 10
+Interpolate Offset
+500,1, -1000,0, 1
+
+; 2
+[Begin Action 502]
+Interpolate Offset
+500,2, 1000,0, 10
+Interpolate Offset
+500,2, 200,0, 45
+Interpolate Offset
+500,2, 150,0, 10
+Interpolate Offset
+500,2, -1000,0, 1
+
+; 3
+[Begin Action 503]
+Interpolate Offset
+500,3, 1000,0, 10
+Interpolate Offset
+500,3, 200,0, 45
+Interpolate Offset
+500,3, 150,0, 10
+Interpolate Offset
+500,3, -1000,0, 1
+
+
+; 4
+[Begin Action 504]
+Interpolate Offset
+500,4, 1000,0, 10
+Interpolate Offset
+500,4, 200,0, 45
+Interpolate Offset
+500,4, 150,0, 10
+Interpolate Offset
+500,4, -1000,0, 1
+
+; 5
+[Begin Action 505]
+Interpolate Offset
+500,5, 1000,0, 10
+Interpolate Offset
+500,5, 200,0, 45
+Interpolate Offset
+500,5, 150,0, 10
+Interpolate Offset
+500,5, -1000,0, 1
+
+; 6
+[Begin Action 506]
+Interpolate Offset
+500,6, 1000,0, 10
+Interpolate Offset
+500,6, 200,0, 45
+Interpolate Offset
+500,6, 150,0, 10
+Interpolate Offset
+500,6, -1000,0, 1
+
+; 7
+[Begin Action 507]
+Interpolate Offset
+500,7, 1000,0, 10
+Interpolate Offset
+500,7, 200,0, 45
+Interpolate Offset
+500,7, 150,0, 10
+Interpolate Offset
+500,7, -1000,0, 1
+
+; 8
+[Begin Action 508]
+Interpolate Offset
+500,8, 1000,0, 10
+Interpolate Offset
+500,8, 200,0, 45
+Interpolate Offset
+500,8, 150,0, 10
+Interpolate Offset
+500,8, -1000,0, 1
+
+; 9
+[Begin Action 509]
+Interpolate Offset
+500,9, 1000,0, 10
+Interpolate Offset
+500,9, 200,0, 45
+Interpolate Offset
+500,9, 150,0, 10
+Interpolate Offset
+500,9, -1000,0, 1
+
+
+
+; FINAL
+[Begin Action 510]
+Interpolate Offset
+500,10, -1200,0, 10
+Interpolate Offset
+500,10, -250,0, 45
+Interpolate Offset
+500,10, -200,0, 10
+Interpolate Offset
+500,10, 1000,0, 1
+
+; ROUND (Final)
+[Begin Action 511]
+Interpolate Offset
+500,0, 1000,0, 10
+Interpolate Offset
+500,0, 250,0, 45
+Interpolate Offset
+500,0, 200,0, 10
+Interpolate Offset
+500,0, -1000,0, 1
+
+; GET
+[Begin Action 512]
+Interpolate Offset
+501,0, -1200,0, 10
+Interpolate Offset
+501,0, -200,0, 45
+Interpolate Offset
+501,0, -150,0, 10
+Interpolate Offset
+501,0, 1000,0, 1
+; READY
+[Begin Action 513]
+Interpolate Offset
+501,1, 1000,0, 10
+Interpolate Offset
+501,1, 250,0, 45
+Interpolate Offset
+501,1, 200,0, 10
+Interpolate Offset
+501,1, -1000,0, 1
+
+; FIG )Top)
+[Begin Action 520]
+511,0, -640,-640, 10
+Interpolate Offset
+510,0, 0,0, 32
+510,0, 0,0, 10
+Interpolate Offset
+510,0, -640,0, 1
+
+; HT! (Top)
+[Begin Action 521]
+511,1, 640,-640, 10
+Interpolate Offset
+510,1, 0,0, 32
+510,1, 0,0, 10
+Interpolate Offset
+510,1, 640,0, 1
+
+; FIG (Bottom)
+[Begin Action 522]
+511,2, -640,640, 10
+Interpolate Offset
+510,2, 0,0, 32
+510,2, 0,0, 10
+Interpolate Offset
+510,2, -640,0, 1
+
+; HT! (Bottom)
+[Begin Action 523]
+511,3, 640,640, 10
+Interpolate Offset
+510,3, 0,0, 32
+510,3, 0,0, 10
+Interpolate Offset
+510,3, 640,0, 1
+
+; Dummy Anim for KO
+[Begin Action 529]
+-1,0, 0,0, 141
+
+; K
+[Begin Action 530]
+-1,0, 0,0, 40
+Interpolate Blend
+Interpolate Scale
+522,0, 0,0, 10, , AS0D256, 1.25,1.25
+Interpolate Blend
+Interpolate Scale
+520,0, 0,0, 20
+520,0, 0,0, 10
+Interpolate Offset
+520,0, -10,-10, 50
+Interpolate Offset
+520,0, -10,-10, 10
+Interpolate Offset
+520,0, -640,-10, 1
+
+; O
+[Begin Action 531]
+-1,0, 0,0, 40
+Interpolate Blend
+Interpolate Scale
+522,1, 0,0, 10, , AS0D256, 1.25,1.25
+Interpolate Blend
+Interpolate Scale
+520,1, 0,0, 20
+520,1, 0,0, 10
+Interpolate Offset
+520,1, -10,-10, 50
+Interpolate Offset
+520,1, -10,-10, 10
+Interpolate Offset
+520,1, 640,-10, 1
+
+; K (Shadow)
+[Begin Action 532]
+-1,0, 0,0, 20
+Interpolate Blend
+Interpolate Scale
+-1,1, 0,0, 30, , AS0D256, 1.25,1.25
+Interpolate Blend
+Interpolate Scale
+521,0, 0,0, 20
+521,0, 0,0, 10
+Interpolate Offset
+521,0, 10,10, 50
+Interpolate Offset
+521,0, 10,10, 10
+Interpolate Offset
+521,0, -640,10, 1
+
+; O (Shadow)
+[Begin Action 533]
+-1,0, 0,0, 20
+Interpolate Blend
+Interpolate Scale
+-1,1, 0,0, 30, , AS0D256, 1.25,1.25
+Interpolate Blend
+Interpolate Scale
+521,1, 0,0, 20
+521,1, 0,0, 10
+Interpolate Offset
+521,1, 10,10, 50
+Interpolate Offset
+521,1, 10,10, 10
+Interpolate Offset
+521,1, 640,10, 1
+; DOUBLE
+[Begin Action 535]
+523,0, 0,-640, 40
+523,0, 0,-640, 10
+Interpolate Offset
+523,0, 0,0, 50
+Interpolate Offset
+523,0, 0,0, 10
+Interpolate Offset
+523,0, -960,0, 10
+
+; KO (Double)
+[Begin Action 536]
+523,1, 0,640, 40
+Interpolate Offset
+523,1, 0,640, 10
+Interpolate Offset
+523,1, 0,0, 50
+523,1, 0,0, 10
+Interpolate Offset
+523,1, 960,0, 10
+
+; TIME
+[Begin Action 540]
+Interpolate Offset
+525,0, -1200,-60, 10
+Interpolate Offset
+525,0, -100,-60, 50
+Interpolate Offset
+525,0, -90,-60, 10
+Interpolate Offset
+525,0, -90,-660, 10
+
+; UP
+[Begin Action 541]
+Interpolate Offset
+525,1, 1200,60, 10
+Interpolate Offset
+525,1, 100,60, 50
+Interpolate Offset
+525,1, 90,60, 10
+Interpolate Offset
+525,1, 90,660, 10
+
+; Dummy for Draw Game
+[Begin Action 544]
+-1,0, 0,0, 80
+
+; DRAW
+[Begin Action 545]
+-1,0, 0,0, 60
+526,0, -732,0, 10
+Interpolate Offset
+526,0, -232,0, 50
+Interpolate Blend
+526,0, -232,0, 10, , AS256D0
+Interpolate Blend
+Interpolate Offset
+526,0, -232,60, 10, , AS0D256
+
+; GAME
+[Begin Action 546]
+-1,0, 0,0, 60
+526,1, 732,0, 10
+Interpolate Offset
+526,1, 232,0, 50
+526,1, 232,0, 10, , AS256D0
+Interpolate Blend
+Interpolate Offset
+526,1, 232,60, 10, , AS0D256
+
+; PERFECT
+[Begin Action 550]
+-1,0, 0,0, 10
+527,1, 1080,0, 10
+Interpolate Offset
+527,1, 0,0, 20
+Interpolate Blend
+527,2, 0,0, 10, , AS0D128
+Interpolate Blend
+527,2, 0,0, 3, , A
+527,0, 0,0, 50
+527,0, 0,0, 10, , AS256D0
+Interpolate Blend
+527,0, 0,0, -1, , AS0D256
+
+; CLOSE ONE
+[Begin Action 551]
+528,0, 0,-60, 30, , AS0D256
+Interpolate Offset
+Interpolate Blend
+528,0, 0,0, 10
+528,0, 0,0, 10
+Interpolate Offset
+Interpolate Angle
+528,0, 0,30, 40, , AS256D0,, , -4
+528,0, 0,30, 10, , AS256D0,, , -4
+Interpolate Blend
+528,0, 0,30, 10, , AS0D256,, , -4
+
+
+; WINNER P1
+[Begin Action 580]
+530,0, -1200,0, 60
+Interpolate Offset
+530,0, -1200,0, 10
+Interpolate Offset
+530,0, -200,0, 150
+Interpolate Offset
+530,0, -160,0, 10
+Interpolate Offset
+530,0, 1200,0, -1
+
+; WINNER P2
+[Begin Action 581]
+-1,0, 0,0, 60
+Interpolate Offset
+530,0, 1200,0, 10
+Interpolate Offset
+530,0, 200,0, 150
+Interpolate Offset
+530,0, 160,0, 10
+Interpolate Offset
+530,0, -1200,0, -1
+
+; YOU WIN
+[Begin Action 582]
+Interpolate Offset
+530,1, -1200,0, 10
+Interpolate Offset
+530,1, -20,0, 150
+Interpolate Offset
+530,1, 20,0, 10
+Interpolate Offset
+530,1, 1200,0, -1
+
+; YOU LOSE
+[Begin Action 583]
+Interpolate Offset
+530,2, 1200,0, 10
+Interpolate Offset
+530,2, 20,0, 150
+Interpolate Offset
+530,2, -20,0, 10
+Interpolate Offset
+530,2, -1200,0, -1
+
+; Name Banner
+[Begin Action 586]
+551,0, 0,0, 60, , AS0D256
+551,0, 0,0, 10, , AS0D256
+Interpolate Blend
+551,0, 0,0, 160, , AS256D0
+551,0, 0,0, 10, , AS256D0
+Interpolate Blend
+551,0, 0,0, -1, , AS0D256
+
+;-----------------------------------------------------------
+[WinIcon]
+p1.pos = 544,120
+p2.pos = 736,120
+; Background icon
+p1.bg0.spr = 120,0
+p2.bg0.spr = 120,0
+; Offset for next icon (x,y)
+p1.iconoffset = -32,0  
+p2.iconoffset = 32,0
+; Counter text font and offset for representing wins
+p1.counter.offset = 0,5
+p1.counter.font = 4,0,0, 230,255,242
+p2.counter.offset = 0,5
+p2.counter.font = 4,0,0, 255,242,242
+; Win by normal
+p1.n.spr = 100,0
+p2.n.spr = 100,0
+; Win by special
+p1.s.spr = 101,0
+p2.s.spr = 101,0
+; Win by hyper (super)
+p1.h.spr = 102,0
+p2.h.spr = 102,0
+; Win by normal throw
+p1.throw.spr = 103,0
+p2.throw.spr = 103,0
+; Win by cheese
+p1.c.spr = 104,0
+p2.c.spr = 104,0
+; Win by time over
+p1.t.spr = 105,0
+p2.t.spr = 105,0
+; Win by suicide
+p1.suicide.spr = 106,0
+p2.suicide.spr = 106,0
+; Opponent beaten by his own teammate
+p1.teammate.spr = 107,0
+p2.teammate.spr = 107,0
+; Win by perfect (overlay icon)
+p1.perfect.spr = 110,0
+p2.perfect.spr = 110,0
+; Win by clutch (overlay icon)
+p1.clutch.spr = 111,0
+p2.clutch.spr = 111,0
+; Use icons up until this number of wins
+useiconupto = 4
+
+;-----------------------------------------------------------
+[WinCount]
+p1.pos = 586,24
+;p1.bg.spr = 
+p1.text.font = 8,0, -1
+p1.text.text = WINS %s
+
+p2.pos = 696,24
+;p2.bg.spr = 
+p2.text.font = 8,0, 1
+p2.text.text = WINS %s
+
+p1.enabled.netplayversus = 1
+p1.enabled.versus = 1
+p1.enabled.versuscoop = 1
+
+p2.enabled.netplayversus = 1
+p2.enabled.versus = 1
+p2.enabled.versuscoop = 1
+
+;-----------------------------------------------------------
+[Timer]
+pos = 1080,24
+;bg.spr = 
+text.font = 8,0, -1
+; Time format: %m = minutes, %s = seconds, %x = milliseconds
+text.text = TIME: %m:%s.%x
+
+enabled.bossrush = 1
+enabled.timeattack = 1
+enabled.timechallenge = 1
+
+;-----------------------------------------------------------
+[Score]
+p1.pos = 586,24
+;p1.bg.spr = 
+p1.text.font = 8,0, -1
+p1.text.text = %s
+
+p2.pos = 696,24
+;p2.bg.spr = 
+p2.text.font = 8,0, 1
+p2.text.text = %s
+
+score.min = 0
+score.max = 999999999
+format.integer.pad = 1
+format.integer.separator = 
+format.decimal.places = 0
+format.decimal.separator = .
+
+p1.enabled.arcade = 1
+p1.enabled.bossrush = 1
+p1.enabled.freebattle = 1
+p1.enabled.netplayteamcoop = 1
+p1.enabled.scorechallenge = 1
+p1.enabled.teamcoop = 1
+p1.enabled.training = 1
+
+;-----------------------------------------------------------
+[Match]
+pos = 200,24
+;bg.spr = 
+text.font = 8,0, 1
+text.text = STAGE %s
+
+enabled.arcade = 1
+enabled.bossrush = 1
+enabled.netplayteamcoop = 1
+enabled.scorechallenge = 1
+enabled.teamcoop = 1
+enabled.timeattack = 1
+enabled.timechallenge = 1
+enabled.netplaysurvivalcoop = 1
+enabled.survival = 1
+enabled.survivalcoop = 1
+enabled.vs100kumite = 1
+
+;-----------------------------------------------------------
+[AILevel]
+p1.pos = 586,24
+;p1.bg.spr = 
+p1.text.font = 8,0, -1
+; %s = integer value, %p = percentage
+p1.text.text = CPU-%s
+
+p2.pos = 696,24
+;p2.bg.spr = 
+p2.text.font = 8,0, 1
+p2.text.text = CPU-%s
+
+format.decimal.places = 0
+format.decimal.separator = .
+
+p1.enabled.watch = 1
+
+p2.enabled.arcade = 1
+p2.enabled.bossrush = 1
+p2.enabled.freebattle = 1
+p2.enabled.netplaysurvivalcoop = 1
+p2.enabled.netplayteamcoop = 1
+p2.enabled.scorechallenge = 1
+p2.enabled.survival = 1
+p2.enabled.survivalcoop = 1
+p2.enabled.teamcoop = 1
+p2.enabled.timeattack = 1
+p2.enabled.timechallenge = 1
+p2.enabled.training = 1
+p2.enabled.vs100kumite = 1
+p2.enabled.watch = 1
+
+;-----------------------------------------------------------
+[Mode]
+demo.pos = 1138,35
+;demo.bg.spr = 
+demo.text.font = 8,0, -1
+demo.text.text = Demo Mode
+
+;-----------------------------------------------------------
+; How to customize
+;-----------------------------------------------------------
+; First of all, set filenames under [Files].
+; 
+; Next, you can customize each component of the fight screen. A component can be
+; anything from a piece of the lifebar, to the text that signals a K.O.
+;
+; Each component starts with its name, followed by a period, and then the names
+; of its elements. For example, a component named "bg" with an element of "anim"
+; looks like "bg.anim".
+;
+; There are several main element types:
+;   1. anim (animation)
+;   2. spr  (sprite)
+;   3. font (text)
+;   4. snd  (sound)
+; 
+; 1. anim
+;    Format: anim = actionno
+;    actionno is the number of the action to use. You must specify a valid
+;    action that is defined within this file. The sprites for the animation come
+;    from the file given for the "sff" parameter in the [Files] group below. You
+;    can define your animation actions anywhere in this file, as long as it does
+;    not come in the middle of a group (an example of a group is the block of
+;    text starting with [Files], and ending on the next group [Lifebar]).
+;    For example, to use action 5 for the p1.bg0 component:
+;      p1.bg0.anim = 5
+;
+; 2. spr
+;    Format: spr = spritegrp, spriteno
+;    This is the identifier pair for the sprite you to display.
+;    For example, to show sprite 103,0 for a component named p1.throw:
+;      p1.throw.spr = 103,0
+;
+; 3. font
+;    Format: font = fontno, fontbank, alignmnt, R, G, B
+;            text = text
+;    This lets you set the font (and optionally the content text).
+;    - fontno is the number of the font defined under [Files]. For instance, for
+;    the line "font2 = font/num1.fnt", the fontno is 2.
+;    - fontbank is the color bank of the font to use. Refer to the font for what
+;    color banks it has.
+;    - alignmt is a number representing the text alignment. 1 is left, 0 means
+;    center, and -1 is for right-alignment.
+;    - R, G, B are the color adjustment values for the font. RGB values default
+;    to 256,256,256 (no color adjustment).
+;    All font values are optional. If fontno is omitted, no text will be drawn.
+;
+;    The "text" element should accompany the "font" element wherever necessary.
+;    The following example will display "FIGHT!" using font 1, bank 1, with
+;    center-alignment.
+;      fight.font = 1,1, 0
+;      fight.text = FIGHT!
+;
+; 4. snd
+;    Format: snd = sndgrp, sndno
+;    This is the identifier pair for the sound effect to play. The .snd file
+;    that the sound is played from is given in the "snd" parameter in the
+;    [Files] group. This plays sound 21,0 for the "level1" component.
+;      level1.snd = 21,0
+; 
+; Take note that the anim, spr and font element types are mutually exclusive;
+; you can only use one of them per component.
+;
+; The types of elements supported vary with the component. Usually the anim, spr
+; and font elements are interchangeable for a component. However, in some cases
+; only one element type may be used. An example of this is found under [Combo]:
+;   counter.font = 2,4  ;Font for combo counter
+; You cannot use an animation or a sprite to represent a numeric counter, so it
+; only makes sense to define a font for use.
+;
+; There are other element types that do nothing on their own. They can be used
+; with display element types (spr, anim and font) to gain more control. These
+; have no meaning when used with the snd element.
+;   5.  offset
+;   6.  displaytime
+;   7.  facing
+;   8.  vfacing
+;   9.  layerno
+;   10. scale
+;   11. angle
+;   12. window 
+;
+; 5. offset
+;   Format: offset = x, y
+;   Displaces the display element horizontally by x pixels, and vertically by y
+;   pixels. If this element is omitted, the offset is assumed to be 0,0.
+;
+; 6. displaytime
+;   Format: displaytime = time_in_ticks
+;   This element defines the time to display the component. If omitted, the
+;   default display time varies with element type. For spr and font elements,
+;   the default displaytime is 1. For anim, it is the looptime of the animation.
+;   This example displays the text "FIGHT!" for 45 game ticks:
+;     fight.font = 1,1, 0
+;     fight.text = FIGHT!
+;     fight.displaytime = 45
+;
+; 7. facing
+;   Format: facing = dir
+;   Sets the horizontal flipping of the display element. 1 means no flipping,
+;   and -1 means flip horizontally. Does not affect "font" elements. Defaults to
+;   1 if omitted.
+;
+; 8. vfacing
+;   Format: vfacing = dir
+;   Sets the vertical flipping of the display element. 1 means no flipping, and
+;   -1 means flip vertically. Does not affect "font" elements. Defaults to 1 if
+;   omitted.
+;
+; 9. layerno
+;   Format: layerno = no
+;   This element lets you set the layer to which the display element will be
+;   drawn on. 0 is in front of the background, but behind the players. 1 is in
+;   front of the players, but behind the foreground. 2 is in front of the
+;   foreground. The default is 0 in most cases.
+;   An example of where this might be useful is when you want to have the life
+;   or power bars appear on top. In that case, set all the components to have
+;   layerno = 2.
+;
+; 10. scale
+;   Format: scale = xscale, yscale
+;   Scales the display element by a horizontal scale factor of xscale, and
+;   vertically by a factor of yscale. Defaults to 1,1 if omitted.
+;
+; 11. angle
+;   Format: angle = degrees
+;   Draws the element rotated by the specified angle.
+;   Currently does not affect "font" elements.
+;
+; 12. window 
+;   Format: window = x1, y1, x2, y2
+;   Specify window with four coordinates x1, y1, x2, and y2 respectively.
+;   Considering the upper left corner of the screen as (0,0), these coordinates
+;   are taken to form a rectangular box with (x1,y1) and (x2,y2) at opposite
+;   corners. Only the part of the display element type that comes within this
+;   box (the "window") will be drawn. If you do not need the windowing effect,
+;   omit this line entirely.
+;
+; Some components have additional elements specific
+; to themselves.

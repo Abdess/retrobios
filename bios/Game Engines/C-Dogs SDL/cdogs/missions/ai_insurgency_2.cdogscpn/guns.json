@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "Guns": [
+    {
+      "Pic": "",
+      "Name": "Detonator",
+      "Icon": "dynamite",
+      "Description": "You will light and place a stick of dynamite on the ground, which will burst in a large explosion after 3 seconds.\n\nDamage: Large explosion\nRate of fire: 42 round/min\nLifespan: 3.00s\nCost: 7",
+      "Bullet": "detonator",
+      "Cost": 7,
+      "Lock": 100,
+      "ReloadLead": 15,
+      "Sound": "hahaha",
+      "ReloadSound": "package_r",
+      "SwitchSound": "package_r",
+      "MuzzleHeight": 0,
+      "Ammo": "Dynamite",
+      "CanDrop": false
+    }
+  ]
+}

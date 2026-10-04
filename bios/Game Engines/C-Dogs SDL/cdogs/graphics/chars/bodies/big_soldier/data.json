@@ -1,0 +1,42 @@
+{
+  "Version": 2,
+  "Order": [
+    ["gun_r", "gun_l", "legs", "body", "head"],
+    ["gun_r", "gun_l", "legs", "body", "head"],
+    ["gun_l", "legs", "body", "head", "gun_r"],
+    ["legs", "body", "head", "gun_r", "gun_l"],
+    ["legs", "body", "head", "gun_r", "gun_l"],
+    ["legs", "body", "head", "gun_r", "gun_l"],
+    ["legs", "gun_r", "body", "head", "gun_l"],
+    ["gun_r", "gun_l", "legs", "body", "head"]
+  ],
+  "Offsets": {
+    "Frame": {
+      "Head": {
+        "stand": [[0, 16]],
+        "idle": [[0, 16]],
+        "run": [
+          [0, 17], [0, 16], [0, 15], [0, 16], [0, 17], [0, 16], [0, 15], [0, 16]
+        ]
+      },
+      "Body": {
+        "stand": [[0, 6]],
+        "idle": [[0, 6]]
+      },
+      "Legs": {
+        "stand": [[0, 6]],
+        "idle": [[0, 6]]
+      },
+      "Gun": {
+        "stand": [[0, 8]],
+        "idle": [[0, 8]],
+        "run": [[0, 9], [0, 8], [0, 7], [0, 8], [0, 9], [0, 8], [0, 7], [0, 8]]
+      }
+    },
+    "Dir": {
+      "Gun": [
+        [7, -3], [7, 0], [4, 2], [-2, 4], [-7, 3], [-8, -1], [-4, -5], [0, -5]
+      ]
+    }
+  }
+}

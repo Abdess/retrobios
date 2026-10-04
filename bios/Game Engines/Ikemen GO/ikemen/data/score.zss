@@ -1,0 +1,149 @@
+#===============================================================================
+# Global states (not halted by Pause/SuperPause, no helper limitations)
+#===============================================================================
+[StateDef -4]
+
+ignoreHitPause if !const(Default.Enable.Score) || teamSide = 0 {
+	# do nothing, global code disabled locally or executed by stage
+} else if roundState = 0 {
+	map(_iksys_scoreTimeVitalFlag) := 0;
+} else if roundState = 4 && !isHelper {
+	# score: time vital bonus
+	if win && map(_iksys_scoreTimeVitalFlag) = 0 && alive {
+		if teamMode = Turns && roundsExisted = 0 && enemy,roundsExisted > 0 {
+			# skip time ratio multiplier, adjust vital bonus depending on how many rounds it took turns team to beat the enemy
+			scoreAdd{value: round(float(life) / lifeMax / (numPartner + 1) * 10000 / (enemy,roundsExisted + 1), -2)}
+		} else {
+			let p1TagNum = 1;
+			let p2TagNum = 1;
+			if teamMode = Tag {
+				let p1TagNum = numPartner + 1;
+			}
+			if enemy,teamMode = Tag {
+				let p2TagNum = enemy,numPartner + 1;
+			}
+			let timeRatio = 100 * timeRemaining / (timeRemaining + timeElapsed);
+			if $p1TagNum > $p2TagNum {
+				# time ratio penalty in case of Tag adjusted FramesPerCount value and not equal team sizes
+				let timeRatio = $timeRatio * $p2TagNum / $p1TagNum;
+			}
+			let timeMul = 1;
+			if $timeRatio > 90 {
+				let timeMul = 5;
+			} else if $timeRatio > 85 {
+				let timeMul = 4;
+			} else if $timeRatio > 80 {
+				let timeMul = 2.5;
+			} else if $timeRatio > 70 {
+				let timeMul = 2;
+			} else if $timeRatio > 60 {
+				let timeMul = 1.5;
+			}
+			scoreAdd{value: round(float(life) / lifeMax / (numPartner + 1) * 10000 * $timeMul, -2)}
+		}
+		map(_iksys_scoreTimeVitalFlag) := 1;
+	}
+} else if roundState >= 2 {
+	# score: first attack bonus
+	if !isHelper {
+		let ret = call IkSys_FirstAttack();
+		if $ret {
+			scoreAdd{value: 1500}
+		}
+	}
+	# score: counter bonus
+	let ret = call IkSys_CounterHit();
+	if $ret {
+		scoreAdd{value: 100}
+	}
+	# score: damage bonus
+	let ret = call IkSys_ReceivedDamage();
+	if $ret && getHitVar(score) = 0 {
+		let dmgMul = 0;
+		# normal attacks
+		if getHitVar(attr) = SCA, HA {
+			let dmgMul = 10;
+		} else if getHitVar(attr) = SCA, SA {
+			let dmgMul = 9;
+		} else if getHitVar(attr) = SCA, NA {
+			let dmgMul = 8;
+		# throws
+		} else if getHitVar(attr) = SCA, HT {
+			let dmgMul = 10;
+		} else if getHitVar(attr) = SCA, ST {
+			let dmgMul = 9;
+		} else if getHitVar(attr) = SCA, NT {
+			let dmgMul = 8;
+		# projectiles
+		} else if getHitVar(attr) = SCA, HP {
+			let dmgMul = 10;
+		} else if getHitVar(attr) = SCA, SP {
+			let dmgMul = 9;
+		} else if getHitVar(attr) = SCA, NP {
+			let dmgMul = 8;
+		}
+		if $dmgMul > 0 {
+			scoreAdd{
+				value: round($ret * $dmgMul, -2);
+				redirectid: cond(playerIdExist(getHitVar(playerId)), getHitVar(playerId), player(getHitVar(playerNo)), ID);
+			}
+		}
+	}	
+	# code executed only by P1 and P2
+	if playerNo = teamSide && !isHelper {
+		# score: combo count bonus
+		let ret = call IkSys_ComboCount();
+		if $ret {
+			switch $ret {
+			case 2:
+				scoreAdd{value: 300}
+			case 3:
+				scoreAdd{value: 500}
+			case 4:
+				scoreAdd{value: 1000}
+			case 5:
+				scoreAdd{value: 1200}
+			case 6:
+				scoreAdd{value: 1500}
+			case 7:
+				scoreAdd{value: 2000}
+			case 8:
+				scoreAdd{value: 2300}
+			case 9:
+				scoreAdd{value: 2600}
+			case 10:
+				scoreAdd{value: 3000}
+			case 11:
+				scoreAdd{value: 3300}
+			case 12:
+				scoreAdd{value: 3600}
+			case 13:
+				scoreAdd{value: 4000}
+			case 14:
+				scoreAdd{value: 4500}
+			default:
+				scoreAdd{value: min(10000, 5000 + ($ret - 15) * 1000)}
+			}
+		}
+		# score: win perfect bonus
+		let ret = call IkSys_WinPerfect();
+		if $ret {
+			scoreAdd{value: 15000}
+		}
+		# score: win hyper bonus
+		let ret = call IkSys_WinHyper();
+		if $ret {
+			scoreAdd{value: 10000}
+		}
+		# score: win special bonus
+		let ret = call IkSys_WinSpecial();
+		if $ret {
+			scoreAdd{value: 3000}
+		}
+		# score: win streak bonus
+		let ret = call IkSys_WinStreak();
+		if $ret {
+			scoreAdd{value: 30000 + ($ret - 1) * 10000}
+		}
+	}
+}

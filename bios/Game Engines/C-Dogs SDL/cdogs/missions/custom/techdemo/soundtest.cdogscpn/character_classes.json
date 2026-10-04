@@ -1,0 +1,15 @@
+{
+  "Version": 2,
+  "Characters": [
+    {
+      "Name": "Killer Dog",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/dog"
+      },
+      "Body": "dog",
+      "Sounds": "dog",
+      "Footsteps": "dog"
+    }
+  ]
+}

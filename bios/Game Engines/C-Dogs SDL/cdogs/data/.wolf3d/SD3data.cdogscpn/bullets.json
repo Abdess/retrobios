@@ -1,0 +1,223 @@
+{
+  "Version": 5,
+  "Bullets": [
+    {
+      "Name": "knife",
+      "Power": 8,
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/knife_flesh"
+        }
+      },
+      "Special": {
+        "Effect": "Petrify",
+        "Ticks": 30
+      }
+    },
+    {
+      "Name": "bullet",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail",
+        "Width": 1.0
+      },
+      "OutOfRangeSpark": "spark",
+      "WallMark": "bullet_hole",
+      "Hit": {
+        "Flesh": {}
+      },
+      "Speed": 35000,
+      "Range": 1,
+      "Power": 21,
+      "Mass": 0.1,
+      "Special": {
+        "Effect": "Petrify",
+        "Ticks": 30
+      }
+    },
+    {
+      "Name": "bullet_enemy",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail",
+        "Width": 1.0
+      },
+      "OutOfRangeSpark": "spark",
+      "WallMark": "bullet_hole",
+      "Hit": {
+        "Flesh": {}
+      },
+      "Speed": 35000,
+      "Range": 1,
+      "Power": 16,
+      "Mass": 0.1
+    },
+    {
+      "Name": "bullet_boss",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail",
+        "Width": 1.5
+      },
+      "OutOfRangeSpark": "spark",
+      "WallMark": "bullet_hole",
+      "Hit": {
+        "Flesh": {}
+      },
+      "Speed": 35000,
+      "Range": 1,
+      "Power": 24,
+      "Mass": 0.1
+    },
+    {
+      "Name": "bullet_quad",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail",
+        "Width": 1.25
+      },
+      "OutOfRangeSpark": "spark",
+      "WallMark": "bullet_hole",
+      "Hit": {
+        "Flesh": {}
+      },
+      "Speed": 35000,
+      "Range": 1,
+      "Power": 12,
+      "Mass": 0.1
+    },
+    {
+      "Name": "syringe",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "syringe"
+      },
+      "ShadowSize": [2, 2],
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/knife_flesh"
+        },
+        "Wall": {
+          "Sound": "glass_break"
+        }
+      },
+      "Speed": 800,
+      "Range": 70,
+      "Power": 20,
+      "Mass": 1,
+      "Size": [4, 4],
+      "Spark": "",
+      "Special": {
+        "Effect": "Poison",
+        "Ticks": 15
+      }
+    },
+    {
+      "Name": "rocket",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "rocket"
+      },
+      "Trail": {
+        "Particle": "smoke_trail_small",
+        "Width": 0,
+        "TicksPerEmit": 4
+      },
+      "ShadowSize": [2, 2],
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/rocket"
+        },
+        "Wall": {
+          "Sound": "hits/rocket"
+        }
+      },
+      "Speed": 800,
+      "Range": 70,
+      "Power": 45,
+      "Mass": 15.0,
+      "Size": [4, 4],
+      "Spark": "boom"
+    },
+    {
+      "Name": "dog_bite",
+      "Power": 11,
+      "Mass": 1.0,
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/dog_growl"
+        }
+      }
+    },
+    {
+      "Name": "ghost_drain",
+      "Power": 3,
+      "Mass": 0,
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/gas"
+        }
+      }
+    },
+    {
+      "Name": "fireball",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball_small",
+        "TicksPerFrame": 4
+      },
+      "Speed": 350,
+      "Range": 200,
+      "Power": 15,
+      "Mass": 18.0,
+      "Size": [3, 3],
+      "Special": {
+        "Effect": "Flame"
+      },
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/fire"
+        },
+        "Wall": {
+          "Sound": "hits/fire"
+        }
+      },
+      "Spark": "fireball_hit"
+    },
+    {
+      "Name": "energy_ball",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball_green",
+        "TicksPerFrame": 4
+      },
+      "Speed": 625,
+      "Range": 200,
+      "Power": 46,
+      "Mass": 40.0,
+      "Size": [3, 3],
+      "Special": "Flame",
+      "Spark": "fireball_green_hit",
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/fire"
+        },
+        "Wall": {
+          "Sound": "hits/fire"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,469 @@
+{
+  "Version": 4,
+  "MapObjects": [
+    {
+      "Name": "chandelier",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "chandelier"
+      },
+      "Offset": [-8, -24],
+      "Health": 0,
+      "DrawAbove": true,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "hanging_skeleton",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "hanging_skeleton"
+      },
+      "Offset": [-5, -26],
+      "Health": 40,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "pillar",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "pillar"
+      },
+      "Health": 80,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "pillar_brown",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "pillar_brown"
+      },
+      "Health": 80,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "sink",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "sink"
+      },
+      "Size": [8, 6],
+      "Health": 50,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "skull_pillar",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "skull_pillar"
+      },
+      "Size": [8, 6],
+      "Offset": [-8, -14],
+      "Health": 20,
+      "Flags": ["NoWalls"]
+    },
+    {
+      "Name": "cowskull_pillar",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "cowskull_pillar"
+      },
+      "Size": [8, 6],
+      "Offset": [-8, -14],
+      "Health": 20,
+      "Flags": ["NoWalls"]
+    },
+    {
+      "Name": "urn",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "urn"
+      },
+      "Size": [10, 8],
+      "Offset": [-5, -8],
+      "Health": 30,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "knives",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "knives"
+      },
+      "Offset": [-5, -13],
+      "Health": 0,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "pots",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "pots"
+      },
+      "Offset": [-8, -13],
+      "Health": 0,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "gibbet_bloody",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "gibbet_bloody"
+      },
+      "Offset": [-7, -33],
+      "Health": 40,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "suit_of_armor",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "suit_of_armor"
+      },
+      "Offset": [-7, -20],
+      "Health": 60,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "gibbet",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "gibbet"
+      },
+      "Offset": [-7, -33],
+      "Health": 40,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "gibbet_skeleton",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "gibbet_skeleton"
+      },
+      "Offset": [-7, -33],
+      "Health": 40,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "gibbet_skulls",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "gibbet_skulls"
+      },
+      "Offset": [-7, -33],
+      "Health": 40,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "basket",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "basket"
+      },
+      "Size": [6, 6],
+      "Offset": [-3, -8],
+      "Health": 0,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "well",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "well"
+      },
+      "Health": 80,
+      "Flags": ["Outside", "NoWalls"]
+    },
+    {
+      "Name": "well_water",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "well_water"
+      },
+      "Health": 80,
+      "Flags": ["Outside", "NoWalls"]
+    },
+    {
+      "Name": "well_blood",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "well_blood"
+      },
+      "Health": 80,
+      "Flags": ["Outside", "NoWalls"]
+    },
+    {
+      "Name": "pool_blood",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "pool_blood"
+      },
+      "Offset": [-8, -6],
+      "Health": 0,
+      "DrawBelow": true
+    },
+    {
+      "Name": "flag",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "flag"
+      },
+      "Size": [6, 4],
+      "Offset": [-4, -21],
+      "Health": 40,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "stove",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "stove"
+      },
+      "Offset": [-8, -21],
+      "Health": 60,
+      "Flags": ["Inside", "OnWall", "FreeInFront"]
+    },
+    {
+      "Name": "spears",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "spears"
+      },
+      "Offset": [-7, -20],
+      "Health": 40,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "truck",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "truck"
+      },
+      "Health": 100,
+      "Flags": ["Outside"]
+    },
+    {
+      "Name": "grass",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "grass"
+      },
+      "Health": 0,
+      "Flags": ["Outside"]
+    },
+    {
+      "Name": "dead_guard",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "dead_guard"
+      },
+      "Health": 0,
+      "DrawBelow": true
+    },
+    {
+      "Name": "spotlight",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "spotlight"
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "shadow",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "shadow"
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "heer_flag",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "heer_flag"
+      },
+      "Offset": [-7, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "hitler_portrait",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "hitler_portrait"
+      },
+      "Offset": [-5, -10],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "brick_eagle",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "brick_eagle"
+      },
+      "Offset": [-8, -11],
+      "Health": 0,
+      "Flags": ["Outside", "OnWall"]
+    },
+    {
+      "Name": "eagle_portrait",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "eagle_portrait"
+      },
+      "Offset": [-7, -10],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "elevator_entrance",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "elevator_entrance"
+      },
+      "Offset": [-5, -9],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "swastika_wreath",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "swastika_wreath"
+      },
+      "Offset": [-5, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "coat_of_arms_flag",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "coat_of_arms_flag"
+      },
+      "Offset": [-7, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "elevator_interior",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "elevator_interior"
+      },
+      "Offset": [-6, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "iron_cross",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "iron_cross"
+      },
+      "Offset": [-7, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "cobble_moss",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "cobble_moss"
+      },
+      "Offset": [-8, -23],
+      "Health": 0,
+      "Flags": ["Outside", "OnWall"]
+    },
+    {
+      "Name": "hitler_glass",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "hitler_glass"
+      },
+      "Offset": [-6, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "skull_blue",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "skull_blue"
+      },
+      "Offset": [-3, -9],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "swastika_blue",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "swastika_blue"
+      },
+      "Offset": [-3, -8],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "brick_color",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "brick_color"
+      },
+      "Offset": [-8, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "panel",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "panel"
+      },
+      "Offset": [-6, -10],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "hitler_poster",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "hitler_poster"
+      },
+      "Offset": [-5, -10],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "stone_color",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "stone_color"
+      },
+      "Offset": [-8, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "ghost_corpse",
+      "Type": "ActorSpawner",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "ghost_corpse"
+      },
+      "Wreck": {
+        "Sound": "",
+        "Bullet": ""
+      },
+      "Offset": [-7, -21],
+      "Health": 0,
+      "CharId": 22,
+      "Counter": 340
+    }
+  ]
+}

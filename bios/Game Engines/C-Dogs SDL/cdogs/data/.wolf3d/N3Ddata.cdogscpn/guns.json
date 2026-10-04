@@ -1,0 +1,217 @@
+{
+  "Version": 3,
+  "Guns": [
+    {
+      "Pic": "",
+      "Icon": "hand_feed",
+      "Name": "Hand Feed",
+      "Bullet": "hand_feed",
+      "Cost": 0,
+      "Lock": 30,
+      "Sound": "",
+      "SwitchSound": "hand_feed",
+      "CanShoot": false,
+      "Auto": true
+    },
+    {
+      "Pic": "small_launcher",
+      "Grips": 2,
+      "Name": "Small Launcher",
+      "Icon": "small_launcher",
+      "Bullet": "feed",
+      "Cost": 1,
+      "Lock": 30,
+      "MuzzleFlashParticle": "",
+      "Sound": "small_launcher",
+      "SwitchSound": "bow_draw0",
+      "Recoil": 0.1,
+      "Ammo": "Feed",
+      "OverheatTicks": -1
+    },
+    {
+      "Pic": "large_launcher",
+      "Grips": 2,
+      "Name": "Large Launcher",
+      "Icon": "large_launcher",
+      "Bullet": "feed",
+      "Prerequisite": "Small Launcher",
+      "Cost": 1,
+      "Lock": 12,
+      "MuzzleFlashParticle": "",
+      "Sound": "large_launcher",
+      "SwitchSound": "bow_draw1",
+      "Recoil": 0.17,
+      "Ammo": "Feed",
+      "OverheatTicks": -1
+    },
+    {
+      "Pic": "super_feeder",
+      "Name": "Super Feeder",
+      "Icon": "super_feeder",
+      "Bullet": "feed",
+      "Prerequisite": "Large Launcher",
+      "Cost": 1,
+      "Lock": 6,
+      "MuzzleFlashParticle": "",
+      "Sound": "super_feeder",
+      "SwitchSound": "bow_draw2",
+      "Recoil": 0.23,
+      "Ammo": "Feed",
+      "OverheatTicks": -1
+    },
+    {
+      "Pic": "cantaloupe_feeder",
+      "Name": "Cantaloupe Feeder",
+      "Icon": "cantaloupe_feeder",
+      "Bullet": "cantaloupe",
+      "Cost": 10,
+      "Lock": 45,
+      "MuzzleFlashParticle": "",
+      "Sound": "cantaloupe_feeder",
+      "SwitchSound": "package_r",
+      "SpreadCount": 2,
+      "SpreadWidth": 0,
+      "ElevationLow": 17,
+      "ElevationHigh": 19,
+      "Ammo": "Cantaloupe",
+      "OverheatTicks": -1
+    },
+    {
+      "Pic": "",
+      "IsGrenade": true,
+      "Name": "Watermelons",
+      "Bullet": "watermelon",
+      "Cost": 20,
+      "Lock": 70,
+      "Sound": "watermelon_feeder",
+      "SwitchSound": "package_pickup",
+      "Elevation": 24,
+      "Ammo": "Watermelon"
+    },
+    {
+      "Pic": "",
+      "Name": "Sheep Spit",
+      "Bullet": "bullet_enemy",
+      "Cost": 1,
+      "Lock": 70,
+      "MuzzleFlashParticle": "",
+      "Sound": "spit",
+      "Recoil": 0.3,
+      "Ammo": "Feed",
+      "CanDrop": false
+    },
+    {
+      "Pic": "",
+      "Name": "Antelope Spit",
+      "Bullet": "bullet_boss",
+      "Cost": 1,
+      "Lock": 70,
+      "MuzzleFlashParticle": "",
+      "Sound": "spit",
+      "Recoil": 0.3,
+      "Ammo": "Feed",
+      "CanDrop": false
+    },
+    {
+      "Name": "Double Spit",
+      "Icon": "machine_gun",
+      "CanDrop": false,
+      "Guns": ["boss_spit1", "boss_spit2"],
+      "Lock": 9
+    },
+    {
+      "Name": "Quad Spit",
+      "Icon": "machine_gun",
+      "CanDrop": false,
+      "Guns": ["boss_double_spit1", "boss_double_spit2"],
+      "Lock": 9
+    },
+    {
+      "Pic": "",
+      "Name": "Goat Kick",
+      "Bullet": "goat_kick",
+      "Cost": 0,
+      "Lock": 80,
+      "Sound": "",
+      "CanShoot": false,
+      "CanDrop": false
+    },
+    {
+      "Name": "Coconuts",
+      "Pic": "",
+      "Icon": "launcher",
+      "Bullet": "coconut",
+      "Cost": 9,
+      "Lock": 40,
+      "Sound": "launch",
+      "SwitchSound": "launcher_switch",
+      "CanDrop": false
+    },
+    {
+      "Name": "Coconuts and Spit",
+      "Icon": "akimbo_pistols",
+      "Guns": ["Coconuts", "boss_spit1"],
+      "CanDrop": false
+    }
+  ],
+  "PseudoGuns": [
+    {
+      "Name": "cantaloupe_splat",
+      "Bullet": "cantaloupe_splat",
+      "Recoil": 2,
+      "SpreadCount": 6,
+      "ElevationLow": 22,
+      "ElevationHigh": 30,
+      "Sound": "splat0"
+    },
+    {
+      "Name": "watermelon_splat",
+      "Bullet": "watermelon_splat",
+      "Recoil": 2,
+      "SpreadCount": 10,
+      "ElevationLow": 22,
+      "ElevationHigh": 30,
+      "Sound": "splat1"
+    },
+    {
+      "Pic": "",
+      "Name": "boss_spit1",
+      "Bullet": "bullet_boss",
+      "Lock": 70,
+      "MuzzleFlashParticle": "",
+      "Sound": "spit",
+      "Recoil": 0.3
+    },
+    {
+      "Pic": "",
+      "Name": "boss_spit2",
+      "Bullet": "bullet_boss",
+      "Lock": 70,
+      "MuzzleFlashParticle": "",
+      "Sound": "spit",
+      "Recoil": 0.3
+    },
+    {
+      "Pic": "",
+      "Name": "boss_double_spit1",
+      "Bullet": "bullet_quad",
+      "Lock": 70,
+      "MuzzleFlashParticle": "",
+      "Sound": "spit",
+      "SpreadCount": 2,
+      "Recoil": 0.3,
+      "MuzzleHeight": 12
+    },
+    {
+      "Pic": "",
+      "Name": "boss_double_spit2",
+      "Bullet": "bullet_quad",
+      "Lock": 70,
+      "MuzzleFlashParticle": "",
+      "Sound": "",
+      "SpreadCount": 2,
+      "Recoil": 0.3,
+      "MuzzleHeight": 12
+    }
+  ]
+}

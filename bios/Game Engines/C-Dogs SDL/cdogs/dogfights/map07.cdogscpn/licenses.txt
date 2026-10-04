@@ -1,0 +1,44 @@
+awake10_megaWall.ogg
+Awake! (Megawall-10)
+by http://cynicmusic.com http://pixelsphere.org
+http://opengameart.org/content/awake-megawall-10
+http://creativecommons.org/publicdomain/zero/1.0/
+
+graphics/armor_bonus.png
+graphics/health_bonus.png
+Derived from Dungeon Crawl 32x32 tiles
+by Chris Hamons (maintainer)
+http://opengameart.org/content/dungeon-crawl-32x32-tiles
+http://creativecommons.org/publicdomain/zero/1.0/
+
+graphics/bfg_plasma_20x20.png
+graphics/bfg_spark.png
+Derived 2D Shooter Effects (Alpha version)
+by Tatermand
+http://opengameart.org/content/2d-shooter-effects-alpha-version
+http://creativecommons.org/publicdomain/zero/1.0/
+
+graphics/stimpack.png
+Adapted from Various inventory 24 pixel icon set
+By OceansDream
+http://opengameart.org/content/various-inventory-24-pixel-icon-set
+http://creativecommons.org/licenses/by/3.0/
+
+sounds/bfg.ogg
+x_explosion.wav
+by cubicApocalypse
+http://freesound.org/people/cubicApocalypse/sounds/256658/
+http://creativecommons.org/licenses/by/4.0/
+
+sounds/bfg_hit.ogg
+DSRXPLOD.WAV
+by wildweasel
+http://freesound.org/people/wildweasel/sounds/39020/
+http://creativecommons.org/licenses/by/4.0/
+
+sounds/sshotgun.ogg
+sounds/sshotgun_r.ogg
+Chaingun, pistol, rifle, shotgun shots
+by Michel Baradari
+http://opengameart.org/content/chaingun-pistol-rifle-shotgun-shots
+http://creativecommons.org/licenses/by/3.0/

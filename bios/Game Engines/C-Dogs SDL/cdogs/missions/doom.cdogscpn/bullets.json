@@ -1,0 +1,128 @@
+{
+  "Version": 5,
+  "Bullets": [
+    {
+      "Name": "chainsaw",
+      "Power": 3,
+      "Hit": {
+        "Object": {
+          "Sound": "chainsaw"
+        },
+        "Flesh": {
+          "Sound": "chainsaw"
+        }
+      }
+    },
+    {
+      "Name": "10mm",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail",
+        "Width": 1.0
+      },
+      "WallMark": "bullet_hole",
+      "Speed": 35000,
+      "Range": 1,
+      "Power": 10,
+      "Mass": 0.2
+    },
+    {
+      "Name": "pellet",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail",
+        "Width": 1.0
+      },
+      "WallMark": "bullet_hole",
+      "Speed": 25000,
+      "Range": 1,
+      "Power": 10,
+      "Mass": 0.2
+    },
+    {
+      "Name": "fireball",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball_small",
+        "TicksPerFrame": 4
+      },
+      "Speed": 350,
+      "Range": 200,
+      "Power": 18,
+      "Mass": 18.0,
+      "Size": [3, 3],
+      "Special": {
+        "Effect": "Flame"
+      },
+      "Spark": "fireball_hit",
+      "Hit": {
+        "Object": {
+          "Sound": "hits/fire"
+        },
+        "Flesh": {
+          "Sound": "hits/fire"
+        },
+        "Wall": {
+          "Sound": "hits/fire"
+        }
+      }
+    },
+    {
+      "Name": "fireball_green",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball_green",
+        "TicksPerFrame": 4
+      },
+      "Speed": 550,
+      "Range": 300,
+      "Power": 40,
+      "Mass": 40.0,
+      "Size": [3, 3],
+      "Special": {
+        "Effect": "Flame"
+      },
+      "Spark": "fireball_green_hit",
+      "Hit": {
+        "Object": {
+          "Sound": "hits/fire"
+        },
+        "Flesh": {
+          "Sound": "hits/fire"
+        },
+        "Wall": {
+          "Sound": "hits/fire"
+        }
+      }
+    },
+    {
+      "Name": "monster_bite",
+      "Power": 10,
+      "Hit": {
+        "Object": {
+          "Sound": "hits/knife_hard"
+        },
+        "Flesh": {
+          "Sound": "monster-2"
+        }
+      }
+    },
+    {
+      "Name": "nukage",
+      "Hit": {
+        "Flesh": {}
+      },
+      "Power": 1,
+      "Special": {
+        "Effect": "Poison",
+        "Ticks": 3
+      }
+    }
+  ]
+}

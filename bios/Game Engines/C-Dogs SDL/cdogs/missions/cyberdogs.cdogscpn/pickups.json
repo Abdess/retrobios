@@ -1,0 +1,95 @@
+{
+    "Version": 3,
+    "Pickups": [
+      {
+        "Name": "folder",
+        "Pic": {
+          "Type": "Normal",
+          "Pic": "folder"
+        },
+        "Effects": [{
+          "Type": "Score",
+          "Score": 200
+        }]
+      },
+      {
+        "Name": "disk1",
+        "Pic": {
+          "Type": "Normal",
+          "Pic": "disk1"
+        },
+        "Effects": [{
+          "Type": "Score",
+          "Score": 200
+        }]
+      },
+      {
+        "Name": "pci_card",
+        "Pic": {
+          "Type": "Normal",
+          "Pic": "pci_card"
+        },
+        "Effects": [{
+          "Type": "Score",
+          "Score": 200
+        }]
+      },
+      {
+        "Name": "paper",
+        "Pic": {
+          "Type": "Normal",
+          "Pic": "paper"
+        },
+        "Effects": [{
+          "Type": "Score",
+          "Score": 200
+        }]
+      },
+      {
+        "Name": "teddy",
+        "Pic": {
+          "Type": "Normal",
+          "Pic": "teddy"
+        },
+        "Effects": [{
+          "Type": "Score",
+          "Score": 200
+        }]
+      },
+      {
+        "Name": "armor",
+        "Pic": {
+          "Type": "Normal",
+          "Pic": "armor_green"
+        },
+        "Effects": [{
+          "Type": "Health",
+          "Health": 50
+        }]
+      },
+      {
+        "Name": "max_armor",
+        "Pic": {
+          "Type": "Normal",
+          "Pic": "armor_blue"
+        },
+        "Effects": [{
+          "Type": "Health",
+          "Health": 70,
+          "ExceedMax": true
+        }]
+      },
+      {
+        "Name": "life",
+        "Pic": {
+          "Type": "Normal",
+          "Pic": "heart"
+        },
+        "Effects": [{
+          "Type": "Lives",
+          "Lives": 1
+        }],
+        "Sound": "1up"
+      }
+    ]
+}

@@ -1,0 +1,11 @@
+{
+	"Version": 16,
+	"Title": "Spawner Test",
+	"Author": "Cong",
+	"Description": "Testing some spawners",
+	"Ammo": true,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": true,
+	"RandomPickups": false,
+	"Missions": 1
+}

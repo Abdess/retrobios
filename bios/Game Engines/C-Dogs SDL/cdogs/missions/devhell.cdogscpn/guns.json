@@ -1,0 +1,14 @@
+{
+  "Version": 1,
+  "Guns": [
+    {
+      "Pic": "",
+      "Icon": "plant",
+      "Name": "Lack of motivation",
+      "Description": "You don't feel like fighting against military grade security bots, protected by high-tech fiber-steel-foam plating and equipped with nerve gas. The best weapon in range are some small arms anyway.",
+      "Bullet": "air",
+      "Recoil": "9999",
+      "Sound": ""
+    }
+  ]
+}

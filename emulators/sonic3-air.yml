@@ -42,10 +42,17 @@ notes: |
   (enginedata.bin, gamedata.bin, audiodata.bin, audioremaster.bin). Three
   are required and part of the release; audioremaster.bin is optional and
   downloaded on demand from https://sonic3air.org/download/audioremaster.bin
-  (126 MB) when the user enables the remastered soundtrack.
+  when the user enables the remastered soundtrack.
   ref: Oxygen/sonic3air/oxygenproject.json:32-38,
        Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:115-118,
        Oxygen/sonic3air/source/sonic3air/audio/RemasteredMusicDownload.cpp:48-62
+
+  Each package is opened from the game data directory, data/ under the
+  install directory, then from data/ under the app-data directory, where
+  the downloader saves audioremaster.bin. Package paths below are written
+  under sonic3-air/, which stands for either root.
+  ref: Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:643-651,
+       Oxygen/oxygenengine/source/oxygen/application/Configuration.cpp:288-289
 
   Only one RomInfo is declared (S3K_Steam). The engine does not support
   on-the-fly Sonic 3 + Sonic & Knuckles lock-on concatenation at run time;
@@ -69,13 +76,53 @@ files:
       accepts a user-picked .bin via the native file-selection dialog that
       satisfies the same post-modification check.
 
+  - name: "enginedata.bin"
+    path: "sonic3-air/data/enginedata.bin"
+    category: game_data
+    system: sonic3-air
+    required: true
+    bundled: true
+    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:115, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:603-617, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:643-651"
+    note: |
+      Oxygen Engine data package. A required package that cannot be opened
+      closes the application, unless the data is present unpacked
+      (data/images/icon.png exists). The engine then checks for
+      oxygen_icon.png in the engine data and stops when it is absent
+      (EngineMain.cpp:584-593).
+
+  - name: "gamedata.bin"
+    path: "sonic3-air/data/gamedata.bin"
+    category: game_data
+    system: sonic3-air
+    required: true
+    bundled: true
+    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:116, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:603-617, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:643-651"
+    note: |
+      Game data package. A required package that cannot be opened closes
+      the application, unless the data is present unpacked
+      (data/images/icon.png exists).
+
+  - name: "audiodata.bin"
+    path: "sonic3-air/data/audiodata.bin"
+    category: game_data
+    system: sonic3-air
+    required: true
+    bundled: true
+    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:117, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:603-617, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:643-651"
+    note: |
+      Audio data package. A required package that cannot be opened closes
+      the application, unless the data is present unpacked
+      (data/images/icon.png exists).
+
   - name: "audioremaster.bin"
+    path: "sonic3-air/data/audioremaster.bin"
     category: game_data
     system: sonic3-air
     required: false
-    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:118 (mDataPackages, Required=false), Oxygen/sonic3air/source/sonic3air/audio/RemasteredMusicDownload.cpp:48-62"
+    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:118 (mDataPackages, Required=false), Oxygen/sonic3air/source/sonic3air/audio/RemasteredMusicDownload.cpp:45-62"
     note: |
-      Remastered soundtrack package (approx 126 MB). Downloaded on demand
-      from https://sonic3air.org/download/audioremaster.bin and reloaded
+      Remastered soundtrack package (131677405 bytes). Downloaded on demand
+      from https://sonic3air.org/download/audioremaster.bin, saved as
+      data/audioremaster.bin under the app-data directory and reloaded
       via EngineMain::reloadFilePackage. Absent at first launch; the
       engine falls back to the emulated FM soundtrack.

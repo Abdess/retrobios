@@ -1,0 +1,148 @@
+{
+	"Missions": [{
+		"Title": "",
+		"Description": "",
+		"Type": "Static",
+		"Width": 16,
+		"Height": 16,
+		"ExitStyle": "plate",
+		"KeyStyle": "office",
+		"Objectives": [],
+		"Enemies": [],
+		"SpecialChars": [],
+		"MapObjectDensities": [],
+		"EnemyDensity": 0,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite",
+		"Chemo bombs",
+		"Petrify gun",
+		"Browny gun",
+		"Confusion bombs",
+		"Chemo gun",
+		"Pulse rifle",
+		"Heatseeker",
+		"Swarmer",
+		"Launcher",
+		"Pistol"],
+		"Song": "",
+		"TileClasses": {
+			"1": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "carbon",
+				"Mask": "000048ff",
+				"MaskAlt": "840084ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"0": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "grid",
+				"Mask": "848484ff",
+				"MaskAlt": "840084ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			}
+		},
+		"Tiles": ["1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1",
+		"1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1"],
+		"Access": ["0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"],
+		"StaticItems": [{
+			"MapObject": "Bullets ammo spawner",
+			"Positions": [[2, 2]]
+		},
+		{
+			"MapObject": "Grenades spawner",
+			"Positions": [[4, 2]]
+		},
+		{
+			"MapObject": "Gas tank ammo spawner",
+			"Positions": [[6, 2]]
+		},
+		{
+			"MapObject": "Shells ammo spawner",
+			"Positions": [[8, 2]]
+		},
+		{
+			"MapObject": "Cells ammo spawner",
+			"Positions": [[10, 2]]
+		},
+		{
+			"MapObject": "Frag grenades ammo spawner",
+			"Positions": [[12, 2]]
+		},
+		{
+			"MapObject": "Molotovs spawner",
+			"Positions": [[2, 4]]
+		},
+		{
+			"MapObject": "Mines ammo spawner",
+			"Positions": [[4, 4],
+			[10, 4]]
+		},
+		{
+			"MapObject": "Machine gun spawner",
+			"Positions": [[2, 6]]
+		},
+		{
+			"MapObject": "Shotgun spawner",
+			"Positions": [[4, 6]]
+		}],
+		"StaticCharacters": [],
+		"StaticObjectives": [],
+		"StaticKeys": [],
+		"StaticPickups": [],
+		"Start": [0, 0],
+		"Exits": [{
+			"Rect": [10,
+			11,
+			5,
+			4],
+			"Mission": 1,
+			"Hidden": false
+		}]
+	}]
+}

@@ -1,0 +1,1826 @@
+{
+	"Missions": [{
+		"Title": "The gardens",
+		"Description": "Having arrived at the mansion where your friend was employed you will now need to determine what is going on.",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"WallStyle": "brick",
+		"FloorStyle": "dirt",
+		"RoomStyle": "recessed",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "office",
+		"Objectives": [{
+			"Description": "Take a stroll through the garden...",
+			"Type": "Explore",
+			"Index": 0,
+			"Count": 100,
+			"Required": 75,
+			"Flags": 8
+		}],
+		"Enemies": [2,
+		3,
+		6,
+		8,
+		11,
+		11,
+		12,
+		13,
+		11,
+		13],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "tree_dead",
+			"Density": 25
+		},
+		{
+			"MapObject": "tree_autumn",
+			"Density": 25
+		}],
+		"EnemyDensity": 10,
+		"Weapons": ["Knife",
+		"Powergun"],
+		"Song": "",
+		"WallMask": "707070ff",
+		"FloorMask": "703800ff",
+		"RoomMask": "840000ff",
+		"AltMask": "840000ff",
+		"Walls": 10,
+		"WallLength": 15,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 0,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 2,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Cleanse the gardens",
+		"Description": "A chill runs down your spine after what you just witnessed. Some things are best left buried and corpses definitely belong in that category. Good thing you have more weapons in the car! As you are loading up you hear screams nearby...",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"WallStyle": "brick",
+		"FloorStyle": "dirt",
+		"RoomStyle": "tile",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "office",
+		"Objectives": [{
+			"Description": "Rid the earth of this unholy menace",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 25,
+			"Required": 25,
+			"Flags": 9
+		}],
+		"Enemies": [0,
+		1,
+		3,
+		4,
+		5,
+		7],
+		"SpecialChars": [11,
+		12,
+		13,
+		14],
+		"MapObjectDensities": [{
+			"MapObject": "tree_dead",
+			"Density": 25
+		},
+		{
+			"MapObject": "tree_autumn",
+			"Density": 25
+		}],
+		"EnemyDensity": 10,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "707070ff",
+		"FloorMask": "703800ff",
+		"RoomMask": "840000ff",
+		"AltMask": "840000ff",
+		"Walls": 10,
+		"WallLength": 15,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 0,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 1,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "The entrance hall",
+		"Description": "Gritting your teeth, you enter the mansion proper. You are determined to see this through to the end, come what may. You remember the cut-off message on your machine and hurriedly push further thoughts about that from your mind. There is always hope...",
+		"Type": "Classic",
+		"Width": 36,
+		"Height": 36,
+		"WallStyle": "plasteel",
+		"FloorStyle": "flat",
+		"RoomStyle": "wood",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "office",
+		"Objectives": [{
+			"Description": "Have a look around...",
+			"Type": "Explore",
+			"Index": 0,
+			"Count": 100,
+			"Required": 80,
+			"Flags": 8
+		}],
+		"Enemies": [11,
+		12,
+		13,
+		14,
+		15,
+		16,
+		17,
+		1,
+		5],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 10
+		},
+		{
+			"MapObject": "box2",
+			"Density": 10
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "plant",
+			"Density": 50
+		},
+		{
+			"MapObject": "bench",
+			"Density": 20
+		},
+		{
+			"MapObject": "chair",
+			"Density": 20
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_clothed",
+			"Density": 10
+		}],
+		"EnemyDensity": 15,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "848484ff",
+		"FloorMask": "5c5c84ff",
+		"RoomMask": "703800ff",
+		"AltMask": "840000ff",
+		"Walls": 20,
+		"WallLength": 20,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 8,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 1,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "A clue?",
+		"Description": "Your psyche is reeling from your experiences. You promise yourself to burn these clothes, new suit or not, should you have the luxury to worry about such things ever again. As despair sets in you stumble upon some offices. Maybe there is something here?",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"WallStyle": "steel",
+		"FloorStyle": "flat",
+		"RoomStyle": "wood",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "office",
+		"Objectives": [{
+			"Description": "Search for clues",
+			"Type": "Collect",
+			"Pickup": "paper",
+			"Count": 3,
+			"Required": 1,
+			"Flags": 5
+		}],
+		"Enemies": [11,
+		12,
+		13,
+		14,
+		15,
+		16,
+		17,
+		18,
+		0,
+		4,
+		6],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 5
+		},
+		{
+			"MapObject": "box2",
+			"Density": 5
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "plant",
+			"Density": 30
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 10
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 15
+		},
+		{
+			"MapObject": "safe",
+			"Density": 15
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "848484ff",
+		"FloorMask": "5c5c84ff",
+		"RoomMask": "844400ff",
+		"AltMask": "840000ff",
+		"Walls": 20,
+		"WallLength": 20,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 8,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Revelations",
+		"Description": "Your pulse is racing as you skim through the documents you found. Apparently the team had made some real progress in their research into the aging process. Some new experiments had been initiated in the basement laboratories...",
+		"Type": "Classic",
+		"Width": 32,
+		"Height": 64,
+		"WallStyle": "steel",
+		"FloorStyle": "flat",
+		"RoomStyle": "checker",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "office",
+		"Objectives": [{
+			"Description": "Find a way into the basement",
+			"Type": "Explore",
+			"Index": 0,
+			"Count": 100,
+			"Required": 80,
+			"Flags": 8
+		}],
+		"Enemies": [11,
+		13,
+		12,
+		14,
+		15,
+		16,
+		17,
+		18,
+		19,
+		7,
+		8],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 5
+		},
+		{
+			"MapObject": "box2",
+			"Density": 5
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "plant",
+			"Density": 30
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 10
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 15
+		},
+		{
+			"MapObject": "safe",
+			"Density": 15
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "848484ff",
+		"FloorMask": "847024ff",
+		"RoomMask": "008484ff",
+		"AltMask": "007000ff",
+		"Walls": 20,
+		"WallLength": 20,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 12,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "The basement",
+		"Description": "The basement. You ignore the instinct to flee as you edge down the stairs. That's the reptile brain talking, you have a duty - an objective to accomplish!",
+		"Type": "Classic",
+		"Width": 32,
+		"Height": 64,
+		"WallStyle": "steel",
+		"FloorStyle": "flat",
+		"RoomStyle": "flat",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "alien",
+		"Objectives": [{
+			"Description": "Search the basement",
+			"Type": "Explore",
+			"Index": 0,
+			"Count": 100,
+			"Required": 80,
+			"Flags": 8
+		},
+		{
+			"Description": "Clues!",
+			"Type": "Collect",
+			"Pickup": "folder",
+			"Count": 1,
+			"Required": 0,
+			"Flags": 5
+		},
+		{
+			"Description": "Clues!",
+			"Type": "Collect",
+			"Pickup": "blueprint",
+			"Count": 1,
+			"Required": 0,
+			"Flags": 5
+		},
+		{
+			"Description": "Clues!",
+			"Type": "Collect",
+			"Pickup": "disk1",
+			"Count": 2,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [11,
+		13,
+		12,
+		14,
+		15,
+		16,
+		17,
+		18,
+		19,
+		20,
+		5,
+		2],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 40
+		},
+		{
+			"MapObject": "safe",
+			"Density": 15
+		}],
+		"EnemyDensity": 25,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "707070ff",
+		"FloorMask": "74601cff",
+		"RoomMask": "007070ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "The experiment logs",
+		"Description": "You have found references to an experiment log. Apparently everything about everything is stored...on computer media of some sort. Grimly you set off in search...if anything gets in your way, well, too bad for them...",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 32,
+		"WallStyle": "steel",
+		"FloorStyle": "flat",
+		"RoomStyle": "flat",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "alien",
+		"Objectives": [{
+			"Description": "Find the log",
+			"Type": "Collect",
+			"Pickup": "cd",
+			"Count": 1,
+			"Required": 1,
+			"Flags": 4
+		},
+		{
+			"Description": "Nope, just a Windows NT CD...",
+			"Type": "Collect",
+			"Pickup": "cd",
+			"Count": 10,
+			"Required": 0,
+			"Flags": 1
+		},
+		{
+			"Description": "Nope, just dirty pictures...",
+			"Type": "Collect",
+			"Pickup": "disk3",
+			"Count": 2,
+			"Required": 0,
+			"Flags": 1
+		},
+		{
+			"Description": "Nope, a copy of Tetris",
+			"Type": "Collect",
+			"Pickup": "disk1",
+			"Count": 1,
+			"Required": 0,
+			"Flags": 5
+		},
+		{
+			"Description": "Cool! A Calvin and Hobbes screensaver!",
+			"Type": "Collect",
+			"Pickup": "disk2",
+			"Count": 1,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [11,
+		13,
+		12,
+		14,
+		15,
+		16,
+		17,
+		18,
+		19,
+		20,
+		17,
+		2],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 40
+		},
+		{
+			"MapObject": "safe",
+			"Density": 15
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 40
+		}],
+		"EnemyDensity": 25,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "707070ff",
+		"FloorMask": "74601cff",
+		"RoomMask": "007070ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Sophie?",
+		"Description": "Wiping the sweat - and other liquids - off your fingers you sit down in front of a computer with your newfound prize. Suddenly an achingly familiar voice is heard. A woman screaming for help...",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"WallStyle": "steel",
+		"FloorStyle": "smallsquare",
+		"RoomStyle": "tile",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "blast",
+		"Objectives": [{
+			"Description": "Save Sophie!",
+			"Type": "Rescue",
+			"Index": 10,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 4
+		}],
+		"Enemies": [11,
+		13,
+		12,
+		14,
+		15,
+		16,
+		17,
+		18,
+		19,
+		20,
+		17,
+		18],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 40
+		},
+		{
+			"MapObject": "safe",
+			"Density": 15
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 30
+		}],
+		"EnemyDensity": 25,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "707070ff",
+		"FloorMask": "004848ff",
+		"RoomMask": "000070ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 18,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 20,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Progress is made",
+		"Description": "Having rescued your friend from the clutches of the devil-spawn creatures you feel new resolve fill your weary body. As Sophie's nimble fingers fly over the keyboard searching for information you decide to do some work of your own...thanks to Sophie you know have additional weaponry as well.",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"WallStyle": "steel",
+		"FloorStyle": "smallsquare",
+		"RoomStyle": "tile",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "blast",
+		"Objectives": [{
+			"Description": "Purge!",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 30,
+			"Required": 30,
+			"Flags": 9
+		},
+		{
+			"Description": "Blueprints of the mansion...could come in handy",
+			"Type": "Collect",
+			"Pickup": "blueprint",
+			"Count": 1,
+			"Required": 0,
+			"Flags": 5
+		}],
+		"Enemies": [36],
+		"SpecialChars": [15,
+		16,
+		17,
+		18,
+		19,
+		20],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 40
+		},
+		{
+			"MapObject": "safe",
+			"Density": 15
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 30
+		}],
+		"EnemyDensity": 1,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Molotovs",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "707070ff",
+		"FloorMask": "004848ff",
+		"RoomMask": "000070ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 15,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 8,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "More basements?",
+		"Description": "Sophie tells you that the CD contains no information about the new series of experiments in the lower basements. You stifle a groan as you realize what this means...deeper, darker basements. At least Sophie hasn't been killed by some big guy with an axe or something like that...",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"WallStyle": "stone",
+		"FloorStyle": "tile",
+		"RoomStyle": "flat",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "blast",
+		"Objectives": [{
+			"Description": "Search the lower basements",
+			"Type": "Explore",
+			"Index": 0,
+			"Count": 100,
+			"Required": 85,
+			"Flags": 8
+		},
+		{
+			"Description": "Find records of the experiment",
+			"Type": "Collect",
+			"Pickup": "folder",
+			"Count": 1,
+			"Required": 1,
+			"Flags": 5
+		}],
+		"Enemies": [17,
+		18,
+		19,
+		20,
+		16,
+		13,
+		15],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 40
+		},
+		{
+			"MapObject": "safe",
+			"Density": 15
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 30
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_lab",
+			"Density": 30
+		}],
+		"EnemyDensity": 30,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Molotovs",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "484848ff",
+		"FloorMask": "004800ff",
+		"RoomMask": "480048ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 15,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 8,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Truth revealed",
+		"Description": "You realize the news are bad almost immediately. These are official government documents. Deep top secret shit indeed. This is bad. This is worse than bad. And to make matters worse you hear steps in the stairs...from downstairs!",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"WallStyle": "stone",
+		"FloorStyle": "tile",
+		"RoomStyle": "flat",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "blast",
+		"Objectives": [{
+			"Description": "Eliminate the threat",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 8,
+			"Required": 8,
+			"Flags": 9
+		},
+		{
+			"Description": "More proof!",
+			"Type": "Collect",
+			"Pickup": "folder",
+			"Count": 2,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [17,
+		18,
+		14,
+		12,
+		16,
+		13,
+		15,
+		11],
+		"SpecialChars": [26,
+		28,
+		30,
+		31],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 40
+		},
+		{
+			"MapObject": "safe",
+			"Density": 15
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 30
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_lab",
+			"Density": 30
+		}],
+		"EnemyDensity": 30,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Molotovs",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "484848ff",
+		"FloorMask": "004800ff",
+		"RoomMask": "480048ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 15,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 8,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Only forward...",
+		"Description": "Bad news first: those were definitely black ops wetwork personnel...high stakes and major players in other words. The documents you are reading do however indicate that this is the work of a renegade faction...probably quite illegal...",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"WallStyle": "stone",
+		"FloorStyle": "tile",
+		"RoomStyle": "flat",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "blast",
+		"Objectives": [{
+			"Description": "Search the laboratories",
+			"Type": "Explore",
+			"Index": 0,
+			"Count": 100,
+			"Required": 53,
+			"Flags": 8
+		},
+		{
+			"Description": "Find some hard evidence",
+			"Type": "Collect",
+			"Pickup": "folder",
+			"Count": 2,
+			"Required": 1,
+			"Flags": 4
+		},
+		{
+			"Description": "One of those scientist bastards got what he deserved!",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 2,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [17,
+		11,
+		15,
+		12,
+		16,
+		13,
+		29,
+		26,
+		27,
+		28,
+		31,
+		30],
+		"SpecialChars": [32],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 15
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 10
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_lab",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 30
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 20
+		}],
+		"EnemyDensity": 30,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Molotovs",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "484848ff",
+		"FloorMask": "707070ff",
+		"RoomMask": "707070ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 15,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 8,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Fresh meat...",
+		"Description": "As you reach the inner laboratory you realize with a sickening feeling that you are facing Sophie's former colleagues...now newly undead. Their skins still retain some traces of the newly lost life...",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"WallStyle": "stone",
+		"FloorStyle": "tile",
+		"RoomStyle": "flat",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "blast",
+		"Objectives": [{
+			"Description": "Lay these poor souls to rest",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 19,
+			"Required": 19,
+			"Flags": 9
+		}],
+		"Enemies": [26,
+		27,
+		28,
+		31,
+		30,
+		29,
+		15,
+		11],
+		"SpecialChars": [25,
+		24,
+		23,
+		22,
+		21],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 15
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 10
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_lab",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 30
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 20
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Molotovs",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "484848ff",
+		"FloorMask": "707070ff",
+		"RoomMask": "707070ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 15,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 8,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "They are truly mad...",
+		"Description": "As the last of the newly resurrected zombies find peace at your hands you hear manic laughter and a closing door. A low-keyed hum is suddenly everywhere...whatever they are up to is bound to be bad...",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 48,
+		"WallStyle": "stone",
+		"FloorStyle": "tile",
+		"RoomStyle": "flat",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "blast",
+		"Objectives": [{
+			"Description": "Destroy all laboratory equipment",
+			"Type": "Destroy",
+			"MapObject": "table_lab",
+			"Count": 9,
+			"Required": 9,
+			"Flags": 8
+		},
+		{
+			"Description": "Die, you scum!",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 4,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [27,
+		31,
+		30,
+		28,
+		26,
+		29,
+		17,
+		12,
+		11],
+		"SpecialChars": [32],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 15
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 10
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 40
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 30
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Molotovs",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "484848ff",
+		"FloorMask": "707070ff",
+		"RoomMask": "707070ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 12,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Uh-oh...",
+		"Description": "You got to the equipment a little too late. Something new slithered into the hallway just as you entered the last laboratory. You vaguely recall something Sophie mentioned about clones...there were several classes or something...",
+		"Type": "Classic",
+		"Width": 32,
+		"Height": 32,
+		"WallStyle": "stone",
+		"FloorStyle": "tile",
+		"RoomStyle": "flat",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "blast",
+		"Objectives": [{
+			"Description": "Destroy the clones",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 5,
+			"Required": 5,
+			"Flags": 9
+		}],
+		"Enemies": [26,
+		27,
+		28,
+		31,
+		30],
+		"SpecialChars": [34],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 15
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 10
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 40
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 30
+		}],
+		"EnemyDensity": 8,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Molotovs",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "484848ff",
+		"FloorMask": "707070ff",
+		"RoomMask": "707070ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 12,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "The trouble with clones is that there are always more...",
+		"Description": "Yes, now you recall...there were A, B and C clones. You don't know which those were, nor which these are...not that you care much...hmm, these seem fireproof though...",
+		"Type": "Classic",
+		"Width": 32,
+		"Height": 32,
+		"WallStyle": "stone",
+		"FloorStyle": "tile",
+		"RoomStyle": "flat",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "blast",
+		"Objectives": [{
+			"Description": "Destroy the clones",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 3,
+			"Required": 3,
+			"Flags": 9
+		}],
+		"Enemies": [37],
+		"SpecialChars": [33],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 15
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 10
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 40
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 30
+		}],
+		"EnemyDensity": 1,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "484848ff",
+		"FloorMask": "707070ff",
+		"RoomMask": "707070ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 12,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "The clone that wouldn't go away...",
+		"Description": "This last clone just will not stop! It pursues you still and nothing you have will even dent it...you hear Sophie shouting somewhere...something about sunlight...isn't there a skylight here somewhere?",
+		"Type": "Classic",
+		"Width": 32,
+		"Height": 64,
+		"WallStyle": "steel",
+		"FloorStyle": "flat",
+		"RoomStyle": "flat",
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"DoorStyle": "alien",
+		"Objectives": [{
+			"Description": "Destroy the C clone",
+			"Type": "Rescue",
+			"Index": 35,
+			"Count": 1,
+			"Required": 0,
+			"Flags": 1
+		},
+		{
+			"Description": "Find the skylight and think of something...",
+			"Type": "Explore",
+			"Index": 0,
+			"Count": 100,
+			"Required": 60,
+			"Flags": 8
+		}],
+		"Enemies": [36],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 25
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 40
+		},
+		{
+			"MapObject": "safe",
+			"Density": 15
+		}],
+		"EnemyDensity": 1,
+		"Weapons": ["Machine gun",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"WallMask": "848484ff",
+		"FloorMask": "847024ff",
+		"RoomMask": "008484ff",
+		"AltMask": "000048ff",
+		"Walls": 40,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	}]
+}

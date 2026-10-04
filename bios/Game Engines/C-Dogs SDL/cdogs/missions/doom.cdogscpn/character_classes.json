@@ -1,0 +1,15 @@
+{
+  "Version": 2,
+  "Characters": [
+    {
+      "Name": "Demon",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/ogre"
+      },
+      "Body": "demon",
+      "Sounds": "ogre",
+      "BloodColor": "ff0000"
+    }
+  ]
+}

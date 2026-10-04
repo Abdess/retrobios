@@ -1,0 +1,392 @@
+{
+  "Version": 5,
+  "DefaultBullet": {
+    "Mass": 0.0,
+    "Spark": "spark",
+    "Hit": {
+      "Object": {
+        "Sound": "hits/hard"
+      },
+      "Flesh": {
+        "Sound": "hits/flesh"
+      },
+      "Wall": {
+        "Sound": "ricochet"
+      }
+    },
+    "SeekFactor": -1
+  },
+  "Bullets": [
+    {
+      "Name": "fist",
+      "Power": 1,
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/fist_flesh"
+        }
+      }
+    },
+    {
+      "Name": "chainsaw",
+      "Power": 2,
+      "Hit": {
+        "Flesh": {
+          "Sound": "chainsaw"
+        }
+      }
+    },
+    {
+      "Name": "chainsaw_x2",
+      "Power": 4,
+      "Hit": {
+        "Flesh": {
+          "Sound": "chainsaw"
+        }
+      }
+    },
+    {
+      "Name": "chainsaw_x3",
+      "Power": 6,
+      "Hit": {
+        "Flesh": {
+          "Sound": "chainsaw"
+        }
+      }
+    },
+    {
+      "Name": "chainsaw_x4",
+      "Power": 8,
+      "Hit": {
+        "Flesh": {
+          "Sound": "chainsaw"
+        }
+      }
+    },
+    {
+      "Name": "chainsaw_x5",
+      "Power": 10,
+      "Hit": {
+        "Flesh": {
+          "Sound": "chainsaw"
+        }
+      }
+    },
+    {
+      "Name": "monster_bite",
+      "Power": 1,
+      "Hit": {
+        "Flesh": {
+          "Sound": "monster-2"
+        }
+      }
+    },
+    {
+      "Name": "monster_bite2",
+      "Power": 2,
+      "Hit": {
+        "Flesh": {
+          "Sound": "monster-2"
+        }
+      }
+    },
+    {
+      "Name": "monster_bite3",
+      "Power": 3,
+      "Hit": {
+        "Flesh": {
+          "Sound": "monster-2"
+        }
+      }
+    },
+    {
+      "Name": "mg",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bullet_ball"
+      },
+      "WallMark": "bullet_hole",
+      "Speed": 1152,
+      "Range": 30,
+      "Power": 6,
+      "Size": [3, 3]
+    },
+    {
+      "Name": "flame",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "flame",
+        "TicksPerFrame": 4
+      },
+      "Speed": 288,
+      "Range": 25,
+      "Power": 10,
+      "Size": [10, 10],
+      "Special": {
+        "Effect": "Flame"
+      },
+      "Spark": "",
+      "Hit": {
+        "Object": {
+          "Sound": "hits/fire"
+        },
+        "Flesh": {
+          "Sound": "hits/fire"
+        },
+        "Wall": {
+          "Sound": "hits/fire"
+        }
+      }
+    },
+    {
+      "Name": "sniper",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/beam_bright"
+      },
+      "Spark": "spark_blue",
+      "Speed": 960,
+      "Range": 70,
+      "Power": 60,
+      "Size": [5, 5]
+    },
+    {
+      "Name": "grenade",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "grenade",
+        "TicksPerFrame": 2
+      },
+      "ShadowSize": [6, 4],
+      "Speed": 384,
+      "Range": 50,
+      "Spark": "",
+      "Hit": {
+        "Object": {},
+        "Flesh": {},
+        "Wall": {}
+      },
+      "Falling": {
+        "GravityFactor": 0.7
+      },
+      "OutOfRangeGuns": [
+        "blast_weak",
+        "explosion"
+      ],
+      "HitGuns": [
+        "blast_weak",
+        "demo_weak",
+        "explosion"
+      ],
+      "Size": [1, 1]
+    },
+    {
+      "Name": "megarocket",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "rocket"
+      },
+      "Trail": {
+        "Particle": "smoke_trail_small",
+        "Width": 0,
+        "TicksPerEmit": 4
+      },
+      "ShadowSize": [6, 4],
+      "Speed": 384,
+      "Range": 50,
+      "Spark": "",
+      "Hit": {
+        "Object": {},
+        "Flesh": {},
+        "Wall": {}
+      },
+      "Falling": {
+        "GravityFactor": 0.3
+      },
+      "OutOfRangeGuns": [
+        "blast_strong",
+        "explosion"
+      ],
+      "HitGuns": [
+        "blast_strong",
+        "demo_strong",
+        "explosion"
+      ],
+      "Size": [1, 1]
+    },
+    {
+      "Name": "pulse",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/pulse"
+      },
+      "Spark": "spark_blue",
+      "Speed": 768,
+      "Range": 50,
+      "Power": 10
+    },
+    {
+      "Name": "laser_dumb",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/beam"
+      },
+      "Spark": "spark_red",
+      "Speed": 384,
+      "Range": 110,
+      "Power": 5
+    },
+    {
+      "Name": "pulse_green",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/pulse_green"
+      },
+      "Spark": "spark_green",
+      "Speed": 768,
+      "Range": 110,
+      "Power": 10
+    },
+    {
+      "Name": "laser",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/beam_yellow"
+      },
+      "Spark": "spark_yellow",
+      "Speed": 960,
+      "Range": 100,
+      "Power": 3
+    },
+    {
+      "Name": "turbo_laser",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/beam_green"
+      },
+      "Spark": "spark_green",
+      "Speed": 960,
+      "Range": 100,
+      "Power": 8
+    },
+    {
+      "Name": "blast_weak",
+      "Range": 1,
+      "Power": 40,
+      "Size": [80, 80],
+      "Persists": true,
+      "Spark": "",
+      "Hit": {
+        "Flesh": {}
+      }
+    },
+    {
+      "Name": "blast_strong",
+      "Range": 1,
+      "Power": 200,
+      "Size": [80, 80],
+      "Persists": true,
+      "Spark": "",
+      "Hit": {
+        "Flesh": {}
+      }
+    },
+    {
+      "Name": "demo_weak",
+      "Range": 1,
+      "Power": 40,
+      "Size": [5, 5],
+      "Spark": "",
+      "Hit": {
+        "Object": {}
+      }
+    },
+    {
+      "Name": "demo_strong",
+      "Range": 1,
+      "Power": 200,
+      "Size": [5, 5],
+      "Spark": "",
+      "Hit": {
+        "Object": {}
+      }
+    },
+    {
+      "Name": "explosion_cast",
+      "SpeedLow": 4096,
+      "SpeedHigh": 8192,
+      "Range": 1,
+      "Hit": {},
+      "OutOfRangeGuns": [
+        "explosion_ball"
+      ]
+    },
+    {
+      "Name": "explosion_ball",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/explosion_small",
+        "TicksPerFrame": 4
+      },
+      "Speed": 0,
+      "Range": 27,
+      "Persists": true,
+      "Hit": {}
+    },
+    {
+      "Name": "small_fireball1",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball",
+        "TicksPerFrame": 3
+      },
+      "Speed": 0,
+      "Range": 40,
+      "Power": 0,
+      "Size": [7, 5],
+      "Persists": true,
+      "Spark": "",
+      "Falling": {
+        "GravityFactor": 1,
+        "FallsDown": false
+      }
+    },
+    {
+      "Name": "small_fireball2",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball",
+        "Count": -8,
+        "TicksPerFrame": 3
+      },
+      "Speed": 0,
+      "Range": 48,
+      "Power": 0,
+      "Size": [7, 5],
+      "Persists": true,
+      "Spark": "",
+      "Falling": {
+        "GravityFactor": 1,
+        "FallsDown": false
+      }
+    },
+    {
+      "Name": "small_fireball3",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball",
+        "Count": -16,
+        "TicksPerFrame": 3
+      },
+      "Speed": 0,
+      "Range": 56,
+      "Power": 0,
+      "Size": [7, 5],
+      "Persists": true,
+      "Spark": "",
+      "Falling": {
+        "GravityFactor": 1,
+        "FallsDown": false
+      }
+    }
+  ]
+}

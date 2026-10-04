@@ -1,0 +1,4 @@
+Adapted from Dungeon Crawl 32x32 tiles by Chris Hamons (maintainer)
+https://opengameart.org/content/dungeon-crawl-32x32-tiles
+
+http://creativecommons.org/publicdomain/zero/1.0/

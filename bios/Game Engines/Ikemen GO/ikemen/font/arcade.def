@@ -1,0 +1,36 @@
+﻿; Arcade - 38 point font
+; Indexed 8-bank
+; Bank 0 - mono
+; Bank 1 - red
+; Bank 2 - green
+; Bank 3 - blue
+; Bank 4 - brown
+; Bank 5 - cyan
+; Bank 6 - purple
+; Bank 7 - yellow
+
+[FNT v2]
+; FNT v2 version number.  Don't change this.
+fntversion = 2,00
+; Name of this font.
+name = "Arcade"
+; This font contains the numbers 0 through 9, letters A-Z and
+; the symbols % ( ) ? -
+
+[Def]
+; This is a bitmap font
+Type = bitmap
+; Bank numbers are mapped to palette numbers (0, bank).
+BankType = palette
+; Size of font: width, height.  Width is used for spaces.
+Size = 36,34
+; Spacing between font glyphs: width, height.
+Spacing = -12,4
+; Drawing offset: x, y.
+Offset = -2,3
+; Filename of the sff containing the glyphs.  Use sff v2 only.
+File = arcade.sff
+
+; Note: All units are in pixels.
+; Text rendered with bitmap fonts may be in ASCII only.
+; See files in work/font for information on creating the sff.

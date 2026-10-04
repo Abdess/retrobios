@@ -1,0 +1,55 @@
+{
+  "Version": 3,
+  "MapObjects": [
+    {
+      "Name": "server_blink",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "server_blink",
+        "TicksPerFrame": 40
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "safe2_wreck"
+      },
+      "Health": 30,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "box3_blink",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "box3_blink",
+        "TicksPerFrame": 40
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "box3_gray_wreck"
+      },
+      "DestroyGuns": [        "explosion1",
+        "explosion2",
+        "explosion3"],
+      "Health": 20,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "table_plastic_computer",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_plastic_computer"
+      },
+      "Wreck": "table_plastic_wreck",
+      "Health": 40,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "phleboltinum",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "phleboltinum"
+      },
+      "Wreck": "safe_wreck",
+      "Health": 50
+    }
+  ]
+}

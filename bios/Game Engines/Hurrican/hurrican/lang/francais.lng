@@ -1,0 +1,260 @@
+--------------------------------
+>   Hurrican Fichier Langage   <
+>                              <
+>         - francais -         <
+>        par DLFRSILVER        <
+>          28.04.2007          <
+>                              <
+>    http://www.poke53280.de   <
+--------------------------------
+//---------- Starter ----------//
+Plein ecran
+Standard
+Commencer
+Quitter
+Annuler
+Langue
+Verifier MAJ
+Une nouvelle version est disponible. Visiter le site web Hurrican maintenant?
+Pas de nouvelle version disponible.
+Niveaux disponibles sur le serveur
+Liste actuelle des niveaux sur serveur
+Choisissez un pack de niveau
+Telechargez la selection
+//---------- Miscellaneous ----------//
+0
+Chargement du fichier de langue
+Chargement des bitmaps :
+Chargement des waves :
+Chargement des modules :
+ ... OK
+Chargement des donnees niveaux pour \n
+//---------- Tutorial Texts ----------//
+Bienvenue dans le niveau tutoriel de Hurrican. Vous apprendrez ici les controles de base. Vous pouvez aller a gauche ou a droite en appuyant sur KEY_LEFT ou KEY_RIGHT. Vous pouvez vous baisser en appuyant sur KEY_CROUCH. Maintenant regardez autour de vous. Il y a d'autres astuces de ce genre dans ce niveau.
+Appuyez sur KEY_JUMP pour sauter. Plus vous maintenez la touche, plus vous sautez loin. Vous pouvez changer de direction durant le saut en appuyant sur KEY_LEFT ou KEY_RIGHT.
+Vous pouvez examiner les environs en appuyant sur KEY_UP et KEY_DOWN. Ca vous aidera a trouver des objets caches. Par exemple, regardez au plafond au dessus de vous...
+Ces diamants sont eparpilles partout dans les niveaux. Vous obtenez des points quand vous les ramassez. En plus, tout les 50 diamants ramasses on vous augmente votre temps.
+Appuyez sur KEY_SHOOT pour tirer et maintenez la touche pour obtenir une sorte d'auto-fire au ralenti. Appuyer sur la touche de facon repetee vous permet de tirer plus vite qu'avec l'autofire standard.
+Maintenant regardez le mur sur votre droite. Il n'a pas l'air bien solide. Essayez de le detruire en tirant dessus avec votre arme.
+Tres bien. Il y a beaucoup d'endroits ou vous pouvez detruire les murs. La plupart du temps, vous ne trouverez les endroits secrets que derriere eux.
+Maintenant, un peu d'exercice de visee. Vous pouvez viser vers le haut en appuyant sur KEY_UP. En combinant ca avec KEY_LEFT ou KEY_RIGHT vous pouvez aussi tirer en diagonale. Maintenant essayez de tirer sur les diamants en dessous de vous.
+Maintenant ca devient excitant... Plus bas vous allez rencontrer les premiers ennemis ou, disons-le, les premiers containers a powerup volants.
+-leer-
+Tres bien. Maintenant ramassez tout les powerup.
+Cet effet etait l'indicateur d'incrementation de la puissance de votre arme. On peut voir lequel en regardant la couleur de l'effet. Le rouge est le tir en eclate, le bleu le laser et le vert est le tir par rebond. Les barres (a la fleche) vous montrent le niveau de l'arme en cours.
+Et maintenant les premiers vrais ennemis: les walkers. Une chose en particulier a leur sujet, vous pouvez leur sauter dessus pour les detruire.
+A nouveau le passage est bloque, mais cette fois le mur friable est en DESSOUS de vous. Maintenez KEY_BLITZ et faites osciller l'arc electrique avec KEY_LEFT et KEY_RIGHT pour detruire le mur.
+Tres bien. Au fait, l'arc electrique peut aussi detruire les ennemis. Malheureusement il est un peu court...  Mais pas de souci: c'est une simple histoire de technique :) sur la droite il y a des powerups pour remedier a ce probleme.
+L'arc electrique est plus long maintenant. essayez-le! Et voila le top du top: il peuvent devenir encore plus long. La barre a cote du symbole de l'arc dans le HUD montre le niveau en cours. Quand vous perdez une vie, vous perdrez aussi une taille pour l'arc.
+Les extras ne sont pas seulement contenus dans les containers volants. Ils peuvent aussi se trouver dans les blocs a powerups qui apparaissent seulement quand on leur tire dessus. Essayez de tirer dans les environs jusqu'a ce que vous en trouviez un (Faites une rotation complete avec l'arc c'est plus facile)...
+Voila ca y est. Maintenant tirez lui dessus de maniere repetee jusqu'a ce qu'il soit vide et ramassez tout les objets.
+Voila celle que l'on appele "lignes de puissance", qui est une arme speciale. Le nombre de lignes de puissance peut etre observe dans le HUD (regardez la fleche). allez un peu sur la droite pour obtenir une information pour pouvoir les utiliser et les voir en action.
+Restez au milieu du pont et appuyez sur KEY_POWERLINE pour activer une ligne de puissance.
+Vsouchhh! Les petits ennemis sont litteralement balayes et les plus gros sont en partie endommages par cette arme. Maintenant ramassez les powerups qui apparaissent.
+Ces powerups sont des grenades. Elles vont faire BOOM. Ca a l'air marrant, mais c'est vrai :) De nouveau, sur la droite vous apprendrez l'usage de ces objets.
+Faites attention, il y a deux nids qui peuvent encaisser un max de degats! Appuyez sur KEY_GRANATE pour tirer une grenade. Elles peuvent endommager tout les ennemis qui se trouvent dans le champ de l'explosion. Pour le second nid vous aurez besoin de rester en dessous et tirer vers le haut.
+On dirait que c'est encore un cul de sac. Baissez vous avec (KEY_CROUCH) et activez la ligne de puissance simultanement (KEY_POWERLINE). De maniere a vous transformer en roue d'acier. A la fin du tunnel, appuyez simplement sur la touche de saut (KEY_JUMP) pour vous relever.
+Comme vous avez pu le remarquer, la roue bleue (regardez la fleche) va diminuer quand vous roulerez sous forme de roue. Mais vous pouvez la remplir a nouveau avec les powerups. En plus, elle se recharge lentement par elle-meme.
+Oui, c'etait le powerup de la roue. quand vous etes en mode roue, vous etes invicible et faites des degats aux ennemis. Et comme si ca ne suffisait pas, vous pouvez meme placer des bombes en appuyant sur KEY_SHOOT. Essayez-la sur les nids sur la droite.
+Waouh, vous etes une sorte de machine a tuer maintenant! Mais le panel d'arme n'est pas encore termine. Des nouvelles armes feront leur apparition...
+Au fait, ces fleches vous montrent le chemin a prendre si vous voulez atteindre la sortie.
+Encore un mur? On peut utilisez l'arc... Mais attendez! Mettez-vous pres du mur et appuyez sur KEY_SHOCKWAVE ...
+Waouhh, cette onde de choc a detruit le mur tout entier, tue le walker et meme vide un bloc de puissance. Mais vous pouvez seulement porter une seule de ces bombes teleguidees a la fois et devez la remplir avec le powerup correspondant quand vous l'utilisez. Si le symbole dans le HUD brille (regardez la fleche), la bombe teleguidee est prete a etre utilisee.
+Encore un exercice de visee... Maintenez KEY_SHOOT et KEY_BLITZ simultanement pour mettre votre arme en charge avec le faisceau. Pendant le chargement, vous pouvez changer la direction de la visee avec KEY_LEFT et KEY_RIGHT. Relachez les cles pour tirer avec le faisceau. Plus vous amenez le faisceau loin, plus le tir sera gros. Allez au milieu et essayez de tirer sur les diamants au dessus de vous avec le faisceau.
+Plus votre arc electrique est long, plus le faisceau se chargera vite. Encore une chose: sur la gauche vous prendrez connaissance des deux armes primaires qui existent en plus du tir en eclate.
+C'etait des tirs a rebond supplementaires. Comme vous le voyez, les powerups peuvent meme etre disposes de cette facon. Ce tir peut etre divise en deux tirs supplementaires suivant le niveau de l'arme que vous utilisez a l'instant. Tres utile dans des tunnels etroits ou des couloirs comme celui-ci.
+La derniere arme pour aujourd'hui est le laser. Ramassez les powerups et testez-le. Sa particularite est pouvoir tirer a travers plusieurs ennemis avec un seul projectile. Vous pouvez faire le tour de vos armes avec KEY_WAFFE_CYCLE. Amusez-vous un peu avec.
+Vous etes arrive a la fin du tutoriel. Dans le jeu vous rencontrerez certains powerups tout nouveau et d'autres. Gardez ceci a l'esprit: experimentez a gauche a droite avec tout ce que vous pouvez pour tout comprendre. Le tutoriel etait un peu plus facile que les niveaux normaux: les nids ne ressuscitent pas les ennemis et vous etiez invincible. Mais maintenant vous devez etre pret pour le combat. Bonne chance!
+36
+37
+38
+39
+//---------- Konsolen Text ----------//
+Hurrican
+
+(c) 2007
+Poke53280
+www.poke53280.de
+
+Tapez "help" pour obtenir des infos a propos de la console de commande
+
+
+//---------- Summary Box ----------//
+Resume
+Secrets
+Cheat debloque:
+- Appuyez sur une touche -
+//---------- Main Menu ----------//
+CHARGEMENT
+SAUVER LE JEU
+COMMENCER LE JEU
+RETOUR AU JEU
+PREFERENCES
+HIGHSCORES
+REMERCIEMENTS
+QUITTER
+UTILISER LE TUTORIEL
+COMMENCER NOUVELLE PARTIE
+CONTINUER UN JEU SAUVE
+FACILE
+NORMAL
+DIFFICILE
+HURRICAN
+curseur: selectionner - entree : choisir - Echap : retour
+RANG
+NOM
+SCORE
+NIVEAU
+MODE
+VOLUME
+SON
+MUSIQUE
+CONFIGURER LES CONTROLES
+CHOISIR LA LANGUE
+MODE:
+Retour de force
+Parametres par defaut
+Joypad
+Joystick
+INCROYABLE
+NOUVEL HIGHSCORE 
+ENTREZ VOTRE NOM
+CONTINUER
+De retour
+marcher a gauche
+marcher a droite
+se baisser
+regarder en haut
+regarder en bas
+saut
+tir
+activer arc electrique
+ligne de puissance
+grenade
+onde de choc
+basculer les armes
+marcher
+regarder
+Axe X/Y
+D-pad
+-appuyez sur une nouvelle touche-
+-appuyez sur un nouveau bouton-
+DETAILS: FAIBLE
+DETAILS: MOYEN
+DETAILS: ELEVE
+DETAILS: MAXIMUM
+UN JOUEUR
+DEUX JOUEUR
+Joueur un
+Joueur deux
+type
+mode
+Sensibilite
+clavier
+non defini
+niveau
+joueur
+date
+- pas d'entree -
+SECRET
+gauche
+droite
+haut
+bas
+bouton
+//---------- Hints ----------//
+Si vous ramassez tout les diamants dans un niveau, vous debloquerez un cheatcode.
+Quand vous perdez une vie, vous perdrez aussi le niveau de puissance de l'arme que vous utilisez.
+Quand vous touchez un ennemi alors que vous etes en mode roue, l'energie du mode roue diminuera plus vite.
+Quand vous ne bougez pas, votre energie en mode roue se chargera plus rapidement.
+When you press jump while your are in wheel mode and in the air, you can perform th wheel jump.
+Ramasser 50 diamants rafraichira la limite de temps.
+Vous ne pouvez pas porter plus de 9 grenades et 9 lignes de puissance.
+Certains secrets sont caches derriere des murs friables.
+Il y a des murs de terre derriere lesquels vous pouvez trouver des secrets.
+Quand vous roulez sur une bombe qui explose lorsque vous etes en mode roue vous serez un peu secoue.
+Si vous vous faites mordre par un gros poisson, alors sautez pour vous en defaire.
+La vapeur et la fumee peut vous pousser un peu quand vous sautez.
+Certains gardiens sont tres durs a vaincre quand vous utilisez seulement votre simple puissance de feu.
+Le feu sur les murs a lance-flammes peuvent aussi endommager les ennemis.
+Le bouclier de protection peut endommager les ennemis lorsqu'on les touche
+Certains ennemis doivent etre evites plutot que d'etre detruits.
+Les grenades font subir des degats a chaque ennemi autour de l'explosion.
+Les lignes de puissances se trouvent de preference dans les blocs caches contenant les powerups.
+Les degats d'un simple tir a rebond diminueront chaque fois que le tir rebondit sur un mur.
+Quand vous appuyez sur la touche de tir de maniere repetee vous pouvez tirer plus vite qu'en ayant un auto-fire standard.
+Vous pouvez sauter sur les blocs de puissance pour atteindre des endroits plus en hauteur.
+Vous pouvez sauver votre jeu apres chaque niveau.
+Plus votre arc electrique est long, plus le faisceau se chargera vite.
+quand vous perdez une vie, l'explosion agit comme une grenade.
+Avec le laser vous pouvez tirer a travers plusieurs ennemis.
+Les armes de base tir en eclate, laser et a rebond peuvent etre augmentes jusqu'au niveau 8.
+Vous pouvez sauvez votre partie apres chaque niveau.
+Vous pouvez changer le niveau de detail des effets speciaux dans le menu des options.
+Certains ennemis peuvent seulement etre endommages que quand ils sont dans un etat bien particulier.
+Poke53280 ne vous demandera JAMAIS votre adresse email ou votre mot de passe...
+//---------- Pissen ----------//
+Bon sang, je dois aller quelquepart...
+Argh! J'en peux plus!
+Pourquoi cette boite de conserve n'a pas d'ailes???
+Qui a concu ce truc bordel?
+Pourquoi personne n'a pense a ce genre de situtaion?
+Comme par hasard...
+Ils ont pas teste ce truc correctement...
+'tain, ca devient franchement balaise la!
+Quand je serais de retour sur la terre...
+... m'en fout j'me plaindrais!
+C'est impossible.
+Cette combinaison d'assaut dispose de tout le tintouin technologique...
+Mais le truc le plus important qu'ils ont oublie.
+Qu'est-ce que j'peux faire maintenant?
+Allez, continue de jouer!
+Grmblfxt ... j'vais peter un cable.
+Je dois patienter...
+... jusqu'a ce que le jeu soit pret!
+//---------- Intro Screen 1 ----------//
+Annee 2138, quelquepart dans l'espace
+Le "dreadnought" revient d'une mission reussie.
+Le prochain arret du vaisseau de transport de troupes est la Terre.
+Tout a coup, les soldats recoivent un appel d'urgence de la planete bleue.
+"La Terre est attaquee! Que toutes les unites disponibles se preparent a la defense!"
+"Des missiles d'origine inconnue frappent la Terre!"
+Quelques secondes plus tard, l'origine des missiles mortels est localisee.
+C'est la planete Takatis.
+Les hommes n'en croient pas leurs yeux tandis qu'ils regardent fixement l'hologramme dans la salle de briefing.
+Personne d'autre que le Docteur Geng X lui-meme n'a pu donner l'assaut.
+Des annees auparavant sa mort avait ete annoncee a travers toute la galaxie, mais il est de retour...
+Sans hesitations le "dreadnought" met le cap vers la planete inexploree.
+Apres un court vol le vaisseau atteint sa destination.
+La planete alien etincelle d'une horrible beaute.
+L'equipage lance le processus d'atterissage.
+Les scanners indiquent une atmosphere de type terrestre.
+Soudain, les nombreux canons a la surface de la planete ouvrent le feu.
+Le systeme de bouclier est inefficace et d'enormes projectiles taillent la coque du vaisseau en pieces.
+Sans espoir, les soldats piquent vers la surface de la planete.
+Alors qu'ils entrent dans l'atmosphere, le vaisseau est sur le point de se mettre en torche.
+quelques secondes apres l'impact.
+La plupart de l'equipage n'a pas survecu a l'atterissage d'urgence du "dreadnought".
+Un seul soldat est encore vivant. Il se releve lentement et se fraye un passage vers l'exterieur.
+Seul deux soldats sont encore vivants. Ils se relevent lentement et se frayent un passage vers l'exterieur.
+Il faut retrouver le Docteur Geng X et liberer le monde de sa presence diabolique.
+//---------- Outtro ----------//
+L'incroyable s'est produit.
+Apres un long combat, le Docteur Geng X est vaincu!
+Tout ce qui reste de lui est enterre sous les decombres fumantes de son
+complexe en ruine. Toutes ses sinistres creations sont ensevelies ici avec lui,
+au plus profond des tenebres.
+La paix a ete enfin ramenee dans l'univers, mais qui sait
+combien de temps cette paix durera.
+Le futur n'est pas encore ecrit.
+
+
+
+//---------- Warpzone ----------//
+Et maintenant, pour les plus patients d'entre vous, quelques petites astuces
+Regardez attentivement le niveau tutoriel pour trouver
+l'entree secrete dans les tuyaux ...
+Utilisez la roue juste au debut est une idee EXPLOSIVE...
+Restez pres de la gauche et n'oubliez pas: les plombiers vont dans les tuyauteries (vive mario lol) ;)
+
+//--- ENDE ---//

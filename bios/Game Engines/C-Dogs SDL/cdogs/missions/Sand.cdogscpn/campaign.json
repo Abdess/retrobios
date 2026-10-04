@@ -1,0 +1,17 @@
+{
+	"Version": 16,
+	"Title": "Sand",
+	"Author": "Cong",
+	"Description": "The treacherous Clan Tantalus are amassing an army of super solders. You are an elite Kardausar soldier of the Emperor; travel to the harsh planet of Sand, the Tantalus fief, and carry out His will.",
+	"Ammo": false,
+	"SkipWeaponMenu": false,
+	"BuyAndSell": false,
+	"RandomPickups": true,
+	"DoorOpenTicks": 70,
+	"Lives": 0,
+	"MaxLives": 0,
+	"PlayerHP": 0,
+	"PlayerMaxHP": 0,
+	"PlayerExcessHP": 0,
+	"Missions": 10
+}

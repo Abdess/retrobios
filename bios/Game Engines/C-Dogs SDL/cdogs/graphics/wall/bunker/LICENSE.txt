@@ -1,0 +1,12 @@
+Derived from
+
+Basic 32x32 sci-fi tiles for roguelike
+by Stephen Challener (Redshrike) and Daniel Cook, hosted by OpenGameArt.org
+http://opengameart.org/content/basic-32x32-sci-fi-tiles-for-roguelike
+http://creativecommons.org/licenses/by/3.0/
+http://opengameart.org/content/oga-by-30-faq
+
+Colored Metal tiles 1b
+by sgtcrispy
+http://opengameart.org/content/colored-metal-tiles-1b
+http://creativecommons.org/publicdomain/zero/1.0/

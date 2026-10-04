@@ -1,0 +1,10 @@
+{
+  "Version": 1,
+  "Pickups": [
+    {
+      "Name": "sample",
+      "Pic": "sample",
+      "Type": "Score"
+    }
+  ]
+}

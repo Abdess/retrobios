@@ -1,0 +1,241 @@
+{
+  "Version": 5,
+  "Bullets": [
+    {
+      "Name": "hand_feed",
+      "Power": 8,
+      "Hit": {
+        "Flesh": {
+          "Sound": "hand_feed"
+        }
+      },
+      "Special": {
+        "Effect": "Petrify",
+        "Ticks": 30
+      }
+    },
+    {
+      "Name": "feed",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail",
+        "Width": 1.0
+      },
+      "OutOfRangeSpark": "spark_yellow",
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/food"
+        }
+      },
+      "Speed": 35000,
+      "Range": 1,
+      "Power": 21,
+      "Mass": 0.1,
+      "Special": {
+        "Effect": "Petrify",
+        "Ticks": 30
+      }
+    },
+    {
+      "Name": "cantaloupe",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/cantaloupe",
+        "TicksPerFrame": 2
+      },
+      "Size": [4, 4],
+      "ShadowSize": [6, 4],
+      "SpeedLow": 500,
+      "SpeedHigh": 700,
+      "Range": 200,
+      "Power": 20,
+      "Mass": 1.0,
+      "Spark": "",
+      "Hit": {
+        "Flesh": {},
+        "Wall": {}
+      },
+      "HitGuns": ["cantaloupe_splat"],
+      "Falling": {
+        "GravityFactor": 1
+      }
+    },
+    {
+      "Name": "cantaloupe_splat",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "particles/spall3",
+        "TicksPerFrame": 6,
+        "Mask": "F08C60"
+      },
+      "SpeedLow": 256,
+      "SpeedHigh": 512,
+      "SpeedScale": true,
+      "Range": 100,
+      "Power": 15,
+      "WallBounces": true,
+      "Hit": {
+        "Flesh": {
+          "Sound": "splat0"
+        },
+        "Wall": {
+          "Sound": "splat0"
+        }
+      },
+      "Falling": {
+        "GravityFactor": 4,
+        "DestroyOnDrop": true
+      }
+    },
+    {
+      "Name": "watermelon",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "grenade",
+        "Mask": "527A30"
+      },
+      "Size": [8, 8],
+      "ShadowSize": [8, 6],
+      "Speed": 400,
+      "Range": 300,
+      "Power": 40,
+      "Mass": 4.0,
+      "Spark": "",
+      "Hit": {
+        "Flesh": {},
+        "Wall": {}
+      },
+      "HitGuns": ["watermelon_splat"],
+      "Falling": {
+        "GravityFactor": 1
+      }
+    },
+    {
+      "Name": "watermelon_splat",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "particles/spall2",
+        "TicksPerFrame": 6,
+        "Mask": "C63A4F"
+      },
+      "SpeedLow": 256,
+      "SpeedHigh": 512,
+      "SpeedScale": true,
+      "Range": 100,
+      "Power": 20,
+      "WallBounces": true,
+      "Hit": {
+        "Flesh": {
+          "Sound": "splat1"
+        },
+        "Wall": {
+          "Sound": "splat1"
+        }
+      },
+      "Falling": {
+        "GravityFactor": 4,
+        "DestroyOnDrop": true
+      }
+    },
+    {
+      "Name": "bullet_enemy",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail_spit",
+        "Width": 1.0
+      },
+      "Hit": {
+        "Flesh": {
+          "Sound": "hurt"
+        }
+      },
+      "Speed": 35000,
+      "Range": 1,
+      "Power": 16,
+      "Mass": 0.1
+    },
+    {
+      "Name": "bullet_boss",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail_spit",
+        "Width": 1.5
+      },
+      "Hit": {
+        "Flesh": {
+          "Sound": "hurt"
+        }
+      },
+      "Speed": 35000,
+      "Range": 1,
+      "Power": 24,
+      "Mass": 0.1
+    },
+    {
+      "Name": "bullet_quad",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail_spit",
+        "Width": 1.25
+      },
+      "Hit": {
+        "Flesh": {
+          "Sound": "hurt"
+        }
+      },
+      "Speed": 35000,
+      "Range": 1,
+      "Power": 12,
+      "Mass": 0.1
+    },
+    {
+      "Name": "coconut",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "grenade",
+        "TicksPerFrame": 2,
+        "Mask": "593519"
+      },
+      "ShadowSize": [6, 4],
+      "Hit": {
+        "Flesh": {
+          "Sound": "hurt"
+        },
+        "Wall": {
+          "Sound": "hits/splat0"
+        }
+      },
+      "Speed": 800,
+      "Range": 70,
+      "Power": 45,
+      "Mass": 15.0,
+      "Size": [4, 4],
+      "Spark": "",
+      "Falling": {
+        "GravityFactor": 1
+      }
+    },
+    {
+      "Name": "goat_kick",
+      "Power": 22,
+      "Mass": 1.0,
+      "Hit": {
+        "Flesh": {
+          "Sound": "goat_kick"
+        }
+      }
+    }
+  ]
+}

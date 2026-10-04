@@ -1,0 +1,89 @@
+#===============================================================================
+# Global states (not halted by Pause/SuperPause, no helper limitations)
+#===============================================================================
+[StateDef -4]
+
+if pauseTime = 0 {
+	# For backward compatibility, x and z-axis get hit acceleration must be handled here
+	# TODO: These cases should maybe use the state number constants
+	# TODO: These patches could be done by appending sctrl's to the common1.cns states
+	if time > 0 && (stateNo = 5030 || stateNo = 5035 || stateNo = 5040 || stateNo = 5050 || stateNo = 5071 || stateNo = 5200) {
+		velAdd{x: getHitVar(xAccel); z: getHitVar(zAccel)}
+	}
+	# When keepstate attack, pause at hitshaketime are handled here
+	# TODO: will change the pause process from hitpause to a new pause SCTRL
+	if gethitvar(keepstate) && gethitvar(hitshaketime) > 0 && hitpausetime = 0 && !hitOverridden {
+		modifyPlayer{hitpausetime: gethitvar(hitshaketime)}
+		ignoreHitPause{
+			getHitVarSet{hitshaketime: 0}
+		}
+	}
+}
+
+[StateDef +1]
+
+# Reversal frame handling
+# If a player just got out of a hit state and regained control, execute their state -1 code again
+# This allows them to counter attack on the first possible frame
+if !isHelper && pauseTime = 0 {
+	if !inCustomState {
+		if !inRunState && time = 0 && ctrl && moveType = I && !map(_iksys_reversal_prevctrl) && map(_iksys_reversal_gothit) {
+			runState{value: -1}
+		}
+	}
+	# Update flags to compare them in the next frame
+	map(_iksys_reversal_gothit) := moveType = H || stateNo = const(StateDownedGetHit_gettingUp);
+	map(_iksys_reversal_prevctrl) := ctrl;
+}
+
+# For backward compatibility, z-axis get hit velocity must be handled here
+if time = 0 && pauseTime = 0 {
+	if stateNo = 151 || stateNo = 153 || stateNo = 155 || stateNo = 5001 || stateNo = 5011 || stateNo = 5030 || stateNo = 5071 || stateNo = 5081 {
+		hitVelSet{z: 1}
+	}
+}
+
+# Ground dust effects
+if gameVar(pausetime) = 0 && gameVar(superpausetime) = 0 {
+	if (moveType = H && (stateType = S || stateType = C)) || stateNo = 52 {
+		if pos y = 0 && (Abs(pos x + cameraPos x - map(_iksys_dustposx)) >= 1 || Abs(pos z - map(_iksys_dustposz)) >= 1) {
+			makeDust{spacing: 3}
+		}
+	}
+}
+mapSet{map: "_iksys_dustposx"; value: pos x + cameraPos x}
+mapSet{map: "_iksys_dustposz"; value: pos z}
+
+# Round start maps reset
+if !isHelper && roundTime = 0 {
+	map(_iksys_lifeRecoveryValue) := 0;
+	map(_iksys_lifeRecoveryFlag) := 0;
+}
+
+# Turns/Survival life recovery
+# TODO: There's a bug here where the enemy also recovers life when you lose in Survival
+if !isHelper && win && roundState = 4 {
+	# Determine how much to recover
+	if map(_iksys_lifeRecoveryFlag) = 0
+	&& (((teamMode = Turns || enemy,teamMode = Turns) && !matchOver) || gameVar(persistlife)) {
+		let base = lifeMax * gameOption(options.turns.recovery.base) / 100;
+		let bonus = lifeMax * gameOption(options.turns.recovery.bonus) / 100;
+		let timeRatio = float(timeRemaining) / (timeRemaining + timeElapsed);
+		if timeRemaining < 0 {
+			let timeRatio = 1;
+		}
+		map(_iksys_lifeRecoveryValue) := round($base + $bonus * $timeRatio, 0);
+		map(_iksys_lifeRecoveryFlag) := 1;
+	}
+	# Recover gradually
+	if map(_iksys_lifeRecoveryValue) > 0 {
+		assertSpecial{flag: roundNotOver; flag2: roundNotSkip}
+		let lifeStep = Min(3, map(_iksys_lifeRecoveryValue));
+		lifeAdd{value: $lifeStep}
+		mapAdd{map: "_iksys_lifeRecoveryValue"; value: -$lifeStep}
+	}
+	# No need to delay round further if life is full
+	if life >= lifeMax {
+		map(_iksys_lifeRecoveryValue) := 0;
+	}
+}

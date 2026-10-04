@@ -1,0 +1,14 @@
+  - Rows are:
+    - Groups of 5 rows: unarmed/armed
+    - First row of group: idle
+    - Next 4 rows of group: walking
+
+  - Columns are directions
+  - Colors are:
+    - Red (0 hue): skin
+    - Green (120 hue): hair
+    - Blue (240 hue): arms
+    - Yellow (60 hue): body
+    - Cyan (180 hue): legs
+    - Magenta (300 hue): feet
+    - Any other shade: as is (recommend R, G, and B between 5 and 250)

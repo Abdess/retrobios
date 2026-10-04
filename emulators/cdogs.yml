@@ -13,124 +13,227 @@ verification: existence
 
 notes: |
   Top-down shooter engine, open-source remake of the DOS C-Dogs by Ronny Wester.
-  Ships every asset it needs in-tree: data/, graphics/, missions/, music/,
-  sounds/, dogfights/, doc/, wiki/ (about 100 MB).
+  The repository ships every asset the engine reads: data/, graphics/,
+  missions/, dogfights/, music/, sounds/ and doc/.
 
-  The data root is baked into the binary via -DCDOGS_DATA_DIR (CMakeLists.txt
-  option). Batocera sets it to /userdata/roms/cdogs/; the Linux source default
-  is cdogs-data. GetDataFilePath() in src/cdogs/utils.c:392 either returns an
-  absolute override as-is, or joins the current working directory with
-  CDOGS_DATA_DIR plus the requested relative path.
+  The data root is baked into the binary through -DCDOGS_DATA_DIR. The
+  source default is "../" ("./" on GCW0), CMakeLists.txt:141-147; Batocera
+  sets it to /userdata/roms/cdogs/. GetDataFilePath(), src/cdogs/utils.c:392,
+  returns an absolute request as it is, and otherwise joins CDOGS_DATA_DIR
+  (under the working directory when it is relative) with the requested path.
 
-  Top-level sub-trees the game pulls files from (every path is relative to
-  CDOGS_DATA_DIR, resolved through GetDataFilePath):
-    data/: ammo.json, bullets.json, guns.json, pickups.json,
-      map_objects.json, character_classes.json, particles.json,
-      gamecontrollerdb.txt, prefixes.txt (configuration data)
-    graphics/: sprites, font, icons; grafx.c:92 (cdogs_icon.bmp),
-      grafx.c:156 (font.png + font.json)
-    missions/: single-player campaigns, mission packs (JSON)
-    music/: menu, briefing, game, end, lose, victory tracks
-      (music.c:45-50 LoadMusic calls)
-    sounds/: sfx wavs
-    dogfights/: deathmatch arenas
+  Paths below are written under cdogs/, which stands for that data root.
 
-  All open-source content (GPL-2.0). No separate BIOS or retail data required.
+  What the engine reads there:
+    data/: the JSON class definitions and name lists loaded by main(),
+      src/cdogs.c:226-245, and the two controller databases,
+      src/cdogs/joystick.c:43-54
+    data/.wolf3d/: campaign templates used when a Wolfenstein 3D, Spear of
+      Destiny or Super 3D Noah's Ark installation is found,
+      src/cdogs/map_wolf.c:50
+    graphics/: every .png, walked by PicManagerLoad,
+      src/cdogs/pic_manager.c:247-254, plus the font and the window icon
+    missions/ and dogfights/: campaigns, src/cdogs/campaigns.c:203-211
+    music/: six track directories, src/cdogs/music.c:45-50
+    sounds/: samples, src/cdogs.c:213
+    doc/CREDITS: src/credits.c:47
 
 files:
   - name: "ammo.json"
-    path: "data/ammo.json"
+    path: "cdogs/data/ammo.json"
     category: game_data
     description: "Ammo type definitions"
     required: true
     bundled: true
-    source_ref: "src/cdogs/ammo.c (AmmoLoadJSON reads data/ammo.json)"
+    source_ref: "src/cdogs.c:228, src/cdogs/ammo.c:77-84"
 
   - name: "bullets.json"
-    path: "data/bullets.json"
+    path: "cdogs/data/bullets.json"
     category: game_data
     description: "Bullet behaviour definitions"
     required: true
     bundled: true
-    source_ref: "src/cdogs/weapon_class.c (BulletsLoadJSON)"
+    source_ref: "src/cdogs.c:230-232, src/cdogs/weapon_class.c:739-746"
 
   - name: "guns.json"
-    path: "data/guns.json"
+    path: "cdogs/data/guns.json"
     category: game_data
     description: "Weapon definitions"
     required: true
     bundled: true
-    source_ref: "src/cdogs/weapon_class.c"
+    source_ref: "src/cdogs.c:230-232, src/cdogs/weapon_class.c:757-763"
 
   - name: "character_classes.json"
-    path: "data/character_classes.json"
+    path: "cdogs/data/character_classes.json"
     category: game_data
     description: "Character class definitions"
     required: true
     bundled: true
-    source_ref: "src/cdogs/character_class.c"
+    source_ref: "src/cdogs.c:234-235, src/cdogs/character_class.c:353-360"
 
   - name: "map_objects.json"
-    path: "data/map_objects.json"
+    path: "cdogs/data/map_objects.json"
     category: game_data
     description: "Interactive map object definitions"
     required: true
     bundled: true
-    source_ref: "src/cdogs/map_object.c"
+    source_ref: "src/cdogs.c:244-245, src/cdogs/map_object.c:231-238"
 
   - name: "particles.json"
-    path: "data/particles.json"
+    path: "cdogs/data/particles.json"
     category: game_data
     description: "Particle effect definitions"
     required: true
     bundled: true
-    source_ref: "src/cdogs/particle.c"
+    source_ref: "src/cdogs.c:226, src/cdogs/particle.c:61-64"
 
   - name: "pickups.json"
-    path: "data/pickups.json"
+    path: "cdogs/data/pickups.json"
     category: game_data
     description: "Pickup item definitions"
     required: true
     bundled: true
-    source_ref: "src/cdogs/pickup_class.c"
+    source_ref: "src/cdogs.c:241-242, src/cdogs/pickup_class.c:246-252"
 
   - name: "prefixes.txt"
-    path: "data/prefixes.txt"
+    path: "cdogs/data/prefixes.txt"
     category: game_data
     description: "Random name generation prefixes"
     required: true
     bundled: true
-    source_ref: "src/cdogs/character.c"
+    source_ref: "src/prep.c:324-327, src/namegen.c:44-59"
+    note: "LoadFile reads the stream without checking that fopen succeeded."
+
+  - name: "suffixes.txt"
+    path: "cdogs/data/suffixes.txt"
+    category: game_data
+    description: "Random name generation suffixes"
+    required: true
+    bundled: true
+    source_ref: "src/prep.c:325-327, src/namegen.c:44-59"
+    note: "LoadFile reads the stream without checking that fopen succeeded."
+
+  - name: "suffixnames.txt"
+    path: "cdogs/data/suffixnames.txt"
+    category: game_data
+    description: "Random name generation name suffixes"
+    required: true
+    bundled: true
+    source_ref: "src/prep.c:326-327, src/namegen.c:44-59"
+    note: "LoadFile reads the stream without checking that fopen succeeded."
 
   - name: "gamecontrollerdb.txt"
-    path: "data/gamecontrollerdb.txt"
+    path: "cdogs/data/gamecontrollerdb.txt"
     category: game_data
     description: "SDL gamecontroller mapping database"
     required: false
     bundled: true
-    source_ref: "src/cdogs/joystick.c:43"
-    unsourceable: "ships inside the engine package; a same-named file of another program must not stand in"
+    source_ref: "src/cdogs/joystick.c:43-48"
+    note: "A load failure is logged and the built-in SDL mappings stay in use."
+
+  - name: "gamecontrollerbuttondb.txt"
+    path: "cdogs/data/gamecontrollerbuttondb.txt"
+    category: game_data
+    description: "Controller button names and colours"
+    required: false
+    bundled: true
+    source_ref: "src/cdogs/joystick.c:49-54"
+    note: "A load failure is logged."
+
+  - name: ".wolf3d/"
+    type: directory
+    path: "cdogs/data/.wolf3d/"
+    category: game_data
+    description: "Campaign templates for Wolfenstein 3D, Spear of Destiny and Super 3D Noah's Ark"
+    required: false
+    bundled: true
+    source_ref: "src/cdogs/map_wolf.c:50, src/cdogs/map_wolf.c:110-134, src/cdogs/map_wolf.c:781-793"
+    note: >
+      Read only when the game data of one of these titles is found in a
+      Steam or GOG installation.
+
+  - name: "graphics/"
+    type: directory
+    path: "cdogs/graphics/"
+    category: game_data
+    description: "Sprites, tiles, HUD and character body definitions"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs.c:189, src/cdogs/pic_manager.c:181-254, src/cdogs/draw/char_sprites.c:55-115"
+    note: >
+      PicManagerLoad walks the directory and loads every .png.
+      CharSpriteClassesLoadDir reads data.json from each directory of
+      graphics/chars/bodies/.
 
   - name: "font.png"
-    path: "graphics/font.png"
+    path: "cdogs/graphics/font.png"
     category: game_data
     description: "Main bitmap font"
     required: true
     bundled: true
-    source_ref: "src/cdogs/grafx.c:156 (FontLoadFromJSON)"
+    source_ref: "src/cdogs.c:186, src/cdogs/grafx.c:156, src/cdogs/font.c:54-60"
 
   - name: "font.json"
-    path: "graphics/font.json"
+    path: "cdogs/graphics/font.json"
     category: game_data
     description: "Main bitmap font layout"
     required: true
     bundled: true
-    source_ref: "src/cdogs/grafx.c:156"
+    source_ref: "src/cdogs.c:186, src/cdogs/grafx.c:156, src/cdogs/font_utils.c:35-41"
 
   - name: "cdogs_icon.bmp"
-    path: "graphics/cdogs_icon.bmp"
+    path: "cdogs/graphics/cdogs_icon.bmp"
     category: game_data
     description: "Window icon"
     required: false
     bundled: true
-    source_ref: "src/cdogs/grafx.c:92"
+    source_ref: "src/cdogs/grafx.c:92-93"
+
+  - name: "missions/"
+    type: directory
+    path: "cdogs/missions/"
+    category: game_data
+    description: "Campaigns"
+    required: false
+    bundled: true
+    source_ref: "src/cdogs/sys_config.h.cmake:38, src/cdogs/campaigns.c:203-206, src/cdogs/campaigns.c:257-298"
+    note: >
+      Every entry of the directory is tried as a campaign and subdirectories
+      are walked. Quick play needs none.
+
+  - name: "dogfights/"
+    type: directory
+    path: "cdogs/dogfights/"
+    category: game_data
+    description: "Dogfight arenas"
+    required: false
+    bundled: true
+    source_ref: "src/cdogs/sys_config.h.cmake:39, src/cdogs/campaigns.c:208-211"
+
+  - name: "music/"
+    type: directory
+    path: "cdogs/music/"
+    category: game_data
+    description: "Music tracks: menu, briefing, game, end, lose, victory"
+    required: false
+    bundled: true
+    source_ref: "src/cdogs/music.c:45-50, src/cdogs/music.c:52-64"
+    note: "Every file of each of the six directories is loaded as a track."
+
+  - name: "sounds/"
+    type: directory
+    path: "cdogs/sounds/"
+    category: game_data
+    description: "Sound effects"
+    required: false
+    bundled: true
+    source_ref: "src/cdogs.c:213, src/cdogs/sounds.c:187-198, src/cdogs/sounds.c:199-244"
+    note: "SoundLoadDir walks the directory and loads every .ogg, .wav and .mp3."
+
+  - name: "CREDITS"
+    path: "cdogs/doc/CREDITS"
+    category: game_data
+    description: "Credits shown in the main menu"
+    required: false
+    bundled: true
+    source_ref: "src/credits.c:47-53"

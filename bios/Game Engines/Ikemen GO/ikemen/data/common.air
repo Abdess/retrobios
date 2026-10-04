@@ -1,0 +1,22 @@
+; Common Animations
+; The actions defined in this file will be compiled as if they belonged to each character
+; They will not overwrite the character's own actions
+
+; If character doesn't have the required "Run Forward" animation, copy "Walk Forward"
+[Begin Action 100]
+Copy Action 20
+
+; If character doesn't have the required "Hop Back" animation, copy "Jump Back"
+[Begin Action 105]
+Copy Action 43
+
+; If character doesn't have the required "Dizzy" animation, use one made out of required sprites
+[Begin Action 5300]
+Clsn2Default: 1
+ Clsn2[0] = -16, 0, 16, -80
+5000,0, 0,0, 6
+5000,10, 0,0, 6
+5000,0, 0,0, 6
+5000,0, 0,0, 6, H
+5000,10, 0,0, 6, H
+5000,0, 0,0, 6, H

@@ -1,0 +1,11 @@
+{
+	"Version": 16,
+	"Title": "AI Insurgency II",
+	"Author": "Sauer2",
+	"Description": "You work in the industrial crime department. A big vendor of robotic parts has complained about strangely behaving parts, suspecting sabotage. You were assigned to look into it.",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": false,
+	"RandomPickups": true,
+	"Missions": 10
+}

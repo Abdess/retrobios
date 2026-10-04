@@ -1,0 +1,102 @@
+{
+  "Version": 1,
+
+  "Bullets": [
+
+    {
+      "Name": "flame_breath",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "flame",
+        "TicksPerFrame": 4
+      },
+      "Speed": 384,
+      "Range": 30,
+      "Power": 30,
+      "Size": [10, 10],
+      "Special": "Flame",
+      "Spark": "",
+      "HitSounds": {
+        "Object": "hits/fire",
+        "Flesh": "hits/fire",
+        "Wall": "hits/fire"
+      },
+      "WallBounces": true
+    },
+    {
+      "Name": "psycho_beam",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "rapid"
+      },
+      "Speed": 1024,
+      "Range": 90,
+      "Power": 50,
+      "WallBounces": true
+    },
+
+    {
+      "Name": "venom_spit",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "molotov",
+        "Tint": [-1.0, 1.0, 0.75],
+        "OldPic": 301
+      },
+      "Speed": 900,
+      "Range": 45,
+      "Power": 20,
+      "Size": [10, 10],
+      "Special": "Petrify",
+      "HitSounds": {
+        "Object": "hits/petrify",
+        "Flesh": "hits/petrify",
+        "Wall": ""
+      }
+    },
+    {
+      "Name": "proto_laser",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/beam"
+      },
+      "Speed": 2000,
+      "Range": 15,
+      "Power": 10,
+      "Size": [1, 1]
+    },
+    {
+      "Name": "proto_bomb",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "grenade",
+        "TicksPerFrame": 2,
+        "Mask": "808080"
+      },
+      "ShadowSize": [6, 4],
+      "Speed": 384,
+      "Range": 100,
+      "Spark": "",
+      "HitSounds": {
+        "Object": "",
+        "Flesh": "",
+        "Wall": "bounce"
+      },
+      "WallBounces": true,
+      "HitsObjects": false,
+      "Falling": {
+        "GravityFactor": 1
+      },
+      "OutOfRangeGuns": [
+        "proto_explosion"
+      ]
+    },
+    {
+      "Name": "proto_frag",
+      "Speed": 640,
+      "Range": 10,
+      "Power": 40,
+      "HurtAlways": true
+    }
+  ]
+}

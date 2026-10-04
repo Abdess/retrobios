@@ -1,0 +1,225 @@
+{
+  "Version": 2,
+  "Pickups": [
+    {
+      "Name": "folder",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "folder"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "folder2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "folder2"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "chip1",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "chip1"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "chip2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "chip2"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "chip3",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "chip3"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "disk1",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "disk1"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "disk2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "disk2"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "disk3",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "disk3"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "blueprint",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "blueprint"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "starmap",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "starmap"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "bd",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bd"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "cd",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "cd"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "bag",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bag"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "sack",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "sack"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "holo",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "holo",
+        "TicksPerFrame": 1
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "plasma_globe",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "plasma_globe",
+        "TicksPerFrame": 10
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "bottle",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bottle"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "bottle_orange",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bottle_orange"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "bottle2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bottle2"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "radio",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "radio",
+        "TicksPerFrame": 10
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "radio2",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "radio2",
+        "TicksPerFrame": 10
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "circuit",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "circuit"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "pci_card",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "pci_card"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "paper",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "paper"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "paper2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "paper2"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "teddy",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "teddy"
+      },
+      "Type": "Score"
+    },
+    {
+      "Name": "health",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "health"
+      },
+      "Type": "Health"
+    }
+  ]
+}

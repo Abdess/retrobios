@@ -1,0 +1,51 @@
+{
+	"Version": 13,
+	"Characters": [{
+		"Class": "Ogre",
+		"Skin": "149c14ff",
+		"Arms": "363636ff",
+		"Body": "363636ff",
+		"Legs": "363636ff",
+		"Hair": "c00000ff",
+		"speed": 0,
+		"Gun": "Confusion bombs",
+		"maxHealth": 40,
+		"flags": 8389760,
+		"probabilityToMove": 50,
+		"probabilityToTrack": 25,
+		"probabilityToShoot": 0,
+		"actionDelay": 15
+	},
+	{
+		"Class": "Jones",
+		"Skin": "ff8136ff",
+		"Arms": "9c0000ff",
+		"Body": "9c0000ff",
+		"Legs": "363636ff",
+		"Hair": "000000ff",
+		"speed": 128,
+		"Gun": "Confusion bombs",
+		"maxHealth": 40,
+		"flags": 1024,
+		"probabilityToMove": 20,
+		"probabilityToTrack": 0,
+		"probabilityToShoot": 0,
+		"actionDelay": 25
+	},
+	{
+		"Class": "Lady",
+		"Skin": "ff8136ff",
+		"Arms": "ff8136ff",
+		"Body": "9c589cff",
+		"Legs": "9c589cff",
+		"Hair": "00000000",
+		"speed": 256,
+		"Gun": "Grenades",
+		"maxHealth": 40,
+		"flags": 1024,
+		"probabilityToMove": 40,
+		"probabilityToTrack": 25,
+		"probabilityToShoot": 0,
+		"actionDelay": 21
+	}]
+}

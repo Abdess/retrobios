@@ -1,0 +1,172 @@
+"Wolfenstein 3D"
+Copyright 1992 id Software
+Published by Apogee Software, Ltd.
+P.O. Box 496389, Garland, TX 75049, TEL: 972-271-1765 ("Apogee")
+
+BY COPYING, USING OR DISTRIBUTING THIS SHAREWARE PROGRAM, YOU
+INDICATE YOUR AGREEMENT TO THE TERMS OF THIS vendor.doc.
+
+=====================
+KEY POINTS
+=====================
+
+[*] Everyone can -- and is encouraged! -- to copy, upload and
+    generally pass around this Program without charging for it.
+
+[*] If you want to distribute it in a retail location (such as
+    on a rack), or as part of a hardware or software bundle, or
+    on CD-ROM you must get PRIOR signed written permission from
+    Apogee.  Apogee reserves its right to withhold permission.
+
+[*] If you want to distribute it as provided in this Vendor.doc
+    by catalog, advertisement, BBS, on-line service, or direct
+    mail, no written permission is needed.  Apogee highly
+    recommends, however, that distribution be made from a copy
+    from Apogee or from one of its authorized sources, such as
+    our web site (http://www.apogee1.com) to prevent the sale 
+    of older versions.
+
+[*] All advertising of the Program must include "Apogee" in the
+    description.
+
+[*] The Program is marked "Shareware" and contains "episode #1". 
+    No right is given by this Vendor.Doc to copy, use or
+    distribute any other version, including any version that is
+    registered, or not marked shareware, or that contains any
+    episode other than #1.
+
+======================
+LICENSE
+======================
+
+[1] DEFINITIONS:  "Program" means Wolfenstein 3D and its related files,
+including this one.  The "Trademarks" consists of "Apogee", the
+Apogee "comet logo", and "Wolfenstein 3D".
+
+[2] OWNERSHIP: Except to the extent expressly licensed,
+Apogee owns and reserves the exclusive right to distribute
+the Program, and to use the Trademarks in connection
+with it.  Its content, layout and format are the property of
+Apogee to the extent permitted by law.
+
+[3] GRANT AND CONDITIONS:  Apogee grants a non-exclusive license
+to distribute the Program on IBM compatible media under the
+Trademarks subject to the following conditions:
+
+ [A] CONDITIONS FOR ALL DISTRIBUTION
+
+  [1] All of the Program's files, including this one, as
+      released by us must be included without modification.
+      The following files must always be included to
+      constitute a legal version for shareware distribution:
+
+      þ audiohed wl1         1,156 01-01-93   1:40p
+      þ audiot   wl1       132,613 01-01-93   1:40p
+      þ gamemaps wl1        27,425 01-01-93   1:40p
+      þ maphead  wl1           402 01-01-93   1:40p
+      þ vgadict  wl1         1,024 01-01-93   1:40p
+      þ vgagraph wl1       326,568 01-01-93   1:40p
+      þ vgahead  wl1           471 01-01-93   1:40p
+      þ vswap    wl1       742,912 01-01-93   1:40p
+      þ wolf3d   exe       109,959 01-01-93   1:40p
+      þ w3dhelp  exe
+
+  [2] No copyright or trademark information may be removed.
+
+  [3] You must not [a] distribute any version of the Program
+      with unauthorized changes, such as additional or different
+      levels, or changed characters or mazes; or
+      [b] characterize such versions as an "add-on" or
+      "extension" of any Apogee product; or [c] distribute any
+      unauthorized third party utility designed to alter any
+      Apogee game, game level, game episode or saved game.
+
+ [B] ADDITIONAL CONDITIONS IF YOU CHARGE:  If your distribution
+involves a disk or other physical medium, you must also:
+
+  [1] Clearly market the Program as shareware, which requires
+      (among other things) using "try before you buy" or similar
+      words on packaging for the Programs.
+
+  [2] Include "Apogee" and the "comet" logo (we encourage use of
+      the 4 color version) on the front cover of the package.
+
+  [3] Include the your name, address and phone number on the
+      packaging and in any added documentation.  This can be
+      imprinted on the package or may be in the form of a label
+      affixed to the box, carton or folder. 
+
+  [4] Any description of the Program included in a re-sellers
+      catalog, sales brochure, on special packaging or handouts,
+      must include "An Apogee Game", "Released by Apogee" or
+      "Published by Apogee" if the word count of the description
+      is more than 14 words in length.
+
+  [5] Distribute copies only after the programs on newly created
+      master diskettes have been thoroughly tested.  Always use
+      high quality media and duplication technology.
+
+  [6] Try to sell only the most current version of the Program.
+
+  [7] Although Apogee discourages the practice, you may add an
+      installation routine if it does not interfere with the
+      proper operation or installation of the Program.
+
+  [8] Program updates, recommended descriptions and "screen
+      shots" will be provided upon request, and are available in
+      the re-seller / dealer conference of Apogee's main BBS.
+
+ [C] ADDITIONAL CONDITIONS FOR BUNDLES, CD-ROMS, AND RACKS: If
+you wish to distribute in a retail location (such as on a rack),
+or as part of a hardware or software bundle, or on CD-ROM, you
+must get PRIOR signed written permission from Apogee, which is
+in Apogee's discretion and may be subject to royalty or other
+conditions.
+
+[4] TERM:  Unless terminated for cause, your grants under this
+VENDOR.DOC terminate 30 days after you receive written notice,
+or such longer period as the notice may provide.  Following such
+termination, you may distribute the Program only until the
+earlier of 60 days after the termination date in the notice, or
+distribution of the copies you have in stock.  Sections [2],
+[5], and [6] survive termination.
+
+[5] LIMITED WARRANTY AND LIMITATION OF REMEDIES: If Apogee
+provides a physically defective copy of the Program, Apogee will
+replace it upon submission of the defective one.  Aside from
+this, the Program IS PROVIDED "AS-IS", AND NO WARRANTIES OF ANY
+KIND (INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS
+FOR A PARTICULAR PURPOSE), EXPRESS OR IMPLIED, ARE MADE AS TO IT
+OR ANY MEDIUM IT MAY BE ON.  OUR ENTIRE LIABILITY AND YOUR
+EXCLUSIVE REMEDY IS SUCH REPLACEMENT, AND UNDER NO CIRCUMSTANCES
+WILL WE PROVIDE ANY OTHER REMEDY FOR DIRECT, INDIRECT, SPECIAL,
+CONSEQUENTIAL, PUNITIVE, INCIDENTAL OR OTHER DAMAGES ARISING
+FROM IT, INCLUDING SUCH FROM NEGLIGENCE, STRICT LIABILITY, OR
+BREACH OF WARRANTY OR CONTRACT, EVEN AFTER NOTICE OF THE
+POSSIBILITY OF SUCH DAMAGES.
+
+[6] MISCELLANY
+
+ [A] Since we would be irreparably damaged if Section [3], [4]
+or [6][D] were not specifically enforced, we will be entitled
+without bond, other security or proof of damages, to appropriate
+equitable remedies with respect to breaches of such sections, in
+addition to such other remedies as we may have.
+
+ [B] You will hold us, our partners, contractors, employees and
+agents harmless from damage, loss and expense arising directly
+or indirectly from your acts and omissions in copying and
+distributing the Program, including from any installation
+routine that you may add.
+
+ [C] With respect to every matter arising under this, you
+consent to the exclusive jurisdiction and venue of the state and
+federal courts sitting in Dallas, Texas, and to service by
+certified mail, return receipt requested, or as otherwise
+permitted by law.
+
+ [D] You will not modify, reverse compile, disassemble, or
+reverse engineer the Program, or use or disclose any
+confidential information that it contains.
+
+[V.07.15.94]

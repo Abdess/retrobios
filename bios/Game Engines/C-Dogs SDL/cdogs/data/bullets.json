@@ -1,0 +1,755 @@
+{
+  "Version": 5,
+  "DefaultBullet": {
+    "Pic": {
+      "Type": "Directional",
+      "Sprites": "bullet"
+    },
+    "Spark": "spark",
+    "Hit": {
+      "Object": {
+        "Sound": "hits/hard"
+      },
+      "Flesh": {
+        "Sound": "hits/flesh"
+      },
+      "Wall": {
+        "Sound": "ricochet"
+      }
+    },
+    "Falling": {
+      "Bounces": true
+    },
+    "SeekFactor": -1
+  },
+  "Bullets": [
+    {
+      "Name": "knife",
+      "Power": 2,
+      "Hit": {
+        "Object": {
+          "Sound": "hits/knife_hard"
+        },
+        "Flesh": {
+          "Sound": "hits/knife_flesh"
+        }
+      }
+    },
+    {
+      "Name": "fist",
+      "Power": 10,
+      "Mass": 1.5,
+      "Hit": {
+        "Object": {
+          "Sound": "hits/knife_hard"
+        },
+        "Flesh": {
+          "Sound": "hits/fist_flesh"
+        }
+      }
+    },
+    {
+      "Name": "mg",
+      "WallMark": "bullet_hole",
+      "Speed": 768,
+      "Range": 60,
+      "Power": 10,
+      "Mass": 10.0
+    },
+    {
+      "Name": "shotgun",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bullet_ball"
+      },
+      "WallMark": "bullet_hole",
+      "Speed": 640,
+      "Range": 50,
+      "Power": 15,
+      "Mass": 15.0
+    },
+    {
+      "Name": "flame",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "flame",
+        "TicksPerFrame": 4
+      },
+      "Speed": 384,
+      "Range": 30,
+      "Power": 12,
+      "Mass": 1.0,
+      "Size": [10, 10],
+      "Special": {
+        "Effect": "Flame"
+      },
+      "Spark": "",
+      "Hit": {
+        "Object": {
+          "Sound": "hits/fire"
+        },
+        "Flesh": {
+          "Sound": "hits/fire"
+        },
+        "Wall": {
+          "Sound": "hits/fire"
+        }
+      },
+      "WallBounces": true
+    },
+    {
+      "Name": "laser",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/beam"
+      },
+      "Spark": "spark_red",
+      "Speed": 1024,
+      "Range": 90,
+      "Power": 20,
+      "Mass": 20.0,
+      "Size": [4, 4]
+    },
+    {
+      "Name": "sniper",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/beam_bright"
+      },
+      "Spark": "spark_blue",
+      "Speed": 1024,
+      "Range": 90,
+      "Power": 50,
+      "Mass": 50.0,
+      "Size": [4, 4]
+    },
+    {
+      "Name": "frag",
+      "WallMark": "bullet_hole",
+      "Speed": 640,
+      "Range": 50,
+      "Power": 40,
+      "Mass": 40.0,
+      "HurtAlways": true
+    },
+    {
+      "Name": "grenade",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "grenade",
+        "TicksPerFrame": 2
+      },
+      "ShadowSize": [6, 4],
+      "Speed": 384,
+      "Range": 100,
+      "Spark": "",
+      "Hit": {
+        "Wall": {
+          "Sound": "bounce"
+        }
+      },
+      "WallBounces": true,
+      "Falling": {
+        "GravityFactor": 1
+      },
+      "OutOfRangeGuns": [
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ]
+    },
+    {
+      "Name": "shrapnelbomb",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "grenade",
+        "TicksPerFrame": 2,
+        "Mask": "808080"
+      },
+      "ShadowSize": [6, 4],
+      "Speed": 384,
+      "Range": 100,
+      "Spark": "",
+      "Hit": {
+        "Wall": {
+          "Sound": "bounce"
+        }
+      },
+      "WallBounces": true,
+      "Falling": {
+        "GravityFactor": 1
+      },
+      "OutOfRangeGuns": [
+        "frag_explosion"
+      ]
+    },
+    {
+      "Name": "molotov",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "molotov"
+      },
+      "ShadowSize": [6, 4],
+      "Speed": 384,
+      "Range": 100,
+      "Spark": "",
+      "Hit": {
+        "Wall": {
+          "Sound": ""
+        }
+      },
+      "Falling": {
+        "GravityFactor": 1,
+        "DestroyOnDrop": true,
+        "DropGuns": [
+          "molotov_explosion"
+        ]
+      },
+      "OutOfRangeGuns": [
+        "molotov_explosion"
+      ],
+      "HitGuns": [
+        "molotov_explosion"
+      ]
+    },
+    {
+      "Name": "gasbomb",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "grenade",
+        "TicksPerFrame": 2,
+        "Mask": "00ff00"
+      },
+      "ShadowSize": [6, 4],
+      "Speed": 384,
+      "Range": 100,
+      "Spark": "",
+      "Hit": {
+        "Wall": {
+          "Sound": "bounce"
+        }
+      },
+      "WallBounces": true,
+      "Falling": {
+        "GravityFactor": 1
+      },
+      "OutOfRangeGuns": [
+        "gas_poison_explosion"
+      ]
+    },
+    {
+      "Name": "confusebomb",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "grenade",
+        "TicksPerFrame": 2,
+        "Mask": "c000c0"
+      },
+      "ShadowSize": [6, 4],
+      "Speed": 384,
+      "Range": 100,
+      "Spark": "",
+      "Hit": {
+        "Wall": {
+          "Sound": "bounce"
+        }
+      },
+      "WallBounces": true,
+      "Falling": {
+        "GravityFactor": 1
+      },
+      "OutOfRangeGuns": [
+        "gas_confuse_explosion"
+      ]
+    },
+    {
+      "Name": "gas",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "gas_cloud",
+        "TicksPerFrame": 4,
+        "Mask": "99ff9940"
+      },
+      "Speed": 384,
+      "Friction": 4,
+      "Range": 35,
+      "Size": [20, 20],
+      "Special": {
+        "Effect": "Poison"
+      },
+      "Persists": true,
+      "Spark": "",
+      "Hit": {
+        "Object": {},
+        "Flesh": {
+          "Sound": "hits/gas"
+        },
+        "Wall": {
+          "Sound": "hits/gas"
+        }
+      },
+      "WallBounces": true
+    },
+    {
+      "Name": "pulse",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/pulse"
+      },
+      "Spark": "spark_blue",
+      "Speed": 1280,
+      "Range": 25,
+      "Power": 6,
+      "Mass": 1.0
+    },
+    {
+      "Name": "heatseeker",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "rocket"
+      },
+      "Trail": {
+        "Particle": "smoke_trail_small",
+        "Width": 0,
+        "TicksPerEmit": 4
+      },
+      "Speed": 512,
+      "Range": 60,
+      "Power": 20,
+      "Mass": 40.0,
+      "Size": [6, 6],
+      "Spark": "boom",
+      "Hit": {
+        "Object": {
+          "Sound": "boom"
+        },
+        "Flesh": {
+          "Sound": "boom"
+        },
+        "Wall": {
+          "Sound": "boom"
+        }
+      },
+      "SeekFactor": 20
+    },
+    {
+      "Name": "rapid",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "rapid"
+      },
+      "Spark": "spark_blue",
+      "Speed": 768,
+      "Range": 45,
+      "Power": 15,
+      "Mass": 15.0,
+      "Erratic": true
+    },
+    {
+      "Name": "petrifier",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "molotov",
+        "Tint": [-1.0, 1.0, 0.75]
+      },
+      "Spark": "spark_blue",
+      "Speed": 768,
+      "Range": 45,
+      "Size": [10, 10],
+      "Special": {
+        "Effect": "Petrify"
+      },
+      "Hit": {
+        "Object": {
+          "Sound": "hits/petrify"
+        },
+        "Flesh": {
+          "Sound": "hits/petrify"
+        },
+        "Wall": {
+          "Sound": ""
+        }
+      }
+    },
+    {
+      "Name": "proxmine",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "mine_inactive"
+      },
+      "Speed": 0,
+      "Range": 140,
+      "Persists": true,
+      "Hit": {},
+      "OutOfRangeGuns": [
+        "activemine"
+      ]
+    },
+    {
+      "Name": "dynamite",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "dynamite_active",
+        "TicksPerFrame": 15
+      },
+      "Speed": 0,
+      "Range": 210,
+      "Persists": true,
+      "Hit": {},
+      "OutOfRangeGuns": [
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ]
+    },
+    {
+      "Name": "swarmer",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "swarmer"
+      },
+      "Trail": {
+        "Particle": "smoke_trail_small",
+        "Width": 0,
+        "TicksPerEmit": 4
+      },
+      "Speed": 700,
+      "Range": 70,
+      "Power": 12,
+      "Mass": 15.0,
+      "Size": [4, 4],
+      "Spark": "boom",
+      "Hit": {
+        "Object": {
+          "Sound": "boom"
+        },
+        "Flesh": {
+          "Sound": "boom"
+        },
+        "Wall": {
+          "Sound": "boom"
+        }
+      },
+      "SeekFactor": 30
+    },
+    {
+      "Name": "fireball_wreck",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball",
+        "Count": 10,
+        "TicksPerFrame": 4
+      },
+      "Delay": -10,
+      "Speed": 0,
+      "Range": 53,
+      "Size": [14, 10],
+      "Persists": true,
+      "Spark": "",
+      "Hit": {}
+    },
+    {
+      "Name": "fireball1",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball",
+        "TicksPerFrame": 4
+      },
+      "Speed": 256,
+      "Range": 53,
+      "Power": 5,
+      "Mass": 5.0,
+      "Size": [14, 10],
+      "HurtAlways": true,
+      "Persists": true,
+      "WallBounces": true,
+      "Spark": "",
+      "Hit": {
+        "Object": {
+          "Sound": "hits/gas"
+        },
+        "Flesh": {
+          "Sound": "hits/gas"
+        },
+        "Wall": {
+          "Sound": ""
+        }
+      },
+      "Falling": {
+        "GravityFactor": 1,
+        "FallsDown": false
+      }
+    },
+    {
+      "Name": "fireball2",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball",
+        "Count": -8,
+        "TicksPerFrame": 4
+      },
+      "Delay": 8,
+      "Speed": 192,
+      "Range": 71,
+      "Power": 5,
+      "Mass": 5.0,
+      "Size": [14, 10],
+      "HurtAlways": true,
+      "Persists": true,
+      "WallBounces": true,
+      "Spark": "",
+      "Hit": {
+        "Object": {
+          "Sound": "hits/gas"
+        },
+        "Flesh": {
+          "Sound": "hits/gas"
+        },
+        "Wall": {
+          "Sound": ""
+        }
+      },
+      "Falling": {
+        "GravityFactor": 1,
+        "FallsDown": false
+      }
+    },
+    {
+      "Name": "fireball3",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball",
+        "Count": -16,
+        "TicksPerFrame": 4
+      },
+      "Delay": 16,
+      "Speed": 128,
+      "Range": 79,
+      "Power": 5,
+      "Mass": 5.0,
+      "Size": [14, 10],
+      "HurtAlways": true,
+      "Persists": true,
+      "WallBounces": true,
+      "Spark": "",
+      "Hit": {
+        "Object": {
+          "Sound": "hits/gas"
+        },
+        "Flesh": {
+          "Sound": "hits/gas"
+        },
+        "Wall": {
+          "Sound": ""
+        }
+      },
+      "Falling": {
+        "GravityFactor": 1,
+        "FallsDown": false
+      }
+    },
+    {
+      "Name": "molotov_flame",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "flame",
+        "TicksPerFrame": 4
+      },
+      "SpeedLow": -256,
+      "SpeedHigh": 256,
+      "SpeedScale": true,
+      "Friction": 4,
+      "RangeLow": 120,
+      "RangeHigh": 148,
+      "Power": 2,
+      "Size": [10, 10],
+      "Special": {
+        "Effect": "Flame"
+      },
+      "HurtAlways": true,
+      "Persists": true,
+      "WallBounces": true,
+      "Spark": "",
+      "Hit": {
+        "Object": {
+          "Sound": "hits/fire"
+        },
+        "Flesh": {
+          "Sound": "hits/fire"
+        },
+        "Wall": {
+          "Sound": ""
+        }
+      },
+      "Falling": {
+        "GravityFactor": 4,
+        "Bounces": false
+      }
+    },
+    {
+      "Name": "gas_cloud_poison",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "gas_cloud",
+        "TicksPerFrame": 4,
+        "Mask": "99ff9940"
+      },
+      "SpeedLow": 0,
+      "SpeedHigh": 255,
+      "Friction": 4,
+      "RangeLow": 155,
+      "RangeHigh": 191,
+      "Size": [20, 20],
+      "Special": {
+        "Effect": "Poison"
+      },
+      "HurtAlways": true,
+      "Persists": true,
+      "WallBounces": true,
+      "Spark": "",
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/gas"
+        },
+        "Wall": {
+          "Sound": ""
+        }
+      }
+    },
+    {
+      "Name": "gas_cloud_confuse",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "gas_cloud",
+        "TicksPerFrame": 4,
+        "Mask": "40004080"
+      },
+      "SpeedLow": 0,
+      "SpeedHigh": 255,
+      "Friction": 4,
+      "RangeLow": 155,
+      "RangeHigh": 191,
+      "Size": [20, 20],
+      "Special": {
+        "Effect": "Confuse"
+      },
+      "Persists": true,
+      "WallBounces": true,
+      "Spark": "",
+      "Hit": {
+        "Flesh": {
+          "Sound": "hits/gas"
+        },
+        "Wall": {
+          "Sound": ""
+        }
+      }
+    },
+    {
+      "Name": "activemine",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "mine_active"
+      },
+      "Speed": 0,
+      "Range": -1,
+      "Persists": true,
+      "Hit": {},
+      "ProximityGuns": [
+        "triggeredmine"
+      ]
+    },
+    {
+      "Name": "triggeredmine",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "mine_active"
+      },
+      "Speed": 0,
+      "Range": 5,
+      "Persists": true,
+      "Hit": {},
+      "OutOfRangeGuns": [
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ]
+    },
+    {
+      "Name": "explosion_small",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/explosion_small",
+        "TicksPerFrame": 4
+      },
+      "Speed": 0,
+      "Range": 27,
+      "Power": 3,
+      "Mass": 10.0,
+      "Size": [64, 64],
+      "Persists": true,
+      "Spark": "",
+      "Hit": {
+        "Object": {
+          "Sound": "hits/gas"
+        },
+        "Flesh": {
+          "Sound": "hits/gas"
+        }
+      }
+    },
+    {
+      "Name": "rocket",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "rocket_blue"
+      },
+      "Trail": {
+        "Particle": "smoke_trail",
+        "Width": 0,
+        "TicksPerEmit": 4
+      },
+      "ShadowSize": [4, 3],
+      "Speed": 250,
+      "Friction": -9,
+      "Range": 120,
+      "Power": 1,
+      "Size": [16, 16],
+      "Spark": "",
+      "Hit": {
+        "Object": {
+          "Sound": ""
+        },
+        "Flesh": {
+          "Sound": ""
+        },
+        "Wall": {
+          "Sound": ""
+        }
+      },
+      "OutOfRangeGuns": [
+        "explosion_small"
+      ],
+      "HitGuns": [
+        "explosion_small"
+      ]
+    },
+    {
+      "Name": "9mm",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail",
+        "Width": 1.0
+      },
+      "OutOfRangeSpark": "spark",
+      "WallMark": "bullet_hole",
+      "Speed": 25000,
+      "Range": 1,
+      "Power": 12,
+      "Mass": 0.2
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+;This stage and its assets are licensed under MIT.
+;--------------------------------------------------------
+[Info]
+name = "Third Heights"
+displayname = "Third Heights"
+versiondate = 11,25,2023
+mugenversion = 1.1
+author = "SuperFromND"
+
+;--------------------------------------------------------
+[Camera]
+startx = 0
+starty = 0
+boundleft = -700
+boundright = 700
+boundhigh = -450
+boundlow = 0
+
+verticalfollow = .85
+floortension = 200
+tension = 200
+
+overdrawhigh = 120
+overdrawlow = 120
+cuthigh = 0
+cutlow = 0
+
+;zoomout = .8
+
+;Field of view. 30 is good for photorealistic scenes, but feel free to tweak this to your preference.
+fov = 30
+;--------------------------------------------------------
+[PlayerInfo]
+;--- Player 1 ---
+p1startx = -280
+p1starty = 0
+p1facing = 1
+
+;--- Player 2 ---
+p2startx = 280
+p2starty = 0
+p2facing = -1
+
+;--- Common ---
+leftbound  = -4000
+rightbound =  4000
+
+;--------------------------------------------------------
+[Bound]
+screenleft = 60
+screenright = 60
+
+;--------------------------------------------------------
+[StageInfo]
+zoffset = 660
+
+autoturn = 1
+resetBG = 1
+
+localcoord = 1280, 720
+xscale = 1
+yscale = 1
+
+portraitscale = 4
+
+;--------------------------------------------------------
+[Shadow]
+intensity = 96
+color = 0,0,0
+yscale = .3
+fade.range = 0,0
+
+;--------------------------------------------------------
+[Reflection]
+intensity = 0
+
+;--------------------------------------------------------
+[Music]
+bgmusic =
+bgmvolume = 100
+
+;========================================================
+[BGdef]
+
+;Filename of 3D model file
+;Supported file types are gltf and glb; supported by most modern 3D model programs.
+;It is recommended to use PNG/JPEG/embedded image format for textures. Compressed DDS textures are not supported.
+;Make sure the world origin of the model is at the camera's starting point.
+model = stage3d.glb
+
+;Filename of .sff file, required by spec (and for stage portraits)
+spr = stage3d.sff
+
+;debugbg = 0
+
+;-------------------------------------
+; Model element definition
+[Model]
+
+; X, Y, and Z coordinates of the model
+offset = 0,-0.2,-0.9
+
+; Scale of the model
+scale = 0.05, 0.05, 0.05
+
+;-------------------------------------
+; Stage portrait data
+[Begin Action 9000]
+9000,1, 0,0,-1

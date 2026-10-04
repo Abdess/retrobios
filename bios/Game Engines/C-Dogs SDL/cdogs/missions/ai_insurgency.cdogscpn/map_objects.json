@@ -1,0 +1,889 @@
+{
+  "Version": 2,
+  "MapObjects": [
+    {
+      "Name": "barrel_blue",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "barrel_blue"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "barrel_blue_wreck"
+      },
+      "Health": 40,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "barrel_blue2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "barrel_blue2"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "barrel_blue2_wreck"
+      },
+      "Health": 40,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "box",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "box_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Outside", "NoWalls"]
+    },
+    {
+      "Name": "box2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box2"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "box_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Outside", "NoWalls"]
+    },
+    {
+      "Name": "crate",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "crate"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "crate_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Outside", "NoWalls"]
+    },
+    {
+      "Name": "crate2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "crate2"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "crate2_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Outside", "NoWalls"]
+    },
+    {
+      "Name": "cabinet",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "cabinet"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "cabinet_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "plant",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "plant"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "plant_wreck"
+      },
+      "Size": [8, 6],
+      "Health": 20,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "flower",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "flower"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "flower_wreck"
+      },
+      "Size": [8, 6],
+      "Health": 20,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "bench",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bench"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "bench_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "table",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "table_wood",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_wood"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "table_wood_candle",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_wood_candle"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "table_clothed",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_clothed"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "table_wood_round",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_wood_round"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_round_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "table_wood_round_candle",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_wood_round_candle"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_round_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "table_wood_round_clothed",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_wood_round_clothed"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_round_clothed_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "table_wood_round_terminal",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_wood_round_terminal"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_round_terminal_wreck"
+      },
+      "Health": 40,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "table_steel",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_steel"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "safe_wreck"
+      },
+      "Health": 30,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "table_plastic",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_plastic"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_plastic_wreck"
+      },
+      "Health": 30,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "chair",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "chair"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "chair_wreck"
+      },
+      "Size": [8, 6],
+      "Health": 20,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "chair_task",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "chair_task"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "chair_task_wreck"
+      },
+      "Size": [8, 6],
+      "Health": 20,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "column",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "column"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "cabinet_wreck"
+      },
+      "Size": [8, 6],
+      "Health": 60,
+      "Flags": ["Outside", "NoWalls"]
+    },
+    {
+      "Name": "rod",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "rod"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "rod_wreck"
+      },
+      "Size": [8, 6],
+      "Health": 60,
+      "Flags": ["Outside", "NoWalls"]
+    },
+    {
+      "Name": "barrel_wood",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "barrel_wood"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "barrel_wood_wreck"
+      },
+      "Health": 40,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "barrel_wood2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "barrel_wood2"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "barrel_wood2_wreck"
+      },
+      "Health": 40,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "box_gray",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box_gray"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "box_green",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box_green"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "box_wood",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box_wood"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "box3_gray",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box3_gray"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "box3_gray_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "box3_green",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box3_green"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "box3_green_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "floor_console",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "floor_console"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "floor_console_wreck"
+      },
+      "Health": 20,
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "bookshelf",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bookshelf"
+      },
+      "Offset": [-8, -15],
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_wreck"
+      },
+      "Size": [16, 6],
+      "Health": 20,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "bookshelf2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bookshelf2"
+      },
+      "Offset": [-8, -15],
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "bookshelf2_wreck"
+      },
+      "Size": [16, 6],
+      "Health": 20,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "terminal",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "terminal"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_wreck"
+      },
+      "Health": 40,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "safe",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "safe"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "safe_wreck"
+      },
+      "Health": 100,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "safe2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "safe2"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "safe2_wreck"
+      },
+      "Health": 100,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "statue_ogre",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "statue_ogre"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "safe_wreck"
+      },
+      "Health": 80,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "statue_behemoth",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "statue_behemoth"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "safe_wreck"
+      },
+      "Health": 80,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "tree_dead",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "tree_dead"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "tree_dead_wreck"
+      },
+      "Size": [8, 6],
+      "Health": 40,
+      "Flags": ["Outside", "NoWalls"]
+    },
+    {
+      "Name": "barrel",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "barrel"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "barrel_wood_wreck"
+      },
+      "Health": 40,
+      "DestroyGuns": ["fire_explosion"],
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "barrel_flame",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "barrel_flame"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "barrel_flame_wreck"
+      },
+      "Health": 40,
+      "DestroyGuns": ["fire_explosion"],
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "barrel_skull",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "barrel_skull"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "barrel_wood_wreck"
+      },
+      "Health": 40,
+      "DestroyGuns": [
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ],
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "barrel_skull2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "barrel_skull2"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "barrel_wood2_wreck"
+      },
+      "Health": 40,
+      "DestroyGuns": [
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ],
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "box_metal_green",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box_metal_green"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "box_metal_green_wreck"
+      },
+      "Health": 40,
+      "DestroyGuns": [
+        "big_quake",
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ],
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "box3",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box3"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "box3_gray_wreck"
+      },
+      "Health": 40,
+      "DestroyGuns": [
+        "big_quake",
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ],
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "box_red",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box_red"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_wood_wreck"
+      },
+      "Health": 40,
+      "DestroyGuns": ["fire_explosion"],
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "box3_red",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box3_red"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "box3_red_wreck"
+      },
+      "Health": 40,
+      "DestroyGuns": ["fire_explosion"],
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "table_lab",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_lab"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "safe_wreck"
+      },
+      "Health": 60,
+      "DestroyGuns": ["gas_poison_explosion"],
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "table_plastic_lab",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "table_plastic_lab"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "table_plastic_lab_wreck"
+      },
+      "Health": 60,
+      "DestroyGuns": ["gas_poison_explosion"],
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "rocket",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "rocket"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "rocket_wreck"
+      },
+      "Health": 40,
+      "DestroyGuns": [
+        "big_quake",
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ],
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "rocket2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "rocket2"
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "rocket_wreck"
+      },
+      "Health": 40,
+      "DestroyGuns": [
+        "big_quake",
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ],
+      "Flags": ["Outside", "OneWall"]
+    },
+    {
+      "Name": "bloodstain",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bloodstain"
+      },
+      "Offset": [-6, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "bloodstain2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bloodstain2"
+      },
+      "Offset": [-6, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "wall_skull",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "wall_skull"
+      },
+      "Offset": [-4, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "wall_skull2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "wall_skull2"
+      },
+      "Offset": [-4, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "wall_stuff",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "wall_stuff"
+      },
+      "Offset": [-4, -14],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "wall_goo",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "wall_goo"
+      },
+      "Offset": [-5, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "wall_goo2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "wall_goo2"
+      },
+      "Offset": [-5, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "bone_blood",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bone_blood"
+      },
+      "Offset": [-6, -3],
+      "Health": 0
+    },
+    {
+      "Name": "gibs",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "gibs"
+      },
+      "Offset": [-6, -3],
+      "Health": 0
+    },
+    {
+      "Name": "skull",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "skull"
+      },
+      "Offset": [-6, -4],
+      "Health": 0
+    },
+    {
+      "Name": "skull2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "skull2"
+      },
+      "Offset": [-6, -4],
+      "Health": 0
+    },
+    {
+      "Name": "goo",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "goo"
+      },
+      "Offset": [-8, -6],
+      "Health": 0
+    },
+    {
+      "Name": "fan",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fan",
+        "TicksPerFrame": 4
+      },
+      "Offset": [-8, -6],
+      "Health": 0
+    },
+    {
+      "Name": "server_blink",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "server_blink",
+        "TicksPerFrame": 40
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "safe2_wreck"
+      },
+      "DestroyGuns": [
+        "server_burn"
+      ],
+      "Health": 30,
+      "Flags": ["Inside", "OneOrMoreWalls", "FreeInFront"]
+    },
+    {
+      "Name": "box3_blink",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "box3_blink",
+        "TicksPerFrame": 40
+      },
+      "WreckPic": {
+        "Type": "Normal",
+        "Pic": "box3_gray_wreck"
+      },
+      "DestroyGuns": ["explosion3", "server_burn"],
+      "Health": 20,
+      "Flags": ["Outside", "OneWall"]
+    }
+  ]
+}

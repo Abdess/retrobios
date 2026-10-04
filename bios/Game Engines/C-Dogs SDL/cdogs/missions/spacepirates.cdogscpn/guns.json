@@ -1,0 +1,107 @@
+{
+  "Version": 1,
+  "Guns": [
+    {
+      "Pic": "blaster_white",
+      "Name": "AArms Needler",
+      "Icon": "petrifier",
+      "Bullet": "yellow_needle",
+      "Cost": 1,
+      "Lock": 3,
+      "Sound": "pulse",
+      "Recoil": 0.3,
+      "SpreadCount": 2,
+      "SpreadWidth": 0.1,
+      "AngleOffset": 0.1,
+      "Ammo": "Mini cells"
+    },
+    {
+      "Pic": "chaingun_blue",
+      "Name": "AArms Pulse MG",
+      "Icon": "machine_gun_blue",
+      "Bullet": "blue_bullet",
+      "Cost": 3,
+      "Lock": 7,
+      "Sound": "pulse",
+      "Recoil": 0.12,
+      "Ammo": "Mini cells"
+    },
+    {
+      "Pic": "rifle2",
+      "Grips": 2,
+      "Name": "XTech BounceRifle",
+      "Icon": "powergun",
+      "Bullet": "blue_beam",
+      "Cost": 9,
+      "Lock": 30,
+      "Sound": "fusion",
+      "Recoil": 0.12,
+      "SpreadCount": 2,
+      "SpreadWidth": 0.2,
+      "Ammo": "Cells"
+    },
+    {
+      "Pic": "shotgun_green",
+      "Grips": 2,
+      "Name": "Zeild Particle Shotgun V5",
+      "Icon": "sniper",
+      "Bullet": "shotgun_particle",
+      "Cost": 5,
+      "Lock": 50,
+      "ReloadLead": 10,
+      "Sound": "shotgun",
+      "ReloadSound": "shotgun_r",
+      "SwitchSound": "shotgun_r",
+      "SpreadCount": 5,
+      "SpreadWidth": 0.2,
+      "Ammo": "Cells"
+    },
+    {
+      "Pic": "raygun",
+      "Name": "The Mutilator!!!",
+      "Icon": "powergun",
+      "Bullet": "red_dot",
+      "Cost": 0,
+      "Lock": 10,
+      "Sound": "pulse",
+      "Recoil": 0,
+      "SpreadCount": 3,
+      "SpreadWidth": 1,
+      "Ammo": "Mini cells"
+    },
+    {
+      "Pic": "pistol",
+      "Name": "Laser Pistol",
+      "Icon": "pistol",
+      "Bullet": "red_laser",
+      "Cost": 0,
+      "Lock": 18,
+      "Sound": "pistol",
+      "SwitchSound": "pistol_switch",
+      "Recoil": 0.1
+    },
+    {
+      "Pic": "",
+      "IsGrenade": true,
+      "Name": "Bioreactive Grenades",
+      "Bullet": "bio_grenade",
+      "Cost": 10,
+      "Lock": 30,
+      "Sound": "launch",
+      "SwitchSound": "grenade_pickup",
+      "Elevation": 24,
+      "Ammo": "Bio Grenades"
+    }
+  ], "PseudoGuns" : [
+    {
+      "Pic": "",
+      "Name": "particle_explosion",
+      "Bullet": "yellow_particle",
+      "Sound": "hits/petrify",
+      "SpreadCount": 60,
+      "SpreadWidth": 0.1,
+      "AngleOffset": 0.05,
+      "ShakeAmount": 2
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "Version": 2,
+  "Characters": [
+    {
+      "Name": "Jones",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Sounds": "man"
+    },
+    {
+      "Name": "Soldier",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "soldier",
+      "Sounds": "man"
+    },
+    {
+      "Name": "Ogre",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/ogre"
+      },
+      "Sounds": "ogre",
+      "BloodColor": "333333"
+    },
+    {
+      "Name": "Bug-eye",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/bugeye"
+      },
+      "Sounds": "alien",
+      "BloodColor": "00ff00",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Mad bug-eye",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/madbugeye"
+      },
+      "Sounds": "alien",
+      "BloodColor": "00ff00",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Robot",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/robot"
+      },
+      "Sounds": "alien",
+      "BloodColor": "0000ff",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Lady",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/lady"
+      },
+      "Sounds": "woman"
+    },
+    {
+      "Name": "Cyborg",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/cyborg"
+      },
+      "Sounds": "zombie",
+      "BloodColor": "ff00ff"
+    },
+    {
+      "Name": "Bones",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/skull"
+      },
+      "Body": "skinny",
+      "Sounds": "zombie",
+      "Footsteps": "bones",
+      "BloodColor": "ffffff",
+      "HasHair": false,
+      "HasFacehair": false
+    },
+    {
+      "Name": "Big Bones",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/skull_big"
+      },
+      "Body": "big_skinny",
+      "Sounds": "zombie",
+      "Footsteps": "bones",
+      "BloodColor": "ffffff",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasHat": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Dog",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/dog"
+      },
+      "Sounds": "dog",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasHat": false,
+      "HasGlasses": false
+    }
+  ]
+}

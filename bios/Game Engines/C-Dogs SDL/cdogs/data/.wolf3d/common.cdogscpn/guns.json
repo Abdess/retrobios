@@ -1,0 +1,234 @@
+{
+  "Version": 3,
+  "Guns": [
+    {
+      "Pic": "knife",
+      "Icon": "knife",
+      "Name": "Knife",
+      "Bullet": "knife",
+      "Cost": 0,
+      "Lock": 30,
+      "Sound": "",
+      "SwitchSound": "knife_switch",
+      "CanShoot": false,
+      "Auto": true
+    },
+    {
+      "Pic": "pistol",
+      "Name": "Pistol",
+      "Icon": "pistol",
+      "Bullet": "bullet",
+      "Cost": 1,
+      "Lock": 30,
+      "Sound": "pistol",
+      "SwitchSound": "pistol_switch",
+      "Recoil": 0.1,
+      "Brass": "brass",
+      "Ammo": "Ammo"
+    },
+    {
+      "Pic": "smg",
+      "Grips": 2,
+      "Name": "Machine Gun",
+      "Icon": "smg",
+      "Bullet": "bullet",
+      "Prerequisite": "Pistol",
+      "Cost": 1,
+      "Lock": 12,
+      "Sound": "machine_gun",
+      "SwitchSound": "machine_gun_switch",
+      "Recoil": 0.17,
+      "Brass": "brass",
+      "Ammo": "Ammo"
+    },
+    {
+      "Pic": "chaingun",
+      "Name": "Chain Gun",
+      "Icon": "machine_gun",
+      "Bullet": "bullet",
+      "Cost": 1,
+      "Lock": 6,
+      "Sound": "chain_gun",
+      "SwitchSound": "chaingun_pickup",
+      "Recoil": 0.23,
+      "Brass": "brass",
+      "Ammo": "Ammo"
+    },
+    {
+      "Pic": "pistol",
+      "Name": "Guard Pistol",
+      "Icon": "pistol",
+      "Bullet": "bullet_enemy",
+      "Cost": 1,
+      "Lock": 70,
+      "Sound": "pistol_guard",
+      "SwitchSound": "pistol_switch",
+      "Recoil": 0.3,
+      "Brass": "brass",
+      "Ammo": "Ammo",
+      "CanDrop": false
+    },
+    {
+      "Pic": "smg",
+      "Grips": 2,
+      "Name": "SS Machine Gun",
+      "Icon": "assault_rifle",
+      "Bullet": "bullet_boss",
+      "Cost": 1,
+      "Lock": 70,
+      "Sound": "machine_gun_burst",
+      "Recoil": 0.3,
+      "Brass": "brass",
+      "Ammo": "Ammo",
+      "DropGun": "Machine Gun"
+    },
+    {
+      "Pic": "chaingun",
+      "Name": "boss_chaingun1",
+      "Bullet": "bullet_boss",
+      "Lock": 70,
+      "Sound": "dual_chain_gun",
+      "Recoil": 0.3,
+      "Brass": "brass"
+    },
+    {
+      "Name": "Dual Chain Gun",
+      "Icon": "machine_gun",
+      "CanDrop": false,
+      "Guns": ["boss_chaingun1", "boss_chaingun2"],
+      "Lock": 9
+    },
+    {
+      "Name": "Quad Chain Gun",
+      "Icon": "machine_gun",
+      "CanDrop": false,
+      "Guns": ["boss_double_chaingun1", "boss_double_chaingun2"],
+      "Lock": 9
+    },
+    {
+      "Pic": "",
+      "Name": "Dog Bite",
+      "Bullet": "dog_bite",
+      "Cost": 0,
+      "Lock": 80,
+      "Sound": "",
+      "CanShoot": false,
+      "CanDrop": false
+    },
+    {
+      "Pic": "",
+      "Name": "Syringes",
+      "Bullet": "syringe",
+      "Cost": 7,
+      "Lock": 30,
+      "Sound": "syringe",
+      "SwitchSound": "molotov_pickup",
+      "CanDrop": false
+    },
+    {
+      "Name": "Rocket Launcher",
+      "Pic": "rocket_blue",
+      "Icon": "launcher",
+      "Bullet": "rocket",
+      "Cost": 9,
+      "Lock": 40,
+      "Sound": "rocket",
+      "SwitchSound": "launcher_switch",
+      "MuzzleFlashParticle": "muzzle_flash_shotgun",
+      "CanDrop": false
+    },
+    {
+      "Pic": "",
+      "Name": "Ghost Drain",
+      "Bullet": "ghost_drain",
+      "Cost": 0,
+      "Sound": "",
+      "SoundLockLength": 10,
+      "CanShoot": false,
+      "CanDrop": false
+    },
+    {
+      "Name": "Flamethrower",
+      "Pic": "",
+      "Bullet": "fireball",
+      "Cost": 1,
+      "Lock": 30,
+      "Sound": "flamethrower",
+      "MuzzleFlashParticle": "",
+      "CanDrop": false
+    },
+    {
+      "Name": "Chaingun and Rocket Launcher",
+      "Icon": "akimbo_pistols",
+      "Guns": ["Rocket Launcher", "boss_chaingun1"],
+      "CanDrop": false
+    },
+    {
+      "Name": "Dual Chaingun and Rocket Launcher",
+      "Icon": "akimbo_pistols",
+      "Guns": ["dual_chaingun_rocket_launcher1", "dual_chaingun_rocket_launcher2"],
+      "CanDrop": false
+    },
+    {
+      "Name": "Energy Ball",
+      "Pic": "",
+      "Bullet": "energy_ball",
+      "Cost": 5,
+      "Lock": 50,
+      "Sound": "flamethrower",
+      "MuzzleFlashParticle": "",
+      "CanDrop": false
+    }
+  ],
+  "PseudoGuns" : [
+    {
+      "Pic": "chaingun",
+      "Name": "boss_chaingun2",
+      "Bullet": "bullet_boss",
+      "Lock": 70,
+      "Sound": "",
+      "Recoil": 0.3,
+      "Brass": "brass"
+    },
+    {
+      "Pic": "quad_chaingun",
+      "Name": "boss_double_chaingun1",
+      "Bullet": "bullet_quad",
+      "Lock": 70,
+      "Sound": "dual_chain_gun",
+      "SpreadCount": 2,
+      "Recoil": 0.3,
+      "MuzzleHeight": 12,
+      "Brass": "brass"
+    },
+    {
+      "Pic": "quad_chaingun",
+      "Name": "boss_double_chaingun2",
+      "Bullet": "bullet_quad",
+      "Lock": 70,
+      "Sound": "",
+      "SpreadCount": 2,
+      "Recoil": 0.3,
+      "MuzzleHeight": 12,
+      "Brass": "brass"
+    },
+    {
+      "Pic": "chaingun",
+      "Name": "dual_chaingun_rocket_launcher1",
+      "Bullets": ["bullet_boss", "rocket"],
+      "Lock": 70,
+      "Sound": "knight_rocket",
+      "Recoil": 0.3,
+      "Brass": "brass"
+    },
+    {
+      "Pic": "chaingun",
+      "Name": "dual_chaingun_rocket_launcher2",
+      "Bullets": ["bullet_boss", "rocket"],
+      "Lock": 70,
+      "Sound": "dual_chaingun",
+      "Recoil": 0.3,
+      "Brass": "brass"
+    }
+  ]
+}

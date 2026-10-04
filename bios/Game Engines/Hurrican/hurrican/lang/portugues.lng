@@ -1,0 +1,260 @@
+--------------------------------
+>   Hurrican Language File     <
+>                              <
+>         - portugues -        <
+>         Raphael Belmont      <
+>          26.06.2007          <
+>                              <
+>    http://www.poke53280.de   <
+--------------------------------
+//---------- Inicio ----------//
+TelaCheia
+Padrao
+Iniciar jogo
+Sair
+Abortar
+Idioma
+Checar novas versoes
+Uma nova versao esta disponivel. Deseja visitar o site Hurricane agora?
+Nenhuma nova versao disponivel.
+Niveis disponiveis no servidor.
+Baixar lista atual de niveis no servidor
+Selecione pacote de nivel
+Selecao de download
+//---------- Miscellaneous ----------//
+0
+Carregando arquivo de idioma
+Carregando imagem :
+Carregando som :
+Carregando modulo :
+ ... OK
+Carregando dados do nivel para \n
+//---------- Textos Tutoriais ----------//
+Bem vindo ao Hurrican nivel tutorial. Aqui voce aprendera os comandos basicos. Voce pode mover para esquerda e direita pressionando seta_esquerda ou seta_direita. Voce pode agachar pressionando seta_baixo. Agora observe mais um pouco. Existem mais dicas como essa nesse nivel.
+Pressione tecla de pulo para pular. Quanto mais voce pressionar a tecla mais alto pulara. Voce pode mudar a direcao enquanto pula pressionando esquerda ou direita.
+Voce pode olhar ao redor pressionando para cima ou para baixo. Isso o ajuda a encontrar itens escondidos. Por exemplo, olhe para o teto acima de voce...
+Esses diamantes estao espalhados pelo nivel. Voce recebera pontos por coleta-los. Ainda a cada 50 diamantes coletados seu tempo enchera novamente.
+Pressione Tiro para atirar e mantenha pressionado para um lento auto-fogo. Pressionando a tecla constantemente voce pode atirar mais rapido do que o normal auto-fogo.
+Agora olhe para a parede na sua direita. Nao parece muito solida. Tente destrui-la com sua arma.
+Muito bem. Existem muitos lugares que voce pode destruir paredes. Na maioria voce encontrara somente areas secretas.
+Agora um pouco de treinamento de mira. Voce pode mirar para cima pressionando Cima. Combinando com Esquerda ou Direita voce pode atirar na diagonal tambem. Agora tente acertar os diamantes acima de voce.
+Agora esta ficando excitante... Embaixo voce encontrara os primeiros inimigos ou, digamos, as primeiras caixas contendo PowerUp.
+-atencao-
+Muito bem.Colete todos os PowerUp agora.
+Esse efeito foi o indicador de forca da sua arma. Pode ser notado pela cor do efeito. Vermelho e o tiro espalhado, azul e o laser e verde e o que rebate. As barras (nas setas) mostram o nivel atual da arma.
+E agora os primeiros inimigos reais: os caminhadores. Uma coisa especial sobre eles e que voce pode pular em cima deles para destrui-los.
+Novamente o caminho esta bloqueado, mas agora a parede destruivel esta abaixo de voce. Pressione Relampago e gire o raio com esquerda e direita para destruir a parede.
+Muito bem. A proposito o raio pode destruir inimigos tambem. Infelizmente e um pouco curto...  Mas nao se preoculpe: e tudo questao de tecnica :) A direita estao alguns PowerUps para mudar isso.
+O raio e mais longo agora. Experimente! E o melhor: pode ir mais longe ainda. A barra ao lado do simbolo do relampago no HUD mostra o nivel atual. Quando voce perde uma vida, voce perdera um nivel do relampago tambem.
+Extras nao se encontram somente nas caixas flutuantes. Eles tambem podem ser encontrados no blocos PowerUp que somente aparecem quando sao atingidos uma primeira vez. Tente atirar por aqui ate voce encontar um (gire o relampago para facilitar um pouco)...
+Aqui esta. Agora atire continuamente ate que esteja vazia e tudo coletado.
+Esses foram os "powerlines", uma arma especial. O numero de powerlines pode ser visto no HUD (observe a seta). Va um pouco para a direita para aprender como usa-los e ve-los em acao.
+Fique no meio da ponte e pressione KEY_POWERLINE para ativar uma powerline.
+Woosh! Inimigos pequenos sao desintegrados e maiores sao danificados tambem. Agora colete os PowerUps.
+Esses PowerUps eram granadas. Elas fazem BOOM. Parece engracado mas e verdade :) Novamente a direita voce aprendera como usar esses itens.
+Cuidado, existem dois ninhos que podem causar um bom dano! Pressione KEY_GRANADA para jogar uma granada. Elas podem destruir tudo ao seu alcance. Para o segundo ninho voce precisara ficar abaixo e atirar pra cima.
+Parece sem saida novamente. Agache e ative a powerline simultaneamente. Voce mudara para a roda de aco. No fim do tunel, simplesmente pressione pulo para levantar-se novamente.
+Como voce deve ter notado (observe a seta) vai baixar quando voce rodar como a roda. Mas voce pode encher novamente com powerups. Porem ira encher por si so.
+Sim, esse foi o PowerUp da roda. Quando voce esta no modo roda, voce e invencivel e danifica inimigos. E como se nao bastasse, voce pode ate colocar bombas pressionando Tiro. Tente nos ninhos a direita.
+Wow, voce e uma maquina assassina agora! Mas o inventario nao esta completo ainda. Algumas armas irao ainda aparecer...
+Essas setas pelo caminho mostram onde e a saida.
+Uma parede novamente? Nos poderiamos usar o relampago... Mas espere! Fique ao lado da parede e pressione KEY_SHOCKWAVE ...
+Wow, aquele shock destruiu toda a parede, matou o caminhador e ate o powerblock. Mas voce pode carregar apenas uma dessas bombas por vez e deve enche-lo com o correspondente powerup quando usar. Se o simbolo no HUD brilhar (observe a seta), a bomba esta pronta para o uso.
+Mais um exercisio de mira... Pressione Tiro e Blitz simultaneamente para carregar sua arma e o raio. Enquanto carrega voce pode mudar a mira. Solte as teclas para atirar. Quanto mais longe maior sera o Tiro. Va ao meioe tente acertar os diamantes acima com o tiro.
+Quanto mais longe for seu raio mais rapido carregara. Mais uma coisa: a esquerda voce aprendera sobre as duas armas primarias.
+Esses foram extras do tiro. Como voce pode ver, powerups podem ate estar largados assim. Esse tiro pode se dividir em mais tiros de acordo com o nivel da arma. Muito bom em tuneis ou corredores como esse.
+A ultima arma e o laser. Pegue os PowerUps e teste. O bom dele e que pode atravessar inimigos com um tiro so. Voce pode mudar suas armas pressionando ciclo de armas. Tente um pouco.
+Esse e o fim do tutorial. No jogo enquanto joga voce aprendera mais. Apenas tente varias coisas diferentes. O tutorial foi um pouco mais facil que os niveis normais: os ninhos nao foram malignos e voce era invencivel. Mas agora prepare-se para a luta. Boa sorte!
+36
+37
+38
+39
+//---------- Konsolen Texto ----------//
+Hurrican
+
+(c) 2007
+Poke53280
+www.poke53280.de
+
+Entre "ajuda" para receber informacoes sobre comandos
+
+
+//---------- Caixa de Resumo ----------//
+Resumo
+Segredos
+Codigo destravado:
+- Pressione qualquer tecla -
+//---------- Menu Principal ----------//
+CARREGANDO
+CARREGANDO JOGO
+INICIAR JOGO
+VOLTAR AO JOGO
+PREFERENCIAS
+RECORDES
+CREDITOS
+SAIR
+JOGAR TUTORIAL
+COMECAR JOGO NOVO
+CONTINUAR JOGO SALVO
+FACIL
+NORMAL
+DIFICIL
+HURRICAN
+cursor: selecionar - enter : escolhe - ESC : volta
+RANK
+NOME
+PONTUACAO
+STAGIO
+HABILIDADE
+VOLUME
+SOM
+MUSICA
+CONFIGURAR CONTROLES
+ESCOLHA IDIOMA
+MODO:
+Force feedback
+Usar padroes
+Controle
+Joystick
+INACREDITAVEL
+NOVO RECORDE NO RANK
+ENTRE SEU NOME
+CONTINUE
+Zurück
+andar esquerda
+andar direita
+agachar
+olhar cima
+olhar baixo
+pulo
+tiro
+activar raio
+powerline
+granada
+shockwave
+ciclo armas
+andar
+olhar
+X/Y Achse
+D-pad
+-pressione nova tecla-
+-pressione novo botao-
+DETALHES: BAIXO
+DETALHES: MEDIO
+DETALHES: ALTO
+DETALHES: MAXIMO
+UM JOGADOR
+DOIS JOGADORES
+Jogador um
+Jogador dois
+tipo
+modo
+Sensibilidade
+teclado
+nao definido
+estagio
+jogador
+data
+- sem registro -
+SEGREDO
+esquerda
+direita
+cima
+baixo
+botao
+//---------- Dicas ----------//
+Se voce coletar todos os diamantes em um nivel, voce ira destravar um codigo.
+Quando perder uma vida, ira perder somente o nivel da arma que estava usando no momento.
+Quando tocar um inimigo enquanto esta no modo roda sua energia da roda vai diminuir mais rapido.
+Quando voce permanece parado a energia da roda aumentara mais rapido.
+Quando voce pressiona pulo no modo roda, a roda ira saltar.
+Coletar 50 diamantes renova seu tempo.
+Voce nao pode carregar mais que 9 granadas e 9 powerlines.
+Alguns segredos estao atras de paredes.
+Existem paredes nao destrutiveis que guardam segredos.
+Rolar sobre uma bomba explodindo ira joga-lo para cima.
+Se voce for mordido por um peixe pula na terra para se livrar.
+Tiro e fumaca podem faze o salto diferente.
+Alguns chefes podem ser bem dificeis usando apenas tiro.
+Fogo resultante de paredes podem atingir inimigos tambem.
+O escudo fere inimigos tambem.
+E melhor desviar de alguns inimigos do que tentar destrui-los.
+Granadas danificam qualquer inimigo perto da explosao.
+Powerlines sao melhores para encontrar objetos secretos.
+O dano da arma que rebate abaixa a cada vez que rebate.
+Pressione continuamente tiro para atirar mais rapido.
+Pule sobre caixas de PowerUps para chegar em locais mais altos.
+Voce pode salvar o jogo apos cada nivel.
+Quanto mais longe o raio, mais rapido ele carrega.
+Quando perder uma vida a explosao funciona como uma granada.
+Com o laser voce atravessa inimigos com um unico tiro.
+As armas primarias podem chegar ao nivel 8.
+Voce pode alterar a qualidade da resolucao em opcoes.
+Alguns inimigos so podem ser atingidos em locais especificos.
+Se voce coletar todos os diamantes em um nivel, voce ira destravar um codigo.
+Poke53280 nunca ira perguntar pelo seu email ou seu password...
+//---------- Nervoso ----------//
+Merda, preciso ir a algum lugar...
+Argh! Nao posso segurar mais!
+Por que essa lata velha nao tem mictorio???
+Quem diabos desenhou isso?
+Por que ninguem pensou nisso?
+Tipico...
+Eles nao testaram isso por muito tempo...
+Merda, to bem apertado agora!
+Quando eu voltar a Terra...
+... Vou reclamar disso!
+Isso e impossivel.
+Esse traje de assalto tem todos os aparatos tecnologicos...
+Mas o mais importante, esqueceram.
+O que que eu faco agora?
+Vamos la, tenta nao pensar!
+Grmblfxt ... To ficando doido.
+Eu preciso segurar...
+... ate o jogo carregar!
+//---------- Tela de Introducao 1 ----------//
+2138, algum lugar no espaco...
+O "Senhor do Medo" esta no seu caminho de volta de uma missao bem sucedida.
+Proxima parada da nave da tropa e a Terra.
+De repente, os soldados recem um chamado do planeta azul.
+"Terra sob ataque! Todas as unidades a seus postos!"
+"Foguetes de origem desconhecida chegam a Terra!"
+Segundos depois, a origem dos misseis e conhecida.
+O planeta Takatis.
+Os homens nao creem no que veem na sala de briefing.
+Ninguem mais do que Dr. Geng iniciou o ataque.
+Anos atras a mensagem da sua morte atravessou a galaxia, ams agora ele esta de volta.
+Sem hesitacao o Senhor do Medo se dirige ao nao explorado planeta.
+A nave chega ao seu destino.
+O planeta alienigena brilha em uma beleza aterradora.
+A tripulacao inicia processo de aterrissagem.
+Os scanners mostram uma atsmosfera semelhante a da Terra.
+De repente, numerosos canhoes surgem a superficie do planeta abrindo fogo.
+O sistema de escudo falha e a nave e completamente destruida.
+Sem saida, os tripulantes evadem a nave.
+Eles acabam de chegar a atmosfera a nave explode.
+Segundos apos o impacto.
+Maioria da tripulacao nao sobrevive a destruicao da Senhor do Medo.
+Apenas um soldado esta vivo. Lentamente ele se levanta e sai.
+Apenas dois soldados estao vivos. Lentamente eles se levantam e saem.
+Determinados a achar Dr. Geng X e libertar o mundo de sua presenca maligna.
+//---------- Outro ----------//
+O inacreditavel acontece.
+Apos uma longa luta, Dr. Geng X foi derrotado!
+O que resta dele esta abaixo de sua fortaleza abatida
+todas as suas criacoes sinistars junto com ele,
+caidas na eterna escuridao.
+Paz e restaurada novamente no mundo embora ninguem saiba dizer
+o quanto durara essa paz.
+O futuro ainda esta a ser escrito.
+
+
+
+//---------- Zona de Transporte ----------//
+E agora para os pacientes, uma pequena dica
+Deem uma boa olhada no nivel tutorial
+A entrada de encanamento ...
+Usar a roda no inicio e uma ideia bombastica...
+Fique proximo a esquerda e nao esqueca: encanadores sao para canos ;)
+
+//--- FINALLE ---//

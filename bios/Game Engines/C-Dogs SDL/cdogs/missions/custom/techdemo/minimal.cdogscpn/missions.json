@@ -1,0 +1,51 @@
+{
+	"Missions": [{
+		"Title": "Mission 1",
+		"Description": "No description",
+		"Type": "Classic",
+		"Width": 16,
+		"Height": 16,
+		"WallStyle": 5,
+		"FloorStyle": 8,
+		"RoomStyle": 0,
+		"ExitStyle": 0,
+		"KeyStyle": 0,
+		"DoorStyle": 0,
+		"Objectives": [],
+		"Enemies": [],
+		"SpecialChars": [],
+		"Items": [],
+		"ItemDensities": [],
+		"EnemyDensity": 0,
+		"Weapons": [],
+		"Song": "",
+		"WallColor": 12,
+		"FloorColor": 12,
+		"RoomColor": 0,
+		"AltColor": 0,
+		"Walls": 0,
+		"WallLength": 0,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 0,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	}]
+}

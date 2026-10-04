@@ -1,0 +1,39 @@
+{
+  "Version": 3,
+  "Guns": [
+    {
+      "Name": "Loop 1",
+      "Lock": 134,
+      "Sound": "loop1",
+      "Brass": "music_note"
+    },
+    {
+      "Name": "Loop 2",
+      "Lock": 134,
+      "Sound": "loop2",
+      "Brass": "music_note"
+    },
+    {
+      "Name": "Loop 3",
+      "Lock": 99,
+      "Sound": "loop3",
+      "Brass": "music_note"
+    },
+    {
+      "Name": "Loop 4",
+      "Lock": 105,
+      "Sound": "loop4",
+      "Brass": "music_note"
+    },
+    {
+      "Pic": "",
+      "Name": "Dog Bite",
+      "Bullet": "dog_bite",
+      "Cost": 0,
+      "Lock": 80,
+      "Sound": "",
+      "CanShoot": false,
+      "CanDrop": false
+    }
+  ]
+}

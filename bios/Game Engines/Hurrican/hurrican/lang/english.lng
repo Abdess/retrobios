@@ -1,0 +1,260 @@
+--------------------------------
+>    Hurrican Language File    <
+>         - english -          <
+>    Poke53280   28.04.2007    <
+>          edited by           <
+> Major Roy Fokker  23.07.2007 <
+>                              <
+>    http://www.poke53280.de   <
+--------------------------------
+//---------- Starter ----------//
+Fullscreen
+Standard
+Start game
+Quit
+Abort
+Language
+Check for updates
+A new version is available. Do you want to visit the Hurrican website now?
+No new version available.
+Available levels on the server
+Download current level list from server
+Choose levelpack
+Download selection
+//---------- Miscellaneous ----------//
+0
+Loading language file
+Loading bitmap :
+Loading wave :
+Loading module :
+ ... OK
+Loading leveldata for \n
+//---------- Tutorial Texts ----------//
+Welcome to the Hurrican tutorial level. Here you'll learn the basic controls. You can move left and right by pressing KEY_LEFT or KEY_RIGHT. You can crouch by pressing KEY_CROUCH. Now look around a bit. There are more hints like this in this level.
+Press KEY_JUMP to jump. The longer you hold the key pressed, the higher you can jump. You can change direction while jumping by pressing KEY_LEFT or KEY_RIGHT.
+You can look around by pressing KEY_UP and KEY_DOWN. This helps you find hidden items. For an example, look at the ceiling above you...
+These diamonds are scattered around the levels. You'll get points for collecting them. In addition, for every 50 diamonds collected you'll get your time refilled.
+Press KEY_SHOOT to fire and hold it down for a slow auto-fire. Pressing the key repeatedly makes you fire faster than the normal autofire.
+Now look at the wall to your right. It doesn't look that solid. Try to destroy it by shooting it with your gun.
+Very good. There are a number of places where you can destroy the walls. Though usually, you will only find secret areas hidden behind them.
+Now for some aiming practice. You can aim up by pressing KEY_UP. By combining this with KEY_LEFT or KEY_RIGHT you can fire diagonally, too. Now try to shoot the platform above you to make the diamonds fall.
+Now it's getting exciting... Down there you will meet the first enemies or, let's say, the first flying powerup containers.
+-leer-
+Very good. Collect all of the powerups now.
+This effect is the indicator that your weapon was powered up. The color of the effect shows which weapon was strengthened. Red is the spreadshot, blue is the laser, and green is the bounce. The bars (at the arrow) show you the current weapon level.
+And now for the first real enemies - the walkers. One special thing about them is that you can jump on top of them to flatten them.
+The way is blocked again, but this time the destroyable wall is BELOW you. Hold down KEY_BLITZ and rotate the lightning with KEY_LEFT and KEY_RIGHT to destroy the wall.
+Very good. By the way, the lightning can destroy enemies too. Unfortunately, it's a bit short...  But don't worry - it's still effective if used skillfully. :) Also, to the right there are some powerups that will remedy this.
+The lightning is longer now. Try it! And the best part is - it can get even longer. The bar beside the lightning symbol in the HUD shows the current level. When you lose a life, you will lose one level of the lightning, too.
+Extras are not only found in the flying containers. They can also be located in powerup blocks which only appear after they are hit for the first time. Try shooting around here until you find one (rotate the lightning to make it a bit easier)...
+There's the block. Now shoot it repeatedly until it is empty and collect all of the items.
+Those were the so called "powerlines", a special weapon. The number of powerlines can be seen in the HUD (look at the arrow). Go a bit to the right to get information on how to use them and to see them in action.
+Stand in the middle of the bridge and press KEY_POWERLINE to activate a powerline.
+Woosh! Small enemies get wiped out and bigger ones are also damaged by this weapon. Now collect the emerging powerups.
+These powerups are grenades. They go BOOM. Sounds funny, but it's true. :) Again, on the right you'll learn how to use these items.
+Watch out, there are two nests that can take a lot of damage! Press KEY_GRANATE to fire a grenade. Grenades damage all enemies that are situated near the explosion. For the second nest, you'll need to stand below it and fire upwards.
+Seems like a dead end again. Crouch (KEY_CROUCH) and activate the powerline simultaneously (KEY_POWERLINE). You will change into the razor wheel. At the end of the tunnel, simply press the jump key (KEY_JUMP) to stand up again.
+As you might have noticed, the blue wheel gauge (look at the arrow) will empty out as you spin around. But you can fill it up again with powerups. Plus, it will charge up slowly by itself.
+That was the wheel powerup. While you are in wheel mode, you are invulnerable and will damage enemies. And as if this wasn't enough, you can even place bombs by pressing KEY_SHOOT. Try it on the nests to the right.
+Wow, you are some killing machine right now! But your arsenal is not complete yet. More weapons are still to come...
+By the way, these arrows show you the direction that you must go if you want to reach the exit.
+A wall again? We could use the lightning... But wait! Stand close to the wall and press KEY_SHOCKWAVE ...
+Wow, that shockwave destroyed the whole wall, killed the walker and even emptied a powerblock. But you can only carry one of these smartbombs at a time and must restock it with the corresponding powerup after you have used it. If the symbol in the HUD glows (look at the arrow), the smartbomb is ready to use.
+One more aiming exercise... Hold down KEY_SHOOT and KEY_BLITZ simultaneously to charge your beam weapon. While charging, you can change the aiming direction with KEY_LEFT and KEY_RIGHT. Release the keys to fire the beam. The longer you charge the beam, the bigger the shot will be. Go in the middle and try to shoot the diamonds above you with the beam.
+The longer your lightning is, the faster the beam will charge. One more lesson - to the left you will learn about your two other primary weapon options besides the spread shot.
+Those were bounce shot extras. As you can see, powerups can even lie around like this. This shot can divide into two or more shots according to your current weapon level. Very useful in close tunnels or corridors like this one here.
+The last weapon for today is the laser. Collect the powerups and test it. Its special feature is that each one of its projectiles can slice through multiple enemies and destroy them all. You can cycle through your weapons with KEY_WAFFE_CYCLE. Try it some now.
+This is the end of the tutorial. In the game you will learn about additional powerups and other items. Just remember - experiment awhile with everything to learn how to use it. This tutorial was a bit easier than the normal levels - the nests did not spawn enemies and you were invulnerable. But now you should be prepared for combat. Good luck!
+36
+37
+38
+39
+//---------- Konsolen Text ----------//
+Hurrican
+
+(c) 2007
+Poke53280
+www.poke53280.de
+
+Enter "help" to get info about console commands
+
+
+//---------- Summary Box ----------//
+Summary
+Secrets
+Cheat unlocked:
+- Press any key -
+//---------- Main Menu ----------//
+LOADING
+SAVE GAME
+START GAME
+BACK TO GAME
+PREFERENCES
+HIGHSCORES
+CREDITS
+QUIT
+PLAY TUTORIAL
+START NEW GAME
+CONTINUE SAVED GAME
+EASY
+NORMAL
+HARD
+HURRICAN
+cursor: select - enter: choose - ESC: back
+RANK
+NAME
+SCORE
+STAGE
+SKILL
+VOLUME
+SOUND
+MUSIC
+CONFIGURE CONTROLS
+CHOOSE LANGUAGE
+MODE:
+Force feedback
+Load default settings
+Joypad
+Joystick
+UNBELIEVABLE
+NEW HIGHSCORE ON RANK
+ENTER YOUR NAME
+CONTINUE
+Back
+walk left
+walk right
+crouch
+look up
+look down
+jump
+shoot
+activate lightning
+powerline
+grenade
+shockwave
+cycle weapons
+walk
+look
+X/Y Axis
+D-pad
+-press new key-
+-press new button-
+DETAILS: LOW
+DETAILS: MEDIUM
+DETAILS: HIGH
+DETAILS: MAXIMUM
+ONE PLAYER
+TWO PLAYER
+Player one
+Player two
+type
+mode
+Sensitivity
+keyboard
+not defined
+stage
+player
+date
+- no entry -
+SECRET
+left
+right
+up
+down
+button
+//---------- Hints ----------//
+If you collect all diamonds in a level, you will unlock a cheatcode.
+When you lose a life, the level of the current weapon will decrease.
+Touching an enemy while in wheel mode makes your wheel energy decrease faster.
+Your wheel energy recharges faster while you are standing still.
+IF you press jump while you are in wheel mode and in the air, you will perform the wheel jump.
+Collecting 50 diamonds will replenish the timer.
+You cannot carry more than 9 grenades and 9 powerlines.
+Some secrets are hidden behind destroyable walls.
+There are counterfeit walls behind which you can find secrets.
+If you roll over an exploding bomb while in wheel mode, you will be propelled upwards a bit.
+If a fish bites onto you, jump onto land to make it let go.
+Steam and smoke will increase the height of your jumps some.
+Some bosses are very difficult to defeat using only pure firepower.
+The fire from the wall flamethrowers can hurt enemies too.
+The shield emitter will damage all enemies it touches.
+Some enemies are better avoided than destroyed.
+Grenades deliver damage to every enemy around the explosion.
+Powerlines are best at finding hidden powerup blocks.
+The damage of a single bounce shot will decrease everytime the shot bounces off a wall.
+If you press the shoot key repeatedly, you can fire faster than with normal auto-fire.
+You can jump on top of the powerblocks to reach higher areas.
+You can save your game after each level.
+The longer your lightning is, the faster the beam weapon will charge.
+When you lose a life, the explosion acts like a grenade.
+The laser weapon can cleave through multiple enemies.
+The primary weapons spreadshot, laser, and bounce can be upgraded up to level 8.
+You can save your game after each level.
+You can alter the detail level of the special effects in the options menu.
+Some enemies can only be hurt while in specific states.
+Poke53280 will NEVER ask for your email address or your password...
+//---------- Pissen ----------//
+Damn it, I need to go somewhere...
+Argh! I can't hold it anymore!
+Why doesn't this tin bucket have a piss-flap???
+Who the hell designed this thing?
+Why didn't anyone consider such a situation?
+It's so typical...
+They didn't test this thing properly...
+Damn, it's getting pretty awkward now!
+When I'm back on Earth...
+.. I am going to complain about this!
+That's impossible.
+This assault suit has all the technical bells and whistles...
+But they forgot the most important thing.
+What can I do now?
+Come on, keep playing!
+Grmblfxt... I'm going crazy.
+I must hold it...
+.. until the game is finished!
+//---------- Intro Screen 1 ----------//
+2138, somewhere in space...
+The "Dreadnought" is returning from a successful mission.
+Next stop of the vessel is Earth.
+Suddenly, its crew receives a distress call from the Blue Planet.
+"Earth is under attack! All available units prepare to defend!"
+"Rockets of unknown origin have struck the planet's surface!"
+Seconds later, the origin of the deadly missiles is determined.
+They are from the planet Takatis.
+The men can't believe their eyes as they glare at the hologram in the briefing room.
+None other than Dr. Geng X himself started the assault.
+Years ago, news of his demise spread across the galaxy, but now he has returned.
+Without hesitation, the "Dreadnought" sets course towards the unexplored planet.
+After a short flight, the ship reaches its destination.
+The alien planet glows with a deceptive beauty.
+The crew initiates the landing process.
+Scanners show an Earth-like atmosphere.
+Suddenly, numerous cannons on the planet surface open fire.
+The shield-system fails and huge projectiles rip through the ship's hull.
+Helpless, the troopers plunge towards the planet's surface.
+As they enter its atmosphere, their ship begins to break apart.
+Seconds after the impact..
+Most of the crew do not survive the emergency landing of the "Dreadnought".
+Only one trooper is still alive. Slowly he gets up and makes his way to the outside..
+Only two troopers are still alive. Slowly they get up and make their way to the outside..
+..determined to find Dr. Geng X and free the world from his evil presence.
+//---------- Outtro ----------//
+The unimaginable has been achieved!
+After a protracted battle, Dr. Geng X was defeated.
+Whatever is left of him lies hidden under the smoking wreckage
+of his ruined stronghold. All of his sinister creations lie buried here with him,
+down in the everlasting darkness.
+Peace was restored to the universe again, but no one knows
+how long this peace will last...
+The future is yet to be written.
+
+
+
+//---------- Warpzone ----------//
+And now, for the stalwart ones of you, a small hint:
+Take a close look at the tutorial level
+to find the secret plumber entrance...
+Have a BLAST with the wheel right at the beginning...
+Stay close to the left and don't forget - plumbers are into pipes ;)
+
+//--- ENDE ---//

@@ -1,0 +1,9 @@
+Derived from Animated Sprites and Textures by Spiney
+http://opengameart.org/content/animated-sprites-and-textures
+
+Licenses:
+http://creativecommons.org/licenses/by/3.0/
+http://creativecommons.org/licenses/by-sa/3.0/
+http://www.gnu.org/licenses/gpl-3.0.html
+http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+http://creativecommons.org/publicdomain/zero/1.0/

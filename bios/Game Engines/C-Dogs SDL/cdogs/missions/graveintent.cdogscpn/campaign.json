@@ -1,0 +1,12 @@
+{
+	"Version": 16,
+	"Title": "Grave Intent",
+	"Author": "clovehoof",
+	"Description": "\"Millions are screaming, the dead are still living.  This Earth has died, yet no one has seen.\"\n  --Electric Wizard",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": false,
+	"RandomPickups": true,
+	"DoorOpenTicks": 70,
+	"Missions": 7
+}

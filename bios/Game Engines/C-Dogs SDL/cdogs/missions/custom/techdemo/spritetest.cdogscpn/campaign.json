@@ -1,0 +1,11 @@
+{
+	"Version": 16,
+	"Title": "Sprite test",
+	"Author": "",
+	"Description": "Missions that have various map objects to test their appearance in-game.",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": false,
+	"RandomPickups": true,
+	"Missions": 1
+}

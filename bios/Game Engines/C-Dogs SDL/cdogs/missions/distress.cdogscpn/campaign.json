@@ -1,0 +1,10 @@
+{
+	"Version": 15,
+	"Title": "Distress call from scientific outpost",
+	"Author": "Ronny Wester",
+	"Description": "A distress call from a remote science outpost sends our heroes on what seems to be yet another routine assignment. But it is not long before a far more sinister truth reveals itself...",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": false,
+	"Missions": 18
+}

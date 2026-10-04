@@ -1,0 +1,11 @@
+{
+	"Version": 16,
+	"Title": "Development Hell",
+	"Author": "Sauer2",
+	"Description": "You work for a military data center in a desert nearby Texas. Suddenly all security bots run amok and start to kill all researchers.",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": false,
+	"RandomPickups": true,
+	"Missions": 6
+}

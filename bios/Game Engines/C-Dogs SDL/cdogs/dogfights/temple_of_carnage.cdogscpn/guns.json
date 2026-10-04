@@ -1,0 +1,146 @@
+{
+  "Version": 1,
+
+  "Guns": [
+     {
+      "Pic": "",
+      "Name": "Cryo mine",
+      "Icon": "proxmines",
+      "Bullet": "proxmine",
+      "Cost": 10,
+      "Lock": 100,
+      "ReloadLead": 15,
+      "Sound": "hahaha",
+      "ReloadSound": "package_r",
+      "SwitchSound": "mine_switch",
+      "MuzzleHeight": 0,
+      "Ammo": "Mines"
+    },
+    {
+      "Pic": "",
+      "Icon": "detonator",
+      "Name": "Suicide Vest",
+      "Bullet": "aloma",
+      "Cost": 20,
+      "Lock": 40,
+      "Sound": "launch",
+      "SwitchSound": "dynamite_pickup"
+    },
+    {
+      "Pic": "",
+      "Icon": "dynamite_pickup",
+      "Name": "Line Charges",
+      "Bullet": "charge",
+      "Cost": 20,
+      "Lock": 40,
+      "Sound": "launch",
+      "SwitchSound": "dynamite_pickup",
+      "Elevation": 24,
+      "Ammo": "Dynamite"
+    },
+    {
+      "Pic": "flamer",
+      "Grips": 2,
+      "Name": "BBQ Incinerator",
+      "Icon": "flamer",
+      "Bullet": "bbq1",
+      "Cost": 1,
+      "Lock": 10,
+      "Recoil": 1,
+      "Sound": "flamer",
+      "SwitchSound": "flamer_switch",
+      "SoundLockLength": 36,
+      "SpreadCount": 1,
+      "SpreadWidth": 0.13,
+      "MuzzleFlashParticle": "muzzle_flash_flamer",
+      "Ammo": "Cells"
+    },
+    {
+      "Pic": "chaingun",
+      "Name": "Flesh Mower",
+      "Icon": "machine_gun",
+      "Bullet": "gmg",
+      "Cost": 1,
+      "Lock": 5,
+      "Sound": "mg",
+      "SpreadCount": 3,
+      "SpreadWidth": 0.13,
+      "SwitchSound": "mg_switch",
+      "Recoil": 0.2,
+      "MuzzleFlashParticle": "muzzle_flash_mg",
+      "Brass": "brass_big",
+      "Ammo": "Bullets"
+    }
+  ],
+  "PseudoGuns" : [
+    {
+      "Pic": "",
+      "Name": "activemine",
+      "Bullet": "activemine",
+      "Sound": "mine_arm"
+    },
+    {
+      "Pic": "",
+      "Name": "triggeredmine",
+      "Bullet": "triggeredmine",
+      "Sound": "mine_trigger"
+    },
+    {
+      "Name": "trigger",
+      "Bullet": "charge",
+      "SpreadCount": 8,
+      "SpreadWidth": 0.785398,
+      "Elevation": 24
+    }, 
+    {
+      "Name": "freezer",
+      "Bullet": "ice",
+      "SpreadCount": 30,
+      "SpreadWidth": 0.2094,
+      "Elevation": 24
+    },
+    {
+      "Name": "charge",
+      "Bullet": "charge",
+      "Elevation": 24
+    },
+    {
+      "Name": "bbq1",
+      "Bullet": "bbq2",
+      "SpreadCount": 4,
+      "SpreadWidth": 0.2,
+      "MuzzleFlashParticle": "muzzle_flash_flamer",
+      "Sound": "flamer"
+    },
+    {
+      "Name": "bbq2",
+      "Bullet": "bbq3",
+      "SpreadCount": 3,
+      "Sound": "flamer",
+      "MuzzleFlashParticle": "muzzle_flash_flamer",
+      "SpreadWidth": 0.2
+    },
+	  {
+	    "Pic": "",
+	    "Name": "grenade_explosion1",
+	    "Bullet": "grenade_fireball1",
+	    "ElevationLow": 14,
+	    "ElevationHigh": 14,
+	    "Sound": "grenade"
+	  },
+	  {
+	    "Pic": "",
+	    "Name": "grenade_explosion2",
+	    "Bullet": "grenade_fireball2",
+	    "ElevationLow": 22,
+	    "ElevationHigh": 22
+	  },
+	  {
+	    "Pic": "",
+	    "Name": "grenade_explosion3",
+	    "Bullet": "grenade_fireball3",
+	    "ElevationLow": 30,
+	    "ElevationHigh": 30
+	  }
+	]
+}

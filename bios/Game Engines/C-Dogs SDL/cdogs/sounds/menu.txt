@@ -1,0 +1,8 @@
+menu_back
+menu_enter
+menu_error
+menu_start
+menu_switch
+Derived from Hi-Tech Button Sound Pack I (Non Themed) by Circlerun
+https://opengameart.org/content/hi-tech-button-sound-pack-i-non-themed
+http://creativecommons.org/publicdomain/zero/1.0/

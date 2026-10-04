@@ -1,0 +1,198 @@
+{
+  "Version": 2,
+  "Characters": [
+    {
+      "Name": "Guard",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "soldier",
+      "Sounds": "guard",
+      "Corpse": "dead_guard"
+    },
+    {
+      "Name": "Killer Dog",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/dog"
+      },
+      "Body": "dog",
+      "Sounds": "dog",
+	    "Footsteps": "dog"
+    },
+    {
+      "Name": "SS",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "soldier",
+      "Sounds": "ss"
+    },
+    {
+      "Name": "Officer",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "soldier",
+      "Sounds": "officer"
+    },
+    {
+      "Name": "Mutant",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/cyborg"
+      },
+      "Body": "mutant",
+      "Sounds": "mutant",
+      "BloodColor": "ff00ff"
+    },
+    {
+      "Name": "Hans Grosse",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "big",
+      "Sounds": "hans"
+    },
+    {
+      "Name": "Dr Schabbs",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "big",
+      "Sounds": "schabbs"
+    },
+    {
+      "Name": "Fake Hitler",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "wizard",
+      "Sounds": "fake_hitler",
+      "BloodColor": "000000"
+    },
+    {
+      "Name": "Mecha Hitler",
+      "Vehicle": true,
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "mech",
+      "DeathSprites": "explosion",
+      "Sounds": "mecha_hitler",
+      "BloodColor": "00ffff",
+      "Footsteps": "mech",
+      "FootstepsDistancePlus": 0
+    },
+    {
+      "Name": "Hitler",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "soldier",
+      "Sounds": "hitler"
+    },
+    {
+      "Name": "Otto Giftmacher",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "big_soldier",
+      "Sounds": "otto"
+    },
+    {
+      "Name": "Gretel Grosse",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "big",
+      "Sounds": "gretel"
+    },
+    {
+      "Name": "General Fettgesicht",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "big_soldier",
+      "Sounds": "fettgesicht"
+    },
+    {
+      "Name": "Pacman Ghost",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "none"
+    },
+    {
+      "Name": "Trans Grosse",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "big",
+      "Sounds": "trans"
+    },
+    {
+      "Name": "Barnacle Wilhelm",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "big",
+      "Sounds": "bill"
+    },
+    {
+      "Name": "Ubermutant",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/cyborg"
+      },
+      "Body": "big_mutant",
+      "Sounds": "ubermutant",
+      "BloodColor": "ff00ff"
+    },
+    {
+      "Name": "Death Knight",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Body": "mech",
+      "Sounds": "knight"
+    },
+    {
+      "Name": "Ghost",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": ""
+      },
+      "Body": "none",
+      "DeathSprites": "",
+      "Sounds": "ghost",
+      "BloodColor": "999999",
+      "Corpse": "ghost_corpse"
+    },
+    {
+      "Name": "Angel of Death",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/madbugeye"
+      },
+      "Body": "angel",
+      "Sounds": "angel",
+      "BloodColor": "ffff00"
+    }
+  ]
+}

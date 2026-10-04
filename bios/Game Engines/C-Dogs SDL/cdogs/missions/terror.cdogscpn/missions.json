@@ -1,0 +1,1901 @@
+{
+	"Missions": [{
+		"Title": "Work hazards",
+		"Description": "B.A.D. members are attacking an office complex. But they are not dealing with puny clerks now! The pen may be mightier than the sword in the long run, but for now let's teach these criminals what happens when combat veterans enter into the fray!",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 30,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Take out all the terrorists",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 15,
+			"Required": 15,
+			"Flags": 0
+		}],
+		"Enemies": [0,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6],
+		"SpecialChars": [20,
+		17,
+		15,
+		14,
+		12,
+		11],
+		"MapObjectDensities": [{
+			"MapObject": "cabinet",
+			"Density": 30
+		},
+		{
+			"MapObject": "plant",
+			"Density": 30
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 15
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 30
+		},
+		{
+			"MapObject": "table_clothed",
+			"Density": 15
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		}],
+		"EnemyDensity": 10,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "007000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "tile",
+				"Mask": "008484ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "844400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 0,
+		"WallLength": 0,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 25,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Storeroom plans",
+		"Description": "We have tracked a couple of known B.A.D. symphatizers to a remote, abandoned warehouse. They seem to be planning yet another atrocious act of violence - violence against innocents that is - and we must determine what that is. Your first priority is to gather information.",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Collect any documents you find",
+			"Type": "Collect",
+			"Pickup": "paper",
+			"Count": 8,
+			"Required": 4,
+			"Flags": 4
+		},
+		{
+			"Description": "Reduce their financial funds",
+			"Type": "Collect",
+			"Pickup": "sack",
+			"Count": 3,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [20,
+		18,
+		17,
+		16,
+		15,
+		12,
+		11],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 50
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 50
+		},
+		{
+			"MapObject": "box2",
+			"Density": 50
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 30
+		},
+		{
+			"MapObject": "bench",
+			"Density": 25
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 10
+		}],
+		"EnemyDensity": 15,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "482400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 40,
+		"WallLength": 15,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 5,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 2,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Mayhem in the park",
+		"Description": "Good work, but no time to chat! I've just received a report that terrorists are butchering innocents in Glaive Park. What are you waiting for? Go, go, go!!",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 64,
+		"ExitStyle": "hazard",
+		"KeyStyle": "dungeon",
+		"Objectives": [{
+			"Description": "Eliminate the terrorist threat!",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 20,
+			"Required": 20,
+			"Flags": 0
+		}],
+		"Enemies": [0,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7,
+		8,
+		10],
+		"SpecialChars": [23,
+		20,
+		15,
+		13,
+		17,
+		14],
+		"MapObjectDensities": [{
+			"MapObject": "tree_dead",
+			"Density": 10
+		},
+		{
+			"MapObject": "tree_autumn",
+			"Density": 10
+		},
+		{
+			"MapObject": "tree",
+			"Density": 90
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 0
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 0
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 0
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "007000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "stone",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 3,
+		"WallLength": 20,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 4,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "B.A.D. storage raid",
+		"Description": "The documents you retrieved earlier have proved fruitful. With their help we have located an old building used as a storage facility by the Brotherhood. There are a lot of explosives in there and we want you to blow up a substantial part of them.",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Burn their fuel",
+			"Type": "Destroy",
+			"MapObject": "barrel",
+			"Count": 12,
+			"Required": 6,
+			"Flags": 0
+		},
+		{
+			"Description": "Blow up their ammo",
+			"Type": "Destroy",
+			"MapObject": "box_metal_green",
+			"Count": 6,
+			"Required": 3,
+			"Flags": 0
+		},
+		{
+			"Description": "Trash their laboratory setups",
+			"Type": "Destroy",
+			"MapObject": "table_lab",
+			"Count": 3,
+			"Required": 0,
+			"Flags": 1
+		},
+		{
+			"Description": "Blow up their gunpowder",
+			"Type": "Destroy",
+			"MapObject": "barrel_skull",
+			"Count": 9,
+			"Required": 5,
+			"Flags": 0
+		},
+		{
+			"Description": "Collect information",
+			"Type": "Collect",
+			"Pickup": "disk3",
+			"Count": 2,
+			"Required": 0,
+			"Flags": 5
+		}],
+		"Enemies": [23,
+		20,
+		18,
+		17,
+		16,
+		11,
+		12],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 0
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 0
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 0
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 0
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 0
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 0
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 0
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 0
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "grid",
+				"Mask": "343448ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "biggrid",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 20,
+		"WallLength": 40,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 4,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 3,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Hostage situation",
+		"Description": "B.A.D. members have taken an old man hostage. They demand an immediate end to 'the unprovoked violence against our organisation'. Yeah, right. Anyway, we must get the old guy out of there safely...feel up to it? No, you do not have a choice...",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Rescue the hostage",
+			"Type": "Rescue",
+			"Index": 27,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 0
+		}],
+		"Enemies": [20,
+		17,
+		18,
+		15,
+		12,
+		11],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "cabinet",
+			"Density": 30
+		},
+		{
+			"MapObject": "plant",
+			"Density": 30
+		},
+		{
+			"MapObject": "bench",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 10
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 30
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "box",
+			"Density": 10
+		},
+		{
+			"MapObject": "box2",
+			"Density": 10
+		}],
+		"EnemyDensity": 15,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "484870ff",
+				"MaskAlt": "94802cff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "tile",
+				"Mask": "707070ff",
+				"MaskAlt": "94802cff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "847024ff",
+				"MaskAlt": "94802cff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 0,
+		"WallLength": 0,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 20,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Take out B.A.D. ring leader",
+		"Description": "Observers have spotted the local B.A.D. ring leader entering a building complex currently under surveillance. Eliminating him will quite likely cripple the local branch of B.A.D.",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Eliminate the ring leader",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 1
+		},
+		{
+			"Description": "Collect information",
+			"Type": "Collect",
+			"Pickup": "disk1",
+			"Count": 2,
+			"Required": 0,
+			"Flags": 5
+		}],
+		"Enemies": [23,
+		20,
+		18,
+		17,
+		15,
+		12,
+		11],
+		"SpecialChars": [28],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 10
+		},
+		{
+			"MapObject": "box",
+			"Density": 10
+		},
+		{
+			"MapObject": "box2",
+			"Density": 10
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 50
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel_skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 15
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 20
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 10
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 10
+		}],
+		"EnemyDensity": 25,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "840000ff",
+				"MaskAlt": "480000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "smallsquare",
+				"Mask": "707070ff",
+				"MaskAlt": "480000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "007000ff",
+				"MaskAlt": "480000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 40,
+		"WallLength": 25,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 3,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 1,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "B.A.D. retaliates",
+		"Description": "It would seem we underestimated the zealousness of these people. To avenge their fallen leader they have actually attacked a local police station. The frenzy and suicidal nature of the attackers are proving too much for the law enforcers to handle so we must assist...",
+		"Type": "Classic",
+		"Width": 36,
+		"Height": 36,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Wipe out the attacking terrorists",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 25,
+			"Required": 25,
+			"Flags": 0
+		}],
+		"Enemies": [24],
+		"SpecialChars": [23,
+		20,
+		19,
+		18,
+		13,
+		14],
+		"MapObjectDensities": [],
+		"EnemyDensity": 5,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "granite",
+				"Mask": "343448ff",
+				"MaskAlt": "848484ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "703800ff",
+				"MaskAlt": "848484ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "700070ff",
+				"MaskAlt": "848484ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 0,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Rescue the chief of police",
+		"Description": "Unfortunately the terrorists managed to kidnap the chief of police, Robin Tataglia. They were tailed to this old factory. Get her out in one piece, please.",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 64,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Rescue chief Tataglia",
+			"Type": "Rescue",
+			"Index": 25,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 0
+		},
+		{
+			"Description": "Kill the B.A.D's hired mercenary",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 1,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [23,
+		20,
+		18,
+		17,
+		15,
+		13,
+		12,
+		11],
+		"SpecialChars": [21],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 15
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 10
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 60
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 5
+		},
+		{
+			"MapObject": "tree_autumn",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 10
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 5
+		}],
+		"EnemyDensity": 15,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "000070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "703800ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "844400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "blast",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 0,
+		"WallLength": 0,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Sack B.A.D. headquarters",
+		"Description": "We now have an explanation for the daring deeds of the local B.A.D. members. It seems as though we have been fortunate enough to stumble upon the B.A.D's core group. We have located the first of what we believe to be many underground complexes. Good riddance!",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"ExitStyle": "plate",
+		"KeyStyle": "plain",
+		"Objectives": [{
+			"Description": "Eliminate all ring leaders",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 2,
+			"Required": 2,
+			"Flags": 0
+		},
+		{
+			"Description": "Blow up ammunition",
+			"Type": "Destroy",
+			"MapObject": "box_metal_green",
+			"Count": 12,
+			"Required": 9,
+			"Flags": 0
+		},
+		{
+			"Description": "Burn the fuel",
+			"Type": "Destroy",
+			"MapObject": "barrel",
+			"Count": 10,
+			"Required": 5,
+			"Flags": 0
+		},
+		{
+			"Description": "Blow up the gunpowder",
+			"Type": "Destroy",
+			"MapObject": "barrel_skull",
+			"Count": 15,
+			"Required": 10,
+			"Flags": 0
+		}],
+		"Enemies": [20,
+		18,
+		17,
+		15,
+		14,
+		13,
+		11,
+		12,
+		16,
+		19],
+		"SpecialChars": [28],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 20
+		},
+		{
+			"MapObject": "box",
+			"Density": 20
+		},
+		{
+			"MapObject": "box2",
+			"Density": 20
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 25
+		}],
+		"EnemyDensity": 22,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "482400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "703800ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "74601cff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "blast",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 8,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Assassination attempt",
+		"Description": "...on the way back from the successful mission, B.A.D. springs a surprise upon our heroes: a sudden attack by hired mercenaries. Suddenly combat veterans face combat veterans in a bitter struggle to the end. Too bad most of the equipment is with another group...",
+		"Type": "Classic",
+		"Width": 32,
+		"Height": 48,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Defeat the mercenaries",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 6,
+			"Required": 6,
+			"Flags": 0
+		}],
+		"Enemies": [],
+		"SpecialChars": [21, 22],
+		"MapObjectDensities": [{
+			"MapObject": "tree_autumn",
+			"Density": 50
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 100
+		}],
+		"EnemyDensity": 0,
+		"Weapons": ["Knife",
+		"Powergun",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "482400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "recessed",
+				"Mask": "840000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 15,
+		"WallLength": 25,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 0,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Another B.A.D. stronghold...",
+		"Description": "Where have you been? Never mind, tell me later...we have found another of those underground bases of theirs. The last attack was a bit too successful, there was hardly anything left from which to learn anything. This time we're sending in a scout team first...you, that is...",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"ExitStyle": "plate",
+		"KeyStyle": "plain",
+		"Objectives": [{
+			"Description": "Scout the complex",
+			"Type": "Explore",
+			"Index": 0,
+			"Count": 100,
+			"Required": 45,
+			"Flags": 0
+		},
+		{
+			"Description": "Steal any documents",
+			"Type": "Collect",
+			"Pickup": "folder",
+			"Count": 5,
+			"Required": 2,
+			"Flags": 4
+		},
+		{
+			"Description": "Destroy their missiles",
+			"Type": "Destroy",
+			"MapObject": "rocket",
+			"Count": 5,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [20,
+		18,
+		17,
+		16,
+		11,
+		12,
+		15,
+		11,
+		17,
+		20],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 10
+		},
+		{
+			"MapObject": "box",
+			"Density": 15
+		},
+		{
+			"MapObject": "box2",
+			"Density": 15
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 100
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 20
+		},
+		{
+			"MapObject": "barrel_skull",
+			"Density": 20
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 15
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 10
+		}],
+		"EnemyDensity": 30,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "stone",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "blast",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 8,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Trash the complex...",
+		"Description": "Ok, that will prove most valuable...now clean out this vermin-infested hellhole! Some of the information you retrieved hint that we may be closer to the source of these horrors than we first anticipated...",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"ExitStyle": "plate",
+		"KeyStyle": "plain",
+		"Objectives": [{
+			"Description": "Eliminate ring leaders",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 3,
+			"Required": 3,
+			"Flags": 0
+		},
+		{
+			"Description": "Blow up ammo",
+			"Type": "Destroy",
+			"MapObject": "box_metal_green",
+			"Count": 5,
+			"Required": 3,
+			"Flags": 0
+		},
+		{
+			"Description": "Burn the fuel",
+			"Type": "Destroy",
+			"MapObject": "barrel",
+			"Count": 12,
+			"Required": 7,
+			"Flags": 0
+		},
+		{
+			"Description": "Blow up the gunpowder",
+			"Type": "Destroy",
+			"MapObject": "barrel_skull",
+			"Count": 9,
+			"Required": 6,
+			"Flags": 0
+		},
+		{
+			"Description": "Destroy their missiles",
+			"Type": "Destroy",
+			"MapObject": "rocket",
+			"Count": 5,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [23,
+		20,
+		18,
+		17,
+		16,
+		11,
+		12,
+		15],
+		"SpecialChars": [28],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 10
+		},
+		{
+			"MapObject": "box",
+			"Density": 15
+		},
+		{
+			"MapObject": "box2",
+			"Density": 15
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 100
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 20
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 35
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 20
+		},
+		{
+			"MapObject": "safe",
+			"Density": 10
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 5
+		}],
+		"EnemyDensity": 30,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "stone",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "blast",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 8,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Final showdown!",
+		"Description": "It seems we have cornered a rat! The leader of the Brotherhood is trapped in a room below us. The bad news is that he holds enough explosives to blow us all to really small pieces...he wants a duel...more bad news: he is believed to be cybernetically enhanced and immune to fire!",
+		"Type": "Classic",
+		"Width": 24,
+		"Height": 16,
+		"ExitStyle": "plate",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Kill the cyborg boss",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 1
+		},
+		{
+			"Description": "Get the detonator",
+			"Type": "Collect",
+			"Pickup": "radio",
+			"Count": 1,
+			"Required": 1,
+			"Flags": 0
+		}],
+		"Enemies": [],
+		"SpecialChars": [26],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_skull",
+			"Density": 60
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 60
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 60
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 60
+		},
+		{
+			"MapObject": "rocket",
+			"Density": 60
+		}],
+		"EnemyDensity": 0,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "tile",
+				"Mask": "007070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "recessed",
+				"Mask": "840000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 0,
+		"WallLength": 0,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 0,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	}]
+}

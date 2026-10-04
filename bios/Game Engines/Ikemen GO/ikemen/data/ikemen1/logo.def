@@ -1,0 +1,14 @@
+[Info]
+localcoord = 1280,720
+
+;------------------------------------
+[Scene 0]
+; Fade
+bg.name = BG0          ;Name of BG to show (no spaces allowed)
+fadein.time = 30
+fadeout.time = 60
+end.time = 200
+
+[BG0 Ikemen Logo]
+type = video
+path = ik_logo.webm

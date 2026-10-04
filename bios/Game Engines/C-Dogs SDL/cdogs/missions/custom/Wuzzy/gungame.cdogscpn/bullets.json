@@ -1,0 +1,189 @@
+{
+  "Version": 1,
+  "Bullets": [
+    {
+      "Name": "piecemarker_bullet",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "9mm"
+      },
+      "Speed": 1000,
+      "Range": 50,
+      "Power": 12
+    },
+    {
+      "Name": "pwn3r_bullet",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "9mm"
+      },
+      "Speed": 1000,
+      "Range": 50,
+      "Power": 12
+    },
+    {
+      "Name": "pn21_bullet",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "9mm"
+      },
+      "Speed": 1000,
+      "Range": 50,
+      "Power": 15
+    },
+    {
+      "Name": "77_bullet",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "9mm"
+      },
+      "Speed": 1000,
+      "Range": 50,
+      "Power": 10
+    },
+    {
+      "Name": "jb007_bullet",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "9mm"
+      },
+      "Speed": 1000,
+      "Range": 50,
+      "Power": 20
+    },
+    {
+      "Name": "desert_hawk_bullet",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "9mm"
+      },
+      "Speed": 1000,
+      "Range": 50,
+      "Power": 35
+    },
+
+
+    {
+      "Name": "mag_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 10
+    },
+    {
+      "Name": "md5_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 12
+    },
+    {
+      "Name": "milit_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 12
+    },
+    {
+      "Name": "m500_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 12
+    },
+    {
+      "Name": "x90_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 12
+    },
+    {
+      "Name": "angry_rabbit_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 12
+    },
+
+
+    {
+      "Name": "sg1_bullet",
+      "Speed": 1000,
+      "Range": 50,
+      "Power": 15
+    },
+    {
+      "Name": "sg2_bullet",
+      "Speed": 1000,
+      "Range": 50,
+      "Power": 17
+    },
+
+
+    {
+      "Name": "poshlinov_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 23
+    },
+    {
+      "Name": "gs49_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 15
+    },
+    {
+      "Name": "storm_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 14
+    },
+    {
+      "Name": "gh55b_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 17
+    },
+    {
+      "Name": "pow9_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 21
+    },
+    {
+      "Name": "raging_pitbull_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 22
+    },
+
+
+    {
+      "Name": "hitpro_bullet",
+      "Speed": 2000,
+      "Range": 500,
+      "Power": 100
+    },
+    {
+      "Name": "snp6plus_bullet",
+      "Speed": 2000,
+      "Range": 500,
+      "Power": 140
+    },
+    {
+      "Name": "1s1k_bullet",
+      "Speed": 2000,
+      "Range": 500,
+      "Power": 200
+    },
+
+
+    {
+      "Name": "mg5000_bullet",
+      "Speed": 900,
+      "Range": 300,
+      "Power": 5
+    },
+    {
+      "Name": "mg6000_bullet",
+      "Speed": 1000,
+      "Range": 300,
+      "Power": 6
+    }
+  ]
+}

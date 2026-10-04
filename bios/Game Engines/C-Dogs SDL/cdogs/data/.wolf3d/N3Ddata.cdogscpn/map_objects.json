@@ -1,0 +1,453 @@
+{
+  "Version": 4,
+  "MapObjects": [
+    {
+      "Name": "chandelier",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "chandelier"
+      },
+      "Offset": [-8, -24],
+      "Health": 0,
+      "DrawAbove": true,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "pillar2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "pillar2"
+      },
+      "Health": 80,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "pillar",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "pillar"
+      },
+      "Health": 80,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "stairs",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "stairs"
+      },
+      "Offset": [-8, -23],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "pillar_candle",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "pillar_candle",
+        "TicksPerFrame": 6
+      },
+      "Health": 80,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "water_pitcher",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "water_pitcher"
+      },
+      "Size": [8, 6],
+      "Offset": [-4, -12],
+      "Wreck": "water_pitcher_wreck",
+      "Health": 50,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "water_pitcher_wreck",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "water_pitcher_wreck"
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "FootstepSound": "footsteps/water",
+      "FootprintMask": "00000099"
+    },
+    {
+      "Name": "beam",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "beam"
+      },
+      "Offset": [-8, -13],
+      "Health": 0,
+      "Flags": ["Inside"]
+    },
+    {
+      "Name": "candle",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "candle",
+        "TicksPerFrame": 6
+      },
+      "Offset": [-7, -29],
+      "Health": 40,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "birdcage",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "birdcage"
+      },
+      "Offset": [-7, -29],
+      "Health": 40
+    },
+    {
+      "Name": "water_trough",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "water_trough"
+      },
+      "Health": 80,
+      "Flags": ["OneOrMoreWalls"]
+    },
+    {
+      "Name": "well_water",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "well_water"
+      },
+      "Health": 80,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "well_feed",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "well_feed"
+      },
+      "Health": 80,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "cage",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "cage"
+      },
+      "Health": 100,
+      "Flags": ["Inside", "OneOrMoreWalls"]
+    },
+    {
+      "Name": "shadow",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "shadow"
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "Flags": ["Inside", "NoWalls"]
+    },
+    {
+      "Name": "curtain_yellow",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "curtain_yellow"
+      },
+      "Offset": [-7, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "curtain_red",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "curtain_red"
+      },
+      "Offset": [-7, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "curtain_blue",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "curtain_blue"
+      },
+      "Offset": [-7, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "monkey_portrait",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "monkey_portrait"
+      },
+      "Offset": [-5, -10],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "noah_portrait",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "noah_portrait"
+      },
+      "Offset": [-8, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "naamah_portrait",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "naamah_portrait"
+      },
+      "Offset": [-8, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "duck_picture",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "duck_picture"
+      },
+      "Offset": [-7, -10],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "noah_flag",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "noah_flag"
+      },
+      "Offset": [-7, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "wood_slime",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "wood_slime"
+      },
+      "Offset": [-8, -23],
+      "Health": 0,
+      "Flags": ["Outside", "OnWall"]
+    },
+    {
+      "Name": "wood_color",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "wood_color"
+      },
+      "Offset": [-8, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "closet",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "closet"
+      },
+      "Offset": [-8, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "closet_fruit",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "closet_fruit"
+      },
+      "Offset": [-8, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "closets",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "closets"
+      },
+      "Offset": [-8, -11],
+      "Health": 0,
+      "Flags": ["Inside", "OnWall"]
+    },
+    {
+      "Name": "lattice_broken",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "lattice_broken"
+      },
+      "Offset": [-8, -11],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    },
+    {
+      "Name": "sheep_sleep",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "sheep_sleep",
+        "TicksPerFrame": 60
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "DamageSmoke": {
+        "Particle": "zzz",
+        "HealthThreshold": 1.0,
+        "Z": 10,
+        "Ticks": 20
+      }
+    },
+    {
+      "Name": "goat_sleep",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "goat_sleep",
+        "TicksPerFrame": 60
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "DamageSmoke": {
+        "Particle": "zzz",
+        "HealthThreshold": 1.0,
+        "Z": 10,
+        "Ticks": 20
+      }
+    },
+    {
+      "Name": "antelope_sleep",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "antelope_sleep",
+        "TicksPerFrame": 120
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "DamageSmoke": {
+        "Particle": "zzz",
+        "HealthThreshold": 1.0,
+        "Z": 10,
+        "Ticks": 35
+      }
+    },
+    {
+      "Name": "ox_sleep",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "ox_sleep",
+        "TicksPerFrame": 150
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "DamageSmoke": {
+        "Particle": "zzz",
+        "HealthThreshold": 1.0,
+        "Z": 10,
+        "Ticks": 45
+      }
+    },
+    {
+      "Name": "camel_sleep",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "camel_sleep",
+        "TicksPerFrame": 300
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "DamageSmoke": {
+        "Particle": "zzz",
+        "HealthThreshold": 1.0,
+        "Z": 10,
+        "Ticks": 100
+      }
+    },
+    {
+      "Name": "ostrich_sleep",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "ostrich_sleep",
+        "TicksPerFrame": 260
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "DamageSmoke": {
+        "Particle": "zzz",
+        "HealthThreshold": 1.0,
+        "Z": 10,
+        "Ticks": 80
+      }
+    },
+    {
+      "Name": "giraffe_sleep",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "giraffe_sleep",
+        "TicksPerFrame": 180
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "DamageSmoke": {
+        "Particle": "zzz",
+        "HealthThreshold": 1.0,
+        "Z": 10,
+        "Ticks": 50
+      }
+    },
+    {
+      "Name": "monkey_sleep",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "monkey_sleep",
+        "TicksPerFrame": 75
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "DamageSmoke": {
+        "Particle": "zzz",
+        "HealthThreshold": 1.0,
+        "Z": 10,
+        "Ticks": 20
+      }
+    },
+    {
+      "Name": "elephant_sleep",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "elephant_sleep",
+        "TicksPerFrame": 500
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "DamageSmoke": {
+        "Particle": "zzz",
+        "HealthThreshold": 1.0,
+        "Z": 10,
+        "Ticks": 200
+      }
+    },
+    {
+      "Name": "bear_sleep",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "bear_sleep",
+        "TicksPerFrame": 400
+      },
+      "Health": 0,
+      "DrawBelow": true,
+      "DamageSmoke": {
+        "Particle": "zzz",
+        "HealthThreshold": 1.0,
+        "Z": 10,
+        "Ticks": 150
+      }
+    }
+  ]
+}

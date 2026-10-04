@@ -1,0 +1,17 @@
+{
+	"Version": 16,
+	"Title": "Spear of Destiny",
+	"Author": "id Software",
+	"Description": "",
+	"Ammo": true,
+	"WeaponPersist": true,
+	"SkipWeaponMenu": true,
+	"RandomPickups": false,
+	"DoorOpenTicks": 210,
+	"Lives": 1,
+	"MaxLives": 9,
+	"PlayerHP": 0,
+	"PlayerMaxHP": 0,
+	"PlayerExcessHP": 0,
+	"Missions": 0
+}

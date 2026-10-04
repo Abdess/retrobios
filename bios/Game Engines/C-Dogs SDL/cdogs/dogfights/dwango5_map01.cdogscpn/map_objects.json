@@ -1,0 +1,41 @@
+{
+  "Version": 3,
+  "MapObjects": [
+    {
+      "Name": "health bonus",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "spawn_pad",
+        "TicksPerFrame": 8
+      },
+      "Offset": [-8, -6],
+      "Health": 0,
+      "Type": "PickupSpawner",
+      "Pickup": "health_bonus"
+    },
+    {
+      "Name": "stimpack spawner",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "spawn_pad",
+        "TicksPerFrame": 8
+      },
+      "Offset": [-8, -6],
+      "Health": 0,
+      "Type": "PickupSpawner",
+      "Pickup": "stimpack"
+    },
+    {
+      "Name": "armor bonus",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "spawn_pad",
+        "TicksPerFrame": 8
+      },
+      "Offset": [-8, -6],
+      "Health": 0,
+      "Type": "PickupSpawner",
+      "Pickup": "armor_bonus"
+    }
+  ]
+}

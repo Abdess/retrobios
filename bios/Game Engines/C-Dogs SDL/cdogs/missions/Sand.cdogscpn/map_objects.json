@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "MapObjects": [
+    {
+      "Name": "crest",
+      "Pic": "crest",
+      "Offset": [-7, -10],
+      "Health": 0,
+      "Flags": ["OnWall"]
+    }
+  ]
+}

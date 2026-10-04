@@ -1,0 +1,17 @@
+{
+	"Version": 16,
+	"Title": "Cyberdogs",
+	"Author": "Ronny Wester & Cong Xu",
+	"Description": "Everyone familiar with Warhammer 40k or Space Hulk\/Crusade\/Marine? \nMore or less the same thing 8-)\nYou (and optionally a buddy) assume the roles of [insert favourite martial profession here] and are sent on missions. \nAll missions consist of collecting objects\/wasting baddies\/blowing up enemy installations and then head home.",
+	"Ammo": true,
+	"SkipWeaponMenu": false,
+	"BuyAndSell": true,
+	"RandomPickups": false,
+	"DoorOpenTicks": 70,
+	"Lives": 0,
+	"MaxLives": 4,
+	"PlayerHP": 20,
+	"PlayerMaxHP": 50,
+	"PlayerExcessHP": 70,
+	"Missions": 10
+}

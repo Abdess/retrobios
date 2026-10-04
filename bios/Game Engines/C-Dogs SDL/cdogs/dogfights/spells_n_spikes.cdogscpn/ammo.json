@@ -1,0 +1,45 @@
+{
+  "Version": 2,
+  "Ammo": [
+    {
+      "Name": "Bolts",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bolts"
+      },
+      "Sound": "package_pickup",
+      "Amount": 3,
+      "Max": 30
+    },
+    {
+      "Name": "Barrels",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "barrel_wood"
+      },
+      "Sound": "package_pickup",
+      "Amount": 1,
+      "Max": 5
+    },
+    {
+      "Name": "Mana",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bottle"
+      },
+      "Sound": "package_pickup",
+      "Amount": 20,
+      "Max": 80
+    },
+    {
+      "Name": "Stars",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "shurikenlogo"
+      },
+      "Sound": "knife_switch",
+      "Amount": 5,
+      "Max": 15
+    }
+  ]
+}

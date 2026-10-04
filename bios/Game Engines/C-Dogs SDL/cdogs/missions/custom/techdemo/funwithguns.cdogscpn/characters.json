@@ -1,0 +1,38 @@
+{
+	"Version": 13,
+	"Characters": [{
+		"Class": "Jones",
+		"HairType": "flattop",
+		"Skin": "ff8136ff",
+		"Arms": "9c0000ff",
+		"Body": "9c0000ff",
+		"Legs": "363636ff",
+		"Hair": "9c0000ff",
+		"Feet": "363636ff",
+		"speed": 128,
+		"Gun": "Dynamite",
+		"maxHealth": 40,
+		"flags": 0,
+		"probabilityToMove": 40,
+		"probabilityToTrack": 15,
+		"probabilityToShoot": 0,
+		"actionDelay": 30
+	},
+	{
+		"Class": "Mech",
+		"Skin": "e6fce6ff",
+		"Arms": "660c00ff",
+		"Body": "aabbaaff",
+		"Legs": "aabbaaff",
+		"Hair": "e0f0e0ff",
+		"Feet": "aabbaaff",
+		"speed": 128,
+		"Gun": "Quad Machine Gun",
+		"maxHealth": 300,
+		"flags": 1024,
+		"probabilityToMove": 50,
+		"probabilityToTrack": 25,
+		"probabilityToShoot": 2,
+		"actionDelay": 15
+	}]
+}

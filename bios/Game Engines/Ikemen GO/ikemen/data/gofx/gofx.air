@@ -1,0 +1,120 @@
+; Animation data for specific Ikemen GO fight effects
+
+;--------------------------
+; Dizzy Birds
+[Begin Action 5300]
+5300, 0, 0, 0, 1
+
+[Begin Action 5301]
+5301, 0, 0, 0, 1
+
+[Begin Action 5302]
+5302, 0, 0, 0, 1
+
+[Begin Action 5303]
+5303, 0, 0, 0, 1
+
+[Begin Action 5304]
+5304, 0, 0, 0, 1
+
+[Begin Action 5305]
+5305, 0, 0, 0, 1
+
+[Begin Action 5306]
+5306,0, 0,0, 1
+
+[Begin Action 5307]
+5307,0, 0,0, 1
+
+[Begin Action 5308]
+5308,0, 0,0, 1
+
+;--------------------------
+; Guard Break Sparks
+[Begin Action 5400]
+5400, 0, 0, 0, 31, , AS256D0
+Interpolate Blend
+5400, 0, 0, 0, 1, , AS8D248
+
+[Begin Action 5401]
+5401, 0, 0, 0, 31, , AS256D0
+Interpolate Blend
+5401, 0, 0, 0, 1, , AS8D248
+
+[Begin Action 5402]
+5402, 0, 0, 0, 31, , AS256D0
+Interpolate Blend
+5402, 0, 0, 0, 1, , AS8D248
+
+; Guard Break shockwave
+[Begin Action 5410]
+5410, 0, 0, 0, 15, , AS256D256, 1.0, 1.0
+Interpolate Blend
+Interpolate Scale
+5410, 0, 0, 0, 1, , AS16D256, 1.5, 1.5
+
+
+;--------------------------
+; Tag Switch icons
+;"AI"
+[Begin Action 5600]
+5600, 0, 0, 0, 60, , AS256D0
+5600, 0, 0, 0, 15, , AS256D0
+Interpolate Blend
+5600, 0, 0, 0, 1, , AS16D240
+
+;"P1"
+[Begin Action 5601]
+5601, 0, 0, 0, 60, , AS256D0
+5601, 0, 0, 0, 15, , AS256D0
+Interpolate Blend
+5601, 0, 0, 0, 1, , AS16D240
+
+;"P2"
+[Begin Action 5602]
+5602, 0, 0, 0, 60, , AS256D0
+5602, 0, 0, 0, 15, , AS256D0
+Interpolate Blend
+5602, 0, 0, 0, 1, , AS16D240
+
+;"P3"
+[Begin Action 5603]
+5603, 0, 0, 0, 60, , AS256D0
+5603, 0, 0, 0, 15, , AS256D0
+Interpolate Blend
+5603, 0, 0, 0, 1, , AS16D240
+
+;"P4"
+[Begin Action 5604]
+5604, 0, 0, 0, 60, , AS256D0
+5604, 0, 0, 0, 15, , AS256D0
+Interpolate Blend
+5604, 0, 0, 0, 1, , AS16D240
+
+;"P5"
+[Begin Action 5605]
+5605, 0, 0, 0, 60, , AS256D0
+5605, 0, 0, 0, 15, , AS256D0
+Interpolate Blend
+5605, 0, 0, 0, 1, , AS16D240
+
+;"P6"
+[Begin Action 5606]
+5606, 0, 0, 0, 60, , AS256D0
+5606, 0, 0, 0, 15, , AS256D0
+Interpolate Blend
+5606, 0, 0, 0, 1, , AS16D240
+
+;"P7"
+[Begin Action 5607]
+5607, 0, 0, 0, 60, , AS256D0
+5607, 0, 0, 0, 15, , AS256D0
+Interpolate Blend
+5607, 0, 0, 0, 1, , AS16D240
+
+;"P8"
+[Begin Action 5608]
+5608, 0, 0, 0, 60, , AS256D0
+5608, 0, 0, 0, 15, , AS256D0
+Interpolate Blend
+5608, 0, 0, 0, 1, , AS16D240

@@ -1,0 +1,11 @@
+{
+	"Version": 16,
+	"Title": "Spear of Destiny Mission 2: Return to Danger",
+	"Author": "FormGen Corporation",
+	"Description": "",
+	"Ammo": true,
+	"SkipWeaponMenu": true,
+	"RandomPickups": false,
+	"DoorOpenTicks": 210,
+	"Missions": 1
+}

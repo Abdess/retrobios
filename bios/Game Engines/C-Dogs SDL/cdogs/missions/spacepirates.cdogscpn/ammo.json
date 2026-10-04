@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Ammo": [
+    {
+      "Name": "Bio Grenades",
+      "Pic": "bio_grenades",
+      "Sound": "grenade_pickup",
+      "Amount": 2,
+      "Max": 10
+    }
+  ]
+}

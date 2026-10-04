@@ -1,0 +1,96 @@
+{
+  "Version": 2,
+  "Guns": [
+    {
+      "Pic": "",
+      "Name": "Monster Bite",
+      "Bullet": "monster_bite",
+      "Cost": 0,
+      "Lock": 20,
+      "Sound": "",
+      "CanShoot": false,
+      "CanDrop": false
+    },
+    {
+      "Pic": "knife_blue",
+      "Icon": "khanjali",
+      "Name": "Khanjali",
+      "Bullet": "khanjali",
+      "Cost": 0,
+      "Lock": 30,
+      "Sound": "",
+      "SwitchSound": "knife_switch",
+      "CanShoot": false
+    },
+    {
+      "Pic": "knife_yellow",
+      "Icon": "wurmtooth",
+      "Name": "Wurmtooth",
+      "Bullet": "wurmtooth",
+      "Prerequisite": "Khanjali",
+      "Cost": 0,
+      "Lock": 15,
+      "Sound": "",
+      "SwitchSound": "knife_switch",
+      "CanShoot": false
+    },
+    {
+      "Pic": "rocket_green",
+      "Name": "Inkvine",
+      "Icon": "biogun",
+      "Bullet": "inkvine",
+      "Cost": 5,
+      "Lock": 50,
+      "Sound": "inkvine",
+      "SwitchSound": "inkvine_r",
+      "MuzzleFlashParticle": "muzzle_flash_inkvine",
+      "Elevation": 20,
+      "Ammo": "Cells"
+    },
+    {
+      "Pic": "blaster_yellow",
+      "Name": "Lasergun",
+      "Icon": "lasergun",
+      "Bullet": "lase",
+      "Cost": 3,
+      "Lock": 50,
+      "Sound": "powergun",
+      "SwitchSound": "powergun_r",
+      "MuzzleFlashSprite": "muzzle_flash_big",
+      "MuzzleFlashColor": "ffff00",
+      "MuzzleFlashDuration": 5,
+      "Ammo": "Cells"
+    },
+    {
+      "Pic": "raygun",
+      "Name": "Projector",
+      "Icon": "projector",
+      "Bullet": "projection",
+      "Prerequisite": "Lasergun",
+      "Cost": 5,
+      "Lock": 60,
+      "Sound": "projector",
+      "SwitchSound": "powergun_r",
+      "MuzzleFlashSprite": "muzzle_flash_big",
+      "MuzzleFlashColor": "ffaa00",
+      "MuzzleFlashDuration": 5,
+      "Ammo": "Cells"
+    }
+  ],
+  "PseudoGuns": [
+    {
+      "Name": "inkvine_splash",
+      "Bullet": "inkvine_splash",
+      "Recoil": 2,
+      "SpreadCount": 6,
+      "ElevationLow": 22,
+      "ElevationHigh": 30,
+      "Sound": "splat"
+    },
+    {
+      "Name": "inkvine_puddle",
+      "Bullet": "inkvine_puddle",
+      "Sound": ""
+    }
+  ]
+}

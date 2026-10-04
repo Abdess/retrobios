@@ -1,0 +1,153 @@
+{
+  "Version": 3,
+  "Pickups": [
+    {
+      "Name": "health_bonus",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "health_bonus"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 1,
+        "ExceedMax": true
+      }]
+    },
+    {
+      "Name": "stimpack",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "stimpack"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 10
+      }]
+    },
+    {
+      "Name": "medikit",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "health"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 25
+      }]
+    },
+    {
+      "Name": "supercharge",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "supercharge"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 100,
+        "ExceedMax": true
+      }]
+    },
+    {
+      "Name": "armor_bonus",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "armor_bonus"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 1,
+        "ExceedMax": true
+      }]
+    },
+    {
+      "Name": "armor",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "armor_green"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 100
+      }]
+    },
+    {
+      "Name": "megaarmor",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "armor_blue"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 200,
+        "ExceedMax": true
+      }]
+    },
+    {
+      "Name": "bullet_pickup2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bullet_pickup2"
+      },
+      "Effects": [{
+        "Type": "Ammo",
+        "Ammo": "Bullets",
+        "Amount": 50
+      }]
+    },
+    {
+      "Name": "shells2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "shells2"
+      },
+      "Effects": [{
+        "Type": "Ammo",
+        "Ammo": "Shells",
+        "Amount": 20
+      }]
+    },
+    {
+      "Name": "rockets2",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "rockets2"
+      },
+      "Effects": [{
+        "Type": "Ammo",
+        "Ammo": "Rockets",
+        "Amount": 10
+      }]
+    },
+    {
+      "Name": "computer_map",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "computer_map",
+        "TicksPerFrame": 10
+      },
+      "Effects": [{
+        "Type": "ShowMap"
+      }]
+    },
+    {
+      "Name": "backpack",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bag"
+      },
+      "Effects": [{
+        "Type": "Ammo",
+        "Ammo": "Bullets",
+        "Amount": 10
+      }, {
+        "Type": "Ammo",
+        "Ammo": "Shells",
+        "Amount": 4
+      }, {
+        "Type": "Ammo",
+        "Ammo": "Rockets",
+        "Amount": 1
+      }]
+    }
+  ]
+}

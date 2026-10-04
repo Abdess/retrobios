@@ -1,0 +1,3 @@
+Adapted from C-Dogs data by Ronny Wester
+
+https://creativecommons.org/licenses/by/4.0/

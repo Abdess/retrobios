@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Ammo": [
+    {
+      "Name": "Protobombs",
+      "Pic": "frag_grenade_pickup",
+      "Sound": "grenade_pickup",
+      "Amount": 2,
+      "Max": 10
+    }
+  ]
+}

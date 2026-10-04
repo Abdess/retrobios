@@ -1,0 +1,1307 @@
+{
+	"Missions": [{
+		"Title": "Training on Sancus Tertius",
+		"Description": "Your training on the harsh prison planet of Sancus Tertius is almost over. For your last trial, kill the fierce creatures living in the wasteland.",
+		"Type": "Cave",
+		"Width": 40,
+		"Height": 40,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Kill creatures",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 15,
+			"Required": 10,
+			"Flags": 0
+		}],
+		"Enemies": [],
+		"SpecialChars": [0, 1],
+		"MapObjectDensities": [{
+			"MapObject": "goo",
+			"Density": 5
+		},
+		{
+			"MapObject": "wall_stuff",
+			"Density": 5
+		},
+		{
+			"MapObject": "scratch",
+			"Density": 5
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 5
+		},
+		{
+			"MapObject": "wall_skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 20
+		}],
+		"PickupCounts": [],
+		"EnemyDensity": 26,
+		"Weapons": ["Khanjali",
+		"Machine gun",
+		"Inkvine",
+		"Lasergun"],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "301e0aff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "844400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "840000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"FillPercent": 40,
+		"Repeat": 4,
+		"R1": 5,
+		"R2": 0,
+		"Rooms": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 3,
+		"ExitEnabled": false,
+		"DoorsEnabled": true
+	},
+	{
+		"Title": "Sabotage of Clan Tantalus Armory",
+		"Description": "The foolish Tantalus know nothing, and are walking into our trap. Sabotage their Clan shields! Find their armory, rumored to house secret projector weapons, and destroy them as well.",
+		"Type": "Interior",
+		"Width": 45,
+		"Height": 44,
+		"ExitStyle": "plate",
+		"KeyStyle": "plain2",
+		"Objectives": [{
+			"Description": "Destroy the Clan shield consoles",
+			"Type": "Destroy",
+			"MapObjects": ["terminal"],
+			"Count": 4,
+			"Required": 4,
+			"Flags": 0
+		},
+		{
+			"Description": "Destroy projectors",
+			"Type": "Destroy",
+			"MapObjects": ["safe"],
+			"Count": 3,
+			"Required": 2,
+			"Flags": 4
+		},
+		{
+			"Description": "A discarded seeker-probe...",
+			"Type": "Collect",
+			"Pickups": ["seeker_probe"],
+			"Count": 1,
+			"Required": 0,
+			"Flags": 5
+		}],
+		"Enemies": [2,
+		3,
+		4,
+		2,
+		2,
+		3,
+		3],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box",
+			"Density": 10
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 20
+		},
+		{
+			"MapObject": "box2",
+			"Density": 10
+		},
+		{
+			"MapObject": "plant",
+			"Density": 20
+		},
+		{
+			"MapObject": "bench",
+			"Density": 25
+		},
+		{
+			"MapObject": "chair",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 20
+		},
+		{
+			"MapObject": "crest",
+			"Density": 20
+		}],
+		"PickupCounts": [],
+		"EnemyDensity": 11,
+		"Weapons": ["Khanjali",
+		"Machine gun",
+		"Inkvine",
+		"Shotgun",
+		"Lasergun",
+		"Dynamite"],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "703800ff",
+				"MaskAlt": "480000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "recessed",
+				"Mask": "484848ff",
+				"MaskAlt": "480000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "smallsquare",
+				"Mask": "74601cff",
+				"MaskAlt": "480000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "alien",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 14,
+			"Min": 6,
+			"Max": 12,
+			"Edge": true,
+			"Overlap": true,
+			"Walls": 5,
+			"WallLength": 10,
+			"WallPad": 2
+		},
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": true,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": true
+		},
+		"Pillars": {
+			"Count": 2,
+			"Min": 2,
+			"Max": 2
+		}
+	},
+	{
+		"Title": "Fortress Raid",
+		"Description": "The time has come to annihilate Clan Tantalus! Our armies have gathered, ready to crush the defenseless fortress. Spearhead the charge, and leave none alive.",
+		"Type": "Interior",
+		"Width": 57,
+		"Height": 53,
+		"ExitStyle": "plate",
+		"KeyStyle": "plain2",
+		"Objectives": [{
+			"Description": "Purge the Tantalus",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 30,
+			"Required": 25,
+			"Flags": 0
+		}],
+		"Enemies": [15, 6],
+		"SpecialChars": [2,
+		3,
+		4],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 25
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 25
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 15
+		},
+		{
+			"MapObject": "box2",
+			"Density": 15
+		},
+		{
+			"MapObject": "barrel_skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 15
+		},
+		{
+			"MapObject": "box3_gas",
+			"Density": 10
+		},
+		{
+			"MapObject": "plant",
+			"Density": 40
+		},
+		{
+			"MapObject": "bench",
+			"Density": 40
+		},
+		{
+			"MapObject": "crest",
+			"Density": 40
+		}],
+		"PickupCounts": [],
+		"EnemyDensity": 12,
+		"Weapons": ["Khanjali",
+		"Machine gun",
+		"Inkvine",
+		"Shotgun",
+		"Lasergun"],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "703800ff",
+				"MaskAlt": "480000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "recessed",
+				"Mask": "484848ff",
+				"MaskAlt": "480000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "smallsquare",
+				"Mask": "74601cff",
+				"MaskAlt": "480000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "alien",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 20,
+			"Min": 6,
+			"Max": 12,
+			"Edge": true,
+			"Overlap": true,
+			"Walls": 3,
+			"WallLength": 6,
+			"WallPad": 2
+		},
+		"ExitEnabled": false,
+		"Doors": {
+			"Enabled": true,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": true
+		},
+		"Pillars": {
+			"Count": 20,
+			"Min": 2,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "Extermination",
+		"Description": "We have taken the Tantalus stronghold and are wiping out the remnants. Some have take refuge in the nearby caves; enter them and exterminate all that you find.",
+		"Type": "Cave",
+		"Width": 50,
+		"Height": 50,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Exterminate the remnants",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 25,
+			"Required": 24,
+			"Flags": 0
+		}],
+		"Enemies": [],
+		"SpecialChars": [2, 4],
+		"MapObjectDensities": [{
+			"MapObject": "wall_stuff",
+			"Density": 15
+		},
+		{
+			"MapObject": "scratch",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 15
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 15
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 25
+		}],
+		"PickupCounts": [],
+		"EnemyDensity": 4,
+		"Weapons": ["Khanjali",
+		"Machine gun",
+		"Grenades",
+		"Inkvine",
+		"Shotgun",
+		"Shrapnel bombs",
+		"Lasergun"],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "422500ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "8b4600ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "844400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"FillPercent": 46,
+		"Repeat": 3,
+		"R1": 5,
+		"R2": 5,
+		"Rooms": {
+			"Count": 5,
+			"Min": 5,
+			"Max": 7,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 3,
+			"WallLength": 2,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": false,
+		"DoorsEnabled": true
+	},
+	{
+		"Title": "The Duel",
+		"Description": "Reports indicate that high-value Tantalus personnel may have passed through an ecological testing site. Their flight is being assisted by their fierce general, Denis Colorado. Eliminate him!",
+		"Type": "Classic",
+		"Width": 35,
+		"Height": 36,
+		"ExitStyle": "plate",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Defeat Denis Colorado",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 0
+		}],
+		"Enemies": [],
+		"SpecialChars": [7],
+		"MapObjectDensities": [{
+			"MapObject": "box_wood",
+			"Density": 15
+		},
+		{
+			"MapObject": "barrel_blue",
+			"Density": 15
+		},
+		{
+			"MapObject": "rod",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 20
+		},
+		{
+			"MapObject": "crest",
+			"Density": 15
+		}],
+		"PickupCounts": [],
+		"EnemyDensity": 0,
+		"Weapons": ["Khanjali",
+		"Machine gun",
+		"Grenades",
+		"Inkvine",
+		"Shotgun",
+		"Shrapnel bombs",
+		"Lasergun"],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "5c5c84ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "biggrid",
+				"Mask": "008484ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "recessed",
+				"Mask": "840000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 32,
+		"WallLength": 17,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 1,
+		"ExitEnabled": false,
+		"Doors": {
+			"Enabled": false,
+			"Min": 0,
+			"Max": 0,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 2,
+			"Min": 3,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "The Search",
+		"Description": "The Tantalus heir, Saul, is escaping into the deep desert! He must be found and eliminated. Be wary of the natives, who are rumored to be formidable fighters.",
+		"Type": "Cave",
+		"Width": 70,
+		"Height": 64,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Search the area",
+			"Type": "Explore",
+			"Index": 0,
+			"Count": 100,
+			"Required": 93,
+			"Flags": 0
+		}],
+		"Enemies": [8],
+		"SpecialChars": [],
+		"MapObjectDensities": [],
+		"PickupCounts": [],
+		"EnemyDensity": 14,
+		"Weapons": ["Khanjali",
+		"Machine gun",
+		"Grenades",
+		"Inkvine",
+		"Shotgun",
+		"Shrapnel bombs",
+		"Lasergun"],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "482400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "480048ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "recessed",
+				"Mask": "840000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"FillPercent": 44,
+		"Repeat": 10,
+		"R1": 5,
+		"R2": -1,
+		"Rooms": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"ExitEnabled": false,
+		"DoorsEnabled": true
+	},
+	{
+		"Title": "Miner Escort",
+		"Description": "It has been a full year since the annihilation of Clan Tantalus. Saul Tantalus is presumed dead. Yet the natives have been growing restless and raiding cinnamon mining operations. You are tasked with protecting one of these missions.",
+		"Type": "Cave",
+		"Width": 63,
+		"Height": 53,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Repel the natives",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 22,
+			"Required": 15,
+			"Flags": 0
+		},
+		{
+			"Description": "Recover lost cinnamon",
+			"Type": "Collect",
+			"Pickups": ["bag"],
+			"Count": 10,
+			"Required": 0,
+			"Flags": 0
+		}],
+		"Enemies": [6],
+		"SpecialChars": [9, 10],
+		"MapObjectDensities": [{
+			"MapObject": "tree_dead",
+			"Density": 5
+		},
+		{
+			"MapObject": "scratch",
+			"Density": 10
+		}],
+		"PickupCounts": [],
+		"EnemyDensity": 12,
+		"Weapons": ["Khanjali",
+		"Machine gun",
+		"Grenades",
+		"Inkvine",
+		"Shotgun",
+		"Shrapnel bombs",
+		"Lasergun"],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "847024ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "94802cff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "recessed",
+				"Mask": "840000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"FillPercent": 40,
+		"Repeat": 4,
+		"R1": 5,
+		"R2": 1,
+		"Rooms": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 3,
+		"ExitEnabled": true,
+		"DoorsEnabled": true
+	},
+	{
+		"Title": "Deep Desert Raid",
+		"Description": "We have finally pinpointed a secret native settlement. Conduct a quick and merciless raid, and exact revenge for their foolish audacity.",
+		"Type": "Classic",
+		"Width": 52,
+		"Height": 42,
+		"ExitStyle": "hazard",
+		"KeyStyle": "plain",
+		"Objectives": [{
+			"Description": "Kill the natives",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 22,
+			"Required": 19,
+			"Flags": 0
+		},
+		{
+			"Description": "Destroy their projectors",
+			"Type": "Destroy",
+			"MapObjects": ["safe"],
+			"Count": 4,
+			"Required": 0,
+			"Flags": 4
+		},
+		{
+			"Description": "Cinnamon tea!",
+			"Type": "Collect",
+			"Pickups": ["bottle_orange"],
+			"Count": 1,
+			"Required": 0,
+			"Flags": 0
+		}],
+		"Enemies": [15, 6],
+		"SpecialChars": [8,
+		10,
+		11],
+		"MapObjectDensities": [{
+			"MapObject": "plant",
+			"Density": 10
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 25
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 30
+		},
+		{
+			"MapObject": "wall_stuff",
+			"Density": 20
+		}],
+		"PickupCounts": [],
+		"EnemyDensity": 9,
+		"Weapons": ["Khanjali",
+		"Machine gun",
+		"Grenades",
+		"Inkvine",
+		"Shotgun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Lasergun"],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "94802cff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "stone",
+				"Mask": "844400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 18,
+		"WallLength": 7,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 14,
+			"Min": 5,
+			"Max": 7,
+			"Edge": true,
+			"Overlap": true,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"ExitEnabled": false,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 19,
+			"Min": 1,
+			"Max": 1
+		}
+	},
+	{
+		"Title": "Captured",
+		"Description": "The raid was a trap! Your troop have been captured and taken to a secret location. Worse, it appears that Saul is still alive and leading the native attacks. Find the rest of your troop and escape immediately!",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 42,
+		"ExitStyle": "hazard",
+		"KeyStyle": "plain",
+		"Objectives": [{
+			"Description": "Rescue your troop",
+			"Type": "Rescue",
+			"Index": 14,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 4
+		},
+		{
+			"Description": "Collect any intelligence",
+			"Type": "Collect",
+			"Pickups": ["blueprint"],
+			"Count": 3,
+			"Required": 0,
+			"Flags": 0
+		}],
+		"Enemies": [9,
+		10,
+		12],
+		"SpecialChars": [5],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 10
+		},
+		{
+			"MapObject": "wall_goo",
+			"Density": 20
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 15
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 15
+		},
+		{
+			"MapObject": "plant",
+			"Density": 10
+		}],
+		"PickupCounts": [],
+		"EnemyDensity": 13,
+		"Weapons": ["Khanjali",
+		"Machine gun",
+		"Projector",
+		"Lasergun",
+		"Wurmtooth"],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "484870ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "480048ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "stone",
+				"Mask": "482400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 11,
+		"WallLength": 9,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 7,
+			"Max": 9,
+			"Edge": true,
+			"Overlap": true,
+			"Walls": 2,
+			"WallLength": 2,
+			"WallPad": 2
+		},
+		"Squares": 0,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 13,
+			"Min": 1,
+			"Max": 2
+		}
+	},
+	{
+		"Title": "Sabotage",
+		"Description": "Clan Tantalus are massing for battle! Thanks to intelligence you have brought back, we know their plan is to create a massive breach using fusion devices. Destroy these devices, and kill their general, Trolley Hollyoak!",
+		"Type": "Classic",
+		"Width": 66,
+		"Height": 30,
+		"ExitStyle": "plate",
+		"KeyStyle": "cube",
+		"Objectives": [{
+			"Description": "Kill general Trolley Hollyoak",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 0
+		},
+		{
+			"Description": "Destroy the fusion devices",
+			"Type": "Destroy",
+			"MapObjects": ["rocket"],
+			"Count": 7,
+			"Required": 5,
+			"Flags": 0
+		}],
+		"Enemies": [12],
+		"SpecialChars": [13],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 20
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 20
+		},
+		{
+			"MapObject": "box3_gas",
+			"Density": 15
+		},
+		{
+			"MapObject": "box2",
+			"Density": 15
+		},
+		{
+			"MapObject": "box",
+			"Density": 15
+		},
+		{
+			"MapObject": "rod",
+			"Density": 10
+		},
+		{
+			"MapObject": "crest",
+			"Density": 30
+		}],
+		"PickupCounts": [],
+		"EnemyDensity": 9,
+		"Weapons": ["Khanjali",
+		"Machine gun",
+		"Grenades",
+		"Inkvine",
+		"Shotgun",
+		"Projector",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Lasergun",
+		"Prox. mine",
+		"Dynamite",
+		"Wurmtooth"],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "848484ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "000048ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "smallsquare",
+				"Mask": "004800ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "alien",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 0,
+		"WallLength": 1,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 7,
+			"Min": 9,
+			"Max": 14,
+			"Edge": true,
+			"Overlap": true,
+			"Walls": 3,
+			"WallLength": 1,
+			"WallPad": 2
+		},
+		"Squares": 0,
+		"ExitEnabled": false,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 3,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 3,
+			"Min": 3,
+			"Max": 3
+		}
+	}]
+}

@@ -1,0 +1,421 @@
+# ZSS language: https: //github.com/ikemen-engine/Ikemen-GO/wiki/ZSS
+# ZSS syntax highlighter for Notepad +  + : https: //github.com/ikemen-engine/zss_npp
+#------------------------------------------------------------------------------------------
+# Commenting in ZSS
+# You may notice that the "; " character is now replaced with the "# " character.
+# This is because "; " is now used to separate parameters in sctrls rather than a
+# blank space.
+
+#==========================================================================================
+# Attached Char player states
+#==========================================================================================
+# First we override this state from the common files to avoid debug warnings due to RemapPal
+[StateDef 5900;
+anim: -2;]
+
+changeState{value: 0}
+
+#==========================================================================================
+[Statedef 0;
+anim: -2;]
+
+#==========================================================================================
+# We override this state from the common files to avoid debug warnings when the fight is over
+[Statedef 175;
+anim: -2;]
+
+#==========================================================================================
+# Helper Pillar state
+#==========================================================================================
+# Helper Pillar - basic state
+[StateDef 200;
+type: S;
+movetype: I;
+physics: N;
+ctrl: 0;
+anim: -2;
+velset: 0, 0;]
+
+# Now we'll define some aspects for the helper
+assertSpecial{flag: nohardcodedkeys; flag2: noautoturn}
+playerPush{value: 0}
+notHitBy{value: SCA}
+
+# The left pillar has an anim with a CLSN, there is a reason for this
+if pos X < 0 {
+	changeAnim{value: 599}
+}
+
+#The right pillar has a very small chance of spawning Cartucho the cat
+if pos X > 0 
+&& map(BrokenObject) = 0 #only if the pillar is whole
+&& NumExplod(1010) = 0 #no more than one Cartucho
+&& randomRange(1,3000) = 1010 #one chance every 3000
+&& RoundState = 2 #only in active round time
+{
+	explod {
+		ID: 1010;
+		anim: 1003;
+		sprpriority: 9;
+		space: stage;
+		pos: 0,-screenHeight*2;
+		Vel: 0, 2;
+		bindtime: 1;
+		bindid: ID;
+		removetime: -1;
+		ownpal: 1;
+		scale: 1, 1;
+	}
+}
+
+#Now all this code is only run if Cartucho has appeared
+if pos X > 0 && NumExplod(1010) > 0 {
+	#if the Pillar is Destroyed, Cartucho will fly away
+	if map(BrokenObject) = 1 {
+		if explodVar(1010, 0,anim) != 1003 {
+			modifyExplod {
+				ID:1010;
+				Vel: RandomRange(-2,2)*2,-3;
+				accel:0,0.4;
+				anim:1003;
+			}
+		}
+		modifyExplod{
+			ID:1010; 
+			angle: -time*30;
+		}
+	}
+	#if the pillar is whole, Cartucho does his stuff
+ 	if map(BrokenObject) = 0 {
+		#Kitty is falling
+		if explodVar(1010, 0,pos y) + explodVar(1010, 0,vel y) <= -180 {
+			modifyExplod {
+				ID:1010; 
+				angle: -time*20
+			}
+		}
+		#Have him turn towards the ground
+		if explodVar(1010, 0,pos y) + explodVar(1010, 0,vel y) = -140 {
+			modifyExplod{ID:1010; angle: 0;}
+		}
+		#Kitty lands
+		if explodVar(1010, 0,pos y) + explodVar(1010, 0,vel y) >= -130 && explodVar(1010, 0,vel y) > 0 {
+			modifyExplod{ID:1010; Vel: 0,0;anim:1004;}
+		}
+		#Kitty goes Idle after an anim is over
+		if (explodVar(1010, 0,anim) = 1004 && explodVar(1010, 0,animElem) = 8) #after landing
+		|| (explodVar(1010, 0,anim) = 1005 && explodVar(1010, 0,animElem) = 12) #after kneading
+		|| (explodVar(1010, 0,anim) = 1006 && explodVar(1010, 0,animElem) = 7) { #after looking around
+			modifyExplod{ID:1010; Vel: 0,0;anim:1007;}
+		}
+		#This checks if someone has fallen
+		for i = 1 ; 8; 1 {
+			if playerNoExist($i) {
+				if player($i),stateNo = [5080,5120]{Map(SomeoneHasFallen):=1;}
+			}
+		}
+		#Kitty kneads when someone has fallen or EnvShake is triggered
+		if explodVar(1010, 0,anim) = 1007 && (EnvShakeVar(time) > 1 || Map( SomeoneHasFallen) = 1) {
+			Map(SomeoneHasFallen):=0;
+			modifyExplod{ID:1010; Vel: 0,0;anim:1005;}
+		}
+		#Kitty looks around randomly if he's idle
+		if explodVar(1010, 0,anim) = 1007 && RandomRange(1,1000) = 10 {
+			modifyExplod{ID:1010; Vel: 0,0;anim:1006;}
+		}
+	}  
+}
+
+# These two define the right pillar collision size
+map(WidthDetect) := 30 * stageVar(StageInfo.XScale);
+map(HeightDetect) := 180 * stageVar(StageInfo.YScale);
+angleDraw{scale: stageVar(stageInfo.xScale), stageVar(stageInfo.yScale)}
+transformClsn{scale: stageVar(stageInfo.xScale), stageVar(stageInfo.yScale)}
+
+# Objects should only be broken once and only after the fight starts
+if map(BrokenObject) = 0 && roundState > 1 {
+
+	# We'll run a loop to check if the player is airborne AND in a gethit state
+	# We iterate up until 8 because that's normally the maximum number of players in Ikemen GO
+	for i = 1; 8; 1 {
+		if playerNoExist($i)	# This trigger is crucial in any code that loops through all players!
+		&& player($i), hitFall = 1
+		&& player($i), stateType = A
+		&& player($i), pos y != 0
+		&& player($i), sprPriority > -9 { # This is to avoid being affected when a stage fatal is triggered
+			# Now let's check if the player is near the object
+			# We'll use a local variable to make the code easier to follow
+			let breakPillar = 0;
+
+			# The right helper will detect it via player position
+			if pos X > 0 &&
+			abs((player($i), pos x + player($i), vel x - pos x)) < map(WidthDetect)
+			&& abs((player($i), pos y + player($i), vel y - pos y)) < map(HeightDetect) {
+				let breakPillar = 1;
+			}
+
+			# While the left helper checks Clsn box overlap
+			if pos x < 0 &&
+			clsnOverLap(clsn2, player($i), ID, clsn2) {
+				let breakPillar = 1;
+			}
+				
+			if $breakPillar {
+				# This will define the object as "broken"
+				map(BrokenObject) := 1;
+
+				playSnd{value: 0, 1; pan: pos x*facing}
+
+				# For the left side pillar
+				if pos x < 0 {
+					# We expand the stage via modifyStageVar
+					modifyStageVar{camera.boundleft: -200}
+					# We hide the reflection from the pillars via modifyBGCtrl and a BGCtrl "Enable"
+					modifyBGCtrl{ID: 301; value: 0}
+					# We hide the pillars themselves via modifyStageBG and changing the anim
+					# which ends in an invisible frame! Alternative: shrink it via scalestart
+					modifyStageBG{ID: 101; actionno: 1}
+				}
+				
+				# For the right side pillar
+				if pos x > 0 {
+					modifyStageVar{camera.boundright: 200}
+					modifyBGCtrl{ID: 302; value: 0}
+					modifyStageBG{ID: 102; actionno: 1}
+				}
+				
+				# Let's throw some debris
+				for j = 1 ; randomRange(30, 40) {
+					explod{
+						ID: 600;
+						anim: 600 + randomRange(0, 5);
+						sprpriority: 9;
+						space: stage;
+						pos: facing*30, -map(HeightDetect)/2;
+						vel: randomRange(-4, 4), randomRange(-7, -3);
+						accel: 0, 0.3;
+						bindtime: 1;
+						bindid: ID;
+						removetime: 120;
+						ownpal: 1;
+						scale: 1, 1;
+						trans: addalpha;
+						alpha: 128, 128;
+						angle: randomrange(1, 360);
+						random: map(WidthDetect)/2, map(HeightDetect)/2;
+					}
+				}
+			}
+		}
+	}
+}
+
+# We don't want the debris going under the floor, but bouncing on it.
+if numExplod(600) > 0 {
+	for t = 0; numExplod(600)-1 {
+		if abs(explodVar(600, $t, vel y)) > 2.5 {
+			modifyExplod{ID:600; index:$t; angle: explodVar(600, $t,angle) + (3*sign(603-explodVar(600, $t,anim)))}
+		}
+		
+		if explodVar(600, $t,pos y) + explodVar(600, $t,vel y) >= 0
+		&& explodVar(600, $t,vel y) > 0.2 {
+			modifyExplod{ID:600; index:$t; vel: explodVar(600, $t,vel x) * 0.8, explodVar(600, $t,vel y) * -0.5}
+		}
+	}
+}
+
+# For the "slowdown" effect
+if map(BrokenObject) = 1 && map(SlowDownTime) > 0 {
+	pause{time: 1}
+	map(SlowDownTime) := map(SlowDownTime) - 1;
+}
+
+# Resetting the objects on load, but condition it to ResetBG!
+if roundState = 0 && stageVar(StageInfo.ResetBG) = 1 {
+	map(SlowDownTime) := stageConst(SlowDown);
+	map(BrokenObject) := 0;
+	
+	# We check the proper side, and use stageBGVar to see if it was broken!
+	if pos x < 0 && stageBGVar(101, 0, actionno) != 0 {
+		# We shrink the stage via modifyStageVar
+		modifyStageVar{camera.boundleft: -30}
+		# We show the reflection from the pillars via modifyBGCtrl and a BGCtrl "Enable"
+		modifyBGCtrl{ID: 301; value: 1}
+		# We show the pillars themselves via modifyStageBG and Changeanim = 0
+		modifyStageBG{ID: 101; actionno: 0}
+	}
+	
+	if pos x > 0 && stageBGVar(102, 0, actionno) != 0 {
+		modifyStageVar{camera.boundright: 30}
+		modifyBGCtrl{ID: 302; value: 1}
+		modifyStageBG{ID: 102; actionno: 0}
+	}
+}
+
+if roundState = 0 && # If Fatality conditions *can* be met, and fatality wasn't performed,
+					 # make banners visible during this round
+	(player(1), decisiveRound || player(2), decisiveRound || player(1), teamMode = Turns || player(2), teamMode = Turns)
+	&& stageBGVar(50, 0, delta.x) != 17.10#This means the banner was not already changed
+{
+	modifyStageBG{ID: 50; trans:addalpha;alpha:256,0;delta.x:0.6;}
+	modifyStageBG{ID: 51; trans:addalpha;alpha:256,0;delta.x:0.6;}
+}
+		
+#==========================================================================================
+# Negative states
+#==========================================================================================
+[Statedef -4]
+# Attached chars will often use helpers to interact with Teams 1 and 2.
+if isHelper(1) {# let's run this only once
+
+	# This defines the stage color pulse.
+	
+	if time = 0 {
+		map(Adding) := 1;
+	}
+	
+	if gameVar(superpausetime) = 0 && gameVar(pausetime) = 0 {
+		map(Pulsation) := map(Pulsation) + map(Adding);
+	}
+	if map(Pulsation) = 180 {
+		map(Adding) := -1;
+	}
+	if map(Pulsation) = 0 {
+		map(Adding) := 1;
+	}
+	map(Intensity) := 0.4;
+	
+	displaytoclipboard{text: "%v"; params: map(Pulsation);}
+	
+	bgPalFX{ID: 2; time: 2; add: 0, -50 + map(Pulsation)*map(Intensity), 10 + map(Pulsation)*map(Intensity)*2.2}
+	bgPalFX{ID: 3; time: 2; add: 0, -100 + map(Pulsation)*1.8*map(Intensity), 10 + map(Pulsation)*map(Intensity)}
+	bgPalFX{ID: 4; time: 2; add: -50 + map(Pulsation)*map(Intensity), -50 + map(Pulsation)*map(Intensity), -10 + map(Pulsation)*map(Intensity)}
+	
+	# Stage Fatal! If the player dies within the window and is thrown up high enough, player will go through
+	# and "fall" across, then an envhsake and a sound will play.
+
+	# Reset everything every round
+	if roundState = 0{
+		map(PlayerNumberIsDead) := -1;
+	}
+	
+	if roundState = 3 && # Let's see...
+	((player(1), decisiveRound && player(1), win = 1) ||
+	(player(2), decisiveRound && player(2), win = 1) ||
+	(player(1), teamMode = Turns && player(1), win = 0) ||
+	(player(2), teamMode = Turns && player(2), win = 0))
+	&& map(PlayerNumberIsDead) < 0 { # Once it's checked, no need to re-check
+		for i = 1; 8; 1 {
+			if playerNoExist($i)
+			&& player($i), alive = 0
+			&& player($i), vel y != 0
+			&& abs(player($i), pos x + cameraPos x) < 110
+			&& player($i), pos y = [-130, -90] {
+				# Mark the player for the Fatal, play the sound and pause
+				map(PlayerNumberIsDead) := player($i), ID;
+				playSnd{value: 0, 2; abspan: 1}
+				pause{time: 120}	
+			}
+		}
+	}
+	# End check for Roundover and win conditions
+	
+	# If the stage fatal is triggered,
+	# hide the lifebars, send the defeated player behind most stage layers,
+	# hide their reflection and shadow, and have them "fall" under the ground level,
+	# and trigger an EnvShake when they landed.
+	# "Landing" moment is checked via commonstates, which is a crucial thought process
+	# for this kind of universal moves.
+	if map(PlayerNumberIsDead) > 0 && roundState > 2 {
+		sprPriority{value: -9; layerno: -1; redirectID: map(PlayerNumberIsDead)}
+		modifyReflection{intensity: 0; redirectID: map(PlayerNumberIsDead)}
+		modifyShadow{intensity: 0; color: 0, 0, 0; redirectID: map(PlayerNumberIsDead)}
+		groundLevelOffset{value: 900; redirectID: map(PlayerNumberIsDead)}
+
+		if playerID(map(PlayerNumberIsDead)), StateNo = 5100
+		&& playerID(map(PlayerNumberIsDead)), Time < 2 {
+			envShake{time: 30; freq: 90; ampl: 10; decay: 1}				
+			Map(JustDied):=1;
+		}
+
+		if roundState = 3 {
+			assertSpecial{flag: nobardisplay}
+		}
+	}
+	
+	if Map(JustDied) > 0 && Map(JustDied) < 9999 {Map(JustDied):=Map(JustDied)+1;}
+	
+	if Map(JustDied) > 50 && Map(JustDied) < 70
+	&& stageBGVar(50, 0, delta.x) != 17.10
+	{
+	   #The wobbling effect is done by stacking these shaded explods
+	   explod{
+		 ID:599;
+		 anim: 598;
+		 postype : left;
+		 pos:screenWidth/2,screenHeight/2;
+		 removetime: 40;
+		 scale :9999,9999;
+		 Shadow :0;
+		 ownpal :1;
+		 ontop :1;
+		 shader :"wobble";
+	     }
+		 
+	   #And this is another simple modifyStageBG idea to make a stage object invisible; just give it this trans
+	   #and add another parameter you can check via stageBGVar
+	   if Map(JustDied) = 60 {modifyStageBG{ID: 50; trans:addalpha;alpha:0,256;delta.x:17.10;}}
+	}
+}
+# End isHelper(1)
+
+# Create only one left side pillar
+# Note the 'StageBackEdgeDist' and 'StageFrontEdgeDist' triggers. They are useful for Attached Chars!
+if numHelper(1) = 0 {
+	helper{
+		helpertype: normal;
+		facing: 1;
+		name: "Left Pillar";
+		pos: -stageBackEdgeDist, 10;
+		ID: 1;
+		stateno : 200;
+		keyctrl : 0;
+		supermovetime: 0;
+		pausemovetime: 0;
+		size.ground.back: 1;
+		size.ground.front: 1;
+		size.height: 1;
+		preserve: 1; # This is relevant in Attached Char helpers!
+		standby: 0; # This is relevant in Attached Char helpers!
+		immortal: 1;
+		ownpal: 1;
+	}
+}
+
+# Create only one right side pillar
+if numHelper(2) = 0 {
+	helper{
+		helpertype: normal;
+		facing: -1;
+		name: "Right Pillar";
+		pos: stageFrontEdgeDist, 10;
+		ID: 2;
+		stateno : 200;
+		keyctrl : 0;
+		supermovetime: 0;
+		pausemovetime: 0;
+		size.ground.back: 1;
+		size.ground.front: 1;
+		size.height: 1;
+		preserve: 1;
+		standby: 0;
+		immortal: 1;
+		ownpal: 1;
+	}
+}
+
+# Now we'll define some conditions for the Attached Character itself, which is not used anymore.
+if isHelper = 0 {
+	assertSpecial{flag: nohardcodedkeys; flag2: noautoturn}
+	tagout{}
+}

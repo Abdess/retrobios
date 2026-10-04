@@ -1,0 +1,50 @@
+{
+  "Version": 2,
+  "Guns": [
+    {
+      "Pic": "pistol",
+      "Name": "Marine Pistol",
+      "Icon": "pistol",
+      "Description": "Standard issue sidearm, low rate of fire and damage. Recommend engaging at a distance.",
+      "Bullet": "10mm",
+      "Cost": 0,
+      "Lock": 18,
+      "Sound": "pistol",
+      "Recoil": 0.05,
+      "Brass": "brass",
+      "Ammo": "Bullets"
+    },
+    {
+      "Pic": "shotgun",
+      "Grips": 2,
+      "Name": "Marine Shotgun",
+      "Icon": "shotgun",
+      "Bullet": "pellet",
+      "Cost": 5,
+      "Lock": 70,
+      "ReloadLead": 10,
+      "Sound": "marine_shotgun",
+      "ReloadSound": "shotgun_r",
+      "SwitchSound": "shotgun_r",
+      "SpreadCount": 7,
+      "SpreadWidth": 0.1,
+      "MuzzleFlashParticle": "muzzle_flash_shotgun",
+      "Brass": "shotshell",
+      "Ammo": "Shells"
+    },
+    {
+      "Pic": "chaingun",
+      "Name": "Chaingun",
+      "Icon": "machine_gun",
+      "Bullet": "10mm",
+      "Cost": 1,
+      "Lock": 8,
+      "Sound": "mg",
+      "SwitchSound": "mg_switch",
+      "Recoil": 0.3,
+      "MuzzleFlashParticle": "muzzle_flash_mg",
+      "Brass": "brass_big",
+      "Ammo": "Bullets"
+    }
+  ]
+}

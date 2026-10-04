@@ -60,4 +60,11 @@ files:
     category: game_data
     required: false
     description: "High Resolution Patch resource archive, loaded when present"
-    source_ref: "src/game.cc:1380-1382"
+    source_ref: "src/game.cc:1380-1382, src/interface.cc:2488, src/interface.cc:2540-2543"
+    note: >
+      Opened as one more database over master.dat, with no check of its
+      content. The engine loads art\intrface\HR_IFACE_<width>.FRM, the
+      widened interface bar, and HR_IFACELFT<n>.frm and HR_IFACERHT<n>.frm,
+      the side panels, which this archive provides. Several builds circulate
+      under the same name and the code cannot tell them apart. BGforgeNet
+      f2_res v0.6 carries hr_iface_800.frm and both pairs of side panels.

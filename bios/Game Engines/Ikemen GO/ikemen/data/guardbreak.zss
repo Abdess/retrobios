@@ -1,0 +1,185 @@
+# Guard Break code adapted from Shiyo Kakuge's add004
+#===============================================================================
+# StateGuardBreakHit
+#===============================================================================
+[StateDef const(StateGuardBreakHit); type: U; movetype: I; physics: N; velset: 0, 0; ctrl: 0;]
+
+if !guardBreak {
+	guardBreakSet{value: 1}
+}
+
+if time = 0 {
+	if pos y < 0 {
+		stateTypeSet{statetype: A} # Just in case
+	}
+	# Decide animation type
+	# These could perhaps use common guard break constants later
+	if stateType = S {
+		changeAnim{value: const(AnimStandOrAirHitHigh_hard)}
+	} else if stateType = C {
+		changeAnim{value: const(AnimCrouchHit_hard)}
+	} else {
+		changeAnim{value: const(AnimStandOrAirHitHigh_hard)} # High hit makes the character look more open than low hit
+	}
+} else {
+	changeAnim{value: anim}
+}
+
+# Special effects
+if time < 13 {
+	let center = Min(const(size.mid.pos.y), 0.5 * const(size.head.pos.y)) * ifElse(stateType = C, 0.5, 1.0);
+	if time = 0 {
+		# Guard break sound
+		playSnd{value: GO 5400, 0}
+		# Blue screen
+		if palFxVar(bg.time) = 0 {
+			bgPalFx{
+				time: 30;
+				sincolor: -255, 60;
+				sinmul: -255, -255, 0, 60;
+			}
+		}
+		# Shockwave
+		explod{
+			# Do note all anims and playsnds on this file are called from gofx.def, not fightfx.air/common.snd
+			anim: GO const(FxGuardBreakShockwave);
+			postype: p1;
+			pos: 0, $center;
+			sprpriority: 7;
+			ownpal: 1;
+			scale: 0.25, 0.25;
+			vfacing: ifElse(random < 500, 1, -1);
+			pausemovetime: -1;
+			ignorehitpause: 1;
+		}
+	}
+	# Glass shards
+	let direction = random / 1000.0; # The higher the shard, the more vertical velocity it will have
+	explod{
+		anim: GO const(FxGuardBreakSpark) + randomRange(0, 2);
+		postype: p1;
+		pos: 0, (0.5 * $center) + ($center * $direction);
+		sprpriority: 6;
+		ownpal: 1;
+		scale: 0.20 + (random / 5000.0), 0.20 + (random / 5000.0);
+		angle: (random % 360);
+		vel: const240p(-6.0 - (random / 333.3)), const240p(-6.0) * $direction;
+		accel: 0, const240p(0.1);
+		friction: 0.95, 0.95;
+		facing: ifElse(random < 500, 1, -1);
+		vfacing: ifElse(random < 500, 1, -1);
+		pausemovetime: -1;
+		ignorehitpause: 1;
+	}
+}
+
+# Every character stays in these states the same time, regardless of animation timing
+if time >= 20 {
+	if vel y >= 0 && pos y >= -vel y { # If at ground level now or in the next frame
+		selfState{value: const(StateGuardBreakRecover)}
+	} else {
+		velAdd{y: const240p(1.0)} # Characters fall down fast regardless of their own acceleration constants
+	}
+}
+
+#===============================================================================
+# StateGuardBreakRecover
+#===============================================================================
+[StateDef const(StateGuardBreakRecover); type: U; movetype: I; physics: N; velset: 0, 0; ctrl: 0;]
+
+if time = 0 {
+	posSet{y: 0}
+	if stateType = A {
+		stateTypeSet{statetype: S; physics: S}
+		if anim != const(AnimStandOrAirHitHigh_hard) {
+			changeAnim{value: const(AnimStandOrAirHitHigh_hard)} # If using actual guard break animations the character would have a transition here
+		}
+	} else if stateType = C {
+		stateTypeSet{statetype: C; physics: C}
+	} else {
+		stateTypeSet{statetype: S; physics: S}
+	}
+}
+
+if time < 45 {
+	if anim = [const(AnimStandOrAirHitHigh_light), const(AnimCrouchRecover_hard)] {
+		if animTime = -1 {
+			changeAnim{value: anim; elem: animElemNo(-1)} # Freeze last frame if reusing one of the required hit animations
+		}
+	}
+	if (time % 2) = 0 {
+		if (time % 4) {
+			offset{x: -const240p(1)}
+		} else {
+			offset{x: const240p(1)}
+		}
+	}
+}
+
+# Change to recovery animation
+if time = 45 {
+	if stateType = S {
+		changeAnim{value: const(AnimStandRecoverHigh_hard)}
+	} else if stateType = C {
+		changeAnim{value: const(AnimCrouchRecover_hard)}
+	} else {
+		changeAnim{value: const(AnimStandRecoverHigh_hard)}
+	}
+}
+
+# Return to neutral
+if time >= 60 {
+	if stateType = S {
+		selfState{value: const(StateStand); ctrl: 1}
+	} else if stateType = C {
+		selfState{value: const(StateCrouching); ctrl: 1}
+	} else {
+		selfState{value: const(StateAirGetHit_recoveringInAirNotFalling); ctrl: 1}
+	}
+}
+
+#===============================================================================
+# Global states
+#===============================================================================
+[StateDef -2]
+
+if !const(Default.Enable.GuardBreak) || isHelper || teamSide = 0 {
+	# Do nothing, global code disabled locally or executed by helper/stage
+} else if roundState = 0 {
+	# Initialize points and variables
+	guardPointsSet{value: guardPointsMax}
+	map(_iksys_guardPointsTimer) := 0;
+} else if roundState = 2 && alive {
+	# Decrease cooldown timer
+	if map(_iksys_guardPointsTimer) > 0 {
+		mapAdd{map: "_iksys_guardPointsTimer"; value: -1}
+	}
+	# Upon block
+	if stateNo = const(StateStandGuardHit_shaking) || stateNo = const(StateCrouchGuardHit_shaking) || stateNo = const(StateAirGuardHit_shaking) {
+		# Start cooldown timer
+		map(_iksys_guardPointsTimer) := 60;
+		# Warning if guard points left are under 333 or 50% for characters with a small guard bar
+		if getHitVar(frame) && guardPoints <= min((0.5 * guardPointsMax), 333) {
+			palFx{time: 20; add: 64, 0, 0; sinadd: 64, 0, 0, 4}
+		}
+		# Enter guard break state
+		if !guardBreak && guardPoints = 0 {
+			selfState{value: const(StateGuardBreakHit)}
+		}
+	}
+	# Reset guard points and remove guard break flag if player is no longer in one of guard break states
+	if guardBreak && stateNo != [const(StateGuardBreakHit), const(StateGuardBreakRecover)] {
+		guardPointsSet{value: guardPointsMax}
+		guardBreakSet{value: 0}
+	}
+	# Guard points recovery
+	if !guardBreak && guardPoints < guardPointsMax && map(_iksys_guardPointsTimer) <= 0 {
+		guardPointsAdd{value: 2; absolute: 1}
+	}
+# Reset status if char is KO
+} else {
+	guardBreakSet{value: 0}
+	if guardPoints < 1 {
+		guardPointsSet{value: 1}
+	}
+}

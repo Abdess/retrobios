@@ -16,9 +16,10 @@ notes: |
   .def, .air, .cmd, .cns, .sff and .snd files of M.U.G.E.N. content, plus its
   own .zss state files.
 
-  Every path below is relative to the working directory. The file names come
-  from the embedded default configuration, src/resources/defaultConfig.ini,
-  which save/config.ini overrides (src/main.go:189-195).
+  Every file is read relative to the working directory; paths below are
+  written under ikemen/, which stands for it. The file names come from the
+  embedded default configuration, src/resources/defaultConfig.ini, which
+  save/config.ini overrides (src/main.go:189-195).
 
   The repository ships:
     data/: common animations, commands, constants and state files
@@ -28,17 +29,25 @@ notes: |
     font/: debug.def with Open Sans, and the default-3x5 bitmap fonts
 
   The default configuration also names files the repository does not hold:
-  the motif data/ikemen1/system.def, the effects pack data/gofx/gofx.def and
-  the stage stages/stage0-720.def. Release packages copy chars, data, font,
-  sound, stages and video from the Ikemen-GO-Screenpack repository next to
-  the engine (.github/workflows/releases.yml:585-593).
+  the motif data/ikemen1/system.def, the effects pack data/gofx/gofx.def, the
+  stage stages/stage0-720.def and external/gamecontrollerdb.txt. Release
+  packages copy chars, data, font, sound, stages and video from the
+  Ikemen-GO-Screenpack repository next to the engine
+  (.github/workflows/releases.yml:585-593) and download the controller
+  database (.github/workflows/releases.yml:610-612).
+
+  A definition file names the files it loads. Each name is searched beside
+  the definition, beside the motif, in the working directory and in data/
+  (src/common.go:641), fonts also in font/ and videos in video/. The motif
+  names its music under sound/, which release packages ship empty.
 
   Characters and stages are found under chars/ and stages/
   (src/system.go:5364, src/system.go:5590).
 
 files:
-  - name: "script"
-    path: "external/script"
+  - name: "script/"
+    type: directory
+    path: "ikemen/external/script/"
     category: game_data
     description: "Lua scripts: main.lua and the modules it requires"
     required: true
@@ -49,7 +58,7 @@ files:
       requires debug, start, options and menu from the same directory.
 
   - name: "IkemenCylia_256.png"
-    path: "external/icons/IkemenCylia_256.png"
+    path: "ikemen/external/icons/IkemenCylia_256.png"
     category: game_data
     description: "Window icon, 256 px"
     required: true
@@ -57,7 +66,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:141, src/system.go:527-538"
 
   - name: "IkemenCylia_96.png"
-    path: "external/icons/IkemenCylia_96.png"
+    path: "ikemen/external/icons/IkemenCylia_96.png"
     category: game_data
     description: "Window icon, 96 px"
     required: true
@@ -65,15 +74,16 @@ files:
     source_ref: "src/resources/defaultConfig.ini:141, src/system.go:527-538"
 
   - name: "IkemenCylia_48.png"
-    path: "external/icons/IkemenCylia_48.png"
+    path: "ikemen/external/icons/IkemenCylia_48.png"
     category: game_data
     description: "Window icon, 48 px"
     required: true
     bundled: true
     source_ref: "src/resources/defaultConfig.ini:141, src/system.go:527-538"
 
-  - name: "shaders"
-    path: "external/shaders"
+  - name: "shaders/"
+    type: directory
+    path: "ikemen/external/shaders/"
     category: game_data
     description: "Post-processing shaders offered in the options menu"
     required: false
@@ -81,7 +91,7 @@ files:
     source_ref: "external/script/options.lua:1646, src/system.go:457-470"
 
   - name: "common.air"
-    path: "data/common.air"
+    path: "ikemen/data/common.air"
     category: game_data
     description: "Common animations merged into every character"
     required: true
@@ -89,7 +99,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:12, src/char.go:4676-4689"
 
   - name: "common.cmd"
-    path: "data/common.cmd"
+    path: "ikemen/data/common.cmd"
     category: game_data
     description: "Common commands appended to every character's command file"
     required: true
@@ -97,7 +107,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:14, src/compiler.go:8367-8380"
 
   - name: "common.const"
-    path: "data/common.const"
+    path: "ikemen/data/common.const"
     category: game_data
     description: "Common constants"
     required: true
@@ -105,7 +115,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:16, src/char.go:4338-4355"
 
   - name: "functions.zss"
-    path: "data/functions.zss"
+    path: "ikemen/data/functions.zss"
     category: game_data
     description: "Common states: shared ZSS functions"
     required: true
@@ -113,7 +123,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "action.zss"
-    path: "data/action.zss"
+    path: "ikemen/data/action.zss"
     category: game_data
     description: "Common states: actions"
     required: true
@@ -121,7 +131,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "demo.zss"
-    path: "data/demo.zss"
+    path: "ikemen/data/demo.zss"
     category: game_data
     description: "Common states: demo mode"
     required: true
@@ -129,7 +139,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "dizzy.zss"
-    path: "data/dizzy.zss"
+    path: "ikemen/data/dizzy.zss"
     category: game_data
     description: "Common states: dizzy"
     required: true
@@ -137,7 +147,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "guardbreak.zss"
-    path: "data/guardbreak.zss"
+    path: "ikemen/data/guardbreak.zss"
     category: game_data
     description: "Common states: guard break"
     required: true
@@ -145,7 +155,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "score.zss"
-    path: "data/score.zss"
+    path: "ikemen/data/score.zss"
     category: game_data
     description: "Common states: score"
     required: true
@@ -153,7 +163,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "system.zss"
-    path: "data/system.zss"
+    path: "ikemen/data/system.zss"
     category: game_data
     description: "Common states: system"
     required: true
@@ -161,7 +171,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "tag.zss"
-    path: "data/tag.zss"
+    path: "ikemen/data/tag.zss"
     category: game_data
     description: "Common states: tag team"
     required: true
@@ -169,7 +179,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "training.zss"
-    path: "data/training.zss"
+    path: "ikemen/data/training.zss"
     category: game_data
     description: "Common states: training mode"
     required: true
@@ -177,7 +187,7 @@ files:
     source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "common1.cns.zss"
-    path: "data/common1.cns.zss"
+    path: "ikemen/data/common1.cns.zss"
     category: game_data
     description: "ZSS replacement for the common1.cns state file"
     required: true
@@ -189,7 +199,7 @@ files:
       asking for common1.cns gets data/common1.cns.zss.
 
   - name: "debug.def"
-    path: "font/debug.def"
+    path: "ikemen/font/debug.def"
     category: game_data
     description: "Debug overlay font definition"
     required: true
@@ -198,7 +208,7 @@ files:
     note: "loadDebugFont raises a Lua error when the font cannot be loaded."
 
   - name: "OpenSans-Bold.ttf"
-    path: "font/Open_Sans/OpenSans-Bold.ttf"
+    path: "ikemen/font/Open_Sans/OpenSans-Bold.ttf"
     category: game_data
     description: "TrueType face named by debug.def"
     required: true
@@ -209,7 +219,7 @@ files:
       font directories; the engine panics when that fails too.
 
   - name: "default-3x5.def"
-    path: "font/default-3x5.def"
+    path: "ikemen/font/default-3x5.def"
     category: game_data
     description: "Default motif font (font1)"
     required: false
@@ -218,7 +228,7 @@ files:
     note: "A motif font that fails to load is logged and replaced by an empty font."
 
   - name: "default-3x5.sff"
-    path: "font/default-3x5.sff"
+    path: "ikemen/font/default-3x5.sff"
     category: game_data
     description: "Glyph sprites named by default-3x5.def"
     required: false
@@ -227,7 +237,7 @@ files:
     note: "LoadFntSff panics when default-3x5.def is loaded and this file is missing."
 
   - name: "system.def"
-    path: "data/ikemen1/system.def"
+    path: "ikemen/data/ikemen1/system.def"
     category: game_data
     description: "Default motif definition"
     required: true
@@ -239,7 +249,7 @@ files:
       when the definition cannot be read. -r selects another motif.
 
   - name: "gofx.def"
-    path: "data/gofx/gofx.def"
+    path: "ikemen/data/gofx/gofx.def"
     category: game_data
     description: "Common effects pack"
     required: true
@@ -249,22 +259,158 @@ files:
       Held by the Ikemen-GO-Screenpack repository and copied into release
       packages. A load failure puts the match loader in its error state.
 
-  - name: "chars"
-    path: "chars"
+  - name: "gofx/"
+    type: directory
+    path: "ikemen/data/gofx/"
+    category: game_data
+    description: "Sprites, animations and sounds named by gofx.def"
+    required: true
+    bundled: true
+    source_ref: "src/fightscreen.go:162-193"
+    note: "loadFightFx returns an error when the sff, air or snd file it names fails to load."
+
+  - name: "ikemen1/"
+    type: directory
+    path: "ikemen/data/ikemen1/"
+    category: game_data
+    description: "Default motif: sprites, logo and credits storyboards, fonts"
+    required: false
+    bundled: true
+    source_ref: "src/motif.go:72-85, src/motif.go:2475-2487, src/motif.go:2594-2621, src/storyboard.go:561-620"
+    note: >
+      Files named by system.def and searched beside it first. A sprite file
+      or font that fails to load is logged and replaced by an empty one.
+
+  - name: "select.def"
+    path: "ikemen/data/select.def"
+    category: game_data
+    description: "Character and stage selection list"
+    required: true
+    bundled: true
+    source_ref: "src/motif.go:81, external/script/main.lua:1522, external/script/main.lua:43-50"
+    note: "main.lua reads the file at startup and raises an error when it cannot be opened."
+
+  - name: "fight.def"
+    path: "ikemen/data/fight.def"
+    category: game_data
+    description: "Fight screen definition"
+    required: true
+    bundled: true
+    source_ref: "src/motif.go:82, src/fightscreen.go:6005-6027, src/fightscreen.go:4792-4800, src/script.go:4233-4236, external/script/main.lua:1188"
+    note: "main.lua calls loadFightScreen at startup, which raises a Lua error on a load failure."
+
+  - name: "fight.sff"
+    path: "ikemen/data/fight.sff"
+    category: game_data
+    description: "Fight screen sprites"
+    required: true
+    bundled: true
+    source_ref: "src/fightscreen.go:4916-4926"
+    note: "Named by the sff key of fight.def; a load failure fails loadFightScreen."
+
+  - name: "fight.snd"
+    path: "ikemen/data/fight.snd"
+    category: game_data
+    description: "Fight screen sounds"
+    required: true
+    bundled: true
+    source_ref: "src/fightscreen.go:4927-4937"
+    note: "Named by the snd key of fight.def; a load failure fails loadFightScreen."
+
+  - name: "fightfx.sff"
+    path: "ikemen/data/fightfx.sff"
+    category: game_data
+    description: "Common effect sprites"
+    required: true
+    bundled: true
+    source_ref: "src/fightscreen.go:4938-4948"
+    note: "Named by the fightfx.sff key of fight.def; a load failure fails loadFightScreen."
+
+  - name: "fightfx.air"
+    path: "ikemen/data/fightfx.air"
+    category: game_data
+    description: "Common effect animations"
+    required: true
+    bundled: true
+    source_ref: "src/fightscreen.go:4949-4959"
+    note: "Named by the fightfx.air key of fight.def; a load failure fails loadFightScreen."
+
+  - name: "common.snd"
+    path: "ikemen/data/common.snd"
+    category: game_data
+    description: "Common effect sounds"
+    required: true
+    bundled: true
+    source_ref: "src/fightscreen.go:4960-4966"
+    note: "Named by the common.snd key of fight.def; a load failure fails loadFightScreen."
+
+  - name: "system.snd"
+    path: "ikemen/data/system.snd"
+    category: game_data
+    description: "Motif sounds"
+    required: false
+    bundled: true
+    source_ref: "src/resources/defaultMotif.ini:69, src/motif.go:73, src/motif.go:2578-2590"
+    note: "Named by the snd key of the motif. A load failure is logged and an empty sound set is used."
+
+  - name: "glyphs.sff"
+    path: "ikemen/data/glyphs.sff"
+    category: game_data
+    description: "Button glyph sprites for the movelist"
+    required: false
+    bundled: true
+    source_ref: "src/resources/defaultMotif.ini:97, src/motif.go:84, src/motif.go:2490-2503"
+    note: "A load failure is logged and an empty sprite set is used."
+
+  - name: "font/"
+    type: directory
+    path: "ikemen/font/"
+    category: game_data
+    description: "Fonts named by the motif, the fight screen and storyboards"
+    required: false
+    bundled: true
+    source_ref: "src/motif.go:64, src/motif.go:2594-2621, src/fightscreen.go:5017, src/storyboard.go:620, src/font.go:413"
+    note: "font/ is the default directory of every font lookup."
+
+  - name: "video/"
+    type: directory
+    path: "ikemen/video/"
+    category: game_data
+    description: "Videos played by the logo and credits storyboards"
+    required: false
+    bundled: true
+    source_ref: "src/stage.go:204-212"
+    note: >
+      A background element of type video names its file in path; video/ is
+      the default directory of the lookup.
+
+  - name: "gamecontrollerdb.txt"
+    path: "ikemen/external/gamecontrollerdb.txt"
+    category: game_data
+    description: "SDL game controller mapping database"
+    required: false
+    bundled: true
+    source_ref: "src/resources/defaultConfig.ini:153, src/system.go:444-445, src/input_sdl.go:261-271"
+    note: "A read failure is logged."
+
+  - name: "chars/"
+    type: directory
+    path: "ikemen/chars/"
     category: game_data
     description: "Character directory"
     required: false
     source_ref: "src/system.go:5364, src/script.go:3190-3191"
     note: >
-      User supplied. A character path that does not resolve as given is
-      searched under chars/.
+      A character path that does not resolve as given is searched under
+      chars/. Release packages ship the Kung Fu Man characters.
 
-  - name: "stages"
-    path: "stages"
+  - name: "stages/"
+    type: directory
+    path: "ikemen/stages/"
     category: game_data
     description: "Stage directory"
     required: false
     source_ref: "src/system.go:5590, src/resources/defaultConfig.ini:178, external/script/main.lua:1770-1774"
     note: >
-      User supplied. Debug.StartStage defaults to stages/stage0-720.def, the
-      stage added when select.def lists none.
+      Debug.StartStage defaults to stages/stage0-720.def, the stage added
+      when select.def lists none.

@@ -1,0 +1,141 @@
+{
+  "Version": 1,
+
+  "Guns": [
+    {
+      "Pic": "knife",
+      "Icon": "knife",
+      "Name": "Silver Knife",
+      "Description": "A melee weapon. This weapon is used automatically. Simply walk into and an enemy to slash and cause damage. You will also damage objects when you walk into them, unless they are explosives. Using the attack key just makes you hold your position.",
+      "Bullet": "knife",
+      "Cost": 0,
+      "Sound": "",
+      "SwitchSound": "knife_switch",
+      "SoundLockLength": 10,
+      "CanShoot": false
+    },
+
+    {
+      "Name": "Blunderbuss",
+      "Icon": "shotgun",
+      "Bullet": "shotgun",
+      "Cost": 5,
+      "Lock": 65,
+      "ReloadLead": 10,
+      "Sound": "explosion_small",
+      "ReloadSound": "shotgun_r",
+      "SwitchSound": "shotgun_r",
+      "SpreadCount": 6,
+      "SpreadWidth": 0.03,
+      "Recoil": 0.08,
+      "MuzzleFlashParticle": "muzzle_flash_shotgun",
+      "Brass": "shotshell",
+      "Ammo": "Shells"
+    },
+
+    {
+      "Name": "Crossbow",
+      "Icon": "shotgun",
+      "Bullet": "cbolt",
+      "Cost": 5,
+      "Lock": 100,
+      "ReloadLead": 15,
+      "Sound": "rocket_launch",
+      "Ammo": "Bolts"
+    },
+
+    {
+      "Pic": "",
+      "Name": "Rigged Barrel",
+      "Icon": "barrel_wood",
+      "Bullet": "proxbarrel",
+      "Cost": 10,
+      "Lock": 100,
+      "ReloadLead": 15,
+      "Sound": "hahaha",
+      "ReloadSound": "package_r",
+      "SwitchSound": "mine_switch",
+      "MuzzleHeight": 0,
+      "Ammo": "Barrels"
+    },
+
+    {
+      "Pic" : "",
+      "Name" : "Spell: Ice Needles",
+      "Icon" : "paper",
+      "Bullet": "ice_needle",
+      "Cost": 1,
+      "Lock": 4,
+      "Sound": "hits/petrify",
+      "Ammo": "Mana",
+      "SpreadCount": 4,
+      "SpreadWidth": 0.1,
+      "Recoil": 0.15
+    },
+
+    {
+      "Pic" : "",
+      "Name" : "Spell: Raging Flames",
+      "Icon" : "paper",
+      "Bullet": "random_fire",
+      "Cost": 2,
+      "Lock": 16,
+      "Sound": "hits/petrify",
+      "Ammo": "Mana",
+      "SpreadCount": 3,
+      "SpreadWidth": 0.15,
+      "Recoil": 0.2
+    },
+
+    {
+      "Pic" : "",
+      "Name" : "Spell: Soul Mutilator",
+      "Icon" : "paper",
+      "Bullet": "mutilator",
+      "Cost": 3,
+      "Lock": 3,
+      "Sound": "hits/petrify",
+      "Ammo": "Mana",
+      "SpreadCount": 8,
+      "SpreadWidth": 0.79,
+      "Recoil": 0.2
+    },
+
+    {
+      "Pic" : "",
+      "Name" : "Shuriken",
+      "Icon" : "shurikenlogo",
+      "Bullet": "star",
+      "Cost": 1,
+      "Lock": 20,
+      "Sound": "rocket_launch",
+      "SwitchSound": "knife_switch",
+      "Ammo": "Stars",
+      "SpreadCount": 2,
+      "SpreadWidth": 0.1,
+      "Recoil": 0.15
+    }
+  ],
+  "PseudoGuns" : [
+    {
+      "Pic": "",
+      "Name": "activebarrel",
+      "Bullet": "activebarrel",
+      "Sound": "mine_arm"
+    },
+    {
+      "Pic": "",
+      "Name": "triggeredbarrel",
+      "Bullet": "triggeredbarrel",
+      "Sound": "mine_trigger"
+    },
+    {
+      "Pic": "",
+      "Name": "frag_explosionbarrel",
+      "Bullet": "barrelfrag",
+      "SpreadCount": 8,
+      "SpreadWidth": 0.79,
+      "AngleOffset": 0.2
+    }
+  ]
+}

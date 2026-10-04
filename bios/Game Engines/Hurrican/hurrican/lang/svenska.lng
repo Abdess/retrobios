@@ -1,0 +1,260 @@
+--------------------------------
+>      Hurrican Språkfil       <
+>                              <
+>         - svenska -          <
+>             D-13             <
+>          28.06.2007          <
+>                              <
+>  www.recordedamigagames.org  <
+--------------------------------
+//---------- Starter ----------//
+Fullskärm
+Standard
+Starta spel
+Avsluta
+Avbryt
+Språk
+Kolla efter uppdateringar
+En ny version finns. Vill du gå till hemsidan för Hurrican nu?
+Ingen ny version finns.
+Tillgängliga världar på servern
+Ladda hem nuvarande varldlista från server
+Välj världpaket
+Ladda hem
+//---------- Miscellaneous ----------//
+0
+Laddar sprakfil
+Laddar bitmap :
+Laddar wave :
+Laddar modul :
+ ... OK
+Laddar bandata för \n
+//---------- Tutorial Texts ----------//
+Välkommen till Hurrican träningsvärld. Här kommer du få lära dig den grundläggande styrningen. Du kan röra dig höger och vänster genom att trycka på KEY_LEFT eller KEY_RIGHT. Du kan ducka genom att trycka på KEY_CROUCH. Titta nu runt lite. Det finns fler tips som den här i världen.
+Tryck KEY_JUMP för att hoppa. Håll knappen nere längre för högre hopp. Du kan ändra riktning medans du hoppar med KEY_LEFT eller KEY_RIGHT.
+Du kan titta längre bort genom att trycka på KEY_UP och KEY_DOWN. Detta är bra för att hitta gömda föremål. Pröva att titta upp i taket...
+Dessa diamanter finns spridda runt om i världarna. Du får poäng genom att samla dem. I övrigt, fyller du även på din tid varje gång om du samlar 50 stycken.
+Tryck på KEY_SHOOT för att avfyra ditt vapen och håll inne knappen för att långsamt skjuta automatiskt. Om du trycker upprepat på knappen kan du skjuta ännu snabbare än om knappen bara är nedtryckt.
+Titta väggen till höger om dig! Den ser bräcklig ut. Pröva att bryta dig igenom med ditt vapen.
+Mycket bra. Det finns många ställen där du kan skjuta väggar. För det mesta döljer dem hemliga ställen.
+Nu lite träning att sikta. Du kan sikta genom att trycka KEY_UP. Genom att kombinera detta med KEY_LEFT eller KEY_RIGHT kan du även skjuta diagonalt. Pröva att skjuta diamanterna ovanför dig.
+Nu blir det spännande... Där nere kommer du möta dina första fiender, eller snarare, de första flygande tillbehörsbehållarna.
+-leer-
+Utmärkt. Samla alla tillbehör nu.
+Den här effekten var ett tecken på att ditt vapen blev uppgraderat. Vilket tillbehör det var kan man se utav färgen på effekten runt spelaren. Röd är sprinkler, blå är laser och grön är studsare. Staplarna (vid pilen) visar dig din nuvarande vapenkraft.
+Nu till dina första riktiga fiender: gångare. En speciell sak med dem är att du kan hoppa på dem för att besegra dem.
+Vägen är blockerad igen, men den här gången är den svaga väggen UNDER dig. Håll ned KEY_BLITZ och rotera blixten med KEY_LEFT och KEY_RIGHT för att förstöra golvet.
+Strålande. Föresten, blixten kan förstöra fiender med. Den är lite kort... men oroa dig inte: med lite träning så :) Till höger har vi några tillbehör för att ändra på det.
+Blixten är längre nu. Testa! Och det bästa är: den kan bli ännu längre. Stapeln bredvid blixt-symbolen längst upp visar din nuvarande blixtkraft. När du förlorar ett liv, så förlorar du även en del kraft från blixten.
+Tillbehör finns inte endast i de flygande behållarna. De finns även i tillbehörsklossar som bara syns om de blir träffade en gång av ditt vapen. Pröva att skjuta omkring dig här för att hitta en (använd blixten för att göra det lite enklare)...
+Där är den. Fortsätt att skjuta på den tills den är tom och plocka upp alla tillbehör.
+Detta var så kallade "kraftlinjer", ett lite speciellt vapen. Antal kraftlinjer kan du se i informationsfältet (vid pilen). Gå en bit till höger för att få information om hur de används och se hur de fungerar.
+Stå i mitten av bron och tryck på KEY_POWERLINE för att aktivera en kraftlinje.
+Swoosh! Små fiender besegras direkt och större blir skadade rejält av det här vapnet. Plocka nu tillbehören som dyker upp.
+Dessa tillbehör är granater. Dom säger KABOOM! Låter kanske kul, men det är sant :) Åter igen, till höger om dig, får du lära dig använda dem.
+Se upp, det finns två nästen som tål mycket skada! Tryck på KEY_GRANATE för att avfyra en granat. Den kan skada alla fiender som befinner sig runt explosionen. För det andra nästet behöver du stå under det och skjuta uppåt.
+Verkar som en återvändsgränd igen. Ducka (KEY_CROUCH) och aktivera en kraftlinje samtidigt (KEY_POWERLINE). Så att du kan ändra dig till stålklingan. Vid slutet av tunneln hoppar du bara (KEY_JUMP) för att ändra tillbaka form.
+Som du kanske märkt, den blå cirkeln (Titta på pilen) kommer minska när du är i stålhjuls-form. Men du kan fylla den igen med tillbehör. Plus att den fylls sakta igen av sig själv.
+Japp, det var stålhjulet det. När du är i hjul-form, är du odödlig och gör samtidigt skada på fiender. Och som inte det vore nog, du kan även placera ut bomber på marken genom att trycka på KEY_SHOOT. Pröva det på nästet till höger.
+Wow, du börjar likna en riktig fighter! Men det finns mer i arsenalen. Några vapen återstår...
+Föresten, dessa pilar visar vilken väg du måste ta, om du vill komma i mål.
+En vägg igen? VÄNTA! Vi skulle kunna använda blixten... men pröva istället att stå nära väggen och tryck på KEY_SHOCKWAVE ...
+Smartbomben förstörde hela väggen, förstörde gångaren och tömde till och med en tillbehörskloss. Men du kan endast bära en enda sån här smartbomb åt gången och måste skaffa en ny genom rätt sorts tillbehör när du använt den. Om symbolen i informationsfältet glöder (se pilen), så har du en smartbomb redo.
+En till övning för att sikta... Håll nere KEY_SHOOT och KEY_BLITZ samtidigt för att ladda ditt vapen med strålen. När du laddar kan du ändra var du siktar med KEY_LEFT och KEY_RIGHT. Släpp knapparna för att släppa lös strålen. Ju längre du laddar strålen, ju större kommer skottet vara. Gå till mitten och försök att skjuta diamanterna ovanför dig med strålen.
+Ju mer tillbehör du har för blixten, ju snabbare kommer strålen att ladda upp. En till sak: till vänster kommer du få lära dig om de två övriga huvudvapnen som finns utöver sprinkler-skott.
+Dessa var studsare. Tryck en gång på KEY_WAFFE_CYCLE för att byta till dem. Som du kan se så kan tillbehör även ligga runtomkring så här. Dessa skott kan splittras i två mindre skott beroende på din aktuella vapenkraft. Den  är väldigt användbar i trånga utrymmen, så som tunnlar och korridorer, som den här framme.
+Sista vapnet idag är lasern. Samla tillbehöret och testa den. Dess speciella egenskap är det faktum att den kan skjuta igenom flera fiender med ett och samma skott. Kom ihåg att du väljer mellan dina huvudvapen genom att trycka på KEY_WAFFE_CYCLE. Pröva lite och känn.
+Detta är slutet på träningsvärlden. I spelet kommer du få lära dig lite mer om vissa tillbehör och lite andra saker. Kom bara ihåg: exprimentera lite med allt möjlight för att förstå det bättre. Träningsvärlden är också lite enklare än de vanliga världarna: nästena skickade inte ut fiender och du var också odödlig här. Men nu är du nog redo för den riktiga fighten. Lycka till!
+36
+37
+38
+39
+//---------- Konsolen Text ----------//
+Hurrican
+
+(c) 2007
+Poke53280
+www.poke53280.de
+
+Skriv "help" för att få info om konsoll-kommandon
+
+
+//---------- Summary Box ----------//
+Summa
+Hemligheter
+Fusk upplåst:
+- Tryck en knapp -
+//---------- Main Menu ----------//
+LADDAR
+SPARA SPEL
+STARTA SPEL
+FORTSÄTT SPEL
+INSTÄLLNINGAR
+HIGHSCORES
+CREDITS
+AVSLUTA
+SPELA TRÄNINGSVÄRLD
+STARTA NYTT SPEL
+FORTSÄTT SPARAT SPEL
+LÄTT
+NORMALT
+SVÅRT
+HURRICAN
+pilar: ändra - enter : välj - ESC : tillbaka
+RANK
+NAMN
+POÄNG
+VÄRLD
+SVÅRIGHET
+VOLYM
+LJUD
+MUSIK
+ÄNDRA KONTROLLER
+VÄLJ SPRÅK
+SÄTT:
+Vibration
+Ladda standardinställningarna
+Joypad
+Joystick
+OTROLIGT
+NY POÄNG PÅ RANK
+SKRIV DITT NAMN
+FORTSÄTT
+Tillbaka
+gå vänster
+gå höger
+ducka
+titta upp
+titta ned
+hoppa
+skjut
+aktivera blixten
+kraftlinje
+granat
+smartbomb
+ändra huvudvapen
+gå
+titta
+X/Y Axel
+D-pad
+-tryck ny tangent-
+-tryck ny knapp-
+DETALJER: LÅG
+DETALJER: MEDIUM
+DETALJER: HÖG
+DETALJER: MAXIMAL
+EN SPELARE
+TVÅ SPELARE
+spelare ett
+spelare två
+typ
+sätt
+känslighet
+tangentbord
+- inget -
+värld
+spelare
+datum
+- INGEN SPARNING -
+HEMLIGT
+vänster
+höger
+upp
+ned
+knapp
+//---------- Hints ----------//
+Om du plockar alla diamanter på en bana, låser du upp en fuskkod.
+När du förlorar ett liv, förlorar du också ett steg på ditt aktuella vapens, vapenkraft.
+Om du rör en fiende i stålhjuls-form så kommer hjulenergin gå åt fortare.
+Om du står helt stilla kommer hjulenergin ladda upp fortare.
+När du trycker på hopp-knappen när du är i stålhjuls-form och i luften, gör du ett hjulhopp.
+Samla 50 diamanter för att fylla på tiden igen.
+Max antal granater och kraftlinjer är 9.
+En del hemligheter ligger bakom förstörbara väggar.
+Det finns väggar du kan gå igenom som döljer hemligheter.
+Om du rullar över en exploderande bomb när du är stålhjul så kastas du upp en bit i luften.
+Om du blir biten av en fisk - hoppa upp på land för att bli av med den.
+Ånga och rök kan lyfta dig en del när du hoppar.
+En del bossar är väldigt svåra om du bara använder vapen.
+Eld från vägg-eldkastare kan också skada fiender.
+Skölden-tillägget kan skada fiender när de tar i dem.
+En del fiender är det bättre att undvika än att försöka besegra.
+Granater gör skada på alla fiender runt explosionen.
+En kraftlinje är bäst för att hitta gömda tillbehörsklossar.
+Studsarens kulor blir svagare för varje gång de studsar mot en vägg.
+Om du trycker på skjuta-knappen snabbt kan du skjuta snabbare än när du skjuter automatiskt genom att hålla nere knappen.
+Du kan hoppa på tillbehörsklossar för att nå högre höjder.
+Du kan spara ditt spel efter varje värld.
+Ju längre blixt du har, ju snabbare laddar strålen upp.
+När du dör exploderar du som en granat.
+Lasern kan skjuta igenom flera fiender med samma skott.
+Huvudvapnen sprinklern, lasern och studsaren kan uppgraderas till vapenkraft 8.
+Ställ in styrningen så att de passar just dig.
+Du kan ändra detaljnivån på specialeffekterna i menyn.
+En del fiender tar endast skada vid ett visst tillfälle.
+Poke53280 kommer ALDRIG fråga om din email-adress eller till lösenord...
+//---------- Pissen ----------//
+Skit, jag behöver gå nånstans...
+Ahhh! Jag kan inte hålla mig!
+Varför har inte den här plåtburken nån kiss-lucka???
+Vem tusan designade den här saken?
+Varför tänkte ingen på en sån här situation?
+Typiskt...
+De har inte testat den här ordentligt...
+Fan, det börjar bli lite olustigt nu!
+När jag kommer tillbaka till jorden...
+...kommer jag klaga om det här!
+Det där är omöjligt.
+Den här dräkten har all möjliga tekniska klockor och visslor...
+Men den viktigaste grejen har de glömt.
+Vad kan jag göra nu?
+Kom igen, spela vidare!
+Grmblfxt ... Jag blir galen.
+Jag måste hålla mig...
+...tills du är redo!
+//---------- Intro Screen 1 ----------//
+2138, någonstans i rymden
+Skeppet "dreadnought" är på väg tillbaka efter ett lyckat uppdrag.
+Nästa anhalt för stridsskeppet är jorden.
+Plötsligt tar soldaterna emot en nödsignal från den blå planeten.
+"Jorden under attack! Alla tillgängliga trupper, förbered för försvar!"
+"Raketer av okänt ursprung träffar jorden!"
+Sekunder senare är ursprunget av de dödliga missilerna funnen.
+Planeten Takatis.
+Trupperna tror inte sina ögon när de stirrar på hologrammet i uppdrags-rummet.
+Ingen annan än Dr. Geng X själv startade attacken.
+Flera år sedan spreds ryktet om hans död över galaxen, men nu är han tillbaka.
+Utan fruktan sätter "dreadnought" kurs mot den outforskade planeten.
+Efter en kort flygning når skeppet sin destination.
+Den främmande planeten strålar med en missledande skönhet.
+Besättningen startar landningsprocessen.
+Instrumenten visar en liknande atmosfär som på jorden.
+Plötsligt öppnar flera kanoner på planetens yta eld.
+Sköld-systemet ger vika och stora projektiler sliter upp skeppet.
+Hjälplösa faller soldaterna mot planetens yta.
+När de träder in i atmosfären är skeppet nära att explodera.
+Sekunder efter kraschen.
+De flesta av besättningen har inte överlevt nödlandningen av "dreadnought".
+Endast en soldat är vid liv. Sakta reser han sig och hittar sin väg ut.
+Endast två soldater är vid liv. Sakta reser de sig och hittar sin väg ut.
+Övertygade om att hitta Dr. Geng X och befria värden från hans ondska.
+//---------- Outtro ----------//
+Det otroliga har skett.
+Efter en lång strid har Dr. Geng X blivit besegrad!
+Vad som än finns kvar av honom ligger dolt under det rykande vraket av
+hans fästning. Alla hans onda skapelser ligger begravda här med honom, 
+nere i det eviga mörkret.
+Fred är återställd i hela universum, men ingen vet
+hur länge den kan tänkas vara.
+Framtiden är ännu oskriven.
+
+
+
+//---------- Warpzone ----------//
+Och nu, för er som är tålamodiga av sig, ett litet tips
+Ta en noga titt på träningsvärlden för att hitta
+den hemliga rörmokar-ingången ...
+Att använda hjulet precis i början är kanske inte så BOMBAT...
+Stanna nära till vänster och glöm inte: rörmokare gillar rör ;)
+
+//--- ENDE ---//

@@ -1,0 +1,243 @@
+#===============================================================================
+# Functions
+#===============================================================================
+# FirstAttack
+[Function IkSys_FirstAttack() ret]
+let ret = 0;
+if firstAttack && (map(_iksys_firstAttackFlag) = 0 || map(_iksys_firstAttackFlag) = gameTime) {
+	let ret = 1;
+	map(_iksys_firstAttackFlag) := gameTime;
+}
+
+# CounterHit
+[Function IkSys_CounterHit() ret]
+let ret = 0;
+if moveCountered = 1 && (map(_iksys_counterHitFlag) = 0 || map(_iksys_counterHitFlag) = gameTime) {
+	let ret = 1;
+	map(_iksys_counterHitFlag) := gameTime;
+} else if moveCountered = 0 {
+	map(_iksys_counterHitFlag) := 0;
+}
+
+# Technical
+[Function IkSys_Technical() ret]
+let ret = 0;
+if (stateNo = const(StateAirGetHit_fallRecoveryOnGround) || stateNo = const(StateAirGetHit_fallRecoveryInAir))
+	&& (map(_iksys_technicalFlag) = 0 || map(_iksys_technicalFlag) = gameTime) {
+	let ret = 1;
+	map(_iksys_technicalFlag) := gameTime;
+} else if moveType = H && stateNo != const(StateAirGetHit_fallRecoveryOnGround) && stateNo != const(StateAirGetHit_fallRecoveryInAir) {
+	map(_iksys_technicalFlag) := 0;
+}
+
+# Reversal
+[Function IkSys_Reversal() ret]
+let ret = 0;
+if map(_iksys_reversalLastCall) != gameTime {
+	map(_iksys_reversalFrame1) := map(_iksys_reversalFrame0);
+	if (moveType = H && !hitOverridden) || stateNo = const(StateDownedGetHit_gettingUp) {
+		# Is in a hit state
+		map(_iksys_reversalFrame0) := 2;
+	} else if stateNo = [1000, 4999] && moveType != H && !inCustomState {
+		# Is performing a special or hyper move
+		map(_iksys_reversalFrame0) := 1;
+	} else {
+		# Reset
+		map(_iksys_reversalFrame0) := 0;
+	}
+	map(_iksys_reversalLastCall) := gameTime;
+}
+if map(_iksys_reversalFrame1) = 2 && map(_iksys_reversalFrame0) = 1 {
+	# Was in a hit state last frame, but is attacking this frame
+	let ret = 1;
+}
+
+# Parry
+[Function IkSys_Parry() ret]
+let ret = 0;
+if moveReversed = 1 && (map(_iksys_parryFlag) = 0 || map(_iksys_parryFlag) = gameTime) {
+	if !inCustomState && numEnemy {
+		let ret = 1;
+		map(_iksys_parryFlag) := gameTime;
+	}
+} else if moveReversed = 0 {
+	map(_iksys_parryFlag) := 0;
+}
+
+# Just Defend
+[Function IkSys_JustDefend() ret]
+let ret = 0;
+if (command = "holdback" || map(_iksys_trainingGuardMode) || stateNo = [const(StateGuard_start), const(StateAirGuardHit_knockedAway)])
+	&& (map(_iksys_justDefendFlag) = 0 || map(_iksys_justDefendFlag) = gameTime) {
+	if map(_iksys_justDefendTimer) = 0 {
+		map(_iksys_justDefendTimer) := gameTime + 3;
+	}
+	if stateNo = [const(StateStandGuardHit_shaking), const(StateAirGuardHit_knockedAway)] && map(_iksys_justDefendTimer) > gameTime {
+		let ret = 1;
+		map(_iksys_justDefendFlag) := gameTime;
+	}
+} else if stateNo != [const(StateGuard_start), const(StateAirGuardHit_knockedAway)] {
+	map(_iksys_justDefendFlag) := 0;
+	map(_iksys_justDefendTimer) := 0;
+}
+
+# Danger
+[Function IkSys_Danger() ret]
+let ret = 0;
+if life > 0 && float(life) / lifeMax <= 0.25
+	&& (map(_iksys_dangerFlag) = 0 || map(_iksys_dangerFlag) = gameTime) {
+	let ret = 1;
+	map(_iksys_dangerFlag) := gameTime;
+}
+
+# Dizzy
+[Function IkSys_Dizzy() ret]
+let ret = 0;
+if dizzy {
+	if map(_iksys_dizzyFlag) = 0 || map(_iksys_dizzyFlag) = gameTime {
+		let ret = 1;
+		map(_iksys_dizzyFlag) := gameTime;
+	}
+} else {
+	map(_iksys_dizzyFlag) := 0;
+}
+
+# Guard Break
+[Function IkSys_GuardBreak() ret]
+let ret = 0;
+if guardBreak {
+	if map(_iksys_guardBreakFlag) = 0 || map(_iksys_guardBreakFlag) = gameTime {
+		let ret = 1;
+		map(_iksys_guardBreakFlag) := gameTime;
+	}
+} else {
+	map(_iksys_guardBreakFlag) := 0;
+}
+
+# Partner Down
+[Function IkSys_PartnerDown() ret]
+let ret = 0;
+if numPartner > 0 && !alive
+	&& (map(_iksys_partnerDownFlag) = 0 || map(_iksys_partnerDownFlag) = gameTime) {
+	let ret = 1;
+	map(_iksys_partnerDownFlag) := gameTime;
+}
+
+# Win Clutch
+[Function IkSys_WinClutch() ret]
+let ret = 0;
+if winClutch && (map(_iksys_winFlag) = 0 || map(_iksys_winFlag) = gameTime) {
+	let ret = 1;
+	map(_iksys_winFlag) := gameTime;
+}
+
+# Win Perfect
+[Function IkSys_WinPerfect() ret]
+let ret = 0;
+if winPerfect && (map(_iksys_winFlag) = 0 || map(_iksys_winFlag) = gameTime) {
+	let ret = 1;
+	map(_iksys_winFlag) := gameTime;
+}
+
+# Win Special
+[Function IkSys_WinSpecial() ret]
+let ret = 0;
+if winSpecial && (map(_iksys_winFlag) = 0 || map(_iksys_winFlag) = gameTime) {
+	let ret = 1;
+	map(_iksys_winFlag) := gameTime;
+}
+
+# Win Hyper
+[Function IkSys_WinHyper() ret]
+let ret = 0;
+if winHyper && (map(_iksys_winFlag) = 0 || map(_iksys_winFlag) = gameTime) {
+	let ret = 1;
+	map(_iksys_winFlag) := gameTime;
+}
+
+# Win Streak
+[Function IkSys_WinStreak() ret]
+let ret = 0;
+if roundState = 4 && win && matchOver && consecutiveWins > 0 && (roundNo > 1 || matchNo > 1)
+	&& (map(_iksys_winStreakFlag) = 0 || map(_iksys_winStreakFlag) = gameTime)
+	&& !isHomeTeam && enemy,aiLevel > 0 {
+		let ret = consecutiveWins;
+		map(_iksys_winStreakFlag) := gameTime;
+}
+
+# Combo Count
+[Function IkSys_ComboCount() ret]
+let ret = 0;
+if comboCount != map(_iksys_comboCountCurr) {
+	if comboCount < map(_iksys_comboCountCurr) && map(_iksys_comboCountCurr) >= 2 {
+		map(_iksys_comboCountRet) := map(_iksys_comboCountCurr);
+		map(_iksys_comboCountFlag) := gameTime;
+	}
+	map(_iksys_comboCountCurr) := comboCount;
+}
+if map(_iksys_comboCountFlag) = gameTime {
+	let ret = map(_iksys_comboCountRet);
+}
+
+# Received Damage
+[Function IkSys_ReceivedDamage() ret]
+let ret = 0;
+if receivedDamage != map(_iksys_receivedDamageCurr) {
+	if receivedDamage > 0 && getHitVar(teamSide) != teamSide {
+		map(_iksys_receivedDamageRet) := receivedDamage - map(_iksys_receivedDamageCurr);
+		map(_iksys_receivedDamageFlag) := gameTime;
+	}
+	map(_iksys_receivedDamageCurr) := receivedDamage;
+}
+if map(_iksys_receivedDamageFlag) = gameTime {
+	let ret = map(_iksys_receivedDamageRet);
+}
+
+#===============================================================================
+# Global states (not halted by Pause/SuperPause, no helper limitations)
+#===============================================================================
+[StateDef -4]
+
+ignoreHitPause if teamSide = 0 {
+	# Do nothing, global code executed by stage
+} else if roundState = 0 {
+	map(_iksys_firstAttackFlag) := 0;
+	map(_iksys_counterHitFlag) := 0;
+	map(_iksys_technicalFlag) := 0;
+	map(_iksys_reversalFlag) := 0;
+	map(_iksys_reversalFrame0) := 0;
+	map(_iksys_reversalFrame1) := 0;
+	map(_iksys_reversalFrame2) := 0;
+	map(_iksys_parryFlag) := 0;
+	map(_iksys_justDefendFlag) := 0;
+	map(_iksys_justDefendTimer) := 0;
+	map(_iksys_dangerFlag) := 0;
+	map(_iksys_dizzyFlag) := 0;
+	map(_iksys_guardBreakFlag) := 0;
+	map(_iksys_partnerDownFlag) := 0;
+	map(_iksys_winFlag) := 0;
+	map(_iksys_winStreakFlag) := 0;
+	map(_iksys_comboCountFlag) := 0;
+	map(_iksys_comboCountCurr) := 0;
+	map(_iksys_comboCountRet) := 0;
+	map(_iksys_receivedDamageFlag) := 0;
+	map(_iksys_receivedDamageCurr) := 0;
+	map(_iksys_receivedDamageRet) := 0;
+} else if roundState >= 2 {
+	call IkSys_FirstAttack();
+	call IkSys_CounterHit();
+	call IkSys_Technical();
+	call IkSys_Reversal();
+	call IkSys_Parry();
+	call IkSys_JustDefend();
+	call IkSys_Danger();
+	call IkSys_Dizzy();
+	call IkSys_GuardBreak();
+	call IkSys_PartnerDown();
+	call IkSys_WinPerfect();
+	call IkSys_WinSpecial();
+	call IkSys_WinHyper();
+	call IkSys_WinStreak();
+	call IkSys_ComboCount();
+	call IkSys_ReceivedDamage();
+}

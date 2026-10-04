@@ -1,0 +1,1355 @@
+{
+	"Missions": [{
+		"Title": "",
+		"Description": "",
+		"Type": "Static",
+		"Width": 32,
+		"Height": 27,
+		"ExitStyle": "hazard",
+		"KeyStyle": "plain2",
+		"Objectives": [],
+		"Enemies": [],
+		"SpecialChars": [],
+		"MapObjectDensities": [],
+		"EnemyDensity": 0,
+		"Weapons": [
+			"Knife",
+			"Pistol",
+			"Machine Gun",
+			"Chain Gun"
+		],
+		"WeaponPersist": false,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"0": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "cbcbcbff",
+				"MaskAlt": "808080ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"1": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "prison",
+				"Mask": "00ffffff",
+				"MaskAlt": "ffe72aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			},
+			"10": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "060effff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"11": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "060effff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"12": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "bb8e37ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"13": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "bb8e37ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"14": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "bb8e37ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"15": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "bunker",
+				"Mask": "d2d1ceff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"16": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "06e9fcff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"17": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "06e9fcff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"18": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "landscape",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"19": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick2",
+				"Mask": "fc2c04ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"2": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "blast",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffe72aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			},
+			"20": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick2",
+				"Mask": "fc2c04ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"21": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "b801b6ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"22": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick2",
+				"Mask": "fc2c04ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"23": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "ffffffff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"24": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "ffffffff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"25": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "bb8e37ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"26": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"27": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "b801b6ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"28": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"29": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"3": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"30": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"31": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "f09c49ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"32": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "f09c49ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"33": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "f09c49ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"34": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "f09c49ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"35": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "ffffffff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"36": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "060effff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"37": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"38": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "060effff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"39": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"4": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"40": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick2",
+				"Mask": "fc2c04ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"41": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"42": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "060effff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"43": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "060effff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"44": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "granite",
+				"Mask": "f09c49ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"45": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"46": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffbe3bff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"47": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffbe3bff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"48": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "granite",
+				"Mask": "f09c49ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"49": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "granite",
+				"Mask": "f09c49ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"5": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"50": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "bb8e37ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"51": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"52": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone2",
+				"Mask": "a8a8a8ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"53": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone2",
+				"Mask": "a8a8a8ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"54": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone2",
+				"Mask": "a8a8a8ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"55": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone2",
+				"Mask": "a8a8a8ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"56": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone2",
+				"Mask": "adadadff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"57": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone2",
+				"Mask": "b4b4b4ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"58": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "a10000ff",
+				"MaskAlt": "b61d09ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"59": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "9c9c9cff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"6": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"60": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone2",
+				"Mask": "a8a8a8ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"61": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone2",
+				"Mask": "a8a8a8ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"62": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "ffffffff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"63": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "fffbfaff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"64": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "granite",
+				"Mask": "b66b09ff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"65": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick2",
+				"Mask": "ff00ffff",
+				"MaskAlt": "9c682aff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"7": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "060effff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"8": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "ffffffff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"9": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "cobble",
+				"Mask": "060effff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			}
+		},
+		"Tiles": ["0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,3,1,4,1,5,1,6,2,7,0,8,0,9,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0",
+		"0,11,0,12,0,13,0,14,0,15,0,16,0,17,0,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,19,0,20,0,21,0,22,0,23,0,24,0,25,0,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,27,0,28,0,29,0,30,0,31,0,32,0,33,0,34,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,35,0,36,0,37,0,38,0,39,0,40,0,41,0,42,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0",
+		"0,43,0,44,0,45,0,46,0,47,0,48,0,49,0,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,51,0,52,0,53,0,54,0,55,0,56,0,57,0,58,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,59,0,60,0,60,0,62,0,63,0,64,0,65,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"],
+		"Access": ["0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,256,0,1024,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,256,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,1024,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"],
+		"StaticItems": [{
+			"MapObject": "jail_cell",
+			"Positions": [[9, 2]]
+		},
+		{
+			"MapObject": "jail_cell_skeleton",
+			"Positions": [[13, 2]]
+		},
+		{
+			"MapObject": "no_sign",
+			"Positions": [[7, 8],
+			[1, 12],
+			[11, 4]]
+		},
+		{
+			"MapObject": "bloodstain2",
+			"Positions": [[1, 8],
+			[13, 8]]
+		},
+		{
+			"MapObject": "bloodstain",
+			"Positions": [[11, 8]]
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Positions": [[15, 8]]
+		},
+		{
+			"MapObject": "map",
+			"Positions": [[5, 12]]
+		},
+		{
+			"MapObject": "wall_vent",
+			"Positions": [[9, 10]]
+		},
+		{
+			"MapObject": "heer_flag",
+			"Positions": [[5, 2],
+			[13, 12],
+			[7, 14]]
+		},
+		{
+			"MapObject": "hitler_portrait",
+			"Positions": [[7, 2],
+			[5, 4]]
+		},
+		{
+			"MapObject": "brick_eagle",
+			"Positions": [[11, 2]]
+		},
+		{
+			"MapObject": "eagle_portrait",
+			"Positions": [[3, 4]]
+		},
+		{
+			"MapObject": "elevator_entrance",
+			"Positions": [[9, 4]]
+		},
+		{
+			"MapObject": "swastika_wreath",
+			"Positions": [[3, 6],
+			[9, 14]]
+		},
+		{
+			"MapObject": "coat_of_arms_flag",
+			"Positions": [[7, 6]]
+		},
+		{
+			"MapObject": "elevator_interior",
+			"Positions": [[11, 6],
+			[9, 6],
+			[7, 16]]
+		},
+		{
+			"MapObject": "iron_cross",
+			"Positions": [[13, 6]]
+		},
+		{
+			"MapObject": "cobble_moss",
+			"Positions": [[15, 6],
+			[3, 8]]
+		},
+		{
+			"MapObject": "hitler_glass",
+			"Positions": [[1, 10]]
+		},
+		{
+			"MapObject": "skull_blue",
+			"Positions": [[3, 10]]
+		},
+		{
+			"MapObject": "swastika_blue",
+			"Positions": [[7, 10]]
+		},
+		{
+			"MapObject": "brick_color",
+			"Positions": [[11, 10]]
+		},
+		{
+			"MapObject": "hitler_poster",
+			"Positions": [[1, 14]]
+		},
+		{
+			"MapObject": "stone_color",
+			"Positions": [[3, 16],
+			[5, 16],
+			[3, 14],
+			[5, 14]]
+		},
+		{
+			"MapObject": "panel",
+			"Positions": [[15, 12]]
+		},
+		{
+			"MapObject": "pool_water",
+			"Positions": [[17, 1]]
+		},
+		{
+			"MapObject": "barrel_green",
+			"Positions": [[19, 1]]
+		},
+		{
+			"MapObject": "table_and_chairs",
+			"Positions": [[21, 1]]
+		},
+		{
+			"MapObject": "rod_light",
+			"Positions": [[23, 1]]
+		},
+		{
+			"MapObject": "spotlight",
+			"Positions": [[25, 1],
+			[23, 1],
+			[30, 9]]
+		},
+		{
+			"MapObject": "chandelier",
+			"Positions": [[25, 1]]
+		},
+		{
+			"MapObject": "hanging_skeleton",
+			"Positions": [[27, 1]]
+		},
+		{
+			"MapObject": "shadow",
+			"Positions": [[27, 1],
+			[28, 3],
+			[30, 3],
+			[17, 5],
+			[26, 5]]
+		},
+		{
+			"MapObject": "pillar",
+			"Positions": [[29, 1]]
+		},
+		{
+			"MapObject": "plant",
+			"Positions": [[17, 3]]
+		},
+		{
+			"MapObject": "bone_blood",
+			"Positions": [[19, 3]]
+		},
+		{
+			"MapObject": "sink",
+			"Positions": [[20, 3]]
+		},
+		{
+			"MapObject": "skull_pillar",
+			"Positions": [[21, 3]]
+		},
+		{
+			"MapObject": "plant_brown",
+			"Positions": [[23, 3]]
+		},
+		{
+			"MapObject": "urn",
+			"Positions": [[25, 3]]
+		},
+		{
+			"MapObject": "knives",
+			"Positions": [[27, 3]]
+		},
+		{
+			"MapObject": "gibbet_bloody",
+			"Positions": [[28, 3]]
+		},
+		{
+			"MapObject": "gibbet",
+			"Positions": [[30, 3]]
+		},
+		{
+			"MapObject": "gibbet_skeleton",
+			"Positions": [[17, 5]]
+		},
+		{
+			"MapObject": "suit_of_armor",
+			"Positions": [[29, 3]]
+		},
+		{
+			"MapObject": "skull",
+			"Positions": [[19, 5]]
+		},
+		{
+			"MapObject": "gibbet_skulls",
+			"Positions": [[26, 5]]
+		},
+		{
+			"MapObject": "bed",
+			"Positions": [[25, 5]]
+		},
+		{
+			"MapObject": "basket",
+			"Positions": [[27, 5]]
+		},
+		{
+			"MapObject": "gibs",
+			"Positions": [[17, 9]]
+		},
+		{
+			"MapObject": "barrel_wood2",
+			"Positions": [[19, 9]]
+		},
+		{
+			"MapObject": "well_water",
+			"Positions": [[21, 9]]
+		},
+		{
+			"MapObject": "well",
+			"Positions": [[23, 9]]
+		},
+		{
+			"MapObject": "pool_blood",
+			"Positions": [[25, 9]]
+		},
+		{
+			"MapObject": "flag",
+			"Positions": [[27, 9]]
+		},
+		{
+			"MapObject": "skull2",
+			"Positions": [[29, 9]]
+		},
+		{
+			"MapObject": "bones",
+			"Positions": [[31, 9]]
+		},
+		{
+			"MapObject": "bones2",
+			"Positions": [[17, 11]]
+		},
+		{
+			"MapObject": "bones3",
+			"Positions": [[19, 11]]
+		},
+		{
+			"MapObject": "pots",
+			"Positions": [[20, 11]]
+		},
+		{
+			"MapObject": "cowskull_pillar",
+			"Positions": [[21, 11]]
+		},
+		{
+			"MapObject": "stove",
+			"Positions": [[22, 11]]
+		},
+		{
+			"MapObject": "well_blood",
+			"Positions": [[23, 11]]
+		},
+		{
+			"MapObject": "spears",
+			"Positions": [[25, 11]]
+		},
+		{
+			"MapObject": "statue_behemoth",
+			"Positions": [[26, 11]]
+		},
+		{
+			"MapObject": "grass",
+			"Positions": [[27, 11]]
+		},
+		{
+			"MapObject": "pillar_brown",
+			"Positions": [[28, 11]]
+		},
+		{
+			"MapObject": "truck",
+			"Positions": [[17, 13]]
+		},
+		{
+			"MapObject": "dead_guard",
+			"Positions": [[21, 13]]
+		},
+		{
+			"MapObject": "ghost_corpse",
+			"Positions": [[14, 21]]
+		}],
+		"StaticCharacters": [{
+			"Index": 0,
+			"Places": [{
+				"Pos": [1, 17],
+				"Dir": 2
+			}]
+		},
+		{
+			"Index": 1,
+			"Places": [{
+				"Pos": [3, 17],
+				"Dir": 1
+			}]
+		},
+		{
+			"Index": 2,
+			"Places": [{
+				"Pos": [5, 17],
+				"Dir": 7
+			}]
+		},
+		{
+			"Index": 3,
+			"Places": [{
+				"Pos": [7, 17],
+				"Dir": 6
+			}]
+		},
+		{
+			"Index": 4,
+			"Places": [{
+				"Pos": [9, 17],
+				"Dir": 0
+			}]
+		},
+		{
+			"Index": 5,
+			"Places": [{
+				"Pos": [11, 17],
+				"Dir": 6
+			}]
+		},
+		{
+			"Index": 6,
+			"Places": [{
+				"Pos": [13, 17],
+				"Dir": 0
+			}]
+		},
+		{
+			"Index": 7,
+			"Places": [{
+				"Pos": [15, 17],
+				"Dir": 7
+			}]
+		},
+		{
+			"Index": 8,
+			"Places": [{
+				"Pos": [1, 19],
+				"Dir": 5
+			}]
+		},
+		{
+			"Index": 9,
+			"Places": [{
+				"Pos": [3, 19],
+				"Dir": 6
+			}]
+		},
+		{
+			"Index": 10,
+			"Places": [{
+				"Pos": [5, 19],
+				"Dir": 0
+			}]
+		},
+		{
+			"Index": 11,
+			"Places": [{
+				"Pos": [7, 19],
+				"Dir": 0
+			}]
+		},
+		{
+			"Index": 12,
+			"Places": [{
+				"Pos": [9, 19],
+				"Dir": 2
+			}]
+		},
+		{
+			"Index": 13,
+			"Places": [{
+				"Pos": [11, 19],
+				"Dir": 0
+			}]
+		},
+		{
+			"Index": 14,
+			"Places": [{
+				"Pos": [13, 19],
+				"Dir": 5
+			}]
+		},
+		{
+			"Index": 15,
+			"Places": [{
+				"Pos": [15, 19],
+				"Dir": 1
+			}]
+		},
+		{
+			"Index": 16,
+			"Places": [{
+				"Pos": [1, 21],
+				"Dir": 5
+			}]
+		},
+		{
+			"Index": 17,
+			"Places": [{
+				"Pos": [3, 21],
+				"Dir": 1
+			}]
+		},
+		{
+			"Index": 18,
+			"Places": [{
+				"Pos": [5, 21],
+				"Dir": 7
+			}]
+		},
+		{
+			"Index": 19,
+			"Places": [{
+				"Pos": [7, 21],
+				"Dir": 0
+			}]
+		},
+		{
+			"Index": 20,
+			"Places": [{
+				"Pos": [9, 21],
+				"Dir": 3
+			}]
+		},
+		{
+			"Index": 21,
+			"Places": [{
+				"Pos": [11, 21],
+				"Dir": 0
+			}]
+		},
+		{
+			"Index": 22,
+			"Places": [{
+				"Pos": [13, 21],
+				"Dir": 6
+			}]
+		},
+		{
+			"Index": 23,
+			"Places": [{
+				"Pos": [15, 21],
+				"Dir": 7
+			}]
+		}],
+		"StaticObjectives": [],
+		"StaticKeys": [{
+			"Index": 0,
+			"Positions": [[4, 2],
+			[4, 2],
+			[4, 2],
+			[4, 2],
+			[21, 5],
+			[21, 5],
+			[21, 5]]
+		},
+		{
+			"Index": 2,
+			"Positions": [[6, 2],
+			[6, 2],
+			[6, 2],
+			[6, 2],
+			[23, 5],
+			[23, 5]]
+		}],
+		"StaticPickups": [{
+			"Pickup": "dogfood",
+			"Positions": [[31, 1]]
+		},
+		{
+			"Pickup": "meal",
+			"Positions": [[29, 5]]
+		},
+		{
+			"Pickup": "health",
+			"Positions": [[31, 5]]
+		},
+		{
+			"Pickup": "ammo_Bullets",
+			"Positions": [[17, 7]]
+		},
+		{
+			"Pickup": "gun_Machine Gun",
+			"Positions": [[19, 7]]
+		},
+		{
+			"Pickup": "gun_Chain Gun",
+			"Positions": [[21, 7]]
+		},
+		{
+			"Pickup": "cross",
+			"Positions": [[23, 7]]
+		},
+		{
+			"Pickup": "chalice",
+			"Positions": [[25, 7]]
+		},
+		{
+			"Pickup": "chest",
+			"Positions": [[27, 7]]
+		},
+		{
+			"Pickup": "crown",
+			"Positions": [[29, 7]]
+		},
+		{
+			"Pickup": "heart",
+			"Positions": [[31, 7]]
+		},
+		{
+			"Pickup": "ammo_box",
+			"Positions": [[31, 11]]
+		},
+		{
+			"Pickup": "spear",
+			"Positions": [[19, 13]]
+		}],
+		"Start": [0, 0],
+		"Exits": [{
+			"Rect": [27,
+			14,
+			4,
+			2],
+			"Mission": 1,
+			"Hidden": false
+		}],
+		"AltFloorsEnabled": false
+	}]
+}

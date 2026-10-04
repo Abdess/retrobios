@@ -1,0 +1,15 @@
+{
+  "Version": 2,
+  "Ammo": [
+    {
+      "Name": "Ammo",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "ammo_clip"
+      },
+      "Sound": "ammo_pickup",
+      "Amount": 4,
+      "Max": 99
+    }
+  ]
+}

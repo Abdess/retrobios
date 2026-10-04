@@ -1,0 +1,260 @@
+--------------------------------
+>   Hurrican Language File     <
+>                              <
+>         - italiano -         <
+>         Luca Longone         <
+>          05.07.2007          <
+>                              <
+>                              <
+--------------------------------
+//---------- Starter ----------//
+Schermo pieno
+Standard
+Inizia gioco
+Esci
+Abortisci
+Lingua
+Controlla aggiornamenti
+Una nuova versione e' disponibile. Vuoi visitare il sito Hurrican adesso?
+Nessuna nuova versione disponibile.
+Livelli disponibili sul server
+Scarica l'attuale lista dei livelli dal server
+Scegli il level pack
+Scarica selezionati
+//---------- Miscellaneous ----------//
+0
+Caricamento file delle lingue
+Caricamento bitmap :
+Caricamento wave :
+Caricamento modulo :
+ ... OK
+Caricamento dati del livello per \n
+//---------- Tutorial Texts ----------//
+Ben venuto al livello tutorial di Hurrican. Qui imparerai i controlli base. Puoi muoverti a destra e sinistra premendo KEY_LEFT o KEY_RIGHT. Puoi accovacciarti premendo KEY_CROUCH. Adesso guardati un po' in torno. Ci sono altri suggerimenti simili a questo nel livello.
+Premi KEY_JUMP per saltare. Piu' a lungo terrai premuto il tasto, piu' in alto salterai. Puoi cambiare la direzione durante il salto premendo KEY_LEFT o KEY_RIGHT.
+Puoi guardarti attorno premendo KEY_UP e KEY_DOWN. Questo ti aiutera' a trovare oggetti nascosti. Per esempio, guarda il soffitto sopra di te...
+Questi diamanti sono disseminati lungo tutti i livelli. Otterrai punti raccogliendoli. In aggiunta, ogni volta che collezioni 50 diamanti, essi ti andranno a ricaricare il tempo.
+Premi KEY_SHOOT per sparare e tieni premuto il tasto per ottenere un po' di lento auto-fire. Premendo ripetutamente potrai sparare piu' velocemente del normale auto-fire.
+Ora guarda il muro alla tua destra. Non sembra molto solido. Prova a distruggerlo sparandogli con la tua arma.
+Molto bene. Ci sono un sacco di punti in cui potrai sparare ai muri. La maggior parte delle volte tuttavia, troverai solo delle aree segrete dietro di essi.
+Ora qualche esercizio di puntamento. Puoi puntare in su' premendo KEY_UP. Insieme a KEY_LEFT o KEY_RIGHT potrai sparare anche in diagonale. Ora prova a sparare per tirare giu' i diamanti sopra di te.
+Ora inizia il divertimento... Laggiu' troverai i primi nemici o, per meglio dire, i primi contenitori di power up.
+-leer-
+Molto bene. Colleziona tutti i power up ora.
+Questo effetto era l'indicazione che la tua arma e' stata rafforzata. Potrai vedere quale era dal colore dell'effetto. Rosso e' lo spread shot, blu e' il laser e verde e' il bounce. Le tacche (guarda la freccia) mostrano il livello corrente dell'arma.
+E ora i primi veri nemici: i walker. Una loro particolarita' e' che gli puoi saltare sopra per metterli knock out.
+La via e' nuovamente bloccata, ma questa volta il muro da distruggere e' SOTTO di te. Tieni premuto KEY_BLITZ e ruota il fulmine con KEY_LEFT e KEY_RIGHT per distruggerlo.
+Molto bene. A proposito, il fulmine puo' distruggere anche i nemici. Sfortunatamente e' un po' corto...  Ma non preoccuparti: dipende tutto dalla tecnica :) A destra ci sono alcuni power up per cambiare questa situazione.
+Il fulmine e' piu' lungo ora. Provalo! E la cosa migliore e': puo' diventare ancora piu' lungo. Le tacche sotto il simbolo del fulmine nell'HUD mostrano il livello corrente. Quando perderai una vita, perderai anche una tacca del fulmine.
+Gli extra non sono presenti solo nei contenitori volanti. Possono anche trovarsi nei blocchi dei power up che appaiono solo se vengono colpiti per la prima volta. Prova a sparare qui attorno finche' non ne trovi uno (fai ruotare il fulmine per rendere la cosa piu' facile)...
+Eccolo. Ora sparagli a ripetizione finche' sara' vuoto e colleziona tutti gli oggetti.
+Queste erano le cosiddette "power line", un'arma speciale. Il numero di power line puo' essere visto nell'HUD (guarda la freccia). Vai un po' a destra per ricevere le informazioni su come usarle e per vederle in azione.
+Resta al centro del ponte e premi KEY_POWERLINE per attivare le power line.
+Whoosh! I nemici piccoli vengono spazzati via e anche i piu' grandi vengono danneggiati da quest'arma. Ora colleziona i power up che vengono su'.
+Questi power up erano granate. Fanno BOOM. Sembra divertente, ma e' la verita' :) Ancora una volta, a destra imparerai l'uso di questi oggetti.
+Attento, ci sono due nidi che possono causare molti danni! Premi KEY_GRANATE per sparare una granata. Possono danneggiare tutti i nemici posizionati attorno all'esplosione. Per il secondo nido dovrai metterti sotto di esso, e sparare in su'.
+Sembra di nuovo un vicolo cieco. Accovacciati (KEY_CROUCH) e attiva le power line simultaneamente (KEY_POWERLINE) in modo da poterti trasformare nella ruota d'acciaio. Alla fine del tunnel, premi semplicemente il tasto per saltare (KEY_JUMP) per rimetterti in piedi.
+Come avrai notato, il cerchio blue (guarda la freccia) diminuira' quando rotoli come una ruota. Ma potrai ricaricarlo di nuovo coi power up. Inoltre, si ricarichera' lentamente da solo.
+Gia', questo era il power up della ruota. Quando sei in modalita' ruota, sei invincible e causerai danni ai nemici. E come se non bastasse, potrai anche piazzare le bombe premendo KEY_SHOOT. Prova con i nidi a destra.
+Wow, sei proprio una macchina assassina adesso! Ma l'armamentario non e' ancora completo. Alcune armi devono ancora arrivare...
+Queste frecce a proposito ti mostrano la direzione da prendere se vuoi raggiungere l'uscita.
+Ancora un muro? Potremmo usare il lampo... Ma aspetta! Avvicinati al muro e premi KEY_SHOCKWAVE ...
+Wow, quell'onda-shock ha distrutto l'intero muro eliminando il walker, e ha anche svuotato un blocco di power up. Puoi trasportare solo una di queste smart bomb alla volta e dovrai ricaricarla con il power up corrispondente dopo averla usata. Se il simbolo nell'HUD e' illuminato (guarda la freccia), la smart bomb e' pronta all'uso.
+Un'altro esercizio di puntamento... Tieni premuto KEY_SHOOT e KEY_BLITZ simultaneamente per caricare la tua arma con il colpo. Durante il caricamento, puoi cambiare la direzione di puntamento con KEY_LEFT e KEY_RIGHT. Lascia i tasti per sparare il colpo. Piu' a lungo mantieni il colpo, piu' sara' grande. Vai al centro e prova a sparare ai diamanti sopra di te con questo colpo.
+Piu' e' lungo il tuo fulmine, piu' velocemente si carichera' il colpo. Un'altra cosa: a sinistra scoprirai le due armi principali che si trovano a fianco allo spread shot.
+Questi erano gli extra per i bounce. Come puoi vedere, i power up possono trovarsi anche in giro cosi'. Questo sparo si puo' dividere in altri due spari in base al potere della tua arma al momento. Molto utile nei tunnel stretti o in corridoi come questo qui.
+L'ultima arma di oggi e' il laser. Colleziona i power up e provalo. La sua particolarita' sta' nel fatto di poter sparare attraverso molti nemici con un colpo solo. Puoi cambiare arma con KEY_WAFFE_CYCLE. Fai un po' di pratica.
+Questa e' la fine del tutorial. Nel gioco incontrerai altri power up e altra roba. Tieni pero' a mente: sperimenta un po' tutto per capire. Il tutorial era un po' piu' facile dei normali livelli: dai nidi non spuntavano nemici ed eri invincibile. Ma ora dovresti essere pronto alla battaglia. Buona fortuna!
+36
+37
+38
+39
+//---------- Konsolen Text ----------//
+Hurrican
+
+(c) 2007
+Poke53280
+www.poke53280.de
+
+Inserire "help" per informazioni sui comandi della console
+
+
+//---------- Summary Box ----------//
+Sommario
+Segreti
+Trucco sbloccato:
+- Premi un tasto -
+//---------- Main Menu ----------//
+CARICAMENTO
+SALVA GIOCO
+INIZIA GIOCO
+TORNA AL GIOCO
+PREFERENZE
+HIGHSCORE
+CREDITI
+ESCI
+GIOCA TUTORIAL
+INIZIA NUOVO GIOCO
+CONTINUA GIOCO SALVATO
+FACILE
+NORMALE
+DIFFICILE
+HURRICAN
+cursori: selezionare - enter : scegliere - ESC : indietro
+POSIZIONE
+NOME
+PUNTEGGIO
+STAGE
+DIFF.
+VOLUME
+SUONO
+MUSICA
+CONFIGURA CONTROLLI
+SCEGLI LINGUA
+MODO:
+Force feedback
+Carica impostazioni predefinite
+Joypad
+Joystick
+INCREDIBILE
+NUOVO HIGHSCORE ALLA POSIZIONE
+INSERISCI IL NOME
+CONTINUA
+dietro
+cammina a sinistra
+cammina a destra
+accovacciati
+guarda su'
+guarda giu'
+salta
+spara
+attiva lampo
+power line
+granata
+onda-shock
+cambia arma
+cammina
+guarda
+Asse X/Y
+D-pad
+-premi nuovo tasto-
+-premi nuovo bottone-
+DETTAGLIO: BASSO
+DETTAGLIO: MEDIO
+DETTAGLIO: ALTO
+DETTAGLIO: MASSIMO
+UN GIOCATORE
+DUE GIOCATORI
+Giocatore uno
+Giocatore due
+tipo
+modo
+sensibilita'
+tastiera
+non definito
+stage
+giocatore
+data
+- nessun valore -
+SEGRETO
+sinistra
+destra
+su'
+giu'
+bottone
+//---------- Hints ----------//
+Collezionando tutti i diamanti di un livello, sbloccherai un codice per un trucco.
+Perdendo una vita perderai anche il livello dell'arma corrente.
+Toccando un nemico mentre sei in modalita' ruota, l'energia del cerchio diminuira' piu' rapidamente.
+Stando fermo senza muoverti l'energia del cerchio si ricarichera' piu' rapidamente.
+Premendo salto mentre sei in modalita' ruota e in aria, potrai eseguire il salto rotante.
+Collezionando 50 diamanti riaggiornerai il limite di tempo.
+Non puoi trasportare piu' di 9 granate e 9 power line.
+Alcuni segreti si nascondono dietro muri da abbattere.
+Dove ci saranno muri che non ti fermano, ci saranno dietro dei segreti.
+Rotolando su una bomba che esplode, in modalita' ruota, subirai un leggero sobbalzo.
+Se verrai morso da un grosso pesce salta sulla terra ferma per liberartene.
+Vapore e fumo possono darti una leggera spinta quando salti.
+Alcuni boss sono veramente duri da abbattere usando la sola e pura potenza di fuoco.
+Il fuoco dai lanciafiamme a muro puo' causare danni anche ai nemici.
+I generatori dello scudo possono danneggiare i nemici quando li toccano.
+Alcuni nemnici e' meglio evitarli che distruggerli.
+Le granate causano danni ad ogni nemico attorno all'esplosione.
+Le power line sono la cosa migliore per trovare i blocchi dei power up.
+Il danno di un singolo bounce diminuira' ad ogni rimbalzo sul muro.
+Premendo ripetutamente il tasto fuoco puoi sparare piu' velocemente che con il normale auto-fire.
+Puoi saltare sui blocchi dei power up per raggiungere le aree sovrastanti.
+Puoi salvare il gioco alla fine di ogni livello.
+Piu' e' lungo il tuo fulmine, piu' rapidamente si carichera' il colpo.
+Perdendo una vita, l'esplosione sara' come quella di una granata.
+Con il laser puoi sparare attraverso piu' nemici.
+Le armi principali spread shot, laser e bounce possono essere potenziate fino a livello 8.
+Puoi salvare il gioco alla fine del livello.
+Puoi cambiare il livello di dettaglio degli effetti speciali dal menu opzioni.
+Alcuni nemici possono essere colpiti solo in specifici momenti.
+Poke53280 non ti chiedera' MAI l'indirizzo email o la tua password...
+//---------- Pissen ----------//
+Dannazione, devo andare da qualche parte...
+Argh! Non riesco piu' a trattenerla!
+Perche' questa armatura di latta non ha l'apertura per fare pipi'???
+Chi diavolo l'ha disegnata?
+Perche' nessuno ha pensato a questa evenienza?
+Tipico...
+Non l'hanno provata abbastanza a lungo...
+Dannazione, la cosa si sta facendo imbarazzante!
+Quando torno sulla Terra...
+... Ho intenzione di protestare per questo!
+E' impossibile.
+Questa suit d'assalto ha tutte le diavolerie e gli accessori immaginabili...
+Ma hanno dimenticato la cosa piu' importante.
+Che posso fare ora?
+Avanti, torna a giocare!
+Grmblfxt ... Sto diventando pazzo.
+Devo trattenerla...
+... finche' si ritorna al gioco!
+//---------- Intro Screen 1 ----------//
+2138, da qualche parte nello spazio
+La "nave da guerra" e' di ritorno da una missione di successo.
+La prossima fermata per la nave di trasporto truppe e' la Terra.
+All'improvviso, i soldati ricevono una chiamata di emergenza dal pianeta azzurro.
+"Terra sotto attacco! Tutte le unita' disponibili si preparino per la difesa!"
+"Razzi di origine sconosciuta colpiscono la Terra!"
+Alcuni secondi piu' tardi l'origine dei micidiali missili viene localizzata.
+Il pianeta Takatis.
+Gli uomini non possono credere ai loro occhi fissando l'ologramma nella stanza missioni.
+Nessun altro a parte il Dr. Geng X in persona poteva dare inizio all'attacco.
+Anni fa la notizia della sua morte si era diffusa per la galassia, ma ora e' tornato.
+Senza esitazione la "nave da guerra" imposta la rotta verso il pianeta inesplorato.
+Dopo un breve volo la nave raggiunge la sua destinazione.
+Il pianeta brilla di una sua affascinante bellezza.
+L'equipaggio inizia la procedura di atterraggio.
+Gli scanner rilevano un'atmosfera simile alla Terra.
+Improvvisamente, numerosi cannoni sulla superficie del pianeta aprono il fuoco.
+Il sistema di scudi viene abbattuto ed enormi proiettili aprono squarci nella nave.
+Senza aiuto, i soldati si dirigono sulla superficie del pianeta.
+Quando entrano nell'atmosfera, la nave inizia a prendere fuoco.
+Alcuni secondi dopo avviene l'impatto.
+Gran parte dell'equipaggio non e' sopravvissuta all'atterraggio di emergenza della "nave da guerra".
+Solo un soldato e' ancora vivo. Egli si alza lentamente e trova la via per uscire, determinato...
+Solo due soldati sono ancora vivi. Si alzano lentamente e trovano la via d'uscita, determinati...
+...A trovare il Dr. Geng X e liberare il mondo dalla sua diabolica presenza.
+//---------- Outtro ----------//
+L'incredibile e' divenuto realta'.
+Dopo una lunga battaglia, Dr. Geng X viene sconfitto!
+Qualunque cosa rimanga di lui restera' nascosta sotto le coltri di fumo della fortezza
+distrutta e in rovina. Tutte le sue sinistre creazioni resteranno seppellite con lui,
+giu' nella profonda ed eterna oscurita'.
+La pace e' stata nuovamente ristabilita nell'universo, ma nessuno sa
+quanto tempo questa pace potra' durare.
+Il futuro deve ancora essere scritto.
+
+
+
+//---------- Warpzone ----------//
+E ora, per quelli pazienti fra voi, alcuni piccoli suggerimenti
+Guarda bene all'interno del livello tutorial per trovare
+l'entrata segreta per le condutture ...
+Usare la ruota proprio all'inizio sarebbe un'idea ESPLOSIVA...
+Resta tutto a sinistra e non dimenticare: gli idraulici cercano i tubi ;)
+
+//--- ENDE ---//

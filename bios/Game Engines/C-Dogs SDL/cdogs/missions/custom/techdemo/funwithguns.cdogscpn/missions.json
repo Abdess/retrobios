@@ -1,0 +1,130 @@
+{
+	"Missions": [{
+		"Title": "Mission 1",
+		"Description": "",
+		"Type": "Classic",
+		"Width": 38,
+		"Height": 38,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [],
+		"Enemies": [0,
+		1,
+		0,
+		0,
+		0],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 105
+		},
+		{
+			"MapObject": "box",
+			"Density": 55
+		}],
+		"EnemyDensity": 35,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite",
+		"Chemo bombs",
+		"Petrify gun",
+		"Browny gun",
+		"Confusion bombs",
+		"Chemo gun",
+		"Pulse rifle",
+		"Heatseeker",
+		"Swarmer",
+		"Launcher",
+		"Pistol",
+		"Spread Gun",
+		"Chaser2",
+		"Stick Grenade",
+		"Vulcan",
+		"Nuclear Strike",
+		"Booby Trap",
+		"Scorpion Spear",
+		"Laser Pointer",
+		"Akimbo Pistols",
+	"Pistol and Powergun"],
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "343448ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "tile",
+				"Mask": "5c5c84ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "recessed",
+				"Mask": "840000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 10,
+		"WallLength": 8,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 0,
+			"Max": 0,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	}]
+}

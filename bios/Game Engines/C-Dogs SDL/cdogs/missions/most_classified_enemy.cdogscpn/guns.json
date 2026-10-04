@@ -1,0 +1,113 @@
+{
+  "Version": 1,
+
+  "Guns": [
+
+    {
+      "Name": "Fire Breath",
+      "Bullet": "flame_breath",
+      "Pic":"",
+      "Icon": "",
+      "Cost": 1,
+      "Lock": 50,
+      "Sound": "flamer",
+      "SpreadCount": 3,
+      "SpreadWidth": 0.1
+    },
+    {
+      "Name": "Psychokinetic Beam",
+      "Bullet": "psycho_beam",
+      "Pic":"",
+      "Icon": "",
+      "Cost": 5,
+      "Lock": 80,
+      "Sound": "powergun",
+      "MuzzleFlashSprite": "muzzle_flash_big",
+      "MuzzleFlashColor": "00ffff",
+      "MuzzleFlashDuration": 10
+    },
+    {
+      "Name": "Paralyzing Venom Spit",
+      "Bullet": "venom_spit",
+      "Cost": 1,
+      "Pic":"",
+      "Icon": "",
+      "Lock": 50,
+      "Sound": "hits/petrify",
+      "HitsObjects": false,
+      "Falling": {
+        "DestroyOnDrop": true
+      }
+    },
+    {
+      "Name": "Prototype I",
+      "Icon": "powergun",
+      "Bullet": "proto_laser",
+      "Cost": 1,
+      "Lock": 2,
+      "Recoil": 0.05,
+      "Sound": "fusion",
+      "SwitchSound": "powergun_switch",
+      "MuzzleFlashParticle": "muzzle_flash_powergun",
+      "Ammo": "Cells"
+    },
+    {
+      "Pic": "zapper",
+      "Name": "Prototype II",
+      "Icon": "browny_gun",
+      "Bullet": "rapid",
+      "Cost": 2,
+      "Lock": 5,
+      "Sound": "fusion",
+      "SwitchSound": "powergun_r",
+      "MuzzleFlashParticle": "muzzle_flash_browny",
+      "Ammo": "Cells"
+    },
+    {
+      "Pic": "",
+      "IsGrenade": true,
+      "Name": "Prototype III",
+      "Bullet": "proto_bomb",
+      "Cost": 20,
+      "Lock": 30,
+      "Sound": "launch",
+      "SwitchSound": "grenade_pickup",
+      "Elevation": 24,
+      "Ammo": "Protobombs"
+    },
+    {
+      "Pic": "",
+      "Icon": "",
+      "Name": "Steel Teeth",
+      "Bullet": "knife",
+      "Cost": 0,
+      "Sound": "",
+      "SwitchSound": "knife_switch",
+      "SoundLockLength": 10,
+      "CanShoot": false
+    },
+    {
+      "Pic": "pistol",
+      "Name": "Machine Pistol",
+      "Icon": "pistol",
+      "Bullet": "9mm",
+      "Cost": 2,
+      "Lock": 6,
+      "Sound": "pistol",
+      "SwitchSound": "pistol_switch",
+      "Recoil": 0.2,
+      "Brass": "brass",
+      "Ammo": "Bullets"
+    }
+  ],
+  "PseudoGuns" : [
+    {
+      "Pic": "",
+      "Name": "proto_explosion",
+      "Bullet": "proto_frag",
+      "SpreadCount": 32,
+      "SpreadWidth": 0.20,
+      "AngleOffset": 0.2
+    }
+  ]
+}

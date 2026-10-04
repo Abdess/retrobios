@@ -1,0 +1,77 @@
+{
+  "Version": 4,
+  "MapObjects": [
+    {
+      "Name": "crate",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "crate"
+      },
+      "Wreck": {
+        "MapObject": "crate_wreck"
+      },
+      "Health": 30,
+      "Flags": ["FreeInFront"]
+    },
+    {
+      "Name": "box",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box"
+      },
+      "Wreck": {
+        "MapObject": "box_wreck"
+      },
+      "Health": 20,
+      "Flags": ["FreeInFront"]
+    },
+    {
+      "Name": "box3_gray",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "box3_gray"
+      },
+      "Wreck": {
+        "MapObject": "box3_gray_wreck"
+      },
+      "Health": 30,
+      "Flags": ["FreeInFront"]
+    },
+    {
+      "Name": "cabinet_server",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "cabinet_server",
+        "TicksPerFrame": 20
+      },
+      "Wreck": {
+        "MapObject": "cabinet_server_wreck"
+      },
+      "Health": 120,
+      "Flags": ["FreeInFront"]
+    },
+    {
+      "Name": "reactor",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "reactor",
+        "TicksPerFrame": 4
+      },
+      "Wreck": {
+        "MapObject": "safe_wreck",
+        "Sound": "explosion"
+      },
+      "Health": 280,
+      "Flags": ["FreeInFront", "Inside"],
+      "DestroyGuns": [
+        "big_quake",
+        "small_explosion1",
+    	  "small_explosion2",
+        "small_explosion3"
+      ],
+      "DamageSmoke": {
+        "HealthThreshold": 0.5
+      }
+    }
+  ]
+}

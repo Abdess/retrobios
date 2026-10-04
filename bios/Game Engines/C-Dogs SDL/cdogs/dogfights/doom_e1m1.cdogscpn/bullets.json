@@ -1,0 +1,37 @@
+{
+  "Version": 2,
+  "Bullets": [
+    {
+      "Name": "10mm",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail",
+        "Width": 1.0
+      },
+      "WallMark": "bullet_hole",
+      "Speed": 35000,
+      "Range": 1,
+      "Power": 10,
+      "Mass": 0.2
+    },
+    {
+      "Name": "pellet",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Trail": {
+        "Particle": "trail",
+        "Width": 1.0
+      },
+      "WallMark": "bullet_hole",
+      "Speed": 25000,
+      "Range": 1,
+      "Power": 10,
+      "Mass": 0.2
+    }
+  ]
+}

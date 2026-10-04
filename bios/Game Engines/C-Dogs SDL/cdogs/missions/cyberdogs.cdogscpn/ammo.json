@@ -1,0 +1,73 @@
+{
+  "Version": 2,
+  "Ammo": [
+    {
+      "Name": "Bullets",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bullet_pickup"
+      },
+      "Sound": "bullet_pickup",
+      "Amount": 100,
+      "Max": 1000,
+      "Price": 600
+    },
+    {
+      "Name": "Grenades",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "grenade_pickup"
+      },
+      "Sound": "grenade_pickup",
+      "Amount": 10,
+      "Max": 100,
+      "Price": 300
+    },
+    {
+      "Name": "Cells",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/cells",
+        "TicksPerFrame": 10
+      },
+      "Sound": "cells_pickup",
+      "Amount": 10,
+      "Max": 100,
+      "Price": 100
+    },
+    {
+      "Name": "Mini cells",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/mini_cells",
+        "TicksPerFrame": 10
+      },
+      "Sound": "mini_cells_pickup",
+      "Amount": 50,
+      "Max": 500,
+      "Price": 500
+    },
+    {
+      "Name": "Rockets",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "rockets"
+      },
+      "Sound": "grenade_pickup",
+      "Amount": 10,
+      "Max": 100,
+      "Price": 1000
+    },
+    {
+      "Name": "Gas tank",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "gas_tank"
+      },
+      "Sound": "gas_tank_pickup",
+      "Amount": 100,
+      "Max": 1000,
+      "Price": 500
+    }
+  ]
+}

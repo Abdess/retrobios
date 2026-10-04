@@ -1,0 +1,722 @@
+/* GILGAMESH! */
+
+[enu default]
+
+MNU_NOPICTURE = "No Picture";
+MNU_DIFFVERSION = "Different\nVersion";
+
+CURGAME = "You are currently in\na game. Continuing will\nerase old game. Ok?";
+GAMESVD = "There's already a game\nsaved at this position.\n      Overwrite?";
+ENDGAMESTR = "Are you sure you want\nto end the game you\nare playing? (Y or N)";
+DELETESVDGAME = "Are you sure you want to\ndelete this saved game?\n\"%s\"";
+STR_NG = "New Game";
+STR_OPTIONS = "Options";
+STR_DISPLAY = "Display Options";
+STR_AMOPTIONS = "Automap Options";
+STR_DEPTHFOG = "Use Depth Fog";
+STR_FULLSCREEN = "Fullscreen";
+STR_VSYNC = "Vertical Sync";
+STR_SD = "Sound Options";
+STR_CL = "Control Setup";
+STR_LG = "Load Game";
+STR_SG = "Save Game";
+STR_CV = "Change View";
+STR_VS = "View Scores";
+STR_RT = "Read This!";
+STR_EG = "End Game";
+STR_BD = "Back to Demo";
+STR_BG = "Back to Game";
+STR_QT = "Quit";
+STR_LOADING = "Loading...";
+STR_SAVING = "Saving...";
+STR_LGC = "Load Game called\n";
+STR_NONE = "None";
+STR_PC = "PC Speaker";
+STR_ALSB = "AdLib/Sound Blaster";
+STR_DISNEY = "Disney Sound Source";
+STR_SB = "Sound Blaster";
+STR_WINDOWEDMOUSE = "Windowed Mouse";
+STR_MOUSEEN = "Mouse Enabled";
+STR_JOYEN = "Joystick Enabled";
+STR_PORT2 = "Use joystick port 2";
+STR_GAMEPAD = "Gravis GamePad Enabled";
+STR_SENS = "Mouse Sensitivity";
+STR_JOYSENS = "Joystick Sensitivity";
+STR_DISABLEYAXIS = "Disable Y Axis";
+STR_CUSTOM = "Customize controls";
+STR_HOWTOUGH = "How tough are you?";
+STR_SUPEREASY = "Super Easy";
+STR_EASY = "Easy";
+STR_NORMAL = "Normal";
+STR_HARD = "Hard";
+STR_MOUSEADJ = "Adjust Mouse Sensitivity";
+STR_MOUSEXADJ = "X Sensitivity";
+STR_MOUSEYADJ = "Y Sensitivity";
+STR_PANXADJ = "Pan X Sensitivity";
+STR_PANYADJ = "Pan Y Sensitivity";
+STR_SLOW = "Slow";
+STR_FAST = "Fast";
+STR_THINK = "Thinking";
+STR_YOUWIN = "you win!";
+STR_TOTALTIME = "total time";
+STR_AVERAGES = "averages";
+STR_BONUS = "bonus";
+STR_TIME = "time";
+STR_PAR = "par";
+STR_RATKILL = "kill";
+STR_RATSECRET = "secret";
+STR_RATTREASURE = "treasure";
+STR_RAT2KILL = "kill ratio";
+STR_RAT2SECRET = "secret ratio";
+STR_RAT2TREASURE = "treasure ratio";
+STR_NOSPACE = "There is not enough space\non your disk to Save Game!";
+STR_SAVECHT = "Your Save Game file is,\nshall we say, \"corrupted\".\nBut I'll let you go on and\nplay anyway....";
+STR_SEEAGAIN = "Let's see that again!";
+STR_SOUNDCONFIG = "Sound Configuration";
+STR_DIGITALDEVICE = "Digital Device & Volume";
+STR_ADLIBDEVICE = "Adlib Device & Volume";
+STR_MUSICDEVICE = "Music Device & Volume";
+STR_SOFT = "Soft";
+STR_LOUD = "Loud";
+STR_ALWAYSRUN = "Always Run";
+STR_CHEATER = "You now have 100% Health,\n99 Ammo and both Keys!\n\nNote that you have basically\neliminated your chances of\ngetting a high score!";
+STR_FLOOR = "floor"; // Floor X completed
+STr_COMPLETED = "completed";
+STR_SELECTRES = "Screen Resolution";
+STR_PLAYERCLASS = "Choose Player";
+STR_ESCQUIT = "Don't Return on Escape";
+STR_FAILWRITE = "Could not write save file.\nCheck file permissions.";
+STR_FAILREAD = "Could not read save file.\nCheck file permissions.";
+STR_AMROTATEOFF = "Rotate: No";
+STR_AMROTATEON = "Rotate: Yes";
+STR_AMROTATEOVERLAY = "Rotate: Overlay Only";
+STR_AMFLOORS = "Draw Floor Textures";
+STR_AMTEXTURES = "Draw Wall Textures";
+STR_AMOVERLAYOFF = "Overlay: Off";
+STR_AMOVERLAYON = "Overlay: On";
+STR_AMOVERLAYBOTH = "Overlay: On + Normal";
+STR_AMTEXTUREDOVERLAY = "Textured Overlay";
+STR_AMPAUSE = "Pause Game";
+STR_AMRATIOS = "Show Level Ratios";
+STR_SMALLFEEDERS = "Small Feeders";
+STR_SCREENSIZE = "Screen Size";
+STR_SMALL = "Small";
+STR_LARGE = "Large";
+
+STR_WHICHEPISODE = "Which episode to play?";
+NA_EPISODE1 = "Carl the Camel\nStart at level 1-1";
+NA_EPISODE2 = "Ginny the Giraffe\nStart at level 2-1";
+NA_EPISODE3 = "Melvin the Monkey\nStart at level 3-1";
+NA_EPISODE4 = "Kerry the Kangaroo\nStart at level 4-1";
+NA_EPISODE5 = "Ernie the Elephant\nStart at level 5-1";
+NA_EPISODE6 = "Burt the Bear\nStart at level 6-1";
+
+// Super 3D Noah's Ark
+NOAH_ENDSTR01 = "Are you sure you're\nready to quit?\nPress Y to Quit.";
+NOAH_ENDSTR02 = "What? Quitting already?\nPress Y to Quit.";
+NOAH_ENDSTR03 = "Are a few hungry animals\ntoo tough for you?\nPress Y to Quit.";
+NOAH_ENDSTR04 = "Giving up so soon?\nPress Y to Quit.";
+NOAH_ENDSTR05 = "Be sure to take your\numbrella, it's wet out there.\nPress Y to Quit.";
+NOAH_ENDSTR06 = "You're going to let\nthose animals run free?\nPress Y to Quit.";
+NOAH_ENDSTR07 = "Did the animals wear\nyou out?\nPress Y to Quit.";
+NOAH_ENDSTR08 = "Are you monkeying around or\ndo you really want to quit?\nPress Y to Quit.";
+NOAH_ENDSTR09 = "The animals might get\nhungry if you're gone\ntoo long!\nPress Y to Quit.";
+
+ROBSJUKEBOX = "Robert's Jukebox";
+
+NOAH_BRIEF_01 = "You'll be out of the ark in six\ndays, Noah. Unfortunately, the\nanimals are a tad bit restless and\nwant to get out now. Good thing\nyou brought all that food with\nyou. You'll need it to put the\nbusy ones to sleep.\n\nAt the end of the first day, be\nprepared to deal with Carl the\nCamel. He's been real cranky lately\nand is a bit out of control.\n\nGood luck and be careful...\n";
+NOAH_BRIEF_02 = "Wow, Noah! Carl sure was hard to\ncalm down. But remember, you\nwere chosen to guide this ark to\nsafety because you know how to\nget the job done.\n\nThe closing of day two ends with\nirritable Ginny the Giraffe. She\nmay be tall and quick, but give\nher enough food and it's off to\nsleep.\n\nOh, and Noah, remember to keep\nan eye out for hidden rooms...\n";
+NOAH_BRIEF_03 = "ZZZZZ... Great job, Noah!. Ginny is\nsnoring away.\n\nBoy, it seems the animals never\nseem to stay asleep very long.\n\nKeep your eye out for Melvin the\nMonkey. He can be pretty tricky\nand may try distracting you with\ncoconuts, but it's your job to get\nhim settled down for the rest of\nyour time aboard the ark.";
+NOAH_BRIEF_04 = "You're doing a great job, Noah!\nYou took care of that Melvin like\na real pro.\n\nI hope you haven't worn yourself\nout yet, because more challenges\nare ahead.\n\nKerry the Kangaroo awaits you,\nand she doesn't look the least\nbit tired. Are you ready for her?\nShe needs to rest like the other\nanimals.";
+NOAH_BRIEF_05 = "Wow! Kerry was no challenge for\nyou! Can you keep up the pace\nwhen faced with Ernie the\nElephant?\n\nDon't worry. Very soon you will\nbe on dry land, and you won't\nhave to chase the animals around\nthe ark anymore.";
+NOAH_BRIEF_06 = "You are almost there! If you can\nget through one more day, you\nwill be out of here for good!\n\nRumor has it one of the bears\ndoes not want to be found. In\nfact he may try to hide from\nyou. Be on the alert for Burt\nthe Bear.\n\nGet him to sleep and your work\nis done!";
+NOAH_BRIEF_COPYRIGHT = "\nSuper 3-D Noah's Ark\n\n\n(C)2014 Wisdom Tree, Inc.\nAll rights reserved.\n\n\nThis game contains copyrighted\nsoftware code owned by\nId Software, Inc\n(C)1992 Id Software, Inc.\nAll rights reserved.\n";
+
+CC_GOAT = "Goat";
+CC_SHEEP = "Sheep";
+CC_OSTRICH = "Ostrich";
+CC_ANTELOPE = "Antelope";
+CC_OX = "Ox";
+CC_CARL = "Carl the Camel";
+CC_MELVIN = "Melvin the Monkey";
+CC_GINNY = "Ginny the Giraffe";
+CC_KERRY = "Kerry the Kangaroo";
+CC_ERNIE = "Ernie the Elephant";
+CC_BURTHIDING = "Hiding Burt";
+CC_BURT = "Burt the Bear";
+
+/* Super 3D Noah's Ark Quiz */
+
+NOAH_CORRECT = "Correct!";
+NOAH_INCORRECT = "Incorrect!";
+
+NOAH_QUIZ_Q01 = "What city was Gilgamesh king\nof?";
+NOAH_QUIZ_H01 = "I:11";
+NOAH_QUIZ_A01A = "Jerusalem"; // Wrong
+NOAH_QUIZ_A01B = "Uruk"; // Correct
+NOAH_QUIZ_A01C = "Eridu"; // Wrong
+
+NOAH_QUIZ_Q02 = "What were the walls of Uruk\nmade of?";
+NOAH_QUIZ_H02 = "I:19";
+NOAH_QUIZ_A02A = "Stone"; // Wrong
+NOAH_QUIZ_A02B = "Brick"; // Correct
+NOAH_QUIZ_A02C = "Concrete"; // Wrong
+
+NOAH_QUIZ_Q03 = "Who was Gilgamesh's father?";
+NOAH_QUIZ_H03 = "I:35";
+NOAH_QUIZ_A03A = "Lugalbanda"; // Correct
+NOAH_QUIZ_A03B = "Sargon"; // Wrong
+NOAH_QUIZ_A03C = "Hammurabi"; // Wrong
+
+NOAH_QUIZ_Q04 = "Who was Gilgamesh's mother?";
+NOAH_QUIZ_H04 = "I:36";
+NOAH_QUIZ_A04A = "Ishtar"; // Wrong
+NOAH_QUIZ_A04B = "Zenobia"; // Wrong
+NOAH_QUIZ_A04C = "Ninsun"; // Correct
+
+NOAH_QUIZ_Q05 = "Why did the gods create\nEnkidu?";
+NOAH_QUIZ_H05 = "I:82";
+NOAH_QUIZ_A05A = "Befriend Gilgamesh"; // Wrong
+NOAH_QUIZ_A05B = "Stop Gilgamesh's tyranny"; // Correct
+NOAH_QUIZ_A05C = "Populate the countryside"; // Wrong
+
+NOAH_QUIZ_Q06 = "Who found Enkidu first?";
+NOAH_QUIZ_H06 = "I:111";
+NOAH_QUIZ_A06A = "A hunter"; // Correct
+NOAH_QUIZ_A06B = "A bushranger"; // Wrong
+NOAH_QUIZ_A06C = "A temple prostitute"; // Wrong
+
+NOAH_QUIZ_Q07 = "Who tamed Enkidu?";
+NOAH_QUIZ_H07 = "I:176";
+NOAH_QUIZ_A07A = "A temple prostitute"; // Correct
+NOAH_QUIZ_A07B = "A hunting party"; // Wrong
+NOAH_QUIZ_A07C = "A life coach"; // Wrong
+
+NOAH_QUIZ_Q08 = "Who guards the cedar forest?";
+NOAH_QUIZ_H08 = "II:220";
+NOAH_QUIZ_A08A = "A pride of lions"; // Wrong
+NOAH_QUIZ_A08B = "Humbaba the giant"; // Correct
+NOAH_QUIZ_A08C = "Smokey the bear"; // Wrong
+
+NOAH_QUIZ_Q09 = "Where was the cedar forest?";
+NOAH_QUIZ_H09 = "IV:3";
+NOAH_QUIZ_A09A = "Mount Lebanon"; // Correct
+NOAH_QUIZ_A09B = "Mount Olympus"; // Wrong
+NOAH_QUIZ_A09C = "Garden of Eden"; // Wrong
+
+NOAH_QUIZ_Q10 = "Which god helped Gilgamesh\ndefeat Humbaba?";
+NOAH_QUIZ_H10 = "III:88";
+NOAH_QUIZ_A10A = "Quetzalcoatl"; // Wrong
+NOAH_QUIZ_A10B = "Enlil"; // Wrong
+NOAH_QUIZ_A10C = "Shamash"; // Correct
+
+NOAH_QUIZ_Q11 = "How was Humbaba defeated?";
+NOAH_QUIZ_H11 = "V:159";
+NOAH_QUIZ_A11A = "drowned by water"; // Wrong
+NOAH_QUIZ_A11B = "immobilized by wind"; // Correct
+NOAH_QUIZ_A11C = "touched by heart"; // Wrong
+
+NOAH_QUIZ_Q12 = "Why did Gilgamesh reject\nIshtar?";
+NOAH_QUIZ_H12 = "VI:42";
+NOAH_QUIZ_A12A = "He loved Enkidu"; // Wrong
+NOAH_QUIZ_A12B = "She was abusive"; // Correct
+NOAH_QUIZ_A12C = "She was too old"; // Wrong
+
+NOAH_QUIZ_Q13 = "Who did Ishtar ask to send\nthe Bull of Heaven?";
+NOAH_QUIZ_H13 = "VI:94";
+NOAH_QUIZ_A13A = "The Cow of Heaven"; // Wrong
+NOAH_QUIZ_A13B = "Her mother Antu"; // Wrong
+NOAH_QUIZ_A13C = "Her father Anu"; // Correct
+
+NOAH_QUIZ_Q14 = "Did the Bull of Heaven die\nfrom an axe blow?";
+NOAH_QUIZ_H14 = "VI:146";
+NOAH_QUIZ_A14A = "Yes"; // Wrong
+NOAH_QUIZ_A14B = "No"; // Correct
+
+NOAH_QUIZ_Q15 = "How did the Bull of Heaven\nattack the men of Uruk?";
+NOAH_QUIZ_H15 = "VI:119";
+NOAH_QUIZ_A15A = "Goring with horns"; // Wrong
+NOAH_QUIZ_A15B = "Flinging dung"; // Wrong
+NOAH_QUIZ_A15C = "Opening pits in the ground"; // Correct
+
+NOAH_QUIZ_Q16 = "Enkidu helped kill the Bull\nof Heaven by holding its tail.";
+NOAH_QUIZ_H16 = "VI:142";
+NOAH_QUIZ_A16A = "False"; // Wrong
+NOAH_QUIZ_A16B = "True"; // Correct
+
+NOAH_QUIZ_Q17 = "How did Enkidu curse the\nhunter?";
+NOAH_QUIZ_H17 = "VII:97";
+NOAH_QUIZ_A17A = "grow horns"; // Wrong
+NOAH_QUIZ_A17B = "sickness"; // Wrong
+NOAH_QUIZ_A17C = "diminished skill"; // Correct
+
+NOAH_QUIZ_Q18 = "How long was Enkidu's\nsickness?";
+NOAH_QUIZ_H18 = "VII:260";
+NOAH_QUIZ_A18A = "7 days"; // Wrong
+NOAH_QUIZ_A18B = "12 days"; // Correct
+NOAH_QUIZ_A18C = "28 days"; // Wrong
+
+NOAH_QUIZ_Q19 = "Who did Gilgamesh pray to\nbefore slaying the lions?";
+NOAH_QUIZ_H19 = "IX:10";
+NOAH_QUIZ_A19A = "Sin the moon god"; // Correct
+NOAH_QUIZ_A19B = "Ishtar the goddess"; // Wrong
+NOAH_QUIZ_A19C = "Zeus the thunder god"; // Wrong
+
+NOAH_QUIZ_Q20 = "Who guards the gate between\nthe twin mountains?";
+NOAH_QUIZ_H20 = "IX:42";
+NOAH_QUIZ_A20A = "Gandalf"; // Wrong
+NOAH_QUIZ_A20B = "Two scorpion monsters"; // Correct
+NOAH_QUIZ_A20C = "Humbaba the giant"; // Wrong
+
+NOAH_QUIZ_Q21 = "How long did it take to go\nthrough the mountain path?";
+NOAH_QUIZ_H21 = "IX:170";
+NOAH_QUIZ_A21A = "6 hours"; // Wrong
+NOAH_QUIZ_A21B = "12 double-hours"; // Correct
+NOAH_QUIZ_A21C = "7 days"; // Wrong
+
+NOAH_QUIZ_Q22 = "What was at the end of the\nmountain path?";
+NOAH_QUIZ_H22 = "IX:172";
+NOAH_QUIZ_A22A = "Fountain of youth"; // Wrong
+NOAH_QUIZ_A22B = "Hills of gold"; // Wrong
+NOAH_QUIZ_A22C = "Trees of jewels"; // Correct
+
+NOAH_QUIZ_Q23 = "Why was Siduri the alewife\nafraid of Gilgamesh?";
+NOAH_QUIZ_H23 = "X:9";
+NOAH_QUIZ_A23A = "he was heavily armed"; // Wrong
+NOAH_QUIZ_A23B = "he was disheveled"; // Correct
+NOAH_QUIZ_A23C = "he was an immigrant"; // Wrong
+
+NOAH_QUIZ_Q24 = "How long did Gilgamesh\ngrieve over Enkidu's corpse?";
+NOAH_QUIZ_H24 = "X:58";
+NOAH_QUIZ_A24A = "six days and seven nights"; // Correct
+NOAH_QUIZ_A24B = "99 days and nights"; // Wrong
+NOAH_QUIZ_A24C = "three days and two nights"; // Wrong
+
+NOAH_QUIZ_Q25 = "When did Gilgamesh give up\nEnkidu's body for burial?";
+NOAH_QUIZ_H25 = "X:50";
+NOAH_QUIZ_A25A = "the body became stiff"; // Wrong
+NOAH_QUIZ_A25B = "the undertakers arrived"; // Wrong
+NOAH_QUIZ_A25C = "maggots fell from a nostril"; // Correct
+
+NOAH_QUIZ_Q26 = "How many poles did the\nboat man ask Gilgamesh to make?";
+NOAH_QUIZ_H26 = "X:160";
+NOAH_QUIZ_A26A = "1"; // Wrong
+NOAH_QUIZ_A26B = "120"; // Wrong
+NOAH_QUIZ_A26C = "300"; // Correct
+
+NOAH_QUIZ_Q27 = "What would have protected\nthe boat from the Waters of Death?";
+NOAH_QUIZ_H27 = "X:157";
+NOAH_QUIZ_A27A = "The Stone Ones"; // Correct
+NOAH_QUIZ_A27B = "The punting poles"; // Wrong
+NOAH_QUIZ_A27C = "The Tree of Life"; // Wrong
+
+NOAH_QUIZ_Q28 = "Gilgamesh ran out of poles\nwhen crossing the Waters of Death.";
+NOAH_QUIZ_H28 = "X:180";
+NOAH_QUIZ_A28A = "True"; // Correct
+NOAH_QUIZ_A28B = "False"; // Wrong
+
+NOAH_QUIZ_Q29 = "Who was Utnapishtim's\nboatman?";
+NOAH_QUIZ_H29 = "X:87";
+NOAH_QUIZ_A29A = "Charon"; // Wrong
+NOAH_QUIZ_A29B = "Siduri"; // Wrong
+NOAH_QUIZ_A29C = "Urshanabi"; // Correct
+
+NOAH_QUIZ_Q30 = "Where did Utnapishtim come\nfrom?";
+NOAH_QUIZ_H30 = "XI:23";
+NOAH_QUIZ_A30A = "Shuruppak"; // Correct
+NOAH_QUIZ_A30B = "Detroit"; // Wrong
+NOAH_QUIZ_A30C = "Eridu"; // Wrong
+
+NOAH_QUIZ_Q31 = "Who warned Utnapishtim of\nthe deluge?";
+NOAH_QUIZ_H31 = "XI:19";
+NOAH_QUIZ_A31A = "Noah"; // Wrong
+NOAH_QUIZ_A31B = "Anu"; // Wrong
+NOAH_QUIZ_A31C = "Enki"; // Correct
+
+NOAH_QUIZ_Q32 = "What shape was\nUtnapishtim's boat?";
+NOAH_QUIZ_H32 = "XI:30";
+NOAH_QUIZ_A32A = "Mickey Mouse"; // Wrong
+NOAH_QUIZ_A32B = "rectangle"; // Wrong
+NOAH_QUIZ_A32C = "square"; // Correct
+
+NOAH_QUIZ_Q33 = "Who built Utnapishtim's\nboat?";
+NOAH_QUIZ_H33 = "XI:48";
+NOAH_QUIZ_A33A = "himself"; // Wrong
+NOAH_QUIZ_A33B = "workers"; // Correct
+NOAH_QUIZ_A33C = "his boatman"; // Wrong
+
+NOAH_QUIZ_Q34 = "How long did the deluge\nstorm last?";
+NOAH_QUIZ_H34 = "XI:128";
+NOAH_QUIZ_A34A = "six days and seven nights"; // Correct
+NOAH_QUIZ_A34B = "one day and one night"; // Wrong
+NOAH_QUIZ_A34C = "three days and two nights"; // Wrong
+
+NOAH_QUIZ_Q35 = "Where did Utnapishtim's\nboat land?";
+NOAH_QUIZ_H35 = "XI:142";
+NOAH_QUIZ_A35A = "Mount Ararat"; // Wrong
+NOAH_QUIZ_A35B = "Mount Lebanon"; // Wrong
+NOAH_QUIZ_A35C = "Mount Nimush"; // Correct
+
+NOAH_QUIZ_Q36 = "Which bird found land\nafter the deluge?";
+NOAH_QUIZ_H36 = "XI:154";
+NOAH_QUIZ_A36A = "raven"; // Correct
+NOAH_QUIZ_A36B = "dove"; // Wrong
+NOAH_QUIZ_A36C = "swallow"; // Wrong
+
+NOAH_QUIZ_Q37 = "How long did the deluge\nlast?";
+NOAH_QUIZ_H37 = "XI:147";
+NOAH_QUIZ_A37A = "seven days"; // Correct
+NOAH_QUIZ_A37B = "seven months"; // Wrong
+NOAH_QUIZ_A37C = "seven minutes"; // Wrong
+
+NOAH_QUIZ_Q38 = "Enki was the god who\ngranted Utnapishtim immortality.";
+NOAH_QUIZ_H38 = "XI:199";
+NOAH_QUIZ_A38A = "True"; // Wrong
+NOAH_QUIZ_A38B = "False"; // Correct
+
+NOAH_QUIZ_Q39 = "What led the gods to come\ndown to the landed boat after\nthe deluge?";
+NOAH_QUIZ_H39 = "XI:158";
+NOAH_QUIZ_A39A = "the smells of sacrifice"; // Correct
+NOAH_QUIZ_A39B = "the calls of animals"; // Wrong
+NOAH_QUIZ_A39C = "Utnapishtim's tears"; // Wrong
+
+NOAH_QUIZ_Q40 = "How many days did\nGilgamesh sleep after hearing\nthe tale of the deluge?";
+NOAH_QUIZ_H40 = "XI:230";
+NOAH_QUIZ_A40A = "3 days"; // Wrong
+NOAH_QUIZ_A40B = "5 days"; // Wrong
+NOAH_QUIZ_A40C = "7 days"; // Correct
+
+NOAH_QUIZ_Q41 = "How did Utnapishtim count\nthe days that Gilgamesh slept?";
+NOAH_QUIZ_H41 = "XI:221";
+NOAH_QUIZ_A41A = "baking bread"; // Correct
+NOAH_QUIZ_A41B = "with a calendar"; // Wrong
+NOAH_QUIZ_A41C = "in a journal"; // Wrong
+
+NOAH_QUIZ_Q42 = "How did Gilgamesh obtain the\nplant of youth?";
+NOAH_QUIZ_H42 = "XI:289";
+NOAH_QUIZ_A42A = "donning scuba gear"; // Wrong
+NOAH_QUIZ_A42B = "tying heavy stones to his feet"; // Correct
+NOAH_QUIZ_A42C = "using a long punting pole"; // Wrong
+
+NOAH_QUIZ_Q43 = "How did Gilgamesh plan to\ntest the plant of youth?";
+NOAH_QUIZ_H43 = "XI:298";
+NOAH_QUIZ_A43A = "feeding some to an old man"; // Correct
+NOAH_QUIZ_A43B = "making a pasta dish"; // Wrong
+NOAH_QUIZ_A43C = "trying some himself"; // Wrong
+
+NOAH_QUIZ_Q44 = "How did Gilgamesh lose the\nplant of youth?";
+NOAH_QUIZ_H44 = "XI:305";
+NOAH_QUIZ_A44A = "stolen by a snake"; // Correct
+NOAH_QUIZ_A44B = "left it on the bus"; // Wrong
+NOAH_QUIZ_A44C = "it died during the journey"; // Wrong
+
+NOAH_QUIZ_Q45 = "Which god was Uruk's temple\ndedicated to?";
+NOAH_QUIZ_H45 = "I:16";
+NOAH_QUIZ_A45A = "Odin"; // Wrong
+NOAH_QUIZ_A45B = "Enlil"; // Wrong
+NOAH_QUIZ_A45C = "Ishtar"; // Correct
+
+NOAH_QUIZ_Q46 = "Enkidu was made from clay.";
+NOAH_QUIZ_H46 = "I:100";
+NOAH_QUIZ_A46A = "True"; // Correct
+NOAH_QUIZ_A46B = "False"; // Wrong
+
+NOAH_QUIZ_Q47 = "How tall was Gilgamesh?";
+NOAH_QUIZ_H47 = "I:52";
+NOAH_QUIZ_A47A = "6 cubits"; // Wrong
+NOAH_QUIZ_A47B = "11 cubits"; // Correct
+NOAH_QUIZ_A47C = "15 cubits"; // Wrong
+
+NOAH_QUIZ_Q48 = "Which animal did Enkidu\nhang out with?";
+NOAH_QUIZ_H48 = "I:108";
+NOAH_QUIZ_A48A = "lions"; // Wrong
+NOAH_QUIZ_A48B = "gazelles"; // Correct
+NOAH_QUIZ_A48C = "koalas"; // Wrong
+
+NOAH_QUIZ_Q49 = "Why did the hunter go to\nGilgamesh to deal with Enkidu?";
+NOAH_QUIZ_H49 = "I:128";
+NOAH_QUIZ_A49A = "he smelled bad"; // Wrong
+NOAH_QUIZ_A49B = "he attacked the hunter"; // Wrong
+NOAH_QUIZ_A49C = "he freed animals from traps"; // Correct
+
+NOAH_QUIZ_Q50 = "How long did Enkidu couple\nwith Shamhat?";
+NOAH_QUIZ_H50 = "I:192";
+NOAH_QUIZ_A50A = "six days and seven nights"; // Correct
+NOAH_QUIZ_A50B = "one whole day"; // Wrong
+NOAH_QUIZ_A50C = "two minutes"; // Wrong
+
+NOAH_QUIZ_Q51 = "Enkidu lost his body hair\nafter coupling with Shamhat.";
+NOAH_QUIZ_H51 = "I:197";
+NOAH_QUIZ_A51A = "True"; // Wrong
+NOAH_QUIZ_A51B = "False"; // Correct
+
+NOAH_QUIZ_Q52 = "Enkidu wanted to befriend\nGilgamesh.";
+NOAH_QUIZ_H52 = "I:212";
+NOAH_QUIZ_A52A = "True"; // Correct
+NOAH_QUIZ_A52B = "False"; // Wrong
+
+NOAH_QUIZ_Q53 = "What did Enkidu gain after\ncoupling with Shamhat?";
+NOAH_QUIZ_H53 = "I:200";
+NOAH_QUIZ_A53A = "wisdom"; // Correct
+NOAH_QUIZ_A53B = "ability to run fast"; // Wrong
+NOAH_QUIZ_A53C = "being handsome"; // Wrong
+
+NOAH_QUIZ_Q54 = "What did Gilgamesh dream\nabout that foretold Enkidu's\nfriendship?";
+NOAH_QUIZ_H54 = "I:246";
+NOAH_QUIZ_A54A = "a blade and an axe"; // Wrong
+NOAH_QUIZ_A54B = "a meteorite and an axe"; // Correct
+NOAH_QUIZ_A54C = "a mortar and a pestle"; // Wrong
+
+NOAH_QUIZ_Q55 = "What did Enkidu consume\nat the shepherds' camp?";
+NOAH_QUIZ_H55 = "II:44";
+NOAH_QUIZ_A55A = "coke and pizza"; // Wrong
+NOAH_QUIZ_A55B = "beer and bread"; // Correct
+NOAH_QUIZ_A55C = "wine and cheese"; // Wrong
+
+NOAH_QUIZ_Q56 = "How did Enkidu help the\nshepherds?";
+NOAH_QUIZ_H56 = "II:60";
+NOAH_QUIZ_A56A = "he herded the sheep"; // Wrong
+NOAH_QUIZ_A56B = "he killed the wolves"; // Correct
+NOAH_QUIZ_A56C = "he flexed his biceps"; // Wrong
+
+NOAH_QUIZ_Q57 = "The people of Uruk kissed\nEnkidu's feet.";
+NOAH_QUIZ_H57 = "II:107";
+NOAH_QUIZ_A57A = "True"; // Correct
+NOAH_QUIZ_A57B = "False"; // Wrong
+
+NOAH_QUIZ_Q58 = "When Gilgamesh fought\nEnkidu, who won?";
+NOAH_QUIZ_H58 = "II:116";
+NOAH_QUIZ_A58A = "Enkidu"; // Wrong
+NOAH_QUIZ_A58B = "Gilgamesh"; // Correct
+NOAH_QUIZ_A58C = "It was a tie"; // Wrong
+
+NOAH_QUIZ_Q59 = "Which god assigned the\nguardian of the cedar forest?";
+NOAH_QUIZ_H59 = "II:219";
+NOAH_QUIZ_A59A = "Shamash"; // Wrong
+NOAH_QUIZ_A59B = "Enlil"; // Correct
+NOAH_QUIZ_A59C = "Osiris"; // Wrong
+
+NOAH_QUIZ_Q60 = "Which of these superpowers\ndid Humbaba have?";
+NOAH_QUIZ_H60 = "II:223";
+NOAH_QUIZ_A60A = "seeing things far away"; // Wrong
+NOAH_QUIZ_A60B = "hearing things far away"; // Correct
+NOAH_QUIZ_A60C = "touching things far away"; // Wrong
+
+NOAH_QUIZ_Q61 = "What was Egalmah?";
+NOAH_QUIZ_H61 = "III:15";
+NOAH_QUIZ_A61A = "the Great Palm Garden"; // Wrong
+NOAH_QUIZ_A61B = "the Great Swimming Pool"; // Wrong
+NOAH_QUIZ_A61C = "the Great Palace"; // Correct
+
+NOAH_QUIZ_Q62 = "Who did Ninsun pray to\nfor helping Gilgamesh\non the cedar forest quest?";
+NOAH_QUIZ_H62 = "III:44";
+NOAH_QUIZ_A62A = "Humbaba"; // Wrong
+NOAH_QUIZ_A62B = "Shamash"; // Correct
+NOAH_QUIZ_A62C = "Enlil"; // Wrong
+
+NOAH_QUIZ_Q63 = "Where did Ninsun go in\norder to pray?";
+NOAH_QUIZ_H63 = "III:43";
+NOAH_QUIZ_A63A = "the palace sanctum"; // Wrong
+NOAH_QUIZ_A63B = "the palace lavatory"; // Wrong
+NOAH_QUIZ_A63C = "the palace roof"; // Correct
+
+NOAH_QUIZ_Q64 = "What did Gilgamesh use\nas libations to Shamash?";
+NOAH_QUIZ_H64 = "III:8";
+NOAH_QUIZ_A64A = "flour"; // Correct
+NOAH_QUIZ_A64B = "wine"; // Wrong
+NOAH_QUIZ_A64C = "hot chocolate"; // Wrong
+
+NOAH_QUIZ_Q65 = "What part of Humbaba did\nGilgamesh take as a trophy?";
+NOAH_QUIZ_H65 = "V:324";
+NOAH_QUIZ_A65A = "the naughty bits"; // Wrong
+NOAH_QUIZ_A65B = "the head"; // Correct
+NOAH_QUIZ_A65C = "a haunch"; // Wrong
+
+NOAH_QUIZ_Q66 = "Which city did the god\nEnlil reside in?";
+NOAH_QUIZ_H66 = "V:202";
+NOAH_QUIZ_A66A = "Nippur"; // Correct
+NOAH_QUIZ_A66B = "Cleveland"; // Wrong
+NOAH_QUIZ_A66C = "Uruk"; // Wrong
+
+NOAH_QUIZ_Q67 = "What part of the\nBull of Heaven was\nsacrificed to Shamash?";
+NOAH_QUIZ_H67 = "VI:148";
+NOAH_QUIZ_A67A = "the heart"; // Correct
+NOAH_QUIZ_A67B = "the head"; // Wrong
+NOAH_QUIZ_A67C = "a haunch"; // Wrong
+
+NOAH_QUIZ_Q68 = "Enkidu was eager to go to\nthe cedar forest.";
+NOAH_QUIZ_H68 = "II:216";
+NOAH_QUIZ_A68A = "True"; // Wrong
+NOAH_QUIZ_A68B = "False"; // Correct
+
+NOAH_QUIZ_Q69 = "After his defeat, Humbaba\nbegged for a quick death.";
+NOAH_QUIZ_H69 = "V:173";
+NOAH_QUIZ_A69A = "True"; // Wrong
+NOAH_QUIZ_A69B = "False"; // Correct
+
+NOAH_QUIZ_Q70 = "Gilgamesh returned from the\ncedar forest by raft.";
+NOAH_QUIZ_H70 = "V:321";
+NOAH_QUIZ_A70A = "True"; // Correct
+NOAH_QUIZ_A70B = "False"; // Wrong
+
+NOAH_QUIZ_Q71 = "What part of the\nBull of Heaven did Enkidu\nthrow at Ishtar?";
+NOAH_QUIZ_H71 = "Gen 9:6";
+NOAH_QUIZ_A71A = "a haunch"; // Correct
+NOAH_QUIZ_A71B = "an eye"; // Wrong
+NOAH_QUIZ_A71C = "the head"; // Wrong
+
+NOAH_QUIZ_Q72 = "The Bull of Heaven's horns\nwere made of precious stone.";
+NOAH_QUIZ_H72 = "VI:162";
+NOAH_QUIZ_A72A = "True"; // Correct
+NOAH_QUIZ_A72B = "False"; // Wrong
+
+NOAH_QUIZ_Q73 = "What did the inhabitants\nof the underworld eat?";
+NOAH_QUIZ_H73 = "VII:188";
+NOAH_QUIZ_A73A = "chicken tenders"; // Wrong
+NOAH_QUIZ_A73B = "dirt"; // Correct
+NOAH_QUIZ_A73C = "fire"; // Wrong
+
+NOAH_QUIZ_Q74 = "Enkidu died from combat\nwounds.";
+NOAH_QUIZ_H74 = "VII:267";
+NOAH_QUIZ_A74A = "True"; // Wrong
+NOAH_QUIZ_A74B = "False"; // Correct
+
+NOAH_QUIZ_Q75 = "What did Gilgamesh make to\nhonor Enkidu?";
+NOAH_QUIZ_H75 = "VIII:68"
+NOAH_QUIZ_A75A = "a gate"; // Wrong
+NOAH_QUIZ_A75B = "a charity song"; // Wrong
+NOAH_QUIZ_A75C = "a statue"; // Correct
+
+NOAH_QUIZ_Q76 = "Utnapishtim brought the\nshipwright on the boat.";
+NOAH_QUIZ_H76 = "XI:95";
+NOAH_QUIZ_A76A = "True"; // Wrong
+NOAH_QUIZ_A76B = "False"; // Correct
+
+NOAH_QUIZ_Q77 = "Utnapishtim brought treasure\nonto the boat.";
+NOAH_QUIZ_H77 = "XI:81";
+NOAH_QUIZ_A77A = "True"; // Correct
+NOAH_QUIZ_A77B = "False"; // Wrong
+
+NOAH_QUIZ_Q78 = "Which river was Shuruppak\nsituated by?";
+NOAH_QUIZ_H78 = "XI:12";
+NOAH_QUIZ_A78A = "Tigris"; // Wrong
+NOAH_QUIZ_A78B = "Mississippi"; // Wrong
+NOAH_QUIZ_A78C = "Euphrates"; // Correct
+
+NOAH_QUIZ_Q79 = "How many decks were in\nUtnapishtim's boat?";
+NOAH_QUIZ_H79 = "XI:61";
+NOAH_QUIZ_A79A = "1"; // Wrong
+NOAH_QUIZ_A79B = "6"; // Correct
+NOAH_QUIZ_A79C = "10"; // Wrong
+
+NOAH_QUIZ_Q80 = "Why did the gods cause the\ndeluge?";
+NOAH_QUIZ_H80 = "XI:14";
+NOAH_QUIZ_A80A = "The men were wicked"; // Wrong
+NOAH_QUIZ_A80B = "The earth was overpopulated"; // Wrong
+NOAH_QUIZ_A80C = "No reason"; // Correct
+
+NOAH_QUIZ_Q81 = "The gods were distraught\nby the deluge.";
+NOAH_QUIZ_H81 = "XI:114";
+NOAH_QUIZ_A81A = "True"; // Correct
+NOAH_QUIZ_A81B = "False"; // Wrong
+
+NOAH_QUIZ_Q82 = "What did Utnapishtim tell\nthe cityfolk his reason\nfor leaving in a boat?";
+NOAH_QUIZ_H82 = "XI:39";
+NOAH_QUIZ_A82A = "Enlil wanted to kill him"; // Correct
+NOAH_QUIZ_A82B = "To become a pirate"; // Wrong
+NOAH_QUIZ_A82C = "To see the world"; // Wrong
+
+NOAH_QUIZ_Q83 = "What was Gilgamesh's\ngenealogy?";
+NOAH_QUIZ_H83 = "I:48";
+NOAH_QUIZ_A83A = "half god half human"; // Wrong
+NOAH_QUIZ_A83B = "2/3 god, 1/3 human"; // Correct
+NOAH_QUIZ_A83C = "half man half hedgehog"; // Wrong
+
+NOAH_QUIZ_Q84 = "Gilgamesh went to the cedar\nforest with an army.";
+NOAH_QUIZ_H84 = "III:220";
+NOAH_QUIZ_A84A = "True"; // Wrong
+NOAH_QUIZ_A84B = "False"; // Correct
+
+NOAH_QUIZ_Q85 = "What did Enkidu make from the\ntallest cedar tree?";
+NOAH_QUIZ_H85 = "V:316";
+NOAH_QUIZ_A85A = "a door"; // Correct
+NOAH_QUIZ_A85B = "toothpicks"; // Wrong
+NOAH_QUIZ_A85C = "a bed"; // Wrong
+
+NOAH_QUIZ_Q86 = "After the deluge, Utnapishtim\nsettled at the source of rivers.";
+NOAH_QUIZ_H86 = "XI:206";
+NOAH_QUIZ_A86A = "True"; // Wrong
+NOAH_QUIZ_A86B = "False"; // Correct
+
+NOAH_QUIZ_Q87 = "Gilgamesh led the way to\nthe cedar forest.";
+NOAH_QUIZ_H87 = "III:220";
+NOAH_QUIZ_A87A = "True"; // Wrong
+NOAH_QUIZ_A87B = "False"; // Correct
+
+NOAH_QUIZ_Q88 = "What did Gilgamesh bring\nback to Uruk from his meeting\nwith Utnapishtim?";
+NOAH_QUIZ_H88 = "XI:306";
+NOAH_QUIZ_A88A = "A loaf of bread"; // Wrong
+NOAH_QUIZ_A88B = "Nothing"; // Correct
+NOAH_QUIZ_A88C = "The plant of youth"; // Wrong
+
+NOAH_QUIZ_Q89 = "The boatman leaves Gilgamesh\nbefore the latter\nreturns to Uruk.";
+NOAH_QUIZ_H89 = "XI:321";
+NOAH_QUIZ_A89A = "True"; // Wrong
+NOAH_QUIZ_A89B = "False"; // Correct
+
+NOAH_QUIZ_Q90 = "Where did the hunter find\nEnkidu?";
+NOAH_QUIZ_H90 = "I:112";
+NOAH_QUIZ_A90A = "at a water hole"; // Correct
+NOAH_QUIZ_A90B = "in the field"; // Wrong
+NOAH_QUIZ_A90C = "at the gay bar"; // Wrong
+
+NOAH_QUIZ_Q91 = "Utnapishtim told Gilgamesh\nabout the plant of youth.";
+NOAH_QUIZ_H91 = "XI:280";
+NOAH_QUIZ_A91A = "True"; // Correct
+NOAH_QUIZ_A91B = "False"; // Wrong
+
+NOAH_QUIZ_Q92 = "Which god made Enkidu?";
+NOAH_QUIZ_H92 = "I:99";
+NOAH_QUIZ_A92A = "Anu"; // Wrong
+NOAH_QUIZ_A92B = "Aruru"; // Correct
+NOAH_QUIZ_A92C = "Anubis"; // Wrong
+
+NOAH_QUIZ_Q93 = "How many cloaks did\nHumbaba have?";
+NOAH_QUIZ_H93 = "V:99";
+NOAH_QUIZ_A93A = "7"; // Correct
+NOAH_QUIZ_A93B = "10 "; // Wrong
+NOAH_QUIZ_A93C = "99"; // Wrong
+
+NOAH_QUIZ_Q94 = "Who was Enkidu's father?";
+NOAH_QUIZ_H94 = "V:117";
+NOAH_QUIZ_A94A = "Enlil"; // Wrong
+NOAH_QUIZ_A94B = "no one"; // Correct
+NOAH_QUIZ_A94C = "Gilgamesh"; // Wrong
+
+NOAH_QUIZ_Q95 = "What was the name of the\ntwin mountains?";
+NOAH_QUIZ_H95 = "IX:37";
+NOAH_QUIZ_A95A = "Megiddo"; // Wrong
+NOAH_QUIZ_A95B = "Mashu"; // Correct
+NOAH_QUIZ_A95C = "Machu Picchu"; // Wrong
+
+NOAH_QUIZ_Q96 = "When Gilgamesh roamed the\nwilderness he was unarmed.";
+NOAH_QUIZ_H96 = "IX:15";
+NOAH_QUIZ_A96A = "True"; // Wrong
+NOAH_QUIZ_A96B = "False"; // Correct
+
+NOAH_QUIZ_Q97 = "Utnapishtim was Gilgamesh's\nancestor.";
+NOAH_QUIZ_H97 = "IX:75";
+NOAH_QUIZ_A97A = "True"; // Correct
+NOAH_QUIZ_A97B = "False"; // Wrong
+
+NOAH_QUIZ_Q98 = "Why did Gilgamesh set off\nto roam the wilderness?";
+NOAH_QUIZ_H98 = "IX:5";
+NOAH_QUIZ_A98A = "to look for treasure"; // Wrong
+NOAH_QUIZ_A98B = "to seek immortality"; // Correct
+NOAH_QUIZ_A98C = "to avenge Enkidu"; // Wrong
+
+NOAH_QUIZ_Q99 = "Who was having nightmares\nwhile travelling to the\ncedar forest?";
+NOAH_QUIZ_H99 = "IV:14";
+NOAH_QUIZ_A99A = "Enkidu"; // Wrong
+NOAH_QUIZ_A99B = "Gilgamesh"; // Correct
+NOAH_QUIZ_A99C = "Humbaba"; // Wrong

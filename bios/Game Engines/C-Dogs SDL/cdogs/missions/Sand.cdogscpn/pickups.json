@@ -1,0 +1,10 @@
+{
+  "Version": 1,
+  "Pickups": [
+    {
+      "Name": "seeker_probe",
+      "Pic": "seeker_probe",
+      "Type": "Score"
+    }
+  ]
+}

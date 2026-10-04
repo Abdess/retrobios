@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Ammo": [
+    {
+      "Name": "N Bottle",
+      "Pic": "n_bottle",
+      "Sound": "gas_tank_pickup",
+      "Amount": 50,
+      "Max": 500
+    }
+  ]
+}

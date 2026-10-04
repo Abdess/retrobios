@@ -1,0 +1,2036 @@
+{
+	"Missions": [{
+		"Title": "",
+		"Description": "Retrieve at least 6 objects",
+		"Type": "Classic",
+		"Width": 100,
+		"Height": 100,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Retrieve objects",
+			"Type": "Collect",
+			"Pickups": ["folder",
+			"disk1",
+			"pci_card",
+			"paper",
+			"teddy"],
+			"Count": 12,
+			"Required": 6,
+			"Flags": 0
+		},
+		{
+			"Description": "Demolition",
+			"Type": "Destroy",
+			"MapObjects": ["crate",
+			"box",
+			"box3_gray",
+			"cabinet_server"],
+			"Count": 400,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [3],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "fan",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 50
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket_wreck",
+			"Density": 10
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 20
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Density": 20
+		}],
+		"PickupCounts": [{
+			"Pickup": "gun_Powergun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_MiniGun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Launcher",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Flamer",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Blaster",
+			"Count": 1
+		},
+		{
+			"Pickup": "armor",
+			"Count": 1
+		},
+		{
+			"Pickup": "max_armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "life",
+			"Count": 2
+		}],
+		"EnemyDensity": 13,
+		"Weapons": ["Fists",
+		"Chainsaw",
+		"2xChainsaw",
+		"3xChainsaw",
+		"4xChainsaw",
+		"5xChainsaw",
+		"MiniGun",
+		"Launcher",
+		"Flamer",
+		"Powergun",
+		"Blaster",
+		"MegaGun"],
+		"WeaponPersist": true,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "acacacff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 140,
+		"WallLength": 20,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 30,
+			"Min": 7,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "",
+		"Description": "Retrieve at least 8 objects",
+		"Type": "Classic",
+		"Width": 100,
+		"Height": 100,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Retrieve objects",
+			"Type": "Collect",
+			"Pickups": ["folder",
+			"disk1",
+			"pci_card",
+			"paper",
+			"teddy"],
+			"Count": 16,
+			"Required": 8,
+			"Flags": 0
+		},
+		{
+			"Description": "Demolition",
+			"Type": "Destroy",
+			"MapObjects": ["crate",
+			"box",
+			"box3_gray",
+			"cabinet_server"],
+			"Count": 400,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [3,
+		3,
+		3,
+		3,
+		3,
+		3,
+		3,
+		3,
+		3,
+		5],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "fan",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 50
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket_wreck",
+			"Density": 10
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 20
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Density": 20
+		}],
+		"PickupCounts": [{
+			"Pickup": "gun_Powergun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_MiniGun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Launcher",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Flamer",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Blaster",
+			"Count": 1
+		},
+		{
+			"Pickup": "armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "max_armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "life",
+			"Count": 2
+		}],
+		"EnemyDensity": 30,
+		"Weapons": ["Fists",
+		"Chainsaw",
+		"2xChainsaw",
+		"3xChainsaw",
+		"4xChainsaw",
+		"5xChainsaw",
+		"MiniGun",
+		"Launcher",
+		"Flamer",
+		"Powergun",
+		"Blaster",
+		"MegaGun"],
+		"WeaponPersist": true,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "34345cff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "smallsquare2",
+				"Mask": "282848ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "smallsquare2",
+				"Mask": "282848ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 140,
+		"WallLength": 20,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 30,
+			"Min": 7,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "",
+		"Description": "Retrieve at least 10 objects",
+		"Type": "Classic",
+		"Width": 100,
+		"Height": 100,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Retrieve objects",
+			"Type": "Collect",
+			"Pickups": ["folder",
+			"disk1",
+			"pci_card",
+			"paper",
+			"teddy"],
+			"Count": 20,
+			"Required": 10,
+			"Flags": 0
+		},
+		{
+			"Description": "Demolition",
+			"Type": "Destroy",
+			"MapObjects": ["crate",
+			"box",
+			"box3_gray",
+			"cabinet_server"],
+			"Count": 400,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [3,
+		3,
+		3,
+		3,
+		5],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "fan",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 50
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket_wreck",
+			"Density": 10
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 20
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Density": 20
+		}],
+		"PickupCounts": [{
+			"Pickup": "gun_Powergun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_MiniGun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Launcher",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Flamer",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Blaster",
+			"Count": 1
+		},
+		{
+			"Pickup": "armor",
+			"Count": 3
+		},
+		{
+			"Pickup": "max_armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "life",
+			"Count": 2
+		}],
+		"EnemyDensity": 37,
+		"Weapons": ["Fists",
+		"Chainsaw",
+		"2xChainsaw",
+		"3xChainsaw",
+		"4xChainsaw",
+		"5xChainsaw",
+		"MiniGun",
+		"Launcher",
+		"Flamer",
+		"Powergun",
+		"Blaster",
+		"MegaGun"],
+		"WeaponPersist": true,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "584418ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "584418ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 140,
+		"WallLength": 20,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 30,
+			"Min": 7,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "",
+		"Description": "Retrieve at least 12 objects",
+		"Type": "Classic",
+		"Width": 100,
+		"Height": 100,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Retrieve objects",
+			"Type": "Collect",
+			"Pickups": ["folder",
+			"disk1",
+			"pci_card",
+			"paper",
+			"teddy"],
+			"Count": 24,
+			"Required": 12,
+			"Flags": 0
+		},
+		{
+			"Description": "Demolition",
+			"Type": "Destroy",
+			"MapObjects": ["crate",
+			"box",
+			"box3_gray",
+			"cabinet_server"],
+			"Count": 400,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [3,
+		3,
+		3,
+		3,
+		5,
+		6],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "fan",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 50
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket_wreck",
+			"Density": 10
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 20
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Density": 20
+		}],
+		"PickupCounts": [{
+			"Pickup": "gun_Powergun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_MiniGun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Launcher",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Flamer",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Blaster",
+			"Count": 1
+		},
+		{
+			"Pickup": "armor",
+			"Count": 4
+		},
+		{
+			"Pickup": "max_armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "life",
+			"Count": 2
+		}],
+		"EnemyDensity": 42,
+		"Weapons": ["Fists",
+		"Chainsaw",
+		"2xChainsaw",
+		"3xChainsaw",
+		"4xChainsaw",
+		"5xChainsaw",
+		"MiniGun",
+		"Launcher",
+		"Flamer",
+		"Powergun",
+		"Blaster",
+		"MegaGun"],
+		"WeaponPersist": true,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 140,
+		"WallLength": 20,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 30,
+			"Min": 7,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "",
+		"Description": "Eliminate at least 70 enemies, Blow up 1 reactor",
+		"Type": "Classic",
+		"Width": 100,
+		"Height": 100,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Retrieve objects",
+			"Type": "Collect",
+			"Pickups": ["folder",
+			"disk1",
+			"pci_card",
+			"paper",
+			"teddy"],
+			"Count": 12,
+			"Required": 0,
+			"Flags": 0
+		},
+		{
+			"Description": "Kill enemies",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 90,
+			"Required": 70,
+			"Flags": 0
+		},
+		{
+			"Description": "Destroy the reactor",
+			"Type": "Destroy",
+			"MapObjects": ["reactor"],
+			"Count": 1,
+			"Required": 1,
+			"Flags": 0
+		},
+		{
+			"Description": "Demolition",
+			"Type": "Destroy",
+			"MapObjects": ["crate",
+			"box",
+			"box3_gray",
+			"cabinet_server"],
+			"Count": 400,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [],
+		"SpecialChars": [3,
+		3,
+		3,
+		5,
+		5],
+		"MapObjectDensities": [{
+			"MapObject": "fan",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 50
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket_wreck",
+			"Density": 10
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 20
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Density": 20
+		}],
+		"PickupCounts": [{
+			"Pickup": "gun_Powergun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_MiniGun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Launcher",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Flamer",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Blaster",
+			"Count": 1
+		},
+		{
+			"Pickup": "armor",
+			"Count": 5
+		},
+		{
+			"Pickup": "max_armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "life",
+			"Count": 2
+		}],
+		"EnemyDensity": 0,
+		"Weapons": ["Fists",
+		"Chainsaw",
+		"2xChainsaw",
+		"3xChainsaw",
+		"4xChainsaw",
+		"5xChainsaw",
+		"MiniGun",
+		"Launcher",
+		"Flamer",
+		"Powergun",
+		"Blaster",
+		"MegaGun"],
+		"WeaponPersist": true,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "584418ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "584418ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 140,
+		"WallLength": 20,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 30,
+			"Min": 7,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "",
+		"Description": "Retrieve at least 8 objects, Eliminate at least 40 enemies",
+		"Type": "Classic",
+		"Width": 100,
+		"Height": 100,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Retrieve objects",
+			"Type": "Collect",
+			"Pickups": ["folder",
+			"disk1",
+			"pci_card",
+			"paper",
+			"teddy"],
+			"Count": 12,
+			"Required": 8,
+			"Flags": 0
+		},
+		{
+			"Description": "Kill enemies",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 100,
+			"Required": 40,
+			"Flags": 0
+		},
+		{
+			"Description": "Demolition",
+			"Type": "Destroy",
+			"MapObjects": ["crate",
+			"box",
+			"box3_gray",
+			"cabinet_server"],
+			"Count": 400,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [],
+		"SpecialChars": [3,
+		3,
+		3,
+		5,
+		4,
+		7],
+		"MapObjectDensities": [{
+			"MapObject": "fan",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 50
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket_wreck",
+			"Density": 10
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 20
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Density": 20
+		}],
+		"PickupCounts": [{
+			"Pickup": "gun_Powergun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_MiniGun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Launcher",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Flamer",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Blaster",
+			"Count": 1
+		},
+		{
+			"Pickup": "armor",
+			"Count": 6
+		},
+		{
+			"Pickup": "max_armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "life",
+			"Count": 2
+		}],
+		"EnemyDensity": 0,
+		"Weapons": ["Fists",
+		"Chainsaw",
+		"2xChainsaw",
+		"3xChainsaw",
+		"4xChainsaw",
+		"5xChainsaw",
+		"MiniGun",
+		"Launcher",
+		"Flamer",
+		"Powergun",
+		"Blaster",
+		"MegaGun"],
+		"WeaponPersist": true,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "584418ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "584418ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 140,
+		"WallLength": 20,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 30,
+			"Min": 7,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "",
+		"Description": "Retrieve at least 18 objects, Blow up 2 reactors",
+		"Type": "Classic",
+		"Width": 100,
+		"Height": 100,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Retrieve objects",
+			"Type": "Collect",
+			"Pickups": ["folder",
+			"disk1",
+			"pci_card",
+			"paper",
+			"teddy"],
+			"Count": 24,
+			"Required": 18,
+			"Flags": 0
+		},
+		{
+			"Description": "Destroy reactors",
+			"Type": "Destroy",
+			"MapObjects": ["reactor"],
+			"Count": 2,
+			"Required": 2,
+			"Flags": 0
+		},
+		{
+			"Description": "Demolition",
+			"Type": "Destroy",
+			"MapObjects": ["crate",
+			"box",
+			"box3_gray",
+			"cabinet_server"],
+			"Count": 400,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [3,
+		3,
+		3,
+		3,
+		4,
+		4,
+		4,
+		7,
+		7,
+		7],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "fan",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 50
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket_wreck",
+			"Density": 10
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 20
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Density": 20
+		}],
+		"PickupCounts": [{
+			"Pickup": "gun_Powergun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_MiniGun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Launcher",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Flamer",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Blaster",
+			"Count": 1
+		},
+		{
+			"Pickup": "armor",
+			"Count": 7
+		},
+		{
+			"Pickup": "max_armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "life",
+			"Count": 2
+		}],
+		"EnemyDensity": 50,
+		"Weapons": ["Fists",
+		"Chainsaw",
+		"2xChainsaw",
+		"3xChainsaw",
+		"4xChainsaw",
+		"5xChainsaw",
+		"MiniGun",
+		"Launcher",
+		"Flamer",
+		"Powergun",
+		"Blaster",
+		"MegaGun"],
+		"WeaponPersist": true,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "34345cff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 140,
+		"WallLength": 20,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 30,
+			"Min": 7,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "",
+		"Description": "Eliminate at least 100 enemies, Blow up 2 reactors",
+		"Type": "Classic",
+		"Width": 100,
+		"Height": 100,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Retrieve objects",
+			"Type": "Collect",
+			"Pickups": ["folder",
+			"disk1",
+			"pci_card",
+			"paper",
+			"teddy"],
+			"Count": 24,
+			"Required": 0,
+			"Flags": 0
+		},
+		{
+			"Description": "Kill enemies",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 140,
+			"Required": 100,
+			"Flags": 0
+		},
+		{
+			"Description": "Destroy reactors",
+			"Type": "Destroy",
+			"MapObjects": ["reactor"],
+			"Count": 2,
+			"Required": 2,
+			"Flags": 0
+		},
+		{
+			"Description": "Demolition",
+			"Type": "Destroy",
+			"MapObjects": ["crate",
+			"box",
+			"box3_gray",
+			"cabinet_server"],
+			"Count": 400,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [],
+		"SpecialChars": [3,
+		3,
+		5,
+		6,
+		4,
+		7,
+		8],
+		"MapObjectDensities": [{
+			"MapObject": "fan",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 50
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket_wreck",
+			"Density": 10
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 20
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Density": 20
+		}],
+		"PickupCounts": [{
+			"Pickup": "gun_Powergun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_MiniGun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Launcher",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Flamer",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Blaster",
+			"Count": 1
+		},
+		{
+			"Pickup": "armor",
+			"Count": 8
+		},
+		{
+			"Pickup": "max_armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "life",
+			"Count": 2
+		}],
+		"EnemyDensity": 0,
+		"Weapons": ["Fists",
+		"Chainsaw",
+		"2xChainsaw",
+		"3xChainsaw",
+		"4xChainsaw",
+		"5xChainsaw",
+		"MiniGun",
+		"Launcher",
+		"Flamer",
+		"Powergun",
+		"Blaster",
+		"MegaGun"],
+		"WeaponPersist": true,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "34345cff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 140,
+		"WallLength": 20,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 30,
+			"Min": 7,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "",
+		"Description": "Retrieve at least 22 objects",
+		"Type": "Classic",
+		"Width": 100,
+		"Height": 100,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Retrieve objects",
+			"Type": "Collect",
+			"Pickups": ["folder",
+			"disk1",
+			"pci_card",
+			"paper",
+			"teddy"],
+			"Count": 28,
+			"Required": 22,
+			"Flags": 0
+		},
+		{
+			"Description": "Demolition",
+			"Type": "Destroy",
+			"MapObjects": ["crate",
+			"box",
+			"box3_gray",
+			"cabinet_server"],
+			"Count": 400,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [3,
+		4,
+		4,
+		7,
+		7],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "fan",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 50
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket_wreck",
+			"Density": 10
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 20
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Density": 20
+		}],
+		"PickupCounts": [{
+			"Pickup": "gun_Powergun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_MiniGun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Launcher",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Flamer",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Blaster",
+			"Count": 1
+		},
+		{
+			"Pickup": "armor",
+			"Count": 9
+		},
+		{
+			"Pickup": "max_armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "life",
+			"Count": 2
+		}],
+		"EnemyDensity": 57,
+		"Weapons": ["Fists",
+		"Chainsaw",
+		"2xChainsaw",
+		"3xChainsaw",
+		"4xChainsaw",
+		"5xChainsaw",
+		"MiniGun",
+		"Launcher",
+		"Flamer",
+		"Powergun",
+		"Blaster",
+		"MegaGun"],
+		"WeaponPersist": true,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "34345cff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 140,
+		"WallLength": 20,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 30,
+			"Min": 7,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 3
+		}
+	},
+	{
+		"Title": "The Final Showdown!",
+		"Description": "Retrieve at least 24 objects",
+		"Type": "Classic",
+		"Width": 100,
+		"Height": 100,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Retrieve objects",
+			"Type": "Collect",
+			"Pickups": ["folder",
+			"disk1",
+			"pci_card",
+			"paper",
+			"teddy"],
+			"Count": 30,
+			"Required": 24,
+			"Flags": 0
+		},
+		{
+			"Description": "Demolition",
+			"Type": "Destroy",
+			"MapObjects": ["crate",
+			"box",
+			"box3_gray",
+			"cabinet_server"],
+			"Count": 400,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [3,
+		4,
+		4,
+		5,
+		5,
+		6,
+		6,
+		7,
+		7,
+		8,
+		8],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "fan",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 50
+		},
+		{
+			"MapObject": "skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket_wreck",
+			"Density": 10
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 20
+		},
+		{
+			"MapObject": "bloodstain1",
+			"Density": 20
+		}],
+		"PickupCounts": [{
+			"Pickup": "gun_Powergun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_MiniGun",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Launcher",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Flamer",
+			"Count": 1
+		},
+		{
+			"Pickup": "gun_Blaster",
+			"Count": 1
+		},
+		{
+			"Pickup": "armor",
+			"Count": 10
+		},
+		{
+			"Pickup": "max_armor",
+			"Count": 2
+		},
+		{
+			"Pickup": "life",
+			"Count": 2
+		}],
+		"EnemyDensity": 64,
+		"Weapons": ["Fists",
+		"Chainsaw",
+		"2xChainsaw",
+		"3xChainsaw",
+		"4xChainsaw",
+		"5xChainsaw",
+		"MiniGun",
+		"Launcher",
+		"Flamer",
+		"Powergun",
+		"Blaster",
+		"MegaGun"],
+		"WeaponPersist": true,
+		"SkipDebrief": false,
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "34345cff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false,
+				"DamageBullet": ""
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "303030ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true,
+				"DamageBullet": ""
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true,
+				"DamageBullet": ""
+			}
+		},
+		"Walls": 140,
+		"WallLength": 20,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 30,
+			"Min": 7,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 1,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": false,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 3
+		}
+	}]
+}

@@ -1,0 +1,420 @@
+{
+  "Version": 2,
+  "Particles": [
+    {
+      "Name": "spark",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "particles/spark"
+      }
+    },
+    {
+      "Name": "spark_blue",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "particles/spark_classic",
+        "Mask": "00ffff"
+      },
+      "Range": 2
+    },
+    {
+      "Name": "spark_red",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "particles/spark_classic",
+        "Mask": "ff0000"
+      },
+      "Range": 2
+    },
+    {
+      "Name": "spark_green",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "particles/spark_classic",
+        "Mask": "00ff00"
+      },
+      "Range": 2
+    },
+    {
+      "Name": "spark_yellow",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "particles/spark_classic",
+        "Mask": "ffff00"
+      },
+      "Range": 2
+    },
+    {
+      "Name": "bullet_hole",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "particles/bullet_hole"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000
+    },
+    {
+      "Name": "boom",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/boom",
+        "TicksPerFrame": 1
+      },
+      "Range": 7
+    },
+    {
+      "Name": "muzzle_flash_default",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/muzzle_flash",
+        "Mask": "ffff80"
+      },
+      "Range": 3
+    },
+    {
+      "Name": "muzzle_flash_mg",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/muzzle_flash",
+        "Mask": "ffff80"
+      },
+      "Range": 2
+    },
+    {
+      "Name": "muzzle_flash_flamer",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/muzzle_flash",
+        "Mask": "ff0000"
+      },
+      "Range": 3
+    },
+    {
+      "Name": "muzzle_flash_shotgun",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/muzzle_flash_big",
+        "Mask": "ffff80"
+      },
+      "Range": 7
+    },
+    {
+      "Name": "muzzle_flash_powergun",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/muzzle_flash",
+        "Mask": "ff0000"
+      },
+      "Range": 5
+    },
+    {
+      "Name": "muzzle_flash_petrifier",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/muzzle_flash_big"
+      },
+      "Range": 10
+    },
+    {
+      "Name": "muzzle_flash_browny",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/muzzle_flash",
+        "Mask": "00ffff"
+      },
+      "Range": 5
+    },
+    {
+      "Name": "muzzle_flash_gasgun",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/muzzle_flash",
+        "Mask": "00ff00"
+      },
+      "Range": 3
+    },
+    {
+      "Name": "muzzle_flash_pulse",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/muzzle_flash_big",
+        "Mask": "00ffff"
+      },
+      "Range": 2
+    },
+    {
+      "Name": "muzzle_flash_heatseeker",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/muzzle_flash_big",
+        "Mask": "ff0000"
+      },
+      "Range": 5
+    },
+    {
+      "Name": "brass",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/brass"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000,
+      "GravityFactor": 1,
+      "HitsWalls": true,
+      "ZDarken": true
+    },
+    {
+      "Name": "brass_big",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/brass_big"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000,
+      "GravityFactor": 1,
+      "HitsWalls": true,
+      "ZDarken": true
+    },
+    {
+      "Name": "shotshell",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/shotshell"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000,
+      "GravityFactor": 1,
+      "HitsWalls": true,
+      "ZDarken": true
+    },
+    {
+      "Name": "smoke",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/smoke",
+        "TicksPerFrame": 6
+      },
+      "Range": 100
+    },
+    {
+      "Name": "smoke_big",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/smoke_big",
+        "TicksPerFrame": 6
+      },
+      "Range": 100
+    },
+    {
+      "Name": "smoke_trail",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/smoke_trail",
+        "TicksPerFrame": 7
+      },
+      "Range": 34
+    },
+    {
+      "Name": "smoke_trail_small",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/smoke_trail_small",
+        "TicksPerFrame": 7
+      },
+      "Range": 27
+    },
+    {
+      "Name": "explosion_small",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/explosion_small",
+        "TicksPerFrame": 4
+      },
+      "Range": 7
+    },
+    {
+      "Name": "fireball_hit",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball_hit",
+        "TicksPerFrame": 4
+      },
+      "Range": 4
+    },
+    {
+      "Name": "fireball_green_hit",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball_green_hit",
+        "TicksPerFrame": 4
+      },
+      "Range": 4
+    },
+    {
+      "Name": "blood1",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/blood1"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000,
+      "GravityFactor": 1,
+      "HitsWalls": true,
+      "Bounces": false,
+      "WallBounces": false
+    },
+    {
+      "Name": "blood2",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/blood2"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000,
+      "GravityFactor": 1,
+      "HitsWalls": true,
+      "Bounces": false,
+      "WallBounces": false,
+      "ZDarken": true
+    },
+    {
+      "Name": "blood3",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/blood3"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000,
+      "GravityFactor": 1,
+      "HitsWalls": true,
+      "Bounces": false,
+      "WallBounces": false,
+      "ZDarken": true
+    },
+    {
+      "Name": "spall1",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "particles/spall1"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000,
+      "GravityFactor": 1,
+      "HitsWalls": true,
+      "BounceFriction": 0.4,
+      "ZDarken": true
+    },
+    {
+      "Name": "spall2",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/spall2"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000,
+      "GravityFactor": 1,
+      "HitsWalls": true,
+      "BounceFriction": 0.4,
+      "ZDarken": true
+    },
+    {
+      "Name": "spall3",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/spall3"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000,
+      "GravityFactor": 1,
+      "HitsWalls": true,
+      "BounceFriction": 0.4,
+      "ZDarken": true
+    },
+    {
+      "Name": "health_plus",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/health_plus",
+        "TicksPerFrame": 10
+      },
+      "Range": 70,
+      "GravityFactor": -0.2
+    },
+    {
+      "Name": "ammo_text",
+      "Type": "Text",
+      "TextMask": "ffff00",
+      "Range": 100,
+      "GravityFactor": 2,
+      "Bounces": true,
+      "DrawAbove": true
+    },
+    {
+      "Name": "key_text",
+      "Type": "Text",
+      "Range": 140,
+      "GravityFactor": 2,
+      "Bounces": true,
+      "DrawAbove": true
+    },
+    {
+      "Name": "locked_text",
+      "Type": "Text",
+      "TextMask": "ff0000",
+      "Range": 40,
+      "GravityFactor": 0,
+      "DrawAbove": true
+    },
+    {
+      "Name": "heal_text",
+      "Type": "Text",
+      "TextMask": "00ff00",
+      "Range": 40,
+      "GravityFactor": 0,
+      "DrawAbove": true
+    },
+    {
+      "Name": "damage_text",
+      "Type": "Text",
+      "TextMask": "ff0000",
+      "Range": 40,
+      "GravityFactor": 0,
+      "DrawAbove": true
+    },
+    {
+      "Name": "score_text",
+      "Type": "Text",
+      "TextMask": "ffff00",
+      "Range": 40,
+      "GravityFactor": 0,
+      "DrawAbove": true
+    },
+    {
+      "Name": "lives_text",
+      "Type": "Text",
+      "TextMask": "00ffff",
+      "Range": 120,
+      "GravityFactor": 0,
+      "DrawAbove": true
+    },
+    {
+      "Name": "trail",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/trail",
+        "TicksPerFrame": 2
+      },
+      "Range": 7
+    },
+    {
+      "Name": "footprint",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "particles/footprint"
+      },
+      "RangeLow": 10000,
+      "RangeHigh": 11000,
+      "DrawBelow": true
+    }
+  ]
+}

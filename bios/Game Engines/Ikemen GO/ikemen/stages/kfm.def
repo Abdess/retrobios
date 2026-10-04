@@ -1,0 +1,362 @@
+; Definition of KFM's stage
+; *** denotes values you should change/check for each stage.
+; The term "background" is used to mean both backgrounds and foregrounds.
+
+;--------------------------------------------------------
+[Info]
+ ;Name of the stage.
+name = "Mountainside Temple"
+displayname = "Mountainside Temple" ;Name to display
+versiondate = 09,30,2009    ;Version date of stage (MM,DD,YYYY or X.XX)
+mugenversion = 1.1          ;Version of M.U.G.E.N stage works on (X.XX)
+author = "Elecbyte"         ;Stage author name
+
+;--------------------------------------------------------
+[Camera]
+ ;Camera starting position: Usually 0 for both
+startx = 0
+starty = 0
+
+ ;Left and right bound of camera
+ ;You may want to fiddle a bit with these values to make sure the
+ ;background doesn't move too far or too little
+ ;***
+boundleft = -150
+boundright = 150
+
+ ;High and low bound of camera
+ ;High is a negative number. Make is more negative if you want to
+ ;camera to be able to move higher.
+ ;Low should usually be 0.
+ ;If omitted, defaults to -25 and 0 respectively
+ ;***
+boundhigh = -22
+boundlow = 0
+
+ ;This is how much the camera will move vertically towards the
+ ;highest player. Valid values are from 0 to 1. A value of 0 will mean
+ ;the camera does not move up at all. A value of 1 will makes the camera
+ ;follow the highest player.
+ ;Typically .2 for normal-sized backgrounds. You may need to pull this
+ ;value up for taller backgrounds.
+verticalfollow = .2
+
+ ;Minimum vertical distance the highest player has to be from the floor,
+ ;before the camera starts to move up to follow him. For extremely
+ ;tall stages, a floor tension of about 20-30 coupled with a
+ ;vertical-follow of .8 allows the camera to follow the action.
+floortension = 0
+
+ ;Vertical distance from top and bottom edges where players can influence
+ ;vertical movement of the camera.
+;tensionhigh = 95
+;tensionlow = -5
+
+ ;Horizontal distance player is from edge before camera starts to move
+ ;left or right. Typically 50 or 60.
+tension = 60
+
+ ;Number of pixels beyond the top and bottom of the screen that may
+ ;be drawn.  Overdraw specifies the how much can be seen during an
+ ;EnvShake.  Overdraw pixels will also be used when the screen aspect
+ ;is taller than the stage aspect.
+overdrawhigh = 0
+overdrawlow = 0
+
+ ;Number of pixels into the top and bottom of the screen that may be
+ ;cut from drawing when the screen aspect is shorter than the stage
+ ;aspect.  These parameters suggest a guideline, and the actual
+ ;number of pixels cut depends on the difference in aspect.
+cuthigh = 35
+cutlow = 25
+
+ ;Zoom limits
+zoomout = 1
+zoomin = 1
+
+;--------------------------------------------------------
+[PlayerInfo]
+;--- Player 1 ---
+ ;Player 1 starting coordinates.
+ ;p1startx is typically -70 and p2startx is 70.
+ ;p1starty should be 0.
+p1startx = -70          ;Starting x coordinates
+p1starty = 0            ;Starting y coordinates
+p1facing = 1            ;Direction player faces: 1=right, -1=left
+
+;--- Player 2 ---
+p2startx = 70
+p2starty = 0
+p2facing = -1
+
+;--- Common ---
+ ;Don't change these values.
+leftbound  = -1000 ;Left bound (x-movement)
+rightbound =  1000 ;Right bound
+
+;--------------------------------------------------------
+[Bound]
+ ;Distance from left/right edge of screen that player can move to
+ ;Typically 15
+screenleft = 15    ;Dist from left of screen that player can move to
+screenright = 15   ;Right edge
+
+;--------------------------------------------------------
+[StageInfo]
+ ;"Ground" level where players stand at, measured in pixels from the
+ ;top of the screen.
+ ;Adjust this value to move the ground level up/down in the screen.
+ ;***
+zoffset = 200
+
+ ;Leave this at 1. It makes the players face each other
+autoturn = 1
+
+ ;Set the following to 1 to have the background be reset between
+ ;rounds.
+resetBG = 1
+
+ ;Width and height of the local coordinate space of the stage.
+localcoord = 320, 240
+
+ ;Horizontal and vertical scaling factor for drawing.
+xscale = 1
+yscale = 1
+
+;--------------------------------------------------------
+[Shadow]
+ ;This controls the darkness of the shadow. Valid values range
+ ;from 0 (lightest) to 256 (darkest). Defaults to 128 if omitted.
+intensity = 64
+
+ ;This is the shadow color given in r,g,b. Valid values for each
+ ;range from 0 (lightest) to 255 (darkest).
+ ;Defaults to 0,0,0 if omitted.
+ ;intensity and color's effects add up to give the final shadow
+ ;result.
+color = 0,0,0
+
+ ;This is the scale factor of the shadow. Use a big scale factor
+ ;to make the shadow longer. You can use a NEGATIVE scale factor
+ ;to make the shadow fall INTO the screen.
+ ;Defaults to 0.4 if omitted.
+yscale = -.1
+
+ ;This parameter lets you set the range over which the shadow is
+ ;visible. The first value is the high level, and the second is
+ ;the middle level. Both represent y-coordinates of the player.
+ ;A shadow is invisible if the player is above the high level,
+ ;and fully visible if below the middle level. The shadow is
+ ;faded in between the two levels. This gives an effect of the
+ ;shadow fading away as the player gets farther away from the
+ ;ground. If omitted, defaults to no level effects (shadow is
+ ;always fully visible).
+fade.range = -400,-100
+
+;--------------------------------------------------------
+[Reflection]
+ ;Intensity of reflection (from 0 to 256). Set to 0 to have no
+ ;reflection. Defaults to 0.
+intensity = 128
+
+;--------------------------------------------------------
+[Music]
+ ;Put a filename for a MOD, MP3 or MIDI here, or just leave it
+ ;blank if you don't want music. If an invalid filename is
+ ;given, then no music will play. To play CD audio, put
+ ;the track number followed by ".da". Using a track number of
+ ;0 will play a random audio track. For example, to play
+ ;track 3 from a music CD, use:
+ ;  bgmusic = 3.da
+bgmusic = sound/kfm.mid
+
+;bgmloopstart = <sample number>
+;bgmloopend = <sample number>
+
+ ;Adjust the volume. 100 is for 100%.
+bgmvolume = 100
+
+;========================================================
+;--------------------------------------------------------
+; Background definition
+; ***
+;-------------------------------------
+; [BG x]
+; type = ?       "Normal"/"Parallax"  (def: "normal")
+; spriteno = ?, ? Sprite group and number: groupno, imgno  (req'd)
+; start = ?, ?   Starting location (integer)  (def: 0, 0)
+; delta = ?, ?   Change in location per camera unit moved (float)  (def: 1,1)
+; trans = ?      Transparency settings: "none"/"add"/"add1"/"sub"/"addalpha" (def: "none")
+; alpha = ?, ?   (only for trans=addalpha) Source,dest alpha (def: 256,0)
+; mask = ?       Masking (int): 0 - off, 1 - on  (def: 0)
+; velocity = ?, ? Velocity: x, y (float): speed background moves (def: 0, 0)
+; tile = ?, ?    Tiling: xtile, ytile (int): 0 - off, 1 - infinite,
+;                        >1 - tile that number of times  (def: 0, 0) - only for Normal BG
+; tilespacing = ?, ? Tiling: x, y (int) : space between tiles (def: 0, 0)
+;  Parallax-only:
+; xscale = ?, ?    Top xscale, bottom xscale (float)
+; width = ?, ?     Top width, bottom width (int)  (use either this or above, but not both)
+; yscalestart = ?  Starting y-scale (float, in percent)  (def: 100)
+; yscaledelta = ?  Change in y-scale per unit (float, in percent)  (def: 0)
+;-------------------------------------
+
+;-------------------------------------
+; Main background definition
+[BGdef]
+ ;Filename of sprite data
+spr = kfm.sff
+
+ ;Set to 1 if you want to clear the screen to magenta before
+ ;drawing layer 0 (the default background). Good for spotting "holes"
+ ;in your background.
+ ;Remember to turn this off when you are done debugging the background,
+ ;because it slows down performance.
+debugbg = 0
+
+;-------------------------------------
+; IKEMEN GO ONLY, preview animation used in the Select screen
+[Begin Action 9000]
+9000,1, 0,0,-1
+;-------------------------------------
+
+;----------
+; Start each background element with the following:
+; Make sure it's "[BG n]", where n is anything you like (it's only used to
+; report errors.) For example, you could use:  [BG TheFloor]
+; Specify as many as you like. This is an example of a normal background:
+[BG 0]
+
+ ;The background type goes here: for now, only NORMAL and PARALLAX
+ ;If this line is omitted, the type will be assumed to be normal.
+type  = normal
+
+ ;The sprite number to use for the background (from the SFF specified above)
+ ;It's the group-number, followed by a comma, then the sprite-number
+ ;*** Do not omit this line.
+spriteno = 0, 0
+
+ ;This is the layer number, which determines where the sprite is drawn to.
+ ;Valid values are 0 and 1.
+ ;0 for background (behind characters), 1 for foreground (in front)
+ ;If this line is omitted, the default value of 0 will be assumed.
+layerno = 0
+
+ ;This is the starting location of the background in the format
+ ;x, y
+ ;If this line is omitted, the default value of 0,0 will be assumed.
+start = 0, 0
+
+ ;These are the number of pixels the background moves for every single unit
+ ;of camera movement, in the format
+ ;x, y
+ ;For the main background (eg. the floor the players stand on) you'll want
+ ;to use a delta of 1,1. Things farther away should have a smaller delta,
+ ;like 0.5 for example. Things near the camera should have a larget delta.
+ ;If this line is omitted, the default value of 1,1 will be assumed.
+delta = .5,.5
+
+ ;Here is the transparency setting of the background.
+ ;Valid values are:
+ ;"none" for normal drawing
+ ;"add" for colour addition (like a spotlight effect)
+ ;"add1" for colour addition with background dimmed to 50% brightness
+ ;"addalpha" for colour addition with control over alpha values (you need
+ ;    an "alpha" parameter if you use this)
+ ;"sub" for colour subtraction (like a shadow effect)
+ ;If this line is omitted, it's assumed that there will be no transparency.
+trans = none
+
+ ;Use this parameter only if "trans = addalpha". First value is the alpha
+ ;of the source (sprite), and the second is the alpha of the destination
+ ;(background). The values range from 0 to 256.
+ ;Uncomment the line below to use it:
+;alpha = 256,0
+
+ ;Mask means whether or not to draw colour zero of a sprite.
+ ;If you turn masking off, the background will take less CPU power to draw,
+ ;so remember to turn it off on sprites that don't use it.
+ ;If this line is omitted, it's assumed that there will be no masking.
+mask  = 0
+
+ ;The format for tiling is x,y. For each of them, the value is:
+ ;0 to use no tiling, 1 to tile, n where (n>1) to tile n times.
+ ;If this line is omitted, it's assumed that there will be no tiling.
+tile  = 0, 0
+
+ ;This is the x and y space between each tile, for tiled backgrounds
+ ;If omitted, default value is 0,0
+tilespacing = 0,0
+
+ ;This defines the drawing space, or "window" of the background. It's
+ ;given in the form
+ ;x1,y1, x2,y2
+ ;where (x1,y1)-(x2,y2) define a rectangular box.
+ ;Make the window smaller if you only want to draw part of the background.
+ ;You normally do not have to use this setting. Value values range from
+ ;0-319 for x, and 0-239 for y. The values are 0,0, 319,239 by default (full
+ ;screen).
+ ;Uncomment the line below to use it:
+;window = 0,0, 319, 239
+
+ ;Similar to the delta parameter, this one affects the movement of
+ ;the window. Defaults to 0,0
+ ;Uncomment the line below to use it:
+;windowdelta = 0,0
+
+;----------
+[BG Floor]
+type  = parallax
+spriteno = 10,0
+start = 0, 181
+delta = .78, .75
+xscale = 1, 1.75
+yscalestart = 100
+yscaledelta = 1.2
+
+;----------
+[BG Ceiling]
+type  = parallax
+spriteno = 11,0
+start = 0, 10
+delta = 1.1115,.75
+xscale = 1.425,1
+yscalestart = 100
+yscaledelta = -1.0
+
+;----------
+[BG Wall reflection on floor]
+type  = normal
+spriteno = 1,1
+trans = addalpha   ;Specify alpha
+alpha = 128,128    ;to 50% + 50%
+start = 0, 239
+delta = .8, .75
+mask = 1
+tile = 1, 0
+
+;----------
+[BG Wall]
+type  = normal
+spriteno = 1,0
+start = 0, 11
+delta = .8, .75
+mask = 1
+tile = 1, 0
+
+;----------
+[BG Pillar Bottom]
+type  = normal
+spriteno = 15,0
+start = 0, 180
+delta = .8, .75
+mask = 1
+tile = 1, 0
+
+;----------
+[BG Pillar Top]
+type  = normal
+spriteno = 15,1
+start = 0, 11
+delta = .8, .75
+mask = 1
+tile = 1, 0

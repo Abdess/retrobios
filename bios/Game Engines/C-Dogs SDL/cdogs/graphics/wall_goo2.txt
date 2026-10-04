@@ -1,0 +1,7 @@
+Adapted from [LPC] Dungeon Elements by Sharm and William.Thompsonj
+http://opengameart.org/content/lpc-dungeon-elements
+
+http://creativecommons.org/licenses/by/3.0/
+http://www.gnu.org/licenses/gpl-3.0.html
+http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+http://opengameart.org/content/oga-by-30-faq

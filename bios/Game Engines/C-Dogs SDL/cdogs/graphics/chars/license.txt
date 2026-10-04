@@ -1,0 +1,28 @@
+The following are extracted from original C-Dogs/Cyberdogs heads, by Ronny Wester CC-BY 3.0 (see graphics/originals.txt)
+- beret
+- cyber_shades
+- cyborg
+- eye_patch
+- flattop
+- goggles
+- mohawk
+- ponytail
+- riot_helmet
+- shades
+- ski_goggles
+
+The following are derived from original C-Dogs/Cyberdogs heads. Please still attribute to Ronny Wester using CC-BY 3.0
+- beard
+- donut
+- dutch
+- handlebar
+- rattail
+- widows
+
+The following are original and licensed as CC0
+
+- combat_helmet
+- hazmat
+- helmet
+- horns
+- peak_cap

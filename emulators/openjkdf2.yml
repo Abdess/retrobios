@@ -28,6 +28,16 @@ notes: |
     aGobDirectories[4]   gamedata\resource (CD overlay), mounted by
                          jkRes_LoadCd (src/Main/jkRes.c:130-131)
 
+  The asset root is the working directory when it holds resource/jk_.cd,
+  else the per-user data directory, whose last component is openjkdf2,
+  openjkmots or opendroidworks (src/Main/InstallHelper.c:97,
+  src/Main/InstallHelper.c:239-270). Paths below are written under that
+  component.
+
+  jkRes_LoadNew mounts every .gob (.goo in Mysteries of the Sith mode) of
+  resource/ (src/Main/jkRes.c:287-300) and jkEpisode lists every one of
+  episode/ (src/Main/jkEpisode.c:106).
+
   Required-asset lists are declared in src/Main/InstallHelper.c and
   checked by InstallHelper_CheckInstalled / AttemptInstallFromExisting;
   a missing entry aborts installation (src/Main/InstallHelper.c:748-756,
@@ -45,7 +55,7 @@ files:
   # ================================================================
 
   - name: "JK1.gob"
-    path: "episode/JK1.gob"
+    path: "openjkdf2/episode/JK1.gob"
     system: dark-forces-ii
     category: game_data
     required: true
@@ -53,7 +63,7 @@ files:
     note: "Single-player episode data."
 
   - name: "JK1CTF.gob"
-    path: "episode/JK1CTF.gob"
+    path: "openjkdf2/episode/JK1CTF.gob"
     system: dark-forces-ii
     category: game_data
     required: true
@@ -61,7 +71,7 @@ files:
     note: "Multiplayer CTF episode."
 
   - name: "JK1MP.gob"
-    path: "episode/JK1MP.gob"
+    path: "openjkdf2/episode/JK1MP.gob"
     system: dark-forces-ii
     category: game_data
     required: true
@@ -69,7 +79,7 @@ files:
     note: "Multiplayer deathmatch episode. Default -episode value in Main.c:120."
 
   - name: "Res1hi.gob"
-    path: "resource/Res1hi.gob"
+    path: "openjkdf2/resource/Res1hi.gob"
     system: dark-forces-ii
     category: game_data
     required: true
@@ -77,7 +87,7 @@ files:
     note: "High-resolution textures and sprites."
 
   - name: "Res2.gob"
-    path: "resource/Res2.gob"
+    path: "openjkdf2/resource/Res2.gob"
     system: dark-forces-ii
     category: game_data
     required: true
@@ -85,15 +95,43 @@ files:
     note: "Shared engine resources: sounds, 3DOs, materials."
 
   - name: "jk_.cd"
-    path: "resource/jk_.cd"
+    path: "openjkdf2/resource/jk_.cd"
     system: dark-forces-ii
     category: game_data
     required: true
-    source_ref: "src/Main/InstallHelper.c:39 (aRequiredAssets), src/Main/jkRes.c:234"
-    note: "CD key marker read by jkRes_ReadKeyFromFile."
+    source_ref: "src/Main/InstallHelper.c:39 (aRequiredAssets), src/Main/InstallHelper.c:764-769, src/Main/InstallHelper.c:1334-1336, src/engine_config.h:263"
+    note: |
+      4-byte marker. The install helper writes JKRES_MAGIC_1 into it once the
+      assets are copied, 0x699232C4 for this game. At startup a missing
+      marker sends the engine to the required-asset check.
+
+  - name: "jk1demo.gob"
+    path: "openjkdf2/episode/jk1demo.gob"
+    system: dark-forces-ii
+    category: game_data
+    required: false
+    source_ref: "src/Main/InstallHelper.c:654, src/Main/InstallHelper.c:841"
+    note: "Single-player episode of the demo, copied by the install helper when present."
+
+  - name: "jk1mpdem.gob"
+    path: "openjkdf2/episode/jk1mpdem.gob"
+    aliases: ["jk1mpdemo.gob"]
+    system: dark-forces-ii
+    category: game_data
+    required: false
+    source_ref: "src/Main/InstallHelper.c:655-656, src/Main/InstallHelper.c:842-843"
+    note: "Multiplayer episode of the demo. The install helper copies it under either name."
+
+  - name: "res1demo.gob"
+    path: "openjkdf2/resource/res1demo.gob"
+    system: dark-forces-ii
+    category: game_data
+    required: false
+    source_ref: "src/Main/InstallHelper.c:657, src/Main/InstallHelper.c:844"
+    note: "Resources of the demo, copied by the install helper when present."
 
   - name: "Res1low.gob"
-    path: "resource/Res1low.gob"
+    path: "openjkdf2/resource/Res1low.gob"
     system: dark-forces-ii
     category: game_data
     required: false
@@ -115,7 +153,7 @@ files:
   # ================================================================
 
   - name: "JKM.goo"
-    path: "episode/JKM.goo"
+    path: "openjkmots/episode/JKM.goo"
     system: mysteries-of-the-sith
     category: game_data
     required: true
@@ -123,28 +161,28 @@ files:
     note: "Main MoTS single-player episode."
 
   - name: "JKM_KFY.goo"
-    path: "episode/JKM_KFY.goo"
+    path: "openjkmots/episode/JKM_KFY.goo"
     system: mysteries-of-the-sith
     category: game_data
     required: true
     source_ref: "src/Main/InstallHelper.c:45 (aRequiredAssetsMots)"
 
   - name: "JKM_MP.goo"
-    path: "episode/JKM_MP.goo"
+    path: "openjkmots/episode/JKM_MP.goo"
     system: mysteries-of-the-sith
     category: game_data
     required: true
     source_ref: "src/Main/InstallHelper.c:46 (aRequiredAssetsMots)"
 
   - name: "JKM_SABER.goo"
-    path: "episode/JKM_SABER.goo"
+    path: "openjkmots/episode/JKM_SABER.goo"
     system: mysteries-of-the-sith
     category: game_data
     required: true
     source_ref: "src/Main/InstallHelper.c:47 (aRequiredAssetsMots)"
 
   - name: "Jkmres.goo"
-    path: "resource/Jkmres.goo"
+    path: "openjkmots/resource/Jkmres.goo"
     system: mysteries-of-the-sith
     category: game_data
     required: true
@@ -152,12 +190,23 @@ files:
     note: "Shared MoTS engine resources."
 
   - name: "JKMsndLO.goo"
-    path: "resource/JKMsndLO.goo"
+    path: "openjkmots/resource/JKMsndLO.goo"
     system: mysteries-of-the-sith
     category: game_data
     required: true
     source_ref: "src/Main/InstallHelper.c:50 (aRequiredAssetsMots)"
     note: "Low-quality sound bank (MININSTALL/JKMSNDLO.GOO on the CD)."
+
+  - name: "jk_.cd"
+    path: "openjkmots/resource/jk_.cd"
+    system: mysteries-of-the-sith
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:51 (aRequiredAssetsMots), src/Main/InstallHelper.c:1318-1320, src/Main/jkRes.c:232-235, src/engine_config.h:267-270"
+    note: |
+      4-byte marker holding 0x3B426929. InstallHelper_SetCwd reads it at
+      startup and enables Mysteries of the Sith mode when it finds that
+      value.
 
   - name: "JKM.EXE"
     system: mysteries-of-the-sith

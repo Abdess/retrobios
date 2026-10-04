@@ -1,0 +1,287 @@
+{
+  "Version": 1,
+  "Guns": [
+	{
+	  "Name": "Piecemarker",
+      "Icon": "piecemarker",
+          "Description": "Weapon class: Pistol\nDamage: 12\nRate of fire: 87 round/min\nDispersion: 0 degrees\nRange: 50\nSpeed: 1000\nCost: 1",
+	  "Bullet": "piecemarker_bullet",
+	  "Cost": 1,
+	  "Lock": 48,
+	  "Sound": "piecemarker",
+          "Brass": "brass"
+	},
+	{
+	  "Name": "PWN3r",
+      "Icon": "pwn3r",
+          "Description": "Weapon class: Pistol\nDamage: 12\nRate of fire: 120 round/min\nDispersion: 0 degrees\nRange: 50\nSpeed: 1000\nCost: 1",
+	  "Bullet": "pwn3r_bullet",
+	  "Cost": 1,
+	  "Lock": 35,
+	  "Sound": "pwn3r",
+          "Brass": "brass"
+	},
+	{
+	  "Name": "Pn-21",
+      "Icon": "pn21",
+          "Description": "Weapon class: Pistol\nDamage: 15\nRate of fire: 110 round/min\nDispersion: 0 degrees\nRange: 50\nSpeed: 1000\nCost: 1",
+	  "Bullet": "pn21_bullet",
+	  "Cost": 1,
+	  "Lock": 38,
+	  "Sound": "pn21",
+          "Brass": "brass"
+	},
+	{
+	  "Name": "Seven-Seven",
+      "Icon": "seven-seven",
+          "Description": "Weapon class: Pistol\nDamage: 10\nRate of fire: 110 round/min\nDispersion: 0 degrees\nRange: 50\nSpeed: 1000\nCost: 1",
+	  "Bullet": "77_bullet",
+	  "Cost": 1,
+	  "Lock": 38,
+	  "Sound": "77",
+          "Brass": "brass"
+	},
+	{
+	  "Name": "JB007",
+      "Icon": "jb007",
+          "Description": "Weapon class: Pistol\nDamage: 20\nRate of fire: 100 round/min\nDispersion: 0 degrees\nRange: 50\nSpeed: 1000\nCost: 1",
+	  "Bullet": "jb007_bullet",
+	  "Cost": 1,
+	  "Lock": 42,
+	  "Sound": "jb007",
+          "Brass": "brass"
+	},
+	{
+	  "Name": "Desert Hawk",
+      "Icon": "desert_hawk",
+          "Description": "Weapon class: Pistol\nDamage: 35\nRate of fire: 105 round/min\nDispersion: 0 degrees\nRange: 50\nSpeed: 1000\nCost: 1",
+	  "Bullet": "desert_hawk_bullet",
+	  "Cost": 1,
+	  "Lock": 40,
+	  "Sound": "desert_hawk",
+          "Brass": "brass"
+	},
+
+
+	{
+	  "Name": "Mag",
+      "Icon": "mag",
+          "Description": "Weapon class: Sub-machine gun\nDamage: 10\nRate of fire: 525 round/min\nDispersion: 2.9 degrees\nRange: 300\nSpeed: 1000\nCost: 1",
+	  "Bullet": "mag_bullet",
+	  "Cost": 1,
+	  "Lock": 8,
+          "Recoil": 0.05,
+	  "Sound": "mag",
+          "Brass": "brass"
+	},
+	{
+	  "Name": "MD5",
+      "Icon": "md5",
+          "Description": "Weapon class: Sub-machine gun\nDamage: 12\nRate of fire: 600 round/min\nDispersion: 3.6 degrees\nRange: 300\nSpeed: 1000\nCost: 1",
+	  "Bullet": "md5_bullet",
+	  "Cost": 1,
+	  "Lock": 7,
+          "Recoil": 0.06,
+	  "Sound": "md5",
+          "Brass": "brass"
+	},
+	{
+	  "Name": "Milit",
+      "Icon": "milit",
+          "Description": "Weapon class: Sub-machine gun\nDamage: 12\nRate of fire: 700 round/min\nDispersion: 4.6 degrees\nRange: 300\nSpeed: 1000\nCost: 1",
+	  "Bullet": "milit_bullet",
+	  "Cost": 1,
+	  "Lock": 6,
+          "Recoil": 0.09,
+	  "Sound": "milit",
+          "Brass": "brass"
+	},
+	{
+	  "Name": "M500",
+      "Icon": "m500",
+          "Description": "Weapon class: Sub-machine gun\nDamage: 12\nRate of Fire: 700 round/min\nDispersion: 5.7 degrees\nRange: 300\nSpeed: 1000\nCost: 1",
+	  "Bullet": "m500_bullet",
+	  "Cost": 1,
+	  "Lock": 6,
+          "Recoil": 0.1,
+	  "Sound": "m500",
+          "Brass": "brass"
+	},
+	{
+	  "Name": "X90",
+      "Icon": "x90",
+          "Description": "Weapon class: Sub-machine gun\nDamage: 12\nRate of fire: 840 round/min\nDispersion: 9.7 degrees\nRange: 300\nSpeed: 1000\nCost: 2",
+	  "Bullet": "x90_bullet",
+	  "Cost": 1,
+	  "Lock": 5,
+          "Recoil": 0.17,
+	  "Sound": "x90",
+          "Brass": "brass"
+	},
+	{
+	  "Name": "Angry Rabbit",
+      "Icon": "angry_rabbit",
+          "Description": "Weapon class: Sub-machine gun\nDamage: 12\nRate of fire: 700 round/min\nDispersion: 6.9 degrees\nRange: 300\nSpeed: 1000\nCost: 1",
+	  "Bullet": "angry_rabbit_bullet",
+	  "Cost": 1,
+	  "Lock": 6,
+          "Recoil": 0.12,
+	  "Sound": "angry_rabbit",
+          "Brass": "brass"
+	},
+
+
+	{
+	  "Name": "SG1",
+      "Icon": "sg1",
+          "Description": "Weapon class: Shotgun\nBullets per shot: 5\nDamage: 15 per bullet (max. 75)\nRate of fire: 70 round/min\nBullet spread: 13.2 degrees\nRange: 50\nSpeed: 1000\nCost: 2",
+	  "Bullet": "sg1_bullet",
+	  "Cost": 2,
+	  "Lock": 60,
+	  "Sound": "sg1",
+          "ReloadLead": 10,
+          "ReloadSound": "shotgun_r",
+          "SpreadCount": 5,
+          "SpreadWidth": 0.23,
+          "Brass": "shotshell"
+	},
+	{
+	  "Name": "SG2",
+      "Icon": "sg2",
+          "Description": "Weapon class: Shotgun\nBullets per shot: 5\nDamage: 17 (max. 85)\nRate of fire: 84 round/min\nBullet spread: 16.0 degrees\nRange: 50\nSpeed: 1000\nCost: 2",
+	  "Bullet": "sg2_bullet",
+	  "Cost": 2,
+	  "Lock": 50,
+	  "Sound": "sg2",
+          "ReloadLead": 10,
+          "ReloadSound": "shotgun_r",
+          "SpreadCount": 5,
+          "SpreadWidth": 0.28,
+          "Brass": "shotshell"
+	},
+
+
+	{
+	  "Name": "Poshlinov",
+      "Icon": "poshlinov",
+          "Description": "Weapon class: Rifle\nDamage: 23\nRate of fire: 466 round/min\nDispersion: 9.7 degrees\nRange: 300\nSpeed: 1000\nCost: 2",
+	  "Bullet": "poshlinov_bullet",
+	  "Cost": 2,
+	  "Lock": 9,
+          "Recoil": 0.17,
+	  "Sound": "poshlinov",
+          "Brass": "brass_big"
+	},
+	{
+	  "Name": "GS-49",
+      "Icon": "gs49",
+          "Description": "Weapon class: Rifle\nDamage: 15\nRate of fire: 420 round/min\nDispersion: 11.5 degrees\nRange: 300\nSpeed: 1000\nCost: 2",
+	  "Bullet": "gs49_bullet",
+	  "Cost": 2,
+	  "Lock": 10,
+          "Recoil": 0.2,
+	  "Sound": "gs49",
+          "Brass": "brass_big"
+	},
+	{
+	  "Name": "STORM",
+      "Icon": "storm",
+          "Description": "Weapon class: Rifle\nDamage: 14\nRate of fire: 466 round/min\nDispersion: 10.9 degrees\nRange: 300\nSpeed: 1000\nCost: 2",
+	  "Bullet": "storm_bullet",
+	  "Cost": 2,
+	  "Lock": 9,
+          "Recoil": 0.19,
+	  "Sound": "storm",
+          "Brass": "brass_big"
+	},
+	{
+	  "Name": "GH55b",
+      "Icon": "gh55b",
+          "Description": "Weapon class: Rifle\nDamage: 17\nRate of fire: 382 round/min\nDispersion: 11.5 degrees\nRange: 300\nSpeed: 1000\nCost: 2",
+	  "Bullet": "gh55b_bullet",
+	  "Cost": 2,
+	  "Lock": 11,
+          "Recoil": 0.2,
+	  "Sound": "gh55b",
+          "Brass": "brass_big"
+	},
+	{
+	  "Name": "POW9",
+      "Icon": "pow9",
+          "Description": "Weapon class: Rifle\nDamage: 17\nRate of fire: 267 round/min\nDispersion: 5.7 degrees\nRange: 300\nSpeed: 1000\nCost: 2",
+	  "Bullet": "pow9_bullet",
+	  "Cost": 2,
+	  "Lock": 17,
+          "Recoil": 0.10,
+	  "Sound": "pow9",
+          "Brass": "brass_big"
+	},
+	{
+	  "Name": "Raging Pitbull",
+      "Icon": "raging_pitbull",
+          "Description": "Weapon class: Rifle\nDamage: 22\nRate of fire: 525 round/min\nDispersion: 14.3 degrees\nRange: 300\nSpeed: 1000\nCost: 2",
+	  "Bullet": "raging_pitbull_bullet",
+	  "Cost": 2,
+	  "Lock": 8,
+          "Recoil": 0.25,
+	  "Sound": "raging_pitbull",
+          "Brass": "brass_big"
+	},
+
+
+	{
+	  "Name": "HITPRO",
+      "Icon": "hitpro",
+          "Description": "Weapon class: Sniper rifle\nDamage: 100\nRate of fire: 42 round/min\nDispersion: 0 degrees\nRange: 500\nSpeed: 2000\nCost: 5",
+	  "Bullet": "hitpro_bullet",
+	  "Cost": 5,
+	  "Lock": 100,
+	  "Sound": "hitpro",
+          "Brass": "brass_big"
+	},
+	{
+	  "Name": "SNP6+",
+      "Icon": "snp6plus",
+          "Description": "Weapon class: Sniper rifle\nDamage: 140\nRate of fire: 24 round/min\nDispersion: 0 degrees\nRange: 500\nSpeed: 2000\nCost: 5",
+	  "Bullet": "snp6plus_bullet",
+	  "Cost": 5,
+	  "Lock": 175,
+	  "Sound": "snp6plus",
+          "Brass": "brass_big"
+	},
+	{
+	  "Name": "1S1K",
+      "Icon": "1s1k",
+          "Description": "Weapon class: Sniper rifle\nDamage: 200\nRate of fire: 13.8 round/min\nDispersion: 0 degrees\nRange: 500\nSpeed: 2000\nCost: 8",
+	  "Bullet": "1s1k_bullet",
+	  "Cost": 8,
+	  "Lock": 300,
+	  "Sound": "1s1k",
+          "Brass": "brass_big"
+	},
+
+
+	{
+	  "Name": "MG5000",
+      "Icon": "mg5000",
+          "Description": "Weapon class: Machine gun\nDamage: 5\nRate of fire: 1050 round/min\nDispersion: 28.7 degrees\nRange: 300\nSpeed: 900\nCost: 1",
+	  "Bullet": "mg5000_bullet",
+	  "Cost": 1,
+	  "Lock": 4,
+          "Recoil": 0.5,
+	  "Sound": "mg5000",
+          "Brass": "brass_big"
+	},
+	{
+	  "Name": "MG6000",
+      "Icon": "mg6000",
+          "Description": "Weapon class: Machine gun\nDamage: 6\nRate of fire: 2100 round/min\nDispersion: 34.4 degrees\nRange: 300\nSpeed: 900\nCost: 1",
+	  "Bullet": "mg6000_bullet",
+	  "Cost": 1,
+	  "Lock": 3,
+          "Recoil": 0.6,
+	  "Sound": "mg6000",
+          "Brass": "brass_big"
+	}
+  ]
+}

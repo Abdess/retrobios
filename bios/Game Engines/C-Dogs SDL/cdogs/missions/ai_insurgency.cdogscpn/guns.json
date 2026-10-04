@@ -1,0 +1,65 @@
+{
+  "Version": 1,
+
+  "Guns": [
+
+    {
+	  "Pic": "pistol",
+      "Name": "Machine Pistol",
+      "Icon": "pistol",
+      "Bullet": "9mm",
+      "Cost": 2,
+      "Lock": 6,
+      "Sound": "pistol",
+      "SwitchSound": "pistol_switch",
+      "Recoil": 0.2,
+      "Brass": "brass",
+      "Ammo": "Bullets"
+    },
+    {
+      "Pic": "chaingun",
+      "Name": "Grenade Machine Gun",
+      "Icon": "machine_gun",
+      "Bullet": "gmg",
+      "Cost": 1,
+      "Lock": 20,
+      "Sound": "mg",
+      "SwitchSound": "mg_switch",
+      "Recoil": 0.17,
+      "MuzzleFlashParticle": "muzzle_flash_mg",
+      "Brass": "brass_big"
+    }
+  ],
+  "PseudoGuns" : [
+	  {
+	    "Pic": "",
+	    "Name": "grenade_explosion1",
+	    "Bullet": "grenade_fireball1",
+	    "ElevationLow": 14,
+	    "ElevationHigh": 14,
+	    "Sound": "grenade"
+	  },
+	  {
+	    "Pic": "",
+	    "Name": "grenade_explosion2",
+	    "Bullet": "grenade_fireball2",
+	    "ElevationLow": 22,
+	    "ElevationHigh": 22
+	  },
+	  {
+	    "Pic": "",
+	    "Name": "grenade_explosion3",
+	    "Bullet": "grenade_fireball3",
+	    "ElevationLow": 30,
+	    "ElevationHigh": 30
+	  },
+	  {
+	    "Pic": "",
+	    "Name": "server_burn",
+	    "Bullet": "molotov_flame",
+	    "Recoil": 2,
+	    "ElevationHigh": 30,
+	    "SpreadCount": 2
+	  }
+	]
+}

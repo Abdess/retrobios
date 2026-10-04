@@ -1,0 +1,109 @@
+{
+  "Version": 2,
+  "Guns": [
+    {
+      "Pic": "",
+      "Icon": "fist",
+      "Name": "Fists",
+      "Bullet": "fist",
+      "Cost": 0,
+      "Lock": 30,
+      "Sound": "",
+      "SwitchSound": "knuckles",
+      "CanShoot": false,
+      "CanDrop": false,
+      "Auto": true
+    },
+    {
+      "Pic": "chainsaw",
+      "Icon": "chainsaw",
+      "Name": "Chainsaw",
+      "Description": "What's a chainsaw doing on Mars? Who cares, as long as your enemy is ripped to pieces!",
+      "Bullet": "chainsaw",
+      "Prerequisite": "Fists",
+      "Cost": 0,
+      "Lock": 0,
+      "Sound": "",
+      "SwitchSound": "chainsaw_switch",
+      "SoundLockLength": 50,
+      "CanShoot": false,
+      "Auto": true
+    },
+    {
+      "Pic": "pistol",
+      "Name": "Marine Pistol",
+      "Icon": "pistol",
+      "Description": "Standard issue sidearm, low rate of fire and damage. Recommend engaging at a distance.",
+      "Bullet": "10mm",
+      "Cost": 0,
+      "Lock": 18,
+      "Sound": "pistol",
+      "Recoil": 0.05,
+      "Brass": "brass",
+      "Ammo": "Bullets"
+    },
+    {
+      "Pic": "shotgun",
+      "Grips": 2,
+      "Name": "Marine Shotgun",
+      "Icon": "shotgun",
+      "Bullet": "pellet",
+      "Cost": 5,
+      "Lock": 70,
+      "ReloadLead": 10,
+      "Sound": "marine_shotgun",
+      "ReloadSound": "shotgun_r",
+      "SwitchSound": "shotgun_r",
+      "SpreadCount": 7,
+      "SpreadWidth": 0.1,
+      "MuzzleFlashParticle": "muzzle_flash_shotgun",
+      "Brass": "shotshell",
+      "Ammo": "Shells"
+    },
+    {
+      "Pic": "chaingun",
+      "Name": "Chaingun",
+      "Icon": "machine_gun",
+      "Bullet": "10mm",
+      "Prerequisite": "Marine Pistol",
+      "Cost": 1,
+      "Lock": 8,
+      "Sound": "mg",
+      "SwitchSound": "mg_switch",
+      "Recoil": 0.3,
+      "MuzzleFlashParticle": "muzzle_flash_mg",
+      "Brass": "brass_big",
+      "Ammo": "Bullets"
+    },
+    {
+      "Name": "Imp Fireball",
+      "Pic": "",
+      "Bullet": "fireball",
+      "Cost": 1,
+      "Lock": 100,
+      "Sound": "fireball",
+      "MuzzleFlashParticle": "",
+      "CanDrop": false
+    },
+    {
+      "Name": "Baron Fireball",
+      "Pic": "",
+      "Bullet": "fireball_green",
+      "Cost": 5,
+      "Lock": 50,
+      "Sound": "fireball",
+      "MuzzleFlashParticle": "",
+      "CanDrop": false
+    },
+    {
+      "Pic": "",
+      "Name": "Monster Bite",
+      "Bullet": "monster_bite",
+      "Cost": 0,
+      "Lock": 20,
+      "Sound": "",
+      "CanShoot": false,
+      "CanDrop": false
+    }
+  ]
+}

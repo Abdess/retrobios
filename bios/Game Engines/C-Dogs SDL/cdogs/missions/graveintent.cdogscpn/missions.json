@@ -1,0 +1,1345 @@
+{
+	"Missions": [{
+		"Title": "Crash Landing",
+		"Description": "Once the splitting headache dies down and you can see again, you stand up.  Agony.  It wears off though.  Always does.\n\n...\n\nThis doesn't look like the base on Tau Ceti e.  Asteroid must have passed through your beam the instant you transmitted -- one in a billion chance.",
+		"Type": "Cave",
+		"Width": 24,
+		"Height": 48,
+		"ExitStyle": "plate2",
+		"KeyStyle": "plain2",
+		"Objectives": [{
+			"Description": "Find out where you are",
+			"Type": "Explore",
+			"Index": 0,
+			"Count": 100,
+			"Required": 80,
+			"Flags": 0
+		}],
+		"Enemies": [5,
+		5,
+		5,
+		0,
+		5,
+		5,
+		5],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "bone_blood",
+			"Density": 10
+		},
+		{
+			"MapObject": "wall_skull2",
+			"Density": 60
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 15
+		},
+		{
+			"MapObject": "skull2",
+			"Density": 5
+		},
+		{
+			"MapObject": "scratch",
+			"Density": 40
+		}],
+		"EnemyDensity": 2,
+		"Weapons": ["Knife", "Pistol"],
+		"Song": "graveintent1.xm",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "granite",
+				"Mask": "5c5c84ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "cobble",
+				"Mask": "282848ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "recessed",
+				"Mask": "707070ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"FillPercent": 40,
+		"Repeat": 4,
+		"R1": 5,
+		"R2": 2,
+		"Rooms": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"ExitEnabled": false,
+		"DoorsEnabled": false
+	},
+	{
+		"Title": "Get the Hell out of Dodge",
+		"Description": "Underground.  It's cold, but not enough to kill you.  Lucky -- you only have a respirator.\n\nYour jumpgate must have gotten separated from you.  If you want to transmit a distress signal, you have to get to the surface first -- and that's the quickest way.\n\n...But what the hell are those sounds?",
+		"Type": "Cave",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "plate2",
+		"KeyStyle": "plain2",
+		"Objectives": [{
+			"Description": "Find your personal jumpgate",
+			"Type": "Collect",
+			"Pickup": "holo",
+			"Count": 1,
+			"Required": 1,
+			"Flags": 4
+		},
+		{
+			"Description": "Eliminate threats",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 5,
+			"Required": 0,
+			"Flags": 9
+		}],
+		"Enemies": [5],
+		"SpecialChars": [0],
+		"MapObjectDensities": [{
+			"MapObject": "bone_blood",
+			"Density": 10
+		},
+		{
+			"MapObject": "skull2",
+			"Density": 5
+		},
+		{
+			"MapObject": "rod",
+			"Density": 30
+		},
+		{
+			"MapObject": "wall_skull2",
+			"Density": 30
+		},
+		{
+			"MapObject": "bulletmarks",
+			"Density": 20
+		},
+		{
+			"MapObject": "wall_goo",
+			"Density": 70
+		}],
+		"EnemyDensity": 10,
+		"Weapons": ["Knife", "Pistol"],
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "granite",
+				"Mask": "484870ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "cobble",
+				"Mask": "20203cff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "recessed",
+				"Mask": "707070ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"FillPercent": 40,
+		"Repeat": 4,
+		"R1": 5,
+		"R2": 2,
+		"Rooms": {
+			"Count": 8,
+			"Min": 5,
+			"Max": 7,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"ExitEnabled": false,
+		"DoorsEnabled": true
+	},
+	{
+		"Title": "Emergence",
+		"Description": "Luckily, your jumpgate had enough charge left to get you a little higher in the caves.  Most people who take two jumps that quickly end up having an aneurysm.\n\nYou'll worry about it later.  These things would kill you quicker.\n\nThey look almost...",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 36,
+		"ExitStyle": "plate2",
+		"KeyStyle": "plain2",
+		"Objectives": [{
+			"Description": "Cut a path to the surface",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 15,
+			"Required": 15,
+			"Flags": 0
+		}],
+		"Enemies": [5],
+		"SpecialChars": [0,
+		2,
+		0,
+		0],
+		"MapObjectDensities": [{
+			"MapObject": "blood3",
+			"Density": 20
+		},
+		{
+			"MapObject": "blood4",
+			"Density": 15
+		},
+		{
+			"MapObject": "gibs",
+			"Density": 15
+		},
+		{
+			"MapObject": "bone_blood",
+			"Density": 5
+		},
+		{
+			"MapObject": "rod",
+			"Density": 10
+		},
+		{
+			"MapObject": "statue_behemoth",
+			"Density": 35
+		},
+		{
+			"MapObject": "skull2",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 15
+		},
+		{
+			"MapObject": "barrel_skull2",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 40
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 40
+		},
+		{
+			"MapObject": "Shotgun spawner",
+			"Density": 5
+		}],
+		"EnemyDensity": 10,
+		"Weapons": ["Knife", "Pistol"],
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "34345cff",
+				"MaskAlt": "3c3c3cff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "20203cff",
+				"MaskAlt": "3c3c3cff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "707070ff",
+				"MaskAlt": "3c3c3cff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon2",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 0,
+		"WallLength": 48,
+		"CorridorWidth": 3,
+		"Rooms": {
+			"Count": 8,
+			"Min": 8,
+			"Max": 14,
+			"Edge": false,
+			"Overlap": true,
+			"Walls": 1,
+			"WallLength": 1,
+			"WallPad": 2
+		},
+		"Squares": 0,
+		"ExitEnabled": true,
+		"Doors": {
+			"Enabled": true,
+			"Min": 2,
+			"Max": 3,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 6,
+			"Min": 2,
+			"Max": 2
+		}
+	},
+	{
+		"Title": "Rumble in the Dark",
+		"Description": "The air feels somehow lighter around here. The surface must be near.\n\nYou trace some unnatural tunnels into a small cavern. Before you can get closer to the rockfall leading up, you hear a dark murmur...",
+		"Type": "Cave",
+		"Width": 37,
+		"Height": 35,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Kill the guardian",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 4
+		},
+		{
+			"Description": "Find access panels",
+			"Type": "Collect",
+			"Pickup": "circuit",
+			"Count": 3,
+			"Required": 0,
+			"Flags": 4
+		}],
+		"Enemies": [0, 2],
+		"SpecialChars": [7],
+		"MapObjectDensities": [{
+			"MapObject": "skull2",
+			"Density": 20
+		},
+		{
+			"MapObject": "bone_blood",
+			"Density": 15
+		},
+		{
+			"MapObject": "box3_gray",
+			"Density": 25
+		},
+		{
+			"MapObject": "Machine gun spawner",
+			"Density": 10
+		},
+		{
+			"MapObject": "box3_green",
+			"Density": 20
+		},
+		{
+			"MapObject": "crate",
+			"Density": 20
+		},
+		{
+			"MapObject": "crate2",
+			"Density": 20
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 50
+		}],
+		"EnemyDensity": 0,
+		"Weapons": ["Knife",
+		"Pistol",
+		"Shotgun"],
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "484870ff",
+				"MaskAlt": "8484acff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "cobble",
+				"Mask": "301c1cff",
+				"MaskAlt": "8484acff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "20203cff",
+				"MaskAlt": "8484acff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "blast",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"FillPercent": 60,
+		"Repeat": 2,
+		"R1": 6,
+		"R2": 3,
+		"Rooms": {
+			"Count": 6,
+			"Min": 6,
+			"Max": 6,
+			"Edge": true,
+			"Overlap": true,
+			"Walls": 0,
+			"WallLength": 1,
+			"WallPad": 1
+		},
+		"Squares": 2,
+		"ExitEnabled": false,
+		"DoorsEnabled": true
+	},
+	{
+		"Title": "The Long Black Road",
+		"Description": "You finally made it to the surface.  Not much lighter up here than it was down there, though.\n\nIs that a road...?  Funny, it almost looks like Earth out there.  Almost.  Maybe this used to be a colony, a long time ago.\n\nThose look like some buildings in the distance.  Might be an antenna you can patch into.",
+		"Type": "Static",
+		"Width": 20,
+		"Height": 100,
+		"ExitStyle": "plate2",
+		"KeyStyle": "plain2",
+		"Objectives": [],
+		"Enemies": [0,
+		0,
+		2,
+		4],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 5
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 15
+		},
+		{
+			"MapObject": "rod",
+			"Density": 25
+		},
+		{
+			"MapObject": "bone_blood",
+			"Density": 5
+		}],
+		"EnemyDensity": 3,
+		"Weapons": ["Knife",
+		"Shotgun",
+		"Pistol"],
+		"Song": "graveintent1.xm",
+		"TileClasses": {
+			"0": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "cobble",
+				"Mask": "c0c0c0ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"1": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "484870ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"2": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "blast",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			},
+			"3": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "202020ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			}
+		},
+		"Tiles": ["1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1",
+		"1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1",
+		"1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1",
+		"1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1",
+		"1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1",
+		"1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,1,1",
+		"0,0,1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,0,0",
+		"0,0,1,1,1,1,1,2,2,2,2,2,2,1,1,1,1,1,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"1,2,2,1,3,3,3,3,3,3,3,3,3,3,3,3,1,2,2,1",
+		"1,3,3,1,3,3,3,3,3,3,3,3,3,3,3,3,1,3,3,1",
+		"1,3,3,1,2,2,2,2,2,2,2,2,2,2,2,2,1,3,3,1",
+		"1,3,3,1,3,3,3,3,3,3,3,3,3,3,3,3,1,3,3,1",
+		"1,1,1,1,3,3,3,3,3,3,3,3,3,3,3,3,1,1,1,1",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,1,1,3,3,3,3,3,3,0,0,0,1",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,1,1",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,1,1,1",
+		"0,1,1,0,3,3,3,3,3,1,1,1,3,3,3,3,0,0,0,0",
+		"0,1,1,0,3,3,3,1,1,1,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,1,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,1,1,3,3,3,3,3,3,3,3,3,3,3,0,1,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,1,0,0",
+		"0,0,0,0,3,3,3,3,3,3,1,1,3,3,3,1,1,1,1,1",
+		"0,0,0,0,3,3,3,3,3,3,1,1,3,3,3,3,1,1,1,1",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,1,1,1,1,3,1,3",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,1,1,3,3,3,3,3",
+		"0,0,0,0,3,3,3,3,3,3,3,3,1,1,3,3,3,3,3,3",
+		"0,0,0,0,3,3,3,3,3,3,3,3,1,1,3,3,3,3,3,3",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3",
+		"0,0,0,0,3,3,3,3,3,3,1,1,3,3,3,3,3,3,3,3",
+		"0,0,0,0,3,3,3,3,3,1,1,3,3,3,3,1,3,3,1,1",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,1,1,1,1,1",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,1,1,0,3,3,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,0,3,1",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0",
+		"0,0,0,0,3,3,3,1,1,3,3,3,3,3,3,3,3,3,3,0",
+		"1,1,0,0,3,3,3,1,1,3,3,3,3,3,3,3,3,3,3,1",
+		"1,1,1,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1",
+		"3,1,1,1,3,3,3,3,3,3,3,3,3,3,1,1,1,1,0,1",
+		"3,0,1,1,3,3,3,3,3,3,3,3,3,3,1,3,3,1,1,1",
+		"0,0,0,0,3,3,3,3,3,3,3,3,1,1,1,3,3,3,0,0",
+		"0,0,0,0,3,3,3,3,3,3,1,1,1,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,1,1,3,3,3,3,3,0,3,0,0",
+		"0,0,0,0,3,3,3,3,3,1,1,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,1,1,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,1,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,1,1,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,1,1,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0",
+		"0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,0,0,0,0"],
+		"Access": ["0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,512,512,512,512,512,512,512,512,512,512,512,512,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
+		"0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"],
+		"StaticItems": [{
+			"MapObject": "statue_behemoth",
+			"Positions": [[14, 8],
+			[5, 8]]
+		},
+		{
+			"MapObject": "wall_skull2",
+			"Positions": [[16, 8],
+			[3, 8]]
+		},
+		{
+			"MapObject": "tree_dead",
+			"Positions": [[19, 7],
+			[0, 7]]
+		},
+		{
+			"MapObject": "Machine gun spawner",
+			"Positions": [[17, 35]]
+		},
+		{
+			"MapObject": "Bullets ammo spawner",
+			"Positions": [[17, 34],
+			[18, 34],
+			[18, 35]]
+		},
+		{
+			"MapObject": "terminal",
+			"Positions": [[17, 63],
+			[14, 5]]
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Positions": [[1, 36],
+			[18, 67],
+			[4, 2]]
+		},
+		{
+			"MapObject": "wall_goo",
+			"Positions": [[18, 64],
+			[19, 63],
+			[14, 65],
+			[15, 62],
+			[18, 72]]
+		},
+		{
+			"MapObject": "gibs",
+			"Positions": [[19, 65]]
+		},
+		{
+			"MapObject": "bone_blood",
+			"Positions": [[16, 67],
+			[17, 69]]
+		},
+		{
+			"MapObject": "skull2",
+			"Positions": [[14, 75]]
+		}],
+		"StaticCharacters": [{
+			"Index": 0,
+			"Places": [{
+				"Pos": [14, 16],
+				"Dir": 1
+			},
+			{
+				"Pos": [17, 12],
+				"Dir": 3
+			},
+			{
+				"Pos": [18, 18],
+				"Dir": 6
+			},
+			{
+				"Pos": [5, 14],
+				"Dir": 4
+			},
+			{
+				"Pos": [1, 18],
+				"Dir": 1
+			},
+			{
+				"Pos": [7, 37],
+				"Dir": 4
+			},
+			{
+				"Pos": [10, 40],
+				"Dir": 6
+			},
+			{
+				"Pos": [7, 42],
+				"Dir": 6
+			},
+			{
+				"Pos": [13, 44],
+				"Dir": 2
+			},
+			{
+				"Pos": [13, 62],
+				"Dir": 0
+			},
+			{
+				"Pos": [7, 56],
+				"Dir": 1
+			},
+			{
+				"Pos": [9, 58],
+				"Dir": 1
+			},
+			{
+				"Pos": [3, 69],
+				"Dir": 1
+			},
+			{
+				"Pos": [5, 71],
+				"Dir": 3
+			},
+			{
+				"Pos": [14, 87],
+				"Dir": 1
+			},
+			{
+				"Pos": [16, 82],
+				"Dir": 3
+			},
+			{
+				"Pos": [17, 86],
+				"Dir": 3
+			},
+			{
+				"Pos": [13, 84],
+				"Dir": 6
+			},
+			{
+				"Pos": [3, 88],
+				"Dir": 3
+			},
+			{
+				"Pos": [7, 91],
+				"Dir": 4
+			},
+			{
+				"Pos": [2, 93],
+				"Dir": 7
+			},
+			{
+				"Pos": [6, 96],
+				"Dir": 4
+			},
+			{
+				"Pos": [17, 75],
+				"Dir": 6
+			},
+			{
+				"Pos": [16, 76],
+				"Dir": 1
+			}]
+		},
+		{
+			"Index": 2,
+			"Places": [{
+				"Pos": [1, 35],
+				"Dir": 4
+			},
+			{
+				"Pos": [7, 45],
+				"Dir": 6
+			},
+			{
+				"Pos": [10, 44],
+				"Dir": 5
+			},
+			{
+				"Pos": [2, 64],
+				"Dir": 4
+			},
+			{
+				"Pos": [10, 71],
+				"Dir": 6
+			},
+			{
+				"Pos": [12, 88],
+				"Dir": 7
+			},
+			{
+				"Pos": [3, 97],
+				"Dir": 7
+			},
+			{
+				"Pos": [8, 97],
+				"Dir": 6
+			}]
+		},
+		{
+			"Index": 4,
+			"Places": [{
+				"Pos": [18, 38],
+				"Dir": 3
+			},
+			{
+				"Pos": [16, 65],
+				"Dir": 2
+			},
+			{
+				"Pos": [14, 67],
+				"Dir": 5
+			},
+			{
+				"Pos": [1, 79],
+				"Dir": 0
+			},
+			{
+				"Pos": [2, 81],
+				"Dir": 3
+			},
+			{
+				"Pos": [17, 73],
+				"Dir": 3
+			}]
+		}],
+		"StaticObjectives": [],
+		"StaticKeys": [{
+			"Index": 1,
+			"Positions": [[2, 35]]
+		}],
+		"StaticPickups": [],
+		"Start": [9, 1],
+		"Exits": [{
+			"Rect": [4,
+			93,
+			11,
+			6],
+			"Mission": 5,
+			"Hidden": false
+		}],
+		"AltFloorsEnabled": true
+	},
+	{
+		"Title": "Pandemonium",
+		"Description": "This... colony.  This was definitely a colony at some point.  It's barely recognizable now.  It's twisted, distorted.\n\nThere's no time to think though.  It's like every one of these corpses on the entire asteroid knows where you are.  You can't hide.  You can't rest.\n\nThose things only rise up around those... altars.  Destroying them might be worth a shot.\n\nMaybe afterwards you can stop to catch your breath.  You're so tired...",
+		"Type": "Classic",
+		"Width": 60,
+		"Height": 80,
+		"ExitStyle": "plate2",
+		"KeyStyle": "plain2",
+		"Objectives": [{
+			"Description": "Destroy all 6 demonic altars",
+			"Type": "Destroy",
+			"MapObject": "statue_behemoth",
+			"Count": 5,
+			"Required": 5,
+			"Flags": 4
+		},
+		{
+			"Description": "Reclaim sacrificial blood",
+			"Type": "Collect",
+			"Pickup": "bottle",
+			"Count": 6,
+			"Required": 0,
+			"Flags": 4
+		}],
+		"Enemies": [0,
+		2,
+		0,
+		0,
+		4],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "tree_dead",
+			"Density": 15
+		},
+		{
+			"MapObject": "bone_blood",
+			"Density": 5
+		},
+		{
+			"MapObject": "skull2",
+			"Density": 5
+		},
+		{
+			"MapObject": "blood1",
+			"Density": 5
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 10
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel_flame",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 30
+		},
+		{
+			"MapObject": "statue_ogre",
+			"Density": 5
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 10
+		},
+		{
+			"MapObject": "rod",
+			"Density": 5
+		},
+		{
+			"MapObject": "wall_skull2",
+			"Density": 40
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Machine gun",
+		"Knife",
+		"Shotgun",
+		"Flamer",
+		"Pistol"],
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "rock",
+				"Mask": "3c3c3cff",
+				"MaskAlt": "002800ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "c0c0c0ff",
+				"MaskAlt": "002800ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "cobble",
+				"Mask": "303030ff",
+				"MaskAlt": "002800ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon2",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 16,
+		"WallLength": 60,
+		"CorridorWidth": 3,
+		"Rooms": {
+			"Count": 14,
+			"Min": 6,
+			"Max": 11,
+			"Edge": true,
+			"Overlap": false,
+			"Walls": 2,
+			"WallLength": 1,
+			"WallPad": 2
+		},
+		"Squares": 4,
+		"ExitEnabled": false,
+		"Doors": {
+			"Enabled": true,
+			"Min": 2,
+			"Max": 2,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 2,
+			"Max": 2
+		}
+	},
+	{
+		"Title": "Nails in the Coffin",
+		"Description": "With every altar you destroy, it feels like daggers in your spine -- but it looks like those corpses feel it, too.  They stopped getting up, at least.  You slump to the floor in one of the dilapidated buildings, wheezing into your respirator.\n\nSlowly, barely perceptibly, the rubble on the floor starts to move...\n\nYou hear a nauseating, inhuman scream outside.",
+		"Type": "Classic",
+		"Width": 60,
+		"Height": 60,
+		"ExitStyle": "plate2",
+		"KeyStyle": "plain2",
+		"Objectives": [{
+			"Description": "Kill the Ur-Devil",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 0
+		},
+		{
+			"Description": "Destroy the Shrine of the Ur-Devil",
+			"Type": "Destroy",
+			"MapObject": "statue_behemoth",
+			"Count": 1,
+			"Required": 1,
+			"Flags": 4
+		},
+		{
+			"Description": "Reclaim sacrificial blood",
+			"Type": "Collect",
+			"Pickup": "bottle",
+			"Count": 6,
+			"Required": 0,
+			"Flags": 4
+		}],
+		"Enemies": [0,
+		0,
+		2,
+		4,
+		0],
+		"SpecialChars": [6],
+		"MapObjectDensities": [{
+			"MapObject": "blood1",
+			"Density": 40
+		},
+		{
+			"MapObject": "blood2",
+			"Density": 20
+		},
+		{
+			"MapObject": "blood0",
+			"Density": 15
+		},
+		{
+			"MapObject": "skull2",
+			"Density": 5
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 75
+		},
+		{
+			"MapObject": "wall_skull2",
+			"Density": 40
+		},
+		{
+			"MapObject": "wall_goo",
+			"Density": 50
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 50
+		},
+		{
+			"MapObject": "barrel_skull",
+			"Density": 30
+		},
+		{
+			"MapObject": "rod",
+			"Density": 10
+		},
+		{
+			"MapObject": "gibs",
+			"Density": 10
+		},
+		{
+			"MapObject": "bone_blood",
+			"Density": 5
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Pistol"],
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "granite",
+				"Mask": "202020ff",
+				"MaskAlt": "202020ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "cobble",
+				"Mask": "3c3c3cff",
+				"MaskAlt": "202020ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "5c5c5cff",
+				"MaskAlt": "202020ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "blast",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 4,
+		"WallLength": 60,
+		"CorridorWidth": 2,
+		"Rooms": {
+			"Count": 8,
+			"Min": 8,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": true,
+			"Walls": 1,
+			"WallLength": 16,
+			"WallPad": 2
+		},
+		"Squares": 1,
+		"ExitEnabled": false,
+		"Doors": {
+			"Enabled": true,
+			"Min": 3,
+			"Max": 3,
+			"RandomPos": false
+		},
+		"Pillars": {
+			"Count": 10,
+			"Min": 2,
+			"Max": 2
+		}
+	}]
+}

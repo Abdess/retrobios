@@ -1,0 +1,187 @@
+{
+  "Version": 3,
+  "Guns": [
+	{
+	  "Name": "Spread Gun",
+	  "Description": "The spread gun rapidly fires 5 energy balls per shot in a broad angle.\n\nDamage: 5 per bullet (max. 25)\nRate of fire: 420 round/min\nLifespan: 0.71s\nSpeed: 1000\nCost: 2",
+	  "Bullet": "spreadgun_bullet",
+	  "Cost": 2,
+	  "Lock": 10,
+	  "Sound": "spreadgun",
+	  "SwitchSound": "switch",
+	  "SpreadCount": 5,
+	  "SpreadWidth": 0.25
+	},
+	{
+	  "Name": "Vulcan",
+	  "Description": "The Vulcan is a rather quick gun which fires its projectiles in a broad range, it also is very accurate.\n\nDamage: 3 per bullet (max. 21)\nRate of fire: 525 round/min\nLifespan: 0.71s\nSpeed: 1000\nCost: 5",
+	  "Bullet": "vulcan_bullet",
+	  "Cost": 5,
+	  "Lock": 8,
+	  "Sound": "vulcan",
+	  "SwitchSound": "switch",
+	  "SpreadCount": 7,
+	  "SpreadWidth": 0.23
+	},
+	{
+	  "Name": "Chaser2",
+	  "Description": "Chaser2 is a rapidly firing energy rifle which fires fast but weak projectiles which will follow and fly towards the nearest enemy. The projectiles are very effective in chasing their targets.\n\nDamage: 3\nRate of fire: 840 round/min\nLifespan: 0.85s\nSpeed: 1200\nCost: 2",
+	  "Bullet": "chaser2_bullet",
+	  "Cost": 2,
+	  "Lock": 5,
+	  "Sound": "chaser2",
+	  "SwitchSound": "switch",
+	  "Recoil": 0.8,
+	  "MuzzleFlashParticle": "muzzle_flash_chaser2"
+	},
+	{
+	  "Name": "Stick Grenade",
+	  "Description": "The stick grenade will explode on impact with a player or an object and continously cause massive local damage.\n\nDamage: Local explosion\nRate of fire: 210 round/min\nLifespan: 1.14s\nSpeed: 340\nCost: 5",
+	  "Pic": "",
+	  "Bullet": "grenade",
+	  "Cost": 5,
+	  "Lock": 20,
+	  "Sound": "",
+	  "SwitchSound": "grenade_pickup",
+	  "Elevation": 24
+	},
+	{
+	  "Description": "You will order a nuclear strike in a fixed distance from your position into your viewing direction or at least to the nearest wall. A siren will go off and a small red dot designates the impact position. About 4.5 seconds later, a nuclear missile will impact and causes a massive explosion, destruction and death.\n\nDamage: Huge explosion, devastating\nRate of fire: 8.4 round/min\nCost: 50",
+	  "Name": "Nuclear Strike",
+	  "Bullet": "laser_designator",
+	  "Cost": 50,
+	  "Lock": 500,
+	  "Sound": "laser_designator",
+	  "SwitchSound": "switch",
+	  "MuzzleFlashParticle": "muzzle_flash_laser_beam"
+	},
+	{
+      "Name": "Booby Trap",
+      "Description": "The booby trap is a weapon which is thrown onto the ground. When on the ground, a visual deception module activates and will make the trap look like a health pack. Any player (including the trapper) in proximity to the fake health pack will trigger the booby trap, which will explode in a ball of hot (and deadly) fire.\n\nDamage: Fire\nRate of fire: 42 round/min\nCost: 6",
+      "Bullet": "booby_trap_pod",
+      "Cost": 6,
+      "Lock": 100,
+      "Sound": "bottle_pop",
+      "ReloadSound": "package_r",
+      "SwitchSound": "package_r",
+      "ReloadLead": 15,
+      "Recoil": 0.4,
+      "Elevation": 20,
+      "MuzzleFlashParticle": "muzzle_flash_thin"
+    },
+    {
+      "Name": "Scorpion Spear",
+      "Bullet": "spearhead",
+      "Cost": 15,
+      "Lock": 100,
+      "Sound": "swoosh_echo",
+	  "SwitchSound": "switch"
+    },
+    {
+      "Name": "Laser Pointer",
+      "Bullet": "laser_point",
+      "Cost": 0,
+      "Lock": 1,
+      "Sound": "",
+	  "SwitchSound": "switch",
+      "MuzzleFlashParticle": ""
+    },
+    {
+      "Name": "Quad Machine Gun",
+      "Icon": "machine_gun",
+      "CanDrop": false,
+	  "Guns": ["quad_mg", "quad_mg"],
+	  "SwitchSound": "switch",
+	  "Lock": 3
+    },
+    {
+      "Name": "Pistol and Powergun",
+      "Icon": "powergun",
+      "CanDrop": false,
+	  "Guns": ["Powergun", "Pistol"],
+	  "SwitchSound": "switch",
+	  "Lock": 6
+    }
+  ],
+  "PseudoGuns" : [
+	{
+	  "Pic": "",
+	  "Name": "grenade_explosion1",
+	  "Bullet": "grenade_fireball1",
+	  "ElevationLow": 14,
+	  "ElevationHigh": 14,
+	  "Sound": "grenade"
+	},
+	{
+	  "Pic": "",
+	  "Name": "grenade_explosion2",
+	  "Bullet": "grenade_fireball2",
+	  "ElevationLow": 22,
+	  "ElevationHigh": 22
+	},
+	{
+	  "Pic": "",
+	  "Name": "grenade_explosion3",
+	  "Bullet": "grenade_fireball3",
+	  "ElevationLow": 30,
+	  "ElevationHigh": 30
+	},
+	{
+	  "Pic": "",
+	  "Name": "laser_dot",
+	  "Bullet": "laser_dot",
+	  "ElevationLow": 0,
+	  "ElevationHigh": 0,
+	  "Sound": "nuke_alarm"
+	},
+	{
+	  "Pic": "",
+	  "Name": "nuke_incoming",
+	  "Bullet": "nuke_incoming",
+	  "ElevationLow": 3000,
+	  "ElevationHigh": 3000,
+	  "Sound": ""
+	},
+	{
+	  "Pic": "",
+	  "Name": "nuclear_strike",
+	  "Bullet": "nuke",
+	  "ElevationLow": -10,
+	  "ElevationHigh": -10,
+	  "Sound": "nuke_fall"
+	},
+	{
+	  "Pic": "",
+	  "Name": "big_explosion1",
+	  "Bullet": "big_explosion_spawner1",
+	  "SpreadCount": 6,
+	  "SpreadWidth": 1.05
+	},
+	{
+	  "Pic": "",
+	  "Name": "big_explosion2",
+	  "Bullet": "big_explosion_spawner2",
+	  "SpreadCount": 8,
+	  "SpreadWidth": 0.79
+	},
+	{
+      "Name": "booby_trap_deployer",
+      "Bullet": "booby_trap",
+      "Sound": "puff",
+      "MuzzleHeight": 0
+    },
+    {
+      "Pic": "quad_chaingun",
+      "Name": "quad_mg",
+      "Bullet": "mg",
+      "Cost": 4,
+      "Lock": 6,
+      "Sound": "lmg",
+      "SpreadCount": 2,
+      "Recoil": 0.2,
+      "MuzzleHeight": 12,
+      "MuzzleFlashParticle": "muzzle_flash_mg",
+      "Brass": "brass_big"
+    }
+  ]
+}

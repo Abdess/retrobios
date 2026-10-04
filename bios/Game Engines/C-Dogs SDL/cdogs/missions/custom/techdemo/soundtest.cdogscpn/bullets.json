@@ -1,0 +1,14 @@
+{
+  "Version": 2,
+  "Bullets": [
+    {
+      "Name": "dog_bite",
+      "Power": 10,
+      "Mass": 1.0,
+      "HitSounds": {
+        "Object": "hits/dog_growl",
+        "Flesh": "hits/dog_growl"
+      }
+    }
+  ]
+}

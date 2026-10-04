@@ -1,0 +1,6 @@
+Derived from Dungeon Crawl 32x32 tiles
+by Chris Hamons (maintainer)
+http://opengameart.org/content/dungeon-crawl-32x32-tiles
+http://creativecommons.org/publicdomain/zero/1.0/
+
+Part of (or All) the graphic tiles used in this program is the Public domain roguelike tileset "RLTiles". Some of the tiles have been modified by Cong Xu. You can find the original tileset at: http://rltiles.sf.net You can find Dungeon Crawl Stone Soup modified tilesets at: http://code.google.com/p/crawl-tiles/downloads/list

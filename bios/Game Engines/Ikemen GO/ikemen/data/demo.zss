@@ -1,0 +1,28 @@
+#===============================================================================
+# Global states (not halted by Pause/SuperPause, no helper limitations)
+#===============================================================================
+[Statedef +1]
+
+# Execute the following code during demo mode
+# See motif [Demo] section for more options
+ignoreHitPause if gameMode = "demo" && !isHelper {
+	assertSpecial{
+		flag: globalNoKO;			# Players cannot be KO'd
+		flag2: roundNotSkip;		# Cannot skip character intros
+		flag3: skipFightDisplay;	# Do not show "Fight" screen
+		flag4: skipRoundDisplay;	# Do not show "Round" screen
+		flag5: noLifeBarAction;		# Hide lifebar actions
+	}
+	# Print text from the first player only
+	if playerNo = 1 {
+		text{
+			removetime: 1;									# Refresh every frame
+			layerno: 2;										# Draw on top of everything
+			text: "https://ikemen-engine.github.io";		# Message to print
+			font: -1;										# Use the debug font since it exists everywhere
+			align: 0;										# Center alignment
+			pos: screenWidth * 0.5, screenHeight * 0.95;	# Centered horizontally. Near bottom of screen
+			scale: 0.5, 0.5;
+		}
+	}
+}

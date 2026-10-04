@@ -1,0 +1,143 @@
+{
+  "Version": 3,
+  "Pickups": [
+    {
+      "Name": "dogfood",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "dogfood"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 4
+      }],
+      "Sound": "health_small"
+    },
+    {
+      "Name": "meal",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "meal"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 10
+      }],
+      "Sound": "health_small"
+    },
+    {
+      "Name": "medkit",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "health"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 25
+      }],
+      "Sound": "health_big"
+    },
+    {
+      "Name": "heart",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "heart"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 200
+      }, {
+        "Type": "Ammo",
+        "Ammo": "Ammo",
+        "Amount": 25
+      }, {
+        "Type": "Lives",
+        "Lives": 1
+      }],
+      "Sound": "1up"
+    },
+    {
+      "Name": "cross",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "cross"
+      },
+      "Effects": [{
+        "Type": "Score",
+        "Score": 100
+      }],
+      "Sound": "pickup_cross"
+    },
+    {
+      "Name": "chalice",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "chalice"
+      },
+      "Effects": [{
+        "Type": "Score",
+        "Score": 500
+      }],
+      "Sound": "pickup_chalice"
+    },
+    {
+      "Name": "chest",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "chest"
+      },
+      "Effects": [{
+        "Type": "Score",
+        "Score": 1000
+      }],
+      "Sound": "pickup_chest"
+    },
+    {
+      "Name": "crown",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "crown"
+      },
+      "Effects": [{
+        "Type": "Score",
+        "Score": 5000
+      }],
+      "Sound": "pickup_crown"
+    },
+    {
+      "Name": "ammo_clip",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "ammo_clip"
+      },
+      "Effects": [{
+        "Type": "Ammo",
+        "Ammo": "Ammo",
+        "Amount": 8
+      }],
+      "Sound": "ammo_pickup"
+    },
+    {
+      "Name": "ammo_box",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "ammo_box"
+      },
+      "Effects": [{
+        "Type": "Ammo",
+        "Ammo": "Ammo",
+        "Amount": 25
+      }],
+      "Sound": "ammo_box"
+    },
+    {
+      "Name": "spear",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "spear"
+      },
+      "Effects": [],
+      "Sound": "spear"
+    }
+  ]
+}

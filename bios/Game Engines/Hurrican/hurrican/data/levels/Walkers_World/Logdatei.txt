@@ -1,0 +1,1680 @@
+Bitmap laden : C:\Programme\Hurrican\data/static_jungle.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_jungle.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_jungle.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/Clouds1.bmp erfolgreich ! 
+s_graues.bmp
+s_Jungle2.bmp
+s_panel.bmp
+s_pflanzen.bmp
+s_saeulen.bmp
+s_Jungle.png
+s_pflanzen.png
+s_Jungle3.png
+s_pflanzen.png
+s_graues.bmp
+s_pflanzen3.png
+s_technik.bmp
+s_pflanzen4.png
+Bitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_spinne.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_spinne.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds_cave.bmp erfolgreich ! 
+s_panel.bmp
+s_kisten.png
+s_machine3.bmp
+s_traeger.bmp
+s_chains.png
+s_factory.bmp
+s_factory5.bmp
+s_rohre.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_flugsack.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_graues.bmp
+s_pflanzen.bmp
+s_rohre.bmp
+s_panel.bmp
+s_traeger.bmp
+s_chains.png
+s_cave.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_spinne.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_spinne.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds_cave.bmp erfolgreich ! 
+s_panel.bmp
+s_kisten.png
+s_machine3.bmp
+s_traeger.bmp
+s_chains.png
+s_factory.bmp
+s_factory5.bmp
+s_rohre.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_flugsack.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_graues.bmp
+s_pflanzen.bmp
+s_rohre.bmp
+s_panel.bmp
+s_traeger.bmp
+s_chains.png
+s_cave.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_kisten.png
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde4.png
+s_mpde5.png
+s_mpde6.png
+s_dino2.png
+s_skull.png
+s_traeger.bmp
+s_chains.png
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_cave4.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_flugsack.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_graues.bmp
+s_pflanzen.bmp
+s_rohre.bmp
+s_panel.bmp
+s_traeger.bmp
+s_chains.png
+s_cave.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_sea.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_arrow.bmp
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_sea.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_arrow.bmp
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Fehler beim Laden von C:\Programme\Hurrican\data/static_aliencave.png !
+Fehler beim Laden von C:\Programme\Hurrican\data/back_aliencave.png !
+Fehler beim Laden von C:\Programme\Hurrican\data/front_aliencave.png !
+Bitmap laden : C:\Programme\Hurrican\data/Clouds1.bmp erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Fehler beim Laden von C:\Programme\Hurrican\data/back_aliencave.png !
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/Clouds1.bmp erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/Clouds1.bmp erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/Clouds1.bmp erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/Clouds1.bmp erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/Clouds1.bmp erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_cave.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_flugsack.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_lava.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_lila.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_planet.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_sea.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_sea.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_arrow.bmp
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_sea.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_arrow.bmp
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_cave4.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_cave4.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei Ende
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_sea.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_arrow.bmp
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_sea.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_arrow.bmp
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_sea.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_arrow.bmp
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_blue.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_weltend1.bmp
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_chains.png
+s_cave4.bmp
+s_cave5.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_spinne.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_spinne.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds_cave.bmp erfolgreich ! 
+s_panel.bmp
+s_kisten.png
+s_machine3.bmp
+s_traeger.bmp
+s_chains.png
+s_factory.bmp
+s_factory5.bmp
+s_rohre.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_spinne.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_spinne.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds_cave.bmp erfolgreich ! 
+s_panel.bmp
+s_kisten.png
+s_machine3.bmp
+s_traeger.bmp
+s_chains.png
+s_factory.bmp
+s_factory5.bmp
+s_rohre.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_jungle.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_jungle.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_jungle.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/Clouds1.bmp erfolgreich ! 
+s_graues.bmp
+s_Jungle2.bmp
+s_panel.bmp
+s_pflanzen.bmp
+s_saeulen.bmp
+s_Jungle.png
+s_pflanzen.png
+s_Jungle3.png
+s_pflanzen.png
+s_graues.bmp
+s_pflanzen3.png
+s_technik.bmp
+s_pflanzen4.png
+Bitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_spinne.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_spinne.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds_cave.bmp erfolgreich ! 
+s_panel.bmp
+s_kisten.png
+s_machine3.bmp
+s_traeger.bmp
+s_chains.png
+s_factory.bmp
+s_factory5.bmp
+s_rohre.bmp
+s_graues.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_sea.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_arrow.bmp
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_kisten.png
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_kisten.png
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_end.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_kisten.png
+s_factory5.bmp
+s_rohre.bmp
+s_spinne1.bmp
+s_spinne2.bmp
+s_spinne3.png
+s_chains.png
+s_end.png
+s_end2.png
+s_end3.png
+s_end4.png
+s_weltend1.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_slime.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_tower.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_mpde.bmp
+s_mpde2.bmp
+s_mpde3.bmp
+s_mpde5.bmp
+s_mpde.bmp
+s_blau2.png
+s_rohre.bmp
+s_factory5.bmp
+s_mpde4.png
+s_kisten.png
+s_pflanzen3.png
+s_traeger.bmp
+s_chains.png
+s_pflanzen2.png
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_flugsack.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_cave.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds7.png erfolgreich ! 
+s_graues.bmp
+s_pflanzen.bmp
+s_rohre.bmp
+s_panel.bmp
+s_traeger.bmp
+s_chains.png
+s_cave.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei EndeBitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+Bitmap laden : C:\Programme\Hurrican\data/static_ice.bmp erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/back_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/front_ice.png erfolgreich ! 
+Bitmap laden : C:\Programme\Hurrican\data/clouds2.bmp erfolgreich ! 
+s_snowplate.bmp
+s_bluestone.png
+s_ice.png
+s_ice2.png
+s_ice3.png
+s_snow.png
+s_snow2.png
+s_factory2.bmp
+s_factory.bmp
+
+>--------------------<
+| GameExit gestartet |
+>--------------------<
+
+-> Direct3D erfolgreich beendet !
+-> DirectInput8 erfolgreich beendet !
+
+-> GameExit erfolgreich beendet !
+
+http://www.poke53280.de
+Bugreports, Fragen etc : Eiswuxe@Poke53280.de
+
+-> Logdatei Ende

@@ -1,0 +1,18 @@
+{
+  "Version": 1,
+  "Particles": [
+    {
+      "Name": "muzzle_flash_inkvine",
+      "Sprites": "particles/muzzle_flash_big",
+      "Mask": "00ff00",
+      "Range": 8
+    },
+    {
+      "Name": "spark_inkvine",
+      "Sprites": "spark_spray",
+      "Mask": "00ff00",
+      "Range": 16,
+      "TicksPerFrame": 4
+    }
+  ]
+}

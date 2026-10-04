@@ -1,0 +1,260 @@
+--------------------------------
+>   Hurrican Language File     <
+>                              <
+>         - Espanol -          <
+>           Hal9000            <
+>          01.07.2007          <
+>                              <
+>    http://www.poke53280.de   <
+--------------------------------
+//---------- Starter ----------//
+Pantalla completa
+Estándar
+Iniciar el juego
+Salir
+Abortar
+Idioma
+Buscar actualizaciones
+Hay una nueva versión disponible. ¿Desea visitar la web de Hurrican ahora?
+No hay nuevas versiones disponibles.
+Lista de niveles disponibles
+Descargar la lista de niveles más reciente
+Seleccionar pack de niveles
+Descargar seleccionados
+//---------- Miscellaneous ----------//
+0
+Cargando archivo de idioma
+Cargando gráficos :
+Cargando sonido :
+Cargando módulo :
+ ... LISTO
+Cargando datos del nivel para \n
+//---------- Tutorial Texts ----------//
+Bienvenido al tutorial de Hurrican. Aqui aprenderas los controles basicos. Puedes moverte a la izquierda o a la derecha pulsando KEY_LEFT o KEY_RIGHT. Puedes agacharte presionando KEY_CROUCH. Explora un poco, hay mas consejos como este en el tutorial.
+Pulsa KEY_JUMP para saltar. Cuanto mas tiempo la tengas pulsada, mas alto saltaras. Puedes variar la direccion mientras saltas presionando KEY_LEFT o KEY_RIGHT.
+Puedes mirar a los alrededores pulsando KEY_UP o KEY_DOWN. Esto puede ayudarte a descubrir zonas secretas. Por ejemplo, mira hacia arriba ahora...
+Estos diamantes estan repartidos en todas las fases. Se obtendran puntos al tomarlos. Asimismo, por cada 50 diamantes recogidos se sumara mas tiempo al tiempo limite.
+Pulsa KEY_SHOOT para disparar y mantenlo pulsado para disparar automaticamente. Pulsa la tecla repetidamente para disparar mas rapido que en el disparo automatico normal.
+Observa el muro de tu derecha. No parece muy solido. Intenta destruirlo disparandolo con tu arma.
+Muy bien, hay abundantes situaciones en el juego donde puedes disparar a los muros. Casi siempre encontraras zonas secretas tras ellos.
+Ahora practica tu punteria. Puedes apuntar hacia arriba pulsando KEY_UP. Combinando con KEY_LEFT o KEY_RIGHT puedes disparar en diagonal. Intenta disparar a los diamantes encima de ti.
+Esto se pone interesante. Abajo te esperan tus primeros enemigos, o mejor dicho, tus primeros contenedores volantes de powerups.
+-leer-
+Muy bien. Ahora recoge todos los powerups.
+Este efecto indica que una de tus armas ha sido mejorada. El tipo de arma mejorada puede verse por el color del efecto. Rojo es para el disparo multiple, azul para el laser y verde para el disparo de rebote. Las barras en la parte superior indican el nivel de potencia del disparo.
+Y ahora a veamos los primeros enemigos de verdad: los walkers. Ademas de dispararlos, puedes saltar encima de ellos para destruirlos.
+De nuevo el camino se halla bloqueado, pero en esta ocasion el muro destruible esta bajo tus pies. Manten pulsado KEY_BLITZ y rota el rayo con KEY_LEFT o KEY_RIGHT para destruir el muro.
+Bien hecho. Por cierto, el rayo tambien puede destruir a los enemigos. Por desgracia es un poco corto... No te preocupes: todo es cuestion de tecnica :) A la derecha hay algunos powerups para poder solucionar esto.
+El rayo es mas largo ahora. ¡Intentalo! Lo mejor de todo es que puede ser incluso mas largo. La barra con el simbolo del rayo en el HUD muestra el nivel de potencia actual. Cuando pierdas una vida, perderas ademas un nivel del rayo.
+Los powerups no solo se encuentran en los contenedores volantes, tambien se localizan en los bloques de powerups que solo se muestran al disparar en ellos por primera vez. Trata de localizar alguno por aqui hasta que lo encuentres (rotar el rayo facilitara la tarea)...
+Ahi esta. Ahora disparalo hasta que no le queden mas y se destruya. Seguidamente recogelo todo.
+Estas son las llamadas "rafagas de energia", un arma especial. El numero de rafagas puede verse en el HUD (mira en la flecha). Dirigete hacia la derecha para averiguar como se usan y verlas en accion.
+Permanece en el medio del puente y pulsa KEY_POWERLINE para activar una rafaga de energia.
+¡Toma ya! Los enemigos debiles son barridos y los mas grandes son deteriorados por esta arma. Ahora recoge todos los powerups que han salido.
+Estos powerups son granadas. Hacen BOOM. Suena raro, pero es cierto :) De nuevo, yendo hacia la derecha aprenderas a usar dichas granadas.
+Cuidado, hay dos nidos que pueden ser muy peligrosos. Pulsa KEY_GRANATE para disparar una granada. Las granadas afectan a todos los enemigos que haya alrededor de la explosion. Para el segundo nido debes situarte debajo de el y disparar hacia arriba.
+Parece un camino sin salida. Agachate (KEY_CROUCH) y activa una rafaga a la vez (KEY_POWERLINE). De esta manera te transformaras en una rueda de acero. Al final del tunel simplemente pulsa saltar (KEY_JUMP) para volver al modo normal.
+Como te habras dado cuenta, el circulo azul (mira la flecha) se reduce al estar en modo rueda. Puedes recargarlo con powerups aunque tambien se recarga por si mismo con el paso del tiempo.
+Si, este es el powerup de la rueda. Cuando se esta en modo rueda se es invencible y se puede arrollar a los enemigos. Por si esto no fuera suficiente, puedes hasta colocar bombas si pulsas KEY_SHOOT. Pruebalo con los nidos de la derecha.
+¡Wow, ahora eres una maquina de matar! Pero tu armamento no esta completo todavia. Aun te quedan algunas armas por ver...
+Estas flechas en el camino te muestran por donde tienes que ir para encontrar la salida.
+¿Otro muro? Podriamos usar el rayo, pero en vez de eso colocate cerca del muro y pulsa KEY_SHOCKWAVE...
+Wow, esa onda de choque destruyo el muro, elimino al walker e incluso vacio un bloque de powerups. Solo puedes llevar una de estas bombas a la vez y se recargan con el powerup correspondiente. Si el simbolo brilla en el HUD (mira la flecha), la onda de choque estara lista.
+Un ejercicio de punteria mas... Manten pulsado KEY_SHOOT y KEY_BLITZ a la vez para cargar tu arma. Mientras se carga, puedes cambiar la direccion con KEY_LEFT o KEY_RIGHT. Deja de pulsar las teclas para liberar el impulso. Cuanto mas tiempo tengas cargando el disparo, mas grande sera. Ve hacia el medio de los diamantes e intenta dispararlos encima de ti con el impulso.
+Cuanto mas largo sea tu rayo, mas rapido se cargara el impulso. Una cosa mas: a la izquierda tienes las otras dos armas primarias del juego aparte del disparo multiple.
+Estos son powerups del disparo de rebote. Como has comprobado, los powerups pueden encontrarse incluso de esta forma. Este disparo puede dividirse en dos mas menudos segun como sea su nivel de potencia. Muy util en tuneles estrechos y pasillos como este de aqui.
+La ultima arma de hoy es el laser. Recoge los powerups y pruebala. Su caracteristica especial es que puede atravesar varios enemigos de un solo disparo. Puedes cambiar tu arma pulsando KEY_WAFFE_CYCLE. Practica un poco con ello.
+Aqui termina el tutorial. En el juego aprenderas mas sobre los powerups y otras cosas. Recuerda: experimenta un poco con todo para entenderlo. El tutorial es un poco mas facil que el resto del juego pues los nidos no lanzaban enemigos y eras invulnerable. A partir de ahora deberas estar preparado para la batalla. ¡Buena suerte!
+36
+37
+38
+39
+//---------- Konsolen Text ----------//
+Hurrican
+
+(c) 2007
+Poke53280
+www.poke53280.de
+
+Introduce "help" para obtener informacion sobre los comandos de consola
+
+
+//---------- Summary Box ----------//
+Resumen
+Secretos
+Trucos desbloqueados:
+- Pulsa cualquier tecla -
+//---------- Main Menu ----------//
+CARGANDO
+GUARDAR PARTIDA
+NUEVA PARTIDA
+VOLVER A LA PARTIDA
+OPCIONES
+MEJORES PUNTUACIONES
+CREDITOS
+SALIR DEL JUEGO
+JUGAR EL TUTORIAL
+EMPEZAR NUEVA PARTIDA
+CONTINUAR PARTIDA GUARDADA
+FACIL
+NORMAL
+DIFICIL
+HURRICAN
+cursor: seleccionar - enter : eleccion - ESC : volver
+POSICION
+NOMBRE
+PUNTUACION
+FASE
+DIFIC.
+VOLUMEN
+SONIDO
+MUSICA
+CONFIGURAR CONTROLES
+SELECCIONAR IDIOMA
+MODO:
+Force feedback
+Configuracion predeterminada
+Joypad
+Joystick
+INCREIBLE
+NUEVA PUNTUACION EN EL RANKING
+INTRODUCE TU NOMBRE
+CONTINUAR
+Volver
+izquierda
+derecha
+agacharse
+mirar arriba
+mirar abajo
+saltar
+disparar
+activar rayo
+rafaga de energia
+granada
+onda de choque
+cambiar arma
+caminar
+mirar
+Eje X/Y 
+D-pad
+-pulsa nueva tecla-
+-press nuevo boton-
+DETALLES: BAJO
+DETALLE: MEDIO
+DETALLE: ALTO
+DETALLE: MAXIMO
+UN JUGADOR
+DOS JUGADORES
+Jugador uno
+Jugador dos
+tipo
+modo
+Sensibilidad
+teclado
+sin asignar
+fase
+jugador
+fecha
+- vacio -
+SECRETO
+izquierda
+derecha
+arriba
+abajo
+boton
+//---------- Hints ----------//
+Si recoges todos los diamantes de un nivel, desbloquearas un truco.
+Cuando pierdas una vida, perderas un nivel de potencia del arma que tengas seleccionada.
+Al tocar un enemigo en modo rueda, la energia de la rueda disminuira mas rapido.
+Al permanecer quieto en modo normal, la energia de la rueda se recargara mas rapido.
+Si saltas en modo rueda mientras estas en el aire realizaras un salto de mayor longitud.
+Recoger 50 diamantes aumentara el tiempo limite.
+No puedes llevar mas de 9 granadas y 9 rafagas de energia.
+Algunos secretos estan ocultos tras muros destruibles.
+Hay muros falsos que pueden llevarte a zonas secretas
+El rodar debajo de una bomba en modo rueda te dara un empujon hacia arriba.
+Si te muerde un gran pez, salta para deshacerte de el.
+Los chorros de vapor y humo pueden elevarte mucho al saltar encima de ellos.
+Algunos bosses son muy duros de pelar si solo usas disparo normal.
+El fuego de los lanzallamas tambien afecta a los enemigos.
+El escudo afecta a los enemigos al tener contacto con ellos.
+Es preferible evitar a algunos enemigos que destruirlos.
+Las granadas afectan a todos los enemigos alrededor de la explosion.
+Las rafagas de energia son el mejor modo de encontar bloques de powerups ocultos.
+La potencia del disparo de rebote disminuira con cada rebote en un muro.
+Si pulsas la tecla de disparo repetidamente dispararas mas rapido que manteniendola pulsada.
+Puedes saltar encima de los bloques de powerups para alcanzar zonas mas altas.
+Puedes salvar la partida al final de cada nivel.
+Cuanto mas largo sea tu rayo, mas rapido se cargara el impulso.
+Al perder una vida, la explosion actuara como una granada.
+Con el laser puedes disparar a traves de multiples enemigos
+Las armas de disparo multiple, laser y disparo de rebote pueden mejorarse hasta 8 veces.
+Puedes guardar tu partida al final de cada nivel.
+Puedes cambiar el detalle del juego en las opciones del juego.
+Algunos enemigos solo pueden destruirse en determinadas situaciones.
+Poke53280 NUNCA preguntara por tu email ni tu password...
+//---------- Pissen ----------//
+Mierda, necesito ir a alguna parte...
+Argh! Ya no lo aguanto mas!
+Por que esta lata no funciona???
+Quien diablos ha ideado esto?
+Por que nadie penso sobre esta situacion?
+Tipico...
+No testearon esta cosa apropiadamente...
+Mierda, esto se hace cada vez mas embarazoso por momentos!
+Cuando vuelva a la tierra...
+... me quejare sobre esto!
+Es imposible.
+Este traje de asalto tiene todos los fallos tecnicos posibles...
+Pero la cosa mas importante que han olvidado
+Que puedo hacer ahora?
+Vamos, sigue jugando!
+Grmblfxt ... Voy a volverme loco.
+Debo resignarme a ello...
+... hasta que el juego este listo!
+//---------- Intro Screen 1 ----------//
+2138, en algun lugar del espacio
+La nave "dreadnought" vuelve de una mision exitosa
+La siguiente parada de la tropa es la Tierra
+De repente, los soldados reciben una llamada de emergencia del planeta azul
+"¡La Tierra esta siendo atacada! ¡Que todas las unidades disponibles se preparen para defenderla!"
+"¡Misiles de origen desconocido han impactado en la Tierra!"
+Segundos mas tarde el origen de los letales misiles es localizado.
+El planeta Takatis.
+Los hombres no pueden creer lo que ven sus ojos mientras observan el holograma en la sala tactica.
+Nada menos que el Dr. Geng X inicio el asalto.
+Tiempo atras el comunicado de su muerte cruzo toda la galaxia, pero ahora ha regresado.
+Sin vacilar la "dreadnought" se dirige rumbo al planeta inexplorado.
+Tras un breve trayecto la nave llega a su destino.
+El planeta alienigena manifiesta una falsa belleza.
+La tropa inicia las maniobras de aterrizaje.
+Los sensores muestran una atmosfera similar a la terrestre.
+De repente, numerosos obuses en la superficie del planeta abren fuego.
+El sistema de escudos falla y los enormes proyectiles destruyen el armazon de la nave.
+Sin ayuda, los soldados ganan la superficie del planeta.
+Conforme penetran en la atmosfera, la nave arde por todos los costados.
+Segundos despues del impacto.
+La mayor parte de la tropa no sobrevivio al aterrizaje de emergencia del "dreadnought".
+Solo un soldado sigue vivo. Se incorpora con dificultad y consigue salir al exterior.
+Solo dos soldados siguen vivos. Se incorporan con dificultad y consiguen salir al exterior.
+Decididos a buscar al Dr. Geng X y liberar al mundo de su presencia maligna.
+//---------- Outtro ----------//
+Lo que parecia imposible se hace realidad.
+Tras un larga andadura, finalmente el Dr. Geng X es derrotado!
+Lo que queda de el yace oculto tras los restos humeantes de su
+arruinada fortaleza. Todas sus siniestras creaciones fueron enterradas con el,
+en la mas negra oscuridad.
+La paz ha sido restaurada en el universo, pero nadie sabe
+cuanto tiempo durara esta paz.
+El futuro no esta escrito.
+
+
+
+//---------- Warpzone ----------//
+Y ahora, para los mas pacientes, un pequeño truco.
+Observa con detenimiento el tutorial para encontrar
+la entrada secreta del fontanero ...
+Usar la rueda al principio del todo es una idea muy EXPLOSIVA...
+Permanece en la izquierda y no lo olvides: los fontaneros van por las tuberias ;)
+
+//--- ENDE ---//

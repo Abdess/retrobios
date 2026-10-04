@@ -1,0 +1,24 @@
+﻿[FNT v2]
+; FNT v2 version number.  Don't change this.
+fntversion = 2,00
+; Name of this font.
+name = "MS ゴシック"
+; Font author
+author = "Microsoft"
+
+[Def]
+; This is a truetype font.
+Type = truetype
+; Size of font: width, height.  Only height is used for truetype fonts.
+Size = 18,36
+; Spacing between font glyphs.  Only height is used for truetype fonts.
+Spacing = 1,1
+; Drawing offset: x, y.
+Offset = 0,0
+; Filename of the font to load.  Will search Windows font directory if not in current directory.
+File = msgothic.ttc
+; Preferred blending mode: 0 - none, 1 - blended.
+Blend = 1
+
+; Note: All units are in pixels.
+; Text rendered with truetype fonts may be ASCII or UTF-8

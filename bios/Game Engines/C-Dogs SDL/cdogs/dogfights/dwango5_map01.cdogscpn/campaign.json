@@ -1,0 +1,10 @@
+{
+	"Version": 15,
+	"Title": "Map01",
+	"Author": "Cong",
+	"Description": "",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": true,
+	"Missions": 1
+}

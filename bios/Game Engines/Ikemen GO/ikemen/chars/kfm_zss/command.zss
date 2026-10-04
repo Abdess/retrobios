@@ -1,0 +1,345 @@
+#-------------------------------------------------------------------------------
+# 2. State entry
+# --------------
+# This is where you define what commands bring you to what states.
+#
+# Each state entry block looks like:
+#   #Command-attack           ;Change Label to any name you want to use to
+#                               ;identify the state with.
+#Before, there were triggers to dictate what should happen for a
+#command to work. Now, it can be expressed as following
+#Triggerall = stateType!=A
+#trigger1 = ctrl
+#trigger2 = var(1)
+#
+#becomes the following
+#if stateType!=A &&
+#(ctrl||var(1))
+#
+#  
+#   changeState{          ;Don't change this
+#   value : new_state_number}
+#
+# - new_state_number is the number of the state to change to
+# - command_name is the name of the command (from the section above)
+# - Useful triggers to know:
+#   - statetype
+#       S, C or A : current state-type of player (stand, crouch, air)
+#   - ctrl
+#       0 or 1 : 1 if player has control. Unless "interrupting" another
+#                move, you'll want ctrl = 1
+#   - stateno
+#       number of state player is in - useful for "move interrupts"
+#   - movecontact
+#       0 or 1 : 1 if player's last attack touched the opponent
+#                useful for "move interrupts"
+#
+# Note: The order of state entry is important.
+#   State entry with a certain command must come before another state
+#   entry with a command that is the subset of the first.
+#   For example, command "fwd_a" must be listed before "a", and
+#   "fwd_ab" should come before both of the others.
+#
+# For reference on triggers, see CNS documentation.
+#
+# Just for your information (skip if you're not interested):
+# This part is an extension of the CNS. "State -1" is a special state
+# that is executed once every game-tick, regardless of what other state
+# you are in.
+
+
+# Don't remove the following line. It's required by the CMD standard.
+
+#===============================================================================
+# Functions
+#===============================================================================
+#This is not a move, but it sets up $canCombo to be 1 if conditions are right
+#for a combo into a special move (used below).
+#Since a lot of special moves rely on the same conditions, this reduces
+#redundant logic.
+[Function Combo() ret]
+let ret = 0;
+if (stateType != A && ctrl) ||
+	((stateNo = [200, 299] || stateNo = [400, 499]) && stateNo != 440 && moveContact) || #!= 440: Except for sweep kick
+	(stateNo = 1310 || stateNo = 1330) { #From blocking
+	let ret = 1;
+}
+
+#===============================================================================
+# command code
+#===============================================================================
+[StateDef -1]
+
+#============|IF roundState = 2|================================================
+if roundState = 2 && !aiLevelF { #prevent attacks outside of fight state
+
+let canCombo = call Combo();
+ignoreHitPause{mapSet{map:"canCombo"; value: $canCombo}}
+
+#===============================================================================
+#
+#-------------------------------------------------------------------------------
+#Smash Kung Fu Upper (uses one super bar)
+if command = "SmashKFUpper" && power >= 1000 && stateType != A &&
+	(ctrl ||
+		(hitDefAttr = SC, NA, SA, HA && stateNo != [3050, 3100) && moveContact) ||
+		(stateNo = 1310 || stateNo = 1330)) { #From blocking
+	changeState{value: 3050}
+}
+
+#-------------------------------------------------------------------------------
+#Triple Kung Fu Palm (uses one super bar)
+if command = "TripleKFPalm" && power >= 1000 && stateType != A &&
+	(ctrl ||
+		(hitDefAttr = SC, NA, SA, HA && stateNo != [3000, 3050) && moveContact) ||
+		(stateNo = 1310 || stateNo = 1330)) { #From blocking
+	changeState{value: 3000}
+}
+
+#-------------------------------------------------------------------------------
+#Fast Kung Fu Knee (1/3 super bar)
+if command = "FF_ab" && power >= 330 && $canCombo { #Use combo condition (above)
+	changeState{value: 1070}
+}
+
+#-------------------------------------------------------------------------------
+#Fast Kung Fu Upper (1/3 super bar)
+if command = "upper_xy" && power >= 330 && $canCombo {
+	changeState{value: 1120}
+}
+
+#-------------------------------------------------------------------------------
+#Fast Kung Fu Zankou
+if command = "QCF_ab" && power >= 330 && $canCombo {
+	changeState{value: 1420}
+}
+
+#-------------------------------------------------------------------------------
+#Fast Kung Fu Palm (1/3 super bar)
+if command = "QCF_xy" && power >= 330 && $canCombo {
+	changeState{value: 1020}
+}
+
+#-------------------------------------------------------------------------------
+#Fast Kung Fu Blow (1/3 super bar)
+if command = "QCB_xy" && power >= 330 && $canCombo {
+	changeState{value: 1220}
+}
+
+#-------------------------------------------------------------------------------
+#Light Kung Fu Knee
+if command = "FF_a" && $canCombo {
+	changeState{value: 1050}
+}
+
+#-------------------------------------------------------------------------------
+#Strong Kung Fu Knee
+if command = "FF_b" && $canCombo {
+	changeState{value: 1060}
+}
+
+#-------------------------------------------------------------------------------
+#Light Kung Fu Upper
+if command = "upper_x" && $canCombo {
+	changeState{value: 1100}
+}
+
+#-------------------------------------------------------------------------------
+#Strong Kung Fu Upper
+if command = "upper_y" && $canCombo {
+	changeState{value: 1110}
+}
+
+#-------------------------------------------------------------------------------
+#Light Kung Fu Zankou
+if command = "QCF_a" && $canCombo {
+	changeState{value: 1400}
+}
+
+#-------------------------------------------------------------------------------
+#Strong Kung Fu Zankou
+if command = "QCF_b" && $canCombo {
+	changeState{value: 1410}
+}
+
+#-------------------------------------------------------------------------------
+#Light Kung Fu Palm
+if command = "QCF_x" && $canCombo {
+	changeState{value: 1000}
+}
+
+#-------------------------------------------------------------------------------
+#Strong Kung Fu Palm
+if command = "QCF_y" && $canCombo {
+	changeState{value: 1010}
+}
+
+#-------------------------------------------------------------------------------
+#Light Kung Fu Blow
+if command = "QCB_x" && $canCombo {
+	changeState{value: 1200}
+}
+
+#-------------------------------------------------------------------------------
+#Strong Kung Fu Blow
+if command = "QCB_y" && $canCombo {
+	changeState{value: 1210}
+}
+
+#-------------------------------------------------------------------------------
+#Kung Fu Blocking (High)
+if command = "blocking" && command != "holddown" &&
+	((ctrl && stateType != A) ||
+		((stateNo = 1310 || stateNo = 1330) && time > 0)) {
+	changeState{value: 1300}
+}
+
+#-------------------------------------------------------------------------------
+#Kung Fu Blocking (Low)
+if command = "blocking" && command = "holddown" &&
+	((ctrl && stateType != A) ||
+		((stateNo = 1310 || stateNo = 1330) && time > 0)) {
+	changeState{value: 1320}
+}
+
+#-------------------------------------------------------------------------------
+#Kung Fu Blocking (Air)
+if command = "blocking" && command != "holddown" && command != "holdup" &&
+	((ctrl && stateType = A) ||
+		(stateNo = 1350 && time > 0)) {
+	changeState{value: 1340}
+}
+
+#===============================================================================
+#
+#-------------------------------------------------------------------------------
+#Run Fwd
+if command = "FF" && stateType = S && ctrl {
+	changeState{value: 100}
+}
+
+#-------------------------------------------------------------------------------
+#Run Back
+if command = "BB" && stateType = S && ctrl {
+	changeState{value: 105}
+}
+
+#-------------------------------------------------------------------------------
+#Kung Fu Throw
+if command = "y" && stateType = S && ctrl && stateNo != 100 && (p2StateType = S || p2StateType = C) && p2MoveType != H &&
+	((command = "holdfwd" && p2BodyDist X < 3) ||
+		(command = "holdback"&& p2BodyDist X < 5)) {
+	changeState{value: 800}
+}
+
+#===============================================================================
+#
+#-------------------------------------------------------------------------------
+#Stand Light Punch
+if command = "x" && command != "holddown" &&
+	((stateType = S && ctrl) ||
+		(stateNo = 200 && animElemTime(3) > 0)) {
+	changeState{value: 200}
+}
+
+#-------------------------------------------------------------------------------
+#Stand Strong Punch
+if command = "y" && command != "holddown" &&
+	((stateType = S && ctrl) ||
+		((stateNo = 200 || stateNo = 230) && animElemTime(3) > 0)) {
+	changeState{value: 210}
+}
+
+#-------------------------------------------------------------------------------
+#Stand Light Kick
+if command = "a" &&Command != "holddown" &&
+	((stateType = S && ctrl) ||
+		((stateNo = 200 || stateNo = 230) && animElemTime(3) > 0)) {
+	changeState{value: 230}
+}
+
+#-------------------------------------------------------------------------------
+#Standing Strong Kick
+if command = "b" &&Command != "holddown" &&
+	((stateType = S && ctrl) ||
+		((stateNo = 200 || stateNo = 230) && animElemTime(3) > 0)) {
+	changeState{value: 240}
+}
+
+#-------------------------------------------------------------------------------
+#Taunt
+if command = "start" && command != "holddown" && stateType != A && ctrl {
+	changeState{value: 195}
+}
+
+#-------------------------------------------------------------------------------
+#Crouching Light Punch
+if command = "x" && command = "holddown" && stateType = C && ctrl {
+	changeState{value: 400}
+}
+
+#-------------------------------------------------------------------------------
+#Crouching Strong Punch
+if command = "y" && command = "holddown" &&
+	((stateType = C && ctrl) ||
+		(stateNo = 400 && animElemTime(2) > 0) ||
+		(stateNo = 430 && moveContact && animElemTime(3) > 0)) {
+	changeState{value: 410}
+}
+
+#-------------------------------------------------------------------------------
+#Crouching Light Kick
+if command = "a" && command = "holddown" &&
+	((stateType = C && ctrl) ||
+		(stateNo = 400 && animElemTime(2) > 0) ||
+		(stateNo = 430 && moveContact && animElemTime(3) > 0)) {
+	changeState{value: 430}
+}
+
+#-------------------------------------------------------------------------------
+#Crouching Strong Kick
+if command = "b" && command = "holddown" &&
+	((stateType = C && ctrl) ||
+		(stateNo = 400 && animElemTime(2) > 0) ||
+		(stateNo = 430 && moveContact && animElemTime(3) > 0)) {
+	changeState{value: 440}
+}
+
+#-------------------------------------------------------------------------------
+#Jump Light Punch
+if command = "x" &&
+	((stateType = A && ctrl) ||
+		(stateNo = 600 && animElemTime(2) > 0) ||
+		stateNo = 1350) { #Air blocking
+	changeState{value: 600}
+}
+
+#-------------------------------------------------------------------------------
+#Jump Strong Punch
+if command = "y" &&
+	((stateType = A && ctrl) ||
+		((stateNo = 600 || stateNo = 630) && moveContact) || #jump_x or jump_a
+		stateNo = 1350) { #Air blocking
+	changeState{value: 610}
+}
+
+#-------------------------------------------------------------------------------
+#Jump Light Kick
+if command = "a" &&
+	((stateType = A && ctrl) ||
+		stateNo = 1350) { #Air blocking
+	changeState{value: 630}
+}
+
+#-------------------------------------------------------------------------------
+#Jump Strong Kick
+if command = "b" &&
+	((stateType = A && ctrl) ||
+		((stateNo = 600 || stateNo = 630) && moveContact) || #jump_x or jump_a
+		stateNo = 1350) { #Air blocking
+	changeState{value: 640}
+}
+
+#End of file: roundState = 2
+#===============================================================================
+}

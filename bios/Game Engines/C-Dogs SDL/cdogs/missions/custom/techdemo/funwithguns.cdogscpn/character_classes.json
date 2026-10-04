@@ -1,0 +1,21 @@
+{
+    "Version": 2,
+    "Characters": [
+      {
+        "Name": "Mech",
+        "Vehicle": true,
+        "HeadPics": {
+          "Type": "Directional",
+          "Sprites": "chars/heads/jones"
+        },
+        "Body": "mech",
+        "DeathSprites": "explosion",
+        "Mass": 500,
+        "Sounds": "mech",
+        "BloodColor": "aabbaa",
+        "Footsteps": "mech",
+        "FootstepsDistancePlus": 0
+      }
+    ]
+  }
+  

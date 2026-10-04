@@ -1,0 +1,138 @@
+{
+  "Version": 3,
+  "Bullets": [
+    {
+      "Name": "khanjali",
+      "Power": 20,
+      "Mass": 0,
+      "HitSounds": {
+        "Object": "hits/knife_hard",
+        "Flesh": "hits/knife_flesh"
+      }
+    },
+    {
+      "Name": "wurmtooth",
+      "Power": 15,
+      "Mass": 0,
+      "HitSounds": {
+        "Object": "hits/knife_hard",
+        "Flesh": "wurmtooth_flesh"
+      }
+    },
+    {
+      "Name": "monster_bite",
+      "Power": 10,
+      "Mass": 0,
+      "HitSounds": {
+        "Object": "hits/knife_hard",
+        "Flesh": "monster-2"
+      }
+    },
+    {
+      "Name": "inkvine",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/wave",
+        "Mask": "00ff00"
+      },
+      "Speed": 640,
+      "Range": 50,
+      "Power": 35,
+      "Mass": 0.01,
+      "Size": [8, 8],
+      "Special": "Poison",
+      "Spark": "spark_inkvine",
+      "HitSounds": {
+        "Object": "",
+        "Flesh": "",
+        "Wall": ""
+      },
+      "HitGuns": [
+        "inkvine_splash"
+      ],
+      "Falling": {
+        "GravityFactor": 1,
+        "DestroyOnDrop": true,
+        "DropGuns": [
+          "inkvine_splash"
+        ]
+      }
+    },
+    {
+      "Name": "inkvine_splash",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "grenade",
+        "Mask": "ccffcc"
+      },
+      "SpeedLow": 256,
+      "SpeedHigh": 512,
+      "SpeedScale": true,
+      "Range": 100,
+      "Persists": true,
+      "WallBounces": true,
+      "Spark": "",
+      "HitSounds": {
+        "Object": "",
+        "Flesh": "",
+        "Wall": ""
+      },
+      "HitsObjects": false,
+      "Falling": {
+        "GravityFactor": 4,
+        "DestroyOnDrop": true,
+        "DropGuns": [
+          "inkvine_puddle"
+        ]
+      },
+      "HitGuns": [
+        "inkvine_puddle"
+      ]
+    },
+    {
+      "Name": "inkvine_puddle",
+      "Pic": {
+        "Type": "AnimatedRandom",
+        "Sprites": "inkvine_puddle",
+        "TicksPerFrame": 0
+      },
+      "RangeLow": 200,
+      "RangeHigh": 300,
+      "Size": [8, 6],
+      "Special": "Poison",
+      "Persists": true,
+      "Spark": "",
+      "HitSounds": {
+        "Object": "",
+        "Flesh": "hits/gas",
+        "Wall": ""
+      }
+    },
+    {
+      "Name": "lase",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/beam_yellow"
+      },
+      "Spark": "spark_yellow",
+      "Speed": 700,
+      "Range": 80,
+      "Power": 30,
+      "Mass": 30.0,
+      "Size": [4, 4]
+    },
+    {
+      "Name": "projection",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "projection"
+      },
+      "Spark": "spark_yellow",
+      "Speed": 600,
+      "Range": 90,
+      "Power": 50,
+      "Mass": 50.0,
+      "Size": [10, 10]
+    }
+  ]
+}

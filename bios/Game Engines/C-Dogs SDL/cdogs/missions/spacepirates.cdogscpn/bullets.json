@@ -1,0 +1,107 @@
+{
+  "Version": 1,
+  "Bullets": [
+    {
+      "Name": "yellow_needle",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "pulsey"
+      },
+      "Speed": 1500,
+      "Range": 15,
+      "Power": 2,
+      "SeekFactor": 10
+    },
+    {
+      "Name": "blue_bullet",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "rapid"
+      },
+      "Speed": 1200,
+      "Range": 45,
+      "Power": 10,
+      "WallBounces": false
+    },
+    {
+      "Name": "blue_beam",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "particles/beam_bright"
+      },
+      "Speed": 1200,
+      "Range": 55,
+      "Power": 20,
+      "WallBounces": true
+    },
+    {
+      "Name": "shotgun_particle",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "rapid",
+        "Mask": "aaff22"
+      },
+      "Speed": 640,
+      "Range": 50,
+      "Power": 15
+    },
+    {
+      "Name": "red_dot",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "pulsey",
+        "Mask": "ff8888"
+      },
+      "Speed": 400,
+      "Range": 350,
+      "Power": 4,
+      "SeekFactor": 90
+    },
+    {
+      "Name": "red_laser",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "rapidr"
+      },
+      "Speed": 1100,
+      "Range": 27,
+      "Power": 12
+    },
+    {
+      "Name": "bio_grenade",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "bio_grenade",
+        "TicksPerFrame": 2
+      },
+      "ShadowSize": [6, 4],
+      "Speed": 384,
+      "Range": 100,
+      "Spark": "",
+      "HitSounds": {
+        "Object": "",
+        "Flesh": "",
+        "Wall": "bounce"
+      },
+      "WallBounces": true,
+      "HitsObjects": false,
+      "Falling": {
+        "GravityFactor": 1
+      },
+      "OutOfRangeGuns": [
+        "particle_explosion"
+      ]
+    },
+    {
+      "Name": "yellow_particle",
+      "Pic": {
+        "Type": "Directional",
+        "Sprites": "pulsey"
+      },
+      "Speed": 1500,
+      "Range": 12,
+      "Power": 8,
+      "SeekFactor": 5
+    }
+  ]
+}

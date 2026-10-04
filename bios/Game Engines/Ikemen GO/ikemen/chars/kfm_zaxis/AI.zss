@@ -1,0 +1,611 @@
+#===============================================================================
+#Global states (not halted by pause/superPause, no helper limitations)
+#===============================================================================
+[StateDef -4]
+
+if stateNo = 100 && roundState != 2 && aiLevelF {
+	changeState{value: 0; ctrl: 1}
+}
+
+# this ZSS AI file is used to define and implement AI for kung fu man.
+#it can also be used a guide for you to create your own AI using IKEMEN GO.
+
+#------------|dis values|-------------------------------------------------------
+
+#This code ensures that in tag mode or simul mode, the "p2bodydist x" value accounts for
+#the actual nearest enemy immediately.
+ignoreHitPause if !isHelper {
+	#activeplayer dist
+	mapSet{map: "enemydx"; value: (pos x - enemyNear,pos x) * (-facing)}
+	#activeplayer bodydist grounded
+	if stateType != A && enemyNear,stateType != A {
+		mapSet{map: "enemybdx"; value: ((pos x - enemyNear,pos x) + (const(size.ground.front) + enemyNear,const(size.ground.front)) * (facing)) * (-facing)}
+	} else if stateType = A && enemyNear,stateType != A { #activeplayer bodydist - p1 in air, p2 on ground
+		mapSet{map: "enemybdx"; value: ((pos x - enemyNear,pos x) + (const(size.air.front) + enemyNear,const(size.ground.front)) * (facing)) * (-facing)}
+	} else if stateType != A && enemyNear,stateType = A { #activeplayer bodydist - p1 on ground, p2 in air
+		mapSet{map: "enemybdx"; value: ((pos x - enemyNear,pos x) + (const(size.ground.front) + enemyNear,const(size.air.front)) * (facing)) * (-facing)}
+	} else if stateType = A && enemyNear,stateType = A { #activeplayer bodydist - both in air
+		mapSet{map: "enemybdx"; value: ((pos x - enemyNear,pos x) + (const(size.air.front) + enemyNear,const(size.air.front)) * (facing)) * (-facing)}
+	}
+}
+
+#This code will calculate a "velocity" even if the opponent uses posadds for movement.
+ignoreHitPause if gameTime%2 = 0 {
+	mapSet{map: "ppx"; value: enemyNear,pos x}
+}
+
+#------------|Juggle point|-----------------------------------------------------
+#Currently, juggle points cannot be detected, so this hackish way of doing so will help the AI
+#determine what juggles it has left to use for combo attacks
+ignoreHitPause if moveHit = 2 && !isHelper && cond(numTarget, target,hitFall, 0) {
+	if hitCount = 1 || map(jug) = 0 {
+		if stateNo = 200 {
+			let jug = 1;
+		} else if stateNo = 600 {
+			let jug = 2;
+		} else if stateNo = 630 {
+			let jug = 3;
+		} else if stateNo = 230 || stateNo = 210 || stateNo = 610 || stateNo = 640 || stateNo = 1000 || stateNo = 1010 || stateNo = 1050 || stateNo = 1060 || stateNo = 1070 ||
+			stateNo = 1100 || stateNo = 1110 || stateNo = 1200 || stateNo = 1210 || stateNo = 1400 || stateNo = 1410 || stateNo = 3000 || stateNo = 3050 {
+			let jug = 4;
+		} else if stateNo = 240 || stateNo = 400 || stateNo = 430 {
+			let jug = 5;
+		} else if stateNo = 410 || stateNo = 1020 || stateNo = 1420 || stateNo = 1220 || stateNo = 1120 {
+			let jug = 6;
+		} else if stateNo = 440 {
+			let jug = 7;
+		}
+		mapAdd{map: "jug"; value: $jug}
+	}
+}
+
+if enemyNear,moveType != H || enemyNear,stateNo = 5040 || enemyNear,stateNo = [5200, 5210] {
+	mapSet{map: "jug"; value: 0}
+}
+
+#===============================================================================
+#Global states (commands)
+#===============================================================================
+[StateDef -1]
+
+#This is used to prevent undesirable actions after getting up from a knock down for a short amount of time
+if anim = 5120 || roundState != 2 { #getuprecoverytime
+	mapSet{map: "gurt"; value: 10}
+}
+
+#global AI loop
+ignoreHitPause if aiLevelF && roundState = 2 && !standby {
+
+#prevent default jump behavior
+assertSpecial{flag: nojump; flag2: noairjump}
+
+#prevent default walk behavior
+assertSpecial{flag: nowalk; flag2: nobrake}
+
+#------------|AI variable declarations|-----------------------------------------
+
+let inrange = 0;
+
+#short hand p2bodydist x
+let p2dx = map(enemybdx);
+
+#short hand p2bodydist y
+let p2dy = p2BodyDist Y;
+
+#get all lights
+let lights = stateNo = 200 || stateNo = 230 || stateNo = 400 || stateNo = 430;
+
+#get all heavies that can cancel
+let heavy = stateNo = 210 || stateNo = 240 || stateNo = 410;
+
+#opponent is not in air or lying down
+let grounded = enemyNear,stateType = S || enemyNear,stateType = C;
+
+#Super cancel flag
+let SC = stateNo = [1000, 1420] && stateType != A && map(canCombo);
+
+#CC - CanCombo, this variable checks and returns the current amount of hitstun the opponent is in.
+# because KFM has no projectiles, we can easily detect if he has a target to accomplish this.
+let CC = cond(numTarget, cond(!enemyNear,hitFall, target,getHitVar(hittime), getHitVar(fall.recovertime)), 0);
+
+#typically you could check the velocity of the opponent to determine how fast they are moving
+#however, if they use posadds to move instead, the vel will remain 0. Using some trickery we can determine the position based velocity
+#using this code below because if the opponent has moved position on the x-axis, we can check 1 frame later to determine how far they moved.
+#if they have not moved, we can try to track velocity instead.
+let trvelx = cond((abs(map(ppx)) - abs(enemyNear,pos x)) = 0 || enemyNear,vel x > (abs(map(ppx)) - abs(enemyNear,pos x)), enemyNear,vel x, (abs(map(ppx)) - abs(enemyNear,pos x)));
+
+#game specific values
+let nojug = enemyNear,anim = 5120 || enemyNear,stateNo = 5040 && enemyNear,ctrl || enemyNear,stateNo = 52 && enemyNear,time < 3 && enemyNear,prevStateNo = 5040;
+
+#how many points do we have to juggle with?
+let jugpt = map(jug);
+
+let hitfall = enemyNear,hitFall || $CC > 8;
+
+#Allows the AI to possibly link attacks if they have less recovery than the opponent.
+if ctrl && !enemyNear,ctrl && (enemyNear,getHitVar(hittime) > 0) {
+	let AI_JI = enemyNear,getHitVar(hittime);
+}
+
+#things to do in neutral(not attacking)
+#Neutral attacks and combo conditions are separated to prevent accidental code preventing either from working
+#properly.
+
+
+if (ctrl && stateNo != 105 || stateNo = 20 || stateNo = 100 || stateNo = 1310 || stateNo = 1330 || stateNo = 1330 || stateNo = 1350) {
+	if stateType != A {
+		#--|Reversals|-----------------------------------------------------------
+		if (enemyNear,moveType = A) && enemyNear,time > 1 {
+
+			#------------|SUPERS|---------------------------------------------------
+			if power >= 1500 {
+				if ($p2dx = [-10, (35+floor($trvelx*.4)*3)]  &&(!$grounded && $p2dy = [-80+(floor(enemyNear,vel y*.4)*-5), -15] || $grounded)) {
+					changeState{value: 3050}
+				}
+
+				#Tripple Kung Fu Palm
+				#This first condition checks for if the opponent is in range of the attack hitting, it adds the opponents current velocity
+				#to determine if they would be hit by them moving closer while attacking. This can be set to any range if you are using this
+				#as an example.			
+				if ($p2dx = [30*($hitfall)-36, (90+floor($trvelx*.4)*5)] && ($p2dy = [-50+(floor(enemyNear,vel y*.4)*-5), -15] || $grounded) &&
+					(enemyNear,stateNo != 5040 && enemyNear,moveType != H || !$grounded && $p2dy = [-50, -15])) && power >= 1000 {
+					changeState{value: 3000}
+				}
+			}
+			#-------------------------------------------------------------------------
+			#Kung Fu Knee
+			if enemyNear,stateType = A && $p2dx = [40*($hitfall)-30, (50+floor($trvelx*.4)*10)] && $p2dy = [-80+(floor(enemyNear,vel y*.4)*-5), -60+($hitfall)*40] &&
+				(enemyNear,stateNo != 5040 && enemyNear,moveType != H || !$grounded && $p2dy = [-60, -15]) && (!map(gurt) || $p2dx > 30) &&
+				random <= (350 * (aiLevelF ** 2 / 48.0)) {
+
+				if power >= 500 && random%3 = 1 && $p2dy < -70 {
+					let version2 = 1070;
+				} else if enemyNear,vel x > 0 && $p2dy < -70 {
+					let version2 = 1060;
+				} else {
+					let version2 = 1050;
+				}
+				changeState{value: $version2}
+			}
+
+			#-----------------------------------------------------------------------
+			#Kung Fu Blocking
+			#This is a command parry that kung fu man has, from an AI perspective, it can be challenging to indicate when it should be used.
+			#For now, this is the most case handling we will attempt. We start by checking if they are moving or what the attack distance of their
+			#current attack is. We can use that math loosely to determine where their attack is. Because this can make fighting challenging, it is disabled
+			#unless the aiLevelF is 5 or higher
+			if $p2dx = [-15, 30+floor($trvelx*.4)*10+floor(enemyNear,const(size.attack.dist)*.5)] && $p2dy = [-50+(floor(enemyNear,vel y *.6)*-10), 0] &&
+				random <= (335 * (aiLevelF ** 2 / 48.0)) && enemyNear,moveType = A && aiLevel > 4 {
+				changeState{value: cond(enemyNear,stateType != C,1300,1320)}
+			}
+		}
+
+		#-----------------------------------------------------------------------
+		#anti air specials are used where it is safe for kfm to try to stop the opponent from jumping in and attacking
+		#because of how they can connect, even on a blocking opponent, it leaves kfm moderately safe and is considered
+		#minimal risk to perform.
+
+		#Kung Fu Upper
+		#We reduce the chance of this happening to 25% to prevent overusage.
+		if enemyNear,stateType = A && $p2dx = [5*($hitfall)-20, (30+floor($trvelx*.4)*20)] &&
+			(enemyNear,stateNo != 5040 && enemyNear,moveType != H || !$grounded && $p2dy = [-80+(floor(enemyNear,vel y*.6)*-5), -40+($hitfall)*30]) && (!map(gurt) || $p2dx > 30) &&
+			random <= (450 * (aiLevelF ** 2 / 48.0)) {
+
+			#1/3 chance to use ex move when power is at least half of one meter
+			if power >= 500 && random%3 = 1 {
+				let version = 1120;
+			#use this for advancing enemies
+			} else if enemyNear,vel x > 0 {
+				let version = 1110;
+			#default version
+			} else {
+				let version = 1100;
+			}
+			changeState{value: $version}
+		}
+
+		#-----------------------------------------------------------------------
+		#anti air normals
+		if random <= (420 * (aiLevelF ** 2 / 48.0)) && $p2dx < 45 && $p2dy = [-70+(floor(enemyNear,vel y*.4)*-5), -20] && !$nojug && $jugpt = 0 {
+			changeState{value: 410}
+		}
+
+		#-----------------------------------------------------------------------
+		#throw
+		if random <= (310 * (aiLevelF ** 2 / 48.0)) && stateType = S && stateNo != 100 && (enemyNear,moveType != H || enemyNear,stateNo = [120, 131]) &&
+			(map(AI_JI) < 2) && $p2dx < 30 && $grounded {
+			changeState{value: 800}
+		}
+
+		#-----------------------------------------------------------------------
+		#blocking
+		if (enemyNear,moveType = A && prevStateNo != [1300, 1350] && stateNo != [1300, 1350] &&
+			inGuardDist && random <= (700 * (aiLevelF ** 2 / 48.0)) || enemyNear,numProj > 0 && random < (440 * (aiLevelF ** 2 / 48.0))) &&
+			$p2dx > -20 && enemyNear,stateType != L &&
+			(ctrl || stateNo = 20 || stateNo = 100) || (enemyNear,numProj >= 1) {
+			assertSpecial{flag: autoguard}
+			changeState{value: 120}
+		}
+
+		#-----------------------------------------------------------------------
+		#this attack is a special case attack, the angle of attack indicates it can be used
+		#to stop crouching attacking opponents preemptively, so kfm will try to do so when possible.
+		#used to hit crouching attacking opponents from a distance
+		if ($p2dx = [35, 55+(floor($trvelx*.4)*5)]) && enemyNear,stateType = C && (enemyNear,moveType = A) && random <= (450 * (aiLevelF ** 2 / 48.0)) {
+			changeState{value: 240}
+		}
+
+		#-----------------------------------------------------------------------
+		#light attacks (200,230,400,430)
+		if $p2dx < 55 + (floor($trvelx * .4) * 5) && !$AI_JI && !$nojug && (!map(gurt) || $p2dx > 35) && ($p2dx > 25 || random <= (225 * (aiLevelF ** 2 / 48.0)) || enemyNear,stateType = A) &&
+			(enemyNear,stateNo != [1025, 1028] || (enemyNear,moveType != H || $CC > 3 && $hitfall && enemyNear,stateNo != [1025, 1028])) {
+			if ($grounded || $p2dy = [-40+(floor(enemyNear,vel y*.4)*-10), -15]) && $p2dx < 45 {
+				let att = cond($p2dy < -40 || enemyNear,stateType = S, 200, 400);
+				if $att = 400 && $p2dx < 35 + (floor($trvelx * .4) * 5) || $att != 400 {
+					changeState{value: $att}
+				}
+			} else if ($p2dx > 25 || random <= (225 * (aiLevelF ** 2 / 48.0))) && $grounded {
+				let att = cond($p2dy > -10 || enemyNear,stateType = S, 430, 230);
+				if $att = 430 && $p2dx < 45 + (floor($trvelx * .4) * 5) || $att != 430 {
+					changeState{value: $att}
+				}
+			}
+		}
+
+		#-----------------------------------------------------------------------
+		#heavy attacks (210,240)
+		#we do not include 440 or 410 here because they are defined elsewhere in a more
+		#specialized way that focuses on what they are capable of doing in a match.
+		if $p2dx < 60 + (floor($trvelx * .4) * 5) && !$AI_JI && (!$nojug || $p2dy > -10) && (!map(gurt) || $p2dx > 35) && random <= (425 * (aiLevelF ** 2 / 48.0)) &&
+			(enemyNear,stateNo != [1025, 1028] || enemyNear,moveType != H) {
+			if ($grounded || $p2dy = [-50 + (floor(enemyNear,vel y*.6)*-10), -25]) {
+				let att = cond($p2dy > -10 || enemyNear,stateType = S, 240, 210);
+				if $att = 240 && $p2dx < 45 + (floor($trvelx * .4) * 5) || $att != 240 {
+					changeState{value: $att}
+				}
+			}
+		}
+
+		#-----------------------------------------------------------------------
+		#jump in landing attacks can be used to start combos from a successful jump attack (600-640)
+		#Using the $AI_JumpIn variable, we can inform the AI about how much time they have to
+		#start a combo by linking a ground attack.
+		if $AI_JI > 9 && $p2dx = [35, 60] && $grounded {
+			changeState{value: cond($p2dx < 50, 240, 210)}
+		}
+		if $AI_JI > 3 && $p2dx <= 55 && $grounded {
+			changeState{value: cond(enemyNear,stateType = S, cond($p2dx > 40, 230, 200), cond($p2dx < 30, 400, 430))}
+		}
+
+		#-----------------------------------------------------------------------
+		#The term "poke" is used to refer to attacks that can usually attack opponents from a safe distance
+		#without high risk. The attacks below meet that criteria but can be changed if more attacks are added later.
+		#pokes
+		if $p2dx = [45, 60] && enemyNear,moveType != H && $grounded && random < (250 * (aiLevelF ** 2 / 48.0)) {
+			if $p2dx = [30, 60+(floor($trvelx*.4)*5)] && random%4 = 0 {
+				let att2 = 210;
+			} else if $p2dx = [30, 50+(floor($trvelx*.4)*5)] && random%4 = 1 {
+				let att2 = 240;
+			} else if $p2dx = [30, 60+(floor($trvelx*.4)*5)] && enemyNear,stateType = S {
+				let att2 = 440;
+			}
+			if $att2 > 0 {
+				changeState{value: $att2}
+			}
+		}
+
+		#-----------------------------------------------------------------------
+		#OTG - attacks that can hit a fallen opponent.
+		if (enemyNear,stateType = L || enemyNear,stateNo = 52) && $jugpt < 13 && $p2dx = [-2, 45] && (!$nojug || enemyNear,stateNo = 52) {
+			changeState{value: cond($jugpt < 8 && enemyNear,time < 20, 440, 430)}
+		}
+
+	#End of file: stateType != A
+	#===========================================================================
+	#This section of AI handles attacks that are done in the air.
+	} else if stateType = A && enemyNear,stateType != L {
+
+		#kung fu blocking - air
+		if $p2dx = [-15, 35+floor($trvelx*.4)*5+floor(enemyNear,const(size.attack.dist)*.5)] && $p2dy = [-20+(floor(enemyNear,vel y*.4)*-5), 30+(floor(vel y*.4)*5)] &&
+			random <= (600 * (aiLevelF ** 2 / 48.0)) && enemyNear,moveType = A {
+			changeState{value: 1340}
+		}
+
+		#cross up
+		#currently this character has no way to do a cross up(attack that hits behind opponent while you jump)
+		#so this is commented, however you could add that ability right now! If you do you can use this code
+		#to define it.
+		#let cu = $p2dx = [-65, 10];
+
+		#if $cu && vel x > 0 && (enemyNear,stateNo = 5120 || $grounded && !$nojug) && vel y > 0 {
+		#	ChangeState{value: 630}
+		#}
+
+		#------------|air normal attacks|---------------------------------------
+
+		#we do not want kfm to try to hit an attacking opponent using specials because this typically means kfm will lose to it.
+		#However, if it's a lower AI level it's ok to make mistakes, or if kfm is behind the opponent anyway.
+		if (enemyNear,hitDefAttr != SCA,SA || facing != enemyNear,facing || aiLevelF < 6) && random <= (700 * (aiLevelF ** 2 / 48.0)) {
+
+			#These attacks will have variable y distance detection depending on if the opponent is standing or crouching, it is not perfect
+			#but the illusion of intelligence is all that matters. We do not want kfm to attack characters in a recovering (state 5040) state.
+			#heavy attacks are given priority as they have bigger rewards, but light attacks are faster so both will be taken into account.
+
+			if (frontEdgeBodyDist < 50 || $p2dx = [-5, (55+(floor($trvelx * .4)*5) + (floor(vel x * .4)*20))]) &&
+				($p2dy > 30 || $p2dy < 0) && $p2dy = [5,40 + ((enemyNear,stateType = S || enemyNear,stateNo = [5115,5122])*40) + ((enemyNear,stateType = C)*25)] &&
+				(vel y > 0 || !$grounded && !$nojug) {
+				changeState{value: 640}
+			}
+
+			if (frontEdgeBodyDist < 50 || $p2dx = [-8, (45+(floor($trvelx * .4)*5) + (floor(vel x * .4)*5))]) &&
+				($p2dy > 30 || $p2dy < 0) && $p2dy = [-20,45 + ((enemyNear,stateType = S || enemyNear,stateNo = [5115,5122])*40) + ((enemyNear,stateType = C)*25)] &&
+				(vel y > 0 || !$grounded && !$nojug) {
+				changeState{value: 610}
+			}
+
+			if (frontEdgeBodyDist < 50 || $p2dx = [-15, (40+(floor($trvelx * .4)*5) + (floor(vel x * .4)*20))]) &&
+				$p2dy = [-20,35+((enemyNear,stateType = S || enemyNear,stateNo = [5115,5122])*40) + ((enemyNear,stateType = C)*25)] &&
+				(vel y > 0 || !$grounded && !$nojug) {
+				changeState{value: 600}
+			}
+
+			if (frontEdgeBodyDist < 50 || $p2dx =[-15, (30+(floor($trvelx * .4)*5) + (floor(vel x * .4)*25))]) &&
+				$p2dy = [-80,35+((enemyNear,stateType = S || enemyNear,stateNo = [5115,5122])*40) + ((enemyNear,stateType = C)*25)] &&
+				(vel y > 0 || (!$grounded) && (!$nojug) || $hitfall) {
+				changeState{value: 630}
+			}
+		}
+
+	#End of file: stateType = A
+	#===========================================================================
+	}
+#End of file: ctrl
+#===============================================================================
+#this section of AI is meant for attacks to be done after an attack defined above connects either as a hit
+#or blocked by the opponent.
+} else if moveContact = [1, 3] && hitPauseTime = 0 && stateType != A {
+
+	#---------------------------------------------------------------------------
+	#These are freeform random combo fillers. They have very basic conditions and
+	#do not break the human pattern of combos. lights can be used to build distance before
+	#finishing combos as well as giving additional damage.
+	#lights
+	if $jugpt < 6 && random < (700 * (aiLevelF ** 2 / 48.0)) {
+		if $p2dx < 20 && moveContact && $lights {
+			if random%2 || enemyNear,stateType = A {
+				changeState{value: cond($p2dy < -18, 200, 400)}
+			} else {
+				changeState{value: cond($p2dx < 25, 430, 230)}
+			}
+		}
+	#---------------------------------------------------------------------------
+	#light to other
+	#this block will build the middle piece of combos. Sometimes a super will occur if the condition
+	#is met.
+		if $p2dx < 85 && moveHit && $lights && !$nojug && random < (600 * (aiLevelF ** 2 / 48.0)) {
+			if $hitfall && $jugpt = [8, 10] && $p2dx = [-8, 35] && $p2dy > -75 && $p2dy != 0 && power > 1000 {
+				changeState{value: 3050}
+			}
+			#We must ensure kfm's attack will combo by checking how much hittime the opponent has remaining.
+			if (random%5 < 3 || enemyNear,stateType = A) && (enemyNear,stateType != L || $p2dy != 0) && $p2dx < 60 {
+				if $CC > 8 {
+					changeState{value: cond($p2dy < -30 || $p2dx > 40, 210, 240)}
+				} else if $p2dx < 35 {
+					changeState{value: 410}
+				}
+			} else {
+				changeState{value: 440}
+			}
+		}
+	}
+	#---------------------------------------------------------------------------
+	#this block will determine how and if kfm will cancel into his various specials. The criteria is that the hitpause of the current attack
+	#is over and the opponent is either not falling or in the air in a possible juggle state. It also requires at least 11 frames of hittime
+	#to ensure the special will connect and the combo will continue unless they are in the air where fall.recovertime is prioritized instead.
+	if ($heavy || $lights && (!$grounded && $p2dy < -10 & $p2dx > 55 || $p2dx >55)) && (moveHit) && ($hitfall || $grounded || $CC > 11) && random < (800 * (aiLevelF ** 2 / 48.0)) {
+		#using our somewhat accurate juggle point system, we are specifying that we only want moves to be used
+		#if we haven't used more than 8 juggle points.
+		if $jugpt <= 8 { #if we have at least 7 frames of hittime from the current attack, we
+			#can cancel into the specials below without fail. For lower levels,
+			#we randomly cancel 50% of the time.
+			if $CC > 7 || aiLevel < 5 && random%2 {
+				#the range of kung fu palm requires at least 120 pixels of space to
+				#connect without missing. The opponent needs to at least be 50 pixels in the air
+				#while falling to ensure the attack juggles. Or they are not in the air at all.
+				if $p2dx = [40, 120] && ($p2dy = [10, -50] || $grounded) {
+					#1/3 chance of using ex version if possible.
+					if power > 450 && $grounded && random%3 = 0 {
+						let spver = 1020;
+					#if we have at least 9 frames of hittime
+					} else if $CC > 9 && $p2dx < 85 {
+						let spver = 1010;
+					} else {
+					#at minimum we use weak kung fu palm
+						let spver = 1000;
+					}
+					changeState{value: $spver}
+					#if the opponent is closer, we can use higher damaging moves that deal more stun.
+					#such as kung fu zankou
+				} else if $p2dx < 40 && ($p2dy = [10, -50] || $grounded) {
+					if power > 450 && $grounded && random%3 = 0 {
+						let spver = 1420;
+					} else if $CC > 9 && $p2dx > 40 {
+						let spver = 1410;
+					} else {
+						let spver = 1400;
+					}
+					changeState{value: $spver}
+				}
+			}
+			#if the opponent is in the air and they are in range, kfm will try to use kung fu knee
+			if !$grounded && $p2dy = [-80+(floor(enemyNear,vel y*.4)*-5), -25] && $CC > 6 && $p2dx < 40 {
+				if power > 450 && $grounded && random%3 = 0 {
+					let spver = 1070;
+				} else if $p2dx > 40 || random%2 {
+					let spver = 1060;
+				} else {
+					let spver = 1050;
+				}
+				changeState{value: $spver}
+			}
+		# if kfm is about to run out of juggle points, he will try to use kung fu blow to deal a
+		# devastating end to a combo.
+		} else if $jugpt = [8, 12+(power < 1000)] { #finishers
+			if $p2dx = [-8, 80] && $p2dy = [-55+(floor(enemyNear,vel y*.4)*-5), -35] {
+				changeState{value: 1200 + (random%2) * 10}
+			}
+		}
+	}
+	#---------------------------------------------------------------------------
+	#This is used to determine if kfm should cancel his supers attacks into hyper attacks
+	#as a reminder $SC is used to identify the same check a human player has to meet to perform this
+	#cancel. we then check if a heavy attack or even a light attack can be used if the opponent is
+	#close to losing. This will gurantee kfm's victory usually.
+	if ($SC || ($heavy && (enemyNear,life < 350) || $lights)) && moveHit && $jugpt < 14 && random < (700 * (aiLevelF ** 2 / 48.0)) {
+		if power >= 1000 {
+			if $p2dx = [-5, 25] && ($p2dy = [-75, -1] || $grounded) {
+				changeState{value: 3050}
+			}
+			if $p2dx = [-5, 80] && ($p2dy = [-40+(floor(enemyNear,vel y*.6)*-5), -25] || $grounded) {
+				changeState{value: 3000}
+			}
+		}
+	}
+#End of file: moveContact
+#===============================================================================
+}
+
+#------------|Kung Fu Knee follow up|-------------------------------------------
+#If there was more follow ups to his kung fu knee, this is the place to handle it
+#The criteria matches the same rule as a non-cpu. Refer to state 1051 to verify.
+#This is placed outside of the main two blocks above because it is considered a special case outlier.
+if (stateNo = 1051 || stateNo = 1061 || stateNo = 1071) && (moveHit || moveContact && aiLevel < 6) && vel y < -1 {
+	if stateNo = [1050, 1069] {
+		changeState{value: 1055}
+	} else {
+		changeState{value: 1075}
+	}
+}
+
+#------------|MOVEMENT|---------------------------------------------------------
+
+#------------|walking|----------------------------------------------------------
+#These are the conditions that will make kfm walk forward.
+mapSet{map: "AIw"; value: 0}
+
+if ((enemyNear,moveType != A) || $p2dx > 25) || (enemyNear,stateType = L && $p2dx > 70) || $AI_JI > 0 {
+	mapSet{map: "AIw"; value: 1}
+}
+
+#These are the conditions that will make kfm walk backwards
+if backEdgeBodyDist > 40 && (enemyNear,moveType = A || enemyNear,stateType != L && $p2dx < 30) {
+	mapSet{map: "AIw"; value: -1}
+}
+
+#there's a 25% chance at any time that if possible, kfm will walk a given direction with the conditions given
+if stateType = S && ctrl && stateNo != 100 && random < 249 && (enemyNear,moveType != A || backEdgeBodyDist < 40) && ($p2dx = [25, 120]) && map(AIw) != 0 {
+	changeState{value: 20}
+}
+
+#If the AI is walking, we don't want them to stutter crouching as it looks very robotic.
+if map(AIw) != 0 && aiLevel > 3 {
+	assertSpecial{flag: nocrouch}
+}
+
+#if the walk condition zeros out, kfm will stop walking.
+if map(AIw) = 0 && stateNo = 20 {
+	printToConsole{text: "changeState{value: 0}"}
+	changeState{value: 0; ctrl: 1}
+}
+#------------|running|----------------------------------------------------------
+
+#These are the conditions that will make kfm run
+
+if stateType != A && (ctrl || stateNo = 20) && stateNo != 100 && random <= (396 * (aiLevelF ** 2 / 48.0)) &&
+	(enemyNear,moveType != A || backEdgeBodyDist < 40) && ($p2dx >= cond($hitfall || enemyNear,stateNo = 5300, 10, 120)) {
+	changeState{value: 100}
+}
+
+#this will make kfm stop running. If you are making your own character with a stop running animation,
+#be sure to change this value: 0 to whatever that state is.
+if stateNo = 100 && ($p2dx < 40 - 20 * (!$grounded) && enemyNear,stateNo != 5040 || $p2dx < - 65 || roundState != 2) {
+	changeState{value: 0; ctrl: 1}
+}
+
+#------------|jumping|----------------------------------------------------------
+#this will decrement the get-up recovery-time map set above
+if map(gurt) > 0 {
+	mapAdd{map: "gurt"; value: -1}
+}
+
+#this is to control optimal times to jump and attack on an opponent getting up from
+#a knock down.
+let p2l = enemyNear,anim = 5120 || enemyNear,stateNo = 5110 && enemyNear,time > 10;
+
+#These are the jump conditions for kfm. Starting off, kfm should not jump immediately after getting up as statistically,
+#it leads to the worst outcome. However, if an opponent tries to throw and kfm detects it, he will still jump.
+#He will also jump if the opponent is waking up from their knock down to score a hit or maintain advantageous pressure.
+#Lastly, he will try to jump after hitting an enemy with an attack that did not knock down. This usually puts the opponent
+#in state 5040 or if they are stunned (state 5300). it is worth mentioning that at lower levels kfm will not be as precise
+#and will leave himself open forbeginners.
+if stateType != A && (((!map(gurt)) && (random < (375 * (aiLevelF ** 2 / 48.0)) || enemyNear,moveType = A && aiLevelF > 6) &&
+	($p2dx > 45 + ((enemyNear,moveType != A && $grounded) * 45) || frontEdgeBodyDist < 50 || $p2l || enemyNear,stateNo = 5040 && $p2dy > -40)) ||
+	enemyNear,hitDefAttr = SC,AT && random < (455 * (aiLevelF ** 2 / 48.0))) &&
+	(
+		enemyNear,hitDefAttr = SC,AT ||
+		($p2dx = [70, 90+(floor(vel x*.4)*5)] || frontEdgeDist < 30) && enemyNear,moveType != H ||
+		$p2l && ($p2dx = [50, 75+(floor(vel x*.4)*5)] || frontEdgeDist < 60) ||
+		enemyNear,stateNo = 5040 && $p2dx = [-20, 60] ||
+		enemyNear,stateNo = 5300 && $p2dx < 40
+	) {
+	let AIJ = 1;
+}
+
+#this will cancel out a jump declaration if the conditions have changed to prevent bad jumping behavior.
+#This is usually meant as a last ditch effort to ensure a jump should be done because it is considered a
+#high risk action.
+if stateType = A || moveType = H && stateNo != [120, 155] ||
+	prevStateNo = 5120 && enemyNear,stateType = A || $p2dx < 80 && frontEdgeBodyDist > 60 && !$nojug ||
+	map(gurt) > 0 && enemyNear,hitDefAttr != SC,AT || $p2dx > 180 {
+	let AIJ = 0;
+}
+
+#If the AIJumping indicator remains valid, kfm will jump if he has control.
+if $AIJ && (ctrl || stateNo = 20 || stateNo = 100) {
+	changeState{value: 40}
+}
+
+if stateNo = 40 {
+	sysVar(1) := 0;
+	#We override default sysVar setting to influence jumping forward or backward
+	if $p2dx >= 60 || (enemyNear,stateNo = 5120 || enemyNear,moveType = H) && $p2dx >= 20 || enemyNear,stateType = A && $p2dx >= 60 {
+		sysVar(1) := 1;
+	}
+	if $p2dx < 15 && enemyNear,moveType = A && backEdgeBodyDist > 30 && frontEdgeBodyDist > 60 {
+		sysVar(1) := -1;
+	}
+}
+
+#-------------------------------------------------------------------------------
+#These are the conditions that will make kfm back dash/jump it has it's own random modifier because
+#we do not want him to back jump as often
+
+if stateType != A && (ctrl || stateNo = 20) && random <= (296 * (aiLevelF ** 2 / 48.0)) && backEdgeBodyDist > 40 &&
+	(enemyNear,moveType = A && $p2dx < 55 || $p2dx < 20 && enemyNear,anim = 5120 && enemyNear,backEdgeBodyDist > 60) {
+	changeState{value: 105; ctrl: 0}
+}
+
+#---------|AI recover|----------------------------------------------------------
+#This will let kfm recover if possible with a 20% chance at any time.
+if alive && canRecover && random%5 = 0 && hitFall && stateNo = 5050 {
+	if vel y > 0 && pos y >= const(movement.air.gethit.groundrecover.ground.threshold) {
+		changeState{value: 5200}
+	}
+	if vel y > const(movement.air.gethit.airrecover.threshold) {
+		changeState{value: 5210}
+	}
+}
+#displayToClipboard{text: "%v %v %v %v %v"; params: $p2dx, sysVar(1), $jugpt, $CC, $AI_JI}
+
+#End of file: AI
+}

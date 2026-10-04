@@ -1,0 +1,23 @@
+{
+  "Version": 2,
+  "Bullets": [
+    
+    {
+      "Name": "detonator",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "dynamite_active",
+        "TicksPerFrame": 15
+      },
+      "Speed": 0,
+      "Range": 2,
+      "Persists": true,
+      "HitsObjects": false,
+      "OutOfRangeGuns": [
+        "explosion1",
+        "explosion2",
+        "explosion3"
+      ]
+    }
+  ]
+}

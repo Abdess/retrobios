@@ -1,0 +1,11 @@
+{
+	"Version": 16,
+	"Title": "Most classified enemy",
+	"Author": "Sauer2",
+	"Description": "The government created you in a military lab. You are a mutant with powers that can be weaponized. But now they got afraid of that powers and aim to \"cut the funds\". You better escape before that happens.",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": false,
+	"RandomPickups": true,
+	"Missions": 12
+}

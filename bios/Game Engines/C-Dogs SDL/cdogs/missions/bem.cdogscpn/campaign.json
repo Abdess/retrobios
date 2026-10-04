@@ -1,0 +1,10 @@
+{
+	"Version": 15,
+	"Title": "Bug-Eyed Monsters",
+	"Author": "Ronny Wester",
+	"Description": "These irrational foes pop up now and again. Unpredictable and vicious, their primary goal seems to be to make a nuisance of themselves rather than actually attaining any specific goals.",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": false,
+	"Missions": 9
+}

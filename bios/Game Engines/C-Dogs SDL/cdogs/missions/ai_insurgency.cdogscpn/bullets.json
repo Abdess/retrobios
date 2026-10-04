@@ -1,0 +1,99 @@
+{
+  "Version": 1,
+  "Bullets": [
+    {
+      "Name": "gmg",
+      "Speed": 668,
+      "Range": 55,
+      "WallBounces": true,
+	    "Falling": {
+        "GravityFactor": 1
+      },
+	    "OutOfRangeGuns": [
+        "grenade_explosion1",
+		    "grenade_explosion2",
+		    "grenade_explosion3"
+      ],
+      "HitGuns": [
+        "grenade_explosion1",
+		    "grenade_explosion2",
+		    "grenade_explosion3"
+      ],
+      "Power": 1
+    },
+    {
+      "Name": "grenade_fireball1",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball",
+        "TicksPerFrame": 3
+      },
+      "Speed": 0,
+      "Range": 40,
+      "Power": 1,
+      "Size": [7, 5],
+      "HurtAlways": true,
+      "Persists": true,
+      "Spark": "",
+      "HitSounds": {
+        "Object": "",
+        "Flesh": "",
+        "Wall": ""
+      },
+      "Falling": {
+        "GravityFactor": 1,
+		    "FallsDown": false
+      }
+    },
+    {
+      "Name": "grenade_fireball2",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball",
+        "Count": -8,
+        "TicksPerFrame": 3
+      },
+      "Speed": 0,
+      "Range": 48,
+      "Power": 0,
+      "Size": [7, 5],
+      "HurtAlways": true,
+      "Persists": true,
+      "Spark": "",
+      "HitSounds": {
+        "Object": "",
+        "Flesh": "",
+        "Wall": ""
+      },
+      "Falling": {
+        "GravityFactor": 1,
+		    "FallsDown": false
+      }
+    },
+    {
+      "Name": "grenade_fireball3",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "fireball",
+        "Count": -16,
+        "TicksPerFrame": 3
+      },
+      "Speed": 0,
+      "Range": 56,
+      "Power": 0,
+      "Size": [7, 5],
+      "HurtAlways": true,
+      "Persists": true,
+      "Spark": "",
+      "HitSounds": {
+        "Object": "",
+        "Flesh": "",
+        "Wall": ""
+      },
+      "Falling": {
+        "GravityFactor": 1,
+		    "FallsDown": false
+      }
+    }
+  ]
+}

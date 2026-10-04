@@ -1,0 +1,260 @@
+--------------------------------
+>     Hurrican Sprach File     <
+>                              <
+>          - deutsch -         <
+>           Poke53280          <
+>          24.04.2007          <
+>                              <
+>    http://www.poke53280.de   <
+--------------------------------
+//---------- Starter ----------//
+Vollbild
+Standard
+Spiel starten
+Beenden
+Abbrechen
+Sprache
+Auf Update prüfen
+Eine neue Version ist verfügbar. Wollen Sie jetzt die Hurrican Webseite öffnen?
+Es ist keine neue Version verfügbar.
+Verfügbare Levels auf dem Server
+Aktuelle Levelliste vom Server laden
+Levelpack wählen
+Auswahl herunterladen
+//---------- Miscellaneous ----------//
+0
+benutztes Sprach File
+Lade Bitmap : 
+Lade Wave : 
+Lade Module : 
+ ... OK
+Lade Leveldaten für\n
+//---------- Tutorial Texts ----------//
+Willkommen zum Hurrican Tutorial-Level. Hier wird dir die grundlegende Steuerung beigebracht. Über KEY_LEFT und KEY_RIGHT kannst du dich nach rechts und nach links bewegen. Auf die Taste KEY_CROUCH duckst du dich. Sieh dich jetzt einmal genau um, es gibt noch mehr solcher Hinweise.
+Drücke zum Springen KEY_JUMP. Je länger du gedrückt hältst, desto höher kannst du springen. Dabei kannst du in der Luft die Richtung ändern, wenn du dementsprechenden KEY_LEFT oder KEY_RIGHT drückst.
+Mit KEY_UP und KEY_DOWN kannst du dich im Level umsehen. So lassen sich einige versteckte Items finden. Sieh hier zum Beispiel mal in Richtung Decke...
+Diese Diamanten liegen in den Levels verstreut. Für das Sammeln erhältst du Punkte. Zudem bekommst du für 50 gesammelte Diamanten deine Zeit wieder aufgefrischt.
+Drücke KEY_SHOOT, um einen Schuß abzugeben und halte die Taste gedrückt für langsames Dauerfeuer. Durch schnelles, aufeinanderfolgendes Drücken kannst Du aber schneller schießen als mit dem Dauerfeuer.
+Sieh dir die Wand rechts einmal genau an. Sieht nicht gerade sehr stabil aus. Versuche sie mit deinem Schuß zu zerstören.
+Sehr gut. Es gibt immer wieder Stellen, an denen man Wände zerschießen kann, um weiterzukommen. Meist verbergen sich dahinter allerdings nur Extras.
+Kommen wir nun zur Zielübung. Mit KEY_UP kannst du nach oben zielen. Durch Kombination mit KEY_LEFT oder KEY_RIGHT kannst du auch schräg zielen. Versuch jetzt, die Diamanten über dir freizuschießen.
+Jetzt wird's spannend... Dort unten triffst du auf die ersten Gegner oder besser gesagt, auf die ersten fliegenden PowerUps.
+-leer-
+Sehr gut. Sammel jetzt alle Extras auf.
+Dieser Effekt eben war das Zeichen dafür, dass sich deine Waffe aufgepowert hat. Welche das war, erkennst du an der Farbe der Energiekugeln. Rot steht für den Streuschuß. Die Striche (siehe Pfeil) geben dir die aktuelle Stufe deiner Waffen an.
+Nun kommen wir zu den ersten gefährlicheren Gegnern, die Walker. Eine Eigenheit der Walker ist es, dass man ihnen auch auf den Kopf springen kann, um sie zu besiegen.
+Wieder kein Weiterkommen, und diesmal ist die brüchige Wand UNTER uns... Halte KEY_BLITZ gedrückt und lenke deinen Blitz mit KEY_LEFT und KEY_RIGHT um dich herum.
+Sehr gut. Der Blitz eignet sich übrigens auch zum Zerstören von Gegnern. Leider ist er ein wenig kurz geraten... Mach' dir nix draus, auf die Technik kommt es an :) Aber das lässt sich ändern. Rechts gibt es noch ein paar PowerUps.
+Dein Blitz ist jetzt länger geworden! Probier es aus! Und das beste ist, er lässt sich noch weiter aufpowern. Der Balken neben dem Blitz-Symbol im HUD gibt die aktuelle Stufe an. Verlierst du ein Leben, verlierst du aber auch wieder eine Stufe des Blitzes!
+Extras gibt es nicht nur in den fliegenden Extra-Containern. Es gibt auch versteckte PowerUp Steine, die erst sichtbar werden, wenn sie angeschossen werden. Schieß' hier ein wenig in die Luft, bis du einen findest. (Am besten mit dem Blitz)...
+Das ist er. Nun heißt es, kräftig darauf schießen, bis er leer ist, und alles schön aufsammeln.
+Das eben waren die sogenannten PowerLines, eine Spezial Waffe. Die Zahl der verfügbaren PowerLines siehst du im HUD (siehe Pfeil). Ein Stück weiter rechts kannst du sie gleich einsetzen. Wie, das wird dir dort erklärt ;)
+Stell' dich genau in die Mitte der Brücke und drücke dann auf KEY_POWERLINE, um die Powerline zu aktivieren.
+Woosh! Kleinere Gegner werden hiervon direkt weggefegt, größere tragen auch ganz schön Schaden davon. Sammle nun die aufsteigenden Extras ein.
+Diese Extras waren Granaten. Die machen ganz schön Bumm. Klingt komisch, ist aber so. Wie zuvor gibt es weiter Rechts gleich die Praxis samt Erklärung.
+Achtung, da rechts liegen zwei Wespennester, die ganz schön was aushalten! Drücke KEY_GRANATE, um eine Granate abzufeuern. Sie beschädigt alles in ihrem näheren Umkreis. Für das zweite Nest musst du von unten dagegen schiessen.
+Hmm, scheinbar ein weiteres mal kein Weiterkommen. Duck' dich (KEY_CROUCH) und aktiviere gleichzeitig eine Powerline (KEY_POWERLINE). Damit verwandelst du dich in das Stachelrad. Am anderen Ende des Tunnels drückst du einfach die Sprungtaste, um wieder aufzustehen.
+Wie du vielleicht gesehen hast, nimmt der blaue Kreis (siehe Pfeil) im HUD ab, solange du dich im Rad-Modus befindest. Er ist allerdings mit Powerups wieder aufzufüllen. Zudem lädt er sich mit der Zeit von alleine auf.
+Richtig, das eben war das Rad-PowerUp. Als Rad bist du unverwundbar, und fügst zudem deinen Gegnern Schaden zu. Und um noch einen obendrauf zu setzen kannst du mit KEY_SHOOT auch noch Bombenlegen. Versuch es gleich an den Nestern weiter rechts.
+Wow, du wirst ja langsam zu 'ner echten Killer-Maschine. Aber das Waffenrepertoire ist noch lange nicht ausgeschöpft. Zu den ganz speziellen Sachen kommen wir jetzt erst...
+Diese Pfeile hier übrigens zeigen dir an bestimmten Stellen, in welche Richtung du gehen musst, um ins nächste Level zu gelangen.
+Was, schon wieder so eine Mauer? Könnte man ja den Blitz verwenden... Aber nicht so voreilig. Stell dich ganz vor die Mauer und drücke KEY_SHOCKWAVE ...
+Wow, die Schockwelle hat die ganze Wand weggesprengt, den Walker plattgemacht, und nebenbei noch nen ganzen Powerblock leergeräumt. Du kannst davon jedoch immer nur eine gleichzeitig mit dir rumtragen und musst sie nach Gebrauch durch Sammeln des passenden Extras wieder aufladen. Ist das Symbol im HUD erleuchtet (siehe Pfeil), dann ist die Schockwelle einsatzbereit.
+Zielübung, die Zweite... Halte KEY_SHOOT und KEY_BLITZ gedrückt, um deine Waffe mit einem Beam aufzuladen. Währenddessen kannst du mit KEY_LEFT und KEY_RIGHT deine Waffe ausrichten. Lasse die beiden Tasten los, um den Beam abzuschiessen. Je länger du auflädst, desto stärker ist auch der Beam. Geh in die Mitte und schieß' wieder die Diamanten über dir frei.
+Je länger dein Blitz ist, desto schneller lädt sich übrigens der Beam auf. Eine Kleinigkeit gibt es allerdings noch. Ein Stück weiter links lernst du noch die zwei anderen primären Waffensysteme kennen, die es neben dem Streuschuß noch gibt.
+Das eben waren die Extras für den Bounce Schuss. Wie du siehst, liegen sie manchmal auch einfach so rum. Dieser Schuss teilt sich in den höheren Stufen nach einem Treffer in zwei kleinere Kugeln auf, die an der Wand abprallen. Sehr effektiv in engen Gängen, so wie diesem hier.
+So, die letzte Waffe für heute: Der Laser. Sammle die PowerUps auf und teste ihn aus. Seine Besonderheit ist es, dass er durch mehrere Gegner durchfliegt. Die Waffen kannst du übrigens mit KEY_WAFFE_CYCLE durchwechseln. Probier es mal aus.
+Das hier ist das Ende des Tutorials. Du wirst im Spiel sicher noch auf ein paar unbekannte PowerUps und andere Sachen stoßen. Dort gilt dann: Experimentiere ein bisschen, um herauszufinden, wie diese Dinge funktionieren. Das Tutorial-Level war ein wenig einfacher als das "echte" Leben. Du warst unverwundbar, und aus den Wespennestern sind auch keine Wespen geschlüpft. Aber jetzt solltest du einigermaßen gut auf dein Abenteuer vorbereitet sein. Also auf in den Kampf ;)
+36
+37
+38
+39
+//---------- Konsolen Text ----------//
+Hurrican
+
+(c) 2007
+Poke53280
+www.poke53280.de
+
+Gib "help" ein, um eine Liste der Konsolenkommandos zu erhalten
+
+
+//---------- Summary Box ----------//
+Zusammenfassung
+Verstecke
+Cheat freigespielt:
+- Taste drücken -
+//---------- Main Menu ----------//
+LADE
+SPIEL SPEICHERN
+SPIEL STARTEN
+ZURUECK ZUM SPIEL
+EINSTELLUNGEN
+HIGHSCORES
+CREDITS
+ENDE
+TUTORIAL SPIELEN
+NEUES SPIEL STARTEN
+ALTES SPIEL FORTSETZEN
+LEICHT
+MITTEL
+SCHWER
+HURRICAN
+Cursor : Auswählen - Enter : Bestätigen - ESC : Zurück
+PLATZ
+NAME
+PUNKTE
+STAGE
+SKILL
+LAUTSTAERKE
+SOUND
+MUSIK
+STEUERUNG KONFIGURIEREN
+SPRACHE WAEHLEN
+MODUS:
+Force feedback
+Standardeinstellungen laden
+Joypad
+Joystick
+WAHNSINN
+NEUE HIGHSCORE AUF PLATZ
+GIB DEINEN NAMEN EIN
+WEITER
+Zurück
+Links laufen
+Rechts laufen
+Ducken
+Nach oben schauen
+Nach unten schauen
+Springen
+Schießen
+Blitz aktivieren
+Powerline
+Granate
+Schockwelle
+Waffe wechseln
+Laufen
+Umschauen
+X/Y Achse
+Steuerkreuz
+-Neue Taste drücken-
+-Neuen Button drücken-
+DETAILS: NIEDRIG
+DETAILS: MEDIUM
+DETAILS: HOCH
+DETAILS: MAXIMUM
+EIN SPIELER
+ZWEI SPIELER
+Spieler eins
+Spieler zwei
+Typ
+Modus
+Empfindlichkeit
+Tastatur
+Nicht definiert
+Stage
+Spieler
+Datum
+- kein Eintrag -
+SECRET
+Links
+Rechts
+Oben
+Unten
+Button
+//---------- Hints ----------//
+Wenn du alle Diamanten in einem Level findest, wirst du mit einem Cheat-Code belohnt.
+Verlierst du ein Leben, so wird auch die aktuell gewählte Waffe um eine Stufe schwächer.
+Wenn du als Rad Gegner berührst, läuft die Radenergie schneller ab.
+Wenn du stehenbleibst und dich nicht bewegst, dann lädt sich die Radenergie schneller auf.
+Drückst du die Sprungtaste, während du als Rad in der Luft bist, führst du einen Radsprung aus.
+Sammelst du 50 Diamanten ein, dann wird deine Zeit wieder aufgefrischt.
+Du kannst nicht mehr als 9 Granaten und 9 Powerlines mit dir tragen.
+Einige Secrets verstecken sich hinter zerstörbaren Wänden.
+Es gibt durchlässige Wände, hinter denen sich Secrets verstecken.
+Rollst du als Rad über eine explodierende Bombe, so wirst du ein Stück nach oben geschleudert.
+Sollte sich mal ein Fisch an dir festbeissen, kannst du an Land springen, um ihn loszuwerden.
+Dampf und Rauch geben einem beim Springen ein wenig Auftrieb.
+Einige Endgegner lassen sich nur sehr schwer mit bloßer Feuerkraft besiegen.
+Die Feuersäulen aus den Wandflammenwerfern können auch Gegner verletzen.
+Die Schildemitter fügen Gegnern bei Berührung Schaden zu.
+Bei einigen Gegner ist es besser, ihnen aus dem Weg zu gehen anstatt sie zu bekämpfen.
+Granaten verletzen alle Gegner, die sich während der Explosion in ihrem Umkreis befinden.
+Die Powerlines eignen sich gut, um die versteckten Powerblöcke zu finden.
+Die Stärke der Bounce-Schüsse nimmt mit jedem Abprallen an der Wand ein wenig ab.
+Durch schnelles Drücken der Feuer-Taste kannst du schneller schiessen als mit Dauerfeuer.
+Du kannst dich auf die Powerblöcke draufstellen um höhergelegene Stellen zu erreichen.
+Du hast nach jedem Level die Möglichkeit, dein Spiel zu speichern.
+Je länger dein Blitz ist, desto schneller lädt sich der Blitz-Beam auf.
+Wenn du ein Leben verlierst, so wirkt deine Explosion wie eine Granate.
+Mit dem Laser kann man durch mehrere Gegner hindurchschiessen.
+Die Standardwaffen Spreadshot, Laser und Bounce gibt es in jeweils 8 Ausbaustufen.
+Nach jedem Level bekommst du die Möglichkeit, dein Spiel zu speichern.
+In den Optionen kannst du den Detailgrad der Spezialeffekte einstellen.
+Manchen Gegnern kann man nur in bestimmten Zuständen Schaden zufügen.
+Poke53280 wird dich NIEMALS nach deiner eMail-Adresse oder deinem Passwort fragen...
+//---------- Pissen ----------//
+Verdammt, ich muß mal dringend wohin ...
+Argh! Ich halt's nicht mehr aus!
+Warum hat der Blecheimer keine Piss-Klappe ???
+Wer hat das Ding bloß gebaut?
+Dass man an sowas nicht gedacht hat.
+Ist ja wieder mal typisch.
+Das wurde wohl nur unzureichend getestet ...
+Oh mann, jetzt wird's aber echt heftig!
+Wenn ich wieder auf der Erde bin ...
+... werde ich mich gleich mal darüber beschweren!
+Das gibt's ja nicht. Sowas.
+Der Kampfanzug hat jeden nur denkbaren technischen Schnickschnack ...
+... aber das Wichtigste haben sie vergessen.
+Was mach ich denn jetzt nur ???
+Na los, jetzt spiel schon weiter!
+Grmblfxt ... ich werd' verrückt ...
+Ich werd's ja wohl noch verhoben bekommen ...
+... bis das Game fertig ist!
+//---------- Intro Screen 1 ----------//
+2138, irgendwo im Weltall...
+Die "Dreadnought" ist gerade auf dem Rückflug nach einer erfolgreichen Mission.
+Das nächste Ziel des Truppentransporters ist die Erde.
+Plötzlich empfangen die Soldaten einen Notruf vom blauen Planeten.
+"Die Erde wird angegriffen! Alle verfügbaren Einheiten umgehend zur Verteidigung bereit machen!"
+"Raketen unbekannter Bauweise schlagen auf die Erde ein."
+Sekunden später wird der Ursprung der todbringenden Flugkörper lokalisiert.
+Es handelt sich um den Planeten Takatis.
+Die Männer trauen ihren Augen nicht, als sie gebannt auf das Hologramm im Besprechungsraum starren.
+Hinter dem Anschlag steckt kein Geringerer als Dr. Geng X.
+Vor Jahren schon erhielt man die Nachricht von seinem Tod, doch nun ist er zurück.
+Ohne zu zögern setzt die "Dreadnought" Kurs auf den bis dato unerforschten Planeten.
+Nach kurzem Flug hat das Schiff sein Ziel erreicht.
+Der fremde Himmelskörper strahlt eine trügerische Schönheit aus.
+Die Crew beginnt mit dem Landeanflug auf Takatis.
+Die Scanner zeigen eine erdähnliche Atmosphäre.
+Plötzlich eröffnen zahlreiche Geschütze auf der Planetenoberfläche das Feuer.
+Die Schutzschilde fallen aus und schwere Projektile reißen große Löcher in die Außenhülle.
+Hilflos stürzen die Soldaten auf die Planetenoberfläche zu.
+Beim Eintritt in die Atmospähre droht das gesamte Schiff zu zerbersten.
+Sekunden nach dem Aufprall.
+Der Großteil der Besatzung hat die Notlandung der "Dreadnought" nicht überlebt.
+Nur ein einziger Soldat der UPFF ist noch am Leben. Er rappelt sich auf und begibt sich nach draussen.
+Nur zwei Soldaten der UPFF sind noch am leben. Sie rappeln sich auf und begeben sich nach draussen.
+Wild entschlossen, Dr. Geng X zu finden und die Welt von seinem Übel zu befreien.
+//---------- Outtro ----------//
+Das Unglaubliche ist vollbracht!
+Nach einem langen Kampf ist Dr. Geng X endlich besiegt.
+Das, was noch von ihm übrig blieb, liegt verborgen unter den qualmenden Trümmern
+seiner zerstörten Festung. All seine finsteren Schöpfungen liegen mit ihm begraben,
+tief in der ewigen Dunkelheit.
+Der Frieden im Universum ist wieder hergestellt, doch niemand weiß,
+wie lange dieser Frieden anhalten wird...
+Die Zukunft muss erst noch geschrieben werden.
+--------------
+Die Credits
+--------------
+//---------- Warpzone ----------//
+Und jetzt, für die Geduldigen unter euch, noch ein kleiner Hinweis
+Wer im Tutorial-Level genau hinschaut,
+der findet vielleicht sogar den geheimen Klempner-Boteneingang...
+Das Rad gleich zu Beginn ist eine BOMBIGE Idee...
+Immer schön links halten und nicht vergessen: Klempner STEHEN auf Röhren ;)
+
+//--- ENDE ---//

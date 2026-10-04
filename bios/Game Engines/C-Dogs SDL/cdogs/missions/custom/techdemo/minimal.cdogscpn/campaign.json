@@ -1,0 +1,7 @@
+{
+	"Version": 3,
+	"Title": "Minimal",
+	"Author": "Cong",
+	"Description": "Contains only one mission with no objectives, to test end screens etc.",
+	"Missions": 1
+}

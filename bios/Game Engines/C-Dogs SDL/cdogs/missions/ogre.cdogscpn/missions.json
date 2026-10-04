@@ -1,0 +1,2360 @@
+{
+	"Missions": [{
+		"Title": "Maintain integrity",
+		"Description": "We were taken completely by surprise and Ogre troops have overrun several installations. We are falling back from this one right now. We will need to destroy several computer terminals lest they, and the information they contain, fall into enemy hands.",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Destroy all terminals",
+			"Type": "Destroy",
+			"MapObject": "terminal",
+			"Count": 5,
+			"Required": 5,
+			"Flags": 6
+		}],
+		"Enemies": [0,
+		1,
+		2,
+		21,
+		20,
+		19,
+		0,
+		1,
+		2],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 30
+		},
+		{
+			"MapObject": "box",
+			"Density": 30
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 30
+		},
+		{
+			"MapObject": "plant",
+			"Density": 30
+		},
+		{
+			"MapObject": "bench",
+			"Density": 30
+		},
+		{
+			"MapObject": "chair",
+			"Density": 30
+		},
+		{
+			"MapObject": "column",
+			"Density": 30
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "707070ff",
+				"MaskAlt": "007070ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "tile",
+				"Mask": "484870ff",
+				"MaskAlt": "007070ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "008484ff",
+				"MaskAlt": "007070ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 20,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 2,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Retrieve the stolen data",
+		"Description": "Intelligence reports that the Ogres managed to backup some of the data before you could get to the terminals. However, troops have intercepted and are now containing the Ogre forces in possession of the data. It's a stalemate at the moment. You will have to resolve the situation...",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Get the disks back",
+			"Type": "Collect",
+			"Pickup": "disk1",
+			"Count": 5,
+			"Required": 5,
+			"Flags": 4
+		}],
+		"Enemies": [0,
+		1,
+		2,
+		3,
+		21],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 30
+		},
+		{
+			"MapObject": "box",
+			"Density": 30
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 30
+		},
+		{
+			"MapObject": "plant",
+			"Density": 30
+		},
+		{
+			"MapObject": "bench",
+			"Density": 30
+		},
+		{
+			"MapObject": "chair",
+			"Density": 30
+		},
+		{
+			"MapObject": "column",
+			"Density": 30
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "tile",
+				"Mask": "007000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "grid",
+				"Mask": "000070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 20,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Intelligence gathering",
+		"Description": "This whole situation is decidedly odd. The Ogres have never been hostile towards the Confed before. Besides, these forces are far from the best of what the Ogre Empire can bring forth. We really need to find out what's going on. See what you can dig up.",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Find some documents",
+			"Type": "Collect",
+			"Pickup": "paper",
+			"Count": 2,
+			"Required": 2,
+			"Flags": 4
+		}],
+		"Enemies": [0,
+		1,
+		2,
+		3,
+		4,
+		19],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 30
+		},
+		{
+			"MapObject": "box",
+			"Density": 30
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 30
+		},
+		{
+			"MapObject": "plant",
+			"Density": 30
+		},
+		{
+			"MapObject": "bench",
+			"Density": 30
+		},
+		{
+			"MapObject": "chair",
+			"Density": 30
+		},
+		{
+			"MapObject": "column",
+			"Density": 30
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "000084ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "biggrid",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "007000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 30,
+		"WallLength": 25,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 15,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Search'n'destroy",
+		"Description": "Intelligence are going through the data you brought back. Now I need you for something different. A particulary aggressive Ogre commander are giving us a lot of trouble in this area. We have established his current whereabouts, a nearby Ogre outpost. We need you to take him out.",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "plate",
+		"KeyStyle": "dungeon",
+		"Objectives": [{
+			"Description": "Kill Miihn-Bha'Stadh",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 1
+		}],
+		"Enemies": [0,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6],
+		"SpecialChars": [12],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_skull",
+			"Density": 30
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 30
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 30
+		},
+		{
+			"MapObject": "statue_ogre",
+			"Density": 30
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 30
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 30
+		}],
+		"EnemyDensity": 23,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "000070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "stone",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "703800ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 20,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 5,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 3,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Gather more information",
+		"Description": "Intelligence has been all over the data you brought back. Something's not right here and we want to know what's up. Unfortunately, your data - while most valuable - leaves a lot of blanks to be filled. We need more data and you will have to get it for us.",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 64,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Steal Ogre documents",
+			"Type": "Collect",
+			"Pickup": "folder",
+			"Count": 2,
+			"Required": 2,
+			"Flags": 4
+		},
+		{
+			"Description": "...and any other data you can find",
+			"Type": "Collect",
+			"Pickup": "disk1",
+			"Count": 7,
+			"Required": 3,
+			"Flags": 0
+		}],
+		"Enemies": [1,
+		2,
+		3,
+		4,
+		5,
+		21,
+		20],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 30
+		},
+		{
+			"MapObject": "box",
+			"Density": 30
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 30
+		},
+		{
+			"MapObject": "plant",
+			"Density": 30
+		},
+		{
+			"MapObject": "bench",
+			"Density": 30
+		},
+		{
+			"MapObject": "chair",
+			"Density": 30
+		},
+		{
+			"MapObject": "column",
+			"Density": 30
+		}],
+		"EnemyDensity": 21,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "007000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "biggrid",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "tile",
+				"Mask": "000084ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 50,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 15,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 2,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Locate the Ogre chemical weapons facility",
+		"Description": "The bio-weapons they are using are causing severe causalties amongst our troops. Our scientists are unable to come up with an antidote. They do tell us the stuff is rather unstable and cannot be stored for long. They must be manufacturing it in the vicinity. Try and find out where it is.",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 64,
+		"ExitStyle": "plate",
+		"KeyStyle": "dungeon",
+		"Objectives": [{
+			"Description": "Find the starmaps",
+			"Type": "Collect",
+			"Pickup": "blueprint",
+			"Count": 3,
+			"Required": 3,
+			"Flags": 4
+		}],
+		"Enemies": [0,
+		1,
+		2,
+		3,
+		5,
+		6],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_skull",
+			"Density": 30
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 30
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 30
+		},
+		{
+			"MapObject": "statue_ogre",
+			"Density": 30
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 30
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 30
+		}],
+		"EnemyDensity": 25,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "480000ff",
+				"MaskAlt": "000070ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "007000ff",
+				"MaskAlt": "000070ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "000084ff",
+				"MaskAlt": "000070ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 40,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 15,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 2,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Wreck the Ogre laboratories",
+		"Description": "The data you brought back has provided us with the location of the Ogres bio-chemical weapons manufacturing plant. If you can disable this facility you will be saving many lives and help our efforts to restore piece to this region again.",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 64,
+		"ExitStyle": "plate",
+		"KeyStyle": "dungeon",
+		"Objectives": [{
+			"Description": "Destroy all laboratory equipment",
+			"Type": "Destroy",
+			"MapObject": "table_lab",
+			"Count": 7,
+			"Required": 7,
+			"Flags": 4
+		}],
+		"Enemies": [0,
+		1,
+		2,
+		3,
+		5,
+		6,
+		7],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_skull",
+			"Density": 30
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 30
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 30
+		},
+		{
+			"MapObject": "statue_ogre",
+			"Density": 30
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 30
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 30
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "74601cff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "482400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 25,
+		"WallLength": 25,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 20,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 2,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Destroy their ammunition",
+		"Description": "The destruction of the bio-weapons lab was a substantial setback for the Ogre forces. Now, as they are forced to retreat, a major ammunitions depot has had most of its garrison transferred elsewhere. It is still heavily guarded, but it is too good a target to pass up.",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 64,
+		"ExitStyle": "plate",
+		"KeyStyle": "dungeon",
+		"Objectives": [{
+			"Description": "Destroy ammo containers",
+			"Type": "Destroy",
+			"MapObject": "box_metal_green",
+			"Count": 12,
+			"Required": 7,
+			"Flags": 0
+		},
+		{
+			"Description": "Destroy fuel barrels",
+			"Type": "Destroy",
+			"MapObject": "barrel",
+			"Count": 15,
+			"Required": 10,
+			"Flags": 0
+		}],
+		"Enemies": [0,
+		2,
+		3,
+		4,
+		1],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_skull",
+			"Density": 30
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 30
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 30
+		},
+		{
+			"MapObject": "statue_ogre",
+			"Density": 30
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 30
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 30
+		}],
+		"EnemyDensity": 25,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "000070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "stone",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "848484ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 25,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 3,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Retake installation",
+		"Description": "Your efforts have helped weaken the Ogre forces in the region and we are now recapturing our lost installations. At this very moment our troops are launching an assault. You are assigned the task of seeking out and eliminating the Ogre commanders. With them out of the picture, the rest should be an easy task.",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 64,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Take out as many squad leaders as possible",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 5,
+			"Required": 3,
+			"Flags": 1
+		}],
+		"Enemies": [7,
+		9,
+		10,
+		0,
+		2,
+		3,
+		4,
+		21,
+		19,
+		20],
+		"SpecialChars": [11, 13],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 30
+		},
+		{
+			"MapObject": "box",
+			"Density": 30
+		},
+		{
+			"MapObject": "box2",
+			"Density": 30
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 30
+		},
+		{
+			"MapObject": "plant",
+			"Density": 30
+		},
+		{
+			"MapObject": "bench",
+			"Density": 30
+		},
+		{
+			"MapObject": "chair",
+			"Density": 30
+		},
+		{
+			"MapObject": "column",
+			"Density": 30
+		}],
+		"EnemyDensity": 30,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "484870ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "smallsquare",
+				"Mask": "004848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "847024ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 50,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Counter strike",
+		"Description": "We have successfully recaptured all installations previously held by Ogre invaders. We are now on the offensive and our goal is now primarily to cripple the Ogre war machinery in this area. We have data on an Ogre depot that has been stripped of most of its defences...",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "plate",
+		"KeyStyle": "dungeon",
+		"Objectives": [{
+			"Description": "Eliminate enemy officers",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 5,
+			"Required": 1,
+			"Flags": 1
+		},
+		{
+			"Description": "Blow up their gunpowder",
+			"Type": "Destroy",
+			"MapObject": "barrel_skull",
+			"Count": 10,
+			"Required": 5,
+			"Flags": 0
+		},
+		{
+			"Description": "Burn their fuel",
+			"Type": "Destroy",
+			"MapObject": "barrel",
+			"Count": 8,
+			"Required": 4,
+			"Flags": 0
+		},
+		{
+			"Description": "Destroy their ammunition",
+			"Type": "Destroy",
+			"MapObject": "box_metal_green",
+			"Count": 12,
+			"Required": 6,
+			"Flags": 0
+		}],
+		"Enemies": [0,
+		1,
+		2,
+		3,
+		9],
+		"SpecialChars": [13,
+		12,
+		11],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_wood",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 15
+		},
+		{
+			"MapObject": "statue_ogre",
+			"Density": 5
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 20
+		}],
+		"EnemyDensity": 25,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "brick",
+				"Mask": "480000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "703800ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "844400ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 25,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 15,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 2,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Wet work",
+		"Description": "We now have the opportunity to strike a devastating blow to the Ogre war machinery! Intelligence has uncovered the current location of Ogre high command of this sector. The area has a high civilian presence, I will remind you that we do not wage war on civilians!",
+		"Type": "Classic",
+		"Width": 54,
+		"Height": 54,
+		"ExitStyle": "plate",
+		"KeyStyle": "dungeon",
+		"Objectives": [{
+			"Description": "Assassinate Ogre high command",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 4,
+			"Required": 4,
+			"Flags": 1
+		}],
+		"Enemies": [1,
+		2,
+		3,
+		26,
+		25,
+		24,
+		23,
+		22,
+		0],
+		"SpecialChars": [27, 14],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_wood",
+			"Density": 20
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 15
+		},
+		{
+			"MapObject": "statue_ogre",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 20
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_clothed",
+			"Density": 15
+		},
+		{
+			"MapObject": "tree_autumn",
+			"Density": 10
+		}],
+		"EnemyDensity": 30,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "484870ff",
+				"MaskAlt": "007000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "stone",
+				"Mask": "848484ff",
+				"MaskAlt": "007000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "004800ff",
+				"MaskAlt": "007000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 25,
+		"WallLength": 25,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 20,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 1,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Terror attack!",
+		"Description": "In retaliation for our attack against Ogre high command, Ogre forces are attacking a housing complex for the civilian workers who are repairing damages caused by this conflict. This is a breach of all protocols and thoroughly dishonorable and detestful act! Repel the attack!",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Eliminate all attackers",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 40,
+			"Required": 40,
+			"Flags": 0
+		}],
+		"Enemies": [18,
+		17,
+		16,
+		15,
+		28],
+		"SpecialChars": [4,
+		3,
+		2,
+		7,
+		9],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 15
+		},
+		{
+			"MapObject": "box",
+			"Density": 15
+		},
+		{
+			"MapObject": "box2",
+			"Density": 15
+		},
+		{
+			"MapObject": "plant",
+			"Density": 15
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 15
+		},
+		{
+			"MapObject": "bench",
+			"Density": 15
+		},
+		{
+			"MapObject": "chair",
+			"Density": 10
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 10
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 20
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "smallsquare",
+				"Mask": "007070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "tile",
+				"Mask": "700070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 0,
+		"WallLength": 0,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 20,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "The defector",
+		"Description": "We have learned that a senior Ogre officer wishes to defect. Faced with the same questions we have been contemplating all along he did some research and believes this campaign to be an unauthorized action by a renegade faction within the Ogre fleet! This is a matter of crucial importance!",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "plate",
+		"KeyStyle": "dungeon",
+		"Objectives": [{
+			"Description": "Get the officer here safely",
+			"Type": "Rescue",
+			"Index": 29,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 4
+		}],
+		"Enemies": [2,
+		3,
+		4,
+		10,
+		0],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "box2",
+			"Density": 15
+		},
+		{
+			"MapObject": "box",
+			"Density": 15
+		},
+		{
+			"MapObject": "barrel_skull",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 10
+		},
+		{
+			"MapObject": "tree_dead",
+			"Density": 20
+		},
+		{
+			"MapObject": "statue_ogre",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 15
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 15
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 5
+		}],
+		"EnemyDensity": 15,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "848484ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "74601cff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "dungeon",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 15,
+		"WallLength": 15,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 15,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 1,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Kidnapping attempt!",
+		"Description": "A party of Ogre Elite Warriors from the renegade faction is attempting to recapture the defecting officer. Apparently the information he holds can give them very big problems with their masters back home. You must foil their plans!",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 32,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Defeat the Ogre assault team",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 12,
+			"Required": 12,
+			"Flags": 0
+		}],
+		"Enemies": [21,
+		20,
+		19],
+		"SpecialChars": [32,
+		31,
+		30],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 20
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 20
+		},
+		{
+			"MapObject": "plant",
+			"Density": 10
+		},
+		{
+			"MapObject": "bench",
+			"Density": 10
+		},
+		{
+			"MapObject": "chair",
+			"Density": 5
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 25
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 10
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 25
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "box",
+			"Density": 10
+		},
+		{
+			"MapObject": "box2",
+			"Density": 10
+		}],
+		"EnemyDensity": 10,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "484870ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "tile",
+				"Mask": "700070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "847024ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 15,
+		"WallLength": 14,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 1,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "The Enemy Stronghold",
+		"Description": "Officer Naijz-Gaij has been in contact with his masters, who were more than slightly upset. As you've noticed Ogre Imperial forces have been arriving all day and are engaging the hostiles as we speak. We are now mounting a joint attack against the enemy headquarters. Ogre Imperials, wearing red body armor, are your allies in this venture.",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "plate",
+		"KeyStyle": "plain",
+		"Objectives": [{
+			"Description": "Eliminate all resistance",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 30,
+			"Required": 30,
+			"Flags": 0
+		},
+		{
+			"Description": "Find the controls to the inner defenses",
+			"Type": "Collect",
+			"Pickup": "radio",
+			"Count": 1,
+			"Required": 1,
+			"Flags": 4
+		}],
+		"Enemies": [36,
+		35,
+		34,
+		33,
+		21,
+		20,
+		19,
+		23,
+		25,
+		26,
+		24],
+		"SpecialChars": [4,
+		32,
+		31,
+		9,
+		10,
+		6],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_skull",
+			"Density": 10
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 20
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 10
+		},
+		{
+			"MapObject": "statue_ogre",
+			"Density": 5
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 5
+		},
+		{
+			"MapObject": "table_lab",
+			"Density": 5
+		},
+		{
+			"MapObject": "wall_skull",
+			"Density": 5
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 10
+		}],
+		"EnemyDensity": 10,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "stone",
+				"Mask": "484848ff",
+				"MaskAlt": "700000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "stone",
+				"Mask": "480000ff",
+				"MaskAlt": "700000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "840000ff",
+				"MaskAlt": "700000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "blast",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 15,
+		"WallLength": 30,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 12,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "The last stand of the renegades",
+		"Description": "Good work, you are truly an honor to this outfit! Now ready yourselves for action once more as we face the remains of the renegade forces. The renegade commanders are cornered and will not yield. Our Ogre liasons tell us these are some mighty heavy dudes. They must be crushed like the vermin they are, or they will surely rise again...",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "plate",
+		"KeyStyle": "plain",
+		"Objectives": [{
+			"Description": "Annihilate the renegade commanders",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 15,
+			"Required": 15,
+			"Flags": 1
+		}],
+		"Enemies": [36,
+		35,
+		34,
+		33,
+		21,
+		19,
+		20],
+		"SpecialChars": [41,
+		37,
+		38,
+		39,
+		40],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_skull",
+			"Density": 15
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 15
+		},
+		{
+			"MapObject": "table_lab",
+			"Density": 15
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 10
+		},
+		{
+			"MapObject": "bone_blood",
+			"Density": 5
+		},
+		{
+			"MapObject": "bloodstain",
+			"Density": 5
+		},
+		{
+			"MapObject": "wall_skull",
+			"Density": 5
+		}],
+		"EnemyDensity": 25,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "484848ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "stone",
+				"Mask": "004800ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "blast",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 40,
+		"WallLength": 15,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 14,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	}]
+}

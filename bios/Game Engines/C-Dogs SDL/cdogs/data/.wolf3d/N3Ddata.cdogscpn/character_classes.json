@@ -1,0 +1,215 @@
+{
+  "Version": 2,
+  "Characters": [
+    {
+      "Name": "Noah",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/jones"
+      },
+      "Sounds": "man",
+      "BloodColor": "00ccff"
+    },
+    {
+      "Name": "Naamah",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/lady"
+      },
+      "Sounds": "woman",
+      "BloodColor": "00ccff"
+    },
+    {
+      "Name": "Sheep",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/sheep"
+      },
+      "Body": "sheep",
+      "Sounds": "sheep",
+      "Footsteps": "sheep",
+      "Corpse": "sheep_sleep",
+      "BloodColor": "00000000",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasHat": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Goat",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/sheep"
+      },
+      "Body": "sheep",
+      "Sounds": "sheep",
+      "Footsteps": "sheep",
+      "Corpse": "goat_sleep",
+      "BloodColor": "00000000",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasHat": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Antelope",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/sheep"
+      },
+      "Body": "antelope",
+      "Sounds": "antelope",
+      "Footsteps": "sheep",
+      "Corpse": "antelope_sleep",
+      "BloodColor": "00000000",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasHat": true,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Ostrich",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/ostrich"
+      },
+      "Body": "ostrich",
+      "Sounds": "ostrich",
+      "Footsteps": "wood",
+      "Corpse": "ostrich_sleep",
+      "BloodColor": "00000000",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasHat": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Ox",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/sheep"
+      },
+      "Body": "antelope",
+      "Sounds": "ox",
+      "Footsteps": "sheep",
+      "Corpse": "ox_sleep",
+      "BloodColor": "00000000",
+      "HasHair": false,
+      "HasFacehair": true,
+      "HasHat": true,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Camel",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/sheep"
+      },
+      "Body": "camel",
+      "Sounds": "camel",
+      "Footsteps": "camel",
+      "Corpse": "camel_sleep",
+      "BloodColor": "00000000",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasHat": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Giraffe",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/sheep"
+      },
+      "Body": "giraffe",
+      "Sounds": "giraffe",
+      "Footsteps": "camel",
+      "Corpse": "giraffe_sleep",
+      "BloodColor": "00000000",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasHat": true,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Bush Bear",
+      "Vehicle": true,
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/bear"
+      },
+      "Body": "bearbush",
+      "DeathSprites": "bush_explosion",
+      "Sounds": "bear",
+      "Footsteps": "bear",
+      "Corpse": "tree_wreck",
+      "BloodColor": "00000000",
+      "HasHair": true,
+      "HasFacehair": false,
+      "HasHat": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Bear",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/bear"
+      },
+      "Body": "elephant",
+      "Sounds": "bear",
+      "Footsteps": "bear",
+      "Corpse": "bear_sleep",
+      "BloodColor": "00000000",
+      "HasHair": true,
+      "HasFacehair": false,
+      "HasHat": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Monkey",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/monkey"
+      },
+      "Body": "monkey",
+      "Sounds": "monkey",
+      "Corpse": "monkey_sleep",
+      "BloodColor": "00000000",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasHat": false,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Kangaroo",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/seal"
+      },
+      "Body": "kangaroo",
+      "Sounds": "kangaroo",
+      "Footsteps": "kangaroo",
+      "BloodColor": "00000000",
+      "HasHair": false,
+      "HasFacehair": false,
+      "HasHat": true,
+      "HasGlasses": false
+    },
+    {
+      "Name": "Elephant",
+      "HeadPics": {
+        "Type": "Directional",
+        "Sprites": "chars/heads/elephant"
+      },
+      "Body": "elephant",
+      "Sounds": "elephant",
+      "Footsteps": "mech",
+      "Corpse": "elephant_sleep",
+      "BloodColor": "00000000",
+      "HasHair": false,
+      "HasFacehair": true,
+      "HasHat": true,
+      "HasGlasses": false
+    }
+  ]
+}

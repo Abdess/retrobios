@@ -1,0 +1,19 @@
+<#f0f000>:Unique Attacks:</>
+High Kung Fu Blocking						_F_+^X
+Low Kung Fu Blocking						_DF_+^X
+Air Kung Fu Blocking						_AIR_F_+^X
+
+<#f0f000>:Throws:</>
+Kung Fu Throw								[_B/_F]_+^Y
+
+<#f0f000>:Special Moves:</>
+Kung Fu Palm_EX								_QDF^P
+Kung Fu Upper_EX							_DSF^P
+Kung Fu Blow_EX								_QDB^P
+Kung Fu Zankou_EX							_QDF^K
+Kung Fu Knee_EX								_F_F^K
+_!Extra kick								^K
+
+<#f0f000>:Super Moves:</>
+Triple Kung Fu Palm <#bebebe>(1000)</>		_QDF_QDF^P
+Smash Kung Fu Upper <#bebebe>(1000)</>		_QDB_QDB^P

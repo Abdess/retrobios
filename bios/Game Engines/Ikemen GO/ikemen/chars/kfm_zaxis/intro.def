@@ -1,0 +1,148 @@
+; Introduction cutscene for KFM's story.
+
+; This storyboard has multiple scenes.
+; Each scene uses two overlay anims, one for the picture, and
+; another for the text.
+; The fadein and fadeout parameters are used to fade one screen
+; to the next.
+
+[SceneDef]
+spr = intro.sff
+startscene = 0         ;Starting scene number (for debugging)
+
+;------------------------------------
+[Scene 0]
+; Fade
+fadein.time = 60       ;Time to take for fading in
+fadein.col = 0,0,0     ;Use 255,255,255 for white-fade
+fadeout.time = 15
+fadeout.col = 255,255,255
+; Screen color
+clearcolor = 255,255,255
+; Overlay Anims (from 0 to 9)
+layerall.pos = 160,0   ;Default position for all layers
+layer0.anim =  0       ;Anim action number
+layer0.offset = 0,32   ;Position offset
+layer0.starttime = 0   ;Time to start display
+layer1.anim =  1
+layer1.offset = 0,176
+; Music
+bgm = intro.mp3        ;Name of music file to play
+bgm.loop = 0
+; Total time
+end.time = 300
+
+;------------------------------------
+[Scene 1]
+; Fade
+fadein.time = 15
+fadein.col = 255,255,255
+fadeout.time = 15
+fadeout.col = 255,255,255
+; Screen color
+; The previous clearcolor value is carried over by default
+; Overlay Anims (from 0 to 9)
+; The previous layerall.pos value is carried over by default
+layer0.anim =  10
+layer0.offset = 0,32
+layer0.starttime = 0
+layer1.anim =  11
+layer1.offset = 0,176
+; Total time
+end.time = 300
+
+;------------------------------------
+[Scene 2]
+; Fade
+fadein.time = 15
+fadein.col = 255,255,255
+fadeout.time = 15
+fadeout.col = 255,255,255
+; Overlay Anims (from 0 to 9)
+layer0.anim =  20
+layer0.offset = 0,32
+layer0.starttime = 0
+layer1.anim =  21
+layer1.offset = 0,176
+; Total time
+end.time = 300
+
+;------------------------------------
+[Scene 3]
+; Fade
+fadein.time = 15
+fadein.col = 255,255,255
+fadeout.time = 15
+fadeout.col = 255,255,255
+; Overlay Anims (from 0 to 9)
+layer0.anim =  30
+layer0.offset = 0,32
+layer0.starttime = 0
+layer1.anim =  31
+layer1.offset = 0,176
+; Total time
+end.time = 300
+
+;------------------------------------
+[Scene 4]
+; Fade
+fadein.time = 15
+fadein.col = 255,255,255
+fadeout.time = 90
+fadeout.col = 0,0,0
+; Overlay Anims (from 0 to 9)
+layer0.anim =  40
+layer0.offset = 0,32
+layer0.starttime = 0
+layer1.anim =  41
+layer1.offset = 53,85
+layer2.anim =  42
+layer2.offset = 0,176
+; Total time
+end.time = 600
+
+;Background image
+[Begin Action 0]
+0,0, 0,0, -1
+
+;Text
+[Begin Action 1]
+1,0, 0,0, -1
+
+;Background image
+[Begin Action 10]
+10,0, 0,0, -1
+
+;Text
+[Begin Action 11]
+11,0, 0,0, -1
+
+;Background image
+[Begin Action 20]
+20,0, 0,0, -1
+
+;Text
+[Begin Action 21]
+21,0, 0,0, -1
+
+;Background image
+[Begin Action 30]
+30,0, 0,0, -1
+
+;Text
+[Begin Action 31]
+31,0, 0,0, -1
+
+;Background image
+[Begin Action 40]
+40,0, 0,0, -1
+
+;Blinking arrow
+[Begin Action 41]
+41,0, 0,0, 40
+-1,0, 0,0, 20
+
+;Text (two lines)
+[Begin Action 42]
+42,0, 0,0, 200
+42,1, 0,0, -1

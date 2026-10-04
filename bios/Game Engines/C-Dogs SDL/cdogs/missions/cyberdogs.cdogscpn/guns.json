@@ -1,0 +1,270 @@
+{
+  "Version": 3,
+  "Guns": [
+    {
+      "Pic": "chainsaw",
+      "Icon": "chainsaw",
+      "Name": "Chainsaw",
+      "Bullet": "chainsaw",
+      "Prerequisite": "Barefisted",
+      "Cost": 0,
+      "Lock": 0,
+      "Sound": "",
+      "SwitchSound": "chainsaw_switch",
+      "SoundLockLength": 50,
+      "CanShoot": false,
+      "Price": 2000,
+      "Auto": true
+    },
+    {
+      "Pic": "chainsaw",
+      "Icon": "chainsaw",
+      "Name": "2xChainsaw",
+      "Bullet": "chainsaw_x2",
+      "Prerequisite": "Chainsaw",
+      "Cost": 0,
+      "Lock": 0,
+      "Sound": "",
+      "SwitchSound": "chainsaw_switch",
+      "SoundLockLength": 50,
+      "CanShoot": false,
+      "Price": 2000,
+      "Auto": true
+    },
+    {
+      "Pic": "chainsaw",
+      "Icon": "chainsaw",
+      "Name": "3xChainsaw",
+      "Bullet": "chainsaw_x3",
+      "Prerequisite": "2xChainsaw",
+      "Cost": 0,
+      "Lock": 0,
+      "Sound": "",
+      "SwitchSound": "chainsaw_switch",
+      "SoundLockLength": 50,
+      "CanShoot": false,
+      "Price": 2000,
+      "Auto": true
+    },
+    {
+      "Pic": "chainsaw",
+      "Icon": "chainsaw",
+      "Name": "4xChainsaw",
+      "Bullet": "chainsaw_x4",
+      "Prerequisite": "3xChainsaw",
+      "Cost": 0,
+      "Lock": 0,
+      "Sound": "",
+      "SwitchSound": "chainsaw_switch",
+      "SoundLockLength": 50,
+      "CanShoot": false,
+      "Price": 2000,
+      "Auto": true
+    },
+    {
+      "Pic": "chainsaw",
+      "Icon": "chainsaw",
+      "Name": "5xChainsaw",
+      "Bullet": "chainsaw_x5",
+      "Prerequisite": "4xChainsaw",
+      "Cost": 0,
+      "Lock": 0,
+      "Sound": "",
+      "SwitchSound": "chainsaw_switch",
+      "SoundLockLength": 50,
+      "CanShoot": false,
+      "Price": 2000,
+      "Auto": true
+    },
+    {
+      "Pic": "",
+      "Icon": "fist",
+      "Name": "Fists",
+      "Bullet": "fist",
+      "Cost": 0,
+      "Lock": 0,
+      "Sound": "",
+      "SoundLockLength": 20,
+      "SwitchSound": "knuckles",
+      "CanShoot": false,
+      "CanDrop": false,
+      "Auto": true
+    },
+    {
+      "Pic": "chaingun",
+      "Name": "MiniGun",
+      "Icon": "minigun",
+      "Bullet": "mg",
+      "Lock": 7,
+      "Sound": "lmg",
+      "SwitchSound": "mg_switch",
+      "MuzzleFlashParticle": "muzzle_flash_mg",
+      "Brass": "brass_big",
+      "Ammo": "Bullets",
+      "Price": 3100
+    },
+    {
+      "Pic": "launcher",
+      "Name": "Launcher",
+      "Icon": "launcher",
+      "Bullet": "grenade",
+      "Lock": 30,
+      "Sound": "bottle_pop",
+      "SwitchSound": "swarmer_switch",
+      "Elevation": 14,
+      "Ammo": "Grenades",
+      "Price": 2800
+    },
+    {
+      "Pic": "flamer",
+      "Grips": 2,
+      "Name": "Flamer",
+      "Icon": "flamer",
+      "Bullet": "flame",
+      "Lock": 7,
+      "Sound": "flamer",
+      "SwitchSound": "flamer_switch",
+      "SoundLockLength": 36,
+      "MuzzleFlashParticle": "muzzle_flash_flamer",
+      "Ammo": "Gas tank",
+      "Price": 3000
+    },
+    {
+      "Name": "Powergun",
+      "Icon": "powergun",
+      "Bullet": "sniper",
+      "Lock": 40,
+      "Sound": "fusion",
+      "SwitchSound": "powergun_switch",
+      "MuzzleFlashParticle": "muzzle_flash_powergun",
+      "Ammo": "Cells",
+      "Price": 2100
+    },
+    {
+      "Pic": "blaster_yellow",
+      "Name": "Gun",
+      "Bullet": "laser",
+      "Lock": 30,
+      "Sound": "pistol",
+      "MuzzleFlashSprite": "muzzle_flash_big",
+      "MuzzleFlashColor": "ffff00",
+      "MuzzleFlashDuration": 5
+    },
+    {
+      "Pic": "blaster_yellow",
+      "Name": "TurboLazer",
+      "Bullet": "turbo_laser",
+      "Lock": 35,
+      "Sound": "pistol",
+      "MuzzleFlashSprite": "muzzle_flash_big",
+      "MuzzleFlashColor": "ffff00",
+      "MuzzleFlashDuration": 5
+    },
+    {
+      "Pic": "pistol",
+      "Name": "Blaster",
+      "Icon": "blaster",
+      "Bullet": "pulse",
+      "Lock": 12,
+      "Sound": "pistol",
+      "SwitchSound": "pulse_switch",
+      "MuzzleFlashParticle": "muzzle_flash_pulse",
+      "Ammo": "Mini cells",
+      "Price": 1500
+    },
+    {
+      "Pic": "rifle",
+      "Grips": 2,
+      "Name": "MegaGun",
+      "Icon": "megagun",
+      "Bullet": "megarocket",
+      "Lock": 30,
+      "Sound": "swell",
+      "SwitchSound": "heatseeker_switch",
+      "Elevation": 5,
+      "MuzzleFlashParticle": "muzzle_flash_heatseeker",
+      "Ammo": "Rockets",
+      "Shake": {
+        "Amount": 8,
+        "CameraSubjectOnly": true
+      },
+      "Price": 6500
+    },
+    {
+      "Name": "DumbGun",
+      "Bullet": "laser_dumb",
+      "Lock": 40,
+      "Sound": "pistol",
+      "MuzzleFlashColor": "ff0000"
+    },
+    {
+      "Pic": "zapper_green",
+      "Name": "Lazer",
+      "Bullet": "pulse_green",
+      "Lock": 65,
+      "Sound": "pulse",
+      "MuzzleFlashSprite": "muzzle_flash_big",
+      "MuzzleFlashColor": "00ff00",
+      "MuzzleFlashDuration": 5
+    }
+  ],
+  "PseudoGuns" : [
+    {
+      "Name": "blast_weak",
+      "Bullet": "blast_weak",
+      "Sound": "explosion_small"
+    },
+    {
+      "Name": "demo_weak",
+      "Bullet": "demo_weak",
+      "Sound": ""
+    },
+    {
+      "Name": "blast_strong",
+      "Bullet": "blast_strong",
+      "Sound": "explosion"
+    },
+    {
+      "Name": "demo_strong",
+      "Bullet": "demo_strong",
+      "Sound": ""
+    },
+    {
+      "Name": "explosion",
+      "Bullet": "explosion_cast",
+      "Sound": "",
+      "Recoil": 6.28,
+      "SpreadCount": 5,
+      "Shake": {
+        "Amount": 10
+      }
+    },
+    {
+      "Name": "explosion_ball",
+      "Bullet": "explosion_ball",
+      "Sound": ""
+    },
+    {
+      "Pic": "",
+      "Name": "small_explosion1",
+      "Bullet": "small_fireball1",
+      "ElevationLow": 14,
+      "ElevationHigh": 14,
+      "Sound": "explosion"
+    },
+    {
+      "Pic": "",
+      "Name": "small_explosion2",
+      "Bullet": "small_fireball2",
+      "ElevationLow": 22,
+      "ElevationHigh": 22
+    },
+    {
+      "Pic": "",
+      "Name": "small_explosion3",
+      "Bullet": "small_fireball3",
+      "ElevationLow": 30,
+      "ElevationHigh": 30
+    }
+  ]
+}

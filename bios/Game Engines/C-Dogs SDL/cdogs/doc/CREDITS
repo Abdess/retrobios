@@ -1,0 +1,60 @@
+Visit the C-Dogs SDL Homepage!
+	http://cxong.github.io/cdogs-sdl/
+
+Ronny Wester
+	That's me! I designed and coded this game and I did all the graphics too
+Lucas Martin-King
+	He procrastinated about releasing C-Dogs SDL! ...and cleaned up after Jeremy
+Jeremy Chin
+	He did all the hard porting work! ;)
+Cong Xu
+	Enhancements and new features
+Zombie
+	Created Campaign Dogs, the website to share custom campaigns
+Tobias Johansson
+	Made the Android port
+Clemens Hackenberg
+	Testing and bug reports, campaigns
+David Knight
+	Made the GCW-Zero port
+Justin Jacobs
+	Made the emscripten port
+Wuzzy
+	Gun descriptions, testing, campaigns
+Vadim Barkov
+	Automatic Windows and macOS deployment
+meZee
+	Travis CI deployment
+
+Joey Lau
+	My love. Although I had to alter the knife rating to survive the dogfights ;-)
+Jan-Olof Hendig
+	A friend with whom I've spent far too much time on the phone far too late
+Joakim Johansson
+	Friend and colleague. We keep each other sane...or is it the other way around?
+Victor Putz
+	Kindred spirit and a great guy to brainstorm with
+Ken Gorley
+	Found the 1st bug in the release: didn't work with a single joystick
+Adrian Stacey
+	Most helpful in tracking down the vsync bug
+Antti Hukkanen
+	Helped locate a bug when using maximum number of characters in a mission
+Tim McEvoy
+	Instrumental in getting the 1.05 crash bug fixed
+Daniel Jansson
+	Friend and fellow aikido instructor
+Chilok Lau
+	Joey's brother and a relentless game-player
+Niklas Wester
+	My LITTLE brother...yeah, I know he is taller...mumble, grumble...
+Anneli Löfgren
+	My mother. Hi Ma! Sorry, no launcher this time...
+Otto Chrons
+	Author of the DSMI sound and music library
+Ethan Brodsky
+	Author of free SB stuff. Helped me out when I got started
+Tech support at DPT
+	The best support staff I've ever come across. Kudos!
+Cyberdogs fans wherever
+	Thanks! Without your support this program would never have come about

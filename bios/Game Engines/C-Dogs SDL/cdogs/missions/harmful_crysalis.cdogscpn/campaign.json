@@ -1,0 +1,11 @@
+{
+	"Version": 16,
+	"Title": "Harmful Crysalis",
+	"Author": "Sauer2",
+	"Description": "You are a miner, looking to mine the rare mineral phleboltinum on Xurion.",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": false,
+	"RandomPickups": true,
+	"Missions": 9
+}

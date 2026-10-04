@@ -1,0 +1,10 @@
+{
+	"Version": 16,
+	"Title": "Static map",
+	"Author": "Cong",
+	"Description": "A demo of a static map, not randomly generated",
+	"Ammo": false,
+	"WeaponPersist": false,
+	"SkipWeaponMenu": false,
+	"Missions": 5
+}

@@ -1,0 +1,13 @@
+{
+  "Version": 1,
+  "Bullets": [
+    {
+      "Name": "air",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": ""
+      },
+      "Power": 0
+    }
+  ]
+}

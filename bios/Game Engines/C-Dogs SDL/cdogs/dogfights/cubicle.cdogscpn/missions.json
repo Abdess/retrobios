@@ -1,0 +1,91 @@
+{
+	"Missions": [{
+		"Title": "",
+		"Description": "",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 64,
+		"WallStyle": 0,
+		"FloorStyle": 3,
+		"RoomStyle": 8,
+		"ExitStyle": 0,
+		"KeyStyle": 0,
+		"DoorStyle": 0,
+		"Objectives": [],
+		"Enemies": [],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 10
+		},
+		{
+			"MapObject": "box",
+			"Density": 10
+		},
+		{
+			"MapObject": "box2",
+			"Density": 10
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 10
+		},
+		{
+			"MapObject": "plant",
+			"Density": 10
+		},
+		{
+			"MapObject": "table",
+			"Density": 10
+		},
+		{
+			"MapObject": "chair",
+			"Density": 10
+		},
+		{
+			"MapObject": "rod",
+			"Density": 10
+		}],
+		"EnemyDensity": 0,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"WallMask": "004800",
+		"FloorMask": "480000",
+		"RoomMask": "840084",
+		"AltMask": "007000",
+		"Walls": 50,
+		"WallLength": 50,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 3,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	}]
+}

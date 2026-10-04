@@ -1,0 +1,7 @@
+Derived from Basic 32x32 sci-fi tiles for roguelike
+by Stephen Challener (Redshrike) and Daniel Cook, hosted by OpenGameArt.org
+http://opengameart.org/content/basic-32x32-sci-fi-tiles-for-roguelike
+
+Licenses:
+http://creativecommons.org/licenses/by/3.0/
+http://opengameart.org/content/oga-by-30-faq

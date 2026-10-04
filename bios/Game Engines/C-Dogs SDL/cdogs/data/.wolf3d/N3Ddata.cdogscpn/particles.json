@@ -1,0 +1,23 @@
+{
+  "Version": 3,
+  "Particles": [
+    {
+      "Name": "zzz",
+      "Type": "Text",
+      "Text": {
+        "Value": "z"
+      },
+      "Range": 40,
+      "GravityFactor": -0.1
+    },
+    {
+      "Name": "trail_spit",
+      "Pic": {
+        "Type": "Animated",
+        "Sprites": "particles/trail_spit",
+        "TicksPerFrame": 2
+      },
+      "Range": 7
+    }
+  ]
+}

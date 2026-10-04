@@ -1,0 +1,1303 @@
+{
+	"Missions": [{
+		"Title": "They are destroying our base!",
+		"Description": "All of a sudden aliens started popping out of nowhere all over the place. Fortunately they seem quite disorganized or we would surely have lost the base by now. We must eliminate this attacking force, though...",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Defeat the attack",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 20,
+			"Required": 15,
+			"Flags": 0
+		}],
+		"Enemies": [0,
+		1,
+		2],
+		"SpecialChars": [10,
+		13,
+		17],
+		"MapObjectDensities": [{
+			"MapObject": "cabinet",
+			"Density": 40
+		},
+		{
+			"MapObject": "chair",
+			"Density": 10
+		},
+		{
+			"MapObject": "column",
+			"Density": 5
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 30
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 20
+		},
+		{
+			"MapObject": "barrel",
+			"Density": 10
+		},
+		{
+			"MapObject": "rocket",
+			"Density": 5
+		}],
+		"EnemyDensity": 10,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "5c5c84ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "tile",
+				"Mask": "848484ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "flat",
+				"Mask": "700070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 20,
+		"WallLength": 20,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 10,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 3,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "What are they up to now?",
+		"Description": "Now the goggle-eyes are rampaging through a suburb! They are killing innocent civilians for no reason...we have got to stop them!",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 48,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Eliminate the monsters",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 20,
+			"Required": 20,
+			"Flags": 0
+		}],
+		"Enemies": [3,
+		4,
+		5,
+		6,
+		7,
+		8,
+		9],
+		"SpecialChars": [10,
+		11,
+		12,
+		13,
+		17,
+		19],
+		"MapObjectDensities": [{
+			"MapObject": "tree",
+			"Density": 50
+		},
+		{
+			"MapObject": "table_clothed",
+			"Density": 30
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 40
+		},
+		{
+			"MapObject": "box_wood",
+			"Density": 5
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 20
+		},
+		{
+			"MapObject": "table_wood_candle",
+			"Density": 20
+		},
+		{
+			"MapObject": "barrel_wood",
+			"Density": 10
+		},
+		{
+			"MapObject": "plant",
+			"Density": 50
+		},
+		{
+			"MapObject": "chair",
+			"Density": 10
+		}],
+		"EnemyDensity": 30,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "008484ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "dirt",
+				"Mask": "007000ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "94802cff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 0,
+		"WallLength": 0,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 25,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 2,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Rescue threatened scientists",
+		"Description": "There may be some fiendish plot behind this madness after all. Our foes are attacking a little known laboratory doing research on our big-eyed opponents. The other attacks may have been diversions. Still, you never know with these critters. Enough already, we must save the staff...",
+		"Type": "Classic",
+		"Width": 64,
+		"Height": 32,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Eradicate the attacking force",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 25,
+			"Required": 25,
+			"Flags": 0
+		}],
+		"Enemies": [27,
+		26,
+		25,
+		24,
+		23],
+		"SpecialChars": [20,
+		12,
+		18,
+		17,
+		14,
+		13],
+		"MapObjectDensities": [{
+			"MapObject": "barrel_blue",
+			"Density": 10
+		},
+		{
+			"MapObject": "box",
+			"Density": 10
+		},
+		{
+			"MapObject": "box2",
+			"Density": 10
+		},
+		{
+			"MapObject": "cabinet",
+			"Density": 50
+		},
+		{
+			"MapObject": "chair",
+			"Density": 10
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 50
+		},
+		{
+			"MapObject": "table_steel",
+			"Density": 25
+		},
+		{
+			"MapObject": "safe",
+			"Density": 5
+		},
+		{
+			"MapObject": "table_lab",
+			"Density": 20
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "plasteel",
+				"Mask": "008484ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "smallsquare",
+				"Mask": "707070ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "biggrid",
+				"Mask": "848484ff",
+				"MaskAlt": "840000ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 0,
+		"WallLength": 0,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 25,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Enough is enough!",
+		"Description": "We are now in a position where we may repay the B.E.M.s for their actions. We have uncovered a B.E.M. ship carrying an arsenal of rockets which they are probably planning to unleash on us at the earliest moment possible. Now, wouldn't it be nice if they were to detonate onboard instead?",
+		"Type": "Classic",
+		"Width": 30,
+		"Height": 64,
+		"ExitStyle": "hazard",
+		"KeyStyle": "cube",
+		"Objectives": [{
+			"Description": "Blow up the rockets",
+			"Type": "Destroy",
+			"MapObject": "rocket",
+			"Count": 20,
+			"Required": 15,
+			"Flags": 0
+		}],
+		"Enemies": [21,
+		20,
+		19,
+		18,
+		17,
+		15,
+		16,
+		14,
+		13,
+		10,
+		11,
+		12],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "column",
+			"Density": 20
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "bench",
+			"Density": 10
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 5
+		},
+		{
+			"MapObject": "wall_goo",
+			"Density": 5
+		},
+		{
+			"MapObject": "goo",
+			"Density": 5
+		}],
+		"EnemyDensity": 25,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "840084ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "striped",
+				"Mask": "847024ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "striped",
+				"Mask": "007070ff",
+				"MaskAlt": "008400ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "alien",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 15,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "They are robbing a BANK???",
+		"Description": "They never cease to amaze me. Now they are robbing banks too...the shrink department guys think it may be something they have picked up from television broadcasts...you know, the archetypical bad guy so to speak. Anyway, we can't have bubble-eyes stealing citizens' savings, can we?",
+		"Type": "Classic",
+		"Width": 48,
+		"Height": 32,
+		"ExitStyle": "hazard",
+		"KeyStyle": "office",
+		"Objectives": [{
+			"Description": "Fend off the \"bank-robbers from space\"",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 25,
+			"Required": 25,
+			"Flags": 0
+		},
+		{
+			"Description": "Safeguard any loot you come across",
+			"Type": "Collect",
+			"Pickup": "sack",
+			"Count": 6,
+			"Required": 0,
+			"Flags": 1
+		}],
+		"Enemies": [3,
+		4,
+		5,
+		6,
+		7,
+		8,
+		9],
+		"SpecialChars": [16,
+		15,
+		21,
+		22,
+		13,
+		17],
+		"MapObjectDensities": [{
+			"MapObject": "cabinet",
+			"Density": 50
+		},
+		{
+			"MapObject": "plant",
+			"Density": 50
+		},
+		{
+			"MapObject": "chair",
+			"Density": 10
+		},
+		{
+			"MapObject": "table_wood",
+			"Density": 20
+		},
+		{
+			"MapObject": "bookshelf",
+			"Density": 10
+		},
+		{
+			"MapObject": "safe",
+			"Density": 30
+		},
+		{
+			"MapObject": "terminal",
+			"Density": 20
+		}],
+		"EnemyDensity": 20,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Sniper rifle"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steel",
+				"Mask": "484870ff",
+				"MaskAlt": "707070ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "wood",
+				"Mask": "847024ff",
+				"MaskAlt": "707070ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "checker",
+				"Mask": "000084ff",
+				"MaskAlt": "707070ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "office",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 0,
+		"WallLength": 0,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 20,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Retrieve the stolen money",
+		"Description": "Despite your valiant, and ultimately successful, efforts, the buggers took off with a considerable amount of dough. Now, the city can do without that kind of strain on the treasury...soooo...we will just have to retrieve the funds won't we?",
+		"Type": "Classic",
+		"Width": 32,
+		"Height": 64,
+		"ExitStyle": "hazard",
+		"KeyStyle": "cube",
+		"Objectives": [{
+			"Description": "Find as much money as possible",
+			"Type": "Collect",
+			"Pickup": "sack",
+			"Count": 32,
+			"Required": 25,
+			"Flags": 0
+		}],
+		"Enemies": [10,
+		11,
+		12,
+		13,
+		14,
+		15,
+		16,
+		17,
+		18,
+		19,
+		20,
+		21],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "goo",
+			"Density": 5
+		},
+		{
+			"MapObject": "wall_goo",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 5
+		},
+		{
+			"MapObject": "column",
+			"Density": 20
+		},
+		{
+			"MapObject": "bench",
+			"Density": 10
+		}],
+		"EnemyDensity": 25,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "484870ff",
+				"MaskAlt": "94802cff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "striped",
+				"Mask": "008484ff",
+				"MaskAlt": "94802cff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "striped",
+				"Mask": "008400ff",
+				"MaskAlt": "94802cff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "alien",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 12,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "On the offensive...",
+		"Description": "Okeeey...our top minds have come up with a plan to put an end to this nonsense. These B.E.M. fellows, they're highly hierarchical you see...so we take out the head and the body crumbles, see? You don't? Well, shut up and follow orders then, will'ya?",
+		"Type": "Classic",
+		"Width": 32,
+		"Height": 64,
+		"ExitStyle": "hazard",
+		"KeyStyle": "cube",
+		"Objectives": [{
+			"Description": "Steal B.E.M. technology",
+			"Type": "Collect",
+			"Pickup": "pci_card",
+			"Count": 5,
+			"Required": 3,
+			"Flags": 4
+		},
+		{
+			"Description": "Any gadget may prove helpful...",
+			"Type": "Collect",
+			"Pickup": "holo",
+			"Count": 2,
+			"Required": 0,
+			"Flags": 5
+		},
+		{
+			"Description": "Data files are good, too",
+			"Type": "Collect",
+			"Pickup": "disk2",
+			"Count": 5,
+			"Required": 0,
+			"Flags": 5
+		},
+		{
+			"Description": "Blueprints are a great help!",
+			"Type": "Collect",
+			"Pickup": "blueprint",
+			"Count": 2,
+			"Required": 0,
+			"Flags": 5
+		}],
+		"Enemies": [22,
+		11,
+		12,
+		13,
+		14,
+		15,
+		16,
+		17,
+		18,
+		19,
+		20,
+		21],
+		"SpecialChars": [],
+		"MapObjectDensities": [{
+			"MapObject": "goo",
+			"Density": 5
+		},
+		{
+			"MapObject": "wall_goo",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 5
+		},
+		{
+			"MapObject": "column",
+			"Density": 20
+		},
+		{
+			"MapObject": "bench",
+			"Density": 10
+		}],
+		"EnemyDensity": 30,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "94802cff",
+				"MaskAlt": "008484ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "striped",
+				"Mask": "008400ff",
+				"MaskAlt": "008484ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "striped",
+				"Mask": "840000ff",
+				"MaskAlt": "008484ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "alien",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 12,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Board and seize an enemy vessel",
+		"Description": "The B.E.M. scout vessel 'Har-Har-Har' - they must be doing this just to taunt us I'm sure - is vulnerable to a quick assault by a small elite force...hey, come back here...no, you may go to the bathroom afterwards!",
+		"Type": "Classic",
+		"Width": 32,
+		"Height": 64,
+		"ExitStyle": "hazard",
+		"KeyStyle": "cube",
+		"Objectives": [{
+			"Description": "Eliminate the crew members",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 30,
+			"Required": 30,
+			"Flags": 0
+		},
+		{
+			"Description": "Seize the remote to the bridge controls",
+			"Type": "Collect",
+			"Pickup": "radio",
+			"Count": 1,
+			"Required": 1,
+			"Flags": 4
+		}],
+		"Enemies": [],
+		"SpecialChars": [22,
+		21,
+		18,
+		17,
+		16,
+		15],
+		"MapObjectDensities": [{
+			"MapObject": "goo",
+			"Density": 5
+		},
+		{
+			"MapObject": "wall_goo",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 5
+		},
+		{
+			"MapObject": "column",
+			"Density": 20
+		},
+		{
+			"MapObject": "bench",
+			"Density": 10
+		}],
+		"EnemyDensity": 0,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Flamer",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Molotovs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "008484ff",
+				"MaskAlt": "000070ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "striped",
+				"Mask": "484870ff",
+				"MaskAlt": "000070ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "striped",
+				"Mask": "000084ff",
+				"MaskAlt": "000070ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "alien",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 50,
+		"WallLength": 10,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 12,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	},
+	{
+		"Title": "Mister Congeniality he\/she\/it ain't...",
+		"Description": "Actually, that remote was for the self-destruction mechanism, but you'd only have been nervous had you known. What's with the sour faces? It ended well, didn't it? Anyway, I've got a treat for you. You have been chosen to put an end to this conflict by nailing the head S.O.B. itself!",
+		"Type": "Classic",
+		"Width": 24,
+		"Height": 24,
+		"ExitStyle": "hazard",
+		"KeyStyle": "cube",
+		"Objectives": [{
+			"Description": "Kill the Big Bug-Eye!",
+			"Type": "Kill",
+			"Index": 0,
+			"Count": 1,
+			"Required": 1,
+			"Flags": 0
+		}],
+		"Enemies": [],
+		"SpecialChars": [28],
+		"MapObjectDensities": [{
+			"MapObject": "goo",
+			"Density": 5
+		},
+		{
+			"MapObject": "wall_goo",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_red",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_metal_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_green",
+			"Density": 5
+		},
+		{
+			"MapObject": "box_gray",
+			"Density": 5
+		},
+		{
+			"MapObject": "column",
+			"Density": 20
+		}],
+		"EnemyDensity": 0,
+		"Weapons": ["Knife",
+		"Machine gun",
+		"Grenades",
+		"Shotgun",
+		"Powergun",
+		"Shrapnel bombs",
+		"Sniper rifle",
+		"Prox. mine",
+		"Dynamite"],
+		"Song": "",
+		"TileClasses": {
+			"Wall": {
+				"Name": "wall",
+				"Type": "Wall",
+				"Style": "steelwood",
+				"Mask": "94802cff",
+				"MaskAlt": "008484ff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": false
+			},
+			"Floor": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "striped",
+				"Mask": "008400ff",
+				"MaskAlt": "008484ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": false
+			},
+			"Room": {
+				"Name": "tile",
+				"Type": "Floor",
+				"Style": "striped",
+				"Mask": "840000ff",
+				"MaskAlt": "008484ff",
+				"CanWalk": true,
+				"IsOpaque": false,
+				"Shootable": false,
+				"IsRoom": true
+			},
+			"Door": {
+				"Name": "door",
+				"Type": "Door",
+				"Style": "alien",
+				"Mask": "ffffffff",
+				"MaskAlt": "ffffffff",
+				"CanWalk": false,
+				"IsOpaque": true,
+				"Shootable": true,
+				"IsRoom": true
+			}
+		},
+		"Walls": 10,
+		"WallLength": 4,
+		"CorridorWidth": 1,
+		"Rooms": {
+			"Count": 0,
+			"Min": 6,
+			"Max": 10,
+			"Edge": false,
+			"Overlap": false,
+			"Walls": 0,
+			"WallLength": 0,
+			"WallPad": 0
+		},
+		"Squares": 0,
+		"Doors": {
+			"Enabled": true,
+			"Min": 1,
+			"Max": 1
+		},
+		"Pillars": {
+			"Count": 0,
+			"Min": 0,
+			"Max": 0
+		}
+	}]
+}

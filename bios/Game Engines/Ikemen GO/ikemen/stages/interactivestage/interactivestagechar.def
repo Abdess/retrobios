@@ -1,0 +1,50 @@
+[Info]
+name = "Attached Char for Interactive Stage"
+author = "Lasombra Demon"
+ikemenversion = 1.0        
+localcoord = 320,240
+;Special thanks to Foobs for his template: 
+;https://github.com/RealFoobs/Attached-char-template/tree/main
+
+;Extra Sprites made by David Bazbar
+
+[Files]
+sprite = interactivestageChar.sff
+anim = interactivestageChar.air
+sound = interactivestageChar.snd
+stcommon = common1.cns
+st = interactivestageChar.zss
+
+;Credits to Neat Unsou for these files
+[Shaders]
+wobble = wobble.frag
+
+;=========================================================================================
+;CMD section
+[Remap]
+x = x
+y = y
+z = z
+a = a
+b = b
+c = c
+s = s
+
+[Defaults]
+command.time = 15
+command.buffer.time = 1
+
+[Command]
+name = "FF" ;Required (do not remove)
+command = F, F
+time = 10
+
+[Command]
+name = "BB" ;Required (do not remove)
+command = B, B
+time = 10
+
+[Command]
+name = "recovery" ;Required (do not remove)
+command = x+y
+time = 1

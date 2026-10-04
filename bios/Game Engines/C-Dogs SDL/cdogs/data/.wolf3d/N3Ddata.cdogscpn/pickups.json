@@ -1,0 +1,194 @@
+{
+  "Version": 3,
+  "Pickups": [
+    {
+      "Name": "small_bandage",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bandage"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 10
+      }],
+      "Sound": "pickup"
+    },
+    {
+      "Name": "large_bandage",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bandage_big"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 25
+      }],
+      "Sound": "pickup"
+    },
+    {
+      "Name": "heart",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "heart"
+      },
+      "Effects": [{
+        "Type": "Health",
+        "Health": 200
+      }, {
+        "Type": "Ammo",
+        "Ammo": "Feed",
+        "Amount": 25
+      }, {
+        "Type": "Lives",
+        "Lives": 1
+      }],
+      "Sound": "1up"
+    },
+    {
+      "Name": "grapes",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "grapes"
+      },
+      "Effects": [{
+        "Type": "Score",
+        "Score": 500
+      }],
+      "Sound": "pickup"
+    },
+    {
+      "Name": "orange",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "orange"
+      },
+      "Effects": [{
+        "Type": "Score",
+        "Score": 500
+      }],
+      "Sound": "pickup"
+    },
+    {
+      "Name": "apple",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "apple"
+      },
+      "Effects": [{
+        "Type": "Score",
+        "Score": 500
+      }],
+      "Sound": "pickup"
+    },
+    {
+      "Name": "banana",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "banana"
+      },
+      "Effects": [{
+        "Type": "Score",
+        "Score": 500
+      }],
+      "Sound": "pickup"
+    },
+    {
+      "Name": "scroll",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "scroll"
+      },
+      "Effects": [{
+        "Type": "Menu",
+        "Menu": {
+          "Text": "This pickup is a template only; the first Item is the correct effects, the second the wrong effects.",
+          "Items": [{
+            "Text": "correct",
+            "Effects": [{
+              "Type": "Score",
+              "Score": 1000
+            }, {
+              "Type": "Health",
+              "Health": 25
+            }, {
+              "Type": "Ammo",
+              "Ammo": "Feed",
+              "Amount": 10
+            }, {
+              "Type": "Sound",
+              "Sound": "bonus"
+            }]
+          }, {
+            "Text": "wrong",
+            "Effects": [{
+              "Type": "Health",
+              "Health": 4
+            }, {
+              "Type": "Sound",
+              "Sound": "wrong"
+            }]
+          }]
+        }
+      }],
+      "Sound": "pickup"
+    },
+    {
+      "Name": "small_feed_box",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "small_feed_box"
+      },
+      "Effects": [{
+        "Type": "Ammo",
+        "Ammo": "Feed",
+        "Amount": 5
+      }],
+      "Sound": "pickup"
+    },
+    {
+      "Name": "large_feed_box",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "large_feed_box"
+      },
+      "Effects": [{
+        "Type": "Ammo",
+        "Ammo": "Feed",
+        "Amount": 25
+      }],
+      "Sound": "pickup"
+    },
+    {
+      "Name": "knapsack",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "bag"
+      },
+      "Effects": [{
+        "Type": "Ammo",
+        "Ammo": "Feed",
+        "Amount": 100
+      }, {
+        "Type": "Ammo",
+        "Ammo": "Cantaloupe",
+        "Amount": 28
+      }, {
+        "Type": "Ammo",
+        "Ammo": "Watermelon",
+        "Amount": 25
+      }],
+      "Sound": "pickup"
+    },
+    {
+      "Name": "map",
+      "Pic": {
+        "Type": "Normal",
+        "Pic": "map"
+      },
+      "Effects": [{
+        "Type": "ShowMap"
+      }],
+      "Sound": "pickup"
+    }
+  ]
+}

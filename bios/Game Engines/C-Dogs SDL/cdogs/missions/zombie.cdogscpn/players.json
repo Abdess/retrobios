@@ -1,0 +1,21 @@
+{
+	"Version": 2,
+	"PlayerTemplates": [{
+		"Name": "Lab Technician",
+		"Face": "Smith",
+		"Skin": "d25106ff",
+		"Arms": "ffffffff",
+		"Body": "ffffffff",
+		"Legs": "363636ff",
+		"Hair": "ff6c00ff"
+	},
+	{
+		"Name": "Smelly Postgrad",
+		"Face": "Bob",
+		"Skin": "d25106ff",
+		"Arms": "ffffffff",
+		"Body": "ffffffff",
+		"Legs": "363636ff",
+		"Hair": "363636ff"
+	}]
+}
