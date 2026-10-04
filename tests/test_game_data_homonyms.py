@@ -81,6 +81,56 @@ class HomonymRule(unittest.TestCase):
         self.assertEqual(homonyms(claims), [])
 
 
+class AbsentFileIsNotReplacedByAHomonym(unittest.TestCase):
+    """The database names the file a destination designates. When that file
+    is a release asset the checkout does not hold, the name step answered
+    with whatever else carried the name: Enemy Territory's `etmain/pak0.pk3`
+    resolved to the Quake III demo pak on a clone without the large files."""
+
+    def setUp(self):
+        import hashlib
+        import tempfile
+
+        import generate_db
+
+        self._tmp = tempfile.TemporaryDirectory()
+        root = Path(self._tmp.name)
+        files = {}
+        for relative, payload in (
+            ("bios/ET/etmain/pak0.pk3", b"enemy territory"),
+            ("bios/Q3/demoq3/pak0.pk3", b"quake iii demo"),
+        ):
+            target = root / relative
+            target.parent.mkdir(parents=True)
+            target.write_bytes(payload)
+            sha1 = hashlib.sha1(payload).hexdigest()
+            files[sha1] = {
+                "path": str(target), "name": "pak0.pk3", "size": len(payload),
+                "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
+                "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "0",
+            }
+        indexes = generate_db.build_indexes(
+            {s: {**r, "path": r["path"][len(str(root)) + 1:]} for s, r in files.items()},
+            {},
+        )
+        self.db = {"files": files, "indexes": indexes}
+        self.own = root / "bios/ET/etmain/pak0.pk3"
+        self.entry = {"name": "pak0.pk3", "path": "etmain/pak0.pk3"}
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def _resolve(self):
+        return resolve_local_file(self.entry, self.db, {}, dest_hint="etmain/pak0.pk3")
+
+    def test_present_it_resolves_by_its_path(self):
+        self.assertEqual(self._resolve(), (str(self.own), "path_exact"))
+
+    def test_absent_it_is_not_found_rather_than_another_game(self):
+        self.own.unlink()
+        self.assertEqual(self._resolve(), (None, "not_found"))
+
+
 class CollectionCarriesNoGameDataHomonym(unittest.TestCase):
     def test_the_profiles_resolve_no_game_data_to_another_game(self):
         database = REPO_ROOT / "database.json"

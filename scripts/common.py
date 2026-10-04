@@ -642,6 +642,7 @@ def resolve_local_file(
     # 2b. Path suffix lookup is useful for same-named regional files, but it
     # is identity evidence only when no content hash was declared.  A stale
     # or incorrect destination can therefore never mask a hash mismatch.
+    own_file_absent = False
     if dest_hint and by_path_suffix:
         # A destination is written from the emulator's point of view
         # ("pcsx2/resources/GameIndex.yaml") and the index from the repo's
@@ -665,6 +666,14 @@ def resolve_local_file(
             candidates = by_path_suffix.get(tail, [])
             if start and len(candidates) > 1:
                 continue
+            # The index names the file this destination designates. Not on
+            # disk, it is a release asset the checkout does not hold, and no
+            # other file of that name is it.
+            if not start and candidates and not any(
+                os.path.exists(files_db.get(h, {}).get("path", ""))
+                for h in candidates
+            ):
+                own_file_absent = True
             if len(candidates) > 1:
                 depth = len(tail.split("/"))
                 candidates = sorted(
@@ -699,7 +708,7 @@ def resolve_local_file(
     # an FPseNG font, an openMSX one and a 3DO ROM. Content still decides: the
     # hash and path steps above run first, so collecting the real bytes makes
     # the entry resolve.
-    unsourceable = bool(file_entry.get("unsourceable"))
+    unsourceable = bool(file_entry.get("unsourceable")) or own_file_absent
 
     if not has_strong_hash and not unsourceable:
         candidates = []
