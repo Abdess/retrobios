@@ -265,16 +265,36 @@ files:
   # -- FluidSynth SoundFont --
 
   - name: "default.sf2"
-    description: "General MIDI SoundFont"
+    description: "SoundFont the operating system installs as FluidSynth default"
     required: false
-    aliases:
-      - "FluidR3_GM.sf2"
-      - "GeneralUser_GS.sf2"
     unsourceable: "probed at fixed operating system paths, where the system's own SoundFont sits; a same-named file of another program must not stand in"
     note: >
-      any SF2 or SF3 file loads; fluid.soundfont names it and
+      first probe when fluid.soundfont is empty:
+      /usr/share/soundfonts/default.sf2, or C:\soundfonts\default.sf2 on
+      Windows. Any SF2 or SF3 file loads; fluid.soundfont names it and
       fluid_synth_sfload is the only check
-    source_ref: "src/gui/midi_synth.h:346-384, src/gui/midi_synth.h:462-473, src/dosbox.cpp:3746"
+    source_ref: "src/gui/midi_synth.h:346-352, src/gui/midi_synth.h:366-368, src/gui/midi_synth.h:381-384, src/gui/midi_synth.h:462-473, src/dosbox.cpp:3746-3747"
+
+  - name: "FluidR3_GM.sf2"
+    description: "Fluid R3 GM SoundFont by Frank Wen"
+    required: false
+    note: >
+      second probe when fluid.soundfont is empty:
+      /usr/share/sounds/sf2/FluidR3_GM.sf2, or C:\DOSBox-X\FluidR3_GM.sf2 on
+      Windows. Elsewhere the file loads when fluid.soundfont gives its path.
+      The synth device probes the same paths
+    source_ref: "src/gui/midi_synth.h:353-355, src/gui/midi_synth.h:370-372, src/gui/midi_synth.h:176-178, src/gui/midi_synth.h:193-195"
+
+  - name: "GeneralUser_GS.sf2"
+    description: "GeneralUser GS SoundFont by S. Christian Collins"
+    required: false
+    note: >
+      third probe when fluid.soundfont is empty:
+      /usr/share/sounds/sf2/GeneralUser_GS.sf2, or
+      C:\DOSBox-X\GeneralUser_GS.sf2 on Windows. Elsewhere the file loads
+      when fluid.soundfont gives its path; the setting's help text names this
+      file as its example. The synth device probes the same paths
+    source_ref: "src/gui/midi_synth.h:356-358, src/gui/midi_synth.h:373-375, src/gui/midi_synth.h:179-181, src/gui/midi_synth.h:196-198, src/dosbox.cpp:3747"
 
   # -- PC-98 character generator --
 

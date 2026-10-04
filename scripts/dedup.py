@@ -47,6 +47,9 @@ NODEDUP_DIRS = {
     # byte for byte to the base set. Folding them into the clone map would
     # key gts1.zip twice, once for MAME's set and once for PinMAME's.
     "PinMAME",
+    # BBK dictionary ROMs are addressed by model directory, and the OS ROM
+    # the A4988 folder needs is the one the gam4980 core is given.
+    "BBK",
 }
 
 

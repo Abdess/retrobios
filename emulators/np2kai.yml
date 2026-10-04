@@ -131,19 +131,24 @@ files:
     source_ref: "sound/rhythmc.c:16, sound/fmgen/fmgen_opna.cpp:1435-1445"
 
   # -- IDE BIOS ROM --
-  # Loaded by ideio.c:1913-1931. Tried in order: ide.rom, d8000.rom,
-  # bank3.bin, bios9821.rom. Only loaded when np2cfg.idebios is enabled
-  # and a real main BIOS ROM is present. Falls back to simulated IDE BIOS.
+  # Loaded by ideio_reset (cbus/ideio.c:1944-1981). Tried in order:
+  # ide.rom, d8000.rom, bank3.bin, bios9821.rom. Only opened when
+  # np2cfg.idebios and np2cfg.usebios are both set and IDEBADDR is not
+  # zero (cbus/ideio.c:1928-1930). The bios9821.rom read in bios/bios.c is
+  # commented out (bios/bios.c:473-482).
   - name: "ide.rom"
     path: "np2kai/ide.rom"
-    size: 8192
+    min_size: 8192
+    validation: [size]
     required: false
     hle_fallback: true
     aliases: ["d8000.rom", "bank3.bin", "bios9821.rom"]
     note: >
-      IDE controller BIOS ROM (8 KB). For IDE HDD boot support.
-      Without this, a simulated IDE BIOS is used.
-    source_ref: "cbus/ideio.c:1975-2003"
+      IDE BIOS of a PC-9821, the ROM a real machine maps at D8000h. The
+      first 0x2000 bytes of the first name found are read to
+      idebaddr << 12 and nothing past them; a shorter file is dropped.
+      Without a loaded ROM the emulated IDE BIOS is used.
+    source_ref: "cbus/ideio.c:1928-1930, cbus/ideio.c:1944-1981"
 
   # -- SCSI BIOS ROM --
   # Loaded by scsiio.c:219. 16 KB (0x4000). Falls back to scsibios[] stub.

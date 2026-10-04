@@ -599,6 +599,30 @@ files:
       RIFF INFO name and get their own reverb, chorus and filter presets
     source_ref: "src/midi/fluidsynth.cpp:672-689, src/midi/fluidsynth.cpp:816-883, src/midi/fluidsynth.cpp:1227-1242"
 
+  - name: "GeneralUser-GS.sf2"
+    path: "soundfonts/GeneralUser-GS.sf2"
+    description: "GeneralUser GS SoundFont by S. Christian Collins"
+    required: false
+    aliases: ["GeneralUser_GS.sf2"]
+    note: >
+      opened only when the soundfont setting names it, with or without the
+      .sf2 extension; MIXER /LISTMIDI lists every .sf2 file found in the
+      SoundFont directories. A file whose stem or RIFF INFO name contains
+      GeneralUser is identified as GeneralUser GS, whatever the rest of the
+      name, and gets its own chorus and reverb parameters in auto mode
+    source_ref: "src/midi/fluidsynth.cpp:194-230, src/midi/fluidsynth.cpp:842-848, src/midi/fluidsynth.cpp:430-434, src/midi/fluidsynth.cpp:573-577, src/midi/fluidsynth.cpp:1133-1158"
+
+  - name: "FluidR3_GM.sf2"
+    path: "soundfonts/FluidR3_GM.sf2"
+    description: "Fluid R3 GM SoundFont by Frank Wen"
+    required: false
+    note: >
+      opened only when the soundfont setting names it, with or without the
+      .sf2 extension. A file whose RIFF INFO name contains Fluid R3, or whose
+      stem contains FluidR3, Fluid_R3 or Fluid-R3, is identified as Fluid R3:
+      auto mode then turns the chorus off and keeps the default reverb
+    source_ref: "src/midi/fluidsynth.cpp:194-230, src/midi/fluidsynth.cpp:863-868, src/midi/fluidsynth.cpp:443-446, src/midi/fluidsynth.cpp:567-571, src/midi/fluidsynth.cpp:1133-1158"
+
   # -- PCjr system ROM --
 
   - name: "system.rom"

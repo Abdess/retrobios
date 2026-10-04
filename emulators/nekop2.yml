@@ -20,12 +20,8 @@ systems: [pc-98]
 # Font data falls back to built-in 8x8 tables. Sound ROM falls back
 # to a 9-byte stub. IDE/SCSI/SASI all have built-in stubs.
 #
-# This is NOT the same core as np2kai. Different repo, different
-# feature set (no fmgen, no IDE/PCI/GPIB ROM loading, no itf.rom).
-# BIOS path is np2/, not np2kai/.
-#
-# .info declares firmware_count=0, which is misleading — the core
-# loads multiple BIOS/font/sound files but all have built-in fallbacks.
+# .info declares firmware_count=0; the core loads several BIOS, font and
+# sound files, each with a built-in fallback.
 
 files:
   # -- Main BIOS ROM --
@@ -44,17 +40,27 @@ files:
       is used, as when the file is absent.
     source_ref: "bios/bios.c:232-237, common/strres.c:53"
 
-  # -- PC-9821 extension BIOS --
-  # Loaded in bios/bios.c:262-266 via getbiospath(). 8 KB (0x2000)
-  # at 0xd8000. Only compiled when SUPPORT_PC9821 is defined
-  # (libretro/compiler.h:169).
+  # -- PC-9821 IDE BIOS, the ROM at D8000h --
+  # Opened in bios/bios.c:263-264 via getbiospath(). The first 0x2000
+  # bytes are read to 0xd8000 (bios/bios.c:266), then the word at 0xd8009
+  # is cleared (bios/bios.c:269); the comment above that line reads
+  # "crush the IDE BIOS". Only compiled when SUPPORT_PC9821 is defined
+  # (libretro/compiler.h:169). GETBIOS writes BIOS9821.ROM on a PC-9821
+  # from segment D800h, length 0x2000 (np2tool/GETBIOS.ASM:96-106).
   - name: "bios9821.rom"
     path: "np2/bios9821.rom"
+    description: "PC-9821 IDE BIOS, the 8 KB ROM at D8000h-D9FFFh"
+    min_size: 8192
+    validation: [size]
     required: false
     note: >
-      PC-9821 extension BIOS ROM (8 KB). For PC-9821 mode support.
-      Mapped at 0xd8000.
-    source_ref: "bios/bios.c:262-266, libretro/compiler.h:169"
+      Dump of D8000h-D9FFFh from a PC-9821, 8192 bytes as GETBIOS writes
+      it. The first 0x2000 bytes are read to 0xd8000 and the word at
+      0xd8009 is then zeroed, which leaves the ROM mapped with its IDE
+      BIOS disabled. A file shorter than 0x2000 bytes fails the read test
+      and the word is left alone; nothing past 0x2000 is read. No other
+      file name is tried.
+    source_ref: "bios/bios.c:262-272, np2tool/GETBIOS.ASM:96-106, libretro/compiler.h:169"
 
   # -- Font file --
   # Set in libretro.c:862 as "<system>/np2/font.bmp".
@@ -91,7 +97,7 @@ files:
 
   # -- YM2608 OPNA rhythm samples --
   # Loaded by rhythm_load() in sound/rhythmc.c:60-71 via getbiospath().
-  # No fmgen engine in this core — only lowercase filenames are used.
+  # The core has no fmgen engine; only lowercase filenames are used.
   - name: "2608_bd.wav"
     path: "np2/2608_bd.wav"
     required: false
