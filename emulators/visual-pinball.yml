@@ -3,9 +3,9 @@ type: standalone
 core_classification: game_engine
 source: "https://github.com/vpinball/vpinball"
 upstream: "https://github.com/vpinball/vpinball"
-profiled_date: "2026-09-04"
-source_commit: "d363edb180b8219b4ddd5ec94f87932141efb3b6"
-core_version: "10.8.0"
+profiled_date: "2026-10-04"
+source_commit: "a31565f1589c17afd0502a8c6a690f408ede14b2"
+core_version: "10.8.1"
 display_name: "Visual Pinball X"
 cores:
   - vpinball
@@ -17,24 +17,30 @@ mode: standalone
 notes: |
   Pinball table simulator. The table is the content: .vpx and .vpt files are
   OLE Compound Documents holding the geometry, textures, sounds and a VBScript
-  program, read through POLE on non-Windows platforms. The standalone branch
-  ports the Windows original by embedding Wine's VBScript engine, stubbing COM
-  and ATL from Wine and ReactOS sources, and linking libpinmame, libaltsound,
-  libdmdutil, libdof and BASS in place of the Windows COM servers
-  (standalone/README.md:11-120). ES-DE finds VPinballX_BGFX or VPinballX_GL and
+  program, read through POLE (src/parts/pintable.cpp:1424-1427). Every build
+  other than the Windows editor compiles the shared source set with
+  __STANDALONE__ and links libwinevbs, Wine's VBScript engine with its COM and
+  ATL headers, beside SDL3, SDL3_ttf, FreeImage and hidapi; PinMAME, AltSound,
+  DMDUtil, DOF, FlexDMD, B2S, PUP, Serum, VNI and ScoreView are plugins staged
+  in plugins/ next to the binary (make/CMakeLists_app.txt:525-546,597-603,
+  make/CMakeLists_sources.txt:809-815, make/CMakeLists_plugins.txt:21-25,39-56).
+  ES-DE finds VPinballX_BGFX or VPinballX_GL and
   runs `<binary> -play <rom>`, Batocera builds the standalone tree at
   3ec37c7f9a into /usr/bin/vpinball and runs `VPinballX_GL -PrefPath <dir> -Ini
   <dir>/VPinballX.ini -Play <rom>`, RetroBat drives the Windows build with its
   registered VPinMAME COM server.
 
-  File location now sits in one class. FileLocator holds m_appPath, the
+  File location sits in one class. FileLocator holds m_appPath, the
   read-only installation folder, and m_prefPath, the preferences folder that
   -PrefPath overrides, and it works in one of two layout modes: AppPrefData
   splits static data, settings and table files across the three, AppOnly keeps
   everything in the application folder, which is the legacy Windows 9x
-  behaviour. Which one applies is decided by where the application ini file is
-  found (src/core/FileLocator.h:11-25,57,63-66,
-  src/core/FileLocator.cpp:379-412). Batocera's 001-default-path.patch
+  behaviour. Which one applies is decided by where VPinballX.ini is found: in
+  the preferences folder gives AppPrefData, else beside the executable gives
+  AppOnly, else AppPrefData (src/core/FileLocator.h:11-25,57,63-66,
+  src/core/FileLocator.cpp:195-206). The preferences folder is the SDL
+  preference path for VPinballX with a major.minor subfolder
+  (src/core/FileLocator.cpp:46-53). Batocera's 001-default-path.patch
   redirects the PinMAME root from $HOME/.pinmame to <prefpath>/pinmame.
 
   Table scripts pull their libraries through SearchScript, which walks ten
@@ -42,97 +48,319 @@ notes: |
   user/ and scripts/ beside it, then the installation folder with user/,
   scripts/ and tables/ under it, then the preferences folder with user/ and
   scripts/ under it (src/core/FileLocator.cpp:379-412,
-  src/parts/pintable.cpp:470-480, src/core/main.h:118-119). The
-  scripts/ directory the build ships carries the ~70 .vbs files tables include
+  src/core/ScriptGlobalTable.cpp:346-375). The
+  scripts/ directory the build ships carries the 71 .vbs files tables include
   by name, core.vbs and controller.vbs beside the per-manufacturer machine
-  scripts (WPC.vbs, sam.vbs, s11.vbs, zac.vbs and the rest), and the editor's
-  completion parser no longer shares that search: ParseVPCore opens core.vbs
-  at one place, the Scripts application subfolder, and shows a warning box when
-  it is not there (src/ui/win/codeview.cpp:2171-2179, CMakeLists.txt:948).
-  The same four roots are handed to table scripts as the UserDirectory,
-  TablesDirectory, MusicDirectory and ScriptsDirectory properties, each falling
-  back from the install directory to the table folder to the preferences path
-  (src/parts/pintable.cpp:484-560).
+  scripts (WPC.vbs, sam.vbs, s11.vbs, zac.vbs and the rest), copied from
+  src/scripts (make/CMakeLists_app.txt:619-623). The Windows editor's
+  completion parser asks for core.vbs through the same search without a table,
+  so in the seven installation and preferences locations, and shows a warning
+  box when none holds it (src/ui/win/codeview.cpp:2068-2076,
+  src/core/FileLocator.cpp:238-245).
+  Table scripts also read four directory properties. UserDirectory is the
+  table's user folder, created on demand, TablesDirectory the system documents
+  folder or the installation folder when SDL reports none, MusicDirectory the
+  table's music folder with an optional subfolder, ScriptsDirectory scripts/
+  under the installation folder; each fails when its directory does not exist
+  (src/core/ScriptGlobalTable.cpp:377-418, src/core/FileLocator.cpp:251-259).
+  In AppPrefData mode user/, music/, cache/ and autosave/ sit beside the table;
+  a folder missing there on a read is looked up the AppOnly way, where user/
+  hangs off the installation folder and music/ is tried under the installation
+  folder, the table folder, then the preferences folder
+  (src/core/FileLocator.cpp:267-377).
 
   The rest of the install tree is read the same way and ships with the binary:
-  assets/ holds BallEnv.exr, AODither.webp and EnvMap.webp (src/renderer/Renderer.cpp:204),
-  the bumper and kicker textures (src/parts/bumper.cpp:244,
-  src/parts/kicker.cpp:274), TableSizes.csv, which the live UI reads to
-  guess the glass position of a table that does not declare one
-  (src/core/TableDB.cpp:16), vpx.html for the built-in
-  web server (lib/src/WebServer.cpp:94) and
-  Default_gamecontrollerdb.txt; shader10.8.0/ holds the .glfx and .fxh sources
-  compiled at runtime (src/renderer/Shader.cpp:1419); flexdmd/ holds the bitmap
-  fonts UltraDMD asks for by resource name, the FlexDMD.Resources. prefix being
-  stripped before the lookup (plugins/flexdmd/UltraDMD.cpp:32,
-  plugins/flexdmd/UltraDMD.cpp:20-22).
+  assets/ holds BallEnv.exr, AODither.webp and EnvMap.webp, the first two
+  loaded with no fallback (src/renderer/Renderer.cpp:176-188),
+  the bumper and kicker textures (src/parts/bumper.cpp:148,160,172,186,
+  src/parts/kicker.cpp:198-239), the segment display textures
+  (src/renderer/Renderer.cpp:1493-1510), TableSizes.csv, the table size
+  database (src/core/TableDB.cpp:16), vpinball.png for the window icon
+  (src/renderer/Window.cpp:280), LiberationSans-Regular.ttf, the textbox font
+  used when the table folder holds no <FontName>-<Style>.ttf
+  (src/parts/textbox.cpp:701-722), the editor/ part icons
+  (src/ui/live/editor/EditorChrome.cpp:200) and four starter tables,
+  blankTable.vpx, exampleTable.vpx, lightSeqTable.vpx and strippedTable.vpx:
+  the live editor loads blankTable.vpx when started without a table or when
+  the requested one fails to load, and its New Table menu loads any of the
+  four (src/core/AppCommands.cpp:277-283, src/ui/live/EditorUI.cpp:334-353).
+  OpenGL builds also get shaders-10.8.1/, the .glfx and .fxh sources parsed at
+  runtime (src/core/FileLocator.cpp:223, src/renderer/Shader.cpp:1827-1828,2234-2237,
+  make/CMakeLists_app.txt:625-635); the directory is not copied for the BGFX
+  renderer. Three plugins carry resources of their own: plugins/flexdmd/assets/
+  holds the bitmap fonts UltraDMD asks for by resource name, the
+  FlexDMD.Resources. prefix being stripped before the lookup
+  (plugins/flexdmd/UltraDMD.cpp:20-24,32-34,
+  plugins/flexdmd/resources/AssetManager.cpp:103-109,252-272),
+  plugins/scoreview/layouts/ the default .scv layouts
+  (plugins/scoreview/ScoreViewPlugin.cpp:64-77) and plugins/inspector/assets/
+  the pages of the inspector's web server
+  (plugins/inspector/InspectorPlugin.cpp:618-626).
 
-  Two parts of that tree ship without a reader on this target. The four starter
-  tables in assets/, blankTable.vpx, exampleTable.vpx, lightSeqTable.vpx and
-  strippedTable.vpx, are loaded only by InitBuiltinTable, whose body is one
-  `#ifndef __STANDALONE__` block (src/ui/win/WinEditor.cpp:2240), and
-  docs/Changelog.txt is read by dialogs/AboutDialog.cpp:27-31, which is not in
-  the standalone source list at all.
+  Two parts of that tree ship without a reader on the desktop targets.
+  docs/Changelog.txt is read by the About dialog
+  (src/ui/win/dialogs/AboutDialog.cpp:34), which sits in the Windows source
+  list only (make/CMakeLists_sources.txt:491,540-541,
+  make/CMakeLists_app.txt:78-80), and assets/web/, vpx.html with its scripts
+  and style sheet, is served by the web server that only the iOS and Android
+  library build compiles (lib/src/WebServer.cpp:92-99,
+  make/CMakeLists_sources.txt:817-823, make/CMakeLists_app.txt:669).
 
   PinMAME is where the emulation happens. Tables that recreate a real solid
   state machine hand a ROM name to the controller, which resolves its root as
-  the pinmame folder beside the table, else the PinMAMEPath setting, else
-  $HOME/.pinmame (plugins/pinmame/PinMAMEPlugin.cpp:326-356). libpinmame then hangs roms,
+  the pinmame folder beside the table when that folder holds roms/, else the
+  PinMAMEPath setting, else $HOME/.pinmame on Linux and macOS
+  (plugins/pinmame/PinMAMEPlugin.cpp:214,322-367). libpinmame then hangs roms,
   nvram, samples, cfg, hi, inp, memcard and sta off that root
-  (pinmame src/libpinmame/libpinmame.cpp:816-823). Every ROM set is a game, one
-  zip per machine; PinMAME declares no BIOS root set anywhere in its tree, and
-  carries neither GAME_IS_BIOS_ROOT nor ROM_SYSTEM_BIOS, so nothing in the ROM
-  path is shared between machines.
+  (pinmame src/libpinmame/libpinmame.cpp:1080-1087) and reads alias.txt from
+  it, a list that renames a requested game before the driver lookup
+  (pinmame src/libpinmame/libpinmame.cpp:304-337,343-346). A memmaps folder,
+  beside roms/ in the table's pinmame folder or under the PinMAMEPath setting,
+  is scanned for an index.json that maps the ROM name to an NVRAM memory map,
+  loaded with the platforms/<platform>.json it names
+  (plugins/pinmame/PinMAMEPlugin.cpp:339,346-347,
+  plugins/pinmame/Controller.cpp:183-241).
 
-  Three shared data files sit outside that per-machine content and are listed
-  below. Two more that the MAME lineage would suggest are unreachable here. The
+  A ROM set is one zip per machine, and every ROM is looked up in the game's
+  zip first, then up its parent chain (pinmame src/common.c:1343-1348).
+  PinMAME carries neither GAME_IS_BIOS_ROOT nor ROM_SYSTEM_BIOS; what it has
+  are nine container sets flagged NOT_A_DRIVER, gts1, gts1s, gts80, gts80s,
+  gts80a, gts80as, allied, gp_110 and recel, each the parent of its family's
+  games and holding the family's system ROMs. A game declares its system ROMs
+  in its own set as well, so they are read from the game zip when it carries
+  them and from the container zip otherwise; the Allied Leisure and Game Plan
+  110 games declare nothing else. The nine are listed below.
+
+  Two shared data files sit outside that ROM content and are listed below as
+  well. Two more that the MAME lineage would suggest are unreachable here. The
   mechanical sample set named by pinmame_sample_names, "*pinmame" followed by
   eighteen .wav members (pinmame src/wpc/wpcsam.c:31-57), is dead twice over:
   readsamples returns before opening anything unless options.use_samples is set
   (pinmame src/common.c:271), the two files that register that option live in
   src/windows/config.c and src/unix/sound.c and neither is in the libpinmame
   source list, and PinmameSetConfig zeroes the whole options struct
-  (pinmame src/libpinmame/libpinmame.cpp:807); independently, SAMPLESINTERFACE
+  (pinmame src/libpinmame/libpinmame.cpp:1071); independently, SAMPLESINTERFACE
   is defined in the PinMAME tree (pinmame src/wpc/wpcsam.h:23) and no driver
   references it. history.dat and mameinfo.dat (pinmame src/datafile.c:619-623,
   649-653) are read only by displayhistory, a page of the MAME on-screen menu
   (pinmame src/usrintrf.c:2846-2851), and by the listing path in
   pinmame src/info.c:820 which libpinmame never calls; VPX passes NULL for
   fn_IsKeyPressed, the thirteenth member of PinmameConfig
-  (plugins/pinmame/Controller.cpp:73, pinmame src/libpinmame/libpinmame.h:418-433),
+  (plugins/pinmame/PinMAMEPlugin.cpp:304-320, pinmame src/libpinmame/libpinmame.h:422-438),
   so osd_is_key_pressed always answers 0
-  (pinmame src/libpinmame/libpinmame.cpp:355-361) and the menu cannot be opened.
+  (pinmame src/libpinmame/libpinmame.cpp:519-525) and the menu cannot be opened.
 
-  The pinmame observations were read at f102dc6cce7eb51e64427dd0b52bed37dbd2adea.
+  The pinmame observations were read at 268854a18be9ad334569b5654345c06a7d0ef521,
+  the revision the build scripts fetch (platforms/config.sh:11).
 
 files:
+
+  - name: gts1.zip
+    path: "pinmame/roms/gts1.zip"
+    system: vpinball
+    category: bios_zip
+    required: false
+    description: "Gottlieb System 1 system ROMs"
+    source_ref: "pinmame src/wpc/gts1games.c:15-22,33-34, pinmame src/wpc/gts1.h:229-233, pinmame src/common.c:1343-1348, pinmame src/fileio.c:953-966"
+    note: >-
+      Container set, parent of every System 1 game. The path is the layout
+      beside a table; roms/ sits the same way under the PinMAMEPath setting or
+      $HOME/.pinmame. Each game declares the same two ROMs and reads them from
+      its own zip first, so this archive is only reached when the game zip
+      lacks them. A member is matched by name, then by checksum.
+    contents:
+      - name: A1752CF.bin
+        size: 2048
+        crc32: "614a3bd9"
+        sha1: "febca18fb6f96037ca82e515dd161dfcb0e4c776"
+      - name: A1753CE.bin
+        size: 2048
+        crc32: "4cd312dd"
+        sha1: "31245daa9972ef8652caee69986585bb8239e86e"
+
+  - name: gts1s.zip
+    path: "pinmame/roms/gts1s.zip"
+    system: vpinball
+    category: bios_zip
+    required: false
+    description: "Gottlieb System 1 with sound board, system ROMs"
+    source_ref: "pinmame src/wpc/gts1games.c:24-31,36-37, pinmame src/wpc/gts1.h:229-233"
+    note: "Container set, clone of gts1 with the same two ROMs, so gts1.zip answers for it."
+    contents:
+      - name: A1752CF.bin
+        size: 2048
+        crc32: "614a3bd9"
+        sha1: "febca18fb6f96037ca82e515dd161dfcb0e4c776"
+      - name: A1753CE.bin
+        size: 2048
+        crc32: "4cd312dd"
+        sha1: "31245daa9972ef8652caee69986585bb8239e86e"
+
+  - name: gts80.zip
+    path: "pinmame/roms/gts80.zip"
+    system: vpinball
+    category: bios_zip
+    required: false
+    description: "Gottlieb System 80 with speech board, system ROMs"
+    source_ref: "pinmame src/wpc/gts80games.c:48-60,62-74,90-91"
+    note: >-
+      Container set, parent of the System 80 games, which declare the same two
+      ROMs themselves. The 7-digit conversions declare u2g807dc.bin and
+      u3g807dc.bin in their place, which this set does not hold.
+    contents:
+      - name: u2_80.bin
+        size: 4096
+        crc32: "4f0bc7b1"
+        sha1: "612cbacdca5cfa6ad23940796df3b7c385be79fe"
+      - name: u3_80.bin
+        size: 4096
+        crc32: "1e69f9d0"
+        sha1: "ad738cac2555830257b531e5e533b15362f624b9"
+
+  - name: gts80s.zip
+    path: "pinmame/roms/gts80s.zip"
+    system: vpinball
+    category: bios_zip
+    required: false
+    description: "Gottlieb System 80, system ROMs"
+    source_ref: "pinmame src/wpc/gts80games.c:48-60,92-93"
+    note: "Container set, clone of gts80 with the same two ROMs, so gts80.zip answers for it."
+    contents:
+      - name: u2_80.bin
+        size: 4096
+        crc32: "4f0bc7b1"
+        sha1: "612cbacdca5cfa6ad23940796df3b7c385be79fe"
+      - name: u3_80.bin
+        size: 4096
+        crc32: "1e69f9d0"
+        sha1: "ad738cac2555830257b531e5e533b15362f624b9"
+
+  - name: gts80a.zip
+    path: "pinmame/roms/gts80a.zip"
+    system: vpinball
+    category: bios_zip
+    required: false
+    description: "Gottlieb System 80A with speech board, system ROMs"
+    source_ref: "pinmame src/wpc/gts80games.c:76-88,95-96"
+    note: "Container set, parent of the System 80A games, which declare the same two ROMs themselves."
+    contents:
+      - name: u2_80a.bin
+        size: 4096
+        crc32: "241de1d4"
+        sha1: "9d5942704cbdec6565d6335e33e9f7e4c60a41ac"
+      - name: u3_80a.bin
+        size: 4096
+        crc32: "2d77ccdc"
+        sha1: "47241ccd365e8d74d5aa5b775acf6445cc95b8a8"
+
+  - name: gts80as.zip
+    path: "pinmame/roms/gts80as.zip"
+    system: vpinball
+    category: bios_zip
+    required: false
+    description: "Gottlieb System 80A, system ROMs"
+    source_ref: "pinmame src/wpc/gts80games.c:76-88,97-98"
+    note: "Container set, clone of gts80a with the same two ROMs, so gts80a.zip answers for it."
+    contents:
+      - name: u2_80a.bin
+        size: 4096
+        crc32: "241de1d4"
+        sha1: "9d5942704cbdec6565d6335e33e9f7e4c60a41ac"
+      - name: u3_80a.bin
+        size: 4096
+        crc32: "2d77ccdc"
+        sha1: "47241ccd365e8d74d5aa5b775acf6445cc95b8a8"
+
+  - name: allied.zip
+    path: "pinmame/roms/allied.zip"
+    system: vpinball
+    category: bios_zip
+    required: false
+    description: "Allied Leisure system ROMs"
+    source_ref: "pinmame src/wpc/allied.c:872-879"
+    note: >-
+      Container set, parent of the Allied Leisure games. Those games declare
+      these three ROMs and no other, so each one runs from its own zip or from
+      this one.
+    contents:
+      - name: alliedu5.bin
+        size: 1024
+        crc32: "e4fb64fb"
+        sha1: "a3d9de7cbfb42180a860e0bbbeaeba96d8bd1e20"
+      - name: alliedu6.bin
+        size: 1024
+        crc32: "dca980dd"
+        sha1: "3817d75413854d889fc1ce4fd6a51d820d1e0534"
+      - name: alliedu3.bin
+        size: 1024
+        crc32: "13f42789"
+        sha1: "baa0f73fda08a3c5d6f1423fb329e4febb07ef97"
+
+  - name: gp_110.zip
+    path: "pinmame/roms/gp_110.zip"
+    system: vpinball
+    category: bios_zip
+    required: false
+    description: "Game Plan Model 110 system ROMs"
+    source_ref: "pinmame src/wpc/gpgames.c:68-74, pinmame src/wpc/gp.h:201-205"
+    note: >-
+      Container set, parent of the Game Plan cocktail games. Those games declare
+      these two ROMs and no other, so each one runs from its own zip or from
+      this one.
+    contents:
+      - name: a-110.u12
+        size: 2048
+        crc32: "ed0d518b"
+        sha1: "8f3ca8792ad907c660d9149a1aa3a3528c7573e3"
+      - name: b1-110.u13
+        size: 2048
+        crc32: "a223f2e8"
+        sha1: "767e15e19e11399935c890c1d1034dccf1ad7f92"
+
+  - name: recel.zip
+    path: "pinmame/roms/recel.zip"
+    system: vpinball
+    category: bios_zip
+    required: false
+    description: "Recel System III shared program"
+    source_ref: "pinmame src/wpc/recelgames.c:70-73, pinmame src/wpc/recel.h:119-130"
+    note: "Container set, parent of the Recel games, which declare the same two ROMs beside their own game PROM."
+    contents:
+      - name: a2361.b1
+        size: 2048
+        crc32: "d0c4695d"
+        sha1: "4846adb3f6c292626840ba5255ffc5e788a69301"
+      - name: a2362.b2
+        size: 2048
+        crc32: "39a70611"
+        sha1: "8545e168a5f256150bcff12d1e6d8efffd08c3cd"
 
   - name: hiscore.dat
     system: vpinball
     category: game_data
     required: false
     description: "MAME high score memory map database, read once per machine start"
-    source_ref: "pinmame src/hiscore.c:18,223-230, pinmame src/cpuexec.c:332-334,393,1755"
+    source_ref: "pinmame src/hiscore.c:18,223-230, pinmame src/cpuexec.c:332-334,393,1755, src/core/player.cpp:457-459"
     note: >-
       hs_open is called unconditionally at the top of cpu_run for every PinMAME
       machine, and the whole body sits behind `if (f)`, so an absent file is a
       no-op. It resolves to a bare filename against the working directory, which
-      is the table's own folder: libpinmame sets paths for eight file types and
-      FILETYPE_HIGHSCORE_DB is not among them, and the option table that would
-      supply a default is linked only by the Windows COM build
-      (pinmame src/libpinmame/libpinmame.cpp:816-823,
-      pinmame src/libpinmame/fileio.c:140, pinmame src/win32com/VPinMAMEConfig.cpp:127).
+      the player sets to the table's own folder: libpinmame sets paths for eight
+      file types and FILETYPE_HIGHSCORE_DB is not among them, and the option
+      table that would supply a default is linked only by the Windows COM build
+      (pinmame src/libpinmame/libpinmame.cpp:1080-1087,
+      pinmame src/libpinmame/fileio.c:141, pinmame src/win32com/VPinMAMEConfig.cpp:127).
 
   - name: cheat.dat
     system: vpinball
     category: game_data
     required: false
-    description: "MAME cheat database, read when the per-ROM ini enables cheats"
-    source_ref: "pinmame src/cheat.c:8434,8602-8614, pinmame src/mame.c:578-583, plugins/pinmame/Controller.cpp:156"
+    description: "MAME cheat database, read when the PinMAME plugin's Cheat setting is on"
+    source_ref: "pinmame src/cheat.c:8434,8602-8614, pinmame src/mame.c:581-587, pinmame src/libpinmame/libpinmame.cpp:1141-1144, plugins/pinmame/PinMAMEPlugin.cpp:215,373, plugins/pinmame/Controller.cpp:162"
     note: >-
-      Off by default: PinmameSetConfig zeroes options, and VPX only turns it on
-      from the `cheat` key of <pinmame root>/ini/<romname>.ini, which it also
-      rewrites on every run. With it on, InitCheat loads the database and an
+      Off by default: PinmameSetConfig zeroes options, and the plugin's Cheat
+      setting, false unless the user changes it, is handed to PinmameSetCheat
+      before each run. With it on, InitCheat loads the database and an
       absent file leaves the menu showing "cheat database not found"
       (pinmame src/cheat.c:2463). Same bare-filename resolution as hiscore.dat.
 
@@ -142,62 +370,85 @@ analysis:
       Copied into the build output next to the executable and installed as one
       unit by every distribution, so they arrive with the emulator rather than
       being sourced separately.
-    source_ref: "CMakeLists.txt:948"
+    source_ref: "make/CMakeLists_app.txt:619-623"
     entries:
       - what: "scripts/, the .vbs library tables include"
-        source_ref: "src/parts/pintable.cpp:470-480, src/core/main.h:118-119, src/core/FileLocator.cpp:379-412, src/ui/win/codeview.cpp:2171-2179"
-      - what: "assets/, textures, TableSizes.csv, vpx.html, the two defaults"
-        source_ref: "src/renderer/Renderer.cpp:204, src/parts/bumper.cpp:244, src/parts/kicker.cpp:274, src/core/TableDB.cpp:16, lib/src/WebServer.cpp:94,100"
-      - what: "shader10.8.0/, .glfx and .fxh compiled at runtime"
-        source_ref: "src/renderer/Shader.cpp:1419"
-      - what: "flexdmd/, the bitmap fonts UltraDMD names as FlexDMD.Resources.*"
-        source_ref: "plugins/flexdmd/UltraDMD.cpp:32, plugins/flexdmd/UltraDMD.cpp:20-22"
-      - what: "user/ and tables/, the two roots exposed to table scripts as directory properties"
-        source_ref: "src/parts/pintable.cpp:484-521"
+        source_ref: "src/core/FileLocator.cpp:379-412, src/core/ScriptGlobalTable.cpp:346-375, src/ui/win/codeview.cpp:2068-2076"
+      - what: "assets/, textures, segment display maps, TableSizes.csv, the window icon, the fallback font, the editor icons"
+        source_ref: "src/renderer/Renderer.cpp:176-188,1493-1510, src/parts/bumper.cpp:148,160,172,186, src/parts/kicker.cpp:198-239, src/core/TableDB.cpp:16, src/renderer/Window.cpp:280, src/parts/textbox.cpp:719-720, src/ui/live/editor/EditorChrome.cpp:200"
+      - what: "assets/blankTable.vpx, exampleTable.vpx, lightSeqTable.vpx, strippedTable.vpx"
+        source_ref: "src/core/AppCommands.cpp:277-283, src/ui/live/EditorUI.cpp:334-353"
+        note: "The live editor's default table and its four New Table templates."
+      - what: "shaders-10.8.1/, .glfx and .fxh parsed at runtime by the OpenGL renderer"
+        source_ref: "src/core/FileLocator.cpp:223, src/renderer/Shader.cpp:1827-1828,2234-2237, make/CMakeLists_app.txt:625-635"
+      - what: "plugins/flexdmd/assets/, the bitmap fonts UltraDMD names as FlexDMD.Resources.*"
+        source_ref: "plugins/flexdmd/UltraDMD.cpp:20-24,32-34, plugins/flexdmd/resources/AssetManager.cpp:103-109,252-272, make/CMakeLists_plugin_FlexDMD.txt:179-182"
+      - what: "plugins/scoreview/layouts/, the default score view layouts"
+        source_ref: "plugins/scoreview/ScoreViewPlugin.cpp:64-77, make/CMakeLists_plugin_ScoreView.txt:92"
+      - what: "plugins/inspector/assets/, the inspector web pages"
+        source_ref: "plugins/inspector/InspectorPlugin.cpp:618-626, make/CMakeLists_plugin_Inspector.txt:96"
 
   shipped_without_a_reader:
-    note: "Copied into the build output but unreachable in the standalone binary"
+    note: "Copied into the build output but unreachable in the desktop standalone binary"
     entries:
-      - what: "assets/blankTable.vpx, exampleTable.vpx, lightSeqTable.vpx, strippedTable.vpx"
-        source_ref: "src/ui/win/WinEditor.cpp:2240"
-        note: "InitBuiltinTable is one #ifndef __STANDALONE__ block; the editor's New Table entries are the only callers."
       - what: "docs/Changelog.txt"
-        source_ref: "dialogs/AboutDialog.cpp:27-31, CMakeLists.txt:949"
-        note: "The About dialog is not in the standalone source list."
+        source_ref: "src/ui/win/dialogs/AboutDialog.cpp:34, make/CMakeLists_sources.txt:540-541, make/CMakeLists_app.txt:622"
+        note: "The About dialog is in the Windows editor source list only."
+      - what: "assets/web/, vpx.html and the files it pulls"
+        source_ref: "lib/src/WebServer.cpp:92-99, make/CMakeLists_sources.txt:817-823"
+        note: "The web server is compiled into the iOS and Android library build only."
 
   user_supplied_paths:
-    note: "Per table, keyed on the table folder or the ROM name, with no fixed filename"
+    note: "Per table, keyed on the table folder or the ROM name"
     entries:
       - what: "PinMAME ROM sets, <pinmame root>/roms/<romname>.zip"
-        source_ref: "plugins/pinmame/PinMAMEPlugin.cpp:326-356, pinmame src/libpinmame/libpinmame.cpp:816"
+        source_ref: "plugins/pinmame/PinMAMEPlugin.cpp:322-367, pinmame src/libpinmame/libpinmame.cpp:1080"
         note: >-
           One zip per machine. The root is the pinmame folder beside the table
-          when present, else the PinMAMEPath setting, else $HOME/.pinmame;
-          Batocera patches that last fallback to <prefpath>/pinmame.
-      - what: "backglass, <table basename>.directb2s"
-        source_ref: "plugins/b2slegacy/forms/FormBackglass.cpp:370"
-        note: "Version-checked against the B2S server on load; absence only warns."
-      - what: "Serum colorizations, the folder named by the SerumPath setting"
-        source_ref: "plugins/serum/serum.cpp:60"
-        note: "Handed to libdmdutil as a path when the AltColor setting is on and the directory exists."
-      - what: "alternative sound packages, under the PinMAME root by ROM name"
-        source_ref: "plugins/altsound/AltSoundPlugin.cpp:189-193"
-      - what: "PUP video packs, <table folder>/pupvideos"
-        source_ref: "plugins/pup/PUPManager.cpp:125, plugins/pup/PUPPlugin.cpp:288"
-      - what: "table music, music/ beside the install, the table or the preferences path"
-        source_ref: "src/audio/AudioPlayer.cpp:75-77, src/parts/pintable.cpp:524-545"
-      - what: "table sidecars, the .vbs script override and the per-table .ini"
-        source_ref: "src/parts/pintable.cpp:704,794"
+          when it holds roms/, else the PinMAMEPath setting, else $HOME/.pinmame
+          on Linux and macOS; Batocera patches that last fallback to
+          <prefpath>/pinmame.
+      - what: "PinMAME game aliases, <pinmame root>/alias.txt"
+        source_ref: "pinmame src/libpinmame/libpinmame.cpp:304-337,343-346"
+        note: "Optional. Each line pairs a requested game name with the ROM set loaded in its place."
+      - what: "NVRAM memory maps, memmaps/index.json and the map files it names"
+        source_ref: "plugins/pinmame/PinMAMEPlugin.cpp:339,346-347, plugins/pinmame/Controller.cpp:183-241"
+        note: >-
+          Optional. index.json maps the ROM name to a map file, whose
+          _metadata.platform names the platforms/<platform>.json loaded with it.
+      - what: "backglass, <table basename>.directb2s, else <table folder name>.directb2s"
+        source_ref: "plugins/b2s/B2SServer.cpp:33-45, plugins/b2slegacy/forms/FormBackglass.cpp:370-378,411-423"
+        note: "The legacy plugin checks the file version against the B2S server version on load."
+      - what: "Serum colorizations, <table folder>/serum/<rom>/<rom>.cROMc or .cRZ, else the SerumPath setting"
+        source_ref: "plugins/serum/serum.cpp:49,561-602"
+        note: "A namespace folder may sit above the ROM folder; PinMAME games are also looked up in <table folder>/pinmame/altcolor."
+      - what: "VNI colorizations, <table folder>/vni/<rom>/<rom>.pal with an optional .vni, else the VniPath setting"
+        source_ref: "plugins/vni/vni.cpp:39,326-376"
+        note: "pin2dmd.pal and pin2dmd.vni are accepted in the same folder; PinMAME games are also looked up in <table folder>/pinmame/altcolor."
+      - what: "alternative sound packages, <table folder>/altsound/<rom>, else <table folder>/pinmame/altsound/<rom>, else the plugin's Folder setting"
+        source_ref: "plugins/altsound/AltSoundPlugin.cpp:28,110-143"
+      - what: "PUP video packs, <table folder>/pupvideos/<rom>, else pupvideos/ under the PUPFolder setting"
+        source_ref: "plugins/pup/PUPManager.cpp:129-157, plugins/pup/PUPPlugin.cpp:64,292-294"
+      - what: "score view layout, <table basename>.scv, else <table folder name>.scv, else the LayoutFolder setting"
+        source_ref: "plugins/scoreview/ScoreViewPlugin.cpp:23,46-62"
+      - what: "table music, music/ beside the table"
+        source_ref: "src/core/ScriptGlobalTable.cpp:116-130, src/core/FileLocator.cpp:267-377"
+        note: "In the legacy layout, music/ under the installation folder, then the table folder, then the preferences folder."
+      - what: "textbox fonts, <table folder>/<FontName>-<Style>.ttf"
+        source_ref: "src/parts/textbox.cpp:701-722"
+      - what: "table sidecars, the .vbs script override, the per-table .ini and the legacy .pov"
+        source_ref: "src/parts/pintable.cpp:1322-1328,1380-1396, src/parts/pintable.h:562-589"
 
   generated_files:
     - what: "VPinballX.ini, the settings file"
-      source_ref: "lib/src/VPinballLib.cpp:192"
+      source_ref: "src/core/VPApp.cpp:270-284, src/core/AppCommands.cpp:533-539"
       note: >-
-        Created on first run under the preferences path, or read from beside the
-        binary when one is there. Batocera seeds it from
-        assets/Default_VPinballX.ini and rewrites it before every launch.
-    - what: "VPReg.ini, per-table settings; vpinball.log"
-      source_ref: "src/utils/Logger.cpp:167"
-    - what: "PinMAME state: nvram/, cfg/, hi/, inp/, memcard/, sta/ and ini/"
-      source_ref: "pinmame src/libpinmame/libpinmame.cpp:817-823, plugins/pinmame/Controller.cpp:166-171"
-      note: "The ini directory is created when missing; the others are written by PinMAME as the machine runs."
+        Looked up in the preferences folder, then beside the binary; when
+        neither holds one the preferences path is kept. -Ini names another file.
+        Batocera seeds it from the assets/Default_VPinballX.ini its pinned tree
+        carries and rewrites it before every launch.
+    - what: "VPReg.ini, values saved by table scripts in the table's user folder; vpinball.log in the preferences folder"
+      source_ref: "src/core/ScriptGlobalTable.cpp:521-551, src/utils/Logger.cpp:164-165"
+    - what: "PinMAME state: nvram/, cfg/, hi/, inp/, memcard/ and sta/"
+      source_ref: "pinmame src/libpinmame/libpinmame.cpp:1081,1083-1087"
+      note: "Written by PinMAME as the machine runs."

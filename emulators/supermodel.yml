@@ -7,9 +7,9 @@ source:
 upstream: "https://github.com/trzy/Supermodel"
 profiled_date: "2026-09-17"
 source_commit:
-  standalone: "24d2ffcfc7f14229337f05f4920fe26b56633d9d"
-  libretro: "9f0a51daf6cef6ec2a304538f18c6dbb4c4b9da2"
-upstream_commit: "24d2ffcfc7f14229337f05f4920fe26b56633d9d"
+  standalone: "8b4de239bf3e0fd921f4383edcd3c21c2e62067b"
+  libretro: "84bc106b45b279bf868a53b9232897c8dc10ca17"
+upstream_commit: "8b4de239bf3e0fd921f4383edcd3c21c2e62067b"
 core_version:
   standalone: "0.3a-WIP"
   libretro: "v0.3a-libretro"
@@ -51,7 +51,7 @@ notes: |
   and Saves/<game>.st<slot> are written by the emulator itself.
   ref: Src/OSD/Windows/FileSystemPath.cpp:28-49, Src/OSD/OSX/FileSystemPath.cpp:28-48,
        Src/OSD/Unix/FileSystemPath.cpp:51-157, Src/OSD/SDL/Main.cpp:1394-1413,
-       Src/OSD/SDL/Main.cpp:1451, Src/OSD/SDL/Main.cpp:2239
+       Src/OSD/SDL/Main.cpp:1445, Src/OSD/SDL/Main.cpp:2233
 
   Libretro: retro_init joins "supermodel" to the frontend system directory and
   the core creates that directory through the VFS. Supermodel.ini, Games.xml and
@@ -63,7 +63,7 @@ notes: |
   afterwards. Music.xml has no embedded copy.
   ref: Src/OSD/libretro/libretro.cpp:855-863, Src/OSD/libretro/libretro.cpp:889-894,
        Src/OSD/libretro/libretro.cpp:1113, Src/OSD/libretro/LibretroWrapper.cpp:166-206,
-       Src/OSD/libretro/LibretroWrapper.cpp:208-228, Makefile:638-647, Makefile:653-655
+       Src/OSD/libretro/LibretroWrapper.cpp:208-228, Makefile:640-653, Makefile:659-661
 
   Libretro NVRAM is the frontend .srm through the memory API. On the first frame
   a <game>.nv written by the standalone build is imported from the save directory
@@ -94,7 +94,7 @@ files:
     md5: "0c7cfc0cba2f2cd674d94e093936f9f8"
     description: "ROM set definitions"
     note: "Parsed at startup into the game database. Every ROM region, file name and CRC32 the loader matches against comes from here, so an unreadable file leaves no set to resolve and the launch returns before the emulator is built. The path is a config key, so -game-xml-file moves it. Nothing about the file is verified beyond parsing; the hash is that of the copy the pinned revision ships."
-    source_ref: "Src/OSD/SDL/Main.cpp:117, Src/OSD/SDL/Main.cpp:1506, Src/OSD/SDL/Main.cpp:1963, Src/OSD/SDL/Main.cpp:2326-2336, Src/GameLoader.cpp:549-559, Src/GameLoader.cpp:1014-1017"
+    source_ref: "Src/OSD/SDL/Main.cpp:117, Src/OSD/SDL/Main.cpp:1500, Src/OSD/SDL/Main.cpp:1957, Src/OSD/SDL/Main.cpp:2319-2329, Src/GameLoader.cpp:549-559, Src/GameLoader.cpp:1014-1017"
 
   - name: Games.xml
     path: "supermodel/Games.xml"
@@ -111,7 +111,7 @@ files:
       - "29fd5bc40cea222e040c1a1cfd60ea2e"
     description: "ROM set definitions, libretro copy"
     note: "Read through the VFS from {system}/supermodel/Games.xml, or Config/Games.xml under it, and parsed from memory. When the read yields nothing the bytes compiled in from Config/Games.xml are parsed instead, so the core identifies every set without a file on disk; a file that is present takes precedence. The second hash is the embedded array, which predates the indentation cleanup of the repository copy by one tab."
-    source_ref: "Src/OSD/libretro/LibretroWrapper.cpp:187-206, Src/OSD/libretro/LibretroWrapper.cpp:221-222, Src/OSD/libretro/LibretroWrapper.cpp:822, Src/OSD/libretro/LibretroWrapper.cpp:834-859, Src/GameLoader.cpp:1019-1030, Makefile:645-647"
+    source_ref: "Src/OSD/libretro/LibretroWrapper.cpp:187-206, Src/OSD/libretro/LibretroWrapper.cpp:221-222, Src/OSD/libretro/LibretroWrapper.cpp:822, Src/OSD/libretro/LibretroWrapper.cpp:834-859, Src/GameLoader.cpp:1019-1030, Makefile:651-653"
 
   - name: Supermodel.ini
     path: "supermodel/Supermodel.ini"
@@ -124,7 +124,7 @@ files:
     md5: "06533608174992f6ea180ae190011778"
     description: "Configuration override"
     note: "Read from {system}/supermodel/Supermodel.ini, or Config/Supermodel.ini under it, when present; a file that fails to parse aborts the load. Core options are applied over it afterwards, so it only reaches keys the options do not set and per-game sections. Extracted from the embedded copy when absent."
-    source_ref: "Src/OSD/libretro/LibretroWrapper.cpp:187-206, Src/OSD/libretro/LibretroWrapper.cpp:219-220, Src/OSD/libretro/LibretroWrapper.cpp:812-817, Src/OSD/libretro/LibretroWrapper.cpp:858, Src/OSD/libretro/LibretroWrapper.cpp:865-866, Makefile:653-655"
+    source_ref: "Src/OSD/libretro/LibretroWrapper.cpp:187-206, Src/OSD/libretro/LibretroWrapper.cpp:219-220, Src/OSD/libretro/LibretroWrapper.cpp:812-817, Src/OSD/libretro/LibretroWrapper.cpp:858, Src/OSD/libretro/LibretroWrapper.cpp:865-866, Makefile:659-661"
 
   - name: p1crosshair.bmp
     standalone_path: "Assets/p1crosshair.bmp"
@@ -136,7 +136,7 @@ files:
     bundled: true
     description: "Player 1 light gun crosshair texture"
     note: "Both bitmaps are read on every launch whatever CrosshairStyle holds, since the load runs before the style decides anything, and a null surface aborts startup ahead of the Model 3 object. 32 bit BMP with alpha, sides a multiple of 2. The libretro build opens the same two files from the Assets directory of the standalone layout, outside the frontend directories, but forces the vector style and never draws them, and its repository does not ship them."
-    source_ref: "Src/OSD/SDL/Crosshair.cpp:34-51, Src/OSD/SDL/Main.cpp:2379-2385, Assets/DIR.txt, Src/OSD/libretro/libretroCrosshair.cpp:36-60, Src/OSD/libretro/LibretroWrapper.cpp:465-471, Src/OSD/libretro/LibretroConfigProvider.h:361"
+    source_ref: "Src/OSD/SDL/Crosshair.cpp:34-51, Src/OSD/SDL/Main.cpp:2372-2378, Assets/DIR.txt, Src/OSD/libretro/libretroCrosshair.cpp:36-60, Src/OSD/libretro/LibretroWrapper.cpp:465-471, Src/OSD/libretro/LibretroConfigProvider.h:361"
 
   - name: p2crosshair.bmp
     standalone_path: "Assets/p2crosshair.bmp"
@@ -148,7 +148,7 @@ files:
     bundled: true
     description: "Player 2 light gun crosshair texture"
     note: "Read in the same call as the player 1 bitmap and equally fatal when it fails to load."
-    source_ref: "Src/OSD/SDL/Crosshair.cpp:35, 49-51, Src/OSD/SDL/Main.cpp:2379-2385, Src/OSD/libretro/libretroCrosshair.cpp:39, 55-58"
+    source_ref: "Src/OSD/SDL/Crosshair.cpp:35, 49-51, Src/OSD/SDL/Main.cpp:2372-2378, Src/OSD/libretro/libretroCrosshair.cpp:39, 55-58"
 
   - name: Music.xml
     path: "supermodel/Music.xml"

@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/ruffle-rs/ruffle"
 upstream: "https://github.com/ruffle-rs/ruffle"
 profiled_date: "2026-09-17"
-source_commit: "74ade97342205ac55d264f2ceb1e642573a21d48"
+source_commit: "ed55e72394d21d7784b0a914fd4525608c6a5661"
 core_version: "0.6.0"
 display_name: "Adobe Flash (Ruffle)"
 cores:
@@ -24,7 +24,7 @@ notes: |
   vulkan --config /var/data/ruffle --save-directory <saves>/ruffle <rom>`. The
   ActionScript class library is compiled by build_playerglobal into
   playerglobal_avm1.swf and playerglobal_avm2.swf and linked into the binary
-  from OUT_DIR (core/src/avm1/globals.rs:89, core/src/avm2/globals.rs:548), so
+  from OUT_DIR (core/src/avm1/globals.rs:88, core/src/avm2/globals.rs:549), so
   startup reads nothing. Locale texts, wgsl shaders, the window icon and the
   OpenH264 license are embedded the same way (desktop/src/gui/locale.rs:7-12,
   desktop/src/app.rs:464, render/wgpu/src/shaders.rs:30-95,
@@ -33,7 +33,7 @@ notes: |
 
   H.264 video is the one external dependency. external_video is a default
   feature and pulls ruffle_video_external with openh264
-  (desktop/Cargo.toml:26,83,90), and enable_openh264 defaults to true
+  (desktop/Cargo.toml:27,84,92), and enable_openh264 defaults to true
   (desktop/src/preferences.rs:291,316). OpenH264Codec::load first dlopens the
   system sonames libopenh264.so.7, libopenh264.so.2.4.1 and libopenh264.so on
   Linux, then falls back to <cache>/ruffle/video/ and fetches the Cisco binary
@@ -45,7 +45,7 @@ notes: |
   (video/external/src/decoder/openh264.rs:135-146), and WelsGetCodecVersion must
   answer 2.4.1 exactly (video/external/src/decoder/openh264.rs:46,153-166). The
   cache root comes from dirs::cache_dir(), ~/.cache/ruffle by default, and
-  --cache-directory moves it (desktop/src/cli.rs:29-33,140). Without the library
+  --cache-directory moves it (desktop/src/cli.rs:31-35,148). Without the library
   the player still starts: ExternalVideoBackend wraps SoftwareVideoBackend, so
   H.263, Screen Video and VP6 keep decoding and only H.264 streams fail
   (video/external/src/backend.rs:41,51-69,73-80).
@@ -59,7 +59,7 @@ notes: |
   to freetype, which routes Linux builds through FreetypeFontRenderer instead;
   the freetype default feature only compiles that branch, the preference
   selects it (desktop/src/backends/ui.rs:190-192,443-487,489-519,
-  desktop/src/preferences/read.rs:74-75, desktop/Cargo.toml:83). The families
+  desktop/src/preferences/read.rs:74-75, desktop/Cargo.toml:84). The families
   asked for are Times New Roman, Arial, Courier New and their metric-compatible
   substitutes, plus the CJK, Hebrew, Arabic and Thai faces
   (desktop/src/player.rs:361-414, desktop/src/gui/controller.rs:620-694), and
@@ -68,15 +68,15 @@ notes: |
   fixed anywhere. The compiled-in Noto Sans subset sits behind the default_font
   feature, which the web and exporter crates enable and the desktop build does
   not (core/src/player.rs:84-85, core/Cargo.toml:82,95, web/Cargo.toml:63-65,
-  exporter/Cargo.toml:16, desktop/Cargo.toml:22), so on the desktop an
+  exporter/Cargo.toml:16, desktop/Cargo.toml:23), so on the desktop an
   unmatched family leaves the run without that face rather than falling back
   to a bundled one.
 
   Files the player writes rather than expects: preferences.toml, bookmarks.toml
   and recents.toml under --config, each defaulted when absent
   (desktop/src/preferences.rs:54-96), .sol SharedObjects under --save-directory
-  (frontend-utils/src/backends/storage.rs:31-60, desktop/src/cli.rs:129-130),
-  and the log file under <cache>/ruffle/log (desktop/src/main.rs:155-166).
+  (frontend-utils/src/backends/storage.rs:31-60, desktop/src/cli.rs:137-138),
+  and the log file under <cache>/ruffle/log (desktop/src/main.rs:165-176).
   ruffle-bundle.toml is the manifest inside a .ruf bundle, which is content
   alongside the .swf rather than a runtime input
   (frontend-utils/src/bundle/info.rs:11, frontend-utils/src/bundle.rs:42-53).
