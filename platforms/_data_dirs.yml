@@ -65,6 +65,22 @@ data_directories:
     local_cache: data/pcsx2-resources
     description: "PCSX2 resources (GameIndex.yaml, RedumpDatabase.yaml, fonts, shaders, icons, sounds)"
 
+  # ref: src/Cafe/GameProfile/GameProfile.cpp:181-195 — Cemu/gameProfiles/default/
+  cemu-gameprofiles:
+    source_url: "https://github.com/cemu-project/Cemu/archive/{version}.tar.gz"
+    source_type: tarball
+    source_path: "Cemu-{version}/bin/gameProfiles/default"
+    version: 3310f3b8b184d64a62b89fd59088c799432badf5
+    local_cache: data/cemu-gameprofiles
+    description: "Cemu default game profiles (one .ini per title id)"
+
+  # ref: src/Cafe/GraphicPack/GraphicPack2.cpp:96-111 — Cemu/graphicPacks/downloadedGraphicPacks/
+  cemu-graphic-packs:
+    source_url: "https://github.com/cemu-project/cemu_graphic_packs/releases/download/Github981/graphicPacks981.zip"
+    source_type: zip
+    local_cache: data/cemu-graphic-packs
+    description: "Cemu community graphic packs, release Github981"
+
   # ref: scummvm/backends/platform/libretro — system/scummvm/
   scummvm:
     source_url: "https://buildbot.libretro.com/assets/system/ScummVM.zip"
