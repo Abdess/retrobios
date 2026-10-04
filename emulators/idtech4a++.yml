@@ -5,8 +5,8 @@ source: "https://github.com/glKarin/com.n0n3m4.diii4a"
 upstream: "https://github.com/glKarin/com.n0n3m4.diii4a"
 author: "glKarin"
 profiled_date: "2026-09-17"
-source_commit: "e4d1382275155b18d51f91c3e1af35ca1fd16e13"
-core_version: "1.1.0harmattan72"
+source_commit: "ce49510f3b0c04969eab8ebe8238416e84e4f0bb"
+core_version: "1.1.0harmattan73"
 display_name: "id Tech engine collection (idTech4A++)"
 cores:
   - "idtech4a++"
@@ -48,10 +48,10 @@ notes: |
   application starts a game directly through com.n0n3m4.q3e.Q3EMain with a `game`
   extra carrying the game token and a `command` extra carrying an argument vector
   that begins with `game.arm`.
-  ref: README.md:13-26, 237-251,
+  ref: README.md:13-26, 248-262,
        Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:8-33, 91-116, 303,
        Q3E/src/main/java/com/n0n3m4/q3e/Q3EGlobals.java:9,
-       idTech4Amm/build.gradle:13-14, 23
+       idTech4Amm/build.gradle:10-14, 23
 
   Game data lives under a working directory, `/sdcard/diii4a` unless the
   preference names another, and each game reads a base folder inside it. With the
@@ -419,7 +419,7 @@ files:
       sort last. It holds the defs, scripts and multiplayer AAS files the bot
       commands need. A second entry repacks only the `maps/` tree into
       zzz_idTech4Amm_d3_sabot_a7_aas.pk4 for users who already have the mod.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:48-58, 129-140, README.md:256-259"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:48-58, 129-140, README.md:267-270"
 
   - name: q4_sabot_a9.pk4
     required: false
@@ -433,7 +433,7 @@ files:
     note: >-
       The Quake 4 counterpart, extracted the same way, with the same
       maps-only variant written as zzz_idTech4Amm_q4_sabot_a9_aas.pk4.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:36-46, 116-127, README.md:256-259"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:36-46, 116-127, README.md:267-270"
 
   - name: play_original_doom3_level.pk4
     required: false
@@ -461,7 +461,7 @@ files:
     note: >-
       Copied into the DOOM 3 base folder on request. It pairs with the
       wide-character language and BFG font support compiled into the engine.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:105-114, README.md:37, 168-169"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:105-114, README.md:37, README.md:174-175"
 
   - name: controls_theme.zipak
     required: false
@@ -560,7 +560,7 @@ files:
       architecture, gameaarch64.so on arm64 and gamearm.so on armv7. Without it
       the engine keeps the game code built into the apk. The launcher also
       accepts a full path to any libxxxxx.so instead.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:342-372, 429-434, idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/AddExternalLibraryFunc.java:71-86, README.md:229-233, 241-251"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:342-372, 429-434, idTech4Amm/src/main/java/com/n0n3m4/DIII4A/launcher/AddExternalLibraryFunc.java:71-86, README.md:240-244, README.md:252-262"
 
   - name: server.so
     required: false
