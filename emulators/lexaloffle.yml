@@ -6,6 +6,7 @@ display_name: "Lexaloffle - PICO-8 / Voxatron"
 cores:
   - lexaloffle
   - "pico-8"
+  - vox_official
 systems:
   - pico8
   - voxatron
