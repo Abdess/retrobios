@@ -40,16 +40,14 @@ files:
     system: enemyterritory
     path: "etmain/pak0.pk3"
     required: true
-    md5: "c8ce5e3eafb9faa74b9af03a9d6f3f5e"
     source_ref: "src/qcommon/files.c:5066-5094 (fatal if absent), 5076 (FS_FOpenFileRead \"pak0.pk3\"), src/qcommon/qcommon.h:787 (BASEGAME \"etmain\")"
-    note: "Retail Wolfenstein: Enemy Territory 2.60b data pak. Startup gate. MD5 informational, not validated by the engine."
+    note: "Retail Wolfenstein: Enemy Territory 2.60b data pak. Startup gate."
 
   - name: "pak1.pk3"
     category: game_data
     system: enemyterritory
     path: "etmain/pak1.pk3"
     required: false
-    md5: "0d1cb16a147b0f12d79fd3b045e07706"
     source_ref: "src/qcommon/files.c:4011-4018 (FS_idPak, NUM_ID_PAKS=9), README.md"
     note: "Retail content update pak. Required by servers running 2.60b, pulled in by FS_ComparePaks."
 
@@ -58,7 +56,6 @@ files:
     system: enemyterritory
     path: "etmain/pak2.pk3"
     required: false
-    md5: "61e3bbae9c1cd522cf7fcc27e3a4bbab"
     source_ref: "src/qcommon/files.c:4011-4018 (FS_idPak), README.md"
     note: "Retail content update pak."
 
