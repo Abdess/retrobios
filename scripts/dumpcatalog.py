@@ -83,14 +83,25 @@ def annotate_provenance(files: dict, snapshots: dict) -> dict[str, int]:
             entry.pop("provenance", None)
     return counts
 
-def write_provenance_snapshot(
-    path: str, source: str, imported_at: str, dats: dict, entries: list[dict]
-) -> bool:
-    """Write a normalized provenance snapshot, sorted for determinism."""
-    snapshot = {
+def build_snapshot(
+    source: str, imported_at: str, dats: dict, entries: list[dict]
+) -> dict:
+    """A provenance snapshot, sorted for determinism."""
+    return {
         "source": source,
         "imported_at": imported_at,
         "dats": dict(sorted(dats.items())),
         "entries": sorted(entries, key=lambda e: (e["dat"], e["name"])),
     }
+
+
+def write_snapshot(path: str, snapshot: dict) -> bool:
+    """Write a snapshot; timestamps alone never count as a change."""
     return write_if_changed(path, json.dumps(snapshot, indent=2) + "\n")
+
+
+def write_provenance_snapshot(
+    path: str, source: str, imported_at: str, dats: dict, entries: list[dict]
+) -> bool:
+    """Write a normalized provenance snapshot."""
+    return write_snapshot(path, build_snapshot(source, imported_at, dats, entries))

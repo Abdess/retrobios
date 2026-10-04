@@ -29,6 +29,7 @@ from romset_recipes import (  # noqa: E402
 from scripts.scraper.romset_dat_importer import (  # noqa: E402
     compact_entries,
     listxml_entries,
+    git_blob_sha,
     merge_snapshot,
     recipe_entries,
 )
@@ -383,6 +384,36 @@ class ListXmlRecipes(unittest.TestCase):
         self.assertEqual(
             [m["name"] for m in entries[0]["members"]], ["own.rom", "shared.rom"]
         )
+
+    def test_upstream_blobs_are_recorded_and_replaced(self):
+        """The snapshot names the DAT blobs it was read from, so a later
+        check can tell whether upstream moved without importing again."""
+        entry = {
+            "dat": "FBNeo - X",
+            "name": "set.zip",
+            "set": "set",
+            "description": "",
+            "members": [{"name": "a", "crc32": "1"}],
+        }
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            output = str(Path(directory) / "fbneo.json")
+            merge_snapshot(output, "fbneo", {"FBNeo - X": "1.0"}, [entry], {"X.dat": "aaa"})
+            with open(output, encoding="utf-8") as handle:
+                self.assertEqual(json.load(handle)["upstream"], {"blobs": {"X.dat": "aaa"}})
+            merge_snapshot(output, "fbneo", {"FBNeo - X": "1.0"}, [entry], {"X.dat": "bbb"})
+            with open(output, encoding="utf-8") as handle:
+                snapshot = json.load(handle)
+            self.assertEqual(snapshot["upstream"], {"blobs": {"X.dat": "bbb"}})
+            self.assertEqual(len(snapshot["entries"]), 1)
+            # An import that names no blobs (a local --pack) keeps the last ones.
+            merge_snapshot(output, "fbneo", {"FBNeo - X": "1.0"}, [entry])
+            with open(output, encoding="utf-8") as handle:
+                self.assertEqual(json.load(handle)["upstream"], {"blobs": {"X.dat": "bbb"}})
+
+    def test_git_blob_sha_matches_git(self):
+        # The values git hash-object gives for the empty blob and for "hi".
+        self.assertEqual(git_blob_sha(b""), "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391")
+        self.assertEqual(git_blob_sha(b"hi"), "32f95c0d1244a78b2be1bab8de17906fabb2c4a8")
 
     def test_versions_accumulate_instead_of_replacing_each_other(self):
         """A platform pins the archive of whichever version it was built on."""

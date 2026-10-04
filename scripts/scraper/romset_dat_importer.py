@@ -8,6 +8,7 @@ documents every set of one version at once.
 MAME ships its ``-listxml`` output as a release asset and FBNeo keeps its DATs
 in its repository, so both are fetched without a browser:
 
+    python -m scripts.scraper.romset_dat_importer --source mame --fetch
     python -m scripts.scraper.romset_dat_importer --source mame --fetch mame0289
     python -m scripts.scraper.romset_dat_importer --source fbneo --fetch
     python -m scripts.scraper.romset_dat_importer --source mame --pack local.dat
@@ -38,8 +39,8 @@ from ..common import (
     list_registered_platforms,
     load_emulator_profiles,
     load_platform_config,
-    write_provenance_snapshot,
 )
+from ..dumpcatalog import build_snapshot, write_snapshot
 from .logiqx_parser import LogiqxDat, parse_logiqx
 
 MAX_MEMBER_SIZE = 200 * 1024 * 1024
@@ -252,31 +253,42 @@ def compact_entries(entries: list[dict]) -> list[dict]:
 
 
 def merge_snapshot(
-    output: str, source: str, dats: dict[str, str], entries: list[dict]
+    output: str,
+    source: str,
+    dats: dict[str, str],
+    entries: list[dict],
+    upstream: dict[str, str] | None = None,
 ) -> bool:
     """Accumulate recipes across versions instead of replacing them.
 
     A platform pins the archive of whichever version its list was built
     against, so the snapshot is a growing library of versions, not a picture
-    of the newest one.
+    of the newest one. ``upstream`` (DAT file -> git blob sha) replaces the
+    previous one: it describes the files this import read, not a history.
     """
     path = Path(output)
     known_entries: list[dict] = []
     known_dats: dict[str, str] = {}
+    known_upstream: dict = {}
     if path.is_file():
         with path.open(encoding="utf-8") as handle:
             existing = json.load(handle)
         known_entries = list(existing.get("entries", []))
         known_dats = dict(existing.get("dats", {}))
+        known_upstream = dict(existing.get("upstream", {}))
 
     known_dats.update(dats)
-    return write_provenance_snapshot(
-        output,
+    if upstream:
+        known_upstream["blobs"] = dict(sorted(upstream.items()))
+    snapshot = build_snapshot(
         source,
         datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         known_dats,
         compact_entries(known_entries + entries),
     )
+    if known_upstream:
+        snapshot["upstream"] = dict(sorted(known_upstream.items()))
+    return write_snapshot(output, snapshot)
 
 
 def _iter_dat_contents(pack: Path):
@@ -301,7 +313,45 @@ def _iter_dat_contents(pack: Path):
 MAME_LISTXML_URL = (
     "https://github.com/mamedev/mame/releases/download/{tag}/{tag}lx.zip"
 )
+MAME_LATEST_API = "https://api.github.com/repos/mamedev/mame/releases/latest"
 FBNEO_DATS_API = "https://api.github.com/repos/libretro/FBNeo/contents/dats"
+
+
+def _api_json(url: str) -> object:
+    request = urllib.request.Request(url, headers={"User-Agent": "retrobios"})
+    with urllib.request.urlopen(request, timeout=60) as response:
+        return json.load(response)
+
+
+class NoReleaseError(ValueError):
+    def __init__(self) -> None:
+        super().__init__("the newest MAME release carries no tag")
+
+
+def latest_mame_tag() -> str:
+    """Tag of the newest MAME release, the one ``--fetch`` takes by default."""
+    payload = _api_json(MAME_LATEST_API)
+    tag = payload.get("tag_name") if isinstance(payload, dict) else None
+    if not tag:
+        raise NoReleaseError
+    return str(tag)
+
+
+def fetch_tag(source: str, requested: str) -> str:
+    """The tag a ``--fetch`` names: bare, the newest MAME release."""
+    if source == "mame" and requested == "latest":
+        tag = latest_mame_tag()
+        print(f"  Derniere release MAME : {tag}")
+        return tag
+    return requested
+
+
+def git_blob_sha(data: bytes) -> str:
+    """The sha git gives a blob, so a cached file can be checked against a
+    repository listing without any other state."""
+    digest = hashlib.sha1(f"blob {len(data)}\0".encode())
+    digest.update(data)
+    return digest.hexdigest()
 
 
 def _download(url: str, destination: Path) -> Path:
@@ -323,28 +373,38 @@ def _download(url: str, destination: Path) -> Path:
     return destination
 
 
-def fetch_pack(source: str, tag: str, cache_dir: Path) -> Path:
+def fetch_pack(
+    source: str, tag: str, cache_dir: Path
+) -> tuple[Path, dict[str, str]]:
     """Download the upstream DAT for *source*.
 
     MAME ships its ``-listxml`` output as a release asset, and FBNeo keeps its
-    DATs in the repository, so neither needs a browser.
+    DATs in the repository, so neither needs a browser. The second value
+    names the upstream state fetched: empty for a release asset, whose tag
+    already says which version it is, and the git blob sha of every DAT for
+    FBNeo, whose files change under a constant header version.
     """
     if source == "mame":
-        return _download(
-            MAME_LISTXML_URL.format(tag=tag), cache_dir / f"{tag}lx.zip"
+        return (
+            _download(MAME_LISTXML_URL.format(tag=tag), cache_dir / f"{tag}lx.zip"),
+            {},
         )
 
-    request = urllib.request.Request(
-        FBNEO_DATS_API, headers={"User-Agent": "retrobios"}
-    )
-    with urllib.request.urlopen(request, timeout=60) as response:
-        listing = json.load(response)
+    listing = _api_json(FBNEO_DATS_API)
     target = cache_dir / "fbneo-dats"
     target.mkdir(parents=True, exist_ok=True)
+    blobs: dict[str, str] = {}
     for item in listing:
-        if item.get("type") == "file" and item["name"].lower().endswith(".dat"):
-            _download(item["download_url"], target / item["name"])
-    return target
+        if item.get("type") != "file" or not item["name"].lower().endswith(".dat"):
+            continue
+        destination = target / item["name"]
+        # The cache is addressed by content: a file already there is kept
+        # only while its blob sha is the one the repository lists.
+        if destination.is_file() and git_blob_sha(destination.read_bytes()) != item["sha"]:
+            destination.unlink()
+        _download(item["download_url"], destination)
+        blobs[item["name"]] = item["sha"]
+    return target, blobs
 
 
 def _is_listxml(pack: Path) -> bool:
@@ -383,8 +443,9 @@ def main() -> int:
     parser.add_argument(
         "--fetch",
         nargs="?",
-        const="mame0289",
-        help="download upstream instead of using --pack (MAME tag, e.g. mame0289)",
+        const="latest",
+        help="download upstream instead of using --pack "
+        "(a MAME tag such as mame0289; bare, the newest release)",
     )
     parser.add_argument("--cache-dir", default=".cache/dats")
     parser.add_argument("--output", default="")
@@ -396,8 +457,11 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
+    blobs: dict[str, str] = {}
     if args.fetch:
-        pack = fetch_pack(args.source, args.fetch, Path(args.cache_dir))
+        pack, blobs = fetch_pack(
+            args.source, fetch_tag(args.source, args.fetch), Path(args.cache_dir)
+        )
         print(f"  Recupere {pack}")
     elif args.pack:
         pack = Path(args.pack)
@@ -457,7 +521,7 @@ def main() -> int:
     if args.dry_run:
         return 0
 
-    changed = merge_snapshot(output, args.source, dats, entries)
+    changed = merge_snapshot(output, args.source, dats, entries, blobs)
     print(f"{'Wrote' if changed else 'Unchanged'} {output}")
     return 0
 
