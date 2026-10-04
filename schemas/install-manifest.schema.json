@@ -82,6 +82,16 @@
       "type": "integer",
       "minimum": 0
     },
+    "pack_files": {
+      "description": "Files the platform's pack holds once extracted: this list, the data directories and the pack's own documents.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "pack_size": {
+      "description": "Bytes those files occupy once extracted.",
+      "type": "integer",
+      "minimum": 0
+    },
     "total_omitted": {
       "type": "integer",
       "minimum": 0

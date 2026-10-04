@@ -288,25 +288,28 @@ def download_external(file_entry: dict, dest_path: str) -> bool:
 
 
 
-def _pack_data_directories(
-    zf,
+# What the builder writes into a platform pack beside the files it carries.
+PACK_DOCUMENTS = ("README.txt", "manifest.json")
+
+
+def _data_directory_members(
     pack_systems: dict,
     data_registry: dict | None,
     platform_name: str,
     base_dest: str,
-    flatten: bool,
     case_insensitive: bool,
     seen_destinations: set,
     seen_lower: set,
     seen_parents: set,
-) -> int:
-    """Add the cached data directories the platform's systems declare.
+):
+    """Yield (source, destination) for the cached data directories a
+    platform's systems declare.
 
     These are not BIOS and carry no hash of their own: they are whole
     trees an emulator reads, refreshed from upstream, so what ships is
-    whatever the cache holds. Returns how many files were added.
+    whatever the cache holds. The pack and the install manifest both read
+    this, the first to write the files and the second to count them.
     """
-    added = 0
     # Data directories from _data_dirs.yml
     for sys_id, system in sorted(pack_systems.items()):
         for dd in system.get("data_directories", []):
@@ -345,8 +348,29 @@ def _pack_data_directories(
                     _register_path(full, seen_destinations, seen_parents)
                     if case_insensitive:
                         seen_lower.add(full.lower())
-                    _add_pack_member(zf, src, _flat(full, base_dest, flatten))
-                    added += 1
+                    yield src, full
+
+
+def _pack_data_directories(
+    zf,
+    pack_systems: dict,
+    data_registry: dict | None,
+    platform_name: str,
+    base_dest: str,
+    flatten: bool,
+    case_insensitive: bool,
+    seen_destinations: set,
+    seen_lower: set,
+    seen_parents: set,
+) -> int:
+    """Add the data directories to the pack. Returns how many files went in."""
+    added = 0
+    for src, full in _data_directory_members(
+        pack_systems, data_registry, platform_name, base_dest,
+        case_insensitive, seen_destinations, seen_lower, seen_parents,
+    ):
+        _add_pack_member(zf, src, _flat(full, base_dest, flatten))
+        added += 1
     return added
 
 
@@ -2880,6 +2904,7 @@ def generate_manifest(
     target_name: str | None = None,
     offline: bool | None = None,
     required_only: bool = False,
+    data_registry: dict | None = None,
 ) -> dict:
     """Generate a JSON manifest for a platform (same resolution as generate_pack).
 
@@ -3100,7 +3125,18 @@ def generate_manifest(
         omitted_by_destination, record_omission, required_only,
     )
 
-    # No phase 3 (data directories) -skipped for manifest
+    # Phase 3: data directories. The installer does not fetch them, so they
+    # stay out of the file list; the pack carries them, so they count toward
+    # what an extraction shows.
+    if data_registry is None:
+        data_registry = load_data_dir_registry(platforms_dir)
+    data_sizes = [
+        os.path.getsize(src)
+        for src, _dest in _data_directory_members(
+            pack_systems, data_registry, platform_name, base_dest,
+            case_insensitive, seen_destinations, seen_lower, seen_parents,
+        )
+    ]
 
     now = _build_timestamp(db)
 
@@ -3122,6 +3158,8 @@ def generate_manifest(
         "standalone_copies": standalone_copies,
         "total_files": len(manifest_files),
         "total_size": total_size,
+        "pack_files": len(manifest_files) + len(data_sizes) + len(PACK_DOCUMENTS),
+        "pack_size": total_size + sum(data_sizes),
         "total_omitted": len(omitted_by_destination),
         "omitted_files": sorted(
             omitted_by_destination.values(), key=lambda entry: entry["dest"]

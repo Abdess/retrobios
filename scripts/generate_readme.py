@@ -97,10 +97,11 @@ def compute_coverage(
 def manifest_totals(
     platform_name: str, install_dir: str = "install"
 ) -> tuple[int | None, int | None]:
-    """Files and bytes a platform's pack ships, from its install manifest.
+    """Files and bytes a platform's pack holds once extracted.
 
-    The manifest is written when packs are built, so it reflects the real
-    pack contents (platform list, core complement and data directories).
+    The install manifest lists what the installer fetches, and states apart
+    what the pack adds to that: the data directories and its own documents.
+    The pack figures are the ones a reader can check against an extraction.
     Returns (None, None) when no manifest exists yet.
     """
     path = os.path.join(install_dir, f"{platform_name}.json")
@@ -111,7 +112,53 @@ def manifest_totals(
             manifest = json.load(f)
     except (json.JSONDecodeError, OSError):
         return None, None
-    return manifest.get("total_files"), manifest.get("total_size")
+    return (
+        manifest.get("pack_files", manifest.get("total_files")),
+        manifest.get("pack_size", manifest.get("total_size")),
+    )
+
+
+def download_table(
+    coverages: dict,
+    archived: set[str],
+    extract_paths: dict[str, str],
+    install_dir: str = "install",
+) -> list[str]:
+    """One row per platform: what its pack holds and where it extracts."""
+    lines = [
+        "| Platform | Files | Extracted size | Extract to | Download |",
+        "|----------|------:|---------------:|-----------|----------|",
+    ]
+    for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
+        display = cov["platform"]
+        if name in archived:
+            display = f"{display} *"
+        files, size = manifest_totals(name, install_dir)
+        lines.append(
+            f"| {display} | {f'{files:,}' if files else '-'} |"
+            f" {format_size(size) if size else '-'} |"
+            f" {extract_paths.get(cov['platform'], '')} |"
+            f" [Download]({RELEASE_URL}) |"
+        )
+    return lines
+
+
+def collection_line(total_files: int, comp: dict) -> str:
+    """The size of the whole collection, said as such.
+
+    Printed bare beside the download links it read as the content of one
+    pack, and a complete extraction looked like a broken one.
+    """
+    return (
+        f"- **{total_files:,} files in the collection**, each with its SHA1,"
+        " MD5, SHA256, CRC32 and Adler-32 fingerprints:"
+        f" {comp['systems']['files']:,} system files,"
+        f" {comp['arcade']['files']:,} arcade ROM sets,"
+        f" {comp['game_data']['files']:,} game and engine data files."
+        " That is every platform and emulator together, so no pack holds"
+        " them all: each carries what its own emulators load, counted in"
+        " the download table"
+    )
 
 
 def format_size(size: int) -> str:
@@ -288,7 +335,11 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "## Download BIOS packs",
         "",
         "One pack per platform, and it holds everything the platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. The installer above does the same file by file, and `--target` narrows it to one machine; for a region or a bare minimum, build your own pack below.",
-        "The size is what the files occupy once extracted; the ZIP itself"
+        "Files is how many the pack holds once extracted, the figure a file"
+        " manager shows for the folder. It differs from one platform to the"
+        " next because a pack carries only what that platform's emulators"
+        " load."
+        " The size is what the files occupy once extracted; the ZIP itself"
         " downloads smaller, and anything over 2 GB arrives split into"
         " `.zip.001`, `.zip.002` volumes. Open the `.001` with 7-Zip or"
         " PeaZip, or join them first"
@@ -301,8 +352,6 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "(https://abdess.github.io/retrobios/wiki/release-process/"
         "#verifying-a-release).",
         "",
-        "| Platform | Extracted size | Extract to | Download |",
-        "|----------|---------------:|-----------|----------|",
     ]
 
     # Where the pack itself is extracted, which is not always the BIOS folder:
@@ -328,16 +377,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         if entry.get("status") == "archived"
     }
 
-    for name, cov in sorted(coverages.items(), key=lambda x: x[1]["platform"]):
-        display = cov["platform"]
-        if name in archived:
-            display = f"{display} *"
-        path = extract_paths.get(cov["platform"], "")
-        _, size = manifest_totals(name)
-        size_cell = format_size(size) if size else "-"
-        lines.append(
-            f"| {display} | {size_cell} | {path} | [Download]({RELEASE_URL}) |"
-        )
+    lines.extend(download_table(coverages, archived, extract_paths))
 
     if archived:
         lines.extend(
@@ -384,10 +424,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
             f"- **{len(coverages)} platforms** supported with platform-specific verification",
             f"- **{emulator_count} emulators** profiled from source (RetroArch cores + standalone)",
             f"- **{len(system_ids)} systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)",
-            f"- **{total_files:,} files**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints:"
-            f" {comp['systems']['files']:,} system files,"
-            f" {comp['arcade']['files']:,} arcade ROM sets,"
-            f" {comp['game_data']['files']:,} game and engine data files",
+            collection_line(total_files, comp),
             *_catalog_matched_line(db),
             f"- **{size_mb:.0f} MB** total collection size",
             "",

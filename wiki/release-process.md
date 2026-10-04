@@ -174,8 +174,9 @@ for f in dist/*.zip; do
   split --bytes=1900M --numeric-suffixes=1 --suffix-length=3 "$f" "$f." && rm "$f"
 done
 
-# 5. The two sizes a pack has. Extracted runs well above downloaded, so the
-#    notes table names the one it carries.
+# 5. The two sizes a pack has, and its file count. Extracted runs well above
+#    downloaded, so the notes table names the one it carries. The count is
+#    what a file manager shows once the pack is extracted.
 python3 - <<'PY'
 import json, pathlib, sys
 sys.path.insert(0, "scripts")
@@ -195,7 +196,7 @@ for manifest in sorted(pathlib.Path("install").glob("*.json")):
     data = json.loads(manifest.read_text())
     download = sum(p.stat().st_size for p in parts[base])
     print(f"{base:<42} download {size(download):>8}"
-          f"   extracted {size(data['total_size']):>8}   {data['total_files']} files")
+          f"   extracted {size(data['pack_size']):>8}   {data['pack_files']:,} files")
 PY
 
 # 6. Create the release as a DRAFT, upload every asset, and only then publish it.
@@ -262,3 +263,10 @@ one the table carries, the header names it. Someone sizing a USB drive is
 reading that column. The README table is the extracted size, from the install
 manifests. `SHA256SUMS.txt` lists the checksums of the full ZIPs before
 splitting.
+
+The table carries a Files column, the `pack_files` step 5 prints, and the
+notes never open on the size of the collection. That total covers every
+platform and emulator together and no pack holds it: v2026.09.04 led with
+"10,330 files" right after "one pack per platform", and someone who extracted
+the complete RetroArch pack and counted 4,525 reported half of it missing.
+The collection total belongs under "What's new", worded as the collection.

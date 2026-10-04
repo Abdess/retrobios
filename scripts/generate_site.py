@@ -235,7 +235,7 @@ def generate_home(
         "",
         '<div class="rb-stat" markdown>',
         f'<span class="rb-stat-value">{total_files:,}</span>',
-        '<span class="rb-stat-label">Files</span>',
+        f'<span class="rb-stat-label">{COLLECTION_FILES_LABEL}</span>',
         "</div>",
         "",
         '<div class="rb-stat" markdown>',
@@ -264,8 +264,8 @@ def generate_home(
         [
             "## Platforms",
             "",
-            "| Icon | Platform | Files | Checked by | Download |",
-            "|---|----------|-------|-----------|----------|",
+            "| Icon | Platform | Files in the pack | Checked by | Download |",
+            "|---|----------|------:|-----------|----------|",
         ]
     )
 
@@ -281,7 +281,7 @@ def generate_home(
 
         lines.append(
             f"| {logo_md} | [{display}](platforms/{name}.md) | "
-            f"{cov['present']:,} | {mode_label} | "
+            f"{manifest_totals(name)[0] or cov['present']:,} | {mode_label} | "
             f"[Pack]({RELEASE_URL}){{ .md-button .md-button--primary }} |"
         )
 
@@ -410,13 +410,19 @@ def compute_stats(db: dict, coverages: dict, profiles: dict) -> dict:
     }
 
 
+# The home tile counts the whole collection. Labelled "Files" above a table
+# of pack buttons, it read as what one pack contains.
+COLLECTION_FILES_LABEL = "Files collected"
+
+
 def composition_sentence(db: dict) -> str:
     comp = compute_composition(db)
     return (
-        f"Of these files, {comp['systems']['files']:,} are console and "
+        f"The collection holds {comp['systems']['files']:,} console and "
         f"computer system files, {comp['arcade']['files']:,} arcade ROM sets "
         f"(`Arcade/`), and {comp['game_data']['files']:,} game and engine "
-        "data (the `RPG Maker/` and `ScummVM/` trees)."
+        "data files (the `RPG Maker/` and `ScummVM/` trees). No pack holds "
+        "them all: each carries what its platform's emulators load."
     )
 
 
@@ -1148,8 +1154,8 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
         f"{len(coverages)} supported platforms with "
         f"{total_present:,} verified files.",
         "",
-        "| Platform | Files | Checked by | Status | Download |",
-        "|----------|-------|-----------|--------|----------|",
+        "| Platform | On its BIOS list | Files in the pack | Checked by | Status | Download |",
+        "|----------|------:|------:|-----------|--------|----------|",
     ]
 
     mode_labels = {
@@ -1175,13 +1181,17 @@ def generate_platform_index(coverages: dict, registry: dict | None = None) -> st
 
         lines.append(
             f"| [{display}]({name}.md) | "
-            f"{cov['present']:,} | {mode_html} | {status_html} | "
+            f"{cov['present']:,} | {manifest_totals(name)[0] or cov['present']:,} | "
+            f"{mode_html} | {status_html} | "
             f"[Pack]({RELEASE_URL}){{ .md-button .md-button--primary }} |"
         )
 
     lines.extend(
         [
             "",
+            "The BIOS list is what the platform publishes. The pack adds the "
+            "files its emulators load and the data directories they read, "
+            "which is the count an extraction shows. "
             "Checked by is the test each platform runs on its own, replicated "
             "from its source code. "
             "[How each mode works](../wiki/verification-modes.md).",
@@ -2232,8 +2242,9 @@ def _availability_check(db: dict, data_names):
             for md5_val in parse_md5_list(md5_raw):
                 if by_md5.get(md5_val):
                     return True
-        sha1 = f.get("sha1", "")
-        if sha1 and sha1 in db_files:
+        # A profile lists several sha1 when the code accepts several dumps.
+        sha1 = f.get("sha1") or []
+        if any(value in db_files for value in ([sha1] if isinstance(sha1, str) else sha1)):
             return True
         return False
 
