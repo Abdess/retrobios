@@ -39,6 +39,10 @@ NODEDUP_DIRS = {
     # A zoneinfo tree is addressed by zone name and its aliases are equal
     # files by design: US/Samoa is Pacific/Midway.
     "tzdata",
+    # VICE data is addressed by machine directory: C64, C64DTV and SCPU64
+    # share one keymap, C64 and CBM-II one palette. With the copies removed
+    # the name step served the C128 keymap to all of them.
+    "c64-emu",
 }
 
 

@@ -45,6 +45,7 @@ files:
     required: true
     source_ref: "code/qcommon/files.c:179 (pak_checksums[0]=1566731103u), 3568 (per-index checksum compare)"
     note: "Retail Quake III Arena base pak. Engine prints a warning on checksum mismatch, does not refuse the file."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak1.pk3"
     category: game_data
@@ -52,6 +53,7 @@ files:
     path: "baseq3/pak1.pk3"
     required: false
     source_ref: "code/qcommon/files.c:180 (pak_checksums[1]=298122907u)"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak2.pk3"
     category: game_data
@@ -59,6 +61,7 @@ files:
     path: "baseq3/pak2.pk3"
     required: false
     source_ref: "code/qcommon/files.c:181 (pak_checksums[2]=412165236u)"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak3.pk3"
     category: game_data
@@ -115,6 +118,7 @@ files:
     required: false
     source_ref: "code/qcommon/files.c:192 (missionpak_checksums[0]=2430342401u)"
     note: "Team Arena base pak. Required only when launching +set fs_game missionpack."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak1.pk3"
     category: game_data
@@ -122,6 +126,7 @@ files:
     path: "missionpack/pak1.pk3"
     required: false
     source_ref: "code/qcommon/files.c:193 (missionpak_checksums[1]=511014160u)"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak2.pk3"
     category: game_data
@@ -129,6 +134,7 @@ files:
     path: "missionpack/pak2.pk3"
     required: false
     source_ref: "code/qcommon/files.c:194 (missionpak_checksums[2]=2662638993u)"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak3.pk3"
     category: game_data

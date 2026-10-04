@@ -81,6 +81,7 @@ files:
   # Ground Zero (rogue/), official Mission Pack 2
   # Separate yquake2 game library repo: yquake2/rogue.
   # ================================================================
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak0.pak"
     category: game_data
@@ -94,6 +95,7 @@ files:
   # Three Wave Capture The Flag (ctf/), official free addon
   # Separate yquake2 game library repo: yquake2/ctf.
   # ================================================================
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak0.pak"
     category: game_data
@@ -102,3 +104,4 @@ files:
     required: false
     source_ref: "src/common/filesystem.c:1331 (first_mods[3]=ctf), 1688"
     note: "Three Wave CTF data. Loaded when `+set game ctf` is passed."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"

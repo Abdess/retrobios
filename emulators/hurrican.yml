@@ -104,3 +104,4 @@ files:
     required: false
     bundled: true
     source_ref: "Hurrican/src/DX8Input.cpp:97-99"
+    unsourceable: "ships inside the engine package; a same-named file of another program must not stand in"

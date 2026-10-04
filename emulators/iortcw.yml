@@ -63,6 +63,7 @@ files:
   # ================================================================
   # main/ - single-player point-release paks
   # ================================================================
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "sp_pak1.pk3"
     category: game_data
@@ -155,6 +156,7 @@ files:
     required: false
     source_ref: "MP/code/qcommon/files.c:209, 1596-1613"
     note: "VM/binary pak, 1.4/1.41 retail. The client extracts game dlls only from paks whose checksum is listed."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "mp_bin0.pk3"
     category: game_data

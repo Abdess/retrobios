@@ -109,6 +109,7 @@ files:
     required: false
     bundled: true
     source_ref: "src/cdogs/joystick.c:43"
+    unsourceable: "ships inside the engine package; a same-named file of another program must not stand in"
 
   - name: "font.png"
     path: "graphics/font.png"

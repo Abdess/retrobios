@@ -56,21 +56,25 @@ files:
     required: false
     source_ref: "src/version.h:92, src/d_main.cpp:3794-3796, wadsrc_extra/CMakeLists.txt:1"
     note: "Per-game filters under static/filter/ (doom.id, strife, hexen, heretic, chex...)."
+    unsourceable: "ships inside the engine package; a same-named file of another program must not stand in"
 
   - name: "lights.pk3"
     category: game_data
     required: false
     source_ref: "src/d_main.cpp:2053-2058, wadsrc_lights/CMakeLists.txt:1"
+    unsourceable: "ships inside the engine package; a same-named file of another program must not stand in"
 
   - name: "brightmaps.pk3"
     category: game_data
     required: false
     source_ref: "src/d_main.cpp:2059-2064, wadsrc_bm/CMakeLists.txt:1"
+    unsourceable: "ships inside the engine package; a same-named file of another program must not stand in"
 
   - name: "game_widescreen_gfx.pk3"
     category: game_data
     required: false
     source_ref: "src/d_main.cpp:2065-2070, wadsrc_widepix/CMakeLists.txt:1"
+    unsourceable: "ships inside the engine package; a same-named file of another program must not stand in"
 
   - name: "gzdoom.sf2"
     category: game_data

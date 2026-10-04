@@ -60,6 +60,7 @@ files:
     required: true
     source_ref: "code/qcommon/files.cpp:326 (fs_originalPaks_main[0]), 4108 (Couldn't load default.cfg)"
     note: "Carries default.cfg; without it FS_Startup aborts with ERR_FATAL."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "Pak1.pk3"
     category: game_data
@@ -67,6 +68,7 @@ files:
     path: "main/Pak1.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:327 (fs_originalPaks_main[1])"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "Pak2.pk3"
     category: game_data
@@ -74,6 +76,7 @@ files:
     path: "main/Pak2.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:328 (fs_originalPaks_main[2])"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "Pak3.pk3"
     category: game_data
@@ -116,6 +119,7 @@ files:
     required: true
     source_ref: "code/qcommon/files.cpp:337 (fs_originalPaks_mainta[0]), 3200 (fs_basegame=mainta), 4108"
     note: "Spearhead default.cfg lives here; required when com_target_game=1."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak2.pk3"
     category: game_data
@@ -123,6 +127,7 @@ files:
     path: "mainta/pak2.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:338 (fs_originalPaks_mainta[1])"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak3.pk3"
     category: game_data
@@ -158,6 +163,7 @@ files:
     required: true
     source_ref: "code/qcommon/files.cpp:346 (fs_originalPaks_maintt[0]), 3227 (fs_basegame=maintt), 4108"
     note: "Breakthrough default.cfg lives here; required when com_target_game=2."
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak2.pk3"
     category: game_data
@@ -165,6 +171,7 @@ files:
     path: "maintt/pak2.pk3"
     required: false
     source_ref: "code/qcommon/files.cpp:347 (fs_originalPaks_maintt[1])"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   - name: "pak3.pk3"
     category: game_data
