@@ -15,21 +15,32 @@ notes: |
   1994). Reads the original DOS game data; no asset bundling in the
   engine binary.
 
-  File lookup walks a path list (shareware share, home dir, binary dir,
-  command-line) and opens the first match.
-  ref: src/io/file.cpp:46-80 (File::File)
+  File lookup walks a path list (platform paths, command-line paths,
+  binary directory, working directory, compiled-in DATAPATH) and opens
+  the first match.
+  ref: src/io/file.cpp:51-77 (File::File), src/main.cpp:186-220
 
-  PANEL.000 is loaded during startup; the engine aborts with
-  "Unable to find game data files" if that first probe fails.
-  ref: src/main.cpp:281, src/main.cpp:287-294
+  PANEL.000 is the first file opened at startup; the engine aborts with
+  "Unable to find game data files" if that probe fails. The five .0FN
+  fonts follow and abort startup the same way.
+  ref: src/main.cpp:279-295, src/main.cpp:308-333
+
+  Level, tileset, sprite and planet names are built by createFileName():
+  LEVEL<n>.<world>, BLOCKS.<world>, SPRITES.<world>, PLANET.<world>,
+  with a three-digit world extension. The episode menu enables an
+  episode when LEVEL0.<world> exists for its first world (0, 3, 6, 9,
+  12, 15, then 30, 33, 36 and 50).
+  ref: src/util.cpp:123-193, src/jj1/jj1episodeutils.cpp:19-36,
+       src/menu/gamemenu.cpp:557-566
 
   JJ2 engine support is experimental and gated by `ENABLE_JJ2` at build
-  time; it reads JJ2's .j2l/.j2t files directly (no conversion step).
-  ref: src/jj2/level/jj2level.cpp:52-70
+  time (off by default); it reads JJ2's .j2l/.j2t files directly (no
+  conversion step).
+  ref: CMakeLists.txt:241-255, src/jj2/level/jj2level.cpp:54-67
 
 files:
   # ================================================================
-  # Required files (loaded unconditionally at startup)
+  # Required files (startup aborts without them)
   # ================================================================
 
   - name: "PANEL.000"
@@ -39,41 +50,107 @@ files:
     source_ref: "src/main.cpp:281 (fatal: \"Unable to find game data files\")"
     note: "Status bar sprites plus two embedded fonts. Fatal if absent."
 
-  - name: "SOUNDS.000"
+  - name: "FONT2.0FN"
     category: game_data
     system: jazz-jackrabbit
     required: true
-    source_ref: "src/io/sound.cpp:278 (loadSounds(\"SOUNDS.000\"))"
-    note: "Digital sound effects. Absence disables sfx but engine continues; audio init logs failure."
+    source_ref: "src/main.cpp:312, 318-333, src/io/gfx/font.cpp:60-64"
+    note: "Startup font. File::File throws when absent and startup aborts."
+
+  - name: "FONTBIG.0FN"
+    category: game_data
+    system: jazz-jackrabbit
+    required: true
+    source_ref: "src/main.cpp:313, 318-333"
+
+  - name: "FONTINY.0FN"
+    category: game_data
+    system: jazz-jackrabbit
+    required: true
+    source_ref: "src/main.cpp:314, 318-333"
+
+  - name: "FONTMN1.0FN"
+    category: game_data
+    system: jazz-jackrabbit
+    required: true
+    source_ref: "src/main.cpp:315, 318-333"
+
+  - name: "FONTMN2.0FN"
+    category: game_data
+    system: jazz-jackrabbit
+    required: true
+    source_ref: "src/main.cpp:316, 318-333"
 
   - name: "STARTUP.0SC"
     category: game_data
     system: jazz-jackrabbit
     required: true
-    source_ref: "src/main.cpp:437 (new JJ1Scene(\"STARTUP.0SC\"))"
-    note: "Opening Epic logo cutscene. Throws E_FILE on absence (startup aborts before menu)."
-
-  # ================================================================
-  # Required for menu entry (loaded when main menu opens)
-  # ================================================================
+    source_ref: "src/main.cpp:435-443"
+    note: "Opening cutscene. play() returns the error before the menu when it is absent."
 
   - name: "MENU.000"
     category: game_data
     system: jazz-jackrabbit
     required: true
-    source_ref: "src/menu/mainmenu.cpp:74 (new File(\"MENU.000\", PATH_TYPE_GAME))"
-    note: "Main menu graphics and layout. Required to show the menu."
+    source_ref: "src/menu/mainmenu.cpp:72-82, src/main.cpp:458-466"
+    note: "Main menu graphics. The MainMenu constructor throws when it is absent."
+
+  - name: "SOUNDS.000"
+    category: game_data
+    system: jazz-jackrabbit
+    required: false
+    source_ref: "src/io/sound.cpp:278, 478-485"
+    note: "Digital sound effects. loadSounds returns false when absent and the engine runs without sfx."
+
+  - name: "MENUSNG.PSM"
+    category: game_data
+    system: jazz-jackrabbit
+    required: false
+    source_ref: "src/main.cpp:408, src/io/sound.cpp:337-344"
+    note: "Menu music. playMusic returns silently when the file is absent."
+
+  # ================================================================
+  # Menu extras (each reports its absence and returns to the menu)
+  # ================================================================
+
+  - name: "INSTRUCT.0SC"
+    category: game_data
+    system: jazz-jackrabbit
+    required: false
+    source_ref: "src/menu/mainmenu.cpp:177-187"
+    note: "Instructions screen."
+
+  - name: "ORDER.0SC"
+    category: game_data
+    system: jazz-jackrabbit
+    required: false
+    source_ref: "src/menu/mainmenu.cpp:209-217"
+    note: "Order information screen."
+
+  - name: "MACRO.1"
+    category: game_data
+    system: jazz-jackrabbit
+    required: false
+    source_ref: "src/menu/mainmenu.cpp:277-289"
+    note: "Demo recording played when the menu idles. MACRO.1 to MACRO.4 are probed."
+
+  - name: "END.0SC"
+    category: game_data
+    system: jazz-jackrabbit
+    required: false
+    source_ref: "src/main.cpp:479-489"
+    note: "Cutscene played when the main menu is left."
+
+  # ================================================================
+  # Required when entering gameplay (level load fails without them)
+  # ================================================================
 
   - name: "FONTS.000"
     category: game_data
     system: jazz-jackrabbit
     required: true
-    source_ref: "src/io/gfx/font.cpp:291-292 (JJ1Font constructor)"
-    note: "Main game font (dialog, HUD numbers)."
-
-  # ================================================================
-  # Required when entering gameplay (fatal when first level loads)
-  # ================================================================
+    source_ref: "src/io/gfx/font.cpp:288-292, src/jj1/level/jj1levelload.cpp:412-421"
+    note: "Level font. JJ1Level::load returns the error when it is absent."
 
   - name: "MAINCHAR.000"
     category: game_data
@@ -86,42 +163,49 @@ files:
     category: game_data
     system: jazz-jackrabbit
     required: false
-    source_ref: "src/jj1/bonuslevel/jj1bonuslevel.cpp:55 (new File(\"BONUS.000\"))"
-    note: "Bonus level sprites + the bonus-screen font (loaded via FONTS.000 code path with the 'bonus' flag)."
+    source_ref: "src/jj1/bonuslevel/jj1bonuslevel.cpp:53-61, 204-206, src/io/gfx/font.cpp:292"
+    note: "Bonus level sprites and the bonus-screen font."
+
+  - name: "BONUS.0SC"
+    category: game_data
+    system: jazz-jackrabbit
+    required: false
+    source_ref: "src/jj1/bonuslevel/jj1bonuslevel.cpp:764-766"
+    note: "Cutscene played when a bonus level is won."
 
   # ================================================================
-  # Level data (per world: 1-9 shareware/registered, 50/51 secret).
-  # Not every episode is required to run; a user may own only one.
-  # LEVEL*.* path pattern uses a two-digit level and a three-digit
-  # world extension, built by createFileName() in src/util.cpp.
+  # Level data. Not every episode is required to run; a user may own
+  # only one. The episode menu probes LEVEL0.<world> for the first
+  # world of each episode; the levels that follow are named by the
+  # level data itself (next level and next world numbers).
   # ================================================================
 
   - name: "LEVEL0.000"
     category: game_data
     system: jazz-jackrabbit
     required: false
-    source_ref: "src/jj1/level/jj1demolevel.cpp:78, src/menu/gamemenu.cpp:559 (createFileName \"LEVEL\")"
-    note: "World 0 first level (shareware episode 1 opener)."
+    source_ref: "src/menu/gamemenu.cpp:324-325, 557-561"
+    note: "First level of world 0, the opener of episode 1."
 
   - name: "PLANET.000"
     category: game_data
     system: jazz-jackrabbit
     required: false
-    source_ref: "src/jj1/level/jj1levelload.cpp:437-450 (planet.### file open)"
-    note: "World intro planet screen (name + preview)."
+    source_ref: "src/jj1/level/jj1levelload.cpp:437-473"
+    note: "World intro planet screen (name + preview). The level loads under the name CUSTOM when it is absent."
 
-  - name: "BLOCKS1.000"
+  - name: "BLOCKS.000"
     category: game_data
     system: jazz-jackrabbit
     required: false
-    source_ref: "src/jj1/level/jj1levelload.cpp:583-584 (createFileName \"BLOCKS\")"
-    note: "World 0 tileset. BLOCKS<n>.<world> per level, n = 1..9."
+    source_ref: "src/jj1/level/jj1levelload.cpp:577-599"
+    note: "World 0 tileset. The extension is the world number unless the level names another one."
 
-  - name: "SPRITES1.000"
+  - name: "SPRITES.000"
     category: game_data
     system: jazz-jackrabbit
     required: false
-    source_ref: "src/jj1/level/jj1levelload.cpp:604 (createFileName \"SPRITES\")"
+    source_ref: "src/jj1/level/jj1levelload.cpp:602-609"
     note: "World 0 enemy/object sprites. One file per world."
 
   - name: "BONUSMAP.000"
@@ -131,48 +215,34 @@ files:
     source_ref: "src/jj1/level/jj1level.cpp:690, src/menu/gamemenu.cpp:324,570"
     note: "Bonus level map for episode 1."
 
-  # Shareware episode has worlds 0-2, registered adds 3-5 (6 full worlds
-  # across 3 episodes). The engine opens LEVEL<n>.<world>, PLANET.<world>,
-  # BLOCKS<n>.<world> and SPRITES<n>.<world> for each world the player
-  # visits; absent episodes just stop progression at the end of the
-  # last available world.
-
   - name: "LEVEL0.001"
     category: game_data
     system: jazz-jackrabbit
     required: false
-    source_ref: "src/jj1/level/jj1demolevel.cpp:78 (createFileName \"LEVEL\", worldNum=1)"
-    note: "World 1 level 0 (shareware episode 1 world 2 opener)."
+    source_ref: "src/jj1/level/jj1level.cpp:794-801"
+    note: "First level of world 1, reached from the level data of world 0."
 
   - name: "LEVEL0.002"
     category: game_data
     system: jazz-jackrabbit
     required: false
-    source_ref: "src/jj1/level/jj1demolevel.cpp:78"
+    source_ref: "src/jj1/level/jj1level.cpp:794-801"
 
   - name: "LEVEL0.003"
     category: game_data
     system: jazz-jackrabbit
     required: false
-    source_ref: "src/jj1/level/jj1demolevel.cpp:78"
-    note: "World 3 (registered episode 2 opener)."
+    source_ref: "src/menu/gamemenu.cpp:557-561, src/jj1/jj1episodeutils.cpp:26-28"
+    note: "First level of world 3, the opener of episode 2."
 
   - name: "LEVEL0.004"
     category: game_data
     system: jazz-jackrabbit
     required: false
-    source_ref: "src/jj1/level/jj1demolevel.cpp:78"
+    source_ref: "src/jj1/level/jj1level.cpp:794-801"
 
   - name: "LEVEL0.005"
     category: game_data
     system: jazz-jackrabbit
     required: false
-    source_ref: "src/jj1/level/jj1demolevel.cpp:78"
-
-  # Cutscene scripts (one per episode intro/outro)
-  - name: "END.0SC"
-    category: game_data
-    system: jazz-jackrabbit
-    required: false
-    source_ref: "src/jj1/scene/jj1scene.cpp (JJ1Scene loader; path assembled per cutscene)"
-    note: "Ending cutscene script. Loaded on episode completion."
+    source_ref: "src/jj1/level/jj1level.cpp:794-801"

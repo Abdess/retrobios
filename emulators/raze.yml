@@ -20,13 +20,27 @@ notes: |
     ref: source/core/version.h:66, source/core/gamecontrol.cpp:1020-1023,
          source/core/initfs.cpp:335-336, wadsrc/CMakeLists.txt:2
 
-  Game detection reads wadsrc/static/engine/grpinfo.txt. Each entry maps
-  a size+CRC32 (or mustcontain lump set) to a game id, flags and
+  Game detection reads engine/grpinfo.txt from raze.pk3. Every file of
+  the search directories is a candidate, whatever its name: a file is
+  identified when its size and CRC32 equal those of a grpinfo block, or
+  when it is an archive holding every `mustcontain` entry of a block
+  that declares no CRC. A block also carries a game id, flags and
   optional `loadgrp` / `loadart` dependencies.
-  ref: source/core/gamecontrol.cpp (GrpScan), wadsrc/static/engine/grpinfo.txt
+  ref: source/core/searchpaths.cpp:286-326, source/core/searchpaths.cpp:696-704,
+       source/core/searchpaths.cpp:738-870, wadsrc/static/engine/grpinfo.txt:1-45
+
+  The names below are the ones the releases ship. The engine itself
+  names DUKE3D.GRP, DUKEDC.GRP, NWINTER.GRP, VACATION.GRP, NAM.GRP,
+  NAPALM.GRP, WW2GI.GRP, REDNECK.GRP and BLOOD.RFF, as the defaults of
+  its -addon, -nam, -napalm, -ww2gi, -route66 and -cryptic switches.
+  ref: source/core/gamecontrol.cpp:328-367
 
   At least one game's GRP (or equivalent archive) must be present for
-  Raze to run. Addons depend on the base game CRC via `dependency`.
+  Raze to run. An addon block names the CRC of its base game in
+  `dependency`. grpinfo.txt also identifies the Mac demos of Duke Nukem
+  3D and Shadow Warrior, the Nuclear Winter demo, Duke!ZONE II,
+  Penthouse Paradise, Alien World Order, Platoon Leader, the ProAsm
+  build of Wanton Destruction and the SSI build of Cryptic Passage.
 
 files:
   # ================================================================
@@ -44,207 +58,580 @@ files:
   # ================================================================
 
   - name: "DUKE3D.GRP"
+    description: "Duke Nukem 3D"
     category: game_data
     system: duke3d
+    path: "DUKE3D.GRP"
     required: false
     size: 26524524
-    crc32: "BBC9CE44"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Nukem 3D)"
+    crc32: "bbc9ce44"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:3, 48-59"
 
   - name: "DUKE3D.GRP"
+    description: "Duke Nukem 3D (South Korean Censored)"
     category: game_data
     system: duke3d
-    path: ".variants/DUKE3D.GRP.aa4f6a40"
+    path: "DUKE3D.GRP"
     required: false
     size: 26385383
-    crc32: "AA4F6A40"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Nukem 3D South Korean Censored)"
+    crc32: "aa4f6a40"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:4, 61-72"
 
   - name: "DUKE3D.GRP"
+    description: "Duke Nukem 3D: Atomic Edition"
     category: game_data
     system: duke3d
-    path: ".variants/DUKE3D.GRP.fd3dcff1"
+    path: "DUKE3D.GRP"
     required: false
     size: 44356548
-    crc32: "FD3DCFF1"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Nukem 3D: Atomic Edition)"
+    crc32: "fd3dcff1"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:5, 74-85"
 
   - name: "DUKE3D.GRP"
+    description: "Duke Nukem 3D: Plutonium Pak"
     category: game_data
     system: duke3d
-    path: ".variants/DUKE3D.GRP.f514a6ac"
+    path: "DUKE3D.GRP"
     required: false
     size: 44348015
-    crc32: "F514A6AC"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Nukem 3D: Plutonium Pak)"
+    crc32: "f514a6ac"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:6, 113-124"
 
   - name: "DUKE3D.GRP"
+    description: "Duke Nukem 3D: Atomic Edition (WT)"
     category: game_data
     system: duke3d
-    path: ".variants/DUKE3D.GRP.982afe4a"
+    path: "DUKE3D.GRP"
     required: false
     size: 44356548
-    crc32: "982AFE4A"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Atomic Edition World Tour)"
-
-  - name: "DUKEDC.GRP"
-    category: game_data
-    system: duke3d
-    required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke it out in D.C.)"
-    note: "Expansion; dependency DUKE15_CRC (Atomic Edition)."
-
-  - name: "VACATION.GRP"
-    category: game_data
-    system: duke3d
-    required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Caribbean: Life's a Beach)"
-    note: "Expansion; dependency DUKE15_CRC."
-
-  - name: "NWINTER.GRP"
-    category: game_data
-    system: duke3d
-    required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke: Nuclear Winter)"
+    crc32: "982afe4a"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:7, 87-98"
+    note: "World Tour release."
 
   - name: "DUKE3D.GRP"
+    description: "Duke Nukem 3D: Atomic Edition (WT)"
     category: game_data
     system: duke3d
-    path: ".variants/DUKE3D.GRP.983ad923"
+    path: "DUKE3D.GRP"
+    required: false
+    size: 44486702
+    crc32: "89792e05"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:100-111"
+    note: "World Tour release, second known build."
+
+  - name: "DUKE3D.GRP"
+    description: "Duke Nukem 3D Shareware 0.99"
+    category: game_data
+    system: duke3d
+    path: "DUKE3D.GRP"
+    required: false
+    size: 9690241
+    crc32: "02f18900"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:8, 126-136"
+
+  - name: "DUKE3D.GRP"
+    description: "Duke Nukem 3D Shareware 1.0"
+    category: game_data
+    system: duke3d
+    path: "DUKE3D.GRP"
+    required: false
+    size: 10429258
+    crc32: "a28aa589"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:9, 138-148"
+
+  - name: "DUKE3D.GRP"
+    description: "Duke Nukem 3D Shareware 1.1"
+    category: game_data
+    system: duke3d
+    path: "DUKE3D.GRP"
+    required: false
+    size: 10442980
+    crc32: "912e1e8d"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:10, 150-160"
+
+  - name: "DUKE3D.GRP"
+    description: "Duke Nukem 3D Shareware 1.3D"
+    category: game_data
+    system: duke3d
+    path: "DUKE3D.GRP"
     required: false
     size: 11035779
-    crc32: "983AD923"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Duke Nukem 3D Shareware 1.3D)"
+    crc32: "983ad923"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:11, 162-172"
+
+  - name: "DUKEDC.GRP"
+    description: "Duke it out in D.C. (1.3D)"
+    category: game_data
+    system: duke3d
+    path: "DUKEDC.GRP"
+    required: false
+    size: 7926624
+    crc32: "a9242158"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:14, 198-208"
+    note: "Addon of the 1.3D release (dependency DUKE13_CRC)."
+
+  - name: "DUKEDC.GRP"
+    description: "Duke it out in D.C."
+    category: game_data
+    system: duke3d
+    path: "DUKEDC.GRP"
+    required: false
+    size: 8225517
+    crc32: "b79d997f"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:15, 210-220"
+    note: "Addon of the Atomic Edition (dependency DUKE15_CRC)."
+
+  - name: "DUKEDC.GRP"
+    description: "Duke it out in D.C."
+    category: game_data
+    system: duke3d
+    path: "DUKEDC.GRP"
+    required: false
+    size: 8410183
+    crc32: "a8cf80da"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:16, 222-232"
+
+  - name: "DUKEDC.GRP"
+    description: "Duke it out in D.C."
+    category: game_data
+    system: duke3d
+    path: "DUKEDC.GRP"
+    required: false
+    size: 8410187
+    crc32: "39a692bf"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:234-245"
+
+  - name: "DUKEDC.GRP"
+    description: "Duke it out in D.C."
+    category: game_data
+    system: duke3d
+    path: "DUKEDC.GRP"
+    required: false
+    size: 8410183
+    crc32: "777c77b1"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:247-258"
+
+  - name: "DUKEDC.GRP"
+    description: "Duke it out in D.C."
+    category: game_data
+    system: duke3d
+    path: "DUKEDC.GRP"
+    required: false
+    size: 8410149
+    crc32: "c63b6a8b"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:260-271"
+
+  - name: "VACATION.GRP"
+    description: "Duke Caribbean: Life's a Beach (1.3)"
+    category: game_data
+    system: duke3d
+    path: "VACATION.GRP"
+    required: false
+    size: 23559381
+    crc32: "4a2dbb62"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:17, 273-285"
+    note: "Addon of the 1.3D release (dependency DUKE13_CRC)."
+
+  - name: "VACATION.GRP"
+    description: "Duke Caribbean: Life's a Beach"
+    category: game_data
+    system: duke3d
+    path: "VACATION.GRP"
+    required: false
+    size: 22551333
+    crc32: "2f4fccee"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:18, 287-299"
+    note: "Addon of the Atomic Edition (dependency DUKE15_CRC)."
+
+  - name: "VACATION.GRP"
+    description: "Duke Caribbean: Life's a Beach"
+    category: game_data
+    system: duke3d
+    path: "VACATION.GRP"
+    required: false
+    size: 22521880
+    crc32: "b62b42fd"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:19, 301-313"
+
+  - name: "VACATION.GRP"
+    description: "Duke Caribbean: Life's a Beach"
+    category: game_data
+    system: duke3d
+    path: "VACATION.GRP"
+    required: false
+    size: 22213819
+    crc32: "18f01c5b"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:20, 316-328"
+
+  - name: "VACATION.GRP"
+    description: "Duke Caribbean: Life's a Beach"
+    category: game_data
+    system: duke3d
+    path: "VACATION.GRP"
+    required: false
+    size: 22397273
+    crc32: "65b5f690"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:330-343"
+
+  - name: "VACATION.GRP"
+    description: "Duke Caribbean: Life's a Beach"
+    category: game_data
+    system: duke3d
+    path: "VACATION.GRP"
+    required: false
+    size: 22201375
+    crc32: "b28e883c"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:345-358"
+
+  - name: "VACATION.GRP"
+    description: "Duke Caribbean: Life's a Beach"
+    category: game_data
+    system: duke3d
+    path: "VACATION.GRP"
+    required: false
+    size: 22213795
+    crc32: "64cf2351"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:360-373"
+
+  - name: "NWINTER.GRP"
+    description: "Duke: Nuclear Winter"
+    category: game_data
+    system: duke3d
+    path: "NWINTER.GRP"
+    required: false
+    size: 16169365
+    crc32: "f1cae8e4"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:21, 375-388"
+    note: "Addon of the Atomic Edition (dependency DUKE15_CRC)."
 
   # ================================================================
   # Blood
   # ================================================================
 
   - name: "BLOOD.RFF"
+    description: "BLOOD: 1.0"
     category: game_data
     system: blood
+    path: "BLOOD.RFF"
     required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt (BLOOD: One Unit Whole Blood - mustcontain blood.pal; loadgrp BLOOD.GRP)"
-    note: "Blood main resource. Shipped as part of One Unit Whole Blood / Fresh Supply."
+    size: 8200353
+    crc32: "b291418f"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:32, 485-499"
 
-  - name: "BLOOD.GRP"
+  - name: "BLOOD.RFF"
+    description: "BLOOD: 1.1"
     category: game_data
     system: blood
+    path: "BLOOD.RFF"
     required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt (BLOOD: One Unit Whole Blood loadgrp)"
+    size: 8231173
+    crc32: "c3a99936"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:33, 501-515"
+
+  - name: "BLOOD.RFF"
+    description: "BLOOD: One Unit Whole Blood"
+    category: game_data
+    system: blood
+    path: "BLOOD.RFF"
+    required: false
+    size: 9570681
+    crc32: "a8fdda84"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:34, 517-531"
+    note: "Any other archive holding help1.qav, normal.plu, inverse.clu, cosine.dat and blood.pal is taken as an unknown Blood version (lines 533-544)."
 
   - name: "SOUNDS.RFF"
     category: game_data
     system: blood
+    path: "SOUNDS.RFF"
     required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt (BLOOD loadgrp \"SOUNDS.RFF\")"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:494, 510, 526, 542"
+    note: "Named by loadgrp in every Blood block; loaded with the main resource."
 
   - name: "GUI.RFF"
     category: game_data
     system: blood
+    path: "GUI.RFF"
     required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt (BLOOD loadgrp \"GUI.RFF\")"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:494, 510, 526, 542"
+    note: "Named by loadgrp in every Blood block; loaded with the main resource."
+
+  - name: "BLOOD.GRP"
+    category: game_data
+    system: blood
+    path: "BLOOD.GRP"
+    required: false
+    source_ref: "wadsrc/static/engine/grpinfo.txt:494, 510, 526, 542"
+    note: "Named by loadgrp in every Blood block; loaded with the main resource."
 
   - name: "CRYPTIC.INI"
     category: game_data
     system: blood
+    path: "CRYPTIC.INI"
     required: false
-    source_ref: "wadsrc/static/engine/grpinfo.txt (BLOOD: Cryptic Passage addon)"
+    source_ref: "wadsrc/static/engine/grpinfo.txt:574-585, source/core/gamecontrol.cpp:361-367, source/core/searchpaths.cpp:712-730"
+    note: "Cryptic Passage addon. Detected next to the Blood files when CRYPTIC.INI, CP01.MAP and CP02.MAP are all present; depends on One Unit Whole Blood and loads CPART07.AR_ and CPART15.AR_."
 
   # ================================================================
   # Shadow Warrior
   # ================================================================
 
   - name: "SW.GRP"
+    description: "Shadow Warrior"
     category: game_data
     system: shadow-warrior
+    path: "SW.GRP"
     required: false
     size: 47536148
-    crc32: "7545319F"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Shadow Warrior registered)"
+    crc32: "7545319f"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:36, 614-625"
 
-  - name: "WD.GRP"
+  - name: "SW.GRP"
+    description: "Shadow Warrior (Europe)"
     category: game_data
     system: shadow-warrior
+    path: "SW.GRP"
+    required: false
+    size: 47536148
+    crc32: "d4a1e153"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:627-638"
+
+  - name: "SW.GRP"
+    description: "Shadow Warrior (UK)"
+    category: game_data
+    system: shadow-warrior
+    path: "SW.GRP"
+    required: false
+    size: 47536148
+    crc32: "3ee68767"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:640-651"
+
+  - name: "SW.GRP"
+    description: "Shadow Warrior (Censored)"
+    category: game_data
+    system: shadow-warrior
+    path: "SW.GRP"
+    required: false
+    size: 47537951
+    crc32: "1a8776d2"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:653-664"
+
+  - name: "SW.GRP"
+    description: "Shadow Warrior Shareware 1.0"
+    category: game_data
+    system: shadow-warrior
+    path: "SW.GRP"
+    required: false
+    size: 25702245
+    crc32: "daa6bece"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:666-676"
+
+  - name: "SW.GRP"
+    description: "Shadow Warrior Shareware 1.1"
+    category: game_data
+    system: shadow-warrior
+    path: "SW.GRP"
+    required: false
+    size: 25833456
+    crc32: "f21a6b35"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:678-688"
+
+  - name: "SW.GRP"
+    description: "Shadow Warrior Shareware 1.2"
+    category: game_data
+    system: shadow-warrior
+    path: "SW.GRP"
+    required: false
+    size: 26056769
+    crc32: "08a7fa1f"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:690-700"
+
+  - name: "WT.GRP"
+    description: "Shadow Warrior: Wanton Destruction"
+    category: game_data
+    system: shadow-warrior
+    path: "WT.GRP"
     required: false
     size: 48698128
-    crc32: "A9AAA7B7"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Shadow Warrior: Wanton Destruction)"
+    crc32: "a9aaa7b7"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:37, 714-724"
+    note: "Addon of the registered game (dependency SWREG12_CRC)."
 
-  - name: "TD.GRP"
+  - name: "WT.GRP"
+    description: "Shadow Warrior: Wanton Destruction"
     category: game_data
     system: shadow-warrior
+    path: "WT.GRP"
+    required: false
+    size: 48698128
+    crc32: "8b6e8011"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:726-736"
+
+  - name: "TD.GRP"
+    description: "Shadow Warrior: Twin Dragon"
+    category: game_data
+    system: shadow-warrior
+    path: "TD.GRP"
     required: false
     size: 12499012
-    crc32: "A1A65BE8"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Shadow Warrior: Twin Dragon)"
+    crc32: "a1a65be8"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:38, 751-762"
+    note: "Addon of the registered game (dependency SWREG12_CRC)."
+
+  - name: "TD.GRP"
+    description: "Shadow Warrior: Twin Dragon"
+    category: game_data
+    system: shadow-warrior
+    path: "TD.GRP"
+    required: false
+    size: 6236287
+    crc32: "b5b71277"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:764-774"
+
+  - name: "TD.GRP"
+    description: "Shadow Warrior: Twin Dragon"
+    category: game_data
+    system: shadow-warrior
+    path: "TD.GRP"
+    required: false
+    size: 6235578
+    crc32: "acc8dcde"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:776-786"
 
   # ================================================================
   # Powerslave / Exhumed
   # ================================================================
 
   - name: "STUFF.DAT"
+    description: "Powerslave"
     category: game_data
     system: exhumed
+    path: "STUFF.DAT"
     required: false
     size: 27020745
-    crc32: "303CBD89"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Powerslave)"
+    crc32: "303cbd89"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:40, 901-912"
 
   - name: "STUFF.DAT"
+    description: "Exhumed"
     category: game_data
     system: exhumed
-    path: ".variants/STUFF.DAT.e3b172f1"
+    path: "STUFF.DAT"
     required: false
     size: 27108170
-    crc32: "E3B172F1"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Exhumed)"
+    crc32: "e3b172f1"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:41, 914-925"
+
+  - name: "STUFF.DAT"
+    description: "Powerslave Demo"
+    category: game_data
+    system: exhumed
+    path: "STUFF.DAT"
+    required: false
+    size: 27020745
+    crc32: "1d8c7645"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:42, 927-937"
 
   # ================================================================
   # Redneck Rampage
   # ================================================================
 
   - name: "REDNECK.GRP"
+    description: "Redneck Rampage"
     category: game_data
     system: redneck
+    path: "REDNECK.GRP"
     required: false
     size: 141174222
-    crc32: "19D9BC79"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Redneck Rampage)"
+    crc32: "19d9bc79"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:28, 788-801"
 
   - name: "REDNECK.GRP"
+    description: "Redneck Rampage Rides Again"
     category: game_data
     system: redneck
-    path: ".variants/REDNECK.GRP.958018c6"
+    path: "REDNECK.GRP"
     required: false
     size: 191798609
-    crc32: "958018C6"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (Redneck Rampage Rides Again)"
+    crc32: "958018c6"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:29, 803-816"
 
   # ================================================================
   # Nam / Napalm / WWII GI
   # ================================================================
 
   - name: "NAM.GRP"
+    description: "NAM"
     category: game_data
     system: nam
+    path: "NAM.GRP"
     required: false
     size: 43448927
-    crc32: "75C1F07B"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (NAM)"
+    crc32: "75c1f07b"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:24, 846-858"
 
   - name: "NAPALM.GRP"
+    description: "NAPALM"
     category: game_data
     system: nam
+    path: "NAPALM.GRP"
     required: false
     size: 44365728
-    crc32: "3DE1589A"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (NAPALM)"
+    crc32: "3de1589a"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:25, 860-872"
 
   - name: "WW2GI.GRP"
+    description: "WWII GI"
     category: game_data
     system: ww2gi
+    path: "WW2GI.GRP"
     required: false
     size: 77939508
-    crc32: "907B82BF"
-    source_ref: "wadsrc/static/engine/grpinfo.txt (WWII GI)"
+    crc32: "907b82bf"
+    validation: [size, crc32]
+    source_ref: "wadsrc/static/engine/grpinfo.txt:26, 874-886"
