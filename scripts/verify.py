@@ -1467,6 +1467,12 @@ def verify_emulator(
                 ) > _SEVERITY_ORDER.get(prev_sev, 0):
                     file_severity[dest] = sev
 
+        # Results of this emulator, by destination. Several entries of one
+        # profile on one destination are the releases the code accepts
+        # there (a shareware and a retail HOG, each GRP in a size table):
+        # holding one of them fills the slot, and the others are not gaps.
+        emu_results: dict[str, list[tuple[dict, bool, bool]]] = {}
+
         for file_entry in files:
             # Skip archived files (verified as archive units above)
             if file_entry.get("archive"):
@@ -1545,21 +1551,30 @@ def verify_emulator(
             result["system"] = file_entry.get("system", "")
             result["hle_fallback"] = hle
             result["ground_truth"] = build_ground_truth(name, validation_index)
-            details.append(result)
-
-            # Aggregate by destination (path if available, else name)
             dest = file_entry.get("path", "") or name
-            dest_to_name[dest] = name
-            cur = result["status"]
-            prev = file_status.get(dest)
-            if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(prev, 0):
-                file_status[dest] = cur
-            sev = compute_severity(cur, required, "existence", hle)
-            prev_sev = file_severity.get(dest)
-            if prev_sev is None or _SEVERITY_ORDER.get(sev, 0) > _SEVERITY_ORDER.get(
-                prev_sev, 0
-            ):
-                file_severity[dest] = sev
+            emu_results.setdefault(dest, []).append((result, required, hle))
+
+        for dest, alternatives in emu_results.items():
+            held = [a for a in alternatives if a[0]["status"] == Status.OK]
+            if held and len(alternatives) > 1:
+                alternatives = held[:1]
+            for result, required, hle in alternatives:
+                details.append(result)
+
+                # Aggregate by destination (path if available, else name)
+                dest_to_name[dest] = result["name"]
+                cur = result["status"]
+                prev = file_status.get(dest)
+                if prev is None or _STATUS_ORDER.get(cur, 0) > _STATUS_ORDER.get(
+                    prev, 0
+                ):
+                    file_status[dest] = cur
+                sev = compute_severity(cur, required, "existence", hle)
+                prev_sev = file_severity.get(dest)
+                if prev_sev is None or _SEVERITY_ORDER.get(
+                    sev, 0
+                ) > _SEVERITY_ORDER.get(prev_sev, 0):
+                    file_severity[dest] = sev
 
     counts = {
         Severity.OK: 0,

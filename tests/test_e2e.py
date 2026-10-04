@@ -1058,6 +1058,30 @@ class TestE2E(unittest.TestCase):
         self.assertEqual(len(groups), 1)
         self.assertEqual(len(groups[0][0]), 2)
 
+    def test_52_platform_grouping_splits_on_cores(self):
+        """Same baseline, different emulators: the core files differ."""
+        declared = {
+            "cores_all": "all_libretro",
+            "cores_all_too": "all_libretro",
+            "cores_listed": ["retroarch", "openmsx"],
+        }
+        for name, cores in declared.items():
+            config = {
+                "platform": name,
+                "verification_mode": "existence",
+                "cores": cores,
+                "systems": {
+                    "s": {"files": [{"name": "x.bin", "destination": "x.bin"}]}
+                },
+            }
+            with open(os.path.join(self.platforms_dir, f"{name}.yml"), "w") as fh:
+                yaml.dump(config, fh)
+        groups = group_identical_platforms(list(declared), self.platforms_dir)
+        self.assertEqual(
+            sorted(sorted(group) for group, _rep in groups),
+            [["cores_all", "cores_all_too"], ["cores_listed"]],
+        )
+
     def test_60_storage_external(self):
         from generate_pack import resolve_file
 
@@ -1453,6 +1477,45 @@ class TestE2E(unittest.TestCase):
             sorted(alone.get("data_dir_notices", [])),
             ["shared-dir", "standalone-only-dir"],
         )
+
+    def test_97c_one_held_release_fills_a_slot_several_are_accepted_for(self):
+        """Entries of one profile on one destination are alternatives.
+
+        A profile lists each release the code accepts under a name (the
+        shareware and the retail archive, told apart by size). Holding one
+        is the slot filled: the releases not held are not gaps and must not
+        drag the destination down to the worst status among them.
+        """
+        present = os.path.join(self.bios_dir, "present_req.bin")
+        size = os.path.getsize(present)
+        profile = {
+            "emulator": "Releases",
+            "type": "standalone",
+            "cores": ["releases"],
+            "systems": ["console-a"],
+            "files": [
+                {"name": "present_req.bin", "path": "game/present_req.bin",
+                 "required": False, "size": size + 7, "validation": ["size"],
+                 "description": "retail"},
+                {"name": "present_req.bin", "path": "game/present_req.bin",
+                 "required": False, "size": size, "validation": ["size"],
+                 "description": "shareware"},
+                {"name": "absent_everywhere.bin", "path": "game/absent.bin",
+                 "required": False},
+            ],
+        }
+        with open(os.path.join(self.emulators_dir, "releases.yml"), "w") as fh:
+            yaml.dump(profile, fh)
+        result = verify_emulator(
+            ["releases"], self.emulators_dir, self.db, standalone=True
+        )
+        statuses = {d["name"]: d["status"] for d in result["details"]}
+        self.assertEqual(statuses["present_req.bin"], "ok")
+        self.assertEqual(statuses["absent_everywhere.bin"], "missing")
+        self.assertEqual(
+            sum(1 for d in result["details"] if d["name"] == "present_req.bin"), 1
+        )
+        self.assertEqual(result["total_files"], 2)
 
     def test_98_verify_emulator_validation_label(self):
         """Validation label reflects the checks used."""
