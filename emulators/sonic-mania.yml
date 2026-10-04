@@ -1,0 +1,38 @@
+emulator: Sonic Mania Decompilation
+type: standalone
+core_classification: game_engine
+source: "https://github.com/Rubberduckycooly/Sonic-Mania-Decompilation"
+upstream: "https://github.com/Rubberduckycooly/RSDKv5-Decompilation"
+source_commit: "9dc699428420d752af9767bdb13f585ee0881bc0"
+upstream_commit: "191d7aea6c262d891244172a8609ac69fbfd7571"
+profiled_date: "2026-10-04"
+display_name: "Sonic Mania (RSDKv5 Decomp)"
+cores: []
+systems: [sonic-mania]
+
+notes: |
+  Full RSDKv5 decompilation of Sonic Mania (Christian Whitehead / Headcannon,
+  2017). Links against the shared RSDKv5-Decompilation engine; game code
+  lives in SonicMania/ and the engine in dependencies/RSDKv5.
+
+  LoadDataPack reads an RSDK v5 container with a 4-byte "RSDK" signature,
+  then a version byte and a 16-bit file count followed by MD5+offset+size
+  per entry. The signature is the only validation; the engine never hashes
+  the full pack.
+  ref: dependencies/RSDKv5/RSDKv5/RSDK/Core/Reader.cpp:107-164 (LoadDataPack)
+
+  Settings.ini key Game:dataFile overrides the default "Data.rsdk". If
+  the ini is absent the engine still calls LoadDataPack("Data.rsdk").
+  ref: dependencies/RSDKv5/RSDKv5/RSDK/User/Core/UserCore.cpp:313,557
+
+files:
+  - name: "Data.rsdk"
+    category: game_data
+    system: sonic-mania
+    required: true
+    source_ref: "dependencies/RSDKv5/RSDKv5/RSDK/Core/Reader.cpp:107 (LoadDataPack), User/Core/UserCore.cpp:313"
+    note: |
+      Sonic Mania game assets (RSDK v5 container, "RSDK" signature). Shipped
+      inside the official Sonic Mania release (Steam, Epic, consoles). The
+      engine aborts gameplay if the pack cannot be opened; without it only
+      the dev-menu error path runs.
