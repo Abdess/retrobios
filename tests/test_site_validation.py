@@ -73,6 +73,22 @@ class WikiSourceHeadings(unittest.TestCase):
         self.assertEqual(offenders, [])
 
 
+class PlatformDetails(unittest.TestCase):
+    def test_lists_and_flags_read_as_prose(self):
+        import generate_site
+
+        lines = generate_site._render_platform_details(
+            {"platform_details": {"megacd": {
+                "extensions_tried": [".bin", ".zip"],
+                "hle_available": False,
+                "root": "<system_dir>/x",
+            }}}
+        )
+        self.assertIn("    - extensions_tried: .bin, .zip", lines)
+        self.assertIn("    - hle_available: no", lines)
+        self.assertIn("    - root: &lt;system_dir>/x", lines)
+
+
 class RenderedSiteValidation(unittest.TestCase):
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)

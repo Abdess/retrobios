@@ -2145,14 +2145,21 @@ def _render_platform_details(profile: dict) -> list[str]:
             if isinstance(pv, dict):
                 lines.append(f"    **{pk}:**")
                 for sk, sv in pv.items():
-                    lines.append(f"    - {sk}: {sv}")
-            elif isinstance(pv, list):
-                lines.append(f"    **{pk}:** {', '.join(str(x) for x in pv)}")
+                    lines.append(f"    - {sk}: {_plain_value(sv)}")
             else:
-                lines.append(f"    **{pk}:** {pv}")
+                lines.append(f"    **{pk}:** {_plain_value(pv)}")
         lines.append("")
 
     return lines
+
+
+def _plain_value(value: object) -> str:
+    """A scalar or a list of scalars as a reader writes it, not as Python does."""
+    if isinstance(value, bool):
+        return "yes" if value else "no"
+    if isinstance(value, (list, tuple)):
+        return ", ".join(_plain_value(item) for item in value)
+    return _escape_tags(str(value))
 
 
 def _render_structured_blocks(profile: dict) -> list[str]:
