@@ -297,6 +297,7 @@ files:
     validation: [sha256]
     description: "Roland CM-300 / SCC-1 v1.10 program ROM 1 (shared with v1.20)"
     source_ref: "src/sc55/rom.rs:236"
+    unsourceable: "no public dump located (2026-10-04); a same-named ROM of another set must not stand in"
 
   - name: "sc55-roms/cm300-v1.10/rom2.bin"
     system: dos
@@ -324,6 +325,7 @@ files:
     validation: [sha256]
     description: "Roland SCB-55 v2.00 program ROM 1 (shared with RLP-3237)"
     source_ref: "src/sc55/rom.rs:269"
+    unsourceable: "no public dump located (2026-10-04); a same-named ROM of another set must not stand in"
 
   - name: "sc55-roms/scb55-v2.00/rom2.bin"
     system: dos
@@ -342,6 +344,7 @@ files:
     validation: [sha256]
     description: "Roland RLP-3237 v2.01 program ROM 2"
     source_ref: "src/sc55/rom.rs:280"
+    unsourceable: "no public dump located (2026-10-04); a same-named ROM of another set must not stand in"
 
   - name: "sc55-roms/rlp3237-v2.01/wave1.bin"
     system: dos
@@ -351,3 +354,4 @@ files:
     validation: [sha256]
     description: "Roland RLP-3237 Wave1 PCM"
     source_ref: "src/sc55/rom.rs:281"
+    unsourceable: "no public dump located (2026-10-04); a same-named ROM of another set must not stand in"
