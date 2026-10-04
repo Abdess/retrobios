@@ -331,7 +331,7 @@ which CI validates every profile against.
 | `mode` | no | default mode: `standalone`, `libretro`, or `both` |
 | `verification` | no | how the core verifies BIOS: `existence`, `md5`, `sha1`, `crc32` |
 | `files` | yes, unless `type: alias` | list of file entries |
-| `data_directories` | no | whole directory trees the core needs, referencing `_data_dirs.yml` keys |
+| `data_directories` | no | whole directory trees the core needs, referencing `_data_dirs.yml` keys; an entry may carry `mode:` when only one build reads the tree |
 | `notes` | no | free-form technical notes |
 | `note` | no | single-paragraph variant of `notes` |
 | `exclusion_note` | no | why the profile has no files despite .info declaring firmware |

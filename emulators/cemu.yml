@@ -5,9 +5,9 @@ source: "https://git.libretro.com/libretro/cemu-libretro"
 source_mirror: "https://github.com/WizzardSK/cemu-libretro"
 upstream: "https://github.com/cemu-project/Cemu"
 logo: "https://raw.githubusercontent.com/cemu-project/Cemu/main/dist/linux/info.cemu.Cemu.png"
-profiled_date: "2026-09-17"
-source_commit: "575236a302d399a217fb0942aaaa231538b48134"
-upstream_commit: "3310f3b8b184d64a62b89fd59088c799432badf5"
+profiled_date: "2026-10-04"
+source_commit: "4802094a2c15559541b3da3a6b11c2e12ba5d7e8"
+upstream_commit: "32e6628a6a9e5255fd0f7e734386a364ff9c106e"
 core_version: "2.6"
 display_name: "Nintendo - Wii U (Cemu)"
 cores:
@@ -17,21 +17,24 @@ systems: [nintendo-wiiu]
 data_directories:
   - ref: cemu-gameprofiles
     destination: "Cemu/gameProfiles/default"
-    source_ref: "src/Cafe/GameProfile/GameProfile.cpp:181-195, src/libretro/CemuLibretro.cpp:1249-1257"
+    source_ref: "src/Cafe/GameProfile/GameProfile.cpp:181-195, src/libretro/CemuLibretro.cpp:1699-1707"
   - ref: cemu-graphic-packs
     destination: "Cemu/graphicPacks/downloadedGraphicPacks"
-    source_ref: "src/Cafe/GraphicPack/GraphicPack2.cpp:96-111, src/libretro/CemuLibretro.cpp:3334-3349"
+    mode: standalone
+    source_ref: "src/Cafe/GraphicPack/GraphicPack2.cpp:96-111, src/gui/wxgui/DownloadGraphicPacksWindow.cpp:234-238"
 
 notes: |
-  Wii U emulator. The libretro core is a fork of the whole Cemu tree, kept
-  merged with upstream, with the frontend glue in src/libretro/. The
-  upstream_commit above is the last merge base. It builds without wxWidgets and
-  ships as a bare shared object on six buildbot targets: linux-x86_64,
-  windows-x86_64, osx-x86_64, osx-arm64, android-arm64-v8a, android-x86_64.
-  Nothing that the standalone distribution carries next to the executable
-  (resources/, gameProfiles/default/) comes with the core.
-  ref: CMakeLists.txt:221-232, src/CMakeLists.txt:71-80,
-       .github/workflows/libretro.yml:1-8
+  Wii U emulator. The libretro core is a fork of the Cemu tree with the wx
+  application removed, kept merged with upstream, with the frontend glue in
+  src/libretro/. The upstream_commit above is the last merge base. The
+  repository builds the core and nothing else, as a bare shared object, for
+  linux x86_64 and aarch64, windows x86_64, osx x86_64 and arm64, android
+  arm64-v8a and x86_64, webos aarch64, ios arm64 and tvos arm64. Nothing that
+  the standalone distribution carries next to the executable (resources/,
+  gameProfiles/default/) comes with the core. The community graphic packs,
+  which standalone downloads, are compiled into it.
+  ref: CMakeLists.txt:4-7, src/CMakeLists.txt:75-90,
+       .gitlab-ci.yml:110, 116, 139, 400, 421, 426, 434, 464, 550, 569
 
   Path model. Cemu resolves every file through four roots: the user data
   path (keys.txt, otp.bin, seeprom.bin, cafeLibs/, graphicPacks/,
@@ -39,8 +42,8 @@ notes: |
   (settings.xml, network_services.xml, controllerProfiles/, per-title
   gameProfiles/), the data path (resources/sharedFonts/, gameProfiles/default/)
   and the MLC. The libretro core points user data, config, cache and data at
-  <system_dir>/Cemu, and puts the MLC at <save_dir>/Cemu/mlc01 unless
-  settings.xml under <system_dir>/Cemu names another mlc_path. The Cemu
+  <system_dir>/Cemu, and always puts the MLC at <save_dir>/Cemu/mlc01: it
+  does not read settings.xml. The Cemu
   subdirectory is not doubled when the frontend already hands over a
   directory of that name (saves sorted per core). Standalone Cemu uses the
   portable directory next to the executable when it exists, otherwise
@@ -48,8 +51,8 @@ notes: |
   Linux, and the MLC defaults to <user data>/mlc01. path: entries below are
   the libretro destination under the system directory; standalone_path: is
   relative to the Cemu user data directory.
-  ref: src/libretro/CemuLibretro.cpp:1197-1257,
-       src/libretro/CemuLibretro.cpp:2590-2601,
+  ref: src/libretro/CemuLibretro.cpp:1647-1707,
+       src/libretro/CemuLibretro.cpp:3264-3272,
        src/gui/wxgui/CemuApp.cpp:90-123, src/gui/wxgui/CemuApp.cpp:127-171,
        src/config/ActiveSettings.cpp:295-321
 
@@ -65,7 +68,7 @@ notes: |
   directories are not encrypted with a disc key and load without the file.
   ref: src/Cafe/Filesystem/FST/KeyCache.cpp:64-136,
        src/Cafe/Filesystem/FST/FST.cpp:192-246,
-       src/libretro/CemuLibretro.cpp:3862-3905
+       src/libretro/CemuLibretro.cpp:4688-4734
 
   Shared fonts. LoadSharedData runs at every title start and looks for the
   four fonts of title 0005001b-10042400 in the MLC first, then under
@@ -79,7 +82,7 @@ notes: |
   of the source tree are Noto Sans CJK Medium faces under the console names,
   not dumps: the standalone distribution ships them, the libretro core does
   not and looks under <system_dir>/Cemu/resources/sharedFonts/.
-  ref: src/Cafe/CafeSystem.cpp:283-362, src/Cafe/CafeSystem.cpp:875-879,
+  ref: src/Cafe/CafeSystem.cpp:286-365, src/Cafe/CafeSystem.cpp:907-911,
        src/Cafe/OS/libs/coreinit/coreinit.cpp:137-184,
        src/resource/CafeDefaultFont.cpp:2562-2569
 
@@ -107,38 +110,53 @@ notes: |
   swkbd.rpl and erreula.rpl on the presence of their data packs in the MLC
   (swkbd.pack of title 0005001b-1004f000, erreula.pack of 0005001b-10051000),
   falling back to the built-in applets when the pack is absent.
-  ref: src/Cafe/OS/RPL/rpl.cpp:1923-1933, src/Cafe/OS/RPL/rpl.cpp:1965-1985,
-       src/Cafe/OS/RPL/rpl.cpp:2136-2148, src/config/ActiveSettings.cpp:57-60,
+  ref: src/Cafe/OS/RPL/rpl.cpp:1929-1939, src/Cafe/OS/RPL/rpl.cpp:1971-1991,
+       src/Cafe/OS/RPL/rpl.cpp:2142-2154, src/config/ActiveSettings.cpp:57-60,
        src/Cafe/OS/libs/snd_user/snd_user.cpp:1220-1227
 
   Data directories. A title's game profile is read from gameProfiles/<title
   id>.ini under the config path, then from gameProfiles/default/<title
   id>.ini under the data path; upstream ships 236 of them in
   bin/gameProfiles/default and the libretro data path is <system_dir>/Cemu.
-  Graphic packs are every directory holding a rules.txt under
-  graphicPacks/ of the user data path; the standalone downloader extracts
-  the cemu_graphic_packs release into graphicPacks/downloadedGraphicPacks/,
-  and the libretro core enables the packs flagged default on load. Miiverse
+  Standalone loads as a graphic pack every directory holding a rules.txt
+  under graphicPacks/ of the user data path, and its downloader extracts the
+  cemu_graphic_packs release into graphicPacks/downloadedGraphicPacks/. The
+  libretro core carries its own copy of that set, zipped into the binary at
+  build time from the dependencies/cemu_graphic_packs submodule. On each
+  content load it compares the first line of graphicPacks/version.txt with
+  the set it carries and, when they differ, deletes everything under
+  <system_dir>/Cemu/graphicPacks and unpacks its set there. A user's own
+  packs go in <system_dir>/Cemu/customGraphicPacks, where a folder replaces
+  the bundled pack at the same relative path. The core enables the packs
+  flagged default and those switched on through its core options. Miiverse
   posts for The Wind Waker HD are served from resources/miiverse/OfflineDB.zar
   under the user data path when the Nintendo network service is selected.
   ref: src/Cafe/GameProfile/GameProfile.cpp:181-195,
        src/Cafe/GraphicPack/GraphicPack2.cpp:96-111,
        src/gui/wxgui/DownloadGraphicPacksWindow.cpp:133,
        src/gui/wxgui/DownloadGraphicPacksWindow.cpp:234-238,
-       src/libretro/CemuLibretro.cpp:3334-3349,
+       src/libretro/embed_graphic_packs.cmake:8-54,
+       src/libretro/LibretroGraphicPacks.cpp:30-103,
+       src/libretro/CemuLibretro.cpp:4883,
+       src/libretro/CemuLibretro.cpp:2745-2786,
+       src/libretro/CemuLibretro.cpp:3130-3140,
        src/Cafe/OS/libs/nn_olv/nn_olv_OfflineDB.cpp:21-31,
        src/Cafe/OS/libs/nn_olv/nn_olv_OfflineDB.cpp:124-125,
        src/Cafe/OS/libs/nn_olv/nn_olv_InitializeTypes.cpp:242-248
 
-  Generated, not collected: settings.xml, network_services.xml (custom
-  service URLs, read when present), controllerProfiles/, title_list_cache.xml
-  (disabled in the core), the shader caches, log.txt, sdcard/, dump/, and
-  the language.txt and country.txt the wx frontend writes into title
-  0005001b-1005c000 of the MLC on first run. title.tmd, title.tik and
-  bootSound.btsnd belong to each title's own dump.
-  ref: src/main.cpp:129-192, src/config/NetworkSettings.cpp:10-14,
+  Generated, not collected: settings.xml (standalone only), network_services.xml
+  (custom service URLs, read when present), controllerProfiles/,
+  title_list_cache.xml (standalone only, the core keeps no cache), the shader
+  caches, log.txt, sdcard/, dump/, and the language.txt and country.txt that
+  the wx frontend and the libretro core both write into title
+  0005001b-1005c000 of the MLC when absent. The core also creates titles/
+  under <system_dir>/Cemu and scans it for updates and DLC, which like
+  title.tmd, title.tik and bootSound.btsnd belong to each title's own dump.
+  ref: src/main.cpp:117-141, src/config/NetworkSettings.cpp:10-14,
        src/gui/wxgui/CemuApp.cpp:580-606,
-       src/Cafe/HW/Latte/Core/LatteShaderCache.cpp:238
+       src/libretro/CemuLibretro.cpp:1609-1645,
+       src/libretro/CemuLibretro.cpp:3289-3295,
+       src/Cafe/HW/Latte/Core/LatteShaderCache.cpp:232
 
 files:
   - name: keys.txt
@@ -151,7 +169,7 @@ files:
       or .wux image, with a 16-byte <image>.key beside the image as the last
       resort. Created with a template when absent. The libretro core
       refuses to load an encrypted image whose key is not in it.
-    source_ref: "src/Cafe/Filesystem/FST/KeyCache.cpp:64-136, src/Cafe/Filesystem/FST/FST.cpp:192-246, src/libretro/CemuLibretro.cpp:3862-3905"
+    source_ref: "src/Cafe/Filesystem/FST/KeyCache.cpp:64-136, src/Cafe/Filesystem/FST/FST.cpp:192-246, src/libretro/CemuLibretro.cpp:4688-4734"
 
   - name: otp.bin
     path: Cemu/otp.bin
@@ -192,7 +210,7 @@ files:
       The four fonts are loaded as a set: one missing in both locations
       drops the whole set to shareddata.bin, then to the placeholder font
       compiled into the binary.
-    source_ref: "src/Cafe/CafeSystem.cpp:289, src/Cafe/CafeSystem.cpp:297-353"
+    source_ref: "src/Cafe/CafeSystem.cpp:292, src/Cafe/CafeSystem.cpp:300-356"
 
   - name: CafeKr.ttf
     path: Cemu/mlc01/sys/title/0005001b/10042400/content/CafeKr.ttf
@@ -201,7 +219,7 @@ files:
     required: false
     hle_fallback: true
     description: "Shared font, Korean, console dump"
-    source_ref: "src/Cafe/CafeSystem.cpp:290, src/Cafe/CafeSystem.cpp:297-353"
+    source_ref: "src/Cafe/CafeSystem.cpp:293, src/Cafe/CafeSystem.cpp:300-356"
 
   - name: CafeStd.ttf
     path: Cemu/mlc01/sys/title/0005001b/10042400/content/CafeStd.ttf
@@ -210,7 +228,7 @@ files:
     required: false
     hle_fallback: true
     description: "Shared font, standard Latin and Japanese, console dump"
-    source_ref: "src/Cafe/CafeSystem.cpp:291, src/Cafe/CafeSystem.cpp:297-353"
+    source_ref: "src/Cafe/CafeSystem.cpp:294, src/Cafe/CafeSystem.cpp:300-356"
 
   - name: CafeTw.ttf
     path: Cemu/mlc01/sys/title/0005001b/10042400/content/CafeTw.ttf
@@ -219,7 +237,7 @@ files:
     required: false
     hle_fallback: true
     description: "Shared font, Traditional Chinese, console dump"
-    source_ref: "src/Cafe/CafeSystem.cpp:292, src/Cafe/CafeSystem.cpp:297-353"
+    source_ref: "src/Cafe/CafeSystem.cpp:295, src/Cafe/CafeSystem.cpp:300-356"
 
   - name: CafeCn.ttf
     path: Cemu/resources/sharedFonts/CafeCn.ttf
@@ -235,7 +253,7 @@ files:
       next to the standalone executable. Read only when the MLC copy is
       absent. The libretro core ships without it and looks under
       <system_dir>/Cemu/resources/sharedFonts/.
-    source_ref: "src/Cafe/CafeSystem.cpp:289, src/Cafe/CafeSystem.cpp:326-331, bin/resources/sharedFonts/CafeCn.ttf"
+    source_ref: "src/Cafe/CafeSystem.cpp:292, src/Cafe/CafeSystem.cpp:329-334, bin/resources/sharedFonts/CafeCn.ttf"
 
   - name: CafeKr.ttf
     path: Cemu/resources/sharedFonts/CafeKr.ttf
@@ -246,7 +264,7 @@ files:
     size: 5626464
     sha1: f0ef38fcc6133c24f4f38ff9b5c06b37e970d3cc
     description: "Shared font replacement, Noto Sans KR Medium"
-    source_ref: "src/Cafe/CafeSystem.cpp:290, src/Cafe/CafeSystem.cpp:326-331, bin/resources/sharedFonts/CafeKr.ttf"
+    source_ref: "src/Cafe/CafeSystem.cpp:293, src/Cafe/CafeSystem.cpp:329-334, bin/resources/sharedFonts/CafeKr.ttf"
 
   - name: CafeStd.ttf
     path: Cemu/resources/sharedFonts/CafeStd.ttf
@@ -257,7 +275,7 @@ files:
     size: 5363768
     sha1: da0d4bcc3b13339179bee946eba16adfd731b4d3
     description: "Shared font replacement, Noto Sans JP Medium"
-    source_ref: "src/Cafe/CafeSystem.cpp:291, src/Cafe/CafeSystem.cpp:326-331, bin/resources/sharedFonts/CafeStd.ttf"
+    source_ref: "src/Cafe/CafeSystem.cpp:294, src/Cafe/CafeSystem.cpp:329-334, bin/resources/sharedFonts/CafeStd.ttf"
 
   - name: CafeTw.ttf
     path: Cemu/resources/sharedFonts/CafeTw.ttf
@@ -268,7 +286,7 @@ files:
     size: 6593548
     sha1: 8ec796192ebc710f23ab6bd55453cae523b70444
     description: "Shared font replacement, Noto Sans TC Medium"
-    source_ref: "src/Cafe/CafeSystem.cpp:292, src/Cafe/CafeSystem.cpp:326-331, bin/resources/sharedFonts/CafeTw.ttf"
+    source_ref: "src/Cafe/CafeSystem.cpp:295, src/Cafe/CafeSystem.cpp:329-334, bin/resources/sharedFonts/CafeTw.ttf"
 
   - name: shareddata.bin
     path: Cemu/shareddata.bin
@@ -280,7 +298,7 @@ files:
       Read only when the four shared fonts are not all present: 32 MiB
       copied from the user data path to 0xF8000000, table of font entries
       included. Nothing about it is validated.
-    source_ref: "src/Cafe/CafeSystem.cpp:354-362"
+    source_ref: "src/Cafe/CafeSystem.cpp:357-365"
 
   - name: snd_user.rpl
     path: Cemu/cafeLibs/snd_user.rpl
@@ -293,7 +311,7 @@ files:
       depends on snd_user, unless the game profile turns shared libraries
       off. Named by the code as the module to dump when a title uses an
       audio effect the built-in one does not implement.
-    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1965-1985, src/Cafe/OS/RPL/rpl.cpp:2136-2148, src/Cafe/OS/libs/snd_user/snd_user.cpp:1220-1227"
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1971-1991, src/Cafe/OS/RPL/rpl.cpp:2142-2154, src/Cafe/OS/libs/snd_user/snd_user.cpp:1220-1227"
 
   - name: snduser2.rpl
     path: Cemu/cafeLibs/snduser2.rpl
@@ -303,7 +321,7 @@ files:
     description: "Cafe OS sound library, second generation"
     note: >-
       Same mechanism as snd_user.rpl, for titles that depend on snduser2.
-    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1965-1985, src/Cafe/OS/RPL/rpl.cpp:2136-2148, src/Cafe/OS/libs/snd_user/snd_user.cpp:1220-1227"
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1971-1991, src/Cafe/OS/RPL/rpl.cpp:2142-2154, src/Cafe/OS/libs/snd_user/snd_user.cpp:1220-1227"
 
   - name: swkbd.rpl
     path: Cemu/cafeLibs/swkbd.rpl
@@ -314,7 +332,7 @@ files:
     note: >-
       Loaded from cafeLibs/ only when swkbd.pack is present in the MLC;
       otherwise the built-in keyboard is used and the file is ignored.
-    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1923-1927, src/Cafe/OS/RPL/rpl.cpp:1972-1982"
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1929-1933, src/Cafe/OS/RPL/rpl.cpp:1978-1988"
 
   - name: erreula.rpl
     path: Cemu/cafeLibs/erreula.rpl
@@ -325,7 +343,7 @@ files:
     note: >-
       Loaded from cafeLibs/ only when erreula.pack is present in the MLC;
       otherwise the built-in error viewer is used and the file is ignored.
-    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1929-1933, src/Cafe/OS/RPL/rpl.cpp:1972-1982"
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1935-1939, src/Cafe/OS/RPL/rpl.cpp:1978-1988"
 
   - name: swkbd.pack
     path: Cemu/mlc01/sys/title/0005001b/1004f000/content/00/swkbd/swkbd.pack
@@ -336,7 +354,7 @@ files:
     note: >-
       Its presence in the MLC is what lets a swkbd.rpl from cafeLibs/ be
       used; the applet then reads it through the Cafe filesystem.
-    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1923-1927"
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1929-1933"
 
   - name: erreula.pack
     path: Cemu/mlc01/sys/title/0005001b/10051000/content/00/erreula/erreula.pack
@@ -347,7 +365,7 @@ files:
     note: >-
       Its presence in the MLC is what lets an erreula.rpl from cafeLibs/ be
       used; the applet then reads it through the Cafe filesystem.
-    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1929-1933"
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1935-1939"
 
   - name: OfflineDB.zar
     path: Cemu/resources/miiverse/OfflineDB.zar
@@ -733,7 +751,7 @@ firmware_titles:
     content: ["CafeCn.ttf", "CafeKr.ttf", "CafeStd.ttf", "CafeTw.ttf"]
     required: false
     note: "Read from the MLC before the resources/sharedFonts/ copy of the data path."
-    source_ref: "src/Cafe/CafeSystem.cpp:283-293"
+    source_ref: "src/Cafe/CafeSystem.cpp:286-296"
 
   - id: "0005001b-10054000"
     name: "SSL certificates"
@@ -747,21 +765,21 @@ firmware_titles:
     content: ["content/00/swkbd/swkbd.pack"]
     required: false
     note: "Presence of the pack lets a dumped swkbd.rpl in cafeLibs/ replace the built-in keyboard."
-    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1923-1927"
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1929-1933"
 
   - id: "0005001b-10051000"
     name: "Error viewer applet"
     content: ["content/00/erreula/erreula.pack"]
     required: false
     note: "Presence of the pack lets a dumped erreula.rpl in cafeLibs/ replace the built-in error viewer."
-    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1929-1933"
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1935-1939"
 
   - id: "0005001b-1005c000"
     name: "Language and country lists"
     content: ["language.txt", "country.txt"]
     required: false
-    note: "Written by the wx frontend on first run when absent; the libretro core creates neither."
-    source_ref: "src/gui/wxgui/CemuApp.cpp:580-606"
+    note: "Written when absent, by the wx frontend on first run and by the libretro core at init."
+    source_ref: "src/gui/wxgui/CemuApp.cpp:580-606, src/libretro/CemuLibretro.cpp:1609-1645"
 
 mlc_structure:
   - "mlc01/sys/title/0005001b/10042400/content/"

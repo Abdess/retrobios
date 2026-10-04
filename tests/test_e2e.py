@@ -1429,6 +1429,31 @@ class TestE2E(unittest.TestCase):
         result = verify_emulator(["test_emu"], self.emulators_dir, self.db)
         self.assertIn("test-data-dir", result.get("data_dir_notices", []))
 
+    def test_97b_a_data_directory_follows_its_build_mode(self):
+        """A tree only the standalone build reads is no concern of the core."""
+        profile = {
+            "emulator": "ModeDirs",
+            "type": "standalone + libretro",
+            "cores": ["mode_dirs"],
+            "systems": ["console-a"],
+            "data_directories": [
+                {"ref": "standalone-only-dir", "mode": "standalone"},
+                {"ref": "shared-dir"},
+            ],
+            "files": [{"name": "present_req.bin", "required": True}],
+        }
+        with open(os.path.join(self.emulators_dir, "mode_dirs.yml"), "w") as fh:
+            yaml.dump(profile, fh)
+        as_core = verify_emulator(["mode_dirs"], self.emulators_dir, self.db)
+        self.assertEqual(as_core.get("data_dir_notices", []), ["shared-dir"])
+        alone = verify_emulator(
+            ["mode_dirs"], self.emulators_dir, self.db, standalone=True
+        )
+        self.assertEqual(
+            sorted(alone.get("data_dir_notices", [])),
+            ["shared-dir", "standalone-only-dir"],
+        )
+
     def test_98_verify_emulator_validation_label(self):
         """Validation label reflects the checks used."""
         result = verify_emulator(["test_validation"], self.emulators_dir, self.db)

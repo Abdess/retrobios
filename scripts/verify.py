@@ -1372,7 +1372,9 @@ def verify_emulator(
             ]
 
         # Check data directories (only notice if not cached)
-        for dd in profile.get("data_directories", []):
+        for dd in filter_files_by_mode(
+            profile.get("data_directories", []), standalone
+        ):
             ref = dd.get("ref", "")
             if not ref:
                 continue

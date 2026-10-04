@@ -223,6 +223,14 @@
           "destination": {
             "type": "string"
           },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "standalone",
+              "libretro",
+              "both"
+            ]
+          },
           "source_ref": {
             "type": "string"
           }

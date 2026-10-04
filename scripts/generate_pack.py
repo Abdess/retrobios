@@ -1289,7 +1289,10 @@ def generate_emulator_pack(
         for emu_name, profile in sorted(selected):
             pack_structure = profile.get("pack_structure")
             files = filter_files_by_mode(profile.get("files", []), standalone)
-            for dd in profile.get("data_directories", []):
+            # A tree only one build reads follows that build, like a file.
+            for dd in filter_files_by_mode(
+                profile.get("data_directories", []), standalone
+            ):
                 ref_key = dd.get("ref", "")
                 if not ref_key or not data_registry or ref_key not in data_registry:
                     if ref_key:
