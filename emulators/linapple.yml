@@ -3,8 +3,8 @@ type: standalone
 core_classification: community_fork
 source: "https://github.com/linappleii/linapple"
 upstream: "https://github.com/AppleWin/AppleWin"
-profiled_date: "2026-09-04"
-source_commit: "be9d1d2f3e26c1ef1f1bdc13455ea02954cd2109"
+profiled_date: "2026-10-04"
+source_commit: "02f948d92b0c4df3272ff2ccb0dfcc4daac3e430"
 core_version: "3.0.0"
 display_name: "Apple - Apple II (LinApple)"
 cores:
@@ -14,57 +14,77 @@ systems:
 mode: standalone
 
 notes: |
-  SDL port of AppleWin for Linux. The tree was taken off SourceForge by
-  maxolasersquad, forked further by several users, and now sits under the
-  linappleii namespace (README.md:8-22). Five frontends build from one core:
-  sdl1, sdl2, sdl3, tui and headless (src/frontends/).
+  SDL port of AppleWin for Linux. The SourceForge project was abandoned and
+  its forks were gathered under the linappleii organization
+  (README.md:163-170). Five frontends build from one core: sdl1, sdl2, sdl3,
+  tui and headless (src/frontends/).
 
-  Every ROM is still compiled into the binary, but no longer as a hand-written
-  byte array. scripts/generate_roms.sh turns res/roms/*.rom into EmbeddedRoms.h
-  and EmbeddedRoms.cpp at build time (CMakeLists.txt:280-297), each image behind
-  an ENABLE_ROM_* macro. The relocation preserved the bytes: every hash this
-  profile recorded against the old string literals matches the .rom file that
-  replaced it.
+  The ROMs the emulator runs are compiled into the binary.
+  scripts/generate_roms.sh turns res/roms/*.rom into EmbeddedRoms.h and
+  EmbeddedRoms.cpp, once at configure time and again at build time
+  (CMakeLists.txt:308-346), each image behind an ENABLE_ROM_* macro
+  (scripts/generate_roms.sh:97-119). Nineteen images go through the generator:
+  ten system ROMs, four character generator ROMs and five card ROMs. The
+  printer card and the clock card carry their firmware as arrays in their own
+  source files (src/apple2/peripherals/printer/Printer.cpp:30,
+  src/apple2/peripherals/clock/ClockCard.cpp:20), and the Mockingboard
+  registers no ROM.
 
-  What that macro is set to decides whether a machine model runs at all.
-  CMakeLists.txt:43-148 leaves the Apple ][, ][+, J-Plus, //e and Enhanced //e
-  system ROMs ON, along with the Disk II, Super Serial Card, mouse,
-  Mockingboard, printer and clock firmware. The three clone options are OFF:
-  ENABLE_ROM_CLONE_BASE64A, ENABLE_ROM_CLONE_PRAVETS and
-  ENABLE_ROM_CLONE_TK3000E (CMakeLists.txt:81-83). Selecting one of those
-  machine types on a default build reaches mem_initialize with no rom_data,
-  which prints the model name and its cmake flag, destroys the context and
-  returns -1 (src/apple2/Memory.cpp:1252-1261). The message offers two ways
-  out, and the second is a file: -R, --rom <file> loads a system ROM at
-  runtime (src/frontends/common/AppArgs.cpp:87).
+  What a macro is set to decides whether a machine model runs at all.
+  CMakeLists.txt:57-145 leaves the Apple ][, ][+, J-Plus, //e and Enhanced //e
+  system ROMs ON, along with the Disk II, Super Serial Card and mouse
+  firmware. The three clone options are OFF: ENABLE_ROM_CLONE_BASE64A,
+  ENABLE_ROM_CLONE_PRAVETS and ENABLE_ROM_CLONE_TK3000E
+  (CMakeLists.txt:95-97). Selecting one of those machine types on a default
+  build reaches mem_initialize with no rom_data, which prints the model name
+  and its cmake flag, destroys the context and returns -1
+  (src/apple2/Memory.cpp:1124-1134). The message offers two ways out, and the
+  second is a file: -R, --rom <file> loads a system ROM at runtime
+  (src/frontends/common/AppArgs.cpp:77,186).
 
-  A custom ROM takes precedence over anything embedded. mem_initialize accepts
-  it at exactly 16384 or 12288 bytes, or larger, taking the trailing 16384 for
-  the //e-class types and the trailing 12288 otherwise
-  (src/apple2/Memory.cpp:1165-1186). Below 12288 nothing is selected and the
-  machine fails to start. No hash or name is checked; the file is whatever the
-  user points at.
+  A custom ROM takes precedence over anything embedded. load_custom_rom opens
+  the path as given, then through Path::find_data_file, and refuses a file
+  below 12288 or above 65536 bytes, which stops the start
+  (src/frontends/common/AppController.cpp:104-148,228-230). mem_initialize
+  accepts the buffer at exactly 16384 or 12288 bytes, or larger, taking the
+  trailing 16384 for the //e-class types and the trailing 12288 otherwise
+  (src/apple2/Memory.cpp:1038-1059). No hash or name is checked; the file is
+  whatever the user points at.
 
-  Character generators are res/charset40*.png, converted to XPM by CMake and
-  included at src/apple2/Video.cpp:37-41. One of five is chosen from the
-  machine type and the keyboard language (src/apple2/Video.cpp:1242-1266).
-  The status font is an XPM as well (src/core/Asset.cpp:22,44).
+  Character generators are res/charset40*.png, converted to XPM by CMake
+  (CMakeLists.txt:277-306) and included at src/apple2/Video.cpp:39-43. One of
+  five is chosen from the machine type and the keyboard language
+  (src/apple2/Video.cpp:1228-1252). The status font and the splash screen are
+  XPM as well (src/core/Asset.cpp:15-16,57,63). The four *_Video.rom images
+  are compiled in, and no source file reads their symbols.
 
-  Master.dsk is inserted into slot 6 drive 1 at startup. asset_find_master_disk
-  resolves it through Path::find_data_file (src/core/Asset.cpp:80-93), which
+  Master.dsk is inserted into slot 6 drive 1 at startup unless the command
+  line names a disk or the configuration autoloads one
+  (src/frontends/common/AppController.cpp:171-192). asset_find_master_disk
+  resolves it through Path::find_data_file (src/core/Asset.cpp:25-39), which
   walks the user data and config directories, the executable directory and its
-  res/ neighbours, the share and etc prefixes, the compiled-in SOURCE_RES_DIR,
-  ASSET_DIR, SYSCONF_DIR and SYS_DIR, then every XDG_CONFIG_DIRS entry
-  (src/core/Util_Path.h:86-130). The same search serves icon.bmp.
+  res/ neighbours, the share and etc prefixes beside it, the compiled-in
+  SOURCE_RES_DIR, /usr/local/share/linapple, /usr/share/linapple, every
+  XDG_CONFIG_DIRS entry and /etc/linapple (src/core/Util_Path.h:116-179). The
+  same search serves icon.bmp and a --rom path that does not open as given.
 
-  The debugger reads its symbol tables through g_state.program_dir, declared at
-  src/core/LinAppleCore.h:159 and read in four places without ever being
+  The debugger reads its symbol tables through system_state.program_dir,
+  declared at src/core/LinAppleCore.h:103 and read without ever being
   assigned, so the names resolve against the working directory.
-  g_file_name_symbols lists nine tables (src/Debugger/Debugger_Symbols.cpp:64-74)
-  and CmdSymbolsLoad preloads a table when the debugger calls it with no
-  arguments (src/Debugger/Debugger_Symbols.cpp:664-681). ParseSymbolTable opens
-  the file with fopen and a missing one leaves the debugger running without its
-  symbols (src/Debugger/Debugger_Symbols.cpp:524).
+  g_file_name_symbols lists nine tables (src/Debugger/Debugger_Symbols.cpp:37-48).
+  CmdSymbolsLoad reads a table's default file when it receives no argument
+  (src/Debugger/Debugger_Symbols.cpp:636-652); its only caller is the LOAD
+  parameter of the SYM commands (src/Debugger/Debugger_Symbols.cpp:817-819),
+  and debug_initialize loads no table (src/Debugger/Debug.cpp:29-37).
+  ParseSymbolTable opens the file with fopen and a missing one leaves the
+  debugger running without its symbols (src/Debugger/Debugger_Symbols.cpp:495).
+
+  Peripheral cards are linked into the executable by default. With
+  BUILD_SHARED_PERIPHERALS, OFF at CMakeLists.txt:43, each card builds as a
+  shared object, and peripheral_plugins_init opens every *.so found in the
+  plugin search paths in either build
+  (src/apple2/peripherals/Peripheral_Internal.cpp:192-219,
+  src/core/Util_Path.h:102-114).
 
   linapple.conf carries preferences only (src/core/Registry.cpp,
   src/frontends/common/AppEnvironment.cpp). Each accessor returns a compiled-in
@@ -77,9 +97,9 @@ files:
     min_size: 143105
     max_size: 143364
     validation: [size]
-    source_ref: "src/core/Asset.cpp:25,80-93,96-99"
+    source_ref: "src/core/Asset.cpp:20,25-39,97-112; src/apple2/peripherals/disk/formats/SectorDiskImage.cpp:65-66,79-82"
     note: >
-      asset_find_master_disk warns and returns non-zero when no search path
+      asset_find_master_disk warns and returns false when no search path
       holds the file, and the emulator starts with an empty drive. No hash or
       content check is performed. LinApple and Batocera ship different images
       under this name, both 143360 bytes.
@@ -90,45 +110,46 @@ files:
     size: 2102
     md5: be7a389c5aa678f5e6ce4748593b0a29
     sha1: 5aee3a718f3d541122b61b9b8203e8a28db97a34
-    source_ref: "src/frontends/sdl2/SDL_Asset.cpp:10-25,34-40"
+    source_ref: "src/frontends/sdl2/SDL_Asset.cpp:18-41,55-69"
     note: >
-      asset_load_bmp resolves the name through Path::find_data_file, prints a
-      warning to stderr when no search path holds it and returns nullptr. The
-      sdl1 and sdl2 frontends load it; sdl3 declares the same helper. Absence
-      costs the window its icon and nothing else.
+      sdl_asset_load_bmp resolves the name through Path::find_data_file,
+      prints a warning to stderr when no search path holds it and returns
+      nullptr. The sdl1, sdl2 and sdl3 frontends each load it when the window
+      is created. Absence costs the window its icon and nothing else.
 
   - name: APPLE2E.SYM
     required: false
     description: "Debugger symbol table for the main ROM"
-    source_ref: "src/Debugger/Debugger_Symbols.cpp:64-74,664-681"
+    source_ref: "src/Debugger/Debugger_Symbols.cpp:37-48,636-652"
     note: >
-      Preloaded into the Main table when the debugger calls CmdSymbolsLoad with
-      no arguments. Parsed as text lines of address and symbol name, with no
-      size or hash check.
+      Read into the Main table when SYMMAIN LOAD is entered without a file
+      name. Parsed as text lines of address and symbol name, with no size or
+      hash check.
 
   - name: A2_BASIC.SYM
     required: false
     description: "Debugger symbol table for Applesoft BASIC"
-    source_ref: "src/Debugger/Debugger_Symbols.cpp:64-74,664-681"
+    source_ref: "src/Debugger/Debugger_Symbols.cpp:37-48,636-652"
     note: >
-      Preloaded into the Basic table when the debugger calls CmdSymbolsLoad with
-      no arguments. Parsed as text lines of address and symbol name, with no
-      size or hash check.
+      Read into the Basic table when SYMBASIC LOAD is entered without a file
+      name. Parsed as text lines of address and symbol name, with no size or
+      hash check.
 
   # System ROMs the default build leaves out. ENABLE_ROM_CLONE_BASE64A,
   # ENABLE_ROM_CLONE_PRAVETS and ENABLE_ROM_CLONE_TK3000E are OFF in
-  # CMakeLists.txt:81-83, so these machine types refuse to start unless the
+  # CMakeLists.txt:95-97, so these machine types refuse to start unless the
   # user passes the image with --rom. The names are the ones upstream gives
   # the images in res/roms; the option takes a path and checks no name.
   - name: Base64A.rom
     required: false
     description: "Copam Base 64A clone system ROM, supplied with --rom"
     min_size: 12288
+    max_size: 65536
     validation: [size]
     size: 49152
     md5: 352fdbcae14c6a8c0398822c7a273309
     sha1: f1c779af480b5bda2bdd03950c1201a5c5143bea
-    source_ref: "CMakeLists.txt:81,85-89; src/apple2/Memory.cpp:96-97,1165-1186,1252-1261"
+    source_ref: "CMakeLists.txt:95,99-103; scripts/generate_roms.sh:107; src/frontends/common/AppController.cpp:125-136; src/apple2/Memory.cpp:99-100,1038-1059,1124-1134"
     note: >
       Larger than a system ROM: mem_initialize takes the trailing 12288 bytes
       for this machine type.
@@ -137,31 +158,34 @@ files:
     required: false
     description: "Pravets 82 clone system ROM, supplied with --rom"
     min_size: 12288
+    max_size: 65536
     validation: [size]
     size: 12288
     md5: c619b7edfcf021f3b8fd20d9386676ba
     sha1: 8bd7ced83e209a15e9b19a05a5ef4b8e996dc1a5
-    source_ref: "CMakeLists.txt:82,91-95; src/apple2/Memory.cpp:98-99,1165-1186,1252-1261"
+    source_ref: "CMakeLists.txt:96,105-109; scripts/generate_roms.sh:109; src/frontends/common/AppController.cpp:125-136; src/apple2/Memory.cpp:101-102,1038-1059,1124-1134"
 
   - name: PRAVETS8M.ROM
     required: false
     description: "Pravets 8M clone system ROM, supplied with --rom"
     min_size: 12288
+    max_size: 65536
     validation: [size]
     size: 12288
     md5: 76c79535f7cf77973e2c711aa977a124
     sha1: f1b4ff018acf95f3355f0d575b66a188d728b687
-    source_ref: "CMakeLists.txt:82,91-95; src/apple2/Memory.cpp:100-101,1165-1186,1252-1261"
+    source_ref: "CMakeLists.txt:96,105-109; scripts/generate_roms.sh:111; src/frontends/common/AppController.cpp:125-136; src/apple2/Memory.cpp:103-104,1038-1059,1124-1134"
 
   - name: PRAVETS8C.ROM
     required: false
     description: "Pravets 8C clone system ROM, supplied with --rom"
     min_size: 12288
+    max_size: 65536
     validation: [size]
     size: 16384
     md5: 1896d7b98dd940c89f7c8ea899b71006
     sha1: c976fe56e57706c161f513a82ba3e0d8cda83904
-    source_ref: "CMakeLists.txt:82,91-95; src/apple2/Memory.cpp:102-103,1165-1186,1252-1261"
+    source_ref: "CMakeLists.txt:96,105-109; scripts/generate_roms.sh:110; src/frontends/common/AppController.cpp:125-136; src/apple2/Memory.cpp:105-106,1038-1059,1124-1134"
     note: >
       A //e-class type: mem_initialize takes the trailing 16384 bytes when the
       file is larger.
@@ -170,11 +194,12 @@ files:
     required: false
     description: "Microdigital TK-3000 //e clone system ROM, supplied with --rom"
     min_size: 12288
+    max_size: 65536
     validation: [size]
     size: 16384
     md5: 8d84b614b545d4eec8799d3f325332cb
     sha1: f163e5753c18ff0e812a448e8da406f102600edf
-    source_ref: "CMakeLists.txt:83,97-101; src/apple2/Memory.cpp:104-105,1165-1186,1252-1261"
+    source_ref: "CMakeLists.txt:97,111-115; scripts/generate_roms.sh:112; src/frontends/common/AppController.cpp:125-136; src/apple2/Memory.cpp:107-108,1038-1059,1124-1134"
     note: >
       A //e-class type: mem_initialize takes the trailing 16384 bytes when the
       file is larger.
@@ -183,8 +208,8 @@ analysis:
   embedded_roms:
     mechanism: >
       res/roms/*.rom compiled into EmbeddedRoms.cpp by scripts/generate_roms.sh
-      at build time, each behind an ENABLE_ROM_* macro
-    source_ref: "CMakeLists.txt:43-148,280-297; scripts/generate_roms.sh"
+      at configure and build time, each behind an ENABLE_ROM_* macro
+    source_ref: "CMakeLists.txt:57-145,308-346; scripts/generate_roms.sh:97-119"
     extraction: "hashes computed from the res/roms images the generator reads"
 
     system_roms:
@@ -194,7 +219,7 @@ analysis:
         image: res/roms/Apple2.rom
         cmake_option: ENABLE_ROM_APPLE2
         default: on
-        source_ref: "src/apple2/Memory.cpp:1189-1193"
+        source_ref: "src/apple2/Memory.cpp:1062-1066"
         size: 12288
         md5: 3c406514b9806a7c57ee65fb0b0c39b4
         sha1: 09288be705464b608ff190519ab008d3dfcd1b05
@@ -205,7 +230,7 @@ analysis:
         image: res/roms/Apple2_Plus.rom
         cmake_option: ENABLE_ROM_APPLE2PLUS
         default: on
-        source_ref: "src/apple2/Memory.cpp:1195-1199"
+        source_ref: "src/apple2/Memory.cpp:1068-1072"
         size: 12288
         md5: 572b3005a4fa49bc54917b069b82c1ab
         sha1: 33a24f5489ba9195b44be77d9afb2252594cb5c7
@@ -216,7 +241,7 @@ analysis:
         image: res/roms/Apple2_JPlus.rom
         cmake_option: ENABLE_ROM_APPLE2_JPLUS
         default: on
-        source_ref: "src/apple2/Memory.cpp:1201-1205"
+        source_ref: "src/apple2/Memory.cpp:1074-1078"
         size: 12288
         md5: f3e8237eca3809bec2a42b984a1332a8
         sha1: ad200b3263d08e7235d0871c8595963a07adc905
@@ -227,7 +252,7 @@ analysis:
         image: res/roms/Apple2e.rom
         cmake_option: ENABLE_ROM_APPLE2E
         default: on
-        source_ref: "src/apple2/Memory.cpp:1207-1211"
+        source_ref: "src/apple2/Memory.cpp:1080-1084"
         size: 16384
         md5: 346bc782c6a08a531c460e33bc03daf4
         sha1: 61fa9254628e5bb7236fb474006116d67684d747
@@ -239,65 +264,185 @@ analysis:
         image: res/roms/Apple2e_Enhanced.rom
         cmake_option: ENABLE_ROM_APPLE2ENHANCED
         default: on
-        source_ref: "src/apple2/Memory.cpp:1213-1217"
+        source_ref: "src/apple2/Memory.cpp:1086-1090"
         size: 16384
         md5: 38063e08c778503fc03ecebb979769e9
         sha1: b8ea90abe135a0031065e01697c4a3a20d51198b
         note: "First 4 KB loaded as internal Cx ROM, remaining 12 KB at $D000"
 
+      - symbol: g_rom_clone_base64a
+        machine: "Base64A"
+        machine_type: A2TYPE_CLONE_BASE64A
+        image: res/roms/Base64A.rom
+        cmake_option: ENABLE_ROM_CLONE_BASE64A
+        default: off
+        source_ref: "src/apple2/Memory.cpp:1092-1098"
+        note: "Trailing 12288 bytes of the image are used"
+
+      - symbol: g_rom_clone_pravets82
+        machine: "Pravets 82"
+        machine_type: A2TYPE_CLONE_PRAVETS82
+        image: res/roms/PRAVETS82.ROM
+        cmake_option: ENABLE_ROM_CLONE_PRAVETS
+        default: off
+        source_ref: "src/apple2/Memory.cpp:1099-1103"
+
+      - symbol: g_rom_clone_pravets8m
+        machine: "Pravets 8M"
+        machine_type: A2TYPE_CLONE_PRAVETS8M
+        image: res/roms/PRAVETS8M.ROM
+        cmake_option: ENABLE_ROM_CLONE_PRAVETS
+        default: off
+        source_ref: "src/apple2/Memory.cpp:1104-1107"
+
+      - symbol: g_rom_clone_pravets8c
+        machine: "Pravets 8C"
+        machine_type: A2TYPE_CLONE_PRAVETS8C
+        image: res/roms/PRAVETS8C.ROM
+        cmake_option: ENABLE_ROM_CLONE_PRAVETS
+        default: off
+        source_ref: "src/apple2/Memory.cpp:1108-1112"
+
+      - symbol: g_rom_clone_tk3000e
+        machine: "TK3000 //e"
+        machine_type: A2TYPE_CLONE_TK3000E
+        image: res/roms/TK3000e.rom
+        cmake_option: ENABLE_ROM_CLONE_TK3000E
+        default: off
+        source_ref: "src/apple2/Memory.cpp:1113-1118"
+
+    video_roms:
+      note: >
+        Compiled in under the macro of their machine. No source file reads
+        the symbols; the display uses the character_generators below.
+      images:
+        - symbol: g_rom_apple2_video
+          image: res/roms/Apple2_Video.rom
+          cmake_option: ENABLE_ROM_APPLE2
+          default: on
+          source_ref: "scripts/generate_roms.sh:98"
+          size: 2048
+          md5: 9ac0dc8c4d0002eb45b0b84be0bde5ec
+          sha1: f9d312f128c9557d9d6ac03bfad6c3ddf83e5659
+        - symbol: g_rom_apple2_jplus_video
+          image: res/roms/Apple2_JPlus_Video.rom
+          cmake_option: ENABLE_ROM_APPLE2_JPLUS
+          default: on
+          source_ref: "scripts/generate_roms.sh:101"
+          size: 2048
+          md5: 271e2c9bf928b95e7baeff391db45495
+          sha1: 0a382be58db5215c4a3de53b19a72fab660d5da2
+        - symbol: g_rom_apple2e_enhanced_video
+          image: res/roms/Apple2e_Enhanced_Video.rom
+          cmake_option: ENABLE_ROM_APPLE2ENHANCED
+          default: on
+          source_ref: "scripts/generate_roms.sh:104"
+          size: 4096
+          md5: 9123fff3442c0e688cc6816be88dd4ab
+          sha1: b2b5d87f52693817fc747df087a4aa1ddcdb1f10
+        - symbol: g_rom_clone_base64a_german_video
+          image: res/roms/Base64A_German_Video.rom
+          cmake_option: ENABLE_ROM_CLONE_BASE64A
+          default: off
+          source_ref: "scripts/generate_roms.sh:108"
+          size: 4096
+          md5: 4b45852b369e2afd864a02d0d91f70dc
+          sha1: 87ca8135f7526ddf829f9c2c4f7dbe4d568818fc
+
     peripheral_firmware:
-      - device: "Parallel printer card"
-        slot: 1
-        image: res/roms/Parallel.rom
-        cmake_option: ENABLE_ROM_PRINTER
+      - device: "Disk II controller, 16 sector boot ROM"
+        slot: 6
+        symbol: g_rom_disk2
+        image: res/roms/DISK2.rom
+        cmake_option: ENABLE_ROM_DISK2
         default: on
-        source_ref: "CMakeLists.txt:134,136-140"
+        source_ref: "CMakeLists.txt:118,121-125; scripts/generate_roms.sh:115; src/apple2/peripherals/disk/Disk.cpp:1125-1127"
         size: 256
-        md5: 5902996f16dc78fc013f6e1db14805b3
-        sha1: c75c751589cbcc1ad4ab4f63676af7abadd86f5b
+        md5: 2020aa1413ff77fe29353f3ee72dc295
+        sha1: d4181c9f046aafc3fb326b381baac809d9e38d16
+
+      - device: "Disk II controller, P6 sequencer PROM"
+        slot: 6
+        symbol: g_rom_disk2_p6
+        image: res/roms/DISK2-P6.rom
+        cmake_option: ENABLE_ROM_DISK2
+        default: on
+        source_ref: "scripts/generate_roms.sh:117; src/apple2/peripherals/disk/Disk.cpp:618-624; CMakeLists.txt:942-955"
+        size: 256
+        md5: 5f1be0c1cdff26f5956eef9643911886
+        sha1: bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4
+        note: >
+          The controller state machine reads its opcodes from this image. A
+          build test pins its SHA-1 and its size. Without ENABLE_ROM_DISK2 the
+          sequencer returns a constant and the data register never moves.
+
+      - device: "Disk II controller, 13 sector boot ROM"
+        symbol: g_rom_disk2_13sector
+        image: res/roms/DISK2-13sector.rom
+        cmake_option: ENABLE_ROM_DISK2
+        default: on
+        source_ref: "scripts/generate_roms.sh:116"
+        size: 256
+        md5: 4f80448507cf43ab40c17ac08d89e278
+        sha1: afd060e6f35faf3bb0146fa889fc787adf56330a
+        note: "Compiled in; no source file reads the symbol"
 
       - device: "Super Serial Card"
         slot: 2
+        symbol: g_rom_ssc
         image: res/roms/SSC.rom
         cmake_option: ENABLE_ROM_SSC
         default: on
-        source_ref: "CMakeLists.txt:105,112-116"
+        source_ref: "CMakeLists.txt:119,127-131; scripts/generate_roms.sh:118; src/apple2/peripherals/super_serial_card/SuperSerial.cpp:250-254"
         size: 2048
         md5: 67c0d61ab0911183faf05270f881a97e
         sha1: 6dab633470c6bc4cb3e81d09fda46597caf8ee57
 
       - device: "Mouse interface card"
         slot: 4
+        symbol: g_rom_mouse_interface
         image: res/roms/MouseInterface.rom
         cmake_option: ENABLE_ROM_MOUSE
         default: on
-        source_ref: "CMakeLists.txt:119,122-126"
+        source_ref: "CMakeLists.txt:133,135-139; scripts/generate_roms.sh:119; src/apple2/peripherals/mouse/Mouse.cpp:537-541"
         size: 2048
         md5: 22563ab338024dac7b03510371d49c57
         sha1: 3a9d881a8a8d30f55b9719aceebbcf717f829d6f
 
-      - device: "Disk II controller, 16 sector"
-        slot: 6
-        image: res/roms/DISK2.rom
-        cmake_option: ENABLE_ROM_DISK2
-        default: on
-        source_ref: "CMakeLists.txt:104,107-111"
+      - device: "Parallel printer card"
+        slot: 1
+        symbol: printer_rom
+        image: res/roms/Parallel.rom
+        source_ref: "src/apple2/peripherals/printer/Printer.cpp:30-53,215; CMakeLists.txt:881-883"
         size: 256
-        md5: 2020aa1413ff77fe29353f3ee72dc295
-        sha1: d4181c9f046aafc3fb326b381baac809d9e38d16
+        md5: 5902996f16dc78fc013f6e1db14805b3
+        sha1: c75c751589cbcc1ad4ab4f63676af7abadd86f5b
+        note: >
+          Not generated and behind no cmake option: the card carries the 256
+          bytes as an array in Printer.cpp. The generator does not read
+          res/roms/Parallel.rom; a build test pins its SHA-1 as the reference
+          of that transcription.
+
+      - device: "Clock card"
+        symbol: clock_rom
+        source_ref: "src/apple2/peripherals/clock/ClockCard.cpp:19-29,158"
+        note: >
+          A 256-byte page written in ClockCard.cpp that answers the ProDOS
+          ThunderClock identification and read entry points. No image under
+          res/roms backs it.
 
     character_generators:
-      mechanism: "PNG converted to XPM by CMake, included at src/apple2/Video.cpp:37-41"
-      selection: "machine type, then keyboard language (src/apple2/Video.cpp:1242-1266)"
+      mechanism: "PNG converted to XPM by CMake, included at src/apple2/Video.cpp:39-43"
+      selection: "machine type, then keyboard language (src/apple2/Video.cpp:1228-1252)"
       accepted_geometry: "128x128, or 128x256 for the Euro ROMs carrying a second language"
       images:
         - filename: charset40.png
-          used_for: "Apple //e and Enhanced //e, English (US)"
+          used_for: "Apple //e class machines, English (US)"
           size: 2745
           md5: c6029ef4d4fa272083769673bdcf2b6c
           sha1: d79aa8af6446c3637401cb75ffdda92fdf7f3853
         - filename: charset40_IIplus.png
-          used_for: "Apple ][ and Apple ][+"
+          used_for: "Apple ][, Apple ][+ and Apple ][ J-Plus"
           size: 1956
           md5: 2104f293d5df7137fdd579ea405da847
           sha1: bc9aa5cbadfcffe82b5b20ce954555b9d07fa260
@@ -318,36 +463,38 @@ analysis:
           sha1: f86bd5238604247e04d616850f244b489daef18d
 
   symbol_tables:
-    source_ref: "src/Debugger/Debugger_Symbols.cpp:64-74"
-    lookup: "g_state.program_dir + filename, and g_state.program_dir is never assigned"
-    preloaded_at_init:
+    source_ref: "src/Debugger/Debugger_Symbols.cpp:37-48"
+    lookup: "system_state.program_dir + filename, and system_state.program_dir is never assigned"
+    loaded_on_command:
       - APPLE2E.SYM
       - A2_BASIC.SYM
-      - A2_USER1.SYM
-    loaded_on_command:
       - A2_ASM.SYM
+      - A2_USER1.SYM
       - A2_USER2.SYM
       - A2_SRC1.SYM
       - A2_SRC2.SYM
       - A2_DOS33.SYM
       - A2_PRODOS.SYM
     note: >
-      Only APPLE2E.SYM and A2_BASIC.SYM are distributed with the emulator, in
-      res/. The user slots and the remaining tables have no shipped counterpart.
+      Each table is read by the LOAD parameter of its SYM command; no table is
+      loaded when the debugger starts. Only APPLE2E.SYM and A2_BASIC.SYM are
+      distributed with the emulator, in res/. The user slots and the remaining
+      tables have no shipped counterpart.
 
   generated_files:
     written_only:
-      - AppleWin.log
+      - linapple.log
       - Profile.txt
       - Trace.txt
       - AppleWin_Text40.txt
       - AppleWin_Text80.txt
+      - Printer.txt
       - "save states"
-      - "printer spool file"
       - "FTP directory cache"
-    written_and_read_back:
-      - LinAppleDebugger.cfg
-    note: "Produced by the emulator, none is user-supplied"
+    note: >
+      Produced by the emulator, none is user-supplied. CmdConfigSave builds
+      the LinAppleDebugger.cfg path and passes it to no open call
+      (src/Debugger/Debugger_Cmd_Config.cpp:218-221).
 
   unused_resources:
     - filename: font.bmp
