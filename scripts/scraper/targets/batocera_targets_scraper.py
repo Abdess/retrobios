@@ -300,7 +300,9 @@ class Scraper(BaseTargetScraper):
             print("  warning: no boards found", file=sys.stderr)
 
         print("  fetching Config.in...", file=sys.stderr)
-        config_in_text = _fetch(CONFIG_IN_URL) or ""
+        config_in_text = _fetch(CONFIG_IN_URL)
+        if not config_in_text:
+            raise RuntimeError(f"empty Config.in from {CONFIG_IN_URL}")
 
         meta_rules = _parse_meta_flags(config_in_text)
         selects = _parse_selects(config_in_text)
@@ -308,14 +310,20 @@ class Scraper(BaseTargetScraper):
             f"  parsed {len(meta_rules)} meta-flag rules, {len(selects)} select lines",
             file=sys.stderr,
         )
+        if not selects:
+            raise RuntimeError(f"no 'select BR2_PACKAGE_*' lines parsed from {CONFIG_IN_URL}")
 
         print("  fetching es_systems.yml...", file=sys.stderr)
-        es_text = _fetch(ES_SYSTEMS_URL) or ""
+        es_text = _fetch(ES_SYSTEMS_URL)
+        if not es_text:
+            raise RuntimeError(f"empty es_systems.yml from {ES_SYSTEMS_URL}")
         package_to_emulators = _parse_es_systems(es_text)
         print(
             f"  parsed {len(package_to_emulators)} package->emulator mappings",
             file=sys.stderr,
         )
+        if not package_to_emulators:
+            raise RuntimeError(f"no package->emulator mappings parsed from {ES_SYSTEMS_URL}")
 
         targets: dict[str, dict] = {}
         for board_name in sorted(boards):
