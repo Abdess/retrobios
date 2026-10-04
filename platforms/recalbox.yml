@@ -1,7 +1,7 @@
 platform: Recalbox
-version: '10.1'
+version: 10.1.1
 homepage: "https://www.recalbox.com"
-source: "https://gitlab.com/recalbox/recalbox/-/raw/10.1/board/recalbox/fsoverlay/recalbox/share_init/system/.emulationstation/es_bios.xml"
+source: "https://gitlab.com/recalbox/recalbox/-/raw/10.1.1/board/recalbox/fsoverlay/recalbox/share_init/system/.emulationstation/es_bios.xml"
 base_destination: bios
 hash_type: md5
 verification_mode: md5
@@ -14,6 +14,7 @@ cores:
 - libretro-hatari
 - libretro/ mame2003-plus
 - libretro/a5200
+- libretro/amiberry
 - libretro/atari800
 - libretro/bk
 - libretro/bluemsx
@@ -98,6 +99,19 @@ cores:
 - ti99sim
 - xemu
 - xroar
+standalone_cores:
+- amiberry
+- dolphin
+- duckstation
+- gsplus
+- hatari
+- oricutron
+- pcsx2
+- reicast
+- scummvm
+- ti99sim
+- xemu
+- xroar
 systems:
   commodore-amiga:
     files:
@@ -113,7 +127,7 @@ systems:
       required: false
       md5: 82a21c1890cae844b3df741f2762d48d
       native_system: amiga600
-      core: amiberry,libretro/uae,libretro/uae4arm,libretro/uae4all
+      core: amiberry,libretro/amiberry,libretro/uae,libretro/uae4arm,libretro/uae4all
       mandatory_declared: false
       native_name: "Amiga 600 (ECS/OCS)"
     - name: kick37175.A500
@@ -128,7 +142,7 @@ systems:
       required: false
       md5: e40a5dfb3d017ba8779faba30cbd1c8e
       native_system: amiga600
-      core: amiberry,libretro/uae,libretro/uae4arm
+      core: amiberry,libretro/amiberry,libretro/uae,libretro/uae4arm
       mandatory_declared: false
       native_name: "Amiga 600 (ECS/OCS)"
     - name: kick02019.AROS.ext
@@ -161,14 +175,14 @@ systems:
       required: true
       md5: 646773759326fbac3b2311fd8c8793ee
       native_system: amiga1200
-      core: amiberry,libretro/uae,libretro/uae4arm
+      core: amiberry,libretro/amiberry,libretro/uae,libretro/uae4arm
       native_name: "Amiga 1200 (AGA)"
     - name: kick40068.A4000
       destination: amiga/bios/kick40068.A4000
       required: true
       md5: 9bdedde6a4f33555b4a270c8ca53297d
       native_system: amiga1200
-      core: amiberry,libretro/uae
+      core: amiberry,libretro/amiberry,libretro/uae
       native_name: "Amiga 1200 (AGA)"
       note: This bios is required only for A4000 emulation
     - name: kick34005.CDTV
@@ -176,7 +190,7 @@ systems:
       required: true
       md5: 89da1838a24460e4b93f4f0c5d92d48d,d98112f18792ee3714df16a6eb421b89,d1145ab3a0f89340f94c9e734762c198
       native_system: amigacdtv
-      core: amiberry,libretro/uae,libretro/uae4arm
+      core: amiberry,libretro/amiberry,libretro/uae,libretro/uae4arm
       hash_match_mandatory: true
       mandatory_declared: true
       native_name: Amiga CDTV
@@ -186,7 +200,7 @@ systems:
       required: true
       md5: f2f241bf094168cfb9e7805dc2856433,5f8924d013dd57a89cf349f4cdedc6b1
       native_system: amigacd32
-      core: amiberry,libretro/uae,libretro/uae4arm
+      core: amiberry,libretro/amiberry,libretro/uae,libretro/uae4arm
       hash_match_mandatory: false
       mandatory_declared: true
       native_name: Amiga CD32
@@ -197,7 +211,7 @@ systems:
       required: false
       md5: bb72565701b1b6faece07d68ea5da639
       native_system: amigacd32
-      core: amiberry,libretro/uae,libretro/uae4arm
+      core: amiberry,libretro/amiberry,libretro/uae,libretro/uae4arm
       mandatory_declared: false
       native_name: Amiga CD32
       note: Extended ROM rev 40.060

@@ -99,26 +99,34 @@ SYSTEM_SLUG_MAP = {
 }
 
 
+def split_cores(names) -> tuple[list[str], list[str]]:
+    """(every core name, the standalone ones) from es_bios.xml ``core`` values."""
+    cores = {name for name in names if name}
+    standalone = {name for name in cores if not name.startswith("libretro")}
+    return sorted(cores), sorted(standalone)
+
+
 class Scraper(BaseScraper):
     """Scraper for Recalbox es_bios.xml."""
 
     def __init__(self, url: str = SOURCE_URL):
         super().__init__(url=url)
 
-    def _fetch_cores(self) -> list[str]:
-        """Extract unique core names from es_bios.xml bios elements."""
+    def _fetch_cores(self) -> tuple[list[str], list[str]]:
+        """Core names from es_bios.xml, and those Recalbox runs standalone.
+
+        The ``core`` attribute writes a libretro core as ``libretro/<name>``
+        and a standalone emulator by its bare name (``dolphin``, ``pcsx2``,
+        ``xemu``), so the prefix is the build mode. One entry spells
+        ``libretro-hatari``; a name that starts with ``libretro`` is a core.
+        """
         raw = self._fetch_raw()
         root = parse_untrusted_xml(raw, "es_bios.xml")
-        cores: set[str] = set()
-        for bios_elem in root.findall(".//system/bios"):
-            raw_core = bios_elem.get("core", "").strip()
-            if not raw_core:
-                continue
-            for part in raw_core.split(","):
-                name = part.strip()
-                if name:
-                    cores.add(name)
-        return sorted(cores)
+        return split_cores(
+            part.strip()
+            for bios_elem in root.findall(".//system/bios")
+            for part in bios_elem.get("core", "").split(",")
+        )
 
     def fetch_requirements(self) -> list[BiosRequirement]:
         """Parse es_bios.xml and return BIOS requirements."""
@@ -213,6 +221,7 @@ class Scraper(BaseScraper):
         if not version:
             version = "10.0"
 
+        cores, standalone = self._fetch_cores()
         return {
             "platform": "Recalbox",
             "version": version,
@@ -221,7 +230,8 @@ class Scraper(BaseScraper):
             "base_destination": "bios",
             "hash_type": "md5",
             "verification_mode": "md5",
-            "cores": self._fetch_cores(),
+            "cores": cores,
+            "standalone_cores": standalone,
             "systems": systems,
         }
 

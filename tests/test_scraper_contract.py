@@ -188,5 +188,24 @@ class RetroPiePackageList(unittest.TestCase):
         self.assertEqual(scraper.fetch_requirements(), [])
 
 
+class RecalboxBuildMode(unittest.TestCase):
+    """es_bios.xml names a libretro core as libretro/<name> and a standalone
+    emulator by its bare name: the prefix is the build mode, and a platform
+    that runs an emulator standalone must say so or the pack lays its files
+    out for the libretro build."""
+
+    def test_bare_names_are_the_standalone_emulators(self):
+        from scraper.recalbox_scraper import split_cores
+
+        cores, standalone = split_cores(
+            ["libretro/uae", "amiberry", "", "dolphin", "libretro/dolphin", "libretro-hatari", "hatari"]
+        )
+        self.assertEqual(
+            cores,
+            ["amiberry", "dolphin", "hatari", "libretro-hatari", "libretro/dolphin", "libretro/uae"],
+        )
+        self.assertEqual(standalone, ["amiberry", "dolphin", "hatari"])
+
+
 if __name__ == "__main__":
     unittest.main()

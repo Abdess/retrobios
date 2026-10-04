@@ -24,6 +24,7 @@ from common import (
     load_data_dir_registry,
     resolution_is_hash_exact,
     resolve_local_file,
+    runs_standalone,
 )
 
 # A profile entry can prove a slot without declaring a hash: Dolphin names no
@@ -148,9 +149,7 @@ def profile_claims(
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):
             continue
-        is_standalone = emu_name in standalone_cores or bool(
-            standalone_cores & {str(c) for c in profile.get("cores", [])}
-        )
+        is_standalone = runs_standalone(emu_name, profile, standalone_cores)
         for entry in profile.get("files") or []:
             if not isinstance(entry, dict):
                 continue

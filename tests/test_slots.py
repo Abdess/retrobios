@@ -393,7 +393,8 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
             entry["mode"] = mode
         if standalone_path:
             entry["standalone_path"] = standalone_path
-        return {"ares": {"cores": ["ares"], "files": [entry]}}
+        return {"ares": {"type": "standalone + libretro", "cores": ["ares"],
+                         "files": [entry]}}
 
     def test_a_standalone_only_file_does_not_claim_a_core_slot(self):
         conflicts = slots.find_conflicts(
@@ -428,7 +429,8 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
         self.assertEqual(claims[0].destination, "elsewhere/IPL.bin")
 
     def test_the_mode_follows_a_core_alias_not_only_the_profile_name(self):
-        profile = {"ares_core": {"cores": ["ares"],
+        profile = {"ares_core": {"type": "standalone + libretro",
+                                 "cores": ["ares"],
                                  "files": [{"name": "IPL.bin",
                                             "path": "GC/JAP/IPL.bin",
                                             "mode": "standalone"}]}}
@@ -437,6 +439,16 @@ class TestBuildModeDecidesWhoClaims(unittest.TestCase):
             standalone_cores={"ares"},
         )
         self.assertEqual(len(conflicts), 1)
+
+    def test_a_profile_without_a_standalone_build_keeps_its_core_layout(self):
+        profile = {"ares": {"type": "libretro", "cores": ["ares"],
+                            "files": [{"name": "IPL.bin",
+                                       "path": "GC/JAP/IPL.bin",
+                                       "standalone_path": "elsewhere/IPL.bin"}]}}
+        claims = slots.profile_claims(
+            profile, REGIONS_DB, standalone_cores={"ares"}
+        )
+        self.assertEqual(claims[0].destination, "GC/JAP/IPL.bin")
 
 
 class TestProvenEvidence(unittest.TestCase):

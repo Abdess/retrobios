@@ -52,6 +52,7 @@ from common import (
     resolve_local_file,
     ProfileSelectionError,
     resolve_platform_cores,
+    runs_standalone,
     sanitize_pack_path,
     select_emulator_profiles,
 )
@@ -455,10 +456,7 @@ def find_undeclared_files(
         if profile.get("bios_mode") == "agnostic":
             continue
 
-        # Check if this profile is standalone: match profile name or any cores: alias
-        is_standalone = emu_name in standalone_set or bool(
-            standalone_set & {str(c) for c in profile.get("cores", [])}
-        )
+        is_standalone = runs_standalone(emu_name, profile, standalone_set)
 
         for f in profile.get("files", []):
             fname = f.get("name", "")
@@ -673,9 +671,7 @@ def find_exclusion_notes(
         # Count standalone-only files -but only report as excluded if the
         # platform does NOT use this emulator in standalone mode
         standalone_set = set(str(c) for c in config.get("standalone_cores", []))
-        is_standalone = emu_name in standalone_set or bool(
-            standalone_set & {str(c) for c in profile.get("cores", [])}
-        )
+        is_standalone = runs_standalone(emu_name, profile, standalone_set)
         if not is_standalone:
             standalone_files = [
                 f for f in profile.get("files", []) if f.get("mode") == "standalone"

@@ -10,6 +10,7 @@ from common import expand_platform_declared_names
 from common import load_emulator_profiles
 from common import resolution_is_hash_exact
 from common import resolve_local_file
+from common import runs_standalone
 from common import sanitize_pack_path
 def _emulator_systems_index(emu_profiles: dict | None) -> dict[str, list[str]]:
     """Map both the profile key and its display name to the profile's systems.
@@ -469,9 +470,7 @@ def _collect_emulator_extras(
             continue
         if emu_name not in relevant:
             continue
-        is_standalone = emu_name in standalone_set or bool(
-            standalone_set & {str(c) for c in profile.get("cores", [])}
-        )
+        is_standalone = runs_standalone(emu_name, profile, standalone_set)
         for f in profile.get("files", []):
             fname = f.get("name", "")
             if not fname:

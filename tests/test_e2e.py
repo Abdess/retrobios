@@ -6184,5 +6184,26 @@ struct BurnDriver BurnDrvneogeo = {
             cross_reference.get_mame_clone_map = original
 
 
+class StandaloneModeRequiresAStandaloneBuild(unittest.TestCase):
+    """A platform names its standalone emulators by its own names, which can
+    equal the key of a libretro-only profile (Recalbox and Batocera both
+    call their standalone ScummVM ``scummvm``). Laid out standalone, such a
+    profile loses every ``path:`` and drops its files at the root."""
+
+    def test_libretro_only_profile_keeps_its_layout(self):
+        from common import runs_standalone
+
+        libretro_only = {"type": "libretro", "cores": ["scummvm"]}
+        dual = {"type": "standalone + libretro", "cores": ["dolphin"]}
+        standalone = {"type": "standalone", "cores": ["xemu"]}
+        named = {"scummvm", "dolphin", "xemu", "hatari"}
+        self.assertFalse(runs_standalone("scummvm", libretro_only, named))
+        self.assertTrue(runs_standalone("dolphin", dual, named))
+        self.assertTrue(runs_standalone("xemu", standalone, named))
+        self.assertTrue(runs_standalone("other-key", {"type": "standalone", "cores": ["hatari"]}, named))
+        self.assertFalse(runs_standalone("dolphin", dual, set()))
+        self.assertFalse(runs_standalone("dolphin", dual, {"pcsx2"}))
+
+
 if __name__ == "__main__":
     unittest.main()
