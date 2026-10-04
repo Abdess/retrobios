@@ -8,7 +8,9 @@ report is folded, since each of those decides whether a row says STALE.
 
 from __future__ import annotations
 
+import os
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -17,6 +19,72 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import check_freshness as cf  # noqa: E402
 from common import yaml_load  # noqa: E402
+
+
+class NativeCacheTests(unittest.TestCase):
+    """A cached original is patched only if it is the file we transcribed."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.cache = Path(self._tmp.name)
+        self.index = self.cache / cf.export_native.SOURCES_INDEX
+        self.root = self.cache / "plat"
+        self.root.mkdir()
+        self.wanted = {"list.txt": "https://example.invalid/tag-2/list.txt"}
+
+    def _cached(self, mtime: float) -> None:
+        path = self.root / "list.txt"
+        path.write_text("x", encoding="utf-8")
+        os.utime(path, (mtime, mtime))
+
+    def _state(self, recorded: dict, transcribed_at: float) -> str:
+        return cf.native_cache_state(
+            self.wanted, self.root, recorded, self.index, transcribed_at
+        )
+
+    def test_a_file_fetched_after_the_scrape_from_the_named_url_is_fresh(self):
+        self._cached(200.0)
+        recorded = {"plat/list.txt": self.wanted["list.txt"]}
+        self.assertEqual(self._state(recorded, 100.0), "")
+
+    def test_an_absent_file_is_named(self):
+        self.assertEqual(self._state({}, 0.0), "list.txt not cached")
+
+    def test_a_file_with_no_recorded_url_proves_nothing(self):
+        self._cached(200.0)
+        self.assertEqual(self._state({}, 100.0), "list.txt cached from an unrecorded URL")
+
+    def test_a_file_from_the_previous_pin_is_stale(self):
+        self._cached(200.0)
+        recorded = {"plat/list.txt": "https://example.invalid/tag-1/list.txt"}
+        self.assertEqual(self._state(recorded, 100.0), "list.txt cached from another revision")
+
+    def test_a_file_older_than_the_rescrape_is_stale(self):
+        """A branch URL does not change when its content does."""
+        self._cached(100.0)
+        recorded = {"plat/list.txt": self.wanted["list.txt"]}
+        self.assertEqual(
+            self._state(recorded, 200.0),
+            "list.txt cached before the platform file was rewritten",
+        )
+
+    def test_the_transcription_date_follows_inheritance(self):
+        platforms = self.cache / "platforms"
+        platforms.mkdir()
+        (platforms / "parent.yml").write_text("platform: P\n", encoding="utf-8")
+        (platforms / "child.yml").write_text("inherits: parent\n", encoding="utf-8")
+        os.utime(platforms / "parent.yml", (300.0, 300.0))
+        os.utime(platforms / "child.yml", (100.0, 100.0))
+        self.assertEqual(cf._transcribed_at(platforms, "child"), 300.0)
+        self.assertEqual(cf._transcribed_at(platforms, "parent"), 300.0)
+
+    def test_every_registered_platform_with_an_exporter_gets_a_row(self):
+        rows = cf.check_native(REPO_ROOT / "platforms", self.cache, self.cache / "truth")
+        self.assertTrue(rows)
+        self.assertEqual({r.area for r in rows}, {"native"})
+        self.assertEqual({r.status for r in rows}, {cf.STALE})
+        self.assertIn("batocera", {r.subject for r in rows})
 
 
 class PlatformDiffTests(unittest.TestCase):

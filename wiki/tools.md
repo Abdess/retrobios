@@ -236,14 +236,26 @@ python scripts/export_native.py --platform batocera --fetch
 python scripts/export_native.py --all --fetch --output-dir dist/upstream/
 ```
 
-`--fetch` downloads the platform's own file once into
-`.cache/upstream-native/`, at the revision the platform YAML's `source:`
-names. Formats that carry code are patched from it rather than
-regenerated, and the export fails without it.
+`--fetch` downloads the platform's own file into `.cache/upstream-native/`,
+at the revision the platform YAML's `source:` names. Formats that carry
+code are patched from it rather than regenerated, and the export fails
+without it. The URL each cached file came from is recorded beside the
+cache, so a platform file that moves to a new tag is fetched again instead
+of patching the previous one.
+
+A branch URL keeps its name while its content moves, and no URL comparison
+can see that. `--refresh-cache` downloads every file again and writes no
+export; it is what follows a rescrape, so the original and the platform
+YAML describe the same moment.
+
+```bash
+python scripts/export_native.py --platform retrobat --refresh-cache
+python scripts/export_native.py --all --refresh-cache
+```
 
 A list is written in the order the code looks: `priority:` first (lowest
 wins), then the profile's own declaration order. What a format cannot
-state is reported rather than written — EmuDeck's arrays are shared
+state is reported rather than written: EmuDeck's arrays are shared
 between emulators its file does not name, so a hash is corrected in place
 and never added.
 
@@ -326,9 +338,11 @@ Per part of a ref: `ANCHORED` (same content, same lines), `SHIFTED` (same
 content, moved), `RENAMED` (the source file moved), `CHANGED` (content
 edited), `AMBIGUOUS` (several equally good candidates), `GONE` (nothing
 left to anchor to), `EXTERNAL` (the ref names a project the profile does
-not declare, so no revision can confirm it). An entry carries the worst
+not declare, so no revision can confirm it), `UNCHECKED` (a pin equal to
+HEAD is judged on self-consistency, and an entry with neither a hash nor
+a name gives that check nothing to look for). An entry carries the worst
 status of its parts. Only `CHANGED`, `GONE` and `AMBIGUOUS` count as
-needing a re-read.
+needing a re-read; a zero next to a row of `unchecked` is not a proof.
 
 A single cited line is often not distinctive, so the anchor widens by
 steps of ±3, ±6, ±12, ±25 and ±50 lines until it is unique. Three further
@@ -424,9 +438,10 @@ directories the refs point at.
 
 Writes are explicit and mechanical only. `--backfill-commits` fills a
 missing `source_commit`, `--rebase-refs` recales `SHIFTED` and `RENAMED`
-line ranges, `--bump-commit` advances `source_commit` to HEAD only when
-nothing needs a re-read. All three refuse to run on a dirty `emulators/`
-without `--force`, and every write is verified by reparsing the document.
+line ranges and moves `source_commit` to HEAD with them, all or nothing,
+`--bump-commit` advances `source_commit` to HEAD only when nothing needs a
+re-read. All three refuse to run on a dirty `emulators/` without `--force`,
+and every write is verified by reparsing the document.
 
 Uses `GITHUB_TOKEN` when set, which `--all` requires. Responses are cached
 under `.cache/upstream/`, addressed by commit sha, so `--offline` replays a
@@ -457,6 +472,62 @@ python scripts/refresh_data_dirs.py --platform batocera    # single platform onl
 python scripts/refresh_data_dirs.py --registry path/to/_data_dirs.yml
 ```
 
+### check_freshness.py
+
+Ask every transcribed layer whether the local copy is the one upstream serves
+today, and answer with one row per subject. Platform and target files are
+re-scraped through the scrapers' own write path into a throwaway copy and
+diffed against the committed file, so the diff decides rather than a version
+string. Core-info is listed and compared with the profiles (a core with no
+profile, a profile that calls standalone a core libretro now builds). Data
+directories are checked against their upstream, dump catalogs and romset
+snapshots against the catalog they were read from (Redump DAT versions, the
+No-Intro daily rebuild, the newest TOSEC pack, the newest MAME release, the
+git blobs of the FBNeo DATs), and the CI toolchain against PyPI and the
+actions' latest releases.
+
+The `native` area needs no network. It reads the cache `export_native.py`
+patches from and reports an original that is absent, that came from another
+URL than the one the platform YAML names, or that was fetched before the
+platform YAML was last rewritten.
+
+```bash
+python scripts/check_freshness.py
+python scripts/check_freshness.py --only platforms,targets
+python scripts/check_freshness.py --json
+python scripts/check_freshness.py --profiles     # also runs profile_sync (slow)
+python scripts/check_freshness.py --offline      # local ages only
+```
+
+The exit code is non-zero when anything is stale. Emulator profiles are the
+one layer left to `profile_sync.py`, which the `--profiles` flag folds in.
+
+### refresh_stale.py
+
+Run the refresher behind every stale row of `check_freshness.py`, several at
+a time, and leave the result in the working tree for review. Nothing is
+committed.
+
+| Stale row | Command |
+|-----------|---------|
+| `platforms/<name>` | the platform scraper, then the `native` refresh for the same platform |
+| `native/<name>` | `export_native.py --platform <name> --refresh-cache` |
+| `targets/<name>` | the target scraper |
+| `data/<key>` | `refresh_data_dirs.py --key <key> --force` |
+| `catalogs/mame recipes`, `catalogs/fbneo recipes` | `scraper/romset_dat_importer.py --source <source> --fetch` |
+
+Rows that need a decision are listed and never run: a buildbot core with no
+profile, a new `.info` file, the Redump, No-Intro and TOSEC packs, the CI
+pins, and `profile_sync`. A failed scraper leaves its cached original
+untouched. Each job writes its output to `tmp/refresh_stale/`, and a GitHub
+token is taken from `GITHUB_TOKEN` or from `gh auth token`.
+
+```bash
+python scripts/refresh_stale.py --dry-run
+python scripts/refresh_stale.py
+python scripts/refresh_stale.py --only platforms,targets --jobs 6
+```
+
 ### Other tools
 
 | Script | Purpose |
@@ -474,12 +545,14 @@ python scripts/refresh_data_dirs.py --registry path/to/_data_dirs.yml
 | `generate_site.py` | Generate all MkDocs site pages (this documentation) |
 | `validate_site.py` | Validate rendered metadata, headings, image alternatives, JSON-LD, local resources, links and fragments |
 | `romset_recipes.py` | Identify which emulator version an arcade archive matches, and rebuild a pinned archive from ROMs already held |
-| `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/` |
+| `scraper/romset_dat_importer.py` | Fetch and import per-set recipes from MAME `-listxml` or FBNeo DATs into `recipes/`; `--fetch` alone takes the newest MAME release, and FBNeo DATs are refreshed by git blob sha |
 | `deterministic_zip.py` | Rebuild MAME BIOS ZIPs deterministically (same ROMs = same hash) |
 | `torrentzip.py` | Build TorrentZip archives for MAME/FBNeo ROM sets (archive bytes depend only on contents) |
 | `crypto_verify.py` | 3DS RSA signature and AES crypto verification |
 | `sect233r1.py` | Pure Python ECDSA verification on sect233r1 curve (3DS OTP cert) |
 | `check_buildbot_system.py` | Detect stale data directories by comparing with buildbot |
+| `check_freshness.py` | One report on every upstream the repository transcribes (see above) |
+| `refresh_stale.py` | Run the refresher behind every stale row of that report (see above) |
 | `migrate.py` | Migrate flat bios structure to Manufacturer/Console/ hierarchy |
 
 ## Installation tools

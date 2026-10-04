@@ -10,6 +10,10 @@ committed.
 Mapping (stale -> command):
     platforms/<name>        python -m scripts.scraper.<module>_scraper
                             -o platforms/<name>.yml
+                            then the native refresh below: the original
+                            the export patches must be the one just scraped
+    native/<name>           python scripts/export_native.py --platform <name>
+                            --refresh-cache
     targets/<name>          python -m scripts.scraper.targets.<module>
                             -o platforms/targets/<name>.yml
     data/<key>              python scripts/refresh_data_dirs.py --key <key>
@@ -47,7 +51,7 @@ LOG_DIR = REPO_ROOT / "tmp" / "refresh_stale"
 CHECK_FRESHNESS = REPO_ROOT / "scripts" / "check_freshness.py"
 PLATFORMS_REGISTRY = REPO_ROOT / "platforms" / "_registry.yml"
 
-AUTO_AREAS = ("platforms", "targets", "data", "catalogs")
+AUTO_AREAS = ("platforms", "native", "targets", "data", "catalogs")
 MANUAL_AREAS = ("coreinfo", "ci", "profiles")
 
 JOB_TIMEOUT = 1800  # 30 minutes per refresher; scrapers rarely exceed 10
@@ -61,6 +65,8 @@ class Job:
     subject: str
     command: list[str]
     log_path: Path
+    # Commands run after `command`, in order, only while each one succeeds.
+    then: tuple[tuple[str, ...], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -122,6 +128,15 @@ def plan_jobs(
     seen: set[tuple[str, str]] = set()
     surfaced: list[dict] = []
     ignored: list[dict] = []
+    # A platform about to be rescraped refreshes its cached original itself,
+    # after the scrape: a separate native job would race the scraper.
+    rescraped = {
+        str(f.get("subject") or "")
+        for f in findings
+        if f.get("status") == "STALE"
+        and f.get("area") == "platforms"
+        and _command_for("platforms", str(f.get("subject") or ""), registry)
+    }
 
     for finding in findings:
         status = finding.get("status")
@@ -132,6 +147,10 @@ def plan_jobs(
             surfaced.append(finding)
             continue
         if status != "STALE":
+            ignored.append(finding)
+            continue
+
+        if area == "native" and subject in rescraped:
             ignored.append(finding)
             continue
 
@@ -148,15 +167,33 @@ def plan_jobs(
         seen.add(key)
 
         log = LOG_DIR / f"{area}__{_slug(subject)}.log"
-        jobs.append(Job(area=area, subject=subject, command=command, log_path=log))
+        then: tuple[tuple[str, ...], ...] = ()
+        if area == "platforms":
+            then = (tuple(_native_refresh(subject)),)
+        jobs.append(
+            Job(area=area, subject=subject, command=command, log_path=log, then=then)
+        )
 
     return jobs, surfaced, ignored
+
+
+def _native_refresh(platform: str) -> list[str]:
+    return [
+        sys.executable,
+        "scripts/export_native.py",
+        "--platform",
+        platform,
+        "--refresh-cache",
+    ]
 
 
 def _command_for(
     area: str, subject: str, registry: dict[str, dict]
 ) -> list[str] | None:
     """Map a stale finding to its refresh command, or None if manual."""
+    if area == "native":
+        return _native_refresh(subject)
+
     if area == "platforms":
         entry = registry.get(subject) or {}
         scraper = entry.get("scraper")
@@ -250,23 +287,27 @@ def run_job(job: Job, env: dict[str, str]) -> JobResult:
     """Execute one refresh command and collect its output."""
     start = time.monotonic()
     job.log_path.parent.mkdir(parents=True, exist_ok=True)
+    returncode = 0
     with job.log_path.open("w", encoding="utf-8") as log:
-        log.write(f"$ {' '.join(job.command)}\n")
-        log.flush()
-        try:
-            proc = subprocess.run(
-                job.command,
-                cwd=REPO_ROOT,
-                stdout=log,
-                stderr=subprocess.STDOUT,
-                env=env,
-                timeout=JOB_TIMEOUT,
-                check=False,
-            )
-            returncode = proc.returncode
-        except subprocess.TimeoutExpired:
-            log.write(f"\nTIMEOUT after {JOB_TIMEOUT}s\n")
-            returncode = 124
+        for command in (job.command, *job.then):
+            log.write(f"$ {' '.join(command)}\n")
+            log.flush()
+            try:
+                proc = subprocess.run(
+                    list(command),
+                    cwd=REPO_ROOT,
+                    stdout=log,
+                    stderr=subprocess.STDOUT,
+                    env=env,
+                    timeout=JOB_TIMEOUT,
+                    check=False,
+                )
+                returncode = proc.returncode
+            except subprocess.TimeoutExpired:
+                log.write(f"\nTIMEOUT after {JOB_TIMEOUT}s\n")
+                returncode = 124
+            if returncode != 0:
+                break
     duration = time.monotonic() - start
     tail = _log_tail(job.log_path)
     return JobResult(job=job, returncode=returncode, duration=duration, tail=tail)
@@ -388,6 +429,8 @@ def main() -> int:
               f"{len(ignored)} already clean/skipped")
         for job in sorted(jobs, key=lambda j: (j.area, j.subject)):
             print(f"  {job.area:10} {job.subject:28}  {' '.join(job.command)}")
+            for command in job.then:
+                print(f"  {'':10} {'':28}  then {' '.join(command)}")
         if surfaced:
             print("\n[manual review needed]")
             for f in surfaced:

@@ -15,6 +15,7 @@ and skip when it has not been populated (python scripts/export_native.py
 from __future__ import annotations
 
 import json
+import os
 import re
 import subprocess
 import sys
@@ -33,7 +34,13 @@ from common import (  # noqa: E402
 )
 from exporter import discover_exporters  # noqa: E402
 from exporter.base_exporter import BaseExporter  # noqa: E402
-from export_native import pinned_base  # noqa: E402
+from export_native import (  # noqa: E402
+    SOURCES_INDEX,
+    collect_originals,
+    fetch,
+    pinned_base,
+    source_key,
+)
 from exporter.baseline import (  # noqa: E402
     NativeFile,
     build_native_model,
@@ -435,6 +442,80 @@ class PinnedRevision(unittest.TestCase):
                 config = load_platform_config(name, str(REPO_ROOT / "platforms"))
                 base = pinned_base(dict(exporters[name].native_sources()), config)
                 self.assertTrue(base.startswith("https://"), base)
+
+
+class _OneFileExporter:
+    """An exporter reduced to what collect_originals reads."""
+
+    def __init__(self, url: str):
+        self._url = url
+
+    def platform_name(self) -> str:
+        return "plat"
+
+    def native_sources(self) -> dict[str, str]:
+        return {"list.txt": self._url}
+
+
+class CachedOriginal(unittest.TestCase):
+    """The cached original is the file the platform data was read from."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.root = Path(self._tmp.name)
+        self.cache = self.root / "cache"
+        self.index = self.cache / SOURCES_INDEX
+
+    def _upstream(self, name: str, text: str) -> str:
+        path = self.root / name
+        path.write_text(text, encoding="utf-8")
+        return path.as_uri()
+
+    def test_the_same_url_is_served_from_the_cache(self):
+        url = self._upstream("v1.txt", "one")
+        target = self.cache / "plat" / "list.txt"
+        self.assertEqual(fetch(url, target, self.index), b"one")
+        self._upstream("v1.txt", "moved")
+        self.assertEqual(fetch(url, target, self.index), b"one")
+
+    def test_refresh_reads_a_branch_url_again(self):
+        """A branch URL keeps its name while the platform moves."""
+        url = self._upstream("branch.txt", "one")
+        target = self.cache / "plat" / "list.txt"
+        fetch(url, target, self.index)
+        self._upstream("branch.txt", "two")
+        self.assertEqual(fetch(url, target, self.index, refresh=True), b"two")
+        self.assertEqual(target.read_bytes(), b"two")
+
+    def test_a_new_pin_refetches_an_existing_file(self):
+        """Reading the file straight from disk served the old pin forever."""
+        old = self._upstream("tag-1.txt", "one")
+        new = self._upstream("tag-2.txt", "two")
+        originals, missing = collect_originals(
+            _OneFileExporter(old), {}, self.cache, True
+        )
+        self.assertEqual((originals, missing), ({"list.txt": "one"}, []))
+        originals, missing = collect_originals(
+            _OneFileExporter(new), {}, self.cache, True
+        )
+        self.assertEqual((originals, missing), ({"list.txt": "two"}, []))
+
+    def test_offline_serves_what_is_cached_and_names_what_is_not(self):
+        url = self._upstream("v1.txt", "one")
+        _, missing = collect_originals(_OneFileExporter(url), {}, self.cache, False)
+        self.assertEqual(missing, ["list.txt: absent and fetching is off"])
+        collect_originals(_OneFileExporter(url), {}, self.cache, True)
+        originals, missing = collect_originals(
+            _OneFileExporter("file:///nowhere/else.txt"), {}, self.cache, False
+        )
+        self.assertEqual((originals, missing), ({"list.txt": "one"}, []))
+
+    def test_the_index_names_a_file_the_same_from_any_directory(self):
+        target = self.cache / "plat" / "list.txt"
+        self.assertEqual(source_key(target, self.index), "plat/list.txt")
+        relative = Path(os.path.relpath(target, Path.cwd()))
+        self.assertEqual(source_key(relative, self.index), "plat/list.txt")
 
 
 class RecalboxExport(unittest.TestCase):

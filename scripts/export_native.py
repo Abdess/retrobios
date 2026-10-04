@@ -10,6 +10,7 @@ a platform ships keeps working.
 Usage:
     python scripts/export_native.py --all --fetch
     python scripts/export_native.py --platform recalbox --upstream-dir up/
+    python scripts/export_native.py --platform retrobat --refresh-cache
 """
 
 from __future__ import annotations
@@ -28,6 +29,7 @@ from exporter import discover_exporters
 from exporter.baseline import build_native_model
 
 DEFAULT_CACHE = ".cache/upstream-native"
+SOURCES_INDEX = ".sources.json"
 _USER_AGENT = "retrobios-exporter/1.0"
 _MAX_BYTES = 64 * 1024 * 1024
 
@@ -41,7 +43,29 @@ def _load_sources(index: Path | None) -> dict[str, str]:
         return {}
 
 
-def fetch(url: str, destination: Path, index: Path | None = None) -> bytes:
+def source_key(destination: Path, index: Path | None) -> str:
+    """How the index names a cached file: its path below the cache root.
+
+    A key that repeated the cache directory as it was typed changed with the
+    working directory, and a file recorded from one place looked unrecorded
+    from another.
+    """
+    if index is not None:
+        try:
+            return destination.resolve().relative_to(index.parent.resolve()).as_posix()
+        except ValueError:
+            pass
+    return str(destination)
+
+
+def load_sources(upstream_dir: Path) -> dict[str, str]:
+    """Cached file -> URL it was fetched from, for a whole cache directory."""
+    return _load_sources(upstream_dir / SOURCES_INDEX)
+
+
+def fetch(
+    url: str, destination: Path, index: Path | None = None, refresh: bool = False
+) -> bytes:
     """Download an original once, then read it from the cache.
 
     The cache path carries the file's own name and nothing of the revision it
@@ -50,10 +74,15 @@ def fetch(url: str, destination: Path, index: Path | None = None) -> bytes:
     URL that produced each cached file is recorded beside the cache, and a
     different URL refetches. A cache written before this index existed keeps
     being served: nothing recorded means nothing contradicted.
+
+    A branch URL names no revision, so the same URL serves new bytes after
+    the platform moves. refresh downloads again whatever the cache holds:
+    it is what a rescrape calls, so the original and its transcription
+    describe the same moment.
     """
     recorded = _load_sources(index)
-    key = str(destination)
-    if destination.exists() and recorded.get(key, url) == url:
+    key = source_key(destination, index)
+    if not refresh and destination.exists() and recorded.get(key, url) == url:
         return destination.read_bytes()
     request = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT})
     with urllib.request.urlopen(request, timeout=60) as response:
@@ -94,14 +123,10 @@ def _raw_url(url: str) -> str:
     return url
 
 
-def collect_originals(
-    exporter: object,
-    systems: dict,
-    upstream_dir: Path,
-    allow_fetch: bool,
-    scraped: dict | None = None,
-) -> tuple[dict[str, str], list[str]]:
-    """Gather the platform's own files, from disk or from upstream."""
+def wanted_sources(
+    exporter: object, systems: dict, scraped: dict | None = None
+) -> dict[str, str]:
+    """Cache-relative name -> URL of every file the exporter patches."""
     wanted = dict(exporter.native_sources())
     components = getattr(exporter, "components", None)
     if callable(components):
@@ -113,21 +138,39 @@ def collect_originals(
     base = pinned_base(wanted, scraped)
     if base:
         wanted = {relative: base + relative for relative in wanted}
+    return wanted
 
+
+def collect_originals(
+    exporter: object,
+    systems: dict,
+    upstream_dir: Path,
+    allow_fetch: bool,
+    scraped: dict | None = None,
+    refresh: bool = False,
+) -> tuple[dict[str, str], list[str]]:
+    """Gather the platform's own files, from disk or from upstream.
+
+    With fetching on, an existing file still goes through fetch(): reading
+    it straight from disk skipped the recorded URL, so a file cached under
+    one pin kept being patched after the platform YAML moved to the next.
+    """
+    wanted = wanted_sources(exporter, systems, scraped)
     root = upstream_dir / exporter.platform_name()
+    index = upstream_dir / SOURCES_INDEX
     originals: dict[str, str] = {}
     missing: list[str] = []
     for relative, url in wanted.items():
         path = root / relative
         payload: bytes | None = None
-        if path.exists():
-            payload = path.read_bytes()
-        elif allow_fetch:
+        if allow_fetch:
             try:
-                payload = fetch(url, path, upstream_dir / ".sources.json")
+                payload = fetch(url, path, index, refresh)
             except (urllib.error.URLError, urllib.error.HTTPError, OSError) as exc:
                 missing.append(f"{relative}: {exc}")
                 continue
+        elif path.exists():
+            payload = path.read_bytes()
         else:
             missing.append(f"{relative}: absent and fetching is off")
             continue
@@ -139,6 +182,42 @@ def collect_originals(
             originals[relative] = payload.decode("utf-8", errors="replace")
 
     return originals, missing
+
+
+def load_inputs(
+    platform: str, truth_dir: Path, platforms_dir: str
+) -> tuple[dict | None, dict | None]:
+    """The truth and the scraped config of a platform, None where absent."""
+    truth_file = truth_dir / f"{platform}.yml"
+    truth: dict | None = None
+    if truth_file.exists():
+        with open(truth_file) as handle:
+            truth = yaml_load(handle) or {}
+    try:
+        scraped = load_platform_config(platform, platforms_dir)
+    except (FileNotFoundError, OSError):
+        scraped = None
+    return truth, scraped
+
+
+def refresh_cache(
+    platform: str,
+    exporter_class: type,
+    truth_dir: Path,
+    platforms_dir: str,
+    upstream_dir: Path,
+) -> tuple[bool, list[str]]:
+    """Download a platform's own files again. Returns (ok, messages)."""
+    truth, scraped = load_inputs(platform, truth_dir, platforms_dir)
+    systems, _ = build_native_model(truth or {}, scraped)
+    exporter = exporter_class()
+    wanted = wanted_sources(exporter, systems, scraped)
+    _, missing = collect_originals(
+        exporter, systems, upstream_dir, True, scraped, refresh=True
+    )
+    if missing:
+        return False, missing
+    return True, [f"{len(wanted)} file(s) fetched"]
 
 
 def export_platform(
@@ -153,18 +232,10 @@ def export_platform(
     """Write one platform's corrected file. Returns (ok, messages)."""
     messages: list[str] = []
 
-    truth_file = truth_dir / f"{platform}.yml"
-    truth: dict = {}
-    if truth_file.exists():
-        with open(truth_file) as handle:
-            truth = yaml_load(handle) or {}
-    else:
+    truth, scraped = load_inputs(platform, truth_dir, platforms_dir)
+    if truth is None:
+        truth = {}
         messages.append(f"no truth for {platform}, only the platform's own data")
-
-    try:
-        scraped = load_platform_config(platform, platforms_dir)
-    except (FileNotFoundError, OSError):
-        scraped = None
 
     systems, report = build_native_model(truth, scraped)
     if not systems:
@@ -253,6 +324,7 @@ def run(
     platforms_dir: str,
     upstream_dir: str,
     allow_fetch: bool,
+    refresh_only: bool = False,
 ) -> int:
     exporters = discover_exporters()
     failures = 0
@@ -265,15 +337,24 @@ def run(
             print(f"  SKIP {platform}: no exporter")
             continue
 
-        ok, messages = export_platform(
-            platform,
-            exporter_class,
-            Path(truth_dir),
-            Path(output_dir),
-            platforms_dir,
-            Path(upstream_dir),
-            allow_fetch,
-        )
+        if refresh_only:
+            ok, messages = refresh_cache(
+                platform,
+                exporter_class,
+                Path(truth_dir),
+                platforms_dir,
+                Path(upstream_dir),
+            )
+        else:
+            ok, messages = export_platform(
+                platform,
+                exporter_class,
+                Path(truth_dir),
+                Path(output_dir),
+                platforms_dir,
+                Path(upstream_dir),
+                allow_fetch,
+            )
         label = "OK  " if ok else "FAIL"
         print(f"  {label} {platform}")
         for message in messages:
@@ -306,7 +387,13 @@ def main() -> None:
     parser.add_argument(
         "--fetch",
         action="store_true",
-        help="download a platform's file when it is not in the cache",
+        help="download a platform's file when it is not in the cache, "
+        "or when the cache came from another URL",
+    )
+    parser.add_argument(
+        "--refresh-cache",
+        action="store_true",
+        help="download every platform file again and write no export",
     )
     args = parser.parse_args()
 
@@ -326,6 +413,7 @@ def main() -> None:
             args.platforms_dir,
             args.upstream_dir,
             args.fetch,
+            args.refresh_cache,
         )
     )
 

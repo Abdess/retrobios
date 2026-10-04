@@ -227,7 +227,7 @@ python scripts/generate_pack.py --all --verify-packs --output-dir dist/
 ```
 
 Integrated as pipeline step 6/8 (runs after consistency check, before
-README generation). Requires packs in `dist/` — skip with `--skip-packs`.
+README generation). Requires packs in `dist/`; skip with `--skip-packs`.
 
 ## Verification discipline
 

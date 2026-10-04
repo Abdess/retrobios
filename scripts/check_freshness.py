@@ -12,6 +12,11 @@ into a throwaway copy, then diffed against the committed file. The diff
 decides, not a version string: a scraper that pins a new tag but produces
 the same entries is reported as a version change and nothing else.
 
+The native export patches each platform's own file, kept in a local cache.
+That cache is checked against the platform file it was transcribed with: an
+original cached before the last rescrape, or under another pin, is no longer
+the file our data describes.
+
 Emulator profiles are covered by profile_sync, which is slow (one API pass
 per profile). ``--profiles`` runs it here and folds its verdict in.
 
@@ -43,6 +48,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+import export_native  # noqa: E402
 import refresh_data_dirs  # noqa: E402
 import upstream  # noqa: E402
 from common import (  # noqa: E402
@@ -50,6 +56,8 @@ from common import (  # noqa: E402
     load_emulator_profiles,
     yaml_load,
 )
+from exporter import discover_exporters  # noqa: E402
+from exporter.baseline import build_native_model  # noqa: E402
 from scripts.scraper.redump_dat_scraper import fetch_snapshot  # noqa: E402
 from scripts.scraper.targets import discover_target_scrapers  # noqa: E402
 
@@ -66,7 +74,7 @@ INSTALLERS = ("install.sh", "install.ps1")
 
 SHOWN_ITEMS = 4  # items named in a diff summary before ", ..."
 SHOWN_NAMES = 12  # core names named in an unresolved row before ", ..."
-AREAS = ("platforms", "targets", "coreinfo", "data", "catalogs", "ci", "profiles")
+AREAS = ("platforms", "native", "targets", "coreinfo", "data", "catalogs", "ci", "profiles")
 OK, STALE, UNKNOWN, ERROR, SKIPPED = "OK", "STALE", "UNKNOWN", "ERROR", "SKIPPED"
 # Every status a finding may carry, in the order the summary counts them.
 STATUSES = (STALE, UNKNOWN, ERROR, SKIPPED, OK)
@@ -276,6 +284,80 @@ def check_platforms(platforms_dir: Path, workdir: Path, jobs: int) -> list[Findi
 
     with ThreadPoolExecutor(max_workers=jobs) as pool:
         findings.extend(pool.map(run, rows))
+    return sorted(findings, key=lambda f: f.subject)
+
+
+# --- native originals --------------------------------------------------------
+
+
+def native_cache_state(
+    wanted: dict[str, str],
+    root: Path,
+    recorded: dict[str, str],
+    index: Path,
+    transcribed_at: float,
+) -> str:
+    """Why a platform's cached originals cannot be patched, '' when they can.
+
+    The export corrects the file our data was transcribed from. A cached
+    original is that file only if it came from the URL the platform file
+    names today and was fetched no earlier than the platform file was last
+    rewritten: a branch URL keeps its name while its content moves.
+    """
+    for relative, url in sorted(wanted.items()):
+        path = root / relative
+        if not path.is_file():
+            return f"{relative} not cached"
+        known = recorded.get(export_native.source_key(path, index))
+        if known is None:
+            return f"{relative} cached from an unrecorded URL"
+        if known != url:
+            return f"{relative} cached from another revision"
+        if path.stat().st_mtime < transcribed_at:
+            return f"{relative} cached before the platform file was rewritten"
+    return ""
+
+
+def _transcribed_at(platforms_dir: Path, platform: str) -> float:
+    """Last rewrite of the platform file or of any file it inherits."""
+    newest = 0.0
+    seen: set[str] = set()
+    name: str | None = platform
+    while name and name not in seen:
+        seen.add(name)
+        path = platforms_dir / f"{name}.yml"
+        if not path.is_file():
+            break
+        newest = max(newest, path.stat().st_mtime)
+        with path.open(encoding="utf-8") as fh:
+            name = (yaml_load(fh) or {}).get("inherits")
+    return newest
+
+
+def check_native(platforms_dir: Path, cache_dir: Path, truth_dir: Path) -> list[Finding]:
+    exporters = discover_exporters()
+    index = cache_dir / export_native.SOURCES_INDEX
+    recorded = export_native.load_sources(cache_dir)
+    findings: list[Finding] = []
+    for name in list_registered_platforms(str(platforms_dir), include_archived=True):
+        exporter_class = exporters.get(name)
+        if not exporter_class:
+            continue
+        truth, scraped = export_native.load_inputs(name, truth_dir, str(platforms_dir))
+        systems, _ = build_native_model(truth or {}, scraped)
+        wanted = export_native.wanted_sources(exporter_class(), systems, scraped)
+        reason = native_cache_state(
+            wanted, cache_dir / name, recorded, index, _transcribed_at(platforms_dir, name)
+        )
+        findings.append(
+            Finding(
+                "native",
+                name,
+                STALE if reason else OK,
+                local=f"{len(wanted)} file(s)",
+                detail=f"{reason}, export_native.py --refresh-cache fetches it" if reason else "",
+            )
+        )
     return sorted(findings, key=lambda f: f.subject)
 
 
@@ -959,6 +1041,8 @@ def main() -> int:
     parser.add_argument("--offline", action="store_true", help="no network, local ages only")
     parser.add_argument("--jobs", type=int, default=4, help="parallel scrapers")
     parser.add_argument("--cache-dir", default=".cache/upstream")
+    parser.add_argument("--native-cache-dir", default=export_native.DEFAULT_CACHE)
+    parser.add_argument("--truth-dir", default="dist/truth")
     parser.add_argument("--platforms-dir", default="platforms")
     parser.add_argument("--emulators-dir", default="emulators")
     args = parser.parse_args()
@@ -978,6 +1062,10 @@ def main() -> int:
                 [Finding("platforms", "scrapers", SKIPPED, detail="offline")]
                 if args.offline
                 else check_platforms(platforms_dir, workdir, args.jobs)
+            )
+        if "native" in areas:
+            findings.extend(
+                check_native(platforms_dir, Path(args.native_cache_dir), Path(args.truth_dir))
             )
         if "targets" in areas:
             findings.extend(check_targets(platforms_dir, workdir, profiles, args.jobs, args.offline))
