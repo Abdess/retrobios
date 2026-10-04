@@ -821,6 +821,33 @@ class TargetFlagIsAppliedOrRefused(unittest.TestCase):
                         f"{alias} disagrees with what the builder resolves",
                     )
 
+    def test_every_published_target_is_the_list_the_builder_resolves(self):
+        """add_cores and remove_cores reach the installer, not only the builder.
+
+        The published lists were the scraped ones, untouched by the
+        overrides: Batocera x86_64 lacked citron and xenia, which the pack
+        for that target ships, and carried the Amiga machine variants and
+        the launchers the builder drops.
+        """
+        import sys as _sys
+
+        _sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        from common import load_target_config
+
+        manifests = sorted((REPO_ROOT / "install" / "targets").glob("*.json"))
+        if not manifests:
+            self.skipTest("no target manifest generated yet")
+        for path in manifests:
+            targets = json.loads(path.read_text())
+            for target, cores in targets.items():
+                if cores is None:
+                    continue
+                with self.subTest(platform=path.stem, target=target):
+                    resolved = load_target_config(
+                        path.stem, target, str(REPO_ROOT / "platforms")
+                    )
+                    self.assertEqual(cores, sorted(resolved))
+
 
 class TestBaseUrlScheme(unittest.TestCase):
     """The bootstraps insist on HTTPS; the installer must not be laxer."""

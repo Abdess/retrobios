@@ -166,6 +166,28 @@ class CoreResolutionTests(unittest.TestCase):
             {"ghost": ["android", "linux"]},
         )
 
+    def test_a_default_override_drops_a_name_on_every_target(self):
+        index = cf.profile_name_index(self.PROFILES)
+        targets = {
+            "targets": {
+                "x86_64": {"cores": ["A500", "ghost"]},
+                "rpi": {"cores": ["A500", "na"]},
+            }
+        }
+        overrides = {
+            "plat": {
+                "targets": {
+                    "_default": {"remove_cores": ["A500"]},
+                    "rpi": {"remove_cores": ["na"]},
+                }
+            }
+        }
+        removed = cf._removed_cores(overrides, "plat")
+        self.assertEqual(
+            cf.unresolved_target_cores(targets, index, removed),
+            {"ghost": ["x86_64"]},
+        )
+
     def test_coreinfo_gaps_fold_case_and_flag_standalone_profiles(self):
         names = ["FreeIntvTSOverlay", "eka2l1", "wqxemu", "mednafen_psx"]
         unprofiled, standalone = cf.coreinfo_gaps(names, self.PROFILES)

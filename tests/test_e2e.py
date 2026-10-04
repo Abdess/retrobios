@@ -1747,6 +1747,33 @@ class TestE2E(unittest.TestCase):
         self.assertIn("core_a", cores)
         self.assertIn("core_b", cores)
 
+    def test_target_default_override_reaches_every_target(self):
+        """`_default` drops a name on every target, then the target adds its own."""
+        self._write_target_fixtures()
+        from common import load_target_config
+
+        targets_dir = os.path.join(self.platforms_dir, "targets")
+        overrides = {
+            "testplatform": {
+                "targets": {
+                    "_default": {"remove_cores": ["core_a"], "add_cores": ["core_z"]},
+                    "target-full": {"aliases": ["full"], "add_cores": ["core_a"]},
+                },
+            },
+        }
+        with open(os.path.join(targets_dir, "_overrides.yml"), "w") as f:
+            yaml.dump(overrides, f)
+        self.assertEqual(
+            load_target_config("testplatform", "target-minimal", self.platforms_dir),
+            {"core_z"},
+        )
+        self.assertEqual(
+            load_target_config("testplatform", "full", self.platforms_dir),
+            {"core_a", "core_b", "core_c", "core_z"},
+        )
+        with self.assertRaises(ValueError):
+            load_target_config("testplatform", "_default", self.platforms_dir)
+
     def test_target_single_target_noop(self):
         self._write_target_fixtures()
         from common import load_target_config

@@ -275,19 +275,24 @@ def load_target_config(
         raise ValueError(msg)
 
     cores = set(str(c) for c in targets[canonical].get("cores", []))
+    return apply_target_overrides(cores, overrides, canonical)
 
-    default_ovr = overrides.get("_default", {})
-    ovr = overrides.get(canonical, {})
-    for c in default_ovr.get("add_cores", []):
-        cores.add(str(c))
-    for c in default_ovr.get("remove_cores", []):
-        cores.discard(str(c))
-    for c in ovr.get("add_cores", []):
-        cores.add(str(c))
-    for c in ovr.get("remove_cores", []):
-        cores.discard(str(c))
 
-    return cores
+def apply_target_overrides(
+    cores: set[str], overrides: dict, target: str
+) -> set[str]:
+    """Cores of one target once the platform's overrides are applied.
+
+    ``_default`` applies to every target of the platform, then the target's
+    own entry: a name the scraper reads as a core on every board (a machine
+    variant, a launcher) is written once instead of once per board.
+    """
+    result = set(cores)
+    for scope in ("_default", target):
+        entry = overrides.get(scope) or {}
+        result |= {str(c) for c in entry.get("add_cores") or []}
+        result -= {str(c) for c in entry.get("remove_cores") or []}
+    return result
 
 
 def list_available_targets(

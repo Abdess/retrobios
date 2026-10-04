@@ -29,6 +29,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    apply_target_overrides,
     artifact_lock,
     ArtifactLockBusy,
     build_target_cores_cache,
@@ -1896,12 +1897,14 @@ def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
         # file instead: the user asked for a filter and got the full pack.
         overrides_path = targets_path / "_overrides.yml"
         alias_map: dict[str, list[str]] = {}
+        platform_overrides: dict = {}
         if overrides_path.is_file():
             with open(overrides_path) as f:
                 all_overrides = yaml_load(f) or {}
-            for tname, ovr in (
+            platform_overrides = (
                 all_overrides.get(yml_file.stem, {}).get("targets", {}) or {}
-            ).items():
+            )
+            for tname, ovr in platform_overrides.items():
                 names = [a for a in (ovr or {}).get("aliases", []) if isinstance(a, str)]
                 if names:
                     alias_map[tname] = names
@@ -1925,7 +1928,12 @@ def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
                     f"{yml_file}: target {target_name!r} cores must be unique "
                     "non-empty strings"
                 )
-            result[target_name] = cores
+            # The same add/remove lists the pack builder applies: a list
+            # published without them makes the installer skip files of a
+            # core the pack for that target ships.
+            result[target_name] = sorted(
+                apply_target_overrides(set(cores), platform_overrides, target_name)
+            )
 
         for target_name, names in alias_map.items():
             if target_name not in result:
