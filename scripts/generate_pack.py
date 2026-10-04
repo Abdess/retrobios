@@ -2130,6 +2130,9 @@ def _run_manifest_mode(
                         alias_manifest["display_name"] = alias_cfg.get(
                             "platform", alias_plat
                         )
+                        alias_manifest["base_destination"] = alias_cfg.get(
+                            "base_destination", ""
+                        )
                         alias_registry = registry.get("platforms", {}).get(alias_plat, {})
                         alias_install = alias_registry.get("install", {})
                         alias_manifest["detect"] = alias_install.get("detect", [])

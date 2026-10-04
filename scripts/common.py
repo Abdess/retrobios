@@ -1055,7 +1055,11 @@ def group_identical_platforms(
     platforms_dir: str,
     target_cores_cache: dict[str, set[str] | None] | None = None,
 ) -> list[tuple[list[str], str]]:
-    """Group platforms that produce identical packs (same files + base_destination).
+    """Group platforms that produce identical packs.
+
+    A pack is the platform's own files plus those of the emulators it runs,
+    so two platforms share one only when both agree. base_destination does
+    not separate them: destinations inside a pack are relative to it.
 
     Returns [(group_of_platform_names, representative), ...].
     The representative is the root platform (one that does not inherit).
@@ -1086,6 +1090,12 @@ def group_identical_platforms(
                 entries.append(f"{dest}|{sha1}|{md5}")
 
         fp = hashlib.sha1("|".join(sorted(entries)).encode()).hexdigest()
+        cores = config.get("cores")
+        emulators = [
+            cores if isinstance(cores, str) else sorted(map(str, cores or [])),
+            sorted(map(str, config.get("standalone_cores") or [])),
+        ]
+        fp = hashlib.sha1(f"{fp}|{emulators}".encode()).hexdigest()
         if target_cores_cache:
             tc = target_cores_cache.get(platform)
             if tc is not None:
