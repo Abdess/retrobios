@@ -158,6 +158,77 @@ class ManifestStatesWhatThePackHolds(PackCountFixture):
         self.assertEqual(errors, [])
 
 
+class ManifestFollowsTheBuilder(PackCountFixture):
+    """Two places where the pack carried a file the manifest left out.
+
+    The release record compares each archive with the count its manifest
+    expects, and the first comparison named both: four `pc6001*.zip` in the
+    Batocera pack, two MSX2+ ROMs in the Recalbox pack.
+    """
+
+    def _platform(self, files: list[dict], mode: str = "md5") -> None:
+        config = dict(PLATFORM, verification_mode=mode, cores=[])
+        config["systems"] = {"demo-system": {"files": files}}
+        (self.platforms / "demo.yml").write_text(yaml.dump(config))
+
+    def _pack_names(self) -> set[str]:
+        out = self.root / "dist"
+        out.mkdir(exist_ok=True)
+        zip_path = builder.generate_pack(
+            "demo", str(self.platforms), self.db, str(self.bios), str(out),
+            include_extras=True, emulators_dir=str(self.emulators),
+            emu_profiles=self.profiles, data_registry=self.registry,
+            offline=True,
+        )
+        with zipfile.ZipFile(zip_path) as archive:
+            return set(archive.namelist()) | {"manifest.json"}
+
+    def test_an_archive_checked_by_the_rom_inside_it_is_listed(self):
+        """Batocera pins the MD5 of a ROM inside the ZIP, not of the ZIP. The
+        builder looked inside, the manifest did not, and an installation by
+        script lost four required archives the pack shipped."""
+        rom = b"rom inside the set"
+        archive = self.bios / "SystemA" / "set.zip"
+        with zipfile.ZipFile(archive, "w") as handle:
+            handle.writestr("basic.rom", rom)
+            # A second ROM, so the archive is not identified by the first.
+            handle.writestr("chargen.rom", b"another rom of the set")
+        raw = archive.read_bytes()
+        sha1 = hashlib.sha1(raw).hexdigest()
+        self.db["files"][sha1] = {
+            "path": str(archive), "name": "set.zip", "size": len(raw),
+            "sha1": sha1, "md5": hashlib.md5(raw).hexdigest(),
+            "sha256": hashlib.sha256(raw).hexdigest(), "crc32": "00000000",
+        }
+        self.db["indexes"] = generate_db.build_indexes(self.db["files"], {})
+        self._platform([{
+            "name": "set.zip", "destination": "set.zip",
+            "md5": hashlib.md5(rom).hexdigest(), "zipped_file": "basic.rom",
+        }])
+        names = self._pack_names()
+        self.assertIn("set.zip", names)
+        manifest = self._manifest()
+        self.assertIn("set.zip", {entry["dest"] for entry in manifest["files"]})
+        self.assertEqual(manifest["pack_files"], len(names))
+
+    def test_a_file_only_a_data_directory_holds_still_counts(self):
+        """The installer cannot fetch it, so it stays out of the list. The
+        pack carries it, so it is part of what an extraction shows."""
+        (self.data / "Machines").mkdir()
+        (self.data / "Machines" / "Msx2pe.rom").write_bytes(b"machine rom")
+        self._platform([{
+            "name": "Msx2pe.rom", "destination": "Machines/Msx2pe.rom",
+            "md5": hashlib.md5(b"machine rom").hexdigest(),
+        }])
+        names = self._pack_names()
+        self.assertIn("Machines/Msx2pe.rom", names)
+        manifest = self._manifest()
+        self.assertNotIn(
+            "Machines/Msx2pe.rom", {entry["dest"] for entry in manifest["files"]}
+        )
+        self.assertEqual(manifest["pack_files"], len(names))
+
+
 RECORD = {
     "tag": "v2026.09.04",
     "packs": {

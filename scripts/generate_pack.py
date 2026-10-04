@@ -293,6 +293,24 @@ def download_external(file_entry: dict, dest_path: str) -> bool:
 PACK_DOCUMENTS = ("README.txt", "manifest.json")
 
 
+def _inner_rom_check(file_entry: dict, local_path: str) -> str:
+    """How an archive answers an entry that pins a ROM inside it.
+
+    Batocera, RetroBat and ROCKNIX hash a member of the ZIP, never the ZIP:
+    the resolver hands back the archive as a mismatch and this decides it.
+    Returns check_inside_zip's answer for the first accepted MD5 that
+    matches, else for the last one tried. The pack and the install manifest
+    both read it, so a file one of them ships is a file the other lists.
+    """
+    declared = [m.strip() for m in file_entry.get("md5", "").split(",") if m.strip()]
+    result = "not_in_zip"
+    for candidate in declared or [""]:
+        result = check_inside_zip(local_path, file_entry["zipped_file"], candidate)
+        if result == "ok":
+            break
+    return result
+
+
 def _data_directory_members(
     pack_systems: dict,
     data_registry: dict | None,
@@ -891,21 +909,8 @@ def generate_pack(
                 ):
                     zf_name = file_entry.get("zipped_file")
                     if zf_name and local_path:
-                        inner_md5_raw = file_entry.get("md5", "")
-                        inner_md5_list = (
-                            [m.strip() for m in inner_md5_raw.split(",") if m.strip()]
-                            if inner_md5_raw
-                            else [""]
-                        )
-                        zip_ok = False
-                        last_result = "not_in_zip"
-                        for md5_candidate in inner_md5_list:
-                            last_result = check_inside_zip(
-                                local_path, zf_name, md5_candidate
-                            )
-                            if last_result == "ok":
-                                zip_ok = True
-                                break
+                        last_result = _inner_rom_check(file_entry, local_path)
+                        zip_ok = last_result == "ok"
                         if zip_ok:
                             status = "zip_exact"
                             file_status.setdefault(dedup_key, "ok")
@@ -2952,6 +2957,11 @@ def generate_manifest(
     manifest_files: list[dict] = []
     omitted_by_destination: dict[str, dict] = {}
     total_size = 0
+    # Sizes of the files the pack carries and the installer cannot fetch: the
+    # collection does not index them, a data directory cache answered.
+    pack_only_sizes: list[int] = []
+    if data_registry is None:
+        data_registry = load_data_dir_registry(platforms_dir)
 
     def manifest_destination(full_destination: str) -> str:
         if base_dest and full_destination.startswith(f"{base_dest}/"):
@@ -3044,8 +3054,16 @@ def generate_manifest(
                     db,
                     bios_dir,
                     zip_contents,
+                    data_dir_registry=data_registry,
                     offline=offline,
                 )
+                if (
+                    status == "hash_mismatch"
+                    and local_path
+                    and file_entry.get("zipped_file")
+                    and _inner_rom_check(file_entry, local_path) == "ok"
+                ):
+                    status = "zip_exact"
                 # An existence platform never reads the bytes, so a declared
                 # hash the local dump contradicts is not a reason to withhold
                 # the file. Hash platforms would reject it, so they omit it.
@@ -3080,6 +3098,12 @@ def generate_manifest(
                 # entry.
                 if not repo_path and not is_release_asset:
                     record_omission(full_dest, file_entry, sys_id, "not_found", None)
+                    if file_size and full_dest not in seen_destinations:
+                        pack_only_sizes.append(file_size)
+                        seen_destinations.add(dedup_key)
+                        _register_path(dedup_key, seen_destinations, seen_parents)
+                        if case_insensitive:
+                            seen_lower.add(dedup_key.lower())
                     continue
 
                 entry: dict = {
@@ -3129,9 +3153,7 @@ def generate_manifest(
     # Phase 3: data directories. The installer does not fetch them, so they
     # stay out of the file list; the pack carries them, so they count toward
     # what an extraction shows.
-    if data_registry is None:
-        data_registry = load_data_dir_registry(platforms_dir)
-    data_sizes = [
+    data_sizes = pack_only_sizes + [
         os.path.getsize(src)
         for src, _dest in _data_directory_members(
             pack_systems, data_registry, platform_name, base_dest,
