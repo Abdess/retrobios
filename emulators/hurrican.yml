@@ -12,75 +12,95 @@ systems: []
 verification: existence
 
 notes: |
-  Open-source Turrican-inspired platformer by Poke53280 / HurricanGame. The
-  tree ships all shipping assets under Hurrican/data/ (93 MB): textures,
-  levels, music, sfx, shaders, plus a bundled gamecontrollerdb.txt.
+  Turrican-style platformer by Poke53280. The repository ships the game data
+  under Hurrican/data/ (textures, levels, music, sfx, shaders,
+  gamecontrollerdb.txt) and the language files under Hurrican/lang/.
 
-  The engine resolves two paths at startup, both set in Hurrican/src/Main.cpp
-  (main() at line 342):
-    * g_storage_ext — the data root used for every asset load. Taken from the
-      -data= CLI flag first (Main.cpp:349-353), then from the compile-time
-      USE_STORAGE_PATH macro (355-363), falling back to "." (365).
-    * g_save_ext / g_config_ext — the user-writable save and config directory,
-      from -save= CLI flag then XDG_DATA_HOME/XDG_CONFIG_HOME under UNIX
-      (369-389).
+  main() (Hurrican/src/Main.cpp:342) sets two roots:
+    g_storage_ext: the read-only data root. Taken from --pathdata or -PD
+      (Hurrican/src/Main.cpp:227-241, 349-352), else from the compile-time
+      USE_STORAGE_PATH when that directory exists, else "."
+      (Hurrican/src/Main.cpp:354-366).
+    g_save_ext and g_config_ext: saves, high scores and Hurrican.cfg. Taken
+      from --pathsave or -PS, else XDG_DATA_HOME and XDG_CONFIG_HOME on
+      builds with USE_HOME_DIR, else "." (Hurrican/src/Main.cpp:370-385).
 
-  Everything the game loads is under <g_storage_ext>/data/:
-    data/textures/*          — DX8Font.cpp:160, DX8Graphics.cpp:393-407 (shaders),
-                               TextureAtlas class and loadImageSDL calls
-    data/shaders/<glsl_ver>/ — DX8Graphics.cpp:393-407 (vert/frag per renderer)
-    data/levels/<name>.lev  — Tileengine.cpp:324-330
-    data/music/              — SoundManager Mp3/OGG loads
-    data/sfx/                — SoundManager LoadSound
-    data/gamecontrollerdb.txt (joystick remapping)
+  Files read under g_storage_ext:
+    lang/*.lng: Hurrican/src/Main.cpp:496-515, Hurrican/src/Texts.cpp:65
+    data/textures/: Hurrican/src/DX8Texture.cpp:204-211
+    data/levels/levellist.dat: Hurrican/src/Texts.cpp:127
+    data/levels/<name>: Hurrican/src/Tileengine.cpp:330
+    data/music/: Hurrican/src/DX8Sound.cpp:314
+    data/sfx/: Hurrican/src/DX8Sound.cpp:580
+    data/shaders/<glsl_version>/: Hurrican/src/DX8Graphics.cpp:393-428
+    data/gamecontrollerdb.txt: Hurrican/src/DX8Input.cpp:97-99
 
-  All data is open content; no retail or BIOS files needed.
+  A texture, level, song or sample that cannot be found sets GameRunning to
+  false and the game quits. --custom <name> reads data/levels/<name>/ first
+  for levels, textures, custom.lng and levellist.dat.
 
 files:
+  - name: "lang"
+    path: "lang"
+    category: game_data
+    description: "Language files (.lng)"
+    required: true
+    bundled: true
+    source_ref: "Hurrican/src/Main.cpp:496-515, Hurrican/src/Texts.cpp:65"
+    note: >
+      GameInit lists the .lng files of lang/, then of the working directory,
+      and aborts when it finds none.
+
   - name: "textures"
     path: "data/textures"
     category: game_data
-    description: "Game textures (sprites, backgrounds, fonts)"
+    description: "Textures (sprites, backgrounds, fonts)"
     required: true
     bundled: true
-    source_ref: "src/DX8Font.cpp:160 (data/textures/ prefix on every font load)"
+    source_ref: "Hurrican/src/DX8Texture.cpp:204-218"
+    note: >
+      An optional scalefactors.txt in the same directory is read by
+      ReadScaleFactorsFiles (Hurrican/src/DX8Texture.cpp:162-168).
 
   - name: "levels"
     path: "data/levels"
     category: game_data
-    description: "Level files (.lev)"
+    description: "Level files and levellist.dat"
     required: true
     bundled: true
-    source_ref: "src/Tileengine.cpp:324-330 (data/levels/<name>.lev + custom lists)"
+    source_ref: "Hurrican/src/Tileengine.cpp:330-336, Hurrican/src/Texts.cpp:127-133"
 
   - name: "shaders"
     path: "data/shaders"
     category: game_data
-    description: "GLSL shader sources per version subdirectory"
+    description: "GLSL shader sources, one subdirectory per GLSL version"
     required: true
     bundled: true
-    source_ref: "src/DX8Graphics.cpp:393-407 (data/shaders/<glsl_version>/*)"
+    source_ref: "Hurrican/src/DX8Graphics.cpp:393-428"
+    note: >
+      Loaded by the GL2 and GL3 renderers (GL2 is the build default); a GL1
+      build compiles this block out.
 
   - name: "music"
     path: "data/music"
     category: game_data
     description: "Music tracks"
-    required: false
+    required: true
     bundled: true
-    source_ref: "src/SoundManager.cpp (data/music/ prefix for LoadMp3/LoadOgg)"
+    source_ref: "Hurrican/src/DX8Sound.cpp:314-320"
 
   - name: "sfx"
     path: "data/sfx"
     category: game_data
     description: "Sound effect samples"
-    required: false
+    required: true
     bundled: true
-    source_ref: "src/SoundManager.cpp (data/sfx/ prefix for LoadSound)"
+    source_ref: "Hurrican/src/DX8Sound.cpp:580-586"
 
   - name: "gamecontrollerdb.txt"
     path: "data/gamecontrollerdb.txt"
     category: game_data
-    description: "SDL gamecontroller mapping database"
+    description: "SDL game controller mapping database"
     required: false
     bundled: true
-    source_ref: "src/DirectInput.cpp (data/gamecontrollerdb.txt)"
+    source_ref: "Hurrican/src/DX8Input.cpp:97-99"

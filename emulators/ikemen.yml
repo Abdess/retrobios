@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/ikemen-engine/Ikemen-GO"
 upstream: "https://github.com/ikemen-engine/Ikemen-GO"
 profiled_date: "2026-10-04"
-source_commit: "02a078d6bf189ff56bbcbbbc8dbfd81753692c56"
+source_commit: "e8b065f410fa9507dbddc1d6b1abc231de99f8c6"
 core_version: ~
 display_name: "Ikemen GO"
 cores: [ikemen]
@@ -12,180 +12,259 @@ systems: []
 verification: existence
 
 notes: |
-  Open-source M.U.G.E.N.-compatible 2D fighting game engine, written in Go.
-  Reads the Elecbyte .def / .air / .cmd / .cns / .sff / .snd files that
-  commercial and community M.U.G.E.N. content ships with.
+  M.U.G.E.N.-compatible 2D fighting game engine written in Go. It reads the
+  .def, .air, .cmd, .cns, .sff and .snd files of M.U.G.E.N. content, plus its
+  own .zss state files.
 
-  The binary comes with the engine's own motif-neutral core data (bundled with
-  the install, not retail BIOS):
-    data/      — common definitions, stage shell, screenpack parameters
-                 (action.zss, common.air, common.cmd, common.const,
-                  common1.cns.zss, dizzy.zss, functions.zss, guardbreak.zss,
-                  score.zss, system.base.def, tag.zss, training.zss)
-    external/  — icons, mods template, lua scripts, GLSL shaders
-    font/      — fallback TTF fonts (Open Sans) and 3x5 bitmap fonts
-                 (default-3x5-bold.def/sff, default-3x5.def/sff, debug.def)
+  Every path below is relative to the working directory. The file names come
+  from the embedded default configuration, src/resources/defaultConfig.ini,
+  which save/config.ini overrides (src/main.go:189-195).
 
-  Characters, stages, and motifs are user-supplied. system.go:2630 and
-  script.go:1174 enforce the convention that any character path lacking the
-  "chars/" prefix is rewritten to "chars/<name>", so content drops into
-  chars/, stages/, data/<motif>/ under the install root.
+  The repository ships:
+    data/: common animations, commands, constants and state files
+    external/script/: the Lua scripts that drive menus and game modes
+    external/icons/: window icons
+    external/shaders/: optional post-processing shaders
+    font/: debug.def with Open Sans, and the default-3x5 bitmap fonts
 
-  Nothing in Ikemen itself is a BIOS. The engine refuses to run with no motif,
-  but ships a stub select screen and the common.* lifebar config, so a user
-  character and stage are enough to boot.
+  The default configuration also names files the repository does not hold:
+  the motif data/ikemen1/system.def, the effects pack data/gofx/gofx.def and
+  the stage stages/stage0-720.def. Release packages copy chars, data, font,
+  sound, stages and video from the Ikemen-GO-Screenpack repository next to
+  the engine (.github/workflows/releases.yml:585-593).
+
+  Characters and stages are found under chars/ and stages/
+  (src/system.go:5364, src/system.go:5590).
 
 files:
-  - name: "system.base.def"
-    path: "data/system.base.def"
+  - name: "script"
+    path: "external/script"
     category: game_data
-    description: "Screenpack / motif parameter reference"
+    description: "Lua scripts: main.lua and the modules it requires"
     required: true
     bundled: true
-    source_ref: "src/system.go (default screenpack parsing)"
+    source_ref: "src/resources/defaultConfig.ini:143, src/main.go:213-232"
+    note: >
+      main.go opens Config.System and panics when it is missing. main.lua
+      requires debug, start, options and menu from the same directory.
 
-  - name: "common.cmd"
-    path: "data/common.cmd"
+  - name: "IkemenCylia_256.png"
+    path: "external/icons/IkemenCylia_256.png"
     category: game_data
-    description: "Common character command set (fallback for chars missing CMD)"
+    description: "Window icon, 256 px"
     required: true
     bundled: true
-    source_ref: "src/char.go (common.cmd lookup for every loaded character)"
+    source_ref: "src/resources/defaultConfig.ini:141, src/system.go:527-538"
+
+  - name: "IkemenCylia_96.png"
+    path: "external/icons/IkemenCylia_96.png"
+    category: game_data
+    description: "Window icon, 96 px"
+    required: true
+    bundled: true
+    source_ref: "src/resources/defaultConfig.ini:141, src/system.go:527-538"
+
+  - name: "IkemenCylia_48.png"
+    path: "external/icons/IkemenCylia_48.png"
+    category: game_data
+    description: "Window icon, 48 px"
+    required: true
+    bundled: true
+    source_ref: "src/resources/defaultConfig.ini:141, src/system.go:527-538"
+
+  - name: "shaders"
+    path: "external/shaders"
+    category: game_data
+    description: "Post-processing shaders offered in the options menu"
+    required: false
+    bundled: true
+    source_ref: "external/script/options.lua:1646, src/system.go:457-470"
 
   - name: "common.air"
     path: "data/common.air"
     category: game_data
-    description: "Common animations (fallback for chars missing AIR)"
+    description: "Common animations merged into every character"
     required: true
     bundled: true
-    source_ref: "src/char.go"
+    source_ref: "src/resources/defaultConfig.ini:12, src/char.go:4676-4689"
+
+  - name: "common.cmd"
+    path: "data/common.cmd"
+    category: game_data
+    description: "Common commands appended to every character's command file"
+    required: true
+    bundled: true
+    source_ref: "src/resources/defaultConfig.ini:14, src/compiler.go:8367-8380"
 
   - name: "common.const"
     path: "data/common.const"
     category: game_data
-    description: "Common constants (gravity, speeds)"
+    description: "Common constants"
     required: true
     bundled: true
-    source_ref: "src/char.go"
-
-  - name: "common1.cns.zss"
-    path: "data/common1.cns.zss"
-    category: game_data
-    description: "Common state controllers (ZSS)"
-    required: true
-    bundled: true
-    source_ref: "src/char.go (ZSS state handler)"
-
-  - name: "action.zss"
-    path: "data/action.zss"
-    category: game_data
-    description: "Default engine action script"
-    required: true
-    bundled: true
-    source_ref: "src/system.go"
+    source_ref: "src/resources/defaultConfig.ini:16, src/char.go:4338-4355"
 
   - name: "functions.zss"
     path: "data/functions.zss"
     category: game_data
-    description: "Shared ZSS helper functions"
+    description: "Common states: shared ZSS functions"
     required: true
     bundled: true
-    source_ref: "src/system.go"
+    source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
-  - name: "score.zss"
-    path: "data/score.zss"
+  - name: "action.zss"
+    path: "data/action.zss"
     category: game_data
-    description: "Score system script"
+    description: "Common states: actions"
     required: true
     bundled: true
-    source_ref: "src/system.go"
+    source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
-  - name: "tag.zss"
-    path: "data/tag.zss"
+  - name: "demo.zss"
+    path: "data/demo.zss"
     category: game_data
-    description: "Tag-team mode script"
+    description: "Common states: demo mode"
     required: true
     bundled: true
-    source_ref: "src/system.go"
+    source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "dizzy.zss"
     path: "data/dizzy.zss"
     category: game_data
-    description: "Dizzy/stun state script"
+    description: "Common states: dizzy"
     required: true
     bundled: true
-    source_ref: "src/system.go"
+    source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "guardbreak.zss"
     path: "data/guardbreak.zss"
     category: game_data
-    description: "Guard-break state script"
+    description: "Common states: guard break"
     required: true
     bundled: true
-    source_ref: "src/system.go"
+    source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
+
+  - name: "score.zss"
+    path: "data/score.zss"
+    category: game_data
+    description: "Common states: score"
+    required: true
+    bundled: true
+    source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
+
+  - name: "system.zss"
+    path: "data/system.zss"
+    category: game_data
+    description: "Common states: system"
+    required: true
+    bundled: true
+    source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
+
+  - name: "tag.zss"
+    path: "data/tag.zss"
+    category: game_data
+    description: "Common states: tag team"
+    required: true
+    bundled: true
+    source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
   - name: "training.zss"
     path: "data/training.zss"
     category: game_data
-    description: "Training mode script"
+    description: "Common states: training mode"
     required: true
     bundled: true
-    source_ref: "src/system.go"
+    source_ref: "src/resources/defaultConfig.ini:18, src/compiler.go:8545-8552"
 
-  - name: "default-3x5.sff"
-    path: "font/default-3x5.sff"
+  - name: "common1.cns.zss"
+    path: "data/common1.cns.zss"
     category: game_data
-    description: "Default 3x5 bitmap font sprites"
+    description: "ZSS replacement for the common1.cns state file"
     required: true
     bundled: true
-    source_ref: "src/font.go, data/system.base.def [Files]"
-
-  - name: "default-3x5.def"
-    path: "font/default-3x5.def"
-    category: game_data
-    description: "Default 3x5 bitmap font definition"
-    required: true
-    bundled: true
-    source_ref: "src/font.go"
-
-  - name: "default-3x5-bold.sff"
-    path: "font/default-3x5-bold.sff"
-    category: game_data
-    description: "Default 3x5 bold bitmap font sprites"
-    required: true
-    bundled: true
-    source_ref: "src/font.go"
-
-  - name: "default-3x5-bold.def"
-    path: "font/default-3x5-bold.def"
-    category: game_data
-    description: "Default 3x5 bold bitmap font definition"
-    required: true
-    bundled: true
-    source_ref: "src/font.go"
+    source_ref: "src/compiler.go:6929-6943, src/compiler.go:8538-8543"
+    note: >
+      A character names its common state file in stcommon. When that file is
+      not found, stateCompile retries with the .zss suffix, so a character
+      asking for common1.cns gets data/common1.cns.zss.
 
   - name: "debug.def"
     path: "font/debug.def"
     category: game_data
-    description: "Debug overlay font"
+    description: "Debug overlay font definition"
+    required: true
+    bundled: true
+    source_ref: "src/resources/defaultConfig.ini:174, external/script/main.lua:648, src/script.go:4108-4111"
+    note: "loadDebugFont raises a Lua error when the font cannot be loaded."
+
+  - name: "OpenSans-Bold.ttf"
+    path: "font/Open_Sans/OpenSans-Bold.ttf"
+    category: game_data
+    description: "TrueType face named by debug.def"
+    required: true
+    bundled: true
+    source_ref: "font/debug.def:19, src/util_desktop.go:29-40"
+    note: >
+      When the file is not found, the same name is searched in the system
+      font directories; the engine panics when that fails too.
+
+  - name: "default-3x5.def"
+    path: "font/default-3x5.def"
+    category: game_data
+    description: "Default motif font (font1)"
     required: false
     bundled: true
-    source_ref: "src/font.go"
+    source_ref: "src/resources/defaultMotif.ini:75, src/motif.go:2593-2609"
+    note: "A motif font that fails to load is logged and replaced by an empty font."
+
+  - name: "default-3x5.sff"
+    path: "font/default-3x5.sff"
+    category: game_data
+    description: "Glyph sprites named by default-3x5.def"
+    required: false
+    bundled: true
+    source_ref: "font/default-3x5.def:21, src/font.go:412-418"
+    note: "LoadFntSff panics when default-3x5.def is loaded and this file is missing."
+
+  - name: "system.def"
+    path: "data/ikemen1/system.def"
+    category: game_data
+    description: "Default motif definition"
+    required: true
+    bundled: true
+    source_ref: "src/resources/defaultConfig.ini:96, src/motif.go:2627-2659, src/script.go:4249-4252"
+    note: >
+      Held by the Ikemen-GO-Screenpack repository and copied into release
+      packages. main.lua calls loadMotif at startup, which raises a Lua error
+      when the definition cannot be read. -r selects another motif.
+
+  - name: "gofx.def"
+    path: "data/gofx/gofx.def"
+    category: game_data
+    description: "Common effects pack"
+    required: true
+    bundled: true
+    source_ref: "src/resources/defaultConfig.ini:21, src/fightscreen.go:85-102, src/system.go:6551-6555"
+    note: >
+      Held by the Ikemen-GO-Screenpack repository and copied into release
+      packages. A load failure puts the match loader in its error state.
 
   - name: "chars"
+    path: "chars"
     category: game_data
-    description: "User-supplied character directory (name resolved via chars/<name>)"
+    description: "Character directory"
     required: false
-    source_ref: "src/system.go:2630, src/script.go:1174 (prefix enforcement)"
+    source_ref: "src/system.go:5364, src/script.go:3190-3191"
     note: >
-      Not shipped: user drops MUGEN-compatible characters under chars/. Each
-      character directory contains its own .def, .cmd, .cns, .air, .sff, .snd.
+      User supplied. A character path that does not resolve as given is
+      searched under chars/.
 
   - name: "stages"
+    path: "stages"
     category: game_data
-    description: "User-supplied stage directory"
+    description: "Stage directory"
     required: false
-    source_ref: "src/resources/defaultConfig.json:112 (StartStage default)"
+    source_ref: "src/system.go:5590, src/resources/defaultConfig.ini:178, external/script/main.lua:1770-1774"
     note: >
-      Not shipped: user drops MUGEN-compatible stages under stages/. Default
-      configuration asks for stages/stage1.def.
+      User supplied. Debug.StartStage defaults to stages/stage0-720.def, the
+      stage added when select.def lists none.

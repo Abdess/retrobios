@@ -9,140 +9,305 @@ core_version: "v1.3.4"
 display_name: "Blake Stone (BStone)"
 cores: [bstone]
 systems: [blake-stone]
-verification: md5
+verification: sha1
 
 notes: |
-  Blake Stone source port by bibendovsky, covering Aliens of Gold (shareware
-  v1.0/v2.0/v2.1/v3.0 and registered v1.0/v2.0/v2.1/v3.0) plus Planet Strike.
+  Source port of Blake Stone: Aliens of Gold and Blake Stone: Planet Strike.
 
-  The engine identifies the installed game by SHA1-hashing every file in the
-  content directory against a hardcoded resource table in id_ca.cpp.
-  Assets::get_aog_sw_v1_0_resources, get_aog_sw_v2_0_resources,
-  get_aog_sw_v2_1_resources, get_aog_sw_v3_0_resources,
-  get_aog_full_v1_0_resources through get_aog_full_v3_0_resources, and
-  get_ps_resources (id_ca.cpp:1493-1687) each list one shipping variant.
-  has_content() in jm_free.cpp:195-220 opens every file in the chosen set and
-  fails the match on the first SHA1 mismatch.
+  The engine accepts nine data sets, each a table of file names and SHA-1
+  values in src/bstone/src/id_ca.cpp:1493-1688: Aliens of Gold shareware
+  v1.0, v2.0, v2.1, v3.0 (.BS1), Aliens of Gold registered v1.0, v2.0, v2.1,
+  v3.0 (.BS6) and Planet Strike (.VSI). has_content
+  (src/bstone/src/jm_free.cpp:197-220) opens every file of a table, hashes
+  each one and rejects the set on the first mismatch, so the files of one
+  directory must all belong to the same version. Within a game the versions
+  are tried in the order v2.1, v3.0, v2.0, v1.0
+  (src/bstone/src/jm_free.cpp:222-356).
 
-  Search paths come from the command line (-aog_dir, -ps_dir), the Steam install
-  (bstone_steam_content_path.cpp) and the GOG install (bstone_gog_content_path.cpp)
-  before the current working directory. File names carry the game suffix:
-    .BS1  Aliens of Gold shareware
-    .BS6  Aliens of Gold registered
-    .VSI  Planet Strike
+  find_contents (src/bstone/src/jm_free.cpp:626-773) looks for the three
+  games, or only the one forced by --aog, --aog_sw or --ps, in these
+  directories in order:
+    1. the --data_dir directory, when given
+    2. the working directory
+    3. the profile directory (--profile_dir, else the per-user data path)
+    4. the GOG install directories (Windows registry)
+    5. the Steam install directories (Windows registry)
+  One complete set is enough. With none the engine stops on "Content not
+  found." (src/bstone/src/jm_free.cpp:754); with several games found it asks
+  which one to play. No single file is required on its own.
 
-  Every file in a set is required; the game refuses to start otherwise. Levels
-  are checked separately: a modded-levels hash saves to the player data instead
-  of being refused (jm_free.cpp:934-946).
+  Each file is opened under its upper-case name first, then under the
+  lower-case name (src/bstone/src/id_ca.cpp:940-961).
 
-  No separate BIOS. BStone requires one of the three retail/shareware data sets.
+  A --mod_dir directory is searched before the data directory for every
+  resource. A MAPTEMP file found there replaces the level hash, unless it is
+  the official level file of another version, which is refused
+  (src/bstone/src/jm_free.cpp:918-950).
 
 files:
-  # ─── Aliens of Gold registered v3.0 (the common retail dump) ───
+  # Aliens of Gold shareware
+  - name: "AUDIOHED.BS1"
+    category: game_data
+    system: blake-stone
+    description: "Aliens of Gold shareware audio chunk offsets"
+    required: false
+    sha1:
+      - "0c3de403b524107809fa9308b730d60e8e41ba93"
+      - "e2c101f9fd4bc7e22ddbfa3f019c9303877de4e2"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0 and v2.0; v2.1 and v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1497, 1518, 1539, 1560"
+
+  - name: "AUDIOT.BS1"
+    category: game_data
+    system: blake-stone
+    description: "Aliens of Gold shareware audio data"
+    required: false
+    sha1:
+      - "3d4e8b62aa4683671027513ad9720f76f176ba5b"
+      - "b79e7afcb4e4b29e59660ec261f72ff1ab4d3a25"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0 and v2.0; v2.1 and v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1498, 1519, 1540, 1561"
+
+  - name: "IANIM.BS1"
+    category: game_data
+    system: blake-stone
+    description: "Aliens of Gold shareware intro movie"
+    required: false
+    sha1: "ba1fa5b0bc34f148deffb4977a3cd1e718e91bbd"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1499, 1520, 1541, 1562"
+
+  - name: "MAPHEAD.BS1"
+    category: game_data
+    system: blake-stone
+    description: "Aliens of Gold shareware map offsets"
+    required: false
+    sha1:
+      - "55b9eb9ed555b0f249c2cefd54ecc3f511bfcd55"
+      - "04a8e4e7c360f6033dc70f7b09edbc4a6447e462"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0 and v2.1 and v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1500, 1521, 1542, 1563"
+
+  - name: "MAPTEMP.BS1"
+    category: game_data
+    system: blake-stone
+    description: "Aliens of Gold shareware level data"
+    required: false
+    sha1:
+      - "293464e7143ff7e6faf5f5b20799e76a394d65bf"
+      - "bbb3cd6ab3e742eada427862504eba06437036d0"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0 and v2.1 and v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1501, 1522, 1543, 1564"
+
+  - name: "SANIM.BS1"
+    category: game_data
+    system: blake-stone
+    description: "Aliens of Gold shareware second final movie"
+    required: false
+    sha1: "22bf818465da0f32eef9611de936cba9966b14aa"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1502, 1523, 1544, 1565"
+
+  - name: "VGADICT.BS1"
+    category: game_data
+    system: blake-stone
+    description: "Aliens of Gold shareware graphics Huffman dictionary"
+    required: false
+    sha1:
+      - "b54d48d35d095e27a3c9130cfa59ed9c4f05abe7"
+      - "058fe0b59c7aa020bf4e7509103892d4c7459aa6"
+      - "ed1ab61ad2529e046f966d9c1627508f76693ef8"
+      - "537676ddcafeee415c22bb9d00097b25bc7e13c5"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0; v2.1; v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1503, 1524, 1545, 1566"
+
+  - name: "VGAGRAPH.BS1"
+    category: game_data
+    system: blake-stone
+    description: "Aliens of Gold shareware compressed graphics"
+    required: false
+    sha1:
+      - "d1fa19131281d30787125f946881652be876f57a"
+      - "e14b6172b6ab7568d3736f087f07a0df5eac5dad"
+      - "b59cbe3793b4612b06254ece48bf8e961ab6f528"
+      - "9f9f4c40c9637af472ce5e1a360e51364c3a418a"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0; v2.1; v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1504, 1525, 1546, 1567"
+
+  - name: "VGAHEAD.BS1"
+    category: game_data
+    system: blake-stone
+    description: "Aliens of Gold shareware graphics chunk offsets"
+    required: false
+    sha1:
+      - "cc44c362e9e2c9f7b9fb2e4ba31331dde42a1e96"
+      - "6c0e273df7fd3940c038fc20a5bdfb81cd50e7ef"
+      - "0635a4a2b823eef2904ed1d590d98362fb16621d"
+      - "e7fb8f241b8fa94739c3bd09ea05c1afc7bbfc95"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0; v2.1; v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1505, 1526, 1547, 1568"
+
+  - name: "VSWAP.BS1"
+    category: game_data
+    system: blake-stone
+    description: "Aliens of Gold shareware walls, sprites and digitised sounds"
+    required: false
+    sha1:
+      - "37412ca9139562fc31330d72470822de4d9ceb4a"
+      - "dbde907ba1110bef445d6daae283c4520d6951b4"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0 and v2.1 and v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1506, 1527, 1548, 1569"
+
+  # Aliens of Gold registered
   - name: "AUDIOHED.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 audio header"
-    required: true
+    description: "Aliens of Gold registered audio chunk offsets"
+    required: false
     sha1: "e2c101f9fd4bc7e22ddbfa3f019c9303877de4e2"
-    source_ref: "src/bstone/src/id_ca.cpp:1657 (get_aog_full_v3_0_resources)"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1581, 1604, 1627, 1650"
 
   - name: "AUDIOT.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 audio data"
-    required: true
+    description: "Aliens of Gold registered audio data"
+    required: false
     sha1: "b79e7afcb4e4b29e59660ec261f72ff1ab4d3a25"
-    source_ref: "src/bstone/src/id_ca.cpp:1658"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1582, 1605, 1628, 1651"
 
   - name: "EANIM.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 ending animation"
-    required: true
+    description: "Aliens of Gold registered final movie"
+    required: false
     sha1: "af5af59ad7ed17517d87b3ece3c0cac23ade535b"
-    source_ref: "src/bstone/src/id_ca.cpp:1659"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1583, 1606, 1629, 1652"
 
   - name: "GANIM.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 gameplay animation"
-    required: true
+    description: "Aliens of Gold registered third final movie"
+    required: false
     sha1: "9b2418a1a1f34abdcf6fcd9ed3344a49912c9b5e"
-    source_ref: "src/bstone/src/id_ca.cpp:1660"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1584, 1607, 1630, 1653"
 
   - name: "IANIM.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 intro animation"
-    required: true
+    description: "Aliens of Gold registered intro movie"
+    required: false
     sha1: "ba1fa5b0bc34f148deffb4977a3cd1e718e91bbd"
-    source_ref: "src/bstone/src/id_ca.cpp:1661"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1585, 1608, 1631, 1654"
 
   - name: "MAPHEAD.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 map header"
-    required: true
-    sha1: "028f624e150f84ffc8336336cb0ecea0932cc22d"
-    source_ref: "src/bstone/src/id_ca.cpp:1662"
+    description: "Aliens of Gold registered map offsets"
+    required: false
+    sha1:
+      - "6f19a144d8985e90f096fc1c67ade58e9051235c"
+      - "028f624e150f84ffc8336336cb0ecea0932cc22d"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0 and v2.1 and v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1586, 1609, 1632, 1655"
 
   - name: "MAPTEMP.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 level data"
-    required: true
-    sha1: "8b48e7eb859382a4c84948c5a62899194288e853"
-    source_ref: "src/bstone/src/id_ca.cpp:1663"
+    description: "Aliens of Gold registered level data"
+    required: false
+    sha1:
+      - "4d00c5f5c843f99a266bd938648192a6eff17b5a"
+      - "8b48e7eb859382a4c84948c5a62899194288e853"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0 and v2.1 and v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1587, 1610, 1633, 1656"
 
   - name: "SANIM.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 story animation"
-    required: true
+    description: "Aliens of Gold registered second final movie"
+    required: false
     sha1: "22bf818465da0f32eef9611de936cba9966b14aa"
-    source_ref: "src/bstone/src/id_ca.cpp:1664"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1588, 1611, 1634, 1657"
 
   - name: "VGADICT.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 huffman dictionary"
-    required: true
-    sha1: "60da35e506d57753f83cca5f232a76dd1cf074ba"
-    source_ref: "src/bstone/src/id_ca.cpp:1665"
+    description: "Aliens of Gold registered graphics Huffman dictionary"
+    required: false
+    sha1:
+      - "d4f81ace1701a7338d43ce07723c2adaafdc837c"
+      - "e83b690836c9edf9ef60f6189b8384fb2319b735"
+      - "e4ae3ef9a3ac158a832092b7b5487227337c6f13"
+      - "60da35e506d57753f83cca5f232a76dd1cf074ba"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0; v2.1; v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1589, 1612, 1635, 1658"
 
   - name: "VGAGRAPH.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 compressed graphics"
-    required: true
-    sha1: "001037fafdff124befb5437c563d0b9c613b3c00"
-    source_ref: "src/bstone/src/id_ca.cpp:1666"
+    description: "Aliens of Gold registered compressed graphics"
+    required: false
+    sha1:
+      - "02dc27d4810e3ffa26540b310eac6091f5e16de0"
+      - "67a679e3b107db8685ba5ff1643a38f9291b00bf"
+      - "6868e6cc4f8cb9160a218c5bce680a11f64c675a"
+      - "001037fafdff124befb5437c563d0b9c613b3c00"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0; v2.1; v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1590, 1613, 1636, 1659"
 
   - name: "VGAHEAD.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 graphics offsets"
-    required: true
-    sha1: "ff165ca5924d738853587a7e4ab1cd239e10e359"
-    source_ref: "src/bstone/src/id_ca.cpp:1667"
+    description: "Aliens of Gold registered graphics chunk offsets"
+    required: false
+    sha1:
+      - "639ec9e7a81ad83fc5b5c557cf4fc5fa28b9676b"
+      - "48b18caa86151610957b64b207cf2a2977ef7d57"
+      - "1a3864cd12de4b8fd6be023b73d2d79e91b9018d"
+      - "ff165ca5924d738853587a7e4ab1cd239e10e359"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0; v2.1; v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1591, 1614, 1637, 1660"
 
   - name: "VSWAP.BS6"
     category: game_data
     system: blake-stone
-    description: "Aliens of Gold v3.0 wall and sprite data"
-    required: true
-    sha1: "6fcc6e007b02b2e55892cfa7acfd42966ef9c9fb"
-    source_ref: "src/bstone/src/id_ca.cpp:1668"
+    description: "Aliens of Gold registered walls, sprites and digitised sounds"
+    required: false
+    sha1:
+      - "0a700732ccbc72f95318a6226a7e1ad78ac713bb"
+      - "6fcc6e007b02b2e55892cfa7acfd42966ef9c9fb"
+    validation: [sha1]
+    note: "sha1 values in order: v1.0; v2.0 and v2.1 and v3.0"
+    source_ref: "src/bstone/src/id_ca.cpp:1592, 1615, 1638, 1661"
 
-  # ─── Planet Strike (only one shipping version) ───
+  # Planet Strike
   - name: "AUDIOHED.VSI"
     category: game_data
     system: blake-stone
-    description: "Planet Strike audio header"
+    description: "Planet Strike audio chunk offsets"
     required: false
     sha1: "2ed9a587926b2b455f8176788f595d03f6359171"
-    source_ref: "src/bstone/src/id_ca.cpp:1696 (get_ps_resources)"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1673"
 
   - name: "AUDIOT.VSI"
     category: game_data
@@ -150,31 +315,35 @@ files:
     description: "Planet Strike audio data"
     required: false
     sha1: "ecac8a800c5d021c8b68d170066c8859df9bd79a"
-    source_ref: "src/bstone/src/id_ca.cpp:1697"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1674"
 
   - name: "EANIM.VSI"
     category: game_data
     system: blake-stone
-    description: "Planet Strike ending animation"
+    description: "Planet Strike final movie"
     required: false
     sha1: "b668330e56ceb069c1b972cefddd8a3d618a14af"
-    source_ref: "src/bstone/src/id_ca.cpp:1698"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1675"
 
   - name: "IANIM.VSI"
     category: game_data
     system: blake-stone
-    description: "Planet Strike intro animation"
+    description: "Planet Strike intro movie"
     required: false
     sha1: "ba1fa5b0bc34f148deffb4977a3cd1e718e91bbd"
-    source_ref: "src/bstone/src/id_ca.cpp:1699"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1676"
 
   - name: "MAPHEAD.VSI"
     category: game_data
     system: blake-stone
-    description: "Planet Strike map header"
+    description: "Planet Strike map offsets"
     required: false
     sha1: "c3fb0a9b81e0240d12c952fe5b57b78c1108aa48"
-    source_ref: "src/bstone/src/id_ca.cpp:1700"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1677"
 
   - name: "MAPTEMP.VSI"
     category: game_data
@@ -182,15 +351,17 @@ files:
     description: "Planet Strike level data"
     required: false
     sha1: "acd03031d526eeaee64072518adf6814f96e2a37"
-    source_ref: "src/bstone/src/id_ca.cpp:1701"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1678"
 
   - name: "VGADICT.VSI"
     category: game_data
     system: blake-stone
-    description: "Planet Strike huffman dictionary"
+    description: "Planet Strike graphics Huffman dictionary"
     required: false
     sha1: "061692d166f68d7e0b81568725439078cc728f33"
-    source_ref: "src/bstone/src/id_ca.cpp:1702"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1679"
 
   - name: "VGAGRAPH.VSI"
     category: game_data
@@ -198,20 +369,23 @@ files:
     description: "Planet Strike compressed graphics"
     required: false
     sha1: "e619a3e6245f79888da5436df138d63204d2caba"
-    source_ref: "src/bstone/src/id_ca.cpp:1703"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1680"
 
   - name: "VGAHEAD.VSI"
     category: game_data
     system: blake-stone
-    description: "Planet Strike graphics offsets"
+    description: "Planet Strike graphics chunk offsets"
     required: false
     sha1: "ad5fed9de5d1d82145df3ff2286e4bc62cb80e2a"
-    source_ref: "src/bstone/src/id_ca.cpp:1704"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1681"
 
   - name: "VSWAP.VSI"
     category: game_data
     system: blake-stone
-    description: "Planet Strike wall and sprite data"
+    description: "Planet Strike walls, sprites and digitised sounds"
     required: false
     sha1: "4113ce83c42e69dc5cb20de79f41971a100f876e"
-    source_ref: "src/bstone/src/id_ca.cpp:1705"
+    validation: [sha1]
+    source_ref: "src/bstone/src/id_ca.cpp:1682"
