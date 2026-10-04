@@ -39,6 +39,10 @@ GITHUB_REPO = "RetroPie/RetroPie-Setup"
 MAX_ARCHIVE = 64 * 1024 * 1024
 
 _MODULE_ID = re.compile(r'^rp_module_id="([^"]+)"', re.MULTILINE)
+# RetroPie updates in place from master, so its release tags stop at the last
+# SD image. The version a user runs is the one this script declares.
+_VERSION_FILE = "retropie_packages.sh"
+_VERSION = re.compile(r'^__version="([^"]+)"', re.MULTILINE)
 # Sections RetroPie does not build as emulators: setup helpers, themes,
 # drivers and the like carry no core.
 _PACKAGE_DIRS = ("emulators", "libretrocores", "ports")
@@ -50,6 +54,7 @@ class Scraper(BaseScraper):
     def __init__(self, url: str = SOURCE_URL):
         super().__init__(url=url)
         self._modules: list[str] | None = None
+        self._version = ""
 
     def _fetch_archive(self) -> bytes:
         request = urllib.request.Request(
@@ -77,16 +82,24 @@ class Scraper(BaseScraper):
                     continue
                 relative = member.name.split("/", 1)[-1]
                 parts = relative.split("/")
-                if len(parts) != 3 or parts[0] != "scriptmodules":
-                    continue
-                if parts[1] not in _PACKAGE_DIRS:
+                is_version_file = relative == _VERSION_FILE
+                is_package = (
+                    len(parts) == 3
+                    and parts[0] == "scriptmodules"
+                    and parts[1] in _PACKAGE_DIRS
+                )
+                if not (is_version_file or is_package):
                     continue
                 handle = archive.extractfile(member)
                 if handle is None:
                     continue
                 text = handle.read().decode("utf-8", errors="replace")
-                match = _MODULE_ID.search(text)
-                if match:
+                match = (_VERSION if is_version_file else _MODULE_ID).search(text)
+                if not match:
+                    continue
+                if is_version_file:
+                    self._version = match.group(1)
+                else:
                     found.add(match.group(1))
 
         self._modules = sorted(found)
@@ -114,10 +127,13 @@ class Scraper(BaseScraper):
         # A libretro package is lr-<core>; a standalone package is named
         # after the emulator itself.
         cores = sorted({module.removeprefix("lr-") for module in self.module_ids()})
+        if not self._version:
+            raise ValueError(f"{self.url}: no __version in {_VERSION_FILE}")
 
         return {
             "inherits": "retroarch",
             "platform": "RetroPie",
+            "version": self._version,
             "homepage": "https://retropie.org.uk",
             "source": SOURCE_URL,
             "base_destination": "BIOS",

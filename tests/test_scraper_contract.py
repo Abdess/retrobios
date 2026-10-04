@@ -165,6 +165,7 @@ class RetroPiePackageList(unittest.TestCase):
     def test_the_core_list_drops_the_libretro_prefix(self):
         scraper = self._scraper(
             {
+                "retropie_packages.sh": '__version="4.8.12"\n',
                 "scriptmodules/libretrocores/lr-mgba.sh": 'rp_module_id="lr-mgba"\n',
                 "scriptmodules/emulators/openmsx.sh": 'rp_module_id="openmsx"\n',
             }
@@ -173,6 +174,27 @@ class RetroPiePackageList(unittest.TestCase):
         self.assertEqual(config["cores"], ["mgba", "openmsx"])
         self.assertEqual(config["inherits"], "retroarch")
         self.assertEqual(config["base_destination"], "BIOS")
+
+    def test_the_version_is_the_one_the_setup_script_declares(self):
+        scraper = self._scraper(
+            {
+                "retropie_packages.sh": '#!/bin/bash\n__version="4.8.12"\n',
+                "scriptmodules/libretrocores/lr-mgba.sh": 'rp_module_id="lr-mgba"\n',
+            }
+        )
+        self.assertEqual(scraper.generate_platform_yaml()["version"], "4.8.12")
+
+    def test_a_version_assigned_elsewhere_is_not_the_setup_version(self):
+        """Only the top-level retropie_packages.sh speaks for the release."""
+        scraper = self._scraper(
+            {
+                "scriptmodules/emulators/openmsx.sh": (
+                    'rp_module_id="openmsx"\n__version="1.0"\n'
+                ),
+            }
+        )
+        with self.assertRaises(ValueError):
+            scraper.generate_platform_yaml()
 
     def test_no_requirement_is_invented_from_prose(self):
         """RetroPie names BIOS in prose, without a hash to transcribe."""

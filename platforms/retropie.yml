@@ -1,5 +1,6 @@
 inherits: retroarch
 platform: RetroPie
+version: 4.8.12
 homepage: "https://retropie.org.uk"
 source: "https://codeload.github.com/RetroPie/RetroPie-Setup/tar.gz/refs/heads/master"
 base_destination: BIOS
