@@ -4,282 +4,845 @@ core_classification: game_engine
 source: "https://github.com/ArnoAnsems/CatacombGL"
 upstream: "https://github.com/ArnoAnsems/CatacombGL"
 profiled_date: "2026-10-04"
-source_commit: "fc0e70bf69276939d8f2b02a9dd89817263095e5"
-core_version: "0.5.5"
+source_commit: "7d3b859a17f7edf02ce47f2d22e8b291e4ef0c91"
+core_version: "0.5.7 Beta"
 display_name: "Catacomb 3-D (CatacombGL)"
 cores: [catacombgl]
 systems: [catacomb-3d, catacomb-adventure]
 verification: existence
 
 notes: |
-  OpenGL source port by Arno Ansems of id Software's Catacomb Adventure series:
-    - Catacomb 3-D: The Descent (.C3D)
-    - Catacomb Abyss (.ABS), three releases v1.12 / v1.13 / v1.24
-    - Catacomb Armageddon (.ARM)
-    - Catacomb Apocalypse (.APC)
+  OpenGL source port of the Catacomb 3-D games. Seven releases are accepted,
+  each with its own file table mapping a file name to an exact byte size
+  (src/System/Finder.cpp:35-44):
+    Catacomb Abyss v1.12, v1.13, v1.24   (src/Abyss/GameDetectionAbyss.h:28-76)
+    Catacomb Armageddon v1.02            (src/Armageddon/GameDetectionArmageddon.h:27-46)
+    Catacomb Apocalypse v1.01            (src/Apocalypse/GameDetectionApocalypse.h:27-46)
+    Catacomb 3-D v1.00, v1.22            (src/Catacomb3D/GameDetectionCatacomb3D.h:27-39)
 
-  The engine detects which game a search path points at by matching every
-  filename and byte-size against a hardcoded map in src/<game>/GameDetection
-  <game>.h. GameDetectionAbyss.h, GameDetectionArmageddon.h,
-  GameDetectionApocalypse.h and GameDetectionCatacomb3D.h declare the
-  <game>Files* std::map<std::string, uint32_t> tables used by
-  src/Engine/GameDetection.cpp.
+  Detection is per release and all-or-nothing. GetDetectionReport
+  (src/Engine/GameDetection.cpp:38-73) walks one table against one folder and
+  adds 2 to the score for a missing file and 1 for a file whose size differs
+  from the table. A release is detected only at score 0, so every file of its
+  table must be present with the listed size. A game whose score is not 0
+  cannot start: the launch ends in a fatal error naming the offending files
+  (src/System/CatacombGL.cpp:416-451). No hash is computed.
 
-  Files are matched by exact byte size at this layer; the loaders downstream
-  then open each by name through src/Engine/EngineCore.cpp. Catacomb Abyss has
-  three distinct file sets (v1.12, v1.13, v1.24), and Catacomb 3-D has v1.00
-  and v1.22.
+  Folders tried for each release, until one scores 0: the working directory
+  (src/System/Finder.cpp:139-143), the folder stored in the configuration for
+  that release (src/System/Finder.cpp:176-185), then for the four Catacombs
+  Pack releases the GOG install folder plus Abyss, Armageddon, Apocalypse or
+  Cat3D (src/System/Finder.cpp:46-52, 145-163). The selection menu can also
+  browse to a folder. File names are joined to the folder as written in the
+  tables, upper case.
 
-  Each supported game sits in its own directory, picked by the user through
-  the game selection menu (src/Engine/GameSelection.cpp). No separate BIOS is
-  needed: the retail / shareware DOS data files are the only requirement.
+  The selection menu groups the releases as "Catacombs Pack (GOG)" (3-D v1.22,
+  Abyss v1.24, Armageddon, Apocalypse), "Shareware" (Abyss v1.12 and v1.13)
+  and "Catacomb 3-D Big Box" (3-D v1.00) (src/Engine/GameSelection.cpp:71-73,
+  src/System/CatacombGL.cpp:252-280). Abyss v1.12 is scanned like the others
+  but its menu entry and key are compiled only when CATABYSSV112 is defined;
+  the build files do not define it (src/System/CatacombGL.cpp:266-271, 313-318).
 
-  The Catacomb Adventure Series releases (Abyss shareware, Armageddon,
-  Apocalypse) were made freeware by Flat Rock Software and are distributed by
-  3D Realms. Catacomb 3-D was released as shareware; the registered v1.22 data
-  is commercial.
+  Once a game starts, EGAGRAPH, GAMEMAPS and AUDIO are read through the
+  static tables of each game and a failed open or short read is fatal
+  (src/Engine/EgaGraph.cpp:50-70, src/Engine/AudioRepository.cpp:43-58). The
+  SHP files are the intro pictures (src/Abyss/IntroViewAbyss.cpp:48-90,
+  src/Armageddon/IntroViewArmageddon.cpp:27-76,
+  src/Apocalypse/IntroViewApocalypse.cpp:27-76); Abyss v1.12 uses SDLOGO,
+  TITLE, CREDITS, BEGIN and FINALE instead (src/Abyss/IntroViewAbyss.cpp:28-45,
+  src/Abyss/GameAbyss.cpp:53-58). SHP10.ABS, SHP13.ARM and SHP13.APC are
+  never opened but belong to the detection tables.
+
+  Catacomb 3-D also reads CONFIG.C3D (474 bytes, written by the DOS game) from
+  the game folder to import its high scores when the port has none of its own
+  (src/Catacomb3D/GameCatacomb3D.cpp:52-57, src/Engine/HighScores.cpp:57-72).
+  Builds defining SAVEDGAMESINDOSFORMAT also import DOS saved games from the
+  game folder (src/Engine/EngineCore.cpp:123-148). Both are user state.
 
 files:
-  # ─── Catacomb 3-D v1.22 (registered) ───
+  # Catacomb 3-D v1.00 (menu group "Catacomb 3-D Big Box")
   - name: "AUDIO.C3D"
+    path: "AUDIO.C3D"
     category: game_data
     system: catacomb-3d
-    description: "Catacomb 3-D audio chunks"
+    description: "Catacomb 3-D v1.00 sound chunks"
     required: false
     size: 5062
+    validation: [size]
+    source_ref: "src/Catacomb3D/GameDetectionCatacomb3D.h:29 (catacomb3Dv100Files)"
+
+  - name: "EGAGRAPH.C3D"
+    path: "EGAGRAPH.C3D"
+    category: game_data
+    system: catacomb-3d
+    description: "Catacomb 3-D v1.00 EGA graphics"
+    required: false
+    size: 258007
+    validation: [size]
+    source_ref: "src/Catacomb3D/GameDetectionCatacomb3D.h:30 (catacomb3Dv100Files)"
+
+  - name: "GAMEMAPS.C3D"
+    path: "GAMEMAPS.C3D"
+    category: game_data
+    system: catacomb-3d
+    description: "Catacomb 3-D v1.00 level maps"
+    required: false
+    size: 14288
+    validation: [size]
+    source_ref: "src/Catacomb3D/GameDetectionCatacomb3D.h:31 (catacomb3Dv100Files)"
+
+  # Catacomb 3-D: The Descent v1.22 (menu group "Catacombs Pack (GOG)")
+  - name: "AUDIO.C3D"
+    path: "AUDIO.C3D"
+    category: game_data
+    system: catacomb-3d
+    description: "Catacomb 3-D v1.22 sound chunks"
+    required: false
+    size: 5062
+    validation: [size]
     source_ref: "src/Catacomb3D/GameDetectionCatacomb3D.h:36 (catacomb3Dv122Files)"
 
   - name: "EGAGRAPH.C3D"
+    path: "EGAGRAPH.C3D"
     category: game_data
     system: catacomb-3d
     description: "Catacomb 3-D v1.22 EGA graphics"
     required: false
     size: 256899
-    source_ref: "src/Catacomb3D/GameDetectionCatacomb3D.h:37"
+    validation: [size]
+    source_ref: "src/Catacomb3D/GameDetectionCatacomb3D.h:37 (catacomb3Dv122Files)"
 
   - name: "GAMEMAPS.C3D"
+    path: "GAMEMAPS.C3D"
     category: game_data
     system: catacomb-3d
-    description: "Catacomb 3-D v1.22 level data"
+    description: "Catacomb 3-D v1.22 level maps"
     required: false
     size: 14288
-    source_ref: "src/Catacomb3D/GameDetectionCatacomb3D.h:38"
+    validation: [size]
+    source_ref: "src/Catacomb3D/GameDetectionCatacomb3D.h:38 (catacomb3Dv122Files)"
 
-  # ─── Catacomb Abyss v1.24 (final shareware) ───
+  # Catacomb Abyss v1.12 (menu group "Shareware", selectable only in builds defining CATABYSSV112)
   - name: "AUDIO.ABS"
+    path: "AUDIO.ABS"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Abyss v1.24 audio"
+    description: "Catacomb Abyss v1.12 sound chunks"
     required: false
     size: 6904
-    source_ref: "src/Abyss/GameDetectionAbyss.h (abyssFilesv124)"
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:30 (abyssFilesv112)"
+
+  - name: "BEGIN.ABS"
+    path: "BEGIN.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.12 intro picture"
+    required: false
+    size: 12742
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:31 (abyssFilesv112)"
+
+  - name: "CREDITS.ABS"
+    path: "CREDITS.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.12 credits picture"
+    required: false
+    size: 15237
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:32 (abyssFilesv112)"
 
   - name: "EGAGRAPH.ABS"
+    path: "EGAGRAPH.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.12 EGA graphics"
+    required: false
+    size: 320626
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:33 (abyssFilesv112)"
+
+  - name: "FINALE.ABS"
+    path: "FINALE.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.12 finale picture"
+    required: false
+    size: 11918
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:34 (abyssFilesv112)"
+
+  - name: "GAMEMAPS.ABS"
+    path: "GAMEMAPS.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.12 level maps"
+    required: false
+    size: 20433
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:35 (abyssFilesv112)"
+
+  - name: "SDLOGO.ABS"
+    path: "SDLOGO.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.12 Softdisk logo picture"
+    required: false
+    size: 1431
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:36 (abyssFilesv112)"
+
+  - name: "TITLE.ABS"
+    path: "TITLE.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.12 title picture"
+    required: false
+    size: 17486
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:37 (abyssFilesv112)"
+
+  # Catacomb Abyss v1.13 (menu group "Shareware")
+  - name: "AUDIO.ABS"
+    path: "AUDIO.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 sound chunks"
+    required: false
+    size: 6904
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:42 (abyssFilesv113)"
+
+  - name: "EGAGRAPH.ABS"
+    path: "EGAGRAPH.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 EGA graphics"
+    required: false
+    size: 336143
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:43 (abyssFilesv113)"
+
+  - name: "GAMEMAPS.ABS"
+    path: "GAMEMAPS.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 level maps"
+    required: false
+    size: 20433
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:44 (abyssFilesv113)"
+
+  - name: "SHP01.ABS"
+    path: "SHP01.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 1"
+    required: false
+    size: 1376
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:45 (abyssFilesv113)"
+
+  - name: "SHP02.ABS"
+    path: "SHP02.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 2"
+    required: false
+    size: 15181
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:46 (abyssFilesv113)"
+
+  - name: "SHP03.ABS"
+    path: "SHP03.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 3"
+    required: false
+    size: 13158
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:47 (abyssFilesv113)"
+
+  - name: "SHP04.ABS"
+    path: "SHP04.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 4"
+    required: false
+    size: 12648
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:48 (abyssFilesv113)"
+
+  - name: "SHP05.ABS"
+    path: "SHP05.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 5"
+    required: false
+    size: 724
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:49 (abyssFilesv113)"
+
+  - name: "SHP06.ABS"
+    path: "SHP06.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 6"
+    required: false
+    size: 9182
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:50 (abyssFilesv113)"
+
+  - name: "SHP07.ABS"
+    path: "SHP07.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 7"
+    required: false
+    size: 9930
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:51 (abyssFilesv113)"
+
+  - name: "SHP08.ABS"
+    path: "SHP08.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 8"
+    required: false
+    size: 398
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:52 (abyssFilesv113)"
+
+  - name: "SHP09.ABS"
+    path: "SHP09.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 9"
+    required: false
+    size: 417
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:53 (abyssFilesv113)"
+
+  - name: "SHP10.ABS"
+    path: "SHP10.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 10"
+    required: false
+    size: 329
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:54 (abyssFilesv113)"
+
+  - name: "SHP11.ABS"
+    path: "SHP11.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 11"
+    required: false
+    size: 10595
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:55 (abyssFilesv113)"
+
+  - name: "SHP12.ABS"
+    path: "SHP12.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.13 intro shape 12"
+    required: false
+    size: 9182
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:56 (abyssFilesv113)"
+
+  # Catacomb Abyss v1.24 (menu group "Catacombs Pack (GOG)")
+  - name: "AUDIO.ABS"
+    path: "AUDIO.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.24 sound chunks"
+    required: false
+    size: 6904
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:61 (abyssFilesv124)"
+
+  - name: "EGAGRAPH.ABS"
+    path: "EGAGRAPH.ABS"
     category: game_data
     system: catacomb-adventure
     description: "Catacomb Abyss v1.24 EGA graphics"
     required: false
     size: 335994
-    source_ref: "src/Abyss/GameDetectionAbyss.h (abyssFilesv124)"
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:62 (abyssFilesv124)"
 
   - name: "GAMEMAPS.ABS"
+    path: "GAMEMAPS.ABS"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Abyss v1.24 level data"
+    description: "Catacomb Abyss v1.24 level maps"
     required: false
     size: 20433
-    source_ref: "src/Abyss/GameDetectionAbyss.h (abyssFilesv124)"
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:63 (abyssFilesv124)"
 
   - name: "SHP01.ABS"
+    path: "SHP01.ABS"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Abyss shapes bank 1"
+    description: "Catacomb Abyss v1.24 intro shape 1"
     required: false
     size: 1376
-    source_ref: "src/Abyss/GameDetectionAbyss.h (abyssFilesv124)"
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:64 (abyssFilesv124)"
 
   - name: "SHP02.ABS"
+    path: "SHP02.ABS"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Abyss shapes bank 2"
+    description: "Catacomb Abyss v1.24 intro shape 2"
     required: false
     size: 14912
-    source_ref: "src/Abyss/GameDetectionAbyss.h (abyssFilesv124)"
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:65 (abyssFilesv124)"
 
   - name: "SHP03.ABS"
+    path: "SHP03.ABS"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Abyss shapes bank 3"
+    description: "Catacomb Abyss v1.24 intro shape 3"
     required: false
     size: 13186
-    source_ref: "src/Abyss/GameDetectionAbyss.h (abyssFilesv124)"
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:66 (abyssFilesv124)"
 
   - name: "SHP04.ABS"
+    path: "SHP04.ABS"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Abyss shapes bank 4"
+    description: "Catacomb Abyss v1.24 intro shape 4"
     required: false
     size: 12648
-    source_ref: "src/Abyss/GameDetectionAbyss.h (abyssFilesv124)"
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:67 (abyssFilesv124)"
 
   - name: "SHP05.ABS"
+    path: "SHP05.ABS"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Abyss shapes bank 5"
+    description: "Catacomb Abyss v1.24 intro shape 5"
     required: false
     size: 724
-    source_ref: "src/Abyss/GameDetectionAbyss.h (abyssFilesv124)"
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:68 (abyssFilesv124)"
 
   - name: "SHP06.ABS"
+    path: "SHP06.ABS"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Abyss shapes bank 6"
+    description: "Catacomb Abyss v1.24 intro shape 6"
     required: false
     size: 9182
-    source_ref: "src/Abyss/GameDetectionAbyss.h (abyssFilesv124)"
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:69 (abyssFilesv124)"
 
-  # ─── Catacomb Armageddon ───
-  - name: "AUDIO.ARM"
+  - name: "SHP07.ABS"
+    path: "SHP07.ABS"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Armageddon audio"
+    description: "Catacomb Abyss v1.24 intro shape 7"
+    required: false
+    size: 9930
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:70 (abyssFilesv124)"
+
+  - name: "SHP08.ABS"
+    path: "SHP08.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.24 intro shape 8"
+    required: false
+    size: 398
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:71 (abyssFilesv124)"
+
+  - name: "SHP09.ABS"
+    path: "SHP09.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.24 intro shape 9"
+    required: false
+    size: 417
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:72 (abyssFilesv124)"
+
+  - name: "SHP10.ABS"
+    path: "SHP10.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.24 intro shape 10"
+    required: false
+    size: 329
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:73 (abyssFilesv124)"
+
+  - name: "SHP11.ABS"
+    path: "SHP11.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.24 intro shape 11"
+    required: false
+    size: 10328
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:74 (abyssFilesv124)"
+
+  - name: "SHP12.ABS"
+    path: "SHP12.ABS"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Abyss v1.24 intro shape 12"
+    required: false
+    size: 1652
+    validation: [size]
+    source_ref: "src/Abyss/GameDetectionAbyss.h:75 (abyssFilesv124)"
+
+  # Catacomb Armageddon v1.02 (menu group "Catacombs Pack (GOG)")
+  - name: "AUDIO.ARM"
+    path: "AUDIO.ARM"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Armageddon v1.02 sound chunks"
     required: false
     size: 7104
-    source_ref: "src/Armageddon/GameDetectionArmageddon.h (armageddonFiles)"
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:29 (armageddonFiles)"
 
   - name: "EGAGRAPH.ARM"
+    path: "EGAGRAPH.ARM"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Armageddon EGA graphics"
+    description: "Catacomb Armageddon v1.02 EGA graphics"
     required: false
     size: 355832
-    source_ref: "src/Armageddon/GameDetectionArmageddon.h (armageddonFiles)"
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:30 (armageddonFiles)"
 
   - name: "GAMEMAPS.ARM"
+    path: "GAMEMAPS.ARM"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Armageddon level data"
+    description: "Catacomb Armageddon v1.02 level maps"
     required: false
     size: 17653
-    source_ref: "src/Armageddon/GameDetectionArmageddon.h (armageddonFiles)"
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:31 (armageddonFiles)"
 
   - name: "SHP1.ARM"
+    path: "SHP1.ARM"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Armageddon shapes bank 1"
+    description: "Catacomb Armageddon v1.02 intro shape 1"
     required: false
     size: 1376
-    source_ref: "src/Armageddon/GameDetectionArmageddon.h (armageddonFiles)"
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:32 (armageddonFiles)"
 
   - name: "SHP2.ARM"
+    path: "SHP2.ARM"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Armageddon shapes bank 2"
+    description: "Catacomb Armageddon v1.02 intro shape 2"
     required: false
     size: 3991
-    source_ref: "src/Armageddon/GameDetectionArmageddon.h (armageddonFiles)"
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:33 (armageddonFiles)"
 
   - name: "SHP3.ARM"
+    path: "SHP3.ARM"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Armageddon shapes bank 3"
+    description: "Catacomb Armageddon v1.02 intro shape 3"
     required: false
     size: 15036
-    source_ref: "src/Armageddon/GameDetectionArmageddon.h (armageddonFiles)"
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:34 (armageddonFiles)"
 
   - name: "SHP4.ARM"
+    path: "SHP4.ARM"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Armageddon shapes bank 4"
+    description: "Catacomb Armageddon v1.02 intro shape 4"
     required: false
     size: 15568
-    source_ref: "src/Armageddon/GameDetectionArmageddon.h (armageddonFiles)"
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:35 (armageddonFiles)"
 
   - name: "SHP5.ARM"
+    path: "SHP5.ARM"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Armageddon shapes bank 5"
+    description: "Catacomb Armageddon v1.02 intro shape 5"
     required: false
     size: 13234
-    source_ref: "src/Armageddon/GameDetectionArmageddon.h (armageddonFiles)"
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:36 (armageddonFiles)"
 
   - name: "SHP6.ARM"
+    path: "SHP6.ARM"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Armageddon shapes bank 6"
+    description: "Catacomb Armageddon v1.02 intro shape 6"
     required: false
     size: 10861
-    source_ref: "src/Armageddon/GameDetectionArmageddon.h (armageddonFiles)"
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:37 (armageddonFiles)"
 
-  # ─── Catacomb Apocalypse ───
-  - name: "AUDIO.APC"
+  - name: "SHP7.ARM"
+    path: "SHP7.ARM"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Apocalypse audio"
+    description: "Catacomb Armageddon v1.02 intro shape 7"
+    required: false
+    size: 9414
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:38 (armageddonFiles)"
+
+  - name: "SHP8.ARM"
+    path: "SHP8.ARM"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Armageddon v1.02 intro shape 8"
+    required: false
+    size: 749
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:39 (armageddonFiles)"
+
+  - name: "SHP9.ARM"
+    path: "SHP9.ARM"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Armageddon v1.02 intro shape 9"
+    required: false
+    size: 9182
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:40 (armageddonFiles)"
+
+  - name: "SHP10.ARM"
+    path: "SHP10.ARM"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Armageddon v1.02 intro shape 10"
+    required: false
+    size: 9930
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:41 (armageddonFiles)"
+
+  - name: "SHP11.ARM"
+    path: "SHP11.ARM"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Armageddon v1.02 intro shape 11"
+    required: false
+    size: 398
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:42 (armageddonFiles)"
+
+  - name: "SHP12.ARM"
+    path: "SHP12.ARM"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Armageddon v1.02 intro shape 12"
+    required: false
+    size: 417
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:43 (armageddonFiles)"
+
+  - name: "SHP13.ARM"
+    path: "SHP13.ARM"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Armageddon v1.02 intro shape 13"
+    required: false
+    size: 329
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:44 (armageddonFiles)"
+
+  - name: "SHP14.ARM"
+    path: "SHP14.ARM"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Armageddon v1.02 intro shape 14"
+    required: false
+    size: 1688
+    validation: [size]
+    source_ref: "src/Armageddon/GameDetectionArmageddon.h:45 (armageddonFiles)"
+
+  # Catacomb Apocalypse v1.01 (menu group "Catacombs Pack (GOG)")
+  - name: "AUDIO.APC"
+    path: "AUDIO.APC"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Apocalypse v1.01 sound chunks"
     required: false
     size: 7366
-    source_ref: "src/Apocalypse/GameDetectionApocalypse.h (apocalypseFiles)"
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:29 (apocalypseFiles)"
 
   - name: "EGAGRAPH.APC"
+    path: "EGAGRAPH.APC"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Apocalypse EGA graphics"
+    description: "Catacomb Apocalypse v1.01 EGA graphics"
     required: false
     size: 382078
-    source_ref: "src/Apocalypse/GameDetectionApocalypse.h (apocalypseFiles)"
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:30 (apocalypseFiles)"
 
   - name: "GAMEMAPS.APC"
+    path: "GAMEMAPS.APC"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Apocalypse level data"
+    description: "Catacomb Apocalypse v1.01 level maps"
     required: false
     size: 18855
-    source_ref: "src/Apocalypse/GameDetectionApocalypse.h (apocalypseFiles)"
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:31 (apocalypseFiles)"
 
   - name: "SHP1.APC"
+    path: "SHP1.APC"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Apocalypse shapes bank 1"
+    description: "Catacomb Apocalypse v1.01 intro shape 1"
     required: false
     size: 1376
-    source_ref: "src/Apocalypse/GameDetectionApocalypse.h (apocalypseFiles)"
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:32 (apocalypseFiles)"
 
   - name: "SHP2.APC"
+    path: "SHP2.APC"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Apocalypse shapes bank 2"
+    description: "Catacomb Apocalypse v1.01 intro shape 2"
     required: false
     size: 6329
-    source_ref: "src/Apocalypse/GameDetectionApocalypse.h (apocalypseFiles)"
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:33 (apocalypseFiles)"
 
   - name: "SHP3.APC"
+    path: "SHP3.APC"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Apocalypse shapes bank 3"
+    description: "Catacomb Apocalypse v1.01 intro shape 3"
     required: false
     size: 13187
-    source_ref: "src/Apocalypse/GameDetectionApocalypse.h (apocalypseFiles)"
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:34 (apocalypseFiles)"
 
   - name: "SHP4.APC"
+    path: "SHP4.APC"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Apocalypse shapes bank 4"
+    description: "Catacomb Apocalypse v1.01 intro shape 4"
     required: false
     size: 13592
-    source_ref: "src/Apocalypse/GameDetectionApocalypse.h (apocalypseFiles)"
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:35 (apocalypseFiles)"
 
   - name: "SHP5.APC"
+    path: "SHP5.APC"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Apocalypse shapes bank 5"
+    description: "Catacomb Apocalypse v1.01 intro shape 5"
     required: false
     size: 12698
-    source_ref: "src/Apocalypse/GameDetectionApocalypse.h (apocalypseFiles)"
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:36 (apocalypseFiles)"
 
   - name: "SHP6.APC"
+    path: "SHP6.APC"
     category: game_data
     system: catacomb-adventure
-    description: "Catacomb Apocalypse shapes bank 6"
+    description: "Catacomb Apocalypse v1.01 intro shape 6"
     required: false
     size: 11131
-    source_ref: "src/Apocalypse/GameDetectionApocalypse.h (apocalypseFiles)"
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:37 (apocalypseFiles)"
+
+  - name: "SHP7.APC"
+    path: "SHP7.APC"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Apocalypse v1.01 intro shape 7"
+    required: false
+    size: 13266
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:38 (apocalypseFiles)"
+
+  - name: "SHP8.APC"
+    path: "SHP8.APC"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Apocalypse v1.01 intro shape 8"
+    required: false
+    size: 640
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:39 (apocalypseFiles)"
+
+  - name: "SHP9.APC"
+    path: "SHP9.APC"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Apocalypse v1.01 intro shape 9"
+    required: false
+    size: 9182
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:40 (apocalypseFiles)"
+
+  - name: "SHP10.APC"
+    path: "SHP10.APC"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Apocalypse v1.01 intro shape 10"
+    required: false
+    size: 9930
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:41 (apocalypseFiles)"
+
+  - name: "SHP11.APC"
+    path: "SHP11.APC"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Apocalypse v1.01 intro shape 11"
+    required: false
+    size: 398
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:42 (apocalypseFiles)"
+
+  - name: "SHP12.APC"
+    path: "SHP12.APC"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Apocalypse v1.01 intro shape 12"
+    required: false
+    size: 417
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:43 (apocalypseFiles)"
+
+  - name: "SHP13.APC"
+    path: "SHP13.APC"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Apocalypse v1.01 intro shape 13"
+    required: false
+    size: 329
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:44 (apocalypseFiles)"
+
+  - name: "SHP14.APC"
+    path: "SHP14.APC"
+    category: game_data
+    system: catacomb-adventure
+    description: "Catacomb Apocalypse v1.01 intro shape 14"
+    required: false
+    size: 1668
+    validation: [size]
+    source_ref: "src/Apocalypse/GameDetectionApocalypse.h:45 (apocalypseFiles)"

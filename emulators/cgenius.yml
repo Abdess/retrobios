@@ -12,187 +12,907 @@ systems: [commander-keen]
 verification: existence
 
 notes: |
-  Open-source reimplementation of the Commander Keen engines (Vorticon, Galaxy,
-  Dreams) and the Cosmo engine, by Gerstrong. Needs the original Commander Keen
-  data files from the user; the engine itself ships with a 876 KB vfsroot (UI
-  art, fonts, sounds) that is not a BIOS and is bundled with the binary.
+  Reimplementation of the Commander Keen engines: Vorticon (Keen 1 to 3),
+  Galaxy (Keen 4 to 6) and Keen Dreams. It reads the data files of the DOS
+  releases and the DOS executable itself, from which it extracts tables,
+  texts and compressed headers.
 
-  For each supported game, Commander Genius expects a flat directory under its
-  "games/" tree containing the original DOS data files. KeenFiles::setupFilenames
-  (src/fileio/KeenFiles.h:36-57) names them by episode number:
+  Game detection. The launcher scans its root and every folder up to two
+  levels under games/ for .exe and .lua files (src/engine/CGameLauncher.h:36-40,
+  src/engine/CGameLauncher.cpp:134-141, 64-78). A file name containing
+  keenN.exe, keenNe.exe, keenN.lua or kNdemo.exe (N from 1 to 6) or kdreams
+  makes the folder a game (src/engine/CGameLauncher.cpp:437-487). Folder names
+  are free; the paths below use the folder names of the packages the project
+  publishes for its in-app downloader, which unpacks under games/
+  (src/engine/gamedownloader.cpp:455-491). File lookups are case-insensitive.
 
-    Vorticon trilogy  (episodes 1-3, Keen 1/2/3)
-      egagraph.ck{N}, egahead.ck{N}, egadict.ck{N},
-      audio.ck{N}, audiohed.ck{N}, audiodct.ck{N},
-      gamemaps.ck{N}, maphead.ck{N}
-    Galaxy trilogy    (episodes 4-6, Keen 4/5/6)
-      same naming, {N} = 4..6
-    Keen Dreams       (episode 7, "KDREAMS")
-      KDREAMSDICT.EGA, KDREAMS.AUD, AUDIODCT.KDR, AUDIOHHD.KDR, plus KDREAMS.EXE
-      (CExeFile.cpp:190-195 reads kdreams.exe to extract the Dreams tiles)
+  Executable. readKeenExeData tries keenN.exe, keenNe.exe, kNdemo.exe, then
+  kdreams.exe (src/fileio/CExeFile.cpp:164-203), unpacks LZEXE or PKLITE
+  compression (src/fileio/CExeFile.cpp:235-255) and derives the version from
+  the size of the unpacked image, never from a hash
+  (src/fileio/CExeFile.cpp:350-402):
+    Keen 1    100274 v1.1, 100484 v1.31, 100132 v1.34
+    Keen 2    118626 v1.0, 118672 v1.31
+    Keen 3    127598 v1.0, 127616 v1.31
+    Keen 4    258064 v1.0, 259232 v1.1, 263488 v1.4
+    Keen 5    262176 v1.0, 266096 v1.4
+    Keen 6    236112 v1.0 (the demo executable), 271696 v1.4, 270896 v1.5
+    Dreams    213536
+  The version selects the offsets used to read data out of the image. Tile
+  properties are known for Keen 1 v1.1, v1.31, v1.34, Keen 2 and 3 v1.0 and
+  v1.31, Keen 4 and 5 v1.4, Keen 6 v1.4 and v1.5, Keen Dreams and the Keen 6
+  demo (src/fileio/CTileLoader.cpp:68-88). The constructor also holds a
+  support map keyed by the same sizes (src/fileio/CExeFile.cpp:29-50); its
+  result and the CRC comparison of getEXECrc are stored in the launcher entry
+  and read nowhere else (src/engine/CGameLauncher.cpp:546-548).
 
-  Episode 1-6 shareware and demo files are freely redistributable under the
-  Apogee/3D Realms terms; the registered Keen 4-6 and Keen Dreams data remain
-  commercial. CPatcher.cpp:129-140 lets a patch file override the default names
-  so GOG/Steam variants work in-place.
+  Vorticon episodes open egahead, egalatch and egasprit, one levelNN file per
+  map (80 is the world map, 81 the ending map, 90 the title map; the other
+  numbers come from the world map data) and finale.ckN. Episode 1 also reads
+  its story, help and ending texts, its sounds and its preview screens from
+  files; episodes 2 and 3 take texts and sounds from the executable
+  (src/engine/keen/vorticon/CStory.cpp:35-76,
+  src/engine/keen/vorticon/CHelp.cpp:38-81,
+  src/engine/keen/vorticon/CAudioVorticon.cpp:40-60). A sounds.ckN file, when
+  present, replaces the embedded sounds. Without the three EGA files or a
+  level file nothing is drawn or the map load fails; the text, finale, sound
+  and preview files are skipped when absent. High scores are kept in the
+  engine's own highscoreepN.dat, SCORES.CKN is not read
+  (src/engine/keen/vorticon/CHighScores.cpp:394-397).
 
-  cosmos engine (added as a git submodule by the build) looks for Cosmo's
-  Cosmic Adventures data (COSMOx.STN, VOLUMES.STN, etc.) using the same
-  directory-per-game layout; those files are not profiled here because the
-  cosmos sub-engine is a separate upstream (Dringgstein/cosmos, pinned to
-  8497b5696c92b13ede4f5ad01dfb577b208404cb by cgenius.mk).
+  Galaxy episodes open EGAGRAPH, GAMEMAPS and AUDIO. A missing EGAGRAPH ends
+  the load (src/engine/keen/galaxy/GalaxyEngine.cpp:237-243). The graphics and
+  audio dictionaries, EGAHEAD, AUDIOHED and MAPHEAD come from the executable;
+  a file named egahead.ckN, egadict.ckN, audiohed.ckN, audiodct.ckN or
+  maphead.ckN in the game folder takes precedence when present, which is how
+  mods replace them (src/fileio/KeenFiles.h:41-48,
+  src/engine/keen/galaxy/res/CEGAGraphicsGalaxy.cpp:537-585, 706-742,
+  src/engine/keen/galaxy/res/CAudioGalaxy.cpp:350-355, 389-411,
+  src/engine/keen/galaxy/common/CMapLoaderGalaxy.cpp:220-235). The Keen 6 demo
+  uses its own offsets (src/fileio/CExeFile.cpp:268-289,
+  src/engine/keen/galaxy/res/CEGAGraphicsGalaxy.cpp:190-205).
 
-  Game directories are searched under the user's roms root. The engine then
-  loads from vfsroot/global/ at startup (fonts, trophy UI, generic sounds),
-  which is bundled with the install, not with the Keen data.
+  Keen Dreams runs on an embedded Reflection Keen build for the EGA releases
+  (src/engine/refkeen/CMakeLists.txt:11-13). The engine extracts nine tables
+  from KDREAMS.EXE at the offsets of shareware v1.13
+  (src/engine/keen/dreams/dreamsengine.cpp:103-114, 226-283, 438) and opens
+  KDREAMS.EGA, KDREAMS.MAP and KDREAMS.AUD, quitting when one is missing.
+  The same file lists a size and CRC-32 for each file of that release
+  (src/engine/keen/dreams/dreamsengine.cpp:93-101); the routine that compared
+  them is commented out (src/engine/refkeen/be_cross_fs.cpp:660-679), so
+  nothing is verified. LAST.SHL is in that list and is never opened.
+
+  A .pat file in the game folder can rename the header and map files and
+  patch the image (src/fileio/CPatcher.cpp:102-141,
+  src/engine/CGameLauncher.cpp:660-696). Optional replacement graphics, sounds
+  and music (gfx/, snd/, music/, songlist.lst) and Lua scripts are looked up
+  in the game folder, some also in the bundled global/ folder
+  (GsKit/fileio/ResourceMgmt.cpp:34-78).
+
+  Cosmo's Cosmic Adventure is handled by a separate submodule compiled only
+  with BUILD_COSMOS, off by default (src/engine/CMakeLists.txt:3).
 
 files:
-  # ─── Keen 1: Marooned on Mars (shareware, freely distributable) ───
+  # Commander Keen 1: Marooned on Mars (shareware)
+  - name: "keen1.exe"
+    path: "games/keen1/keen1.exe"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 executable, read for tables, texts and tile properties"
+    required: false
+    source_ref: "src/fileio/CExeFile.cpp:164-168"
+
   - name: "egahead.ck1"
+    path: "games/keen1/egahead.ck1"
     category: game_data
     system: commander-keen
     description: "Keen 1 EGA graphics header"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:42 (egaheadFilename = egahead.ckN)"
+    source_ref: "src/engine/keen/vorticon/CEGAGraphicsVort.cpp:48-52"
 
-  - name: "egagraph.ck1"
+  - name: "egalatch.ck1"
+    path: "games/keen1/egalatch.ck1"
     category: game_data
     system: commander-keen
-    description: "Keen 1 EGA graphics data"
+    description: "Keen 1 tiles, fonts and bitmaps"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:41"
+    source_ref: "src/engine/keen/vorticon/CEGALatch.cpp:160-165"
 
-  - name: "egadict.ck1"
+  - name: "egasprit.ck1"
+    path: "games/keen1/egasprit.ck1"
     category: game_data
     system: commander-keen
-    description: "Keen 1 EGA huffman dictionary"
+    description: "Keen 1 sprites"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:43"
+    source_ref: "src/engine/keen/vorticon/CEGAGraphicsVort.cpp:146-149, src/engine/keen/vorticon/CEGASprit.cpp:111-116"
 
-  - name: "audio.ck1"
+  - name: "level01.ck1"
+    path: "games/keen1/level01.ck1"
     category: game_data
     system: commander-keen
-    description: "Keen 1 audio data"
+    description: "Keen 1 level 1"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:44"
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
 
-  - name: "audiohed.ck1"
+  - name: "level02.ck1"
+    path: "games/keen1/level02.ck1"
     category: game_data
     system: commander-keen
-    description: "Keen 1 audio header"
+    description: "Keen 1 level 2"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:45"
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
 
-  - name: "audiodct.ck1"
+  - name: "level03.ck1"
+    path: "games/keen1/level03.ck1"
     category: game_data
     system: commander-keen
-    description: "Keen 1 audio dictionary"
+    description: "Keen 1 level 3"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:46"
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
 
-  - name: "gamemaps.ck1"
+  - name: "level04.ck1"
+    path: "games/keen1/level04.ck1"
     category: game_data
     system: commander-keen
-    description: "Keen 1 level data"
+    description: "Keen 1 level 4"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:47"
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
 
-  - name: "maphead.ck1"
+  - name: "level05.ck1"
+    path: "games/keen1/level05.ck1"
     category: game_data
     system: commander-keen
-    description: "Keen 1 level header"
+    description: "Keen 1 level 5"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:48"
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
 
-  # ─── Keen 4: Secret of the Oracle (full version, Galaxy episode 1) ───
-  - name: "egahead.ck4"
+  - name: "level06.ck1"
+    path: "games/keen1/level06.ck1"
     category: game_data
     system: commander-keen
-    description: "Keen 4 EGA graphics header"
+    description: "Keen 1 level 6"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:42"
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level07.ck1"
+    path: "games/keen1/level07.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level 7"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level08.ck1"
+    path: "games/keen1/level08.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level 8"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level09.ck1"
+    path: "games/keen1/level09.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level 9"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level10.ck1"
+    path: "games/keen1/level10.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level 10"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level11.ck1"
+    path: "games/keen1/level11.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level 11"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level12.ck1"
+    path: "games/keen1/level12.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level 12"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level13.ck1"
+    path: "games/keen1/level13.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level 13"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level14.ck1"
+    path: "games/keen1/level14.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level 14"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level15.ck1"
+    path: "games/keen1/level15.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level 15"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level16.ck1"
+    path: "games/keen1/level16.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level 16"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level80.ck1"
+    path: "games/keen1/level80.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 world map"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, src/engine/keen/vorticon/playgame/CPlayGameVorticon.h:35"
+
+  - name: "level81.ck1"
+    path: "games/keen1/level81.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 ending map"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, src/engine/keen/vorticon/finale/CEndingEp1.cpp:104"
+
+  - name: "level90.ck1"
+    path: "games/keen1/level90.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 title and demo map"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, src/engine/keen/vorticon/CPassiveVort.cpp:33"
+
+  - name: "finale.ck1"
+    path: "games/keen1/finale.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 ending picture"
+    required: false
+    source_ref: "src/engine/keen/vorticon/finale/CEndingEp1.cpp:167, src/engine/keen/vorticon/finale/finale.cpp:94-95"
+
+  - name: "sounds.ck1"
+    path: "games/keen1/sounds.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 PC speaker sounds"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CAudioVorticon.cpp:36-40"
+
+  - name: "storytxt.ck1"
+    path: "games/keen1/storytxt.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 story text"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CStory.cpp:42-46"
+
+  - name: "helptext.ck1"
+    path: "games/keen1/helptext.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 help text"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CHelp.cpp:45-49"
+
+  - name: "endtext.ck1"
+    path: "games/keen1/endtext.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 ending text"
+    required: false
+    source_ref: "src/engine/keen/vorticon/finale/CFinale.cpp:41-44, src/engine/keen/vorticon/finale/CEndingEp1.cpp:42"
+
+  - name: "previews.ck1"
+    path: "games/keen1/previews.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 previews text, enables the Previews menu entry"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CPreviews.cpp:58-65, src/engine/core/menu/CHelpMenu.cpp:58-67"
+
+  - name: "preview2.ck1"
+    path: "games/keen1/preview2.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 preview screen 2"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CPreviews.cpp:42-49"
+
+  - name: "preview3.ck1"
+    path: "games/keen1/preview3.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 preview screen 3"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CPreviews.cpp:42-49"
+
+  # Commander Keen 2: The Earth Explodes (registered)
+  - name: "keen2.exe"
+    path: "games/keen2/keen2.exe"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 executable, read for tables, texts and tile properties"
+    required: false
+    source_ref: "src/fileio/CExeFile.cpp:164-168"
+
+  - name: "egahead.ck2"
+    path: "games/keen2/egahead.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 EGA graphics header"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CEGAGraphicsVort.cpp:48-52"
+
+  - name: "egalatch.ck2"
+    path: "games/keen2/egalatch.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 tiles, fonts and bitmaps"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CEGALatch.cpp:160-165"
+
+  - name: "egasprit.ck2"
+    path: "games/keen2/egasprit.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 sprites"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CEGAGraphicsVort.cpp:146-149, src/engine/keen/vorticon/CEGASprit.cpp:111-116"
+
+  - name: "level01.ck2"
+    path: "games/keen2/level01.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 1"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level02.ck2"
+    path: "games/keen2/level02.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 2"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level03.ck2"
+    path: "games/keen2/level03.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 3"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level04.ck2"
+    path: "games/keen2/level04.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 4"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level05.ck2"
+    path: "games/keen2/level05.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 5"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level06.ck2"
+    path: "games/keen2/level06.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 6"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level07.ck2"
+    path: "games/keen2/level07.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 7"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level08.ck2"
+    path: "games/keen2/level08.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 8"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level09.ck2"
+    path: "games/keen2/level09.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 9"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level10.ck2"
+    path: "games/keen2/level10.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 10"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level11.ck2"
+    path: "games/keen2/level11.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 11"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level12.ck2"
+    path: "games/keen2/level12.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 12"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level13.ck2"
+    path: "games/keen2/level13.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 13"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level14.ck2"
+    path: "games/keen2/level14.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 14"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level15.ck2"
+    path: "games/keen2/level15.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 15"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level16.ck2"
+    path: "games/keen2/level16.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 level 16"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level80.ck2"
+    path: "games/keen2/level80.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 world map"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, src/engine/keen/vorticon/playgame/CPlayGameVorticon.h:35"
+
+  - name: "level81.ck2"
+    path: "games/keen2/level81.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 ending map"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, src/engine/keen/vorticon/finale/CEndingEp2.cpp:72"
+
+  - name: "level90.ck2"
+    path: "games/keen2/level90.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 title and demo map"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, src/engine/keen/vorticon/CPassiveVort.cpp:33"
+
+  - name: "finale.ck2"
+    path: "games/keen2/finale.ck2"
+    category: game_data
+    system: commander-keen
+    description: "Keen 2 ending picture"
+    required: false
+    source_ref: "src/engine/keen/vorticon/finale/CEndingEp2.cpp:174, src/engine/keen/vorticon/finale/finale.cpp:94-95"
+
+  # Commander Keen 3: Keen Must Die! (registered)
+  - name: "keen3.exe"
+    path: "games/keen3/keen3.exe"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 executable, read for tables, texts and tile properties"
+    required: false
+    source_ref: "src/fileio/CExeFile.cpp:164-168"
+
+  - name: "egahead.ck3"
+    path: "games/keen3/egahead.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 EGA graphics header"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CEGAGraphicsVort.cpp:48-52"
+
+  - name: "egalatch.ck3"
+    path: "games/keen3/egalatch.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 tiles, fonts and bitmaps"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CEGALatch.cpp:160-165"
+
+  - name: "egasprit.ck3"
+    path: "games/keen3/egasprit.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 sprites"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CEGAGraphicsVort.cpp:146-149, src/engine/keen/vorticon/CEGASprit.cpp:111-116"
+
+  - name: "level01.ck3"
+    path: "games/keen3/level01.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 1"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level02.ck3"
+    path: "games/keen3/level02.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 2"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level03.ck3"
+    path: "games/keen3/level03.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 3"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level04.ck3"
+    path: "games/keen3/level04.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 4"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level05.ck3"
+    path: "games/keen3/level05.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 5"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level06.ck3"
+    path: "games/keen3/level06.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 6"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level07.ck3"
+    path: "games/keen3/level07.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 7"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level08.ck3"
+    path: "games/keen3/level08.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 8"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level09.ck3"
+    path: "games/keen3/level09.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 9"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level10.ck3"
+    path: "games/keen3/level10.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 10"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level11.ck3"
+    path: "games/keen3/level11.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 11"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level12.ck3"
+    path: "games/keen3/level12.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 12"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level13.ck3"
+    path: "games/keen3/level13.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 13"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level14.ck3"
+    path: "games/keen3/level14.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 14"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level15.ck3"
+    path: "games/keen3/level15.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 15"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level16.ck3"
+    path: "games/keen3/level16.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 level 16"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, 153-160"
+
+  - name: "level80.ck3"
+    path: "games/keen3/level80.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 world map"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, src/engine/keen/vorticon/playgame/CPlayGameVorticon.h:35"
+
+  - name: "level81.ck3"
+    path: "games/keen3/level81.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 ending map"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, src/engine/keen/vorticon/finale/CEndingEp3.cpp:68"
+
+  - name: "level90.ck3"
+    path: "games/keen3/level90.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 title and demo map"
+    required: false
+    source_ref: "src/engine/keen/vorticon/CVorticonMapLoader.cpp:128-130, src/engine/keen/vorticon/CPassiveVort.cpp:33"
+
+  - name: "finale.ck3"
+    path: "games/keen3/finale.ck3"
+    category: game_data
+    system: commander-keen
+    description: "Keen 3 ending picture"
+    required: false
+    source_ref: "src/engine/keen/vorticon/finale/CEndingEp3.cpp:136, src/engine/keen/vorticon/finale/finale.cpp:94-95"
+
+  # Commander Keen 4: Secret of the Oracle (shareware)
+  - name: "keen4e.exe"
+    path: "games/keen4/keen4e.exe"
+    aliases: ["keen4.exe"]
+    category: game_data
+    system: commander-keen
+    description: "Keen 4 executable, read for dictionaries, headers, texts and tile properties"
+    required: false
+    source_ref: "src/fileio/CExeFile.cpp:174-176"
 
   - name: "egagraph.ck4"
+    path: "games/keen4/egagraph.ck4"
     category: game_data
     system: commander-keen
-    description: "Keen 4 EGA graphics data"
+    description: "Keen 4 EGA graphics"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:41"
-
-  - name: "egadict.ck4"
-    category: game_data
-    system: commander-keen
-    description: "Keen 4 EGA huffman dictionary"
-    required: false
-    source_ref: "src/fileio/KeenFiles.h:43"
-
-  - name: "audio.ck4"
-    category: game_data
-    system: commander-keen
-    description: "Keen 4 audio data"
-    required: false
-    source_ref: "src/fileio/KeenFiles.h:44"
-
-  - name: "audiohed.ck4"
-    category: game_data
-    system: commander-keen
-    description: "Keen 4 audio header"
-    required: false
-    source_ref: "src/fileio/KeenFiles.h:45"
-
-  - name: "audiodct.ck4"
-    category: game_data
-    system: commander-keen
-    description: "Keen 4 audio dictionary"
-    required: false
-    source_ref: "src/fileio/KeenFiles.h:46"
+    source_ref: "src/engine/keen/galaxy/res/CEGAGraphicsGalaxy.cpp:754-763"
 
   - name: "gamemaps.ck4"
+    path: "games/keen4/gamemaps.ck4"
     category: game_data
     system: commander-keen
-    description: "Keen 4 level data"
+    description: "Keen 4 level maps"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:47"
+    source_ref: "src/fileio/KeenFiles.h:47, src/engine/keen/galaxy/common/CMapLoaderGalaxy.cpp:249-257"
 
-  - name: "maphead.ck4"
+  - name: "audio.ck4"
+    path: "games/keen4/audio.ck4"
     category: game_data
     system: commander-keen
-    description: "Keen 4 level header"
+    description: "Keen 4 sounds and music"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:48"
+    source_ref: "src/fileio/KeenFiles.h:44, src/engine/keen/galaxy/res/CAudioGalaxy.cpp:358-366, src/fileio/CExeFile.cpp:709-716"
 
-  # ─── Keen Dreams (episode 7) ───
+  # Commander Keen 5: The Armageddon Machine (registered)
+  - name: "keen5e.exe"
+    path: "games/keen5/keen5e.exe"
+    aliases: ["keen5.exe"]
+    category: game_data
+    system: commander-keen
+    description: "Keen 5 executable, read for dictionaries, headers, texts and tile properties"
+    required: false
+    source_ref: "src/fileio/CExeFile.cpp:174-176"
+
+  - name: "egagraph.ck5"
+    path: "games/keen5/egagraph.ck5"
+    category: game_data
+    system: commander-keen
+    description: "Keen 5 EGA graphics"
+    required: false
+    source_ref: "src/engine/keen/galaxy/res/CEGAGraphicsGalaxy.cpp:754-763"
+
+  - name: "gamemaps.ck5"
+    path: "games/keen5/gamemaps.ck5"
+    category: game_data
+    system: commander-keen
+    description: "Keen 5 level maps"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:47, src/engine/keen/galaxy/common/CMapLoaderGalaxy.cpp:249-257"
+
+  - name: "audio.ck5"
+    path: "games/keen5/audio.ck5"
+    category: game_data
+    system: commander-keen
+    description: "Keen 5 sounds and music"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:44, src/engine/keen/galaxy/res/CAudioGalaxy.cpp:358-366, src/fileio/CExeFile.cpp:709-716"
+
+  # Commander Keen 6: Aliens Ate My Baby Sitter! (retail)
+  - name: "keen6e.exe"
+    path: "games/keen6/keen6e.exe"
+    aliases: ["keen6.exe"]
+    category: game_data
+    system: commander-keen
+    description: "Keen 6 executable, read for dictionaries, headers, texts and tile properties"
+    required: false
+    source_ref: "src/fileio/CExeFile.cpp:174-176"
+
+  - name: "egagraph.ck6"
+    path: "games/keen6/egagraph.ck6"
+    category: game_data
+    system: commander-keen
+    description: "Keen 6 EGA graphics"
+    required: false
+    source_ref: "src/engine/keen/galaxy/res/CEGAGraphicsGalaxy.cpp:754-763"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+
+  - name: "gamemaps.ck6"
+    path: "games/keen6/gamemaps.ck6"
+    category: game_data
+    system: commander-keen
+    description: "Keen 6 level maps"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:47, src/engine/keen/galaxy/common/CMapLoaderGalaxy.cpp:249-257"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+
+  - name: "audio.ck6"
+    path: "games/keen6/audio.ck6"
+    category: game_data
+    system: commander-keen
+    description: "Keen 6 sounds and music"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:44, src/engine/keen/galaxy/res/CAudioGalaxy.cpp:358-366, src/fileio/CExeFile.cpp:709-716"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+
+  # Commander Keen 6: Aliens Ate My Baby Sitter! (demo)
+  - name: "k6demo.exe"
+    path: "games/K6DEMO/k6demo.exe"
+    category: game_data
+    system: commander-keen
+    description: "Keen 6 demo executable, read for dictionaries, headers, texts and tile properties"
+    required: false
+    source_ref: "src/fileio/CExeFile.cpp:183-187"
+
+  - name: "egagraph.ck6"
+    path: "games/K6DEMO/egagraph.ck6"
+    category: game_data
+    system: commander-keen
+    description: "Keen 6 demo EGA graphics"
+    required: false
+    source_ref: "src/engine/keen/galaxy/res/CEGAGraphicsGalaxy.cpp:754-763"
+
+  - name: "gamemaps.ck6"
+    path: "games/K6DEMO/gamemaps.ck6"
+    category: game_data
+    system: commander-keen
+    description: "Keen 6 demo level maps"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:47, src/engine/keen/galaxy/common/CMapLoaderGalaxy.cpp:249-257"
+
+  - name: "audio.ck6"
+    path: "games/K6DEMO/audio.ck6"
+    category: game_data
+    system: commander-keen
+    description: "Keen 6 demo sounds and music"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:44, src/engine/keen/galaxy/res/CAudioGalaxy.cpp:358-366, src/fileio/CExeFile.cpp:709-716"
+
+  # Keen Dreams (shareware v1.13, EGA)
   - name: "KDREAMS.EXE"
+    path: "games/KeenDreams/KDREAMS.EXE"
     category: game_data
     system: commander-keen
-    description: "Keen Dreams executable (CExeFile reads embedded tiles)"
+    description: "Keen Dreams executable, read for the nine embedded tables"
     required: false
-    source_ref: "src/fileio/CExeFile.cpp:190-195"
+    size: 81619
+    crc32: "9dce0a39"
+    source_ref: "src/fileio/CExeFile.cpp:195-196, src/engine/keen/dreams/dreamsengine.cpp:97"
 
-  - name: "KDREAMSDICT.EGA"
+  - name: "KDREAMS.EGA"
+    path: "games/KeenDreams/KDREAMS.EGA"
     category: game_data
     system: commander-keen
-    description: "Keen Dreams EGA huffman dictionary"
+    description: "Keen Dreams EGA graphics"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:52"
+    size: 213045
+    crc32: "2dc94687"
+    source_ref: "src/engine/refkeen/kdreams/id_ca.cpp:605-608, src/engine/keen/dreams/dreamsengine.cpp:96"
+
+  - name: "KDREAMS.MAP"
+    path: "games/KeenDreams/KDREAMS.MAP"
+    category: game_data
+    system: commander-keen
+    description: "Keen Dreams level maps"
+    required: false
+    size: 65673
+    crc32: "8dce09af"
+    source_ref: "src/engine/refkeen/kdreams/id_ca.cpp:749-752, src/engine/keen/dreams/dreamsengine.cpp:98"
 
   - name: "KDREAMS.AUD"
+    path: "games/KeenDreams/KDREAMS.AUD"
     category: game_data
     system: commander-keen
-    description: "Keen Dreams audio data"
+    description: "Keen Dreams sounds"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:53"
+    size: 3498
+    crc32: "80ac85e5"
+    source_ref: "src/engine/refkeen/kdreams/id_ca.cpp:817-820, src/fileio/KeenFiles.h:53, src/engine/keen/dreams/dreamsengine.cpp:94"
 
-  - name: "AUDIODCT.KDR"
+  - name: "KDREAMS.CMP"
+    path: "games/KeenDreams/KDREAMS.CMP"
     category: game_data
     system: commander-keen
-    description: "Keen Dreams audio dictionary"
+    description: "Keen Dreams title screen library, skipped when absent"
     required: false
-    source_ref: "src/fileio/KeenFiles.h:54"
-
-  - name: "AUDIOHHD.KDR"
-    category: game_data
-    system: commander-keen
-    description: "Keen Dreams audio header"
-    required: false
-    source_ref: "src/fileio/KeenFiles.h:55"
+    size: 14189
+    crc32: "97628ca0"
+    source_ref: "src/engine/keen/dreams/dreamsintro.cpp:42-46, src/engine/refkeen/kdreams/soft.cpp:388-390, src/engine/keen/dreams/dreamsengine.cpp:95"
