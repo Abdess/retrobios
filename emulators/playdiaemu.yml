@@ -1,0 +1,29 @@
+emulator: PlaydiaEmu
+type: libretro
+core_classification: pure_libretro
+source: "https://github.com/AloysHF/PlaydiaEmu"
+upstream: "https://github.com/AloysHF/PlaydiaEmu"
+profiled_date: "2026-10-04"
+source_commit: "6e758408ddffafe407282473f3904c1699a4cea8"
+core_version: "0.1.0"
+display_name: "Bandai - Playdia (PlaydiaEmu)"
+cores:
+  - playdiaemu
+systems:
+  - bandai-playdia
+
+notes: |
+  PlaydiaEmu is a Bandai Playdia emulator written in Rust by Aloys, built
+  as an HLE disc player: it streams dual-track MODE2 CUE/BIN (plain or
+  Redump-style ZIP), routes F1/F2/F3 video fragments, decodes XA ADPCM
+  audio and the AK8000 video. The Playdia MC68HC05 CPU is not emulated.
+  No BIOS or firmware is loaded.
+
+  retro_load_game (crates/playdiaemu-libretro/src/api.rs) opens the game
+  file alone. The core-info declares firmware_count = 0
+  (crates/playdiaemu-libretro/playdiaemu_libretro.info:19), and the
+  playdiaemu-core crate reads only the user content: CUE/BIN tracks and
+  ZIP archives from the game path (crates/playdiaemu-core/src/content.rs
+  :111-199). No other file is ever opened.
+
+files: []

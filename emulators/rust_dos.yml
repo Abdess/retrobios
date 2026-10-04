@@ -1,0 +1,301 @@
+emulator: Rust-DOS
+type: standalone + libretro
+core_classification: official_port
+source: "https://git.libretro.com/libretro/rust-dos"
+upstream: "https://github.com/dividebysandwich/rust-dos"
+profiled_date: "2026-10-04"
+source_commit: "9a5df84571a6a8442df4ef4d55e2a5c92add6421"
+core_version: "1.3.0"
+display_name: "DOS (Rust-DOS)"
+cores:
+  - rust_dos
+systems:
+  - dos
+mode: both
+
+notes: |
+  Rust-DOS is an x86 DOS emulator written in Rust by dividebysandwich,
+  with a built-in DOS, BIOS, XMS, EMS, DPMI host and software MIDI
+  (OPL3). The README states "no DOS or BIOS images needed" and the
+  libretro core declares supports_no_game = "true" with no firmware
+  entries (libretro/rust_dos_libretro.info).
+
+  Three optional firmware families enhance accuracy for games written
+  for specific sound hardware. All three have HLE / software fallbacks
+  that keep audio working without the ROMs.
+
+  - AWE32 sample ROM (awe32.raw): the Creative Sound Blaster AWE32's
+    1 MB sample ROM. src/awe32/rom.rs:13-17 declares FILE_NAME and the
+    required SHA-256. Without it, the EMU8000 synth still plays what
+    programs load into its sample RAM but ROM sounds are silent
+    (src/awe32/rom.rs:4-6).
+
+  - Roland Sound Canvas ROMs: a Rust port of Nuked-SC55 covers the
+    SC-55, SC-55mkII, SC-55ST, CM-300/SCC-1, SCB-55, RLP-3237, SC-155
+    and SC-155mkII. src/sc55/rom.rs:131-295 lists 13 romsets, each 4-5
+    ROM files identified by the SHA-256 of their contents whatever the
+    filenames are. The settings window can download eight of them from
+    the Internet Archive item roland-sc-55-series-roms
+    (src/sc55/download.rs:12-24, 39). Without a complete set, MIDI
+    falls back to the OPL3 / soundfont / GUS synths
+    (src/sc55/mod.rs:116-120).
+
+  - Roland MT-32 ROMs: played by munt (libmt32emu) loaded at runtime
+    (src/mt32.rs:1-6). munt identifies the control+PCM pair by its own
+    SHA-1 table internally; rust-dos does not declare hashes. Without
+    them (or without libmt32emu on the host), midisynth=mt32 fails and
+    the other MIDI backends take over.
+
+  The libretro frontend adds its system directory to each loader's
+  search path (libretro/src/core.rs:148-157), so BIOS files sit next
+  to the core like any other RetroArch firmware.
+
+files:
+  - name: "awe32.raw"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    size: 1048576  # 1 MB (2 * ROM_WORDS, 512 Ki 16-bit words)
+    sha256: "4e143b94f758734f594ded78f4e5115635975c16fa37fabeae0baa4938ca710e"
+    validation: [size, sha256]
+    description: "Creative Sound Blaster AWE32 sample ROM for the EMU8000 synth"
+    source_ref: "src/awe32/rom.rs:13 (FILE_NAME), 15-17 (DOWNLOAD_URL + SHA256), 60-63 (parse size check)"
+
+  # Sound Canvas ROM sets. Each entry is a directory under sc55-roms/
+  # containing N ROM files identified by content hash (any filenames).
+  # Only the 8 sets rust-dos can download from the Internet Archive
+  # (src/sc55/download.rs:12-24) are listed here; the other 5 in the
+  # ROMSETS table (st-v1.01, sc155mk2-v1.01, cm300-v1.10, cm300-v1.20,
+  # scb55-v2.00, rlp3237-v2.01) share ROMs with these sets and are
+  # recognized when their files are present.
+
+  - name: "sc55-roms/mk1-v1.21/rom1.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "7e1bacd1d7c62ed66e465ba05597dcd60dfc13fc23de0287fdbce6cf906c6544"
+    validation: [sha256]
+    description: "Roland SC-55 v1.21 program ROM 1 (H8/532 code), auto-preferred set"
+    source_ref: "src/sc55/rom.rs:213-220 (mk1-v1.21), 299 (PREFERRED)"
+
+  - name: "sc55-roms/mk1-v1.21/rom2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "effc6132d68f7e300aaef915ccdd08aba93606c22d23e580daf9ea6617913af1"
+    validation: [sha256]
+    description: "Roland SC-55 v1.21 program ROM 2"
+    source_ref: "src/sc55/rom.rs:215"
+
+  - name: "sc55-roms/mk1-v1.21/wave1.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "5655509a531804f97ea2d7ef05b8fec20ebf46216b389a84c44169257a4d2007"
+    validation: [sha256]
+    description: "Roland SC-55 Wave1 PCM (shared across all SC-55 mk1 versions)"
+    source_ref: "src/sc55/rom.rs:128 (MK1_WAVE1), 216"
+
+  - name: "sc55-roms/mk1-v1.21/wave2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "c655b159792d999b90df9e4fa782cf56411ba1eaa0bb3ac2bdaf09e1391006b1"
+    validation: [sha256]
+    description: "Roland SC-55 Wave2 PCM"
+    source_ref: "src/sc55/rom.rs:129 (MK1_WAVE2), 217"
+
+  - name: "sc55-roms/mk1-v1.21/wave3.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "334b2d16be3c2362210fdbec1c866ad58badeb0f84fd9bf5d0ac599baf077cc2"
+    validation: [sha256]
+    description: "Roland SC-55 Wave3 PCM"
+    source_ref: "src/sc55/rom.rs:130 (MK1_WAVE3), 218"
+
+  - name: "sc55-roms/mk1-v1.00/rom1.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "b4ecf44bc0520322b0d114d397951d3bf92ca6fa51d0d27b2407df58a6be2efe"
+    validation: [sha256]
+    description: "Roland SC-55 v1.00 program ROM 1"
+    source_ref: "src/sc55/rom.rs:174"
+
+  - name: "sc55-roms/mk1-v1.00/rom2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "014e2e21ea30de7a1e4f1cdea14dd9a719960535e257a9e40e98dbb1a5870226"
+    validation: [sha256]
+    description: "Roland SC-55 v1.00 program ROM 2"
+    source_ref: "src/sc55/rom.rs:175"
+
+  - name: "sc55-roms/mk1-v1.10/rom1.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "2fe88ec39f3ef4b1de8cdf74527419467975c47f7aacfcd07605e01d54bd89b5"
+    validation: [sha256]
+    description: "Roland SC-55 v1.10 program ROM 1"
+    source_ref: "src/sc55/rom.rs:187"
+
+  - name: "sc55-roms/mk1-v1.10/rom2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "ec064d6c4fc70ec990911089d966043cb819fba0e26e6f6afdd0a05e5301b91b"
+    validation: [sha256]
+    description: "Roland SC-55 v1.10 program ROM 2"
+    source_ref: "src/sc55/rom.rs:188"
+
+  - name: "sc55-roms/mk1-v1.20/rom1.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "7e1bacd1d7c62ed66e465ba05597dcd60dfc13fc23de0287fdbce6cf906c6544"
+    validation: [sha256]
+    description: "Roland SC-55 v1.20 program ROM 1 (same bytes as v1.21 ROM1)"
+    source_ref: "src/sc55/rom.rs:203"
+
+  - name: "sc55-roms/mk1-v1.20/rom2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "22ce6ca59e6332143b335525e81fab501ea6fccce4b7e2f3bfc2cc8bf6612ff6"
+    validation: [sha256]
+    description: "Roland SC-55 v1.20 program ROM 2"
+    source_ref: "src/sc55/rom.rs:204"
+
+  - name: "sc55-roms/mk1-v2.00/rom1.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "24a65c97cdbaa847d6f59193523ce63c73394b4b693a6517ee79441f2fb8a3ee"
+    validation: [sha256]
+    description: "Roland SC-55 v2.00 program ROM 1 (shared with SC-155-rev1)"
+    source_ref: "src/sc55/rom.rs:225"
+
+  - name: "sc55-roms/mk1-v2.00/rom2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "f5dac35d450ab986570a209dff3816eec75cee669e161f54b51224b467dd0bcc"
+    validation: [sha256]
+    description: "Roland SC-55 v2.00 program ROM 2"
+    source_ref: "src/sc55/rom.rs:226"
+
+  - name: "sc55-roms/mk2-v1.01/rom1.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "8a1eb33c7599b746c0c50283e4349a1bb1773b5c0ec0e9661219bf6c067d2042"
+    validation: [sha256]
+    description: "Roland SC-55mkII v1.01 H8/532 ROM 1 (shared with SC-55ST and SC-155mkII)"
+    source_ref: "src/sc55/rom.rs:125 (MK2_ROM1), 140"
+
+  - name: "sc55-roms/mk2-v1.01/rom2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "a4c9fd821059054c7e7681d61f49ce6f42ed2fe407a7ec1ba0dfdc9722582ce0"
+    validation: [sha256]
+    description: "Roland SC-55mkII v1.01 program ROM 2 (shared with SC-155mkII)"
+    source_ref: "src/sc55/rom.rs:141"
+
+  - name: "sc55-roms/mk2-v1.01/smrom.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "b0b5f865a403f7308b4be8d0ed3ba2ed1c22db881b8a8326769dea222f6431d8"
+    validation: [sha256]
+    description: "Roland SC-55mkII sub-MCU (M37450) ROM (shared with SC-55ST and SC-155mkII)"
+    source_ref: "src/sc55/rom.rs:126 (MK2_SMROM), 142"
+
+  - name: "sc55-roms/mk2-v1.01/wave1.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "c6429e21b9b3a02fbd68ef0b2053668433bee0bccd537a71841bc70b8874243b"
+    validation: [sha256]
+    description: "Roland SC-55mkII Wave1 PCM (shared with SC-55ST, SC-155mkII, SCB-55, RLP-3237)"
+    source_ref: "src/sc55/rom.rs:127 (MK2_WAVE1), 143"
+
+  - name: "sc55-roms/mk2-v1.01/wave2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "5b753f6cef4cfc7fcafe1430fecbb94a739b874e55356246a46abe24097ee491"
+    validation: [sha256]
+    description: "Roland SC-55mkII Wave2 PCM (shared with SC-55ST, SC-155mkII, SCB-55 Wave3, CM-300 Wave3)"
+    source_ref: "src/sc55/rom.rs:128 (MK2_WAVE2), 144"
+
+  - name: "sc55-roms/sc155-rev1/rom2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "ceb7b9d3d9d264efe5dc3ba992b94f3be35eb6d0451abc574b6f6b5dc3db237b"
+    validation: [sha256]
+    description: "Roland SC-155 rev1 program ROM 2 (ROM1 shared with mk1-v2.00; Wave1/2/3 shared with mk1 family)"
+    source_ref: "src/sc55/rom.rs:289"
+
+  - name: "sc55-roms/cm300-v1.30/rom1.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "9ec66abb5231b6c6f46f48b33d5412703041037d69a6803626ac402f25552af2"
+    validation: [sha256]
+    description: "Roland CM-300 / SCC-1 v1.30 program ROM 1"
+    source_ref: "src/sc55/rom.rs:258"
+
+  - name: "sc55-roms/cm300-v1.30/rom2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "f89442734fdebacae87c7707c01b2d7fdbf5940abae738987aee912d34b5882e"
+    validation: [sha256]
+    description: "Roland CM-300 / SCC-1 v1.30 program ROM 2"
+    source_ref: "src/sc55/rom.rs:259"
+
+  - name: "sc55-roms/cm300-v1.30/wave1.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "40c093cbfb4441a5c884e623f882a80b96b2527f9fd431e074398d206c0f073d"
+    validation: [sha256]
+    description: "Roland CM-300 Wave1 PCM (shared with CM-300 v1.10 and v1.20)"
+    source_ref: "src/sc55/rom.rs:132 (CM300_WAVE1), 260"
+
+  - name: "sc55-roms/cm300-v1.30/wave2.bin"
+    system: dos
+    required: false
+    hle_fallback: true
+    category: bios
+    sha256: "9bbbcac747bd6f7a2693f4ef10633db8ab626f17d3d9c47c83c3839d4dd2f613"
+    validation: [sha256]
+    description: "Roland CM-300 Wave2 PCM"
+    source_ref: "src/sc55/rom.rs:133 (CM300_WAVE2), 261"

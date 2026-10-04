@@ -1,0 +1,90 @@
+emulator: SimCoupe
+type: standalone
+core_classification: official_port
+source: "https://github.com/simonowen/simcoupe"
+upstream: "https://github.com/simonowen/simcoupe"
+profiled_date: "2026-10-04"
+source_commit: "1f966036543991c05022ce4f95cfbfbb0014b187"
+core_version: "v1.2.17"
+display_name: "SAM Coupe (SimCoupe)"
+cores:
+  - samcoupe
+systems:
+  - sam-coupe
+mode: standalone
+
+notes: |
+  SimCoupe is the SAM Coupe emulator by Simon Owen. The modern 1.2.x
+  releases are standalone (SDL and Win32 ports), separate from the older
+  pre-1.0 code the libretro simcp core wraps. Four files sit next to the
+  binary in the installed Resource/ directory and are picked up by
+  OSD::MakeFilePath(PathType::Resource, name).
+
+  samcoupe.rom is the SAM Coupe ROM v3.0. LoadRoms (Base/Memory.cpp
+  :167-229) opens it, reads two 16kB pages into ROM0 and ROM1, and
+  returns true on a complete read. A failed open or a short read falls
+  back to another load of samcoupe.rom (lines 194-196) and, if even that
+  fails, fills both ROM pages with 0xFF and prints "Error loading ROM"
+  (lines 225-228). The emulator keeps running but the Z80 then executes
+  0xFF (RST 38h) from reset, so nothing boots: the file is practically
+  required.
+
+  atom.rom and atomlite.rom boot the SAMBUS Atom / Atom Lite IDE drives
+  the SAM community added. Memory.cpp:180-189 picks atomlite.rom when
+  either drive is configured as drvAtomLite, atom.rom when drive 2 is
+  drvAtom, and otherwise stays on samcoupe.rom. The default option
+  atombootrom = true (Base/Options.h:46) enables this path, so a user
+  running an Atom-configured machine needs the matching ROM; a plain
+  SAM Coupe never opens them.
+
+  sp0256-al2.bin is the Microchip SP0256-AL2 allophone data loaded by
+  the Blue Alpha VoiceBox device (Base/VoiceBox.cpp:35-40). VoiceBox is
+  enabled by default (Base/Options.h:124, voicebox = true) and the
+  constructor opens the file at reset; if it is absent the SP0256
+  stays zero-initialised and the device returns silence to any program
+  that queries port 0xFF (Base/SAMIO.cpp:538-539, 760).
+
+files:
+  - name: samcoupe.rom
+    system: sam-coupe
+    required: true
+    size: 32768  # 32 kB, two 16 kB ROM pages
+    md5: "ad08ed47b07b0d7047fd3d0b5e7d90b3"
+    sha1: "c86601633fb61a8c517f7657aad9af4e6870f2ee"
+    crc32: "0b7e3585"
+    validation: [size]
+    description: "SAM Coupe ROM v3.0 (ROM0 + ROM1 pages)"
+    source_ref: "Base/Memory.cpp:167-229 (LoadRoms); Resource/samcoupe.rom"
+
+  - name: atom.rom
+    system: sam-coupe
+    required: false
+    size: 32768
+    md5: "fcb5d837f996efaaece074c3ceec2b55"
+    sha1: "cd342579f066c0863e4f769c2e6757085e21b0a1"
+    crc32: "dec75f58"
+    validation: [size]
+    description: "SAMBUS Atom IDE boot ROM, loaded when drive 2 is drvAtom"
+    source_ref: "Base/Memory.cpp:186-188; Resource/atom.rom"
+
+  - name: atomlite.rom
+    system: sam-coupe
+    required: false
+    size: 32768
+    md5: "ec1e8290da040307d6b3174b7ace9453"
+    sha1: "b2303b7200f5a17b54b841af9f0604db7bbdd1ab"
+    crc32: "9cf316a8"
+    validation: [size]
+    description: "SAMBUS Atom Lite IDE boot ROM, loaded when either drive is drvAtomLite"
+    source_ref: "Base/Memory.cpp:183-184; Resource/atomlite.rom"
+
+  - name: sp0256-al2.bin
+    system: sam-coupe
+    required: false
+    size: 2048
+    md5: "c6fe422a12d834b34c54956782ec5f81"
+    sha1: "e60fcb5fa16ff3f3b69d36c7a6e955744d3feafc"
+    crc32: "b504ac15"
+    validation: [size]
+    description: "Microchip SP0256-AL2 allophone data for the Blue Alpha VoiceBox"
+    source_ref: "Base/VoiceBox.cpp:35-40 (VoiceBoxDevice::VoiceBoxDevice); Base/Options.h:124 (voicebox default on); Resource/sp0256-al2.bin"

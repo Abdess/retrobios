@@ -1,0 +1,41 @@
+emulator: mGBA Splitscreen
+type: libretro
+core_classification: community_fork
+source: "https://github.com/Spuds0588/mgba-splitscreen"
+upstream: "https://github.com/mgba-emu/mgba"
+profiled_date: "2026-10-04"
+source_commit: "b66511a35873bda9c961872813e58b35543bcfc5"
+core_version: "0.1.0"
+display_name: "Nintendo - Game Boy Advance (mGBA Splitscreen)"
+cores:
+  - mgba_splitscreen
+systems:
+  - nintendo-gba
+
+notes: |
+  mGBA Splitscreen is a fork of mGBA that runs 2-4 linked GBA cores in a
+  single libretro instance over mGBA's lockstep SIO driver. Built from
+  the upstream mGBA tree with -DBUILD_LIBRETRO_SPLITSCREEN=ON
+  (CMakeLists.txt:1036-1058), the fork adds the mgba-splitscreen link
+  fixes (Four Swords handshake assist and a gated deadlock kick) on top
+  of mGBA's library layer. The player instances live in
+  src/platform/libretro-splitscreen/instances.c and reject anything that
+  is not a GBA ROM (instances.c:114-119).
+
+  The splitscreen wrapper never performs its own BIOS lookup. Each
+  per-player mCore reaches mGBA's shared GBA core, which looks for
+  gba_bios.bin in the system directory and uses the built-in HLE BIOS
+  (src/gba/hle-bios.c) when it is missing. The core-info declares one
+  optional firmware entry (gba_bios.bin) and only accepts the .gba
+  extension, so GB/GBC/SGB BIOS files that upstream mGBA supports are
+  unreachable here.
+
+files:
+  - name: gba_bios.bin
+    system: nintendo-gba
+    required: false
+    hle_fallback: true
+    size: 16384  # 16 KB (GBA_SIZE_BIOS)
+    validation: [size]
+    note: "GBA BIOS, same file upstream mGBA uses. HLE replacement built in."
+    source_ref: "src/platform/libretro-splitscreen/mgba_splitscreen_libretro.info:34-37 (firmware0_desc/path/opt); src/gba/gba.c:520-551 (GBALoadBIOS, inherited from mGBA core)"
