@@ -1,0 +1,116 @@
+emulator: Taradino
+type: standalone
+core_classification: game_engine
+source: "https://github.com/fabiangreffrath/taradino"
+upstream: "https://github.com/fabiangreffrath/taradino"
+profiled_date: "2026-10-04"
+source_commit: "2b4ea3c6c18caf60959efee1f2534c2122607716"
+core_version: "0.1"
+display_name: "Taradino"
+cores: [taradino]
+systems: [rott]
+
+notes: |
+  SDL2 port of Rise of the Triad by Fabian Greffrath, forked from the
+  original 1995 Apogee/3D Realms source release.
+
+  Build-time switch: SHAREWARE=0 (default, "registered") expects
+  DARKWAR.WAD / DARKWAR.RTL / DARKWAR.RTC; SHAREWARE=1 (dropped by the
+  CMakeLists SHAREWARE option) expects HUNTBGIN.WAD / HUNTBGIN.RTL /
+  HUNTBGIN.RTC (rott/rt_main.h:33-45). The repo distributes the
+  non-shareware binary; shareware builds are compiled by users from the
+  same tree.
+
+  Startup assembles argv in SetupWadFile (rott/rt_main.c:808-842), joining
+  `datadir` and STANDARDGAMEWAD, then feeds it to W_InitMultipleFiles
+  (rott/rt_main.c:842, rott/w_wad.c). The WAD search tries each path
+  registered through add_datadir() (rott/rt_datadir.c:198-209); a missing
+  main WAD aborts with FileNotFoundError(STANDARDGAMEWAD)
+  (rott/rt_main.c:812).
+
+  Game-product detection runs after the main WAD opens: FindFileByName
+  (rott/rt_main.c:165-177) looks for ROTTSITE.RTC (site license),
+  ROTTCD.RTC (SuperROTT, i.e. ROTT CD extra battle levels), and
+  DARKWAR.RTC (registered battle levels), setting gamestate.Product to
+  ROTT_SITELICENSE, ROTT_SUPERCD or ROTT_REGISTERED. Shareware builds
+  stay on ROTT_SHAREWARE.
+
+  REMOTE1.RTS carries the "Remote Ridicule" speech bank; its absence is
+  silently tolerated (rott/rt_main.c:830-834).
+
+  No hash is validated — the loader relies on WAD lump names and the
+  SHAREWARE_TAG magic number inside the RTL (rott/rt_ted.c:1432).
+
+files:
+  # ================================================================
+  # Rise of the Triad: Dark War (registered release, Apogee 1995)
+  # Default build (SHAREWARE=0, rott/rt_main.h:33-39)
+  # ================================================================
+
+  - name: "DARKWAR.WAD"
+    category: game_data
+    system: rott
+    required: true
+    source_ref: "rott/rt_main.h:34 (STANDARDGAMEWAD), rott/rt_main.c:808-812 (FileNotFoundError on miss)"
+    note: "Main data WAD. Fatal if absent in non-shareware build."
+
+  - name: "DARKWAR.RTL"
+    category: game_data
+    system: rott
+    required: true
+    source_ref: "rott/rt_main.h:35 (STANDARDGAMELEVELS), rott/rt_main.c:192"
+    note: "Single-player level data. Opened alongside the main WAD."
+
+  - name: "DARKWAR.RTC"
+    category: game_data
+    system: rott
+    required: false
+    source_ref: "rott/rt_main.h:36 (STANDARDBATTLELEVELS), rott/rt_main.c:174-177 (ROTT_REGISTERED when present)"
+    note: "Comm-bat (deathmatch) level data. Marks gamestate as ROTT_REGISTERED."
+
+  - name: "ROTTCD.RTC"
+    category: game_data
+    system: rott
+    required: false
+    source_ref: "rott/rt_main.h:38 (SUPERROTTBATTLELEVELS), rott/rt_main.c:170-172"
+    note: "SuperROTT (ROTT CD) extra battle levels. Promotes product to ROTT_SUPERCD."
+
+  - name: "ROTTSITE.RTC"
+    category: game_data
+    system: rott
+    required: false
+    source_ref: "rott/rt_main.h:39 (SITELICENSEBATTLELEVELS), rott/rt_main.c:164-166"
+    note: "Site License battle levels. Promotes product to ROTT_SITELICENSE."
+
+  - name: "REMOTE1.RTS"
+    category: game_data
+    system: rott
+    required: false
+    source_ref: "rott/rt_main.c:832 (datadir/REMOTE1.RTS fallback)"
+    note: "Remote Ridicule speech bank. Loaded if present, silently skipped otherwise."
+
+  # ================================================================
+  # Shareware build (SHAREWARE=1, rott/rt_main.h:41-43)
+  # Produced only when users set -DSHAREWARE=1; file names differ.
+  # ================================================================
+
+  - name: "HUNTBGIN.WAD"
+    category: game_data
+    system: rott
+    required: false
+    source_ref: "rott/rt_main.h:41 (STANDARDGAMEWAD under SHAREWARE)"
+    note: "Shareware main WAD (Hunt Begins). Required only in shareware builds."
+
+  - name: "HUNTBGIN.RTL"
+    category: game_data
+    system: rott
+    required: false
+    source_ref: "rott/rt_main.h:42 (STANDARDGAMELEVELS under SHAREWARE)"
+    note: "Shareware level data."
+
+  - name: "HUNTBGIN.RTC"
+    category: game_data
+    system: rott
+    required: false
+    source_ref: "rott/rt_main.h:43 (STANDARDBATTLELEVELS under SHAREWARE)"
+    note: "Shareware comm-bat level data."

@@ -1,0 +1,42 @@
+emulator: Ion Fury
+type: standalone
+core_classification: game_engine
+source: "https://voidpoint.io/terminx/eduke32"
+upstream: "https://voidpoint.io/terminx/eduke32"
+profiled_date: "2026-10-04"
+source_commit: "ec5824db81817866f70da326d3811bb0f52b3517"
+core_version: "r11007"
+display_name: "Ion Fury"
+cores: [fury]
+systems: [fury]
+
+notes: |
+  Ion Fury runs on EDuke32 built with FURY=1 (GNUmakefile:6-15), which
+  defines EDUKE32_STANDALONE and sets APPBASENAME=fury, APPNAME="Ion Fury".
+  In standalone mode the GRP-detection table of EDuke32
+  (source/duke3d/src/grpscan.cpp:38-77) is compiled out by #ifndef
+  EDUKE32_STANDALONE, G_DefaultGrpFile returns "(none)"
+  (source/duke3d/src/common.cpp:60-77), and the loader autoscans the search
+  paths for *.grp / *.zip / *.ssi / *.pk3 / *.pk4
+  (source/duke3d/src/common.cpp:913).
+
+  Search paths added for the Fury binary include the Steam install (Ion
+  Fury) and the GOG install (ION Fury), marked with SEARCHPATH_FURY
+  (source/duke3d/src/common.cpp:585-587, 622-625, 822-833). After scanning,
+  G_CleanupSearchPaths removes all non-FURY entries when the FURY game
+  flag is active (source/duke3d/src/common.cpp:850-851), so Fury only
+  reads from its own install directory.
+
+  No hash or filename is validated by the engine: Ion Fury ships one GRP
+  (fury.grp) that holds every map, art bank, sound and DEF the game needs,
+  plus a small number of top-level files the retail installers lay down
+  alongside it. Only the GRP is listed below; the other files
+  (fury.cfg, settings.cfg, saves, screenshots) are user state.
+
+files:
+  - name: "fury.grp"
+    category: game_data
+    system: fury
+    required: true
+    source_ref: "source/duke3d/src/common.cpp:913 (autoscan extensions), 585-587 (Steam path), 822-833 (GOG path)"
+    note: "Main data archive bundled with the retail Ion Fury release. Autoscan picks it up as the only GRP under the Fury search paths."

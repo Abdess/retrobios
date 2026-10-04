@@ -1,0 +1,71 @@
+emulator: ET Legacy
+type: standalone
+core_classification: game_engine
+source: "https://github.com/etlegacy/etlegacy"
+upstream: "https://github.com/etlegacy/etlegacy"
+profiled_date: "2026-10-04"
+source_commit: "f8974d1861e3e95c236d3a7c05362d05f408275f"
+core_version: "2.83.0+git"
+display_name: "ET: Legacy"
+cores: [etlegacy]
+systems: [enemyterritory]
+
+notes: |
+  Wolfenstein: Enemy Territory source port. BASEGAME = "etmain"
+  (src/qcommon/qcommon.h:787). FS_InitFilesystem (src/qcommon/files.c:
+  5066-5094) refuses to start if pak0.pk3 is not reachable under etmain
+  and prints "Please copy pak0.pk3 from the 'etmain' path of your
+  Wolfenstein: Enemy Territory installation to <path>". pak1.pk3 and
+  pak2.pk3 are checked against the server's requested pak list in
+  FS_ComparePaks (src/qcommon/files.c:4011-4018) but neither is a
+  startup gate; third-party mods pull them in as needed (see README.md
+  "In addition, third party mods might also require pak1.pk3 and
+  pak2.pk3"). mp_bin.pk3 ships in the retail release and holds the
+  stock multiplayer binaries.
+
+  NUM_ID_PAKS = 9 (src/qcommon/qcommon.h:815) counts the names recognised
+  by FS_idPak; retail Enemy Territory 2.60b publishes only pak0, pak1,
+  pak2 and mp_bin, so the extra slots are reserved for forward compatible
+  server lists, never filled by id.
+
+  The ET Legacy project ships its own replacement etmain/ assets (configs,
+  presets, locale files) directly in the source tree, plus a Legacy mod
+  pk3 downloaded on first run. The user still has to supply the retail
+  pak0.pk3 from the free Enemy Territory 2.60b download; pak0.pk3 holds
+  every id map, model, texture and sound.
+
+files:
+  - name: "pak0.pk3"
+    category: game_data
+    system: enemyterritory
+    path: "etmain/pak0.pk3"
+    required: true
+    md5: "c8ce5e3eafb9faa74b9af03a9d6f3f5e"
+    source_ref: "src/qcommon/files.c:5066-5094 (fatal if absent), 5076 (FS_FOpenFileRead \"pak0.pk3\"), src/qcommon/qcommon.h:787 (BASEGAME \"etmain\")"
+    note: "Retail Wolfenstein: Enemy Territory 2.60b data pak. Startup gate. MD5 informational, not validated by the engine."
+
+  - name: "pak1.pk3"
+    category: game_data
+    system: enemyterritory
+    path: "etmain/pak1.pk3"
+    required: false
+    md5: "0d1cb16a147b0f12d79fd3b045e07706"
+    source_ref: "src/qcommon/files.c:4011-4018 (FS_idPak, NUM_ID_PAKS=9), README.md"
+    note: "Retail content update pak. Required by servers running 2.60b, pulled in by FS_ComparePaks."
+
+  - name: "pak2.pk3"
+    category: game_data
+    system: enemyterritory
+    path: "etmain/pak2.pk3"
+    required: false
+    md5: "61e3bbae9c1cd522cf7fcc27e3a4bbab"
+    source_ref: "src/qcommon/files.c:4011-4018 (FS_idPak), README.md"
+    note: "Retail content update pak."
+
+  - name: "mp_bin.pk3"
+    category: game_data
+    system: enemyterritory
+    path: "etmain/mp_bin.pk3"
+    required: false
+    source_ref: "src/qcommon/files.c:4011-4018 (FS_idPak)"
+    note: "Retail multiplayer QVM binaries. ET Legacy ships its own cgame/ui binaries; retail pack is for pure clients joining stock servers."

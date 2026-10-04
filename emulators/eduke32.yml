@@ -1,0 +1,155 @@
+emulator: EDuke32
+type: standalone
+core_classification: game_engine
+source: "https://voidpoint.io/terminx/eduke32"
+upstream: "https://voidpoint.io/terminx/eduke32"
+profiled_date: "2026-10-04"
+source_commit: "ec5824db81817866f70da326d3811bb0f52b3517"
+core_version: "r11007"
+display_name: "EDuke32"
+cores: [eduke32]
+systems: [duke3d, nam, napalm, ww2gi]
+
+notes: |
+  Build-engine port by TerminX, Hendricks266, Plagman and others. Covers
+  Duke Nukem 3D (and its official addons), NAM, NAPALM, WWII GI and
+  Platoon Leader. Startup scans the search path for registered GRPs by
+  CRC32 (source/duke3d/src/grpscan.cpp:39-76 internalgrpfiles[]). Each GRP
+  carries a game flag (DUKE / NAM / NAPALM / WW2GI) and optional addon
+  dependency; EDuke32 picks the user selection, mounts it with
+  initgroupfile and loads the DEF / CON / RTS the GRP points to.
+
+  G_DefaultGrpFile (source/duke3d/src/common.cpp:60-73) returns the base
+  GRP for the active game flag: DUKE3D.GRP, NAM.GRP, NAPALM.GRP, WW2GI.GRP.
+  G_DefaultConFile and G_DefaultRtsFile pick EDUKE.CON / NAM.CON /
+  NAPALM.CON / WW2GI.CON and DUKE.RTS / NAM.RTS / NAPALM.RTS / WW2GI.RTS.
+
+  CRCs listed in source/duke3d/src/grpscan.h match the retail GRP byte
+  for byte; the loader only checks CRC32 (not MD5) and only to pick the
+  entry, never to refuse an unknown GRP. CON / RTS / addon files are
+  referenced from the chosen entry but their contents are not validated.
+
+files:
+  # ================================================================
+  # Duke Nukem 3D (base game, GAMEFLAG_DUKE)
+  # ================================================================
+
+  - name: "DUKE3D.GRP"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "source/duke3d/src/common.cpp:36 (defaultgamegrp GAME_DUKE), source/duke3d/src/grpscan.cpp:41-50 (CRC-indexed variants)"
+    note: >
+      Any retail variant plays: Atomic Edition / Plus / World Tour
+      (DUKE15_CRC 0xFD3DCFF1, 44356548 bytes, grpscan.h:35), v1.3D
+      registered (DUKE13_CRC 0xBBC9CE44, 26524524 bytes, grpscan.h:33),
+      Shareware v1.3D (DUKESW_CRC 0x983AD923, 11035779 bytes,
+      grpscan.h:41), World Tour (DUKEWT_CRC 0x982AFE4A, grpscan.h:37),
+      Plutonium Pak (DUKEPP_CRC 0xF514A6AC, grpscan.h:36), South Korean
+      censored (DUKEKR_CRC 0xAA4F6A40, grpscan.h:34). CRC32 identifies
+      the variant and selects the matching entry in internalgrpfiles[];
+      no MD5 or SHA1 is read.
+
+  - name: "EDUKE.CON"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "source/duke3d/src/common.cpp:38 (defaultgameconfilename GAME_DUKE)"
+    note: "EDuke32 CON script. Shipped inside the GRP by default; external copy only when the user overrides it."
+
+  - name: "DUKE.RTS"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "source/duke3d/src/grpscan.cpp:39-76 (rtsname field)"
+    note: "Remote Ridicule speech. Not loaded if absent."
+
+  # ---- Duke 3D addons ----
+
+  - name: "DUKEDC.GRP"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "source/duke3d/src/grpscan.cpp:56-59 (Duke it out in D.C., GAMEFLAG_ADDON)"
+
+  - name: "VACATION.GRP"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "source/duke3d/src/grpscan.cpp:60-64 (Duke Caribbean: Life's a Beach, GAMEFLAG_ADDON)"
+
+  - name: "NWINTER.GRP"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "source/duke3d/src/grpscan.cpp:65-66 (Duke: Nuclear Winter, GAMEFLAG_ADDON)"
+
+  - name: "DZ2.GRP"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "source/duke3d/src/grpscan.cpp:67-69 (Duke!ZONE II, GAMEFLAG_ADDON)"
+
+  - name: "PENTP.GRP"
+    category: game_data
+    system: duke3d
+    required: false
+    source_ref: "source/duke3d/src/grpscan.cpp:70-71 (Penthouse Paradise, GAMEFLAG_ADDON)"
+
+  # ================================================================
+  # NAM (GAMEFLAG_NAM)
+  # ================================================================
+
+  - name: "NAM.GRP"
+    category: game_data
+    system: nam
+    size: 43448927
+    required: false
+    source_ref: "source/duke3d/src/grpscan.h:54 (NAM_CRC 0x75C1F07B), source/duke3d/src/grpscan.cpp:72"
+
+  - name: "NAM.CON"
+    category: game_data
+    system: nam
+    required: false
+    source_ref: "source/duke3d/src/common.cpp:38 (defaultgameconfilename GAME_NAM)"
+
+  # ================================================================
+  # NAPALM (GAMEFLAG_NAM | GAMEFLAG_NAPALM)
+  # ================================================================
+
+  - name: "NAPALM.GRP"
+    category: game_data
+    system: napalm
+    size: 44365728
+    required: false
+    source_ref: "source/duke3d/src/grpscan.h:55 (NAPALM_CRC 0x3DE1589A), source/duke3d/src/grpscan.cpp:73"
+
+  - name: "NAPALM.CON"
+    category: game_data
+    system: napalm
+    required: false
+    source_ref: "source/duke3d/src/common.cpp:38 (defaultgameconfilename GAME_NAPALM)"
+
+  # ================================================================
+  # WWII GI (GAMEFLAG_WW2GI)
+  # ================================================================
+
+  - name: "WW2GI.GRP"
+    category: game_data
+    system: ww2gi
+    size: 77939508
+    required: false
+    source_ref: "source/duke3d/src/grpscan.h:56 (WW2GI_CRC 0x907B82BF), source/duke3d/src/grpscan.cpp:74"
+
+  - name: "WW2GI.CON"
+    category: game_data
+    system: ww2gi
+    required: false
+    source_ref: "source/duke3d/src/common.cpp:38 (defaultgameconfilename GAME_WW2GI)"
+
+  - name: "PLATOONL.GRP"
+    category: game_data
+    system: ww2gi
+    size: 37852572
+    required: false
+    source_ref: "source/duke3d/src/grpscan.h:57 (PLATOONL_CRC 0xD1ED8C0C), source/duke3d/src/grpscan.cpp:75 (Platoon Leader, GAMEFLAG_ADDON)"

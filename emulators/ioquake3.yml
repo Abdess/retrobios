@@ -1,0 +1,138 @@
+emulator: ioquake3
+type: standalone
+core_classification: game_engine
+source: "https://github.com/ioquake/ioq3"
+upstream: "https://github.com/ioquake/ioq3"
+profiled_date: "2026-10-04"
+source_commit: "83a776283bdb958f82db25554b5ed0966aaf6e49"
+core_version: "1.36+git"
+display_name: "ioquake3"
+cores: [ioquake3]
+systems: [quake3, teamarena]
+
+notes: |
+  Quake III Arena / Team Arena source port maintained by the ioquake
+  team. BASEGAME = "baseq3", BASETA = "missionpack" (code/qcommon/q_shared.h
+  :44,65). FS_Startup (code/qcommon/files.c:3360) scans each search path
+  for pak0.pk3 through pak(NUM_ID_PAKS-1).pk3 under baseq3, and up to
+  NUM_TA_PAKS paks under missionpack (code/qcommon/qcommon.h:591-593,
+  NUM_ID_PAKS=9, NUM_TA_PAKS=4).
+
+  Loaded paks are matched against hardcoded unsigned 32-bit checksums
+  (code/qcommon/files.c:178-198: pak_checksums[], missionpak_checksums[]).
+  These are NOT MD5 / SHA1 / CRC32 of the file; they are id's own custom
+  pak checksum (sum of each lump CRC, see FS_LoadZipFile). A mismatch
+  prints "WARNING: baseq3/pak0.pk3 is present but its checksum (%u) is
+  not correct" (code/qcommon/files.c:3574) and keeps running: the loader
+  does not refuse the file, so no md5/sha1 is written below.
+
+  Missing paks are only fatal when neither com_standalone nor fs_basegame
+  override the base game (code/qcommon/files.c:3697, 3738).
+
+files:
+  # ================================================================
+  # Quake III Arena (baseq3/, 9 numbered paks)
+  # Retail v1.32 ships pak0.pk3 through pak8.pk3 under baseq3.
+  # pak_checksums[0..8] = { 1566731103, 298122907, 412165236,
+  #                         2991495316, 1197932710, 4087071573,
+  #                         3709064859, 908855077, 977125798 }
+  # ================================================================
+
+  - name: "pak0.pk3"
+    category: game_data
+    system: quake3
+    path: "baseq3/pak0.pk3"
+    required: true
+    source_ref: "code/qcommon/files.c:179 (pak_checksums[0]=1566731103u), 3568 (per-index checksum compare)"
+    note: "Retail Quake III Arena base pak. Engine prints a warning on checksum mismatch, does not refuse the file."
+
+  - name: "pak1.pk3"
+    category: game_data
+    system: quake3
+    path: "baseq3/pak1.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:180 (pak_checksums[1]=298122907u)"
+
+  - name: "pak2.pk3"
+    category: game_data
+    system: quake3
+    path: "baseq3/pak2.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:181 (pak_checksums[2]=412165236u)"
+
+  - name: "pak3.pk3"
+    category: game_data
+    system: quake3
+    path: "baseq3/pak3.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:182 (pak_checksums[3]=2991495316u)"
+
+  - name: "pak4.pk3"
+    category: game_data
+    system: quake3
+    path: "baseq3/pak4.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:183 (pak_checksums[4]=1197932710u)"
+
+  - name: "pak5.pk3"
+    category: game_data
+    system: quake3
+    path: "baseq3/pak5.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:184 (pak_checksums[5]=4087071573u)"
+
+  - name: "pak6.pk3"
+    category: game_data
+    system: quake3
+    path: "baseq3/pak6.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:185 (pak_checksums[6]=3709064859u)"
+
+  - name: "pak7.pk3"
+    category: game_data
+    system: quake3
+    path: "baseq3/pak7.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:186 (pak_checksums[7]=908855077u)"
+
+  - name: "pak8.pk3"
+    category: game_data
+    system: quake3
+    path: "baseq3/pak8.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:187 (pak_checksums[8]=977125798u)"
+
+  # ================================================================
+  # Team Arena (missionpack/, 4 numbered paks)
+  # missionpak_checksums[0..3] = { 2430342401, 511014160,
+  #                                2662638993, 1438664554 }
+  # ================================================================
+
+  - name: "pak0.pk3"
+    category: game_data
+    system: teamarena
+    path: "missionpack/pak0.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:192 (missionpak_checksums[0]=2430342401u)"
+    note: "Team Arena base pak. Required only when launching +set fs_game missionpack."
+
+  - name: "pak1.pk3"
+    category: game_data
+    system: teamarena
+    path: "missionpack/pak1.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:193 (missionpak_checksums[1]=511014160u)"
+
+  - name: "pak2.pk3"
+    category: game_data
+    system: teamarena
+    path: "missionpack/pak2.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:194 (missionpak_checksums[2]=2662638993u)"
+
+  - name: "pak3.pk3"
+    category: game_data
+    system: teamarena
+    path: "missionpack/pak3.pk3"
+    required: false
+    source_ref: "code/qcommon/files.c:195 (missionpak_checksums[3]=1438664554u)"

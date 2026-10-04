@@ -1,0 +1,217 @@
+emulator: Xash3D FWGS
+type: standalone
+core_classification: game_engine
+source: "https://github.com/FWGS/xash3d-fwgs"
+upstream: "https://github.com/FWGS/xash3d-fwgs"
+profiled_date: "2026-10-04"
+source_commit: "1414fc281b6dc986378ea7ae35086c62d782a865"
+core_version: "0.21+git"
+display_name: "Xash3D FWGS"
+cores: [xash3d_fwgs]
+systems: [halflife, cstrike, czero, czeror, dmc, gearbox, bshift, ricochet, tfc]
+
+notes: |
+  GoldSrc / Half-Life 1 engine reimplementation by Flying With Gauss.
+  Game directories are discovered at startup: FS_CheckForXashGameDir
+  (filesystem/gameinfo.c:611-634) walks each sub-folder of the base path
+  and keeps the ones that contain gameinfo.txt or liblist.gam.
+  FS_ParseGenericGameInfo (filesystem/gameinfo.c:231-430) reads the mod
+  descriptor out of either file: `basedir` names the fallback game
+  (chained one level, e.g. czeror -> czero -> cstrike -> valve, see
+  filesystem/searchpath.c:327), `fallback_dir` names a second fallback,
+  and `game` / `gamename` carry the human-readable title.
+
+  Each supported mod's data is a Valve-style game folder with its own
+  pak0.pak / pak1.pak, maps/, models/, sound/, overviews/ and a game
+  descriptor. The engine does not hash any file; the pak header is the
+  only sanity check (filesystem/pak.c). liblist.gam ships inside each
+  retail mod and is also written out by the engine as gameinfo.txt the
+  first time it imports a Valve folder (filesystem/gameinfo.c:538-544).
+
+  A Quake-engine game dir is recognised separately by
+  FS_CheckForQuakeGameDir (filesystem/gameinfo.c:578-603), which looks
+  for pak0.pak + progs.dat / quake.rc; Xash3D FWGS can run Quake 1 total
+  conversions this way.
+
+  Below are the folders Half-Life retail / official addon releases
+  install under the Steam install root. Each entry marks the per-mod
+  descriptor and base pak so the engine can detect the game; map / model
+  / sound trees that live beside them are too open-ended to enumerate
+  and are counted as part of the same game data.
+
+files:
+  # ================================================================
+  # Half-Life (valve/) — base game, chained parent of every HL1 mod
+  # ================================================================
+
+  - name: "liblist.gam"
+    category: game_data
+    system: halflife
+    path: "valve/liblist.gam"
+    required: true
+    source_ref: "filesystem/gameinfo.c:617 (gamedir probe), 538-544 (liblist.gam -> gameinfo.txt conversion), 695 (parser)"
+    note: "Game descriptor shipped with retail Half-Life. Engine converts it to gameinfo.txt on first run."
+
+  - name: "pak0.pak"
+    category: game_data
+    system: halflife
+    path: "valve/pak0.pak"
+    required: true
+    source_ref: "filesystem/pak.c (PAK loader), filesystem/searchpath.c:912 (valve fallback)"
+    note: "Retail Half-Life base pak."
+
+  - name: "pak1.pak"
+    category: game_data
+    system: halflife
+    path: "valve/pak1.pak"
+    required: false
+    source_ref: "filesystem/pak.c"
+    note: "Patch pak, present on Steam Half-Life installs."
+
+  # ================================================================
+  # Counter-Strike 1.6 (cstrike/)
+  # ================================================================
+
+  - name: "liblist.gam"
+    category: game_data
+    system: cstrike
+    path: "cstrike/liblist.gam"
+    required: true
+    source_ref: "filesystem/gameinfo.c:617, filesystem/searchpath.c:327 (cstrike -> valve chain)"
+    note: "Declares fallback_dir \"valve\". Counter-Strike 1.6 retail descriptor."
+
+  - name: "pak0.pak"
+    category: game_data
+    system: cstrike
+    path: "cstrike/pak0.pak"
+    required: false
+    source_ref: "filesystem/pak.c"
+    note: "Loose files (maps/, sprites/, sound/, models/) are the usual retail layout; a bundled pak0.pak is optional."
+
+  # ================================================================
+  # Condition Zero (czero/)
+  # ================================================================
+
+  - name: "liblist.gam"
+    category: game_data
+    system: czero
+    path: "czero/liblist.gam"
+    required: true
+    source_ref: "filesystem/searchpath.c:327 (czero -> cstrike -> valve chain)"
+
+  - name: "pak0.pak"
+    category: game_data
+    system: czero
+    path: "czero/pak0.pak"
+    required: false
+    source_ref: "filesystem/pak.c"
+
+  # ================================================================
+  # Condition Zero: Deleted Scenes (czeror/)
+  # ================================================================
+
+  - name: "liblist.gam"
+    category: game_data
+    system: czeror
+    path: "czeror/liblist.gam"
+    required: true
+    source_ref: "filesystem/searchpath.c:327 (czeror -> czero -> cstrike -> valve chain)"
+
+  - name: "pak0.pak"
+    category: game_data
+    system: czeror
+    path: "czeror/pak0.pak"
+    required: false
+    source_ref: "filesystem/pak.c"
+
+  # ================================================================
+  # Deathmatch Classic (dmc/)
+  # ================================================================
+
+  - name: "liblist.gam"
+    category: game_data
+    system: dmc
+    path: "dmc/liblist.gam"
+    required: true
+    source_ref: "filesystem/gameinfo.c:617"
+
+  - name: "pak0.pak"
+    category: game_data
+    system: dmc
+    path: "dmc/pak0.pak"
+    required: false
+    source_ref: "filesystem/pak.c"
+
+  # ================================================================
+  # Opposing Force (gearbox/)
+  # ================================================================
+
+  - name: "liblist.gam"
+    category: game_data
+    system: gearbox
+    path: "gearbox/liblist.gam"
+    required: true
+    source_ref: "filesystem/gameinfo.c:617"
+    note: "Gearbox folder is the retail Opposing Force game dir."
+
+  - name: "pak0.pak"
+    category: game_data
+    system: gearbox
+    path: "gearbox/pak0.pak"
+    required: false
+    source_ref: "filesystem/pak.c"
+
+  # ================================================================
+  # Blue Shift (bshift/)
+  # Half-Life source dir still called "bshift" in Steam depot.
+  # ================================================================
+
+  - name: "liblist.gam"
+    category: game_data
+    system: bshift
+    path: "bshift/liblist.gam"
+    required: true
+    source_ref: "filesystem/gameinfo.c:617"
+
+  - name: "pak0.pak"
+    category: game_data
+    system: bshift
+    path: "bshift/pak0.pak"
+    required: false
+    source_ref: "filesystem/pak.c"
+
+  # ================================================================
+  # Ricochet (ricochet/)
+  # ================================================================
+
+  - name: "liblist.gam"
+    category: game_data
+    system: ricochet
+    path: "ricochet/liblist.gam"
+    required: true
+    source_ref: "filesystem/gameinfo.c:617"
+
+  - name: "pak0.pak"
+    category: game_data
+    system: ricochet
+    path: "ricochet/pak0.pak"
+    required: false
+    source_ref: "filesystem/pak.c"
+
+  # ================================================================
+  # Team Fortress Classic (tfc/)
+  # ================================================================
+
+  - name: "liblist.gam"
+    category: game_data
+    system: tfc
+    path: "tfc/liblist.gam"
+    required: true
+    source_ref: "filesystem/gameinfo.c:617"
+
+  - name: "pak0.pak"
+    category: game_data
+    system: tfc
+    path: "tfc/pak0.pak"
+    required: false
+    source_ref: "filesystem/pak.c"

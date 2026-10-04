@@ -1,0 +1,104 @@
+emulator: Yamagi Quake II
+type: standalone
+core_classification: game_engine
+source: "https://github.com/yquake2/yquake2"
+upstream: "https://github.com/yquake2/yquake2"
+profiled_date: "2026-10-04"
+source_commit: "f190ac496d00ef9238a5f16dd012c6dc81a997c9"
+core_version: "8.51+git"
+display_name: "Yamagi Quake II"
+cores: [yquake2]
+systems: [quake2, xatrix, rogue, ctf]
+
+notes: |
+  Quake II source port. BASEDIRNAME = "baseq2" (src/common/header/common.h
+  :36). FS_AddDirToSearchPath (src/common/filesystem.c:1646) loops
+  pak%d.<ext> from 0 to MAX_PAKS-1 (=99) across fs_packtypes = { pak, pk3 }
+  for the active game directory, loading each one as a protected pak.
+  retail Quake II ships only pak0.pak and pak1.pak; later paks are
+  consumed by community mods and the Nightdive remaster.
+
+  Supported official mods are listed in first_mods[]
+  (src/common/filesystem.c:1331) = { "baseq2", "xatrix", "rogue", "ctf" }.
+  Mod game dirs are selected via the `game` cvar (FS_InitFilesystem +
+  FS_BuildGameSpecificSearchPath, src/common/filesystem.c:2075-2097).
+  Each mod ships its own pak0.pak / pak1.pak (The Reckoning, Ground Zero,
+  Three Wave CTF). Zaero support uses the same path layout (`game zaero`)
+  but no official repository under the yquake2 org.
+
+  The engine never hashes a pak. Validation is "does the pack read as a
+  valid PAK header" (FS_LoadPAK, src/common/filesystem.c:873). Missing
+  files produce "Couldn't load %s" at Com_Error level only for the
+  baseq2 lookup when the game cannot find any game assets at all.
+
+  Background music is streamed from <game>/music/track02.ogg ... track22.ogg
+  by OGG_InitTrackList (src/client/sound/ogg.c), not required for gameplay.
+
+files:
+  # ================================================================
+  # Quake II (baseq2/)
+  # Retail v3.20 ships pak0.pak (max 2 GiB PAK, holds everything) and
+  # pak1.pak (demo-related). Patched installations may add pak2.pak+.
+  # ================================================================
+
+  - name: "pak0.pak"
+    category: game_data
+    system: quake2
+    path: "baseq2/pak0.pak"
+    required: true
+    source_ref: "src/common/filesystem.c:1688 (pak%d.%s scan), 36 (BASEDIRNAME), 1331 (first_mods[0]=baseq2)"
+    note: "Retail Quake II data pak. Not hash-validated."
+
+  - name: "pak1.pak"
+    category: game_data
+    system: quake2
+    path: "baseq2/pak1.pak"
+    required: false
+    source_ref: "src/common/filesystem.c:1688"
+
+  - name: "pak2.pak"
+    category: game_data
+    system: quake2
+    path: "baseq2/pak2.pak"
+    required: false
+    source_ref: "src/common/filesystem.c:1688"
+    note: "Added by community re-releases and the KMQuake2 content pack."
+
+  # ================================================================
+  # The Reckoning (xatrix/) — official Mission Pack 1
+  # Separate yquake2 game library repo: yquake2/xatrix.
+  # ================================================================
+
+  - name: "pak0.pak"
+    category: game_data
+    system: xatrix
+    path: "xatrix/pak0.pak"
+    required: false
+    source_ref: "src/common/filesystem.c:1331 (first_mods[1]=xatrix), 1688"
+    note: "The Reckoning data. Loaded when `+set game xatrix` is passed."
+
+  # ================================================================
+  # Ground Zero (rogue/) — official Mission Pack 2
+  # Separate yquake2 game library repo: yquake2/rogue.
+  # ================================================================
+
+  - name: "pak0.pak"
+    category: game_data
+    system: rogue
+    path: "rogue/pak0.pak"
+    required: false
+    source_ref: "src/common/filesystem.c:1331 (first_mods[2]=rogue), 1688"
+    note: "Ground Zero data. Loaded when `+set game rogue` is passed."
+
+  # ================================================================
+  # Three Wave Capture The Flag (ctf/) — official free addon
+  # Separate yquake2 game library repo: yquake2/ctf.
+  # ================================================================
+
+  - name: "pak0.pak"
+    category: game_data
+    system: ctf
+    path: "ctf/pak0.pak"
+    required: false
+    source_ref: "src/common/filesystem.c:1331 (first_mods[3]=ctf), 1688"
+    note: "Three Wave CTF data. Loaded when `+set game ctf` is passed."
