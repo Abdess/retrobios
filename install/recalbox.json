@@ -5,7 +5,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-10-04T15:54:42Z",
+  "generated": "2026-10-04T19:03:36Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,28 +237,12 @@
       }
     }
   ],
-  "total_files": 2848,
-  "total_size": 4153501362,
-  "pack_files": 2850,
-  "pack_size": 4153501362,
-  "total_omitted": 4,
+  "total_files": 2850,
+  "total_size": 4153583282,
+  "pack_files": 2852,
+  "pack_size": 4153583282,
+  "total_omitted": 2,
   "omitted_files": [
-    {
-      "dest": "Machines/MSX2+ - European/Msx2pe.rom",
-      "name": "Msx2pe.rom",
-      "system": "msx1,msx2,msxturbor",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
-    {
-      "dest": "Machines/MSX2+ - European/Msx2pexte.rom",
-      "name": "Msx2pexte.rom",
-      "system": "msx1,msx2,msxturbor",
-      "required": true,
-      "reason": "not_found",
-      "cores": null
-    },
     {
       "dest": "geolith/neocd.zip",
       "name": "neocd.zip",
@@ -1285,6 +1269,22 @@
       "sha256": "9fb7ef5003fcb953f46ffe5bab399832d8175f53cccb763d8c454a91bc2429fd",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/openmsx/fs-a1wsx_kanjibasic.rom",
+      "cores": null
+    },
+    {
+      "dest": "Machines/MSX2+ - European/Msx2pe.rom",
+      "sha1": "aea0e4a635efce5336e496d36e4cb0a4b79593ff",
+      "sha256": "9676045124c64087ded3c2fa486017bfbd329a392d99f9f0fba7a17c5098b6cd",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX2+ - European/Msx2pe.rom",
+      "cores": null
+    },
+    {
+      "dest": "Machines/MSX2+ - European/Msx2pexte.rom",
+      "sha1": "cf00ec60608010aac94cfe245eb7aa67cb44d110",
+      "sha256": "059dcd16bd70a7632576715147524e4dd281701c730f5417d7e9841365044150",
+      "size": 49152,
+      "repo_path": "bios/Microsoft/MSX/MSX2+ - European/Msx2pexte.rom",
       "cores": null
     },
     {

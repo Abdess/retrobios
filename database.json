@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-04T15:54:42Z",
-  "total_files": 10707,
-  "total_size": 15201561742,
+  "generated_at": "2026-10-04T19:03:36Z",
+  "total_files": 10709,
+  "total_size": 15201643662,
   "files": {
     "738c7f5fd0c8b57ee2e87ae7a97bf8e21a821d07": {
       "path": "bios/3D Realms/Duke Nukem 3D/DUKE.RTS",
@@ -41344,6 +41344,26 @@
       "sha256": "8b4adaea1893d8176f32f64fbb87603663b070ee7c0c3f028d141a37d7ed4bc4",
       "crc32": "15c6ce2b",
       "adler32": "69b6e00a"
+    },
+    "aea0e4a635efce5336e496d36e4cb0a4b79593ff": {
+      "path": "bios/Microsoft/MSX/MSX2+ - European/Msx2pe.rom",
+      "name": "Msx2pe.rom",
+      "size": 32768,
+      "sha1": "aea0e4a635efce5336e496d36e4cb0a4b79593ff",
+      "md5": "277fd57c13f301fb4b366845a32d673a",
+      "sha256": "9676045124c64087ded3c2fa486017bfbd329a392d99f9f0fba7a17c5098b6cd",
+      "crc32": "76c46fe0",
+      "adler32": "7420bf81"
+    },
+    "cf00ec60608010aac94cfe245eb7aa67cb44d110": {
+      "path": "bios/Microsoft/MSX/MSX2+ - European/Msx2pexte.rom",
+      "name": "Msx2pexte.rom",
+      "size": 49152,
+      "sha1": "cf00ec60608010aac94cfe245eb7aa67cb44d110",
+      "md5": "f78ab735aaad7045badbda8f4c8ac751",
+      "sha256": "059dcd16bd70a7632576715147524e4dd281701c730f5417d7e9841365044150",
+      "crc32": "2852b383",
+      "adler32": "563aa006"
     },
     "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e": {
       "path": "bios/Microsoft/MSX/MSX2.ROM",
@@ -116191,6 +116211,8 @@
       "462d6ecb52a8c35dd7d48c2d46687f14": "6e55cfc48d0d6ee57b041cb09427f614fb6a1910",
       "0a34c660614ead31dab78638ce7745e9": "c5edc3b289dea120fe60ad38596a51c2e28838aa",
       "e09783c4ec6d4770c5395c42bb0e1d91": "5c5eb001e6a1fe29edb7abd428a3967bb388e5db",
+      "277fd57c13f301fb4b366845a32d673a": "aea0e4a635efce5336e496d36e4cb0a4b79593ff",
+      "f78ab735aaad7045badbda8f4c8ac751": "cf00ec60608010aac94cfe245eb7aa67cb44d110",
       "ec3a01c91f24fbddcbcab0ad301bc9ef": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
       "2183c2aff17cf4297bdb496de78c2e8a": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
       "6d8c0ca64e726c82a4b726e9b01cdf1e": "e2fbd56e42da637609d23ae9df9efd1b4241b18a",
@@ -134250,6 +134272,12 @@
       ],
       "cbios_music.rom": [
         "5c5eb001e6a1fe29edb7abd428a3967bb388e5db"
+      ],
+      "Msx2pe.rom": [
+        "aea0e4a635efce5336e496d36e4cb0a4b79593ff"
+      ],
+      "Msx2pexte.rom": [
+        "cf00ec60608010aac94cfe245eb7aa67cb44d110"
       ],
       "MSX2.ROM": [
         "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
@@ -161215,6 +161243,8 @@
       "1c7429c6": "6e55cfc48d0d6ee57b041cb09427f614fb6a1910",
       "ae23c039": "c5edc3b289dea120fe60ad38596a51c2e28838aa",
       "15c6ce2b": "5c5eb001e6a1fe29edb7abd428a3967bb388e5db",
+      "76c46fe0": "aea0e4a635efce5336e496d36e4cb0a4b79593ff",
+      "2852b383": "cf00ec60608010aac94cfe245eb7aa67cb44d110",
       "6cdaf3a5": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
       "66237ecf": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
       "00870134": "e2fbd56e42da637609d23ae9df9efd1b4241b18a",
@@ -171924,6 +171954,8 @@
       "3436ed432f8afca2da51e004b895f6e7d3120fbb43ba45e864cc5a4af7e17754": "6e55cfc48d0d6ee57b041cb09427f614fb6a1910",
       "ca2814c8f28d745fba3ba0730d63c29ceb1e18da10747582735dc95d99a11aa1": "c5edc3b289dea120fe60ad38596a51c2e28838aa",
       "8b4adaea1893d8176f32f64fbb87603663b070ee7c0c3f028d141a37d7ed4bc4": "5c5eb001e6a1fe29edb7abd428a3967bb388e5db",
+      "9676045124c64087ded3c2fa486017bfbd329a392d99f9f0fba7a17c5098b6cd": "aea0e4a635efce5336e496d36e4cb0a4b79593ff",
+      "059dcd16bd70a7632576715147524e4dd281701c730f5417d7e9841365044150": "cf00ec60608010aac94cfe245eb7aa67cb44d110",
       "4bc4ae85ca5f28246cd3e7b7e017d298ddd375603657f84ef2c7954bc2d9b919": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
       "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
       "9501a609be7d92e53fbd75fa65c8317563035d617744664892863ed54463db51": "e2fbd56e42da637609d23ae9df9efd1b4241b18a",
@@ -207825,6 +207857,24 @@
       ],
       "MSX2+ - C-BIOS/cbios_music.rom": [
         "5c5eb001e6a1fe29edb7abd428a3967bb388e5db"
+      ],
+      "Microsoft/MSX/MSX2+ - European/Msx2pe.rom": [
+        "aea0e4a635efce5336e496d36e4cb0a4b79593ff"
+      ],
+      "MSX/MSX2+ - European/Msx2pe.rom": [
+        "aea0e4a635efce5336e496d36e4cb0a4b79593ff"
+      ],
+      "MSX2+ - European/Msx2pe.rom": [
+        "aea0e4a635efce5336e496d36e4cb0a4b79593ff"
+      ],
+      "Microsoft/MSX/MSX2+ - European/Msx2pexte.rom": [
+        "cf00ec60608010aac94cfe245eb7aa67cb44d110"
+      ],
+      "MSX/MSX2+ - European/Msx2pexte.rom": [
+        "cf00ec60608010aac94cfe245eb7aa67cb44d110"
+      ],
+      "MSX2+ - European/Msx2pexte.rom": [
+        "cf00ec60608010aac94cfe245eb7aa67cb44d110"
       ],
       "Microsoft/MSX/MSX2.ROM": [
         "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e"

@@ -72,8 +72,8 @@ Each file is checked the way your platform checks it. Most compare a checksum, t
 - **12 platforms** supported with platform-specific verification
 - **506 emulators** profiled from source (RetroArch cores + standalone)
 - **546 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **10,707 files in the collection**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 5,358 system files, 2,810 arcade ROM sets, 2,539 game and engine data files. That is every platform and emulator together, so no pack holds them all: each carries what its own emulators load, counted in the download table
-- **559 of 5,358 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
+- **10,709 files in the collection**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 5,360 system files, 2,810 arcade ROM sets, 2,539 game and engine data files. That is every platform and emulator together, so no pack holds them all: each carries what its own emulators load, counted in the download table
+- **559 of 5,360 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
 - **14497 MB** total collection size
 
 ## Supported systems
@@ -180,4 +180,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-10-04T18:24:32Z*
+*Auto-generated on 2026-10-04T19:06:39Z*

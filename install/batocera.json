@@ -237,11 +237,11 @@
       }
     }
   ],
-  "total_files": 3568,
-  "total_size": 7434077146,
-  "pack_files": 3570,
-  "pack_size": 7434077146,
-  "total_omitted": 10,
+  "total_files": 3572,
+  "total_size": 7434367750,
+  "pack_files": 3574,
+  "pack_size": 7434367750,
+  "total_omitted": 6,
   "omitted_files": [
     {
       "dest": "Content/Metadata/Metadata",
@@ -302,38 +302,6 @@
       "cores": [
         "virtualjaguar"
       ]
-    },
-    {
-      "dest": "pc6001.zip",
-      "name": "pc6001.zip",
-      "system": "pc60",
-      "required": true,
-      "reason": "hash_mismatch",
-      "cores": null
-    },
-    {
-      "dest": "pc6001a.zip",
-      "name": "pc6001a.zip",
-      "system": "pc60",
-      "required": true,
-      "reason": "hash_mismatch",
-      "cores": null
-    },
-    {
-      "dest": "pc6001mk2.zip",
-      "name": "pc6001mk2.zip",
-      "system": "pc60",
-      "required": true,
-      "reason": "hash_mismatch",
-      "cores": null
-    },
-    {
-      "dest": "pc6001mk2sr.zip",
-      "name": "pc6001mk2sr.zip",
-      "system": "pc60",
-      "required": true,
-      "reason": "hash_mismatch",
-      "cores": null
     }
   ],
   "files": [
@@ -2457,6 +2425,38 @@
       "sha256": "c24fd91c9f0687bf2033abd7747d3f5b162bba4f23692640f69ee62eb404b293",
       "size": 128,
       "repo_path": "bios/Oric/Oric/Oric/colour.rom",
+      "cores": null
+    },
+    {
+      "dest": "pc6001.zip",
+      "sha1": "9efae188fac3f94e62bb922b980ca45062ae0c87",
+      "sha256": "ffb2c886bd69f7f2fc6d959714a539744797ee30a23615fb713750ef7cbaa212",
+      "size": 22952,
+      "repo_path": "bios/Arcade/Arcade/pc6001.zip",
+      "cores": null
+    },
+    {
+      "dest": "pc6001a.zip",
+      "sha1": "c0af567d5f6385f33ea0b97ebb21af6ed25f6c65",
+      "sha256": "d1f05f26bf65c581265c7bd40ce714afc882975d87ab7b2fda21ec2c4d6a91d3",
+      "size": 20772,
+      "repo_path": "bios/Arcade/Arcade/pc6001a.zip",
+      "cores": null
+    },
+    {
+      "dest": "pc6001mk2.zip",
+      "sha1": "7422a65b18a79728ec9e4aec0256941f049c33ef",
+      "sha256": "239a8e861ebef645ac830147ef47dde343dc25b1c84296b92a9a7cdcc33dd783",
+      "size": 98994,
+      "repo_path": "bios/Arcade/Arcade/pc6001mk2.zip",
+      "cores": null
+    },
+    {
+      "dest": "pc6001mk2sr.zip",
+      "sha1": "c4a5f9c46e176323876cf8ec3749df6343e7be6f",
+      "sha256": "029aa80de9238d7acaaf6b27e72ea58588f3639da9a6bd5527c069e1a4527bbb",
+      "size": 147886,
+      "repo_path": "bios/Arcade/Arcade/pc6001mk2sr.zip",
       "cores": null
     },
     {
