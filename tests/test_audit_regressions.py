@@ -388,6 +388,22 @@ class CatalogRatioRegressions(unittest.TestCase):
         self.assertEqual(count_catalog_matched(db), 1)
         self.assertEqual(compute_composition(db)["systems"]["files"], 2)
 
+    def test_engine_and_publisher_trees_are_game_data(self):
+        """Engine data collected under `Game Engines/` and under a game
+        publisher counted as console and computer system files: 7 697 of
+        them made the README announce 13 564 system files."""
+        from scripts.common import composition_tier
+
+        for path in (
+            "bios/Game Engines/C-Dogs SDL/cdogs/data/guns.json",
+            "bios/Id Software/Quake III Arena/baseq3/pak1.pk3",
+            "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/share.j2e",
+            "bios/RPG Maker/easyrpg/rtp/2000/Backdrop/Bridge.png",
+        ):
+            self.assertEqual(composition_tier(path), "game_data", path)
+        self.assertEqual(composition_tier("bios/Sony/PlayStation/scph5501.bin"), "systems")
+        self.assertEqual(composition_tier("bios/Microsoft/MSX/MSX2.ROM"), "systems")
+
     def test_readme_ratio_matches_the_database(self):
         from scripts.common import compute_composition, count_catalog_matched, load_database
 

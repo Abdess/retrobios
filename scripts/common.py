@@ -1002,7 +1002,26 @@ def unique_emulator_profiles(profiles: dict[str, dict]) -> dict[str, dict]:
     }
 
 
-GAME_DATA_TOPS = ("RPG Maker", "ScummVM")
+# Trees that hold game and engine data rather than the system files of a
+# machine: the engine trees, and the publishers whose games an engine runs.
+GAME_DATA_TOPS = (
+    "RPG Maker",
+    "ScummVM",
+    "Game Engines",
+    "sdlpal",
+    "Dinothawr",
+    "3D Realms",
+    "Apogee",
+    "Blizzard",
+    "Crack dot Com",
+    "Electronic Arts",
+    "Epic MegaGames",
+    "Id Software",
+    "Interplay",
+    "Monolith",
+    "Softdisk",
+    "Valve",
+)
 
 
 def composition_tier(path: str) -> str:
@@ -1020,8 +1039,8 @@ def compute_composition(db: dict) -> dict:
     """File and byte counts by tree area.
 
     Three buckets, each re-derivable from paths alone: arcade ROM sets
-    (Arcade/), game and engine data (the RPG Maker/ and ScummVM/ trees),
-    and console or computer system files (everything else).
+    (Arcade/), game and engine data (the trees of GAME_DATA_TOPS), and
+    console or computer system files (everything else).
     """
     buckets = {
         "systems": {"files": 0, "size_bytes": 0},

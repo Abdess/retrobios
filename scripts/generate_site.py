@@ -428,7 +428,8 @@ def composition_sentence(db: dict) -> str:
         f"The collection holds {comp['systems']['files']:,} console and "
         f"computer system files, {comp['arcade']['files']:,} arcade ROM sets "
         f"(`Arcade/`), and {comp['game_data']['files']:,} game and engine "
-        "data files (the `RPG Maker/` and `ScummVM/` trees). No pack holds "
+        "data files (`Game Engines/`, `RPG Maker/`, `ScummVM/` and the game "
+        "publishers' trees). No pack holds "
         "them all: each carries what its platform's emulators load."
     )
 
