@@ -1,8 +1,8 @@
 emulator: Sonic 1 & 2 (2013) Decompilation
 type: standalone
 core_classification: game_engine
-source: "https://github.com/Rubberduckycooly/Sonic-1-2-2013-Decompilation"
-upstream: "https://github.com/Rubberduckycooly/Sonic-1-2-2013-Decompilation"
+source: "https://github.com/RSDKModding/RSDKv4-Decompilation"
+upstream: "https://github.com/RSDKModding/RSDKv4-Decompilation"
 source_commit: "a7f5195e21fdad7b75e4587e249013feeea9e6f3"
 core_version: "1.3.3"
 profiled_date: "2026-10-04"
@@ -17,37 +17,38 @@ notes: |
   the loaded data pack (gameWindowText "Sonic 1" or "Sonic 2").
   ref: RSDKv4/RetroEngine.cpp:423, RSDKv4/ModAPI.cpp:428
 
-  CheckRSDKFile just fopen()s the data pack; there is no signature or
-  checksum test. The engine falls back to a loose Data/ + Bytecode/ tree
-  if the pack is absent, and writes a usage.txt that asks for a pack named
-  Engine.dataFile[0] (default "Data.rsdk").
-  ref: RSDKv4/RetroEngine.cpp:296-331, RSDKv4/Userdata.cpp:251-263,
-       RSDKv4/RetroEngine.cpp:484-521
+  CheckRSDKFile opens the data pack and compares its first six bytes to
+  the "RSDKvB" signature; there is no checksum test. The engine falls
+  back to a loose Data/ + Bytecode/ tree if the pack is absent. When
+  GameConfig.bin cannot be loaded either way it writes a usage.txt that
+  asks for a pack named Engine.dataFile[0] (default "Data.rsdk").
+  ref: RSDKv4/Reader.cpp:25-102, RSDKv4/RetroEngine.cpp:296-331,
+       RSDKv4/Userdata.cpp:251-263, RSDKv4/RetroEngine.cpp:483-520
 
   Up to four packs can be mounted (DataFile, DataFile2..4 in the Dev
   section of settings.ini); the extras default to Data2.rsdk, Data3.rsdk,
   Data4.rsdk once declared.
-  ref: RSDKv4/RetroEngine.hpp:373, RSDKv4/Userdata.cpp:396-408
+  ref: RSDKv4/Reader.hpp:38, RSDKv4/RetroEngine.cpp:324-331,
+       RSDKv4/Userdata.cpp:396-408
 
 files:
   - name: "Data.rsdk"
     category: game_data
     system: sonic-1-2013
     required: true
-    source_ref: "RSDKv4/RetroEngine.cpp:321 (CheckRSDKFile(\"Data.rsdk\")), RSDKv4/Userdata.cpp:252"
+    source_ref: "RSDKv4/Userdata.cpp:251-252 (default name), RSDKv4/Userdata.cpp:396-397 (Dev:DataFile), RSDKv4/RetroEngine.cpp:316-321 (CheckRSDKFile call), RSDKv4/Reader.cpp:38-46 (signature check)"
     note: |
       Sonic the Hedgehog (2013) assets. Shipped with the official Sonic
-      Origins release and the delisted iOS/Android apps. Engine opens the
-      file with fopen(); content identity is read from the embedded
-      GameConfig.bin, not the pack hash.
+      Origins release and the delisted iOS/Android apps. The engine checks
+      the six-byte signature only; content identity is read from the
+      embedded GameConfig.bin, not the pack hash.
 
   - name: "Data.rsdk"
     category: game_data
     system: sonic-2-2013
     required: true
-    source_ref: "RSDKv4/RetroEngine.cpp:321 (CheckRSDKFile(\"Data.rsdk\")), RSDKv4/Userdata.cpp:252"
+    source_ref: "RSDKv4/Userdata.cpp:251-252 (default name), RSDKv4/Userdata.cpp:396-397 (Dev:DataFile), RSDKv4/RetroEngine.cpp:316-321 (CheckRSDKFile call), RSDKv4/Reader.cpp:38-46 (signature check)"
     note: |
       Sonic the Hedgehog 2 (2013) assets. Shipped with the official Sonic
-      Origins release and the delisted iOS/Android apps. Same engine
-      filename as Sonic 1; the launcher selects which pack sits next to
-      the binary at run time.
+      Origins release and the delisted iOS/Android apps. Same default
+      file name as Sonic 1; Dev:DataFile in settings.ini names another.

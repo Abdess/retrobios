@@ -22,8 +22,8 @@ notes: |
   ~/.d1x-rebirth / ~/.d2x-rebirth on Unix) is searched for the HOG and
   PIG files; -hogdir on the command line adds another search path. On
   startup similar/main/inferno.cpp mounts descent.hog (D1) or
-  descent2.hog / d2demo.hog (D2) via make_PHYSFSX_ComputedPathMount at
-  lines 472-479. If neither hog is found the engine aborts with
+  descent2.hog / d2demo.hog (D2) via make_PHYSFSX_ComputedPathMount
+  (similar/main/inferno.cpp:471-476). If neither hog is found the engine aborts with
   UserError "Could not find a valid hog file".
 
   The size of the HOG picks the data edition (common/main/mission.h:58):
@@ -41,11 +41,14 @@ notes: |
   one of the PIG graphics families (groupa.pig / alien1.pig / alien2.pig
   / fire.pig / ice.pig / water.pig for retail, d2demo.pig for shareware)
   plus the sampled sound bank (descent2.s11 for 11 kHz or descent2.s22
-  for 22 kHz; piggy.cpp:79). Mac shareware additionally bundles exit.ham.
+  for 22 kHz; similar/main/piggy.cpp:79). Mac shareware additionally bundles exit.ham.
   d2x.hog is the Descent 2: Vertigo expansion mission, probed in the
-  MISSION_DIR by inferno.cpp:542 to toggle the "Vertigo Enhanced" title.
-  Movies (intro-h.mvl, robots-h.mvl, other-h.mvl or their -l low-res
-  counterparts) are optional; the game plays without them.
+  MISSION_DIR by similar/main/inferno.cpp:542 to toggle the "Vertigo Enhanced" title.
+  The movie libraries are named from three stems (intro, other, robots;
+  d2x-rebirth/main/movie.cpp:93-95) and a resolution letter: <stem>-h.mvl
+  is tried first, then <stem>-l.mvl (d2x-rebirth/main/movie.cpp:660,
+  672-677). A library that fails to mount is logged and skipped; the
+  game plays without movies.
 
   Only the free PC shareware pair (desc14sw.tar.gz = descent.hog +
   descent.pig; d2shar10.tar.gz = d2demo.hog/pig/ham) is redistributable;
@@ -54,7 +57,7 @@ notes: |
 files:
   # ------ Descent 1 shareware (free) ------
   - name: descent.hog
-    path: dxx-rebirth/d1/shareware/descent.hog
+    path: descent.hog
     system: descent
     category: game_data
     required: false
@@ -66,7 +69,7 @@ files:
     source_ref: "similar/main/mission.cpp:80; common/main/mission.h:67"
 
   - name: descent.pig
-    path: dxx-rebirth/d1/shareware/descent.pig
+    path: descent.pig
     system: descent
     category: game_data
     required: false
@@ -75,7 +78,7 @@ files:
 
   # ------ Descent 1 retail ------
   - name: descent.hog
-    path: dxx-rebirth/d1/retail/descent.hog
+    path: descent.hog
     system: descent
     category: game_data
     required: false
@@ -87,7 +90,7 @@ files:
     source_ref: "common/main/mission.h:61-64"
 
   - name: descent.pig
-    path: dxx-rebirth/d1/retail/descent.pig
+    path: descent.pig
     system: descent
     category: game_data
     required: false
@@ -96,7 +99,7 @@ files:
 
   # ------ Descent 2 shareware (free) ------
   - name: d2demo.hog
-    path: dxx-rebirth/d2/shareware/d2demo.hog
+    path: d2demo.hog
     system: descent2
     category: game_data
     required: false
@@ -108,7 +111,7 @@ files:
     source_ref: "similar/main/mission.cpp:107-108; common/main/mission.h:71"
 
   - name: d2demo.pig
-    path: dxx-rebirth/d2/shareware/d2demo.pig
+    path: d2demo.pig
     system: descent2
     category: game_data
     required: false
@@ -116,7 +119,7 @@ files:
     source_ref: "similar/main/piggy.cpp:73"
 
   - name: d2demo.ham
-    path: dxx-rebirth/d2/shareware/d2demo.ham
+    path: d2demo.ham
     system: descent2
     category: game_data
     required: false
@@ -125,7 +128,7 @@ files:
 
   # ------ Descent 2 retail ------
   - name: descent2.hog
-    path: dxx-rebirth/d2/retail/descent2.hog
+    path: descent2.hog
     system: descent2
     category: game_data
     required: false
@@ -137,7 +140,7 @@ files:
     source_ref: "common/main/mission.h:73-76"
 
   - name: descent2.ham
-    path: dxx-rebirth/d2/retail/descent2.ham
+    path: descent2.ham
     system: descent2
     category: game_data
     required: false
@@ -145,7 +148,7 @@ files:
     source_ref: "similar/main/piggy.cpp:74"
 
   - name: groupa.pig
-    path: dxx-rebirth/d2/retail/groupa.pig
+    path: groupa.pig
     system: descent2
     category: game_data
     required: false
@@ -153,7 +156,7 @@ files:
     source_ref: "similar/main/piggy.cpp:72; similar/main/inferno.cpp:689"
 
   - name: alien1.pig
-    path: dxx-rebirth/d2/retail/alien1.pig
+    path: alien1.pig
     system: descent2
     category: game_data
     required: false
@@ -161,7 +164,7 @@ files:
     source_ref: "similar/main/piggy.cpp:87"
 
   - name: alien2.pig
-    path: dxx-rebirth/d2/retail/alien2.pig
+    path: alien2.pig
     system: descent2
     category: game_data
     required: false
@@ -169,7 +172,7 @@ files:
     source_ref: "similar/main/piggy.cpp:88"
 
   - name: fire.pig
-    path: dxx-rebirth/d2/retail/fire.pig
+    path: fire.pig
     system: descent2
     category: game_data
     required: false
@@ -177,7 +180,7 @@ files:
     source_ref: "similar/main/piggy.cpp:89"
 
   - name: ice.pig
-    path: dxx-rebirth/d2/retail/ice.pig
+    path: ice.pig
     system: descent2
     category: game_data
     required: false
@@ -185,7 +188,7 @@ files:
     source_ref: "similar/main/piggy.cpp:91"
 
   - name: water.pig
-    path: dxx-rebirth/d2/retail/water.pig
+    path: water.pig
     system: descent2
     category: game_data
     required: false
@@ -193,7 +196,7 @@ files:
     source_ref: "similar/main/piggy.cpp:92"
 
   - name: descent2.s22
-    path: dxx-rebirth/d2/retail/descent2.s22
+    path: descent2.s22
     system: descent2
     category: game_data
     required: false
@@ -201,7 +204,7 @@ files:
     source_ref: "similar/main/piggy.cpp:79"
 
   - name: descent2.s11
-    path: dxx-rebirth/d2/retail/descent2.s11
+    path: descent2.s11
     system: descent2
     category: game_data
     required: false
@@ -209,7 +212,7 @@ files:
     source_ref: "similar/main/piggy.cpp:79"
 
   - name: d2x.hog
-    path: dxx-rebirth/d2/retail/missions/d2x.hog
+    path: missions/d2x.hog
     system: descent2
     category: game_data
     required: false
@@ -217,23 +220,25 @@ files:
     source_ref: "similar/main/inferno.cpp:542"
 
   - name: intro-h.mvl
-    path: dxx-rebirth/d2/retail/intro-h.mvl
+    path: intro-h.mvl
     system: descent2
     category: game_data
     required: false
     description: "Descent 2 intro cinematic (high-res)"
-    source_ref: "similar/main/titles.cpp:292"
+    source_ref: "d2x-rebirth/main/movie.cpp:93-95 (movielib_files), 660 (name format); similar/main/titles.cpp:292 (intro.mve)"
 
   - name: robots-h.mvl
-    path: dxx-rebirth/d2/retail/robots-h.mvl
+    path: robots-h.mvl
     system: descent2
     category: game_data
     required: false
-    description: "Descent 2 robot briefings (high-res); recommended for single-player"
+    description: "Descent 2 robot briefings (high-res)"
+    source_ref: "d2x-rebirth/main/movie.cpp:93-95 (movielib_files), 660 (name format)"
 
   - name: other-h.mvl
-    path: dxx-rebirth/d2/retail/other-h.mvl
+    path: other-h.mvl
     system: descent2
     category: game_data
     required: false
     description: "Descent 2 misc cinematics (high-res)"
+    source_ref: "d2x-rebirth/main/movie.cpp:93-95 (movielib_files), 660 (name format)"

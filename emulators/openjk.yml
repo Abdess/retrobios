@@ -19,7 +19,7 @@ notes: |
     openjk        JKA MP, built from codemp/ with BuildMPEngine
     openjo_sp     JK2 SP, built from code/ with BuildJK2SPEngine
                   (same translation units, JK2_MODE defined,
-                   CMakeLists.txt:450-453)
+                   code/CMakeLists.txt:450-453)
 
   BASEGAME = "base" (code/qcommon/q_shared.h:86). FS_Startup( BASEGAME )
   adds base/ from cdpath, basepath, apppath, homepath via
@@ -32,19 +32,21 @@ notes: |
   Hard engine dependency: default.cfg (SP) or mpdefault.cfg (MP) must be
   readable through the virtual filesystem, otherwise FS_Startup aborts
   with Com_Error( ERR_FATAL, "Couldn't load default.cfg" ) at
-  code/qcommon/files.cpp:3002,3041 and codemp/qcommon/files.cpp:4040,4089.
+  code/qcommon/files.cpp:3002-3003,3041 and
+  codemp/qcommon/files.cpp:4039-4040,4089.
   Both config files live inside the retail assets0.pk3.
 
-  Pure-server pak reference list uses NUM_ID_PAKS = 9
-  (codemp/qcommon/qcommon.h:567, codemp/qcommon/files.cpp:3169): the MP
-  client treats base/assets0.pk3 through base/assets8.pk3 as official id
-  paks and refuses to auto-download them, but this only governs server
-  compatibility, not file requirement.
+  FS_idPak matches base/assets0 through base/assets8 (NUM_ID_PAKS = 9,
+  codemp/qcommon/qcommon.h:567, codemp/qcommon/files.cpp:3169-3170). The
+  MP client never auto-downloads a pak with one of those names
+  (codemp/qcommon/files.cpp:3241) and never offers one for download
+  (codemp/qcommon/files.cpp:4447). The check does not make any of them
+  required.
 
 files:
   # ================================================================
   # Jedi Academy retail (base/, assets0.pk3 through assets3.pk3)
-  # Shared by openjk_sp (SP) and openjk (MP) — same base/ directory.
+  # Shared by openjk_sp (SP) and openjk (MP), same base/ directory.
   # ================================================================
 
   - name: "assets0.pk3"
@@ -52,15 +54,15 @@ files:
     system: jediacademy
     path: "base/assets0.pk3"
     required: true
-    source_ref: "code/qcommon/files.cpp:3002 (default.cfg ERR_FATAL), codemp/qcommon/files.cpp:4040 (mpdefault.cfg ERR_FATAL), codemp/qcommon/files.cpp:3169 (NUM_ID_PAKS index 0)"
-    note: "Carries default.cfg and mpdefault.cfg — the only files the SP and MP engines refuse to start without. Also holds the base menus, shaders, strings and the cgamex86.dll / jagamex86.dll VMs."
+    source_ref: "code/qcommon/files.cpp:3002-3003 (default.cfg ERR_FATAL), codemp/qcommon/files.cpp:4039-4040 (mpdefault.cfg ERR_FATAL), codemp/qcommon/files.cpp:3169-3170 (NUM_ID_PAKS index 0)"
+    note: "Carries default.cfg and mpdefault.cfg, the only files the SP and MP engines refuse to start without."
 
   - name: "assets1.pk3"
     category: game_data
     system: jediacademy
     path: "base/assets1.pk3"
     required: false
-    source_ref: "codemp/qcommon/files.cpp:3169 (NUM_ID_PAKS index 1)"
+    source_ref: "codemp/qcommon/files.cpp:3169-3170 (NUM_ID_PAKS index 1)"
     note: "Retail JKA base content (audio). Loader scans the directory, no hard reference."
 
   - name: "assets2.pk3"
@@ -68,7 +70,7 @@ files:
     system: jediacademy
     path: "base/assets2.pk3"
     required: false
-    source_ref: "codemp/qcommon/files.cpp:3169 (NUM_ID_PAKS index 2)"
+    source_ref: "codemp/qcommon/files.cpp:3169-3170 (NUM_ID_PAKS index 2)"
     note: "Retail JKA base content (video/cinematics)."
 
   - name: "assets3.pk3"
@@ -76,7 +78,7 @@ files:
     system: jediacademy
     path: "base/assets3.pk3"
     required: false
-    source_ref: "codemp/qcommon/files.cpp:3169 (NUM_ID_PAKS index 3)"
+    source_ref: "codemp/qcommon/files.cpp:3169-3170 (NUM_ID_PAKS index 3)"
     note: "Retail JKA patch 1.01 content."
 
   # ================================================================
@@ -90,7 +92,7 @@ files:
     system: jediknight2
     path: "base/assets0.pk3"
     required: true
-    source_ref: "code/qcommon/files.cpp:3002 (default.cfg ERR_FATAL, built with JK2_MODE via CMakeLists.txt:450-453)"
+    source_ref: "code/qcommon/files.cpp:3002-3003 (default.cfg ERR_FATAL), code/CMakeLists.txt:450-453 (JK2_MODE build)"
     note: "Retail JK2 base archive. Carries default.cfg; openjo_sp aborts without it."
 
   - name: "assets1.pk3"
@@ -98,7 +100,7 @@ files:
     system: jediknight2
     path: "base/assets1.pk3"
     required: false
-    source_ref: "code/qcommon/files.cpp:2770 (Sys_ListFiles(curpath, \".pk3\", ...))"
+    source_ref: "code/qcommon/files.cpp:2770 (Sys_ListFiles over .pk3)"
     note: "Retail JK2 base content."
 
   - name: "assets2.pk3"
@@ -106,7 +108,7 @@ files:
     system: jediknight2
     path: "base/assets2.pk3"
     required: false
-    source_ref: "code/qcommon/files.cpp:2770 (Sys_ListFiles(curpath, \".pk3\", ...))"
+    source_ref: "code/qcommon/files.cpp:2770 (Sys_ListFiles over .pk3)"
     note: "Retail JK2 base content."
 
   - name: "assets5.pk3"
@@ -114,5 +116,5 @@ files:
     system: jediknight2
     path: "base/assets5.pk3"
     required: false
-    source_ref: "code/qcommon/files.cpp:2770 (Sys_ListFiles(curpath, \".pk3\", ...))"
+    source_ref: "code/qcommon/files.cpp:2770 (Sys_ListFiles over .pk3)"
     note: "Retail JK2 patch 1.04 content."
