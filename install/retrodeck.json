@@ -5,7 +5,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-10-04T20:41:16Z",
+  "generated": "2026-10-04T21:25:52Z",
   "base_destination": "",
   "detect": [
     {
@@ -237,12 +237,22 @@
       }
     }
   ],
-  "total_files": 7192,
-  "total_size": 8147088131,
-  "pack_files": 7194,
-  "pack_size": 8147088131,
-  "total_omitted": 14,
+  "total_files": 7596,
+  "total_size": 8176292609,
+  "pack_files": 7598,
+  "pack_size": 8176292609,
+  "total_omitted": 16,
   "omitted_files": [
+    {
+      "dest": "bios/SC-55/WAVEROM3.BIN",
+      "name": "WAVEROM3.BIN",
+      "system": "dos",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "dosbox"
+      ]
+    },
     {
       "dest": "bios/SufamiTurbo.sfc",
       "name": "SufamiTurbo.sfc",
@@ -342,13 +352,23 @@
       ]
     },
     {
-      "dest": "bios/jazz2/Content/Metadata/Metadata",
-      "name": "Metadata/",
-      "system": "jazz-jackrabbit-2",
-      "required": true,
+      "dest": "bios/jagboot_m.rom",
+      "name": "jagboot_m.rom",
+      "system": "atari-jaguar",
+      "required": false,
       "reason": "not_found",
       "cores": [
-        "jazz2-native"
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "bios/soundfonts/gzdoom.sf2",
+      "name": "gzdoom.sf2",
+      "system": "doom",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "gzdoom"
       ]
     },
     {
@@ -16782,6 +16802,46 @@
       ]
     },
     {
+      "dest": "bios/epr-20091.ic8",
+      "sha1": "eff0f54c70bce05ff3a289bf30b1027e1c8cd117",
+      "sha256": "ac778ec04aaa4df296d30743536da3de31281f8ae5c94d7be433dcc84e25d85b",
+      "size": 524288,
+      "repo_path": "bios/Sega/ST-V/epr-20091.ic8",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "bios/epr-17952a.ic8",
+      "sha1": "eaf1c3e5d602e1139d2090a78d7e19f04f916794",
+      "sha256": "bac5a52794cf424271f073df228e0b0eb042dede6a3b829eb49abf155e7e0137",
+      "size": 524288,
+      "repo_path": "bios/Sega/ST-V/epr-17952a.ic8",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "bios/epr-17954a.ic8",
+      "sha1": "af79cff317e5b57d49e463af16a9f616ed1eee08",
+      "sha256": "3e6f91506031badc4ebdf7fe5b4f33180222a369b575522861688d3b27322a68",
+      "size": 524288,
+      "repo_path": "bios/Sega/ST-V/epr-17954a.ic8",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "bios/satar4mp.bin",
+      "sha1": "b9645d265644d201dbccc39aaf4bfa60cebe7ead",
+      "sha256": "76982109ed433d512413044d7c5bc869f6d97e2826f5ac10cc7418fb3fff1ab3",
+      "size": 262144,
+      "repo_path": "bios/Sega/Saturn/satar4mp.bin",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
       "dest": "bios/bk/MONIT10.ROM",
       "sha1": "4e83a94ae5155bbea14d7331a5a8db82457bd5ae",
       "sha256": "c93f3e7d3342f747f6c55a3b5ebb8c1840d3d118e80dc5d274f645dc2b393688",
@@ -31350,6 +31410,56 @@
       ]
     },
     {
+      "dest": "bios/gzdoom.pk3",
+      "sha1": "810ed9968c5b3bdc2c348c9bc76e9f80fbe31308",
+      "sha256": "2d5233e37ac699cd75607eac87be2bae87bd288b54374f11e8cf5b43c0ec2f9c",
+      "size": 3612904,
+      "repo_path": "bios/Game Engines/GZDoom/gzdoom.pk3",
+      "cores": [
+        "gzdoom"
+      ]
+    },
+    {
+      "dest": "bios/game_support.pk3",
+      "sha1": "3d4678183a20c235edda73f089bf4572d066255b",
+      "sha256": "6347f8b79a91b41fdbd8aa81a62b213128f7aaef5a24213c926bfa56f4fcd0ce",
+      "size": 2380108,
+      "repo_path": "bios/Game Engines/GZDoom/game_support.pk3",
+      "cores": [
+        "gzdoom"
+      ]
+    },
+    {
+      "dest": "bios/lights.pk3",
+      "sha1": "be3e3c3024ded9ceb53f9322abb35b1fc1d18e15",
+      "sha256": "4afd4a39a19adc826b96aed563df2496db0caa265b18fd82db39dd58727ca349",
+      "size": 24179,
+      "repo_path": "bios/Game Engines/GZDoom/lights.pk3",
+      "cores": [
+        "gzdoom"
+      ]
+    },
+    {
+      "dest": "bios/brightmaps.pk3",
+      "sha1": "d87823a7d2f4bf3935ab0b3d20fe8a533a4afeb5",
+      "sha256": "c8a75ff8a26ca532e72903cbf5367335446e13c0b91bb2aa0f53e4078191489b",
+      "size": 246598,
+      "repo_path": "bios/Game Engines/GZDoom/brightmaps.pk3",
+      "cores": [
+        "gzdoom"
+      ]
+    },
+    {
+      "dest": "bios/game_widescreen_gfx.pk3",
+      "sha1": "97936990801a287443dce75a7b3ee74b201dd698",
+      "sha256": "180c109fd5794baeb9cf99ccc0a2b2a1826ddfc87fc55614bb1a2dc5f32770b6",
+      "size": 5565936,
+      "repo_path": "bios/Game Engines/GZDoom/game_widescreen_gfx.pk3",
+      "cores": [
+        "gzdoom"
+      ]
+    },
+    {
       "dest": "bios/fm_banks/GENMIDI.GS.wopl",
       "sha1": "538d220d87b86b997f539265eb12a6c319e17a1c",
       "sha256": "3e90b1e13007fb97c29d4a6f819519f1065892495c259961913317402a779514",
@@ -31656,6 +31766,3926 @@
       ],
       "storage": "release",
       "release_asset": "sd.raw"
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Common/player_shield.aura",
+      "sha1": "287880c50eb9efc3bc06867f8a48f736f91dafad",
+      "sha256": "040c90ff6010cea2fec10fd118fd8a5529486a2f78c4fe50a3e6e75ac3160b9c",
+      "size": 1295,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Common/player_shield.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Common/rain.aura",
+      "sha1": "62ec81055685f4c14debb33e5ee7e8d4b61d890d",
+      "sha256": "02317bc96e4105b75a08e31fa1d9bded8210497ea1e66d1c8504ac9d07a8fcf9",
+      "size": 50,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Common/rain.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Common/shield_fire.aura",
+      "sha1": "5227411cace52935470f762922a8c76f3bf09691",
+      "sha256": "a17b1ee17342145532851ed831f0bfafb03b22fda3b959be89f05ce29c69f815",
+      "size": 13301,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Common/shield_fire.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Common/shield_lightning.aura",
+      "sha1": "e91a359c47135f66c6a669a614c438d31939466a",
+      "sha256": "f688a28d1f5441adff2e1505868437c1dc54b00795ffb27337d420468bdb09d3",
+      "size": 25446,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Common/shield_lightning.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Common/shield_water.aura",
+      "sha1": "481ba6666ca50dc3c9471ebabf52be007507f90b",
+      "sha256": "56274ada856778d7543e202e6518d9dc78f236cef28bfa84031ec6c3cba64ad5",
+      "size": 15237,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Common/shield_water.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Common/sugar_rush_stars.aura",
+      "sha1": "dd1412b669bdc6c61753e39bb085b0bf72e78d2c",
+      "sha256": "ab637b6684ea0a867fcd61cc7f19beaa58958a02042ba117c0c802e75ab06585",
+      "size": 6106,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Common/sugar_rush_stars.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Jazz/jump_shoot_end.aura",
+      "sha1": "63044231f54902b569a0ce3911ee8369efce2af5",
+      "sha256": "21954765e2d5e10d4731a80da28472d476928466598eb8d904be159720fb471c",
+      "size": 5885,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Jazz/jump_shoot_end.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Jazz/ledge_climb.aura",
+      "sha1": "23748decf00bbe2b8d6fe37e6bcc2b7503f326c2",
+      "sha256": "be65998a1505880a84f1fe51635da56f429f9fc7727da6b96e2f5c42fd534333",
+      "size": 8727,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Jazz/ledge_climb.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Lori/eol.aura",
+      "sha1": "67dfeda0af4669d5ec20d7b270aade0557dce42c",
+      "sha256": "dc28587672911642f20fbc8b91971d7b8da8b5f56a6f903634de90eea618edd8",
+      "size": 23474,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Lori/eol.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Object/checkpoint_xmas.aura",
+      "sha1": "df53985d2029b05f0998014933529503a994ab00",
+      "sha256": "7d148aaa3825fe54d09cdd5ba319c0b67d5e2420537f109c50abcdf66663fe89",
+      "size": 11086,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Object/checkpoint_xmas.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Object/crate_ammo_electro.aura",
+      "sha1": "297acc3b8567e8b7560c0b8dded2d660741ca3c9",
+      "sha256": "a3a563a1113e2d1060a98f7afe1b7083d599a78ce610c3b93b609670d6ffcfc2",
+      "size": 705,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Object/crate_ammo_electro.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Object/crate_ammo_pepper.aura",
+      "sha1": "f0d88662a77f42b7a506df7064900392fcebf235",
+      "sha256": "5c17d73d85984870a481f1c0f5ac9dc43398c19ec4532ebaf5d060e967221f54",
+      "size": 720,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Object/crate_ammo_pepper.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Object/powerup_empty.aura",
+      "sha1": "c7b98ca26af42ad01ccfdf29349caa558871042b",
+      "sha256": "998ee6509102056583203879e072ef1adb81177dbba2ffa5f29a9c7ca03ac7fa",
+      "size": 7535,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Object/powerup_empty.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Object/powerup_shield_laser.aura",
+      "sha1": "07063c90dec84bbff9f34621e53a9a6947db4a3c",
+      "sha256": "b7c6cf61d28643801aa8f3a8e14bc295daa72c49a76fcc6ce748d24bdfa1e9da",
+      "size": 8190,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Object/powerup_shield_laser.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Object/powerup_swap_characters_lori.aura",
+      "sha1": "fcccc6e92333eb670658c1b22d26d4d78bb72170",
+      "sha256": "68dabc875cdb9c9d07017e03494ec3524c601874eb79e605a824e283351cffb0",
+      "size": 8536,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Object/powerup_swap_characters_lori.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Object/powerup_upgrade_blaster_lori.aura",
+      "sha1": "961c2d7b052a4595f19ad35c1dc906dbcc32a3ae",
+      "sha256": "4a68ce5e6dcf6df0640f2e7edf9420da2a534dff28fb2a069b235c3958663f5b",
+      "size": 8459,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Object/powerup_upgrade_blaster_lori.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Pickup/ammo_thunderbolt.aura",
+      "sha1": "e179a07f0ab2e963bcc8ccf4501d101215000e2b",
+      "sha256": "10cfe64a048e81bb55bca5ef3898e491cf8ecbba46a9e0c7403aea2e30333df8",
+      "size": 2629,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Pickup/ammo_thunderbolt.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Pickup/ammo_toaster_disabled.aura",
+      "sha1": "4198d1d944fba3fe5eb9eddb04cb92023dec03aa",
+      "sha256": "3a276d7735b16627ba788849742e26edfb24a2a72faffdb489187e81e0abb2ad",
+      "size": 3504,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Pickup/ammo_toaster_disabled.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Pickup/fast_fire_lori.aura",
+      "sha1": "0f8f7de66f1d10bb7d928b6e21f24f44b1c58ddd",
+      "sha256": "00a372b1b5fd1481c30b866fe8b715d3d782f9ff2079aa744ab1a275c735da42",
+      "size": 1973,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Pickup/fast_fire_lori.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Spaz/jump_shoot_end.aura",
+      "sha1": "dde1cda93f961d26ecd9e91bfdc9096488fa027d",
+      "sha256": "3388bb963bf3c0c8b7c5bef57941c168fff22a1eeaa286ac445594f06c232137",
+      "size": 5290,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Spaz/jump_shoot_end.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Spaz/ledge_climb.aura",
+      "sha1": "d72bd255c411dd4ce1fbb673a0e314af9643d943",
+      "sha256": "718987925b74c4cf401bc4fb1a060938bc83f60e78cb4b3e8cf903184a911bee",
+      "size": 7774,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Spaz/ledge_climb.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/blaster_upgraded_lori.aura",
+      "sha1": "02762aa9d47cae1f5be48ae462e1d356489548f7",
+      "sha256": "af99d13a2c52250b3a733bc9ad2a0cb23dd85f1b1b931d6cf5e0622580a7aa34",
+      "size": 2190,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/blaster_upgraded_lori.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/character_art_difficulty_lori.aura",
+      "sha1": "7f51820270485ab48e60918fd053e6793681e899",
+      "sha256": "55de3da413f00a1bbadbf788f29b1d6123c70989408b2ad9de64ec04c3db9113",
+      "size": 38715,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/character_art_difficulty_lori.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/dim.aura",
+      "sha1": "4255655e07294c927b41abe3976c24ea70c8b89e",
+      "sha256": "192b7452e8fffb5d4c49167bf146d779c33f633664b627d62ed6568dde23fdac",
+      "size": 704,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/dim.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/episode_complete.aura",
+      "sha1": "e9ef49b13b97263bb6e7705b7dc94bb71cc4171e",
+      "sha256": "bcbf69468bc9515148f5daf616c4cb60a71f74818b7df720268d79c1fda279c8",
+      "size": 2188,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/episode_complete.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/font_medium.font",
+      "sha1": "1623ad345fd80be32edcadd8dbd6cdec1536f1d5",
+      "sha256": "4e4353aa158768a08ea08efb8accca5e578b7f27103927a80c296b652bfd20e9",
+      "size": 8345,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/font_medium.font",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/font_small.font",
+      "sha1": "c5df036c54da48a078c5f54d5a2c1f5a4da3d10a",
+      "sha256": "96ff1bd362ca3a9549e1e8853707bdc58808d43507a2b4daec11f6006934cd3d",
+      "size": 16130,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/font_small.font",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_a.aura",
+      "sha1": "3e71adda91f313420622ff3aacb48aa4247c513f",
+      "sha256": "ed4f4ca5c4d62b44b3be7d3081dba362e48be7b33d0803a0428cafe3d79d7757",
+      "size": 618,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_a.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_b.aura",
+      "sha1": "43073b977aa7034ee58487648ab673e89012a815",
+      "sha256": "cf2550d7929c12c414fad4cb2bb2237a9bf0b3b3e95810368dcdcd616216216a",
+      "size": 579,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_b.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_c_down.aura",
+      "sha1": "7ea0111342734d4c5a4409161224f0434b688791",
+      "sha256": "ad1dae222eec96b9b435c9e322a4cc7423b71488bbb4787ae0fe5ceff26fe5fc",
+      "size": 550,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_c_down.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_c_left.aura",
+      "sha1": "e4f9ecb823e93558008dfc11d527856ba5ab8ccc",
+      "sha256": "4403fca5951a10c0a7e747ed00b67f94d720c92a143a1bbc58b1e101c62955f9",
+      "size": 567,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_c_left.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_c_right.aura",
+      "sha1": "ae51f473eb96a77e51582072d9572d9cfec50942",
+      "sha256": "cad655c4054a870c372d443218763b444f5a679947b70d301a70d042bc3e2a45",
+      "size": 574,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_c_right.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_c_up.aura",
+      "sha1": "d06a56815342079ef28da572b8a1a6bc827ab05b",
+      "sha256": "74f7743f911cc4a3f86fa7e580f9e5e701a67b3bd6f66de59ba1f2e0c1c9f480",
+      "size": 550,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_c_up.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_down.aura",
+      "sha1": "ef086b1ceaa3ed930626738d58ee47d24a7fa821",
+      "sha256": "edfbdc09e5e5db7dc95aa9f5b016d36c47b620e5d600f880e0ddb80841454f4c",
+      "size": 386,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_down.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_l.aura",
+      "sha1": "50f06ff7331d312ae3eabd93b3841223759830ea",
+      "sha256": "a35bb670aa9972f4bf0f1fa61992f1ee19821ff59f014790b8a084794bcf8bbe",
+      "size": 436,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_l.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_left.aura",
+      "sha1": "58048789c67d7ec137b39d7829f690a7ec79080f",
+      "sha256": "2e833dc3662f17822cf6414cd799c82b205b14e12d445d74b032eae4634b45f4",
+      "size": 390,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_left.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_r.aura",
+      "sha1": "a5747642f73bd8529aa0d234a6a6f1dacbd8e0b0",
+      "sha256": "a21198b655c9806110113f8addf29af4dbe0a3ae63224fb9e21c8748b91546a0",
+      "size": 454,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_r.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_right.aura",
+      "sha1": "e8f35bb5963c6f1ccf40e012acb3e6c1a3fe37a1",
+      "sha256": "76953fa278481da4a9b2e195e54d01c2312172f17b2950fd54a1d916c568ff1c",
+      "size": 404,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_right.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_start.aura",
+      "sha1": "acc23f6e9923e3dc898a97644b7b7f671957872f",
+      "sha256": "72bbbd3bd6d62d9bbd2c82e62921e87f8b7edeaef12dca615f36f8685419e315",
+      "size": 851,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_start.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_stick.aura",
+      "sha1": "a9b8cde735cc3246948ceb1006f306029da3a022",
+      "sha256": "b482bd6924391466de3a51c032c3a4561b6ffb3a9400030dfad55d2ffc6ea45c",
+      "size": 548,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_stick.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_up.aura",
+      "sha1": "d9710ea2f71c1f164af52bb813df5db7293f9b25",
+      "sha256": "e9e8747dee73cbfbc5ada96599ab19bb80b7bffe32270ea9fb06e5a68ae5c30c",
+      "size": 380,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_up.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/n64_z.aura",
+      "sha1": "29e7dbd5f5dffadcc1e5e1d0187c25fec31ce97b",
+      "sha256": "dcbe9a40114ed4954e9647f82bec957d24aa936914c1dc5123a6bf0ce2f63e6f",
+      "size": 617,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/n64_z.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_a.aura",
+      "sha1": "236ab19ecb3725cbcd7586991d3ac1647318e9de",
+      "sha256": "7a62482c13123bf9e4f5520de13587d884380820244d6aaa587bf23549c0a13b",
+      "size": 849,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_a.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_b.aura",
+      "sha1": "eeae326bc0faa9ae21ffaf2f2ae73019b4891bbd",
+      "sha256": "91ec98f953c81d5ec273d035a87dcb06a51c29366e2634ea3b2394c8f7515627",
+      "size": 932,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_b.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_back.aura",
+      "sha1": "cb2e85cfe063eaef02d7b8287044df91d2c0afc2",
+      "sha256": "68efff3cf250daf9671680e36ec92041f72854c1a3d42d5dbc7464df28e79fac",
+      "size": 1382,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_back.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_down.aura",
+      "sha1": "01e71f5b811485a52293482580a96f02b8b85d81",
+      "sha256": "7778c2727922590cdd4019275afe2100f92a1b0cf3359cf31db69e6be680b2da",
+      "size": 1047,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_down.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_guide.aura",
+      "sha1": "467187fc95bff2925efe532f3947d644a6c0589d",
+      "sha256": "b3b8f7318c971434043badcf43423c93309875be8acb7aacebb79bf40d0ac844",
+      "size": 1020,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_guide.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_lb.aura",
+      "sha1": "327170111f857c01464996cc01303f66f33c1e57",
+      "sha256": "33ebc319cf683e376c0f8185e2a30f5f5f1d5ca201544eaee6e94656f1ee721c",
+      "size": 997,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_lb.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_left.aura",
+      "sha1": "42967e112f806dd97f9584ff9a9b8ca9eea3a042",
+      "sha256": "04097985f4a0af0b6c203737a0703a3f71d2323670b4ba341999a632e7a41a56",
+      "size": 1213,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_left.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_lt.aura",
+      "sha1": "3167b605356328449cbe64d479a8e51f4516d13b",
+      "sha256": "c8cca992a1e539cf5a318d2a5f68b09eac3bd0dd40000edc914fe36d1f927b11",
+      "size": 1250,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_lt.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_misc1.aura",
+      "sha1": "f0b6d6bf989dc814f714bcdd2dd11bc842236baf",
+      "sha256": "07d31dea5774e0bfce7ab7e38d12ef33afceec3c10aa4d28c36a5552578c7a6f",
+      "size": 974,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_misc1.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_rb.aura",
+      "sha1": "9bf08320558e09cedccb1b3f8995fe73b07b74e3",
+      "sha256": "30dec3a0ac9311342904b6647b380259516ed3a602cc56d756b12bb3a911c63a",
+      "size": 1023,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_rb.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_right.aura",
+      "sha1": "7a44b57ca17cab4493f1901dc052fbbdb5d38e11",
+      "sha256": "3fcf3f921725c37b19128b30a9462490ea3a2e41bcc15284de8ced72bb1b715a",
+      "size": 1239,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_right.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_rt.aura",
+      "sha1": "58bf83a63adec056ddaeeb5fbe9f06b424e4f177",
+      "sha256": "53570c7e87f5c3d2f997dd5310203cd0631d01024de55f6731741ca1d0a0de8d",
+      "size": 1230,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_rt.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_start.aura",
+      "sha1": "db847c14755c254ceff02bbd347a8875db9f7809",
+      "sha256": "75959dfda7e136bd15d48ee4e8f0c4a9400253bab2ec0b661e4c3c2b5dd48536",
+      "size": 1016,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_start.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_touchpad.aura",
+      "sha1": "b1466b30c8bb98c53b405ee64d26415f54a9054d",
+      "sha256": "1b3d5936ce659c5dd1cdbdc9c5f1ce4dba36f459b6f3d67a429222910ae65268",
+      "size": 555,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_touchpad.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_up.aura",
+      "sha1": "700986b253a28bf23c149d5a2e16c1171c18c03e",
+      "sha256": "b75b56be3722fc2d9954ffefe9db4b298f26d20c4f6c16f50cb6db7e906183d6",
+      "size": 1060,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_up.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_x.aura",
+      "sha1": "30134f7b4e121f950d654f1b5f2587cfce861e38",
+      "sha256": "44958c2212c7ebe10b91f3b19ac889913b2bb714714afd516aaee58ef0a27063",
+      "size": 829,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_x.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/ps_y.aura",
+      "sha1": "4af1f52ea9210e9faa450ba9f9f9a9383936f307",
+      "sha256": "a8eddc61d1b3178f35cc86ed3128bd3679f558f75393119c521c5718d57a77aa",
+      "size": 873,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/ps_y.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/psl_a.aura",
+      "sha1": "b2f767548de156b24b6d12093765e1471ddf0ef9",
+      "sha256": "705bb8ac337d9e198190b386544da8b2a048c69ccd10763a870700d692953df4",
+      "size": 1106,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/psl_a.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/psl_b.aura",
+      "sha1": "ea254d27864d09bd0b5fefab6fc0d55b2811bc37",
+      "sha256": "403cbeabecba78439e14c7037ca586aee0bb1b28824410a75f924823ec8744ff",
+      "size": 1069,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/psl_b.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/psl_back.aura",
+      "sha1": "c1d8298c0f9de65ca084f980b1eb2a3d1f3d507b",
+      "sha256": "2d8cf3243a7acf503419d3e64824a29b2bb7985420341ed7c89024960e2d4afc",
+      "size": 951,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/psl_back.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/psl_down.aura",
+      "sha1": "979b8579bd6448fbd487e18567e2336e35cebe9b",
+      "sha256": "2127b5edbb9036dd69382db3bc17a0f373f6234e92bbb98f78368f15fdf005bd",
+      "size": 1219,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/psl_down.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/psl_left.aura",
+      "sha1": "1192f2b8809b6d0635977240bdbc5cf0edf3adb7",
+      "sha256": "f3b261d80d3c2fc60f3ffc8c9eaa560e1a6eead8cffd61005a51122dc0063fc9",
+      "size": 1387,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/psl_left.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/psl_right.aura",
+      "sha1": "476ceb8578b6ad0aa3a728d1c08befedd7a42d04",
+      "sha256": "db77f2fe8947e7b407954c1b3670761fd8aeaa8da9df797c83c4e8ec719dfb6f",
+      "size": 1431,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/psl_right.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/psl_start.aura",
+      "sha1": "aa294fff3589d84eb94c3e70899adec0afadd84b",
+      "sha256": "7803e9a9d115a533f7cea3d9b92d29422358f0e657ccbe04ecb14cf9dff9df4c",
+      "size": 1085,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/psl_start.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/psl_up.aura",
+      "sha1": "f4daabf39af54eb4cd5a8da7ce845288f735a39c",
+      "sha256": "1eda8d53701f1d623cbde85001000f1bc99560e5830feb73134734254df041cf",
+      "size": 1206,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/psl_up.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/psl_x.aura",
+      "sha1": "9450f6fdcefd32cac187acedf0db587f0ad70939",
+      "sha256": "ba9d9daac02d0bb44091474d716ad3c9461aca43e06882bc5716b25b782ed6ef",
+      "size": 1006,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/psl_x.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/psl_y.aura",
+      "sha1": "a5a5d1d932013413fe69d0a6d577a70b5050a601",
+      "sha256": "98b39a2dc35bc483dd98faf91a499f253698e154ff7038d02b6d402775472a89",
+      "size": 1079,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/psl_y.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_a.aura",
+      "sha1": "42907cac5128cb4344440620733a46f0992450ec",
+      "sha256": "7f03e67e4a0c3b0fc7ee684574eee332a1e8f064b1b6057f9aa097ef8ff9503b",
+      "size": 881,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_a.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_b.aura",
+      "sha1": "cb6f1e891c52e108456f7c5d680be691c6dfb6b5",
+      "sha256": "7ce71eb3ae338c59df3d2365610bb78f50a6af77088ca4ec43bc3f6f85de82ca",
+      "size": 932,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_b.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_back.aura",
+      "sha1": "f16e1c8c7b96f7ea01efa2d70eceeb7b80ae9845",
+      "sha256": "1d62fd8fb3348379adc43fa5225c9a31ed0bb9f7ce82c4cf86a0745f2278d0f1",
+      "size": 788,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_back.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_down.aura",
+      "sha1": "0f4ab5cd244332e164391a37ae96f4488d83e48d",
+      "sha256": "12b1beb45b47bb79a714701d022de87a2405bb6df109b32764cbec5fb1a80147",
+      "size": 1115,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_down.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_guide.aura",
+      "sha1": "ee8a764c0d4d65d50634a48f703ac86809379619",
+      "sha256": "8055d52536d611e750b225f2c0db6ba951483f352bf398ddd05b75b74a7c1020",
+      "size": 759,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_guide.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_lb.aura",
+      "sha1": "d575956c80043f036ab418ff4071083e6208616b",
+      "sha256": "4b617b5fa248912bd7c1083d195fd32299b0062d479ef66200b8f48d50c45532",
+      "size": 969,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_lb.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_left.aura",
+      "sha1": "d22cb0aa95a2176d71217ab906ff042a2b005787",
+      "sha256": "53337283ec0bec40c79b972b7a98113e89a10c5ed483b1b8f58d9999fc8ef497",
+      "size": 1103,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_left.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_misc1.aura",
+      "sha1": "f0507e4f2a09881823b5d38ea1006243eab0ffcd",
+      "sha256": "5ebcbb089c5bbd29070c2db49465a42a71ab1e42afe793b6003231388d7872da",
+      "size": 607,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_misc1.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_rb.aura",
+      "sha1": "2122cf9194e7d481e6915ee3238b424ada600f10",
+      "sha256": "70b26e7d7da6fb6c505418eed7cceee924799cec378e370af0bf44fde6e0a7cb",
+      "size": 975,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_rb.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_right.aura",
+      "sha1": "cd85d4bbc17a9e1dff068e980007316e7a50884a",
+      "sha256": "a6e60bfc1e06b565596a5d0214332280c6eaf4e516c53b96205ee8e6c9667199",
+      "size": 1178,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_right.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_start.aura",
+      "sha1": "68211c4a346d9793cad653534143247820035809",
+      "sha256": "4129433d3742698b67ea97538a9bcde241f647bb9a5118988e2ec0eb75277859",
+      "size": 688,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_start.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_up.aura",
+      "sha1": "0c1c1c7ededb122ee4599a79ba6c80816dd2f0ae",
+      "sha256": "017fad6f479375ada98c44b046bfd5daf288e808fb5f9dae8601c0c065438cb5",
+      "size": 1148,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_up.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_x.aura",
+      "sha1": "de39f28b9b64409ea320cb51f65c70cb43167e6f",
+      "sha256": "6b823d43eb9d966acae926f358b0e0a891c56842602d16f90965dcf50fa1e7b2",
+      "size": 941,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_x.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/steam_y.aura",
+      "sha1": "669b92442f734921db18140b1862971f1cc2428a",
+      "sha256": "32488da4538132e2711a91054b6a48d510f2649a4184a1e1050944a7268ddd56",
+      "size": 888,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/steam_y.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_a.aura",
+      "sha1": "023e6732d8eac935d3f4c54fbc2d2c0e79cac963",
+      "sha256": "fd2fce6d3002dd775057793317b6f147cd5cba9b1db8c42358fed615942faffa",
+      "size": 874,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_a.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_b.aura",
+      "sha1": "e04e795c34313c72cb68145dfda5f659e648b74d",
+      "sha256": "b3af8956fe3fd2825fb539f14de79cee246a4102b0220d31de5cf829a1becc01",
+      "size": 846,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_b.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_back.aura",
+      "sha1": "2245d636629af9c2cdf89b366380c69fa9416f67",
+      "sha256": "70a23543a21ba03bcff91adcb7928ced5d80f5bae314a9b7a52311159c8d70ed",
+      "size": 290,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_back.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_down.aura",
+      "sha1": "08699766495c46c4fb6993132851a87fe1dc9730",
+      "sha256": "07f27c6ce9bf5779738b0857de2d639d9e69ff79237d01a103835d95a148770c",
+      "size": 894,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_down.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_guide.aura",
+      "sha1": "e80a399665b855d12aa90f929674f07baf3e83a1",
+      "sha256": "457608d214e3f3cb745a7cc6a43467bd16924807f13f09440a55b09b8f89e9b5",
+      "size": 958,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_guide.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_left.aura",
+      "sha1": "37631e125deb1734c58201b6cf5df7ea97d47fa9",
+      "sha256": "2c93f616c05475473782cccca4a841b4e69639eaac92d965d3a4855a27ebf9e8",
+      "size": 1186,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_left.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_lt.aura",
+      "sha1": "12660337c8f1b938f68d9004af0b9b7eab3c433a",
+      "sha256": "84d2e2aa0dbd1a285312e67dfbb8beb12c884583ed4e7f619aaa62be49421bc4",
+      "size": 1135,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_lt.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_misc1.aura",
+      "sha1": "f6018daade294b519f58e41b5f5653f821a676b2",
+      "sha256": "dbe915681a22cfc2cde118fafd921af4a78a804c0b98750982ffdd2c4f98b420",
+      "size": 550,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_misc1.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_right.aura",
+      "sha1": "96a4b182ed23a50bf894429ef495c93d44be0160",
+      "sha256": "28b4f18bb35960d248a5607a0037d457614b6f86c5b2708e980f89b9169860ff",
+      "size": 1107,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_right.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_rt.aura",
+      "sha1": "0ba1b9b5042d031e25b23f837a72b691cf427d39",
+      "sha256": "469c30381311c5c16e3e621a00a3c85f69141a1e34d73ae6898ff6c8a13560cd",
+      "size": 1144,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_rt.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_start.aura",
+      "sha1": "661263e1a33927d4b78e289efa6d1d6537405799",
+      "sha256": "a4b7dc1ced194ba28ea4075489f7a841f326001f636dbd1f28d25d62b528b2cd",
+      "size": 670,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_start.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_up.aura",
+      "sha1": "45a7ecf6ba95504fae7220f027c0374a77661ac0",
+      "sha256": "b130fabfc9a2e775d5e62593e3495290560f8ac7ae70a9fdcb6d9e76aeb12254",
+      "size": 895,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_up.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_x.aura",
+      "sha1": "ba711ec05db31ec2d3e32d09add8a5fce9a7f1c7",
+      "sha256": "c48b015192f1cf11621e0a7f2425e53add53a6e6122b6cb698dedae4747d0518",
+      "size": 823,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_x.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/switch_y.aura",
+      "sha1": "720566198e87a893cfd95c57adb827f62490c69b",
+      "sha256": "43047cfeb6b461b04425311755fb44e68b94873d5a6b2573d8fd95ca6f5af63c",
+      "size": 930,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/switch_y.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_a.aura",
+      "sha1": "35d4237ad075a3c008b0dd501bf34592811a0415",
+      "sha256": "8b9f82a45f57ed1aeb69fbac223535d659792a4c098af15147a8416b3507c245",
+      "size": 900,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_a.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_b.aura",
+      "sha1": "133c27c7289414197bcbbac7f0074ab36f30a5e0",
+      "sha256": "158efff6fe9cece8c06f349db9e702f47cd61869c5b1f37d3bc495890912f15b",
+      "size": 805,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_b.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_back.aura",
+      "sha1": "5b5bb02dd8bb773fcb53ebd253cc580713aa69af",
+      "sha256": "93525b9a871595d8dde3a3f91ca334831cfa2c10397d0bdbbb431e580ba388e8",
+      "size": 424,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_back.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_down.aura",
+      "sha1": "65396284745d6c02025e307f4ba792118bf7cbfc",
+      "sha256": "88614d9437c3f9107ac40f647abd3b235d3b5523155feb0168fdcc2a93f64ed9",
+      "size": 895,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_down.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_guide.aura",
+      "sha1": "37483b1974091dac2f7ea308112d2024eadcd312",
+      "sha256": "9eb651345b9a0da3501a1e0454b0780847aca7ccbeb4ddb2151bd8fe90d95618",
+      "size": 787,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_guide.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_lb.aura",
+      "sha1": "af315f2f584957f4deba3704dbbd85e861fd3471",
+      "sha256": "97921001e9f148aec4071134d396f0bece35062c622764d4f92c24e390482055",
+      "size": 573,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_lb.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_left.aura",
+      "sha1": "e9d5758cc9edddcde0b6e411bc0be9282389726a",
+      "sha256": "34c64a0c4061a87690716e1be4e3bb893416af6e595b8039f45fafd316d79add",
+      "size": 964,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_left.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_ls.aura",
+      "sha1": "fd9c05ab0031e17b6d587cf85a4ecdcdb6c0e174",
+      "sha256": "ba9696230a16605b88e4ed7c3281a96e158ad13bff3ec8d267b151841946c181",
+      "size": 603,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_ls.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_lt.aura",
+      "sha1": "f0b77c78642c4caec58ced3e101073035b142106",
+      "sha256": "545adafe705eb647f7bd0c0ff8b56a3c06b9f026adad30449cbb7cf5e5771bdb",
+      "size": 879,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_lt.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_misc1.aura",
+      "sha1": "35c3562e1862cc45830aebc24b9b52d65f48cf42",
+      "sha256": "6e27f19e3d02ce4d8c86df1af5eed9d429339d23257dee262cdf204f312609ec",
+      "size": 819,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_misc1.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_rb.aura",
+      "sha1": "72ddc1bdd1cd216f68d5b6f6c179f09876ae63ce",
+      "sha256": "920c96f33c3e118f7a6133fa08cd295eb744201ebc962690ab32907d4b594bc5",
+      "size": 576,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_rb.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_right.aura",
+      "sha1": "b507f4e607f6ec5c5313fe473ae3e433677f4bd3",
+      "sha256": "ce75a556b99c15f90d63f62596a1cc187f0276a83147df31ca1453fdc76c5fa6",
+      "size": 965,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_right.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_rs.aura",
+      "sha1": "db78b69c4121aa6635ee767b8a7c600833dfe566",
+      "sha256": "c808edb1133cdca56b0ff0c0a05ce7354501ce7381a41d9901b3e6cd58cceacc",
+      "size": 618,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_rs.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_rt.aura",
+      "sha1": "eea43f3f12695c62efcd9418a21b39940a33fa56",
+      "sha256": "00517c983d921e73e09257bad0dc72005e41029432e272707a529165eaa0d44c",
+      "size": 895,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_rt.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_start.aura",
+      "sha1": "263ffdf552774426ba470d339c91f2417c89edaa",
+      "sha256": "85565649edbad4d4d2e95aea892ab20a096b41b2a725ad75f2dee2b2081d9e4d",
+      "size": 421,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_start.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_up.aura",
+      "sha1": "aa92f97ecf86c6992060e19e34a9277943a744f0",
+      "sha256": "9b8f24ab46108938fe9dcfd9c4fe97d1b925fa654f55bdb18fb660f6224d06af",
+      "size": 896,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_up.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_x.aura",
+      "sha1": "c16e2c5b555739de1f99d7662aec4149f1acf823",
+      "sha256": "6ed4020c9d0fcfb62035ec770d9d463b9e71db805ae30c7b4ede73fbdafdb1f6",
+      "size": 752,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_x.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/gamepad/xbox_y.aura",
+      "sha1": "fb69206d8d62253681ee1afd28569ce247a0d3ce",
+      "sha256": "adf8e7a29244b9263dde9310bd1402853de0bb0d5c49afe8591ec7d580d90688",
+      "size": 711,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/gamepad/xbox_y.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/glow.aura",
+      "sha1": "992abfdbf0c121ccf5b4b4bc91efc2a81f62af31",
+      "sha256": "67c4837da3281bf1602b579c3be813a7b7bf8539e61828cb681be15ae00cbca2",
+      "size": 458,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/glow.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/line.aura",
+      "sha1": "fb33a0231c696597f2ab5de8633a71854d0f081a",
+      "sha256": "a09436e4b41dcb6602fc743aec074e1ec29c0b2bc5b52915077d4d8bf19a752e",
+      "size": 3002,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/line.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/line_arrow.aura",
+      "sha1": "52eace5377eeff734b0b7c648c01bb10654a0e39",
+      "sha256": "b27b5d7e258fffb6cb925f5cc77641ef8989e8b737a3a61c7670d37abefeef07",
+      "size": 5011,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/line_arrow.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/loading.aura",
+      "sha1": "41f470a463b43a59ef1ac36fde01f03f5bbf5d08",
+      "sha256": "e46c634c1d923d43b90da57031ebcc5a05b037835b960df8f3c6392afc65397e",
+      "size": 1790,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/loading.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/logo.aura",
+      "sha1": "15687c1df87c0242173ed5ee1d083867631c0590",
+      "sha256": "7cdd9ff4261f136a737273683d8a6fa9df2203264466cf4f76052d0af655f241",
+      "size": 3833,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/logo.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/rip.aura",
+      "sha1": "0dc9e190a0ad923475b0ba878744e85b861568c8",
+      "sha256": "018a65da77052745a5322b3f435907220a4473a75a910f8f1c6f5cf56d19e801",
+      "size": 1357,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/rip.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/storage.aura",
+      "sha1": "0a4046ce7cfc2b910ce54641b8d793735d2e69be",
+      "sha256": "9b473e2f77cd069aa66faf2501113d83138aa278860504d5d2f864a03cb1df05",
+      "size": 399,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/storage.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/touch_change.aura",
+      "sha1": "ac1dac16d2e25409ab35062aae298e3306bdda9b",
+      "sha256": "ed113128fd69a85d7fc1f8c221b7e356b989d6a85f3edf3a32130581b663772a",
+      "size": 4344,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/touch_change.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/touch_close.aura",
+      "sha1": "ee0ef94010fd6493c6905e8aa70553b78b73d7f3",
+      "sha256": "894cde5f2ad88ed49cddabfb62d2bbbf39e5ca24935308bfaee8fc64e4ebd5bf",
+      "size": 1537,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/touch_close.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/touch_dpad.aura",
+      "sha1": "3be93272b450fb1a1ec3a1f4ee6b9a27cec2e9b3",
+      "sha256": "d04577e41b33b9907f5aaf8a4b39e4867a09bef6fe1a80aad33b54b63b28f774",
+      "size": 4153,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/touch_dpad.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/touch_fire.aura",
+      "sha1": "565a55ac185fd72c1273d9828cb22605ddfc697e",
+      "sha256": "27531474953a2b9f89bd0639c479d12227fd5be59fe53331e428a15d8e70bb34",
+      "size": 6976,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/touch_fire.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/touch_jump.aura",
+      "sha1": "99ee5f63a711e559da28d0899dd80936aa3232f5",
+      "sha256": "9578981996d9510c3eaaf2c12f6e65ad25b4735b0b33085a6aa37df24e5052ab",
+      "size": 6054,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/touch_jump.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/touch_keyboard.aura",
+      "sha1": "2a2df404fcf87f3c71449ca5699fe35662e51c29",
+      "sha256": "bb1181d967714e7b906b2a052acef0faf9751a6d82e43afdd481700094be4f6b",
+      "size": 455,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/touch_keyboard.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/touch_pause.aura",
+      "sha1": "ece3590601480c1a18c7ea1fe363939147553657",
+      "sha256": "a7a1c06812170cb4835863adef213f85c306db4c5e6178d1fee18f9a5c9d2e51",
+      "size": 1102,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/touch_pause.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/touch_run.aura",
+      "sha1": "c7d284e82660dafaf6eb99407936dbc80bbbd043",
+      "sha256": "a704daf1c4f532ca2463fa625cd8b8dc6e690abe7b0e451147895f5beb3459fa",
+      "size": 8419,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/touch_run.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/uac.aura",
+      "sha1": "a7ff0f6a75a62d62e7bb4d656c499dd09b5765ea",
+      "sha256": "8daea9c6d09f9857427da8e8f9289ede6ee9d4fadcbac7d9a3ea9e98f2bbda8b",
+      "size": 1075,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/uac.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/weapon_wheel.aura",
+      "sha1": "a9cd625271c52af89a57153d1a63930b1de4d43e",
+      "sha256": "0fdeea6bc7db50ec2f118427f88b98ea2b46115bf2bda65e463bcbd730d9a1d5",
+      "size": 281,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/weapon_wheel.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/UI/weapon_wheel_inner.aura",
+      "sha1": "bc7f1b81c6bf217f00740f1c6d1d6b4f3f6f1293",
+      "sha256": "6469bbbc763513a746601c7466d9c291d4539e781d4a63781d9c3348a0c1073e",
+      "size": 5961,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/UI/weapon_wheel_inner.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Weapon/electro.aura",
+      "sha1": "d1840a0a1822fb58007c0aeeb45f9ec382c89987",
+      "sha256": "054e5778c2ee9b7bb3468021d3e28fc26814ae8b93a4a7cd832d3151fab7a388",
+      "size": 121,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Weapon/electro.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Weapon/electro_mask.aura",
+      "sha1": "45ee91a264da1a2b2cb6285471e2b5553b723461",
+      "sha256": "d98d4302d3a15600e496e9d50d05d23f18070dc986d58778ad3c60ded1100493",
+      "size": 108,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Weapon/electro_mask.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Weapon/pepper.aura",
+      "sha1": "8098eb9d1ba3d586aabdd434e126730f30422c18",
+      "sha256": "37aee34e8086b3549510ca87f423090279566e90f0a36ac524091a991d4c951b",
+      "size": 78,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Weapon/pepper.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Weapon/pepper_upgraded.aura",
+      "sha1": "1bdc997437d2746f33ed06b45d64495dcb19c9fd",
+      "sha256": "29b9272169c6f6b099c0f9ca9f64a398d62b0002a26bb1131691d1cc01dfe05b",
+      "size": 184,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Weapon/pepper_upgraded.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Weapon/thunderbolt1.aura",
+      "sha1": "e012500a52b7a1aa5575083f4ee57514768ec6dc",
+      "sha256": "8717fe41a15121ef27b07428c2c9a4614ad7dc4e42ef2b765f4fc67bb493b421",
+      "size": 2640,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Weapon/thunderbolt1.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Animations/Weapon/thunderbolt2.aura",
+      "sha1": "f4418dc3a769d0aae365e8f9eb2cd4dde8a08e00",
+      "sha256": "e1881f585bfd36f6e35c05d965738e1dd6da89e8368b77cee8d51b8bc268f513",
+      "size": 2570,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Animations/Weapon/thunderbolt2.aura",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/Bilsy.res",
+      "sha1": "2e997ab43e3aa839d1b40a179dda4388d758366d",
+      "sha256": "9a070e0f78e627149b14de9662b9ef38c102e1a235a6e51ac477e4c7e4862d5b",
+      "size": 1004,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/Bilsy.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/BilsyXmas.res",
+      "sha1": "b73ccbcc3ddb67c0689bb17175d19cff0a9c111f",
+      "sha256": "6572fa5ea6fe33469f9c58bcde341f0c86af347ab8d77db2fb862960e1b731d1",
+      "size": 1054,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/BilsyXmas.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/Bolly.res",
+      "sha1": "da3725ebe66d6f0e2198cdb61878b0093f57875a",
+      "sha256": "aa7608b8eb2eb4a135710b9a0af2a5dbd784814dee6fd4f50285613048da5952",
+      "size": 779,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/Bolly.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/Bubba.res",
+      "sha1": "2cd594e0823d7325bada6bcf6698c8a43a9436c7",
+      "sha256": "329ef741253d7d13067e75747b8382352f877ce778ebce09bd78e19aa15bd268",
+      "size": 1710,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/Bubba.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/Devan.res",
+      "sha1": "e21042e146e4966955ab804760f8dd75a4e1e435",
+      "sha256": "c4e1f93e89745bf096ba51cea0fe394250c1f34959480c6756806e3584a5ff47",
+      "size": 3445,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/Devan.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/DevanRemote.res",
+      "sha1": "907c364cb0555491221baab86ee11b7879f2adf5",
+      "sha256": "9ae4bb68db7c4d8e7b6c52f16a338696222ff06952b6b5d6623796065361082c",
+      "size": 332,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/DevanRemote.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/Queen.res",
+      "sha1": "24a65b165090e2357735b3655fb01d9271a0606c",
+      "sha256": "14deddb00cd988f8b45e3155e9d7996460fc5cb3ab5367e0a577c8a152284bec",
+      "size": 1240,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/Queen.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/Robot.res",
+      "sha1": "f005928a235888300acc255e17b0e4596b03e2e4",
+      "sha256": "777a6249869c98ac65924e8c51b31923840fa020a4b34d65a705506af7bf094f",
+      "size": 1968,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/Robot.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/TurtleBoss.res",
+      "sha1": "7abd6a6f84f48a2411a3ca017e8a4869dd9a9c39",
+      "sha256": "d3ffc0a7feef8edfed267450120a10a25f443a1f01831df51abf07587b765f14",
+      "size": 970,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/TurtleBoss.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/TurtleBossShell.res",
+      "sha1": "143d3bd15486ae40c014ede9b9a729b8636f89cf",
+      "sha256": "36c7afae4488a27df897301c608741785057efd38dbe3afcec37851f21e65d99",
+      "size": 664,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/TurtleBossShell.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/Tweedle.res",
+      "sha1": "b829ba87f19147db70abffe6e03db3af48f98fd0",
+      "sha256": "c2fc6cfb3428117a15d165f3e230382393c91b7ad51cf3f885830400b1e296a4",
+      "size": 125,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/Tweedle.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Boss/Uterus.res",
+      "sha1": "beb581e7df2d5b87ec182dbdb7c5d51b0e5c3ee5",
+      "sha256": "72dff138a3705615d30f19f72a901ae3c3bf39f0c9727eeb2570c34f16b8fea4",
+      "size": 714,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Boss/Uterus.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Bridge/Gem.res",
+      "sha1": "d62e24079341c43fb01dcec0ceb0539ddd13d82b",
+      "sha256": "27524ae5f3a60303448c89a35d3dfa3c63eae0770dab47f494fdf4708b62ef6f",
+      "size": 141,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Bridge/Gem.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Bridge/Lab.res",
+      "sha1": "79dc9a37fc6d0254927baf141ea623f8deefeb68",
+      "sha256": "71606b74c3025123dd51ce9bb8bb08abfd3a79829f018be234fda1bd485a574f",
+      "size": 141,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Bridge/Lab.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Bridge/Log.res",
+      "sha1": "ce06ad14a27170e88a9775907a54630114789c0f",
+      "sha256": "dafd7a1d42e4cc27b62819f46d9205fd0234bed4555e73a73dc3f59bad207f30",
+      "size": 141,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Bridge/Log.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Bridge/Rope.res",
+      "sha1": "388d11f3963dfb62051c551e9e3df2f59b9640d8",
+      "sha256": "7ff318875c575bc8ecc05aadec478c53413668d1852b6b812d418cda89d581c8",
+      "size": 142,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Bridge/Rope.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Bridge/Stone.res",
+      "sha1": "bc648fb129a2f2775a3fca76e46304f915712918",
+      "sha256": "1d60874964329582b52b71056f65cf9bb171d0af56c7974c9869c8b7fabbc265",
+      "size": 143,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Bridge/Stone.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Bridge/StoneRed.res",
+      "sha1": "7310f0048a76d4cd596edcafcab887f0c55cb478",
+      "sha256": "6203170afec2e6e956444c76b536201883f04849351b23b18d66d959ac7aa355",
+      "size": 147,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Bridge/StoneRed.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Bridge/Vine.res",
+      "sha1": "9a193e425847e8f26aa18623807376e425c00add",
+      "sha256": "ec75d81cb349b8cf3f342f666ca6c2ea5089a67ea9e85b86f48b0a4cb38ba5a5",
+      "size": 142,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Bridge/Vine.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/AmmoBouncer.res",
+      "sha1": "845557c19573238ab090b32d30056c28024a3409",
+      "sha256": "9c86a37f4203ff909b59959ad80811aecb80962368ae1c5a29f9dd039d16abda",
+      "size": 224,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/AmmoBouncer.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/AmmoElectro.res",
+      "sha1": "c5fde880d3f533ba3e8c6090779791bc4078bb19",
+      "sha256": "cd5fb6256b89041a9522a71e9bf9ab0355d419bc72570a78f1200c2c477f8f01",
+      "size": 224,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/AmmoElectro.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/AmmoFreezer.res",
+      "sha1": "c8e237bac7265528c07af8d0f4cb2d2b3847ed89",
+      "sha256": "ee4fd3f6d4337874e3422f649e57e5ba29f221c64044c806cb0687466acd6243",
+      "size": 224,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/AmmoFreezer.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/AmmoPepper.res",
+      "sha1": "848c1be19657b9557314729682eff95c31d7c0f3",
+      "sha256": "9aee65ca769ba96703b008d970edfca52c4f7a687a1fafbefd91d24a12cb1595",
+      "size": 222,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/AmmoPepper.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/AmmoRF.res",
+      "sha1": "e51b470ab079a31a5b688e18a4db573da73f4899",
+      "sha256": "8a1f8d0b959cc71f2100e451825af27f76f0bf4d85d50c6c58720ee9ef371665",
+      "size": 214,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/AmmoRF.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/AmmoSeeker.res",
+      "sha1": "f180c1482c8e0812e72ea1f7a5c020162f681df0",
+      "sha256": "3253b3de8ff9b694123249159ea51bc58b9cdf77cc652a476ba21649e97fc3b9",
+      "size": 222,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/AmmoSeeker.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/AmmoTNT.res",
+      "sha1": "4eee49c2f5177ce2d0757631c2ba56595bb32a69",
+      "sha256": "67dd883f722d46f8d264ebad252c556406211466ac21486df28ba11df2714292",
+      "size": 126,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/AmmoTNT.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/AmmoThunderbolt.res",
+      "sha1": "facbeca4d71404ffe9aa615d5af306b96de39172",
+      "sha256": "3fd281a23fa6f6ee10818459bbec5c89e65174a5017f9eb252378c55e8a0d75a",
+      "size": 139,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/AmmoThunderbolt.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/AmmoToaster.res",
+      "sha1": "9a1f4f364e9e9d08a6ac2f3b65d2a64835b13bf5",
+      "sha256": "3231451f0950395c8f991404a04bb22df0d5704bdbe503aec298fdd519ccdf03",
+      "size": 224,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/AmmoToaster.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/Carrot.res",
+      "sha1": "d85e83dbc11b1b8b028a854f0defc44dddf3c623",
+      "sha256": "713957373f614c299e781b4179f928cd70a250b93e9efc537f005c07555c7ab8",
+      "size": 108,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/Carrot.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/CarrotFly.res",
+      "sha1": "824c517e7374f69658cb215cc1c74ef35ed54df8",
+      "sha256": "84faab603691db1b649d10abccaece78eece246915fe24b4275cae83b872af7d",
+      "size": 112,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/CarrotFly.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/CarrotFull.res",
+      "sha1": "729e91dbedffb5032c14f88d87b63deb887d2f23",
+      "sha256": "9d0e8d10cbe385630b2cc7aa9d6e7873c9f8a7ab1954c854a3c3ab5e42c5c668",
+      "size": 150,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/CarrotFull.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/CarrotInvincible.res",
+      "sha1": "be51ef6a5b216fb76466dc8a0eb43e3a9de818fc",
+      "sha256": "aa8be75466438475c4bab8b1643e36f9b70e90fde659590c4a560cd1cd521348",
+      "size": 159,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/CarrotInvincible.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/Coins.res",
+      "sha1": "38e8007517b1f2efde0f1cc2019859d14f3af6a7",
+      "sha256": "bd0bed0b21accc0e03a2691e293b6434abb34f1d5fd85a1a41cbdbdfcb6b98a3",
+      "size": 269,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/Coins.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FastFireJazz.res",
+      "sha1": "9a3fc4356dbf508e8295e4a77ff0560d75d69fbb",
+      "sha256": "dd7b0abf70c7fbdc20e3dd1d2fed47a3e11321276a3462552b07954de1c35998",
+      "size": 118,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FastFireJazz.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FastFireLori.res",
+      "sha1": "7cba8862f1a9b0364fb3e22614fa9b361ba341d4",
+      "sha256": "0440e24acb23a7fb554d68ed5cac56d2b5d34bd50318f6e1fc188fb78d87e1c4",
+      "size": 118,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FastFireLori.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FastFireSpaz.res",
+      "sha1": "a2410e07d9d6b385ef6ed09a3eca8f31e4dfa6fd",
+      "sha256": "cf7e5f36b72825e9b9cd165fefbee1738d9affb2ddfd6d1b2a5e880a66b9f76c",
+      "size": 118,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FastFireSpaz.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodApple.res",
+      "sha1": "2b8347c50ec23376452fe0469f1d5059a100e502",
+      "sha256": "23abff8aefc5f5c88088d8f93e7c0a05d17ba38112cbd070bcebeab0445151cc",
+      "size": 110,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodApple.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodBanana.res",
+      "sha1": "27ac6f037434a79a092eec1ea2896ec407b68123",
+      "sha256": "ed87f89712dfed3f26ee4b6fd86854477d409d2b1947baf2da40fa76b9ea1458",
+      "size": 111,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodBanana.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodBurger.res",
+      "sha1": "82a17624741579b8cd46d087f332e279ff99263a",
+      "sha256": "1c346934072418d65304cf42ee861d3670dbb2dfc319b101df18edb47f6b8124",
+      "size": 111,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodBurger.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodCake.res",
+      "sha1": "8785d11d54f7983d645fa4f6dad903057499d09f",
+      "sha256": "986a041fa9b5e1d025ca7962778c1b6cd9b172ea5ca74d93dff422375bfe505b",
+      "size": 110,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodCake.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodCandy.res",
+      "sha1": "bdc6bd8bd2662b9c485659bc6aca473d64db737c",
+      "sha256": "4d779d5c82d8817af378ed77a48259555032edf82bec4534a433525ecf61a6d9",
+      "size": 110,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodCandy.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodCheese.res",
+      "sha1": "7115233f9b17e0fd9bf169615cee5ca1f2127259",
+      "sha256": "b51f3970a24262d185baea7b443191bea9481fc0d3d623a4699f130e6bcde3b2",
+      "size": 111,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodCheese.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodCherry.res",
+      "sha1": "83f2dfeadc7ec27cc588940c4f1af53b9a86c964",
+      "sha256": "2c8350e75551efafa39e947cbe1e25a94c7647a0d32ab89b567bbe04ed9ac0db",
+      "size": 111,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodCherry.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodChickenLeg.res",
+      "sha1": "32953861975c355a73d7a63f12c2a6b3d8c36689",
+      "sha256": "c810055a881af5bf06946515228a3c9d700ee3ec4ddfb76ea70594f7f02a115e",
+      "size": 112,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodChickenLeg.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodChips.res",
+      "sha1": "550e048fa3c48638487e188148d2e7d6296c4ca5",
+      "sha256": "aadc9856b10f6f3972c218526c50a5c00e60245caaff0ab8b5642a11f4f3449c",
+      "size": 110,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodChips.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodChocolate.res",
+      "sha1": "1f70ecac8f68fc91748ac6cbfddfe906a082ba90",
+      "sha256": "e28903901afb97b8486ea91444caa288cf280df2d748123d659bed92c9d3768e",
+      "size": 114,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodChocolate.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodCoke.res",
+      "sha1": "19075d41a50f39ae46e29eb8a3238f78a576043a",
+      "sha256": "8dfa113d1ee82103de60a230abcbe80aa3b4dc653477082fab1baaa4ed459279",
+      "size": 109,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodCoke.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodCucumber.res",
+      "sha1": "16ec2cc3fa799a7bde54fa3a6dc44652d98b25f7",
+      "sha256": "daba76eaf444030f1816361a43c74536068613a7f2034c148fe93774feade59d",
+      "size": 113,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodCucumber.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodCupcake.res",
+      "sha1": "ea69fe9f15319ded6064b1a432bf66ecfe10fc4d",
+      "sha256": "0334e9a531adb6a7980e4d5c88e6fa31e0b1114ebef5da609b62f8ae40608f47",
+      "size": 112,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodCupcake.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodDonut.res",
+      "sha1": "b361f451b44d4b2369e10f7cc4f3e940a709ceca",
+      "sha256": "19025cf04e69f561580da41643e99140371aae6bd0f74ce7bb275efc8a88827b",
+      "size": 110,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodDonut.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodEggplant.res",
+      "sha1": "11bdeef5f28a5c90900ba9eff256eee73076d3ac",
+      "sha256": "9f4facad85696d3819ae4118ce800c27c4d6b6ff73c6efd24191e7403ec2d455",
+      "size": 113,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodEggplant.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodFries.res",
+      "sha1": "2cf4969bf4926944c2bda4d52a8b705d7bd74935",
+      "sha256": "44884d45ca808871de79304e0ef62787182389f59f9b412ea25f69bffc4f6661",
+      "size": 110,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodFries.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodGrapes.res",
+      "sha1": "2fbef091e0a9e4856298f9cc1edb9192657300d7",
+      "sha256": "9f9c8dae82abeadc82e46976f399a9bd33d03dfb64899e7452e8a62146f29bb3",
+      "size": 111,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodGrapes.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodHam.res",
+      "sha1": "64b176d893f28f22afbabd7121978aecf7bf057a",
+      "sha256": "260ea6a2f9e69020b6d4ea89395d182596aeb62838c4e8316213026c9edd45bb",
+      "size": 108,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodHam.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodHotDog.res",
+      "sha1": "60fb8dddd05b0c3c7c9f65264acb5f4eed686e09",
+      "sha256": "d16ad333b525b107a0635e1072b44597cebc8dcb81c94390264bc7037fc941d5",
+      "size": 111,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodHotDog.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodIceCream.res",
+      "sha1": "ef02a7a1d84e2c4fff62de19f39867ddd7110095",
+      "sha256": "deca67643b716e64510999444425f13b24627b18fc2e0f3e6de554355b186aa5",
+      "size": 114,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodIceCream.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodLemon.res",
+      "sha1": "6004f2c14d735b5e7d39d741b6446b43556739ff",
+      "sha256": "15413551c5ee8c6f0fe1b1cb28b0817470ee440e056ad4e2c3870acdf73af489",
+      "size": 110,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodLemon.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodLettuce.res",
+      "sha1": "af0350e89804065a46eaac856ea471977282a84d",
+      "sha256": "82bfc4828e5729a2b407149a2c376ede1cb8b560d8a76dacc78f904d9ae2a333",
+      "size": 112,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodLettuce.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodLime.res",
+      "sha1": "8ba46e01841178fd14af4f9afea07d1ff833d1a0",
+      "sha256": "194b43c0867368ff473529ef446f56231124f914acc74fb044678de380ea124f",
+      "size": 109,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodLime.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodMilk.res",
+      "sha1": "610f173f7f4b6d804db64815f1c8e50d25965bf7",
+      "sha256": "c679d1971a6b6d5be4d8604c1294e44455d8e38c0aaceefe36070fae2a334933",
+      "size": 109,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodMilk.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodOrange.res",
+      "sha1": "ca21339f513c44cfa6c0ae9de243c2384cebafc2",
+      "sha256": "63832e3cb47c117334b3b114407f32613e17179bc242304d15f62a1b79c64eda",
+      "size": 111,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodOrange.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodPeach.res",
+      "sha1": "a14646840947dabf566ef614a1bf5256829846c2",
+      "sha256": "f01886c49aba57d49cdc94b0b1528c025f126c192109335e21586517561b542b",
+      "size": 110,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodPeach.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodPear.res",
+      "sha1": "8f5b1b488cdebc9e381e41f25b8fab2193b15648",
+      "sha256": "52b5a2f7ae1956ada5685025906186fdbacc851560d12720169ccec7e150fe48",
+      "size": 109,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodPear.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodPepsi.res",
+      "sha1": "32f4c87a6935ee1c0a02439dc297beb123eb0766",
+      "sha256": "e28c9d14b3b0833bcf6fa2fe9dc93ac02002a001ae1097ebcc4292a847905b09",
+      "size": 109,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodPepsi.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodPie.res",
+      "sha1": "ea9860e05af3cead2d3ab4f5a045efe6cd1ba4c4",
+      "sha256": "2dad3b98ccdd3bc01958bf9756a6dd7dbfd0b5f22bd798529e57fc074c53719c",
+      "size": 108,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodPie.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodPizza.res",
+      "sha1": "8e9147dd1544a1999642fcba62e64491c74f3800",
+      "sha256": "01268332e6d42db01115f3e558405e3a6f5beaff80f16cf118a43e97bc626a5c",
+      "size": 110,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodPizza.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodPretzel.res",
+      "sha1": "0b2dec2dbf085d54d6b6c9416e50d7e0e688f7d4",
+      "sha256": "267907abb8b6472c583cb502b25a68f1d1cb24bd288de9063580a289f31c1813",
+      "size": 112,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodPretzel.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodSandwich.res",
+      "sha1": "1b0b76fc92cae32f0c3511b3d219952c5fb8d0f8",
+      "sha256": "f1bb62d109c852abb7d80522aa6a93c71fb7691d9622a630f1d781874192ee21",
+      "size": 113,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodSandwich.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodStrawberry.res",
+      "sha1": "6bb9c74819c8f0036c5b0f504f276ab5e02971ad",
+      "sha256": "a9c7ef61240c56750a4f25332141aede8f946e680c740d146100a53c9d6eff51",
+      "size": 115,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodStrawberry.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodTaco.res",
+      "sha1": "3a83ab02588bb6234c6834634eb720241075bd94",
+      "sha256": "2ed386548cc7102abc7f9b209434fd40f2d78f1491f4865f7f6611b4d78ecd15",
+      "size": 109,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodTaco.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodThing.res",
+      "sha1": "96cf5c72bca57b9b63c062ac6ac98adc2d4a04c3",
+      "sha256": "928ae21f9fdda7124017b295719a996aa901ddc5186b38016edd84d2233d8f4e",
+      "size": 110,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodThing.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/FoodWaterMelon.res",
+      "sha1": "9b3ce0bdc929a059de54463bcd0e10dd78046a67",
+      "sha256": "05f41d0e0e623a96d01b87254dca97e7f7de11998396224c09d4c20205b27a04",
+      "size": 115,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/FoodWaterMelon.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/Gems.res",
+      "sha1": "e06dc7cc3b858929e07caf6afcae1342580b99ed",
+      "sha256": "fe8752841b10315cb47b23570684addb4c40cf3ed0080e1de0ac393d740a2373",
+      "size": 435,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/Gems.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/OneUp.res",
+      "sha1": "e3d3c8fe0246a4b9e609f0a6b811710af753bbb4",
+      "sha256": "09774ba103a2f3d19a9b1ff0725ff63b3f7147cf17a170c51fa37731eb6f6738",
+      "size": 104,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/OneUp.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Collectible/Stopwatch.res",
+      "sha1": "586df3c2a7558782bf307206ac3f0eee8d0e87f6",
+      "sha256": "9679955899b3c33bb3ab0ea7c268b78027aaf6b816f185d3c6b110b239536429",
+      "size": 114,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Collectible/Stopwatch.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Common/AmbientBubbles.res",
+      "sha1": "ba67052729f452eaabe92aeb042197be3adde78c",
+      "sha256": "3e80c47813cfa2a8860e12256ca535b9c6a5f4540e5c890e152cdce4c1b7c3de",
+      "size": 124,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Common/AmbientBubbles.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Common/AmbientSound.res",
+      "sha1": "51d028fe17199d522d4b7e1ca284c36d929d9d71",
+      "sha256": "0e5b8ae8d90a14aa44ec8c058684aac5b038b4a4dc99c332fa473a77d1cab01e",
+      "size": 252,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Common/AmbientSound.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Common/Explosions.res",
+      "sha1": "951bda43c80997522e96612af0fb9b69c6bde75b",
+      "sha256": "de8c564ce988ed3cece9de059de6653d4df310281147e80228a98fa9cf5f0974",
+      "size": 1858,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Common/Explosions.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Common/Scenery.res",
+      "sha1": "c9bd8c2f771ab9fc2af78ed13df42abf5c54025d",
+      "sha256": "d7e2f5e21bc2fbc6aeee9f72926e74fd8b75a9001527390f373493dbc56b4cd5",
+      "size": 760,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Common/Scenery.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Bat.res",
+      "sha1": "974f7c5f34a4ebee6a97de6b89ab5f73459822cf",
+      "sha256": "29b36108c9ec141039de7794119405aafb96c043dbfc6691c417db3d6f1d2716",
+      "size": 749,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Bat.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Bee.res",
+      "sha1": "0a359453e1364d846735b1aea0da508763f48094",
+      "sha256": "f6b80ef42c0af78cb58ba2bcc39d8784ba4dfbe9cd3b8909e74944f38afbc61d",
+      "size": 322,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Bee.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Cat.res",
+      "sha1": "eb880f8febaf306392f7e0ec4ed2774f3825ae4b",
+      "sha256": "940b92c1ce15a3dd305f86840cf9c25d10b92d4393ca2eef9b2f935a8041dc03",
+      "size": 489,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Cat.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Caterpillar.res",
+      "sha1": "04facf39fb86cc969d3252be04a23757d1fde7a6",
+      "sha256": "e160c79a0a50e74836473b2c5d383823e838cdb402f3f81351e093bf2f273b36",
+      "size": 827,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Caterpillar.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Crab.res",
+      "sha1": "2cd9787e67b4e31f29669e285d2c490fe44d77a9",
+      "sha256": "e14ed3cfe616975ebdc19b43362ecd5f5c94b2e1c598b1903d027285e4429c98",
+      "size": 631,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Crab.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Demon.res",
+      "sha1": "122a7dacc912698de234878b030d0ce01ab08135",
+      "sha256": "aa00384d19bd4d59af19b55d1a27b98925232700768d5d25d5ae0d47888757c6",
+      "size": 474,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Demon.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Doggy.res",
+      "sha1": "b18fdb4499def7abca63fd26b723b0793906ed87",
+      "sha256": "e80d5852bd051e7f195578c523e20aae621c349354d73393f64795f5922fafd4",
+      "size": 474,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Doggy.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Dragon.res",
+      "sha1": "8942ca7ce5223043a8129a6bcba7e17980d17bb0",
+      "sha256": "dd3541ba6d360d42849e1bd7fceb17009172e2d8abb94948f3d611332783a48f",
+      "size": 628,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Dragon.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Dragonfly.res",
+      "sha1": "e0b5bc24282709f0159d2f9211ad8b7f1081624a",
+      "sha256": "84df013ecf784a2dacd820376270644b0d006c436423dd9db0ae01f58c261079",
+      "size": 238,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Dragonfly.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/FatChick.res",
+      "sha1": "ae73d15c3ff822478eb7e3165974da7c21001b39",
+      "sha256": "b7fc72bb801ea99c4ed976dbd792ad902ceb3c5db7d82cc01b926c7f7321ed0a",
+      "size": 390,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/FatChick.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Fencer.res",
+      "sha1": "b80e1790fc97aeb18d00da49e7548b75776c35c2",
+      "sha256": "f6b70302caa4816e062d0a3f4e3a9efb3125cef9b1d25f8cbfec5789692db762",
+      "size": 332,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Fencer.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Fish.res",
+      "sha1": "581f467a00971e633cc3ad4ccfe2f01235e71def",
+      "sha256": "a27325ef9093952d3463f70eb623232a0d27045c1d666ec6c046b1bcd4ab3088",
+      "size": 256,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Fish.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Helmut.res",
+      "sha1": "d2dc869a8cdd6c21351923b01c1e45f8d77cf6c5",
+      "sha256": "e9dc1d9546e2dfedc9c6ce83582d50a56fd7df62d5603e3a78f348c20b1d3c1b",
+      "size": 260,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Helmut.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/LabRat.res",
+      "sha1": "97fc31b734fc06701708bd442ce72345d9e0fad6",
+      "sha256": "bff5ee0386e5f44cbab6fa4f4861342a1615497c844dd45cae05e58be8fa68ac",
+      "size": 606,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/LabRat.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Lizard.res",
+      "sha1": "0555be871f633d3ad036c9508285d22fc2558be5",
+      "sha256": "d99751ef2d420d86e5741287810785d6ed41356892208af485ae6f2f1438cede",
+      "size": 249,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Lizard.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/LizardFloat.res",
+      "sha1": "fcd58f07880c2e2affb04983b054fee95166ac26",
+      "sha256": "4bbbb1fdeb0c87f2e3d9fe12457bbbb7f8a3b383936172aaeb97cf44bd0eda5f",
+      "size": 704,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/LizardFloat.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/LizardFloatXmas.res",
+      "sha1": "828c14285c7898fd3f3e3af40850a0b1703d4274",
+      "sha256": "30f8ce7288b2f2eb0a0c4adccb065fbb6c6be33aed1776b09c9717f43374e31e",
+      "size": 748,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/LizardFloatXmas.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/LizardXmas.res",
+      "sha1": "8551545b6f96a4ea9a3b6fb73258b681b92b2c4f",
+      "sha256": "56bdc8947886df2886925097cb9ffbf1e99ee37a7e4d9bd3aec857d2a3d7e6b9",
+      "size": 259,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/LizardXmas.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/MadderHatter.res",
+      "sha1": "5fa6c3fedc5ef6070341b650a6e564e3bb830a9c",
+      "sha256": "ae5c2b6288929fd2c8a7683f1cceecfbf71fbd18b65a9b4141a5fdb6d2448138",
+      "size": 736,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/MadderHatter.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Monkey.res",
+      "sha1": "5b56e2c2c0253cf1abfba6287eb5b130a697a2d4",
+      "sha256": "7476fe2996d61c62f26e0c45c087134e82bd9095d93a9422529bd500288a6577",
+      "size": 1054,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Monkey.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Rapier.res",
+      "sha1": "cec4099b0c8e3589753fb4df4b3ed458281d74b8",
+      "sha256": "64a23f0a6d3ad08c42f5f3e3ff2d03e4e3eff4690e9d25d9f5cabd2f14fba4e7",
+      "size": 807,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Rapier.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Raven.res",
+      "sha1": "40cf021b66f9e26634280a22c5a4c52ba80779df",
+      "sha256": "90aad43eca3ece9254956959a6bf635ed7030c16d706b91efe0083cbfa514c71",
+      "size": 384,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Raven.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Skeleton.res",
+      "sha1": "67f68f648266883bca82df1a8bab09d3d69dac1a",
+      "sha256": "72060b7bee808b2a48aa371291ae0cf15cdefc35175504b9a27fd312df1e8fe6",
+      "size": 303,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Skeleton.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Sparks.res",
+      "sha1": "7f4d2fe4f4d19f266cb96e66245199e1486541bf",
+      "sha256": "1ce00854722831b212a9e69974b3c48a2edbcb3f5baed3d56a52d011c360a56b",
+      "size": 124,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Sparks.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Sucker.res",
+      "sha1": "2266d7b1cfd68520b9b7dbb8da9b98a77ec3e67b",
+      "sha256": "508d3ef9535429fb085a351f3d4ed4014158a5369025fe5442f044afcd284030",
+      "size": 680,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Sucker.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/SuckerFloat.res",
+      "sha1": "dc04bb79dff1d333199acb4abbade5a30f907875",
+      "sha256": "8ccff34d1513da81f1bebfbe161c1b06d1a5ebe3e7667e3c1239a42b74648ad7",
+      "size": 165,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/SuckerFloat.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Turtle.res",
+      "sha1": "b80860639e6ca5ca83c461f99e1f278088dba37e",
+      "sha256": "c18ed8a99f6d88cd63eb070216753718fc8077044eb48a9e544e418a6ea43e3c",
+      "size": 973,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Turtle.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/TurtleShell.res",
+      "sha1": "1df544f50ae722de9ae0153b4d26ba67d10100ea",
+      "sha256": "aaded42f35aa141415c2ffc3b68c8aedcf77492570079a2eda69b46eb6e7e4a6",
+      "size": 668,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/TurtleShell.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/TurtleShellXmas.res",
+      "sha1": "b5c5a66e97e888929dc580dd102383ae03cb572f",
+      "sha256": "01c5c6027b949fb7363d325e033c13b89d7c037fb0b947334a355d44ff7a48ef",
+      "size": 678,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/TurtleShellXmas.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/TurtleTough.res",
+      "sha1": "bea1a8e0419b7caca324043db2072c95850437d6",
+      "sha256": "3fa687fee255c4cb6cc81d824fe1773c97ab00e41aefaab04a35e59792985c38",
+      "size": 166,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/TurtleTough.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/TurtleTube.res",
+      "sha1": "320c88a1cf706b39c65a0dd79be216ffc4b09dbc",
+      "sha256": "b305a2929e6ec4a429dbd4cf6ecccf752e4a1a4ec85bbc3145c2cc7760bdec99",
+      "size": 165,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/TurtleTube.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/TurtleXmas.res",
+      "sha1": "8338a3328a6e97e73638b5de8427890eca545a71",
+      "sha256": "97b1ebd18ffa282d6934421f5149d5e36fa67c6439f96326d6aa36efc0083728",
+      "size": 1023,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/TurtleXmas.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Enemy/Witch.res",
+      "sha1": "0e6887fb5c7446db554fdcb0fd316344d5e681b8",
+      "sha256": "eeb95b5ba1e3cabaf7a162a775d110ff1f3691532c2d31dfb86fe88d38da6137",
+      "size": 568,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Enemy/Witch.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Interactive/PlayerFrog.res",
+      "sha1": "c4398b091a7b7d9f78452e3b387fc1bac82edcab",
+      "sha256": "d7c03ed609f840cd6f0576c24e9ec394e08c4cb37a0a00645e4a7aaeea25906c",
+      "size": 3207,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Interactive/PlayerFrog.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Interactive/PlayerJazz.res",
+      "sha1": "54b447e31f5fce8acf44db930eba81e62a48e37b",
+      "sha256": "35a0ec5200a5b10fe0caa47597909a99f62231a900c5e1d50745d910ead3657b",
+      "size": 10525,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Interactive/PlayerJazz.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Interactive/PlayerLori.res",
+      "sha1": "1a654f6022ff5e54c237b00f638af09ebb3ad2f3",
+      "sha256": "110c9590f374574e06db6950c2881cf803971ce721fd2a29b1272cb326311940",
+      "size": 10242,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Interactive/PlayerLori.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Interactive/PlayerSpaz.res",
+      "sha1": "e2435f3c72f929e75dd1330b5a3a4274bef5777b",
+      "sha256": "f2a536aa3c39e69613ed3acc5e933a12b848bd1e114e0470331a2110c3376bba",
+      "size": 10390,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Interactive/PlayerSpaz.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/MovingPlatform/Ball.res",
+      "sha1": "82a17588942fb1f751e1521072e7717abf03d081",
+      "sha256": "3914f076a79b2c881e11ef6aa4df414abae9183ccfd9bf494848633dc2e88f4f",
+      "size": 206,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/MovingPlatform/Ball.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/MovingPlatform/CarrotusFruit.res",
+      "sha1": "a0f486bc6a0e15bc0ab1e0fef326d61e9047fe06",
+      "sha256": "dcd7d9565c7dbf8913af9afe0084fb1f786394a9f1ebdcaf29f052ab9c00d106",
+      "size": 226,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/MovingPlatform/CarrotusFruit.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/MovingPlatform/CarrotusGrass.res",
+      "sha1": "d539c73225dae38282a309a330f000e797dad85d",
+      "sha256": "20878ad3acc439091b8c8100d8dda6b0a503e8facc875b189e6abd469cbe39ae",
+      "size": 226,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/MovingPlatform/CarrotusGrass.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/MovingPlatform/Lab.res",
+      "sha1": "3cc5a61b79a894a2e2163f7294ae1a6ffdfc3676",
+      "sha256": "9ad39d4ada5f3413c5c6ad85b6d3fd08a9018c3986c4dce0d6d3a157c8b8b939",
+      "size": 204,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/MovingPlatform/Lab.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/MovingPlatform/Sonic.res",
+      "sha1": "8388921da342a72951255ab8351327d33b55ca3d",
+      "sha256": "f7902e2e0945063cc332b811bfa0bdb1dbd85ff50657f7cda99f733e736f3c0b",
+      "size": 208,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/MovingPlatform/Sonic.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/MovingPlatform/Spike.res",
+      "sha1": "a100cdbfd5586dc90ef6c9dfbf224657451ef53d",
+      "sha256": "e55011dc9fbd5d4c1ec0c652fd3681c9584a309eaa7a82f202b81b85ebe98b0b",
+      "size": 208,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/MovingPlatform/Spike.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/MovingPlatform/SpikeBall.res",
+      "sha1": "ed59c14f23ad61fee1abdba435a5a7e28bdc2d6f",
+      "sha256": "836a00355868562683411586c5812c4d7debe877b51690daf2a8990e80937af7",
+      "size": 210,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/MovingPlatform/SpikeBall.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Airboard.res",
+      "sha1": "2a42db1c53735445f565411861cabc2447403adb",
+      "sha256": "5f4ead5eda0f7fb37652b0c04d44355109fce241bc3d4c0a0344449876c838d5",
+      "size": 149,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Airboard.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/BarrelContainer.res",
+      "sha1": "1613e7785b0f38a63381de5feb5732bdd1d3136d",
+      "sha256": "453587fe18b3a3d98b97b5e694b78ba2069dd8a4fcacf07af7bb11828c1a91d5",
+      "size": 673,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/BarrelContainer.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/BirdBirdy.res",
+      "sha1": "780249da6f592f27ba8493d808f438de21530d2a",
+      "sha256": "626e3a6aade6a011bd7d2ccafa67a31da1584abb83d7aee4136395bff9c856d4",
+      "size": 413,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/BirdBirdy.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/BirdCageBirdy.res",
+      "sha1": "6f00b5ad561b6cdc3b58d33a4110bec3ec2c8732",
+      "sha256": "331790367992d478cf0afba93c98600fda7176a705ee5e90405f52f540925d12",
+      "size": 333,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/BirdCageBirdy.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/BirdCageChuck.res",
+      "sha1": "732c0e7e85931a75462d437bd7465015d7891e9a",
+      "sha256": "9b2c06cd36df8556b2060669d7c309503a97cd304040f8378d42c6009b19a86c",
+      "size": 321,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/BirdCageChuck.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/BirdChuck.res",
+      "sha1": "819e631d93b7e16a368f806bd63daebdd0e7915f",
+      "sha256": "d6f67de385122274979bbabd6bc53c99f125532234fff607472aa62b29320a9c",
+      "size": 388,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/BirdChuck.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Bomb.res",
+      "sha1": "8bf4ed374d43a482f6b533ae31f7d4aac41b9a3f",
+      "sha256": "4f3fc803b7daf68574614fb50b59f01980583bdb9592dda5ebac89cb8b4ff163",
+      "size": 124,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Bomb.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/BonusWarp.res",
+      "sha1": "37e98ab1d631f83e490e0b3b3c670de1704f2ffa",
+      "sha256": "0d1b1e735e021a0bbe72c05b4075c47250dc01e7f6a1bdb68339e967c43b655a",
+      "size": 552,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/BonusWarp.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Checkpoint.res",
+      "sha1": "bb3a2e7ad0814000574e8c8723b1e7eb02ebb855",
+      "sha256": "33bc5168342f17240af657bf3d2221ad16ffbd08b226dd49730300f8a0308d08",
+      "size": 533,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Checkpoint.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/CheckpointXmas.res",
+      "sha1": "98e1e8d009cb9fda2806489ea02fdb8d7854df21",
+      "sha256": "9a5ac227503cd040267072aa336a051ef3f3523bfa4419db46e5d768b300b378",
+      "size": 548,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/CheckpointXmas.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Crate/AmmoBouncer.res",
+      "sha1": "ace28bf2c5dbafcd77ed3ed24a8639423e653f45",
+      "sha256": "7822faee4c803560762ff48d909e0be3d88fce965c032fb34dcab75974ab53e8",
+      "size": 487,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Crate/AmmoBouncer.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Crate/AmmoElectro.res",
+      "sha1": "da775a1996f1588538e4c78bbdf13cc20b6c9811",
+      "sha256": "d90bf3dc5a453b3a36b25412f45e7a28f22e7e2f20542bb3bf3c90a5e48f63ef",
+      "size": 487,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Crate/AmmoElectro.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Crate/AmmoFreezer.res",
+      "sha1": "56e65f63564c099be5736991a6d808f0d5f235ef",
+      "sha256": "502eed02314b9e1c38992d5eded27dc938badac9f03ac5a20a053fa50b84917e",
+      "size": 487,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Crate/AmmoFreezer.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Crate/AmmoPepper.res",
+      "sha1": "b8ecbbf070a3000f35b6739d141691e8135924ef",
+      "sha256": "998fd67e79bef9bf532912511380436a99c300164942c8e9e917c067ef9d806c",
+      "size": 485,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Crate/AmmoPepper.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Crate/AmmoRF.res",
+      "sha1": "75e0d506982e4e33e51c10a5db364e61f78fbe6d",
+      "sha256": "41b71bb21f657ce208c692a32aaf18321871f04131d51b15f9eb76672b675561",
+      "size": 477,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Crate/AmmoRF.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Crate/AmmoSeeker.res",
+      "sha1": "d4612dc7339952f20426bef79b26e13757a7d565",
+      "sha256": "5c159ff5c1d72722dff71adf0c4c3c025d047c6dc963f120a6a65ca66739889a",
+      "size": 485,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Crate/AmmoSeeker.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Crate/AmmoTNT.res",
+      "sha1": "f6adee95115aec73d496ba4bb2c9dabf2a8dfab9",
+      "sha256": "2aaacd705a451a16d70a09cbbcd8cdfd55239484075869ba245c06df2d4c96e0",
+      "size": 479,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Crate/AmmoTNT.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Crate/AmmoToaster.res",
+      "sha1": "ad5cf3ecf0fa221d54ce3de0e6e0f1ab6afa8678",
+      "sha256": "9670ccb378b4a590b0d80de5297871a16f97263ac8f2a06ca0c28430297659cb",
+      "size": 487,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Crate/AmmoToaster.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Crate/Generic.res",
+      "sha1": "fa1a8f8d8bbbce26867eab86d242bc84c7590fac",
+      "sha256": "984ba66b5b9a9ccd876d6e2d163ab1be1f9eec34b8a097613b3f855fe233ea43",
+      "size": 641,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Crate/Generic.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/CtfBase.res",
+      "sha1": "7171d6dfa6af5364e2232cba7680150642532e3b",
+      "sha256": "6fce686dcd2b79e556d46ca4837e81da7a46324b43d5345107074b23625ebece",
+      "size": 576,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/CtfBase.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/CtfFlag.res",
+      "sha1": "541aad2f962edebfec19ce7346c8adfc33b93cd2",
+      "sha256": "a7751a9b074b6bb08f8774c2d1d13bf287292623261d99770f95f46d6f74c20f",
+      "size": 250,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/CtfFlag.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Eva.res",
+      "sha1": "b1dc2d79c98cb44fc4b82fa1a7703d7685bff0df",
+      "sha256": "76be602e905d1a0b3f1768a0c33bfdc3c1bf33999a65e2daf3fac007519c779e",
+      "size": 552,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Eva.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/GemGiant.res",
+      "sha1": "ae1ab30952c63141367b7ce6cc60aafb0960e8de",
+      "sha256": "a8f84644d32c40a6dae0822aff6fe79b7366e1a39712798151604b598a6df0e7",
+      "size": 218,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/GemGiant.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/IceBlock.res",
+      "sha1": "ad14af66265acd9f3746654800b35cc23e0298ce",
+      "sha256": "da720d182463dcaa8b225f34e64570470c761a003c999cf89a95ee600ad44630",
+      "size": 113,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/IceBlock.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Moth.res",
+      "sha1": "f3e864b2a56b1a3dc8a2f72e79196fc88ff66386",
+      "sha256": "177d2ffb22792043197bff384128e6168d9dfd22d193cc15aeb1a87c492e341d",
+      "size": 421,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Moth.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PinballBumper.res",
+      "sha1": "f7209c256033d330178e1f84020f51536880ca51",
+      "sha256": "93ff103b1eac00d845856c769a17391325ec346cdda83d901521d10cfb358493",
+      "size": 453,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PinballBumper.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PinballPaddle.res",
+      "sha1": "6f7d1dc72e7b5e382b8bae48c12d3f6a2306e543",
+      "sha256": "88df6cafef0672c8975248c0c9a7e0442dd37e7672cbb813c35b209084712e9c",
+      "size": 444,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PinballPaddle.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Bird.res",
+      "sha1": "f5b62b22dfca121343a54eaf6caeee11f4ded7dc",
+      "sha256": "4b17118999e61b2393ca04be6c869648d99d68f81be17af8a39f696b98452cc9",
+      "size": 238,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Bird.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Blaster.res",
+      "sha1": "c5b736b912fc23147045eb3db6a69b8a0ec4bce7",
+      "sha256": "891cdf681675b97203bc9dc0adcaeacde71b63f330c4b57b9fe035cd9375ecf0",
+      "size": 504,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Blaster.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Bouncer.res",
+      "sha1": "9c559b701c5c9b67ed07d7641403e37e14f7a99d",
+      "sha256": "331ebff26330a4e0dcd3e65bd13a7436d95a8eb94f487194b633c12e9fcbb8ce",
+      "size": 241,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Bouncer.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Electro.res",
+      "sha1": "dab7fd39d63ad7b2664a753badcc22b45e6850fd",
+      "sha256": "898ffc915665b46e767f7b8d4195001342f10fbf4668cedaf148e2be284cd5ca",
+      "size": 241,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Electro.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Empty.res",
+      "sha1": "60791a438b5605df0c610ffb0424c3f2c6e87c23",
+      "sha256": "427a1a79a8daad487d10533c6f5ef0e4dafa8e05354730e0ebddfea01d23484c",
+      "size": 229,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Empty.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Freezer.res",
+      "sha1": "819c2788852bdf32f771156b298dc68d884902ec",
+      "sha256": "9e3712e9bb8b5203b5b01bcd68a705c5a5622ccb8c609509cf48d20dcf7f0768",
+      "size": 241,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Freezer.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Pepper.res",
+      "sha1": "877f9cb3d290b713890687ab096af02dab093a16",
+      "sha256": "6a47a00e1b6b30ce492ead33ad76686eac631af1057b3ec32a1af0f303d716a0",
+      "size": 239,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Pepper.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/RF.res",
+      "sha1": "19190cdac77da7c1ce89d9a1f3741caf2c3df565",
+      "sha256": "0bcbf16e9bf9afa4cabbc09ae814a9680e245061bd134136b26d397c7ce0b409",
+      "size": 231,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/RF.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Seeker.res",
+      "sha1": "fd37030f1d6827614be97564d1ba22b97aceab05",
+      "sha256": "4f4dadb0f2be59a7f9449f043e14d395f51bdd87ef1b233ed642b74b0deec207",
+      "size": 239,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Seeker.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/ShieldFire.res",
+      "sha1": "b1352206b74faecc190a8466540670bf86b21fa8",
+      "sha256": "ad097eb33737cd3b0ca6be44958bbf2a2dbec49426fbe5f055f17dfccac96c81",
+      "size": 240,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/ShieldFire.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/ShieldLaser.res",
+      "sha1": "0484d2c8e606dc7583833340c9c0a0e495e085ef",
+      "sha256": "aa96ac4001364c7f43cf0ed30dfa17ed13e0393e173c49938b83892c0ccfb84a",
+      "size": 242,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/ShieldLaser.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/ShieldLightning.res",
+      "sha1": "bd6e48e9e0301f5b53fc8491772687b5c48da691",
+      "sha256": "182fb314ea6b5f431db743defca02541fef912c59dde22b68d5a8d198ac03556",
+      "size": 250,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/ShieldLightning.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/ShieldWater.res",
+      "sha1": "b0c09bf57dfedffce9c57c00d1a4077f0ca33dfe",
+      "sha256": "9623512301f41512b8b3787e24db0a0feec6196dcc7da3e7243161d677b4c21d",
+      "size": 242,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/ShieldWater.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Swap2.res",
+      "sha1": "0b90625344e4cdd81edc0395ba0d38fb4884b92d",
+      "sha256": "5d3ef19cf67c5388d7f7b53ddc2d7853c9f75e81c329f64b83a6a46aa449164a",
+      "size": 239,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Swap2.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Swap3.res",
+      "sha1": "92902834884c91d1f17197cc4bb62c0418e1f85d",
+      "sha256": "1c107cb20a9c61e391020424c2b131ab1911cc5d23f93380b159ca43bd91d6cf",
+      "size": 244,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Swap3.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PowerUp/Toaster.res",
+      "sha1": "8ae50982cb23466f74060fccc3613a8c8a655066",
+      "sha256": "dbc259a85242cd5fedcdbef5fa0d42b4306ee47781f5c9bf4dc760e3f2d384da",
+      "size": 241,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PowerUp/Toaster.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PushBoxCrate.res",
+      "sha1": "316484bfae783682e302c029f4cd875ae4ae53a2",
+      "sha256": "c3d6865520dca7756ef20208177aa0d8b4e8fdafed5b8de2dce2ea8e8a4ba97a",
+      "size": 116,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PushBoxCrate.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/PushBoxRock.res",
+      "sha1": "ca9af892f9226b5bece517d9d7751df591976782",
+      "sha256": "165c555767791f944252b3ac5000b4f00d54c85a3a91a5ee500620c2a70724df",
+      "size": 115,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/PushBoxRock.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/RollingRock.res",
+      "sha1": "2f1e5c6468a3959c1a5e97761aa5baa68fd9bdb4",
+      "sha256": "a1c9761308352ce7fcc691d7d321105845b2afe27e641fe89b3987e9584a3dd8",
+      "size": 207,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/RollingRock.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/SignEol.res",
+      "sha1": "d84e3c7e4cf1951eea1906f49f2714d313ca6b70",
+      "sha256": "48f6b1f1a692bec02cdf27ec2cfdf75bae255b62e9a7058e40cb98328bad2cb4",
+      "size": 112,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/SignEol.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/Spring.res",
+      "sha1": "b198761188391fbb02e0b17880e7ffca85106d3c",
+      "sha256": "9047fa270b86017618882f8dd8415528348ebbbaff095d000040f5aed5739c2c",
+      "size": 2307,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/Spring.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/SteamNote.res",
+      "sha1": "96af81d351dd4c452968372737d9b985a137039b",
+      "sha256": "463df06de1ed9001c48482aa00e17aab57680c1362b819e529e1ead965f67c1c",
+      "size": 228,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/SteamNote.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/SwingingVine.res",
+      "sha1": "572e4bb90883e9a6ca09f8aa38501050a6fec3f4",
+      "sha256": "bb8e6ee9793251b2dfb618cd7271327634f63cfec4ed6b9e002c2e16fb2b9204",
+      "size": 104,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/SwingingVine.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Object/TriggerCrate.res",
+      "sha1": "c439aad8429b95668398e6d081424d18f51a9b0e",
+      "sha256": "6d78f5d6ca6a8497637eaa6fe27fef93f472e2e4210a40347bcfa592fdb30e58",
+      "size": 222,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Object/TriggerCrate.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Pole/Carrotus.res",
+      "sha1": "a2c2b6438a4b8b697d1b86f1a64a6a8299a62e9d",
+      "sha256": "319662da12410fac154d5dfa36fc76a7eb6e84966f0cc14f0c66a3d452f55d6e",
+      "size": 239,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Pole/Carrotus.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Pole/Diamondus.res",
+      "sha1": "93ce7f6427d7ade2be7423e9ef97173bf0df5e93",
+      "sha256": "9218a76457a447c1571549fb3da7b7146b91ca7910c3186959b9855d402b1f54",
+      "size": 240,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Pole/Diamondus.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Pole/DiamondusTree.res",
+      "sha1": "d909bba0d35380d27082f97d0319df94b9e4cfd6",
+      "sha256": "75ec2abbce7e9dada446d7ee2ac967d115779aa4cb8439f17a54d962df989a24",
+      "size": 245,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Pole/DiamondusTree.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Pole/Jungle.res",
+      "sha1": "fb24143e123e99d57dd39bd3d4f18a57cf4a58ab",
+      "sha256": "5cf06e4f32e9e00baa8d8418ec74be1e460265528f572ca87ef19b2193ff5f35",
+      "size": 237,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Pole/Jungle.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Pole/Psych.res",
+      "sha1": "dd6f4910ea13919a3fc70f30124e323ba8a5a4b1",
+      "sha256": "a41c51395015d82666aa41bfb0b9856d7b39e613ee847be7b1be39fdff89b0dc",
+      "size": 236,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Pole/Psych.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/UI/HUD.res",
+      "sha1": "f205eb9a87c6d61ed22f3a6cba8f482be7b7a0b5",
+      "sha256": "f19b6f98a93072f53b7c916b99eabd47a036afcbf70eedf6254eba9c53af9275",
+      "size": 4637,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/UI/HUD.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/UI/Loading.res",
+      "sha1": "4a60d37d912b83ac394eff34a9b1291b0a7c8447",
+      "sha256": "7fb09109569e0bcfc132b06bafa59adeb095369e520b3b34444720500f660f0a",
+      "size": 124,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/UI/Loading.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/UI/MainMenu.res",
+      "sha1": "29c409b31d33152c61356e68829aa30e9594d778",
+      "sha256": "ea880a70dff9a1b0d58d2ead42323331da7fdde87a5a45bbe9608533e13d295b",
+      "size": 11473,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/UI/MainMenu.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/Blaster.res",
+      "sha1": "cc8d3acda06c25f1082f6b810bf631493865ed61",
+      "sha256": "9206c3acb64192f8fe808de07744caed4b323d0231154b476ccb790dade3140f",
+      "size": 441,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/Blaster.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/Bouncer.res",
+      "sha1": "b77b38aa5bb07795b9b9d0a02ef8d0e18ab5cc4d",
+      "sha256": "d2611c54cb45500b41a47c6ad017f7a43000129176ecdcb1e05c37b5177711ea",
+      "size": 834,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/Bouncer.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/Electro.res",
+      "sha1": "bce073fffad9c293fe7aee28a7d145e0a0c2cc2b",
+      "sha256": "1d99f081f40789507e6794ac1bb3308573a6678351814061c6b58212017fc4f4",
+      "size": 320,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/Electro.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/Freezer.res",
+      "sha1": "2553e19bc2d374da02e3ea0295c7382bb2753500",
+      "sha256": "356ed061f3b4e2adf7a451a405d6ca6af8ae9a51b5860bed1013ad6123fe330b",
+      "size": 709,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/Freezer.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/Pepper.res",
+      "sha1": "7af866f2b9d2a46841139ad98a4937fbdaae540e",
+      "sha256": "4944a6be6cf9b4f26f91133386cab7fb2bd4c93f77a7af8926360ba85bdedb1c",
+      "size": 293,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/Pepper.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/RF.res",
+      "sha1": "b28c483a02ee34e2b163f6572b33001bbd50ddd9",
+      "sha256": "1a2b56b7d8a8d842648a11a6ad9f942177604300d7ee78705fddf6c62ca33716",
+      "size": 366,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/RF.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/Seeker.res",
+      "sha1": "5b43d5292334f1f73f0e3052f2d02bcabe2d819e",
+      "sha256": "8bf235c6f65fd0dff41e46760a002c3c0c5f8c1e4cc8c2f74456eb9ec4aeca56",
+      "size": 315,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/Seeker.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/ShieldFire.res",
+      "sha1": "d251357181a629b2237f604850af0880802def31",
+      "sha256": "a566ca36e4e3564469521e8457f457a6a0159c63e46a87a911c114aacb23908c",
+      "size": 215,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/ShieldFire.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/ShieldLightning.res",
+      "sha1": "99b124a8833e552a431f2dd2ce2648c1d993f704",
+      "sha256": "7a782e2022a462bf5474b1a65d0ae3cc5b53900d6d2be58e6608bc6adcefb474",
+      "size": 312,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/ShieldLightning.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/ShieldWater.res",
+      "sha1": "668b231ecf9d68d0b8bf77e6cc9cb14e78392588",
+      "sha256": "3bd196a94033b7735413c8e6ebc6460c05da6255c46f35b934cb9e9f0d18bdbc",
+      "size": 256,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/ShieldWater.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/TNT.res",
+      "sha1": "b2874e36cf68551b38e3d1d9dbd70d157695a60d",
+      "sha256": "78781fc9518d1d2d2ea1891b9fc17996a3ce18f358fe9522ed6de4aba5716710",
+      "size": 450,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/TNT.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/Thunderbolt.res",
+      "sha1": "d8ec959c8ce488da8e11fdbf2aee4d40d90cc00f",
+      "sha256": "7735f28074022e7e28b4cc184ded9c0f86ea4255d8ec49a9515a3bdf594080a5",
+      "size": 289,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/Thunderbolt.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Metadata/Weapon/Toaster.res",
+      "sha1": "4cd87d9a9a14a1f1396bafa986ed7b7b69f36441",
+      "sha256": "9f71a12622a943dc33e5c7caf1a42cc4a5595270edafda5b919162fb88ff7dae",
+      "size": 284,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Metadata/Weapon/Toaster.res",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/cs.mo",
+      "sha1": "8f91ddd757f07e935be710a2a303075c295fff08",
+      "sha256": "e91158968beba4afca228a4ed49ba40bb92d10e3b727c57abe359438cf5fb45e",
+      "size": 41678,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/cs.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/cs.po",
+      "sha1": "2dcdef8987bb30156eb090b96ca5c024e636a412",
+      "sha256": "5079bdbe8c8d4209ecfc5ec496f4c187292a6ba23d71f02960075a62de90aff0",
+      "size": 83848,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/cs.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/de.mo",
+      "sha1": "6b2c689bfc64e7c5fb8b7197d96c9d4b33925b88",
+      "sha256": "7ab3913e77c0eaf9c157979b9ef0df732625e9250d0547dc18353fbba014d2d2",
+      "size": 40873,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/de.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/de.po",
+      "sha1": "0837a4cfb023b5d11983787680885a0f39e2c5ec",
+      "sha256": "eb552a4579ea53cff34d888086cd022a30340b29ee00380b99d6090b6731983a",
+      "size": 83941,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/de.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/es.mo",
+      "sha1": "bf90b90d228d784ef2f558ef46811e76296e1d63",
+      "sha256": "bc68a4ea65c2e73e773f261518f2ce8436f59e7b5ca15dc4d6e63c57bf1e681f",
+      "size": 31478,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/es.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/es.po",
+      "sha1": "66fc1068e7d5d179ee8903a516c9d0e6caa4bc68",
+      "sha256": "bc362dfc570b25bc1b4ee53e08b03dbdf7c2a810ae525cf54e851007ffeb3ff2",
+      "size": 79837,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/es.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/fi.mo",
+      "sha1": "bda24e53129517ae82f1e8b3fa37a97f33753dcf",
+      "sha256": "1044f9d59f035559ea6d78b4db170f3557aabb2ee0629f10088dca86751d1510",
+      "size": 40948,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/fi.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/fi.po",
+      "sha1": "3ef0388ad1d052b452c4693959c6f0d8ea4441ac",
+      "sha256": "ba9a70882026d00fbd2b20a60ab3063b6c772b9c50fec69e307a8b66fb7e3322",
+      "size": 83656,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/fi.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/fr.mo",
+      "sha1": "2af8613ba63efa766958135f4b55c6a2c795f620",
+      "sha256": "5dfff606cf5e1a3aace8536b75fb0c58f650f2fd2f4c1d8fe2fc09f5dc6dae9f",
+      "size": 42249,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/fr.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/fr.po",
+      "sha1": "9c5c8943003e937059ee43b05bbfa664c130721d",
+      "sha256": "9674c9042c0f0b266442e9f02a72581ccc699720eb4662857d15f07cfcb3b7bf",
+      "size": 84793,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/fr.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/gl.mo",
+      "sha1": "b23ff9b243b46bf222e4a8c125ec72462cb250ae",
+      "sha256": "3e836d44fdb4affb07fe27c96dcb1cecef47852abe19b654efc1964200860805",
+      "size": 30586,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/gl.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/gl.po",
+      "sha1": "1c208d4116c35023a6d72dd1c7fb58cde12bc094",
+      "sha256": "f8078ff4053b146541ef5e432e278ba2b2ed0997a538c4dafb1cb130a5e0819d",
+      "size": 78936,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/gl.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/hu.mo",
+      "sha1": "c16d3b909e8bb435764301804bef089c796e2eff",
+      "sha256": "96ab40341441a7be3079c62c2ab5af770d4bf59f293f9507d241f35438ae8923",
+      "size": 36929,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/hu.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/hu.po",
+      "sha1": "95e2960c11c40b77ab14861775d2aea0769f8d63",
+      "sha256": "7d4140a053898a643600067917c692a7d20c93fb16e10f593b52c1bcf24fa9df",
+      "size": 82829,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/hu.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/it.mo",
+      "sha1": "8e7a77dd3f643b54389bfeba247d3828e3e2d029",
+      "sha256": "17af0137bf8dc34de8c6919ff543fa36a1902b052f748d4934a308a833cd80ae",
+      "size": 40623,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/it.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/it.po",
+      "sha1": "ae7e9ff41e27ad11e618197f03fbc449b5982ee8",
+      "sha256": "29b5caa4a494de4ae790aa70276eade40ae237d765f94ed5b00fe1f11e1f5188",
+      "size": 83783,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/it.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/nb.mo",
+      "sha1": "edea3dab73814e72642ce7fcf839c862c28469cc",
+      "sha256": "40900c48fcdddac05f5564baf7155b04dfd9d67aa133bd4621cae7d87a02e4f0",
+      "size": 39131,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/nb.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/nb.po",
+      "sha1": "5bdbd81ec4132c4431527e705b3aaa2367fe07f8",
+      "sha256": "dfe3ef5ef79a138adc0689a3a8df54d424d1b0662a54931eaed72de62376748d",
+      "size": 82264,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/nb.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/nl.mo",
+      "sha1": "38c752073bbb03dad6b609bb6e5fba27e4638e07",
+      "sha256": "5d3ab40b00c84bee40be5f30bf613cdaf47acb3844c070dac0675460c897afdc",
+      "size": 40700,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/nl.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/nl.po",
+      "sha1": "302a9deaec363d1b6745c48d7e82d206d548eb8c",
+      "sha256": "a5df941a43a7e15ee2baedb107c014fb4bd51f55174c81b329207bedc8da4828",
+      "size": 83535,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/nl.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/pl.mo",
+      "sha1": "ee0bc2290a6d6f2d3a20fb56884578162691344d",
+      "sha256": "98c9fa50ccfeb0906e7204df71d5164bedf41b58ab2d30fb1f9035de0db58858",
+      "size": 40974,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/pl.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/pl.po",
+      "sha1": "538b2c4290e3c58be55d13daf7fc6369803f6e39",
+      "sha256": "b80cba6b7fa4551f037de10afa8cd7d2beb0ddfdbe086ce2a09cf209d4670921",
+      "size": 84428,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/pl.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/pt.mo",
+      "sha1": "06bb3fcc5338c333f348c65cb99da7a84975a36d",
+      "sha256": "f7a6743979b910be955696cae869eaf5163b3348e5b81e0286079b5695f33684",
+      "size": 2474,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/pt.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/pt.po",
+      "sha1": "28a1c4fed3f16cd2a93c6fe856ee95dd7e828f0a",
+      "sha256": "1caa1e49b7285381fa10d4e41292ab0ef7a4254b8ce24c6eddde64d714ce06f3",
+      "size": 66527,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/pt.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/pt_BR.mo",
+      "sha1": "baf11bf779d58d67cdd6f15b309d5ed30fd32194",
+      "sha256": "6794435cff7cc4d7df67a6a644a83346d090cca2fa818b750e5deddaddd7de80",
+      "size": 40353,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/pt_BR.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/pt_BR.po",
+      "sha1": "d168588508ae03df3b55336a120c2bb155f1a3e5",
+      "sha256": "ebf531a4992085109974b2e7b680eb0644f85e2b988baed2d48b60ebdd37ddd8",
+      "size": 83733,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/pt_BR.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/ro.mo",
+      "sha1": "923431431a2b6a2f62238015128c2f04eeb1c120",
+      "sha256": "7897ac9795e3a0c2ca320e03ddff8c6a5fdd851f4e67a713200b2afe67a2d52e",
+      "size": 41510,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/ro.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/ro.po",
+      "sha1": "d55b74d66936f1690ce3f586e595b9ac1eb77a73",
+      "sha256": "7a95c5119c0a551781d08222531f5ebe403e6cf628f1b5ec745d57fbff937a21",
+      "size": 84933,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/ro.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/ru.mo",
+      "sha1": "50cd5258c56c4ef7f09c7d6580709fb0300f7f80",
+      "sha256": "d88537ab95b4ace39c2d22203d7e48fe28a6110c54f52926861273f95acc14af",
+      "size": 45172,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/ru.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/ru.po",
+      "sha1": "021ca2ba6cfe768794baeecf5ffde263019ab932",
+      "sha256": "8321c8ec7497929fe408162eaff094c1706619b3568421d12b1026e1f5fa27e6",
+      "size": 91085,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/ru.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/tr.mo",
+      "sha1": "9f5251cd6a179f72fa3261b21abc7a06ff48f792",
+      "sha256": "6b23f54740f11b86321843d2e7b644b571089490d367900d8c00aa9ba9be6829",
+      "size": 39939,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/tr.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/tr.po",
+      "sha1": "43d485bc5d04410c1232cd6bfd56479762fb9a90",
+      "sha256": "bdb9e811fdda19fa18acb2375a76cfdeab6d459df2fb9a6c4ac912295004298f",
+      "size": 83060,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/tr.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/ua.mo",
+      "sha1": "91453d623144451850402e76292ab6225dadeeee",
+      "sha256": "5e0fd341237a6fd3f1b38f01a3ce5ddf3ca25aa82df049f4e8bc37899af2a147",
+      "size": 44627,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/ua.mo",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Content/Translations/ua.po",
+      "sha1": "2c9e95f3156d006f8b0d99ac4926f788b8aece69",
+      "sha256": "2b169fcd7fff9fbf2fd214055641e0539ea45836de1b0f67b38013b808bfd22a",
+      "size": 90550,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Content/Translations/ua.po",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/AnimsSw.j2a",
+      "sha1": "133392a2c638d17796c6f510cf94ec391cc4c407",
+      "sha256": "bba1158ca704219c6465c2384d33b9d0d341c7cff96d2dc7808dc9b1293153f5",
+      "size": 4148297,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/AnimsSw.j2a",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/Data.j2d",
+      "sha1": "44a3111a139da9972a905debc549ab06a31f6d22",
+      "sha256": "842ef1e4f0a8fe08d01c9db3491c7d65fde4b579816afc672541b4217ca4b3e7",
+      "size": 1064675,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/Data.j2d",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/prince.j2e",
+      "sha1": "a05f07295b31f8cacb333917a074f1dc317246f1",
+      "sha256": "8f014b5f41be83d96ed81a0af707c1a131b690cec7fb7a4e892e2be8a87fe97b",
+      "size": 35507,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/prince.j2e",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/rescue.j2e",
+      "sha1": "f5e4a4105679b92b6aad8c9c8077ea2016b7ae67",
+      "sha256": "0c01a5c153394ba8121a8bfba36b280ebae65662be0b205e796bae2ef8073346",
+      "size": 36870,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/rescue.j2e",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/flash.j2e",
+      "sha1": "f7829fd5bca05f672493abc3891a32fcbaa58e10",
+      "sha256": "94909d95d5105f01611ffbd89acc352576d11edddee8213dd721ea7148abc709",
+      "size": 38521,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/flash.j2e",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/monk.j2e",
+      "sha1": "81ae0c3ddb45cca8b279067d58600943b53d721e",
+      "sha256": "3257a90ff4ef4f43ed3d390eea600fba0b320fb34b0d18202d3daf0324e78bfd",
+      "size": 40872,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/monk.j2e",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/share.j2e",
+      "sha1": "674a75eff49b8c4c7510b2765e0864f0f41aff5c",
+      "sha256": "488042d8f4164ff25132912fce2f11057ca0f82028006b331796b7134f237497",
+      "size": 39100,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/share.j2e",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/home.j2e",
+      "sha1": "63c2b49f3d8ae85cff88bc69a186a960e9c84245",
+      "sha256": "98a59de427a941eadbddaad5c624a8714d13a5ea1468e112dae82be0ce3dfcc3",
+      "size": 40153,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/home.j2e",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/share1.j2l",
+      "sha1": "c96ae8f1d8f2c0209f095ca11052a8d704446401",
+      "sha256": "a6a3193c522bb13681c26600e66e8e62fdc6be33e019e6fdbec33b96a6e8b9d1",
+      "size": 8813,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/share1.j2l",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/share2.j2l",
+      "sha1": "cefbe711a2ed694af508ed9e48d7ec1d131ceac0",
+      "sha256": "bcf817257dd902b94d797145de70ed5f2a8ba0b39d250d15dc02cc5a1e9b44c2",
+      "size": 5888,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/share2.j2l",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/share3.j2l",
+      "sha1": "7c78e44ba7986ec896d86d52db3036889499057e",
+      "sha256": "6401a30fbda2c043890cbfea3ff7cd1c77e494a9c94f0139e0081922dafa76f7",
+      "size": 7051,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/share3.j2l",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/sharectf.j2l",
+      "sha1": "5615245c2f2289113b7771c0fa174df7a923cd60",
+      "sha256": "fba0daa1131e9ea8bed1a1abe8e256f17dd022b72df2678f9f3f6bd69754e5dc",
+      "size": 5419,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/sharectf.j2l",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/sharect2.j2l",
+      "sha1": "bdd3bb4269dbf9fed63a6eadcd695d50372af3a9",
+      "sha256": "e258402d73e37bbdc6793fe3558eca5bfc391c6859efb59ba1925ae0a170ff9b",
+      "size": 7610,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/sharect2.j2l",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/sharetrs.j2l",
+      "sha1": "3c6f956dfdceeab4883ec85cde936ad57d48ff9d",
+      "sha256": "419a6fe26001699b28ce4e89a906f1b574d0d84a835c5d03653b26e2ab68a370",
+      "size": 6930,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/sharetrs.j2l",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/labrat1n.j2t",
+      "sha1": "35a2e1e346dd5e811efae0b3c0a56e556e0242b2",
+      "sha256": "d387f9a72de5f4f2fc60977881f8f3a2070212c98b7dc48269eb69f57b08f181",
+      "size": 198123,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/labrat1n.j2t",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/psych2.j2t",
+      "sha1": "e5a12fde45448086289e120369b6b659b31abd4c",
+      "sha256": "1d86486231700e22dce19bcf30845e7fea15c499c47991e6eec380481ee6fc28",
+      "size": 173213,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/psych2.j2t",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/diam2.j2t",
+      "sha1": "7a0090b5f84809bbc01023c407fce871224af87b",
+      "sha256": "1932ce5c807ae6008049350170671abe3040b95e4e49921a7bea9fc06720253e",
+      "size": 211074,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/diam2.j2t",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/menu.j2b",
+      "sha1": "a0edf52b887564a2c85401d27bd3a1312f5eb7ec",
+      "sha256": "b667e398559d4e9faef82317463ef983dbd7cc2e6826d5600a1b664376096e90",
+      "size": 228853,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/menu.j2b",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/intro.j2b",
+      "sha1": "d23d1836b5f60e0d67549581f317d8c5a039e292",
+      "sha256": "882eabcb395b88bebfbedf8523b8395103f8e60dca404acad778462398470e8b",
+      "size": 533804,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/intro.j2b",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/labrat.j2b",
+      "sha1": "713596a3d39a4b67df4fc8c77c9af72bdc2dd2df",
+      "sha256": "05df265c8059bb8481c767ce889f35bed5dc70509493e5d89ae4a379a81b5d4b",
+      "size": 287903,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/labrat.j2b",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/funkyg.j2b",
+      "sha1": "be16e04604a6947329a24bbe321273e0f88b3b9e",
+      "sha256": "8c33f146a495bce3df8948a9712fc071034bb4de886dccebd8ac9c66d7ed789d",
+      "size": 216360,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/funkyg.j2b",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/diamond.j2b",
+      "sha1": "d908e72dd8d02a8f0a563caa497dff43e4e3bb8d",
+      "sha256": "63717e150330b43c932d2abb0bddb7f853da7e28e58e1fdc2dce55fe0c595350",
+      "size": 148168,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/diamond.j2b",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/boss2.j2b",
+      "sha1": "630d20c2e7b79215abc728fea22adfc9916737be",
+      "sha256": "162207a34fd2638042a6d735c90f5d6f2e581b05bef1f9883050e96efcd342dc",
+      "size": 195582,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/boss2.j2b",
+      "cores": [
+        "jazz2-native"
+      ]
+    },
+    {
+      "dest": "bios/jazz2/Source/intro.j2v",
+      "sha1": "a701f52d7cb9b672e8b6b359c18a90da64c49053",
+      "sha256": "34819c25f55e2266d3debb0d70a70b64a6b84724b6eafff461648c4f68dcb89a",
+      "size": 5050726,
+      "repo_path": "bios/Epic MegaGames/Jazz Jackrabbit 2/jazz2/Source/intro.j2v",
+      "cores": [
+        "jazz2-native"
+      ]
     },
     {
       "dest": "bios/bioscv.rom",
@@ -62069,10 +66099,10 @@
     },
     {
       "dest": "bios/gamecontrollerdb.txt",
-      "sha1": "8c272ae624c56d48d788fafe0397fab2e33d838f",
-      "sha256": "d8d995606af437fff434aa204ca976f21bebaf44170f98bdc3a86074d1a9ac91",
-      "size": 408885,
-      "repo_path": "bios/Other/eka2l1/resources/gamecontrollerdb.txt",
+      "sha1": "446e3d7138becc17d3bc31401a241247318f42a9",
+      "sha256": "d65433feb3602d056900016cda40cf581f00289f179da336613b55ae3136afe2",
+      "size": 26890,
+      "repo_path": "bios/Game Engines/C-Dogs SDL/cdogs/data/gamecontrollerdb.txt",
       "cores": [
         "solarus"
       ]
@@ -62529,10 +66559,10 @@
     },
     {
       "dest": "bios/SyobonAction/SE/coin.ogg",
-      "sha1": "ee1e75ffd2b7010f23bbcf28fe4fd00132deb184",
-      "sha256": "3fe2273852a81c9ab3ebd804f8bffd4d8b966eef3dccc8972088105bb2f5b7f8",
-      "size": 6658,
-      "repo_path": "bios/Other/syobonaction/coin.ogg",
+      "sha1": "01025d41311afe30f9c4167338353686b64220c4",
+      "sha256": "517d0a6c5c4ed49c9010b9be8124c6a897e3b593ce250e8abb0d7964d3803f53",
+      "size": 15230,
+      "repo_path": "bios/Game Engines/TheXTech/sound/coin.ogg",
       "cores": [
         "syobonaction"
       ]
@@ -62659,10 +66689,10 @@
     },
     {
       "dest": "bios/SyobonAction/SE/allclear.ogg",
-      "sha1": "a96f0daf7da14225eb615f4561bc1d6d4a168601",
-      "sha256": "93f02ae92ff2d0e6773f12d3cc4f2ec74f230c69aeedc660b3e821a008187ba9",
-      "size": 29295,
-      "repo_path": "bios/Other/syobonaction/allclear.ogg",
+      "sha1": "76a0e44033f99fa404688a5dba5b679daa22d22b",
+      "sha256": "90df72ba24b72b56ed4bbc6f73d076792111dbbc60e6081b8697839afc5c21e5",
+      "size": 140597,
+      "repo_path": "bios/Game Engines/Hydra Castle Labyrinth/hcl/data/midi/allclear.ogg",
       "cores": [
         "syobonaction"
       ]
@@ -63818,6 +67848,26 @@
       ]
     },
     {
+      "dest": "bios/[BIOS] Atari Jaguar CD (World).j64",
+      "sha1": "73883e7a6e9b132452436f7ab1aeaeb0776428e5",
+      "sha256": "646a0687a01dc6c1fffff508ca25c14b78d30bdfcfa958d4c3e20f6bf78e4f1b",
+      "size": 262144,
+      "repo_path": "bios/Atari/Jaguar/[BIOS] Atari Jaguar CD (World).j64",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "bios/[BIOS] Atari Jaguar Developer CD (World).j64",
+      "sha1": "d61b7b5912118f114ef00cf44966a5ef62e455a5",
+      "sha256": "f8d03a5a31fc3bd01a4f85f60d3dbe1656a6770f2a9ca9bad0a66c03ed1bd512",
+      "size": 262144,
+      "repo_path": "bios/Atari/Jaguar/[BIOS] Atari Jaguar Developer CD (World).j64",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
       "dest": "bios/psvita/PSVUPDAT.PUP",
       "sha1": "cc72dfcc964577cc29112ef368c28f55277c237c",
       "sha256": "6ef6dc8da6db026f28647713e473486d770087a605c52a8d751bfca7478386cf",
@@ -64539,6 +68589,16 @@
       "sha256": "f5a76c2b154750074edc50c265afb05e1b672d9ed72d4a31f60c9da0d21fe10c",
       "size": 65536,
       "repo_path": "bios/Dragon/Dragon/sdbdos.rom",
+      "cores": [
+        "xroar"
+      ]
+    },
+    {
+      "dest": "bios/dragonfly-2.3.rom",
+      "sha1": "a9cad98b46fd9d77f1c579ed20da3c0c4be2547a",
+      "sha256": "fcfb728ab4fd8ed674f2d11cf839ea9d716ba15c508aa9ec66b8959e781eba99",
+      "size": 4096,
+      "repo_path": "bios/Dragon/Dragon/dragonfly-2.3.rom",
       "cores": [
         "xroar"
       ]

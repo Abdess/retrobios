@@ -145,6 +145,7 @@ nav:
   - Dinothawr: systems/dinothawr.md
   - Dragon: systems/dragon.md
   - EACA: systems/eaca.md
+  - Electronic Arts: systems/electronic-arts.md
   - Elektronika: systems/elektronika.md
   - Enterprise: systems/enterprise.md
   - Entex: systems/entex.md
@@ -173,6 +174,7 @@ nav:
   - Mattel: systems/mattel.md
   - Microdigital: systems/microdigital.md
   - Microsoft: systems/microsoft.md
+  - Monolith: systems/monolith.md
   - NEC: systems/nec.md
   - Nintendo: systems/nintendo.md
   - Nokia: systems/nokia.md
@@ -205,6 +207,7 @@ nav:
   - Tomy: systems/tomy.md
   - Toys for Bob: systems/toys-for-bob.md
   - VTech: systems/vtech.md
+  - Valve: systems/valve.md
   - VideoBrain: systems/videobrain.md
   - Videoton: systems/videoton.md
   - Vircon: systems/vircon.md

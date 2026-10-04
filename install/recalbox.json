@@ -5,7 +5,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-10-04T20:41:16Z",
+  "generated": "2026-10-04T21:25:52Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,12 +237,22 @@
       }
     }
   ],
-  "total_files": 2850,
-  "total_size": 4153583282,
-  "pack_files": 2852,
-  "pack_size": 4153583282,
-  "total_omitted": 2,
+  "total_files": 3233,
+  "total_size": 4175871379,
+  "pack_files": 3235,
+  "pack_size": 4175871379,
+  "total_omitted": 4,
   "omitted_files": [
+    {
+      "dest": "SC-55/WAVEROM3.BIN",
+      "name": "WAVEROM3.BIN",
+      "system": "dos",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "dosbox"
+      ]
+    },
     {
       "dest": "geolith/neocd.zip",
       "name": "neocd.zip",
@@ -254,6 +264,16 @@
     {
       "dest": "jagboot.rom",
       "name": "jagboot.rom",
+      "system": "atari-jaguar",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "jagboot_m.rom",
+      "name": "jagboot_m.rom",
       "system": "atari-jaguar",
       "required": false,
       "reason": "not_found",
@@ -2289,10 +2309,10 @@
     },
     {
       "dest": "dc/dc_flash.bin",
-      "sha1": "94d44d7f9529ec1642ba3771ed3c5f756d5bc872",
-      "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
-      "size": 131072,
-      "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
+      "sha1": "e3d1ca03142a1f4f846966ad8d5eac6fcbcbdda5",
+      "sha256": "2521bd7cbed55c33820ace6b12a70ae23a4192a06f4290770bf72987c3488dfe",
+      "size": 262144,
+      "repo_path": "bios/Sega/Dreamcast/dc_flash_region_free_hack.bin",
       "cores": null
     },
     {
@@ -4104,6 +4124,16 @@
       ]
     },
     {
+      "dest": "satar4mp.bin",
+      "sha1": "b9645d265644d201dbccc39aaf4bfa60cebe7ead",
+      "sha256": "76982109ed433d512413044d7c5bc869f6d97e2826f5ac10cc7418fb3fff1ab3",
+      "size": 262144,
+      "repo_path": "bios/Sega/Saturn/satar4mp.bin",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
       "dest": "bk/BASIC10.ROM",
       "sha1": "af7eae90c398ec12942a408fa5ac2722e331738c",
       "sha256": "24be347356715352fcab480ed1559302d47d598255980a32150eba1431b462b8",
@@ -4751,6 +4781,3796 @@
       "repo_path": "bios/Sega/Arcade/epr-10330.57",
       "cores": [
         "cannonball"
+      ]
+    },
+    {
+      "dest": "corsixth/ANIMS/WINLEVEL.SMK",
+      "sha1": "a82974b2acb924ebe21f66705266440c6d066047",
+      "sha256": "790be5298654605ab7bd4d86b53c98146a2234f039f37f939def9eea3f5c5b93",
+      "size": 243188,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/ANIMS/WINLEVEL.SMK",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/AWEMAN32.DLL",
+      "sha1": "78a78cbaa63958519bc92c420fc87e3eca9b4f5f",
+      "sha256": "1249d7496d68f42569d983d0ae026beaa86090a77ebe3b58e3eb5352f3ee5aef",
+      "size": 35328,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/AWEMAN32.DLL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/AWARD03V.DAT",
+      "sha1": "25c38d66459aedc84616f096e3b1c939ffbbbc29",
+      "sha256": "f897bc94fabdcf6e33ced572fc18ba133fcf525dad3667f31831e7ed13b7a98c",
+      "size": 203890,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/AWARD03V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/AWARD03V.TAB",
+      "sha1": "741b3b3b4ac2423f61375d317d9f611c864394b0",
+      "sha256": "04381fc7625df3644381b4ad724a268b102ee821042e66a3735255f6fe5aea55",
+      "size": 144,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/AWARD03V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/BANK02V.DAT",
+      "sha1": "f23079620649f9ce3714253d769e50e8b96a45e4",
+      "sha256": "13118d69c79683371e6df477d6b77a32639cdbd2312bd21cd27508d2c5661ed2",
+      "size": 37833,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/BANK02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/BANK02V.TAB",
+      "sha1": "ba3c41b152b14b21ae73c6e2fc7152488b0831a6",
+      "sha256": "ebebf842eba13f8d1bccef2b6c2311917a6de8e4892600fab9fadec412fcd191",
+      "size": 90,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/BANK02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/BID02V.DAT",
+      "sha1": "972f0af9169759979218ae484660cf4a117e1c01",
+      "sha256": "2859ac391333e3db6978b84893078a299953c81c2bbc6383a11fee6a9a9f55dd",
+      "size": 23471,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/BID02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/BID02V.TAB",
+      "sha1": "456dd5719c8c0c36108b6e23ae062821c137e12b",
+      "sha256": "4cf3d17b04ee03e8c1d0c7b4eecedd2c86777c82be7ddf693256b3c2f50b54fd",
+      "size": 66,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/BID02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/BORDER01.DAT",
+      "sha1": "a8e40534a5c44f8bd575591960a1d0d5c7cbc16e",
+      "sha256": "ae7fe998f307db737b2b4806cfc3fa88db4d7137c45130e69d670a859c697708",
+      "size": 7707,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/BORDER01.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/BORDER01.TAB",
+      "sha1": "103d5b800a4e4617352f53c1c2287e713e8bf160",
+      "sha256": "efa8fbcde2560d43c9a013c0260f3933f6578b888506c0e2ffaa1152d1e58b38",
+      "size": 108,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/BORDER01.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/BUTTON01.DAT",
+      "sha1": "d967eb07abd43fad0d210ec6bd3bea77110c038c",
+      "sha256": "b1e9a2c393267539793cab76ad4cb8e9911cfb6c76d986c2f903639b7ed8e2e1",
+      "size": 252811,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/BUTTON01.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/BUTTON01.TAB",
+      "sha1": "5b3893c02ce682bd33785781416d49cb1fdd322e",
+      "sha256": "df9837b2bf49259b1db13e25902dc18bc3cdad43fc8c278d13d4aec793647973",
+      "size": 2490,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/BUTTON01.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/DRUGN02V.DAT",
+      "sha1": "c72c4e206c242b683e4b4a70d44f062e2036136a",
+      "sha256": "a239cd0583269a975b0f20b3e7dbb835ce5d5a254eeb91f79849a62b75890064",
+      "size": 15201,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/DRUGN02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/DRUGN02V.TAB",
+      "sha1": "7ea27c8126418a0e2317e40371ae2f828d9c52c5",
+      "sha256": "6dad0d44f7dc2924dcb162eb26f495dd9095875e3df69a196307c221521e398a",
+      "size": 78,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/DRUGN02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/FACE01V.DAT",
+      "sha1": "ee3d27f088065010280cf667a71d472fd3be44f9",
+      "sha256": "a6744e22209a269a13091a8d122910873323ed0436f9ac82a4de03c89fc3f1dc",
+      "size": 73143,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FACE01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/FACE01V.TAB",
+      "sha1": "60952422d543d76bda738efccafd55683cfad459",
+      "sha256": "10f5fd9cb986e7f84ff1b94cfc542dc4a935304eb1657f218abdced231183b9e",
+      "size": 330,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FACE01V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/FACE02V.DAT",
+      "sha1": "467d28bcb93f04a31e0388ddaf837b370237a0b8",
+      "sha256": "c0f5c3bf6652213079bd158d0ef297eda75d96d4865d99550cbf014039ccf395",
+      "size": 116569,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FACE02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/FACE02V.TAB",
+      "sha1": "bae5a75758b8a95ce8523d3e4669c17dc28a0047",
+      "sha256": "31785d70cef359627e93736dbac946ba27b0bc03a0784bc222ecea94561a9ced",
+      "size": 372,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FACE02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/FAME02V.DAT",
+      "sha1": "a9dcb674c378048c459196372db92ad9660317bb",
+      "sha256": "c4c0b1f1cf940b94f68eda8bbc23a7f3d45ba0d6b8781d879380b3c0e711be48",
+      "size": 1060,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FAME02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/FAME02V.TAB",
+      "sha1": "1a8a69307da4c9af7a6b2b078402c9540e510bde",
+      "sha256": "cd38a3a53e44a155478b04ed4d0eaf4e7c793bada5059e006f4ed83cfd52c567",
+      "size": 18,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FAME02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/FAX02V.DAT",
+      "sha1": "9cbf36ca0136531a7a1d690412d10d83642f745f",
+      "sha256": "5c0db20eac87bff38f375df74c3d478f1d799e4b3e4da9113b26359074920802",
+      "size": 17393,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FAX02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/FAX02V.TAB",
+      "sha1": "5b148318fbb86d9553a7658f08b9773471ae2cd5",
+      "sha256": "8db262a13d77d7ba0216420953b7a429b837a31f10e534639103e8a08a3d0bf5",
+      "size": 126,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FAX02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/GRAPH02V.DAT",
+      "sha1": "0a1d118680bde995f5b29d4a55d6ff4a436dfd64",
+      "sha256": "0a0d12f750d5227469a4c54e562d38c052241fd017141af8b4a3d6497a606d71",
+      "size": 3988,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/GRAPH02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/GRAPH02V.TAB",
+      "sha1": "46846bd01a3f14034e8e36519fe918dfa21584f8",
+      "sha256": "642cbe629d81d670e788bd877b5e314647aa3eb0730f52e1149b18d5d7ac5fdc",
+      "size": 24,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/GRAPH02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/HAM01V.DAT",
+      "sha1": "d3a06c66f921047de38b57f0afa149c1db2d0b17",
+      "sha256": "972c2a5cbc91891466e31f0d3b2f693b3215eecaf5553dbd25c16841aa7a8fb7",
+      "size": 85598,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/HAM01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/HAM01V.TAB",
+      "sha1": "3ef7588c06111c94574146c3ac3e8dc5563cf4d0",
+      "sha256": "cd26f0b99fb75444ea815563419e41962e1ebcf4b9015ef009f3c1b4fe732c27",
+      "size": 54,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/HAM01V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LANG-0.DAT",
+      "sha1": "01e00c9c48ad6d06920150b2cc2643550945fbbe",
+      "sha256": "ee1f88f290cd05b28f01675f7520d3eb1ca33df82bc5937154498869e04513b2",
+      "size": 98406,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LANG-0.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LANG-1.DAT",
+      "sha1": "24169cec72eab745f8597cc692b56a7528059d2d",
+      "sha256": "cb907b1b388eada5b24f13df8ddd3db96a44e6008320cd847323ecaba4fac8ef",
+      "size": 98742,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LANG-1.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LANG-2.DAT",
+      "sha1": "006da00c75c9cb9e499061cff6cecf03540941c3",
+      "sha256": "c84826e521e965ed744f810f36b05bc3d20181dee0d4f3fd65298fd6008d91f3",
+      "size": 115490,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LANG-2.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LANG-3.DAT",
+      "sha1": "a35355c9926bd2e69e00c9a6b4ca3eb42f063a83",
+      "sha256": "d9154596121309c086b2940aa14e8d38343293b48c544dfba97fd5cc7c84c7d1",
+      "size": 102489,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LANG-3.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LANG-4.DAT",
+      "sha1": "9ddad2a5b173b66374cbd45177681ac91f9b65c9",
+      "sha256": "91d573981958f0dd5c6a2d5e7dda66e71ae8189d638a7e401a5cc05ed2568c00",
+      "size": 103737,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LANG-4.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LANG-5.DAT",
+      "sha1": "d3b6f3216285f244690d31f1bcb52915e52be21e",
+      "sha256": "4bfc10b12f1b7f82679006124862838fea352945a53e3a2324c0e839c857d29b",
+      "size": 98610,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LANG-5.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LETTR02V.DAT",
+      "sha1": "74da09ef3996ca17499d0fdaa7faa6052abca0a7",
+      "sha256": "017bb52279aef635f8561ba14a2fcbd42a6968fb2411598c8ee80f37027556a1",
+      "size": 5734,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LETTR02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LETTR02V.TAB",
+      "sha1": "9aa3330914c5862fa317dd419ccdaeac072a4e0d",
+      "sha256": "d864f37801a5fa51dc1eac67f9ef3e3a6f155f56e19a7265e0eeaa0be4cdece0",
+      "size": 30,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LETTR02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LIQ01V.DAT",
+      "sha1": "3899fff9696877a2d1f13c72d6aba3878667c854",
+      "sha256": "df237e8a2e184ac0f44ac1171c23e30e3135e7c38b9120ec0b2ec6983e0e85a6",
+      "size": 91726,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LIQ01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LIQ01V.TAB",
+      "sha1": "1c0e37a3cdfde4b5f6933b85570ebe11c67c2f52",
+      "sha256": "757e2dc459860d3c90c6f8eafe57d6f066a74458ef0c64d95b99c56d7db2409d",
+      "size": 54,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LIQ01V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LOAD02V.DAT",
+      "sha1": "0502702798e9b4a2ba295bb39c048c4bc427a7e6",
+      "sha256": "0f503f99e6bbd92bb9d9b0fdaf3f71c8531b3fb079faa7696d07f63745726fce",
+      "size": 455,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LOAD02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/LOAD02V.TAB",
+      "sha1": "e00611dd03d4e9bf54aa3be195c3667ce15b1d30",
+      "sha256": "31a4d492c2b111514e779963b510a91baf753345ce86f28a17828a2a7263c8bb",
+      "size": 36,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LOAD02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/MAIN02M.DAT",
+      "sha1": "c8dbbb597d0431e848e0df8a6c7fd93f0614e454",
+      "sha256": "594c847ca4aa331662a32390ce71baae26a21546cef1bec8a9b35ebd662ae52f",
+      "size": 58432,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MAIN02M.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/MAIN02M.TAB",
+      "sha1": "6668be86f99c37266680dcec8f512a4567676c9f",
+      "sha256": "dc7e0980723b09820eb6d3ac3a5882f62413e0bd56094c6ed21bbf30a405ba3e",
+      "size": 72,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MAIN02M.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/MONEY01V.DAT",
+      "sha1": "36f34a8158f8c522350b6c3778f3a53e00a36fae",
+      "sha256": "caa944723b7e34034418274e2b7a0a5e045469f46cbb126df581f08e761fff07",
+      "size": 974,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MONEY01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/MONEY01V.TAB",
+      "sha1": "1bce417201b43468a6d288d9f89ed641df1d579d",
+      "sha256": "74083a1b9dcf362b46d0a6943cee5e7e3cc8a5d5e073a1e95d820c8df04fd3ad",
+      "size": 72,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MONEY01V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/MPALETTE.DAT",
+      "sha1": "768a40921d4df8d0517b547db03f56d60b1f01c0",
+      "sha256": "35bf56c71691b071b6e2f9c78bd2eefe81d91e6dd361c40ffee99f44a13884be",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MPALETTE.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/MPOINTER.DAT",
+      "sha1": "34e7f284df7f8fb2625a56b76bc444de9153ed3e",
+      "sha256": "2b89c4a89dd1774640c88144e1d3518f4fb8205d5b6ae604c31c71fae092d259",
+      "size": 4748,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MPOINTER.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/MPOINTER.TAB",
+      "sha1": "ff35e4dcc962b203684f7d82a5a833e389007e9c",
+      "sha256": "aba7a81d68bb01c7d89739daf1392e0433996c17b6550de5037356810c2aaf18",
+      "size": 132,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MPOINTER.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PANEL02V.DAT",
+      "sha1": "43cfdb0210f682e18a6d0ca12ffa123bb507fde0",
+      "sha256": "a9fec6d81c8b5930dce4a9d78dc98ead992e8837da3765b4f7b413fdcc61aeba",
+      "size": 39862,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PANEL02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PANEL02V.TAB",
+      "sha1": "9eeba0b88580309633e65cf2d9ed3a6320ac77a4",
+      "sha256": "734b5f23e0269e5d3b5185121f3ecf916b57a69dbaa8147603af4513a0068dd9",
+      "size": 366,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PANEL02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PANEL03V.DAT",
+      "sha1": "0967c37914ebc64dcaa3596edc0917938ea25a8d",
+      "sha256": "e611e88ffa5e8a48f2ce8e74a6042c085f83b89d2729dbb4f4af286cb4953b52",
+      "size": 52678,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PANEL03V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PANEL03V.TAB",
+      "sha1": "3a17da240d2a3144c946c947f935d1c04478b5cf",
+      "sha256": "75b436ee3d7174cc0393fed2c9f32507dfa8853c7a30fbab6128c7074c993b89",
+      "size": 126,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PANEL03V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PANEL04V.DAT",
+      "sha1": "add4b9ef1ac9de28220376371ee8a85cc2b7a1a1",
+      "sha256": "8177830490683a02d08777280ed292108375199ba4f27df3bd5f337e7f06b856",
+      "size": 14941,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PANEL04V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PANEL04V.TAB",
+      "sha1": "74f7cad52b02f19436d458c706bb2cfc46674297",
+      "sha256": "65a4fb7cc7889aa78f771b34bcc8b1b3d0534ce3f5fabe48a4d3f636b84f6536",
+      "size": 168,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PANEL04V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/POL02V.DAT",
+      "sha1": "5a9dfd2c876fb5092ca084a0d98bd1d6d8ee86e1",
+      "sha256": "bedcebe293a1237662232f4197774e62d527719e671dbabecff311bdf493932e",
+      "size": 7223,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/POL02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/POL02V.TAB",
+      "sha1": "9bb25f76ed91861b8fb1b44bad778a2d7ccc39db",
+      "sha256": "9be3c9c624ad4255951120c019daac3766d5e40c1d431a926d6bc6915501133d",
+      "size": 42,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/POL02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PREF02V.DAT",
+      "sha1": "0346be2c13bcebfc388f1b0fea0d4c2047938366",
+      "sha256": "4470601522a6ac0bf24949e4421c346dfad5b7fdc76eec9cb9c530f03464e8e1",
+      "size": 1460,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PREF02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PREF02V.TAB",
+      "sha1": "9f142efb328bcae6054f544860f3139d7d5b2fd7",
+      "sha256": "20a0e14e010cb182c009bd1eef0aafe23eb0d36f2173187c42d0ad8483eb6af5",
+      "size": 18,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PREF02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PULLDV.DAT",
+      "sha1": "21fe3edf724de8237947c1c2c922b30e372dea41",
+      "sha256": "fc091f98de026a52b61ad75ed520da9886e841018ac6770d2124e0e99fcef55c",
+      "size": 976,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PULLDV.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PULLDV.TAB",
+      "sha1": "3a02a9ba24a4259bc0a4a05773082154f06004d2",
+      "sha256": "0cdc605871fe0e62bb4a97eada62edae64d2fb46e1350e6310cf8b8a069c9ccd",
+      "size": 126,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PULLDV.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PULLDX.DAT",
+      "sha1": "91b5e1bccc7265eb5dc9f03b81ede5c741816fea",
+      "sha256": "3a852db5931bda408fae1c452060313e9bfaab319eb60c1d8b936fbd7791d959",
+      "size": 634,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PULLDX.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/PULLDX.TAB",
+      "sha1": "85b2b73c89218179f5019168f636e2a187b03907",
+      "sha256": "1d3807ac8a849c4144be80085291482478b38d762cd726b75a616e430c162837",
+      "size": 66,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PULLDX.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/P_COMP.LEX",
+      "sha1": "5900e1d23afeeedb836e7881a1f7536c6b2a905b",
+      "sha256": "0fa48d835d3f7fc6d09b9681df322a90b9bda2c9e0081173802c1839470046c1",
+      "size": 311,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/P_COMP.LEX",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/REP02V.DAT",
+      "sha1": "8a8b61e8bb4a04432f2bbd152fb66fa0bb367627",
+      "sha256": "2767a54aa294aa67aa07c0d05209e816e2907926577affdc03756b9f75385358",
+      "size": 7030,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/REP02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/REP02V.TAB",
+      "sha1": "57489feff920a222ae76d4f8b5beaa35cd9f292f",
+      "sha256": "be08618ea800a767703c25f743cfc34bf6d2128285a8ef329c805f1163c6ac64",
+      "size": 90,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/REP02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/RES02V.DAT",
+      "sha1": "784b2dd4a339245e2a95dac0024abdb021a2f327",
+      "sha256": "bbc1fde0750e846ff86ac1db785b72f3491e41a997478e485a2f54e73a4ad77e",
+      "size": 158263,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/RES02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/RES02V.TAB",
+      "sha1": "2f713cf3977c95fbcd1b67c75bcbcd14b030c17e",
+      "sha256": "da5c243deaaab65497eac1c422e067503fedaf6544e26db335515ec0544ebdff",
+      "size": 114,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/RES02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/STAFF02V.DAT",
+      "sha1": "c2154f6f3d91008cb349ecf50139cdf6243d0384",
+      "sha256": "3ef0a3f9b28386c2ce6ef8d6882b0222e09d5b09145f60a1b15e600bd931c1da",
+      "size": 18289,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/STAFF02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/STAFF02V.TAB",
+      "sha1": "df322bb8a4c4a67f2be386f912fe77a9f7f10f8e",
+      "sha256": "42f5d16c8cad2b3c3ee6ee6d1da657d165de0335178dfa0f89deb04cb3852a1b",
+      "size": 138,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/STAFF02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/STAT02V.DAT",
+      "sha1": "e72b454f22e6aaa7e040a330beef4a445c5dd8e7",
+      "sha256": "1e8a6b605bd997d5216ef3c7c28efa01480cc9c8a42152795e052835485aa043",
+      "size": 731,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/STAT02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/STAT02V.TAB",
+      "sha1": "5ceeb6ebbb07f54e0656054f5ac31aab28def32c",
+      "sha256": "d3c0c0fd055aefc417aa584eb87fe3ead097c47f6b3fc9ae4285f191aae4c591",
+      "size": 12,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/STAT02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/S_COMP.LEX",
+      "sha1": "49e78e97c4f1a8f5b3fdaa0e56bc560e7c9f84e7",
+      "sha256": "ddfc4540086ada4bdeb5437f45e2c9e4413721e6ea09091753f522908da515c2",
+      "size": 672,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/S_COMP.LEX",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/TOWN02V.DAT",
+      "sha1": "e580e5ab9a2b3af19326eb4788c024baba70d4ee",
+      "sha256": "6b4bdae5757be4730b1f859d28367deeaa6fe24963a669b15618b665fb72800c",
+      "size": 15828,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/TOWN02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/TOWN02V.TAB",
+      "sha1": "a29bcf193d66efa5a3c71f12df260c69f5799bae",
+      "sha256": "cface6aaa1aa56ec1ef7b5748abeb4230edb22c334a8b43f239ec40a4ac8ca65",
+      "size": 120,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/TOWN02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/VBLK-0.DAT",
+      "sha1": "533b60fd924fa69528106cb70fcb5b3b2933b81b",
+      "sha256": "3f6ddf91707a7f7b7a26166518a06a079c2a03216a229676a52ca44ae546f918",
+      "size": 266978,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/VBLK-0.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/VELE-1.ANI",
+      "sha1": "c05058dceb4e27889ec0a787ff93080a04f3978e",
+      "sha256": "cd269819931037e4a26735ec7263e36001470403b3ae55ad4920d443faded12a",
+      "size": 104300,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/VELE-1.ANI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/VFRA-1.ANI",
+      "sha1": "33817c1a6d0c36dca44f7d76b2ad1e6a2050d936",
+      "sha256": "d4fbd8f987de49e35aaa340a297814d94762397cda167c3262a444be92c33a0c",
+      "size": 51819,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/VFRA-1.ANI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/VLIST-1.ANI",
+      "sha1": "c4114e1c2a015fd27096649d59cfbfbf278d6852",
+      "sha256": "c6a7530658341704456f9a6de61e209a332a0d307cbf81250cc81d61ea39d697",
+      "size": 90583,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/VLIST-1.ANI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/VSPR-0.DAT",
+      "sha1": "ab9900afc174f7ea774713ae2080c0e85487cfcc",
+      "sha256": "b4b7bc790d17c1642318209e8199e271356c4b9ec8e14660e7a4c0b05f5e8bba",
+      "size": 941398,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/VSPR-0.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/VSPR-0.TAB",
+      "sha1": "883091aab74368e5eaeb488d7e8630e0c3df4197",
+      "sha256": "7e54edae5fb2887b8a9844f5594bb140635259786fa3a775b0d5b073bc7e24ac",
+      "size": 17897,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/VSPR-0.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/VSTART-1.ANI",
+      "sha1": "7236b0ad62b14e7f3a1c8be435d1d6e2b226195c",
+      "sha256": "d7681c8843a9f7d16c6ad573c5c365659f1436f7a7c23903f026a85a9eb7a015",
+      "size": 6048,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/VSTART-1.ANI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/WATCH01V.DAT",
+      "sha1": "c5cb2d00a152484305bf6a683bdb5f11f843b563",
+      "sha256": "bd884c70896dd9c0b32efe60ae18e632b64dc4749bbf760cf683c06cc438b3a8",
+      "size": 5284,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/WATCH01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/WATCH01V.TAB",
+      "sha1": "eed5c24fb964355e524f11e8e34c3f918a8bd574",
+      "sha256": "206daaae64b7f9a4dc8e133b1debd4d4beff581d71f0a33e31534124670f93b3",
+      "size": 108,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/WATCH01V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DOS4GW.EXE",
+      "sha1": "c489f83dc15a9ffc3c502707da40e581ec79bfe6",
+      "sha256": "b8265123ac8a189637448618409ef3ecd2e9f3e1a47062c685a02240f688dec1",
+      "size": 265396,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DOS4GW.EXE",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/HOSP95.EXE",
+      "sha1": "2da7f5e9265e30d025de2ee40d1f6ae95d3c01b8",
+      "sha256": "4025dec55d78964e56591fc69abc0915c039bb934607c13bf59862b6b9d21aca",
+      "size": 1064960,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/HOSP95.EXE",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/HOSPITAL.EXE",
+      "sha1": "d37aaea89e22be35467b3050280394c74a5e0b07",
+      "sha256": "2f9f7499553beb6ba947e21f5c90a9e9b9f000a85f97d6a4610ae8a14d995482",
+      "size": 1713424,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/HOSPITAL.EXE",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/MODEM.INI",
+      "sha1": "cbb8391cb65c20e2c05a2f29211e55c49939c3db",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "size": 3,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATAM/DEMO.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/MSS32.DLL",
+      "sha1": "88f2754ed52ca09f61299d2be2b14e1ff4e18c44",
+      "sha256": "a2912c7f00475f22e310351cfdf6fa2be3529f3ff1a9c245830d1b7c3486fd6c",
+      "size": 144384,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/MSS32.DLL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/AREA01V.DAT",
+      "sha1": "de274fb5b31d62aa41f516d427e9ba6cd321cd2f",
+      "sha256": "43acf0868e911dc34a4d7f6cc83944ed352e6c440624871ba0a0d55867c39443",
+      "size": 149635,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/AREA01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/AREA01V.PAL",
+      "sha1": "77e67bd55022418551c2a1ea4d1d83b5024c24e0",
+      "sha256": "b6bcaa7c458ed883de5ed8fb0818e65e03abbb0e69e3b22f1ac460b237178c4e",
+      "size": 757,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/AREA01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/AWARD01V.DAT",
+      "sha1": "c6bade4a7685f98f4a967ecd92c58712f2dc7b40",
+      "sha256": "a96a2b5aa00779af3be7bcfb7dde65de8587a3dfa47b8648fef3c469b4c12333",
+      "size": 158527,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/AWARD01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/AWARD01V.PAL",
+      "sha1": "bee13ef1cb9689730674db0707f538a505ba4189",
+      "sha256": "8f519ca33070e4b00f77a190899f3284bbacc9f7c3c9e4b58b810e4e05f76180",
+      "size": 745,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/AWARD01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/AWARD02V.DAT",
+      "sha1": "e7c409e985a8e51a156044831e354cbd2e5a5a5c",
+      "sha256": "b735ca6333070292de3a7dba11c5d5b4fcdb99ce474fde048d58500d82d7cb5a",
+      "size": 150017,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/AWARD02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/AWARD02V.PAL",
+      "sha1": "bee13ef1cb9689730674db0707f538a505ba4189",
+      "sha256": "8f519ca33070e4b00f77a190899f3284bbacc9f7c3c9e4b58b810e4e05f76180",
+      "size": 745,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/AWARD01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/AWARD03V.DAT",
+      "sha1": "36d887ce4b26f70d7c825ccac5cc9a0a8d104f5f",
+      "sha256": "a3f4f3bfd0cdf318c47173c968c442f493d6357c3ce9cdfdd0d05e7517f748bb",
+      "size": 157694,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/AWARD03V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/AWARD03V.TAB",
+      "sha1": "de0f67c3223d19f570ea9a4157988f94dfa749b7",
+      "sha256": "6294229c27684fc214419c987b0561197fc7bc6e032af3432fe397101707d6c8",
+      "size": 140,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/AWARD03V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/AWARDX3V.DAT",
+      "sha1": "25c38d66459aedc84616f096e3b1c939ffbbbc29",
+      "sha256": "f897bc94fabdcf6e33ced572fc18ba133fcf525dad3667f31831e7ed13b7a98c",
+      "size": 203890,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/AWARD03V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/AWARDX3V.TAB",
+      "sha1": "741b3b3b4ac2423f61375d317d9f611c864394b0",
+      "sha256": "04381fc7625df3644381b4ad724a268b102ee821042e66a3735255f6fe5aea55",
+      "size": 144,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/AWARD03V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/BANK02V.DAT",
+      "sha1": "a7dbf83eb22381b7ffafbeefdaae34158bbf4851",
+      "sha256": "62a30d178fd8926f1e54aea5b3bc1ccdca2d07acdff5470c65123da1665b717c",
+      "size": 13573,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/BANK02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/BANK02V.TAB",
+      "sha1": "e27c3aff21c1d5004f763e282e5aa23ac6e06baa",
+      "sha256": "f48c39f46afc069cccb2f81d327caac609609d8e0e376f8974794ce4168ffec8",
+      "size": 84,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/BANK02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/BANKX2V.DAT",
+      "sha1": "f23079620649f9ce3714253d769e50e8b96a45e4",
+      "sha256": "13118d69c79683371e6df477d6b77a32639cdbd2312bd21cd27508d2c5661ed2",
+      "size": 37833,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/BANK02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/BANKX2V.TAB",
+      "sha1": "ba3c41b152b14b21ae73c6e2fc7152488b0831a6",
+      "sha256": "ebebf842eba13f8d1bccef2b6c2311917a6de8e4892600fab9fadec412fcd191",
+      "size": 90,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/BANK02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/BID01V.DAT",
+      "sha1": "d7c7698259fa1bdf11ee7e49fac5530c98170f53",
+      "sha256": "a91baaccbe53fc621fd5ddfbdd50b610edd7fa66efbd2a3539ccf50bb60132c1",
+      "size": 120623,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/BID01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/BID01V.PAL",
+      "sha1": "68a8e0b9d881dfa62882409d9887b9374e958cae",
+      "sha256": "f691ce0daba375a4219081741d3f0e769f3085d7320e74df870888fa4b2ef8ec",
+      "size": 634,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/BID01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/BID02V.DAT",
+      "sha1": "8e991fb4804683c54df42dd0a3f0711f8165b1d2",
+      "sha256": "27bc53c1783809106b4b44028a50ed4a83b35202eda4df0b496dfda8ba0cbe7f",
+      "size": 11195,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/BID02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/BID02V.TAB",
+      "sha1": "caaf96c230e1078c70a8e7ce6f67d8f8a338d488",
+      "sha256": "3cdbf96e666350796079566022201495195aa459bde434cd297c3173c2d00c1f",
+      "size": 66,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/BID02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/BRIEF01V.DAT",
+      "sha1": "33e7f54f9505b28d2d558debbaf96e672fab1aad",
+      "sha256": "73bacfcf4b84309334decdc6d2763bb6e0a12ce9191f00ae3672c6c7056d7357",
+      "size": 143819,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/BRIEF01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/BRIEF01V.PAL",
+      "sha1": "47805cb2f8bcc3fe30172f71f9356fe7292959b1",
+      "sha256": "33c4c88baf5ed39fc0a088d1bdee94cba5648367c25b26bc350cf2d7efa489f7",
+      "size": 749,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/BRIEF01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/CRED01V.DAT",
+      "sha1": "317fef8e2af416e3af882308b0b0adbb8d88caf5",
+      "sha256": "c3175e120674df68416deab95a91383ae91125eae8762e6833ec335950813608",
+      "size": 71540,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/CRED01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/CRED01V.PAL",
+      "sha1": "7ebf4e15317794cda361ddbf39478686a9747f08",
+      "sha256": "30f234aa098fba44212993c856f343ada7afe55b033e6a4490db36226b5cb7c7",
+      "size": 724,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/CRED01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/DRUGN02V.DAT",
+      "sha1": "a50036a15431d2569f9a448a6842f71e67b87dc6",
+      "sha256": "bfa1c66625a8f7c1d7322fbbaae6d40cad0144eb57873ef4dedf296788145c7f",
+      "size": 6055,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/DRUGN02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/DRUGN02V.TAB",
+      "sha1": "ee116e7968a889b066abebf348aa10f42b91fb2e",
+      "sha256": "d6703d10ea3a828353294cfd26efb7ddddca5dde585d116eb37bc11d8e8ab9ab",
+      "size": 74,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/DRUGN02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/DRUGNX2V.DAT",
+      "sha1": "c72c4e206c242b683e4b4a70d44f062e2036136a",
+      "sha256": "a239cd0583269a975b0f20b3e7dbb835ce5d5a254eeb91f79849a62b75890064",
+      "size": 15201,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/DRUGN02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/DRUGNX2V.TAB",
+      "sha1": "7ea27c8126418a0e2317e40371ae2f828d9c52c5",
+      "sha256": "6dad0d44f7dc2924dcb162eb26f495dd9095875e3df69a196307c221521e398a",
+      "size": 78,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/DRUGN02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FACE01V.DAT",
+      "sha1": "84d160cbb801e492c83a2d6b99a44596f773300b",
+      "sha256": "3e9f76973785ba0435ae7bd3ac409a39507bd9eed7fd8ebd0c9d6692a1ffa944",
+      "size": 87750,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FACE01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAME01V.DAT",
+      "sha1": "7336b6fa3921b925eb0615f2144c9d8f9ae37714",
+      "sha256": "98c8d693cd2fe630e9544fc86ca48f2ff702f2fc0d5e047c4eb1e22af2f4ae98",
+      "size": 158477,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FAME01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAME01V.PAL",
+      "sha1": "bee13ef1cb9689730674db0707f538a505ba4189",
+      "sha256": "8f519ca33070e4b00f77a190899f3284bbacc9f7c3c9e4b58b810e4e05f76180",
+      "size": 745,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/AWARD01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAME02V.DAT",
+      "sha1": "9c2d7f2786f7f4c035b932e80e7dbacbc94dc5f0",
+      "sha256": "6d6567e9f5d7cbc567e6c6e373cc0a72e585f69d948d62c9b85f9e983d3c244e",
+      "size": 206,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FAME02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAME02V.TAB",
+      "sha1": "123eba5f38daa6909a3afc231bf33e1831bd906f",
+      "sha256": "04f69a9ddf0191c5b9a0a3550f6136546de05797ad5d25426057cb7541070d98",
+      "size": 18,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FAME02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAMEX2V.DAT",
+      "sha1": "a9dcb674c378048c459196372db92ad9660317bb",
+      "sha256": "c4c0b1f1cf940b94f68eda8bbc23a7f3d45ba0d6b8781d879380b3c0e711be48",
+      "size": 1060,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FAME02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAMEX2V.TAB",
+      "sha1": "1a8a69307da4c9af7a6b2b078402c9540e510bde",
+      "sha256": "cd38a3a53e44a155478b04ed4d0eaf4e7c793bada5059e006f4ed83cfd52c567",
+      "size": 18,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FAME02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAX01V.DAT",
+      "sha1": "7b478c2656a30ad74fab24a6e66bd815809e86a5",
+      "sha256": "b2b0b6a9f491dff1fc91b081f0b3f00997049ae9d4c4186db9acb183fb53d02b",
+      "size": 64285,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FAX01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAX01V.PAL",
+      "sha1": "d799b6cf1cb82d763663ac71f90d92044bd36083",
+      "sha256": "40c7e11b25fbabcee1d7be48badff91ae0f821dd37e2fb9fa1e2433a35b6fa11",
+      "size": 659,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FAX01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAX02V.DAT",
+      "sha1": "9f0b44cf659bb70531a45cd0acfedc5e27bf1a16",
+      "sha256": "2ae8b2df38f7899c728edb520a173afc6dd363d99e67f6c20b647db9ba88ffd5",
+      "size": 8213,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FAX02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAX02V.TAB",
+      "sha1": "878acf08cf411bba5c1ff4708b72892de12be899",
+      "sha256": "02baa16f5c778a41002714e8c1459d67147dea873de34d234aa6b405da88473b",
+      "size": 110,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FAX02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAXX2V.DAT",
+      "sha1": "9cbf36ca0136531a7a1d690412d10d83642f745f",
+      "sha256": "5c0db20eac87bff38f375df74c3d478f1d799e4b3e4da9113b26359074920802",
+      "size": 17393,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FAX02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FAXX2V.TAB",
+      "sha1": "5b148318fbb86d9553a7658f08b9773471ae2cd5",
+      "sha256": "8db262a13d77d7ba0216420953b7a429b837a31f10e534639103e8a08a3d0bf5",
+      "size": 126,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/FAX02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FCOMP.BAT",
+      "sha1": "c24c31f4fa7ac7ae44f4fdfd0aeff0642d1f0449",
+      "sha256": "3ccd51f438b633c5f3c23c50a177bac0cf26ed7f129e54a57b15a03877308bf1",
+      "size": 42,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FCOMP.BAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT00V.TAB",
+      "sha1": "b34705fb46c0489a61a6ee15721cca4b378b8782",
+      "sha256": "5894eacfb25fa54fa7dd210421bdbde50e216d6d16e68aee7c5a2cbe51ed9709",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT00V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT01V.DAT",
+      "sha1": "64424da229f2fbd186deda35e1aa2414fe145cf5",
+      "sha256": "013fe62f99d4f5dae585a35ad7705a7c808846298850838c46e3479448e6f400",
+      "size": 7830,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT01V.TAB",
+      "sha1": "51b656c1ccef7624989f74fa9d6e4d4af564d752",
+      "sha256": "e32f49425cb3e7be1787f00fb4030d8b94724723dc85e5a7e4614b1038ce07d8",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT01V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT02V.DAT",
+      "sha1": "672deb306f08dcd1ad06d2bbf0f6f57ff840af18",
+      "sha256": "268b681fdb3dfe82919f68db64a5fa5a82b94ddf93b68b65fb28d92e2f9257b9",
+      "size": 7830,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT02V.TAB",
+      "sha1": "51b656c1ccef7624989f74fa9d6e4d4af564d752",
+      "sha256": "e32f49425cb3e7be1787f00fb4030d8b94724723dc85e5a7e4614b1038ce07d8",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT01V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT04V.DAT",
+      "sha1": "bf7665656f8068d2fe57f4dd05ba3ac42c055377",
+      "sha256": "8ebfe2d9b920f5a6225e993c71ce82ab089c0d6fa3df25f5598d1b4e9f38f173",
+      "size": 9732,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT04V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT04V.TAB",
+      "sha1": "238a8dd93dfda7ca8c4b2ea20adbe2a5749ecbd5",
+      "sha256": "a802a76a9f154d49b7e856b30735a44b06523039b255ce1d4f3e0374a439a8bd",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT04V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT05V.DAT",
+      "sha1": "e3be07de731cf6d574bca2fba83c51205eefb2bf",
+      "sha256": "4485aad543af3ea3f7cdd217002f8ad2ae18112db2d05d9bf6e6ac8567d93b67",
+      "size": 2559,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT05V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT05V.TAB",
+      "sha1": "1fdbe7cc7a92f3c2b938c9c364a8411ea052f574",
+      "sha256": "13460e835c5f990f912e8819c27774e969f4d0fd9542c6c4ebd76b65ad7ceab9",
+      "size": 582,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT05V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT09V.DAT",
+      "sha1": "6cda0bc844fd6f3f6402c680dc645f14b1861897",
+      "sha256": "87576785a4837401fcfbc82cf9db80eeedd6be5e928064e34f96c097810aa479",
+      "size": 7286,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT09V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT09V.TAB",
+      "sha1": "c8d42e01571ca6599cf48a49fed9db15e03def75",
+      "sha256": "5928bf1e306da93fafff5092c933278fec88e81d5ca400e6ec1aa5610a2f3c3f",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT09V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT100V.DAT",
+      "sha1": "061941aeb04eddefefa205d5a1d9823ad77bb5cb",
+      "sha256": "b7b74a4b3863bfc4eff23b5b1f9d514f66b1eead1968a5490825250b944a3443",
+      "size": 11071,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT100V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT100V.TAB",
+      "sha1": "664bde191b1ec68b429196e5f02eafcb3d7747a1",
+      "sha256": "c53a9b048b639ecb003b370689ca32a3ca8c0dd091834f2a147e14fba3770332",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT100V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT101V.DAT",
+      "sha1": "07b3fa885233f44ce46a19eec8d47329c6235a3c",
+      "sha256": "3292638660194159af0d95a92e7a416d1c48389230e476cf571a5618a54aa62b",
+      "size": 11062,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT101V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT101V.TAB",
+      "sha1": "f3aa42b442369133fad4d1fd86dcc2828751c575",
+      "sha256": "0c6d6f2851cbc63444f47a6c50858cd88ce40c3e70b8644e6634fd29c636d831",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT101V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT102V.DAT",
+      "sha1": "c7d5739478ee2faf12a20eebe14454333c68ba7a",
+      "sha256": "ce62a3aa6e0360108c1995bed91afae6954483dd4407c6f8290634c63b4c1da5",
+      "size": 3607,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT102V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT102V.TAB",
+      "sha1": "53c433ff88d23a093bfb157af2b7a79b0c2f2cf3",
+      "sha256": "2b8a11f9f72f36b7b6d848e84e3dd7e720d66006611ccd4a60da6e4a0383597e",
+      "size": 1176,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT102V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT105V.DAT",
+      "sha1": "2895a0ce95793a29ef876913d6d1dfa45f3687ec",
+      "sha256": "af0eb3fa6835c961cf48eef771178246ab396ea95b4bc94be4cc274ea37a53db",
+      "size": 14315,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT105V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT105V.TAB",
+      "sha1": "cb21e218d86b1e937a55e56696daeb6adcd0c7f8",
+      "sha256": "db079de0eadc574df4c0eae5acc471b87dba600b67e8915fa1a82f4e766b7846",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT105V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT106V.DAT",
+      "sha1": "d5631c2175189d6b8df68f09aa43ea0c6d02d306",
+      "sha256": "05852d34be4e4b419e2129498e4d918fc69ae668507b848a4eb0224c6fc99152",
+      "size": 3021,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT106V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT106V.TAB",
+      "sha1": "dd7444e257ea7499e981a749fe0f47a1cae57fe7",
+      "sha256": "a4d1aa34720fb9234eab8449325adee3693e972eaf017bf35cd204a3d55cd085",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT106V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT110V.DAT",
+      "sha1": "823fd491a740ca1f3cda43420cfa0a0c462c37b6",
+      "sha256": "c4edf5a4c5ab85db0045562d65b471b7e7b74d15855231bf36a212e66c7c5877",
+      "size": 3393,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT110V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT110V.TAB",
+      "sha1": "22c61d7471b1796ff41ec4d0113beb2f6d7ae77b",
+      "sha256": "f509953f460e5055b340f466cd688d6d5e9832b5b3165572aca0d80e9138171c",
+      "size": 204,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT110V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT111V.DAT",
+      "sha1": "c68b6803119f5668bf20945e712b8d4c4d5f00de",
+      "sha256": "d69149c2b3e86d87489e43d5207b503bdab7f198a336e20fdbb0be7f67dd3bfb",
+      "size": 2475,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT111V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT111V.TAB",
+      "sha1": "d503420b5abdd1363d193d3c5154a24ab8939386",
+      "sha256": "3abd0a124e7f98610d202d754340f6d3883598bdf6dc1bf808faf4e902905e13",
+      "size": 204,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT111V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT112V.DAT",
+      "sha1": "42454a43eb1d796f6dbeac44fb0334614890728a",
+      "sha256": "f825dfd4fce80b49885fd4cf7f8c5e8fed13edb58a87b883c656744c9a665b00",
+      "size": 21044,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT112V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT112V.TAB",
+      "sha1": "b496523eca5c2a4c1cdacba81f60c28a5f727f4e",
+      "sha256": "98b035656c110fb66c04d9a192106a86a43bbb62f8a9860f5f30f0a307f2fcfe",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT112V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT113V.DAT",
+      "sha1": "051dc5d9e9f764cbc2080caab6733b8a86b02fc4",
+      "sha256": "12bb666ed94eb640a65fb5650034a87b492ac2db395ce4332abfa44179b92aae",
+      "size": 21048,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT113V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT113V.TAB",
+      "sha1": "f1a4fd768dd75eb413f1ed434fe2ee9cf1ecf2b7",
+      "sha256": "f5341ce9dd471d005d1fdb5a378ff43ba954cedb9e54ace0f96370ff44806165",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT113V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT115V.DAT",
+      "sha1": "3c39b0d4aa3555125a5a520d01771d99da8c78aa",
+      "sha256": "4b2d31f6a99843ce66c4684f16510010a7da1a4c56760362cbd51332913b1c5f",
+      "size": 18194,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT115V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT115V.TAB",
+      "sha1": "c7fc2e1dae6c1525e5df493fc12898cacf7aa5ee",
+      "sha256": "c829df2c998a8affadef65b0584ab790176bb095b4238d45dbcd3a5f3b5c157b",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT115V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT120V.DAT",
+      "sha1": "133aecaa538d570e8dffe9217ebd51f6d7ca168a",
+      "sha256": "7aeede5815e29d21d8ebaea7f2017163766f1ef358907f81596935e05c310e5f",
+      "size": 14183,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT120V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT120V.TAB",
+      "sha1": "e870e925647116f8e9e5257a86aa0791a1173cef",
+      "sha256": "621971a21dba606a7f19e516717768852eaf704cdecd7db54959e9c0436042e3",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT120V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT121V.DAT",
+      "sha1": "c246f11745e8b126fe32e157909ffa2140c382b5",
+      "sha256": "dce10a65e5f2aa78fbed6124b760b798d016a778a83852a126557456467eb573",
+      "size": 40205,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT121V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT121V.TAB",
+      "sha1": "e4a77230c913d0bd25edd47f08cfec537cd98484",
+      "sha256": "a38530543fa70db67f1504375433f7c0107d05ca53f336719c6af1f0758b1499",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT121V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT122V.DAT",
+      "sha1": "383ba7597b4b3db99c61a9838f772607a91e000a",
+      "sha256": "f9a9956563390ca713fd39985993c630f110dab201ec865a41655e7b1db7d3e5",
+      "size": 84664,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT122V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT122V.TAB",
+      "sha1": "571294c94e0f1c022633b26b0b5f29fde7b6afcd",
+      "sha256": "b39f0ceef1a1e9c3af0e7879a9cce76dda9f93c9a9d51fc4a2450bdac19c0623",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT122V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT123V.DAT",
+      "sha1": "b6cee74e762f2610ba137a237b6c982e43eb6519",
+      "sha256": "3c37abff8276ba89f4611fb1e3418c4c75dab9a1c0c89210db37b6459221c536",
+      "size": 18656,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT123V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT123V.TAB",
+      "sha1": "f544f046eaacf3d542ee0fb0804be27a9a6be71e",
+      "sha256": "3b66af91c617d125a7db10d0ddf6f9ba3dc0def27cd8a614fee6e44ebaaeef92",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT123V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT124V.DAT",
+      "sha1": "a112a2eec762e077f5e18b9357ce8ece09512696",
+      "sha256": "0ceaea8a154560f395ef14a52a5e2b5118a2635cd28e8eddcfe2c36b701bbdc6",
+      "size": 11777,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT124V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT124V.TAB",
+      "sha1": "b23936116d4275b45f08e7817f9d1d5758fafdf1",
+      "sha256": "5b666342e952815da48f954295dc944013da105815ebee5dd34473be0fd62aa1",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT124V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT125V.DAT",
+      "sha1": "cd4d35e9eb81331682b0921c10e9705bfe2814c0",
+      "sha256": "9514bdb0f7c13ac8439076b5040ac6c77b5677f995a5541672706e282189b295",
+      "size": 41698,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT125V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT125V.TAB",
+      "sha1": "1e84695ac68e926736ce0f84a927a6ff9ff4d10a",
+      "sha256": "f43f695c7c2f3d9faea0adca3198b2b15c75e3f26ce0533be4efe3603b978e3c",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT125V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT126V.DAT",
+      "sha1": "bd4368f249474e8dab79120e246f19e06b280a87",
+      "sha256": "d1d34eb7f15575e92c2def53b16e3758673a9ee36c8c445994f8949c843ec364",
+      "size": 41698,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT126V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT126V.TAB",
+      "sha1": "aaa351207e0a10b69c7b8721c655c1ff43ad7d6e",
+      "sha256": "7b199d9ee85e0630943e2c4cb0b301fe9f0aa75677dca5aedb3081f532ff6113",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT126V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT16V.DAT",
+      "sha1": "9e9f96e77c1ff051d577351a3d05c78ed7f41dcf",
+      "sha256": "e4385a39fe5935f372380193ceda3b38d15f18a46afab130936f26941d8c44ca",
+      "size": 11202,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT16V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT16V.TAB",
+      "sha1": "a694c49a0d0a9aa1a2e84835ef22d294a150a974",
+      "sha256": "c9dd9d00c856c5709625d2a466237c1dcdf5d54102caeb26071fadf3bd93cf9a",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT16V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT18V.DAT",
+      "sha1": "2a3506dac9242127376a54abc542447cfa470f60",
+      "sha256": "01d709bfcdf118c3e7aab6ad2d9afcfc06d05c73af4746fc46cbeec5bc3176ab",
+      "size": 13556,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT18V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT18V.TAB",
+      "sha1": "6e73f235c102171e66e19a91cade8236e5050158",
+      "sha256": "7b536cc207fbf0883e32a720fe92206ed2f51113cf622aab65738059b16cf1cb",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT18V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT19V.DAT",
+      "sha1": "8b314bf00386370a5c3cf30808f06a59592e79bf",
+      "sha256": "207b8d48eee2f5d5b52eb96941ec037aa42922f9544627b7e11886613204f1e2",
+      "size": 13484,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT19V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT19V.TAB",
+      "sha1": "edf50001f4bfb6779e5981c2a8c34bde0d88074f",
+      "sha256": "574290bb591336d9d250097c5af2c8f69d3a9b58fff2c288daa8b7dc4b7299ba",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT19V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT24V.DAT",
+      "sha1": "4d989ef1f6ca7760bc73124c98315e012d82d138",
+      "sha256": "932df904d0ce48346d88bfaab7107d8a77cde17760e8a8ebab1515f05f67fd6c",
+      "size": 1524,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT24V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT24V.TAB",
+      "sha1": "66e60e96027b6ce8df589b3e17a61ea687586ddc",
+      "sha256": "8c0f712be349de753b87006994cf25d221cf608ec8cbcfe304b7aac7594c6903",
+      "size": 582,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT24V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT25V.DAT",
+      "sha1": "cd00923d3cc3c8453d4d5770cf6791d59fb7b891",
+      "sha256": "f0f97a9342a76dd19a1a7f91989dde323cb7c760a9f95a9727768bd4bf80602c",
+      "size": 11776,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT25V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT25V.TAB",
+      "sha1": "8c54a1bca95c34d53fd1375cecad63e25cf58fb4",
+      "sha256": "ca4e435211ecd71aebff3d85b98306fe8111c10845508aed3b5980a150939965",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT25V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT26V.DAT",
+      "sha1": "d9ba23428694599b2fbdde41e99a85f310c24084",
+      "sha256": "ff68ca4817954bed7678df8a45953554aeec150d400ca65de64bca3bf69cb331",
+      "size": 10844,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT26V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT26V.TAB",
+      "sha1": "482befa0fe7de07ae87f47425d85b304e9f2bcd4",
+      "sha256": "eac8232a617e511951c7e92fcd1f75f62ffa7d329cff3700c76d1ac4ee54ba87",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT26V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT31V.DAT",
+      "sha1": "7734882ff620a0871dd7cf5fdbb3cb1bc135b764",
+      "sha256": "06d8aa9ea0f86503ec1a43eea257718f1dec1d0eac8bba9ccd216095e8f9383f",
+      "size": 8081,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT31V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT31V.TAB",
+      "sha1": "0b539b0d518491773327d8c7461c0e798da9d5c8",
+      "sha256": "84463bae50b6da99dd531f83783fed366ac4afa8cf47ed2ac55328825fef6e51",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT31V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT34V.DAT",
+      "sha1": "b100576aa3dfba06ef66a940b22cbc84a0902463",
+      "sha256": "23ed289f4e5da390766dfa512eb26c4f29e3f826f42b5eb3cbf36776851c4625",
+      "size": 2676,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT34V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT34V.TAB",
+      "sha1": "4a7c5c973f4713dbe25fe46e3c83baa2df4b8142",
+      "sha256": "950ea5f04a9ca98b230bbe205f7e9b560e7fd10c7440d576657320e86d88b9fb",
+      "size": 582,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT34V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT35V.DAT",
+      "sha1": "70e1e1e63232ddedf782a6d27fd2f69094234e1e",
+      "sha256": "116d0d5c3d2ecd8060adc71c2641b1ce16af7f99fc9372e83dccacd849bc0e6b",
+      "size": 7896,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT35V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT35V.TAB",
+      "sha1": "c7d23e36b9cda74b3d233a72b11607716a84b72e",
+      "sha256": "cdf7703af662716e52380c2ac9a98eae8df17063650ac02a477584abb2c85b60",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT35V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT36V.DAT",
+      "sha1": "69e98b14e099cdb25191d74d71d094c3375e0f96",
+      "sha256": "dbb36562af785faae2b56d17efbc2c55eed0e5dcb477e9bfcfb4a8e45ac804ea",
+      "size": 9105,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT36V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT36V.TAB",
+      "sha1": "7a5c0729519deb30332c75721890350b5cb8dddf",
+      "sha256": "df08f2fc9a6bc0967aa80312494461696e0966767bae27910d7481b50b71f5ad",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT36V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT37V.DAT",
+      "sha1": "621285cc74eb2d82bb0aec8ed573e02574e22ea4",
+      "sha256": "976e62f488d66aebd0d05157e0469eb8b01a337e20aeed5765d65fb2547e6a27",
+      "size": 8101,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT37V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT37V.TAB",
+      "sha1": "967f10d492b7a88632b3a1397c8e84682802476b",
+      "sha256": "966d209dd6285aca4286b65f9b3a84f237645cab4bfe99450ce8a2cbe0ac06d9",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT37V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT38V.DAT",
+      "sha1": "6ca7152f581f56866eb921524166afe7fb7db39e",
+      "sha256": "936853fe4aae7e838c3f39d16f85944d4feebb3125085aea0ea7933148ccbc91",
+      "size": 2559,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT38V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT38V.TAB",
+      "sha1": "1fdbe7cc7a92f3c2b938c9c364a8411ea052f574",
+      "sha256": "13460e835c5f990f912e8819c27774e969f4d0fd9542c6c4ebd76b65ad7ceab9",
+      "size": 582,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT05V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT39V.DAT",
+      "sha1": "85b107077391b231833ecfaad4b8c3794096b107",
+      "sha256": "a586923a862622a8d60f17586c1745e020223cd080763518d63477e7880d4ebc",
+      "size": 70391,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT39V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT39V.TAB",
+      "sha1": "a6850a423c3e54b9d332e17d111714766df7f96e",
+      "sha256": "3600eeceebe506e6a4191fd17f5a9ff3d3e56cc9cecdd8db2830400bb27bca5f",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT39V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT40V.DAT",
+      "sha1": "d900a82803c14a2bb356eb89622273b7befb36e8",
+      "sha256": "da197532b35edf6dd67dc17f59f67878ccff2ccda2744283e9f278ae396f3b66",
+      "size": 64366,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT40V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT40V.TAB",
+      "sha1": "fa5d1d870c0fbd96597511ec44e2b27fe8247300",
+      "sha256": "068ce6a3af06fb5ced1d4a42d9f6b692514810191b42a05359145c95ba673ea2",
+      "size": 1164,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT40V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT43V.DAT",
+      "sha1": "75ea7a6eeaf7f23546787416cc78b7e88dd630a2",
+      "sha256": "20a8af3c92c70ac427e0bb5f00359172b75138548c80ea065204aceafb8f36e3",
+      "size": 15539,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT43V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT43V.TAB",
+      "sha1": "781a84d36fc24f9a36abbf6b50cb9554db37b49b",
+      "sha256": "5938bec81e86fa117aa8bcf23969585634d8b2417888c34af2d6406e3f486de5",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT43V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT44V.DAT",
+      "sha1": "9cf464319a3e408323607389880866bbcbf10ac6",
+      "sha256": "3669b45ce8c157e80f9321e641cde85bcac0332f4ec94991f88f6eb83d0fb5f8",
+      "size": 5731,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT44V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT44V.TAB",
+      "sha1": "75ee796cef72d7dd22a0fcce6f53a7728bd9aa19",
+      "sha256": "ecc8758288e04bcf7e0039a74da40708791c481904c73b1fffcbca45ec41f242",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT44V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT45V.DAT",
+      "sha1": "e5eb9742fd216f55781f8bb789c2e56535ec6f4c",
+      "sha256": "3da59533582d8c72c9effbc4338b57da553ca3194809e99f8804b42c95929952",
+      "size": 8277,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT45V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT45V.TAB",
+      "sha1": "3e41a75b9149dd71ff8bfd59f3b0437c8edd7757",
+      "sha256": "85d10f0640423b8a4f102688f2b9903ccfec0320f0001b27626261d9cd95d454",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT45V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT46V.DAT",
+      "sha1": "98e3d881e83fb45b1905cde90db0bc41cf50795d",
+      "sha256": "bbbdedfc77465226824c54753d1c00600c464471be5192f4da46b83336cc40b2",
+      "size": 16105,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT46V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT46V.TAB",
+      "sha1": "5f720763f70273773a812b8a016ff2c51069dc19",
+      "sha256": "981d5013cbe6a9f3ead103095f56e02189ae81b0c9a8e66f153da71410582423",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT46V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT47V.DAT",
+      "sha1": "b4afa8af8291ce1e8e127168123d2af5f7f6a101",
+      "sha256": "af298af4b9e73aa887c48f93e3e1d6b306e16c0bec93e44357f3a9308c2151de",
+      "size": 12983,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT47V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT47V.TAB",
+      "sha1": "4f3719bee26c44854df14b277e7b00fee51a7193",
+      "sha256": "d760aa60c9055b0c45dca5ab86256dc24e0f026a262a8128d51cb5d763fde831",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT47V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT50V.DAT",
+      "sha1": "0aeb3e0ccb9c4c931e6e074765e0de09502e95c1",
+      "sha256": "51b3bc6813b18ed17d20756598129215e69dce918bde2755a811ec5c706b156c",
+      "size": 7299,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT50V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT50V.TAB",
+      "sha1": "637482f3d6b8c3292c71c7f8ee47f8a489ec911a",
+      "sha256": "4aaa8f0e16bbd835b33fa80f2f45e36e364d4a96db410d185465f1edb74d90fe",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT50V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT51V.DAT",
+      "sha1": "2cb8f630555cb1f0d6acc93c717c9c6ec4999f1f",
+      "sha256": "aeef300da037eeac305f1813d47b3376975c38f46f20beef02b335bff217aace",
+      "size": 9835,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT51V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT51V.TAB",
+      "sha1": "b9fe737729caf6f1c9d3bb9fe8f225612f9db1e3",
+      "sha256": "285f4edfe56e655cdd638afed80edc1fba500359c66d62aafc058f337033b781",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT51V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT60V.DAT",
+      "sha1": "c9041b2cb14c6c18b500fd52c23ed426cb2b1b1b",
+      "sha256": "948441be02239b6a51a28b35d4948e53a217597439c7c2ed59c031bd5fbf7827",
+      "size": 17799,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT60V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT60V.TAB",
+      "sha1": "7a02498a5cdf3e143532010e8be1a04086ede9c1",
+      "sha256": "e27944aa934f5cbc3fa9c25ac1244a8b87d97df6327a25c7def1956cc0cda0ee",
+      "size": 1170,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT60V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT74V.DAT",
+      "sha1": "d7538848c3456511e3dd78385ed3c3fb60bf54fc",
+      "sha256": "8126bfc3d2683b7094f77c64d10bcde5baa8692ff3e3f6f9edc7efc1c15b9b94",
+      "size": 3342,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT74V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT74V.TAB",
+      "sha1": "c13596375d8f9218276298f1e1755eb4ad94a923",
+      "sha256": "8983c3f5b02739db21bcf82a2bcb97d7fc2722fec1c47a8a6c87cb14294869f2",
+      "size": 1176,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT74V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GBANK.DAT",
+      "sha1": "f7834acbc8171972db0d20dcdbcbfa80e704709a",
+      "sha256": "4ca181dad07dcf44eaeed593ce8ceb859aa8ff11d8ccdf18301b383ac1ed6147",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GBANK.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GBANK.PAL",
+      "sha1": "188580a4c84c511fe5914f04a2ae0baa3567c756",
+      "sha256": "c93b45bff8191d4358cb3194edf66ccd336a77fbd62d2ad0b8a08780d32ff090",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GBANK.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GCASEBK.DAT",
+      "sha1": "42137adc32a06051822bb8f98b28721cc910fa01",
+      "sha256": "4b3da8d5bdd71ea1de7be18d27052bedab1593862e64729ca094f8252b9b53c7",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GCASEBK.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GCASEBK.PAL",
+      "sha1": "188580a4c84c511fe5914f04a2ae0baa3567c756",
+      "sha256": "c93b45bff8191d4358cb3194edf66ccd336a77fbd62d2ad0b8a08780d32ff090",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GBANK.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GGRAPH.DAT",
+      "sha1": "439bcefab40be417da17cc124a379ba030cd6aaa",
+      "sha256": "e4ca5c99029d86b4649dfad74a0077a57112d5ff8bc36d0c93ef92b69f0897d1",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GGRAPH.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GGRAPH.PAL",
+      "sha1": "188580a4c84c511fe5914f04a2ae0baa3567c756",
+      "sha256": "c93b45bff8191d4358cb3194edf66ccd336a77fbd62d2ad0b8a08780d32ff090",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GBANK.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GHOST1.DAT",
+      "sha1": "89cdb7f2d3de4d638b053135fecb9243e05953f2",
+      "sha256": "788511d281a00f09259c27345266ae1b39a94d6e288a71871ae672d2cb18ec7c",
+      "size": 27047,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GHOST1.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GHOST2.DAT",
+      "sha1": "7eddbd624b6efbb5cde823703c0518252c3e71bf",
+      "sha256": "5361105077df7db4fdaa1ea067f512c5565bbedf5ce7f624297fca5fd4dfc8d3",
+      "size": 26873,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GHOST2.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GHOST66.DAT",
+      "sha1": "d6d23522a135ffd1a4a255358e3b96943828a983",
+      "sha256": "3c687d92de8dee6c875ea94f79acef15e48698ba6265651715c010050a316ae4",
+      "size": 37180,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GHOST66.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GPOLICY.DAT",
+      "sha1": "fe099898ad88e9c78e8dfb8fb3a7138dee567ce8",
+      "sha256": "e764d15b6fd91c0e4a829eedf04175bf9b3833d7eabbd3081828ebe913bfcee3",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GPOLICY.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GPOLICY.PAL",
+      "sha1": "188580a4c84c511fe5914f04a2ae0baa3567c756",
+      "sha256": "c93b45bff8191d4358cb3194edf66ccd336a77fbd62d2ad0b8a08780d32ff090",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GBANK.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GRAPH02V.DAT",
+      "sha1": "5084163b20e43acfa175a294c4faf576adfed66e",
+      "sha256": "805d46500f3029626af65073bf056b50979f6389fc0cb0e8e76274b6463aef01",
+      "size": 1138,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GRAPH02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GRAPH02V.TAB",
+      "sha1": "4839f6eecec7b80fe54bb70b71dccd7c47c97c32",
+      "sha256": "7f6837f84420ba6e805644cdc6e55d8403eb7f4987c271d0b8074a7847364b0b",
+      "size": 24,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GRAPH02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GRES.DAT",
+      "sha1": "5b1a4b2b7a0f656eeec4eaecd8754439226be4b7",
+      "sha256": "7ab13f74184bf27cf16f77c4de6fbb47e26bf1aea74f27918d557a9eec19f1fc",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GRES.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GRES.PAL",
+      "sha1": "188580a4c84c511fe5914f04a2ae0baa3567c756",
+      "sha256": "c93b45bff8191d4358cb3194edf66ccd336a77fbd62d2ad0b8a08780d32ff090",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GBANK.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GSTAFF.DAT",
+      "sha1": "dbec1fe6ab26fe48932d323daa2f0f047483a4a1",
+      "sha256": "8dd72abf95f842ae0b23b383af24d2e533f77b134d309e1e09907254aaaf2857",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GSTAFF.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GSTAFF.PAL",
+      "sha1": "188580a4c84c511fe5914f04a2ae0baa3567c756",
+      "sha256": "c93b45bff8191d4358cb3194edf66ccd336a77fbd62d2ad0b8a08780d32ff090",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GBANK.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GSTAT.DAT",
+      "sha1": "49c220af7a6b27c7b68185310dd9d82b210f0f9e",
+      "sha256": "4cdc566afc8b4e1adc37f2b1350daf5ef480b89853e301933ed71b7037cb228d",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GSTAT.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GSTAT.PAL",
+      "sha1": "188580a4c84c511fe5914f04a2ae0baa3567c756",
+      "sha256": "c93b45bff8191d4358cb3194edf66ccd336a77fbd62d2ad0b8a08780d32ff090",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GBANK.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GSTATUS.DAT",
+      "sha1": "8e99bdd7babc43834a79f41b4068c235d343cf26",
+      "sha256": "e13e064b145081b2ebd6a6166ec75d06071f61ad0942f9038109253456d30870",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GSTATUS.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GSTATUS.PAL",
+      "sha1": "188580a4c84c511fe5914f04a2ae0baa3567c756",
+      "sha256": "c93b45bff8191d4358cb3194edf66ccd336a77fbd62d2ad0b8a08780d32ff090",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GBANK.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GTITLE.DAT",
+      "sha1": "89b3b8e2dc508542c356e91b08245c0b6b91544b",
+      "sha256": "8d76b52e903afd82c346a9220193c865e94f72ff0b52b85b0d6f552c5487bf29",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GTITLE.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GTITLE.PAL",
+      "sha1": "02817dba22cd5060f99aef4a3006fe1e2fe5c87c",
+      "sha256": "6e1203e637949ccd9cf6faf2f6e2a71a65de2fa10efab648b26e5c2a1ceb650b",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GTITLE.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GTOWN.DAT",
+      "sha1": "e5e6a1462fff36c659a68eed3916904371cf8650",
+      "sha256": "254c11ba1cfd3cfbb2f36682a09d5617c96dbcb3e7e4ff851f8dbee9dd34d29c",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GTOWN.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/GTOWN.PAL",
+      "sha1": "188580a4c84c511fe5914f04a2ae0baa3567c756",
+      "sha256": "c93b45bff8191d4358cb3194edf66ccd336a77fbd62d2ad0b8a08780d32ff090",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/GBANK.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/LETTR02V.DAT",
+      "sha1": "44dd4c33ab3bb3e7cf67023ecbe6f7f292c758dc",
+      "sha256": "ec2a0371e1708c07e3872869dfb1bbc37dfcf3130ac8e74d94877bfded887d3f",
+      "size": 1602,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/LETTR02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/LETTR02V.TAB",
+      "sha1": "ec8e6d98df985a9f0d84c078c362c987838c05e3",
+      "sha256": "d8f69ca38c64182ea984356e7681fdb581f1069274cde008269e9e69998bdf45",
+      "size": 30,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/LETTR02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/LETTRX2V.DAT",
+      "sha1": "74da09ef3996ca17499d0fdaa7faa6052abca0a7",
+      "sha256": "017bb52279aef635f8561ba14a2fcbd42a6968fb2411598c8ee80f37027556a1",
+      "size": 5734,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LETTR02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/LETTRX2V.TAB",
+      "sha1": "9aa3330914c5862fa317dd419ccdaeac072a4e0d",
+      "sha256": "d864f37801a5fa51dc1eac67f9ef3e3a6f155f56e19a7265e0eeaa0be4cdece0",
+      "size": 30,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LETTR02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/LOAD01V.DAT",
+      "sha1": "630e1765e95e91c2983c0d10034874e9b88bb96e",
+      "sha256": "9bf7b2b7cae16f9fdf1edaaf54d0c907586c41ab191305db154667cf6bf111be",
+      "size": 38228,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/LOAD01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/LOAD01V.PAL",
+      "sha1": "12c2bcbf49c52df7410e36cb5367b8c7743cb0dc",
+      "sha256": "eaa52cf2041edd98ba3ca2874d36ebc6aec508dabfdfcc2e75503f1c6401d481",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/LOAD01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/LOAD02V.DAT",
+      "sha1": "d46c8415c93c4a3f01dcc422e381fb0c22d1be6f",
+      "sha256": "befd16e2baa636b9c2d38398b64d38e60009b9b537decc86714dabf049ff80b8",
+      "size": 113,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/LOAD02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/LOAD02V.TAB",
+      "sha1": "6709810e2cc1779dace6eb76b1744c15ba7b7217",
+      "sha256": "96f5f53023b4d1783d2c605db18641466bda0ad84dcfa01f5b345f6c32c577c3",
+      "size": 36,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/LOAD02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/LOADX2V.DAT",
+      "sha1": "0502702798e9b4a2ba295bb39c048c4bc427a7e6",
+      "sha256": "0f503f99e6bbd92bb9d9b0fdaf3f71c8531b3fb079faa7696d07f63745726fce",
+      "size": 455,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LOAD02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/LOADX2V.TAB",
+      "sha1": "e00611dd03d4e9bf54aa3be195c3667ce15b1d30",
+      "sha256": "31a4d492c2b111514e779963b510a91baf753345ce86f28a17828a2a7263c8bb",
+      "size": 36,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/LOAD02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/MAIN01M.DAT",
+      "sha1": "0143107ca08f0a2163bd9159c597424c09b27fc6",
+      "sha256": "4f059b1d2e8def4a6af0dc76bcb5646a6182331b0ccf1c1af16b14ab4b96b166",
+      "size": 64000,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/MAIN01M.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/MAIN01M.PAL",
+      "sha1": "77c97689599889d740fce74810400c23f94fcb27",
+      "sha256": "5e30335a88b72677ee871504b068b0a910693f4c3d57568c5c98b830333461a6",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/MAIN01M.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/MAIN02M.DAT",
+      "sha1": "eb4117506ff71a3feb430e86cb26e93075227277",
+      "sha256": "036e093aabb289a979a5fa2c029d0e5041c445b47065eae2fdce3a822fd217d1",
+      "size": 49160,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/MAIN02M.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/MAIN02M.TAB",
+      "sha1": "f73e9775e5b68b16576549b8715f9fcb18b353ec",
+      "sha256": "22be6aec34b420bea84207f0ec8c5d323c7a5bef761ee4db9ae2fabf167b842a",
+      "size": 72,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/MAIN02M.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/MAINX2M.DAT",
+      "sha1": "c8dbbb597d0431e848e0df8a6c7fd93f0614e454",
+      "sha256": "594c847ca4aa331662a32390ce71baae26a21546cef1bec8a9b35ebd662ae52f",
+      "size": 58432,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MAIN02M.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/MAINX2M.TAB",
+      "sha1": "6668be86f99c37266680dcec8f512a4567676c9f",
+      "sha256": "dc7e0980723b09820eb6d3ac3a5882f62413e0bd56094c6ed21bbf30a405ba3e",
+      "size": 72,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MAIN02M.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/POL02V.DAT",
+      "sha1": "fd86bf0d2e1f8075a5f421ee38bdcc92535a1c8c",
+      "sha256": "46598feaed68e8ed36645157916d19ef68d6c5bb0b500a6fd3e9f1454a646d79",
+      "size": 1870,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/POL02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/POL02V.TAB",
+      "sha1": "9b4fac8311e0bf851e7f09c7fdda9d7835af2936",
+      "sha256": "21843bbd1245f02921d0f7e49688c9f0677291798bf7c25e811276245b0fe941",
+      "size": 42,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/POL02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/POLX2V.DAT",
+      "sha1": "5a9dfd2c876fb5092ca084a0d98bd1d6d8ee86e1",
+      "sha256": "bedcebe293a1237662232f4197774e62d527719e671dbabecff311bdf493932e",
+      "size": 7223,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/POL02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/POLX2V.TAB",
+      "sha1": "9bb25f76ed91861b8fb1b44bad778a2d7ccc39db",
+      "sha256": "9be3c9c624ad4255951120c019daac3766d5e40c1d431a926d6bc6915501133d",
+      "size": 42,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/POL02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/PREF01V.DAT",
+      "sha1": "6fa10e4b713d3f2be580937ef34be29beb7ea361",
+      "sha256": "8a6b2b8f150a3ac87984a43408b73a7eb994429ecc6d556b72a48335d3a98ab3",
+      "size": 114939,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/PREF01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/PREF01V.PAL",
+      "sha1": "87cd91e1cb6e4adbd125d6b95a0c9ed56859c13b",
+      "sha256": "d8379f3b4217efbbed4a91f8af90a1d8a7117fb4e3bca89ff1ebaa18f636a898",
+      "size": 759,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/PREF01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/PREF02V.DAT",
+      "sha1": "417dd35d9feef4e9b6d67b5e5c51d34ca8ae3664",
+      "sha256": "4a53060ed0d988abd4e86f1e7ef7668751b608af02af4f0ad40eaf4a03f12edb",
+      "size": 304,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/PREF02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/PREF02V.TAB",
+      "sha1": "7ef8e930c74567c3ddbee6909a5b25d3028751fb",
+      "sha256": "48fd2ef2f4d9fb84a584d33f6da721a269020dfb29227c6ee48724b1a0972eef",
+      "size": 18,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/PREF02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/PREFX2V.TAB",
+      "sha1": "9f142efb328bcae6054f544860f3139d7d5b2fd7",
+      "sha256": "20a0e14e010cb182c009bd1eef0aafe23eb0d36f2173187c42d0ad8483eb6af5",
+      "size": 18,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/PREF02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REP02V.DAT",
+      "sha1": "196bf8d41e5e96665010a2a23288c3d89c3e7e97",
+      "sha256": "30550f7f4c6d55d070dcfc94d815a4583eee186164b5becebbb862075a452e2c",
+      "size": 2461,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REP02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REP02V.TAB",
+      "sha1": "cfeb7c8637af571cfd162303c18eb345e5c417e6",
+      "sha256": "ef5b945a9f4df178984bfd90df3024f25a79bcee439797f87d728cf33d597d75",
+      "size": 84,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REP02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REPX2V.DAT",
+      "sha1": "8a8b61e8bb4a04432f2bbd152fb66fa0bb367627",
+      "sha256": "2767a54aa294aa67aa07c0d05209e816e2907926577affdc03756b9f75385358",
+      "size": 7030,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/REP02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REPX2V.TAB",
+      "sha1": "57489feff920a222ae76d4f8b5beaa35cd9f292f",
+      "sha256": "be08618ea800a767703c25f743cfc34bf6d2128285a8ef329c805f1163c6ac64",
+      "size": 90,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/REP02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ00V.DAT",
+      "sha1": "eccc0a4368e3486b7288c64100197b7b6adcd5f7",
+      "sha256": "31ac12a2bf3f7ff1baeafa395409dc329bfb467410902578a7377e31c7688f94",
+      "size": 26382,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ00V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ00V.TAB",
+      "sha1": "67919f159c9d53f902055fbfb83c7520cff51870",
+      "sha256": "d72d02fb86c304e9a80735ba705cfcbe9b506898251bf74f58fc724347bf3223",
+      "size": 2490,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ00V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ01V.DAT",
+      "sha1": "d67ccc858c2a2e19d35f06564fdf8502c789ff06",
+      "sha256": "c73f9cfe205caf6c6ee8d426f3e382c7c6d761e4323432ad02797370b3fb43b2",
+      "size": 35873,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ01V.TAB",
+      "sha1": "7063f9c8c27e2b8e9f0d958db2bf12d5e94574dd",
+      "sha256": "22af0b5698496869a32b261ac3d5b04d5aa9b008e8b0c37cdc7100990d67490b",
+      "size": 846,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ01V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ02V.DAT",
+      "sha1": "c9c75a77dde52fdd1a9b0f397e82e0dabb9213f0",
+      "sha256": "2c87894f3cf57e337e5890001667bac2cefca69917f730159ee2b04a19cee147",
+      "size": 9348,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ02V.TAB",
+      "sha1": "7e570277303612bf35feabdfbe9658de47d30523",
+      "sha256": "07a9e9f9b05ed571c05c6af9904941fa27b1df23930ef5eaf5fe0ea5966046e2",
+      "size": 821,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ03V.DAT",
+      "sha1": "ca27e1d1c0ff14e482dedd6c543575a241d19e32",
+      "sha256": "eeef6c89490160be897f33363c7305122719541fd3b768b618427319bb1f27da",
+      "size": 3972,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ03V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ03V.TAB",
+      "sha1": "82a41ce8ed74549f464e1066b107a4191ff68b1a",
+      "sha256": "fed0ce64806adeab7da3fdb531a0e6a5b37fa38f0046890ed03e840dccb682ab",
+      "size": 800,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ03V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ04V.DAT",
+      "sha1": "cb0dbc4e4d0475091ccd56d9d5daab63804d571a",
+      "sha256": "6b1e017e52e29951060da2d4fc3cb7a5ec6d5317a170570a130ce7a9c60141e8",
+      "size": 2086,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ04V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ04V.TAB",
+      "sha1": "6b01553e38cb65997d3f2f651e3912d34c3d6b10",
+      "sha256": "67cabe3d6ccbc6eaa8cf3a4053cdb290332706ca2eddc1896c10a2450d508bd0",
+      "size": 792,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ04V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ05V.DAT",
+      "sha1": "8c7fe4f0f76d9aced8a0abea0d0388e7a73d2399",
+      "sha256": "46f3e310251a558eb75872a8851a1530d9ba71a2667cd3891b166e1f5b6f8f19",
+      "size": 4632,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ05V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ05V.TAB",
+      "sha1": "ad5bd3d7f519d45443d81e87a9a41c0496cfda8e",
+      "sha256": "e491e345c86493213a9c2b9066ef904e4aec942ca82914bd6105dbe616119619",
+      "size": 820,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ05V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ06V.DAT",
+      "sha1": "bc543f01a38cfd4cc62bf467afcdfeb0420eb565",
+      "sha256": "4707c00ecaa30600b373e9bb5223d7b6a3669b9ff6ef8ffee4eb0a8dddec45d7",
+      "size": 6719,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ06V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ06V.TAB",
+      "sha1": "7f18182d0effda14bc8dbbf435f1865c5c1d6367",
+      "sha256": "ee939ebb08a43e5febb348fddd1f0fab8fd93dc38fb3d5470902d2440ef401b3",
+      "size": 820,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ06V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ09V.DAT",
+      "sha1": "e47b5eacdadb181dd3b1e469f0c4f51a17647b60",
+      "sha256": "935dbca69f494591c1c7ccb8555901d72cb6795a54162a471188aff65f7eed9f",
+      "size": 3528,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ09V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ09V.TAB",
+      "sha1": "76b1aa3a918b21ce75924c593aa6bc50b95cb425",
+      "sha256": "c150960df8637419c3286910b13f2d3206870c21c9f8e3f3a3b6161c2eb2f5d9",
+      "size": 808,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ09V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ10V.DAT",
+      "sha1": "3812f172e8328681436070eb0a01549560518d26",
+      "sha256": "a9c734dce1311797a80b7c8a3a940c77f2956e1891fe5948294adc6ab7125ecb",
+      "size": 4486,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ10V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ10V.TAB",
+      "sha1": "f27d05c9825a3844dc7b6f3426d71019b164ee9a",
+      "sha256": "bc02472c9df476713495c9c2007649341e820c1cc2feeb1a0a86c3edbe37e245",
+      "size": 822,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ10V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ11V.DAT",
+      "sha1": "4f223e5c24a5dc857bab153cd04faf4afc9f9c37",
+      "sha256": "b071b28c536b9b06da231e75d19e26cc6b1cad7aa46f08072a47ccf1c655c3e8",
+      "size": 9657,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ11V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ11V.TAB",
+      "sha1": "df885cf9e2420bd75cc6bc1fed62bf6d555f3f5f",
+      "sha256": "0822e034c939edf380d12fd54802368774d266a1204942c2dad7b44928ae3c74",
+      "size": 854,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ11V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ12V.DAT",
+      "sha1": "78d5d6689c55e8bf881f2b612897791b784b4454",
+      "sha256": "d8cdea8edbbddf0174b4565f4981382817f0a0103aa50c1b98d31d70321ab50e",
+      "size": 6124,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ12V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ12V.TAB",
+      "sha1": "29c6df6586a97adf2b6475aa3d47a6a6dc023156",
+      "sha256": "f956a345749dfc4a165716519d01bf95bb41490052c8ad135d95a9162a8adf7f",
+      "size": 819,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ12V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ13V.DAT",
+      "sha1": "350abe46178f82e24a8056464f2d30044e6ea673",
+      "sha256": "16545dbf4566e35ddef581e9be87529c4925012cbd8775abe8ac62fc0f51269a",
+      "size": 2602,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ13V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/REQ13V.TAB",
+      "sha1": "c3d3b0a4b8db296b3ca4a4fb3425b4e7b6e5ecb7",
+      "sha256": "504d2c6d9dc8d5ade3d4ee22ec65e2de9212fbe861bddbff410ac75465ca0e58",
+      "size": 831,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/REQ13V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/RES02V.DAT",
+      "sha1": "f0d136fcb942cfba77a8c69a4bc8cc3c6ad7de28",
+      "sha256": "e387c3b50e3a30ded2210f81ba8f1e3c32f6c934e52f0b7cf238e97cd42de739",
+      "size": 74434,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/RES02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/RES02V.TAB",
+      "sha1": "0794bc0fb29c369b7cfbfbbdf0bf3c800630aacc",
+      "sha256": "cf135986c7b029b423994853c3a021774d83fe02574b652cf41b3813beea5d4c",
+      "size": 98,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/RES02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SCORE01V.DAT",
+      "sha1": "f185f902e8b40a8e6c8e138691f0b22a0eccbdca",
+      "sha256": "2f058a87a8361b860788d4d158cff58c26f4878a33cd2f4d6ad2bb90b525d042",
+      "size": 30015,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/SCORE01V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SCORE01V.PAL",
+      "sha1": "e093a64326e6a77ece0ed533cfdd5eb344e73ae8",
+      "sha256": "8843cf6a61f075edf1837b34f815e781420b7716c9f82eadd1ac0d027aa1a332",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/SCORE01V.PAL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SFONT39V.DAT",
+      "sha1": "e6e4ac24b37e88ab6d985d5a28c5ecbbb2b5d18e",
+      "sha256": "3e804b8b4208ef210b02a299e4879212e5d921cacf82c1549310ed041dc8c1d8",
+      "size": 32164,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/SFONT39V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SFONT39V.TAB",
+      "sha1": "97e61c72eeb663cd2a0a51412842335b88547a8a",
+      "sha256": "069efb9dd85fdca85cde818c91fb343fd90c94d620280eea555807a749ebf8dd",
+      "size": 636,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/SFONT39V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SHOT1.DAT",
+      "sha1": "e6172a4fbab77abf3677971fa799e18b7fd16142",
+      "sha256": "612d4cc5e38505e641ef929c988251c0a507b3020108b7a5470184cc03256ea2",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/SHOT1.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SHOT1.PAL",
+      "sha1": "768a40921d4df8d0517b547db03f56d60b1f01c0",
+      "sha256": "35bf56c71691b071b6e2f9c78bd2eefe81d91e6dd361c40ffee99f44a13884be",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MPALETTE.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SHOT2.DAT",
+      "sha1": "6b565b846584073ed8a906f5eacf189f1f474b46",
+      "sha256": "c030d71f9828737a8d682197ad70a84474e935e7460df4bdc23b36dd82c3ceba",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/SHOT2.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SHOT2.PAL",
+      "sha1": "768a40921d4df8d0517b547db03f56d60b1f01c0",
+      "sha256": "35bf56c71691b071b6e2f9c78bd2eefe81d91e6dd361c40ffee99f44a13884be",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MPALETTE.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SHOT3.DAT",
+      "sha1": "a1b96cc71ffc83b9daa64acf411674260eeec58b",
+      "sha256": "64cbd06bd46b86f77b93af8fead78c19172dd6203e78b6bf87b603ee687397c4",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/SHOT3.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SHOT3.PAL",
+      "sha1": "768a40921d4df8d0517b547db03f56d60b1f01c0",
+      "sha256": "35bf56c71691b071b6e2f9c78bd2eefe81d91e6dd361c40ffee99f44a13884be",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MPALETTE.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SHOT4.DAT",
+      "sha1": "5492d7c89b8d2367c620f177cd491168df7e7c37",
+      "sha256": "32404067192084576a2d5d707511a211637e66d46a72dc9859f69d390e789c5c",
+      "size": 307200,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/SHOT4.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SHOT4.PAL",
+      "sha1": "768a40921d4df8d0517b547db03f56d60b1f01c0",
+      "sha256": "35bf56c71691b071b6e2f9c78bd2eefe81d91e6dd361c40ffee99f44a13884be",
+      "size": 768,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/MPALETTE.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SPOINTER.TAB",
+      "sha1": "ad6d2c394a7f6248fcec1550935f960c8d5f0ca5",
+      "sha256": "e034d9d0e7eadfc537f0060b167eaab0d76c12a753b2cc87718596203472d954",
+      "size": 216,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/SPOINTER.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/STAFF02V.DAT",
+      "sha1": "61e9dca330d2cdf1ca6cf0db6e5b2035a502bb5b",
+      "sha256": "deca86c512a074aa050330a579d9570a09895b3f53e49a4aae1bf9a587b73478",
+      "size": 4952,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/STAFF02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/STAFF02V.TAB",
+      "sha1": "520883d3e030ab09977134b01f16eda57a47ccb3",
+      "sha256": "87b111419704b4e3e216884462101c190e98076c8e72989019483f614fc05e3c",
+      "size": 111,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/STAFF02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/STAFFX2V.DAT",
+      "sha1": "72a688cdec888adc32f41a7f145d21d132391748",
+      "sha256": "47be63be2045d21f0a44646b4961985b21ee5ac0eed8ddd0b855ce392bd9c911",
+      "size": 39829,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/STAFFX2V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/STAFFX2V.TAB",
+      "sha1": "2c4a8865003be71218372ad9bfa3da1944737206",
+      "sha256": "3cb89bc50f2129cd3c010d428c438af06f544191af116aa2edfe6af89b32efea",
+      "size": 138,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/STAFFX2V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/STAT02V.DAT",
+      "sha1": "79adb78903236f39cf9cc2e29972aafec338255c",
+      "sha256": "3fb2c8d0ee4a673b6b9673735c4c443bc34f9421aad3afd04bfbff82df42044d",
+      "size": 163,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/STAT02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/STAT02V.TAB",
+      "sha1": "5cfc6520071515ed777ac95d6cc11bad149c9319",
+      "sha256": "8ec9c9a3d8b339525db8de9e1c32221cc8c38b8c7b8ddc91b206169195ec8ce7",
+      "size": 12,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/STAT02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/STATX2V.DAT",
+      "sha1": "e72b454f22e6aaa7e040a330beef4a445c5dd8e7",
+      "sha256": "1e8a6b605bd997d5216ef3c7c28efa01480cc9c8a42152795e052835485aa043",
+      "size": 731,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/STAT02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/STATX2V.TAB",
+      "sha1": "5ceeb6ebbb07f54e0656054f5ac31aab28def32c",
+      "sha256": "d3c0c0fd055aefc417aa584eb87fe3ead097c47f6b3fc9ae4285f191aae4c591",
+      "size": 12,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/STAT02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/TOWN.DAT",
+      "sha1": "60d50554d73ab67614b7cdc25aa861fc3a387545",
+      "sha256": "253a4503933ed7728cbd651afddb3b55061a20790eca9cd25e10c78ac10ef6a8",
+      "size": 48552,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/TOWN.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/TOWN02V.DAT",
+      "sha1": "09ef0237fe5694c053651600560f45d54b08a4dd",
+      "sha256": "8cc5ef0e2f9433d9f50bbe0756c0c0d7a9c137748e502241e581b5072cab3430",
+      "size": 6504,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/TOWN02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/TOWN02V.TAB",
+      "sha1": "ad05a25fcf40793cc3779bfb2b2788ae1e7c8fc5",
+      "sha256": "d0b74aedfa5d1b93bc2bb33592377213219186491632be2ab5649657ebcf90ae",
+      "size": 110,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/TOWN02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/TOWNX2V.DAT",
+      "sha1": "e580e5ab9a2b3af19326eb4788c024baba70d4ee",
+      "sha256": "6b4bdae5757be4730b1f859d28367deeaa6fe24963a669b15618b665fb72800c",
+      "size": 15828,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/TOWN02V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/TOWNX2V.TAB",
+      "sha1": "a29bcf193d66efa5a3c71f12df260c69f5799bae",
+      "sha256": "cface6aaa1aa56ec1ef7b5748abeb4230edb22c334a8b43f239ec40a4ac8ca65",
+      "size": 120,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/TOWN02V.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATAM/DEMO.DAT",
+      "sha1": "cbb8391cb65c20e2c05a2f29211e55c49939c3db",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "size": 3,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATAM/DEMO.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/README.TXT",
+      "sha1": "eee967494b2f0bb6b2d48b8fc710377eab98d3c5",
+      "sha256": "775a8c91dfa736d1d484a56f0241849c9f619ecafdb250a205157320d852cd7d",
+      "size": 8967,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/README.TXT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SAVE/DEMO.DAT",
+      "sha1": "cbb8391cb65c20e2c05a2f29211e55c49939c3db",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "size": 3,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATAM/DEMO.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SETSOUND.BAT",
+      "sha1": "5301d0019d582828f73e6996f873df7e80b2e942",
+      "sha256": "16282c5976a74b21a6c5d89103758763a497cb4cf75ed517da99c7d18b7eca92",
+      "size": 38,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SETSOUND.BAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SMACKW32.DLL",
+      "sha1": "ce59969d0f088f9b54062c8fce435e27a6fa3acc",
+      "sha256": "02c6c3c653e8eff656d5a67b6e22f8444e4d705ae08b640f2ff66efcc8cf6fbc",
+      "size": 71168,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SMACKW32.DLL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/ADLIB.MDI",
+      "sha1": "0bfcb449735691a7c08ce5e9460f43516c3bd44b",
+      "sha256": "ec095bec621a264e17e1bf80e5426a5bdca2327cdbcde32c067e3a81239d8db7",
+      "size": 15073,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/ADLIB.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/ADLIBG.MDI",
+      "sha1": "ff817c17e60f458c413c61186a3392b572e07e2d",
+      "sha256": "717a6debfe0de829ec83f7fd8ee056e5c4caf23f6e94984694001fb0360b596b",
+      "size": 16464,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/ADLIBG.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/ADRV688.DIG",
+      "sha1": "255ecb5d649895d65bca49bd6afcbdf875e34bf2",
+      "sha256": "294a7de77d88a7f38f58b32fc7166ced87a4c44e6c9be760f78b1724744d7161",
+      "size": 11278,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/ADRV688.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/AUDIODRV.DIG",
+      "sha1": "b099389bdcecf7ebb1f23a1a06898cdf569e5bf8",
+      "sha256": "26cb72a971883c7dfddfd74c4a5c85f0a5d4e55a34ab8aa9b2893df9abfa6ca3",
+      "size": 11372,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/AUDIODRV.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/DATA/MINHEAP.DAT",
+      "sha1": "0442cc88eb88fcc16b0fcb2dc633f07d38240f32",
+      "sha256": "25c0a4aac8b08b59050908b8f85ee96e4ae4c337f511f04bda42bb803cb9ec3c",
+      "size": 446,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/DATA/MINHEAP.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/DATA/SOUND-0.DAT",
+      "sha1": "f2b2450faaedf26f3d9db10d3a356a2df1fad7f1",
+      "sha256": "c6e98bab59ea23c50e9ce894568d267bf6342a4563ee27944fa3d68e058b24bb",
+      "size": 4647422,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/DATA/SOUND-0.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/DOS4GW.EXE",
+      "sha1": "c489f83dc15a9ffc3c502707da40e581ec79bfe6",
+      "sha256": "b8265123ac8a189637448618409ef3ecd2e9f3e1a47062c685a02240f688dec1",
+      "size": 265396,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DOS4GW.EXE",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/ESFM.MDI",
+      "sha1": "cb3f3af40fb3069917ea2a1b7a57860f5d14f295",
+      "sha256": "4da7be521dd048f7f82c2c178496463353fe373c2eedde5ee38a252fe3225a43",
+      "size": 15896,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/ESFM.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/IWAV.DIG",
+      "sha1": "efd99ed5c598648567df82dd6a0236f8584cc38f",
+      "sha256": "428f537c47b82c09ae17d6de0c02dbb913aaee0c12c5c17b62b2ffc991b92524",
+      "size": 2585,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/IWAV.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/IWAV.MDI",
+      "sha1": "b72d4299dab151ef38491445b6c3ddef79071e78",
+      "sha256": "5b82cbec55215695cf58358ce0c0f37f3b00a74229dd8beb868a12646cc00275",
+      "size": 2149,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/IWAV.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/JAMMER.DIG",
+      "sha1": "103e0bf92c6fd1c9fc925fd57bdc22e56170b395",
+      "sha256": "cca38c28eabe00b88e4bddd627fa68a68b2559029098b777129ca00201831a9c",
+      "size": 3219,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/JAMMER.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/MIDI/ATLANTIS.XMI",
+      "sha1": "f753bbd054b70a4541ec7f51badc38b5d8ee529d",
+      "sha256": "f1fd82aacceb0afe1e67b24449375dcb1dba93eca4872a0f2eba098e401e2e2b",
+      "size": 24784,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/MIDI/ATLANTIS.XMI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/MIDI/MIDIDEM.TXT",
+      "sha1": "0cb1a2b167e69d22deed6fa113b1f772ae6aac10",
+      "sha256": "04b1f0dded2619011d894e95f4cfbd4abf32f616d8147ad60cb01fbd90d0d2d9",
+      "size": 78,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/MIDI/MIDIDEM.TXT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/MIDI/NIGHTSH.XMI",
+      "sha1": "c29fff2865bc0be93fda315d5251a7ef3702936d",
+      "sha256": "96454e0e8683d7a805074c96c363c75acad890bbd8c584f5350989f8eadaa56d",
+      "size": 14402,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/MIDI/NIGHTSH.XMI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/MIDI/STEADY.XMI",
+      "sha1": "580169ab5ec1a8e356ca16ce4f21f7ddff4c5805",
+      "sha256": "dd78cdf4ec2a80930d419376a03e805234fc2ec1eb13ee928293261072104c8e",
+      "size": 12490,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/MIDI/STEADY.XMI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/MINHEAP.DAT",
+      "sha1": "0442cc88eb88fcc16b0fcb2dc633f07d38240f32",
+      "sha256": "25c0a4aac8b08b59050908b8f85ee96e4ae4c337f511f04bda42bb803cb9ec3c",
+      "size": 446,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/DATA/MINHEAP.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/MPU401.MDI",
+      "sha1": "a44394494f94040dfd4c0a268a1012c2f99390d9",
+      "sha256": "5810b3708844f76b69e1e9bd69420fb9096496cf5f3ee4b86eeeddd139394b0c",
+      "size": 2002,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/MPU401.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/MSSDRVR.LST",
+      "sha1": "e1af9cfe7ba64493a07ed2913564386777266a88",
+      "sha256": "c9f2fb89c254e4c29363c552f63f80bd414941a1ac1d1dbe13f11ad443efdc62",
+      "size": 20408,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/MSSDRVR.LST",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/MSSW95.EXE",
+      "sha1": "1bbc89a5730cea3d82e9d77221046cb5b2941497",
+      "sha256": "505fc13d5db095f12533d647a54cd9bd671b3defe3ad14ee24fd48bcdf9d832b",
+      "size": 8030,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/MSSW95.EXE",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/MT32MPU.MDI",
+      "sha1": "ffce4117a9b5bf046f4f6fe39fa58c6ae9504f34",
+      "sha256": "90a78622000df7099980f8c818b32a12816bbb5b62c490eeda346c5d6510f20a",
+      "size": 6948,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/MT32MPU.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/NULL.MDI",
+      "sha1": "cf861b813bbcefd7379966caee260646d841ebcc",
+      "sha256": "9a3fbeb9883ad72ff86e367ed9712df1e82aa9d7f317b2602cbd1b4e2054393c",
+      "size": 1626,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/NULL.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/NVDIG.DIG",
+      "sha1": "822f20d70297cd414189f54035b5a0bcf84947d6",
+      "sha256": "0a83f41fe6d3f6131181690c80fe4855f2d197224475227ff3a4a89481b0e233",
+      "size": 1877,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/NVDIG.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/NVMPU.MDI",
+      "sha1": "0f7474eb29e558096377a2c153e14829f94ca627",
+      "sha256": "1aa9edc550ed5d5c539a1dc72256baa29aa7b192be9da94b102b292d0aa5e343",
+      "size": 2044,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/NVMPU.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/OPL3.MDI",
+      "sha1": "deaa0743c32bf87abe3f777867cabedc5568156d",
+      "sha256": "ca7f5be3fca9a76a936dbb1f2f1de6980678705979fc39479b419f24cee72429",
+      "size": 16474,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/OPL3.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/PAS.MDI",
+      "sha1": "abdd9443604d1d4f013a24d506cf830f75988ce9",
+      "sha256": "028cbdb132c09eb5ae1b595cf9eab5df1d6bf59291b157ac378a82e6233da4a7",
+      "size": 15512,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/PAS.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/PASPLUS.MDI",
+      "sha1": "4ab57eb4e9e025661d658d988cbbe67690e1dbf8",
+      "sha256": "79de0abdb6c7a31ca7309321b70dd19d848c8110d89dc6ea9df13e982d523714",
+      "size": 16545,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/PASPLUS.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/PCSPKR.MDI",
+      "sha1": "a058c690a4b6e2e825bbb24a347e4e8b640c04e3",
+      "sha256": "7c91c3c2048353e8ff9c20414e99abc5bda430e1b6a175876b7fc322346497ff",
+      "size": 4722,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/PCSPKR.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/PROAUDIO.DIG",
+      "sha1": "9bd209517dfd8988dc3f13dfc85c6cfc5c61f535",
+      "sha256": "6e1e4ad2244447adc9eee9a97369f942095e5299579b72dd955a33bf9e594da5",
+      "size": 2214,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/PROAUDIO.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/RAP10.DIG",
+      "sha1": "485d392f2575a2f609bb1b96562f8c464740874e",
+      "sha256": "21d841b53be1bef17c86906e9943c160f0811fd614c14df614e217042c978145",
+      "size": 2936,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/RAP10.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SAMPLE.AD",
+      "sha1": "08a4ee14fc9a42b9f93a6309ca44808f3fa2243d",
+      "sha256": "02d4f5d47f40442260f26804863cb2bd7f53ac13921f31a95db9449c6a6896c5",
+      "size": 3802,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SAMPLE.AD",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SAMPLE.OPL",
+      "sha1": "08a4ee14fc9a42b9f93a6309ca44808f3fa2243d",
+      "sha256": "02d4f5d47f40442260f26804863cb2bd7f53ac13921f31a95db9449c6a6896c5",
+      "size": 3802,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SAMPLE.AD",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SB16.DIG",
+      "sha1": "e3379544a4e975c2dc82f1a9194d2980d8ff745a",
+      "sha256": "267d6dc348ecb7c6357b6421e693fc2222ac0ee276938af8b3e98fc545f8ca70",
+      "size": 2923,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SB16.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SBAWE32.MDI",
+      "sha1": "ac89d710988e67940ab895cdddf79f384afc42e9",
+      "sha256": "945b4b3f0b722a347c2a025dda872426f47a289e03ef3bd0aa1c02809c94e4e4",
+      "size": 31396,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SBAWE32.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SBLASTER.DIG",
+      "sha1": "78d3cfa378a9ba84eacdd165cb3487c17db606b7",
+      "sha256": "19df1f9fc10505b555aec51f692f7fdaaa10322a7e9ed2070dd56112f6f75a8d",
+      "size": 3212,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SBLASTER.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SBLASTER.MDI",
+      "sha1": "16e30446db69ed2e8304d9ea3697c7b617ed4fcc",
+      "sha256": "41da5bf5a1f720bf43070b8293fc8d763696aa87b1db463881a6171e9884d2f3",
+      "size": 15205,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SBLASTER.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SBPRO.DIG",
+      "sha1": "95f9e577b06a88eac532bdd5db346aabdf0a9161",
+      "sha256": "189d65d14569770184cba66cbeeea9c4307b4eefa8dd9d21e3d2d2819403429a",
+      "size": 2871,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SBPRO.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SBPRO1.MDI",
+      "sha1": "26d97308487075dafcc5e2fecb5165c13b174b05",
+      "sha256": "88cf684d5c9f4825747154505ee6060644c4f686ddc8774da648c77d4c8b70d0",
+      "size": 15558,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SBPRO1.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SBPRO2.MDI",
+      "sha1": "2da34127d34fd57364512224c2034f7547df94af",
+      "sha256": "4a4279e89094b64276a1a44297c0cc4c44753b3ff25a5cbac30d71f3fea03860",
+      "size": 16628,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SBPRO2.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SETSOUND.EXE",
+      "sha1": "e54cf9fef28e644e8a828efb66c15f07d95866c0",
+      "sha256": "aa86349a164f5506a34fff99ea004b84e255750ab553addd982dad8d64dfeb02",
+      "size": 120433,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SETSOUND.EXE",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SNDSCAPE.DIG",
+      "sha1": "f9902b74d545813315194f5a1791c4ea0a9a1e0d",
+      "sha256": "a1459763f2fdcb1ada4f9fc6d28c9ea33077c00dad91b5809ee899f5a1b6c05c",
+      "size": 4171,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SNDSCAPE.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SNDSCAPE.MDI",
+      "sha1": "01e3ffef3aa6e9d312f190a9403ff8d167743aed",
+      "sha256": "f541a45fc4f5c4c9a5f68c6addcd451a261b0b4b20a00239d4c8e47320ff31c0",
+      "size": 2971,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SNDSCAPE.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SNDSYS.DIG",
+      "sha1": "0f14df1913a670e7b14fb7856ac72d457401dc1d",
+      "sha256": "46ea416974c918dc18e4310b70ac4bbb3647b2d75cc954510d303b7308273907",
+      "size": 3419,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SNDSYS.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/SOUND.DAT",
+      "sha1": "17bb14e9220fae8097b9d429581373efd35cb440",
+      "sha256": "13106e96270ee04b34ef1ff251bf9d4848d1a9fd7cd7c207326579d1473acb8b",
+      "size": 1546910,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/SOUND.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/TANDY.MDI",
+      "sha1": "18052137ba2930beb3afd5da0b98643d13b54d76",
+      "sha256": "7d99bae4fb46a8915a3017611974950edeb0e8fae263056dc301c55d56bd9a76",
+      "size": 5027,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/TANDY.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/ULTRA.DIG",
+      "sha1": "4327d6bb924b4e40fa7ff035bdfb73a879c31836",
+      "sha256": "4e63a94e272f37907910cc2a73120d2d21f3651a66bd06fcac7e80c93af55478",
+      "size": 9478,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/ULTRA.DIG",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/SOUND/ULTRA.MDI",
+      "sha1": "8337ada0962de33ee3eb8ebbf9d5d0c898f41fd2",
+      "sha256": "e7034fb38cd05821bb0960537745db75348c193c7a9889373bbcc86eb1cac17f",
+      "size": 49672,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/SOUND/ULTRA.MDI",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/WSND7R.DLL",
+      "sha1": "95d303f2ace5e42a22aaf6979148dc7cb4a38e9f",
+      "sha256": "0a3a9aedb66f3bf4288e94dd420be73de0be8d9a21327232fa0c2f973ae1a795",
+      "size": 109056,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/WSND7R.DLL",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATA/VBLK-0.TAB",
+      "sha1": "e3de36bdd14df5fcf9f11634c24c6127c2672848",
+      "sha256": "9492252e5fc7e23fcd6972b496b27d7caaf17a13350c11f4461ea3b232750961",
+      "size": 1356,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATA/VBLK-0.TAB",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/LEVELS/LEVEL.L1",
+      "sha1": "d264f15b394d248f107554642b771dfc15e7480f",
+      "sha256": "68ac27da538697d880173553ffa5fa612ffdbcf1778ed023702cabfadc4147f6",
+      "size": 163948,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/LEVELS/LEVEL.L1",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/SPOINTER.DAT",
+      "sha1": "e564e0e0e6d4e88ddde883b4bd9f6745c515f5c6",
+      "sha256": "1cbfe71428a7bef725b7e40d30654299054a52023541827c1d811cbdce7d9bf4",
+      "size": 6555,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/SPOINTER.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/QDATA/FONT00V.DAT",
+      "sha1": "9e23938615902b2768fa8bd814fa09db18195b2b",
+      "sha256": "23adad27c1f1726e29d9176dd4c4b16d18c138045a6f999142496ad7a4266e31",
+      "size": 6776,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/QDATA/FONT00V.DAT",
+      "cores": [
+        "corsixth"
+      ]
+    },
+    {
+      "dest": "corsixth/DATAM/DEMO.DAT",
+      "sha1": "cbb8391cb65c20e2c05a2f29211e55c49939c3db",
+      "sha256": "6bdf66b5bf2a44e658bea2ee86695ab150a06e600bf67cd5cce245ad54962c61",
+      "size": 3,
+      "repo_path": "bios/Game Engines/Theme Hospital/corsixth/DATAM/DEMO.DAT",
+      "cores": [
+        "corsixth"
       ]
     },
     {
@@ -24835,10 +28655,10 @@
     },
     {
       "dest": "gamecontrollerdb.txt",
-      "sha1": "8c272ae624c56d48d788fafe0397fab2e33d838f",
-      "sha256": "d8d995606af437fff434aa204ca976f21bebaf44170f98bdc3a86074d1a9ac91",
-      "size": 408885,
-      "repo_path": "bios/Other/eka2l1/resources/gamecontrollerdb.txt",
+      "sha1": "446e3d7138becc17d3bc31401a241247318f42a9",
+      "sha256": "d65433feb3602d056900016cda40cf581f00289f179da336613b55ae3136afe2",
+      "size": 26890,
+      "repo_path": "bios/Game Engines/C-Dogs SDL/cdogs/data/gamecontrollerdb.txt",
       "cores": [
         "solarus"
       ]
@@ -25091,6 +28911,26 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
       "cores": [
         "vice_xvic"
+      ]
+    },
+    {
+      "dest": "[BIOS] Atari Jaguar CD (World).j64",
+      "sha1": "73883e7a6e9b132452436f7ab1aeaeb0776428e5",
+      "sha256": "646a0687a01dc6c1fffff508ca25c14b78d30bdfcfa958d4c3e20f6bf78e4f1b",
+      "size": 262144,
+      "repo_path": "bios/Atari/Jaguar/[BIOS] Atari Jaguar CD (World).j64",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "[BIOS] Atari Jaguar Developer CD (World).j64",
+      "sha1": "d61b7b5912118f114ef00cf44966a5ef62e455a5",
+      "sha256": "f8d03a5a31fc3bd01a4f85f60d3dbe1656a6770f2a9ca9bad0a66c03ed1bd512",
+      "size": 262144,
+      "repo_path": "bios/Atari/Jaguar/[BIOS] Atari Jaguar Developer CD (World).j64",
+      "cores": [
+        "virtualjaguar"
       ]
     },
     {
@@ -25489,6 +29329,16 @@
       "sha256": "f5a76c2b154750074edc50c265afb05e1b672d9ed72d4a31f60c9da0d21fe10c",
       "size": 65536,
       "repo_path": "bios/Dragon/Dragon/sdbdos.rom",
+      "cores": [
+        "xroar"
+      ]
+    },
+    {
+      "dest": "dragonfly-2.3.rom",
+      "sha1": "a9cad98b46fd9d77f1c579ed20da3c0c4be2547a",
+      "sha256": "fcfb728ab4fd8ed674f2d11cf839ea9d716ba15c508aa9ec66b8959e781eba99",
+      "size": 4096,
+      "repo_path": "bios/Dragon/Dragon/dragonfly-2.3.rom",
       "cores": [
         "xroar"
       ]

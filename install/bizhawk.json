@@ -5,7 +5,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-10-04T15:54:42Z",
+  "generated": "2026-10-04T21:25:52Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -20,15 +20,25 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 809,
-  "total_size": 2537512731,
-  "pack_files": 811,
-  "pack_size": 2537512731,
-  "total_omitted": 1,
+  "total_files": 815,
+  "total_size": 2539872027,
+  "pack_files": 817,
+  "pack_size": 2539872027,
+  "total_omitted": 2,
   "omitted_files": [
     {
       "dest": "jagboot.rom",
       "name": "jagboot.rom",
+      "system": "atari-jaguar",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "jagboot_m.rom",
+      "name": "jagboot_m.rom",
       "system": "atari-jaguar",
       "required": false,
       "reason": "not_found",
@@ -1230,6 +1240,46 @@
       "sha256": "6e3b35af6e45d9005460cfe44e3907563bde7a4636926ebd316dc84913efdd1b",
       "size": 2097152,
       "repo_path": "bios/Sega/Saturn/SAT_Ultraman.bin",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "epr-20091.ic8",
+      "sha1": "eff0f54c70bce05ff3a289bf30b1027e1c8cd117",
+      "sha256": "ac778ec04aaa4df296d30743536da3de31281f8ae5c94d7be433dcc84e25d85b",
+      "size": 524288,
+      "repo_path": "bios/Sega/ST-V/epr-20091.ic8",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "epr-17952a.ic8",
+      "sha1": "eaf1c3e5d602e1139d2090a78d7e19f04f916794",
+      "sha256": "bac5a52794cf424271f073df228e0b0eb042dede6a3b829eb49abf155e7e0137",
+      "size": 524288,
+      "repo_path": "bios/Sega/ST-V/epr-17952a.ic8",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "epr-17954a.ic8",
+      "sha1": "af79cff317e5b57d49e463af16a9f616ed1eee08",
+      "sha256": "3e6f91506031badc4ebdf7fe5b4f33180222a369b575522861688d3b27322a68",
+      "size": 524288,
+      "repo_path": "bios/Sega/ST-V/epr-17954a.ic8",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "satar4mp.bin",
+      "sha1": "b9645d265644d201dbccc39aaf4bfa60cebe7ead",
+      "sha256": "76982109ed433d512413044d7c5bc869f6d97e2826f5ac10cc7418fb3fff1ab3",
+      "size": 262144,
+      "repo_path": "bios/Sega/Saturn/satar4mp.bin",
       "cores": [
         "beetle_saturn"
       ]
@@ -6758,6 +6808,26 @@
       "repo_path": "bios/Commodore/C128/vice/C64/kernal-901227-02.bin",
       "cores": [
         "vice_x64"
+      ]
+    },
+    {
+      "dest": "[BIOS] Atari Jaguar CD (World).j64",
+      "sha1": "73883e7a6e9b132452436f7ab1aeaeb0776428e5",
+      "sha256": "646a0687a01dc6c1fffff508ca25c14b78d30bdfcfa958d4c3e20f6bf78e4f1b",
+      "size": 262144,
+      "repo_path": "bios/Atari/Jaguar/[BIOS] Atari Jaguar CD (World).j64",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "[BIOS] Atari Jaguar Developer CD (World).j64",
+      "sha1": "d61b7b5912118f114ef00cf44966a5ef62e455a5",
+      "sha256": "f8d03a5a31fc3bd01a4f85f60d3dbe1656a6770f2a9ca9bad0a66c03ed1bd512",
+      "size": 262144,
+      "repo_path": "bios/Atari/Jaguar/[BIOS] Atari Jaguar Developer CD (World).j64",
+      "cores": [
+        "virtualjaguar"
       ]
     },
     {
