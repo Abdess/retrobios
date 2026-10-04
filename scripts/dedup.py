@@ -50,6 +50,13 @@ NODEDUP_DIRS = {
     # BBK dictionary ROMs are addressed by model directory, and the OS ROM
     # the A4988 folder needs is the one the gam4980 core is given.
     "BBK",
+    # Engine data trees read by path: one sound or one sprite sits under
+    # several characters, campaigns or episodes, and each copy is opened
+    # where it lies.
+    "C-Dogs SDL",
+    "Ikemen GO",
+    "Theme Hospital",
+    "TheXTech",
 }
 
 

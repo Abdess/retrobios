@@ -292,5 +292,50 @@ class ProfileContract(unittest.TestCase):
         return name.endswith("/") or "type" in entry
 
 
+class CollectionScanAndIgnoreRules(unittest.TestCase):
+    """Two rules that kept collected engine trees out of the repository."""
+
+    def test_a_hidden_directory_of_an_engine_tree_is_scanned(self):
+        """C-Dogs SDL reads its Wolfenstein campaigns from `data/.wolf3d/`.
+        The scan dropped every dot-directory but `.variants`, so 695 files
+        of a collected tree could not enter the database."""
+        self.assertFalse(
+            generate_db.should_skip(Path("Game Engines/cdogs/data/.wolf3d/N3D.json"))
+        )
+        self.assertFalse(generate_db.should_skip(Path("Sony/.variants/scph.bin.1234")))
+
+    def test_hidden_files_and_tooling_directories_stay_out(self):
+        for skipped in (
+            "RPG Maker/mkxp-z/Fonts/.gitkeep",
+            "Atari/.DS_Store",
+            ".cache/large/file.bin",
+            ".git/config",
+        ):
+            self.assertTrue(generate_db.should_skip(Path(skipped)), skipped)
+
+    def test_an_ignored_file_under_bios_is_a_registered_release_asset(self):
+        """`.gitignore` is the register of release assets, path by path. A
+        bare `data/` rule also matched every engine's own `data/` directory:
+        1 525 collected files would have stayed uncommitted while the
+        manifests pointed installers at them."""
+        import subprocess
+
+        listed = subprocess.run(
+            ["git", "ls-files", "--others", "--ignored", "--exclude-standard", "bios"],
+            cwd=REPO_ROOT, capture_output=True, text=True,
+        )
+        if listed.returncode != 0:
+            self.skipTest("not a git checkout")
+        registered = {
+            line.strip()
+            for line in (REPO_ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.startswith("#")
+        }
+        strays = [
+            path for path in listed.stdout.splitlines() if path not in registered
+        ]
+        self.assertEqual(strays[:10], [], f"{len(strays)} ignored files not registered")
+
+
 if __name__ == "__main__":
     unittest.main()

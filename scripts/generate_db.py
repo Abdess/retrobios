@@ -43,13 +43,15 @@ CACHED_HASHES = ("sha1", "md5", "sha256", "crc32", "adler32")
 
 
 def should_skip(path: Path) -> bool:
-    """Check if a path should be skipped. Allows .variants/ directories."""
-    for part in path.parts:
-        if part in SKIP_PATTERNS:
-            return True
-        if part.startswith(".") and part != ".variants":
-            return True
-    return False
+    """Whether a path stays out of the collection.
+
+    Tooling directories and hidden files do. A hidden directory inside the
+    collection does not: `.variants/` holds alternate dumps, and an engine
+    tree can carry one of its own (C-Dogs SDL reads `data/.wolf3d/`).
+    """
+    if any(part in SKIP_PATTERNS for part in path.parts):
+        return True
+    return path.name.startswith(".")
 
 
 def _canonical_name(filepath: Path) -> str:

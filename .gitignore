@@ -8,6 +8,8 @@ __pycache__/
 dist/
 site/
 *.tmp
+# px68k reads its fallback font under this name: a collection file, not scratch.
+!bios/**/*.tmp
 *.log
 node_modules/
 
@@ -20,10 +22,13 @@ bios/Sony/PlayStation 3/.variants/PS3UPDAT.PUP.ed8ab192
 bios/Sony/PlayStation Vita/PSVUPDAT.PUP
 bios/Sony/PlayStation Vita/PSP2UPDAT.PUP
 
-# Data directories (fetched at build time)
-data/
+# Data directories (fetched at build time). Anchored: an engine tree under
+# bios/ has a data/ directory of its own, and that one is committed.
+/data/
 
 # Large files stored as GitHub Release assets (additional)
+bios/Other/mame4droid-2024/data/history.db
+bios/Other/mame4droid-2024/data/.variants/history.db.615619e8
 bios/Arcade/MAME/artwork/snspell.zip
 bios/Arcade/MAME/MAME 0.174 Arcade XML.dat
 bios/Sony/PlayStation Vita/.variants/PSP2UPDAT.PUP.3ae832c9
