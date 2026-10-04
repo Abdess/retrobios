@@ -4,9 +4,9 @@ core_classification: community_fork
 cores: [melonds_ds, melondsds]
 source: "https://github.com/JesseTG/melonds-ds"
 upstream: "https://github.com/melonDS-emu/melonDS"
-profiled_date: "2026-03-24"
-source_commit: "bc4e4b67d2d470d7c682810a1e892cafd6f9082b"
-core_version: "1.2.0"
+profiled_date: "2026-10-04"
+source_commit: "f394adbacb5722ee97c1b37c8064da9a25818310"
+core_version: "1.4.0"
 display_name: "Nintendo - DS (melonDS DS)"
 systems:
   - nintendo-ds
@@ -14,10 +14,31 @@ systems:
 
 notes: |
   Libretro-specific remake using melonDS as a statically-linked library.
-  DS mode has FreeBIOS/generated firmware fallback; DSi mode requires all
-  native files. Core searches "melonDS DS/" subfolder first, then system root.
-  In DSi mode, NDS BIOS (bios7/bios9) are also required alongside DSi BIOS.
-  Firmware and NAND filenames are user-selectable via core options.
+  LoadBios() looks for each BIOS in "{system}/melonDS DS/" first, then in the
+  system directory itself, and rejects a file whose size is not exactly the
+  expected one (src/libretro/config/console.cpp:1087-1133).
+
+  DS mode: the firmware named by the core option is loaded when BIOS/Firmware
+  Mode is Native, otherwise (or when it fails to load) a generated firmware
+  is used (src/libretro/config/console.cpp:337-364). bios7.bin and bios9.bin
+  are only read with a native firmware; if either fails the core falls back
+  to FreeBIOS (src/libretro/config/console.cpp:379-410). With FreeBIOS an
+  encrypted retail ROM is refused (src/libretro/config/console.cpp:420-424),
+  and booting without content needs native BIOS and a bootable firmware
+  (src/libretro/config/console.cpp:398-401).
+
+  DSi mode requires dsi_bios7.bin, dsi_bios9.bin, bios7.bin, bios9.bin, a DSi
+  firmware and a NAND image; each missing file throws
+  (src/libretro/config/console.cpp:490-551).
+
+  Firmware and NAND images have no fixed name. RegisterCoreOptions() scans
+  the system directory and its "melonDS DS" subdirectory and offers every
+  file that passes IsFirmwareImage() or IsDsiNandImage() as a core option
+  value (src/libretro/config/config.cpp:1005-1020). The default firmware is
+  the newest file whose header matches the console type. The NAND option
+  defaults to Auto: for a title installed onto the NAND the core picks the
+  discovered image whose console region matches the ROM, otherwise the first
+  one found (src/libretro/config/console.cpp:564-579).
 
 files:
   # --- Nintendo DS (NTR) ---
@@ -29,7 +50,8 @@ files:
     size: 16384
     validation: [size]
     crc32: 1280f0d5
-    source_ref: "src/libretro/config/console.cpp:219, src/MemConstants.h:31, src/MemConstants.h:36"
+    source_ref: "src/libretro/config/config.hpp:326, src/libretro/config/console.cpp:379, src/libretro/config/console.cpp:526-529, src/libretro/config/console.cpp:1098-1103, src/MemConstants.h:31, src/MemConstants.h:36"
+    note: "Required in DSi mode."
 
   - name: bios9.bin
     system: nintendo-ds
@@ -39,15 +61,16 @@ files:
     size: 4096
     validation: [size]
     crc32: 2ab23573
-    source_ref: "src/libretro/config/console.cpp:306, src/MemConstants.h:30, src/MemConstants.h:37"
+    source_ref: "src/libretro/config/config.hpp:325, src/libretro/config/console.cpp:380, src/libretro/config/console.cpp:531-534, src/libretro/config/console.cpp:1098-1103, src/MemConstants.h:30, src/MemConstants.h:37"
+    note: "Required in DSi mode."
 
   - name: firmware.bin
     system: nintendo-ds
     description: "NDS firmware image"
     required: false
     hle_fallback: true
-    source_ref: "src/libretro/config/console.cpp:184"
-    note: "Filename configurable via core options; generated firmware used as fallback"
+    source_ref: "src/libretro/config/console.cpp:337-364, src/libretro/config/console.cpp:1136-1182, src/libretro/config/constants.cpp:102-176, src/libretro/config/constants.hpp:288"
+    note: "Any file name: the core lists every file of 131072, 262144 or 524288 bytes with a valid firmware header and the user picks one. A generated firmware is used as fallback."
 
   # --- Nintendo DSi (TWL) ---
   - name: dsi_bios7.bin
@@ -57,8 +80,8 @@ files:
     size: 65536
     validation: [size]
     crc32: 4316cc42
-    source_ref: "src/libretro/config/console.cpp:333, src/MemConstants.h:32, src/MemConstants.h:44"
-    note: "Contains eMMC key-Y at offset 0x8308 for NAND init"
+    source_ref: "src/libretro/config/config.hpp:328, src/libretro/config/console.cpp:516-519, src/libretro/config/console.cpp:1098-1103, src/MemConstants.h:32, src/MemConstants.h:44"
+    note: "The eMMC key-Y at offset 0x8308 is used to open the NAND image (src/libretro/config/console.cpp:586)."
 
   - name: dsi_bios9.bin
     system: nintendo-dsi
@@ -67,18 +90,18 @@ files:
     size: 65536
     validation: [size]
     crc32: bae84f6c
-    source_ref: "src/libretro/config/console.cpp:338, src/MemConstants.h:32, src/MemConstants.h:45"
+    source_ref: "src/libretro/config/config.hpp:327, src/libretro/config/console.cpp:521-524, src/libretro/config/console.cpp:1098-1103, src/MemConstants.h:32, src/MemConstants.h:45"
 
   - name: dsi_firmware.bin
     system: nintendo-dsi
     description: "DSi firmware image"
     required: true
-    source_ref: "src/libretro/config/console.cpp:352-358"
-    note: "Filename configurable via core options; must have DSi firmware header"
+    source_ref: "src/libretro/config/console.cpp:497-499, src/libretro/config/console.cpp:536-551, src/libretro/config/constants.cpp:102-176"
+    note: "Any file name, selected through a core option; the firmware header must declare the DSi console type."
 
   - name: dsi_nand.bin
     system: nintendo-dsi
     description: "DSi NAND dump"
     required: true
-    source_ref: "src/libretro/config/console.cpp:378, src/libretro/config/console.cpp:1172-1179"
-    note: "Filename configurable via core options; 240MB or 245.5MB with optional no$cash footer"
+    source_ref: "src/libretro/config/console.cpp:490-495, src/libretro/config/console.cpp:564-592, src/libretro/config/console.cpp:1401-1416, src/libretro/config/constants.cpp:44-100, src/libretro/config/constants.hpp:283-287"
+    note: "Any file name, selected through a core option or picked automatically by region. 251658240 or 257425408 bytes, plus 64 when the no$gba footer is appended; the footer magic must be present at the end or at offset 0xFF800."

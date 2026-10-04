@@ -3,9 +3,9 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/drhelius/Geargrafx"
 upstream: "https://github.com/drhelius/Geargrafx"
-profiled_date: "2026-09-17"
-source_commit: "78fc3d7a1b9f55d78d8fe64c13368131a269e204"
-core_version: "1.7.22"
+profiled_date: "2026-10-04"
+source_commit: "d0307bfbe4aebb67e1969502b6ccec752fd04b1d"
+core_version: "1.8.1"
 display_name: "NEC - PC Engine / SuperGrafx / CD (Geargrafx)"
 cores:
   - geargrafx
@@ -13,52 +13,71 @@ systems:
   - nec-pc-engine
   - nec-supergrafx
   - nec-pc-engine-cd
+  - laseractive
 
 notes: |
   Geargrafx is a PC Engine / TurboGrafx-16 / SuperGrafx / CD-ROM emulator by
   Ignacio Sanchez (drhelius). HuCard games run without any external file.
 
-  CD-ROM content needs a System Card image from the frontend system directory.
-  load_bios() in platforms/libretro/libretro.cpp:617-658 picks the file name
-  from the core option geargrafx_cdrom_bios (libretro.cpp:1429-1452):
-  System Card 1 loads syscard1.pce, System Card 2 loads syscard2.pce, System
-  Card 3 (the default) and Force Game Express load syscard3.pce; the older
-  values Auto and Game Express are still accepted and map to the same. The
-  path is "{system_directory}/{name}" (libretro.cpp:644). When the card is
-  missing the core posts "CD-ROM BIOS not found" and continues
-  (libretro.cpp:645-654). gexpress.pce is then always attempted from the
-  same directory (libretro.cpp:656-657), silently. load_bios() runs from
-  retro_load_game() for CD content only (libretro.cpp:466-467) and again on
-  retro_reset() when a CD is loaded (libretro.cpp:312). With the libretro
+  CD-ROM content (cue, chd, mmi) needs a System Card image from the frontend
+  system directory. load_bios() in platforms/libretro/libretro.cpp:709-750
+  picks the file name from the core option geargrafx_cdrom_bios
+  (platforms/libretro/libretro.cpp:1568-1591): System Card 1 loads
+  syscard1.pce, System Card 2 loads syscard2.pce, System Card 3 (the default)
+  and Force Game Express load syscard3.pce; the older values Auto and Game
+  Express are still accepted and map to the same. The path is
+  "{system_directory}/{name}" (platforms/libretro/libretro.cpp:736). When the
+  card is missing the core posts "CD-ROM BIOS not found" and continues
+  (platforms/libretro/libretro.cpp:737-746). gexpress.pce is then always
+  attempted from the same directory (platforms/libretro/libretro.cpp:748-749).
+  load_bios() runs from retro_load_game() for CD content only
+  (platforms/libretro/libretro.cpp:518-519) and again on retro_reset() when a
+  CD is loaded (platforms/libretro/libretro.cpp:355-356). With the libretro
   VFS the file goes through load_bios_file() into LoadBiosFromBuffer(),
-  otherwise through Media::LoadBios() (libretro.cpp:580-615,
-  src/media.cpp:391-431).
+  otherwise through Media::LoadBios() (platforms/libretro/libretro.cpp:672-707,
+  src/media.cpp:448-491).
 
-  Media::LoadBiosData() (src/media.cpp:447-488) compares the file size with
-  GG_BIOS_SYSCARD_SIZE (0x40000) or GG_BIOS_GAME_EXPRESS_SIZE (0x8000)
-  (src/defines.h:53-54) and only logs a mismatch. A 512-byte header is
-  stripped when the size has bit 9 set, the data is copied into a zeroed
-  buffer of the expected size, and CRC32 is computed over that whole buffer.
-  GatherBIOSInfoFromDB() (src/media.cpp:777-811) looks the CRC up in
+  Media::LoadBiosData() (src/media.cpp:662-705) strips a 512-byte header when
+  the size is the expected size plus 512, then rejects any image whose size
+  is not GG_BIOS_SYSCARD_SIZE (0x40000) or GG_BIOS_GAME_EXPRESS_SIZE (0x8000)
+  (src/defines.h:53-54). CRC32 is computed over the accepted image.
+  GatherBIOSInfoFromDB() (src/media.cpp:1027-1061) looks the CRC up in
   k_game_database entries flagged GG_GAMEDB_BIOS_SYSCARD or
   GG_GAMEDB_BIOS_GAME_EXPRESS (src/game_db.h:48-56); an unknown CRC marks the
-  image "Unknown" and invalid but it is still used. The CRC is therefore the
-  CRC of the padded buffer, not of the file: the 16384-byte Game Express
-  Green dump (file CRC32 20E0A364) is recognised as 16AAF05A.
+  image "Unknown" and invalid but it is still used.
 
   For CD content the ROM banks map onto the System Card buffer, or onto the
   Game Express buffer when the disc is a Game Express title
-  (src/media.cpp:845-849). A Game Express disc is detected by its CRC in
-  game_db.h (GG_GAMEDB_GAME_EXPRESS, src/media.cpp:743-747) or forced by the
-  option (src/media.cpp:604-608). With no card loaded the buffer is zeros and
-  the CD does not boot. Arcade Card titles are also detected from game_db.h
-  and run on the selected System Card.
+  (src/media.cpp:1094-1103). A Game Express disc is detected by its CRC in
+  game_db.h (GG_GAMEDB_GAME_EXPRESS, src/media.cpp:993-997), named by the
+  card field of an MMI image (src/media.cpp:821-823) or forced by the option
+  (src/media.cpp:835-839). With no card loaded the buffer is zeros and the CD
+  does not boot. Arcade Card titles are also detected from game_db.h and run
+  on the selected System Card.
 
-  Backup RAM is exposed through RETRO_MEMORY_SAVE_RAM (libretro.cpp:540-548)
-  and saved by the frontend. A connected Memory Base 128 is persisted by the
-  core itself as geargrafx_mb128.sav in the frontend save directory
-  (libretro.cpp:660-740). Both are state the core writes, not files a user
-  obtains.
+  MMI content is a LaserActive LD-ROM2 image. retro_load_game() also calls
+  load_pac_bios() for it (platforms/libretro/libretro.cpp:521-522), which
+  reads the NEC PAC firmware from the system directory according to the core
+  option geargrafx_laseractive_region (platforms/libretro/libretro.cpp:1603-1614):
+  Japan loads pac-n1.bin and falls back to pce-lp1.bin, US loads pac-n10.bin,
+  Auto (the default) loads both regions
+  (platforms/libretro/libretro.cpp:775-797). Media::LoadPacBiosData()
+  (src/media.cpp:570-632) accepts 0x80000 bytes (GG_BIOS_LASERACTIVE_SIZE,
+  src/defines.h:55), with or without a 512-byte header, and compares the
+  CRC32 with the values hardcoded for the region; an unknown CRC is logged
+  and the image is still used. SelectPacBios() (src/media.cpp:634-660) follows
+  the option, then the regionCode of the MMI image, then whichever region is
+  loaded. An MMI image that names no card maps the PAC firmware
+  (src/media.cpp:1094-1103); one that names a card uses the System Card or
+  Game Express buffer. retro_load_game() fails when the firmware the MMI
+  image needs is not loaded (platforms/libretro/libretro.cpp:534-549).
+
+  Backup RAM is exposed through RETRO_MEMORY_SAVE_RAM
+  (platforms/libretro/libretro.cpp:632-640) and saved by the frontend. A
+  connected Memory Base 128 is persisted by the core itself as
+  geargrafx_mb128.sav in the frontend save directory
+  (platforms/libretro/libretro.cpp:799-879). Both are state the core writes,
+  not files a user obtains.
 
 files:
   - name: "syscard3.pce"
@@ -66,7 +85,7 @@ files:
     size: 262144
     required: true
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:622, platforms/libretro/libretro.cpp:634-639, platforms/libretro/libretro.cpp:644-654, src/media.cpp:447-488, src/defines.h:53, src/game_db.h:51-52, src/game_db.h:54"
+    source_ref: "platforms/libretro/libretro.cpp:714, platforms/libretro/libretro.cpp:726-731, platforms/libretro/libretro.cpp:736-746, src/media.cpp:662-705, src/defines.h:53, src/game_db.h:51-52, src/game_db.h:54"
     note: >
       Loaded for the default option value System Card 3 and for Force Game
       Express. game_db.h accepts three images under this name: Japan
@@ -79,7 +98,7 @@ files:
     size: 262144
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:621, platforms/libretro/libretro.cpp:631-632, src/media.cpp:447-488, src/defines.h:53, src/game_db.h:49-50, src/game_db.h:53"
+    source_ref: "platforms/libretro/libretro.cpp:713, platforms/libretro/libretro.cpp:723-724, src/media.cpp:662-705, src/defines.h:53, src/game_db.h:49-50, src/game_db.h:53"
     note: >
       Loaded when geargrafx_cdrom_bios is System Card 2. game_db.h accepts
       v2.0 Japan (CRC32 52520BC6), v2.1 Japan (CRC32 283B74E0) and USA
@@ -91,7 +110,7 @@ files:
     crc32: "3F9F95A4"
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:620, platforms/libretro/libretro.cpp:628-629, src/media.cpp:447-488, src/defines.h:53, src/game_db.h:48"
+    source_ref: "platforms/libretro/libretro.cpp:712, platforms/libretro/libretro.cpp:720-721, src/media.cpp:662-705, src/defines.h:53, src/game_db.h:48"
     note: "Loaded when geargrafx_cdrom_bios is System Card 1."
 
   - name: "gexpress.pce"
@@ -99,14 +118,50 @@ files:
     size: 32768
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:623, platforms/libretro/libretro.cpp:656-657, src/media.cpp:447-488, src/media.cpp:604-608, src/media.cpp:743-747, src/defines.h:54, src/game_db.h:55-56"
+    source_ref: "platforms/libretro/libretro.cpp:715, platforms/libretro/libretro.cpp:748-749, src/media.cpp:662-705, src/media.cpp:821-823, src/media.cpp:835-839, src/media.cpp:993-997, src/defines.h:54, src/game_db.h:55-56"
     note: >
       Always attempted after the System Card, used for discs flagged
-      GG_GAMEDB_GAME_EXPRESS in game_db.h or when the option is Force Game
-      Express. game_db.h accepts the Blue Version (CRC32 51A12D90, 32768
-      bytes) and the Green Version (CRC32 16AAF05A over the 32768-byte
-      buffer; the dump is 16384 bytes, file CRC32 20E0A364, zero-padded by
-      LoadBiosData).
+      GG_GAMEDB_GAME_EXPRESS in game_db.h, for MMI images whose card is
+      Games Express, or when the option is Force Game Express. game_db.h
+      accepts the Blue Version (CRC32 51A12D90) and the Green Version
+      (CRC32 16AAF05A). Both CRCs are of 32768-byte images: the 16384-byte
+      Green dump (CRC32 20E0A364) is rejected on size and matches 16AAF05A
+      once zero-padded to 32768 bytes.
+
+  - name: "pac-n1.bin"
+    description: "LaserActive NEC PAC-N1 v1.02 (Japan)"
+    size: 524288
+    crc32: "A8CB694C"
+    region: [japan]
+    required: true
+    validation: [size, crc32]
+    source_ref: "platforms/libretro/libretro.cpp:780-784, platforms/libretro/libretro.cpp:534-549, src/media.cpp:570-632, src/defines.h:55"
+    note: >
+      Japanese PAC firmware, read for MMI content when
+      geargrafx_laseractive_region is Auto or Japan. The Japanese slot
+      accepts the PAC-N1 and PCE-LP1 images under either file name.
+
+  - name: "pce-lp1.bin"
+    description: "LaserActive NEC PCE-LP1 v1.02 (Japan)"
+    size: 524288
+    crc32: "76116A02"
+    region: [japan]
+    required: false
+    validation: [size, crc32]
+    source_ref: "platforms/libretro/libretro.cpp:785-789, src/media.cpp:570-632, src/defines.h:55"
+    note: "Read only when pac-n1.bin did not load."
+
+  - name: "pac-n10.bin"
+    description: "LaserActive NEC PAC-N10 v1.02 (US)"
+    size: 524288
+    crc32: "01223DD5"
+    region: [north-america]
+    required: true
+    validation: [size, crc32]
+    source_ref: "platforms/libretro/libretro.cpp:792-796, platforms/libretro/libretro.cpp:534-549, src/media.cpp:570-632, src/defines.h:55"
+    note: >
+      US PAC firmware, read for MMI content when
+      geargrafx_laseractive_region is Auto or US.
 
 valid_bios_crc32:
   syscard:
@@ -119,4 +174,9 @@ valid_bios_crc32:
     - { crc32: "2B5B75FE", name: "TurboGrafx CD Super System 3.0 (USA)" }
   game_express:
     - { crc32: "51A12D90", name: "Games Express CD Card Blue Version (J)" }
-    - { crc32: "16AAF05A", name: "Games Express CD Card Green Version (J)", file_crc32: "20E0A364", file_size: 16384 }
+    - { crc32: "16AAF05A", name: "Games Express CD Card Green Version (J)" }
+  laseractive_japan:
+    - { crc32: "A8CB694C", name: "PAC-N1 v1.02" }
+    - { crc32: "76116A02", name: "PCE-LP1 v1.02" }
+  laseractive_us:
+    - { crc32: "01223DD5", name: "PAC-N10 v1.02" }

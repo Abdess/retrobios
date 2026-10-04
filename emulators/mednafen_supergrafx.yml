@@ -3,52 +3,47 @@ type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/beetle-supergrafx-libretro"
 upstream: "https://mednafen.github.io/"
-profiled_date: "2026-03-24"
-source_commit: "3c6fcd3deded54ebecd69408f108407ac03d11b5"
-core_version: "v1.23.0"
+profiled_date: "2026-10-04"
+source_commit: "eabaaa438b1732d05ff206a97e700f845d6bfa96"
+core_version: "v1.29.0"
 display_name: "NEC - PC Engine SuperGrafx (Beetle SuperGrafx)"
 cores: [mednafen_supergrafx, beetle_supergrafx]
 systems: [nec-pc-engine]
 verification: existence
 notes: >
-  Fork of Mednafen's pce_fast module with SuperGrafx and CD support.
-  Separate codebase from beetle_pce (mednafen/pce_fast/ vs mednafen/pce/).
-  BIOS loaded via HuC_LoadCD() at CD-ROM load time. Core option "sgx_cdbios"
-  selects which card image to use (default: System Card 3).
-  DetectGECD() auto-detects Games Express discs and overrides to gexpress.pce.
+  Port of Mednafen's pce_fast module with SuperGrafx and CD support.
+  The card image is read from the system directory by HuC_LoadCD() at
+  CD-ROM load time (mednafen/pce_fast/huc.cpp:221-245); the load fails when
+  the file cannot be opened. Core option "sgx_cdbios" selects which image
+  to use (default: System Card 3). With "sgx_detect_gexpress" enabled (the
+  default), DetectGECD() recognises Games Express discs and loads
+  gexpress.pce whatever the selection (mednafen/pce_fast/pce.cpp:453-454).
   DetectSGXCD() detects SuperGrafx CD titles via magic bytes.
-  Arcade Card mode (sgx_arcadecard option, not exposed) extends System Card 3
-  with extra RAM mapping.
+  Arcade Card emulation is always on (mednafen/settings.cpp:90-91).
+  HuC_LoadCD() strips a 512-byte header and copies at most 262144 bytes.
   No hash or size validation on BIOS load.
-  Upstream pce_fast module has a single pce_fast.cdbios string setting;
-  the 4-option dropdown is a libretro addition. Upstream has no separate
-  gecdbios setting (unlike the accurate pce module).
 
 files:
   - name: "syscard3.pce"
     description: "CD-ROM System Card 3.0 (Japan)"
-    region: [japan]
     required: true
     source_ref: "libretro.cpp:972-973, mednafen/settings.cpp:37"
     note: "Default value for sgx_cdbios option."
 
   - name: "syscard2.pce"
     description: "CD-ROM System Card 2.0 (Japan)"
-    region: [japan]
     required: false
     source_ref: "libretro.cpp:974-975"
     note: "sgx_cdbios = 'System Card 2'."
 
   - name: "syscard1.pce"
     description: "CD-ROM System Card 1.0 (Japan)"
-    region: [japan]
     required: false
     source_ref: "libretro.cpp:976-977"
     note: "sgx_cdbios = 'System Card 1'."
 
   - name: "gexpress.pce"
     description: "Games Express CD Card"
-    region: [japan]
     required: false
     source_ref: "libretro.cpp:978-979, mednafen/pce_fast/pce.cpp:330-367,453-454"
     note: "sgx_cdbios = 'Games Express' or auto-detected via DetectGECD()."

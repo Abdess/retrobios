@@ -2,9 +2,9 @@ emulator: Gearlynx
 type: libretro
 core_classification: official_port
 source: "https://github.com/drhelius/Gearlynx"
-profiled_date: "2026-03-23"
-source_commit: "d98c154444f1610016ad60704de2eed3ef80de22"
-core_version: "1.0.0"
+profiled_date: "2026-10-04"
+source_commit: "6a939afbca387ca615d96433928866e9d16ba2de"
+core_version: "1.2.33"
 display_name: "Atari - Lynx (GearLynx)"
 cores: [gearlynx]
 systems: [atari-lynx]
@@ -12,37 +12,37 @@ verification: existence
 
 notes: |
   Gearlynx is an Atari Lynx emulator by Ignacio Sanchez (drhelius).
-  The libretro core loads lynxboot.img from the system directory at
-  retro_load_game time (platforms/libretro/libretro.cpp:105-129, function load_bootroms).
+  The libretro core loads lynxboot.img from the system directory in
+  retro_load_game() and again in retro_reset()
+  (platforms/libretro/libretro.cpp:170-212, function load_bootroms).
   Path is built as: system_directory + "/lynxboot.img", no subdirectory.
+  With the libretro VFS the file is read by load_bios_file() and handed to
+  LoadBiosFromBuffer(), otherwise Media::LoadBios() opens it
+  (platforms/libretro/libretro.cpp:130-168, src/media.cpp:578-620).
 
-  LoadBios in src/media.cpp:578 reads exactly 512 bytes (GLYNX_BIOS_SIZE
-  = 0x200, src/defines.h:52). If the file size is not 0x200, the load is
-  rejected with BIOS_LOAD_INVALID_SIZE. After loading, bytes at offset
-  0x1F8 and 0x1F9 are patched (RAM/MAPCTL registers), then CRC32 is
-  computed and compared against GLYNX_DB_BIOS_CRC (0x0D973C9D,
+  LoadBiosData in src/media.cpp:633-683 takes exactly 512 bytes
+  (GLYNX_BIOS_SIZE = 0x200, src/defines.h:52). If the file size is not
+  0x200, the load is rejected with BIOS_LOAD_INVALID_SIZE. After loading,
+  bytes at offset 0x1F8 and 0x1F9 are patched (RAM/MAPCTL registers), then
+  CRC32 is computed and compared against GLYNX_DB_BIOS_CRC (0x0D973C9D,
   src/game_db.h:47). An invalid CRC triggers a warning log but the BIOS
   is still marked as loaded (m_is_bios_loaded = true).
 
   No HLE fallback. If the BIOS is not loaded (IsBiosLoaded() returns
-  false), RunToVBlank in
-  src/gearlynx_core.cpp:465-473 renders a static "no bios" image
-  and returns false, refusing to emulate. The BIOS is required for
-  any ROM to run. Homebrew (.o, BS93 format) bypasses the normal
-  boot sequence via PrepareForHomebrew() but still requires the BIOS
-  to be loaded for the emulation loop to execute.
+  false), RunToVBlank in src/gearlynx_core.cpp:216-221 renders a static
+  "no bios" image and returns false, refusing to emulate. The BIOS is
+  required for any ROM to run. Homebrew (.o, BS93 format) bypasses the
+  normal boot sequence via PrepareForHomebrew() but still requires the
+  BIOS to be loaded for the emulation loop to execute.
 
-  ROM extensions: .lnx, .lyx, .o
+  ROM extensions: .lnx, .lyx, .o, .bin
 
 files:
   - name: "lynxboot.img"
     description: "Atari Lynx boot ROM"
-    region: [world]
     required: true
     size: 512
-    sha1: "e4ed47fae31693e016b081c6bda48da5b70d7ccb"
-    md5: "fcd403db69f54290b51035d82f835e7b"
     crc32: "0d973c9d"
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:160-202 (load_bootroms), src/media.cpp:578-620 (LoadBios), src/defines.h:52 (GLYNX_BIOS_SIZE=0x200), src/game_db.h:38 (GLYNX_DB_BIOS_CRC=0x0D973C9D), src/gearlynx_core.cpp:467-471 (no-bios guard)"
+    source_ref: "platforms/libretro/libretro.cpp:170-212 (load_bootroms), src/media.cpp:633-683 (LoadBiosData), src/defines.h:52 (GLYNX_BIOS_SIZE=0x200), src/game_db.h:47 (GLYNX_DB_BIOS_CRC=0x0D973C9D), src/gearlynx_core.cpp:216-221 (no-bios guard)"
     note: "512-byte boot ROM validated by CRC32 after load. Invalid CRC logs a warning but still works. Missing or wrong-size file blocks emulation entirely (no HLE fallback)."
