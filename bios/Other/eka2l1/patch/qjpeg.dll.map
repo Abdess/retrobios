@@ -1,0 +1,6 @@
+[requirements]
+replace
+qt-plugin
+inrom
+uid2 0x1000008d
+uid3 0x2001e61b

@@ -26,7 +26,6 @@
 21 35           ; CMdaAudioPlayerUtility::NewL
 39 36           ; CMdaAudioPlayerUtiltiy::Close
 22 37           ; CMdaAudioPlayerUtility::Pause
-23 159          ; CMdaAudioPlayerUtility::Duration(TTimeIntervalMicroSeconds&)
 24 38           ; CMdaAudioPlayerUtility::OpenDesL
 25 39           ; CMdaAudioPlayerUtility::OpenUrlL
 26 40           ; CMdaAudioPlayerUtility::GetVolume
@@ -135,7 +134,6 @@
 21 35           ; CMdaAudioPlayerUtility::NewL
 39 36           ; CMdaAudioPlayerUtiltiy::Close
 22 37           ; CMdaAudioPlayerUtility::Pause
-23 159          ; CMdaAudioPlayerUtility::Duration(TTimeIntervalMicroSeconds&)
 24 38           ; CMdaAudioPlayerUtility::OpenDesL
 25 39           ; CMdaAudioPlayerUtility::OpenUrlL
 26 40           ; CMdaAudioPlayerUtility::GetVolume
@@ -244,7 +242,6 @@
 21 35           ; CMdaAudioPlayerUtility::NewL
 39 36           ; CMdaAudioPlayerUtiltiy::Close
 22 37           ; CMdaAudioPlayerUtility::Pause
-23 159          ; CMdaAudioPlayerUtility::Duration(TTimeIntervalMicroSeconds&)
 24 38           ; CMdaAudioPlayerUtility::OpenDesL
 25 39           ; CMdaAudioPlayerUtility::OpenUrlL
 26 40           ; CMdaAudioPlayerUtility::GetVolume
@@ -353,7 +350,6 @@
 21 35           ; CMdaAudioPlayerUtility::NewL
 39 36           ; CMdaAudioPlayerUtiltiy::Close
 22 37           ; CMdaAudioPlayerUtility::Pause
-23 159          ; CMdaAudioPlayerUtility::Duration(TTimeIntervalMicroSeconds&)
 24 38           ; CMdaAudioPlayerUtility::OpenDesL
 25 39           ; CMdaAudioPlayerUtility::OpenUrlL
 26 40           ; CMdaAudioPlayerUtility::GetVolume
@@ -578,13 +574,6 @@
 74 41           ; NewL__20CMdaAudioToneUtilityR21MMdaAudioToneObserverP10CMdaServeri22TMdaPriorityPreference
 75 109          ; PrepareToPlayDualTone__20CMdaAudioToneUtilityiiRC25TTimeIntervalMicroSeconds
 76 57           ; SetBalanceL__20CMdaAudioToneUtilityi
-
-[epoc70]
-15 4            ; NewDesPlayerL__22CMdaAudioPlayerUtilityRC6TDesC8R23MMdaAudioPlayerCallbacki22TMdaPriorityPreferenceP10CMdaServer
-16 2            ; NewDesPlayerReadOnlyL__22CMdaAudioPlayerUtilityRC6TDesC8R23MMdaAudioPlayerCallbacki22TMdaPriorityPreferenceP10CMdaServer
-17 3            ; NewFilePlayerL__22CMdaAudioPlayerUtilityRC7TDesC16R23MMdaAudioPlayerCallbacki22TMdaPriorityPreferenceP10CMdaServer
-47 6            ; NewL__24CMdaAudioRecorderUtilityR29MMdaObjectStateChangeObserverP10CMdaServeri22TMdaPriorityPreference
-73 1            ; NewL__20CMdaAudioToneUtilityR21MMdaAudioToneObserverP10CMdaServer
 
 [epoc7]
 2 70            ; SetPriority__22CMdaAudioPlayerUtilityi22TMdaPriorityPreference

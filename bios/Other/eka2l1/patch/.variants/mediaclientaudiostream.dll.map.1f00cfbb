@@ -84,9 +84,6 @@
 13 7            ; SetDataTypeL__21CMdaAudioOutputStreamG7TFourCC
 8 8             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbacki22TMdaPriorityPreference
 
-[epoc70]
-37 1            ; CMdaAudioOutputStream::NewLegacyL
-
 [epoc7]
 7 1             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbackP10CMdaServer
 4 3             ; GetBalanceL__C21CMdaAudioOutputStream
@@ -97,5 +94,5 @@
 8 8             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbacki22TMdaPriorityPreference
 
 [epoc6]
-37 1            ; CMdaAudioOutputStream::NewLegacyL
-37 2            ; CMdaAudioOutputStream::NewLegacyL
+7 1             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbackP10CMdaServer
+7 2             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbackP10CMdaServer, guessing for now

@@ -1,0 +1,9 @@
+source=avkonfep
+
+[requirements]
+uid2 0x10005e32
+uid3 0x101f4d25
+
+[epoc7]
+1 1
+2 2

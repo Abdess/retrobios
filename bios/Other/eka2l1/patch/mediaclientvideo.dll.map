@@ -665,3 +665,106 @@
 163 163
 164 164
 165 165
+
+[epoc81a]
+1 1     ; CVideoPlayerUtility::Volume(void) const
+2 4     ; CVideoPlayerUtility::AudioEnabledL(void) const
+3 6     ; CVideoPlayerUtility::AudioTypeL(void) const
+4 8     ; CVideoPlayerUtility::Balance(void) const
+5 9     ; CVideoPlayerUtility::Close(void)
+6 82    ; CVideoPlayerUtility::ControllerImplementationInformationL(void)
+7 73    ; CVideoPlayerUtility::CustomCommandAsync(TPckgBuf<TMMFMessageDestination> const &, int, TDesC8 const &, TDesC8 const &, TRequestStatus &)
+8 74    ; CVideoPlayerUtility::CustomCommandAsync(TPckgBuf<TMMFMessageDestination> const &, int, TDesC8 const &, TDesC8 const &, TDes8 &, TRequestStatus &)
+9 77    ; CVideoPlayerUtility::CustomCommandSync(TPckgBuf<TMMFMessageDestination> const &, int, TDesC8 const &, TDesC8 const &)
+10 78   ; CVideoPlayerUtility::CustomCommandSync(TPckgBuf<TMMFMessageDestination> const &, int, TDesC8 const &, TDesC8 const &, TDes8 &)
+11 11   ; CVideoPlayerUtility::DurationL(void) const
+13 88   ; CVideoPlayerUtility::GetCropRegionL(TRect &) const
+14 14   ; CVideoPlayerUtility::GetFrameL(TDisplayMode)
+15 95   ; CVideoPlayerUtility::GetFrameL(TDisplayMode, ContentAccess::TIntent)
+16 89   ; CVideoPlayerUtility::GetScaleFactorL(float &, float &, int &) const
+17 84   ; CVideoPlayerUtility::GetVideoLoadingProgressL(int &)
+18 20   ; CVideoPlayerUtility::MaxVolume(void) const
+19 21   ; CVideoPlayerUtility::MetaDataEntryL(int) const
+20 23   ; CVideoPlayerUtility::NewL(MVideoPlayerUtilityObserver &, int, TMdaPriorityPreference, RWsSession &, CWsScreenDevice &, RWindowBase &, TRect const &, TRect const &)
+21 25   ; CVideoPlayerUtility::NumberOfMetaDataEntriesL(void) const
+22 30   ; CVideoPlayerUtility::OpenDesL(TDesC8 const &, TUid)
+23 96   ; CVideoPlayerUtility::OpenFileL(RFile const &, TUid)
+24 32   ; CVideoPlayerUtility::OpenFileL(TDesC16 const &, TUid)
+25 34   ; CVideoPlayerUtility::OpenUrlL(TDesC16 const &, int, TDesC8 const &, TUid)
+26 36   ; CVideoPlayerUtility::PauseL(void)
+27 38   ; CVideoPlayerUtility::Play(void)
+28 85   ; CVideoPlayerUtility::Play(TTimeIntervalMicroSeconds const &, TTimeIntervalMicroSeconds const &)
+29 39   ; CVideoPlayerUtility::PositionL(void) const
+30 90   ; CVideoPlayerUtility::Prepare(void)
+31 42   ; CVideoPlayerUtility::PriorityL(int &, TMdaPriorityPreference &) const
+32 86   ; CVideoPlayerUtility::RefreshFrameL(void)
+33 44   ; CVideoPlayerUtility::RegisterForVideoLoadingNotification(MVideoLoadingObserver &)
+34 71   ; Reserved1(void)
+35 70   ; Reserved2(void)
+36 91   ; CVideoPlayerUtility::RotationL(void) const
+37 50   ; CVideoPlayerUtility::SetBalanceL(int)
+38 92   ; CVideoPlayerUtility::SetCropRegionL(TRect const &)
+39 51   ; CVideoPlayerUtility::SetDisplayWindowL(RWsSession &, CWsScreenDevice &, RWindowBase &, TRect const &, TRect const &)
+40 54   ; CVideoPlayerUtility::SetPositionL(TTimeIntervalMicroSeconds const &)
+41 55   ; CVideoPlayerUtility::SetPriorityL(int, TMdaPriorityPreference)
+42 93   ; CVideoPlayerUtility::SetRotationL(TVideoRotation)
+43 94   ; CVideoPlayerUtility::SetScaleFactorL(float, float, int)
+44 81   ; CVideoPlayerUtility::SetVideoFrameRateL(float)
+45 61   ; CVideoPlayerUtility::SetVolumeL(int)
+46 62   ; CVideoPlayerUtility::Stop(void)
+47 65   ; CVideoPlayerUtility::VideoBitRateL(void) const
+48 66   ; CVideoPlayerUtility::VideoFormatMimeType(void) const
+49 67   ; CVideoPlayerUtility::VideoFrameRateL(void) const
+50 69   ; CVideoPlayerUtility::VideoFrameSizeL(TSize &) const
+51 2    ; CVideoPlayerUtility::AudioBitRateL(void) const
+
+[epoc80]
+1 1     ; CVideoPlayerUtility::Volume(void) const
+2 4     ; CVideoPlayerUtility::AudioEnabledL(void) const
+3 6     ; CVideoPlayerUtility::AudioTypeL(void) const
+4 8     ; CVideoPlayerUtility::Balance(void) const
+5 9     ; CVideoPlayerUtility::Close(void)
+6 82    ; CVideoPlayerUtility::ControllerImplementationInformationL(void)
+7 73    ; CVideoPlayerUtility::CustomCommandAsync(TPckgBuf<TMMFMessageDestination> const &, int, TDesC8 const &, TDesC8 const &, TRequestStatus &)
+8 74    ; CVideoPlayerUtility::CustomCommandAsync(TPckgBuf<TMMFMessageDestination> const &, int, TDesC8 const &, TDesC8 const &, TDes8 &, TRequestStatus &)
+9 77    ; CVideoPlayerUtility::CustomCommandSync(TPckgBuf<TMMFMessageDestination> const &, int, TDesC8 const &, TDesC8 const &)
+10 78   ; CVideoPlayerUtility::CustomCommandSync(TPckgBuf<TMMFMessageDestination> const &, int, TDesC8 const &, TDesC8 const &, TDes8 &)
+11 11   ; CVideoPlayerUtility::DurationL(void) const
+13 88   ; CVideoPlayerUtility::GetCropRegionL(TRect &) const
+14 14   ; CVideoPlayerUtility::GetFrameL(TDisplayMode)
+15 95   ; CVideoPlayerUtility::GetFrameL(TDisplayMode, ContentAccess::TIntent)
+16 89   ; CVideoPlayerUtility::GetScaleFactorL(float &, float &, int &) const
+17 84   ; CVideoPlayerUtility::GetVideoLoadingProgressL(int &)
+18 20   ; CVideoPlayerUtility::MaxVolume(void) const
+19 21   ; CVideoPlayerUtility::MetaDataEntryL(int) const
+20 23   ; CVideoPlayerUtility::NewL(MVideoPlayerUtilityObserver &, int, TMdaPriorityPreference, RWsSession &, CWsScreenDevice &, RWindowBase &, TRect const &, TRect const &)
+21 25   ; CVideoPlayerUtility::NumberOfMetaDataEntriesL(void) const
+22 30   ; CVideoPlayerUtility::OpenDesL(TDesC8 const &, TUid)
+24 32   ; CVideoPlayerUtility::OpenFileL(TDesC16 const &, TUid)
+25 34   ; CVideoPlayerUtility::OpenUrlL(TDesC16 const &, int, TDesC8 const &, TUid)
+26 36   ; CVideoPlayerUtility::PauseL(void)
+27 38   ; CVideoPlayerUtility::Play(void)
+28 85   ; CVideoPlayerUtility::Play(TTimeIntervalMicroSeconds const &, TTimeIntervalMicroSeconds const &)
+29 39   ; CVideoPlayerUtility::PositionL(void) const
+30 90   ; CVideoPlayerUtility::Prepare(void)
+31 42   ; CVideoPlayerUtility::PriorityL(int &, TMdaPriorityPreference &) const
+32 86   ; CVideoPlayerUtility::RefreshFrameL(void)
+33 44   ; CVideoPlayerUtility::RegisterForVideoLoadingNotification(MVideoLoadingObserver &)
+34 71   ; Reserved1(void)
+35 70   ; Reserved2(void)
+36 91   ; CVideoPlayerUtility::RotationL(void) const
+37 50   ; CVideoPlayerUtility::SetBalanceL(int)
+38 92   ; CVideoPlayerUtility::SetCropRegionL(TRect const &)
+39 51   ; CVideoPlayerUtility::SetDisplayWindowL(RWsSession &, CWsScreenDevice &, RWindowBase &, TRect const &, TRect const &)
+40 54   ; CVideoPlayerUtility::SetPositionL(TTimeIntervalMicroSeconds const &)
+41 55   ; CVideoPlayerUtility::SetPriorityL(int, TMdaPriorityPreference)
+42 93   ; CVideoPlayerUtility::SetRotationL(TVideoRotation)
+43 94   ; CVideoPlayerUtility::SetScaleFactorL(float, float, int)
+44 81   ; CVideoPlayerUtility::SetVideoFrameRateL(float)
+45 61   ; CVideoPlayerUtility::SetVolumeL(int)
+46 62   ; CVideoPlayerUtility::Stop(void)
+47 65   ; CVideoPlayerUtility::VideoBitRateL(void) const
+48 66   ; CVideoPlayerUtility::VideoFormatMimeType(void) const
+49 67   ; CVideoPlayerUtility::VideoFrameRateL(void) const
+50 69   ; CVideoPlayerUtility::VideoFrameSizeL(TSize &) const
+51 2    ; CVideoPlayerUtility::AudioBitRateL(void) const
