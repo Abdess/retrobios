@@ -1982,7 +1982,7 @@ def _render_emulator_file(
     lines.append("")
     lines.append(f"**`{fname}`** {badge_str}")
     if desc:
-        lines.append(f"<br>{desc}")
+        lines.append(f"<br>{_escape_tags(str(desc))}")
     lines.append("")
 
     details = []
@@ -2011,25 +2011,13 @@ def _render_emulator_file(
             bounds.append(f"max {_fmt_size(fmax)}")
         details.append(f"Size: {', '.join(bounds)}")
     if fsha1:
-        s = fsha1[:12]
-        details.append(
-            f'SHA1: <span class="rb-hash" title="{fsha1}">'
-            f"`{s}...`</span>"
-        )
+        details.append(f"SHA1: {_hash_spans(fsha1)}")
     if fmd5:
-        s = fmd5[:12]
-        details.append(
-            f'MD5: <span class="rb-hash" title="{fmd5}">'
-            f"`{s}...`</span>"
-        )
+        details.append(f"MD5: {_hash_spans(fmd5)}")
     if fcrc32:
         details.append(f"CRC32: `{fcrc32}`")
     if fsha256:
-        s = fsha256[:12]
-        details.append(
-            f'SHA256: <span class="rb-hash" title="{fsha256}">'
-            f"`{s}...`</span>"
-        )
+        details.append(f"SHA256: {_hash_spans(fsha256)}")
     if fadler32:
         details.append(f"Adler32: `{fadler32}`")
     if aliases:
@@ -2077,7 +2065,7 @@ def _render_emulator_file(
         for d in details:
             lines.append(f"- {d}")
     if fnote:
-        lines.append(f"- {fnote}")
+        lines.append(f"- {_escape_tags(str(fnote))}")
     if contents:
         lines.append(f"- Contents ({len(contents)} entries):")
         for c in contents[:10]:
@@ -2194,10 +2182,20 @@ def _render_structured_blocks(profile: dict) -> list[str]:
             continue
         lines.append(f'???+ abstract "{label}"')
         lines.append("")
+        start = len(lines)
         _render_yaml_value(lines, val, indent=4)
+        lines[start:] = [_escape_tags(line) for line in lines[start:]]
         lines.append("")
 
     return lines
+
+
+def _hash_spans(value: str | list) -> str:
+    """One abbreviated hash, or each of the hashes a profile accepts."""
+    values = [value] if isinstance(value, str) else [str(v) for v in value]
+    return ", ".join(
+        f'<span class="rb-hash" title="{v}">`{v[:12]}...`</span>' for v in values
+    )
 
 
 def _availability_check(db: dict, data_names):
@@ -2361,7 +2359,7 @@ def generate_emulator_page(
                 [
                     "",
                     '!!! info "Why no files"',
-                    f"    {exclusion}",
+                    f"    {_escape_tags(str(exclusion))}",
                 ]
             )
     else:
@@ -3972,6 +3970,7 @@ from siterender import (  # noqa: E402,F401
     _fmt_size,
     _pct,
     _admonition_body,
+    _escape_tags,
     _icon_name,
     _icon_url,
     system_icon_markdown,

@@ -17,9 +17,33 @@ ICON_CACHE_PATH = Path(".cache") / "system_icons.json"
 # because a heading with a broken image reads worse than a heading without one.
 _icon_available: dict[str, bool] = {}
 
+_CODE_SPAN = re.compile(r"(`+).+?\1", re.S)
+
+
+def _escape_tags(text: str) -> str:
+    """Show a placeholder such as ``<system_dir>`` as it was written.
+
+    Profile prose names paths with angle brackets. Passed through as HTML
+    they are unknown tags and vanish from the page, and ``<title id>`` opens
+    a title element that swallows everything after it. Code spans keep their
+    brackets, and an autolink stays a link.
+    """
+    def outside(chunk: str) -> str:
+        return re.sub(r"<(?!https?://|mailto:)", "&lt;", chunk)
+
+    out: list[str] = []
+    position = 0
+    for match in _CODE_SPAN.finditer(text):
+        out.append(outside(text[position:match.start()]))
+        out.append(match.group(0))
+        position = match.end()
+    out.append(outside(text[position:]))
+    return "".join(out)
+
+
 def _admonition_body(text: str) -> str:
     """Indent prose without turning source tokens such as ``#if`` into H1s."""
-    escaped = re.sub(r"(?m)^(\s*)#", r"\1\\#", text)
+    escaped = re.sub(r"(?m)^(\s*)#", r"\1\\#", _escape_tags(text))
     return escaped.replace("\n", "\n    ")
 
 def _icon_name(manufacturer: str, console_name: str) -> str:

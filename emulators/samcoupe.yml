@@ -1,4 +1,4 @@
-emulator: SimCoupe
+emulator: "SimCoupe (standalone)"
 type: standalone
 core_classification: official_port
 source: "https://github.com/simonowen/simcoupe"

@@ -33,6 +33,26 @@ def _page(title: str, description: str, body: str = "") -> str:
 """
 
 
+class ProsePlaceholders(unittest.TestCase):
+    """A path written with angle brackets reaches the reader as written."""
+
+    def test_a_placeholder_is_text_not_a_tag(self):
+        from siterender import _admonition_body, _escape_tags
+
+        self.assertEqual(
+            _escape_tags("gameProfiles/<title id>.ini under <system_dir>/Cemu"),
+            "gameProfiles/&lt;title id>.ini under &lt;system_dir>/Cemu",
+        )
+        self.assertIn("&lt;title id>", _admonition_body("read <title id>.ini"))
+
+    def test_code_spans_and_links_are_left_alone(self):
+        from siterender import _escape_tags
+
+        self.assertEqual(_escape_tags("`<system_dir>/x`"), "`<system_dir>/x`")
+        self.assertEqual(_escape_tags("see <https://example.org/a>"), "see <https://example.org/a>")
+        self.assertEqual(_escape_tags("size < 4096"), "size &lt; 4096")
+
+
 class RenderedSiteValidation(unittest.TestCase):
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
