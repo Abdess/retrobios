@@ -1,0 +1,181 @@
+emulator: OpenMoHAA
+type: standalone
+core_classification: game_engine
+source: "https://github.com/openmoh/openmohaa"
+upstream: "https://github.com/openmoh/openmohaa"
+profiled_date: "2026-10-04"
+source_commit: "a2f340195975f4f042e28a60b62561dd9a0b2700"
+upstream_commit: "a2f340195975f4f042e28a60b62561dd9a0b2700"
+display_name: "OpenMoHAA"
+cores: []
+systems: [mohaa, mohaa-spearhead, mohaa-breakthrough]
+
+notes: |
+  Reimplementation of the id Tech 3-derived engine that powers Medal of
+  Honor: Allied Assault (2002) and its expansions Spearhead and
+  Breakthrough. BASEGAME = "main" (code/qcommon/q_shared.h:35); the target
+  game is selected at startup via the com_target_game cvar (0 = Allied
+  Assault / TG_MOH, 1 = Spearhead / TG_MOHTA, 2 = Breakthrough / TG_MOHTT,
+  code/qcommon/common.c:3164-3237).
+
+  FS_AddGameDirectory (code/qcommon/files.cpp:3106) scans the game folder
+  for every "*.pk3" via Sys_ListFiles(curpath, ".pk3", ...) at line 3136,
+  sorts them with paksort and mounts each one. It does not look up
+  individual retail names and does not refuse an unknown pak. FS_Startup
+  (code/qcommon/files.cpp:3640-3650) always loads com_basegame = "main";
+  Spearhead additionally sets fs_basegame = "mainta" (common.c:3200) and
+  Breakthrough sets fs_basegame = "maintt" (common.c:3227), which triggers
+  a second FS_AddGameDirectories call for that folder.
+
+  The only hard failure during init is "Couldn't load default.cfg"
+  (code/qcommon/files.cpp:4108), i.e. no pak in the active search path
+  provides default.cfg. Retail Pak0.pk3 (main/) carries it; Spearhead and
+  Breakthrough ship a default.cfg inside their own pak1.pk3 so they can
+  run with or without a main/ install under openmohaa.
+
+  The retail pak names are documented in-source as reference arrays
+  fs_originalPaks_main / fs_originalPaks_mainta / fs_originalPaks_maintt
+  (code/qcommon/files.cpp:324-350). They are declared but not currently
+  consulted by the loader; they encode the files the engine was authored
+  against. Capitalisation ("Pak0.pk3" under main/, "pak1.pk3" under
+  mainta/ and maintt/) matches the retail ISO filenames and is preserved
+  below for case-sensitive filesystems. FS_FilenameCompare and
+  Sys_ListFiles are case-insensitive, so Windows installs match either
+  casing.
+
+  FS_CheckPak0 (code/qcommon/files.cpp:3707) is a documented stub: the
+  comment at 3710-3712 notes that MOHAA ships in too many localised pak
+  versions to pin a checksum, so no CRC / MD5 is enforced on the paks.
+
+files:
+  # ================================================================
+  # Medal of Honor: Allied Assault retail (BASEGAME = "main")
+  # Reference list: fs_originalPaks_main[] at code/qcommon/files.cpp:324
+  # ================================================================
+
+  - name: "Pak0.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak0.pk3"
+    required: true
+    source_ref: "code/qcommon/files.cpp:326 (fs_originalPaks_main[0]), 4108 (Couldn't load default.cfg)"
+    note: "Carries default.cfg; without it FS_Startup aborts with ERR_FATAL."
+
+  - name: "Pak1.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak1.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:327 (fs_originalPaks_main[1])"
+
+  - name: "Pak2.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak2.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:328 (fs_originalPaks_main[2])"
+
+  - name: "Pak3.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak3.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:329 (fs_originalPaks_main[3])"
+
+  - name: "Pak4.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak4.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:330 (fs_originalPaks_main[4])"
+
+  - name: "Pak5.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak5.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:331 (fs_originalPaks_main[5])"
+
+  - name: "Pak6.pk3"
+    category: game_data
+    system: mohaa
+    path: "main/Pak6.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:332 (fs_originalPaks_main[6])"
+
+  # ================================================================
+  # Spearhead expansion (fs_basegame = "mainta", TG_MOHTA)
+  # Reference list: fs_originalPaks_mainta[] at code/qcommon/files.cpp:335
+  # Set com_target_game 1 to load this branch.
+  # ================================================================
+
+  - name: "pak1.pk3"
+    category: game_data
+    system: mohaa-spearhead
+    path: "mainta/pak1.pk3"
+    required: true
+    source_ref: "code/qcommon/files.cpp:337 (fs_originalPaks_mainta[0]), 3200 (fs_basegame=mainta), 4108"
+    note: "Spearhead default.cfg lives here; required when com_target_game=1."
+
+  - name: "pak2.pk3"
+    category: game_data
+    system: mohaa-spearhead
+    path: "mainta/pak2.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:338 (fs_originalPaks_mainta[1])"
+
+  - name: "pak3.pk3"
+    category: game_data
+    system: mohaa-spearhead
+    path: "mainta/pak3.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:339 (fs_originalPaks_mainta[2])"
+
+  - name: "pak4.pk3"
+    category: game_data
+    system: mohaa-spearhead
+    path: "mainta/pak4.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:340 (fs_originalPaks_mainta[3])"
+
+  - name: "pak5.pk3"
+    category: game_data
+    system: mohaa-spearhead
+    path: "mainta/pak5.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:341 (fs_originalPaks_mainta[4])"
+
+  # ================================================================
+  # Breakthrough expansion (fs_basegame = "maintt", TG_MOHTT)
+  # Reference list: fs_originalPaks_maintt[] at code/qcommon/files.cpp:344
+  # Set com_target_game 2 to load this branch.
+  # ================================================================
+
+  - name: "pak1.pk3"
+    category: game_data
+    system: mohaa-breakthrough
+    path: "maintt/pak1.pk3"
+    required: true
+    source_ref: "code/qcommon/files.cpp:346 (fs_originalPaks_maintt[0]), 3227 (fs_basegame=maintt), 4108"
+    note: "Breakthrough default.cfg lives here; required when com_target_game=2."
+
+  - name: "pak2.pk3"
+    category: game_data
+    system: mohaa-breakthrough
+    path: "maintt/pak2.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:347 (fs_originalPaks_maintt[1])"
+
+  - name: "pak3.pk3"
+    category: game_data
+    system: mohaa-breakthrough
+    path: "maintt/pak3.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:348 (fs_originalPaks_maintt[2])"
+
+  - name: "pak4.pk3"
+    category: game_data
+    system: mohaa-breakthrough
+    path: "maintt/pak4.pk3"
+    required: false
+    source_ref: "code/qcommon/files.cpp:349 (fs_originalPaks_maintt[3])"

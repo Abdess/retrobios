@@ -1,0 +1,646 @@
+emulator: TR2X
+display_name: "TR2X"
+type: standalone
+core_classification: game_engine
+source: "https://github.com/LostArtefacts/TRX"
+upstream: "https://github.com/LostArtefacts/TRX"
+source_commit: "c43c1cc875277324dff44a9e57e4fdd58fd3fb4c"
+upstream_commit: "c43c1cc875277324dff44a9e57e4fdd58fd3fb4c"
+profiled_date: "2026-10-04"
+cores: []
+systems:
+  - tomb-raider-2
+
+notes: |
+  Enhanced engine for Tomb Raider 2 (1997), part of the TRX monorepo
+  that also hosts TR1X and TR3X. Loads retail .tr2 level files, the
+  main.sfx soundbank, music tracks and FMV cutscenes from a Steam, GOG
+  or disc install of TR2.
+
+  Path resolution (src/trx/game/paths.c):
+    levels   %mod_dir%/levels/<file>        GAME_DYNAMIC_PATH_LEVEL_FILE
+    sfx      %mod_dir%/<file>               GAME_DYNAMIC_PATH_SFX_FILE
+    fmv      %mod_dir%/fmv/<file><ext>      GAME_DYNAMIC_PATH_FMV_FILE
+    music    %mod_dir%/music/<name><ext>    GAME_DYNAMIC_PATH_MUSIC_DIR
+  with %mod_dir% = games/tr2 under the TRX root. The gameflow.json5,
+  the catalog_*.csv tables, string tables, injections, images and
+  shaders ship inside the TRX zip (data/trx/ship/) and are not user
+  files.
+
+  main.sfx is TR2's sample bank. The gameflow sets sfx_path to it
+  (data/trx/ship/games/tr2/gameflow.json5:33) and the level pipeline
+  reads it per level (src/trx/game/level/pipeline.c:179).
+
+  FMV extension probing (src/trx/game/paths.c:76-79):
+    .mp4 .mkv .mpeg .avi .webm .ogv .rpl .fmv .bik
+  The retail Core/Eidos cutscenes are .rpl; the gameflow still names
+  them .AVI, resolution picks whichever extension exists.
+
+  Music backend (src/trx/game/music/backend_files.c:25-49):
+    extensions .flac .ogg .mp3 .wav .wma
+    file name  trackNN.<ext> (two-digit) or N.<ext>
+  Retail TR2 CD rips yield 2.mp3 through 61.mp3 (bare-number form,
+  per docs/trx/INSTALLING.md ship tree).
+
+files:
+  # Soundbank
+  - name: "main.sfx"
+    path: "games/tr2/main.sfx"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:33"
+    note: "Shared sample bank, loaded for every level."
+
+  # Levels
+  # Enumerated by data/trx/ship/games/tr2/gameflow.json5 "levels" array.
+  - name: "title.tr2"
+    path: "games/tr2/levels/title.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:15"
+
+  - name: "assault.tr2"
+    path: "games/tr2/levels/assault.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:54"
+    note: "Lara's Home / assault course."
+
+  - name: "wall.tr2"
+    path: "games/tr2/levels/wall.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:84"
+    note: "The Great Wall"
+
+  - name: "boat.tr2"
+    path: "games/tr2/levels/boat.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:119"
+    note: "Venice"
+
+  - name: "venice.tr2"
+    path: "games/tr2/levels/venice.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:144"
+    note: "Bartoli's Hideout"
+
+  - name: "opera.tr2"
+    path: "games/tr2/levels/opera.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:171"
+    note: "Opera House"
+
+  - name: "rig.tr2"
+    path: "games/tr2/levels/rig.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:202"
+    note: "Offshore Rig"
+
+  - name: "platform.tr2"
+    path: "games/tr2/levels/platform.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:231"
+    note: "Diving Area"
+
+  - name: "unwater.tr2"
+    path: "games/tr2/levels/unwater.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:260"
+    note: "40 Fathoms"
+
+  - name: "keel.tr2"
+    path: "games/tr2/levels/keel.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:289"
+    note: "Wreck of the Maria Doria"
+
+  - name: "living.tr2"
+    path: "games/tr2/levels/living.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:321"
+    note: "Living Quarters"
+
+  - name: "deck.tr2"
+    path: "games/tr2/levels/deck.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:351"
+    note: "The Deck"
+
+  - name: "skidoo.tr2"
+    path: "games/tr2/levels/skidoo.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:383"
+    note: "Tibetan Foothills"
+
+  - name: "monastry.tr2"
+    path: "games/tr2/levels/monastry.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:411"
+    note: "Barkhang Monastery"
+
+  - name: "catacomb.tr2"
+    path: "games/tr2/levels/catacomb.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:440"
+    note: "Catacombs of the Talion"
+
+  - name: "icecave.tr2"
+    path: "games/tr2/levels/icecave.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:468"
+    note: "Ice Palace"
+
+  - name: "emprtomb.tr2"
+    path: "games/tr2/levels/emprtomb.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:496"
+    note: "Temple of Xian"
+
+  - name: "floating.tr2"
+    path: "games/tr2/levels/floating.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:526"
+    note: "Floating Islands"
+
+  - name: "xian.tr2"
+    path: "games/tr2/levels/xian.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:552"
+    note: "The Dragon's Lair"
+
+  - name: "house.tr2"
+    path: "games/tr2/levels/house.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:578"
+    note: "Home Sweet Home"
+
+  - name: "cut1.tr2"
+    path: "games/tr2/levels/cut1.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:691"
+    note: "Cutscene level 1"
+
+  - name: "cut2.tr2"
+    path: "games/tr2/levels/cut2.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:706"
+    note: "Cutscene level 2"
+
+  - name: "cut3.tr2"
+    path: "games/tr2/levels/cut3.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:721"
+    note: "Cutscene level 3"
+
+  - name: "cut4.tr2"
+    path: "games/tr2/levels/cut4.tr2"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:737"
+    note: "Cutscene level 4"
+
+  # FMV cutscenes
+  # Enumerated by data/trx/ship/games/tr2/gameflow.json5 "fmvs" array.
+  # The retail files on disc carry a .rpl extension; the gameflow still
+  # lists .AVI, resolution picks whichever extension is present.
+  - name: "LOGO.AVI"
+    aliases: [logo.rpl]
+    path: "games/tr2/fmv/logo.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:756"
+    note: "Eidos legal screen."
+
+  - name: "ANCIENT.AVI"
+    aliases: [ancient.rpl]
+    path: "games/tr2/fmv/ancient.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:757"
+    note: "Intro cutscene."
+
+  - name: "MODERN.AVI"
+    aliases: [modern.rpl]
+    path: "games/tr2/fmv/modern.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:758"
+
+  - name: "LANDING.AVI"
+    aliases: [landing.rpl]
+    path: "games/tr2/fmv/landing.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:759"
+
+  - name: "MS.AVI"
+    aliases: [ms.rpl]
+    path: "games/tr2/fmv/ms.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:760"
+
+  - name: "CRASH.AVI"
+    aliases: [crash.rpl]
+    path: "games/tr2/fmv/crash.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:761"
+
+  - name: "JEEP.AVI"
+    aliases: [jeep.rpl]
+    path: "games/tr2/fmv/jeep.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:762"
+
+  - name: "END.AVI"
+    aliases: [end.rpl]
+    path: "games/tr2/fmv/end.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2/gameflow.json5:763"
+
+  # Music tracks (retail CD audio, ripped as N.<ext>).
+  # Enumerated by the ship tree in docs/trx/INSTALLING.md (TR2 uses the
+  # bare-number form, not the trackNN form; the loader accepts either).
+  - name: "2.mp3"
+    path: "games/tr2/music/2.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "3.mp3"
+    path: "games/tr2/music/3.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "4.mp3"
+    path: "games/tr2/music/4.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "5.mp3"
+    path: "games/tr2/music/5.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "6.mp3"
+    path: "games/tr2/music/6.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "7.mp3"
+    path: "games/tr2/music/7.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "8.mp3"
+    path: "games/tr2/music/8.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "9.mp3"
+    path: "games/tr2/music/9.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "10.mp3"
+    path: "games/tr2/music/10.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "11.mp3"
+    path: "games/tr2/music/11.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "12.mp3"
+    path: "games/tr2/music/12.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "13.mp3"
+    path: "games/tr2/music/13.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "14.mp3"
+    path: "games/tr2/music/14.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "15.mp3"
+    path: "games/tr2/music/15.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "16.mp3"
+    path: "games/tr2/music/16.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "17.mp3"
+    path: "games/tr2/music/17.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "18.mp3"
+    path: "games/tr2/music/18.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "19.mp3"
+    path: "games/tr2/music/19.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "20.mp3"
+    path: "games/tr2/music/20.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "21.mp3"
+    path: "games/tr2/music/21.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "22.mp3"
+    path: "games/tr2/music/22.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "23.mp3"
+    path: "games/tr2/music/23.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "24.mp3"
+    path: "games/tr2/music/24.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "25.mp3"
+    path: "games/tr2/music/25.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "26.mp3"
+    path: "games/tr2/music/26.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "27.mp3"
+    path: "games/tr2/music/27.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "28.mp3"
+    path: "games/tr2/music/28.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "29.mp3"
+    path: "games/tr2/music/29.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "30.mp3"
+    path: "games/tr2/music/30.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "31.mp3"
+    path: "games/tr2/music/31.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "32.mp3"
+    path: "games/tr2/music/32.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "33.mp3"
+    path: "games/tr2/music/33.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "34.mp3"
+    path: "games/tr2/music/34.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "35.mp3"
+    path: "games/tr2/music/35.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "36.mp3"
+    path: "games/tr2/music/36.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "37.mp3"
+    path: "games/tr2/music/37.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "38.mp3"
+    path: "games/tr2/music/38.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "39.mp3"
+    path: "games/tr2/music/39.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "40.mp3"
+    path: "games/tr2/music/40.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "41.mp3"
+    path: "games/tr2/music/41.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "42.mp3"
+    path: "games/tr2/music/42.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "43.mp3"
+    path: "games/tr2/music/43.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "44.mp3"
+    path: "games/tr2/music/44.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "45.mp3"
+    path: "games/tr2/music/45.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "46.mp3"
+    path: "games/tr2/music/46.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "47.mp3"
+    path: "games/tr2/music/47.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "48.mp3"
+    path: "games/tr2/music/48.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "49.mp3"
+    path: "games/tr2/music/49.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "50.mp3"
+    path: "games/tr2/music/50.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "51.mp3"
+    path: "games/tr2/music/51.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "52.mp3"
+    path: "games/tr2/music/52.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "53.mp3"
+    path: "games/tr2/music/53.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "54.mp3"
+    path: "games/tr2/music/54.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "55.mp3"
+    path: "games/tr2/music/55.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "56.mp3"
+    path: "games/tr2/music/56.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "57.mp3"
+    path: "games/tr2/music/57.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "58.mp3"
+    path: "games/tr2/music/58.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "59.mp3"
+    path: "games/tr2/music/59.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "60.mp3"
+    path: "games/tr2/music/60.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"
+
+  - name: "61.mp3"
+    path: "games/tr2/music/61.mp3"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:48"

@@ -1,0 +1,199 @@
+emulator: OpenJKDF2
+type: standalone
+core_classification: game_engine
+source: "https://github.com/shinyquagsire23/OpenJKDF2"
+upstream: "https://github.com/shinyquagsire23/OpenJKDF2"
+profiled_date: "2026-10-04"
+source_commit: "02297602cb289b113df27be33b5a7dddbe3d91c1"
+core_version: "0.9.9.0"
+display_name: "OpenJKDF2"
+cores: []
+systems:
+  - dark-forces-ii
+  - mysteries-of-the-sith
+  - droidworks
+
+notes: |
+  Reimplementation of LucasArts' Sith engine. Runs Star Wars Jedi Knight:
+  Dark Forces II (1997), its Mysteries of the Sith expansion (1998) with
+  the `-motsCompat` switch, and Star Wars DroidWorks (1998) via the
+  DroidWorks branch of the build.
+
+  Resource mounting (src/Main/jkRes.c):
+    aGobDirectories[3]   "resource" root, auto-mounted at startup
+                         (src/Main/jkRes.c:37 jkRes_LoadNew)
+    aGobDirectories[1]   "episode\<name>.gob" / ".goo" for the active
+                         episode, mounted by jkRes_LoadGob
+                         (src/Main/jkRes.c:103-106)
+    aGobDirectories[4]   gamedata\resource (CD overlay), mounted by
+                         jkRes_LoadCd (src/Main/jkRes.c:130-131)
+
+  Required-asset lists are declared in src/Main/InstallHelper.c and
+  checked by InstallHelper_CheckInstalled / AttemptInstallFromExisting;
+  a missing entry aborts installation (src/Main/InstallHelper.c:748-756,
+  1091-1097, 1229-1256).
+
+  JK.EXE / JKM.EXE are only consumed by the 32-bit static-recomp build
+  (src/main.c:696-718, gated by `!ARCH_64BIT && !ARCH_WASM &&
+  !TARGET_ANDROID`), which mmaps the retail binary at 0x400000 and
+  patches it via do_hooks(). The 64-bit, WASM and Android builds skip
+  that path and do not read JK.EXE at all.
+
+files:
+  # ================================================================
+  # Jedi Knight: Dark Forces II (base game)
+  # ================================================================
+
+  - name: "JK1.gob"
+    path: "episode/JK1.gob"
+    system: dark-forces-ii
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:34 (aRequiredAssets)"
+    note: "Single-player episode data."
+
+  - name: "JK1CTF.gob"
+    path: "episode/JK1CTF.gob"
+    system: dark-forces-ii
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:35 (aRequiredAssets)"
+    note: "Multiplayer CTF episode."
+
+  - name: "JK1MP.gob"
+    path: "episode/JK1MP.gob"
+    system: dark-forces-ii
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:36 (aRequiredAssets)"
+    note: "Multiplayer deathmatch episode. Default -episode value in Main.c:120."
+
+  - name: "Res1hi.gob"
+    path: "resource/Res1hi.gob"
+    system: dark-forces-ii
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:37 (aRequiredAssets)"
+    note: "High-resolution textures and sprites."
+
+  - name: "Res2.gob"
+    path: "resource/Res2.gob"
+    system: dark-forces-ii
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:38 (aRequiredAssets)"
+    note: "Shared engine resources: sounds, 3DOs, materials."
+
+  - name: "jk_.cd"
+    path: "resource/jk_.cd"
+    system: dark-forces-ii
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:39 (aRequiredAssets), src/Main/jkRes.c:234"
+    note: "CD key marker read by jkRes_ReadKeyFromFile."
+
+  - name: "Res1low.gob"
+    path: "resource/Res1low.gob"
+    system: dark-forces-ii
+    category: game_data
+    required: false
+    source_ref: "src/Main/InstallHelper.c:71 (aDiskAssetMap)"
+    note: "Low-resolution textures shipped on the CD under MININSTALL/."
+
+  - name: "JK.EXE"
+    system: dark-forces-ii
+    category: game_data
+    required: false
+    source_ref: "src/main.c:696-718, src/Main/InstallHelper.c:494 (aInstallOptionalAssets)"
+    note: |
+      Retail executable mmap'd at 0x400000 and patched by do_hooks() in the
+      32-bit static-recomp build. Not read by the 64-bit, WASM or Android
+      builds.
+
+  # ================================================================
+  # Mysteries of the Sith (expansion, -motsCompat)
+  # ================================================================
+
+  - name: "JKM.goo"
+    path: "episode/JKM.goo"
+    system: mysteries-of-the-sith
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:48 (aRequiredAssetsMots)"
+    note: "Main MoTS single-player episode."
+
+  - name: "JKM_KFY.goo"
+    path: "episode/JKM_KFY.goo"
+    system: mysteries-of-the-sith
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:45 (aRequiredAssetsMots)"
+
+  - name: "JKM_MP.goo"
+    path: "episode/JKM_MP.goo"
+    system: mysteries-of-the-sith
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:46 (aRequiredAssetsMots)"
+
+  - name: "JKM_SABER.goo"
+    path: "episode/JKM_SABER.goo"
+    system: mysteries-of-the-sith
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:47 (aRequiredAssetsMots)"
+
+  - name: "Jkmres.goo"
+    path: "resource/Jkmres.goo"
+    system: mysteries-of-the-sith
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:49 (aRequiredAssetsMots)"
+    note: "Shared MoTS engine resources."
+
+  - name: "JKMsndLO.goo"
+    path: "resource/JKMsndLO.goo"
+    system: mysteries-of-the-sith
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:50 (aRequiredAssetsMots)"
+    note: "Low-quality sound bank (MININSTALL/JKMSNDLO.GOO on the CD)."
+
+  - name: "JKM.EXE"
+    system: mysteries-of-the-sith
+    category: game_data
+    required: false
+    source_ref: "src/main.c:696-718, src/Main/InstallHelper.c:495 (aInstallOptionalAssets)"
+    note: "MoTS retail executable, used only by the 32-bit static-recomp build."
+
+  # ================================================================
+  # Star Wars DroidWorks (Main_bDroidWorks branch)
+  # ================================================================
+
+  - name: "dwCD.GOB"
+    system: droidworks
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:58 (aRequiredAssetsDroidworks), src/Dw/dwInits.cpp:67-93"
+    note: "CD-image data archive, mounted by dwGob."
+
+  - name: "dwHD.GOB"
+    system: droidworks
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:59 (aRequiredAssetsDroidworks), src/Dw/dwInits.cpp:67-93"
+    note: "Hard-drive install archive."
+
+  - name: "dwMin.GOB"
+    system: droidworks
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:60 (aRequiredAssetsDroidworks), src/Dw/dwInits.cpp:67-93"
+    note: "Minimum-install archive."
+
+  - name: "dwStream.GOB"
+    system: droidworks
+    category: game_data
+    required: true
+    source_ref: "src/Main/InstallHelper.c:61 (aRequiredAssetsDroidworks), src/Dw/dwInits.cpp:93"
+    note: "Streamed WAV audio, listed only in the WAV ext search path."

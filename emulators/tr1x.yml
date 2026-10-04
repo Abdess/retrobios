@@ -1,0 +1,628 @@
+emulator: TR1X
+display_name: "TR1X"
+type: standalone
+core_classification: game_engine
+source: "https://github.com/LostArtefacts/TRX"
+upstream: "https://github.com/LostArtefacts/TRX"
+source_commit: "c43c1cc875277324dff44a9e57e4fdd58fd3fb4c"
+upstream_commit: "c43c1cc875277324dff44a9e57e4fdd58fd3fb4c"
+profiled_date: "2026-10-04"
+cores: []
+systems:
+  - tomb-raider-1
+
+notes: |
+  Enhanced engine for Tomb Raider 1 (1996), part of the TRX monorepo
+  that also hosts TR2X and TR3X. Loads retail .phd level files, music
+  tracks and FMV cutscenes from a Steam, GOG or disc install of TR1.
+
+  Path resolution (src/trx/game/paths.c):
+    levels   %mod_dir%/levels/<file>        GAME_DYNAMIC_PATH_LEVEL_FILE
+    fmv      %mod_dir%/fmv/<file><ext>      GAME_DYNAMIC_PATH_FMV_FILE
+    music    %mod_dir%/music/<name><ext>    GAME_DYNAMIC_PATH_MUSIC_DIR
+  with %mod_dir% = games/tr1 under the TRX root. The game-flow file,
+  the catalog_*.csv tables, string tables, injections, images and
+  shaders ship inside the TRX zip (data/trx/ship/) and are not user
+  files.
+
+  FMV extension probing (src/trx/game/paths.c:76-79):
+    .mp4 .mkv .mpeg .avi .webm .ogv .rpl .fmv .bik
+  The retail Core/Eidos cutscenes are .rpl; the gameflow still names
+  them .avi, resolution picks whichever extension exists.
+
+  Music backend (src/trx/game/music/backend_files.c:25-49):
+    extensions .flac .ogg .mp3 .wav .wma
+    file name  trackNN.<ext> (two-digit) or N.<ext>
+  Retail TR1 CD rips yield track02..track60.
+
+  TR1 keeps every sample inlined in the .phd level files, so no
+  main.sfx accompanies the levels.
+
+files:
+  # Levels
+  # Enumerated by data/trx/ship/games/tr1/gameflow.json5 "levels" array.
+  - name: "title.phd"
+    path: "games/tr1/levels/title.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:38"
+
+  - name: "gym.phd"
+    path: "games/tr1/levels/gym.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:59"
+
+  - name: "level1.phd"
+    path: "games/tr1/levels/level1.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:95"
+    note: "Caves"
+
+  - name: "level2.phd"
+    path: "games/tr1/levels/level2.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:116"
+    note: "City of Vilcabamba"
+
+  - name: "level3a.phd"
+    path: "games/tr1/levels/level3a.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:134"
+    note: "Lost Valley"
+
+  - name: "level3b.phd"
+    path: "games/tr1/levels/level3b.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:153"
+    note: "Tomb of Qualopec"
+
+  - name: "level4.phd"
+    path: "games/tr1/levels/level4.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:173"
+    note: "St. Francis' Folly"
+
+  - name: "level5.phd"
+    path: "games/tr1/levels/level5.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:194"
+    note: "Colosseum"
+
+  - name: "level6.phd"
+    path: "games/tr1/levels/level6.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:214"
+    note: "Palace Midas"
+
+  - name: "level7a.phd"
+    path: "games/tr1/levels/level7a.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:232"
+    note: "The Cistern"
+
+  - name: "level7b.phd"
+    path: "games/tr1/levels/level7b.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:252"
+    note: "Tomb of Tihocan"
+
+  - name: "level8a.phd"
+    path: "games/tr1/levels/level8a.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:278"
+    note: "City of Khamoon"
+
+  - name: "level8b.phd"
+    path: "games/tr1/levels/level8b.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:300"
+    note: "Obelisk of Khamoon"
+
+  - name: "level8c.phd"
+    path: "games/tr1/levels/level8c.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:321"
+    note: "Sanctuary of the Scion"
+
+  - name: "level10a.phd"
+    path: "games/tr1/levels/level10a.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:343"
+    note: "Natla's Mines"
+
+  - name: "level10b.phd"
+    path: "games/tr1/levels/level10b.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:376"
+    note: "Atlantis"
+
+  - name: "level10c.phd"
+    path: "games/tr1/levels/level10c.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:401"
+    note: "The Great Pyramid"
+
+  - name: "cut1.phd"
+    path: "games/tr1/levels/cut1.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:490"
+    note: "Cutscene level 1 (after Qualopec)"
+
+  - name: "cut2.phd"
+    path: "games/tr1/levels/cut2.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:511"
+    note: "Cutscene level 2 (after Tihocan)"
+
+  - name: "cut3.phd"
+    path: "games/tr1/levels/cut3.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:531"
+    note: "Cutscene level 3 (Khamoon ambush)"
+
+  - name: "cut4.phd"
+    path: "games/tr1/levels/cut4.phd"
+    required: true
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:552"
+    note: "Cutscene level 4 (Natla's mines)"
+
+  # FMV cutscenes
+  # Enumerated by data/trx/ship/games/tr1/gameflow.json5 "fmvs" array.
+  # The retail files on disc carry a .rpl extension; the gameflow still
+  # lists .avi, resolution picks whichever extension is present.
+  - name: "core.avi"
+    aliases: [core.rpl]
+    path: "games/tr1/fmv/core.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:576"
+    note: "Core Design legal screen."
+
+  - name: "escape.avi"
+    aliases: [escape.rpl]
+    path: "games/tr1/fmv/escape.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:577"
+    note: "Eidos legal screen."
+
+  - name: "cafe.avi"
+    aliases: [cafe.rpl]
+    path: "games/tr1/fmv/cafe.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:578"
+    note: "Intro cutscene."
+
+  - name: "mansion.avi"
+    aliases: [mansion.rpl]
+    path: "games/tr1/fmv/mansion.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:579"
+
+  - name: "snow.avi"
+    aliases: [snow.rpl]
+    path: "games/tr1/fmv/snow.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:580"
+
+  - name: "lift.avi"
+    aliases: [lift.rpl]
+    path: "games/tr1/fmv/lift.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:581"
+
+  - name: "vision.avi"
+    aliases: [vision.rpl]
+    path: "games/tr1/fmv/vision.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:582"
+
+  - name: "canyon.avi"
+    aliases: [canyon.rpl]
+    path: "games/tr1/fmv/canyon.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:583"
+
+  - name: "pyramid.avi"
+    aliases: [pyramid.rpl]
+    path: "games/tr1/fmv/pyramid.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:584"
+
+  - name: "prison.avi"
+    aliases: [prison.rpl]
+    path: "games/tr1/fmv/prison.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:585"
+
+  - name: "end.avi"
+    aliases: [end.rpl]
+    path: "games/tr1/fmv/end.rpl"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1/gameflow.json5:586"
+
+  # Music tracks (retail CD audio, ripped as trackNN.<ext>).
+  # Enumerated by the ship tree in docs/trx/INSTALLING.md.
+  # The code accepts .flac .ogg .mp3 .wav .wma under either trackNN or N.
+  - name: "track02.flac"
+    path: "games/tr1/music/track02.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track03.flac"
+    path: "games/tr1/music/track03.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track04.flac"
+    path: "games/tr1/music/track04.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track05.flac"
+    path: "games/tr1/music/track05.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track06.flac"
+    path: "games/tr1/music/track06.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track07.flac"
+    path: "games/tr1/music/track07.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track08.flac"
+    path: "games/tr1/music/track08.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track09.flac"
+    path: "games/tr1/music/track09.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track10.flac"
+    path: "games/tr1/music/track10.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track11.flac"
+    path: "games/tr1/music/track11.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track12.flac"
+    path: "games/tr1/music/track12.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track13.flac"
+    path: "games/tr1/music/track13.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track14.flac"
+    path: "games/tr1/music/track14.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track15.flac"
+    path: "games/tr1/music/track15.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track16.flac"
+    path: "games/tr1/music/track16.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track17.flac"
+    path: "games/tr1/music/track17.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track18.flac"
+    path: "games/tr1/music/track18.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track19.flac"
+    path: "games/tr1/music/track19.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track20.flac"
+    path: "games/tr1/music/track20.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track21.flac"
+    path: "games/tr1/music/track21.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track22.flac"
+    path: "games/tr1/music/track22.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track23.flac"
+    path: "games/tr1/music/track23.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track24.flac"
+    path: "games/tr1/music/track24.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track25.flac"
+    path: "games/tr1/music/track25.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track26.flac"
+    path: "games/tr1/music/track26.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track27.flac"
+    path: "games/tr1/music/track27.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track28.flac"
+    path: "games/tr1/music/track28.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track29.flac"
+    path: "games/tr1/music/track29.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track30.flac"
+    path: "games/tr1/music/track30.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track31.flac"
+    path: "games/tr1/music/track31.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track32.flac"
+    path: "games/tr1/music/track32.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track33.flac"
+    path: "games/tr1/music/track33.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track34.flac"
+    path: "games/tr1/music/track34.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track35.flac"
+    path: "games/tr1/music/track35.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track36.flac"
+    path: "games/tr1/music/track36.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track37.flac"
+    path: "games/tr1/music/track37.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track38.flac"
+    path: "games/tr1/music/track38.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track39.flac"
+    path: "games/tr1/music/track39.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track40.flac"
+    path: "games/tr1/music/track40.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track41.flac"
+    path: "games/tr1/music/track41.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track42.flac"
+    path: "games/tr1/music/track42.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track43.flac"
+    path: "games/tr1/music/track43.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track44.flac"
+    path: "games/tr1/music/track44.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track45.flac"
+    path: "games/tr1/music/track45.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track46.flac"
+    path: "games/tr1/music/track46.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track47.flac"
+    path: "games/tr1/music/track47.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track48.flac"
+    path: "games/tr1/music/track48.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track49.flac"
+    path: "games/tr1/music/track49.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track50.flac"
+    path: "games/tr1/music/track50.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track51.flac"
+    path: "games/tr1/music/track51.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track52.flac"
+    path: "games/tr1/music/track52.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track53.flac"
+    path: "games/tr1/music/track53.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track54.flac"
+    path: "games/tr1/music/track54.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track55.flac"
+    path: "games/tr1/music/track55.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track56.flac"
+    path: "games/tr1/music/track56.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track57.flac"
+    path: "games/tr1/music/track57.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track58.flac"
+    path: "games/tr1/music/track58.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track59.flac"
+    path: "games/tr1/music/track59.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
+
+  - name: "track60.flac"
+    path: "games/tr1/music/track60.flac"
+    required: false
+    category: game_data
+    source_ref: "src/trx/game/music/backend_files.c:43"
