@@ -3,44 +3,99 @@ type: standalone + libretro
 core_classification: pure_libretro
 source: "https://github.com/AloysHF/DingooEmu"
 upstream: "https://github.com/AloysHF/DingooEmu"
-profiled_date: "2026-09-03"
-source_commit: "746d6f116c707b9a2ede23c4b25468f90e26af26"
-core_version: "0.2.0"
-display_name: "Dingoo - A320 (DingooEmu)"
+profiled_date: "2026-09-17"
+source_commit: "f57c9339e6021cd37c4bd694c14b0813a9b5ee72"
+core_version: "0.3.0"
+display_name: "Dingoo - A320 / Gemei A330 (DingooEmu)"
 cores:
   - dingooemu
 systems:
   - dingoo-a320
+  - gemei-a330
 
 notes: |
-  Dingoo A320 emulator written in Rust by AloysHF. The libretro core and
-  the dingoo-emu standalone binary share the dingooemu-core crate. A .app
-  file is parsed from its full path (need_fullpath = true,
-  crates/dingooemu-libretro/src/api.rs:87; Emulator::from_path,
-  crates/dingooemu-core/src/emulator.rs:316-319;
-  crates/dingooemu-core/src/app_loader.rs:119-122) and its imports are
-  bound to Rust implementations of the Dingoo SDK
-  (crates/dingooemu-core/src/emulator/sdk_hle/mod.rs:22-30). No firmware
-  image, font or system file backs those calls.
+  Dingoo A320 and Gemei A330 emulator written in Rust by AloysHF. The
+  libretro core and the dingoo-emu standalone binary share the
+  dingooemu-core crate. Content is read from its full path (need_fullpath
+  = true, crates/dingooemu-libretro/src/api.rs:87;
+  crates/dingooemu/src/main.rs:226; crates/dingooemu-core/src/emulator.rs:33-37;
+  crates/dingooemu-core/src/package.rs:124-135). The CCDL package's load
+  address selects the runtime: a .app loaded in the 0x8xxxxxxx range runs on
+  the MIPS32 interpreter as an A320, a .cc, .c2s or .c3s loaded at
+  0x10100000 (retail SDK) or 0x13800000 (homebrew SDK) runs on the
+  ARM32/Thumb interpreter as an A330
+  (crates/dingooemu-core/src/content.rs:66-74, 104-121;
+  crates/dingooemu-core/src/emulator.rs:44-55). Both runtimes bind the
+  package's imports to Rust implementations of the device SDK
+  (crates/dingooemu-core/src/a320/runtime/sdk_hle/mod.rs:22-30;
+  crates/dingooemu-core/src/a330/runtime/sdk_hle/mod.rs:226-234). No
+  firmware code is executed and no font or system file backs those calls.
 
-  The guest file API (crates/dingooemu-core/src/emulator/sdk_hle/files.rs:43-129)
+  The A320 guest file API
+  (crates/dingooemu-core/src/a320/runtime/sdk_hle/files.rs:43-128)
   resolves a name in three steps: a file under the save directory, a
   resource packed inside the .app, then a host file relative to the .app's
-  own directory (crates/dingooemu-core/src/emulator.rs:1684-1706,
-  crates/dingooemu-core/src/emulator.rs:1433-1501). fsys_findfirst
+  own directory (crates/dingooemu-core/src/a320/runtime.rs:1645-1665,
+  crates/dingooemu-core/src/a320/runtime.rs:1592-1618,
+  crates/dingooemu-core/src/a320/runtime.rs:1424-1428,
+  crates/dingooemu-core/src/a320/runtime.rs:1449-1462). fsys_findfirst
   enumerates the .app's directory and refuses to leave it
-  (crates/dingooemu-core/src/emulator.rs:1545-1591). Files the game
-  creates land in the frontend save directory
-  (crates/dingooemu-libretro/src/api.rs:152-155) or, when the frontend
-  gives none, beside the .app (crates/dingooemu-core/src/emulator.rs:411).
-  The core queries RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY only
+  (crates/dingooemu-core/src/a320/runtime.rs:1519-1529).
+
+  The A330 guest file API
+  (crates/dingooemu-core/src/a330/runtime/sdk_hle/files.rs:74-135)
+  resolves a name in five steps: a file under the save directory, a host
+  file relative to the content's directory, a resource packed inside the
+  package, the zip payload appended to the package, then an entry of the
+  firmware archive mounted from the content's directory; a name none of
+  them answers fails the open. fsys_findfirst enumerates the content's
+  directory and refuses to leave it
+  (crates/dingooemu-core/src/a330/runtime/sdk_hle/files.rs:381-395).
+
+  Files the game creates land in the frontend save directory
+  (crates/dingooemu-libretro/src/api.rs:150-155,
+  crates/dingooemu-core/src/emulator.rs:173-179) or, when the frontend
+  gives none and in the standalone, beside the content
+  (crates/dingooemu-core/src/a320/runtime.rs:372,
+  crates/dingooemu-core/src/a330/runtime.rs:415-417). The core queries
+  RETRO_ENVIRONMENT_GET_SAVE_DIRECTORY only
   (crates/dingooemu-libretro/src/constants.rs:30); no system directory
   constant exists in the crate.
 
   With the diagnostic core option on, dingooemu-diagnostic.txt is written
-  to the save directory (crates/dingooemu-libretro/src/diagnostics.rs:83-89,
-  crates/dingooemu-libretro/src/diagnostics.rs:311-316). No include_bytes!
-  data is compiled in.
+  to the save directory, or beside the content without one
+  (crates/dingooemu-libretro/src/api.rs:156-159,
+  crates/dingooemu-libretro/src/diagnostics.rs:8,
+  crates/dingooemu-libretro/src/diagnostics.rs:83-89,
+  crates/dingooemu-libretro/src/diagnostics.rs:310-318). No include_bytes!
+  data is compiled in. The .info declares firmware_count = 0: the one file
+  below is read from the content's directory, never from the system
+  directory.
 
-exclusion_note: "No file is read outside the content: the .app path is the only input, guest file calls resolve to the save directory, the .app's resource table or the .app's own directory, nothing queries the system directory, no data is embedded with include_bytes!, and the .info declares firmware_count = 0."
-files: []
+files:
+  - name: "A330.HXF"
+    system: gemei-a330
+    required: false
+    storage: large_file
+    load_from: content_dir
+    size: 76352901
+    validation: [signature]
+    md5: "d8e1849773223a842076ca04053a13a4"
+    sha1: "69b3544d992a23e8b736c61837914a4d1b4e7bb5"
+    description: "Gemei A330 firmware update archive, V1.1 build3 of 2011-02-13"
+    note: >-
+      Mounted when an A330 package loads: the content's directory is
+      scanned and the first entry whose extension is hxf, in any case, is
+      read whole. The file must start with WADF0100 and declare at offset
+      20 a size within its own length; each record is a u32 name length,
+      the name, one byte, a u32 data length and the data, and a zero name
+      length ends the table. Names are lowercased, backslashes turned to
+      slashes and a leading drive letter dropped, so Z:\SYSTEM\nls\c_936.nls
+      and system/nls/c_936.nls reach the same entry. The archive is the
+      last source consulted when a game opens a file the save directory,
+      the content directory, the package's resources and its appended zip
+      payload do not hold; without it such an open fails and the runtime
+      goes on. The image itself is never hashed, and the hashes here name
+      the last firmware Gemei published; the V1.10 image of 2011-01-25
+      indexes the same way.
+    source_ref: "crates/dingooemu-core/src/a330/runtime.rs:415-418, crates/dingooemu-core/src/a330/firmware_archive.rs:16-50, 54-58, 63-96, 117-124, crates/dingooemu-core/src/a330/runtime/sdk_hle/files.rs:108-133"

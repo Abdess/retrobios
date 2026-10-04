@@ -3,9 +3,10 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/libretro/jollycv"
 upstream: "https://gitlab.com/jgemu/jollycv"
-profiled_date: "2026-03-24"
-source_commit: "eb14292005d51e2bef954cb75145981037ee9988"
-core_version: "2.0.0"
+profiled_date: "2026-09-17"
+source_commit: "2790d59c7194d29e83f8603ffd7e9da17f11575e"
+upstream_commit: "18875ffdb1891cec04217cf02928af563a3af9d8"
+core_version: "2.1.0"
 display_name: "ColecoVision/CreatiVision/My Vision (JollyCV)"
 cores:
   - jollycv
@@ -15,70 +16,76 @@ systems:
   - myvision
 
 notes: |
-  JollyCV is a multi-system emulator by Rupert Carmichael supporting
-  ColecoVision (with Super Game Module), CreatiVision, and My Vision.
+  JollyCV emulates the ColecoVision (with Super Game Module), the VTech
+  CreatiVision and the Nichibutsu My Vision. The libretro port and the
+  Jolly Good build share the same src/ tree; only the front end differs.
 
-  BIOS handling depends on the detected system type (set via core option
-  or auto-detected from ROM database via jcv_process_hash/jcv_get_dbflags):
+  The libretro port picks the system from the file name
+  (libretro/libretro.c:670-679): ".myv" is My Vision, ".rom" and ".bin"
+  are looked up by MD5 in the CreatiVision table (src/jcv_db.c:109-176,
+  reached through src/jollycv.c:118-120) and fall back to ColecoVision,
+  ".col" is ColecoVision. A CreatiVision image whose MD5 is not in the
+  table runs as ColecoVision. Version 2.1.0 moved that table from
+  libretro/gamedb.h into src/jcv_db.c so both builds share it.
 
-  - ColecoVision (JCV_SYS_COLECO): loads "coleco.rom" from system dir.
-    BIOS is mapped at 0x0000-0x1FFF. Size must be exactly 8192 bytes
-    (SIZE_CVBIOS = SIZE_8K = 0x2000). Load fails if size mismatches.
-    Without the BIOS, ColecoVision games will not run (load returns false).
+  BIOS files are read from the front end's system directory, no
+  subdirectory, as "<system_dir>/coleco.rom" or "<system_dir>/bioscv.rom"
+  (libretro/libretro.c:696-716). jcv_bios_load_file (src/jollycv.c:406-432)
+  opens the file, reads it whole and hands the buffer to
+  jcv_coleco_bios_load or jcv_crvision_bios_load, which keep it only when
+  the size is exactly SIZE_CVBIOS (8192) or SIZE_CRVBIOS (2048). The return
+  value of that size check is dropped at src/jollycv.c:427, so a file of the
+  wrong size passes the loader while the BIOS pointer stays NULL; the first
+  BIOS read (src/jcv_coleco.c:281-282, src/jcv_crvision.c:443-444) then
+  dereferences it. A missing file fails retro_load_game. My Vision loads no
+  BIOS (libretro/libretro.c:717-719).
 
-  - CreatiVision (JCV_SYS_CRVISION): loads "bioscv.rom" from system dir.
-    BIOS is mapped at 0xF800-0xFFFF. Size must be exactly 2048 bytes
-    (SIZE_CRVBIOS = SIZE_2K = 0x800). Without the BIOS, CreatiVision
-    games will not run.
+  The Jolly Good build reads the same two names from the front end's BIOS
+  path (jg.c:463-481) and declares them through jg_get_bioslist with an
+  MD5 each (jg.c:151-156). The core never compares those MD5; the reference
+  front end hashes the file against them for a debug log only
+  (jgrf src/jgrf.c:441-458). The md5: fields below carry these values.
 
-  - My Vision (JCV_SYS_MYVISION): no BIOS required.
-
-  The libretro port constructs paths via snprintf("%s%c%s", sysdir, pss,
-  filename) in libretro.c:699-711. jcv_bios_load_file() opens the file,
-  reads it fully, then delegates to jcv_coleco_bios_load() or
-  jcv_crvision_bios_load() which validate size before copying.
-
-  ColecoVision cartridge header bytes at offset 0x0000-0x0001 control
-  boot behavior: 0xAA55 shows the BIOS title screen, 0x55AA jumps
-  directly to the game code vector.
-
-  The core includes a built-in ROM database with MD5 hashes (gamedb.h)
-  for game-specific flags, but this is for game compatibility, not BIOS
-  verification.
+  ColecoVision cartridges start with 0xAA55 to show the BIOS title screen or
+  0x55AA to jump straight to the game vector (src/jcv_coleco.c:421-426).
+  The MD5 database of ColecoVision games in src/jcv_db.c selects cartridge
+  mappers and controller flags.
 
 files:
-  # --- ColecoVision BIOS (required for CV games) ---
   - name: "coleco.rom"
     system: colecovision
+    description: "ColecoVision BIOS"
     required: true
     size: 8192
+    md5: "2c66f5911e5b42b8ebe113403548eee7"
     validation: [size]
-    source_ref: "libretro/libretro.c:701, src/jcv_coleco.c:402-406"
-    note: "Mapped at 0x0000-0x1FFF. Replaced by SGM lower RAM when Super Game Module is active. Must be exactly 8192 bytes."
+    source_ref: "libretro/libretro.c:697-703, src/jollycv.c:406-432, src/jcv_coleco.c:402-410, jg.c:151-153"
+    note: "Mapped at 0x0000-0x1FFF, replaced by the lower 8K of SGM RAM when the Super Game Module enables it. The MD5 is the value the JG bioslist declares; the core compares the size only."
 
-  # --- CreatiVision BIOS (required for CreatiVision games) ---
   - name: "bioscv.rom"
     system: creativision
     description: "VTech CreatiVision BIOS ROM"
     required: true
     size: 2048
+    md5: "3b1ef759d8e3fb4071582efd33dd05f9"
     validation: [size]
-    source_ref: "libretro/libretro.c:711, src/jcv_crvision.c:315-318"
-    note: "Mapped at 0xF800-0xFFFF. Must be exactly 2048 bytes."
+    source_ref: "libretro/libretro.c:707-713, src/jollycv.c:406-432, src/jcv_crvision.c:316-324, jg.c:154-155"
+    note: "Mapped at 0xF800-0xFFFF. The MD5 is the value the JG bioslist declares; the core compares the size only."
 
 platform_details:
   colecovision:
     bios_filename: "coleco.rom"
     bios_size: 8192
     memory_map: "0x0000-0x1FFF"
-    source_ref: "src/jcv_coleco.c:269-281"
+    source_ref: "src/jcv_coleco.c:268-283"
 
   creativision:
     bios_filename: "bioscv.rom"
     bios_size: 2048
     memory_map: "0xF800-0xFFFF"
-    source_ref: "src/jcv_crvision.c:315-337, 441"
+    source_ref: "src/jcv_crvision.c:316-318, 443-445"
 
   myvision:
     bios_required: false
-    note: "No BIOS needed. My Vision games run without any system ROM."
+    source_ref: "libretro/libretro.c:717-719"
+    note: "No BIOS is loaded for My Vision."

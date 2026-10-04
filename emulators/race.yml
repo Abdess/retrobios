@@ -3,8 +3,9 @@ type: libretro
 core_classification: community_fork
 source: "https://github.com/libretro/RACE"
 upstream: "https://github.com/8bitpsp/race"
-profiled_date: "2026-03-25"
+profiled_date: "2026-09-17"
 source_commit: "c7810dd7f172827bfa2004813bc000b13786636b"
+upstream_commit: "065db2eb614d4414ed49a1a9e241022450bb844d"
 core_version: "v2.16"
 display_name: "SNK - Neo Geo Pocket / Color (RACE)"
 cores: [race]
@@ -15,15 +16,19 @@ notes: |
   Judge_ (MHE), ported to GP2X by Flavor, to PSP by Akop Karapetyan, modified
   by theelf, then adapted for libretro.
 
-  No external BIOS files are required. The upstream versions (GP2X, PSP) support
-  optional loading of NPBIOS.BIN, but the libretro port disabled it entirely
-  with #if 0 in race-memory.c:loadBIOS(). The comment explains: "Using a real
-  bios file causes nothing but issues."
+  No external BIOS files are required. The upstream versions (GP2X, PSP) load
+  NPBIOS.BIN optionally; the libretro port's loadBIOS() returns 0
+  unconditionally, and the disabled file-reading body it once carried under
+  #if 0 was removed in June 2026, so the port no longer names the file. The
+  core never queries the system directory: the only files it opens are the
+  ROM and the .ngf flash save in the save directory.
 
-  The core uses a software HLE approach: a compiled-in koyote_bin RAM dump
-  (post-boot console state) is copied into mainram at startup, a fake SWI jump
-  table is built at cpurom[0xE000], and doBios() in tlcs900h.c handles 33 BIOS
-  functions in software. The Z80 sound CPU is emulated via cz80 or DrZ80.
+  The core boots through a software HLE path: a compiled-in koyote_bin RAM
+  snapshot (12 KB of main RAM captured after a real BIOS has booted) is copied
+  into mainram, a fake SWI jump table is built at cpurom[0xE000], doBios() in
+  tlcs900h.c answers 14 BIOS call numbers in software, and the system font
+  is an embedded table in ngpBios.c. The Z80 sound CPU is emulated via cz80
+  or DrZ80.
 
 files: []
 
@@ -33,10 +38,24 @@ analysis:
     size: 65536  # 64 KB (0x10000)
     loaded_by: "race-memory.c:loadBIOS()"
     status: disabled
-    source_ref: "race-memory.c:337-361"
+    source_ref: "race-memory.c:330-340, race-memory.c:354-357"
     upstream_status: optional
-    upstream_ref: "memory.cpp:346-365 (8bitpsp/race)"
+    upstream_ref: "memory.cpp:346-366 (8bitpsp/race)"
     note: |
-      loadBIOS() is wrapped in #if 0 and always returns 0 in the libretro port.
-      In upstream (8bitpsp/race, alekmaul/race), the function is live and loads
-      NPBIOS.BIN optionally, falling back to HLE if not found.
+      loadBIOS() returns 0 unconditionally in the libretro port, so mem_init()
+      always takes the HLE branch. The #if 0 body that opened NPBIOS.BIN with
+      filestream_open() was dropped by commit 0e4783a on 2026-06-15; the
+      libretro tree no longer contains the name. In upstream, loadBIOS() opens
+      NPBIOS.BIN from the working directory with fopen(), requires exactly
+      0x10000 bytes, and falls back to HLE when the file is absent or short.
+  hle:
+    ram_snapshot: "koyote_bin.h:1-6"
+    ram_snapshot_size: 12288
+    ram_snapshot_copy: "race-memory.c:406-407"
+    jump_table: "race-memory.c:360-369"
+    interrupt_vectors: "race-memory.c:318-328"
+    bios_calls: "tlcs900h.c:5837-5921"
+    bios_call_count: 14
+    system_font: "ngpBios.c:15"
+  filesystem_access: "ROM at main.c:266-268, .ngf flash save at flash.c:231-233 and flash.c:344-346"
+  system_directory_used: false

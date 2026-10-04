@@ -3,9 +3,9 @@ type: libretro
 core_classification: official_port
 source: "https://github.com/drhelius/Geargrafx"
 upstream: "https://github.com/drhelius/Geargrafx"
-profiled_date: "2026-03-23"
-source_commit: "0a68ce8f6d3d787e84d7bc9efa30e982fa3d4c77"
-core_version: "1.6.0"
+profiled_date: "2026-09-17"
+source_commit: "78fc3d7a1b9f55d78d8fe64c13368131a269e204"
+core_version: "1.7.22"
 display_name: "NEC - PC Engine / SuperGrafx / CD (Geargrafx)"
 cores:
   - geargrafx
@@ -16,24 +16,49 @@ systems:
 
 notes: |
   Geargrafx is a PC Engine / TurboGrafx-16 / SuperGrafx / CD-ROM emulator by
-  Ignacio Sanchez (drhelius). HuCard games run without BIOS.
+  Ignacio Sanchez (drhelius). HuCard games run without any external file.
 
-  CD-ROM games require a System Card BIOS from the system directory. The core
-  option "geargrafx_cdrom_bios" selects which card: Auto (default, maps to
-  syscard3.pce), System Card 1, System Card 2, System Card 3, or Game Express.
-  load_bios() in libretro.cpp builds "{system_directory}/{filename}" and calls
-  core->LoadBios(path, true) for the syscard, then always attempts to load
-  gexpress.pce via core->LoadBios(path, false).
+  CD-ROM content needs a System Card image from the frontend system directory.
+  load_bios() in platforms/libretro/libretro.cpp:617-658 picks the file name
+  from the core option geargrafx_cdrom_bios (libretro.cpp:1429-1452):
+  System Card 1 loads syscard1.pce, System Card 2 loads syscard2.pce, System
+  Card 3 (the default) and Force Game Express load syscard3.pce; the older
+  values Auto and Game Express are still accepted and map to the same. The
+  path is "{system_directory}/{name}" (libretro.cpp:644). When the card is
+  missing the core posts "CD-ROM BIOS not found" and continues
+  (libretro.cpp:645-654). gexpress.pce is then always attempted from the
+  same directory (libretro.cpp:656-657), silently. load_bios() runs from
+  retro_load_game() for CD content only (libretro.cpp:466-467) and again on
+  retro_reset() when a CD is loaded (libretro.cpp:312). With the libretro
+  VFS the file goes through load_bios_file() into LoadBiosFromBuffer(),
+  otherwise through Media::LoadBios() (libretro.cpp:580-615,
+  src/media.cpp:391-431).
 
-  LoadBios() in media.cpp reads the file, strips a 512-byte header if present,
-  computes CRC32, and checks it against k_game_database entries flagged with
-  GG_GAMEDB_BIOS_SYSCARD or GG_GAMEDB_BIOS_GAME_EXPRESS. If the CRC32 is not
-  found, the BIOS is marked as "Unknown" and invalid, but loading still proceeds.
-  Size is checked against expected constants and logged if wrong, but not enforced.
+  Media::LoadBiosData() (src/media.cpp:447-488) compares the file size with
+  GG_BIOS_SYSCARD_SIZE (0x40000) or GG_BIOS_GAME_EXPRESS_SIZE (0x8000)
+  (src/defines.h:53-54) and only logs a mismatch. A 512-byte header is
+  stripped when the size has bit 9 set, the data is copied into a zeroed
+  buffer of the expected size, and CRC32 is computed over that whole buffer.
+  GatherBIOSInfoFromDB() (src/media.cpp:777-811) looks the CRC up in
+  k_game_database entries flagged GG_GAMEDB_BIOS_SYSCARD or
+  GG_GAMEDB_BIOS_GAME_EXPRESS (src/game_db.h:48-56); an unknown CRC marks the
+  image "Unknown" and invalid but it is still used. The CRC is therefore the
+  CRC of the padded buffer, not of the file: the 16384-byte Game Express
+  Green dump (file CRC32 20E0A364) is recognised as 16AAF05A.
 
-  Game Express CD-ROM games are auto-detected via CRC32 lookup in game_db.h
-  (GG_GAMEDB_GAME_EXPRESS flag). Arcade Card games are also detected from
-  game_db.h and enable extra 0x30000 bytes of Card RAM for Super CD-ROM mode.
+  For CD content the ROM banks map onto the System Card buffer, or onto the
+  Game Express buffer when the disc is a Game Express title
+  (src/media.cpp:845-849). A Game Express disc is detected by its CRC in
+  game_db.h (GG_GAMEDB_GAME_EXPRESS, src/media.cpp:743-747) or forced by the
+  option (src/media.cpp:604-608). With no card loaded the buffer is zeros and
+  the CD does not boot. Arcade Card titles are also detected from game_db.h
+  and run on the selected System Card.
+
+  Backup RAM is exposed through RETRO_MEMORY_SAVE_RAM (libretro.cpp:540-548)
+  and saved by the frontend. A connected Memory Base 128 is persisted by the
+  core itself as geargrafx_mb128.sav in the frontend save directory
+  (libretro.cpp:660-740). Both are state the core writes, not files a user
+  obtains.
 
 files:
   - name: "syscard3.pce"
@@ -41,43 +66,47 @@ files:
     size: 262144
     required: true
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:632, platforms/libretro/libretro.cpp:647-649, src/media.cpp:435-532, src/defines.h:52, src/game_db.h:50, src/game_db.h:54"
+    source_ref: "platforms/libretro/libretro.cpp:622, platforms/libretro/libretro.cpp:634-639, platforms/libretro/libretro.cpp:644-654, src/media.cpp:447-488, src/defines.h:53, src/game_db.h:51-52, src/game_db.h:54"
     note: >
-      Default BIOS for CD-ROM games (cdrom_bios Auto or System Card 3).
-      game_db.h recognizes Japan (CRC32 6D9A73EF) and USA (CRC32 2B5B75FE)
-      variants under the same filename.
+      Loaded for the default option value System Card 3 and for Force Game
+      Express. game_db.h accepts three images under this name: Japan
+      (CRC32 6D9A73EF), the Japan NuFont Hack (CRC32 0ECEA1F3, syscard3.pce
+      patched with xlateFont-JPN.ips from dshadoff/SYSCARD_Translatefont)
+      and USA (CRC32 2B5B75FE).
 
   - name: "syscard2.pce"
-    description: "CD-ROM System Card 2.0"
+    description: "CD-ROM System Card 2.0 / 2.1"
     size: 262144
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:631, platforms/libretro/libretro.cpp:641-642, src/media.cpp:435-532, src/game_db.h:48-49, src/game_db.h:53"
+    source_ref: "platforms/libretro/libretro.cpp:621, platforms/libretro/libretro.cpp:631-632, src/media.cpp:447-488, src/defines.h:53, src/game_db.h:49-50, src/game_db.h:53"
     note: >
-      cdrom_bios = 'System Card 2'. For older CD-ROM2 titles. game_db.h
-      recognizes three variants: v2.0 Japan (CRC32 52520BC6), v2.1 Japan
-      (CRC32 283B74E0), and USA (CRC32 FF2A5EC3).
+      Loaded when geargrafx_cdrom_bios is System Card 2. game_db.h accepts
+      v2.0 Japan (CRC32 52520BC6), v2.1 Japan (CRC32 283B74E0) and USA
+      (CRC32 FF2A5EC3).
 
   - name: "syscard1.pce"
     description: "CD-ROM System Card 1.0 (Japan)"
     size: 262144
+    crc32: "3F9F95A4"
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:630, platforms/libretro/libretro.cpp:638-639, src/media.cpp:435-532, src/game_db.h:47"
-    note: >
-      cdrom_bios = 'System Card 1'. Very early CD-ROM2 games only.
-      CRC32 3F9F95A4.
+    source_ref: "platforms/libretro/libretro.cpp:620, platforms/libretro/libretro.cpp:628-629, src/media.cpp:447-488, src/defines.h:53, src/game_db.h:48"
+    note: "Loaded when geargrafx_cdrom_bios is System Card 1."
 
   - name: "gexpress.pce"
-    description: "Game Express CD Card"
+    description: "Games Express CD Card"
     size: 32768
     required: false
     validation: [size, crc32]
-    source_ref: "platforms/libretro/libretro.cpp:633, platforms/libretro/libretro.cpp:633-634, platforms/libretro/libretro.cpp:535-536, src/media.cpp:435-532, src/defines.h:53, src/game_db.h:55-56"
+    source_ref: "platforms/libretro/libretro.cpp:623, platforms/libretro/libretro.cpp:656-657, src/media.cpp:447-488, src/media.cpp:604-608, src/media.cpp:743-747, src/defines.h:54, src/game_db.h:55-56"
     note: >
-      Always loaded alongside the selected System Card BIOS (platforms/libretro/libretro.cpp:642).
-      Required for Game Express CD-ROM titles. game_db.h recognizes Blue Version
-      (CRC32 51A12D90) and Green Version (CRC32 16AAF05A).
+      Always attempted after the System Card, used for discs flagged
+      GG_GAMEDB_GAME_EXPRESS in game_db.h or when the option is Force Game
+      Express. game_db.h accepts the Blue Version (CRC32 51A12D90, 32768
+      bytes) and the Green Version (CRC32 16AAF05A over the 32768-byte
+      buffer; the dump is 16384 bytes, file CRC32 20E0A364, zero-padded by
+      LoadBiosData).
 
 valid_bios_crc32:
   syscard:
@@ -85,8 +114,9 @@ valid_bios_crc32:
     - { crc32: "52520BC6", name: "CD-ROM System Card 2.0 (J)" }
     - { crc32: "283B74E0", name: "CD-ROM System Card 2.1 (J)" }
     - { crc32: "6D9A73EF", name: "Super CD-ROM System 3.0 (J)" }
+    - { crc32: "0ECEA1F3", name: "Super CD-ROM System 3.0 (J) NuFont Hack" }
     - { crc32: "FF2A5EC3", name: "TurboGrafx CD System Card 2.0 (USA)" }
     - { crc32: "2B5B75FE", name: "TurboGrafx CD Super System 3.0 (USA)" }
   game_express:
-    - { crc32: "51A12D90", name: "Game Express Card Blue Version (J)" }
-    - { crc32: "16AAF05A", name: "Game Express Card Green Version (J)" }
+    - { crc32: "51A12D90", name: "Games Express CD Card Blue Version (J)" }
+    - { crc32: "16AAF05A", name: "Games Express CD Card Green Version (J)", file_crc32: "20E0A364", file_size: 16384 }

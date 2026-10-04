@@ -4,8 +4,8 @@ core_classification: official_port
 source: "https://github.com/libretro/hatari"
 upstream: "https://github.com/hatari/hatari"
 logo: "https://raw.githubusercontent.com/hatari/hatari/main/share/icons/hicolor/scalable/apps/hatari.svg"
-profiled_date: "2026-09-03"
-source_commit: "7fd34ccf34c6ea12b7f2b960b2f167d7f251892d"
+profiled_date: "2026-09-17"
+source_commit: "5831f66e05ae19435bd9d8ef1c6f9c93998ff6f4"
 upstream_commit: "51ed9991101fdc4623b3b38ec16e5a170cf2dffa"
 core_version: "2.6.1-devel"
 display_name: "Atari - ST/STE/TT/Falcon (Hatari)"
@@ -23,50 +23,61 @@ notes: |
   January 2026, plus the port commits that follow the merge base recorded
   as upstream_commit: VFS, disk control, core options and hard disk
   loading. It builds as hatari_libretro (.gitlab-ci-libretro.yml:10-11,
-  src/CMakeLists.txt:371-402), reports library_name hatari and the
-  HATARI_VERSION string 2.6.1-devel (src/retro/main_retro.c:219-220,
+  src/CMakeLists.txt:371-404), reports library_name hatari and the
+  HATARI_VERSION string 2.6.1-devel (src/retro/main_retro.c:218-219,
   src/includes/version.h:8). The .info shipped in the tree declares no
   firmware (share/libretro/info/libretro-hatari.info); the
-  hatari_libretro.info in libretro-core-info still describes the 1.8 port
-  and its tos.img MD5, which this code never checks.
+  hatari_libretro.info in libretro-core-info took that file's metadata on
+  2026-09-16 and keeps a tos.img firmware entry with the TOS 1.02 US MD5,
+  which this code never checks.
 
   retro_init builds <system>/tos.img, records whether it exists and passes
-  it as --tos (src/retro/main_retro.c:157-204); when it is absent a
+  it as --tos (src/retro/main_retro.c:157-207); when it is absent a
   frontend message is shown and retro_run only refreshes the framebuffer
-  (src/retro/main_retro.c:186-189, src/retro/main_retro.c:251-262). The
+  (src/retro/main_retro.c:186-189, src/retro/main_retro.c:250-261). The
   name is fixed by that check: the .rom and .tos fallbacks of File_Read
-  (src/tos.c:61-67, src/file.c:298-339, src/file.c:530-569) are never
-  reached under a frontend. Without a system directory Main_Init runs
-  with no --tos and the TOS path falls back to tos.img in the Hatari data
-  directory derived from the executable location (src/configuration.c:810-812,
-  src/paths.c:299-331, CMakeLists.txt:418-430). TOS_LoadImage strips the
-  256-byte (34-byte for 4.92) loader of a RAM TOS, detects EmuTOS by ETOS
-  at offset 0x2c, refuses images below 0x40 bytes, above 1 MB, with a
-  version outside 0x100-0x6FF or a load address other than 0xE00000 or
-  0xFC0000, and coerces machine type and CPU to the TOS version unless
-  the image is a 512 KB or larger EmuTOS (src/tos.c:976-1097,
-  src/tos.c:838-969). ROM patches apply when the hatari_patch_tos option
-  is on (src/retro/options.c:250-263, src/retro/options.c:783). No TOS is
-  embedded. Because nSymbolsAutoLoad defaults to SYM_AUTOLOAD_DEBUGGER
-  (src/configuration.c:621, src/includes/configuration.h:29-31), every TOS
-  load also reads a <tos>.sym symbol table when one exists
-  (src/tos.c:1094, src/debug/symbols.c:1095-1113,
-  src/debug/symbols.c:1002-1020, src/debug/symbols.c:372-407).
+  (src/tos.c:60-66, src/file.c:312-353, src/file.c:544-583) are never
+  reached under a frontend. A missing --tos file fails option parsing
+  (src/options.c:1026-1079, src/options.c:1937-1945); Main_ErrorExit only
+  raises the quit flag in this build (src/retro/main_retro.c:478-490), so
+  Main_Init carries on with bUseTos cleared and TOS_InitImage installs the
+  built-in test stub of faketosData.c instead of reading a ROM
+  (src/tos.c:43, src/tos.c:1112-1131, src/tos.c:1151-1162). Without a
+  system directory Main_Init runs with no --tos, the TOS path falls back to
+  tos.img in the Hatari data directory derived from the executable location
+  (src/configuration.c:810-812, src/paths.c:305-356, CMakeLists.txt:422-434)
+  and have_bios is never set. TOS_LoadImage strips the 256-byte (34-byte
+  for 4.92) loader of a RAM TOS, detects EmuTOS by ETOS at offset 0x2c,
+  refuses images below 0x40 bytes, above 1 MB, with a version outside
+  0x100-0x6FF or a load address other than 0xE00000 or 0xFC0000, and
+  coerces machine type and CPU to the TOS version unless the image is a
+  512 KB or larger EmuTOS (src/tos.c:976-1097, src/tos.c:838-969). ROM
+  patches apply when the hatari_patch_tos option is on and the image is
+  not EmuTOS (src/retro/options.c:250-263, src/retro/options.c:784,
+  src/tos.c:1220-1222). No TOS is embedded. Because nSymbolsAutoLoad
+  defaults to SYM_AUTOLOAD_DEBUGGER (src/configuration.c:621,
+  src/includes/configuration.h:29-31), every TOS load also reads a
+  <tos>.sym symbol table when one exists (src/tos.c:1094,
+  src/debug/symbols.c:1095-1113, src/debug/symbols.c:1002-1020,
+  src/debug/symbols.c:372-407).
 
   The Hatari home directory is the RetroArch save directory
   (src/paths.c:236-250). Configuration is read from <CONFDIR>/hatari.cfg,
   /etc on Unix and the current directory on Windows, then from hatari.cfg
   in that home directory, before the --tos argument is applied
-  (src/main.c:256-278, src/main.c:315-318, src/configuration.c:862-867,
-  src/configuration.c:1061-1071, CMakeLists.txt:440-457). Every section is
-  honoured: the cartridge image (src/configuration.c:487-493), floppy
-  images, GEMDOS directories and ACSI, SCSI and IDE images
-  (src/configuration.c:362-364, src/configuration.c:375-483), MIDI, printer
-  and RS232 host endpoints (src/configuration.c:509-543), all disabled by
-  default (src/configuration.c:736-761) and opened by Midi_Host_Open,
-  Printer_TransferByteTo and RS232_OpenCOMPort when enabled
-  (src/midi.c:342-367, src/printer.c:42-65, src/printer.c:89-106,
-  src/rs232.c:175-230). szMappingFileName is parsed
+  (src/main.c:260-282, src/main.c:319-322, src/configuration.c:862-867,
+  src/configuration.c:1061-1071, CMakeLists.txt:444-461). The boot core
+  options are applied right after the command line, so the machine, DSP,
+  CPU, FPU, memory and hatari_patch_tos keys of hatari.cfg are overwritten
+  by them (src/main.c:328-330, src/retro/options.c:724-789). Every other
+  section is honoured: the cartridge image (src/configuration.c:487-493),
+  floppy images, GEMDOS directories and ACSI, SCSI and IDE images
+  (src/configuration.c:362-364, src/configuration.c:375-483), MIDI, printer,
+  RS232 and SCC host endpoints (src/configuration.c:509-543), all disabled
+  by default (src/configuration.c:736-761) and opened by Midi_Host_Open,
+  Printer_TransferByteTo, RS232_OpenCOMPort and SCC_Init_Channel when
+  enabled (src/midi.c:342-367, src/printer.c:42-65, src/printer.c:89-106,
+  src/rs232.c:175-246, src/scc.c:439-500). szMappingFileName is parsed
   (src/configuration.c:256) but the port's Keymap_LoadRemapFile is empty
   (src/retro/keymap.c:222-224); only the SDL build reads a keymap file
   (src/sdl/keymap.c:701). The autosave snapshot is restored by
@@ -76,31 +87,35 @@ notes: |
   src/falcon/nvram.c:334-337).
 
   Content is a floppy image, an .m3u list parsed relative to its own
-  directory (src/retro/disk_control.c:96-184), an .ide image put on the
+  directory (src/retro/disk_control.c:94-182), an .ide image put on the
   IDE master, a .vhd image put on ACSI 0 or a .gem marker naming a GEMDOS
-  directory (src/retro/main_retro.c:370-424, src/retro/harddisk.c:32-129).
+  directory (src/retro/main_retro.c:369-427, src/retro/harddisk.c:32-129).
   With a .gem, <system>/hatari/BOOT.ST is inserted into drive A when it
-  exists (src/retro/harddisk.c:104-127). A disk whose name ends in A pulls
+  exists (src/retro/harddisk.c:105-127). A disk whose name ends in A pulls
   the sibling ending in B into drive B (src/floppy.c:300-343,
   src/floppy.c:385-388), and an STX image reads its .wd1772 overlay from
-  the same directory (src/floppies/stx.c:807-825). Savestates pass through
+  the same directory (src/floppies/stx.c:807-827). Savestates pass through
   hatari_savestate.tmp in the system directory
-  (src/retro/main_retro.c:41, src/retro/main_retro.c:293-357). IPF support
+  (src/retro/main_retro.c:41, src/retro/main_retro.c:292-359). IPF support
   is compiled in from rsn8887/capsimg when ENABLE_STATIC_CAPSIMAGE is on
-  (cmake/BuildDependencies.cmake:93-126); the Windows and Vita CI jobs turn
-  it off (.gitlab-ci-libretro.yml:97, .gitlab-ci-libretro.yml:105,
-  .gitlab-ci-libretro.yml:189).
+  (cmake/BuildDependencies.cmake:93-126); the Windows jobs build with it
+  since September 2026 (.gitlab-ci-libretro.yml:101,
+  .gitlab-ci-libretro.yml:109) and the static Vita, Wii, Wii U and Switch
+  jobs turn it off (.gitlab-ci-libretro.yml:193, .gitlab-ci-libretro.yml:202,
+  .gitlab-ci-libretro.yml:210, .gitlab-ci-libretro.yml:218).
   File access goes through the libretro VFS when the frontend provides it
-  (src/retro/vfs.c:17-49, src/file.c:239-286, src/file.c:465-478).
+  (src/retro/vfs.c:17-48, src/file.c:253-302, src/file.c:479-492), and a
+  device-prefixed path such as ux0:/ counts as absolute (src/file.c:152-164).
 
 files:
   - name: "tos.img"
     path: "tos.img"
     description: "Atari TOS ROM image"
     required: true
+    min_size: 64
     max_size: 1048576
     validation: [size]
-    source_ref: "src/retro/main_retro.c:157-204, src/retro/main_retro.c:251-262, src/options.c:1937-1945, src/tos.c:61-67, src/tos.c:976-1097, src/tos.c:838-969, src/file.c:298-339"
+    source_ref: "src/retro/main_retro.c:157-207, src/retro/main_retro.c:250-261, src/options.c:1937-1945, src/tos.c:60-66, src/tos.c:976-1097, src/tos.c:838-969, src/file.c:312-353"
     note: >
       Any TOS 1.00 to 4.04, TOS 0.00, a RAM TOS or EmuTOS. The file must
       carry this exact name: retro_init only enables emulation when
@@ -125,19 +140,20 @@ files:
     min_size: 40
     max_size: 131076
     validation: [size]
-    source_ref: "src/cart.c:39-46, src/cart.c:52-88, src/cart.c:97-105, src/cart.c:115-141, src/configuration.c:487-493, src/configuration.c:814"
+    source_ref: "src/cart.c:41-47, src/cart.c:53-88, src/cart.c:97-104, src/cart.c:114-142, src/configuration.c:487-493, src/configuration.c:814"
     note: >
       Set through hatari.cfg. Raw images up to 0x20000 bytes or .stc
       images of exactly 0x20004 bytes whose 4-byte header is skipped;
       extensions .img, .rom and .stc are tried when the configured path is
       missing. Replaced by the built-in GEMDOS trampoline whenever GEMDOS
-      hard disk emulation, extended VDI or OS tracing is on.
+      hard disk emulation, extended VDI, program autostart or OS tracing
+      is on.
 
   - name: "BOOT.ST"
     path: "hatari/BOOT.ST"
     description: "Boot floppy inserted with GEMDOS hard disk folders"
     required: false
-    source_ref: "src/retro/harddisk.c:78-129, src/retro/main_retro.c:393-396"
+    source_ref: "src/retro/harddisk.c:78-129, src/retro/main_retro.c:391-395"
     note: "Inserted into drive A when the content is a .gem file."
 
   - name: "hatari.cfg"
@@ -146,10 +162,11 @@ files:
     required: false
     storage: user_provided
     unsourceable: "user settings in Hatari's INI format; no canonical contents"
-    source_ref: "src/main.c:256-278, src/main.c:315-318, src/configuration.c:862-867, src/configuration.c:1061-1071, src/paths.c:236-250, CMakeLists.txt:440-457"
+    source_ref: "src/main.c:260-282, src/main.c:319-322, src/main.c:328-330, src/configuration.c:862-867, src/configuration.c:1061-1071, src/paths.c:236-250, CMakeLists.txt:444-461"
     note: >
       Read from <CONFDIR>/hatari.cfg and then from hatari.cfg in the
-      RetroArch save directory, before the --tos argument is applied.
+      RetroArch save directory, before the --tos argument and the boot
+      core options are applied.
 
   - name: "hatari.nvram"
     path: null
@@ -160,7 +177,7 @@ files:
     validation: [size]
     storage: user_provided
     unsourceable: "machine state the emulator writes itself at exit; no canonical contents"
-    source_ref: "src/falcon/nvram.c:96-97, src/falcon/nvram.c:116-141, src/falcon/nvram.c:148-171, src/falcon/nvram.c:282-294, src/falcon/nvram.c:334-337, src/paths.c:236-250, src/main.c:204"
+    source_ref: "src/falcon/nvram.c:96-97, src/falcon/nvram.c:116-141, src/falcon/nvram.c:148-171, src/falcon/nvram.c:282-294, src/falcon/nvram.c:334-337, src/paths.c:236-250, src/main.c:208"
     note: >
       Read from the RetroArch save directory at NvRam_Init; a short read
       keeps the built-in defaults. Saved back on exit.

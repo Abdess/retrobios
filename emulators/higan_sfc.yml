@@ -1,11 +1,12 @@
 emulator: "higan (SFC Accuracy)"
 type: libretro
-core_classification: community_fork
-source: "https://github.com/libretro/nSide"
-upstream: "https://github.com/byuu/higan"
-profiled_date: "2026-03-23"
-source_commit: "5e965d0db4c0d05e7e8fb6449035538781c73473"
-core_version: "v105 (Super Famicom Accuracy)"
+core_classification: frozen_snapshot
+source: "https://gitlab.com/higan/higan"
+source_branch: libretro
+upstream: "https://gitlab.com/higan/higan"
+profiled_date: "2026-09-17"
+source_commit: "d3f592013a27cb78f17d84f90a6be6cf6f6af1d1"
+core_version: "106"
 display_name: "Nintendo - SNES / Famicom (higan Accuracy)"
 cores:
   - higan_sfc
@@ -14,124 +15,212 @@ systems:
   - nintendo-sgb
 
 notes: |
-  Fork of higan v106 by hex-usr, renamed at byuu's request. Dot-based
-  PPU profile (cycle-accurate, most demanding). Current nSide source
-  blocks accuracy build (#error at libretro.cpp:39, libretro-sfc.cpp:8).
-  Core is orphaned from an older nSide revision.
-  Coprocessor firmware loaded via icarus manifest system from system_dir.
-  File names follow icarus convention: {identifier}.{content}.rom.
-  SGB emulation loads from SGB1.sfc/ or SGB2.sfc/ subdirectories,
-  with fallback to SGB.sfc/ and Super GameBoy.sfc/.
-  SPC700 IPL ROM (ipl.rom, 64 bytes) compiled into binary.
-  Accuracy and balanced cartridge loading code is identical.
+  The libretro target lives on the libretro branch of higan's own repository,
+  merged with the v106 release: Emulator::Version is "106"
+  (higan/emulator/emulator.hpp:15) and retro_get_system_info announces it as
+  library_version under the name "higan (Super Famicom Accuracy)"
+  (higan/target-libretro/libretro.cpp:405-412,
+  higan/target-libretro/libretro-sfc.cpp:513). The buildbot recipe builds
+  higan_sfc from that branch (libretro-super
+  recipes/linux/cores-linux-x64-generic:71), whose last commit dates from
+  2017-11-19. The library is named higan_$(corename)_libretro with corename
+  sfc (higan/target-libretro/GNUmakefile:1-11,
+  higan/target-libretro/GNUmakefile:13-19). nSide, from which
+  nside_sfc_balanced is built, refuses core=sfc at build time
+  (nSide nSide/target-libretro/GNUmakefile:1-2).
+
+  The system manifest and the 64-byte SPC700 IPL ROM are compiled into the
+  binary and served from memory (higan/target-libretro/libretro-sfc.cpp:364-396,
+  higan/sfc/smp/smp.cpp:25-33).
+
+  Coprocessor firmware. A ROM is imported through icarus, whose heuristics
+  detect the coprocessor from the cartridge header
+  (icarus/heuristics/super-famicom.cpp:707-759) and write a manifest naming
+  each firmware file with its size
+  (icarus/heuristics/super-famicom.cpp:482-545). DSP1 games are given the
+  DSP1B names; dsp1.program.rom and dsp1.data.rom are named for the Campus
+  Challenge '92 and Powerfest '94 cartridges
+  (icarus/heuristics/super-famicom.cpp:623-640,
+  icarus/heuristics/super-famicom.cpp:416-417,
+  icarus/heuristics/super-famicom.cpp:437-438). When the image does not carry
+  the firmware appended (icarus/heuristics/super-famicom.cpp:106-190), the
+  importer reports the file as missing (icarus/core/super-famicom.cpp:64-71)
+  and the target reads it through locate_libretro, appends it to the image
+  and imports again (higan/target-libretro/libretro.cpp:105-141).
+  locate_libretro tries the system directory, then higan/ under the user's
+  config and data directories (higan/target-libretro/libretro.cpp:15-35). No
+  hash is checked; the sizes below are those the manifest declares, and a
+  shorter file leaves the second import short and the load fails.
+
+  The icarus database is read from Database/ next to the frontend
+  executable or under the icarus config and data directories, and takes
+  precedence over the heuristics when the image's SHA-256 is listed
+  (icarus/core/core.cpp:1-16, icarus/icarus.cpp:7-15,
+  icarus/core/super-famicom.cpp:17-24). It names dsp1.program.rom and
+  dsp1.data.rom for several DSP1 titles and sgb.boot.rom for the Super Game
+  Boy cartridge.
+
+  Super Game Boy. Loading a .gb or .gbc file selects the folder named by the
+  higan_sfc_sgb_bios option, SGB1.sfc/ by default or SGB2.sfc/
+  (higan/target-libretro/libretro-sfc.cpp:154-156,
+  higan/target-libretro/libretro-sfc.cpp:354). program.rom is looked up in
+  that folder, then in SGB.sfc/ and Super GameBoy.sfc/, and the folder's
+  manifest is generated from its program.rom and *.boot.rom files
+  (higan/target-libretro/libretro-sfc.cpp:202-243,
+  icarus/core/super-famicom.cpp:1-11). The heuristics recognise the cartridge
+  by its header and name the boot ROM sgb1.boot.rom or sgb2.boot.rom
+  (icarus/heuristics/super-famicom.cpp:612-621,
+  icarus/heuristics/super-famicom.cpp:225-245). The Game Boy system opens
+  that name from the folder first and from the system directory root as a
+  fallback (higan/gb/system/system.cpp:54-65,
+  higan/sfc/coprocessor/icd2/icd2.cpp:34-38,
+  higan/target-libretro/libretro.cpp:200-278). Once a Game Boy image is
+  loaded both files are mandatory: a missing program.rom fails
+  load_special_bios, a missing boot ROM sets the failure flag, and
+  retro_load_game returns false (higan/target-libretro/libretro-sfc.cpp:223-227,
+  higan/target-libretro/libretro.cpp:635-642). The source tree ships no copy
+  of the boot ROMs or of the coprocessor firmware.
 
 files:
-  # DSP coprocessors - uPD7725 (split data+program format)
-  - name: "dsp1.data.rom"
-    system: nintendo-snes
-    required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:457-502"
-
+  # NEC uPD7725 (DSP1, DSP1B, DSP2, DSP3, DSP4): 2048 x 24-bit program words,
+  # 1024 x 16-bit data words
   - name: "dsp1.program.rom"
     system: nintendo-snes
+    size: 6144
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:457-502"
+    note: "Named for the Campus Challenge '92 and Powerfest '94 cartridges and by the icarus database; other DSP1 games use dsp1b.program.rom."
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:416, icarus/heuristics/super-famicom.cpp:437"
 
-  - name: "dsp1b.data.rom"
+  - name: "dsp1.data.rom"
     system: nintendo-snes
+    size: 2048
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:457-502"
+    note: "Named for the Campus Challenge '92 and Powerfest '94 cartridges and by the icarus database; other DSP1 games use dsp1b.data.rom."
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:417, icarus/heuristics/super-famicom.cpp:438"
 
   - name: "dsp1b.program.rom"
     system: nintendo-snes
+    size: 6144
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:457-502"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:482, icarus/heuristics/super-famicom.cpp:712-720"
 
-  - name: "dsp2.data.rom"
+  - name: "dsp1b.data.rom"
     system: nintendo-snes
+    size: 2048
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:457-502"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:483, icarus/heuristics/super-famicom.cpp:712-720"
 
   - name: "dsp2.program.rom"
     system: nintendo-snes
+    size: 6144
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:457-502"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:492, icarus/heuristics/super-famicom.cpp:734"
 
-  - name: "dsp3.data.rom"
+  - name: "dsp2.data.rom"
     system: nintendo-snes
+    size: 2048
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:457-502"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:493, icarus/heuristics/super-famicom.cpp:734"
 
   - name: "dsp3.program.rom"
     system: nintendo-snes
+    size: 6144
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:457-502"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:502, icarus/heuristics/super-famicom.cpp:738"
 
-  - name: "dsp4.data.rom"
+  - name: "dsp3.data.rom"
     system: nintendo-snes
+    size: 2048
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:457-502"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:503, icarus/heuristics/super-famicom.cpp:738"
 
   - name: "dsp4.program.rom"
     system: nintendo-snes
+    size: 6144
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:457-502"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:512, icarus/heuristics/super-famicom.cpp:742"
 
-  # CX4 coprocessor - HG51BS169
+  - name: "dsp4.data.rom"
+    system: nintendo-snes
+    size: 2048
+    required: false
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:513, icarus/heuristics/super-famicom.cpp:742"
+
+  # Hitachi HG51B169 (Cx4): 1024 x 24-bit data words
   - name: "cx4.data.rom"
     system: nintendo-snes
+    size: 3072
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:405-454"
+    source_ref: "higan/sfc/cartridge/load.cpp:201-225, icarus/heuristics/super-famicom.cpp:255, icarus/heuristics/super-famicom.cpp:708"
 
-  # Seta coprocessors - uPD96050
-  - name: "st010.data.rom"
-    system: nintendo-snes
-    required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:504-548"
-
+  # NEC uPD96050 (ST010, ST011): 16384 x 24-bit program words,
+  # 2048 x 16-bit data words
   - name: "st010.program.rom"
     system: nintendo-snes
+    size: 49152
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:504-548"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:522, icarus/heuristics/super-famicom.cpp:750"
 
-  - name: "st011.data.rom"
+  - name: "st010.data.rom"
     system: nintendo-snes
+    size: 4096
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:504-548"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:523, icarus/heuristics/super-famicom.cpp:750"
 
   - name: "st011.program.rom"
     system: nintendo-snes
+    size: 49152
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:504-548"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:533, icarus/heuristics/super-famicom.cpp:754"
 
-  # ST018 coprocessor - ARM6
-  - name: "st018.data.rom"
+  - name: "st011.data.rom"
     system: nintendo-snes
+    size: 4096
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:362-402"
+    source_ref: "higan/sfc/cartridge/load.cpp:227-257, icarus/heuristics/super-famicom.cpp:534, icarus/heuristics/super-famicom.cpp:754"
 
+  # SETA ARM6 (ST018): 128 KiB program, 32 KiB data
   - name: "st018.program.rom"
     system: nintendo-snes
+    size: 131072
     required: false
-    source_ref: "nSide/sfc/cartridge/load.cpp:362-402"
+    source_ref: "higan/sfc/cartridge/load.cpp:185-199, icarus/heuristics/super-famicom.cpp:544, icarus/heuristics/super-famicom.cpp:758"
 
-  # Super Game Boy
-  - name: "SGB1.sfc/sgb1.boot.rom"
+  - name: "st018.data.rom"
+    system: nintendo-snes
+    size: 32768
+    required: false
+    source_ref: "higan/sfc/cartridge/load.cpp:185-199, icarus/heuristics/super-famicom.cpp:545, icarus/heuristics/super-famicom.cpp:758"
+
+  # Super Game Boy: cartridge ROM and boot ROM per folder
+  - name: "program.rom"
+    path: "SGB1.sfc/program.rom"
     system: nintendo-sgb
     required: false
-    source_ref: "nSide/gb/system/system.cpp:54-65"
+    note: "Also looked up as SGB.sfc/program.rom and Super GameBoy.sfc/program.rom."
+    source_ref: "higan/target-libretro/libretro-sfc.cpp:202-243, higan/sfc/cartridge/load.cpp:77-80"
 
-  - name: "SGB1.sfc/program.rom"
+  - name: "sgb1.boot.rom"
+    path: "SGB1.sfc/sgb1.boot.rom"
+    system: nintendo-sgb
+    aliases:
+      - "sgb.boot.rom"
+    size: 256
+    required: false
+    note: "Falls back to sgb1.boot.rom at the system directory root. Named sgb.boot.rom by the icarus database entry for the cartridge."
+    source_ref: "higan/gb/system/system.cpp:54-65, icarus/heuristics/super-famicom.cpp:232, icarus/heuristics/super-famicom.cpp:619, icarus/core/super-famicom.cpp:17-24"
+
+  - name: "program.rom"
+    path: "SGB2.sfc/program.rom"
     system: nintendo-sgb
     required: false
-    source_ref: "nSide/target-libretro/libretro-sfc.cpp:179-215"
+    note: "Selected by the higan_sfc_sgb_bios option."
+    source_ref: "higan/target-libretro/libretro-sfc.cpp:202-243, higan/sfc/cartridge/load.cpp:77-80"
 
-  - name: "SGB2.sfc/sgb2.boot.rom"
+  - name: "sgb2.boot.rom"
+    path: "SGB2.sfc/sgb2.boot.rom"
     system: nintendo-sgb
+    size: 256
     required: false
-    source_ref: "nSide/gb/system/system.cpp:54-65"
-
-  - name: "SGB2.sfc/program.rom"
-    system: nintendo-sgb
-    required: false
-    source_ref: "nSide/target-libretro/libretro-sfc.cpp:179-215"
+    note: "Falls back to sgb2.boot.rom at the system directory root."
+    source_ref: "higan/gb/system/system.cpp:54-65, icarus/heuristics/super-famicom.cpp:243, icarus/heuristics/super-famicom.cpp:614"

@@ -1,16 +1,23 @@
 emulator: Supermodel
-type: standalone
-source: https://github.com/trzy/Supermodel
-upstream: https://github.com/trzy/Supermodel
-profiled_date: "2026-03-26"
-source_commit: "24d2ffcfc7f14229337f05f4920fe26b56633d9d"
-core_version: "0.3a"
-display_name: "Supermodel (Sega Model 3)"
+type: standalone + libretro
+core_classification: community_fork
+source:
+  standalone: "https://github.com/trzy/Supermodel"
+  libretro: "https://git.libretro.com/libretro/Libretro-Supermodel"
+upstream: "https://github.com/trzy/Supermodel"
+profiled_date: "2026-09-17"
+source_commit:
+  standalone: "24d2ffcfc7f14229337f05f4920fe26b56633d9d"
+  libretro: "9f0a51daf6cef6ec2a304538f18c6dbb4c4b9da2"
+upstream_commit: "24d2ffcfc7f14229337f05f4920fe26b56633d9d"
+core_version:
+  standalone: "0.3a-WIP"
+  libretro: "v0.3a-libretro"
+display_name: "Sega - Model 3 (Supermodel)"
 cores:
   - supermodel
 systems:
   - sega-model3
-mode: standalone
 
 notes: |
   Open-source Sega Model 3 arcade emulator by Bart Trzynadlowski (trzy) and
@@ -18,54 +25,142 @@ notes: |
   2.0/2.1) including Real3D graphics, SCSP sound, DSB1/DSB2 MPEG music boards,
   drive boards, and net board. Cross-platform (Windows, Linux, macOS).
 
+  The libretro core is Libretro-Supermodel, developed by sgiannop on top of
+  the 2019 libretro attempt and now held under the libretro organisation on
+  GitHub, mirrored at the same revision on git.libretro.com where the buildbot
+  pipeline lives (.gitlab-ci.yml). It carries the whole Supermodel tree with
+  its own OSD under Src/OSD/libretro and reports v0.3a-libretro. The older
+  libretro/supermodel repository on GitHub keeps the full trzy history and
+  received the same feature branch as its PR #2, but has no CI file and is
+  not what the buildbot publishes.
+  ref: Src/OSD/libretro/libretro.cpp:937-938, Docs/README.md:5-12
+
   Uses MAME-compatible ROM sets loaded from ZIP archives. GameLoader identifies
-  games by CRC32 checksums defined in Config/Games.xml. Parent/child ROM set
+  games by CRC32 checksums defined in Games.xml. Parent/child ROM set
   relationships exist between regional variants of the same game, not as shared
   BIOS sets. No standalone BIOS or firmware files are loaded outside of game ZIPs.
+  The core routes the ZIP reads through the libretro VFS.
+  ref: Src/OSD/libretro/LibretroWrapper.cpp:828-832, Src/OSD/libretro/vfs_ioapi.cpp
+
+  Standalone: four data files of its own are read from the install tree, Config/
+  and Assets/ relative to the working directory on Windows and macOS. On Linux
+  the same relative directories are used when Config/ exists in the working
+  directory, otherwise ~/.supermodel/ when present, otherwise the XDG data and
+  config homes. Supermodel.ini is written from a compiled-in default when it is
+  absent and rewritten after interactive input configuration; NVRAM/<game>.nv
+  and Saves/<game>.st<slot> are written by the emulator itself.
+  ref: Src/OSD/Windows/FileSystemPath.cpp:28-49, Src/OSD/OSX/FileSystemPath.cpp:28-48,
+       Src/OSD/Unix/FileSystemPath.cpp:51-157, Src/OSD/SDL/Main.cpp:1394-1413,
+       Src/OSD/SDL/Main.cpp:1451, Src/OSD/SDL/Main.cpp:2239
+
+  Libretro: retro_init joins "supermodel" to the frontend system directory and
+  the core creates that directory through the VFS. Supermodel.ini, Games.xml and
+  Music.xml are looked up flat in it first, then under a Config/ subdirectory
+  kept for the initial port's layout. Games.xml and Supermodel.ini are also
+  compiled into the binary from the repository copies, and when neither layout
+  holds the file the embedded bytes are written to the flat path on first run.
+  An external file is read in preference to the embedded one and never updated
+  afterwards. Music.xml has no embedded copy.
+  ref: Src/OSD/libretro/libretro.cpp:855-863, Src/OSD/libretro/libretro.cpp:889-894,
+       Src/OSD/libretro/libretro.cpp:1113, Src/OSD/libretro/LibretroWrapper.cpp:166-206,
+       Src/OSD/libretro/LibretroWrapper.cpp:208-228, Makefile:638-647, Makefile:653-655
+
+  Libretro NVRAM is the frontend .srm through the memory API. On the first frame
+  a <game>.nv written by the standalone build is imported from the save directory
+  when the .srm is empty; it is never written back. Save states are serialised in
+  memory, and a state file on disk is loaded only when InitStateFile names one,
+  which the core option layer leaves empty.
+  ref: Src/OSD/libretro/libretro.cpp:766-781, Src/OSD/libretro/libretro.cpp:1380-1409,
+       Src/OSD/libretro/libretro.cpp:1685-1690, Src/OSD/libretro/LibretroWrapper.cpp:479,
+       Src/OSD/libretro/LibretroWrapper.cpp:544-545, Src/OSD/libretro/LibretroConfigProvider.h:15
+
+  The Legacy3D renderer compiles its shaders from built-in strings and reads a
+  file only when VertexShader or FragmentShader names one; both default to an
+  empty string in either build.
+  ref: Src/Graphics/Shader.cpp:52-63, Src/Graphics/Shader.cpp:100-108,
+       Src/OSD/libretro/LibretroConfigProvider.h:22-23
 
   EmuDeck installs the Flatpak package (com.supermodel3.Supermodel). Config
   stored in ~/.supermodel/Config/. No checkBIOS entry in EmuDeck.
 
-  Four data files of its own are read from the install tree, Config/ and Assets/
-  relative to the working directory on Windows and macOS, under the home
-  directory on Linux. Supermodel.ini, NVRAM/<game>.nv and Saves/<game>.st<slot>
-  are written by the emulator itself.
-  ref: Src/OSD/Windows/FileSystemPath.cpp:28-49
-
 files:
   - name: Games.xml
-    path: "Config/Games.xml"
+    standalone_path: "Config/Games.xml"
+    mode: standalone
     required: true
     bundled: true
+    size: 151626
+    sha1: "6871a47de90ca67f9ff8e4e280416851a8164563"
+    md5: "0c7cfc0cba2f2cd674d94e093936f9f8"
     description: "ROM set definitions"
-    note: "Parsed at startup into the game database. Every ROM region, file name and CRC32 the loader matches against comes from here, so an unreadable file leaves no set to resolve and the launch returns before the emulator is built. The path is a config key, so -game-xml-file moves it."
+    note: "Parsed at startup into the game database. Every ROM region, file name and CRC32 the loader matches against comes from here, so an unreadable file leaves no set to resolve and the launch returns before the emulator is built. The path is a config key, so -game-xml-file moves it. Nothing about the file is verified beyond parsing; the hash is that of the copy the pinned revision ships."
     source_ref: "Src/OSD/SDL/Main.cpp:117, Src/OSD/SDL/Main.cpp:1506, Src/OSD/SDL/Main.cpp:1963, Src/OSD/SDL/Main.cpp:2326-2336, Src/GameLoader.cpp:549-559, Src/GameLoader.cpp:1014-1017"
 
+  - name: Games.xml
+    path: "supermodel/Games.xml"
+    mode: libretro
+    required: false
+    bundled: true
+    has_builtin: true
+    size: [148364, 148362]
+    sha1:
+      - "fa334ab5ba6366bd28168860c913e6365b9fec96"
+      - "57500ad35b883acb5e7766c04f5b42e65185715c"
+    md5:
+      - "2d16307ceb658636a05d34c7ba935b48"
+      - "29fd5bc40cea222e040c1a1cfd60ea2e"
+    description: "ROM set definitions, libretro copy"
+    note: "Read through the VFS from {system}/supermodel/Games.xml, or Config/Games.xml under it, and parsed from memory. When the read yields nothing the bytes compiled in from Config/Games.xml are parsed instead, so the core identifies every set without a file on disk; a file that is present takes precedence. The second hash is the embedded array, which predates the indentation cleanup of the repository copy by one tab."
+    source_ref: "Src/OSD/libretro/LibretroWrapper.cpp:187-206, Src/OSD/libretro/LibretroWrapper.cpp:221-222, Src/OSD/libretro/LibretroWrapper.cpp:822, Src/OSD/libretro/LibretroWrapper.cpp:834-859, Src/GameLoader.cpp:1019-1030, Makefile:645-647"
+
+  - name: Supermodel.ini
+    path: "supermodel/Supermodel.ini"
+    mode: libretro
+    required: false
+    bundled: true
+    has_builtin: true
+    size: 9421
+    sha1: "cbda2b3fa65e37c5c2824a4630f95f145533c360"
+    md5: "06533608174992f6ea180ae190011778"
+    description: "Configuration override"
+    note: "Read from {system}/supermodel/Supermodel.ini, or Config/Supermodel.ini under it, when present; a file that fails to parse aborts the load. Core options are applied over it afterwards, so it only reaches keys the options do not set and per-game sections. Extracted from the embedded copy when absent."
+    source_ref: "Src/OSD/libretro/LibretroWrapper.cpp:187-206, Src/OSD/libretro/LibretroWrapper.cpp:219-220, Src/OSD/libretro/LibretroWrapper.cpp:812-817, Src/OSD/libretro/LibretroWrapper.cpp:858, Src/OSD/libretro/LibretroWrapper.cpp:865-866, Makefile:653-655"
+
   - name: p1crosshair.bmp
-    path: "Assets/p1crosshair.bmp"
+    standalone_path: "Assets/p1crosshair.bmp"
+    mode: standalone
     size: 295992
+    sha1: "581cea232c296c7bd76f3101c3ae1bffdf5abf08"
+    md5: "9012018f50f707c1707009346eb5d18b"
     required: true
     bundled: true
     description: "Player 1 light gun crosshair texture"
-    note: "Both bitmaps are read on every launch whatever CrosshairStyle holds, since the load runs before the style decides anything, and a null surface aborts startup ahead of the Model 3 object. 32 bit BMP with alpha, sides a multiple of 2."
-    source_ref: "Src/OSD/SDL/Crosshair.cpp:34-51, Src/OSD/SDL/Main.cpp:2379-2385, Assets/DIR.txt"
+    note: "Both bitmaps are read on every launch whatever CrosshairStyle holds, since the load runs before the style decides anything, and a null surface aborts startup ahead of the Model 3 object. 32 bit BMP with alpha, sides a multiple of 2. The libretro build opens the same two files from the Assets directory of the standalone layout, outside the frontend directories, but forces the vector style and never draws them, and its repository does not ship them."
+    source_ref: "Src/OSD/SDL/Crosshair.cpp:34-51, Src/OSD/SDL/Main.cpp:2379-2385, Assets/DIR.txt, Src/OSD/libretro/libretroCrosshair.cpp:36-60, Src/OSD/libretro/LibretroWrapper.cpp:465-471, Src/OSD/libretro/LibretroConfigProvider.h:361"
 
   - name: p2crosshair.bmp
-    path: "Assets/p2crosshair.bmp"
+    standalone_path: "Assets/p2crosshair.bmp"
+    mode: standalone
     size: 295992
+    sha1: "13c5e692c7acf2ec8243ac421d58fdf69c6c2370"
+    md5: "866dbf59a0e2d849de2365e1c953cc97"
     required: true
     bundled: true
     description: "Player 2 light gun crosshair texture"
     note: "Read in the same call as the player 1 bitmap and equally fatal when it fails to load."
-    source_ref: "Src/OSD/SDL/Crosshair.cpp:35, 49-51, Src/OSD/SDL/Main.cpp:2379-2385"
+    source_ref: "Src/OSD/SDL/Crosshair.cpp:35, 49-51, Src/OSD/SDL/Main.cpp:2379-2385, Src/OSD/libretro/libretroCrosshair.cpp:39, 55-58"
 
   - name: Music.xml
-    path: "Config/Music.xml"
+    path: "supermodel/Music.xml"
+    standalone_path: "Config/Music.xml"
     required: false
     bundled: true
+    size: 9224
+    sha1: "b44ed959fe2948a03d81b98e67ca32f2b4c37e78"
+    md5: "ddb4e23db15dda67539eee24de23de4b"
     description: "Custom MPEG music track map"
-    note: "Consulted only for a game with a DSB1 or DSB2 board, and skipped when the file is absent. Maps an MPEG ROM offset to an MP3 the user supplies."
-    source_ref: "Src/OSD/SDL/Main.cpp:118, Src/OSD/SDL/Main.cpp:943, Src/Sound/MPEG/MpegAudio.cpp:88-108"
+    note: "Consulted only for a game with a DSB1 or DSB2 board, and skipped when the file is absent. Maps an MPEG ROM offset to an MP3 the user supplies. The shipped file is a commented example. The libretro core resolves it beside Games.xml and has no embedded copy."
+    source_ref: "Src/OSD/SDL/Main.cpp:118, Src/OSD/SDL/Main.cpp:943, Src/Sound/MPEG/MpegAudio.cpp:88-108, Src/OSD/libretro/LibretroWrapper.cpp:223, Src/OSD/libretro/LibretroWrapper.cpp:494"
 
 exclusion_note: >
   The Sega Model 3 arcade hardware has no shared system BIOS. Each game board

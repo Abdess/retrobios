@@ -4,8 +4,8 @@ core_classification: game_engine
 source: "https://github.com/glKarin/com.n0n3m4.diii4a"
 upstream: "https://github.com/glKarin/com.n0n3m4.diii4a"
 author: "glKarin"
-profiled_date: "2026-08-11"
-source_commit: "dea1eb9f122cfae042961cfc32a3474e59354589"
+profiled_date: "2026-09-17"
+source_commit: "e4d1382275155b18d51f91c3e1af35ca1fd16e13"
 core_version: "1.1.0harmattan72"
 display_name: "id Tech engine collection (idTech4A++)"
 cores:
@@ -291,15 +291,19 @@ files:
     required: true
     bundled: true
     category: game_data
-    size: 98396
-    md5: 3155df291027d253e2596db3fca1ac4a
-    sha1: 2651f1eff1785999918c08600f079e1ad4a206e7
+    size: 98425
+    md5: a0fcf6c54d453a80c8aac693d17979b8
+    sha1: 604636a62dd04c90392b19adf61d3a62381dfb02
     description: "The Dark Mod GLSL shader set rewritten for OpenGL ES"
     note: >-
       Unpacked into the standalone directory as `glslprogs/`, the tree the
       renderer compiles its programs from. Version-stamped with the engine
-      release so a Dark Mod update replaces it.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:83-92, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:705-722, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:391"
+      release and a patch number, so a Dark Mod update or a shader fix replaces
+      it. TDM_GLSL_SHADER_VERSION reads 2.14.2 here: the four SSAO programs
+      moved their uniform-dependent initialisers out of global scope and cast
+      their integer terms to float. The 2.14.1 pack it replaced is kept as a
+      variant.
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:83-92, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:705-722, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:391, Q3E/src/main/jni/darkmod/glslprogs/ssao.frag.glsl:78-80, 163-166"
 
   - name: renderprogs.pk4
     required: true

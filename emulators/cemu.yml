@@ -1,406 +1,777 @@
 emulator: Cemu
-type: standalone
-source: "https://github.com/cemu-project/Cemu"
+type: standalone + libretro
+core_classification: community_fork
+source: "https://git.libretro.com/libretro/cemu-libretro"
+source_mirror: "https://github.com/WizzardSK/cemu-libretro"
+upstream: "https://github.com/cemu-project/Cemu"
 logo: "https://raw.githubusercontent.com/cemu-project/Cemu/main/dist/linux/info.cemu.Cemu.png"
-profiled_date: "2026-03-18"
-source_commit: "51250c02dea9ec9333e4725a17c0eac705128ff0"
+profiled_date: "2026-09-17"
+source_commit: "575236a302d399a217fb0942aaaa231538b48134"
+upstream_commit: "3310f3b8b184d64a62b89fd59088c799432badf5"
 core_version: "2.6"
-display_name: "Cemu (Wii U)"
+display_name: "Nintendo - Wii U (Cemu)"
 cores:
   - cemu
 systems: [nintendo-wiiu]
-analysis_date: "2026-03-17"
-analysis_commit: "HEAD (depth=1)"
 
-# keys.txt - disc decryption keys (AES-128, one per line, hex format)
-# Located in Cemu user data root directory
-# otp.bin and seeprom.bin - console-specific dumps for online features
-# MLC path contains firmware titles under sys/title/
+data_directories:
+  - ref: cemu-gameprofiles
+    destination: "Cemu/gameProfiles/default"
+    source_ref: "src/Cafe/GameProfile/GameProfile.cpp:181-195, src/libretro/CemuLibretro.cpp:1249-1257"
+  - ref: cemu-graphic-packs
+    destination: "Cemu/graphicPacks/downloadedGraphicPacks"
+    source_ref: "src/Cafe/GraphicPack/GraphicPack2.cpp:96-111, src/libretro/CemuLibretro.cpp:3334-3349"
+
+notes: |
+  Wii U emulator. The libretro core is a fork of the whole Cemu tree, kept
+  merged with upstream, with the frontend glue in src/libretro/. The
+  upstream_commit above is the last merge base. It builds without wxWidgets and
+  ships as a bare shared object on six buildbot targets: linux-x86_64,
+  windows-x86_64, osx-x86_64, osx-arm64, android-arm64-v8a, android-x86_64.
+  Nothing that the standalone distribution carries next to the executable
+  (resources/, gameProfiles/default/) comes with the core.
+  ref: CMakeLists.txt:221-232, src/CMakeLists.txt:71-80,
+       .github/workflows/libretro.yml:1-8
+
+  Path model. Cemu resolves every file through four roots: the user data
+  path (keys.txt, otp.bin, seeprom.bin, cafeLibs/, graphicPacks/,
+  shareddata.bin, resources/miiverse/, the default mlc01), the config path
+  (settings.xml, network_services.xml, controllerProfiles/, per-title
+  gameProfiles/), the data path (resources/sharedFonts/, gameProfiles/default/)
+  and the MLC. The libretro core points user data, config, cache and data at
+  <system_dir>/Cemu, and puts the MLC at <save_dir>/Cemu/mlc01 unless
+  settings.xml under <system_dir>/Cemu names another mlc_path. The Cemu
+  subdirectory is not doubled when the frontend already hands over a
+  directory of that name (saves sorted per core). Standalone Cemu uses the
+  portable directory next to the executable when it exists, otherwise
+  %APPDATA%/Cemu on Windows, XDG_DATA_HOME/Cemu and XDG_CONFIG_HOME/Cemu on
+  Linux, and the MLC defaults to <user data>/mlc01. path: entries below are
+  the libretro destination under the system directory; standalone_path: is
+  relative to the Cemu user data directory.
+  ref: src/libretro/CemuLibretro.cpp:1197-1257,
+       src/libretro/CemuLibretro.cpp:2590-2601,
+       src/gui/wxgui/CemuApp.cpp:90-123, src/gui/wxgui/CemuApp.cpp:127-171,
+       src/config/ActiveSettings.cpp:295-321
+
+  keys.txt is read once from the user data path. A missing file is created
+  with a comment header and an example key; each line is stripped of
+  comments, spaces, dashes and underscores and must then be 32 hex
+  characters, otherwise an error is raised for that line. FindDiscKey tries
+  every key in order against the encrypted partition header of a .wud/.wux
+  and falls back to a 16-byte <image>.key next to the image. The libretro
+  core asks that question before setting up any renderer and refuses the
+  load with a message naming keys.txt when no key matches, so an encrypted
+  disc image does not start without it. .wua archives, .rpx and NUS
+  directories are not encrypted with a disc key and load without the file.
+  ref: src/Cafe/Filesystem/FST/KeyCache.cpp:64-136,
+       src/Cafe/Filesystem/FST/FST.cpp:192-246,
+       src/libretro/CemuLibretro.cpp:3862-3905
+
+  Shared fonts. LoadSharedData runs at every title start and looks for the
+  four fonts of title 0005001b-10042400 in the MLC first, then under
+  resources/sharedFonts/ of the data path. All four must be found in one
+  place or the other, otherwise none is loaded and the code tries
+  shareddata.bin, a 32 MiB dump of the shared data region, read from the
+  user data path straight into 0xF8000000. With nothing loaded a title that
+  calls OSGetSharedData receives the placeholder font compiled into the
+  binary, decompressed from a zlib array, so games run but with one Latin
+  face standing in for the CJK sets. The four files in resources/sharedFonts/
+  of the source tree are Noto Sans CJK Medium faces under the console names,
+  not dumps: the standalone distribution ships them, the libretro core does
+  not and looks under <system_dir>/Cemu/resources/sharedFonts/.
+  ref: src/Cafe/CafeSystem.cpp:283-362, src/Cafe/CafeSystem.cpp:875-879,
+       src/Cafe/OS/libs/coreinit/coreinit.cpp:137-184,
+       src/resource/CafeDefaultFont.cpp:2562-2569
+
+  Online files. iosuCrypto_init reads otp.bin and seeprom.bin from the user
+  data path and rejects any size other than 1024 and 512 bytes; without a
+  valid OTP no certificate is loaded and online mode is off. The certificate
+  table names 8 client certificates with their AES-encrypted RSA keys and 39
+  CA certificates, all under sys/title/0005001b/10054000/content/ of the
+  MLC; olive and wood appear twice under distinct ids, so 7 distinct client
+  pairs and 39 CA files are read. A key file must be a non-empty multiple of
+  16 bytes and is decrypted with the key at OTP offset 0x120. Online mode is
+  only enabled when every file of the table is present. For the libretro
+  core these live in the save directory, not the system directory.
+  ref: src/Cafe/IOSU/legacy/iosu_crypto.cpp:303-330,
+       src/Cafe/IOSU/legacy/iosu_crypto.cpp:463-606,
+       src/Cafe/IOSU/legacy/iosu_crypto.cpp:608-655,
+       src/config/ActiveSettings.cpp:50-55, src/Cafe/Account/Account.cpp:422-458
+
+  cafeLibs. When a title depends on a module, the loader first looks for
+  <module>.rpl in cafeLibs/ under the user data path and loads it in place
+  of Cemu's own implementation, as long as the game profile does not set
+  loadSharedLibraries to false (the default is true). Any Cafe OS module can
+  be placed there; the code names snd_user.rpl and snduser2.rpl as the ones
+  to dump when a title uses an unsupported audio effect, and gates
+  swkbd.rpl and erreula.rpl on the presence of their data packs in the MLC
+  (swkbd.pack of title 0005001b-1004f000, erreula.pack of 0005001b-10051000),
+  falling back to the built-in applets when the pack is absent.
+  ref: src/Cafe/OS/RPL/rpl.cpp:1923-1933, src/Cafe/OS/RPL/rpl.cpp:1965-1985,
+       src/Cafe/OS/RPL/rpl.cpp:2136-2148, src/config/ActiveSettings.cpp:57-60,
+       src/Cafe/OS/libs/snd_user/snd_user.cpp:1220-1227
+
+  Data directories. A title's game profile is read from gameProfiles/<title
+  id>.ini under the config path, then from gameProfiles/default/<title
+  id>.ini under the data path; upstream ships 236 of them in
+  bin/gameProfiles/default and the libretro data path is <system_dir>/Cemu.
+  Graphic packs are every directory holding a rules.txt under
+  graphicPacks/ of the user data path; the standalone downloader extracts
+  the cemu_graphic_packs release into graphicPacks/downloadedGraphicPacks/,
+  and the libretro core enables the packs flagged default on load. Miiverse
+  posts for The Wind Waker HD are served from resources/miiverse/OfflineDB.zar
+  under the user data path when the Nintendo network service is selected.
+  ref: src/Cafe/GameProfile/GameProfile.cpp:181-195,
+       src/Cafe/GraphicPack/GraphicPack2.cpp:96-111,
+       src/gui/wxgui/DownloadGraphicPacksWindow.cpp:133,
+       src/gui/wxgui/DownloadGraphicPacksWindow.cpp:234-238,
+       src/libretro/CemuLibretro.cpp:3334-3349,
+       src/Cafe/OS/libs/nn_olv/nn_olv_OfflineDB.cpp:21-31,
+       src/Cafe/OS/libs/nn_olv/nn_olv_OfflineDB.cpp:124-125,
+       src/Cafe/OS/libs/nn_olv/nn_olv_InitializeTypes.cpp:242-248
+
+  Generated, not collected: settings.xml, network_services.xml (custom
+  service URLs, read when present), controllerProfiles/, title_list_cache.xml
+  (disabled in the core), the shader caches, log.txt, sdcard/, dump/, and
+  the language.txt and country.txt the wx frontend writes into title
+  0005001b-1005c000 of the MLC on first run. title.tmd, title.tik and
+  bootSound.btsnd belong to each title's own dump.
+  ref: src/main.cpp:129-192, src/config/NetworkSettings.cpp:10-14,
+       src/gui/wxgui/CemuApp.cpp:580-606,
+       src/Cafe/HW/Latte/Core/LatteShaderCache.cpp:238
 
 files:
-  # --- Disc decryption keys ---
-  - name: "keys.txt"
+  - name: keys.txt
+    path: Cemu/keys.txt
+    standalone_path: keys.txt
     required: true
-    path: ""  # Cemu root / user data directory
-    size: null
-    note: "AES-128 disc keys for WUD/WUX decryption, one 32-char hex key per line"
-    source_ref: "src/Cafe/Filesystem/FST/KeyCache.cpp:63"
+    description: "Disc title keys, one AES-128 key per line"
+    note: >-
+      Tried in file order against the encrypted partition header of a .wud
+      or .wux image, with a 16-byte <image>.key beside the image as the last
+      resort. Created with a template when absent. The libretro core
+      refuses to load an encrypted image whose key is not in it.
+    source_ref: "src/Cafe/Filesystem/FST/KeyCache.cpp:64-136, src/Cafe/Filesystem/FST/FST.cpp:192-246, src/libretro/CemuLibretro.cpp:3862-3905"
 
-  # --- Console-specific dumps (online play) ---
-  - name: "otp.bin"
+  - name: otp.bin
+    path: Cemu/otp.bin
+    standalone_path: otp.bin
     required: false
-    path: ""  # Cemu root / user data directory
     size: 1024
-    note: "Wii U OTP dump, required for online mode and SSL certificate generation"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:556"
+    validation: [size]
+    description: "Wii U OTP dump"
+    note: >-
+      Read into the OTP mirror at init; any other size is rejected and
+      online mode stays off. Its keys decrypt the client certificate keys
+      and sign the device certificate.
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:553-577, src/Cafe/IOSU/legacy/iosu_crypto.cpp:619-626"
 
-  - name: "seeprom.bin"
+  - name: seeprom.bin
+    path: Cemu/seeprom.bin
+    standalone_path: seeprom.bin
     required: false
-    path: ""  # Cemu root / user data directory
     size: 512
-    note: "Wii U SEEPROM dump, required for online mode and console region detection"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:579"
+    validation: [size]
+    description: "Wii U SEEPROM dump"
+    note: >-
+      Read into the SEEPROM mirror at init; any other size is rejected and
+      online mode stays off.
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:579-600, src/Cafe/IOSU/legacy/iosu_crypto.cpp:627-632"
 
-  # --- Shared system fonts (title 0005001b-10042400) ---
-  # Fallback: Cemu also checks resources/sharedFonts/ in its data directory
-  - name: "CafeCn.ttf"
-    required: true
-    path: "mlc01/sys/title/0005001b/10042400/content/"
-    note: "Shared font - Chinese"
-    source_ref: "src/Cafe/CafeSystem.cpp:289"
-
-  - name: "CafeKr.ttf"
-    required: true
-    path: "mlc01/sys/title/0005001b/10042400/content/"
-    note: "Shared font - Korean"
-    source_ref: "src/Cafe/CafeSystem.cpp:290"
-
-  - name: "CafeStd.ttf"
-    required: true
-    path: "mlc01/sys/title/0005001b/10042400/content/"
-    note: "Shared font - Standard (Latin/Japanese)"
-    source_ref: "src/Cafe/CafeSystem.cpp:291"
-
-  - name: "CafeTw.ttf"
-    required: true
-    path: "mlc01/sys/title/0005001b/10042400/content/"
-    note: "Shared font - Traditional Chinese (Taiwan)"
-    source_ref: "src/Cafe/CafeSystem.cpp:292"
-
-  # --- SSL client certificates (title 0005001b-10054000) ---
-  # Required for online features, loaded only when otp.bin is present
-  - name: "WIIU_COMMON_1_CERT.der"
+  # Shared fonts, title 0005001b-10042400. Two slots per font: the console
+  # dump in the MLC, read first, and the replacement Cemu ships in
+  # resources/sharedFonts/ of its data path, read when the MLC has none.
+  - name: CafeCn.ttf
+    path: Cemu/mlc01/sys/title/0005001b/10042400/content/CafeCn.ttf
+    standalone_path: mlc01/sys/title/0005001b/10042400/content/CafeCn.ttf
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/ccerts/"
-    note: "Nintendo client certificate - common"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:471"
+    hle_fallback: true
+    description: "Shared font, Simplified Chinese, console dump"
+    note: >-
+      The four fonts are loaded as a set: one missing in both locations
+      drops the whole set to shareddata.bin, then to the placeholder font
+      compiled into the binary.
+    source_ref: "src/Cafe/CafeSystem.cpp:289, src/Cafe/CafeSystem.cpp:297-353"
 
-  - name: "WIIU_COMMON_1_RSA_KEY.aes"
+  - name: CafeKr.ttf
+    path: Cemu/mlc01/sys/title/0005001b/10042400/content/CafeKr.ttf
+    standalone_path: mlc01/sys/title/0005001b/10042400/content/CafeKr.ttf
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/ccerts/"
-    note: "Nintendo client key - common (AES-encrypted)"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:471"
+    hle_fallback: true
+    description: "Shared font, Korean, console dump"
+    source_ref: "src/Cafe/CafeSystem.cpp:290, src/Cafe/CafeSystem.cpp:297-353"
 
-  - name: "WIIU_ACCOUNT_1_CERT.der"
+  - name: CafeStd.ttf
+    path: Cemu/mlc01/sys/title/0005001b/10042400/content/CafeStd.ttf
+    standalone_path: mlc01/sys/title/0005001b/10042400/content/CafeStd.ttf
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/ccerts/"
-    note: "Nintendo client certificate - account"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:472"
+    hle_fallback: true
+    description: "Shared font, standard Latin and Japanese, console dump"
+    source_ref: "src/Cafe/CafeSystem.cpp:291, src/Cafe/CafeSystem.cpp:297-353"
 
-  - name: "WIIU_ACCOUNT_1_RSA_KEY.aes"
+  - name: CafeTw.ttf
+    path: Cemu/mlc01/sys/title/0005001b/10042400/content/CafeTw.ttf
+    standalone_path: mlc01/sys/title/0005001b/10042400/content/CafeTw.ttf
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/ccerts/"
-    note: "Nintendo client key - account (AES-encrypted)"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:472"
+    hle_fallback: true
+    description: "Shared font, Traditional Chinese, console dump"
+    source_ref: "src/Cafe/CafeSystem.cpp:292, src/Cafe/CafeSystem.cpp:297-353"
 
-  - name: "WIIU_OLIVE_1_CERT.der"
+  - name: CafeCn.ttf
+    path: Cemu/resources/sharedFonts/CafeCn.ttf
+    standalone_path: resources/sharedFonts/CafeCn.ttf
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/ccerts/"
-    note: "Nintendo client certificate - olive (Miiverse)"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:473"
+    bundled: true
+    hle_fallback: true
+    size: 9664448
+    sha1: 2d95227b9b3eaf1c74d9293ecd0d190ec7ffbbe3
+    description: "Shared font replacement, Noto Sans SC Medium"
+    note: >-
+      Carried in bin/resources/sharedFonts/ of the source tree and installed
+      next to the standalone executable. Read only when the MLC copy is
+      absent. The libretro core ships without it and looks under
+      <system_dir>/Cemu/resources/sharedFonts/.
+    source_ref: "src/Cafe/CafeSystem.cpp:289, src/Cafe/CafeSystem.cpp:326-331, bin/resources/sharedFonts/CafeCn.ttf"
 
-  - name: "WIIU_OLIVE_1_RSA_KEY.aes"
+  - name: CafeKr.ttf
+    path: Cemu/resources/sharedFonts/CafeKr.ttf
+    standalone_path: resources/sharedFonts/CafeKr.ttf
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/ccerts/"
-    note: "Nintendo client key - olive (AES-encrypted)"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:473"
+    bundled: true
+    hle_fallback: true
+    size: 5626464
+    sha1: f0ef38fcc6133c24f4f38ff9b5c06b37e970d3cc
+    description: "Shared font replacement, Noto Sans KR Medium"
+    source_ref: "src/Cafe/CafeSystem.cpp:290, src/Cafe/CafeSystem.cpp:326-331, bin/resources/sharedFonts/CafeKr.ttf"
 
-  - name: "WIIU_VINO_1_CERT.der"
+  - name: CafeStd.ttf
+    path: Cemu/resources/sharedFonts/CafeStd.ttf
+    standalone_path: resources/sharedFonts/CafeStd.ttf
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/ccerts/"
-    note: "Nintendo client certificate - vino"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:474"
+    bundled: true
+    hle_fallback: true
+    size: 5363768
+    sha1: da0d4bcc3b13339179bee946eba16adfd731b4d3
+    description: "Shared font replacement, Noto Sans JP Medium"
+    source_ref: "src/Cafe/CafeSystem.cpp:291, src/Cafe/CafeSystem.cpp:326-331, bin/resources/sharedFonts/CafeStd.ttf"
 
-  - name: "WIIU_VINO_1_RSA_KEY.aes"
+  - name: CafeTw.ttf
+    path: Cemu/resources/sharedFonts/CafeTw.ttf
+    standalone_path: resources/sharedFonts/CafeTw.ttf
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/ccerts/"
-    note: "Nintendo client key - vino (AES-encrypted)"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:474"
+    bundled: true
+    hle_fallback: true
+    size: 6593548
+    sha1: 8ec796192ebc710f23ab6bd55453cae523b70444
+    description: "Shared font replacement, Noto Sans TC Medium"
+    source_ref: "src/Cafe/CafeSystem.cpp:292, src/Cafe/CafeSystem.cpp:326-331, bin/resources/sharedFonts/CafeTw.ttf"
 
-  - name: "WIIU_WOOD_1_CERT.der"
+  - name: shareddata.bin
+    path: Cemu/shareddata.bin
+    standalone_path: shareddata.bin
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/ccerts/"
-    note: "Nintendo client certificate - wood"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:475"
+    hle_fallback: true
+    description: "Dump of the shared data region of a console"
+    note: >-
+      Read only when the four shared fonts are not all present: 32 MiB
+      copied from the user data path to 0xF8000000, table of font entries
+      included. Nothing about it is validated.
+    source_ref: "src/Cafe/CafeSystem.cpp:354-362"
 
-  - name: "WIIU_WOOD_1_RSA_KEY.aes"
+  - name: snd_user.rpl
+    path: Cemu/cafeLibs/snd_user.rpl
+    standalone_path: cafeLibs/snd_user.rpl
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/ccerts/"
-    note: "Nintendo client key - wood (AES-encrypted)"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:475"
+    hle_fallback: true
+    description: "Cafe OS sound library"
+    note: >-
+      Loaded from cafeLibs/ in place of the built-in module whenever a title
+      depends on snd_user, unless the game profile turns shared libraries
+      off. Named by the code as the module to dump when a title uses an
+      audio effect the built-in one does not implement.
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1965-1985, src/Cafe/OS/RPL/rpl.cpp:2136-2148, src/Cafe/OS/libs/snd_user/snd_user.cpp:1220-1227"
 
-  # --- SSL CA certificates (title 0005001b-10054000) ---
-  # Nintendo CA certs
-  - name: "CACERT_NINTENDO_CA.der"
+  - name: snduser2.rpl
+    path: Cemu/cafeLibs/snduser2.rpl
+    standalone_path: cafeLibs/snduser2.rpl
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
+    hle_fallback: true
+    description: "Cafe OS sound library, second generation"
+    note: >-
+      Same mechanism as snd_user.rpl, for titles that depend on snduser2.
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1965-1985, src/Cafe/OS/RPL/rpl.cpp:2136-2148, src/Cafe/OS/libs/snd_user/snd_user.cpp:1220-1227"
+
+  - name: swkbd.rpl
+    path: Cemu/cafeLibs/swkbd.rpl
+    standalone_path: cafeLibs/swkbd.rpl
+    required: false
+    hle_fallback: true
+    description: "Cafe OS software keyboard applet library"
+    note: >-
+      Loaded from cafeLibs/ only when swkbd.pack is present in the MLC;
+      otherwise the built-in keyboard is used and the file is ignored.
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1923-1927, src/Cafe/OS/RPL/rpl.cpp:1972-1982"
+
+  - name: erreula.rpl
+    path: Cemu/cafeLibs/erreula.rpl
+    standalone_path: cafeLibs/erreula.rpl
+    required: false
+    hle_fallback: true
+    description: "Cafe OS error viewer applet library"
+    note: >-
+      Loaded from cafeLibs/ only when erreula.pack is present in the MLC;
+      otherwise the built-in error viewer is used and the file is ignored.
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1929-1933, src/Cafe/OS/RPL/rpl.cpp:1972-1982"
+
+  - name: swkbd.pack
+    path: Cemu/mlc01/sys/title/0005001b/1004f000/content/00/swkbd/swkbd.pack
+    standalone_path: mlc01/sys/title/0005001b/1004f000/content/00/swkbd/swkbd.pack
+    load_from: save_dir
+    required: false
+    description: "Software keyboard applet data, title 0005001b-1004f000"
+    note: >-
+      Its presence in the MLC is what lets a swkbd.rpl from cafeLibs/ be
+      used; the applet then reads it through the Cafe filesystem.
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1923-1927"
+
+  - name: erreula.pack
+    path: Cemu/mlc01/sys/title/0005001b/10051000/content/00/erreula/erreula.pack
+    standalone_path: mlc01/sys/title/0005001b/10051000/content/00/erreula/erreula.pack
+    load_from: save_dir
+    required: false
+    description: "Error viewer applet data, title 0005001b-10051000"
+    note: >-
+      Its presence in the MLC is what lets an erreula.rpl from cafeLibs/ be
+      used; the applet then reads it through the Cafe filesystem.
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1929-1933"
+
+  - name: OfflineDB.zar
+    path: Cemu/resources/miiverse/OfflineDB.zar
+    standalone_path: resources/miiverse/OfflineDB.zar
+    required: false
+    unsourceable: "archive of Wind Waker HD Miiverse posts in a layout only this reader describes, never published with any Cemu release"
+    description: "Archived Miiverse posts for The Wind Waker HD"
+    note: >-
+      ZArchive opened lazily from the user data path when a title running
+      with the Nintendo network service asks for posts. The reader serves
+      PostList_WindWakerHD.xml, memo/<post id> and image/<post id>.jpg for
+      the three Wind Waker HD title ids and nothing for any other title.
+      Without it the post list is empty.
+    source_ref: "src/Cafe/OS/libs/nn_olv/nn_olv_OfflineDB.cpp:21-31, src/Cafe/OS/libs/nn_olv/nn_olv_OfflineDB.cpp:67-72, src/Cafe/OS/libs/nn_olv/nn_olv_OfflineDB.cpp:114-135, src/Cafe/OS/libs/nn_olv/nn_olv_OfflineDB.cpp:186-197, src/Cafe/OS/libs/nn_olv/nn_olv_InitializeTypes.cpp:242-248"
+
+  # Client certificates, title 0005001b-10054000. Each pair is read from the
+  # MLC and the .aes key is decrypted with the OTP key at offset 0x120.
+  - name: WIIU_COMMON_1_CERT.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_COMMON_1_CERT.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_COMMON_1_CERT.der
+    load_from: save_dir
+    required: false
+    description: "Client certificate, common"
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:471, src/Cafe/IOSU/legacy/iosu_crypto.cpp:303-330"
+
+  - name: WIIU_COMMON_1_RSA_KEY.aes
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_COMMON_1_RSA_KEY.aes
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_COMMON_1_RSA_KEY.aes
+    load_from: save_dir
+    required: false
+    description: "Client key, common, AES-CBC encrypted"
+    note: "Must be a non-empty multiple of 16 bytes."
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:471, src/Cafe/IOSU/legacy/iosu_crypto.cpp:312-326"
+
+  - name: WIIU_ACCOUNT_1_CERT.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_ACCOUNT_1_CERT.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_ACCOUNT_1_CERT.der
+    load_from: save_dir
+    required: false
+    description: "Client certificate, account"
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:472, src/Cafe/IOSU/legacy/iosu_crypto.cpp:303-330"
+
+  - name: WIIU_ACCOUNT_1_RSA_KEY.aes
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_ACCOUNT_1_RSA_KEY.aes
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_ACCOUNT_1_RSA_KEY.aes
+    load_from: save_dir
+    required: false
+    description: "Client key, account, AES-CBC encrypted"
+    note: "Must be a non-empty multiple of 16 bytes."
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:472, src/Cafe/IOSU/legacy/iosu_crypto.cpp:312-326"
+
+  - name: WIIU_OLIVE_1_CERT.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_OLIVE_1_CERT.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_OLIVE_1_CERT.der
+    load_from: save_dir
+    required: false
+    description: "Client certificate, olive (Miiverse)"
+    note: "Registered twice, under ids 4 and 7."
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:473, src/Cafe/IOSU/legacy/iosu_crypto.cpp:476, src/Cafe/IOSU/legacy/iosu_crypto.cpp:303-330"
+
+  - name: WIIU_OLIVE_1_RSA_KEY.aes
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_OLIVE_1_RSA_KEY.aes
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_OLIVE_1_RSA_KEY.aes
+    load_from: save_dir
+    required: false
+    description: "Client key, olive, AES-CBC encrypted"
+    note: "Must be a non-empty multiple of 16 bytes."
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:473, src/Cafe/IOSU/legacy/iosu_crypto.cpp:476, src/Cafe/IOSU/legacy/iosu_crypto.cpp:312-326"
+
+  - name: WIIU_VINO_1_CERT.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_VINO_1_CERT.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_VINO_1_CERT.der
+    load_from: save_dir
+    required: false
+    description: "Client certificate, vino (Nintendo TVii)"
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:474, src/Cafe/IOSU/legacy/iosu_crypto.cpp:303-330"
+
+  - name: WIIU_VINO_1_RSA_KEY.aes
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_VINO_1_RSA_KEY.aes
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_VINO_1_RSA_KEY.aes
+    load_from: save_dir
+    required: false
+    description: "Client key, vino, AES-CBC encrypted"
+    note: "Must be a non-empty multiple of 16 bytes."
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:474, src/Cafe/IOSU/legacy/iosu_crypto.cpp:312-326"
+
+  - name: WIIU_WOOD_1_CERT.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_WOOD_1_CERT.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_WOOD_1_CERT.der
+    load_from: save_dir
+    required: false
+    description: "Client certificate, wood (eShop)"
+    note: "Registered twice, under ids 6 and 8."
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:475, src/Cafe/IOSU/legacy/iosu_crypto.cpp:477, src/Cafe/IOSU/legacy/iosu_crypto.cpp:303-330"
+
+  - name: WIIU_WOOD_1_RSA_KEY.aes
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_WOOD_1_RSA_KEY.aes
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/ccerts/WIIU_WOOD_1_RSA_KEY.aes
+    load_from: save_dir
+    required: false
+    description: "Client key, wood, AES-CBC encrypted"
+    note: "Must be a non-empty multiple of 16 bytes."
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:475, src/Cafe/IOSU/legacy/iosu_crypto.cpp:477, src/Cafe/IOSU/legacy/iosu_crypto.cpp:312-326"
+
+  # CA certificates, same title, scerts/. Parsed as DER X.509 and added to
+  # the SSL store; every one of them must load for online mode.
+  - name: CACERT_NINTENDO_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CA.der
+    load_from: save_dir
+    required: false
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:480"
 
-  - name: "CACERT_NINTENDO_CA_G2.der"
+  - name: CACERT_NINTENDO_CA_G2.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CA_G2.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CA_G2.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:481"
 
-  - name: "CACERT_NINTENDO_CA_G3.der"
+  - name: CACERT_NINTENDO_CA_G3.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CA_G3.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CA_G3.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:482"
 
-  - name: "CACERT_NINTENDO_CLASS2_CA.der"
+  - name: CACERT_NINTENDO_CLASS2_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CLASS2_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CLASS2_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:483"
 
-  - name: "CACERT_NINTENDO_CLASS2_CA_G2.der"
+  - name: CACERT_NINTENDO_CLASS2_CA_G2.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CLASS2_CA_G2.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CLASS2_CA_G2.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:484"
 
-  - name: "CACERT_NINTENDO_CLASS2_CA_G3.der"
+  - name: CACERT_NINTENDO_CLASS2_CA_G3.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CLASS2_CA_G3.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/CACERT_NINTENDO_CLASS2_CA_G3.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:485"
 
-  # Commercial CA certs
-  - name: "BALTIMORE_CYBERTRUST_ROOT_CA.der"
+  - name: BALTIMORE_CYBERTRUST_ROOT_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/BALTIMORE_CYBERTRUST_ROOT_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/BALTIMORE_CYBERTRUST_ROOT_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:488"
 
-  - name: "CYBERTRUST_GLOBAL_ROOT_CA.der"
+  - name: CYBERTRUST_GLOBAL_ROOT_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/CYBERTRUST_GLOBAL_ROOT_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/CYBERTRUST_GLOBAL_ROOT_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:489"
 
-  - name: "VERIZON_GLOBAL_ROOT_CA.der"
+  - name: VERIZON_GLOBAL_ROOT_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/VERIZON_GLOBAL_ROOT_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/VERIZON_GLOBAL_ROOT_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:490"
 
-  - name: "GLOBALSIGN_ROOT_CA.der"
+  - name: GLOBALSIGN_ROOT_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/GLOBALSIGN_ROOT_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/GLOBALSIGN_ROOT_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:491"
 
-  - name: "GLOBALSIGN_ROOT_CA_R2.der"
+  - name: GLOBALSIGN_ROOT_CA_R2.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/GLOBALSIGN_ROOT_CA_R2.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/GLOBALSIGN_ROOT_CA_R2.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:492"
 
-  - name: "GLOBALSIGN_ROOT_CA_R3.der"
+  - name: GLOBALSIGN_ROOT_CA_R3.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/GLOBALSIGN_ROOT_CA_R3.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/GLOBALSIGN_ROOT_CA_R3.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:493"
 
-  - name: "VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G3.der"
+  - name: VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G3.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G3.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G3.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:494"
 
-  - name: "VERISIGN_UNIVERSAL_ROOT_CA.der"
+  - name: VERISIGN_UNIVERSAL_ROOT_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/VERISIGN_UNIVERSAL_ROOT_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/VERISIGN_UNIVERSAL_ROOT_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:495"
 
-  - name: "VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G5.der"
+  - name: VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G5.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G5.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G5.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:496"
 
-  - name: "THAWTE_PRIMARY_ROOT_CA_G3.der"
+  - name: THAWTE_PRIMARY_ROOT_CA_G3.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/THAWTE_PRIMARY_ROOT_CA_G3.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/THAWTE_PRIMARY_ROOT_CA_G3.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:497"
 
-  - name: "THAWTE_PRIMARY_ROOT_CA.der"
+  - name: THAWTE_PRIMARY_ROOT_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/THAWTE_PRIMARY_ROOT_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/THAWTE_PRIMARY_ROOT_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:498"
 
-  - name: "GEOTRUST_GLOBAL_CA.der"
+  - name: GEOTRUST_GLOBAL_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/GEOTRUST_GLOBAL_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/GEOTRUST_GLOBAL_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:499"
 
-  - name: "GEOTRUST_GLOBAL_CA2.der"
+  - name: GEOTRUST_GLOBAL_CA2.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/GEOTRUST_GLOBAL_CA2.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/GEOTRUST_GLOBAL_CA2.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:500"
 
-  - name: "GEOTRUST_PRIMARY_CA.der"
+  - name: GEOTRUST_PRIMARY_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/GEOTRUST_PRIMARY_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/GEOTRUST_PRIMARY_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:501"
 
-  - name: "GEOTRUST_PRIMARY_CA_G3.der"
+  - name: GEOTRUST_PRIMARY_CA_G3.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/GEOTRUST_PRIMARY_CA_G3.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/GEOTRUST_PRIMARY_CA_G3.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:502"
 
-  - name: "ADDTRUST_EXT_CA_ROOT.der"
+  - name: ADDTRUST_EXT_CA_ROOT.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/ADDTRUST_EXT_CA_ROOT.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/ADDTRUST_EXT_CA_ROOT.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:503"
 
-  - name: "COMODO_CA.der"
+  - name: COMODO_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/COMODO_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/COMODO_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:504"
 
-  - name: "UTN_DATACORP_SGC_CA.der"
+  - name: UTN_DATACORP_SGC_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/UTN_DATACORP_SGC_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/UTN_DATACORP_SGC_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:505"
 
-  - name: "UTN_USERFIRST_HARDWARE_CA.der"
+  - name: UTN_USERFIRST_HARDWARE_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/UTN_USERFIRST_HARDWARE_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/UTN_USERFIRST_HARDWARE_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:506"
 
-  - name: "DIGICERT_HIGH_ASSURANCE_EV_ROOT_CA.der"
+  - name: DIGICERT_HIGH_ASSURANCE_EV_ROOT_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/DIGICERT_HIGH_ASSURANCE_EV_ROOT_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/DIGICERT_HIGH_ASSURANCE_EV_ROOT_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:507"
 
-  - name: "DIGICERT_ASSURED_ID_ROOT_CA.der"
+  - name: DIGICERT_ASSURED_ID_ROOT_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/DIGICERT_ASSURED_ID_ROOT_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/DIGICERT_ASSURED_ID_ROOT_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:508"
 
-  - name: "DIGICERT_GLOBAL_ROOT_CA.der"
+  - name: DIGICERT_GLOBAL_ROOT_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/DIGICERT_GLOBAL_ROOT_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/DIGICERT_GLOBAL_ROOT_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:509"
 
-  - name: "GTE_CYBERTRUST_GLOBAL_ROOT.der"
+  - name: GTE_CYBERTRUST_GLOBAL_ROOT.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/GTE_CYBERTRUST_GLOBAL_ROOT.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/GTE_CYBERTRUST_GLOBAL_ROOT.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:510"
 
-  - name: "VERISIGN_CLASS3_PUBLIC_PRIMARY_CA.der"
+  - name: VERISIGN_CLASS3_PUBLIC_PRIMARY_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/VERISIGN_CLASS3_PUBLIC_PRIMARY_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/VERISIGN_CLASS3_PUBLIC_PRIMARY_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:511"
 
-  - name: "THAWTE_PREMIUM_SERVER_CA.der"
+  - name: THAWTE_PREMIUM_SERVER_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/THAWTE_PREMIUM_SERVER_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/THAWTE_PREMIUM_SERVER_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:512"
 
-  - name: "EQUIFAX_SECURE_CA.der"
+  - name: EQUIFAX_SECURE_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/EQUIFAX_SECURE_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/EQUIFAX_SECURE_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:513"
 
-  - name: "ENTRUST_SECURE_SERVER_CA.der"
+  - name: ENTRUST_SECURE_SERVER_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/ENTRUST_SECURE_SERVER_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/ENTRUST_SECURE_SERVER_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:514"
 
-  - name: "VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G2.der"
+  - name: VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G2.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G2.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/VERISIGN_CLASS3_PUBLIC_PRIMARY_CA_G2.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:515"
 
-  - name: "ENTRUST_CA_2048.der"
+  - name: ENTRUST_CA_2048.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/ENTRUST_CA_2048.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/ENTRUST_CA_2048.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:516"
 
-  - name: "ENTRUST_ROOT_CA.der"
+  - name: ENTRUST_ROOT_CA.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/ENTRUST_ROOT_CA.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/ENTRUST_ROOT_CA.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:517"
 
-  - name: "ENTRUST_ROOT_CA_G2.der"
+  - name: ENTRUST_ROOT_CA_G2.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/ENTRUST_ROOT_CA_G2.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/ENTRUST_ROOT_CA_G2.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:518"
 
-  - name: "DIGICERT_ASSURED_ID_ROOT_CA_G2.der"
+  - name: DIGICERT_ASSURED_ID_ROOT_CA_G2.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/DIGICERT_ASSURED_ID_ROOT_CA_G2.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/DIGICERT_ASSURED_ID_ROOT_CA_G2.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:519"
 
-  - name: "DIGICERT_GLOBAL_ROOT_CA_G2.der"
+  - name: DIGICERT_GLOBAL_ROOT_CA_G2.der
+    path: Cemu/mlc01/sys/title/0005001b/10054000/content/scerts/DIGICERT_GLOBAL_ROOT_CA_G2.der
+    standalone_path: mlc01/sys/title/0005001b/10054000/content/scerts/DIGICERT_GLOBAL_ROOT_CA_G2.der
+    load_from: save_dir
     required: false
-    path: "mlc01/sys/title/0005001b/10054000/content/scerts/"
     source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:520"
 
-  # --- Optional firmware libraries (cafeLibs/) ---
-  - name: "snd_user.rpl"
-    required: false
-    path: "cafeLibs/"
-    note: "Wii U firmware sound library, improves audio accuracy for some games"
-    source_ref: "src/Cafe/OS/libs/snd_user/snd_user.cpp:1225"
-
-  - name: "snduser2.rpl"
-    required: false
-    path: "cafeLibs/"
-    note: "Wii U firmware sound library v2, improves audio accuracy for some games"
-    source_ref: "src/Cafe/OS/libs/snd_user/snd_user.cpp:1225"
-
-# Firmware title IDs referenced in the source
 firmware_titles:
   - id: "0005001b-10042400"
     name: "Shared fonts"
     content: ["CafeCn.ttf", "CafeKr.ttf", "CafeStd.ttf", "CafeTw.ttf"]
-    required: true
-    source_ref: "src/Cafe/CafeSystem.cpp:289-292"
+    required: false
+    note: "Read from the MLC before the resources/sharedFonts/ copy of the data path."
+    source_ref: "src/Cafe/CafeSystem.cpp:283-293"
 
   - id: "0005001b-10054000"
     name: "SSL certificates"
     content: ["ccerts/", "scerts/"]
     required: false
-    note: "Only needed for online features, requires otp.bin"
-    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:535"
+    note: "Every file of the certificate table must be present for online mode, with a valid otp.bin and seeprom.bin."
+    source_ref: "src/Cafe/IOSU/legacy/iosu_crypto.cpp:463-521, src/Cafe/IOSU/legacy/iosu_crypto.cpp:535"
+
+  - id: "0005001b-1004f000"
+    name: "Software keyboard applet"
+    content: ["content/00/swkbd/swkbd.pack"]
+    required: false
+    note: "Presence of the pack lets a dumped swkbd.rpl in cafeLibs/ replace the built-in keyboard."
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1923-1927"
+
+  - id: "0005001b-10051000"
+    name: "Error viewer applet"
+    content: ["content/00/erreula/erreula.pack"]
+    required: false
+    note: "Presence of the pack lets a dumped erreula.rpl in cafeLibs/ replace the built-in error viewer."
+    source_ref: "src/Cafe/OS/RPL/rpl.cpp:1929-1933"
 
   - id: "0005001b-1005c000"
-    name: "System language/country data"
+    name: "Language and country lists"
     content: ["language.txt", "country.txt"]
     required: false
-    note: "Auto-generated by Cemu if missing"
-    source_ref: "src/gui/wxgui/CemuApp.cpp:535-561"
+    note: "Written by the wx frontend on first run when absent; the libretro core creates neither."
+    source_ref: "src/gui/wxgui/CemuApp.cpp:580-606"
 
-  - id: "00050010-10041200"
-    name: "System version"
-    content: ["version.bin"]
-    required: false
-    note: "Referenced but not strictly loaded (TODO in source)"
-    source_ref: "src/Cafe/OS/libs/coreinit/coreinit_MCP.cpp:203"
-
-  - id: "00050010-10040000"
-    name: "Wii U Menu (JPN)"
-    required: false
-    source_ref: "src/Cafe/OS/libs/sysapp/sysapp.cpp:382"
-
-  - id: "00050010-10040100"
-    name: "Wii U Menu (USA)"
-    required: false
-    source_ref: "src/Cafe/OS/libs/sysapp/sysapp.cpp:382"
-
-  - id: "00050010-10040200"
-    name: "Wii U Menu (EUR)"
-    required: false
-    source_ref: "src/Cafe/OS/libs/sysapp/sysapp.cpp:382"
-
-# MLC directory structure expected by Cemu
 mlc_structure:
-  - "mlc01/sys/title/0005001b/10042400/content/"  # shared fonts
-  - "mlc01/sys/title/0005001b/10054000/content/ccerts/"  # client certs
-  - "mlc01/sys/title/0005001b/10054000/content/scerts/"  # server CA certs
-  - "mlc01/sys/title/0005001b/1005c000/content/"  # language files
-  - "mlc01/sys/title/00050010/"  # system applets
-  - "mlc01/usr/title/00050000/"  # base games
-  - "mlc01/usr/title/0005000c/"  # DLC
-  - "mlc01/usr/title/0005000e/"  # updates
-  - "mlc01/usr/save/"  # save data
-  - "mlc01/usr/boss/"  # SpotPass data
-
-notes: |
-  Cemu is a standalone Wii U emulator (not a libretro core).
-  Minimum to run games: keys.txt with disc decryption keys.
-  Shared fonts are required but Cemu ships fallback fonts in resources/sharedFonts/.
-  Online play requires otp.bin (1024 bytes) + seeprom.bin (512 bytes) + SSL certificates.
-  The cafeLibs/ directory can hold original Wii U firmware .rpl libraries for accuracy.
-  Any .rpl from the Wii U firmware placed in cafeLibs/ will override Cemu's HLE implementation.
+  - "mlc01/sys/title/0005001b/10042400/content/"
+  - "mlc01/sys/title/0005001b/10054000/content/ccerts/"
+  - "mlc01/sys/title/0005001b/10054000/content/scerts/"
+  - "mlc01/sys/title/0005001b/1004f000/content/00/swkbd/"
+  - "mlc01/sys/title/0005001b/10051000/content/00/erreula/"
+  - "mlc01/sys/title/0005001b/1005c000/content/"
+  - "mlc01/usr/title/00050000/"
+  - "mlc01/usr/title/0005000c/"
+  - "mlc01/usr/title/0005000e/"
+  - "mlc01/usr/save/"
+  - "mlc01/usr/boss/"

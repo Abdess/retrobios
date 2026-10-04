@@ -4,10 +4,10 @@ core_classification: community_fork
 source: "https://github.com/rfandango/XenDroid"
 upstream: "https://github.com/has207/xenia-edge"
 author: "rfandango"
-profiled_date: "2026-08-12"
+profiled_date: "2026-09-17"
 source_commit: "779680ade075d2d2a4c589c6a8d57a8e26c116c0"
 upstream_commit: "84cf209221160590768f615a0369a9c4a1456bbf"
-core_version: "b70d643"
+core_version: "0b11201"
 display_name: "Microsoft - Xbox 360 (XenDroid)"
 cores:
   - "xendroid"
@@ -23,19 +23,26 @@ notes: |
   app, AAudio and OpenSLES audio systems, an Android input driver, and Android
   providers for the guest keyboard, the message box and disc swap. The library
   recognises ISO, ZAR, GOD, extracted XEX folders and STFS containers, and the
-  boot path reads the file signature before mounting.
+  boot path reads the file signature before mounting. A disc that carries a
+  content tree has its packages staged out through the app cache and installed
+  under content: the library offers it when the game is launched and the
+  install screen accepts the disc directly.
   ref: emulator-core/src/main/cpp/CMakeLists.txt:30-56, 112-152,
-       emulator-core/src/main/cpp/xendroid_emu.cpp:333-346, 671-676,
-       app/src/main/java/xendroid/compose/data/GameFormat.kt:6, 26-32
+       emulator-core/src/main/cpp/xendroid_emu.cpp:337-350, 675-680,
+       app/src/main/java/xendroid/compose/data/GameFormat.kt:6, 26-32,
+       emulator-core/src/main/cpp/xenia/src/xenia/vfs/content_install_standalone.cc:138-183, 185-267,
+       app/src/main/java/xendroid/compose/ui/library/GameLibraryViewModel.kt:142-152,
+       app/src/main/java/xendroid/compose/ui/content/InstallContentViewModel.kt:127-172
 
   Releases are tagged XenDroid-<short commit> and the version name is the git
-  hash handed to the build, so b70d643 is both the head of main and the current
-  release. version.h names canary_experimental dc561e4df, carried over from the
-  ax360e tree the project started as, and it does not describe the vendored
-  code. The Edge revision is named by the periodic merge pull request instead,
-  and Edge rebases its branch, so that commit is no longer reachable there.
-  ref: app/build.gradle:34, emulator-core/src/main/cpp/version.h:4-5,
-       .github/workflows/XenDroid.yml:185-187
+  hash handed to the build, so 0b11201 is the current release; the two commits
+  main carries past it touch the README only. version.h names
+  canary_experimental dc561e4df, carried over from the ax360e tree the project
+  started as, and it does not describe the vendored code. The Edge revision is
+  named by the periodic merge pull request instead, and Edge rebases its
+  branch, so that commit is no longer reachable there.
+  ref: app/build.gradle:34, .github/workflows/XenDroid.yml:178, 188, 274-275,
+       emulator-core/src/main/cpp/version.h:4-5
 
   No Xbox 360 system file is read. xboxkrnl, xam and xbdm are HLE modules
   registered at startup, the XEX1 retail, XEX2 retail and XEX2 devkit keys are
@@ -52,12 +59,15 @@ notes: |
   passed as a launch argument beside the config path and the log path. content,
   cache, cache0, cache1, patches and plugins hang off it, the global
   configuration is xenia-canary.config.toml and per title overrides live in
-  config/<TITLE_ID>.config.toml. The custom driver directory sits in internal
-  storage instead, because the external filesystem cannot carry an executable
-  mapping.
-  ref: emulator-core/src/main/java/xendroid/compose/Application.java:14-33, 84-88,
-       app/src/main/java/xendroid/compose/EmulatorHostActivity.kt:231-236,
-       emulator-core/src/main/cpp/xendroid_emu.cpp:312-317, 355-381
+  config/<TITLE_ID>.config.toml. The bundled default_config.toml is written
+  under the storage root at every start, rewritten whenever the asset differs
+  from the copy on disk, and seeds the global configuration when that file is
+  missing. The custom driver directory sits in internal storage instead,
+  because the external filesystem cannot carry an executable mapping.
+  ref: emulator-core/src/main/java/xendroid/compose/Application.java:14-33, 80-91,
+       app/src/main/java/xendroid/compose/settings/ConfigStore.kt:82-89,
+       app/src/main/java/xendroid/compose/EmulatorHostActivity.kt:237-242,
+       emulator-core/src/main/cpp/xendroid_emu.cpp:316-321, 359-385
 
   479 game patches ship inside the APK, synced at build time from the
   xenia-canary game-patches submodule pinned at 3553a5ae. The patch database
@@ -86,7 +96,7 @@ files:
       The configured path is read before the instance is created and opened
       through adrenotools when the file exists, otherwise the system libvulkan.so
       is used. The row is hidden on devices without /dev/kgsl-3d0.
-    source_ref: "app/src/main/java/xendroid/compose/ui/settings/SettingRows.kt:175-200, app/src/main/java/xendroid/compose/settings/SettingsRepository.kt:34-35, 140, emulator-core/src/main/java/xendroid/compose/Utils.java:164-236, emulator-core/src/main/java/xendroid/compose/Application.java:21-24, emulator-core/src/main/cpp/xenia/src/xenia/ui/vulkan/vulkan_instance.cc:49, 168-192, 203"
+    source_ref: "app/src/main/java/xendroid/compose/ui/settings/SettingRows.kt:175-200, app/src/main/java/xendroid/compose/settings/SettingsRepository.kt:34-35, 140, emulator-core/src/main/java/xendroid/compose/Utils.java:164-236, emulator-core/src/main/java/xendroid/compose/Application.java:21-24, emulator-core/src/main/cpp/xenia/src/xenia/ui/vulkan/vulkan_instance.cc:106, 236-260, 271"
 
   - name: "<font>.ttf"
     required: false
@@ -146,7 +156,7 @@ files:
       The title directory is mounted as the plugins device and each enabled entry
       whose hash matches the running module is loaded as a user module on its own
       thread.
-    source_ref: "emulator-core/src/main/cpp/xenia/src/xenia/patcher/plugin_loader.cc:175-233, 235-252, emulator-core/src/main/cpp/xenia/src/xenia/emulator.cc:2625-2630"
+    source_ref: "emulator-core/src/main/cpp/xenia/src/xenia/patcher/plugin_loader.cc:175-233, 235-252, emulator-core/src/main/cpp/xenia/src/xenia/emulator.cc:2622-2627"
 
   - name: Account
     required: false
