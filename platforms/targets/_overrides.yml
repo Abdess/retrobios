@@ -5,6 +5,8 @@
 # Format:
 #   platform_name:
 #     targets:
+#       _default:                    # applies to every target
+#         remove_cores: [...]
 #       target-name:
 #         aliases: [alias1, alias2]
 #         add_cores: [core_to_add]
@@ -15,6 +17,27 @@
 # doesn't resolve. These are confirmed available on x86_64 via Config.in.
 batocera:
   targets:
+    _default:
+      # Amiga machine variants (A500, CD32, etc.) are selectors passed to
+      # fsuae/amiberry, not emulators of their own; batocera-es-system
+      # groups them under the emulator's node in es_systems.yml.
+      # odcommander is OpenDingux's file manager; flatpak is a runtime
+      # launcher. Neither emulates anything.
+      remove_cores:
+        - A500
+        - "A500+"
+        - A600
+        - A1000
+        - A1200
+        - A3000
+        - A4000
+        - CD32
+        - CDTV
+        - flatpak
+        - odcommander
+        - sh
+        - steam
+        - wine-tkg
     x86_64:
       add_cores: [citron, demul, model2, xenia]
     zen3:
@@ -37,3 +60,23 @@ retroarch:
       aliases: [ps2]
     playstation-psp:
       aliases: [psp]
+
+retrodeck:
+  targets:
+    _default:
+      # RetroDECK ships RetroArch itself as a component; its target list
+      # includes the frontend name alongside the actual cores.
+      remove_cores: [retroarch]
+
+emudeck:
+  targets:
+    _default:
+      # EmuDeck's EmuScripts tree carries a template.sh placeholder used
+      # to scaffold new installers; it is not an emulator.
+      remove_cores: [template]
+
+retropie:
+  targets:
+    _default:
+      # Homebrew game scriptmodule, not an emulator.
+      remove_cores: [superflappybirds]

@@ -276,7 +276,12 @@ def load_target_config(
 
     cores = set(str(c) for c in targets[canonical].get("cores", []))
 
+    default_ovr = overrides.get("_default", {})
     ovr = overrides.get(canonical, {})
+    for c in default_ovr.get("add_cores", []):
+        cores.add(str(c))
+    for c in default_ovr.get("remove_cores", []):
+        cores.discard(str(c))
     for c in ovr.get("add_cores", []):
         cores.add(str(c))
     for c in ovr.get("remove_cores", []):
@@ -1096,6 +1101,29 @@ def group_identical_platforms(
     return result
 
 
+def runs_standalone(
+    emu_name: str, profile: dict, standalone_cores: set[str]
+) -> bool:
+    """Whether a platform lays this emulator's files out for its standalone build.
+
+    A platform names the emulators it launches standalone in
+    ``standalone_cores``, by profile key or by any name in ``cores:``. The
+    name alone is not enough: Recalbox and Batocera call their standalone
+    ScummVM ``scummvm``, which is also the key of the libretro core's
+    profile, and that profile documents no standalone build. Laid out
+    "standalone" it would lose every ``path:`` and drop its files at the
+    root, so a profile whose ``type`` has no standalone build keeps its
+    libretro layout whatever the platform calls it.
+    """
+    if not standalone_cores:
+        return False
+    if "standalone" not in str(profile.get("type", "")):
+        return False
+    return emu_name in standalone_cores or bool(
+        standalone_cores & {str(c) for c in profile.get("cores", [])}
+    )
+
+
 def resolve_platform_cores(
     config: dict,
     profiles: dict[str, dict],
@@ -1193,6 +1221,8 @@ MANUFACTURER_PREFIXES = (
     "interton-",
     "texas-instruments-",
     "videoton-",
+    "wenquxing-",
+    "aquaplus-",
 )
 
 
