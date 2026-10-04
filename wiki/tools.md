@@ -538,8 +538,9 @@ python scripts/refresh_stale.py --only platforms,targets --jobs 6
 | `validate_schemas.py` | Validate the data contracts: schemas and semantic invariants. `--source-only` checks `emulators/` and `platforms/` alone, which is what PR validation runs |
 | `auto_fetch.py` | Fetch missing BIOS files from known sources (4-step pipeline) |
 | `list_platforms.py` | List active platforms (`--all` includes archived, used by CI) |
-| `download.py` | Download a pack from GitHub releases, split volumes joined and checked (Python, stdlib only) |
+| `download.py` | Download a pack from GitHub releases, every part checked (Python, stdlib only) |
 | `download.sh` | Same, as a shell one-liner (`curl` + `unzip`) |
+| `split_pack.py` | Cut a pack over the release asset limit into parts that are each a ZIP of whole files, read back before the pack is removed |
 | `provenance_report.py` | Dump-catalog coverage and acquisition targets (see above) |
 | `generate_readme.py` | Generate README.md and CONTRIBUTING.md from database |
 | `generate_site.py` | Generate all MkDocs site pages (this documentation) |
@@ -581,9 +582,11 @@ same-named file.
 
 `scripts/download.sh` remains available for downloading a prebuilt platform
 ZIP when a manually reviewed pack release contains it; it is separate from the
-per-file automatic installer above. A pack over 2 GB is published as numbered
-volumes: both downloaders group them under one platform name, download each
-one, join them and check the result against the release's `SHA256SUMS.txt`.
+per-file automatic installer above. A pack over 2 GB is published in several
+parts: both downloaders group them under one platform name, download each
+one and check it against the release's `SHA256SUMS.txt`. Parts that are each
+a ZIP are extracted one after the other; the `.zip.001` slices of releases up
+to v2026.09.04 are joined first.
 That list carries a detached signature, `SHA256SUMS.txt.sig`, verifiable
 against `allowed_signers` at the repository root; the
 [release process](release-process.md#verifying-a-release) gives the commands.

@@ -1,8 +1,11 @@
 """Tests for the release pack downloaders.
 
-Packs over 2 GB are published as numbered volumes (`.zip.001`, `.zip.002`),
-so a downloader that expects one asset per platform finds nothing for most
-of them. These tests pin the grouping, the join and the staging location.
+A pack over the release asset limit is published in several files, so a
+downloader that expects one asset per platform finds nothing for most of
+them. Two layouts exist: parts that are each a ZIP (`.part1of2.zip`), and
+the byte ranges of one archive that releases up to v2026.09.04 carry
+(`.zip.001`, `.zip.002`). These tests pin the grouping, the join, the
+checksum of each layout and the staging location.
 """
 from __future__ import annotations
 
@@ -33,6 +36,9 @@ sys.modules["download"] = download
 _spec.loader.exec_module(download)
 
 SHELL = REPO_ROOT / "scripts" / "download.sh"
+
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import split_pack  # noqa: E402
 
 # A slice of a real release: two whole packs, three split, and the checksums.
 RELEASE_ASSETS = [
@@ -125,6 +131,46 @@ class TestPackGrouping(unittest.TestCase):
             ["Big_BIOS_Pack.zip.001", "Big_BIOS_Pack.zip.009", "Big_BIOS_Pack.zip.010"],
         )
 
+    def test_zip_parts_group_into_one_pack(self):
+        packs = download.group_packs(
+            _release(
+                [
+                    "Batocera_43.1_BIOS_Pack.part2of2.zip",
+                    "Batocera_43.1_BIOS_Pack.part1of2.zip",
+                    "BizHawk_2.11.1_BIOS_Pack.zip",
+                ]
+            )
+        )
+        self.assertEqual(
+            [(pack.name, [part["name"] for part in pack.parts]) for pack in packs],
+            [
+                (
+                    "Batocera_43.1_BIOS_Pack.zip",
+                    [
+                        "Batocera_43.1_BIOS_Pack.part1of2.zip",
+                        "Batocera_43.1_BIOS_Pack.part2of2.zip",
+                    ],
+                ),
+                ("BizHawk_2.11.1_BIOS_Pack.zip", ["BizHawk_2.11.1_BIOS_Pack.zip"]),
+            ],
+        )
+        self.assertFalse(packs[0].joined)
+
+    def test_zip_parts_order_numerically_not_lexically(self):
+        names = [f"Big_BIOS_Pack.part{n}of12.zip" for n in (10, 9, 1)]
+        pack = download.group_packs(_release(names))[0]
+        self.assertEqual(
+            [part["name"] for part in pack.parts],
+            [f"Big_BIOS_Pack.part{n}of12.zip" for n in (1, 9, 10)],
+        )
+        self.assertEqual(pack.expected_parts, 12)
+
+    def test_byte_range_volumes_are_joined(self):
+        pack = download.group_packs(
+            _release(["Old_BIOS_Pack.zip.001", "Old_BIOS_Pack.zip.002"])
+        )[0]
+        self.assertTrue(pack.joined)
+
     def test_other_assets_are_not_packs(self):
         packs = download.group_packs(_release(["SHA256SUMS.txt", "database.json"]))
         self.assertEqual(packs, [])
@@ -214,19 +260,39 @@ class TestStagingIsolation(unittest.TestCase):
 class ReleaseServer:
     """Serves a release index and its assets over loopback."""
 
-    def __init__(self, pack_name: str, payload: dict[str, bytes], volumes: int):
+    def __init__(
+        self,
+        pack_name: str,
+        payload: dict[str, bytes],
+        volumes: int,
+        zip_parts: bool = False,
+    ):
         self.root = Path(tempfile.mkdtemp())
         (self.root / "assets").mkdir()
         archive = self.root / "assets" / pack_name
-        with zipfile.ZipFile(archive, "w") as zf:
+        with zipfile.ZipFile(archive, "w", zipfile.ZIP_DEFLATED) as zf:
             for name, data in payload.items():
                 zf.writestr(name, data)
         raw = archive.read_bytes()
         self.digest = hashlib.sha256(raw).hexdigest()
-        archive.unlink()
+        sums = f"{self.digest}  {pack_name}\n"
 
         self.names: list[str] = []
-        if volumes == 1:
+        if zip_parts:
+            # One byte under the whole archive: the last member no longer fits.
+            parts = split_pack.split_pack(archive, limit=len(raw) - 1)
+            self.names = [part.name for part in parts]
+            sums = "".join(
+                f"{hashlib.sha256(part.read_bytes()).hexdigest()}  {part.name}\n"
+                for part in parts
+            )
+            raw = b""
+        else:
+            archive.unlink()
+
+        if zip_parts:
+            pass
+        elif volumes == 1:
             (self.root / "assets" / pack_name).write_bytes(raw)
             self.names.append(pack_name)
         else:
@@ -236,9 +302,7 @@ class ReleaseServer:
                 (self.root / "assets" / name).write_bytes(raw[start : start + cut])
                 self.names.append(name)
 
-        (self.root / "assets" / "SHA256SUMS.txt").write_text(
-            f"{self.digest}  {pack_name}\n"
-        )
+        (self.root / "assets" / "SHA256SUMS.txt").write_text(sums)
 
         handler = functools.partial(_QuietHandler, directory=str(self.root))
         self.httpd = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
@@ -254,8 +318,17 @@ class ReleaseServer:
             }
             for name in self.names + ["SHA256SUMS.txt"]
         ]
-        (index / "latest").write_text(json.dumps({"assets": assets}))
+        self.index = index / "latest"
+        self.index.write_text(json.dumps({"assets": assets}))
         threading.Thread(target=self.httpd.serve_forever, daemon=True).start()
+
+    def unlist_last_part(self) -> None:
+        """An upload that stopped early: the release lists one part fewer."""
+        release = json.loads(self.index.read_text())
+        release["assets"] = [
+            asset for asset in release["assets"] if asset["name"] != self.names[-1]
+        ]
+        self.index.write_text(json.dumps(release))
 
     def corrupt_last_volume(self) -> None:
         target = self.root / "assets" / self.names[-1]
@@ -270,6 +343,7 @@ class DownloaderCase(unittest.TestCase):
     """Common fixture: a two-volume pack served over loopback."""
 
     volumes = 2
+    zip_parts = False
     payload = {
         "bios/scph5501.bin": b"\x10\x20" * 4096,
         "bios/dc/dc_boot.bin": b"\x30\x40" * 4096,
@@ -280,7 +354,9 @@ class DownloaderCase(unittest.TestCase):
     platform_label = "Batocera 43.1"
 
     def setUp(self):
-        self.server = ReleaseServer(self.pack_name, self.payload, self.volumes)
+        self.server = ReleaseServer(
+            self.pack_name, self.payload, self.volumes, self.zip_parts
+        )
         self.addCleanup(self.server.close)
         self.dest = Path(tempfile.mkdtemp()) / "bios"
         # A pack is gigabytes: staging it in the system temp directory fills
@@ -314,6 +390,7 @@ class DownloaderCase(unittest.TestCase):
         ]
         self.assertIn(self.platform_label, names)
         self.assertNotIn(".001", out)
+        self.assertNotIn("part1of", out)
 
     def assert_refused(self, proc):
         self.assertNotEqual(proc.returncode, 0)
@@ -447,6 +524,35 @@ class TestWholePackPython(WholePackCase, TestDownloadPython):
 
 
 class TestWholePackShell(WholePackCase, TestDownloadShell):
+    pass
+
+
+class ZipPartsCase(DownloaderCase):
+    """A pack published as parts that are each an archive."""
+
+    zip_parts = True
+
+
+class ZipPartsTests:
+    def test_each_part_is_an_archive_on_its_own(self):
+        self.assertEqual(len(self.server.names), 2)
+        for name in self.server.names:
+            with zipfile.ZipFile(self.server.root / "assets" / name) as archive:
+                self.assertIsNone(archive.testzip())
+
+    def test_a_release_missing_a_part_is_refused(self):
+        self.server.unlist_last_part()
+        proc = self.run_cli(self.platform, str(self.dest), expect_success=False)
+        self.assertNotEqual(proc.returncode, 0)
+        self.assertIn("1 of 2", proc.stdout + proc.stderr)
+        self.assertFalse((self.dest / "bios/scph5501.bin").exists())
+
+
+class TestZipPartsPython(ZipPartsTests, ZipPartsCase, TestDownloadPython):
+    pass
+
+
+class TestZipPartsShell(ZipPartsTests, ZipPartsCase, TestDownloadShell):
     pass
 
 

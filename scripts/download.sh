@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Download BIOS pack from GitHub Releases (Linux/macOS one-liner compatible)
 #
-# A pack over 2 GB is published as numbered volumes (.zip.001, .zip.002),
-# which are downloaded, joined and checked here.
+# A pack over 2 GB is published in several parts. Each is a ZIP
+# (.part1of2.zip), checked and extracted in turn. Releases up to v2026.09.04
+# carry byte ranges of one archive instead (.zip.001), which are joined first.
 #
 # Usage:
 #   bash scripts/download.sh retroarch ~/RetroArch/system/
@@ -47,9 +48,11 @@ asset_urls() {
         sed -n 's/.*"browser_download_url"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p'
 }
 
-# The archive name behind each asset, volumes folded into their archive.
+# The archive name behind each asset, the files of one pack folded together:
+# Pack.part1of2.zip and Pack.zip.001 both belong to Pack.zip.
 pack_names() {
     asset_urls "$1" | sed 's#.*/##' |
+        sed 's/\(_BIOS_Pack\)\.part[0-9][0-9]*of[0-9][0-9]*\.zip$/\1.zip/' |
         sed -n 's/\(.*_BIOS_Pack\.zip\)\(\.[0-9][0-9]*\)\{0,1\}$/\1/p' |
         LC_ALL=C sort -u
 }
@@ -103,11 +106,25 @@ EOF
         exit 1
     fi
 
+    local stem="${archive%.zip}"
     local volumes
     volumes=$(asset_urls "$release_json" |
-        grep -E "/${archive//./\\.}(\.[0-9]+)?$" | LC_ALL=C sort)
+        grep -E "/${stem//./\\.}(\.zip(\.[0-9]+)?|\.part[0-9]+of[0-9]+\.zip)$" |
+        LC_ALL=C sort)
     if [ -z "$volumes" ]; then
         echo "Error: no asset found for ${archive}." >&2
+        exit 1
+    fi
+
+    local count
+    count=$(printf '%s\n' "$volumes" | wc -l | tr -d ' ')
+
+    # Parts that are each a ZIP say in their name how many there are.
+    local declared
+    declared=$(printf '%s\n' "$volumes" |
+        sed -n 's/.*\.part[0-9][0-9]*of\([0-9][0-9]*\)\.zip$/\1/p' | head -1)
+    if [ -n "$declared" ] && [ "$declared" != "$count" ]; then
+        echo "Error: the release lists ${count} of ${declared} parts of ${archive}." >&2
         exit 1
     fi
 
@@ -118,9 +135,6 @@ EOF
     rm -rf "$staging"
     mkdir -p "$staging"
     trap 'rm -rf "$staging"' EXIT
-
-    local count
-    count=$(printf '%s\n' "$volumes" | wc -l | tr -d ' ')
 
     local index=0
     local url name
@@ -138,17 +152,23 @@ EOF
 $volumes
 EOF
 
-    if [ "$count" -gt 1 ]; then
+    if [ -z "$declared" ] && [ "$count" -gt 1 ]; then
         echo "Joining ${count} parts into ${archive}..."
-        # split(1) writes plain byte ranges, so concatenation rebuilds the ZIP.
+        # Releases up to v2026.09.04: split(1) wrote plain byte ranges, so
+        # concatenation rebuilds the ZIP.
         cat "${staging}/${archive}".[0-9][0-9][0-9] > "${staging}/${archive}"
         rm -f "${staging}/${archive}".[0-9][0-9][0-9]
     fi
 
-    verify_checksum "$release_json" "$staging" "$archive"
+    local file
+    for file in "${staging}"/*.zip; do
+        verify_checksum "$release_json" "$staging" "$(basename "$file")"
+    done
 
     echo "Extracting to ${dest}/..."
-    unzip -o -q "${staging}/${archive}" -d "$dest"
+    for file in "${staging}"/*.zip; do
+        unzip -o -q "$file" -d "$dest"
+    done
 
     rm -rf "$staging"
     trap - EXIT
@@ -182,7 +202,7 @@ verify_checksum() {
         return 0
     fi
 
-    echo "Checking the archive..."
+    echo "Checking ${archive}..."
     local actual
     actual=$($hasher "${staging}/${archive}" | cut -d' ' -f1)
     if [ "$actual" != "$expected" ]; then

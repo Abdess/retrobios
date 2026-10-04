@@ -161,18 +161,18 @@ python scripts/pipeline.py
 python scripts/generate_pack.py --platform retropie --output-dir dist/
 python scripts/generate_pack.py --platform retropie --verify-packs --output-dir dist/
 
-# 3. Checksums of the full ZIPs, before splitting, then sign the list. The
-#    checksums answer corruption; the signature answers a rewritten release,
-#    which is the one thing a checksum published beside its own artifacts
-#    cannot answer.
+# 3. A release file must be under 2 GiB. A larger pack becomes parts that are
+#    each a ZIP of whole files (Pack.part1of2.zip): any tool opens one, and
+#    the parts extracted into one folder are the pack. Each part is read back
+#    and the set compared with the pack before the pack is removed.
+python scripts/split_pack.py dist/
+
+# 4. Checksums of the files as published, then sign the list. The checksums
+#    answer corruption; the signature answers a rewritten release, which is
+#    the one thing a checksum published beside its own artifacts cannot
+#    answer.
 (cd dist && sha256sum *.zip > SHA256SUMS.txt)
 ssh-keygen -Y sign -f ~/.ssh/retrobios_signing -n file dist/SHA256SUMS.txt
-
-# 4. Split anything over 2 GB (GitHub asset cap); 7-Zip and PeaZip open .001 directly
-for f in dist/*.zip; do
-  [ "$(stat -c%s "$f")" -gt 2000000000 ] || continue
-  split --bytes=1900M --numeric-suffixes=1 --suffix-length=3 "$f" "$f." && rm "$f"
-done
 
 # 5. The two sizes a pack has, and its file count. Extracted runs well above
 #    downloaded, so the notes table names the one it carries. The count is
@@ -183,8 +183,8 @@ sys.path.insert(0, "scripts")
 from download import _match_key
 
 parts = {}
-for path in sorted(pathlib.Path("dist").glob("*_BIOS_Pack.zip*")):
-    parts.setdefault(path.name.split(".zip")[0] + ".zip", []).append(path)
+for path in sorted(pathlib.Path("dist").glob("*_BIOS_Pack*.zip")):
+    parts.setdefault(path.name.split("_BIOS_Pack")[0], []).append(path)
 
 def size(n):
     return f"{n / 1024 ** 3:.1f} GB" if n >= 1024 ** 3 else f"{n / 1024 ** 2:.0f} MB"
@@ -204,7 +204,7 @@ PY
 #    during the whole upload.
 DATE=$(date +%Y.%m.%d)
 gh release create "v${DATE}" --draft --title "BIOS Pack v${DATE}" --notes-file notes.md
-for f in dist/SHA256SUMS.txt dist/SHA256SUMS.txt.sig dist/*.zip dist/*.zip.0*; do
+for f in dist/SHA256SUMS.txt dist/SHA256SUMS.txt.sig dist/*.zip; do
   [ -f "$f" ] && gh release upload "v${DATE}" "$f#$(basename "$f")" --clobber
 done
 gh release view "v${DATE}" --json assets --jq '.assets | length'   # expect every file
@@ -233,14 +233,17 @@ sha256sum --check --ignore-missing SHA256SUMS.txt
 ```
 
 The first command must print `Good "file" signature for releases@retrobios`.
-Order matters: verify the list before trusting the sums in it, and join split
-volumes before checking, since the sums are of the full ZIPs.
+Order matters: verify the list before trusting the sums in it. The list names
+every file as published, so a single part checks on its own. Releases up to
+v2026.09.04 listed the whole ZIPs instead, and their `.zip.001` volumes have
+to be joined before checking.
 
 The signature and the reproducible build answer different questions. The
 signature says the list came from the holder of the release key. The build
-says the bytes are derivable: packs are deterministic, so rebuilding one from
-the same collection yields the same archive, and its checksum can be compared
-against the signed list without trusting either.
+says the bytes are derivable: packs are deterministic and a part copies its
+members as stored, so rebuilding and splitting from the same collection
+yields the same files, and their checksums can be compared against the
+signed list without trusting either.
 
 The private half lives on the maintainer's machine and is generated with
 `ssh-keygen -t ed25519 -f ~/.ssh/retrobios_signing -C releases@retrobios`. Its
@@ -261,8 +264,18 @@ the closed issues. A pack has two sizes and they are far apart: Batocera
 downloads as 2.4 GB and extracts to 4.0 GB. Step 5 prints both, and whichever
 one the table carries, the header names it. Someone sizing a USB drive is
 reading that column. The README table is the extracted size, from the install
-manifests. `SHA256SUMS.txt` lists the checksums of the full ZIPs before
-splitting.
+manifests. `SHA256SUMS.txt` lists the checksums of the files as published,
+parts included.
+
+A pack in parts is said so above the table, where the links are: every part
+is needed, each is an ordinary ZIP, and they extract into the same folder.
+Until v2026.09.04 the parts were byte ranges cut by `split`, named
+`.zip.001`, and the sentence explaining them sat under the table. A range
+opened alone is not an archive and no tool says a part is missing, so five
+reports in six months took one for a broken download (#45, #51, #66, #77,
+#79). The README, the download page and the troubleshooting page describe
+both layouts for as long as a release cut that way is still published; once
+step 7 has deleted it, the `.zip.001` paragraph leaves those three pages.
 
 The table carries a Files column, the `pack_files` step 5 prints, and the
 notes never open on the size of the collection. That total covers every

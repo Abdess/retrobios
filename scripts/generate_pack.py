@@ -63,6 +63,7 @@ import packresolve
 import region as region_mod
 import slot as slot_mod
 import slots
+import split_pack
 from deterministic_zip import _FIXED_DATE_TIME, rebuild_zip_deterministic
 from nativemode import (
     digest_algorithm,
@@ -3274,6 +3275,20 @@ def _narrows_contents(pack_name: str) -> bool:
     return any(f"{tag}_" in pack_name for tag in _CONTENT_NARROWING_TAGS)
 
 
+def _pack_archives(output_dir: str) -> list[str]:
+    """The ZIPs of a directory that are packs.
+
+    A part of a split pack holds a share of a platform by design and was
+    checked against the whole when it was cut: judged as a pack it would
+    fail conformance, and injecting a manifest would change published bytes.
+    """
+    return sorted(
+        name
+        for name in os.listdir(output_dir)
+        if name.endswith(".zip") and not split_pack.is_part(name)
+    )
+
+
 def verify_and_finalize_packs(
     output_dir: str,
     db: dict,
@@ -3295,18 +3310,14 @@ def verify_and_finalize_packs(
 
     # Map ZIP names to platform names
     pack_to_platform: dict[str, list[str]] = {}
-    for name in sorted(os.listdir(output_dir)):
-        if not name.endswith(".zip"):
-            continue
+    for name in _pack_archives(output_dir):
         for pname in list_registered_platforms(platforms_dir):
             cfg = load_platform_config(pname, platforms_dir)
             display = cfg.get("platform", pname).replace(" ", "_")
             if display in name or display.replace("_", "") in name.replace("_", ""):
                 pack_to_platform.setdefault(name, []).append(pname)
 
-    for name in sorted(os.listdir(output_dir)):
-        if not name.endswith(".zip"):
-            continue
+    for name in _pack_archives(output_dir):
         zip_path = os.path.join(output_dir, name)
 
         # Stage 1: database integrity

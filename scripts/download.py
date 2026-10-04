@@ -3,8 +3,11 @@
 
 Cross-platform tool (Linux/macOS/Windows) using only Python stdlib.
 
-A pack over 2 GB is published as numbered volumes (`.zip.001`, `.zip.002`),
-so a platform is a group of assets rather than a single one.
+A pack over the release asset limit is published in several files, so a
+platform is a group of assets rather than a single one. The parts are each
+a ZIP (`.part1of2.zip`), checked and extracted one after the other. Releases
+up to v2026.09.04 carry byte ranges of one archive instead (`.zip.001`,
+`.zip.002`), which are joined first.
 
 Usage:
     python scripts/download.py --list                    # List platforms
@@ -39,6 +42,9 @@ MAX_CHECKSUMS_BYTES = 1 << 20
 CHUNK = 1 << 20
 
 _VOLUME_RE = re.compile(rf"^(?P<base>.+{re.escape(PACK_SUFFIX)})\.(?P<index>\d+)$")
+_PART_RE = re.compile(
+    r"^(?P<stem>.+_BIOS_Pack)\.part(?P<index>\d+)of(?P<count>\d+)\.zip$"
+)
 _LOOPBACK_HOSTS = {"127.0.0.1", "::1", "localhost"}
 
 
@@ -64,12 +70,19 @@ API = _checked_url(os.environ.get("RETROBIOS_API", DEFAULT_API), "RETROBIOS_API"
 
 @dataclass(frozen=True)
 class Pack:
-    """A platform pack: one asset, or the volumes it was split into."""
+    """A platform pack: one asset, or the files it was published in.
+
+    `joined` says the files are byte ranges of one archive. `expected_parts`
+    is the count a part's own name declares, so a release that lists fewer
+    is recognised before anything is downloaded.
+    """
 
     name: str
     platform: str
     parts: tuple[dict, ...]
     size: int
+    joined: bool = False
+    expected_parts: int = 1
 
 
 def get_latest_release() -> dict:
@@ -94,13 +107,21 @@ def get_latest_release() -> dict:
 
 
 def group_packs(release: dict) -> list[Pack]:
-    """Group release assets into packs, volumes folded into their archive."""
+    """Group release assets into packs, the files of one pack folded together."""
     groups: dict[str, list[tuple[int, dict]]] = {}
+    joined: set[str] = set()
+    expected: dict[str, int] = {}
     for asset in release.get("assets", []):
         name = asset["name"]
         volume = _VOLUME_RE.match(name)
+        part = _PART_RE.match(name)
         if volume:
             groups.setdefault(volume["base"], []).append((int(volume["index"]), asset))
+            joined.add(volume["base"])
+        elif part:
+            base = f"{part['stem']}.zip"
+            groups.setdefault(base, []).append((int(part["index"]), asset))
+            expected[base] = int(part["count"])
         elif name.endswith(PACK_SUFFIX):
             groups.setdefault(name, []).append((0, asset))
 
@@ -113,6 +134,8 @@ def group_packs(release: dict) -> list[Pack]:
                 platform=base[: -len(PACK_SUFFIX)].replace("_", " "),
                 parts=parts,
                 size=sum(part.get("size", 0) for part in parts),
+                joined=base in joined,
+                expected_parts=expected.get(base, len(parts)),
             )
         )
     return packs
@@ -213,8 +236,34 @@ def make_staging(dest: Path) -> Path:
     return Path(tempfile.mkdtemp(prefix=STAGING_PREFIX, dir=dest))
 
 
-def fetch_pack(pack: Pack, staging: Path, checksums: dict[str, str]) -> Path:
-    """Download every volume of a pack and return the assembled archive."""
+def _check(archive: Path, checksums: dict[str, str]) -> None:
+    """Compare a downloaded file with its published SHA-256, when there is one."""
+    expected = checksums.get(archive.name)
+    if not expected:
+        print(f"No checksum published for {archive.name}, skipping.")
+        return
+    print(f"Checking {archive.name}...")
+    actual = compute_hashes(str(archive))["sha256"].lower()
+    if actual != expected:
+        archive.unlink()
+        print(
+            f"Error: checksum mismatch for {archive.name}\n"
+            f"  expected {expected}\n  got      {actual}\n"
+            "Download the parts again; a truncated part gives this.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+
+def fetch_pack(pack: Pack, staging: Path, checksums: dict[str, str]) -> list[Path]:
+    """Download a pack and return the archives to extract, each one checked."""
+    if len(pack.parts) != pack.expected_parts:
+        print(
+            f"Error: the release lists {len(pack.parts)} of "
+            f"{pack.expected_parts} parts of {pack.name}.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
     staging.mkdir(parents=True, exist_ok=True)
     volumes = []
     for index, part in enumerate(pack.parts, start=1):
@@ -224,32 +273,20 @@ def fetch_pack(pack: Pack, staging: Path, checksums: dict[str, str]) -> Path:
         download_file(part["browser_download_url"], target, part.get("size", 0), label)
         volumes.append(target)
 
-    archive = staging / pack.name
-    if volumes != [archive]:
-        if len(volumes) > 1:
-            print(f"Joining {len(volumes)} parts into {pack.name}...")
-            join_volumes(volumes, archive)
-            for volume in volumes:
-                volume.unlink()
-        else:
-            volumes[0].replace(archive)
+    if pack.joined:
+        archive = staging / pack.name
+        print(f"Joining {len(volumes)} parts into {pack.name}...")
+        join_volumes(volumes, archive)
+        for volume in volumes:
+            volume.unlink()
+        volumes = [archive]
 
-    expected = checksums.get(pack.name)
-    if expected:
-        print("Checking the archive...")
-        actual = compute_hashes(str(archive))["sha256"].lower()
-        if actual != expected:
-            archive.unlink()
-            print(
-                f"Error: checksum mismatch for {pack.name}\n"
-                f"  expected {expected}\n  got      {actual}\n"
-                "Download the parts again; a truncated part gives this.",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-    else:
+    if not checksums:
         print(f"No {CHECKSUMS_ASSET} in the release, skipping the checksum.")
-    return archive
+        return volumes
+    for archive in volumes:
+        _check(archive, checksums)
+    return volumes
 
 
 def show_info(platform: str, release: dict):
@@ -333,9 +370,10 @@ To check files already in place, use: python install.py --check
 
     staging = make_staging(dest)
     try:
-        archive = fetch_pack(pack, staging, fetch_checksums(release))
+        archives = fetch_pack(pack, staging, fetch_checksums(release))
         print(f"Extracting to {dest}/...")
-        safe_extract_zip(str(archive), str(dest))
+        for archive in archives:
+            safe_extract_zip(str(archive), str(dest))
     finally:
         shutil.rmtree(staging, ignore_errors=True)
     print("Done!")

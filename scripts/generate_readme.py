@@ -340,11 +340,18 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         " next because a pack carries only what that platform's emulators"
         " load."
         " The size is what the files occupy once extracted; the ZIP itself"
-        " downloads smaller, and anything over 2 GB arrives split into"
-        " `.zip.001`, `.zip.002` volumes. Open the `.001` with 7-Zip or"
-        " PeaZip, or join them first"
-        " (`cat Pack.zip.0* > Pack.zip`, or"
-        " `copy /b Pack.zip.001+Pack.zip.002 Pack.zip` on Windows).",
+        " downloads smaller.",
+        "",
+        "A pack over 2 GB comes in several parts, and every part is needed."
+        " How to open them depends on their name:",
+        "",
+        "- `Pack.part1of2.zip`, `Pack.part2of2.zip`: each part is an ordinary"
+        " ZIP. Extract them all into the same folder.",
+        "- `Pack.zip.001`, `Pack.zip.002` (releases up to v2026.09.04): slices"
+        " of one ZIP, none of which opens on its own. Put them in one folder"
+        " and open the `.001` with 7-Zip or PeaZip, or join them first with"
+        " `cat Pack.zip.0* > Pack.zip` on Linux and macOS,"
+        " `cmd /c copy /b Pack.zip.001+Pack.zip.002 Pack.zip` on Windows.",
         "",
         "Every release ships `SHA256SUMS.txt` and a detached signature of it,"
         " checkable against `allowed_signers` in this repository:"

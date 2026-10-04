@@ -77,9 +77,9 @@ bash scripts/download.sh retroarch ~/RetroArch/system/
 bash scripts/download.sh --list  # show available packs
 ```
 
-A pack published in several volumes is downloaded part by part, joined, and
-checked against the SHA-256 the release publishes before anything is
-extracted. `python scripts/download.py` does the same on Windows.
+A pack published in several parts is downloaded part by part and checked
+against the SHA-256 the release publishes before anything is extracted.
+`python scripts/download.py` does the same on Windows.
 
 ### Option 3: manual download
 
@@ -87,15 +87,19 @@ extracted. `python scripts/download.py` does the same on Windows.
 2. Download the ZIP pack for your platform
 3. Extract to the BIOS directory listed below
 
-Packs over 2 GB are split into numbered volumes (`.zip.001`, `.zip.002`).
-Download every part into the same folder, then open the `.001` with 7-Zip or
-PeaZip, which read the whole set. To join them into one ZIP first:
+A pack over 2 GB comes in several parts, and every part is needed. How to
+open them depends on their name:
 
-- Linux/macOS: `cat Pack.zip.0* > Pack.zip`
-- Windows (cmd): `copy /b Pack.zip.001+Pack.zip.002 Pack.zip`
+- `Pack.part1of2.zip`, `Pack.part2of2.zip`: each part is an ordinary ZIP.
+  Extract them all into the same folder.
+- `Pack.zip.001`, `Pack.zip.002` (releases up to v2026.09.04): slices of one
+  ZIP, none of which opens on its own. Put them in one folder and open the
+  `.001` with 7-Zip or PeaZip, or join them first:
+    - Linux/macOS: `cat Pack.zip.0* > Pack.zip`
+    - Windows: `cmd /c copy /b Pack.zip.001+Pack.zip.002 Pack.zip`
 
-A frontend's own extractor may refuse a volume: Batocera answers `Archive
-type: '001' is not yet supported`. Join the parts from a shell there. See
+A frontend's own extractor may refuse a slice: Batocera answers `Archive
+type: '001' is not yet supported`. Join the slices from a shell there. See
 [Download](../which-pack.md) for the per-setup instructions.
 
 ## BIOS directory by platform

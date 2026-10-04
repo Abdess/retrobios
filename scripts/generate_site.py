@@ -3406,12 +3406,16 @@ download it, and extract the files into the BIOS folder listed below.
 The metadata and website can be newer than that release: pack publication is
 manual and only happens after the release gates pass.
 
-Packs over 2 GB are split into numbered volumes (`.zip.001`, `.zip.002`).
-Download every part, then open the `.001` file with 7-Zip or PeaZip, which
-extract the whole archive directly. To join the parts manually instead:
+A pack over 2 GB comes in several parts, and every part is needed. How to
+open them depends on their name:
 
-- Linux/macOS: `cat PackName.zip.0* > PackName.zip`
-- Windows (cmd): `copy /b PackName.zip.001+PackName.zip.002 PackName.zip`
+- `PackName.part1of2.zip`, `PackName.part2of2.zip`: each part is an ordinary
+  ZIP. Extract them all into the same folder.
+- `PackName.zip.001`, `PackName.zip.002` (releases up to v2026.09.04): slices
+  of one ZIP, none of which opens on its own. Put them in one folder and open
+  the `.001` with 7-Zip or PeaZip, or join them first:
+    - Linux/macOS: `cat PackName.zip.0* > PackName.zip`
+    - Windows: `cmd /c copy /b PackName.zip.001+PackName.zip.002 PackName.zip`
 
 ### Steam Deck
 

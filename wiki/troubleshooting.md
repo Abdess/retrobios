@@ -271,18 +271,25 @@ Some platforms share packs (Lakka uses the RetroArch pack). The installer handle
 this mapping automatically, but if you're downloading manually, check which pack
 name corresponds to your platform.
 
-**A split pack will not extract:**
+**A pack in several parts will not extract:**
 
-A pack over 2 GB is published as `.zip.001`, `.zip.002`. Put every part in one
-folder; 7-Zip and PeaZip open the `.001` directly. A frontend's own extractor
-may refuse it, Batocera among them:
+Parts named `Pack.part1of2.zip` are ordinary ZIPs: extract each one into the
+same folder, and check that all of them were downloaded, the name says how
+many there are.
+
+Parts named `Pack.zip.001`, `Pack.zip.002` (releases up to v2026.09.04) are
+slices of one ZIP. None opens on its own, and the error never says a part is
+missing: 7-Zip reports `Unavailable start of archive` on a `.002`, Windows
+has no program for the extension. Put every slice in one folder; 7-Zip and
+PeaZip open the `.001` directly. A frontend's own extractor may refuse it,
+Batocera among them:
 
 ```
 Archive type: '001' is not yet supported
 ```
 
-The volumes are plain byte ranges, so joining them from a shell rebuilds the
-ZIP:
+The slices are plain byte ranges, so joining them from a shell rebuilds the
+ZIP (`cmd /c copy /b Pack.zip.001+Pack.zip.002 Pack.zip` on Windows):
 
 ```bash
 cat Pack.zip.0* > Pack.zip
