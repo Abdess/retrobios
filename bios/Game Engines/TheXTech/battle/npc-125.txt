@@ -1,0 +1,3 @@
+frames=6
+framestyle=1
+framespeed=6

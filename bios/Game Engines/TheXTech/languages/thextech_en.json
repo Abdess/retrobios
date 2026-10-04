@@ -1,0 +1,876 @@
+{
+    "editor": {
+        "block": {
+            "canBreak": "Can Break",
+            "canBreakTooltip": "Legacy: breaks when hit",
+            "inside": "Inside:",
+            "invis": "Invis",
+            "letterHeight": "H ",
+            "letterWidth": "W ",
+            "pickContents": "Pick block contents",
+            "slick": "Slick"
+        },
+        "browser": {
+            "askOverwriteFile": "Overwrite {0}?",
+            "itemNewFile": "<New File>",
+            "itemNewFolder": "<New Folder>",
+            "newFile": "New file",
+            "openFile": "Open file",
+            "saveFile": "Save file"
+        },
+        "events": {
+            "bounds": {
+                "changeAllSectionBoundsToCurrent": "Change all sect bounds to current?",
+                "changeSectionBoundsToCurrent": "Change sect {0} bounds to current?",
+                "shouldEvent": "Should Event {0}"
+            },
+            "controlsForEventN": "Controls for event {0}",
+            "deletion": {
+                "cancel": "No: do not delete event",
+                "confirm": "Yes: delete event",
+                "deletingEvent": "Deleting event {0}"
+            },
+            "desc": {
+                "activate": "NPC enters the screen",
+                "death": "NPC dies",
+                "destroy": "block is destroyed",
+                "enter": "warp is entered",
+                "hit": "block is hit",
+                "layerClear": "everything in object layer is gone",
+                "phraseTriggersAfterTemplate": "{0} triggers {1} ms after event {2} occurs",
+                "phraseTriggersWhenTemplate": "{0} triggers when {1}",
+                "talk": "player talks to NPC"
+            },
+            "header": "Events:",
+            "headerTriggerEvent": "Trigger:",
+            "itemNewEvent": "<New Event>",
+            "label": {
+                "activate": "Activate",
+                "death": "Death",
+                "destroy": "Destroy",
+                "enter": "Enter",
+                "hit": "Hit",
+                "layerClear": "Layer Clear",
+                "next": "Next",
+                "talk": "Talk"
+            },
+            "layers": {
+                "headerHide": "Hide:",
+                "headerMove": "Move:",
+                "headerShow": "Show:",
+                "headerToggle": "Toggle:"
+            },
+            "letter": {
+                "activate": "A:",
+                "death": "D:",
+                "destroy": "D:",
+                "enter": "E:",
+                "hit": "H:",
+                "layerClear": "L:",
+                "talk": "T:"
+            },
+            "promptEventName": "Event name",
+            "promptEventText": "Event text",
+            "props": {
+                "autostart": "Autostart",
+                "controls": "Controls",
+                "endGame": "End Game",
+                "layerSmoke": "Smoke",
+                "sound": "Sound"
+            },
+            "sections": {
+                "actionKeep": "Keep",
+                "actionReset": "Reset",
+                "actionSet": "Set",
+                "phraseAllSections": "All Sections",
+                "propBackground": "BG",
+                "propBounds": "Bounds",
+                "propMusic": "Music"
+            },
+            "settingsForEvent": "Settings for event {0}"
+        },
+        "file": {
+            "actionClearLevel": "Clear Level",
+            "actionClearWorld": "Clear World",
+            "actionExit": "Exit",
+            "actionOpen": "Open",
+            "actionRevert": "Revert",
+            "commandNew": "New",
+            "commandOpen": "Open...",
+            "commandSave": "Save",
+            "commandSaveAs": "Save as...",
+            "confirmConfirmAction": "Are you sure you want to {0}?",
+            "confirmConvertFormatTo": "Convert format to {0}?",
+            "confirmSaveBeforeAction": "Save before you {0}?",
+            "convert": {
+                "descNew": "The file extension will change but the old file will NOT be deleted.\n\nPlease check for lost features after saving."
+            },
+            "formatLegacy": "Legacy",
+            "formatModern": "Modern",
+            "labelCurrentFile": "Current file: ",
+            "labelFormat": "Format:",
+            "optionActionWithoutSave": "{0} without saving",
+            "optionCancelAction": "Cancel: do not {0}",
+            "optionCancelConversion": "Cancel conversion",
+            "optionProceedWithConversion": "Proceed with conversion",
+            "optionYesSaveThenAction": "Yes: save then {0}",
+            "sectionLevel": "Level",
+            "sectionWorld": "World"
+        },
+        "labelSortLayer": "Sort Layer:",
+        "labelSortOffset": "Sort Offset:",
+        "layers": {
+            "abbrevAttLayer": "Att: ",
+            "default": "Default",
+            "deletion": {
+                "cancel": "Cancel: do not delete layer",
+                "confirmDelete": "No: *DELETE ALL CONTENTS*",
+                "confirmPreserve": "Yes: move to default layer",
+                "header": "Deleting layer {0}",
+                "preserveLayerContents": "Preserve layer contents?"
+            },
+            "desc": {
+                "att": "Whenever the NPC moves, the attached layer moves following it"
+            },
+            "header": "Layers:",
+            "itemNewLayer": "<New Layer>",
+            "label": "Layer:",
+            "labelAttached": "Attached:",
+            "labelAttachedLayer": "Attached Layer:",
+            "labelMoveLayer": "Move Layer:",
+            "promptLayerName": "Layer name"
+        },
+        "letterCoordX": "X",
+        "letterCoordY": "Y",
+        "letterDown": "D",
+        "letterLeft": "L",
+        "letterRight": "R",
+        "letterUp": "U",
+        "level": {
+            "alwaysVis": "Always Vis",
+            "bigBG": "Big BG",
+            "gameStart": "Game Start",
+            "levelName": "Level Name",
+            "pathBG": "Path BG",
+            "pathUnlocks": "Path Unlocks",
+            "startPos": "Start Pos"
+        },
+        "mapPos": "Map Pos:",
+        "npc": {
+            "abbrevGen": "Gen",
+            "ai": {
+                "LR": "LR",
+                "UD": "UD",
+                "aiIs": "AI: {0}",
+                "headerCustomAi": "Custom AI:",
+                "jump": "Jump",
+                "leap": "Leap",
+                "swim": "Swim",
+                "target": "Target",
+                "use1_0Ai": "Use 1.0 AI?"
+            },
+            "gen": {
+                "direction": "Direction",
+                "effectIs": "Effect: {0}",
+                "effectShoot": "Shoot",
+                "effectWarp": "Warp",
+                "header": "Generator Settings"
+            },
+            "inContainer": "In",
+            "inertNice": "Nice",
+            "props": {
+                "active": "Active",
+                "attachSurface": "Attach",
+                "facing": "Facing"
+            },
+            "stuckStop": "Stop",
+            "tooltipExpandSection": "Expand section"
+        },
+        "pageBlankOfBlank": "Page {0} of {1}",
+        "phraseAreYouSure": "Are you sure?",
+        "phraseCountMore": "{0} More",
+        "phraseDelayIsMs": "Delay: {0} ms",
+        "phraseGenericIndex": "Number {0}",
+        "phraseRadiusIndex": "Radius {0}",
+        "phraseSectionIndex": "Section {0}",
+        "phraseTextOf": "{0} Text",
+        "phraseWarpIndex": "Warp {0}",
+        "section": {
+            "horizWrap": "Horiz. Wrap",
+            "vertWrap": "Vert. Wrap",
+            "noTurnBack": "No Turn Back",
+            "offscreenExit": "Offscreen Exit",
+            "scroll": "Scroll",
+            "setBounds": "Set Bounds",
+            "underwater": "Underwater"
+        },
+        "select": {
+            "allSectPropBlankForEventN": "All Sect {0} for {1}",
+            "pathBlankUnlock": "Path {0} Unlock By",
+            "sectBlankPropBlankForEventN": "Sect {0} {1} for {2}",
+            "sectionBlankPropBlank": "Section {0} {1}",
+            "soundForEventN": "Sound for Event {0}",
+            "warpTransitEffect": "Warp Transition Effect",
+            "worldMusic": "World Music"
+        },
+        "testPlay": {
+            "boot": "Boot",
+            "char": "Char",
+            "magicHand": "Magic Hand",
+            "pet": "Pet",
+            "power": "Power"
+        },
+        "toggleMagicBlock": "Magic Block",
+        "tooltip": {
+            "BGOs": "BGOs",
+            "NPCs": "NPCs",
+            "area": "Area",
+            "blocks": "Blocks",
+            "erase": "Erase",
+            "eraseAll": "Erase All",
+            "events": "Events",
+            "file": "File",
+            "layers": "Layers",
+            "levels": "Levels",
+            "music": "Music",
+            "paths": "Paths",
+            "scenes": "Scenes",
+            "select": "Select",
+            "settings": "Settings",
+            "show": "Show",
+            "tiles": "Tiles",
+            "warps": "Warps",
+            "water": "Water"
+        },
+        "warp": {
+            "allow": "Allow:",
+            "cannonExit": "Cannon Exit",
+            "dir": "Dir.",
+            "effect": "Effect:",
+            "in": "In",
+            "item": "Item",
+            "lvlWarp": "Lvl Warp",
+            "needFloor": "Need Floor",
+            "needKey": "Need Key",
+            "needStarCount": "Need {0} {1}",
+            "out": "Out",
+            "placing": "Placing:",
+            "ride": "Ride",
+            "showStarCount": "Show Star Count",
+            "showStartScene": "Show Start Scene",
+            "speed": "Speed ",
+            "starLockMessage": "Star lock msg",
+            "style": {
+                "blipInstant": "Blip",
+                "door": "Door",
+                "pipe": "Pipe",
+                "portal": "Port",
+                "style": "Style: "
+            },
+            "target": "Target: ",
+            "title": "Warp Settings",
+            "to": "To: {0}",
+            "toMap": "To Map",
+            "transit": {
+                "name0": "NONE",
+                "name1": "SCROLL",
+                "name2": "FADE",
+                "name3": "CIRCLE",
+                "name4": "FLIP (H)",
+                "name5": "FLIP (V)"
+            },
+            "twoWay": "Two-Way"
+        },
+        "water": {
+            "title": "Water Settings"
+        },
+        "wordCoins": "Coins",
+        "wordEnabled": "Enabled",
+        "wordEvent": {
+            "genitive": "Event",
+            "nominative": "Event",
+            "typeLabel": "{0} Event:"
+        },
+        "wordHeight": "Height",
+        "wordInstant": "Instant",
+        "wordMode": "Mode",
+        "wordNPC": {
+            "genitive": "NPC",
+            "nominative": "NPC"
+        },
+        "wordText": "Text",
+        "wordWidth": "Width",
+        "world": {
+            "allowChars": "Allow Chars",
+            "hubWorld": "Hub World",
+            "introLevel": "Intro Level",
+            "name": "World Name",
+            "phraseCreditIndex": "World Credit Line {0}:",
+            "retryOnFail": "Retry On Fail",
+            "totalStars": "Total Stars: "
+        }
+    },
+    "game": {
+        "connect": {
+            "dropAddTitle": "Drop/Add Players",
+            "phraseChangeChar": "Change Char",
+            "phraseDropMe": "Drop Me",
+            "phraseDropPX": "Drop P{0}",
+            "phraseForceResume": "Force Resume",
+            "phraseHoldStart": "Hold Start",
+            "phrasePressAButton": "Press A Button",
+            "phraseSetControls": "Set Controls",
+            "phraseStartToForceRes": "Press Start to Force Resume",
+            "phraseStartToResume": "Press Start to Resume",
+            "phraseTestControls": "Test Controls",
+            "phraseTestProfile": "Test Profile",
+            "phraseWaitingForInput": "Waiting for input device...",
+            "reconnectTitle": "Reconnect",
+            "splitPressSelect_1": "Press Select for",
+            "splitPressSelect_2": "Controls Options",
+            "wordDisconnect": "Disconnect"
+        },
+        "error": {
+            "errorInvalidEnterWarp": "Can't start the level because of an invalid entrance warp {1} was specified.\nTotal warp entries: {2}\n\nFile: {0}",
+            "errorNoStartPoint": "Can't start the level because of no available start points placed or entrance warp specified.\n\nFile: {0}",
+            "openFileFailed": "Can't open \"{0}\": file doesn't exist or corrupted.",
+            "warpNeedStarCount": "You need {0} {1} to enter.",
+            "IPCTimeOut": "No responce from the connected Editor. Game will be closed.",
+            "openIPCDataFailed": "Can't proceed received file data because of corruption or other errors.",
+            "errorTooOldEngine": "Content requires a newer engine feature level ({0}) than the current version ({1}). Please update TheXTech.",
+            "errorTooOldGameAssets": "Content requires a newer asset pack feature level ({0}) than the current asset pack ({1}). Please upgrade your game asset pack."
+        },
+        "hint": {
+            "pound-altrun": "Press Alt Run to pound downwards!",
+            "pound-down": "Press Down to pound downwards!",
+            "no-lives-new": "No coins left? Take a loan! Just watch your score...",
+            "no-lives-old": "Be careful - Game Over is imminent!",
+            "rainbow-surf": "Grab, run, hold down, and let go to surf.",
+            "char5-bombs": "Press Run to collect and Alt Run to throw.",
+            "heavy-duck": "Duck to block most - but not all - flames!",
+            "shoe-block": "Wearing this blocks most - but not all - flames!",
+            "gray-bricks": "Some blocks are vulnerable to special powers."
+        },
+        "message": {
+            "scanningLevels": "Scanning levels..."
+        },
+        "format": {
+            "minutesSeconds": "{0}m{1}s"
+        },
+        "pause": {
+            "continue": "Continue",
+            "playerSetup": "Player Setup",
+            "enterCode": "Enter Code",
+            "quit": "Quit",
+            "quitTesting": "Quit Testing",
+            "resetCheckpoints": "Reset Checkpoints",
+            "restartLevel": "Restart Level",
+            "returnToEditor": "Return to Editor",
+            "saveAndContinue": "Save and Continue",
+            "saveAndQuit": "Save and Quit"
+        },
+        "msgbox": {
+            "sysInfoError": "Error!",
+            "sysInfoTitle": "Info",
+            "sysInfoWarning": "Warning!"
+        },
+        "screenPaused": "Paused",
+        "ipcStatus": {
+            "dataAccepted": "Data accepted, the parsing started...",
+            "dataTransferStarted": "Started data tansfer...",
+            "dataValid": "Accepted data is valid",
+            "errorTimeout": "ERROR: Wait time out.",
+            "loadingdone": "Done. Starting game...",
+            "waitingInput": "Waiting for input data..."
+        },
+        "loader": {
+            "statusAssetPacks": "Asset packs",
+            "statusFinishing": "Finishing...",
+            "statusGameInfo": "Game info",
+            "statusLoadData": "Loading data...",
+            "statusLoadFile": "Load: {0}",
+            "statusTranslations": "Translations",
+            "loading": "Loading..."
+        }
+    },
+    "languageName": "English",
+    "menu": {
+        "abbrevMilliseconds": "MS",
+        "battle": {
+            "errorNoLevels": "Can't start battle because of no levels available"
+        },
+        "caseNone": "<None>",
+        "character": {
+            "selectCharacter": "{0} game"
+        },
+        "controls": {
+            "buttons": {
+                "altJump": "Alt Jump",
+                "altRun": "Alt Run",
+                "down": "Down",
+                "drop": "Drop Item",
+                "jump": "Jump",
+                "left": "Left",
+                "right": "Right",
+                "run": "Run",
+                "start": "Start",
+                "up": "Up"
+            },
+            "caseInvalid": "(Invalid)",
+            "caseMouse": "(Mouse)",
+            "caseTouch": "(Touch)",
+            "controlsConnected": "Connected:",
+            "controlsDeleteKey": "(Alt Jump to Delete)",
+            "controlsDeleteKey2": "(Alt Run to Delete)",
+            "controlsDeviceTypes": "Device Types",
+            "controlsInUse": "(In Use)",
+            "controlsNewProfile": "<New Profile>",
+            "controlsNotInUse": "(Not In Use)",
+            "controlsReallyDeleteProfile": "Really delete profile?",
+            "controlsTitle": "Controls",
+            "cursor": {
+                "down": "Mouse Down",
+                "left": "Mouse Left",
+                "primary": "Primary",
+                "right": "Mouse Right",
+                "secondary": "Secondary",
+                "tertiary": "Tertiary",
+                "up": "Mouse Up"
+            },
+            "editor": {
+                "fastScroll": "Fast Scrl",
+                "modeErase": "Mode Erase",
+                "modeSelect": "Mode Select",
+                "nextSection": "Next Sect",
+                "prevSection": "Prev Sect",
+                "scrollDown": "Scrl Down",
+                "scrollLeft": "Scrl Left",
+                "scrollRight": "Scrl Right",
+                "scrollUp": "Scrl Up",
+                "switchScreens": "Show Pane",
+                "testPlay": "Test Play"
+            },
+            "hotkeys": {
+                "debugInfo": "Debug Info",
+                "enterCheats": "Enter Code",
+                "fullscreen": "Fullscreen",
+                "legacyPause": "Old Pause",
+                "recordGif": "Record GIF",
+                "screenshot": "Screenshot",
+                "toggleHUD": "Toggle HUD",
+                "vanillaCam": "Vanilla Cam"
+            },
+            "options": {
+                "batteryStatus": "Battery Status",
+                "maxPlayers": "Max Players",
+                "rumble": "Rumble",
+                "altMenuControls": "Alt Menu Controls",
+                "textEntryStyle": "Text Entry Style"
+            },
+            "joystickSimpleEditor": "Simple Editor Controls",
+            "phraseNewProfOldJoy": "New Profile for Old Joystick",
+            "profile": {
+                "cursorControls": "Cursor controls",
+                "deleteProfile": "Delete profile",
+                "editorControls": "Editor controls",
+                "hotkeys": "Hotkeys",
+                "playerControls": "Player controls",
+                "renameProfile": "Rename profile"
+            },
+            "tDS": {
+                "buttonA": "A",
+                "buttonB": "B",
+                "buttonL": "L",
+                "buttonR": "R",
+                "buttonSelect": "Select",
+                "buttonStart": "Start",
+                "buttonX": "X",
+                "buttonY": "Y",
+                "buttonZL": "ZL",
+                "buttonZR": "ZR",
+                "cStick": "C-Stick",
+                "casePen": "(Pen)",
+                "dPad": "D-Pad",
+                "tStick": "Thumb"
+            },
+            "touchscreen": {
+                "layout": {
+                    "longOld": "Long (Old)",
+                    "phabletOld": "Phablet (Old)",
+                    "phoneOld": "Phone (Old)",
+                    "standard": "Standard",
+                    "tabletOld": "Tablet (Old)",
+                    "tight": "Tight",
+                    "tinyOld": "Tiny (Old)"
+                },
+                "option": {
+                    "feedbackLength": "Feedback Length",
+                    "feedbackStrength": "Feedback Strength",
+                    "holdRun": "Hold Run on Start",
+                    "interfaceStyle": "Interface Style",
+                    "layoutStyle": "Layout Style",
+                    "resetLayout": "Reset Layout",
+                    "sStartSpacing": "S-Start Spacing",
+                    "scaleButtons": "Scale Buttons",
+                    "scaleDPad": "Scale D-Pad",
+                    "scaleFactor": "Scale Factor",
+                    "showCodeButton": "Show Code Button"
+                },
+                "style": {
+                    "ABXY": "ABXY",
+                    "XODA": "XODA",
+                    "actions": "Actions"
+                }
+            },
+            "types": {
+                "gamepad": "Gamepad",
+                "keyboard": "Keyboard",
+                "oldJoystick": "Old Joy",
+                "touchscreen": "Touchscreen"
+            },
+            "wii": {
+                "classic": {
+                    "buttonLT": "LT",
+                    "buttonRT": "RT",
+                    "buttonX": "X",
+                    "buttonY": "Y",
+                    "buttonZL": "ZL",
+                    "buttonZR": "ZR",
+                    "lStick": "L-Pad",
+                    "rStick": "R-Pad"
+                },
+                "nunchuck": {
+                    "buttonC": "C",
+                    "buttonZ": "Z",
+                    "prefixN": "N"
+                },
+                "phraseNewClassic": "New Classic Profile",
+                "phraseNewNunchuck": "New Nunchuck Profile",
+                "typeClassic": "Classic",
+                "typeNunchuck": "Nunchuck",
+                "typeWiimote": "Wiimote",
+                "typeGamecube": "GameCube",
+                "wiimote": {
+                    "button1": "1",
+                    "button2": "2",
+                    "buttonA": "A",
+                    "buttonB": "B",
+                    "buttonHome": "Home",
+                    "buttonMinus": "-",
+                    "buttonPlus": "+",
+                    "caseIR": "(IR)",
+                    "dPad": "D-Pad",
+                    "shake": "Shake"
+                }
+            },
+            "wordButtons": "Buttons",
+            "wordProfiles": "Profiles"
+        },
+        "editor": {
+            "errorMissingResources": "Sorry! You are missing {0}, required for the in-game editor.",
+            "battles": "<Battle Levels>",
+            "makeFor": "Make for:",
+            "newWorld": "<New World>",
+            "promptNewWorldName": "New world name"
+        },
+        "game": {
+            "gameBattleRandom": "Random Level",
+            "gameCopySave": "Copy save",
+            "gameEraseSave": "Erase save",
+            "gameEraseSlot": "Select the slot to erase",
+            "gameNoBattleLevels": "<No battle levels>",
+            "gameNoEpisodesToPlay": "<No episodes to play>",
+            "warnEpCompat": "This episode was made for a different branch of SMBX and may not work properly.",
+            "gameSlotContinue": "SLOT {0} ... {1}%",
+            "gameSlotNew": "SLOT {0} ... NEW GAME",
+            "gameSourceSlot": "Select the source slot",
+            "gameTargetSlot": "Now select the target",
+            "phraseScore": "Score: {0}",
+            "phraseTime": "Time: {0}"
+        },
+        "loading": "Loading...",
+        "main": {
+            "main1PlayerGame": "1 Player Game",
+            "mainBattleGame": "Battle Game",
+            "mainEditor": "Editor",
+            "mainExit": "Exit",
+            "mainMultiplayerGame": "2 Player Game",
+            "mainOptions": "Options",
+            "mainPlayEpisode": "Play Episode"
+        },
+        "options": {
+            "restartEngine": "Restart engine for changes to take effect.",
+            "advanced": {
+                "_header": "Advanced",
+                "_tooltip": "Technical options for internal operations",
+                "advanced-audio": "Audio",
+                "advanced-video": "Video",
+                "audio-buffer-size": {
+                    "_name": "Buffer size",
+                    "_tooltip": "Increase for fewer pops but more lag"
+                },
+                "audio-channels": {
+                    "_name": "Channels",
+                    "mono": "Mono",
+                    "stereo": "Stereo"
+                },
+                "audio-enable": "Enable",
+                "audio-format": {
+                    "_name": "Audio format",
+                    "_tooltip": "Format for sound driver"
+                },
+                "audio-sample-rate": {
+                    "11025": "11025 Hz",
+                    "16000": "16000 Hz",
+                    "22050": "22050 Hz",
+                    "32000": "32000 Hz",
+                    "44100": "44100 Hz",
+                    "48000": "48000 Hz",
+                    "_name": "Sample rate"
+                },
+                "choose-assets-on-launch": "Choose assets on launch",
+                "log-level": {
+                    "_name": "Log level",
+                    "critical": "Critical",
+                    "debug": "Debug",
+                    "fatal": "Fatal",
+                    "info": "Info",
+                    "none": "None",
+                    "warning": "Warning"
+                },
+                "record-gameplay-data": "Record gameplay",
+                "render": {
+                    "_name": "Render mode",
+                    "hw": "Auto",
+                    "opengl": "OpenGL 3+",
+                    "opengl-tip": "Desktop API with support for all new visual effects and full accuracy to SMBX64",
+                    "opengl11": "OpenGL 1.1",
+                    "opengl11-tip": "Legacy desktop API with full accuracy to SMBX64",
+                    "opengles": "OpenGL ES 2+",
+                    "opengles-tip": "Mobile API with support for all new visual effects and high accuracy to SMBX64",
+                    "opengles11": "OpenGL ES 1.1+",
+                    "opengles11-tip": "Legacy mobile API with full accuracy to SMBX64",
+                    "sdl": "SDL2",
+                    "sdl-tip": "Basic cross-platform render API",
+                    "sw": "Software"
+                },
+                "scale-down-textures": {
+                    "_name": "Scale down images",
+                    "_tooltip": "Store images as 1x to save memory",
+                    "all": "All",
+                    "all-tip": "Less loading stutter than 'Safe'",
+                    "none": "None",
+                    "none-tip": "Least loading stutter",
+                    "safe": "Safe",
+                    "safe-tip": "Checks if images are in 2x format"
+                },
+                "use-native-osk": "Native OSK",
+                "inaccurate-gifs": "Inaccurate GIFs",
+                "inaccurate-gifs-tip": "Allows 3D effect when GIFs are present",
+                "webm-recording": "WEBM recording",
+                "internal-res-4p": {
+                    "_name": "4P split screen size",
+                    "default": "Default",
+                    "fhd": "1920x1080 (FHD)",
+                    "qhd": "2560x1440 (QHD)",
+                    "qsmbx": "1600x1200 (QSMBX)"
+                },
+                "fullscreen-type": {
+                    "_name": "Fullscreen type",
+                    "auto": "Auto",
+                    "desktop": "Desktop",
+                    "desktop-tip": "Keep the current screen resolution",
+                    "exclusive": "Exclusive",
+                    "exclusive-tip": "Set physical screen resolution"
+                },
+                "fullscreen-depth": {
+                    "16": "16-bit",
+                    "32": "32-bit",
+                    "_name": "Exclusive bit depth",
+                    "auto": "Auto"
+                },
+                "fullscreen-res": "Exclusive res"
+            },
+            "audio": {
+                "_header": "Audio",
+                "audio-music-volume": "Music volume",
+                "audio-prefs": "Preferences",
+                "audio-sfx-volume": "SFX volume",
+                "sfx-audio-fx": "Echo effects",
+                "sfx-modern": "Modern SFX",
+                "sfx-modern-tip": "Use sounds added in TheXTech",
+                "sfx-pet-beat": "Pet grooves",
+                "sfx-pet-beat-tip": "Play special groove when riding a pet",
+                "sfx-spatial-audio": "Spatial audio",
+                "sfx-spatial-audio-tip": "Reduce volume of offscreen sounds"
+            },
+            "compatibility": {
+                "_header": "Session Tweaks",
+                "_tooltip": "Options for compat or debugging",
+                "autocode": "Autocode",
+                "bugfixes": "Bugfixes",
+                "features": "Features",
+                "reset-all": "Reset All"
+            },
+            "controls": {
+                "_header": "Controls"
+            },
+            "episode-options": {
+                "_header": "Episode Options",
+                "creator-compat": {
+                    "_name": "Creator compat",
+                    "_tooltip": "Logic tweaks by content creator",
+                    "disable": "Disable",
+                    "enable": "Enable",
+                    "file-only": "File only"
+                },
+                "playstyle": {
+                    "_name": "Playstyle",
+                    "classic": "Classic",
+                    "classic-tip": "Minimal updates",
+                    "modern": "Modern",
+                    "modern-tip": "All updates",
+                    "vanilla": "Vanilla",
+                    "vanilla-tip": "No updates"
+                },
+                "hub-resume": "Save warp in hub",
+                "hub-resume-tip": "Resume play at the last warp you entered"
+            },
+            "main": {
+                "_header": "Main",
+                "background-work": "Run in background",
+                "background-work-tip": "Play with joystick while game is unfocused",
+                "four-screen-mode": {
+                    "_name": "4P screen mode",
+                    "shared": "Shared",
+                    "split": "Split"
+                },
+                "frame-skip": "Frameskip",
+                "discord-rpc": "Discord Integration",
+                "language": "Language",
+                "multiplayer": "Multiplayer",
+                "timing": "Frame Timing",
+                "two-screen-mode": {
+                    "_name": "2P screen mode",
+                    "shared": "Shared",
+                    "smbx": "SMBX",
+                    "split": "Left/Right",
+                    "topbottom": "Top/Bottom"
+                },
+                "unlimited-framerate": "Unlimited framerate",
+                "vsync": "V-Sync"
+            },
+            "video": {
+                "_header": "Video",
+                "battery-status": {
+                    "_name": "Device battery status",
+                    "fullscreen": "Fullscreen",
+                    "fullscreen-tip": "Show when the game is fullscreen",
+                    "low": "Low",
+                    "low-tip": "Show when the battery is low",
+                    "off": "Off",
+                    "on": "Always"
+                },
+                "display-controllers": "Controls activity",
+                "effects": "Screen Effects",
+                "enable-inter-level-fade-effect": "Fade transitions",
+                "fullscreen": "Fullscreen",
+                "info-game": "Onscreen game info",
+                "info-meta": "Onscreen meta info",
+                "info-run": "Onscreen run info",
+                "internal-res": {
+                    "3ds": "800x480 (3DS)",
+                    "_name": "Screen size",
+                    "_tooltip": "Resolution of gameplay field",
+                    "dynamic": "Dynamic",
+                    "gba": "480x320 (GBA)",
+                    "hd": "1280x720 (HD)",
+                    "hello": "768x432 (HELLO)",
+                    "nds": "512x384 (NDS)",
+                    "smbx": "800x600 (SMBX)",
+                    "smbx-wide": "SMBX (wide)",
+                    "snes": "512x448 (SNES)",
+                    "vga": "640x480 (VGA)"
+                },
+                "scale-mode": {
+                    "0_5x": "0.5x",
+                    "1x": "1x",
+                    "2x": "2x",
+                    "_name": "Scale mode",
+                    "integer": "Integer",
+                    "linear": "Smooth",
+                    "nearest": "Nearest",
+                    "full": "Full",
+                    "center": "Center",
+                    "3x": "3x"
+                },
+                "show-episode-title": {
+                    "_name": "Episode name",
+                    "bottom": "Bottom",
+                    "bottom-tip": "Show above speedrun timer",
+                    "off": "Off",
+                    "top": "Top",
+                    "top-tip": "Show above HUD at high resolution"
+                },
+                "3d-compat-mode": "3D compat mode",
+                "3d-compat-mode-tip": "Draw all objects in one 3D plane",
+                "show-fails-counter": "Fails counter",
+                "show-fails-counter-tip": "Show fails on the episode and current level",
+                "show-fps": "Framerate",
+                "show-medals-counter": "Medals counter",
+                "show-medals-counter-tip": "Show medals in HUD and at level entrance",
+                "show-playtime-counter": {
+                    "_name": "Playtime counter",
+                    "_tooltip": "Show time spent on the episode and current attempt",
+                    "animated": "Animated",
+                    "animated-tip": "Adds a rainbow effect on level end",
+                    "off": "Off",
+                    "off-tip": "Show only during speedruns",
+                    "opaque": "Opaque",
+                    "transparent": "Transparent"
+                },
+                "show-screen-shake": "Screen shake",
+                "video-system": "System",
+                "world-map-stars-show": "World map stars",
+                "world-map-stars-show-tip": "Show collected stars above levels"
+            },
+            "view-credits": {
+                "_header": "View Credits"
+            },
+            "speedrun": {
+                "mode": {
+                    "0": "0",
+                    "1": "1",
+                    "2": "2",
+                    "3": "3",
+                    "_name": "Speedrun mode"
+                }
+            }
+        },
+        "wordBack": "Back",
+        "wordHide": "Hide",
+        "wordNo": "No",
+        "wordOff": "Off",
+        "wordOn": "On",
+        "wordPlayer": "Player",
+        "wordProfile": "Profile",
+        "wordResume": "Resume",
+        "wordShow": "Show",
+        "wordWaiting": "Waiting",
+        "wordYes": "Yes"
+    },
+    "outro": {
+        "cppPortDevelopers": "C++ port developers:",
+        "customSprites": "Custom Sprites:",
+        "engineCredits": "Engine credits:",
+        "gameCredits": "Game credits:",
+        "levelDesign": "Level Design:",
+        "nameAndrewSpinks": "Andrew Spinks",
+        "nameVitalyNovichkov": "Vitaly Novichkov",
+        "originalBy": "Original VB6 code By:",
+        "psVitaPortBy": "PS Vita Port By:",
+        "qualityControl": "Quality Control:",
+        "specialThanks": "Special Thanks:"
+    },
+    "pluralRules": "one-is-singular"
+}

@@ -37,9 +37,11 @@ notes: |
   PATCH_SOURCE in the batocera mk). The patch itself is bundled with the
   emulator, not with the retail data.
 
-  Outlaws loader (TFE_Outlaws/outlawsMain.cpp) looks for the Outlaws retail
-  data in a separate configured directory. The level/sound/texture GOBs it
-  needs are OL.GOB (Outlaws main .gob) and the game's .LAB packages.
+  Outlaws: every method of TFE_Outlaws/outlawsMain.cpp is a stub and
+  runGame() returns false. The only Outlaws file the code names is
+  Outlaws.lab, tested by the settings dialog before it stores the Outlaws
+  source path (TFE_FrontEndUI/frontEndUi.cpp:1340); the line that would
+  make it the active source path is commented out (:1344).
 
 files:
   - name: "DARK.GOB"
@@ -75,25 +77,12 @@ files:
     system: dark-forces
     description: "Optional enhanced HD asset pack"
     required: false
-    source_ref: "TheForceEngine/TFE_DarkForces/darkForcesMain.cpp (c_optionalGobFileNames)"
+    source_ref: "TheForceEngine/TFE_DarkForces/darkForcesMain.cpp:80-83, 1360-1372"
 
-  - name: "OL.GOB"
+  - name: "Outlaws.lab"
     category: game_data
     system: outlaws
-    description: "Outlaws main data archive"
+    description: "Outlaws main LAB archive"
     required: false
-    source_ref: "TheForceEngine/TFE_Outlaws/outlawsMain.cpp"
-
-  - name: "OLSFX.GOB"
-    category: game_data
-    system: outlaws
-    description: "Outlaws sound effects archive"
-    required: false
-    source_ref: "TheForceEngine/TFE_Outlaws/outlawsMain.cpp"
-
-  - name: "OLMUSIC.GOB"
-    category: game_data
-    system: outlaws
-    description: "Outlaws music archive"
-    required: false
-    source_ref: "TheForceEngine/TFE_Outlaws/outlawsMain.cpp"
+    source_ref: "TheForceEngine/TFE_FrontEndUI/frontEndUi.cpp:1306, 1340"
+    note: "Tested for existence when the user picks the Outlaws source path. The Outlaws game class is stubs and opens no file."

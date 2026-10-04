@@ -1,0 +1,3136 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: jazz2-resurrection\n"
+"POT-Creation-Date: 2026-09-28 22:44+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: thatcakepiece\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.9\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-KeywordsList: _;_n:1,2;_x:1c,2;_nx:1c,2,3;_f;_fn:1,2\n"
+"X-Poedit-SearchPath-0: Sources/Jazz2\n"
+"X-Poedit-SearchPath-1: .fake/Translations\n"
+"X-Poedit-SearchPath-2: Sources/Main.cpp\n"
+
+#: .fake/Translations/flash/01_diam1.j2l.h:1
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Spaz ate the dopefish."
+msgstr ""
+"\n"
+"Spaz megette a dopefish-t."
+
+#: .fake/Translations/flash/01_diam1.j2l.h:2
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Find the gopher."
+msgstr ""
+"\n"
+"Találd meg a mormotát."
+
+#: .fake/Translations/flash/01_diam1.j2l.h:3
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Dragons live in burbank."
+msgstr ""
+"\n"
+"A sárkányok Burbankban élnek."
+
+#: .fake/Translations/flash/01_diam1.j2l.h:4
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Mark wears briefs. \n"
+"Hoo Hah!"
+msgstr ""
+"\n"
+"Mark alsóneműt visel. \n"
+"Hú-ha!"
+
+#: .fake/Translations/flash/01_diam1.j2l.h:5
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Nick loves shiny. \n"
+"Always has!"
+msgstr ""
+"\n"
+"Nick szereti a csillogó dolgokat. \n"
+"Mindig is így volt!"
+
+#: .fake/Translations/flash/02_diam3.j2l.h:1
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Send Tim new socks."
+msgstr ""
+"\n"
+"Küldj Timnek új zoknikat."
+
+#: .fake/Translations/flash/02_diam3.j2l.h:2
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Send Nigel a green card."
+msgstr ""
+"\n"
+"Küldj Nigelnek egy zöld kártyát."
+
+#: .fake/Translations/flash/02_diam3.j2l.h:3
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Beware of chainsaw schmalz."
+msgstr ""
+"\n"
+"Óvakodj a láncfűrészes schmalz-tól."
+
+#: .fake/Translations/flash/02_diam3.j2l.h:4
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Dont give mark a burrito."
+msgstr ""
+"\n"
+"Ne adj Marknak burritót."
+
+#: .fake/Translations/flash/05_medivo1.j2l.h:1
+msgctxt "flash/05_medivo1"
+msgid ""
+"\n"
+"Beware of falling enemies."
+msgstr ""
+"\n"
+"Vigyázz a lezuhanó ellenségekre."
+
+#: .fake/Translations/flash/05_medivo1.j2l.h:2
+msgctxt "flash/05_medivo1"
+msgid ""
+"\n"
+"Craig is still a doofus!"
+msgstr ""
+"\n"
+"Craig még mindig egy idióta!"
+
+#: .fake/Translations/flash/05_medivo1.j2l.h:3
+msgctxt "flash/05_medivo1"
+msgid ""
+"\n"
+"Secret Level Time!!!"
+msgstr ""
+"\n"
+"Titkos szint!!!"
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:1
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Buttstomp A Silver Crate\n"
+"To Clear Your Path"
+msgstr ""
+"\n"
+"Csapj seggcsapással az ezüst ládára\n"
+"hogy megtisztítsd az utadat"
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:2
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Crates can also make platforms appear..."
+msgstr ""
+"\n"
+"A ládák platformokat is felfedhetnek..."
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:3
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Melt the Spring..."
+msgstr ""
+"\n"
+"Olvaszd meg a rugót..."
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:4
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Leh is a Camper"
+msgstr ""
+"\n"
+"Leh egy kempingező"
+
+#: .fake/Translations/monk/01_jung1.j2l.h:1
+msgctxt "monk/01_jung1"
+msgid ""
+"\n"
+"Falling boulders can \n"
+"give you a headache."
+msgstr ""
+"\n"
+"A lezuhanó sziklák \n"
+"fejfájást okozhatnak."
+
+#: .fake/Translations/monk/01_jung1.j2l.h:2
+msgctxt "monk/01_jung1"
+msgid ""
+"\n"
+"A Flamethrower works\n"
+"well against bugs."
+msgstr ""
+"\n"
+"A lángszóró hatékony\n"
+"a bogarak ellen."
+
+#: .fake/Translations/monk/03_hell.j2l.h:1
+msgctxt "monk/03_hell"
+msgid ""
+"\n"
+"Long live the ice level."
+msgstr ""
+"\n"
+"Éljen a jégpálya."
+
+#: .fake/Translations/monk/03_hell.j2l.h:2
+msgctxt "monk/03_hell"
+msgid ""
+"\n"
+"Goodnight, bubba!"
+msgstr ""
+"\n"
+"Jó éjt, kicsim!"
+
+#: .fake/Translations/monk/06_damn2.j2l.h:2
+msgctxt "monk/06_damn2"
+msgid ""
+"\n"
+"What the heck? Aaaah! No!  \n"
+"This is NOT over!"
+msgstr ""
+"\n"
+"Mi a…? Aaaah! Ne!\n"
+"Ezzel még NINCS vége!"
+
+#: .fake/Translations/prince/01_castle1.j2l.h:1
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Poles spin you around so\n"
+" you can go even faster."
+msgstr ""
+"\n"
+"A rúdak megpörgetnek,\n"
+"így még gyorsabban száguldozhatsz."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:2
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"You found a secret area."
+msgstr ""
+"\n"
+"Találtál egy titkos területet."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:3
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Secret Treasure Room."
+msgstr ""
+"\n"
+"Titkos Kincses Szoba."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:4
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Nothing to see here."
+msgstr ""
+"\n"
+"Nincs itt semmi látnivaló."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:5
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Collect coins to activate \n"
+"bonus warp devices."
+msgstr ""
+"\n"
+"Gyűjts érméket hogy aktiválhasd\n"
+"a bónusz térhajtó eszközöket."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:1
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Cheese is green on tuesday."
+msgstr ""
+"\n"
+"A sajt kedden zöld."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:2
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Craig is king doofus."
+msgstr ""
+"\n"
+"Craig a bolondok királya."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:3
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"To beat the queen \n"
+"shoot her off her ledge."
+msgstr ""
+"\n"
+"A királynő legyőzéséhez \n"
+"lődd le a párkányáról."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:4
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Good job! \n"
+"Now go get Devan Shell!"
+msgstr ""
+"\n"
+"Szép munka!\n"
+"Most menj, és szerezd meg a Devan kagylót!"
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:5
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"To kick through these\n"
+"blocks, press down and jump!"
+msgstr ""
+"\n"
+"A kockákat úgy rúghatod át,\n"
+"hogy lefelé nézel miközben ugrasz!"
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:6
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Press down and jump beneath \n"
+"these blocks to break them!"
+msgstr ""
+"\n"
+"Nézz lefelé ugrás közben, \n"
+"hogy széttörd az alattad lévő kockákat!"
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:7
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Buttstomp the metal box \n"
+"to open key blocks!"
+msgstr ""
+"\n"
+"Seggcsapással nyisd ki\n"
+"a kulcsládákat!"
+
+#: .fake/Translations/prince/03_carrot1.j2l.h:1
+msgctxt "prince/03_carrot1"
+msgid ""
+"\n"
+"Stomp your booty to exit."
+msgstr ""
+"\n"
+"Vonszold a segged a kijárathoz."
+
+#: .fake/Translations/prince/03_carrot1.j2l.h:2
+msgctxt "prince/03_carrot1"
+msgid ""
+"\n"
+"This spring is frozen."
+msgstr ""
+"\n"
+"Ez a rugó meg van fagyva."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:1
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"Super dooper secret."
+msgstr ""
+"\n"
+"Szuper titkos."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:2
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"Shields will give you unlimited \n"
+"special ammo for a short time."
+msgstr ""
+"\n"
+"A pajzsok rövid ideig korlátlan \n"
+" speciális lőszert adnak."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:4
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"Stopwatches will add time to\n"
+"the life of a shield."
+msgstr ""
+"\n"
+"A stopperórák meghosszabbítják \n"
+"a pajzs élettartamát."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:5
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"This schwartzenguard is toast!"
+msgstr ""
+"\n"
+"Ez a Schwartzenguard el van intézve!"
+
+#: .fake/Translations/prince/06_labrat2.j2l.h:1
+msgctxt "prince/06_labrat2"
+msgid ""
+"\n"
+"\n"
+"You cannot defeat me, Jazz!\n"
+"Prepare to face my superbot!"
+msgstr ""
+"\n"
+"\n"
+"Nem győzhetsz le, Jazz! \n"
+"Készülj fel szembenézni a szuperrobotommal!"
+
+#: .fake/Translations/prince/06_labrat2.j2l.h:2
+msgctxt "prince/06_labrat2"
+msgid ""
+"\n"
+"\n"
+"Ack! I'm outta here!"
+msgstr ""
+"\n"
+"\n"
+"Júj! Itt sem vagyok!"
+
+#: .fake/Translations/prince/06_labrat2.j2l.h:3
+msgctxt "prince/06_labrat2"
+msgid ""
+"\n"
+"These blocks are speed blocks.\n"
+"Run into them at full speed!"
+msgstr ""
+"\n"
+"Sebességblokkok! \n"
+"Teljes gázzal neki!"
+
+#: .fake/Translations/prince/trainer.j2l.h:1
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Welcome to Jazz Jackrabbit 2. \n"
+" This is a training level."
+msgstr ""
+"\n"
+"Üdv a Jazz Jackrabbit 2-ben! \n"
+"Ez egy gyakorlópálya."
+
+#: .fake/Translations/prince/trainer.j2l.h:2
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Collect goodies for\n"
+"points and surprises."
+msgstr ""
+"\n"
+"Gyűjts jóságokat pontokért \n"
+"és meglepetésekért."
+
+#: .fake/Translations/prince/trainer.j2l.h:3
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"After jumping, press jump\n"
+"again to do a special move."
+msgstr ""
+"\n"
+"Ugrás után ugorj még egyszer \n"
+"egy különleges mozdulat végrehajtásához."
+
+#: .fake/Translations/prince/trainer.j2l.h:4
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Some walls can be shot."
+msgstr ""
+"\n"
+"Bizonyos objektumokat le tudsz lőni."
+
+#: .fake/Translations/prince/trainer.j2l.h:5
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"When in the air, press down\n"
+"to stomp with your butt."
+msgstr ""
+"\n"
+"Míg a levegőben vagy nézz lefelé, \n"
+"hogy seggcsapást hajts végre."
+
+#: .fake/Translations/prince/trainer.j2l.h:6
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Secrets abound in Jazz 2. \n"
+" Check the walls."
+msgstr ""
+"\n"
+"A Jazz 2 tele van titkokkal! \n"
+"Vizsgáld meg a falakat."
+
+#: .fake/Translations/prince/trainer.j2l.h:7
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Good job. Remember to\n"
+"look for secrets."
+msgstr ""
+"\n"
+"Szép munka! Ne felejts el \n"
+"mindig körülnézni."
+
+#: .fake/Translations/prince/trainer.j2l.h:8
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Collect gems for \n"
+"an extra life."
+msgstr ""
+"\n"
+"Gyűjts drágaköveket \n"
+"további életekért."
+
+#: .fake/Translations/prince/trainer.j2l.h:9
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Red Gems count\n"
+"as one gem."
+msgstr ""
+"\n"
+"A piros drágakövek\n"
+"1 darab drágakőnek számítanak."
+
+#: .fake/Translations/prince/trainer.j2l.h:10
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Green gems count\n"
+"as five gems."
+msgstr ""
+"\n"
+"A zöld drágakövek\n"
+"5 darab drágakőnek számítanak."
+
+#: .fake/Translations/prince/trainer.j2l.h:11
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Blue gems count\n"
+"as ten gems."
+msgstr ""
+"\n"
+"A kék drágakövek\n"
+"10 darab drágakőnek számítanak."
+
+#: .fake/Translations/prince/trainer.j2l.h:12
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Carrots give you health."
+msgstr ""
+"\n"
+"A sárgarépák életet adnak."
+
+#: .fake/Translations/prince/trainer.j2l.h:13
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Checkpoints save your\n"
+"spot if you lose a life."
+msgstr ""
+"\n"
+"Az ellenőrzőpontok elmentik a helyzeted,\n"
+"életveszteség esetén itt fogsz újraéledni."
+
+#: .fake/Translations/prince/trainer.j2l.h:14
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Collect coins to\n"
+"unlock bonus rooms."
+msgstr ""
+"\n"
+"Gyűjts érméket a \n"
+"bónuszszobák kinyitásához."
+
+#: .fake/Translations/prince/trainer.j2l.h:15
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Beware of sharp stuff.\n"
+"It hurts."
+msgstr ""
+"\n"
+"Vigyázz az éles dolgokra! \n"
+"Bántanak."
+
+#: .fake/Translations/prince/trainer.j2l.h:16
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Now youre ready to play.\n"
+" Good luck and have fun."
+msgstr ""
+"\n"
+"Most már készen állsz a játékra. \n"
+"Sok szerencsét és jó szórakozást."
+
+#: .fake/Translations/rescue/01_colon1.j2l.h:1
+msgctxt "rescue/01_colon1"
+msgid ""
+"\n"
+"Buttstomp the manhole cover!"
+msgstr ""
+"\n"
+"Seggcsapást a csatornafedélnek!"
+
+#: .fake/Translations/rescue/03_psych1.j2l.h:1
+msgctxt "rescue/03_psych1"
+msgid ""
+"\n"
+"Smoke rings will \n"
+"make you dizzy."
+msgstr ""
+"\n"
+"A füstkarikák \n"
+"megszédítenek."
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:1
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"You can't buttstomp\n"
+"so go up and around!"
+msgstr ""
+"\n"
+"Itt nem tudsz seggcsapást használni, \n"
+"menj fel és kerüld meg!"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:2
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"No rewards to those\n"
+"with itchy trigger fingers."
+msgstr ""
+"\n"
+"A türelmetleneknek \n"
+"nincs jutalom."
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:3
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Todays Forcast: Strong Winds!"
+msgstr ""
+"\n"
+"A mai előrejelzés: erős szelek!"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:4
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Find the crate\n"
+"to clear your path."
+msgstr ""
+"\n"
+"Találd meg a ládát, hogy\n"
+"megtisztítsd az utadat."
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:5
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Welcome to\n"
+"Jazz Jackrabbit 2:\n"
+"The Secret Files!"
+msgstr ""
+"\n"
+"Köszöntünk a \n"
+"Jazz Jackrabbit 2:\n"
+"The Secret Files-ban!"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:6
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Only Spaz can get to\n"
+"the room up on the left.\n"
+"He may need something\n"
+"to stand on."
+msgstr ""
+"\n"
+"Csak Spaz juthat fel \n"
+"a bal felső szobába.\n"
+"Kellhet valami, \n"
+"amin megállhat."
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:7
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Don't beat Nigel at pool.\n"
+"You've veen warned. :)"
+msgstr ""
+"\n"
+"Ne verd meg Nigelt biliárdban.\n"
+"Figyelmeztettelek. :)"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:16
+msgctxt "secretf/01_easter1"
+msgid ""
+"Eating too many chocolate\n"
+"eggs can make you sick :p"
+msgstr ""
+"Túl sok csokitojás megevése\n"
+"betegséget okozhat :p"
+
+#: .fake/Translations/secretf/02_easter2.j2l.h:1
+msgctxt "secretf/02_easter2"
+msgid ""
+"\n"
+"Sloping Tunnel Entrance"
+msgstr ""
+"\n"
+"Lejtős alagútbejárat"
+
+#: .fake/Translations/secretf/02_easter2.j2l.h:2
+msgctxt "secretf/02_easter2"
+msgid ""
+"\n"
+"To access the tunnels above\n"
+"find the access warp."
+msgstr ""
+"\n"
+"A felső alagutak hozzáféréséhez\n"
+"keresd meg a teleportáló készüléket."
+
+#: .fake/Translations/secretf/02_easter2.j2l.h:3
+msgctxt "secretf/02_easter2"
+msgid ""
+"\n"
+"One route leads to riches.\n"
+"One route leads to battle."
+msgstr ""
+"\n"
+"Az egyik út gazdagsághoz vezet.\n"
+"A másik csatához."
+
+#: .fake/Translations/secretf/03_easter3.j2l.h:1
+msgctxt "secretf/03_easter3"
+msgid ""
+"\n"
+"Only those who can double-jump\n"
+"can get to the goodies!"
+msgstr ""
+"\n"
+"Csak azok juthatnak el a jóságokhoz\n"
+"akik képesek magasra ugrani!"
+
+#: .fake/Translations/secretf/03_easter3.j2l.h:2
+msgctxt "secretf/03_easter3"
+msgid ""
+"\n"
+"Find the crate to make\n"
+"your climbing blocks appear"
+msgstr ""
+"\n"
+"Találd meg a ládát, hogy\n"
+"megjelenjenek a mászókockáid"
+
+#: .fake/Translations/secretf/03_easter3.j2l.h:3
+msgctxt "secretf/03_easter3"
+msgid ""
+"\n"
+"Stomping this crate also\n"
+"free's some enemies :)"
+msgstr ""
+"\n"
+"Ennek a ládának a seggcsapása néhány\n"
+"ellenséget is kiszabadít :)"
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:1
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Enter the house with caution....."
+msgstr ""
+"\n"
+"Óvatosan lépj be a házba....."
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:3
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Silver Crates can't be broken underwater..."
+msgstr ""
+"\n"
+"Az ezüstládákat nem lehet széttörni a víz alatt…"
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:4
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Water Level control crate above."
+msgstr ""
+"\n"
+"A vízszint szabályzó láda fent van."
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:5
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Stomping crates can be good and bad..."
+msgstr ""
+"\n"
+"A ládák seggcsapással való rugdosása lehet jó is, rossz is…"
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:7
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"But you need a way to get up there..."
+msgstr ""
+"\n"
+"De kell egy mód, hogy feljuss oda…"
+
+#: .fake/Translations/secretf/06_haunted3.j2l.h:16
+msgctxt "secretf/06_haunted3"
+msgid ""
+"\n"
+"Michelle,\n"
+"I will love you always and forever :)"
+msgstr ""
+"\n"
+"Michelle,\n"
+"Mindig és örökké szeretni foglak :)"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:1
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Take to the roof tops!"
+msgstr ""
+"\n"
+"Menj fel a tetőkre!"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:2
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"The skies above will reward\n"
+"those who stomp..."
+msgstr ""
+"\n"
+"Az égiek megjutalmazzák azokat\n"
+"akik seggcsapást használnak..."
+
+#: .fake/Translations/secretf/07_town1.j2l.h:3
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Jump as far over to the\n"
+"right as you possibly can..."
+msgstr ""
+"\n"
+"Ugorj a lehető\n"
+"legtávolabbra jobb irányba…"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:4
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Didn't make the jump huh? :)"
+msgstr ""
+"\n"
+"Nem sikerült az ugrás, mi? :)"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:5
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Well Done!"
+msgstr ""
+"\n"
+"Szép volt!"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:6
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Use your Special Moves to get up the air cons!\n"
+"For Jazz, press Crouch and Jump.\n"
+"For Spaz, Press Jump Twice!"
+msgstr ""
+"\n"
+"Használd a különleges mozdulataidat, hogy feljuss a légkondikra!\n"
+"Jazz: guggolj le, majd ugorj.\n"
+"Spaz:, ugorj duplán!"
+
+#: .fake/Translations/secretf/08_town2.j2l.h:1
+msgctxt "secretf/08_town2"
+msgid ""
+"\n"
+"Find the crate and the gems are yours!"
+msgstr ""
+"\n"
+"Találd meg a ládát, és a drágakövek a tieid!"
+
+#: .fake/Translations/secretf/08_town2.j2l.h:2
+msgctxt "secretf/08_town2"
+msgid ""
+"\n"
+"Springs Don't Work When Frozen..."
+msgstr ""
+"\n"
+"A rugók nem működnek, ha megfagynak…"
+
+#: .fake/Translations/secretf/08_town2.j2l.h:3
+msgctxt "secretf/08_town2"
+msgid ""
+"\n"
+"Collecting 20 coins is more rewarding..."
+msgstr ""
+"\n"
+"20 érme összegyűjtése még nagyobb jutalommal jár…"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:1
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Find the crate to clear the blocks...."
+msgstr ""
+"\n"
+"Találd meg a ládát a kockák eltakarításához…"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:2
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"BEWARE! Flocks of Ravens can\n"
+"be very dangerous."
+msgstr ""
+"\n"
+"VIGYÁZZ! A hollókseregek\n"
+"nagyon veszélyesek tudnak lenni."
+
+#: .fake/Translations/secretf/09_town3.j2l.h:3
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"The remove the blocks\n"
+"look to the tallest building."
+msgstr ""
+"\n"
+"A kockák eltávolításához nézz\n"
+"a legmagasabb épületre."
+
+#: .fake/Translations/secretf/09_town3.j2l.h:4
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Choose a cover and stomp away!"
+msgstr ""
+"\n"
+"Válassz fedezéket, és rúgj neki seggcsapással!"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:5
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Hi GeoBunny :)"
+msgstr ""
+"\n"
+"Szia GeoNyuszi :)"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:6
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Goto www.project2.com\n"
+"use\n"
+"password: BUNNYLOVER\n"
+msgstr ""
+"\n"
+"Látogass el a www.project2.com oldalra\n"
+"és használd a\n"
+"BUNNYLOVER jelszót\n"
+
+#: .fake/Translations/share/01_share1.j2l.h:1
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Shoot these blocks!"
+msgstr ""
+"\n"
+"Lődd szét ezeket a kockákat!"
+
+#: .fake/Translations/share/01_share1.j2l.h:2
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"When in the air, press down\n"
+"to stomp with your butt."
+msgstr ""
+"\n"
+"A levegőben nézz lefelé,\n"
+"hogy seggcsapást hajts végre."
+
+#: .fake/Translations/share/01_share1.j2l.h:3
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"To pass this area, stomp\n"
+"the secret metal crate."
+msgstr ""
+"\n"
+"A terület teljesítéséhez rúgd\n"
+"le a titkos fémládát."
+
+#: .fake/Translations/share/01_share1.j2l.h:4
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"You need twenty coins to pass \n"
+"through this secret warp!"
+msgstr ""
+"\n"
+"Ehhez a titkos teleportáló készülékhez 20 darab\n"
+"érmére van szükséged!"
+
+#: .fake/Translations/share/01_share1.j2l.h:5
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Coins give you access to \n"
+"warps that appear later."
+msgstr ""
+"\n"
+"Az érmék lehetővé teszik a \n"
+"később megjelenő térkapuk használatát."
+
+#: .fake/Translations/share/01_share1.j2l.h:6
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Stomp in the right place and\n"
+"you might find a surprise!"
+msgstr ""
+"\n"
+"Használd a seggcsapást a megfelelő helyen, \n"
+"és nyeremény ütheti markodat!"
+
+#: .fake/Translations/share/01_share1.j2l.h:7
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Some crates contain\n"
+"bombs or baddies!"
+msgstr ""
+"\n"
+"Néhány láda bombákat vagy\n"
+"ellenségeket rejt!"
+
+#: .fake/Translations/share/02_share2.j2l.h:1
+msgctxt "share/02_share2"
+msgid ""
+"\n"
+"You need twenty coins to pass \n"
+"through this secret warp!"
+msgstr ""
+"\n"
+"20 darab érmére van szükséged, hogy \n"
+"használhasd ezt a térhajtó készüléket!"
+
+#: .fake/Translations/share/02_share2.j2l.h:2
+msgctxt "share/02_share2"
+msgid ""
+"\n"
+"A flamethrower works well \n"
+"against nasty bugs."
+msgstr ""
+"\n"
+"A lángszóró tökéletes ezek\n"
+"a nyavalyás bogarak ellen."
+
+#: .fake/Translations/share/02_share2.j2l.h:3
+msgctxt "share/02_share2"
+msgid ""
+"\n"
+"Smoke rings will make\n"
+"you very dizzy!"
+msgstr ""
+"\n"
+"A füstkarikák nagyon\n"
+"megszédítenek!"
+
+#: .fake/Translations/share/03_share3.j2l.h:1
+msgctxt "share/03_share3"
+msgid ""
+"\n"
+"Beware the witch! She can\n"
+"turn you into a frog."
+msgstr ""
+"\n"
+"Vigyázz a boszorkánnyal! Képes\n"
+"téged békává változtatni."
+
+#: .fake/Translations/share/03_share3.j2l.h:2
+msgctxt "share/03_share3"
+msgid ""
+"\n"
+"If you are turned into a frog\n"
+"Eva Earlong can help!"
+msgstr ""
+"\n"
+"Ha békává változtál\n"
+"Hosszúfülü Eva segíthet rajtad!"
+
+#: .fake/Translations/share/03_share3.j2l.h:3
+msgctxt "share/03_share3"
+msgid ""
+"\n"
+"You made it! This is the end\n"
+" of the shareware version.\n"
+"Now check out the order info\n"
+"for M O R E!"
+msgstr ""
+"\n"
+"Sikerült! Ez itt a ShareWare\n"
+"verzió vége.\n"
+"Vedd meg a teljes játékot\n"
+"további tartalomért!"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:1
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Watch out for the spikes below!"
+msgstr ""
+"\n"
+"Vigyázz az alul lévő tüskékre!"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:2
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"You can buttstomp through\n"
+"some of the weakspots\n"
+"in the pathways!"
+msgstr ""
+"\n"
+"A seggcsapással átütheted\n"
+"az útvonal számos\n"
+"gyenge pontjait!"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:3
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Some blocks can only\n"
+"be broken with a\n"
+"certain weapon."
+msgstr ""
+"\n"
+"Néhány kocka csak\n"
+"egy megadott fegyverrel\n"
+"törhető szét."
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:4
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Welcome to Christmas Chronicles!"
+msgstr ""
+"\n"
+"Üdv a Christmas Chronicles-ben!"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:5
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Seasons Greetings from\n"
+"Epic MegaGames\n"
+"Orange Games and\n"
+"Project 2 Interactive!"
+msgstr ""
+"\n"
+"Ünnepi üdvözlet az\n"
+"Epic MegaGames-től,\n"
+"az Orange Games-től\n"
+"és a Project 2 Interactive-tól!"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:1
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"You can stand on top\n"
+"of some of the trees!"
+msgstr ""
+"\n"
+"Néhány fa tetején\n"
+"megtudsz állni!"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:2
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"You can buttstomp through\n"
+"some of the weakspots\n"
+"in the pathways!"
+msgstr ""
+"\n"
+"A seggcsapással átütheted\n"
+"az útvonal számos\n"
+"gyenge pontjait!"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:3
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"Punching the blocks above you\n"
+"can be rewarding."
+msgstr ""
+"\n"
+"A feletted lévő kockák\n"
+"ütögetése jutalmazó lehet."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:6
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"Gem Trail Entry Crate."
+msgstr ""
+"\n"
+"Drágakő-ösvény belépő láda."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:7
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"Gem Trail Entrance.\n"
+"Climb the treetops to find\n"
+"and stomp the Entry Crate."
+msgstr ""
+"\n"
+"Drágakő-ösvény bejárata.\n"
+"Mássz fel a fa tetejére, hogy megtaláld\n"
+"és seggcsapással feltörd a belépő ládát."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:14
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"\n"
+"Hi There, Piggy!\n"
+"\n"
+"- Poopy"
+msgstr ""
+"\n"
+"\n"
+"Szia, Malacka!\n"
+"\n"
+"- Poopy"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:15
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"\n"
+"Michelle:\n"
+"You've changed my life in so many ways\n"
+"I dedicate this project to you.\n"
+"I love you so much."
+msgstr ""
+"\n"
+"\n"
+"Michelle:\n"
+"Oly sokféleképpen változtattad meg az életemet\n"
+"Ezt a projektet neked szentelem.\n"
+"Nagyon szeretlek."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:16
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"\n"
+"Kassi Nicole:\n"
+"A million things I long to say to you\n"
+"But my words always lead to the same ending\n"
+"I love you, I love you."
+msgstr ""
+"\n"
+"\n"
+"Kassi Nicole:\n"
+"Millió dolgot szeretnék elmondani neked,\n"
+"de a szavaim mindig ugyanahhoz a véghez vezetnek:\n"
+"Szeretlek, szeretlek."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:1
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Please use your TNT wisely."
+msgstr ""
+"\n"
+"Kérlek a TNT-t tudatosan használd."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:2
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Don't lose your grip!"
+msgstr ""
+"\n"
+"Ne engedd el!"
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:3
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Welcome to Burrowsville\n"
+"Please drive carefully."
+msgstr ""
+"\n"
+"Köszöntjük Burrowsville-ben\n"
+"Kérjük vezessen óvatosan."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:4
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"That bridge doesnt\n"
+"look too safe..."
+msgstr ""
+"\n"
+"Az a híd nem tűnik\n"
+"túl biztonságosnak..."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:5
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Robert and Craig:\n"
+"Springs RULE! :)"
+msgstr ""
+"\n"
+"Robert és Craig:\n"
+"A rugók URALNAK! :)"
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:6
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Now leaving Burrowsville\n"
+"Please visit again."
+msgstr ""
+"\n"
+"Most elhagyja Burrowsville-t\n"
+"Kérjük, látogasson el újra."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:7
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Password: xmasbunny\n"
+"Please visit\n"
+"www.project2.com"
+msgstr ""
+"\n"
+"Jelszó: xmasbunny\n"
+"Kérlek látogass el a\n"
+"www.project2.com weboldalra"
+
+#: Sources/Jazz2/LevelHandler.cpp:258 Sources/Jazz2/LevelHandler.cpp:319
+#, c++-format
+msgid "Level \"{}\" initialized"
+msgstr "A(z) „{}” pálya betöltve"
+
+#. TRANSLATORS: Link to website under header text in About section
+#: Sources/Jazz2/LevelHandler.cpp:1075
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:235
+msgid "For more information, visit the official website:"
+msgstr "További információért látogass el a hivatalos weboldalra:"
+
+#: Sources/Jazz2/LevelHandler.cpp:2119
+#, c++-format
+#| msgid "Level \"{}\" initialized"
+msgid "Level \"{}\" restored"
+msgstr ""
+
+#: Sources/Jazz2/LevelHandler.cpp:3117
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4153
+msgid "Cheats are not allowed in current context"
+msgstr "A csalások nem engedélyezettek a jelenlegi helyzetben"
+
+#: Sources/Jazz2/Multiplayer/GameModes/CaptureTheFlagMode.cpp:16
+msgid "home"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/GameModes/CaptureTheFlagMode.cpp:16
+msgid "taken"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/GameModes/CaptureTheFlagMode.cpp:16
+msgid "dropped"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/GameModes/TreasureHuntMode.cpp:32
+msgid "Find exit!"
+msgstr "Keress kijáratot!"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:585
+msgid ""
+"\n"
+"\n"
+"The game will begin shortly!"
+msgstr ""
+"\n"
+"\n"
+"A játék hamarosan kezdődik!"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:769
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} won the championship!"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2840
+#, c++-format
+msgid "Value out of range (2-{})"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2916
+msgid "Usage: /team <blue|red|green|yellow|auto>"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2923
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4658
+#, c++-format
+msgid "You joined the {} team"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2925
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4660
+msgid "Cannot change team right now"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2936
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2948
+msgid "Teams are only used in team game modes"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2939
+msgid "Teams rebalanced"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2963
+msgid "Usage: /setteam <player#> <blue|red|green|yellow>"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2978
+#, c++-format
+msgid "Player {} moved to the {} team"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2980
+msgid "Player not found"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:3720
+msgid ""
+"You have already finished the race, you can play again in the next round"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:3724
+msgid "You cannot join the game right now"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:3763
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4770
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] disconnected"
+msgstr "\f[c:#d0705d]{}\f[/c] kilépett"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4044
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4768
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] connected"
+msgstr "\f[c:#d0705d]{}\f[/c] csatlakozott"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4791
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:7345
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] was roasted by \f[c:#d0705d]{}\f[/c]"
+msgstr "\f[c:#d0705d]{}\f[/c] megsütötte \f[c:#d0705d]{}\f[/c] játékost"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4794
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:7371
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] was roasted by environment"
+msgstr "\f[c:#d0705d]{}\f[/c] játékost a környezet kiütötte"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:8639
+msgid ""
+"\n"
+"\n"
+"Teams have been rebalanced"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:8944
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} took the {} flag!"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:8952
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"The {} flag was returned"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:9000
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} team captured the {} flag!"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:9111
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"The {} flag was dropped"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10159
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} finished the race!\n"
+"{} seconds remaining"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10173
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} finished {}."
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10437
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"Winner is {}"
+msgstr ""
+"\n"
+"\n"
+"A nyertes {}"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10501
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} team wins!"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10557
+msgid ""
+"\n"
+"\n"
+"The round ended in a draw"
+msgstr ""
+
+#: Sources/Jazz2/UI/HUD.cpp:602 Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:222
+msgid "Spectating"
+msgstr ""
+
+#. TRANSLATORS: Tappable hint in the top-left corner of the in-game console to toggle the on-screen keyboard
+#: Sources/Jazz2/UI/InGameConsole.cpp:235
+msgid "Keyboard"
+msgstr ""
+
+#: Sources/Jazz2/UI/InGameConsole.cpp:548
+msgid "Unknown command"
+msgstr "Ismeretlen parancs"
+
+#. TRANSLATORS: Header text in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:233
+msgid ""
+"Reimplementation of the game \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] released "
+"in 1998. Supports various versions of the game (Shareware Demo, Holiday Hare "
+"'98, The Secret Files and Christmas Chronicles). Also, it partially supports "
+"some features of JJ2+ extension."
+msgstr ""
+"A 1998-ban megjelent \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] játék újraírása. "
+"Támogatja a játék különböző verzióit (Shareware Demo, Holiday Hare '98, The "
+"Secret Files és Christmas Chronicles). Ezen kívül részben támogatja a JJ2+ "
+"kiegészítő egyes funkcióit."
+
+#. TRANSLATORS: Label in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:237
+msgid "Developers"
+msgstr "Fejlesztők"
+
+#. TRANSLATORS: Label in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:239
+msgid "Contributors"
+msgstr "Közreműködők"
+
+#. TRANSLATORS: Label in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:241
+msgid "Translators"
+msgstr "Fordítók"
+
+#. TRANSLATORS: Footer text in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:243
+msgid ""
+"This project uses modified \f[c:#9e7056]nCine\f[/c] game engine and "
+"following libraries:"
+msgstr ""
+"Ez a projekt a módosított \f[c:#9e7056]nCine\f[/c] játékmotort és az alábbi "
+"könyvtárakat használja:"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:61
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:98
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:194
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:196
+msgid "Play Story"
+msgstr "Új játék"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:69
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:83
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:103
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:20
+msgid "Play Multiplayer"
+msgstr ""
+
+#. TRANSLATORS: Menu item in main menu (Emscripten only)
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:74
+msgid "Play Shareware Demo"
+msgstr "Shareware változat indítása"
+
+#. TRANSLATORS: Menu item in main menu (Emscripten only)
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:89
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:65
+msgid "Import Episodes"
+msgstr "Epizódok importálása"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:94
+msgid "Continue"
+msgstr "Folytatás"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:109
+msgid "Highscores"
+msgstr "Ranglétra"
+
+#. TRANSLATORS: Menu item in main menu
+#. TRANSLATORS: Subheader in First Run section
+#. \uE000 is the Discord icon of the menu font's private use area, written as an escape so that
+#. the character itself cannot be lost when the file is edited
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:111
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:22
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:62
+msgid "Options"
+msgstr "Beállítások"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:113
+msgid "About"
+msgstr "Névjegy"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:121
+msgid "Quit"
+msgstr "Kilépés"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:233
+#, c++-format
+msgid "For more information, visit {} and  Discord!"
+msgstr ""
+"További információért látogass el a {} weboldalra és a  Discord "
+"szerverünkre!"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:246
+msgid "Access to external storage has been granted!"
+msgstr "A külső tárhelyhez való hozzáférés engedélyezve lett!"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:248
+msgid ""
+"\f[c:#337233]Restart the game to read \f[c:#9e7056]Jazz Jackrabbit "
+"2\f[c:#337233] files correctly."
+msgstr ""
+"\f[c:#337233]Indítsd újra a játékot a \f[c:#9e7056]Jazz Jackrabbit "
+"2\f[c:#337233] fájlok beolvasásához."
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:258
+msgid ""
+"\f[c:#704a4a]This game requires original \f[c:#9e7056]Jazz Jackrabbit "
+"2\f[c:#704a4a] files!"
+msgstr ""
+"\f[c:#704a4a]Ez a játék az eredeti \f[c:#9e7056]Jazz Jackrabbit "
+"2\f[c:#704a4a] fájlokat igényli!"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:260
+msgid "Make sure Jazz Jackrabbit 2 files are present in following path:"
+msgstr ""
+"Győződj meg róla, hogy a Jazz Jackrabbit 2 fájljai megtalálhatók a következő "
+"elérési útvonalon:"
+
+#. TRANSLATORS: Menu item in main menu (Android 11+ only)
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:268
+msgid "Allow access to external storage"
+msgstr "Külső tárhely elérésének engedélyezése"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:30
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:38
+msgid "Controls"
+msgstr "Irányítás"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:46
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:267
+#, c++-format
+msgid "Remap Controls for Player {}"
+msgstr "{}. játékos"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:51
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:270
+msgid "Remap Controls"
+msgstr "Gombkiosztás módosítása"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:63
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:111
+msgid "Touch Controls"
+msgstr "Érintőképernyős vezérlés"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:68
+msgid "Toggle Run"
+msgstr "Folytonos futás"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:69
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:113
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:123
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:53
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:58
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:62
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:66
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:74
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:83
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:56
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:57
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:67
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:71
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:75
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:101
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:122
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:142
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:166
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:178
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:261
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:277
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:288
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:107
+msgid "Enabled"
+msgstr "Engedélyezve"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:69
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:103
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:113
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:123
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:53
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:58
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:62
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:66
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:74
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:83
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:61
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:67
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:71
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:75
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:101
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:122
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:142
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:166
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:178
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:261
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:277
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:288
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:295
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:107
+msgid "Disabled"
+msgstr "Letiltva"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:72
+msgid "Gamepad Button Labels"
+msgstr "Játékvezérlő gombfeliratok"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:95
+msgid "Gamepad Rumble"
+msgstr "Játékvezérlő rezgése"
+
+#. TRANSLATORS: Option for Gamepad Rumble in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:99
+msgid "Strong"
+msgstr "Erős"
+
+#. TRANSLATORS: Option for Gamepad Rumble in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:102
+msgid "Weak"
+msgstr "Gyenge"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:112
+msgid "Extended PlayStation™ Support"
+msgstr "Kiterjesztett PlayStation™ támogatás"
+
+#. TRANSLATORS: Menu item in Options > Controls section (Android only)
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:122
+msgid "Native Back Button"
+msgstr "Beépített vissza gomb"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:127
+#: Sources/Jazz2/UI/Menu/InputDiagnosticsSection.cpp:86
+msgid "Input Diagnostics"
+msgstr "Beviteli diagnosztika"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:129
+msgid "Reset To Default"
+msgstr "Alapértékre állítás"
+
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:159
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:216
+msgid "Easy"
+msgstr "Könnyű"
+
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:160
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:216
+msgid "Medium"
+msgstr "Közepes"
+
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:161
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:216
+msgid "Hard"
+msgstr "Nehéz"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:168
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:176
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:244
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:54
+msgid "Battle"
+msgstr "Csata"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:169
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:245
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:56
+msgid "Team Battle"
+msgstr "Csapatharc"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:170
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:246
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:58
+msgid "Race"
+msgstr "Verseny"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:171
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:247
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:60
+msgid "Team Race"
+msgstr "Csapatos verseny"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:172
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:248
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:62
+msgid "Treasure Hunt"
+msgstr "Kincskeresés"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:173
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:249
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:64
+msgid "Team Treasure Hunt"
+msgstr "Csapatos kincskeresés"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:174
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:250
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:66
+msgid "Capture The Flag"
+msgstr "Capture The Flag"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:175
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:251
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:68
+msgid "Cooperation"
+msgstr "Többjátékos"
+
+#. TRANSLATORS: Menu item in Multiplayer section (local splitscreen multiplayer)
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:217
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:189
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:34
+msgid "Create Local Splitscreen Game"
+msgstr ""
+
+#. TRANSLATORS: Menu item to select the number of local splitscreen players
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:222
+msgid "Number of Players"
+msgstr ""
+
+#. TRANSLATORS: Menu item to select player character (Jazz, Spaz, Lori)
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:234
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:39
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:22
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:139
+msgid "Character"
+msgstr "Karakter"
+
+#. TRANSLATORS: Menu item to select difficulty
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:249
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:24
+msgid "Difficulty"
+msgstr "Nehézség"
+
+#. TRANSLATORS: Menu item to select game mode
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:256
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:41
+msgid "Game Mode"
+msgstr "Játékmód"
+
+#. TRANSLATORS: Menu item to start the local game with the selected settings
+#. TRANSLATORS: Menu item to start selected episode/level
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:269
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:26
+msgid "Start"
+msgstr "Indítás"
+
+#. TRANSLATORS: Menu item to select Wi-Fi or ad hoc connection (PSP only)
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:44
+msgid "Connection"
+msgstr ""
+
+#. TRANSLATORS: Menu item to create server with selected settings
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:47
+msgid "Create Server"
+msgstr "Szerver létrehozása"
+
+#. TRANSLATORS: Transport mode in Create Server section on PSP, local wireless connection between consoles
+#. TRANSLATORS: Transport mode in Connect To Server section on PSP, local wireless connection between consoles
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:263
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:473
+msgid "Ad hoc"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:263
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:473
+msgid "Wi-Fi"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:418
+msgid ""
+"\f[c:#704a4a]Cannot create the server!\f[/c]\n"
+"\n"
+"\n"
+"Playlist is not properly configured.\n"
+"Please review server configuration and try it again."
+msgstr ""
+"\f[c:#704a4a]Nem lehet létrehozni a szervert!\f[/c]\n"
+"\n"
+"\n"
+"A lejátszási lista nincs rendesen beállítva.\n"
+"Kérlek ellenőrizd a szerverkonfigurációt és próbáld újra."
+
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:457
+msgid ""
+"\f[c:#704a4a]Cannot create the server!\f[/c]\n"
+"\n"
+"\n"
+"Please verify that no other server\n"
+"is running on that port and try it again."
+msgstr ""
+"\f[c:#704a4a]Nem lehet létrehozni a szervert!\f[/c]\n"
+"\n"
+"\n"
+"Kérlek bizonyosodj meg arról, hogy\n"
+"nem-e fut egy másik szerver ezen a porton és próbáld újra."
+
+#: Sources/Jazz2/UI/Menu/CustomLevelSelectSection.cpp:155
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:595
+msgid "Play Custom Levels"
+msgstr "Egyéni pályák"
+
+#: Sources/Jazz2/UI/Menu/CustomLevelSelectSection.cpp:167
+msgid "No custom level found!"
+msgstr "Nem található egyéni pálya!"
+
+#: Sources/Jazz2/UI/Menu/CustomLevelSelectSection.cpp:189
+msgid "Create server from playlist"
+msgstr "Szerver létrehozása lejátszási listából"
+
+#. TRANSLATORS: Menu item in Multiplayer section (host a private online server)
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:192
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:30
+msgid "Create Private Server"
+msgstr "Privát szerver létrehozása"
+
+#. TRANSLATORS: Menu item in Multiplayer section (host a publicly listed online server)
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:193
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:28
+msgid "Create Public Server"
+msgstr "Nyilvános szerver létrehozása"
+
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:207
+msgid "No episode found!"
+msgstr "Nem található epizód!"
+
+#. TRANSLATORS: Menu subitem in Play Story section
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:360
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:361
+msgid "Restart episode"
+msgstr "Epizód újraindítása"
+
+#. TRANSLATORS: Information in Play Story section that episode is locked because the previous episode is not complete
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:386
+#, c++-format
+msgid "You must complete \"{}\" first!"
+msgstr "Először be kell fejezned a(z) \"{}\" nevű epizódot!"
+
+#. TRANSLATORS: Information in Play Story section that episode is locked
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:390
+msgid "Episode is locked!"
+msgstr "Az epizód zárolva van!"
+
+#. TRANSLATORS: Menu item in First Run section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:106
+msgid "Legacy"
+msgstr "Hagyományos"
+
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:106
+msgid "I want to play the game the way it used to be."
+msgstr "Úgy akarok játszani a játékkal, mint amilyen régen volt."
+
+#. TRANSLATORS: Menu item in First Run section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:108
+msgid "Reforged"
+msgstr "Feljavított"
+
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:108
+msgid "I want to play the game with something new."
+msgstr "Valami újdonsággal szeretnék találkozni a játékban."
+
+#. TRANSLATORS: Header in First Run section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:194
+msgid "Welcome to \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] reimplementation!"
+msgstr "Üdvözlünk a \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] újraírásában!"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:38
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:30
+msgid "Gameplay"
+msgstr "Játékmenet"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:115
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:43
+msgid "Enhancements"
+msgstr "Kiegészítések"
+
+#. TRANSLATORS: Subheader in First Run section
+#. \uE000 is the Discord icon of the menu font's private use area, written as an escape so that
+#. the character itself cannot be lost when the file is edited
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#, c++-format
+msgid ""
+"You can choose your preferred play style.\n"
+"This option can be changed at any time in \f[c:#707070]{}\f[/c] > "
+"\f[c:#707070]{}\f[/c] > \f[c:#707070]{}\f[/c].\n"
+"For more information, visit {} and  Discord!"
+msgstr ""
+"Kiválaszthatod a számodra megfelelő játékmódot.\n"
+"Ez az opció bármikor módosítható a(z) \f[c:#707070]{}\f[/c] >  \f[c:#707070]"
+"{}\f[/c] > \f[c:#707070]{}\f[/c] menüpontban.\n"
+"További információért látogass el a {} weboldalra és a  Discord "
+"szerverünkre!"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:52
+msgid "Reforged Gameplay"
+msgstr "Újrakovácsolt játékmenet"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:57
+msgid "Reforged Camera"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:61
+msgid "Reforged HUD"
+msgstr "Újrakovácsolt felhasználói felület"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:65
+msgid "Reforged Main Menu"
+msgstr "Újrakovácsolt főmenü"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:73
+msgid "Ledge Climbing"
+msgstr "Peremmászás"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:78
+msgid "Weapon Wheel"
+msgstr "Fegyvertárcsa"
+
+#. TRANSLATORS: Option for Weapon Wheel item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:82
+msgid "Enabled With Ammo Count"
+msgstr "Bekapcsolva, lőszer számlálóval"
+
+#. TRANSLATORS: Header in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:118
+msgid "You can enable enhancements that were added to this remake."
+msgstr "Bekapcsolhatod a felújítás során hozzáadott fejlesztéseket."
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:45
+#: Sources/Jazz2/UI/Menu/LanguageSelectSection.cpp:44
+msgid "Language"
+msgstr "Nyelv"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#. Uses a custom value drawer to show the UAC icon next to "Enabled" (it allows running unsigned scripts)
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:50
+msgid "Scripting"
+msgstr "Szkriptelés"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:66
+msgid "Continuous Jump"
+msgstr "Folytonos ugrás"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:70
+msgid "Switch To New Weapon"
+msgstr "Új fegyverre váltás"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:74
+msgid "Show Minimap"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:78
+msgid "Allow Cheats"
+msgstr "Csalások engedélyezése"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:79
+msgid "Yes"
+msgstr "Igen"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:79
+msgid "No"
+msgstr "Nem"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:83
+msgid "Overwrite Episode Completion"
+msgstr "Epizód eredményeinek felülírása"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:86
+msgid "No Cheats Only"
+msgstr "Csak csalás nélküli játék esetén"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:88
+msgid "Higher Score Only"
+msgstr "Csak magasabb pontszám esetén"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:89
+msgid "Always"
+msgstr "Minden alkalommal"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:100
+msgid "Razer Chroma™"
+msgstr "Razer Chroma™ támogatás"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:112
+msgid "Browse \"Source\" Directory"
+msgstr "Játékfájlok böngészése"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:126
+#: Sources/Jazz2/UI/Menu/RefreshCacheSection.cpp:83
+msgid "Refresh Cache"
+msgstr "Gyorsítótár felfrissítése"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:39
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:32
+msgid "Graphics"
+msgstr "Grafika"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:49
+msgid "Rescale Mode"
+msgstr "Átméretezési mód"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:54
+msgid "Screen Resolution"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:70
+msgid "Rendering Resolution"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:121
+msgid "Fullscreen"
+msgstr "Teljes képernyős ablak"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:141
+msgid "Antialiasing"
+msgstr "Élsimítás"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:165
+msgid "Background Dithering"
+msgstr "Háttér zajszórása"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:177
+msgid "Blur Effects"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:189
+msgid "Lighting Resolution"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:229
+msgid "Particle Quality"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:232
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:306
+msgid "Off"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:233
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:252
+msgid "Low"
+msgstr "Alacsony"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:234
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:252
+msgid "High"
+msgstr "Magas"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:251
+msgid "Water Quality"
+msgstr "Vízminőség"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:260
+msgid "Show Player Trails"
+msgstr "Játékos nyomvonalainak megjelenítése"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:268
+msgid "Preferred Splitscreen"
+msgstr "Osztott képernyő elrendezése"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:269
+msgid "Vertical"
+msgstr "Függőleges"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:269
+msgid "Horizontal"
+msgstr "Vízszintes"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:276
+msgid "Prefer Zoom Out"
+msgstr "Kicsinyítés előnyben részesítése"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#. TRANSLATORS: Header of Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:285
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:54
+msgid "Safe Area"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:287
+msgid "Keep Aspect Ratio In Cinematics"
+msgstr "Képarány megtartása az átvezető videókban"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:294
+msgid "Unaligned Viewport"
+msgstr "Eltolt nézetablak"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:295
+msgid "Enabled \f[c:#d0705d](Experimental)\f[/c]"
+msgstr "Engedélyezve \f[c:#d0705d](Kísérleti)\f[/c]"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:303
+msgid "Performance Metrics"
+msgstr "Teljesítménymérők"
+
+#. TRANSLATORS: Option for Performance Metrics item in Options > Graphics section, only the frame rate is shown
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:308
+msgid "Basic"
+msgstr ""
+
+#. TRANSLATORS: Option for Performance Metrics item in Options > Graphics section, the frame rate and the time each part of a frame takes
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:310
+msgid "Detailed"
+msgstr "Részletes"
+
+#: Sources/Jazz2/UI/Menu/HighscoresSection.cpp:181
+msgid "Highscores for \f[c:#d0705d]Base game\f[/c]"
+msgstr "Az \f[c:#d0705d]alapjáték\f[/c] legmagasabb pontszámai"
+
+#: Sources/Jazz2/UI/Menu/HighscoresSection.cpp:191
+#, c++-format
+msgid "Highscores for \f[c:#d0705d]{}\f[/c]"
+msgstr "Legmagasabb pontszámok a(z) \f[c:#d0705d]{}\f[/c] epizódhoz"
+
+#. TRANSLATORS: Header in Import Episodes section
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:68
+msgid "Select files of your original game to unlock additional episodes"
+msgstr ""
+"Válaszd ki az eredeti játék fájljait, hogy feloldhasd a további epizódokat"
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:74
+#, c++-format
+msgid "Processing of {} file..."
+msgid_plural "Processing of {} files..."
+msgstr[0] "{} fájl feldolgozása folyamatban..."
+msgstr[1] "{} fájl feldolgozása folyamatban..."
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:77
+msgid "Waiting for files..."
+msgstr "Várakozás a fájlokra..."
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:83
+msgid "No files were selected!"
+msgstr "Nem választottál ki fájlt!"
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:88
+msgid "No new episodes were imported!"
+msgstr "Nem lett importálva új epizód!"
+
+#: Sources/Jazz2/UI/Menu/InputDiagnosticsSection.cpp:100
+msgid "No gamepads are detected!"
+msgstr "Nincs csatlakoztatott játékvezérlő!"
+
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:23
+msgid "Select Game Mode"
+msgstr "Játékmód kiválasztása"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:35
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:41
+msgid "Sounds"
+msgstr "Hangok"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:40
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:100
+msgid "User Profile"
+msgstr "Felhasználói profil"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:42
+msgid "Resume"
+msgstr "Folytatás"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:49
+msgid "Join Game"
+msgstr ""
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:52
+msgid "Spectate"
+msgstr "Néző mód"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:56
+msgid "Change Character"
+msgstr ""
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:66
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:69
+msgid "Save & Exit"
+msgstr "Mentés és kilépés"
+
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:66
+msgid "Disconnect & Exit"
+msgstr "Kapcsolat bontása"
+
+#. TRANSLATORS: Menu item in Multiplayer section (join an existing online server)
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:25
+msgid "Join Server"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/RefreshCacheSection.cpp:85
+msgid "Processing of files in \f[c:#9e7056]\"Source\"\f[/c] directory..."
+msgstr ""
+"A fájlok feldolgozása a \f[c:#9e7056]\"Source\"\f [/c] könyvtárban "
+"folyamatban van..."
+
+#: Sources/Jazz2/UI/Menu/RefreshCacheSection.cpp:88
+msgid "Newly added levels and episodes will be available soon."
+msgstr "A frissen hozzáadott pályák és epizódok hamarosan elérhetők lesznek."
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:52
+msgid "Left"
+msgstr "Bal"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:54
+msgid "Right"
+msgstr "Jobb"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:56
+msgid "Up"
+msgstr "Fel"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:58
+msgid "Down"
+msgstr "Le"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:60
+msgid "Buttstomp"
+msgstr "Seggcsapás"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:62
+msgid "Fire"
+msgstr "Tüzelés"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:64
+msgid "Jump"
+msgstr "Ugrás"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:66
+msgid "Run"
+msgstr "Futás"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#. TRANSLATORS: Bottom hint in Connect To Server > IP Address input field
+#. _root->DrawStringShadow(_("Keyboard"), charOffset, centerX - 84.0f, hintY, IMenuContainer::FontLayer + 110,
+#. Alignment::Left, Font::DefaultColor, 0.7f, 0.4f, 0.0f, 0.0f, 0.0f, 0.9f);
+#. }
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:68
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:299
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:452
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:482
+msgid "Change Weapon"
+msgstr "Fegyverváltás"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:70
+msgid "Back"
+msgstr "Vissza"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:72
+msgid "Toggle Console"
+msgstr "Konzol be/kikapcsolása"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:75
+#, c++-format
+msgid "Weapon {}"
+msgstr "{}. fegyver"
+
+#. TRANSLATORS: Bottom hint in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:289
+msgid "Press any key or button to assign"
+msgstr "Nyomj meg bármilyen billentyűt vagy gombot a hozzárendeléshez"
+
+#. TRANSLATORS: Bottom hint in Options > Controls > Remap Controls section, prefixed with key/button to press
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:301
+msgid "to remove assignment"
+msgstr "a hozzárendelés eltávolításához"
+
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:32
+msgid "Select Rescale Mode"
+msgstr "Átméretezési mód kiválasztása"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:48
+msgid "None / Pixel-perfect"
+msgstr "Nincs / Pixel-pontos"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:66
+msgid "CRT Scanlines"
+msgstr "CRT vonalak"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:68
+msgid "CRT Shadow Mask"
+msgstr "CRT árnyékszűrő"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:70
+msgid "CRT Aperture Grille"
+msgstr "CRT rekeszrács"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:73
+msgid "Monochrome"
+msgstr "Monokróm"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:58
+msgid "Left Margin"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:60
+msgid "Top Margin"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:62
+msgid "Right Margin"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:64
+msgid "Bottom Margin"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:66
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:139
+msgid "Reset"
+msgstr ""
+
+#. TRANSLATORS: Value of a margin in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:92
+msgid "None"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:139
+msgid "Laps"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:141
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:583
+msgid "Treasure"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:169
+msgid "Scoreboard"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:174
+msgid "Player"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:184
+msgid "Pts"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:186
+msgid "Ping"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:284
+msgid "Connect To Server"
+msgstr "Csatlakozás a szerverhez"
+
+#. TRANSLATORS: Shown in Connect To Server section on PSP while the console switches between Wi-Fi and ad hoc mode
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:299
+msgid "Switching connection mode…"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:304
+msgid "No servers found, but still searchin'!"
+msgstr "Nem találtunk szervereket, de még nyomozunk!"
+
+#. TRANSLATORS: Label in Connect To Server > IP Address input field
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:422
+msgid "IP Address:"
+msgstr ""
+
+#. TRANSLATORS: Placeholder in Connect To Server > IP Address input field
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:429
+msgid "<ip> or <ip>:<port>"
+msgstr ""
+
+#. TRANSLATORS: Bottom hint in Connect To Server > IP Address input field, prefixed with key/button to press
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:464
+msgid "to show keyboard"
+msgstr ""
+
+#. TRANSLATORS: Bottom hint in Connect To Server section, prefixed with key/button to press
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:496
+msgid "to connect to IP address"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/SimpleMessageSection.cpp:48
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:227
+msgid "Press \f[c:#d0705d]Fire\f[/c] to continue"
+msgstr "Nyomd meg a \f[c:#d0705d]Tüzelés\f[/c] gombot a folytatáshoz"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:51
+msgid "Master Volume"
+msgstr "Főhangerő"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:59
+msgid "SFX Volume"
+msgstr "Hangeffektek"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:67
+msgid "Music Volume"
+msgstr "Zene"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:83
+msgid "Sample Rate"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:130
+msgid "Save"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:146
+msgid "Joystick"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:156
+msgid "Vibration"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:164
+msgid "Drag to move · Pinch or corner to resize"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:106
+msgid "Discord Integration"
+msgstr "Discord integráció"
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:121
+msgid "Player Name"
+msgstr "Játékos neve"
+
+#. TRANSLATORS: Menu item in Options > User Profile section (primary fur/body color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:164
+msgid "Primary Fur"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > User Profile section (secondary fur/body color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:166
+msgid "Secondary Fur"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > User Profile section (weapon color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:168
+msgid "Weapon"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > User Profile section (miscellaneous accent color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:170
+msgid "Miscellaneous"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:185
+msgid "Default"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:205
+msgid "Apply Custom Colors"
+msgstr ""
+
+#. TRANSLATORS: Value of "Apply Colors" in Options > User Profile
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:210
+msgid "Online only"
+msgstr ""
+
+#. TRANSLATORS: Value of "Apply Colors" in Options > User Profile
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:212
+msgid "Online and first local player"
+msgstr ""
+
+#. TRANSLATORS: Value of "Apply Colors" in Options > User Profile
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:214
+msgid "Online and all local players"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:222
+msgid "Unique Player ID"
+msgstr "Játékosazonosító"
+
+#. TRANSLATORS: Spectator hint, "Fire" and "Run" are the names of the two actions
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:236
+msgid "Fire: next player, Run: free camera"
+msgstr ""
+
+#. TRANSLATORS: Spectator hint, "Fire" is the name of the action
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:238
+msgid "Fire: follow a player"
+msgstr ""
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:255
+#, c++-format
+msgid "Game starts in {}"
+msgstr "A játék {} másodpercen belül kezdődik"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:263
+#, c++-format
+msgid "Waiting for {} more player"
+msgid_plural "Waiting for {} more players"
+msgstr[0] "{} játékosra várunk"
+msgstr[1] "{} játékosra várunk"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:286
+#, c++-format
+msgid "Finish in {} s"
+msgstr ""
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:581
+msgid "Time"
+msgstr ""
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:584
+msgid "Kills"
+msgstr ""
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:612
+msgid "Final standings"
+msgstr ""
+
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:175
+msgid "Team"
+msgstr ""
+
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:184
+msgid "Auto"
+msgstr ""
+
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:223
+msgid "Use \f[c:#d0705d]Up/Down\f[/c] to switch between character and team"
+msgstr ""
+
+#: Sources/Main.cpp:929 Sources/Main.cpp:1010
+msgid ""
+"\f[c:#704a4a]Cannot load specified level!\f[/c]\n"
+"\n"
+"\n"
+"Make sure all necessary files\n"
+"are accessible and try it again."
+msgstr ""
+"\f[c:#704a4a]Nem lehet betölteni a megadott pályát!\f[/c]\n"
+"\n"
+"\n"
+"Győződj meg róla, hogy \n"
+"az összes szükséges fájl elérhető, és próbáld újra."
+
+#: Sources/Main.cpp:1112
+msgid ""
+"\f[c:#704a4a]Cannot resume saved state!\f[/c]\n"
+"\n"
+"\n"
+"Make sure all necessary files\n"
+"are accessible and try it again."
+msgstr ""
+"\f[c:#704a4a]Nem lehet folytatni a mentett állapotot!\f[/c]\n"
+"\n"
+"\n"
+"Győződj meg róla, hogy \n"
+"az összes szükséges fájl elérhető, és próbáld újra."
+
+#: Sources/Main.cpp:1402
+msgid "Unnamed server"
+msgstr "Névtelen szerver"
+
+#: Sources/Main.cpp:1559
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Invalid parameter specified."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"Hibás paraméter."
+
+#: Sources/Main.cpp:1560
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Your client version is not compatible with the server."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"A kliensed verziója nem kompatibilis a szerverrel."
+
+#: Sources/Main.cpp:1561
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"The client was rejected due to malformed communication protocol."
+msgstr ""
+
+#: Sources/Main.cpp:1562
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"The connection was denied by the web browser.\n"
+"One of the reasons may be connecting to an unsecured WebSocket."
+msgstr ""
+
+#: Sources/Main.cpp:1563
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Authentication failed.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"Sikertelen hitelesítés!\n"
+"További információért vedd fel a kapcsolatot a szerver adminisztrátoraival."
+
+#: Sources/Main.cpp:1564
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Invalid password specified."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"Helytelen jelszó."
+
+#: Sources/Main.cpp:1565
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Invalid player name specified.\n"
+"Please check your profile and try it again."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"Helytelen felhasználónév.\n"
+"Kérlek ellenőrizd a profilodat, majd probáld újra."
+
+#: Sources/Main.cpp:1566
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"This client is not in the server whitelist.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"Ez a kilens nincs jelen a szerver fehérlistájában\n"
+"További információért vedd fel a kapcsolatot a szerver adminisztrátoraival."
+
+#: Sources/Main.cpp:1567
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Server requires 3rd party authentication provider.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"Ez a szerver harmadik feltől származó azonosítást vár.\n"
+"További információért vedd fel a kapcsolatot a szerver adminisztrátoraival."
+
+#: Sources/Main.cpp:1568
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Server capacity is full.\n"
+"Please try it later."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"A szerver kapacitása megtelt.\n"
+"Kérlek, próbáld újra később."
+
+#: Sources/Main.cpp:1569
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Server is not in a state where it can process your request.\n"
+"Please try again in a few seconds."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"A szerver nincs olyan állapotban, hogy feldolgozhassa a kérésedet.\n"
+"Kérlek, próbáld újra néhány másodperc múlva."
+
+#: Sources/Main.cpp:1570
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down.\n"
+"Please try it later."
+msgstr ""
+"\f[c:#704a4a]A kapcsolat megszakadt!\f[/c]\n"
+"\n"
+"\n"
+"A szerver éppen leáll.\n"
+"Kérjük, próbálja meg később."
+
+#: Sources/Main.cpp:1571
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down for maintenance.\n"
+"Please try it again later."
+msgstr ""
+"\f[c:#704a4a]A kapcsolat megszakadt!\f[/c]\n"
+"\n"
+"\n"
+"A szerver karbantartás miatt leáll.\n"
+"Kérlek, próbáld újra később."
+
+#: Sources/Main.cpp:1572
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down for reconfiguration.\n"
+"Please try it again later."
+msgstr ""
+"\f[c:#704a4a]A kapcsolat megszakadt!\f[/c]\n"
+"\n"
+"\n"
+"A szerver újrakonfigurálás miatt leáll.\n"
+"Kérlek, próbáld újra később."
+
+#: Sources/Main.cpp:1573
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down for update.\n"
+"Please check your client version and try it again in a minute."
+msgstr ""
+"\f[c:#704a4a]A kapcsolat megszakadt!\f[/c]\n"
+"\n"
+"\n"
+"A szerver frissítés miatt leáll.\n"
+"Kérlek, ellenőrizd a kliens verzióját, és próbáld újra egy percen belül."
+
+#: Sources/Main.cpp:1574
+msgid ""
+"\f[c:#704a4a]Connection has been lost!\f[/c]\n"
+"\n"
+"\n"
+"Please try it again and if the problem persists,\n"
+"check your network connection."
+msgstr ""
+"\f[c:#704a4a]A kapcsolat megszakadt!\f[/c]\n"
+"\n"
+"\n"
+"Kérlek, próbálja meg újra, és ha a probléma továbbra is fennáll,\n"
+"ellenőrizd a hálózati kapcsolatot."
+
+#: Sources/Main.cpp:1575
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"The server is not responding for connection request."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"A szerver nem válaszol a csatlakozási kérelemre."
+
+#: Sources/Main.cpp:1576
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"You have been \f[c:#907050]kicked\f[/c] off the server.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]A kapcsolat megszakadt!\f[/c]\n"
+"\n"
+"\n"
+"Ki lettél \f[c:#907050]rúgva\f[/c] a szerverről.\n"
+"További információkért fordulj a szerveradminisztrátorokhoz."
+
+#: Sources/Main.cpp:1577
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"You have been \f[c:#725040]banned\f[/c] off the server.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]A kapcsolat megszakadt!\f[/c]\n"
+"\n"
+"\n"
+"\f[c:#907050]Ki lettél tiltva\f[/c] a szerverről.\n"
+"További információért vedd fel a kapcsolatot a szerver adminisztrátoraival."
+
+#: Sources/Main.cpp:1578
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Cheating detected."
+msgstr ""
+"\f[c:#704a4a]A kapcsolat megszakadt!\f[/c]\n"
+"\n"
+"\n"
+"Csalás észlelve."
+
+#: Sources/Main.cpp:1579
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Your client doesn't contain required assets.\n"
+"Please download the required files and try it again."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"A kliensed nem tartalmazza a szükséges fájlokat. \n"
+"Töltsd le a szükséges fájlokat, majd próbáld újra."
+
+#: Sources/Main.cpp:1580
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"The server has disconnected you due to inactivity."
+msgstr ""
+"\f[c:#704a4a]A kapcsolat megszakadt!\f[/c]\n"
+"\n"
+"\n"
+"A szerver bontotta a kapcsolatot tétlenség miatt."
+
+#: Sources/Main.cpp:1910
+#, c++-format
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Your client doesn't contain level \"{}\".\n"
+"Please download the required files and try it again."
+msgstr ""
+"\f[c:#704a4a]Nem lehet csatlakozni a szerverhez!\f[/c]\n"
+"\n"
+"\n"
+"A kliensed nem tartalmazza a(z) \"{}\" szintet.\n"
+"Töltsd le a szükséges fájlokat, majd próbáld újra."
+
+#~ msgid "Short"
+#~ msgstr "Rövid"

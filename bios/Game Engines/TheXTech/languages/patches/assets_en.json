@@ -1,0 +1,15 @@
+{
+    "character": {
+        "name1": "Demo",
+        "name2": "Iris",
+        "name3": "Kood",
+        "name4": "Raocow",
+        "name5": "Sheath"
+    },
+    "objects": {
+        "wordFails": "DEMOS",
+        "wordStarAccusativeDualOrCounter": "<Unused in English, translate as \"stars\" in Dual form if your language has dual form (the number between plural and singular); If your language has counter word, use counter word instead>",
+        "wordStarAccusativePlural": "leeks",
+        "wordStarAccusativeSingular": "leek"
+    }
+}

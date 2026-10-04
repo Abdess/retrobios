@@ -1,0 +1,874 @@
+{
+    "editor": {
+        "file": {
+            "convert": {
+                "descNew": "A extensão será alterada, mas o arquivo NÃO será deletado.\n\nPor favor, confira os recursos que serão perdidos antes."
+            },
+            "formatLegacy": "Antigo (SMBX-64)",
+            "formatModern": "Moderno (PGE-X)",
+            "labelCurrentFile": "Arquivo atual: \\",
+            "labelFormat": "Formato:",
+            "optionActionWithoutSave": "{0} sem guardar",
+            "optionCancelAction": "Cancelar: não {0}",
+            "optionCancelConversion": "Cancelar conversão",
+            "optionProceedWithConversion": "Confirmar conversão",
+            "optionYesSaveThenAction": "SIM: Guardar, depois {0}",
+            "sectionLevel": "Nível",
+            "actionOpen": "Abrir",
+            "confirmConfirmAction": "Certeza que quer {0}?",
+            "confirmConvertFormatTo": "Converter para {0}?",
+            "confirmSaveBeforeAction": "Guardar antes de {0}?",
+            "sectionWorld": "Mundo",
+            "actionClearLevel": "Limpar Nível",
+            "actionClearWorld": "Limpar Mundo",
+            "actionExit": "Sair",
+            "commandNew": "Novo",
+            "commandOpen": "Abrir...",
+            "commandSave": "Guardar",
+            "commandSaveAs": "Guardar como...",
+            "actionRevert": "Redefinir"
+        },
+        "labelSortLayer": "Organizar Camadas:",
+        "layers": {
+            "abbrevAttLayer": "Anexa: ",
+            "default": "Padrão",
+            "deletion": {
+                "cancel": "Cancelar: Não apagar camada",
+                "confirmDelete": "NÃO: *APAGA TODO O CONTEÚDO*",
+                "preserveLayerContents": "Preservar o conteúdo da camada?",
+                "confirmPreserve": "SIM: Mover para a camada padrão",
+                "header": "Apagando camada {0}"
+            },
+            "header": "Camadas:",
+            "itemNewLayer": "<Nova Camada>",
+            "label": "Camada:",
+            "labelAttached": "Anexado:",
+            "labelAttachedLayer": "Camada Anexada:",
+            "labelMoveLayer": "Mover Camada:",
+            "promptLayerName": "Nome da camada",
+            "desc": {
+                "att": "Quando o NPC se mover, a camada anexada o seguira"
+            }
+        },
+        "letterCoordY": "Y",
+        "letterDown": "B",
+        "letterLeft": "E",
+        "letterUp": "C",
+        "level": {
+            "alwaysVis": "Sempre Vis",
+            "bigBG": "Cam.Grande",
+            "gameStart": "Iniciar Jogo",
+            "levelName": "Nome do Nível",
+            "pathBG": "Caminho",
+            "pathUnlocks": "Caminhos Desbloq.",
+            "startPos": "Pos. Inicial"
+        },
+        "mapPos": "Pos. Mapa:",
+        "npc": {
+            "inertNice": "Amig",
+            "props": {
+                "active": "Ativo",
+                "attachSurface": "Anexa",
+                "facing": "Olhando"
+            },
+            "inContainer": "-",
+            "stuckStop": "Fica",
+            "ai": {
+                "LR": "Esq-Dir",
+                "UD": "Cim-Bai",
+                "aiIs": "IA: {0}",
+                "headerCustomAi": "IA Person.:",
+                "leap": "Saltar",
+                "swim": "Nadar",
+                "target": "Perseguir",
+                "jump": "Pular",
+                "use1_0Ai": "Usar IA 1.0?"
+            },
+            "gen": {
+                "effectWarp": "Telep",
+                "effectIs": "Efeito: {0}",
+                "effectShoot": "Atirar",
+                "header": "Config. de Gerador",
+                "direction": "Direção"
+            },
+            "abbrevGen": "Gera.",
+            "tooltipExpandSection": "Expandir Seção"
+        },
+        "phraseAreYouSure": "Tem certeza?",
+        "phraseCountMore": "Mais {0}",
+        "phraseDelayIsMs": "Interv.: {0} ms",
+        "phraseRadiusIndex": "Raio {0}",
+        "phraseSectionIndex": "Seção {0}",
+        "section": {
+            "horizWrap": "Ligar Esq-Dir",
+            "noTurnBack": "Sem Volta",
+            "offscreenExit": "Sair Pela Borda",
+            "scroll": "Deslizar",
+            "setBounds": "Def. Bordas",
+            "underwater": "Subaquático",
+            "vertWrap": "TP. Vertical"
+        },
+        "select": {
+            "pathBlankUnlock": "Caminho {0} Desbloqueia Por",
+            "sectionBlankPropBlank": "Seção {0}{1}",
+            "allSectPropBlankForEventN": "Todas Seções {0} para {1}",
+            "sectBlankPropBlankForEventN": "Seção {0} {1} para {2}",
+            "soundForEventN": "Som para Evento {0}",
+            "warpTransitEffect": "Efeito de Transição do Teleporte",
+            "worldMusic": "Música do Mundo"
+        },
+        "testPlay": {
+            "boot": "Bota",
+            "char": "Pers",
+            "magicHand": "Mão Mágica",
+            "pet": "Mont.",
+            "power": "Poder"
+        },
+        "tooltip": {
+            "area": "Área",
+            "erase": "Apagar",
+            "NPCs": "NPCs",
+            "music": "Música",
+            "scenes": "Cenário",
+            "BGOs": "Obj. de Fundo",
+            "eraseAll": "Apagar Tudo",
+            "blocks": "Blocos",
+            "file": "Arquivo",
+            "layers": "Camadas",
+            "levels": "Níveis",
+            "paths": "Caminhos",
+            "select": "Selecionar",
+            "show": "Mostrar",
+            "settings": "Configurações",
+            "tiles": "Peças",
+            "warps": "Teleportes",
+            "water": "Água",
+            "events": "Eventos"
+        },
+        "warp": {
+            "effect": "Efeito:",
+            "in": "Ent.",
+            "out": "Saí.",
+            "placing": "Colocando:",
+            "ride": "Montar",
+            "speed": "Velocidade ",
+            "style": {
+                "blipInstant": "Inst.",
+                "door": "Porta",
+                "portal": "Port",
+                "style": "Estilo: ",
+                "pipe": "Cano"
+            },
+            "to": "A: {0}",
+            "toMap": "Para Mapa",
+            "transit": {
+                "name1": "DESLIZAR",
+                "name4": "VIRAR (H)",
+                "name0": "NENHUM",
+                "name2": "TRANSIÇÃO",
+                "name3": "CÍRCULO",
+                "name5": "VIRAR (V)"
+            },
+            "twoWay": "Ida-Volta",
+            "cannonExit": "Saí. Canhão",
+            "allow": "Permitir:",
+            "dir": "Dire.",
+            "item": "Item",
+            "needStarCount": "Precisa de {0} {1}",
+            "lvlWarp": "Tele.Nív.",
+            "needFloor": "Precisa de Chão",
+            "needKey": "Precisa de Chave",
+            "showStarCount": "Mostrar Estrelas",
+            "showStartScene": "Mostrar Cena Inicial",
+            "starLockMessage": "Mens. de Bloq. de Estrela",
+            "target": "Abre: ",
+            "title": "Config. de Teleporte"
+        },
+        "water": {
+            "title": "Config. de Água"
+        },
+        "wordEvent": {
+            "typeLabel": "Evento {0}:",
+            "nominative": "Evento",
+            "genitive": "Evento"
+        },
+        "wordInstant": "Instantâneo",
+        "wordNPC": {
+            "nominative": "NPC",
+            "genitive": "NPC"
+        },
+        "wordText": "Texto",
+        "wordWidth": "Largura",
+        "world": {
+            "hubWorld": "Mundo Central",
+            "introLevel": "Nível Inicial",
+            "name": "Nome do Mundo",
+            "allowChars": "Jogáveis",
+            "phraseCreditIndex": "Linha {0} - Créditos do Mundo:",
+            "totalStars": "Núm.Estrelas:",
+            "retryOnFail": "AutoRessurgir"
+        },
+        "block": {
+            "canBreak": "Quebrável",
+            "pickContents": "Escolha o conteúdo do bloco",
+            "canBreakTooltip": "Antigo \"Quebrar ao bater\"",
+            "inside": "Contém:",
+            "letterHeight": "A-",
+            "letterWidth": "L-",
+            "slick": "Escorr.",
+            "invis": "Inv."
+        },
+        "events": {
+            "desc": {
+                "hit": "bater no bloco",
+                "layerClear": "tudo na camada de objetos estiver limpa",
+                "phraseTriggersAfterTemplate": "{0} ativa {1} ms depois do evento {2}",
+                "phraseTriggersWhenTemplate": "{0} ativa quando {1}",
+                "talk": "o jogador fala com o NPC",
+                "death": "o NPC morre",
+                "destroy": "o bloco é destruído",
+                "enter": "entrar no teleporte",
+                "activate": "o NPC entrar na tela"
+            },
+            "deletion": {
+                "cancel": "NÃO: Não apagar o evento",
+                "confirm": "SIM: Apagar o evento",
+                "deletingEvent": "Apagando o evento {0}"
+            },
+            "header": "Evento:",
+            "headerTriggerEvent": "Ativação:",
+            "itemNewEvent": "<Novo Evento>",
+            "label": {
+                "activate": "Ativar",
+                "death": "Morte",
+                "layerClear": "Camada Limpa",
+                "destroy": "Destruir",
+                "enter": "Entrar",
+                "hit": "Bater",
+                "next": "Próximo",
+                "talk": "Falar"
+            },
+            "layers": {
+                "headerMove": "Mover:",
+                "headerHide": "Esconder:",
+                "headerShow": "Mostrar:",
+                "headerToggle": "Alternar:"
+            },
+            "letter": {
+                "enter": "E:",
+                "layerClear": "L:",
+                "activate": "A:",
+                "death": "M:",
+                "destroy": "D:",
+                "hit": "B:",
+                "talk": "F:"
+            },
+            "props": {
+                "sound": "Som",
+                "autostart": "Ao iniciar",
+                "controls": "Control.",
+                "endGame": "Fin.Jogo",
+                "layerSmoke": "Fumaça"
+            },
+            "sections": {
+                "actionKeep": "Manter",
+                "actionReset": "Rein.",
+                "actionSet": "Def.",
+                "phraseAllSections": "Todas as Seções",
+                "propBackground": "Fundo",
+                "propBounds": "Bordas",
+                "propMusic": "Música"
+            },
+            "promptEventName": "Nome do evento",
+            "promptEventText": "Texto do evento",
+            "bounds": {
+                "changeAllSectionBoundsToCurrent": "Mudar todos os limites de borda da seção atual?",
+                "changeSectionBoundsToCurrent": "Mudar os limites de borda da seção {0} aos valores atuais?",
+                "shouldEvent": "Editar Evento {0}"
+            },
+            "controlsForEventN": "Controles para o evento {0}",
+            "settingsForEvent": "Config. do evento {0}"
+        },
+        "browser": {
+            "itemNewFile": "<Novo Arquivo>",
+            "askOverwriteFile": "Sobrescrever {0}?",
+            "itemNewFolder": "<Nova Pasta>",
+            "openFile": "Abrir arquivo",
+            "newFile": "Criar arquivo",
+            "saveFile": "Guardar arquivo"
+        },
+        "labelSortOffset": "Organizar Deslocamento (Offset):",
+        "letterCoordX": "X",
+        "letterRight": "D",
+        "pageBlankOfBlank": "Pagina {0} de {1}",
+        "phraseGenericIndex": "Número {0}",
+        "phraseTextOf": "Texto - {0}",
+        "phraseWarpIndex": "Teleporte {0}",
+        "toggleMagicBlock": "Bloco Mágico",
+        "wordEnabled": "Ativado",
+        "wordCoins": "Moedas",
+        "wordHeight": "Altura",
+        "wordMode": "Modo"
+    },
+    "game": {
+        "connect": {
+            "phraseHoldStart": "Pressione Start",
+            "splitPressSelect_2": "Opções de Controle",
+            "dropAddTitle": "Ger. Jogadores",
+            "phraseChangeChar": "Mudar Personagem",
+            "phraseDropMe": "Retirar",
+            "phraseDropPX": "Tirar J{0}",
+            "phraseForceResume": "Forçar Continuação",
+            "phrasePressAButton": "Pressione A",
+            "phraseSetControls": "Definir Controles",
+            "phraseStartToForceRes": "Pressione Start para Forçar Continuar",
+            "phraseStartToResume": "Pressione Start para Continuar",
+            "phraseTestControls": "Testar Controles",
+            "phraseTestProfile": "Testar Perfil",
+            "phraseWaitingForInput": "Esperando por Controles...",
+            "reconnectTitle": "Reconectar",
+            "splitPressSelect_1": "Pressione Select para",
+            "wordDisconnect": "Desconectar"
+        },
+        "error": {
+            "errorInvalidEnterWarp": "Não foi possível iniciar o nível devido a um teleporte de entrada invalido em {1}.\nTotal de entradas no teleporte: {2}\n\nArquivo: {0}",
+            "errorNoStartPoint": "Não foi possível iniciar o nível por este nível não conter ponto de inicio ou entradas de teleporte especificadas.\n\nArquivo: {0}",
+            "openFileFailed": "\"{0}\" não foi aberto: Arquivo inexistente ou corrompido.",
+            "warpNeedStarCount": "Você precisa de\n{0} {1} para entrar.",
+            "errorTooOldGameAssets": "O conteúdo requer um pacote de recursos de fase mais recente ({0}) do que o pacote de recursos atual ({1}). Atualize seu pacote de recursos do jogo.",
+            "IPCTimeOut": "Sem Resposta do editor conectado o jogo será fechado",
+            "errorTooOldEngine": "O conteúdo requer um nível de recurso de mecanismo mais recente ({0}) do que a versão atual ({1}). Atualize o TheXTech.",
+            "openIPCDataFailed": ""
+        },
+        "message": {
+            "scanningLevels": "Buscando níveis..."
+        },
+        "pause": {
+            "playerSetup": "Configurar Jogadores",
+            "enterCode": "Comandos",
+            "returnToEditor": "Retornar ao Editor",
+            "saveAndContinue": "Guardar e Continuar",
+            "saveAndQuit": "Guardar e Sair",
+            "quit": "Sair",
+            "quitTesting": "Sair do Teste",
+            "resetCheckpoints": "Reiniciar Ponto de Ressurgimento",
+            "continue": "Continuar",
+            "restartLevel": "Reiniciar Nível"
+        },
+        "format": {
+            "minutesSeconds": "{0}m{1}s"
+        },
+        "hint": {
+            "no-lives-old": "Cuidado - Fim de Jogo iminente!",
+            "no-lives-new": "Sem moedas? Empréstimo! Olhe para sua pontuação...",
+            "char5-bombs": "Pressione Correr para segurar e Correr ALT para jogar.",
+            "gray-bricks": "Alguns blocos são vulneráveis a habilidades.",
+            "rainbow-surf": "Pegue, corra, abaixe, e então surfe.",
+            "shoe-block": "Vestindo isso ficará imune a - quase todos - fogos!",
+            "heavy-duck": "Abaixe para se proteger de - nem todos - fogos!",
+            "pound-altrun": "Use Correr ALT para Ground Pound!",
+            "pound-down": "Use Baixo para Ground Pound!"
+        },
+        "msgbox": {
+            "sysInfoError": "Erro!",
+            "sysInfoTitle": "Informação",
+            "sysInfoWarning": "Aviso!"
+        },
+        "loader": {
+            "statusLoadData": "",
+            "statusGameInfo": "",
+            "statusLoadFile": "",
+            "statusFinishing": "",
+            "statusAssetPacks": "",
+            "statusTranslations": ""
+        },
+        "ipcStatus": {
+            "loadingdone": "",
+            "dataAccepted": "",
+            "dataTransferStarted": "",
+            "errorTimeout": "",
+            "dataValid": "",
+            "waitingInput": ""
+        },
+        "screenPaused": ""
+    },
+    "menu": {
+        "controls": {
+            "touchscreen": {
+                "style": {
+                    "XODA": "𐄂○□△",
+                    "ABXY": "ABXY",
+                    "actions": "Ações"
+                },
+                "layout": {
+                    "tinyOld": "Pequeno (Antigo)",
+                    "longOld": "Longo (Antigo)",
+                    "phabletOld": "Phablet (Antigo)",
+                    "phoneOld": "Telefone (Antigo)",
+                    "tabletOld": "Tablet (Antigo)",
+                    "tight": "Apertado",
+                    "standard": "Def. Padrão"
+                },
+                "option": {
+                    "feedbackLength": "Duração da Vibração",
+                    "feedbackStrength": "Força da Vibração",
+                    "holdRun": "Segurar \"Correr\" ao Iniciar",
+                    "interfaceStyle": "Estilo da interface",
+                    "layoutStyle": "Estilo do Layout",
+                    "resetLayout": "Reiniciar Layout",
+                    "scaleButtons": "Escala dos Botões",
+                    "scaleDPad": "Escala do Direcional",
+                    "scaleFactor": "Fator de Escala",
+                    "showCodeButton": "Mostrar Botão de Comandos",
+                    "sStartSpacing": "Espaçamento S-Start"
+                }
+            },
+            "phraseNewProfOldJoy": "Novo Perfil para Joystick Antigo",
+            "wii": {
+                "typeNunchuck": "Nunchuck",
+                "wiimote": {
+                    "caseIR": "(Infravermelho)",
+                    "shake": "Sacudir",
+                    "button1": "1",
+                    "button2": "2",
+                    "buttonA": "A",
+                    "buttonB": "B",
+                    "buttonHome": "Bot. Home",
+                    "dPad": "Direcionais",
+                    "buttonMinus": "-",
+                    "buttonPlus": "+"
+                },
+                "classic": {
+                    "buttonLT": "LT",
+                    "buttonRT": "RT",
+                    "buttonX": "X",
+                    "buttonY": "Y",
+                    "buttonZL": "ZL",
+                    "buttonZR": "ZR",
+                    "lStick": "Direcional Esq",
+                    "rStick": "Direcional Dir"
+                },
+                "nunchuck": {
+                    "buttonC": "C",
+                    "buttonZ": "Z",
+                    "prefixN": "N"
+                },
+                "phraseNewClassic": "Novo Perfil - Classic",
+                "phraseNewNunchuck": "Novo Perfil - Nunchuck",
+                "typeClassic": "Classic",
+                "typeWiimote": "Wiimote",
+                "typeGamecube": ""
+            },
+            "hotkeys": {
+                "enterCheats": "Comandos",
+                "fullscreen": "Tela Cheia",
+                "debugInfo": "Depurar",
+                "legacyPause": "Pausa Alt",
+                "recordGif": "Gravar GIF",
+                "screenshot": "Capt. Tela",
+                "toggleHUD": "Interface",
+                "vanillaCam": "Câmera Vanilla"
+            },
+            "tDS": {
+                "buttonA": "A",
+                "buttonB": "B",
+                "buttonR": "R",
+                "buttonZL": "ZL",
+                "buttonZR": "ZR",
+                "casePen": "(Stylus)",
+                "buttonL": "L",
+                "buttonSelect": "Select",
+                "buttonStart": "Start",
+                "buttonX": "X",
+                "buttonY": "Y",
+                "cStick": "Analógico-C",
+                "dPad": "Direcionais",
+                "tStick": "Bot. do Analógico"
+            },
+            "cursor": {
+                "down": "Mouse Baixo",
+                "left": "Mouse Esq",
+                "right": "Mouse Dir",
+                "up": "Mouse Cima",
+                "primary": "Primário",
+                "secondary": "Secundário",
+                "tertiary": "Terciário"
+            },
+            "buttons": {
+                "altJump": "Pulo Alt",
+                "altRun": "Correr Alt",
+                "down": "Baixo",
+                "drop": "Cham.Item",
+                "jump": "Pular",
+                "left": "Esquerda",
+                "right": "Direita",
+                "start": "Iniciar",
+                "up": "Cima",
+                "run": "Correr"
+            },
+            "caseInvalid": "(Invalido)",
+            "caseMouse": "(Mouse)",
+            "caseTouch": "(Toque)",
+            "controlsConnected": "Conectado:",
+            "controlsDeviceTypes": "Tipos de Dispositivos",
+            "controlsInUse": "(Em Uso)",
+            "controlsNewProfile": "<Novo Perfil>",
+            "controlsNotInUse": "(Não Usado)",
+            "controlsReallyDeleteProfile": "Apagar perfil?",
+            "controlsTitle": "Controles",
+            "editor": {
+                "fastScroll": "Desl. Rápido",
+                "switchScreens": "Painel",
+                "nextSection": "Prox. Seção",
+                "scrollLeft": "Desl. Esq",
+                "scrollRight": "Desl. Dir",
+                "scrollUp": "Desl. Acima",
+                "testPlay": "Rodar Teste",
+                "modeErase": "M Apagar",
+                "modeSelect": "M Selec",
+                "prevSection": "Seção Anter",
+                "scrollDown": "Desl. Abaixo"
+            },
+            "options": {
+                "batteryStatus": "Estado da Bateria",
+                "maxPlayers": "Jogadores Máximos",
+                "rumble": "Vibrar",
+                "textEntryStyle": "Estilo de Entrada de Texto"
+            },
+            "profile": {
+                "hotkeys": "Atalhos",
+                "cursorControls": "Controles do cursor",
+                "deleteProfile": "Apagar Perfil",
+                "editorControls": "Controles do editor",
+                "playerControls": "Controles do jogador",
+                "renameProfile": "Renomear perfil"
+            },
+            "wordButtons": "Botões",
+            "wordProfiles": "Perfis",
+            "types": {
+                "touchscreen": "Tela de Toque",
+                "keyboard": "Teclado",
+                "gamepad": "Controle",
+                "oldJoystick": "Joystick Antigo"
+            },
+            "controlsDeleteKey": "(Pulo Alt para Apagar)",
+            "controlsDeleteKey2": "(Correr Alt para Apagar)",
+            "joystickSimpleEditor": ""
+        },
+        "game": {
+            "gameBattleRandom": "Nível Aleatório",
+            "gameCopySave": "Copiar Jogo",
+            "gameEraseSave": "Apagar Jogo",
+            "gameEraseSlot": "Selecione um Jogo para apagar",
+            "gameSlotNew": "JOGO {0} ... NOVO JOGO",
+            "gameNoBattleLevels": "<Sem níveis de batalha>",
+            "gameNoEpisodesToPlay": "<Sem episódios para jogar>",
+            "gameSourceSlot": "Selecione o Jogo de origem",
+            "gameTargetSlot": "Agora, o Jogo de destino",
+            "phraseScore": "Pontos: {0}",
+            "phraseTime": "Tempo: {0}",
+            "gameSlotContinue": "JOGO {0} ... {1}%",
+            "warnEpCompat": "Este episódio foi feito para uma versão diferente de SMBX e pode não funcionar como esperado."
+        },
+        "main": {
+            "mainPlayEpisode": "Jogar Episódio",
+            "main1PlayerGame": "Um Jogador",
+            "mainEditor": "Editor",
+            "mainOptions": "Opções",
+            "mainBattleGame": "Modo Batalha",
+            "mainExit": "Sair",
+            "mainMultiplayerGame": "Dois Jogadores"
+        },
+        "options": {
+            "restartEngine": "Reinicie a Engine para aplicar as mudanças.",
+            "advanced": {
+                "audio-enable": "Ativar",
+                "audio-format": {
+                    "_tooltip": "Formato para driver de som",
+                    "_name": "Formato de áudio"
+                },
+                "audio-sample-rate": {
+                    "11025": "11025 Hz",
+                    "_name": "Taxa de amostragem",
+                    "22050": "22050 Hz",
+                    "16000": "16000 Hz",
+                    "32000": "32000 Hz",
+                    "44100": "44100 Hz",
+                    "48000": "48000 Hz"
+                },
+                "render": {
+                    "opengl11": "OpenGL 1.1",
+                    "hw": "Automático",
+                    "opengl": "OpenGL 3+",
+                    "opengles11-tip": "",
+                    "_name": "Modo de renderização",
+                    "opengl-tip": "",
+                    "opengles-tip": "",
+                    "opengles": "OpenGL ES 2+",
+                    "opengl11-tip": "",
+                    "sdl": "SDL2",
+                    "sdl-tip": "",
+                    "sw": "Software",
+                    "opengles11": "OpenGL ES 1.1+"
+                },
+                "webm-recording": "",
+                "internal-res-4p": {
+                    "qhd": "2560x1440 (QHD)",
+                    "fhd": "1920x1080 (FHD)",
+                    "default": "Padrão",
+                    "qsmbx": "1600x1200 (QSMBX)",
+                    "_name": ""
+                },
+                "_tooltip": "Opções técnicas para operações internas",
+                "_header": "Avançado",
+                "advanced-video": "Vídeo",
+                "advanced-audio": "Áudio",
+                "audio-buffer-size": {
+                    "_tooltip": "Aumente para menos engasgos a custo de desempenho",
+                    "_name": "Buffer"
+                },
+                "audio-channels": {
+                    "stereo": "Estéreo",
+                    "mono": "Mono",
+                    "_name": "Canais"
+                },
+                "log-level": {
+                    "_name": "Nível de depuração (log)",
+                    "debug": "Depuração",
+                    "critical": "Crítico",
+                    "fatal": "Fatal",
+                    "info": "Informação",
+                    "warning": "Aviso",
+                    "none": "Nada"
+                },
+                "choose-assets-on-launch": "Escolher assets ao iniciar",
+                "record-gameplay-data": "Gravar jogatina",
+                "scale-down-textures": {
+                    "_tooltip": "Armazena imagens como 1x para economizar memória",
+                    "_name": "Reduzir escala das imagens",
+                    "safe-tip": "Verifica se as imagens estão no formato 2x",
+                    "safe": "Seguro",
+                    "none-tip": "Menos travamentos",
+                    "none": "Nenhum",
+                    "all-tip": "Menos travamentos no carregamento do que 'Seguro'",
+                    "all": "Todas"
+                },
+                "use-native-osk": "",
+                "fullscreen-type": {
+                    "_name": "",
+                    "exclusive": "",
+                    "desktop-tip": "",
+                    "desktop": "",
+                    "exclusive-tip": "",
+                    "auto": ""
+                },
+                "inaccurate-gifs-tip": "",
+                "inaccurate-gifs": "",
+                "fullscreen-depth": {
+                    "16": "",
+                    "auto": "",
+                    "_name": "",
+                    "32": ""
+                },
+                "fullscreen-res": ""
+            },
+            "main": {
+                "_header": "Principal",
+                "background-work": "",
+                "four-screen-mode": {
+                    "_name": "",
+                    "shared": "",
+                    "split": ""
+                },
+                "discord-rpc": "Integração com Discord",
+                "multiplayer": "",
+                "frame-skip": "",
+                "language": "Idioma",
+                "vsync": "",
+                "timing": "",
+                "two-screen-mode": {
+                    "split": "",
+                    "smbx": "",
+                    "topbottom": "",
+                    "_name": "",
+                    "shared": ""
+                },
+                "unlimited-framerate": "",
+                "background-work-tip": ""
+            },
+            "video": {
+                "internal-res": {
+                    "smbx-wide": "",
+                    "_name": "Tamanho da tela",
+                    "hello": "768x432 (HELLO)",
+                    "nds": "512x384 (NDS)",
+                    "_tooltip": "",
+                    "dynamic": "Dinâmico",
+                    "hd": "1280x720 (HD)",
+                    "gba": "480x320 (GBA)",
+                    "smbx": "800x600 (SMBX)",
+                    "snes": "512x448 (SNES)",
+                    "vga": "640x480 (VGA)",
+                    "3ds": "800x480 (3DS)"
+                },
+                "show-episode-title": {
+                    "bottom": "",
+                    "bottom-tip": "",
+                    "off": "",
+                    "_name": "",
+                    "top": "",
+                    "top-tip": ""
+                },
+                "scale-mode": {
+                    "integer": "",
+                    "1x": "1x",
+                    "center": "",
+                    "0_5x": "0,5x",
+                    "nearest": "",
+                    "full": "",
+                    "linear": "",
+                    "2x": "2x",
+                    "_name": "",
+                    "3x": ""
+                },
+                "show-fails-counter-tip": "",
+                "enable-inter-level-fade-effect": "",
+                "show-fails-counter": "",
+                "battery-status": {
+                    "off": "Desligado",
+                    "on": "Sempre",
+                    "low-tip": "",
+                    "_name": "",
+                    "fullscreen": "",
+                    "fullscreen-tip": "",
+                    "low": ""
+                },
+                "show-playtime-counter": {
+                    "opaque": "",
+                    "transparent": "",
+                    "_name": "",
+                    "animated": "",
+                    "animated-tip": "",
+                    "off": "",
+                    "off-tip": "",
+                    "_tooltip": ""
+                },
+                "effects": "",
+                "display-controllers": "",
+                "info-game": "",
+                "info-run": "",
+                "info-meta": "",
+                "fullscreen": "",
+                "show-fps": "",
+                "video-system": "",
+                "show-screen-shake": "",
+                "world-map-stars-show": "",
+                "_header": "Vídeo",
+                "show-medals-counter-tip": "",
+                "3d-compat-mode-tip": "",
+                "world-map-stars-show-tip": "",
+                "show-medals-counter": "",
+                "3d-compat-mode": ""
+            },
+            "speedrun": {
+                "mode": {
+                    "0": "0",
+                    "_name": "",
+                    "2": "2",
+                    "3": "3",
+                    "1": "1"
+                }
+            },
+            "audio": {
+                "sfx-audio-fx": "Efeitos de eco",
+                "sfx-spatial-audio": "Som espacial",
+                "sfx-modern": "Efeitos modernos",
+                "sfx-modern-tip": "",
+                "sfx-pet-beat": "",
+                "audio-sfx-volume": "Volume dos efeitos",
+                "_header": "Áudio",
+                "audio-prefs": "Referências",
+                "audio-music-volume": "Volume da música",
+                "sfx-spatial-audio-tip": "Reduz o volume de sons fora da tela",
+                "sfx-pet-beat-tip": ""
+            },
+            "episode-options": {
+                "creator-compat": {
+                    "_name": "",
+                    "file-only": "",
+                    "enable": "",
+                    "disable": "",
+                    "_tooltip": ""
+                },
+                "_header": "",
+                "playstyle": {
+                    "modern": "",
+                    "_name": "",
+                    "classic-tip": "",
+                    "classic": "",
+                    "vanilla-tip": "",
+                    "vanilla": "",
+                    "modern-tip": ""
+                },
+                "hub-resume-tip": "",
+                "hub-resume": ""
+            },
+            "compatibility": {
+                "reset-all": "",
+                "autocode": "",
+                "bugfixes": "",
+                "_tooltip": "",
+                "_header": "",
+                "features": ""
+            },
+            "controls": {
+                "_header": "Controles"
+            },
+            "view-credits": {
+                "_header": "Ver créditos"
+            }
+        },
+        "editor": {
+            "errorMissingResources": "Desculpe! {0} esta faltando, é necessário para o editor no jogo.",
+            "battles": "<Níveis de Batalha>",
+            "newWorld": "<Novo Mundo>",
+            "promptNewWorldName": "Nome do novo mundo",
+            "makeFor": "Fazer para:"
+        },
+        "wordBack": "Voltar",
+        "wordWaiting": "Esperando",
+        "loading": "Carregando...",
+        "abbrevMilliseconds": "MS",
+        "battle": {
+            "errorNoLevels": "Não foi possível iniciar uma batalha por falta de níveis"
+        },
+        "caseNone": "<Nenhum>",
+        "character": {
+            "selectCharacter": "Jogo do {0}"
+        },
+        "wordHide": "Esconder",
+        "wordNo": "Não",
+        "wordOff": "Desl.",
+        "wordOn": "Ligado",
+        "wordPlayer": "Jogador",
+        "wordProfile": "Perfil",
+        "wordResume": "Continuar",
+        "wordShow": "Mostrar",
+        "wordYes": "Sim"
+    },
+    "languageName": "Português-BR",
+    "outro": {
+        "specialThanks": "Agradecimentos Especiais:",
+        "cppPortDevelopers": "Desenvolvedores da versão C++:",
+        "customSprites": "Sprite Personalizado:",
+        "engineCredits": "Créditos da Engine:",
+        "gameCredits": "Créditos do jogo:",
+        "levelDesign": "Design de níveis:",
+        "nameAndrewSpinks": "Andrew Spinks",
+        "nameVitalyNovichkov": "Novichkov Vitaliy",
+        "originalBy": "Código original VB6 Por:",
+        "psVitaPortBy": "Port para PS Vita Por:",
+        "qualityControl": "Controle de Qualidade:"
+    },
+    "pluralRules": "one-is-singular"
+}

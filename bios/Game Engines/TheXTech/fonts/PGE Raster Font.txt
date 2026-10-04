@@ -1,0 +1,91 @@
+PGE Raster Font
+
+Structure:
+
+-Header.font.ini
+--font-map-1
+--sprite-1
+--font-map-2
+--sprite-2
+...
+
+
+XXX.font.ini - Definition of the raster font
+
+```ini
+; Main section of the font
+[font]
+tables = 4              ; Count of font maps
+name = "font1"          ; title of the font
+ttf-outlines = true     ; draw black outline in TTF-fallback drawn letters
+ttf-outlines-colour = 0x000000FF        ; The color of the outline at the TTF fallback
+ttf-fallback = "FontName Regular"       ; The name of the preferred TTF font if available
+ttf-size = 14                           ; The glyph size of the TTF fallback
+ttf-fallback-1x = "SmallFont Regular"   ; The name of the preferred TTF font on platforms with a low screen resolution
+ttf-size-1x = 14                        ; The glyph size of the TTF fallback on platforms with a low screen resolution
+space-width = 16        ; With of the white space character in pixels
+interletter-space = 2   ; Inter-letter space in pixels
+newline-offset = 20     ; Offset between of the lines in pixels
+glyph-offset-x = 0      ; Horizontal pixel offset of glyphs
+glyph-offset-y = 0      ; Vertical pixel offset of glyphs
+
+; List of font maps are used in this font.
+; Each font map includes one sprite - a picture contains drawn letters
+; and map of cells in that image in dependence on UTF8 character
+[tables]
+table1 = "font1_en.ini" ; name of each INI file can have anything
+table2 = "font1_ru.ini"
+table3 = "font1_misc.ini"
+table4 = "font1_misc2.ini"
+; ...
+tableN = "NNN.ini"
+```
+
+
+Font map (Must be saved in UTF-8 format!!!)
+
+```ini
+;
+;Font map
+;
+;Defines the available characters which can be printed
+; is possible to have multiple font textures
+
+[font-map]
+texture = font1_ru.png ; Picture contains characters of the font which a matrix of letters
+texture-scale = 2      ; The power-of-two render scale factor
+width = 6              ; Horizontal count of cells in the matrix on texture
+height = 6             ; Vertical count of cells in the matrix on texture
+
+; Map of font
+;
+; Entry format (monospace fonts):
+; position y0 x1 = value X
+;
+; Example:
+; 0-1 = "X"
+;
+;
+; Entry format (with a width subtracting at left and right ):
+;   position y0 x1  = value X, padding-left 2, padding-right 3
+;
+; Example:
+; 0-1 = "X23"
+;
+;
+; Entry format (map same coordinate to multiple places, for example,
+;   to share same cell for capitalized and smaller letter):
+;   position y0 x1 z1 = value X, padding-left 2, padding-right 3
+;
+; Example:
+; 0-1-0 = "X23"
+; 0-1-1 = "x45"
+; Note: z1 can have any number value, but required to have different for same X and Y pair.
+; That need to make INI value names be different or all first values are will be overwritten by last
+;
+
+[entries]
+0-0 = "А"   ; Regular map entry
+1-0 = "Б22" ; Entry with subtracting of left and right sizes of letter widths
+; ...
+```

@@ -1,0 +1,873 @@
+{
+    "editor": {
+        "block": {
+            "canBreak": "Kırılabilir",
+            "canBreakTooltip": "Legacy: vurunca kırılır",
+            "inside": "İçinde:",
+            "invis": "Görmez",
+            "letterHeight": "Y",
+            "letterWidth": "G",
+            "pickContents": "Blok içeriği seç",
+            "slick": "Kaygan"
+        },
+        "browser": {
+            "askOverwriteFile": "Üzerine Yaz {0}?",
+            "itemNewFile": "<Yeni Dosya>",
+            "itemNewFolder": "<Yeni Klâsör>",
+            "newFile": "Yeni dosya",
+            "openFile": "Dosyayı aç",
+            "saveFile": "Dosyayı kaydet"
+        },
+        "events": {
+            "bounds": {
+                "changeAllSectionBoundsToCurrent": "Bütün kısımları buna dönüştür?",
+                "changeSectionBoundsToCurrent": "{0} kısımının ayarlarını buna bağla?",
+                "shouldEvent": "{0} Olayı Şunu Yapmalı Mı"
+            },
+            "controlsForEventN": "'{0}' olayı için kontroller",
+            "deletion": {
+                "cancel": "Hayır: olayı silme",
+                "confirm": "Evet: olayı sil",
+                "deletingEvent": "{0} olayı siliniyor"
+            },
+            "desc": {
+                "activate": "NPC ekrana girer",
+                "death": "NPC ölür",
+                "destroy": "blok yok edildi",
+                "enter": "ışınlanma girildi",
+                "hit": "bloğa vurulduğunda",
+                "layerClear": "obje katmanındaki her şey temizlendiğinde",
+                "phraseTriggersAfterTemplate": "{2} yaşandıktan ms sonra {0} etkinleştirir {1}'i",
+                "phraseTriggersWhenTemplate": "{1} {0}'i etkinleştir",
+                "talk": "NPC ile konuşulduğunda"
+            },
+            "header": "Olaylar:",
+            "headerTriggerEvent": "Etkinleştir:",
+            "itemNewEvent": "<Yeni Olay>",
+            "label": {
+                "activate": "Aktifleştir",
+                "death": "Ölüm",
+                "destroy": "Yok Et",
+                "enter": "Giriş",
+                "hit": "Vuruldu",
+                "layerClear": "Katmanı Temizle",
+                "next": "Sonraki",
+                "talk": "Konuş"
+            },
+            "layers": {
+                "headerHide": "Gizle:",
+                "headerMove": "Hareket Ettir:",
+                "headerShow": "Göster:",
+                "headerToggle": "Geçiş Yap:"
+            },
+            "letter": {
+                "activate": "A:",
+                "death": "Ö:",
+                "destroy": "Y:",
+                "enter": "G:",
+                "hit": "V:",
+                "layerClear": "Ka:",
+                "talk": "Ko:"
+            },
+            "promptEventName": "Olay adı",
+            "promptEventText": "Olay metni",
+            "props": {
+                "autostart": "OtoBaşla",
+                "controls": "Kontroller",
+                "endGame": "Oyun sonu",
+                "sound": "Ses",
+                "layerSmoke": "Duman"
+            },
+            "sections": {
+                "actionKeep": "Tut",
+                "actionReset": "Sıfırla",
+                "actionSet": "Ayarla",
+                "phraseAllSections": "Bütün Kısımlar",
+                "propBackground": "AP",
+                "propBounds": "Sınırlar",
+                "propMusic": "Müzik"
+            },
+            "settingsForEvent": "{0} olayının ayarları"
+        },
+        "file": {
+            "actionClearLevel": "Seviyeyi Temizle",
+            "actionClearWorld": "Dünyayı Temizle",
+            "actionExit": "Çıkış",
+            "actionOpen": "Aç",
+            "actionRevert": "Geri Al",
+            "commandNew": "Yeni",
+            "commandOpen": "Aç...",
+            "commandSave": "Kaydet",
+            "commandSaveAs": "Farklı Kaydet...",
+            "confirmConfirmAction": "{0} yapmak istediğine emin misin?",
+            "confirmConvertFormatTo": "{0} formatına dönüştürülsün mü?",
+            "confirmSaveBeforeAction": "{0} yapmadan kaydet?",
+            "formatLegacy": "Legacy",
+            "formatModern": "Modern",
+            "labelCurrentFile": "Şu anki dosya:",
+            "labelFormat": "Biçim:",
+            "optionActionWithoutSave": "Kaydetmeden {0}",
+            "optionCancelAction": "İptal: {0} yapma",
+            "optionCancelConversion": "Dönüştürmeyi iptal et",
+            "optionProceedWithConversion": "Dönüştürmeye devam et",
+            "optionYesSaveThenAction": "Evet: kaydet ve {0}",
+            "sectionLevel": "Seviye",
+            "sectionWorld": "Dünya",
+            "convert": {
+                "descNew": "Dosya uzantısı değişecek ama eski dosya SİLİNMEYECEK.\n\nLütfen kaydettikten sonra kaybolmuş özelliklere bakın."
+            }
+        },
+        "layers": {
+            "abbrevAttLayer": "Takılı: ",
+            "default": "Varsayılan",
+            "deletion": {
+                "cancel": "İptal: katmanı silme",
+                "confirmDelete": "Hayır: *BÜTÜN İÇERİĞİ SİL*",
+                "confirmPreserve": "Evet: varsayılan katmana taşı",
+                "header": "{0} katmanı siliniyor",
+                "preserveLayerContents": "Katman içeriği korunsun mu?"
+            },
+            "desc": {
+                "att": "NPC hareket ettiği zaman bağlı olduğu katman onu takip eder"
+            },
+            "header": "Katmanlar:",
+            "itemNewLayer": "<Yeni Katman>",
+            "label": "Katman:",
+            "labelAttached": "Bağlı Olduğu:",
+            "labelAttachedLayer": "Bağlı Olduğu Katman:",
+            "labelMoveLayer": "Katmanı Hareket Ettir:",
+            "promptLayerName": "Katman adı"
+        },
+        "letterCoordX": "X",
+        "letterCoordY": "Y",
+        "letterDown": "A",
+        "letterLeft": "So",
+        "letterRight": "Sa",
+        "letterUp": "Y",
+        "level": {
+            "alwaysVis": "Hep Görün",
+            "bigBG": "Büyük AP",
+            "gameStart": "Oyun Başlar",
+            "levelName": "Seviye İsmi",
+            "pathBG": "Yol AP",
+            "pathUnlocks": "Yol Anahtarları",
+            "startPos": "Başlangıç Pozisyonu"
+        },
+        "mapPos": "Harita Pozisyonu",
+        "npc": {
+            "abbrevGen": "Üret",
+            "ai": {
+                "LR": "SağSol",
+                "UD": "YukAş",
+                "aiIs": "AI: {0}",
+                "headerCustomAi": "Custom AI:",
+                "jump": "Atla",
+                "leap": "Sıçra",
+                "swim": "Yüz",
+                "target": "Hedef",
+                "use1_0Ai": "1.0 AI Kullan"
+            },
+            "gen": {
+                "direction": "Yönü",
+                "effectIs": "Efekt: {0}",
+                "effectShoot": "Ateşle",
+                "effectWarp": "Işınla",
+                "header": "Jeneratör Ayarları"
+            },
+            "inContainer": "İçi",
+            "inertNice": "Dost",
+            "props": {
+                "active": "",
+                "attachSurface": "",
+                "facing": "Yönü"
+            },
+            "stuckStop": "Dur",
+            "tooltipExpandSection": "Kısmı Genişlet"
+        },
+        "pageBlankOfBlank": "Sayfa {0} de {1}",
+        "phraseAreYouSure": "Emin misin?",
+        "phraseCountMore": "{0} Daha",
+        "phraseDelayIsMs": "{0} ms Ertele",
+        "phraseRadiusIndex": "",
+        "phraseSectionIndex": "Kısım {0}",
+        "phraseTextOf": "",
+        "phraseWarpIndex": "",
+        "section": {
+            "horizWrap": "",
+            "noTurnBack": "",
+            "offscreenExit": "",
+            "scroll": "",
+            "setBounds": "",
+            "underwater": "",
+            "vertWrap": ""
+        },
+        "select": {
+            "allSectPropBlankForEventN": "",
+            "pathBlankUnlock": "",
+            "sectBlankPropBlankForEventN": "",
+            "sectionBlankPropBlank": "",
+            "soundForEventN": "",
+            "warpTransitEffect": "",
+            "worldMusic": ""
+        },
+        "testPlay": {
+            "boot": "",
+            "char": "",
+            "magicHand": "",
+            "pet": "",
+            "power": ""
+        },
+        "toggleMagicBlock": "Büyülü Blok",
+        "tooltip": {
+            "BGOs": "",
+            "NPCs": "",
+            "blocks": "",
+            "erase": "",
+            "eraseAll": "",
+            "events": "",
+            "file": "Dosya",
+            "layers": "",
+            "levels": "",
+            "music": "",
+            "paths": "",
+            "scenes": "",
+            "select": "",
+            "settings": "",
+            "show": "",
+            "tiles": "Tilelar",
+            "warps": "",
+            "water": "",
+            "area": ""
+        },
+        "warp": {
+            "allow": "",
+            "cannonExit": "",
+            "dir": "",
+            "effect": "",
+            "in": "",
+            "item": "",
+            "lvlWarp": "",
+            "needFloor": "",
+            "needKey": "",
+            "needStarCount": "",
+            "out": "",
+            "placing": "",
+            "ride": "",
+            "showStarCount": "",
+            "showStartScene": "",
+            "speed": "",
+            "starLockMessage": "",
+            "style": {
+                "blipInstant": "",
+                "door": "",
+                "pipe": "",
+                "portal": "",
+                "style": ""
+            },
+            "target": "",
+            "title": "",
+            "to": "",
+            "toMap": "",
+            "transit": {
+                "name0": "",
+                "name1": "",
+                "name2": "",
+                "name3": "",
+                "name4": "",
+                "name5": ""
+            },
+            "twoWay": ""
+        },
+        "water": {
+            "title": ""
+        },
+        "wordCoins": "",
+        "wordEnabled": "",
+        "wordEvent": {
+            "genitive": "",
+            "nominative": "",
+            "typeLabel": ""
+        },
+        "wordHeight": "",
+        "wordInstant": "",
+        "wordMode": "",
+        "wordNPC": {
+            "genitive": "",
+            "nominative": ""
+        },
+        "wordText": "",
+        "wordWidth": "",
+        "world": {
+            "allowChars": "",
+            "hubWorld": "",
+            "introLevel": "",
+            "name": "",
+            "phraseCreditIndex": "",
+            "retryOnFail": "",
+            "totalStars": ""
+        },
+        "labelSortLayer": "Katmanları Sırala:",
+        "labelSortOffset": "",
+        "phraseGenericIndex": ""
+    },
+    "game": {
+        "connect": {
+            "dropAddTitle": "",
+            "phraseChangeChar": "",
+            "phraseDropMe": "",
+            "phraseDropPX": "",
+            "phraseForceResume": "",
+            "phraseHoldStart": "",
+            "phrasePressAButton": "",
+            "phraseSetControls": "",
+            "phraseStartToForceRes": "",
+            "phraseStartToResume": "",
+            "phraseTestControls": "",
+            "phraseWaitingForInput": "",
+            "reconnectTitle": "",
+            "splitPressSelect_1": "",
+            "splitPressSelect_2": "",
+            "wordDisconnect": "",
+            "phraseTestProfile": "Test Profili"
+        },
+        "error": {
+            "openFileFailed": "",
+            "warpNeedStarCount": "",
+            "errorInvalidEnterWarp": "",
+            "errorNoStartPoint": "",
+            "errorTooOldGameAssets": "",
+            "openIPCDataFailed": "",
+            "IPCTimeOut": "",
+            "errorTooOldEngine": ""
+        },
+        "pause": {
+            "continue": "",
+            "enterCode": "",
+            "quit": "",
+            "quitTesting": "",
+            "resetCheckpoints": "",
+            "restartLevel": "",
+            "returnToEditor": "",
+            "saveAndContinue": "",
+            "saveAndQuit": "",
+            "playerSetup": ""
+        },
+        "hint": {
+            "char5-bombs": "",
+            "gray-bricks": "",
+            "rainbow-surf": "",
+            "shoe-block": "",
+            "heavy-duck": "",
+            "no-lives-old": "",
+            "no-lives-new": "",
+            "pound-altrun": "",
+            "pound-down": ""
+        },
+        "message": {
+            "scanningLevels": ""
+        },
+        "format": {
+            "minutesSeconds": ""
+        },
+        "msgbox": {
+            "sysInfoWarning": "",
+            "sysInfoError": "",
+            "sysInfoTitle": ""
+        },
+        "loader": {
+            "statusLoadData": "",
+            "statusGameInfo": "",
+            "statusLoadFile": "",
+            "statusFinishing": "",
+            "statusAssetPacks": "",
+            "statusTranslations": ""
+        },
+        "ipcStatus": {
+            "loadingdone": "",
+            "dataAccepted": "",
+            "dataTransferStarted": "",
+            "errorTimeout": "",
+            "dataValid": "",
+            "waitingInput": ""
+        },
+        "screenPaused": ""
+    },
+    "languageName": "Türkçe",
+    "menu": {
+        "abbrevMilliseconds": "",
+        "battle": {
+            "errorNoLevels": ""
+        },
+        "caseNone": "",
+        "character": {
+            "selectCharacter": ""
+        },
+        "controls": {
+            "buttons": {
+                "altJump": "",
+                "altRun": "",
+                "down": "",
+                "drop": "",
+                "jump": "",
+                "left": "",
+                "right": "",
+                "run": "",
+                "start": "",
+                "up": ""
+            },
+            "caseInvalid": "",
+            "caseMouse": "",
+            "caseTouch": "",
+            "controlsConnected": "",
+            "controlsDeleteKey": "",
+            "controlsDeviceTypes": "",
+            "controlsInUse": "",
+            "controlsNewProfile": "",
+            "controlsNotInUse": "",
+            "controlsReallyDeleteProfile": "",
+            "controlsTitle": "",
+            "cursor": {
+                "down": "",
+                "left": "",
+                "primary": "",
+                "right": "",
+                "secondary": "",
+                "tertiary": "",
+                "up": ""
+            },
+            "editor": {
+                "fastScroll": "",
+                "modeErase": "",
+                "modeSelect": "",
+                "nextSection": "",
+                "prevSection": "",
+                "scrollDown": "",
+                "scrollLeft": "",
+                "scrollRight": "",
+                "scrollUp": "",
+                "switchScreens": "",
+                "testPlay": ""
+            },
+            "hotkeys": {
+                "debugInfo": "",
+                "enterCheats": "",
+                "fullscreen": "",
+                "legacyPause": "",
+                "recordGif": "",
+                "screenshot": "",
+                "toggleHUD": "",
+                "vanillaCam": ""
+            },
+            "options": {
+                "batteryStatus": "",
+                "maxPlayers": "",
+                "rumble": "",
+                "textEntryStyle": ""
+            },
+            "phraseNewProfOldJoy": "",
+            "profile": {
+                "cursorControls": "",
+                "deleteProfile": "",
+                "editorControls": "",
+                "hotkeys": "",
+                "playerControls": "",
+                "renameProfile": ""
+            },
+            "tDS": {
+                "buttonA": "",
+                "buttonB": "",
+                "buttonL": "",
+                "buttonR": "",
+                "buttonSelect": "",
+                "buttonStart": "",
+                "buttonX": "",
+                "buttonY": "",
+                "buttonZL": "",
+                "buttonZR": "",
+                "cStick": "",
+                "casePen": "",
+                "dPad": "",
+                "tStick": ""
+            },
+            "touchscreen": {
+                "layout": {
+                    "longOld": "",
+                    "phabletOld": "",
+                    "phoneOld": "",
+                    "standard": "",
+                    "tabletOld": "",
+                    "tight": "",
+                    "tinyOld": ""
+                },
+                "option": {
+                    "feedbackLength": "",
+                    "feedbackStrength": "",
+                    "holdRun": "",
+                    "interfaceStyle": "",
+                    "layoutStyle": "",
+                    "resetLayout": "",
+                    "sStartSpacing": "",
+                    "scaleButtons": "",
+                    "scaleDPad": "",
+                    "scaleFactor": "",
+                    "showCodeButton": ""
+                },
+                "style": {
+                    "ABXY": "",
+                    "XODA": "",
+                    "actions": ""
+                }
+            },
+            "types": {
+                "gamepad": "",
+                "keyboard": "",
+                "oldJoystick": "",
+                "touchscreen": ""
+            },
+            "wii": {
+                "classic": {
+                    "buttonLT": "",
+                    "buttonRT": "",
+                    "buttonX": "",
+                    "buttonY": "",
+                    "buttonZL": "",
+                    "buttonZR": "",
+                    "lStick": "",
+                    "rStick": ""
+                },
+                "nunchuck": {
+                    "buttonC": "",
+                    "buttonZ": "",
+                    "prefixN": ""
+                },
+                "phraseNewClassic": "",
+                "phraseNewNunchuck": "",
+                "typeClassic": "",
+                "typeNunchuck": "",
+                "typeWiimote": "",
+                "wiimote": {
+                    "button1": "",
+                    "button2": "",
+                    "buttonA": "",
+                    "buttonB": "",
+                    "buttonHome": "",
+                    "buttonMinus": "-",
+                    "buttonPlus": "",
+                    "caseIR": "",
+                    "dPad": "",
+                    "shake": "Salla"
+                },
+                "typeGamecube": ""
+            },
+            "wordButtons": "",
+            "wordProfiles": "",
+            "joystickSimpleEditor": ""
+        },
+        "editor": {
+            "errorMissingResources": "",
+            "newWorld": "",
+            "promptNewWorldName": "",
+            "battles": "",
+            "makeFor": ""
+        },
+        "game": {
+            "gameBattleRandom": "",
+            "gameCopySave": "",
+            "gameEraseSave": "",
+            "gameEraseSlot": "",
+            "gameNoBattleLevels": "",
+            "gameNoEpisodesToPlay": "",
+            "gameSlotContinue": "",
+            "gameSlotNew": "",
+            "gameSourceSlot": "",
+            "gameTargetSlot": "",
+            "phraseScore": "",
+            "phraseTime": "",
+            "warnEpCompat": ""
+        },
+        "loading": "",
+        "main": {
+            "main1PlayerGame": "",
+            "mainBattleGame": "",
+            "mainEditor": "",
+            "mainExit": "",
+            "mainMultiplayerGame": "",
+            "mainOptions": "",
+            "mainPlayEpisode": ""
+        },
+        "options": {
+            "advanced": {
+                "advanced-video": "Video",
+                "advanced-audio": "Ses",
+                "audio-format": {
+                    "_name": "Ses formatı",
+                    "_tooltip": ""
+                },
+                "render": {
+                    "opengl": "",
+                    "opengl-tip": "",
+                    "opengl11-tip": "",
+                    "opengl11": "",
+                    "opengles11": "",
+                    "sw": "",
+                    "sdl-tip": "",
+                    "opengles11-tip": "",
+                    "sdl": "",
+                    "opengles-tip": "",
+                    "hw": "",
+                    "_name": "",
+                    "opengles": ""
+                },
+                "log-level": {
+                    "debug": "",
+                    "fatal": "",
+                    "_name": "",
+                    "critical": "",
+                    "warning": "",
+                    "info": "",
+                    "none": ""
+                },
+                "audio-sample-rate": {
+                    "_name": "",
+                    "48000": "",
+                    "11025": "",
+                    "22050": "",
+                    "16000": "",
+                    "32000": "",
+                    "44100": ""
+                },
+                "scale-down-textures": {
+                    "_name": "",
+                    "all": "",
+                    "_tooltip": "",
+                    "none-tip": "",
+                    "safe-tip": "",
+                    "safe": "",
+                    "all-tip": "",
+                    "none": ""
+                },
+                "webm-recording": "",
+                "internal-res-4p": {
+                    "qhd": "",
+                    "_name": "",
+                    "fhd": "",
+                    "default": "",
+                    "qsmbx": ""
+                },
+                "_header": "",
+                "_tooltip": "",
+                "audio-buffer-size": {
+                    "_name": "",
+                    "_tooltip": ""
+                },
+                "audio-channels": {
+                    "mono": "",
+                    "_name": "",
+                    "stereo": ""
+                },
+                "choose-assets-on-launch": "",
+                "audio-enable": "",
+                "record-gameplay-data": "",
+                "use-native-osk": "",
+                "fullscreen-type": {
+                    "_name": "",
+                    "exclusive": "",
+                    "desktop-tip": "",
+                    "desktop": "",
+                    "exclusive-tip": "",
+                    "auto": ""
+                },
+                "inaccurate-gifs-tip": "",
+                "inaccurate-gifs": "",
+                "fullscreen-depth": {
+                    "16": "",
+                    "auto": "",
+                    "_name": "",
+                    "32": ""
+                },
+                "fullscreen-res": ""
+            },
+            "episode-options": {
+                "creator-compat": {
+                    "_tooltip": "",
+                    "disable": "",
+                    "_name": "",
+                    "enable": "",
+                    "file-only": ""
+                },
+                "_header": "Bölüm Ayarları",
+                "playstyle": {
+                    "modern-tip": "",
+                    "classic": "",
+                    "classic-tip": "",
+                    "vanilla": "",
+                    "modern": "",
+                    "vanilla-tip": "",
+                    "_name": ""
+                },
+                "hub-resume-tip": "",
+                "hub-resume": ""
+            },
+            "main": {
+                "background-work": "",
+                "four-screen-mode": {
+                    "shared": "",
+                    "_name": "",
+                    "split": ""
+                },
+                "frame-skip": "",
+                "vsync": "",
+                "two-screen-mode": {
+                    "topbottom": "",
+                    "split": "",
+                    "shared": "",
+                    "_name": "",
+                    "smbx": ""
+                },
+                "background-work-tip": "",
+                "timing": "",
+                "multiplayer": "",
+                "language": "",
+                "_header": "",
+                "unlimited-framerate": "",
+                "discord-rpc": ""
+            },
+            "video": {
+                "internal-res": {
+                    "hd": "",
+                    "hello": "",
+                    "smbx": "",
+                    "dynamic": "",
+                    "_tooltip": "",
+                    "_name": "",
+                    "gba": "",
+                    "snes": "",
+                    "vga": "",
+                    "smbx-wide": "",
+                    "3ds": "",
+                    "nds": ""
+                },
+                "effects": "",
+                "scale-mode": {
+                    "_name": "",
+                    "center": "",
+                    "2x": "",
+                    "1x": "",
+                    "0_5x": "",
+                    "nearest": "",
+                    "full": "",
+                    "linear": "",
+                    "integer": "",
+                    "3x": "3x"
+                },
+                "info-meta": "",
+                "show-episode-title": {
+                    "_name": "Bölüm adı",
+                    "bottom": "Alt",
+                    "top": "Üst",
+                    "off": "Kapalı",
+                    "top-tip": "",
+                    "bottom-tip": "Speedrun sayacının üzerinde göster"
+                },
+                "show-playtime-counter": {
+                    "opaque": "Opak",
+                    "animated-tip": "Seviye sonuna gökkuşağı efekti ekle",
+                    "off": "Kapalı",
+                    "off-tip": "Sadece speedrun esnasında göster",
+                    "_tooltip": "",
+                    "_name": "Oynama sayısı sayacı",
+                    "transparent": "Yarı şeffaf",
+                    "animated": ""
+                },
+                "_header": "",
+                "world-map-stars-show-tip": "Toplanmış yıldızları seviye üzerinde göster",
+                "3d-compat-mode-tip": "Bütün objeleri bir 3D düzlemde çiz",
+                "battery-status": {
+                    "_name": "",
+                    "low-tip": "",
+                    "low": "",
+                    "fullscreen-tip": "",
+                    "fullscreen": "",
+                    "off": "",
+                    "on": ""
+                },
+                "info-run": "",
+                "display-controllers": "",
+                "enable-inter-level-fade-effect": "",
+                "fullscreen": "",
+                "info-game": "",
+                "3d-compat-mode": "",
+                "show-screen-shake": "Ekran sallanması",
+                "world-map-stars-show": "Dünya haritası yıldızları",
+                "video-system": "Sistem",
+                "show-medals-counter-tip": "",
+                "show-fps": "Framerate",
+                "show-fails-counter-tip": "",
+                "show-medals-counter": "Madalya sayacı",
+                "show-fails-counter": "Hata sayacı"
+            },
+            "speedrun": {
+                "mode": {
+                    "3": "3",
+                    "_name": "Speedrun modu",
+                    "0": "0",
+                    "2": "2",
+                    "1": "1"
+                }
+            },
+            "audio": {
+                "sfx-modern-tip": "",
+                "audio-sfx-volume": "",
+                "sfx-modern": "",
+                "audio-prefs": "",
+                "sfx-spatial-audio-tip": "",
+                "sfx-audio-fx": "",
+                "sfx-spatial-audio": "",
+                "sfx-pet-beat": "",
+                "sfx-pet-beat-tip": "",
+                "_header": "",
+                "audio-music-volume": ""
+            },
+            "controls": {
+                "_header": ""
+            },
+            "compatibility": {
+                "bugfixes": "",
+                "_header": "",
+                "reset-all": "",
+                "features": "",
+                "autocode": "",
+                "_tooltip": ""
+            },
+            "view-credits": {
+                "_header": ""
+            },
+            "restartEngine": ""
+        },
+        "wordBack": "Geri",
+        "wordHide": "Gizle",
+        "wordNo": "Hayır",
+        "wordOff": "Kapalı",
+        "wordOn": "Açık",
+        "wordPlayer": "Oyuncu",
+        "wordProfile": "Profil",
+        "wordResume": "Devam Et",
+        "wordShow": "Göster",
+        "wordWaiting": "Bekleniyor",
+        "wordYes": "Evet"
+    },
+    "outro": {
+        "cppPortDevelopers": "C++ portunun geliştiricileri:",
+        "customSprites": "",
+        "engineCredits": "",
+        "gameCredits": "",
+        "levelDesign": "Seviye Tasarımı:",
+        "nameAndrewSpinks": "Andrew Spinks",
+        "nameVitalyNovichkov": "Vitaly Novichkov",
+        "originalBy": "Orijinal VB6 kodu:",
+        "psVitaPortBy": "PS Vita Portu:",
+        "specialThanks": "Özel Teşekkürler:",
+        "qualityControl": "Kalite Kontrol:"
+    },
+    "pluralRules": ""
+}

@@ -644,3 +644,58 @@ files:
     required: false
     category: game_data
     source_ref: "src/trx/game/music/backend_files.c:48"
+
+  # The Golden Mask expansion
+  # Known game tr2-gm, extends tr2 (src/trx/game/shell/mod.c:37-38).
+  # Enumerated by data/trx/ship/games/tr2-gm/gameflow.json5 "levels" array.
+  # Its FMVs and music fall back to games/tr2.
+  - name: "main.sfx"
+    path: "games/tr2-gm/main.sfx"
+    aliases: ["main_gm.sfx"]
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:34, src/trx/game/game_flow/reader.c:198-219, src/trx/game/paths.c:203-212"
+    note: "Sample bank of the expansion. main_gm.sfx is tried first, each name in the expansion directory then in games/tr2."
+
+  - name: "title.tr2"
+    path: "games/tr2-gm/levels/title.tr2"
+    aliases: ["title_gm.tr2"]
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:16, src/trx/game/game_flow/reader.c:198-219, 903-909, src/trx/game/paths.c:123-132"
+    note: "Title level of the expansion. title_gm.tr2 is tried first, each name in the expansion levels directory then in games/tr2/levels."
+
+  - name: "level1.tr2"
+    path: "games/tr2-gm/levels/level1.tr2"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:56"
+    note: "The Cold War"
+
+  - name: "level2.tr2"
+    path: "games/tr2-gm/levels/level2.tr2"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:88"
+    note: "Fool's Gold"
+
+  - name: "level3.tr2"
+    path: "games/tr2-gm/levels/level3.tr2"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:113"
+    note: "Furnace of the Gods"
+
+  - name: "level4.tr2"
+    path: "games/tr2-gm/levels/level4.tr2"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:138"
+    note: "Kingdom"
+
+  - name: "level5.tr2"
+    path: "games/tr2-gm/levels/level5.tr2"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:175"
+    note: "Nightmare in Vegas"

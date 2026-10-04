@@ -1,0 +1,218 @@
+===============================================================================
+Introduction:
+===============================================================================
+This is not so a license, but more like a notice and the set of advices on how
+to properly treat this content.
+
+This file IS NOT AN EXPLICIT LICENE in order to avoid the sub-licensing.
+
+There are files that has an explicit licensing as well as files of the grey
+area: these files were been contributed by Talkhaus members but nobody assigned
+an explicit license to the content and didn't explicitly granted permission to
+use the content for this project. And therefore, please, don't use this content
+commercially except of files that explicitly allowed for that by their licenses.
+
+
+===============================================================================
+The platform game, created by Vitaly Novichkov (a.k.a. Wohlstand) from off
+various content set, available in the public.
+===============================================================================
+Links:
+- Talkhaus community: https://talkhaus.raocow.com/
+- Wohlstand's official site: https://wohlsoft.ru/
+===============================================================================
+
+
+===============================================================================
+Licenses for components of Adventures of Demo
+===============================================================================
+This repository contains resources are licensed differently. The rest of
+resources (such as graphics, music, sound effects, characters etc.) CAN'T BE
+USED outside this project, and can't be used outside of any other project
+maintained by Talkhaus community members without permission of original authors
+of every individual resource. Below you can find the list of files are can be
+used differently.
+===============================================================================
+Characters and the A2XT universe (Demo, Iris, Kood, Raocow, Iris and others) are
+property of Samuel Tanguay "raocow". By default, you can't use these characters
+and related stuff outside this, and outside any other projects by Talkhaus
+community without given permissions.
+===============================================================================
+
+
+Exceptions for resources:
+
+-------------------------------------------------------------------------------
+Graphics
+-------------------------------------------------------------------------------
+The major part of graphics from the "SMBX Redrawn" package was given
+by SilverDeoxys563 for everyone's free use in their projects.
+
+These resources can be fairly used for any purposes in condition of giving
+credits to SilverDeoxys563 who originally made these graphics. Additional
+permissions must be discussed with SilverDeoxys563 who is the original author.
+
+- All resources at the "graphics/ui/" directory (except of: Heart1.png,
+Heart2.png, Interface0.png, Interface2.png, Interface3.png, LoadCoin.png,
+LoadCoin.png, Container0.png, Container1.png, Container2.png, TextBox.png which
+are owned by Talkhaus) are relased under MIT license by Andrew Spinks or created
+by Wohlstand.
+
+- Resources at the "graphics/touchscreen" directory made by Wohlstand, ZeZeinzer
+and 0lhi. They are licensed under MIT.
+
+- Resources at the "graphics/ui/icon" directory are owned by Talkhaus.
+Additional use permissions must be discussed with Talkhaus members.
+
+- Listed files in the graphics/background are owned by Talkhaus and additional
+use permissions must be discussed with Talkhaus members:
+ - background-104.png
+ - background-105.png
+ - background-134.png
+ - background-135.png
+ - background-136.png
+ - background-137.png
+ - background-141.png
+ - background-142.png
+ - background-143.png
+ - background-144.png
+ - background-145.png
+ - background-150.png
+ - background-160.png
+ - background-35.png
+ - background-87.png
+
+- Listed files in the graphics/background are licensed under MIT license:
+ - background-88.png
+
+- Listed files in the graphics/background2 are released under MIT license by
+Wohlstand (created using public domain resources from the OpenGameArt):
+ - background2-2.png
+ - background2-36.png
+ - background2-7.png
+ - background2-8.png
+ - background2-9.png
+
+- Listed files in the graphics/block are owned by Talkhaus and additional
+use permissions must be discussed with Talkhaus members:
+ - block-55.png
+ - block-110.png
+ - block-111.png
+ - block-112.png
+ - block-267.png
+ - block-268.png
+ - block-269.png
+ - block-281.png
+ - block-282.png
+ - block-283.png
+ - block-527.png
+ - block-529.png
+ - block-620.png
+ - block-621.png
+ - block-622.png
+ - block-623.png
+ - block-624.png
+ - block-625.png
+ - block-626.png
+ - block-627.png
+ - block-628.png
+ - block-629.png
+ - block-631.png
+ - block-632.png
+ - block-633.png
+ - block-634.png
+
+- Almost all files in the graphics/effect are owned by Talkhaus and additional
+use permissions must be discussed with Talkhaus members.
+
+- Almost all files in the graphics/npc (except npc-289.png, npc-25.png,
+npc-11.png, npc-78.png) are owned by Talkhaus and additional
+use permissions must be discussed with Talkhaus members. Excluded files are
+licensed under MIT license.
+
+- Almost all files in graphics/link, graphics/mario, graphics/luigi,
+graphics/peach, graphics/toad, graphics/yoshi, and graphics/player directories
+are owned by Talkhaus and additional use permissions must be discussed with
+Talkhaus members.
+
+- Almost all files in the graphics/level are owned by Talkhaus and additional
+use permissions must be discussed with Talkhaus members.
+
+- Almost all files in the graphics/path are owned by Talkhaus and additional
+use permissions must be discussed with Talkhaus members.
+
+- Almost all files in graphics/_misc are public domain, except for the
+background2-1.png file made by SilverDeoxys563.
+
+
+-------------------------------------------------------------------------------
+Music
+-------------------------------------------------------------------------------
+The rest of the music at the "music" directory was taken from the Mod Archive
+or SMW Central sites and mostly available as public domain or free use.
+
+Next files at the "music" directory are composed by Wohlstand and licensed under
+Creative Commons 4.0 BY-SA:
+- Subway_spc.spc
+- menuet_of_game.spc (co-authored with Aristo/Marina [formerly known as GLuigiX])
+- title.it (co-authored with Aristo/Marina [formerly known as GLuigiX])
+
+Next files at the "music" directory are owned by Talkhaus and addtional use
+permissions must be discussed with Talkhaus members:
+- a2mt-anothercastle.spc
+- asmt-imperial.spc
+
+The "Pilots1-13.mid" is a ripped file from the "Pilot Brothers: On the Track of
+Striped Elephant" game, authored by Nikolay Stukalin.
+
+
+
+-------------------------------------------------------------------------------
+Sound effects
+-------------------------------------------------------------------------------
+The rest of the sound effects at the "sound" directory was created by Wohlstand
+and licensed under Creative Commons 4.0 BY-SA. Part of files made by Hoeloe,
+rixithechao or downloaded from public domain sites (LIST IS  NOT READY).
+
+Next files were taken from the Hedgewars project (the game itself licensed under GNU GPLv2)
+(source: https://hg.hedgewars.org/hedgewars/file/tip/share/hedgewars/Data/Sounds)
+- bullet-bill.ogg
+- hog_freeze.ogg
+
+
+-------------------------------------------------------------------------------
+Fonts
+-------------------------------------------------------------------------------
+The rest of the raster fonts in PNG files created by Wohlstand and licensed
+under Creative Commons 4.0 BY-SA. Ordinary TTF and OTF files has the license
+notices inside.
+
+
+-------------------------------------------------------------------------------
+Game data (levels and worlds)
+-------------------------------------------------------------------------------
+The rest of files originally made by Andrew Spinks (Redigit) and published for
+everyone's free use, and later upgraded/modified (and somewhere made from the
+scratch) by Wohlstand. These files can be used as a base for other projects,
+but, suggested to never use them for any kind of commercial purposes.
+
+
+
+Appendix:
+-------------------------------------------------------------------------------
+Text of the MIT License for resources are licensed under it:
+-------------------------------------------------------------------------------
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the “Software”), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+THE SOFTWARE AND IT'S CONTENT IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.

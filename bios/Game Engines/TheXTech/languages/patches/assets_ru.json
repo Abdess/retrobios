@@ -1,0 +1,15 @@
+{
+    "character": {
+        "name1": "Демо",
+        "name2": "Айрис",
+        "name3": "Куд",
+        "name4": "Рао",
+        "name5": "Шиф"
+    },
+    "objects": {
+        "wordFails": "ДЭМО",
+        "wordStarAccusativeDualOrCounter": "лука-порея",
+        "wordStarAccusativePlural": "луков-пореев",
+        "wordStarAccusativeSingular": "лук-порей"
+    }
+}

@@ -191,6 +191,97 @@ files:
     source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:423-429"
     note: "Entry that lists custom levels."
 
+  # Levels of the Shareware Demo. Every .j2l present in Source/ is
+  # converted, whatever its name.
+  # ref: Sources/Jazz2/Compatibility/AssetConverter.cpp:437-516
+
+  - name: "share1.j2l"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/share1.j2l"
+    standalone_path: "Source/share1.j2l"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:217, 437-499"
+    note: "First level of share.j2e, stored as share/01_share1. Its exit names share2."
+
+  - name: "share2.j2l"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/share2.j2l"
+    standalone_path: "Source/share2.j2l"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:218, 437-499"
+    note: "Second level of the Shareware Demo episode. Its exit names share3."
+
+  - name: "share3.j2l"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/share3.j2l"
+    standalone_path: "Source/share3.j2l"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:219, 437-499"
+    note: "Third level of the Shareware Demo episode. Its exit ends the episode."
+
+  - name: "sharectf.j2l"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/sharectf.j2l"
+    standalone_path: "Source/sharectf.j2l"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:54, 437-499"
+    note: "Capture the flag level of the Shareware Demo, stored under unknown/."
+
+  - name: "sharect2.j2l"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/sharect2.j2l"
+    standalone_path: "Source/sharect2.j2l"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:54, 437-499"
+    note: "Capture the flag level of the Shareware Demo, stored under unknown/."
+
+  - name: "sharetrs.j2l"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/sharetrs.j2l"
+    standalone_path: "Source/sharetrs.j2l"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:54, 437-499"
+    note: "Treasure hunt level of the Shareware Demo, stored under unknown/."
+
+  # Tilesets. Only those a converted level names are converted. The name
+  # is read from the level, lowercased and looked up in Source/ without
+  # regard to case.
+  # ref: Sources/Jazz2/Compatibility/JJ2Level.cpp:117, 724-727,
+  #      Sources/Jazz2/Compatibility/AssetConverter.cpp:492, 575-596
+
+  - name: "labrat1n.j2t"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/labrat1n.j2t"
+    standalone_path: "Source/labrat1n.j2t"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:117, 724-727, Sources/Jazz2/Compatibility/AssetConverter.cpp:492, 575-596"
+    note: "Tileset named by share1.j2l, sharect2.j2l and sharetrs.j2l."
+
+  - name: "psych2.j2t"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/psych2.j2t"
+    standalone_path: "Source/psych2.j2t"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:117, 724-727, Sources/Jazz2/Compatibility/AssetConverter.cpp:492, 575-596"
+    note: "Tileset named by share2.j2l."
+
+  - name: "diam2.j2t"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/diam2.j2t"
+    standalone_path: "Source/diam2.j2t"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:117, 724-727, Sources/Jazz2/Compatibility/AssetConverter.cpp:492, 575-596"
+    note: "Tileset named by share3.j2l and sharectf.j2l."
+
   # Music, read from Content/Music/ then from Source/
   # ref: Sources/Jazz2/ContentResolver.cpp:2681-2691
 
@@ -238,6 +329,46 @@ files:
     required: false
     source_ref: "Sources/Jazz2/UI/Cinematics.cpp:255, Sources/Main.cpp:964, Sources/Jazz2/Compatibility/AssetConverter.cpp:535-538"
     note: "Music of the ending cinematic."
+
+  # Level music. The name is read from the level, lowercased and given
+  # the .j2b extension when it has none.
+  # ref: Sources/Jazz2/Compatibility/JJ2Level.cpp:121, 736-741
+
+  - name: "labrat.j2b"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/labrat.j2b"
+    standalone_path: "Source/labrat.j2b"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:121, 736-741, Sources/Jazz2/LevelHandler.cpp:629-635, Sources/Jazz2/ContentResolver.cpp:2681-2685"
+    note: "Music named by share1.j2l, sharect2.j2l and sharetrs.j2l."
+
+  - name: "funkyg.j2b"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/funkyg.j2b"
+    standalone_path: "Source/funkyg.j2b"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:121, 736-741, Sources/Jazz2/LevelHandler.cpp:629-635, Sources/Jazz2/ContentResolver.cpp:2681-2685"
+    note: "Music named by share2.j2l."
+
+  - name: "diamond.j2b"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/diamond.j2b"
+    standalone_path: "Source/diamond.j2b"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:121, 736-741, Sources/Jazz2/LevelHandler.cpp:629-635, Sources/Jazz2/ContentResolver.cpp:2681-2685"
+    note: "Music named by share3.j2l and sharectf.j2l."
+
+  - name: "boss2.j2b"
+    category: game_data
+    system: jazz-jackrabbit-2
+    path: "jazz2/Source/boss2.j2b"
+    standalone_path: "Source/boss2.j2b"
+    required: false
+    source_ref: "Sources/Jazz2/Compatibility/EventConverter.cpp:356-362, Sources/Jazz2/LevelHandler.cpp:1397-1400, Sources/Jazz2/ContentResolver.cpp:2681-2685"
+    note: "Boss music. The boss activation event carries a music index that is converted to boss1.j2b or boss2.j2b; share3.j2l carries index 1."
 
   # Cinematics, read from Content/Cinematics/ then from Source/
 

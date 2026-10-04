@@ -1,0 +1,15 @@
+{
+    "character": {
+        "name1": "첸시",
+        "name2": "앨리스",
+        "name3": "쿨드",
+        "name4": "라우카오",
+        "name5": "쉬스"
+    },
+    "objects": {
+        "wordFails": "실패 횟수",
+        "wordStarAccusativeDualOrCounter": "개",
+        "wordStarAccusativePlural": "부추",
+        "wordStarAccusativeSingular": "부추"
+    }
+}

@@ -1,0 +1,6 @@
+width=160
+gfxwidth=160
+nogravity=1
+grabside=0
+speed=0
+noyoshi=1

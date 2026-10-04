@@ -1,0 +1,3186 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: jazz2-resurrection\n"
+"POT-Creation-Date: 2026-09-28 22:44+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: Mwyann\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.9\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-KeywordsList: _;_n:1,2;_x:1c,2;_nx:1c,2,3;_f;_fn:1,2\n"
+"X-Poedit-SearchPath-0: Sources/Jazz2\n"
+"X-Poedit-SearchPath-1: .fake/Translations\n"
+"X-Poedit-SearchPath-2: Sources/Main.cpp\n"
+
+#: .fake/Translations/flash/01_diam1.j2l.h:1
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Spaz ate the dopefish."
+msgstr ""
+"\n"
+"Spaz a gobé le Dopefish."
+
+#: .fake/Translations/flash/01_diam1.j2l.h:2
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Find the gopher."
+msgstr ""
+"\n"
+"Trouve le Trionyx."
+
+#: .fake/Translations/flash/01_diam1.j2l.h:3
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Dragons live in burbank."
+msgstr ""
+"\n"
+"Des dragons habitent à Burbank."
+
+#: .fake/Translations/flash/01_diam1.j2l.h:4
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Mark wears briefs. \n"
+"Hoo Hah!"
+msgstr ""
+"\n"
+"Mark porte un slip. \n"
+"Ouah !"
+
+#: .fake/Translations/flash/01_diam1.j2l.h:5
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Nick loves shiny. \n"
+"Always has!"
+msgstr ""
+"\n"
+"Nick aime tout ce qui brille. \n"
+"Il a toujours été comme ça !"
+
+#: .fake/Translations/flash/02_diam3.j2l.h:1
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Send Tim new socks."
+msgstr ""
+"\n"
+"Envoie des chaussettes neuves à Tim."
+
+#: .fake/Translations/flash/02_diam3.j2l.h:2
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Send Nigel a green card."
+msgstr ""
+"\n"
+"Envoie un visa à Nigel."
+
+#: .fake/Translations/flash/02_diam3.j2l.h:3
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Beware of chainsaw schmalz."
+msgstr ""
+"\n"
+"Méfie-toi du Schmalz à la tronçonneuse."
+
+#: .fake/Translations/flash/02_diam3.j2l.h:4
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Dont give mark a burrito."
+msgstr ""
+"\n"
+"Pas de burrito pour Mark."
+
+#: .fake/Translations/flash/05_medivo1.j2l.h:1
+msgctxt "flash/05_medivo1"
+msgid ""
+"\n"
+"Beware of falling enemies."
+msgstr ""
+"\n"
+"Méfie-toi des ennemis qui tombent."
+
+#: .fake/Translations/flash/05_medivo1.j2l.h:2
+msgctxt "flash/05_medivo1"
+msgid ""
+"\n"
+"Craig is still a doofus!"
+msgstr ""
+"\n"
+"Craig est toujours un imbécile !"
+
+#: .fake/Translations/flash/05_medivo1.j2l.h:3
+msgctxt "flash/05_medivo1"
+msgid ""
+"\n"
+"Secret Level Time!!!"
+msgstr ""
+"\n"
+"C'est l'heure du niveau secret !!!"
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:1
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Buttstomp A Silver Crate\n"
+"To Clear Your Path"
+msgstr ""
+"\n"
+"Piétine ton butin pour sortir."
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:2
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Crates can also make platforms appear..."
+msgstr ""
+"\n"
+"Les caisses peuvent aussi faire apparaître\n"
+"des plateformes..."
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:3
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Melt the Spring..."
+msgstr ""
+"\n"
+"Fais fondre le ressort..."
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:4
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Leh is a Camper"
+msgstr ""
+"\n"
+"Leh est un campeur"
+
+#: .fake/Translations/monk/01_jung1.j2l.h:1
+msgctxt "monk/01_jung1"
+msgid ""
+"\n"
+"Falling boulders can \n"
+"give you a headache."
+msgstr ""
+"\n"
+"En tombant, les boulders peuvent \n"
+"te donner mal à la tête..."
+
+#: .fake/Translations/monk/01_jung1.j2l.h:2
+msgctxt "monk/01_jung1"
+msgid ""
+"\n"
+"A Flamethrower works\n"
+"well against bugs."
+msgstr ""
+"\n"
+"Les lanceflammes sont super \n"
+"pour faire la guerre aux moustiques."
+
+#: .fake/Translations/monk/03_hell.j2l.h:1
+msgctxt "monk/03_hell"
+msgid ""
+"\n"
+"Long live the ice level."
+msgstr ""
+"\n"
+"Vive l'ère des glaces !"
+
+#: .fake/Translations/monk/03_hell.j2l.h:2
+msgctxt "monk/03_hell"
+msgid ""
+"\n"
+"Goodnight, bubba!"
+msgstr ""
+"\n"
+"Bonne nuit Bubba !"
+
+#: .fake/Translations/monk/06_damn2.j2l.h:2
+msgctxt "monk/06_damn2"
+msgid ""
+"\n"
+"What the heck? Aaaah! No!  \n"
+"This is NOT over!"
+msgstr ""
+"\n"
+"Comment ? Aaaah ! Non !\n"
+"Ce n'est PAS terminé !"
+
+#: .fake/Translations/prince/01_castle1.j2l.h:1
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Poles spin you around so\n"
+" you can go even faster."
+msgstr ""
+"\n"
+"Une perche te fait tournoyer\n"
+"pour que tu puisses aller encore plus vite."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:2
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"You found a secret area."
+msgstr ""
+"\n"
+"Tu as trouvé une chambre secrète."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:3
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Secret Treasure Room."
+msgstr ""
+"\n"
+"Chambre au trésor."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:4
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Nothing to see here."
+msgstr ""
+"\n"
+"Rien à voir ici."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:5
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Collect coins to activate \n"
+"bonus warp devices."
+msgstr ""
+"\n"
+"Ramasse les pièces pour activer\n"
+"les tunnels téléporteurs."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:1
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Cheese is green on tuesday."
+msgstr ""
+"\n"
+"Le fromage est vert le mardi."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:2
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Craig is king doofus."
+msgstr ""
+"\n"
+"Craig est le roi des imbéciles."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:3
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"To beat the queen \n"
+"shoot her off her ledge."
+msgstr ""
+"\n"
+"Pour vaincre la reine \n"
+"tire pour la faire tomber de sa corniche."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:4
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Good job! \n"
+"Now go get Devan Shell!"
+msgstr ""
+"\n"
+"Félicitations ! \n"
+"Maintenant, tu peux sortir du chateau !"
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:5
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"To kick through these\n"
+"blocks, press down and jump!"
+msgstr ""
+"\n"
+"Pour renverser ces \n"
+"dalles, appuie sur Bas et saute !"
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:6
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Press down and jump beneath \n"
+"these blocks to break them!"
+msgstr ""
+"\n"
+"Appuie sur Bas et saute sous \n"
+"ces dalles pour les casser !"
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:7
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Buttstomp the metal box \n"
+"to open key blocks!"
+msgstr ""
+"\n"
+"Tape ton derrière sur la malle \n"
+"pour ouvrir les dalles à clé !"
+
+#: .fake/Translations/prince/03_carrot1.j2l.h:1
+msgctxt "prince/03_carrot1"
+msgid ""
+"\n"
+"Stomp your booty to exit."
+msgstr ""
+"\n"
+"Tape ton derrière pour sortir."
+
+#: .fake/Translations/prince/03_carrot1.j2l.h:2
+msgctxt "prince/03_carrot1"
+msgid ""
+"\n"
+"This spring is frozen."
+msgstr ""
+"\n"
+"Ce ressort est gelé."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:1
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"Super dooper secret."
+msgstr ""
+"\n"
+"Secret super-extra."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:2
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"Shields will give you unlimited \n"
+"special ammo for a short time."
+msgstr ""
+"\n"
+"Pendant quelques instants, un bouclier\n"
+"te donnera des munitions à gogo."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:4
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"Stopwatches will add time to\n"
+"the life of a shield."
+msgstr ""
+"\n"
+"Un chrono prolonge\n"
+"la durée de vie d'un bouclier."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:5
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"This schwartzenguard is toast!"
+msgstr ""
+"\n"
+"Ce garde-chiourme est en civet !"
+
+#: .fake/Translations/prince/06_labrat2.j2l.h:1
+msgctxt "prince/06_labrat2"
+msgid ""
+"\n"
+"\n"
+"You cannot defeat me, Jazz!\n"
+"Prepare to face my superbot!"
+msgstr ""
+"\n"
+"Tu n'as aucune chance !\n"
+"Prépare-toi à faire face à mon Super-Robot !"
+
+#: .fake/Translations/prince/06_labrat2.j2l.h:2
+msgctxt "prince/06_labrat2"
+msgid ""
+"\n"
+"\n"
+"Ack! I'm outta here!"
+msgstr ""
+"\n"
+"\n"
+"Ouille, Ouille ! Moi, je me casse !"
+
+#: .fake/Translations/prince/06_labrat2.j2l.h:3
+msgctxt "prince/06_labrat2"
+msgid ""
+"\n"
+"These blocks are speed blocks.\n"
+"Run into them at full speed!"
+msgstr ""
+"\n"
+"Ces blocs sont des blocs de vitesse.\n"
+"Cours dessus à pleine vitesse !"
+
+#: .fake/Translations/prince/trainer.j2l.h:1
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Welcome to Jazz Jackrabbit 2. \n"
+" This is a training level."
+msgstr ""
+"\n"
+"Jazz Jackrabbit 2 est content de te voir. \n"
+"Ce niveau est juste pour t'entraîner."
+
+#: .fake/Translations/prince/trainer.j2l.h:2
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Collect goodies for\n"
+"points and surprises."
+msgstr ""
+"\n"
+"Ramasse les goodies pour \n"
+"gagner des points et des surprises."
+
+#: .fake/Translations/prince/trainer.j2l.h:3
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"After jumping, press jump\n"
+"again to do a special move."
+msgstr ""
+"\n"
+"Après avoir sauté, saute une deuxième fois\n"
+"pour faire un mouvement spécial."
+
+#: .fake/Translations/prince/trainer.j2l.h:4
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Some walls can be shot."
+msgstr ""
+"\n"
+"Tu peux tirer sur certains murs."
+
+#: .fake/Translations/prince/trainer.j2l.h:5
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"When in the air, press down\n"
+"to stomp with your butt."
+msgstr ""
+"\n"
+"Une fois en l'air, appuie sur Bas\n"
+"pour taper avec ton derrière."
+
+#: .fake/Translations/prince/trainer.j2l.h:6
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Secrets abound in Jazz 2. \n"
+" Check the walls."
+msgstr ""
+"\n"
+"Jazz 2 est truffé de secrets. \n"
+" Vérifie bien les murs."
+
+#: .fake/Translations/prince/trainer.j2l.h:7
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Good job. Remember to\n"
+"look for secrets."
+msgstr ""
+"\n"
+"Bien joué ! N'oublie pas de\n"
+"chercher les secrets."
+
+#: .fake/Translations/prince/trainer.j2l.h:8
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Collect gems for \n"
+"an extra life."
+msgstr ""
+"\n"
+"Ramasse les diamants pour gagner\n"
+"des vies supplémentaires."
+
+#: .fake/Translations/prince/trainer.j2l.h:9
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Red Gems count\n"
+"as one gem."
+msgstr ""
+"\n"
+"Les diamants rouges comptent\n"
+"pour un."
+
+#: .fake/Translations/prince/trainer.j2l.h:10
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Green gems count\n"
+"as five gems."
+msgstr ""
+"\n"
+"Les diamants verts comptent\n"
+"pour cinq."
+
+#: .fake/Translations/prince/trainer.j2l.h:11
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Blue gems count\n"
+"as ten gems."
+msgstr ""
+"\n"
+"Les diamants bleus comptent\n"
+"pour dix."
+
+#: .fake/Translations/prince/trainer.j2l.h:12
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Carrots give you health."
+msgstr ""
+"\n"
+"Les carrottes te gardent en bonne santé."
+
+#: .fake/Translations/prince/trainer.j2l.h:13
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Checkpoints save your\n"
+"spot if you lose a life."
+msgstr ""
+"\n"
+"Les postes de contrôle sauvent ta \n"
+"peau si tu perds une vie."
+
+#: .fake/Translations/prince/trainer.j2l.h:14
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Collect coins to\n"
+"unlock bonus rooms."
+msgstr ""
+"\n"
+"Ramasse les pièces pour\n"
+"ouvrir les salles de bonus."
+
+#: .fake/Translations/prince/trainer.j2l.h:15
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Beware of sharp stuff.\n"
+"It hurts."
+msgstr ""
+"\n"
+"Méfie-toi des objets pointus.\n"
+"Ils font mal."
+
+#: .fake/Translations/prince/trainer.j2l.h:16
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Now youre ready to play.\n"
+" Good luck and have fun."
+msgstr ""
+"\n"
+"Ca y est ! Tu es prêt à jouer.\n"
+" Bonne chance et amuse-toi bien !"
+
+#: .fake/Translations/rescue/01_colon1.j2l.h:1
+msgctxt "rescue/01_colon1"
+msgid ""
+"\n"
+"Buttstomp the manhole cover!"
+msgstr ""
+"\n"
+"Tape ton derrière sur la bouche d'égout !"
+
+#: .fake/Translations/rescue/03_psych1.j2l.h:1
+msgctxt "rescue/03_psych1"
+msgid ""
+"\n"
+"Smoke rings will \n"
+"make you dizzy."
+msgstr ""
+"\n"
+"Les ronds de fumée te donneront \n"
+"le vertige."
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:1
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"You can't buttstomp\n"
+"so go up and around!"
+msgstr ""
+"\n"
+"Vous n'avez pas la possibilité de ruer\n"
+"Alors levez-vous et mettez-vous en route !"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:2
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"No rewards to those\n"
+"with itchy trigger fingers."
+msgstr ""
+"\n"
+"Pas de récompense pour ceux\n"
+"qui n'ont pas la main sûre"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:3
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Todays Forcast: Strong Winds!"
+msgstr ""
+"\n"
+"Météo pour aujourd'hui : Vent violent"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:4
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Find the crate\n"
+"to clear your path."
+msgstr ""
+"\n"
+"Trouvez le coffre\n"
+"et dégagez votre chemin"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:5
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Welcome to\n"
+"Jazz Jackrabbit 2:\n"
+"The Secret Files!"
+msgstr ""
+"\n"
+"Bienvenue sur\n"
+"Jackrabbit 2:\n"
+"The Secret Files"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:6
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Only Spaz can get to\n"
+"the room up on the left.\n"
+"He may need something\n"
+"to stand on."
+msgstr ""
+"\n"
+"Seul Spaz peut accèder à\n"
+"la pièce en haut à gauche.\n"
+"Il aura peut-être besoin de quelque chose\n"
+"sur quoi monter"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:7
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Don't beat Nigel at pool.\n"
+"You've veen warned. :)"
+msgstr ""
+"\n"
+"Ne battez pas Nigel au billard\n"
+" Vous êtes prévenu !"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:16
+msgctxt "secretf/01_easter1"
+msgid ""
+"Eating too many chocolate\n"
+"eggs can make you sick :p"
+msgstr ""
+"Manger trop d'oeufs en chocolat\n"
+" peut vous rendre malade"
+
+#: .fake/Translations/secretf/02_easter2.j2l.h:1
+msgctxt "secretf/02_easter2"
+msgid ""
+"\n"
+"Sloping Tunnel Entrance"
+msgstr ""
+"\n"
+"Entrée de biais du tunnel"
+
+#: .fake/Translations/secretf/02_easter2.j2l.h:2
+msgctxt "secretf/02_easter2"
+msgid ""
+"\n"
+"To access the tunnels above\n"
+"find the access warp."
+msgstr ""
+"\n"
+"Pour accéder aux tunnels au-dessus\n"
+"trouvez le tunnel téléporteur"
+
+#: .fake/Translations/secretf/02_easter2.j2l.h:3
+msgctxt "secretf/02_easter2"
+msgid ""
+"\n"
+"One route leads to riches.\n"
+"One route leads to battle."
+msgstr ""
+"\n"
+"Un chemin mène aux richesses\n"
+"un chemin mène à la lutte"
+
+#: .fake/Translations/secretf/03_easter3.j2l.h:1
+msgctxt "secretf/03_easter3"
+msgid ""
+"\n"
+"Only those who can double-jump\n"
+"can get to the goodies!"
+msgstr ""
+"\n"
+"Seuls ceux qui peuvent faire un double saut\n"
+"pourront arriver aux gadgets"
+
+#: .fake/Translations/secretf/03_easter3.j2l.h:2
+msgctxt "secretf/03_easter3"
+msgid ""
+"\n"
+"Find the crate to make\n"
+"your climbing blocks appear"
+msgstr ""
+"\n"
+"Trouvez le coffre afin de faire\n"
+"apparaître vos blocs de grimpée"
+
+#: .fake/Translations/secretf/03_easter3.j2l.h:3
+msgctxt "secretf/03_easter3"
+msgid ""
+"\n"
+"Stomping this crate also\n"
+"free's some enemies :)"
+msgstr ""
+"\n"
+"Heurter ce coffre peut aussi\n"
+"libérer quelques ennemis"
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:1
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Enter the house with caution....."
+msgstr ""
+"\n"
+"Entrez dans la maison avec précaution..."
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:3
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Silver Crates can't be broken underwater..."
+msgstr ""
+"\n"
+"Les coffres en argent ne peuvent\n"
+"pas être brisés sous l'eau"
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:4
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Water Level control crate above."
+msgstr ""
+"\n"
+"Coffre pour le contrôle du niveau\n"
+"d'eau au dessus"
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:5
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Stomping crates can be good and bad..."
+msgstr ""
+"\n"
+"Heurter les coffres peut être\n"
+"bien ou mal..."
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:7
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"But you need a way to get up there..."
+msgstr ""
+"\n"
+"Mais vous devez trouver le\n"
+"moyen d'aller là-bas"
+
+#: .fake/Translations/secretf/06_haunted3.j2l.h:16
+msgctxt "secretf/06_haunted3"
+msgid ""
+"\n"
+"Michelle,\n"
+"I will love you always and forever :)"
+msgstr ""
+"\n"
+"Michelle,\n"
+"Je t'aimerai toujours et pour toujours :)"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:1
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Take to the roof tops!"
+msgstr ""
+"\n"
+"Sauvez-vous sur les toits !"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:2
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"The skies above will reward\n"
+"those who stomp..."
+msgstr ""
+"\n"
+"Les cieux récompenseront\n"
+"ceux qui frappent"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:3
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Jump as far over to the\n"
+"right as you possibly can..."
+msgstr ""
+"\n"
+"Sautez sur la droite le plus loin\n"
+"que vous pouvez"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:4
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Didn't make the jump huh? :)"
+msgstr ""
+"\n"
+"Vous avez loupé votre saut, hein ?"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:5
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Well Done!"
+msgstr ""
+"\n"
+"Bien joué !"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:6
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Use your Special Moves to get up the air cons!\n"
+"For Jazz, press Crouch and Jump.\n"
+"For Spaz, Press Jump Twice!"
+msgstr ""
+"\n"
+"Utilisez vos Mouvements Spéciaux\n"
+"pour soulever les conduites d'air\n"
+"Pour Jazz appuyez sur\n"
+"Accroupissement et Saut\n"
+"pour Spaz, appuyez deux fois sur Saut!"
+
+#: .fake/Translations/secretf/08_town2.j2l.h:1
+msgctxt "secretf/08_town2"
+msgid ""
+"\n"
+"Find the crate and the gems are yours!"
+msgstr ""
+"\n"
+"Trouvez le coffre et les joyaux seront à vous !"
+
+#: .fake/Translations/secretf/08_town2.j2l.h:2
+msgctxt "secretf/08_town2"
+msgid ""
+"\n"
+"Springs Don't Work When Frozen..."
+msgstr ""
+"\n"
+"Les trampolines ne marchent pas\n"
+"quand ils sont gelés"
+
+#: .fake/Translations/secretf/08_town2.j2l.h:3
+msgctxt "secretf/08_town2"
+msgid ""
+"\n"
+"Collecting 20 coins is more rewarding..."
+msgstr ""
+"\n"
+"Il est plus rémunérateur de réunir 20 pièces"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:1
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Find the crate to clear the blocks...."
+msgstr ""
+"\n"
+"Trouvez le coffre pour éliminer les blocs"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:2
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"BEWARE! Flocks of Ravens can\n"
+"be very dangerous."
+msgstr ""
+"\n"
+"ATTENTION!\n"
+"les nuées de corbeaux peuvent\n"
+"être très dangereuses"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:3
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"The remove the blocks\n"
+"look to the tallest building."
+msgstr ""
+"\n"
+"Pour déplacer les blocs\n"
+"regardez le building le plus haut"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:4
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Choose a cover and stomp away!"
+msgstr ""
+"\n"
+"Choisissez un bouclier et\n"
+"donnez une bonne ruade"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:5
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Hi GeoBunny :)"
+msgstr ""
+"\n"
+"Hi GeoBunny :)"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:6
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Goto www.project2.com\n"
+"use\n"
+"password: BUNNYLOVER\n"
+msgstr ""
+"\n"
+"Goto www.project2.com\n"
+"use\n"
+"password: BUNNYLOVER\n"
+
+#: .fake/Translations/share/01_share1.j2l.h:1
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Shoot these blocks!"
+msgstr ""
+"\n"
+"Tire sur ces dalles !"
+
+#: .fake/Translations/share/01_share1.j2l.h:2
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"When in the air, press down\n"
+"to stomp with your butt."
+msgstr ""
+"\n"
+"Quand tu es en l'air, appuie sur Bas\n"
+"pour taper avec ton derrière."
+
+#: .fake/Translations/share/01_share1.j2l.h:3
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"To pass this area, stomp\n"
+"the secret metal crate."
+msgstr ""
+"\n"
+"Pour traverser cette zone, piétine\n"
+"la malle secrète."
+
+#: .fake/Translations/share/01_share1.j2l.h:4
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"You need twenty coins to pass \n"
+"through this secret warp!"
+msgstr ""
+"\n"
+"Il te faut vingt pièces pour traverser \n"
+"ce tunnel téléporteur !"
+
+#: .fake/Translations/share/01_share1.j2l.h:5
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Coins give you access to \n"
+"warps that appear later."
+msgstr ""
+"\n"
+"Les pièces permettent de traverser \n"
+"des tunnels téléporteurs que tu verras plus tard."
+
+#: .fake/Translations/share/01_share1.j2l.h:6
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Stomp in the right place and\n"
+"you might find a surprise!"
+msgstr ""
+"\n"
+"Piétine là où il faut et\n"
+"tu pourrais bien avoir une surprise !"
+
+#: .fake/Translations/share/01_share1.j2l.h:7
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Some crates contain\n"
+"bombs or baddies!"
+msgstr ""
+"\n"
+"Certaines caisses peuvent contenir\n"
+"des bombes ou des sbires !"
+
+#: .fake/Translations/share/02_share2.j2l.h:1
+msgctxt "share/02_share2"
+msgid ""
+"\n"
+"You need twenty coins to pass \n"
+"through this secret warp!"
+msgstr ""
+"\n"
+"Il te faut vingt pièces pour traverser \n"
+"ce tunnel téléporteur !"
+
+#: .fake/Translations/share/02_share2.j2l.h:2
+msgctxt "share/02_share2"
+msgid ""
+"\n"
+"A flamethrower works well \n"
+"against nasty bugs."
+msgstr ""
+"\n"
+"Les lanceflammes sont super \n"
+"pour faire la guerre aux moustiques."
+
+#: .fake/Translations/share/02_share2.j2l.h:3
+msgctxt "share/02_share2"
+msgid ""
+"\n"
+"Smoke rings will make\n"
+"you very dizzy!"
+msgstr ""
+"\n"
+"Les ronds de fumée te donneront\n"
+"un sacré vertige !"
+
+#: .fake/Translations/share/03_share3.j2l.h:1
+msgctxt "share/03_share3"
+msgid ""
+"\n"
+"Beware the witch! She can\n"
+"turn you into a frog."
+msgstr ""
+"\n"
+"Méfie-toi de la sorcière ! Elle peut\n"
+"te changer en grenouille."
+
+#: .fake/Translations/share/03_share3.j2l.h:2
+msgctxt "share/03_share3"
+msgid ""
+"\n"
+"If you are turned into a frog\n"
+"Eva Earlong can help!"
+msgstr ""
+"\n"
+"Si tu es transformé en grenouille\n"
+"Eva Earlong peut te sauver !"
+
+#: .fake/Translations/share/03_share3.j2l.h:3
+msgctxt "share/03_share3"
+msgid ""
+"\n"
+"You made it! This is the end\n"
+" of the shareware version.\n"
+"Now check out the order info\n"
+"for M O R E!"
+msgstr ""
+"\n"
+"Vous l'avez fait ! Ceci est\n"
+"la fin de la version démo.\n"
+"Consultez le bon de commande\n"
+"pour en avoir P L U S !"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:1
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Watch out for the spikes below!"
+msgstr ""
+"\n"
+"Fais attention aux pointes en bas !"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:2
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"You can buttstomp through\n"
+"some of the weakspots\n"
+"in the pathways!"
+msgstr ""
+"\n"
+"Tu peux taper ton derrière\n"
+"sur les parties fragiles\n"
+"du chemin !"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:3
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Some blocks can only\n"
+"be broken with a\n"
+"certain weapon."
+msgstr ""
+"\n"
+"Certains blocs ne peuvent\n"
+"être détruits qu'avec\n"
+"une arme précise."
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:4
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Welcome to Christmas Chronicles!"
+msgstr ""
+"\n"
+"Bienvenue à Christmas Chronicles!"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:5
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Seasons Greetings from\n"
+"Epic MegaGames\n"
+"Orange Games and\n"
+"Project 2 Interactive!"
+msgstr ""
+"\n"
+"Meilleurs voeux de la part de\n"
+"Epic MegaGames\n"
+"Orange Games et\n"
+"Project 2 Interactive !"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:1
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"You can stand on top\n"
+"of some of the trees!"
+msgstr ""
+"\n"
+"Tu peux marcher au dessus\n"
+"de certains arbres !"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:2
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"You can buttstomp through\n"
+"some of the weakspots\n"
+"in the pathways!"
+msgstr ""
+"\n"
+"Tu peux taper ton derrière\n"
+"sur les parties fragiles\n"
+"du chemin !"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:3
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"Punching the blocks above you\n"
+"can be rewarding."
+msgstr ""
+"\n"
+"Frappe les blocs au dessus de toi\n"
+"pour recevoir une récompense."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:6
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"Gem Trail Entry Crate."
+msgstr ""
+"\n"
+"Caisse d'entrée de la Gem Trail"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:7
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"Gem Trail Entrance.\n"
+"Climb the treetops to find\n"
+"and stomp the Entry Crate."
+msgstr ""
+"\n"
+"Entrée de la Gem Trail.\n"
+"Grimpez sur les arbres pour trouver\n"
+"et frapper la caisse d'entrée."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:14
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"\n"
+"Hi There, Piggy!\n"
+"\n"
+"- Poopy"
+msgstr ""
+"\n"
+"\n"
+"Salut, Piggy !\n"
+"\n"
+"- Poopy"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:15
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"\n"
+"Michelle:\n"
+"You've changed my life in so many ways\n"
+"I dedicate this project to you.\n"
+"I love you so much."
+msgstr ""
+"\n"
+"\n"
+"Michelle :\n"
+"Tu as tellement changé ma vie\n"
+"Je te dédie ce projet.\n"
+"Je t'aime tellement."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:16
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"\n"
+"Kassi Nicole:\n"
+"A million things I long to say to you\n"
+"But my words always lead to the same ending\n"
+"I love you, I love you."
+msgstr ""
+"\n"
+"\n"
+"Kassi Nicole:\n"
+"J'ai tant de choses à te dire, mais mes mots\n"
+"se concluent toujours de la même manière :\n"
+"Je t'aime, je t'aime."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:1
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Please use your TNT wisely."
+msgstr ""
+"\n"
+"Utilise les explosifs intelligemment."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:2
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Don't lose your grip!"
+msgstr ""
+"\n"
+"Ne lâche pas prise !"
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:3
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Welcome to Burrowsville\n"
+"Please drive carefully."
+msgstr ""
+"\n"
+"Bienvenue à Burrowsville\n"
+"Conduisez prudemment."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:4
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"That bridge doesnt\n"
+"look too safe..."
+msgstr ""
+"\n"
+"Ce pont n'a pas\n"
+"l'air solide..."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:5
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Robert and Craig:\n"
+"Springs RULE! :)"
+msgstr ""
+"\n"
+"Robert et Craig:\n"
+"Vive le printemps ! :)"
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:6
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Now leaving Burrowsville\n"
+"Please visit again."
+msgstr ""
+"\n"
+"Vous quittez Burrowsville.\n"
+"A bientôt !"
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:7
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Password: xmasbunny\n"
+"Please visit\n"
+"www.project2.com"
+msgstr ""
+"\n"
+"Password: xmasbunny\n"
+"Please visit\n"
+"www.project2.com"
+
+#: Sources/Jazz2/LevelHandler.cpp:258 Sources/Jazz2/LevelHandler.cpp:319
+#, c++-format
+msgid "Level \"{}\" initialized"
+msgstr "Niveau \"{}\" initialisé"
+
+#. TRANSLATORS: Link to website under header text in About section
+#: Sources/Jazz2/LevelHandler.cpp:1075
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:235
+msgid "For more information, visit the official website:"
+msgstr "Pour plus d'information, visitez le site officiel :"
+
+#: Sources/Jazz2/LevelHandler.cpp:2119
+#, c++-format
+#| msgid "Level \"{}\" initialized"
+msgid "Level \"{}\" restored"
+msgstr ""
+
+#: Sources/Jazz2/LevelHandler.cpp:3117
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4153
+msgid "Cheats are not allowed in current context"
+msgstr "La triche n'est pas autorisée dans le contexte actuel"
+
+#: Sources/Jazz2/Multiplayer/GameModes/CaptureTheFlagMode.cpp:16
+msgid "home"
+msgstr "base"
+
+#: Sources/Jazz2/Multiplayer/GameModes/CaptureTheFlagMode.cpp:16
+msgid "taken"
+msgstr "pris"
+
+#: Sources/Jazz2/Multiplayer/GameModes/CaptureTheFlagMode.cpp:16
+msgid "dropped"
+msgstr "lâché"
+
+#: Sources/Jazz2/Multiplayer/GameModes/TreasureHuntMode.cpp:32
+msgid "Find exit!"
+msgstr "Trouve la sortie !"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:585
+msgid ""
+"\n"
+"\n"
+"The game will begin shortly!"
+msgstr ""
+"\n"
+"\n"
+"Le jeu va bientôt commencer !"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:769
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} won the championship!"
+msgstr ""
+"\n"
+"\n"
+"{} a remporté le championnat !"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2840
+#, c++-format
+msgid "Value out of range (2-{})"
+msgstr "Valeur hors plage (2-{})"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2916
+msgid "Usage: /team <blue|red|green|yellow|auto>"
+msgstr "Utilisation : /team <blue|red|green|yellow|auto>"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2923
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4658
+#, c++-format
+msgid "You joined the {} team"
+msgstr "Vous avez rejoint l'équipe {}"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2925
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4660
+msgid "Cannot change team right now"
+msgstr "Pas de changement d'équipe pour le moment"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2936
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2948
+msgid "Teams are only used in team game modes"
+msgstr "Les équipes ne sont utilisées que dans les modes de jeu en équipe"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2939
+msgid "Teams rebalanced"
+msgstr "Équipes rééquilibrées"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2963
+msgid "Usage: /setteam <player#> <blue|red|green|yellow>"
+msgstr "Utilisation : /setteam <numérojoueur> <blue|red|green|yellow>"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2978
+#, c++-format
+msgid "Player {} moved to the {} team"
+msgstr "Le joueur {} est désormais dans l'équipe {}"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2980
+msgid "Player not found"
+msgstr "Joueur non trouvé"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:3720
+msgid ""
+"You have already finished the race, you can play again in the next round"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:3724
+#| msgid "Cannot change team right now"
+msgid "You cannot join the game right now"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:3763
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4770
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] disconnected"
+msgstr "\f[c:#d0705d]{}\f[/c] est déconnecté"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4044
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4768
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] connected"
+msgstr "\f[c:#d0705d]{}\f[/c] est connecté"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4791
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:7345
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] was roasted by \f[c:#d0705d]{}\f[/c]"
+msgstr "\f[c:#d0705d]{}\f[/c] s'est fait griller par \f[c:#d0705d]{}\f[/c]"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4794
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:7371
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] was roasted by environment"
+msgstr "\f[c:#d0705d]{}\f[/c] s'est fait griller par l'environnement"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:8639
+msgid ""
+"\n"
+"\n"
+"Teams have been rebalanced"
+msgstr ""
+"\n"
+"\n"
+"Les équipes ont été rééquilibrées"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:8944
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} took the {} flag!"
+msgstr ""
+"\n"
+"\n"
+"{} a pris le drapeau {} !"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:8952
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"The {} flag was returned"
+msgstr ""
+"\n"
+"\n"
+"Le drapeau {} est revenu"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:9000
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} team captured the {} flag!"
+msgstr ""
+"\n"
+"\n"
+"L'équipe {} a capturé le drapeau {} !"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:9111
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"The {} flag was dropped"
+msgstr ""
+"\n"
+"\n"
+"Le drapeau {} a été lâché"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10159
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} finished the race!\n"
+"{} seconds remaining"
+msgstr ""
+"\n"
+"\n"
+"{} a terminé la course !\n"
+"{} secondes restantes"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10173
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} finished {}."
+msgstr ""
+"\n"
+"\n"
+"{} a terminé {}."
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10437
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"Winner is {}"
+msgstr ""
+"\n"
+"\n"
+"{} a gagné !"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10501
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} team wins!"
+msgstr ""
+"\n"
+"\n"
+"L'équipe {} a gagné !"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10557
+msgid ""
+"\n"
+"\n"
+"The round ended in a draw"
+msgstr ""
+"\n"
+"\n"
+"La manche s'est terminée par un match nul"
+
+#: Sources/Jazz2/UI/HUD.cpp:602 Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:222
+msgid "Spectating"
+msgstr "Spectateur"
+
+#. TRANSLATORS: Tappable hint in the top-left corner of the in-game console to toggle the on-screen keyboard
+#: Sources/Jazz2/UI/InGameConsole.cpp:235
+msgid "Keyboard"
+msgstr "Clavier"
+
+#: Sources/Jazz2/UI/InGameConsole.cpp:548
+msgid "Unknown command"
+msgstr "Commande inconnue"
+
+#. TRANSLATORS: Header text in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:233
+msgid ""
+"Reimplementation of the game \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] released "
+"in 1998. Supports various versions of the game (Shareware Demo, Holiday Hare "
+"'98, The Secret Files and Christmas Chronicles). Also, it partially supports "
+"some features of JJ2+ extension."
+msgstr ""
+"Réimplementation du jeu \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] sorti en 1998. "
+"Gère différentes versions du jeu (démo Shareware, Holiday Hare '98, The "
+"Secret Files et Christmas Chronicles). Support partiel de certaines "
+"fonctionnalités de l'extension JJ2+."
+
+#. TRANSLATORS: Label in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:237
+msgid "Developers"
+msgstr "Développeurs"
+
+#. TRANSLATORS: Label in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:239
+msgid "Contributors"
+msgstr "Contributeurs"
+
+#. TRANSLATORS: Label in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:241
+msgid "Translators"
+msgstr "Traducteurs"
+
+#. TRANSLATORS: Footer text in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:243
+msgid ""
+"This project uses modified \f[c:#9e7056]nCine\f[/c] game engine and "
+"following libraries:"
+msgstr ""
+"Ce projet utilise le moteur de jeu \f[c:#9e7056]nCine\f[/c] modifié et les "
+"librairies suivantes:"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:61
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:98
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:194
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:196
+msgid "Play Story"
+msgstr "Mode histoire"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:69
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:83
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:103
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:20
+msgid "Play Multiplayer"
+msgstr "Jeu multijoueur"
+
+#. TRANSLATORS: Menu item in main menu (Emscripten only)
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:74
+msgid "Play Shareware Demo"
+msgstr "Jouer la démo Shareware"
+
+#. TRANSLATORS: Menu item in main menu (Emscripten only)
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:89
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:65
+msgid "Import Episodes"
+msgstr "Importer des épisodes"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:94
+msgid "Continue"
+msgstr "Continuer"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:109
+msgid "Highscores"
+msgstr "Meilleurs scores"
+
+#. TRANSLATORS: Menu item in main menu
+#. TRANSLATORS: Subheader in First Run section
+#. \uE000 is the Discord icon of the menu font's private use area, written as an escape so that
+#. the character itself cannot be lost when the file is edited
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:111
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:22
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:62
+msgid "Options"
+msgstr "Options"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:113
+msgid "About"
+msgstr "À propos"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:121
+msgid "Quit"
+msgstr "Quitter"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:233
+#, c++-format
+msgid "For more information, visit {} and  Discord!"
+msgstr "Pour plus d'informations, visitez {} et  Discord !"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:246
+msgid "Access to external storage has been granted!"
+msgstr "L'accès au stockage externe a été autorisé !"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:248
+msgid ""
+"\f[c:#337233]Restart the game to read \f[c:#9e7056]Jazz Jackrabbit "
+"2\f[c:#337233] files correctly."
+msgstr ""
+"\f[c:#337233]Relancer le jeu pour lire les fichiers \f[c:#9e7056]Jazz "
+"Jackrabbit 2\f[c:#337233] correctement."
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:258
+msgid ""
+"\f[c:#704a4a]This game requires original \f[c:#9e7056]Jazz Jackrabbit "
+"2\f[c:#704a4a] files!"
+msgstr ""
+"\f[c:#704a4a]Ce jeu requiert les fichiers d'origine du jeu \f[c:#9e7056]Jazz "
+"Jackrabbit 2\f[c:#704a4a]!"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:260
+msgid "Make sure Jazz Jackrabbit 2 files are present in following path:"
+msgstr ""
+"Assurez-vous que les fichiers de Jazz Jackrabbit 2 sont présents dans ce "
+"dossier:"
+
+#. TRANSLATORS: Menu item in main menu (Android 11+ only)
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:268
+msgid "Allow access to external storage"
+msgstr "Autoriser l'accès au stockage externe"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:30
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:38
+msgid "Controls"
+msgstr "Contrôles"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:46
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:267
+#, c++-format
+msgid "Remap Controls for Player {}"
+msgstr "Changer les contrôles pour le joueur {}"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:51
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:270
+msgid "Remap Controls"
+msgstr "Changer les contrôles"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:63
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:111
+msgid "Touch Controls"
+msgstr "Contrôles tactiles"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:68
+msgid "Toggle Run"
+msgstr "Mode Marche/Course"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:69
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:113
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:123
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:53
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:58
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:62
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:66
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:74
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:83
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:56
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:57
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:67
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:71
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:75
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:101
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:122
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:142
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:166
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:178
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:261
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:277
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:288
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:107
+msgid "Enabled"
+msgstr "Activé"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:69
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:103
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:113
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:123
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:53
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:58
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:62
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:66
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:74
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:83
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:61
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:67
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:71
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:75
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:101
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:122
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:142
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:166
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:178
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:261
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:277
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:288
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:295
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:107
+msgid "Disabled"
+msgstr "Désactivé"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:72
+msgid "Gamepad Button Labels"
+msgstr "Étiquettes des boutons de la manette"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:95
+msgid "Gamepad Rumble"
+msgstr "Vibrations de la manette"
+
+#. TRANSLATORS: Option for Gamepad Rumble in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:99
+msgid "Strong"
+msgstr "Fortes"
+
+#. TRANSLATORS: Option for Gamepad Rumble in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:102
+msgid "Weak"
+msgstr "Faibles"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:112
+msgid "Extended PlayStation™ Support"
+msgstr "Prise en charge étendue PlayStation™"
+
+#. TRANSLATORS: Menu item in Options > Controls section (Android only)
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:122
+msgid "Native Back Button"
+msgstr "Touche retour native"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:127
+#: Sources/Jazz2/UI/Menu/InputDiagnosticsSection.cpp:86
+msgid "Input Diagnostics"
+msgstr "Diagnostic des entrées"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:129
+msgid "Reset To Default"
+msgstr "Réinitialiser par défaut"
+
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:159
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:216
+msgid "Easy"
+msgstr "Facile"
+
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:160
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:216
+msgid "Medium"
+msgstr "Moyen"
+
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:161
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:216
+msgid "Hard"
+msgstr "Difficile"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:168
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:176
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:244
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:54
+msgid "Battle"
+msgstr "Match"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:169
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:245
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:56
+msgid "Team Battle"
+msgstr "Match en équipe"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:170
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:246
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:58
+msgid "Race"
+msgstr "Course"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:171
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:247
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:60
+msgid "Team Race"
+msgstr "Course par équipe"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:172
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:248
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:62
+msgid "Treasure Hunt"
+msgstr "Chasse au trésor"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:173
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:249
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:64
+msgid "Team Treasure Hunt"
+msgstr "Chasse au trésor en équipe"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:174
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:250
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:66
+msgid "Capture The Flag"
+msgstr "Capture de drapeau"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:175
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:251
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:68
+msgid "Cooperation"
+msgstr "Coopération"
+
+#. TRANSLATORS: Menu item in Multiplayer section (local splitscreen multiplayer)
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:217
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:189
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:34
+msgid "Create Local Splitscreen Game"
+msgstr "Créer une partie locale en écran partagé"
+
+#. TRANSLATORS: Menu item to select the number of local splitscreen players
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:222
+msgid "Number of Players"
+msgstr "Nombre de joueurs"
+
+#. TRANSLATORS: Menu item to select player character (Jazz, Spaz, Lori)
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:234
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:39
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:22
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:139
+msgid "Character"
+msgstr "Personnage"
+
+#. TRANSLATORS: Menu item to select difficulty
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:249
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:24
+msgid "Difficulty"
+msgstr "Difficulté"
+
+#. TRANSLATORS: Menu item to select game mode
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:256
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:41
+msgid "Game Mode"
+msgstr "Mode de jeu"
+
+#. TRANSLATORS: Menu item to start the local game with the selected settings
+#. TRANSLATORS: Menu item to start selected episode/level
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:269
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:26
+msgid "Start"
+msgstr "Démarrer la partie"
+
+#. TRANSLATORS: Menu item to select Wi-Fi or ad hoc connection (PSP only)
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:44
+msgid "Connection"
+msgstr "Connexion"
+
+#. TRANSLATORS: Menu item to create server with selected settings
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:47
+msgid "Create Server"
+msgstr "Créer un serveur"
+
+#. TRANSLATORS: Transport mode in Create Server section on PSP, local wireless connection between consoles
+#. TRANSLATORS: Transport mode in Connect To Server section on PSP, local wireless connection between consoles
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:263
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:473
+msgid "Ad hoc"
+msgstr "Ad hoc"
+
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:263
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:473
+msgid "Wi-Fi"
+msgstr "Wi-Fi"
+
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:418
+msgid ""
+"\f[c:#704a4a]Cannot create the server!\f[/c]\n"
+"\n"
+"\n"
+"Playlist is not properly configured.\n"
+"Please review server configuration and try it again."
+msgstr ""
+"\f[c:#704a4a]Impossible de créer le serveur !\f[/c]\n"
+"\n"
+"\n"
+"La playlist n'est pas correctement configurée.\n"
+"Vérifiez la configuration du serveur et réessayez."
+
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:457
+msgid ""
+"\f[c:#704a4a]Cannot create the server!\f[/c]\n"
+"\n"
+"\n"
+"Please verify that no other server\n"
+"is running on that port and try it again."
+msgstr ""
+"\f[c:#704a4a]Impossible de créer le serveur !\f[/c]\n"
+"\n"
+"\n"
+"Vérifiez qu'aucun autre serveur\n"
+"ne fonctionne sur le même port et réessayez."
+
+#: Sources/Jazz2/UI/Menu/CustomLevelSelectSection.cpp:155
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:595
+msgid "Play Custom Levels"
+msgstr "Jouer des niveaux personnalisés"
+
+#: Sources/Jazz2/UI/Menu/CustomLevelSelectSection.cpp:167
+msgid "No custom level found!"
+msgstr "Aucun niveau personnalisé trouvé !"
+
+#: Sources/Jazz2/UI/Menu/CustomLevelSelectSection.cpp:189
+msgid "Create server from playlist"
+msgstr "Créer un serveur depuis une playlist"
+
+#. TRANSLATORS: Menu item in Multiplayer section (host a private online server)
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:192
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:30
+msgid "Create Private Server"
+msgstr "Créer un serveur privé"
+
+#. TRANSLATORS: Menu item in Multiplayer section (host a publicly listed online server)
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:193
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:28
+msgid "Create Public Server"
+msgstr "Créer un serveur public"
+
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:207
+msgid "No episode found!"
+msgstr "Aucun épisode trouvé !"
+
+#. TRANSLATORS: Menu subitem in Play Story section
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:360
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:361
+msgid "Restart episode"
+msgstr "Recommencer l'épisode"
+
+#. TRANSLATORS: Information in Play Story section that episode is locked because the previous episode is not complete
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:386
+#, c++-format
+msgid "You must complete \"{}\" first!"
+msgstr "Terminez l'épisode \"{}\" d'abord !"
+
+#. TRANSLATORS: Information in Play Story section that episode is locked
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:390
+msgid "Episode is locked!"
+msgstr "L'épisode est verrouillé !"
+
+#. TRANSLATORS: Menu item in First Run section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:106
+msgid "Legacy"
+msgstr "Original"
+
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:106
+msgid "I want to play the game the way it used to be."
+msgstr "Je veux jouer au jeu d'origine, tel qu'il était."
+
+#. TRANSLATORS: Menu item in First Run section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:108
+msgid "Reforged"
+msgstr "Modernisé"
+
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:108
+msgid "I want to play the game with something new."
+msgstr "Je veux jouer au jeu avec quelques nouveautés."
+
+#. TRANSLATORS: Header in First Run section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:194
+msgid "Welcome to \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] reimplementation!"
+msgstr ""
+"Bienvenue à la réimplémentation de \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] !"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:38
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:30
+msgid "Gameplay"
+msgstr "Jeu"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:115
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:43
+msgid "Enhancements"
+msgstr "Améliorations"
+
+#. TRANSLATORS: Subheader in First Run section
+#. \uE000 is the Discord icon of the menu font's private use area, written as an escape so that
+#. the character itself cannot be lost when the file is edited
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#, c++-format
+msgid ""
+"You can choose your preferred play style.\n"
+"This option can be changed at any time in \f[c:#707070]{}\f[/c] > "
+"\f[c:#707070]{}\f[/c] > \f[c:#707070]{}\f[/c].\n"
+"For more information, visit {} and  Discord!"
+msgstr ""
+"Vous pouvez choisir votre mode de jeu préféré.\n"
+"Cette option peut être changée à tout moment dans \f[c:#707070]{}\f[/c] > "
+"\f[c:#707070]{}\f[/c] > \f[c:#707070]{}\f[/c].\n"
+"Pour plus d'information, visiter {} et  Discord !"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:52
+msgid "Reforged Gameplay"
+msgstr "Jouabilité modernisée"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:57
+msgid "Reforged Camera"
+msgstr "Caméra modernisée"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:61
+msgid "Reforged HUD"
+msgstr "Informations à l'écran modernisées"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:65
+msgid "Reforged Main Menu"
+msgstr "Menu principal modernisé"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:73
+msgid "Ledge Climbing"
+msgstr "Escalader les rebords"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:78
+msgid "Weapon Wheel"
+msgstr "Roue d'armes"
+
+#. TRANSLATORS: Option for Weapon Wheel item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:82
+msgid "Enabled With Ammo Count"
+msgstr "Activé avec compteur de munitions"
+
+#. TRANSLATORS: Header in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:118
+msgid "You can enable enhancements that were added to this remake."
+msgstr ""
+"Vous pouvez activer les améliorations qui ont été ajoutées à ce remake."
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:45
+#: Sources/Jazz2/UI/Menu/LanguageSelectSection.cpp:44
+msgid "Language"
+msgstr "Langue"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#. Uses a custom value drawer to show the UAC icon next to "Enabled" (it allows running unsigned scripts)
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:50
+msgid "Scripting"
+msgstr "Scripting"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:66
+msgid "Continuous Jump"
+msgstr "Saut continu"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:70
+msgid "Switch To New Weapon"
+msgstr "Basculer vers la nouvelle arme"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:74
+msgid "Show Minimap"
+msgstr "Afficher la mini-carte"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:78
+msgid "Allow Cheats"
+msgstr "Autoriser la triche"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:79
+msgid "Yes"
+msgstr "Oui"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:79
+msgid "No"
+msgstr "Non"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:83
+msgid "Overwrite Episode Completion"
+msgstr "Remplacer l'achèvement d'épisode"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:86
+msgid "No Cheats Only"
+msgstr "Sans triche uniquement"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:88
+msgid "Higher Score Only"
+msgstr "Meilleur score uniquement"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:89
+msgid "Always"
+msgstr "Toujours"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:100
+msgid "Razer Chroma™"
+msgstr "Razer Chroma™"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:112
+msgid "Browse \"Source\" Directory"
+msgstr "Ouvrir le dossier \"Source\""
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:126
+#: Sources/Jazz2/UI/Menu/RefreshCacheSection.cpp:83
+msgid "Refresh Cache"
+msgstr "Rafraîchir le cache"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:39
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:32
+msgid "Graphics"
+msgstr "Graphismes"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:49
+msgid "Rescale Mode"
+msgstr "Mode de rendu"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:54
+msgid "Screen Resolution"
+msgstr "Résolution d'écran"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:70
+msgid "Rendering Resolution"
+msgstr "Résolution de rendu"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:121
+msgid "Fullscreen"
+msgstr "Plein écran"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:141
+msgid "Antialiasing"
+msgstr "Antialiasing"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:165
+msgid "Background Dithering"
+msgstr "Tramage en arrière-plan"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:177
+msgid "Blur Effects"
+msgstr "Effets de flou"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:189
+msgid "Lighting Resolution"
+msgstr "Résolution de l'éclairage"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:229
+msgid "Particle Quality"
+msgstr "Qualité des particules"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:232
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:306
+msgid "Off"
+msgstr "Désactivé"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:233
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:252
+msgid "Low"
+msgstr "Bas"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:234
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:252
+msgid "High"
+msgstr "Haut"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:251
+msgid "Water Quality"
+msgstr "Qualité de l'eau"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:260
+msgid "Show Player Trails"
+msgstr "Afficher traînées joueur"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:268
+msgid "Preferred Splitscreen"
+msgstr "Écran partagé préféré"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:269
+msgid "Vertical"
+msgstr "Vertical"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:269
+msgid "Horizontal"
+msgstr "Horizontal"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:276
+msgid "Prefer Zoom Out"
+msgstr "Préférer dézoomé"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#. TRANSLATORS: Header of Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:285
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:54
+msgid "Safe Area"
+msgstr "Zone de sécurité"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:287
+msgid "Keep Aspect Ratio In Cinematics"
+msgstr "Conserver ratio des cinématiques"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:294
+msgid "Unaligned Viewport"
+msgstr "Vue non alignée"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:295
+msgid "Enabled \f[c:#d0705d](Experimental)\f[/c]"
+msgstr "Activé \f[c:#d0705d](Expérimental)\f[/c]"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:303
+msgid "Performance Metrics"
+msgstr "Indicateurs de performance"
+
+#. TRANSLATORS: Option for Performance Metrics item in Options > Graphics section, only the frame rate is shown
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:308
+msgid "Basic"
+msgstr ""
+
+#. TRANSLATORS: Option for Performance Metrics item in Options > Graphics section, the frame rate and the time each part of a frame takes
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:310
+msgid "Detailed"
+msgstr "Détaillé"
+
+#: Sources/Jazz2/UI/Menu/HighscoresSection.cpp:181
+msgid "Highscores for \f[c:#d0705d]Base game\f[/c]"
+msgstr "Meilleurs scores pour \f[c:#d0705d]le jeu de base\f[/c]"
+
+#: Sources/Jazz2/UI/Menu/HighscoresSection.cpp:191
+#, c++-format
+msgid "Highscores for \f[c:#d0705d]{}\f[/c]"
+msgstr "Meilleurs scores pour \f[c:#d0705d]{}\f[/c]"
+
+#. TRANSLATORS: Header in Import Episodes section
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:68
+msgid "Select files of your original game to unlock additional episodes"
+msgstr ""
+"Sélectionner les fichiers du jeu d'origine pour débloquer des épisodes "
+"supplémentaires"
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:74
+#, c++-format
+msgid "Processing of {} file..."
+msgid_plural "Processing of {} files..."
+msgstr[0] "Traitement de {} fichier..."
+msgstr[1] "Traitement de {} fichiers..."
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:77
+msgid "Waiting for files..."
+msgstr "En attente des fichiers..."
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:83
+msgid "No files were selected!"
+msgstr "Aucun fichier sélectionné !"
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:88
+msgid "No new episodes were imported!"
+msgstr "Aucun nouvel épisode importé !"
+
+#: Sources/Jazz2/UI/Menu/InputDiagnosticsSection.cpp:100
+msgid "No gamepads are detected!"
+msgstr "Aucune manette trouvée !"
+
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:23
+msgid "Select Game Mode"
+msgstr "Choisir un mode de jeu"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:35
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:41
+msgid "Sounds"
+msgstr "Sons"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:40
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:100
+msgid "User Profile"
+msgstr "Profil utilisateur"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:42
+msgid "Resume"
+msgstr "Reprendre"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:49
+msgid "Join Game"
+msgstr "Rejoindre la partie"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:52
+msgid "Spectate"
+msgstr "Spectateur"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:56
+msgid "Change Character"
+msgstr "Changer de personnage"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:66
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:69
+msgid "Save & Exit"
+msgstr "Sauver et quitter"
+
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:66
+msgid "Disconnect & Exit"
+msgstr "Déconnecter et quitter"
+
+#. TRANSLATORS: Menu item in Multiplayer section (join an existing online server)
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:25
+msgid "Join Server"
+msgstr "Rejoindre un serveur"
+
+#: Sources/Jazz2/UI/Menu/RefreshCacheSection.cpp:85
+msgid "Processing of files in \f[c:#9e7056]\"Source\"\f[/c] directory..."
+msgstr ""
+"Traitement des fichiers dans le dossier \f[c:#9e7056]\"Source\"\f[/c]..."
+
+#: Sources/Jazz2/UI/Menu/RefreshCacheSection.cpp:88
+msgid "Newly added levels and episodes will be available soon."
+msgstr "De nouveaux niveaux et épisodes seront bientôt disponibles."
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:52
+msgid "Left"
+msgstr "Gauche"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:54
+msgid "Right"
+msgstr "Droite"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:56
+msgid "Up"
+msgstr "Haut"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:58
+msgid "Down"
+msgstr "Bas"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:60
+msgid "Buttstomp"
+msgstr "Coup vers le bas"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:62
+msgid "Fire"
+msgstr "Tirer"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:64
+msgid "Jump"
+msgstr "Sauter"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:66
+msgid "Run"
+msgstr "Courir"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#. TRANSLATORS: Bottom hint in Connect To Server > IP Address input field
+#. _root->DrawStringShadow(_("Keyboard"), charOffset, centerX - 84.0f, hintY, IMenuContainer::FontLayer + 110,
+#. Alignment::Left, Font::DefaultColor, 0.7f, 0.4f, 0.0f, 0.0f, 0.0f, 0.9f);
+#. }
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:68
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:299
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:452
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:482
+msgid "Change Weapon"
+msgstr "Changer d'arme"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:70
+msgid "Back"
+msgstr "Retour"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:72
+msgid "Toggle Console"
+msgstr "Affichage de la console"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:75
+#, c++-format
+msgid "Weapon {}"
+msgstr "Arme {}"
+
+#. TRANSLATORS: Bottom hint in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:289
+msgid "Press any key or button to assign"
+msgstr "Appuyer sur une touche ou un bouton pour attribuer"
+
+#. TRANSLATORS: Bottom hint in Options > Controls > Remap Controls section, prefixed with key/button to press
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:301
+msgid "to remove assignment"
+msgstr "pour désattribuer"
+
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:32
+msgid "Select Rescale Mode"
+msgstr "Sélectionner le mode de rendu"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:48
+msgid "None / Pixel-perfect"
+msgstr "Aucun / Au pixel près"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:66
+msgid "CRT Scanlines"
+msgstr "Lignes d'écran cathodique"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:68
+msgid "CRT Shadow Mask"
+msgstr "Masque d'écran cathodique"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:70
+msgid "CRT Aperture Grille"
+msgstr "Grille d'écran cathodique"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:73
+msgid "Monochrome"
+msgstr "Monochrome"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:58
+msgid "Left Margin"
+msgstr "Marge gauche"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:60
+msgid "Top Margin"
+msgstr "Marge haut"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:62
+msgid "Right Margin"
+msgstr "Marge droite"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:64
+msgid "Bottom Margin"
+msgstr "Marge bas"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:66
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:139
+msgid "Reset"
+msgstr "Réinitialiser"
+
+#. TRANSLATORS: Value of a margin in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:92
+msgid "None"
+msgstr "Aucune"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:139
+msgid "Laps"
+msgstr "Tours"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:141
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:583
+msgid "Treasure"
+msgstr "Trésor"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:169
+msgid "Scoreboard"
+msgstr "Tableau des scores"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:174
+msgid "Player"
+msgstr "Joueur"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:184
+msgid "Pts"
+msgstr "Pts"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:186
+msgid "Ping"
+msgstr "Latence"
+
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:284
+msgid "Connect To Server"
+msgstr "Connexion au serveur"
+
+#. TRANSLATORS: Shown in Connect To Server section on PSP while the console switches between Wi-Fi and ad hoc mode
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:299
+msgid "Switching connection mode…"
+msgstr "Changement du mode de connexion..."
+
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:304
+msgid "No servers found, but still searchin'!"
+msgstr "Aucun serveur trouvé, mais la recherche continue !"
+
+#. TRANSLATORS: Label in Connect To Server > IP Address input field
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:422
+msgid "IP Address:"
+msgstr "Adresse IP :"
+
+#. TRANSLATORS: Placeholder in Connect To Server > IP Address input field
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:429
+msgid "<ip> or <ip>:<port>"
+msgstr "<ip> ou <ip>:<port>"
+
+#. TRANSLATORS: Bottom hint in Connect To Server > IP Address input field, prefixed with key/button to press
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:464
+msgid "to show keyboard"
+msgstr "pour afficher le clavier"
+
+#. TRANSLATORS: Bottom hint in Connect To Server section, prefixed with key/button to press
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:496
+msgid "to connect to IP address"
+msgstr "pour se connecter à l'adresse IP"
+
+#: Sources/Jazz2/UI/Menu/SimpleMessageSection.cpp:48
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:227
+msgid "Press \f[c:#d0705d]Fire\f[/c] to continue"
+msgstr "Appuyez sur \f[c:#d0705d]Feu\f[/c] pour continuer"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:51
+msgid "Master Volume"
+msgstr "Volume global"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:59
+msgid "SFX Volume"
+msgstr "Sons"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:67
+msgid "Music Volume"
+msgstr "Musique"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:83
+msgid "Sample Rate"
+msgstr "Fréquence d'échantillonnage"
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:130
+msgid "Save"
+msgstr "Sauver"
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:146
+msgid "Joystick"
+msgstr "Joystick"
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:156
+msgid "Vibration"
+msgstr "Vibration"
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:164
+msgid "Drag to move · Pinch or corner to resize"
+msgstr ""
+"Faites glisser pour déplacer · Pincez ou touchez un coin pour redimensionner"
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:106
+msgid "Discord Integration"
+msgstr "Intégration Discord"
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:121
+msgid "Player Name"
+msgstr "Nom du joueur"
+
+#. TRANSLATORS: Menu item in Options > User Profile section (primary fur/body color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:164
+msgid "Primary Fur"
+msgstr "Fourrure principale"
+
+#. TRANSLATORS: Menu item in Options > User Profile section (secondary fur/body color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:166
+msgid "Secondary Fur"
+msgstr "Fourrure secondaire"
+
+#. TRANSLATORS: Menu item in Options > User Profile section (weapon color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:168
+msgid "Weapon"
+msgstr "Arme"
+
+#. TRANSLATORS: Menu item in Options > User Profile section (miscellaneous accent color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:170
+msgid "Miscellaneous"
+msgstr "Divers"
+
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:185
+msgid "Default"
+msgstr "Par défaut"
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:205
+msgid "Apply Custom Colors"
+msgstr "Appliquer les couleurs personnalisées"
+
+#. TRANSLATORS: Value of "Apply Colors" in Options > User Profile
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:210
+msgid "Online only"
+msgstr "En ligne uniquement"
+
+#. TRANSLATORS: Value of "Apply Colors" in Options > User Profile
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:212
+msgid "Online and first local player"
+msgstr "En ligne et premier joueur local"
+
+#. TRANSLATORS: Value of "Apply Colors" in Options > User Profile
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:214
+msgid "Online and all local players"
+msgstr "En ligne et tout joueur local"
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:222
+msgid "Unique Player ID"
+msgstr "ID unique de joueur"
+
+#. TRANSLATORS: Spectator hint, "Fire" and "Run" are the names of the two actions
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:236
+msgid "Fire: next player, Run: free camera"
+msgstr "Bouton de tir : joueur suivant, courir : caméra libre"
+
+#. TRANSLATORS: Spectator hint, "Fire" is the name of the action
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:238
+msgid "Fire: follow a player"
+msgstr "Bouton de tir : suivre un joueur"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:255
+#, c++-format
+msgid "Game starts in {}"
+msgstr "Le jeu commence dans {}"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:263
+#, c++-format
+msgid "Waiting for {} more player"
+msgid_plural "Waiting for {} more players"
+msgstr[0] "En attente de {} joueur en plus"
+msgstr[1] "En attente de {} joueurs en plus"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:286
+#, c++-format
+msgid "Finish in {} s"
+msgstr "Fin dans {} s"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:581
+msgid "Time"
+msgstr "Temps"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:584
+msgid "Kills"
+msgstr "Éliminations"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:612
+msgid "Final standings"
+msgstr "Classement final"
+
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:175
+msgid "Team"
+msgstr "Équipe"
+
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:184
+msgid "Auto"
+msgstr "Auto"
+
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:223
+msgid "Use \f[c:#d0705d]Up/Down\f[/c] to switch between character and team"
+msgstr ""
+"Utiliser \f[c:#d0705d]Haut/Bas\f[/c] pour basculer entre personnage et équipe"
+
+#: Sources/Main.cpp:929 Sources/Main.cpp:1010
+msgid ""
+"\f[c:#704a4a]Cannot load specified level!\f[/c]\n"
+"\n"
+"\n"
+"Make sure all necessary files\n"
+"are accessible and try it again."
+msgstr ""
+"\f[c:#704a4a]Impossible de charger le niveau!\f[/c]\n"
+"\n"
+"\n"
+"Assurez-vous que tous les fichiers nécessaires\n"
+"sont accessibles et essayez à nouveau."
+
+#: Sources/Main.cpp:1112
+msgid ""
+"\f[c:#704a4a]Cannot resume saved state!\f[/c]\n"
+"\n"
+"\n"
+"Make sure all necessary files\n"
+"are accessible and try it again."
+msgstr ""
+"\f[c:#704a4a]Impossible de rétablir la sauvegarde !\f[/c]\n"
+"\n"
+"\n"
+"Assurez-vous que tous les fichiers nécessaires\n"
+"sont accessibles et essayez à nouveau."
+
+#: Sources/Main.cpp:1402
+msgid "Unnamed server"
+msgstr "Serveur sans nom"
+
+#: Sources/Main.cpp:1559
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Invalid parameter specified."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"Paramètre invalide spécifié."
+
+#: Sources/Main.cpp:1560
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Your client version is not compatible with the server."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"La version de votre client n'est pas compatible avec ce serveur."
+
+#: Sources/Main.cpp:1561
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"The client was rejected due to malformed communication protocol."
+msgstr ""
+"\f[c:#704a4a]La connexion a été interrompue !\f[/c]\n"
+"\n"
+"\n"
+"Le client a été rejeté en raison d'un protocole de communication incorrect."
+
+#: Sources/Main.cpp:1562
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"The connection was denied by the web browser.\n"
+"One of the reasons may be connecting to an unsecured WebSocket."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"La connexion a été refusée par le navigateur Web.\n"
+"Cela peut notamment être dû à une connexion à un WebSocket non sécurisé."
+
+#: Sources/Main.cpp:1563
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Authentication failed.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"L'authentification a échoué.\n"
+"Contactez un administrateur du serveur pour plus d'information."
+
+#: Sources/Main.cpp:1564
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Invalid password specified."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"Mot de passe incorrect."
+
+#: Sources/Main.cpp:1565
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Invalid player name specified.\n"
+"Please check your profile and try it again."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"Nom d'utilisateur invalide.\n"
+"Vérifiez votre profil et réessayez."
+
+#: Sources/Main.cpp:1566
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"This client is not in the server whitelist.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"Ce client n'est pas autorisé à se connecter.\n"
+"Contactez un administrateur du serveur pour plus d'information."
+
+#: Sources/Main.cpp:1567
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Server requires 3rd party authentication provider.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"Ce serveur nécessite une authentification tierce.\n"
+"Contactez un administrateur du serveur pour plus d'information."
+
+#: Sources/Main.cpp:1568
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Server capacity is full.\n"
+"Please try it later."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"Le serveur est plein.\n"
+"Essayez à nouveau plus tard."
+
+#: Sources/Main.cpp:1569
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Server is not in a state where it can process your request.\n"
+"Please try again in a few seconds."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"Le serveur n'est pas dans l'état de traiter votre demande.\n"
+"Réessayez à nouveau dans quelques secondes."
+
+#: Sources/Main.cpp:1570
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down.\n"
+"Please try it later."
+msgstr ""
+"\f[c:#704a4a]La connexion a été interrompue !\f[/c]\n"
+"\n"
+"\n"
+"Le serveur s'arrête.\n"
+"Essayez à nouveau plus tard."
+
+#: Sources/Main.cpp:1571
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down for maintenance.\n"
+"Please try it again later."
+msgstr ""
+"\f[c:#704a4a]La connexion a été interrompue !\f[/c]\n"
+"\n"
+"\n"
+"Le serveur s'arrête pour maintenance.\n"
+"Essayez à nouveau plus tard."
+
+#: Sources/Main.cpp:1572
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down for reconfiguration.\n"
+"Please try it again later."
+msgstr ""
+"\f[c:#704a4a]La connexion a été interrompue !\f[/c]\n"
+"\n"
+"\n"
+"Le serveur s'arrête pour reconfiguration.\n"
+"Essayez à nouveau plus tard."
+
+#: Sources/Main.cpp:1573
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down for update.\n"
+"Please check your client version and try it again in a minute."
+msgstr ""
+"\f[c:#704a4a]La connexion a été interrompue !\f[/c]\n"
+"\n"
+"\n"
+"Le serveur s'arrête pour mise à jour.\n"
+"Vérifiez la version de votre client et essayez à nouveau dans une minute."
+
+#: Sources/Main.cpp:1574
+msgid ""
+"\f[c:#704a4a]Connection has been lost!\f[/c]\n"
+"\n"
+"\n"
+"Please try it again and if the problem persists,\n"
+"check your network connection."
+msgstr ""
+"\f[c:#704a4a]La connexion a été perdue!\f[/c]\n"
+"\n"
+"\n"
+"Réessayez à nouveau et si le problème persiste,\n"
+"vérifiez votre connexion à Internet."
+
+#: Sources/Main.cpp:1575
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"The server is not responding for connection request."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"Le serveur ne répond pas aux demandes de connexion."
+
+#: Sources/Main.cpp:1576
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"You have been \f[c:#907050]kicked\f[/c] off the server.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]La connexion a été interrompue !\f[/c]\n"
+"\n"
+"\n"
+"Vous avez été \f[c:#907050]éjecté\f[/c] du serveur.\n"
+"Contactez un administrateur du serveur pour plus d'information."
+
+#: Sources/Main.cpp:1577
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"You have been \f[c:#725040]banned\f[/c] off the server.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]La connexion a été interrompue !\f[/c]\n"
+"\n"
+"\n"
+"Vous avez été \f[c:#725040]banni\f[/c] du serveur.\n"
+"Contactez un administrateur du serveur pour plus d'information."
+
+#: Sources/Main.cpp:1578
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Cheating detected."
+msgstr ""
+"\f[c:#704a4a]La connexion a été interrompue !\f[/c]\n"
+"\n"
+"\n"
+"Triche détectée."
+
+#: Sources/Main.cpp:1579
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Your client doesn't contain required assets.\n"
+"Please download the required files and try it again."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"Votre client ne contient pas les éléments requis.\n"
+"Veuillez télécharger les fichiers nécessaires et réessayez."
+
+#: Sources/Main.cpp:1580
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"The server has disconnected you due to inactivity."
+msgstr ""
+"\f[c:#704a4a]La connexion a été interrompue !\f[/c]\n"
+"\n"
+"\n"
+"Le serveur vous a déconnecté pour cause d'inactivité."
+
+#: Sources/Main.cpp:1910
+#, c++-format
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Your client doesn't contain level \"{}\".\n"
+"Please download the required files and try it again."
+msgstr ""
+"\f[c:#704a4a]Impossible de se connecter au serveur !\f[/c]\n"
+"\n"
+"\n"
+"Votre client ne contient pas le niveau \"{}\".\n"
+"Veuillez télécharger les fichiers nécessaires et réessayez."
+
+#~ msgid "Short"
+#~ msgstr "Court"

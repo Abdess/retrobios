@@ -1,0 +1,767 @@
+{
+    " episode_title": "Первое приключение",
+    " episode_world": "world.wldx",
+    "bonus1.lvlx": {
+        "title": "",
+        "title-orig": "Super Firepower Spot",
+        "title-u": true
+    },
+    "bonus10.lvlx": {
+        "title": "",
+        "title-orig": "Phat Loot Friday",
+        "title-u": true
+    },
+    "bonus11.lvlx": {
+        "title": "",
+        "title-orig": "The Device",
+        "title-u": true
+    },
+    "bonus12.lvlx": {
+        "title": "",
+        "title-orig": "Even Moar Freebies",
+        "title-u": true
+    },
+    "bonus2.lvlx": {
+        "title": "",
+        "title-orig": "Secret Squirrel Area",
+        "title-u": true
+    },
+    "bonus3.lvlx": {
+        "title": "",
+        "title-orig": "Bouncy Bounce Bonus Spot",
+        "title-u": true
+    },
+    "bonus4.lvlx": {
+        "title": "",
+        "title-orig": "Sibling Rivalry Area",
+        "title-u": true
+    },
+    "bonus5.lvlx": {
+        "title": "",
+        "title-orig": "Top Secret Area",
+        "title-u": true
+    },
+    "bonus6.lvlx": {
+        "title": "",
+        "title-orig": "Freebie Zone",
+        "title-u": true
+    },
+    "bonus7.lvlx": {
+        "title": "",
+        "title-orig": "PK Switch",
+        "title-u": true
+    },
+    "bonus8.lvlx": {
+        "title": "",
+        "title-orig": "Pit Stop",
+        "title-u": true
+    },
+    "bonus9.lvlx": {
+        "title": "",
+        "title-orig": "Good Ship Lifestyle",
+        "title-u": true
+    },
+    "dungeon1.lvlx": {
+        "title": "",
+        "title-orig": "Dungeon of Hurt",
+        "title-u": true
+    },
+    "dungeon2.lvlx": {
+        "title": "",
+        "title-orig": "Dungeon of Agony",
+        "title-u": true
+    },
+    "dungeon3.lvlx": {
+        "title": "",
+        "title-orig": "Dungeon of Strange Happenings",
+        "title-u": true
+    },
+    "dungeon4.lvlx": {
+        "title": "",
+        "title-orig": "Dungeon of Inappropriate Phrases",
+        "title-u": true
+    },
+    "intro.lvlx": {
+        "events": [
+            {
+                "i": 4,
+                "msg": "Добро пожаловать в наш мир, странник!",
+                "orig": "Welcome to our World, Stranger!"
+            },
+            {
+                "i": 5,
+                "msg": "Пожалуйста, проследуйте за указателями, чтобы войти в мир и начать ваше приклю-\nчение.",
+                "orig": "Please follow arrow pointers to enter the world to start your adventure here!"
+            },
+            {
+                "i": 6,
+                "msg": "Чтобы входить в двери и говорить с персонажами, нажмите кнопку ВВЕРХ, стоя перед дверью или перед персонажем, у которого виден восклицательный знак.",
+                "orig": "To enter doors or talk to an NPC, press the UP key while you are in front of a door or an NPC with an exclamation mark."
+            },
+            {
+                "i": 8,
+                "msg": "Эй, кто-то убил бандита! Это спасение!",
+                "orig": "Hey, you just killed a bandit! You saved us!"
+            },
+            {
+                "i": 9,
+                "msg": "Добро пожаловать к нам! Ты, кажется, наш Мессия! У нас очень большая беда: наше королевство было захвачено беспощадным Мистером Хеллом, он послал против нас свою огромную армию! Мы устали от них! Пожалуйста, спаси наше королевство от зла!",
+                "orig": "Welcome to us! You are probably our Messiah! We have very big trouble: our kingdom was seized by the merciless Mr. Hell, sending his huge army against us! We are tired of them! Please save our kingdom from the Evil!"
+            },
+            {
+                "i": 11,
+                "msg": "Приветствую, и добро пожаловать в игру! Данная инструкция расскажет об основных персонажах и поможет адаптировать управление, и познакомиться с основами.",
+                "orig": "Hello, and welcome to the game! This instruction will explain the main characters, allow you to adapt controles (SIC), and see some basics."
+            },
+            {
+                "i": 12,
+                "msg": "",
+                "orig": "This is Demo, an armless cycloptic demon, alien minion, and command center operator.",
+                "u": true
+            }
+        ],
+        "npc": [
+            {
+                "i": 0,
+                "orig": "Huh? I was silent ... What am I doing here? I'm waiting for when they let me go home ... What is the voice here? Are you sure you're not crazy? Here in the hall there is absolute silence.",
+                "talk": "А? Я молчал как мышь ... Что я здесь делаю? Я жду, когда мне разрешат вер-\nнуться домой ... Что за голос тут? У тебя точно всё с головой в порядке? В этом зале абсолютная гро-\nбовая тишина."
+            },
+            {
+                "i": 4,
+                "orig": "Do you still don't know how to enter pipes? Just press DOWN while you standing on it.",
+                "talk": "Ты до сих пор не знаешь, как залезать в трубы? Просто нажми ВНИЗ, стоя на трубе."
+            },
+            {
+                "i": 6,
+                "orig": "Enter this door to take the basic tutorial, or go forward to begin the adventure!",
+                "talk": "Войди в эту дверь, чтобы пройти базовое обучение, или беги вперёд, чтобы начать приключение!"
+            },
+            {
+                "i": 8,
+                "orig": "Please use this telephone to take tips: press JUMP while you standing under it.",
+                "talk": "",
+                "u": true
+            },
+            {
+                "i": 10,
+                "orig": "Please grab this blue block and throw it up. Press DOWN while standing on it, and press RUN button to grab it. Then, press UP key and release the RUN button to throw the block up.",
+                "talk": "",
+                "u": true
+            }
+        ],
+        "title": "Введение",
+        "title-orig": "Intro"
+    },
+    "level1.lvlx": {
+        "title": "",
+        "title-orig": "Super Easy Level",
+        "title-u": true
+    },
+    "level10.lvlx": {
+        "title": "",
+        "title-orig": "Mega Underground Zone",
+        "title-u": true
+    },
+    "level11.lvlx": {
+        "npc": [
+            {
+                "i": 137,
+                "orig": "Once you grab the pistol you better hold on tight!",
+                "talk": "Как только возьмёшь пистолет, держи его крепко!"
+            }
+        ],
+        "title": "",
+        "title-orig": "Brick Hole Massacre",
+        "title-u": true
+    },
+    "level12.lvlx": {
+        "title": "",
+        "title-orig": "Super Pipe Action Town",
+        "title-u": true
+    },
+    "level13.lvlx": {
+        "title": "",
+        "title-orig": "Super Nostalgia World",
+        "title-u": true
+    },
+    "level14.lvlx": {
+        "title": "",
+        "title-orig": "Jumpy Hoppy Goopa Zone",
+        "title-u": true
+    },
+    "level15.lvlx": {
+        "title": "",
+        "title-orig": "Pwnhammer",
+        "title-u": true
+    },
+    "level16.lvlx": {
+        "npc": [
+            {
+                "i": 388,
+                "orig": "Stomp this P thing to turn some blocks into coins and coins into blocks for 12 seconds. You can grab and move it.\n\nUse it WISELY!",
+                "talk": "Раздави эту букву P, чтобы превратить некоторые блоки в монетки, а монетки в блоки на 12 секунд. Её можно подобрать и перетащить.\n\nИспользуй её МУДРО!"
+            }
+        ],
+        "title": "",
+        "title-orig": "Switch Action Zone",
+        "title-u": true
+    },
+    "level17.lvlx": {
+        "title": "",
+        "title-orig": "Panic Zone",
+        "title-u": true
+    },
+    "level18.lvlx": {
+        "title": "",
+        "title-orig": "Painful Playland",
+        "title-u": true
+    },
+    "level19.lvlx": {
+        "title": "",
+        "title-orig": "Flying Demo Zone",
+        "title-u": true
+    },
+    "level2.lvlx": {
+        "title": "",
+        "title-orig": "Grassy Grass Hills",
+        "title-u": true
+    },
+    "level20.lvlx": {
+        "title": "",
+        "title-orig": "Go Go Furba",
+        "title-u": true
+    },
+    "level21.lvlx": {
+        "title": "",
+        "title-orig": "The Great Fish Fiasco",
+        "title-u": true
+    },
+    "level22.lvlx": {
+        "title": "",
+        "title-orig": "Hurtful Bananas",
+        "title-u": true
+    },
+    "level23.lvlx": {
+        "title": "",
+        "title-orig": "Series of Bananas",
+        "title-u": true
+    },
+    "level24.lvlx": {
+        "title": "",
+        "title-orig": "A Short Level",
+        "title-u": true
+    },
+    "level25.lvlx": {
+        "title": "",
+        "title-orig": "Pwnhammer Duex",
+        "title-u": true
+    },
+    "level26.lvlx": {
+        "title": "",
+        "title-orig": "The Suck",
+        "title-u": true
+    },
+    "level27.lvlx": {
+        "title": "",
+        "title-orig": "The Invasion",
+        "title-u": true
+    },
+    "level28.lvlx": {
+        "title": "",
+        "title-orig": "The Hot Sock",
+        "title-u": true
+    },
+    "level29.lvlx": {
+        "title": "",
+        "title-orig": "Desert Maze",
+        "title-u": true
+    },
+    "level3.lvlx": {
+        "title": "",
+        "title-orig": "Green Savage Zone",
+        "title-u": true
+    },
+    "level30.lvlx": {
+        "title": "",
+        "title-orig": "Pyramid of Fail",
+        "title-u": true
+    },
+    "level31.lvlx": {
+        "title": "",
+        "title-orig": "Pyramid Action Machine",
+        "title-u": true
+    },
+    "level32.lvlx": {
+        "title": "",
+        "title-orig": "Sandy Ghosty Bullet Town",
+        "title-u": true
+    },
+    "level33.lvlx": {
+        "title": "",
+        "title-orig": "The Invasion Number Two",
+        "title-u": true
+    },
+    "level34.lvlx": {
+        "title": "",
+        "title-orig": "The Rawest Forest",
+        "title-u": true
+    },
+    "level35.lvlx": {
+        "title": "",
+        "title-orig": "The King of Plants",
+        "title-u": true
+    },
+    "level36.lvlx": {
+        "title": "",
+        "title-orig": "Underground Battle Zone",
+        "title-u": true
+    },
+    "level37.lvlx": {
+        "title": "",
+        "title-orig": "DO NOT ENTER",
+        "title-u": true
+    },
+    "level38.lvlx": {
+        "title": "",
+        "title-orig": "Butterfly War Zone",
+        "title-u": true
+    },
+    "level39.lvlx": {
+        "title": "",
+        "title-orig": "Shell Hell",
+        "title-u": true
+    },
+    "level4.lvlx": {
+        "title": "",
+        "title-orig": "Megaton Pipe Area",
+        "title-u": true
+    },
+    "level40.lvlx": {
+        "title": "",
+        "title-orig": "The Third Invasion",
+        "title-u": true
+    },
+    "level41.lvlx": {
+        "title": "",
+        "title-orig": "The Water lies",
+        "title-u": true
+    },
+    "level42.lvlx": {
+        "title": "",
+        "title-orig": "Boil the world in a pan!",
+        "title-u": true
+    },
+    "level43.lvlx": {
+        "title": "",
+        "title-orig": "Air Raid",
+        "title-u": true
+    },
+    "level44.lvlx": {
+        "title": "",
+        "title-orig": "The Revenge of Pwnhammer",
+        "title-u": true
+    },
+    "level45.lvlx": {
+        "title": "",
+        "title-orig": "Crushing Hazard",
+        "title-u": true
+    },
+    "level46.lvlx": {
+        "title": "",
+        "title-orig": "Surival of the Fastest",
+        "title-u": true
+    },
+    "level47.lvlx": {
+        "title": "",
+        "title-orig": "Easymode Tanks",
+        "title-u": true
+    },
+    "level48.lvlx": {
+        "title": "",
+        "title-orig": "Hardmode Tanks",
+        "title-u": true
+    },
+    "level49.lvlx": {
+        "title": "",
+        "title-orig": "The King of Hell",
+        "title-u": true
+    },
+    "level5.lvlx": {
+        "title": "",
+        "title-orig": "Floating Brick Niche",
+        "title-u": true
+    },
+    "level6.lvlx": {
+        "events": [
+            {
+                "i": 3,
+                "msg": "Чтобы подбирать врагов, нужно встать им на голову, нажать ВНИЗ, и потом зажать БЕГ. Кнопку БЕГ нужно удерживать, чтобы переносить врага, и отпустить кнопку, чтобы его швырнуть вперёд.",
+                "orig": "Hold DOWN and press the RUN button to grab enemies while standing on them."
+            }
+        ],
+        "title": "",
+        "title-orig": "Dream Nightmare Land",
+        "title-u": true
+    },
+    "level7.lvlx": {
+        "title": "",
+        "title-orig": "Misplaced Pipehammer Maze",
+        "title-u": true
+    },
+    "level8.lvlx": {
+        "title": "",
+        "title-orig": "Super Awesome Land",
+        "title-u": true
+    },
+    "level9.lvlx": {
+        "npc": [
+            {
+                "i": 101,
+                "orig": "Get out evil spirits!",
+                "talk": "Изыдите злые духи!"
+            }
+        ],
+        "title": "",
+        "title-orig": "Field of Bitey Plants",
+        "title-u": true
+    },
+    "world.wldx": {
+        "credits": "Оригинал:\nRedigit\n\nОбновления, исправления, \nмодификации:\nWohlstand\n\nПеревод на русский:\nWohlstand",
+        "credits-n": "Оригинал:\nRedigit\n\nОбновления, исправления, \nмодификации:\nWohlstand\n\nПеревод на русский:\nWohlstand",
+        "credits-orig": "Original version by Redigit\nUpdated, fixed and modified by Wohlstand\n",
+        "levels": [
+            {
+                "i": 0,
+                "orig": "Panic Zone",
+                "tit": "Зона паники"
+            },
+            {
+                "i": 1,
+                "orig": "Green Savage Zone",
+                "tit": "Дикая зелёная зона"
+            },
+            {
+                "i": 2,
+                "orig": "Megaton Pipe Area",
+                "tit": "Область мегатонных труб"
+            },
+            {
+                "i": 3,
+                "orig": "Floating Brick Niche",
+                "tit": "Ниша парящих кирпичей"
+            },
+            {
+                "i": 4,
+                "orig": "Super Firepower Spot",
+                "tit": "Точка суперогненной силы"
+            },
+            {
+                "i": 5,
+                "orig": "Grassy Grass Hills",
+                "tit": "Травянисто-травянистые холмы"
+            },
+            {
+                "i": 6,
+                "orig": "Switch Action Zone",
+                "tit": "Зона рабочих переключателей"
+            },
+            {
+                "i": 7,
+                "orig": "Dungeon of Hurt",
+                "tit": "Поздемелье боли"
+            },
+            {
+                "i": 8,
+                "orig": "Misplaced Pipehammer Maze",
+                "tit": "Неуместный трубный лабиринт"
+            },
+            {
+                "i": 9,
+                "orig": "Dream Nightmare Land",
+                "tit": "Страна кошмаров"
+            },
+            {
+                "i": 10,
+                "orig": "Secret Squirrel Area",
+                "tit": "Секретная беличья зона"
+            },
+            {
+                "i": 11,
+                "orig": "Super Easy Level",
+                "tit": "Супер-лёгкий уровень"
+            },
+            {
+                "i": 12,
+                "orig": "Bouncy Bounce Bonus Spot",
+                "tit": "Прыгуче-прыгучая бонусная точка"
+            },
+            {
+                "i": 13,
+                "orig": "Field of Bitey Plants",
+                "tit": "Поле кусачих растений"
+            },
+            {
+                "i": 14,
+                "orig": "Super Awesome Land",
+                "tit": "Супер-потрясающая земля"
+            },
+            {
+                "i": 15,
+                "orig": "Brick Hole Massacre",
+                "tit": "Резня в кирпичной яме"
+            },
+            {
+                "i": 16,
+                "orig": "Super Pipe Action Town",
+                "tit": "Супер-трубный городок"
+            },
+            {
+                "i": 17,
+                "orig": "The Invasion",
+                "tit": "Вторжение"
+            },
+            {
+                "i": 18,
+                "orig": "Dungeon of Agony",
+                "tit": "Подземелье агонии"
+            },
+            {
+                "i": 19,
+                "orig": "Super Nostalgia World",
+                "tit": "Мир супер-ностальгии"
+            },
+            {
+                "i": 20,
+                "orig": "Mega Underground Zone",
+                "tit": "Мега-поздемная зона"
+            },
+            {
+                "i": 21,
+                "orig": "Jumpy Hoppy Goopa Zone",
+                "tit": "Зона невных и прыгучих гуп"
+            },
+            {
+                "i": 22,
+                "orig": "Sibling Rivalry Area",
+                "tit": "Зона братского сопернчиества"
+            },
+            {
+                "i": 23,
+                "orig": "Top Secret Area",
+                "tit": "Совершенно секретная зона"
+            },
+            {
+                "i": 24,
+                "orig": "Dungeon of Inappropriate Phrases",
+                "tit": "Подземелье неуместных фраз"
+            },
+            {
+                "i": 25,
+                "orig": "Painful Playland",
+                "tit": "Болезненная игровая страна"
+            },
+            {
+                "i": 26,
+                "orig": "Dungeon of Strange Happenings",
+                "tit": "Поздемелье странных вещей"
+            },
+            {
+                "i": 27,
+                "orig": "A Short Level",
+                "tit": "Короткий уровень"
+            },
+            {
+                "i": 28,
+                "orig": "The Great Fish Fiasco",
+                "tit": "Великое рыбное фиаско"
+            },
+            {
+                "i": 29,
+                "orig": "Flying Demo Zone",
+                "tit": "Зона летающей Дэмо"
+            },
+            {
+                "i": 30,
+                "orig": "Freebie Zone",
+                "tit": "Зона халявы"
+            },
+            {
+                "i": 31,
+                "orig": "Go Go Furba",
+                "tit": "Вперёд, Фюрба"
+            },
+            {
+                "i": 32,
+                "orig": "Series of Bananas",
+                "tit": "Серия бананов"
+            },
+            {
+                "i": 33,
+                "orig": "Good Ship Lifestyle",
+                "tit": "Хороша корабельная жизнь"
+            },
+            {
+                "i": 34,
+                "orig": "PK Switch",
+                "tit": "ПК-переключатель"
+            },
+            {
+                "i": 35,
+                "orig": "Hurtful Bananas",
+                "tit": "Болезненные бананы"
+            },
+            {
+                "i": 36,
+                "orig": "The Suck",
+                "tit": "Полный отстой"
+            },
+            {
+                "i": 37,
+                "orig": "Pwnhammer",
+                "tit": "Убеймолот"
+            },
+            {
+                "i": 38,
+                "orig": "Start game here",
+                "tit": "Начало игры здесь"
+            },
+            {
+                "i": 39,
+                "orig": "Pwnhammer Duex",
+                "tit": "Убеймолот: Дубль Два"
+            },
+            {
+                "i": 40,
+                "orig": "Pyramid of Fail",
+                "tit": "Пирамида поражения"
+            },
+            {
+                "i": 41,
+                "orig": "The Hot Sock",
+                "tit": "Горячий носок"
+            },
+            {
+                "i": 42,
+                "orig": "Desert Maze",
+                "tit": "Пустынный лабиринт"
+            },
+            {
+                "i": 43,
+                "orig": "Sandy Ghosty Bullet Town",
+                "tit": "Песчаный пулегород с приведениями"
+            },
+            {
+                "i": 44,
+                "orig": "Pyramid Action Machine",
+                "tit": "Пирамидная машина"
+            },
+            {
+                "i": 45,
+                "orig": "Pit Stop",
+                "tit": "Пит-стоп"
+            },
+            {
+                "i": 46,
+                "orig": "The Invasion Number Two",
+                "tit": "Вторжение номер два"
+            },
+            {
+                "i": 47,
+                "orig": "Phat Loot Friday",
+                "tit": "Шикарная пятничная добыча"
+            },
+            {
+                "i": 48,
+                "orig": "The Rawest Forest",
+                "tit": "Свежайший лес"
+            },
+            {
+                "i": 49,
+                "orig": "The King of Plants",
+                "tit": "Король растений"
+            },
+            {
+                "i": 50,
+                "orig": "Underground Battle Zone",
+                "tit": "Подземная боевая арена"
+            },
+            {
+                "i": 51,
+                "orig": "DO NOT ENTER",
+                "tit": "НЕ ВХОДИТЬ"
+            },
+            {
+                "i": 52,
+                "orig": "Shell Hell",
+                "tit": "Ад панцирей"
+            },
+            {
+                "i": 53,
+                "orig": "Butterfly War Zone",
+                "tit": "Поле боя с бабочками"
+            },
+            {
+                "i": 54,
+                "orig": "Air Raid",
+                "tit": "Воздушный налёт"
+            },
+            {
+                "i": 55,
+                "orig": "The Third Invasion",
+                "tit": "Третье вторжение"
+            },
+            {
+                "i": 56,
+                "orig": "Even Moar Freebies",
+                "tit": "Ещё больше халявы"
+            },
+            {
+                "i": 57,
+                "orig": "The Water lies",
+                "tit": "Вода лжёт"
+            },
+            {
+                "i": 58,
+                "orig": "Boil the world in a pan!",
+                "tit": "Сварим весь мир в кастрюле!"
+            },
+            {
+                "i": 59,
+                "orig": "The Device",
+                "tit": "Устройство"
+            },
+            {
+                "i": 60,
+                "orig": "The Revenge of Pwnhammer",
+                "tit": "Мест убеймолота"
+            },
+            {
+                "i": 61,
+                "orig": "Crushing Hazard",
+                "tit": "Опасность раздавливания"
+            },
+            {
+                "i": 62,
+                "orig": "Surival of the Fastest",
+                "tit": "Выживет быстрейший"
+            },
+            {
+                "i": 63,
+                "orig": "Hardmode Tanks",
+                "tit": "Танки повышенной сложности"
+            },
+            {
+                "i": 64,
+                "orig": "Easymode Tanks",
+                "tit": "Танки лёгкой сложности"
+            },
+            {
+                "i": 65,
+                "orig": "The King of Hell",
+                "tit": "Король Ада"
+            }
+        ],
+        "title": "Первое приключение",
+        "title-orig": "The first adventure"
+    }
+}

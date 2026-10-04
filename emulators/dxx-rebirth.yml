@@ -242,3 +242,98 @@ files:
     required: false
     description: "Descent 2 misc cinematics (high-res)"
     source_ref: "d2x-rebirth/main/movie.cpp:93-95 (movielib_files), 660 (name format)"
+
+  # ------ Add-on archives ------
+  # add_archives_to_search_path() mounts every *.dxa found at the root of
+  # the search path; the code names the extension, not the files. The names
+  # below are the add-ons the project publishes. Each build has its own data
+  # directory (d1x-rebirth, d2x-rebirth), so an archive is seen by one game.
+  - name: "d1xr-hires.dxa"
+    path: "d1x-rebirth/d1xr-hires.dxa"
+    system: descent
+    category: game_data
+    required: false
+    description: "High resolution title, briefing and ending screens for Descent 1"
+    note: "Mounted at startup when present; its files extend or replace the game content."
+    source_ref: "common/misc/physfsx.cpp:23, 377-394, similar/main/inferno.cpp:603, SConstruct:4362"
+
+  - name: "d1xr-briefings-ger.dxa"
+    path: "d1x-rebirth/d1xr-briefings-ger.dxa"
+    system: descent
+    category: game_data
+    required: false
+    description: "German briefing texts for Descent 1"
+    note: "Mounted at startup when present; its files extend or replace the game content."
+    source_ref: "common/misc/physfsx.cpp:23, 377-394, similar/main/inferno.cpp:603, SConstruct:4362"
+
+  - name: "d1xr-mac-demo-sounds.dxa"
+    path: "d1x-rebirth/d1xr-mac-demo-sounds.dxa"
+    system: descent
+    category: game_data
+    required: false
+    description: "Sound set of the Macintosh Descent 1 demo"
+    note: "Mounted at startup when present; its files extend or replace the game content."
+    source_ref: "common/misc/physfsx.cpp:23, 377-394, similar/main/inferno.cpp:603, SConstruct:4362"
+
+  - name: "d1xr-opl3-music.dxa"
+    path: "d1x-rebirth/d1xr-opl3-music.dxa"
+    system: descent
+    category: game_data
+    required: false
+    description: "Descent 1 music as Ogg Vorbis files, OPL3 rendering"
+    note: "Mounted at startup when present; its files extend or replace the game content."
+    source_ref: "common/misc/physfsx.cpp:23, 377-394, similar/main/inferno.cpp:603, SConstruct:4362"
+
+  - name: "d1xr-sc55-music.dxa"
+    path: "d1x-rebirth/d1xr-sc55-music.dxa"
+    system: descent
+    category: game_data
+    required: false
+    description: "Descent 1 music as Ogg Vorbis files, Roland SC-55 rendering"
+    note: "Mounted at startup when present; its files extend or replace the game content."
+    source_ref: "common/misc/physfsx.cpp:23, 377-394, similar/main/inferno.cpp:603, SConstruct:4362"
+
+  - name: "editor.dxa"
+    path: "d1x-rebirth/editor.dxa"
+    system: descent
+    category: game_data
+    required: false
+    description: "Level editor data for the Descent 1 build"
+    note: "Mounted only by a build with the editor enabled, when the editor opens."
+    source_ref: "similar/editor/med.cpp:367-370, SConstruct:4362"
+
+  - name: "d2xr-briefings-ger.dxa"
+    path: "d2x-rebirth/d2xr-briefings-ger.dxa"
+    system: descent2
+    category: game_data
+    required: false
+    description: "German briefing texts for Descent 2"
+    note: "Mounted at startup when present; its files extend or replace the game content."
+    source_ref: "common/misc/physfsx.cpp:23, 377-394, similar/main/inferno.cpp:603, SConstruct:4362"
+
+  - name: "d2xr-opl3-music.dxa"
+    path: "d2x-rebirth/d2xr-opl3-music.dxa"
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 music as Ogg Vorbis files, OPL3 rendering"
+    note: "Mounted at startup when present; its files extend or replace the game content."
+    source_ref: "common/misc/physfsx.cpp:23, 377-394, similar/main/inferno.cpp:603, SConstruct:4362"
+
+  - name: "d2xr-sc55-music.dxa"
+    path: "d2x-rebirth/d2xr-sc55-music.dxa"
+    system: descent2
+    category: game_data
+    required: false
+    description: "Descent 2 music as Ogg Vorbis files, Roland SC-55 rendering"
+    note: "Mounted at startup when present; its files extend or replace the game content."
+    source_ref: "common/misc/physfsx.cpp:23, 377-394, similar/main/inferno.cpp:603, SConstruct:4362"
+
+  - name: "editor.dxa"
+    path: "d2x-rebirth/editor.dxa"
+    system: descent2
+    category: game_data
+    required: false
+    description: "Level editor data for the Descent 2 build"
+    note: "Mounted only by a build with the editor enabled, when the editor opens."
+    source_ref: "similar/editor/med.cpp:367-370, SConstruct:4362"

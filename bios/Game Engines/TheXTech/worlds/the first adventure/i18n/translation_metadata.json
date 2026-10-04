@@ -1,0 +1,728 @@
+{
+    " episode_title": "The first adventure",
+    " episode_world": "world.wldx",
+    "bonus1.lvlx": {
+        "title": "Super Firepower Spot"
+    },
+    "bonus10.lvlx": {
+        "title": "Phat Loot Friday"
+    },
+    "bonus11.lvlx": {
+        "title": "The Device"
+    },
+    "bonus12.lvlx": {
+        "title": "Even Moar Freebies"
+    },
+    "bonus2.lvlx": {
+        "title": "Secret Squirrel Area"
+    },
+    "bonus3.lvlx": {
+        "title": "Bouncy Bounce Bonus Spot"
+    },
+    "bonus4.lvlx": {
+        "title": "Sibling Rivalry Area"
+    },
+    "bonus5.lvlx": {
+        "title": "Top Secret Area"
+    },
+    "bonus6.lvlx": {
+        "title": "Freebie Zone"
+    },
+    "bonus7.lvlx": {
+        "title": "PK Switch"
+    },
+    "bonus8.lvlx": {
+        "title": "Pit Stop"
+    },
+    "bonus9.lvlx": {
+        "title": "Good Ship Lifestyle"
+    },
+    "dungeon1.lvlx": {
+        "title": "Dungeon of Hurt"
+    },
+    "dungeon2.lvlx": {
+        "title": "Dungeon of Agony"
+    },
+    "dungeon3.lvlx": {
+        "title": "Dungeon of Strange Happenings"
+    },
+    "dungeon4.lvlx": {
+        "title": "Dungeon of Inappropriate Phrases"
+    },
+    "intro.lvlx": {
+        "dialogues": [
+            {
+                "messages": [
+                    "npc-0-talk"
+                ],
+                "note": ""
+            },
+            {
+                "messages": [
+                    "npc-4-talk"
+                ],
+                "note": ""
+            },
+            {
+                "messages": [
+                    "npc-6-talk"
+                ],
+                "note": ""
+            },
+            {
+                "messages": [
+                    "npc-8-talk"
+                ],
+                "note": ""
+            },
+            {
+                "messages": [
+                    "npc-10-talk"
+                ],
+                "note": ""
+            },
+            {
+                "messages": [
+                    "event-4-msg",
+                    "event-5-msg"
+                ],
+                "note": ""
+            },
+            {
+                "messages": [
+                    "event-6-msg"
+                ],
+                "note": ""
+            },
+            {
+                "messages": [
+                    "event-8-msg",
+                    "event-9-msg"
+                ],
+                "note": ""
+            },
+            {
+                "messages": [
+                    "event-11-msg"
+                ],
+                "note": ""
+            },
+            {
+                "messages": [
+                    "event-12-msg"
+                ],
+                "note": ""
+            }
+        ],
+        "events": [
+            {
+                "i": 4,
+                "msg": "Welcome to our World, Stranger!",
+                "trig": 5
+            },
+            {
+                "by-event": [
+                    4
+                ],
+                "i": 5,
+                "msg": "Please follow arrow pointers to enter the world to start your adventure here!"
+            },
+            {
+                "i": 6,
+                "msg": "To enter doors or talk to an NPC, press the UP key while you are in front of a door or an NPC with an exclamation mark."
+            },
+            {
+                "i": 8,
+                "msg": "Hey, you just killed a bandit! You saved us!",
+                "trig": 9
+            },
+            {
+                "by-event": [
+                    8
+                ],
+                "i": 9,
+                "msg": "Welcome to us! You are probably our Messiah! We have very big trouble: our kingdom was seized by the merciless Mr. Hell, sending his huge army against us! We are tired of them! Please save our kingdom from the Evil!"
+            },
+            {
+                "i": 11,
+                "msg": "Hello, and welcome to the game! This instruction will explain the main characters, allow you to adapt controles (SIC), and see some basics."
+            },
+            {
+                "i": 12,
+                "msg": "This is Demo, an armless cycloptic demon, alien minion, and command center operator."
+            }
+        ],
+        "npc": [
+            {
+                "i": 0,
+                "t": 94,
+                "talk": "Huh? I was silent ... What am I doing here? I'm waiting for when they let me go home ... What is the voice here? Are you sure you're not crazy? Here in the hall there is absolute silence."
+            },
+            {
+                "i": 4,
+                "t": 151,
+                "talk": "Do you still don't know how to enter pipes? Just press DOWN while you standing on it."
+            },
+            {
+                "i": 6,
+                "t": 94,
+                "talk": "Enter this door to take the basic tutorial, or go forward to begin the adventure!"
+            },
+            {
+                "i": 8,
+                "t": 94,
+                "talk": "Please use this telephone to take tips: press JUMP while you standing under it."
+            },
+            {
+                "i": 10,
+                "t": 151,
+                "talk": "Please grab this blue block and throw it up. Press DOWN while standing on it, and press RUN button to grab it. Then, press UP key and release the RUN button to throw the block up."
+            }
+        ],
+        "title": "Intro"
+    },
+    "level1.lvlx": {
+        "title": "Super Easy Level"
+    },
+    "level10.lvlx": {
+        "title": "Mega Underground Zone"
+    },
+    "level11.lvlx": {
+        "dialogues": [
+            {
+                "messages": [
+                    "npc-137-talk"
+                ],
+                "note": ""
+            }
+        ],
+        "npc": [
+            {
+                "i": 137,
+                "t": 94,
+                "talk": "Once you grab the pistol you better hold on tight!"
+            }
+        ],
+        "title": "Brick Hole Massacre"
+    },
+    "level12.lvlx": {
+        "title": "Super Pipe Action Town"
+    },
+    "level13.lvlx": {
+        "title": "Super Nostalgia World"
+    },
+    "level14.lvlx": {
+        "title": "Jumpy Hoppy Goopa Zone"
+    },
+    "level15.lvlx": {
+        "title": "Pwnhammer"
+    },
+    "level16.lvlx": {
+        "dialogues": [
+            {
+                "messages": [
+                    "npc-388-talk"
+                ],
+                "note": ""
+            }
+        ],
+        "npc": [
+            {
+                "i": 388,
+                "t": 151,
+                "talk": "Stomp this P thing to turn some blocks into coins and coins into blocks for 12 seconds. You can grab and move it.\n\nUse it WISELY!"
+            }
+        ],
+        "title": "Switch Action Zone"
+    },
+    "level17.lvlx": {
+        "title": "Panic Zone"
+    },
+    "level18.lvlx": {
+        "title": "Painful Playland"
+    },
+    "level19.lvlx": {
+        "title": "Flying Demo Zone"
+    },
+    "level2.lvlx": {
+        "title": "Grassy Grass Hills"
+    },
+    "level20.lvlx": {
+        "title": "Go Go Furba"
+    },
+    "level21.lvlx": {
+        "title": "The Great Fish Fiasco"
+    },
+    "level22.lvlx": {
+        "title": "Hurtful Bananas"
+    },
+    "level23.lvlx": {
+        "title": "Series of Bananas"
+    },
+    "level24.lvlx": {
+        "title": "A Short Level"
+    },
+    "level25.lvlx": {
+        "title": "Pwnhammer Duex"
+    },
+    "level26.lvlx": {
+        "title": "The Suck"
+    },
+    "level27.lvlx": {
+        "title": "The Invasion"
+    },
+    "level28.lvlx": {
+        "title": "The Hot Sock"
+    },
+    "level29.lvlx": {
+        "title": "Desert Maze"
+    },
+    "level3.lvlx": {
+        "title": "Green Savage Zone"
+    },
+    "level30.lvlx": {
+        "title": "Pyramid of Fail"
+    },
+    "level31.lvlx": {
+        "title": "Pyramid Action Machine"
+    },
+    "level32.lvlx": {
+        "title": "Sandy Ghosty Bullet Town"
+    },
+    "level33.lvlx": {
+        "title": "The Invasion Number Two"
+    },
+    "level34.lvlx": {
+        "title": "The Rawest Forest"
+    },
+    "level35.lvlx": {
+        "title": "The King of Plants"
+    },
+    "level36.lvlx": {
+        "title": "Underground Battle Zone"
+    },
+    "level37.lvlx": {
+        "title": "DO NOT ENTER"
+    },
+    "level38.lvlx": {
+        "title": "Butterfly War Zone"
+    },
+    "level39.lvlx": {
+        "title": "Shell Hell"
+    },
+    "level4.lvlx": {
+        "title": "Megaton Pipe Area"
+    },
+    "level40.lvlx": {
+        "title": "The Third Invasion"
+    },
+    "level41.lvlx": {
+        "title": "The Water lies"
+    },
+    "level42.lvlx": {
+        "title": "Boil the world in a pan!"
+    },
+    "level43.lvlx": {
+        "title": "Air Raid"
+    },
+    "level44.lvlx": {
+        "title": "The Revenge of Pwnhammer"
+    },
+    "level45.lvlx": {
+        "title": "Crushing Hazard"
+    },
+    "level46.lvlx": {
+        "title": "Surival of the Fastest"
+    },
+    "level47.lvlx": {
+        "title": "Easymode Tanks"
+    },
+    "level48.lvlx": {
+        "title": "Hardmode Tanks"
+    },
+    "level49.lvlx": {
+        "title": "The King of Hell"
+    },
+    "level5.lvlx": {
+        "title": "Floating Brick Niche"
+    },
+    "level6.lvlx": {
+        "dialogues": [
+            {
+                "messages": [
+                    "event-3-msg"
+                ],
+                "note": ""
+            }
+        ],
+        "events": [
+            {
+                "i": 3,
+                "msg": "Hold DOWN and press the RUN button to grab enemies while standing on them."
+            }
+        ],
+        "title": "Dream Nightmare Land"
+    },
+    "level7.lvlx": {
+        "title": "Misplaced Pipehammer Maze"
+    },
+    "level8.lvlx": {
+        "title": "Super Awesome Land"
+    },
+    "level9.lvlx": {
+        "dialogues": [
+            {
+                "messages": [
+                    "npc-101-talk"
+                ],
+                "note": ""
+            }
+        ],
+        "npc": [
+            {
+                "i": 101,
+                "t": 94,
+                "talk": "Get out evil spirits!"
+            }
+        ],
+        "title": "Field of Bitey Plants"
+    },
+    "use-tr-id": false,
+    "world.wldx": {
+        "credits": "Original version by Redigit\nUpdated, fixed and modified by Wohlstand\n",
+        "credits-n": "Original version by Redigit\nUpdated, fixed and modified by Wohlstand\n",
+        "levels": [
+            {
+                "f": "level17.lvlx",
+                "i": 0,
+                "tit": "Panic Zone"
+            },
+            {
+                "f": "level3.lvlx",
+                "i": 1,
+                "tit": "Green Savage Zone"
+            },
+            {
+                "f": "level4.lvlx",
+                "i": 2,
+                "tit": "Megaton Pipe Area"
+            },
+            {
+                "f": "level5.lvlx",
+                "i": 3,
+                "tit": "Floating Brick Niche"
+            },
+            {
+                "f": "bonus1.lvlx",
+                "i": 4,
+                "tit": "Super Firepower Spot"
+            },
+            {
+                "f": "level2.lvlx",
+                "i": 5,
+                "tit": "Grassy Grass Hills"
+            },
+            {
+                "f": "level16.lvlx",
+                "i": 6,
+                "tit": "Switch Action Zone"
+            },
+            {
+                "f": "dungeon1.lvlx",
+                "i": 7,
+                "tit": "Dungeon of Hurt"
+            },
+            {
+                "f": "level7.lvlx",
+                "i": 8,
+                "tit": "Misplaced Pipehammer Maze"
+            },
+            {
+                "f": "level6.lvlx",
+                "i": 9,
+                "tit": "Dream Nightmare Land"
+            },
+            {
+                "f": "bonus2.lvlx",
+                "i": 10,
+                "tit": "Secret Squirrel Area"
+            },
+            {
+                "f": "level1.lvlx",
+                "i": 11,
+                "tit": "Super Easy Level"
+            },
+            {
+                "f": "bonus3.lvlx",
+                "i": 12,
+                "tit": "Bouncy Bounce Bonus Spot"
+            },
+            {
+                "f": "level9.lvlx",
+                "i": 13,
+                "tit": "Field of Bitey Plants"
+            },
+            {
+                "f": "level8.lvlx",
+                "i": 14,
+                "tit": "Super Awesome Land"
+            },
+            {
+                "f": "level11.lvlx",
+                "i": 15,
+                "tit": "Brick Hole Massacre"
+            },
+            {
+                "f": "level12.lvlx",
+                "i": 16,
+                "tit": "Super Pipe Action Town"
+            },
+            {
+                "f": "level27.lvlx",
+                "i": 17,
+                "tit": "The Invasion"
+            },
+            {
+                "f": "dungeon2.lvlx",
+                "i": 18,
+                "tit": "Dungeon of Agony"
+            },
+            {
+                "f": "level13.lvlx",
+                "i": 19,
+                "tit": "Super Nostalgia World"
+            },
+            {
+                "f": "level10.lvlx",
+                "i": 20,
+                "tit": "Mega Underground Zone"
+            },
+            {
+                "f": "level14.lvlx",
+                "i": 21,
+                "tit": "Jumpy Hoppy Goopa Zone"
+            },
+            {
+                "f": "bonus4.lvlx",
+                "i": 22,
+                "tit": "Sibling Rivalry Area"
+            },
+            {
+                "f": "bonus5.lvlx",
+                "i": 23,
+                "tit": "Top Secret Area"
+            },
+            {
+                "f": "dungeon4.lvlx",
+                "i": 24,
+                "tit": "Dungeon of Inappropriate Phrases"
+            },
+            {
+                "f": "level18.lvlx",
+                "i": 25,
+                "tit": "Painful Playland"
+            },
+            {
+                "f": "dungeon3.lvlx",
+                "i": 26,
+                "tit": "Dungeon of Strange Happenings"
+            },
+            {
+                "f": "level24.lvlx",
+                "i": 27,
+                "tit": "A Short Level"
+            },
+            {
+                "f": "level21.lvlx",
+                "i": 28,
+                "tit": "The Great Fish Fiasco"
+            },
+            {
+                "f": "level19.lvlx",
+                "i": 29,
+                "tit": "Flying Demo Zone"
+            },
+            {
+                "f": "bonus6.lvlx",
+                "i": 30,
+                "tit": "Freebie Zone"
+            },
+            {
+                "f": "level20.lvlx",
+                "i": 31,
+                "tit": "Go Go Furba"
+            },
+            {
+                "f": "level23.lvlx",
+                "i": 32,
+                "tit": "Series of Bananas"
+            },
+            {
+                "f": "bonus9.lvlx",
+                "i": 33,
+                "tit": "Good Ship Lifestyle"
+            },
+            {
+                "f": "bonus7.lvlx",
+                "i": 34,
+                "tit": "PK Switch"
+            },
+            {
+                "f": "level22.lvlx",
+                "i": 35,
+                "tit": "Hurtful Bananas"
+            },
+            {
+                "f": "level26.lvlx",
+                "i": 36,
+                "tit": "The Suck"
+            },
+            {
+                "f": "level15.lvlx",
+                "i": 37,
+                "tit": "Pwnhammer"
+            },
+            {
+                "f": "intro.lvlx",
+                "i": 38,
+                "tit": "Start game here"
+            },
+            {
+                "f": "level25.lvlx",
+                "i": 39,
+                "tit": "Pwnhammer Duex"
+            },
+            {
+                "f": "level30.lvlx",
+                "i": 40,
+                "tit": "Pyramid of Fail"
+            },
+            {
+                "f": "level28.lvlx",
+                "i": 41,
+                "tit": "The Hot Sock"
+            },
+            {
+                "f": "level29.lvlx",
+                "i": 42,
+                "tit": "Desert Maze"
+            },
+            {
+                "f": "level32.lvlx",
+                "i": 43,
+                "tit": "Sandy Ghosty Bullet Town"
+            },
+            {
+                "f": "level31.lvlx",
+                "i": 44,
+                "tit": "Pyramid Action Machine"
+            },
+            {
+                "f": "bonus8.lvlx",
+                "i": 45,
+                "tit": "Pit Stop"
+            },
+            {
+                "f": "level33.lvlx",
+                "i": 46,
+                "tit": "The Invasion Number Two"
+            },
+            {
+                "f": "bonus10.lvlx",
+                "i": 47,
+                "tit": "Phat Loot Friday"
+            },
+            {
+                "f": "level34.lvlx",
+                "i": 48,
+                "tit": "The Rawest Forest"
+            },
+            {
+                "f": "level35.lvlx",
+                "i": 49,
+                "tit": "The King of Plants"
+            },
+            {
+                "f": "level36.lvlx",
+                "i": 50,
+                "tit": "Underground Battle Zone"
+            },
+            {
+                "f": "level37.lvlx",
+                "i": 51,
+                "tit": "DO NOT ENTER"
+            },
+            {
+                "f": "level39.lvlx",
+                "i": 52,
+                "tit": "Shell Hell"
+            },
+            {
+                "f": "level38.lvlx",
+                "i": 53,
+                "tit": "Butterfly War Zone"
+            },
+            {
+                "f": "level43.lvlx",
+                "i": 54,
+                "tit": "Air Raid"
+            },
+            {
+                "f": "level40.lvlx",
+                "i": 55,
+                "tit": "The Third Invasion"
+            },
+            {
+                "f": "bonus12.lvlx",
+                "i": 56,
+                "tit": "Even Moar Freebies"
+            },
+            {
+                "f": "level41.lvlx",
+                "i": 57,
+                "tit": "The Water lies"
+            },
+            {
+                "f": "level42.lvlx",
+                "i": 58,
+                "tit": "Boil the world in a pan!"
+            },
+            {
+                "f": "bonus11.lvlx",
+                "i": 59,
+                "tit": "The Device"
+            },
+            {
+                "f": "level44.lvlx",
+                "i": 60,
+                "tit": "The Revenge of Pwnhammer"
+            },
+            {
+                "f": "level45.lvlx",
+                "i": 61,
+                "tit": "Crushing Hazard"
+            },
+            {
+                "f": "level46.lvlx",
+                "i": 62,
+                "tit": "Surival of the Fastest"
+            },
+            {
+                "f": "level48.lvlx",
+                "i": 63,
+                "tit": "Hardmode Tanks"
+            },
+            {
+                "f": "level47.lvlx",
+                "i": 64,
+                "tit": "Easymode Tanks"
+            },
+            {
+                "f": "level49.lvlx",
+                "i": 65,
+                "tit": "The King of Hell"
+            }
+        ],
+        "title": "The first adventure"
+    }
+}

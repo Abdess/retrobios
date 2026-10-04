@@ -1,0 +1,15 @@
+{
+    "character": {
+        "name1": "晨汐",
+        "name2": "愛麗絲",
+        "name3": "酷德",
+        "name4": "勞考",
+        "name5": "希斯"
+    },
+    "objects": {
+        "wordFails": "失敗次數",
+        "wordStarAccusativeDualOrCounter": "顆",
+        "wordStarAccusativePlural": "韭蔥",
+        "wordStarAccusativeSingular": "韭蔥"
+    }
+}

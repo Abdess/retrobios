@@ -1,0 +1,15 @@
+{
+    "character": {
+        "name1": "Demo",
+        "name2": "Iris",
+        "name3": "Kood",
+        "name4": "Raocow",
+        "name5": "Sheath"
+    },
+    "objects": {
+        "wordFails": "DEMOS",
+        "wordStarAccusativeDualOrCounter": "alhos-porós",
+        "wordStarAccusativePlural": "alhos-porós",
+        "wordStarAccusativeSingular": "alho-poró"
+    }
+}

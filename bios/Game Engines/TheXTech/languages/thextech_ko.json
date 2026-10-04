@@ -1,0 +1,874 @@
+{
+    "editor": {
+        "layers": {
+            "promptLayerName": "레이어 이름",
+            "label": "레이어:",
+            "deletion": {
+                "header": "레이어 {0} 삭제 중",
+                "confirmDelete": "아니요: *모든 콘텐츠 삭제*",
+                "preserveLayerContents": "레이어 내용을 보존하겠습니까?",
+                "confirmPreserve": "예: 기본 레이어로 이동",
+                "cancel": "취소: 레이어를 삭제하지 않음"
+            },
+            "header": "레이어:",
+            "labelAttachedLayer": "첨부 레이어:",
+            "labelMoveLayer": "이동 레이어:",
+            "desc": {
+                "att": "NPC가 움직일 때마다 부착된 레이어도 따라 움직임"
+            },
+            "default": "기본값",
+            "itemNewLayer": "<새로운 레이어>",
+            "abbrevAttLayer": "공격: ",
+            "labelAttached": "첨부:"
+        },
+        "block": {
+            "invis": "보이지 않음",
+            "canBreak": "깨질 수 있음",
+            "letterHeight": "높이",
+            "letterWidth": "폭",
+            "canBreakTooltip": "구버전: 부딪히면 부서진다",
+            "pickContents": "블록 내용 선택",
+            "inside": "내부:",
+            "slick": "미끄러움"
+        },
+        "file": {
+            "labelFormat": "형식:",
+            "optionCancelAction": "취소: {0}하지 마세요",
+            "optionYesSaveThenAction": "예: 저장한 다음 {0}",
+            "optionActionWithoutSave": "저장하지 않고 {0}",
+            "sectionWorld": "세계",
+            "optionProceedWithConversion": "변환 진행",
+            "optionCancelConversion": "변환 취소",
+            "sectionLevel": "레벨",
+            "labelCurrentFile": "현재 파일: ",
+            "formatLegacy": "레거시",
+            "formatModern": "최신",
+            "actionClearLevel": "레벨 지움",
+            "actionClearWorld": "세계 지움",
+            "actionExit": "종료",
+            "actionOpen": "열기",
+            "actionRevert": "복귀",
+            "commandNew": "새로운",
+            "commandOpen": "열기...",
+            "commandSave": "저장",
+            "commandSaveAs": "다른 이름으로 저장...",
+            "confirmConfirmAction": "정말 {0} 할까요?",
+            "confirmConvertFormatTo": "형식을 {0} 변환할까요?",
+            "confirmSaveBeforeAction": "{0} 전에 저장할까요?",
+            "convert": {
+                "descNew": "파일 확장명은 변경되지만 이전 파일은 삭제되지 않습니다.\n\n저장 후 손실된 기능을 확인하십시오."
+            }
+        },
+        "warp": {
+            "speed": "속도 ",
+            "title": "워프 설정",
+            "toMap": "지도로",
+            "transit": {
+                "name0": "없음",
+                "name1": "스크롤",
+                "name3": "원",
+                "name4": "뒤집기 (수평)",
+                "name2": "페이드",
+                "name5": "뒤집기 (수직)"
+            },
+            "twoWay": "양방향",
+            "style": {
+                "style": "스타일: ",
+                "portal": "포트",
+                "blipInstant": "순간이동",
+                "door": "문",
+                "pipe": "파이프"
+            },
+            "target": "대상: ",
+            "cannonExit": "대포 출구",
+            "dir": "방향",
+            "effect": "효과:",
+            "in": "입구",
+            "item": "아이템",
+            "lvlWarp": "레벨 워프",
+            "needFloor": "바닥 필요",
+            "needKey": "열쇠 필요",
+            "needStarCount": "{0} {1} 필요",
+            "out": "출구",
+            "placing": "장소:",
+            "ride": "타다",
+            "showStarCount": "별 개수 표시",
+            "showStartScene": "시작 장면 표시",
+            "starLockMessage": "별 잠금 메시지",
+            "to": "보내기: {0}",
+            "allow": "허용:"
+        },
+        "water": {
+            "title": "물 설정"
+        },
+        "wordEvent": {
+            "nominative": "이벤트",
+            "typeLabel": "{0} 이벤트:",
+            "genitive": "이벤트"
+        },
+        "wordInstant": "즉시",
+        "wordMode": "모드",
+        "wordNPC": {
+            "genitive": "NPC",
+            "nominative": "NPC"
+        },
+        "wordText": "텍스트",
+        "wordWidth": "폭",
+        "world": {
+            "hubWorld": "허브 월드",
+            "name": "월드 이름",
+            "retryOnFail": "실패 시 재시도",
+            "totalStars": "모은 별: ",
+            "allowChars": "캐릭터 허용",
+            "phraseCreditIndex": "월드 크레딧 라인 {0}:",
+            "introLevel": "인트로 레벨"
+        },
+        "wordCoins": "동전",
+        "wordEnabled": "활성화",
+        "wordHeight": "높이",
+        "labelSortLayer": "레이어 정렬:",
+        "labelSortOffset": "오프셋 정렬:",
+        "letterCoordX": "X",
+        "letterCoordY": "Y",
+        "letterDown": "D",
+        "level": {
+            "levelName": "레벨 이름",
+            "pathUnlocks": "잠금 해제 경로",
+            "pathBG": "배경 경로",
+            "startPos": "시작 위치",
+            "alwaysVis": "항상 표시",
+            "bigBG": "큰 배경",
+            "gameStart": "게임 시작"
+        },
+        "mapPos": "지도 위치:",
+        "npc": {
+            "abbrevGen": "생성기",
+            "ai": {
+                "LR": "LR",
+                "UD": "UD",
+                "aiIs": "AI: {0}",
+                "headerCustomAi": "커스텀 AI:",
+                "jump": "점프",
+                "leap": "뛰다",
+                "swim": "수영",
+                "use1_0Ai": "1.0 AI 사용?",
+                "target": "대상"
+            },
+            "gen": {
+                "effectIs": "효과: {0}",
+                "effectShoot": "발사",
+                "effectWarp": "워프",
+                "direction": "방향",
+                "header": "생성기 설정"
+            },
+            "props": {
+                "active": "활동적",
+                "attachSurface": "위치",
+                "facing": "방향"
+            },
+            "inContainer": "포함",
+            "inertNice": "좋음",
+            "tooltipExpandSection": "확장 섹션",
+            "stuckStop": "정지"
+        },
+        "pageBlankOfBlank": "{0} 의 {1} 페이지",
+        "phraseAreYouSure": "확실한가요?",
+        "phraseCountMore": "{0} 더 많은",
+        "phraseDelayIsMs": "지연: {0} ms",
+        "phraseGenericIndex": "숫자 {0}",
+        "phraseRadiusIndex": "반경 {0}",
+        "phraseSectionIndex": "섹션 {0}",
+        "phraseTextOf": "{0} 텍스트",
+        "phraseWarpIndex": "워프 {0}",
+        "section": {
+            "horizWrap": "수평 워프",
+            "noTurnBack": "되돌릴 수 없음",
+            "offscreenExit": "오프스크린 종료",
+            "scroll": "스크롤",
+            "setBounds": "경계 설정",
+            "underwater": "수중",
+            "vertWrap": "수직 순환"
+        },
+        "select": {
+            "sectBlankPropBlankForEventN": "{2}에 대한 {0} {1} 섹션",
+            "sectionBlankPropBlank": "{0} {1} 섹션",
+            "soundForEventN": "이벤트 {0} 사운드",
+            "warpTransitEffect": "워프 전환 효과",
+            "worldMusic": "세계 음악",
+            "pathBlankUnlock": "경로 {0} 잠금 해제 기준",
+            "allSectPropBlankForEventN": "{1}에 대한 모든 섹션 {0}"
+        },
+        "testPlay": {
+            "boot": "부트",
+            "char": "캐릭터",
+            "magicHand": "매직 핸드",
+            "pet": "애완동물",
+            "power": "파워"
+        },
+        "toggleMagicBlock": "매직 블록",
+        "tooltip": {
+            "BGOs": "배경 개체",
+            "NPCs": "NPC",
+            "area": "영역",
+            "erase": "지움",
+            "events": "이벤트",
+            "file": "파일",
+            "levels": "레벨",
+            "music": "음악",
+            "paths": "경로",
+            "select": "선택",
+            "warps": "워프",
+            "water": "물",
+            "show": "표시",
+            "blocks": "블록",
+            "eraseAll": "모두 지움",
+            "layers": "레이어",
+            "scenes": "장면",
+            "settings": "설정",
+            "tiles": "타일"
+        },
+        "letterLeft": "L",
+        "letterRight": "R",
+        "events": {
+            "headerTriggerEvent": "전환:",
+            "itemNewEvent": "<새 이벤트>",
+            "layers": {
+                "headerShow": "표시:",
+                "headerMove": "이동:",
+                "headerHide": "숨김:",
+                "headerToggle": "전환:"
+            },
+            "label": {
+                "activate": "활성화",
+                "death": "죽음",
+                "destroy": "파괴",
+                "enter": "진입",
+                "hit": "영향",
+                "layerClear": "레이어 지움",
+                "next": "다음",
+                "talk": "대화"
+            },
+            "deletion": {
+                "confirm": "예: 이벤트 삭제",
+                "deletingEvent": "이벤트 {0} 삭제 중",
+                "cancel": "아니요: 이벤트를을 삭제하지 않음"
+            },
+            "desc": {
+                "activate": "NPC가 화면에 들어옴",
+                "death": "NPC 죽음",
+                "destroy": "블록이 파괴됨",
+                "enter": "워프가 입력됨",
+                "hit": "블록이 맞음",
+                "layerClear": "개체 레이어의 모든 항목이 사라짐",
+                "phraseTriggersAfterTemplate": "{0}은 이벤트 {2} 발생 후 {1}초 후에 전환",
+                "phraseTriggersWhenTemplate": "{0}는 {1}일 때 전환",
+                "talk": "플레이어가 NPC와 대화"
+            },
+            "header": "이벤트:",
+            "bounds": {
+                "changeAllSectionBoundsToCurrent": "모든 섹션 경계를 현재 설정으로 변경할까요?",
+                "changeSectionBoundsToCurrent": "{0} 섹션 경계를 현재 설정으로 변경할까요?",
+                "shouldEvent": "이벤트가 {0}이어야 함"
+            },
+            "controlsForEventN": "이벤트 {0}에 대한 컨트롤",
+            "letter": {
+                "activate": "A:",
+                "death": "D:",
+                "destroy": "D:",
+                "enter": "E:",
+                "hit": "H:",
+                "layerClear": "L:",
+                "talk": "T:"
+            },
+            "props": {
+                "layerSmoke": "연기",
+                "sound": "사운드",
+                "autostart": "자동시작",
+                "controls": "컨트롤",
+                "endGame": "게임 클리어"
+            },
+            "sections": {
+                "actionKeep": "유지",
+                "actionReset": "재설정",
+                "actionSet": "설정",
+                "phraseAllSections": "모든 섹션",
+                "propBackground": "배경",
+                "propBounds": "경계",
+                "propMusic": "음악"
+            },
+            "settingsForEvent": "이벤트 {0}에 대한 설정",
+            "promptEventName": "이벤트 이름",
+            "promptEventText": "이벤트 텍스트"
+        },
+        "browser": {
+            "saveFile": "저장 파일",
+            "itemNewFolder": "<새 폴더>",
+            "newFile": "새 파일",
+            "openFile": "파일 열기",
+            "askOverwriteFile": "{0}을(를) 덮어쓸까요?",
+            "itemNewFile": "<새 파일>"
+        },
+        "letterUp": "U"
+    },
+    "menu": {
+        "game": {
+            "gameNoBattleLevels": "<전투 레벨 없음>",
+            "gameSourceSlot": "소스 슬롯 선택",
+            "gameEraseSave": "저장 지우기",
+            "gameTargetSlot": "이제 대상을 선택",
+            "gameSlotContinue": "슬롯 {0} ... {1}%",
+            "gameSlotNew": "슬롯 {0} ... 새로운 게임",
+            "phraseScore": "점수: {0}",
+            "gameNoEpisodesToPlay": "<재생할 에피소드 없음>",
+            "phraseTime": "시간: {0}",
+            "gameEraseSlot": "삭제할 슬롯 선택",
+            "gameBattleRandom": "랜덤 레벨",
+            "gameCopySave": "저장 복사",
+            "warnEpCompat": ""
+        },
+        "wordHide": "숨김",
+        "options": {
+            "restartEngine": "변경 사항을 적용하려면 엔진을 다시 시작하세요.",
+            "advanced": {
+                "render": {
+                    "opengl11-tip": "",
+                    "sw": "",
+                    "opengles11-tip": "",
+                    "opengl-tip": "",
+                    "sdl": "",
+                    "_name": "렌더 모드",
+                    "opengl": "",
+                    "hw": "자동",
+                    "sdl-tip": "",
+                    "opengl11": "",
+                    "opengles": "",
+                    "opengles11": "",
+                    "opengles-tip": ""
+                },
+                "scale-down-textures": {
+                    "_name": "",
+                    "all": "",
+                    "safe": "",
+                    "all-tip": "",
+                    "none-tip": "",
+                    "none": "",
+                    "safe-tip": "",
+                    "_tooltip": ""
+                },
+                "advanced-audio": "",
+                "webm-recording": "",
+                "_header": "",
+                "_tooltip": "",
+                "audio-channels": {
+                    "mono": "",
+                    "stereo": "",
+                    "_name": ""
+                },
+                "audio-format": {
+                    "_name": "",
+                    "_tooltip": ""
+                },
+                "audio-enable": "",
+                "audio-sample-rate": {
+                    "11025": "",
+                    "48000": "",
+                    "_name": "",
+                    "32000": "",
+                    "16000": "",
+                    "22050": "",
+                    "44100": ""
+                },
+                "log-level": {
+                    "debug": "",
+                    "_name": "",
+                    "fatal": "",
+                    "critical": "",
+                    "info": "",
+                    "warning": "",
+                    "none": ""
+                },
+                "audio-buffer-size": {
+                    "_tooltip": "",
+                    "_name": ""
+                },
+                "record-gameplay-data": "",
+                "internal-res-4p": {
+                    "fhd": "",
+                    "qsmbx": "",
+                    "qhd": "",
+                    "default": "",
+                    "_name": ""
+                },
+                "choose-assets-on-launch": "",
+                "advanced-video": "",
+                "use-native-osk": "",
+                "fullscreen-type": {
+                    "_name": "",
+                    "exclusive": "",
+                    "desktop-tip": "",
+                    "desktop": "",
+                    "exclusive-tip": "",
+                    "auto": ""
+                },
+                "inaccurate-gifs-tip": "",
+                "inaccurate-gifs": "",
+                "fullscreen-depth": {
+                    "16": "",
+                    "auto": "",
+                    "_name": "",
+                    "32": ""
+                },
+                "fullscreen-res": ""
+            },
+            "main": {
+                "unlimited-framerate": "",
+                "timing": "",
+                "four-screen-mode": {
+                    "_name": "",
+                    "split": "",
+                    "shared": ""
+                },
+                "multiplayer": "",
+                "language": "언어",
+                "vsync": "",
+                "two-screen-mode": {
+                    "shared": "",
+                    "split": "",
+                    "smbx": "",
+                    "topbottom": "",
+                    "_name": ""
+                },
+                "background-work-tip": "",
+                "background-work": "",
+                "_header": "",
+                "discord-rpc": "",
+                "frame-skip": ""
+            },
+            "video": {
+                "battery-status": {
+                    "low": "",
+                    "_name": "",
+                    "off": "",
+                    "on": "",
+                    "fullscreen": "전체화면",
+                    "fullscreen-tip": "",
+                    "low-tip": ""
+                },
+                "enable-inter-level-fade-effect": "",
+                "show-episode-title": {
+                    "_name": "",
+                    "bottom-tip": "",
+                    "top": "",
+                    "off": "",
+                    "bottom": "",
+                    "top-tip": ""
+                },
+                "internal-res": {
+                    "gba": "",
+                    "vga": "",
+                    "_name": "",
+                    "3ds": "",
+                    "_tooltip": "",
+                    "nds": "",
+                    "dynamic": "",
+                    "smbx": "",
+                    "hello": "",
+                    "hd": "",
+                    "snes": "",
+                    "smbx-wide": ""
+                },
+                "scale-mode": {
+                    "integer": "정수",
+                    "center": "",
+                    "_name": "스케일",
+                    "nearest": "가장 가까운",
+                    "1x": "",
+                    "0_5x": "",
+                    "full": "",
+                    "linear": "이중선형",
+                    "2x": "",
+                    "3x": ""
+                },
+                "_header": "",
+                "display-controllers": "",
+                "info-run": "",
+                "info-meta": "",
+                "effects": "",
+                "fullscreen": "전체화면",
+                "show-fails-counter": "",
+                "3d-compat-mode-tip": "",
+                "show-fails-counter-tip": "",
+                "3d-compat-mode": "",
+                "show-fps": "",
+                "show-playtime-counter": {
+                    "animated-tip": "",
+                    "_name": "",
+                    "_tooltip": "",
+                    "off": "",
+                    "animated": "",
+                    "off-tip": "",
+                    "transparent": "",
+                    "opaque": ""
+                },
+                "show-medals-counter-tip": "",
+                "show-medals-counter": "",
+                "video-system": "",
+                "show-screen-shake": "",
+                "world-map-stars-show": "",
+                "world-map-stars-show-tip": "",
+                "info-game": ""
+            },
+            "controls": {
+                "_header": ""
+            },
+            "episode-options": {
+                "_header": "",
+                "creator-compat": {
+                    "_name": "",
+                    "file-only": "",
+                    "enable": "",
+                    "disable": "",
+                    "_tooltip": ""
+                },
+                "playstyle": {
+                    "modern-tip": "",
+                    "modern": "",
+                    "classic": "",
+                    "classic-tip": "",
+                    "vanilla": "",
+                    "vanilla-tip": "",
+                    "_name": ""
+                },
+                "hub-resume-tip": "",
+                "hub-resume": ""
+            },
+            "speedrun": {
+                "mode": {
+                    "_name": "",
+                    "3": "",
+                    "2": "",
+                    "1": "",
+                    "0": ""
+                }
+            },
+            "audio": {
+                "_header": "",
+                "audio-sfx-volume": "",
+                "audio-prefs": "",
+                "sfx-pet-beat": "",
+                "sfx-spatial-audio": "",
+                "sfx-pet-beat-tip": "",
+                "audio-music-volume": "",
+                "sfx-modern": "",
+                "sfx-modern-tip": "",
+                "sfx-spatial-audio-tip": "",
+                "sfx-audio-fx": ""
+            },
+            "compatibility": {
+                "_header": "",
+                "features": "",
+                "bugfixes": "",
+                "_tooltip": "",
+                "autocode": "",
+                "reset-all": ""
+            },
+            "view-credits": {
+                "_header": "크레딧 보기"
+            }
+        },
+        "wordWaiting": "대기 중",
+        "main": {
+            "mainEditor": "편집기",
+            "main1PlayerGame": "1 인용 게임",
+            "mainMultiplayerGame": "2 인용 게임",
+            "mainBattleGame": "전투 게임",
+            "mainOptions": "옵션",
+            "mainExit": "종료",
+            "mainPlayEpisode": "에피소드 재생"
+        },
+        "controls": {
+            "editor": {
+                "scrollUp": "위로 스크롤",
+                "prevSection": "이전 섹션",
+                "scrollRight": "오른쪽으로 스크롤",
+                "scrollLeft": "왼쪽으로 스크롤",
+                "scrollDown": "스크롤 다운",
+                "fastScroll": "빠른 스크롤",
+                "modeErase": "지우기 모드",
+                "modeSelect": "선택 모드",
+                "nextSection": "다음 선택",
+                "switchScreens": "창 표시",
+                "testPlay": "재생 테스트"
+            },
+            "buttons": {
+                "jump": "점프",
+                "altRun": "대체 실행",
+                "down": "아래",
+                "drop": "아이템 삭제",
+                "altJump": "대체 점프",
+                "right": "오른쪽",
+                "up": "위쪽",
+                "left": "왼쪽",
+                "run": "실행",
+                "start": "시작"
+            },
+            "controlsConnected": "연결됨:",
+            "controlsDeviceTypes": "장치 유형",
+            "controlsInUse": "(사용)",
+            "controlsNewProfile": "<새 프로파일>",
+            "cursor": {
+                "up": "마우스 위쪽",
+                "right": "마우스 오른쪽",
+                "tertiary": "3차",
+                "secondary": "2차",
+                "down": "마우스 아래쪽",
+                "left": "마우스 왼쪽",
+                "primary": "1차"
+            },
+            "controlsDeleteKey": "(대체 점프로 삭제)",
+            "controlsDeleteKey2": "(대체 실행로 삭제)",
+            "caseInvalid": "(유효하지 않음)",
+            "caseMouse": "(마우스)",
+            "caseTouch": "(터치)",
+            "controlsNotInUse": "(사용하지 않음)",
+            "controlsReallyDeleteProfile": "프로파일을 삭제하겠습니까?",
+            "controlsTitle": "컨트롤",
+            "hotkeys": {
+                "fullscreen": "전체화면",
+                "debugInfo": "디버그 정보",
+                "enterCheats": "코드 입력",
+                "legacyPause": "이전 일시 중지",
+                "recordGif": "GIF 녹화",
+                "screenshot": "스크린샷",
+                "toggleHUD": "상태 표시줄 토글",
+                "vanillaCam": ""
+            },
+            "tDS": {
+                "buttonA": "A",
+                "buttonB": "B",
+                "buttonY": "Y",
+                "buttonZL": "ZL",
+                "cStick": "C-스틱",
+                "casePen": "(펜)",
+                "dPad": "십자패드",
+                "tStick": "썸네일",
+                "buttonStart": "시작",
+                "buttonX": "X",
+                "buttonL": "L",
+                "buttonR": "R",
+                "buttonSelect": "선택",
+                "buttonZR": "ZR"
+            },
+            "phraseNewProfOldJoy": "이전 조이스틱의 새 프로파일",
+            "profile": {
+                "playerControls": "플레이어 컨트롤",
+                "renameProfile": "프로파일 이름바꾸기",
+                "editorControls": "편집기 컨트롤",
+                "cursorControls": "커서 컨트롤",
+                "hotkeys": "단축키",
+                "deleteProfile": "프로파일 삭제"
+            },
+            "touchscreen": {
+                "layout": {
+                    "longOld": "와이드 (이전)",
+                    "phabletOld": "패블릿 (이전)",
+                    "phoneOld": "폰 (이전)",
+                    "standard": "보통",
+                    "tabletOld": "태블릿 (이전)",
+                    "tight": "빽빽이",
+                    "tinyOld": "아주 작음 (이전)"
+                },
+                "option": {
+                    "feedbackStrength": "피드백 강도",
+                    "holdRun": "시작 시 실행 보류",
+                    "interfaceStyle": "인터페이스 스타일",
+                    "layoutStyle": "레이아웃 스타일",
+                    "scaleDPad": "스케일 십자패드",
+                    "scaleFactor": "스케일 팩터",
+                    "showCodeButton": "코드 버튼 표시",
+                    "scaleButtons": "스케일 버튼",
+                    "feedbackLength": "피드백 길이",
+                    "resetLayout": "레이아웃 재설정",
+                    "sStartSpacing": "S-시작 간격"
+                },
+                "style": {
+                    "actions": "동작",
+                    "ABXY": "ABXY",
+                    "XODA": "XODA"
+                }
+            },
+            "types": {
+                "touchscreen": "터치스크린",
+                "gamepad": "게임패드",
+                "keyboard": "키보드",
+                "oldJoystick": "오래된 조이스틱"
+            },
+            "wii": {
+                "classic": {
+                    "buttonLT": "LT",
+                    "buttonRT": "RT",
+                    "buttonX": "X",
+                    "buttonY": "Y",
+                    "buttonZL": "ZL",
+                    "buttonZR": "ZR",
+                    "lStick": "L-패드",
+                    "rStick": "R-패드"
+                },
+                "nunchuck": {
+                    "buttonC": "C",
+                    "buttonZ": "Z",
+                    "prefixN": "N"
+                },
+                "wiimote": {
+                    "buttonA": "A",
+                    "button1": "1",
+                    "button2": "2",
+                    "buttonB": "B",
+                    "buttonHome": "Home",
+                    "buttonMinus": "-",
+                    "buttonPlus": "+",
+                    "caseIR": "(IR)",
+                    "dPad": "십자패드",
+                    "shake": "진동"
+                },
+                "phraseNewNunchuck": "새 눈챠크 프로파일",
+                "phraseNewClassic": "새 클래식 프로파일",
+                "typeClassic": "클래식",
+                "typeNunchuck": "눈챠크",
+                "typeWiimote": "위모트",
+                "typeGamecube": ""
+            },
+            "options": {
+                "textEntryStyle": "텍스트 입력 스타일",
+                "maxPlayers": "최대 플레이어",
+                "rumble": "진동",
+                "batteryStatus": "배터리 상태"
+            },
+            "wordButtons": "버튼",
+            "wordProfiles": "프로파일",
+            "joystickSimpleEditor": ""
+        },
+        "wordPlayer": "플레이어",
+        "wordBack": "뒤로가기",
+        "wordOn": "켬",
+        "wordProfile": "프로파일",
+        "loading": "불러오기 중...",
+        "wordShow": "표시",
+        "wordNo": "아니오",
+        "wordYes": "예",
+        "wordResume": "다시 시작",
+        "wordOff": "끔",
+        "abbrevMilliseconds": "초",
+        "battle": {
+            "errorNoLevels": "레벨이 없어서 전투를 시작할 수 없음"
+        },
+        "caseNone": "<없음>",
+        "character": {
+            "selectCharacter": "{0} 게임"
+        },
+        "editor": {
+            "battles": "<전투 레벨>",
+            "errorMissingResources": "죄송합니다! 게임 내 편집기에 필요한 {0}이 누락되었습니다.",
+            "newWorld": "<새로운 세계>",
+            "promptNewWorldName": "새로운 세계 이름",
+            "makeFor": ""
+        }
+    },
+    "outro": {
+        "originalBy": "원본 VB6 코드 게시자:",
+        "cppPortDevelopers": "C++ 포트 개발자:",
+        "nameAndrewSpinks": "앤드류 스핑크스",
+        "customSprites": "커스텀 스프라이트:",
+        "specialThanks": "특별히 감사한 분들:",
+        "psVitaPortBy": "PS 비타 포트 게시자:",
+        "engineCredits": "엔진 크레딧:",
+        "levelDesign": "레벨 디자인:",
+        "nameVitalyNovichkov": "비탈리 노비치코프",
+        "gameCredits": "게임 크레딧:",
+        "qualityControl": "품질 제어:"
+    },
+    "pluralRules": "singular-only",
+    "languageName": "한국어",
+    "game": {
+        "connect": {
+            "phraseTestProfile": "프로파일 테스트",
+            "phraseDropMe": "게임에서 나가기",
+            "phraseDropPX": "플레이어 {0} 삭제",
+            "phraseForceResume": "강제 시작",
+            "phraseHoldStart": "시작 보류",
+            "phraseSetControls": "컨트롤 설정",
+            "phraseStartToForceRes": "강제 시작시 Start 누름",
+            "phraseStartToResume": "시작시 Start 누름",
+            "phraseWaitingForInput": "입력 장치를 기다리는 중...",
+            "reconnectTitle": "다시 연결",
+            "dropAddTitle": "플레이어 삭제/추가",
+            "phraseChangeChar": "캐릭터 변경",
+            "phrasePressAButton": "A 버튼 누름",
+            "phraseTestControls": "컨트롤 테스트",
+            "splitPressSelect_1": "선택을 누름",
+            "splitPressSelect_2": "컨트롤 옵션",
+            "wordDisconnect": "연결 끊기"
+        },
+        "error": {
+            "warpNeedStarCount": "입력하려면 {0} {1}이(가) 필요합니다.",
+            "errorInvalidEnterWarp": "잘못된 입구 워프 {1}이(가) 지정되었기 때문에 레벨을 시작할 수 없습니다.\n총 워프 항목: {2}\n\n파일: {0}",
+            "openFileFailed": "\"{0}\"을(를) 열 수 없습니다. 파일이 존재하지 않거나 손상되었습니다.",
+            "errorNoStartPoint": "사용 가능한 시작점이 배치되지 않았거나 입구 워프가 지정되어 있지 않아 레벨을 시작할 수 없습니다.\n\n파일: {0}",
+            "errorTooOldGameAssets": "",
+            "openIPCDataFailed": "",
+            "IPCTimeOut": "",
+            "errorTooOldEngine": ""
+        },
+        "pause": {
+            "continue": "계속하기",
+            "quit": "종료",
+            "quitTesting": "종료 테스트",
+            "enterCode": "코드 입력",
+            "saveAndQuit": "저장하고 종료",
+            "resetCheckpoints": "체크포인트 재설정",
+            "restartLevel": "레벨 재시작",
+            "returnToEditor": "편집기로 돌아가기",
+            "saveAndContinue": "저장하고 계속하기",
+            "playerSetup": "플레이어 설정"
+        },
+        "msgbox": {
+            "sysInfoError": "오류입니다!",
+            "sysInfoTitle": "",
+            "sysInfoWarning": ""
+        },
+        "message": {
+            "scanningLevels": "레벨 스캔 중..."
+        },
+        "format": {
+            "minutesSeconds": "{0}분{1}초"
+        },
+        "hint": {
+            "no-lives-new": "실패하면 점수가 재설정됩니다.",
+            "no-lives-old": "실패하면 게임이 끝납니다.",
+            "rainbow-surf": "잡고, 달리고, 누르고, 놓아서 서핑하세요.",
+            "char5-bombs": "모으려면 Run을 누르고, 던지려면 Alt Run을 누르세요.",
+            "gray-bricks": "",
+            "heavy-duck": "",
+            "shoe-block": "",
+            "pound-altrun": "",
+            "pound-down": ""
+        },
+        "loader": {
+            "statusLoadData": "",
+            "statusGameInfo": "",
+            "statusLoadFile": "",
+            "statusFinishing": "",
+            "statusAssetPacks": "",
+            "statusTranslations": ""
+        },
+        "ipcStatus": {
+            "loadingdone": "",
+            "dataAccepted": "",
+            "dataTransferStarted": "",
+            "errorTimeout": "",
+            "dataValid": "",
+            "waitingInput": ""
+        },
+        "screenPaused": ""
+    }
+}

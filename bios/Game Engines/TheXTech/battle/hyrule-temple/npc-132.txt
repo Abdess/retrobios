@@ -1,0 +1,5 @@
+playerblocktop=1
+grabtop=1
+jumphurt=0
+nofireball=0
+cliffturn=1

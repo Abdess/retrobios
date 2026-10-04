@@ -1,0 +1,3169 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: jazz2-resurrection\n"
+"POT-Creation-Date: 2026-09-28 22:44+0200\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: rtdsx\n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.9\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-KeywordsList: _;_n:1,2;_x:1c,2;_nx:1c,2,3;_f;_fn:1,2\n"
+"X-Poedit-SearchPath-0: Sources/Jazz2\n"
+"X-Poedit-SearchPath-1: .fake/Translations\n"
+"X-Poedit-SearchPath-2: Sources/Main.cpp\n"
+
+#: .fake/Translations/flash/01_diam1.j2l.h:1
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Spaz ate the dopefish."
+msgstr ""
+"\n"
+"Spaz spiste dopefisken."
+
+#: .fake/Translations/flash/01_diam1.j2l.h:2
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Find the gopher."
+msgstr ""
+"\n"
+"Finn gopheren."
+
+#: .fake/Translations/flash/01_diam1.j2l.h:3
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Dragons live in burbank."
+msgstr ""
+"\n"
+"Drager lever in Burbank."
+
+#: .fake/Translations/flash/01_diam1.j2l.h:4
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Mark wears briefs. \n"
+"Hoo Hah!"
+msgstr ""
+"\n"
+"Mark bruker truser.\n"
+"Hoo Hah!"
+
+#: .fake/Translations/flash/01_diam1.j2l.h:5
+msgctxt "flash/01_diam1"
+msgid ""
+"\n"
+"Nick loves shiny. \n"
+"Always has!"
+msgstr ""
+"\n"
+"Nick elsker blanke ting.\n"
+"Det har han alltid gjort!"
+
+#: .fake/Translations/flash/02_diam3.j2l.h:1
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Send Tim new socks."
+msgstr ""
+"\n"
+"Send Tim nye sokker."
+
+#: .fake/Translations/flash/02_diam3.j2l.h:2
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Send Nigel a green card."
+msgstr ""
+"\n"
+"Send Nigel et grønt kort."
+
+#: .fake/Translations/flash/02_diam3.j2l.h:3
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Beware of chainsaw schmalz."
+msgstr ""
+"\n"
+"Pass deg for motorsag schmalsz."
+
+#: .fake/Translations/flash/02_diam3.j2l.h:4
+msgctxt "flash/02_diam3"
+msgid ""
+"\n"
+"Dont give mark a burrito."
+msgstr ""
+"\n"
+"Ikke gi Mark en burrito."
+
+#: .fake/Translations/flash/05_medivo1.j2l.h:1
+msgctxt "flash/05_medivo1"
+msgid ""
+"\n"
+"Beware of falling enemies."
+msgstr ""
+"\n"
+"Se opp for fallende fiender."
+
+#: .fake/Translations/flash/05_medivo1.j2l.h:2
+msgctxt "flash/05_medivo1"
+msgid ""
+"\n"
+"Craig is still a doofus!"
+msgstr ""
+"\n"
+"Craig er fortsatt en idiot!"
+
+#: .fake/Translations/flash/05_medivo1.j2l.h:3
+msgctxt "flash/05_medivo1"
+msgid ""
+"\n"
+"Secret Level Time!!!"
+msgstr ""
+"\n"
+"Hemmelig Level Tid!!!"
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:1
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Buttstomp A Silver Crate\n"
+"To Clear Your Path"
+msgstr ""
+"\n"
+"Rumpestomp en sølvkasse\n"
+"For å rydde veien din"
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:2
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Crates can also make platforms appear..."
+msgstr ""
+"\n"
+"Kasser kan også få plattformer til å vises..."
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:3
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Melt the Spring..."
+msgstr ""
+"\n"
+"Smelt fjæren..."
+
+#: .fake/Translations/flash/bonus_garglair.j2l.h:4
+msgctxt "flash/bonus_garglair"
+msgid ""
+"\n"
+"Leh is a Camper"
+msgstr ""
+"\n"
+"Leh er en Camper"
+
+#: .fake/Translations/monk/01_jung1.j2l.h:1
+msgctxt "monk/01_jung1"
+msgid ""
+"\n"
+"Falling boulders can \n"
+"give you a headache."
+msgstr ""
+"\n"
+"Fallende steinblokker kan \n"
+"gi deg hodepine."
+
+#: .fake/Translations/monk/01_jung1.j2l.h:2
+msgctxt "monk/01_jung1"
+msgid ""
+"\n"
+"A Flamethrower works\n"
+"well against bugs."
+msgstr ""
+"\n"
+"En flammekaster fungerer\n"
+"godt mot insekter."
+
+#: .fake/Translations/monk/03_hell.j2l.h:1
+msgctxt "monk/03_hell"
+msgid ""
+"\n"
+"Long live the ice level."
+msgstr ""
+"\n"
+"Lenge leve isnivået."
+
+#: .fake/Translations/monk/03_hell.j2l.h:2
+msgctxt "monk/03_hell"
+msgid ""
+"\n"
+"Goodnight, bubba!"
+msgstr ""
+"\n"
+"God natt, Bubba!"
+
+#: .fake/Translations/monk/06_damn2.j2l.h:2
+msgctxt "monk/06_damn2"
+msgid ""
+"\n"
+"What the heck? Aaaah! No!  \n"
+"This is NOT over!"
+msgstr ""
+"\n"
+"Hva i all verden? Aaaah! Nei!  \n"
+"Dette er IKKE over!"
+
+#: .fake/Translations/prince/01_castle1.j2l.h:1
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Poles spin you around so\n"
+" you can go even faster."
+msgstr ""
+"\n"
+"Polene snurrer deg rundt slik at\n"
+" du kan gå enda raskere."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:2
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"You found a secret area."
+msgstr ""
+"\n"
+"Du har funnet et hemmelig område."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:3
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Secret Treasure Room."
+msgstr ""
+"\n"
+"Hemmelig skattkammer."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:4
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Nothing to see here."
+msgstr ""
+"\n"
+"Ingenting å se her."
+
+#: .fake/Translations/prince/01_castle1.j2l.h:5
+msgctxt "prince/01_castle1"
+msgid ""
+"\n"
+"Collect coins to activate \n"
+"bonus warp devices."
+msgstr ""
+"\n"
+"Samle mynter for å aktivere \n"
+"bonus-warp-enheter."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:1
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Cheese is green on tuesday."
+msgstr ""
+"\n"
+"Ost er grønn på tirsdag."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:2
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Craig is king doofus."
+msgstr ""
+"\n"
+"Craig er kongen av idioter."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:3
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"To beat the queen \n"
+"shoot her off her ledge."
+msgstr ""
+"\n"
+"For å slå dronningen \n"
+"skyt henne ned fra kanten."
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:4
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Good job! \n"
+"Now go get Devan Shell!"
+msgstr ""
+"\n"
+"Bra jobbet! \n"
+"Nå går du og henter Devan Shell!"
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:5
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"To kick through these\n"
+"blocks, press down and jump!"
+msgstr ""
+"\n"
+"For å sparke gjennom disse\n"
+"blokkene, trykk ned og hopp!"
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:6
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Press down and jump beneath \n"
+"these blocks to break them!"
+msgstr ""
+"\n"
+"Trykk ned og hopp under \n"
+"disse blokkene for å knuse dem!"
+
+#: .fake/Translations/prince/02_castle1n.j2l.h:7
+msgctxt "prince/02_castle1n"
+msgid ""
+"\n"
+"Buttstomp the metal box \n"
+"to open key blocks!"
+msgstr ""
+"\n"
+"Buttstomp på metallboksen \n"
+"for å åpne nøkkelblokkene!"
+
+#: .fake/Translations/prince/03_carrot1.j2l.h:1
+msgctxt "prince/03_carrot1"
+msgid ""
+"\n"
+"Stomp your booty to exit."
+msgstr ""
+"\n"
+"Stomp med rumpa for å gå ut."
+
+#: .fake/Translations/prince/03_carrot1.j2l.h:2
+msgctxt "prince/03_carrot1"
+msgid ""
+"\n"
+"This spring is frozen."
+msgstr ""
+"\n"
+"Denne fjæren er frossen."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:1
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"Super dooper secret."
+msgstr ""
+"\n"
+"Superduper hemmelig."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:2
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"Shields will give you unlimited \n"
+"special ammo for a short time."
+msgstr ""
+"\n"
+"Skjold gir deg ubegrenset \n"
+"spesiell ammunisjon i en kort periode."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:4
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"Stopwatches will add time to\n"
+"the life of a shield."
+msgstr ""
+"\n"
+"Stoppeklokker vil forlenge\n"
+"levetiden til et skjold."
+
+#: .fake/Translations/prince/04_carrot1n.j2l.h:5
+msgctxt "prince/04_carrot1n"
+msgid ""
+"\n"
+"This schwartzenguard is toast!"
+msgstr ""
+"\n"
+"Denne schwartzenguarden er ferdig!"
+
+#: .fake/Translations/prince/06_labrat2.j2l.h:1
+msgctxt "prince/06_labrat2"
+msgid ""
+"\n"
+"\n"
+"You cannot defeat me, Jazz!\n"
+"Prepare to face my superbot!"
+msgstr ""
+"\n"
+"\n"
+"Du kan ikke beseire meg, Jazz!\n"
+"Gjør deg klar til å møte superboten min!"
+
+#: .fake/Translations/prince/06_labrat2.j2l.h:2
+msgctxt "prince/06_labrat2"
+msgid ""
+"\n"
+"\n"
+"Ack! I'm outta here!"
+msgstr ""
+"\n"
+"\n"
+"Ack! Jeg stikker!"
+
+#: .fake/Translations/prince/06_labrat2.j2l.h:3
+msgctxt "prince/06_labrat2"
+msgid ""
+"\n"
+"These blocks are speed blocks.\n"
+"Run into them at full speed!"
+msgstr ""
+"\n"
+"Disse blokkene er hastighetsblokker.\n"
+"Kjør inn i dem med full fart!"
+
+#: .fake/Translations/prince/trainer.j2l.h:1
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Welcome to Jazz Jackrabbit 2. \n"
+" This is a training level."
+msgstr ""
+"\n"
+"Velkommen til Jazz Jackrabbit 2. \n"
+" Dette er et treningsnivå."
+
+#: .fake/Translations/prince/trainer.j2l.h:2
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Collect goodies for\n"
+"points and surprises."
+msgstr ""
+"\n"
+"Samle godbiter for\n"
+"poeng og overraskelser."
+
+#: .fake/Translations/prince/trainer.j2l.h:3
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"After jumping, press jump\n"
+"again to do a special move."
+msgstr ""
+"\n"
+"Etter å ha hoppet, trykk på hopp\n"
+"igjen for å utføre et spesialtrekk."
+
+#: .fake/Translations/prince/trainer.j2l.h:4
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Some walls can be shot."
+msgstr ""
+"\n"
+"Noen vegger kan skytes."
+
+#: .fake/Translations/prince/trainer.j2l.h:5
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"When in the air, press down\n"
+"to stomp with your butt."
+msgstr ""
+"\n"
+"Når du er i luften, trykk ned\n"
+"for å stampe med rumpa."
+
+#: .fake/Translations/prince/trainer.j2l.h:6
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Secrets abound in Jazz 2. \n"
+" Check the walls."
+msgstr ""
+"\n"
+"Jazz 2 er full av hemmeligheter. \n"
+" Sjekk veggene."
+
+#: .fake/Translations/prince/trainer.j2l.h:7
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Good job. Remember to\n"
+"look for secrets."
+msgstr ""
+"\n"
+"Bra jobbet. Husk å\n"
+"se etter hemmeligheter."
+
+#: .fake/Translations/prince/trainer.j2l.h:8
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Collect gems for \n"
+"an extra life."
+msgstr ""
+"\n"
+"Samle edelstener for å få \n"
+"et ekstra liv."
+
+#: .fake/Translations/prince/trainer.j2l.h:9
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Red Gems count\n"
+"as one gem."
+msgstr ""
+"\n"
+"Røde edelstener teller\n"
+"som én edelsten."
+
+#: .fake/Translations/prince/trainer.j2l.h:10
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Green gems count\n"
+"as five gems."
+msgstr ""
+"\n"
+"Grønne edelstener teller\n"
+"som fem edelstener."
+
+#: .fake/Translations/prince/trainer.j2l.h:11
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Blue gems count\n"
+"as ten gems."
+msgstr ""
+"\n"
+"Blå edelstener teller\n"
+"som ti edelstener."
+
+#: .fake/Translations/prince/trainer.j2l.h:12
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Carrots give you health."
+msgstr ""
+"\n"
+"Gulrøtter gir deg helse."
+
+#: .fake/Translations/prince/trainer.j2l.h:13
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Checkpoints save your\n"
+"spot if you lose a life."
+msgstr ""
+"\n"
+"Kontrollpunkter lagrer din\n"
+"plassering hvis du mister et liv."
+
+#: .fake/Translations/prince/trainer.j2l.h:14
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Collect coins to\n"
+"unlock bonus rooms."
+msgstr ""
+"\n"
+"Samle mynter for å\n"
+"låse opp bonusrom."
+
+#: .fake/Translations/prince/trainer.j2l.h:15
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Beware of sharp stuff.\n"
+"It hurts."
+msgstr ""
+"\n"
+"Vær forsiktig med skarpe gjenstander.\n"
+"Det gjør vondt."
+
+#: .fake/Translations/prince/trainer.j2l.h:16
+msgctxt "prince/trainer"
+msgid ""
+"\n"
+"Now youre ready to play.\n"
+" Good luck and have fun."
+msgstr ""
+"\n"
+"Nå er du klar til å spille.\n"
+" Lykke til og ha det gøy."
+
+#: .fake/Translations/rescue/01_colon1.j2l.h:1
+msgctxt "rescue/01_colon1"
+msgid ""
+"\n"
+"Buttstomp the manhole cover!"
+msgstr ""
+"\n"
+"Buttstomp kumlokket!"
+
+#: .fake/Translations/rescue/03_psych1.j2l.h:1
+msgctxt "rescue/03_psych1"
+msgid ""
+"\n"
+"Smoke rings will \n"
+"make you dizzy."
+msgstr ""
+"\n"
+"Røykringer vil \n"
+"gjøre deg svimmel."
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:1
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"You can't buttstomp\n"
+"so go up and around!"
+msgstr ""
+"\n"
+"Du kan ikke Rompestumpe\n"
+"så gå opp og rundt!"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:2
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"No rewards to those\n"
+"with itchy trigger fingers."
+msgstr ""
+"\n"
+"Ingen belønning til de\n"
+"som er for raske på avtrekkeren."
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:3
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Todays Forcast: Strong Winds!"
+msgstr ""
+"\n"
+"Dagens værmelding: Sterk vind!"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:4
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Find the crate\n"
+"to clear your path."
+msgstr ""
+"\n"
+"Finn kassen\n"
+"for å rydde veien."
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:5
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Welcome to\n"
+"Jazz Jackrabbit 2:\n"
+"The Secret Files!"
+msgstr ""
+"\n"
+"Velkommen til\n"
+"Jazz Jackrabbit 2:\n"
+"The Secret Files!"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:6
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Only Spaz can get to\n"
+"the room up on the left.\n"
+"He may need something\n"
+"to stand on."
+msgstr ""
+"\n"
+"Bare Spaz kan komme seg til\n"
+"rommet oppe til venstre.\n"
+"Han trenger kanskje noe\n"
+"å stå på."
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:7
+msgctxt "secretf/01_easter1"
+msgid ""
+"\n"
+"Don't beat Nigel at pool.\n"
+"You've veen warned. :)"
+msgstr ""
+"\n"
+"Ikke slå Nigel i biljard.\n"
+"Du er advart. :)"
+
+#: .fake/Translations/secretf/01_easter1.j2l.h:16
+msgctxt "secretf/01_easter1"
+msgid ""
+"Eating too many chocolate\n"
+"eggs can make you sick :p"
+msgstr ""
+"Å spise for mange sjokoladeegg\n"
+"kan gjøre deg syk :p"
+
+#: .fake/Translations/secretf/02_easter2.j2l.h:1
+msgctxt "secretf/02_easter2"
+msgid ""
+"\n"
+"Sloping Tunnel Entrance"
+msgstr ""
+"\n"
+"Skrånende tunnelinnkjørsel"
+
+#: .fake/Translations/secretf/02_easter2.j2l.h:2
+msgctxt "secretf/02_easter2"
+msgid ""
+"\n"
+"To access the tunnels above\n"
+"find the access warp."
+msgstr ""
+"\n"
+"For å få tilgang til tunnelene ovenfor,\n"
+"må du finne tilgangsportalen."
+
+#: .fake/Translations/secretf/02_easter2.j2l.h:3
+msgctxt "secretf/02_easter2"
+msgid ""
+"\n"
+"One route leads to riches.\n"
+"One route leads to battle."
+msgstr ""
+"\n"
+"En vei fører til rikdom.\n"
+"En vei fører til kamp."
+
+#: .fake/Translations/secretf/03_easter3.j2l.h:1
+msgctxt "secretf/03_easter3"
+msgid ""
+"\n"
+"Only those who can double-jump\n"
+"can get to the goodies!"
+msgstr ""
+"\n"
+"Bare de som kan dobbel-hoppe\n"
+"kan komme seg til godbitene!"
+
+#: .fake/Translations/secretf/03_easter3.j2l.h:2
+msgctxt "secretf/03_easter3"
+msgid ""
+"\n"
+"Find the crate to make\n"
+"your climbing blocks appear"
+msgstr ""
+"\n"
+"Finn kassen for å få\n"
+"klatreblokkene til å vises"
+
+#: .fake/Translations/secretf/03_easter3.j2l.h:3
+msgctxt "secretf/03_easter3"
+msgid ""
+"\n"
+"Stomping this crate also\n"
+"free's some enemies :)"
+msgstr ""
+"\n"
+"Å Stompe på denne kassen frigjør også\n"
+"noen fiender :)"
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:1
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Enter the house with caution....."
+msgstr ""
+"\n"
+"Gå inn i huset med forsiktighet..."
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:3
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Silver Crates can't be broken underwater..."
+msgstr ""
+"\n"
+"Sølvkasser kan ikke ødelegges under vann..."
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:4
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Water Level control crate above."
+msgstr ""
+"\n"
+"Vannstandskontrollkasse ovenfor."
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:5
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"Stomping crates can be good and bad..."
+msgstr ""
+"\n"
+"Å trampe på kasser kan være både bra og dårlig..."
+
+#: .fake/Translations/secretf/04_haunted1.j2l.h:7
+msgctxt "secretf/04_haunted1"
+msgid ""
+"\n"
+"But you need a way to get up there..."
+msgstr ""
+"\n"
+"Men du trenger en måte å komme deg opp dit på..."
+
+#: .fake/Translations/secretf/06_haunted3.j2l.h:16
+msgctxt "secretf/06_haunted3"
+msgid ""
+"\n"
+"Michelle,\n"
+"I will love you always and forever :)"
+msgstr ""
+"\n"
+"Michelle,\n"
+"Jeg vil alltid elske deg :)"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:1
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Take to the roof tops!"
+msgstr ""
+"\n"
+"Opp på taket!"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:2
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"The skies above will reward\n"
+"those who stomp..."
+msgstr ""
+"\n"
+"Himmelen over vil belønne\n"
+"dem som stomper..."
+
+#: .fake/Translations/secretf/07_town1.j2l.h:3
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Jump as far over to the\n"
+"right as you possibly can..."
+msgstr ""
+"\n"
+"Hopp så langt til høyre\n"
+"som du overhodet kan..."
+
+#: .fake/Translations/secretf/07_town1.j2l.h:4
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Didn't make the jump huh? :)"
+msgstr ""
+"\n"
+"Du klarte ikke å hoppe, hva? :)"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:5
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Well Done!"
+msgstr ""
+"\n"
+"Bra jobbet!"
+
+#: .fake/Translations/secretf/07_town1.j2l.h:6
+msgctxt "secretf/07_town1"
+msgid ""
+"\n"
+"Use your Special Moves to get up the air cons!\n"
+"For Jazz, press Crouch and Jump.\n"
+"For Spaz, Press Jump Twice!"
+msgstr ""
+"\n"
+"Bruk spesialbevegelsene dine for å komme deg opp i luften!\n"
+"For Jazz, trykk på Crouch og Jump.\n"
+"For Spaz, trykk på Jump to ganger!"
+
+#: .fake/Translations/secretf/08_town2.j2l.h:1
+msgctxt "secretf/08_town2"
+msgid ""
+"\n"
+"Find the crate and the gems are yours!"
+msgstr ""
+"\n"
+"Finn kassen, så er edelstenene dine!"
+
+#: .fake/Translations/secretf/08_town2.j2l.h:2
+msgctxt "secretf/08_town2"
+msgid ""
+"\n"
+"Springs Don't Work When Frozen..."
+msgstr ""
+"\n"
+"Fjærer fungerer ikke når de er frosne..."
+
+#: .fake/Translations/secretf/08_town2.j2l.h:3
+msgctxt "secretf/08_town2"
+msgid ""
+"\n"
+"Collecting 20 coins is more rewarding..."
+msgstr ""
+"\n"
+"Å samle 20 mynter er mer lønnsomt..."
+
+#: .fake/Translations/secretf/09_town3.j2l.h:1
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Find the crate to clear the blocks...."
+msgstr ""
+"\n"
+"Finn kassen for å fjerne blokkene...."
+
+#: .fake/Translations/secretf/09_town3.j2l.h:2
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"BEWARE! Flocks of Ravens can\n"
+"be very dangerous."
+msgstr ""
+"\n"
+"VÆR FORSIKTIG! Flokker av ravner kan\n"
+"være svært farlige."
+
+#: .fake/Translations/secretf/09_town3.j2l.h:3
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"The remove the blocks\n"
+"look to the tallest building."
+msgstr ""
+"\n"
+"Fjern blokkene\n"
+"se mot det høyeste bygget."
+
+#: .fake/Translations/secretf/09_town3.j2l.h:4
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Choose a cover and stomp away!"
+msgstr ""
+"\n"
+"Velg et cover og stamp i vei!"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:5
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Hi GeoBunny :)"
+msgstr ""
+"\n"
+"Hei GeoBunny :)"
+
+#: .fake/Translations/secretf/09_town3.j2l.h:6
+msgctxt "secretf/09_town3"
+msgid ""
+"\n"
+"Goto www.project2.com\n"
+"use\n"
+"password: BUNNYLOVER\n"
+msgstr ""
+"\n"
+"Gå til www.project2.com\n"
+"bruk\n"
+"passord: BUNNYLOVER\n"
+
+#: .fake/Translations/share/01_share1.j2l.h:1
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Shoot these blocks!"
+msgstr ""
+"\n"
+"Skyt disse blokkene!"
+
+#: .fake/Translations/share/01_share1.j2l.h:2
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"When in the air, press down\n"
+"to stomp with your butt."
+msgstr ""
+"\n"
+"Når du er i luften, trykk ned\n"
+"for å stompe med rumpa."
+
+#: .fake/Translations/share/01_share1.j2l.h:3
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"To pass this area, stomp\n"
+"the secret metal crate."
+msgstr ""
+"\n"
+"For å komme forbi dette området, må du stompe på\n"
+"den hemmelige metallkassen."
+
+#: .fake/Translations/share/01_share1.j2l.h:4
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"You need twenty coins to pass \n"
+"through this secret warp!"
+msgstr ""
+"\n"
+"Du trenger tjue mynter for å passere \n"
+"gjennom denne hemmelige warpen!"
+
+#: .fake/Translations/share/01_share1.j2l.h:5
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Coins give you access to \n"
+"warps that appear later."
+msgstr ""
+"\n"
+"Myntene gir deg tilgang til \n"
+"warps som dukker opp senere."
+
+#: .fake/Translations/share/01_share1.j2l.h:6
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Stomp in the right place and\n"
+"you might find a surprise!"
+msgstr ""
+"\n"
+"Stomp på riktig sted, så\n"
+"kan du finne en overraskelse!"
+
+#: .fake/Translations/share/01_share1.j2l.h:7
+msgctxt "share/01_share1"
+msgid ""
+"\n"
+"Some crates contain\n"
+"bombs or baddies!"
+msgstr ""
+"\n"
+"Noen kasser inneholder\n"
+"bomber eller skurker!"
+
+#: .fake/Translations/share/02_share2.j2l.h:1
+msgctxt "share/02_share2"
+msgid ""
+"\n"
+"You need twenty coins to pass \n"
+"through this secret warp!"
+msgstr ""
+"\n"
+"Du trenger tjue mynter for å passere \n"
+"gjennom denne hemmelige warpen!"
+
+#: .fake/Translations/share/02_share2.j2l.h:2
+msgctxt "share/02_share2"
+msgid ""
+"\n"
+"A flamethrower works well \n"
+"against nasty bugs."
+msgstr ""
+"\n"
+"En flammekaster fungerer godt \n"
+"mot ekle insekter."
+
+#: .fake/Translations/share/02_share2.j2l.h:3
+msgctxt "share/02_share2"
+msgid ""
+"\n"
+"Smoke rings will make\n"
+"you very dizzy!"
+msgstr ""
+"\n"
+"Røykringer vil gjøre\n"
+"deg veldig svimmel!"
+
+#: .fake/Translations/share/03_share3.j2l.h:1
+msgctxt "share/03_share3"
+msgid ""
+"\n"
+"Beware the witch! She can\n"
+"turn you into a frog."
+msgstr ""
+"\n"
+"Pass deg for heksen! Hun kan\n"
+"forvandle deg til en frosk."
+
+#: .fake/Translations/share/03_share3.j2l.h:2
+msgctxt "share/03_share3"
+msgid ""
+"\n"
+"If you are turned into a frog\n"
+"Eva Earlong can help!"
+msgstr ""
+"\n"
+"Hvis du blir forvandlet til en frosk\n"
+"kan Eva Earlong hjelpe deg!"
+
+#: .fake/Translations/share/03_share3.j2l.h:3
+msgctxt "share/03_share3"
+msgid ""
+"\n"
+"You made it! This is the end\n"
+" of the shareware version.\n"
+"Now check out the order info\n"
+"for M O R E!"
+msgstr ""
+"\n"
+"Du klarte det! Dette er slutten\n"
+" på shareware-versjonen.\n"
+"Sjekk nå bestillingsinformasjonen\n"
+"for M E R!"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:1
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Watch out for the spikes below!"
+msgstr ""
+"\n"
+"Pass på piggene nedenfor!"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:2
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"You can buttstomp through\n"
+"some of the weakspots\n"
+"in the pathways!"
+msgstr ""
+"\n"
+"Du kan Rumpestompe gjennom\n"
+"noen av svakhetene\n"
+"i gangveiene!"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:3
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Some blocks can only\n"
+"be broken with a\n"
+"certain weapon."
+msgstr ""
+"\n"
+"Noen blokker kan bare\n"
+"knuses med et\n"
+"bestemt våpen."
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:4
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Welcome to Christmas Chronicles!"
+msgstr ""
+"\n"
+"Velkommen til Christmas Chronicles!"
+
+#: .fake/Translations/xmas99/01_xmas1.j2l.h:5
+msgctxt "xmas99/01_xmas1"
+msgid ""
+"\n"
+"Seasons Greetings from\n"
+"Epic MegaGames\n"
+"Orange Games and\n"
+"Project 2 Interactive!"
+msgstr ""
+"\n"
+"God jul fra\n"
+"Epic MegaGames\n"
+"Orange Games og\n"
+"Project 2 Interactive!"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:1
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"You can stand on top\n"
+"of some of the trees!"
+msgstr ""
+"\n"
+"Du kan stå på toppen\n"
+"av noen av trærne!"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:2
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"You can buttstomp through\n"
+"some of the weakspots\n"
+"in the pathways!"
+msgstr ""
+"\n"
+"Du kan Rumpestompe gjennom\n"
+"noen av svakhetene\n"
+"i gangveiene!"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:3
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"Punching the blocks above you\n"
+"can be rewarding."
+msgstr ""
+"\n"
+"Å slå blokkene over deg\n"
+"kan være givende."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:6
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"Gem Trail Entry Crate."
+msgstr ""
+"\n"
+"Gem Trail-innføringskasse."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:7
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"Gem Trail Entrance.\n"
+"Climb the treetops to find\n"
+"and stomp the Entry Crate."
+msgstr ""
+"\n"
+"Gem Trail-inngangen.\n"
+"Klatre opp i tretoppene for å finne\n"
+"og tråkke på inngangskassen."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:14
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"\n"
+"Hi There, Piggy!\n"
+"\n"
+"- Poopy"
+msgstr ""
+"\n"
+"\n"
+"Hei, Piggy!\n"
+"\n"
+"- Poopy"
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:15
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"\n"
+"Michelle:\n"
+"You've changed my life in so many ways\n"
+"I dedicate this project to you.\n"
+"I love you so much."
+msgstr ""
+"\n"
+"\n"
+"Michelle:\n"
+"Du har forandret livet mitt på så mange måter.\n"
+"Jeg dedikerer dette prosjektet til deg.\n"
+"Jeg elsker deg så høyt."
+
+#: .fake/Translations/xmas99/02_xmas2.j2l.h:16
+msgctxt "xmas99/02_xmas2"
+msgid ""
+"\n"
+"\n"
+"Kassi Nicole:\n"
+"A million things I long to say to you\n"
+"But my words always lead to the same ending\n"
+"I love you, I love you."
+msgstr ""
+"\n"
+"\n"
+"Kassi Nicole:\n"
+"Det er så mange ting jeg ønsker å si til deg,\n"
+"men ordene mine ender alltid på samme måte:\n"
+"Jeg elsker deg, jeg elsker deg."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:1
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Please use your TNT wisely."
+msgstr ""
+"\n"
+"Bruk TNT med omhu."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:2
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Don't lose your grip!"
+msgstr ""
+"\n"
+"Ikke mist grepet!"
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:3
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Welcome to Burrowsville\n"
+"Please drive carefully."
+msgstr ""
+"\n"
+"Velkommen til Burrowsville.\n"
+"Kjør forsiktig."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:4
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"That bridge doesnt\n"
+"look too safe..."
+msgstr ""
+"\n"
+"Den broen ser ikke\n"
+"så sikker ut..."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:5
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Robert and Craig:\n"
+"Springs RULE! :)"
+msgstr ""
+"\n"
+"Robert og Craig:\n"
+"Fjærer RULER! :)"
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:6
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Now leaving Burrowsville\n"
+"Please visit again."
+msgstr ""
+"\n"
+"Forlater nå Burrowsville.\n"
+"Kom gjerne tilbake."
+
+#: .fake/Translations/xmas99/03_xmas3.j2l.h:7
+msgctxt "xmas99/03_xmas3"
+msgid ""
+"\n"
+"Password: xmasbunny\n"
+"Please visit\n"
+"www.project2.com"
+msgstr ""
+"\n"
+"Passord: xmasbunny\n"
+"Besøk\n"
+"www.project2.com"
+
+#: Sources/Jazz2/LevelHandler.cpp:258 Sources/Jazz2/LevelHandler.cpp:319
+#, c++-format
+msgid "Level \"{}\" initialized"
+msgstr "Nivå \"{}\" initialisert"
+
+#. TRANSLATORS: Link to website under header text in About section
+#: Sources/Jazz2/LevelHandler.cpp:1075
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:235
+msgid "For more information, visit the official website:"
+msgstr "For mer informasjon, besøk den offisielle nettsiden:"
+
+#: Sources/Jazz2/LevelHandler.cpp:2119
+#, c++-format
+#| msgid "Level \"{}\" initialized"
+msgid "Level \"{}\" restored"
+msgstr ""
+
+#: Sources/Jazz2/LevelHandler.cpp:3117
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4153
+msgid "Cheats are not allowed in current context"
+msgstr "Juks er ikke tillat i nåværende kontekst"
+
+#: Sources/Jazz2/Multiplayer/GameModes/CaptureTheFlagMode.cpp:16
+msgid "home"
+msgstr "hjem"
+
+#: Sources/Jazz2/Multiplayer/GameModes/CaptureTheFlagMode.cpp:16
+msgid "taken"
+msgstr "tatt"
+
+#: Sources/Jazz2/Multiplayer/GameModes/CaptureTheFlagMode.cpp:16
+msgid "dropped"
+msgstr "mistet"
+
+#: Sources/Jazz2/Multiplayer/GameModes/TreasureHuntMode.cpp:32
+msgid "Find exit!"
+msgstr "Finn utgang!"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:585
+msgid ""
+"\n"
+"\n"
+"The game will begin shortly!"
+msgstr ""
+"\n"
+"\n"
+"Spillet vil begynne straks!"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:769
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} won the championship!"
+msgstr ""
+"\n"
+"\n"
+"{} vant mesterskapet!"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2840
+#, c++-format
+msgid "Value out of range (2-{})"
+msgstr "Verdi utenfor rekkevidde (2-{})"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2916
+msgid "Usage: /team <blue|red|green|yellow|auto>"
+msgstr "Bruk: /team <blue|red|green|yellow|auto>"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2923
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4658
+#, c++-format
+msgid "You joined the {} team"
+msgstr "Du ble med i {} teamet"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2925
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4660
+msgid "Cannot change team right now"
+msgstr "Kan ikke bytte lag akkurat nå"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2936
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2948
+msgid "Teams are only used in team game modes"
+msgstr "Lag brukes kun i lagspillmoduser"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2939
+msgid "Teams rebalanced"
+msgstr "Lagene er ombalansert"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2963
+msgid "Usage: /setteam <player#> <blue|red|green|yellow>"
+msgstr "Bruk: /setteam <spiller#> <blue|red|green|yellow>"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2978
+#, c++-format
+msgid "Player {} moved to the {} team"
+msgstr "Spiller {} flyttet til {}-laget"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:2980
+msgid "Player not found"
+msgstr "Spilleren ble ikke funnet"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:3720
+msgid ""
+"You have already finished the race, you can play again in the next round"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:3724
+#| msgid "Cannot change team right now"
+msgid "You cannot join the game right now"
+msgstr ""
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:3763
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4770
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] disconnected"
+msgstr "\f[c:#d0705d]{}\f[/c] frakoblet"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4044
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4768
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] connected"
+msgstr "\f[c:#d0705d]{}\f[/c] koblet på"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4791
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:7345
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] was roasted by \f[c:#d0705d]{}\f[/c]"
+msgstr "\f[c:#d0705d]{}\f[/c] Var stekt av \f[c:#d0705d]{}\f[/c]"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:4794
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:7371
+#, c++-format
+msgid "\f[c:#d0705d]{}\f[/c] was roasted by environment"
+msgstr "\f[c:#d0705d]{}\f[/c] var stekt av miljø"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:8639
+msgid ""
+"\n"
+"\n"
+"Teams have been rebalanced"
+msgstr ""
+"\n"
+"\n"
+"Lagene har blitt ombalansert"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:8944
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} took the {} flag!"
+msgstr ""
+"\n"
+"\n"
+"{} tok {}-flagget!"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:8952
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"The {} flag was returned"
+msgstr ""
+"\n"
+"\n"
+"Flagget {} ble returnert"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:9000
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} team captured the {} flag!"
+msgstr ""
+"\n"
+"\n"
+"{}-laget erobret {}-flagget!"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:9111
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"The {} flag was dropped"
+msgstr ""
+"\n"
+"\n"
+"Flagget {} ble mistet"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10159
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} finished the race!\n"
+"{} seconds remaining"
+msgstr ""
+"\n"
+"\n"
+"{} fullførte løpet!\n"
+"{} sekunder igjen"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10173
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} finished {}."
+msgstr ""
+"\n"
+"\n"
+"{} fullførte {}."
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10437
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"Winner is {}"
+msgstr ""
+"\n"
+"\n"
+"Vinneren er {}"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10501
+#, c++-format
+msgid ""
+"\n"
+"\n"
+"{} team wins!"
+msgstr ""
+"\n"
+"\n"
+"{} lag vinner!"
+
+#: Sources/Jazz2/Multiplayer/MpLevelHandler.cpp:10557
+msgid ""
+"\n"
+"\n"
+"The round ended in a draw"
+msgstr ""
+"\n"
+"\n"
+"Runden endte uavgjort"
+
+#: Sources/Jazz2/UI/HUD.cpp:602 Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:222
+msgid "Spectating"
+msgstr "Ser på"
+
+#. TRANSLATORS: Tappable hint in the top-left corner of the in-game console to toggle the on-screen keyboard
+#: Sources/Jazz2/UI/InGameConsole.cpp:235
+msgid "Keyboard"
+msgstr "Tastatur"
+
+#: Sources/Jazz2/UI/InGameConsole.cpp:548
+msgid "Unknown command"
+msgstr "Ukjent kommando"
+
+#. TRANSLATORS: Header text in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:233
+msgid ""
+"Reimplementation of the game \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] released "
+"in 1998. Supports various versions of the game (Shareware Demo, Holiday Hare "
+"'98, The Secret Files and Christmas Chronicles). Also, it partially supports "
+"some features of JJ2+ extension."
+msgstr ""
+"Reimplementering av spillet \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] utgitt i "
+"1998. Støtter ulike versjoner av spillet (Shareware Demo, Holiday Hare '98, "
+"The Secret Files og Christmas Chronicles). Støtter også delvis noen "
+"funksjoner i JJ2+ utvidelsen."
+
+#. TRANSLATORS: Label in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:237
+msgid "Developers"
+msgstr "Utviklere"
+
+#. TRANSLATORS: Label in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:239
+msgid "Contributors"
+msgstr "Bidragsytere"
+
+#. TRANSLATORS: Label in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:241
+msgid "Translators"
+msgstr "Oversettere"
+
+#. TRANSLATORS: Footer text in About section
+#: Sources/Jazz2/UI/Menu/AboutSection.cpp:243
+msgid ""
+"This project uses modified \f[c:#9e7056]nCine\f[/c] game engine and "
+"following libraries:"
+msgstr ""
+"Dette prosjektet bruker modifisert \f[c:#9e7056]nCine\f[/c] spillmotor og "
+"følgende biblioteker:"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:61
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:98
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:194
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:196
+msgid "Play Story"
+msgstr "Spill historie"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:69
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:83
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:103
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:20
+msgid "Play Multiplayer"
+msgstr "Spill flerspiller"
+
+#. TRANSLATORS: Menu item in main menu (Emscripten only)
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:74
+msgid "Play Shareware Demo"
+msgstr "Spill Shareware Demo"
+
+#. TRANSLATORS: Menu item in main menu (Emscripten only)
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:89
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:65
+msgid "Import Episodes"
+msgstr "Importer episoder"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:94
+msgid "Continue"
+msgstr "Fortsett"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:109
+msgid "Highscores"
+msgstr "Høyeste poengsummer"
+
+#. TRANSLATORS: Menu item in main menu
+#. TRANSLATORS: Subheader in First Run section
+#. \uE000 is the Discord icon of the menu font's private use area, written as an escape so that
+#. the character itself cannot be lost when the file is edited
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:111
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:22
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:62
+msgid "Options"
+msgstr "Instillinger"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:113
+msgid "About"
+msgstr "Om"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:121
+msgid "Quit"
+msgstr "Avslutt"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:233
+#, c++-format
+msgid "For more information, visit {} and  Discord!"
+msgstr "For mer informasjon, besøk {} og  Discord!"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:246
+msgid "Access to external storage has been granted!"
+msgstr "Tilgang til ekstern lagring er gitt!"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:248
+msgid ""
+"\f[c:#337233]Restart the game to read \f[c:#9e7056]Jazz Jackrabbit "
+"2\f[c:#337233] files correctly."
+msgstr ""
+"\f[c:#337233]Start spillet på nytt for å lese \f[c:#9e7056]Jazz Jackrabbit "
+"2\f[c:#337233]-filene riktig."
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:258
+msgid ""
+"\f[c:#704a4a]This game requires original \f[c:#9e7056]Jazz Jackrabbit "
+"2\f[c:#704a4a] files!"
+msgstr ""
+"\f[c:#704a4a]Dette spillet krever originale \f[c:#9e7056]Jazz Jackrabbit "
+"2\f[c:#704a4a]-filer!"
+
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:260
+msgid "Make sure Jazz Jackrabbit 2 files are present in following path:"
+msgstr "Sørg for at Jazz Jackrabbit 2-filene finnes i følgende bane:"
+
+#. TRANSLATORS: Menu item in main menu (Android 11+ only)
+#: Sources/Jazz2/UI/Menu/BeginSection.cpp:268
+msgid "Allow access to external storage"
+msgstr "Tillat tilgang til ekstern lagring"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:30
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:38
+msgid "Controls"
+msgstr "Kontroller"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:46
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:267
+#, c++-format
+msgid "Remap Controls for Player {}"
+msgstr "Omkonfigurer kontroller for spiller {}"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:51
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:270
+msgid "Remap Controls"
+msgstr "Omkonfigurer kontroller"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:63
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:111
+msgid "Touch Controls"
+msgstr "Berøringskontroller"
+
+#. TRANSLATORS: Menu item in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:68
+msgid "Toggle Run"
+msgstr "Slå av/på Løp"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:69
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:113
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:123
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:53
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:58
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:62
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:66
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:74
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:83
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:56
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:57
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:67
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:71
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:75
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:101
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:122
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:142
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:166
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:178
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:261
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:277
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:288
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:107
+msgid "Enabled"
+msgstr "Skrudd på"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:69
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:103
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:113
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:123
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:53
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:58
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:62
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:66
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:74
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:83
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:61
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:67
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:71
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:75
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:101
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:122
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:142
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:166
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:178
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:261
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:277
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:288
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:295
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:107
+msgid "Disabled"
+msgstr "Skrudd av"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:72
+msgid "Gamepad Button Labels"
+msgstr "Gamepad-knappetiketter"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:95
+msgid "Gamepad Rumble"
+msgstr "Gamepad-vibrering"
+
+#. TRANSLATORS: Option for Gamepad Rumble in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:99
+msgid "Strong"
+msgstr "Sterk"
+
+#. TRANSLATORS: Option for Gamepad Rumble in Options > Controls section
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:102
+msgid "Weak"
+msgstr "Svak"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:112
+msgid "Extended PlayStation™ Support"
+msgstr "Extended PlayStation™-støtte"
+
+#. TRANSLATORS: Menu item in Options > Controls section (Android only)
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:122
+msgid "Native Back Button"
+msgstr "Innebygd tilbake-knapp"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:127
+#: Sources/Jazz2/UI/Menu/InputDiagnosticsSection.cpp:86
+msgid "Input Diagnostics"
+msgstr "Inndatadiagnostikk"
+
+#: Sources/Jazz2/UI/Menu/ControlsOptionsSection.cpp:129
+msgid "Reset To Default"
+msgstr "Tilbakestill til standard"
+
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:159
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:216
+msgid "Easy"
+msgstr "Lett"
+
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:160
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:216
+msgid "Medium"
+msgstr "Middels"
+
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:161
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:216
+msgid "Hard"
+msgstr "Vanskelig"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:168
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:176
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:244
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:54
+msgid "Battle"
+msgstr "Kamp"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:169
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:245
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:56
+msgid "Team Battle"
+msgstr "Lagkamp"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:170
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:246
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:58
+msgid "Race"
+msgstr "Race"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:171
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:247
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:60
+msgid "Team Race"
+msgstr "Lagkonkurranse"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:172
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:248
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:62
+msgid "Treasure Hunt"
+msgstr "Skattejakt"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:173
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:249
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:64
+msgid "Team Treasure Hunt"
+msgstr "Lagskattejakt"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:174
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:250
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:66
+msgid "Capture The Flag"
+msgstr "Fang flagget"
+
+#. TRANSLATORS: Menu item in Select Game Mode section
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:175
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:251
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:68
+msgid "Cooperation"
+msgstr "Samarbeid"
+
+#. TRANSLATORS: Menu item in Multiplayer section (local splitscreen multiplayer)
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:217
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:189
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:34
+msgid "Create Local Splitscreen Game"
+msgstr "Lag et lokalt spill med delt skjerm"
+
+#. TRANSLATORS: Menu item to select the number of local splitscreen players
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:222
+msgid "Number of Players"
+msgstr "Antall spillere"
+
+#. TRANSLATORS: Menu item to select player character (Jazz, Spaz, Lori)
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:234
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:39
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:22
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:139
+msgid "Character"
+msgstr "Karakter"
+
+#. TRANSLATORS: Menu item to select difficulty
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:249
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:24
+msgid "Difficulty"
+msgstr "Vanskelighetsgrad"
+
+#. TRANSLATORS: Menu item to select game mode
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:256
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:41
+msgid "Game Mode"
+msgstr "Spillmodus"
+
+#. TRANSLATORS: Menu item to start the local game with the selected settings
+#. TRANSLATORS: Menu item to start selected episode/level
+#: Sources/Jazz2/UI/Menu/CreateLocalGameOptionsSection.cpp:269
+#: Sources/Jazz2/UI/Menu/StartGameOptionsSection.cpp:26
+msgid "Start"
+msgstr "Start"
+
+#. TRANSLATORS: Menu item to select Wi-Fi or ad hoc connection (PSP only)
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:44
+msgid "Connection"
+msgstr ""
+
+#. TRANSLATORS: Menu item to create server with selected settings
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:47
+msgid "Create Server"
+msgstr "Opprett server"
+
+#. TRANSLATORS: Transport mode in Create Server section on PSP, local wireless connection between consoles
+#. TRANSLATORS: Transport mode in Connect To Server section on PSP, local wireless connection between consoles
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:263
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:473
+msgid "Ad hoc"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:263
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:473
+msgid "Wi-Fi"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:418
+msgid ""
+"\f[c:#704a4a]Cannot create the server!\f[/c]\n"
+"\n"
+"\n"
+"Playlist is not properly configured.\n"
+"Please review server configuration and try it again."
+msgstr ""
+"\f[c:#704a4a]Kan ikke opprette serveren!\f[/c]\n"
+"\n"
+"\n"
+"Spillelisten er ikke riktig konfigurert.\n"
+"Kontroller serverkonfigurasjonen og prøv på nytt."
+
+#: Sources/Jazz2/UI/Menu/CreateServerOptionsSection.cpp:457
+msgid ""
+"\f[c:#704a4a]Cannot create the server!\f[/c]\n"
+"\n"
+"\n"
+"Please verify that no other server\n"
+"is running on that port and try it again."
+msgstr ""
+"\f[c:#704a4a]Kan ikke opprette serveren!\f[/c]\n"
+"\n"
+"\n"
+"Kontroller at ingen andre servere\n"
+"kjører på den porten, og prøv igjen."
+
+#: Sources/Jazz2/UI/Menu/CustomLevelSelectSection.cpp:155
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:595
+msgid "Play Custom Levels"
+msgstr "Spill tilpassede nivåer"
+
+#: Sources/Jazz2/UI/Menu/CustomLevelSelectSection.cpp:167
+msgid "No custom level found!"
+msgstr "Ingen tilpasset nivå funnet!"
+
+#: Sources/Jazz2/UI/Menu/CustomLevelSelectSection.cpp:189
+msgid "Create server from playlist"
+msgstr "Opprett server fra spilleliste"
+
+#. TRANSLATORS: Menu item in Multiplayer section (host a private online server)
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:192
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:30
+msgid "Create Private Server"
+msgstr "Opprett privat server"
+
+#. TRANSLATORS: Menu item in Multiplayer section (host a publicly listed online server)
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:193
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:28
+msgid "Create Public Server"
+msgstr "Opprett offentlig server"
+
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:207
+msgid "No episode found!"
+msgstr "Ingen episoder funnet!"
+
+#. TRANSLATORS: Menu subitem in Play Story section
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:360
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:361
+msgid "Restart episode"
+msgstr "Start episode på nytt"
+
+#. TRANSLATORS: Information in Play Story section that episode is locked because the previous episode is not complete
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:386
+#, c++-format
+msgid "You must complete \"{}\" first!"
+msgstr "Du må fullføre \"{}\" først!"
+
+#. TRANSLATORS: Information in Play Story section that episode is locked
+#: Sources/Jazz2/UI/Menu/EpisodeSelectSection.cpp:390
+msgid "Episode is locked!"
+msgstr "Episoden er låst!"
+
+#. TRANSLATORS: Menu item in First Run section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:106
+msgid "Legacy"
+msgstr "Klassisk"
+
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:106
+msgid "I want to play the game the way it used to be."
+msgstr "Jeg vil spille spillet slik det var før."
+
+#. TRANSLATORS: Menu item in First Run section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:108
+msgid "Reforged"
+msgstr "Fornyet"
+
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:108
+msgid "I want to play the game with something new."
+msgstr "Jeg vil spille spillet med noe nytt."
+
+#. TRANSLATORS: Header in First Run section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:194
+msgid "Welcome to \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] reimplementation!"
+msgstr "Velkommen til \f[c:#9e7056]Jazz Jackrabbit 2\f[/c] reimplementering!"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:38
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:30
+msgid "Gameplay"
+msgstr "Spillopplevelse"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:115
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:43
+msgid "Enhancements"
+msgstr "Forbedringer"
+
+#. TRANSLATORS: Subheader in First Run section
+#. \uE000 is the Discord icon of the menu font's private use area, written as an escape so that
+#. the character itself cannot be lost when the file is edited
+#: Sources/Jazz2/UI/Menu/FirstRunSection.cpp:204
+#, c++-format
+msgid ""
+"You can choose your preferred play style.\n"
+"This option can be changed at any time in \f[c:#707070]{}\f[/c] > "
+"\f[c:#707070]{}\f[/c] > \f[c:#707070]{}\f[/c].\n"
+"For more information, visit {} and  Discord!"
+msgstr ""
+"Du kan velge din foretrukne spillstil.\n"
+"Dette alternativet kan endres når som helst under \f[c:#707070]{}\f[/c] > "
+"\f[c:#707070]{}\f[/c] > \f[c:#707070]{}\f[/c].\n"
+"For mer informasjon, besøk {} og  Discord!"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:52
+msgid "Reforged Gameplay"
+msgstr "Fornyet spillopplevelse"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:57
+msgid "Reforged Camera"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:61
+msgid "Reforged HUD"
+msgstr "Fornyet HUD"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:65
+msgid "Reforged Main Menu"
+msgstr "Fornyet hovedmeny"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:73
+msgid "Ledge Climbing"
+msgstr "Kantklatring"
+
+#. TRANSLATORS: Menu item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:78
+msgid "Weapon Wheel"
+msgstr "Våpenhjul"
+
+#. TRANSLATORS: Option for Weapon Wheel item in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:82
+msgid "Enabled With Ammo Count"
+msgstr "Aktivert med ammunisjonstelling"
+
+#. TRANSLATORS: Header in Options > Gameplay > Enhancements section
+#: Sources/Jazz2/UI/Menu/GameplayEnhancementsSection.cpp:118
+msgid "You can enable enhancements that were added to this remake."
+msgstr "Du kan aktivere forbedringer som ble lagt til i denne nyutgivelsen."
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:45
+#: Sources/Jazz2/UI/Menu/LanguageSelectSection.cpp:44
+msgid "Language"
+msgstr "Språk"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#. Uses a custom value drawer to show the UAC icon next to "Enabled" (it allows running unsigned scripts)
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:50
+msgid "Scripting"
+msgstr "Skripting"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:66
+msgid "Continuous Jump"
+msgstr "Kontinuerlig Hopp"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:70
+msgid "Switch To New Weapon"
+msgstr "Bytt til nytt våpen"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:74
+msgid "Show Minimap"
+msgstr "Vis minimap"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:78
+msgid "Allow Cheats"
+msgstr "Tillat juks"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:79
+msgid "Yes"
+msgstr "Ja"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:79
+msgid "No"
+msgstr "Nei"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:83
+msgid "Overwrite Episode Completion"
+msgstr "Overskriv ferdigstillelse av episode"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:86
+msgid "No Cheats Only"
+msgstr "Kun uten juks"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:88
+msgid "Higher Score Only"
+msgstr "Kun høyere poengsum"
+
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:89
+msgid "Always"
+msgstr "Alltid"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:100
+msgid "Razer Chroma™"
+msgstr "Razer Chroma™"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:112
+msgid "Browse \"Source\" Directory"
+msgstr "Bla gjennom \"Source\"-mappen"
+
+#. TRANSLATORS: Menu item in Options > Gameplay section
+#: Sources/Jazz2/UI/Menu/GameplayOptionsSection.cpp:126
+#: Sources/Jazz2/UI/Menu/RefreshCacheSection.cpp:83
+msgid "Refresh Cache"
+msgstr "Oppdater cache"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:39
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:32
+msgid "Graphics"
+msgstr "Grafikk"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:49
+msgid "Rescale Mode"
+msgstr "Omskaleringsmodus"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:54
+msgid "Screen Resolution"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:70
+msgid "Rendering Resolution"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:121
+msgid "Fullscreen"
+msgstr "Fullskjerm"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:141
+msgid "Antialiasing"
+msgstr "Antialiasing"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:165
+msgid "Background Dithering"
+msgstr "Bakgrunnsdithering"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:177
+msgid "Blur Effects"
+msgstr "Uskarphetseffekter"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:189
+msgid "Lighting Resolution"
+msgstr "Oppløsning for belysning"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:229
+msgid "Particle Quality"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:232
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:306
+msgid "Off"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:233
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:252
+msgid "Low"
+msgstr "Lav"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:234
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:252
+msgid "High"
+msgstr "Høy"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:251
+msgid "Water Quality"
+msgstr "Vannkvalitet"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:260
+msgid "Show Player Trails"
+msgstr "Vis spillerspor"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:268
+msgid "Preferred Splitscreen"
+msgstr "Foretrukket delt skjerm"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:269
+msgid "Vertical"
+msgstr "Vertikal"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:269
+msgid "Horizontal"
+msgstr "Horisontal"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:276
+msgid "Prefer Zoom Out"
+msgstr "Foretrekk å zoome ut"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#. TRANSLATORS: Header of Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:285
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:54
+msgid "Safe Area"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:287
+msgid "Keep Aspect Ratio In Cinematics"
+msgstr "Behold bildeforholdet i filmsekvenser"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:294
+msgid "Unaligned Viewport"
+msgstr "Ujustert visningsvindu"
+
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:295
+msgid "Enabled \f[c:#d0705d](Experimental)\f[/c]"
+msgstr "Aktivert \f[c:#d0705d](Eksperimentell)\f[/c]"
+
+#. TRANSLATORS: Menu item in Options > Graphics section
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:303
+msgid "Performance Metrics"
+msgstr "Ytelsesmålinger"
+
+#. TRANSLATORS: Option for Performance Metrics item in Options > Graphics section, only the frame rate is shown
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:308
+msgid "Basic"
+msgstr ""
+
+#. TRANSLATORS: Option for Performance Metrics item in Options > Graphics section, the frame rate and the time each part of a frame takes
+#: Sources/Jazz2/UI/Menu/GraphicsOptionsSection.cpp:310
+msgid "Detailed"
+msgstr "Detaljert"
+
+#: Sources/Jazz2/UI/Menu/HighscoresSection.cpp:181
+msgid "Highscores for \f[c:#d0705d]Base game\f[/c]"
+msgstr "Highscores for \f[c:#d0705d]Basisspill\f[/c]"
+
+#: Sources/Jazz2/UI/Menu/HighscoresSection.cpp:191
+#, c++-format
+msgid "Highscores for \f[c:#d0705d]{}\f[/c]"
+msgstr "Høye poengsummer for \f[c:#d0705d]{}\f[/c]"
+
+#. TRANSLATORS: Header in Import Episodes section
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:68
+msgid "Select files of your original game to unlock additional episodes"
+msgstr "Velg filer fra det originale spillet for å låse opp flere episoder"
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:74
+#, c++-format
+msgid "Processing of {} file..."
+msgid_plural "Processing of {} files..."
+msgstr[0] "Behandler {}-fil..."
+msgstr[1] "Behandling av {} filer..."
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:77
+msgid "Waiting for files..."
+msgstr "Venter på filer..."
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:83
+msgid "No files were selected!"
+msgstr "Ingen filer ble valgt!"
+
+#: Sources/Jazz2/UI/Menu/ImportSection.cpp:88
+msgid "No new episodes were imported!"
+msgstr "Ingen nye episoder ble importert!"
+
+#: Sources/Jazz2/UI/Menu/InputDiagnosticsSection.cpp:100
+msgid "No gamepads are detected!"
+msgstr "Ingen spillkontroller er oppdaget!"
+
+#: Sources/Jazz2/UI/Menu/MultiplayerGameModeSelectSection.cpp:23
+msgid "Select Game Mode"
+msgstr "Velg spillmodus"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:35
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:41
+msgid "Sounds"
+msgstr "Lyder"
+
+#. TRANSLATORS: Menu item in Options section
+#: Sources/Jazz2/UI/Menu/OptionsSection.cpp:40
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:100
+msgid "User Profile"
+msgstr "Brukerprofil"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:42
+msgid "Resume"
+msgstr "Fortsett"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:49
+msgid "Join Game"
+msgstr "Bli med i spillet"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:52
+msgid "Spectate"
+msgstr "Se på"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:56
+msgid "Change Character"
+msgstr "Bytt karakter"
+
+#. TRANSLATORS: Menu item in main menu
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:66
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:69
+msgid "Save & Exit"
+msgstr "Lagre og avslutt"
+
+#: Sources/Jazz2/UI/Menu/PauseSection.cpp:66
+msgid "Disconnect & Exit"
+msgstr "Koble fra og avslutt"
+
+#. TRANSLATORS: Menu item in Multiplayer section (join an existing online server)
+#: Sources/Jazz2/UI/Menu/PlayMultiplayerSection.cpp:25
+msgid "Join Server"
+msgstr "Bli med i serveren"
+
+#: Sources/Jazz2/UI/Menu/RefreshCacheSection.cpp:85
+msgid "Processing of files in \f[c:#9e7056]\"Source\"\f[/c] directory..."
+msgstr "Behandler filer i \f[c:#9e7056]\"Source\"\f[/c]-mappen…"
+
+#: Sources/Jazz2/UI/Menu/RefreshCacheSection.cpp:88
+msgid "Newly added levels and episodes will be available soon."
+msgstr "Nye nivåer og episoder vil snart være tilgjengelige."
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:52
+msgid "Left"
+msgstr "Venstre"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:54
+msgid "Right"
+msgstr "Høyre"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:56
+msgid "Up"
+msgstr "Opp"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:58
+msgid "Down"
+msgstr "Ned"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:60
+msgid "Buttstomp"
+msgstr "Rumpestomp"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:62
+msgid "Fire"
+msgstr "Skyt"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:64
+msgid "Jump"
+msgstr "Hopp"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:66
+msgid "Run"
+msgstr "Løp"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#. TRANSLATORS: Bottom hint in Connect To Server > IP Address input field
+#. _root->DrawStringShadow(_("Keyboard"), charOffset, centerX - 84.0f, hintY, IMenuContainer::FontLayer + 110,
+#. Alignment::Left, Font::DefaultColor, 0.7f, 0.4f, 0.0f, 0.0f, 0.0f, 0.9f);
+#. }
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:68
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:299
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:452
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:482
+msgid "Change Weapon"
+msgstr "Bytt våpen"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:70
+msgid "Back"
+msgstr "Tilbake"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:72
+msgid "Toggle Console"
+msgstr "Skru av/på konsoll"
+
+#. TRANSLATORS: Menu item in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:75
+#, c++-format
+msgid "Weapon {}"
+msgstr "Våpen {}"
+
+#. TRANSLATORS: Bottom hint in Options > Controls > Remap Controls section
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:289
+msgid "Press any key or button to assign"
+msgstr "Trykk på en hvilken som helst tast eller knapp for å tilordne"
+
+#. TRANSLATORS: Bottom hint in Options > Controls > Remap Controls section, prefixed with key/button to press
+#: Sources/Jazz2/UI/Menu/RemapControlsSection.cpp:301
+msgid "to remove assignment"
+msgstr "å fjerne tilordning"
+
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:32
+msgid "Select Rescale Mode"
+msgstr "Velg skaleringsmodus"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:48
+msgid "None / Pixel-perfect"
+msgstr "Ingen / Pikselperfekt"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:66
+msgid "CRT Scanlines"
+msgstr "CRT-skannelinjer"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:68
+msgid "CRT Shadow Mask"
+msgstr "CRT-skyggefilter"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:70
+msgid "CRT Aperture Grille"
+msgstr "CRT-åpningsgitter"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Rescale Mode section
+#: Sources/Jazz2/UI/Menu/RescaleModeSection.cpp:73
+msgid "Monochrome"
+msgstr "Monokrom"
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:58
+msgid "Left Margin"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:60
+msgid "Top Margin"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:62
+msgid "Right Margin"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:64
+msgid "Bottom Margin"
+msgstr ""
+
+#. TRANSLATORS: Menu item in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:66
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:139
+msgid "Reset"
+msgstr "Tilbakestill"
+
+#. TRANSLATORS: Value of a margin in Options > Graphics > Safe Area section
+#: Sources/Jazz2/UI/Menu/SafeAreaOptionsSection.cpp:92
+msgid "None"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:139
+msgid "Laps"
+msgstr "Runder"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:141
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:583
+msgid "Treasure"
+msgstr "Skatt"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:169
+msgid "Scoreboard"
+msgstr "Resultattavle"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:174
+msgid "Player"
+msgstr "Spiller"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:184
+msgid "Pts"
+msgstr "Png"
+
+#: Sources/Jazz2/UI/Menu/ScoreboardSection.cpp:186
+msgid "Ping"
+msgstr "Ping"
+
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:284
+msgid "Connect To Server"
+msgstr "Koble til server"
+
+#. TRANSLATORS: Shown in Connect To Server section on PSP while the console switches between Wi-Fi and ad hoc mode
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:299
+msgid "Switching connection mode…"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:304
+msgid "No servers found, but still searchin'!"
+msgstr "Ingen servere funnet, men søker fortsatt!"
+
+#. TRANSLATORS: Label in Connect To Server > IP Address input field
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:422
+msgid "IP Address:"
+msgstr "IP Adresse:"
+
+#. TRANSLATORS: Placeholder in Connect To Server > IP Address input field
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:429
+msgid "<ip> or <ip>:<port>"
+msgstr "<ip> eller <ip>:<port>"
+
+#. TRANSLATORS: Bottom hint in Connect To Server > IP Address input field, prefixed with key/button to press
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:464
+msgid "to show keyboard"
+msgstr "for å vise tastaturet"
+
+#. TRANSLATORS: Bottom hint in Connect To Server section, prefixed with key/button to press
+#: Sources/Jazz2/UI/Menu/ServerSelectSection.cpp:496
+msgid "to connect to IP address"
+msgstr "å koble til IP-adresse"
+
+#: Sources/Jazz2/UI/Menu/SimpleMessageSection.cpp:48
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:227
+msgid "Press \f[c:#d0705d]Fire\f[/c] to continue"
+msgstr "Trykk \f[c:#d0705d]Skyt\f[/c] for å fortsette"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:51
+msgid "Master Volume"
+msgstr "Hovedvolum"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:59
+msgid "SFX Volume"
+msgstr "Effektvolum"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:67
+msgid "Music Volume"
+msgstr "Musikkvolum"
+
+#. TRANSLATORS: Menu item in Options > Sounds section
+#: Sources/Jazz2/UI/Menu/SoundsOptionsSection.cpp:83
+msgid "Sample Rate"
+msgstr ""
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:130
+msgid "Save"
+msgstr "Lagre"
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:146
+msgid "Joystick"
+msgstr "Joystick"
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:156
+msgid "Vibration"
+msgstr "Vibrasjon"
+
+#: Sources/Jazz2/UI/Menu/TouchControlsOptionsSection.cpp:164
+msgid "Drag to move · Pinch or corner to resize"
+msgstr "Dra for å flytte · Klyp eller hjørne for å endre størrelse"
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:106
+msgid "Discord Integration"
+msgstr "Discord-integrasjon"
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:121
+msgid "Player Name"
+msgstr "Spiller Navn"
+
+#. TRANSLATORS: Menu item in Options > User Profile section (primary fur/body color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:164
+msgid "Primary Fur"
+msgstr "Primær pels"
+
+#. TRANSLATORS: Menu item in Options > User Profile section (secondary fur/body color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:166
+msgid "Secondary Fur"
+msgstr "Sekundær pels"
+
+#. TRANSLATORS: Menu item in Options > User Profile section (weapon color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:168
+msgid "Weapon"
+msgstr "Våpen"
+
+#. TRANSLATORS: Menu item in Options > User Profile section (miscellaneous accent color)
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:170
+msgid "Miscellaneous"
+msgstr "Diverse"
+
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:185
+msgid "Default"
+msgstr "Standard"
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:205
+msgid "Apply Custom Colors"
+msgstr "Bruk egendefinerte farger"
+
+#. TRANSLATORS: Value of "Apply Colors" in Options > User Profile
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:210
+msgid "Online only"
+msgstr "Kun på nett"
+
+#. TRANSLATORS: Value of "Apply Colors" in Options > User Profile
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:212
+msgid "Online and first local player"
+msgstr "Online og første lokale spiller"
+
+#. TRANSLATORS: Value of "Apply Colors" in Options > User Profile
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:214
+msgid "Online and all local players"
+msgstr "Online og alle lokale spillere"
+
+#. TRANSLATORS: Menu item in Options > User Profile section
+#: Sources/Jazz2/UI/Menu/UserProfileOptionsSection.cpp:222
+msgid "Unique Player ID"
+msgstr "Unik Spiller ID"
+
+#. TRANSLATORS: Spectator hint, "Fire" and "Run" are the names of the two actions
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:236
+msgid "Fire: next player, Run: free camera"
+msgstr ""
+
+#. TRANSLATORS: Spectator hint, "Fire" is the name of the action
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:238
+msgid "Fire: follow a player"
+msgstr ""
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:255
+#, c++-format
+msgid "Game starts in {}"
+msgstr "Spillet starter om {}"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:263
+#, c++-format
+msgid "Waiting for {} more player"
+msgid_plural "Waiting for {} more players"
+msgstr[0] "Venter for {} mer spiller"
+msgstr[1] "Venter for {} mer spillere"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:286
+#, c++-format
+msgid "Finish in {} s"
+msgstr "I mål om {} s"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:581
+msgid "Time"
+msgstr "Tid"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:584
+msgid "Kills"
+msgstr "Drepte"
+
+#: Sources/Jazz2/UI/Multiplayer/MpHUD.cpp:612
+msgid "Final standings"
+msgstr "Sluttstilling"
+
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:175
+msgid "Team"
+msgstr "Lag"
+
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:184
+msgid "Auto"
+msgstr "Auto"
+
+#: Sources/Jazz2/UI/Multiplayer/MpInGameLobby.cpp:223
+msgid "Use \f[c:#d0705d]Up/Down\f[/c] to switch between character and team"
+msgstr "Bruk \f[c:#d0705d]Opp/Ned\f[/c] for å bytte mellom karakter og lag"
+
+#: Sources/Main.cpp:929 Sources/Main.cpp:1010
+msgid ""
+"\f[c:#704a4a]Cannot load specified level!\f[/c]\n"
+"\n"
+"\n"
+"Make sure all necessary files\n"
+"are accessible and try it again."
+msgstr ""
+"\f[c:#704a4a]Kunne ikke laste angitt nivå!\f[/c]\n"
+"\n"
+"\n"
+"Sørg for at alle nødvendige filer\n"
+"er tilgjengelige og prøv på nytt."
+
+#: Sources/Main.cpp:1112
+msgid ""
+"\f[c:#704a4a]Cannot resume saved state!\f[/c]\n"
+"\n"
+"\n"
+"Make sure all necessary files\n"
+"are accessible and try it again."
+msgstr ""
+"\f[c:#704a4a]Kan ikke gjenoppta lagret spill!\f[/c]\n"
+"\n"
+"\n"
+"Sørg for at alle nødvendige filer\n"
+"er tilgjengelige og prøv igjen."
+
+#: Sources/Main.cpp:1402
+msgid "Unnamed server"
+msgstr "Navnløs server"
+
+#: Sources/Main.cpp:1559
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Invalid parameter specified."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Ugyldig parameter angitt."
+
+#: Sources/Main.cpp:1560
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Your client version is not compatible with the server."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Din klientversjon er ikke kompatibel med serveren."
+
+#: Sources/Main.cpp:1561
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"The client was rejected due to malformed communication protocol."
+msgstr ""
+"\f[c:#704a4a]Tilkoblingen er lukket!\f[/c]\n"
+"\n"
+"\n"
+"Klienten ble avvist på grunn av feil kommunikasjonsprotokoll."
+
+#: Sources/Main.cpp:1562
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"The connection was denied by the web browser.\n"
+"One of the reasons may be connecting to an unsecured WebSocket."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Tilkoblingen ble avvist av nettleseren.\n"
+"En av årsakene kan være tilkobling til en usikret WebSocket."
+
+#: Sources/Main.cpp:1563
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Authentication failed.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Autentisering mislyktes.\n"
+"Kontakt serveradministratorene for mer informasjon."
+
+#: Sources/Main.cpp:1564
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Invalid password specified."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Ugyldig passord angitt."
+
+#: Sources/Main.cpp:1565
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Invalid player name specified.\n"
+"Please check your profile and try it again."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Ugyldig spillernavn angitt.\n"
+"Kontroller profilen din og prøv igjen."
+
+#: Sources/Main.cpp:1566
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"This client is not in the server whitelist.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Denne klienten er ikke på serverens hviteliste.\n"
+"Kontakt serveradministratorene for mer informasjon."
+
+#: Sources/Main.cpp:1567
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Server requires 3rd party authentication provider.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Serveren krever tredjeparts autentiseringsleverandør.\n"
+"Kontakt serveradministratorene for mer informasjon."
+
+#: Sources/Main.cpp:1568
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Server capacity is full.\n"
+"Please try it later."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Serveren er full.\n"
+"Vennligst prøv igjen senere."
+
+#: Sources/Main.cpp:1569
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Server is not in a state where it can process your request.\n"
+"Please try again in a few seconds."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Serveren er ikke i en tilstand der den kan behandle forespørselen din.\n"
+"Vennligst prøv igjen om noen sekunder."
+
+#: Sources/Main.cpp:1570
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down.\n"
+"Please try it later."
+msgstr ""
+"\f[c:#704a4a]Tilkoblingen er lukket!\f[/c]\n"
+"\n"
+"\n"
+"Serveren stenger ned.\n"
+"Vennligst prøv igjen senere."
+
+#: Sources/Main.cpp:1571
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down for maintenance.\n"
+"Please try it again later."
+msgstr ""
+"\f[c:#704a4a]Tilkoblingen er lukket!\f[/c]\n"
+"\n"
+"\n"
+"Serveren stenger for vedlikehold.\n"
+"Vennligst prøv igjen senere."
+
+#: Sources/Main.cpp:1572
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down for reconfiguration.\n"
+"Please try it again later."
+msgstr ""
+"\f[c:#704a4a]Tilkoblingen er lukket!\f[/c]\n"
+"\n"
+"\n"
+"Serveren stenger for omkonfigurering.\n"
+"Vennligst prøv igjen senere."
+
+#: Sources/Main.cpp:1573
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Server is shutting down for update.\n"
+"Please check your client version and try it again in a minute."
+msgstr ""
+"\f[c:#704a4a]Tilkoblingen er lukket!\f[/c]\n"
+"\n"
+"\n"
+"Serveren stenger for oppdatering.\n"
+"Vennligst sjekk klientversjonen din og prøv igjen om et minutt."
+
+#: Sources/Main.cpp:1574
+msgid ""
+"\f[c:#704a4a]Connection has been lost!\f[/c]\n"
+"\n"
+"\n"
+"Please try it again and if the problem persists,\n"
+"check your network connection."
+msgstr ""
+"\f[c:#704a4a]Tilkoblingen er mistet!\f[/c]\n"
+"\n"
+"\n"
+"Vennligst prøv igjen, og hvis problemet vedvarer, sjekk "
+"nettverkstilkoblingen din."
+
+#: Sources/Main.cpp:1575
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"The server is not responding for connection request."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Serveren svarer ikke på tilkoblingsforespørselen."
+
+#: Sources/Main.cpp:1576
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"You have been \f[c:#907050]kicked\f[/c] off the server.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Tilkoblingen er lukket!\f[/c]\n"
+"\n"
+"\n"
+"Du har blitt \f[c:#907050]kastet\f[/c] ut av serveren.\n"
+"Kontakt serveradministratorene for mer informasjon."
+
+#: Sources/Main.cpp:1577
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"You have been \f[c:#725040]banned\f[/c] off the server.\n"
+"Contact server administrators for more information."
+msgstr ""
+"\f[c:#704a4a]Tilkoblingen er lukket!\f[/c]\n"
+"\n"
+"\n"
+"Du har blitt \f[c:#725040]utelukket/bannet\f[/c] fra serveren.\n"
+"Kontakt serveradministratorene for mer informasjon."
+
+#: Sources/Main.cpp:1578
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"Cheating detected."
+msgstr ""
+"\f[c:#704a4a]Forbindelsen er brutt!\f[/c]\n"
+"\n"
+"\n"
+"Juks oppdaget."
+
+#: Sources/Main.cpp:1579
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Your client doesn't contain required assets.\n"
+"Please download the required files and try it again."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Klienten din inneholder ikke nødvendige ressurser.\n"
+"Last ned de nødvendige filene og prøv igjen."
+
+#: Sources/Main.cpp:1580
+msgid ""
+"\f[c:#704a4a]Connection has been closed!\f[/c]\n"
+"\n"
+"\n"
+"The server has disconnected you due to inactivity."
+msgstr ""
+"\f[c:#704a4a]Forbindelsen er brutt!\f[/c]\n"
+"\n"
+"\n"
+"Serveren har koblet deg fra på grunn av inaktivitet."
+
+#: Sources/Main.cpp:1910
+#, c++-format
+msgid ""
+"\f[c:#704a4a]Cannot connect to the server!\f[/c]\n"
+"\n"
+"\n"
+"Your client doesn't contain level \"{}\".\n"
+"Please download the required files and try it again."
+msgstr ""
+"\f[c:#704a4a]Kan ikke koble til serveren!\f[/c]\n"
+"\n"
+"\n"
+"Klienten din inneholder ikke nivå \"{}\".\n"
+"Last ned de nødvendige filene og prøv igjen."
+
+#~ msgid "Short"
+#~ msgstr "Kort"

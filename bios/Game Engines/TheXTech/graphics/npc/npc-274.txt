@@ -1,0 +1,2 @@
+framestyle = 0
+frames = 4

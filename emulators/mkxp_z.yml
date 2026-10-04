@@ -55,7 +55,8 @@ files:
     category: game_data
     path: "mkxp-z/Fonts/"
     required: false
-    source_ref: "src/core.cpp:1199-1211"
+    unsourceable: "the core creates this directory empty and mounts it for fonts the user adds; the fallback font is compiled into the binary"
+    source_ref: "src/core.cpp:1199-1211, src/display/font.cpp:61-90"
 
   - name: "Preload"
     type: directory
@@ -63,6 +64,7 @@ files:
     category: game_data
     path: "mkxp-z/Scripts/Preload/"
     required: false
+    unsourceable: "the core creates this directory empty for the user's own scripts; its default preload scripts are mounted from memory"
     source_ref: "src/core.cpp:891-934"
 
   - name: "Postload"
@@ -71,4 +73,5 @@ files:
     category: game_data
     path: "mkxp-z/Scripts/Postload/"
     required: false
+    unsourceable: "the core creates this directory empty for the user's own scripts"
     source_ref: "src/core.cpp:901-956"

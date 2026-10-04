@@ -40,47 +40,72 @@ notes: |
     4. QData/Font00V.dat is read unconditionally (:1576) and its CRC32
        picks the charset (mik vs cp437).
 
-  Only the four files the loader *reads unconditionally* are tracked
-  below. The sound/music path uses the game's XMI tracks when a
-  SoundFont is available (App:findSoundFont at :1589 probes
-  GeneralUser-GS.sf2, FluidR3_GM.sf2, FluidR3.sf3 and three Linux
-  system paths); the SoundFont is a user preference, not game data.
+  The install root is read as a tree. FileSystem:setRoot() lists the
+  root, each subdirectory is listed the first time a path crosses it,
+  and every name is matched after normalise() upper-cases it
+  (CorsixTH/Lua/filesystem.lua:59-76, 93-117, 243-272). Graphics,
+  sprites, levels, sounds and movies are opened from that tree on
+  demand, so the install is declared as one directory. The files the
+  loader names at startup keep their own entries, written with the
+  upper-case names the DOS release ships and the lookup normalises to.
 
-  Everything else (hundreds of SPR/TAB/DAT files, SMK movies, ADL /
-  XMI music) is loaded on demand from the install directory and is
-  not individually verified by the engine; a user who sets up the
-  Theme Hospital folder once has them all.
+  The sound/music path uses the game's XMI tracks when a SoundFont is
+  available (App:findSoundFont at :1589 probes GeneralUser-GS.sf2,
+  FluidR3_GM.sf2, FluidR3.sf3 and three Linux system paths); the
+  SoundFont is a user preference, not game data.
 
-exclusion_note: "Theme Hospital install is scanned folder-wide; the engine only hard-checks a handful of sentinel files"
 files:
-  - name: VBlk-0.tab
-    path: corsixth/Data/VBlk-0.tab
+  - name: "corsixth/"
+    path: "corsixth/"
+    type: directory
+    system: theme-hospital
+    category: game_data
+    required: true
+    description: "Theme Hospital install directory (full game or demo)"
+    source_ref: "CorsixTH/Lua/filesystem.lua:64-76, CorsixTH/Lua/app.lua:1435-1447, 1454, 1499"
+    note: "Accepted as an install when it holds data, levels and qdata subdirectories; the rest of the tree is opened by name on demand."
+
+  - name: "VBLK-0.TAB"
+    path: "corsixth/DATA/VBLK-0.TAB"
     system: theme-hospital
     category: game_data
     required: true
     description: "Theme Hospital core sprite index; sentinel checked at startup"
     source_ref: "CorsixTH/Lua/app.lua:1521"
+    note: "Looked up as Data/VBlk-0.tab."
 
-  - name: Level.L1
-    path: corsixth/Levels/Level.L1
+  - name: "LEVEL.L1"
+    path: "corsixth/LEVELS/LEVEL.L1"
     system: theme-hospital
     category: game_data
     required: true
     description: "First Theme Hospital level file; sentinel checked at startup"
-    source_ref: "CorsixTH/Lua/app.lua:1522"
+    source_ref: "CorsixTH/Lua/app.lua:1522, 1560"
+    note: "Looked up as Levels/Level.L1. With the demo marker present, a size more than 1024 bytes away from 163948 is reported as corrupt and the game still starts."
 
-  - name: SPointer.dat
-    path: corsixth/QData/SPointer.dat
+  - name: "SPOINTER.DAT"
+    path: "corsixth/QDATA/SPOINTER.DAT"
     system: theme-hospital
     category: game_data
     required: true
     description: "Sprite pointer table; sentinel checked at startup"
     source_ref: "CorsixTH/Lua/app.lua:1523"
+    note: "Looked up as QData/SPointer.dat."
 
-  - name: Font00V.dat
-    path: corsixth/QData/Font00V.dat
+  - name: "FONT00V.DAT"
+    path: "corsixth/QDATA/FONT00V.DAT"
     system: theme-hospital
     category: game_data
     required: true
     description: "Theme Hospital font; CRC32 selects charset (mik vs cp437)"
     source_ref: "CorsixTH/Lua/app.lua:1576-1584"
+    note: "Looked up as QData/Font00V.dat."
+
+  - name: "DEMO.DAT"
+    path: "corsixth/DATAM/DEMO.DAT"
+    system: theme-hospital
+    category: game_data
+    required: false
+    description: "Demo marker; its presence selects the demo graphics set and the demo size checks"
+    source_ref: "CorsixTH/Lua/app.lua:1535-1539, 1558-1561"
+    note: "Looked up as DataM/Demo.dat. Absent from a full install."

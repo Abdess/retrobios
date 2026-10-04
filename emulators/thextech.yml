@@ -42,22 +42,38 @@ notes: |
   (`thextech-assets-adventures-of-demo`); any pack that satisfies the
   structure above runs.
 
+  Paths below are written from a search root. TheXTech/ is the name the
+  build gives its user directory (THEXTECH_DIRECTORY_PREFIX) and its
+  system directory; the application directory is searched the same way.
+  ref: CMakeLists.txt:297, lib/AppPath/private/app_path_unix.cpp:46, 103,
+       lib/AppPath/private/app_path.cpp:87
+
 files:
   # ================================================================
-  # Asset pack identification files
+  # Pack discovery
   # ================================================================
 
-  - name: "_meta.ini"
+  - name: "assets/"
+    type: directory
     category: game_data
+    path: "TheXTech/assets/"
     required: false
-    source_ref: "src/main/asset_pack.cpp:125, 131-181, 318-319"
-    note: "Archive pack descriptor. [content] engine=TheXTech, platform, pack-id. An archive without it is skipped."
+    source_ref: "src/main/asset_pack.cpp:131-181, 290-300, 313-319"
+    note: "Every file directly under assets/ is opened as an archive and kept as a pack when it holds _meta.ini; every subdirectory is kept when it holds graphics/ui/. _meta.ini is read only through the archive prefix: [content] engine must be TheXTech, platform must match the build, pack-id names the pack."
 
   - name: "gameinfo.ini"
     category: game_data
+    path: "TheXTech/gameinfo.ini"
     required: false
     source_ref: "src/main/asset_pack.cpp:126, 182-190, src/main/game_info.cpp:143"
     note: "Directory pack descriptor. [game] id names the pack, [android] logo/background override the menu images."
+
+  - name: "thextech.ini"
+    category: game_data
+    path: "TheXTech/thextech.ini"
+    required: false
+    source_ref: "lib/AppPath/private/app_path.cpp:98, 196-222"
+    note: "Read from the application directory at startup. [Main] force-portable = true makes that directory the user directory, so settings and saves stay next to the executable."
 
   # ================================================================
   # Images of the pack-selection menu
@@ -65,21 +81,21 @@ files:
 
   - name: "thextech_128.png"
     category: game_data
-    path: "graphics/ui/icon/thextech_128.png"
+    path: "TheXTech/graphics/ui/icon/thextech_128.png"
     required: false
     source_ref: "src/main/asset_pack.cpp:115, 225"
     note: "Pack icon. Loaded during pack scan, result not checked."
 
   - name: "MenuGFX2.png"
     category: game_data
-    path: "graphics/ui/MenuGFX2.png"
+    path: "TheXTech/graphics/ui/MenuGFX2.png"
     required: true
     source_ref: "src/main/asset_pack.cpp:116, 226-230, 334-335, src/gfx.cpp:201"
     note: "Main menu logo. Pack ignored if no logo loads; GFX_t::load requires it as well."
 
   - name: "background2-2.png"
     category: game_data
-    path: "graphics/background2/background2-2.png"
+    path: "TheXTech/graphics/background2/background2-2.png"
     required: false
     source_ref: "src/main/asset_pack.cpp:117, 227-233"
     note: "Menu background. Loaded during pack scan, result not checked."
@@ -92,13 +108,31 @@ files:
   - name: "graphics/"
     type: directory
     category: game_data
+    path: "TheXTech/graphics/"
     required: true
     source_ref: "src/main/asset_pack.cpp:274, 326-327, src/gfx.cpp:121-229, src/load_gfx.cpp:120-123"
     note: "graphics/ui/ must exist for a directory to be scanned as a pack; GFX_t::load rejects the pack when a required UI image is missing."
 
+  - name: "fonts/"
+    type: directory
+    category: game_data
+    path: "TheXTech/fonts/"
+    required: false
+    source_ref: "src/fontman/font_manager.cpp:270, 477-499"
+    note: "Raster fonts described by *.font.ini files. Without the directory, or with no font in it, the built-in fallback fonts are loaded."
+
+  - name: "languages/"
+    type: directory
+    category: game_data
+    path: "TheXTech/languages/"
+    required: false
+    source_ref: "lib/AppPath/private/app_path.cpp:311-315, src/core/language/language_common.cpp:72-83, 104-122"
+    note: "thextech_<lang>.json and assets_<lang>.json translations. Without the directory no translation is listed."
+
   - name: "sound/"
     type: directory
     category: game_data
+    path: "TheXTech/sound/"
     required: false
     source_ref: "src/sound.cpp:1319"
     note: "SFX directory, files named by sounds.ini. Game runs without sounds."
@@ -106,56 +140,61 @@ files:
   - name: "music/"
     type: directory
     category: game_data
+    path: "TheXTech/music/"
     required: false
     source_ref: "src/sound.cpp:1318"
     note: "Music tracks, files named by music.ini."
 
   - name: "sounds.ini"
     category: game_data
+    path: "TheXTech/sounds.ini"
     required: false
     source_ref: "src/sound.cpp:1322, 1348-1354, 1363"
     note: "SFX index. A message box reports its absence and the game runs without SFX."
 
   - name: "music.ini"
     category: game_data
+    path: "TheXTech/music.ini"
     required: false
     source_ref: "src/sound.cpp:1321, 1341-1347, 1356"
     note: "Music index. A message box reports its absence and the game runs without default music."
 
+  - name: "editor.ini"
+    category: game_data
+    path: "TheXTech/editor.ini"
+    required: false
+    source_ref: "src/editor/editor_custom.cpp:962, 979, src/main/translate.cpp:888"
+    note: "Item lists of the built-in editor, read when the translation table is built."
+
   - name: "intro.lvlx"
     category: game_data
+    path: "TheXTech/intro.lvlx"
+    aliases: ["intro.lvl"]
     required: true
     source_ref: "src/game_main.cpp:172-185, 224-250, 1095-1106"
-    note: "Level shown behind the main menu. intro.lvl and a level picked from introset/ take its place; with none of the three the game exits on a fatal error."
-
-  - name: "intro.lvl"
-    category: game_data
-    required: false
-    source_ref: "src/game_main.cpp:176-177"
-    note: "Read when intro.lvlx is absent."
+    note: "Level shown behind the main menu. intro.lvl is opened when intro.lvlx is absent, and a level picked from introset/ takes the place of both; with none of the three the game exits on a fatal error."
 
   - name: "introset/"
     type: directory
     category: game_data
+    path: "TheXTech/introset/"
     required: false
+    unsourceable: "optional directory a pack author fills with alternative intro levels; the Adventures of Demo pack carries none and the code falls back on intro.lvlx"
     source_ref: "src/game_main.cpp:194-222, 247"
-    note: "Directory of .lvl/.lvlx intro levels; one is picked at random when present."
+    note: "Directory of .lvl/.lvlx intro levels; one is picked at random when present, otherwise the root intro level is opened."
 
   - name: "outro.lvlx"
     category: game_data
+    path: "TheXTech/outro.lvlx"
+    aliases: ["outro.lvl"]
     required: false
     source_ref: "src/game_main.cpp:857-869"
-    note: "Level shown behind the credits, unless the episode names its own."
-
-  - name: "outro.lvl"
-    category: game_data
-    required: false
-    source_ref: "src/game_main.cpp:865-866"
-    note: "Read when outro.lvlx is absent."
+    note: "Level shown behind the credits, unless the episode names its own. outro.lvl is opened when outro.lvlx is absent."
 
   - name: "worlds/"
     type: directory
     category: game_data
+    path: "TheXTech/worlds/"
     required: false
     source_ref: "src/main/menu_main.cpp:361-370"
     note: "Episodes shipped with the pack, listed next to the user's worlds directory."
@@ -163,6 +202,7 @@ files:
   - name: "battle/"
     type: directory
     category: game_data
+    path: "TheXTech/battle/"
     required: false
     source_ref: "src/main/menu_main.cpp:701-706"
     note: "Battle mode levels shipped with the pack."

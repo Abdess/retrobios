@@ -1,0 +1,10 @@
+width=748
+height=276
+gfxwidth=748
+gfxheight=276
+frames=2
+framestyle=0
+nogravity=1
+speed=0
+blocktop=0
+framespeed=30

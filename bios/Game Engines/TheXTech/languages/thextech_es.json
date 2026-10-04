@@ -1,0 +1,874 @@
+{
+    "editor": {
+        "block": {
+            "canBreak": "Se rompe",
+            "canBreakTooltip": "Legado: se rompe cuando es golpeado",
+            "inside": "Tiene:",
+            "invis": "Invis",
+            "slick": "Resbala",
+            "pickContents": "Elegir contenido del bloque",
+            "letterHeight": "Al",
+            "letterWidth": "An"
+        },
+        "browser": {
+            "askOverwriteFile": "Sobreescribir {0}?",
+            "itemNewFile": "<Nuevo archivo>",
+            "itemNewFolder": "<Nueva carpeta>",
+            "newFile": "Nuevo archivo",
+            "openFile": "Abrir archivo",
+            "saveFile": "Guardar archivo"
+        },
+        "events": {
+            "controlsForEventN": "Controles para evento {0}",
+            "header": "Eventos:",
+            "deletion": {
+                "cancel": "No: No eliminar evento",
+                "confirm": "Sí: Eliminar evento",
+                "deletingEvent": "Eliminando evento {0}"
+            },
+            "desc": {
+                "death": "NPC muere",
+                "destroy": "Bloque es destruido",
+                "hit": "Bloque es golpeado",
+                "phraseTriggersWhenTemplate": "{0} desencadena cuando {1}",
+                "talk": "Jugador habla a NPC",
+                "phraseTriggersAfterTemplate": "{0} se activa {1} ms después del evento {2}",
+                "activate": "NPC entra en la pantalla",
+                "enter": "se ingresa al pasaje",
+                "layerClear": "todo en la capa de objetos se ha ido"
+            },
+            "itemNewEvent": "<Nuevo evento>",
+            "label": {
+                "activate": "Activar",
+                "destroy": "Destruir",
+                "death": "Morir",
+                "enter": "Ingresar",
+                "hit": "Golpe",
+                "next": "Siguiente",
+                "talk": "Hablar",
+                "layerClear": "Capa limpia"
+            },
+            "sections": {
+                "phraseAllSections": "Todas las secciones",
+                "propMusic": "Música",
+                "actionReset": "Reiniciar",
+                "actionSet": "Establecer",
+                "actionKeep": "Mantener",
+                "propBackground": "Fondo",
+                "propBounds": "Límites"
+            },
+            "headerTriggerEvent": "Activa evento:",
+            "letter": {
+                "hit": "G:",
+                "death": "M:",
+                "talk": "H:",
+                "enter": "I:",
+                "destroy": "D:",
+                "layerClear": "C:",
+                "activate": "A:"
+            },
+            "promptEventText": "Texto del evento",
+            "props": {
+                "autostart": "Comenzar Automáticamente",
+                "controls": "Controles",
+                "endGame": "Final del Juego",
+                "sound": "Sonido",
+                "layerSmoke": "Humo"
+            },
+            "settingsForEvent": "Ajustes para el Evento {0}",
+            "bounds": {
+                "shouldEvent": "Debería el Evento {0}",
+                "changeAllSectionBoundsToCurrent": "Cambiar todos los límites de la sección a los actuales?",
+                "changeSectionBoundsToCurrent": "Cambiar los límites de la sección {0} a los actuales?"
+            },
+            "promptEventName": "Nombre del evento",
+            "layers": {
+                "headerMove": "Mover:",
+                "headerHide": "Esconde:",
+                "headerToggle": "Alternar:",
+                "headerShow": "Muestra:"
+            }
+        },
+        "file": {
+            "actionExit": "Salir",
+            "actionOpen": "Abrir",
+            "actionRevert": "Revertir",
+            "commandNew": "Nuevo",
+            "commandOpen": "Abrir...",
+            "commandSave": "Guardar",
+            "formatModern": "Moderno",
+            "optionCancelConversion": "Cancelar conversión",
+            "commandSaveAs": "Guardar como...",
+            "confirmConfirmAction": "¿Estás seguro de que quieres {0}?",
+            "formatLegacy": "Legado",
+            "optionActionWithoutSave": "{0} sin guardar",
+            "optionProceedWithConversion": "Proceder con la conversión",
+            "sectionLevel": "Nivel",
+            "sectionWorld": "Mundo",
+            "confirmConvertFormatTo": "Convertir formato a {0}?",
+            "confirmSaveBeforeAction": "¿Guardar antes de {0}?",
+            "labelFormat": "Formato:",
+            "optionCancelAction": "Cancelar: no {0}",
+            "optionYesSaveThenAction": "Sí: guardar entonces {0}",
+            "actionClearWorld": "Mundo terminado",
+            "actionClearLevel": "Nivel terminado",
+            "labelCurrentFile": "Archivo actual: ",
+            "convert": {
+                "descNew": "La extensión de archivo cambiará, pero el archivo viejo NO SERÁ ELIMINADO.\n\nPor favor, revise las características perdidas después de guardar."
+            }
+        },
+        "layers": {
+            "deletion": {
+                "cancel": "Cancelar: No eliminar capa",
+                "header": "Eliminando capa {0}",
+                "confirmDelete": "No: *BORRAR TODO EL CONTENIDO*",
+                "preserveLayerContents": "¿Conservar el contenido de las capas?",
+                "confirmPreserve": "Sí: pasar a la capa por defecto"
+            },
+            "header": "Capas:",
+            "itemNewLayer": "<Nueva capa>",
+            "label": "Capa:",
+            "promptLayerName": "Nombre de la capa",
+            "labelAttachedLayer": "Capa adjunta:",
+            "labelMoveLayer": "Mover capa:",
+            "desc": {
+                "att": "Cada vez que el NPC se mueve, la capa adjunta se mueve siguiéndolo"
+            },
+            "default": "Por defecto",
+            "abbrevAttLayer": "Att: ",
+            "labelAttached": "Adjunto:"
+        },
+        "level": {
+            "levelName": "Nombre del nivel",
+            "startPos": "Pos Inicio",
+            "pathBG": "Ruta BG",
+            "pathUnlocks": "Desbloqueo de rutas",
+            "gameStart": "Inicio del juego",
+            "alwaysVis": "Siempre Vis",
+            "bigBG": "Gran BG"
+        },
+        "wordEvent": {
+            "typeLabel": "Evento {0}:",
+            "nominative": "Evento",
+            "genitive": "Evento"
+        },
+        "warp": {
+            "needStarCount": "Requiere {0} {1}",
+            "placing": "Colocación:",
+            "to": "Hacia: {0}",
+            "showStartScene": "Mostrar escena de inicio",
+            "twoWay": "Dos-vías",
+            "needFloor": "Necesita suelo",
+            "style": {
+                "door": "Puerta",
+                "pipe": "Tubería",
+                "portal": "Puerto",
+                "style": "Estilo: ",
+                "blipInstant": "Instantáneo"
+            },
+            "cannonExit": "Salida del cañón",
+            "transit": {
+                "name1": "DESPLAZAMIENTO",
+                "name3": "CÍRCULO",
+                "name2": "DESVANECER",
+                "name0": "NADA",
+                "name4": "VOLTEAR (H)",
+                "name5": "VOLTEAR (V)"
+            },
+            "allow": "Permitir:",
+            "starLockMessage": "Mensaje de bloqueo de estrella",
+            "showStarCount": "Mostrar recuento de estrellas",
+            "effect": "Efecto:",
+            "target": "Objetivo: ",
+            "speed": "Velocidad ",
+            "toMap": "Hacia el Mapa",
+            "item": "Objeto",
+            "needKey": "Requiere Llave",
+            "in": "Entrada",
+            "out": "Salida",
+            "title": "Configuración de Pasaje",
+            "ride": "Montar",
+            "lvlWarp": "Pasaje de Nivel",
+            "dir": "Dir."
+        },
+        "letterRight": "R",
+        "select": {
+            "warpTransitEffect": "Efecto de transición Warp",
+            "soundForEventN": "Sonido para Evento {0}",
+            "pathBlankUnlock": "Ruta {0} Desbloquear Por",
+            "worldMusic": "Música del mundo",
+            "sectionBlankPropBlank": "Sección {0} {1}",
+            "sectBlankPropBlankForEventN": "{1} de Secc {0} para {2}",
+            "allSectPropBlankForEventN": "{1} de Todas SS para {2}"
+        },
+        "tooltip": {
+            "BGOs": "BGOs",
+            "events": "Eventos",
+            "eraseAll": "Borrar todo",
+            "music": "Música",
+            "erase": "Borrar",
+            "settings": "Ajustes",
+            "water": "Agua",
+            "show": "Mostrar",
+            "paths": "Caminos",
+            "levels": "Niveles",
+            "layers": "Capas",
+            "file": "Archivo",
+            "select": "Seleccione",
+            "scenes": "Escenas",
+            "tiles": "Baldosas",
+            "warps": "Pasajes",
+            "blocks": "Bloques",
+            "area": "Área",
+            "NPCs": "NPCs"
+        },
+        "npc": {
+            "ai": {
+                "aiIs": "AI: {0}",
+                "target": "Objetivo",
+                "swim": "Nadar",
+                "jump": "Saltar",
+                "leap": "Salto",
+                "UD": "UD",
+                "headerCustomAi": "IA personalizada:",
+                "use1_0Ai": "¿Usar IA 1.0?",
+                "LR": "LR"
+            },
+            "tooltipExpandSection": "Ampliar sección",
+            "stuckStop": "Detener",
+            "gen": {
+                "header": "Ajustes del generador",
+                "effectShoot": "Dispara a",
+                "direction": "Dirección",
+                "effectWarp": "Warp",
+                "effectIs": "Efecto: {0}"
+            },
+            "props": {
+                "attachSurface": "Adjuntar",
+                "facing": "Frente a",
+                "active": "Activo"
+            },
+            "abbrevGen": "Gen",
+            "inertNice": "Bonito",
+            "inContainer": "En"
+        },
+        "letterLeft": "L",
+        "testPlay": {
+            "magicHand": "Mano mágica",
+            "power": "Potencia",
+            "char": "Pers",
+            "pet": "Mascota",
+            "boot": "Bota"
+        },
+        "letterDown": "D",
+        "mapPos": "Mapa Pos:",
+        "letterCoordX": "X",
+        "water": {
+            "title": "Ajustes de agua"
+        },
+        "phraseTextOf": "{0} Texto",
+        "wordEnabled": "Activado",
+        "phraseSectionIndex": "Sección {0}",
+        "wordCoins": "Monedas",
+        "section": {
+            "setBounds": "Establecer límites",
+            "noTurnBack": "Sin vuelta atrás",
+            "underwater": "Bajo el agua",
+            "offscreenExit": "Salida fuera de pantalla",
+            "scroll": "Desplácese por",
+            "horizWrap": "Env. Horizontal",
+            "vertWrap": "Env. Vertical"
+        },
+        "phraseGenericIndex": "Número {0}",
+        "letterUp": "U",
+        "phraseCountMore": "{0} Más",
+        "phraseRadiusIndex": "Radio {0}",
+        "pageBlankOfBlank": "Página {0} de {1}",
+        "phraseWarpIndex": "Pasaje {0}",
+        "phraseAreYouSure": "¿Seguro?",
+        "toggleMagicBlock": "Bloque mágico",
+        "phraseDelayIsMs": "Retraso: {0} ms",
+        "letterCoordY": "Y",
+        "wordHeight": "Alto",
+        "wordWidth": "Ancho",
+        "wordInstant": "Instante",
+        "world": {
+            "introLevel": "Nivel de Introducción",
+            "name": "Nombre del Mundo",
+            "phraseCreditIndex": "Línea {0} de Créditos del Mundo:",
+            "retryOnFail": "Reintentar En Fallo",
+            "allowChars": "Permitir Personajes",
+            "totalStars": "Estrellas en total: ",
+            "hubWorld": "Mundo de Centro"
+        },
+        "wordMode": "Modo",
+        "wordText": "Texto",
+        "labelSortLayer": "Ordenar Capa:",
+        "labelSortOffset": "Ordenar Desplazamiento:",
+        "wordNPC": {
+            "genitive": "NPC",
+            "nominative": "NPC"
+        }
+    },
+    "menu": {
+        "game": {
+            "gameNoBattleLevels": "<Sin niveles de batalla>",
+            "gameSourceSlot": "Seleccione la ranura de origen",
+            "gameEraseSave": "Borrar guardar",
+            "gameBattleRandom": "Nivel aleatorio",
+            "gameTargetSlot": "Ahora seleccione el objetivo",
+            "gameSlotContinue": "SLOT {0} ... {1}%",
+            "gameSlotNew": "SLOT {0} ... NUEVO",
+            "phraseScore": "Puntuación: {0}",
+            "gameNoEpisodesToPlay": "<Sin episodios que reproducir>",
+            "phraseTime": "Tiempo: {0}",
+            "gameEraseSlot": "Seleccione la ranura que desea borrar",
+            "gameCopySave": "Copiar guardar",
+            "warnEpCompat": "Este episodio se hizo para una rama diferente de SMBX y tal vez no funcionará bien."
+        },
+        "editor": {
+            "newWorld": "<Nuevo Mundo>",
+            "errorMissingResources": "Lo sentimos. Te falta {0}, necesario para el editor del juego.",
+            "promptNewWorldName": "Nombre del mundo nuevo",
+            "battles": "<Niveles de Batalla>",
+            "makeFor": "Hacer para:"
+        },
+        "wordHide": "Ocultar",
+        "options": {
+            "restartEngine": "Reinicie el motor para que los cambios surtan efecto.",
+            "advanced": {
+                "render": {
+                    "opengl": "OpenGL 3+",
+                    "opengles-tip": "",
+                    "sdl-tip": "",
+                    "opengl11-tip": "",
+                    "sdl": "SDL2",
+                    "opengles": "OpenGL ES 2+",
+                    "_name": "Moda de renderizado",
+                    "opengles11": "OpenGL ES 1.1+",
+                    "opengles11-tip": "",
+                    "sw": "Software",
+                    "hw": "Auto",
+                    "opengl-tip": "",
+                    "opengl11": "OpenGL 1.1"
+                },
+                "scale-down-textures": {
+                    "all-tip": "Menos tartamudeo al cargar que 'Seguras'",
+                    "none": "Ningunas",
+                    "_tooltip": "Almacenar las imágenes a 1x para ahorrar la memoria",
+                    "all": "Todas",
+                    "_name": "Reducir imágenes",
+                    "none-tip": "Lo menos tartamudeo al cargar",
+                    "safe": "Seguras",
+                    "safe-tip": "Verifica que las imágenes estén en formato 2x"
+                },
+                "audio-sample-rate": {
+                    "48000": "48000 Hz",
+                    "32000": "32000 Hz",
+                    "11025": "11025 Hz",
+                    "44100": "44100 Hz",
+                    "_name": "Frecuencia de muestreo",
+                    "16000": "16000 Hz",
+                    "22050": "22050 Hz"
+                },
+                "choose-assets-on-launch": "Seleccionar activos en lanzar",
+                "log-level": {
+                    "_name": "Nivel de registrar",
+                    "critical": "Crítico",
+                    "none": "Nada",
+                    "info": "Info",
+                    "fatal": "Fatal",
+                    "warning": "Aviso",
+                    "debug": "Depurar"
+                },
+                "audio-channels": {
+                    "mono": "Mono",
+                    "stereo": "Stereo",
+                    "_name": "Canales"
+                },
+                "internal-res-4p": {
+                    "qhd": "2560x1440 (QHD)",
+                    "_name": "Tamaño de pantalla dividida 4P",
+                    "default": "Por defecto",
+                    "fhd": "1920x1080 (FHD)",
+                    "qsmbx": "1600x1200 (QSMBX)"
+                },
+                "webm-recording": "Grabación WEBM",
+                "advanced-audio": "Áudio",
+                "advanced-video": "Video",
+                "_header": "Avanzado",
+                "_tooltip": "Opciones tecnicales para las operaciones internales",
+                "record-gameplay-data": "Grabar jugación",
+                "audio-buffer-size": {
+                    "_tooltip": "Aumenta para menos estallidos pero más retraso",
+                    "_name": "Tamaño de búfer"
+                },
+                "audio-format": {
+                    "_name": "Formato de áudio",
+                    "_tooltip": "Formato para controlador de sondio"
+                },
+                "audio-enable": "Activar",
+                "use-native-osk": "Teclado del sistema",
+                "inaccurate-gifs-tip": "Permite efecto 3D cuando hay imagenes GIF",
+                "inaccurate-gifs": "GIF inexactos",
+                "fullscreen-type": {
+                    "_name": "",
+                    "exclusive": "",
+                    "desktop-tip": "",
+                    "desktop": "",
+                    "exclusive-tip": "",
+                    "auto": ""
+                },
+                "fullscreen-depth": {
+                    "16": "",
+                    "auto": "",
+                    "_name": "",
+                    "32": ""
+                },
+                "fullscreen-res": ""
+            },
+            "audio": {
+                "sfx-audio-fx": "Efectos de eco",
+                "sfx-modern": "Sonidos modernos",
+                "audio-prefs": "Preferencias",
+                "sfx-modern-tip": "Usar sonidos añadidos en TheXTech",
+                "audio-sfx-volume": "Volumen de sonidos",
+                "sfx-spatial-audio-tip": "Reducir el volumen de sonidos lejos",
+                "sfx-spatial-audio": "Áudio espacial",
+                "sfx-pet-beat-tip": "Reproducir un ritmo especial a montar una mascota",
+                "sfx-pet-beat": "Ritmo de mascota",
+                "audio-music-volume": "Volumen de música",
+                "_header": "Áudio"
+            },
+            "episode-options": {
+                "creator-compat": {
+                    "_name": "Compat de creador",
+                    "file-only": "Sólo archivo",
+                    "enable": "Activar",
+                    "disable": "Desactivar",
+                    "_tooltip": "Ajustes logicales por el creador del contenido"
+                },
+                "_header": "Opciones de Episodio",
+                "playstyle": {
+                    "_name": "Estilo de juego",
+                    "modern": "Moderno",
+                    "classic": "Clásico",
+                    "classic-tip": "Actualizaciones minimales",
+                    "vanilla-tip": "Ningunas actualizaciones",
+                    "modern-tip": "Todas actualizaciones",
+                    "vanilla": "Vainilla"
+                },
+                "hub-resume-tip": "Resumir el juego en la próxima pasaja ingresada",
+                "hub-resume": "Grabar pasaja en centro"
+            },
+            "video": {
+                "effects": "Efectos de Pantalla",
+                "enable-inter-level-fade-effect": "Transiciones",
+                "info-meta": "Info. en pantalla de sistema",
+                "internal-res": {
+                    "vga": "640x480 (VGA)",
+                    "snes": "512x448 (SNES)",
+                    "hd": "1280x720 (HD)",
+                    "_tooltip": "Resolución del campo de jugación",
+                    "dynamic": "Dinámico",
+                    "hello": "768x432 (HELLO)",
+                    "gba": "480x320 (GBA)",
+                    "_name": "Tamaño de pantalla",
+                    "3ds": "800x480 (3DS)",
+                    "smbx": "800x600 (SMBX)",
+                    "smbx-wide": "SMBX (ancha)",
+                    "nds": "512x384 (NDS)"
+                },
+                "scale-mode": {
+                    "1x": "1x",
+                    "0_5x": "0,5x",
+                    "_name": "Modo de escala",
+                    "2x": "2x",
+                    "nearest": "Cercana",
+                    "full": "Completa",
+                    "center": "Centrada",
+                    "linear": "Lineal",
+                    "integer": "Entera",
+                    "3x": ""
+                },
+                "info-game": "Info. en pantalla de juego",
+                "show-playtime-counter": {
+                    "off-tip": "Muestra sólo en las carreras rápidas",
+                    "_tooltip": "Muestra el tiempo pasado en el episodio y el intento actual",
+                    "opaque": "Opaco",
+                    "_name": "Temporizador de carrera",
+                    "transparent": "Transparente",
+                    "animated-tip": "Añade un efecto arcoiris a completar un nivel",
+                    "animated": "Animado",
+                    "off": "Desactivado"
+                },
+                "3d-compat-mode-tip": "Dibuja todos objetos en un solo plano 3D",
+                "show-fails-counter": "Contador de fallos",
+                "show-episode-title": {
+                    "_name": "Nombre del episodio",
+                    "top": "Superior",
+                    "top-tip": "Muestra sobre HUD a alta resolución",
+                    "off": "Desactivado",
+                    "bottom-tip": "Muestra sobre temporizador de carrera",
+                    "bottom": "Inferior"
+                },
+                "video-system": "Sistema",
+                "world-map-stars-show-tip": "Muestra estrellas recogidas sobre los niveles",
+                "world-map-stars-show": "Estrellas en mapa mundial",
+                "battery-status": {
+                    "fullscreen": "Pantalla completa",
+                    "_name": "Estado de pila",
+                    "off": "Nunca",
+                    "fullscreen-tip": "Muestra cuando el juego está en pantalla completa",
+                    "on": "Siempre",
+                    "low": "Bajo",
+                    "low-tip": "Muestra cuando el nivel de la pila está bajo"
+                },
+                "_header": "Video",
+                "show-medals-counter": "Contador de medallas",
+                "show-fps": "Frecuencia de cuadros",
+                "show-medals-counter-tip": "Muestra las medallas en el HUD y en las entradas de nivel",
+                "show-fails-counter-tip": "Muestra los fallos en el episodio y el nivel actual",
+                "info-run": "Info. en pantalla de carrera",
+                "3d-compat-mode": "Modo de compat 3D",
+                "fullscreen": "Pantalla completa",
+                "show-screen-shake": "Movimiento de pantalla",
+                "display-controllers": "Actividad de controles"
+            },
+            "view-credits": {
+                "_header": "Ver Créditos"
+            },
+            "speedrun": {
+                "mode": {
+                    "_name": "Modo de carrera rápida",
+                    "3": "3",
+                    "2": "2",
+                    "0": "0",
+                    "1": "1"
+                }
+            },
+            "compatibility": {
+                "_header": "Ajustes de sesión",
+                "_tooltip": "Opciones para compat o depuración",
+                "reset-all": "Restablecar todo",
+                "features": "Funciones nuevas",
+                "bugfixes": "Corrección de errores",
+                "autocode": "Autocode"
+            },
+            "controls": {
+                "_header": "Controles"
+            },
+            "main": {
+                "four-screen-mode": {
+                    "_name": "Modo de pantalla 4P",
+                    "split": "Dividida",
+                    "shared": "Compartida"
+                },
+                "background-work-tip": "Jugar con joystick cuando el juego está en segundo plano",
+                "background-work": "Continuar en fondo",
+                "vsync": "V-Sync",
+                "discord-rpc": "Integración con Discord",
+                "frame-skip": "Saltado de cuadro",
+                "_header": "Principal",
+                "language": "Idioma",
+                "two-screen-mode": {
+                    "_name": "Modo de pantalla 2P",
+                    "split": "Izq/Der",
+                    "topbottom": "Arriba/Abajo",
+                    "smbx": "SMBX",
+                    "shared": "Compartida"
+                },
+                "timing": "Sincronización de Cuadros",
+                "multiplayer": "Multijugador",
+                "unlimited-framerate": "Modo turbo"
+            }
+        },
+        "wordWaiting": "En espera",
+        "main": {
+            "mainEditor": "Editor",
+            "main1PlayerGame": "Juego para 1 jugador",
+            "mainMultiplayerGame": "Juego para 2 jugadores",
+            "mainBattleGame": "Juego de batalla",
+            "mainOptions": "Opciones",
+            "mainExit": "Salir",
+            "mainPlayEpisode": "Jugar Episodio"
+        },
+        "controls": {
+            "wii": {
+                "wiimote": {
+                    "caseIR": "(IR)",
+                    "buttonPlus": "+",
+                    "buttonMinus": "-",
+                    "buttonHome": "Inicio",
+                    "shake": "Agitar",
+                    "dPad": "D-Pad",
+                    "buttonA": "A",
+                    "buttonB": "B",
+                    "button1": "1",
+                    "button2": "2"
+                },
+                "classic": {
+                    "buttonLT": "LT",
+                    "buttonY": "Y",
+                    "rStick": "R-Joy",
+                    "buttonX": "X",
+                    "buttonZR": "ZR",
+                    "buttonRT": "RT",
+                    "buttonZL": "ZL",
+                    "lStick": "L-Joy"
+                },
+                "nunchuck": {
+                    "prefixN": "N",
+                    "buttonZ": "Z",
+                    "buttonC": "C"
+                },
+                "typeClassic": "Classic",
+                "typeNunchuck": "Nunchuk",
+                "phraseNewNunchuck": "Nuevo Perfil Nunchuk",
+                "typeWiimote": "Wii Remote",
+                "phraseNewClassic": "Nuevo Perfil Classic",
+                "typeGamecube": ""
+            },
+            "wordProfiles": "Perfiles",
+            "wordButtons": "Botones",
+            "buttons": {
+                "altJump": "Salto Alt",
+                "start": "Comenzar",
+                "down": "Abajo",
+                "jump": "Saltar",
+                "drop": "Soltar Objeto",
+                "run": "Correr",
+                "altRun": "Correr Alt",
+                "up": "Arriba",
+                "left": "Izquierda",
+                "right": "Derecha"
+            },
+            "controlsInUse": "(En uso)",
+            "controlsNewProfile": "<Nuevo Perfil>",
+            "controlsDeleteKey": "(Salto Alt para Borrar)",
+            "controlsDeleteKey2": "(Correr Alt para Borrar)",
+            "controlsNotInUse": "(No en uso)",
+            "tDS": {
+                "buttonStart": "Comenzar",
+                "casePen": "(Lápiz)",
+                "cStick": "Palanca C",
+                "buttonL": "L",
+                "buttonB": "B",
+                "buttonR": "R",
+                "dPad": "Cruz de control",
+                "buttonY": "Y",
+                "buttonZR": "ZR",
+                "buttonZL": "ZL",
+                "buttonA": "A",
+                "buttonSelect": "Select",
+                "buttonX": "X",
+                "tStick": "Deslizante"
+            },
+            "controlsDeviceTypes": "Tipos de Dispositivo",
+            "caseInvalid": "(Inválido)",
+            "controlsReallyDeleteProfile": "¿Realmente eliminar perfil?",
+            "controlsTitle": "Controles",
+            "touchscreen": {
+                "option": {
+                    "holdRun": "Mantener \"Correr\" al Comenzar",
+                    "showCodeButton": "Mostrar Botón de Código",
+                    "feedbackLength": "Duración de Vibración",
+                    "interfaceStyle": "Estilo de Botones",
+                    "resetLayout": "Restablecer Diseño",
+                    "layoutStyle": "Estilo de Diseño",
+                    "feedbackStrength": "Fuerza de Vibración",
+                    "scaleButtons": "Escala de Botones",
+                    "scaleDPad": "Escala de Cruceta",
+                    "sStartSpacing": "S-Start Espaciado",
+                    "scaleFactor": "Factor de Escala"
+                },
+                "layout": {
+                    "standard": "Estándar",
+                    "phabletOld": "Phablet (Legado)",
+                    "tight": "Ajustado",
+                    "tabletOld": "Tableta (Legado)",
+                    "phoneOld": "Móbil (Legado)",
+                    "tinyOld": "Diminuto (Old)",
+                    "longOld": "Largo (Legado)"
+                },
+                "style": {
+                    "ABXY": "ABXY",
+                    "actions": "Acciones",
+                    "XODA": "XODA"
+                }
+            },
+            "cursor": {
+                "secondary": "Secundario",
+                "tertiary": "Terciario",
+                "primary": "Primario",
+                "left": "Ratón Izquierdo",
+                "right": "Ratón Derecho",
+                "down": "Ratón Abajo",
+                "up": "Ratón Arriba"
+            },
+            "hotkeys": {
+                "screenshot": "Captura de Pantalla",
+                "debugInfo": "Información de Depuración",
+                "enterCheats": "Introducir Código",
+                "fullscreen": "Pantalla Completa",
+                "toggleHUD": "Alternar HUD",
+                "recordGif": "Grabar GIF",
+                "vanillaCam": "Vainilla Cam",
+                "legacyPause": "Pausa Legada"
+            },
+            "profile": {
+                "deleteProfile": "Eliminar perfil",
+                "cursorControls": "Controles de cursor",
+                "playerControls": "Controles del juego",
+                "renameProfile": "Renombrar perfil",
+                "editorControls": "Controles de editor",
+                "hotkeys": "Teclas rápidas"
+            },
+            "types": {
+                "keyboard": "Teclado",
+                "touchscreen": "Pantalla Táctil",
+                "oldJoystick": "Joy Legado",
+                "gamepad": "Joystick"
+            },
+            "caseTouch": "(Táctil)",
+            "options": {
+                "batteryStatus": "Estado de Batería",
+                "rumble": "Vibración",
+                "textEntryStyle": "Estilo de entrada de texto",
+                "maxPlayers": "Max de Jugadores"
+            },
+            "editor": {
+                "testPlay": "Juego de Prueba",
+                "scrollLeft": "Despl Izq",
+                "scrollRight": "Despl Der",
+                "scrollDown": "Despl Abajo",
+                "modeErase": "Modo Borrar",
+                "switchScreens": "Mostrar Panel",
+                "fastScroll": "Apurarse",
+                "modeSelect": "Modo Sel.",
+                "nextSection": "Secc Prox",
+                "prevSection": "Secc Ult",
+                "scrollUp": "Despl Arr"
+            },
+            "controlsConnected": "Conectado:",
+            "joystickSimpleEditor": "Controles de Editor Sensillos",
+            "caseMouse": "(Ratón)",
+            "phraseNewProfOldJoy": "Perfil nuevo para joystick legado"
+        },
+        "wordPlayer": "Jugador",
+        "wordBack": "Volver",
+        "wordOn": "Encendido",
+        "wordProfile": "Perfil",
+        "loading": "Cargando...",
+        "wordShow": "Mostrar",
+        "wordNo": "No",
+        "wordYes": "Si",
+        "wordOff": "Apagado",
+        "character": {
+            "selectCharacter": "Juego de {0}"
+        },
+        "battle": {
+            "errorNoLevels": "Imposible comenzar batalla debido a que no hay niveles disponibles"
+        },
+        "caseNone": "<Ninguno>",
+        "wordResume": "Reanudar",
+        "abbrevMilliseconds": "MS"
+    },
+    "outro": {
+        "originalBy": "Código original VB6 Por:",
+        "cppPortDevelopers": "Desarrolladores de puertos C++:",
+        "nameAndrewSpinks": "Andrew Spinks",
+        "customSprites": "Sprites personalizados:",
+        "specialThanks": "Agradecimientos especiales:",
+        "psVitaPortBy": "Puerto PS Vita Por:",
+        "engineCredits": "Créditos del motor:",
+        "levelDesign": "Diseño de niveles:",
+        "nameVitalyNovichkov": "Vitaly Novichkov",
+        "gameCredits": "Créditos del juego:",
+        "qualityControl": "Control de Calidad:"
+    },
+    "pluralRules": "one-is-singular",
+    "game": {
+        "connect": {
+            "phraseTestControls": "Probar Controles",
+            "phraseChangeChar": "Cambiar Personaje",
+            "phrasePressAButton": "Presiona un Botón",
+            "splitPressSelect_2": "Opciones de Controles",
+            "dropAddTitle": "Quitar/Añadir Jugadores",
+            "phraseStartToForceRes": "Presiona Comenzar para Forzar Resumir",
+            "splitPressSelect_1": "Presiona Select para",
+            "wordDisconnect": "Desconectar",
+            "phraseStartToResume": "Presiona Comenzar para Resumir",
+            "phraseHoldStart": "Mantén Comenzar",
+            "phraseWaitingForInput": "Esperando un dispositivo de entrada...",
+            "reconnectTitle": "Reconectar",
+            "phraseSetControls": "Establecer Controles",
+            "phraseDropMe": "Soltarme",
+            "phraseDropPX": "Soltar a P{0}",
+            "phraseTestProfile": "Probar Perfil",
+            "phraseForceResume": "Forzar Resumir"
+        },
+        "error": {
+            "errorInvalidEnterWarp": "Imposible comenzar el nivel debido a que un pasaje de entrada inválido {1} fue especificado.\nTotal Pasajes de Entrada: {2}\n\nArchivo: {0}",
+            "openFileFailed": "Imposible abrir \"{0}\": El archivo está corrupto o no existe.",
+            "warpNeedStarCount": "Necesitas {0} {1} para entrar.",
+            "errorNoStartPoint": "Imposible empezar nivel debido a que no hay puntos de comienzo colocados ni pasajes de entrada especificados.\n\nArchivo: {0}",
+            "errorTooOldGameAssets": "",
+            "openIPCDataFailed": "",
+            "IPCTimeOut": "",
+            "errorTooOldEngine": ""
+        },
+        "pause": {
+            "restartLevel": "Reiniciar Nivel",
+            "quit": "Salir",
+            "saveAndContinue": "Guardar y Continuar",
+            "resetCheckpoints": "Reiniciar Puntos de Control",
+            "saveAndQuit": "Guardar y Salir",
+            "returnToEditor": "Regresar al Editor",
+            "continue": "Continuar",
+            "quitTesting": "Dejar de Probar",
+            "enterCode": "Introducir Código",
+            "playerSetup": "Ordenar Jugadores"
+        },
+        "message": {
+            "scanningLevels": "Escaneando niveles..."
+        },
+        "hint": {
+            "no-lives-old": "Caución - ¡el final se acerca!",
+            "gray-bricks": "Algunos bloques se pueden romper por poderes especiales.",
+            "char5-bombs": "Presiona Correr para recogerlas y Correr Alt para tirarlas.",
+            "heavy-duck": "¡Agáchate para bloquear muchas - pero no todas - llamas!",
+            "rainbow-surf": "Cógelo, corre, mantén pulsado abajo, y déjalo para hacer surf.",
+            "no-lives-new": "¿No tienes moneda? ¡Toma un préstamo! Pero cuídate el puntaje...",
+            "shoe-block": "¡Ponerse esto bloquea muchas - pero no todas - llamas!",
+            "pound-altrun": "¡Presiona Correr Alt para golpear el suelo!",
+            "pound-down": "¡Presiona Abajo para golpear el suelo!"
+        },
+        "format": {
+            "minutesSeconds": "{0}mm{1}ss"
+        },
+        "msgbox": {
+            "sysInfoWarning": "¡Aviso!",
+            "sysInfoTitle": "Información",
+            "sysInfoError": "¡Error!"
+        },
+        "loader": {
+            "statusLoadData": "",
+            "statusGameInfo": "",
+            "statusLoadFile": "",
+            "statusFinishing": "",
+            "statusAssetPacks": "",
+            "statusTranslations": ""
+        },
+        "ipcStatus": {
+            "loadingdone": "",
+            "dataAccepted": "",
+            "dataTransferStarted": "",
+            "errorTimeout": "",
+            "dataValid": "",
+            "waitingInput": ""
+        },
+        "screenPaused": ""
+    },
+    "languageName": "Español"
+}

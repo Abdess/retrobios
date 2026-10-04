@@ -1,0 +1,6 @@
+gfxheight = 46
+gfxwidth = 40
+width = 24
+height = 40
+framestyle = 1
+frames = 1

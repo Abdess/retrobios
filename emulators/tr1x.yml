@@ -626,3 +626,51 @@ files:
     required: false
     category: game_data
     source_ref: "src/trx/game/music/backend_files.c:43"
+
+  # Unfinished Business expansion
+  # Known game tr1-ub, extends tr1 (src/trx/game/shell/mod.c:30-31).
+  # Enumerated by data/trx/ship/games/tr1-ub/gameflow.json5 "levels" array.
+  # Its title, FMVs and music fall back to games/tr1.
+  - name: "egypt.phd"
+    path: "games/tr1-ub/levels/egypt.phd"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:63"
+    note: "Return to Egypt"
+
+  - name: "cat.phd"
+    path: "games/tr1-ub/levels/cat.phd"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:87"
+    note: "Temple of the Cat"
+
+  - name: "end.phd"
+    path: "games/tr1-ub/levels/end.phd"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:110"
+    note: "Atlantean Stronghold"
+
+  - name: "end2.phd"
+    path: "games/tr1-ub/levels/end2.phd"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:132"
+    note: "The Hive"
+
+  # PC demo
+  # Known game tr1-demo-pc, extends tr1 (src/trx/game/shell/mod.c:32-33).
+  - name: "title.phd"
+    path: "games/tr1-demo-pc/levels/title.phd"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1-demo-pc/gameflow.json5:38, src/trx/game/game_flow/reader.c:903-909, src/trx/game/paths.c:123-132"
+    note: "Title level of the PC demo. A title level is also looked up in the levels directory of the game it extends, so games/tr1/levels/title.phd is used when this one is absent."
+
+  - name: "level2.phd"
+    path: "games/tr1-demo-pc/levels/level2.phd"
+    required: false
+    category: game_data
+    source_ref: "data/trx/ship/games/tr1-demo-pc/gameflow.json5:56, src/trx/game/level/format/format_tr1.c:74-99, 186-191"
+    note: "City of Vilcabamba in the PC demo layout, which stores the palette before the cameras. The demo game does not load without it."
