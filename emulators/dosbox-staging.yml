@@ -588,20 +588,16 @@ files:
 
   - name: "default.sf2"
     path: "soundfonts/default.sf2"
-    description: "General MIDI SoundFont"
+    description: "SoundFont named by the default soundfont setting"
     required: false
-    aliases:
-      - "GeneralUser-GS.sf2"
-      - "FluidR3_GM.sf2"
-      - "Fluid_R3_GM_GS.sf2"
-      - "4gmgsmt-sf2_04-compat.sf2"
-      - "4GMGSMT.SF2"
-      - "synthgs-sf2_04-compat.sf2"
+    unsourceable: "name the operating system gives the SoundFont it installs as default, not shipped with the program; a same-named file of another program must not stand in"
     note: >
-      any SoundFont loads; GeneralUser GS, Fluid R3, the AWE32 4MB GM/GS/MT
+      default value of the soundfont setting: the name picks the default
+      SoundFont when the operating system installs one, usually Fluid R3.
+      Any SoundFont loads; GeneralUser GS, Fluid R3, the AWE32 4MB GM/GS/MT
       bank and the Trevor0402 SC-55 SoundFont are recognised by filename or
       RIFF INFO name and get their own reverb, chorus and filter presets
-    source_ref: "src/midi/fluidsynth.cpp:672-689, src/midi/fluidsynth.cpp:816-883, src/midi/fluidsynth.cpp:1229-1242"
+    source_ref: "src/midi/fluidsynth.cpp:672-689, src/midi/fluidsynth.cpp:816-883, src/midi/fluidsynth.cpp:1227-1242"
 
   # -- PCjr system ROM --
 

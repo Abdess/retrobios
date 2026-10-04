@@ -270,6 +270,7 @@ files:
     aliases:
       - "FluidR3_GM.sf2"
       - "GeneralUser_GS.sf2"
+    unsourceable: "probed at fixed operating system paths, where the system's own SoundFont sits; a same-named file of another program must not stand in"
     note: >
       any SF2 or SF3 file loads; fluid.soundfont names it and
       fluid_synth_sfload is the only check

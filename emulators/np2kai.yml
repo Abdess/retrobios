@@ -35,18 +35,21 @@ systems: [pc-98]
 
 files:
   # -- Main BIOS ROM --
-  # Loaded in bios/bios.c:430-436 via getbiospath(). 96 KB (0x18000) mapped
-  # at 0xe8000. Only loaded when np2cfg.usebios is true (core option).
-  # Without this, CopyMemory copies nosyscode[] built-in simulator.
+  # Loaded in bios/bios.c:440-447 via getbiospath(). 96 KB (0x18000) mapped
+  # at 0xe8000. Only loaded when np2cfg.usebios is set, which is the default
+  # (pccore.c:129) and has no core option. Without this, CopyMemory copies
+  # the nosyscode[] built-in simulator (bios/bios.c:463).
   - name: "bios.rom"
     path: "np2kai/bios.rom"
-    size: 98304
+    min_size: 98304
+    validation: [size]
     required: false
     hle_fallback: true
     note: >
-      PC-9801 system BIOS ROM (96 KB). The core boots without it using the
-      built-in BIOS simulator, but some software requires the real BIOS.
-    source_ref: "bios/bios.c:450-456, common/strres.c:60"
+      PC-9801 system BIOS ROM. The first 0x18000 bytes are read to 0xe8000;
+      a file shorter than that is ignored and the built-in BIOS simulator
+      is used, as when the file is absent.
+    source_ref: "bios/bios.c:440-447, pccore.c:129, common/strres.c:67"
 
   # -- Font file --
   # Path set in libretro.c:1813 as "<system>/np2kai/font.bmp".

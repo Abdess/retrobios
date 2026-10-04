@@ -29,17 +29,20 @@ systems: [pc-98]
 
 files:
   # -- Main BIOS ROM --
-  # Loaded in bios/bios.c:232-235 via getbiospath(). 96 KB (0x18000)
+  # Loaded in bios/bios.c:232-237 via getbiospath(). 96 KB (0x18000)
   # mapped at 0xe8000. Without this, the built-in BIOS simulator
-  # (nosyscode + BIOS_SIMULATE) is used.
+  # (nosyscode + BIOS_SIMULATE) is used (bios/bios.c:253).
   - name: "bios.rom"
     path: "np2/bios.rom"
+    min_size: 98304
+    validation: [size]
     required: false
     hle_fallback: true
     note: >
-      PC-9801 system BIOS ROM (96 KB). The core boots without it using
-      the built-in BIOS simulator, but some software requires the real BIOS.
-    source_ref: "bios/bios.c:232-235, common/strres.c:53"
+      PC-9801 system BIOS ROM. The first 0x18000 bytes are read to 0xe8000;
+      a file shorter than that is ignored and the built-in BIOS simulator
+      is used, as when the file is absent.
+    source_ref: "bios/bios.c:232-237, common/strres.c:53"
 
   # -- PC-9821 extension BIOS --
   # Loaded in bios/bios.c:262-266 via getbiospath(). 8 KB (0x2000)
