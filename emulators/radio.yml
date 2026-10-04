@@ -1,0 +1,80 @@
+emulator: radio
+type: utility
+core_classification: pure_libretro
+source: "https://git.libretro.com/libretro/libretro-radio"
+upstream: "https://github.com/fpscan/libretro-radio"
+author: "fpscan, gadsby"
+profiled_date: "2026-09-17"
+source_commit: "5d7d786ad1d8703a52184ff2ee39712c46ed67c9"
+upstream_commit: "5d7d786ad1d8703a52184ff2ee39712c46ed67c9"
+core_version: "1.1"
+display_name: "Internet Radio (Radio)"
+cores:
+  - radio
+systems: []
+
+notes: |
+  Streams internet radio and plays local MP3 and WAV files behind a tuner
+  display with five visualisers. The station list is built once in
+  retro_load_game, in this order: the content when it is given, then
+  radio_stations.m3u in the system directory, then the same name in the save
+  directory, then in the working directory, then the 100 most clicked
+  stations of the radio-browser.info API over plain HTTP, and last eight
+  SomaFM streams compiled into the core. Each step runs only while the list
+  is still empty, so the first source that yields a station wins.
+  ref: libretro-radio.c:2409-2488
+
+  Content is an .m3u or .txt playlist, or a single .mp3 or .wav file. A
+  playlist is read line by line: an EXTINF line names the next entry, any
+  other line that is not a comment is a stream URL or a local file path,
+  and a bare host gets http:// prepended. Up to 256 entries are kept and
+  each is given a fake FM frequency for the tuner. A playlist that parses to
+  zero entries counts as no content and the chain above continues, which is
+  what the zero-byte empty.m3u in the repository is for. Local audio is
+  opened from the path the playlist or the frontend gives; a WAV must be
+  PCM or float with a fmt and a data chunk.
+  ref: libretro-radio.c:1965-1971, libretro-radio.c:37,
+       libretro-radio.c:2221-2291, libretro-radio.c:2419-2435,
+       libretro-radio.c:746-797, libretro-radio.c:800-871
+
+  Streaming is a hand-written HTTP/1.0 client over an AF_INET socket: the
+  URL scheme is stripped, an https:// entry is joined in clear on the port
+  it names or 80, ICY status lines are accepted and up to five redirects
+  are followed. No TLS library, certificate store or font file is read; the
+  8x8 glyphs are a table in the binary. MP3 decoding is libmad, compiled in
+  from the libretro-deps submodule.
+  ref: libretro-radio.c:517-548, libretro-radio.c:564-743,
+       libretro-radio.c:81, Makefile:30-45, .gitlab-ci.yml:13-17
+
+  The presets are the loaded list seen through the Active Preset core
+  option, which selects entries 1 to 100 by index; a list longer than that
+  is still walked with up and down on the pad. retro_load_game accepts a
+  null game, but retro_set_environment only sets the pixel format and the
+  variables and never announces SET_SUPPORT_NO_GAME, so the frontend still
+  demands a content path and the .info supports_no_game only shows the
+  Start Core entry.
+  ref: libretro-radio.c:977-991, libretro-radio.c:1984-1999,
+       libretro-radio.c:2068-2073
+
+  The GitLab project is the copy the buildbot builds through its own CI,
+  from the same tree as the author's GitHub repository, and the Makefile
+  names the binary radio_libretro.
+  ref: .gitlab-ci.yml:10, Makefile:17
+
+files:
+  - name: radio_stations.m3u
+    path: "radio_stations.m3u"
+    required: false
+    category: game_data
+    validation: [existence]
+    unsourceable: "station list the user writes, one stream URL or local audio path per line, with no name or entry the code expects"
+    description: "default station list, read when the content yields no station"
+    note: >-
+      Opened from the system directory, then from the save directory, then
+      from the working directory, each only while no station has been
+      loaded yet. Parsed like a content playlist and accepted once one entry
+      comes out of it; a missing or empty file hands over to the
+      radio-browser.info API and then to the eight built-in SomaFM streams.
+      A file put here replaces those two fallbacks for every start without
+      content.
+    source_ref: "libretro-radio.c:2437-2461, libretro-radio.c:2278-2291, libretro-radio.c:2464-2481"

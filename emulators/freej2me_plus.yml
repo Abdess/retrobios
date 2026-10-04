@@ -1,0 +1,103 @@
+emulator: FreeJ2ME-Plus
+type: libretro
+core_classification: enhanced_fork
+source: "https://github.com/TASEmulators/freej2me-plus"
+upstream: "https://github.com/hex007/freej2me"
+profiled_date: "2026-09-17"
+source_commit: "631cf3f8edf18ce8ef2e9de46bd2dad50d6411a2"
+upstream_commit: "8b9bc8a19baf26e3d92f88934a64a32f1cbc2795"
+core_version: "1.52"
+display_name: "Mobile - J2ME (FreeJ2ME-Plus)"
+cores:
+  - freej2me_plus
+systems:
+  - j2me
+
+notes: |
+  Fork of FreeJ2ME adding phone-specific APIs (Siemens, Nokia, Motorola,
+  KDDI, SKT, DoJa, JBlend, Mascot Capsule V3, M3G), KJX loading and more
+  core options. The native core is a C bridge: retro_init reads the system
+  directory, checks that freej2me_plus-lr.jar exists there and spawns
+  java -jar with the file encoding and the screen size as arguments, then
+  drives the Java process over pipes. Windows launches javaw through
+  CreateProcess with the system directory as starting directory; Linux
+  forks, chdir()s into it and execvp()s java. A Java runtime (8 or later)
+  must be on the host PATH. The jar is built by ant from build.xml, which
+  writes the libretro variant as freej2me_plus-lr.jar.
+  ref: src/libretro/freej2me_libretro.c:38-42,
+       src/libretro/freej2me_libretro.c:845-874,
+       src/libretro/freej2me_libretro.c:1566-1568,
+       src/libretro/freej2me_libretro.c:1665-1674,
+       build.xml:66-76
+
+  Only existence is tested. When the jar is absent the core posts the
+  SYSTEM_NOT_FOUND message and returns from retro_init before any process is
+  created, so nothing loads. The message text still names freej2me-lr.jar,
+  the file the original core opens; this core opens freej2me_plus-lr.jar.
+  ref: src/libretro/freej2me_libretro.c:334-341,
+       src/libretro/freej2me_libretro.c:852-858,
+       src/libretro/freej2me_libretro.h:74
+
+  Every relative path the jar opens resolves against the system directory,
+  since the Java process starts there. freej2me_system/ is created on first
+  run and holds freej2me.conf (written with defaults when missing, then
+  overridden by the core options the bridge sends), FreeJ2ME.log, and the
+  SiemensData/ and XceData/ directories that the Siemens and XCE file APIs
+  write to. FreeJ2MEDumps/KDDI/ receives the jar and jad extracted from a
+  .kjx. Saves go to <save_dir>/freej2me/ (rms/<suite>/ and
+  config/<suite>/game.conf), falling back to the system directory when the
+  frontend has no save directory.
+  ref: src/org/recompile/freej2me/Config.java:47-48,
+       src/org/recompile/freej2me/Config.java:186-205,
+       src/org/recompile/mobile/Mobile.java:117-119,
+       src/org/recompile/mobile/Mobile.java:131,
+       src/libretro/freej2me_libretro.c:912-920,
+       src/org/recompile/freej2me/Libretro.java:198-202,
+       src/javax/microedition/rms/RecordStore.java:111
+
+  Two files are user supplied and optional. With the freej2me_midifont core
+  option on, Manager.checkCustomMidi loads the first .sf2 or .gm listed in
+  freej2me_system/customMIDI/ as the MIDI soundbank; off, or with the
+  directory empty, the JVM default soundbank is used. With freej2me_textfont
+  on, PlatformFont loads the first .ttf, .otf or .ttc in
+  freej2me_system/customFont/; off, the AWT SansSerif, Monospaced and Dialog
+  faces are used. Both directories are created with a placeholder file when
+  missing, and neither file has a fixed name.
+  ref: src/libretro/freej2me_libretro.c:459-471,
+       src/org/recompile/freej2me/Libretro.java:236,
+       src/org/recompile/freej2me/Libretro.java:250,
+       src/org/recompile/mobile/Mobile.java:987-993,
+       src/javax/microedition/media/Manager.java:53,
+       src/javax/microedition/media/Manager.java:325-346,
+       src/org/recompile/mobile/PlatformFont.java:63,
+       src/org/recompile/mobile/PlatformFont.java:102-119
+
+files:
+  - name: "freej2me_plus-lr.jar"
+    system: j2me
+    path: "freej2me_plus-lr.jar"
+    required: true
+    validation: [existence]
+    description: "FreeJ2ME-Plus libretro Java application"
+    note: "Java program the native core launches with java -jar from the system directory root. Built by ant from build.xml at the pinned revision; the code reads no size and no hash."
+    source_ref: "src/libretro/freej2me_libretro.c:38-42 (freej2meapp), src/libretro/freej2me_libretro.c:845-861 (GET_SYSTEM_DIRECTORY, freej2me_present, SYSTEM_NOT_FOUND_MSG), src/libretro/freej2me_libretro.c:334-341 (access F_OK), src/libretro/freej2me_libretro.c:863-874 (java -jar argv), build.xml:66-76 (destfile)"
+
+  - name: "<soundfont>.sf2"
+    system: j2me
+    path: "freej2me_system/customMIDI/<soundfont>.sf2"
+    required: false
+    unsourceable: "user supplied, no canonical file"
+    category: game_data
+    description: "MIDI soundbank for J2ME audio"
+    note: "First .sf2 or .gm in the directory listing, loaded through MidiSystem.getSoundbank when the freej2me_midifont option is on. A rejected file is logged and the JVM default soundbank stays."
+    source_ref: "src/javax/microedition/media/Manager.java:53, src/javax/microedition/media/Manager.java:325-346, src/org/recompile/mobile/Mobile.java:987-989"
+
+  - name: "<font>.ttf"
+    system: j2me
+    path: "freej2me_system/customFont/<font>.ttf"
+    required: false
+    unsourceable: "user supplied, no canonical file"
+    category: game_data
+    description: "TrueType font for J2ME text"
+    note: "First .ttf, .otf or .ttc in the directory listing, loaded through Font.createFont when the freej2me_textfont option is on. A rejected file is logged and the AWT faces stay."
+    source_ref: "src/org/recompile/mobile/PlatformFont.java:63, src/org/recompile/mobile/PlatformFont.java:102-119, src/org/recompile/mobile/Mobile.java:991-993"

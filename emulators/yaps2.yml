@@ -1,0 +1,1530 @@
+emulator: yaps2
+type: standalone + libretro
+core_classification: community_fork
+bios_mode: agnostic
+source: "https://github.com/yaps2/yaps2"
+upstream: "https://github.com/PCSX2/pcsx2"
+profiled_date: "2026-09-17"
+source_commit: "57ea93c0ce8306063b31fe6658dab6b492bbedfe"
+upstream_commit: "342db51523f288c5ced20f5be3c679f46472cc45"
+core_version: "Git"
+display_name: "Sony - PlayStation 2 (yaps2)"
+cores: [yaps2]
+systems: [sony-playstation-2]
+
+bios_directory: "pcsx2/bios/"
+resources_directory: "pcsx2/resources/"
+
+data_directories:
+  - ref: yaps2-resources
+    destination: "pcsx2/resources"
+    source_ref: "pcsx2-libretro/Main.cpp:157-158, pcsx2/Pcsx2Config.cpp:2399-2413"
+
+notes: |
+  PlayStation 2 emulator, a GPL-3.0 fork of PCSX2 for arm64 Linux handhelds:
+  native AArch64 EE, IOP and VU recompilers, a persisted VU program cache,
+  libmali and Adreno gates in the Vulkan backend. One tree builds the Qt
+  desktop application, an SDL3 kmsdrm frontend (yaps2-sdl) and a libretro core
+  (yaps2_libretro.so); the nightly release ships all three for arm64 Linux
+  plus a macOS build. The fork is discontinued and its recompilers moved to
+  ARMSX2; main is the final state. The tree is PCSX2 at 342db515 (2026-06-19)
+  plus 335 fork commits, and bin/resources is byte for byte that PCSX2
+  revision.
+  ref: README.md:1-3, CMakeLists.txt:51-53, CMakeLists.txt:92-110,
+       cmake/BuildParameters.cmake:16-21, .github/workflows/nightly_release.yml:104-118
+
+  The libretro core keeps everything under <system>/pcsx2: AppRoot and
+  DataRoot are that directory, Resources is pcsx2/resources, Settings is
+  pcsx2/inis, and LoadStartupSettings derives bios, memcards, cheats, patches,
+  textures, gamesettings, cache, snaps, sstates, logs, covers, inputprofiles
+  and videos from DataRoot with the PCSX2 defaults. The core writes its own
+  yaps2-libretro.ini and secrets.ini there. The renderer is forced to Vulkan
+  through the frontend's context negotiation interface, the SDL input source
+  is switched off, and audio goes out through the libretro batch callback.
+  ref: pcsx2-libretro/Main.cpp:145-165, pcsx2-libretro/Main.cpp:196-209,
+       pcsx2-libretro/Main.cpp:213-223, pcsx2-libretro/Main.cpp:1489-1521,
+       pcsx2/Pcsx2Config.cpp:2304-2318, pcsx2/Pcsx2Config.cpp:2330-2346,
+       pcsx2/VMManager.cpp:557-561
+
+  The standalone builds resolve resources beside the binary, or under the
+  share/PCSX2 data directory of a PACKAGE_MODE install, and the data directory
+  as YAPS2 under the platform configuration root: Documents on Windows,
+  $XDG_CONFIG_HOME or ~/.config on Linux, Library/Application Support on
+  macOS, or beside the binary in portable mode. bios, memcards, cheats,
+  patches and the rest sit under that data directory. The SDL frontend keeps
+  its ini at inis/PCSX2.ini, forces the Vulkan renderer, SDL audio and SDL
+  input, and exits at startup when the resources directory or
+  Roboto-Regular.ttf is missing.
+  ref: pcsx2/Pcsx2Config.cpp:2159-2204, pcsx2/Pcsx2Config.cpp:2227-2302,
+       cmake/BuildParameters.cmake:251-257, pcsx2-sdl/Main.cpp:114-137,
+       pcsx2-sdl/Main.cpp:150-160, pcsx2-sdl/Main.cpp:176-189,
+       pcsx2-qt/QtHost.cpp:1343-1346
+
+  A BIOS image is required. VMManager::Initialize calls LoadBIOS before
+  opening the CDVD, and a false return is a startup failure; only a GS dump
+  replay skips it. In the libretro core that failure ends the CPU thread and
+  no frame is ever presented. Detection is by content: LoadBIOS opens the
+  image named by Filenames/BIOS, or when that is empty or absent scans the
+  bios folder for any file between 4 and 8 MB whose romdir carries a RESET
+  entry followed by a readable ROMVER. The fifth ROMVER character gives the
+  zone among Japan, USA, Europe, Asia, China, T10K, COH-H, Test and Free, an
+  EXTINFO entry supplies the serial. No name and no hash is matched. The image
+  is read into the 4 MB ROM region and truncated to it; one shorter than
+  2465792 bytes turns off the OSDSys parameter HLE.
+  ref: pcsx2/VMManager.cpp:1444-1461, pcsx2-libretro/Main.cpp:670-680,
+       pcsx2/ps2/BiosTools.cpp:16-17, pcsx2/ps2/BiosTools.cpp:80-197,
+       pcsx2/ps2/BiosTools.cpp:258-282, pcsx2/ps2/BiosTools.cpp:317-369,
+       pcsx2/Pcsx2Config.cpp:2100-2106
+
+  The core option yaps2_bios lists the files of <system>/pcsx2/bios whose name
+  ends in .bin, sorted, behind an auto entry; auto writes an empty
+  Filenames/BIOS and leaves the choice to the folder scan, a listed name is
+  written as is. The libretro boot always sets fast_boot.
+  ref: pcsx2-libretro/Main.cpp:937-940, pcsx2-libretro/Main.cpp:989-1039,
+       pcsx2-libretro/Main.cpp:1237-1243, pcsx2-libretro/Main.cpp:1482
+
+  Companions derive from the selected image. rom1 and rom2 are tried as the
+  full name plus extension, then with the extension replaced, opened
+  case-insensitively, copied to 4 MB regions and skipped with a console line
+  when absent. The nvm is read at the replaced extension and rebuilt in memory
+  with region and language defaults when missing, short or blank; the mec is
+  read the same way and written back as 0x00020603 when it cannot be read. No
+  EROM path exists. The IRX injection at 0x1630 reads EmuConfig.CurrentIRX,
+  which is set at runtime only and assigned by nothing in this tree.
+  ref: pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:366-367,
+       pcsx2/MemoryTypes.h:12-14, pcsx2/CDVD/CDVD.cpp:46-50,
+       pcsx2/CDVD/CDVD.cpp:136-205, pcsx2/ps2/BiosTools.cpp:384-385,
+       pcsx2/Config.h:1443-1445, pcsx2/R3000AInterpreter.cpp:219
+
+  Nothing from the resources folder is compiled into the binaries. Every
+  resource is read at its own name under EmuFolders::Resources, and
+  GetOverridableResourcePath lets a copy under UserResources take precedence.
+  The libretro core ships as a bare shared object, so the user supplies
+  <system>/pcsx2/resources from a yaps2 build; the SDL and Qt packages carry
+  the folder beside the binary.
+  ref: pcsx2/Pcsx2Config.cpp:2399-2413, pcsx2-libretro/Main.cpp:157-158,
+       pcsx2-sdl/CMakeLists.txt:29-33, .github/workflows/linux_build_libretro.yml:139-150
+
+  Missing resources are not uniformly survivable. The three fonts LoadFontData
+  reads fail ImGuiManager::Initialize, which fails OpenGSDevice and the VM
+  boot. Roboto-Regular.ttf is loaded by the frontends: the SDL frontend exits
+  without it, the libretro core only logs a warning, but with no standard
+  font AddTextFont returns null and AddImGuiFonts fails the same way. Every
+  Vulkan shader source is read in GSDeviceVK::Create, cas.glsl and its two
+  includes with the others, and any read failure fails the device; the
+  OpenGL backend behaves the same except that a missing cas.glsl only turns
+  sharpening off. Vulkan is the only backend the libretro core presents
+  through; the OpenGL device is what the software renderer opens when the
+  first Vulkan GPU is Intel or a software rasterizer, and what the standalone
+  builds open when OpenGL is selected. Direct3D sources are read by Windows
+  builds only, which the libretro target excludes. The databases, the patch
+  archive, the controller mappings, the sounds and the interface artwork
+  degrade instead.
+  ref: pcsx2/ImGui/ImGuiManager.cpp:148-153, pcsx2/ImGui/ImGuiManager.cpp:205-211,
+       pcsx2/ImGui/ImGuiManager.cpp:472-524, pcsx2/ImGui/ImGuiManager.cpp:598-637,
+       pcsx2/ImGui/ImGuiManager.cpp:772-790, pcsx2-libretro/Main.cpp:177-193,
+       pcsx2/GS/GS.cpp:154-172, pcsx2/GS/GS.cpp:386-408,
+       pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2308-2351,
+       pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:577-581,
+       pcsx2/GS/GSUtil.cpp:276-311, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2240-2270,
+       CMakeLists.txt:108-110
+
+  The fullscreen interface and its textures are opened by the SDL and Qt
+  frontends, and by the achievements client when it shows a login or a
+  notification; the libretro core never opens it on its own, and its
+  achievements stay off unless yaps2-libretro.ini enables them. Achievement
+  sounds play from the resources folder when the sound effects are enabled
+  and no custom sound is set.
+  ref: pcsx2-sdl/Main.cpp:746, pcsx2-qt/QtHost.cpp:163,
+       pcsx2/Achievements.cpp:256-260, pcsx2/VMManager.cpp:423-424,
+       pcsx2/ImGui/FullscreenUI.cpp:321-345, pcsx2/Achievements.cpp:942-951
+
+  The Qt build reads a per-script interface font by filename, first under
+  UserResources then under the resources folder, and offers to download the
+  first entry of the script table into UserResources/fonts from the PCSX2
+  runtime-resources release when neither holds it. Only the Latin and emoji
+  entries are shipped. Compiled .qm translations are read from a translations
+  folder beside the Qt binary, built from the .ts sources at build time.
+  ref: pcsx2-qt/Translations.cpp:314-371, pcsx2-qt/Translations.cpp:414-424,
+       pcsx2-qt/Translations.cpp:541-549, pcsx2-qt/Translations.cpp:624-650,
+       pcsx2-qt/QtHost.cpp:64-65, pcsx2-qt/Translations.cpp:133-171
+
+  Files the emulator produces rather than reads from a distribution: memory
+  cards, save states, snapshots, the shader caches and the persisted VU
+  program cache under cache/vu_jit, the game list cache, the DEV9 HDD image
+  named in the ini. Per-game user files keep the PCSX2 layout under the data
+  directory: cheats and patches as <serial>_<crc>.pnach, which the libretro
+  option yaps2_cheats enables from <system>/pcsx2/cheats,
+  gamesettings/<serial>_<crc>.ini, textures/<serial>/replacements.
+  ref: pcsx2/arm64/microVU_ProgCache-arm64.inl:33-40,
+       pcsx2/arm64/microVU_ProgCache-arm64.inl:452-462, pcsx2/Patch.cpp:320-355,
+       pcsx2-libretro/Main.cpp:945-947, pcsx2-libretro/Main.cpp:1245-1247,
+       pcsx2/DEV9/DEV9.cpp:86-94
+
+files:
+  - name: ps2-0230a-20080220.bin
+    path: pcsx2/bios/ps2-0230a-20080220.bin
+    standalone_path: bios/ps2-0230a-20080220.bin
+    agnostic: true
+    required: true
+    min_size: 4194304
+    max_size: 8388608
+    validation: [size]
+    description: "PS2 BIOS image"
+    note: >-
+      Any image whose romdir holds RESET and ROMVER is accepted, whatever its
+      name. The 4 to 8 MB range gates the folder scan; an image named in the
+      configuration skips that range. The libretro option list only shows
+      names ending in .bin. Read into the 4 MB ROM region and truncated to
+      it. Shorter than 2465792 bytes disables the OSDSys parameter HLE.
+    source_ref: "pcsx2/ps2/BiosTools.cpp:16-17, pcsx2/ps2/BiosTools.cpp:80-197, pcsx2/ps2/BiosTools.cpp:258-294, pcsx2/ps2/BiosTools.cpp:317-369, pcsx2-libretro/Main.cpp:999-1006"
+
+  - name: ps2-0230a-20080220.rom1
+    path: pcsx2/bios/ps2-0230a-20080220.rom1
+    standalone_path: bios/ps2-0230a-20080220.rom1
+    required: false
+    max_size: 4194304
+    description: "DVD player ROM"
+    note: >-
+      Tried as {bios}.rom1 then {biosbase}.rom1, opened case-insensitively.
+      Copied to the ROM1 region and truncated to 4 MB. Logged and skipped
+      when absent.
+    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:366, pcsx2/MemoryTypes.h:13"
+
+  - name: ps2-0230a-20080220.rom2
+    path: pcsx2/bios/ps2-0230a-20080220.rom2
+    standalone_path: bios/ps2-0230a-20080220.rom2
+    required: false
+    max_size: 4194304
+    description: "Chinese ROM extension"
+    note: >-
+      Same two-step naming as rom1. Copied to the ROM2 region, 4 MB in this
+      tree. Only Chinese region consoles carry one, so no such companion
+      exists for this image.
+    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:367, pcsx2/MemoryTypes.h:14"
+
+  - name: ps2-0230a-20080220.nvm
+    path: pcsx2/bios/ps2-0230a-20080220.nvm
+    standalone_path: bios/ps2-0230a-20080220.nvm
+    required: false
+    hle_fallback: true
+    size: 1024
+    description: "Console NVRAM"
+    note: >-
+      Read at the BIOS path with the extension replaced by nvm. Carries the
+      console id, the iLink id, the MAC, the model number and the OSD
+      configuration. A 1024 byte image is built in memory when the file is
+      absent, short, or carries a blank config block, zeroed except for a
+      fixed iLink id and the language and region defaults of the BIOS region.
+    source_ref: "pcsx2/CDVD/CDVD.cpp:46-47, pcsx2/CDVD/CDVD.cpp:136-188"
+
+  - name: ps2-0230a-20080220.mec
+    path: pcsx2/bios/ps2-0230a-20080220.mec
+    standalone_path: bios/ps2-0230a-20080220.mec
+    required: false
+    hle_fallback: true
+    size: 4
+    description: "Mechacon version"
+    note: >-
+      Read at the BIOS path with the extension replaced by mec. Defaults to
+      0x00020603 and is written back at that path when it cannot be read.
+    source_ref: "pcsx2/CDVD/CDVD.cpp:49-50, pcsx2/CDVD/CDVD.cpp:190-204"
+
+  - name: eeprom.dat
+    required: false
+    hle_fallback: true
+    load_from: working_directory
+    size: 64
+    description: "DEV9 network adapter EEPROM"
+    note: >-
+      Opened read-write from the process working directory when the network
+      adapter starts and mapped over 64 bytes. A compiled-in image stands in
+      when the file is missing or cannot be mapped.
+    source_ref: "pcsx2/DEV9/DEV9.cpp:59-70, pcsx2/DEV9/DEV9.cpp:97-158, pcsx2/VMManager.cpp:1592"
+
+  - name: flash.dat
+    required: false
+    hle_fallback: true
+    load_from: working_directory
+    max_size: 8650752
+    description: "DEV9 SmartMedia flash image"
+    note: >-
+      Opened from the process working directory at network adapter init and
+      read as 1024 blocks of 16 pages of 512 bytes plus 16 ECC bytes. The
+      card is filled with 0xFF when the file is absent; a short read is
+      logged.
+    source_ref: "pcsx2/DEV9/flash.cpp:9-16, pcsx2/DEV9/flash.cpp:62-86"
+
+  - name: GameIndex.yaml
+    path: pcsx2/resources/GameIndex.yaml
+    standalone_path: resources/GameIndex.yaml
+    required: false
+    bundled: true
+    size: 2693579
+    sha1: 7efb2ed721cf0c0f0677324e09be311a8337e793
+    description: "Game database"
+    note: >-
+      Read from the resources folder on the first serial lookup, keyed by
+      serial, carrying the per-game fixes, patches and settings overrides.
+      A console error when absent; no game is then matched.
+    source_ref: "pcsx2/GameDatabase.cpp:39, pcsx2/GameDatabase.cpp:974-984, pcsx2/GameDatabase.cpp:1020-1034"
+
+  - name: RedumpDatabase.yaml
+    path: pcsx2/resources/RedumpDatabase.yaml
+    standalone_path: resources/RedumpDatabase.yaml
+    required: false
+    bundled: true
+    mode: standalone
+    size: 1906463
+    sha1: dceb4536fba7fb89452864fc512a4d071a19eae0
+    description: "Disc track hash database"
+    note: >-
+      Loaded on the first hash lookup, which only the Qt game summary page
+      performs, to tell whether a dump matches a known good one.
+    source_ref: "pcsx2/GameDatabase.cpp:1081, pcsx2/GameDatabase.cpp:1131-1146, pcsx2-qt/Settings/GameSummaryWidget.cpp:322"
+
+  - name: patches.zip
+    path: pcsx2/resources/patches.zip
+    standalone_path: resources/patches.zip
+    required: false
+    bundled: true
+    category: game_data
+    description: "Game patch archive"
+    note: >-
+      Opened read only from the resources folder when a game's patches are
+      enumerated, searched for <serial>_<crc>.pnach then <crc>.pnach. Files
+      in the patches and cheats folders take precedence. The widescreen and
+      no-interlacing options enable the named groups it carries. Absent from
+      the source tree: the Qt workflow downloads it from the PCSX2
+      pcsx2_patches releases, the SDL and libretro packages ship without it.
+      A failed open is reported once on screen.
+    source_ref: "pcsx2/Patch.cpp:115-117, pcsx2/Patch.cpp:289-317, pcsx2/Patch.cpp:365-406, pcsx2/Patch.cpp:596-611, .github/workflows/linux_build_qt.yml:130-133"
+
+  - name: game_controller_db.txt
+    path: pcsx2/resources/game_controller_db.txt
+    standalone_path: resources/game_controller_db.txt
+    required: false
+    bundled: true
+    mode: standalone
+    size: 512366
+    sha1: ca84ef31b6d48c6ab9530b743da373790a4f723b
+    description: "SDL controller mapping database"
+    note: >-
+      A copy in the data root wins, then the resources folder, and the path
+      is handed to SDL as a hint; SDL falls back to its built-in mappings
+      when neither exists. Read by the SDL input source, which the libretro
+      core switches off.
+    source_ref: "pcsx2/Input/SDLInputSource.cpp:24, pcsx2/Input/SDLInputSource.cpp:614-629, pcsx2-libretro/Main.cpp:219"
+
+  - name: Roboto-Regular.ttf
+    path: pcsx2/resources/fonts/Roboto-Regular.ttf
+    standalone_path: resources/fonts/Roboto-Regular.ttf
+    required: true
+    bundled: true
+    size: 305608
+    sha1: 00d62fbdc8d5dec4c659005e116d0ba2ee63b547
+    description: "Interface font"
+    note: >-
+      Mapped by each frontend and handed to ImGuiManager as the standard
+      font. The SDL frontend exits without it; the libretro core logs a
+      warning, then AddTextFont has nothing to add and ImGui setup fails with
+      the GS device.
+    source_ref: "pcsx2-libretro/Main.cpp:177-193, pcsx2-sdl/Main.cpp:129-137, pcsx2/ImGui/ImGuiManager.cpp:598-637, pcsx2/ImGui/ImGuiManager.cpp:772-779, pcsx2/GS/GS.cpp:154-172"
+
+  - name: RobotoMono-Medium.ttf
+    path: pcsx2/resources/fonts/RobotoMono-Medium.ttf
+    standalone_path: resources/fonts/RobotoMono-Medium.ttf
+    required: true
+    bundled: true
+    size: 86820
+    sha1: 9056e59b69c6f1160fdfb92a0773f17f6307f3ad
+    description: "Fixed-width and OSD font"
+    note: >-
+      Read for the fixed-width font and used as the OSD font when no custom
+      one is set. LoadFontData fails without it.
+    source_ref: "pcsx2/ImGui/ImGuiManager.cpp:494-501, pcsx2/ImGui/ImGuiManager.cpp:648-664, pcsx2/ImGui/FullscreenUI_Settings.cpp:3405-3406"
+
+  - name: fa-solid-900.ttf
+    path: pcsx2/resources/fonts/fa-solid-900.ttf
+    standalone_path: resources/fonts/fa-solid-900.ttf
+    required: true
+    bundled: true
+    size: 414664
+    sha1: 7f0f721265c228f2484e4924bace5a80b7826fbe
+    description: "Font Awesome icon font"
+    note: "Read for the interface icon glyphs. LoadFontData fails without it."
+    source_ref: "pcsx2/ImGui/ImGuiManager.cpp:504-511"
+
+  - name: promptfont.otf
+    path: pcsx2/resources/fonts/promptfont.otf
+    standalone_path: resources/fonts/promptfont.otf
+    required: true
+    bundled: true
+    size: 263548
+    sha1: 374ee91aeabee48013d2f090571752ec5081356f
+    description: "Controller prompt font"
+    note: "Read for the controller button glyphs. LoadFontData fails without it."
+    source_ref: "pcsx2/ImGui/ImGuiManager.cpp:514-521"
+
+  - name: Twemoji.Mozilla.ttf
+    path: pcsx2/resources/fonts/Twemoji.Mozilla.ttf
+    standalone_path: resources/fonts/Twemoji.Mozilla.ttf
+    required: false
+    bundled: true
+    mode: standalone
+    size: 1574620
+    sha1: 660c7fe74de23ee604bea47673f84710bd34f075
+    description: "Emoji font"
+    note: >-
+      First entry of the Qt emoji script table, resolved under UserResources
+      then the resources folder and downloaded into UserResources/fonts when
+      neither holds it. The SDL frontend and the libretro core load no emoji
+      font.
+    source_ref: "pcsx2-qt/Translations.cpp:340-347, pcsx2-qt/Translations.cpp:414-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansJP-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansJP-Regular.ttf
+    standalone_path: resources/fonts/NotoSansJP-Regular.ttf
+    required: false
+    mode: standalone
+    description: "Japanese interface font"
+    note: >-
+      First entry of the Qt Japanese script table. Resolved under
+      UserResources then the resources folder, and downloaded into
+      UserResources/fonts when the interface language needs it and neither
+      holds it. Not shipped.
+    source_ref: "pcsx2-qt/Translations.cpp:354-360, pcsx2-qt/Translations.cpp:414-424, pcsx2-qt/Translations.cpp:541-549, pcsx2-qt/QtHost.cpp:64-65"
+
+  - name: NotoSansKR-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansKR-Regular.ttf
+    standalone_path: resources/fonts/NotoSansKR-Regular.ttf
+    required: false
+    mode: standalone
+    description: "Korean interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:361-366, pcsx2-qt/Translations.cpp:414-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansSC-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansSC-Regular.ttf
+    standalone_path: resources/fonts/NotoSansSC-Regular.ttf
+    required: false
+    mode: standalone
+    description: "Simplified Chinese interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:320-326, pcsx2-qt/Translations.cpp:414-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansTC-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansTC-Regular.ttf
+    standalone_path: resources/fonts/NotoSansTC-Regular.ttf
+    required: false
+    mode: standalone
+    description: "Traditional Chinese interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:327-333, pcsx2-qt/Translations.cpp:414-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansArabic-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansArabic-Regular.ttf
+    standalone_path: resources/fonts/NotoSansArabic-Regular.ttf
+    required: false
+    mode: standalone
+    description: "Arabic interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:314-319, pcsx2-qt/Translations.cpp:414-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansHebrew-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansHebrew-Regular.ttf
+    standalone_path: resources/fonts/NotoSansHebrew-Regular.ttf
+    required: false
+    mode: standalone
+    description: "Hebrew interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:348-353, pcsx2-qt/Translations.cpp:414-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: NotoSansDevanagari-Regular.ttf
+    path: pcsx2/resources/fonts/NotoSansDevanagari-Regular.ttf
+    standalone_path: resources/fonts/NotoSansDevanagari-Regular.ttf
+    required: false
+    mode: standalone
+    description: "Devanagari interface font"
+    note: "Same resolution and download path as the Japanese font. Not shipped."
+    source_ref: "pcsx2-qt/Translations.cpp:334-339, pcsx2-qt/Translations.cpp:414-424, pcsx2-qt/Translations.cpp:541-549"
+
+  - name: tfx.glsl
+    path: pcsx2/resources/shaders/vulkan/tfx.glsl
+    standalone_path: resources/shaders/vulkan/tfx.glsl
+    required: true
+    bundled: true
+    size: 52493
+    sha1: 0a16f66d7816d73af3b28dea2bb292415695f6f7
+    description: "Vulkan texture function shader"
+    note: >-
+      Read into the device at creation and specialised per draw. A source
+      that cannot be read fails GSDeviceVK::Create, and Vulkan is the backend
+      the libretro core presents through.
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2308-2317, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5349-5364, pcsx2/GS/Renderers/Common/GSDevice.cpp:372-375"
+
+  - name: convert.glsl
+    path: pcsx2/resources/shaders/vulkan/convert.glsl
+    standalone_path: resources/shaders/vulkan/convert.glsl
+    required: true
+    bundled: true
+    size: 13888
+    sha1: 0cb56397052613612faf8d5eedfc77066b1fea16
+    description: "Vulkan conversion shader"
+    note: "Read for the utility pipelines and again for the FXAA pass. The device fails without it."
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2334-2338, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:4472-4478, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:4830-4835"
+
+  - name: present.glsl
+    path: pcsx2/resources/shaders/vulkan/present.glsl
+    standalone_path: resources/shaders/vulkan/present.glsl
+    required: true
+    bundled: true
+    size: 10324
+    sha1: 9d9e1f89d20576251c49519974cefc0ce88554ec
+    description: "Vulkan presentation shader"
+    note: "The device fails without it."
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:4651-4663"
+
+  - name: interlace.glsl
+    path: pcsx2/resources/shaders/vulkan/interlace.glsl
+    standalone_path: resources/shaders/vulkan/interlace.glsl
+    required: true
+    bundled: true
+    size: 7289
+    sha1: d5ba24ba836c418f7f2d9d8b44bd337baa9e45a3
+    description: "Vulkan interlace shader"
+    note: "The device fails without it."
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:4707-4713"
+
+  - name: merge.glsl
+    path: pcsx2/resources/shaders/vulkan/merge.glsl
+    standalone_path: resources/shaders/vulkan/merge.glsl
+    required: true
+    bundled: true
+    size: 759
+    sha1: e84aa516874350f414e95d3891ce480fe2958aae
+    description: "Vulkan merge shader"
+    note: "The device fails without it."
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:4758-4764"
+
+  - name: shadeboost.glsl
+    path: pcsx2/resources/shaders/vulkan/shadeboost.glsl
+    standalone_path: resources/shaders/vulkan/shadeboost.glsl
+    required: true
+    bundled: true
+    size: 1914
+    sha1: bef69d202c6e21f2ec0d6930e439a9498642ba6b
+    description: "Vulkan shade boost shader"
+    note: "Compiled by the post-processing pass at device creation. The device fails without it."
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:4810, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:4865-4869"
+
+  - name: fxaa.fx
+    path: pcsx2/resources/shaders/common/fxaa.fx
+    standalone_path: resources/shaders/common/fxaa.fx
+    required: true
+    bundled: true
+    size: 17432
+    sha1: 9d7012f8bb7bb4599ed2518f12ed540655cdd8d8
+    description: "FXAA shader, shared by every backend"
+    note: >-
+      Compiled by the Vulkan and OpenGL post-processing passes at device
+      creation, so those devices fail without it. The Direct3D backends
+      compile it on first use and only lose the effect.
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:4837-4841, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:577, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:2084-2092, pcsx2/GS/Renderers/DX11/GSDevice11.cpp:1806, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2975"
+
+  - name: cas.glsl
+    path: pcsx2/resources/shaders/vulkan/cas.glsl
+    standalone_path: resources/shaders/vulkan/cas.glsl
+    required: true
+    bundled: true
+    size: 2637
+    sha1: 005cecf1a5e20b05407d55d0aad22cf81ad66c31
+    description: "Vulkan contrast adaptive sharpening shader"
+    note: >-
+      Includes ffx_a.h and ffx_cas.h. CompileCASPipelines runs in the device
+      creation chain and its failure is returned, so the Vulkan device fails
+      without it.
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2347-2348, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:4895-4938"
+
+  - name: ffx_a.h
+    path: pcsx2/resources/shaders/common/ffx_a.h
+    standalone_path: resources/shaders/common/ffx_a.h
+    required: true
+    bundled: true
+    size: 161481
+    sha1: 726370c10154ad092c15c251b98c79185e980c7c
+    description: "FidelityFX helper header"
+    note: >-
+      Read as a source file and substituted for the include line of the
+      sharpening shader before compilation. GetCASShaderSource fails without
+      it, and the Vulkan device with it.
+    source_ref: "pcsx2/GS/Renderers/Common/GSDevice.cpp:1151-1162"
+
+  - name: ffx_cas.h
+    path: pcsx2/resources/shaders/common/ffx_cas.h
+    standalone_path: resources/shaders/common/ffx_cas.h
+    required: true
+    bundled: true
+    size: 63512
+    sha1: a1d1a687577f7a607fda35bc88950f57c2129ca5
+    description: "FidelityFX CAS header"
+    note: "Substituted the same way as ffx_a.h."
+    source_ref: "pcsx2/GS/Renderers/Common/GSDevice.cpp:1151-1162"
+
+  - name: imgui.glsl
+    path: pcsx2/resources/shaders/vulkan/imgui.glsl
+    standalone_path: resources/shaders/vulkan/imgui.glsl
+    required: true
+    bundled: true
+    size: 791
+    sha1: b8d20aa6884878ba72c080d3f2107e09606963d3
+    description: "Vulkan interface shader"
+    note: "The device fails without it."
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2350-2351, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:4940-4947"
+
+  - name: tfx_vgs.glsl
+    path: pcsx2/resources/shaders/opengl/tfx_vgs.glsl
+    standalone_path: resources/shaders/opengl/tfx_vgs.glsl
+    required: false
+    bundled: true
+    size: 14414
+    sha1: fc40fc49de1cd8ed7d60df0394dd6367ae82b85f
+    description: "OpenGL texture function vertex and geometry shader"
+    note: >-
+      The OpenGL device fails without it. That device is opened when the
+      standalone builds select OpenGL, or by the software renderer when the
+      first Vulkan GPU is Intel or a software rasterizer.
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:636-637, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:684-694, pcsx2/GS/GSUtil.cpp:292-301"
+
+  - name: tfx_fs.glsl
+    path: pcsx2/resources/shaders/opengl/tfx_fs.glsl
+    standalone_path: resources/shaders/opengl/tfx_fs.glsl
+    required: false
+    bundled: true
+    size: 36862
+    sha1: 554160d31bb97aca0e9f367f4de811dd8ad1fb21
+    description: "OpenGL texture function fragment shader"
+    note: "Read with tfx_vgs.glsl; the OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:684-694"
+
+  - name: convert.glsl
+    path: pcsx2/resources/shaders/opengl/convert.glsl
+    standalone_path: resources/shaders/opengl/convert.glsl
+    required: false
+    bundled: true
+    size: 14077
+    sha1: d26608762bfca4a470facc15c378b901ef27e249
+    description: "OpenGL conversion shader"
+    note: "The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:412-417"
+
+  - name: present.glsl
+    path: pcsx2/resources/shaders/opengl/present.glsl
+    standalone_path: resources/shaders/opengl/present.glsl
+    required: false
+    bundled: true
+    size: 11721
+    sha1: 96e5e75b66e31e577816bdea65ac976fb4e45d58
+    description: "OpenGL presentation shader"
+    note: "The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:498-503"
+
+  - name: merge.glsl
+    path: pcsx2/resources/shaders/opengl/merge.glsl
+    standalone_path: resources/shaders/opengl/merge.glsl
+    required: false
+    bundled: true
+    size: 579
+    sha1: 7f476bffdc19d7ba2806eef40c2e8e40bdf0896c
+    description: "OpenGL merge shader"
+    note: "The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:534-539"
+
+  - name: interlace.glsl
+    path: pcsx2/resources/shaders/opengl/interlace.glsl
+    standalone_path: resources/shaders/opengl/interlace.glsl
+    required: false
+    bundled: true
+    size: 6912
+    sha1: 60d6562c205ed9179ab092c37568c06b64b00ee5
+    description: "OpenGL interlace shader"
+    note: "The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:557-562"
+
+  - name: shadeboost.glsl
+    path: pcsx2/resources/shaders/opengl/shadeboost.glsl
+    standalone_path: resources/shaders/opengl/shadeboost.glsl
+    required: false
+    bundled: true
+    size: 1623
+    sha1: 511dc6bb2f81d0ad61fe46c6e91dce8b344fd934
+    description: "OpenGL shade boost shader"
+    note: "Compiled with the FXAA program at device creation. The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:577-578, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:2123-2130"
+
+  - name: cas.glsl
+    path: pcsx2/resources/shaders/opengl/cas.glsl
+    standalone_path: resources/shaders/opengl/cas.glsl
+    required: false
+    bundled: true
+    size: 2413
+    sha1: b478ce9d1343b8dd201c045f010bd1b64ba158ae
+    description: "OpenGL contrast adaptive sharpening shader"
+    note: >-
+      Compiled when the context offers compute shaders. A source that cannot
+      be read only turns sharpening off.
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:581, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:2312-2319"
+
+  - name: imgui.glsl
+    path: pcsx2/resources/shaders/opengl/imgui.glsl
+    standalone_path: resources/shaders/opengl/imgui.glsl
+    required: false
+    bundled: true
+    size: 637
+    sha1: 04bfcabf518320593dcda8198475c7f39295ef1f
+    description: "OpenGL interface shader"
+    note: "The OpenGL device fails without it."
+    source_ref: "pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:657-658, pcsx2/GS/Renderers/OpenGL/GSDeviceOGL.cpp:2367-2374"
+
+  - name: tfx.fx
+    path: pcsx2/resources/shaders/dx11/tfx.fx
+    standalone_path: resources/shaders/dx11/tfx.fx
+    required: false
+    bundled: true
+    mode: standalone
+    size: 51948
+    sha1: a2246fc37f40c94dd944d1a64919438e424ae503
+    description: "Direct3D texture function shader"
+    note: >-
+      Read by the Direct3D 11 and 12 devices of a Windows Qt build, which
+      fail without it. The libretro target builds on Linux only.
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:206, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:870, CMakeLists.txt:108-110"
+
+  - name: convert.fx
+    path: pcsx2/resources/shaders/dx11/convert.fx
+    standalone_path: resources/shaders/dx11/convert.fx
+    required: false
+    bundled: true
+    mode: standalone
+    size: 15850
+    sha1: 773e6b9177ac20ec4f80181c2ebdcaa33d71c91a
+    description: "Direct3D conversion shader"
+    note: "The Direct3D devices fail without it."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:220, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2705"
+
+  - name: present.fx
+    path: pcsx2/resources/shaders/dx11/present.fx
+    standalone_path: resources/shaders/dx11/present.fx
+    required: false
+    bundled: true
+    mode: standalone
+    size: 10945
+    sha1: 84b000485929698392676e8e7915bfcce15291ee
+    description: "Direct3D presentation shader"
+    note: "The Direct3D devices fail without it."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:256, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2849"
+
+  - name: merge.fx
+    path: pcsx2/resources/shaders/dx11/merge.fx
+    standalone_path: resources/shaders/dx11/merge.fx
+    required: false
+    bundled: true
+    mode: standalone
+    size: 538
+    sha1: 8dba66121f3bbc4b2bdf67722ef4c2b6b6b23ee6
+    description: "Direct3D merge shader"
+    note: "The Direct3D devices fail without it."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:308, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2928"
+
+  - name: interlace.fx
+    path: pcsx2/resources/shaders/dx11/interlace.fx
+    standalone_path: resources/shaders/dx11/interlace.fx
+    required: false
+    bundled: true
+    mode: standalone
+    size: 7205
+    sha1: f3d1e30101e58143282085bc6330db33a0f77a85
+    description: "Direct3D interlace shader"
+    note: "The Direct3D devices fail without it."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:343, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2892"
+
+  - name: shadeboost.fx
+    path: pcsx2/resources/shaders/dx11/shadeboost.fx
+    standalone_path: resources/shaders/dx11/shadeboost.fx
+    required: false
+    bundled: true
+    mode: standalone
+    size: 1311
+    sha1: 568f01644e02944fe3d48cfb751e71ebe504c0be
+    description: "Direct3D shade boost shader"
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:363, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2998"
+
+  - name: cas.hlsl
+    path: pcsx2/resources/shaders/dx11/cas.hlsl
+    standalone_path: resources/shaders/dx11/cas.hlsl
+    required: false
+    bundled: true
+    mode: standalone
+    size: 2597
+    sha1: a15cc4dce1edcd3db4c4e022d2a3b78e11c18a8c
+    description: "Direct3D contrast adaptive sharpening shader"
+    note: "Includes ffx_a.h and ffx_cas.h."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:2127, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2177"
+
+  - name: imgui.fx
+    path: pcsx2/resources/shaders/dx11/imgui.fx
+    standalone_path: resources/shaders/dx11/imgui.fx
+    required: false
+    bundled: true
+    mode: standalone
+    size: 736
+    sha1: 47491eaf3ba082383305b3d958794409cb0f5476
+    description: "Direct3D interface shader"
+    note: "The Direct3D devices fail without it."
+    source_ref: "pcsx2/GS/Renderers/DX11/GSDevice11.cpp:2177, pcsx2/GS/Renderers/DX12/GSDevice12.cpp:2205"
+
+  - name: message.wav
+    path: pcsx2/resources/sounds/achievements/message.wav
+    standalone_path: resources/sounds/achievements/message.wav
+    required: false
+    bundled: true
+    size: 15696
+    sha1: c54f04b63ac6f04e0a0944ef260b5497e4494dbd
+    description: "Achievement notification sound"
+    note: >-
+      Played from the resources folder when the achievement information
+      sound is enabled and no custom sound is set.
+    source_ref: "pcsx2/Achievements.cpp:66, pcsx2/Achievements.cpp:942-951, pcsx2/Achievements.cpp:1170"
+
+  - name: unlock.wav
+    path: pcsx2/resources/sounds/achievements/unlock.wav
+    standalone_path: resources/sounds/achievements/unlock.wav
+    required: false
+    bundled: true
+    size: 202702
+    sha1: da328a0a3074ec86fee2d6741bfc2e5a1f68d063
+    description: "Achievement unlock sound"
+    source_ref: "pcsx2/Achievements.cpp:67, pcsx2/Achievements.cpp:942-951, pcsx2/Achievements.cpp:1220"
+
+  - name: lbsubmit.wav
+    path: pcsx2/resources/sounds/achievements/lbsubmit.wav
+    standalone_path: resources/sounds/achievements/lbsubmit.wav
+    required: false
+    bundled: true
+    size: 82096
+    sha1: 5ad1e110dcf0ffd26405981398892a82e4f3bad1
+    description: "Leaderboard submission sound"
+    source_ref: "pcsx2/Achievements.cpp:68, pcsx2/Achievements.cpp:942-951, pcsx2/Achievements.cpp:1339"
+
+  - name: placeholder.png
+    path: pcsx2/resources/fullscreenui/placeholder.png
+    standalone_path: resources/fullscreenui/placeholder.png
+    required: false
+    bundled: true
+    size: 2668
+    sha1: 25e41433147face77af96fecac4519ed11ae8072
+    description: "Fullscreen interface placeholder texture"
+    note: >-
+      Named as the placeholder texture when the fullscreen interface
+      initialises; that initialisation fails without it and the interface
+      stays closed.
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:335-341, pcsx2/ImGui/ImGuiFullscreen.cpp:292-300"
+
+  - name: no-save.png
+    path: pcsx2/resources/fullscreenui/no-save.png
+    standalone_path: resources/fullscreenui/no-save.png
+    required: false
+    bundled: true
+    size: 9655
+    sha1: 7b0bb79d38c573648de218645c6fb16449e156e0
+    description: "Empty save slot texture"
+    note: "Read when the save state selector opens from its hotkeys."
+    source_ref: "pcsx2/ImGui/ImGuiOverlays.cpp:1413-1414, pcsx2/Hotkeys.cpp:268-283"
+
+  - name: media-cdrom.svg
+    path: pcsx2/resources/fullscreenui/media-cdrom.svg
+    standalone_path: resources/fullscreenui/media-cdrom.svg
+    required: false
+    bundled: true
+    size: 3318
+    sha1: 36cc8f46014a321b7602e52c062ab23d7c256ccc
+    description: "Game list menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1356, pcsx2/ImGui/FullscreenUI.cpp:3296"
+
+  - name: start-game.svg
+    path: pcsx2/resources/fullscreenui/start-game.svg
+    standalone_path: resources/fullscreenui/start-game.svg
+    required: false
+    bundled: true
+    size: 2839
+    sha1: dd8e7a8bebe509a38b803105abaf37b275f4cbb3
+    description: "Start game menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1362"
+
+  - name: applications-system.svg
+    path: pcsx2/resources/fullscreenui/applications-system.svg
+    standalone_path: resources/fullscreenui/applications-system.svg
+    required: false
+    bundled: true
+    size: 3797
+    sha1: 280834f689b9ab157d29026caed47fcc5da9fe40
+    description: "Settings menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1369, pcsx2/ImGui/FullscreenUI.cpp:3291"
+
+  - name: exit.svg
+    path: pcsx2/resources/fullscreenui/exit.svg
+    standalone_path: resources/fullscreenui/exit.svg
+    required: false
+    bundled: true
+    size: 4042
+    sha1: 8452aac0ea8adf96f52c6fc87b7bc9c038249c97
+    description: "Exit menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1375, pcsx2/ImGui/FullscreenUI.cpp:1508"
+
+  - name: start-file.svg
+    path: pcsx2/resources/fullscreenui/start-file.svg
+    standalone_path: resources/fullscreenui/start-file.svg
+    required: false
+    bundled: true
+    size: 1120
+    sha1: 47bd0895af12344dd80d7dc1133c26d2b5081110
+    description: "Start file menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1432"
+
+  - name: drive-cdrom.svg
+    path: pcsx2/resources/fullscreenui/drive-cdrom.svg
+    standalone_path: resources/fullscreenui/drive-cdrom.svg
+    required: false
+    bundled: true
+    size: 1037
+    sha1: 6ff7f132ca2483d7e24a52eead4d3b807eb9addf
+    description: "Start disc menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1438"
+
+  - name: start-bios.svg
+    path: pcsx2/resources/fullscreenui/start-bios.svg
+    standalone_path: resources/fullscreenui/start-bios.svg
+    required: false
+    bundled: true
+    size: 1295
+    sha1: 061f35078713d8bb386d595964da7366781f98ef
+    description: "Start BIOS menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1444"
+
+  - name: back-icon.svg
+    path: pcsx2/resources/fullscreenui/back-icon.svg
+    standalone_path: resources/fullscreenui/back-icon.svg
+    required: false
+    bundled: true
+    size: 1364
+    sha1: 9b754fe9c868225a922dd3e6fc2f9d447ff5442c
+    description: "Back menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1450, pcsx2/ImGui/FullscreenUI.cpp:1500"
+
+  - name: desktop-mode.svg
+    path: pcsx2/resources/fullscreenui/desktop-mode.svg
+    standalone_path: resources/fullscreenui/desktop-mode.svg
+    required: false
+    bundled: true
+    size: 1269
+    sha1: 513d784434cd934048e16b2a333b4d65da099e8b
+    description: "Desktop mode menu icon"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1516"
+
+  - name: AppBanner.svg
+    path: pcsx2/resources/icons/AppBanner.svg
+    standalone_path: resources/icons/AppBanner.svg
+    required: false
+    bundled: true
+    size: 2649
+    sha1: cf42e9d792747ccb06ff243672ed37b30db23def
+    description: "Application banner"
+    note: "Loaded with the fullscreen interface resources."
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:751-753"
+
+  - name: AppIconLarge.png
+    path: pcsx2/resources/icons/AppIconLarge.png
+    standalone_path: resources/icons/AppIconLarge.png
+    required: false
+    bundled: true
+    size: 93501
+    sha1: 4ecf41cbd6df0d5e454ff01d9b92b4e7b0bc65c7
+    description: "Application icon"
+    note: >-
+      Drawn by the fullscreen interface, shown by the Qt setup wizard, and
+      copied out when a desktop entry is written.
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:1282, pcsx2-qt/SetupWizardDialog.cpp:160, pcsx2-qt/ShortcutCreationDialog.cpp:430"
+
+  - name: AppIconLarge.ico
+    path: pcsx2/resources/icons/AppIconLarge.ico
+    standalone_path: resources/icons/AppIconLarge.ico
+    required: false
+    bundled: true
+    mode: standalone
+    size: 302430
+    sha1: d36096c9d3b0504dbf4ec3bef0cde46b79b83686
+    description: "Windows application icon"
+    note: "Named as the shortcut icon by the Qt shortcut dialog on Windows."
+    source_ref: "pcsx2-qt/ShortcutCreationDialog.cpp:317"
+
+  - name: ra-icon.svg
+    path: pcsx2/resources/icons/ra-icon.svg
+    standalone_path: resources/icons/ra-icon.svg
+    required: false
+    bundled: true
+    size: 2092
+    sha1: 7d21ec2d411d63137e5352544aa74e0b8bb04199
+    description: "RetroAchievements icon"
+    note: "Drawn on the achievements page of the fullscreen interface."
+    source_ref: "pcsx2/ImGui/FullscreenUI_Settings.cpp:4375"
+
+  - name: cover-placeholder.png
+    path: pcsx2/resources/cover-placeholder.png
+    standalone_path: resources/cover-placeholder.png
+    required: false
+    bundled: true
+    mode: standalone
+    size: 56075
+    sha1: 620b40ff921876175550bb976f0428274853fe27
+    description: "Qt game list cover placeholder"
+    source_ref: "pcsx2-qt/GameList/GameListModel.cpp:506"
+
+  - name: star-0.svg
+    path: pcsx2/resources/icons/star-0.svg
+    standalone_path: resources/icons/star-0.svg
+    required: false
+    bundled: true
+    size: 5315
+    sha1: 431b06f0504fa004e4d3b46808c56432b5965d9f
+    description: "Compatibility rating icon, nothing"
+    note: >-
+      One of six rating textures loaded with the fullscreen interface
+      resources and by the Qt game list.
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:755-759, pcsx2-qt/GameList/GameListModel.cpp:502-504"
+
+  - name: star-1.svg
+    path: pcsx2/resources/icons/star-1.svg
+    standalone_path: resources/icons/star-1.svg
+    required: false
+    bundled: true
+    size: 5300
+    sha1: 34a1b02a508ad17cf6e6f356ae779c60d32df46d
+    description: "Compatibility rating icon, intro"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:755-759, pcsx2-qt/GameList/GameListModel.cpp:502-504"
+
+  - name: star-2.svg
+    path: pcsx2/resources/icons/star-2.svg
+    standalone_path: resources/icons/star-2.svg
+    required: false
+    bundled: true
+    size: 5285
+    sha1: 5d14c6a473c67e4c4105182830645f1d7ec14a70
+    description: "Compatibility rating icon, menu"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:755-759, pcsx2-qt/GameList/GameListModel.cpp:502-504"
+
+  - name: star-3.svg
+    path: pcsx2/resources/icons/star-3.svg
+    standalone_path: resources/icons/star-3.svg
+    required: false
+    bundled: true
+    size: 5270
+    sha1: 6a662a918addfb384c56ab3194ec64c96f7e7ab5
+    description: "Compatibility rating icon, in game"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:755-759, pcsx2-qt/GameList/GameListModel.cpp:502-504"
+
+  - name: star-4.svg
+    path: pcsx2/resources/icons/star-4.svg
+    standalone_path: resources/icons/star-4.svg
+    required: false
+    bundled: true
+    size: 5255
+    sha1: 58d8acd1fab6a4ac1647b5798f727c28b390ae1b
+    description: "Compatibility rating icon, playable"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:755-759, pcsx2-qt/GameList/GameListModel.cpp:502-504"
+
+  - name: star-5.svg
+    path: pcsx2/resources/icons/star-5.svg
+    standalone_path: resources/icons/star-5.svg
+    required: false
+    bundled: true
+    size: 5240
+    sha1: b7bbd4dd268bbda347fec8b1749e355f55581251
+    description: "Compatibility rating icon, perfect"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:755-759, pcsx2-qt/GameList/GameListModel.cpp:502-504"
+
+  - name: at.svg
+    path: pcsx2/resources/icons/flags/at.svg
+    standalone_path: resources/icons/flags/at.svg
+    required: false
+    bundled: true
+    size: 183
+    sha1: 3268e79c513366efae9889e345bb04748eac322f
+    description: "Flag icon, game list region PAL-AU"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486"
+
+  - name: au.svg
+    path: pcsx2/resources/icons/flags/au.svg
+    standalone_path: resources/icons/flags/au.svg
+    required: false
+    bundled: true
+    size: 1296
+    sha1: 630d3cc1a29b86023ab331836acd7ae3791aec07
+    description: "Flag icon, game list region PAL-A; BIOS zone Oceania"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/Settings/BIOSSettingsWidget.cpp:81-113"
+
+  - name: az.svg
+    path: pcsx2/resources/icons/flags/az.svg
+    standalone_path: resources/icons/flags/az.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 501
+    sha1: 2529cee6bcdb128ecf4f208d7c609af7c78c06b2
+    description: "Flag icon, interface language az-AZ"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: be.svg
+    path: pcsx2/resources/icons/flags/be.svg
+    standalone_path: resources/icons/flags/be.svg
+    required: false
+    bundled: true
+    size: 284
+    sha1: a509c1a94f2c5808e7eedf2cfbbc6235588aa97a
+    description: "Flag icon, game list region PAL-BE"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486"
+
+  - name: br.svg
+    path: pcsx2/resources/icons/flags/br.svg
+    standalone_path: resources/icons/flags/br.svg
+    required: false
+    bundled: true
+    size: 6978
+    sha1: 00d4d90a54e0cd40122df3763b5b20161d433abd
+    description: "Flag icon, game list region NTSC-B; interface language pt-BR"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: ch.svg
+    path: pcsx2/resources/icons/flags/ch.svg
+    standalone_path: resources/icons/flags/ch.svg
+    required: false
+    bundled: true
+    size: 262
+    sha1: dab53e761a0f21523f2714df9b5c58fd35a21a0d
+    description: "Flag icon, game list region PAL-SWI"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486"
+
+  - name: cn.svg
+    path: pcsx2/resources/icons/flags/cn.svg
+    standalone_path: resources/icons/flags/cn.svg
+    required: false
+    bundled: true
+    size: 775
+    sha1: 863b0360572b2d7c9b1a08ce6fbb32ffa1ce3644
+    description: "Flag icon, game list region NTSC-C; BIOS zone China; interface language zh-CN"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/Settings/BIOSSettingsWidget.cpp:81-113, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: cz.svg
+    path: pcsx2/resources/icons/flags/cz.svg
+    standalone_path: resources/icons/flags/cz.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 213
+    sha1: ac4790de2a89b5918f9f21d7ed5a4907d723a1a7
+    description: "Flag icon, interface language cs-CZ"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: de.svg
+    path: pcsx2/resources/icons/flags/de.svg
+    standalone_path: resources/icons/flags/de.svg
+    required: false
+    bundled: true
+    size: 209
+    sha1: 9003c2aa29d2869772266e9b56c869387541999a
+    description: "Flag icon, game list region PAL-G; interface language de-DE"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: dk.svg
+    path: pcsx2/resources/icons/flags/dk.svg
+    standalone_path: resources/icons/flags/dk.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 225
+    sha1: 32a86d0ade5364276371bc6c326f7baa62bcd743
+    description: "Flag icon, interface language da-DK"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: es.svg
+    path: pcsx2/resources/icons/flags/es.svg
+    standalone_path: resources/icons/flags/es.svg
+    required: false
+    bundled: true
+    size: 80294
+    sha1: 674a3b81dc17c092c26e94b3ede351619854680e
+    description: "Flag icon, game list region PAL-S; interface language ca-ES and es-ES"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: eu.svg
+    path: pcsx2/resources/icons/flags/eu.svg
+    standalone_path: resources/icons/flags/eu.svg
+    required: false
+    bundled: true
+    size: 1295
+    sha1: ebbe870f77114dc2a12e385c56a5a7c993b3f22d
+    description: "Flag icon, game list region PAL-E and PAL-M; BIOS zone Europe"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/Settings/BIOSSettingsWidget.cpp:81-113"
+
+  - name: fi.svg
+    path: pcsx2/resources/icons/flags/fi.svg
+    standalone_path: resources/icons/flags/fi.svg
+    required: false
+    bundled: true
+    size: 216
+    sha1: b10db9c6d1271076effc0c451ad2ce64fa511fa8
+    description: "Flag icon, game list region PAL-FI; interface language fi-FI"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: fr.svg
+    path: pcsx2/resources/icons/flags/fr.svg
+    standalone_path: resources/icons/flags/fr.svg
+    required: false
+    bundled: true
+    size: 220
+    sha1: 4250bebf6de8e988e864342934beb72c510ea382
+    description: "Flag icon, game list region PAL-F; interface language fr-FR"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: gb.svg
+    path: pcsx2/resources/icons/flags/gb.svg
+    standalone_path: resources/icons/flags/gb.svg
+    required: false
+    bundled: true
+    size: 504
+    sha1: 161ee20a0a75bb06d4f2ca9acdbb137d9a963cec
+    description: "Flag icon, game list region PAL-UK"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486"
+
+  - name: gr.svg
+    path: pcsx2/resources/icons/flags/gr.svg
+    standalone_path: resources/icons/flags/gr.svg
+    required: false
+    bundled: true
+    size: 814
+    sha1: 7fa4815d8ad260e10afb5e9e3f10531a169017df
+    description: "Flag icon, game list region PAL-GR; interface language el-GR"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: hk.svg
+    path: pcsx2/resources/icons/flags/hk.svg
+    standalone_path: resources/icons/flags/hk.svg
+    required: false
+    bundled: true
+    size: 727
+    sha1: 74008ed4de892e7028f393138b4fd15a94e71eb8
+    description: "Flag icon, game list region NTSC-HK; BIOS zone Asia"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/Settings/BIOSSettingsWidget.cpp:81-113"
+
+  - name: hr.svg
+    path: pcsx2/resources/icons/flags/hr.svg
+    standalone_path: resources/icons/flags/hr.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 30732
+    sha1: a8dc8f5db456ba51b1b9c310daf3d993aff5cde9
+    description: "Flag icon, interface language hr-HR"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: hu.svg
+    path: pcsx2/resources/icons/flags/hu.svg
+    standalone_path: resources/icons/flags/hu.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 259
+    sha1: ce29276f2ce2e4706b5592b13f67da0e20f4d2f6
+    description: "Flag icon, interface language hu-HU"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: id.svg
+    path: pcsx2/resources/icons/flags/id.svg
+    standalone_path: resources/icons/flags/id.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 163
+    sha1: b64010d8ea927ad199558b0a3ecaec9fda8b0daf
+    description: "Flag icon, interface language id-ID"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: il.svg
+    path: pcsx2/resources/icons/flags/il.svg
+    standalone_path: resources/icons/flags/il.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 813
+    sha1: 46bd8a96a3f6f212be972c4eeaeb5dabe1a5de58
+    description: "Flag icon, interface language he-IL"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: in.svg
+    path: pcsx2/resources/icons/flags/in.svg
+    standalone_path: resources/icons/flags/in.svg
+    required: false
+    bundled: true
+    size: 1090
+    sha1: fa2a2b11f6d78ef7ea1aee9ae341b26a0f398dc8
+    description: "Flag icon, game list region PAL-IN; interface language hi-IN"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: ir.svg
+    path: pcsx2/resources/icons/flags/ir.svg
+    standalone_path: resources/icons/flags/ir.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 14695
+    sha1: e8c6fe0fd7341391702da83d416410236ba0455f
+    description: "Flag icon, interface language fa-IR"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: it.svg
+    path: pcsx2/resources/icons/flags/it.svg
+    standalone_path: resources/icons/flags/it.svg
+    required: false
+    bundled: true
+    size: 273
+    sha1: 7415b7fed9a98587f62ea65ceff5f9ea0689d33e
+    description: "Flag icon, game list region PAL-I; interface language it-IT"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: jp.svg
+    path: pcsx2/resources/icons/flags/jp.svg
+    standalone_path: resources/icons/flags/jp.svg
+    required: false
+    bundled: true
+    size: 438
+    sha1: 7b40bd2022d8b824d22ee3f480e82aa18d462b28
+    description: "Flag icon, game list region NTSC-J; BIOS zone Japan; interface language ja-JP"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/Settings/BIOSSettingsWidget.cpp:81-113, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: kr.svg
+    path: pcsx2/resources/icons/flags/kr.svg
+    standalone_path: resources/icons/flags/kr.svg
+    required: false
+    bundled: true
+    size: 1016
+    sha1: 09f0d9286160100831513846a1425ff3cf526c5b
+    description: "Flag icon, game list region NTSC-K; interface language ko-KR"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: lt.svg
+    path: pcsx2/resources/icons/flags/lt.svg
+    standalone_path: resources/icons/flags/lt.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 381
+    sha1: f3793dea11ba69fb2ed47ce2171f4fe2a20e3ada
+    description: "Flag icon, interface language lt-LT"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: lv.svg
+    path: pcsx2/resources/icons/flags/lv.svg
+    standalone_path: resources/icons/flags/lv.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 214
+    sha1: 5f7f8b85708d880bc4ec840a56027d849e012851
+    description: "Flag icon, interface language lv-LV"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: mx.svg
+    path: pcsx2/resources/icons/flags/mx.svg
+    standalone_path: resources/icons/flags/mx.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 83734
+    sha1: 77e296aab748df78d1b2e92a4cb1631778e39c7b
+    description: "Flag icon, BIOS zone Mexico; interface language es-419"
+    source_ref: "pcsx2-qt/Settings/BIOSSettingsWidget.cpp:81-113, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: nl.svg
+    path: pcsx2/resources/icons/flags/nl.svg
+    standalone_path: resources/icons/flags/nl.svg
+    required: false
+    bundled: true
+    size: 212
+    sha1: eac8781372854f4ce2b7fe100257b714503ac6ff
+    description: "Flag icon, game list region PAL-NL; interface language nl-NL"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: no.svg
+    path: pcsx2/resources/icons/flags/no.svg
+    standalone_path: resources/icons/flags/no.svg
+    required: false
+    bundled: true
+    size: 302
+    sha1: 8083fdbbd0f5dcfb1a044b17c934c640dc2c16be
+    description: "Flag icon, game list region PAL-NO; interface language no-NO"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: Other.svg
+    path: pcsx2/resources/icons/flags/Other.svg
+    standalone_path: resources/icons/flags/Other.svg
+    required: false
+    bundled: true
+    size: 656
+    sha1: d168d39632798f8be799d21bd0a0c9ca13533272
+    description: "Flag icon, game list region unclassified"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486"
+
+  - name: pl.svg
+    path: pcsx2/resources/icons/flags/pl.svg
+    standalone_path: resources/icons/flags/pl.svg
+    required: false
+    bundled: true
+    size: 204
+    sha1: 12edefd7e07dfc56da5840a767d8f346d754741d
+    description: "Flag icon, game list region PAL-PL; interface language pl-PL"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: pt.svg
+    path: pcsx2/resources/icons/flags/pt.svg
+    standalone_path: resources/icons/flags/pt.svg
+    required: false
+    bundled: true
+    size: 7890
+    sha1: 27aa81654a49de86b9bdc5fa803509eac8c6eb1d
+    description: "Flag icon, game list region PAL-P; interface language pt-PT"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: ro.svg
+    path: pcsx2/resources/icons/flags/ro.svg
+    standalone_path: resources/icons/flags/ro.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 284
+    sha1: 056220ed6c2f1447166cbfb0a1a59ead7327acd6
+    description: "Flag icon, interface language ro-RO"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: rs.svg
+    path: pcsx2/resources/icons/flags/rs.svg
+    standalone_path: resources/icons/flags/rs.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 181232
+    sha1: b98706a247823546c7b5520472eb9adb499ac109
+    description: "Flag icon, interface language sr-SP"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: ru.svg
+    path: pcsx2/resources/icons/flags/ru.svg
+    standalone_path: resources/icons/flags/ru.svg
+    required: false
+    bundled: true
+    size: 212
+    sha1: 2a502ee04c295946091a85800c634af684e04119
+    description: "Flag icon, game list region PAL-R; BIOS zone Russia; interface language ru-RU"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/Settings/BIOSSettingsWidget.cpp:81-113, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: sa.svg
+    path: pcsx2/resources/icons/flags/sa.svg
+    standalone_path: resources/icons/flags/sa.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 9885
+    sha1: 86d7cc3af549a0dd407973241b61d8d176fd63f3
+    description: "Flag icon, interface language ar-SA"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: scn.svg
+    path: pcsx2/resources/icons/flags/scn.svg
+    standalone_path: resources/icons/flags/scn.svg
+    required: false
+    bundled: true
+    size: 527
+    sha1: ffaf4b51ff1512ef60f9b13ef3eaeaeecf3a5256
+    description: "Flag icon, game list region PAL-SC"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486"
+
+  - name: se.svg
+    path: pcsx2/resources/icons/flags/se.svg
+    standalone_path: resources/icons/flags/se.svg
+    required: false
+    bundled: true
+    size: 199
+    sha1: d4e52e7b15063ba562cafe525610e7cc6ad0e4ab
+    description: "Flag icon, game list region PAL-SW; interface language sv-SE"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: tr.svg
+    path: pcsx2/resources/icons/flags/tr.svg
+    standalone_path: resources/icons/flags/tr.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 523
+    sha1: 6741fb37a915e706b7a57293473c38b8e631ddee
+    description: "Flag icon, interface language tr-TR"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: tw.svg
+    path: pcsx2/resources/icons/flags/tw.svg
+    standalone_path: resources/icons/flags/tw.svg
+    required: false
+    bundled: true
+    size: 2450
+    sha1: a9014bf94727050ce0c1670debbda2aba22d348c
+    description: "Flag icon, game list region NTSC-T; interface language zh-TW"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: ua.svg
+    path: pcsx2/resources/icons/flags/ua.svg
+    standalone_path: resources/icons/flags/ua.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 216
+    sha1: fda1ecf6d12b236e2eb5bae004514bee9910c082
+    description: "Flag icon, interface language uk-UA"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: us.svg
+    path: pcsx2/resources/icons/flags/us.svg
+    standalone_path: resources/icons/flags/us.svg
+    required: false
+    bundled: true
+    size: 2524
+    sha1: 141d1636ceff28ecd7762b37ee7f4818137fa7b3
+    description: "Flag icon, game list region NTSC-U; BIOS zone USA; interface language en-US"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/Settings/BIOSSettingsWidget.cpp:81-113, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: vn.svg
+    path: pcsx2/resources/icons/flags/vn.svg
+    standalone_path: resources/icons/flags/vn.svg
+    required: false
+    bundled: true
+    mode: standalone
+    size: 461
+    sha1: fa86e679b019dd59a2e15378dc8c4b2ba591ff77
+    description: "Flag icon, interface language vi-VN"
+    source_ref: "pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"
+
+  - name: za.svg
+    path: pcsx2/resources/icons/flags/za.svg
+    standalone_path: resources/icons/flags/za.svg
+    required: false
+    bundled: true
+    size: 860
+    sha1: b8e39cc07766388f5d2759604692c1789f4fb1a8
+    description: "Flag icon, game list region PAL-AF; interface language af-ZA"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486, pcsx2-qt/QtUtils.cpp:515-552, pcsx2-qt/SetupWizardDialog.cpp:188-190"

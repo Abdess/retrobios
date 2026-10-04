@@ -1,0 +1,55 @@
+emulator: Picocomputer 6502
+type: standalone + libretro
+core_classification: official_port
+source: "https://github.com/picocomputer/rp6502"
+source_branch: libretro
+upstream: "https://github.com/picocomputer/rp6502"
+profiled_date: "2026-09-17"
+source_commit: "02bfc3cbc9b2700795ce0a40fb49b413784cb832"
+core_version: "0.33"
+display_name: "Picocomputer 6502"
+cores:
+  - rp6502
+systems:
+  - picocomputer-6502
+
+notes: |
+  Rumbledethumps' Picocomputer 6502, a WDC 65C02 driven by two Raspberry Pi
+  Picos acting as RIA and VGA. The libretro core, the desktop emulator and the
+  Pico firmware live in one repository: src/host/libretro is the core and
+  src/host/sokol the standalone, both linked over the same emu_core library
+  (src/core/emu.cmake:31-105). A release fast-forwards the libretro branch to
+  the tag, which is what the buildbot builds (version.cmake:14-19), and the
+  core reports that tag as its version (src/core/sys/version.c:16-19).
+
+  The content is a .rp6502 program image and nothing else is loaded.
+  retro_load_game refuses a null path (src/host/libretro/retro.c:520-526),
+  makes it absolute and hands it to proc_boot (src/host/libretro/retro.c:545-563,
+  src/host/libretro/retro.c:498-518), which fills SRAM and XRAM from the
+  file's records through rom_load (src/core/sys/proc.c:83-104,
+  src/core/rom/rom.c:46-82). The file is opened with fs_rom_open and must
+  begin with #!RP6502 (src/core/rom/pump.c:96-115). Assets a program bundles
+  are read on demand from the same file, hence need_fullpath
+  (src/host/libretro/retro.c:344-354).
+
+  The RIA and VGA firmware are reimplemented inside emu_core, not read from
+  disk: the terminal fonts are hex arrays (src/core/term/font.c:13-25) and the
+  OEM code page tables are generated at build time from fatfs
+  (src/core/gen.cmake:46-61, src/core/emu.cmake:28,83). The core never asks
+  for the system directory. The frontend's save directory, or failing that the
+  content's own directory, becomes the program's working directory on the host
+  filesystem (src/host/libretro/retro.c:444-494), and the machine's stdio
+  drivers are the ROM and that filesystem (src/host/libretro/drivers.h:60).
+  The libretro machine declares no CONFIG_SAVE driver, so its settings are
+  never written to disk (src/host/libretro/drivers.h:48-58,
+  src/core/sys/config.c:62-64).
+
+  The standalone takes the program on the command line, installs --rom files
+  as :basename aliases on a null drive and, given no program, waits for one to
+  be dropped on the window (src/host/sokol/cli/cli.c:122-137,
+  src/host/sokol/cli/main.c:210, src/host/sokol/cli/main.c:292-311). The
+  debugger's ImGui layout file and the cc65 .dbg or llvm-mos ELF a DAP session
+  names are the program's own build outputs (src/host/sokol/cli/cli.c:154,
+  src/core/dap/cc65dbg.c:315, src/core/dap/dwarf_elf.c:44).
+
+files: []

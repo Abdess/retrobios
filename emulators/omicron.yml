@@ -1,0 +1,75 @@
+emulator: Omicron
+type: libretro
+core_classification: game_engine
+source: "https://github.com/libretro/Omicron"
+source_mirror: "https://git.libretro.com/libretro/Omicron"
+upstream: "https://github.com/msx80/Omicron"
+profiled_date: "2026-09-17"
+source_commit: "0181fbad079addb1fca895325c711f8f91397be4"
+upstream_commit: "aaaa2f1a98b88a6b1e6102417317ced206887076"
+core_version: "v1"
+display_name: "Omicron"
+cores:
+  - omicron
+systems:
+  - omicron
+
+notes: |
+  Java game engine on libGDX by msx80, inspired by fantasy consoles. A game
+  is an .omicron cartridge: a jar carrying an omicron.properties descriptor
+  that names the Game class, and numbered sheetN.png, soundN.wav, musicN.mp3
+  and fileN.bin resources, all read from inside the cartridge
+  (omicron-player/omicron-loader/src/main/java/org/github/msx80/omicron/fantasyconsole/cartridges/JarCartridge.java:20-25,
+  omicron-player/omicron-engine/src/main/java/org/github/msx80/omicron/GameRun.java:74-100).
+  The libretro core is the experimental frontend of the same repository; the
+  libretro fork is the 2020-09-29 tree plus a GitLab CI file and a Makefile
+  that takes the JNI headers from JAVA_HOME. The CI builds the shared
+  library for Linux x64, i686 and aarch64 only (.gitlab-ci.yml:48-66).
+
+  retro_load_game builds <system_dir>/omicron/omicron.jar and refuses the
+  content when the file is absent
+  (libretro/LibretroOmicronCore/omicron_libretro.c:364-387). It then opens
+  the JVM shared library by hand: JAVA_HOME must be set
+  (libretro/LibretroOmicronCore/ejava.c:74-80), and libjvm.so or jvm.dll is
+  probed under lib/server, jre/bin/server, jre/lib/amd64/server,
+  jre/lib/aarch64/server, bin/server, bin/client and jre/bin/client, first
+  hit wins (libretro/LibretroOmicronCore/ejava.c:86-94). The JVM is created
+  with no option (libretro/LibretroOmicronCore/ejava.c:249-250). A
+  Bootstrap class compiled into the core binary
+  (libretro/LibretroOmicronCore/bootstrap.h) is defined through JNI and
+  given the jar path; it opens the jar in a URLClassLoader and instantiates
+  org.github.msx80.omicron.libretro.entrypoint.EntryPoint
+  (libretro/LibretroOmicronCore/ejava.c:258-287,
+  libretro/omicron-libretro-java/src/Bootstrap.java:33-39). One JVM per
+  process: unloading keeps it and the next load reuses it
+  (libretro/LibretroOmicronCore/ejava.c:291-305). The Java runtime is a
+  host installation, not a file of this profile.
+
+  omicron.jar is the Maven jar-with-dependencies of
+  libretro/omicron-libretro-java under that name: EntryPoint, the engine,
+  loader and api modules, libGDX 1.9.10 with the LWJGL 3 backend and the
+  desktop natives of both (libretro/omicron-libretro-java/pom.xml:13-61).
+  GdxNativesLoader.load and GL.createCapabilities extract those natives
+  from the jar when the frontend creates the GL context
+  (libretro/omicron-libretro-java/src/org/github/msx80/omicron/libretro/entrypoint/EntryPoint.java:137-147),
+  so nothing else is read from system_dir. Audio is a MockAudio and
+  Preferences are written under java.io.tmpdir
+  (libretro/omicron-libretro-java/src/experimental/LibretroApplication.java:45,
+  libretro/omicron-libretro-java/src/experimental/LibretroApplication.java:172-173).
+
+  The cartridge class loader installs a SecurityManager
+  (omicron-player/omicron-loader/src/main/java/org/github/msx80/omicron/fantasyconsole/crazyclassloader/NonAggressiveClassLoader.java:19-20).
+  From Java 18 on System.setSecurityManager throws unless the JVM starts
+  with java.security.manager=allow, which the core never passes; the C side
+  does not check the pending exception, so the game is reported as loaded
+  with a 0x0 geometry. Java 8 to 17 runs it.
+
+files:
+  - name: "omicron.jar"
+    system: omicron
+    path: "omicron/omicron.jar"
+    required: true
+    validation: [existence]
+    description: "Omicron libretro Java backend: engine, libGDX, LWJGL and their natives"
+    source_ref: "libretro/LibretroOmicronCore/omicron_libretro.c:364-387 (GET_SYSTEM_DIRECTORY, omicron/omicron.jar, fileExists), libretro/LibretroOmicronCore/ejava.c:258-287 (Bootstrap main with the jar path), libretro/omicron-libretro-java/src/Bootstrap.java:33-39 (URLClassLoader, EntryPoint), libretro/omicron-libretro-java/pom.xml:13-61"
+    note: "Built with mvn package assembly:single in libretro/omicron-libretro-java after the omicron-api, omicron-loader and omicron-engine Gradle modules are published to the local Maven repository; the jar-with-dependencies output is renamed omicron.jar. Only its presence is checked."

@@ -1,0 +1,65 @@
+emulator: video_processor
+type: utility
+core_classification: pure_libretro
+source: "https://github.com/libretro/libretro-video-processor"
+source_mirror: "https://git.libretro.com/libretro/libretro-video-processor"
+upstream: "https://github.com/jaredmcneill/libretro-v4l2"
+author: "Jared McNeill"
+profiled_date: "2026-09-17"
+source_commit: "8fe4751f0039a1b645bf750531fcfc234958a7ac"
+upstream_commit: "c608ced893583e0a8a8153890f99453fd1647d53"
+core_version: "0.0.2"
+display_name: "Video Processor (V4L2)"
+cores:
+  - video_processor
+systems: []
+
+notes: |
+  Capture core for V4L2 devices: a console plugged into a capture card is
+  shown through the frontend so its scalers and shaders apply to the signal.
+  The core opens the capture device, requests RGB24 and two mmap buffers,
+  and converts each dequeued frame to RGB565 for the video callback. Audio
+  comes from an ALSA capture PCM opened at 48 kHz, S16_LE, two channels, and
+  is read from the frontend audio callback. There is no emulation, no state
+  to serialize and no memory map.
+  ref: video_processor_v4l2.c:299-419, video_processor_v4l2.c:492-529,
+       video_processor_v4l2.c:531-544, video_processor_v4l2.c:554-698
+
+  Both devices are picked from core options built in retro_set_environment.
+  The video list comes from a udev enumeration of the video4linux subsystem
+  filtered on the /dev/video prefix, or from a fixed /dev/video0 to
+  /dev/video3 list when libudev is not compiled in. The audio list comes from
+  the ALSA PCM hints whose IOID is Input and whose name starts with hw: or
+  default:. These are device nodes and PCM names, not files: nothing is read
+  from the system directory, no path is built and no file is opened. The
+  content handed to retro_load_game is not looked at either: valid_extensions
+  is NULL, need_fullpath is false and the core never declares no-content
+  support, so the frontend still asks for a file whose bytes are ignored.
+  ref: video_processor_v4l2.c:140-205, video_processor_v4l2.c:208-242,
+       video_processor_v4l2.c:244-268, video_processor_v4l2.c:448-455
+
+  The frame rate is the frameperiod of the active V4L2 standard and the
+  pixel aspect comes from VIDIOC_CROPCAP; retro_get_region reports NTSC when
+  the standard carries the NTSC bit and PAL otherwise. A device that does not
+  enumerate its active standard makes retro_load_game fail.
+  ref: video_processor_v4l2.c:457-480, video_processor_v4l2.c:593-617,
+       video_processor_v4l2.c:728-731
+
+  Linux only, through linux/videodev2.h. libv4l2, ALSA and libudev are each
+  autodetected by the Makefile and dropped when their header is missing;
+  without libv4l2 the raw ioctl path is used and the format conversion the
+  library provides is lost. The GitLab CI installs the three development
+  packages, and the buildbot binary for linux x86_64 links libv4l2.so.0,
+  libasound.so.2 and libudev.so.1. RetroArch also compiles a diverged copy of
+  this core into its own binary under cores/libretro-video-processor when
+  HAVE_VIDEOPROCESSOR is set; that copy declares no-content support and adds
+  capture and output mode options, and opens the same device nodes only.
+  ref: video_processor_v4l2.c:45-57, Makefile:107-124
+
+  Written by Jared McNeill in July 2016 as libretro-v4l2. The libretro fork
+  carries the author's last commits, the audio batch callback and the ALSA
+  overrun recovery, then the 2026 CI and dependency autodetection change; the
+  original repository stopped at the RGB24 conversion commit.
+
+files: []
+source_ref: "video_processor_v4l2.c:27-28, .gitlab-ci.yml:19"

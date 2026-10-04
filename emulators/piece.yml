@@ -1,0 +1,77 @@
+emulator: piece-emu
+type: libretro
+core_classification: official_port
+source: "https://github.com/autch/piece-emu"
+upstream: "https://github.com/autch/piece-emu"
+profiled_date: "2026-09-17"
+source_commit: "08ec4b45176e8df0d6d6f67e56b87e847cd64a65"
+core_version: "0.1"
+display_name: "Aquaplus - P/ECE (piece-emu)"
+cores:
+  - piece
+systems:
+  - aquaplus-piece
+
+notes: |
+  Aquaplus P/ECE emulator (EPSON S1C33209 SoC, S1C33000 CPU core) by
+  Autch. The repository ships an SDL3 standalone, a headless runner and
+  the libretro core, all built from the same core, soc, board and system
+  sources (src/libretro/CMakeLists.txt:17-57).
+
+  The content is a P/ECE Flash Image (.pfi): a 40-byte PFIHEADER carrying
+  the SYSTEMINFO block, then the raw flash contents at the stored offset
+  (src/pfi_format.h:22-47). retro_get_system_info sets need_fullpath to
+  false, so the frontend hands the file over as a memory blob
+  (src/libretro/piece_libretro.cpp:225-233). retro_load_game checks the
+  PFI signature and SYSTEMINFO.size == 32, sizes SRAM and flash from
+  SYSTEMINFO, copies the flash bytes into an SST39VF flash device and
+  starts the CPU at the reset vector read from flash base 0xC00000
+  (src/libretro/piece_libretro.cpp:271-362,
+  src/debug/pfi_loader_blob.cpp:20-91). The P/ECE kernel, its PFFS file
+  system and the installed applications (.pex) all live in that flash
+  image. The bus maps internal IRAM, external SRAM, external flash and
+  I/O only (src/core/bus.hpp:75-79 and src/core/bus.hpp:239); the core
+  carries no embedded boot code, and retro_set_environment registers
+  core options and nothing else (src/libretro/piece_libretro.cpp:204-218).
+  No environment call asks for the system directory.
+
+  RETRO_MEMORY_SAVE_RAM exposes the whole flash as a PFI image (original
+  header, then the flash bytes, re-copied sector by sector when the
+  kernel writes), so the frontend's .srm is itself a bootable .pfi
+  (src/libretro/piece_libretro.cpp:334-352, 538-564, 614-624). A stored
+  .srm with a valid header replaces the flash on the first frame
+  (src/libretro/piece_libretro.cpp:398-420).
+
+  A .pfi is produced from the official Aquaplus PieceSystem 1.20 updater
+  with the bundled mkpfi. mkpfi checks the "Piece Kernel Program"
+  signature at offset 8 of all.bin, writes the boot vector 0x00C02004
+  into sector 0, leaves sector 1 blank and copies all.bin from sector 2
+  (src/tools/mkpfi.c:14, 88-95, 115-135). A fresh image boots to the
+  launcher with startup.pex, date.pex and gamepad.pex installed; games
+  are added with pfar.
+
+  The .info reports display_version 0.3; the code announces 0.1.
+
+files: []
+
+platform_details:
+  flash_image:
+    format: "PFI"
+    header_size: 40
+    flash_base: "0xC00000"
+    sector_size: 4096
+    source_ref: "src/pfi_format.h:22-47, src/debug/pfi_loader_blob.cpp:20-91"
+  kernel_source:
+    name: "PieceSystem 1.20 updater"
+    url: "https://aquaplus.jp/piece/dl/update120.exe"
+    archive: "LHA self-extracting executable"
+    members:
+      - path: "piece/update/all.bin"
+        size: 516096
+        flash: "512 KB factory units"
+        command: "mkpfi -512kb piece/update/all.bin piece.pfi"
+      - path: "piece/update/2mb/all.bin"
+        size: 516096
+        flash: "2 MB modified units"
+        command: "mkpfi -2mb piece/update/2mb/all.bin piece.pfi"
+    source_ref: "src/tools/mkpfi.c:14, 88-95, 115-135"

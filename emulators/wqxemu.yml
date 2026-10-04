@@ -1,0 +1,247 @@
+emulator: WQXEmu
+type: standalone + libretro
+core_classification: official_port
+source: "https://git.libretro.com/libretro/wqxemu"
+upstream: "https://github.com/AloysHF/WQXEmu"
+profiled_date: "2026-09-17"
+source_commit: "7191df429042116e707ba68f5b2d2a8ae567b2ad"
+upstream_commit: "7191df429042116e707ba68f5b2d2a8ae567b2ad"
+core_version: "0.1.0"
+display_name: "Wenquxing - Electronic Dictionary (WQXEmu)"
+cores:
+  - wqxemu
+systems:
+  - wenquxing-nc1020
+  - wenquxing-pc1000
+  - wenquxing-cc800
+  - wenquxing-nc2000
+  - wenquxing-nc3000
+
+notes: |
+  Wenquxing electronic dictionary emulator written in Rust by AloysHF.
+  The libretro core and the wqx-emu standalone binary share the
+  wqxemu-core crate, which runs the original firmware of five models on
+  an emulated 6502 SoC: NC1020, PC1000, CC800, NC2000 and NC3000. The
+  git.libretro.com repository is a mirror of the GitHub one at the same
+  commit; the buildbot consumes its .gitlab-ci.yml.
+
+  The core takes no content. retro_load_game refuses a non-null game
+  info (crates/wqxemu-libretro/src/lib.rs:632-635) and the machine is
+  started through Start Core, supports_no_game being set
+  (crates/wqxemu-libretro/src/lib.rs:476-481). The model comes from the
+  wqxemu_model core option, NC1020 when unset
+  (crates/wqxemu-libretro/src/lib.rs:263-282,
+  crates/wqxemu-libretro/src/lib.rs:956-973), and its firmware set is
+  built as {system}/WQXEmu/<model>/<file>
+  (crates/wqxemu-libretro/src/lib.rs:211-248, model names in
+  crates/wqxemu-core/src/machine.rs:35-43). Every path of the set must be
+  a regular file, otherwise retro_load_game names the missing paths and
+  returns false (crates/wqxemu-libretro/src/lib.rs:250-257,
+  crates/wqxemu-libretro/src/lib.rs:644-658). Only the set of the
+  selected model is read.
+
+  Each machine reads its files whole with std::fs::read and checks their
+  size only: a ROM or NOR image must be at least as large as the window
+  it fills, the PC1000 ROM must be exactly 12 MiB or 16 MiB, and NAND
+  images are copied without any check. A file that fails the check makes
+  Emulator::new fail and retro_load_game returns false with the loader's
+  message (crates/wqxemu-libretro/src/lib.rs:671-677). No hash is
+  verified.
+
+  The firmware files are never written. Neither frontend calls save_nor;
+  the writable flash, NAND, RAM and peripheral state of a session is
+  serialized to {save}/<model>/<fingerprint>.wqxs, a gzip file the core
+  creates on unload and reloads at the next start of the same model and
+  firmware set (crates/wqxemu-libretro/src/lib.rs:316-340,
+  crates/wqxemu-libretro/src/lib.rs:679-693,
+  crates/wqxemu-core/src/save.rs:43-88). The fingerprint is an FNV-1a
+  over the slot layout and the content of every file of the set
+  (crates/wqxemu-core/src/machine.rs:89-113). That file is created by the
+  core. retro_get_memory_data returns null for every memory id
+  (crates/wqxemu-libretro/src/lib.rs:875-885).
+
+  The standalone binary takes the same files as explicit --rom, --nor,
+  --nand and --nand0 paths and has no default directory; --model selects
+  the machine, otherwise detect_model guesses it from the file sizes
+  (crates/wqxemu/src/main.rs:27-42, crates/wqxemu/src/main.rs:239-274,
+  crates/wqxemu/src/main.rs:276-288,
+  crates/wqxemu-core/src/machines/mod.rs:38-87). Its device skins are
+  include_bytes! PNGs (crates/wqxemu/src/keypad.rs:59-66).
+
+  The libretro-core-info file names the PC1000 NOR image pc1000.fls. The
+  code opens pc1000.nor since commit 0a8f7a5 of 2026-08-23; the v0.1.0
+  tag predates that commit and opens pc1000.fls.
+
+files:
+  - name: obj_lu.bin
+    path: WQXEmu/nc1020/obj_lu.bin
+    system: wenquxing-nc1020
+    required: true
+    min_size: 25165824
+    validation: [size]
+    description: "NC1020 system ROM, three 8 MiB volumes"
+    note: >-
+      Read whole from {system}/WQXEmu/nc1020/obj_lu.bin. The image must
+      be at least 0x8000 * 0x300 bytes or the loader fails; a larger file
+      is kept whole. Each 32 KiB bank is stored with its 16 KiB halves
+      swapped and is swapped back on load, and the BBS pages are mapped
+      from it.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:214-219, crates/wqxemu-core/src/machines/nc1020.rs:61-98, crates/wqxemu-core/src/memory.rs:24"
+
+  - name: nc1020.fls
+    path: WQXEmu/nc1020/nc1020.fls
+    system: wenquxing-nc1020
+    required: true
+    min_size: 1048576
+    validation: [size]
+    description: "NC1020 NOR flash, 32 banks of 32 KiB"
+    note: >-
+      Read whole from {system}/WQXEmu/nc1020/nc1020.fls. The image must
+      be at least 0x8000 * 0x20 bytes or the loader fails; only the first
+      1 MiB is used, with the same 16 KiB half swap as the ROM. Writes go
+      to the in-memory copy and are persisted in the .wqxs session file,
+      never to this file.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:214-219, crates/wqxemu-core/src/machines/nc1020.rs:101-122, crates/wqxemu-core/src/memory.rs:26"
+
+  - name: pc1000.rom
+    path: WQXEmu/pc1000/pc1000.rom
+    system: wenquxing-pc1000
+    required: true
+    size: [12582912, 16777216]
+    validation: [size]
+    description: "PC1000 system ROM, obj1 + obj2 + obj3"
+    note: >-
+      Read whole from {system}/WQXEmu/pc1000/pc1000.rom and stored
+      linearly. Exactly 12 MiB (obj1, obj2, obj3 back to back) or 16 MiB
+      (the PC1000EMUX and Android layout, obj3 at 12 MiB with 8 to 12 MiB
+      unused) is accepted; any other size fails the loader. The volume
+      tables are rebuilt for the layout found.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:220-225, crates/wqxemu-core/src/machines/pc1000.rs:38-40, crates/wqxemu-core/src/machines/pc1000.rs:236-283"
+
+  - name: pc1000.nor
+    aliases: [pc1000.fls]
+    path: WQXEmu/pc1000/pc1000.nor
+    system: wenquxing-pc1000
+    required: true
+    min_size: 524288
+    validation: [size]
+    description: "PC1000 NOR flash, 16 banks of 32 KiB"
+    note: >-
+      Read whole from {system}/WQXEmu/pc1000/pc1000.nor. The image must
+      be at least 0x80000 bytes or the loader fails; only the first
+      512 KiB is used. A dump stored with swapped 16 KiB halves is
+      recognised by the info-block signature at bank 0 offset 0x4000 and
+      unswapped. The v0.1.0 tag and the libretro-core-info file name it
+      pc1000.fls.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:220-225, crates/wqxemu-core/src/machines/pc1000.rs:42, crates/wqxemu-core/src/machines/pc1000.rs:284-313"
+
+  - name: obj.bin
+    path: WQXEmu/cc800/obj.bin
+    system: wenquxing-cc800
+    required: true
+    min_size: 16777216
+    validation: [size]
+    description: "CC800 system ROM, two volumes of 256 banks"
+    note: >-
+      Read whole from {system}/WQXEmu/cc800/obj.bin. The image must be at
+      least 0x1000000 bytes or the loader fails; only the first 16 MiB is
+      used. Each 32 KiB bank is stored with its 16 KiB halves swapped and
+      is swapped back on load. Volume 0 is banks 0 to 255, volume 1 banks
+      256 to 511.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:226-231, crates/wqxemu-core/src/machines/cc800.rs:38, crates/wqxemu-core/src/machines/cc800.rs:229-251"
+
+  - name: cc800.fls
+    path: WQXEmu/cc800/cc800.fls
+    system: wenquxing-cc800
+    required: true
+    min_size: 524288
+    validation: [size]
+    description: "CC800 NOR flash, 16 banks of 32 KiB"
+    note: >-
+      Read whole from {system}/WQXEmu/cc800/cc800.fls. The image must be
+      at least 0x80000 bytes or the loader fails; only the first 512 KiB
+      is used, with the same 16 KiB half swap as the ROM.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:226-231, crates/wqxemu-core/src/machines/cc800.rs:40, crates/wqxemu-core/src/machines/cc800.rs:252-267"
+
+  - name: nc2000.nor
+    path: WQXEmu/nc2000/nc2000.nor
+    system: wenquxing-nc2000
+    required: true
+    min_size: 524288
+    validation: [size]
+    description: "NC2000 NOR flash, 16 banks of 32 KiB"
+    note: >-
+      Read whole from {system}/WQXEmu/nc2000/nc2000.nor in physical order,
+      no bank swap. The image must be at least 16 * 0x8000 bytes or the
+      loader fails; only the first 512 KiB is used. Bank 0 is the fixed
+      BIOS page at 0xE000.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:232-237, crates/wqxemu-core/src/machines/nc2000.rs:20, crates/wqxemu-core/src/machines/nc2000.rs:28, crates/wqxemu-core/src/machines/nc2000.rs:265-277"
+
+  - name: nc2000.nand
+    path: WQXEmu/nc2000/nc2000.nand
+    system: wenquxing-nc2000
+    required: true
+    size: 34603008
+    description: "NC2000 NAND flash main area, 65536 pages of 528 bytes"
+    note: >-
+      Read whole from {system}/WQXEmu/nc2000/nc2000.nand and copied after
+      the 64-page first plane, up to 65536 pages of 512 data plus 16
+      spare bytes. No size check: bytes beyond that are ignored and a
+      shorter file leaves the remainder erased at 0xFF.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:232-237, crates/wqxemu-core/src/machines/nc2000.rs:22-26, crates/wqxemu-core/src/machines/nc2000.rs:278-282, crates/wqxemu-core/src/machines/nc2000.rs:292-296"
+
+  - name: nc2000.nand0
+    path: WQXEmu/nc2000/nc2000.nand0
+    system: wenquxing-nc2000
+    required: true
+    size: 33792
+    description: "NC2000 NAND flash first plane, 64 pages of 528 bytes"
+    note: >-
+      Read whole from {system}/WQXEmu/nc2000/nc2000.nand0 into the first
+      64 pages of the NAND array. No size check. The libretro core always
+      puts it in the NC2000 set and the standalone binary requires
+      --nand0 for this model, so a missing file stops the start.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:232-237, crates/wqxemu-core/src/machines/nc2000.rs:24, crates/wqxemu-core/src/machines/nc2000.rs:283-288, crates/wqxemu-core/src/machines/nc2000.rs:298-301, crates/wqxemu/src/main.rs:260-265"
+
+  - name: nc3000.nor
+    path: WQXEmu/nc3000/nc3000.nor
+    system: wenquxing-nc3000
+    required: true
+    min_size: 1048576
+    validation: [size]
+    description: "NC3000 NOR flash, 32 banks of 32 KiB"
+    note: >-
+      Read whole from {system}/WQXEmu/nc3000/nc3000.nor in physical order,
+      no bank swap. The image must be at least 32 * 0x8000 bytes or the
+      loader fails; only the first 1 MiB is used. Bank 0 is the fixed
+      BIOS page at 0xE000.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:238-246, crates/wqxemu-core/src/machines/nc3000.rs:23, crates/wqxemu-core/src/machines/nc3000.rs:33, crates/wqxemu-core/src/machines/nc3000.rs:272-284"
+
+  - name: nc3000.nand
+    path: WQXEmu/nc3000/nc3000.nand
+    system: wenquxing-nc3000
+    required: true
+    size: 69206016
+    storage: large_file
+    description: "NC3000 NAND flash, two planes of 65536 pages of 528 bytes"
+    note: >-
+      Read whole from {system}/WQXEmu/nc3000/nc3000.nand and copied after
+      the 64-page first plane, up to 131072 pages of 512 data plus 16
+      spare bytes. No size check: bytes beyond that are ignored and a
+      shorter file leaves the remainder erased at 0xFF.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:238-246, crates/wqxemu-core/src/machines/nc3000.rs:25-29, crates/wqxemu-core/src/machines/nc3000.rs:285-289, crates/wqxemu-core/src/machines/nc3000.rs:336-340"
+
+  - name: nc3000.nand0
+    path: WQXEmu/nc3000/nc3000.nand0
+    system: wenquxing-nc3000
+    required: false
+    size: 33792
+    description: "NC3000 NAND flash first plane, 64 pages of 528 bytes"
+    note: >-
+      Read whole from {system}/WQXEmu/nc3000/nc3000.nand0 into the first
+      64 pages of the NAND array when the file exists; the libretro core
+      only adds it to the set in that case and the standalone --nand0 is
+      optional for this model. Without it the core writes the marker
+      "ggv nc3000" at offset 528 of an erased first plane and the machine
+      boots the same way.
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:238-246, crates/wqxemu-core/src/machines/nc3000.rs:27-31, crates/wqxemu-core/src/machines/nc3000.rs:290-297, crates/wqxemu-core/src/machines/nc3000.rs:342-350, crates/wqxemu/src/main.rs:266-270"
