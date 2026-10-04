@@ -1,0 +1,36 @@
+emulator: Pyxel
+type: standalone
+core_classification: game_engine
+source: "https://github.com/kitao/pyxel"
+upstream: "https://github.com/kitao/pyxel"
+profiled_date: "2026-10-04"
+source_commit: "50f9bd77780c993aca62b5b221766bde5791081d"
+core_version: "v2.9.9"
+display_name: "Pyxel"
+cores: [pyxel]
+systems: []
+verification: existence
+
+notes: |
+  Retro game engine for Python by Takashi Kitao. The engine is a Python
+  package with a Rust-based extension (crates/pyxel-core, built via maturin).
+  Pyxel programs are either .py scripts that import pyxel or self-contained
+  .pyxapp bundles (zip archives containing a startup script plus assets).
+
+  There is no external BIOS, firmware, or retail data to collect. Everything
+  the engine needs ships inside the Python wheel:
+    python/pyxel/              — Python API, fonts, shader, examples
+    crates/pyxel-core/         — Rust engine (compiled as pyxel_extension)
+    crates/pyxel-platform/     — SDL2 wrapper
+    crates/pyxel-wrapper/      — Python ↔ Rust glue (PyO3)
+
+  Batocera's packaging (package/batocera/emulators/python-pyxel/python-pyxel.mk)
+  installs the wheel into site-packages, drops the examples, and provides a
+  pyxel.keys evmapy layout. The content run by Pyxel is the user's .pyxapp or
+  .py file, which plays the role of a cartridge; those are user content, not
+  pack contents.
+
+  The engine refuses nothing on startup; a bare `pyxel init` plus a user
+  script is enough to run.
+
+files: []

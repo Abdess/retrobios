@@ -1,0 +1,99 @@
+emulator: The Force Engine
+type: standalone
+core_classification: game_engine
+source: "https://github.com/luciusDXL/TheForceEngine"
+upstream: "https://github.com/luciusDXL/TheForceEngine"
+profiled_date: "2026-10-04"
+source_commit: "cc25205cc94c36a396f6f50295772f6ec83069a2"
+core_version: "v1.22.420"
+display_name: "The Force Engine"
+cores: [theforceengine, tfe]
+systems: [dark-forces, outlaws]
+verification: existence
+
+notes: |
+  Modern Jedi engine reimplementation by Lucius Dark, supporting LucasArts
+  Dark Forces (shipping) and Outlaws (in-progress).
+
+  TFE itself bundles the engine data under TheForceEngine/ in the source tree,
+  which batocera.ports/theforceengine.mk rsyncs to
+  /usr/share/batocera/datainit/system/configs/theforceengine/ on install:
+    Captions/     Documentation/     ExternalData/     Fonts/
+    Mods/         Shaders/           SoundFonts/       UI_Text/        UI_Images/
+
+  The user is expected to supply the retail game data. Dark Forces is probed
+  by checking for DARK.GOB in the configured source-data path
+  (TheForceEngine/main.cpp:484-485, with PATH_SOURCE_DATA from TFE_Paths).
+
+  Dark Forces loader list (TFE_DarkForces/darkForcesMain.cpp:70-83):
+    c_gobFileNames[]          = DARK.GOB, SOUNDS.GOB, TEXTURES.GOB, SPRITES.GOB
+    c_optionalGobFileNames[]  = enhanced.gob
+  The DOS retail Dark Forces floppy and CD both ship DARK.GOB, SOUNDS.GOB,
+  TEXTURES.GOB, SPRITES.GOB; enhanced.gob is the TFE-only HD asset pack.
+
+  Dark Forces official patch v1.22 (df_patch4) is pulled by the build script as
+  df_patch4.zip from df-21.net and dropped under Mods/, so the engine applies
+  the retail v1.22 patches on top of any user retail install (THEFORCEENGINE_
+  PATCH_SOURCE in the batocera mk). The patch itself is bundled with the
+  emulator, not with the retail data.
+
+  Outlaws loader (TFE_Outlaws/outlawsMain.cpp) looks for the Outlaws retail
+  data in a separate configured directory. The level/sound/texture GOBs it
+  needs are OL.GOB (Outlaws main .gob) and the game's .LAB packages.
+
+files:
+  - name: "DARK.GOB"
+    category: game_data
+    system: dark-forces
+    description: "Dark Forces main data archive (levels, briefings, scripts)"
+    required: true
+    source_ref: "TheForceEngine/TFE_DarkForces/darkForcesMain.cpp:74 (c_gobFileNames[0]), main.cpp:484-485 (install detection)"
+
+  - name: "SOUNDS.GOB"
+    category: game_data
+    system: dark-forces
+    description: "Dark Forces audio archive"
+    required: true
+    source_ref: "TheForceEngine/TFE_DarkForces/darkForcesMain.cpp:75 (c_gobFileNames[1])"
+
+  - name: "TEXTURES.GOB"
+    category: game_data
+    system: dark-forces
+    description: "Dark Forces texture archive"
+    required: true
+    source_ref: "TheForceEngine/TFE_DarkForces/darkForcesMain.cpp:76 (c_gobFileNames[2])"
+
+  - name: "SPRITES.GOB"
+    category: game_data
+    system: dark-forces
+    description: "Dark Forces sprite archive"
+    required: true
+    source_ref: "TheForceEngine/TFE_DarkForces/darkForcesMain.cpp:77 (c_gobFileNames[3])"
+
+  - name: "enhanced.gob"
+    category: game_data
+    system: dark-forces
+    description: "Optional enhanced HD asset pack"
+    required: false
+    source_ref: "TheForceEngine/TFE_DarkForces/darkForcesMain.cpp (c_optionalGobFileNames)"
+
+  - name: "OL.GOB"
+    category: game_data
+    system: outlaws
+    description: "Outlaws main data archive"
+    required: false
+    source_ref: "TheForceEngine/TFE_Outlaws/outlawsMain.cpp"
+
+  - name: "OLSFX.GOB"
+    category: game_data
+    system: outlaws
+    description: "Outlaws sound effects archive"
+    required: false
+    source_ref: "TheForceEngine/TFE_Outlaws/outlawsMain.cpp"
+
+  - name: "OLMUSIC.GOB"
+    category: game_data
+    system: outlaws
+    description: "Outlaws music archive"
+    required: false
+    source_ref: "TheForceEngine/TFE_Outlaws/outlawsMain.cpp"

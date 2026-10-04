@@ -1,0 +1,62 @@
+emulator: Abuse
+type: standalone
+core_classification: game_engine
+source: "https://github.com/Xenoveritas/abuse"
+upstream: "https://github.com/Xenoveritas/abuse"
+profiled_date: "2026-10-04"
+source_commit: "c855a923cd7fb27b629b4e1af78b1fcc5f263d01"
+core_version: "v0.9.1"
+display_name: "Abuse"
+cores: [abuse]
+systems: []
+verification: existence
+
+notes: |
+  Side-scrolling 1995 action game by Crack dot Com, SDL2 fork from the Xenoveritas
+  branch. The port ships its own game data in-tree under data/ (14 MB), including
+  the Lisp scripts, levels, art and freedesktop metadata; the fRaBs expansion was
+  removed from this fork over licensing uncertainty.
+
+  Entry point abuse.lsp is loaded relative to the data directory. The data root
+  is set in src/sdlport/setup.cpp:
+    1. -datadir <path> CLI argument (setup.cpp:327-332)
+    2. datadir= in abuse.cfg (setup.cpp:182)
+    3. ASSETDIR compile-time constant, filled by CMakeLists.txt:45-54 — "." on
+       Windows, abuse.app/Contents/Resources/data on macOS, share/games/abuse on
+       Linux (setup.cpp:441-474)
+  Loader1 reads abuse.lsp via lisp (loader2.cpp:284), which chain-loads
+  lisp/english.lsp -> lisp/common.lsp -> lisp/startup.lsp -> ...
+
+  Batocera's packaging (package/batocera/ports/abuse/abuse.mk) pins DASSETDIR to
+  /userdata/roms/abuse and splits the data into the Pacman package abuse-data
+  which pulls abuse.zoy.org's abuse-data-2.00.tar.gz, a 16 MB public-domain pack
+  that includes music/ and sfx/ (which the Xenoveritas tree omits).
+
+  No separate BIOS or firmware. The whole game is open content.
+
+files:
+  - name: "abuse.lsp"
+    category: game_data
+    description: "Lisp entry point loaded first after setting the data directory"
+    required: true
+    bundled: true
+    source_ref: "src/loader2.cpp:284 (lsf default), src/netcfg.cpp:204 (lsf override)"
+    note: >
+      Shipped in the source tree under data/. Loader2 reads it via load(); the
+      file in turn chain-loads the rest of the Lisp data (english.lsp,
+      common.lsp, startup.lsp, options.lsp, input.lsp, startup).
+
+  - name: "defaults.prp"
+    category: game_data
+    description: "Default properties for level objects"
+    required: true
+    bundled: true
+    source_ref: "data/abuse.lsp"
+
+  - name: "english.lsp"
+    path: "lisp/english.lsp"
+    category: game_data
+    description: "Localized strings loaded first by abuse.lsp"
+    required: true
+    bundled: true
+    source_ref: "data/abuse.lsp:9"

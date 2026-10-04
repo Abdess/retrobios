@@ -1,0 +1,191 @@
+emulator: Ikemen GO
+type: standalone
+core_classification: game_engine
+source: "https://github.com/ikemen-engine/Ikemen-GO"
+upstream: "https://github.com/ikemen-engine/Ikemen-GO"
+profiled_date: "2026-10-04"
+source_commit: "02a078d6bf189ff56bbcbbbc8dbfd81753692c56"
+core_version: ~
+display_name: "Ikemen GO"
+cores: [ikemen]
+systems: []
+verification: existence
+
+notes: |
+  Open-source M.U.G.E.N.-compatible 2D fighting game engine, written in Go.
+  Reads the Elecbyte .def / .air / .cmd / .cns / .sff / .snd files that
+  commercial and community M.U.G.E.N. content ships with.
+
+  The binary comes with the engine's own motif-neutral core data (bundled with
+  the install, not retail BIOS):
+    data/      — common definitions, stage shell, screenpack parameters
+                 (action.zss, common.air, common.cmd, common.const,
+                  common1.cns.zss, dizzy.zss, functions.zss, guardbreak.zss,
+                  score.zss, system.base.def, tag.zss, training.zss)
+    external/  — icons, mods template, lua scripts, GLSL shaders
+    font/      — fallback TTF fonts (Open Sans) and 3x5 bitmap fonts
+                 (default-3x5-bold.def/sff, default-3x5.def/sff, debug.def)
+
+  Characters, stages, and motifs are user-supplied. system.go:2630 and
+  script.go:1174 enforce the convention that any character path lacking the
+  "chars/" prefix is rewritten to "chars/<name>", so content drops into
+  chars/, stages/, data/<motif>/ under the install root.
+
+  Nothing in Ikemen itself is a BIOS. The engine refuses to run with no motif,
+  but ships a stub select screen and the common.* lifebar config, so a user
+  character and stage are enough to boot.
+
+files:
+  - name: "system.base.def"
+    path: "data/system.base.def"
+    category: game_data
+    description: "Screenpack / motif parameter reference"
+    required: true
+    bundled: true
+    source_ref: "src/system.go (default screenpack parsing)"
+
+  - name: "common.cmd"
+    path: "data/common.cmd"
+    category: game_data
+    description: "Common character command set (fallback for chars missing CMD)"
+    required: true
+    bundled: true
+    source_ref: "src/char.go (common.cmd lookup for every loaded character)"
+
+  - name: "common.air"
+    path: "data/common.air"
+    category: game_data
+    description: "Common animations (fallback for chars missing AIR)"
+    required: true
+    bundled: true
+    source_ref: "src/char.go"
+
+  - name: "common.const"
+    path: "data/common.const"
+    category: game_data
+    description: "Common constants (gravity, speeds)"
+    required: true
+    bundled: true
+    source_ref: "src/char.go"
+
+  - name: "common1.cns.zss"
+    path: "data/common1.cns.zss"
+    category: game_data
+    description: "Common state controllers (ZSS)"
+    required: true
+    bundled: true
+    source_ref: "src/char.go (ZSS state handler)"
+
+  - name: "action.zss"
+    path: "data/action.zss"
+    category: game_data
+    description: "Default engine action script"
+    required: true
+    bundled: true
+    source_ref: "src/system.go"
+
+  - name: "functions.zss"
+    path: "data/functions.zss"
+    category: game_data
+    description: "Shared ZSS helper functions"
+    required: true
+    bundled: true
+    source_ref: "src/system.go"
+
+  - name: "score.zss"
+    path: "data/score.zss"
+    category: game_data
+    description: "Score system script"
+    required: true
+    bundled: true
+    source_ref: "src/system.go"
+
+  - name: "tag.zss"
+    path: "data/tag.zss"
+    category: game_data
+    description: "Tag-team mode script"
+    required: true
+    bundled: true
+    source_ref: "src/system.go"
+
+  - name: "dizzy.zss"
+    path: "data/dizzy.zss"
+    category: game_data
+    description: "Dizzy/stun state script"
+    required: true
+    bundled: true
+    source_ref: "src/system.go"
+
+  - name: "guardbreak.zss"
+    path: "data/guardbreak.zss"
+    category: game_data
+    description: "Guard-break state script"
+    required: true
+    bundled: true
+    source_ref: "src/system.go"
+
+  - name: "training.zss"
+    path: "data/training.zss"
+    category: game_data
+    description: "Training mode script"
+    required: true
+    bundled: true
+    source_ref: "src/system.go"
+
+  - name: "default-3x5.sff"
+    path: "font/default-3x5.sff"
+    category: game_data
+    description: "Default 3x5 bitmap font sprites"
+    required: true
+    bundled: true
+    source_ref: "src/font.go, data/system.base.def [Files]"
+
+  - name: "default-3x5.def"
+    path: "font/default-3x5.def"
+    category: game_data
+    description: "Default 3x5 bitmap font definition"
+    required: true
+    bundled: true
+    source_ref: "src/font.go"
+
+  - name: "default-3x5-bold.sff"
+    path: "font/default-3x5-bold.sff"
+    category: game_data
+    description: "Default 3x5 bold bitmap font sprites"
+    required: true
+    bundled: true
+    source_ref: "src/font.go"
+
+  - name: "default-3x5-bold.def"
+    path: "font/default-3x5-bold.def"
+    category: game_data
+    description: "Default 3x5 bold bitmap font definition"
+    required: true
+    bundled: true
+    source_ref: "src/font.go"
+
+  - name: "debug.def"
+    path: "font/debug.def"
+    category: game_data
+    description: "Debug overlay font"
+    required: false
+    bundled: true
+    source_ref: "src/font.go"
+
+  - name: "chars"
+    category: game_data
+    description: "User-supplied character directory (name resolved via chars/<name>)"
+    required: false
+    source_ref: "src/system.go:2630, src/script.go:1174 (prefix enforcement)"
+    note: >
+      Not shipped: user drops MUGEN-compatible characters under chars/. Each
+      character directory contains its own .def, .cmd, .cns, .air, .sff, .snd.
+
+  - name: "stages"
+    category: game_data
+    description: "User-supplied stage directory"
+    required: false
+    source_ref: "src/resources/defaultConfig.json:112 (StartStage default)"
+    note: >
+      Not shipped: user drops MUGEN-compatible stages under stages/. Default
+      configuration asks for stages/stage1.def.

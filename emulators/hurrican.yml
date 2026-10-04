@@ -1,0 +1,86 @@
+emulator: Hurrican
+type: standalone
+core_classification: game_engine
+source: "https://github.com/HurricanGame/Hurrican"
+upstream: "https://github.com/HurricanGame/Hurrican"
+profiled_date: "2026-10-04"
+source_commit: "0d91d1f2d40f38d21e7f41afc01369ee55649fb6"
+core_version: ~
+display_name: "Hurrican"
+cores: [hurrican]
+systems: []
+verification: existence
+
+notes: |
+  Open-source Turrican-inspired platformer by Poke53280 / HurricanGame. The
+  tree ships all shipping assets under Hurrican/data/ (93 MB): textures,
+  levels, music, sfx, shaders, plus a bundled gamecontrollerdb.txt.
+
+  The engine resolves two paths at startup, both set in Hurrican/src/Main.cpp
+  (main() at line 342):
+    * g_storage_ext — the data root used for every asset load. Taken from the
+      -data= CLI flag first (Main.cpp:349-353), then from the compile-time
+      USE_STORAGE_PATH macro (355-363), falling back to "." (365).
+    * g_save_ext / g_config_ext — the user-writable save and config directory,
+      from -save= CLI flag then XDG_DATA_HOME/XDG_CONFIG_HOME under UNIX
+      (369-389).
+
+  Everything the game loads is under <g_storage_ext>/data/:
+    data/textures/*          — DX8Font.cpp:160, DX8Graphics.cpp:393-407 (shaders),
+                               TextureAtlas class and loadImageSDL calls
+    data/shaders/<glsl_ver>/ — DX8Graphics.cpp:393-407 (vert/frag per renderer)
+    data/levels/<name>.lev  — Tileengine.cpp:324-330
+    data/music/              — SoundManager Mp3/OGG loads
+    data/sfx/                — SoundManager LoadSound
+    data/gamecontrollerdb.txt (joystick remapping)
+
+  All data is open content; no retail or BIOS files needed.
+
+files:
+  - name: "textures"
+    path: "data/textures"
+    category: game_data
+    description: "Game textures (sprites, backgrounds, fonts)"
+    required: true
+    bundled: true
+    source_ref: "src/DX8Font.cpp:160 (data/textures/ prefix on every font load)"
+
+  - name: "levels"
+    path: "data/levels"
+    category: game_data
+    description: "Level files (.lev)"
+    required: true
+    bundled: true
+    source_ref: "src/Tileengine.cpp:324-330 (data/levels/<name>.lev + custom lists)"
+
+  - name: "shaders"
+    path: "data/shaders"
+    category: game_data
+    description: "GLSL shader sources per version subdirectory"
+    required: true
+    bundled: true
+    source_ref: "src/DX8Graphics.cpp:393-407 (data/shaders/<glsl_version>/*)"
+
+  - name: "music"
+    path: "data/music"
+    category: game_data
+    description: "Music tracks"
+    required: false
+    bundled: true
+    source_ref: "src/SoundManager.cpp (data/music/ prefix for LoadMp3/LoadOgg)"
+
+  - name: "sfx"
+    path: "data/sfx"
+    category: game_data
+    description: "Sound effect samples"
+    required: false
+    bundled: true
+    source_ref: "src/SoundManager.cpp (data/sfx/ prefix for LoadSound)"
+
+  - name: "gamecontrollerdb.txt"
+    path: "data/gamecontrollerdb.txt"
+    category: game_data
+    description: "SDL gamecontroller mapping database"
+    required: false
+    bundled: true
+    source_ref: "src/DirectInput.cpp (data/gamecontrollerdb.txt)"

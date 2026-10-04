@@ -1,0 +1,88 @@
+emulator: Hydra Castle Labyrinth
+type: standalone
+core_classification: game_engine
+source: "https://github.com/ptitSeb/hydracastlelabyrinth"
+upstream: "https://github.com/ptitSeb/hydracastlelabyrinth"
+profiled_date: "2026-10-04"
+source_commit: "e31648688434a789e3056e52cdf1b9a842eeed48"
+core_version: ~
+display_name: "Hydra Castle Labyrinth (hcl)"
+cores: [hcl]
+systems: []
+verification: existence
+
+notes: |
+  Open-source port of E. Hashimoto's 2008 Japanese freeware Metroidvania Hydra
+  Castle Labyrinth. ptitSeb's SDL/SDL2/SDL3 fork is used by batocera (the
+  package batocera/ports/hcl pins HCL_VERSION to this commit).
+
+  The engine opens every data file from a relative "data/" prefix hard-coded
+  in the sources:
+    - qda.c:19   — strcpy(fullPath, "data/") before appending qda chunk names
+    - hero.c:202 — fopen("data/save.tmp", "rb")
+    - sdl2/audio.c:30 — strcpy(buff, "data/") before midi/wav loads
+    - sdl2/graphics.c, sdl3/graphics.c — fopen("data/bmp.qda", "rb")
+    - game.h:184 — savename macro = "data/save.tmp"
+  Save files are rewritten in that same relative data/ tree, so the game must
+  be launched from a working directory that contains data/ (batocera copies
+  the shipped data/ beside the binary).
+
+  The 31 MB data/ tree is shipped in the source repository and is open content.
+  Nothing else is required.
+
+files:
+  - name: "bmp.qda"
+    path: "data/bmp.qda"
+    category: game_data
+    description: "Packed graphics (QDA archive of all bitmaps)"
+    required: true
+    bundled: true
+    source_ref: "src/sdl2/graphics.c:229 (fopen \"data/bmp.qda\" rb)"
+
+  - name: "en.dat"
+    path: "data/en.dat"
+    category: game_data
+    description: "English localization"
+    required: true
+    bundled: true
+    source_ref: "src/text.c (loaded via data/ prefix)"
+
+  - name: "jp.dat"
+    path: "data/jp.dat"
+    category: game_data
+    description: "Japanese localization"
+    required: true
+    bundled: true
+    source_ref: "src/text.c"
+
+  - name: "map"
+    path: "data/map"
+    category: game_data
+    description: "Level maps directory (060 .map files)"
+    required: true
+    bundled: true
+    source_ref: "src/stagedata.c (loads data/map/<nnn>.map)"
+
+  - name: "obj"
+    path: "data/obj"
+    category: game_data
+    description: "Per-stage object definitions directory"
+    required: true
+    bundled: true
+    source_ref: "src/stagedata.c (loads data/obj/<nnn>.dat)"
+
+  - name: "midi"
+    path: "data/midi"
+    category: game_data
+    description: "Music files (.mid + .ogg companions)"
+    required: false
+    bundled: true
+    source_ref: "src/sdl2/audio.c:30 (data/ prefix for midi loads)"
+
+  - name: "wav"
+    path: "data/wav"
+    category: game_data
+    description: "Sound effect samples"
+    required: false
+    bundled: true
+    source_ref: "src/sdl2/audio.c (data/wav/<name>.wav)"

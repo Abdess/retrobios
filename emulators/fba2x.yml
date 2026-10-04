@@ -1,0 +1,137 @@
+emulator: piFBA (fba2x)
+type: standalone
+core_classification: frozen_snapshot
+source: "https://github.com/recalbox/pifba"
+upstream: "https://github.com/finalburn/fbalpha-fork"
+profiled_date: "2026-10-04"
+source_commit: "419faa7c3967560f6fa149f2f78b5aedca5b123a"
+core_version: "0.2.97.x"
+display_name: "Arcade (piFBA / fba2x)"
+cores: [fba2x, pifba]
+systems:
+  - arcade
+  - snk-neogeo-mvs
+  - snk-neogeo-aes
+  - capcom-cps1
+  - capcom-cps2
+  - capcom-cps3
+  - igs-pgm
+verification: md5
+
+archive_prefix: fbneo
+
+notes: |
+  Recalbox's standalone ARM port of Final Burn Alpha, lineage pifba (originally
+  by Franxis / Oopsware for the GP2X, modernised to SDL2 by Recalbox). The
+  binary is installed as fba2x and runs with a ZIP path on the command line
+  (rpi/main.cpp:187 — "Usage: fba2x <path to rom><shortname>.zip").
+
+  BIOS and ROM archives are resolved relative to szAppRomPath, hardcoded to
+  "roms/" in rpi/bzip.cpp:4 and overridden only through the rom path argument.
+  BzipOpen (rpi/bzip.cpp:355-394) iterates BurnDrvGetZipName(z) for every
+  BIOS/parent slot and opens "<roms/><name>" directly — no fallback
+  directory walking.
+
+  Shared BIOS ROM sets flagged BDF_BOARDROM in the driver source:
+    - neogeo (burn/neogeo/d_neogeo.cpp)  — SNK Neo Geo system BIOS
+    - pgm    (burn/pgm/d_pgm.cpp)        — IGS PGM board BIOS
+
+  CPS1 and CPS2 titles embed their program/encryption ROMs directly in each
+  game archive — no CPS board BIOS zip. CPS3 (burn/cps3/d_cps3.cpp) carries
+  the SH-2 BIOS as a BRF_BIOS member of each game's archive (red-earth,
+  jojo, sfiii, etc.), so there is no shared cps3.zip here either.
+
+  pifba is a FROZEN snapshot of Final Burn Alpha 0.2.97.x with ARM-specific
+  speedhacks (NEOGEO_HACKS, OOPSWARE_FIX, USE_SPEEDHACKS) and a reduced driver
+  set compared with upstream FBA / FBNeo: 32 BIOS entries in d_neogeo.cpp vs
+  ~45 in modern FBNeo, no newer Neo Geo UniBios revisions (uni-bios.10 through
+  uni-bios.13 are commented out), no Hyper Street Fighter 2 refresh, and no
+  SNK Hyper NeoGeo 64. Keep this separate from fbalpha2012 (libretro port of
+  the same base) because it does not share binaries or load behaviour.
+
+files:
+  # ─── Neo Geo system BIOS (archive: neogeo.zip) ───
+  - name: "neogeo.zip"
+    category: bios_zip
+    system: snk-neogeo-mvs
+    description: "SNK Neo Geo system BIOS ROM set"
+    required: true
+    archive: neogeo
+    source_ref: "burn/neogeo/d_neogeo.cpp:923 (BurnDrvneogeo, BDF_BOARDROM)"
+    contents:
+      - name: "vs-bios.rom"
+        size: 131072
+        crc32: "f0e8f27d"
+      - name: "usa_2slt.bin"
+        size: 131072
+        crc32: "e72943de"
+      - name: "asia-s3.rom"
+        size: 131072
+        crc32: "91b64be3"
+      - name: "sp1.jipan.1024"
+        size: 131072
+        crc32: "9fb0abe4"
+      - name: "neo-po.bin"
+        size: 131072
+        crc32: "16d0c132"
+      - name: "neo-epo.bin"
+        size: 131072
+        crc32: "d27a71f1"
+      - name: "neodebug.bin"
+        size: 131072
+        crc32: "698ebb7d"
+      - name: "sp-s2.sp1"
+        size: 131072
+        crc32: "9036d879"
+      - name: "uni-bios.rom"
+        size: 131072
+        crc32: "2d50996a"
+      - name: "sp-e.sp1"
+        size: 131072
+        crc32: "2723a5b5"
+      - name: "sp-j2.rom"
+        size: 131072
+        crc32: "acede59c"
+      - name: "sp-s.sp1"
+        size: 131072
+        crc32: "c7f2fa45"
+      - name: "sm1.sm1"
+        size: 131072
+        crc32: "97cf998b"
+      - name: "sfix.sfx"
+        size: 131072
+        crc32: "354029fc"
+      - name: "000-lo.lo"
+        size: 65536
+        crc32: "e09e253c"
+      - name: "236-bios.bin"
+        size: 131072
+        crc32: "853e6b96"
+      - name: "268-bios.bin"
+        size: 524288
+        crc32: "b4590283"
+      - name: "sp-4x.sp1"
+        size: 524288
+        crc32: "b4590283"
+      - name: "271-bios.bin"
+        size: 524288
+        crc32: "148dd727"
+
+  # ─── PGM board BIOS (archive: pgm.zip) ───
+  - name: "pgm.zip"
+    category: bios_zip
+    system: igs-pgm
+    description: "IGS PGM (Polygame Master) System BIOS ROM set"
+    required: true
+    archive: pgm
+    source_ref: "burn/pgm/d_pgm.cpp:255 (BurnDrvpgm, BDF_BOARDROM)"
+    contents:
+      - name: "pgm_p01s.rom"
+        size: 131072
+        crc32: "e42b166e"
+      - name: "pgm_t01s.rom"
+        size: 2097152
+        crc32: "1a7123a0"
+      - name: "pgm_m01s.rom"
+        size: 2097152
+        crc32: "45ae7159"

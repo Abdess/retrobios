@@ -1,0 +1,198 @@
+emulator: Commander Genius
+type: standalone
+core_classification: game_engine
+source: "https://gitlab.com/Dringgstein/Commander-Genius"
+upstream: "https://gitlab.com/Dringgstein/Commander-Genius"
+profiled_date: "2026-10-04"
+source_commit: "bee4fcbd235b9d3d804a50cc6ecaccbbe89490f7"
+core_version: "v3.6.3"
+display_name: "Commander Genius"
+cores: [cgenius]
+systems: [commander-keen]
+verification: existence
+
+notes: |
+  Open-source reimplementation of the Commander Keen engines (Vorticon, Galaxy,
+  Dreams) and the Cosmo engine, by Gerstrong. Needs the original Commander Keen
+  data files from the user; the engine itself ships with a 876 KB vfsroot (UI
+  art, fonts, sounds) that is not a BIOS and is bundled with the binary.
+
+  For each supported game, Commander Genius expects a flat directory under its
+  "games/" tree containing the original DOS data files. KeenFiles::setupFilenames
+  (src/fileio/KeenFiles.h:36-57) names them by episode number:
+
+    Vorticon trilogy  (episodes 1-3, Keen 1/2/3)
+      egagraph.ck{N}, egahead.ck{N}, egadict.ck{N},
+      audio.ck{N}, audiohed.ck{N}, audiodct.ck{N},
+      gamemaps.ck{N}, maphead.ck{N}
+    Galaxy trilogy    (episodes 4-6, Keen 4/5/6)
+      same naming, {N} = 4..6
+    Keen Dreams       (episode 7, "KDREAMS")
+      KDREAMSDICT.EGA, KDREAMS.AUD, AUDIODCT.KDR, AUDIOHHD.KDR, plus KDREAMS.EXE
+      (CExeFile.cpp:190-195 reads kdreams.exe to extract the Dreams tiles)
+
+  Episode 1-6 shareware and demo files are freely redistributable under the
+  Apogee/3D Realms terms; the registered Keen 4-6 and Keen Dreams data remain
+  commercial. CPatcher.cpp:129-140 lets a patch file override the default names
+  so GOG/Steam variants work in-place.
+
+  cosmos engine (added as a git submodule by the build) looks for Cosmo's
+  Cosmic Adventures data (COSMOx.STN, VOLUMES.STN, etc.) using the same
+  directory-per-game layout; those files are not profiled here because the
+  cosmos sub-engine is a separate upstream (Dringgstein/cosmos, pinned to
+  8497b5696c92b13ede4f5ad01dfb577b208404cb by cgenius.mk).
+
+  Game directories are searched under the user's roms root. The engine then
+  loads from vfsroot/global/ at startup — fonts, trophy UI, generic sounds —
+  which is bundled with the install, not with the Keen data.
+
+files:
+  # ─── Keen 1: Marooned on Mars (shareware, freely distributable) ───
+  - name: "egahead.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 EGA graphics header"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:42 (egaheadFilename = egahead.ckN)"
+
+  - name: "egagraph.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 EGA graphics data"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:41"
+
+  - name: "egadict.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 EGA huffman dictionary"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:43"
+
+  - name: "audio.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 audio data"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:44"
+
+  - name: "audiohed.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 audio header"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:45"
+
+  - name: "audiodct.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 audio dictionary"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:46"
+
+  - name: "gamemaps.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level data"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:47"
+
+  - name: "maphead.ck1"
+    category: game_data
+    system: commander-keen
+    description: "Keen 1 level header"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:48"
+
+  # ─── Keen 4: Secret of the Oracle (full version, Galaxy episode 1) ───
+  - name: "egahead.ck4"
+    category: game_data
+    system: commander-keen
+    description: "Keen 4 EGA graphics header"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:42"
+
+  - name: "egagraph.ck4"
+    category: game_data
+    system: commander-keen
+    description: "Keen 4 EGA graphics data"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:41"
+
+  - name: "egadict.ck4"
+    category: game_data
+    system: commander-keen
+    description: "Keen 4 EGA huffman dictionary"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:43"
+
+  - name: "audio.ck4"
+    category: game_data
+    system: commander-keen
+    description: "Keen 4 audio data"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:44"
+
+  - name: "audiohed.ck4"
+    category: game_data
+    system: commander-keen
+    description: "Keen 4 audio header"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:45"
+
+  - name: "audiodct.ck4"
+    category: game_data
+    system: commander-keen
+    description: "Keen 4 audio dictionary"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:46"
+
+  - name: "gamemaps.ck4"
+    category: game_data
+    system: commander-keen
+    description: "Keen 4 level data"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:47"
+
+  - name: "maphead.ck4"
+    category: game_data
+    system: commander-keen
+    description: "Keen 4 level header"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:48"
+
+  # ─── Keen Dreams (episode 7) ───
+  - name: "KDREAMS.EXE"
+    category: game_data
+    system: commander-keen
+    description: "Keen Dreams executable (CExeFile reads embedded tiles)"
+    required: false
+    source_ref: "src/fileio/CExeFile.cpp:190-195"
+
+  - name: "KDREAMSDICT.EGA"
+    category: game_data
+    system: commander-keen
+    description: "Keen Dreams EGA huffman dictionary"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:52"
+
+  - name: "KDREAMS.AUD"
+    category: game_data
+    system: commander-keen
+    description: "Keen Dreams audio data"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:53"
+
+  - name: "AUDIODCT.KDR"
+    category: game_data
+    system: commander-keen
+    description: "Keen Dreams audio dictionary"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:54"
+
+  - name: "AUDIOHHD.KDR"
+    category: game_data
+    system: commander-keen
+    description: "Keen Dreams audio header"
+    required: false
+    source_ref: "src/fileio/KeenFiles.h:55"

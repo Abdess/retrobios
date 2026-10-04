@@ -1,0 +1,135 @@
+emulator: C-Dogs SDL
+type: standalone
+core_classification: game_engine
+source: "https://github.com/cxong/cdogs-sdl"
+upstream: "https://github.com/cxong/cdogs-sdl"
+profiled_date: "2026-10-04"
+source_commit: "57782a74ae245d868487094d201d0e56e94a9390"
+core_version: "2.4.0"
+display_name: "C-Dogs"
+cores: [cdogs, cdogs-sdl]
+systems: []
+verification: existence
+
+notes: |
+  Top-down shooter engine, open-source remake of the DOS C-Dogs by Ronny Wester.
+  Ships every asset it needs in-tree: data/, graphics/, missions/, music/,
+  sounds/, dogfights/, doc/, wiki/ (about 100 MB).
+
+  The data root is baked into the binary via -DCDOGS_DATA_DIR (CMakeLists.txt
+  option). Batocera sets it to /userdata/roms/cdogs/; the Linux source default
+  is cdogs-data. GetDataFilePath() in src/cdogs/utils.c:392 either returns an
+  absolute override as-is, or joins the current working directory with
+  CDOGS_DATA_DIR plus the requested relative path.
+
+  Top-level sub-trees the game pulls files from (every path is relative to
+  CDOGS_DATA_DIR, resolved through GetDataFilePath):
+    data/           — ammo.json, bullets.json, guns.json, pickups.json,
+                      map_objects.json, character_classes.json, particles.json,
+                      gamecontrollerdb.txt, prefixes.txt (configuration data)
+    graphics/       — sprites, font, icons; grafx.c:92 (cdogs_icon.bmp),
+                      grafx.c:156 (font.png + font.json)
+    missions/       — single-player campaigns, mission packs (JSON)
+    music/          — menu, briefing, game, end, lose, victory tracks
+                      (music.c:45-50 LoadMusic calls)
+    sounds/         — sfx wavs
+    dogfights/      — deathmatch arenas
+
+  All open-source content (GPL-2.0). No separate BIOS or retail data required.
+
+files:
+  - name: "ammo.json"
+    path: "data/ammo.json"
+    category: game_data
+    description: "Ammo type definitions"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs/ammo.c (AmmoLoadJSON reads data/ammo.json)"
+
+  - name: "bullets.json"
+    path: "data/bullets.json"
+    category: game_data
+    description: "Bullet behaviour definitions"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs/weapon_class.c (BulletsLoadJSON)"
+
+  - name: "guns.json"
+    path: "data/guns.json"
+    category: game_data
+    description: "Weapon definitions"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs/weapon_class.c"
+
+  - name: "character_classes.json"
+    path: "data/character_classes.json"
+    category: game_data
+    description: "Character class definitions"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs/character_class.c"
+
+  - name: "map_objects.json"
+    path: "data/map_objects.json"
+    category: game_data
+    description: "Interactive map object definitions"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs/map_object.c"
+
+  - name: "particles.json"
+    path: "data/particles.json"
+    category: game_data
+    description: "Particle effect definitions"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs/particle.c"
+
+  - name: "pickups.json"
+    path: "data/pickups.json"
+    category: game_data
+    description: "Pickup item definitions"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs/pickup_class.c"
+
+  - name: "prefixes.txt"
+    path: "data/prefixes.txt"
+    category: game_data
+    description: "Random name generation prefixes"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs/character.c"
+
+  - name: "gamecontrollerdb.txt"
+    path: "data/gamecontrollerdb.txt"
+    category: game_data
+    description: "SDL gamecontroller mapping database"
+    required: false
+    bundled: true
+    source_ref: "src/cdogs/joystick.c:43"
+
+  - name: "font.png"
+    path: "graphics/font.png"
+    category: game_data
+    description: "Main bitmap font"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs/grafx.c:156 (FontLoadFromJSON)"
+
+  - name: "font.json"
+    path: "graphics/font.json"
+    category: game_data
+    description: "Main bitmap font layout"
+    required: true
+    bundled: true
+    source_ref: "src/cdogs/grafx.c:156"
+
+  - name: "cdogs_icon.bmp"
+    path: "graphics/cdogs_icon.bmp"
+    category: game_data
+    description: "Window icon"
+    required: false
+    bundled: true
+    source_ref: "src/cdogs/grafx.c:92"
