@@ -1,6 +1,6 @@
 platform: emudeck
 source: https://github.com/dragoonDorise/EmuDeck
-scraped_at: '2026-09-03T15:54:43Z'
+scraped_at: '2026-10-04T12:31:50Z'
 targets:
   steamos:
     architecture: x86_64
@@ -17,6 +17,7 @@ targets:
     - ardens
     - arduous
     - ares
+    - armsx2
     - atari800
     - azahar
     - b2
@@ -55,6 +56,7 @@ targets:
     - dinothawr
     - dirksimple
     - dolphin
+    - dosbox
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
@@ -63,6 +65,7 @@ targets:
     - easyrpg
     - ecwolf
     - eden
+    - emuscv
     - ep128emu_core
     - fbalpha
     - fbalpha2012
@@ -79,6 +82,7 @@ targets:
     - freechaf
     - freeintv
     - frodo
+    - fsuae
     - fuse
     - galaksija
     - gam4980
@@ -98,6 +102,7 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
     - hbmame
     - holani
     - irogb
@@ -115,6 +120,7 @@ targets:
     - mame2003_plus
     - mame2010
     - mame2015
+    - mame2016
     - mcsoftserve
     - mednafen_gba
     - mednafen_lynx
@@ -150,21 +156,25 @@ targets:
     - nicaiemu
     - noods
     - np2kai
+    - nside_sfc_balanced
     - nuance
     - numero
     - nxengine
     - o2em
     - oberon
+    - omicron
     - openlara
     - opera
     - panda3ds
     - parallel_n64
     - pcee2
+    - pcem
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -180,10 +190,13 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
+    - remotejoy
     - retro8
     - romcleaner
     - rpcs3
+    - rust_dos
     - rustynes
     - ryujinx
     - same_cdi
@@ -230,6 +243,7 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
+    - video_processor
     - vircon32
     - virtualjaguar
     - virtualxt
@@ -240,9 +254,11 @@ targets:
     - vitaquake2-zaero
     - vitaquake3
     - wasm4
+    - wqxemu
     - x1
     - xemu
     - xenia
+    - xenianative
     - xrick
     - yabasanshiro
     - yabause
@@ -300,6 +316,7 @@ targets:
     - dinothawr
     - dirksimple
     - dolphin
+    - dosbox
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
@@ -308,6 +325,7 @@ targets:
     - easyrpg
     - ecwolf
     - eden
+    - emuscv
     - ep128emu_core
     - fbalpha
     - fbalpha2012
@@ -324,6 +342,7 @@ targets:
     - freechaf
     - freeintv
     - frodo
+    - fsuae
     - fuse
     - galaksija
     - gam4980
@@ -343,6 +362,7 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
     - hbmame
     - holani
     - irogb
@@ -360,6 +380,7 @@ targets:
     - mame2003_plus
     - mame2010
     - mame2015
+    - mame2016
     - mcsoftserve
     - mednafen_gba
     - mednafen_lynx
@@ -395,21 +416,25 @@ targets:
     - nicaiemu
     - noods
     - np2kai
+    - nside_sfc_balanced
     - nuance
     - numero
     - nxengine
     - o2em
     - oberon
+    - omicron
     - openlara
     - opera
     - panda3ds
     - parallel_n64
     - pcee2
+    - pcem
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -425,10 +450,13 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
+    - remotejoy
     - retro8
     - romcleaner
     - rpcs3
+    - rust_dos
     - rustynes
     - ryujinx
     - same_cdi
@@ -475,6 +503,7 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
+    - video_processor
     - vircon32
     - virtualjaguar
     - virtualxt
@@ -485,6 +514,7 @@ targets:
     - vitaquake2-zaero
     - vitaquake3
     - wasm4
+    - wqxemu
     - x1
     - xemu
     - xenia

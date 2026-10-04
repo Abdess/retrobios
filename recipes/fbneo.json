@@ -1,6 +1,6 @@
 {
   "source": "fbneo",
-  "imported_at": "2026-08-10",
+  "imported_at": "2026-10-04",
   "dats": {
     "FinalBurn Neo - Arcade Games": "1.0.0.03",
     "FinalBurn Neo - Astrocade Home Computer Games": "1.0.0.03",
@@ -7786,6 +7786,47 @@
       ]
     },
     {
+      "dat": "FinalBurn Neo - ColecoVision Games",
+      "name": "rallyx.zip",
+      "set": "rallyx",
+      "description": "Rally-X (HB)",
+      "members": [
+        {
+          "name": "Rally-X (2026)(unhuman).rom",
+          "size": 131072,
+          "crc32": "c6b9b5a9",
+          "sha1": ""
+        },
+        {
+          "name": "coleco.rom",
+          "size": 8192,
+          "crc32": "3aa93ef3",
+          "sha1": ""
+        },
+        {
+          "name": "colecoa.rom",
+          "size": 8192,
+          "crc32": "39bb16fc",
+          "sha1": ""
+        },
+        {
+          "name": "czz50.rom",
+          "size": 16384,
+          "crc32": "4999abc6",
+          "sha1": ""
+        },
+        {
+          "name": "svi603.rom",
+          "size": 8192,
+          "crc32": "19e91b82",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - ColecoVision Games"
+      ]
+    },
+    {
       "dat": "FinalBurn Neo - FDS Games",
       "name": "fdsbios.zip",
       "set": "fdsbios",
@@ -7881,6 +7922,41 @@
           "name": "Galaga (Japan)(1984)(Namco).rom",
           "size": 32768,
           "crc32": "8856961d",
+          "sha1": ""
+        },
+        {
+          "name": "kanji.rom",
+          "size": 262144,
+          "crc32": "1f6406fb",
+          "sha1": ""
+        },
+        {
+          "name": "msx.rom",
+          "size": 32768,
+          "crc32": "a317e6b4",
+          "sha1": ""
+        },
+        {
+          "name": "msxj.rom",
+          "size": 32768,
+          "crc32": "071135e0",
+          "sha1": ""
+        }
+      ],
+      "dats": [
+        "FinalBurn Neo - MSX 1 Games"
+      ]
+    },
+    {
+      "dat": "FinalBurn Neo - MSX 1 Games",
+      "name": "galaxy.zip",
+      "set": "galaxy",
+      "description": "Galaxy (HB)",
+      "members": [
+        {
+          "name": "Galaxy (2026)(Gamecast Entertainment).rom",
+          "size": 32768,
+          "crc32": "be4cdb4c",
           "sha1": ""
         },
         {
@@ -8577,5 +8653,28 @@
         "FinalBurn Neo - ZX Spectrum Games"
       ]
     }
-  ]
+  ],
+  "upstream": {
+    "blobs": {
+      "FinalBurn Neo (ClrMame Pro XML, Arcade only).dat": "06fd53978335037cbf2fc1c25f97348cb0dab319",
+      "FinalBurn Neo (ClrMame Pro XML, Bally Astrocade Games only).dat": "7acfd6d42e70c751c858ef069a62c77c4048a0ec",
+      "FinalBurn Neo (ClrMame Pro XML, ColecoVision only).dat": "414430a8569c650e5f2ea8e726bce3050aa8ef25",
+      "FinalBurn Neo (ClrMame Pro XML, FDS Games only).dat": "f42114f934da56c64627980e5188d3146534ad04",
+      "FinalBurn Neo (ClrMame Pro XML, Fairchild Channel F Games only).dat": "90ce8903a387ff2086fc1163abd9ced97c2c76d0",
+      "FinalBurn Neo (ClrMame Pro XML, GBA Games only).dat": "69d6cd81bbd38a822886954cc782c9a5a4e924fe",
+      "FinalBurn Neo (ClrMame Pro XML, Game Gear only).dat": "86072046457f04b335a82e64ff2762bfc86ce084",
+      "FinalBurn Neo (ClrMame Pro XML, MSX 1 Games only).dat": "63e44dfe07180a1cb946ac86dd0c3b7a3349d7a9",
+      "FinalBurn Neo (ClrMame Pro XML, Master System only).dat": "fafc4d832c45de94809d36b828bd15e6f9986a06",
+      "FinalBurn Neo (ClrMame Pro XML, Megadrive only).dat": "329ac56591d8b4a2cad15a51a9863b7c7141d8e2",
+      "FinalBurn Neo (ClrMame Pro XML, NES Games only).dat": "bb5feb4d4610f527c1761bce25a729b2413f16d5",
+      "FinalBurn Neo (ClrMame Pro XML, NeoGeo Pocket Games only).dat": "f6a8a097b8d1c073223767532044223cb78c2ed0",
+      "FinalBurn Neo (ClrMame Pro XML, Neogeo only).dat": "421716a0ea7d9c74d33a568a538dda63d44eb1b5",
+      "FinalBurn Neo (ClrMame Pro XML, PC-Engine only).dat": "ee7a919b06c06505026cf99e93a34cc4a6df6766",
+      "FinalBurn Neo (ClrMame Pro XML, SNES Games only).dat": "21aadc7ce57083518f3b4019b254e9d1733f6cfc",
+      "FinalBurn Neo (ClrMame Pro XML, Sega SG-1000 only).dat": "9da354dfcf066623e12d582ed3631177981e500b",
+      "FinalBurn Neo (ClrMame Pro XML, SuprGrafx only).dat": "bbdb2e89a5a278133ed8ea71b2c29ae92a27db85",
+      "FinalBurn Neo (ClrMame Pro XML, TurboGrafx16 only).dat": "01be51eaf3ee6cb4c0cfe4b499c4086f3400000a",
+      "FinalBurn Neo (ClrMame Pro XML, ZX Spectrum Games only).dat": "140833ab63c42c44c79740af2c8ad7a67f6dd5b7"
+    }
+  }
 }

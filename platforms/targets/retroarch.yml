@@ -1,6 +1,6 @@
 platform: retroarch
 source: https://buildbot.libretro.com/nightly/
-scraped_at: '2026-09-03T15:54:31Z'
+scraped_at: '2026-10-04T09:13:49Z'
 targets:
   linux-x86_64:
     architecture: x86_64
@@ -52,12 +52,14 @@ targets:
     - dinothawr
     - dirksimple
     - dolphin
+    - dosbox
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha
     - fbalpha2012
@@ -74,6 +76,7 @@ targets:
     - freechaf
     - freeintv
     - frodo
+    - fsuae
     - fuse
     - galaksija
     - gam4980
@@ -93,6 +96,7 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
     - hbmame
     - holani
     - irogb
@@ -110,6 +114,7 @@ targets:
     - mame2003_plus
     - mame2010
     - mame2015
+    - mame2016
     - mcsoftserve
     - mednafen_gba
     - mednafen_lynx
@@ -144,21 +149,25 @@ targets:
     - nicaiemu
     - noods
     - np2kai
+    - nside_sfc_balanced
     - nuance
     - numero
     - nxengine
     - o2em
     - oberon
+    - omicron
     - openlara
     - opera
     - panda3ds
     - parallel_n64
     - pcee2
+    - pcem
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -173,9 +182,12 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
+    - remotejoy
     - retro8
     - romcleaner
+    - rust_dos
     - rustynes
     - same_cdi
     - sameboy
@@ -219,6 +231,7 @@ targets:
     - vice_xplus4
     - vice_xscpu64
     - vice_xvic
+    - video_processor
     - vircon32
     - virtualjaguar
     - virtualxt
@@ -228,6 +241,7 @@ targets:
     - vitaquake2-zaero
     - vitaquake3
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -487,12 +501,14 @@ targets:
     - dinothawr
     - dirksimple
     - dolphin
+    - dosbox
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha
     - fbalpha2012
@@ -528,6 +544,7 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
     - hbmame
     - holani
     - irogb
@@ -545,6 +562,7 @@ targets:
     - mame2003_plus
     - mame2010
     - mame2015
+    - mame2016
     - mcsoftserve
     - mednafen_gba
     - mednafen_lynx
@@ -579,6 +597,7 @@ targets:
     - nicaiemu
     - noods
     - np2kai
+    - nside_sfc_balanced
     - nuance
     - numero
     - nxengine
@@ -589,11 +608,13 @@ targets:
     - panda3ds
     - parallel_n64
     - pcee2
+    - pcem
     - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -608,9 +629,12 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
+    - remotejoy
     - retro8
     - romcleaner
+    - rust_dos
     - rustynes
     - same_cdi
     - sameboy
@@ -663,6 +687,7 @@ targets:
     - vitaquake2-zaero
     - vitaquake3
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -683,6 +708,7 @@ targets:
     - arduous
     - atari800
     - b2
+    - bbkemu
     - bk
     - blastem
     - bluemsx
@@ -707,13 +733,16 @@ targets:
     - crocods
     - desmume2015
     - dice
+    - dingooemu
     - dinothawr
     - dirksimple
+    - dosbox
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha2012
     - fbalpha2012_cps1
@@ -748,6 +777,9 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
+    - hbmame
+    - holani
     - jaxe
     - jollycv
     - jumpnbump
@@ -757,8 +789,11 @@ targets:
     - mame
     - mame2000
     - mame2003
+    - mame2003_midway
     - mame2003_plus
     - mame2010
+    - mame2015
+    - mame2016
     - mcsoftserve
     - mednafen_gba
     - mednafen_lynx
@@ -776,26 +811,33 @@ targets:
     - melonds
     - mesen
     - mesen-s
+    - mesen2
+    - meteor
     - mgba
     - minivmac
     - mojozork
     - mrboom
     - mu
     - mupen64plus_next
+    - native32emu
     - nekop2
     - neocd
     - nestopia
+    - nicaiemu
     - np2kai
+    - nuance
     - numero
     - nxengine
     - o2em
     - oberon
     - opera
     - parallel_n64
+    - pcem
     - pcsx_rearmed
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -810,8 +852,11 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
+    - remotejoy
     - retro8
+    - rustynes
     - same_cdi
     - sameboy
     - sameduck
@@ -823,6 +868,7 @@ targets:
     - snes9x2005
     - snes9x2005_plus
     - snes9x2010
+    - spmp8000emu
     - squirreljme
     - stella
     - stella2014
@@ -861,6 +907,7 @@ targets:
     - vitaquake2-zaero
     - vitaquake3
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -879,6 +926,7 @@ targets:
     - applewin
     - ardens
     - arduous
+    - armsx2
     - atari800
     - azahar
     - b2
@@ -902,6 +950,7 @@ targets:
     - cemu
     - chailove
     - citra
+    - citra2018
     - clownmdemu
     - craft
     - crocods
@@ -913,12 +962,14 @@ targets:
     - dinothawr
     - dirksimple
     - dolphin
+    - dosbox
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha
     - fbalpha2012
@@ -955,6 +1006,7 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
     - hbmame
     - holani
     - irogb
@@ -969,6 +1021,8 @@ targets:
     - mame2003_midway
     - mame2003_plus
     - mame2010
+    - mame2015
+    - mame2016
     - mamearcade
     - mamemess
     - mcsoftserve
@@ -1006,6 +1060,7 @@ targets:
     - nicaiemu
     - noods
     - np2kai
+    - nuance
     - numero
     - nxengine
     - o2em
@@ -1020,6 +1075,7 @@ targets:
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -1034,9 +1090,11 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
     - retro8
     - romcleaner
+    - rust_dos
     - rustynes
     - same_cdi
     - sameboy
@@ -1089,6 +1147,7 @@ targets:
     - vitaquake2-xatrix
     - vitaquake2-zaero
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -1104,6 +1163,7 @@ targets:
     - a5200
     - amiarcadia
     - anarch
+    - applewin
     - ardens
     - arduous
     - atari800
@@ -1137,12 +1197,14 @@ targets:
     - dinothawr
     - dirksimple
     - dolphin
+    - dosbox
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha
     - fbalpha2012
@@ -1179,6 +1241,8 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
+    - hbmame
     - holani
     - jaxe
     - jollycv
@@ -1191,6 +1255,8 @@ targets:
     - mame2003_midway
     - mame2003_plus
     - mame2010
+    - mame2015
+    - mame2016
     - mamearcade
     - mcsoftserve
     - mednafen_gba
@@ -1239,6 +1305,7 @@ targets:
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -1253,9 +1320,11 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
     - retro8
     - romcleaner
+    - rust_dos
     - rustynes
     - same_cdi
     - sameboy
@@ -1308,6 +1377,7 @@ targets:
     - vitaquake2-xatrix
     - vitaquake2-zaero
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -1323,6 +1393,7 @@ targets:
     - amiarcadia
     - amiberry
     - anarch
+    - applewin
     - ardens
     - arduous
     - atari800
@@ -1346,6 +1417,8 @@ targets:
     - cap32
     - cemu
     - chailove
+    - citra
+    - citra2018
     - clownmdemu
     - craft
     - crocods
@@ -1357,12 +1430,14 @@ targets:
     - dinothawr
     - dirksimple
     - dolphin
+    - dosbox
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha
     - fbalpha2012
@@ -1399,6 +1474,8 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
+    - hbmame
     - holani
     - jaxe
     - jollycv
@@ -1411,6 +1488,8 @@ targets:
     - mame2003_midway
     - mame2003_plus
     - mame2010
+    - mame2015
+    - mame2016
     - mamearcade
     - mcsoftserve
     - mednafen_gba
@@ -1449,6 +1528,7 @@ targets:
     - nicaiemu
     - noods
     - np2kai
+    - nuance
     - numero
     - nxengine
     - o2em
@@ -1462,6 +1542,7 @@ targets:
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -1476,9 +1557,11 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
     - retro8
     - romcleaner
+    - rust_dos
     - rustynes
     - same_cdi
     - sameboy
@@ -1531,6 +1614,7 @@ targets:
     - vitaquake2-xatrix
     - vitaquake2-zaero
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -1546,13 +1630,16 @@ targets:
     - a5200
     - amiarcadia
     - anarch
+    - applewin
     - ardens
     - arduous
     - atari800
+    - b2
     - bbkemu
     - bk
     - blastem
     - bluemsx
+    - boom3
     - bsnes
     - bsnes-jg
     - bsnes2014_accuracy
@@ -1577,12 +1664,14 @@ targets:
     - dinothawr
     - dirksimple
     - dolphin
+    - dosbox
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha
     - fbalpha2012
@@ -1593,6 +1682,8 @@ targets:
     - fbneo
     - fceumm
     - ffmpeg
+    - fixgb
+    - fixnes
     - flycast
     - fmsx
     - freechaf
@@ -1617,6 +1708,8 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
+    - hbmame
     - holani
     - jaxe
     - jollycv
@@ -1629,6 +1722,8 @@ targets:
     - mame2003_midway
     - mame2003_plus
     - mame2010
+    - mame2015
+    - mame2016
     - mamearcade
     - mcsoftserve
     - mednafen_gba
@@ -1648,6 +1743,7 @@ targets:
     - melonds
     - mesen
     - mesen-s
+    - mesen2
     - mesens
     - meteor
     - mgba
@@ -1675,6 +1771,7 @@ targets:
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -1689,6 +1786,7 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
     - retro8
     - romcleaner
@@ -1742,6 +1840,7 @@ targets:
     - vitaquake2-xatrix
     - vitaquake2-zaero
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -1794,12 +1893,14 @@ targets:
     - dinothawr
     - dirksimple
     - dolphin
+    - dosbox
     - dosbox_core
     - dosbox_pure
     - dosbox_svn
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha2012
     - fbalpha2012_cps1
@@ -1835,6 +1936,8 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
+    - hbmame
     - higan_sfc
     - holani
     - irogb
@@ -1848,8 +1951,11 @@ targets:
     - mame
     - mame2000
     - mame2003
+    - mame2003_midway
     - mame2003_plus
     - mame2010
+    - mame2015
+    - mame2016
     - mcsoftserve
     - mednafen_gba
     - mednafen_lynx
@@ -1897,6 +2003,7 @@ targets:
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -1911,10 +2018,12 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
     - remotejoy
     - retro8
     - romcleaner
+    - rust_dos
     - rustynes
     - same_cdi
     - sameboy
@@ -1968,6 +2077,7 @@ targets:
     - vitaquake2-zaero
     - vitaquake3
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -1987,6 +2097,7 @@ targets:
     - applewin
     - ardens
     - arduous
+    - armsx2
     - atari800
     - azahar
     - b2
@@ -2010,6 +2121,8 @@ targets:
     - cap32
     - cemu
     - chailove
+    - citra
+    - citra2018
     - clownmdemu
     - craft
     - crocods
@@ -2019,10 +2132,12 @@ targets:
     - dinothawr
     - dirksimple
     - dolphin
+    - dosbox
     - dosbox_pure
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha2012
     - fbalpha2012_cps1
@@ -2057,6 +2172,7 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
     - hbmame
     - holani
     - irogb
@@ -2069,8 +2185,11 @@ targets:
     - mame
     - mame2000
     - mame2003
+    - mame2003_midway
     - mame2003_plus
     - mame2010
+    - mame2015
+    - mame2016
     - mcsoftserve
     - mednafen_gba
     - mednafen_lynx
@@ -2103,6 +2222,7 @@ targets:
     - nicaiemu
     - noods
     - np2kai
+    - nside_sfc_balanced
     - nuance
     - numero
     - nxengine
@@ -2117,6 +2237,7 @@ targets:
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - pokketstation
@@ -2131,9 +2252,12 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
+    - remotejoy
     - retro8
     - romcleaner
+    - rust_dos
     - rustynes
     - same_cdi
     - sameboy
@@ -2186,6 +2310,7 @@ targets:
     - vitaquake2-zaero
     - vitaquake3
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -2204,11 +2329,13 @@ targets:
     - applewin
     - ardens
     - arduous
+    - armsx2
     - atari800
     - azahar
     - b2
     - bbkemu
     - bk
+    - blastem
     - bluemsx
     - boom3
     - boom3_xp
@@ -2224,6 +2351,7 @@ targets:
     - bsnes_mercury_performance
     - cannonball
     - cap32
+    - cemu
     - chailove
     - clownmdemu
     - craft
@@ -2238,6 +2366,7 @@ targets:
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha2012
     - fbalpha2012_cps1
@@ -2272,6 +2401,7 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
     - hbmame
     - holani
     - irogb
@@ -2284,8 +2414,11 @@ targets:
     - mame
     - mame2000
     - mame2003
+    - mame2003_midway
     - mame2003_plus
     - mame2010
+    - mame2015
+    - mame2016
     - mcsoftserve
     - mednafen_gba
     - mednafen_lynx
@@ -2318,16 +2451,20 @@ targets:
     - nicaiemu
     - noods
     - np2kai
+    - nuance
     - numero
     - nxengine
     - o2em
     - oberon
     - opera
     - parallel_n64
+    - pcee2
+    - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - potator
@@ -2341,9 +2478,11 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
     - retro8
     - romcleaner
+    - rust_dos
     - rustynes
     - same_cdi
     - sameboy
@@ -2362,6 +2501,7 @@ targets:
     - stella2014
     - stella2023
     - superbroswar
+    - swanstation
     - tamalibretro
     - tgbdual
     - theodore
@@ -2392,6 +2532,7 @@ targets:
     - vitaquake2-xatrix
     - vitaquake2-zaero
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -2410,11 +2551,13 @@ targets:
     - applewin
     - ardens
     - arduous
+    - armsx2
     - atari800
     - azahar
     - b2
     - bbkemu
     - bk
+    - blastem
     - bluemsx
     - boom3
     - boom3_xp
@@ -2430,6 +2573,7 @@ targets:
     - bsnes_mercury_performance
     - cannonball
     - cap32
+    - cemu
     - chailove
     - clownmdemu
     - craft
@@ -2444,6 +2588,7 @@ targets:
     - doukutsu_rs
     - easyrpg
     - ecwolf
+    - emuscv
     - ep128emu_core
     - fbalpha2012
     - fbalpha2012_cps1
@@ -2478,6 +2623,7 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
     - hbmame
     - holani
     - irogb
@@ -2490,8 +2636,11 @@ targets:
     - mame
     - mame2000
     - mame2003
+    - mame2003_midway
     - mame2003_plus
     - mame2010
+    - mame2015
+    - mame2016
     - mcsoftserve
     - mednafen_gba
     - mednafen_lynx
@@ -2524,15 +2673,19 @@ targets:
     - nicaiemu
     - noods
     - np2kai
+    - nuance
     - numero
     - nxengine
     - o2em
     - oberon
     - opera
+    - pcee2
+    - pcsx2
     - pcsx_rearmed
     - pd777
     - picodrive
     - play
+    - playdiaemu
     - pocketcdg
     - pokemini
     - potator
@@ -2545,9 +2698,11 @@ targets:
     - quasi88
     - quicknes
     - race
+    - radio
     - reminiscence
     - retro8
     - romcleaner
+    - rust_dos
     - rustynes
     - same_cdi
     - sameboy
@@ -2566,6 +2721,7 @@ targets:
     - stella2014
     - stella2023
     - superbroswar
+    - swanstation
     - tamalibretro
     - tgbdual
     - theodore
@@ -2596,6 +2752,7 @@ targets:
     - vitaquake2-xatrix
     - vitaquake2-zaero
     - wasm4
+    - wqxemu
     - x1
     - xrick
     - yabasanshiro
@@ -2659,12 +2816,14 @@ targets:
     - gpsp
     - gw
     - handy
+    - hatarib
     - jaxe
     - jumpnbump
     - lowresnx
     - lutro
     - mame2000
     - mame2003
+    - mame2003_midway
     - mame2003_plus
     - mednafen_lynx
     - mednafen_ngp
@@ -2682,6 +2841,7 @@ targets:
     - mesens
     - mgba
     - minivmac
+    - mojozork
     - mrboom
     - mu
     - mupen64plus_next
@@ -2805,6 +2965,7 @@ targets:
     - lutro
     - mame2000
     - mame2003
+    - mame2003_midway
     - mame2003_plus
     - mednafen_ngp
     - mednafen_pce_fast
@@ -2812,6 +2973,7 @@ targets:
     - mednafen_wswan
     - mgba
     - minivmac
+    - mojozork
     - mrboom
     - mu
     - nekop2
@@ -2919,6 +3081,7 @@ targets:
     - lowresnx
     - lutro
     - mame2000
+    - mame2003_midway
     - mednafen_lynx
     - mednafen_ngp
     - mednafen_pce_fast
@@ -2927,6 +3090,7 @@ targets:
     - mednafen_wswan
     - mgba
     - minivmac
+    - mojozork
     - mrboom
     - mu
     - nestopia
@@ -3016,11 +3180,13 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
     - jaxe
     - jumpnbump
     - lowresnx
     - lutro
     - mame2000
+    - mame2003_midway
     - mednafen_lynx
     - mednafen_ngp
     - mednafen_pce_fast
@@ -3030,6 +3196,7 @@ targets:
     - mednafen_wswan
     - mgba
     - minivmac
+    - mojozork
     - mrboom
     - mu
     - nestopia
@@ -3133,6 +3300,7 @@ targets:
     - handy
     - hatari
     - hatari2014
+    - hatarib
     - jaxe
     - jumpnbump
     - lowresnx
@@ -3150,6 +3318,7 @@ targets:
     - mednafen_wswan
     - mgba
     - minivmac
+    - mojozork
     - mrboom
     - mu
     - nekop2
@@ -3399,6 +3568,7 @@ targets:
     - mednafen_vb
     - mednafen_wswan
     - mgba
+    - mgba_splitscreen
     - mrboom
     - mu
     - nekop2

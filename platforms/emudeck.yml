@@ -1,5 +1,5 @@
 platform: EmuDeck
-version: 2.3.8
+version: 2.7EA
 homepage: "https://www.emudeck.com"
 source: "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/functions/checkBIOS.sh"
 base_destination: bios
@@ -7,6 +7,7 @@ hash_type: md5
 verification_mode: md5
 cores:
 - ares
+- armsx2
 - azahar
 - bigpemu
 - cemu
@@ -32,6 +33,7 @@ cores:
 - vita3k
 - xemu
 - xenia
+- xenianative
 - yuzu
 systems:
   sony-playstation:

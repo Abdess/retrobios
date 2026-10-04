@@ -866,6 +866,39 @@ systems:
       native_path: bios/sl90025.bin
       native_name: Fairchild ChannelF
     name: Fairchild ChannelF
+  chihiro:
+    files:
+    - name: chihiro_xbox_bios.bin
+      destination: chihiro/chihiro_xbox_bios.bin
+      required: true
+      native_system: chihiro
+      native_path: bios/chihiro/chihiro_xbox_bios.bin
+      native_name: Sega Chihiro
+    - name: fpr21042_m29w160et.bin
+      destination: chihiro/fpr21042_m29w160et.bin
+      required: true
+      native_system: chihiro
+      native_path: bios/chihiro/fpr21042_m29w160et.bin
+      native_name: Sega Chihiro
+    - name: ic10_g24lc64
+      destination: chihiro/ic10_g24lc64
+      required: true
+      native_system: chihiro
+      native_path: bios/chihiro/ic10_g24lc64
+      native_name: Sega Chihiro
+    - name: ic11_24lc024.bin
+      destination: chihiro/ic11_24lc024.bin
+      required: true
+      native_system: chihiro
+      native_path: bios/chihiro/ic11_24lc024.bin
+      native_name: Sega Chihiro
+    - name: pc20_g24lc64.bin
+      destination: chihiro/pc20_g24lc64.bin
+      required: true
+      native_system: chihiro
+      native_path: bios/chihiro/pc20_g24lc64.bin
+      native_name: Sega Chihiro
+    name: Sega Chihiro
   coco:
     files:
     - name: coco.zip
@@ -2457,10 +2490,10 @@ systems:
   triforce:
     files:
     - name: segaboot.gcm
-      destination: emulators/dolphin-emu/User/Triforce/segaboot.gcm
+      destination: triforce/segaboot.gcm
       required: true
       native_system: triforce
-      native_path: emulators/dolphin-emu/User/Triforce/segaboot.gcm
+      native_path: bios/triforce/segaboot.gcm
       native_name: Triforce
     name: Triforce
   tutor:

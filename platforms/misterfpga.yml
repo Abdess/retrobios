@@ -1,5 +1,5 @@
 platform: MiSTer FPGA
-version: '2026-08-29'
+version: '2026-09-29'
 homepage: "https://misterfpga.org"
 source: "https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/db/bios_db.json.zip"
 base_destination: games
@@ -151,6 +151,38 @@ systems:
     native_id: Interact
     name: Interact Home Computer
     docs: "https://github.com/MiSTer-devel/Interact_MiSTer"
+  loopy:
+    files:
+    - name: boot0.rom
+      destination: Loopy/boot0.rom
+      required: true
+      md5: d527e3ed1bf9bd0661154c202a65c5bd
+      size: 32768
+      native_system: Loopy
+    - name: boot1.rom
+      destination: Loopy/boot1.rom
+      required: true
+      md5: c0f1c899c9ca098663d046d60779711d
+      size: 524288
+      native_system: Loopy
+    native_id: Loopy
+    name: loopy
+  marty:
+    files:
+    - name: mrom.m36
+      destination: Marty/mrom.m36
+      required: true
+      md5: 2ea2d6e18a6ec4cae998be5599fa69de
+      size: 2097152
+      native_system: Marty
+    - name: mrom.m37
+      destination: Marty/mrom.m37
+      required: true
+      md5: 609d6356ac4b950238339772199266ce
+      size: 2097152
+      native_system: Marty
+    native_id: Marty
+    name: marty
   mattel-intellivision:
     files:
     - name: boot0.rom
@@ -529,14 +561,42 @@ systems:
       md5: aeec6fe3934481e20eb7db6d5ff56a54
       size: 2048
       native_system: Studio-II
-    - name: boot4.rom
-      destination: Studio-II/boot4.rom
+    - name: chip8.bin
+      destination: Studio-II/chip8.bin
       required: true
       md5: 9f037435b6721be9ee91dc93293e52ce
       size: 768
       native_system: Studio-II
+    - name: openstudio2.bin
+      destination: Studio-II/openstudio2.bin
+      required: true
+      md5: 000d3330df9fcf05a009fd428efecdce
+      size: 2048
+      native_system: Studio-II
     native_id: Studio-II
     name: studio-ii
+  superacan:
+    files:
+    - name: boot0.rom
+      destination: SuperAcan/boot0.rom
+      required: true
+      md5: 53c4343e062bb3b337370bbb58e64d16
+      size: 4096
+      native_system: SuperAcan
+    - name: boot1.rom
+      destination: SuperAcan/boot1.rom
+      required: true
+      md5: c5bab9c8148578cda8a7bc6098e7fb52
+      size: 8192
+      native_system: SuperAcan
+    - name: boot2.rom
+      destination: SuperAcan/boot2.rom
+      required: true
+      md5: 3938e12dae1845046b3f2fa023a6a56a
+      size: 8192
+      native_system: SuperAcan
+    native_id: SuperAcan
+    name: superacan
   tandy-coco:
     files:
     - name: boot0.rom
@@ -581,6 +641,16 @@ systems:
       native_system: GameCom
     native_id: GameCom
     name: Tiger Game.com
+  videobrain:
+    files:
+    - name: boot.rom
+      destination: VideoBrain/boot.rom
+      required: true
+      md5: e1e7f6120eb8e23ca5c63b4246f04f18
+      size: 4096
+      native_system: VideoBrain
+    native_id: VideoBrain
+    name: videobrain
   wonderswan:
     files:
     - name: boot.rom
