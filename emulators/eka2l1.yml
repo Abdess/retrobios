@@ -7,7 +7,7 @@ source:
 upstream: "https://github.com/EKA2L1/EKA2L1"
 profiled_date: "2026-09-17"
 source_commit:
-  standalone: "293e399b34eb0cee1519fb095587be65a0a4edd2"
+  standalone: "1fcfadbff7f8b81d8c17bc82d04b0c94d16803bf"
   libretro: "97ac3df6767f819c95405e4c86e7007d2e8ae61d"
 upstream_commit:
   libretro: "47b4ad76a6dd7d3656f52be86dfd5b9ff9a50c70"
@@ -27,9 +27,15 @@ notes: |
   N-Gage 2.0 libraries and the game libraries from S60v1 to Symbian Belle. One
   tree builds the Qt desktop frontend, the Android and iOS applications, and a
   libretro core; the core lives on the libretro branch of the WizzardSK fork,
-  merged from upstream at 47b4ad76.
+  merged from upstream at 47b4ad76. The tip of that branch, 7a40bb0d, merges
+  upstream 0b7d9d67 and does not build the core: content.cpp still calls
+  install_firmware and install_rom_with_optional_rpkg without the
+  isolate_drives argument they take from that merge on. The libretro pin is the
+  last revision of the branch that builds.
   ref: README.md:20, README.md:29-32, src/emu/CMakeLists.txt:61-62,
-       CMakeLists.txt:18, .gitlab-ci.yml:14-22
+       CMakeLists.txt:18, .gitlab-ci.yml:14-22, src/emu/libretro/src/content.cpp:96-100,
+       src/emu/system/src/installation/rpkg.cpp:208-210,
+       src/emu/system/src/installation/firmware.cpp:290-293
 
   A device is registered in <storage>/devices.yml and holds its ROM image at
   <storage>/roms/<firmware code, lower case>/SYM.ROM with the unpacked ROFS
@@ -39,37 +45,45 @@ notes: |
   list and never checked against a size or a hash. <storage> is the
   data-storage option, "data" by default, relative to the working directory.
   ref: src/emu/system/include/system/consts.h:23-25,
-       src/emu/system/src/epoc.cpp:1393-1401, src/emu/system/src/epoc.cpp:805-829,
-       src/emu/loader/src/rom.cpp:281-299, src/emu/system/src/devices.cpp:175-200,
+       src/emu/system/src/epoc.cpp:1486-1494, src/emu/system/src/epoc.cpp:824-848,
+       src/emu/loader/src/rom.cpp:281-299, src/emu/system/src/devices.cpp:177-202,
        src/emu/config/include/config/options.inl:45
 
   Three installers produce that layout from a dump. A bare ROM image is enough
-  when it is an EKA1 image carrying z:\system\versions\sw.txt, the N-Gage case:
-  its files are unpacked to drives/z/, the firmware code is read from them and
-  the image is copied to SYM.ROM. An EKA2 image needs the RPKG made by the
+  when it is an EKA1 image carrying one of the device naming files: product.txt,
+  sw.txt or langsw.txt under z:\resource\versions, sw.txt or langsw.txt under
+  z:\system\versions, or z:\system\install\sonyericssonp90xplatform.sis. That
+  is the N-Gage case: its files are unpacked to drives/z/, the firmware code is
+  read from them and the image is copied to SYM.ROM. The libretro pin tests
+  z:\system\versions\sw.txt alone. Any other image needs the RPKG made by the
   Dumber tool beside it, which supplies the ROFS. A .vpl variant packing list
   names the .fpsx flash images of a factory firmware, from which the core image,
   the ROFS and the drive contents are extracted. The names of the dump files
   are free; SYM.ROM is the name the installers give the resident copy.
-  ref: src/emu/system/src/installation/rpkg.cpp:43-64,
-       src/emu/system/src/installation/rpkg.cpp:131-193,
-       src/emu/system/src/installation/rpkg.cpp:202-248,
-       src/emu/system/src/installation/rpkg.cpp:251-253,
+  ref: src/emu/system/src/installation/rpkg.cpp:44-68,
+       src/emu/system/src/software.cpp:396-408,
+       src/emu/system/src/installation/rpkg.cpp:132-199,
+       src/emu/system/src/installation/rpkg.cpp:208-255,
+       src/emu/system/src/installation/rpkg.cpp:257-259,
        src/emu/system/src/installation/firmware.cpp:290-303,
        src/emu/system/src/installation/firmware.cpp:381-406,
-       src/emu/system/src/installation/firmware.cpp:425-428,
-       src/emu/system/src/installation/firmware.cpp:467-487
+       src/emu/system/src/installation/firmware.cpp:438-441,
+       src/emu/system/src/installation/firmware.cpp:480-515
 
   Standalone, the Qt frontend installs through its device dialog, from a ROM,
   a ROM with its RPKG, or a VPL; the settings dialog can also rescan drives/z/
-  and rebuild devices.yml from the directories that still hold a SYM.ROM. On
+  and rebuild devices.yml from the directories that still hold a SYM.ROM. A
+  device installed with the isolate-drives box ticked keeps drives C, D and E
+  under <storage>/drives/<firmware code>/ instead of <storage>/drives/. On
   Linux and macOS the working directory is the EKA2L1 folder of the user data
   location and the shipped patch, resources, scripts and compat folders are
   copied there at startup; on Windows it is the directory the executable is
   started from.
-  ref: src/emu/qt/src/device_install_dialog.cpp:161-171,
-       src/emu/qt/src/device_install_dialog.cpp:180-184,
-       src/emu/qt/src/settings_dialog.cpp:526, src/emu/system/src/epoc.cpp:383-445,
+  ref: src/emu/qt/src/device_install_dialog.cpp:162-172,
+       src/emu/qt/src/device_install_dialog.cpp:181-185,
+       src/emu/qt/src/settings_dialog.cpp:534, src/emu/system/src/epoc.cpp:396-462,
+       src/emu/qt/src/device_install_dialog.cpp:138,
+       src/emu/system/src/devices.cpp:378-385, src/emu/system/src/epoc.cpp:877-884,
        src/emu/qt/src/main.cpp:101-121
 
   The libretro core keeps everything under <system>/eka2l1: data-storage is
@@ -98,15 +112,21 @@ notes: |
   Those entries carry mode standalone.
   ref: src/emu/libretro/CMakeLists.txt:8-45, src/emu/libretro/src/thread.cpp:19-38,
        src/emu/libretro/src/thread.cpp:41-60, src/emu/libretro/src/thread.cpp:83-89,
-       src/emu/common/src/path.cpp:427-450, src/emu/system/src/epoc.cpp:1296-1317
+       src/emu/common/src/path.cpp:427-450, src/emu/system/src/epoc.cpp:1389-1410
 
   Shipped runtime files are read at their own name below the working
   directory. Patch libraries: every patch/*.map is parsed, the DLL is
-  <map name>_<version suffix>.dll for the device's Symbian version upward, then
-  <map name>_general.dll; a map naming a source picks that DLL prefix; a map
-  requiring host-tls is skipped below S60v3 FP1; a missing folder is skipped.
-  goommonitor and avkonfep have no map: the Qt and Android frontends copy them
-  over the ROM's own Z:\sys\bin DLL, from S60v5 and from S60v3 FP1 on. Shaders:
+  <map name>_<version suffix>.dll for the device's Symbian version upward,
+  stopping at 8.1a on an EKA1 device, then <map name>_general.dll on EKA2
+  only; a map naming a source picks that DLL prefix; a map requiring host-tls
+  is skipped below S60v3 FP1; a missing folder is skipped. A map routes exports
+  of the original DLL to the patch DLL and is dropped when it holds no route
+  for the device's version. A map whose requirements carry replace holds no
+  route: its DLL is loaded in place of the image of that name, and with
+  qt-plugin only when the Qt plugin verification data of the original accepts
+  it. goommonitor_general.dll and avkonfep_general.dll are reached by no map:
+  the Qt and Android frontends copy them over the ROM's own Z:\sys\bin DLL,
+  from S60v5 and from S60v3 FP1 on. Shaders:
   the eight files under resources are compiled by the OpenGL driver at start
   and an unreadable one leaves the program without source. The upscale filter
   named in an application's screen-upscale setting is read from
@@ -121,9 +141,11 @@ notes: |
   modules from scripts/eka2l1/; the libretro recipe builds without it. Fonts
   the user imports live in <storage>/fonts and are added to the font store
   after the ROM fonts.
-  ref: src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:435-438,
-       src/emu/kernel/src/libmanager.cpp:495-540, src/emu/kernel/src/libmanager.cpp:557-561,
-       src/emu/qt/src/state.cpp:181-204,
+  ref: src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:440-443,
+       src/emu/kernel/src/libmanager.cpp:475-503, src/emu/kernel/src/libmanager.cpp:505-556,
+       src/emu/kernel/src/libmanager.cpp:558-569, src/emu/kernel/src/libmanager.cpp:586-590,
+       src/emu/kernel/src/libmanager.cpp:697-780, src/emu/kernel/src/libmanager.cpp:1191-1193,
+       src/emu/qt/src/state.cpp:179-202,
        src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:264-282,
        src/emu/drivers/src/graphics/backend/ogl/shader_ogl.cpp:184-189,
        src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409,
@@ -133,15 +155,15 @@ notes: |
        src/emu/drivers/src/input/backend/emu_controller_sdl2.cpp:143-145,
        src/emu/config/src/panic_blacklist.cpp:27-35, src/emu/config/src/app_settings.cpp:82-114,
        src/emu/utils/src/panic.cpp:32-38, src/emu/scripting/src/manager.cpp:196-202,
-       src/emu/scripting/src/manager.cpp:230-256, src/emu/services/src/fbs/fbs.cpp:434,
-       src/emu/services/src/fbs/impls/font.cpp:1190-1213, .gitlab-ci.yml:19,
+       src/emu/scripting/src/manager.cpp:230-256, src/emu/services/src/fbs/fbs.cpp:443,
+       src/emu/services/src/fbs/impls/font.cpp:1185-1208, .gitlab-ci.yml:19,
        src/emu/qt/CMakeLists.txt:264-278, src/emu/qt/CMakeLists.txt:289-290,
        src/emu/qt/CMakeLists.txt:376-377, cmake/Symbian.cmake:20-31
 
   config.yml, bindings/<profile>.yml, devices.yml, the drives/ tree and
   libretro-content.txt are written by the emulator itself.
   ref: src/emu/config/src/config.cpp:344-350, src/emu/config/src/config.cpp:358-368,
-       src/emu/system/src/devices.cpp:248-249
+       src/emu/system/src/devices.cpp:260-261
 
 files:
   - name: SYM.ROM
@@ -159,7 +181,7 @@ files:
       whenever the device is selected. Every other phone model needs its own
       dump, an EKA2 image with its RPKG, or a VPL with its .fpsx images.
     source_ref:
-      standalone: "src/emu/system/src/epoc.cpp:1393-1401, src/emu/system/src/epoc.cpp:805-829, src/emu/system/include/system/consts.h:23-25, src/emu/system/src/installation/rpkg.cpp:43-64, src/emu/system/src/installation/rpkg.cpp:190-193, src/emu/qt/src/device_install_dialog.cpp:161-171"
+      standalone: "src/emu/system/src/epoc.cpp:1486-1494, src/emu/system/src/epoc.cpp:824-848, src/emu/system/include/system/consts.h:23-25, src/emu/system/src/installation/rpkg.cpp:44-68, src/emu/system/src/installation/rpkg.cpp:196-199, src/emu/qt/src/device_install_dialog.cpp:162-172"
       libretro: "src/emu/libretro/src/main.cpp:82-100, src/emu/libretro/src/content.cpp:44-111, src/emu/libretro/src/main.cpp:161-169, src/emu/system/src/installation/rpkg.cpp:202-248"
 
   - name: audiooutputrouting.dll.map
@@ -168,15 +190,15 @@ files:
     required: false
     bundled: true
     description: "Export map routing audiooutputrouting.dll to the host"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:495-540, cmake/Symbian.cmake:20-31, src/patch/CMakeLists.txt:6"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:505-556, cmake/Symbian.cmake:20-31, src/patch/CMakeLists.txt:6"
 
   - name: audiooutputrouting_general.dll
     standalone_path: patch/audiooutputrouting_general.dll
     mode: standalone
     required: false
     bundled: true
-    description: "Patched audiooutputrouting.dll, all Symbian versions"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:530-540, src/emu/kernel/src/libmanager.cpp:557-561, src/patch/audiooutputrouting/group/audiooutputrouting.dll.map:1"
+    description: "Patched audiooutputrouting.dll, EKA2 versions"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:540-556, src/emu/kernel/src/libmanager.cpp:586-590, src/patch/audiooutputrouting/group/audiooutputrouting.dll.map:1"
 
   - name: avkonfep_general.dll
     standalone_path: patch/avkonfep_general.dll
@@ -184,7 +206,15 @@ files:
     required: false
     bundled: true
     description: "Avkon FEP bridged to the host input method, copied over Z:\\sys\\bin\\avkonfep.dll on S60v3 FP1 and later"
-    source_ref: "src/emu/qt/src/state.cpp:181-204, src/patch/CMakeLists.txt:5"
+    source_ref: "src/emu/qt/src/state.cpp:179-202, src/patch/CMakeLists.txt:5"
+
+  - name: avkonfep_v81a.dll
+    standalone_path: patch/avkonfep_v81a.dll
+    mode: standalone
+    required: false
+    bundled: true
+    description: "FEP bridged to the host input method for EKA1, routed to from hwrfep.fep on Symbian 7.0s"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:505-518, src/emu/kernel/src/libmanager.cpp:521-538, src/patch/avkonfep/group/hwrfep.fep.map:1, src/patch/avkonfep/group/hwrfep.fep.map:7-9, src/patch/CMakeLists.txt:5"
 
   - name: backlightctrl.dll.map
     standalone_path: patch/backlightctrl.dll.map
@@ -192,15 +222,15 @@ files:
     required: false
     bundled: true
     description: "Export map for backlightctrl.dll, bound to the DLL UIDs it names"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:448-464, src/patch/CMakeLists.txt:10"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:453-469, src/patch/CMakeLists.txt:10"
 
   - name: backlightctrl_v81a.dll
     standalone_path: patch/backlightctrl_v81a.dll
     mode: standalone
     required: false
     bundled: true
-    description: "Patched backlightctrl.dll for Symbian 8.1a"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:511-528, src/patch/backlightctrl/group/backlightctrl.dll.map:1-4"
+    description: "Patched backlightctrl.dll built for Symbian 8.1a, routed to on Symbian 6.1, 7.0s and 8.0a: the epoc81 section of the map matches no version name"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:521-538, src/emu/kernel/src/libmanager.cpp:487-502, src/emu/common/src/types.cpp:140-141, src/patch/backlightctrl/group/backlightctrl.dll.map:1-5, src/patch/backlightctrl/group/backlightctrl.dll.map:17, src/patch/backlightctrl/group/backlightctrl.dll.map:29, src/patch/backlightctrl/group/backlightctrl.dll.map:41"
 
   - name: commdb.dll.map
     standalone_path: patch/commdb.dll.map
@@ -208,7 +238,7 @@ files:
     required: false
     bundled: true
     description: "Export map for the in-ROM commdb.dll of Symbian 6"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:448-464, src/patch/CMakeLists.txt:17"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:453-469, src/patch/CMakeLists.txt:18"
 
   - name: commdb_v6.dll
     standalone_path: patch/commdb_v6.dll
@@ -216,7 +246,7 @@ files:
     required: false
     bundled: true
     description: "Patched commdb.dll for Symbian 6"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:511-528, src/patch/commdb/group/commdb.dll.map:1-7"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:521-538, src/patch/commdb/group/commdb.dll.map:1-7"
 
   - name: ecam.dll.map
     standalone_path: patch/ecam.dll.map
@@ -224,15 +254,15 @@ files:
     required: false
     bundled: true
     description: "Export map for ecam.dll, the camera API"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:495-540, src/patch/CMakeLists.txt:8"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:505-556, src/patch/CMakeLists.txt:8"
 
   - name: ecam_general.dll
     standalone_path: patch/ecam_general.dll
     mode: standalone
     required: false
     bundled: true
-    description: "Patched ecam.dll, all Symbian versions"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:530-540, src/emu/kernel/src/libmanager.cpp:557-561, src/patch/ecam/group/ecam.dll.map:1-4"
+    description: "Patched ecam.dll, EKA2 versions"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:540-556, src/emu/kernel/src/libmanager.cpp:586-590, src/patch/ecam/group/ecam.dll.map:1-4"
 
   - name: goommonitor_general.dll
     standalone_path: patch/goommonitor_general.dll
@@ -240,7 +270,15 @@ files:
     required: false
     bundled: true
     description: "Global OOM monitor client, copied over Z:\\sys\\bin\\goommonitor.dll on S60v5 and later"
-    source_ref: "src/emu/qt/src/state.cpp:181-204, src/patch/CMakeLists.txt:15"
+    source_ref: "src/emu/qt/src/state.cpp:179-202, src/patch/CMakeLists.txt:15"
+
+  - name: hwrfep.fep.map
+    standalone_path: patch/hwrfep.fep.map
+    mode: standalone
+    required: false
+    bundled: true
+    description: "Export map for hwrfep.fep on Symbian 7.0s, bound to the UIDs it names and served by avkonfep_v81a.dll through its source key"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:453-469, src/emu/kernel/src/libmanager.cpp:505-518, src/patch/avkonfep/group/hwrfep.fep.map:1-9, src/patch/CMakeLists.txt:5"
 
   - name: mediaclientaudio.dll.map
     standalone_path: patch/mediaclientaudio.dll.map
@@ -248,7 +286,7 @@ files:
     required: false
     bundled: true
     description: "Export map for mediaclientaudio.dll, CMdaAudioPlayerUtility and friends"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:495-540, src/patch/CMakeLists.txt:11"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:505-556, src/patch/CMakeLists.txt:11"
 
   - name: mediaclientaudio_general.dll
     standalone_path: patch/mediaclientaudio_general.dll
@@ -256,15 +294,15 @@ files:
     required: false
     bundled: true
     description: "Patched mediaclientaudio.dll, EKA2 versions"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:530-540, src/emu/kernel/src/libmanager.cpp:557-561, src/patch/mediaclientaudio/group/mediaclientaudio.dll.map:1-4"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:540-556, src/emu/kernel/src/libmanager.cpp:586-590, src/patch/mediaclientaudio/group/mediaclientaudio.dll.map:1-4"
 
   - name: mediaclientaudio_v81a.dll
     standalone_path: patch/mediaclientaudio_v81a.dll
     mode: standalone
     required: false
     bundled: true
-    description: "Patched mediaclientaudio.dll for Symbian 8.1a"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:511-528, src/patch/mediaclientaudio/group/mediaclientaudio.dll.map:424-427"
+    description: "Patched mediaclientaudio.dll for Symbian 8.1a and earlier EKA1 releases"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:521-538, src/patch/mediaclientaudio/group/mediaclientaudio.dll.map:428-431"
 
   - name: mediaclientaudioinputstream.dll.map
     standalone_path: patch/mediaclientaudioinputstream.dll.map
@@ -272,7 +310,7 @@ files:
     required: false
     bundled: true
     description: "Export map for mediaclientaudioinputstream.dll, served by the mediaclientaudiostream DLLs through its source key"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:495-508, src/patch/mediaclientaudiostream/group/mediaclientaudioinputstream.dll.map:1"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:505-518, src/patch/mediaclientaudiostream/group/mediaclientaudioinputstream.dll.map:1"
 
   - name: mediaclientaudiostream.dll.map
     standalone_path: patch/mediaclientaudiostream.dll.map
@@ -280,7 +318,7 @@ files:
     required: false
     bundled: true
     description: "Export map for mediaclientaudiostream.dll"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:495-540, src/patch/CMakeLists.txt:12"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:505-556, src/patch/CMakeLists.txt:12"
 
   - name: mediaclientaudiostream_general.dll
     standalone_path: patch/mediaclientaudiostream_general.dll
@@ -288,15 +326,15 @@ files:
     required: false
     bundled: true
     description: "Patched mediaclientaudiostream.dll, EKA2 versions"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:530-540, src/emu/kernel/src/libmanager.cpp:557-561, src/patch/mediaclientaudiostream/group/mediaclientaudiostream.dll.map:1"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:540-556, src/emu/kernel/src/libmanager.cpp:586-590, src/patch/mediaclientaudiostream/group/mediaclientaudiostream.dll.map:1"
 
   - name: mediaclientaudiostream_v81a.dll
     standalone_path: patch/mediaclientaudiostream_v81a.dll
     mode: standalone
     required: false
     bundled: true
-    description: "Patched mediaclientaudiostream.dll for Symbian 8.1a"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:511-528, src/patch/mediaclientaudiostream/group/mediaclientaudiostream.dll.map:1"
+    description: "Patched mediaclientaudiostream.dll for Symbian 8.1a and earlier EKA1 releases"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:521-538, src/patch/mediaclientaudiostream/group/mediaclientaudiostream.dll.map:1"
 
   - name: mediaclientvideo.dll.map
     standalone_path: patch/mediaclientvideo.dll.map
@@ -304,15 +342,23 @@ files:
     required: false
     bundled: true
     description: "Export map for mediaclientvideo.dll"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:495-540, src/patch/CMakeLists.txt:13"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:505-556, src/patch/CMakeLists.txt:13"
 
   - name: mediaclientvideo_v100.dll
     standalone_path: patch/mediaclientvideo_v100.dll
     mode: standalone
     required: false
     bundled: true
-    description: "Patched mediaclientvideo.dll for Symbian^3 and Belle"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:511-528, src/patch/mediaclientvideo/group/mediaclientvideo.dll.map:1"
+    description: "Patched mediaclientvideo.dll, routed to from the epoc93fp1, epoc93fp2, epoc94 and epoc100 sections of the map"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:521-538, src/patch/mediaclientvideo/group/mediaclientvideo.dll.map:1, src/patch/mediaclientvideo/group/mediaclientvideo.dll.map:168, src/patch/mediaclientvideo/group/mediaclientvideo.dll.map:335, src/patch/mediaclientvideo/group/mediaclientvideo.dll.map:502"
+
+  - name: mediaclientvideo_v81a.dll
+    standalone_path: patch/mediaclientvideo_v81a.dll
+    mode: standalone
+    required: false
+    bundled: true
+    description: "Patched mediaclientvideo.dll for Symbian 8.0a and 8.1a"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:521-538, src/patch/mediaclientvideo/group/mediaclientvideo.dll.map:669, src/patch/mediaclientvideo/group/mediaclientvideo.dll.map:721"
 
   - name: postingsurfacefactory.dll.map
     standalone_path: patch/postingsurfacefactory.dll.map
@@ -320,15 +366,31 @@ files:
     required: false
     bundled: true
     description: "Export map for postingsurfacefactory.dll, the video posting surface"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:495-540, src/patch/CMakeLists.txt:14"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:505-556, src/patch/CMakeLists.txt:14"
 
   - name: postingsurfacefactory_general.dll
     standalone_path: patch/postingsurfacefactory_general.dll
     mode: standalone
     required: false
     bundled: true
-    description: "Patched postingsurfacefactory.dll, all Symbian versions"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:530-540, src/emu/kernel/src/libmanager.cpp:557-561, src/patch/postingsurfacefactory/group/postingsurfacefactory.dll.map:1"
+    description: "Patched postingsurfacefactory.dll, EKA2 versions"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:540-556, src/emu/kernel/src/libmanager.cpp:586-590, src/patch/postingsurfacefactory/group/postingsurfacefactory.dll.map:1"
+
+  - name: qjpeg.dll.map
+    standalone_path: patch/qjpeg.dll.map
+    mode: standalone
+    required: false
+    bundled: true
+    description: "Replacement map for the in-ROM Qt JPEG plugin qjpeg.dll: replace and qt-plugin requirements, no export route"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:475, src/emu/kernel/src/libmanager.cpp:558-569, src/patch/qjpeg/group/qjpeg.dll.map:1-6, src/patch/CMakeLists.txt:16"
+
+  - name: qjpeg_general.dll
+    standalone_path: patch/qjpeg_general.dll
+    mode: standalone
+    required: false
+    bundled: true
+    description: "Qt JPEG plugin decoding on the host, loaded in place of the ROM's qjpeg.dll on EKA2 when the Qt of the ROM accepts it"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:540-556, src/emu/kernel/src/libmanager.cpp:697-780, src/emu/kernel/src/libmanager.cpp:1191-1193, src/patch/qjpeg/group/qjpeg.dll.map:1-6"
 
   - name: scdv.dll.map
     standalone_path: patch/scdv.dll.map
@@ -336,7 +398,7 @@ files:
     required: false
     bundled: true
     description: "Export map for scdv.dll, CFbsDrawDevice and CDirectScreenBitmap"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:495-540, src/patch/CMakeLists.txt:7"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:505-556, src/patch/CMakeLists.txt:7"
 
   - name: scdv_general.dll
     standalone_path: patch/scdv_general.dll
@@ -344,7 +406,7 @@ files:
     required: false
     bundled: true
     description: "Patched scdv.dll, EKA2 versions"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:530-540, src/emu/kernel/src/libmanager.cpp:557-561, src/patch/scdv/group/scdv.dll.map:1-28"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:540-556, src/emu/kernel/src/libmanager.cpp:586-590, src/patch/scdv/group/scdv.dll.map:1-28"
 
   - name: scdv_v81a.dll
     standalone_path: patch/scdv_v81a.dll
@@ -352,7 +414,7 @@ files:
     required: false
     bundled: true
     description: "Patched scdv.dll for Symbian 8.1a and earlier EKA1 releases"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:511-528, src/patch/scdv/group/scdv.dll.map:29-45"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:521-538, src/patch/scdv/group/scdv.dll.map:29-45"
 
   - name: ssl.dll.map
     standalone_path: patch/ssl.dll.map
@@ -360,15 +422,15 @@ files:
     required: false
     bundled: true
     description: "Export map for ssl.dll routed to the host TLS stack, skipped below S60v3 FP1"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:435-438, src/patch/ssl/group/ssl.dll.map:1-4, src/patch/CMakeLists.txt:16"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:440-443, src/patch/ssl/group/ssl.dll.map:1-4, src/patch/CMakeLists.txt:17"
 
   - name: ssl_general.dll
     standalone_path: patch/ssl_general.dll
     mode: standalone
     required: false
     bundled: true
-    description: "Patched ssl.dll, all Symbian versions"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:530-540, src/emu/kernel/src/libmanager.cpp:557-561, src/patch/ssl/group/ssl.dll.map:6-9"
+    description: "Patched ssl.dll, S60v3 FP1 and later"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:540-556, src/emu/kernel/src/libmanager.cpp:586-590, src/patch/ssl/group/ssl.dll.map:6-9"
 
   - name: vibractrl.dll.map
     standalone_path: patch/vibractrl.dll.map
@@ -376,15 +438,15 @@ files:
     required: false
     bundled: true
     description: "Export map for vibractrl.dll, bound to the DLL UIDs it names"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:407-411, src/emu/kernel/src/libmanager.cpp:448-464, src/patch/CMakeLists.txt:9"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:411-415, src/emu/kernel/src/libmanager.cpp:453-469, src/patch/CMakeLists.txt:9"
 
   - name: vibractrl_v81a.dll
     standalone_path: patch/vibractrl_v81a.dll
     mode: standalone
     required: false
     bundled: true
-    description: "Patched vibractrl.dll for Symbian 8.1a"
-    source_ref: "src/emu/kernel/src/libmanager.cpp:511-528, src/patch/vibractrl/group/vibractrl.dll.map:1-4"
+    description: "Patched vibractrl.dll for Symbian 8.1a and earlier EKA1 releases"
+    source_ref: "src/emu/kernel/src/libmanager.cpp:521-538, src/patch/vibractrl/group/vibractrl.dll.map:1-4"
 
   - name: sprite_norm.vert
     standalone_path: resources/sprite_norm.vert
@@ -456,7 +518,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: 4xBR.frag
     standalone_path: resources/upscale/4xBR.frag
@@ -464,7 +526,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: 4xhq.frag
     standalone_path: resources/upscale/4xhq.frag
@@ -472,7 +534,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: 5xBR-lv2.frag
     standalone_path: resources/upscale/5xBR-lv2.frag
@@ -480,7 +542,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: 5xBR.frag
     standalone_path: resources/upscale/5xBR.frag
@@ -488,7 +550,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: aacolor.frag
     standalone_path: resources/upscale/aacolor.frag
@@ -496,7 +558,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: CRT-Hyllian.frag
     standalone_path: resources/upscale/CRT-Hyllian.frag
@@ -504,7 +566,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: CRT-Lottes-TV.frag
     standalone_path: resources/upscale/CRT-Lottes-TV.frag
@@ -512,7 +574,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: CRT-Lottes.frag
     standalone_path: resources/upscale/CRT-Lottes.frag
@@ -520,7 +582,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: dot.frag
     standalone_path: resources/upscale/dot.frag
@@ -528,7 +590,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: dot_mobile.frag
     standalone_path: resources/upscale/dot_mobile.frag
@@ -536,7 +598,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: dotpsp_color_mobile.frag
     standalone_path: resources/upscale/dotpsp_color_mobile.frag
@@ -544,7 +606,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: fxaa.frag
     standalone_path: resources/upscale/fxaa.frag
@@ -552,7 +614,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: grayscale.frag
     standalone_path: resources/upscale/grayscale.frag
@@ -560,7 +622,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: inversecolors.frag
     standalone_path: resources/upscale/inversecolors.frag
@@ -568,7 +630,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: natural.frag
     standalone_path: resources/upscale/natural.frag
@@ -576,7 +638,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: scanline-emu.frag
     standalone_path: resources/upscale/scanline-emu.frag
@@ -584,7 +646,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: scanline.frag
     standalone_path: resources/upscale/scanline.frag
@@ -592,7 +654,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: sharpen.frag
     standalone_path: resources/upscale/sharpen.frag
@@ -600,7 +662,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: zfast_lcd.frag
     standalone_path: resources/upscale/zfast_lcd.frag
@@ -608,7 +670,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: zfast_lcd_mobile.frag
     standalone_path: resources/upscale/zfast_lcd_mobile.frag
@@ -616,7 +678,7 @@ files:
     required: false
     bundled: true
     description: "Upscale filter selected by an application's filter-shader-path setting"
-    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:404-406, src/emu/qt/src/settings_dialog.cpp:312-313, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
+    source_ref: "src/emu/drivers/src/graphics/backend/ogl/graphics_ogl.cpp:397-409, src/emu/services/src/window/screen.cpp:638-640, src/emu/qt/src/settings_dialog.cpp:318-319, .gitmodules:70-72, src/emu/qt/CMakeLists.txt:273"
 
   - name: defaultbank.sf2
     standalone_path: resources/defaultbank.sf2
@@ -624,7 +686,7 @@ files:
     required: false
     bundled: true
     description: "SoundFont bank of the TinySoundFont MIDI player, the sf2-bank-path option"
-    source_ref: "src/emu/drivers/src/audio/backend/tinysoundfont/player_tsf.cpp:66-77, src/emu/drivers/src/audio/backend/tinysoundfont/player_tsf.cpp:192-196, src/emu/config/include/config/options.inl:73, src/emu/qt/src/state.cpp:157-158, src/emu/qt/CMakeLists.txt:275"
+    source_ref: "src/emu/drivers/src/audio/backend/tinysoundfont/player_tsf.cpp:66-77, src/emu/drivers/src/audio/backend/tinysoundfont/player_tsf.cpp:192-196, src/emu/config/include/config/options.inl:73, src/emu/config/src/config.cpp:404-406, src/emu/qt/src/state.cpp:155-156, src/emu/qt/CMakeLists.txt:275"
 
   - name: defaultbank.hsb
     standalone_path: resources/defaultbank.hsb
@@ -632,7 +694,7 @@ files:
     required: false
     bundled: true
     description: "Beatnik bank of the miniBAE MIDI player, the hsb-bank-path option"
-    source_ref: "src/emu/drivers/src/audio/backend/minibae/player_minibae.cpp:86-96, src/emu/config/include/config/options.inl:72, src/emu/qt/src/state.cpp:157-158, src/emu/qt/CMakeLists.txt:274"
+    source_ref: "src/emu/drivers/src/audio/backend/minibae/player_minibae.cpp:86-96, src/emu/config/include/config/options.inl:72, src/emu/config/src/config.cpp:400-402, src/emu/qt/src/state.cpp:155-156, src/emu/qt/CMakeLists.txt:274"
 
   - name: gamecontrollerdb.txt
     standalone_path: resources/gamecontrollerdb.txt
@@ -720,7 +782,7 @@ files:
     required: false
     bundled: true
     description: "Panic category descriptions read when the system is created"
-    source_ref: "src/emu/utils/src/panic.cpp:32-38, src/emu/system/src/epoc.cpp:634, src/emu/qt/CMakeLists.txt:269"
+    source_ref: "src/emu/utils/src/panic.cpp:32-38, src/emu/system/src/epoc.cpp:653, src/emu/qt/CMakeLists.txt:269"
 
   - name: aq_crash_fix.lua
     standalone_path: scripts/aq_crash_fix.lua
@@ -746,6 +808,14 @@ files:
     description: "Compatibility script, loaded from scripts/ by builds carrying LuaJIT"
     source_ref: "src/emu/scripting/src/manager.cpp:196-202, src/emu/scripting/src/manager.cpp:230-256, src/emu/qt/CMakeLists.txt:271"
 
+  - name: qt_font_extras_fix.lua
+    standalone_path: scripts/qt_font_extras_fix.lua
+    mode: standalone
+    required: false
+    bundled: true
+    description: "Compatibility script, loaded from scripts/ by builds carrying LuaJIT"
+    source_ref: "src/emu/scripting/src/manager.cpp:196-202, src/emu/scripting/src/manager.cpp:230-256, src/emu/qt/CMakeLists.txt:271"
+
   - name: s3_driver_patch.lua
     standalone_path: scripts/s3_driver_patch.lua
     mode: standalone
@@ -756,6 +826,14 @@ files:
 
   - name: s60v3_empty_avkon_menu_fix.lua
     standalone_path: scripts/s60v3_empty_avkon_menu_fix.lua
+    mode: standalone
+    required: false
+    bundled: true
+    description: "Compatibility script, loaded from scripts/ by builds carrying LuaJIT"
+    source_ref: "src/emu/scripting/src/manager.cpp:196-202, src/emu/scripting/src/manager.cpp:230-256, src/emu/qt/CMakeLists.txt:271"
+
+  - name: ssx_cash_unlock_fix.lua
+    standalone_path: scripts/ssx_cash_unlock_fix.lua
     mode: standalone
     required: false
     bundled: true
@@ -777,6 +855,14 @@ files:
     bundled: true
     description: "eka2l1.common module the shipped scripts require through package.path"
     source_ref: "src/emu/scripting/src/manager.cpp:252, src/scripts/aq_crash_fix.lua:1, src/emu/qt/CMakeLists.txt:289-290"
+
+  - name: context.lua
+    standalone_path: scripts/eka2l1/ipc/context.lua
+    mode: standalone
+    required: false
+    bundled: true
+    description: "eka2l1.ipc.context module required by eka2l1.events"
+    source_ref: "src/emu/scripting/src/manager.cpp:252, src/emu/scripting/lua/eka2l1/events.lua:11, src/emu/qt/CMakeLists.txt:289-290"
 
   - name: cpu.lua
     standalone_path: scripts/eka2l1/cpu.lua
