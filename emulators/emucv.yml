@@ -1,0 +1,51 @@
+emulator: EmuCV
+type: libretro
+core_classification: pure_libretro
+source: "https://gitlab.com/MaaaX-EPOCH84/libretro-emucv"
+profiled_date: "2026-09-17"
+pin_frozen: "the shipping core is this revision. HEAD removed the prototype from the tree on 2026-09-11 (a188c0f) and archived its last description files on 2026-09-12 (06a066a); the new skeleton has not yet been copied from libretro-emuscv1 (ROADMAP step 4.3). Recaling would repoint these refs at a tree that currently holds nothing but a roadmap."
+source_commit: "6a6e1b15c5d5afefbc3fefdd8b52f3f2c8c0a0eb"
+core_version: "0.00"
+display_name: "EPOCH - Cassette Vision (EmuCV)"
+cores:
+  - emucv
+systems:
+  - epochcv
+
+notes: |
+  Cassette Vision emulator written for libretro by Maxime Marconato. The
+  console has no system ROM: each cartridge carries the NEC uPD777 (or
+  uPD778) that runs it, so the cartridge dump is the whole machine.
+
+  Content is opened from its full path (need_fullpath = true,
+  src/core.cpp:307) with a plain fopen (src/emu.cpp:138,
+  src/fileio.cpp:84-93). The file must be exactly 4064 bytes, the 2032
+  valid program addresses as 16-bit words (src/emu.h:16, src/emu.h:223,
+  src/emu.cpp:143-153); any other size zeroes program memory and leaves
+  the cartridge not inserted. Each word is read as a big-endian 12-bit
+  instruction (src/emu.cpp:159-164). The commented MD5 check at
+  src/emu.cpp:313-320 is not compiled.
+
+  The uPD778 character generator (128 patterns of 7 lines) is a static
+  table compiled into the core, pattern_778c at src/emu.cpp:168-307, and
+  is never read from disk.
+
+  RETRO_ENVIRONMENT_GET_SYSTEM_DIRECTORY and GET_SAVE_DIRECTORY are
+  queried at init and stored (src/core.cpp:362-366, src/core.cpp:377-381,
+  src/common.cpp:1054-1094). Nothing reads them back: the path helpers
+  inherited from the Common Source Code Project (get_application_path,
+  create_local_path, the ini reader and writer) sit inside comment blocks
+  (src/common.cpp:799-937, src/common.cpp:1095-1719). Core options are
+  not registered, f_retro_load_settings and f_retro_save_settings are
+  empty (src/core.cpp:2562-2895, src/core.cpp:2900-3099). No save RAM
+  (src/core.cpp:3437-3450) and no save states (src/core.cpp:3374-3390).
+
+  The .info declares firmware_count = 0 and matches the code.
+
+files: []
+
+platform_details:
+  cpu: "NEC uPD777C / uPD778C, one per cartridge"
+  program_memory: "2032 words of 12 bits"
+  pattern_memory: "896 bytes, compiled in"
+  source_ref: "src/emu.h:16-19"
