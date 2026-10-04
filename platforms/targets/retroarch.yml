@@ -1,6 +1,6 @@
 platform: retroarch
 source: https://buildbot.libretro.com/nightly/
-scraped_at: '2026-10-04T09:13:49Z'
+scraped_at: '2026-10-04T12:56:19Z'
 targets:
   linux-x86_64:
     architecture: x86_64
@@ -187,6 +187,7 @@ targets:
     - remotejoy
     - retro8
     - romcleaner
+    - rpcs3
     - rust_dos
     - rustynes
     - same_cdi

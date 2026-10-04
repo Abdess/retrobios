@@ -21,8 +21,9 @@ batocera:
       # Amiga machine variants (A500, CD32, etc.) are selectors passed to
       # fsuae/amiberry, not emulators of their own; batocera-es-system
       # groups them under the emulator's node in es_systems.yml.
-      # odcommander is OpenDingux's file manager; flatpak is a runtime
-      # launcher. Neither emulates anything.
+      # odcommander is OpenDingux's file manager; flatpak/steam/wine-tkg/sh
+      # are runtime launchers. N64 video plugins (gliden64, glide64mk2,
+      # rice) are backends to mupen64plus, not emulators.
       remove_cores:
         - A500
         - "A500+"
@@ -38,10 +39,27 @@ batocera:
         - sh
         - steam
         - wine-tkg
+        - gliden64
+        - glide64mk2
+        - rice
     x86_64:
       add_cores: [citron, demul, model2, xenia]
     zen3:
       add_cores: [citron, demul, model2, xenia]
+
+retrobat:
+  targets:
+    _default:
+      # Launchers and the shell, not emulators.
+      remove_cores:
+        - flatpak
+        - odcommander
+        - sh
+        - steam
+        - wine-tkg
+        - glide64mk2
+        - gliden64
+        - rice
 
 retroarch:
   targets:
