@@ -3,7 +3,7 @@ type: standalone
 core_classification: community_fork
 source: "https://github.com/rafaelvcaetano/melonDS-android"
 upstream: "https://github.com/rafaelvcaetano/melonDS-android-lib"
-source_commit: "3f3a1c8260850ce5f5ffe2b25ee4274b8674fa5f"
+source_commit: "c42995caff0144f37ad9791dc9bc96d82e8a6f65"
 upstream_commit: "431ab4bd0003c4356e25fce89640ae1004579b9b"
 profiled_date: "2026-08-12"
 core_version: "2.0.1 (NIGHTLY)"
@@ -39,26 +39,26 @@ notes: |
   (app/src/main/res/xml/pref_custom_firmware.xml:33,39).
 
   use_custom_bios defaults off (app/src/main/res/xml/pref_custom_firmware.xml:11,
-  SharedPreferencesSettingsRepository.kt:258-260). With it off, launching a ROM
+  app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:258-260). With it off, launching a ROM
   skips the directory check entirely and the core substitutes FreeBIOS and a
   firmware built in memory, so DS games run with nothing supplied. Booting into
   the firmware menu instead of a ROM always turns it on
-  (AndroidEmulatorManager.kt:247-253), as does any per-ROM console override
-  (AndroidEmulatorManager.kt:239). DSi needs both directories: the DSi check
-  runs the DS check after its own (ConfigurationDirectoryVerifier.kt:13-21).
+  (app/src/main/java/me/magnum/melonds/impl/emulator/AndroidEmulatorManager.kt:247-253), as does any per-ROM console override
+  (app/src/main/java/me/magnum/melonds/impl/emulator/AndroidEmulatorManager.kt:239). DSi needs both directories: the DSi check
+  runs the DS check after its own (app/src/main/java/me/magnum/melonds/domain/services/ConfigurationDirectoryVerifier.kt:13-21).
 
   The generated firmware keeps its Wi-Fi access point block in wfcsettings.bin,
   read at boot and written back by the emulator
-  (EmulatorArgsBuilder.cpp:189,200-226, MelonInstance.cpp:58-62). It resolves
-  against context.filesDir (PlatformAndroid.cpp:158-163,
-  SharedPreferencesSettingsRepository.kt:155), app-private internal storage the
+  (app/src/main/cpp/EmulatorArgsBuilder.cpp:189,200-226, app/src/main/cpp/MelonInstance.cpp:58-62). It resolves
+  against context.filesDir (app/src/main/cpp/PlatformAndroid.cpp:158-163,
+  app/src/main/java/me/magnum/melonds/impl/SharedPreferencesSettingsRepository.kt:155), app-private internal storage the
   user cannot write to, and holds settings this build produced. Not listed below:
   there is nothing to obtain.
 
   Neither SD card is reachable in this build. getSDCardArgs returns nothing when
-  a card is disabled (SDCardArgsBuilder.cpp:19-20) and the JNI layer hardcodes
+  a card is disabled (app/src/main/cpp/SDCardArgsBuilder.cpp:19-20) and the JNI layer hardcodes
   both the DSi card and the homebrew DLDI card to disabled
-  (MelonDSAndroidConfiguration.cpp:93-94), with no preference anywhere in the app
+  (app/src/main/cpp/MelonDSAndroidConfiguration.cpp:93-94), with no preference anywhere in the app
   to turn either on; the README lists DSi SD card support under missing features. The Action Replay database the core can parse is likewise
   never built: ARDatabaseDAT is reached only from src/frontend/qt_sdl, and the
   Android build sets BUILD_QT_SDL OFF and links the core alone

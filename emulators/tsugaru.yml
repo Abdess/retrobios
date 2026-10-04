@@ -4,7 +4,7 @@ type: standalone
 source: "https://github.com/captainys/TOWNSEMU"
 upstream: "https://github.com/captainys/TOWNSEMU"
 profiled_date: "2026-03-26"
-source_commit: "ee0c2673252d6879e78a5de6b560e2d2b125e2b8"
+source_commit: "e27adde120fe06150f3d57a6dc7cba66b5f43a32"
 cores:
   - tsugaru
 systems:

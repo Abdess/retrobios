@@ -5,7 +5,7 @@ cores: [puae, uae]
 source: "https://github.com/libretro/libretro-uae"
 upstream: "https://github.com/GnoStiC/PUAE"
 profiled_date: "2026-03-24"
-source_commit: "96ebfcfc2c66233ad37f6dc99ee991211dc719ad"
+source_commit: "6536174a80d74e6c325aaa5390ff091fac8761d0"
 core_version: "5.3.1"
 display_name: "Commodore - Amiga (PUAE)"
 systems:
@@ -56,7 +56,7 @@ notes: |
   capsimg.so/capsimg.dll is an optional shared library for IPF floppy image
   support (SPS/CAPS format). Not a BIOS file, loaded dynamically at runtime.
 
-  Source: libretro/libretro-core.h:140-245, libretro/libretro-core.c:5611-5751,
+  Source: libretro/libretro-core.h:140-245, libretro/libretro-core.c:5612-5752,
   libretro/libretro-core.c:6044-6093
 
 files:
@@ -243,14 +243,14 @@ files:
     system: commodore-amiga
     required: false
     note: "Amiga Forever ROM decryption key. Copied to saves/WHDLoad/Devs/Kickstarts/ for WHDLoad."
-    source_ref: "libretro/libretro-core.c:5968-5979"
+    source_ref: "libretro/libretro-core.c:5969-5980"
 
   - name: "WHDLoad.key"
     system: commodore-amiga
     required: false
     unsourceable: "per-user signed registration key, never distributed generically, WHDLoad free since v18.2"
     note: "WHDLoad license key. Copied to saves/WHDLoad/L/ for registered WHDLoad use."
-    source_ref: "libretro/libretro-core.c:5984-5997"
+    source_ref: "libretro/libretro-core.c:5985-5998"
 
   - name: "WHDLoad.prefs"
     system: commodore-amiga
@@ -290,4 +290,4 @@ platform_details:
     amiga_forever: "amiga-os-{version}.rom"
     tosec: "Kickstart v{version} rev {rev} ({year})(Commodore)({model}).rom"
   scan_prefixes: ["kick", "amiga-os", "KS ROM"]
-  source_ref: "libretro/libretro-core.c:2650-2677"
+  source_ref: "libretro/libretro-core.c:2651-2678"

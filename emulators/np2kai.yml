@@ -4,7 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/NP2kai"
 upstream: "https://github.com/AZO234/NP2kai"
 profiled_date: "2026-03-24"
-source_commit: "ac05f003bf44f58a235f5b31de0cd42dabdbf1a8"
+source_commit: "1ea561cd7fd62b33f4e7b3f1c2e30fc3e6089f28"
 core_version: "0.86"
 display_name: "NEC - PC-98 (Neko Project II Kai)"
 cores: [np2kai]

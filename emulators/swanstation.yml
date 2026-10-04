@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/swanstation"
 upstream: "https://github.com/stenzek/duckstation"
 profiled_date: "2026-03-25"
-source_commit: "7f69c199ed88d5723f71dd3a6e9c1b7a45b535a6"
+source_commit: "b6c30a7b270a3f68ac41f268eafdfa678d17dea2"
 core_version: "v0.1"
 display_name: "Sony - PlayStation (SwanStation)"
 cores: [swanstation]

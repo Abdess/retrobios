@@ -4,7 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/bsnes-mercury"
 upstream: "https://byuu.org/higan"
 profiled_date: "2026-03-25"
-source_commit: "ea22363fb0c1ebe92e7a70cdf55e9bb43f9207be"
+source_commit: "79d7f9de218b6ffa65a80bbdc5828532bc239232"
 core_version: "v094 (Mercury)"
 display_name: "Nintendo - SNES / SFC (bsnes-mercury)"
 cores: [bsnes_mercury_accuracy, bsnes_mercury_balanced, bsnes_mercury_performance]

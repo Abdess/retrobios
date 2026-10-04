@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/DCurrent/openbor"
 upstream: "https://github.com/DCurrent/openbor"
 profiled_date: "2026-08-12"
-source_commit: "9d81480f8481fbb9e76b0b5f2a5dfa408376761a"
+source_commit: "787b6770409935137579715febf80cf7a529b748"
 core_version: "4.0 Build 7949"
 display_name: "OpenBOR Game Engine"
 cores:

@@ -5,7 +5,7 @@ source: "https://github.com/libretro/nestopia"
 upstream: "https://gitlab.com/jgemu/nestopia"
 logo: "https://raw.githubusercontent.com/0ldsk00l/nestopia/master/icons/svg/nestopia.svg"
 profiled_date: "2026-03-24"
-source_commit: "5a1cd378cb46ca9ccc2dd6f8b2b6a79ab986052e"
+source_commit: "b9fdc9c4e6d374abacd1a678ae46ec7f963ef59a"
 core_version: "1.53.1"
 display_name: "Nintendo - NES / Famicom (Nestopia)"
 cores: [nestopia]
@@ -43,7 +43,7 @@ files:
     validation: [crc32]
     md5: "ca30b50f880eb660a320674ed365ef7a"
     sha1: "57fe1bdee955bb48d357e463ccbf129496930b62"
-    source_ref: "libretro/libretro.cpp:2111-2139 (FDS load), source/core/NstFds.cpp:57-127 (Bios class, CRC32 validation)"
+    source_ref: "libretro/libretro.cpp:2169-2197 (FDS load), source/core/NstFds.cpp:57-127 (Bios class, CRC32 validation)"
     note: "Mapped at 0xE000-0xFFFF (8 KB). retro_load_game returns false if missing when loading .fds files. CRC32 checked: Famicom 0x5E607DCF, Twin Famicom 0x4DF24A6C."
 
   # --- NES game database (optional, overrides baked-in copy) ---
@@ -52,7 +52,7 @@ files:
     description: "Nestopia game database for region and mapper autodetection"
     required: false
     hle_fallback: true
-    source_ref: "libretro/libretro.cpp:2063-2093 (database load), libretro/nstdatabase.hpp (baked-in fallback)"
+    source_ref: "libretro/libretro.cpp:2121-2151 (database load), libretro/nstdatabase.hpp (baked-in fallback)"
     note: "XML database matching games by SHA1+CRC32. Used for region, mapper, mirroring, and 4-player adapter detection. Built-in fallback exists so this file is optional."
 
   # --- Custom palette (optional, core option nestopia_palette = Custom) ---
@@ -62,7 +62,7 @@ files:
     required: false
     hle_fallback: true
     size: 192
-    source_ref: "libretro/libretro.cpp:2041-2062 (palette load)"
+    source_ref: "libretro/libretro.cpp:2099-2120 (palette load)"
     note: "64 RGB triplets (64 x 3 bytes = 192 bytes). Loaded unconditionally at startup; applied only when nestopia_palette core option is set to Custom. Falls back to built-in Royaltea palette. Multiple valid palettes exist so no canonical hash."
 
   # --- ADPCM audio samples (optional, game-specific) ---

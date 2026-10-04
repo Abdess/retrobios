@@ -4,7 +4,7 @@ core_classification: other
 source: "https://github.com/jsgroth/jgenesis"
 upstream: "https://github.com/jsgroth/jgenesis"
 profiled_date: "2026-08-08"
-source_commit: "0b26611fa23007f2632d32b7cdbdb6369b01eb91"
+source_commit: "db1bec7392704aa0ecc2bbbb5ac751fec3c485a0"
 core_version: "0.14.0"
 display_name: "Multi-System (jgenesis)"
 cores:
@@ -41,7 +41,7 @@ notes: |
 
   Sega CD selects the BIOS by disc region and per_region_bios defaults to true,
   so the US, European and Japanese images are each reachable
-  (frontend/jgenesis-native-driver/src/mainloop/genesis.rs:230-259,
+  (frontend/jgenesis-native-driver/src/mainloop/genesis.rs:215-244,
   frontend/jgenesis-native-config/src/genesis.rs:117). Setting "Use US BIOS for
   all regions" collapses all three onto the US slot.
 
@@ -82,7 +82,7 @@ files:
     mode: standalone
     size: 131072
     validation: [size]
-    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:40-50 (read), frontend/jgenesis-native-driver/src/mainloop/genesis.rs:253-259 (bios_path_for_region), backend/segacd-core/src/api.rs:77-79 (BIOS_LEN check)"
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:39-49 (read), frontend/jgenesis-native-driver/src/mainloop/genesis.rs:238-244 (bios_path_for_region), backend/segacd-core/src/api.rs:77-79 (BIOS_LEN check)"
     note: "Selected when the disc region is Americas, and for every region when per_region_bios is off."
 
   - name: "bios_CD_E.bin"
@@ -93,7 +93,7 @@ files:
     mode: standalone
     size: 131072
     validation: [size]
-    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:253-259 (eu_bios_path), backend/segacd-core/src/api.rs:77-79"
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:238-244 (eu_bios_path), backend/segacd-core/src/api.rs:77-79"
 
   - name: "bios_CD_J.bin"
     system: sega-megacd
@@ -103,7 +103,7 @@ files:
     mode: standalone
     size: 131072
     validation: [size]
-    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:253-259 (jp_bios_path), backend/segacd-core/src/api.rs:77-79"
+    source_ref: "frontend/jgenesis-native-driver/src/mainloop/genesis.rs:238-244 (jp_bios_path), backend/segacd-core/src/api.rs:77-79"
 
   # -------------------------------------------------------
   # Game Boy Advance

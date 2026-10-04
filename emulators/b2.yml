@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/zoltanvb/b2-libretro"
 upstream: "https://github.com/tom-seddon/b2"
 profiled_date: "2026-03-23"
-source_commit: "6485984cddf50e20fb7d9d5d350a9d54265c283c"
+source_commit: "9793f6a8040c416d147003cada29363b955b54e7"
 core_version: "v0.4"
 display_name: "Acorn - BBC Micro (b2)"
 cores: [b2]
@@ -25,14 +25,14 @@ notes: |
   create_core() loads OS and sideways ROMs from static machine_types[] arrays.
   GetAssetPath() and LoadFile() are stubbed — no file I/O at runtime.
   ref: zoltanvb/b2-libretro/src/libretro/roms.hpp
-  ref: zoltanvb/b2-libretro/src/libretro/core.cpp:274-304
-  ref: zoltanvb/b2-libretro/src/libretro/adapters.cpp:74-78
+  ref: src/libretro/core.cpp:275-305
+  ref: src/libretro/adapters.cpp:74-78
 
   9 machine types: B/Acorn 1770, B/Watford DDB2, B/Watford DDB3,
   B/Opus 1770, B/Opus Challenger 256K, B/Opus Challenger 512K,
   B+, B+128, Master 128 (MOS 3.20).
   Master 3.50, Master Turbo, Master Compact not yet implemented.
-  ref: zoltanvb/b2-libretro/src/libretro/core.h:117
+  ref: src/libretro/core.h:117
 
 files: []
 # all ROMs embedded in binary via roms.hpp — no external files needed

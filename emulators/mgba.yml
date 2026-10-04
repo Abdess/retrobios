@@ -5,7 +5,7 @@ source: "https://github.com/libretro/mgba"
 upstream: "https://github.com/mgba-emu/mgba"
 logo: "https://raw.githubusercontent.com/mgba-emu/mgba/master/res/mgba-256.png"
 profiled_date: "2026-03-24"
-source_commit: "e31759b24e7a4e3899285ff720d7b573ac328ae7"
+source_commit: "7a12d6d4b9acb14c0ae62c9166b6a2f3d08007f6"
 core_version: "0.10-dev"
 display_name: "Nintendo - Game Boy Advance (mGBA)"
 cores:

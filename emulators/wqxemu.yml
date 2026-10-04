@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://git.libretro.com/libretro/wqxemu"
 upstream: "https://github.com/AloysHF/WQXEmu"
 profiled_date: "2026-09-17"
-source_commit: "7191df429042116e707ba68f5b2d2a8ae567b2ad"
+source_commit: "868b644df757379b15a04c7354f8f756d11076c3"
 upstream_commit: "7191df429042116e707ba68f5b2d2a8ae567b2ad"
 core_version: "0.1.0"
 display_name: "Wenquxing - Electronic Dictionary (WQXEmu)"

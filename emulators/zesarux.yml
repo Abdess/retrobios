@@ -3,7 +3,7 @@ type: standalone
 core_classification: other
 source: "https://github.com/chernandezba/zesarux"
 upstream: "https://github.com/chernandezba/zesarux"
-source_commit: "331ba12286c008230643ce98a2963bbfe60f3b35"
+source_commit: "8e1e8f3fcb5a8e677984df7aeaff30667682ab56"
 profiled_date: "2026-09-17"
 core_version: "13.1-SN"
 display_name: "Sinclair - ZX Spectrum and clones (ZEsarUX)"
@@ -34,7 +34,7 @@ systems:
 
 notes: |
   Multi-machine Sinclair emulator. Every ROM is read from disk at run time;
-  none is compiled into the binary. `rom_load` (src/cpu.c:3203-3803) maps
+  none is compiled into the binary. `rom_load` (src/cpu.c:3268-3868) maps
   `current_machine_type` to a filename through a switch, then resolves it with
   `find_sharedfile` (src/utils.c:1314-1352), which searches the current directory,
   `../Resources/`, `INSTALL_PREFIX/share/zesarux/` and the directory holding the
@@ -47,7 +47,7 @@ notes: |
   `bundled: true`.
 
   A missing machine ROM is not fatal: `rom_load` logs an error and returns
-  (src/cpu.c:3465-3473), the panic having been removed deliberately. The machine then
+  (src/cpu.c:3530-3538), the panic having been removed deliberately. The machine then
   runs on uninitialised memory, so the ROMs the switch names are marked required
   for the machine they serve. The one hard failure is `prism_failsafe.rom`, which
   `prism_load_failsafe_rom` loads through its own path and which calls `cpu_panic`
@@ -59,8 +59,8 @@ notes: |
   as an error. `validation: [size]` is set only where the code makes that
   comparison.
 
-  `--romfile` (src/start.c:4870-4874) overrides the machine ROM with any file the user
-  picks (src/cpu.c:3455-3458); the ROMs under `alternate_roms/` and the extra
+  `--romfile` (src/start.c:4876-4880) overrides the machine ROM with any file the user
+  picks (src/cpu.c:3520-3523); the ROMs under `alternate_roms/` and the extra
   variants in the install root exist for that path and are documented in the
   shipped src/ALTERNATEROMS file. Interface ROMs are equally overridable
   (`--divide-rom`, `--divmmc-rom`, `--dandanator-rom`, `--ifrom-rom`,
@@ -68,17 +68,17 @@ notes: |
 
   ES-DE drives ZEsarUX for its `zxnext` system with `--machine tbblue
   --tbblue-fast-boot-mode --enable-esxdos-handler`. Fast boot swaps
-  `tbblue_loader.rom` for `48.rom` (src/cpu.c:3308-3309), and the esxdos handler needs
+  `tbblue_loader.rom` for `48.rom` (src/cpu.c:3373-3374), and the esxdos handler needs
   the divMMC firmware `esxmmc085.rom`, so that path loads `48.rom`, `esxmmc085.rom`
   and the `tbblue.mmc` card image rather than a dedicated Next ROM.
 
   ZEsarUX also loads UI and bundled-software resources through the same
   `find_sharedfile` path: `keyboards/*.bmp` on-screen keyboard art
-  (src/menu/menu_items.c:19258, 21784, 21805), `z88_shortcuts.bmp`
-  (src/video/screen.c:11210), the `my_soft/` homebrew collection
-  (src/menu/menu_items.c:32199, 32258; src/menu/menu_items_storage.c:582), the
-  `copiers/*.zsf` tape copier snapshots (src/menu/menu_items_storage.c:651, 742) and
-  `editionnamegame.tzx` (src/cpu.h:73, src/utils.c:17879). They are application
+  (src/menu/menu_items.c:19480, 21784, 21805), `z88_shortcuts.bmp`
+  (src/video/screen.c:11254), the `my_soft/` homebrew collection
+  (src/menu/menu_items.c:32497, 32258; src/menu/menu_items_storage.c:582), the
+  `copiers/*.zsf` tape copier snapshots (src/menu/menu_items_storage.c:666, 742) and
+  `editionnamegame.tzx` (src/cpu.h:73, src/utils.c:17885). They are application
   resources rather than system firmware and carry no entry below.
   `PrismChime.bin` sits in the source tree but no code reads it and COMMONFILES
   does not install it.
@@ -96,8 +96,8 @@ files:
     bundled: true
     system: sinclair-zx-spectrum
     fast_boot: "tbblue"
-    source_ref: "src/cpu.c:3213-3222 (16K/48K, CZ 2000, CZ Spectrum), src/cpu.c:3308 (tbblue fast boot), src/utils.c:4098 (size)"
-    note: "48K BASIC. Also loaded four times over as the TBBlue fast-boot image (src/cpu.c:3588-3597)."
+    source_ref: "src/cpu.c:3278-3287 (16K/48K, CZ 2000, CZ Spectrum), src/cpu.c:3373 (tbblue fast boot), src/utils.c:4098 (size)"
+    note: "48K BASIC. Also loaded four times over as the TBBlue fast-boot image (src/cpu.c:3653-3662)."
 
   - name: "48es.rom"
     size: 16384
@@ -105,7 +105,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3312-3314, src/utils.c:4098"
+    source_ref: "src/cpu.c:3377-3379, src/utils.c:4098"
     note: "Spanish 48K+ ROM, selected for MACHINE_ID_SPECTRUM_48_PLUS_SPA."
 
   - name: "inves.rom"
@@ -114,8 +114,8 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3224-3227, src/utils.c:4098"
-    note: "Investronica Inves Spectrum+. Loaded at memoria_spectrum[65536] (src/cpu.c:3486-3492)."
+    source_ref: "src/cpu.c:3289-3292, src/utils.c:4098"
+    note: "Investronica Inves Spectrum+. Loaded at memoria_spectrum[65536] (src/cpu.c:3551-3557)."
 
   - name: "128.rom"
     size: 32768
@@ -123,7 +123,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3247-3249, src/utils.c:4100"
+    source_ref: "src/cpu.c:3312-3314, src/utils.c:4100"
 
   - name: "128s.rom"
     size: 32768
@@ -131,7 +131,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3251-3253, src/utils.c:4100"
+    source_ref: "src/cpu.c:3316-3318, src/utils.c:4100"
 
   - name: "p2.rom"
     size: 32768
@@ -139,7 +139,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3258-3260, src/utils.c:4100"
+    source_ref: "src/cpu.c:3323-3325, src/utils.c:4100"
     note: "ZX Spectrum +2."
 
   - name: "p2f.rom"
@@ -148,7 +148,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3262-3264, src/utils.c:4100"
+    source_ref: "src/cpu.c:3327-3329, src/utils.c:4100"
 
   - name: "p2s.rom"
     size: 32768
@@ -156,7 +156,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3266-3268, src/utils.c:4100"
+    source_ref: "src/cpu.c:3331-3333, src/utils.c:4100"
 
   - name: "p2a40.rom"
     size: 65536
@@ -164,7 +164,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3272-3275, src/utils.c:4102"
+    source_ref: "src/cpu.c:3337-3340, src/utils.c:4102"
     note: "+2A/+3 ROM v4.0."
 
   - name: "p2a41.rom"
@@ -173,7 +173,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3277-3280, src/utils.c:4102"
+    source_ref: "src/cpu.c:3342-3345, src/utils.c:4102"
     note: "+2A/+3 ROM v4.1."
 
   - name: "p2as.rom"
@@ -182,7 +182,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3282-3285, src/utils.c:4102"
+    source_ref: "src/cpu.c:3347-3350, src/utils.c:4102"
 
   - name: "pentagon.rom"
     size: 32768
@@ -190,7 +190,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3316-3318, src/utils.c:4100 (MACHINE_IS_SPECTRUM_128_P2 covers Pentagon, src/cpu.h:545)"
+    source_ref: "src/cpu.c:3381-3383, src/utils.c:4100 (MACHINE_IS_SPECTRUM_128_P2 covers Pentagon, src/cpu.h:545)"
 
   - name: "se.rom"
     size: 32768
@@ -198,7 +198,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3292-3295, src/utils.c:4106"
+    source_ref: "src/cpu.c:3357-3360, src/utils.c:4106"
     note: "Chloe 140SE/280SE, SE Basic IV."
 
   - name: "chrome.rom"
@@ -207,7 +207,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3341-3343, src/utils.c:4112"
+    source_ref: "src/cpu.c:3406-3408, src/utils.c:4112"
 
   - name: "prism.rom"
     size: 327680
@@ -215,8 +215,8 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3303-3305, src/utils.c:4108"
-    note: "20 pages of 16K. Page map documented at src/cpu.c:3557-3573."
+    source_ref: "src/cpu.c:3368-3370, src/utils.c:4108"
+    note: "20 pages of 16K. Page map documented at src/cpu.c:3622-3638."
 
   - name: "prism_failsafe.rom"
     size: 16384
@@ -224,7 +224,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/machines/prism.h:61, src/machines/prism.c:581-590, src/cpu.c:3581"
+    source_ref: "src/machines/prism.h:61, src/machines/prism.c:581-590, src/cpu.c:3646"
     note: "Loaded straight after prism.rom by prism_load_failsafe_rom(). The only ROM whose absence is fatal: the loader calls cpu_panic both when the file is missing and when the read is not 16384 bytes."
 
   - name: "zxuno_bootloader.rom"
@@ -232,7 +232,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3288-3290, src/cpu.c:3531-3535"
+    source_ref: "src/cpu.c:3353-3355, src/cpu.c:3596-3600"
     size_note: "Read caps at 8192 bytes and only errors when fewer than 1 byte is read, so no exact size check. get_rom_size returns 214 for ZX-Uno (src/utils.c:4104) but that value is unused on this path."
 
   - name: "zxevo_tsconf.rom"
@@ -241,7 +241,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3345-3347, src/utils.c:4114"
+    source_ref: "src/cpu.c:3410-3412, src/utils.c:4114"
 
   - name: "zxevo_baseconf.rom"
     size: 524288
@@ -249,7 +249,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3349-3351, src/utils.c:4116"
+    source_ref: "src/cpu.c:3414-3416, src/utils.c:4116"
     note: "ZX Evolution BaseConf ROM set. The 13.1 tree ships the Turbo 2+/PentEvo build with New ROM boot v1.06; the 13.0 release shipped the PentEvo edition 2013 image of the same size."
 
   # ============================================================
@@ -262,15 +262,15 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum-next
-    source_ref: "src/cpu.c:3307-3310, src/cpu.c:3598-3604, src/utils.c:4110"
-    note: "FPGA loader, mirrored to 16K at src/cpu.c:3600. Bypassed when --tbblue-fast-boot-mode selects 48.rom instead."
+    source_ref: "src/cpu.c:3372-3375, src/cpu.c:3663-3669, src/utils.c:4110"
+    note: "FPGA loader, mirrored to 16K at src/cpu.c:3665. Bypassed when --tbblue-fast-boot-mode selects 48.rom instead."
 
   - name: "tbblue.mmc"
     size: 67108864
     required: false
     bundled: true
     system: sinclair-zx-spectrum-next
-    source_ref: "src/menu/menu_items_storage.c:12129-12147, src/configure:1921"
+    source_ref: "src/menu/menu_items_storage.c:12092-12110, src/configure:1921"
     note: "SD card image carrying the Next system software. Assigned as MMC card 0 by the local-tbblue menu action; the emulator reports 'tbblue.mmc image not found' when absent."
     size_note: "64 MB, so it needs storage: large_file once the image is acquired and uploaded as a release asset."
 
@@ -284,7 +284,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3229-3231, src/utils.c:4098"
+    source_ref: "src/cpu.c:3294-3296, src/utils.c:4098"
 
   - name: "tk90xs.rom"
     size: 16384
@@ -292,7 +292,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3233-3235, src/utils.c:4098"
+    source_ref: "src/cpu.c:3298-3300, src/utils.c:4098"
 
   - name: "tk95.rom"
     size: 16384
@@ -300,7 +300,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3237-3239, src/utils.c:4098"
+    source_ref: "src/cpu.c:3302-3304, src/utils.c:4098"
 
   - name: "tk95es.rom"
     size: 16384
@@ -308,7 +308,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.c:3241-3243, src/utils.c:4098"
+    source_ref: "src/cpu.c:3306-3308, src/utils.c:4098"
 
   # ============================================================
   # Timex
@@ -320,7 +320,7 @@ files:
     required: true
     bundled: true
     system: timex-tc2048
-    source_ref: "src/cpu.c:3353-3355, src/utils.c:4098 (TC2048 falls under MACHINE_IS_SPECTRUM_16_48, src/cpu.h:543)"
+    source_ref: "src/cpu.c:3418-3420, src/utils.c:4098 (TC2048 falls under MACHINE_IS_SPECTRUM_16_48, src/cpu.h:543)"
 
   - name: "ts2068.rom"
     size: 24576
@@ -328,7 +328,7 @@ files:
     required: true
     bundled: true
     system: timex-ts2068
-    source_ref: "src/cpu.c:3298-3301, src/cpu.c:3634-3648, src/utils.c:4118"
+    source_ref: "src/cpu.c:3363-3366, src/cpu.c:3699-3713, src/utils.c:4118"
     note: "Read as two blocks: 16384 into the main ROM table, then 8192 into the EX ROM table. Serves TS2068 and TC2068."
 
   - name: "ts1500.rom"
@@ -337,7 +337,7 @@ files:
     required: true
     bundled: true
     system: timex-ts1500
-    source_ref: "src/cpu.c:3377-3381, src/utils.c:4134"
+    source_ref: "src/cpu.c:3442-3446, src/utils.c:4134"
 
   # ============================================================
   # ZX80 / ZX81 family
@@ -350,8 +350,8 @@ files:
     required: true
     bundled: true
     system: sinclair-zx80
-    source_ref: "src/cpu.c:3357-3362, src/cpu.c:3689-3699, src/utils.c:4130"
-    note: "Serves ZX80, TK80 and TK82. An 8192-byte file is accepted as-is so the ZX81 ROM can run on a ZX80 (src/cpu.c:3693)."
+    source_ref: "src/cpu.c:3422-3427, src/cpu.c:3754-3764, src/utils.c:4130"
+    note: "Serves ZX80, TK80 and TK82. An 8192-byte file is accepted as-is so the ZX81 ROM can run on a ZX80 (src/cpu.c:3758)."
 
   - name: "zx81.rom"
     size: 8192
@@ -359,7 +359,7 @@ files:
     required: true
     bundled: true
     system: sinclair-zx81
-    source_ref: "src/cpu.c:3364-3375, src/utils.c:4134"
+    source_ref: "src/cpu.c:3429-3440, src/utils.c:4134"
     note: "Serves ZX81, Timex TS1000, TK82C, TK83 and the Czerweny CZ 1000/1500 models."
 
   - name: "tk85.rom"
@@ -368,7 +368,7 @@ files:
     required: true
     bundled: true
     system: microdigital-tk85
-    source_ref: "src/cpu.c:3383-3387, src/utils.c:4132"
+    source_ref: "src/cpu.c:3448-3452, src/utils.c:4132"
     note: "The TK85 test precedes the generic ZX81 test in get_rom_size, so 10240 wins over 8192."
 
   - name: "zxpand_zx81.rom"
@@ -394,7 +394,7 @@ files:
     required: true
     bundled: true
     system: jupiter-ace
-    source_ref: "src/cpu.c:3389-3393, src/utils.c:4136"
+    source_ref: "src/cpu.c:3454-3458, src/utils.c:4136"
 
   # ============================================================
   # Sinclair QL, Cambridge Z88, MK14
@@ -407,7 +407,7 @@ files:
     required: true
     bundled: true
     system: sinclair-ql
-    source_ref: "src/cpu.c:3424-3429, src/cpu.c:3764-3773"
+    source_ref: "src/cpu.c:3489-3494, src/cpu.c:3829-3838"
     size_note: "Reads up to 131072 bytes and errors only below 16384, so the check is a minimum rather than an exact size."
 
   - name: "ql_jm.rom"
@@ -415,7 +415,7 @@ files:
     required: false
     bundled: true
     system: sinclair-ql
-    source_ref: "src/cpu.c:3428 (commented alternative), src/start.c:4870-4874"
+    source_ref: "src/cpu.c:3493 (commented alternative), src/start.c:4876-4880"
     note: "JM release. Reachable through --romfile; the switch selects ql_js.rom."
 
   - name: "tkii220.rom"
@@ -423,7 +423,7 @@ files:
     required: false
     bundled: true
     system: sinclair-ql
-    source_ref: "src/machines/ql.c:1348-1375, src/start.c:5621-5646, src/cpu.c:3797-3801"
+    source_ref: "src/machines/ql.c:1348-1375, src/start.c:5627-5652, src/cpu.c:3862-3866"
     note: "QJUMP Toolkit II 2.20, the ROM ql.c names as the example for --ql-rom-c000-file. ql_load_extra_roms() runs after the system ROM and reads 16K into memoria_ql at 0xC000 from the path the option gives; the read count is not checked."
 
   - name: "qsound_V1.94.rom"
@@ -432,7 +432,7 @@ files:
     required: false
     bundled: true
     system: sinclair-ql
-    source_ref: "src/soundchips/qsound.h:50, src/soundchips/qsound.c:329-369, src/start.c:6772-6779, src/cpu.c:3798-3801"
+    source_ref: "src/soundchips/qsound.h:50, src/soundchips/qsound.c:329-369, src/start.c:6799-6806, src/cpu.c:3863-3866"
     note: "QL Qsound firmware, read into memoria_ql at 0xC0000 once --ql-qsound-enabled is set; the read count is not checked and --ql-qsound-rom points the loader at another file. QSOUND_ROM_FILE is spelled qsound_V1.94.rom while the shipped file is Qsound_V1.94.rom, so the default only resolves on a case-insensitive filesystem."
 
   - name: "Z88OZ47.rom"
@@ -440,7 +440,7 @@ files:
     required: true
     bundled: true
     system: cambridge-z88
-    source_ref: "src/cpu.c:3395-3400, src/cpu.c:3720-3730"
+    source_ref: "src/cpu.c:3460-3465, src/cpu.c:3785-3795"
     size_note: "Reads up to 512K and errors only when nothing is read; z88_internal_rom_size is derived from the byte count, so any size is accepted."
 
   - name: "mk14.rom"
@@ -449,7 +449,7 @@ files:
     required: true
     bundled: true
     system: science-of-cambridge-mk14
-    source_ref: "src/cpu.c:3431-3433, src/utils.c:4148"
+    source_ref: "src/cpu.c:3496-3498, src/utils.c:4148"
 
   # ============================================================
   # Amstrad CPC and PCW
@@ -461,7 +461,7 @@ files:
     required: true
     bundled: true
     system: amstrad-cpc
-    source_ref: "src/cpu.c:3403-3409, src/utils.c:4140"
+    source_ref: "src/cpu.c:3468-3474, src/utils.c:4140"
     note: "Serves CPC 464 and CPC 4128."
 
   - name: "cpc664.rom"
@@ -470,7 +470,7 @@ files:
     required: true
     bundled: true
     system: amstrad-cpc
-    source_ref: "src/cpu.c:3411-3413, src/utils.c:4142"
+    source_ref: "src/cpu.c:3476-3478, src/utils.c:4142"
 
   - name: "cpc6128.rom"
     size: 49152
@@ -478,7 +478,7 @@ files:
     required: true
     bundled: true
     system: amstrad-cpc
-    source_ref: "src/cpu.c:3415-3417, src/utils.c:4142"
+    source_ref: "src/cpu.c:3480-3482, src/utils.c:4142"
 
   - name: "pcw_boot.rom"
     size: 275
@@ -486,8 +486,8 @@ files:
     required: true
     bundled: true
     system: pcw
-    source_ref: "src/cpu.c:3435-3441, src/cpu.c:3785-3791, src/utils.c:4150"
-    note: "Boot block the PCW pulls into RAM rather than a mapped ROM (src/cpu.c:3784). Serves PCW 8256 and 8512."
+    source_ref: "src/cpu.c:3500-3506, src/cpu.c:3850-3856, src/utils.c:4150"
+    note: "Boot block the PCW pulls into RAM rather than a mapped ROM (src/cpu.c:3849). Serves PCW 8256 and 8512."
 
   - name: "pcw_8x_boot1.dsk"
     size: 194864
@@ -515,7 +515,7 @@ files:
     required: true
     bundled: true
     system: sam-coupe
-    source_ref: "src/cpu.c:3419-3422, src/utils.c:4144"
+    source_ref: "src/cpu.c:3484-3487, src/utils.c:4144"
 
   - name: "atomlite.rom"
     size: 32768
@@ -523,7 +523,7 @@ files:
     required: false
     bundled: true
     system: sam-coupe
-    source_ref: "src/cpu.c:3420, src/utils.c:4144"
+    source_ref: "src/cpu.c:3485, src/utils.c:4144"
     note: "Replaces samcoupe.rom when Atom Lite emulation is on."
 
   - name: "samram.rom"
@@ -554,14 +554,14 @@ files:
     required: true
     bundled: true
     system: colecovision
-    source_ref: "src/cpu.c:3320-3322, src/utils.c:4120"
+    source_ref: "src/cpu.c:3385-3387, src/utils.c:4120"
 
   - name: "sg1000.rom"
     size: 155
     required: true
     bundled: true
     system: sg-1000
-    source_ref: "src/cpu.c:3324-3326, src/cpu.c:3658-3662"
+    source_ref: "src/cpu.c:3389-3391, src/cpu.c:3723-3727"
     size_note: "Nothing is read from this file. The SG-1000 branch is empty and the source comment states the file only has to exist for the open to succeed."
 
   - name: "sms.rom"
@@ -570,7 +570,7 @@ files:
     required: true
     bundled: true
     system: sega-mastersystem
-    source_ref: "src/cpu.c:3328-3330, src/utils.c:4124"
+    source_ref: "src/cpu.c:3393-3395, src/utils.c:4124"
 
   - name: "msx.rom"
     size: 32768
@@ -578,7 +578,7 @@ files:
     required: true
     bundled: true
     system: msx
-    source_ref: "src/cpu.c:3332-3334, src/utils.c:4126"
+    source_ref: "src/cpu.c:3397-3399, src/utils.c:4126"
 
   - name: "svi.rom"
     size: 32768
@@ -586,7 +586,7 @@ files:
     required: true
     bundled: true
     system: spectravideo
-    source_ref: "src/cpu.c:3336-3339, src/utils.c:4128"
+    source_ref: "src/cpu.c:3401-3404, src/utils.c:4128"
     note: "Serves SVI-318 and SVI-328."
 
   # ============================================================
@@ -664,7 +664,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/storage/zxmmcplus.h:30, src/start.c:5950-5953, src/storage/zxmmcplus.c:756-778"
+    source_ref: "src/storage/zxmmcplus.h:30, src/start.c:5956-5959, src/storage/zxmmcplus.c:756-778"
     note: "ZXMMC+ flash ROM image, the default for --zxmmcplus-flash-file."
     size_note: "The image holds ROM and RAM together, so the check is ZXMMCPLUS_FLASHROM_SIZE + ZXMMCPLUS_RAM_SIZE, not the 512K ROM constant alone."
 
@@ -674,7 +674,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/machines/zxuno.h:29, src/machines/zxuno.h:80, src/start.c:4910-4913, src/cpu.c:3539, src/machines/zxuno.c:1186-1208"
+    source_ref: "src/machines/zxuno.h:29, src/machines/zxuno.h:80, src/start.c:4916-4919, src/cpu.c:3604, src/machines/zxuno.c:1186-1208"
     note: "ZX-Uno SPI flash image, loaded by zxuno_load_spi_flash() right after the bootloader. Default for --zxunospifile. ZXUNO_SPI_SIZE is 4096 KB."
 
   # ============================================================
@@ -687,7 +687,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/copy_interfaces/multiface.c:224, src/copy_interfaces/multiface.c:232-242, src/menu/menu_items.c:42277-42282"
+    source_ref: "src/copy_interfaces/multiface.c:224, src/copy_interfaces/multiface.c:232-242, src/menu/menu_items.c:42575-42580"
     note: "Multiface One. The file selector rejects anything that is not exactly 8 KB."
 
   - name: "mf128.rom"
@@ -696,7 +696,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/copy_interfaces/multiface.c:224, src/copy_interfaces/multiface.c:232-242, src/menu/menu_items.c:42277-42282"
+    source_ref: "src/copy_interfaces/multiface.c:224, src/copy_interfaces/multiface.c:232-242, src/menu/menu_items.c:42575-42580"
     note: "Multiface 128."
 
   - name: "mf3.rom"
@@ -705,7 +705,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/copy_interfaces/multiface.c:224, src/copy_interfaces/multiface.c:232-242, src/menu/menu_items.c:42277-42282"
+    source_ref: "src/copy_interfaces/multiface.c:224, src/copy_interfaces/multiface.c:232-242, src/menu/menu_items.c:42575-42580"
     note: "Multiface 3."
 
   - name: "specmate.rom"
@@ -837,7 +837,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/menu/menu_items.c:41821-41847"
+    source_ref: "src/menu/menu_items.c:42119-42145"
     note: "Spectrum program the emulator injects to dump RAM to tape."
 
   # ============================================================
@@ -871,21 +871,21 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/start.c:4870-4874, src/cpu.c:3455-3458"
+    source_ref: "src/start.c:4876-4880, src/cpu.c:3520-3523"
 
   - name: "tk90x_v1br.rom"
     size: 16384
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:97, src/start.c:4870-4874, src/cpu.c:3455-3458"
+    source_ref: "src/ALTERNATEROMS:97, src/start.c:4876-4880, src/cpu.c:3520-3523"
 
   - name: "tk90x_v2es.rom"
     size: 16384
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:98, src/start.c:4870-4874, src/cpu.c:3455-3458"
+    source_ref: "src/ALTERNATEROMS:98, src/start.c:4876-4880, src/cpu.c:3520-3523"
     note: "Corrected TK90X ROM."
 
   - name: "tk95es_modif.rom"
@@ -893,7 +893,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:101-106, src/start.c:4870-4874, src/cpu.c:3455-3458"
+    source_ref: "src/ALTERNATEROMS:101-106, src/start.c:4876-4880, src/cpu.c:3520-3523"
     note: "TK95 Spanish ROM with message and symbol fixes by Rodolfo Edison Guerra."
 
   - name: "Z88OZ431.rom"
@@ -901,49 +901,49 @@ files:
     required: false
     bundled: true
     system: cambridge-z88
-    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88OZ441.rom"
     size: 524288
     required: false
     bundled: true
     system: cambridge-z88
-    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88OZ45.rom"
     size: 524288
     required: false
     bundled: true
     system: cambridge-z88
-    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88OZ46.rom"
     size: 524288
     required: false
     bundled: true
     system: cambridge-z88
-    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88UK220.rom"
     size: 131072
     required: false
     bundled: true
     system: cambridge-z88
-    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88UK300.rom"
     size: 131072
     required: false
     bundled: true
     system: cambridge-z88
-    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88UK400.rom"
     size: 131072
     required: false
     bundled: true
     system: cambridge-z88
-    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "aszmice07.rom"
     path: "alternate_roms/aszmice07.rom"
@@ -951,7 +951,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx81
-    source_ref: "src/ALTERNATEROMS:4-5, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:4-5, src/start.c:4876-4880"
     note: "ASZMIC E07 replacement ROM with assembler and debugger. The 4K image is stored twice to reach 8K."
 
   - name: "sp-rom.rom"
@@ -960,7 +960,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx81
-    source_ref: "src/ALTERNATEROMS:7-9, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:7-9, src/start.c:4876-4880"
     note: "Comprocsys SP ROM add-on card, loaded at address 2000H."
 
   - name: "ace.rom"
@@ -970,7 +970,7 @@ files:
     bundled: true
     system: jupiter-ace
     variant_group: "jupiter-ace-rom"
-    source_ref: "src/ALTERNATEROMS:11-12, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:11-12, src/start.c:4876-4880"
     note: "Jupiter Ace ROM patched by Dutra Lacerda, distinct from the root ace.rom."
 
   - name: "opense.rom"
@@ -979,7 +979,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:14-15, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:14-15, src/start.c:4876-4880"
     note: "OpenSE BASIC 3.1.2 for the 48K."
 
   - name: "sebasic4_rom1.rom"
@@ -988,7 +988,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:18-19, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:18-19, src/start.c:4876-4880"
     note: "SE BASIC 4.1.0 standalone ROM 1 for the 48K."
 
   - name: "derby_p_32K.rom"
@@ -997,7 +997,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:21-23, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:21-23, src/start.c:4876-4880"
     note: "Derby+ for 128K machines with 32K of ROM."
 
   - name: "derby_pp_64K.rom"
@@ -1006,7 +1006,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:21-23, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:21-23, src/start.c:4876-4880"
     note: "Derby++ for 128K machines with 64K of ROM."
 
   - name: "plus2c.rom"
@@ -1015,7 +1015,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:40-41, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:40-41, src/start.c:4876-4880"
     note: "Unofficial +2C ROM by Andrew Owen, for 128K/+2."
 
   - name: "plus2b.rom"
@@ -1024,7 +1024,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:46-76, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:46-76, src/start.c:4876-4880"
     note: "+2B ROM set for +2A/+3: 128 editor, 48K BASIC, BBC BASIC, OpenSE BASIC 3.1.1."
 
   - name: "plus3e_mmcen3eE.rom"
@@ -1033,7 +1033,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/cpu.h:365, src/menu/menu_items.c:30678-30688, src/ALTERNATEROMS:26-30"
+    source_ref: "src/cpu.h:369, src/menu/menu_items.c:30976-30986, src/ALTERNATEROMS:26-30"
     note: "+3e v1.38 English for MMC. Resolved by name through find_sharedfile for the +2e/+3e MMC machine preset."
 
   - name: "plus3e_mmces3eE.rom"
@@ -1042,7 +1042,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:26-30, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:26-30, src/start.c:4876-4880"
     note: "+3e v1.38 Spanish for MMC."
 
   - name: "plus3e_sm8en3eE.rom"
@@ -1051,7 +1051,7 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:32-36, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:32-36, src/start.c:4876-4880"
     note: "+3e v1.38 English for simple 8-bit IDE."
 
   - name: "plus3e_sm8es3eE.rom"
@@ -1060,5 +1060,5 @@ files:
     required: false
     bundled: true
     system: sinclair-zx-spectrum
-    source_ref: "src/ALTERNATEROMS:32-36, src/start.c:4870-4874"
+    source_ref: "src/ALTERNATEROMS:32-36, src/start.c:4876-4880"
     note: "+3e v1.38 Spanish for simple 8-bit IDE."

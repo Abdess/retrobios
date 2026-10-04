@@ -4,7 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/libretro/arduous"
 upstream: "https://github.com/jmaroeder/arduous"
 profiled_date: "2026-03-23"
-source_commit: "798e3950f1de7c69455bc988d55eafeebac5a1eb"
+source_commit: "831b83e67ad46e8c86b8165649ff81bc6fc6c157"
 core_version: "0.1.0"
 display_name: "Arduboy (Arduous)"
 cores:

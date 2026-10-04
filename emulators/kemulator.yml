@@ -5,7 +5,7 @@ source: "https://github.com/shinovon/KEmulator"
 upstream: "https://github.com/shinovon/KEmulator"
 author: "shinovon"
 profiled_date: "2026-08-11"
-source_commit: "0101182"
+source_commit: "769149212e167512b7792953f7646e543d29b9af"
 core_version: "2.21.5"
 display_name: "Mobile - J2ME (KEmulator nnmod)"
 cores:
@@ -172,7 +172,7 @@ files:
     validation: [existence]
     description: "Device presets: screen sizes, key maps, platform identities"
     note: "Devices.load reads the PresetsPath setting, /res/presets.xml by default, as a jar resource and falls back to a disk read when the resource is absent, which is how a user-supplied preset file is picked up."
-    source_ref: "src/main/emulator/Settings.java:131, src/main/emulator/Devices.java:25-50, src/main/emulator/Emulator.java:638"
+    source_ref: "src/main/emulator/Settings.java:131, src/main/emulator/Devices.java:25-50, src/main/emulator/Emulator.java:644"
 
   - name: en.txt
     system: j2me

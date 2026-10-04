@@ -4,7 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/snes9x2010"
 upstream: "https://github.com/snes9xgit/snes9x"
 profiled_date: "2026-03-25"
-source_commit: "7db129b1ecdccb38cb4d7184bcbed39beed79656"
+source_commit: "fe690dd321fa5a46b5234a2bde089d2518c62b0e"
 core_version: "v1.52.4"
 display_name: "Nintendo - SNES / SFC (Snes9x 2010)"
 cores:
@@ -17,7 +17,7 @@ systems:
 notes: |
   Frozen snapshot of Snes9x 1.52.4, rewritten in C with optimizations
   for PS3 (originally called SNES9x Next).
-  SPC700 IPL ROM (64 bytes) embedded in src/apu.c:3643 as APUROM[64].
+  SPC700 IPL ROM (64 bytes) embedded in src/apu.c:3662 as APUROM[64].
   DSP-1 ROM data (1024 x uint16) embedded in src/dsp.c:219 as DSP1ROM[1024].
   All coprocessors (DSP-1/2/3/4, CX4, ST010/011/018, SuperFX, SPC7110,
   SA-1, S-DD1, S-RTC, OBC-1) are pure HLE.

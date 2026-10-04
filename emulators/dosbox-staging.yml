@@ -3,7 +3,7 @@ type: standalone
 core_classification: enhanced_fork
 source: "https://github.com/dosbox-staging/dosbox-staging"
 upstream: "https://github.com/dosbox-staging/dosbox-staging"
-source_commit: "639aba29163f5acff84774bf4397dcfe53a4986d"
+source_commit: "54bafc7c17e1cbb06f94dddb5803629369d6e219"
 profiled_date: "2026-08-08"
 core_version: "0.84.0-alpha"
 display_name: "DOS (DOSBox Staging)"

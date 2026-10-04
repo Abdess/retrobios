@@ -3,7 +3,7 @@ type: standalone
 source: "https://github.com/ares-emulator/ares"
 upstream: "https://github.com/ares-emulator/ares"
 profiled_date: "2026-03-26"
-source_commit: "b80f67d38312648d197762121c3a27b02c0887db"
+source_commit: "4cb8d92b441557cb6bcaf133c4cbc7f6819b1122"
 core_version: "v147"
 display_name: "ares"
 cores: [ares]
@@ -61,7 +61,7 @@ notes: |
   Firmware path resolution: settings.paths.firmware (user override) or
   {userData}/ares/Firmware/ (default). Per-system firmware assigned in
   Settings > Firmware dialog or via scan-by-hash.
-  ref: desktop-ui/settings/settings.hpp:87-99, desktop-ui/desktop-ui.cpp:68-75
+  ref: desktop-ui/settings/settings.hpp:89-101, desktop-ui/desktop-ui.cpp:68-75
 
   Systems with fully embedded firmware (no user files needed):
   Game Boy (boot.rom), Game Boy Color (boot.rom), Mega Drive (TMSS),

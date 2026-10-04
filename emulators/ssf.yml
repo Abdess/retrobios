@@ -5,6 +5,7 @@ source: "https://github.com/shimazzz/SEGASaturnEmulator-SSF"
 upstream: closed-source
 author: "Shima"
 profiled_date: "2026-08-12"
+source_commit: "432e257c312f705d5f85f298710d152240111da8"
 core_version: "PreviewVer R38"
 display_name: "Sega - Saturn/ST-V (SSF)"
 cores:

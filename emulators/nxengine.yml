@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/libretro/nxengine-libretro"
 upstream: "https://github.com/Rox64/NXEngine"
 profiled_date: "2026-03-24"
-source_commit: "a1c45fd4d045333f4ea523e556469b545be82b0a"
+source_commit: "fd1c0686f8b4c0aea9b5addbc077e3ad7da23bb7"
 core_version: "1.0.0.6"
 display_name: "Cave Story (NXEngine)"
 cores: [nxengine, nx]
@@ -17,8 +17,8 @@ notes: |
 
   The core requires the freeware Cave Story distribution placed in
   {system_dir}/nxengine/. When launched without content, it looks for
-  Doukutsu.exe there (nxengine/libretro/libretro.cpp:273-278). When launched with a .exe
-  content file, it uses the parent directory of that file (nxengine/libretro/libretro.cpp:256).
+  Doukutsu.exe there (nxengine/libretro/libretro.cpp:289-294). When launched with a .exe
+  content file, it uses the parent directory of that file (nxengine/libretro/libretro.cpp:272).
 
   At startup (main.cpp:75-90), the core opens Doukutsu.exe and extracts:
   ORG music (extractorg.c), PXT sound effects (extractpxt.c), stage tile
@@ -33,7 +33,7 @@ notes: |
   The font is compiled-in (bitmap_font.h). The upstream standalone version
   uses font.ttf via SDL_ttf.
 
-  Valid content extension: .exe (nxengine/libretro/libretro.cpp:126).
+  Valid content extension: .exe (nxengine/libretro/libretro.cpp:142).
 
 files:
   - name: "Doukutsu.exe"
@@ -45,7 +45,7 @@ files:
     size: 1478656
     md5: "38695d3d69d7a0ada8178072dad4c58b"
     sha1: "bb2d0441e073da9c584f23c2ad8c7ab8aac293bf"
-    source_ref: "main.cpp:77-78 (opened for extraction), nxengine/libretro/libretro.cpp:274 (existence check)"
+    source_ref: "main.cpp:77-78 (opened for extraction), nxengine/libretro/libretro.cpp:290 (existence check)"
     note: "Placed in system/nxengine/. The core extracts ORG music, PXT sounds, stage tile attributes, BMP graphics, and wavetable from this binary at each launch."
 
   - name: "data/"

@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/drhelius/Gearsystem"
 upstream: "https://github.com/drhelius/Gearsystem"
 profiled_date: "2026-03-23"
-source_commit: "d547ae361bf242f25c45260aad29d4adc26e672a"
+source_commit: "3c86cbefe71cb7b18df54d0bc3aeedf552081da5"
 core_version: "3.2.0"
 display_name: "Sega - MS/GG/SG-1000 (Gearsystem)"
 cores:
@@ -34,17 +34,17 @@ files:
   - name: "bios.sms"
     system: sega-mastersystem
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:568, platforms/libretro/libretro.cpp:571 (load_bootroms)"
+    source_ref: "platforms/libretro/libretro.cpp:777, platforms/libretro/libretro.cpp:780 (load_bootroms)"
 
   - name: "bios.gg"
     system: sega-gamegear
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:858, platforms/libretro/libretro.cpp:571 (load_bootroms)"
+    source_ref: "platforms/libretro/libretro.cpp:1067, platforms/libretro/libretro.cpp:780 (load_bootroms)"
 
 platform_details:
   mastersystem:
     bios_filename: "bios.sms"
-    source_ref: "src/Memory.cpp:225-230"
+    source_ref: "src/Memory.cpp:227-232"
     note: |
       Boot ROM loaded via LoadBootromSMS() -> LoadBootroom(path, false).
       Raw binary read, stored in m_pBootromSMS. Bank count computed as
@@ -52,7 +52,7 @@ platform_details:
 
   gamegear:
     bios_filename: "bios.gg"
-    source_ref: "src/Memory.cpp:232-237"
+    source_ref: "src/Memory.cpp:234-239"
     note: |
       Boot ROM loaded via LoadBootromGG() -> LoadBootroom(path, true).
       Raw binary read, stored in m_pBootromGG. Same bank computation.
@@ -61,5 +61,5 @@ platform_details:
   sg1000:
     bios_filename: null
     note: |
-      No BIOS support. src/Memory.cpp:379-382 returns false from IsBootromEnabled()
+      No BIOS support. src/Memory.cpp:381-384 returns false from IsBootromEnabled()
       when IsSG1000() or IsGameGearInSMSMode() is true.

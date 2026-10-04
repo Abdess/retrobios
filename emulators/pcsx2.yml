@@ -7,7 +7,7 @@ upstream: "https://github.com/PCSX2/pcsx2"
 cores:
   - pcsx2
 profiled_date: "2026-03-30"
-source_commit: "aaf03c18b677905b3df4568d14efee7f58734049"
+source_commit: "81526d4dc7cc70e4ae75abb35a789417456c6d43"
 core_version: "Git"
 display_name: "Sony - PlayStation 2 (PCSX2)"
 systems: [sony-playstation-2]
@@ -64,12 +64,12 @@ files:
     path: pcsx2/resources/cheats_ws.zip
     required: false
     mode: libretro
-    source_ref: "pcsx2/VMManager.cpp:346-359"
+    source_ref: "pcsx2/VMManager.cpp:348-361"
     note: "Widescreen patches archive."
 
   - name: cheats_ni.zip
     path: pcsx2/resources/cheats_ni.zip
     required: false
     mode: libretro
-    source_ref: "pcsx2/VMManager.cpp:381-394"
+    source_ref: "pcsx2/VMManager.cpp:383-396"
     note: "No-interlacing patches archive."

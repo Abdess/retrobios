@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/fuse-libretro"
 upstream: "https://sourceforge.net/projects/fuse-emulator/"
 profiled_date: "2026-03-23"
-source_commit: "000a8ae51a5141d75c109a22150e37ba06d57910"
+source_commit: "e997e2bc32c888348f862f69f2c53babfedf7791"
 core_version: "1.6.0"
 display_name: "Sinclair - ZX Spectrum (Fuse)"
 cores:
@@ -20,7 +20,7 @@ notes: |
   ROM loading is in src/compat/file.c:91-118. The core first checks an
   internal table of embedded ROMs (mem_entries[]). If the ROM filename is
   not found there, it falls back to the filesystem at
-  {system_dir}/fuse/{rom_filename} (file.c:160-175).
+  {system_dir}/fuse/{rom_filename} (src/compat/file.c:160-175).
 
   Embedded ROMs cover 48K-family, 128K, +2, +3, +3e, SE, TC2048, TC2068.
   Pentagon, Scorpion, and peripheral ROMs are NOT embedded and must be
@@ -29,11 +29,11 @@ notes: |
   Default ROM filenames are set in fuse/settings.c:209-260. Each machine
   type loads its ROMs during reset via machine_load_rom() calls in the
   fuse/machines directory. All ROMs are size-validated at load time
-  (fuse/machine.c:289).
+  (fuse/machine.c:287).
 
-  The +2A reuses the +3 ROMs (plus3-0/1/2/3.rom) per settings.c:234-237.
-  The TS2068 reuses TC2068 ROMs (tc2068-0/1.rom) per settings.c:257-258.
-  Spectrum 16K uses 48.rom per settings.c:211.
+  The +2A reuses the +3 ROMs (plus3-0/1/2/3.rom) per fuse/settings.c:234-237.
+  The TS2068 reuses TC2068 ROMs (tc2068-0/1.rom) per fuse/settings.c:257-258.
+  Spectrum 16K uses 48.rom per fuse/settings.c:211.
 
   Upstream FUSE 1.7.0 has SP0256 speech chip (sp0256-al2.rom) and Currah
   uSpeech (uspeech.rom) peripherals not ported to libretro.
@@ -105,7 +105,7 @@ files:
     size: 16384
     validation: [size]
     note: "Spectrum +3 ROM 0. Also used for +2A. Embedded in core."
-    source_ref: "fuse/settings.c:239, fuse/settings.c:243, fuse/machines/specplus3.c:197"
+    source_ref: "fuse/settings.c:239, fuse/settings.c:243, fuse/machines/specplus3.c:193"
 
   - name: "fuse/plus3-1.rom"
     system: sinclair-zxspectrum
@@ -116,7 +116,7 @@ files:
     size: 16384
     validation: [size]
     note: "Spectrum +3 ROM 1. Also used for +2A. Embedded in core."
-    source_ref: "fuse/settings.c:240, fuse/settings.c:244, fuse/machines/specplus3.c:200"
+    source_ref: "fuse/settings.c:240, fuse/settings.c:244, fuse/machines/specplus3.c:196"
 
   - name: "fuse/plus3-2.rom"
     system: sinclair-zxspectrum
@@ -127,7 +127,7 @@ files:
     size: 16384
     validation: [size]
     note: "Spectrum +3 ROM 2. Also used for +2A. Embedded in core."
-    source_ref: "fuse/settings.c:241, fuse/settings.c:245, fuse/machines/specplus3.c:203"
+    source_ref: "fuse/settings.c:241, fuse/settings.c:245, fuse/machines/specplus3.c:199"
 
   - name: "fuse/plus3-3.rom"
     system: sinclair-zxspectrum
@@ -138,7 +138,7 @@ files:
     size: 16384
     validation: [size]
     note: "Spectrum +3 ROM 3. Also used for +2A. Embedded in core."
-    source_ref: "fuse/settings.c:242, fuse/settings.c:246, fuse/machines/specplus3.c:206"
+    source_ref: "fuse/settings.c:242, fuse/settings.c:246, fuse/machines/specplus3.c:202"
 
   - name: "fuse/plus3e-0.rom"
     system: sinclair-zxspectrum
@@ -149,7 +149,7 @@ files:
     size: 16384
     validation: [size]
     note: "Spectrum +3e ROM 0. Embedded in core."
-    source_ref: "fuse/settings.c:247, fuse/machines/specplus3e.c:70"
+    source_ref: "fuse/settings.c:247, fuse/machines/specplus3e.c:66"
 
   - name: "fuse/plus3e-1.rom"
     system: sinclair-zxspectrum
@@ -160,7 +160,7 @@ files:
     size: 16384
     validation: [size]
     note: "Spectrum +3e ROM 1. Embedded in core."
-    source_ref: "fuse/settings.c:248, fuse/machines/specplus3e.c:73"
+    source_ref: "fuse/settings.c:248, fuse/machines/specplus3e.c:69"
 
   - name: "fuse/plus3e-2.rom"
     system: sinclair-zxspectrum
@@ -171,7 +171,7 @@ files:
     size: 16384
     validation: [size]
     note: "Spectrum +3e ROM 2. Embedded in core."
-    source_ref: "fuse/settings.c:249, fuse/machines/specplus3e.c:76"
+    source_ref: "fuse/settings.c:249, fuse/machines/specplus3e.c:72"
 
   - name: "fuse/plus3e-3.rom"
     system: sinclair-zxspectrum
@@ -182,7 +182,7 @@ files:
     size: 16384
     validation: [size]
     note: "Spectrum +3e ROM 3. Same as plus3-3.rom. Embedded in core."
-    source_ref: "fuse/settings.c:250, fuse/machines/specplus3e.c:79"
+    source_ref: "fuse/settings.c:250, fuse/machines/specplus3e.c:75"
 
   - name: "fuse/se-0.rom"
     system: sinclair-zxspectrum
@@ -249,7 +249,7 @@ files:
     size: 16384
     validation: [size]
     note: "Pentagon 128K/512K/1024 ROM 0. Required for Pentagon machines."
-    source_ref: "fuse/settings.c:226, fuse/settings.c:230, fuse/settings.c:234, fuse/machines/pentagon.c:135"
+    source_ref: "fuse/settings.c:226, fuse/settings.c:230, fuse/settings.c:234, fuse/machines/pentagon.c:131"
 
   - name: "fuse/128p-1.rom"
     system: sinclair-zxspectrum
@@ -258,7 +258,7 @@ files:
     size: 16384
     validation: [size]
     note: "Pentagon 128K/512K/1024 ROM 1. Required for Pentagon machines."
-    source_ref: "fuse/settings.c:227, fuse/settings.c:231, fuse/settings.c:235, fuse/machines/pentagon.c:138"
+    source_ref: "fuse/settings.c:227, fuse/settings.c:231, fuse/settings.c:235, fuse/machines/pentagon.c:134"
 
   - name: "fuse/trdos.rom"
     system: sinclair-zxspectrum
@@ -267,7 +267,7 @@ files:
     size: 16384
     validation: [size]
     note: "TR-DOS ROM (Beta 128 disk interface). Used by Pentagon and Scorpion."
-    source_ref: "fuse/settings.c:228, fuse/settings.c:232, fuse/settings.c:236, fuse/machines/pentagon.c:141"
+    source_ref: "fuse/settings.c:228, fuse/settings.c:232, fuse/settings.c:236, fuse/machines/pentagon.c:137"
 
   - name: "fuse/gluck.rom"
     system: sinclair-zxspectrum
@@ -322,7 +322,7 @@ files:
 
     size: 8192
     validation: [size]
-    note: "Interface 1 ROM (edition 2). Loaded by peripherals/if1.c:403."
+    note: "Interface 1 ROM (edition 2). Loaded by fuse/peripherals/if1.c:403."
     source_ref: "fuse/settings.c:221, fuse/peripherals/if1.c:404"
 
   - name: "fuse/disciple.rom"

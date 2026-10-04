@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/xenia-canary/xenia-canary"
 upstream: "https://github.com/xenia-canary/xenia-canary"
 profiled_date: "2026-03-26"
-source_commit: "0e1307bd2e6bfeeff29635a6b823e72e61c97ce9"
+source_commit: "7347cd12ef6e3029db3abcf17a0760d9f74f84bd"
 core_version: "canary"
 display_name: "Xenia Canary (Xbox 360)"
 cores:

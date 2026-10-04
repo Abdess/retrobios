@@ -3,7 +3,7 @@ type: libretro
 core_classification: pure_libretro
 source: "https://github.com/libretro/libretro-directxbox"
 profiled_date: "2026-03-23"
-source_commit: "a157f3c1a68cb40dd74d5a664c0e39a245aaa59c"
+source_commit: "8b6b806675065efa7addb833e56fff7c05193bb1"
 core_version: "alpha"
 display_name: "Microsoft - Xbox (DirectXbox)"
 cores:
@@ -72,7 +72,7 @@ notes:
     acceleration. The core requires libvirt86 for x86 virtualization.
   microsoft_bios: >
     The source references xbox-3944.bin as an alternative flash ROM (Microsoft
-    retail BIOS, typically 256 KB). It is commented out in libretro.cpp:204
+    retail BIOS, typically 256 KB). It is commented out in src/libretro/libretro.cpp:204
     because ATA and OHCI hardware are not yet implemented, preventing the
     Microsoft BIOS from completing boot.
   machine_types: >

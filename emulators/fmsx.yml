@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/fmsx-libretro"
 upstream: "https://fms.komkon.org/fMSX/"
 profiled_date: "2026-03-23"
-source_commit: "f013e213458e06d9df718e4bc4b09d46f88aa899"
+source_commit: "4de11755ce4f196ac1c8a7bb20bb4eccbc87a7d4"
 core_version: "6.0"
 display_name: "Microsoft - MSX (fMSX)"
 cores:
@@ -66,7 +66,7 @@ files:
     required: true
     system: msx
     bundled: true
-    note: "MSX1 main BIOS (32 KB). Loaded for MSX1 model (fMSX/MSX.c:693)."
+    note: "MSX1 main BIOS (32 KB). Loaded for MSX1 model (fMSX/MSX.c:697)."
     source_ref: "fMSX/ROMs/MSX.ROM"
 
   # -- MSX2 BIOS --
@@ -78,7 +78,7 @@ files:
     required: true
     system: msx2
     bundled: true
-    note: "MSX2 main BIOS (32 KB). Loaded for MSX2 model (fMSX/MSX.c:709)."
+    note: "MSX2 main BIOS (32 KB). Loaded for MSX2 model (fMSX/MSX.c:713)."
     source_ref: "fMSX/ROMs/MSX2.ROM"
 
   - name: MSX2EXT.ROM
@@ -88,7 +88,7 @@ files:
     required: true
     system: msx2
     bundled: true
-    note: "MSX2 extension BIOS (16 KB). Loaded alongside MSX2.ROM (fMSX/MSX.c:710)."
+    note: "MSX2 extension BIOS (16 KB). Loaded alongside MSX2.ROM (fMSX/MSX.c:714)."
     source_ref: "fMSX/ROMs/MSX2EXT.ROM"
 
   # -- MSX2+ BIOS (default model) --
@@ -100,7 +100,7 @@ files:
     required: true
     system: msx2plus
     bundled: true
-    note: "MSX2+ main BIOS (32 KB). Loaded for MSX2+ model, the default (fMSX/MSX.c:731)."
+    note: "MSX2+ main BIOS (32 KB). Loaded for MSX2+ model, the default (fMSX/MSX.c:735)."
     source_ref: "fMSX/ROMs/MSX2P.ROM"
 
   - name: MSX2PEXT.ROM
@@ -110,7 +110,7 @@ files:
     required: true
     system: msx2plus
     bundled: true
-    note: "MSX2+ extension BIOS (16 KB). Loaded alongside MSX2P.ROM (fMSX/MSX.c:732)."
+    note: "MSX2+ extension BIOS (16 KB). Loaded alongside MSX2P.ROM (fMSX/MSX.c:736)."
     source_ref: "fMSX/ROMs/MSX2PEXT.ROM"
 
   # -- Disk support --
@@ -121,7 +121,7 @@ files:
     sha1: 032cb1c1c75b9a191fa1230978971698d9d2a17f
     required: false
     bundled: true
-    note: "Disk controller BIOS (16 KB). Needed for .dsk content. Enable 'Simulate DiskROM' option (fMSX/MSX.c:780)."
+    note: "Disk controller BIOS (16 KB). Needed for .dsk content. Enable 'Simulate DiskROM' option (fMSX/MSX.c:784)."
     source_ref: "fMSX/ROMs/DISK.ROM"
 
   # -- Optional expansion ROMs --
@@ -132,7 +132,7 @@ files:
     sha1: 9d789166e3caf28e4742fe933d962e99618c633d
     required: false
     bundled: true
-    note: "FM-PAC cartridge ROM (64 KB, YM2413 FM synthesis). Auto-loaded into first free slot (fMSX/MSX.c:557)."
+    note: "FM-PAC cartridge ROM (64 KB, YM2413 FM synthesis). Auto-loaded into first free slot (fMSX/MSX.c:561)."
     source_ref: "fMSX/ROMs/FMPAC.ROM"
 
   - name: KANJI.ROM
@@ -141,7 +141,7 @@ files:
     sha1: 84a645becec0a25d3ab7a909cde1b242699a8662
     required: false
     bundled: true
-    note: "Kanji font ROM (128 KB). Auto-loaded if present, no option needed (fMSX/MSX.c:530)."
+    note: "Kanji font ROM (128 KB). Auto-loaded if present, no option needed (fMSX/MSX.c:534)."
     source_ref: "fMSX/ROMs/KANJI.ROM"
 
   - name: MSXDOS2.ROM
@@ -150,7 +150,7 @@ files:
     sha1: c36c9e0f96738a340381e23b4f97245388801a46
     required: false
     bundled: true
-    note: "MSX-DOS 2 ROM (64 KB). Loaded when 'fmsx_dos2' option enabled and model is MSX2 or MSX2+ (fMSX/MSX.c:545)."
+    note: "MSX-DOS 2 ROM (64 KB). Loaded when 'fmsx_dos2' option enabled and model is MSX2 or MSX2+ (fMSX/MSX.c:549)."
     source_ref: "fMSX/ROMs/MSXDOS2.ROM"
 
   - name: PAINTER.ROM
@@ -159,7 +159,7 @@ files:
     sha1: 7fd2a28c4fdaeb140f3c8c8fb90271b1472c97b9
     required: false
     bundled: true
-    note: "Paint utility ROM (64 KB). Auto-loaded for MSX2 and MSX2+ models (fMSX/MSX.c:552)."
+    note: "Paint utility ROM (64 KB). Auto-loaded for MSX2 and MSX2+ models (fMSX/MSX.c:556)."
     source_ref: "fMSX/ROMs/PAINTER.ROM"
 
   - name: RS232.ROM
@@ -168,7 +168,7 @@ files:
     sha1: 7aec0134ad6a5177f4056fcb6047083e8e00529b
     required: false
     bundled: true
-    note: "RS-232C serial interface ROM (16 KB + 256 B). Loaded into slot 3:3 (fMSX/MSX.c:533)."
+    note: "RS-232C serial interface ROM (16 KB + 256 B). Loaded into slot 3:3 (fMSX/MSX.c:537)."
     source_ref: "fMSX/ROMs/RS232.ROM"
 
   # -- GameMaster (not bundled, requires core option) --
@@ -176,19 +176,19 @@ files:
   - name: GMASTER2.ROM
     required: false
     bundled: false
-    note: "Konami GameMaster2 cartridge ROM. Loaded when 'fmsx_game_master' option enabled (fMSX/MSX.c:576)."
+    note: "Konami GameMaster2 cartridge ROM. Loaded when 'fmsx_game_master' option enabled (fMSX/MSX.c:580)."
 
   - name: GMASTER.ROM
     required: false
     bundled: false
-    note: "Konami GameMaster cartridge ROM. Fallback if GMASTER2.ROM is missing (fMSX/MSX.c:580)."
+    note: "Konami GameMaster cartridge ROM. Fallback if GMASTER2.ROM is missing (fMSX/MSX.c:584)."
 
   # -- CMOS persistence (auto-generated, not a BIOS) --
 
   - name: CMOS.ROM
     required: false
     bundled: false
-    note: "RTC/CMOS settings. Auto-saved by the core on exit, auto-loaded on start (fMSX/MSX.c:526)."
+    note: "RTC/CMOS settings. Auto-saved by the core on exit, auto-loaded on start (fMSX/MSX.c:530)."
 
   # -- Text fonts (selectable via fmsx_font core option) --
 
@@ -196,29 +196,29 @@ files:
     required: false
     bundled: true
     md5: 85b38e4128bbc300e675f55b278683a8
-    note: "Default text font. Loaded by LoadFNT() (fMSX/MSX.c:523). Same content as CYRILLIC.FNT."
-    source_ref: "fMSX/ROMs/DEFAULT.FNT, libretro.c:1546"
+    note: "Default text font. Loaded by LoadFNT() (fMSX/MSX.c:527). Same content as CYRILLIC.FNT."
+    source_ref: "fMSX/ROMs/DEFAULT.FNT, libretro.c:1547"
 
   - name: ITALIC.FNT
     required: false
     bundled: true
     md5: c83e50e9f33b8dd893c414691822740d
     note: "Italic text font."
-    source_ref: "fMSX/ROMs/ITALIC.FNT, libretro.c:1546"
+    source_ref: "fMSX/ROMs/ITALIC.FNT, libretro.c:1547"
 
   - name: INTERNAT.FNT
     required: false
     bundled: true
     md5: ac4f4a90c1b1887db48ded39c9d9c847
     note: "International text font."
-    source_ref: "fMSX/ROMs/INTERNAT.FNT, libretro.c:1546"
+    source_ref: "fMSX/ROMs/INTERNAT.FNT, libretro.c:1547"
 
   - name: CYRILLIC.FNT
     required: false
     bundled: true
     md5: 85b38e4128bbc300e675f55b278683a8
     note: "Cyrillic text font. Same content as DEFAULT.FNT."
-    source_ref: "fMSX/ROMs/CYRILLIC.FNT, libretro.c:1546"
+    source_ref: "fMSX/ROMs/CYRILLIC.FNT, libretro.c:1547"
 
   - name: KOREAN.FNT
     region: [south-korea]
@@ -226,7 +226,7 @@ files:
     bundled: true
     md5: 73291e76638a2f5aa2eceb843df468f4
     note: "Korean text font."
-    source_ref: "fMSX/ROMs/KOREAN.FNT, libretro.c:1546"
+    source_ref: "fMSX/ROMs/KOREAN.FNT, libretro.c:1547"
 
   - name: JAPANESE.FNT
     region: [japan]
@@ -234,7 +234,7 @@ files:
     bundled: true
     md5: aa28f0703b951a6be8df3e28e20d263d
     note: "Japanese text font."
-    source_ref: "fMSX/ROMs/JAPANESE.FNT, libretro.c:1546"
+    source_ref: "fMSX/ROMs/JAPANESE.FNT, libretro.c:1547"
 
   # -- Cartridge identification database --
 
@@ -242,11 +242,11 @@ files:
     required: false
     bundled: false
     unsourceable: "dead legacy code path, never created or distributed, replaced by CARTS.SHA"
-    note: "CRC database for cartridge identification and mapper detection. Tried first, before CARTS.SHA (fMSX/MSX.c:2697)."
+    note: "CRC database for cartridge identification and mapper detection. Tried first, before CARTS.SHA (fMSX/MSX.c:2701)."
 
   - name: CARTS.SHA
     required: false
     bundled: true
     md5: 74b0f217fa0e2b8bb5a2f8e2ecc69da3
-    note: "SHA1 database for cartridge identification and mapper detection. Fallback when CARTS.CRC absent (fMSX/MSX.c:2712)."
+    note: "SHA1 database for cartridge identification and mapper detection. Fallback when CARTS.CRC absent (fMSX/MSX.c:2716)."
     source_ref: "fMSX/ROMs/CARTS.SHA"

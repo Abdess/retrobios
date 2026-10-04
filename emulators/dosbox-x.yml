@@ -3,7 +3,7 @@ type: standalone
 core_classification: enhanced_fork
 source: "https://github.com/joncampbell123/dosbox-x"
 upstream: "https://github.com/joncampbell123/dosbox-x"
-source_commit: "c98f5a359729f61263d88ae816a4263a7a15f12e"
+source_commit: "e013b8bf8e27ef878a646049bf5b2e732878d616"
 profiled_date: "2026-09-17"
 core_version: "2026.08.31"
 display_name: "DOS (DOSBox-X)"
@@ -25,7 +25,7 @@ notes: |
   olivetti/m24/att6300, pc3270, ega, ega200, jega, mcga, vgaonly, the S3,
   Tseng, Paradise and ATI SVGA cards, the vesa variants, and pc98/pc9801/pc9821.
   fm_towns is marked STUB in the same list.
-  ref: src/dosbox.cpp:1534-1574
+  ref: src/dosbox.cpp:1537-1577
 
   No system BIOS: the PC BIOS, VGA BIOS, video fonts, keyboard layouts, codepage
   tables, the Z: drive utilities including GLIDE2X.OVL, and the TTF text font are
@@ -46,7 +46,7 @@ notes: |
   program directory, then in the configuration directory, which is last tried
   for dosbox-x-<version>.conf; that file is written with the defaults when it
   does not exist.
-  ref: src/gui/sdlmain.cpp:8664-8740, src/misc/cross.cpp:229-245
+  ref: src/gui/sdlmain.cpp:8667-8743, src/misc/cross.cpp:229-245
 
   MT-32: libmt32emu is built from src/libs/mt32. Only four file names are ever
   opened, and each candidate is identified by exact file size then SHA1, so the
@@ -58,7 +58,7 @@ notes: |
   the MT32 names. The directory is mt32.romdir, then the working directory, then
   the resource directory, then the configuration directory. A missing pair logs
   the accepted file names and disables the device.
-  ref: src/gui/midi_mt32.h:246-275, src/dosbox.cpp:3585-3595
+  ref: src/gui/midi_mt32.h:246-275, src/dosbox.cpp:3607-3617
 
   FluidSynth reads fluid.soundfont; fluid_synth_sfload is the only check. With
   the setting empty it probes /usr/share/soundfonts/default.sf2,
@@ -84,27 +84,27 @@ notes: |
   identified by its size, which covers ASC16 and ASCFONT.15 from UCDOS and ETen
   Chinese DOS, ASC24, HZK14, HZK16, HZK24 and STDFONT.15 and STDFONT.24.
   Unset settings fall back to the built-in font data.
-  ref: src/ints/int_dosv.cpp:654-749, 1631-1710, src/dosbox.cpp:2547-2580
+  ref: src/ints/int_dosv.cpp:654-749, 1631-1710, src/dosbox.cpp:2550-2583
 
   BOOT -bios loads a BIOS image at the top of the first megabyte, truncated to
   128 KB, or 96 KB on PC-98 where it also looks for <image>.itf.rom, <image>.ITF.ROM,
   itf.rom and ITF.ROM to serve the bank switched Initial Firmware Test region
   through port 43Dh.
-  ref: src/dos/dos_programs.cpp:2225-2226, 2249-2338
+  ref: src/dos/dos_programs.cpp:2227-2228, 2261-2350
 
   BIOSTEST.COM loads an image of up to 64 KB at F000:0 and restarts the CPU at
   the reset vector; it is compiled only when the debugger is enabled. The
   settings call binary on reset and call binary on boot load blobs of up to
   128 KB into the ROM BIOS area for CPU testing.
-  ref: src/dos/dos_programs.cpp:3589-3642, src/ints/bios.cpp:13280-13356
+  ref: src/dos/dos_programs.cpp:3666-3719, src/ints/bios.cpp:13298-13374
 
   A build configured with --enable-dosbox_agent reads the key=value file named
   by -agent-config to start the RPC debugger agent; the file names the
   transport and endpoint, nothing else is read from disk.
-  ref: configure.ac:1441-1448, src/gui/sdlmain.cpp:8487-8493, src/agent/protocol/agent_protocol.cpp:477-632
+  ref: configure.ac:1441-1448, src/gui/sdlmain.cpp:8490-8496, src/agent/protocol/agent_protocol.cpp:477-632
 
   Glide passthrough loads glide2x.dll, libglide2x.so or libglide2x.dylib.
-  ref: src/hardware/glide.cpp:353-359, src/dosbox.cpp:3485-3487
+  ref: src/hardware/glide.cpp:353-359, src/dosbox.cpp:3507-3509
 
   ttf.font, ttf.fontbold, ttf.fontital and ttf.fontboit name a TTF, OTF, FON or
   TTC font resolved through the same search order plus the system font
@@ -121,10 +121,10 @@ notes: |
   the customcodepage translation table, .kl layout files and the KEYBOARD.SYS
   to KEYBRD4.SYS libraries read from a mounted drive, the glshaders directory
   and the .lng translations.
-  ref: src/ints/bios.cpp:11463-11472, src/gui/sdlmain.cpp:966-968, 7010-7018,
+  ref: src/ints/bios.cpp:11466-11475, src/gui/sdlmain.cpp:968-970, 7012-7020,
        src/gui/sdl_mapper.cpp:5731-5787, src/dos/dos.cpp:4402-4437,
-       src/dos/dos_keyboard_layout.cpp:300-340, src/gui/render.cpp:1538-1545,
-       src/misc/messages.cpp:294-320
+       src/dos/dos_keyboard_layout.cpp:300-340, src/gui/render.cpp:1547-1554,
+       src/misc/messages.cpp:300-326
 
 files:
   # -- MT-32 and CM-32L control ROMs --
@@ -273,7 +273,7 @@ files:
     note: >
       any SF2 or SF3 file loads; fluid.soundfont names it and
       fluid_synth_sfload is the only check
-    source_ref: "src/gui/midi_synth.h:346-384, src/gui/midi_synth.h:462-473, src/dosbox.cpp:3724"
+    source_ref: "src/gui/midi_synth.h:346-384, src/gui/midi_synth.h:462-473, src/dosbox.cpp:3746"
 
   # -- PC-98 character generator --
 
@@ -287,7 +287,7 @@ files:
       256 8x8 cells at 0x0, 256 8x16 cells at 0x800, 96 by 92 16x16 cells at
       0x1800; a file of any other length is rejected. Enabled by
       pc-98 try font rom, on by default
-    source_ref: "src/ints/int10.cpp:1487-1549, src/dosbox.cpp:2491-2492"
+    source_ref: "src/ints/int10.cpp:1487-1549, src/dosbox.cpp:2494-2495"
 
   - name: "ANEX86.BMP"
     description: "PC-98 character generator, Anex86 bitmap"
@@ -298,7 +298,7 @@ files:
       pixel, no compression, inverse colour scheme; the first row is the 8x16
       single-width set and the rest is 16x16 full-width. Also reachable through
       the pc-98 anex86 font setting, which is tried before FONT.ROM
-    source_ref: "src/ints/int10.cpp:1555-1647, src/dosbox.cpp:2495-2498"
+    source_ref: "src/ints/int10.cpp:1555-1647, src/dosbox.cpp:2498-2501"
 
   - name: "FREECG98.BMP"
     description: "PC-98 character generator, free generated bitmap"
@@ -348,32 +348,32 @@ files:
     description: "Printer Roman typeface"
     required: false
     note: "also the fallback typeface for any unmapped LQ selection"
-    source_ref: "src/hardware/parport/printer.cpp:320-321, src/hardware/parport/printer.cpp:336-337, src/dosbox.cpp:4629-4631"
+    source_ref: "src/hardware/parport/printer.cpp:320-321, src/hardware/parport/printer.cpp:336-337, src/dosbox.cpp:4691-4693"
 
   - name: "sansserif.ttf"
     path: "FONTS/sansserif.ttf"
     description: "Printer Sans Serif typeface"
     required: false
-    source_ref: "src/hardware/parport/printer.cpp:323-324, src/dosbox.cpp:4629-4631"
+    source_ref: "src/hardware/parport/printer.cpp:323-324, src/dosbox.cpp:4691-4693"
 
   - name: "courier.ttf"
     path: "FONTS/courier.ttf"
     description: "Printer Courier typeface"
     required: false
-    source_ref: "src/hardware/parport/printer.cpp:326-327, src/dosbox.cpp:4629-4631"
+    source_ref: "src/hardware/parport/printer.cpp:326-327, src/dosbox.cpp:4691-4693"
 
   - name: "script.ttf"
     path: "FONTS/script.ttf"
     description: "Printer Script typeface"
     required: false
-    source_ref: "src/hardware/parport/printer.cpp:329-330, src/dosbox.cpp:4629-4631"
+    source_ref: "src/hardware/parport/printer.cpp:329-330, src/dosbox.cpp:4691-4693"
 
   - name: "ocra.ttf"
     path: "FONTS/ocra.ttf"
     description: "Printer OCR-A typeface"
     required: false
     note: "serves both the OCR-A and OCR-B selections"
-    source_ref: "src/hardware/parport/printer.cpp:332-334, src/dosbox.cpp:4629-4631"
+    source_ref: "src/hardware/parport/printer.cpp:332-334, src/dosbox.cpp:4691-4693"
 
   # -- PC-98 sound board BIOS --
 
@@ -386,7 +386,7 @@ files:
     note: >
       16 KB read into CC000h from the working directory only, when
       pc-98 sound bios and pc-98 load sound bios rom file are both set
-    source_ref: "src/hardware/pc98_fm.cpp:367-385, src/dosbox.cpp:2392-2399"
+    source_ref: "src/hardware/pc98_fm.cpp:367-385, src/dosbox.cpp:2395-2402"
 
   # -- Video BIOS ROM images --
   # Loaded in place of the built-in INT 10h when vga bios use rom image is set.
@@ -400,7 +400,7 @@ files:
     max_size: 65536
     validation: [size]
     note: "default file name for machine = svga_et4000"
-    source_ref: "src/dosbox.cpp:943-994, src/dosbox.cpp:2759-2770"
+    source_ref: "src/dosbox.cpp:943-994, src/dosbox.cpp:2762-2773"
 
   - name: "TRIO64 (Ver. 1.5-07) [VGA] (S3 Incorporated).bin"
     description: "S3 Trio64 video BIOS"
@@ -411,7 +411,7 @@ files:
     max_size: 65536
     validation: [size]
     note: "default file name for machine = svga_s3"
-    source_ref: "src/dosbox.cpp:951-953, src/dosbox.cpp:2759-2770"
+    source_ref: "src/dosbox.cpp:951-953, src/dosbox.cpp:2762-2773"
 
   - name: "ibm-vga.bin"
     description: "IBM VGA option ROM of 10/27/86, laid out as mapped at C000:0"
@@ -424,7 +424,7 @@ files:
       read by LOADROM.COM from a mounted local drive; accepted when the file
       starts with 55 AA, byte 3 masked with 0xFC equals 0xE8 and the string IBM
       appears at offset 0x1E, and the machine is EGA or better
-    source_ref: "src/dos/dos_programs.cpp:3529-3555, src/dos/dos_programs.cpp:3566-3572"
+    source_ref: "src/dos/dos_programs.cpp:3606-3632, src/dos/dos_programs.cpp:3643-3649"
 
   # -- IBM ROM BASIC --
 
@@ -441,7 +441,7 @@ files:
       32 KB to 64 KB in 4 KB steps; LOADROM.COM maps the same image at F600:0
       when it is exactly 32768 bytes, starts with E9 8F 7E and carries the
       string IBM at offset 0x4CD4
-    source_ref: "src/ints/bios.cpp:13212-13232, src/dos/dos_programs.cpp:3556-3560, src/dosbox.cpp:1945-1947"
+    source_ref: "src/ints/bios.cpp:13230-13250, src/dos/dos_programs.cpp:3633-3637, src/dosbox.cpp:1948-1950"
 
   # -- PCjr --
 
@@ -456,7 +456,7 @@ files:
       read during PCjr cartridge boot; bytes 0x3000 to 0xDFFF are copied to
       physical F3000. A short read leaves the region untouched and the cartridge
       still boots
-    source_ref: "src/dos/dos_programs.cpp:3067-3076"
+    source_ref: "src/dos/dos_programs.cpp:3079-3088"
 
   # -- Whole system BIOS images --
 
@@ -467,7 +467,7 @@ files:
       loaded at the top of the first megabyte, rounded up to a paragraph and
       truncated to 128 KB, or to 96 KB on PC-98; a larger image is clamped
       rather than rejected
-    source_ref: "src/dos/dos_programs.cpp:2249-2299"
+    source_ref: "src/dos/dos_programs.cpp:2261-2311"
 
   - name: "ITF.ROM"
     description: "PC-98 Initial Firmware Test BIOS"
@@ -478,4 +478,4 @@ files:
       served through the port 43Dh bank switch alongside a BOOT -bios image;
       <image>.itf.rom is tried before the bare name so one directory can hold
       several
-    source_ref: "src/dos/dos_programs.cpp:2301-2332"
+    source_ref: "src/dos/dos_programs.cpp:2313-2344"

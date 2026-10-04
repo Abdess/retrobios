@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/LekKit/RVVM"
 upstream: "https://github.com/LekKit/RVVM"
 profiled_date: "2026-03-25"
-source_commit: "a662c0edd507b4e04f20d44490c514b683007ae7"
+source_commit: "d6eae2ed964ee9c65f846be657a93cd100d072a7"
 core_version: "0.6-git"
 display_name: "RVVM"
 cores: [rvvm]
@@ -45,7 +45,7 @@ files:
   - name: "fw_payload.bin"
     path: "rvvm/fw_payload.bin"
     required: true
-    source_ref: "src/bindings/libretro/libretro.c:309-314, src/core/rvvm.c:625-632"
+    source_ref: "src/bindings/libretro/libretro.c:309-314, src/core/rvvm.c:628-635"
     note: >
       M-mode firmware loaded at 0x80000000. Typically OpenSBI with U-Boot
       payload (fw_payload.bin) or standalone (fw_jump.bin). Referenced by
@@ -54,7 +54,7 @@ files:
   - name: "Image"
     path: "rvvm/Image"
     required: false
-    source_ref: "src/bindings/libretro/libretro.c:316-318, src/core/rvvm.c:634-642"
+    source_ref: "src/bindings/libretro/libretro.c:316-318, src/core/rvvm.c:637-645"
     note: >
       S-mode kernel payload loaded at offset 0x200000 (rv64) or 0x400000
       (rv32) from RAM base. Only needed with fw_jump.bin as bootrom.
@@ -64,7 +64,7 @@ files:
     path: "rvvm/machine.dtb"
     required: false
     mode: standalone
-    source_ref: "src/main.c:214, src/core/rvvm.c:645-652"
+    source_ref: "src/main.c:220, src/core/rvvm.c:648-655"
     note: >
       Custom Flattened Device Tree. The core auto-generates a DTB based on
       machine configuration. The libretro binding does not parse a dtb= key

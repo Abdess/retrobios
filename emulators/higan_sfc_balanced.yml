@@ -4,7 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/libretro/nSide"
 upstream: "https://gitlab.com/higan/higan"
 profiled_date: "2026-09-17"
-source_commit: "f8a3ac45ef31a3a367d0a9ecd925110124e73eff"
+source_commit: "5b2b5da3a9654d88b2e51fb7a1637808ac601a18"
 upstream_commit: "3353efd3a1087f4d16d9b9fd2a8e465087ab8ec0"
 core_version: "106.25"
 display_name: "Nintendo - SNES / SFC (nSide Balanced)"

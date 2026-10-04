@@ -3,7 +3,7 @@ type: standalone
 source: "https://github.com/Vita3K/Vita3K"
 upstream: "https://github.com/Vita3K/Vita3K"
 profiled_date: "2026-03-29"
-source_commit: "69fd32ef9d00be3f92330b7330d00225e06b598d"
+source_commit: "df2880875f397ff8c6e76513ed5d7d0a947af9a0"
 core_version: "0.2.1"
 display_name: "Vita3K (PS Vita)"
 cores:
@@ -32,7 +32,7 @@ files:
       Games load LLE modules from vs0/sys/external/*.suprx. Preload modules
       (libc, libSceFt2, libpvf) are always LLE. Without firmware most games fail.
       Some simple titles may run on HLE alone.
-    source_ref: "vita3k/packages/src/pup.cpp:260-314, vita3k/app/src/app.cpp:175, vita3k/module/src/load_module.cpp:142-161, 187"
+    source_ref: "vita3k/packages/src/pup.cpp:260-314, vita3k/app/src/app.cpp:176, vita3k/module/src/load_module.cpp:142-161, 187"
 
   - name: PSP2UPDAT.PUP
     path: "psvita/PSP2UPDAT.PUP"
@@ -42,7 +42,7 @@ files:
       Supplementary firmware font package. Populates the sa0 partition with
       system fonts (PVF format), which the renderer registers as the firmware
       font directory when the partition holds content.
-    source_ref: "vita3k/packages/src/pup.cpp:296-297, vita3k/app/src/app.cpp:176, vita3k/renderer/src/renderer.cpp:121-127"
+    source_ref: "vita3k/packages/src/pup.cpp:296-297, vita3k/app/src/app.cpp:177, vita3k/renderer/src/renderer.cpp:121-127"
 
 notes: |
   Standalone PS Vita emulator. No libretro core.

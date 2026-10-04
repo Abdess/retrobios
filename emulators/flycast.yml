@@ -5,7 +5,7 @@ source: "https://github.com/libretro/flycast"
 upstream: "https://github.com/flyinghead/flycast"
 logo: "https://raw.githubusercontent.com/flyinghead/flycast/master/shell/linux/flycast.png"
 profiled_date: "2026-03-23"
-source_commit: "45bd2f4e59708a7c16a5bb1cb90a94d1b39e330d"
+source_commit: "bde196bfbf541435d0e7d3e3fa91dbd154e7c502"
 core_version: "0.1"
 display_name: "Sega - Dreamcast/Naomi (Flycast)"
 cores:
@@ -35,25 +35,25 @@ notes: |
   - NAOMI flat boot ROM search includes epr-21576d.bin fallback not in upstream.
 
   BIOS file search uses prefix + name pattern. The libretro port appends "dc/"
-  to the system directory (libretro.cpp:1972). All files below are relative
+  to the system directory (core/libretro/libretro.cpp:1972). All files below are relative
   to system_dir/dc/.
 
-  The prefix is determined by platform (sb_mem.cpp:32-49):
+  The prefix is determined by platform (core/hw/holly/sb_mem.cpp:32-49):
     Dreamcast   -> dc_
     Dev Unit    -> hkt_
     NAOMI       -> naomi_
     Atomiswave  -> (no prefix, BIOS loaded from awbios.zip)
 
-  Boot ROM search pattern (sb_mem.cpp:51-68):
+  Boot ROM search pattern (core/hw/holly/sb_mem.cpp:51-68):
     {prefix}boot.bin, {prefix}boot.bin.bin, {prefix}bios.bin, {prefix}bios.bin.bin
-  NAOMI also tries: epr-21576d.bin (sb_mem.cpp:59)
-  Flash/NVRAM search pattern (sb_mem.cpp:231):
+  NAOMI also tries: epr-21576d.bin (core/hw/holly/sb_mem.cpp:59)
+  Flash/NVRAM search pattern (core/hw/holly/sb_mem.cpp:231):
     {prefix}nvmem.bin, {prefix}flash_wb.bin, {prefix}flash.bin, {prefix}flash.bin.bin
 
   BIOS[] also declares airlbios and naomigd. No entry of Games[] carries
   either name in its bios field and naomi_LoadBios is only ever called with
   that field or the literal naomi, so neither archive is opened.
-  ref: naomi_cart.cpp:79,229-240,476-479, naomi_roms.h:79,191
+  ref: core/hw/naomi/naomi_cart.cpp:79,229-240,476-479, core/hw/naomi/naomi_roms.h:79,191
 
 files:
   # -------------------------------------------------------

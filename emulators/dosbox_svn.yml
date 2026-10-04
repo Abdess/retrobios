@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/dosbox-svn"
 upstream: "https://sourceforge.net/projects/dosbox/"
 profiled_date: "2026-03-23"
-source_commit: "53ca2f6303a652d129321cfc521f000cd7ec5531"
+source_commit: "46a3164fc0f1e808ae56143d81698b00fb6b4781"
 core_version: "SVN"
 display_name: "DOS (DOSBox-SVN)"
 cores: [dosbox_svn]
@@ -19,7 +19,7 @@ notes: |
   (ALSA, CoreAudio, CoreMIDI, Win32, OSS) + retro_midi_interface.
   ref: src/gui/midi.cpp
 
-  system_directory set and logged (libretro/libretro.cpp:1411-1413), never used
+  system_directory set and logged (libretro/libretro.cpp:1438-1440), never used
   to load files. Config uses retro_save_directory (src/misc/cross.cpp:61-71).
   Keyboard layouts and codepages embedded in binary.
   ref: dos_keyboard_layout_data.h, dos_codepages.h

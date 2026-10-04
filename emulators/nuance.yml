@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/WizzardSK/nuance-libretro"
 upstream: "https://github.com/andkrau/NuanceResurrection"
 profiled_date: "2026-09-03"
-source_commit: "700d28553f3a06b16385ed9e48f194377e131b03"
+source_commit: "daf3ca642756a559ecce91e10da0e73cbad180ff"
 upstream_commit: "700d28553f3a06b16385ed9e48f194377e131b03"
 core_version: "0.6.7"
 display_name: "VM Labs - NUON (Nuance)"
@@ -27,7 +27,7 @@ notes: |
 
   retro_load_game looks for <system>/nuance/bios.cof and changes the working
   directory to <system>/nuance when it exists, else to the directory of the
-  core library when bios.cof sits beside it (src/libretro.cpp:313-352). Every
+  core library when bios.cof sits beside it (src/libretro.cpp:332-371). Every
   data file is then opened by bare name from the working directory. InitBios
   loads bios.cof into MPE3 and MediaInitMPE loads minibios.cof into MPE0
   (minibiosX.cof on MPEs 1 to 3). A failed load prints "Missing File!" and
@@ -43,10 +43,10 @@ notes: |
   neither extra section.
 
   nuance.cfg is read from the working directory, then from the directory of
-  the running executable (src/NuonEnvironment.cpp:533-549); without it the
+  the running executable (src/NuonEnvironment.cpp:547-563); without it the
   values set in NuonEnvironment::Init apply. The GLSL shaders are opened from
   the working directory and fall back to the copies compiled into the binary
-  (src/ShaderProgram.cpp:85-135, src/embedded_shaders.h). FlashEEPROM.bin is
+  (src/ShaderProgram.cpp:94-144, src/embedded_shaders.h). FlashEEPROM.bin is
   read by the FlashEEPROM constructor and written by the destructor, both
   relative to the process working directory at load and unload of the core
   (src/FlashEEPROM.h:36-51). Game data (nuon.run, nuon.dat) is read from the
@@ -61,7 +61,7 @@ files:
     md5: "23bf80c259f182f582beeb368aba98f5"
     required: true
     bundled: true
-    source_ref: "src/libretro.cpp:313-352, src/NuonEnvironment.cpp:581, src/NuonEnvironment.cpp:603-605, src/bios.cpp:566-582, src/coff.cpp:47-70"
+    source_ref: "src/libretro.cpp:332-371, src/NuonEnvironment.cpp:595, src/NuonEnvironment.cpp:617-619, src/bios.cpp:566-582, src/coff.cpp:47-70"
     note: >
       Loaded into MPE3 by InitBios. The 2007 build shipped in the release
       archives (19410 bytes, sha1 4f42ed8f5e171cc79112d1c1e201381e83b1fc0d)
@@ -102,7 +102,7 @@ files:
     md5: "20becfdb932042f8ab47c098e92a12ed"
     required: false
     bundled: true
-    source_ref: "src/NuonEnvironment.cpp:533-549, src/NuonEnvironment.cpp:917-1056"
+    source_ref: "src/NuonEnvironment.cpp:547-563, src/NuonEnvironment.cpp:931-1070"
     note: >
       Read from the working directory, then beside the running executable.
       Absent file leaves the defaults of NuonEnvironment::Init in place.
@@ -116,7 +116,7 @@ files:
     required: false
     bundled: true
     has_builtin: true
-    source_ref: "src/video.cpp:119, src/ShaderProgram.cpp:85-135, src/embedded_shaders.h:31-52"
+    source_ref: "src/video.cpp:129, src/ShaderProgram.cpp:94-144, src/embedded_shaders.h:31-52"
     note: >
       Opened from the working directory; the copy compiled into the binary is
       used when the file is absent. The release archives ship the file without
@@ -131,7 +131,7 @@ files:
     required: false
     bundled: true
     has_builtin: true
-    source_ref: "src/video.cpp:120, src/ShaderProgram.cpp:85-135, src/embedded_shaders.h:31-52"
+    source_ref: "src/video.cpp:130, src/ShaderProgram.cpp:94-144, src/embedded_shaders.h:31-52"
     note: >
       Selected when UseCRTshader is disabled in nuance.cfg. Same lookup and
       fallback as video_generic.vs; the release copy is 6090 bytes.
@@ -145,7 +145,7 @@ files:
     required: false
     bundled: true
     has_builtin: true
-    source_ref: "src/video.cpp:120, src/ShaderProgram.cpp:85-135, src/embedded_shaders.h:31-52"
+    source_ref: "src/video.cpp:130, src/ShaderProgram.cpp:94-144, src/embedded_shaders.h:31-52"
     note: >
       Selected when UseCRTshader is enabled, the shipped default. Same lookup
       and fallback as video_generic.vs; the release copy is 8052 bytes.
@@ -170,4 +170,4 @@ files:
     note: >
       Read from the working directory by the standalone executables only;
       NuanceMain.cpp and NuanceMain_linux.cpp are excluded from the libretro
-      build (CMakeLists.txt:190).
+      build (CMakeLists.txt:214).

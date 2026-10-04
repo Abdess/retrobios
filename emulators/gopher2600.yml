@@ -4,7 +4,7 @@ core_classification: other
 source: "https://github.com/JetSetIlly/Gopher2600"
 upstream: "https://github.com/JetSetIlly/Gopher2600"
 profiled_date: "2026-08-08"
-source_commit: "6bfd0abeb61ff109e3e354efad8274da1ac629d6"
+source_commit: "3b0e186983c6e13af6e2f2f42530138a10d6b31b"
 core_version: "v0.57.0"
 display_name: "Atari - 2600 (Gopher2600)"
 cores:
@@ -44,7 +44,7 @@ notes: |
 
   stella.pro is Stella's cartridge properties database, read from the
   configuration directory (properties/properties.go:28,48-58). It is loaded by
-  NewDebugger (debugger/debugger.go:356), which drives play as well as debug
+  NewDebugger (debugger/debugger.go:357), which drives play as well as debug
   (gopher2600.go:261,307,326), so it applies to the plain `gopher2600 <rom>`
   invocation. A missing file is logged and start-up continues; the ROM selector
   then falls back to the filename and no television specification is inferred
@@ -107,7 +107,7 @@ files:
       Recognised by the MD5 of the 256 bytes at 0x300, so the name is the one the
       dump carries rather than one the code fixes. The carousel ROMs are only
       read once this image has been accepted.
-    source_ref: "hardware/memory/cartridge/supercharger/demounit.go:56-78, hardware/memory/cartridge/supercharger/supercharger.go:107, 115, hardware/memory/cartridge/fingerprint.go:345"
+    source_ref: "hardware/memory/cartridge/supercharger/demounit.go:56-78, hardware/memory/cartridge/supercharger/supercharger.go:107, 115, hardware/memory/cartridge/fingerprint.go:358"
 
   - name: "Starpath Demonstration Unit 1P.bin"
     system: atari-2600
@@ -177,4 +177,4 @@ files:
     system: atari-2600
     required: false
     description: "Stella cartridge properties database, keyed by cartridge MD5"
-    source_ref: "properties/properties.go:28,48-58; debugger/debugger.go:356"
+    source_ref: "properties/properties.go:28, 48-58, debugger/debugger.go:357"

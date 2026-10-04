@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/garglk/garglk"
 upstream: "https://github.com/garglk/garglk"
 profiled_date: "2026-08-08"
-source_commit: "520c3cbca2d8956d9f4b7e4e9ca2a92dce59778d"
+source_commit: "9e06211c20bee35026744424a57f50375cdc29db"
 core_version: "2026.1"
 display_name: "Interactive Fiction (Gargoyle)"
 cores:
@@ -55,7 +55,7 @@ notes: |
   interpreter loads the shipped TTF files by name from the data directory,
   then the executable directory, then the working directory, and calls
   winabort() when all three miss.
-  ref: garglk/garglk.h:675-676 (defaults), garglk/garglk.ini:205,208, garglk/fontfc.cpp:83-154
+  ref: garglk/garglk.h:694-695 (defaults), garglk/garglk.ini:205,208, garglk/fontfc.cpp:83-154
        (fontconfig lookup), garglk/draw.cpp:381-408 (path fallbacks), 300-350
        (make_font, abort), 490-498 (file names)
 
@@ -71,7 +71,7 @@ notes: |
   and themes in its themes subdirectory. macOS keeps the eight Gargoyle faces
   in Resources/Fonts and Unifont in Resources; the Windows installer also
   registers the eight faces as system fonts.
-  ref: garglk/sysqt.cpp:931-975, garglk/sysmac.mm:1001-1018, garglk/CMakeLists.txt:137,145,
+  ref: garglk/sysqt.cpp:960-1004, garglk/sysmac.mm:1013-1030, garglk/CMakeLists.txt:137,145,
        510-534, gargoyle_osx.sh:124-125,211-213, installer.nsi:89-90,208-215
 
   Themes are read from every *.json in the theme directories, which are the
@@ -79,7 +79,7 @@ notes: |
   the data directory for the AppImage. A parse failure is reported and the
   file skipped. The light and dark themes are also compiled into the binary,
   so the on-disk copies of those two replace identical entries.
-  ref: garglk/theme.cpp:266-319, garglk/sysqt.cpp:953-975, garglk/CMakeLists.txt:81-93
+  ref: garglk/theme.cpp:266-319, garglk/sysqt.cpp:982-1004, garglk/CMakeLists.txt:81-93
 
   garglk.ini is not distributed: the default config is compiled in as a string
   and written to the highest-priority user location on demand. Installing a

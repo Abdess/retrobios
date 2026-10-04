@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/blastem"
 upstream: "https://www.retrodev.com/blastem/"
 profiled_date: "2026-03-23"
-source_commit: "b4d75247ebad8852fd9bc385b423df704c6c5af5"
+source_commit: "1e0de94dc7e669c0925a22c0fccf6cdc837af0a0"
 core_version: "v0.6.3-pre"
 display_name: "Sega - Mega Drive - Genesis (BlastEm)"
 cores:
@@ -43,7 +43,7 @@ files:
     required: false
     hle_fallback: true
     note: "ROM feature database (game-specific mapper/save config). Embedded in core, external is optional override."
-    source_ref: "libblastem.c:1297-1314 read_bundled_file()"
+    source_ref: "libblastem.c:1438-1455 read_bundled_file()"
 
   # TMSS ROM — only used in standalone mode with tmss-enabled model
   # libretro build returns NULL for tmss.md (libblastem.c:541)

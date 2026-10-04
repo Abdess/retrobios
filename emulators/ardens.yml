@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/tiberiusbrown/ardens"
 upstream: "https://github.com/tiberiusbrown/ardens"
 profiled_date: "2026-03-23"
-source_commit: "661a7dd4febc8d00e790a4ecde44b936295adf97"
+source_commit: "ba7ad0dcfc196459859d304a8c483b38621c7cfa"
 core_version: "Git"
 display_name: "Arduboy (Ardens)"
 cores:
@@ -53,9 +53,9 @@ platform_details:
       All bootloaders are compiled from Intel HEX into C arrays at build
       time. The core selects the game or menu variant at reset depending
       on whether a flashcart image was loaded and the boot_to_menu config
-      flag (absim_arduboy.cpp:151-181). The bootloader is written to the
+      flag (src/absim_arduboy.cpp:151-181). The bootloader is written to the
       top of the ATmega32U4 program memory at the address defined by the
-      BOOTSZ fuse bits (absim.hpp:811).
+      BOOTSZ fuse bits (src/absim.hpp:811).
 
   embedded_flashcart_header:
     source_ref: "src/boot/boot_flashcart.c, src/absim_w25q128.hpp:14"

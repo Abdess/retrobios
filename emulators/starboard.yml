@@ -5,6 +5,7 @@ source: "https://github.com/get-starboard/starboard"
 upstream: closed-source
 author: "force9"
 profiled_date: "2026-08-12"
+source_commit: "d3a21a9aaeabb90e59d7a48241b293dba3ee9309"
 core_version: "0.23.0"
 display_name: "PortMaster library (Starboard)"
 verification: existence

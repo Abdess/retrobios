@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
 profiled_date: "2026-03-23"
-source_commit: "a251c76229f1637e433b93e29845039752771b6d"
+source_commit: "63c4190785cadd5ff84483399375871ed6e98754"
 core_version: "v1.0.0.2"
 display_name: "Arcade (FinalBurn Neo) (Neo-Geo)"
 cores:
@@ -21,7 +21,7 @@ notes: |
 
   Neo Geo games reference "neogeo" as parent ROM set. The BIOS ZIP
   must be alongside game ZIPs or in system_dir/fbneo/.
-  Search order (libretro.cpp:881-949):
+  Search order (src/burner/libretro/libretro.cpp:881-949):
     1. {system_dir}/fbneo/patched/{romName}
     2. {rom_dir}/{romName}
     3. {system_dir}/fbneo/{romName}
@@ -39,7 +39,7 @@ notes: |
   Neo Geo CDZ uses neocdz.zip with parent "neogeo". CD/CDZ BIOS plus
   zoom table.
 
-  hiscore.dat loaded from system_dir/fbneo/ (hiscore.cpp:407).
+  hiscore.dat loaded from system_dir/fbneo/ (src/burn/hiscore.cpp:407).
 
   need_fullpath=false, extensions=zip|7z|cue|ccd, savestate=deterministic.
 

@@ -5,7 +5,7 @@ source: "https://github.com/libretro/snes9x"
 upstream: "https://github.com/snes9xgit/snes9x"
 logo: "https://raw.githubusercontent.com/snes9xgit/snes9x/master/gtk/data/snes9x.svg"
 profiled_date: "2026-03-25"
-source_commit: "890b5d445538fe790aa3add3d5702c80f551e0ae"
+source_commit: "fae2fea08f74180759ef540ee94259213f503480"
 core_version: "1.61"
 display_name: "Nintendo - SNES / SFC (Snes9x)"
 systems: [nintendo-snes, nintendo-satellaview, nintendo-sufami-turbo]

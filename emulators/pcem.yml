@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/libretro-pcem"
 upstream: "https://github.com/sarah-walker-pcem/pcem"
 profiled_date: "2026-03-24"
-source_commit: "95890058d3cb4b07c455cd1d16e010a115300cee"
+source_commit: "e07923e902dcedcf65a502fb3f14e75b9ded5271"
 core_version: "v11 (PCem-mooch, based on PCem v10.1)"
 display_name: "PC (PCem)"
 cores: [pcem]

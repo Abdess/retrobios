@@ -4,7 +4,7 @@ core_classification: official_port
 source: "https://github.com/libretro/vitaquake2"
 upstream: "https://github.com/Rinnegatamante/vitaQuakeII"
 profiled_date: "2026-03-25"
-source_commit: "59a511555106eef7156c1f34d1ee6c47d11cc4ee"
+source_commit: "4b333fe18e8816974f04432af01f87654ae16e21"
 core_version: "git"
 display_name: "Quake II (vitaQuake 2)"
 cores: [vitaquake2, vitaquake2-rogue, vitaquake2-xatrix, vitaquake2-zaero]

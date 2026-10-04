@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://gitlab.com/solarus-games/solarus"
 upstream: "https://gitlab.com/solarus-games/solarus"
 profiled_date: "2026-08-08"
-source_commit: "9cafa994b10f64ce2cad8a34c9da062feab6002d"
+source_commit: "a0b5d4c966bf3f4daec2efc879378d4cf1b62ca7"
 core_version: "2.2.0"
 display_name: "Solarus Game Engine"
 cores:
@@ -23,34 +23,34 @@ notes: |
 
   The quest arrives as the content argument. get_quest_path takes the last
   non-option argv and otherwise falls back to SOLARUS_DEFAULT_QUEST, which
-  defaults to "." (MainLoop.cpp:108-121, cmake/AddOptions.cmake:8,
+  defaults to "." (src/core/MainLoop.cpp:108-121, cmake/AddOptions.cmake:8,
   include/solarus/core/Common.h:119-123). open_quest mounts that path through
   PhysFS directly, then tries <path>/data, <path>/data.solarus and
   <path>/data.solarus.zip, each both
-  relative and under PHYSFS_getBaseDir (QuestFiles.cpp:151-165), and the quest
-  counts as found once quest.dat resolves (QuestFiles.cpp:228-233). The rest
+  relative and under PHYSFS_getBaseDir (src/core/QuestFiles.cpp:151-165), and the quest
+  counts as found once quest.dat resolves (src/core/QuestFiles.cpp:228-233). The rest
   comes out of that mount: quest.dat and project_db.dat
-  (CurrentQuest.cpp:44,49), fonts under fonts/ as .png, .ttf, .otf, .ttc or .fon
-  (FontResource.cpp:65-101), shaders under shaders/ (Shader.cpp:113), tilesets,
-  sprites and music (Tileset.cpp:156-174, SpriteAnimationSet.cpp:48,
-  MusicSystem.cpp:136-142).
+  (src/core/CurrentQuest.cpp:44,49), fonts under fonts/ as .png, .ttf, .otf, .ttc or .fon
+  (src/core/FontResource.cpp:65-101), shaders under shaders/ (src/graphics/Shader.cpp:113), tilesets,
+  sprites and music (src/entities/Tileset.cpp:156-174, src/graphics/SpriteAnimationSet.cpp:48,
+  src/audio/MusicSystem.cpp:136-142).
 
   Startup reads one file from outside the quest. System::initialize probes
   SDL_GetBasePath() then SOLARUS_DATADIR_PATH for gamecontrollerdb.txt and hands
   whichever it finds to SDL through SDL_HINT_GAMECONTROLLERCONFIG_FILE
-  (System.cpp:71-99). The GLSL fallbacks are raw string literals in
-  DefaultShaders.h:57,114, and glad, hqx and snes_spc compile in from
+  (src/core/System.cpp:71-99). The GLSL fallbacks are raw string literals in
+  include/solarus/graphics/DefaultShaders.h:57,114, and glad, hqx and snes_spc compile in from
   third_party/.
 
   Files the engine writes rather than expects: settings.dat and savegames under
-  the quest write directory named in quest.dat (Settings.cpp:149-166,240-280,
-  Savegame.cpp:114), the write root from SDL_GetPrefPath (src/core/QuestFiles.cpp:721),
-  and error.txt under SOLARUS_FILE_LOGGING (Logger.cpp:29-45). Batocera's
+  the quest write directory named in quest.dat (src/core/Settings.cpp:183-200,274-314,
+  src/core/Savegame.cpp:132), the write root from SDL_GetPrefPath (src/core/QuestFiles.cpp:721),
+  and error.txt under SOLARUS_FILE_LOGGING (src/core/Logger.cpp:29-45). Batocera's
   002-pad.patch adds a read of /userdata/system/configs/solarus/pads.ini, which
   its own generator rewrites at every launch. The editor and launcher subtrees
   build separately from the root CMakeLists, which adds only cli/, tests/ and
   third_party/, and their assets are Qt resources compiled into those binaries
-  (editor/cmake/AddQtFiles.cmake:46-50, launcher/cmake/addTarget.cmake:30).
+  (editor/cmake/AddQtFiles.cmake:47-51, launcher/cmake/addTarget.cmake:30).
 
 files:
   - name: gamecontrollerdb.txt

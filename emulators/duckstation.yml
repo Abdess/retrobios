@@ -5,7 +5,7 @@ source: "https://github.com/stenzek/duckstation"
 upstream: "https://github.com/stenzek/duckstation"
 logo: "https://raw.githubusercontent.com/stenzek/duckstation/master/data/resources/images/duck.png"
 profiled_date: "2026-03-23"
-source_commit: "6f704d405b2374a35944d85e330452e4c3cbc08b"
+source_commit: "4122fed9ad3e6e5c2ecf1516cd51675a5931623e"
 core_version: "v0.1"
 display_name: "Sony - PlayStation (DuckStation)"
 cores: [duckstation]
@@ -30,7 +30,7 @@ notes: |
   only by the two settings screens, which fall back to the real filename when it
   is null.
   ref: src/core/bios.h:41-43 (field declarations)
-  ref: src/duckstation-qt/biossettingswidget.cpp:150, src/core/fullscreenui_settings.cpp:3239
+  ref: src/duckstation-qt/biossettingswidget.cpp:149, src/core/fullscreenui_settings.cpp:3301
   Lower priority = preferred. PS2 deprioritized (>= 100) for dynamic fast boot.
   Late PAL deprioritized (>= 150) due to additional regional checks.
   OpenBIOS detected by signature at offset 0x78, not by hash.

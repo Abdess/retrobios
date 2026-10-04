@@ -4,7 +4,7 @@ core_classification: frozen_snapshot
 source: "https://github.com/libretro/mame2003-libretro"
 upstream: "https://www.mamedev.org"
 profiled_date: "2026-03-24"
-source_commit: "259339e92d5f63e4b293ce0d42a069f9e8ba2a6a"
+source_commit: "b9ac708f922386a0ae1f2379dbb31b60d7ec7b25"
 core_version: "0.78"
 display_name: "Arcade (MAME 2003)"
 

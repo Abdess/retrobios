@@ -4,7 +4,7 @@ core_classification: embedded_hle
 source: "https://github.com/libretro/pcsx_rearmed"
 upstream: "https://github.com/notaz/pcsx_rearmed"
 profiled_date: "2026-03-25"
-source_commit: "05c4dbfa8e4d994820b278345316ce8cbed4209f"
+source_commit: "c8816799b50388e61cfe237fe2cdbb7d8175f20a"
 core_version: "r25"
 display_name: "Sony - PlayStation (PCSX ReARMed)"
 cores: [pcsx_rearmed, pcsx_rearmed_neon, pcsx_rearmed_interpreter]
@@ -29,7 +29,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3721-3724 (listed_bios[0])"
+    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[0])"
     note: "Preferred JP BIOS, searched first by exact filename."
 
   # -- Region: North America (PSX_REGION_US = 0) --
@@ -41,7 +41,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3721-3724 (listed_bios[1])"
+    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[1])"
     note: "Preferred US BIOS, searched first by exact filename."
 
   # -- Region: Europe (PSX_REGION_EU = 2) --
@@ -53,7 +53,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3721-3724 (listed_bios[2])"
+    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[2])"
     note: "Preferred EU BIOS, searched first by exact filename."
 
   # -- Fallback BIOS filenames (searched in order after scph550x) --
@@ -65,7 +65,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3721-3724 (listed_bios[3])"
+    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[3])"
     note: "Region detected from content at runtime. Must be 512 KB in libretro context."
 
   - name: "scph101.bin"
@@ -75,7 +75,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3721-3724 (listed_bios[4])"
+    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[4])"
     note: "PSone slim model."
 
   - name: "scph7001.bin"
@@ -85,7 +85,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3721-3724 (listed_bios[5])"
+    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[5])"
 
   - name: "scph1001.bin"
     description: "SCPH-1001 (v2.2 12-04-95 A)"
@@ -94,7 +94,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3721-3724 (listed_bios[6])"
+    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[6])"
     note: "Original US model. Last in the explicit filename search list."
 
   # -- Dynamic scan fallback --

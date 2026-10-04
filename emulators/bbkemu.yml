@@ -4,7 +4,7 @@ core_classification: pure_libretro
 source: "https://github.com/AloysHF/BBKEmu"
 upstream: "https://github.com/AloysHF/BBKEmu"
 profiled_date: "2026-09-03"
-source_commit: "479e52953344329810dc0305a4c160e4badfc9bc"
+source_commit: "09bc66de868c8d2d6e1e1a6339552baf0c778b34"
 core_version: "0.1.0"
 display_name: "BBK - Electronic Dictionary (BBKEmu)"
 cores:

@@ -5,7 +5,7 @@ cores: [mednafen_pcfx, pcfx]
 source: "https://github.com/libretro/beetle-pcfx-libretro"
 upstream: "https://mednafen.github.io/"
 profiled_date: "2026-03-24"
-source_commit: "0580dee757adfdb9bf8b9c24693dde5f3d0a78a1"
+source_commit: "c1650bad5fbdcc3c3ccd45e29e3983e1ccf16cff"
 core_version: "v0.9.36.5"
 display_name: "NEC - PC-FX (Beetle PC-FX)"
 systems:

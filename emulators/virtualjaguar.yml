@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/libretro/virtualjaguar-libretro"
 upstream: "http://shamusworld.gotdns.org/git/virtualjaguar"
 profiled_date: "2026-09-04"
-source_commit: "03ced5f"
+source_commit: "f9a3c89f58836cb2c45a42ad4edfac047050f30a"
 core_version: "v2.1.0"
 display_name: "Atari - Jaguar (Virtual Jaguar)"
 cores:
@@ -187,7 +187,7 @@ analysis:
     mechanism: embedded
     load_address: "0xE00000"
     load_size: "0x20000"
-    source_ref: "libretro.c:5339-5382, libretro.c:6295"
+    source_ref: "libretro.c:5339-5382, libretro.c:6331"
     selection_logic: "BT_CUSTOM reads a file, BT_M_SERIES tries jagboot_m.rom, otherwise the embedded array"
     external_loading: true
     note: |
