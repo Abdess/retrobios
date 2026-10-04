@@ -5,7 +5,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-09-13T22:10:18Z",
+  "generated": "2026-10-04T15:54:42Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -15,8 +15,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 615,
-  "total_size": 1573725234,
+  "total_files": 958,
+  "total_size": 1580831155,
+  "pack_files": 960,
+  "pack_size": 1580831155,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -3757,6 +3759,26 @@
       ]
     },
     {
+      "dest": "colecovision/eos.rom",
+      "sha1": "ad3c20ef444f10af7ae8eb75c81e500d9b1bba3d",
+      "sha256": "cd012db8816fcebf0790fbc30f16d003ecd9ccfea844451c04b4a78c631cced3",
+      "size": 8192,
+      "repo_path": "bios/Coleco/Adam/eos.rom",
+      "cores": [
+        "gearcoleco"
+      ]
+    },
+    {
+      "dest": "colecovision/writer.rom",
+      "sha1": "d4aec4efe1431e56fe52d83baf9118542c525255",
+      "sha256": "3b17255d2679d11f79e6cacda86de5f6bc9bb5cddf78cbddc651af03b237317d",
+      "size": 32768,
+      "repo_path": "bios/Other/colem/WRITER.ROM",
+      "cores": [
+        "gearcoleco"
+      ]
+    },
+    {
       "dest": "lynx/howard.o",
       "sha1": "bdca7bbb647066cf7555ce5d555ce09de4ebc41b",
       "sha256": "8fc5201d46abd1a98639b59ba1579198617a4c28839fd3611ac82cbb092fa77e",
@@ -3899,6 +3921,706 @@
       ]
     },
     {
+      "dest": "fds/nestopia/samples/moepro/00.wav",
+      "sha1": "1b74c4bb6e9cc837899c4ea52fc15bf80eeb0f95",
+      "sha256": "4058860cbd6f836b1150464fc9dd508f7f6d6501dec2122a169f2430e98f4042",
+      "size": 60848,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/00.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/01.wav",
+      "sha1": "52fab1fdb4a55d97ddb0401f176fafc84943e57a",
+      "sha256": "b47932288f4d4942ee542f4f6299d84289aaff13d709cdfbe4ed3855c0865427",
+      "size": 37296,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/01.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/02.wav",
+      "sha1": "0c9428d948926c3aa482a428078a60db3f7ef91e",
+      "sha256": "cec9dd88a1b283f6c0412aac08eadd1e703fedb4474761b6f02c0623bf4862e3",
+      "size": 45742,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/02.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/03.wav",
+      "sha1": "fd268be49fd638147b1f7218ae1c40657680ccfd",
+      "sha256": "e103fa946d2e9192acb8c4c07df25d2ef775f676602cff2d129320f59d81de53",
+      "size": 75950,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/03.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/04.wav",
+      "sha1": "3b6199db98d320d5bb2ea8691d30227e7ed118db",
+      "sha256": "529064f95a8e0b9f6cecb3a51c408dbe0847347089d444d45e27431428ce23b0",
+      "size": 59056,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/04.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/05.wav",
+      "sha1": "92a0159ad88105b78dd42430307f8a98dd6976f3",
+      "sha256": "b7d3bd609cee374ac79588f27882e15640d3e45b429c60dbbdba5d4737cc491b",
+      "size": 52402,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/05.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/06.wav",
+      "sha1": "d1fd28c8be92a1aed763153da0697640d91d0cdc",
+      "sha256": "0a1358bc8cbb7233bb6cedd991c4d3d941ab7489b8fc91b2e9924393e16e58c3",
+      "size": 25644,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/06.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/07.wav",
+      "sha1": "a26a951feba976a83ebfd0fff3818085840d5aa7",
+      "sha256": "09bb903d5ff56b1fd10fc99da7cb7d2b251c461d0e7a27ed071ae4c1f873f342",
+      "size": 58796,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/07.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/08.wav",
+      "sha1": "7eee02c56b24ae23ed02ef84a9811a733d07c803",
+      "sha256": "3d974d808f03bd6fc43638564519bd6fbb8a2a9030a5a99cb6defd1158d17c10",
+      "size": 61104,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/08.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/09.wav",
+      "sha1": "5b31c4b303d05afc804587836709f47718bd3307",
+      "sha256": "947f79c00b53bb7c078d232327a870d8bc3e4700389a5e40ad85d6c2bb48a6a4",
+      "size": 79024,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/09.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/10.wav",
+      "sha1": "974fd66cfbb53b525fd2158101e25a8309a471cd",
+      "sha256": "1b62e83b6957799b7f10c1817045e4561c85d04136ee00990cbd7b72c277e012",
+      "size": 55986,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/10.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/11.wav",
+      "sha1": "20a7f931f614e9d2b5e9d7cf108604c62acfbb98",
+      "sha256": "da62982e81026fcd38a60ea31589247b3bb107052080b21f98f831426e8b08c4",
+      "size": 59310,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/11.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/12.wav",
+      "sha1": "45ff533fa8f99e3225a20a370bb2cde1c1405377",
+      "sha256": "256b691cce30a4e123cb321475b10c484bf80d0b91efbeb68d1e78bb8cf197cc",
+      "size": 33198,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/12.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/13.wav",
+      "sha1": "f228ba0b8862ea0b57f193a0719ce4346585e93d",
+      "sha256": "11e15546d86fbdd003a793c3848bd9005a1c48cb2e523c1ad64370f971cca608",
+      "size": 49714,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/13.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/14.wav",
+      "sha1": "bd20174499ce3167ba2f90a33fbe4465d0c39d42",
+      "sha256": "9b0bf62bdb3c92096b4078db48e84e9e65d99e12da8ac078a83064da62413251",
+      "size": 35246,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/14.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro/15.wav",
+      "sha1": "4f8256764b5d41ef3a7385dcd1aa872efc337d80",
+      "sha256": "71592070407c7f7491973f35c4585dae96628405fda21ba149c08855e36f58ae",
+      "size": 267952,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro/15.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/00.wav",
+      "sha1": "f8b567102356e811ec6e2bc7597d3a824ba56094",
+      "sha256": "da80258977fc3230d03f50105e85174e7733d8210c3e02ffbc803727e33229c9",
+      "size": 25132,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/00.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/01.wav",
+      "sha1": "0857f5f60907b6c0f74e750c56955f9329299958",
+      "sha256": "35da7d4382896e3bf407b1ae1cdca8362ccf8d08dc84458904a1264b93669008",
+      "size": 29874,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/01.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/02.wav",
+      "sha1": "a15c041a9fec99b7ca573a497dc9c534c7ccfc42",
+      "sha256": "04d33e305279e13251c0b1bbac06e595551632960a8b379f9d4d1fec5363551d",
+      "size": 25454,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/02.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/03.wav",
+      "sha1": "360dd1ca6c2ec85d46fcb65492ffc6fd29e99513",
+      "sha256": "6aecc31c6de164d0226bc7c6bc3ed32398d41c0c35b8014972691beac9cb1b05",
+      "size": 26028,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/03.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/04.wav",
+      "sha1": "6113543e0dbcc1054f31ae6ea5958fd01f9f9896",
+      "sha256": "6d3bf3b45947179cd9e4403a5d28fd85da633d88d58cb872f0d27553d73586e9",
+      "size": 36144,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/04.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/05.wav",
+      "sha1": "d0798d0e52c64a854735dffd2d2acb648fba8438",
+      "sha256": "943f50ab1006d76846fee13c43da82034558bb458dc508915ae57935b488bb3f",
+      "size": 35884,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/05.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/06.wav",
+      "sha1": "0314c1f5cea4f42cd2fb3e8bdb5bee97fd5cf21e",
+      "sha256": "31cf7b9b066d89512b5d7f5e28c3bfd65a176fefc6f573348f55a6dc3fa32b5e",
+      "size": 34990,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/06.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/07.wav",
+      "sha1": "aa203345b22e061423a9c79eb863915fe6154f4b",
+      "sha256": "2be2631433b24005cd591a531f47c2ad7c3c50f84c3f0d8f0a4d885fa8120c2f",
+      "size": 49580,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/07.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/08.wav",
+      "sha1": "b6cb08d400c59d004ad48515a4843620e13c7417",
+      "sha256": "85f12222051e3e97cdf13bb829da271b4ca04282e08a215c745e4231d7e81ba3",
+      "size": 49966,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/08.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/09.wav",
+      "sha1": "77b8866343f1df80209753a45f01b89801b19e36",
+      "sha256": "c50ccacc0b92c75bf8344d7d51dcf2cd97ac6349e3d8a10b24ab4b5c10a99bde",
+      "size": 49716,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/09.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/10.wav",
+      "sha1": "c75ca7eeb03f83d52c94eab2910d2cc8338cdd31",
+      "sha256": "f7c442195deceae94d024ce8fd74a7410d647796a6716c2b8961f322a4299d4d",
+      "size": 56752,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/10.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/11.wav",
+      "sha1": "b56aa41c1a7b8e916006f1bec91091017e92561c",
+      "sha256": "0be1ca9e8f1b7df7af72a89c30d53f2afe39ca30feca4034beb535192e2a5b17",
+      "size": 58542,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/11.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/12.wav",
+      "sha1": "8bbe02be18839d75a6e45097ff510a1deba14de4",
+      "sha256": "985cb0729026abef70017d2baac04cdcf8e3774ff17ef3ceb04e58c36750c94c",
+      "size": 34994,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/12.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/13.wav",
+      "sha1": "2ca976d877a8b7c7b5d3e70409c10d8c356dcf4d",
+      "sha256": "d6d8879abbd09b4342031bde0f460a513bfb9cbb7681bcd817488c5071cedcac",
+      "size": 31410,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/13.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/14.wav",
+      "sha1": "54d198f58430fae05ed156c3fb44ecf24a74d27f",
+      "sha256": "50dc1ae6ed2a1deb863843d851f826942327f2d149cc60611e1db474d3619dd7",
+      "size": 128176,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/14.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/15.wav",
+      "sha1": "8728ea5b384732883a1829cdf98de6e1ceb4d0ca",
+      "sha256": "3d950ecf7dfc4984f5de560602e64ffd1d14d5713481999da7bc11174507d20c",
+      "size": 26416,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/15.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/16.wav",
+      "sha1": "b8000eada705cf56630266b151564d054d3e2a06",
+      "sha256": "24d5db4ca2d256752cd049a330cb406196c05f4cfe8036beb309e0e4533d21de",
+      "size": 44,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/16.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/17.wav",
+      "sha1": "c6d2242fccde849977cc1602b8fbed55ae1a9526",
+      "sha256": "097350aacacacf391c02d5a0eb67e74d63a006f4b324dae846d95dec1d971289",
+      "size": 25390,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/17.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/18.wav",
+      "sha1": "bde661ddbcd8b1e20dd36b89161d726fb01b74b7",
+      "sha256": "46252f277268d13b67f67ed056b770ad284daf9cb6234e41c954b3e6e4d17e67",
+      "size": 28590,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/18.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/moepro88/19.wav",
+      "sha1": "07ba02cbee4e065a7b2100c8288e954ec42ddc56",
+      "sha256": "13a73abb7eaaf2b90e7546aa4d53f300bfd6b7adf8c486ca5267528064d93d22",
+      "size": 269490,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/19.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/00.wav",
+      "sha1": "b8000eada705cf56630266b151564d054d3e2a06",
+      "sha256": "24d5db4ca2d256752cd049a330cb406196c05f4cfe8036beb309e0e4533d21de",
+      "size": 44,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/16.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/01.wav",
+      "sha1": "b8000eada705cf56630266b151564d054d3e2a06",
+      "sha256": "24d5db4ca2d256752cd049a330cb406196c05f4cfe8036beb309e0e4533d21de",
+      "size": 44,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/16.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/02.wav",
+      "sha1": "fe31302c9ea88867b695b98bfaf9eefefdabd55c",
+      "sha256": "e2211de611a4d3c63c46ced0415207608caedd2a13a2095ec1648d1b241eac09",
+      "size": 58796,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/02.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/03.wav",
+      "sha1": "091d6f2937c2623c9a367c2e518fa3cb482d7763",
+      "sha256": "52a3dbae444ddb5cbd840684055447cfe4604181c054dc9cc96e8dac704738a2",
+      "size": 57260,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/03.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/04.wav",
+      "sha1": "070844d19896ec801af711e3588f9073f0a9e320",
+      "sha256": "777376c8fee03bab363bf42626bb479d49549929f337129c27fc1595ddf87595",
+      "size": 42412,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/04.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/05.wav",
+      "sha1": "e172e6f6df89a1144a6a96f1f21c107fbe0e3a7c",
+      "sha256": "6d0ef71f81af12671f0376c698f765476778cfbd094c4eb6bd24b60a23b73048",
+      "size": 39724,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/05.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/06.wav",
+      "sha1": "aee63e58e12a60063ac8867d88f3ae36d32a1f49",
+      "sha256": "385d7eb688b007fed90c74c9544cbbb1d257e16309c2ea08ae77038df61d379e",
+      "size": 82732,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/06.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/07.wav",
+      "sha1": "c9be7b35ef33afad5e4f51555268754cf6448bfc",
+      "sha256": "4851edf631d90ff072ed4dd711e79c159e15d30e76fea4636f5518bf264cdee1",
+      "size": 58028,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/07.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/08.wav",
+      "sha1": "f02e19872ba68325624764d3b2a3a1bcbaa35460",
+      "sha256": "52084aa182baadb479575ce5d626063acf6acce51920095b070bac4cb030e9e3",
+      "size": 66732,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/08.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/09.wav",
+      "sha1": "9e1676e1c6bddf1c82b376849d1489eb7b15daa1",
+      "sha256": "a3334eca7325f1ddb258d78ca61193667a41d01993922afe3f36a0a9d2555915",
+      "size": 57132,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/09.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/10.wav",
+      "sha1": "db6765a86441e18f24e80216fb0cf76fc0968766",
+      "sha256": "1f877dd857c3abcdececa24d3701a31413bdcafac2117e49f4685c8737c7d9e0",
+      "size": 50860,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/10.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/11.wav",
+      "sha1": "c9959e4557e36f4aca8d69fefe2718707eab1029",
+      "sha256": "4bbc4feca42cd84c088df080c05cb9d9e81330c75721f90ca972e2b7968b197f",
+      "size": 53490,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/11.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/12.wav",
+      "sha1": "c506ed3cbeb845a13289dd43d307ffec6c757e3a",
+      "sha256": "240cbeb3fceb005c3cd8228c2390015fd4379c2cf42152dc50f9e3143c4afc34",
+      "size": 54572,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/12.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/13.wav",
+      "sha1": "742d43677acbb31d3d5fa0f85c516f669ea15a19",
+      "sha256": "1ebd5c4f0dae2c66db0be7cc32e758a68f21bba5d708c1cdccdeb993428c0c0a",
+      "size": 271406,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/13.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/14.wav",
+      "sha1": "9dc641f4dbe747ff4c0a6f45741eb74fc84241b1",
+      "sha256": "7b9492573be3b4cedff5b7626847ea99f4712e660c2f50dd4ea0256e20748859",
+      "size": 46510,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/14.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/15.wav",
+      "sha1": "8037dbd1b9145d1ba80ce4792c84b441dc7542ca",
+      "sha256": "eb58e615f2cc0d5fc037c78774dd9b6cd2c5b4d8b308484c3fad14f5ab9996d6",
+      "size": 41900,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/15.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/16.wav",
+      "sha1": "52549dc98c47518bbaf8b5aa301aa6c2f69059fe",
+      "sha256": "72b2ee6ccb7317eeb89a7cb7f6f09fb35b41bc00e7af278ce4d18f7c3b9f5b0a",
+      "size": 47532,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/16.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/17.wav",
+      "sha1": "5928470e1d2128ba55d94d997ac272443841275c",
+      "sha256": "260aa6efe08e01ffa5eba227335a779a16665eb583e1d2e77ec25ce79a739f40",
+      "size": 31664,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/17.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/18.wav",
+      "sha1": "6c03f293381976075f8ba305f473194727e64fd0",
+      "sha256": "7b7f099d4049604af9d6dc9320fbc06e6397328974303f0d33892b0ac150455a",
+      "size": 58924,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/mptennis/18.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/mptennis/19.wav",
+      "sha1": "b8000eada705cf56630266b151564d054d3e2a06",
+      "sha256": "24d5db4ca2d256752cd049a330cb406196c05f4cfe8036beb309e0e4533d21de",
+      "size": 44,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/moepro88/16.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/terao/00.wav",
+      "sha1": "20b7b3e2323e69e693070b468ecd155e72c8d137",
+      "sha256": "b42f0fe924e7a46b7c690dc20b40ddde98976b7eb110447b14b33b0d47ce1e26",
+      "size": 90798,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/terao/00.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/terao/01.wav",
+      "sha1": "bbf5de2ba467281dc81f836d04be8b347dcbdec5",
+      "sha256": "8ef8c381610f561c482385264271609fd934fbd811f594d4fcb0138df42cfacf",
+      "size": 54700,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/terao/01.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/terao/02.wav",
+      "sha1": "d10e446d888c759fb7481957b6d448802885de88",
+      "sha256": "967b336e8aeee82be78fd5f69107e5d683c5a6ef369cbd86d323681d88efde17",
+      "size": 48044,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/terao/02.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/terao/03.wav",
+      "sha1": "c7ba780c28a68dd84cad9455d091d4ca5cb07612",
+      "sha256": "e4080be9568dd021b8af1233f8c6e7b00be9fb1b0f146e3a4300d8ce93ed5d46",
+      "size": 83634,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/terao/03.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/terao/04.wav",
+      "sha1": "40c1a36528eb45a4c6a20211501380258c392ce8",
+      "sha256": "584400c9b80c33c39aed22767f52c483d3896fe48b56dee6c8ac7e39a54533b2",
+      "size": 77740,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/terao/04.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/terao/05.wav",
+      "sha1": "875f12a1ede52c4353cab2c414b3d3506cafd333",
+      "sha256": "eaa7107775199ccde7d885665aa5d9d765d12bf13c0bc080f306e5e0b1b628e0",
+      "size": 80812,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/terao/05.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/ftaerobi/00.wav",
+      "sha1": "06bf992519d72743dc507e6ee2568110513457e5",
+      "sha256": "85cc7417c9c6ae27155c5366bc7c470feb39debb8f011ef1bd100ee469f6e9f8",
+      "size": 378030,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/ftaerobi/00.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/ftaerobi/01.wav",
+      "sha1": "17243274babc5cb3b880e0cf1946a0654d956e01",
+      "sha256": "20eb350c397b1147d8d4d4ba2f823dc71ee13fc117de0c1861911680c159ab73",
+      "size": 145582,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/ftaerobi/01.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/ftaerobi/02.wav",
+      "sha1": "e4cb2172905fe415c7452aa8dd1d520d314f6c0c",
+      "sha256": "9b8ce8c248ac3512297c94a77b68ba1b8d90841aedbda2938fc987bab5aa1a30",
+      "size": 114606,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/ftaerobi/02.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/ftaerobi/03.wav",
+      "sha1": "232d761ddff41318382a4abd5df1307ed1add968",
+      "sha256": "3a75335960c5a233e81f63590291a3bddb5f59029bd26e264fd4ecdfe24a5423",
+      "size": 311470,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/ftaerobi/03.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/ftaerobi/04.wav",
+      "sha1": "fed7c58429927e42fc8e036e69c75dd3ec284dcf",
+      "sha256": "0a7383994194d01007faf8b41e130afe1b057e44861ee85947031a5c5dea3d64",
+      "size": 94382,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/ftaerobi/04.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/ftaerobi/05.wav",
+      "sha1": "efc454741d89fbea6afa4b2c1e9bd12931c0e51a",
+      "sha256": "8f65734fa5bff9d73c24d01d9124c245a8f022e30277a67c9db2750e55119e14",
+      "size": 95404,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/ftaerobi/05.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/ftaerobi/06.wav",
+      "sha1": "c2a19619759420d438fa7aaa14919b79241dd3b6",
+      "sha256": "5968343313ca1d9b4c6463c9620ff02f3c3baef9c63d28b585e04a0e9f9bcc6c",
+      "size": 98476,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/ftaerobi/06.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
+      "dest": "fds/nestopia/samples/ftaerobi/07.wav",
+      "sha1": "ad9aed9a52134e469a7856e43d81985a9368ddbe",
+      "sha256": "2fc244c5d7b832840caa3fda2048b42858083b7b780ff0d84c86d2c22efa107a",
+      "size": 90284,
+      "repo_path": "bios/Nintendo/NES/nestopia/samples/ftaerobi/07.wav",
+      "cores": [
+        "nestopia"
+      ]
+    },
+    {
       "dest": "pc-9800-series/np2kai/ide.rom",
       "sha1": "0877ffb4b4d1c18283468be3579b72ed8c22e3ac",
       "sha256": "c15220d1c448bfd3aa268ef8de41dce14a9b3ba90171aaae539d6d94721ff4e0",
@@ -3936,6 +4658,2706 @@
       "repo_path": "bios/NEC/PC-98/pci.rom",
       "cores": [
         "np2kai"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E480.WAV",
+      "sha1": "e9f05f46c50e4372aa491afdac554c9334df4fae",
+      "sha256": "c11de9c9b472e55dad1b878261edf878f463895c87e9fe7cca0e929573bf23cf",
+      "size": 101,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E480.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E481.WAV",
+      "sha1": "377332bc70c90a406174898e28460f860e96e5d7",
+      "sha256": "8baa4fbc2b5db100b59bbe707cb3b5654b605fc473ac7c862dbedccb79746411",
+      "size": 554,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E481.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E482.WAV",
+      "sha1": "377332bc70c90a406174898e28460f860e96e5d7",
+      "sha256": "8baa4fbc2b5db100b59bbe707cb3b5654b605fc473ac7c862dbedccb79746411",
+      "size": 554,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E481.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E483.WAV",
+      "sha1": "e9f9a45767fbd4b0401dc79cb53decacc14e174c",
+      "sha256": "e0d1c3c36b49e27d896f54217bc98c97bad57c8bc4d4c261e489a939f4c52864",
+      "size": 1096,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E483.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E484.WAV",
+      "sha1": "cfbc05c2e6a5c6027f29bf5e53cf0184de84315b",
+      "sha256": "b987e1f1f46cc0cb547cf852f8ff9723c03b2a6305f8b42df219d3a5959cd1ff",
+      "size": 2219,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E484.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E485.WAV",
+      "sha1": "a01740034269723ecbd9052ce9367ae51f877a90",
+      "sha256": "74004347abb3c7624c875a123b5d4338ab888ecb4bb554855d6deee43024f075",
+      "size": 4592,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E485.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E486.WAV",
+      "sha1": "6755dd5575592fdb28368d8976db55aa9133decb",
+      "sha256": "213389b8bcfc0c93a1033c33eb753feab605c7dfacdbefa50501d952975a7cd9",
+      "size": 2902,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E486.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E487.WAV",
+      "sha1": "398525e5de11961a6150fe7e0bd3ae452059e660",
+      "sha256": "33d12779d36a9b4bd1a5b859b2e63205a7bc416879e96b25806eab76f720a5bd",
+      "size": 804,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E487.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E488.WAV",
+      "sha1": "da43667e121ab051aff85fe2cc38983433017aeb",
+      "sha256": "27951a40991d097d7e06e6e89af9f9b49f6a9f9ac58e40cb5859b9d5ecb08dd7",
+      "size": 1378,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E488.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E489.WAV",
+      "sha1": "8314709ae85cbbe0e3116d7b67e7cca1a742fd21",
+      "sha256": "a7b4b53ba62151eacdca638d1ae1a3771119dc02a97175a0bd59955dd1aa586c",
+      "size": 576,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E489.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E48A.WAV",
+      "sha1": "1d17625ca5a3edf31e7afc9ce57452f8e69d6758",
+      "sha256": "5567adafa6fb1595ca9b820b94eb346b6bcc1f7836966ee751649e5ffbaff30d",
+      "size": 1556,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E48A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E48B.WAV",
+      "sha1": "3e8c6409c8338aa1671ffcb491fa9a715a72658d",
+      "sha256": "19c525a1a052a37097ce4c4c600f5d64f5d6a1d6c72bae6159f1fe1016455938",
+      "size": 1516,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E48B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E48C.WAV",
+      "sha1": "62276a0db7ee5bcfc9efc62f8ccc7e6368c96c14",
+      "sha256": "401f1dc473b333ee39c10f57e24718113640b96125363339deffcc1eecd59979",
+      "size": 794,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E48C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E48D.WAV",
+      "sha1": "460030490eebe0285bb9d201f86ae52de6241333",
+      "sha256": "b073fba8d0181d6f94566290ff1d69b71176d081052d7fd02e4e7a72cb7353c7",
+      "size": 1510,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E48D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E48E.WAV",
+      "sha1": "0f7ee9bc06a639f01278b839163e46617ebb4cfd",
+      "sha256": "48e366a11cad384158915ccddffd945be41c92b629a84895191970708eb5ff4c",
+      "size": 1892,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E48E.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E48F.WAV",
+      "sha1": "d2b13751a8239e6524661f94d6a3b7d3f8278ff8",
+      "sha256": "7d7cd66587573c827f7105cc1194bd43ea476081dcb1195b126be908eba7e505",
+      "size": 788,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E48F.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E490.WAV",
+      "sha1": "447ebca86f2356a4af464440c824124f79a99aa0",
+      "sha256": "0101e4245b4e65eb5a08c603ae22cdff0e0a672e7bdee92069f624d3b61441a8",
+      "size": 2020,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E490.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E491.WAV",
+      "sha1": "c7140de455aa30a2e27973792f99e5dd0aac9049",
+      "sha256": "97df7e6c9f6b2aa7af933fb32674c442154d6dd87b2fda3e77af43214f8c3169",
+      "size": 1122,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E491.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E492.WAV",
+      "sha1": "ac79cf8b0a17ca79c1101c8482693ba2bd798534",
+      "sha256": "0414ef8c630656ed192268e983402c1800d37b0d72920197ff03297ef06adb19",
+      "size": 1862,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E492.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E493.WAV",
+      "sha1": "9cf603888d902d8dca77a8ca614206554d67cfe5",
+      "sha256": "c26e130598e2587ca0b27e0a198778c05bd6bf90baacc2025be3a248915c922d",
+      "size": 2772,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E493.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E494.WAV",
+      "sha1": "3b1b2627d5866c8832059680e3691c671735908d",
+      "sha256": "9f7a44e78f4b89a46e7958ac40ea6bad350459b452bdc44054a4d400b20022b6",
+      "size": 3120,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E494.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E495.WAV",
+      "sha1": "7bbfa47611dee8664a92e21ae3473aa0ba6b70a8",
+      "sha256": "3e783430d2c99dfb68c1ab5d00d221b3914bcc73b67cf43c8a0fac6e7989691c",
+      "size": 854,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E495.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E496.WAV",
+      "sha1": "fe32246b39297ee2d896a9e81b939cbc35219837",
+      "sha256": "96129788b2bedd5f5c810c1870c4a89b7bbac6f1a330120de647355611fe5ee6",
+      "size": 1154,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E496.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E497.WAV",
+      "sha1": "e6b8b09f8f35b0231f7c0a9333da3c0bf0b3c9cf",
+      "sha256": "5d56dacfb9893aca4a6ea271b5f3d7704f5adbd9014a6c4dc0e5b5ace68ce43b",
+      "size": 1122,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E497.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E498.WAV",
+      "sha1": "e91ec5281b0f0aa4f77305698ec3f74b95aa41ce",
+      "sha256": "07161cace823bac6f50c3a592db2020d41049adae42302ef6c907397f088279a",
+      "size": 1144,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E498.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E499.WAV",
+      "sha1": "f8f1ca2c37dbf1d4504d5e49bf042c488926d88f",
+      "sha256": "f01ba5de963ebe9ae22fdd1c076f41bdf3d78e96d3408c0055ac5a9b76c863b3",
+      "size": 2056,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E499.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E49A.WAV",
+      "sha1": "917572d54de1b06c0c90d87daf33a4fd28a6738d",
+      "sha256": "11469a4671f429d1aedf3a8411b0cc4ec1a19956984939bffa9e9163d20ff38f",
+      "size": 1302,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E49A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E49B.WAV",
+      "sha1": "150920ff6cbfe812f8a8421b3a4ce5ebceec5471",
+      "sha256": "9c86191eeefabbe475da131874a4cf8e64b9997fe3589bb47a65e18bb4ff56c1",
+      "size": 2492,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E49B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E49C.WAV",
+      "sha1": "c5b465745b0f0e1f28415f55c4e2b7a818a45de2",
+      "sha256": "e8fe2aace5a6c40729ab38a5ddbb8ee03e556ce66ac508e32f53c241889c3c91",
+      "size": 936,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E49C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E49D.WAV",
+      "sha1": "b23b324495378105b3f8c9813f65fa2a235edf79",
+      "sha256": "57c0ace6473be912f8757ded3b8b4546b89bd62ac08416678c4ed17de75eccbc",
+      "size": 2038,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E49D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E49E.WAV",
+      "sha1": "2c0048229c5a5a7bea83dc0eead2d6450348d4a4",
+      "sha256": "e7a1cebe2efd83f23444c40feded0486d92837e7fca681d118072d2bf53da6be",
+      "size": 1146,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E49E.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E49F.WAV",
+      "sha1": "036cd3db7ae5baf3850c34b53420fd92adacd09b",
+      "sha256": "236c713c6299074665844505fd0383b06f8854e449081775f24b9780effff5a5",
+      "size": 2884,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E49F.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4A0.WAV",
+      "sha1": "0566750feb17c819062e76c934430163b568cfc6",
+      "sha256": "c397f2dad116782416c81a4b4505fa7fbcde5e1ce976c466de3bcb8c730ba240",
+      "size": 4096,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4A0.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4A1.WAV",
+      "sha1": "ed4a6bf512df5f81a2e4638540913bf6bd350b83",
+      "sha256": "e217a1cabed419417414161698d71c9b4691075aa6ceadffd3353265e2067b5b",
+      "size": 1702,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4A1.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4A2.WAV",
+      "sha1": "571b0c2e684c368c64ccaf8b48c87d511861739f",
+      "sha256": "5bf28128c1b602d864481ecdcd8137d361281510cf4665715e5ae4b1baae1050",
+      "size": 1570,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4A2.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4A3.WAV",
+      "sha1": "030e80a51a8f4dc11d784f34d181bab9249ae4d4",
+      "sha256": "6e97b6476b1502ca36b28846662c6f5095a098f498d581b624f0359938ad01a4",
+      "size": 2060,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4A3.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4A4.WAV",
+      "sha1": "e30981ff89281c220f6caf5656446325d163bdc9",
+      "sha256": "581317cd8a340204d0f02374ebdd06b382c9e4c77c1f6819909f84d2d4d2d4a9",
+      "size": 846,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4A4.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4A5.WAV",
+      "sha1": "ddeb8c942fbd8c4eedf3f7f74ad70f431ebef40b",
+      "sha256": "689e62471705a5d4b44924fd0f3c91b35daaff59d5b4efa85b88cf2e1317dab2",
+      "size": 1756,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4A5.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4A6.WAV",
+      "sha1": "f3826493020428be0df6cbab349a319cf80ae540",
+      "sha256": "363461d41b245b21f348a6c533586b2eddc4c9982ceba25d94dbb0fc9817513c",
+      "size": 2144,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4A6.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4A7.WAV",
+      "sha1": "6191d8c1cf880320271ec9669123e00851290d83",
+      "sha256": "2615635fb2c8abd421b00d83bd2650b9cb1111554a2e24eeb38eb08dd5873081",
+      "size": 1388,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4A7.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4A8.WAV",
+      "sha1": "998cbe3fd80302c4d5581d5831ea0ecb2e1f954c",
+      "sha256": "e985da961ecded0e1b972055ed3b25ff0677dcbebb4455286908b42d94db2873",
+      "size": 1586,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4A8.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4A9.WAV",
+      "sha1": "a03fcb64fc13ba15ba45faa6db5c4d549948a0a0",
+      "sha256": "cbd1c880fa8c511b82b85de261c84804eb3c01edb651f0c0ce709a5a33c90626",
+      "size": 2022,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4A9.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4AA.WAV",
+      "sha1": "f7d127a999632323ffc04cdf1026cc34f3342af8",
+      "sha256": "85a48db247370bfe8cf6627f326a310dee1bc9ccf80b61af457828bcab6930d3",
+      "size": 1624,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4AA.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4AB.WAV",
+      "sha1": "f85dbcdc78fee69fb92412243c58e7040008a1cb",
+      "sha256": "2f5009d24588656a908a09ebfa0b9412b27ed93ece1cf72364778f80a00abedb",
+      "size": 2302,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4AB.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4AC.WAV",
+      "sha1": "42ac24d6b833803cb4cf5cd3b8e4e52754debfd1",
+      "sha256": "638109ec656d13b1d0c6bdbfff1bd3b14af3b94bd84bdb8aa03482a3c62238db",
+      "size": 2484,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4AC.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4AD.WAV",
+      "sha1": "2e0a591f6be51acecb5488c5bd08bd7f4e2c9eec",
+      "sha256": "3195b45972a797ebb7cd51c5014fe90271f8905135929c8f87485b303ae6f7a3",
+      "size": 1252,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4AD.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4AE.WAV",
+      "sha1": "38d2610887cf96c3c7b0e2527e68f2ce50e80958",
+      "sha256": "c34d2d4832e46063258d1e73ec6bf66c93b52848dd6f97df90127ffa38d72952",
+      "size": 1978,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4AE.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4AF.WAV",
+      "sha1": "114276e4d8c0601445df7ce6b4845cc2de869a2d",
+      "sha256": "7ce2802376739319b1aeaf1ac49a0382cc2e0e2a132d4dae373a1ec3aeec68ef",
+      "size": 3984,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4AF.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4B0.WAV",
+      "sha1": "8db3123c23505758683c82234df322fe17e4136a",
+      "sha256": "4f1de5134383180e4478964eaf0e13ab07b81a817656b3a6e960ead9379c5a9c",
+      "size": 2184,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4B0.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4B1.WAV",
+      "sha1": "c72d9081ce896d6f64be838a1ee19e6226746961",
+      "sha256": "0d65df0b98c7879a9b54f4954034f0a4a95e02a4455cde0c6702ba0c1a0a1eb3",
+      "size": 1448,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4B1.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4B2.WAV",
+      "sha1": "5eedf29bdccb10db00086b62df78f93ad4156694",
+      "sha256": "09591f15532611d0cf4fa97acdba287900b5e4c4de5573f275967575069cfd49",
+      "size": 2040,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4B2.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4B3.WAV",
+      "sha1": "5cb52d6f6560364ec543cd6a35233dd268f38692",
+      "sha256": "d5fc5c662c3e3ab93d77276baa39335a66d3400a87fb17e5c2ae99377b2a338f",
+      "size": 1762,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4B3.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4B4.WAV",
+      "sha1": "fb02f0c9fc856e2cee607c2d4ee0bf7db4202328",
+      "sha256": "91d39ae2adc6f5af5ecf4378693c45f2b0f16020c944c3775d34559b1509121b",
+      "size": 3334,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4B4.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4B5.WAV",
+      "sha1": "63fde30ea5c9e6c8cff725f2d88c3e330fa40906",
+      "sha256": "124688a8244ca434e5020acbb7ba178988d7b32dee9608c70f86ad0eba75ee94",
+      "size": 2604,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4B5.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4B6.WAV",
+      "sha1": "b268d0d62e2349a3e4d48ea2602c2eb970b21fd8",
+      "sha256": "3fe3537e875e422a055dd0309a5c98dc3cf94b4510e2165ee59e685ca44a8088",
+      "size": 2654,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4B6.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4B7.WAV",
+      "sha1": "5c870dd84055b507c2f727a7c6fe07b8a12e6434",
+      "sha256": "1f4fc1f7dcdd1998af9bccf17ec65a091bfd1d6d10f97e4cfa40e89bb9b5ed4d",
+      "size": 984,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4B7.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4B8.WAV",
+      "sha1": "f220270eae897293c493774be20ee8303908778c",
+      "sha256": "8ba5602db35cf5571dedaf0894de1eb21c7c40542d3b4b597e874323bca7f7ce",
+      "size": 2156,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4B8.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4B9.WAV",
+      "sha1": "6d75e1054018d26b86b8fce91759e3496f89d1e4",
+      "sha256": "c503489d552d3ee64519b89b47ac8fd605147b3b6ba42eeb3f484acf8df79402",
+      "size": 890,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4B9.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4BA.WAV",
+      "sha1": "9b4ca2e365ebf02258d673576e46940e0d37c681",
+      "sha256": "772d01cb3de6b7a0944051b3609ad85a1f4768b5063b7866909613d147b05cfe",
+      "size": 3656,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4BA.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4BB.WAV",
+      "sha1": "3ae2356c60c2135e8b2d3dea549ef4a8ecd64393",
+      "sha256": "1f14d1ad17c16ba57e68da0e83978810efa59cc331d5f797309819d1bb55768a",
+      "size": 3166,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4BB.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4BC.WAV",
+      "sha1": "eec2e39e4738a63848aa9188adb60c876a99fe88",
+      "sha256": "dfa0bed6458159a511e108e0207b147d1027fb10f5324568663c50e64a156f8e",
+      "size": 3840,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4BC.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4BD.WAV",
+      "sha1": "6ca46181e348815880311220e2a64aeb18d52768",
+      "sha256": "ab928d890751a5b8a5304f777874ed64eca30952755c16bf752ecb3271e4d32c",
+      "size": 464,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4BD.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4BE.WAV",
+      "sha1": "9ec880f3e4241a768f7604db7283812c87946fc3",
+      "sha256": "b4f2e7de7cc1d19caf6ae99b89a480568c338074044cfc726c936189c2c6fc82",
+      "size": 2084,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4BE.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4BF.WAV",
+      "sha1": "7ee36df1636d4a5235a64e36edf64cef355eac0f",
+      "sha256": "245f425ccdd22dfe55f0a2046b5c85e4d9920745d5d2aacc71549dece0cb1502",
+      "size": 646,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4BF.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4C0.WAV",
+      "sha1": "94d97320eb493797ebb20a22f11bc7b2b1641622",
+      "sha256": "30f628c257990fe6325b8799ec673ffd1efc52a0178cfe2793a193b8ae38ca6b",
+      "size": 5348,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4C0.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4C1.WAV",
+      "sha1": "a34d78df6fc82b6eb770bff362b78a461ae6ae78",
+      "sha256": "5863076ac8b1728ffdf5e81163b61ca2ccec01c1044e933751bc7afb241018ef",
+      "size": 8577,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4C1.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4C2.WAV",
+      "sha1": "95357028fc0aef52c2fc7893fd121e61866eee4a",
+      "sha256": "d02e4880b8d110dc9cbab2a1e5a36e57acf9daa3257e01647135c47db53392ac",
+      "size": 5504,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4C2.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4C3.WAV",
+      "sha1": "041ebc42bc9d051941cad58df1613bde7278cd98",
+      "sha256": "5316f3425f8745043436f36084a5ebd2ddfbb3782c3f316fb8795d7c8c77cc4e",
+      "size": 12420,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4C3.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4C4.WAV",
+      "sha1": "2360b9d155a58527f50ecd9f911f26f45c6bc105",
+      "sha256": "376649a1e0f13fc51ce5cb8389f035f57187f8aa7fd8d85f5567795120a1c38a",
+      "size": 11286,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4C4.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4C5.WAV",
+      "sha1": "262785f38122a50360e92f12802e72fe1eedeea0",
+      "sha256": "1a5f4af316b86470e25cece489c7f3e58a08feee5860b93866fe94570414a24c",
+      "size": 7194,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4C5.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4C6.WAV",
+      "sha1": "706b813044de4cb81648eb56504ba710a44323c0",
+      "sha256": "2e2725aad048dd84bdc448a35ffece76593f548223ef72d3e8de1bab1662a8aa",
+      "size": 7078,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4C6.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4C7.WAV",
+      "sha1": "2b5e3df38cff6e76660fd569c2b4ee49eaa8df9e",
+      "sha256": "a10f836f56af4e0ddadc026c4abeb7aecdf8ce36bd2015fbc5a32787edc80ba4",
+      "size": 4566,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4C7.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4C8.WAV",
+      "sha1": "c9a737151b2f4f8e19ffd1f83b57776323689ee0",
+      "sha256": "d0dc32affb58f9f9496814d788c5c18067d843ff5b921c9c184908ede26966ae",
+      "size": 7740,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4C8.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4C9.WAV",
+      "sha1": "ea8539736413d266f7318a328e07efacee1fd288",
+      "sha256": "7f262d924488af3e9db02e41d247fca8c25f2baafe76b3ae0209a83d9794f78a",
+      "size": 9504,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4C9.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4CA.WAV",
+      "sha1": "346ed107b9346665d216e73f0047336c0e46d972",
+      "sha256": "5b1887e01ef7460bda59a71249f357acd82ead0e40708ee95abc50a39b3eeacd",
+      "size": 12896,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4CA.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4FA.WAV",
+      "sha1": "e67d10a83cb82db0d19bdbb3d6697dc69bdcc7ba",
+      "sha256": "f05ae951c06a374d091e10c4f6306eb83dac765c7744ea2683396f4283681481",
+      "size": 11049,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4FA.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E4FB.WAV",
+      "sha1": "8004b2b79ca3465b8e01c715084ea435ec4ea03f",
+      "sha256": "a098d6504d882f87c655d21c7e32f477e8a919eccadbbd3c086766b318de2cad",
+      "size": 7604,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E4FB.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E880.WAV",
+      "sha1": "04ba0422b949c786f35ae6173f794c616667cd24",
+      "sha256": "d617040d0b1e2e8173ea4e18cc2e33b9dcc0c6644a883a9fbdcfa725f43b3b6f",
+      "size": 10745,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E880.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E881.WAV",
+      "sha1": "686c70b43b54e3a397e19436d3c65d7090efac25",
+      "sha256": "07adc66c7f9855735989944f4e468d3ee4562ec19a055724322537f95d08fd94",
+      "size": 7324,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E881.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E882.WAV",
+      "sha1": "53866e4e9ab4e004cd38d21603c9f018f52d924f",
+      "sha256": "fcac2dc6beae40d368a34a7482e5e20b4d4f8f6c4a3e27fb1628b2420842019a",
+      "size": 6876,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E882.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E883.WAV",
+      "sha1": "a3bd0bb14653a9138cf86b910a3c3b8892fdef08",
+      "sha256": "790bf631c0a4b26c2cd261c67c858a3e7b1cde8fc82e72099f9686ae52d85d21",
+      "size": 7418,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E883.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E884.WAV",
+      "sha1": "72623723870561772e5b390478888897a52a0d56",
+      "sha256": "c831d26de349e5d9b16004e2078c1f0dcd47929746be48b529064ae7eb931c32",
+      "size": 13296,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E884.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E885.WAV",
+      "sha1": "852f1f98d6cc776b32e45ae4bcdf58c85036f01c",
+      "sha256": "628391fdf9ef3665ab04c948f752ef6e288a09281cb6600e2b60f0e96b7abb12",
+      "size": 10055,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E885.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E886.WAV",
+      "sha1": "85740a689133cb158d5282b5e428764763dbfde3",
+      "sha256": "a3bf5dc0fc839d2fe0ac165224344b50db2ecd1eb0d10b1a264812ca50fe911f",
+      "size": 5827,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E886.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E887.WAV",
+      "sha1": "1657e149a3c6ee7704e6f2b0232762f508bf8476",
+      "sha256": "9f248f6710f616779762c008d94212e207276d2e066d46849be1ad51bbea6fb0",
+      "size": 6215,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E887.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E888.WAV",
+      "sha1": "fa96786c2bdae91f833d4d509b5af47f75fccde8",
+      "sha256": "0eeceaf651d2762c867b1ec419ff599ea4e96493398382e6b25ab7758d352988",
+      "size": 5264,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E888.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E889.WAV",
+      "sha1": "f272226e426a076cc341d228a08286b09a90eadf",
+      "sha256": "62ff4cbf4cc7831d2af756969cff1e30ad6a76beb2e53d8d257d10b68af30f7f",
+      "size": 8524,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E889.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E88A.WAV",
+      "sha1": "73b6e7aa0ddf4cbfb14838bc73f80cf67ccf6bbc",
+      "sha256": "31d4166f01613d7386aeb1a9d1174de21dad8b622a4fb1839604fc3ba8ee29ee",
+      "size": 4348,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E88A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E88B.WAV",
+      "sha1": "967d7100e93e24cf54bd955891263ae334b2143c",
+      "sha256": "19241649fa3365290effb653b496e2aa9fd05ddb9b54e95b632b5728cd0b2180",
+      "size": 4104,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E88B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E88C.WAV",
+      "sha1": "6af80ddb8071daa018cc825a5d5f293120ee3826",
+      "sha256": "830d3de8a95a026a21c6a38584884caa290b24909d247daf9f9da55f23c2fa9c",
+      "size": 9624,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E88C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E88D.WAV",
+      "sha1": "08e99d85be82360d827f87a9b8ab270eca74370e",
+      "sha256": "8eaadbc24351ba4d94f4ea7e9e479863ad1e736b53fa143a4d7fc36c6c6e0d0b",
+      "size": 6914,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E88D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E88E.WAV",
+      "sha1": "a91d8b40b80923227e1d2b16d2810051607725fb",
+      "sha256": "62bc3106b6635068d99c0cc87067586fbc4b10d2203e8b8175e025621b38db2b",
+      "size": 8319,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E88E.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E88F.WAV",
+      "sha1": "2696142c50d3221926484759d353acbf734ed06d",
+      "sha256": "c78ae14152692f973585bbbcae580350a0e9edce75e9a3c1d956586c303bebdf",
+      "size": 9592,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E88F.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E890.WAV",
+      "sha1": "adf56b91a13597f60d0bb7fb6298a786234c677e",
+      "sha256": "a9fefb03282443c05c77d5c4a498d9622f90904d0b88452ba40fbabfec436449",
+      "size": 9479,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E890.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E891.WAV",
+      "sha1": "274f70e6ac2b9189ceafce10fc54bd78090905bc",
+      "sha256": "650cc6ec3cae423ee4457dea74bc04c8931c30f26cb6e1202a6833bae132fa46",
+      "size": 8697,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E891.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E892.WAV",
+      "sha1": "a86639c1ed47d97d7fe0db77b797adee88aa9c5d",
+      "sha256": "d8c022f2ccc15aec8dfe3a01d55f8182021ef5f10a0d639524cf5f1483238945",
+      "size": 6878,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E892.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E893.WAV",
+      "sha1": "6dc334d19859202f93a3a63e4d0b2ef089fd7611",
+      "sha256": "282b397a856977946fc5e3626cc18cdfe566ece54c1afbac6a2fb94b2cead52f",
+      "size": 6220,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E893.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E894.WAV",
+      "sha1": "e3de69f9d1f17da944a554e6ff0a1c8e47c8b9a2",
+      "sha256": "4b0d7da010c7afeeb0af225e95e21d248e21950af3acfc4a90ad4372f287191e",
+      "size": 6830,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E894.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E895.WAV",
+      "sha1": "286e17017ef45c2882e1ba6ff94495020c5118b1",
+      "sha256": "d0df5caf06d33ef13239902d1759f52e16cf0b1304d2f0c957ed8dd757a3d74a",
+      "size": 6283,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E895.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E980.WAV",
+      "sha1": "fa384c780e295b58c42de82968406a9b7af684b3",
+      "sha256": "f5feef1bac420f370d1d457327166c79418f249245874ccce7cc542d3702a541",
+      "size": 6300,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E980.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E981.WAV",
+      "sha1": "0c99f421655357a430b3c9989cd76644caadacb6",
+      "sha256": "87dc7f9ed3e0f2c5fe0b4fb9cd39cca61bc9d755fdb60d4f95cb57d7094a7139",
+      "size": 5324,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E981.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E982.WAV",
+      "sha1": "af78ec8e231f425bfb35973691d2a2f7d0b60d8c",
+      "sha256": "cabc20feed4c04e9d35112bf0d6ea13296782058fb6f8aed66452a67c9e3c4f4",
+      "size": 11267,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E982.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E983.WAV",
+      "sha1": "b7337ea4f67d77252aef7ef4bb8a00541f3361f0",
+      "sha256": "eba0a328d5ae7a78f2cf21cf46ce2305c475cee234a43b91ef6a034ea25081f9",
+      "size": 7202,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E983.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E984.WAV",
+      "sha1": "1477298b1ad2c2b4ff1fb2ce564ab092d907b77d",
+      "sha256": "f4fad3000145513e6e51e80ce66c8838754d3e9b95ee35b9ecd7b881ab1303ee",
+      "size": 6732,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E984.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E985.WAV",
+      "sha1": "85d30b95837bb8551e645c04346a1aeb62f93bbf",
+      "sha256": "db6f0900a8422aef63427e667b5bdc9251e2ba0743dbc35ab4a7ac89503d7fcb",
+      "size": 6317,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E985.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E986.WAV",
+      "sha1": "9b1e1d350e358cbb043cbcaca2458f6eb8c44fd3",
+      "sha256": "ee8b1706d70e00b3f20a5a4fc886a1c08b3e9f6d1cf4cb16150573898f08df7f",
+      "size": 6638,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E986.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E987.WAV",
+      "sha1": "50614f009eb83720634e3b995592142e1c0b3635",
+      "sha256": "fd91b309fd87a11da2654dfa3fddcd9d6fb0a9ffeaae3e653800f3af2f972571",
+      "size": 8261,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E987.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E988.WAV",
+      "sha1": "2fe6e0b229ac343c95f40c4e4fa149a39fb82221",
+      "sha256": "7f3fc22fb744d47fe7024238b17a6c91b0e6f6763b7efb20c16dc330f75b2e32",
+      "size": 10269,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E988.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E989.WAV",
+      "sha1": "73371c0c666846cff75b7e57b763dd5d48455abc",
+      "sha256": "ef3a56eb4ba555552e0a0aa876ed08d138e1743423dc7aa4f196eac4c07738fb",
+      "size": 5644,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E989.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E98A.WAV",
+      "sha1": "66523076f5dd3945cbbdb8207cbf55febc4dcb24",
+      "sha256": "cb14e392380566c24b2b1dfeab3a8c0890f2f5b1ed7d789f54015600de7d54a4",
+      "size": 6008,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E98A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E98B.WAV",
+      "sha1": "fc8d50a5277bb0469d2625bef627b9248b6b366c",
+      "sha256": "151afcd50fc35fe93c48db940025669c9dfbe625bdc912ae79d825b5e087a29a",
+      "size": 10470,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E98B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E98C.WAV",
+      "sha1": "ebc2fa75754d27bca2413049a917cf77b79aff90",
+      "sha256": "7e1eb13859f94f8a13544800ba46e599d3a5943820bc88309ffa1db8032b9bc7",
+      "size": 6304,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E98C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E98D.WAV",
+      "sha1": "468c801f246bcab1950b3a9b5be0851f6089d7a8",
+      "sha256": "024833b1c7fcb853d6c71436f6c8b68840637199910b38bb1d025788e5ac0d1b",
+      "size": 3478,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E98D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E98E.WAV",
+      "sha1": "688b00078be680b7cdd6440e37b6cadb168422d0",
+      "sha256": "e851710abf3d07d2979c47ae3299db55e145d914e8e97c951aeb438f72c97526",
+      "size": 12232,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E98E.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E98F.WAV",
+      "sha1": "86dd5ab45b141c52f938e6ed4a12af3376d97c7c",
+      "sha256": "d6610f4e7ea2dacc827d19fe014623448a1addcadbbe67262f894a3ed6553417",
+      "size": 13922,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E98F.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E990.WAV",
+      "sha1": "18baabee16728274cbcb72b24f6562a5f32b4431",
+      "sha256": "4bd8e86618c3c0bac0bac6444b5cfe8359b0ae5cd645256d07d6b8d71580a424",
+      "size": 10460,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E990.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E991.WAV",
+      "sha1": "87d912c23b1ba9b342a157cfe01a5320e50263c5",
+      "sha256": "65575e7c401994ea79755844865da0d8490592119f4035c1b1edaa3300274d86",
+      "size": 2924,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E991.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E992.WAV",
+      "sha1": "44687c6dd6e2bfac4e79ae58788a6d62252ac29b",
+      "sha256": "10e682321c2be274cff5b57c77579c334979390d41ea46b9b732ec8467e50800",
+      "size": 16808,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E992.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E993.WAV",
+      "sha1": "e9a6a2947ef5056e7de9a1237ec4e24710989303",
+      "sha256": "8be0ff59ef25a932784579a611047931911c37609f29131dcf76ad6e259cabec",
+      "size": 12544,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E993.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E994.WAV",
+      "sha1": "697246d7012a7be6a31e2fdf311381483c3ba452",
+      "sha256": "df20c5446518872aaad7cefad131889fa9b6d94122151e18a5d12e46a04d3431",
+      "size": 7100,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E994.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E995.WAV",
+      "sha1": "9d6a63a7852e056bd20e316cd6c49feee360a20e",
+      "sha256": "99b946aa0101235999b84e028f85820bdcc966f30b4af513899679f70b3cead1",
+      "size": 6452,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E995.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/E996.WAV",
+      "sha1": "4c03c68552afdf14dd568d4119337436ff517408",
+      "sha256": "661edf8935d0c6e1416a6302684c12b23a1b6f64e1007f155cc5d32945ec11f5",
+      "size": 6685,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/E996.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA80.WAV",
+      "sha1": "c0a38acebbebc40460a14d699a2ede06a6024c40",
+      "sha256": "342206cbcce158e48e1c9389ea02a63766a5964c2d8b7caccec8e3dd9f97ae2a",
+      "size": 3092,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA80.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA81.WAV",
+      "sha1": "b6976b3f878006d75aa00d1b3ef9f8b77cf191e3",
+      "sha256": "97e59ce6c9457262e600ea1af14cb8dd0762474fa995f528e08b38e2bb14a91e",
+      "size": 5390,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA81.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA82.WAV",
+      "sha1": "8a63b318ec48706a1115637756154d0da5a746d1",
+      "sha256": "81ba68345bb4395d33acb212b4de32ee235a732bd15ab3e97bd73feb4831978d",
+      "size": 14341,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA82.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA83.WAV",
+      "sha1": "32153f8e76870d54b90e819bde2de3ad0e86f698",
+      "sha256": "a320b09d1acb5b1bbc3503a86cefb5fa703fd62d9f249932ab195d45f5cfec5e",
+      "size": 4719,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA83.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA84.WAV",
+      "sha1": "d3a98ffa559856e6a73cd04a815df45956316ff9",
+      "sha256": "24746eb25e61fd1b95aa210efe9f49af93479f8c8c58ec569c20df6d45c453a3",
+      "size": 5252,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA84.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA85.WAV",
+      "sha1": "7726dc8764a4ad9137703b3d2a5495726a7d5d33",
+      "sha256": "23367c7fef1c20918b72b4bf3052a1ca0af2ed501a5f1b8a574d666c744ed36e",
+      "size": 7018,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA85.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA86.WAV",
+      "sha1": "6a4b5b2a83a6dd8783f7c59564e70ff2c53ddbdf",
+      "sha256": "77a86f79ff9d36f89eeffa0c6e57e086cb8bce8ae71e30550e305d2a1acd6691",
+      "size": 8480,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA86.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA87.WAV",
+      "sha1": "e7c6e2efc9399c3cc980f0fb19e43cb3d76d1cf4",
+      "sha256": "1dbf984971e89d34b54cafe4c3e6517e544a2e90f5f0fccdad83b32c19cb2800",
+      "size": 9496,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA87.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA88.WAV",
+      "sha1": "c679da29c2fbd65038bdf15f3577491bf0b1ba40",
+      "sha256": "f4a57d89f59aa65f7107f307be98fd05a7830ef470736a3d345f912bce025b08",
+      "size": 38600,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA88.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA89.WAV",
+      "sha1": "ea05c8bbfea55c21714f63aa373c819d58f096d1",
+      "sha256": "ed69eb64437b1da16fb34a7f05c496f4cfd212b206a0ed7ec3557b3f902f1a59",
+      "size": 29892,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA89.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA8A.WAV",
+      "sha1": "692cc1f10ab19c7e62d92e87f41a69e573d4dab1",
+      "sha256": "bec9d70db67e4d1a934102226c090bdb38353032cc4ee6bd018c69beb7b2a6ef",
+      "size": 11328,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA8A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA8B.WAV",
+      "sha1": "94c333cf848bcb76c7bf7dc1d66cb9744be5fb27",
+      "sha256": "79507734ee64165c045658f938068c0e527ea221e7356d65c274b6b1098f291a",
+      "size": 2604,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA8B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA8C.WAV",
+      "sha1": "182d2bc34c6d8829628c1c9fca5e60da116492e0",
+      "sha256": "724e51965e152512ad8982de341608c21bba1382fb63373134eff8e84794c8a7",
+      "size": 16184,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA8C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA8D.WAV",
+      "sha1": "329a81f7c7df4bab0b03afad8e0cc1416881b99d",
+      "sha256": "1e3eef3f39e265da1e698c68efdc8248849b8a0618e42227df89ed1f542505ba",
+      "size": 3308,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA8D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA8E.WAV",
+      "sha1": "1a705992cf1e7036a84ae4cddc6cc16d342a3251",
+      "sha256": "aaf384a69af1326fa57558e9831dc384990cb2a0e8ed8bfd1f0c5bc141ee9dcb",
+      "size": 3350,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA8E.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA8F.WAV",
+      "sha1": "8ab7685bad14bcbca5b6bc3b65b5a896b5a3588e",
+      "sha256": "487f98b61381b09ff3154d1ec5330eb8bbe4414c8c127485fd6174b81bcecb26",
+      "size": 18174,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA8F.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA90.WAV",
+      "sha1": "dadb40c830ba1b65c545fe24f6a61cb6ba977a52",
+      "sha256": "63d24d9c3e095846bf3b93ff1bd3b65e6be282c17544323bf9e8aa05c678f4ef",
+      "size": 3348,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA90.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA91.WAV",
+      "sha1": "54ff7b04bcefab5f8afc8f8d88b033c0c01a543b",
+      "sha256": "94d90124cc505131a348556e58cea2625c96043028363058c62b9331452099a0",
+      "size": 3299,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA91.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA92.WAV",
+      "sha1": "bc10887ef07c76b4344ff54e7c59c33a4a60817c",
+      "sha256": "e2e617d9f0dec9fe7200f544700e8afb41a86ce0ddc3d297ed95a065dfafe990",
+      "size": 3302,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA92.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA93.WAV",
+      "sha1": "9c3fd7de14c33785e3c8bcad679b56065034114a",
+      "sha256": "ce41b5b80e98d5d075897ad33d615bc046aa5d93b26c7a60d35f6dc0f8dea519",
+      "size": 3306,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA93.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA94.WAV",
+      "sha1": "d34a6655c316fa05c1175f0b797b07f4f0e49c85",
+      "sha256": "7f1dd900f14f5acf7a607b8e8381b74af100a1eb738c0d88eaaa992539b692fe",
+      "size": 3267,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA94.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA95.WAV",
+      "sha1": "4c557f9f0caf9becfd374f7071880349abb94257",
+      "sha256": "486015533c26e698c9a1d0a1dfeb50044c2d32c360f2d4a62fb7d9e6cd9074ad",
+      "size": 3388,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA95.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA96.WAV",
+      "sha1": "a9af1ee7fcd3cab915d592de263945c46dbcbf62",
+      "sha256": "2b8d96381cdcca192c9a6d0233d0a9079871720e34cc9615b1f13ea10391eb44",
+      "size": 3392,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA96.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA97.WAV",
+      "sha1": "e4b558b00206e2c0d2c8bc429b55c09e40b68b61",
+      "sha256": "459f5ec63cb091dd6623c8d813acb04b875a8e256ab2b7edb0a8f2419a434df1",
+      "size": 3393,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA97.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA98.WAV",
+      "sha1": "4f4dbb4a6a010d01c2330d7ee52c9b8905bc89d3",
+      "sha256": "f694637321cd9d3880b3f37b3d6361daae7ee37cb27d89bc76ecc4197809413c",
+      "size": 3359,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA98.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA99.WAV",
+      "sha1": "e0371167d32c98ce290f04f8a784ffe6a1781b56",
+      "sha256": "92d5a3102509e1a236be1db07ab56ac5a03eaf2d58d7398eb437a5d6f2c4c306",
+      "size": 3300,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA99.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA9A.WAV",
+      "sha1": "d25cf10602e76da5c77db420bb4b08204c7c8f41",
+      "sha256": "dbe4a182850ac9d34a3f724fadccf471195fecf7be13f0e44e16b7eed376fc0d",
+      "size": 3312,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA9A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA9B.WAV",
+      "sha1": "fe76a44aa35d6dde85a7e0e441e828ed37bde198",
+      "sha256": "4ac7537dbf63c11c764173bf4949cb4918ff7cd404ee2af364d5b647b508900b",
+      "size": 3402,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA9B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA9C.WAV",
+      "sha1": "b1cb3ac78ec2e35f1dfdf37464b638dc4fd7e4c0",
+      "sha256": "974a47c9f1c4c66b8ee08d9c7d5f1b3808f8ba42e4f1db32f1bddf553047e816",
+      "size": 3308,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA9C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA9D.WAV",
+      "sha1": "bc2852bc760d5551e38bafc42afffad35e1b3d54",
+      "sha256": "6f4f4ef74ee3a0d55c569fad1f26dc2f150f8a9e1692457c609c04af1139c4ce",
+      "size": 3313,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA9D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA9E.WAV",
+      "sha1": "1ea0e8e7dc9bbd63c4e8a00ee02bbbdec7f7ef18",
+      "sha256": "841f89a785e67f4e211390fd18cb6a89846299359e89a1b8f432651589940d21",
+      "size": 3302,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA9E.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EA9F.WAV",
+      "sha1": "7f30bf3624ba369eda16178b2e090b1358230f49",
+      "sha256": "098fbe983d914b1d3bacea9d719013165b64a15454c828c72cbfe7d5e45c6e8c",
+      "size": 3340,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EA9F.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EAA0.WAV",
+      "sha1": "93a16f5a693cd84552de22603549142a629e1ee3",
+      "sha256": "b58ddf5be02cb5577838b5b2aa977f67c354bb994c7c9df9e2b9b0020f4fdead",
+      "size": 3314,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EAA0.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EAA1.WAV",
+      "sha1": "4710a0b7b0d456bdc0f9b04d221d6e171800baac",
+      "sha256": "ff5eb60096e1c0fd44b86e9eec8fd8499126db5e5935d480e99b7c416f55cc75",
+      "size": 3306,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EAA1.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EAA2.WAV",
+      "sha1": "c7d3ee76fb6ff21ce700a2561bdf2a18cdfc5a0b",
+      "sha256": "446f7529ba0155ab6d5b2c5921fc28c53bcfcd2e1602fffe40c0c9f786b1eeb2",
+      "size": 3308,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EAA2.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EAA3.WAV",
+      "sha1": "196e2177527773cfca9c990e65d896d01c7c6546",
+      "sha256": "3ff27184345a1915f60b1dd1c462804f44bcc4a32d0fc385693bb65bd4e197b1",
+      "size": 3314,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EAA3.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EAA4.WAV",
+      "sha1": "710365ad7e04c4a33c5ea02aa9faf29404c42468",
+      "sha256": "fd6ab6309867b5ac759ae82e403de708169f3e38693254cb19fab41dadc5fcaf",
+      "size": 3313,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EAA4.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EAA5.WAV",
+      "sha1": "c94edc4d802d0056f792480a205895ce36e54e70",
+      "sha256": "6db911e44671270eb02eb4bb1dc126175f8328138bcfdfcb4d0eef9dec1b4070",
+      "size": 3311,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EAA5.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EAA6.WAV",
+      "sha1": "ee6069156165cf07415b7bc6f86ab3921470b444",
+      "sha256": "dbf21e8716ac48062f46797674da2aa19c5a3a6753a43e8a41d14bd8ae5e2d21",
+      "size": 3340,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EAA6.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EAA7.WAV",
+      "sha1": "4eeae3d926fb3ba764680904b5cde765bba681a4",
+      "sha256": "2a0afc4ec7815bdf891f30a6a14c264c5bea52a87a2fb301052affdc7dff654b",
+      "size": 3302,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EAA7.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB80.WAV",
+      "sha1": "4e5ccb64034dfc6ac9f43617211e68e4933dda42",
+      "sha256": "90b9929632a216f5110ca2b37ecd92dd7a357873490a5976b2ff1d7c88171ed7",
+      "size": 7226,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB80.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB81.WAV",
+      "sha1": "9f14ccfc2a7872a5086d918e5097f185ba4cbeac",
+      "sha256": "486a612aff03a7b24ebfa5156708dadd5149601697a302c7b3a653f53a686011",
+      "size": 5558,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB81.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB82.WAV",
+      "sha1": "7e04eb6642a002f70385d6d504441000f5bd224b",
+      "sha256": "0fb3c6c9f0b0d66225014fc4d04f4ed24943c5d26f144ff05f3ac1f140cbcfd7",
+      "size": 5566,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB82.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB83.WAV",
+      "sha1": "7ff3b5894c7a00f423c3a8f3182fefa4132bff25",
+      "sha256": "0ce2855a634fd2b37a7ebc520e0cab603c98c9b2bb4ab53da0f228c4c490d44a",
+      "size": 6276,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB83.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB84.WAV",
+      "sha1": "67e520e9d94d2caad8556aff6f767e10e057b662",
+      "sha256": "ee2b85bdb3a80a8709d25c9f053859a1d040ba5decf50b10830a19b717f527b3",
+      "size": 7508,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB84.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB85.WAV",
+      "sha1": "623e6306c946748617002aa9e83803f965b713e2",
+      "sha256": "934386182e8ffd81c8bc1c73fae4e37f83b96f83cfb213e140d49b7e280066ef",
+      "size": 5400,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB85.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB86.WAV",
+      "sha1": "abb0a057fcad809e30efc2e97a3d6cbd1ed533c8",
+      "sha256": "30bbdd7f45b1e94a6eb6edc1c3eddd2f2f41adcad615e5fc16f7e66ff9d7c60a",
+      "size": 8981,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB86.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB87.WAV",
+      "sha1": "422d790f51fc928025d8db7e8815d5da0d4f4053",
+      "sha256": "20d8bc2d8a611b2f273fac8ee108ae460e1d50d2a73982f223cc706400c135d2",
+      "size": 8844,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB87.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB88.WAV",
+      "sha1": "d00edf437274ce5845618c46e1e0980abb2ba7a0",
+      "sha256": "4be1d707e35399bef19d55a01474d67148b6d38fe23f36480908040dcb5c256b",
+      "size": 6554,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB88.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB89.WAV",
+      "sha1": "1a970a0fc1b44e3f140070fe7a447eead56747e7",
+      "sha256": "4f906a33d9c428e6dfd7d1000cf3146395757d848abeb2936be5b3f9f4e5d17e",
+      "size": 6932,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB89.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB8A.WAV",
+      "sha1": "b3d7f02d3ed6fb190fd89bf4bed92d79b12d3789",
+      "sha256": "98fa885ad42e2c3d5cf14b33c0bfb8c8bca626a626ada9d319f3407b502372e1",
+      "size": 7059,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB8A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB8B.WAV",
+      "sha1": "2ce6552e0caf9b78348600108ecc4534f0c62cd1",
+      "sha256": "057775fbe58157d86eab5a120cfcb734ba560d2ed9836b9ee391f22d20cf3d9c",
+      "size": 7544,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB8B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB8C.WAV",
+      "sha1": "0f8d5bc12b6c607e270c96298eec2c58b07fda75",
+      "sha256": "5a7207030a462276b16b03b96a9a7b4ef1e7b42678379dffc26ed091a099ed54",
+      "size": 5790,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB8C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB8D.WAV",
+      "sha1": "8a3597a2fff99aa9d62a3e280c9c286353e88de2",
+      "sha256": "322eae2715656546ed1cad24ad588bfbe47476f05e2c4bb6157eb7da814e807a",
+      "size": 6700,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB8D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB8E.WAV",
+      "sha1": "d90cb70892e01f733b4f2a0e259078fb1b1d4d29",
+      "sha256": "624cb0bf1715275e11d7c1d54a6d4c2d4ddaed4ae97b009ca58392b5499eb65b",
+      "size": 6188,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB8E.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB8F.WAV",
+      "sha1": "7c802a13dfd3da1566bbacfec9ee6601791fd848",
+      "sha256": "412768ed68228130696ec72f37ee3605190bf10a1ad4f415447b5c95192fdd11",
+      "size": 4880,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB8F.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB90.WAV",
+      "sha1": "d0f85eb868a6a6c64c50892699b36e8a39c006ca",
+      "sha256": "a3324b56550b004c69823c96126190222186102dfad5015a400bd4ebe4f98b7b",
+      "size": 7480,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB90.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB91.WAV",
+      "sha1": "20b24da52b6bc8d26821f5e014629cffdf6ffe46",
+      "sha256": "d6d1cda334081452f49688459fb37a5775d0f52033cd69d77900850a1f5e1b4d",
+      "size": 6804,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB91.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB92.WAV",
+      "sha1": "d82dce08c0be113e5c64964a6c17d827810c704b",
+      "sha256": "d4339cf7eded604b25312288bbc5bd9ae992b946b6755385df43a3e59f6431bf",
+      "size": 7419,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB92.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB93.WAV",
+      "sha1": "2e0bbf1ba563f37bfff57c13651f62df83e6e0b7",
+      "sha256": "636a46e3830fbb14e03fd2f8b2c71014232c7cb50b4631dfe7e5a200f051bbaf",
+      "size": 6105,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB93.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB94.WAV",
+      "sha1": "bdbf4b3f95bd172d246c4cc15da8e2a7bbe0adc4",
+      "sha256": "eae1a633994e64847916b435dcd71214546d2198b99958a4f6c7dca67f85b2fd",
+      "size": 4972,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB94.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB95.WAV",
+      "sha1": "9a607564ea58becd15bbec9050ff48a1d61c61fb",
+      "sha256": "3f422c451cb80bc1144d8d4668e9a85910a5ef53d157dd3c56ad6bed1bb984bd",
+      "size": 5084,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB95.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB96.WAV",
+      "sha1": "ce416a8bd1719278afbe8a48ebd7d0ed922fcd89",
+      "sha256": "e5b65dd31531715eef9f0936890b0149a9fa63dd8bffab11d54084ee0b362bfc",
+      "size": 6492,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB96.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB97.WAV",
+      "sha1": "7b5a8dcf2e77b31c518d5f83b7ffffae3b844630",
+      "sha256": "56bde94f8a59fbac09c9661d609533f68c5a49e5d160a147100363b7c2105147",
+      "size": 8819,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB97.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB98.WAV",
+      "sha1": "e4d84e0683ade720b4563c7c7c0410fd39c7e9c4",
+      "sha256": "c31a313ee6fd1e2639465bb498962f846b7cf6ad7ea0fc8fea59bce072493bb7",
+      "size": 6104,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB98.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB99.WAV",
+      "sha1": "aa5f74ee17a7aa1a32e9e5c49ec9c6b7a04845cf",
+      "sha256": "60860d8f5286964649346933966d5294a255f9aba8a5d5df48179ff0e17c53e5",
+      "size": 5896,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB99.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB9A.WAV",
+      "sha1": "7ed33e9b39600e6272c7240b0e8d5a41a0f4888d",
+      "sha256": "09f6542d9ba6d57a1c5c9efccff66112402191a9de7224b786fcc0d3c335988c",
+      "size": 5784,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB9A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB9B.WAV",
+      "sha1": "cb15dd86f24484d7e4108781062a2d16d1d89ca0",
+      "sha256": "2a2ef71cac9934597c091c038072b8848cf16cd26a8b6859da62e17b1b5e47ce",
+      "size": 5742,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB9B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB9C.WAV",
+      "sha1": "47de566090c6caac648d4bbcd0c343df746568f0",
+      "sha256": "23731e18ea8e3f4290f75263effe3dc968e81c7d9eec898801c08ff7ef21e78b",
+      "size": 6154,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB9C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EB9D.WAV",
+      "sha1": "66e3a07e95bfbac501f058f51a7b0b95ec96cbd2",
+      "sha256": "b82bbadbd79f6afc881fd410cf6177e04790e6c2520cdc17284f13d9333a51cc",
+      "size": 4984,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EB9D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC80.WAV",
+      "sha1": "054c867c19fbf3120fca51e982d22f9c13136c36",
+      "sha256": "4275fe5f2b97dc1835ef1b96159a27d085b9747764754c13d110fda6196b66e2",
+      "size": 6815,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC80.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC81.WAV",
+      "sha1": "ef469efefc7235959669e759a6da2b0c16839170",
+      "sha256": "8dc7f2abe7dc6e1ebb4dadced0fc0c71c99a7cb56d9edd48b854c02d508c1e04",
+      "size": 5628,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC81.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC82.WAV",
+      "sha1": "e7741bef117cb09c3de3159be3b2862f1870beb0",
+      "sha256": "69c02d6bd66de1c6a95ac2a3a0b766e95befd6c9e4635d6c0719a639b2181600",
+      "size": 17440,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC82.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC83.WAV",
+      "sha1": "864dcb2898f4b5c10f1ef2480d72a2dce115993a",
+      "sha256": "5d23a90894f7fb8af325f74186b800e35035e8113c8a6aaf6a52f8ebc866f9bb",
+      "size": 8162,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC83.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC84.WAV",
+      "sha1": "648c2162db1ba8e0e691480355e58fd5ddf2ad25",
+      "sha256": "1c3bf5af377d296f52c52d8928e027e4a53925c4aeb310407764b4aa4cd5003d",
+      "size": 7944,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC84.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC85.WAV",
+      "sha1": "4685a25254e96cdb0155ee33718dce4ff6e9edd4",
+      "sha256": "74449f9686e766707b27618e0bddc8ef757b4629545e7d2b1d6d34ca64dc04fe",
+      "size": 6848,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC85.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC86.WAV",
+      "sha1": "0ceac61e9ccc404c1dccda6c9a75f64331d4a6fe",
+      "sha256": "bc0df3db43a586f805e258cbaec80730f457afc4fd9bd19180072527a6f7dea9",
+      "size": 8225,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC86.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC87.WAV",
+      "sha1": "db5a9041e9b84d38797d0c20c3d04d4ed8da98c9",
+      "sha256": "10ce2669e5c070ae28371c5978fe44f888a842e87cbd12137e137aac5ecfe1af",
+      "size": 5588,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC87.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC88.WAV",
+      "sha1": "13a8be5b060a54760b6527b295b487e2e85fb828",
+      "sha256": "cf462d9c1850624371a7c97a6a332211e0a92f643fea42742ca3b9f54bb3fb53",
+      "size": 8954,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC88.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC89.WAV",
+      "sha1": "37d21747780f31e27861893235797b2762d1e80f",
+      "sha256": "23c89aee43cb899e6a6049994b4dd6a4567cf7b4c90e6736d02fa353aeae5461",
+      "size": 7340,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC89.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC8A.WAV",
+      "sha1": "805b5d089a49c6e2610324c7efba052df161845b",
+      "sha256": "d25fc355a5a760162c531bd5f3815305e16bc4b7519b382b32264077b2441604",
+      "size": 9092,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC8A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC8B.WAV",
+      "sha1": "8a53ff860fa8197eccb90253438cbf87f70338f3",
+      "sha256": "f6bcac23c621f8716a2d17a1cc0dc47fec4a2f4d6cfe5ffcf7ecf9583d32bfa2",
+      "size": 7754,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC8B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC8C.WAV",
+      "sha1": "fc27b4a13273c690ad6685b739822f05c1affee7",
+      "sha256": "a9a71cb2bb1a341495728254fa56d429bacd8540719cea663d9c8944ffd920b3",
+      "size": 7100,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC8C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC8D.WAV",
+      "sha1": "abc09ffe7043d7538e80c7c4c8ee47f54cf60856",
+      "sha256": "de3eca372dbd820aaa9afdda6e60b3ed36560a96b714d45e6fd9a2862a39fe44",
+      "size": 5732,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC8D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC8E.WAV",
+      "sha1": "64bb3766cda1c05edd3ce2c04baf2663aacb1e47",
+      "sha256": "aa53019be01001352e194ad28e6ca05a38786d70e1661ace8ec8169a9dab1a69",
+      "size": 6200,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC8E.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC8F.WAV",
+      "sha1": "20b55ac566b10e45fb98e3453099546b4f83df71",
+      "sha256": "b6f24ff18796182be216c0879e77198da26b7d00de6a36debb27a0593b0f1387",
+      "size": 6504,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC8F.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC90.WAV",
+      "sha1": "15003be8afdf6662636df34f9d0fdf8ba632d449",
+      "sha256": "f576a4b5d6a6646ac99104e90f608aefcea5d383e1d2635cc800159afa447af9",
+      "size": 7853,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC90.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC91.WAV",
+      "sha1": "266306b0b05d08d79e274987ae710ae4385c2e2e",
+      "sha256": "2a99dd7f6d1c2328a9330836386b7088364e9bd64c1eb1bd55bed11310e97680",
+      "size": 8378,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC91.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC92.WAV",
+      "sha1": "0096ec79d5794701c88a80253e901f09e003b6d0",
+      "sha256": "a02ad4fe1a0382dca83d1a4a22a2b916914c8a0d4bf5e5e970cb5c7f4a77bd76",
+      "size": 5336,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC92.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC93.WAV",
+      "sha1": "fe4f0b2b4706debb07b3c58a318e3f79761dc933",
+      "sha256": "05282c4147ec701667cf40d323ae5d1771d573170b75755e9d01800c148860a1",
+      "size": 8294,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC93.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC94.WAV",
+      "sha1": "580bf965f905acc45d7476ff3e24029b1c6b4d42",
+      "sha256": "0f9b3e0dafbfa980eacb8cfd9a2d52107771f0e51b47ce470dbfcdcdd1975e98",
+      "size": 7838,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC94.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC95.WAV",
+      "sha1": "5a22bf57f1e9bdcf6bb1b048a5cb81d301883a81",
+      "sha256": "0f6aa07715e766ff50f1f4d40ca8b73e47a01819fb2e7eac413ef8acbc177908",
+      "size": 6927,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC95.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC96.WAV",
+      "sha1": "99ad591322be7a14ea8a43f4d45fcabb63d90eef",
+      "sha256": "0ca92022d46195d9d948746c5c79c740755a77a0d39953afde2aa98a4562ac63",
+      "size": 7524,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC96.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC97.WAV",
+      "sha1": "9206250e7517cce701670a8ece55508dc575cd0a",
+      "sha256": "8567719eb2a8a99647da113a61aa72b9488d8f9c70805f68f50e265c50c67c80",
+      "size": 8140,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC97.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC98.WAV",
+      "sha1": "7cb542fd3470aa2474a672e946e4f14d7a4f1b69",
+      "sha256": "115928854731e63e61e62cead248cd7819ad8529a50e78611d47506a6cf53423",
+      "size": 8370,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC98.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC99.WAV",
+      "sha1": "aa33bbb6963a1d4cc2264e7cdc215fc6c1cf047e",
+      "sha256": "638b0cc9d20eb79775cec7ff92434a45e73d7d7e80e9314ca00e9993deba960d",
+      "size": 7292,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC99.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC9A.WAV",
+      "sha1": "874af9613d319e16c843d51f4655de8203b15d8b",
+      "sha256": "8f96428a5bdaccd454b8287e4faef1c415820a809932bdce6435b97a7a593d0e",
+      "size": 6884,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC9A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EC9B.WAV",
+      "sha1": "7f5fe6bd0a77bf00ee5315f7199b643c9981efbf",
+      "sha256": "625c9bf8623cd70d12d42310d4dbacc336151665b14368539d92878c567ddbf2",
+      "size": 6846,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EC9B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED80.WAV",
+      "sha1": "9e53a4cc1eaa03a133c343f805c51183b6dc3b75",
+      "sha256": "99d0f0d5df5b782c3386b5ae0d31c1f2a51d56383d8759d0d0cb3d7b717ad35b",
+      "size": 6308,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED80.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED81.WAV",
+      "sha1": "48fd140e66499fcc84140cc110048b9bbbcafdf0",
+      "sha256": "92698a628f8a8f9bd23cf44e86d6f80d1ae2a6257b0198cabfbd88017b150a05",
+      "size": 5772,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED81.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED82.WAV",
+      "sha1": "5d2b34400aea98cb48113754439d8048cd4ed561",
+      "sha256": "229640ccace4ab2c08f128d71408e49278dea831bd19ba9d4a72c3db9eb31ddc",
+      "size": 6794,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED82.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED83.WAV",
+      "sha1": "38ffa32a23c9a7e08a2f1585dbb1dfd2dff17f15",
+      "sha256": "06b8081c6b2fc042d8ce07dbecf663d2134336f58fa2ce909a3424b20d827aa6",
+      "size": 6680,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED83.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED84.WAV",
+      "sha1": "0b8cb81c50228f928d2548a71dd67c16ef993e52",
+      "sha256": "559a7f887a284497c9d4329c4558b7609ea587abaf357cc8235b251a4e887cf7",
+      "size": 6624,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED84.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED85.WAV",
+      "sha1": "e63ee19fb6cfbb7c7fb49b9d2c0d63f0340908a0",
+      "sha256": "6add510a18cb15c92d3131433bc8697b81040ab3db6021eb82aef4edf8ade4c7",
+      "size": 7450,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED85.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED86.WAV",
+      "sha1": "eef5bede191f932dd12503dd0df825c9906db047",
+      "sha256": "4c25422fccae70b7faa19c0775415a74c7517b3549c42c7f822a27c6846aa1ba",
+      "size": 7055,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED86.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED87.WAV",
+      "sha1": "0efc0fe9496d3a089ad883a418b77c35c7b6e6bd",
+      "sha256": "1d84b750ec99338569581e87aa17b66cc7ee66be01c6a6e5833333dc16205b70",
+      "size": 5955,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED87.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED88.WAV",
+      "sha1": "ea2807d6b226158fcb7db4d8e61de34989721039",
+      "sha256": "75576e074632edaf9456eb76c8a7cd3818f12727e00b7cebfd1c2e9848dc4afc",
+      "size": 6789,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED88.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED89.WAV",
+      "sha1": "b458e966fe375006f205076ef3cc5d7565d922ac",
+      "sha256": "0280d7820a2d1e1885e286b08b8bec173decf28cd60a9fd1e0100dc7a8bfafa7",
+      "size": 6542,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED89.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED8A.WAV",
+      "sha1": "ba9282568f114bd94f95c264801d55baa8ffb752",
+      "sha256": "873884c999c818f865c243abb586c406c185231eb6211aaf707756594eca9045",
+      "size": 6924,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED8A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED8B.WAV",
+      "sha1": "aba7ee89cb781a4582a7316823f9738d22b57582",
+      "sha256": "e0fcc8fb1d1026497d1bf9438984be6309d05434e36e9193ae973330e60141b1",
+      "size": 7062,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED8B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED8C.WAV",
+      "sha1": "8eb3baef9069dbf53f9669cbc5a1287b79901389",
+      "sha256": "eac22ebb7fcac276d882b87a64aa3f73b77ce71a1399a9db62d7a8175ffeb10b",
+      "size": 6967,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED8C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED8D.WAV",
+      "sha1": "a7a6a8533972c507542aba4714cd0f15db6602af",
+      "sha256": "6a1b08702c36883c8d18f5858c1dc231c4c63a4368857af6f22010a29572ff0f",
+      "size": 7205,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED8D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED8E.WAV",
+      "sha1": "bfd702793e6f10dcac65512339bcbb085a73cf1a",
+      "sha256": "1ec34772037c4331603de87b3dbea3d2b23d452c5445a16ded29567cdffc20f4",
+      "size": 7381,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED8E.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED8F.WAV",
+      "sha1": "89026b899b8b2d377135996f5783ab5b242bab79",
+      "sha256": "6db59d080abbdc76f40bd3fefbb2767d5adce8297cd8ade7eef30ce2ec84a25a",
+      "size": 5168,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED8F.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED90.WAV",
+      "sha1": "a60a1ced8e6bee78e6a672b485077e5c54c6f7ef",
+      "sha256": "2c49099e2bd7d71cd77afcb9a1e2adb9aed8d99249a79f328036b2fe3d1f4db8",
+      "size": 5344,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED90.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED91.WAV",
+      "sha1": "645da630d380f1533e577390d4910f47aabfdcd0",
+      "sha256": "8ed0934fecee8041a6564187df3b8b1d58be9172d376b496c25870554e9d4214",
+      "size": 5345,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED91.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED92.WAV",
+      "sha1": "d96bb0a01066e6419c5babe277b328ebc1e702b7",
+      "sha256": "b0f08ed5a4b450893c0d9bb19c86b912483f97683c0e5b02b34bac61dc405483",
+      "size": 7924,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED92.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED93.WAV",
+      "sha1": "ac8c24b6625a3eab260aec1e7a977a5c24ff2099",
+      "sha256": "141e8cde8e8c4724e372c21bbc645f4a348a954fecf34380f31d664edb38c489",
+      "size": 7415,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED93.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED94.WAV",
+      "sha1": "1f41521b2e1034ba3ef57d1c9cd1f64d239a0ee4",
+      "sha256": "89e3dd7cd7f9f37f529b008fa2c6c82b21c44cb0d775eea88b34ac70d97e75f0",
+      "size": 6820,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED94.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED95.WAV",
+      "sha1": "e62125d1811ef39d59c0ebaa82d965337ae1ac43",
+      "sha256": "2731517d9a0e178278a5bceb77c54d43dcf6db3f648ff2784547b16d088237dd",
+      "size": 6464,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED95.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED96.WAV",
+      "sha1": "1e5b312a087c1ab4f1ce5227d2ceb7019bd9411c",
+      "sha256": "0755d7c7d89a626e2df239aa865e3ffaf70dfb97caf5c62d84a9be5678f979c7",
+      "size": 6576,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED96.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED97.WAV",
+      "sha1": "2c0ed0e0a46d784f867d10f706bf2b945698e2eb",
+      "sha256": "6fc0560d3c787d2b814b0a83c9e14675961eedf05e137ce1d682d7dd446e497a",
+      "size": 6124,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED97.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED98.WAV",
+      "sha1": "d2767f52c211913bff58325b35470901c2cc134f",
+      "sha256": "568f075fa594a9b4b722ce20d5d0ac6702f3708843706a29dc6e473ed9513896",
+      "size": 7688,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED98.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED99.WAV",
+      "sha1": "b3db1aa5e09b281ee879073ec41e3322fce114ff",
+      "sha256": "64b6acd1ee98ee715599ee16ea12e03d677eabe08093a158985c7f73865baba5",
+      "size": 6369,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED99.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/ED9A.WAV",
+      "sha1": "579b708e6871a45c9a9d4565398e07786b14f6a1",
+      "sha256": "2fa2de90bc4dd923d7d61f3b9695d5d7def1c016d7f94254dd337573361974f3",
+      "size": 6254,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/ED9A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE80.WAV",
+      "sha1": "6a547d27b6492a9d5cef796a65279872281906a7",
+      "sha256": "d2ff69142ce54e016141b8bf271a57293ad87c2d86708691fb1e139470a750d5",
+      "size": 6012,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE80.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE81.WAV",
+      "sha1": "730dd8237625131bc04f0e1fbf10e789d449cfa2",
+      "sha256": "28a9d4ff3ea03ddcfc0199ebcbf3be69a2e31f5ce45d2c03addbc3b2822816b3",
+      "size": 8294,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE81.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE82.WAV",
+      "sha1": "8381380f72ac29f3cd51b183377f4095bbab58bc",
+      "sha256": "0855e37f2591338415eae0e1483edaaf34ae01837adfc5b178e0c127fbd7b9dc",
+      "size": 7128,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE82.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE83.WAV",
+      "sha1": "da3b15c5c5da9b33c5e4d4f1be66d37df3d7a01d",
+      "sha256": "85c5450e7db2a6267df9d5acebd035e4914f5d805dfd7fd47dabe59d290a187c",
+      "size": 4256,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE83.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE84.WAV",
+      "sha1": "b6381d5b6c81a7eb849039ba3324f1490e783730",
+      "sha256": "fe6f36486fdac230bdb04fdd49f2fd3aea9bfe0ee9428fe6332cd8d8a37cd141",
+      "size": 7514,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE84.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE85.WAV",
+      "sha1": "9046d17f6e105bd945c98ca3c635504d01cdcef4",
+      "sha256": "84788cbb596fbad327e8500983dede94853da20b1178e35c145670cce7015071",
+      "size": 8176,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE85.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE86.WAV",
+      "sha1": "ae9e313cfb5b93f2c7b378a9369ff494f05b1d52",
+      "sha256": "05f6d0fa1c36a6f5cfc8d73e6c6426e994c0032b2c2ffaa8c5c198cc285c34a4",
+      "size": 6824,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE86.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE87.WAV",
+      "sha1": "aa329f60459078b58b0f9b4eaaa31e79a6beaf1b",
+      "sha256": "98215d5b7d94f653a9082536be6c0dcb909c50934b933ecc46934a820dfc85e5",
+      "size": 8117,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE87.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE88.WAV",
+      "sha1": "2d15dfc0e7e3dfc689b5a15ebf265290dbd9c74d",
+      "sha256": "0a16542755b988f7f23fd33c4761f5a2048a9b6e396635f193276d18969773a4",
+      "size": 8756,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE88.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE89.WAV",
+      "sha1": "c10bfaea03b1675b22a7f19c964dc93ccd9b09b4",
+      "sha256": "81b87937b26c92c124d21f70883bdcc1437a2d86d51dec040971212561e38c09",
+      "size": 7406,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE89.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE8A.WAV",
+      "sha1": "8765a99d4ffb9d92150d5d687b8775de2fc8b8de",
+      "sha256": "462f80da3a76e32058cfd780c88924078112349aba2a7b3c0966fbb0eac5db7d",
+      "size": 7352,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE8A.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE8B.WAV",
+      "sha1": "5114c86d1e5658aecaea2c841a56bfd10b6499ff",
+      "sha256": "da3bc67aa460494874f143da9567c5216dbe2783acd2e4c87351d0c19ce841b0",
+      "size": 8651,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE8B.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE8C.WAV",
+      "sha1": "e296940f5c25640b2ec27066fbe9ea34f359b195",
+      "sha256": "9816cf85006395b22be0022ac159e28873ba837e9268fdc63fbd71d46a0fee6d",
+      "size": 7511,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE8C.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE8D.WAV",
+      "sha1": "c72dc1a1d8de1c7ca05f86c5c4fe39d599d00cca",
+      "sha256": "aa7b95f5ef68f986663498424bbe4b0edaf437b6a2acff73f1189ff6fb1be504",
+      "size": 8024,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE8D.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE8E.WAV",
+      "sha1": "b3911786fadaa35b0d52015910c03aed8f912c04",
+      "sha256": "f74c9047436920df757cf7f9109b9f890006fca3ed1d1e305b2e96e3abf0af3e",
+      "size": 9809,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE8E.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE8F.WAV",
+      "sha1": "4ae9fa224a6ea4735477e579c76e789219683fa3",
+      "sha256": "5c05b2cfc8d200f6adc3ad119792cae70310e1a576ba6dd56799651c7822ab3d",
+      "size": 8364,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE8F.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE90.WAV",
+      "sha1": "ea89afa879c4b55346fb204cdef195337e666764",
+      "sha256": "6ccd68b297383da30b2b9747c472866dbc4c445ee8cb1d5c74be14013ecbfa62",
+      "size": 4828,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE90.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE91.WAV",
+      "sha1": "d1111332c81ac42685462b4a5873983e4ac9aead",
+      "sha256": "ef496a06604e3b81d318ab83726aa431b89b208ee7d31105a568113cdc284131",
+      "size": 6092,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE91.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE92.WAV",
+      "sha1": "97929054528b66f06fd98fb5ba899fcbfb5424ed",
+      "sha256": "dfcf2e8dc161885a954a4641dcaeba621f7b0322a36c9eef29316797a9e06f64",
+      "size": 5000,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE92.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE93.WAV",
+      "sha1": "2e9871fec4e6573b44a8e94240509b4f8711f391",
+      "sha256": "85a108ef9a451f5a5ad758fbf4de65744ed9e91b26f46941c0cf0bf7acadab21",
+      "size": 7197,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE93.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE94.WAV",
+      "sha1": "7b4bc138e2be80c296db7536274a6ba31964196e",
+      "sha256": "1e41b87aa69836a4c8fed9c41b2ac7546393336ed9d92654df60613ca9d7b116",
+      "size": 6785,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE94.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE95.WAV",
+      "sha1": "adc7430ccce833ca0f38b24a77f4f25e4a3cccc9",
+      "sha256": "9fe7372e85c2685d0af40c61fd1f79f9568d053a6c3474fb809e5f75dc92ac3b",
+      "size": 6105,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE95.WAV",
+      "cores": [
+        "o2em"
+      ]
+    },
+    {
+      "dest": "odyssey-2-slash-videopac-g7000/voice/EE96.WAV",
+      "sha1": "01002d1b5e3d60af93f5815ef5709438a9c9ae28",
+      "sha256": "75f33e1205817d5df8765223ffb3a24c8d9a3d9f7b8d35532089356f3cc72049",
+      "size": 7604,
+      "repo_path": "bios/Magnavox/Odyssey2/voice/EE96.WAV",
+      "cores": [
+        "o2em"
       ]
     },
     {
@@ -4919,11 +8341,11 @@
       ]
     },
     {
-      "dest": "xbox/eeprom.bin",
+      "dest": "xbox/xbox_eeprom.bin",
       "sha1": "ff3e7eaf715fe5612e46fc984d686ed3b115baef",
       "sha256": "e652203e6d91140729c29588b18ff8838896cdeb9a3100fbf8d20763af27c9d2",
       "size": 256,
-      "repo_path": "bios/Microsoft/Xbox/xemu_eeprom.bin",
+      "repo_path": "bios/Microsoft/Xbox/xbox_eeprom.bin",
       "cores": [
         "xemu"
       ]
@@ -4934,6 +8356,16 @@
       "sha256": "c5ec3e0fbc4f31d36c13211ded7f070f3b5f04e99a367fbe5d8c2d8c6e4f925d",
       "size": 1638400,
       "repo_path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",
+      "cores": [
+        "xemu"
+      ]
+    },
+    {
+      "dest": "xbox/wpcap.dll",
+      "sha1": "c2a606a0151b4ba55fa204cf5e013afc9dcc89a6",
+      "sha256": "160efaeb4bea94e7a12b24da0414c88d7fff7db9531104b93d6ae7b01ab858ea",
+      "size": 499128,
+      "repo_path": "bios/Other/xemu/wpcap.dll",
       "cores": [
         "xemu"
       ]

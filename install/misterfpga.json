@@ -5,7 +5,7 @@
   "platform": "misterfpga",
   "display_name": "MiSTer FPGA",
   "version": "1.0",
-  "generated": "2026-09-03T20:45:52Z",
+  "generated": "2026-10-04T15:54:42Z",
   "base_destination": "games",
   "detect": [
     {
@@ -16,10 +16,45 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 72,
-  "total_size": 25191625,
-  "total_omitted": 0,
-  "omitted_files": [],
+  "total_files": 77,
+  "total_size": 25769161,
+  "pack_files": 79,
+  "pack_size": 25769161,
+  "total_omitted": 4,
+  "omitted_files": [
+    {
+      "dest": "Marty/mrom.m36",
+      "name": "mrom.m36",
+      "system": "marty",
+      "required": true,
+      "reason": "not_found",
+      "cores": null
+    },
+    {
+      "dest": "Marty/mrom.m37",
+      "name": "mrom.m37",
+      "system": "marty",
+      "required": true,
+      "reason": "not_found",
+      "cores": null
+    },
+    {
+      "dest": "Studio-II/openstudio2.bin",
+      "name": "openstudio2.bin",
+      "system": "studio-ii",
+      "required": true,
+      "reason": "not_found",
+      "cores": null
+    },
+    {
+      "dest": "VideoBrain/boot.rom",
+      "name": "boot.rom",
+      "system": "videobrain",
+      "required": true,
+      "reason": "hash_mismatch",
+      "cores": null
+    }
+  ],
   "files": [
     {
       "dest": "3DO/boot.rom",
@@ -139,6 +174,22 @@
       "sha256": "e0888ba82382aabb7557aa4a3445e613bd7f33bae1af5ece211e2cb6bc9ffa82",
       "size": 2048,
       "repo_path": "bios/Interact/Home Computer/interact.rom",
+      "cores": null
+    },
+    {
+      "dest": "Loopy/boot0.rom",
+      "sha1": "17542ef275ea8ebeaaddd00d304232c3c355ea25",
+      "sha256": "82a8d6add06e324e36c71b0a7a92d607af3db5e65574a6892794d70df668e9d5",
+      "size": 32768,
+      "repo_path": "bios/Casio/Loopy/boot0.rom",
+      "cores": null
+    },
+    {
+      "dest": "Loopy/boot1.rom",
+      "sha1": "99f50be06b083fdb07e08f30b0b26d9037afc869",
+      "sha256": "7540ff64268e500a34fb83c8642510d341440ac6258f6c36851e182870e40f75",
+      "size": 524288,
+      "repo_path": "bios/Casio/Loopy/boot1.rom",
       "cores": null
     },
     {
@@ -518,11 +569,35 @@
       "cores": null
     },
     {
-      "dest": "Studio-II/boot4.rom",
+      "dest": "Studio-II/chip8.bin",
       "sha1": "64e51bd50d7016665feb97866d66dee0af1613b5",
       "sha256": "8764ba7e02fe00489997b45ac1f15f188f726cbcd5311e252225e62eb58d6d04",
       "size": 768,
       "repo_path": "bios/RCA/Studio II/boot4.rom",
+      "cores": null
+    },
+    {
+      "dest": "SuperAcan/boot0.rom",
+      "sha1": "a8e75633662978d0a885f16a4ed0f898f278a10a",
+      "sha256": "2e4d88bec69b5e7e4803368c233ce0d20f6dd107c5af0cfcc0089d310c695d7c",
+      "size": 4096,
+      "repo_path": "bios/Funtech/Super A'Can/boot0.rom",
+      "cores": null
+    },
+    {
+      "dest": "SuperAcan/boot1.rom",
+      "sha1": "8bf17bf311afeb9974bee058ba63eef5e8b6f5c1",
+      "sha256": "219f51bcb8544fe733bf784e087544f97aa5457945260c7fa07a8639f30f3a68",
+      "size": 8192,
+      "repo_path": "bios/Funtech/Super A'Can/boot1.rom",
+      "cores": null
+    },
+    {
+      "dest": "SuperAcan/boot2.rom",
+      "sha1": "ab8f15506308b89d2f8ef01b88aa2595d4e1e779",
+      "sha256": "9889590805a97b7bb439d853d9ae4d6b31067bacb8225ab0538f3491dedab4b8",
+      "size": 8192,
+      "repo_path": "bios/Funtech/Super A'Can/boot2.rom",
       "cores": null
     },
     {
