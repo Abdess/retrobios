@@ -84,5 +84,15 @@ bios/Wenquxing/NC3000/WQXEmu/nc3000/nc3000.nand
 bios/Gemei/A330/A330.HXF
 bios/Gemei/A330/.variants/A330.HXF.58c11dad
 
+# Free game data over 50 MB (fetched from large-files release)
+bios/Id Software/Wolfenstein Enemy Territory/etmain/pak0.pk3
+bios/Blizzard/Diablo/fonts.mpq
+bios/Toys for Bob/The Ur-Quan Masters/uqm-0.8.0-voice.uqm
+bios/Toys for Bob/The Ur-Quan Masters/uqm-remix-disc2.uqm
+bios/Toys for Bob/The Ur-Quan Masters/uqm-remix-disc4-1.uqm
+bios/Game Engines/DOOM/action2.wad
+bios/Game Engines/DOOM/harm1.wad
+bios/Game Engines/DOOM/delaweare.wad
+
 # Output-directory locks (artifact_lock)
 .lock
