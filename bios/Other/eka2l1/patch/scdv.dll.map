@@ -1,0 +1,46 @@
+[epoc100]
+1 1       ; CFbsDrawDevice::DisplayMode16M
+3 3       ; CFbsDrawDevice::NewScreenDeviceL (ScreenInfo variant)
+5 42      ; CFbsDrawDevice::NewScreenDeviceL (Screen number variant)
+6 43      ; CDirectScreenBitmap::NewL(int aScreenNumber)
+7 7       ; CDirectScreenBitmap::NewL
+
+[epoc94]
+1 1       ; CFbsDrawDevice::DisplayMode16M
+3 3       ; CFbsDrawDevice::NewScreenDeviceL (ScreenInfo variant)
+5 42      ; CFbsDrawDevice::NewScreenDeviceL (Screen number variant)
+6 43      ; CDirectScreenBitmap::NewL(int aScreenNumber)
+7 7       ; CDirectScreenBitmap::NewL
+
+[epoc93fp2]
+1 1       ; CFbsDrawDevice::DisplayMode16M
+3 3       ; CFbsDrawDevice::NewScreenDeviceL (ScreenInfo variant)
+5 42      ; CFbsDrawDevice::NewScreenDeviceL (Screen number variant)
+6 43      ; CDirectScreenBitmap::NewL(int aScreenNumber)
+7 7       ; CDirectScreenBitmap::NewL
+
+[epoc93fp1]
+1 1       ; CFbsDrawDevice::DisplayMode16M
+3 3       ; CFbsDrawDevice::NewScreenDeviceL (ScreenInfo variant)
+5 42      ; CFbsDrawDevice::NewScreenDeviceL (Screen number variant)
+6 43      ; CDirectScreenBitmap::NewL(int aScreenNumber)
+7 7       ; CDirectScreenBitmap::NewL
+
+[epoc81a]
+4 2       ; NewScreenDeviceL__14CFbsDrawDeviceG11TScreenInfo12TDisplayMode
+2 10      ; DisplayMode16M__14CFbsDrawDevice
+6 12      ; NewScreenDeviceL__14CFbsDrawDevicei12TDisplayMode
+7 9       ; NewL__19CDirectScreenBitmap
+
+[epoc80]
+4 2       ; NewScreenDeviceL__14CFbsDrawDeviceG11TScreenInfo12TDisplayMode
+2 10      ; DisplayMode16M__14CFbsDrawDevice
+7 9       ; NewL__19CDirectScreenBitmap
+
+[epoc7]
+4 2       ; NewScreenDeviceL__14CFbsDrawDeviceG11TScreenInfo12TDisplayMode
+2 10      ; DisplayMode16M__14CFbsDrawDevice
+7 9       ; NewL__19CDirectScreenBitmap
+
+[epoc6]
+4 2       ; NewScreenDeviceL__14CFbsDrawDeviceG11TScreenInfo12TDisplayMode

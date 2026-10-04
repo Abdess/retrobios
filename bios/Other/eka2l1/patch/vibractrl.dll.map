@@ -1,0 +1,39 @@
+[requirements]
+uid2=0x1000008d
+uid3=0x101fb429
+
+[epoc6]
+1 1         ; Replace all exports
+2 2
+3 3
+4 4
+5 5
+6 6
+7 7
+
+[epoc7]
+1 1         ; Replace all exports
+2 2
+3 3
+4 4
+5 5
+6 6
+7 7
+
+[epoc80]
+1 1         ; Replace all exports
+2 2
+3 3
+4 4
+5 5
+6 6
+7 7
+
+[epoc81a]
+1 1         ; Replace all exports
+2 2
+3 3
+4 4
+5 5
+6 6
+7 7

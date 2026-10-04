@@ -1,0 +1,141 @@
+source=mediaclientaudiostream
+
+[epoc95]
+19 1        ; _ZN20CMdaAudioInputStream11SetBalanceLEi
+21 2        ; _ZN20CMdaAudioInputStream11SetPriorityEii
+22 3        ; _ZN20CMdaAudioInputStream12SetDataTypeLE7TFourCC
+24 4        ; _ZN20CMdaAudioInputStream19SetAudioPropertiesLEii
+27 5        ; _ZN20CMdaAudioInputStream4NewLER28MMdaAudioInputStreamCallback 
+28 6        ; _ZN20CMdaAudioInputStream4NewLER28MMdaAudioInputStreamCallbackii 
+29 7        ; _ZN20CMdaAudioInputStream4OpenEP11TMdaPackage 
+30 8        ; _ZN20CMdaAudioInputStream4StopEv 
+31 9        ; _ZN20CMdaAudioInputStream5ReadLER5TDes8
+32 10       ; _ZN20CMdaAudioInputStream7SetGainEi
+33 11       ; _ZN20CMdaAudioInputStream8GetBytesEv 
+34 12       ; _ZN20CMdaAudioInputStream8PositionEv
+35 13       ; _ZNK20CMdaAudioInputStream11GetBalanceLEv
+36 14       ; _ZNK20CMdaAudioInputStream4GainEv 
+37 15       ; _ZNK20CMdaAudioInputStream7MaxGainEv
+39 16       ; _ZNK20CMdaAudioInputStream8DataTypeEv
+43 18       ; _ZTI20CMdaAudioInputStream 
+51 21       ; _ZTV20CMdaAudioInputStream
+20 23       ; _ZN20CMdaAudioInputStream11SetBitRateLEi
+26 24       ; _ZN20CMdaAudioInputStream21GetSupportedBitRatesLER6RArrayIiE
+38 25       ; _ZNK20CMdaAudioInputStream8BitRateLEv 
+23 26       ; _ZN20CMdaAudioInputStream15CustomInterfaceE4TUid
+25 27       ; _ZN20CMdaAudioInputStream19SetSingleBufferModeEi 
+18 28       ; _ZN20CMdaAudioInputStream11RequestStopEv
+
+[epoc94]
+19 1        ; _ZN20CMdaAudioInputStream11SetBalanceLEi
+21 2        ; _ZN20CMdaAudioInputStream11SetPriorityEii
+22 3        ; _ZN20CMdaAudioInputStream12SetDataTypeLE7TFourCC
+24 4        ; _ZN20CMdaAudioInputStream19SetAudioPropertiesLEii
+27 5        ; _ZN20CMdaAudioInputStream4NewLER28MMdaAudioInputStreamCallback 
+28 6        ; _ZN20CMdaAudioInputStream4NewLER28MMdaAudioInputStreamCallbackii 
+29 7        ; _ZN20CMdaAudioInputStream4OpenEP11TMdaPackage 
+30 8        ; _ZN20CMdaAudioInputStream4StopEv 
+31 9        ; _ZN20CMdaAudioInputStream5ReadLER5TDes8
+32 10       ; _ZN20CMdaAudioInputStream7SetGainEi
+33 11       ; _ZN20CMdaAudioInputStream8GetBytesEv 
+34 12       ; _ZN20CMdaAudioInputStream8PositionEv
+35 13       ; _ZNK20CMdaAudioInputStream11GetBalanceLEv
+36 14       ; _ZNK20CMdaAudioInputStream4GainEv 
+37 15       ; _ZNK20CMdaAudioInputStream7MaxGainEv
+39 16       ; _ZNK20CMdaAudioInputStream8DataTypeEv
+43 18       ; _ZTI20CMdaAudioInputStream 
+51 21       ; _ZTV20CMdaAudioInputStream
+20 23       ; _ZN20CMdaAudioInputStream11SetBitRateLEi
+26 24       ; _ZN20CMdaAudioInputStream21GetSupportedBitRatesLER6RArrayIiE
+38 25       ; _ZNK20CMdaAudioInputStream8BitRateLEv 
+23 26       ; _ZN20CMdaAudioInputStream15CustomInterfaceE4TUid
+25 27       ; _ZN20CMdaAudioInputStream19SetSingleBufferModeEi 
+18 28       ; _ZN20CMdaAudioInputStream11RequestStopEv
+
+[epoc93fp2]
+19 1        ; _ZN20CMdaAudioInputStream11SetBalanceLEi
+21 2        ; _ZN20CMdaAudioInputStream11SetPriorityEii
+22 3        ; _ZN20CMdaAudioInputStream12SetDataTypeLE7TFourCC
+24 4        ; _ZN20CMdaAudioInputStream19SetAudioPropertiesLEii
+27 5        ; _ZN20CMdaAudioInputStream4NewLER28MMdaAudioInputStreamCallback 
+28 6        ; _ZN20CMdaAudioInputStream4NewLER28MMdaAudioInputStreamCallbackii 
+29 7        ; _ZN20CMdaAudioInputStream4OpenEP11TMdaPackage 
+30 8        ; _ZN20CMdaAudioInputStream4StopEv 
+31 9        ; _ZN20CMdaAudioInputStream5ReadLER5TDes8
+32 10       ; _ZN20CMdaAudioInputStream7SetGainEi
+33 11       ; _ZN20CMdaAudioInputStream8GetBytesEv 
+34 12       ; _ZN20CMdaAudioInputStream8PositionEv
+35 13       ; _ZNK20CMdaAudioInputStream11GetBalanceLEv
+36 14       ; _ZNK20CMdaAudioInputStream4GainEv 
+37 15       ; _ZNK20CMdaAudioInputStream7MaxGainEv
+39 16       ; _ZNK20CMdaAudioInputStream8DataTypeEv
+43 18       ; _ZTI20CMdaAudioInputStream 
+51 21       ; _ZTV20CMdaAudioInputStream
+20 23       ; _ZN20CMdaAudioInputStream11SetBitRateLEi
+26 24       ; _ZN20CMdaAudioInputStream21GetSupportedBitRatesLER6RArrayIiE
+38 25       ; _ZNK20CMdaAudioInputStream8BitRateLEv 
+23 26       ; _ZN20CMdaAudioInputStream15CustomInterfaceE4TUid
+25 27       ; _ZN20CMdaAudioInputStream19SetSingleBufferModeEi 
+18 28       ; _ZN20CMdaAudioInputStream11RequestStopEv
+
+[epoc93fp1]
+19 1        ; _ZN20CMdaAudioInputStream11SetBalanceLEi
+21 2        ; _ZN20CMdaAudioInputStream11SetPriorityEii
+22 3        ; _ZN20CMdaAudioInputStream12SetDataTypeLE7TFourCC
+24 4        ; _ZN20CMdaAudioInputStream19SetAudioPropertiesLEii
+27 5        ; _ZN20CMdaAudioInputStream4NewLER28MMdaAudioInputStreamCallback 
+28 6        ; _ZN20CMdaAudioInputStream4NewLER28MMdaAudioInputStreamCallbackii 
+29 7        ; _ZN20CMdaAudioInputStream4OpenEP11TMdaPackage 
+30 8        ; _ZN20CMdaAudioInputStream4StopEv 
+31 9        ; _ZN20CMdaAudioInputStream5ReadLER5TDes8
+32 10       ; _ZN20CMdaAudioInputStream7SetGainEi
+33 11       ; _ZN20CMdaAudioInputStream8GetBytesEv 
+34 12       ; _ZN20CMdaAudioInputStream8PositionEv
+35 13       ; _ZNK20CMdaAudioInputStream11GetBalanceLEv
+36 14       ; _ZNK20CMdaAudioInputStream4GainEv 
+37 15       ; _ZNK20CMdaAudioInputStream7MaxGainEv
+39 16       ; _ZNK20CMdaAudioInputStream8DataTypeEv
+43 18       ; _ZTI20CMdaAudioInputStream 
+51 21       ; _ZTV20CMdaAudioInputStream
+20 23       ; _ZN20CMdaAudioInputStream11SetBitRateLEi
+26 24       ; _ZN20CMdaAudioInputStream21GetSupportedBitRatesLER6RArrayIiE
+38 25       ; _ZNK20CMdaAudioInputStream8BitRateLEv 
+23 26       ; _ZN20CMdaAudioInputStream15CustomInterfaceE4TUid
+25 27       ; _ZN20CMdaAudioInputStream19SetSingleBufferModeEi 
+18 28       ; _ZN20CMdaAudioInputStream11RequestStopEv
+
+[epoc81a]
+35 1        ; CMdaAudioInputStream::Stop(void)
+18 2        ; CMdaAudioInputStream::GetBalanceL(void) const
+19 3        ; CMdaAudioInputStream::GetBytes(void)
+21 4        ; CMdaAudioInputStream::MaxGain(void) const
+22 5        ; CMdaAudioInputStream::NewL(MMdaAudioInputStreamCallback &)
+23 6        ; CMdaAudioInputStream::NewL(MMdaAudioInputStreamCallback &, int, TMdaPriorityPreference)
+24 7        ; CMdaAudioInputStream::Open(TMdaPackage *)
+25 8        ; CMdaAudioInputStream::Position(void)
+26 9        ; CMdaAudioInputStream::ReadL(TDes8 &)
+28 10       ; CMdaAudioInputStream::SetAudioPropertiesL(int, int)
+29 11       ; CMdaAudioInputStream::SetBalanceL(int)
+32 12       ; CMdaAudioInputStream::SetGain(int)
+33 13       ; CMdaAudioInputStream::SetPriority(int, TMdaPriorityPreference)
+17 14       ; CMdaAudioInputStream::Gain(void) const
+31 15       ; CMdaAudioInputStream::SetDataTypeL(TFourCC)
+16 16       ; CMdaAudioInputStream::DataType(void) const
+
+[epoc80]
+35 1        ; CMdaAudioInputStream::Stop(void)
+18 2        ; CMdaAudioInputStream::GetBalanceL(void) const
+19 3        ; CMdaAudioInputStream::GetBytes(void)
+21 4        ; CMdaAudioInputStream::MaxGain(void) const
+22 5        ; CMdaAudioInputStream::NewL(MMdaAudioInputStreamCallback &)
+23 6        ; CMdaAudioInputStream::NewL(MMdaAudioInputStreamCallback &, int, TMdaPriorityPreference)
+24 7        ; CMdaAudioInputStream::Open(TMdaPackage *)
+25 8        ; CMdaAudioInputStream::Position(void)
+26 9        ; CMdaAudioInputStream::ReadL(TDes8 &)
+28 10       ; CMdaAudioInputStream::SetAudioPropertiesL(int, int)
+29 11       ; CMdaAudioInputStream::SetBalanceL(int)
+32 12       ; CMdaAudioInputStream::SetGain(int)
+33 13       ; CMdaAudioInputStream::SetPriority(int, TMdaPriorityPreference)
+17 14       ; CMdaAudioInputStream::Gain(void) const
+31 15       ; CMdaAudioInputStream::SetDataTypeL(TFourCC)
+16 16       ; CMdaAudioInputStream::DataType(void) const

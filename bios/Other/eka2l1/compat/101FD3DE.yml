@@ -1,0 +1,3 @@
+fps: 60
+time-delay: 300
+should-child-inherit-setting: true

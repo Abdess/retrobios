@@ -1,0 +1,9 @@
+[requirements]
+host-tls
+uid2 0x1000183d
+uid3 0x10001842
+
+[shared]
+1 1
+2 2
+3 3

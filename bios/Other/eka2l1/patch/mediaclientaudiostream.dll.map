@@ -1,0 +1,98 @@
+[epoc100]
+1 18            ; CMdaAudioOutputStream::RequestStop
+2 1             ; CMdaAudioOutputStream::SetBalance
+3 2             ; CMdaAudioOutputStream::SetDataType
+9 3             ; CMdaAudioOutputStream::NewL(MMdaAudioOutputStreamCallback&, CMdaServer*)
+10 4            ; CMdaAudioOutputStream::NewL()
+13 5            ; CMdaAudioOutputStream::GetBytes
+14 6            ; CMdaAudioOutputStream::GetBalance
+15 7            ; CMdaAudioOutputStream::DataType
+5 14            ; CMdaAudioOutputStream::WillResumePlay
+7 15            ; CMdaAudioOutputStream::RegisterAudioResourceNof
+8 16            ; CMdaAudioOutputStream::CancelRegister
+6 17            ; CMdaAudioOutputStream::CustomInterface
+4 19            ; CMdaAudioOutputStream::KeepOpenAtEnd
+11 20           ; CMdaAudioOutputStream::Pause
+12 21           ; CMdaAudioOutputStream::Resume
+
+[epoc94]
+1 18            ; CMdaAudioOutputStream::RequestStop
+2 1             ; CMdaAudioOutputStream::SetBalance
+3 2             ; CMdaAudioOutputStream::SetDataType
+9 3             ; CMdaAudioOutputStream::NewL(MMdaAudioOutputStreamCallback&, CMdaServer*)
+10 4            ; CMdaAudioOutputStream::NewL()
+13 5            ; CMdaAudioOutputStream::GetBytes
+14 6            ; CMdaAudioOutputStream::GetBalance
+15 7            ; CMdaAudioOutputStream::DataType
+5 14            ; CMdaAudioOutputStream::WillResumePlay
+7 15            ; CMdaAudioOutputStream::RegisterAudioResourceNof
+8 16            ; CMdaAudioOutputStream::CancelRegister
+6 17            ; CMdaAudioOutputStream::CustomInterface
+4 19            ; CMdaAudioOutputStream::KeepOpenAtEnd
+11 20           ; CMdaAudioOutputStream::Pause
+12 21           ; CMdaAudioOutputStream::Resume
+
+[epoc93fp2]
+1 18            ; CMdaAudioOutputStream::RequestStop
+2 1             ; CMdaAudioOutputStream::SetBalance
+3 2             ; CMdaAudioOutputStream::SetDataType
+9 3             ; CMdaAudioOutputStream::NewL(MMdaAudioOutputStreamCallback&, CMdaServer*)
+10 4            ; CMdaAudioOutputStream::NewL()
+13 5            ; CMdaAudioOutputStream::GetBytes
+14 6            ; CMdaAudioOutputStream::GetBalance
+15 7            ; CMdaAudioOutputStream::DataType
+5 14            ; CMdaAudioOutputStream::WillResumePlay
+7 15            ; CMdaAudioOutputStream::RegisterAudioResourceNof
+8 16            ; CMdaAudioOutputStream::CancelRegister
+6 17            ; CMdaAudioOutputStream::CustomInterface
+4 19            ; CMdaAudioOutputStream::KeepOpenAtEnd
+11 20           ; CMdaAudioOutputStream::Pause
+12 21           ; CMdaAudioOutputStream::Resume
+
+[epoc93fp1]
+1 18            ; CMdaAudioOutputStream::RequestStop
+2 1             ; CMdaAudioOutputStream::SetBalance
+3 2             ; CMdaAudioOutputStream::SetDataType
+9 3             ; CMdaAudioOutputStream::NewL(MMdaAudioOutputStreamCallback&, CMdaServer*)
+10 4            ; CMdaAudioOutputStream::NewL()
+13 5            ; CMdaAudioOutputStream::GetBytes
+14 6            ; CMdaAudioOutputStream::GetBalance
+15 7            ; CMdaAudioOutputStream::DataType
+5 14            ; CMdaAudioOutputStream::WillResumePlay
+7 15            ; CMdaAudioOutputStream::RegisterAudioResourceNof
+8 16            ; CMdaAudioOutputStream::CancelRegister
+6 17            ; CMdaAudioOutputStream::CustomInterface
+4 19            ; CMdaAudioOutputStream::KeepOpenAtEnd
+11 20           ; CMdaAudioOutputStream::Pause
+12 21           ; CMdaAudioOutputStream::Resume
+
+[epoc81a]
+7 1             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbackP10CMdaServer
+4 3             ; GetBalanceL__C21CMdaAudioOutputStream
+5 4             ; GetBytes__21CMdaAudioOutputStream
+12 5            ; SetBalanceL__21CMdaAudioOutputStreami
+2 6             ; DataType__C21CMdaAudioOutputStream
+13 7            ; SetDataTypeL__21CMdaAudioOutputStreamG7TFourCC
+8 8             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbacki22TMdaPriorityPreference
+
+[epoc80]
+7 1             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbackP10CMdaServer
+4 3             ; GetBalanceL__C21CMdaAudioOutputStream
+5 4             ; GetBytes__21CMdaAudioOutputStream
+12 5            ; SetBalanceL__21CMdaAudioOutputStreami
+2 6             ; DataType__C21CMdaAudioOutputStream
+13 7            ; SetDataTypeL__21CMdaAudioOutputStreamG7TFourCC
+8 8             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbacki22TMdaPriorityPreference
+
+[epoc7]
+7 1             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbackP10CMdaServer
+4 3             ; GetBalanceL__C21CMdaAudioOutputStream
+5 4             ; GetBytes__21CMdaAudioOutputStream
+12 5            ; SetBalanceL__21CMdaAudioOutputStreami
+2 6             ; DataType__C21CMdaAudioOutputStream
+13 7            ; SetDataTypeL__21CMdaAudioOutputStreamG7TFourCC
+8 8             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbacki22TMdaPriorityPreference
+
+[epoc6]
+7 1             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbackP10CMdaServer
+7 2             ; NewL__21CMdaAudioOutputStreamR29MMdaAudioOutputStreamCallbackP10CMdaServer, guessing for now

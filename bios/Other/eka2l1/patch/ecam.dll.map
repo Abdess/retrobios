@@ -1,0 +1,27 @@
+[shared]
+1 1    	; _ZN7CCamera13NewDuplicateLER15MCameraObserveri @ 1 NONAME
+2 2    	; _ZN7CCamera16CamerasAvailableEv @ 2 NONAME
+3 3    	; _ZN7CCamera4NewLER15MCameraObserveri @ 3 NONAME
+4 4     ; _ZN10TECAMEventC1E4TUidi @ 4 NONAME
+5 5     ; _ZN10TECAMEventC1Ev @ 5 NONAME
+6 6     ; _ZN10TECAMEventC2E4TUidi @ 6 NONAME
+7 7     ; _ZN10TECAMEventC2Ev @ 7 NONAME
+8 8     ; _ZN7CCamera13NewDuplicateLER16MCameraObserver2i @ 8 NONAME
+9 9     ; _ZN7CCamera4NewLER16MCameraObserver2ii @ 9 NONAME
+10 10   ; _ZN11TECAMEvent225IsEventEncapsulationValidERK10TECAMEvent @ 10 NONAME
+11 11   ; _ZN11TECAMEvent2C1E4TUidii @ 11 NONAME
+12 12   ; _ZN11TECAMEvent2C2E4TUidii @ 12 NONAME
+13 13   ; _ZN7CCamera13CameraVersionEv @ 13 NONAME
+14 14   ; _ZN7CCamera14NewDuplicate2LER15MCameraObserveri @ 14 NONAME ABSENT
+15 15   ; _ZN7CCamera14NewDuplicate2LER16MCameraObserver2i @ 15 NONAME
+16 16   ; _ZN7CCamera5New2LER15MCameraObserveri @ 16 NONAME ABSENT
+17 17   ; _ZN7CCamera5New2LER16MCameraObserver2ii @ 17 NONAME
+18 18   ; _ZNK11TECAMEvent214EventClassUsedEv @ 18 NONAME
+19 19   ; _ZN13TReservedInfo21SubscribeReserveInfoLER16MReserveObserveriRP18CCameraStatusWatch @ 19 NONAME
+20 20   ; _ZN18CCameraStatusWatchD0Ev @ 20 NONAME
+21 21   ; _ZN18CCameraStatusWatchD1Ev @ 21 NONAME
+22 22   ; _ZN18CCameraStatusWatchD2Ev @ 22 NONAME
+23 23   ; _ZTI18CCameraStatusWatch @ 23 NONAME
+24 24   ; _ZTV18CCameraStatusWatch @ 24 NONAME
+25 25   ; _ZN7CCameraC2Ev @ 25 NONAME
+

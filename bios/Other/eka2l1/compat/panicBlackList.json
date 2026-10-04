@@ -1,0 +1,8 @@
+{
+    "playserver": {
+        "PlayServer": {
+            "category": "Timeout",
+            "code": -33
+        }
+    }
+}
