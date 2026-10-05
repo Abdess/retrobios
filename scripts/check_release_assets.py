@@ -21,21 +21,23 @@ import os
 import re
 import subprocess
 import sys
+from collections.abc import Iterable
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import load_database
-from largefiles import LARGE_FILES_RELEASE, LARGE_FILES_REPO
+from largefiles import (
+    LARGE_FILES_RELEASE,
+    LARGE_FILES_REPO,
+    asset_names,
+    registered_paths,
+)
 
 Finding = tuple[str, str, int, int | None]
 
 
 def expected_assets(db: dict, gitignore_text: str) -> dict[str, int]:
     """Map each gitignored database path to the size the manifests carry."""
-    ignored = {
-        line.strip()
-        for line in gitignore_text.splitlines()
-        if line.strip().startswith("bios/")
-    }
+    ignored = set(registered_paths(gitignore_text))
     return {
         entry["path"]: entry["size"]
         for entry in db.get("files", {}).values()
@@ -43,31 +45,37 @@ def expected_assets(db: dict, gitignore_text: str) -> dict[str, int]:
     }
 
 
-def _asset_names(path: str) -> list[str]:
-    """Names the release may publish a file under.
+def _spellings(name: str) -> list[str]:
+    """Names the release may publish an asset under.
 
     GitHub rewrites spaces to dots in asset names, so a file whose name
     carries spaces is published under the dotted form.
     """
-    name = os.path.basename(path)
     return [name, name.replace(" ", ".")] if " " in name else [name]
 
 
 def compare(
-    expected: dict[str, int], assets: dict[str, int], notes_current: bool = True
+    expected: dict[str, int],
+    assets: dict[str, int],
+    notes_current: bool = True,
+    registered: Iterable[str] | None = None,
 ) -> list[Finding]:
     """Files the release lacks or serves at another size, sorted by kind.
 
-    A release description that no longer matches what render_notes() would
-    write is a finding of its own: the page is what a reader checks a
-    download against.
+    *registered* is every path .gitignore lists; an asset name depends on
+    which other paths share its basename, so it defaults to *expected* only
+    when the caller has nothing wider. A release description that no longer
+    matches what render_notes() would write is a finding of its own: the
+    page is what a reader checks a download against.
     """
     findings: list[Finding] = []
     if not notes_current:
         findings.append(("notes", "release description", 0, None))
+    names = asset_names([*(registered or ()), *expected])
     for path, size in sorted(expected.items()):
         published = next(
-            (assets[name] for name in _asset_names(path) if name in assets), None
+            (assets[name] for name in _spellings(names[path]) if name in assets),
+            None,
         )
         if published is None:
             findings.append(("missing", path, size, None))
@@ -150,17 +158,12 @@ def render_notes(
     sections already written by hand are kept by name.
     """
     known = parse_notes(previous)
-    ignored = {
-        line.strip()
-        for line in gitignore_text.splitlines()
-        if line.strip().startswith("bios/")
-    }
+    names = asset_names(registered_paths(gitignore_text))
     indexed: dict[str, tuple[str, str]] = {}
     for sha1, entry in db.get("files", {}).items():
         path = entry.get("path", "")
-        if path in ignored:
-            name = os.path.basename(path)
-            for candidate in (name, name.replace(" ", ".")):
+        if path in names:
+            for candidate in _spellings(names[path]):
                 indexed[candidate] = (sha1, path)
 
     rows: dict[str, list[tuple[int, str]]] = {section: [] for section in SECTIONS}
@@ -307,7 +310,12 @@ def main() -> int:
     if args.notes:
         with open(args.notes, "w", encoding="utf-8") as handle:
             handle.write(rendered)
-    findings = compare(expected, assets, notes_current=rendered.strip() == body.strip())
+    findings = compare(
+        expected,
+        assets,
+        notes_current=rendered.strip() == body.strip(),
+        registered=registered_paths(gitignore_text),
+    )
 
     if args.json:
         print(json.dumps(

@@ -123,11 +123,23 @@ deletes version-tagged releases).
 `large-files` into `.cache/large/` and copies them to their expected paths
 before pack generation.
 
+**Asset name.** A gitignored path whose file name no other gitignored path
+shares is published under that file name. When two paths share one, each is
+published under its location below `bios/`, segments joined by `--` and any
+character outside `A-Za-z0-9._-` replaced by `_`
+(`Id_Software--Wolfenstein_Enemy_Territory--etmain--pak0.pk3`).
+`asset_names()` in `scripts/largefiles.py` is the only place that rule lives;
+the manifests, the fetcher and `check_release_assets.py` all read it.
+
 **Upload.** To add or update a large file:
 
 ```bash
 gh release upload large-files "bios/Sony/PS3/PS3UPDAT.PUP#PS3UPDAT.PUP"
 ```
+
+The text after `#` is only a display label: the asset takes the uploaded
+file's own name. A path whose asset name differs from its file name is
+uploaded from a copy carrying the asset name.
 
 **Local cache.** `generate_pack.py` calls `fetch_large_file()` which downloads
 from the release and caches in `.cache/large/` for subsequent runs.
@@ -136,8 +148,7 @@ from the release and caches in `.cache/large/` for subsequent runs.
 from the manifest size, and the manifest size is that of the local file. A
 file rebuilt locally after its upload therefore fails every install until it
 is uploaded again (`--clobber`). `python scripts/check_release_assets.py`
-compares every gitignored `bios/` path in the database with the asset of the
-same name, and the release page with the one it renders from the collection;
+compares every gitignored `bios/` path in the database with its asset, and the release page with the one it renders from the collection;
 the online pipeline runs it as step 2b2. To refresh the page:
 
 ```bash

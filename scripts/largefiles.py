@@ -7,9 +7,14 @@ from __future__ import annotations
 
 import contextlib
 import os
+import re
 import tempfile
 import urllib.error
+import urllib.parse
 import urllib.request
+from collections import Counter
+from collections.abc import Iterable
+from pathlib import Path
 
 from hashing import compute_hashes
 
@@ -17,6 +22,83 @@ from hashing import compute_hashes
 LARGE_FILES_RELEASE = "large-files"
 LARGE_FILES_REPO = "Abdess/retrobios"
 LARGE_FILES_CACHE = ".cache/large"
+GITIGNORE = Path(__file__).resolve().parent.parent / ".gitignore"
+
+_UNSAFE_ASSET_CHARS = re.compile(r"[^A-Za-z0-9._-]+")
+
+
+def registered_paths(gitignore_text: str) -> list[str]:
+    """The bios/ paths .gitignore lists, which are the release assets."""
+    return [
+        line.strip()
+        for line in gitignore_text.splitlines()
+        if line.strip().startswith("bios/")
+    ]
+
+
+def load_registered_paths(gitignore: str | Path = GITIGNORE) -> list[str]:
+    try:
+        return registered_paths(Path(gitignore).read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return []
+
+
+def asset_names(registered: Iterable[str]) -> dict[str, str]:
+    """Map each registered path to the name of its release asset.
+
+    A path whose basename no other registered path shares is published
+    under that basename. A path whose basename is shared is published under
+    its location below bios/, segments joined by "--" and every character
+    outside [A-Za-z0-9._-] replaced by "_":
+    bios/Id Software/Wolfenstein Enemy Territory/etmain/pak0.pk3 becomes
+    Id_Software--Wolfenstein_Enemy_Territory--etmain--pak0.pk3. The name
+    depends on the path only, never on the bytes, so rebuilding a file
+    keeps its asset.
+    """
+    paths = sorted(set(registered))
+    counts = Counter(os.path.basename(p) for p in paths)
+    names: dict[str, str] = {}
+    for registered_path in paths:
+        base = os.path.basename(registered_path)
+        if counts[base] == 1:
+            names[registered_path] = base
+            continue
+        rel = registered_path.removeprefix("bios/")
+        names[registered_path] = "--".join(
+            _UNSAFE_ASSET_CHARS.sub("_", part) for part in rel.split("/")
+        )
+    owners: dict[str, str] = {}
+    for registered_path, name in names.items():
+        # GitHub publishes a space as a dot, so both spellings are taken.
+        for spelling in {name, name.replace(" ", ".")}:
+            other = owners.setdefault(spelling, registered_path)
+            if other != registered_path:
+                raise ValueError(
+                    f"release asset {spelling!r} named by both {other!r} "
+                    f"and {registered_path!r}"
+                )
+    return names
+
+
+def asset_name(path: str, registered: Iterable[str]) -> str:
+    """The release asset name of *path* among the *registered* paths."""
+    return asset_names([*registered, path])[path]
+
+
+def asset_candidates(name: str, registered: Iterable[str]) -> list[str]:
+    """Assets that may hold *name*, a registered path or a bare file name.
+
+    A bare name shared by several registered paths has one asset per path;
+    the caller's hash tells them apart.
+    """
+    registered = list(registered)
+    if "/" in name:
+        return [asset_name(name, registered)]
+    names = asset_names(registered)
+    matches = [
+        names[p] for p in sorted(names) if os.path.basename(p) == name
+    ]
+    return matches or [name]
 
 
 def fetch_large_file(
@@ -26,8 +108,33 @@ def fetch_large_file(
     expected_md5: str = "",
     *,
     offline: bool = False,
+    registered: Iterable[str] | None = None,
 ) -> str | None:
-    """Return a verified cached large file, downloading it only when allowed."""
+    """Return a verified cached large file, downloading it only when allowed.
+
+    *name* is a registered bios/ path or a bare file name; asset_names()
+    turns it into the asset to fetch, and a bare name shared by several
+    registered paths tries each of their assets until one verifies.
+    """
+    if registered is None:
+        registered = load_registered_paths()
+    for asset in asset_candidates(name, registered):
+        cached = _fetch_asset(
+            asset, dest_dir, expected_sha1, expected_md5, offline=offline
+        )
+        if cached:
+            return cached
+    return None
+
+
+def _fetch_asset(
+    name: str,
+    dest_dir: str,
+    expected_sha1: str,
+    expected_md5: str,
+    *,
+    offline: bool,
+) -> str | None:
     cached = os.path.join(dest_dir, name)
     # Between the existence test and the hash, a concurrent run can drop the
     # same stale entry: the file is gone by the time this one reads it, and
