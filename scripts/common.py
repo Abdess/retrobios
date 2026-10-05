@@ -1298,6 +1298,36 @@ def runs_standalone(
     )
 
 
+def upstream_profile_index(
+    profiles: dict[str, dict], include_aliases: bool = False
+) -> dict[str, set[str]]:
+    """Every name a core is known by upstream -> the profiles that claim it.
+
+    A name can be claimed twice: the buildbot's `pcsx2` is the LRPS2 core,
+    which lrps2.yml lists in `cores:`, and also the key of the standalone
+    pcsx2 profile. A last-wins dict kept one of the two depending on file
+    order, and a RetroArch target filter dropped LRPS2's files. Callers
+    choose: a platform list prefers the exact key, a target filter keeps
+    every claimant.
+    """
+    index: dict[str, set[str]] = {}
+    for name, profile in profiles.items():
+        if not include_aliases and profile.get("type") == "alias":
+            continue
+        index.setdefault(name, set()).add(name)
+        for core in profile.get("cores") or []:
+            index.setdefault(str(core), set()).add(name)
+    return index
+
+
+def preferred_profile(index: dict[str, set[str]], name: str) -> str | None:
+    """The profile a name designates: its own key first, else the first claimant."""
+    claimants = index.get(name)
+    if not claimants:
+        return None
+    return name if name in claimants else sorted(claimants)[0]
+
+
 def resolve_platform_cores(
     config: dict,
     profiles: dict[str, dict],
@@ -1323,14 +1353,12 @@ def resolve_platform_cores(
         }
     elif isinstance(cores_config, list):
         core_set = {str(c) for c in cores_config}
-        core_to_profile: dict[str, str] = {}
-        for name, p in profiles.items():
-            if p.get("type") == "alias":
-                continue
-            core_to_profile[name] = name
-            for core_name in p.get("cores", []):
-                core_to_profile[str(core_name)] = name
-        result = {core_to_profile[c] for c in core_set if c in core_to_profile}
+        index = upstream_profile_index(profiles)
+        result = {
+            profile
+            for c in core_set
+            if (profile := preferred_profile(index, c)) is not None
+        }
         # Support "all_libretro" as a list element: combines all libretro
         # profiles with explicitly listed standalone cores (e.g. RetroDECK
         # ships RetroArch + standalone emulators)
@@ -1355,13 +1383,10 @@ def resolve_platform_cores(
         # Upstream sources (buildbot, es_systems) may use different names
         # than our profile keys (e.g., mednafen_psx vs beetle_psx).
         # The profiles' cores: field lists these alternate names.
-        upstream_to_profile: dict[str, str] = {}
-        for name, p in profiles.items():
-            upstream_to_profile[name] = name
-            for alias in p.get("cores", []):
-                upstream_to_profile[str(alias)] = name
-        # Expand target_cores to profile keys
-        expanded = {upstream_to_profile.get(c, c) for c in target_cores}
+        index = upstream_profile_index(profiles, include_aliases=True)
+        expanded = {
+            profile for c in target_cores for profile in index.get(c, {c})
+        }
         result = result & expanded
     return result
 
@@ -1467,12 +1492,10 @@ def filter_systems_by_target(
         return systems
 
     # Build reverse index for target core name resolution
-    upstream_to_profile: dict[str, str] = {}
-    for name, p in profiles.items():
-        upstream_to_profile[name] = name
-        for alias in p.get("cores", []):
-            upstream_to_profile[str(alias)] = name
-    expanded_target = {upstream_to_profile.get(c, c) for c in target_cores}
+    index = upstream_profile_index(profiles, include_aliases=True)
+    expanded_target = {
+        profile for c in target_cores for profile in index.get(c, {c})
+    }
 
     _norm_sid = _norm_system_id
 

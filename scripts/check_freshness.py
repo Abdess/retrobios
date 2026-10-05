@@ -54,6 +54,7 @@ import upstream  # noqa: E402
 from common import (  # noqa: E402
     list_registered_platforms,
     load_emulator_profiles,
+    upstream_profile_index,
     yaml_load,
 )
 from exporter import discover_exporters  # noqa: E402
@@ -364,14 +365,9 @@ def check_native(platforms_dir: Path, cache_dir: Path, truth_dir: Path) -> list[
 # --- targets ----------------------------------------------------------------
 
 
-def profile_name_index(profiles: dict[str, dict]) -> dict[str, str]:
-    """Upstream core name -> profile key, the index target filtering uses."""
-    index: dict[str, str] = {}
-    for key, profile in profiles.items():
-        index.setdefault(key, key)
-        for alias in profile.get("cores") or []:
-            index.setdefault(str(alias), key)
-    return index
+def profile_name_index(profiles: dict[str, dict]) -> dict[str, set[str]]:
+    """Upstream core name -> the profiles that claim it, as target filtering reads it."""
+    return upstream_profile_index(profiles, include_aliases=True)
 
 
 def _removed_cores(overrides: dict, platform: str) -> dict[str, set[str]]:
@@ -539,13 +535,20 @@ def coreinfo_gaps(
     Matching folds case: the buildbot serves lower-case names while a few
     .info files keep the project's own casing.
     """
-    index = {k.casefold(): v for k, v in profile_name_index(profiles).items()}
+    index: dict[str, set[str]] = {}
+    for key, claimants in profile_name_index(profiles).items():
+        index.setdefault(key.casefold(), set()).update(claimants)
     unprofiled = [n for n in names if n.casefold() not in index]
+    # A name only standalone profiles claim: libretro now builds a core
+    # nothing in the collection describes as one.
     standalone = [
-        (n, index[n.casefold()])
+        (n, sorted(index[n.casefold()])[0])
         for n in names
         if n.casefold() in index
-        and str(profiles[index[n.casefold()]].get("type", "")).strip() == "standalone"
+        and all(
+            str(profiles[c].get("type", "")).strip() == "standalone"
+            for c in index[n.casefold()]
+        )
     ]
     return unprofiled, standalone
 
