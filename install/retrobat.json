@@ -236,11 +236,11 @@
       }
     }
   ],
-  "total_files": 12286,
-  "total_size": 8834411562,
-  "pack_files": 12288,
-  "pack_size": 8834411562,
-  "total_omitted": 31,
+  "total_files": 12283,
+  "total_size": 8466139986,
+  "pack_files": 12285,
+  "pack_size": 8466139986,
+  "total_omitted": 34,
   "omitted_files": [
     {
       "dest": "base/pak001.pk4",
@@ -250,6 +250,16 @@
       "reason": "not_found",
       "cores": [
         "dhewm3"
+      ]
+    },
+    {
+      "dest": "baseq3/pak0.pk3",
+      "name": "pak0.pk3",
+      "system": "quake3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "ioquake3"
       ]
     },
     {
@@ -443,6 +453,16 @@
       ]
     },
     {
+      "dest": "main/pak0.pk3",
+      "name": "pak0.pk3",
+      "system": "return-to-castle-wolfenstein",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "iortcw"
+      ]
+    },
+    {
       "dest": "mainta/pak1.pk3",
       "name": "pak1.pk3",
       "system": "mohaa-spearhead",
@@ -480,6 +500,16 @@
       "reason": "not_found",
       "cores": [
         "openmohaa"
+      ]
+    },
+    {
+      "dest": "missionpack/pak0.pk3",
+      "name": "pak0.pk3",
+      "system": "teamarena",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "ioquake3"
       ]
     },
     {
@@ -120724,36 +120754,6 @@
       "repo_path": "bios/Nokia/N-Gage/SYM.ROM",
       "cores": [
         "eka2l1"
-      ]
-    },
-    {
-      "dest": "baseq3/pak0.pk3",
-      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
-      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
-      "size": 122757192,
-      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
-      "cores": [
-        "ioquake3"
-      ]
-    },
-    {
-      "dest": "missionpack/pak0.pk3",
-      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
-      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
-      "size": 122757192,
-      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
-      "cores": [
-        "ioquake3"
-      ]
-    },
-    {
-      "dest": "main/pak0.pk3",
-      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
-      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
-      "size": 122757192,
-      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
-      "cores": [
-        "iortcw"
       ]
     },
     {
