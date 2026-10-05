@@ -149,8 +149,8 @@ class CoreResolutionTests(unittest.TestCase):
 
     def test_index_maps_key_and_every_core_alias(self):
         index = cf.profile_name_index(self.PROFILES)
-        self.assertEqual(index["mednafen_psx"], "beetle_psx")
-        self.assertEqual(index["beetle_psx"], "beetle_psx")
+        self.assertEqual(index["mednafen_psx"], {"beetle_psx"})
+        self.assertEqual(index["beetle_psx"], {"beetle_psx"})
 
     def test_unresolved_honours_remove_cores_per_target(self):
         index = cf.profile_name_index(self.PROFILES)

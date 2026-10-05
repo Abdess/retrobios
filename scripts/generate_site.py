@@ -38,8 +38,10 @@ from common import (
     load_emulator_profiles,
     load_provenance_snapshots,
     parse_md5_list,
+    preferred_profile,
     require_yaml,
     unique_emulator_profiles,
+    upstream_profile_index,
     write_if_changed as _write_artifact,
     yaml_load,
 )
@@ -3116,11 +3118,11 @@ def generate_cross_reference(
         k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
     }
 
-    # Build core -> profile lookup by core name
-    core_to_profile: dict[str, str] = {}
-    for pname, p in unique.items():
-        for core in p.get("cores", [pname]):
-            core_to_profile[str(core)] = pname
+    # Core name -> the profile it designates, the rule target filtering uses.
+    index = upstream_profile_index(unique)
+    core_to_profile: dict[str, str] = {
+        core: preferred_profile(index, core) for core in index
+    }
 
     total_cores = len(unique)
     total_upstreams = len({

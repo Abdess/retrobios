@@ -1659,8 +1659,8 @@ class TestE2E(unittest.TestCase):
         config = {
             "platform": "TestStandalone",
             "verification_mode": "existence",
-            "cores": ["test_emu"],
-            "standalone_cores": ["test_emu"],
+            "cores": ["test_sa"],
+            "standalone_cores": ["test_sa"],
             "systems": {
                 "console-a": {
                     "files": [
@@ -1680,7 +1680,7 @@ class TestE2E(unittest.TestCase):
         emu = {
             "emulator": "TestStandaloneEmu",
             "type": "standalone + libretro",
-            "cores": ["test_emu"],
+            "cores": ["test_sa"],
             "systems": ["console-a"],
             "files": [
                 {
