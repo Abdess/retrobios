@@ -177,11 +177,12 @@ class ProfileContradictionsAreKnown(unittest.TestCase):
                 )
                 if path and status == "hash_mismatch":
                     unsatisfied.append(f"{name}/{entry.get('name','')}")
-        self.assertLessEqual(
-            len(unsatisfied), 20,
-            "profile declarations no held file satisfies grew past the known "
-            f"set ({len(unsatisfied)}):\n  " + "\n  ".join(sorted(unsatisfied)),
-        )
+        # The exact set, not a ceiling: a ceiling of 20 over 4 known cases
+        # let 16 new ones through, and a swap of one case for another passed.
+        self.assertEqual(sorted(unsatisfied), KNOWN_UNSATISFIED)
+
+
+KNOWN_UNSATISFIED: list[str] = []
 
 
 class ArchiveNamesDesignateArchives(unittest.TestCase):
@@ -209,12 +210,15 @@ class ArchiveNamesDesignateArchives(unittest.TestCase):
                 # <name>.zip, or the repo's variant form <name>.zip.<md5prefix>
                 if not re.match(r".*\.zip(\.[0-9a-f]{6,})?$", base):
                     loose.append(f"{name} -> {path}")
-        self.assertLessEqual(
-            len(loose),
-            1,
-            "an archive name designates a loose file; the only accepted case is "
-            "ngpc.zip, whose md5 RetroDECK itself declares against the loose "
-            f"Neo Geo Pocket Color BIOS:\n  " + "\n  ".join(sorted(loose)),
+        # The only accepted case is ngpc.zip, whose md5 RetroDECK itself
+        # declares against the loose Neo Geo Pocket Color BIOS. Counting it
+        # let d2fdc.zip take its place unnoticed.
+        self.assertEqual(
+            sorted(loose),
+            [
+                "ngpc.zip -> bios/SNK/Neo Geo Pocket/"
+                "SNK Neo-Geo Pocket Color BIOS (1999)(SNK)(en-ja).bin"
+            ],
         )
 
 
