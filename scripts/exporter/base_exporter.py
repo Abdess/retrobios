@@ -133,6 +133,15 @@ class BaseExporter(ABC):
         require = require or cls.requires()
         return not require or bool(fe.hash(require))
 
+    def states(self, fe: NativeFile, field_name: str) -> bool:
+        """Whether the written file carries this entry's corrected field.
+
+        The summary counts what lands, read entry by entry: a correction the
+        model makes and the format keeps out of the file is not a change the
+        maintainer will find in the diff.
+        """
+        return field_name in self.carries()
+
     def outcome(
         self,
         systems: dict[str, NativeSystem],
