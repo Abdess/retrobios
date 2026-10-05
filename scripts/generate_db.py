@@ -307,7 +307,7 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
         if path not in large_files.values() and name not in large_files:
             continue
         cached = fetch_large_file(
-            name,
+            path if path in large_files.values() else name,
             expected_sha1=entry.get("sha1", ""),
             expected_md5=entry.get("md5", ""),
         )

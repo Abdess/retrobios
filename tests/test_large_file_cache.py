@@ -291,5 +291,149 @@ class PreservedLargeFileEntries(unittest.TestCase):
         self.assertEqual(files["b" * 40]["path"], "/cache/large/FW.PUP")
 
 
+class ReleaseAssetNames(unittest.TestCase):
+    """One registered path, one asset name, the same for every consumer.
+
+    Every consumer named an asset by the file's basename, so two collection
+    files sharing one (`etmain/pak0.pk3` and `demomain/pak0.pk3`) could not
+    both be published: the second upload replaced the first and every
+    fetch received whichever was there.
+    """
+
+    ET = "bios/Id Software/Wolfenstein Enemy Territory/etmain/pak0.pk3"
+    RTCW = "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3"
+    PUP = "bios/Sony/PS3/PS3UPDAT.PUP"
+    REGISTERED = [ET, RTCW, PUP]
+
+    def test_a_shared_basename_gets_two_distinct_names(self):
+        names = largefiles.asset_names(self.REGISTERED)
+        self.assertNotEqual(names[self.ET], names[self.RTCW])
+        self.assertNotIn("pak0.pk3", (names[self.ET], names[self.RTCW]))
+        for name in (names[self.ET], names[self.RTCW]):
+            self.assertNotIn("/", name)
+            self.assertNotIn(" ", name)
+            self.assertTrue(name.endswith("pak0.pk3"))
+
+    def test_the_name_depends_on_the_path_not_on_the_set_order(self):
+        forward = largefiles.asset_names(self.REGISTERED)
+        backward = largefiles.asset_names(list(reversed(self.REGISTERED)))
+        self.assertEqual(forward, backward)
+
+    def test_a_basename_used_once_keeps_its_name(self):
+        self.assertEqual(
+            largefiles.asset_name(self.PUP, self.REGISTERED), "PS3UPDAT.PUP"
+        )
+        self.assertEqual(
+            largefiles.asset_names(["bios/Arcade/MAME/MAME 0.174 Arcade XML.dat"]),
+            {"bios/Arcade/MAME/MAME 0.174 Arcade XML.dat": "MAME 0.174 Arcade XML.dat"},
+        )
+
+    def test_the_published_register_has_no_two_paths_on_one_name(self):
+        registered = largefiles.registered_paths(
+            (REPO_ROOT / ".gitignore").read_text(encoding="utf-8")
+        )
+        names = largefiles.asset_names(registered)
+        self.assertEqual(len(set(names.values())), len(registered))
+        basenames = [os.path.basename(p) for p in registered]
+        for registered_path, name in names.items():
+            if basenames.count(os.path.basename(registered_path)) == 1:
+                self.assertEqual(name, os.path.basename(registered_path))
+
+    def test_manifest_checker_and_fetcher_agree_on_a_path(self):
+        import check_release_assets
+        import generate_pack
+
+        expected = largefiles.asset_names(self.REGISTERED)
+        gitignore = "\n".join(["tmp/", *self.REGISTERED]) + "\n"
+
+        with tempfile.TemporaryDirectory() as root:
+            Path(root, ".gitignore").write_text(gitignore, encoding="utf-8")
+            generate_pack._GITIGNORE_ENTRIES = None
+            try:
+                manifest = {
+                    p: generate_pack._release_asset_name(os.path.join(root, p), root)
+                    for p in self.REGISTERED
+                }
+            finally:
+                generate_pack._GITIGNORE_ENTRIES = None
+        self.assertEqual(manifest, expected)
+
+        sizes = {self.ET: 228138631, self.RTCW: 122757192, self.PUP: 10}
+        published = {expected[p]: size for p, size in sizes.items()}
+        self.assertEqual(
+            check_release_assets.compare(
+                sizes, published, registered=self.REGISTERED
+            ),
+            [],
+        )
+        # The old basename-only asset must not satisfy either pak.
+        self.assertEqual(
+            {f[1] for f in check_release_assets.compare(
+                sizes, {"pak0.pk3": 228138631, "PS3UPDAT.PUP": 10},
+                registered=self.REGISTERED,
+            )},
+            {self.ET, self.RTCW},
+        )
+        db = {"files": {
+            "a" * 40: {"path": self.ET, "size": sizes[self.ET]},
+            "b" * 40: {"path": self.RTCW, "size": sizes[self.RTCW]},
+            "c" * 40: {"path": self.PUP, "size": sizes[self.PUP]},
+        }}
+        body = check_release_assets.render_notes(
+            db, gitignore, published, "", {}, {}, {}
+        )
+        self.assertIn(f"[{expected[self.ET]}]", body)
+        self.assertIn("a" * 40, body)
+        self.assertIn("b" * 40, body)
+        self.assertNotIn("## Not indexed", body)
+
+        requested: list[str] = []
+
+        def fake_urlopen(req, timeout=None):
+            requested.append(req.full_url.rsplit("/", 1)[1])
+            raise urllib.error.URLError("offline")
+
+        self._urlopen = largefiles.urllib.request.urlopen
+        largefiles.urllib.request.urlopen = fake_urlopen
+        try:
+            with tempfile.TemporaryDirectory() as cache:
+                largefiles.fetch_large_file(
+                    self.RTCW, dest_dir=cache, registered=self.REGISTERED
+                )
+                self.assertEqual(
+                    requested,
+                    [largefiles.urllib.parse.quote(expected[self.RTCW])],
+                )
+                requested.clear()
+                largefiles.fetch_large_file(
+                    "pak0.pk3", dest_dir=cache, registered=self.REGISTERED
+                )
+                self.assertEqual(
+                    sorted(requested),
+                    sorted(
+                        largefiles.urllib.parse.quote(expected[p])
+                        for p in (self.ET, self.RTCW)
+                    ),
+                )
+        finally:
+            largefiles.urllib.request.urlopen = self._urlopen
+
+    def test_a_shared_basename_is_fetched_by_the_asset_its_hash_names(self):
+        names = largefiles.asset_names(self.REGISTERED)
+        with tempfile.TemporaryDirectory() as cache:
+            Path(cache, names[self.ET]).write_bytes(PAYLOAD_A)
+            Path(cache, names[self.RTCW]).write_bytes(PAYLOAD_B)
+            got = largefiles.fetch_large_file(
+                "pak0.pk3",
+                dest_dir=cache,
+                expected_sha1=hashlib.sha1(PAYLOAD_B).hexdigest(),
+                offline=True,
+                registered=self.REGISTERED,
+            )
+            self.assertEqual(got, os.path.join(cache, names[self.RTCW]))
+            # The cache entry of the other asset is a valid file, not stale.
+            self.assertTrue(Path(cache, names[self.ET]).exists())
+
+
 if __name__ == "__main__":
     unittest.main()
