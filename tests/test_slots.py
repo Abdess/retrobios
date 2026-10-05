@@ -369,6 +369,17 @@ class TestSelfContradictingDestinations(unittest.TestCase):
         )
         self.assertEqual(slots.find_collisions(config, REGIONS_DB), [])
 
+    def test_a_file_both_declarations_accept_settles_the_path(self):
+        """RetroDECK: ATARIOSB.ROM under one system with one md5, under
+        another with a list naming that same md5; the shipped file passes
+        both, so --strict has nothing to correct there."""
+        config = self._config(
+            {"name": "IPL.bin", "destination": "disk.rom", "md5": "m" * 32},
+            {"name": "IPL.bin", "destination": "disk.rom",
+             "md5": f"{'n' * 32},{'m' * 32}"},
+        )
+        self.assertEqual(slots.find_collisions(config, REGIONS_DB), [])
+
     def test_a_primary_and_its_pinned_variant_are_one_family(self):
         self.assertTrue(
             slots._same_file_family(
