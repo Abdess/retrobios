@@ -514,6 +514,7 @@ def verify_pack_against_platform(
             db,
             base_dest,
             emu_profiles,
+            target_cores=target_cores,
         )
         region_drops = region_mod.resolve_region_drops(
             region_groups, region_index, regions
