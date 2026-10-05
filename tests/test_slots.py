@@ -203,12 +203,25 @@ class TestConflicts(unittest.TestCase):
                 self.assertIn("zip_contents", parameters)
                 self.assertIn("data_dir_registry", parameters)
 
-        # And both consumers hand theirs over rather than letting it default.
-        for module in (generate_pack, verify):
+        parameters = inspect.signature(slots.pack_overrides).parameters
+        self.assertIn("zip_contents", parameters)
+        self.assertIn("data_dir_registry", parameters)
+
+        # Every consumer reads the one decision and hands its indexes over:
+        # the ZIP builder, the install manifest and the report. The manifest
+        # deciding nothing gave the installer other bytes than the ZIP.
+        for module, calls in ((generate_pack, 2), (verify, 1)):
             source = inspect.getsource(module)
-            call = source[source.index("slots.find_conflicts(") :][:400]
             with self.subTest(module=module.__name__):
-                self.assertIn("zip_contents", call)
+                self.assertNotIn("slots.arbitrate(", source)
+                self.assertNotIn("slots.find_conflicts(", source)
+                self.assertEqual(source.count("slots.pack_overrides("), calls)
+                for start in range(len(source)):
+                    start = source.find("slots.pack_overrides(", start)
+                    if start < 0:
+                        break
+                    self.assertIn("zip_contents", source[start:start + 200])
+                    start += 1
 
     def test_a_rom_inside_a_romset_claims_nothing_of_its_own(self):
         """The archive occupies the destination, not the ROM it holds.
@@ -299,9 +312,12 @@ class TestBuilderAndVerifierAgree(unittest.TestCase):
         verifier = Path(__file__).resolve().parents[1] / "scripts" / "verify.py"
         for source in (builder, verifier):
             text = source.read_text(encoding="utf-8")
-            self.assertIn("slots.find_conflicts(", text, source.name)
-            self.assertIn("slots.arbitrate(", text, source.name)
-            self.assertIn("decision.serves_both", text, source.name)
+            self.assertIn("slots.pack_overrides(", text, source.name)
+            self.assertNotIn("decision.serves_both", text, source.name)
+        self.assertIn(
+            "decision.serves_both",
+            (builder.parent / "slots.py").read_text(encoding="utf-8"),
+        )
 
     def test_neither_reimplements_the_mode_test(self):
         # A local "if mode == md5" beside the override would drift from the
@@ -468,6 +484,50 @@ class TestProvenEvidence(unittest.TestCase):
         self.assertFalse(
             slots.Claim("profile", "d", "n", status="hash_mismatch").is_proven
         )
+
+
+
+class ManifestFollowsTheArbitration(unittest.TestCase):
+    """The installer is handed the file the ZIP carries on a contested slot."""
+
+    def test_retroarch_manifest_serves_every_override(self):
+        repo = Path(__file__).resolve().parents[1]
+        if not (repo / "database.json").is_file():
+            self.skipTest("no database.json")
+        # The database names files relative to the repository root, and this
+        # module's fixtures move the working directory elsewhere.
+        previous = os.getcwd()
+        os.chdir(repo)
+        self.addCleanup(os.chdir, previous)
+        import generate_pack
+        from common import (
+            build_zip_contents_index,
+            load_data_dir_registry,
+            load_database,
+            load_emulator_profiles,
+            load_platform_config,
+        )
+
+        db = load_database(str(repo / "database.json"))
+        config = load_platform_config("retroarch", str(repo / "platforms"))
+        profiles = load_emulator_profiles(str(repo / "emulators"))
+        overrides = slots.pack_overrides(
+            config, profiles, db, build_zip_contents_index(db),
+            load_data_dir_registry(str(repo / "platforms")),
+        )
+        if not overrides:
+            self.skipTest("no contested slot the pack settles on its own")
+        manifest = generate_pack.generate_manifest(
+            "retroarch", str(repo / "platforms"), db, str(repo / "bios"),
+            str(repo / "platforms" / "_registry.yml"),
+            emulators_dir=str(repo / "emulators"), emu_profiles=profiles, offline=True,
+        )
+        base = config.get("base_destination", "")
+        by_dest = {f["dest"]: f for f in manifest["files"]}
+        for destination, path in overrides.items():
+            dest = destination[len(base) + 1:] if base else destination
+            with self.subTest(destination=destination):
+                self.assertEqual(by_dest[dest]["repo_path"], path)
 
 
 if __name__ == "__main__":

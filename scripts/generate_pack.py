@@ -651,30 +651,15 @@ def generate_pack(
     from common import resolve_platform_cores
 
     validation_index = {}
-    slot_overrides: dict[str, str] = {}
     if emu_profiles:
         platform_profiles = {
             name: emu_profiles[name]
             for name in resolve_platform_cores(config, emu_profiles)
         }
         validation_index = _build_validation_index(platform_profiles)
-        # Where a source-verified profile contradicts the scraped baseline on
-        # one destination, the pack answers to the platform it is built for.
-        # In existence mode the frontend never reads the bytes, so serving the
-        # emulator's file satisfies both sides and nothing is traded away.
-        mode = config.get("verification_mode", "existence")
-        for conflict in slots.find_conflicts(
-            config,
-            platform_profiles,
-            db,
-            base_dest,
-            {str(c) for c in config.get("standalone_cores", [])},
-            zip_contents,
-            data_registry,
-        ):
-            decision = slots.arbitrate(conflict, mode)
-            if decision.serves_both and decision.winner.local_path:
-                slot_overrides[conflict.destination] = decision.winner.local_path
+    slot_overrides = slots.pack_overrides(
+        config, emu_profiles or {}, db, zip_contents, data_registry
+    )
 
     # Filter systems by target if specified
     plat_cores = (
@@ -2967,6 +2952,9 @@ def generate_manifest(
     pack_only_sizes: list[int] = []
     if data_registry is None:
         data_registry = load_data_dir_registry(platforms_dir)
+    slot_overrides = slots.pack_overrides(
+        config, emu_profiles, db, zip_contents, data_registry
+    )
 
     def manifest_destination(full_destination: str) -> str:
         if base_dest and full_destination.startswith(f"{base_dest}/"):
@@ -3062,6 +3050,9 @@ def generate_manifest(
                     data_dir_registry=data_registry,
                     offline=offline,
                 )
+                override = slot_overrides.get(full_dest)
+                if override:
+                    local_path, status = override, "slot_arbitrated"
                 if (
                     status == "hash_mismatch"
                     and local_path

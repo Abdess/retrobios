@@ -730,28 +730,13 @@ def verify_platform(
     )
     zip_contents = build_zip_contents_index(db) if has_zipped else {}
 
-    slot_overrides: dict[str, str] = {}
-    if emu_profiles:
-        base_dest = config.get("base_destination", "")
-        arbitrated = {
-            name: emu_profiles[name]
-            for name in resolve_platform_cores(config, emu_profiles)
-        }
-        for conflict in slots.find_conflicts(
-            config,
-            arbitrated,
-            db,
-            base_dest,
-            {str(c) for c in config.get("standalone_cores", [])},
-            zip_contents,
-            data_dir_registry,
-        ):
-            decision = slots.arbitrate(conflict, mode)
-            if decision.serves_both and decision.winner.local_path:
-                key = conflict.destination
-                if base_dest and key.startswith(f"{base_dest}/"):
-                    key = key[len(base_dest) + 1:]
-                slot_overrides[key] = decision.winner.local_path
+    base_dest = config.get("base_destination", "")
+    slot_overrides = {
+        (key[len(base_dest) + 1:] if base_dest and key.startswith(f"{base_dest}/") else key): path
+        for key, path in slots.pack_overrides(
+            config, emu_profiles or {}, db, zip_contents, data_dir_registry
+        ).items()
+    }
 
     # Build HLE + validation indexes from emulator profiles
     profiles = (
