@@ -372,7 +372,7 @@ files:
     path: "Machines/Shared Roms/KANJI.rom"
     system: msx2plus
     required: true
-    size_options: [131072, 262144]
+    size: [131072, 262144]
     validation: [size]
     description: "Kanji character ROM, named by the MSX2+ and turbo R machine definitions"
     note: >-

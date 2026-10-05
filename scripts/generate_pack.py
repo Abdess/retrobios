@@ -57,6 +57,7 @@ from common import (
     resolve_local_file,
     sanitize_pack_path,
     select_emulator_profiles,
+    size_fits,
     yaml_load,
 )
 import packresolve
@@ -65,6 +66,7 @@ import slot as slot_mod
 import slots
 import split_pack
 from deterministic_zip import _FIXED_DATE_TIME, rebuild_zip_deterministic
+from largefiles import asset_name
 from nativemode import (
     digest_algorithm,
     hash_mismatch_excludes_file,
@@ -847,14 +849,9 @@ def generate_pack(
                                     _path = _entry.get("path", "")
                                     if _path:
                                         _prefix = _path.rsplit("/", 1)[0] + "/"
-                                        _min = _ef.get("min_size", 0)
-                                        _max = _ef.get("max_size", float("inf"))
-                                        if _ef.get("size") and not _min:
-                                            _min = _ef["size"]
-                                            _max = _ef["size"]
                                         for _s, _e in files_db.items():
                                             if _e.get("path", "").startswith(_prefix):
-                                                if _min <= _e.get("size", 0) <= _max:
+                                                if size_fits(_ef, _e.get("size", 0)):
                                                     if os.path.exists(_e["path"]):
                                                         local_path = _e["path"]
                                                         agnostic_path = _prefix
@@ -2765,12 +2762,23 @@ def _is_release_asset(local_path: str, repo_root: str) -> bool:
     is still served by the repository, and announcing it as a release asset
     sends the installer to an asset nobody uploaded.
     """
-    gitignore = _load_gitignore_entries(repo_root)
+    return _repo_relative(local_path, repo_root) in _load_gitignore_entries(repo_root)
+
+
+def _repo_relative(local_path: str, repo_root: str) -> str:
     try:
-        rel = os.path.relpath(local_path, repo_root)
+        return os.path.relpath(local_path, repo_root)
     except ValueError:
-        rel = ""
-    return rel in gitignore
+        return ""
+
+
+def _release_asset_name(local_path: str, repo_root: str) -> str:
+    """The large-files asset install.py downloads for a gitignored file."""
+    registered = [
+        entry for entry in _load_gitignore_entries(repo_root)
+        if entry.startswith("bios/")
+    ]
+    return asset_name(_repo_relative(local_path, repo_root), registered)
 
 
 def _get_repo_path(sha1: str, db: dict) -> str:
@@ -2880,9 +2888,7 @@ def _manifest_core_entries(
 
         if _is_release_asset(local_path or "", repo_root):
             entry["storage"] = "release"
-            entry["release_asset"] = (
-                os.path.basename(local_path) if local_path else fe["name"]
-            )
+            entry["release_asset"] = _release_asset_name(local_path, repo_root)
 
         manifest_files.append(entry)
         omitted_by_destination.pop(full_dest, None)
@@ -3117,8 +3123,8 @@ def generate_manifest(
 
                 if is_release_asset:
                     entry["storage"] = "release"
-                    entry["release_asset"] = (
-                        os.path.basename(local_path) if local_path else file_entry["name"]
+                    entry["release_asset"] = _release_asset_name(
+                        local_path, repo_root
                     )
 
                 manifest_files.append(entry)

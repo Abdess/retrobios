@@ -113,7 +113,7 @@ files:
     description: "Nintendo DS firmware image"
     required: false
     hle_fallback: true
-    size_options: [131072, 262144, 524288]
+    size: [131072, 262144, 524288]
     validation: [size]
     note: >-
       Three lengths are accepted and everything else is rejected. Loaded only in

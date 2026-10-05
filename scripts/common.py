@@ -64,6 +64,15 @@ def name_match_size_ok(file_entry: dict, candidate_size: int | None) -> bool:
         validation = validation.get("core", [])
     if "size" not in (validation or []) or candidate_size is None:
         return True
+    return size_fits(file_entry, candidate_size)
+
+
+def size_fits(file_entry: dict, candidate_size: int) -> bool:
+    """Whether a size is one the entry declares.
+
+    ``size`` is an exact size or the list of sizes the code accepts; it
+    outranks a ``min_size``/``max_size`` range. Nothing declared fits all.
+    """
     declared = file_entry.get("size")
     if declared is not None:
         allowed = declared if isinstance(declared, list) else [declared]
@@ -450,16 +459,11 @@ def _resolve_agnostic(file_entry: dict, files_db: dict, has_strong_hash: bool):
     prefix = file_entry.get("agnostic_path_prefix", "")
     if not prefix:
         return None
-    min_size = file_entry.get("min_size", 0)
-    max_size = file_entry.get("max_size", float("inf"))
-    exact_size = file_entry.get("size")
-    if exact_size and not min_size:
-        min_size = max_size = exact_size
     for _sha1, entry in files_db.items():
         path = entry.get("path", "")
         if not path.startswith(prefix):
             continue
-        if min_size <= entry.get("size", 0) <= max_size and os.path.exists(path):
+        if size_fits(file_entry, entry.get("size", 0)) and os.path.exists(path):
             return path, "agnostic_fallback"
     return None
 

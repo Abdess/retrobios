@@ -106,6 +106,25 @@ class AgnosticScanStaysInItsTree(unittest.TestCase):
         )
         return [e for e in extras if e.get("agnostic_scan")]
 
+    def test_a_list_of_accepted_sizes_selects_the_scan(self):
+        """`size` may list every size the code accepts. The scan compared it
+        as one integer and failed on a list."""
+        profiles = self._write_profile(
+            "emulator: demo\n"
+            "type: libretro\n"
+            "display_name: Demo\n"
+            "bios_mode: agnostic\n"
+            "systems: [demo-system]\n"
+            "cores: [demo]\n"
+            "files:\n"
+            "  - name: boot.bin\n"
+            "    system: demo-system\n"
+            "    size: [512, 1024]\n"
+            "    agnostic: true\n"
+        )
+        names = sorted(e["name"] for e in self._scan(profiles))
+        self.assertIn("boot.bin", names)
+
     def test_it_collects_the_interchangeable_dumps(self):
         profiles = self._write_profile(
             "emulator: demo\n"

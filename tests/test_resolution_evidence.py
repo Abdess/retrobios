@@ -198,6 +198,19 @@ class AgnosticFallback(unittest.TestCase):
         }
         self.assertIsNotNone(common._resolve_agnostic(entry, self.files_db, False))
 
+    def test_a_list_of_accepted_sizes_is_honoured(self):
+        entry = {
+            "agnostic": True,
+            "agnostic_path_prefix": str(self.root),
+            "size": [32, 64],
+        }
+        self.assertEqual(
+            common._resolve_agnostic(entry, self.files_db, False),
+            (str(self.match), "agnostic_fallback"),
+        )
+        entry["size"] = [32, 65]
+        self.assertIsNone(common._resolve_agnostic(entry, self.files_db, False))
+
     def test_without_a_prefix_nothing_is_scanned(self):
         entry = {"agnostic": True, "size": 64}
         self.assertIsNone(common._resolve_agnostic(entry, self.files_db, False))
@@ -205,6 +218,32 @@ class AgnosticFallback(unittest.TestCase):
     def test_an_entry_that_is_not_agnostic_is_left_alone(self):
         entry = {"agnostic_path_prefix": str(self.root), "size": 64}
         self.assertIsNone(common._resolve_agnostic(entry, self.files_db, False))
+
+
+class OneSpellingForAcceptedSizes(unittest.TestCase):
+    """A set of sizes the code accepts is ``size: [a, b]`` and nothing else.
+
+    SC-55/ROM2.BIN declared its two sizes under a field the resolver never
+    read and resolved by name to a PlayStation 2 ROM of a third size.
+    """
+
+    def test_no_profile_uses_a_second_field(self):
+        offenders = [
+            path.name
+            for path in sorted((REPO_ROOT / "emulators").glob("*.yml"))
+            if "size_options" in path.read_text(encoding="utf-8")
+        ]
+        self.assertEqual(offenders, [])
+
+    def test_the_schema_refuses_the_second_field(self):
+        import json
+
+        schema = json.loads(
+            (REPO_ROOT / "schemas/emulator.schema.json").read_text(encoding="utf-8")
+        )
+        file_entry = schema["properties"]["files"]["items"]["properties"]
+        self.assertNotIn("size_options", file_entry)
+        self.assertEqual(file_entry["size"]["type"], ["integer", "array", "null"])
 
 
 if __name__ == "__main__":

@@ -12,6 +12,7 @@ from common import resolution_is_hash_exact
 from common import resolve_local_file
 from common import runs_standalone
 from common import sanitize_pack_path
+from common import size_fits
 def _emulator_systems_index(emu_profiles: dict | None) -> dict[str, list[str]]:
     """Map both the profile key and its display name to the profile's systems.
 
@@ -213,21 +214,12 @@ def _agnostic_scan_extras(
             if ambiguous and agnostic_votes.get(path_prefix, 0) < 2:
                 continue
 
-            # Size criteria from the file entry
-            min_size = f.get("min_size", 0)
-            max_size = f.get("max_size", float("inf"))
-            exact_size = f.get("size")
-            if exact_size and not min_size:
-                min_size = exact_size
-                max_size = exact_size
-
             # Scan DB for all files under this prefix matching size
             for sha1, entry in files_db.items():
                 path = entry.get("path", "")
                 if not path.startswith(path_prefix):
                     continue
-                size = entry.get("size", 0)
-                if not (min_size <= size <= max_size):
+                if not size_fits(f, entry.get("size", 0)):
                     continue
                 scan_name = entry.get("name", "")
                 if not scan_name:

@@ -174,6 +174,17 @@ class TestSizeGateOnTheNameStep(unittest.TestCase):
         self.assertIsNotNone(path)
         self.assertEqual(status, "hash_mismatch")
 
+    def test_a_list_of_accepted_sizes_gates_the_name_step(self):
+        # SC-55/ROM2.BIN accepts two sizes; a PlayStation 2 ROM2.BIN of a
+        # third size answered to the name because the list was ignored.
+        entry = {"name": "ROM", "size": [8, 999], "validation": ["size"]}
+        path, status = resolve_local_file(entry, self.db)
+        self.assertEqual(status, "name_exact")
+        self.assertIn("IIGS", path)
+        entry = {"name": "ROM", "size": [999, 1000], "validation": ["size"]}
+        path, status = resolve_local_file(entry, self.db)
+        self.assertEqual(status, "hash_mismatch")
+
     def test_a_size_without_validation_rejects_nothing(self):
         # Documented behaviour: a size is informative until the emulator
         # itself checks it.
