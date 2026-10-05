@@ -464,9 +464,15 @@ def find_undeclared_files(
             profile.get("files", []), db, is_standalone
         ):
             fname = f.get("name", "")
-            effective_path = (
-                f.get("standalone_path") if is_standalone else f.get("path")
-            ) or fname
+            # One destination rule for the dedup key and for the entry: a
+            # standalone build without standalone_path falls back on path.
+            # The key used to skip that fallback, so clk's Acorn/basic.rom and
+            # Electron/basic.rom both keyed as "basic.rom" under Batocera's
+            # standalone clk and the second was dropped.
+            if is_standalone:
+                dest = f.get("standalone_path") or f.get("path") or fname
+            else:
+                dest = f.get("path") or fname
             raw_regions = f.get("region") or []
             region_key = tuple(
                 str(value) for value in (
@@ -478,7 +484,7 @@ def find_undeclared_files(
             seen_key = (
                 fname,
                 f.get("archive"),
-                effective_path,
+                dest,
                 f.get("system"),
                 f.get("variant_group"),
                 region_key,
@@ -538,12 +544,6 @@ def find_undeclared_files(
                     entry["archive_required_count"] += 1
                     entry["required"] = True
                 continue
-
-            # Determine destination path based on mode
-            if is_standalone:
-                dest = f.get("standalone_path") or f.get("path") or fname
-            else:
-                dest = f.get("path") or fname
 
             # Resolution: storage flag, then name, then path basename
             storage = f.get("storage", "")
