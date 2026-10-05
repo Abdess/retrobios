@@ -67,16 +67,19 @@ files:
   # ================================================================
 
   - name: "easyrpg.soundfont"
+    aliases: ["FluidR3_GM.sf2"]
     category: game_data
     path: "easyrpg.soundfont"
     required: false
     hle_fallback: true
-    source_ref: "src/decoder_fluidsynth.cpp:125"
+    source_ref: "src/decoder_fluidsynth.cpp:125, src/decoder_fluidsynth.cpp:149-152"
     note: >
       General MIDI soundfont (SF2 format) for MIDI music playback. Many RPG
       Maker games use MIDI for background music. Without a soundfont, MIDI
       falls back to the built-in FmMidi synthesizer (lower quality). Any
-      GM-compatible .sf2 works.
+      GM-compatible .sf2 works. After easyrpg.soundfont, the FluidSynth
+      default and SDL_SOUNDFONTS, desktop Linux, BSD and macOS builds try
+      FluidR3_GM.sf2 under /usr/share/soundfonts and /usr/share/sounds/sf2.
 
   # ================================================================
   # WildMidi configuration (optional, alternative MIDI backend)

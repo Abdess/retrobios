@@ -57,6 +57,11 @@ NODEDUP_DIRS = {
     "Ikemen GO",
     "Theme Hospital",
     "TheXTech",
+    # CatacombGL reads each game's folder by name and compares sizes only:
+    # the Armageddon and Apocalypse intro shapes SHP1, SHP9 to SHP13 are the
+    # Abyss shareware bytes under the retail names, and each game opens
+    # its own copy.
+    "Softdisk",
 }
 
 
