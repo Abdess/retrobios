@@ -131,6 +131,45 @@ class AbsentFileIsNotReplacedByAHomonym(unittest.TestCase):
         self.assertEqual(self._resolve(), (None, "not_found"))
 
 
+class SecondPassKeepsIdentity(unittest.TestCase):
+    """A copy of a covered file at another core's path keeps the entry's proof.
+
+    The second extras pass copied a name the baseline already covers to the
+    profile's own path, without its hashes or its `unsourceable:` flag, so
+    the copy resolved on the name: RetroBat's pack carried Quake III's
+    baseq3/pak1.pk3 as MOHAA's mainta/pak1.pk3.
+    """
+
+    def test_flag_and_hashes_reach_the_alternative_destination(self):
+        from packextras import _collect_emulator_extras
+
+        sha = "a" * 40
+        md5 = "b" * 32
+        db = {
+            "files": {sha: {"path": "bios/Q3/baseq3/pak1.pk3", "name": "pak1.pk3",
+                            "sha1": sha, "md5": md5, "size": 10}},
+            "indexes": {"by_name": {"pak1.pk3": [sha]}, "by_md5": {md5: sha},
+                        "by_path_suffix": {"baseq3/pak1.pk3": [sha]}, "by_crc32": {}},
+        }
+        config = {
+            "platform": "P", "cores": ["mohaa"], "standalone_cores": ["mohaa"],
+            "systems": {"q3": {"files": [
+                {"name": "pak1.pk3", "destination": "baseq3/pak1.pk3", "md5": md5}]}},
+        }
+        profiles = {"mohaa": {
+            "emulator": "MOHAA", "type": "standalone", "cores": ["mohaa"],
+            "systems": ["mohaa"],
+            "files": [
+                {"name": "pak1.pk3", "path": "mainta/pak1.pk3", "unsourceable": "retail"},
+                {"name": "pak1.pk3", "path": "maintt/pak1.pk3", "sha1": "c" * 40},
+            ],
+        }}
+        extras = {e["destination"]: e for e in _collect_emulator_extras(
+            config, "emulators", db, set(), "", profiles)}
+        self.assertEqual(extras["mainta/pak1.pk3"].get("unsourceable"), "retail")
+        self.assertEqual(extras["maintt/pak1.pk3"].get("sha1"), "c" * 40)
+
+
 class CollectionCarriesNoGameDataHomonym(unittest.TestCase):
     def test_the_profiles_resolve_no_game_data_to_another_game(self):
         database = REPO_ROOT / "database.json"
