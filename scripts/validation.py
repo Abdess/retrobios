@@ -10,6 +10,7 @@ from __future__ import annotations
 import os
 
 from common import compute_hashes
+from hashing import parse_md5_list
 
 # Validation types that require console-specific cryptographic keys.
 # verify.py cannot reproduce these -size checks still apply if combined.
@@ -321,3 +322,73 @@ def filter_files_by_mode(files: list[dict], standalone: bool) -> list[dict]:
             continue
         result.append(f)
     return result
+
+
+def find_validated_variant(
+    file_entry: dict,
+    db: dict,
+    current_path: str,
+    validation_index: dict,
+    bios_dir: str = "bios",
+    platform_digest: str | None = None,
+) -> str | None:
+    """A held file the emulator's own checks accept, in place of current_path.
+
+    Candidates come first from the hashes the emulator declares, which finds
+    a dump stored under another name, then from the files sharing the name.
+    platform_digest is the hash the frontend compares ("md5", "sha1") or None
+    when it reads no bytes: a candidate must then also carry a value the
+    entry declares, since the frontend would reject anything else. The
+    report and the packs read this one function, so the file a report counts
+    as satisfying the emulator is the file a pack ships.
+    """
+    fname = file_entry.get("name", "")
+    if not fname or fname not in validation_index:
+        return None
+    accepted: set[str] = set()
+    if platform_digest:
+        if file_entry.get("zipped_file"):
+            return None
+        declared = file_entry.get(platform_digest) or ""
+        if platform_digest == "md5":
+            accepted = set(parse_md5_list(declared))
+        elif isinstance(declared, str) and declared:
+            accepted = {declared.lower()}
+        elif isinstance(declared, list):
+            accepted = {str(value).lower() for value in declared}
+
+    files_db = db.get("files", {})
+    indexes = db.get("indexes", {})
+    current_real = os.path.realpath(current_path)
+    seen: set[str] = set()
+
+    def candidates():
+        expected = validation_index[fname]
+        for hash_type, index_key in (
+            ("sha1", None), ("md5", "by_md5"), ("crc32", "by_crc32"), ("sha256", "by_sha256"),
+        ):
+            for value in expected.get(hash_type) or []:
+                if index_key is None:
+                    yield value
+                    continue
+                found = indexes.get(index_key, {}).get(value)
+                if isinstance(found, str):
+                    yield found
+                elif isinstance(found, list):
+                    yield from found
+        yield from indexes.get("by_name", {}).get(fname, [])
+
+    for sha1 in candidates():
+        entry = files_db.get(sha1) or {}
+        path = entry.get("path", "")
+        if not path or not os.path.exists(path):
+            continue
+        real = os.path.realpath(path)
+        if real == current_real or real in seen:
+            continue
+        seen.add(real)
+        if accepted and str(entry.get(platform_digest, "")).lower() not in accepted:
+            continue
+        if check_file_validation(path, fname, validation_index, bios_dir) is None:
+            return path
+    return None

@@ -71,6 +71,7 @@ from validation import (
     build_ground_truth,
     check_file_validation,
     filter_files_by_mode,
+    find_validated_variant,
 )
 
 DEFAULT_DB = "database.json"
@@ -125,7 +126,7 @@ def verify_entry_existence(
             reason, emus_list = check
             suppressed = False
             if db:
-                better = _find_best_variant(
+                better = find_validated_variant(
                     file_entry, db, local_path, validation_index,
                 )
                 if better:
@@ -700,91 +701,6 @@ def find_exclusion_notes(
 # Platform verification
 
 
-def _find_best_variant(
-    file_entry: dict,
-    db: dict,
-    current_path: str,
-    validation_index: dict,
-) -> str | None:
-    """Search for a repo file that passes emulator validation.
-
-    Two-pass search:
-    1. Hash lookup, using the emulator's expected hashes (sha1, md5, sha256,
-       crc32) to find candidates directly in the DB indexes.  This finds
-       variants stored under different filenames (e.g. megacd2_v200_eu.bin
-       for bios_CD_E.bin).
-    2. Name lookup, checking all files sharing the same name (aliases,
-       .variants/ with name-based suffixes).
-
-    If any candidate on disk passes ``check_file_validation``, the
-    discrepancy is suppressed: the repo has what the emulator needs.
-    """
-    fname = file_entry.get("name", "")
-    if not fname or fname not in validation_index:
-        return None
-
-    files_db = db.get("files", {})
-    current_real = os.path.realpath(current_path)
-    seen_paths: set[str] = set()
-
-    def _try_candidate(sha1: str) -> str | None:
-        candidate = files_db.get(sha1, {})
-        path = candidate.get("path", "")
-        if not path or not os.path.exists(path):
-            return None
-        rp = os.path.realpath(path)
-        if rp == current_real or rp in seen_paths:
-            return None
-        seen_paths.add(rp)
-        if check_file_validation(path, fname, validation_index) is None:
-            return path
-        return None
-
-    # Pass 1: hash-based lookup from emulator expected values
-    ventry = validation_index[fname]
-    indexes = db.get("indexes", {})
-    for hash_type, db_index_key in (
-        ("sha1", None),
-        ("md5", "by_md5"),
-        ("crc32", "by_crc32"),
-        ("sha256", "by_sha256"),
-    ):
-        expected = ventry.get(hash_type)
-        if not expected:
-            continue
-        if db_index_key is None:
-            # SHA1 is the primary key of files_db
-            for h in expected:
-                if h in files_db:
-                    result = _try_candidate(h)
-                    if result:
-                        return result
-            continue
-        db_index = indexes.get(db_index_key, {})
-        for h in expected:
-            entries = db_index.get(h)
-            if not entries:
-                continue
-            if isinstance(entries, list):
-                for sha1 in entries:
-                    result = _try_candidate(sha1)
-                    if result:
-                        return result
-            elif isinstance(entries, str):
-                result = _try_candidate(entries)
-                if result:
-                    return result
-
-    # Pass 2: name-based lookup (aliases, .variants/ with same filename)
-    by_name = db.get("indexes", {}).get("by_name", {})
-    for sha1 in by_name.get(fname, []):
-        result = _try_candidate(sha1)
-        if result:
-            return result
-
-    return None
-
-
 def verify_platform(
     config: dict,
     db: dict,
@@ -941,11 +857,12 @@ def verify_platform(
                     )
                     if check:
                         reason, emus_list = check
-                        better = _find_best_variant(
+                        better = find_validated_variant(
                             file_entry,
                             db,
                             local_path,
                             validation_index,
+                            platform_digest=digest_algorithm(mode),
                         )
                         if not better:
                             emus = ", ".join(emus_list)
@@ -1514,7 +1431,7 @@ def verify_emulator(
                 check = check_file_validation(local_path, name, validation_index)
                 if check:
                     reason, _emus = check
-                    better = _find_best_variant(
+                    better = find_validated_variant(
                         file_entry, db, local_path, validation_index,
                     )
                     if better:

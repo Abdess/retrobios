@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import re
 _HEX_RE = re.compile(r"\b([0-9a-fA-F]{8,40})\b")
-from validation import check_file_validation
 from largefiles import fetch_large_file
 import os
 from hashing import parse_md5_list
@@ -116,54 +115,6 @@ def lookup_hashes(
             except (KeyError, OSError):
                 pass
         print(f"  In repo: {'YES' if in_repo else 'NO'}")
-
-def _find_candidate_satisfying_both(
-    file_entry: dict,
-    db: dict,
-    local_path: str,
-    validation_index: dict,
-    bios_dir: str,
-) -> str | None:
-    """Search for a repo file that satisfies both platform MD5 and emulator validation.
-
-    When the current file passes platform verification but fails emulator checks,
-    search all candidates with the same name for one that passes both.
-    Returns a better path, or None if no upgrade found.
-    """
-    fname = file_entry.get("name", "")
-    if not fname:
-        return None
-    entry = validation_index.get(fname)
-    if not entry:
-        return None
-
-    md5_expected = file_entry.get("md5", "")
-    md5_set = (
-        {m.strip().lower() for m in md5_expected.split(",") if m.strip()}
-        if md5_expected
-        else set()
-    )
-
-    by_name = db.get("indexes", {}).get("by_name", {})
-    files_db = db.get("files", {})
-
-    for sha1 in by_name.get(fname, []):
-        candidate = files_db.get(sha1, {})
-        path = candidate.get("path", "")
-        if (
-            not path
-            or not os.path.exists(path)
-            or os.path.realpath(path) == os.path.realpath(local_path)
-        ):
-            continue
-        # Must still satisfy platform MD5
-        if md5_set and candidate.get("md5", "").lower() not in md5_set:
-            continue
-        # Check emulator validation
-        reason = check_file_validation(path, fname, validation_index, bios_dir)
-        if reason is None:
-            return path
-    return None
 
 def resolve_file(
     file_entry: dict,
