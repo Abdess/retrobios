@@ -204,13 +204,31 @@ class TestRepoProfiles(unittest.TestCase):
             entry = index.get(name)
             if entry is None:
                 self.skipTest(f"{name} not in any profile")
-        if not index["scph1001.bin"].get("conflict"):
-            self.skipTest("no conflicting ranks declared yet")
+        # pcsx1 and DuckStation both rank these and disagree: losing the mark
+        # is the failure this test exists for, not a reason to skip it.
+        self.assertTrue(index["scph1001.bin"].get("conflict"))
         drops, _u = slot.resolve_slot_drops(
             {"psx": _pairs("scph1001.bin", "scph5501.bin", "scph7001.bin")},
             index,
         )
         self.assertEqual(drops & {"scph1001.bin", "scph5501.bin"}, set())
+
+    def test_opposite_orders_mark_a_conflict(self):
+        """Two cores ranking the same files in opposite orders drop nothing."""
+        profiles = {
+            "a": {"files": [
+                {"name": "x.bin", "system": "s", "priority": 1},
+                {"name": "y.bin", "system": "s", "priority": 2},
+            ]},
+            "b": {"files": [
+                {"name": "x.bin", "system": "s", "priority": 2},
+                {"name": "y.bin", "system": "s", "priority": 1},
+            ]},
+        }
+        index = slot.build_slot_index(profiles)
+        self.assertTrue(index["x.bin"].get("conflict") or index["y.bin"].get("conflict"))
+        drops, _u = slot.resolve_slot_drops({"s": _pairs("x.bin", "y.bin")}, index)
+        self.assertEqual(drops, set())
 
     def test_numero_search_order_decides_its_slot(self):
         """numero is alone on ti-83 and ranks all three ROMs, so this is the
