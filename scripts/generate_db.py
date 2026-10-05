@@ -402,9 +402,11 @@ def _collect_all_aliases(files: dict) -> dict:
     """
     md5_to_sha1 = {}
     name_to_sha1 = {}
+    name_count: dict[str, int] = {}
     for sha1, entry in files.items():
         md5_to_sha1[entry["md5"]] = sha1
         name_to_sha1[entry["name"]] = sha1
+        name_count[entry["name"]] = name_count.get(entry["name"], 0) + 1
 
     aliases = {}
 
@@ -501,7 +503,10 @@ def _collect_all_aliases(files: dict) -> dict:
                         matched = sha1
                     elif md5 and md5 in md5_to_sha1:
                         matched = md5_to_sha1[md5]
-                    elif entry_name and entry_name in name_to_sha1:
+                    elif entry_name and name_count.get(entry_name) == 1:
+                        # A name carried by several files names none of them:
+                        # quasi88's disk.rom aliases went to whichever
+                        # disk.rom the scan met last, a Tandy CoCo ROM.
                         matched = name_to_sha1[entry_name]
                     if matched:
                         for alias_name in entry_aliases:
