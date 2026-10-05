@@ -25,7 +25,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import compute_hashes, list_registered_platforms, load_database, yaml_load
+from common import (
+    compute_hashes,
+    list_registered_platforms,
+    load_database,
+    load_platform_config,
+    parse_md5_list,
+)
 
 try:
     import yaml
@@ -109,20 +115,24 @@ def load_platform_hashes(platforms_dir: str) -> dict:
     if not os.path.isdir(platforms_dir) or yaml is None:
         return known
 
+    # Read the way verify reads them: inheritance and shared groups resolved,
+    # and a Recalbox md5 field split into the revisions it lists. The raw
+    # file kept "a,b,c" as one value, so a PR adding the seventh accepted
+    # falcon.img was told its hash differs.
     for name in list_registered_platforms(platforms_dir, include_archived=True):
-        f = Path(platforms_dir) / f"{name}.yml"
-        with open(f) as fh:
-            try:
-                config = yaml_load(fh) or {}
-            except yaml.YAMLError:
-                continue
+        try:
+            config = load_platform_config(name, platforms_dir)
+        except (OSError, yaml.YAMLError) as exc:
+            print(f"WARNING: {name}: {exc}", file=sys.stderr)
+            continue
 
-        for sys_id, system in config.get("systems", {}).items():
+        for system in config.get("systems", {}).values():
             for file_entry in system.get("files", []):
-                if "sha1" in file_entry:
-                    known["sha1"].add(file_entry["sha1"])
-                if "md5" in file_entry:
-                    known["md5"].add(file_entry["md5"])
+                sha1 = file_entry.get("sha1")
+                for value in sha1 if isinstance(sha1, list) else [sha1]:
+                    if value:
+                        known["sha1"].add(str(value).lower())
+                known["md5"].update(parse_md5_list(file_entry.get("md5")))
                 if "name" in file_entry:
                     known["names"].add(file_entry["name"])
 
