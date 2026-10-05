@@ -611,6 +611,24 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                                 "target_cores", {k.arg for k in call.keywords}
                             )
 
+    def test_pal_console_region_reaches_oceania(self):
+        """PSX cores pick these BIOSes for the PAL console region, not for Europe alone.
+
+        DuckStation's ConsoleRegion::PAL, Beetle PSX, SwanStation, PCSX ReARMed's
+        EU slot and Rustation all serve Australian and New Zealand discs from the
+        same images; annotated [europe] only, --region australia dropped them.
+        """
+        import yaml
+
+        repo = Path(__file__).resolve().parent.parent
+        for emu in ("duckstation", "beetle_psx", "swanstation", "pcsx_rearmed", "rustation"):
+            profile = yaml.safe_load((repo / "emulators" / f"{emu}.yml").read_text())
+            for entry in profile.get("files", []):
+                regions = entry.get("region") or []
+                if "europe" in regions:
+                    with self.subTest(emulator=emu, name=entry.get("name")):
+                        self.assertIn("oceania", regions)
+
 
 if __name__ == "__main__":
     unittest.main()

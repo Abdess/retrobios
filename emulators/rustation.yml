@@ -50,7 +50,7 @@ files:
 
   - name: "scph5502.bin"
     description: "SCPH-5502 (v3.0 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: true
     size: 524288
     validation: [size, sha256]
@@ -183,7 +183,7 @@ files:
   # Europe alternatives
   - name: "scph1002.bin"
     description: "SCPH-1002 (v2.0 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     size: 524288
     validation: [size, sha256]
@@ -192,7 +192,7 @@ files:
 
   - name: "scph1002b.bin"
     description: "SCPH-1002 (v2.1 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     size: 524288
     validation: [size, sha256]
@@ -201,7 +201,7 @@ files:
 
   - name: "scph1002c.bin"
     description: "SCPH-1002 (v2.2 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     size: 524288
     validation: [size, sha256]
@@ -210,7 +210,7 @@ files:
 
   - name: "scph7002.bin"
     description: "SCPH-7002 (v4.1 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     size: 524288
     validation: [size, sha256]
@@ -219,7 +219,7 @@ files:
 
   - name: "scph102.bin"
     description: "SCPH-102 (v4.4 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     size: 524288
     validation: [size, sha256]
@@ -228,7 +228,7 @@ files:
 
   - name: "scph102_v45.bin"
     description: "v4.5 E"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     size: 524288
     validation: [size, sha256]
