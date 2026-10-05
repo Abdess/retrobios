@@ -954,8 +954,13 @@ def fetch_manifest(plat: str) -> dict:
         sys.exit(1)
 
 
-def fetch_targets(plat: str) -> dict:
-    """Download target core list. Returns empty dict on 404."""
+def fetch_targets(plat: str) -> "dict | None":
+    """Download the target core list.
+
+    Empty on 404, where the platform publishes no targets. None when the list
+    could not be read: a timeout says nothing about the platform, and
+    answering "no targets" for it sent users to the full pack.
+    """
     url = TARGETS_URL.format(platform=plat)
     try:
         with urllib.request.urlopen(url, timeout=30) as resp:
@@ -965,10 +970,11 @@ def fetch_targets(plat: str) -> dict:
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
             return {}
-        print(f"  Warning: failed to fetch targets for {plat}: {exc}", file=sys.stderr)
-        return {}
-    except (urllib.error.URLError, OSError, ValueError):
-        return {}
+        print(f"  Error: failed to fetch targets for {plat}: {exc}", file=sys.stderr)
+        return None
+    except (urllib.error.URLError, OSError, ValueError) as exc:
+        print(f"  Error: failed to fetch targets for {plat}: {exc}", file=sys.stderr)
+        return None
 
 
 def _filter_by_target(
@@ -1580,6 +1586,8 @@ def main() -> None:
 
         if args.list_targets:
             targets = fetch_targets(plat_name)
+            if targets is None:
+                sys.exit(1)
             if not targets:
                 print(f"  No targets available for {plat_name}")
             else:
@@ -1592,6 +1600,8 @@ def main() -> None:
         # Target filtering
         if args.target:
             targets = fetch_targets(plat_name)
+            if targets is None:
+                sys.exit(1)
             target_info = targets.get(args.target)
             if target_info is None:
                 # Carrying on would install every file, which is the opposite
