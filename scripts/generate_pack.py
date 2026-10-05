@@ -131,54 +131,6 @@ def _write_generated_member(zf: zipfile.ZipFile, arcname: str, text: str) -> Non
     zf.writestr(info, text)
 
 
-
-
-
-
-
-
-
-
-def _pack_member_groups(
-    config: dict,
-    pack_systems: dict,
-    emulators_dir: str,
-    db: dict,
-    base_dest: str,
-    emu_profiles: dict | None,
-    target_cores: set[str] | None,
-    source: str,
-) -> dict[str, list[tuple[str, str]]]:
-    """Group every candidate of a pack by system, as (destination, name).
-
-    Covers the platform baseline and the core extras, because a narrowing pass
-    that saw only one of the two would compare an incomplete set.
-    """
-    groups: dict[str, list[tuple[str, str]]] = {}
-    for sys_id, system in pack_systems.items():
-        members = groups.setdefault(sys_id, [])
-        for fe in system.get("files", []):
-            dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
-            if dest:
-                members.append((dest, fe.get("name", "")))
-    if source == "platform":
-        return groups
-    # find_undeclared_files reports the profile's display name, not its key,
-    # so index both: on a key-only lookup nearly every core extra fell into a
-    # single bucket and lost its per-system grouping.
-    emu_systems = _emulator_systems_index(emu_profiles)
-    for fe in _collect_emulator_extras(
-        config, emulators_dir, db, set(), base_dest, emu_profiles,
-        target_cores=target_cores, include_all=(source == "truth"),
-    ):
-        dest = sanitize_pack_path(fe.get("destination", fe.get("name", "")))
-        if not dest:
-            continue
-        for sys_id in emu_systems.get(fe.get("source_emulator", ""), ["_extras"]):
-            groups.setdefault(sys_id, []).append((dest, fe.get("name", "")))
-    return groups
-
-
 def _narrowings(
     source: str,
     regions: list[str] | None,
@@ -576,8 +528,10 @@ def _select_variants(
     """
     region_drops: set[str] = set()
     region_fallbacks: list[str] = []
-    if regions:
-        region_index = region_mod.build_region_index(emu_profiles or {})
+    # One grouping for both passes: a file judged in its own system by one
+    # pass must not land in every system of its profile for the other.
+    region_groups: dict[str, list[tuple[str, str]]] = {}
+    if regions or one_per_slot:
         region_groups, _extra_dests = platform_region_groups(
             config,
             pack_systems,
@@ -589,6 +543,8 @@ def _select_variants(
             include_extras=(source != "platform"),
             include_all=(source == "truth"),
         )
+    if regions:
+        region_index = region_mod.build_region_index(emu_profiles or {})
         region_drops = region_mod.resolve_region_drops(
             region_groups, region_index, regions
         )
@@ -598,13 +554,9 @@ def _select_variants(
 
     slot_undecidable: list[str] = []
     if one_per_slot:
-        members_by_system = _pack_member_groups(
-            config, pack_systems, emulators_dir, db, base_dest,
-            emu_profiles, target_cores, source,
-        )
         slot_groups = {
             sys_id: [(d, n) for d, n in members if d not in region_drops]
-            for sys_id, members in members_by_system.items()
+            for sys_id, members in region_groups.items()
         }
         slot_drops, slot_undecidable = slot_mod.resolve_slot_drops(
             slot_groups, slot_mod.build_slot_index(emu_profiles or {})
