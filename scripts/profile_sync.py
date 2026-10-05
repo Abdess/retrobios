@@ -18,7 +18,7 @@ import re
 import subprocess
 import sys
 import tempfile
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import date
 from pathlib import Path
 
@@ -998,19 +998,19 @@ class EntryReport:
 class ProfileReport:
     name: str
     repo: str | None = None
-    repos: list[str] = None
+    repos: list[str] = field(default_factory=list)
     pinned_tag: str | None = None
     host: str | None = None
     pin: str | None = None
     pin_origin: str | None = None
     head: str | None = None
-    entries: list[EntryReport] = None
+    entries: list[EntryReport] = field(default_factory=list)
     skipped: str | None = None
-    counts: dict[str, int] = None
+    counts: dict[str, int] = field(default_factory=dict)
     # Declared repositories whose forge the tool cannot read. They are named
     # rather than dropped: a `source` on an unknown host used to fall back to
     # `upstream` in silence, and a divergence between the two went unseen.
-    unread: list[str] = None
+    unread: list[str] = field(default_factory=list)
 
     def needs_review(self) -> int:
         counts = self.counts or {}
