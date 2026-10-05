@@ -1283,25 +1283,9 @@ def generate_emulator_pack(
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
-    # One group per system (or explicit variant_group) inside each profile.
-    # Multi-system cores such as O2EM therefore retain a fallback BIOS for
-    # every system instead of letting one matching system empty another.
-    region_drops: set[str] = set()
-    if regions:
-        region_index = region_mod.build_region_index(dict(selected))
-        region_groups: dict[str, list[tuple[str, str]]] = {}
-        for emu_name, profile in sorted(selected):
-            structure = profile.get("pack_structure")
-            for fe in filter_files_by_mode(profile.get("files", []), standalone):
-                dest = _resolve_destination(fe, structure, standalone)
-                if dest:
-                    group_id = _emulator_region_group(emu_name, profile, fe)
-                    region_groups.setdefault(group_id, []).append(
-                        (dest, fe.get("name", ""))
-                    )
-        region_drops = region_mod.resolve_region_drops(
-            region_groups, region_index, regions
-        )
+    region_drops: set[str] = (
+        emulator_region_drops(selected, standalone, regions) if regions else set()
+    )
 
     total_files = 0
     missing_files = []
@@ -3436,6 +3420,7 @@ from packextras import (  # noqa: E402,F401
     _collect_emulator_extras,
     _extra_system_ids,
     platform_region_groups,
+    emulator_region_drops,
     _emulator_region_group,
 )
 

@@ -600,6 +600,34 @@ def platform_region_groups(
             groups.setdefault(group_id, []).append((dest, name))
     return groups, extra_dests
 
+def emulator_region_drops(
+    selected: list[tuple[str, dict]], standalone: bool, regions: list[str]
+) -> set[str]:
+    """Destinations an emulator-mode `--region` withdraws.
+
+    One group per system (or explicit variant_group) inside each profile, so
+    a multi-system core such as O2EM keeps a fallback BIOS for every system
+    instead of letting one matching system empty another. The emulator pack
+    and `verify --emulator` both read this, keyed by pack destination.
+    """
+    import region as region_mod
+    from packpaths import _resolve_destination
+    from validation import filter_files_by_mode
+
+    region_index = region_mod.build_region_index(dict(selected))
+    region_groups: dict[str, list[tuple[str, str]]] = {}
+    for emu_name, profile in sorted(selected):
+        structure = profile.get("pack_structure")
+        for fe in filter_files_by_mode(profile.get("files", []), standalone):
+            dest = _resolve_destination(fe, structure, standalone)
+            if dest:
+                group_id = _emulator_region_group(emu_name, profile, fe)
+                region_groups.setdefault(group_id, []).append(
+                    (dest, fe.get("name", ""))
+                )
+    return region_mod.resolve_region_drops(region_groups, region_index, regions)
+
+
 def _emulator_region_group(emu_name: str, profile: dict, file_entry: dict) -> str:
     """Stable group ID for regional alternatives within an emulator profile."""
     variant = file_entry.get("variant_group")
