@@ -34,7 +34,6 @@ notes: |
 files:
   - name: "o2rom.bin"
     system: odyssey2
-    region: [north-america]
     required: true
     size: 1024
     md5: "562d5ebf9e030a40d6fabfc2f33139fd"
@@ -46,7 +45,6 @@ files:
 
   - name: "c52.bin"
     system: videopac
-    region: [europe]
     required: true
     size: 1024
     md5: "f1071cdb0b6b10dde94d3bc8a6146387"
@@ -58,7 +56,6 @@ files:
 
   - name: "g7400.bin"
     system: videopac
-    region: [europe]
     required: true
     size: 1024
     md5: "c500ff71236068e0dc0d0603d265ae76"
@@ -70,7 +67,6 @@ files:
 
   - name: "jopac.bin"
     system: videopac
-    region: [france]
     required: true
     size: 1024
     md5: "279008e4a0db2dc5f1c048853b033828"
