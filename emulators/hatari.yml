@@ -127,11 +127,16 @@ files:
     required: false
     storage: user_provided
     unsourceable: "one table per TOS build, valid only beside the image it was linked with: each EmuTOS release archive carries the table of its ROM, etos512k.sym beside etos512k.img, and Atari TOS has none"
-    source_ref: "src/tos.c:1094, src/debug/symbols.c:1095-1113, src/debug/symbols.c:1002-1020, src/debug/symbols.c:372-407, src/configuration.c:621, src/includes/configuration.h:29-31"
+    source_ref: "src/tos.c:1094, src/debug/symbols.c:1095-1113, src/debug/symbols.c:1002-1020, src/debug/symbols.c:372-407, src/configuration.c:621, src/includes/configuration.h:29-31, src/retro/main_retro.c:182-194"
     note: >
       The name is the TOS image path with its last three characters
-      replaced by sym, and the image path is always tos.img here. Read at
-      every TOS load when present; the symbols serve the built-in debugger.
+      replaced by sym, and the image path is always tos.img here: retro_init
+      passes <system>/tos.img as --tos and no other image name reaches the
+      loader, so a table named after another image, emutos.sym beside
+      emutos.img, is never opened. nSymbolsAutoLoad gates the read; its
+      default is not off and no core option changes it, so the table is read
+      at every TOS load when present. The symbols serve the built-in
+      debugger.
 
   - name: "cartridge ROM"
     path: null

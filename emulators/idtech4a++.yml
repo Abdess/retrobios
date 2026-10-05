@@ -136,7 +136,7 @@ notes: |
   ETQW are covered by this path; the bot, Rivensin and translation archives are
   extracted on request from the launcher instead.
   ref: Q3E/src/main/java/com/n0n3m4/q3e/Q3EMain.java:167,
-       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:624-703, 921-940,
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:667-746, 964-984,
        Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResource.java:12-47,
        Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:32-218
 
@@ -303,7 +303,7 @@ files:
       moved their uniform-dependent initialisers out of global scope and cast
       their integer terms to float. The 2.14.1 pack it replaced is kept as a
       variant.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:83-92, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:705-722, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:391, Q3E/src/main/jni/darkmod/glslprogs/ssao.frag.glsl:78-80, 163-166"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:83-92, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:748-767, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:391, Q3E/src/main/jni/darkmod/glslprogs/ssao.frag.glsl:78-80, 163-166"
 
   - name: renderprogs.pk4
     required: true
@@ -316,7 +316,7 @@ files:
     note: >-
       Unpacked into `base/renderprogs/` beside the game resources. The shipped
       BFG data carries the desktop HLSL set, which this build cannot use.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:72-81, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:768-787, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:393"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:72-81, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:811-829, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:393"
 
   - name: glsl.pk4
     required: true
@@ -328,7 +328,7 @@ files:
     description: "Skin Deep shader set rewritten for OpenGL ES"
     note: >-
       Unpacked into `base/glsl/` and stamped with the game version.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:197-206, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:726-745, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:399"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:197-206, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:769-788, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:399"
 
   - name: zzz_etqwbase.pk4
     required: true
@@ -343,7 +343,7 @@ files:
       override the ones the retail archives carry. ETQW_GLSL_SHADER_VERSION
       names the set the build expects and reads .6 here; the .3 pack it
       replaced is kept as a variant for older builds.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:208-217, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:747-766, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:400"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:208-217, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:790-809, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:400"
 
   - name: legacy_v2.83.2.pk3
     required: true
@@ -359,7 +359,7 @@ files:
       retail Enemy Territory data in `etmain` stays the user's to supply. The
       file name is built from the engine version, so a Legacy update lands under
       a new name.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:175-184, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:845-868, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:397"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:175-184, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:888-911, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:397"
 
   - name: extras.pk3
     required: true
@@ -389,7 +389,7 @@ files:
     note: >-
       Extracted right after the base extras and mounted the same way, for the
       cs16 and cs16_yapb server classes the launcher offers.
-    source_ref: "xash3d-fwgs filesystem/filesystem.c:1380-1382, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:153-162, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:815-843, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:412"
+    source_ref: "xash3d-fwgs filesystem/filesystem.c:1380-1382, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:153-162, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:858-886, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:412"
 
   - name: extras.zip
     required: true
@@ -403,7 +403,7 @@ files:
       Unpacked into `files/` under the Source standalone directory. It carries
       the DejaVu, Droid Sans Fallback, Itim and Liberation faces the engine
       substitutes for the Windows fonts, and extras_dir.vpk.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:164-173, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:895-919, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:396"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:164-173, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:938-961, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:396"
 
   - name: d3_sabot_a7.pk4
     required: false
@@ -657,4 +657,4 @@ exclusion_note: >
        Q3E/src/main/jni/ecwolf/src/wl_iwad.cpp:766,
        Q3E/src/main/jni/q3e/q3emisc.c:23-25,
        idTech4Amm/src/main/java/com/n0n3m4/DIII4A/GameLauncher.java:2899, 2916,
-       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:697-703
+       Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:740-746
