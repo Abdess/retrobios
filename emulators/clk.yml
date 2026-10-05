@@ -225,12 +225,12 @@ files:
   - name: AP6v133.rom
     path: Electron/AP6v133.rom
     description: "Advanced Plus 6 ROM"
-    size: 8192
+    size: 7772
     crc32: "e0013cfc"
     required: false
-    note: "Conditional: needed for AP6 commands"
+    note: "Conditional: needed for AP6 commands. The catalogue records crc32 e0013cfc, which is the 7772-byte RetroHardware Plus 1 Support 1.33c build of 16 Jun 2020, and declares 8 KiB: Request::Node::validate() resizes the loaded image to 8192 bytes and the fetcher reads any length."
     mode: standalone
-    source_ref: "Machines/Utility/ROMCatalogue.cpp:138-145"
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:138-145, Machines/Utility/ROMCatalogue.cpp:1484-1499, OSBindings/SDL/main.cpp:756-783"
 
   # -------------------------------------------------------
   # Amiga (machine_name: "Amiga")
@@ -508,11 +508,18 @@ files:
     path: DiskII/state-machine-16.rom
     description: "Disk II 16-sector state machine ROM"
     size: 256
-    crc32: "9796a238"
+    crc32: "b72a2c70"
     required: false
-    note: "Conditional: needed for disk controller. Also used by Oric Pravetz."
+    note: >
+      Conditional: needed for disk controller. Also used by Oric Pravetz. The
+      catalogue accepts 9796a238 and b72a2c70, the same PROM in two byte orders.
+      set_state_machine() takes an image whose first byte is 0x18 as already in
+      Beneath Apple ProDOS order (b72a2c70) and only reorders its addresses; any
+      other image is read as the unadulterated P6 PROM (9796a238), its address
+      lines and the top nibble of each value remapped into that order. Both give
+      the same internal table.
     mode: standalone
-    source_ref: "Machines/Utility/ROMCatalogue.cpp:536-543"
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:536-543, Components/DiskII/DiskII.cpp:187-239"
 
   - name: boot-13.rom
     path: DiskII/boot-13.rom
@@ -693,11 +700,16 @@ files:
     path: Macintosh/macplus.rom
     description: "Macintosh Plus ROM"
     size: 131072
-    crc32: "4fa5b399"
+    crc32: "b2102e8e"
     required: true
-    note: "Required for Macintosh 512ke and Plus models"
+    note: >
+      Required for Macintosh 512ke and Plus models. The catalogue accepts three
+      images, 4fa5b399, 7cacd18f and b2102e8e; b2102e8e carries the ROM
+      checksum 4D1F8172 of the third Mac Plus revision. The
+      machine copies whichever is supplied into its 128 KiB ROM without
+      reading the revision.
     mode: standalone
-    source_ref: "Machines/Utility/ROMCatalogue.cpp:740-751"
+    source_ref: "Machines/Utility/ROMCatalogue.cpp:740-751, Machines/Apple/Macintosh/Macintosh.cpp:127-144"
 
   # -------------------------------------------------------
   # Master System (machine_name: "MasterSystem")

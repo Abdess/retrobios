@@ -294,11 +294,16 @@ files:
     required: false
     hle_fallback: true
     description: "Dump of the shared data region of a console"
+    size: 33554432
     note: >-
       Read only when the four shared fonts are not all present: 32 MiB
       copied from the user data path to 0xF8000000, table of font entries
-      included. Nothing about it is validated.
-    source_ref: "src/Cafe/CafeSystem.cpp:357-365"
+      included. Nothing about it is validated. The region holds the
+      SharedDataEntry table (0xFFCAFE01 to 0xFFCAFE04, type 2) followed by
+      CafeCn.ttf, CafeKr.ttf, CafeStd.ttf and CafeTw.ttf, byte-identical to
+      the console dumps of title 0005001b-10042400 above; every other byte
+      is zero.
+    source_ref: "src/Cafe/CafeSystem.cpp:268-291, src/Cafe/CafeSystem.cpp:357-365"
 
   - name: snd_user.rpl
     path: Cemu/cafeLibs/snd_user.rpl

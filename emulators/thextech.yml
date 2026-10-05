@@ -179,9 +179,8 @@ files:
     category: game_data
     path: "TheXTech/introset/"
     required: false
-    unsourceable: "optional directory a pack author fills with alternative intro levels; the Adventures of Demo pack carries none and the code falls back on intro.lvlx"
-    source_ref: "src/game_main.cpp:194-222, 247"
-    note: "Directory of .lvl/.lvlx intro levels; one is picked at random when present, otherwise the root intro level is opened."
+    source_ref: "src/game_main.cpp:194-222, 247, src/main/level_file.cpp:321-339"
+    note: "Directory of .lvl/.lvlx intro levels; one is picked at random when present, otherwise the root intro level is opened. The Adventures of Demo pack carries none; these 19 levels come from the introset/ of the Nostalgic Paradise pack (Blue Edition 0.2.8b, nostalgic-paradise-stable.7z). A level reads custom graphics from introset/ and from the subfolder named after it (07/, 08/, 10/); every other block, BGO, NPC and background ID they use is present in the Adventures of Demo graphics."
 
   - name: "outro.lvlx"
     category: game_data

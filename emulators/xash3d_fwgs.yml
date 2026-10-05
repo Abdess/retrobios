@@ -21,10 +21,14 @@ notes: |
   filesystem/searchpath.c:327), `fallback_dir` names a second fallback,
   and `game` / `gamename` carry the human-readable title.
 
-  Each supported mod's data is a Valve-style game folder with its own
-  pak0.pak / pak1.pak, maps/, models/, sound/, overviews/ and a game
-  descriptor. The engine does not hash any file; the pak header is the
-  only sanity check (filesystem/pak.c). liblist.gam ships inside each
+  Each supported mod's data is a Valve-style game folder with a game
+  descriptor, maps/, models/, sound/, overviews/ and any number of .pak
+  archives. FS_AddGameDirectory mounts every .pak of the folder, then
+  every .pk3, .pk3dir and .wad, each kind in sorted name order and each
+  above the previous one, then the folder itself on top, so loose files
+  win over packed ones (filesystem/searchpath.c:188-224). No archive name
+  is required. The engine does not hash any file; the pak header is the
+  only sanity check (filesystem/pak.c:98-157). liblist.gam ships inside each
   retail mod and is also written out by the engine as gameinfo.txt the
   first time it imports a Valve folder (filesystem/gameinfo.c:538-544).
 
@@ -34,10 +38,11 @@ notes: |
   conversions this way.
 
   Below are the folders Half-Life retail / official addon releases
-  install under the Steam install root. Each entry marks the per-mod
-  descriptor and base pak so the engine can detect the game; map / model
-  / sound trees that live beside them are too open-ended to enumerate
-  and are counted as part of the same game data.
+  install under the Steam install root. The descriptor is what makes the
+  engine detect a folder (filesystem/gameinfo.c:614-630); the pak entries
+  name the archives the retail releases ship. Map / model / sound trees
+  that live beside them are too open-ended to enumerate and are counted
+  as part of the same game data.
 
 files:
   # ================================================================
@@ -56,18 +61,18 @@ files:
     category: game_data
     system: halflife
     path: "valve/pak0.pak"
-    required: true
-    source_ref: "filesystem/pak.c (PAK loader), filesystem/searchpath.c:912 (valve fallback)"
-    note: "Retail Half-Life base pak."
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    required: false
+    source_ref: "filesystem/searchpath.c:188-224, filesystem/pak.c:98-157"
+    note: "Half-Life game data packed in one archive, as the CD and WON releases install it. The engine mounts whatever .pak the folder holds and requires none: the Steam depot ships valve/ as loose files with no .pak, and the game runs from those."
+    unsourceable: "The WON Linux dedicated servers 1.0.0.9 to 3.1.1.1 carry a server-only valve/pak0.pak (65022757, 47500556 or 33772308 bytes, at most 1035 entries: multiplayer maps, models, sounds, sprites and skies, with no single-player map, gfx/shell or sound/vox), not the client archive of the CD and WON releases."
 
   - name: "pak1.pak"
     category: game_data
     system: halflife
     path: "valve/pak1.pak"
     required: false
-    source_ref: "filesystem/pak.c"
-    note: "Patch pak, present on Steam Half-Life installs."
+    source_ref: "filesystem/searchpath.c:188-224, filesystem/pak.c:98-157"
+    note: "Mounted above pak0.pak when present, as any second .pak of the folder would be. The only valve/pak1.pak released is the one the Blue Shift High Definition Pack installer writes (7839196 bytes, 99 entries: HD models, sounds and sprites for Half-Life); Steam ships no .pak in valve/."
     unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
 
   # ================================================================
@@ -90,7 +95,7 @@ files:
     required: false
     source_ref: "filesystem/pak.c"
     note: "Loose files (maps/, sprites/, sound/, models/) are the usual retail layout; a bundled pak0.pak is optional."
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    unsourceable: "The Linux dedicated servers hlds_l 1.1.2.0 and hlds_l_11262003 ship cstrike/ as loose files with no .pak."
 
   # ================================================================
   # Condition Zero (czero/)
@@ -149,7 +154,7 @@ files:
     path: "dmc/pak0.pak"
     required: false
     source_ref: "filesystem/pak.c"
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    unsourceable: "The Linux dedicated servers that carry dmc/ (hlds_l 3.1.1.1 and 1.1.2.0) ship it as loose files with no .pak, and none of the WON patches checked carries a dmc/pak0.pak."
 
   # ================================================================
   # Opposing Force (gearbox/)
@@ -169,7 +174,7 @@ files:
     path: "gearbox/pak0.pak"
     required: false
     source_ref: "filesystem/pak.c"
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    unsourceable: "The free 1.1.0.8 WON patch ofo1108.exe installs a gearbox/pak0.pak of 83750141 bytes (sha1 aefbe228c010ade60e73d1ddf1f9b2878090b596) holding 514 entries with the 25 multiplayer maps and none of the of0a0 to of7a single-player maps, and the free Linux server opfor_linux.tar.gz carries a 529-entry multiplayer-only pak of 74390909 bytes, so neither is the client archive of the retail release."
 
   # ================================================================
   # Blue Shift (bshift/)
@@ -209,7 +214,7 @@ files:
     path: "ricochet/pak0.pak"
     required: false
     source_ref: "filesystem/pak.c"
-    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
+    unsourceable: "The Linux dedicated servers that carry ricochet/ (hlds_l 3.1.1.1 and 1.1.2.0) ship it as loose files with no .pak, and none of the WON patches checked carries a ricochet/pak0.pak."
 
   # ================================================================
   # Team Fortress Classic (tfc/)
