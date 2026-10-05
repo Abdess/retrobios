@@ -473,6 +473,29 @@ class PipelineRegressions(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertFalse(pipeline.check_consistency(verify, pack))
 
+    def test_nothing_parsed_is_not_consistent(self):
+        """A changed output format must not pass with no platform compared."""
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(pipeline.check_consistency("RetroArch — 2/2 OK", ""))
+            self.assertFalse(pipeline.check_consistency("", ""))
+
+    def test_pack_without_verify_result_is_a_failure(self):
+        verify = "RetroArch: 2/2 OK"
+        pack = "\n".join(
+            [
+                "Generating pack for RetroArch [source=full]...",
+                "  a.zip: 2 files packed (2 baseline + 0 from cores), 2/2 files OK",
+                "Generating pack for Batocera [source=full]...",
+                "  b.zip: 2 files packed (2 baseline + 0 from cores), 2/2 files OK",
+            ]
+        )
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(pipeline.check_consistency(verify, pack))
+
+    def test_slot_step_reaches_the_summary(self):
+        source = Path(pipeline.__file__).read_text(encoding="utf-8")
+        self.assertIn('results["slots"] = ok', source)
+
     def test_every_refresh_failure_reaches_pipeline_exit_status(self):
         for failed_label in (
             "2/8 refresh data directories",

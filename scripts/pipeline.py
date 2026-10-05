@@ -144,6 +144,15 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
 
     print("\n--- 5/8 consistency check ---")
     all_ok = True
+    if not v or not p:
+        # Nothing parsed is nothing compared: a changed output format would
+        # otherwise pass the check without a single platform in it.
+        print(f"  parsed {len(v)} verify and {len(p)} pack results: nothing to compare")
+        all_ok = False
+    for p_label in sorted(p):
+        if not any(_match_key(p_label) & _match_key(v_label) for v_label in v):
+            print(f"  {p_label}: pack with no verify result")
+            all_ok = False
 
     for v_label, (v_ok, v_total) in sorted(v.items()):
         # Match by normalized name overlap.  Platform display labels and
@@ -444,10 +453,14 @@ def main():
     # Step 3b: Destinations both layers claim, and how each was settled. The
     # ones the pack settles by itself must stay at zero cost; the rest name an
     # upstream declaration no build can repair, so this reports and never gates.
-    run(
+    # A crash is not a report: without --strict slots.py exits 0 on every
+    # conflict, so a non-zero code means it never finished reading.
+    ok, _ = run(
         [sys.executable, "scripts/slots.py"],
         "3b/8 slot arbitration",
     )
+    results["slots"] = ok
+    all_ok = all_ok and ok
 
     # Step 4: Generate packs
     pack_output = ""
