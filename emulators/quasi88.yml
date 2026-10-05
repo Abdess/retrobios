@@ -108,14 +108,14 @@ files:
     source_ref: "src/LIBRETRO/libretro.c:559"
     aliases: ["N88N.ROM", "N80.ROM", "n80.rom"]
 
-  - name: disk.rom
-    path: "quasi88/disk.rom"
+  - name: n88sub.rom
+    path: "quasi88/n88sub.rom"
     size: 2048
     required: false
     hle_fallback: true
     note: "Disk subsystem ROM (2 KB, 2D type). Falls back to pseudo-BIOS if missing."
-    source_ref: "src/LIBRETRO/libretro.c:552-553"
-    aliases: ["DISK.ROM", "N88SUB.ROM", "n88sub.rom"]
+    source_ref: "src/LIBRETRO/libretro.c:114, src/LIBRETRO/libretro.c:552-553"
+    aliases: ["N88SUB.ROM", "DISK.ROM", "disk.rom"]
 
   - name: n88knj1.rom
     path: "quasi88/n88knj1.rom"
