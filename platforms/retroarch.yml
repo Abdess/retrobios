@@ -1552,7 +1552,7 @@ systems:
     docs: "https://docs.libretro.com/library/np2kai/"
     includes:
     - np2kai
-  nec---pc-8801:
+  nec-pc-88:
     files:
     - name: n88_0.rom
       destination: quasi88/n88_0.rom
@@ -1645,6 +1645,11 @@ systems:
       native_system: NEC - PC-8801
       native_path: quasi88/n88knj2.rom
     native_id: NEC - PC-8801
+    core: quasi88
+    manufacturer: NEC
+    docs: "https://docs.libretro.com/library/quasi88/"
+    includes:
+    - quasi88
   nec-pc-fx:
     files:
     - name: fx-scsi.rom
@@ -2005,7 +2010,7 @@ systems:
     core: desmume
     manufacturer: Nintendo
     docs: "https://docs.libretro.com/library/desmume/"
-  nintendo---nintendo-dsi:
+  nintendo-dsi:
     files:
     - name: dsi_bios7.bin
       destination: dsi_bios7.bin
@@ -2367,7 +2372,7 @@ systems:
       size: 1024
       native_system: Phillips - Videopac+
     native_id: Phillips - Videopac+
-  philips---cd-i:
+  philips-cdi:
     files:
     - name: cdimono1.zip
       destination: cdimono1.zip
@@ -4721,12 +4726,6 @@ systems:
     core: scummvm
     manufacturer: Various
     docs: "https://docs.libretro.com/library/scummvm/"
-  nec-pc-88:
-    includes:
-    - quasi88
-    core: quasi88
-    manufacturer: NEC
-    docs: "https://docs.libretro.com/library/quasi88/"
   xrick:
     files:
     - name: data.zip

@@ -60,6 +60,7 @@ SYSTEM_SLUG_MAP = {
     "Mattel - Intellivision": "mattel-intellivision",
     "Microsoft - MSX": "microsoft-msx",
     "NEC - PC Engine - TurboGrafx 16 - SuperGrafx": "nec-pc-engine",
+    "NEC - PC-8801": "nec-pc-88",
     "NEC - PC-98": "nec-pc-98",
     "NEC - PC-FX": "nec-pc-fx",
     "Nintendo - Famicom Disk System": "nintendo-fds",
@@ -69,12 +70,14 @@ SYSTEM_SLUG_MAP = {
     "Nintendo - Gameboy Color": "nintendo-gbc",
     "Nintendo - Nintendo 64DD": "nintendo-64dd",
     "Nintendo - Nintendo DS": "nintendo-ds",
+    "Nintendo - Nintendo DSi": "nintendo-dsi",
     "Nintendo - Nintendo Entertainment System": "nintendo-nes",
     "Nintendo - Pokemon Mini": "nintendo-pokemon-mini",
     "Nintendo - Satellaview": "nintendo-satellaview",
     "Nintendo - SuFami Turbo": "nintendo-sufami-turbo",
     "Nintendo - Super Game Boy": "nintendo-sgb",
     "Nintendo - Super Nintendo Entertainment System": "nintendo-snes",
+    "Philips - CD-i": "philips-cdi",
     "Phillips - Videopac+": "philips-videopac",
     "SNK - NeoGeo CD": "snk-neogeo-cd",
     "ScummVM": "scummvm",
@@ -259,12 +262,6 @@ class Scraper(BaseScraper):
         # shared groups in _shared.yml. The includes directive is resolved
         # at load time by load_platform_config().
         EXTRA_SYSTEMS = {
-            "nec-pc-88": {
-                "includes": ["quasi88"],
-                "core": "quasi88",
-                "manufacturer": "NEC",
-                "docs": "https://docs.libretro.com/library/quasi88/",
-            },
             # ref: Vircon32/libretro.c -virtual console, single BIOS
             "vircon32": {
                 "files": [
@@ -470,6 +467,7 @@ class Scraper(BaseScraper):
         # Verified in fuse-libretro/src/compat/paths.c -core searches
         # system/ flat, not fuse/ subfolder. Docs are wrong on this.
         SYSTEM_SHARED_GROUPS = {
+            "nec-pc-88": ["quasi88"],
             "nec-pc-98": ["np2kai"],
             "sharp-x68000": ["keropi"],
             "sega-saturn": ["kronos"],
