@@ -139,6 +139,7 @@ def _agnostic_scan_extras(
     by_name: dict,
     seen_dests: set,
     extras_prefix: str,
+    standalone_set: set[str] | None = None,
 ) -> list[dict]:
     """Every interchangeable candidate a filename-agnostic core accepts.
 
@@ -203,6 +204,14 @@ def _agnostic_scan_extras(
                 continue
             if not (f.get("size") or f.get("min_size") or f.get("max_size")):
                 continue
+            # The free name is the BIOS directory's: a shader, a sound or a
+            # font the emulator reads from its resources tree has a fixed
+            # name and must not seed a scan (yaps2 flattened 189 of them to
+            # the root of the RetroArch pack).
+            bios_dir = profile.get("bios_directory")
+            fpath = f.get("path") or ""
+            if bios_dir and "/" in fpath and not fpath.startswith(bios_dir):
+                continue
 
             path_prefix = resolved_dirs.get(id(f), "")
             if not path_prefix:
@@ -224,7 +233,13 @@ def _agnostic_scan_extras(
                 scan_name = entry.get("name", "")
                 if not scan_name:
                     continue
-                dest = scan_name
+                # Into the directory the seed entry names, not the root:
+                # yaps2 reads its BIOS from pcsx2/bios/.
+                seed = f.get("path") or ""
+                if runs_standalone(emu_name, profile, standalone_set or set()):
+                    seed = f.get("standalone_path") or seed
+                folder = seed.rsplit("/", 1)[0] if "/" in seed else ""
+                dest = f"{folder}/{scan_name}" if folder else scan_name
                 full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
                 if full_dest in seen_dests:
                     continue
@@ -526,7 +541,8 @@ def _collect_emulator_extras(
 
     extras.extend(
         _agnostic_scan_extras(
-            profiles, relevant, db, by_name, seen_dests, extras_prefix
+            profiles, relevant, db, by_name, seen_dests, extras_prefix,
+            standalone_set,
         )
     )
 
