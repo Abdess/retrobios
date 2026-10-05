@@ -21,7 +21,9 @@ from dataclasses import dataclass, field
 import nativemode
 from common import (
     build_zip_contents_index,
+    check_inside_zip,
     load_data_dir_registry,
+    parse_md5_list,
     resolution_is_hash_exact,
     resolve_local_file,
     runs_standalone,
@@ -415,8 +417,38 @@ def find_collisions(
             if local and local not in resolved:
                 resolved.append(local)
         if len(resolved) > 1 and not _same_file_family(resolved):
+            # A file every declaration accepts settles the path: RetroDECK
+            # declares ATARIOSB.ROM twice, the second with an md5 list that
+            # also names the first one's file.
+            if any(_accepted_by_all(path, entries, db) for path in resolved):
+                continue
             collisions.append(Collision(destination=key, resolved=resolved))
     return collisions
+
+
+def _accepted_by_all(path: str, entries: list[dict], db: dict) -> bool:
+    """Whether every declaration's own hashes accept the file at path."""
+    record = next(
+        (e for e in db.get("files", {}).values() if e.get("path") == path), None
+    )
+    if record is None:
+        return False
+    for entry in entries:
+        if entry.get("zipped_file"):
+            declared = parse_md5_list(entry.get("md5"))
+            if declared and not any(
+                check_inside_zip(path, entry["zipped_file"], m) == "ok" for m in declared
+            ):
+                return False
+            continue
+        md5s = parse_md5_list(entry.get("md5"))
+        if md5s and str(record.get("md5", "")).lower() not in md5s:
+            return False
+        sha1 = entry.get("sha1")
+        sha1s = [sha1] if isinstance(sha1, str) else list(sha1 or [])
+        if sha1s and str(record.get("sha1", "")).lower() not in {h.lower() for h in sha1s}:
+            return False
+    return True
 
 
 def _same_file_family(paths: list[str]) -> bool:
