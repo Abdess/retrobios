@@ -168,6 +168,20 @@ class TestConflicts(unittest.TestCase):
         profile = {"dolphin": {"files": [{"name": "IPL.bin", "path": "slot/IPL.bin"}]}}
         self.assertEqual(slots.find_conflicts(config, profile, REGIONS_DB), [])
 
+    def test_a_bare_sibling_met_first_does_not_hide_the_contradiction(self):
+        """RetroArch declares dsi_bios7.bin bare under one system and with a
+        hash under another; the pack ships the hashed one, so the slot is
+        judged on it, whichever system is read first."""
+        config = {
+            "systems": {
+                "a-console": {"files": [{"name": "IPL.bin", "destination": "GC/JAP/IPL.bin"}]},
+                "b-console": {"files": [
+                    {"name": "IPL.bin", "destination": "GC/JAP/IPL.bin", "md5": "m" * 32}]},
+            }
+        }
+        conflicts = slots.find_conflicts(config, self._profile("GC/JAP/IPL.bin"), REGIONS_DB)
+        self.assertEqual([c.destination for c in conflicts], ["GC/JAP/IPL.bin"])
+
     def test_launchers_and_aliases_never_claim(self):
         profile = {
             "launcher": {

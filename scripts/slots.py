@@ -193,6 +193,13 @@ def profile_claims(
     return claims
 
 
+def _claim_rank(claim: Claim) -> int:
+    """How strongly a platform claim speaks for what the pack ships."""
+    if resolution_is_hash_exact(claim.status):
+        return 2
+    return 1 if claim.is_proven else 0
+
+
 def find_conflicts(
     config: dict,
     profiles: dict,
@@ -211,7 +218,13 @@ def find_conflicts(
     for claim in platform_claims(
         config, db, base_dest, zip_contents, data_dir_registry
     ):
-        by_dest.setdefault(_normalize(claim.destination), claim)
+        key = _normalize(claim.destination)
+        held = by_dest.get(key)
+        # The pack ships the declaration a hash proves (_preferred_entries),
+        # so a bare sibling met first must not stand for the destination:
+        # it would hide the contradiction with the file actually shipped.
+        if held is None or _claim_rank(claim) > _claim_rank(held):
+            by_dest[key] = claim
 
     # Grouped before judging: a profile may declare several revisions that are
     # all acceptable at one destination, and the platform choosing one of them
