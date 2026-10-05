@@ -1382,7 +1382,7 @@ def verify_emulator(
 
             dest_hint = file_entry.get("path", "")
             local_path, resolve_status = resolve_local_file(
-                file_entry,
+                {**file_entry, "source_profile": emu_name},
                 db,
                 zip_contents,
                 dest_hint=dest_hint,

@@ -194,6 +194,43 @@ class ReleaseAssetIsNotANameMatch(unittest.TestCase):
             fetch.assert_not_called()
 
 
+class NameStepPrefersTheOwnersCopy(unittest.TestCase):
+    """Same-named files are ordered by where the asking profile keeps its own.
+
+    The name step took the first path in index order: Syobon Action's
+    coin.ogg came from TheXTech's sound folder while its own copy sat in
+    bios/Other/syobonaction/.
+    """
+
+    def test_the_copy_stored_with_the_profile_wins(self):
+        import tempfile
+
+        from common import resolve_local_file
+
+        with tempfile.TemporaryDirectory() as tmp:
+            previous = os.getcwd()
+            os.chdir(tmp)
+            self.addCleanup(os.chdir, previous)
+            other = Path("bios/Game Engines/TheXTech/sound/coin.ogg")
+            own = Path("bios/Other/syobonaction/coin.ogg")
+            for path, data in ((other, b"a" * 10), (own, b"b" * 12)):
+                path.parent.mkdir(parents=True)
+                path.write_bytes(data)
+            files = {
+                "1" * 40: {"path": str(other), "name": "coin.ogg", "size": 10},
+                "2" * 40: {"path": str(own), "name": "coin.ogg", "size": 12},
+            }
+            db = {"files": files, "indexes": {
+                "by_name": {"coin.ogg": ["1" * 40, "2" * 40]},
+                "by_md5": {}, "by_crc32": {}, "by_path_suffix": {}}}
+            entry = {"name": "coin.ogg", "path": "SyobonAction/SE/coin.ogg"}
+            path, status = resolve_local_file(entry, db, dest_hint=entry["path"])
+            self.assertEqual((path, status), (str(own), "name_exact"))
+            entry = {"name": "coin.ogg", "path": "SE/coin.ogg", "source_profile": "syobonaction"}
+            path, _status = resolve_local_file(entry, db, dest_hint=entry["path"])
+            self.assertEqual(path, str(own))
+
+
 class CollectionCarriesNoGameDataHomonym(unittest.TestCase):
     def test_the_profiles_resolve_no_game_data_to_another_game(self):
         database = REPO_ROOT / "database.json"
