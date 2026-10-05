@@ -24,7 +24,7 @@ files:
     hle_fallback: true
     size: 16384
     validation: [size]
-    source_ref: "desmume/src/NDSSystem.cpp:2178-2182, desmume/src/frontend/libretro/libretro.cpp:763"
+    source_ref: "desmume/src/NDSSystem.cpp:2156-2166, desmume/src/frontend/libretro/libretro.cpp:763"
     note: "Native file needed for firmware boot and SWI-from-BIOS accuracy"
 
   - name: "bios9.bin"
@@ -34,7 +34,7 @@ files:
     hle_fallback: true
     size: 4096
     validation: [size]
-    source_ref: "desmume/src/NDSSystem.cpp:2236-2239, desmume/src/frontend/libretro/libretro.cpp:764"
+    source_ref: "desmume/src/NDSSystem.cpp:2214-2224, desmume/src/frontend/libretro/libretro.cpp:764"
     note: "Native file needed for firmware boot and logo comparison (Pal Park)"
 
   - name: "firmware.bin"
