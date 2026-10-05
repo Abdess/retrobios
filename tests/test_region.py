@@ -551,18 +551,38 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
             tmp.cleanup()
 
     def test_one_grouping_pass_serves_both_sides(self):
-        """A second hand-rolled grouping is how the two drifted apart."""
+        """A second hand-rolled grouping is how the two drifted apart.
+
+        Every module is read, not only the two that once held a copy: the
+        builder was split into several modules and a grouping can move with
+        it. packextras.py holds the two shared passes, platform and emulator.
+        """
         scripts = Path(__file__).resolve().parent.parent / "scripts"
-        hand_rolled = 0
-        for name in ("generate_pack.py", "verify.py"):
-            for line in (scripts / name).read_text().splitlines():
-                if "region_groups.setdefault(" in line:
-                    hand_rolled += 1
-        self.assertLessEqual(
-            hand_rolled, 2,
-            "platform region grouping belongs to platform_region_groups; "
-            "the only other pass is the per-emulator pack shape",
-        )
+        for path in sorted(scripts.rglob("*.py")):
+            if path.name == "packextras.py":
+                continue
+            with self.subTest(module=path.name):
+                self.assertNotIn(
+                    "region_groups.setdefault(", path.read_text(encoding="utf-8"),
+                    "region grouping belongs to packextras: platform_region_groups "
+                    "or emulator_region_drops",
+                )
+
+    def test_emulator_report_keeps_what_the_emulator_pack_keeps(self):
+        """O2EM: --region us left the Videopac BIOSes in the pack, not in the report."""
+        repo = Path(__file__).resolve().parent.parent
+        if not (repo / "emulators" / "o2em.yml").is_file():
+            self.skipTest("no o2em profile")
+        from verify import verify_emulator
+        from common import load_database
+
+        db = load_database(str(repo / "database.json"))
+        full = verify_emulator(["o2em"], str(repo / "emulators"), db)
+        narrowed = verify_emulator(["o2em"], str(repo / "emulators"), db, regions=["north-america"])
+        names = {d["name"] for d in narrowed["details"]}
+        for kept in ("c52.bin", "g7400.bin", "jopac.bin"):
+            self.assertIn(kept, names, "a system with no candidate in the region falls back")
+        self.assertEqual(full["total_files"], narrowed["total_files"])
 
 
 if __name__ == "__main__":

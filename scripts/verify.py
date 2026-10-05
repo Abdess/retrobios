@@ -1242,7 +1242,7 @@ def verify_emulator(
     """Verify files for specific emulator profiles.
 
     A region priority list narrows the report the same way a pack built with the
-    same list would be narrowed. One group per profile, as in generate_pack.
+    same list would be narrowed, through the emulator pack's own drop set.
     """
     load_emulator_profiles(emulators_dir)
     zip_contents = build_zip_contents_index(db)
@@ -1265,22 +1265,12 @@ def verify_emulator(
     dest_to_name: dict[str, str] = {}
     data_dir_notices: list[str] = []
 
+    # The emulator pack withdraws these; the report withdraws the same.
     region_drops: set[str] = set()
     if regions:
-        import region as region_mod
+        from packextras import emulator_region_drops
 
-        region_index = region_mod.build_region_index(dict(selected))
-        region_groups: dict[str, list[tuple[str, str]]] = {}
-        for emu_name, profile in selected:
-            members = region_groups.setdefault(emu_name, [])
-            for fe in filter_files_by_mode(profile.get("files", []), standalone):
-                nm = fe.get("name", "")
-                key = fe.get("path") or nm
-                if key:
-                    members.append((key, nm))
-        region_drops = region_mod.resolve_region_drops(
-            region_groups, region_index, regions
-        )
+        region_drops = emulator_region_drops(selected, standalone, regions)
 
     for emu_name, profile in selected:
         files = expand_directory_entries(
@@ -1289,10 +1279,13 @@ def verify_emulator(
             standalone,
         )
         if region_drops:
+            from packpaths import _resolve_destination
+
+            structure = profile.get("pack_structure")
             files = [
                 fe
                 for fe in files
-                if (fe.get("path") or fe.get("name", "")) not in region_drops
+                if _resolve_destination(fe, structure, standalone) not in region_drops
             ]
 
         # Check data directories (only notice if not cached)
