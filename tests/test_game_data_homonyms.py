@@ -170,6 +170,30 @@ class SecondPassKeepsIdentity(unittest.TestCase):
         self.assertEqual(extras["maintt/pak1.pk3"].get("sha1"), "c" * 40)
 
 
+class ReleaseAssetIsNotANameMatch(unittest.TestCase):
+    """The release fallback keeps the flag the local resolver honours.
+
+    ioquake3's baseq3/pak0.pk3 is flagged unsourceable; the local resolver
+    returned not_found, then the release fallback looked the asset up by its
+    bare name and handed Return to Castle Wolfenstein's demo pak to three
+    platform manifests.
+    """
+
+    def test_an_unsourceable_entry_without_hash_never_reaches_the_asset_store(self):
+        from unittest import mock
+
+        import packresolve
+
+        entry = {"name": "pak0.pk3", "unsourceable": "retail"}
+        db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_path_suffix": {}}}
+        with mock.patch.object(packresolve, "fetch_large_file", return_value="/x/pak0.pk3") as fetch:
+            self.assertEqual(
+                packresolve.resolve_file(entry, db, "bios", {}, offline=True),
+                (None, "not_found"),
+            )
+            fetch.assert_not_called()
+
+
 class CollectionCarriesNoGameDataHomonym(unittest.TestCase):
     def test_the_profiles_resolve_no_game_data_to_another_game(self):
         database = REPO_ROOT / "database.json"
