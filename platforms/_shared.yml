@@ -195,8 +195,11 @@ shared_groups:
       destination: quasi88/N88EXT3.ROM
       required: true
       md5: "fc4b76a402ba501e6ba6de4b3e8b4273"
-    # Alternative naming from libretro docs (lowercase, _N suffix)
-    # ref: quasi88/src/libretro.c — core accepts both conventions
+    # N88EXT0-3.ROM above are the mkII SR extension ROMs that match N88.ROM
+    # (MAME pc8801mk2sr: 710a63ec, c0bd2aa6, af2b6efa, 7713c519). The core
+    # reads N88EXTn.ROM before n88_n.rom (src/LIBRETRO/libretro.c:109-112),
+    # so they win over the n88_n.rom dumps System.dat pairs with that main ROM,
+    # which come from other models (n88_0 61984bab is the original PC-8801's).
     - name: n88_0.rom
       destination: quasi88/n88_0.rom
       required: false
