@@ -264,6 +264,46 @@ class Decision:
         return self.reason == SERVES_BOTH
 
 
+def pack_overrides(
+    config: dict,
+    profiles: dict,
+    db: dict,
+    zip_contents: dict | None = None,
+    data_dir_registry: dict | None = None,
+) -> dict[str, str]:
+    """Full pack destination -> the file a platform pack serves there instead.
+
+    Where a source-verified profile contradicts the scraped baseline on one
+    destination, the pack answers to the platform it is built for; in
+    existence mode the frontend never reads the bytes, so serving the
+    emulator's file satisfies both. The ZIP builder, the install manifest and
+    verify all read this: two of them deciding alone gave the one-line
+    installer different bytes than the ZIP.
+    """
+    from common import resolve_platform_cores
+
+    if not profiles:
+        return {}
+    platform_profiles = {
+        name: profiles[name] for name in resolve_platform_cores(config, profiles)
+    }
+    mode = config.get("verification_mode", "existence")
+    overrides: dict[str, str] = {}
+    for conflict in find_conflicts(
+        config,
+        platform_profiles,
+        db,
+        config.get("base_destination", ""),
+        {str(c) for c in config.get("standalone_cores", [])},
+        zip_contents,
+        data_dir_registry,
+    ):
+        decision = arbitrate(conflict, mode)
+        if decision.serves_both and decision.winner.local_path:
+            overrides[conflict.destination] = decision.winner.local_path
+    return overrides
+
+
 def arbitrate(conflict: Conflict, mode: str, addressee: str = "platform") -> Decision:
     """Decide a contested destination for the pack being built.
 
