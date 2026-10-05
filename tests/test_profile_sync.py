@@ -2835,12 +2835,47 @@ class TestCollectCitations(unittest.TestCase):
         citation = collect_citations(document)[0]
         self.assertEqual(citation.parts[0].path, "boot.data.c")
 
-    def test_external_project_prefix_is_skipped(self):
+    def test_external_project_prefix_keeps_its_word(self):
+        """The project word travels with the path, the source_ref convention.
+
+        Dropping the run left m64plus-fz's `rice Config.cpp` unchecked
+        although its declared repository vendors the plugin.
+        """
         document = {
             "notes": "ref: mt32_model.cpp:36-97, munt ROMInfo.cpp:206-213\n"
         }
-        refs = [c.ref for c in collect_citations(document)]
-        self.assertEqual(refs, ["mt32_model.cpp:36-97"])
+        citations = collect_citations(document)
+        self.assertEqual(
+            [c.ref for c in citations],
+            ["mt32_model.cpp:36-97", "ROMInfo.cpp:206-213"],
+        )
+        self.assertEqual(citations[1].parts[0].path, "munt ROMInfo.cpp")
+        self.assertTrue(profile_sync.is_external_citation("munt ROMInfo.cpp"))
+
+    def test_project_word_resolves_inside_a_declared_tree(self):
+        tree = [
+            "mupen64plus-video-rice/upstream/src/Config.cpp",
+            "mupen64plus-video-gln64/src/Config.cpp",
+            "mupen64plus-core/upstream/src/device/pif/bootrom_hle.c",
+        ]
+        resolve = profile_sync.resolve_project_word
+        self.assertEqual(
+            resolve("rice Config.cpp", [tree]),
+            "mupen64plus-video-rice/upstream/src/Config.cpp",
+        )
+        self.assertEqual(
+            resolve("mupen64plus-core device/pif/bootrom_hle.c", [tree]),
+            "mupen64plus-core/upstream/src/device/pif/bootrom_hle.c",
+        )
+        self.assertIsNone(resolve("munt ROMInfo.cpp", [tree]))
+        self.assertIsNone(resolve("mupen64plus Config.cpp", [tree]))
+
+    def test_run_is_rendered_with_its_written_path(self):
+        parts = [RefPart("mupen64plus-video-rice/upstream/src/Config.cpp", 38, 38, "38")]
+        self.assertEqual(
+            profile_sync._run_after_moves(parts, {0: (40, 40, None)}, "Config.cpp:38"),
+            "Config.cpp:40",
+        )
 
     def test_linking_word_is_not_a_project(self):
         document = {"notes": "It boots, in libretro.cpp:12 as shown.\n"}
@@ -2852,7 +2887,8 @@ class TestCollectCitations(unittest.TestCase):
             "notes": "ref: soundcanvas.cpp:55-71, 80-147, Ext plugin.cpp:23\n"
         }
         citations = collect_citations(document)
-        self.assertEqual(len(citations), 1)
+        self.assertEqual(len(citations), 2)
+        self.assertEqual(citations[1].parts[0].path, "Ext plugin.cpp")
         self.assertEqual(citations[0].ref, "soundcanvas.cpp:55-71, 80-147")
         self.assertEqual(
             [(p.start, p.end) for p in citations[0].parts],
@@ -3134,7 +3170,8 @@ class TestRealignProse(unittest.TestCase):
         self._git("config", "user.name", "t")
         written = PROSE_SAMPLE.replace('"pin"', '"oldpin"')
         self._commit(written, "profile")
-        self._commit(PROSE_SAMPLE, "advance pin")
+        # The pin advances in the working tree, the text stays committed.
+        self.path.write_text(PROSE_SAMPLE, encoding="utf-8")
 
     def test_run_realigns_from_the_writing_pin(self):
         self._repo_with_advanced_pin()
@@ -3153,6 +3190,26 @@ class TestRealignProse(unittest.TestCase):
         self.assertEqual(
             yaml.safe_load(text)["source_commit"], "pin",
         )
+
+    def test_pin_moved_under_committed_text_is_not_guessed(self):
+        """A committed pin change under the same text may be a correction.
+
+        vitaquake2 kept its notes while 38fc9331 re-pinned it onto the
+        revision those notes described; realigning from the first pin moved
+        correct citations onto unrelated code.
+        """
+        self._repo_with_advanced_pin()
+        self._commit(PROSE_SAMPLE, "put the pin on the revision the refs describe")
+        self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]
+        self.files[("pin", "a.c")] = ["x"] * 13 + ["subject"]
+        self.files[("oldpin", "b.c")] = list("pqrstuvwx")
+        self.files[("pin", "b.c")] = list("pqrstuvwx")
+        before = self.path.read_text()
+        messages = profile_sync.realign_prose(self.path, self.tmp.name)
+        self.assertTrue(
+            any("pin moved under this text" in m for m in messages), messages
+        )
+        self.assertEqual(self.path.read_text(), before)
 
     def test_dry_run_writes_nothing(self):
         self._repo_with_advanced_pin()
@@ -3192,7 +3249,7 @@ class TestRealignProse(unittest.TestCase):
         self._git("config", "user.name", "t")
         base = PROSE_SAMPLE.replace("(a.c:10)", "(deep.c:10)")
         self._commit(base.replace('"pin"', '"oldpin"'), "profile")
-        self._commit(base, "advance pin")
+        self.path.write_text(base, encoding="utf-8")
         profile_sync.upstream.list_tree = (
             lambda repo, sha, cache_dir, offline=False: ([], True)
         )
@@ -3210,7 +3267,7 @@ class TestRealignProse(unittest.TestCase):
         self._git("config", "user.name", "t")
         base = PROSE_SAMPLE.replace("(a.c:10)", "(deep.c:10)")
         self._commit(base.replace('"pin"', '"oldpin"'), "profile")
-        self._commit(base, "advance pin")
+        self.path.write_text(base, encoding="utf-8")
         self.files[("oldpin", "src/deep.c")] = ["x"]
         self.files[("oldpin", "contrib/deep.c")] = ["y"]
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
@@ -3226,7 +3283,7 @@ class TestRealignProse(unittest.TestCase):
         self._git("config", "user.name", "t")
         base = PROSE_SAMPLE.replace("(a.c:10)", "(deep.c:10)")
         self._commit(base.replace('"pin"', '"oldpin"'), "profile")
-        self._commit(base, "advance pin")
+        self.path.write_text(base, encoding="utf-8")
         self.files[("oldpin", "src/deep.c")] = ["x"] * 9 + ["subject"]
         self.files[("pin", "src/deep.c")] = ["x"] * 13 + ["subject"]
         self.files[("oldpin", "b.c")] = list("pqrstuvwx")
