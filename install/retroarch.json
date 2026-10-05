@@ -256,9 +256,9 @@
     }
   ],
   "total_files": 5982,
-  "total_size": 6690195463,
+  "total_size": 6691123407,
   "pack_files": 8625,
-  "pack_size": 6730728627,
+  "pack_size": 6731656571,
   "total_omitted": 14,
   "omitted_files": [
     {
@@ -773,10 +773,10 @@
     },
     {
       "dest": "ATARIOSB.ROM",
-      "sha1": "f1f0741b1d34fb4350cf7cb8ab3b6ea11cdd8174",
-      "sha256": "bc6012f8ca2f7dde21ae895899b1d2af572ffaa28f819b84911ddb6a0bd8a5c7",
+      "sha1": "db1031585968cfc6ec2ecda5c9a5a52f61444a3b",
+      "sha256": "63973d5e86b1ae5b6fca5b119a7f7589e817e19acc3ca54e54462c9dfb619e73",
       "size": 10240,
-      "repo_path": "bios/Atari/400-800/ATARIOSB.ROM",
+      "repo_path": "bios/Atari/400-800/ROM_OS_B_NTSC",
       "cores": null
     },
     {
@@ -2247,10 +2247,10 @@
     },
     {
       "dest": "BS-X.bin",
-      "sha1": "604556b2e62860af18db5a77f2956ebc75450020",
-      "sha256": "3ce321496edc5d77038de2034eb3fb354d7724afd0bc7fd0319f3eb5d57b984d",
+      "sha1": "4891d739a8a8b67923681bad4fb67edab2e90e50",
+      "sha256": "a49827b45ff9ac9cf5b4658190e1428e59251bc82d8a63d8e9e0f71e439f008f",
       "size": 1048576,
-      "repo_path": "bios/Nintendo/SNES/Satellaview_BS-X.sfc",
+      "repo_path": "bios/Nintendo/SNES/BS-X.bin",
       "cores": null
     },
     {
@@ -3815,10 +3815,10 @@
     },
     {
       "dest": "scph5000.bin",
-      "sha1": "e340db2696274dda5fdc25e434a914db71e8b02b",
-      "sha256": "8e0383171e67b33e60d5df6394c58843f3b11c7a0b97f3bfcc4319ac2d1f9d18",
+      "sha1": "ffa7f9a7fb19d773a0c3985a541c8e5623d2c30d",
+      "sha256": "0c8359870cbac0ea091f1c87f188cd332dcc709753b91cafd9fd44a4a6188197",
       "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/.variants/scph5000.bin.eb201d2d",
+      "repo_path": "bios/Sony/PlayStation/scph5000.bin",
       "cores": null
     },
     {
@@ -4495,10 +4495,10 @@
     },
     {
       "dest": "pcsx2/resources/GameIndex.yaml",
-      "sha1": "57369df9ca82a460e596cea7835c5a0797dee668",
-      "sha256": "efa94cb7b9208dc6812bb9407dc986560e523cce57f511eff30942f76b7288bf",
-      "size": 1737799,
-      "repo_path": "bios/Sony/PlayStation 2/.variants/GameIndex.yaml.57369df9",
+      "sha1": "40ecf6138c99a0aba775ef93240b295025a45500",
+      "sha256": "483face8f50f5e96d89528059522be3766b44f5e07e854bae1fa92ff0111d0a7",
+      "size": 2665743,
+      "repo_path": "bios/Sony/PlayStation 2/resources/GameIndex.yaml",
       "cores": null
     },
     {
