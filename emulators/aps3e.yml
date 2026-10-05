@@ -124,7 +124,7 @@ files:
   - name: "<game>.dkey"
     aliases: ["<game>.key"]
     required: false
-    size_options: [16, 32]
+    size: [16, 32]
     validation: [size]
     unsourceable: "per-disc AES-128 key named after the image it decrypts, one per title, carried by disc dump catalogues rather than by the emulator"
     description: "Redump disc decryption key read beside an encrypted ISO"

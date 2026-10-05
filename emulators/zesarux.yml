@@ -344,8 +344,7 @@ files:
   # ============================================================
 
   - name: "zx80.rom"
-    size: 4096
-    size_options: [4096, 8192]
+    size: [4096, 8192]
     validation: [size]
     required: true
     bundled: true
@@ -630,8 +629,7 @@ files:
     note: "Beta Disk / TR-DOS firmware."
 
   - name: "if1-v1.rom"
-    size: 8192
-    size_options: [8192, 16384]
+    size: [8192, 16384]
     validation: [size]
     required: false
     bundled: true
@@ -640,8 +638,7 @@ files:
     note: "Interface 1 firmware version 1, selected when if1_rom_version is 1. The load accepts 8192 or 16384 bytes and disables Interface 1 emulation otherwise."
 
   - name: "if1-v2.rom"
-    size: 8192
-    size_options: [8192, 16384]
+    size: [8192, 16384]
     validation: [size]
     required: false
     bundled: true

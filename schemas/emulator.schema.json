@@ -415,12 +415,6 @@
           "size_note": {
             "type": "string"
           },
-          "size_options": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
           "standalone_path": {
             "type": "string"
           },

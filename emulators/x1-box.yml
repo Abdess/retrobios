@@ -114,7 +114,7 @@ files:
     required: true
     path: "x1box/flash.bin"
     config_key: "sys.files.flashrom_path"
-    size_options: [262144, 524288, 1048576]
+    min_size: 65536
     size_note: "Any non-zero multiple of 65536; 256 KB is assumed when the image cannot be read."
     validation: [size]
     description: "Xbox flash ROM"

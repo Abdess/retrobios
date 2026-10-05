@@ -1976,7 +1976,6 @@ def _render_emulator_file(
     fpattern = f.get("pattern", "")
     region_check = f.get("region_check")
     size_note = f.get("size_note", "")
-    size_options = f.get("size_options", [])
     size_range = f.get("size_range", "")
 
     badges = _file_badges(f, in_repo)
@@ -2062,10 +2061,6 @@ def _render_emulator_file(
         details.append(f"Region check: {'yes' if region_check else 'no'}")
     if size_note:
         details.append(f"Size note: {size_note}")
-    if size_options:
-        details.append(
-            f"Size options: {', '.join(_fmt_size(s) for s in size_options)}"
-        )
     if size_range:
         details.append(f"Size range: {size_range}")
 

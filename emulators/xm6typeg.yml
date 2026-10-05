@@ -239,7 +239,6 @@ files:
     system: sharp-x68000
     required: false
     min_size: 8192
-    size_options: [8192, 131072]
     validation: [size]
     description: "Internal SCSI interface ROM, SUPER and later"
     source_ref: "xm6g.pdf p.17, xm6g.exe:0x1404fd1ef (reads at 0x1404fd327, 0x1404fd3dd), XM6 2.06 vm/memory.cpp:305-310, 328-345"
@@ -254,7 +253,6 @@ files:
     system: sharp-x68000
     required: false
     min_size: 8160
-    size_options: [8160, 8192, 131072]
     validation: [size]
     description: "External SCSI interface ROM, CZ-6BS1 board"
     source_ref: "xm6g.pdf p.17, xm6g.exe:0x1404fd20a (retry at 0x1404fd419), XM6 2.06 vm/memory.cpp:316-318, 341-352"
@@ -270,7 +268,7 @@ files:
   - name: SRAM.DAT
     system: sharp-x68000
     required: false
-    size_options: [16384, 65536]
+    size: [16384, 65536]
     description: "SRAM image for EXPERT and the other base models"
     source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 14, XM6 2.06 vm/sram.cpp:70-81, 112"
     note: >-
@@ -282,7 +280,7 @@ files:
   - name: SRAMXVI.DAT
     system: sharp-x68000
     required: false
-    size_options: [16384, 65536]
+    size: [16384, 65536]
     description: "SRAM image for XVI"
     source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 15"
     note: >-
@@ -292,7 +290,7 @@ files:
   - name: SRAMCMP.DAT
     system: sharp-x68000
     required: false
-    size_options: [16384, 65536]
+    size: [16384, 65536]
     description: "SRAM image for Compact"
     source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 16"
     note: >-
@@ -301,7 +299,7 @@ files:
   - name: SRAM030.DAT
     system: sharp-x68000
     required: false
-    size_options: [16384, 65536]
+    size: [16384, 65536]
     description: "SRAM image for X68030, 040turbo and 060turbo"
     source_ref: "xm6g.pdf p.18, xm6g.exe:0x140592350 index 17"
     note: >-

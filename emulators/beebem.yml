@@ -498,10 +498,9 @@ files:
     system: bbc-micro-b
     required: false
     bundled: true
-    size: 8192
+    size: [2048, 4096, 8192]
     md5: f786d0647f9732fa065695d569d261ab
     sha1: e6ee738e5f2f8556002b79d18caa8ef21f14e08d
-    size_options: [2048, 4096, 8192]
     note: >
       Loaded for TubeDevice::TorchZ80. Up to 8192 bytes are read and a short image
       is mirrored to fill the 8 KB window: a 2 KB image is repeated four times, a
