@@ -497,20 +497,25 @@ def _collect_emulator_extras(
             ):
                 continue
             seen_dests.add(full_dest)
-            extras.append(
-                {
-                    "name": fname,
-                    "destination": dest,
-                    "required": f.get("required", False),
-                    "hle_fallback": f.get("hle_fallback", False),
-                    "source_emulator": profile.get("emulator", emu_name),
-                    "source_profile": emu_name,
-                    "source_system": f.get("system"),
-                    "source_systems": list(profile.get("systems", [])),
-                    "region": f.get("region"),
-                    "variant_group": f.get("variant_group"),
-                }
-            )
+            extra = {
+                "name": fname,
+                "destination": dest,
+                "required": f.get("required", False),
+                "hle_fallback": f.get("hle_fallback", False),
+                "source_emulator": profile.get("emulator", emu_name),
+                "source_profile": emu_name,
+                "source_system": f.get("system"),
+                "source_systems": list(profile.get("systems", [])),
+                "region": f.get("region"),
+                "variant_group": f.get("variant_group"),
+            }
+            # The same identity the first pass carries: without it the copy
+            # resolves on its name alone and a same-named file of another
+            # game fills the slot the profile marks as not held.
+            for identity in ("sha1", "md5", "sha256", "crc32", "size", "unsourceable"):
+                if f.get(identity) not in (None, "", []):
+                    extra[identity] = f[identity]
+            extras.append(extra)
 
     extras.extend(
         _archive_prefix_extras(
