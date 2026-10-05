@@ -10,7 +10,7 @@ import json
 from collections import OrderedDict
 
 from .base_exporter import BaseExporter
-from .baseline import NativeSystem, Report
+from .baseline import NativeFile, NativeSystem, Report
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/master"
@@ -40,6 +40,24 @@ class Exporter(BaseExporter):
     @staticmethod
     def native_sources() -> dict[str, str]:
         return {"batocera-systems.json": SOURCE_URL}
+
+    @staticmethod
+    def _md5(fe: NativeFile) -> str:
+        """The one md5 the entry is checked against, empty for existence.
+
+        RetroBat writes an empty md5 to check a file by existence. Filling it
+        turns that into a content check on a single value: right when the
+        truth accepts exactly one image, wrong when the core takes several
+        and the field can hold only the first.
+        """
+        if "md5" in fe.filled and len(fe.hashes("md5")) != 1:
+            return ""
+        return fe.hash("md5")
+
+    def states(self, fe: NativeFile, field_name: str) -> bool:
+        if field_name == "md5" and "md5" in fe.filled:
+            return bool(self._md5(fe))
+        return super().states(fe, field_name)
 
     def render(
         self,
@@ -71,7 +89,7 @@ class Exporter(BaseExporter):
             bios_files = []
             for fe in files:
                 entry: OrderedDict[str, str] = OrderedDict()
-                entry["md5"] = fe.hash("md5")
+                entry["md5"] = self._md5(fe)
                 declared = fe.native("native_path", "")
                 entry["file"] = str(declared) if declared else f"bios/{fe.destination}"
                 bios_files.append(entry)

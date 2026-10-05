@@ -267,16 +267,28 @@ def export_platform(
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
 
-    # Only what the format can state: a correction to a field the file has
-    # no place for is not a change the maintainer will find in the diff, and
-    # counting it would announce work the export did not do.
-    carried = exporter.carries()
-    applied = [
-        correction
-        for correction in report.hashes_corrected
-        if correction.rsplit(" ", 1)[-1] in carried
-    ]
-    requirements = len(report.required_corrected) if "required" in carried else 0
+    # Only what the format states: a correction to a field the file has no
+    # place for, or one its render keeps out, is not a change the maintainer
+    # will find in the diff, and counting it would announce work the export
+    # did not do. A hash written where the platform left none changes the
+    # check from existence to content, so it is counted too.
+    applied: list[str] = []
+    filled: list[str] = []
+    requirements = 0
+    for system in systems.values():
+        for entry in system.files:
+            for field_name in entry.corrections:
+                if not exporter.states(entry, field_name):
+                    continue
+                if field_name == "required":
+                    requirements += 1
+                else:
+                    applied.append(f"{entry.native_system}/{entry.name} {field_name}")
+            filled.extend(
+                f"{entry.native_system}/{entry.name} {field_name}"
+                for field_name in entry.filled
+                if exporter.states(entry, field_name)
+            )
 
     landed = 0
     refused = 0
@@ -300,6 +312,8 @@ def export_platform(
             f"{report.files_kept} kept, {landed} added, "
             f"{len(applied)} hashes corrected, {requirements} requirements corrected"
         )
+        if filled:
+            summary += f", {len(filled)} hashes filled"
         if refused:
             summary += f", {refused} the format cannot state"
         if lost:
@@ -309,6 +323,10 @@ def export_platform(
         messages.append(f"hash corrected: {correction}")
     if len(applied) > 5:
         messages.append(f"and {len(applied) - 5} more hash corrections")
+    for fill in filled[:5]:
+        messages.append(f"hash filled: {fill}")
+    if len(filled) > 5:
+        messages.append(f"and {len(filled) - 5} more hash fills")
 
     messages.extend(f"INVALID: {issue}" for issue in issues[:10])
     if len(issues) > 10:

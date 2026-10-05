@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from scraper.emudeck_scraper import FUNCTION_HASH_MAP, _RE_FUNC, _RE_LOCAL_HASHES
 
 from .base_exporter import BaseExporter
-from .baseline import NativeSystem, Report
+from .baseline import NativeFile, NativeSystem, Report, _hash_values
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main"
@@ -71,6 +71,27 @@ class Exporter(BaseExporter):
         """
         return False
 
+    @staticmethod
+    def _entry_md5s(fe: NativeFile) -> list[str]:
+        """The values one platform entry puts in the array, corrected in place.
+
+        An entry keeps its own values unless the truth contradicts all of
+        them, and then the truth's replace them. An entry without a hash
+        adds nothing, and the truth's extra accepted revisions are not
+        appended: either would grow an array other consumers read too.
+        """
+        theirs = _hash_values(fe.platform or {}, "md5")
+        if not theirs:
+            return []
+        if "md5" in fe.corrections:
+            return fe.hashes("md5")
+        return theirs
+
+    def states(self, fe: NativeFile, field_name: str) -> bool:
+        if field_name in fe.filled:
+            return False
+        return super().states(fe, field_name)
+
     @classmethod
     def _md5s(cls, systems: dict[str, NativeSystem], system_id: str) -> list[str]:
         """Every MD5 the system accepts, in a stable order, deduplicated."""
@@ -81,7 +102,7 @@ class Exporter(BaseExporter):
             for fe in system.files:
                 if not cls.writable(fe):
                     continue
-                for value in fe.hashes("md5"):
+                for value in cls._entry_md5s(fe):
                     if _MD5.match(value) and value not in seen:
                         seen.append(value)
         return seen

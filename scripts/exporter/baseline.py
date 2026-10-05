@@ -48,6 +48,8 @@ class NativeFile:
     platform: dict | None = None
     truth: dict | None = None
     corrections: list[str] = field(default_factory=list)
+    # Hash fields the platform left empty and the truth fills.
+    filled: list[str] = field(default_factory=list)
 
     @property
     def origin(self) -> str:
@@ -104,7 +106,16 @@ class NativeFile:
         return None
 
     def size(self) -> int | None:
-        for entry in (self.truth, self.platform):
+        """Size of the content the written hashes describe.
+
+        hashes() keeps the platform's values when the truth has none, so the
+        truth's size is only taken when the truth also speaks for the hash:
+        a name-matched 480-byte fbneo boot.bin turned RomM's Dreamcast
+        boot.bin into size 480 beside its 2 MB md5, which never verifies.
+        """
+        truth_hashed = any(_hash_values(self.truth or {}, f) for f in HASH_FIELDS)
+        order = (self.truth, self.platform) if truth_hashed else (self.platform, self.truth)
+        for entry in order:
             if entry and entry.get("size"):
                 return int(entry["size"])
         return None
@@ -310,6 +321,8 @@ def build_native_model(
                         report.hashes_corrected.append(
                             f"{matched.native_system}/{matched.name} {field_name}"
                         )
+                    elif ours and not theirs:
+                        matched.filled.append(field_name)
                 t_req = truth_entry.get("required")
                 p_req = (matched.platform or {}).get("required")
                 if (
@@ -321,6 +334,18 @@ def build_native_model(
                     report.required_corrected.append(
                         f"{matched.native_system}/{matched.name}"
                     )
+                continue
+
+            # A file another core's entry already claimed is still the
+            # platform's file, not a new one: scph101.bin, declared by two
+            # PSX cores, was written into RetroDECK's manifest a second time.
+            declared = [
+                candidate
+                for native_id in target_ids
+                for candidate in systems.get(native_id, NativeSystem(native_id)).files
+                if candidate.platform is not None
+            ]
+            if any(by_destination(c) or by_name(c) for c in declared):
                 continue
 
             # The truth knows a file the platform does not declare.
