@@ -76,6 +76,7 @@ from validation import (
     _build_validation_index,
     check_file_validation,
     filter_files_by_mode,
+    find_validated_variant,
 )
 
 yaml = require_yaml()
@@ -960,12 +961,13 @@ def generate_pack(
                     )
                     if check:
                         reason, emus_list = check
-                        better = _find_candidate_satisfying_both(
+                        better = find_validated_variant(
                             file_entry,
                             db,
                             local_path,
                             validation_index,
                             bios_dir,
+                            platform_digest=digest_algorithm(verification_mode),
                         )
                         if better:
                             local_path = better
@@ -1270,6 +1272,7 @@ def generate_emulator_pack(
 
     # ZIP naming
     display_names = [p.get("emulator", n).replace(" ", "") for n, p in selected]
+    validation_index = _build_validation_index(dict(selected))
     narrow_tags = "".join(
         tag
         for tag, _label in _narrowings(
@@ -1479,6 +1482,18 @@ def generate_emulator_pack(
                 if status in ("not_found", "user_provided") or not local_path:
                     missing_files.append(fe["name"])
                     continue
+
+                # The file verify --emulator credits is the one shipped: a
+                # dump the core's own check rejects gives way to a held one
+                # it accepts (azahar's otp.bin, dolphin's dsp_rom.bin).
+                if check_file_validation(
+                    local_path, fe["name"], validation_index, bios_dir
+                ):
+                    better = find_validated_variant(
+                        fe, db, local_path, validation_index, bios_dir
+                    )
+                    if better:
+                        local_path = better
 
                 # SHA1 dedup: skip if same physical file AND same destination
                 # (but allow same file to be packed under different destinations,
@@ -3447,7 +3462,6 @@ from packresolve import (  # noqa: E402,F401
     parse_hash_input,
     parse_hash_file,
     lookup_hashes,
-    _find_candidate_satisfying_both,
     resolve_file,
 )
 
