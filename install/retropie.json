@@ -15,11 +15,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 9892,
-  "total_size": 8849340324,
-  "pack_files": 12535,
-  "pack_size": 8889873488,
-  "total_omitted": 24,
+  "total_files": 9890,
+  "total_size": 8603825940,
+  "pack_files": 12533,
+  "pack_size": 8644359104,
+  "total_omitted": 26,
   "omitted_files": [
     {
       "dest": "SC-55/WAVEROM3.BIN",
@@ -59,6 +59,16 @@
       "reason": "not_found",
       "cores": [
         "mesence"
+      ]
+    },
+    {
+      "dest": "baseq3/pak0.pk3",
+      "name": "pak0.pk3",
+      "system": "quake3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "ioquake3"
       ]
     },
     {
@@ -159,6 +169,16 @@
       "reason": "not_found",
       "cores": [
         "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "missionpack/pak0.pk3",
+      "name": "pak0.pk3",
+      "system": "teamarena",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "ioquake3"
       ]
     },
     {
@@ -95713,26 +95733,6 @@
       "repo_path": "bios/Arcade/Arcade/hiscore.dat",
       "cores": [
         "fbalpha2012_cps1"
-      ]
-    },
-    {
-      "dest": "baseq3/pak0.pk3",
-      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
-      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
-      "size": 122757192,
-      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
-      "cores": [
-        "ioquake3"
-      ]
-    },
-    {
-      "dest": "missionpack/pak0.pk3",
-      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
-      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
-      "size": 122757192,
-      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
-      "cores": [
-        "ioquake3"
       ]
     },
     {

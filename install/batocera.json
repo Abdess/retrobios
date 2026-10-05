@@ -237,11 +237,11 @@
       }
     }
   ],
-  "total_files": 12822,
-  "total_size": 8400856937,
-  "pack_files": 12824,
-  "pack_size": 8400856937,
-  "total_omitted": 26,
+  "total_files": 12819,
+  "total_size": 8032585361,
+  "pack_files": 12821,
+  "pack_size": 8032585361,
+  "total_omitted": 29,
   "omitted_files": [
     {
       "dest": "Enterprise/basic21.bin",
@@ -271,6 +271,16 @@
       "reason": "not_found",
       "cores": [
         "dosbox"
+      ]
+    },
+    {
+      "dest": "baseq3/pak0.pk3",
+      "name": "pak0.pk3",
+      "system": "quake3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "ioquake3"
       ]
     },
     {
@@ -394,6 +404,16 @@
       ]
     },
     {
+      "dest": "main/pak0.pk3",
+      "name": "pak0.pk3",
+      "system": "return-to-castle-wolfenstein",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "iortcw"
+      ]
+    },
+    {
       "dest": "mainta/pak1.pk3",
       "name": "pak1.pk3",
       "system": "mohaa-spearhead",
@@ -431,6 +451,16 @@
       "reason": "not_found",
       "cores": [
         "openmohaa"
+      ]
+    },
+    {
+      "dest": "missionpack/pak0.pk3",
+      "name": "pak0.pk3",
+      "system": "teamarena",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "ioquake3"
       ]
     },
     {
@@ -126012,16 +126042,6 @@
       ]
     },
     {
-      "dest": "baseq3/pak0.pk3",
-      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
-      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
-      "size": 122757192,
-      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
-      "cores": [
-        "ioquake3"
-      ]
-    },
-    {
       "dest": "demoq3/pak0.pk3",
       "sha1": "1976ee8b604f928a1ed38f5646d04a62355f3e8e",
       "sha256": "e77abad2466f45a0a7ea018445528f9b95a0fe7789fa1abc1a7718bbf0754b08",
@@ -126029,26 +126049,6 @@
       "repo_path": "bios/Id Software/Quake III Arena/demoq3/pak0.pk3",
       "cores": [
         "ioquake3"
-      ]
-    },
-    {
-      "dest": "missionpack/pak0.pk3",
-      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
-      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
-      "size": 122757192,
-      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
-      "cores": [
-        "ioquake3"
-      ]
-    },
-    {
-      "dest": "main/pak0.pk3",
-      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
-      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
-      "size": 122757192,
-      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
-      "cores": [
-        "iortcw"
       ]
     },
     {
