@@ -1357,5 +1357,29 @@ class TestAvailablePlatforms(unittest.TestCase):
             self.assertIn("retroarch", proc.stdout)
 
 
+class TargetListFailureIsNotAnAnswer(unittest.TestCase):
+    """A timeout is not 'no targets': it sent users to the full pack."""
+
+    def test_unreachable_list_is_none(self):
+        import urllib.error
+        from unittest import mock
+
+        def boom(*args, **kwargs):
+            raise urllib.error.URLError("timed out")
+
+        with mock.patch.object(install.urllib.request, "urlopen", boom), \
+                contextlib.redirect_stderr(io.StringIO()):
+            self.assertIsNone(install.fetch_targets("retroarch"))
+
+    def test_absent_list_is_empty(self):
+        import urllib.error
+        from unittest import mock
+
+        def missing(url, *args, **kwargs):
+            raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
+
+        with mock.patch.object(install.urllib.request, "urlopen", missing):
+            self.assertEqual(install.fetch_targets("retroarch"), {})
+
 if __name__ == "__main__":
     unittest.main()
