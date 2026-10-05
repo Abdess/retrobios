@@ -5956,6 +5956,29 @@ struct BurnDriver BurnDrvneogeo = {
              ["--system", "sony-playstation"], "refuse"),
             (["--platform", "retroarch", "--split"],
              ["--system", "sony-playstation"], "refuse"),
+            # --all took the same filter and wrote twelve complete manifests.
+            (["--all", "--manifest"], ["--system", "sony-playstation"], "refuse"),
+            (["--all", "--split"], ["--system", "sony-playstation"], "refuse"),
+            # A pack built with --system is named after its systems; the check
+            # looked for the full pack instead.
+            (["--platform", "retroarch", "--verify-packs"],
+             ["--system", "sony-playstation"], "refuse"),
+            # --all-variants builds its own six combinations: it overrode these
+            # and the single-pack modes never read it at all.
+            (["--platform", "retroarch", "--all-variants"], ["--source", "truth"],
+             "refuse"),
+            (["--platform", "retroarch", "--all-variants"], ["--required-only"],
+             "refuse"),
+            (["--emulator", "duckstation"], ["--all-variants"], "refuse"),
+            (["--system", "sony-playstation"], ["--all-variants"], "refuse"),
+            (["--emulator", "duckstation", "--verify-packs"], ["--all-variants"],
+             "refuse"),
+            (["--all", "--manifest", "--all-variants"], ["--verify-packs"],
+             "refuse"),
+            (["--all", "--all-variants", "--verify-packs"], ["--one-per-slot"],
+             "refuse"),
+            (["--all", "--all-variants", "--verify-packs"], ["--split"],
+             "refuse"),
         ]
         for mode, flag, expected in matrix:
             with self.subTest(mode=mode, flag=flag):

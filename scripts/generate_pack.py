@@ -230,6 +230,41 @@ def _target_tag(target_name: str) -> str:
     )
 
 
+def _system_tag(system_filter: list[str] | None) -> str:
+    """Filename tag for a pack limited to some systems, empty for all."""
+    if not system_filter:
+        return ""
+    display_parts = []
+    for sid in system_filter:
+        s = sid.lower().replace("_", "-")
+        for prefix in MANUFACTURER_PREFIXES:
+            if s.startswith(prefix):
+                s = s[len(prefix) :]
+                break
+        display_parts.append("_".join(p.title() for p in s.split("-") if p))
+    return "_" + "_".join(display_parts)
+
+
+def _platform_pack_stem(
+    group_platforms: list[str], representative: str, platforms_dir: str
+) -> str:
+    """Platform part of a pack name, version included.
+
+    A group of identical platforms shares one pack named after all of them;
+    the builder and --verify-packs both read the name from here.
+    """
+    rep_cfg = load_platform_config(representative, platforms_dir)
+    version = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
+    version_tag = f"_{version.replace(' ', '')}" if version else ""
+    if len(group_platforms) <= 1:
+        return rep_cfg.get("platform", representative).replace(" ", "_") + version_tag
+    names = [
+        load_platform_config(p, platforms_dir).get("platform", p)
+        for p in group_platforms
+    ]
+    return "_".join(n.replace(" ", "") for n in names) + version_tag
+
+
 
 
 
@@ -618,27 +653,12 @@ def generate_pack(
     platform_display = config.get("platform", platform_name)
     base_dest = config.get("base_destination", "")
 
-    version = config.get("version", config.get("dat_version", ""))
-    version_tag = f"_{version.replace(' ', '')}" if version else ""
     narrowings = _narrowings(
         source, regions, target_name, one_per_slot, required_only
     )
     narrow_tags = "".join(tag for tag, _label in narrowings)
-
-    sys_tag = ""
-    if system_filter:
-        display_parts = []
-        for sid in system_filter:
-            s = sid.lower().replace("_", "-")
-            for prefix in MANUFACTURER_PREFIXES:
-                if s.startswith(prefix):
-                    s = s[len(prefix) :]
-                    break
-            parts = s.split("-")
-            display_parts.append("_".join(p.title() for p in parts if p))
-        sys_tag = "_" + "_".join(display_parts)
-
-    zip_name = f"{platform_display.replace(' ', '_')}{version_tag}{narrow_tags}_BIOS_Pack{sys_tag}.zip"
+    stem = _platform_pack_stem([platform_name], platform_name, platforms_dir)
+    zip_name = f"{stem}{narrow_tags}_BIOS_Pack{_system_tag(system_filter)}.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -2056,7 +2076,7 @@ def _validate_args(args, parser):
         ):
             if given:
                 parser.error(f"{flag} is incompatible with --from-md5")
-    if has_system and has_platform:
+    if has_system and (has_platform or has_all):
         if args.manifest:
             parser.error("--system is incompatible with --manifest")
         if args.split:
@@ -2201,10 +2221,13 @@ def _run_verify_packs(args):
     with open(args.db) as f:
         verify_db = json.load(f)
 
-    platforms = list_registered_platforms(args.platforms_dir)
     if args.platform:
         platforms = [args.platform]
-    elif not args.all:
+    elif args.all:
+        platforms = list_registered_platforms(
+            args.platforms_dir, include_archived=args.include_archived
+        )
+    else:
         print("ERROR: --verify-packs requires --platform or --all")
         sys.exit(1)
 
@@ -2212,18 +2235,16 @@ def _run_verify_packs(args):
     verify_regions = getattr(args, "regions", None)
     verify_profiles = load_emulator_profiles(args.emulators_dir)
     verify_data_registry = load_data_dir_registry(args.platforms_dir)
+    expected = _expected_pack_names(
+        platforms, args.platforms_dir, verify_regions, args.target
+    )
+    on_disk = (
+        set(os.listdir(args.output_dir)) if os.path.isdir(args.output_dir) else set()
+    )
 
     for platform_name in platforms:
-        config = load_platform_config(platform_name, args.platforms_dir)
-        display = config.get("platform", platform_name).replace(" ", "_")
-
-        zip_path = None
-        if os.path.isdir(args.output_dir):
-            for entry in sorted(os.listdir(args.output_dir)):
-                if entry.endswith("_BIOS_Pack.zip") and display in entry:
-                    zip_path = os.path.join(args.output_dir, entry)
-                    break
-        if not zip_path:
+        found = sorted(expected[platform_name] & on_disk)
+        if not found:
             print(f"  {platform_name}: SKIP (no pack in {args.output_dir})")
             # Naming a platform is asking about its pack. Answering SKIP and
             # exiting 0 says the pack passed; with --all, a platform whose pack
@@ -2231,38 +2252,36 @@ def _run_verify_packs(args):
             if args.platform:
                 all_ok = False
             continue
-
-        if _narrows_contents(os.path.basename(zip_path)):
-            print(f"  {platform_name}: SKIP (narrowed variant)")
-            continue
-
-        result = verify_pack_against_platform(
-            zip_path,
-            platform_name,
-            args.platforms_dir,
-            db=verify_db,
-            emulators_dir=args.emulators_dir,
-            emu_profiles=verify_profiles,
-            regions=verify_regions,
-            data_registry=verify_data_registry,
-            target_cores=_target_cores_for(
-                platform_name, args.target, args.platforms_dir
-            ),
-        )
-        ok, errors = result[0], result[3]
-        bl_checked, bl_present = result[4], result[5]
-        core_checked, core_present = result[6], result[7]
-        counts = (
-            f"{bl_present}/{bl_checked} baseline, "
-            f"{core_present}/{core_checked} cores"
-        )
-        if ok:
-            print(f"  {platform_name}: OK ({counts})")
-        else:
-            print(f"  {platform_name}: FAIL ({counts}, {len(errors)} errors)")
-            for err in errors[:5]:
-                print(f"    {err}")
-            all_ok = False
+        tc = _target_cores_for(platform_name, args.target, args.platforms_dir)
+        # A group pack and a pack built for the platform alone can both be
+        # present; each one is a pack of this platform.
+        for pack_name in found:
+            zip_path = os.path.join(args.output_dir, pack_name)
+            result = verify_pack_against_platform(
+                zip_path,
+                platform_name,
+                args.platforms_dir,
+                db=verify_db,
+                emulators_dir=args.emulators_dir,
+                emu_profiles=verify_profiles,
+                regions=verify_regions,
+                data_registry=verify_data_registry,
+                target_cores=tc,
+            )
+            ok, errors = result[0], result[3]
+            bl_checked, bl_present = result[4], result[5]
+            core_checked, core_present = result[6], result[7]
+            counts = (
+                f"{bl_present}/{bl_checked} baseline, "
+                f"{core_present}/{core_checked} cores"
+            )
+            if ok:
+                print(f"  {platform_name} [{pack_name}]: OK ({counts})")
+            else:
+                print(f"  {platform_name} [{pack_name}]: FAIL ({counts}, {len(errors)} errors)")
+                for err in errors[:5]:
+                    print(f"    {err}")
+                all_ok = False
 
     if not all_ok:
         sys.exit(1)
@@ -2346,13 +2365,6 @@ def _run_platform_packs(
                         offline=args.offline,
                     )
                 if not args.split and zip_path and aliases:
-                    rep_cfg = load_platform_config(representative, args.platforms_dir)
-                    ver = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
-                    ver_tag = f"_{ver.replace(' ', '')}" if ver else ""
-                    all_names = [
-                        load_platform_config(p, args.platforms_dir).get("platform", p)
-                        for p in group_platforms
-                    ]
                     narrow_tags = "".join(
                         tag
                         for tag, _label in _narrowings(
@@ -2363,9 +2375,12 @@ def _run_platform_packs(
                             required_only,
                         )
                     )
+                    stem = _platform_pack_stem(
+                        group_platforms, representative, args.platforms_dir
+                    )
                     combined = (
-                        "_".join(n.replace(" ", "") for n in all_names)
-                        + f"{ver_tag}{narrow_tags}_BIOS_Pack.zip"
+                        f"{stem}{narrow_tags}_BIOS_Pack"
+                        f"{_system_tag(system_filter)}.zip"
                     )
                     new_path = os.path.join(os.path.dirname(zip_path), combined)
                     if new_path != zip_path:
@@ -2518,6 +2533,32 @@ def main():
     if args.one_per_slot and args.manifest_targets:
         parser.error("--one-per-slot is incompatible with --manifest-targets")
 
+    # --all-variants builds the six source x required combinations itself:
+    # a --source or --required-only beside it would be overridden, and the
+    # modes that build one pack (emulator, system, hashes) never read it.
+    if args.all_variants:
+        for flag, given in (
+            ("--source", args.source != "full"),
+            ("--required-only", args.required_only),
+            ("--emulator", args.emulator),
+            ("--from-md5", args.from_md5 or args.from_md5_file),
+        ):
+            if given:
+                parser.error(f"{flag} is incompatible with --all-variants")
+        if args.system and not (args.platform or args.all):
+            parser.error("--all-variants requires --platform or --all")
+        if args.verify_packs and args.manifest:
+            parser.error("--verify-packs is incompatible with --manifest")
+        if args.verify_packs:
+            # The check that follows the build reads the full pack's name.
+            for flag, given in (
+                ("--system", args.system),
+                ("--one-per-slot", args.one_per_slot),
+                ("--split", args.split),
+            ):
+                if given:
+                    parser.error(f"{flag} is incompatible with --verify-packs")
+
     # Quick-exit modes: --verify-packs alone = verify existing packs only
     # Combined with --all-variants, generation runs first then verify
     if args.verify_packs and not args.all_variants:
@@ -2529,6 +2570,7 @@ def main():
             ("--one-per-slot", args.one_per_slot),
             ("--required-only", args.required_only),
             ("--source", args.source != "full"),
+            ("--system", args.system),
         ):
             if given:
                 parser.error(f"{flag} is incompatible with --verify-packs")
@@ -2731,6 +2773,9 @@ def main():
                 target_cores_cache,
                 system_filter,
             )
+        if args.verify_packs:
+            with _pack_output_lock(args.output_dir, exclusive=False):
+                _run_verify_packs(args)
 
 
 # Manifest generation (JSON inventory for install.py)
@@ -3269,6 +3314,52 @@ def _target_cores_for(
     return cache.get(platform_name)
 
 
+def _expected_pack_names(
+    platforms: list[str],
+    platforms_dir: str,
+    regions: list[str] | None,
+    target_name: str | None,
+) -> dict[str, set[str]]:
+    """Exact pack file names --verify-packs may check, per platform.
+
+    Rebuilt from the name builder, never matched by substring: a substring
+    picks the full pack when a regional or targeted one was asked for, or a
+    narrowed pack when the full one was. A platform answers to its own name
+    and to the name of the group it shares a pack with.
+    """
+    narrow_tags = "".join(
+        tag for tag, _label in _narrowings("full", regions, target_name, False, False)
+    )
+    names: dict[str, set[str]] = {
+        p: {f"{_platform_pack_stem([p], p, platforms_dir)}{narrow_tags}_BIOS_Pack.zip"}
+        for p in platforms
+    }
+    # Groups depend on which platforms a run built: --all alone or with
+    # --include-archived. Both compositions are names a pack can carry.
+    for include_archived in (False, True):
+        pool = list_registered_platforms(
+            platforms_dir, include_archived=include_archived
+        )
+        cache = None
+        if target_name:
+            cache, pool = build_target_cores_cache(
+                pool, target_name, platforms_dir, is_all=True
+            )
+        for group, representative in group_identical_platforms(
+            pool, platforms_dir, cache
+        ):
+            if len(group) < 2:
+                continue
+            name = (
+                f"{_platform_pack_stem(group, representative, platforms_dir)}"
+                f"{narrow_tags}_BIOS_Pack.zip"
+            )
+            for p in group:
+                if p in names:
+                    names[p].add(name)
+    return names
+
+
 def _content_narrowing_tags() -> tuple[str, ...]:
     """Tags naming a pack that holds fewer files than the platform declares.
 
@@ -3347,7 +3438,7 @@ def verify_and_finalize_packs(
     # Map ZIP names to platform names
     pack_to_platform: dict[str, list[str]] = {}
     for name in _pack_archives(output_dir):
-        for pname in list_registered_platforms(platforms_dir):
+        for pname in list_registered_platforms(platforms_dir, include_archived=True):
             cfg = load_platform_config(pname, platforms_dir)
             display = cfg.get("platform", pname).replace(" ", "_")
             if display in name or display.replace("_", "") in name.replace("_", ""):

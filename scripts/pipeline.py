@@ -249,6 +249,8 @@ def main():
         help="Export native formats (implies --with-truth)",
     )
     args = parser.parse_args()
+    if args.all_variants and args.source != "full":
+        parser.error("--source is incompatible with --all-variants")
 
     # A second run on the same output directory is refused before any work:
     # the database rebuild alone takes minutes, and the reader holding the
