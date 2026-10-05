@@ -27,18 +27,25 @@ EMULATORS_DIR = os.path.join(REPO_ROOT, "emulators")
 
 
 def _pack_path(platform_name: str) -> str | None:
-    """Path of the platform's pack ZIP, or None when there is none."""
+    """Path of the platform's full pack, by the exact name the builder writes."""
     if not os.path.isdir(DIST_DIR):
         return None
     sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
-    from common import load_platform_config
+    from generate_pack import _expected_pack_names
 
-    config = load_platform_config(platform_name, PLATFORMS_DIR)
-    display = config.get("platform", platform_name).replace(" ", "_")
-    for entry in sorted(os.listdir(DIST_DIR)):
-        if entry.endswith("_BIOS_Pack.zip") and display in entry:
-            return os.path.join(DIST_DIR, entry)
+    names = _expected_pack_names([platform_name], PLATFORMS_DIR, [], None)
+    for entry in sorted(names[platform_name]):
+        path = os.path.join(DIST_DIR, entry)
+        if os.path.isfile(path):
+            return path
     return None
+
+
+def _registered_platforms() -> list[str]:
+    sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
+    from common import list_registered_platforms
+
+    return list_registered_platforms(PLATFORMS_DIR, include_archived=True)
 
 
 def _profiles_newer_than(path: str) -> list[str]:
@@ -92,29 +99,15 @@ class PackIntegrityTest(unittest.TestCase):
             f"{result.stdout}\n{result.stderr}"
         )
 
-    def test_retroarch(self):
-        self._verify_platform("retroarch")
+    def test_every_registered_platform(self):
+        """Every platform the registry knows, not a list written by hand.
 
-    def test_batocera(self):
-        self._verify_platform("batocera")
-
-    def test_bizhawk(self):
-        self._verify_platform("bizhawk")
-
-    def test_emudeck(self):
-        self._verify_platform("emudeck")
-
-    def test_recalbox(self):
-        self._verify_platform("recalbox")
-
-    def test_retrobat(self):
-        self._verify_platform("retrobat")
-
-    def test_retrodeck(self):
-        self._verify_platform("retrodeck")
-
-    def test_romm(self):
-        self._verify_platform("romm")
+        Eight names were written out and ROCKNIX and MiSTer FPGA, both
+        released, were never checked.
+        """
+        for platform_name in _registered_platforms():
+            with self.subTest(platform=platform_name):
+                self._verify_platform(platform_name)
 
 
 if __name__ == "__main__":
