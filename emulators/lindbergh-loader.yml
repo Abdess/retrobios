@@ -298,20 +298,26 @@ files:
   - name: lindbergrc
     system: sega-lindbergh
     required: false
-    description: "Lindbergh site configuration read by Sega's lxmaster boot supervisor"
-    source_ref: "src/lindbergh/hook.c:650-653"
+    description: "Lindbergh development configuration read by Sega's lxmaster and segaboot"
+    source_ref: "src/lindbergh/hook.c:650-653, src/lindbergh/lindbergh.c:892-894"
     unsourceable: >-
       /root is a symlink to /usr/local/root, which holds no lindbergrc on
-      the retail system card. Nothing canonical exists to reproduce: every
-      key is a site or unit specific development setting, and a stock
-      production machine ships no lindbergrc at all.
+      the retail system card. The system card's /etc/rsyncd.conf exports
+      /root as an rsync module commented "/root/ for lindbergrc": the file
+      was pushed from a developer host onto development units, and a stock
+      production machine ships none.
     note: >-
-      An INI file, sections [develop], [terminal], [segaboot] and [keychip].
-      It is read by Sega's lxmaster boot supervisor, not by the games; the
+      An INI file read by Sega's boot programs, not by the games; the
       per-title <id>rc files that do ship in game dumps are xinit client
-      scripts, a different thing. The fopen hook rewrites /root/lindbergrc to
-      lindbergrc in the game directory, and the loader neither creates the file
-      nor substitutes for it.
+      scripts, a different thing. lxmaster (Sep 2005 and Jan 2008 builds)
+      reads [develop], [terminal] and [segaboot], and from the 2008 build
+      [keychip], whose values it writes to /var/lxmaster/keychip. segaboot
+      1.04-2 reads [develop] (source-hdd, no-md5check, debugger) and
+      [keychip] (game-id, major-release, model-type, src-media, src-default,
+      dst-media, nfs-source, debug-arg). The fopen hook rewrites
+      /root/lindbergrc to lindbergrc in the game directory for any program
+      the loader wraps, segaboot included (-s), and the loader neither
+      creates the file nor substitutes for it.
 
   - name: gamecontrollerdb.txt
     system: sega-lindbergh
