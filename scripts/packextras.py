@@ -611,8 +611,15 @@ def platform_region_groups(
             )
         ] = dest
         variant = extra.get("variant_group")
-        for sys_id in _extra_system_ids(extra) or ["_extras"]:
-            group_id = f"{sys_id}:variant:{variant}" if variant else sys_id
+        if variant:
+            # A variant group is one slot of one core, whatever system each
+            # member is filed under: PicoDrive files its US Mega CD BIOS under
+            # sega-segacd and the EU/JP ones under sega-megacd, and find_bios
+            # picks one of the twelve. Keyed as emulator mode keys it.
+            group_ids = [f"{extra.get('source_emulator', '')}:variant:{variant}"]
+        else:
+            group_ids = _extra_system_ids(extra) or ["_extras"]
+        for group_id in group_ids:
             groups.setdefault(group_id, []).append((dest, name))
     return groups, extra_dests
 
