@@ -361,6 +361,19 @@ def _repo_satisfies_declaration(
                     continue
     return False
 
+def _repo_holds_member(file_entry: dict, db: dict) -> bool:
+    """Whether a held archive of that name carries the declared member."""
+    files_db = db.get("files", {})
+    declared = [m.strip() for m in str(file_entry.get("md5") or "").split(",") if m.strip()]
+    for sha1 in db.get("indexes", {}).get("by_name", {}).get(file_entry.get("name", ""), []):
+        path = (files_db.get(sha1) or {}).get("path", "")
+        if not path.endswith(".zip") or not os.path.exists(path):
+            continue
+        if any(check_inside_zip(path, file_entry["zipped_file"], m) == "ok" for m in declared):
+            return True
+    return False
+
+
 def _intentional_hash_exclusion(
     entries: list[dict],
     db: dict,
@@ -586,6 +599,16 @@ def verify_pack_against_platform(
                 ]
                 if not checkable:
                     continue
+                # An archive declared once per ROM it must hold is checked
+                # once per ROM by the frontend: each such declaration has to
+                # pass on its own, where the repository holds an archive
+                # that would.
+                for fe in checkable:
+                    if not fe.get("zipped_file"):
+                        continue
+                    err = _check_member_hash(zf, member, fe, digest)
+                    if err is not None and (db is None or _repo_holds_member(fe, db)):
+                        errors.append(err)
                 member_errors = []
                 satisfied = False
                 for fe in checkable:
