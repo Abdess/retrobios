@@ -29,7 +29,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[0])"
+    source_ref: "frontend/libretro.c:3864-3867 (listed_bios[0])"
     note: "Preferred JP BIOS, searched first by exact filename."
 
   # -- Region: North America (PSX_REGION_US = 0) --
@@ -41,19 +41,19 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[1])"
+    source_ref: "frontend/libretro.c:3864-3867 (listed_bios[1])"
     note: "Preferred US BIOS, searched first by exact filename."
 
   # -- Region: Europe (PSX_REGION_EU = 2) --
 
   - name: "scph5502.bin"
     description: "SCPH-5502 (v3.0 01-06-97 E)"
-    region: [europe]
+    region: [europe, oceania]
     size: 524288
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[2])"
+    source_ref: "frontend/libretro.c:3864-3867 (listed_bios[2])"
     note: "Preferred EU BIOS, searched first by exact filename."
 
   # -- Fallback BIOS filenames (searched in order after scph550x) --
@@ -65,7 +65,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[3])"
+    source_ref: "frontend/libretro.c:3864-3867 (listed_bios[3])"
     note: "Region detected from content at runtime. Must be 512 KB in libretro context."
 
   - name: "scph101.bin"
@@ -75,7 +75,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[4])"
+    source_ref: "frontend/libretro.c:3864-3867 (listed_bios[4])"
     note: "PSone slim model."
 
   - name: "scph7001.bin"
@@ -85,7 +85,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[5])"
+    source_ref: "frontend/libretro.c:3864-3867 (listed_bios[5])"
 
   - name: "scph1001.bin"
     description: "SCPH-1001 (v2.2 12-04-95 A)"
@@ -94,7 +94,7 @@ files:
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3737-3740 (listed_bios[6])"
+    source_ref: "frontend/libretro.c:3864-3867 (listed_bios[6])"
     note: "Original US model. Last in the explicit filename search list."
 
   # -- Dynamic scan fallback --
