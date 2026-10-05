@@ -5,7 +5,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-10-04T21:25:52Z",
+  "generated": "2026-10-05T00:24:12Z",
   "base_destination": "",
   "detect": [
     {
@@ -237,10 +237,10 @@
       }
     }
   ],
-  "total_files": 7596,
-  "total_size": 8176292609,
-  "pack_files": 7598,
-  "pack_size": 8176292609,
+  "total_files": 7599,
+  "total_size": 8230876176,
+  "pack_files": 7601,
+  "pack_size": 8230876176,
   "total_omitted": 16,
   "omitted_files": [
     {
@@ -16832,6 +16832,16 @@
       ]
     },
     {
+      "dest": "bios/mpeg_card.bin",
+      "sha1": "2f5ebd434f6d5b82e93d03e5626007bd5380f652",
+      "sha256": "d4bac489d59bf9bfd05fab4f647df66a087f0fd0bbb9f0a8b3c55cdcf51048de",
+      "size": 524288,
+      "repo_path": "bios/Sega/Saturn/mpeg_card.bin",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
       "dest": "bios/satar4mp.bin",
       "sha1": "b9645d265644d201dbccc39aaf4bfa60cebe7ead",
       "sha256": "76982109ed433d512413044d7c5bc869f6d97e2826f5ac10cc7418fb3fff1ab3",
@@ -17707,6 +17717,16 @@
       "sha256": "c8f9e16345dbc3b6e165fe12435486a748e730ebe6002b5d713efe73d171d51c",
       "size": 6593548,
       "repo_path": "bios/Nintendo/Wii U/resources/sharedFonts/CafeTw.ttf",
+      "cores": [
+        "cemu"
+      ]
+    },
+    {
+      "dest": "bios/Cemu/shareddata.bin",
+      "sha1": "cd34a0ee9b7a8cbb9c9eae34739704a9dd4dd413",
+      "sha256": "662bc6c693c88040531fbe51186ce203e188d1c67ad788b2013b3c91ce595420",
+      "size": 33554432,
+      "repo_path": "bios/Nintendo/Wii U/shareddata.bin",
       "cores": [
         "cemu"
       ]
@@ -31645,6 +31665,16 @@
       "sha256": "b838dc9a394fe708df7239994b37c14c21e34f81d4cc921e060fc9c16b8ba240",
       "size": 19321722,
       "repo_path": "bios/Game Engines/DOOM/hacx.wad",
+      "cores": [
+        "gzdoom"
+      ]
+    },
+    {
+      "dest": "bios/hacx2.wad",
+      "sha1": "f9ce49ed020f560cb1963634b529bc450e598a65",
+      "sha256": "7f63d58b4e360825a09ee086e8d733b2cd37cea882d785d2658cbc77ba7b1b74",
+      "size": 20504847,
+      "repo_path": "bios/Game Engines/DOOM/hacx2.wad",
       "cores": [
         "gzdoom"
       ]

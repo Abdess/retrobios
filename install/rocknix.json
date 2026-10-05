@@ -5,7 +5,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-10-04T21:25:52Z",
+  "generated": "2026-10-05T00:24:12Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -17,10 +17,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 5848,
-  "total_size": 6534239798,
-  "pack_files": 5850,
-  "pack_size": 6534239798,
+  "total_files": 5850,
+  "total_size": 6568318518,
+  "pack_files": 5852,
+  "pack_size": 6568318518,
   "total_omitted": 14,
   "omitted_files": [
     {
@@ -989,6 +989,26 @@
       "sha256": "3e6f91506031badc4ebdf7fe5b4f33180222a369b575522861688d3b27322a68",
       "size": 524288,
       "repo_path": "bios/Sega/ST-V/epr-17954a.ic8",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "stvbios.zip",
+      "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
+      "sha256": "1c4970da5f7066dd213d3dca14f7e45408cf667f508f4653025626bb33fbeb14",
+      "size": 3455065,
+      "repo_path": "bios/Arcade/Arcade/stvbios.zip",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "mpeg_card.bin",
+      "sha1": "2f5ebd434f6d5b82e93d03e5626007bd5380f652",
+      "sha256": "d4bac489d59bf9bfd05fab4f647df66a087f0fd0bbb9f0a8b3c55cdcf51048de",
+      "size": 524288,
+      "repo_path": "bios/Sega/Saturn/mpeg_card.bin",
       "cores": [
         "beetle_saturn"
       ]
@@ -2589,6 +2609,16 @@
       "sha256": "c8f9e16345dbc3b6e165fe12435486a748e730ebe6002b5d713efe73d171d51c",
       "size": 6593548,
       "repo_path": "bios/Nintendo/Wii U/resources/sharedFonts/CafeTw.ttf",
+      "cores": [
+        "cemu"
+      ]
+    },
+    {
+      "dest": "Cemu/shareddata.bin",
+      "sha1": "cd34a0ee9b7a8cbb9c9eae34739704a9dd4dd413",
+      "sha256": "662bc6c693c88040531fbe51186ce203e188d1c67ad788b2013b3c91ce595420",
+      "size": 33554432,
+      "repo_path": "bios/Nintendo/Wii U/shareddata.bin",
       "cores": [
         "cemu"
       ]
@@ -20951,16 +20981,6 @@
       "repo_path": "bios/VTech/CreatiVision/bioscv.rom",
       "cores": [
         "jollycv"
-      ]
-    },
-    {
-      "dest": "stvbios.zip",
-      "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
-      "sha256": "1c4970da5f7066dd213d3dca14f7e45408cf667f508f4653025626bb33fbeb14",
-      "size": 3455065,
-      "repo_path": "bios/Arcade/Arcade/stvbios.zip",
-      "cores": [
-        "kronos"
       ]
     },
     {

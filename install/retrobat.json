@@ -5,7 +5,7 @@
   "platform": "retrobat",
   "display_name": "RetroBat",
   "version": "1.0",
-  "generated": "2026-10-04T21:25:52Z",
+  "generated": "2026-10-05T00:24:12Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -236,10 +236,10 @@
       }
     }
   ],
-  "total_files": 12242,
-  "total_size": 8147957126,
-  "pack_files": 12244,
-  "pack_size": 8147957126,
+  "total_files": 12313,
+  "total_size": 9146837881,
+  "pack_files": 12315,
+  "pack_size": 9146837881,
   "total_omitted": 4,
   "omitted_files": [
     {
@@ -4904,6 +4904,126 @@
       "sha256": "2f269172f95262fdb146fdfcb549bf0e7081c25aa597eedd8d5a6a0f1fea0b6f",
       "size": 9182,
       "repo_path": "bios/Softdisk/Catacomb Abyss/SHP12.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP1.ARM",
+      "sha1": "b64369d86ec9f7bf601b9b6da7ed3dfa13e2d88f",
+      "sha256": "a082bb5e17709aa22e06918b67f99761c7907d94ce6eb8de8113e35ca4ed64cd",
+      "size": 1376,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP01.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP9.ARM",
+      "sha1": "37c612a5bda088953dcf517c751adb6b38df34d6",
+      "sha256": "ed76629e3df3d51c334fc5ab142a32ad678a66a380c5ec81b2141fe3a251315a",
+      "size": 9182,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP06.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP10.ARM",
+      "sha1": "f83e63d8bfaa4db633d3a5093d85d94e66bf4e51",
+      "sha256": "399d8f466c29c10e061e29fdf2d56d7530f65df8b8da28675a5a2fcfe6906a96",
+      "size": 9930,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP07.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP11.ARM",
+      "sha1": "f5484279becfd0e4e251ef99b619caf80aac3d95",
+      "sha256": "7b1d332b97a75649ce5904fcb1cade9e4d88fcc6c81d034c0013758c58b9f1b7",
+      "size": 398,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP08.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP12.ARM",
+      "sha1": "1607595b8e63c0c3fd345eee8b9b1e64cc711470",
+      "sha256": "de92d1fe21b763eae112e9f641c9bda8af0e3ae1aa443e5c567e2a2e58cbeb75",
+      "size": 417,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP09.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP13.ARM",
+      "sha1": "4bd2fe1fe5efd452c05eeb7a3c9790d8465fec5c",
+      "sha256": "aa115bf7f90328d46d04b24025c4dd5845b05d47d7e40624355f4f4434373a70",
+      "size": 329,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP10.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP1.APC",
+      "sha1": "b64369d86ec9f7bf601b9b6da7ed3dfa13e2d88f",
+      "sha256": "a082bb5e17709aa22e06918b67f99761c7907d94ce6eb8de8113e35ca4ed64cd",
+      "size": 1376,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP01.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP9.APC",
+      "sha1": "37c612a5bda088953dcf517c751adb6b38df34d6",
+      "sha256": "ed76629e3df3d51c334fc5ab142a32ad678a66a380c5ec81b2141fe3a251315a",
+      "size": 9182,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP06.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP10.APC",
+      "sha1": "f83e63d8bfaa4db633d3a5093d85d94e66bf4e51",
+      "sha256": "399d8f466c29c10e061e29fdf2d56d7530f65df8b8da28675a5a2fcfe6906a96",
+      "size": 9930,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP07.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP11.APC",
+      "sha1": "f5484279becfd0e4e251ef99b619caf80aac3d95",
+      "sha256": "7b1d332b97a75649ce5904fcb1cade9e4d88fcc6c81d034c0013758c58b9f1b7",
+      "size": 398,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP08.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP12.APC",
+      "sha1": "1607595b8e63c0c3fd345eee8b9b1e64cc711470",
+      "sha256": "de92d1fe21b763eae112e9f641c9bda8af0e3ae1aa443e5c567e2a2e58cbeb75",
+      "size": 417,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP09.ABS",
+      "cores": [
+        "catacombgl"
+      ]
+    },
+    {
+      "dest": "SHP13.APC",
+      "sha1": "4bd2fe1fe5efd452c05eeb7a3c9790d8465fec5c",
+      "sha256": "aa115bf7f90328d46d04b24025c4dd5845b05d47d7e40624355f4f4434373a70",
+      "size": 329,
+      "repo_path": "bios/Softdisk/Catacomb Abyss/SHP10.ABS",
       "cores": [
         "catacombgl"
       ]
@@ -39739,6 +39859,16 @@
       ]
     },
     {
+      "dest": "Cemu/shareddata.bin",
+      "sha1": "cd34a0ee9b7a8cbb9c9eae34739704a9dd4dd413",
+      "sha256": "662bc6c693c88040531fbe51186ce203e188d1c67ad788b2013b3c91ce595420",
+      "size": 33554432,
+      "repo_path": "bios/Nintendo/Wii U/shareddata.bin",
+      "cores": [
+        "cemu"
+      ]
+    },
+    {
       "dest": "Cemu/cafeLibs/snd_user.rpl",
       "sha1": "4e0ff91f1881203e404cd41ec34725b43eec5cf2",
       "sha256": "45b0dbe8926a263d86bc4e77084815e58336b9b437196d48bc3da3c5b2b2675e",
@@ -44090,9 +44220,9 @@
     },
     {
       "dest": "devilutionx/devilutionx.mpq",
-      "sha1": "ef8fee4e526575170199ad7f0c4ed6f11076dfe1",
-      "sha256": "190701ca282fef8fa8b3f165322760813d6b199462bb4e2587a20068c08accd3",
-      "size": 5562231,
+      "sha1": "2676a91ae6c610d7e4fb28448366878608024f24",
+      "sha256": "977394e2f08c3a1e8036bcdc2f6475b10d45f909f63f4f5f3ec6240b47a84dd8",
+      "size": 5660183,
       "repo_path": "bios/Blizzard/Diablo/devilutionx/devilutionx.mpq",
       "cores": [
         "devilutionx"
@@ -44136,6 +44266,16 @@
       "sha256": "48bfb5baeed370b565a61db5eab90214700121311a3c40e50d2671d5bac8778b",
       "size": 34710143,
       "repo_path": "bios/Blizzard/Diablo/devilutionx/ru.mpq",
+      "cores": [
+        "devilutionx"
+      ]
+    },
+    {
+      "dest": "devilutionx/mods/hf.mpq",
+      "sha1": "c9e218c7e0df5ec9da5d9f2ba4f6e6f00a01553d",
+      "sha256": "bbf4551b06c29bbba308fdbc999edd4f5728f68a66342c9e81f61b1af2dba11a",
+      "size": 541039,
+      "repo_path": "bios/Blizzard/Diablo/devilutionx/mods/hf.mpq",
       "cores": [
         "devilutionx"
       ]
@@ -44189,6 +44329,18 @@
       "cores": [
         "dhewm3"
       ]
+    },
+    {
+      "dest": "demo/demo00.pk4",
+      "sha1": "10df25f1a7d6ae2a7ebf3e2f9f2ecfc10511ad8a",
+      "sha256": "16d7dfe6b9f7f0765b23169dfab79e927514457b069b9ece9583666f423ec6c1",
+      "size": 483535485,
+      "repo_path": "bios/Id Software/Doom 3/demo/demo00.pk4",
+      "cores": [
+        "dhewm3"
+      ],
+      "storage": "release",
+      "release_asset": "demo00.pk4"
     },
     {
       "dest": "GC/USA/IPL.bin",
@@ -44441,6 +44593,30 @@
       "cores": [
         "dxx-rebirth"
       ]
+    },
+    {
+      "dest": "d1x-rebirth/d1xr-opl3-music.dxa",
+      "sha1": "42214df6d498036c1a8a8264091e78e1923b08e6",
+      "sha256": "8fe8fede12ca735cac28133e4a581c4026ed22845ab016814a745b2c10b81603",
+      "size": 81503503,
+      "repo_path": "bios/Interplay/Descent/d1x-rebirth/d1xr-opl3-music.dxa",
+      "cores": [
+        "dxx-rebirth"
+      ],
+      "storage": "release",
+      "release_asset": "d1xr-opl3-music.dxa"
+    },
+    {
+      "dest": "d1x-rebirth/d1xr-sc55-music.dxa",
+      "sha1": "ab0e37ffc2fc715aea7d31a882000b147c8d070e",
+      "sha256": "b27f7b9dc5f9c2744402c56c9499dfd9503c17e73a2a5223e745529d7867962f",
+      "size": 72803408,
+      "repo_path": "bios/Interplay/Descent/d1x-rebirth/d1xr-sc55-music.dxa",
+      "cores": [
+        "dxx-rebirth"
+      ],
+      "storage": "release",
+      "release_asset": "d1xr-sc55-music.dxa"
     },
     {
       "dest": "d1x-rebirth/editor.dxa",
@@ -55964,7 +56140,7 @@
         "etlegacy"
       ],
       "storage": "release",
-      "release_asset": "pak0.pk3"
+      "release_asset": "Id_Software--Wolfenstein_Enemy_Territory--etmain--pak0.pk3"
     },
     {
       "dest": "etmain/pak1.pk3",
@@ -57016,6 +57192,16 @@
       "sha256": "b838dc9a394fe708df7239994b37c14c21e34f81d4cc921e060fc9c16b8ba240",
       "size": 19321722,
       "repo_path": "bios/Game Engines/DOOM/hacx.wad",
+      "cores": [
+        "gzdoom"
+      ]
+    },
+    {
+      "dest": "hacx2.wad",
+      "sha1": "f9ce49ed020f560cb1963634b529bc450e598a65",
+      "sha256": "7f63d58b4e360825a09ee086e8d733b2cd37cea882d785d2658cbc77ba7b1b74",
+      "size": 20504847,
+      "repo_path": "bios/Game Engines/DOOM/hacx2.wad",
       "cores": [
         "gzdoom"
       ]
@@ -85819,6 +86005,48 @@
       ]
     },
     {
+      "dest": "sonic3-air/data/enginedata.bin",
+      "sha1": "d8d8bf397239442cb8f15e5b4aa461c3a9643727",
+      "sha256": "242c05637f48491b3996446d5303a27f56856db315b5a1dc4ace64a214004280",
+      "size": 508005,
+      "repo_path": "bios/Game Engines/Sonic 3 AIR/sonic3-air/data/enginedata.bin",
+      "cores": [
+        "sonic3-air"
+      ]
+    },
+    {
+      "dest": "sonic3-air/data/gamedata.bin",
+      "sha1": "2bb4c2879137a90f422ce9e498352c775c6d772e",
+      "sha256": "240d8894305301a5b6718ac893e6851ff6b254780c8809eb554e071d19c1bfb0",
+      "size": 3705612,
+      "repo_path": "bios/Game Engines/Sonic 3 AIR/sonic3-air/data/gamedata.bin",
+      "cores": [
+        "sonic3-air"
+      ]
+    },
+    {
+      "dest": "sonic3-air/data/audiodata.bin",
+      "sha1": "4f41fd97db57a0efeabc122ec209c151699648c6",
+      "sha256": "382b28eccfa3f1505ca2b3910e6f62e759d818dc69cc4336cbf52ec4ca8dd429",
+      "size": 2289447,
+      "repo_path": "bios/Game Engines/Sonic 3 AIR/sonic3-air/data/audiodata.bin",
+      "cores": [
+        "sonic3-air"
+      ]
+    },
+    {
+      "dest": "sonic3-air/data/audioremaster.bin",
+      "sha1": "8ecd7378026cfd6880c9d93fcdc09e92f48ce490",
+      "sha256": "55f460dd9a3516494e56abcd39e687fff4a75011d66eafcd83c1490a8e254fa4",
+      "size": 131677405,
+      "repo_path": "bios/Game Engines/Sonic 3 AIR/sonic3-air/data/audioremaster.bin",
+      "cores": [
+        "sonic3-air"
+      ],
+      "storage": "release",
+      "release_asset": "audioremaster.bin"
+    },
+    {
       "dest": "squirreljme-0.3.0-fast.jar",
       "sha1": "7c4cd0a5451eedeac9b328f48408dbc312198ccf",
       "sha256": "9c828fe883923374a15fc9cd708555688c5d9b9beeeaf6d16aceff0669c57502",
@@ -112689,6 +112917,326 @@
       ]
     },
     {
+      "dest": "TheXTech/introset/01.lvlx",
+      "sha1": "3c8a9c00b2776d4d0272bb8131daa59492c23eab",
+      "sha256": "9db07d0323d0e2d25707aa20b7d7f46060ec7e878d7fb6cd1c4b2e7b1c720566",
+      "size": 2515,
+      "repo_path": "bios/Game Engines/TheXTech/introset/01.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/02.lvlx",
+      "sha1": "966f2bd2bd8226f109a0756ed43fcc844f1b575d",
+      "sha256": "193864c86dc56f6cc4093c047c63a7de361207e1ddebe0a40ed6dec6984618b5",
+      "size": 5929,
+      "repo_path": "bios/Game Engines/TheXTech/introset/02.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/03.lvlx",
+      "sha1": "432f7cfa8710e182a813d5b67be9a3664cac4580",
+      "sha256": "443b0a96ced41f7a956c5588e58c74c8e12fe0937a3a88319196ddb858324128",
+      "size": 6518,
+      "repo_path": "bios/Game Engines/TheXTech/introset/03.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/04.lvlx",
+      "sha1": "09348890ea39e8d7ec488d0674cb50f640240756",
+      "sha256": "89f062ced8f883d215d808c4b3ccea9654974f74eef457d65cd53ddfbc9069c2",
+      "size": 9466,
+      "repo_path": "bios/Game Engines/TheXTech/introset/04.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/05.lvlx",
+      "sha1": "9953edc0cc4637d9ad08482cc92df6080cb395b7",
+      "sha256": "77c9168fc86e59f169aab96b09cac1d94d07aa71d3330852716fb83293d5e112",
+      "size": 7773,
+      "repo_path": "bios/Game Engines/TheXTech/introset/05.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/06.lvlx",
+      "sha1": "525c040076e23641749303f5d66742a4629eced5",
+      "sha256": "5d9f870bc72bb273452236493fce9c298ee9bb20119714450768d996bcdbf3e8",
+      "size": 2516,
+      "repo_path": "bios/Game Engines/TheXTech/introset/06.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/07.lvlx",
+      "sha1": "31abeba6e3ed7dac8bd114c43c4f534eded9194c",
+      "sha256": "0cafc7e165616acb9e7eea617ef51bab41d64afcb7d0e3d77a4b3c379bfae2a4",
+      "size": 2915,
+      "repo_path": "bios/Game Engines/TheXTech/introset/07.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/07/background-151.png",
+      "sha1": "92c906e9633f14b142b13d45b0e96fcf4dbe8848",
+      "sha256": "d85d67eb3a5e56dda64daaee1a7e3ff5b0d7445131937f9d1210dbaf948d8561",
+      "size": 229,
+      "repo_path": "bios/Game Engines/TheXTech/introset/07/background-151.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/07/background-152.png",
+      "sha1": "7c444cc45262a6bcefd78588557014661eaea015",
+      "sha256": "23ab945dc529950c4867227a7d254f651100be02ad2d03e8e1673d934ae47566",
+      "size": 219,
+      "repo_path": "bios/Game Engines/TheXTech/introset/07/background-152.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/07/background-18.png",
+      "sha1": "a5bd4b5e5540e5057902ee06f4ca4c7b0f712075",
+      "sha256": "46e9c1332442c429ff9c1e06dfdfeaf523ee58c01675b5c3d0f1ec5568d91f07",
+      "size": 1897,
+      "repo_path": "bios/Game Engines/TheXTech/introset/07/background-18.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/07/background-19.png",
+      "sha1": "9b9aea630edebf1c16939af95db81f1d0bd05335",
+      "sha256": "3292eedec9e54d856d6384af95f257dec2c7c52810ba08719546627b280383e7",
+      "size": 1611,
+      "repo_path": "bios/Game Engines/TheXTech/introset/07/background-19.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/07/background-8.png",
+      "sha1": "be5fd8bb4df744140acac6c73f796a6e465efbcf",
+      "sha256": "31252f9fc97b68b5af66398c9faf73b0ee909d80f020e4ba4ee6e26d0d32f20b",
+      "size": 1702,
+      "repo_path": "bios/Game Engines/TheXTech/introset/07/background-8.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/08.lvlx",
+      "sha1": "4a6c1cb480ef6d06daad9c13943b2d8097a928f0",
+      "sha256": "afe66f5d2259f6205ad6cd4b1d4576884bc99b652f228e6630a76fc456bc0bbd",
+      "size": 2970,
+      "repo_path": "bios/Game Engines/TheXTech/introset/08.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/08/background-151.png",
+      "sha1": "92c906e9633f14b142b13d45b0e96fcf4dbe8848",
+      "sha256": "d85d67eb3a5e56dda64daaee1a7e3ff5b0d7445131937f9d1210dbaf948d8561",
+      "size": 229,
+      "repo_path": "bios/Game Engines/TheXTech/introset/07/background-151.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/08/background-152.png",
+      "sha1": "7c444cc45262a6bcefd78588557014661eaea015",
+      "sha256": "23ab945dc529950c4867227a7d254f651100be02ad2d03e8e1673d934ae47566",
+      "size": 219,
+      "repo_path": "bios/Game Engines/TheXTech/introset/07/background-152.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/08/background-18.png",
+      "sha1": "a5bd4b5e5540e5057902ee06f4ca4c7b0f712075",
+      "sha256": "46e9c1332442c429ff9c1e06dfdfeaf523ee58c01675b5c3d0f1ec5568d91f07",
+      "size": 1897,
+      "repo_path": "bios/Game Engines/TheXTech/introset/07/background-18.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/08/background-19.png",
+      "sha1": "9b9aea630edebf1c16939af95db81f1d0bd05335",
+      "sha256": "3292eedec9e54d856d6384af95f257dec2c7c52810ba08719546627b280383e7",
+      "size": 1611,
+      "repo_path": "bios/Game Engines/TheXTech/introset/07/background-19.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/08/background-2.png",
+      "sha1": "9f2c627a00bd80a79ae5a413dfaf75cb07752ca4",
+      "sha256": "323b9d8e7eee6bf624546afffa98e7c3d125976a4b317d738a2ab8665fd64d65",
+      "size": 1398,
+      "repo_path": "bios/Game Engines/TheXTech/introset/08/background-2.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/08/background-20.png",
+      "sha1": "28d9766165f7457e47d5663f1ddd1968236892a9",
+      "sha256": "b7ca3498137e240d0a0fd1bc5c0ef328362861950f8be60ced7ac6767a5391a1",
+      "size": 1383,
+      "repo_path": "bios/Game Engines/TheXTech/introset/08/background-20.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/09.lvlx",
+      "sha1": "c55ba129062849c2211756c7f7a5ef96edfde30b",
+      "sha256": "138e1e4582270e9ad17592e6fe9f9e21aa55ef1c4defcd4ce05b1d592a54310c",
+      "size": 5619,
+      "repo_path": "bios/Game Engines/TheXTech/introset/09.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/10.lvlx",
+      "sha1": "ed652bafcebaa4f76fc3415dc8a4a83fa38e0faa",
+      "sha256": "ae56cdda239c2851225a669676c68830f535e200187b9140993781afd511d5a5",
+      "size": 2876,
+      "repo_path": "bios/Game Engines/TheXTech/introset/10.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/10/background2-51.png",
+      "sha1": "baa1369c415b8cdc8339ba9dfd11e801ec628c55",
+      "sha256": "5f5cf53aa21337e4e522720ea97cdb31d0169fef4ca7b8ed2a32396e0c6089cb",
+      "size": 34294,
+      "repo_path": "bios/Game Engines/TheXTech/introset/10/background2-51.png",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/11.lvlx",
+      "sha1": "0da28edc830ef41f7a412b61aa9d7e161633430e",
+      "sha256": "86faf55890d116809d67cc9bdcd3a709bc7c3dd8f40207ae9573d315c9bb2e0f",
+      "size": 5768,
+      "repo_path": "bios/Game Engines/TheXTech/introset/11.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/12.lvlx",
+      "sha1": "95362142f1f6f31f12e7018b1611e83ccfd33d51",
+      "sha256": "7f467ea06b1667872ebed1522eb6bd82f9d668592ae66988e07bc093859c3a76",
+      "size": 2835,
+      "repo_path": "bios/Game Engines/TheXTech/introset/12.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/13.lvlx",
+      "sha1": "74b80622491bb523539713990e6deae4684190e7",
+      "sha256": "a17abd73b8a7a50f0aaa22b27f4a6caf9015db32f961e347e1e2bb54e11bcebf",
+      "size": 7512,
+      "repo_path": "bios/Game Engines/TheXTech/introset/13.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/14.lvlx",
+      "sha1": "12aba9b1ff85a371f1bf6a77c829c4852a4797f9",
+      "sha256": "a6f7669793b063b8657abc2a8531b8c2b9c33d2c90d3776b72a2aea3c7357094",
+      "size": 6935,
+      "repo_path": "bios/Game Engines/TheXTech/introset/14.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/15.lvlx",
+      "sha1": "9a7443bb6eda0cbe9addcd1c2d4b65ca9f8897a6",
+      "sha256": "d5a4d2e758d7667e55d14df0768bc3e00a2c3fe03d6c3340dee29a605250cced",
+      "size": 7022,
+      "repo_path": "bios/Game Engines/TheXTech/introset/15.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/16.lvlx",
+      "sha1": "4b90fc095397c0ec362af393a9b163e73f944d3f",
+      "sha256": "7ca4339b60eaa27105cd2e5a0c4ebf084257cd3abd88e8066329ae15e37dfae6",
+      "size": 2870,
+      "repo_path": "bios/Game Engines/TheXTech/introset/16.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/17.lvlx",
+      "sha1": "6fb4d958e62ee3bc17011e87664b40860c53c60a",
+      "sha256": "a66329cc8e4d276c379176fa829c65d6343b0a991dd6e5cadef6a28c10c08fcd",
+      "size": 4404,
+      "repo_path": "bios/Game Engines/TheXTech/introset/17.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/18.lvlx",
+      "sha1": "e7726daca9d096f6c3e620811aeff8a743f5dd33",
+      "sha256": "e31b677eadf84e24134f7bb4b2b5d08b36949484e590b943e0abd7541da99417",
+      "size": 8296,
+      "repo_path": "bios/Game Engines/TheXTech/introset/18.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/19.lvlx",
+      "sha1": "30df8a29c8d48acadb05b3bfbaad48da4f62a9b4",
+      "sha256": "e8b76fe7ecd73ec50fb9616844a55408a89c74483cfeeb818127f81c2b9a3b76",
+      "size": 7858,
+      "repo_path": "bios/Game Engines/TheXTech/introset/19.lvlx",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
+      "dest": "TheXTech/introset/compat.ini",
+      "sha1": "c1f423921d63926413cd6ce0a437269c139cf19b",
+      "sha256": "2f1f2105a3e14300b2464b1cebdd30183d35697bc3d69b5a60fa2f29ef55aba8",
+      "size": 41,
+      "repo_path": "bios/Game Engines/TheXTech/introset/compat.ini",
+      "cores": [
+        "thextech"
+      ]
+    },
+    {
       "dest": "TheXTech/outro.lvlx",
       "sha1": "6e1728edd9b634e04ecf72e59428eb783e1e545b",
       "sha256": "6cbd09b874e557a60e994413359d79f104df129849155fc0332897c1f5b68663",
@@ -118069,11 +118617,141 @@
       ]
     },
     {
+      "dest": "games/tr1-ub/levels/egypt.phd",
+      "sha1": "41c6651c5d684dbc0712c43b0dea0b792bfa5662",
+      "sha256": "664fd439f27b70e27f099b6763fe6cf8d61f253460f3ae422fded2945aaa8298",
+      "size": 3278614,
+      "repo_path": "bios/Game Engines/TRX/games/tr1-ub/levels/egypt.phd",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr1-ub/levels/cat.phd",
+      "sha1": "2caf754bfaea22ee013ced346867dbd3caf63610",
+      "sha256": "9148bcf45904de9ed466cb45029cf5247cee5e46928b58fb4585e86c270bf772",
+      "size": 3270370,
+      "repo_path": "bios/Game Engines/TRX/games/tr1-ub/levels/cat.phd",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr1-ub/levels/end.phd",
+      "sha1": "327653c50cf9d1b343982ba57018d7342a882bca",
+      "sha256": "3e6330d1b5a34792cf34571a258a1fa7233784fd8486e57a8815db9c671d8774",
+      "size": 3208018,
+      "repo_path": "bios/Game Engines/TRX/games/tr1-ub/levels/end.phd",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr1-ub/levels/end2.phd",
+      "sha1": "470b4884624e1a4073bf832d12a12d96bb724a59",
+      "sha256": "457f353d0c6faeb8dd92789e59c74be2e2427fe6fc66a833365652fe0e06476d",
+      "size": 3153300,
+      "repo_path": "bios/Game Engines/TRX/games/tr1-ub/levels/end2.phd",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr1-demo-pc/levels/title.phd",
+      "sha1": "27f7a95739e373d06365fb8b60613885c9d36bd8",
+      "sha256": "e1f4a11b7566fc9ba3be5208806915bf5bfc30a890ce0e610b5be697d664580b",
+      "size": 316138,
+      "repo_path": "bios/Game Engines/TRX/games/tr1-demo-pc/levels/title.phd",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr1-demo-pc/levels/level2.phd",
+      "sha1": "f0fc40ca8df563191dda683bae76522f16f0f535",
+      "sha256": "efaae10c309b266b6ad0c27369b9a4e227ae9d62b9aff6d5f8e076a535e83199",
+      "size": 2873406,
+      "repo_path": "bios/Game Engines/TRX/games/tr1-demo-pc/levels/level2.phd",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
       "dest": "games/tr2/music/57.mp3",
       "sha1": "0873bc661731f6daa8c8a76af4259228b1cbf8ef",
       "sha256": "0b2c4d56b47b589f04a43085aadb2aad530a2d346bc366cabc7215e87e0d8cf1",
       "size": 386864,
       "repo_path": "bios/Game Engines/TRX/games/tr2/music/57.mp3",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2-gm/main.sfx",
+      "sha1": "9de9423b6f12875b8d02dd783d5c1547f15e36fc",
+      "sha256": "3d04ebbb5e733cc3462be2232225500931b977cfc61847f14de812d59f81860b",
+      "size": 7609670,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/main.sfx",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2-gm/levels/title.tr2",
+      "sha1": "b7dadcbaf38cefdc89a692e85b290caf6409b163",
+      "sha256": "5d95717b543fa1daf98a4005d577bbc32e059413fd7093e57ad627606b0a4da5",
+      "size": 611892,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/levels/title.tr2",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2-gm/levels/level1.tr2",
+      "sha1": "8d8109c1afbb2b443c1c1f57add4676f17b5dc84",
+      "sha256": "678948e186bd92b13cb0c1c1b53710510ec4b46f3aa8a7b3475469214cf77d70",
+      "size": 4134916,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/levels/level1.tr2",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2-gm/levels/level2.tr2",
+      "sha1": "6c9417d3b03cc2fd9fac62cea0910d9ef107ee1b",
+      "sha256": "9e8d18aa10e04920fbeddfdc857f4525a26001a7f0082266a3bb20666f41696f",
+      "size": 4128016,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/levels/level2.tr2",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2-gm/levels/level3.tr2",
+      "sha1": "e92f045520d6e0aaec2c42dd2c28d34a0677df70",
+      "sha256": "b58fe14d0bdd125c43964e6cc2232c25811fcfc2eded59c3312ee44f6a00e7e7",
+      "size": 4357268,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/levels/level3.tr2",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2-gm/levels/level4.tr2",
+      "sha1": "83ffcd559e656186bc807e1040485f72956dbc00",
+      "sha256": "840f8d482e3bc4f92e0737a44473cde0db5720fd72fe0107bd2848dfcc27d64b",
+      "size": 4165986,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/levels/level4.tr2",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2-gm/levels/level5.tr2",
+      "sha1": "4508d23e8475ef6afd7a1756763dd606f23c15a9",
+      "sha256": "d36da82d368c31c870a34107c0827db30b8853875d613143343ee0e369441f57",
+      "size": 4098568,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/levels/level5.tr2",
       "cores": [
         "tr2x"
       ]
@@ -119850,13 +120528,15 @@
     },
     {
       "dest": "demomain/pak0.pk3",
-      "sha1": "1976ee8b604f928a1ed38f5646d04a62355f3e8e",
-      "sha256": "e77abad2466f45a0a7ea018445528f9b95a0fe7789fa1abc1a7718bbf0754b08",
-      "size": 46853694,
-      "repo_path": "bios/Id Software/Quake III Arena/demoq3/pak0.pk3",
+      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
+      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
+      "size": 122757192,
+      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
       "cores": [
         "iortcw"
-      ]
+      ],
+      "storage": "release",
+      "release_asset": "Id_Software--Return_to_Castle_Wolfenstein--demomain--pak0.pk3"
     },
     {
       "dest": "mainta/pak1.pk3",
@@ -119880,13 +120560,15 @@
     },
     {
       "dest": "mainta/pak3.pk3",
-      "sha1": "1efe8111d7ed8a4fd97a41c652526d735e7ce7c2",
-      "sha256": "ebc3dfb73f6c31182e1aebc9ef080dcaf2128ed6496db78d7a381e6427eb3f1c",
-      "size": 17393201,
-      "repo_path": "bios/Electronic Arts/Medal of Honor Allied Assault/maintt/pak3.pk3",
+      "sha1": "a3d1a7e24a56d958f52557fbcd3b970ecf4b20e0",
+      "sha256": "3bc8bbf8a57cf38ba1f8e1e94ce1c70d8cb22ed93bf8f027e219d3cb88cf012d",
+      "size": 52839464,
+      "repo_path": "bios/Electronic Arts/Medal of Honor Allied Assault/mainta/pak3.pk3",
       "cores": [
         "openmohaa"
-      ]
+      ],
+      "storage": "release",
+      "release_asset": "pak3.pk3"
     },
     {
       "dest": "maintt/pak1.pk3",
@@ -119906,6 +120588,46 @@
       "repo_path": "bios/Id Software/Quake III Arena/baseq3/pak2.pk3",
       "cores": [
         "openmohaa"
+      ]
+    },
+    {
+      "dest": "games/tr1/levels/title.phd",
+      "sha1": "27f7a95739e373d06365fb8b60613885c9d36bd8",
+      "sha256": "e1f4a11b7566fc9ba3be5208806915bf5bfc30a890ce0e610b5be697d664580b",
+      "size": 316138,
+      "repo_path": "bios/Game Engines/TRX/games/tr1-demo-pc/levels/title.phd",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr1/levels/level2.phd",
+      "sha1": "f0fc40ca8df563191dda683bae76522f16f0f535",
+      "sha256": "efaae10c309b266b6ad0c27369b9a4e227ae9d62b9aff6d5f8e076a535e83199",
+      "size": 2873406,
+      "repo_path": "bios/Game Engines/TRX/games/tr1-demo-pc/levels/level2.phd",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr2/main.sfx",
+      "sha1": "9de9423b6f12875b8d02dd783d5c1547f15e36fc",
+      "sha256": "3d04ebbb5e733cc3462be2232225500931b977cfc61847f14de812d59f81860b",
+      "size": 7609670,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/main.sfx",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2/levels/title.tr2",
+      "sha1": "b7dadcbaf38cefdc89a692e85b290caf6409b163",
+      "sha256": "5d95717b543fa1daf98a4005d577bbc32e059413fd7093e57ad627606b0a4da5",
+      "size": 611892,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/levels/title.tr2",
+      "cores": [
+        "tr2x"
       ]
     },
     {
