@@ -67,7 +67,7 @@ files:
 
   - name: "scph1002a.bin"
     description: "SCPH-1002, DTL-H1002 (v2.0 05-10-95 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "54847e693405ffeb0359c6287434cbef"
     region_check: false
@@ -77,7 +77,7 @@ files:
 
   - name: "scph1002b.bin"
     description: "SCPH-1002, DTL-H1102 (v2.1 07-17-95 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "417b34706319da7cf001e76e40136c23"
     region_check: false
@@ -87,7 +87,7 @@ files:
 
   - name: "scph1002c.bin"
     description: "SCPH-1002, DTL-H1202, H3002 (v2.2 12-04-95 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "e2110b8a2b97a8e0b857a45d32f7e187"
     region_check: false
@@ -177,7 +177,7 @@ files:
 
   - name: "scph5502.bin"
     description: "SCPH-5502, 5552 (v3.0 01-06-97 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: true
     md5: "32736f17079d0b2b7024407c39bd3050"
     region_check: false
@@ -217,7 +217,7 @@ files:
 
   - name: "scph7002.bin"
     description: "SCPH-7002, 7502, 9002 (v4.1 12-16-97 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "b9d9a0286c33dc6b7237bb13cd46fdee"
     region_check: false
@@ -257,7 +257,7 @@ files:
 
   - name: "scph102_v44.bin"
     description: "SCPH-102 (v4.4 03-24-00 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "b10f5e0e3d9eb60e5159690680b1e774"
     region_check: true
@@ -267,7 +267,7 @@ files:
 
   - name: "scph102_v45.bin"
     description: "SCPH-102 (v4.5 05-25-00 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "de93caec13d1a141a40a79f5c86168d6"
     region_check: true
@@ -301,7 +301,7 @@ files:
 
   - name: "ps2_scph30003.bin"
     description: "PS2, SCPH-30003 (v5.0 09-02-00 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "71f50ef4f4e17c163c78908e16244f7d"
     region_check: true
@@ -391,7 +391,7 @@ files:
 
   - name: "ps2_dtlh30002.bin"
     description: "PS2, DTL-H30002 (v5.0 09/02/00 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "91c87cb2f2eb6ce529a2360f80ce2457"
     region_check: true
@@ -401,7 +401,7 @@ files:
 
   - name: "ps2_dtlh30102_0902.bin"
     description: "PS2, DTL-H30102 (v5.0 09/02/00 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "3016b3dd42148a67e2c048595ca4d7ce"
     region_check: true
@@ -411,7 +411,7 @@ files:
 
   - name: "ps2_scph30002_0902.bin"
     description: "PS2, SCPH-30002/SCPH-30003/SCPH-30004 (v5.0 09/02/00 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "b7fa11e87d51752a98b38e3e691cbf17"
     region_check: true
@@ -461,7 +461,7 @@ files:
 
   - name: "ps2_dtlh30102_1228.bin"
     description: "PS2, DTL-H30102 (v5.0 12/28/00 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "6f9a6feb749f0533aaae2cc45090b0ed"
     region_check: true
@@ -471,7 +471,7 @@ files:
 
   - name: "ps2_scph30002_1228.bin"
     description: "PS2, SCPH-30002/SCPH-30003/SCPH-30004/SCHP-35002/SCPH-35003/SCPH-35004 (v5.0 12/28/00 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "838544f12de9b0abc90811279ee223c8"
     region_check: true
@@ -531,7 +531,7 @@ files:
 
   - name: "ps2_scph30002r_0704.bin"
     description: "PS2, SCPH-30002R/SCPH-30003R/SCPH-30004R (v5.0 07/04/01 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "491209dd815ceee9de02dbbc408c06d6"
     region_check: true
@@ -551,7 +551,7 @@ files:
 
   - name: "ps2_scph30002r_1004.bin"
     description: "PS2, SCPH-30002R/SCPH-30003R/SCPH-30004R (v5.0 10/04/01 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "8359638e857c8bc18c3c18ac17d9cc3c"
     region_check: true
@@ -581,7 +581,7 @@ files:
 
   - name: "ps2_scph39002.bin"
     description: "PS2, SCPH-39002/SCPH-39003/SCPH-39004 (v5.0 03/19/02 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "0d2228e6fd4fb639c9c39d077a9ec10c"
     region_check: true
@@ -601,7 +601,7 @@ files:
 
   - name: "ps2_scph39008.bin"
     description: "PS2, SCPH-39008 (v5.0 04/26/02 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "5b1f47fbeb277c6be2fccdd6344ff2fd"
     region_check: true
@@ -641,7 +641,7 @@ files:
 
   - name: "ps2_dtlh50002.bin"
     description: "PS2, DTL-H50002 (v5.0 02/27/03 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "666018ffec65c5c7e04796081295c6c7"
     region_check: true
@@ -651,7 +651,7 @@ files:
 
   - name: "ps2_scph50002_0227.bin"
     description: "PS2, SCPH-50002/SCPH-50003/SCPH-50004 (v5.0 02/27/03 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "6e69920fa6eef8522a1d688a11e41bc6"
     region_check: true
@@ -731,7 +731,7 @@ files:
 
   - name: "ps2_scph50002_0623.bin"
     description: "PS2, SCPH-50002/SCPH-50003/SCPH-50004 (v5.0 06/23/03 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "bd6415094e1ce9e05daabe85de807666"
     region_check: true
@@ -761,7 +761,7 @@ files:
 
   - name: "ps2_scph50008.bin"
     description: "PS2, SCPH-50008 (v5.0 06/23/03 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "b53d51edc7fc086685e31b811dc32aad"
     region_check: true
@@ -791,7 +791,7 @@ files:
 
   - name: "ps2_scph50004_0822.bin"
     description: "PS2, SCPH-50004 (v5.0 08/22/03 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "afde410bd026c16be605a1ae4bd651fd"
     region_check: true
@@ -831,7 +831,7 @@ files:
 
   - name: "ps2_scph70002.bin"
     description: "PS2, SCPH-70002/SCPH-70003/SCPH-70004/SCPH-70008 (v5.0 06/14/04 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "dc752f160044f2ed5fc1f4964db2a095"
     region_check: true
@@ -841,7 +841,7 @@ files:
 
   - name: "ps2_scph70002_alt.bin"
     description: "PS2, SCPH-70002 (v5.0 06/14/04 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "7ebb4fc5eab6f79a27d76ac9aad392b2"
     region_check: true
@@ -851,7 +851,7 @@ files:
 
   - name: "ps2_dtlh70002.bin"
     description: "PS2, DTL-H70002 (v5.0 06/14/04 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "63ead1d74893bf7f36880af81f68a82d"
     region_check: true
@@ -921,7 +921,7 @@ files:
 
   - name: "ps2_scph75002.bin"
     description: "PS2, SCPH-75002/SCPH-75003/SCPH-75004/SCPH-75008 (v5.0 06/20/05 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "573f7d4a430c32b3cc0fd0c41e104bbd"
     region_check: true
@@ -961,7 +961,7 @@ files:
 
   - name: "ps2_scph77002.bin"
     description: "PS2, SCPH-77002/SCPH-77003/SCPH-77004/SCPH-77008 (v5.0 02/10/06 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "af60e6d1a939019d55e5b330d24b1c25"
     region_check: true
@@ -1021,7 +1021,7 @@ files:
 
   - name: "ps2_scph79002_90002.bin"
     description: "PS2, SCPH-79002/SCPH-79003/SCPH-79004/SCPH-79008/SCPH-90002/SCPH-90003/SCPH-90004 (v5.0 09/05/06 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "80bbb237a6af9c611df43b16b930b683"
     region_check: true
@@ -1061,7 +1061,7 @@ files:
 
   - name: "ps2_scph90002_0220.bin"
     description: "PS2, SCPH-90002/SCPH-90003/SCPH-90004/SCPH-90008 (v5.0 02/20/08 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "dc69f0643a3030aaa4797501b483d6c4"
     region_check: true
@@ -1081,7 +1081,7 @@ files:
 
   - name: "ps2_kdl22px300.bin"
     description: "PS2, KDL-22PX300 (v5.0 04/15/10 E)"
-    region: [europe]
+    region: [europe, oceania]
     required: false
     md5: "93ea3bcee4252627919175ff1b16a1d9"
     region_check: true
