@@ -584,6 +584,33 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
             self.assertIn(kept, names, "a system with no candidate in the region falls back")
         self.assertEqual(full["total_files"], narrowed["total_files"])
 
+    def test_every_grouping_call_carries_the_target(self):
+        """Integrity grouped every core's extras while the builder grouped the target's.
+
+        Under --target with --region, a fallback the pack kept was withdrawn
+        from the check: 14 Batocera rk3568 files were never verified.
+        """
+        import ast
+
+        scripts = Path(__file__).resolve().parent.parent / "scripts"
+        for path in sorted(scripts.rglob("*.py")):
+            tree = ast.parse(path.read_text(encoding="utf-8"))
+            for func in ast.walk(tree):
+                if not isinstance(func, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    continue
+                params = {a.arg for a in func.args.args + func.args.kwonlyargs}
+                if "target_cores" not in params:
+                    continue
+                for call in ast.walk(func):
+                    if (
+                        isinstance(call, ast.Call)
+                        and getattr(call.func, "id", None) == "platform_region_groups"
+                    ):
+                        with self.subTest(module=path.name, function=func.name):
+                            self.assertIn(
+                                "target_cores", {k.arg for k in call.keywords}
+                            )
+
 
 if __name__ == "__main__":
     unittest.main()
