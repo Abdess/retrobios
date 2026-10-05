@@ -6,8 +6,7 @@ Reproduces the exact verification logic from Azahar/Citra source code:
 - movable.sed: magic check + RSA on embedded LFCS
 - otp.bin: AES-128-CBC decrypt + magic + SHA256 hash
 
-RSA verification is pure Python (no dependencies).
-AES decryption requires 'cryptography' library or falls back to openssl CLI.
+RSA verification and AES decryption are pure Python (no dependencies).
 
 Source refs:
   Azahar src/core/hw/unique_data.cpp
@@ -19,7 +18,6 @@ from __future__ import annotations
 
 import hashlib
 import struct
-import subprocess
 from collections.abc import Callable
 from pathlib import Path
 
@@ -137,54 +135,94 @@ def _rsa_verify_pkcs1v15_sha256(
     return em == expected_em
 
 
-# AES-128-CBC decryption (with fallback)
+# AES-128-CBC decryption, standard library only. The build promises stdlib +
+# pyyaml; a contributor without cryptography, pycryptodome or openssl on PATH
+# got a RuntimeError from verify.py on otp.bin. 256 bytes need no speed.
+
+
+def _xtime(value: int) -> int:
+    value <<= 1
+    return (value ^ 0x11B) & 0xFF if value & 0x100 else value
+
+
+def _gmul(a: int, b: int) -> int:
+    product = 0
+    while b:
+        if b & 1:
+            product ^= a
+        a = _xtime(a)
+        b >>= 1
+    return product
+
+
+def _build_sbox() -> tuple[list[int], list[int]]:
+    sbox = [0] * 256
+    inverse = [0] * 256
+    for value in range(256):
+        # Multiplicative inverse in GF(2^8), then the affine transform.
+        inv = 0 if value == 0 else next(
+            c for c in range(1, 256) if _gmul(value, c) == 1
+        )
+        out = inv
+        for shift in range(1, 5):
+            out ^= ((inv << shift) | (inv >> (8 - shift))) & 0xFF
+        out ^= 0x63
+        sbox[value] = out
+        inverse[out] = value
+    return sbox, inverse
+
+
+_SBOX, _INV_SBOX = _build_sbox()
+
+
+def _expand_key(key: bytes) -> list[list[int]]:
+    """The eleven round keys of AES-128, each sixteen bytes."""
+    words = [list(key[i : i + 4]) for i in range(0, 16, 4)]
+    rcon = 1
+    for i in range(4, 44):
+        word = list(words[i - 1])
+        if i % 4 == 0:
+            word = [_SBOX[b] for b in word[1:] + word[:1]]
+            word[0] ^= rcon
+            rcon = _xtime(rcon)
+        words.append([a ^ b for a, b in zip(words[i - 4], word)])
+    return [sum(words[r * 4 : r * 4 + 4], []) for r in range(11)]
+
+
+def _decrypt_block(block: bytes, round_keys: list[list[int]]) -> bytes:
+    state = [b ^ k for b, k in zip(block, round_keys[10])]
+    for rnd in range(9, -1, -1):
+        # Inverse ShiftRows on a column-major state, then inverse SubBytes.
+        state = [state[(i + 4 * (i % 4) * 3) % 16] for i in range(16)]
+        state = [_INV_SBOX[b] for b in state]
+        state = [b ^ k for b, k in zip(state, round_keys[rnd])]
+        if rnd:
+            mixed = []
+            for c in range(4):
+                a0, a1, a2, a3 = state[c * 4 : c * 4 + 4]
+                mixed += [
+                    _gmul(a0, 14) ^ _gmul(a1, 11) ^ _gmul(a2, 13) ^ _gmul(a3, 9),
+                    _gmul(a0, 9) ^ _gmul(a1, 14) ^ _gmul(a2, 11) ^ _gmul(a3, 13),
+                    _gmul(a0, 13) ^ _gmul(a1, 9) ^ _gmul(a2, 14) ^ _gmul(a3, 11),
+                    _gmul(a0, 11) ^ _gmul(a1, 13) ^ _gmul(a2, 9) ^ _gmul(a3, 14),
+                ]
+            state = mixed
+    return bytes(state)
 
 
 def _aes_128_cbc_decrypt(data: bytes, key: bytes, iv: bytes) -> bytes:
     """Decrypt AES-128-CBC without padding."""
-    # Try cryptography library first
-    try:
-        from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-
-        cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
-        decryptor = cipher.decryptor()
-        return decryptor.update(data) + decryptor.finalize()
-    except ImportError:
-        pass
-
-    # Try pycryptodome
-    try:
-        from Crypto.Cipher import AES  # type: ignore[import-untyped]
-
-        cipher = AES.new(key, AES.MODE_CBC, iv)
-        return cipher.decrypt(data)
-    except ImportError:
-        pass
-
-    # Fallback to openssl CLI
-    try:
-        result = subprocess.run(
-            [
-                "openssl",
-                "enc",
-                "-aes-128-cbc",
-                "-d",
-                "-K",
-                key.hex(),
-                "-iv",
-                iv.hex(),
-                "-nopad",
-            ],
-            input=data,
-            capture_output=True,
-            check=True,
-        )
-        return result.stdout
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        raise RuntimeError(
-            "AES decryption requires 'cryptography' or 'pycryptodome' library, "
-            "or 'openssl' CLI tool"
-        )
+    if len(key) != 16 or len(iv) != 16 or len(data) % 16:
+        raise ValueError("AES-128-CBC needs a 16-byte key and IV and whole blocks")
+    round_keys = _expand_key(key)
+    out = bytearray()
+    previous = iv
+    for offset in range(0, len(data), 16):
+        block = data[offset : offset + 16]
+        plain = _decrypt_block(block, round_keys)
+        out += bytes(a ^ b for a, b in zip(plain, previous))
+        previous = block
+    return bytes(out)
 
 
 # File verification functions
