@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import sys
 
-from common import _norm_system_id, resolve_platform_cores
+from common import _norm_system_id, resolve_platform_cores, runs_standalone
 from validation import filter_files_by_mode
 
 
@@ -20,28 +20,6 @@ def _serialize_source_ref(sr: object) -> str:
         parts = [f"{k}: {v}" for k, v in sr.items()]
         return "; ".join(parts)
     return str(sr)
-
-
-def _determine_core_mode(
-    emu_name: str,
-    profile: dict,
-    cores_config: str | list | None,
-    standalone_set: set[str] | None,
-) -> str:
-    """Determine effective mode (libretro/standalone) for a resolved core."""
-    if cores_config == "all_libretro":
-        return "libretro"
-    if standalone_set is not None:
-        profile_names = {emu_name} | {str(c) for c in profile.get("cores", [])}
-        if profile_names & standalone_set:
-            return "standalone"
-        return "libretro"
-    ptype = profile.get("type", "libretro")
-    if "standalone" in ptype and "libretro" in ptype:
-        return "both"
-    if "standalone" in ptype:
-        return "standalone"
-    return "libretro"
 
 
 def _enrich_hashes(entry: dict, db: dict) -> None:
@@ -288,13 +266,10 @@ def generate_platform_truth(
     Returns a dict with platform metadata, systems, and per-file details
     including which cores reference each file.
     """
-    cores_config = config.get("cores")
-
-    # Resolve standalone set for mode determination
-    standalone_set: set[str] | None = None
-    standalone_cores = config.get("standalone_cores")
-    if isinstance(standalone_cores, list):
-        standalone_set = {str(c) for c in standalone_cores}
+    # The layout rule verify and the pack builder apply: truth guessed its
+    # own from the profile type where the platform names no standalone
+    # emulator, and kept files the pack never carries.
+    standalone_set = {str(c) for c in config.get("standalone_cores") or []}
 
     resolved = resolve_platform_cores(config, profiles, target_cores)
 
@@ -347,14 +322,10 @@ def generate_platform_truth(
             continue
         cores_profiled.add(emu_name)
 
-        mode = _determine_core_mode(emu_name, profile, cores_config, standalone_set)
-        raw_files = profile.get("files", [])
-        if mode == "both":
-            filtered = raw_files
-        else:
-            filtered = filter_files_by_mode(
-                raw_files, standalone=(mode == "standalone")
-            )
+        filtered = filter_files_by_mode(
+            profile.get("files", []),
+            standalone=runs_standalone(emu_name, profile, standalone_set),
+        )
 
         for fe in filtered:
             profile_sid = fe.get("system", "")
