@@ -43,6 +43,7 @@ files:
   # Enumerated by data/trx/ship/games/tr1/gameflow.json5 "levels" array.
   - name: "title.phd"
     path: "games/tr1/levels/title.phd"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
     required: true
     category: game_data
     source_ref: "data/trx/ship/games/tr1/gameflow.json5:38"
@@ -62,6 +63,7 @@ files:
 
   - name: "level2.phd"
     path: "games/tr1/levels/level2.phd"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
     required: true
     category: game_data
     source_ref: "data/trx/ship/games/tr1/gameflow.json5:116"
@@ -631,46 +633,52 @@ files:
   # Known game tr1-ub, extends tr1 (src/trx/game/shell/mod.c:30-31).
   # Enumerated by data/trx/ship/games/tr1-ub/gameflow.json5 "levels" array.
   # Its title, FMVs and music fall back to games/tr1.
+  # The project's installer downloads the levels from its own host as
+  # tr1-ub-vanilla.zip (original edition) or tr1-ub-music.zip (fan-patched
+  # edition) and copies data/*.phd to games/tr1-ub/levels/; tools/download_assets
+  # fetches tr1-ub.zip, which carries the expansion's images only.
   - name: "egypt.phd"
     path: "games/tr1-ub/levels/egypt.phd"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:63"
-    note: "Return to Egypt"
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:63, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:18-22"
+    note: "Return to Egypt. The installer offers the original edition and a fan-patched edition of the level set."
 
   - name: "cat.phd"
     path: "games/tr1-ub/levels/cat.phd"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:87"
-    note: "Temple of the Cat"
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:87, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:18-22"
+    note: "Temple of the Cat. The installer offers the original edition and a fan-patched edition of the level set."
 
   - name: "end.phd"
     path: "games/tr1-ub/levels/end.phd"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:110"
-    note: "Atlantean Stronghold"
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:110, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:18-22"
+    note: "Atlantean Stronghold. The installer offers the original edition and a fan-patched edition of the level set."
 
   - name: "end2.phd"
     path: "games/tr1-ub/levels/end2.phd"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:132"
-    note: "The Hive"
+    source_ref: "data/trx/ship/games/tr1-ub/gameflow.json5:132, tools/installer/TRX_Installer/InstallComponentFactory.cs:72-81, tools/installer/TRX_Installer/InstallMappings.cs:18-22"
+    note: "The Hive. The installer offers the original edition and a fan-patched edition of the level set."
 
   # PC demo
   # Known game tr1-demo-pc, extends tr1 (src/trx/game/shell/mod.c:32-33).
+  # tools/download_assets and the installer fetch tr1-demo-pc.zip from the
+  # project's host; it holds games/tr1-demo-pc/levels/{title,level2}.phd.
   - name: "title.phd"
     path: "games/tr1-demo-pc/levels/title.phd"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1-demo-pc/gameflow.json5:38, src/trx/game/game_flow/reader.c:903-909, src/trx/game/paths.c:123-132"
+    source_ref: "data/trx/ship/games/tr1-demo-pc/gameflow.json5:38, src/trx/game/game_flow/reader.c:903-909, src/trx/game/paths.c:123-132, tools/download_assets:67, tools/installer/TRX_Installer/InstallComponentFactory.cs:83-87"
     note: "Title level of the PC demo. A title level is also looked up in the levels directory of the game it extends, so games/tr1/levels/title.phd is used when this one is absent."
 
   - name: "level2.phd"
     path: "games/tr1-demo-pc/levels/level2.phd"
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr1-demo-pc/gameflow.json5:56, src/trx/game/level/format/format_tr1.c:74-99, 186-191"
+    source_ref: "data/trx/ship/games/tr1-demo-pc/gameflow.json5:56, src/trx/game/level/format/format_tr1.c:74-99, 186-191, tools/download_assets:67, tools/installer/TRX_Installer/InstallComponentFactory.cs:83-87"
     note: "City of Vilcabamba in the PC demo layout, which stores the palette before the cameras. The demo game does not load without it."

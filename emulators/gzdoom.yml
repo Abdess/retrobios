@@ -343,7 +343,8 @@ files:
     category: game_data
     system: doom
     required: false
-    source_ref: "wadsrc_extra/static/iwadinfo.txt:71, 699"
+    source_ref: "wadsrc_extra/static/iwadinfo.txt:65-75, 699, src/d_iwad.cpp:351-394, src/common/filesystem/source/resourcefile.cpp:156-174"
+    note: "Identified by the MAP01 map and the HACX-E lump, whatever the container: every candidate is opened by its magic, so a zip under this name is read as a pk3. The Hacx 2.0 repository builds that zip from src/, where hacx-e.txt is the HACX-E lump and maps/MAP01.wad the first map."
 
   - name: "action2.wad"
     category: game_data

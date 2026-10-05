@@ -46,6 +46,7 @@ files:
   # Soundbank
   - name: "main.sfx"
     path: "games/tr2/main.sfx"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
     required: true
     category: game_data
     source_ref: "data/trx/ship/games/tr2/gameflow.json5:33"
@@ -55,6 +56,7 @@ files:
   # Enumerated by data/trx/ship/games/tr2/gameflow.json5 "levels" array.
   - name: "title.tr2"
     path: "games/tr2/levels/title.tr2"
+    unsourceable: "retail data the collection does not hold; a same-named file of another game must not stand in"
     required: true
     category: game_data
     source_ref: "data/trx/ship/games/tr2/gameflow.json5:15"
@@ -649,12 +651,16 @@ files:
   # Known game tr2-gm, extends tr2 (src/trx/game/shell/mod.c:37-38).
   # Enumerated by data/trx/ship/games/tr2-gm/gameflow.json5 "levels" array.
   # Its FMVs and music fall back to games/tr2.
+  # tools/download_assets and the installer fetch tr2-gm.zip from the
+  # project's host; it holds games/tr2-gm/main.sfx and games/tr2-gm/levels/*.tr2.
+  # Installing from a retail directory maps data/main_gm.sfx to
+  # games/tr2-gm/main_gm.sfx and data/*.tr2 to games/tr2-gm/levels/.
   - name: "main.sfx"
     path: "games/tr2-gm/main.sfx"
     aliases: ["main_gm.sfx"]
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:34, src/trx/game/game_flow/reader.c:198-219, src/trx/game/paths.c:203-212"
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:34, src/trx/game/game_flow/reader.c:198-219, src/trx/game/paths.c:203-212, tools/download_assets:71, tools/installer/TRX_Installer/InstallMappings.cs:35-40"
     note: "Sample bank of the expansion. main_gm.sfx is tried first, each name in the expansion directory then in games/tr2."
 
   - name: "title.tr2"
@@ -662,7 +668,7 @@ files:
     aliases: ["title_gm.tr2"]
     required: false
     category: game_data
-    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:16, src/trx/game/game_flow/reader.c:198-219, 903-909, src/trx/game/paths.c:123-132"
+    source_ref: "data/trx/ship/games/tr2-gm/gameflow.json5:16, src/trx/game/game_flow/reader.c:198-219, 903-909, src/trx/game/paths.c:123-132, tools/download_assets:71, tools/installer/TRX_Installer/InstallMappings.cs:35-40"
     note: "Title level of the expansion. title_gm.tr2 is tried first, each name in the expansion levels directory then in games/tr2/levels."
 
   - name: "level1.tr2"
