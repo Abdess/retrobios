@@ -5,7 +5,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-10-04T20:41:16Z",
+  "generated": "2026-10-05T20:14:26Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -16,9 +16,9 @@
   ],
   "standalone_copies": [],
   "total_files": 958,
-  "total_size": 1580741043,
+  "total_size": 1580732707,
   "pack_files": 960,
-  "pack_size": 1580741043,
+  "pack_size": 1580732707,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -3324,10 +3324,10 @@
     },
     {
       "dest": "colecovision/fbneo/hiscore.dat",
-      "sha1": "7381472bf046126257e51a0124e4553282f020e5",
-      "sha256": "9d44fc928c0df41debad1b86739bd6ca96a5891b3b499f6fb3d7e9ea95ca8de5",
-      "size": 322458,
-      "repo_path": "bios/Arcade/Arcade/hiscore.dat",
+      "sha1": "ae3329abbcb7b445d979321a1f67733aa3f023d0",
+      "sha256": "d9c51a13ec2c6db6c9ba0f955c8a8fd8fe54fc2ec05cd82226f4ddf53d500182",
+      "size": 314122,
+      "repo_path": "bios/Arcade/FBNeo/hiscore.dat",
       "cores": [
         "fbneo"
       ]

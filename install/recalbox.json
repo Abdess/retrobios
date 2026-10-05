@@ -5,7 +5,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-10-05T00:24:12Z",
+  "generated": "2026-10-05T20:14:26Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,10 +237,10 @@
       }
     }
   ],
-  "total_files": 3234,
-  "total_size": 4176395667,
-  "pack_files": 3236,
-  "pack_size": 4176395667,
+  "total_files": 3235,
+  "total_size": 4205399725,
+  "pack_files": 3237,
+  "pack_size": 4205399725,
   "total_omitted": 4,
   "omitted_files": [
     {
@@ -21409,10 +21409,10 @@
     },
     {
       "dest": "fbneo/hiscore.dat",
-      "sha1": "7381472bf046126257e51a0124e4553282f020e5",
-      "sha256": "9d44fc928c0df41debad1b86739bd6ca96a5891b3b499f6fb3d7e9ea95ca8de5",
-      "size": 322458,
-      "repo_path": "bios/Arcade/Arcade/hiscore.dat",
+      "sha1": "ae3329abbcb7b445d979321a1f67733aa3f023d0",
+      "sha256": "d9c51a13ec2c6db6c9ba0f955c8a8fd8fe54fc2ec05cd82226f4ddf53d500182",
+      "size": 314122,
+      "repo_path": "bios/Arcade/FBNeo/hiscore.dat",
       "cores": [
         "fbneo"
       ]
@@ -22075,40 +22075,40 @@
     },
     {
       "dest": "f355dlx.zip",
-      "sha1": "48d1712d1b1cdfeeeb43c6287c17b0b6309cfaab",
-      "sha256": "58e88cedb31918e2b9deeaddb80df45b8484cc1c4f10792520360a2585ad5014",
-      "size": 2328436,
-      "repo_path": "bios/Arcade/Arcade/f355dlx.zip",
+      "sha1": "7740229e15dd80b20a8d263a67cd37c310602ee4",
+      "sha256": "92d8634d8c61a1b50aa0b517638d8829bb70e7fe051423695722e77869d6780c",
+      "size": 2331068,
+      "repo_path": "bios/Arcade/MAME/f355dlx.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "f355bios.zip",
-      "sha1": "b6ff66dcb5547bd91760d239ddf428a655631c53",
-      "sha256": "8335208b035253d5c671ecaaa113369409ffd70e86d1c87ab1e21bdf352fff6c",
-      "size": 1394278,
-      "repo_path": "bios/Arcade/Arcade/f355bios.zip",
+      "sha1": "37487f9f73734e8dd621004a5ef98c5a2301bd1d",
+      "sha256": "47ebe6dad9d8398c7eacb69c652d8f5c449c6f7ce420579c3a287c1b73e0250b",
+      "size": 1396910,
+      "repo_path": "bios/Arcade/MAME/f355bios.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "lindbios.zip",
-      "sha1": "65a2f2cee74c316d5f40b68deda66787609df353",
-      "sha256": "9d057f11a2c4cfa7c637016fbca20c125c86a137ab4ca1957079f5cf0e73000c",
-      "size": 1462941,
-      "repo_path": "bios/Arcade/Arcade/lindbios.zip",
+      "sha1": "cd2601242084856146bae2bea3084930b423e744",
+      "sha256": "0fadf3027e8b690de567140c3ed72885da25c18471345e9adc18d3aa879a6859",
+      "size": 1462963,
+      "repo_path": "bios/Arcade/MAME/lindbios.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "segasp.zip",
-      "sha1": "de78a0b8df78d5ffdb1a274f80d877a96ef204aa",
-      "sha256": "3bca348667d6ff08fd5efe38eec35100ccbe0de3cd1e0b5dd72ae5c6cc201ee9",
-      "size": 1281424,
-      "repo_path": "bios/Arcade/Arcade/segasp.zip",
+      "sha1": "b4c7e46fb510096acf8fb19fb99c8c5a8ab1d9e1",
+      "sha256": "bda96939992d42410034caf3f5296d8fc63eced1693b5b522536c6ac717ded73",
+      "size": 4266446,
+      "repo_path": "bios/Arcade/MAME/segasp.zip",
       "cores": [
         "mame"
       ]
@@ -22125,10 +22125,10 @@
     },
     {
       "dest": "chihiro.zip",
-      "sha1": "4fe94baf28d658dd2651de4055a0ac33aa42aa0e",
-      "sha256": "760e30588b1d0fc7a3ede0097a0a5ca423c26b9e6a11c40d9e7f285489b57e4f",
-      "size": 2104141,
-      "repo_path": "bios/Arcade/Arcade/chihiro.zip",
+      "sha1": "459832de5d758b76ac85a6c07b693496cd5ad7f2",
+      "sha256": "48a268250decb2ff9e5388def44f66f2a260da002162677cc96d55892fafa6ad",
+      "size": 2194504,
+      "repo_path": "bios/Arcade/MAME/chihiro.zip",
       "cores": [
         "mame"
       ]
@@ -22145,30 +22145,30 @@
     },
     {
       "dest": "shtzone.zip",
-      "sha1": "2adbde3ef74c431fbd700cffd4cd1d41251a8833",
-      "sha256": "123e8fa1550b12d7c1d07dfe5936d7bed3bb345abd3d1d5e02ad851df8167cd3",
-      "size": 3332,
-      "repo_path": "bios/Arcade/Arcade/shtzone.zip",
+      "sha1": "d08a271feaab04ac904e6357c23bca95c1cf57f1",
+      "sha256": "a62534c0fafce53482946d7d1b72ca844979c4e77a892264e3038a5ad87ba658",
+      "size": 3354,
+      "repo_path": "bios/Arcade/MAME/shtzone.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "sammymdl.zip",
-      "sha1": "2c178083ac2906cecb7e331d7111f7766a353052",
-      "sha256": "b624c087452f580d19629105c55fd322ca2474f3153c8e5d366a8cedc0eecf66",
-      "size": 24090,
-      "repo_path": "bios/Arcade/Arcade/sammymdl.zip",
+      "sha1": "a2d1cfe34d5e62b7c8d6490383fb079ffe7f4a4a",
+      "sha256": "9767a4757761956c220df202e6cce2821aeb57b1daef544ee233ae7fd5fa5bad",
+      "size": 24112,
+      "repo_path": "bios/Arcade/MAME/sammymdl.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "isgsm.zip",
-      "sha1": "f590ccf688b4c05fa1da5c5dd92c224545170c3b",
-      "sha256": "c481bfde0ae68e5fbe70a406af1698fcba5b76d7e23c860c2715cacf019efad4",
-      "size": 10207,
-      "repo_path": "bios/Arcade/Arcade/isgsm.zip",
+      "sha1": "6a19d46d3915f2bff823ac34327bb0976fb2fed7",
+      "sha256": "2a7a1a7ee15b322356bcdfd46dd3592bcf6a9bf6cb04f4cd2cf27ea54dbb6665",
+      "size": 10185,
+      "repo_path": "bios/Arcade/MAME/isgsm.zip",
       "cores": [
         "mame"
       ]
@@ -22185,20 +22185,20 @@
     },
     {
       "dest": "sfcbox.zip",
-      "sha1": "14311945b06a5d013d1df5ce961ab47fbd46fb2a",
-      "sha256": "75e95fb7431568fe4e71c0d71bbf41ebce3091a2d25ecc8da53f7eb115c4eba8",
-      "size": 194344,
-      "repo_path": "bios/Arcade/Arcade/sfcbox.zip",
+      "sha1": "21194d81d1a27dbf688ea43cf79d312e4fe2d0ee",
+      "sha256": "bb09a26b65fcc2d3217f9b0c8b7552de4df44f2f792d97ca7845114e464c8f50",
+      "size": 242698,
+      "repo_path": "bios/Arcade/MAME/sfcbox.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "aleck64.zip",
-      "sha1": "beaf97c4a0e0792b8db65648f9dabb6a54ae0549",
-      "sha256": "53e9cb3814cfa086a4cb152d250a740d2a438aaadbeec248a86a1698e69dc24a",
-      "size": 1804,
-      "repo_path": "bios/Arcade/Arcade/aleck64.zip",
+      "sha1": "6f2f76832d6dc2c18997421ba26d22d623715c77",
+      "sha256": "9785ce8820981de663ad9114c11ed0b70f548c80c4eb699b56745ddc3d106673",
+      "size": 1826,
+      "repo_path": "bios/Arcade/MAME/aleck64.zip",
       "cores": [
         "mame"
       ]
@@ -22215,20 +22215,20 @@
     },
     {
       "dest": "sys246.zip",
-      "sha1": "fbba87e9d6852862252d31dd919f943c8edd7eb7",
-      "sha256": "f3bb5f2101534172ec49f6e7b6eb66bb2a2116c953d64517fc098a51f042002a",
-      "size": 580122,
-      "repo_path": "bios/Arcade/Arcade/sys246.zip",
+      "sha1": "b7452e0120830f0770c097d6a4ef94d61659e3e9",
+      "sha256": "923f6dffdd94b496d47c4b065884eef820e66c7d9ad7ebc759bffcef1e571c1e",
+      "size": 580144,
+      "repo_path": "bios/Arcade/MAME/sys246.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "sys256.zip",
-      "sha1": "721621a353051fea6de484c26b534cdec4de616e",
-      "sha256": "5fc6a17d793b5b647c7590f650ee3f21c5210cca7e05e51734a3c3d20182698d",
-      "size": 582110,
-      "repo_path": "bios/Arcade/Arcade/sys256.zip",
+      "sha1": "481e24901892848d005e5d9466d57ab3432b9b29",
+      "sha256": "dca31e0839b94f0bf9d83ced74e4eb5612a5aed12df82d036f5a8c2acdaf3a5b",
+      "size": 582132,
+      "repo_path": "bios/Arcade/MAME/sys256.zip",
       "cores": [
         "mame"
       ]
@@ -22245,20 +22245,20 @@
     },
     {
       "dest": "kviper.zip",
-      "sha1": "78c8e1c3c033b65758b7e53a9346b44d037fea7f",
-      "sha256": "d746ea1605f08994141e38277277953e55e202964b56cf6db4c277242c39f045",
-      "size": 33864,
-      "repo_path": "bios/Arcade/Arcade/kviper.zip",
+      "sha1": "413371bb5f59976608debf83e69a1d0cb2b606b7",
+      "sha256": "323f86555c5bd538825c5c9945bc7fb467eac0f3954dce55f6f6b8e8965cc877",
+      "size": 33886,
+      "repo_path": "bios/Arcade/MAME/kviper.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "gq863.zip",
-      "sha1": "975fbbbec0b578a495a8da9e1a5965d94d6d52e1",
-      "sha256": "ba9aa024a73f9b45000d179e03b8b135f8a90371ba3bbe3722e3b4ae1f1b8045",
-      "size": 74462,
-      "repo_path": "bios/Arcade/Arcade/gq863.zip",
+      "sha1": "f216c17e3191b1c8acb36568b0a2f983b5b7fea1",
+      "sha256": "9a65179ed2bd33dafb47e4699b0ddecf7aa48dc2229746e989c227e750780628",
+      "size": 74484,
+      "repo_path": "bios/Arcade/MAME/gq863.zip",
       "cores": [
         "mame"
       ]
@@ -22305,100 +22305,100 @@
     },
     {
       "dest": "coh1000c.zip",
-      "sha1": "9e156eee236b0077a50a2cda1ff0b874390ed8db",
-      "sha256": "8411e2b6e41326d2f4b6687b445155681a82246ad2746568e5026fcd7cf58466",
-      "size": 278470,
-      "repo_path": "bios/Arcade/Arcade/coh1000c.zip",
+      "sha1": "67520b1be708b785efa26aa2bbc6b2180e0d191e",
+      "sha256": "df486f9b603b068b531c00ccb7bfed329943e3c15a4e6fedde14ec9dc6c07801",
+      "size": 278492,
+      "repo_path": "bios/Arcade/MAME/coh1000c.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "coh3002c.zip",
-      "sha1": "94d49033e2c45a2591331826559bc93b2bb0884f",
-      "sha256": "a85cdfb3d5c2d0ba2ee537776ba94ef9d69dc3a2f9d7217d6404fbb00563f666",
-      "size": 137941,
-      "repo_path": "bios/Arcade/Arcade/coh3002c.zip",
+      "sha1": "9d9a06c4a9617396679111182fb85f1b116c4430",
+      "sha256": "b54984e34f316e4e41de775f991e48beff9289bd30493345767465cfe7ff2a56",
+      "size": 137963,
+      "repo_path": "bios/Arcade/MAME/coh3002c.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "coh1000t.zip",
-      "sha1": "c6d884d7b7ea46338efd116d6ddfa1392c624649",
-      "sha256": "d415464f70fdf2474fda692345729d77d2d35fe682cb8fbfc5999eb8c2765bee",
-      "size": 126274,
-      "repo_path": "bios/Arcade/Arcade/coh1000t.zip",
+      "sha1": "87d1a6aa8733e4fd54e820348a060f98ba2fffc5",
+      "sha256": "576762d85d5335a4966d9cbb53210c226c2f67d77aa25c3ec9c51862b2007492",
+      "size": 126296,
+      "repo_path": "bios/Arcade/MAME/coh1000t.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "coh1000a.zip",
-      "sha1": "c91f79c7ac73519c8b99c184b2fcbffae42fa324",
-      "sha256": "7f4a45107f6eb3fcfe7078f9f2b2e5bbce1d3eff0b0e1fba84da068a69bdac8f",
-      "size": 126259,
-      "repo_path": "bios/Arcade/Arcade/coh1000a.zip",
+      "sha1": "f8526dcec63402d2533d8180e217fa03a6322c34",
+      "sha256": "64bec99b727a1c0b2970b9e9d61378cbe6834262e9857b06ea3c364676c29468",
+      "size": 126281,
+      "repo_path": "bios/Arcade/MAME/coh1000a.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "coh1000w.zip",
-      "sha1": "13bf28e3528c385b642046c2e0f96f44b33df0f2",
-      "sha256": "5fae53908dcf09d5de4d0d5d6efd8f7315ea6f52cc224caba4cf888448202b73",
-      "size": 126147,
-      "repo_path": "bios/Arcade/Arcade/coh1000w.zip",
+      "sha1": "bce86d35e38951c05e9299aa77d71b0557661eae",
+      "sha256": "cbda93a154963f5f4c2d7b7fb3588011af300873400f0c46db80332fc8965a8e",
+      "size": 126169,
+      "repo_path": "bios/Arcade/MAME/coh1000w.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "coh1001l.zip",
-      "sha1": "ab30bd19261c208e2c44c35de6f68cd415fb80e9",
-      "sha256": "2d49c0d3039fcd1b5ead9a166b4bc07d5b9ad17287547fc1aa4492d6d7cada2d",
-      "size": 126185,
-      "repo_path": "bios/Arcade/Arcade/coh1001l.zip",
+      "sha1": "12983dbd03cd4787f850a2c39cabd4cfedfdc362",
+      "sha256": "18ac64ca030d50a5edc1801181d2f55cf1d24b0861ab4136dee904a4f1876ce8",
+      "size": 126207,
+      "repo_path": "bios/Arcade/MAME/coh1001l.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "coh1002v.zip",
-      "sha1": "5162fcac2fa5a92480a081b3397099ce4a3703c5",
-      "sha256": "9e4fb8208d357e7d0269628be6d2916d7031d248904ed9b6fb34a814432ae5f8",
-      "size": 126314,
-      "repo_path": "bios/Arcade/Arcade/coh1002v.zip",
+      "sha1": "470da2042487c17fce84d8d10fc5af46b4594c9c",
+      "sha256": "c3c79b83ddcfbc3e98e87f4bc0f23876b51548181633bc4cd15bafa06bfa67ea",
+      "size": 126336,
+      "repo_path": "bios/Arcade/MAME/coh1002v.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "coh1002e.zip",
-      "sha1": "1f15b3acc75031633387b372ea71e537f4f96220",
-      "sha256": "31d0823e4ac37f1e7c8a5d9e98e556b74001c8c34e92fcd6315af3b0852f1ff9",
-      "size": 128626,
-      "repo_path": "bios/Arcade/Arcade/coh1002e.zip",
+      "sha1": "670bd7592f4eef153223e7906ead8b2d97901291",
+      "sha256": "36b81a13e73bb4d1e60fc9477321df5a32df7f13b806da9960bdeedd58909adf",
+      "size": 128648,
+      "repo_path": "bios/Arcade/MAME/coh1002e.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "coh1002m.zip",
-      "sha1": "197337577f55ab4c237c3d545d63082e73748c47",
-      "sha256": "ac3c371340786919a9a420a7d0e6355709c3c5af62383e5c9ba3f90231af4723",
-      "size": 138588,
-      "repo_path": "bios/Arcade/Arcade/coh1002m.zip",
+      "sha1": "88d002262d7c26983416d5bc90f039f93615f947",
+      "sha256": "36c35f78a6a8978a2e734374445d145981205a1939b9cbb4a7aa1aefa1b4aaf8",
+      "size": 138610,
+      "repo_path": "bios/Arcade/MAME/coh1002m.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "coh3002t.zip",
-      "sha1": "2c4f6d8d134a2e096e676821fad0a66ac32e6e5c",
-      "sha256": "18514d40206bf2f221a704b8853941111aae7e69e87a393ca6500de65716e523",
-      "size": 504337,
-      "repo_path": "bios/Arcade/Arcade/coh3002t.zip",
+      "sha1": "119fbb7632b13834f36e7da45a22b662f52ffe1a",
+      "sha256": "fa789b062b2bf065c2fa981f66820aef147bbf66702604e0c151597d4c551ebe",
+      "size": 504359,
+      "repo_path": "bios/Arcade/MAME/coh3002t.zip",
       "cores": [
         "mame"
       ]
@@ -22415,10 +22415,10 @@
     },
     {
       "dest": "taitotz.zip",
-      "sha1": "d7ccc6ea8b21f5178389543f5e14c06e4e6f3b57",
-      "sha256": "80593cf39c7716fb07d8bf7341cad517f7e2ec76168ad4c6c9cc2750ebe3f9f6",
-      "size": 77002,
-      "repo_path": "bios/Arcade/Arcade/taitotz.zip",
+      "sha1": "03e5703453dbca0c5ea4689b31524fea19eff34a",
+      "sha256": "b008b4879c128bb4c7afe7eaf7dc51fff30d8309f51653118c5a7e2b795efb7a",
+      "size": 77024,
+      "repo_path": "bios/Arcade/MAME/taitotz.zip",
       "cores": [
         "mame"
       ]
@@ -22455,50 +22455,50 @@
     },
     {
       "dest": "alg_bios.zip",
-      "sha1": "901e1927ebe87946e3e4bb6d0a825088a8a60490",
-      "sha256": "c0c48b9718bffac3ce64dc5e393306c4571d6a148c34249f70ffe9282996b804",
-      "size": 143125,
-      "repo_path": "bios/Arcade/Arcade/alg_bios.zip",
+      "sha1": "1344452b4b29aacc9fdffc83f5cd14c028e32cc7",
+      "sha256": "adc925cdd66a25b4168d7a6569bc7feed97f7a6ecc79df0a246f3fc34f072de0",
+      "size": 143147,
+      "repo_path": "bios/Arcade/MAME/alg_bios.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "atarisy1.zip",
-      "sha1": "4fb1f00681d2540b476add2def2bbf07ca3e3993",
-      "sha256": "1cf61e6b54589ed9bf2b5f319c2b56de205384d6726b7a0fae79213071f3cfb5",
-      "size": 49385,
-      "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
+      "sha1": "0c9bc4b948bd1816ebe13e2acb97931cbcc6ea15",
+      "sha256": "ae8c41b3d0107c6f0634730267af569a51e49f5df1bdb2c1e6c591bb6251b7d3",
+      "size": 57375,
+      "repo_path": "bios/Arcade/MAME/atarisy1.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "galgbios.zip",
-      "sha1": "9ec50f79c5fd6eaddd88542aa18b6c5bb81a9ed4",
-      "sha256": "0132a956caa5705177688d2ee454aaf919b9cc3ed1ee6c4ae331f006292b59f0",
-      "size": 1345333,
-      "repo_path": "bios/Arcade/Arcade/galgbios.zip",
+      "sha1": "f138c8df3637b804a0e5f2007af583b01c338554",
+      "sha256": "d87cc31aebc4694e9d776734572dbe8b45071a4888d913cb4baac4fc51175a1f",
+      "size": 1345355,
+      "repo_path": "bios/Arcade/MAME/galgbios.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "aristmk5.zip",
-      "sha1": "81011bee956427e015cbb91e5d93364b6dc300dc",
-      "sha256": "fff946335cfc26315d4fa9460977bb9c0bb70ce18964f5a4ea7d1ccf18e7d04e",
-      "size": 261435,
-      "repo_path": "bios/Arcade/Arcade/aristmk5.zip",
+      "sha1": "c128717ef439e5260485111c97439a0bef682264",
+      "sha256": "daf2092d3b70607912d988fac9dcab420cf0f604c5913c89552c661483aedbdb",
+      "size": 566233,
+      "repo_path": "bios/Arcade/MAME/aristmk5.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "aristmk6.zip",
-      "sha1": "e5a16ec95d54dd3ced17edccfdda049ac2f8f86f",
-      "sha256": "413ed514a52797abfeed7b9d93900bc2c49c8ea24ded12ac0cc4368bf053f56f",
-      "size": 22239668,
-      "repo_path": "bios/Arcade/Arcade/aristmk6.zip",
+      "sha1": "c5c72aec2f70003d99da9c33858036543ec53dff",
+      "sha256": "cc1a10b1b611b6b22093bd2c38cba8b05af279cb18b1517ae7b45c31b02658c2",
+      "size": 41477458,
+      "repo_path": "bios/Arcade/MAME/aristmk6.zip",
       "cores": [
         "mame"
       ]
@@ -22515,30 +22515,30 @@
     },
     {
       "dest": "allied.zip",
-      "sha1": "f44836072ec6ad9e5a7b46105985548181faab5b",
-      "sha256": "eb522861656943cf9fe9121bb80cd00c911aa20d4608f54d0ecbb8a58ce2009b",
-      "size": 2926,
-      "repo_path": "bios/Arcade/Arcade/allied.zip",
+      "sha1": "cbb8ee9e3988683e42a54508d85d883f36c4fb51",
+      "sha256": "f21fa6a0d943f188cf76475c4a38d87000fb6766d2118fb291aeb576cf6d8c61",
+      "size": 2948,
+      "repo_path": "bios/Arcade/MAME/allied.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "gp_110.zip",
-      "sha1": "6fdec00172233095cebb085b26214648d1093ecb",
-      "sha256": "6368d9a6d566b25ae135c6da9e106821397974300fecee9a4d89c41641895c51",
-      "size": 3140,
-      "repo_path": "bios/Arcade/Arcade/gp_110.zip",
+      "sha1": "bc58cfdbafb52d4b8d77ed0448425b2037ec7d79",
+      "sha256": "1a2b7f0b779404d63346df1a909432ce17fb1d0063af105dc602f02e0ec50129",
+      "size": 3162,
+      "repo_path": "bios/Arcade/MAME/gp_110.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "gts1.zip",
-      "sha1": "346cbf24af08f5bfd96e6a77abf27595477aace8",
-      "sha256": "2c8d682fecf646a5526aa788a6bd5fffb12e005572eb6eab8155a035df2af079",
-      "size": 3734,
-      "repo_path": "bios/Arcade/Arcade/gts1.zip",
+      "sha1": "d0a347bbf8d3d6996a025054fe84f16719cc871f",
+      "sha256": "2054f0619231def0b5dca29e0e2662bb63e7365f66d6dd0b143bc6fa153ffa4a",
+      "size": 3756,
+      "repo_path": "bios/Arcade/MAME/gts1.zip",
       "cores": [
         "mame"
       ]
@@ -22585,40 +22585,40 @@
     },
     {
       "dest": "iteagle.zip",
-      "sha1": "7b5be2c65e378f736ee4689303349d80dc425f5f",
-      "sha256": "a12f79362c78b69d0c789ff7ae9075d1b92c826e4bbda4a5573505a3ba54b624",
-      "size": 3602204,
-      "repo_path": "bios/Arcade/Arcade/iteagle.zip",
+      "sha1": "3b95307e772c0db158c3ad3b6425b85364cee75a",
+      "sha256": "96f057d36a28132e6ef66b2685a4d69ab1b04152e3c6dae8ccaa84e9b4e732e3",
+      "size": 3602226,
+      "repo_path": "bios/Arcade/MAME/iteagle.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "su2000.zip",
-      "sha1": "2e50b96a1d37e9407209e291d5f549233287ac77",
-      "sha256": "ff7e0e14c59317c8e67795b790fa73dc951664d778b6f09041f3942a6c86e469",
-      "size": 90729,
-      "repo_path": "bios/Arcade/Arcade/su2000.zip",
+      "sha1": "86f5074cf3c6353156ea3f1bb49bf840410cf0ea",
+      "sha256": "6818ead4f9d0b28134c0b71f5697446bf55efe70b3e6c1ef138b6365a3230f30",
+      "size": 90751,
+      "repo_path": "bios/Arcade/MAME/su2000.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "tourvis.zip",
-      "sha1": "a1352d895578181532d13e81ac7a8fecad564d1a",
-      "sha256": "7915bbe4e23fdaa5116622ff3c269def5368bb0008369f52d5cc966ab80789d2",
-      "size": 29492,
-      "repo_path": "bios/Arcade/Arcade/tourvis.zip",
+      "sha1": "1382217486f524266a1f598d40e6e808209be5a8",
+      "sha256": "b6cbcc04b5ff078c4ca22e4bcc1a012f1ff4a482c96d06964078b33580e9524a",
+      "size": 69276,
+      "repo_path": "bios/Arcade/MAME/tourvis.zip",
       "cores": [
         "mame"
       ]
     },
     {
       "dest": "v4bios.zip",
-      "sha1": "5024b3bfd04ccd2061eb60d2eca254e8faf44f5c",
-      "sha256": "29e05af157d01d146c7ec501e99b7931d78920beccf9b66c9b310c860941e37f",
-      "size": 3753,
-      "repo_path": "bios/Arcade/Arcade/v4bios.zip",
+      "sha1": "9964f68aadd3eef4daa4c0d946422821b4352208",
+      "sha256": "cf23bfd8a445d0888afbc198ca5edce049a70ce9f5f02a1561ee4bc29efdd1d9",
+      "size": 3775,
+      "repo_path": "bios/Arcade/MAME/v4bios.zip",
       "cores": [
         "mame"
       ]
@@ -22635,10 +22635,10 @@
     },
     {
       "dest": "pumpitup.zip",
-      "sha1": "6c9139fe4e094088029e545ab62520052971906a",
-      "sha256": "9f86200a6e51e12bbb4526f1bd8c05fcd22112a21c04566582f732da8f750835",
-      "size": 1838700,
-      "repo_path": "bios/Arcade/Arcade/pumpitup.zip",
+      "sha1": "a32161e3b5904f3eb87a156d35fbd941c8f913d0",
+      "sha256": "4a9187a43ff9ccae171ecfed8284af57328d7ac645516bdb763b227b54b6ddc1",
+      "size": 7985810,
+      "repo_path": "bios/Arcade/MAME/pumpitup.zip",
       "cores": [
         "mame"
       ]
@@ -22795,10 +22795,10 @@
     },
     {
       "dest": "adam_spi.zip",
-      "sha1": "e7328f43ceea8c9c0a6dc814680da9ff46e93fd3",
-      "sha256": "3ece02358b7292d5525d5b648412e7028cfa7cf670c6351c955bfc19351ce58c",
-      "size": 446843,
-      "repo_path": "bios/Arcade/Arcade/adam_spi.zip",
+      "sha1": "f534c2cfc9729f06b13f87ce62fbd8f63731e160",
+      "sha256": "a52e597afbb2dd19fd31a9bc51199d8811f4369ab8ab9a30cfb5c9a9c24309c2",
+      "size": 576494,
+      "repo_path": "bios/Arcade/MAME/adam_spi.zip",
       "cores": [
         "mame"
       ]
@@ -23235,10 +23235,10 @@
     },
     {
       "dest": "qsound.zip",
-      "sha1": "f1ccedb2c6e8f15cfebab52c3923e4b35f4df43f",
-      "sha256": "de8cfe2c1a0207b02a937a1cde4c56040e6d5aa7d0f52c26652a35d9f07dd9b6",
-      "size": 2654,
-      "repo_path": "bios/Arcade/Arcade/qsound.zip",
+      "sha1": "b875be47c087d7a0d484d29232a23fd0bae736e6",
+      "sha256": "55feb9b70dacb7364f0310ed16cc9281b5b0a31318b9e2e0587ae06d15f95356",
+      "size": 2676,
+      "repo_path": "bios/Arcade/MAME/qsound.zip",
       "cores": [
         "mame"
       ]
@@ -23255,10 +23255,10 @@
     },
     {
       "dest": "ym2608.zip",
-      "sha1": "06fc753d015b43ca1787f4cfd9331b1674202e64",
-      "sha256": "187ede0f57d1439092a7ac50ea923533871ab7ee65e29baabc4dcdfa7ad4823f",
-      "size": 7609,
-      "repo_path": "bios/Arcade/Arcade/ym2608.zip",
+      "sha1": "1214e3207e4dc85cc1597c53abd70802049dda2c",
+      "sha256": "817aabbfe1ed8734a6cbb88d72178a80b6074dea155cfe1c95f2e4eb8990d1be",
+      "size": 7587,
+      "repo_path": "bios/Arcade/MAME/ym2608.zip",
       "cores": [
         "mame"
       ]
@@ -31913,6 +31913,16 @@
       "sha256": "e017efa804f1f7d4d3da82b67d7370c5be062b4860f1cff4f898f93437d691a0",
       "size": 1024,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.nvm",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "message.wav",
+      "sha1": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
+      "sha256": "dfd8035387a463722ad07af3c91934e0a685f2afa57e31d305f0602656d1edb1",
+      "size": 15696,
+      "repo_path": "bios/Sony/PlayStation 2/resources/sounds/achievements/message.wav",
       "cores": [
         "pcsx2"
       ]

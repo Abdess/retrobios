@@ -5,7 +5,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-10-05T00:24:12Z",
+  "generated": "2026-10-05T20:14:26Z",
   "base_destination": "",
   "detect": [
     {
@@ -238,9 +238,9 @@
     }
   ],
   "total_files": 7599,
-  "total_size": 8230876176,
+  "total_size": 8230747966,
   "pack_files": 7601,
-  "pack_size": 8230876176,
+  "pack_size": 8230747966,
   "total_omitted": 16,
   "omitted_files": [
     {
@@ -30615,10 +30615,10 @@
     },
     {
       "dest": "bios/fbneo/hiscore.dat",
-      "sha1": "7381472bf046126257e51a0124e4553282f020e5",
-      "sha256": "9d44fc928c0df41debad1b86739bd6ca96a5891b3b499f6fb3d7e9ea95ca8de5",
-      "size": 322458,
-      "repo_path": "bios/Arcade/Arcade/hiscore.dat",
+      "sha1": "ae3329abbcb7b445d979321a1f67733aa3f023d0",
+      "sha256": "d9c51a13ec2c6db6c9ba0f955c8a8fd8fe54fc2ec05cd82226f4ddf53d500182",
+      "size": 314122,
+      "repo_path": "bios/Arcade/FBNeo/hiscore.dat",
       "cores": [
         "fbneo"
       ]
@@ -66589,10 +66589,10 @@
     },
     {
       "dest": "bios/SyobonAction/SE/coin.ogg",
-      "sha1": "01025d41311afe30f9c4167338353686b64220c4",
-      "sha256": "517d0a6c5c4ed49c9010b9be8124c6a897e3b593ce250e8abb0d7964d3803f53",
-      "size": 15230,
-      "repo_path": "bios/Game Engines/TheXTech/sound/coin.ogg",
+      "sha1": "ee1e75ffd2b7010f23bbcf28fe4fd00132deb184",
+      "sha256": "3fe2273852a81c9ab3ebd804f8bffd4d8b966eef3dccc8972088105bb2f5b7f8",
+      "size": 6658,
+      "repo_path": "bios/Other/syobonaction/coin.ogg",
       "cores": [
         "syobonaction"
       ]
@@ -66719,10 +66719,10 @@
     },
     {
       "dest": "bios/SyobonAction/SE/allclear.ogg",
-      "sha1": "76a0e44033f99fa404688a5dba5b679daa22d22b",
-      "sha256": "90df72ba24b72b56ed4bbc6f73d076792111dbbc60e6081b8697839afc5c21e5",
-      "size": 140597,
-      "repo_path": "bios/Game Engines/Hydra Castle Labyrinth/hcl/data/midi/allclear.ogg",
+      "sha1": "a96f0daf7da14225eb615f4561bc1d6d4a168601",
+      "sha256": "93f02ae92ff2d0e6773f12d3cc4f2ec74f230c69aeedc660b3e821a008187ba9",
+      "size": 29295,
+      "repo_path": "bios/Other/syobonaction/allclear.ogg",
       "cores": [
         "syobonaction"
       ]
@@ -71854,6 +71854,16 @@
       ]
     },
     {
+      "dest": "bios/message.wav",
+      "sha1": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
+      "sha256": "dfd8035387a463722ad07af3c91934e0a685f2afa57e31d305f0602656d1edb1",
+      "size": 15696,
+      "repo_path": "bios/Sony/PlayStation 2/resources/sounds/achievements/message.wav",
+      "cores": [
+        "armsx2"
+      ]
+    },
+    {
       "dest": "bios/rom1.bin",
       "sha1": "47d2ec4b342649e4c391043ab915d4435f9d180d",
       "sha256": "41de2047af8382988bfd568035ff26eec5f1cabc3efe773680546aa00a82857d",
@@ -72241,16 +72251,6 @@
       "sha256": "549ec23dea1cc5e036013ced7099c038c880fcdc2aac8e36c53a9a61fe7d58c6",
       "size": 736,
       "repo_path": "bios/Other/armsx2/imgui.fx",
-      "cores": [
-        "yaps2"
-      ]
-    },
-    {
-      "dest": "bios/message.wav",
-      "sha1": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
-      "sha256": "dfd8035387a463722ad07af3c91934e0a685f2afa57e31d305f0602656d1edb1",
-      "size": 15696,
-      "repo_path": "bios/Other/armsx2/message.wav",
       "cores": [
         "yaps2"
       ]
