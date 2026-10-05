@@ -468,5 +468,33 @@ class TestProvenancePage(unittest.TestCase):
         self.assertIn("**0** of 2 system files", page)
 
 
+class ArchiveMembersAreHeld(unittest.TestCase):
+    """A dump held as a romset member is not an acquisition target."""
+
+    def test_member_of_a_zip_counts_as_held(self):
+        import hashlib
+        import zlib
+
+        from scripts.provenance_report import archive_members
+
+        data = b"bally" * 400
+        with tempfile.TemporaryDirectory() as tmp:
+            archive = Path(tmp) / "astrocdw.zip"
+            with zipfile.ZipFile(archive, "w") as zf:
+                zf.writestr("bioswhit.bin", data)
+            db = {"files": {"z": {"path": str(archive), "md5": "x", "size": 1}}}
+            entry = {
+                "name": "Bally Astrocade (USA).bin",
+                "dat": "Bally - Astrocade",
+                "crc32": f"{zlib.crc32(data):08x}",
+                "size": len(data),
+                "sha1": hashlib.sha1(data).hexdigest(),
+            }
+            wrong = dict(entry, name="other.bin", sha1="0" * 40)
+            snapshots = {"no-intro": {"entries": [entry, wrong]}}
+            report = build_report(db, snapshots, archive_members(db))
+        self.assertEqual(report["no-intro"]["matched"], 1)
+        self.assertEqual([e["name"] for e in report["no-intro"]["missing"]], ["other.bin"])
+
 if __name__ == "__main__":
     unittest.main()

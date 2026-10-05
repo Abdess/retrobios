@@ -15,15 +15,65 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
+import zipfile
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import DEFAULT_PROVENANCE_DIR, load_database, load_provenance_snapshots
 
 
-def build_report(db: dict, snapshots: dict) -> dict:
+def archive_members(db: dict) -> dict[tuple[str, int], list[tuple[str, str]]]:
+    """(crc32, size) of every member of the collection's ZIPs -> (zip, member).
+
+    Read from the central directories alone: a romset member is a dump the
+    collection already holds, and listing it as an acquisition target sent
+    searches after astrocdw.zip's bioswhit.bin and the Gamate BIOS.
+    """
+    members: dict[tuple[str, int], list[tuple[str, str]]] = {}
+    for entry in db.get("files", {}).values():
+        path = entry.get("path", "")
+        if not path.endswith(".zip") or not os.path.exists(path):
+            continue
+        try:
+            with zipfile.ZipFile(path) as archive:
+                for info in archive.infolist():
+                    if info.is_dir():
+                        continue
+                    key = (f"{info.CRC:08x}", info.file_size)
+                    members.setdefault(key, []).append((path, info.filename))
+        except (zipfile.BadZipFile, OSError) as exc:
+            print(f"  WARNING: {path}: {exc}", file=sys.stderr)
+    return members
+
+
+def _held_in_archive(entry: dict, members: dict) -> bool:
+    """Whether a catalog entry is a member of one of the collection's ZIPs.
+
+    crc32 and size only nominate candidates; a declared sha1 must match the
+    member's bytes.
+    """
+    crc = str(entry.get("crc32") or "").lower()
+    size = entry.get("size")
+    if not crc or size is None:
+        return False
+    candidates = members.get((crc.zfill(8), int(size)), [])
+    sha1 = str(entry.get("sha1") or "").lower()
+    if not sha1:
+        return bool(candidates)
+    for path, name in candidates:
+        try:
+            with zipfile.ZipFile(path) as archive:
+                if hashlib.sha1(archive.read(name)).hexdigest() == sha1:
+                    return True
+        except (zipfile.BadZipFile, OSError, KeyError) as exc:
+            print(f"  WARNING: {path}:{name}: {exc}", file=sys.stderr)
+    return False
+
+
+def build_report(db: dict, snapshots: dict, members: dict | None = None) -> dict:
     """Compare each snapshot against the collection.
 
     A DAT counts as covered when the collection holds at least one of
@@ -34,6 +84,7 @@ def build_report(db: dict, snapshots: dict) -> dict:
     split the target list is swamped by content the project never ships.
     """
     by_sha1 = db.get("files", {})
+    members = members or {}
     by_md5_size = {
         (entry.get("md5", ""), entry.get("size", 0)) for entry in by_sha1.values()
     }
@@ -44,10 +95,11 @@ def build_report(db: dict, snapshots: dict) -> dict:
         covered_dats = set()
         unmatched = []
         for entry in snapshot["entries"]:
-            if entry.get("sha1") in by_sha1 or (
-                entry.get("md5"),
-                entry.get("size"),
-            ) in by_md5_size:
+            if (
+                entry.get("sha1") in by_sha1
+                or (entry.get("md5"), entry.get("size")) in by_md5_size
+                or _held_in_archive(entry, members)
+            ):
                 matched += 1
                 covered_dats.add(entry.get("dat", ""))
             else:
@@ -84,7 +136,7 @@ def main() -> int:
         print(f"No provenance snapshots in {args.provenance_dir}/")
         return 0
 
-    report = build_report(db, snapshots)
+    report = build_report(db, snapshots, archive_members(db))
 
     if args.json:
         print(json.dumps(report, indent=2))
