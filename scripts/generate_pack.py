@@ -1437,7 +1437,7 @@ def generate_emulator_pack(
 
                 dest_hint = fe.get("path", "")
                 local_path, status = resolve_file(
-                    fe,
+                    {**fe, "source_profile": emu_name},
                     db,
                     bios_dir,
                     zip_contents,

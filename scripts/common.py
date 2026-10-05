@@ -468,6 +468,36 @@ def _resolve_agnostic(file_entry: dict, files_db: dict, has_strong_hash: bool):
     return None
 
 
+def _affinity_tokens(text: str) -> set[str]:
+    return {
+        token
+        for token in (re.sub(r"[^0-9a-z]", "", part.casefold()) for part in text.split("/"))
+        if token
+    }
+
+
+def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str]:
+    """Same-named candidates, the ones stored with the file's owner first.
+
+    A name step without a tie-break took whichever path sorted first: the
+    TheXTech coin.ogg for Syobon Action, a Hurrican sound for ARMSX2. The
+    destination's directories and the profile that asks name where its own
+    copy lives; the order is otherwise kept.
+    """
+    hint = dest_hint or file_entry.get("path") or file_entry.get("destination") or ""
+    wanted = _affinity_tokens(hint.rsplit("/", 1)[0] if "/" in hint else "")
+    for owner in (file_entry.get("source_profile"), file_entry.get("source_emulator")):
+        if owner:
+            wanted |= _affinity_tokens(str(owner).replace(" ", ""))
+    if not wanted or len(paths) < 2:
+        return paths
+
+    def score(path: str) -> int:
+        return len(wanted & _affinity_tokens(path.rsplit("/", 1)[0]))
+
+    return sorted(paths, key=score, reverse=True)
+
+
 def resolve_local_file(
     file_entry: dict,
     db: dict,
@@ -737,6 +767,7 @@ def resolve_local_file(
         if candidates:
             if zipped_file:
                 candidates = [p for p in candidates if ".zip" in os.path.basename(p)]
+            candidates = _by_affinity(candidates, file_entry, dest_hint)
             primary = [p for p in candidates if "/.variants/" not in p]
             if primary or candidates:
                 return (primary[0] if primary else candidates[0]), "name_exact"
@@ -795,8 +826,9 @@ def resolve_local_file(
                 return (primary[0] if primary else valid[0][0]), "hash_mismatch"
             # No candidate contains the zipped_file -fall through to step 5
         elif not unsourceable:
-            primary = [c[0] for c in candidates if "/.variants/" not in c[0]]
-            return (primary[0] if primary else candidates[0][0]), "hash_mismatch"
+            ordered = _by_affinity([c[0] for c in candidates], file_entry, dest_hint)
+            primary = [c for c in ordered if "/.variants/" not in c]
+            return (primary[0] if primary else ordered[0]), "hash_mismatch"
 
     # 5. zipped_file content match via pre-built index (last resort:
     # matches inner ROM MD5 across ALL ZIPs in the repo, so only use
