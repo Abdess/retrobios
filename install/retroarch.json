@@ -5,7 +5,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-10-05T20:47:58Z",
+  "generated": "2026-10-05T22:37:20Z",
   "base_destination": "system",
   "detect": [
     {
@@ -256,9 +256,9 @@
     }
   ],
   "total_files": 5849,
-  "total_size": 6395772026,
+  "total_size": 6395485306,
   "pack_files": 8492,
-  "pack_size": 6436305190,
+  "pack_size": 6436018470,
   "total_omitted": 14,
   "omitted_files": [
     {
@@ -1620,6 +1620,38 @@
       "cores": null
     },
     {
+      "dest": "quasi88/n88_0.rom",
+      "sha1": "d1ae642aed4f0584eeb81ff50180db694e5101d4",
+      "sha256": "8b584cd9143a670ddfce657ca65067c86f6be1db757a3085f48b1479ac6e8cf3",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/n88_0.rom",
+      "cores": null
+    },
+    {
+      "dest": "quasi88/n88_1.rom",
+      "sha1": "4ae4d37409ff99411a623da9f6a44192170a854e",
+      "sha256": "810936574cdf68849822a1570046091f0bad0590dee3635dbc89a4cc4e099555",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/n88_1.rom",
+      "cores": null
+    },
+    {
+      "dest": "quasi88/n88_2.rom",
+      "sha1": "e94278682ef9e9bbb82201f72c50382748dcea2a",
+      "sha256": "7d361b1bfd8523cd580bd9ca73902154556fbf45f60f0f539beef397d9462646",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/n88_2.rom",
+      "cores": null
+    },
+    {
+      "dest": "quasi88/n88_3.rom",
+      "sha1": "af452aed79b072c4d17985830b7c5dca64d4b412",
+      "sha256": "3dc431af6e0c724582a3aa49e5c22cb9cc99d8298a4cce500e62bbaf1bc4bffb",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/n88_3.rom",
+      "cores": null
+    },
+    {
       "dest": "quasi88/n88jisho.rom",
       "sha1": "deef0cc2a9734ba891a6d6c022aa70ffc66f783e",
       "sha256": "25773eaee3af617db08d26602d8f4cdc7d42ed946ca510d3b1d96fe1645af63c",
@@ -1705,38 +1737,6 @@
       "sha256": "8580fecc6574b40a082aaf227afc3c1dbd06f333ba7549278ff73647b02b2303",
       "size": 8192,
       "repo_path": "bios/NEC/PC-98/N88EXT3.ROM",
-      "cores": null
-    },
-    {
-      "dest": "quasi88/n88_0.rom",
-      "sha1": "d1ae642aed4f0584eeb81ff50180db694e5101d4",
-      "sha256": "8b584cd9143a670ddfce657ca65067c86f6be1db757a3085f48b1479ac6e8cf3",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_0.rom",
-      "cores": null
-    },
-    {
-      "dest": "quasi88/n88_1.rom",
-      "sha1": "4ae4d37409ff99411a623da9f6a44192170a854e",
-      "sha256": "810936574cdf68849822a1570046091f0bad0590dee3635dbc89a4cc4e099555",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_1.rom",
-      "cores": null
-    },
-    {
-      "dest": "quasi88/n88_2.rom",
-      "sha1": "e94278682ef9e9bbb82201f72c50382748dcea2a",
-      "sha256": "7d361b1bfd8523cd580bd9ca73902154556fbf45f60f0f539beef397d9462646",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_2.rom",
-      "cores": null
-    },
-    {
-      "dest": "quasi88/n88_3.rom",
-      "sha1": "af452aed79b072c4d17985830b7c5dca64d4b412",
-      "sha256": "3dc431af6e0c724582a3aa49e5c22cb9cc99d8298a4cce500e62bbaf1bc4bffb",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_3.rom",
       "cores": null
     },
     {
@@ -1924,22 +1924,6 @@
       "cores": null
     },
     {
-      "dest": "dsi_bios7.bin",
-      "sha1": "c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53",
-      "sha256": "12a03016ba07cfd874fc002df49a2c6eb2414eb7cfa395c2043035ec5e9193e8",
-      "size": 65536,
-      "repo_path": "bios/Nintendo/DS/NDS_Bios7i.bin",
-      "cores": null
-    },
-    {
-      "dest": "dsi_bios9.bin",
-      "sha1": "719b9eef33692406d7170ff526069615759c4dfc",
-      "sha256": "6e9f70b51dc4f26289b597f14e2513620c2af964374a95f4c5a62b5cad199afc",
-      "size": 65536,
-      "repo_path": "bios/Nintendo/DS/NDS_Bios9i.bin",
-      "cores": null
-    },
-    {
       "dest": "64DD_IPL.bin",
       "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
       "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
@@ -2012,6 +1996,22 @@
       "cores": null,
       "storage": "release",
       "release_asset": "dsi_nand.bin"
+    },
+    {
+      "dest": "dsi_bios7.bin",
+      "sha1": "c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53",
+      "sha256": "12a03016ba07cfd874fc002df49a2c6eb2414eb7cfa395c2043035ec5e9193e8",
+      "size": 65536,
+      "repo_path": "bios/Nintendo/DS/NDS_Bios7i.bin",
+      "cores": null
+    },
+    {
+      "dest": "dsi_bios9.bin",
+      "sha1": "719b9eef33692406d7170ff526069615759c4dfc",
+      "sha256": "6e9f70b51dc4f26289b597f14e2513620c2af964374a95f4c5a62b5cad199afc",
+      "size": 65536,
+      "repo_path": "bios/Nintendo/DS/NDS_Bios9i.bin",
+      "cores": null
     },
     {
       "dest": "disksys.rom",
@@ -53347,10 +53347,10 @@
     },
     {
       "dest": "quasi88/font.rom",
-      "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
-      "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
-      "size": 288768,
-      "repo_path": "bios/NEC/PC-98/font.rom",
+      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
+      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/font.rom",
       "cores": [
         "quasi88"
       ]
