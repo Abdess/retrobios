@@ -459,6 +459,34 @@ def _prose_external(line: str, path_start: int, known=frozenset()) -> bool:
     return not lead or lead[-1] in ",:("
 
 
+def resolve_project_word(path: str, trees) -> str | None:
+    """Path of `project file` inside a declared tree, None when out of reach.
+
+    m64plus-fz cites `rice Config.cpp` and `mupen64plus-core
+    device/pif/bootrom_hle.c`: plugins vendored in the declared repository
+    under mupen64plus-video-rice/ and mupen64plus-core/. A citation is in
+    reach when exactly one file ends with the path below a directory naming
+    the project; the first tree that answers decides.
+    """
+    word, _, rest = path.partition(" ")
+    rest = rest.strip().lstrip("/")
+    if not rest:
+        return None
+    word = word.lower()
+    suffix = "/" + rest
+    for tree in trees:
+        matches = [
+            p for p in tree or []
+            if p.endswith(suffix)
+            and any(word in seg.lower() for seg in p[: -len(suffix)].split("/"))
+        ]
+        if len(matches) == 1:
+            return matches[0]
+        if matches:
+            return None
+    return None
+
+
 def _prose_runs(text: str, known=frozenset()):
     """Citation runs inside one prose scalar.
 
@@ -491,8 +519,14 @@ def _prose_runs(text: str, known=frozenset()):
                 path_start -= 1
                 path = "." + path
             if _prose_external(line, path_start, known):
-                consumed = match.end()
-                continue
+                # Kept with its project word, the source_ref convention: the
+                # report looks for the project inside the declared trees
+                # (mupen64plus-ae vendors `rice Config.cpp`) and calls the
+                # citation EXTERNAL only when none carries it.
+                before = line[:path_start].rstrip()
+                word = before[max(before.rfind(" "), before.rfind("\t"),
+                                  before.rfind("(")) + 1:]
+                path = f"{word} {path}"
             path_span = (path_start, match.end("path"))
             spans = [(match.start("range"), match.end("range"))]
             end = match.end()
@@ -1511,6 +1545,27 @@ def build_report(
                 candidates = near
         return None, candidates
 
+    def _tree_order():
+        for view in views:
+            yield _pin_tree_for(view)
+        for view in views:
+            yield _context_for(view)[1]
+
+    resolved_words: dict[str, str | None] = {}
+    for index, (display, ref, tokens, hashes, parts, citation) in enumerate(refs):
+        rewritten = []
+        for part in parts:
+            if is_external_citation(part.path):
+                if part.path not in resolved_words:
+                    resolved_words[part.path] = resolve_project_word(
+                        part.path, _tree_order()
+                    )
+                found = resolved_words[part.path]
+                if found:
+                    part = RefPart(found, part.start, part.end, part.raw)
+            rewritten.append(part)
+        refs[index] = (display, ref, tokens, hashes, rewritten, citation)
+
     lines_cache: dict[tuple[str, str, int | None], list[str] | None] = {}
 
     def fetch(which: str, path: str, start: int | None = None, tokens=(), forced=None):
@@ -2045,11 +2100,18 @@ def _prose_moves(
     return moves
 
 
-def _run_after_moves(parts, moves: dict[int, tuple[int, int, str | None]]) -> str:
-    """The prose run as it reads once its moved ranges are rewritten."""
+def _run_after_moves(
+    parts, moves: dict[int, tuple[int, int, str | None]], run: str = ""
+) -> str:
+    """The prose run as it reads once its moved ranges are rewritten.
+
+    The path is the one written in the run: a part can carry a project word
+    or the tree path the report resolved it to, neither of which the
+    sentence spells.
+    """
     new_path = next(
         (move[2] for move in moves.values() if move[2]), None
-    )
+    ) or (run.split(":", 1)[0] if run else None)
     ranges = []
     for index, part in enumerate(parts):
         if index in moves:
@@ -2126,7 +2188,7 @@ def _apply_prose_edits(
             low = pattern.search(lines[run_hits[0]]).start()
             file_edits.setdefault(run_hits[0], []).append(
                 (low, low + len(citation.ref),
-                 _run_after_moves(citation.parts, moves))
+                 _run_after_moves(citation.parts, moves, citation.ref))
             )
         slot = (id(citation.holder), citation.key)
         holders[slot] = (citation.holder, citation.key)
@@ -2135,7 +2197,7 @@ def _apply_prose_edits(
         )
         applied.append(
             f"{citation.field}: {citation.ref} -> "
-            f"{_run_after_moves(citation.parts, moves)}"
+            f"{_run_after_moves(citation.parts, moves, citation.ref)}"
         )
 
     for number, replacements in file_edits.items():
@@ -2334,7 +2396,9 @@ def pending_recale(
             ):
                 pending += 1
             continue
-        rendered = _run_after_moves([p.part for p in entry.parts], moves)
+        rendered = _run_after_moves(
+            [p.part for p in entry.parts], moves, entry.source_ref
+        )
         if _citation_key(rendered) == _citation_key(entry.source_ref):
             continue
         slot = (entry.field, _citation_key(rendered))
@@ -2413,25 +2477,30 @@ def _scalar_values(document: dict) -> dict[str, str]:
     }
 
 
-def _writing_pin(
+def _writing_pins(
     revisions: list[tuple[str, dict]], intro_sha: str, field: str
-) -> str | None:
-    """Pin recorded at the introducing commit, or first recorded after it.
+) -> list[str]:
+    """Distinct pins committed while the scalar held its current text.
 
-    The backfill resolved missing pins from profiled_date, the writing time
-    of the profile, so the first value ever recorded stands for the scalars
-    that predate it.
+    The pin at the introducing commit stands for the scalars that predate
+    it (the backfill resolved missing pins from profiled_date). A pin that
+    moved later under the same text is either a bump that left the prose
+    behind or a correction putting the pin on the revision the text already
+    described: vitaquake2 was written under 34f0888, then re-pinned to
+    59a5115 by a commit that touched nothing else. The history cannot tell
+    the two apart, so every pin the text lived under is returned.
     """
     index = next(
         (i for i, (sha, _) in enumerate(revisions) if sha == intro_sha), None
     )
     if index is None:
-        return None
+        return []
+    pins: list[str] = []
     for position in range(index, -1, -1):
         value = revisions[position][1].get(field)
-        if isinstance(value, str) and value:
-            return value
-    return None
+        if isinstance(value, str) and value and value not in pins:
+            pins.append(value)
+    return pins
 
 
 def _resolve_at(
@@ -2473,6 +2542,8 @@ def _realign_part(
     part: RefPart, pairs, cache_dir: str, offline: bool
 ) -> tuple[str, object] | None:
     """One range, anchored from its writing revision to the current pin."""
+    if is_external_citation(part.path):
+        return None
     unclear = None
     for repo, written, current in pairs:
         state, payload = _resolve_at(repo, written, part.path, cache_dir, offline)
@@ -2509,7 +2580,8 @@ def realign_prose(
     anchoring it from the current pin would faithfully track the wrong
     content: the cited line holds someone else's code there. The writing pin
     is read from the profile's own history, at the commit that introduced
-    the scalar's current text.
+    the scalar's current text, and only when no other pin was committed
+    under that text since.
     """
     text = path.read_text(encoding="utf-8")
     document = yaml.safe_load(text)
@@ -2558,13 +2630,25 @@ def realign_prose(
             # The scalar is not committed yet: written now, under this pin.
             continue
         pairs = []
+        ambiguous: list[str] = []
         for pin_field, repo in repos:
             current = document.get(f"{pin_field}_commit")
             if not isinstance(current, str) or not current:
                 continue
-            written = _writing_pin(revisions, intro_sha, f"{pin_field}_commit")
-            if written and written != current:
-                pairs.append((repo, written, current))
+            written = _writing_pins(revisions, intro_sha, f"{pin_field}_commit")
+            if len(written) > 1:
+                ambiguous.append(f"{pin_field}_commit {' -> '.join(written)}")
+            elif written and written[0] != current:
+                pairs.append((repo, written[0], current))
+        if ambiguous:
+            # Moving from the wrong one rewrites a correct citation onto
+            # someone else's code, with nothing to show it happened.
+            messages.extend(
+                f"read again: {citation.field}: {citation.ref} (pin moved under "
+                f"this text: {item}; the history does not say which it describes)"
+                for item in ambiguous
+            )
+            continue
         if not pairs:
             continue
         moves: dict[int, tuple[int, int, str | None]] = {}
@@ -2593,7 +2677,7 @@ def realign_prose(
     if dry_run:
         messages.extend(
             f"would recale {citation.field}: {citation.ref} -> "
-            f"{_run_after_moves(citation.parts, moves)}"
+            f"{_run_after_moves(citation.parts, moves, citation.ref)}"
             for citation, moves in jobs
         )
         return messages
