@@ -1532,8 +1532,8 @@ def expand_platform_declared_names(config: dict, db: dict) -> set[str]:
             md5 = fe.get("md5", "")
             if not md5:
                 continue
-            # Skip multi-hash and zippedFile entries (inner ROM MD5, not file MD5)
-            if "," in md5 or fe.get("zippedFile"):
+            # Skip multi-hash and zipped_file entries (inner ROM MD5, not file MD5)
+            if "," in md5 or fe.get("zipped_file"):
                 continue
             sha1 = by_md5.get(md5.lower())
             if not sha1:
