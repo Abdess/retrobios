@@ -63,5 +63,30 @@ class AliasesNeedAnUnambiguousName(unittest.TestCase):
         self.assertEqual([a["name"] for a in aliases.get("a", [])], ["n88sub.rom"])
 
 
+class NoNetworkInTheBuild(unittest.TestCase):
+    def test_generate_db_reads_no_remote_source(self):
+        """core-info was fetched on every run, offline ones included."""
+        source = (REPO_ROOT / "scripts" / "generate_db.py").read_text(encoding="utf-8")
+        self.assertNotIn("coreinfo_scraper", source)
+        self.assertNotIn("urllib.request", source)
+
+    def test_hash_proven_entry_registers_its_own_name(self):
+        import generate_db
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            previous = os.getcwd()
+            os.chdir(tmp)
+            try:
+                Path("emulators").mkdir()
+                Path("emulators/g.yml").write_text(
+                    'files:\n  - name: "writer.rom"\n    sha1: "s1"\n'
+                )
+                aliases = generate_db._collect_all_aliases(
+                    {"s1": {"name": "WRITER.ROM", "path": "bios/WRITER.ROM", "md5": "m"}}
+                )
+            finally:
+                os.chdir(previous)
+        self.assertEqual([a["name"] for a in aliases.get("s1", [])], ["writer.rom"])
+
 if __name__ == "__main__":
     unittest.main()

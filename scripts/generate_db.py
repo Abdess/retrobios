@@ -461,21 +461,10 @@ def _collect_all_aliases(files: dict) -> dict:
         except ImportError:
             pass
 
-    try:
-        sys.path.insert(0, "scripts")
-        from scraper.coreinfo_scraper import Scraper as CoreInfoScraper
-
-        ci_reqs = CoreInfoScraper().fetch_requirements()
-        for r in ci_reqs:
-            basename = r.name
-            # Try to match by MD5 or by known canonical names
-            matched = None
-            if r.md5 and r.md5 in md5_to_sha1:
-                matched = md5_to_sha1[r.md5]
-            if matched:
-                _add_alias(basename, matched)
-    except (ImportError, ConnectionError, OSError):
-        pass
+    # core-info is not read here: it was the only network call of a build
+    # that must give the same database offline, and the one name it added
+    # (gearcoleco's writer.rom) is a profile entry proven by its sha1, which
+    # the profile pass below now registers.
 
     # Collect aliases from emulator YAMLs (aliases field on file entries)
     emulators_dir = Path("emulators")
@@ -492,18 +481,22 @@ def _collect_all_aliases(files: dict) -> dict:
                 except (yaml.YAMLError, OSError):
                     continue
                 for file_entry in emu_config.get("files", []):
-                    entry_aliases = file_entry.get("aliases", [])
-                    if not entry_aliases:
-                        continue
+                    entry_aliases = list(file_entry.get("aliases") or [])
                     entry_name = file_entry.get("name", "")
                     sha1 = file_entry.get("sha1", "")
                     md5 = file_entry.get("md5", "")
                     matched = None
                     if sha1 and sha1 in files:
                         matched = sha1
+                        # Proven by content, the profile's own name designates
+                        # the file whatever the collection calls it.
+                        entry_aliases.insert(0, entry_name)
                     elif md5 and md5 in md5_to_sha1:
                         matched = md5_to_sha1[md5]
-                    elif entry_name and name_count.get(entry_name) == 1:
+                        entry_aliases.insert(0, entry_name)
+                    if not entry_aliases:
+                        continue
+                    if not matched and entry_name and name_count.get(entry_name) == 1:
                         # A name carried by several files names none of them:
                         # quasi88's disk.rom aliases went to whichever
                         # disk.rom the scan met last, a Tandy CoCo ROM.
