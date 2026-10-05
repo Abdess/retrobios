@@ -41,7 +41,6 @@ files:
   # -------------------------------------------------------
   - name: "panafz1.bin"
     system: 3do
-    region: [north-america]
     required: true
     size: 1048576  # 1 MB
     md5: "f47264dd47fe30f73ab3c010015c155b"
@@ -54,7 +53,6 @@ files:
   # -------------------------------------------------------
   - name: "panafz1j.bin"
     system: 3do
-    region: [japan]
     required: true
     size: 1048576  # 1 MB
     md5: "a496cfdded3da562759be3561317b605"
@@ -67,7 +65,6 @@ files:
   # -------------------------------------------------------
   - name: "panafz1j-norsa.bin"
     system: 3do
-    region: [japan]
     required: false
     size: 1048576  # 1 MB
     md5: "f6c71de7470d16abe4f71b1444883dc8"
@@ -80,7 +77,6 @@ files:
   # -------------------------------------------------------
   - name: "panafz10.bin"
     system: 3do
-    region: [north-america]
     required: true
     size: 1048576  # 1 MB
     md5: "51f2f43ae2f3508a14d9f56597e2d3ce"
@@ -93,7 +89,6 @@ files:
   # -------------------------------------------------------
   - name: "panafz10-norsa.bin"
     system: 3do
-    region: [north-america]
     required: false
     size: 1048576  # 1 MB
     md5: "1477bda80dc33731a65468c1f5bcbee9"
@@ -106,7 +101,6 @@ files:
   # -------------------------------------------------------
   - name: "panafz10e-anvil.bin"
     system: 3do
-    region: [europe]
     required: true
     size: 1048576  # 1 MB
     md5: "a48e6746bd7edec0f40cff078f0bb19f"
@@ -119,7 +113,6 @@ files:
   # -------------------------------------------------------
   - name: "panafz10e-anvil-norsa.bin"
     system: 3do
-    region: [europe]
     required: false
     size: 1048576  # 1 MB
     md5: "cf11bbb5a16d7af9875cca9de9a15e09"
@@ -132,7 +125,6 @@ files:
   # -------------------------------------------------------
   - name: "goldstar.bin"
     system: 3do
-    region: [north-america]
     required: true
     size: 1048576  # 1 MB
     md5: "8639fd5e549bd6238cfee79e3e749114"
@@ -145,7 +137,6 @@ files:
   # -------------------------------------------------------
   - name: "sanyotry.bin"
     system: 3do
-    region: [japan]
     required: true
     size: 1048576  # 1 MB
     md5: "35fa1a1ebaaeea286dc5cd15487c13ea"
@@ -158,7 +149,6 @@ files:
   # -------------------------------------------------------
   - name: "3do_arcade_saot.bin"
     system: 3do
-    region: [north-america]
     required: false
     size: 524288  # 512 KB
     md5: "8970fc987ab89a7f64da9f8a8c4333ff"
@@ -171,7 +161,6 @@ files:
   # -------------------------------------------------------
   - name: "panafz1-kanji.bin"
     system: 3do
-    region: [japan]
     required: false
     size: 933636
     md5: "b8dc97f778a6245c58e064b0312e8281"
@@ -184,7 +173,6 @@ files:
   # -------------------------------------------------------
   - name: "panafz1j-kanji.bin"
     system: 3do
-    region: [japan]
     required: false
     size: 1048576  # 1 MB
     md5: "c23fb5d5e6bb1c240d02cf968972be37"
@@ -197,7 +185,6 @@ files:
   # -------------------------------------------------------
   - name: "panafz10ja-anvil-kanji.bin"
     system: 3do
-    region: [japan]
     required: false
     size: 1048576  # 1 MB
     md5: "428577250f43edc902ea239c50d2240d"
