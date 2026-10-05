@@ -4,10 +4,10 @@ core_classification: community_fork
 source: "https://github.com/aenu1/aps3e"
 source_branch: main4
 upstream: "https://github.com/RPCS3/rpcs3"
-profiled_date: "2026-08-11"
-source_commit: "4e579526bda21c2c51fc8512ad408a2004cc1798"
-upstream_commit: "40e9ee5af0de7ca31691c58eebe64ba205a2900b"
-core_version: "2.41"
+profiled_date: "2026-10-06"
+source_commit: "c6ca18217f2f1563235f83d94df78e35423a1720"
+upstream_commit: "1f080485b95db2700c5cf244b1314f73b6cf564e"
+core_version: "2.43"
 display_name: "Sony - PlayStation 3 (aPS3e)"
 cores:
   - aps3e
@@ -18,16 +18,16 @@ notes: |
   PlayStation 3 emulator for Android, distributed on Google Play as aenu.aps3e
   and aenu.aps3e.premium. RPCS3 is vendored whole under app/src/main/cpp/rpcs3
   rather than pulled as a submodule, and a JNI layer of about six thousand lines
-  replaces the Qt front end. The vendored tree reports itself as 0.0.41-alpha.1
-  at RPCS3 commit 40e9ee5a.
+  replaces the Qt front end. The vendored tree reports itself as 0.0.42-alpha.1
+  at RPCS3 commit 1f080485.
   ref: app/src/main/cpp/rpcs3/rpcs3/git-version.h:3,
        app/src/main/cpp/rpcs3/rpcs3/rpcs3_version.cpp:29
 
-  Source drops land on successive branches, not on the default one. Release 2.41
-  of 2026-07-30 is the commit titled 2.41 at the head of main4; the lightweight
-  tags 2.39, 2.40 and 2.41 all sit on the head of main2, an April tree that
-  predates every one of those releases and whose generated git-version.h was
-  never filled in. main4 is the tree read here. No versionName is usable either:
+  Source drops land on successive branches, not on the default one. Release 2.43
+  of 2026-10-05 is the commit titled 2.43 at the head of main4; the lightweight
+  tags 2.39 to 2.43 all sit on the head of main2, the default branch, an April
+  tree that predates every one of those releases and whose generated
+  git-version.h was never filled in. main4 is the tree read here. No versionName is usable either:
   the only gradle file committed is app/build.gradle.bak, which carries the
   placeholder 1.19a and is renamed and completed with the signing block at build
   time.
@@ -39,7 +39,7 @@ notes: |
   custom font directory sits at the data root, and the custom GPU driver
   directory sits in internal storage because the external filesystem cannot
   carry an executable mapping.
-  ref: app/src/main/cpp/aps3e_rp3_impl.cpp:151-157,
+  ref: app/src/main/cpp/aps3e_rp3_impl.cpp:139-145,
        app/src/main/java/aenu/aps3e/Application.java:21-64
 
   The PS3 firmware is required and nothing runs without it. Three independent
@@ -51,10 +51,10 @@ notes: |
   EmulatorActivity, which does not pass through the game list. The shipped
   configuration leaves Libraries Control empty, so liblv2.sprx keeps its default
   entry in the module list and the check fires.
-  ref: app/src/main/java/aenu/aps3e/MainActivity.java:145-147,
-       app/src/main/java/aenu/aps3e/MainActivity.java:189-192,
-       app/src/main/java/aenu/aps3e/QuickStartActivity.java:318-320,
-       app/src/main/cpp/rpcs3/rpcs3/Emu/System.cpp:2763-2783,
+  ref: app/src/main/java/aenu/aps3e/MainActivity.java:144-146,
+       app/src/main/java/aenu/aps3e/MainActivity.java:188-191,
+       app/src/main/java/aenu/aps3e/QuickStartActivity.java:317-319,
+       app/src/main/cpp/rpcs3/rpcs3/Emu/System.cpp:2829-2849,
        app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/lv2/sys_prx.cpp:86,
        aps3e/app/src/main/assets/config/config.yml
 
@@ -67,39 +67,40 @@ notes: |
   come from the firmware rather than from a separate download. Custom points all
   three classes at one file and reverts to From Firmware when that path no
   longer exists.
-  ref: app/src/main/cpp/aps3e_rp3_impl.cpp:216-246,
-       app/src/main/cpp/rpcs3/rpcs3/Emu/RSX/Overlays/overlay_fonts.cpp:113-118
+  ref: app/src/main/cpp/aps3e_rp3_impl.cpp:204-234,
+       app/src/main/cpp/rpcs3/rpcs3/Emu/RSX/Overlays/overlay_fonts.cpp:112-117
 
   Vulkan is reached through a loader chosen before the emulator starts. The
   global config YAML is read directly for Use Custom Driver and Custom Driver
-  Library Path, and the named library is dlopened when both are set and the path
-  exists; otherwise the system libvulkan.so is used. Drivers are imported either
-  as a bare shared object or as a zip whose meta.json names the library.
-  ref: app/src/main/cpp/aps3e_emu.cpp:1015-1039,
-       app/src/main/cpp/vkapi.cpp:21,
-       app/src/main/java/aenu/aps3e/EmulatorSettings.java:1235-1330
+  Library Path, and the named library is opened through libadrenotools as a
+  custom driver when both are set and the path exists; otherwise the system
+  libvulkan.so is dlopened. Drivers are imported either as a bare shared object
+  or as a zip whose meta.json names the library.
+  ref: app/src/main/cpp/aps3e_emu.cpp:952-976,
+       app/src/main/cpp/vkapi.cpp:18-33,
+       app/src/main/java/aenu/aps3e/EmulatorSettings.java:1232-1327
 
-  Encrypted disc images are supported by a loader that has no counterpart in the
-  desktop code line. Launching an ISO makes the Java layer look for a sidecar key
-  beside it, trying the base name with .dkey and then with .key, and hand the
-  descriptor down beside the image. The key is accepted at exactly 32 bytes, read
-  as a hex string, or exactly 16 bytes, read as raw bytes, and installed as an
-  AES-128 decryption context. A 3k3y watermark at offset 0xF70 is recognised
-  separately and needs no key.
-  ref: app/src/main/java/aenu/aps3e/Utils.java:200-220,
-       app/src/main/java/aenu/aps3e/EmulatorActivity.java:149-155,
-       app/src/main/cpp/rpcs3/rpcs3/Loader/iso.cpp:354-399,
-       app/src/main/cpp/rpcs3/rpcs3/Loader/iso.cpp:508-554
+  Encrypted disc images are decrypted by the ISO loader. Launching an ISO makes
+  the Java layer look for a sidecar key beside it, trying the base name with
+  .dkey and then with .key, and hand the descriptor down beside the image. At
+  most 32 bytes of the key are read: a full 32-byte read is taken as a hex
+  string, a 16-byte file as raw bytes, and the result is installed as an AES-128
+  decryption context. A 3k3y watermark at offset 0xF70 is recognised separately
+  and needs no key.
+  ref: app/src/main/java/aenu/aps3e/Utils.java:185-205,
+       app/src/main/java/aenu/aps3e/EmulatorActivity.java:148-154,
+       app/src/main/cpp/rpcs3/rpcs3/Loader/iso.cpp:362-408,
+       app/src/main/cpp/rpcs3/rpcs3/Loader/iso.cpp:517-562
 
   One import entry point takes EDAT, RAP and PKG. A RAP is copied verbatim into
   the exdata folder of user 00000001 and rejected unless it is exactly 16 bytes.
   An EDAT is parsed for its NPD header, rejected below 0x90 bytes or without the
   NPD magic, and written to the same folder under the content id the header
   carries. A PKG goes through the package reader and lands in dev_hdd0.
-  ref: app/src/main/java/aenu/aps3e/MainActivity.java:700-711,
-       app/src/main/java/aenu/aps3e/Emulator.java:820-844,
-       app/src/main/cpp/aps3e_emu.cpp:941-969,
-       app/src/main/cpp/aps3e_emu.cpp:923-933
+  ref: app/src/main/java/aenu/aps3e/MainActivity.java:624-658,
+       app/src/main/java/aenu/aps3e/Emulator.java:820-845,
+       app/src/main/cpp/aps3e_emu.cpp:878-906,
+       app/src/main/cpp/aps3e_emu.cpp:860-870
 
   patch.yml, compatibility_table.json and database_config.json ship inside the
   APK as assets and are not user supplied.
@@ -119,21 +120,23 @@ files:
       SCEPKG keys and their inner TARs extracted over dev_flash. The Java layer
       creates dev_flash/.installed once the native call returns true. No digest
       of the file itself is compared against anything.
-    source_ref: "app/src/main/cpp/aps3e_emu.cpp:727-897, app/src/main/cpp/emulator_aps3e.cpp:1078, app/src/main/java/aenu/aps3e/MainActivity.java:644-676, app/src/main/res/values/strings.xml:132-134"
+    source_ref: "app/src/main/cpp/aps3e_emu.cpp:664-835, app/src/main/cpp/emulator_aps3e.cpp:1078, app/src/main/java/aenu/aps3e/MainActivity.java:591-623, app/src/main/res/values/strings.xml:120-122"
 
   - name: "<game>.dkey"
     aliases: ["<game>.key"]
     required: false
     size: [16, 32]
     validation: [size]
+    size_note: "Read capped at 32 bytes: a file of 32 bytes or more is taken as hex from its first 32 characters, a 16-byte file as raw, any other length is refused."
     unsourceable: "per-disc AES-128 key named after the image it decrypts, one per title, carried by disc dump catalogues rather than by the emulator"
     description: "Redump disc decryption key read beside an encrypted ISO"
     note: >-
       Resolved as a sidecar of the image being launched, .dkey first then .key,
-      and passed down as a second descriptor. 32 bytes are read as a hex string
-      and converted, 16 bytes are taken as raw; any other length fails the key
-      check. An image whose odd regions are encrypted does not boot without it.
-    source_ref: "app/src/main/java/aenu/aps3e/Utils.java:200-220, app/src/main/cpp/rpcs3/rpcs3/Loader/iso.cpp:354-399, app/src/main/cpp/rpcs3/rpcs3/Loader/iso.cpp:850-870"
+      and passed down as a second descriptor. Up to 32 bytes are read: a full
+      32-byte read is taken as a hex string and converted, a 16-byte file as raw;
+      any other length fails the key check. An image whose odd regions are
+      encrypted does not boot without it.
+    source_ref: "app/src/main/java/aenu/aps3e/Utils.java:185-205, app/src/main/cpp/rpcs3/rpcs3/Loader/iso.cpp:362-408, app/src/main/cpp/rpcs3/rpcs3/Loader/iso.cpp:855-882"
 
   - name: "<content_id>.rap"
     required: false
@@ -145,8 +148,10 @@ files:
       Imported through the EDAT/RAP/PKG entry and copied byte for byte into
       dev_hdd0/home/00000001/exdata under the name it was given. The import is
       refused unless the source is exactly 16 bytes. SELF decryption looks the
-      matching file up in that folder by content id, with a lowercase extension.
-    source_ref: "app/src/main/java/aenu/aps3e/MainActivity.java:702-706, app/src/main/java/aenu/aps3e/Emulator.java:820-844, app/src/main/cpp/rpcs3/rpcs3/Crypto/unself.cpp:1271-1286, app/src/main/cpp/rpcs3/rpcs3/Emu/system_utils.cpp:391"
+      matching file up by content id, with a lowercase extension, in the exdata
+      folder of each user under dev_hdd0/home, and rejects a content id longer
+      than 0x30 characters or outside A-Z, a-z, 0-9, - and _.
+    source_ref: "app/src/main/java/aenu/aps3e/MainActivity.java:649-653, app/src/main/java/aenu/aps3e/Emulator.java:820-845, app/src/main/cpp/rpcs3/rpcs3/Crypto/unself.cpp:1312-1343, app/src/main/cpp/rpcs3/rpcs3/Emu/system_utils.cpp:396-421"
 
   - name: "<content_id>.edat"
     required: false
@@ -158,7 +163,7 @@ files:
       Imported through the same entry. The NPD header is read and the file
       refused below 0x90 bytes or when the magic is not NPD, then written whole
       to dev_hdd0/home/00000001/exdata under the content id the header declares.
-    source_ref: "app/src/main/java/aenu/aps3e/MainActivity.java:707-711, app/src/main/cpp/aps3e_emu.cpp:941-969, app/src/main/cpp/emulator_aps3e.cpp:1085, app/src/main/cpp/rpcs3/rpcs3/Emu/system_utils.cpp:413"
+    source_ref: "app/src/main/java/aenu/aps3e/MainActivity.java:654-658, app/src/main/cpp/aps3e_emu.cpp:878-906, app/src/main/cpp/emulator_aps3e.cpp:1085, app/src/main/cpp/rpcs3/rpcs3/Emu/system_utils.cpp:440"
 
   - name: "<font>.ttf"
     aliases: ["<font>.ttc", "<font>.otf"]
@@ -172,7 +177,7 @@ files:
       classes at once, and only while Font File Selection is Custom. The setting
       reverts to From Firmware when the stored path no longer resolves, so the
       firmware faces cover the absence.
-    source_ref: "app/src/main/java/aenu/aps3e/EmulatorSettings.java:1332-1352, app/src/main/cpp/aps3e_rp3_impl.cpp:227-239, app/src/main/cpp/rpcs3/rpcs3/Emu/system_config.h:401-402"
+    source_ref: "app/src/main/java/aenu/aps3e/EmulatorSettings.java:1329-1349, app/src/main/cpp/aps3e_rp3_impl.cpp:215-227, app/src/main/cpp/rpcs3/rpcs3/Emu/system_config.h:402-403"
 
   - name: "<driver>.so"
     aliases: ["<driver>.zip"]
@@ -183,22 +188,23 @@ files:
     note: >-
       Imported as a shared object, or as a zip whose meta.json names the library
       to keep, and unpacked into the driver directory in internal storage. Read
-      from the global config YAML before the emulator initialises and dlopened in
-      place of the system loader. The system libvulkan.so is used when Use Custom
-      Driver is off, the path is empty, or the file is gone.
-    source_ref: "app/src/main/java/aenu/aps3e/EmulatorSettings.java:1235-1330, app/src/main/cpp/aps3e_emu.cpp:1015-1039, app/src/main/cpp/vkapi.cpp:21, app/src/main/cpp/rpcs3/rpcs3/Emu/system_config.h:209-211"
+      from the global config YAML before the emulator initialises and opened
+      through libadrenotools in place of the system loader. The system
+      libvulkan.so is used when Use Custom Driver is off, the path is empty, or
+      the file is gone.
+    source_ref: "app/src/main/java/aenu/aps3e/EmulatorSettings.java:1232-1327, app/src/main/cpp/aps3e_emu.cpp:952-976, app/src/main/cpp/vkapi.cpp:18-33, app/src/main/cpp/rpcs3/rpcs3/Emu/system_config.h:209-211"
 
 # Layout produced by extracting PS3UPDAT.PUP, and the paths this tree reads from it.
 dev_flash:
   path: "config/dev_flash/"
-  source_ref: "app/src/main/cpp/rpcs3/rpcs3/Emu/vfs_config.h:15, app/src/main/cpp/aps3e_rp3_impl.cpp:151-153"
+  source_ref: "app/src/main/cpp/rpcs3/rpcs3/Emu/vfs_config.h:15, app/src/main/cpp/aps3e_rp3_impl.cpp:139-141"
   note: >-
     Mounted at /dev_flash and rooted at the config directory. Written only by the
     firmware installer, which extracts the dev_flash_ packages of the PUP into it.
 
   sys_external:
     path: "dev_flash/sys/external/"
-    source_ref: "app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/PPUModule.cpp:2608-2610, app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/lv2/sys_prx.cpp:207"
+    source_ref: "app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/PPUModule.cpp:2703-2705, app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/lv2/sys_prx.cpp:208, app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/Modules/cellSysmodule.cpp:1031"
     note: >-
       Firmware SPRX modules. liblv2.sprx gates the boot and pulls the rest in;
       each module can be forced to LLE or HLE through Libraries Control, which
@@ -213,7 +219,7 @@ dev_flash:
 
   fonts:
     path: "dev_flash/data/font/"
-    source_ref: "app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/Modules/cellFont.cpp:226-241, app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/Modules/cellFont.cpp:281, app/src/main/cpp/rpcs3/rpcs3/Emu/RSX/Overlays/overlay_fonts.cpp:117-118"
+    source_ref: "app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/Modules/cellFont.cpp:226-241, app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/Modules/cellFont.cpp:281, app/src/main/cpp/rpcs3/rpcs3/Emu/RSX/Overlays/overlay_fonts.cpp:116-117"
     note: >-
       Faces cellFontOpenFontset maps by type, and the directory the overlay
       searches for its own list. A fontset the emulator does not implement falls
@@ -244,21 +250,21 @@ dev_flash:
 
   vsh:
     path: "dev_flash/vsh/"
-    source_ref: "app/src/main/cpp/rpcs3/rpcs3/util/sysinfo.cpp:651-653, app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/PPUThread.cpp:4433-4441, app/src/main/cpp/rpcs3/rpcs3/Emu/RSX/Overlays/overlay_user_list_dialog.cpp:207"
+    source_ref: "app/src/main/cpp/rpcs3/rpcs3/util/sysinfo.cpp:651-653, app/src/main/cpp/rpcs3/rpcs3/Emu/Cell/PPUThread.cpp:4799-4807, app/src/main/cpp/rpcs3/rpcs3/Emu/RSX/Overlays/overlay_user_list_dialog.cpp:207, app/src/main/cpp/rpcs3/rpcs3/Emu/RSX/Overlays/FriendsList/overlay_friends_list_dialog.cpp:85"
     note: >-
       vsh/etc/version.txt supplies the installed firmware version, compared
       against the PS3_SYSTEM_VER a title declares. vsh/module/eseibrd.sprx is
       precompiled at boot and vsh/resource/explore/user carries the avatars the
-      user list draws.
+      user list and the friends list draw.
 
   ps1emu:
     path: "dev_flash/ps1emu/"
-    source_ref: "app/src/main/cpp/rpcs3/rpcs3/Emu/System.cpp:2187"
+    source_ref: "app/src/main/cpp/rpcs3/rpcs3/Emu/System.cpp:2253"
     note: "ps1_newemu.self, the argv[0] of a PS1 Classics boot."
 
   pspemu:
     path: "dev_flash/pspemu/"
-    source_ref: "app/src/main/cpp/rpcs3/rpcs3/Emu/System.cpp:2215"
+    source_ref: "app/src/main/cpp/rpcs3/rpcs3/Emu/System.cpp:2281"
     note: "psp_emulator.self, the argv[0] of a PSP minis boot."
 
 dev_flash2:
