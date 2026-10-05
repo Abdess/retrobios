@@ -3293,6 +3293,46 @@ class TestRealignProse(unittest.TestCase):
         self.assertIn("(deep.c:14)", self.path.read_text())
 
 
+class TestOutputModesApplyTheirFlags(unittest.TestCase):
+    """--changed-only narrows --json too; extras are refused off the text report."""
+
+    def _main(self, *argv):
+        from unittest import mock
+
+        clean = ProfileReport(name="clean")
+        drift = ProfileReport(name="drift", counts={"CHANGED": 1})
+        reports = {"clean": clean, "drift": drift}
+        out, err = io.StringIO(), io.StringIO()
+        saved = sys.argv
+        try:
+            sys.argv = ["profile_sync.py", "--all", *argv]
+            with mock.patch.object(profile_sync, "load_emulator_profiles", return_value={}), \
+                    mock.patch.object(profile_sync, "select_profiles",
+                                      return_value={"clean": {}, "drift": {}}), \
+                    mock.patch.object(profile_sync, "_check_quota"), \
+                    mock.patch.object(profile_sync, "build_report",
+                                      side_effect=lambda name, *a, **k: reports[name]), \
+                    contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+                try:
+                    profile_sync.main()
+                    code = 0
+                except SystemExit as exc:
+                    code = exc.code
+        finally:
+            sys.argv = saved
+        return code, out.getvalue(), err.getvalue()
+
+    def test_changed_only_narrows_json(self):
+        code, out, _ = self._main("--changed-only", "--json")
+        self.assertEqual(code, 0)
+        self.assertEqual([r["name"] for r in json.loads(out)], ["drift"])
+
+    def test_extras_are_refused_with_json(self):
+        code, _, err = self._main("--json", "--check-version")
+        self.assertEqual(code, 1)
+        self.assertIn("--check-version", err)
+
+
 class TestRealignFlagMatrix(unittest.TestCase):
     """--realign-prose applies a flag or refuses it, never swallows it."""
 
