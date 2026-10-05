@@ -165,6 +165,38 @@ def _unreachable_citations(path: Path, document: object) -> list[str]:
     return out
 
 
+def _unknown_data_dir_refs() -> list[str]:
+    """data_directories refs the registry does not define.
+
+    A ref nobody registers is never fetched: yaps2 named yaps2-resources and
+    every run printed "not cached" while refresh_data_dirs had nothing to
+    refresh.
+    """
+    registry_path = ROOT / "platforms" / "_data_dirs.yml"
+    with registry_path.open(encoding="utf-8") as handle:
+        registered = set((yaml_load(handle) or {}).get("data_directories", {}))
+    out: list[str] = []
+    for directory in (ROOT / "emulators", ROOT / "platforms"):
+        for path in sorted(directory.glob("*.yml")):
+            if path.name.startswith("_"):
+                continue
+            with path.open(encoding="utf-8") as handle:
+                document = yaml_load(handle) or {}
+            systems = document.get("systems")
+            holders = [document, *(systems.values() if isinstance(systems, dict) else [])]
+            for holder in holders:
+                if not isinstance(holder, dict):
+                    continue
+                for entry in holder.get("data_directories") or []:
+                    ref = entry.get("ref") if isinstance(entry, dict) else None
+                    if ref and ref not in registered:
+                        out.append(
+                            f"{path.relative_to(ROOT)}: data directory {ref!r} "
+                            f"is not in platforms/_data_dirs.yml"
+                        )
+    return out
+
+
 def _semantic_envelope_checks(path: Path, document: dict) -> list[str]:
     if document.get("count") != len(document.get("items", [])):
         return [f"{path.relative_to(ROOT)}: count does not equal len(items)"]
@@ -240,6 +272,7 @@ def main() -> int:
             ROOT / "platforms", "platform.schema.json", skip_private=True
         )
     )
+    errors.extend(_unknown_data_dir_refs())
 
     if not args.source_only:
         database_path = ROOT / "database.json"

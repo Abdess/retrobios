@@ -65,6 +65,16 @@ data_directories:
     local_cache: data/pcsx2-resources
     description: "PCSX2 resources (GameIndex.yaml, RedumpDatabase.yaml, fonts, shaders, icons, sounds)"
 
+  # ref: pcsx2-libretro/Main.cpp:157-158 (yaps2) - system/pcsx2/resources/
+  # yaps2's own bin/resources at the revision its profile is pinned to.
+  yaps2-resources:
+    source_url: "https://github.com/yaps2/yaps2/archive/{version}.tar.gz"
+    source_type: tarball
+    source_path: "yaps2-{version}/bin/resources"
+    version: 57ea93c0ce8306063b31fe6658dab6b492bbedfe
+    local_cache: data/yaps2-resources
+    description: "yaps2 resources (GameIndex.yaml, RedumpDatabase.yaml, fonts, shaders, icons, sounds)"
+
   # ref: src/Cafe/GameProfile/GameProfile.cpp:181-195 — Cemu/gameProfiles/default/
   cemu-gameprofiles:
     source_url: "https://github.com/cemu-project/Cemu/archive/{version}.tar.gz"
