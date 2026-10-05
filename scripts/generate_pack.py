@@ -2088,6 +2088,7 @@ def _run_manifest_mode(
     else:
         variants = [(args.source, args.required_only)]
 
+    failed: list[str] = []
     for source, required_only in variants:
         for group_platforms, representative in groups:
             print(f"\nGenerating manifest for {representative} [source={source}]...")
@@ -2155,6 +2156,13 @@ def _run_manifest_mode(
                         print(f"  {alias_path}: alias of {representative}")
             except (FileNotFoundError, OSError, yaml.YAMLError) as e:
                 print(f"  ERROR: {e}")
+                failed.append(representative)
+
+    # A platform whose manifest could not be built has none, and install.py
+    # serves whatever an older run left there: that is a failed run.
+    if failed:
+        print(f"ERROR: no manifest for {', '.join(sorted(set(failed)))}")
+        sys.exit(1)
 
 
 @contextlib.contextmanager
@@ -2265,6 +2273,7 @@ def _run_platform_packs(
     else:
         variants = [(args.source, args.required_only)]
 
+    failed: list[str] = []
     for source, required_only in variants:
         for group_platforms, representative in groups:
             aliases = [p for p in group_platforms if p != representative]
@@ -2346,6 +2355,7 @@ def _run_platform_packs(
                         print(f"  Renamed -> {os.path.basename(new_path)}")
             except (FileNotFoundError, OSError, yaml.YAMLError) as e:
                 print(f"  ERROR: {e}")
+                failed.append(representative)
 
     print("\nVerifying packs and generating manifests...")
     skip_conf = bool(system_filter or args.split)
@@ -2369,6 +2379,11 @@ def _run_platform_packs(
                     regions=getattr(args, "regions", None),
                 )
                 all_ok = all_ok and ok
+    if failed:
+        # Verification only sees the ZIPs that exist; a pack that was never
+        # written does not fail it.
+        print(f"ERROR: no pack for {', '.join(sorted(set(failed)))}")
+        sys.exit(1)
     if not all_ok:
         print("WARNING: some packs have verification errors")
         sys.exit(1)
