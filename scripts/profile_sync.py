@@ -3027,6 +3027,31 @@ def main() -> None:
                 file=sys.stderr,
             )
             raise SystemExit(1)
+    machine = [
+        flag for flag, on in (
+            ("--json", args.as_json),
+            ("--markdown", args.markdown),
+            ("--fetch-plan", args.fetch_plan),
+            ("--triage", args.triage),
+        ) if on
+    ]
+    extras = [
+        flag for flag, on in (
+            ("--check-version", args.check_version),
+            ("--detect-new-files", args.detect_new_files),
+            ("--watch-hashes", args.watch_hashes),
+            ("--full-diff", args.full_diff),
+            ("--tree-diff", args.tree_diff),
+        ) if on
+    ]
+    if machine and extras:
+        # The extra sections only exist in the text report; the other outputs
+        # returned before reaching them and printed as if never asked.
+        print(
+            f"{', '.join(machine)} does not carry {', '.join(extras)}",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
     profiles = load_emulator_profiles(args.emulators_dir, skip_aliases=False)
     selected = select_profiles(profiles, args)
     _check_quota(len(selected), args.offline)
@@ -3094,22 +3119,28 @@ def main() -> None:
                 # The guard already left the file untouched; keep going.
                 print(f"{name}: write refused: {exc}", file=sys.stderr)
 
+    # --changed-only narrows every output, not the text report alone: the
+    # documented `--all --changed-only --json` listed every profile.
+    shown = [
+        report for report in reports
+        if not args.changed_only or report.needs_review()
+    ]
     if args.as_json:
-        print(json.dumps([report_to_dict(r) for r in reports], indent=2))
+        print(json.dumps([report_to_dict(r) for r in shown], indent=2))
         return
     if args.markdown:
         target = Path(args.report_dir) / f"profile-sync-{date.today().isoformat()}.md"
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_text(format_markdown(reports), encoding="utf-8")
+        target.write_text(format_markdown(shown), encoding="utf-8")
         print(f"written: {target}")
         return
     if args.fetch_plan:
-        for report in reports:
+        for report in shown:
             for url in fetch_plan(report):
                 print(url)
         return
     if args.triage:
-        _print_triage(args, selected, reports)
+        _print_triage(args, selected, shown)
         return
     printed = 0
     for report in reports:
