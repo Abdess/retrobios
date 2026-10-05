@@ -5,7 +5,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-10-04T21:25:52Z",
+  "generated": "2026-10-05T00:24:12Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -20,10 +20,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 815,
-  "total_size": 2539872027,
-  "pack_files": 817,
-  "pack_size": 2539872027,
+  "total_files": 816,
+  "total_size": 2540396315,
+  "pack_files": 818,
+  "pack_size": 2540396315,
   "total_omitted": 2,
   "omitted_files": [
     {
@@ -1275,6 +1275,26 @@
       ]
     },
     {
+      "dest": "stvbios.zip",
+      "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
+      "sha256": "1c4970da5f7066dd213d3dca14f7e45408cf667f508f4653025626bb33fbeb14",
+      "size": 3455065,
+      "repo_path": "bios/Arcade/Arcade/stvbios.zip",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "mpeg_card.bin",
+      "sha1": "2f5ebd434f6d5b82e93d03e5626007bd5380f652",
+      "sha256": "d4bac489d59bf9bfd05fab4f647df66a087f0fd0bbb9f0a8b3c55cdcf51048de",
+      "size": 524288,
+      "repo_path": "bios/Sega/Saturn/mpeg_card.bin",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
       "dest": "satar4mp.bin",
       "sha1": "b9645d265644d201dbccc39aaf4bfa60cebe7ead",
       "sha256": "76982109ed433d512413044d7c5bc869f6d97e2826f5ac10cc7418fb3fff1ab3",
@@ -1856,16 +1876,6 @@
       "sha256": "9f7b0bf853d7ce6f5b27e3542fc132ff4f19a31332dab4ab601daafa80ee3f69",
       "size": 718362,
       "repo_path": "bios/Arcade/MAME/airlbios.zip",
-      "cores": [
-        "mame"
-      ]
-    },
-    {
-      "dest": "stvbios.zip",
-      "sha1": "b14bbed4bf459439cf7e96d2f79d7adea5d31448",
-      "sha256": "1c4970da5f7066dd213d3dca14f7e45408cf667f508f4653025626bb33fbeb14",
-      "size": 3455065,
-      "repo_path": "bios/Arcade/Arcade/stvbios.zip",
       "cores": [
         "mame"
       ]

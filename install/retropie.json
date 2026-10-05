@@ -5,7 +5,7 @@
   "platform": "retropie",
   "display_name": "RetroPie",
   "version": "1.0",
-  "generated": "2026-10-04T21:25:52Z",
+  "generated": "2026-10-05T00:24:12Z",
   "base_destination": "BIOS",
   "detect": [
     {
@@ -15,10 +15,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 9892,
-  "total_size": 8442848937,
-  "pack_files": 12535,
-  "pack_size": 8483382101,
+  "total_files": 9898,
+  "total_size": 8800137721,
+  "pack_files": 12541,
+  "pack_size": 8840670885,
   "total_omitted": 18,
   "omitted_files": [
     {
@@ -4955,6 +4955,16 @@
       "sha256": "3e6f91506031badc4ebdf7fe5b4f33180222a369b575522861688d3b27322a68",
       "size": 524288,
       "repo_path": "bios/Sega/ST-V/epr-17954a.ic8",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
+      "dest": "mpeg_card.bin",
+      "sha1": "2f5ebd434f6d5b82e93d03e5626007bd5380f652",
+      "sha256": "d4bac489d59bf9bfd05fab4f647df66a087f0fd0bbb9f0a8b3c55cdcf51048de",
+      "size": 524288,
+      "repo_path": "bios/Sega/Saturn/mpeg_card.bin",
       "cores": [
         "beetle_saturn"
       ]
@@ -40970,6 +40980,16 @@
       ]
     },
     {
+      "dest": "Cemu/shareddata.bin",
+      "sha1": "cd34a0ee9b7a8cbb9c9eae34739704a9dd4dd413",
+      "sha256": "662bc6c693c88040531fbe51186ce203e188d1c67ad788b2013b3c91ce595420",
+      "size": 33554432,
+      "repo_path": "bios/Nintendo/Wii U/shareddata.bin",
+      "cores": [
+        "cemu"
+      ]
+    },
+    {
       "dest": "Cemu/cafeLibs/snd_user.rpl",
       "sha1": "4e0ff91f1881203e404cd41ec34725b43eec5cf2",
       "sha256": "45b0dbe8926a263d86bc4e77084815e58336b9b437196d48bc3da3c5b2b2675e",
@@ -42030,6 +42050,18 @@
       "cores": [
         "dosbox-staging"
       ]
+    },
+    {
+      "dest": "soundfonts/FluidR3_GM.sf2",
+      "sha1": "4fd467afcb45c8b4cfd1eadac9372a819e35d46d",
+      "sha256": "74594e8f4250680adf590507a306655a299935343583256f3b722c48a1bc1cb0",
+      "size": 148398306,
+      "repo_path": "bios/RPG Maker/easyrpg/easyrpg.soundfont",
+      "cores": [
+        "dosbox-staging"
+      ],
+      "storage": "release",
+      "release_asset": "easyrpg.soundfont"
     },
     {
       "dest": "system.rom",
@@ -43170,6 +43202,30 @@
       "cores": [
         "dxx-rebirth"
       ]
+    },
+    {
+      "dest": "d1x-rebirth/d1xr-opl3-music.dxa",
+      "sha1": "42214df6d498036c1a8a8264091e78e1923b08e6",
+      "sha256": "8fe8fede12ca735cac28133e4a581c4026ed22845ab016814a745b2c10b81603",
+      "size": 81503503,
+      "repo_path": "bios/Interplay/Descent/d1x-rebirth/d1xr-opl3-music.dxa",
+      "cores": [
+        "dxx-rebirth"
+      ],
+      "storage": "release",
+      "release_asset": "d1xr-opl3-music.dxa"
+    },
+    {
+      "dest": "d1x-rebirth/d1xr-sc55-music.dxa",
+      "sha1": "ab0e37ffc2fc715aea7d31a882000b147c8d070e",
+      "sha256": "b27f7b9dc5f9c2744402c56c9499dfd9503c17e73a2a5223e745529d7867962f",
+      "size": 72803408,
+      "repo_path": "bios/Interplay/Descent/d1x-rebirth/d1xr-sc55-music.dxa",
+      "cores": [
+        "dxx-rebirth"
+      ],
+      "storage": "release",
+      "release_asset": "d1xr-sc55-music.dxa"
     },
     {
       "dest": "d1x-rebirth/editor.dxa",
@@ -55723,6 +55779,16 @@
       "sha256": "b838dc9a394fe708df7239994b37c14c21e34f81d4cc921e060fc9c16b8ba240",
       "size": 19321722,
       "repo_path": "bios/Game Engines/DOOM/hacx.wad",
+      "cores": [
+        "gzdoom"
+      ]
+    },
+    {
+      "dest": "hacx2.wad",
+      "sha1": "f9ce49ed020f560cb1963634b529bc450e598a65",
+      "sha256": "7f63d58b4e360825a09ee086e8d733b2cd37cea882d785d2658cbc77ba7b1b74",
+      "size": 20504847,
+      "repo_path": "bios/Game Engines/DOOM/hacx2.wad",
       "cores": [
         "gzdoom"
       ]

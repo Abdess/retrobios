@@ -5,7 +5,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-10-04T21:25:52Z",
+  "generated": "2026-10-05T00:24:12Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,10 +237,10 @@
       }
     }
   ],
-  "total_files": 3233,
-  "total_size": 4175871379,
-  "pack_files": 3235,
-  "pack_size": 4175871379,
+  "total_files": 3234,
+  "total_size": 4176395667,
+  "pack_files": 3236,
+  "pack_size": 4176395667,
   "total_omitted": 4,
   "omitted_files": [
     {
@@ -4121,6 +4121,16 @@
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
       "cores": [
         "beetle_psx"
+      ]
+    },
+    {
+      "dest": "mpeg_card.bin",
+      "sha1": "2f5ebd434f6d5b82e93d03e5626007bd5380f652",
+      "sha256": "d4bac489d59bf9bfd05fab4f647df66a087f0fd0bbb9f0a8b3c55cdcf51048de",
+      "size": 524288,
+      "repo_path": "bios/Sega/Saturn/mpeg_card.bin",
+      "cores": [
+        "beetle_saturn"
       ]
     },
     {

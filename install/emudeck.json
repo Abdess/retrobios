@@ -5,7 +5,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-10-04T15:54:42Z",
+  "generated": "2026-10-05T00:24:12Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -250,10 +250,10 @@
       }
     }
   ],
-  "total_files": 582,
-  "total_size": 3417765934,
-  "pack_files": 584,
-  "pack_size": 3417765934,
+  "total_files": 583,
+  "total_size": 3451320366,
+  "pack_files": 585,
+  "pack_size": 3451320366,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -645,6 +645,16 @@
       "sha256": "c8f9e16345dbc3b6e165fe12435486a748e730ebe6002b5d713efe73d171d51c",
       "size": 6593548,
       "repo_path": "bios/Nintendo/Wii U/resources/sharedFonts/CafeTw.ttf",
+      "cores": [
+        "cemu"
+      ]
+    },
+    {
+      "dest": "Cemu/shareddata.bin",
+      "sha1": "cd34a0ee9b7a8cbb9c9eae34739704a9dd4dd413",
+      "sha256": "662bc6c693c88040531fbe51186ce203e188d1c67ad788b2013b3c91ce595420",
+      "size": 33554432,
+      "repo_path": "bios/Nintendo/Wii U/shareddata.bin",
       "cores": [
         "cemu"
       ]

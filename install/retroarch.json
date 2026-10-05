@@ -5,7 +5,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-10-04T21:25:52Z",
+  "generated": "2026-10-05T00:24:12Z",
   "base_destination": "system",
   "detect": [
     {
@@ -255,10 +255,10 @@
       }
     }
   ],
-  "total_files": 5980,
-  "total_size": 6656116743,
-  "pack_files": 8623,
-  "pack_size": 6696649907,
+  "total_files": 5982,
+  "total_size": 6690195463,
+  "pack_files": 8625,
+  "pack_size": 6730728627,
   "total_omitted": 14,
   "omitted_files": [
     {
@@ -4930,6 +4930,16 @@
       ]
     },
     {
+      "dest": "mpeg_card.bin",
+      "sha1": "2f5ebd434f6d5b82e93d03e5626007bd5380f652",
+      "sha256": "d4bac489d59bf9bfd05fab4f647df66a087f0fd0bbb9f0a8b3c55cdcf51048de",
+      "size": 524288,
+      "repo_path": "bios/Sega/Saturn/mpeg_card.bin",
+      "cores": [
+        "beetle_saturn"
+      ]
+    },
+    {
       "dest": "satar4mp.bin",
       "sha1": "b9645d265644d201dbccc39aaf4bfa60cebe7ead",
       "sha256": "76982109ed433d512413044d7c5bc869f6d97e2826f5ac10cc7418fb3fff1ab3",
@@ -6175,6 +6185,16 @@
       "sha256": "c8f9e16345dbc3b6e165fe12435486a748e730ebe6002b5d713efe73d171d51c",
       "size": 6593548,
       "repo_path": "bios/Nintendo/Wii U/resources/sharedFonts/CafeTw.ttf",
+      "cores": [
+        "cemu"
+      ]
+    },
+    {
+      "dest": "Cemu/shareddata.bin",
+      "sha1": "cd34a0ee9b7a8cbb9c9eae34739704a9dd4dd413",
+      "sha256": "662bc6c693c88040531fbe51186ce203e188d1c67ad788b2013b3c91ce595420",
+      "size": 33554432,
+      "repo_path": "bios/Nintendo/Wii U/shareddata.bin",
       "cores": [
         "cemu"
       ]
