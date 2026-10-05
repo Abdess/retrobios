@@ -480,16 +480,34 @@ def _preferred_entries(
         ]
         if not constrained:
             continue
-        best = None
-        for fe in constrained:
-            _lp, _st = resolve_file(
+        resolved = [
+            (fe, *resolve_file(
                 fe,
                 db,
                 bios_dir,
                 zip_contents,
                 data_dir_registry=data_registry,
                 offline=offline,
-            )
+            ))
+            for fe in constrained
+        ]
+        members = [fe for fe in entries if fe.get("zipped_file")]
+        if members:
+            # One archive declared once per ROM it must hold: the archive
+            # to ship is the one the most declarations accept, not the first
+            # that answers one of them (adam_fdc.zip: a one-member MAME set
+            # answered first, the eight-member set sat beside it).
+            def accepted(path: str | None) -> int:
+                if not path or not path.endswith(".zip"):
+                    return -1
+                return sum(_inner_rom_check(fe, path) == "ok" for fe in members)
+
+            fe, path, _st = max(resolved, key=lambda item: accepted(item[1]))
+            if accepted(path) > 0:
+                preferred_entries[full] = id(fe)
+                continue
+        best = None
+        for fe, _lp, _st in resolved:
             if _lp and _st == "md5_exact":
                 best = fe
                 break
