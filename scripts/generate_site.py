@@ -3463,7 +3463,7 @@ open them depends on their name:
 
 | Setup | What it is | Pack | Extract to |
 |-------|-----------|------|-----------|
-| [RetroPie](https://retropie.org.uk/) | The classic Pi emulation setup, largest community, most online guides | [RetroArch]({rel}) | `~/RetroPie/BIOS/` |
+| [RetroPie](https://retropie.org.uk/) | The classic Pi emulation setup, largest community, most online guides | [RetroPie]({rel}) | `~/RetroPie/BIOS/` |
 | [Lakka](https://www.lakka.tv/) | Lightweight RetroArch OS, minimal config, boots straight into the UI | [RetroArch]({rel}) | `/storage/system/` |
 | [Batocera](https://batocera.org/) | Easy setup, works on Pi 3/4/5 and many other boards (Odroid, etc.) | [Batocera]({rel}) | `/userdata/bios/` |
 | [Recalbox](https://www.recalbox.com/) | Plug-and-play experience, good for a first build | [Recalbox]({rel}) | `/recalbox/share/bios/` |
