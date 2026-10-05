@@ -29,6 +29,14 @@ bios/Sony/PlayStation Vita/PSP2UPDAT.PUP
 # Large files stored as GitHub Release assets (additional)
 bios/Other/mame4droid-2024/data/history.db
 bios/Other/mame4droid-2024/data/.variants/history.db.615619e8
+bios/Interplay/Descent/d1x-rebirth/d1xr-opl3-music.dxa
+bios/Interplay/Descent/d1x-rebirth/d1xr-sc55-music.dxa
+bios/Game Engines/Sonic 3 AIR/sonic3-air/data/audioremaster.bin
+bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3
+bios/Id Software/Return to Castle Wolfenstein/demomain/.variants/pak0.pk3.82395c6e
+bios/Id Software/Doom 3/demo/demo00.pk4
+bios/Electronic Arts/Medal of Honor Allied Assault/mainta/pak3.pk3
+bios/Valve/Half-Life/valve/.variants/pak0.pak.2c57b84f
 bios/Arcade/MAME/artwork/snspell.zip
 bios/Arcade/MAME/MAME 0.174 Arcade XML.dat
 bios/Sony/PlayStation Vita/.variants/PSP2UPDAT.PUP.3ae832c9

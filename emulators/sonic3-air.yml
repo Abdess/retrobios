@@ -38,14 +38,32 @@ notes: |
        Oxygen/sonic3air/source/sonic3air/ConfigurationImpl.cpp:33-47,
        Oxygen/sonic3air/oxygenproject.json:9-20
 
-  The engine ships four data packages built from Oxygen/sonic3air/data/
-  (enginedata.bin, gamedata.bin, audiodata.bin, audioremaster.bin). Three
-  are required and part of the release; audioremaster.bin is optional and
-  downloaded on demand from https://sonic3air.org/download/audioremaster.bin
-  when the user enables the remastered soundtrack.
+  The engine ships four data packages (enginedata.bin, gamedata.bin,
+  audiodata.bin, audioremaster.bin). Three are required and part of the
+  release; audioremaster.bin is optional and downloaded on demand from
+  https://sonic3air.org/download/audioremaster.bin when the user enables
+  the remastered soundtrack.
   ref: Oxygen/sonic3air/oxygenproject.json:32-38,
        Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:115-118,
        Oxygen/sonic3air/source/sonic3air/audio/RemasteredMusicDownload.cpp:48-62
+
+  The packages are written by the game binary itself when run with -pack
+  from Oxygen/sonic3air/ (PackageBuilder::performPacking), which the
+  mastering scripts call before copying the results to the release image.
+    gamedata.bin       data/ without data/audio/ and data/metadata.json
+    audiodata.bin      data/audio/original/
+    audioremaster.bin  data/audio/remastered/
+    enginedata.bin     ../oxygenengine/data/
+  Each package is a flat container: "OPCK", format version 3, content
+  version BUILD_NUMBER, then one entry per file keyed by its path relative
+  to the base directory, in std::map order. Packing reads the data
+  directories only; the ROM is not involved.
+  ref: Oxygen/sonic3air/source/sonic3air/main.cpp:92-97,
+       Oxygen/sonic3air/source/sonic3air/helper/PackageBuilder.cpp:16-63,
+       Oxygen/oxygenengine/source/oxygen/file/FilePackage.cpp:44-151,
+       Oxygen/oxygenengine/source/oxygen/file/FilePackage.h:28-30,
+       Oxygen/sonic3air/source/sonic3air/version.inc:1,
+       Oxygen/sonic3air/___internal/mastering/mastering_linux.sh:48-52
 
   Each package is opened from the game data directory, data/ under the
   install directory, then from data/ under the app-data directory, where
@@ -81,24 +99,25 @@ files:
     category: game_data
     system: sonic3-air
     required: true
-    bundled: true
-    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:115, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:603-617, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:643-651"
+    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:115, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:603-617, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:643-651, Oxygen/sonic3air/source/sonic3air/helper/PackageBuilder.cpp:57-62"
     note: |
-      Oxygen Engine data package. A required package that cannot be opened
-      closes the application, unless the data is present unpacked
-      (data/images/icon.png exists). The engine then checks for
-      oxygen_icon.png in the engine data and stops when it is absent
-      (EngineMain.cpp:584-593).
+      Oxygen Engine data package, packed from Oxygen/oxygenengine/data/
+      (fonts, images, shaders, sprites, oxygen_icon.png). A required
+      package that cannot be opened closes the application, unless the
+      data is present unpacked (data/images/icon.png exists). The engine
+      then checks for oxygen_icon.png in the engine data and stops when it
+      is absent (EngineMain.cpp:584-593).
 
   - name: "gamedata.bin"
     path: "sonic3-air/data/gamedata.bin"
     category: game_data
     system: sonic3-air
     required: true
-    bundled: true
-    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:116, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:603-617, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:643-651"
+    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:116, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:603-617, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:643-651, Oxygen/sonic3air/source/sonic3air/helper/PackageBuilder.cpp:36-41"
     note: |
-      Game data package. A required package that cannot be opened closes
+      Game data package, packed from Oxygen/sonic3air/data/ without the
+      audio directory and metadata.json (binary tables, fonts, images,
+      rawdata, sprites). A required package that cannot be opened closes
       the application, unless the data is present unpacked
       (data/images/icon.png exists).
 
@@ -107,12 +126,12 @@ files:
     category: game_data
     system: sonic3-air
     required: true
-    bundled: true
-    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:117, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:603-617, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:643-651"
+    source_ref: "Oxygen/sonic3air/source/sonic3air/EngineDelegate.cpp:117, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:603-617, Oxygen/oxygenengine/source/oxygen/engine/EngineMain.cpp:643-651, Oxygen/sonic3air/source/sonic3air/helper/PackageBuilder.cpp:43-48"
     note: |
-      Audio data package. A required package that cannot be opened closes
-      the application, unless the data is present unpacked
-      (data/images/icon.png exists).
+      Audio data package, packed from Oxygen/sonic3air/data/audio/original/
+      (emulated soundtrack definitions and prototype SMPS tracks). A
+      required package that cannot be opened closes the application,
+      unless the data is present unpacked (data/images/icon.png exists).
 
   - name: "audioremaster.bin"
     path: "sonic3-air/data/audioremaster.bin"

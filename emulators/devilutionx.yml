@@ -39,14 +39,22 @@ notes: |
 
   devilutionx.mpq is a build artefact packed from the repo's assets/
   directory with the smpq tool (CMake option BUILD_ASSETS_MPQ,
-  CMakeLists.txt:192-204). The compiled binary expects it next to the
-  executable on every platform except Android, Apple and 3DS/Switch
-  (:509-516), where its contents are shipped loose. After loading the
-  core archives the engine reads the asset ASSETS_VERSION and aborts
-  with "Failed to load UI resources" unless its content is "1\n"
-  (Source/init.cpp:54, 79-85, Source/diablo.cpp:1225-1239). The same
-  test on fonts\VERSION applies to fonts.mpq when it is loaded
-  (Source/init.cpp:98-114).
+  CMakeLists.txt:192-204). CMake/Assets.cmake:46-238 lists the packed
+  files (ASSETS_VERSION, arena, data, fonts, gendata, levels, lua,
+  plrgfx, txtdata and ui_art, plus data/inv/objcurs-widths.txt and the
+  ui_art PNGs outside SDL1 and Vita builds); each Translations/<lang>.po
+  is compiled with msgfmt to <lang>.gmo and appended
+  (CMake/Assets.cmake:8-29, 268-272). The archive is written with
+  "smpq -A -M 1 -C BZIP2 -c" from the staged assets directory
+  (CMake/Assets.cmake:287-294). mods/hf.mpq is built the same way from
+  the mods/hf file list (CMake/Mods.cmake:8-33, 58-67). The compiled
+  binary expects devilutionx.mpq next to the executable on every
+  platform except Android, Apple and 3DS/Switch (:509-516), where its
+  contents are shipped loose. After loading the core archives the engine
+  reads the asset ASSETS_VERSION and aborts with "Failed to load UI
+  resources" unless its content is "1\n" (Source/init.cpp:54, 79-85,
+  Source/diablo.cpp:1225-1239). The same test on fonts\VERSION applies
+  to fonts.mpq when it is loaded (Source/init.cpp:98-114).
 
   fonts.mpq is the CJK + language assets add-on from the
   devilutionx-assets release; English installs do not need it.
@@ -124,9 +132,9 @@ files:
     system: diablo
     category: game_data
     required: true
-    description: "Engine assets (UI art, fonts, data tables, Lua scripts) packed from the repository's assets/ directory"
-    note: "Loaded first on every platform except Android, Apple, 3DS and Switch. Its files are also found in an assets/ directory next to the binary when the build installs them loose. The engine aborts when the asset ASSETS_VERSION is absent or is not \"1\\n\"."
-    source_ref: "Source/engine/assets.cpp:509-516, 223-226, Source/init.cpp:79-85, Source/diablo.cpp:1225-1239"
+    description: "Engine assets (UI art, fonts, data tables, Lua scripts, compiled translations) packed from the repository's assets/ directory"
+    note: "Loaded first on every platform except Android, Apple, 3DS and Switch. Its files are also found in an assets/ directory next to the binary when the build installs them loose. The engine aborts when the asset ASSETS_VERSION is absent or is not \"1\\n\". Built by CMake with smpq (MPQ version 1, BZIP2, no attributes) from the file list of CMake/Assets.cmake plus one <lang>.gmo per translation."
+    source_ref: "Source/engine/assets.cpp:509-516, 223-226, Source/init.cpp:54, 79-85, Source/diablo.cpp:1225-1239, CMake/Assets.cmake:46-224, 287-294"
 
   - name: "fonts.mpq"
     path: "devilutionx/fonts.mpq"
@@ -169,5 +177,5 @@ files:
     category: game_data
     required: false
     description: "Hellfire mod archive packed from the repository's mods/hf directory"
-    note: "mods/<name>.mpq is opened for each active mod; hf is activated when hellfire.mpq is present. A mod with no archive and no loose directory is served from the core archives."
-    source_ref: "Source/engine/assets.cpp:748-764, Source/options.cpp:77-79, CMakeLists.txt:204"
+    note: "mods/<name>.mpq is opened for each active mod; hf is activated when hellfire.mpq is present. A mod with no archive and no loose directory is served from the core archives. Built by CMake with smpq (MPQ version 1, BZIP2, no attributes) from the hellfire_mod file list."
+    source_ref: "Source/engine/assets.cpp:748-764, Source/options.cpp:77-79, CMakeLists.txt:204, CMake/Mods.cmake:8-33, 58-66"
