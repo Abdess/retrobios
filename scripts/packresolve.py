@@ -155,6 +155,11 @@ def resolve_file(
     first_sha1 = (sha1[0] if sha1 else "") if isinstance(sha1, list) else (sha1 or "")
     md5_list = parse_md5_list(file_entry.get("md5"))
     first_md5 = md5_list[0] if md5_list else ""
+    if file_entry.get("unsourceable") and not (first_sha1 or first_md5):
+        # The asset store is addressed by file name: with no hash to check,
+        # it would hand back the same-named file of another game, which is
+        # exactly what the flag forbids.
+        return (path, status) if path else (None, "not_found")
     cached = fetch_large_file(
         name,
         expected_sha1=first_sha1,
