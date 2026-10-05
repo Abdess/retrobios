@@ -15,11 +15,11 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 9898,
-  "total_size": 8800137721,
-  "pack_files": 12541,
-  "pack_size": 8840670885,
-  "total_omitted": 18,
+  "total_files": 9892,
+  "total_size": 8849340324,
+  "pack_files": 12535,
+  "pack_size": 8889873488,
+  "total_omitted": 24,
   "omitted_files": [
     {
       "dest": "SC-55/WAVEROM3.BIN",
@@ -112,6 +112,36 @@
       ]
     },
     {
+      "dest": "games/keen6/audio.ck6",
+      "name": "audio.ck6",
+      "system": "commander-keen",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
+      "dest": "games/keen6/egagraph.ck6",
+      "name": "egagraph.ck6",
+      "system": "commander-keen",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
+      "dest": "games/keen6/gamemaps.ck6",
+      "name": "gamemaps.ck6",
+      "system": "commander-keen",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
       "dest": "jagboot.rom",
       "name": "jagboot.rom",
       "system": "atari-jaguar",
@@ -129,6 +159,26 @@
       "reason": "not_found",
       "cores": [
         "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "rogue/pak0.pak",
+      "name": "pak0.pak",
+      "system": "rogue",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "yquake2"
+      ]
+    },
+    {
+      "dest": "soundfonts/default.sf2",
+      "name": "default.sf2",
+      "system": "dos",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "dosbox-staging"
       ]
     },
     {
@@ -199,6 +249,16 @@
       "reason": "not_found",
       "cores": [
         "drastic"
+      ]
+    },
+    {
+      "dest": "xatrix/pak0.pak",
+      "name": "pak0.pak",
+      "system": "xatrix",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "yquake2"
       ]
     }
   ],
@@ -573,10 +633,10 @@
     },
     {
       "dest": "ATARIOSB.ROM",
-      "sha1": "f1f0741b1d34fb4350cf7cb8ab3b6ea11cdd8174",
-      "sha256": "bc6012f8ca2f7dde21ae895899b1d2af572ffaa28f819b84911ddb6a0bd8a5c7",
+      "sha1": "db1031585968cfc6ec2ecda5c9a5a52f61444a3b",
+      "sha256": "63973d5e86b1ae5b6fca5b119a7f7589e817e19acc3ca54e54462c9dfb619e73",
       "size": 10240,
-      "repo_path": "bios/Atari/400-800/ATARIOSB.ROM",
+      "repo_path": "bios/Atari/400-800/ROM_OS_B_NTSC",
       "cores": null
     },
     {
@@ -2047,10 +2107,10 @@
     },
     {
       "dest": "BS-X.bin",
-      "sha1": "604556b2e62860af18db5a77f2956ebc75450020",
-      "sha256": "3ce321496edc5d77038de2034eb3fb354d7724afd0bc7fd0319f3eb5d57b984d",
+      "sha1": "4891d739a8a8b67923681bad4fb67edab2e90e50",
+      "sha256": "a49827b45ff9ac9cf5b4658190e1428e59251bc82d8a63d8e9e0f71e439f008f",
       "size": 1048576,
-      "repo_path": "bios/Nintendo/SNES/Satellaview_BS-X.sfc",
+      "repo_path": "bios/Nintendo/SNES/BS-X.bin",
       "cores": null
     },
     {
@@ -3615,10 +3675,10 @@
     },
     {
       "dest": "scph5000.bin",
-      "sha1": "e340db2696274dda5fdc25e434a914db71e8b02b",
-      "sha256": "8e0383171e67b33e60d5df6394c58843f3b11c7a0b97f3bfcc4319ac2d1f9d18",
+      "sha1": "ffa7f9a7fb19d773a0c3985a541c8e5623d2c30d",
+      "sha256": "0c8359870cbac0ea091f1c87f188cd332dcc709753b91cafd9fd44a4a6188197",
       "size": 524288,
-      "repo_path": "bios/Sony/PlayStation/.variants/scph5000.bin.eb201d2d",
+      "repo_path": "bios/Sony/PlayStation/scph5000.bin",
       "cores": null
     },
     {
@@ -4295,10 +4355,10 @@
     },
     {
       "dest": "pcsx2/resources/GameIndex.yaml",
-      "sha1": "57369df9ca82a460e596cea7835c5a0797dee668",
-      "sha256": "efa94cb7b9208dc6812bb9407dc986560e523cce57f511eff30942f76b7288bf",
-      "size": 1737799,
-      "repo_path": "bios/Sony/PlayStation 2/.variants/GameIndex.yaml.57369df9",
+      "sha1": "40ecf6138c99a0aba775ef93240b295025a45500",
+      "sha256": "483face8f50f5e96d89528059522be3766b44f5e07e854bae1fa92ff0111d0a7",
+      "size": 2665743,
+      "repo_path": "bios/Sony/PlayStation 2/resources/GameIndex.yaml",
       "cores": null
     },
     {
@@ -95546,36 +95606,6 @@
       ]
     },
     {
-      "dest": "games/keen6/egagraph.ck6",
-      "sha1": "93d7aeaaa8d21ed408c04d03aa1a893395b139a4",
-      "sha256": "8838c6f6f34bbca2be59270e00a608d2532d8bda83b268d8b9dedec7ce1ca295",
-      "size": 291898,
-      "repo_path": "bios/Id Software/Commander Keen/K6DEMO/egagraph.ck6",
-      "cores": [
-        "cgenius"
-      ]
-    },
-    {
-      "dest": "games/keen6/gamemaps.ck6",
-      "sha1": "30f785e447dd39830872199d6ad2f5d8b5948a16",
-      "sha256": "fb413c47e5efa7aae88c05c344e08f9f231af447e6366aff26fb209debb919e3",
-      "size": 19095,
-      "repo_path": "bios/Id Software/Commander Keen/K6DEMO/gamemaps.ck6",
-      "cores": [
-        "cgenius"
-      ]
-    },
-    {
-      "dest": "games/keen6/audio.ck6",
-      "sha1": "f8b6e123ee49ede30481d80631f1adc094767f4b",
-      "sha256": "518ff3c0b1b144b2fa93713efc30b0cd7a379aba7eb8322e78b7d35ac59ce9b9",
-      "size": 36914,
-      "repo_path": "bios/Id Software/Commander Keen/K6DEMO/audio.ck6",
-      "cores": [
-        "cgenius"
-      ]
-    },
-    {
       "dest": "GC/USA/IPL.bin",
       "sha1": "ef9194ab4804aa0aa8540d846caf291b28331165",
       "sha256": "7c833f95839c226699108b93ab6acbe772788bfa3f05132b8ced5e78f5bc9a26",
@@ -95676,16 +95706,6 @@
       ]
     },
     {
-      "dest": "soundfonts/default.sf2",
-      "sha1": "22bcfeb5b6c6481569b90db96aa3f4b5f06c8848",
-      "sha256": "865f15ed7097d68539c4556ceea629658148e5d8fcc9d15a4eb13144653e9cb8",
-      "size": 3281786,
-      "repo_path": "bios/ZC/ZC210/zc210/sf2/default.sf2",
-      "cores": [
-        "dosbox-staging"
-      ]
-    },
-    {
       "dest": "fbalpha2012/hiscore.dat",
       "sha1": "7381472bf046126257e51a0124e4553282f020e5",
       "sha256": "9d44fc928c0df41debad1b86739bd6ca96a5891b3b499f6fb3d7e9ea95ca8de5",
@@ -95697,20 +95717,20 @@
     },
     {
       "dest": "baseq3/pak0.pk3",
-      "sha1": "1976ee8b604f928a1ed38f5646d04a62355f3e8e",
-      "sha256": "e77abad2466f45a0a7ea018445528f9b95a0fe7789fa1abc1a7718bbf0754b08",
-      "size": 46853694,
-      "repo_path": "bios/Id Software/Quake III Arena/demoq3/pak0.pk3",
+      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
+      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
+      "size": 122757192,
+      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
       "cores": [
         "ioquake3"
       ]
     },
     {
       "dest": "missionpack/pak0.pk3",
-      "sha1": "1976ee8b604f928a1ed38f5646d04a62355f3e8e",
-      "sha256": "e77abad2466f45a0a7ea018445528f9b95a0fe7789fa1abc1a7718bbf0754b08",
-      "size": 46853694,
-      "repo_path": "bios/Id Software/Quake III Arena/demoq3/pak0.pk3",
+      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
+      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
+      "size": 122757192,
+      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
       "cores": [
         "ioquake3"
       ]
@@ -95903,26 +95923,6 @@
       "repo_path": "bios/Arcade/Arcade/hiscore.dat",
       "cores": [
         "ume2015"
-      ]
-    },
-    {
-      "dest": "xatrix/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "yquake2"
-      ]
-    },
-    {
-      "dest": "rogue/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "yquake2"
       ]
     },
     {

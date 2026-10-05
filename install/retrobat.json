@@ -236,12 +236,192 @@
       }
     }
   ],
-  "total_files": 12313,
-  "total_size": 9146837881,
-  "pack_files": 12315,
-  "pack_size": 9146837881,
-  "total_omitted": 4,
+  "total_files": 12286,
+  "total_size": 8834411562,
+  "pack_files": 12288,
+  "pack_size": 8834411562,
+  "total_omitted": 31,
   "omitted_files": [
+    {
+      "dest": "base/pak001.pk4",
+      "name": "pak001.pk4",
+      "system": "doom3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "dhewm3"
+      ]
+    },
+    {
+      "dest": "bshift/liblist.gam",
+      "name": "liblist.gam",
+      "system": "bshift",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "bshift/pak0.pak",
+      "name": "pak0.pak",
+      "system": "bshift",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "cstrike/liblist.gam",
+      "name": "liblist.gam",
+      "system": "cstrike",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "cstrike/pak0.pak",
+      "name": "pak0.pak",
+      "system": "cstrike",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "czero/liblist.gam",
+      "name": "liblist.gam",
+      "system": "czero",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "czero/pak0.pak",
+      "name": "pak0.pak",
+      "system": "czero",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "czeror/liblist.gam",
+      "name": "liblist.gam",
+      "system": "czeror",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "czeror/pak0.pak",
+      "name": "pak0.pak",
+      "system": "czeror",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "dmc/pak0.pak",
+      "name": "pak0.pak",
+      "system": "dmc",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "games/keen6/audio.ck6",
+      "name": "audio.ck6",
+      "system": "commander-keen",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
+      "dest": "games/keen6/egagraph.ck6",
+      "name": "egagraph.ck6",
+      "system": "commander-keen",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
+      "dest": "games/keen6/gamemaps.ck6",
+      "name": "gamemaps.ck6",
+      "system": "commander-keen",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
+      "dest": "games/tr1/levels/level2.phd",
+      "name": "level2.phd",
+      "system": "tomb-raider-1",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr1/levels/title.phd",
+      "name": "title.phd",
+      "system": "tomb-raider-1",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr2/levels/title.tr2",
+      "name": "title.tr2",
+      "system": "tomb-raider-2",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2/main.sfx",
+      "name": "main.sfx",
+      "system": "tomb-raider-2",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "gearbox/pak0.pak",
+      "name": "pak0.pak",
+      "system": "gearbox",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
     {
       "dest": "jagboot.rom",
       "name": "jagboot.rom",
@@ -263,6 +443,66 @@
       ]
     },
     {
+      "dest": "mainta/pak1.pk3",
+      "name": "pak1.pk3",
+      "system": "mohaa-spearhead",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "openmohaa"
+      ]
+    },
+    {
+      "dest": "mainta/pak2.pk3",
+      "name": "pak2.pk3",
+      "system": "mohaa-spearhead",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "openmohaa"
+      ]
+    },
+    {
+      "dest": "maintt/pak1.pk3",
+      "name": "pak1.pk3",
+      "system": "mohaa-breakthrough",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "openmohaa"
+      ]
+    },
+    {
+      "dest": "maintt/pak2.pk3",
+      "name": "pak2.pk3",
+      "system": "mohaa-breakthrough",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "openmohaa"
+      ]
+    },
+    {
+      "dest": "ricochet/pak0.pak",
+      "name": "pak0.pak",
+      "system": "ricochet",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "rogue/pak0.pak",
+      "name": "pak0.pak",
+      "system": "rogue",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "yquake2"
+      ]
+    },
+    {
       "dest": "soundfonts/gzdoom.sf2",
       "name": "gzdoom.sf2",
       "system": "doom",
@@ -280,6 +520,36 @@
       "reason": "not_found",
       "cores": [
         "raze"
+      ]
+    },
+    {
+      "dest": "valve/pak0.pak",
+      "name": "pak0.pak",
+      "system": "halflife",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "valve/pak1.pak",
+      "name": "pak1.pak",
+      "system": "halflife",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "xatrix/pak0.pak",
+      "name": "pak0.pak",
+      "system": "xatrix",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "yquake2"
       ]
     }
   ],
@@ -120427,46 +120697,6 @@
       ]
     },
     {
-      "dest": "games/keen6/egagraph.ck6",
-      "sha1": "93d7aeaaa8d21ed408c04d03aa1a893395b139a4",
-      "sha256": "8838c6f6f34bbca2be59270e00a608d2532d8bda83b268d8b9dedec7ce1ca295",
-      "size": 291898,
-      "repo_path": "bios/Id Software/Commander Keen/K6DEMO/egagraph.ck6",
-      "cores": [
-        "cgenius"
-      ]
-    },
-    {
-      "dest": "games/keen6/gamemaps.ck6",
-      "sha1": "30f785e447dd39830872199d6ad2f5d8b5948a16",
-      "sha256": "fb413c47e5efa7aae88c05c344e08f9f231af447e6366aff26fb209debb919e3",
-      "size": 19095,
-      "repo_path": "bios/Id Software/Commander Keen/K6DEMO/gamemaps.ck6",
-      "cores": [
-        "cgenius"
-      ]
-    },
-    {
-      "dest": "games/keen6/audio.ck6",
-      "sha1": "f8b6e123ee49ede30481d80631f1adc094767f4b",
-      "sha256": "518ff3c0b1b144b2fa93713efc30b0cd7a379aba7eb8322e78b7d35ac59ce9b9",
-      "size": 36914,
-      "repo_path": "bios/Id Software/Commander Keen/K6DEMO/audio.ck6",
-      "cores": [
-        "cgenius"
-      ]
-    },
-    {
-      "dest": "base/pak001.pk4",
-      "sha1": "0d9ca3d4532c0d412fbb64ab2885f52ef8852594",
-      "sha256": "2ba245254b8ed3440e252f6e2e24af2c6343d7c312f9a9a7e73509abdaf13e49",
-      "size": 99336,
-      "repo_path": "bios/Id Software/Doom 3/d3xp/pak001.pk4",
-      "cores": [
-        "dhewm3"
-      ]
-    },
-    {
       "dest": "Triforce/segaboot.gcm",
       "sha1": "7297a11be143011ceb75a0720f96855003415a5d",
       "sha256": "9a2eee93f5ed961aea4b12a318e2b4a54fa69a31239c1378b8bef6ea02e90391",
@@ -120498,30 +120728,30 @@
     },
     {
       "dest": "baseq3/pak0.pk3",
-      "sha1": "1976ee8b604f928a1ed38f5646d04a62355f3e8e",
-      "sha256": "e77abad2466f45a0a7ea018445528f9b95a0fe7789fa1abc1a7718bbf0754b08",
-      "size": 46853694,
-      "repo_path": "bios/Id Software/Quake III Arena/demoq3/pak0.pk3",
+      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
+      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
+      "size": 122757192,
+      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
       "cores": [
         "ioquake3"
       ]
     },
     {
       "dest": "missionpack/pak0.pk3",
-      "sha1": "1976ee8b604f928a1ed38f5646d04a62355f3e8e",
-      "sha256": "e77abad2466f45a0a7ea018445528f9b95a0fe7789fa1abc1a7718bbf0754b08",
-      "size": 46853694,
-      "repo_path": "bios/Id Software/Quake III Arena/demoq3/pak0.pk3",
+      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
+      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
+      "size": 122757192,
+      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
       "cores": [
         "ioquake3"
       ]
     },
     {
       "dest": "main/pak0.pk3",
-      "sha1": "1976ee8b604f928a1ed38f5646d04a62355f3e8e",
-      "sha256": "e77abad2466f45a0a7ea018445528f9b95a0fe7789fa1abc1a7718bbf0754b08",
-      "size": 46853694,
-      "repo_path": "bios/Id Software/Quake III Arena/demoq3/pak0.pk3",
+      "sha1": "cbb387a24ae7c57b193e0f7d8931e98d854a4b29",
+      "sha256": "042d40fa08f562e37e1df423acc0972a9360cae61365015949895eb622a3279c",
+      "size": 122757192,
+      "repo_path": "bios/Id Software/Return to Castle Wolfenstein/demomain/pak0.pk3",
       "cores": [
         "iortcw"
       ]
@@ -120539,26 +120769,6 @@
       "release_asset": "Id_Software--Return_to_Castle_Wolfenstein--demomain--pak0.pk3"
     },
     {
-      "dest": "mainta/pak1.pk3",
-      "sha1": "0be8c392b0237304fd823206d7b6ef72e0f656d5",
-      "sha256": "d4ffd60b4b414c3419499e321b6f5c2e933cf082df85823ad2d6ae2f803e1682",
-      "size": 374405,
-      "repo_path": "bios/Id Software/Quake III Arena/baseq3/pak1.pk3",
-      "cores": [
-        "openmohaa"
-      ]
-    },
-    {
-      "dest": "mainta/pak2.pk3",
-      "sha1": "507a86bdf8e3a8315f66a6b638fe1cabefd44425",
-      "sha256": "ccae938a2f13a03b24902d675181d516a431699701ed88023a307f34b5bcd58c",
-      "size": 7511182,
-      "repo_path": "bios/Id Software/Quake III Arena/baseq3/pak2.pk3",
-      "cores": [
-        "openmohaa"
-      ]
-    },
-    {
       "dest": "mainta/pak3.pk3",
       "sha1": "a3d1a7e24a56d958f52557fbcd3b970ecf4b20e0",
       "sha256": "3bc8bbf8a57cf38ba1f8e1e94ce1c70d8cb22ed93bf8f027e219d3cb88cf012d",
@@ -120569,216 +120779,6 @@
       ],
       "storage": "release",
       "release_asset": "pak3.pk3"
-    },
-    {
-      "dest": "maintt/pak1.pk3",
-      "sha1": "0be8c392b0237304fd823206d7b6ef72e0f656d5",
-      "sha256": "d4ffd60b4b414c3419499e321b6f5c2e933cf082df85823ad2d6ae2f803e1682",
-      "size": 374405,
-      "repo_path": "bios/Id Software/Quake III Arena/baseq3/pak1.pk3",
-      "cores": [
-        "openmohaa"
-      ]
-    },
-    {
-      "dest": "maintt/pak2.pk3",
-      "sha1": "507a86bdf8e3a8315f66a6b638fe1cabefd44425",
-      "sha256": "ccae938a2f13a03b24902d675181d516a431699701ed88023a307f34b5bcd58c",
-      "size": 7511182,
-      "repo_path": "bios/Id Software/Quake III Arena/baseq3/pak2.pk3",
-      "cores": [
-        "openmohaa"
-      ]
-    },
-    {
-      "dest": "games/tr1/levels/title.phd",
-      "sha1": "27f7a95739e373d06365fb8b60613885c9d36bd8",
-      "sha256": "e1f4a11b7566fc9ba3be5208806915bf5bfc30a890ce0e610b5be697d664580b",
-      "size": 316138,
-      "repo_path": "bios/Game Engines/TRX/games/tr1-demo-pc/levels/title.phd",
-      "cores": [
-        "tr1x"
-      ]
-    },
-    {
-      "dest": "games/tr1/levels/level2.phd",
-      "sha1": "f0fc40ca8df563191dda683bae76522f16f0f535",
-      "sha256": "efaae10c309b266b6ad0c27369b9a4e227ae9d62b9aff6d5f8e076a535e83199",
-      "size": 2873406,
-      "repo_path": "bios/Game Engines/TRX/games/tr1-demo-pc/levels/level2.phd",
-      "cores": [
-        "tr1x"
-      ]
-    },
-    {
-      "dest": "games/tr2/main.sfx",
-      "sha1": "9de9423b6f12875b8d02dd783d5c1547f15e36fc",
-      "sha256": "3d04ebbb5e733cc3462be2232225500931b977cfc61847f14de812d59f81860b",
-      "size": 7609670,
-      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/main.sfx",
-      "cores": [
-        "tr2x"
-      ]
-    },
-    {
-      "dest": "games/tr2/levels/title.tr2",
-      "sha1": "b7dadcbaf38cefdc89a692e85b290caf6409b163",
-      "sha256": "5d95717b543fa1daf98a4005d577bbc32e059413fd7093e57ad627606b0a4da5",
-      "size": 611892,
-      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/levels/title.tr2",
-      "cores": [
-        "tr2x"
-      ]
-    },
-    {
-      "dest": "valve/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "valve/pak1.pak",
-      "sha1": "588ef09965dee539521b4eb6da4337ce78a2ea21",
-      "sha256": "678210ecd1b27dde1c645660333a1a7b139d849425793859657f804d379b62ad",
-      "size": 12992754,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak1.pak",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "cstrike/liblist.gam",
-      "sha1": "dfa2d03d919031c40cb899e1a74a58cbfb6d1060",
-      "sha256": "e409ea731911ffc3fcd6d8d422e6d2c07c7b68c7c864f3b81dcafeae67c09320",
-      "size": 329,
-      "repo_path": "bios/Valve/Half-Life/dmc/liblist.gam",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "cstrike/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "czero/liblist.gam",
-      "sha1": "dfa2d03d919031c40cb899e1a74a58cbfb6d1060",
-      "sha256": "e409ea731911ffc3fcd6d8d422e6d2c07c7b68c7c864f3b81dcafeae67c09320",
-      "size": 329,
-      "repo_path": "bios/Valve/Half-Life/dmc/liblist.gam",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "czero/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "czeror/liblist.gam",
-      "sha1": "dfa2d03d919031c40cb899e1a74a58cbfb6d1060",
-      "sha256": "e409ea731911ffc3fcd6d8d422e6d2c07c7b68c7c864f3b81dcafeae67c09320",
-      "size": 329,
-      "repo_path": "bios/Valve/Half-Life/dmc/liblist.gam",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "czeror/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "dmc/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "gearbox/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "bshift/liblist.gam",
-      "sha1": "dfa2d03d919031c40cb899e1a74a58cbfb6d1060",
-      "sha256": "e409ea731911ffc3fcd6d8d422e6d2c07c7b68c7c864f3b81dcafeae67c09320",
-      "size": 329,
-      "repo_path": "bios/Valve/Half-Life/dmc/liblist.gam",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "bshift/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "ricochet/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "xash3d_fwgs"
-      ]
-    },
-    {
-      "dest": "xatrix/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "yquake2"
-      ]
-    },
-    {
-      "dest": "rogue/pak0.pak",
-      "sha1": "b86e8878a8e8706595ceebe88b3e6b4c1ba5bcab",
-      "sha256": "cae257182f34d3913f3d663e1d7cf865d668feda6af393d4ecf3e9e408b48d09",
-      "size": 49951322,
-      "repo_path": "bios/Id Software/Quake II/baseq2/pak0.pak",
-      "cores": [
-        "yquake2"
-      ]
     },
     {
       "dest": "fbneo/astrocde.zip",
