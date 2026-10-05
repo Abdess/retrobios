@@ -4,7 +4,7 @@ core_classification: community_fork
 core: mednafen_saturn_libretro
 source: "https://github.com/libretro/beetle-saturn-libretro"
 upstream: "https://mednafen.github.io/"
-profiled_date: "2026-03-24"
+profiled_date: "2026-10-05"
 source_commit: "65f05fa66f83e65e33be83aa433d883b4fd9509a"
 core_version: "v1.32.1"
 display_name: "Sega - Saturn (Beetle Saturn)"
@@ -17,29 +17,51 @@ systems:
 
 notes: |
   Libretro port of Mednafen's Saturn emulation module, converted to C and
-  reporting v1.32.1 (libretro.c:57). Region auto-detection reads the disc header
-  and selects the matching BIOS. Manual override via beetle_saturn_region option.
+  reporting v1.32.1 (libretro.c:57). Every firmware file is read from the
+  system directory: MDFN_MakeFName joins retro_base_directory and the bare
+  name for MDFNMKF_FIRMWARE (libretro.c:2267-2268), and the BIOS path is
+  built the same way (mednafen/ss/ss.c:1867-1869).
 
-  InitCommon() returns false if the BIOS file is missing or not exactly 512 KB.
-  Both region BIOS files are required for full region coverage.
+  Region comes from the disc header and the region table of
+  mednafen/ss/db.c (libretro.c:1147-1149) and can be forced by the
+  beetle_saturn_region option (libretro.c:488-510, libretro.c:1153-1154).
+  With no content loaded the region defaults to North America
+  (libretro.c:1103, libretro.c:1300-1301). The BIOS filename is hard-coded
+  per region (mednafen/ss/ss.c:1845-1848): sega_101.bin for Japan and Asia
+  NTSC, mpr-17933.bin for every other area. The file must be exactly 524288
+  bytes and InitCommon returns false when it is absent, of another size or
+  short on read (mednafen/ss/ss.c:1943-1947, mednafen/ss/ss.c:1961-1984).
+  The sha256 of the loaded image is kept only to refuse a save state made
+  under another BIOS (mednafen/ss/ss.c:1988, mednafen/ss/ss.c:2589-2608).
+  ss.bios_sanity answers true (mednafen/settings.c:50-51) but nothing in the
+  port reads it: the name and hash table that upstream checks under that
+  setting is not carried over.
 
-  KOF95 and Ultraman ROM carts are loaded when the cart type is set via core
-  option or auto-detected from the internal game database.
+  The cartridge is chosen by the game table of mednafen/ss/db.c or by the
+  beetle_saturn_cart option (libretro.c:512-530, libretro.c:1157-1158). The
+  KOF95 and Ultraman ROM carts are opened from the system directory under
+  the names of mednafen/settings.c:62-65 (mednafen/ss/cart.c:197-216). An
+  absent file leaves the cart slot on the dummy handlers and the load goes
+  on (mednafen/ss/cart.c:209).
 
   ST-V content is a game ZIP or a bare ROM matched against the ST-V game
   table (libretro.c:1207-1227, libretro.c:1261-1281). The cabinet region of
   the matched game selects one of three ST-V BIOS images
-  (mednafen/ss/ss.c:1829-1843), read as a bare file from the system directory
-  or, when that file is absent, as the member of the same name in stvbios.zip
-  there (mednafen/ss/ss.c:1875-1942). Either form may be 131072 or 524288
-  bytes (mednafen/ss/ss.c:1911-1912, mednafen/ss/ss.c:1962).
+  (mednafen/ss/ss.c:1829-1843); the beetle_saturn_region option is not
+  applied on that path (libretro.c:1217, libretro.c:1275). The image is read
+  as a bare file from the system directory or, when that file is absent, as
+  the member of the same name in stvbios.zip there, matched without regard
+  to case (mednafen/ss/ss.c:1875-1949, zip_reader.c:358-365). Either form
+  may be 131072 or 524288 bytes (mednafen/ss/ss.c:1911-1912,
+  mednafen/ss/ss.c:1962).
 
   The Video CD Card is driven through the CD block. With the
-  beetle_saturn_mpeg_card option enabled, CDB_Init opens mpeg_card.bin in the
-  system directory and MPEG_Init keeps up to 0x80000 bytes of it; without the
-  ROM the card answers commands but does not authenticate
-  (libretro.c:578-586, mednafen/settings.c:68-69, mednafen/ss/cdb.c:1315-1332,
-  mednafen/ss/mpeg.c:423-450).
+  beetle_saturn_mpeg_card option enabled (libretro.c:578-586, default
+  disabled), CDB_Init opens mpeg_card.bin in the system directory and
+  MPEG_Init keeps up to 0x80000 bytes of it (mednafen/settings.c:52-53,
+  mednafen/settings.c:68-69, mednafen/ss/cdb.c:1315-1332,
+  mednafen/ss/mpeg.c:423-450). The bytes are never mapped or executed: the
+  loaded image only makes the card authenticate (mednafen/ss/mpeg.c:667-675).
 
   No setting names a file for the bootable ROM cart: ss.cart.bootrom_path
   has no value in the port (mednafen/ss/cart.c:242-262,
@@ -51,32 +73,36 @@ files:
     region: [japan, asia-ntsc]
     required: true
     size: 524288
-    validation: [size]
-    note: "Saturn BIOS v1.01 (Japan). Used when region is JP or Asia NTSC."
-    source_ref: "mednafen/ss/ss.c:1846 (region filename), mednafen/ss/ss.c:1871-1988 (open, size check, read, sha256)"
+    validation: {core: [size], upstream: [size, sha256]}
+    sha256: "dcfef4b99605f872b6c3b6d05c045385cdea3d1b702906a0ed930df7bcb7deac"
+    note: "Saturn BIOS v1.01 (Japan), loaded for the Japan and Asia NTSC areas. The port checks the size only; the sha256 is the value upstream Mednafen 1.32.1 holds for this filename in its ss.bios_sanity table (src/ss/ss.cpp, BIOSDB)."
+    source_ref: "mednafen/ss/ss.c:1845-1846 (region filename), mednafen/ss/ss.c:1867-1873 (open), mednafen/ss/ss.c:1961-1984 (size check, read), mednafen/ss/ss.c:1988 (sha256 for save states)"
 
   - name: "mpr-17933.bin"
     system: sega-saturn
     region: [north-america, europe, south-korea, asia-pal, brazil, latin-america]
     required: true
     size: 524288
-    validation: [size]
-    note: "Saturn BIOS (NA/EU). Used for all non-JP/Asia-NTSC regions."
-    source_ref: "mednafen/ss/ss.c:1848 (region filename), mednafen/ss/ss.c:1871-1988 (open, size check, read, sha256)"
+    validation: {core: [size], upstream: [size, sha256]}
+    sha256: "96e106f740ab448cf89f0dd49dfbac7fe5391cb6bd6e14ad5e3061c13330266f"
+    note: "Saturn BIOS v1.00a (North America and Europe), loaded for every area other than Japan and Asia NTSC, and when no content is loaded. The port checks the size only; the sha256 is the value upstream Mednafen 1.32.1 holds for this filename in its ss.bios_sanity table (src/ss/ss.cpp, BIOSDB)."
+    source_ref: "mednafen/ss/ss.c:1847-1848 (region filename), mednafen/ss/ss.c:1867-1873 (open), mednafen/ss/ss.c:1961-1984 (size check, read), mednafen/ss/ss.c:1988 (sha256 for save states), libretro.c:1103 (default area)"
 
   - name: "mpr-18811-mx.ic1"
     system: sega-saturn
     required: false
-    size: 2097152
-    note: "KOF95 expansion ROM cart. Loaded when cart type set to KOF95."
-    source_ref: "mednafen/ss/cart.c:200-215 (firmware path + open), mednafen/ss/cart/rom.c:51 (CART_ROM_Init)"
+    min_size: 2097152
+    validation: [size]
+    note: "King of Fighters '95 ROM cart. Selected by the game table for MK-81088 and T-3101G or by the beetle_saturn_cart option. The first 0x200000 bytes are read; a shorter file installs a zeroed cart, an absent file leaves the slot empty."
+    source_ref: "mednafen/settings.c:62-63 (filename), mednafen/ss/cart.c:197-216 (open), mednafen/ss/cart/rom.c:67-68 (read), mednafen/ss/db.c:90-91 (game table), libretro.c:527 (option)"
 
   - name: "mpr-19367-mx.ic1"
     system: sega-saturn
     required: false
-    size: 2097152
-    note: "Ultraman expansion ROM cart. Loaded when cart type set to Ultraman."
-    source_ref: "mednafen/ss/cart.c:200-215 (firmware path + open), mednafen/ss/cart/rom.c:51 (CART_ROM_Init)"
+    min_size: 2097152
+    validation: [size]
+    note: "Ultraman: Hikari no Kyojin Densetsu ROM cart. Selected by the game table for T-13308G or by the beetle_saturn_cart option. The first 0x200000 bytes are read; a shorter file installs a zeroed cart, an absent file leaves the slot empty."
+    source_ref: "mednafen/settings.c:64-65 (filename), mednafen/ss/cart.c:197-216 (open), mednafen/ss/cart/rom.c:67-68 (read), mednafen/ss/db.c:92 (game table), libretro.c:529 (option)"
 
   - name: "epr-20091.ic8"
     system: sega-stv
@@ -85,7 +111,7 @@ files:
     size: [131072, 524288]
     validation: [size]
     note: "ST-V BIOS for Japan and Asia NTSC cabinets. Read from stvbios.zip when the bare file is absent."
-    source_ref: "mednafen/ss/ss.c:1838-1839 (region filename), mednafen/ss/ss.c:1871-1988 (open, zip fallback, size check, read, sha256)"
+    source_ref: "mednafen/ss/ss.c:1838-1839 (region filename), mednafen/ss/ss.c:1871-1988 (open, zip fallback, size check, read)"
 
   - name: "epr-17952a.ic8"
     system: sega-stv
@@ -94,7 +120,7 @@ files:
     size: [131072, 524288]
     validation: [size]
     note: "ST-V BIOS for North America and Central and South America cabinets. Read from stvbios.zip when the bare file is absent."
-    source_ref: "mednafen/ss/ss.c:1840-1841 (region filename), mednafen/ss/ss.c:1871-1988 (open, zip fallback, size check, read, sha256)"
+    source_ref: "mednafen/ss/ss.c:1840-1841 (region filename), mednafen/ss/ss.c:1871-1988 (open, zip fallback, size check, read)"
 
   - name: "epr-17954a.ic8"
     system: sega-stv
@@ -103,13 +129,29 @@ files:
     size: [131072, 524288]
     validation: [size]
     note: "ST-V BIOS for every other cabinet region. Read from stvbios.zip when the bare file is absent."
-    source_ref: "mednafen/ss/ss.c:1842-1843 (region filename), mednafen/ss/ss.c:1871-1988 (open, zip fallback, size check, read, sha256)"
+    source_ref: "mednafen/ss/ss.c:1842-1843 (region filename), mednafen/ss/ss.c:1871-1988 (open, zip fallback, size check, read)"
+
+  - name: "stvbios.zip"
+    category: bios_zip
+    system: sega-stv
+    required: false
+    description: "ST-V BIOS archive"
+    note: "Opened only when the bare ST-V BIOS file for the cabinet region is absent. The member of the same name is matched without regard to case and must be 131072 or 524288 bytes; no hash is checked."
+    source_ref: "mednafen/ss/ss.c:1888-1941 (open, member lookup, size check, extract), zip_reader.c:358-365 (case-insensitive lookup)"
+    contents:
+      - name: "epr-20091.ic8"
+        description: "Japan and Asia NTSC"
+      - name: "epr-17952a.ic8"
+        description: "North America and Central and South America"
+      - name: "epr-17954a.ic8"
+        description: "Europe and every other region"
 
   - name: "mpeg_card.bin"
     system: sega-saturn
     required: false
-    note: "Video CD Card firmware, opened when beetle_saturn_mpeg_card is enabled. At most 0x80000 bytes are kept and nothing is checked; without it the card does not authenticate."
-    source_ref: "mednafen/settings.c:68-69 (filename), mednafen/ss/cdb.c:1315-1332 (open), mednafen/ss/mpeg.c:423-450 (read)"
+    size: 524288
+    note: "Video CD Card program ROM, opened when beetle_saturn_mpeg_card is enabled. The card carries a 512 KiB mask ROM; the core keeps at most 0x80000 bytes, pads a shorter image with zeros and checks nothing else. The image is never mapped: its presence is what makes the card authenticate, and without it the card answers commands but does not authenticate."
+    source_ref: "mednafen/settings.c:68-69 (filename), mednafen/ss/cdb.c:1315-1332 (open), mednafen/ss/mpeg.c:67-71 (size), mednafen/ss/mpeg.c:423-450 (read), mednafen/ss/mpeg.c:667-675 (authentication)"
 
   - name: "satar4mp.bin"
     system: sega-saturn
