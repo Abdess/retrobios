@@ -19,6 +19,7 @@ def _build_readme(
     undecidable_slots: list[str] | None = None,
     narrowings: list[tuple[str, str]] | None = None,
     system_filter: list[str] | None = None,
+    bios_paths: list[str] | None = None,
 ) -> str:
     """Build a personalized step-by-step README for each platform pack."""
     narrowings = narrowings or []
@@ -128,8 +129,9 @@ def _build_readme(
             "  ----------------\n"
             "  1. Open Dolphin file manager\n"
             "  2. Show hidden files (Ctrl+H)\n"
-            "  3. Navigate to ~/retrodeck/bios/\n"
-            "  4. Extract all files from this archive directly into ~/retrodeck/bios/\n\n"
+            "  3. Navigate to ~/retrodeck/\n"
+            "  4. Extract all files from this archive directly into ~/retrodeck/\n"
+            "     (the archive already holds the bios/ and roms/ folders)\n\n"
             "  NOTE: RetroDECK uses its own BIOS checker. After\n"
             "  copying, open RetroDECK > Tools > BIOS Checker to\n"
             "  verify everything is detected.\n\n"
@@ -186,11 +188,19 @@ def _build_readme(
     # Lakka uses same guide as RetroArch
     guides["lakka"] = guides["retroarch"]
 
+    # A platform without a written guide is told where its files go by the
+    # registry, which the installer reads too: "your BIOS directory" sent
+    # MiSTer users looking for a folder MiSTer does not have.
+    targets = [path for path in bios_paths or [] if path]
+    where = (
+        " or ".join(f"{path}/" for path in targets)
+        if targets else "your BIOS directory"
+    )
     guide = guides.get(
         platform_name,
         (
             f"INSTALLATION\n\n"
-            f"  1. Extract all files from this archive directly into your BIOS directory\n"
+            f"  1. Extract all files from this archive directly into {where}\n"
             f"  2. Overwrite if asked\n\n"
         ),
     )
