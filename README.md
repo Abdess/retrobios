@@ -72,8 +72,8 @@ Each file is checked the way your platform checks it. Most compare a checksum, t
 - **12 platforms** supported with platform-specific verification
 - **506 emulators** profiled from source (RetroArch cores + standalone)
 - **546 systems** handled by those emulators (NES, SNES, PlayStation, Saturn, Dreamcast, ...)
-- **18,987 files in the collection**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 5,257 system files, 2,810 arcade ROM sets, 10,920 game and engine data files. That is every platform and emulator together, so no pack holds them all: each carries what its own emulators load, counted in the download table
-- **561 of 5,257 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
+- **18,988 files in the collection**, each with its SHA1, MD5, SHA256, CRC32 and Adler-32 fingerprints: 5,258 system files, 2,810 arcade ROM sets, 10,920 game and engine data files. That is every platform and emulator together, so no pack holds them all: each carries what its own emulators load, counted in the download table
+- **562 of 5,258 system files** matched to dump-preservation catalogs (No-Intro, Redump, TOSEC); arcade sets and engine data fall outside what those catalogs index
 - **16670 MB** total collection size
 
 ## Supported systems
@@ -86,17 +86,17 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 | Platform | On its BIOS list | Files its emulators load | Checked by |
 |----------|-----------------:|-------------------------:|------------|
-| Batocera | 353/353 | 12,275/12,705 | MD5 hash |
-| BizHawk | 118/118 | 647/648 | SHA1 hash |
+| Batocera | 353/353 | 12,274/12,704 | MD5 hash |
+| BizHawk | 118/118 | 649/650 | SHA1 hash |
 | EmuDeck | 168/168 | 381/383 | MD5 hash |
-| Lakka | 530/530 | 5,262/5,292 | file presence |
+| Lakka | 527/527 | 5,263/5,293 | file presence |
 | MiSTer FPGA | 81/81 | - | MD5 hash |
 | ROCKNIX | 38/38 | 5,700/5,730 | MD5 hash |
-| Recalbox | 351/351 | 2,726/2,734 | MD5 hash |
-| RetroArch | 530/530 | 5,262/5,292 | file presence |
+| Recalbox | 351/351 | 2,727/2,735 | MD5 hash |
+| RetroArch | 527/527 | 5,263/5,293 | file presence |
 | RetroBat | 348/348 | 11,748/12,178 | MD5 hash |
-| RetroDECK | 2,008/2,008 | 5,279/5,329 | MD5 hash |
-| RetroPie * | 530/530 | 9,181/9,323 | file presence |
+| RetroDECK | 2,008/2,008 | 5,280/5,330 | MD5 hash |
+| RetroPie * | 527/527 | 9,182/9,324 | file presence |
 | RomM | 381/381 | 624/630 | MD5 hash |
 
 Each fraction is what the pack has over what is needed, counting required and optional files alike since both ship. The first column is the BIOS list the platform publishes. The second counts files its emulators load that this list never mentions, found by reading their source code, and it is routinely several times larger. A short fraction means files are still missing, and they are named in the [gap analysis](https://abdess.github.io/retrobios/gaps/).
@@ -180,4 +180,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-10-05T20:54:20Z*
+*Auto-generated on 2026-10-05T23:10:58Z*

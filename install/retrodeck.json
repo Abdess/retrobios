@@ -5,7 +5,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-10-05T20:47:58Z",
+  "generated": "2026-10-05T22:37:20Z",
   "base_destination": "",
   "detect": [
     {
@@ -238,9 +238,9 @@
     }
   ],
   "total_files": 7666,
-  "total_size": 8629195582,
+  "total_size": 8628902718,
   "pack_files": 7668,
-  "pack_size": 8629195582,
+  "pack_size": 8628902718,
   "total_omitted": 16,
   "omitted_files": [
     {
@@ -64766,6 +64766,16 @@
       ]
     },
     {
+      "dest": "bios/quasi88/n88sub.rom",
+      "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
+      "sha256": "9dc63118728a171ce2ed437ad38ef280b8b7bcf4a5a95fedf18946501b010456",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-98/N88SUB.ROM",
+      "cores": [
+        "quasi88"
+      ]
+    },
+    {
       "dest": "bios/quasi88/n88knj2.rom",
       "sha1": "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53",
       "sha256": "5c31df4b892e730d1ba7f80fd5583e838ae5583ba52408088da74b9ff422e5fe",
@@ -64787,10 +64797,10 @@
     },
     {
       "dest": "bios/quasi88/font.rom",
-      "sha1": "78ba9960f135372825ab7244b5e4e73a810002ff",
-      "sha256": "8db165d567e13bce3f50ee495975671faa5a0ff332dcb08e187aa91125c81ec6",
-      "size": 288768,
-      "repo_path": "bios/NEC/PC-98/font.rom",
+      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
+      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/font.rom",
       "cores": [
         "quasi88"
       ]
@@ -70259,16 +70269,6 @@
       "sha256": "4db0b25bf25fd063b08fde9e76d7504440cd322a8ab6b72c4ee7d8ea98ce0839",
       "size": 32768,
       "repo_path": "bios/NEC/PC-98/n88n.rom",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
-      "dest": "bios/quasi88/disk.rom",
-      "sha1": "8063185d4dd653dd75a68855148c9ee15b71164c",
-      "sha256": "a34304b73fb96aa9a3696669b6a124eeac43622888e64071b1d0866b0a0ab0d3",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/disk.rom",
       "cores": [
         "quasi88"
       ]
