@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 
 from .base_exporter import BaseExporter
-from .baseline import NativeFile, NativeSystem, Report
+from .baseline import NativeFile, NativeSystem, Report, _hash_values
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/TASEmulators/BizHawk/master"
@@ -80,7 +80,10 @@ class Exporter(BaseExporter):
         seen: dict[str, list[NativeFile]] = {}
         for system in systems.values():
             for fe in system.files:
-                if fe.hash("sha1"):
+                # A SHA1 BizHawk declares is BizHawk's own code, the authority
+                # for its cores: the truth's MSX.rom came from FBNeo and would
+                # have made MSXHawk refuse the dump it accepts.
+                if fe.hash("sha1") and not _hash_values(fe.platform or {}, "sha1"):
                     seen.setdefault(fe.name.casefold(), []).append(fe)
         resolved: dict[str, NativeFile] = {}
         for name, entries in seen.items():
