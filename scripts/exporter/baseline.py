@@ -42,6 +42,15 @@ def _field_sets(entry: dict | None) -> dict[str, set[str]]:
     return {f: set(_hash_values(entry or {}, f)) for f in HASH_FIELDS}
 
 
+def _single_size(value: object) -> int | None:
+    """One size, or None: a list names several accepted revisions, which a
+    single size field cannot state (int() on it stopped the whole export)."""
+    if isinstance(value, list):
+        distinct = {int(v) for v in value}
+        return distinct.pop() if len(distinct) == 1 else None
+    return int(value)
+
+
 @dataclass
 class NativeFile:
     """One file as the platform will read it, after correction."""
@@ -147,7 +156,7 @@ class NativeFile:
         order = (self.platform, self.truth) if source == "platform" else (self.truth, self.platform)
         for entry in order:
             if entry and entry.get("size"):
-                return int(entry["size"])
+                return _single_size(entry["size"])
         return None
 
     def native(self, key: str, default: object = "") -> object:
