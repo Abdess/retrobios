@@ -1012,6 +1012,13 @@ class ProfileReport:
     # rather than dropped: a `source` on an unknown host used to fall back to
     # `upstream` in silence, and a divergence between the two went unseen.
     unread: list[str] = field(default_factory=list)
+    # The upstream view when the profile declares one: its pin and HEAD. A
+    # recale moves its parts onto upstream HEAD lines, so a bump advances
+    # upstream_commit with source_commit, or the profile describes two
+    # revisions at once (geolith jg.c drifted 213 -> 221 -> 229).
+    upstream_pin: str | None = None
+    upstream_head: str | None = None
+    upstream_origin: str | None = None
 
     def needs_review(self) -> int:
         counts = self.counts or {}
@@ -1195,22 +1202,32 @@ def verify_at_pin(part: RefPart, pin_lines, tokens, hash_tokens=()) -> PartResul
     )
 
 
-def reconcile_self_check(parts: list[PartResult]) -> list[PartResult]:
+def reconcile_self_check(
+    parts: list[PartResult], eligible: list[bool] | None = None
+) -> list[PartResult]:
     """Judge a self-checked entry whole rather than part by part.
 
     A ref often cites both the table carrying the value and the code that
-    loads the file. Once one part anchors on the value, the others describe
-    behaviour and cannot be judged by value: the checker would only rediscover
-    the value where the first part already points. A structurally absent part
-    still counts, since that verdict does not rest on the value.
+    loads the file. Once one part anchors on the value, the others in the
+    SAME file describe behaviour and cannot be judged by value: the checker
+    would only rediscover the value where the first part already points. A
+    part in another file carries its own value and is judged on it: geolith's
+    jg.c part, sixteen lines off, was settled by an anchored libretro.c part.
+    A structurally absent part still counts, and a part that was compared
+    against HEAD rather than self-checked is never rewritten.
     """
-    if not any(part.status == "ANCHORED" for part in parts):
-        return parts
+    eligible = eligible if eligible is not None else [True] * len(parts)
+    anchored_files = {
+        part.part.path
+        for part, ok in zip(parts, eligible)
+        if ok and part.status == "ANCHORED"
+    }
     kept = ("ANCHORED", "GONE", "EXTERNAL", "BINARY")
     return [
-        part if part.status in kept
-        else PartResult(part.part, "ANCHORED", None, None, None, [])
-        for part in parts
+        PartResult(part.part, "ANCHORED", None, None, None, [])
+        if ok and part.status not in kept and part.part.path in anchored_files
+        else part
+        for part, ok in zip(parts, eligible)
     ]
 
 
@@ -1364,6 +1381,11 @@ def build_report(
     report.repos = [v.repo.slug for v in views]
     report.pin, report.pin_origin = primary.pin, primary.origin
     report.head = primary.head
+    for view in views[1:]:
+        if view.field == "upstream":
+            report.upstream_pin = view.pin
+            report.upstream_head = view.head
+            report.upstream_origin = view.origin
     # A profile can hold its pin on purpose, documenting a build that is that
     # revision. Comparing it to HEAD says nothing and recaling would repoint
     # its refs at code the build never had, so it is judged like a frozen tag:
@@ -1639,26 +1661,24 @@ def build_report(
         )
 
     # Comparing a revision with itself anchors every ref whatever it cites, so
-    # a profile already sitting on HEAD is judged on self-consistency instead.
-    self_check = bool(report.pinned_tag) or primary.pin == primary.head
-    if self_check:
-        staged = [
-            (entry_name, ref, citation, reconcile_self_check([
-                verify_at_pin(
-                    part, fetch(PIN, part.path, part.start, tokens), tokens, hashes
-                )
-                for part in ref_parts
-            ]))
-            for entry_name, ref, tokens, hashes, ref_parts, citation in refs
+    # a part whose repository already sits on HEAD is judged on
+    # self-consistency instead. Decided per part, by the repository that owns
+    # it: a primary on HEAD says nothing about an upstream that moved on.
+    def self_checked(part, tokens) -> bool:
+        if report.pinned_tag:
+            return True
+        view, _ = resolve_path(part.path, part.start, tuple(tokens))
+        return view.pin == view.head
+
+    staged = []
+    for entry_name, ref, tokens, hashes, ref_parts, citation in refs:
+        flags = [self_checked(part, tokens) for part in ref_parts]
+        judged = [
+            verify_at_pin(part, fetch(PIN, part.path, part.start, tokens), tokens, hashes)
+            if flag else anchor_across_views(part, tokens)
+            for part, flag in zip(ref_parts, flags)
         ]
-    else:
-        staged = [
-            (entry_name, ref, citation, [
-                anchor_across_views(part, tokens)
-                for part in ref_parts
-            ])
-            for entry_name, ref, tokens, hashes, ref_parts, citation in refs
-        ]
+        staged.append((entry_name, ref, citation, reconcile_self_check(judged, flags)))
 
     shifts = dominant_shifts([p for _, _, _, parts in staged for p in parts])
     for entry_name, ref, citation, parts in staged:
@@ -2434,20 +2454,40 @@ def bump_commit(
     if pending_recale(report, accept_changed, text):
         return False
     document = yaml.safe_load(text)
-    if document.get("source_commit") == report.head:
+    upstream_moves = bool(
+        report.upstream_head and report.upstream_pin != report.upstream_head
+    )
+    if document.get("source_commit") == report.head and not upstream_moves:
         # Rewriting the pin to the value it already holds is not a bump, and
         # announcing it buries the profiles that did move.
         return False
+    if isinstance(document.get("upstream_commit"), dict):
+        # A pin per build mode names no single upstream revision to advance.
+        return False
     expected = dict(document)
     expected["source_commit"] = report.head
-    if document.get("source_commit"):
+    new_text = text
+    if document.get("source_commit") == report.head:
+        pass
+    elif document.get("source_commit"):
         new_text, _ = replace_field_line(
-            text, "source_commit", str(document["source_commit"]), report.head
+            new_text, "source_commit", str(document["source_commit"]), report.head
         )
     else:
         new_text = insert_after_line(
-            text, "profiled_date", f'source_commit: "{report.head}"'
+            new_text, "profiled_date", f'source_commit: "{report.head}"'
         )
+    if upstream_moves:
+        expected["upstream_commit"] = report.upstream_head
+        if document.get("upstream_commit"):
+            new_text, _ = replace_field_line(
+                new_text, "upstream_commit", str(document["upstream_commit"]),
+                report.upstream_head,
+            )
+        else:
+            new_text = insert_after_line(
+                new_text, "source_commit", f'upstream_commit: "{report.upstream_head}"'
+            )
     apply_edit(path, new_text, expected)
     return True
 
