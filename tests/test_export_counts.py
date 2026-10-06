@@ -19,6 +19,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from exporter.baseline import NativeFile, NativeSystem, build_native_model  # noqa: E402
+from exporter.bizhawk_exporter import Exporter as BizHawk  # noqa: E402
+from exporter.misterfpga_exporter import Exporter as Mister  # noqa: E402
+from exporter.romm_exporter import Exporter as Romm  # noqa: E402
+from scraper.emudeck_scraper import FUNCTION_HASH_MAP  # noqa: E402
 from exporter.emudeck_exporter import Exporter as EmuDeck  # noqa: E402
 from exporter.retrobat_exporter import Exporter as RetroBat  # noqa: E402
 from exporter.retrodeck_exporter import Exporter as RetroDeck  # noqa: E402
@@ -130,8 +134,6 @@ class EmuDeckWritesItsCorrections(unittest.TestCase):
     SCRIPT = "checkPS1BIOS(){\n  local hashes=(%s)\n}\n"
 
     def _systems(self, corrected: NativeFile, other: NativeFile) -> dict:
-        from scraper.emudeck_scraper import FUNCTION_HASH_MAP
-
         system_id = FUNCTION_HASH_MAP["checkPS1BIOS"]
         corrected.native_system = other.native_system = system_id
         return {system_id: NativeSystem(system_id, files=[corrected, other])}
@@ -168,8 +170,6 @@ class EmuDeckWritesItsCorrections(unittest.TestCase):
 
 class BizHawkCountsWhatItWrites(unittest.TestCase):
     def test_an_ambiguous_name_is_not_counted(self):
-        from exporter.bizhawk_exporter import Exporter as BizHawk
-
         sha_a, sha_b, sha_c = "a" * 40, "b" * 40, "c" * 40
         first = NativeFile("bios.bin", "bios.bin", "S1", platform={"sha1": sha_a},
                            truth={"sha1": sha_b}, corrections=["sha1"])
@@ -183,8 +183,6 @@ class BizHawkCountsWhatItWrites(unittest.TestCase):
 
 class MisterCountsWhatItWrites(unittest.TestCase):
     def test_a_path_the_database_lacks_is_not_counted(self):
-        from exporter.misterfpga_exporter import Exporter as Mister
-
         held = NativeFile("boot.rom", "NES/boot.rom", "nes", platform={"md5": A},
                           truth={"md5": B}, corrections=["md5"])
         absent = NativeFile("boot.rom", "SNES/boot.rom", "snes", platform={"md5": A},
@@ -260,8 +258,6 @@ class OneFileOneIdentity(unittest.TestCase):
 class RommKeepsItsOwnKeys(unittest.TestCase):
     def test_a_same_named_addition_does_not_replace_their_entry(self):
         """fbneo's 480-byte boot.bin overwrote RomM's Dreamcast boot.bin."""
-        from exporter.romm_exporter import Exporter as Romm
-
         theirs = NativeFile("boot.bin", "dc/boot.bin", "dc",
                             platform={"size": 2097152, "md5": A})
         ours = NativeFile("boot.bin", "fbneo/boot.bin", "dc",

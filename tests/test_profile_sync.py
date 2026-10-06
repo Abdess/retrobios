@@ -2558,7 +2558,9 @@ class TestBumpCommit(unittest.TestCase):
         text = self.path.read_text(encoding="utf-8")
         self.path.write_text(
             "source_commit:\n  standalone: \"aaa\"\n  libretro: \"bbb\"\n"
-            + "\n".join(l for l in text.splitlines() if not l.startswith("source_commit"))
+            + "\n".join(
+                line for line in text.splitlines() if not line.startswith("source_commit")
+            )
             + "\n",
             encoding="utf-8",
         )

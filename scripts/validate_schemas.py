@@ -268,6 +268,14 @@ def unchecked_formats() -> list[str]:
     return sorted(used - set(FormatChecker().checkers))
 
 
+def _format_errors() -> list[str]:
+    """jsonschema skips a format it has no checker for: say so, and fail."""
+    return [
+        f"no checker for format {name}: install \"jsonschema[format-nongpl]\""
+        for name in unchecked_formats()
+    ]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -277,17 +285,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    unchecked = unchecked_formats()
-    if unchecked:
-        # jsonschema skips a format it has no checker for, silently.
-        print(
-            f"ERROR no checker for format(s) {', '.join(unchecked)}: "
-            'install "jsonschema[format-nongpl]"',
-            file=sys.stderr,
-        )
-        return 1
-
-    errors: list[str] = []
+    errors: list[str] = _format_errors()
     errors.extend(
         _validate_yaml_directory(ROOT / "emulators", "emulator.schema.json")
     )

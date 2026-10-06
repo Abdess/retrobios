@@ -2676,15 +2676,58 @@ def _writing_pairs(
         written = _writing_pins(revisions, intro_sha, f"{pin_field}_commit")
         if len(written) > 1:
             ambiguous.append(f"{pin_field}_commit {' -> '.join(written)}")
-        moved = [(repo, pin, current) for pin in written if pin != current]
-        # The current pin among the candidates reads as "no move" for that
-        # repository, which the other candidates must then agree with.
-        options.append(moved + ([None] if current in written else []))
+        # The current pin among the candidates reads as "no move" (None) for
+        # that repository, which the other candidates must then agree with.
+        options.append([
+            (repo, pin, current) if pin != current else None for pin in written
+        ])
     readings = [
         [pair for pair in combo if pair is not None]
         for combo in itertools.product(*options)
-    ] if options else [[]]
+    ]
     return readings, ambiguous
+
+
+def _realign_citation(
+    citation: Citation,
+    readings: list[list],
+    ambiguous: list[str],
+    cache_dir: str,
+    offline: bool,
+) -> tuple[dict[int, tuple[int, int, str | None]], list[str]]:
+    """The moves one prose run needs, and what blocks them.
+
+    Several pins under one text: the history cannot say which the text
+    describes, but when the cited range lands in the same place from every
+    one of them the question does not matter. When the readings disagree,
+    moving from the wrong one rewrites a correct citation onto someone
+    else's code, with nothing to show it happened.
+    """
+    moves: dict[int, tuple[int, int, str | None]] = {}
+    blocked: list[str] = []
+    for index, part in enumerate(citation.parts):
+        outcomes = {
+            repr(result): result
+            for result in (
+                _realign_part(part, pairs, cache_dir, offline) if pairs else None
+                for pairs in readings
+            )
+        }
+        if len(outcomes) > 1:
+            blocked.extend(
+                f"pin moved under this text: {item}; the readings disagree"
+                for item in ambiguous
+            )
+            continue
+        outcome = next(iter(outcomes.values()))
+        if outcome is None:
+            continue
+        state, payload = outcome
+        if state == "ok":
+            moves[index] = (payload[0], payload[1], None)
+        else:
+            blocked.append(payload)
+    return moves, blocked
 
 
 def realign_prose(
@@ -2748,34 +2791,7 @@ def realign_prose(
         readings, ambiguous = _writing_pairs(document, repos, revisions, intro_sha)
         if not any(readings):
             continue
-        moves: dict[int, tuple[int, int, str | None]] = {}
-        blocked: list[str] = []
-        for index, part in enumerate(citation.parts):
-            # Several pins under one text: the history cannot say which the
-            # text describes, but when the cited range lands in the same
-            # place from every one of them the question does not matter.
-            results = [
-                _realign_part(part, pairs, cache_dir, offline) if pairs else None
-                for pairs in readings
-            ]
-            outcomes = {repr(result): result for result in results}
-            if len(outcomes) > 1:
-                # Moving from the wrong one rewrites a correct citation onto
-                # someone else's code, with nothing to show it happened.
-                blocked.extend(
-                    f"pin moved under this text: {item}; the readings disagree"
-                    for item in ambiguous
-                )
-                continue
-            outcome = next(iter(outcomes.values()))
-            if outcome is None:
-                continue
-            state, payload = outcome
-            if state == "ok":
-                start, end = payload
-                moves[index] = (start, end, None)
-            else:
-                blocked.append(payload)
+        moves, blocked = _realign_citation(citation, readings, ambiguous, cache_dir, offline)
         if blocked:
             # Half a run must not move: the untouched ranges would read as
             # already realigned when they were never even located.
@@ -2911,21 +2927,13 @@ def _check_quota(count: int, offline: bool) -> None:
         raise SystemExit(1)
 
 
-def _apply_writes(args, name: str, profile: dict, report: ProfileReport) -> None:
-    path = Path(args.emulators_dir) / f"{name}.yml"
-    if not path.is_file():
-        return
-    if args.backfill_commits and report.pin and not profile.get("source_commit"):
-        if args.dry_run:
-            print(f"{name}: would write source_commit {report.pin[:7]}")
-        elif backfill_commit(path, report.pin):
-            print(f"{name}: source_commit {report.pin[:7]}")
-    if not (args.rebase_refs or args.bump_commit):
-        return
-    # Prose written under an older pin describes that revision: anchored from
-    # the current pin, a recale or a bump follows someone else's code
-    # (boom3 FileSystem.cpp:2125, written at b810234e, an unrelated
-    # OpenFileRead at 132dfddb). It moves first, from the pin it was written at.
+def _stale_prose_blocks(name: str, path: Path, args) -> bool:
+    """Whether prose written under an older pin has to move first.
+
+    Anchored from the current pin, a recale or a bump follows someone else's
+    code (boom3 FileSystem.cpp:2125, written at b810234e, an unrelated
+    OpenFileRead at 132dfddb). It moves first, from the pin it was written at.
+    """
     stale = realign_prose(path, args.cache_dir, args.offline, dry_run=True)
     if stale:
         print(
@@ -2933,6 +2941,26 @@ def _apply_writes(args, name: str, profile: dict, report: ProfileReport) -> None
             "run --realign-prose or read them before the pin moves",
             file=sys.stderr,
         )
+    return bool(stale)
+
+
+def _backfill(args, name: str, profile: dict, report: ProfileReport, path: Path) -> None:
+    """Write the pin a profile without source_commit was written at."""
+    if not report.pin or profile.get("source_commit"):
+        return
+    if args.dry_run:
+        print(f"{name}: would write source_commit {report.pin[:7]}")
+    elif backfill_commit(path, report.pin):
+        print(f"{name}: source_commit {report.pin[:7]}")
+
+
+def _apply_writes(args, name: str, profile: dict, report: ProfileReport) -> None:
+    path = Path(args.emulators_dir) / f"{name}.yml"
+    if not path.is_file():
+        return
+    if args.backfill_commits:
+        _backfill(args, name, profile, report, path)
+    if not (args.rebase_refs or args.bump_commit) or _stale_prose_blocks(name, path, args):
         return
     with tempfile.TemporaryDirectory() as scratch:
         # Always work on a copy. A dry run reports what it left there; a real

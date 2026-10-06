@@ -9,7 +9,9 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
-import region
+import common  # noqa: E402
+import region  # noqa: E402
+from packextras import emulator_region_drops  # noqa: E402
 
 
 class TestVocabulary(unittest.TestCase):
@@ -647,10 +649,6 @@ class RegionalRequestsKeepWhatTheCodeLoads(unittest.TestCase):
     )
 
     def test_each_request_keeps_its_file(self):
-        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
-        import common
-        from packextras import emulator_region_drops
-
         profiles = common.load_emulator_profiles(
             os.path.join(os.path.dirname(__file__), "..", "emulators")
         )

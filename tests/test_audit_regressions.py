@@ -576,7 +576,7 @@ class SchemaFormatsAreChecked(unittest.TestCase):
 
     @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def test_a_missing_checker_is_named(self):
-        import validate_schemas
+        import validate_schemas  # noqa: PLC0415
 
         empty = mock.Mock(checkers={})
         with mock.patch.object(validate_schemas, "FormatChecker", return_value=empty):

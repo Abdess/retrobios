@@ -95,6 +95,14 @@ class Exporter(BaseExporter):
             return False
         return super().states(fe, field_name)
 
+    def _expected_md5s(
+        self, systems: dict[str, NativeSystem], name: str, system_id: str
+    ) -> list[str]:
+        """What a check must now hold; a refused rewrite keeps EmuDeck's own array."""
+        if name in getattr(self, "_withdrawn", {}):
+            return []
+        return self._md5s(systems, system_id)
+
     def _refused_systems(self) -> set[str]:
         withdrawn = getattr(self, "_withdrawn", {})
         return {FUNCTION_HASH_MAP[name] for name in withdrawn if name in FUNCTION_HASH_MAP}
@@ -200,9 +208,8 @@ class Exporter(BaseExporter):
             if name not in defined:
                 issues.append(f"check absent from the output: {name}")
                 continue
-            md5s = self._md5s(systems, system_id)
-            if not md5s or name in getattr(self, "_withdrawn", {}):
-                # A refused rewrite keeps EmuDeck's own array, by design.
+            md5s = self._expected_md5s(systems, name, system_id)
+            if not md5s:
                 continue
             body = next(
                 content[start:end]
