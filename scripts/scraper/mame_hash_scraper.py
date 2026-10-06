@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import logging
 import shutil
 import subprocess
@@ -109,24 +110,28 @@ def _sparse_clone() -> None:
 
 
 def _get_version() -> str:
-    # version.cpp is generated at build time, not in the repo.
-    # Use GitHub API to get the latest release tag.
+    """The latest MAME release, from the GitHub API.
+
+    version.cpp is generated at build time, not in the repo. A failed lookup
+    raises: "unknown" was cached for a day and written as core_version.
+    """
+    headers = {
+        "User-Agent": "retrobios-scraper/1.0",
+        "Accept": "application/vnd.github.v3+json",
+    }
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    url = "https://api.github.com/repos/mamedev/mame/releases/latest"
     try:
-        req = urllib.request.Request(
-            "https://api.github.com/repos/mamedev/mame/releases/latest",
-            headers={
-                "User-Agent": "retrobios-scraper/1.0",
-                "Accept": "application/vnd.github.v3+json",
-            },
-        )
+        req = urllib.request.Request(url, headers=headers)
         with urllib.request.urlopen(req, timeout=10) as resp:
-            data = json.loads(resp.read())
-            tag = data.get("tag_name", "")
-            if tag:
-                return _parse_version_tag(tag)
-    except (urllib.error.URLError, json.JSONDecodeError, OSError):
-        pass
-    return "unknown"
+            tag = json.loads(resp.read()).get("tag_name", "")
+    except (urllib.error.URLError, json.JSONDecodeError, OSError) as exc:
+        raise RuntimeError(f"cannot read the MAME release from {url}: {exc}") from exc
+    if not tag:
+        raise RuntimeError(f"no tag_name in {url}")
+    return _parse_version_tag(tag)
 
 
 def _parse_version_tag(tag: str) -> str:

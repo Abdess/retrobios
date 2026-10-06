@@ -117,8 +117,11 @@ def _extract_version() -> tuple[str, str]:
                     if t["name"] != "latest" and t["name"].startswith("v"):
                         version = t["name"]
                         break
-        except (urllib.error.URLError, OSError):
-            pass
+        except (urllib.error.URLError, OSError) as exc:
+            raise RuntimeError(f"cannot determine the FBNeo version: {exc}") from exc
+    if version == "unknown":
+        # Written as core_version otherwise, and cached for a day.
+        raise RuntimeError("cannot determine the FBNeo version: no tag, resource.h or release")
 
     sha_result = subprocess.run(
         ["git", "rev-parse", "HEAD"],
