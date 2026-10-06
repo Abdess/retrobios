@@ -176,7 +176,7 @@ class Exporter(BaseExporter):
         return names
 
     @staticmethod
-    def _required_for(fe: NativeFile, core: str) -> bool:
+    def _required_for(fe: NativeFile, core: str | None) -> bool:
         """Whether the package's own core needs the file.
 
         The merged `required` is true when any core needs it: pcsx_rearmed
@@ -259,7 +259,7 @@ class Exporter(BaseExporter):
             candidates = [
                 fe
                 for fe in files
-                if self._required_for(fe, core or "")
+                if self._required_for(fe, core)
                 and not (
                     {fe.name.lower()}
                     | {str(a).lower() for a in (fe.native("aliases", []) or [])}
