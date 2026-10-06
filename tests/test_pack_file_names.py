@@ -48,5 +48,24 @@ class PackFileNames(unittest.TestCase):
             self.assertTrue(result and Path(result).parent == out, result)
 
 
+class SystemPackLeavesTheEmulatorPack(unittest.TestCase):
+    """--system built under the emulator pack's name and renamed it away."""
+
+    def test_both_packs_stay(self):
+        import subprocess  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            for mode in (["--emulator", "emuscv"], ["--system", "scv"]):
+                subprocess.run(
+                    [sys.executable, "scripts/generate_pack.py", *mode, "--offline",
+                     "--output-dir", tmp],
+                    cwd=REPO_ROOT, capture_output=True, check=True, timeout=600,
+                )
+            names = sorted(p.name for p in Path(tmp).iterdir())
+            self.assertIn("EmuSCV_BIOS_Pack.zip", names)
+            self.assertIn("Scv_BIOS_Pack.zip", names)
+            self.assertFalse([n for n in names if n.startswith(".system-")])
+
+
 if __name__ == "__main__":
     unittest.main()
