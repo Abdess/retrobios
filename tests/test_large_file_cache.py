@@ -12,6 +12,7 @@ import hashlib
 import io
 import json
 import os
+import shutil
 import sys
 import tempfile
 import threading
@@ -24,6 +25,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import common  # noqa: E402
 import largefiles
+import check_release_assets  # noqa: E402
 
 PAYLOAD_A = b"A" * (256 * 1024)
 PAYLOAD_B = b"B" * (256 * 1024)
@@ -366,7 +368,6 @@ class ReleaseAssetNames(unittest.TestCase):
                 self.assertEqual(name, os.path.basename(registered_path))
 
     def test_manifest_checker_and_fetcher_agree_on_a_path(self):
-        import check_release_assets
         import generate_pack
 
         expected = largefiles.asset_names(self.REGISTERED)
@@ -488,8 +489,6 @@ class DownloadFailuresAndRevisions(unittest.TestCase):
         self.addCleanup(setattr, largefiles.urllib.request, "urlopen", self._urlopen)
 
     def tearDown(self):
-        import shutil
-
         shutil.rmtree(self.dir, ignore_errors=True)
 
     def test_a_stalled_stream_leaves_no_scratch(self):
@@ -534,8 +533,6 @@ class GameDataHasOneDefinition(unittest.TestCase):
     """
 
     def test_the_release_section_follows_the_composition_tier(self):
-        import check_release_assets
-
         for path in (
             "bios/Id Software/Doom 3/demo/demo00.pk4",
             "bios/Valve/Half-Life/valve/pak0.pak",

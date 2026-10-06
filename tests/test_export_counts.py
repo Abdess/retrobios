@@ -22,6 +22,8 @@ from exporter.baseline import NativeFile, NativeSystem, build_native_model  # no
 from exporter.emudeck_exporter import Exporter as EmuDeck  # noqa: E402
 from exporter.retrobat_exporter import Exporter as RetroBat  # noqa: E402
 from exporter.retrodeck_exporter import Exporter as RetroDeck  # noqa: E402
+from exporter.recalbox_exporter import Exporter as Recalbox  # noqa: E402
+from exporter.retropie_exporter import Exporter as RetroPie  # noqa: E402
 
 A = "a" * 32
 B = "b" * 32
@@ -171,16 +173,12 @@ class OneFileOneIdentity(unittest.TestCase):
 
 class RecalboxKeepsItsOwnNotes(unittest.TestCase):
     def test_no_profile_prose_reaches_a_note(self):
-        from exporter.recalbox_exporter import Exporter as Recalbox
-
         fe = NativeFile("bios.bin", "bios.bin", "psx", platform={"md5": A},
                         truth={"md5": A, "note": "Loaded at libretro.c:120"})
         self.assertNotIn("note=", Recalbox()._bios_element(fe, "psx"))
 
 class RetroPieProposals(unittest.TestCase):
     def test_required_is_read_for_the_package_core(self):
-        from exporter.retropie_exporter import Exporter as RetroPie
-
         fe = NativeFile("scph5501.bin", "scph5501.bin", "psx",
                         truth={"required": True, "_required_by": ["beetle_psx"],
                                "_cores": ["beetle_psx", "pcsx_rearmed"]})
@@ -188,8 +186,6 @@ class RetroPieProposals(unittest.TestCase):
         self.assertFalse(RetroPie._required_for(fe, "pcsx_rearmed"))
 
     def test_a_list_of_alternatives_is_not_extended(self):
-        from exporter.retropie_exporter import Exporter as RetroPie
-
         alternatives = "Copy the required BIOS file a.rom or b.rom to $biosdir"
         enumeration = "Copy the required BIOS files a.rom and b.rom to $biosdir"
         self.assertIsNone(RetroPie._insertion_point(alternatives))

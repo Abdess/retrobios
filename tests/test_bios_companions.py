@@ -12,6 +12,7 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
+import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -43,8 +44,6 @@ class Companions(unittest.TestCase):
         self.assertEqual([sha for sha, _ in found], ["a"])
 
     def test_pcsx2_profiles_name_no_free_standing_companion(self):
-        import yaml
-
         for name in ("pcsx2", "pcsx2-legacy"):
             profile = yaml.safe_load((REPO_ROOT / "emulators" / f"{name}.yml").read_text())
             names = {str(f.get("name", "")).lower() for f in profile.get("files", [])}

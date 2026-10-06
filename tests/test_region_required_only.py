@@ -14,12 +14,11 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from packextras import platform_region_groups  # noqa: E402
 
 
 class RequiredOnlyBeforeRegion(unittest.TestCase):
     def test_optional_files_leave_the_groups(self):
-        from packextras import platform_region_groups
-
         systems = {"vic20": {"files": [
             {"name": "kernel-ntsc.bin", "destination": "Vic20/kernel-ntsc.bin", "required": True},
             {"name": "kernel-japanese.bin", "destination": "Vic20/kernel-japanese.bin",

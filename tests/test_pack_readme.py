@@ -8,6 +8,7 @@ does not have, while the registry names the path.
 
 from __future__ import annotations
 
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -49,8 +50,6 @@ class GuidesPointAtTheReadPath(unittest.TestCase):
 class GuidesNameShippedInstallers(unittest.TestCase):
     def test_every_installer_named_exists(self):
         """RetroBat's guide sent users to an install.bat no release carries."""
-        import re
-
         source = (REPO_ROOT / "scripts" / "packreadme.py").read_text(encoding="utf-8")
         for name in set(re.findall(r"install\.(?:bat|ps1|sh|py)", source)):
             with self.subTest(installer=name):

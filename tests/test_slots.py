@@ -12,6 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 
 import slots  # noqa: E402
+from slots import Claim, Conflict, arbitrate, format_decision  # noqa: E402
 
 
 def _db(entries: dict[str, dict]) -> dict:
@@ -559,8 +560,6 @@ class StrongestProfileClaimWins(unittest.TestCase):
     """yaps2 pins GameIndex.yaml by sha1; armsx2 matched a path only."""
 
     def test_hash_proof_beats_path_proof(self):
-        from slots import Claim, Conflict, arbitrate, format_decision
-
         def claim(emu, path, status):
             return Claim("profile", "pcsx2/resources/GameIndex.yaml", "GameIndex.yaml",
                          emulator=emu, local_path=path, status=status)

@@ -318,9 +318,9 @@ def build_native_model(
                 # 480-byte boot.bin is not RomM's 2 MB Dreamcast boot.bin.
                 t_size = truth_entry.get("size")
                 p_size = (candidate.platform or {}).get("size")
-                if isinstance(t_size, int) and isinstance(p_size, int) and t_size != p_size:
-                    return False
-                return True
+                return not (
+                    isinstance(t_size, int) and isinstance(p_size, int) and t_size != p_size
+                )
 
             def by_hash(candidate: NativeFile) -> bool:
                 if not t_hashes:

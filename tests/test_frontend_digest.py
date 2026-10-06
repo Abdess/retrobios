@@ -9,7 +9,6 @@ the pack and the manifest while verify, comparing md5, called it OK.
 from __future__ import annotations
 
 import hashlib
-import json
 import os
 import sys
 import tempfile
@@ -21,6 +20,9 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import load_platform_config  # noqa: E402
+from generate_pack import generate_manifest, generate_pack  # noqa: E402
+from verify import verify_platform  # noqa: E402
 
 
 class FrontendDigestDecides(unittest.TestCase):
@@ -61,10 +63,6 @@ class FrontendDigestDecides(unittest.TestCase):
         self.root = root
 
     def test_pack_manifest_and_verify_agree(self):
-        from common import load_platform_config
-        from generate_pack import generate_manifest, generate_pack
-        from verify import verify_platform
-
         os.chdir(self.root)
         self.addCleanup(os.chdir, REPO_ROOT)
         zip_path = generate_pack(

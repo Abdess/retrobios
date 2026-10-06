@@ -15,12 +15,11 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from common import load_platform_config  # noqa: E402
 
 
 class CaseInsensitiveWhereTheFilesystemIs(unittest.TestCase):
     def test_windows_and_macos_platforms_carry_the_flag(self):
-        from common import load_platform_config
-
         registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text())
         for name, data in registry["platforms"].items():
             systems = {str(d.get("os")) for d in (data.get("install") or {}).get("detect", [])}
