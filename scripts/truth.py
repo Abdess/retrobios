@@ -97,6 +97,42 @@ def _enrich_hashes(entry: dict, db: dict) -> None:
         entry["size"] = record["size"]
 
 
+_FILLED_FIELDS = (
+    "size",
+    "min_size",
+    "max_size",
+    "path",
+    "validation",
+    "description",
+    "category",
+    "hle_fallback",
+    "note",
+    "aliases",
+    "contents",
+    "region",
+)
+_COPIED_FIELDS = (
+    "sha1",
+    "md5",
+    "sha256",
+    "crc32",
+    "size",
+    "path",
+    "description",
+    "hle_fallback",
+    "category",
+    "note",
+    "validation",
+    "min_size",
+    "max_size",
+    "aliases",
+    "contents",
+    "priority",
+    "region",
+)
+_HASH_FIELDS = ("sha1", "md5", "sha256", "crc32")
+
+
 def _merge_file_into_system(
     system: dict,
     file_entry: dict,
@@ -111,6 +147,15 @@ def _merge_file_into_system(
     one path or none, its declarations are revisions of one file.
     """
     files = system.setdefault("files", [])
+    existing = _same_file(files, file_entry, emu_name)
+    if existing is None:
+        files.append(_new_truth_entry(file_entry, emu_name, db))
+    else:
+        _fold_into(existing, file_entry, emu_name)
+
+
+def _same_file(files: list[dict], file_entry: dict, emu_name: str) -> dict | None:
+    """The entry already standing for this file, if any."""
     name_lower = file_entry["name"].lower()
     path = str(file_entry.get("path") or "").casefold()
 
@@ -118,130 +163,100 @@ def _merge_file_into_system(
         return str(f.get("path") or "").casefold()
 
     same_name = [f for f in files if f["name"].lower() == name_lower]
-    existing = (
+    return (
         next((f for f in same_name if path and other_path(f) == path), None)
         or next((f for f in same_name if emu_name not in f.get("_cores", ())), None)
         # Revisions accepted under one name and no path fill one slot.
         or next((f for f in same_name if not path or not other_path(f)), None)
     )
 
-    if existing is not None:
-        existing["_cores"] = existing.get("_cores", set()) | {emu_name}
-        sr = file_entry.get("source_ref")
-        if sr is not None:
-            sr_key = _serialize_source_ref(sr)
-            existing["_source_refs"] = existing.get("_source_refs", set()) | {sr_key}
-        else:
-            existing.setdefault("_source_refs", set())
-        if file_entry.get("required") and not existing.get("required"):
-            existing["required"] = True
-        if file_entry.get("required"):
-            # Which cores need it: `required` above is the union, true when
-            # any core needs it, and a package of one core must not read it.
-            existing["_required_by"] = existing.get("_required_by", set()) | {emu_name}
-        for h in ("sha1", "md5", "sha256", "crc32"):
-            theirs = file_entry.get(h, "")
-            ours = existing.get(h, "")
-            # Skip empty strings
-            if not theirs or theirs == "":
-                continue
-            if not ours or ours == "":
-                existing[h] = theirs
-                continue
-            # Normalize to sets for multi-hash comparison
-            t_list = theirs if isinstance(theirs, list) else [theirs]
-            o_list = ours if isinstance(ours, list) else [ours]
-            t_set = {str(v).lower() for v in t_list}
-            o_set = {str(v).lower() for v in o_list}
-            if not t_set & o_set:
-                print(
-                    f"WARNING: hash conflict for {file_entry['name']} "
-                    f"({h}: {ours} vs {theirs}, core {emu_name})",
-                    file=sys.stderr,
-                )
-        # Merge non-hash data fields if existing lacks them.
-        # A core that creates an entry without size/path/validation may be
-        # enriched by a sibling core that has those fields.
-        for field in (
-            "size",
-            "min_size",
-            "max_size",
-            "path",
-            "validation",
-            "description",
-            "category",
-            "hle_fallback",
-            "note",
-            "aliases",
-            "contents",
-            "region",
-        ):
-            if file_entry.get(field) is not None and existing.get(field) is None:
-                existing[field] = file_entry[field]
-        # Search order is a fact of the code, so it travels with the entry.
-        # The best rank any core gives it is kept and the disagreement is
-        # recorded beside it, the way slot.py already does: the rank says
-        # how early to read the file, the conflict says the order cannot
-        # decide which single file to keep.
-        theirs = file_entry.get("priority")
-        if theirs is not None:
-            ours = existing.get("priority")
-            if ours is None:
-                existing["priority"] = theirs
-            else:
-                if ours != theirs:
-                    existing["priority_conflict"] = True
-                existing["priority"] = min(ours, theirs)
-        return
 
+def _fold_into(existing: dict, file_entry: dict, emu_name: str) -> None:
+    """Add one core's declaration to the entry that already stands for it."""
+    existing["_cores"] = existing.get("_cores", set()) | {emu_name}
+    sr = file_entry.get("source_ref")
+    if sr is not None:
+        sr_key = _serialize_source_ref(sr)
+        existing["_source_refs"] = existing.get("_source_refs", set()) | {sr_key}
+    else:
+        existing.setdefault("_source_refs", set())
+    if file_entry.get("required"):
+        existing["required"] = True
+        # Which cores need it: `required` above is the union, true when
+        # any core needs it, and a package of one core must not read it.
+        existing["_required_by"] = existing.get("_required_by", set()) | {emu_name}
+    _merge_hashes(existing, file_entry, emu_name)
+    # Merge non-hash data fields if existing lacks them.
+    # A core that creates an entry without size/path/validation may be
+    # enriched by a sibling core that has those fields.
+    for field in _FILLED_FIELDS:
+        if file_entry.get(field) is not None and existing.get(field) is None:
+            existing[field] = file_entry[field]
+    _merge_priority(existing, file_entry.get("priority"))
+
+
+def _merge_hashes(existing: dict, file_entry: dict, emu_name: str) -> None:
+    for h in _HASH_FIELDS:
+        theirs = file_entry.get(h, "")
+        ours = existing.get(h, "")
+        if not theirs:
+            continue
+        if not ours:
+            existing[h] = theirs
+            continue
+        # Normalize to sets for multi-hash comparison
+        t_list = theirs if isinstance(theirs, list) else [theirs]
+        o_list = ours if isinstance(ours, list) else [ours]
+        if not {str(v).lower() for v in t_list} & {str(v).lower() for v in o_list}:
+            print(
+                f"WARNING: hash conflict for {file_entry['name']} "
+                f"({h}: {ours} vs {theirs}, core {emu_name})",
+                file=sys.stderr,
+            )
+
+
+def _merge_priority(existing: dict, theirs: int | None) -> None:
+    """Search order is a fact of the code, so it travels with the entry.
+
+    The best rank any core gives it is kept and the disagreement is recorded
+    beside it, the way slot.py already does: the rank says how early to read
+    the file, the conflict says the order cannot decide which single file to
+    keep.
+    """
+    if theirs is None:
+        return
+    ours = existing.get("priority")
+    if ours is None:
+        existing["priority"] = theirs
+        return
+    if ours != theirs:
+        existing["priority_conflict"] = True
+    existing["priority"] = min(ours, theirs)
+
+
+def _new_truth_entry(file_entry: dict, emu_name: str, db: dict | None) -> dict:
     entry: dict = {"name": file_entry["name"]}
     if file_entry.get("required") is not None:
         entry["required"] = file_entry["required"]
-    for field in (
-        "sha1",
-        "md5",
-        "sha256",
-        "crc32",
-        "size",
-        "path",
-        "description",
-        "hle_fallback",
-        "category",
-        "note",
-        "validation",
-        "min_size",
-        "max_size",
-        "aliases",
-        "contents",
-        "priority",
-        "region",
-    ):
+    for field in _COPIED_FIELDS:
         val = file_entry.get(field)
         if val is not None:
             entry[field] = val
     # Strip empty string hashes (profile says "" when hash is unknown)
-    for h in ("sha1", "md5", "sha256", "crc32"):
+    for h in _HASH_FIELDS:
         if entry.get(h) == "":
             del entry[h]
     # Normalize CRC32: strip 0x prefix, lowercase
     crc = entry.get("crc32")
-    if isinstance(crc, str) and crc.startswith("0x"):
-        entry["crc32"] = crc[2:].lower()
-    elif isinstance(crc, str) and crc != crc.lower():
-        entry["crc32"] = crc.lower()
+    if isinstance(crc, str):
+        entry["crc32"] = crc.removeprefix("0x").lower()
     entry["_cores"] = {emu_name}
     entry["_required_by"] = {emu_name} if file_entry.get("required") else set()
     sr = file_entry.get("source_ref")
-    if sr is not None:
-        sr_key = _serialize_source_ref(sr)
-        entry["_source_refs"] = {sr_key}
-    else:
-        entry["_source_refs"] = set()
-
+    entry["_source_refs"] = {_serialize_source_ref(sr)} if sr is not None else set()
     if db:
         _enrich_hashes(entry, db)
-
-    files.append(entry)
+    return entry
 
 
 def _has_exploitable_data(entry: dict) -> bool:
@@ -500,6 +515,27 @@ def _pair_rank(truth_entry: dict, scraped_entry: dict) -> tuple[bool, bool, bool
     )
 
 
+def _hash_mismatch(t_entry: dict, s_entry: dict) -> dict | None:
+    """The first hash both sides declare without a value in common."""
+    for h in ("sha1", "md5", "crc32"):
+        t_hash = t_entry.get(h, "")
+        s_hash = s_entry.get(h, "")
+        if not t_hash or not s_hash:
+            continue
+        # Normalize to list for multi-hash support
+        t_list = t_hash if isinstance(t_hash, list) else [t_hash]
+        s_list = s_hash if isinstance(s_hash, list) else [s_hash]
+        if not {v.lower() for v in t_list} & {v.lower() for v in s_list}:
+            return {
+                "name": s_entry["name"],
+                "hash_type": h,
+                f"truth_{h}": t_hash,
+                f"scraped_{h}": s_hash,
+                "truth_cores": list(t_entry.get("_cores", [])),
+            }
+    return None
+
+
 def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     """Compare files between truth and scraped for a single system.
 
@@ -538,30 +574,9 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
         matched.add(t_position)
         t_entry = truth_files[t_position]
 
-        # Hash comparison
-        for h in ("sha1", "md5", "crc32"):
-            t_hash = t_entry.get(h, "")
-            s_hash = s_entry.get(h, "")
-            if not t_hash or not s_hash:
-                continue
-            # Normalize to list for multi-hash support
-            t_list = t_hash if isinstance(t_hash, list) else [t_hash]
-            s_list = s_hash if isinstance(s_hash, list) else [s_hash]
-            t_set = {v.lower() for v in t_list}
-            s_set = {v.lower() for v in s_list}
-            if not t_set & s_set:
-                hash_mismatch.append(
-                    {
-                        "name": s_entry["name"],
-                        "hash_type": h,
-                        f"truth_{h}": t_hash,
-                        f"scraped_{h}": s_hash,
-                        "truth_cores": list(t_entry.get("_cores", [])),
-                    }
-                )
-                break
-
-        # Required mismatch
+        mismatch = _hash_mismatch(t_entry, s_entry)
+        if mismatch:
+            hash_mismatch.append(mismatch)
         t_req = t_entry.get("required")
         s_req = s_entry.get("required")
         if t_req is not None and s_req is not None and t_req != s_req:
