@@ -490,3 +490,72 @@ def settle_mismatch(
     ):
         return "frontend_digest_exact"
     return status
+
+
+def destination_owners(profiles: dict) -> dict[str, list[tuple[str, str]]]:
+    """For each file name, the path tail each emulator reads it under."""
+    owners: dict[str, list[tuple[str, str]]] = {}
+    for emu_name, profile in profiles.items():
+        for f in profile.get("files", []):
+            name = str(f.get("name") or "")
+            if not name:
+                continue
+            for declared in {f.get("path"), f.get("standalone_path")} - {None, ""} or {name}:
+                owners.setdefault(name.lower(), []).append(
+                    (str(declared).replace("\\", "/").lower(), emu_name)
+                )
+    return owners
+
+
+def _owners_of(destination: str, name: str, owners: dict) -> set[str]:
+    """Emulators whose declared path is the longest tail of the destination."""
+    destination = destination.replace("\\", "/").lower()
+    matching = [
+        (tail, emu) for tail, emu in owners.get(name.lower(), [])
+        if destination == tail or destination.endswith("/" + tail)
+    ]
+    if not matching:
+        return set()
+    longest = max(len(tail) for tail, _emu in matching)
+    return {emu for tail, emu in matching if len(tail) == longest}
+
+
+def validated_choice(
+    file_entry: dict,
+    local_path: str | None,
+    db: dict,
+    validation_index: dict,
+    bios_dir: str,
+    platform_digest: str | None,
+    destination: str = "",
+    owners: dict | None = None,
+) -> tuple[str | None, str | None]:
+    """The file a platform destination ships, and the disagreement if any.
+
+    A frontend's own check can pass while an emulator it runs rejects the
+    file; a held variant both accept replaces it. The pack and the install
+    manifest both read this, so they name the same file. A destination
+    another emulator declares more precisely is that emulator's: ZEsarUX's
+    48 KB cpc6128.rom check has no say over ep128emu/roms/cpc6128.rom.
+    """
+    if not local_path or not validation_index:
+        return local_path, None
+    name = file_entry.get("name", "")
+    rules = validation_index.get(name)
+    if rules and owners and destination:
+        owning = _owners_of(destination, name, owners)
+        if owning and not owning & set(rules["emulators"]):
+            return local_path, None
+    check = check_file_validation(
+        local_path, file_entry.get("name", ""), validation_index, bios_dir
+    )
+    if not check:
+        return local_path, None
+    better = find_validated_variant(
+        file_entry, db, local_path, validation_index, bios_dir,
+        platform_digest=platform_digest,
+    )
+    if better:
+        return better, None
+    reason, emulators = check
+    return local_path, f"{', '.join(emulators)} says {reason}"
