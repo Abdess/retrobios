@@ -1873,11 +1873,15 @@ def _file_badges(f: dict, in_repo: bool) -> list[str]:
         badges.append(
             '<span class="rb-badge rb-badge-muted">optional</span>'
         )
-    if not in_repo:
+    if not in_repo and f.get("unsourceable"):
+        badges.append(
+            '<span class="rb-badge rb-badge-muted">unsourceable</span>'
+        )
+    elif not in_repo:
         badges.append(
             '<span class="rb-badge rb-badge-warning">missing</span>'
         )
-    elif in_repo:
+    else:
         badges.append(
             '<span class="rb-badge rb-badge-success">in repo</span>'
         )
@@ -2236,7 +2240,9 @@ def _availability_check(db: dict, data_names):
 
     def _file_available(f: dict) -> bool:
         """Check if a file is available using the same resolution as cross_reference."""
-        if not f.get("name"):
+        # cross_reference sets these aside before resolving: the file found
+        # under the name belongs to another game or release.
+        if not f.get("name") or f.get("unsourceable"):
             return False
         if f.get("storage", "") in ("release", "large_file"):
             return True
@@ -2367,14 +2373,18 @@ def generate_emulator_page(
         bios_zips = [f for f in files if f.get("category") == "bios_zip"]
 
         in_repo_count = sum(1 for f in files if _file_available(f))
-        missing_count = len(files) - in_repo_count
+        unsourceable_count = sum(1 for f in files if f.get("unsourceable"))
+        missing_count = len(files) - in_repo_count - unsourceable_count
         req_count = sum(1 for f in files if f.get("required"))
         opt_count = len(files) - req_count
         hle_count = sum(1 for f in files if f.get("hle_fallback"))
 
         parts = [f"**{len(files)} files**"]
         parts.append(f"{req_count} required, {opt_count} optional")
-        parts.append(f"{in_repo_count} in repo, {missing_count} missing")
+        held = f"{in_repo_count} in repo, {missing_count} missing"
+        if unsourceable_count:
+            held += f", {unsourceable_count} unsourceable"
+        parts.append(held)
         if hle_count:
             parts.append(f"{hle_count} with HLE fallback")
         lines.append(" | ".join(parts))
