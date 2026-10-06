@@ -1298,6 +1298,16 @@ def runs_standalone(
     )
 
 
+# What identifies a profile entry's content, carried unchanged wherever the
+# entry travels (cross-reference report, core extras, second-pass copies).
+# Each copy once kept its own subset: np2kai's bios.rom lost min_size and
+# validation on the way and resolved to an IBM PCjr ROM of the same name.
+PROFILE_IDENTITY_FIELDS = (
+    "sha1", "md5", "sha256", "crc32", "size", "min_size", "max_size",
+    "validation", "aliases", "unsourceable",
+)
+
+
 def upstream_profile_index(
     profiles: dict[str, dict], include_aliases: bool = False
 ) -> dict[str, set[str]]:
