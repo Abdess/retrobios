@@ -137,8 +137,9 @@ class Scraper(BaseTargetScraper):
         print("  listing RetroPie scriptmodules...", file=sys.stderr)
         filenames = self._list_scriptmodules()
 
-        # {platform: [core_id, ...]}
-        platform_cores: dict[str, list[str]] = {p: [] for p in PLATFORM_FLAGS}
+        # A libretro and a standalone package can share a name (lr-dosbox,
+        # dosbox): a core list names each once.
+        platform_cores: dict[str, set[str]] = {p: set() for p in PLATFORM_FLAGS}
 
         for filename in filenames:
             content = self._fetch_module(filename)
@@ -154,7 +155,7 @@ class Scraper(BaseTargetScraper):
                 core_name = core_name[3:].replace("-", "_")
             for platform in PLATFORM_FLAGS:
                 if _is_available(flags, platform):
-                    platform_cores[platform].append(core_name)
+                    platform_cores[platform].add(core_name)
 
         print(f"  parsed {len(filenames)} scriptmodules", file=sys.stderr)
 
