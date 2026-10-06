@@ -81,11 +81,17 @@ def parse_pack_counts(output: str) -> dict[str, tuple[int, int]]:
     for line in output.splitlines():
         m = re.match(r"Generating (?:shared )?pack for (.+)\.\.\.", line)
         if m:
-            # Labels carry execution metadata such as ``[source=full]``.
-            # It is not part of the platform identity used for consistency.
-            current_label = re.sub(
-                r"\s+\[source=[^\]]+\]$", "", m.group(1).strip()
-            )
+            # Labels carry execution metadata such as ``[source=full]``. Only
+            # the full, unreduced pack is what verify describes: with
+            # --all-variants the six variants shared one label and the last
+            # (platform, required) was compared to the full report.
+            label = m.group(1).strip()
+            meta = re.search(r"\s+\[([^\]]+)\]$", label)
+            current_label = label[: meta.start()] if meta else label
+            if meta and meta.group(1) != "source=full":
+                current_label = ""
+            continue
+        if not current_label:
             continue
         if "files packed" not in line:
             continue
@@ -557,8 +563,14 @@ def main():
         print("\n--- 4c/8 generate target manifests: SKIPPED (--skip-packs) ---")
         results["generate_target_manifests"] = SKIPPED
 
-    # Step 5: Consistency check
-    if pack_output and verify_output:
+    # Step 5: Consistency check. verify describes the full pack; a run that
+    # built only a reduced one (--source platform or truth) has nothing to
+    # compare it with, and says so instead of failing on an empty parse.
+    full_pack_built = args.source == "full" or args.all_variants
+    if pack_output and verify_output and not full_pack_built:
+        print("\n--- 5/8 consistency check: SKIPPED (no full pack built) ---")
+        results["consistency"] = SKIPPED
+    elif pack_output and verify_output:
         ok = check_consistency(verify_output, pack_output)
         results["consistency"] = ok
         all_ok = all_ok and ok
@@ -567,7 +579,12 @@ def main():
         results["consistency"] = SKIPPED
 
     # Step 6: Pack integrity (extract + hash verification)
-    if not args.skip_packs:
+    if not args.skip_packs and not full_pack_built:
+        # The check reads the full pack's name; a reduced pack holds fewer
+        # files than the platform declares by design.
+        print("\n--- 6/8 pack integrity: SKIPPED (no full pack built) ---")
+        results["pack_integrity"] = SKIPPED
+    elif not args.skip_packs:
         integrity_cmd = [
             sys.executable,
             "scripts/generate_pack.py",

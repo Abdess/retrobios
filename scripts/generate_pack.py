@@ -2271,9 +2271,9 @@ def _run_platform_packs(
                     for p in group_platforms
                 ]
                 label = " / ".join(all_names)
-                print(f"\nGenerating pack for {label} [source={source}]...")
+                print(f"\nGenerating pack for {label} [source={source}{', required' if required_only else ''}]...")
             else:
-                print(f"\nGenerating pack for {representative} [source={source}]...")
+                print(f"\nGenerating pack for {representative} [source={source}{', required' if required_only else ''}]...")
 
             try:
                 tc = target_cores_cache.get(representative) if args.target else None
