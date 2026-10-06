@@ -29,15 +29,21 @@ class ValidationIndexScope(unittest.TestCase):
         self.assertRegex(
             verify,
             r"plat_cores = resolve_platform_cores\(config, profiles\)\s+"
-            r"validation_index = _build_validation_index\(\s*"
-            r"\{name: profiles\[name\] for name in plat_cores\}",
+            r"platform_profiles = \{name: profiles\[name\] for name in plat_cores\}",
         )
+        self.assertIn("validation_index = _build_validation_index(platform_profiles)", verify)
         self.assertRegex(
             builder,
             r"for name in resolve_platform_cores\(config, emu_profiles\)\s*\}\s*"
             r"validation_index = _build_validation_index\(platform_profiles\)",
         )
 
+
+class HleIndexScope(unittest.TestCase):
+    def test_hle_index_reads_the_platform_cores(self):
+        verify = (REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
+        start = verify.index("hle_index: dict[str, bool] = {}")
+        self.assertIn("for profile in platform_profiles.values():", verify[start:start + 200])
 
 if __name__ == "__main__":
     unittest.main()
