@@ -19,6 +19,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 from scripts.scraper.targets import (  # noqa: E402
+    batocera_targets_scraper,
     emudeck_targets_scraper,
     retroarch_targets_scraper,
     retropie_targets_scraper,
@@ -32,6 +33,7 @@ def _refuse(*_args, **_kwargs):
 class FailedRequestsStopTheScrape(unittest.TestCase):
     def test_every_scraper_raises(self):
         for module in (
+            batocera_targets_scraper,
             emudeck_targets_scraper,
             retropie_targets_scraper,
             retroarch_targets_scraper,
@@ -58,6 +60,58 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
             ), self.assertRaises(RuntimeError):
                 module.Scraper().fetch_targets()
 
+    def test_batocera_needs_its_boards(self):
+        """No board listed, or one board unreadable, used to print a warning
+        and write the targets file without those boards."""
+
+        class _Body:
+            def __init__(self, body: bytes):
+                self.body = body
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+            def read(self):
+                return self.body
+
+        def serve(boards: list[str], refuse_board: bool):
+            def urlopen(request, *_a, **_k):
+                url = request.full_url
+                if "/tags" in url:
+                    return _Body(b'[{"name": "batocera-43"}]')
+                if "/contents/configs" in url:
+                    return _Body(json.dumps([{"name": b} for b in boards]).encode())
+                if url.endswith(".board"):
+                    if refuse_board:
+                        _refuse()
+                    return _Body(b"BR2_PACKAGE_BATOCERA_TARGET_X86_64=y\n")
+                if url.endswith("Config.in"):
+                    return _Body(b"config X\n\tselect BR2_PACKAGE_MGBA\n")
+                return _Body(
+                    b"gba:\n  emulators:\n    libretro:\n"
+                    b"      mgba: {requireAnyOf: [BR2_PACKAGE_MGBA]}\n"
+                )
+
+            return urlopen
+
+        for boards, refuse_board in (([], False), (["batocera-x86_64.board"], True)):
+            with self.subTest(boards=boards), mock.patch.object(
+                batocera_targets_scraper.urllib.request,
+                "urlopen",
+                serve(boards, refuse_board),
+            ), self.assertRaises(RuntimeError):
+                batocera_targets_scraper.Scraper().fetch_targets()
+
+        with mock.patch.object(
+            batocera_targets_scraper.urllib.request,
+            "urlopen",
+            serve(["batocera-x86_64.board"], False),
+        ):
+            targets = batocera_targets_scraper.Scraper().fetch_targets()["targets"]
+        self.assertEqual(targets["x86_64"]["cores"], ["mgba"])
 
 
 class RetroPieModuleFlags(unittest.TestCase):

@@ -27,25 +27,16 @@ PLATFORM_NAME = "batocera"
 
 GITHUB_API = "https://api.github.com/repos/batocera-linux/batocera.linux/contents"
 try:
+    from ..base_scraper import github_headers
     from ..batocera_scraper import fetch_stable_tag
 except ImportError:
+    from scraper.base_scraper import github_headers
     from scraper.batocera_scraper import fetch_stable_tag
 
-_STABLE_TAG = fetch_stable_tag() or "master"
-RAW_BASE = f"https://raw.githubusercontent.com/batocera-linux/batocera.linux/{_STABLE_TAG}"
+RAW_BASE = "https://raw.githubusercontent.com/batocera-linux/batocera.linux/{tag}"
 
-CONFIG_IN_URL = f"{RAW_BASE}/package/batocera/core/batocera-system/Config.in"
-ES_SYSTEMS_URL = (
-    f"{RAW_BASE}/package/batocera/emulationstation/batocera-es-system/es_systems.yml"
-)
-
-_HEADERS = {
-    "User-Agent": "retrobios-scraper/1.0",
-    "Accept": "application/vnd.github.v3+json",
-}
-import os as _os
-if _os.environ.get("GITHUB_TOKEN"):
-    _HEADERS["Authorization"] = f"Bearer {_os.environ['GITHUB_TOKEN']}"
+CONFIG_IN_PATH = "package/batocera/core/batocera-system/Config.in"
+ES_SYSTEMS_PATH = "package/batocera/emulationstation/batocera-es-system/es_systems.yml"
 
 _TARGET_FLAG_RE = re.compile(r"^(BR2_PACKAGE_BATOCERA_TARGET_\w+)=y", re.MULTILINE)
 
@@ -68,26 +59,22 @@ _META_BLOCK_RE = re.compile(
 )
 
 
-def _fetch(url: str, headers: dict | None = None) -> str | None:
+def _fetch(url: str, headers: dict | None = None) -> str:
     h = headers or {"User-Agent": "retrobios-scraper/1.0"}
     try:
         req = urllib.request.Request(url, headers=h)
         with urllib.request.urlopen(req, timeout=30) as resp:
             return resp.read().decode("utf-8")
     except urllib.error.URLError as e:
-        print(f"  skip {url}: {e}", file=sys.stderr)
-        return None
+        raise RuntimeError(f"cannot fetch {url}: {e}") from e
 
 
-def _fetch_json(url: str) -> list | dict | None:
-    text = _fetch(url, headers=_HEADERS)
-    if text is None:
-        return None
+def _fetch_json(url: str) -> list | dict:
+    text = _fetch(url, headers=github_headers())
     try:
         return json.loads(text)
     except json.JSONDecodeError as e:
-        print(f"  json parse error {url}: {e}", file=sys.stderr)
-        return None
+        raise RuntimeError(f"cannot parse {url}: {e}") from e
 
 
 def _normalise_condition(raw: str) -> str:
@@ -272,40 +259,41 @@ class Scraper(BaseTargetScraper):
 
     def __init__(self, url: str = "https://github.com/batocera-linux/batocera.linux"):
         super().__init__(url=url)
+        self.tag = ""
+
+    def _raw(self, path: str) -> str:
+        return f"{RAW_BASE.format(tag=self.tag)}/{path}"
 
     def _list_boards(self) -> list[str]:
         """List batocera-*.board files from configs/ via GitHub API."""
-        data = _fetch_json(f"{GITHUB_API}/configs")
-        if not data or not isinstance(data, list):
-            return []
-        return [
+        data = _fetch_json(f"{GITHUB_API}/configs?ref={self.tag}")
+        boards = [
             item["name"]
             for item in data
             if isinstance(item, dict)
             and item.get("name", "").startswith("batocera-")
             and item.get("name", "").endswith(".board")
-        ]
+        ] if isinstance(data, list) else []
+        if not boards:
+            raise RuntimeError(f"no batocera-*.board file in configs/ at {self.tag}")
+        return boards
 
     def _fetch_board_flag(self, board_name: str) -> str | None:
         """Fetch a board file and extract its BR2_PACKAGE_BATOCERA_TARGET_* flag."""
-        url = f"{RAW_BASE}/configs/{board_name}"
-        text = _fetch(url)
-        if text is None:
-            return None
-        m = _TARGET_FLAG_RE.search(text)
+        m = _TARGET_FLAG_RE.search(_fetch(self._raw(f"configs/{board_name}")))
         return m.group(1) if m else None
 
     def fetch_targets(self) -> dict:
         """Build per-board emulator availability map."""
+        self.tag = fetch_stable_tag()
         print("  fetching board list...", file=sys.stderr)
         boards = self._list_boards()
-        if not boards:
-            print("  warning: no boards found", file=sys.stderr)
 
         print("  fetching Config.in...", file=sys.stderr)
-        config_in_text = _fetch(CONFIG_IN_URL)
+        config_in_url = self._raw(CONFIG_IN_PATH)
+        config_in_text = _fetch(config_in_url)
         if not config_in_text:
-            raise RuntimeError(f"empty Config.in from {CONFIG_IN_URL}")
+            raise RuntimeError(f"empty Config.in from {config_in_url}")
 
         meta_rules = _parse_meta_flags(config_in_text)
         selects = _parse_selects(config_in_text)
@@ -314,19 +302,20 @@ class Scraper(BaseTargetScraper):
             file=sys.stderr,
         )
         if not selects:
-            raise RuntimeError(f"no 'select BR2_PACKAGE_*' lines parsed from {CONFIG_IN_URL}")
+            raise RuntimeError(f"no 'select BR2_PACKAGE_*' lines parsed from {config_in_url}")
 
         print("  fetching es_systems.yml...", file=sys.stderr)
-        es_text = _fetch(ES_SYSTEMS_URL)
+        es_systems_url = self._raw(ES_SYSTEMS_PATH)
+        es_text = _fetch(es_systems_url)
         if not es_text:
-            raise RuntimeError(f"empty es_systems.yml from {ES_SYSTEMS_URL}")
+            raise RuntimeError(f"empty es_systems.yml from {es_systems_url}")
         package_to_emulators = _parse_es_systems(es_text)
         print(
             f"  parsed {len(package_to_emulators)} package->emulator mappings",
             file=sys.stderr,
         )
         if not package_to_emulators:
-            raise RuntimeError(f"no package->emulator mappings parsed from {ES_SYSTEMS_URL}")
+            raise RuntimeError(f"no package->emulator mappings parsed from {es_systems_url}")
 
         targets: dict[str, dict] = {}
         for board_name in sorted(boards):
