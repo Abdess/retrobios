@@ -701,6 +701,10 @@ files:
     mode: standalone
     required: false
     bundled: true
+    size: 408885
+    sha1: "8c272ae624c56d48d788fafe0397fab2e33d838f"
+    md5: "b1586eb09b91f65c37a2f5e7c6ef7980"
+    note: "src/external/SDL_GameControllerDB is a submodule pinned at a113e7fa"
     description: "SDL2 controller mapping database handed to SDL_GameControllerAddMappingsFromFile"
     source_ref: "src/emu/drivers/src/input/backend/emu_controller_sdl2.cpp:143-145, src/emu/qt/CMakeLists.txt:277"
 

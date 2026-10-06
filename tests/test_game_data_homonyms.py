@@ -261,5 +261,28 @@ class CollectionCarriesNoGameDataHomonym(unittest.TestCase):
         self.assertEqual(homonyms(claims), [])
 
 
+class ControllerDatabasesAreTheirOwn(unittest.TestCase):
+    """Solarus and EKA2L1 were handed the 26 KB C-Dogs copy by name.
+
+    Each ships its own gamecontrollerdb.txt: Solarus its assets/ copy,
+    EKA2L1 the SDL_GameControllerDB submodule it pins.
+    """
+
+    def test_each_resolves_by_content(self):
+        db_path = REPO_ROOT / "database.json"
+        if not db_path.exists():
+            self.skipTest("no database.json")
+        db = load_database(str(db_path))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        for key in ("solarus", "eka2l1"):
+            entry = next(
+                e for e in profiles[key]["files"] if e["name"] == "gamecontrollerdb.txt"
+            )
+            with self.subTest(profile=key):
+                path, status = resolve_local_file(entry, db)
+                self.assertIn(status, ("sha1_exact", "md5_exact"))
+                self.assertNotIn("C-Dogs", path or "")
+
+
 if __name__ == "__main__":
     unittest.main()
