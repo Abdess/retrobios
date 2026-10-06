@@ -35,6 +35,7 @@ import slots
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     PROFILE_IDENTITY_FIELDS,
+    list_available_targets,
     list_platform_system_ids,
     build_target_cores_cache,
     build_zip_contents_index,
@@ -402,6 +403,15 @@ def _candidate_verdict(
     return "keep"
 
 
+def _identity_of(entry: dict) -> dict:
+    """The fields that tell a profile's file apart from a same-named one."""
+    return {
+        field: entry.get(field)
+        for field in PROFILE_IDENTITY_FIELDS
+        if entry.get(field) not in (None, "", [])
+    }
+
+
 def find_undeclared_files(
     config: dict,
     emulators_dir: str,
@@ -605,11 +615,7 @@ def find_undeclared_files(
                     "checks": sorted(checks) if checks else [],
                     "source_ref": f.get("source_ref"),
                     "expected": _build_expected(f, checks),
-                    **{
-                        field: f.get(field)
-                        for field in PROFILE_IDENTITY_FIELDS
-                        if f.get(field) not in (None, "", [])
-                    },
+                    **_identity_of(f),
                     "sha1": f.get("sha1"),
                     "md5": f.get("md5"),
                 }
@@ -709,6 +715,36 @@ def find_exclusion_notes(
 # Platform verification
 
 
+def _resolve_for_platform(
+    file_entry: dict,
+    sys_id: str,
+    db: dict,
+    zip_contents: dict,
+    data_dir_registry: dict | None,
+    slot_overrides: dict[str, str],
+    mode: str,
+    platform_profiles: dict,
+) -> tuple[str | None, str]:
+    """Resolve one platform entry the way the pack builder does.
+
+    A slot the arbitration decided wins over the resolver; a frontend that
+    never reads the bytes takes the filename-free core's own image.
+    """
+    override = slot_overrides.get(
+        sanitize_pack_path(file_entry.get("destination", file_entry.get("name", "")))
+    )
+    if override:
+        return override, "slot_arbitrated"
+    local_path, status = resolve_local_file(
+        file_entry, db, zip_contents, data_dir_registry=data_dir_registry
+    )
+    if local_path is None and not reads_file_contents(mode):
+        found = agnostic_substitute(file_entry, sys_id, db, platform_profiles)
+        if found:
+            return found[0], "agnostic_fallback"
+    return local_path, status
+
+
 def verify_platform(
     config: dict,
     db: dict,
@@ -759,11 +795,12 @@ def verify_platform(
     # missing required Batocera BIOS into INFO.
     plat_cores = resolve_platform_cores(config, profiles)
     platform_profiles = {name: profiles[name] for name in plat_cores}
-    hle_index: dict[str, bool] = {}
-    for profile in platform_profiles.values():
-        for f in profile.get("files", []):
-            if f.get("hle_fallback"):
-                hle_index[f.get("name", "")] = True
+    hle_index = {
+        f.get("name", ""): True
+        for profile in platform_profiles.values()
+        for f in profile.get("files", [])
+        if f.get("hle_fallback")
+    }
     validation_index = _build_validation_index(platform_profiles)
 
     # Filter systems by target
@@ -816,23 +853,10 @@ def verify_platform(
                 in region_drops
             ):
                 continue
-            local_path, resolve_status = resolve_local_file(
-                file_entry,
-                db,
-                zip_contents,
-                data_dir_registry=data_dir_registry,
+            local_path, resolve_status = _resolve_for_platform(
+                file_entry, sys_id, db, zip_contents, data_dir_registry,
+                slot_overrides, mode, platform_profiles,
             )
-            override = slot_overrides.get(
-                sanitize_pack_path(
-                    file_entry.get("destination", file_entry.get("name", ""))
-                )
-            )
-            if override:
-                local_path, resolve_status = override, "slot_arbitrated"
-            if not reads_file_contents(mode) and local_path is None:
-                found = agnostic_substitute(file_entry, sys_id, db, platform_profiles)
-                if found:
-                    local_path, resolve_status = found[0], "agnostic_fallback"
             if not reads_file_contents(mode):
                 result = verify_entry_existence(
                     file_entry,
@@ -1668,6 +1692,58 @@ def print_emulator_result(result: dict, verbose: bool = False) -> None:
             print(f"    {gt_cov['platform_only']} without declared validation")
 
 
+def _refuse_listing_narrowings(
+    args: argparse.Namespace, parser: argparse.ArgumentParser
+) -> None:
+    """A listing mode reads --platform at most; anything else is refused.
+
+    Printing past a narrowing flag lets the user believe it applied
+    (generate_pack applies the same table).
+    """
+    listing = next(
+        (flag for flag, on in (
+            ("--list-emulators", args.list_emulators),
+            ("--list-systems", args.list_systems),
+            ("--list-targets", args.list_targets),
+        ) if on),
+        None,
+    )
+    if not listing:
+        return
+    reads_platform = listing != "--list-emulators"
+    for flag, on in (
+        ("--platform", args.platform and not reads_platform),
+        ("--all", args.all),
+        ("--emulator", args.emulator),
+        ("--system", args.system),
+        ("--region", getattr(args, "region", None)),
+        ("--target", getattr(args, "target", None)),
+    ):
+        if on:
+            parser.error(f"{flag} is incompatible with {listing}")
+
+
+def _run_listing(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
+    if args.list_emulators:
+        list_emulator_profiles(args.emulators_dir)
+    elif args.list_systems and args.platform:
+        list_platform_system_ids(args.platform, args.platforms_dir)
+    elif args.list_systems:
+        list_system_ids(args.emulators_dir)
+    else:
+        if not args.platform:
+            parser.error("--list-targets requires --platform")
+        targets = list_available_targets(args.platform, args.platforms_dir)
+        if not targets:
+            print(f"No targets configured for platform '{args.platform}'")
+            return
+        for t in targets:
+            aliases = f" (aliases: {', '.join(t['aliases'])})" if t["aliases"] else ""
+            print(
+                f"  {t['name']:30s} {t['architecture']:10s} {t['core_count']:>4d} cores{aliases}"
+            )
+
+
 def main():
     parser = argparse.ArgumentParser(description="Platform-native BIOS verification")
     parser.add_argument("--platform", "-p", help="Platform name")
@@ -1716,52 +1792,9 @@ def main():
         except ValueError as exc:
             parser.error(str(exc))
 
-    # A listing mode reads --platform at most; anything else that narrows is
-    # refused rather than printed past (generate_pack applies the same table).
-    listing = next(
-        (flag for flag, on in (
-            ("--list-emulators", args.list_emulators),
-            ("--list-systems", args.list_systems),
-            ("--list-targets", args.list_targets),
-        ) if on),
-        None,
-    )
-    if listing:
-        reads_platform = listing != "--list-emulators"
-        for flag, on in (
-            ("--platform", args.platform and not reads_platform),
-            ("--all", args.all),
-            ("--emulator", args.emulator),
-            ("--system", args.system),
-            ("--region", getattr(args, "region", None)),
-            ("--target", getattr(args, "target", None)),
-        ):
-            if on:
-                parser.error(f"{flag} is incompatible with {listing}")
-    if args.list_emulators:
-        list_emulator_profiles(args.emulators_dir)
-        return
-    if args.list_systems:
-        if args.platform:
-            list_platform_system_ids(args.platform, args.platforms_dir)
-        else:
-            list_system_ids(args.emulators_dir)
-        return
-
-    if args.list_targets:
-        if not args.platform:
-            parser.error("--list-targets requires --platform")
-        from common import list_available_targets
-
-        targets = list_available_targets(args.platform, args.platforms_dir)
-        if not targets:
-            print(f"No targets configured for platform '{args.platform}'")
-            return
-        for t in targets:
-            aliases = f" (aliases: {', '.join(t['aliases'])})" if t["aliases"] else ""
-            print(
-                f"  {t['name']:30s} {t['architecture']:10s} {t['core_count']:>4d} cores{aliases}"
-            )
+    _refuse_listing_narrowings(args, parser)
+    if args.list_emulators or args.list_systems or args.list_targets:
+        _run_listing(args, parser)
         return
 
     # Mutual exclusion
