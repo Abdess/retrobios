@@ -5,7 +5,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-10-06T03:26:07Z",
+  "generated": "2026-10-06T06:50:25Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -251,9 +251,9 @@
     }
   ],
   "total_files": 569,
-  "total_size": 3452229095,
+  "total_size": 3452230081,
   "pack_files": 571,
-  "pack_size": 3452229095,
+  "pack_size": 3452230081,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -331,18 +331,18 @@
     },
     {
       "dest": "disksys.rom",
-      "sha1": "57fe1bdee955bb48d357e463ccbf129496930b62",
-      "sha256": "99c18490ed9002d9c6d999b9d8d15be5c051bdfa7cc7e73318053c9a994b0178",
+      "sha1": "af5af53f66982e749643fdf8b2acbb7d4d3ed229",
+      "sha256": "fdc1a76e654feea993fcb38366e05ee5f4eb641f86fe6bebaeefd412e112dd72",
       "size": 8192,
-      "repo_path": "bios/Arcade/FBNeo/fdsbios.nes",
+      "repo_path": "bios/Nintendo/Famicom Disk System/.variants/disksys.rom.af5af53f",
       "cores": null
     },
     {
       "dest": "prod.keys",
-      "sha1": "d6cedce971a2a4ab2588e39285a9d2fb37b62924",
-      "sha256": "76df55f85c6628cd924f227a72a301bbb731833c0a0f00c440e01e6b34480990",
-      "size": 15039,
-      "repo_path": "bios/Arcade/Arcade/switch/prod.keys",
+      "sha1": "c146b651696d25287241f4bab18226e488bc45b3",
+      "sha256": "039895c6e93a0c6208c3af27da8c3fc408083873a96f2320dc334a6fa252c112",
+      "size": 16025,
+      "repo_path": "bios/Nintendo/Switch/prod.keys",
       "cores": null
     },
     {
@@ -387,26 +387,26 @@
     },
     {
       "dest": "bios_CD_E.bin",
-      "sha1": "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356",
-      "sha256": "16735df92fcc1d0fc6a1eced244867e95281c5006340926082b74e363e073dc4",
+      "sha1": "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58",
+      "sha256": "fe608a2a07676a23ab5fd5eee2f53c9e2526d69a28aa16ccd85c0ec42e6933cb",
       "size": 131072,
-      "repo_path": "bios/Sega/Mega CD/MCD_eu_100.bin",
+      "repo_path": "bios/Sega/Mega CD/eu_mcd2_9303.bin",
       "cores": null
     },
     {
       "dest": "bios_CD_U.bin",
-      "sha1": "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed",
-      "sha256": "807384678ef259494d943eddb6954dfc7069693d0dde0c424e2028488d88e81a",
+      "sha1": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
+      "sha256": "fb477cdbf94c84424c2feca4fe40656d85393fe7b7b401911b45ad2eb991258c",
       "size": 131072,
-      "repo_path": "bios/Sega/Mega CD/bios_CD_U.bin",
+      "repo_path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
       "cores": null
     },
     {
       "dest": "bios_CD_J.bin",
-      "sha1": "4846f448160059a7da0215a5df12ca160f26dd69",
-      "sha256": "923eb9da740f98ab1572085e3d351e2c0982df0906b0b99efb68a9997c94cf8f",
+      "sha1": "d203cfe22c03ae479dd8ca33840cf8d9776eb3ff",
+      "sha256": "7133fc2dd2fe5b7d0acd53a5f10f3d00b5d31270239ad20d74ef32393e24af88",
       "size": 131072,
-      "repo_path": "bios/Sega/Mega CD/MCD_jp_100p.bin",
+      "repo_path": "bios/Sega/Mega CD/jp_mcd2_921222.bin",
       "cores": null
     },
     {

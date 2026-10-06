@@ -5,7 +5,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-10-06T03:26:07Z",
+  "generated": "2026-10-06T06:50:25Z",
   "base_destination": "system",
   "detect": [
     {
@@ -17,9 +17,9 @@
   ],
   "standalone_copies": [],
   "total_files": 5867,
-  "total_size": 6399851574,
+  "total_size": 6399839286,
   "pack_files": 8510,
-  "pack_size": 6440384738,
+  "pack_size": 6440372450,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -961,10 +961,10 @@
     },
     {
       "dest": "galaksija/ROM2.BIN",
-      "sha1": "1bae895fbdd658cfb56c53cc2139282cc1e778de",
-      "sha256": "9fc01e6beab84e61e0267fa39e23c649cdf2ccd25ad1cbfc2de0facfd160e723",
-      "size": 8192,
-      "repo_path": "bios/Sony/PlayStation 2/ROM2.BIN",
+      "sha1": "5d5ab4313a2d0effe7572bb129193b64cab002c1",
+      "sha256": "7d93fe474fcc98c06a6d96e533f8935e4e707edf0792d3e9d679ea68404375de",
+      "size": 4096,
+      "repo_path": "bios/Galaksija/ROM2.BIN",
       "cores": null
     },
     {
@@ -1771,10 +1771,10 @@
     },
     {
       "dest": "dolphin-emu/Sys/GC/dsp_rom.bin",
-      "sha1": "f4f683a49d7eb4155566f793f2c1c27e90159992",
-      "sha256": "7f33e6600722791ccee5fd15d4330af8d8f74165f7d1ded6738684c0294aaffe",
+      "sha1": "3c6cc6e04fdd0b2a392d7a6ed769455444846be7",
+      "sha256": "49d987ee1eab29a157425b82d54516957a81e1bac247c8834e494642605c3e8c",
       "size": 8192,
-      "repo_path": "bios/Nintendo/GameCube/Sys/GC/dsp_rom.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.3c6cc6e0",
       "cores": null
     },
     {
@@ -47491,10 +47491,10 @@
     },
     {
       "dest": "np2kai/scsi.rom",
-      "sha1": "451c85c46b92e6ad2ad930f055ccf0fe3049936d",
-      "sha256": "5e1efe51b2c8be901ab4283c671bd84364a574845b7269f92bdddc4dae9ae5d5",
-      "size": 16384,
-      "repo_path": "bios/Other/Clock Signal/AppleII/scsi.rom",
+      "sha1": "3d7166f05daad1b022fa04c2569e788580158095",
+      "sha256": "9809ed07796454d5524cce240c4f815496b82fae3644aba80778612c618d5cf7",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/scsi.rom",
       "cores": [
         "np2kai"
       ]

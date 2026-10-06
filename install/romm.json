@@ -5,7 +5,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-10-06T03:26:07Z",
+  "generated": "2026-10-06T06:50:25Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -16,9 +16,9 @@
   ],
   "standalone_copies": [],
   "total_files": 958,
-  "total_size": 1580216611,
+  "total_size": 1580208419,
   "pack_files": 960,
-  "pack_size": 1580216611,
+  "pack_size": 1580208419,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -4632,10 +4632,10 @@
     },
     {
       "dest": "pc-9800-series/np2kai/scsi.rom",
-      "sha1": "451c85c46b92e6ad2ad930f055ccf0fe3049936d",
-      "sha256": "5e1efe51b2c8be901ab4283c671bd84364a574845b7269f92bdddc4dae9ae5d5",
-      "size": 16384,
-      "repo_path": "bios/Other/Clock Signal/AppleII/scsi.rom",
+      "sha1": "3d7166f05daad1b022fa04c2569e788580158095",
+      "sha256": "9809ed07796454d5524cce240c4f815496b82fae3644aba80778612c618d5cf7",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/scsi.rom",
       "cores": [
         "np2kai"
       ]
