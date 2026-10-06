@@ -2819,13 +2819,22 @@ def realign_prose(
 
 
 def emulators_dir_is_dirty(emulators_dir: str) -> bool:
-    """True when the profile directory carries uncommitted changes."""
+    """True when the profile directory carries uncommitted changes.
+
+    Git is asked from inside the directory, so a profile tree that lives in
+    another repository answers for itself. A directory git cannot read is
+    never reported clean: the writes have nothing to roll back to.
+    """
     result = subprocess.run(
-        ["git", "status", "--porcelain", "--", emulators_dir],
+        ["git", "-C", emulators_dir, "status", "--porcelain", "--", "."],
         capture_output=True,
         text=True,
         check=False,
     )
+    if result.returncode:
+        raise RuntimeError(
+            f"cannot read the git status of {emulators_dir}: {result.stderr.strip()}"
+        )
     return bool(result.stdout.strip())
 
 
@@ -3218,18 +3227,19 @@ def main() -> None:
         args.backfill_commits or args.rebase_refs or args.bump_commit
         or args.realign_prose
     )
-    if (
-        writes
-        and not args.dry_run
-        and not args.force
-        and emulators_dir_is_dirty(args.emulators_dir)
-    ):
-        print(
-            f"{args.emulators_dir} carries uncommitted changes. "
-            "Commit them first or pass --force.",
-            file=sys.stderr,
-        )
-        raise SystemExit(1)
+    if writes and not args.dry_run and not args.force:
+        try:
+            dirty = emulators_dir_is_dirty(args.emulators_dir)
+        except RuntimeError as e:
+            print(f"{e}. Pass --force to write anyway.", file=sys.stderr)
+            raise SystemExit(1) from e
+        if dirty:
+            print(
+                f"{args.emulators_dir} carries uncommitted changes. "
+                "Commit them first or pass --force.",
+                file=sys.stderr,
+            )
+            raise SystemExit(1)
 
     if args.realign_prose:
         for name in selected:

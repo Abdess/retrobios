@@ -3511,5 +3511,27 @@ class TestBuildReportProse(TestBuildReport):
         self.assertEqual(report.entries[0].kind, "prose")
 
 
+class TestEmulatorsDirStatus(unittest.TestCase):
+    """git was asked from the current directory and its exit code ignored:
+    a profile tree in another repository, or in none, read as clean, and
+    --rebase-refs wrote over uncommitted profiles."""
+
+    def _git(self, *args: str, cwd: str) -> None:
+        subprocess.run(["git", *args], cwd=cwd, check=True, capture_output=True)
+
+    def test_a_tree_in_another_repository_answers_for_itself(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._git("init", "-q", cwd=root)
+            Path(root, "a.yml").write_text("emulator: a\n")
+            self.assertTrue(profile_sync.emulators_dir_is_dirty(root))
+
+    def test_a_tree_outside_any_repository_is_not_clean(self):
+        with tempfile.TemporaryDirectory() as root, mock.patch.dict(
+            os.environ, {"GIT_CEILING_DIRECTORIES": str(Path(root).parent)}
+        ):
+            with self.assertRaises(RuntimeError):
+                profile_sync.emulators_dir_is_dirty(root)
+
+
 if __name__ == "__main__":
     unittest.main()
