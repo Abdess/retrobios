@@ -5,7 +5,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-10-06T03:26:07Z",
+  "generated": "2026-10-06T06:50:25Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -238,9 +238,9 @@
     }
   ],
   "total_files": 12826,
-  "total_size": 8065364335,
+  "total_size": 8065338769,
   "pack_files": 12828,
-  "pack_size": 8065364335,
+  "pack_size": 8065338769,
   "total_omitted": 30,
   "omitted_files": [
     {
@@ -40969,20 +40969,20 @@
     },
     {
       "dest": "switch/prod.keys",
-      "sha1": "d6cedce971a2a4ab2588e39285a9d2fb37b62924",
-      "sha256": "76df55f85c6628cd924f227a72a301bbb731833c0a0f00c440e01e6b34480990",
-      "size": 15039,
-      "repo_path": "bios/Arcade/Arcade/switch/prod.keys",
+      "sha1": "c146b651696d25287241f4bab18226e488bc45b3",
+      "sha256": "039895c6e93a0c6208c3af27da8c3fc408083873a96f2320dc334a6fa252c112",
+      "size": 16025,
+      "repo_path": "bios/Nintendo/Switch/prod.keys",
       "cores": [
         "citron"
       ]
     },
     {
       "dest": "switch/title.keys",
-      "sha1": "8e6c2873d671f482d3fe0f7b96e18e0f84d02c10",
-      "sha256": "dc6e31aae8daa9067dafcf2bca6d9d3aa691a63474eb698ad8c54be3e360753b",
-      "size": 19584,
-      "repo_path": "bios/Arcade/Arcade/switch/title.keys",
+      "sha1": "bfee8e708dc4c8f27bfe51a12d57caaa0b7f74de",
+      "sha256": "3ed66f7e82df79922739c6c2d34de90bc36a48d13acdff24f9d51013bd8c0677",
+      "size": 1224,
+      "repo_path": "bios/Nintendo/Switch/title.keys",
       "cores": [
         "citron"
       ]
@@ -85625,10 +85625,10 @@
     },
     {
       "dest": "np2kai/scsi.rom",
-      "sha1": "451c85c46b92e6ad2ad930f055ccf0fe3049936d",
-      "sha256": "5e1efe51b2c8be901ab4283c671bd84364a574845b7269f92bdddc4dae9ae5d5",
-      "size": 16384,
-      "repo_path": "bios/Other/Clock Signal/AppleII/scsi.rom",
+      "sha1": "3d7166f05daad1b022fa04c2569e788580158095",
+      "sha256": "9809ed07796454d5524cce240c4f815496b82fae3644aba80778612c618d5cf7",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/scsi.rom",
       "cores": [
         "np2kai"
       ]
