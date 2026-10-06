@@ -29,6 +29,7 @@ from common import (
     name_match_size_ok,
     parse_md5_list,
     require_yaml,
+    runs_standalone,
 )
 
 yaml = require_yaml()
@@ -254,6 +255,7 @@ def _cross_reference_profile(
     declared: dict[str, set[str]],
     report: dict,
     index: dict,
+    standalone_cores: set[str] | None = None,
 ) -> None:
     """Compare one emulator profile against what the platforms declare.
 
@@ -281,6 +283,9 @@ def _cross_reference_profile(
         for sys_id in systems:
             platform_names.update(declared.get(_norm_system_id(sys_id), set()))
 
+    # The build a platform runs decides which entries it reads, as in
+    # find_undeclared_files: without a platform, the libretro build.
+    is_standalone = runs_standalone(emu_name, profile, standalone_cores or set())
     gaps = []
     covered = []
     unsourceable_list: list[dict] = []
@@ -320,9 +325,11 @@ def _cross_reference_profile(
         if "path" in f and f["path"] is None:
             continue
 
-        # Skip standalone-only files
+        # Skip the entries of the build the platform does not run
         file_mode = f.get("mode", "both")
-        if file_mode == "standalone":
+        if file_mode == "standalone" and not is_standalone:
+            continue
+        if file_mode == "libretro" and is_standalone:
             continue
 
         # Skip files loaded from non-system directories (save_dir, content_dir)
@@ -438,6 +445,7 @@ def cross_reference(
     platform_data_dirs: dict[str, set[str]] | None = None,
     data_names: set[str] | None = None,
     all_declared: set[str] | None = None,
+    standalone_cores: set[str] | None = None,
 ) -> dict:
     """Compare emulator profiles against platform declarations.
 
@@ -477,7 +485,7 @@ def cross_reference(
     }
     for emu_name, profile in profiles.items():
         _cross_reference_profile(
-            emu_name, profile, declared, report, index
+            emu_name, profile, declared, report, index, standalone_cores
         )
 
     return report
@@ -554,6 +562,7 @@ def main():
     if args.target and not args.platform:
         parser.error("--target requires --platform")
 
+    standalone_cores: set[str] = set()
     if args.platform:
         from common import load_target_config, resolve_platform_cores
 
@@ -565,6 +574,7 @@ def main():
         config = load_platform_config(args.platform, args.platforms_dir)
         relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
         profiles = {k: v for k, v in profiles.items() if k in relevant}
+        standalone_cores = {str(c) for c in config.get("standalone_cores", [])}
 
     if not profiles:
         print("No emulator profiles found.", file=sys.stderr)
@@ -575,7 +585,10 @@ def main():
     )
     db = load_database(args.db)
     data_names = _build_supplemental_index()
-    report = cross_reference(profiles, declared, db, plat_data_dirs, data_names)
+    report = cross_reference(
+        profiles, declared, db, plat_data_dirs, data_names,
+        standalone_cores=standalone_cores,
+    )
 
     if args.json:
         print(json.dumps(report, indent=2))

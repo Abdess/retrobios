@@ -18,6 +18,18 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
+DUAL_PROFILE = {
+    "emulator": "Dual",
+    "type": "standalone + libretro",
+    "cores": ["dual"],
+    "systems": ["sys"],
+    "files": [
+        {"name": "both.bin"},
+        {"name": "standalone.bin", "mode": "standalone"},
+        {"name": "libretro.bin", "mode": "libretro"},
+    ],
+}
+
 
 class StandaloneProfilesCarryNoFileMode(unittest.TestCase):
     def test_every_profile_follows_it(self):
@@ -53,6 +65,30 @@ class StandaloneProfilesCarryNoFileMode(unittest.TestCase):
             [e.message for e in validator.iter_errors(profile) if "mode" in e.message],
             [],
         )
+
+
+class CrossReferenceReadsTheBuildThePlatformRuns(unittest.TestCase):
+    """cross_reference dropped every standalone entry whatever the platform:
+    for Recalbox, which runs Dolphin standalone, it reported 12 Dolphin gaps
+    where verify and the pack builder found 26."""
+
+    def _gaps(self, standalone_cores):
+        import sys
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        from cross_reference import cross_reference
+
+        empty_db = {"files": {}, "indexes": {}}
+        report = cross_reference(
+            {"dual": DUAL_PROFILE}, {}, empty_db, standalone_cores=standalone_cores
+        )
+        return sorted(g["name"] for g in report["dual"]["gap_details"])
+
+    def test_a_platform_running_it_standalone(self):
+        self.assertEqual(self._gaps({"dual"}), ["both.bin", "standalone.bin"])
+
+    def test_a_platform_running_the_core(self):
+        self.assertEqual(self._gaps(set()), ["both.bin", "libretro.bin"])
 
 
 if __name__ == "__main__":
