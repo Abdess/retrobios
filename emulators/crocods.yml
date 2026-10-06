@@ -28,11 +28,11 @@ notes: |
     - ROMEXT[0] (upper ROM slot 0, 16KB): second half of cpc6128_bin (BASIC)
     - ROMEXT[7] (upper ROM slot 7, 16KB): romdisc_bin (AMSDOS)
 
-  Called from HardResetCPC() (crocods-core/platform.c:1009-1020) using
+  Called from HardResetCPC() (crocods-core/platform.c:1024-1035) using
   the extern byte arrays directly. No filesystem ROM loading exists in
   the libretro path.
 
-  A Multiface ROM loader exists (crocods-core/multiface.c:51-61) that
+  A Multiface ROM loader exists (crocods-core/multiface.c:53-64) that
   reads LocRomMulti via fopen(), but InitMultiface() is never called
   from the libretro build or platform.c. Dead code in libretro context.
 
@@ -45,7 +45,7 @@ files: []
 
 platform_details:
   bios_mapping:
-    source_ref: "crocods-core/vga.c:185-200, crocods-core/platform.c:1009-1020"
+    source_ref: "crocods-core/vga.c:185-200, crocods-core/platform.c:1024-1035"
     note: |
       All ROMs are embedded. InitMemCPC() copies cpc6128_bin and romdisc_bin
       into ROMINF and ROMEXT arrays via memcpy. No filesystem lookup occurs.
