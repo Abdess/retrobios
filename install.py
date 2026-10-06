@@ -103,7 +103,34 @@ DEFAULT_DESTS = {
     "rocknix": Path("/storage/roms/bios"),
     "misterfpga": Path("/media/fat/games"),
     "retropie": Path.home() / "RetroPie" / "BIOS",
+    "romm": Path("/romm/library/bios"),
 }
+
+
+def _os_default_dests(os_type: str) -> dict[str, Path]:
+    """Where a platform keeps its BIOS on this OS, when it is not detected.
+
+    The same folders the platform's detection looks for: a platform named on
+    the command line but not found must not land in ~/bios, which none of
+    them reads.
+    """
+    home = Path.home()
+    if os_type == "windows":
+        profile = Path(os.environ.get("USERPROFILE", str(home)))
+        appdata = Path(os.environ.get("APPDATA", str(home / "AppData" / "Roaming")))
+        return {
+            "retroarch": appdata / "RetroArch" / "system",
+            "retrobat": profile / "RetroBat" / "bios",
+            "bizhawk": profile / "BizHawk" / "Firmware",
+        }
+    if os_type == "darwin":
+        return {
+            "retroarch": home / "Library" / "Application Support" / "RetroArch" / "system",
+        }
+    return {
+        "retroarch": home / ".config" / "retroarch" / "system",
+        "bizhawk": home / ".config" / "BizHawk" / "Firmware",
+    }
 
 # Set when the run is interrupted, so queued downloads end instead of draining
 # the pool: every future is submitted before the first one completes.
@@ -1385,7 +1412,7 @@ def _prompt_manual_platform(os_type: str) -> list[tuple[str, Path]]:
             plat = AVAILABLE_PLATFORMS[int(choice) - 1]
         elif choice in AVAILABLE_PLATFORMS:
             plat = choice
-    default_dest = DEFAULT_DESTS.get(plat, Path.home() / "bios")
+    default_dest = _default_dest(os_type, plat)
     try:
         raw = input(f"BIOS directory [{default_dest}]: ").strip()
     except (EOFError, KeyboardInterrupt):
@@ -1405,7 +1432,9 @@ def _default_dest(os_type: str, platform_name: str) -> Path:
     """
     if os_type == "android" and platform_name == "retroarch":
         return _android_storage_root() / "RetroArch" / "system"
-    return DEFAULT_DESTS.get(platform_name, Path.home() / "bios")
+    return _os_default_dests(os_type).get(
+        platform_name, DEFAULT_DESTS.get(platform_name, Path.home() / "bios")
+    )
 
 
 def _manual_usage_hint(os_type: str) -> list[str]:

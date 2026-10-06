@@ -183,6 +183,44 @@ class TestDefaultDests(unittest.TestCase):
         )
 
 
+class TestDefaultsFollowTheRegistry(unittest.TestCase):
+    """A platform named but not detected fell back to ~/bios on every OS for
+    RetroArch, RetroBat, BizHawk and RomM, a folder none of them reads."""
+
+    ENV = {"USERPROFILE": "/u", "APPDATA": "/u/AppData/Roaming"}
+
+    def _expand(self, raw: str) -> Path:
+        text = raw.replace("$HOME", str(Path.home()))
+        for name, value in self.ENV.items():
+            text = text.replace(f"%{name}%", value)
+        return Path(text.replace("\\", "/"))
+
+    def test_the_default_is_a_folder_detection_looks_for(self):
+        import yaml
+
+        registry = yaml.safe_load(
+            (Path(__file__).resolve().parent.parent / "platforms" / "_registry.yml")
+            .read_text(encoding="utf-8")
+        )["platforms"]
+        checked = 0
+        with unittest.mock.patch.dict(os.environ, self.ENV):
+            for name, entry in registry.items():
+                by_os: dict[str, set[Path]] = {}
+                for rule in (entry.get("install") or {}).get("detect", []):
+                    if rule.get("bios_path"):
+                        by_os.setdefault(rule["os"], set()).add(self._expand(rule["bios_path"]))
+                    elif rule.get("method") == "path_exists":
+                        by_os.setdefault(rule["os"], set()).add(self._expand(rule["path"]))
+                    elif rule.get("parse_key") == "system_directory":
+                        config = self._expand(rule["config"])
+                        by_os.setdefault(rule["os"], set()).add(config.parent / "system")
+                for os_type, candidates in by_os.items():
+                    with self.subTest(platform=name, os=os_type):
+                        self.assertIn(install._default_dest(os_type, name), candidates)
+                        checked += 1
+        self.assertGreater(checked, 10)
+
+
 class TestEmbeddedDetection(unittest.TestCase):
     """MiSTer is identified by the main binary at the SD card root."""
 
@@ -1025,7 +1063,9 @@ class TestManualPlatformPrompt(unittest.TestCase):
         answers = iter(["1", ""])
         with unittest.mock.patch("builtins.input", lambda _prompt="": next(answers)):
             chosen = install._prompt_manual_platform("linux")
-        self.assertEqual(chosen, [("retroarch", Path.home() / "bios")])
+        self.assertEqual(
+            chosen, [("retroarch", Path.home() / ".config" / "retroarch" / "system")]
+        )
 
     def test_name_and_explicit_directory(self):
         answers = iter(["batocera", "~/my bios"])
