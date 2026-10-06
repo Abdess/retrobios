@@ -90,16 +90,12 @@ class NativeFile:
             return platform_values
         if source == "truth":
             return truth_values
-        if truth_values and platform_values and not set(truth_values) & set(
-            platform_values
-        ):
+        if not truth_values:
+            return platform_values
+        if not set(truth_values) & set(platform_values):
             return truth_values
-        if truth_values:
-            # Keep the platform's extra accepted revisions alongside ours.
-            merged = list(truth_values)
-            merged.extend(v for v in platform_values if v not in merged)
-            return merged
-        return platform_values
+        # Keep the platform's extra accepted revisions alongside ours.
+        return truth_values + [v for v in platform_values if v not in truth_values]
 
     def hash(self, field_name: str) -> str:
         values = self.hashes(field_name)
