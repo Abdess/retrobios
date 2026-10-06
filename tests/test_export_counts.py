@@ -166,6 +166,21 @@ class EmuDeckWritesItsCorrections(unittest.TestCase):
         )
 
 
+class BizHawkCountsWhatItWrites(unittest.TestCase):
+    def test_an_ambiguous_name_is_not_counted(self):
+        from exporter.bizhawk_exporter import Exporter as BizHawk
+
+        sha_a, sha_b, sha_c = "a" * 40, "b" * 40, "c" * 40
+        first = NativeFile("bios.bin", "bios.bin", "S1", platform={"sha1": sha_a},
+                           truth={"sha1": sha_b}, corrections=["sha1"])
+        second = NativeFile("bios.bin", "bios.bin", "S2", platform={"sha1": sha_c})
+        systems = {"S1": NativeSystem("S1", files=[first]), "S2": NativeSystem("S2", files=[second])}
+        exporter = BizHawk()
+        source = f'File("{sha_a.upper()}", 16, "bios.bin")\n'
+        exporter.render(systems, None, {exporter.native_filename(): source})
+        self.assertFalse(exporter.states(first, "sha1"))
+
+
 class ModelKeepsOneFileOneEntry(unittest.TestCase):
     def test_size_describes_the_hash_written(self):
         fe = NativeFile("boot.bin", "dc/boot.bin", "dc",

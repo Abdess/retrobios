@@ -60,6 +60,14 @@ class Exporter(BaseExporter):
         # hang off exist nowhere else.
         return True
 
+    def states(self, fe: NativeFile, field_name: str) -> bool:
+        """A name that resolves to several SHA1s is left alone, so its
+        correction is not a change the database receives."""
+        touchable = getattr(self, "_touchable", None)
+        if field_name == "sha1" and touchable is not None and fe.name.casefold() not in touchable:
+            return False
+        return super().states(fe, field_name)
+
     @staticmethod
     def _unambiguous(systems: dict[str, NativeSystem]) -> dict[str, NativeFile]:
         """Files whose name identifies exactly one entry with a SHA1.
@@ -96,6 +104,7 @@ class Exporter(BaseExporter):
             )
 
         index = self._unambiguous(systems)
+        self._touchable = set(index)
 
         def commented_out(text: str, position: int) -> bool:
             """Whether the call sits on a line the compiler never sees.
