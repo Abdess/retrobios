@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -336,13 +337,18 @@ class TestBuilderAndVerifierAgree(unittest.TestCase):
 
     def test_neither_reimplements_the_mode_test(self):
         # A local "if mode == md5" beside the override would drift from the
-        # arbitration rule the moment either side is edited.
+        # arbitration rule the moment either side is edited. The anchor is the
+        # override lookup both sides must perform; the old anchor was a string
+        # the test above forbids, so the window was the whole file.
+        mode_test = re.compile(r"""[=!]=\s*["'](?:md5|sha1|existence)["']""")
         for name in ("generate_pack.py", "verify.py"):
             source = Path(__file__).resolve().parents[1] / "scripts" / name
             body = source.read_text(encoding="utf-8")
-            marker = body.find("decision.serves_both")
-            window = body[max(0, marker - 600):marker]
-            self.assertNotIn('verification_mode") == "md5"', window, name)
+            anchors = [m.start() for m in re.finditer(r"slot_overrides\.get\(", body)]
+            self.assertTrue(anchors, name)
+            for at in anchors:
+                window = body[max(0, at - 600):at + 600]
+                self.assertIsNone(mode_test.search(window), name)
 
 
 class TestSelfContradictingDestinations(unittest.TestCase):
