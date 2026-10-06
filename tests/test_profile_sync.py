@@ -2483,6 +2483,22 @@ class TestBumpCommit(unittest.TestCase):
         self.assertEqual(profile_sync.pending_recale(report), 0)
         self.assertTrue(bump_commit(self.path, report))
 
+    def test_upstream_pin_moves_with_source_pin(self):
+        """A recale onto upstream HEAD lines must advance upstream_commit too."""
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "ANCHORED", None, 10, 12, []
+        )
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[EntryReport("a.bin", "a.c:10-12", "ANCHORED", [part])],
+            counts={"ANCHORED": 1},
+            upstream_pin="uppin", upstream_head="uphead", upstream_origin="upstream_commit",
+        )
+        self.assertTrue(bump_commit(self.path, report))
+        written = yaml.safe_load(self.path.read_text())
+        self.assertEqual(written["source_commit"], "newhead")
+        self.assertEqual(written["upstream_commit"], "uphead")
+
     def test_refused_when_pinned_to_a_superseded_tag(self):
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead",
@@ -3331,6 +3347,21 @@ class TestOutputModesApplyTheirFlags(unittest.TestCase):
         code, _, err = self._main("--json", "--check-version")
         self.assertEqual(code, 1)
         self.assertIn("--check-version", err)
+
+
+class TestReconcilePerFile(unittest.TestCase):
+    def test_an_anchored_part_settles_only_its_own_file(self):
+        anchored = PartResult(RefPart("libretro.c", 5, 5, "5"), "ANCHORED", None, None, None, [])
+        same = PartResult(RefPart("libretro.c", 9, 9, "9"), "AMBIGUOUS", None, None, None, [])
+        other = PartResult(RefPart("jg.c", 229, 230, "229-230"), "AMBIGUOUS", None, None, None, [])
+        result = profile_sync.reconcile_self_check([anchored, same, other])
+        self.assertEqual([p.status for p in result], ["ANCHORED", "ANCHORED", "AMBIGUOUS"])
+
+    def test_a_compared_part_is_never_rewritten(self):
+        anchored = PartResult(RefPart("a.c", 5, 5, "5"), "ANCHORED", None, None, None, [])
+        shifted = PartResult(RefPart("a.c", 9, 9, "9"), "SHIFTED", None, 12, 12, [])
+        result = profile_sync.reconcile_self_check([anchored, shifted], [True, False])
+        self.assertEqual(result[1].status, "SHIFTED")
 
 
 class TestRealignFlagMatrix(unittest.TestCase):
