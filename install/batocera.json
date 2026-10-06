@@ -5,7 +5,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-10-05T22:37:20Z",
+  "generated": "2026-10-06T00:05:31Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,11 +237,11 @@
       }
     }
   ],
-  "total_files": 12820,
-  "total_size": 8058399584,
-  "pack_files": 12822,
-  "pack_size": 8058399584,
-  "total_omitted": 29,
+  "total_files": 12829,
+  "total_size": 8070315277,
+  "pack_files": 12831,
+  "pack_size": 8070315277,
+  "total_omitted": 37,
   "omitted_files": [
     {
       "dest": "Enterprise/basic21.bin",
@@ -271,6 +271,16 @@
       "reason": "not_found",
       "cores": [
         "dosbox"
+      ]
+    },
+    {
+      "dest": "base/pak001.pk4",
+      "name": "pak001.pk4",
+      "system": "doom3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "dhewm3"
       ]
     },
     {
@@ -371,6 +381,76 @@
       "reason": "not_found",
       "cores": [
         "xash3d_fwgs"
+      ]
+    },
+    {
+      "dest": "games/keen6/audio.ck6",
+      "name": "audio.ck6",
+      "system": "commander-keen",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
+      "dest": "games/keen6/egagraph.ck6",
+      "name": "egagraph.ck6",
+      "system": "commander-keen",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
+      "dest": "games/keen6/gamemaps.ck6",
+      "name": "gamemaps.ck6",
+      "system": "commander-keen",
+      "required": false,
+      "reason": "not_found",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
+      "dest": "games/tr1/levels/level2.phd",
+      "name": "level2.phd",
+      "system": "tomb-raider-1",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr1/levels/title.phd",
+      "name": "title.phd",
+      "system": "tomb-raider-1",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr2/levels/title.tr2",
+      "name": "title.tr2",
+      "system": "tomb-raider-2",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2/main.sfx",
+      "name": "main.sfx",
+      "system": "tomb-raider-2",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "tr2x"
       ]
     },
     {
@@ -40878,6 +40958,36 @@
       ]
     },
     {
+      "dest": "games/K6DEMO/egagraph.ck6",
+      "sha1": "93d7aeaaa8d21ed408c04d03aa1a893395b139a4",
+      "sha256": "8838c6f6f34bbca2be59270e00a608d2532d8bda83b268d8b9dedec7ce1ca295",
+      "size": 291898,
+      "repo_path": "bios/Id Software/Commander Keen/K6DEMO/egagraph.ck6",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
+      "dest": "games/K6DEMO/gamemaps.ck6",
+      "sha1": "30f785e447dd39830872199d6ad2f5d8b5948a16",
+      "sha256": "fb413c47e5efa7aae88c05c344e08f9f231af447e6366aff26fb209debb919e3",
+      "size": 19095,
+      "repo_path": "bios/Id Software/Commander Keen/K6DEMO/gamemaps.ck6",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
+      "dest": "games/K6DEMO/audio.ck6",
+      "sha1": "f8b6e123ee49ede30481d80631f1adc094767f4b",
+      "sha256": "518ff3c0b1b144b2fa93713efc30b0cd7a379aba7eb8322e78b7d35ac59ce9b9",
+      "size": 36914,
+      "repo_path": "bios/Id Software/Commander Keen/K6DEMO/audio.ck6",
+      "cores": [
+        "cgenius"
+      ]
+    },
+    {
       "dest": "games/KeenDreams/KDREAMS.EXE",
       "sha1": "6841cb967090e4c84b8cfcab72ff0b4ac5c8a446",
       "sha256": "574d49b882af9ac15232eadb4c6edce94a35b30d622f6e01f6ae20565f7c5aab",
@@ -41033,6 +41143,16 @@
       "sha256": "5627eb8c67116c4af0e3800d9177f1614e98386b49bf7c1932487d480b75c1c5",
       "size": 4096,
       "repo_path": "bios/Other/Clock Signal/BBCMicro/Z80_122.rom",
+      "cores": [
+        "clk"
+      ]
+    },
+    {
+      "dest": "Electron/basic.rom",
+      "sha1": "3693c9cb9bf3b41bae1150f7a8264992468fc8c0",
+      "sha256": "4988cb41121921f997ab17a59dd1909fece9273699eba0c6fbaafae104aa27b0",
+      "size": 8192,
+      "repo_path": "bios/Atari/400-800/ATARIBAS.ROM",
       "cores": [
         "clk"
       ]
@@ -46045,6 +46165,16 @@
       "sha256": "57be0712bb180943ad51757b48486bc590e9242fd885704771c0a7102953d4b7",
       "size": 12243,
       "repo_path": "bios/Id Software/Doom 3/base/pak008.pk4",
+      "cores": [
+        "dhewm3"
+      ]
+    },
+    {
+      "dest": "d3xp/pak001.pk4",
+      "sha1": "0d9ca3d4532c0d412fbb64ab2885f52ef8852594",
+      "sha256": "2ba245254b8ed3440e252f6e2e24af2c6343d7c312f9a9a7e73509abdaf13e49",
+      "size": 99336,
+      "repo_path": "bios/Id Software/Doom 3/d3xp/pak001.pk4",
       "cores": [
         "dhewm3"
       ]
@@ -75974,6 +76104,16 @@
       ]
     },
     {
+      "dest": "hurrican/data/gamecontrollerdb.txt",
+      "sha1": "ba00b7518d0d0bb6fc114e75f6ca72e698559923",
+      "sha256": "8055f1ea5f2eb367476a57fd153429d1ec3c0aa2e6c93e88a5ea85c922245f2d",
+      "size": 584016,
+      "repo_path": "bios/Game Engines/Hurrican/hurrican/data/gamecontrollerdb.txt",
+      "cores": [
+        "hurrican"
+      ]
+    },
+    {
       "dest": "gamecontrollerdb.txt",
       "sha1": "446e3d7138becc17d3bc31401a241247318f42a9",
       "sha256": "d65433feb3602d056900016cda40cf581f00289f179da336613b55ae3136afe2",
@@ -77914,6 +78054,16 @@
       ]
     },
     {
+      "dest": "ikemen/external/gamecontrollerdb.txt",
+      "sha1": "323050ab1d541a84c383c903d0f2fc54f6543da3",
+      "sha256": "e606134678e6b3fdbdec9081289a1f0ba3e25d53b59b2aa3cdfe69bf491ad18f",
+      "size": 609830,
+      "repo_path": "bios/Game Engines/Ikemen GO/ikemen/external/gamecontrollerdb.txt",
+      "cores": [
+        "ikemen"
+      ]
+    },
+    {
       "dest": "ikemen/chars/kfm/ending.def",
       "sha1": "f331bd28c1937bc18b247b3ff6bb461b00cb216e",
       "sha256": "a20eef6761aa419c989d06a19af790c48d96e56d28f115674353fd11c6b4f479",
@@ -78799,6 +78949,16 @@
       "sha256": "812c9e97f231e89cefede3848c6110b7bd34245093af6f22c2cacde3e6b15663",
       "size": 454478,
       "repo_path": "bios/Id Software/Quake III Arena/baseq3/pak8.pk3",
+      "cores": [
+        "ioquake3"
+      ]
+    },
+    {
+      "dest": "demoq3/pak0.pk3",
+      "sha1": "1976ee8b604f928a1ed38f5646d04a62355f3e8e",
+      "sha256": "e77abad2466f45a0a7ea018445528f9b95a0fe7789fa1abc1a7718bbf0754b08",
+      "size": 46853694,
+      "repo_path": "bios/Id Software/Quake III Arena/demoq3/pak0.pk3",
       "cores": [
         "ioquake3"
       ]
@@ -88619,6 +88779,16 @@
       "sha256": "8b7e32bbe42dbb77faee79ed4fc0295ecc8330b78e04c1f606a40e5d7ef20011",
       "size": 65536,
       "repo_path": "bios/Microsoft/MSX/openmsx/NMS8245SystemROM1.08.bin",
+      "cores": [
+        "openmsx"
+      ]
+    },
+    {
+      "dest": "fmpac.rom",
+      "sha1": "fec451b9256570a0e4869355a40329c57f40705f",
+      "sha256": "a3a6a325935d031cee662b56e2c810c73d35a8375a2c5ffa03f6d27405bc569e",
+      "size": 65536,
+      "repo_path": "bios/Microsoft/MSX/openmsx/fmpac.rom",
       "cores": [
         "openmsx"
       ]
@@ -123316,11 +123486,51 @@
       ]
     },
     {
+      "dest": "games/tr1-demo-pc/levels/title.phd",
+      "sha1": "27f7a95739e373d06365fb8b60613885c9d36bd8",
+      "sha256": "e1f4a11b7566fc9ba3be5208806915bf5bfc30a890ce0e610b5be697d664580b",
+      "size": 316138,
+      "repo_path": "bios/Game Engines/TRX/games/tr1-demo-pc/levels/title.phd",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
+      "dest": "games/tr1-demo-pc/levels/level2.phd",
+      "sha1": "f0fc40ca8df563191dda683bae76522f16f0f535",
+      "sha256": "efaae10c309b266b6ad0c27369b9a4e227ae9d62b9aff6d5f8e076a535e83199",
+      "size": 2873406,
+      "repo_path": "bios/Game Engines/TRX/games/tr1-demo-pc/levels/level2.phd",
+      "cores": [
+        "tr1x"
+      ]
+    },
+    {
       "dest": "games/tr2/music/57.mp3",
       "sha1": "0873bc661731f6daa8c8a76af4259228b1cbf8ef",
       "sha256": "0b2c4d56b47b589f04a43085aadb2aad530a2d346bc366cabc7215e87e0d8cf1",
       "size": 386864,
       "repo_path": "bios/Game Engines/TRX/games/tr2/music/57.mp3",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2-gm/main.sfx",
+      "sha1": "9de9423b6f12875b8d02dd783d5c1547f15e36fc",
+      "sha256": "3d04ebbb5e733cc3462be2232225500931b977cfc61847f14de812d59f81860b",
+      "size": 7609670,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/main.sfx",
+      "cores": [
+        "tr2x"
+      ]
+    },
+    {
+      "dest": "games/tr2-gm/levels/title.tr2",
+      "sha1": "b7dadcbaf38cefdc89a692e85b290caf6409b163",
+      "sha256": "5d95717b543fa1daf98a4005d577bbc32e059413fd7093e57ad627606b0a4da5",
+      "size": 611892,
+      "repo_path": "bios/Game Engines/TRX/games/tr2-gm/levels/title.tr2",
       "cores": [
         "tr2x"
       ]
@@ -125992,16 +126202,6 @@
       ]
     },
     {
-      "dest": "Electron/basic.rom",
-      "sha1": "4a7393f3a45ea309f744441c16723e2ef447a281",
-      "sha256": "45bd55dc0f6f0f8f1fe9e2481de7def206565eec8f600ba3068b849ca4132079",
-      "size": 16384,
-      "repo_path": "bios/Acorn/BBC Micro/basic2.rom",
-      "cores": [
-        "clk"
-      ]
-    },
-    {
       "dest": "Triforce/segaboot.gcm",
       "sha1": "7297a11be143011ceb75a0720f96855003415a5d",
       "sha256": "9a2eee93f5ed961aea4b12a318e2b4a54fa69a31239c1378b8bef6ea02e90391",
@@ -126019,36 +126219,6 @@
       "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
       "cores": [
         "dolphin"
-      ]
-    },
-    {
-      "dest": "hurrican/data/gamecontrollerdb.txt",
-      "sha1": "ba00b7518d0d0bb6fc114e75f6ca72e698559923",
-      "sha256": "8055f1ea5f2eb367476a57fd153429d1ec3c0aa2e6c93e88a5ea85c922245f2d",
-      "size": 584016,
-      "repo_path": "bios/Game Engines/Hurrican/hurrican/data/gamecontrollerdb.txt",
-      "cores": [
-        "hurrican"
-      ]
-    },
-    {
-      "dest": "ikemen/external/gamecontrollerdb.txt",
-      "sha1": "323050ab1d541a84c383c903d0f2fc54f6543da3",
-      "sha256": "e606134678e6b3fdbdec9081289a1f0ba3e25d53b59b2aa3cdfe69bf491ad18f",
-      "size": 609830,
-      "repo_path": "bios/Game Engines/Ikemen GO/ikemen/external/gamecontrollerdb.txt",
-      "cores": [
-        "ikemen"
-      ]
-    },
-    {
-      "dest": "demoq3/pak0.pk3",
-      "sha1": "1976ee8b604f928a1ed38f5646d04a62355f3e8e",
-      "sha256": "e77abad2466f45a0a7ea018445528f9b95a0fe7789fa1abc1a7718bbf0754b08",
-      "size": 46853694,
-      "repo_path": "bios/Id Software/Quake III Arena/demoq3/pak0.pk3",
-      "cores": [
-        "ioquake3"
       ]
     },
     {
