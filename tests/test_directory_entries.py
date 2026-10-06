@@ -19,6 +19,13 @@ from pathlib import Path
 
 import yaml
 
+try:
+    import jsonschema  # noqa: F401
+except ImportError:
+    HAS_JSONSCHEMA = False
+else:
+    HAS_JSONSCHEMA = True
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
@@ -246,6 +253,7 @@ class PackCarriesADirectory(DirectoryFixture):
         self.assertEqual(missing, ["Fonts"])
 
 
+@unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
 class ProfileContract(unittest.TestCase):
     """One way to say an entry is a directory, so one place reads it."""
 

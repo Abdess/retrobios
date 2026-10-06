@@ -20,6 +20,13 @@ from pathlib import Path
 
 import yaml
 
+try:
+    import jsonschema  # noqa: F401
+except ImportError:
+    HAS_JSONSCHEMA = False
+else:
+    HAS_JSONSCHEMA = True
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
@@ -142,6 +149,7 @@ class ManifestStatesWhatThePackHolds(PackCountFixture):
         self.assertEqual(manifest["total_files"], 2)
         self.assertEqual(manifest["pack_files"], 2 + 3 + len(builder.PACK_DOCUMENTS))
 
+    @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def test_the_manifest_schema_accepts_the_two_figures(self):
         from jsonschema import Draft202012Validator
 

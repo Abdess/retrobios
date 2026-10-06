@@ -20,6 +20,13 @@ from unittest import mock
 
 import yaml
 
+try:
+    import jsonschema  # noqa: F401
+except ImportError:
+    HAS_JSONSCHEMA = False
+else:
+    HAS_JSONSCHEMA = True
+
 ROOT = Path(__file__).resolve().parent.parent
 TMP_ROOT = ROOT / "tmp" / "tests"
 TMP_ROOT.mkdir(parents=True, exist_ok=True)
@@ -229,6 +236,7 @@ class UnreachableCitationRegressions(unittest.TestCase):
     check is offline and runs on every push.
     """
 
+    @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def _hits(self, text: str) -> bool:
         import validate_schemas
 
@@ -255,6 +263,7 @@ class UnreachableCitationRegressions(unittest.TestCase):
             with self.subTest(citation=good):
                 self.assertFalse(self._hits(good))
 
+    @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def test_the_corpus_carries_none(self):
         import validate_schemas
 
@@ -1039,6 +1048,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsafe"):
             install._validate_manifest(manifest, "retroarch")
 
+    @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def test_target_schema_accepts_the_null_the_generator_emits(self):
         """The schema and generate_target_manifests must agree on null.
 
@@ -1056,6 +1066,7 @@ class InstallerBoundaryRegressions(unittest.TestCase):
         document = {"windows": None, "switch": ["a5200"]}
         self.assertEqual(list(validator.iter_errors(document)), [])
 
+    @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
     def test_pack_manifests_are_read_from_inside_the_archive(self):
         """generate_pack writes manifest.json into the ZIP, not beside it.
 
