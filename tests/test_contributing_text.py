@@ -31,5 +31,26 @@ class OneContributingText(unittest.TestCase):
         )
 
 
+
+class CoverageReadsTheGivenProfiles(unittest.TestCase):
+    """generate_site --emulators-dir changed the emulator pages but not the
+    platform coverage, which read ./emulators whatever was given."""
+
+    def test_the_directory_reaches_verify(self):
+        from unittest import mock  # noqa: PLC0415
+
+        seen: list[str] = []
+
+        def fake_verify(config, db, emulators_dir, **_kwargs):
+            seen.append(emulators_dir)
+            return {"status_counts": {}, "total_files": 0, "undeclared_files": [], "details": []}
+
+        with mock.patch.object(generate_readme, "verify_platform", fake_verify), \
+                mock.patch.object(generate_readme, "load_emulator_profiles", return_value={}):
+            generate_readme.compute_coverage(
+                "retroarch", str(REPO_ROOT / "platforms"), {"files": {}}, emulators_dir="elsewhere"
+            )
+        self.assertEqual(seen, ["elsewhere"])
+
 if __name__ == "__main__":
     unittest.main()
