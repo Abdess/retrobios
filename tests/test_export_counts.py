@@ -169,5 +169,13 @@ class OneFileOneIdentity(unittest.TestCase):
         declared = next(f for f in systems["dc"].files if f.platform is not None)
         self.assertIsNone(declared.truth)
 
+class RecalboxKeepsItsOwnNotes(unittest.TestCase):
+    def test_no_profile_prose_reaches_a_note(self):
+        from exporter.recalbox_exporter import Exporter as Recalbox
+
+        fe = NativeFile("bios.bin", "bios.bin", "psx", platform={"md5": A},
+                        truth={"md5": A, "note": "Loaded at libretro.c:120"})
+        self.assertNotIn("note=", Recalbox()._bios_element(fe, "psx"))
+
 if __name__ == "__main__":
     unittest.main()
