@@ -25,6 +25,34 @@ MANIFEST = "component_manifest.json"
 PLAIN_LABELS = ("Required", "Optional")
 
 
+def _systems_of(entry: dict) -> list[str]:
+    """The systems one entry serves: neogeo.zip is declared once for three."""
+    declared = entry.get("system")
+    if isinstance(declared, list):
+        return [str(s) for s in declared]
+    return [str(declared)] if declared else []
+
+
+def _md5_set(value: object) -> set[str]:
+    return {m.strip().lower() for m in str(value or "").split(",") if m.strip()}
+
+
+def _matching_keys(
+    entry: dict, by_key: dict[tuple[str, str], OrderedDict]
+) -> list[tuple[str, str]]:
+    """Our keys this platform entry answers to.
+
+    An entry without a system matches ours only when one system alone
+    declares the name.
+    """
+    name = str(entry.get("filename", ""))
+    systems = _systems_of(entry)
+    if systems:
+        return [(name, s) for s in systems if (name, s) in by_key]
+    named = [k for k in by_key if k[0] == name]
+    return named if len(named) == 1 else []
+
+
 class Exporter(BaseExporter):
     """Write RetroDECK's component manifests, corrected."""
 
@@ -175,41 +203,24 @@ class Exporter(BaseExporter):
         # shares a hash with, never all of them.
         seen_keys: dict[tuple[str, str], int] = {}
         for entry in entries:
-            declared = entry.get("system")
-            systems = declared if isinstance(declared, list) else [declared] if declared else []
-            for system in systems:
-                key = (str(entry.get("filename", "")), str(system))
+            for system in _systems_of(entry):
+                key = (str(entry.get("filename", "")), system)
                 seen_keys[key] = seen_keys.get(key, 0) + 1
-        for entry in existing if isinstance(existing, list) else []:
-            if not isinstance(entry, dict):
-                continue
-            name = str(entry.get("filename", ""))
-            declared = entry.get("system")
-            # One entry can serve several systems: neogeo.zip is declared
-            # once for neogeo, fbneo and arcade.
-            systems = (
-                [str(s) for s in declared] if isinstance(declared, list)
-                else [str(declared)] if declared else []
+        for entry in entries:
+            keys = _matching_keys(entry, by_key)
+            other_revision = (
+                keys
+                and seen_keys.get(keys[0], 0) > 1
+                and not _md5_set(entry.get("md5")) & _md5_set(by_key[keys[0]].get("md5"))
             )
-            keys = [(name, s) for s in systems if (name, s) in by_key]
-            if not systems:
-                # An entry without a system matches ours only when one
-                # system alone declares the name.
-                named = [k for k in by_key if k[0] == name]
-                keys = named if len(named) == 1 else []
-            if keys and seen_keys.get(keys[0], 0) > 1:
-                theirs = {m.strip().lower() for m in str(entry.get("md5", "")).split(",") if m.strip()}
-                ours = {
-                    m.strip().lower()
-                    for m in str(by_key[keys[0]].get("md5", "")).split(",") if m.strip()
-                }
-                if not theirs & ours:
-                    merged.append(OrderedDict(entry))
-                    corrected.update(keys)
-                    continue
+            if other_revision:
+                merged.append(OrderedDict(entry))
+                corrected.update(keys)
+                continue
             if not keys:
                 merged.append(OrderedDict(entry))
                 continue
+            declared = entry.get("system")
             combined = OrderedDict(entry)
             combined.update(
                 (field, value) for field, value in by_key[keys[0]].items()
