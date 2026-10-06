@@ -1230,6 +1230,7 @@ def generate_emulator_pack(
     required_only: bool = False,
     regions: list[str] | None = None,
     offline: bool | None = None,
+    platforms_dir: str | None = None,
 ) -> str | None:
     """Generate a ZIP pack for specific emulator profiles."""
     all_profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
@@ -1269,7 +1270,7 @@ def generate_emulator_pack(
     seen_hashes: set[str] = set()  # SHA1 dedup for same file, different path
     data_dir_notices: list[str] = []
     data_registry = load_data_dir_registry(
-        os.path.join(os.path.dirname(__file__), "..", "platforms")
+        platforms_dir or os.path.join(os.path.dirname(__file__), "..", "platforms")
     )
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
@@ -1500,6 +1501,7 @@ def generate_system_pack(
     required_only: bool = False,
     regions: list[str] | None = None,
     offline: bool | None = None,
+    platforms_dir: str | None = None,
 ) -> str | None:
     """Generate a ZIP pack for all emulators supporting given system IDs."""
     profiles = load_emulator_profiles(emulators_dir)
@@ -1549,6 +1551,7 @@ def generate_system_pack(
         required_only=required_only,
         regions=regions,
         offline=offline,
+        platforms_dir=platforms_dir,
     )
     if result:
         # Rename to system-based name. Every dimension goes through the one
@@ -2697,6 +2700,7 @@ def main():
                 required_only=args.required_only,
                 regions=getattr(args, "regions", None),
                 offline=args.offline,
+                platforms_dir=args.platforms_dir,
             )
         if not built:
             sys.exit(1)
@@ -2717,6 +2721,7 @@ def main():
                 required_only=args.required_only,
                 regions=getattr(args, "regions", None),
                 offline=args.offline,
+                platforms_dir=args.platforms_dir,
             )
         if not built:
             sys.exit(1)

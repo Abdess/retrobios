@@ -71,5 +71,30 @@ class VerifyRefusesWhatAModeDoesNotRead(unittest.TestCase):
         self.assertEqual(seen, ["elsewhere"])
 
 
+class EmulatorPackReadsThePlatformsDir(unittest.TestCase):
+    def test_the_registry_comes_from_the_given_dir(self):
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import generate_pack  # noqa: PLC0415
+
+        seen: list[str] = []
+
+        def registry(path: str) -> dict:
+            seen.append(str(path))
+            return {}
+
+        db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}}}
+        out = REPO_ROOT / "tmp" / "emupack-registry"
+        with mock.patch.object(generate_pack, "load_data_dir_registry", registry):
+            generate_pack.generate_emulator_pack(
+                ["handy"], str(REPO_ROOT / "emulators"), db, "bios", str(out),
+                zip_contents={}, platforms_dir="elsewhere",
+            )
+        for leftover in out.glob("*"):
+            leftover.unlink()
+        if out.exists():
+            out.rmdir()
+        self.assertEqual(seen, ["elsewhere"])
+
+
 if __name__ == "__main__":
     unittest.main()
