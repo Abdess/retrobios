@@ -630,5 +630,35 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                         self.assertIn("oceania", regions)
 
 
+
+class RegionalRequestsKeepWhatTheCodeLoads(unittest.TestCase):
+    """A --region request never drops the file the core opens for it.
+
+    mednafen_pce_fast tagged option-selected cards with territories, beetle_psx
+    tagged its override BIOS [world], mednafen tagged the ST-V NA BIOS for
+    America alone and the PAL PSX BIOS for Europe alone.
+    """
+
+    CASES = (
+        ("mednafen_pce_fast", ["north-america"], "syscard3.pce"),
+        ("beetle_psx", ["brazil"], "scph5501.bin"),
+        ("mednafen", ["south-korea", "europe"], "epr-17952a.ic8"),
+        ("mednafen", ["australia", "north-america"], "scph5502.bin"),
+    )
+
+    def test_each_request_keeps_its_file(self):
+        sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
+        import common
+        from packextras import emulator_region_drops
+
+        profiles = common.load_emulator_profiles(
+            os.path.join(os.path.dirname(__file__), "..", "emulators")
+        )
+        for name, regions, kept in self.CASES:
+            with self.subTest(profile=name, regions=regions):
+                drops = emulator_region_drops([(name, profiles[name])], False, regions)
+                self.assertNotIn(kept, drops)
+
+
 if __name__ == "__main__":
     unittest.main()

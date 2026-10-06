@@ -292,7 +292,7 @@ files:
   - name: "scph5502.bin"
     system: sony-playstation
     description: "SCPH-5502 / v3.0E BIOS"
-    region: [europe]
+    region: [europe, oceania]
     required: true
     size: 524288
     sha256: "1faaa18fa820a0225e488d9f086296b8e6c46df739666093987ff7d8fd352c09"
@@ -376,7 +376,7 @@ files:
   - name: "epr-17952a.ic8"
     system: sega-stv
     description: "ST-V BIOS (North America)"
-    region: [north-america]
+    region: [north-america, south-korea, asia-pal, brazil, latin-america]
     required: true
     size: 524288
     validation: [size]
