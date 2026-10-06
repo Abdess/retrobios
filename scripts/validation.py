@@ -313,6 +313,17 @@ def validate_cli_modes(args, mode_attrs: list[str]) -> None:
         raise SystemExit(f"Options are mutually exclusive: --{'  --'.join(mode_attrs)}")
 
 
+def read_from_system_dir(file_entry: dict) -> bool:
+    """Whether the emulator reads this entry from the system directory.
+
+    A file loaded from the save, content or working directory is not a BIOS:
+    no platform lists it, no pack carries it, and the truth model must not
+    ask a platform to declare it.
+    """
+    load_from = file_entry.get("load_from", "")
+    return not load_from or load_from == "system_dir"
+
+
 def filter_files_by_mode(files: list[dict], standalone: bool) -> list[dict]:
     """Filter file entries by libretro/standalone mode."""
     result = []

@@ -79,6 +79,7 @@ from validation import (
     check_file_validation,
     filter_files_by_mode,
     find_validated_variant,
+    read_from_system_dir,
 )
 
 DEFAULT_DB = "database.json"
@@ -404,9 +405,7 @@ def _candidate_verdict(
         return "skip"
     if file_mode == "libretro" and is_standalone:
         return "skip"
-    # Read from somewhere other than the system directory: not a BIOS gap.
-    load_from = file_entry.get("load_from", "")
-    if load_from and load_from != "system_dir":
+    if not read_from_system_dir(file_entry):
         return "skip"
     # Filename-agnostic entries are answered by the builder's own scan.
     if file_entry.get("agnostic"):

@@ -9,7 +9,7 @@ from __future__ import annotations
 import sys
 
 from common import _norm_system_id, resolve_platform_cores, runs_standalone
-from validation import filter_files_by_mode
+from validation import filter_files_by_mode, read_from_system_dir
 
 
 def _serialize_source_ref(sr: object) -> str:
@@ -378,6 +378,8 @@ def generate_platform_truth(
         )
 
         for fe in filtered:
+            if not read_from_system_dir(fe):
+                continue
             profile_sid = fe.get("system", "")
             if not profile_sid:
                 sys_ids = profile.get("systems", [])
