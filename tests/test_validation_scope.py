@@ -42,8 +42,10 @@ class ValidationIndexScope(unittest.TestCase):
 class HleIndexScope(unittest.TestCase):
     def test_hle_index_reads_the_platform_cores(self):
         verify = (REPO_ROOT / "scripts" / "verify.py").read_text(encoding="utf-8")
-        start = verify.index("hle_index: dict[str, bool] = {}")
-        self.assertIn("for profile in platform_profiles.values():", verify[start:start + 200])
+        start = verify.index("    hle_index = {")
+        block = verify[start:verify.index("}", start)]
+        self.assertIn("for profile in platform_profiles.values()", block)
+        self.assertNotIn("profiles.values()", block.replace("platform_profiles.values()", ""))
 
 if __name__ == "__main__":
     unittest.main()
