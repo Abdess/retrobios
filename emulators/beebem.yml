@@ -110,7 +110,8 @@ files:
     md5: 5daed103918277e2065dd7e8d23e57a5
     sha1: 7e3c536baeae84d6498a14e8405319e01ee78232
     max_size: 131072
-    source_ref: "Src/RomConfigFile.cpp:45, Src/BeebMem.cpp:1322-1356"
+    note: "Paged ROM slot, read by the BeebReadRoms bank loop (Src/BeebMem.cpp:1322-1356)."
+    source_ref: "Src/RomConfigFile.cpp:45"
 
   - name: OS12.map
     path: BeebFile/BBC/OS12.map
@@ -293,8 +294,8 @@ files:
     md5: 9087f772447038a00178488b3591347b
     sha1: 04d5876999f93fc61a18f172b1fbb3b75db733ac
     validation: [size]
-    note: "OS ROM slot for Model::Master128."
-    source_ref: "Src/RomConfigFile.cpp:103, Src/BeebMem.cpp:1291-1308"
+    note: "OS ROM slot for Model::Master128, read into 0xC000 by BeebReadRoms (Src/BeebMem.cpp:1291-1308)."
+    source_ref: "Src/RomConfigFile.cpp:103"
 
   - name: Terminal.rom
     path: BeebFile/M128/Terminal.rom
@@ -550,8 +551,8 @@ files:
     validation: [size]
     note: >
       512 KB on-board flash carrying the system software and BASIC. Rejected as
-      InvalidROM unless the file is exactly 0x80000 bytes.
-    source_ref: "Src/SprowCoPro.cpp:51-90, Src/SprowCoPro.h:49, Src/BeebWin.cpp:1058-1088"
+      InvalidROM unless the file is exactly 0x80000 bytes (Src/SprowCoPro.h:49).
+    source_ref: "Src/SprowCoPro.cpp:51-90, Src/BeebWin.cpp:1058-1088"
 
   # -- Program directory files --
 
@@ -685,8 +686,8 @@ files:
     size: 6716
     md5: 07b0e1d4cb329185a8a52c48db00bcf9
     sha1: 5817277bcb110b747432b8716a0ffbe0c1e13de2
-    note: "Read at ApplyPreferences. The return value is ignored, leaving the built-in map."
-    source_ref: "Src/BeebWin.cpp:560-563, Src/KeyMap.cpp:65-78"
+    note: "Read at ApplyPreferences by ReadKeyMap (Src/KeyMap.cpp:65-123). The return value is ignored, leaving the built-in map."
+    source_ref: "Src/BeebWin.cpp:560-563"
 
   - name: Default.kmap
     description: "Default keyboard mapping"
@@ -696,7 +697,8 @@ files:
     size: 6716
     md5: 199de64bdb59a176d102f03cca4eadf9
     sha1: 63c72e11f6ce8cd9dc5ebb96b4938010f4b2e4f0
-    source_ref: "Src/BeebWin.cpp:565-567, Src/KeyMap.cpp:65-78"
+    note: "Parsed by ReadKeyMap (Src/KeyMap.cpp:65-123)."
+    source_ref: "Src/BeebWin.cpp:565-567"
 
   - name: DefaultUser.kmap
     description: "Fallback user keyboard mapping"
