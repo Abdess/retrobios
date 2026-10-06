@@ -195,6 +195,16 @@ class MisterCountsWhatItWrites(unittest.TestCase):
         self.assertFalse(exporter.states(absent, "md5"))
 
 
+class OneMd5FormatsAddWhole(unittest.TestCase):
+    def test_an_addition_with_several_md5_is_refused(self):
+        from exporter.batocera_exporter import Exporter as Batocera  # noqa: PLC0415
+
+        several = NativeFile("boot.bin", "boot.bin", "dc", truth={"md5": [A, B, C]})
+        single = NativeFile("boot2.bin", "boot2.bin", "dc", truth={"md5": A})
+        self.assertFalse(Batocera.writable(several))
+        self.assertTrue(Batocera.writable(single))
+
+
 class ModelKeepsOneFileOneEntry(unittest.TestCase):
     def test_a_list_of_sizes_is_not_one_size(self):
         """A profile may accept several revisions; int() on the list crashed."""
@@ -274,6 +284,31 @@ class RommKeepsItsOwnKeys(unittest.TestCase):
         written = json.loads(produced[exporter.native_filename()])
         self.assertEqual(written["dc:boot.bin"]["size"], "2097152")
         self.assertFalse(exporter.writable(ours))
+
+class NamesInAnotherDirectory(unittest.TestCase):
+    def test_a_truth_path_in_another_directory_does_not_match(self):
+        scraped = {"systems": {"pc98": {"files": [
+            {"name": "bios.rom", "destination": "np2kai/bios.rom", "md5": A},
+        ]}}}
+        truth = {"systems": {"pc98": {"files": [
+            {"name": "bios.rom", "path": "BeebFile/BIOS.rom", "md5": B},
+        ]}}}
+        systems, _report = build_native_model(truth, scraped)
+        declared = next(f for f in systems["pc98"].files if f.platform is not None)
+        self.assertIsNone(declared.truth)
+
+    def test_a_destination_ending_in_the_path_matches(self):
+        scraped = {"systems": {"gc": {"files": [
+            {"name": "IPL.bin", "destination": "dolphin-emu/Sys/GC/USA/IPL.bin", "md5": A},
+            {"name": "IPL.bin", "destination": "dolphin-emu/Sys/GC/EUR/IPL.bin", "md5": B},
+        ]}}}
+        truth = {"systems": {"gc": {"files": [
+            {"name": "IPL.bin", "path": "GC/EUR/IPL.bin", "md5": B},
+            {"name": "IPL.bin", "path": "GC/USA/IPL.bin", "md5": A},
+        ]}}}
+        systems, report = build_native_model(truth, scraped)
+        self.assertEqual(report.hashes_corrected, [])
+
 
 class RecalboxKeepsItsOwnNotes(unittest.TestCase):
     def test_no_profile_prose_reaches_a_note(self):

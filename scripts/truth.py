@@ -165,10 +165,28 @@ def _same_file(files: list[dict], file_entry: dict, emu_name: str) -> dict | Non
     same_name = [f for f in files if f["name"].lower() == name_lower]
     return (
         next((f for f in same_name if path and other_path(f) == path), None)
-        or next((f for f in same_name if emu_name not in f.get("_cores", ())), None)
+        # Another core's file of the same name is the same file unless their
+        # contents disagree: beebem's 16 KB BBC BIOS.rom and np2kai's PC-98
+        # bios.rom merged, and the export wrote the BBC md5 over Recalbox's.
+        or next(
+            (f for f in same_name
+             if emu_name not in f.get("_cores", ()) and not _contents_disagree(f, file_entry)),
+            None,
+        )
         # Revisions accepted under one name and no path fill one slot.
         or next((f for f in same_name if not path or not other_path(f)), None)
     )
+
+
+def _contents_disagree(a: dict, b: dict) -> bool:
+    """A hash both declare without a value in common, or two declared sizes."""
+    for field in ("sha1", "md5", "sha256", "crc32"):
+        ours = {str(v).lower() for v in (a.get(field) if isinstance(a.get(field), list) else [a.get(field)]) if v}
+        theirs = {str(v).lower() for v in (b.get(field) if isinstance(b.get(field), list) else [b.get(field)]) if v}
+        if ours and theirs and not ours & theirs:
+            return True
+    size_a, size_b = a.get("size"), b.get("size")
+    return isinstance(size_a, int) and isinstance(size_b, int) and size_a != size_b
 
 
 def _fold_into(existing: dict, file_entry: dict, emu_name: str) -> None:
