@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 import urllib.error
 import urllib.request
@@ -225,22 +226,38 @@ class BaseScraper(ABC):
         ...
 
 
-def fetch_github_latest_version(repo: str) -> str | None:
-    """Fetch the latest release version tag from a GitHub repo."""
+def github_headers() -> dict[str, str]:
+    """Headers for api.github.com, authenticated when a token is set.
+
+    Anonymous calls share a quota of 60 per hour, so a scrape run after a
+    few others gets 403 for every request.
+    """
+    headers = {
+        "User-Agent": "retrobios-scraper/1.0",
+        "Accept": "application/vnd.github.v3+json",
+    }
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    return headers
+
+
+def fetch_github_latest_version(repo: str) -> str:
+    """Return the tag of the latest release of a GitHub repo.
+
+    Raises instead of returning a fallback: a platform YAML written without
+    the release it was read from cannot be patched back by the exporter.
+    """
     url = f"https://api.github.com/repos/{repo}/releases/latest"
     try:
-        req = urllib.request.Request(
-            url,
-            headers={
-                "User-Agent": "retrobios-scraper/1.0",
-                "Accept": "application/vnd.github.v3+json",
-            },
-        )
+        req = urllib.request.Request(url, headers=github_headers())
         with urllib.request.urlopen(req, timeout=15) as resp:
-            data = json.loads(resp.read())
-            return data.get("tag_name", "")
-    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError):
-        return None
+            tag = json.loads(resp.read()).get("tag_name", "")
+    except (urllib.error.URLError, json.JSONDecodeError) as e:
+        raise RuntimeError(f"cannot read the latest release of {repo}: {e}") from e
+    if not tag:
+        raise RuntimeError(f"the latest release of {repo} names no tag")
+    return tag
 
 
 class _PlatformDumper(yaml.SafeDumper):

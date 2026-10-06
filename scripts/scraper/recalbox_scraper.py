@@ -21,7 +21,7 @@ from .base_scraper import BaseScraper, BiosRequirement, requirement_entry
 
 PLATFORM_NAME = "recalbox"
 
-def _fetch_gitlab_stable_tag() -> str | None:
+def _fetch_gitlab_stable_tag() -> str:
     """Fetch the latest stable x.y.z tag from the Recalbox GitLab."""
     import json
     import re
@@ -33,16 +33,16 @@ def _fetch_gitlab_stable_tag() -> str | None:
         req = urllib.request.Request(url, headers={"User-Agent": "retrobios-scraper/1.0"})
         with urllib.request.urlopen(req, timeout=15) as resp:
             tags = json.loads(resp.read())
-    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError):
-        return None
+    except (urllib.error.URLError, json.JSONDecodeError) as e:
+        raise RuntimeError(f"cannot list Recalbox tags: {e}") from e
     stable = [t["name"] for t in tags if re.fullmatch(r"[0-9]+\.[0-9]+(\.[0-9]+)?", t["name"])]
-    return stable[0] if stable else None
+    if not stable:
+        raise RuntimeError("no stable Recalbox tag among the latest 50")
+    return stable[0]
 
-
-_STABLE_TAG = _fetch_gitlab_stable_tag() or "master"
 
 SOURCE_URL = (
-    f"https://gitlab.com/recalbox/recalbox/-/raw/{_STABLE_TAG}/"
+    "https://gitlab.com/recalbox/recalbox/-/raw/{tag}/"
     "board/recalbox/fsoverlay/recalbox/share_init/system/"
     ".emulationstation/es_bios.xml"
 )
@@ -109,8 +109,9 @@ def split_cores(names) -> tuple[list[str], list[str]]:
 class Scraper(BaseScraper):
     """Scraper for Recalbox es_bios.xml."""
 
-    def __init__(self, url: str = SOURCE_URL):
-        super().__init__(url=url)
+    def __init__(self):
+        self.tag = _fetch_gitlab_stable_tag()
+        super().__init__(url=SOURCE_URL.format(tag=self.tag))
 
     def _fetch_cores(self) -> tuple[list[str], list[str]]:
         """Core names from es_bios.xml, and those Recalbox runs standalone.
@@ -217,16 +218,12 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(requirement_entry(req))
 
-        version = _STABLE_TAG if _STABLE_TAG != "master" else ""
-        if not version:
-            version = "10.0"
-
         cores, standalone = self._fetch_cores()
         return {
             "platform": "Recalbox",
-            "version": version,
+            "version": self.tag,
             "homepage": "https://www.recalbox.com",
-            "source": SOURCE_URL,
+            "source": self.url,
             "base_destination": "bios",
             "hash_type": "md5",
             "verification_mode": "md5",

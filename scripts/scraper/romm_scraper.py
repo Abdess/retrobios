@@ -44,10 +44,8 @@ PLATFORM_NAME = "romm"
 
 GITHUB_REPO = "rommapp/romm"
 
-_STABLE_TAG = fetch_github_latest_version(GITHUB_REPO) or "master"
-
 SOURCE_URL = (
-    f"https://raw.githubusercontent.com/rommapp/romm/{_STABLE_TAG}"
+    "https://raw.githubusercontent.com/rommapp/romm/{tag}"
     "/backend/models/fixtures/known_bios_files.json"
 )
 
@@ -124,8 +122,9 @@ FIRMWARE_MIRRORS: dict[str, tuple[str, ...]] = {
 class Scraper(BaseScraper):
     """Scraper for RomM known_bios_files.json."""
 
-    def __init__(self, url: str = SOURCE_URL):
-        super().__init__(url=url)
+    def __init__(self):
+        self.tag = fetch_github_latest_version(GITHUB_REPO)
+        super().__init__(url=SOURCE_URL.format(tag=self.tag))
         self._parsed: dict | None = None
 
     def _parse_json(self) -> dict:
@@ -212,14 +211,12 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(requirement_entry(req))
 
-        version = _STABLE_TAG if _STABLE_TAG != "master" else ""
-
         return {
             "inherits": "emulatorjs",
             "platform": "RomM",
-            "version": version,
+            "version": self.tag,
             "homepage": "https://romm.app",
-            "source": SOURCE_URL,
+            "source": self.url,
             "base_destination": "bios",
             "hash_type": "sha1",
             "verification_mode": "md5",

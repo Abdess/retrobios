@@ -231,3 +231,50 @@ class RecalboxBuildMode(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class UnreadableReleaseStopsTheScrape(unittest.TestCase):
+    """A failed tag lookup fell back to master, or to an empty or invented
+    version. BizHawk, RomM, Batocera and Recalbox then wrote a YAML read from
+    master under the previous release's version (Recalbox under "10.0"), and
+    the exporter patched a revision the data never described."""
+
+    @staticmethod
+    def _refuse(*_args, **_kwargs):
+        import urllib.error
+
+        raise urllib.error.HTTPError("https://api.github.com/x", 403, "rate limited", {}, None)
+
+    def test_every_pinned_scraper_raises(self):
+        import importlib
+        from unittest import mock
+
+        for name in (
+            "scraper.bizhawk_scraper",
+            "scraper.romm_scraper",
+            "scraper.batocera_scraper",
+            "scraper.recalbox_scraper",
+        ):
+            module = importlib.import_module(name)
+            with self.subTest(scraper=name), mock.patch(
+                "urllib.request.urlopen", self._refuse
+            ), self.assertRaises(RuntimeError):
+                module.Scraper()
+
+    def test_a_release_lookup_raises(self):
+        from unittest import mock
+
+        from scraper.base_scraper import fetch_github_latest_version
+
+        with mock.patch("urllib.request.urlopen", self._refuse), self.assertRaises(
+            RuntimeError
+        ):
+            fetch_github_latest_version("libretro/RetroArch")
+
+    def test_the_token_is_sent(self):
+        from unittest import mock
+
+        from scraper.base_scraper import github_headers
+
+        with mock.patch.dict("os.environ", {"GITHUB_TOKEN": "t0k"}):
+            self.assertEqual(github_headers()["Authorization"], "Bearer t0k")

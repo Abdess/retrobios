@@ -431,7 +431,7 @@ class Scraper(BaseScraper):
             from .base_scraper import fetch_github_latest_version
         except ImportError:
             from scraper.base_scraper import fetch_github_latest_version
-        version = fetch_github_latest_version("RetroDECK/RetroDECK") or ""
+        version = fetch_github_latest_version("RetroDECK/RetroDECK")
 
         return {
             "platform": "RetroDECK",
