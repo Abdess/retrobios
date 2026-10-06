@@ -752,20 +752,19 @@ def verify_platform(
         if emu_profiles is not None
         else load_emulator_profiles(emulators_dir)
     )
-    hle_index: dict[str, bool] = {}
-    for profile in profiles.values():
-        for f in profile.get("files", []):
-            if f.get("hle_fallback"):
-                hle_index[f.get("name", "")] = True
     # Ground truth comes from the emulators the platform runs. A standalone
     # profile that loads a same-named file of its own (ZEsarUX's 48K
     # cpc6128.rom against cap32's 32K one) has nothing to say about a
-    # RetroArch pack.
+    # RetroArch pack, nor does its HLE: dosbox-x's FONT.ROM fallback turned a
+    # missing required Batocera BIOS into INFO.
     plat_cores = resolve_platform_cores(config, profiles)
     platform_profiles = {name: profiles[name] for name in plat_cores}
-    validation_index = _build_validation_index(
-        {name: profiles[name] for name in plat_cores}
-    )
+    hle_index: dict[str, bool] = {}
+    for profile in platform_profiles.values():
+        for f in profile.get("files", []):
+            if f.get("hle_fallback"):
+                hle_index[f.get("name", "")] = True
+    validation_index = _build_validation_index(platform_profiles)
 
     # Filter systems by target
     if not target_cores:
