@@ -35,19 +35,23 @@ def load_database(db_path: str) -> dict:
 
 
 
-_casefold_index_cache: dict[int, dict[str, list[str]]] = {}
+# One slot: the dict it was built from, its size then, and the folded view.
+# Keyed by id() alone, a database freed and replaced by another at the same
+# address got the old index back, and the case-insensitive step answered from
+# a collection that no longer existed.
+_casefold_index_cache: list[tuple[dict, int, dict[str, list[str]]]] = []
 
 
 def _casefold_name_index(by_name: dict) -> dict[str, list[str]]:
     """Build (and cache) a casefolded view of the by_name index."""
-    key = id(by_name)
-    cached = _casefold_index_cache.get(key)
-    if cached is not None:
-        return cached
+    if _casefold_index_cache:
+        source, size, folded = _casefold_index_cache[0]
+        if source is by_name and size == len(by_name):
+            return folded
     folded: dict[str, list[str]] = {}
     for name, sha1s in by_name.items():
         folded.setdefault(name.casefold(), []).extend(sha1s)
-    _casefold_index_cache[key] = folded
+    _casefold_index_cache[:] = [(by_name, len(by_name), folded)]
     return folded
 
 
