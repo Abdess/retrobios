@@ -36,11 +36,9 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
             retropie_targets_scraper,
             retroarch_targets_scraper,
         ):
-            with (
-                self.subTest(scraper=module.__name__),
-                mock.patch.object(module.urllib.request, "urlopen", _refuse),
-                self.assertRaises(RuntimeError),
-            ):
+            with self.subTest(scraper=module.__name__), mock.patch.object(
+                module.urllib.request, "urlopen", _refuse
+            ), self.assertRaises(RuntimeError):
                 module.Scraper().fetch_targets()
 
     def test_an_empty_listing_is_not_a_target(self):
@@ -55,11 +53,9 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
                 return b"[]"
 
         for module in (emudeck_targets_scraper, retropie_targets_scraper):
-            with (
-                self.subTest(scraper=module.__name__),
-                mock.patch.object(module.urllib.request, "urlopen", lambda *_a, **_k: _Empty()),
-                self.assertRaises(RuntimeError),
-            ):
+            with self.subTest(scraper=module.__name__), mock.patch.object(
+                module.urllib.request, "urlopen", lambda *_a, **_k: _Empty()
+            ), self.assertRaises(RuntimeError):
                 module.Scraper().fetch_targets()
 
 
@@ -103,7 +99,7 @@ class RetroPieModuleFlags(unittest.TestCase):
             "ports/openbor.sh": 'rp_module_id="openbor"\nrp_module_flags="sdl1 !mali !x11"',
         }
 
-        def fake_fetch(url, accept="text/plain"):
+        def fake_fetch(url, **_kwargs):
             section = url.rstrip("/").rsplit("/", 1)[-1]
             if section in listings:
                 return json.dumps(listings[section])

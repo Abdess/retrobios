@@ -130,9 +130,8 @@ class PackWalkHoldsTheCache(unittest.TestCase):
             registry = {"sdlpal": {"local_cache": str(cache)}}
             walk = _data_directory_members(systems, registry, "p", "", False, set(), set(), set())
             next(walk)
-            with (
-                open(cache.with_name(".sdlpal.lock"), "a") as handle,
-                self.assertRaises(BlockingIOError),
+            with open(cache.with_name(".sdlpal.lock"), "a") as handle, self.assertRaises(
+                BlockingIOError
             ):
                 fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
             list(walk)
