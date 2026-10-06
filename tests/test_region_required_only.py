@@ -8,6 +8,7 @@ the optional winner: the slot shipped empty.
 
 from __future__ import annotations
 
+import ast
 import sys
 import unittest
 from pathlib import Path
@@ -30,8 +31,15 @@ class RequiredOnlyBeforeRegion(unittest.TestCase):
         self.assertEqual(groups["vic20"], [("Vic20/kernel-ntsc.bin", "kernel-ntsc.bin")])
 
     def test_every_caller_passes_it(self):
-        source = (REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8")
-        self.assertEqual(source.count("required_only=required_only,\n        )"), 2)
+        tree = ast.parse((REPO_ROOT / "scripts" / "generate_pack.py").read_text(encoding="utf-8"))
+        calls = [
+            node for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and getattr(node.func, "id", None) == "platform_region_groups"
+        ]
+        self.assertGreaterEqual(len(calls), 2)
+        for call in calls:
+            self.assertIn("required_only", {kw.arg for kw in call.keywords})
 
 
 if __name__ == "__main__":
