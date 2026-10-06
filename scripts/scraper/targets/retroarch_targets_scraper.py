@@ -87,7 +87,7 @@ class Scraper(BaseTargetScraper):
     def __init__(self, url: str = BUILDBOT_URL):
         super().__init__(url=url)
 
-    def _fetch_url(self, url: str) -> str | None:
+    def _fetch_url(self, url: str) -> str:
         try:
             req = urllib.request.Request(
                 url, headers={"User-Agent": "retrobios-scraper/1.0"}
@@ -95,14 +95,12 @@ class Scraper(BaseTargetScraper):
             with urllib.request.urlopen(req, timeout=30) as resp:
                 return resp.read().decode("utf-8")
         except urllib.error.URLError as e:
-            print(f"  skip {url}: {e}", file=sys.stderr)
-            return None
+            # A target written from a failed request loses its cores in silence.
+            raise RuntimeError(f"cannot fetch {url}: {e}") from e
 
     def _fetch_cores_for_target(self, path: str) -> list[str]:
         url = f"{self.url}{path}/"
         html = self._fetch_url(url)
-        if html is None:
-            return []
         cores: list[str] = []
         seen: set[str] = set()
         for match in _HREF_RE.finditer(html):
@@ -134,10 +132,7 @@ class Scraper(BaseTargetScraper):
 
     def _fetch_cores_for_recipe(self, recipe_path: str) -> list[str]:
         url = f"{RECIPE_BASE_URL}{recipe_path}"
-        text = self._fetch_url(url)
-        if text is None:
-            return []
-        return self._parse_recipe_cores(text)
+        return self._parse_recipe_cores(self._fetch_url(url))
 
     def fetch_targets(self) -> dict:
         targets: dict[str, dict] = {}
@@ -145,8 +140,7 @@ class Scraper(BaseTargetScraper):
             print(f"  fetching {target_name}...", file=sys.stderr)
             cores = self._fetch_cores_for_target(path)
             if not cores:
-                print(f"  warning: no cores found for {target_name}", file=sys.stderr)
-                continue
+                raise RuntimeError(f"no cores listed for {target_name}")
             targets[target_name] = {
                 "architecture": arch,
                 "cores": cores,
@@ -156,8 +150,7 @@ class Scraper(BaseTargetScraper):
             print(f"  fetching {target_name} (recipe)...", file=sys.stderr)
             cores = self._fetch_cores_for_recipe(recipe_path)
             if not cores:
-                print(f"  warning: no cores found for {target_name}", file=sys.stderr)
-                continue
+                raise RuntimeError(f"no cores listed for {target_name}")
             targets[target_name] = {
                 "architecture": arch,
                 "cores": cores,
