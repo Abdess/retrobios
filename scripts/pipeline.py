@@ -119,11 +119,11 @@ def parse_pack_exclusions(output: str) -> dict[str, int]:
     for line in output.splitlines():
         label_match = re.match(r"Generating (?:shared )?pack for (.+)\.\.\.", line)
         if label_match:
-            current_label = re.sub(
-                r"\s+\[source=[^\]]+\]$", "", label_match.group(1).strip()
-            )
+            # The same reading as parse_pack_counts: a reduced variant must
+            # not overwrite the full pack's count under the shared label.
+            current_label = _full_pack_label(label_match.group(1).strip())
             continue
-        if "files packed" not in line:
+        if not current_label or "files packed" not in line:
             continue
         excluded_match = re.search(r"(\d+) unsafe excluded", line)
         exclusions[current_label] = (

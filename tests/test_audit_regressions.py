@@ -511,6 +511,16 @@ class PipelineRegressions(unittest.TestCase):
         ])
         self.assertEqual(pipeline.parse_pack_counts(output), {"RetroArch": (535, 535)})
 
+    def test_exclusions_read_only_the_full_variant(self):
+        """--all-variants printed six packs under one label; the last won."""
+        output = "\n".join([
+            "Generating pack for Batocera [source=full]...",
+            "  a.zip: 5 files packed (5 baseline + 0 from cores), 5/5 files OK, 3 unsafe excluded",
+            "Generating pack for Batocera [source=truth, required]...",
+            "  b.zip: 2 files packed (0 baseline + 2 from cores), 2/2 files OK",
+        ])
+        self.assertEqual(pipeline.parse_pack_exclusions(output), {"Batocera": 3})
+
     def test_slot_step_reaches_the_summary(self):
         source = Path(pipeline.__file__).read_text(encoding="utf-8")
         self.assertIn('results["slots"] = ok', source)
