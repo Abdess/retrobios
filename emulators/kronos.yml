@@ -2,9 +2,10 @@ emulator: Kronos
 type: libretro
 core_classification: official_port
 source: "https://github.com/libretro/yabause"
+source_branch: kronos
 upstream: "https://github.com/FCare/Kronos"
 profiled_date: "2026-03-24"
-source_commit: "8926b0c6c347f8c5c755911ddb0ac695420ffbf8"
+source_commit: "3791ffb2221fda61d70aec5cca376418caf05669"
 core_version: "v2.6.0"
 display_name: "Sega - Saturn/ST-V (Kronos)"
 cores:
@@ -244,7 +245,7 @@ files:
     size: 2097152
     validation: [size]
     note: "ROM cartridge for The King of Fighters '95. Auto-detected via game DB."
-    source_ref: "yabause/src/utils/src/db.c:43-44, yabause/src/cs0.c:1207-1216"
+    source_ref: "yabause/src/utils/src/db.c:43-44, yabause/src/sys/memory/src/cs0.c:1526-1535"
 
   - name: "mpr-19367-mx.ic1"
     system: sega-saturn
@@ -252,4 +253,4 @@ files:
     size: 2097152
     validation: [size]
     note: "ROM cartridge for Ultraman: Hikari no Kyojin Densetsu. Auto-detected via game DB."
-    source_ref: "yabause/src/utils/src/db.c:45, yabause/src/cs0.c:1207-1216"
+    source_ref: "yabause/src/utils/src/db.c:45, yabause/src/sys/memory/src/cs0.c:1526-1535"
