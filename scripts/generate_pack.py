@@ -3413,12 +3413,15 @@ def _target_cores_for(
 ) -> set[str] | None:
     """Cores a target leaves available, or None when no target was asked for.
 
-    None means no narrowing, which is what an unfiltered pack expects.
+    None means no narrowing, which is what an unfiltered pack expects. Read
+    the way --all builds: a platform without a target file was packed
+    unnarrowed under the target's name, and checking that pack must not
+    raise where building it did not.
     """
     if not target_name:
         return None
     cache, _kept = build_target_cores_cache(
-        [platform_name], target_name, platforms_dir
+        [platform_name], target_name, platforms_dir, is_all=True
     )
     return cache.get(platform_name)
 
