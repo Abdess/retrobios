@@ -82,6 +82,9 @@ from validation import (
 
 DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"
+# The repository's platforms wherever the script runs from, for library calls
+# that pass no directory.
+_REPO_PLATFORMS = os.path.join(os.path.dirname(__file__), "..", "platforms")
 DEFAULT_EMULATORS_DIR = "emulators"
 
 
@@ -1258,7 +1261,7 @@ def verify_emulator(
     db: dict,
     standalone: bool = False,
     regions: list[str] | None = None,
-    platforms_dir: str | None = None,
+    platforms_dir: str = _REPO_PLATFORMS,
 ) -> dict:
     """Verify files for specific emulator profiles.
 
@@ -1276,9 +1279,7 @@ def verify_emulator(
     # Build validation index from selected profiles only
     selected_profiles = {n: p for n, p in selected}
     validation_index = _build_validation_index(selected_profiles)
-    data_registry = load_data_dir_registry(
-        platforms_dir or os.path.join(os.path.dirname(__file__), "..", "platforms")
-    )
+    data_registry = load_data_dir_registry(platforms_dir)
 
     details = []
     file_status: dict[str, str] = {}
@@ -1556,7 +1557,7 @@ def verify_system(
     db: dict,
     standalone: bool = False,
     regions: list[str] | None = None,
-    platforms_dir: str | None = None,
+    platforms_dir: str = _REPO_PLATFORMS,
 ) -> dict:
     """Verify files for all emulators supporting given system IDs."""
     profiles = load_emulator_profiles(emulators_dir)
@@ -1729,6 +1730,21 @@ def _refuse_listing_narrowings(
             parser.error(f"{flag} is incompatible with {listing}")
 
 
+def _refuse_mode_flags(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
+    """A flag the chosen mode does not read is refused, never ignored."""
+    for refused, message in (
+        (args.standalone and not (args.emulator or args.system),
+         "--standalone requires --emulator or --system"),
+        (args.include_archived and not args.all, "--include-archived requires --all"),
+        (args.target and not (args.platform or args.all),
+         "--target requires --platform or --all"),
+        (args.target and (args.emulator or args.system),
+         "--target is incompatible with --emulator and --system"),
+    ):
+        if refused:
+            parser.error(message)
+
+
 def _run_listing(args: argparse.Namespace, parser: argparse.ArgumentParser) -> None:
     if args.list_emulators:
         list_emulator_profiles(args.emulators_dir)
@@ -1811,14 +1827,7 @@ def main():
         parser.error(
             "--platform, --all, --emulator, and --system are mutually exclusive"
         )
-    if args.standalone and not (args.emulator or args.system):
-        parser.error("--standalone requires --emulator or --system")
-    if args.include_archived and not args.all:
-        parser.error("--include-archived requires --all")
-    if args.target and not (args.platform or args.all):
-        parser.error("--target requires --platform or --all")
-    if args.target and (args.emulator or args.system):
-        parser.error("--target is incompatible with --emulator and --system")
+    _refuse_mode_flags(args, parser)
 
     with open(args.db) as f:
         db = json.load(f)

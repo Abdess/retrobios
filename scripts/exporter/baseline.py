@@ -38,6 +38,10 @@ def _is_placeholder(name: str) -> bool:
     return "<" in name or ">" in name or "*" in name
 
 
+def _field_sets(entry: dict | None) -> dict[str, set[str]]:
+    return {f: set(_hash_values(entry or {}, f)) for f in HASH_FIELDS}
+
+
 @dataclass
 class NativeFile:
     """One file as the platform will read it, after correction."""
@@ -67,8 +71,7 @@ class NativeFile:
         truth's crc32 beside Batocera's md5 for bios7.bin is one dump, and
         reading it as a contradiction emptied the md5 the frontend checks.
         """
-        truth = {f: set(_hash_values(self.truth or {}, f)) for f in HASH_FIELDS}
-        plat = {f: set(_hash_values(self.platform or {}, f)) for f in HASH_FIELDS}
+        truth, plat = _field_sets(self.truth), _field_sets(self.platform)
         if not any(truth.values()):
             return "platform"
         if not any(plat.values()):
@@ -76,10 +79,12 @@ class NativeFile:
         shared = [f for f in HASH_FIELDS if truth[f] and plat[f]]
         if any(truth[f] & plat[f] for f in shared):
             return "both"
+        return "truth" if shared or self._sizes_differ() else "both"
+
+    def _sizes_differ(self) -> bool:
         t_size = (self.truth or {}).get("size")
         p_size = (self.platform or {}).get("size")
-        sizes_differ = isinstance(t_size, int) and isinstance(p_size, int) and t_size != p_size
-        return "truth" if shared or sizes_differ else "both"
+        return isinstance(t_size, int) and isinstance(p_size, int) and t_size != p_size
 
     def hashes(self, field_name: str) -> list[str]:
         """Accepted values for a hash, truth first when it has an opinion.

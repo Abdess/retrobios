@@ -102,20 +102,25 @@ def _build_supplemental_index(
             if dpath.is_dir() and not dpath.name.startswith("."):
                 names.add(dpath.name + "/")
                 names.add(dpath.name.lower() + "/")
-        import zipfile
+        names |= _zip_member_names(bios_path)
+    return names
 
-        for zpath in bios_path.rglob("*.zip"):
-            try:
-                with zipfile.ZipFile(zpath) as zf:
-                    for member in zf.namelist():
-                        if not member.endswith("/"):
-                            basename = (
-                                member.rsplit("/", 1)[-1] if "/" in member else member
-                            )
-                            names.add(basename)
-                            names.add(basename.lower())
-            except (zipfile.BadZipFile, OSError):
-                pass
+
+def _zip_member_names(bios_path: Path) -> set[str]:
+    """Basenames of the files inside every ZIP under bios/, both cases."""
+    import zipfile
+
+    names: set[str] = set()
+    for zpath in bios_path.rglob("*.zip"):
+        try:
+            with zipfile.ZipFile(zpath) as zf:
+                members = [m for m in zf.namelist() if not m.endswith("/")]
+        except (zipfile.BadZipFile, OSError) as exc:
+            print(f"  WARNING: unreadable archive {zpath}: {exc}", file=sys.stderr)
+            continue
+        for member in members:
+            basename = member.rsplit("/", 1)[-1]
+            names.update((basename, basename.lower()))
     return names
 
 
@@ -177,16 +182,20 @@ def _resolve_source(
             by_name_lower[canonical.lower()]
         ):
             return "bios"
-    # data/ supplemental index: a directory entry looks for a directory, a
-    # file entry for a file.
-    if data_names:
-        is_directory = fname.endswith("/") or (file_entry or {}).get("type") == "directory"
-        looked_up = [fname, key] + ([basename, basename.lower()] if basename else [])
-        if is_directory:
-            looked_up = [name.rstrip("/") + "/" for name in looked_up]
-        if any(name in data_names for name in looked_up):
-            return "data"
+    if data_names and _data_hit(fname, basename, file_entry, data_names):
+        return "data"
     return None
+
+
+def _data_hit(
+    fname: str, basename: str | None, file_entry: dict | None, data_names: set[str]
+) -> bool:
+    """Whether data/ or a ZIP holds the name: a directory entry looks for a
+    directory, a file entry for a file."""
+    looked_up = [fname, fname.lower()] + ([basename, basename.lower()] if basename else [])
+    if fname.endswith("/") or (file_entry or {}).get("type") == "directory":
+        looked_up = [name.rstrip("/") + "/" for name in looked_up]
+    return any(name in data_names for name in looked_up)
 
 
 def entry_source(f: dict, index: dict) -> str | None:

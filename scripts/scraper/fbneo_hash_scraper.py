@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import shutil
 import subprocess
 import sys
@@ -101,27 +102,7 @@ def _extract_version() -> tuple[str, str]:
         version = _version_from_resource_h()
     # Last resort: use GitHub API for latest real release tag
     if version == "unknown":
-        try:
-            import urllib.error
-            import urllib.request
-
-            req = urllib.request.Request(
-                "https://api.github.com/repos/finalburnneo/FBNeo/tags?per_page=10",
-                headers={"User-Agent": "retrobios-scraper/1.0"},
-            )
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                import json as json_mod
-
-                tags = json_mod.loads(resp.read())
-                for t in tags:
-                    if t["name"] != "latest" and t["name"].startswith("v"):
-                        version = t["name"]
-                        break
-        except (urllib.error.URLError, OSError) as exc:
-            raise RuntimeError(f"cannot determine the FBNeo version: {exc}") from exc
-    if version == "unknown":
-        # Written as core_version otherwise, and cached for a day.
-        raise RuntimeError("cannot determine the FBNeo version: no tag, resource.h or release")
+        version = _version_from_api()
 
     sha_result = subprocess.run(
         ["git", "rev-parse", "HEAD"],
@@ -133,6 +114,31 @@ def _extract_version() -> tuple[str, str]:
     commit = sha_result.stdout.strip()
 
     return version, commit
+
+
+def _version_from_api() -> str:
+    """The latest real release tag, or an error: "unknown" was written as
+    core_version and cached for a day."""
+    import json as json_mod
+    import urllib.error
+    import urllib.request
+
+    headers = {"User-Agent": "retrobios-scraper/1.0"}
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    req = urllib.request.Request(
+        "https://api.github.com/repos/finalburnneo/FBNeo/tags?per_page=10", headers=headers
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            tags = json_mod.loads(resp.read())
+    except (urllib.error.URLError, OSError, ValueError) as exc:
+        raise RuntimeError(f"cannot determine the FBNeo version: {exc}") from exc
+    for tag in tags:
+        if tag["name"] != "latest" and tag["name"].startswith("v"):
+            return tag["name"]
+    raise RuntimeError("cannot determine the FBNeo version: no tag, resource.h or release")
 
 
 def _version_from_resource_h() -> str:

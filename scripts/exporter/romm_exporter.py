@@ -64,7 +64,7 @@ class Exporter(BaseExporter):
         """
         return native_id in SLUG_MAP
 
-    def writable(self, fe: NativeFile, require: str = "") -> bool:
+    def writable(self, fe: NativeFile, require: str = "") -> bool:  # noqa: ARG002
         """What RomM already ships stays; the conditions gate additions.
 
         An entry of theirs that could never verify is still theirs, and the

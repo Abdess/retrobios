@@ -37,7 +37,6 @@ from common import (
     load_database,
     load_emulator_profiles,
     load_provenance_snapshots,
-    parse_md5_list,
     require_yaml,
     resolve_platform_cores,
     unique_emulator_profiles,
@@ -52,7 +51,7 @@ from nativemode import reads_file_contents
 
 
 yaml = require_yaml()
-from generate_readme import compute_coverage, release_totals
+from generate_readme import compute_coverage, contributing_text, release_totals
 from profile_sync import source_ref_values, split_source_ref
 from provenance_report import build_report
 import release_record
@@ -3108,8 +3107,6 @@ def generate_cross_reference(
 
 
 def generate_contributing() -> str:
-    from generate_readme import contributing_text
-
     return contributing_text(
         lambda page: f"{page}.md", "# Contributing - RetroBIOS", "on this site"
     )

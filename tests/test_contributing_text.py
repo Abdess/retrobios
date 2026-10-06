@@ -10,6 +10,7 @@ import re
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -37,11 +38,9 @@ class CoverageReadsTheGivenProfiles(unittest.TestCase):
     platform coverage, which read ./emulators whatever was given."""
 
     def test_the_directory_reaches_verify(self):
-        from unittest import mock  # noqa: PLC0415
-
         seen: list[str] = []
 
-        def fake_verify(config, db, emulators_dir, **_kwargs):
+        def fake_verify(_config, _db, emulators_dir, **_kwargs):
             seen.append(emulators_dir)
             return {"status_counts": {}, "total_files": 0, "undeclared_files": [], "details": []}
 
