@@ -481,23 +481,30 @@ def _affinity_tokens(text: str) -> set[str]:
 
 
 def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str]:
-    """Same-named candidates, the ones stored with the file's owner first.
+    """Same-named candidates, the likeliest first.
 
     A name step without a tie-break took whichever path sorted first: the
-    TheXTech coin.ogg for Syobon Action, a Hurrican sound for ARMSX2. The
-    destination's directories and the profile that asks name where its own
-    copy lives; the order is otherwise kept.
+    TheXTech coin.ogg for Syobon Action, a Hurrican sound for ARMSX2, the
+    1 MB CM-32L PCM ROM for ScummVM's 512 KB MT32_PCM.ROM. A size the entry
+    declares orders the candidates first (ordering rejects nothing, so an
+    unvalidated size keeps its informative status); then the destination's
+    directories and the profile that asks name where its own copy lives. The
+    order is otherwise kept.
     """
+    if len(paths) < 2:
+        return paths
     hint = dest_hint or file_entry.get("path") or file_entry.get("destination") or ""
     wanted = _affinity_tokens(hint.rsplit("/", 1)[0] if "/" in hint else "")
     for owner in (file_entry.get("source_profile"), file_entry.get("source_emulator")):
         if owner:
             wanted |= _affinity_tokens(str(owner).replace(" ", ""))
-    if not wanted or len(paths) < 2:
-        return paths
+    sized = any(file_entry.get(k) for k in ("size", "min_size", "max_size"))
 
-    def score(path: str) -> int:
-        return len(wanted & _affinity_tokens(path.rsplit("/", 1)[0]))
+    def score(path: str) -> tuple[int, int]:
+        fits = 0
+        if sized and os.path.exists(path):
+            fits = int(size_fits(file_entry, os.path.getsize(path)))
+        return fits, len(wanted & _affinity_tokens(path.rsplit("/", 1)[0]))
 
     return sorted(paths, key=score, reverse=True)
 
