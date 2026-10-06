@@ -5,9 +5,9 @@ source: "https://github.com/sashkinbro/EmuCoreX"
 upstream: "https://github.com/PCSX2/pcsx2"
 author: "Oleksandr (sashkinbro)"
 profiled_date: "2026-10-04"
-source_commit: "ed8d7dd721dc8da958f3149acdc4c72d77d5a685"
+source_commit: "9884c9f9a0c5d5df2f0c0c064ec41029a4528d72"
 upstream_commit: "c10a5c9ad951c517dc48b722b5b84eb9bf7fdb42"
-core_version: "0.4.6"
+core_version: "0.4.7"
 display_name: "Sony - PlayStation 2 (EmuCoreX)"
 cores:
   - emucorex
