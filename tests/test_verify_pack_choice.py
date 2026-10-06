@@ -119,7 +119,7 @@ class GroupRenameKeepsSystemTag(unittest.TestCase):
             args = argparse.Namespace(
                 all_variants=False, source="full", required_only=False,
                 platforms_dir="platforms", target=None, split=False,
-                include_extras=False, emulators_dir="emulators", regions=[],
+                emulators_dir="emulators", regions=[],
                 one_per_slot=False, offline=True, bios_dir="bios",
                 output_dir=tmp,
             )

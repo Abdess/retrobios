@@ -190,8 +190,6 @@ would have loaded.
   region is kept whole rather than emptied
 - `--one-per-slot`: keep one file per system and declared region, ranked by the
   `priority:` the emulator source states, lowest first
-- `--include-extras`: with `--emulator` or `--system`, add the files the cores
-  pull in beyond the selection
 - `--db`, `--platforms-dir`, `--emulators-dir`: read another database or source
   tree instead of the repository's
 - `--source {platform,truth,full}`: select file source (platform YAML only, emulator profiles only, or both)

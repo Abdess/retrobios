@@ -123,7 +123,7 @@ class ManifestStatesWhatThePackHolds(PackCountFixture):
         out.mkdir()
         zip_path = builder.generate_pack(
             "demo", str(self.platforms), self.db, str(self.bios), str(out),
-            include_extras=True, emulators_dir=str(self.emulators),
+            emulators_dir=str(self.emulators),
             emu_profiles=self.profiles, data_registry=self.registry,
             offline=True,
         )
@@ -184,7 +184,7 @@ class ManifestFollowsTheBuilder(PackCountFixture):
         out.mkdir(exist_ok=True)
         zip_path = builder.generate_pack(
             "demo", str(self.platforms), self.db, str(self.bios), str(out),
-            include_extras=True, emulators_dir=str(self.emulators),
+            emulators_dir=str(self.emulators),
             emu_profiles=self.profiles, data_registry=self.registry,
             offline=True,
         )

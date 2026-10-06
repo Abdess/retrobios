@@ -38,7 +38,7 @@ class FailedPlatformFailsTheRun(unittest.TestCase):
         return argparse.Namespace(
             all_variants=False, source="full", required_only=False,
             platforms_dir="platforms", target=None, split=False,
-            include_extras=False, emulators_dir="emulators", regions=[],
+            emulators_dir="emulators", regions=[],
             one_per_slot=False, offline=True, bios_dir="bios",
             output_dir=self.tmp.name, verify_packs=False,
         )
