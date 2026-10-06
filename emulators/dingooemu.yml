@@ -84,7 +84,8 @@ files:
     sha1: "69b3544d992a23e8b736c61837914a4d1b4e7bb5"
     description: "Gemei A330 firmware update archive, V1.1 build3 of 2011-02-13"
     note: >-
-      Mounted when an A330 package loads: the content's directory is
+      Mounted when an A330 package loads
+      (crates/dingooemu-core/src/a330/runtime.rs:415-418): the content's directory is
       scanned and the first entry whose extension is hxf, in any case, is
       read whole. The file must start with WADF0100 and declare at offset
       20 a size within its own length; each record is a u32 name length,
@@ -98,4 +99,4 @@ files:
       goes on. The image itself is never hashed, and the hashes here name
       the last firmware Gemei published; the V1.10 image of 2011-01-25
       indexes the same way.
-    source_ref: "crates/dingooemu-core/src/a330/runtime.rs:415-418, crates/dingooemu-core/src/a330/firmware_archive.rs:16-50, 54-58, 63-96, 117-124, crates/dingooemu-core/src/a330/runtime/sdk_hle/files.rs:108-133"
+    source_ref: "crates/dingooemu-core/src/a330/firmware_archive.rs:16-50, 54-58, 63-96, 117-124, crates/dingooemu-core/src/a330/runtime/sdk_hle/files.rs:108-133"

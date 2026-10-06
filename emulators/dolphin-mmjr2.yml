@@ -188,7 +188,7 @@ files:
     adler32_byteswap: true
     description: "DSP coefficient ROM"
     note: "Read by DSP LLE alongside the instruction ROM, and by the AX ucode under HLE for polyphase resampling, which drops any file that is not 0x1000 bytes and plays on without it."
-    source_ref: "Source/Core/Common/CommonPaths.h:121, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:87-105, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:107-120, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:42-69, Source/Core/Core/DSP/DSPCore.h:58"
+    source_ref: "Source/Core/Common/CommonPaths.h:121, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:87-120, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:42-69, Source/Core/Core/DSP/DSPCore.h:58"
 
   - name: codehandler.bin
     path: null

@@ -90,7 +90,7 @@ files:
     md5: 25629dfe870d097469c217b95fdc1c95
     sha1: 39102c8e9cb55fcc0b9b62098780ed4a3cb6a4bb
     note: "AMSDOS disc ROM, shipped cap32.cfg sets slot07=DEFAULT, skipped on the 464; missing file clears the slot"
-    source_ref: "src/cap32.cpp:1170-1178, src/cap32.cpp:1245-1249, cap32.cfg:215, rom/amsdos.rom"
+    source_ref: "src/cap32.cpp:1170-1178, src/cap32.cpp:1245-1249, cap32.cfg:205-206, 215, rom/amsdos.rom"
   - name: system.cpr
     system: amstrad-cpc
     required: false

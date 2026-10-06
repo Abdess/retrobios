@@ -143,7 +143,7 @@ files:
     has_builtin: true
     size: 32768
     note: "EXDOS 1.4 + IS-DOS 1.0 (UK). Used for IS-DOS disk mode instead of exdos13.rom."
-    source_ref: "core/core.cpp:255, roms/roms.hpp:30104 (built-in data, MD5 verified)"
+    source_ref: "core/core.cpp:294-298, roms/roms.hpp:30104 (built-in data, MD5 verified)"
 
   # ============================================================
   # Enterprise 64/128 - file I/O and extensions
@@ -193,7 +193,7 @@ files:
     has_builtin: true
     size: 32768
     note: "EP-DOS 1.6f. Provides HFONT and CLKOFF for Hungarian locale. 32K across segments 0x06-0x07."
-    source_ref: "core/core.cpp:238-239, roms/roms.hpp:43780 (built-in data, MD5 verified)"
+    source_ref: "core/core.cpp:252-256, roms/roms.hpp:43780 (built-in data, MD5 verified)"
 
   - name: brd.rom
     path: ep128emu/roms/brd.rom
