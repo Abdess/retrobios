@@ -1199,6 +1199,29 @@ def _normalize_zip_for_pack(
 
 
 
+def _archive_destination(
+    archive_name: str, archive_prefix: str, pack_structure: dict | None, standalone: bool
+) -> str:
+    """Where an emulator pack places one of the profile's archives."""
+    archive_dest = sanitize_pack_path(archive_name)
+    if archive_prefix:
+        archive_dest = f"{archive_prefix}/{archive_dest}"
+    prefix = (pack_structure or {}).get("standalone" if standalone else "libretro", "")
+    return f"{prefix}/{archive_dest}" if prefix else archive_dest
+
+
+def _archive_is_optional(archive_entry: dict, archive_name: str, files: list[dict]) -> bool:
+    """Optional as a whole: its own entry and every member it carries.
+
+    geolith's _Required pack held neocd.zip and irrmaze.zip all the same.
+    """
+    return archive_entry.get("required") is False and all(
+        member.get("required") is False
+        for member in files
+        if member.get("archive") == archive_name
+    )
+
+
 def generate_emulator_pack(
     profile_names: list[str],
     emulators_dir: str,
@@ -1309,14 +1332,9 @@ def generate_emulator_pack(
             # Pack archives as units
             archive_prefix = profile.get("archive_prefix", "")
             for archive_name in sorted(archives):
-                archive_dest = sanitize_pack_path(archive_name)
-                if archive_prefix:
-                    archive_dest = f"{archive_prefix}/{archive_dest}"
-                if pack_structure:
-                    mode_key = "standalone" if standalone else "libretro"
-                    prefix = pack_structure.get(mode_key, "")
-                    if prefix:
-                        archive_dest = f"{prefix}/{archive_dest}"
+                archive_dest = _archive_destination(
+                    archive_name, archive_prefix, pack_structure, standalone
+                )
 
                 if archive_dest.lower() in seen_lower:
                     continue
@@ -1333,14 +1351,7 @@ def generate_emulator_pack(
                     ),
                     {"name": archive_name},
                 )
-                if required_only and archive_entry.get("required") is False and all(
-                    member.get("required") is False
-                    for member in files
-                    if member.get("archive") == archive_name
-                ):
-                    # Optional as a whole: its own entry and every member it
-                    # carries. geolith's _Required pack held neocd.zip and
-                    # irrmaze.zip all the same.
+                if required_only and _archive_is_optional(archive_entry, archive_name, files):
                     continue
                 local_path, status = resolve_file(
                     archive_entry,
@@ -2229,6 +2240,11 @@ def _run_verify_packs(args):
         sys.exit(1)
 
 
+def _pack_label(source: str, required_only: bool) -> str:
+    """The variant tag pipeline.parse_pack_counts reads after a pack name."""
+    return f"[source={source}, required]" if required_only else f"[source={source}]"
+
+
 def _run_platform_packs(
     args,
     groups,
@@ -2259,9 +2275,9 @@ def _run_platform_packs(
                     for p in group_platforms
                 ]
                 label = " / ".join(all_names)
-                print(f"\nGenerating pack for {label} [source={source}{', required' if required_only else ''}]...")
+                print(f"\nGenerating pack for {label} {_pack_label(source, required_only)}...")
             else:
-                print(f"\nGenerating pack for {representative} [source={source}{', required' if required_only else ''}]...")
+                print(f"\nGenerating pack for {representative} {_pack_label(source, required_only)}...")
 
             try:
                 tc = target_cores_cache.get(representative) if args.target else None
