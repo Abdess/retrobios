@@ -536,6 +536,33 @@ class PipelineRegressions(unittest.TestCase):
                 self.assertEqual(raised.exception.code, 1)
 
 
+    def test_a_targeted_export_reads_a_full_model(self):
+        """--target wrote truth/<target>/ only; the export read truth/."""
+        commands: list[list[str]] = []
+
+        def fake_run(command, _label):
+            commands.append([str(part) for part in command])
+            return True, "RetroArch: 1/1 OK\n"
+
+        argv = ["pipeline.py", "--offline", "--skip-packs", "--skip-docs",
+                "--with-export", "--target", "switch"]
+        with (
+            mock.patch.object(sys, "argv", argv),
+            mock.patch.object(pipeline, "run", side_effect=fake_run),
+            contextlib.redirect_stdout(io.StringIO()),
+        ):
+            with contextlib.suppress(SystemExit):
+                pipeline.main()
+        truth_runs = [c for c in commands if "scripts/generate_truth.py" in c]
+        export = next(c for c in commands if "scripts/export_native.py" in c)
+        read_dir = export[export.index("--truth-dir") + 1]
+        full_models = [
+            c for c in truth_runs
+            if "--target" not in c and c[c.index("--output-dir") + 1] == read_dir
+        ]
+        self.assertTrue(full_models, truth_runs)
+
+
 class ResolverRegressions(unittest.TestCase):
     def _database(self, entries: dict[str, Path], suffix: str | None = None) -> dict:
         files = {}
