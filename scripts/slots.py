@@ -355,14 +355,17 @@ def format_decision(decision: Decision) -> str:
     conflict = decision.conflict
     if decision.serves_both:
         winner = decision.winner.local_path
-        served = sorted({
-            c.emulator for c in conflict.profile_claims
-            if c.emulator and c.local_path == winner
-        })
-        others = sorted({
+        # A claim that only matched a path is answered by whatever file sits
+        # there; only one that pins content can be left wanting.
+        pinned_elsewhere = {
             c.emulator for c in conflict.profile_claims
             if c.emulator and c.local_path != winner
-        })
+            and resolution_is_hash_exact(c.status)
+        }
+        served = sorted({
+            c.emulator for c in conflict.profile_claims if c.emulator
+        } - pinned_elsewhere)
+        others = sorted(pinned_elsewhere)
         line = (
             f"{conflict.destination}: serve {winner} "
             f"({', '.join(served) or 'profile'}); the frontend only "
