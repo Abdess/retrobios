@@ -480,6 +480,15 @@ def _affinity_tokens(text: str) -> set[str]:
     }
 
 
+def _owner_tokens(file_entry: dict) -> set[str]:
+    """Tokens naming the profile that asks for the file."""
+    tokens: set[str] = set()
+    for owner in (file_entry.get("source_profile"), file_entry.get("source_emulator")):
+        if owner:
+            tokens |= _affinity_tokens(str(owner).replace(" ", ""))
+    return tokens
+
+
 def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str]:
     """Same-named candidates, the likeliest first.
 
@@ -495,10 +504,7 @@ def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str
         return paths
     hint = dest_hint or file_entry.get("path") or file_entry.get("destination") or ""
     wanted = _affinity_tokens(hint.rsplit("/", 1)[0] if "/" in hint else "")
-    owners: set[str] = set()
-    for owner in (file_entry.get("source_profile"), file_entry.get("source_emulator")):
-        if owner:
-            owners |= _affinity_tokens(str(owner).replace(" ", ""))
+    owners = _owner_tokens(file_entry)
     sized = any(file_entry.get(k) for k in ("size", "min_size", "max_size"))
 
     def score(path: str) -> tuple[int, bool, int]:
@@ -725,12 +731,17 @@ def resolve_local_file(
                 own_file_absent = True
             if len(candidates) > 1:
                 depth = len(tail.split("/"))
+                # At equal depth the owner's own copy: super3's Games.xml was
+                # served to Supermodel-Dojo by index order alone.
+                owners = _owner_tokens(file_entry)
                 candidates = sorted(
                     candidates,
-                    key=lambda h: len(
-                        files_db.get(h, {}).get("path", "").split("/")
-                    )
-                    - depth,
+                    key=lambda h: (
+                        len(files_db.get(h, {}).get("path", "").split("/")) - depth,
+                        not owners & _affinity_tokens(
+                            files_db.get(h, {}).get("path", "").rsplit("/", 1)[0]
+                        ),
+                    ),
                 )
             for match_sha1 in candidates:
                 if match_sha1 not in files_db:
