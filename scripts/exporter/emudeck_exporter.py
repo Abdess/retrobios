@@ -90,7 +90,26 @@ class Exporter(BaseExporter):
     def states(self, fe: NativeFile, field_name: str) -> bool:
         if field_name in fe.filled:
             return False
+        if field_name == "md5" and fe.native_system in self._refused_systems():
+            # The array was left as EmuDeck wrote it: nothing was corrected.
+            return False
         return super().states(fe, field_name)
+
+    def _refused_systems(self) -> set[str]:
+        withdrawn = getattr(self, "_withdrawn", {})
+        return {FUNCTION_HASH_MAP[name] for name in withdrawn if name in FUNCTION_HASH_MAP}
+
+    @staticmethod
+    def _corrected_away(systems: dict[str, NativeSystem], system_id: str) -> set[str]:
+        """The platform md5 values a correction of ours replaces."""
+        return {
+            value
+            for system in systems.values()
+            if system.native_id == system_id
+            for fe in system.files
+            if "md5" in fe.corrections
+            for value in _hash_values(fe.platform or {}, "md5")
+        }
 
     @classmethod
     def _md5s(cls, systems: dict[str, NativeSystem], system_id: str) -> list[str]:
@@ -151,7 +170,9 @@ class Exporter(BaseExporter):
                 # and our model does not was deleted: a user whose dump matched
                 # it would stop passing the check. A rewrite that withdraws one
                 # is refused and reported instead.
-                withdrawn = theirs - set(md5s)
+                # A correction replaces the value it corrects, which is not a
+                # withdrawal; any other value missing from ours would be.
+                withdrawn = theirs - set(md5s) - self._corrected_away(systems, system_id)
                 if withdrawn:
                     self._withdrawn.setdefault(name, set()).update(withdrawn)
                 elif set(md5s) != theirs:
@@ -180,7 +201,8 @@ class Exporter(BaseExporter):
                 issues.append(f"check absent from the output: {name}")
                 continue
             md5s = self._md5s(systems, system_id)
-            if not md5s:
+            if not md5s or name in getattr(self, "_withdrawn", {}):
+                # A refused rewrite keeps EmuDeck's own array, by design.
                 continue
             body = next(
                 content[start:end]
