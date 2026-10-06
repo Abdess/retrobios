@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/vpinball/vpinball"
 upstream: "https://github.com/vpinball/vpinball"
 profiled_date: "2026-10-04"
-source_commit: "a31565f1589c17afd0502a8c6a690f408ede14b2"
+source_commit: "8a9f36d227a0e71be33c36418e4e3ffc8c5c2723"
 core_version: "10.8.1"
 display_name: "Visual Pinball X"
 cores:
@@ -17,13 +17,14 @@ mode: standalone
 notes: |
   Pinball table simulator. The table is the content: .vpx and .vpt files are
   OLE Compound Documents holding the geometry, textures, sounds and a VBScript
-  program, read through POLE (src/parts/pintable.cpp:1424-1427). Every build
+  program, read through POLE (src/parts/pintable.cpp:1427-1430). Every build
   other than the Windows editor compiles the shared source set with
   __STANDALONE__ and links libwinevbs, Wine's VBScript engine with its COM and
-  ATL headers, beside SDL3, SDL3_ttf, FreeImage and hidapi; PinMAME, AltSound,
+  ATL headers, beside SDL3, SDL3_ttf, FreeImage, hidapi, libspatialaudio and
+  libmysofa with zlib; PinMAME, AltSound,
   DMDUtil, DOF, FlexDMD, B2S, PUP, Serum, VNI and ScoreView are plugins staged
-  in plugins/ next to the binary (make/CMakeLists_app.txt:525-546,597-603,
-  make/CMakeLists_sources.txt:809-815, make/CMakeLists_plugins.txt:21-25,39-56).
+  in plugins/ next to the binary (make/CMakeLists_app.txt:533-554,605-615,
+  make/CMakeLists_sources.txt:811-817, make/CMakeLists_plugins.txt:21-25,39-56).
   ES-DE finds VPinballX_BGFX or VPinballX_GL and
   runs `<binary> -play <rom>`, Batocera builds the standalone tree at
   3ec37c7f9a into /usr/bin/vpinball and runs `VPinballX_GL -PrefPath <dir> -Ini
@@ -48,11 +49,11 @@ notes: |
   user/ and scripts/ beside it, then the installation folder with user/,
   scripts/ and tables/ under it, then the preferences folder with user/ and
   scripts/ under it (src/core/FileLocator.cpp:379-412,
-  src/core/ScriptGlobalTable.cpp:346-375). The
+  src/core/ScriptGlobalTable.cpp:352-381). The
   scripts/ directory the build ships carries the 71 .vbs files tables include
   by name, core.vbs and controller.vbs beside the per-manufacturer machine
   scripts (WPC.vbs, sam.vbs, s11.vbs, zac.vbs and the rest), copied from
-  src/scripts (make/CMakeLists_app.txt:619-623). The Windows editor's
+  src/scripts (make/CMakeLists_app.txt:631-635). The Windows editor's
   completion parser asks for core.vbs through the same search without a table,
   so in the seven installation and preferences locations, and shows a warning
   box when none holds it (src/ui/win/codeview.cpp:2068-2076,
@@ -62,7 +63,7 @@ notes: |
   folder or the installation folder when SDL reports none, MusicDirectory the
   table's music folder with an optional subfolder, ScriptsDirectory scripts/
   under the installation folder; each fails when its directory does not exist
-  (src/core/ScriptGlobalTable.cpp:377-418, src/core/FileLocator.cpp:251-259).
+  (src/core/ScriptGlobalTable.cpp:383-424, src/core/FileLocator.cpp:251-259).
   In AppPrefData mode user/, music/, cache/ and autosave/ sit beside the table;
   a folder missing there on a read is looked up the AppOnly way, where user/
   hangs off the installation folder and music/ is tried under the installation
@@ -83,10 +84,10 @@ notes: |
   blankTable.vpx, exampleTable.vpx, lightSeqTable.vpx and strippedTable.vpx:
   the live editor loads blankTable.vpx when started without a table or when
   the requested one fails to load, and its New Table menu loads any of the
-  four (src/core/AppCommands.cpp:277-283, src/ui/live/EditorUI.cpp:334-353).
+  four (src/core/AppCommands.cpp:277-283, src/ui/live/EditorUI.cpp:338-357).
   OpenGL builds also get shaders-10.8.1/, the .glfx and .fxh sources parsed at
-  runtime (src/core/FileLocator.cpp:223, src/renderer/Shader.cpp:1827-1828,2234-2237,
-  make/CMakeLists_app.txt:625-635); the directory is not copied for the BGFX
+  runtime (src/core/FileLocator.cpp:223, src/renderer/Shader.cpp:1827-1828,2231-2234,
+  make/CMakeLists_app.txt:637-647); the directory is not copied for the BGFX
   renderer. Three plugins carry resources of their own: plugins/flexdmd/assets/
   holds the bitmap fonts UltraDMD asks for by resource name, the
   FlexDMD.Resources. prefix being stripped before the lookup
@@ -100,11 +101,11 @@ notes: |
   Two parts of that tree ship without a reader on the desktop targets.
   docs/Changelog.txt is read by the About dialog
   (src/ui/win/dialogs/AboutDialog.cpp:34), which sits in the Windows source
-  list only (make/CMakeLists_sources.txt:491,540-541,
+  list only (make/CMakeLists_sources.txt:493,542-543,
   make/CMakeLists_app.txt:78-80), and assets/web/, vpx.html with its scripts
   and style sheet, is served by the web server that only the iOS and Android
   library build compiles (lib/src/WebServer.cpp:92-99,
-  make/CMakeLists_sources.txt:817-823, make/CMakeLists_app.txt:669).
+  make/CMakeLists_sources.txt:819-825, make/CMakeLists_app.txt:679).
 
   PinMAME is where the emulation happens. Tables that recreate a real solid
   state machine hand a ROM name to the controller, which resolves its root as
@@ -340,7 +341,7 @@ files:
     category: game_data
     required: false
     description: "MAME high score memory map database, read once per machine start"
-    source_ref: "pinmame src/hiscore.c:18,223-230, pinmame src/cpuexec.c:332-334,393,1755, src/core/player.cpp:457-459"
+    source_ref: "pinmame src/hiscore.c:18, 223-230, pinmame src/cpuexec.c:332-334, 393, 1755, src/core/player.cpp:463-465"
     note: >-
       hs_open is called unconditionally at the top of cpu_run for every PinMAME
       machine, and the whole body sits behind `if (f)`, so an absent file is a
@@ -364,23 +365,40 @@ files:
       absent file leaves the menu showing "cheat database not found"
       (pinmame src/cheat.c:2463). Same bare-filename resolution as hiscore.dat.
 
+  - name: fabian-hrir.sofa
+    path: "assets/fabian-hrir.sofa"
+    system: vpinball
+    required: false
+    size: 1766147
+    sha1: "5bf46cfb6472b81f4aa7fb2c87bc79afc23109d7"
+    md5: "b98b60a050e3c2edfa7a59863c625c61"
+    description: "FABIAN full-sphere HRIR set, the HRTF of the binaural spatial audio renderer"
+    source_ref: "src/audio/SpatialAudio.cpp:49-56,344-360, make/CMakeLists_app.txt:631-635"
+    note: >-
+      Read from assets/ under the installation folder when libspatialaudio is
+      built with libmysofa, which every build script does; the headphone and VR
+      binauralizer then runs second order ambisonics on it. A missing or
+      unreadable file logs "Failed to load the binaural HRTF" and audio falls
+      back to loudspeaker decoding. The file sits in the repository's top-level
+      assets/ while the build copies src/assets, so no build output carries it.
+
 analysis:
   shipped_with_the_binary:
     note: >-
       Copied into the build output next to the executable and installed as one
       unit by every distribution, so they arrive with the emulator rather than
       being sourced separately.
-    source_ref: "make/CMakeLists_app.txt:619-623"
+    source_ref: "make/CMakeLists_app.txt:631-635"
     entries:
       - what: "scripts/, the .vbs library tables include"
-        source_ref: "src/core/FileLocator.cpp:379-412, src/core/ScriptGlobalTable.cpp:346-375, src/ui/win/codeview.cpp:2068-2076"
+        source_ref: "src/core/FileLocator.cpp:379-412, src/core/ScriptGlobalTable.cpp:352-381, src/ui/win/codeview.cpp:2068-2076"
       - what: "assets/, textures, segment display maps, TableSizes.csv, the window icon, the fallback font, the editor icons"
         source_ref: "src/renderer/Renderer.cpp:176-188,1493-1510, src/parts/bumper.cpp:148,160,172,186, src/parts/kicker.cpp:198-239, src/core/TableDB.cpp:16, src/renderer/Window.cpp:280, src/parts/textbox.cpp:719-720, src/ui/live/editor/EditorChrome.cpp:200"
       - what: "assets/blankTable.vpx, exampleTable.vpx, lightSeqTable.vpx, strippedTable.vpx"
-        source_ref: "src/core/AppCommands.cpp:277-283, src/ui/live/EditorUI.cpp:334-353"
+        source_ref: "src/core/AppCommands.cpp:277-283, src/ui/live/EditorUI.cpp:338-357"
         note: "The live editor's default table and its four New Table templates."
       - what: "shaders-10.8.1/, .glfx and .fxh parsed at runtime by the OpenGL renderer"
-        source_ref: "src/core/FileLocator.cpp:223, src/renderer/Shader.cpp:1827-1828,2234-2237, make/CMakeLists_app.txt:625-635"
+        source_ref: "src/core/FileLocator.cpp:223, src/renderer/Shader.cpp:1827-1828, src/renderer/Shader.cpp:2231-2234, make/CMakeLists_app.txt:637-647"
       - what: "plugins/flexdmd/assets/, the bitmap fonts UltraDMD names as FlexDMD.Resources.*"
         source_ref: "plugins/flexdmd/UltraDMD.cpp:20-24,32-34, plugins/flexdmd/resources/AssetManager.cpp:103-109,252-272, make/CMakeLists_plugin_FlexDMD.txt:179-182"
       - what: "plugins/scoreview/layouts/, the default score view layouts"
@@ -392,10 +410,10 @@ analysis:
     note: "Copied into the build output but unreachable in the desktop standalone binary"
     entries:
       - what: "docs/Changelog.txt"
-        source_ref: "src/ui/win/dialogs/AboutDialog.cpp:34, make/CMakeLists_sources.txt:540-541, make/CMakeLists_app.txt:622"
+        source_ref: "src/ui/win/dialogs/AboutDialog.cpp:34, make/CMakeLists_sources.txt:542-543, make/CMakeLists_app.txt:634"
         note: "The About dialog is in the Windows editor source list only."
       - what: "assets/web/, vpx.html and the files it pulls"
-        source_ref: "lib/src/WebServer.cpp:92-99, make/CMakeLists_sources.txt:817-823"
+        source_ref: "lib/src/WebServer.cpp:92-99, make/CMakeLists_sources.txt:819-825"
         note: "The web server is compiled into the iOS and Android library build only."
 
   user_supplied_paths:
@@ -432,12 +450,12 @@ analysis:
       - what: "score view layout, <table basename>.scv, else <table folder name>.scv, else the LayoutFolder setting"
         source_ref: "plugins/scoreview/ScoreViewPlugin.cpp:23,46-62"
       - what: "table music, music/ beside the table"
-        source_ref: "src/core/ScriptGlobalTable.cpp:116-130, src/core/FileLocator.cpp:267-377"
+        source_ref: "src/core/ScriptGlobalTable.cpp:122-136, src/core/FileLocator.cpp:267-377"
         note: "In the legacy layout, music/ under the installation folder, then the table folder, then the preferences folder."
       - what: "textbox fonts, <table folder>/<FontName>-<Style>.ttf"
         source_ref: "src/parts/textbox.cpp:701-722"
       - what: "table sidecars, the .vbs script override, the per-table .ini and the legacy .pov"
-        source_ref: "src/parts/pintable.cpp:1322-1328,1380-1396, src/parts/pintable.h:562-589"
+        source_ref: "src/parts/pintable.cpp:1325-1331, src/parts/pintable.cpp:1383-1399, src/parts/pintable.h:560-587"
 
   generated_files:
     - what: "VPinballX.ini, the settings file"
@@ -448,7 +466,7 @@ analysis:
         Batocera seeds it from the assets/Default_VPinballX.ini its pinned tree
         carries and rewrites it before every launch.
     - what: "VPReg.ini, values saved by table scripts in the table's user folder; vpinball.log in the preferences folder"
-      source_ref: "src/core/ScriptGlobalTable.cpp:521-551, src/utils/Logger.cpp:164-165"
+      source_ref: "src/core/ScriptGlobalTable.cpp:527-557, src/utils/Logger.cpp:164-165"
     - what: "PinMAME state: nvram/, cfg/, hi/, inp/, memcard/ and sta/"
       source_ref: "pinmame src/libpinmame/libpinmame.cpp:1081,1083-1087"
       note: "Written by PinMAME as the machine runs."
