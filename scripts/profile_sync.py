@@ -2439,16 +2439,21 @@ def pending_recale(
     return pending
 
 
+def _needs_review(report: ProfileReport, accept_changed: bool) -> bool:
+    """Whether the report leaves a ref to read before the pin may move."""
+    if report.skipped or not report.head or report.pinned_tag:
+        return True
+    blocking = REVIEW_STATUSES if not accept_changed else (
+        s for s in REVIEW_STATUSES if s != "CHANGED"
+    )
+    return any((report.counts or {}).get(s) for s in blocking)
+
+
 def bump_commit(
     path: Path, report: ProfileReport, accept_changed: bool = False
 ) -> bool:
     """Advance source_commit to HEAD when nothing needs a read again."""
-    if report.skipped or not report.head or report.pinned_tag:
-        return False
-    blocking = REVIEW_STATUSES if not accept_changed else (
-        s for s in REVIEW_STATUSES if s != "CHANGED"
-    )
-    if any((report.counts or {}).get(s) for s in blocking):
+    if _needs_review(report, accept_changed):
         return False
     text = path.read_text(encoding="utf-8")
     if pending_recale(report, accept_changed, text):
@@ -2466,30 +2471,24 @@ def bump_commit(
         return False
     expected = dict(document)
     expected["source_commit"] = report.head
-    new_text = text
-    if document.get("source_commit") == report.head:
-        pass
-    elif document.get("source_commit"):
-        new_text, _ = replace_field_line(
-            new_text, "source_commit", str(document["source_commit"]), report.head
-        )
-    else:
-        new_text = insert_after_line(
-            new_text, "profiled_date", f'source_commit: "{report.head}"'
-        )
+    new_text = _set_pin(text, document, "source_commit", report.head, "profiled_date")
     if upstream_moves:
         expected["upstream_commit"] = report.upstream_head
-        if document.get("upstream_commit"):
-            new_text, _ = replace_field_line(
-                new_text, "upstream_commit", str(document["upstream_commit"]),
-                report.upstream_head,
-            )
-        else:
-            new_text = insert_after_line(
-                new_text, "source_commit", f'upstream_commit: "{report.upstream_head}"'
-            )
+        new_text = _set_pin(
+            new_text, document, "upstream_commit", report.upstream_head, "source_commit"
+        )
     apply_edit(path, new_text, expected)
     return True
+
+
+def _set_pin(text: str, document: dict, field: str, value: str, after: str) -> str:
+    """Write *field* as *value*, replacing its line or adding one after *after*."""
+    current = document.get(field)
+    if current == value:
+        return text
+    if current:
+        return replace_field_line(text, field, str(current), value)[0]
+    return insert_after_line(text, after, f'{field}: "{value}"')
 
 
 def _git_history(path: Path) -> list[str]:
