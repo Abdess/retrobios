@@ -13,6 +13,7 @@ carries `unsourceable:` until its own bytes are held.
 from __future__ import annotations
 
 import os
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -300,11 +301,10 @@ class SwitchKeysAreTheNewestSet(unittest.TestCase):
         ]
 
         def newest(path: Path) -> int:
-            keys = [
-                line.split("=")[0].strip() for line in path.read_text(errors="replace").splitlines()
-                if line.startswith("master_key_")
-            ]
-            return max((int(k.rsplit("_", 1)[1], 16) for k in keys), default=-1)
+            generations = re.findall(
+                r"^master_key_([0-9a-f]{2})\s*=", path.read_text(errors="replace"), re.MULTILINE
+            )
+            return max((int(g, 16) for g in generations), default=-1)
 
         best = max(newest(REPO_ROOT / p) for p in held)
         for key in ("yuzu", "citron", "eden", "suyu", "ryujinx", "kenji-nx", "skyline"):
