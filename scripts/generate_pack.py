@@ -577,6 +577,24 @@ def _select_variants(
     return region_drops, region_fallbacks, slot_undecidable
 
 
+def _platform_pack_name(
+    platform_name: str,
+    platforms_dir: str,
+    narrowings: list[tuple[str, str]],
+    system_filter: list[str] | None,
+    pack_name: str | None = None,
+) -> str:
+    """File name of a platform pack: stem, narrowing tags, system tag.
+
+    A caller naming the pack itself (a --split part) is taken at its word.
+    """
+    if pack_name:
+        return pack_name
+    stem = _platform_pack_stem([platform_name], platform_name, platforms_dir)
+    tags = "".join(tag for tag, _label in narrowings)
+    return f"{stem}{tags}_BIOS_Pack{_system_tag(system_filter)}.zip"
+
+
 def generate_pack(
     platform_name: str,
     platforms_dir: str,
@@ -623,10 +641,12 @@ def generate_pack(
     narrowings = _narrowings(
         source, regions, target_name, one_per_slot, required_only
     )
-    narrow_tags = "".join(tag for tag, _label in narrowings)
-    stem = _platform_pack_stem([platform_name], platform_name, platforms_dir)
-    zip_name = pack_name or f"{stem}{narrow_tags}_BIOS_Pack{_system_tag(system_filter)}.zip"
-    zip_path = os.path.join(output_dir, zip_name)
+    zip_path = os.path.join(
+        output_dir,
+        _platform_pack_name(
+            platform_name, platforms_dir, narrowings, system_filter, pack_name
+        ),
+    )
     os.makedirs(output_dir, exist_ok=True)
 
     # Case-insensitive dedup only for platforms targeting Windows/macOS.
@@ -2460,6 +2480,13 @@ def _refuse_refresh_data(args, parser) -> None:
             parser.error(f"--refresh-data is incompatible with {flag}")
 
 
+def _refuse_include_archived(args, parser) -> None:
+    """Only --all chooses among registered platforms; every other mode names
+    its own platform, emulator, system or hash."""
+    if args.include_archived and not args.all:
+        parser.error("--include-archived requires --all")
+
+
 def _refuse_unapplied_flags(args, parser) -> None:
     """Refuse every flag the requested mode would not apply.
 
@@ -2467,10 +2494,7 @@ def _refuse_unapplied_flags(args, parser) -> None:
     about an artifact the caller did not name. Run before any quick-exit
     mode, since --verify-packs and --manifest-targets return early.
     """
-    # Only --all chooses among registered platforms; every other mode names
-    # its own platform, emulator, system or hash.
-    if args.include_archived and not args.all:
-        parser.error("--include-archived requires --all")
+    _refuse_include_archived(args, parser)
     # Parsed before the quick-exit modes: --verify-packs returns early and
     # still needs the region priority list to narrow its expectation.
     args.regions = []

@@ -207,6 +207,16 @@ def _timestamp() -> str:
 # Home page
 
 
+def _extract_table(platforms_dir: str) -> list[str]:
+    """The home page's extraction table, indented for its admonition."""
+    rows = [
+        f"    | {display} | `{folder}` |"
+        for display, folder in extract_targets(platforms_dir)
+    ]
+    notes = [f"    {note}" for note in extract_notes(platforms_dir)]
+    return ["    | Platform | Extract to |", "    |----------|-----------|", *rows, "", *notes]
+
+
 def generate_home(
     db: dict,
     coverages: dict,
@@ -328,14 +338,7 @@ def generate_home(
             "",
             '??? info "Where to extract"',
             "",
-            "    | Platform | Extract to |",
-            "    |----------|-----------|",
-            *(
-                f"    | {display} | `{folder}` |"
-                for display, folder in extract_targets(platforms_dir)
-            ),
-            "",
-            *(f"    {note}" for note in extract_notes(platforms_dir)),
+            *_extract_table(platforms_dir),
             "    Every other pack extracts straight into the BIOS folder."
             " [Full instructions per setup](which-pack.md).",
             "",
@@ -1870,17 +1873,17 @@ def _file_badges(f: dict, in_repo: bool) -> list[str]:
         badges.append(
             '<span class="rb-badge rb-badge-muted">optional</span>'
         )
-    if not in_repo and f.get("unsourceable"):
+    if in_repo:
+        badges.append(
+            '<span class="rb-badge rb-badge-success">in repo</span>'
+        )
+    elif f.get("unsourceable"):
         badges.append(
             '<span class="rb-badge rb-badge-muted">unsourceable</span>'
         )
-    elif not in_repo:
-        badges.append(
-            '<span class="rb-badge rb-badge-warning">missing</span>'
-        )
     else:
         badges.append(
-            '<span class="rb-badge rb-badge-success">in repo</span>'
+            '<span class="rb-badge rb-badge-warning">missing</span>'
         )
     if hle:
         badges.append(
@@ -2247,6 +2250,40 @@ def _availability_check(db: dict, data_names):
     return _file_available
 
 
+def _emulator_file_summary(files: list[dict], available) -> list[str]:
+    """The counts above an emulator's file table, and its categories."""
+    in_repo_count = sum(1 for f in files if available(f))
+    unsourceable_count = sum(1 for f in files if f.get("unsourceable"))
+    missing_count = len(files) - in_repo_count - unsourceable_count
+    req_count = sum(1 for f in files if f.get("required"))
+    hle_count = sum(1 for f in files if f.get("hle_fallback"))
+
+    held = f"{in_repo_count} in repo, {missing_count} missing"
+    if unsourceable_count:
+        held += f", {unsourceable_count} unsourceable"
+    parts = [
+        f"**{len(files)} files**",
+        f"{req_count} required, {len(files) - req_count} optional",
+        held,
+    ]
+    if hle_count:
+        parts.append(f"{hle_count} with HLE fallback")
+    lines = [" | ".join(parts)]
+
+    categories = [f.get("category", "bios") for f in files]
+    if "game_data" in categories or "bios_zip" in categories:
+        cats = [
+            f"{categories.count(key)} {label}"
+            for key, label in (
+                ("bios", "BIOS"), ("game_data", "game data"), ("bios_zip", "BIOS ZIPs")
+            )
+            if categories.count(key)
+        ]
+        lines.append(f"Categories: {', '.join(cats)}")
+    lines.append("")
+    return lines
+
+
 def generate_emulator_page(
     name: str,
     profile: dict,
@@ -2363,38 +2400,7 @@ def generate_emulator_page(
     else:
         _file_available = _availability_check(db, data_names)
 
-        # Stats by category
-        bios_files = [f for f in files if f.get("category", "bios") == "bios"]
-        game_data = [f for f in files if f.get("category") == "game_data"]
-        bios_zips = [f for f in files if f.get("category") == "bios_zip"]
-
-        in_repo_count = sum(1 for f in files if _file_available(f))
-        unsourceable_count = sum(1 for f in files if f.get("unsourceable"))
-        missing_count = len(files) - in_repo_count - unsourceable_count
-        req_count = sum(1 for f in files if f.get("required"))
-        opt_count = len(files) - req_count
-        hle_count = sum(1 for f in files if f.get("hle_fallback"))
-
-        parts = [f"**{len(files)} files**"]
-        parts.append(f"{req_count} required, {opt_count} optional")
-        held = f"{in_repo_count} in repo, {missing_count} missing"
-        if unsourceable_count:
-            held += f", {unsourceable_count} unsourceable"
-        parts.append(held)
-        if hle_count:
-            parts.append(f"{hle_count} with HLE fallback")
-        lines.append(" | ".join(parts))
-
-        if game_data or bios_zips:
-            cats = []
-            if bios_files:
-                cats.append(f"{len(bios_files)} BIOS")
-            if game_data:
-                cats.append(f"{len(game_data)} game data")
-            if bios_zips:
-                cats.append(f"{len(bios_zips)} BIOS ZIPs")
-            lines.append(f"Categories: {', '.join(cats)}")
-        lines.append("")
+        lines.extend(_emulator_file_summary(files, _file_available))
 
         # File table
         for f in files:

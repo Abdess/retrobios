@@ -322,13 +322,18 @@ def build_native_model(
                 if candidate.truth is None
             ]
 
-            def by_destination(candidate: NativeFile) -> bool:
+            def by_destination(candidate: NativeFile, t_dest: str = t_dest) -> bool:
                 # Dolphin writes dolphin-emu/Sys/GC/USA/IPL.bin for the truth's
                 # GC/USA/IPL.bin: a destination ending in the path is the file.
                 theirs = _match_key(candidate.platform or {})[0]
                 return bool(t_dest) and (theirs == t_dest or theirs.endswith("/" + t_dest))
 
-            def by_name(candidate: NativeFile) -> bool:
+            def by_name(
+                candidate: NativeFile,
+                t_dest: str = t_dest,
+                t_name: str = t_name,
+                truth_entry: dict = truth_entry,
+            ) -> bool:
                 theirs_dest, theirs = _match_key(candidate.platform or {})
                 if not t_name or theirs != t_name:
                     return False
@@ -346,7 +351,7 @@ def build_native_model(
                     isinstance(t_size, int) and isinstance(p_size, int) and t_size != p_size
                 )
 
-            def by_hash(candidate: NativeFile) -> bool:
+            def by_hash(candidate: NativeFile, t_hashes: set = t_hashes) -> bool:
                 if not t_hashes:
                     return False
                 theirs = {

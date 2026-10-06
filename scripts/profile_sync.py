@@ -71,6 +71,11 @@ class RefPart:
     end: int | None
     raw: str = ""
 
+    @property
+    def last(self) -> int | None:
+        """Last cited line: the end of a range, or the single line."""
+        return self.end or self.start
+
 
 @dataclass(frozen=True)
 class AnchorResult:
@@ -910,7 +915,7 @@ def anchor_part(
             reason = "written against HEAD, pin names an older revision"
         return PartResult(part, "GONE", None, None, None, [], reason, slug, url)
 
-    end = part.end or part.start
+    end = part.last
     if end > len(pin_lines):
         # The file is there and the line is not yet: the pinned revision is
         # shorter than the one the ref was written against. nestopia cited
@@ -1173,7 +1178,7 @@ def verify_at_pin(part: RefPart, pin_lines, tokens, hash_tokens=()) -> PartResul
         )
     if part.start is None:
         return PartResult(part, "ANCHORED", None, None, None, [])
-    if (part.end or part.start) > len(pin_lines):
+    if part.last > len(pin_lines):
         return PartResult(
             part, "GONE", None, None, None, [], "beyond the end of the file"
         )
@@ -1190,7 +1195,7 @@ def verify_at_pin(part: RefPart, pin_lines, tokens, hash_tokens=()) -> PartResul
     # per line, so the window reaches forward as far as the entry has members.
     reach = SELF_CHECK_CONTEXT + len(tokens)
     lo = max(0, part.start - 1 - SELF_CHECK_CONTEXT)
-    hi = min(len(pin_lines), (part.end or part.start) + reach)
+    hi = min(len(pin_lines), part.last + reach)
     window = "\n".join(pin_lines[lo:hi]).lower()
     if any(token in window for token in tokens):
         return PartResult(part, "ANCHORED", None, None, None, [])
@@ -2823,6 +2828,22 @@ def realign_prose(
     return messages
 
 
+def _refuse_dirty_tree(emulators_dir: str) -> None:
+    """Writes need a clean profile tree to roll back to."""
+    try:
+        dirty = emulators_dir_is_dirty(emulators_dir)
+    except RuntimeError as e:
+        print(f"{e}. Pass --force to write anyway.", file=sys.stderr)
+        raise SystemExit(1) from e
+    if dirty:
+        print(
+            f"{emulators_dir} carries uncommitted changes. "
+            "Commit them first or pass --force.",
+            file=sys.stderr,
+        )
+        raise SystemExit(1)
+
+
 def emulators_dir_is_dirty(emulators_dir: str) -> bool:
     """True when the profile directory carries uncommitted changes.
 
@@ -3233,18 +3254,7 @@ def main() -> None:
         or args.realign_prose
     )
     if writes and not args.dry_run and not args.force:
-        try:
-            dirty = emulators_dir_is_dirty(args.emulators_dir)
-        except RuntimeError as e:
-            print(f"{e}. Pass --force to write anyway.", file=sys.stderr)
-            raise SystemExit(1) from e
-        if dirty:
-            print(
-                f"{args.emulators_dir} carries uncommitted changes. "
-                "Commit them first or pass --force.",
-                file=sys.stderr,
-            )
-            raise SystemExit(1)
+        _refuse_dirty_tree(args.emulators_dir)
 
     if args.realign_prose:
         for name in selected:

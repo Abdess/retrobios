@@ -101,6 +101,27 @@ SYSTEM_SLUG_MAP = {
 }
 
 
+def _core_info_files() -> list[str]:
+    """Paths of every .info file in libretro-core-info, or RuntimeError."""
+    import json
+
+    url = "https://api.github.com/repos/libretro/libretro-core-info/git/trees/master?recursive=1"
+    try:
+        req = urllib.request.Request(url, headers=github_headers())
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            tree = json.loads(resp.read())
+    except (urllib.error.URLError, json.JSONDecodeError) as e:
+        raise RuntimeError(f"cannot list libretro-core-info: {e}") from e
+    info_files = [
+        item["path"]
+        for item in tree.get("tree", [])
+        if item["path"].endswith("_libretro.info")
+    ]
+    if not info_files:
+        raise RuntimeError(f"no .info file in {url}")
+    return info_files
+
+
 class Scraper(BaseScraper):
     """Scraper for libretro System.dat."""
 
@@ -167,28 +188,10 @@ class Scraper(BaseScraper):
 
     def _fetch_core_metadata(self) -> dict[str, dict]:
         """Fetch per-core metadata from libretro-core-info .info files."""
-        import json
-
         from .coreinfo_scraper import CORE_SYSTEM_MAP
 
-        url = "https://api.github.com/repos/libretro/libretro-core-info/git/trees/master?recursive=1"
-        try:
-            req = urllib.request.Request(url, headers=github_headers())
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                tree = json.loads(resp.read())
-        except (urllib.error.URLError, json.JSONDecodeError) as e:
-            raise RuntimeError(f"cannot list libretro-core-info: {e}") from e
-
-        info_files = [
-            item["path"]
-            for item in tree.get("tree", [])
-            if item["path"].endswith("_libretro.info")
-        ]
-        if not info_files:
-            raise RuntimeError(f"no .info file in {url}")
-
         metadata: dict[str, dict] = {}
-        for filename in info_files:
+        for filename in _core_info_files():
             core_name = filename.replace("_libretro.info", "")
             system_slug = CORE_SYSTEM_MAP.get(core_name)
             if not system_slug or system_slug in metadata:
