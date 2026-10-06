@@ -1345,6 +1345,15 @@ def generate_emulator_pack(
                     ),
                     {"name": archive_name},
                 )
+                if required_only and archive_entry.get("required") is False and all(
+                    member.get("required") is False
+                    for member in files
+                    if member.get("archive") == archive_name
+                ):
+                    # Optional as a whole: its own entry and every member it
+                    # carries. geolith's _Required pack held neocd.zip and
+                    # irrmaze.zip all the same.
+                    continue
                 local_path, status = resolve_file(
                     archive_entry,
                     db,
