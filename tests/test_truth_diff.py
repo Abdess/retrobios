@@ -75,12 +75,62 @@ class ADiffThatComparedNothingFails(unittest.TestCase):
                 self.assertIn("skip", proc.stderr)
 
 
+class OneNameSeveralFiles(unittest.TestCase):
+    """Dolphin's three IPL.bin differ only by path; the model kept one."""
+
+    REGIONS = {"USA": "a" * 32, "EUR": "b" * 32, "JAP": "c" * 32}
+
+    def _system(self) -> dict:
+        from truth import _merge_file_into_system
+
+        system: dict = {}
+        for core in ("dolphin", "ishiiruka"):
+            for region, md5 in self.REGIONS.items():
+                _merge_file_into_system(
+                    system,
+                    {"name": "IPL.bin", "path": f"GC/{region}/IPL.bin", "md5": md5},
+                    core,
+                    None,
+                )
+        _merge_file_into_system(system, {"name": "IPL.bin"}, "other", None)
+        return system
+
+    def test_a_core_declaring_a_name_twice_declares_two_files(self):
+        files = self._system()["files"]
+        self.assertEqual(
+            sorted(f["path"] for f in files),
+            ["GC/EUR/IPL.bin", "GC/JAP/IPL.bin", "GC/USA/IPL.bin"],
+        )
+        for entry in files:
+            self.assertEqual(entry["_cores"] - {"other"}, {"dolphin", "ishiiruka"})
+
+    def test_revisions_under_one_name_and_no_path_stay_one_file(self):
+        from truth import _merge_file_into_system
+
+        system: dict = {}
+        for md5 in ("a" * 32, "b" * 32):
+            _merge_file_into_system(
+                system, {"name": "MT32_CONTROL.ROM", "md5": md5}, "dosbox", None
+            )
+        self.assertEqual(len(system["files"]), 1)
+
+    def test_the_diff_pairs_each_by_destination(self):
+        from truth import _diff_system
+
+        scraped = {"files": [
+            {"name": "IPL.bin", "destination": f"dolphin-emu/Sys/GC/{region}/IPL.bin",
+             "md5": md5}
+            for region, md5 in self.REGIONS.items()
+        ]}
+        self.assertEqual(_diff_system(self._system(), scraped), {})
+
+
 class RenameMatching(unittest.TestCase):
     def test_a_shared_sha1_pairs_the_two_names(self):
         truth = [_entry("bios_CD_U.bin", sha1="a" * 40)]
         scraped = {"rom1.bin": _entry("ROM1.bin", sha1="a" * 40)}
         matched_truth, matched_scraped = _match_renames(truth, scraped)
-        self.assertEqual(matched_truth, {"bios_cd_u.bin"})
+        self.assertEqual(matched_truth, {0})
         self.assertEqual(matched_scraped, {"rom1.bin"})
 
     def test_md5_and_crc32_pair_them_too(self):
@@ -90,12 +140,12 @@ class RenameMatching(unittest.TestCase):
                 truth = [_entry("a.bin", **{algorithm: value})]
                 scraped = {"b.bin": _entry("b.bin", **{algorithm: value})}
                 matched_truth, _ = _match_renames(truth, scraped)
-                self.assertEqual(matched_truth, {"a.bin"})
+                self.assertEqual(matched_truth, {0})
 
     def test_hash_comparison_ignores_case(self):
         truth = [_entry("a.bin", sha1="AbCdEf" + "0" * 34)]
         scraped = {"b.bin": _entry("b.bin", sha1="abcdef" + "0" * 34)}
-        self.assertEqual(_match_renames(truth, scraped)[0], {"a.bin"})
+        self.assertEqual(_match_renames(truth, scraped)[0], {0})
 
     def test_different_content_is_not_a_rename(self):
         truth = [_entry("a.bin", sha1="a" * 40)]
@@ -135,14 +185,14 @@ class RenameMatching(unittest.TestCase):
             "d.bin": _entry("d.bin", sha1="c" * 40),
         }
         matched_truth, matched_scraped = _match_renames(truth, scraped)
-        self.assertEqual(matched_truth, {"a.bin", "c.bin"})
+        self.assertEqual(matched_truth, {0, 1})
         self.assertEqual(matched_scraped, {"b.bin", "d.bin"})
 
     def test_an_unrelated_file_beside_a_rename_stays_unmatched(self):
         truth = [_entry("a.bin", sha1="a" * 40), _entry("lonely.bin", sha1="f" * 40)]
         scraped = {"b.bin": _entry("b.bin", sha1="a" * 40)}
         matched_truth, _ = _match_renames(truth, scraped)
-        self.assertEqual(matched_truth, {"a.bin"})
+        self.assertEqual(matched_truth, {0})
         self.assertNotIn("lonely.bin", matched_truth)
 
 

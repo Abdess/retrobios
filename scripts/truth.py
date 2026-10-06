@@ -103,15 +103,27 @@ def _merge_file_into_system(
     emu_name: str,
     db: dict | None,
 ) -> None:
-    """Merge a file entry into a system's file list, deduplicating by name."""
+    """Merge a file entry into a system's file list, deduplicating by name.
+
+    A name is one file across cores, whatever path each core gives it. A
+    core that declares the same name under two paths declares two files:
+    Dolphin's three IPL.bin differ only by GC/USA, GC/EUR, GC/JAP. Under
+    one path or none, its declarations are revisions of one file.
+    """
     files = system.setdefault("files", [])
     name_lower = file_entry["name"].lower()
+    path = str(file_entry.get("path") or "").casefold()
 
-    existing = None
-    for f in files:
-        if f["name"].lower() == name_lower:
-            existing = f
-            break
+    def other_path(f: dict) -> str:
+        return str(f.get("path") or "").casefold()
+
+    same_name = [f for f in files if f["name"].lower() == name_lower]
+    existing = (
+        next((f for f in same_name if path and other_path(f) == path), None)
+        or next((f for f in same_name if emu_name not in f.get("_cores", ())), None)
+        # Revisions accepted under one name and no path fill one slot.
+        or next((f for f in same_name if not path or not other_path(f)), None)
+    )
 
     if existing is not None:
         existing["_cores"] = existing.get("_cores", set()) | {emu_name}
@@ -418,7 +430,7 @@ def generate_platform_truth(
 
 def _match_renames(
     unmatched_truth: list[dict], unmatched_scraped: dict
-) -> tuple[set[str], set[str]]:
+) -> tuple[set[int], set]:
     """Pair files a platform renamed with the truth entry they came from.
 
     A platform is free to call a file whatever it likes -- Batocera ships
@@ -427,51 +439,62 @@ def _match_renames(
     is one file under two names, and counting it as both missing and extra
     would report a gap that does not exist.
 
-    Returns the truth names and scraped keys that pair up.
+    Returns the positions in unmatched_truth and the scraped keys that pair
+    up: a name does not identify a truth entry, two can share it.
     """
     # Hash-based fallback: detect platform renames (e.g. Batocera ROM → ROM1)
     # If an unmatched scraped file shares a hash with an unmatched truth file,
     # it's the same file under a different name: a platform rename, not a gap.
-    rename_matched_truth: set[str] = set()
-    rename_matched_scraped: set[str] = set()
+    rename_matched_truth: set[int] = set()
+    rename_matched_scraped: set = set()
 
     if unmatched_truth and unmatched_scraped:
         # Build hash → truth file index for unmatched truth files
-        truth_hash_index: dict[str, dict] = {}
-        for fe in unmatched_truth:
+        truth_hash_index: dict[str, int] = {}
+        for position, fe in enumerate(unmatched_truth):
             for h in ("sha1", "md5", "crc32"):
                 val = fe.get(h)
                 if val and isinstance(val, str):
-                    truth_hash_index[val.lower()] = fe
+                    truth_hash_index[val.lower()] = position
 
         for s_key, s_entry in unmatched_scraped.items():
             for h in ("sha1", "md5", "crc32"):
                 s_val = s_entry.get(h)
                 if not s_val or not isinstance(s_val, str):
                     continue
-                t_entry = truth_hash_index.get(s_val.lower())
-                if t_entry is not None:
+                position = truth_hash_index.get(s_val.lower())
+                if position is not None:
                     # Rename detected. Count as matched
-                    rename_matched_truth.add(t_entry["name"].lower())
+                    rename_matched_truth.add(position)
                     rename_matched_scraped.add(s_key)
                     break
 
     return rename_matched_truth, rename_matched_scraped
 
 
-def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
-    """Compare files between truth and scraped for a single system."""
-    # Build truth index: name.lower() -> entry, alias.lower() -> entry
-    truth_index: dict[str, dict] = {}
-    for fe in truth_sys.get("files", []):
-        truth_index[fe["name"].lower()] = fe
-        for alias in fe.get("aliases", []):
-            truth_index[alias.lower()] = fe
+def _hash_set(entry: dict) -> set[str]:
+    values: set[str] = set()
+    for h in ("sha1", "md5", "crc32"):
+        value = entry.get(h) or []
+        values.update(str(v).lower() for v in (value if isinstance(value, list) else [value]))
+    return values
 
-    # Build scraped index: name.lower() -> entry
-    scraped_index: dict[str, dict] = {}
-    for fe in scraped_sys.get("files", []):
-        scraped_index[fe["name"].lower()] = fe
+
+def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
+    """Compare files between truth and scraped for a single system.
+
+    A name can stand for several files of one system (Dolphin's IPL.bin
+    under GC/USA, GC/EUR and GC/JAP), so each scraped entry is paired with
+    the same-named truth entry at its destination first, and an entry
+    never answers for two.
+    """
+    truth_files = truth_sys.get("files", [])
+    truth_index: dict[str, list[int]] = {}
+    for position, fe in enumerate(truth_files):
+        for key in [fe["name"], *fe.get("aliases", [])]:
+            truth_index.setdefault(key.lower(), []).append(position)
+
+    scraped_files = scraped_sys.get("files", [])
 
     missing: list[dict] = []
     hash_mismatch: list[dict] = []
@@ -479,14 +502,35 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     extra_phantom: list[dict] = []
     extra_unprofiled: list[dict] = []
 
-    matched_truth_names: set[str] = set()
+    def _tail(value: object) -> str:
+        return str(value or "").replace("\\", "/").casefold()
 
-    # Compare scraped files against truth
-    for s_key, s_entry in scraped_index.items():
-        t_entry = truth_index.get(s_key)
-        if t_entry is None:
+    matched: set[int] = set()
+    unmatched_scraped: dict[int, dict] = {}
+    for s_position, s_entry in enumerate(scraped_files):
+        candidates = [
+            p for p in truth_index.get(s_entry["name"].lower(), []) if p not in matched
+        ]
+        if not candidates:
+            if s_entry["name"].lower() not in truth_index:
+                unmatched_scraped[s_position] = s_entry
             continue
-        matched_truth_names.add(t_entry["name"].lower())
+        destination = _tail(s_entry.get("destination"))
+        s_hashes = _hash_set(s_entry)
+
+        def rank(position: int) -> tuple[bool, bool, bool, bool]:
+            t = truth_files[position]
+            t_path = _tail(t.get("path"))
+            return (
+                bool(t_path) and destination.endswith(t_path),
+                "/" in t_path and t_path.rsplit("/", 1)[0] == destination.rpartition("/")[0],
+                t["name"].lower() == s_entry["name"].lower(),
+                bool(s_hashes & _hash_set(t)),
+            )
+
+        t_position = max(candidates, key=rank)
+        matched.add(t_position)
+        t_entry = truth_files[t_position]
 
         # Hash comparison
         for h in ("sha1", "md5", "crc32"):
@@ -525,23 +569,16 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
 
     # Collect unmatched files from both sides
     unmatched_truth = [
-        fe
-        for fe in truth_sys.get("files", [])
-        if fe["name"].lower() not in matched_truth_names
+        fe for position, fe in enumerate(truth_files) if position not in matched
     ]
-    unmatched_scraped = {
-        s_key: s_entry
-        for s_key, s_entry in scraped_index.items()
-        if s_key not in truth_index
-    }
 
     rename_matched_truth, rename_matched_scraped = _match_renames(
         unmatched_truth, unmatched_scraped
     )
 
     # Truth files not matched (by name, alias, or hash) -> missing
-    for fe in unmatched_truth:
-        if fe["name"].lower() not in rename_matched_truth:
+    for position, fe in enumerate(unmatched_truth):
+        if position not in rename_matched_truth:
             missing.append(
                 {
                     "name": fe["name"],
@@ -553,9 +590,14 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     # Scraped files not in truth -> extra
     coverage = truth_sys.get("_coverage", {})
     has_unprofiled = bool(coverage.get("cores_unprofiled"))
+    # An archive declared once per ROM it holds (zipped_file) is still one
+    # file.
+    seen_extra: set[tuple[str, str]] = set()
     for s_key, s_entry in unmatched_scraped.items():
-        if s_key in rename_matched_scraped:
+        key = (s_entry["name"].lower(), _tail(s_entry.get("destination")))
+        if s_key in rename_matched_scraped or key in seen_extra:
             continue
+        seen_extra.add(key)
         entry = {"name": s_entry["name"]}
         if has_unprofiled:
             extra_unprofiled.append(entry)
