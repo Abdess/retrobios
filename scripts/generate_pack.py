@@ -1713,19 +1713,13 @@ def generate_split_packs(
             results.append(zip_path)
 
     # Warn about extras that couldn't be distributed (emulators without systems: field)
-    all_groups_match = set()
-    for group_system_ids in groups.values():
-        group_norm = {_norm_system_id(s) for s in group_system_ids}
-        all_groups_match |= set(group_system_ids) | group_norm
-    undistributed = [
-        fe
-        for fe in all_extras
-        if not (
-            set(_extra_system_ids(fe))
-            | {_norm_system_id(s) for s in _extra_system_ids(fe)}
+    distributed = {
+        id(fe)
+        for fe in _extras_for_systems(
+            all_extras, [s for ids in groups.values() for s in ids]
         )
-        & all_groups_match
-    ]
+    }
+    undistributed = [fe for fe in all_extras if id(fe) not in distributed]
     if undistributed:
         emus = sorted({fe.get("source_emulator", "?") for fe in undistributed})
         print(
