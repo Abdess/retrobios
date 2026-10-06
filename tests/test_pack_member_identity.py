@@ -42,5 +42,24 @@ class MembersMustBeKnown(unittest.TestCase):
         self.assertTrue(any("garbled.bin" in e for e in manifest["errors"]))
 
 
+class SchemaAcceptsEveryStatus(unittest.TestCase):
+    """verified_members reached every pack manifest and the schema refused it."""
+
+    def test_each_status_packverify_writes_is_in_the_schema(self):
+        import json
+        import re
+
+        source = (REPO_ROOT / "scripts" / "packverify.py").read_text(encoding="utf-8")
+        written = set(re.findall(r'status = "([a-z_]+)"', source))
+        schema = json.loads(
+            (REPO_ROOT / "schemas" / "pack-manifest.schema.json").read_text(encoding="utf-8")
+        )
+        allowed = set(
+            schema["properties"]["files"]["items"]["properties"]["status"]["enum"]
+        )
+        self.assertTrue(written)
+        self.assertEqual(sorted(written - allowed), [])
+
+
 if __name__ == "__main__":
     unittest.main()

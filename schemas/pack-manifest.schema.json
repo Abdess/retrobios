@@ -21,7 +21,7 @@
           "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
           "md5": { "type": "string", "pattern": "^[a-f0-9]{32}$" },
           "size": { "type": "integer", "minimum": 0 },
-          "status": { "enum": ["verified", "verified_md5", "verified_rebuild", "verified_data", "untracked"] },
+          "status": { "enum": ["verified", "verified_md5", "verified_rebuild", "verified_data", "verified_members", "untracked"] },
           "name": { "type": "string" }
         }
       }
