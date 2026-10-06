@@ -1219,6 +1219,38 @@ def _archive_is_optional(archive_entry: dict, archive_name: str, files: list[dic
     )
 
 
+def _pack_data_tree(
+    zf: zipfile.ZipFile,
+    local_cache: str,
+    dd_dest: str,
+    seen_destinations: set[str],
+    seen_parents: set[str],
+    seen_lower: set[str],
+) -> int:
+    """Write one data directory into an emulator pack, under its shared lock.
+
+    A refresh swaps the tree by rename; without the lock a walk half done
+    read the old tree and wrote files of the new one.
+    """
+    added = 0
+    with cache_lock(local_cache, shared=True):
+        for root, _dirs, filenames in os.walk(local_cache):
+            for fname in filenames:
+                src = os.path.join(root, fname)
+                rel = os.path.relpath(src, local_cache)
+                full = f"{dd_dest}/{rel}" if dd_dest else rel
+                if full.lower() in seen_lower or _has_path_conflict(
+                    full, seen_destinations, seen_parents
+                ):
+                    continue
+                seen_destinations.add(full)
+                _register_path(full, seen_destinations, seen_parents)
+                seen_lower.add(full.lower())
+                _add_pack_member(zf, src, full)
+                added += 1
+    return added
+
+
 def generate_emulator_pack(
     profile_names: list[str],
     emulators_dir: str,
@@ -1303,20 +1335,9 @@ def generate_emulator_pack(
                     prefix = pack_structure.get(mode_key, "")
                     if prefix:
                         dd_dest = f"{prefix}/{dd_dest}" if dd_dest else prefix
-                for root, _dirs, filenames in os.walk(local_cache):
-                    for fname in filenames:
-                        src = os.path.join(root, fname)
-                        rel = os.path.relpath(src, local_cache)
-                        full = f"{dd_dest}/{rel}" if dd_dest else rel
-                        if full.lower() in seen_lower:
-                            continue
-                        if _has_path_conflict(full, seen_destinations, seen_parents):
-                            continue
-                        seen_destinations.add(full)
-                        _register_path(full, seen_destinations, seen_parents)
-                        seen_lower.add(full.lower())
-                        _add_pack_member(zf, src, full)
-                        total_files += 1
+                total_files += _pack_data_tree(
+                    zf, local_cache, dd_dest, seen_destinations, seen_parents, seen_lower
+                )
 
             if not files:
                 print(f"  No files needed for {profile.get('emulator', emu_name)}")

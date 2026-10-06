@@ -139,5 +139,32 @@ class PackWalkHoldsTheCache(unittest.TestCase):
                 fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
                 fcntl.flock(handle, fcntl.LOCK_UN)
 
+class EmulatorPackHoldsTheCache(unittest.TestCase):
+    def test_the_walk_holds_a_shared_lock(self):
+        import fcntl  # noqa: PLC0415
+
+        from generate_pack import _pack_data_tree  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            cache = Path(tmp) / "data" / "scummvm"
+            cache.mkdir(parents=True)
+            (cache / "a.dat").write_bytes(b"a")
+            held: list[bool] = []
+
+            def member(_zf, _src, _dest):
+                with open(cache.with_name(".scummvm.lock"), "a") as handle:
+                    try:
+                        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    except BlockingIOError:
+                        held.append(True)
+                    else:
+                        fcntl.flock(handle, fcntl.LOCK_UN)
+                        held.append(False)
+
+            with mock.patch("generate_pack._add_pack_member", member):
+                _pack_data_tree(None, str(cache), "scummvm", set(), set(), set())
+            self.assertEqual(held, [True])
+
+
 if __name__ == "__main__":
     unittest.main()
