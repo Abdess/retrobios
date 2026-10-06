@@ -13,7 +13,7 @@ platforms/               one YAML config per platform (scraped from upstream)
   _data_dirs.yml         data directory definitions (Dolphin Sys, PPSSPP...)
   targets/               hardware target configs + _overrides.yml
 provenance/              dump-catalog snapshots (redump, no-intro, tosec)
-scripts/                 all tooling (Python, pyyaml only dependency)
+scripts/                 all tooling (Python, pyyaml; jsonschema for schema checks)
   scraper/               upstream scrapers (libretro, batocera, recalbox...)
   scraper/targets/       hardware target scrapers (retroarch, batocera, emudeck, retropie)
   exporter/              native format exporters (batocera, recalbox, emudeck...)
