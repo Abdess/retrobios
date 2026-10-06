@@ -49,7 +49,7 @@ _NAME_OVERRIDES: dict[str, str] = {
 _SKIP = {"retroarch_maincfg", "retroarch"}
 
 
-def _fetch(url: str) -> str | None:
+def _fetch(url: str) -> str:
     headers = {"User-Agent": "retrobios-scraper/1.0"}
     token = os.environ.get("GITHUB_TOKEN")
     if token and "api.github.com" in url:
@@ -59,21 +59,18 @@ def _fetch(url: str) -> str | None:
         with urllib.request.urlopen(req, timeout=30) as resp:
             return resp.read().decode("utf-8")
     except urllib.error.URLError as e:
-        print(f"  skip {url}: {e}", file=sys.stderr)
-        return None
+        # A target written from a failed request loses its cores in silence.
+        raise RuntimeError(f"cannot fetch {url}: {e}") from e
 
 
 def _list_emuscripts(api_url: str) -> list[str]:
     """List emulator script filenames from GitHub API."""
-    raw = _fetch(api_url)
-    if not raw:
-        return []
-    entries = json.loads(raw)
-    names = []
-    for e in entries:
-        name = e.get("name", "")
-        if name.endswith(".sh") or name.endswith(".ps1"):
-            names.append(name)
+    entries = json.loads(_fetch(api_url))
+    names = [
+        e["name"] for e in entries if e.get("name", "").endswith((".sh", ".ps1"))
+    ]
+    if not names:
+        raise RuntimeError(f"no emulator scripts listed at {api_url}")
     return names
 
 
@@ -136,15 +133,13 @@ class Scraper(BaseTargetScraper):
         import os
 
         target_path = os.path.join("platforms", "targets", "retroarch.yml")
-        if not os.path.exists(target_path):
-            return []
         with open(target_path) as f:
             data = yaml_load(f) or {}
         # Find a target matching the architecture
-        for tname, tinfo in data.get("targets", {}).items():
-            if tinfo.get("architecture") == arch:
-                return tinfo.get("cores", [])
-        return []
+        for tinfo in data.get("targets", {}).values():
+            if tinfo.get("architecture") == arch and tinfo.get("cores"):
+                return tinfo["cores"]
+        raise RuntimeError(f"no {arch} core list in {target_path}")
 
     def fetch_targets(self) -> dict:
         steamos_cores = self._fetch_cores_for_target(STEAMOS_API, "SteamOS")

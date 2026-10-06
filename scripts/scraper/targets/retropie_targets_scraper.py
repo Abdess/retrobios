@@ -59,7 +59,7 @@ _MODULE_ID_RE = re.compile(r'rp_module_id\s*=\s*["\']([^"\']+)["\']')
 _MODULE_FLAGS_RE = re.compile(r'rp_module_flags\s*=\s*["\']([^"\']*)["\']')
 
 
-def _fetch(url: str, accept: str = "text/plain") -> str | None:
+def _fetch(url: str, accept: str = "text/plain") -> str:
     headers = {"User-Agent": "retrobios-scraper/1.0", "Accept": accept}
     token = os.environ.get("GITHUB_TOKEN")
     if token and "api.github.com" in url:
@@ -69,8 +69,8 @@ def _fetch(url: str, accept: str = "text/plain") -> str | None:
         with urllib.request.urlopen(req, timeout=30) as resp:
             return resp.read().decode("utf-8")
     except urllib.error.URLError as e:
-        print(f"  skip {url}: {e}", file=sys.stderr)
-        return None
+        # A target written from a failed request loses its cores in silence.
+        raise RuntimeError(f"cannot fetch {url}: {e}") from e
 
 
 def _is_available(flags_str: str, platform: str) -> bool:
@@ -111,32 +111,24 @@ class Scraper(BaseTargetScraper):
 
     def _list_scriptmodules(self) -> list[str]:
         """Return list of .sh filenames from the libretrocores directory."""
-        raw = _fetch(self.url, accept="application/vnd.github+json")
-        if raw is None:
-            return []
-        try:
-            entries = json.loads(raw)
-        except json.JSONDecodeError as e:
-            print(f"  JSON parse error: {e}", file=sys.stderr)
-            return []
-        return [e["name"] for e in entries if e.get("name", "").endswith(".sh")]
+        entries = json.loads(_fetch(self.url, accept="application/vnd.github+json"))
+        names = [e["name"] for e in entries if e.get("name", "").endswith(".sh")]
+        if not names:
+            raise RuntimeError(f"no scriptmodules listed at {self.url}")
+        return names
 
-    def _fetch_module(self, filename: str) -> str | None:
+    def _fetch_module(self, filename: str) -> str:
         return _fetch(f"{RAW_BASE_URL}{filename}")
 
     def fetch_targets(self) -> dict:
         print("  listing RetroPie scriptmodules...", file=sys.stderr)
         filenames = self._list_scriptmodules()
-        if not filenames:
-            print("  warning: no scriptmodules found", file=sys.stderr)
 
         # {platform: [core_id, ...]}
         platform_cores: dict[str, list[str]] = {p: [] for p in PLATFORM_FLAGS}
 
         for filename in filenames:
             content = self._fetch_module(filename)
-            if content is None:
-                continue
             module_id, flags = _parse_module(content)
             if not module_id:
                 print(f"  warning: no rp_module_id in {filename}", file=sys.stderr)
