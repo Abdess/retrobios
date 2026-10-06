@@ -20,6 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    _norm_system_id,
     get_mame_clone_map,
     list_registered_platforms,
     load_database,
@@ -44,6 +45,9 @@ def load_platform_files(
     """Collect declared filenames + data_directories per system.
 
     Restricted to *platforms* when given, otherwise every registered platform.
+    Keyed by the normalized system ID: a profile writes `sega-megacd` where
+    RetroArch writes `sega-mega-cd`, and an exact match called 924 declared
+    files undeclared.
     """
     declared = {}
     platform_data_dirs = {}
@@ -55,42 +59,47 @@ def load_platform_files(
             for fe in system.get("files", []):
                 name = fe.get("name", "")
                 if name:
-                    declared.setdefault(sys_id, set()).add(name)
+                    declared.setdefault(_norm_system_id(sys_id), set()).add(name)
             for dd in system.get("data_directories", []):
                 ref = dd.get("ref", "")
                 if ref:
-                    platform_data_dirs.setdefault(sys_id, set()).add(ref)
+                    platform_data_dirs.setdefault(_norm_system_id(sys_id), set()).add(ref)
     return declared, platform_data_dirs
 
 
 def _build_supplemental_index(
     data_root: str = "data", bios_root: str = "bios"
 ) -> set[str]:
-    """Build a set of filenames and directory names in data/ and inside bios/ ZIPs."""
+    """Build a set of filenames and directory names in data/ and inside bios/ ZIPs.
+
+    A directory is indexed only with its trailing slash: a bare name matched a
+    file entry of the same name, and BasiliskII's required `ROM` read as held
+    because cpcemu keeps a directory called ROM.
+    """
     names: set[str] = set()
     root_path = Path(data_root)
     if root_path.is_dir():
         for fpath in root_path.rglob("*"):
             if fpath.name.startswith("."):
                 continue
-            names.add(fpath.name)
-            names.add(fpath.name.lower())
+            if fpath.is_file():
+                names.add(fpath.name)
+                names.add(fpath.name.lower())
+            else:
+                names.add(fpath.name + "/")
+                names.add(fpath.name.lower() + "/")
             if fpath.is_dir():
                 # Also index relative path from data/subdir/ for directory entries
                 parts = fpath.relative_to(root_path).parts
                 if len(parts) > 1:
                     rel = "/".join(parts[1:])
-                    names.add(rel)
                     names.add(rel + "/")
-                    names.add(rel.lower())
                     names.add(rel.lower() + "/")
     bios_path = Path(bios_root)
     if bios_path.is_dir():
         # Index directory names for directory-type entries (e.g., "nestopia/samples/moepro/")
         for dpath in bios_path.rglob("*"):
             if dpath.is_dir() and not dpath.name.startswith("."):
-                names.add(dpath.name)
-                names.add(dpath.name.lower())
                 names.add(dpath.name + "/")
                 names.add(dpath.name.lower() + "/")
         import zipfile
@@ -168,13 +177,52 @@ def _resolve_source(
             by_name_lower[canonical.lower()]
         ):
             return "bios"
-    # data/ supplemental index
+    # data/ supplemental index: a directory entry looks for a directory, a
+    # file entry for a file.
     if data_names:
-        if fname in data_names or key in data_names:
-            return "data"
-        if basename and (basename in data_names or basename.lower() in data_names):
+        is_directory = fname.endswith("/") or (file_entry or {}).get("type") == "directory"
+        looked_up = [fname, key] + ([basename, basename.lower()] if basename else [])
+        if is_directory:
+            looked_up = [name.rstrip("/") + "/" for name in looked_up]
+        if any(name in data_names for name in looked_up):
             return "data"
     return None
+
+
+def entry_source(f: dict, index: dict) -> str | None:
+    """Where the collection holds a profile entry, or None.
+
+    By name, path and alias, then by any hash the entry declares. The gap
+    report and the site pages read this one function, so a file is held or
+    missing in the same way on both.
+    """
+    by_name, by_name_lower = index["by_name"], index["by_name_lower"]
+    data_names, by_path_suffix = index.get("data_names"), index["by_path_suffix"]
+    db_files = index["db_files"]
+    fname = f.get("name", "")
+    path_field = f.get("path") or ""
+    for candidate in [fname, *([path_field] if path_field != fname else []),
+                      *(f.get("aliases") or [])]:
+        if not candidate:
+            continue
+        source = _resolve_source(
+            candidate, by_name, by_name_lower, data_names, by_path_suffix, f, db_files,
+        )
+        if source is not None:
+            return source
+
+    def values(field: str) -> list[str]:
+        raw = f.get(field) or []
+        return [str(v).lower() for v in (raw if isinstance(raw, list) else [raw]) if v]
+
+    held = (
+        any(index["by_md5"].get(v) for v in parse_md5_list(f.get("md5")))
+        or any(v in db_files for v in values("sha1"))
+        # rust_dos names its SC-55 ROMs by sha256 alone
+        or any(v in index["by_sha256"] for v in values("sha256"))
+        or any(index["by_crc32"].get(v) for v in values("crc32"))
+    )
+    return "bios" if held else None
 
 
 def _resolve_archive_source(
@@ -207,10 +255,7 @@ def _cross_reference_profile(
     """
     by_name = index["by_name"]
     by_name_lower = index["by_name_lower"]
-    by_md5 = index["by_md5"]
-    by_crc32 = index["by_crc32"]
     by_path_suffix = index["by_path_suffix"]
-    db_files = index["db_files"]
     data_names = index["data_names"]
     all_declared = index["all_declared"]
     emu_files = profile.get("files", [])
@@ -225,7 +270,7 @@ def _cross_reference_profile(
     else:
         platform_names = set()
         for sys_id in systems:
-            platform_names.update(declared.get(sys_id, set()))
+            platform_names.update(declared.get(_norm_system_id(sys_id), set()))
 
     gaps = []
     covered = []
@@ -339,44 +384,7 @@ def _cross_reference_profile(
         if storage in ("release", "large_file"):
             source = "large_file"
         else:
-            source = _resolve_source(
-                fname, by_name, by_name_lower, data_names, by_path_suffix,
-                f, db_files,
-            )
-            if source is None:
-                path_field = f.get("path", "")
-                if path_field and path_field != fname:
-                    source = _resolve_source(
-                        path_field, by_name, by_name_lower,
-                        data_names, by_path_suffix, f, db_files,
-                    )
-            # Try the alternate names the emulator accepts, like
-            # resolve_local_file does
-            if source is None:
-                for alias in f.get("aliases") or []:
-                    source = _resolve_source(
-                        alias, by_name, by_name_lower,
-                        data_names, by_path_suffix, f, db_files,
-                    )
-                    if source is not None:
-                        break
-            # Try MD5 hash match
-            if source is None:
-                for md5_val in parse_md5_list(f.get("md5")):
-                    if by_md5.get(md5_val):
-                        source = "bios"
-                        break
-            # Try SHA1 hash match
-            if source is None:
-                raw_sha1 = f.get("sha1", "")
-                sha1_values = raw_sha1 if isinstance(raw_sha1, list) else [raw_sha1]
-                if any(value and value in db_files for value in sha1_values):
-                    source = "bios"
-            # Try CRC32 hash match
-            if source is None:
-                crc32 = str(f.get("crc32", "")).lower()
-                if crc32 and by_crc32.get(crc32):
-                    source = "bios"
+            source = entry_source(f, index)
             if source is None:
                 source = "missing"
 
@@ -442,6 +450,7 @@ def cross_reference(
     by_name_lower = {k.lower(): k for k in by_name}
     by_md5 = db.get("indexes", {}).get("by_md5", {})
     by_crc32 = db.get("indexes", {}).get("by_crc32", {})
+    by_sha256 = db.get("indexes", {}).get("by_sha256", {})
     by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
     db_files = db.get("files", {})
     report = {}
@@ -451,6 +460,7 @@ def cross_reference(
         "by_name_lower": by_name_lower,
         "by_md5": by_md5,
         "by_crc32": by_crc32,
+        "by_sha256": by_sha256,
         "by_path_suffix": by_path_suffix,
         "db_files": db_files,
         "data_names": data_names,

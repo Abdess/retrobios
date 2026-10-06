@@ -5562,11 +5562,13 @@ struct BurnDriver BurnDrvneogeo = {
                 with open(os.path.join(plat_dir, f"{name}.yml"), "w") as f:
                     yaml.dump(cfg, f)
 
+            # Keyed by the normalized system ID, as profiles spell systems
+            # differently from platforms.
             everything, _ = load_platform_files(plat_dir)
-            self.assertEqual(everything["shared-system"], {"a.bin", "b.bin"})
+            self.assertEqual(everything["sharedsystem"], {"a.bin", "b.bin"})
 
             only_alpha, _ = load_platform_files(plat_dir, ["alpha"])
-            self.assertEqual(only_alpha["shared-system"], {"a.bin"})
+            self.assertEqual(only_alpha["sharedsystem"], {"a.bin"})
 
 
     def test_227_manifest_injected_compressed(self):
