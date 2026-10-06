@@ -31,6 +31,37 @@
           "files"
         ]
       }
+    },
+    {
+      "comment": "Per-file mode separates the two builds of a dual profile. A profile with only a standalone build has no libretro side to separate it from, and a file marked standalone there drops out of the gap analysis and of the packs of every platform that lists the emulator without standalone_cores.",
+      "if": {
+        "properties": {
+          "type": {
+            "const": "standalone"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      },
+      "then": {
+        "properties": {
+          "files": {
+            "items": {
+              "not": {
+                "properties": {
+                  "mode": {
+                    "const": "standalone"
+                  }
+                },
+                "required": [
+                  "mode"
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   ],
   "properties": {

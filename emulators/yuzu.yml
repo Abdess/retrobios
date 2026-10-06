@@ -27,21 +27,18 @@ files:
   - name: "prod.keys"
     required: true
     path: "switch/"
-    mode: standalone
     note: "Production keys for NCA decryption (master, key area, header, titlekek)"
     source_ref: "src/core/crypto/key_manager.cpp:655-656"
 
   - name: "title.keys"
     required: false
     path: "switch/"
-    mode: standalone
     note: "Per-title encryption keys (rights_id to titlekey mappings)"
     source_ref: "src/core/crypto/key_manager.cpp:659-660"
 
   - name: "console.keys"
     required: false
     path: "switch/"
-    mode: standalone
     note: "Console-specific keys (BIS, SD seed)"
     source_ref: "src/core/crypto/key_manager.cpp:661-662"
 
@@ -49,7 +46,6 @@ files:
     required: false
     path: "switch/"
     size: 160
-    mode: standalone
     note: "Amiibo decryption keys (two InternalKey structs, 0x50 bytes each)"
     source_ref: "src/core/hle/service/nfc/common/amiibo_crypto.cpp:273-294"
 
