@@ -5,7 +5,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-10-05T20:47:58Z",
+  "generated": "2026-10-06T03:26:07Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -250,10 +250,10 @@
       }
     }
   ],
-  "total_files": 580,
-  "total_size": 3467876435,
-  "pack_files": 582,
-  "pack_size": 3467876435,
+  "total_files": 569,
+  "total_size": 3452229095,
+  "pack_files": 571,
+  "pack_size": 3452229095,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -591,10 +591,10 @@
     },
     {
       "dest": "Cemu/otp.bin",
-      "sha1": "f0332b7252e9c01b30bf5d5a63ceb22dc47968aa",
-      "sha256": "93c2e20cc377f2cb0fa9a2ee58c39be22e00baa94b890545e585e53b3eb4039f",
-      "size": 256,
-      "repo_path": "bios/Nintendo/3DS/Citra/sysdata/otp.bin",
+      "sha1": "aa4ebc7f94c22b04945b6c9232547ada10b71f6f",
+      "sha256": "a12993f7fe069098ab6fe1cdb43099a1dfb568223bef08ed5cb43ec93d9ff2de",
+      "size": 1024,
+      "repo_path": "bios/Nintendo/Wii U/otp.bin",
       "cores": [
         "cemu"
       ]
@@ -3513,20 +3513,20 @@
     },
     {
       "dest": "dsi_bios9.bin",
-      "sha1": "db61fa39ddbc5f5ed71fb19cda47609ef0201723",
-      "sha256": "664c608bd6ccfe583e87b3b924afa00f8697dc7ca92eeb6d206d68abb03d2e10",
+      "sha1": "719b9eef33692406d7170ff526069615759c4dfc",
+      "sha256": "6e9f70b51dc4f26289b597f14e2513620c2af964374a95f4c5a62b5cad199afc",
       "size": 65536,
-      "repo_path": "bios/Nintendo/DS/dsi_bios9.bin",
+      "repo_path": "bios/Nintendo/DS/NDS_Bios9i.bin",
       "cores": [
         "melonds"
       ]
     },
     {
       "dest": "dsi_bios7.bin",
-      "sha1": "d2b17224e156ee5e55b5d8d9f323b1c9b86dd951",
-      "sha256": "28a13952901b4065ef3f08c3252b49a00b6525e301b7ddaa3a390b4c7cbef901",
+      "sha1": "c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53",
+      "sha256": "12a03016ba07cfd874fc002df49a2c6eb2414eb7cfa395c2043035ec5e9193e8",
       "size": 65536,
-      "repo_path": "bios/Nintendo/DS/dsi_bios7.bin",
+      "repo_path": "bios/Nintendo/DS/NDS_Bios7i.bin",
       "cores": [
         "melonds"
       ]
@@ -3645,20 +3645,20 @@
     },
     {
       "dest": "scummvm/extra/MT32_CONTROL.ROM",
-      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
-      "sha256": "08d68695e5bff6bbcbb751d6e4453db9f5ead0b5f41e86480798a04376dfe090",
+      "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
+      "sha256": "a73a06c23ed38370e58a11fb1b86f7ea4c547061a60d7aa62bae446235fd2dff",
       "size": 65536,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/mt32_control.rom",
       "cores": [
         "scummvm"
       ]
     },
     {
       "dest": "scummvm/extra/MT32_PCM.ROM",
-      "sha1": "289cc298ad532b702461bfc738009d9ebe8025ea",
-      "sha256": "0dc50190bb7ea3fb212c970346b771a511772b528801e7eda6d27efda8c40698",
-      "size": 1048576,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
+      "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
+      "sha256": "d9164063f293410cf33f2f64cdcea6893b44723fe41938e07ec9aef58b406238",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_mt32.rom",
       "cores": [
         "scummvm"
       ]
@@ -4782,6 +4782,16 @@
       ]
     },
     {
+      "dest": "SCPH-10000.MEC",
+      "sha1": "3f8affbe07024ccd2f5b8374072d0928c583a862",
+      "sha256": "fbbfc6c156266ac7e9afb37f0cc53fb78fadf2f09f580e56b2da57e6539e463b",
+      "size": 4,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.MEC",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
       "dest": "SCPH-30004R.bin",
       "sha1": "8fa040852d4b8688f0c84bcfffc65eb208f2b432",
       "sha256": "ee7ae4cc152588b7da1dab17494a321ceafafaf799769baea4e8a28afa5044b1",
@@ -4812,6 +4822,36 @@
       ]
     },
     {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.NVM",
+      "sha1": "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65",
+      "sha256": "5b255bce650e66efeeb3b0bebc0dff705600d05aa2e076a315d02c6a7ed6ac9a",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.NVM",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.ROM2",
+      "sha1": "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c",
+      "sha256": "8dc012640186c46a39fcdd64a8ab9430080a220bd0630da58c977f35725de5cf",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM2",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-50009_BIOS_V10_CHN_190.ROM1",
+      "sha1": "b284280341f16b1581c28ff81934bfdf403da1f0",
+      "sha256": "ad812eb36b8e7daa6106411e43840f70175f012a7a7dd289965872fe43933cc4",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM1",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
       "dest": "SCPH-70004.BIN",
       "sha1": "434bc0b4eb4827da0773ec0795aadc5162569a07",
       "sha256": "d6653f4e93be2f6f9e9d690a934f26cf0f6ad4e348b69f41ef736732c3a6685b",
@@ -4822,11 +4862,31 @@
       ]
     },
     {
+      "dest": "SCPH-70004.ROM1",
+      "sha1": "cc44355ded232a2ba5309bb24d4cd55af08696b2",
+      "sha256": "b86fbccaa111ca7497630337dafea7da7320fc4f924ada22b92145ef806e7b42",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.ROM1",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
       "dest": "SCPH-70008_BIOS_V12_RUS_200.BIN",
       "sha1": "cce6fac0f7e682ad167e1e828b2d53192c3d5051",
       "sha256": "d6da9154a9954cafd9d3df44609236ba86c197a0b7d75380f952c4cb910b67f6",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.BIN",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
+      "dest": "SCPH-70008_BIOS_V12_RUS_200.NVM",
+      "sha1": "6611151e8f599230cdf19a17318e7e5ddc781961",
+      "sha256": "b1704c7da37f03db017ad7576508c61b250d9ed4f3ceda8732ea91a3034f6cbf",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.NVM",
       "cores": [
         "pcsx2"
       ]
@@ -5572,6 +5632,16 @@
       ]
     },
     {
+      "dest": "ps2-0230a-20080220.nvm",
+      "sha1": "258ad0f26b0b269462bbd9acbb5506d5dfbcc3d5",
+      "sha256": "e017efa804f1f7d4d3da82b67d7370c5be062b4860f1cff4f898f93437d691a0",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.nvm",
+      "cores": [
+        "pcsx2"
+      ]
+    },
+    {
       "dest": "ps2-0230e-20080220.bin",
       "sha1": "9915b5ba56798f4027ac1bd8d10abe0c1c9c326a",
       "sha256": "cb5a91fda0e8e2b2a012c0b4d7db5831281c32a89cd659c6e8f64df1fe204e69",
@@ -5617,46 +5687,6 @@
       "sha256": "afb3ddd3b285c11865ce62d1d47a20e4aa699a2539b31c2629a4a49d2100869b",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0250j-20100415.bin",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "GameIndex.yaml",
-      "sha1": "57369df9ca82a460e596cea7835c5a0797dee668",
-      "sha256": "efa94cb7b9208dc6812bb9407dc986560e523cce57f511eff30942f76b7288bf",
-      "size": 1737799,
-      "repo_path": "bios/Sony/PlayStation 2/.variants/GameIndex.yaml.57369df9",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "ROM2.BIN",
-      "sha1": "5d5ab4313a2d0effe7572bb129193b64cab002c1",
-      "sha256": "7d93fe474fcc98c06a6d96e533f8935e4e707edf0792d3e9d679ea68404375de",
-      "size": 4096,
-      "repo_path": "bios/Sony/PlayStation 2/.variants/ROM2.BIN.5d5ab431",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "SCPH30004R.nvm",
-      "sha1": "1d3caaed7411425c16aee8c35db47b928e31f60b",
-      "sha256": "c598dea13e5bba2fcae69de5b051c15fcd5b25842978be1bb20a86cfff243eaf",
-      "size": 1024,
-      "repo_path": "bios/Sony/PlayStation 2/.variants/SCPH30004R.nvm.5e0200d0",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "patches.zip",
-      "sha1": "2562e542d66db945ccf158d7a221c2a28e3b6be4",
-      "sha256": "df2b384ec29221155e8151fa2ff2dc8f0eef2409a8dce5ee7f7514352ae4058a",
-      "size": 2165576,
-      "repo_path": "bios/Sony/PlayStation 2/.variants/patches.zip.5a4d0a00",
       "cores": [
         "pcsx2"
       ]
@@ -5792,81 +5822,11 @@
       ]
     },
     {
-      "dest": "EROM.BIN",
-      "sha1": "adb4dbb7feb8247811506a38896ddcb789c4b477",
-      "sha256": "f7c4944e3001e3849cdead743e200e009d4d07bd5afb20fb937a7b201895f713",
-      "size": 247968,
-      "repo_path": "bios/Sony/PlayStation 2/EROM.BIN",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "SCPH-10000.MEC",
-      "sha1": "3f8affbe07024ccd2f5b8374072d0928c583a862",
-      "sha256": "fbbfc6c156266ac7e9afb37f0cc53fb78fadf2f09f580e56b2da57e6539e463b",
-      "size": 4,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.MEC",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "SCPH-50009_BIOS_V10_CHN_190.EROM",
-      "sha1": "2ed11fd9333e62e36659565a744330a5902ed5e3",
-      "sha256": "67a6b2779e9320abe24f75ce811acf29e54d6dc06ce65b11341b6d84103de7f8",
-      "size": 3145728,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.EROM",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "SCPH-50009_BIOS_V10_CHN_190.NVM",
-      "sha1": "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65",
-      "sha256": "5b255bce650e66efeeb3b0bebc0dff705600d05aa2e076a315d02c6a7ed6ac9a",
+      "dest": "SCPH30004R.nvm",
+      "sha1": "1d3caaed7411425c16aee8c35db47b928e31f60b",
+      "sha256": "c598dea13e5bba2fcae69de5b051c15fcd5b25842978be1bb20a86cfff243eaf",
       "size": 1024,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.NVM",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "SCPH-50009_BIOS_V10_CHN_190.ROM1",
-      "sha1": "b284280341f16b1581c28ff81934bfdf403da1f0",
-      "sha256": "ad812eb36b8e7daa6106411e43840f70175f012a7a7dd289965872fe43933cc4",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM1",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "SCPH-50009_BIOS_V10_CHN_190.ROM2",
-      "sha1": "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c",
-      "sha256": "8dc012640186c46a39fcdd64a8ab9430080a220bd0630da58c977f35725de5cf",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM2",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "SCPH-70004.EROM",
-      "sha1": "ec0121bb8e2a209044309780d2efc2559c9a0ef1",
-      "sha256": "e5bcd5925c1f22de48d49c3895dd421d167faddc033aac628f5facfba90ceef3",
-      "size": 3145728,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.EROM",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "SCPH-70004.ROM1",
-      "sha1": "cc44355ded232a2ba5309bb24d4cd55af08696b2",
-      "sha256": "b86fbccaa111ca7497630337dafea7da7320fc4f924ada22b92145ef806e7b42",
-      "size": 524288,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.ROM1",
+      "repo_path": "bios/Sony/PlayStation 2/.variants/SCPH30004R.nvm.5e0200d0",
       "cores": [
         "pcsx2"
       ]
@@ -5877,16 +5837,6 @@
       "sha256": "48ea5461a794fbc366798776e1dd5b734a25d0f140d75c23b642d99e48e2b76f",
       "size": 1024,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70006_BIOS_V12_HK_200.NVM",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "SCPH-70008_BIOS_V12_RUS_200.NVM",
-      "sha1": "6611151e8f599230cdf19a17318e7e5ddc781961",
-      "sha256": "b1704c7da37f03db017ad7576508c61b250d9ed4f3ceda8732ea91a3034f6cbf",
-      "size": 1024,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.NVM",
       "cores": [
         "pcsx2"
       ]
@@ -5912,16 +5862,6 @@
       ]
     },
     {
-      "dest": "SCPH-90006_BIOS_VX_HK _230.EROM",
-      "sha1": "6b357e8624095770952fc408cdc6647fa62e0d28",
-      "sha256": "8801922f614b365d9d37557d7a375d06d385e936804943cb2c52abff55a3d254",
-      "size": 3145728,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.EROM",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
       "dest": "SCPH-90006_BIOS_VX_HK _230.NVM",
       "sha1": "465c2738c280eb1864f679c80b55e468bf670057",
       "sha256": "d218113ad67d0c178123b797d31baf7f4ae4a9466251d98b9db4192434d3a5e8",
@@ -5937,56 +5877,6 @@
       "sha256": "1b7c68be427e6f571596ef6b444e8b86d1b4e2a226d62f6bfc86717a798f2317",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.ROM1",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "cheats_ni.zip",
-      "sha1": "dec5e4f137890c338babe13cfb9d41ff869fa721",
-      "sha256": "91d5ae704ff8b6d90165a65f69e9e2be8a9ab9c588c525dc1c9c4ecbbdef1ffd",
-      "size": 42525,
-      "repo_path": "bios/Sony/PlayStation 2/cheats_ni.zip",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "cheats_ws.zip",
-      "sha1": "773b4279d8c8e182dc57e444dbf448a1d115e7e0",
-      "sha256": "d07e3adde4da6a3220363b12d7b066168918225546122643ef7d19fece53b8b1",
-      "size": 1273296,
-      "repo_path": "bios/Sony/PlayStation 2/cheats_ws.zip",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "ps2-0230a-20080220.nvm",
-      "sha1": "258ad0f26b0b269462bbd9acbb5506d5dfbcc3d5",
-      "sha256": "e017efa804f1f7d4d3da82b67d7370c5be062b4860f1cff4f898f93437d691a0",
-      "size": 1024,
-      "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.nvm",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "message.wav",
-      "sha1": "c54f04b63ac6f04e0a0944ef260b5497e4494dbd",
-      "sha256": "dfd8035387a463722ad07af3c91934e0a685f2afa57e31d305f0602656d1edb1",
-      "size": 15696,
-      "repo_path": "bios/Sony/PlayStation 2/resources/sounds/achievements/message.wav",
-      "cores": [
-        "pcsx2"
-      ]
-    },
-    {
-      "dest": "rom1.bin",
-      "sha1": "47d2ec4b342649e4c391043ab915d4435f9d180d",
-      "sha256": "41de2047af8382988bfd568035ff26eec5f1cabc3efe773680546aa00a82857d",
-      "size": 199680,
-      "repo_path": "bios/Sony/PlayStation 2/rom1.bin",
       "cores": [
         "pcsx2"
       ]
