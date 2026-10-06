@@ -573,7 +573,22 @@ class StrongestProfileClaimWins(unittest.TestCase):
         )
         decision = arbitrate(conflict, "existence")
         self.assertEqual(decision.winner.emulator, "yaps2")
-        self.assertIn("armsx2 expected another file", format_decision(decision))
+        # armsx2 names no content: the file at the path answers it too.
+        line = format_decision(decision)
+        self.assertIn("(armsx2, yaps2)", line)
+        self.assertNotIn("expected another file", line)
+
+        pinned = Conflict(
+            conflict.destination,
+            conflict.platform_claim,
+            [claim("armsx2", "a", "md5_exact"), claim("yaps2", "y", "sha1_exact")],
+        )
+        # Both pin content: the tie goes to the first, the other is named.
+        self.assertIn(
+            "yaps2 expected another file",
+            format_decision(arbitrate(pinned, "existence")),
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
