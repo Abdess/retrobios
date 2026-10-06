@@ -148,6 +148,7 @@ platforms:
   retroarch:
     config: retroarch.yml
     status: active
+    extract_to: system/
     logo: https://raw.githubusercontent.com/libretro/RetroArch/master/media/retroarch-vector_invader-only.svg
     scraper: libretro
     source_url: https://raw.githubusercontent.com/libretro/libretro-database/master/dat/System.dat
@@ -182,6 +183,7 @@ platforms:
   batocera:
     config: batocera.yml
     status: active
+    extract_to: /userdata/bios/
     logo: https://raw.githubusercontent.com/batocera-linux/batocera-emulationstation/master/resources/splash_batocera.svg
     scraper: batocera
     source_url: https://raw.githubusercontent.com/batocera-linux/batocera.linux/master/package/batocera/core/batocera-scripts/scripts/batocera-systems
@@ -407,6 +409,7 @@ platforms:
   recalbox:
     config: recalbox.yml
     status: active
+    extract_to: /recalbox/share/bios/
     logo: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/main/svg/recalbox.svg
     scraper: recalbox
     source_url: https://gitlab.com/recalbox/recalbox/-/raw/master/board/recalbox/fsoverlay/recalbox/share_init/system/.emulationstation/es_bios.xml
@@ -620,6 +623,7 @@ platforms:
   retrobat:
     config: retrobat.yml
     status: active
+    extract_to: bios/
     logo: https://raw.githubusercontent.com/RetroBat-Official/retrobat/main/system/resources/retrobat_logo_notext.png
     scraper: retrobat
     source_url: https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/master/batocera-systems/Resources/batocera-systems.json
@@ -808,6 +812,7 @@ platforms:
   emudeck:
     config: emudeck.yml
     status: active
+    extract_to: ~/Emulation/bios/
     logo: https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/icons/EmuDeck.png
     scraper: emudeck
     source_url: https://raw.githubusercontent.com/dragoonDorise/EmuDeck/main/functions/checkBIOS.sh
@@ -838,6 +843,7 @@ platforms:
   lakka:
     config: lakka.yml
     status: active
+    extract_to: /storage/system/
     logo: https://raw.githubusercontent.com/libretro/retroarch-assets/master/src/xmb/flatui/lakka.svg
     scraper: libretro
     inherits_from: retroarch
@@ -854,6 +860,7 @@ platforms:
   retrodeck:
     config: retrodeck.yml
     status: active
+    extract_to: ~/retrodeck/
     logo: https://raw.githubusercontent.com/RetroDECK/RetroDECK/main/res/icon.svg
     scraper: retrodeck
     source_url: https://github.com/RetroDECK/components
@@ -898,6 +905,7 @@ platforms:
   romm:
     config: romm.yml
     status: active
+    extract_to: library/bios/
     logo: https://avatars.githubusercontent.com/u/168586850
     scraper: romm
     source_url: https://raw.githubusercontent.com/rommapp/romm/master/backend/models/fixtures/known_bios_files.json
@@ -945,6 +953,7 @@ platforms:
   rocknix:
     config: rocknix.yml
     status: active
+    extract_to: /storage/roms/bios/
     logo: https://avatars.githubusercontent.com/u/152618023
     scraper: rocknix
     cores: all_libretro
@@ -959,6 +968,7 @@ platforms:
   retropie:
     config: retropie.yml
     status: archived
+    extract_to: ~/RetroPie/BIOS/
     logo: https://avatars.githubusercontent.com/u/11378204
     scraper: retropie
     source: https://github.com/RetroPie/RetroPie-Setup
@@ -975,6 +985,7 @@ platforms:
   bizhawk:
     config: bizhawk.yml
     status: active
+    extract_to: Firmware/
     logo: https://avatars.githubusercontent.com/u/11743303
     scraper: bizhawk
     source_url: https://raw.githubusercontent.com/TASEmulators/BizHawk/master/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs
@@ -1039,6 +1050,7 @@ platforms:
   misterfpga:
     config: misterfpga.yml
     status: active
+    extract_to: /media/fat/games/
     logo: https://avatars.githubusercontent.com/u/47264183
     scraper: misterfpga
     source_url: https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/db/bios_db.json.zip
