@@ -161,6 +161,64 @@ class LargeFileCacheTest(unittest.TestCase):
             str(cached),
         )
 
+    def _serve(self, payload: bytes, gets: list):
+        class _Head(io.BytesIO):
+            headers = {"Content-Length": str(len(payload))}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *exc):
+                return False
+
+        def urlopen(req, timeout=None):
+            if req.get_method() == "HEAD":
+                return _Head()
+            gets.append(req.full_url)
+            return _SlowResponse(payload)
+
+        largefiles.urllib.request.urlopen = urlopen
+
+    def test_a_reuploaded_asset_replaces_the_cached_revision(self):
+        """--clobber put new bytes under the name: the stale copy answered
+        None on every run, without a single request."""
+        cached = Path(self.dir) / "asset.bin"
+        cached.write_bytes(PAYLOAD_A)
+        rebuilt = b"C" * 1000
+        gets: list = []
+        self._serve(rebuilt, gets)
+        result = common.fetch_large_file(
+            "asset.bin", dest_dir=self.dir,
+            expected_sha1=hashlib.sha1(rebuilt).hexdigest(),
+        )
+        self.assertEqual(result, str(cached))
+        self.assertEqual(cached.read_bytes(), rebuilt)
+        self.assertEqual(len(gets), 1)
+
+    def test_a_revision_the_release_still_serves_is_kept(self):
+        cached = Path(self.dir) / "asset.bin"
+        cached.write_bytes(PAYLOAD_A)
+        gets: list = []
+        self._serve(PAYLOAD_A, gets)
+        result = common.fetch_large_file(
+            "asset.bin", dest_dir=self.dir, expected_sha1="00" * 20
+        )
+        self.assertIsNone(result)
+        self.assertEqual(gets, [])
+        self.assertEqual(cached.read_bytes(), PAYLOAD_A)
+
+    def test_a_download_that_does_not_verify_keeps_the_cache(self):
+        cached = Path(self.dir) / "asset.bin"
+        cached.write_bytes(PAYLOAD_A)
+        gets: list = []
+        self._serve(b"D" * 10, gets)
+        result = common.fetch_large_file(
+            "asset.bin", dest_dir=self.dir, expected_sha1="00" * 20
+        )
+        self.assertIsNone(result)
+        self.assertEqual(cached.read_bytes(), PAYLOAD_A)
+        self.assertEqual(os.listdir(self.dir), ["asset.bin"])
+
 
 class HashCacheKeepsEveryDigest(unittest.TestCase):
     """A cache hit must serve the same five digests a fresh hash produces.
