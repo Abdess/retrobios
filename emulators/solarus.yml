@@ -57,6 +57,10 @@ files:
     system: solarus
     category: game_data
     required: false
+    bundled: true
+    size: 600521
+    sha1: "ab035b7804089690018318e4a05f9a8fc59421ff"
+    md5: "1e70da4de91be79b9ccf47209a1fc73f"
     description: "SDL gamepad mappings applied on top of the built-in table"
     source_ref: "src/core/System.cpp:71-99, cmake/AddDefines.cmake:44-49, cmake/AddInstallTargets.cmake:23-28"
     note: >-
