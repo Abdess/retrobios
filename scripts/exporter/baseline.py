@@ -61,9 +61,11 @@ class NativeFile:
         """Which side's content fields describe the file: one side, or both.
 
         Mixing them field by field wrote the truth's size and crc beside the
-        platform's sha1, a record no file satisfies. Both sides are merged
-        only where they agree on some hash; where they contradict, the truth
-        decides alone; where the truth declares none, the platform does.
+        platform's sha1, a record no file satisfies. The truth decides alone
+        only on a contradiction: a hash both sides declare without a value in
+        common, or two declared sizes. Different fields prove nothing: the
+        truth's crc32 beside Batocera's md5 for bios7.bin is one dump, and
+        reading it as a contradiction emptied the md5 the frontend checks.
         """
         truth = {f: set(_hash_values(self.truth or {}, f)) for f in HASH_FIELDS}
         plat = {f: set(_hash_values(self.platform or {}, f)) for f in HASH_FIELDS}
@@ -71,9 +73,13 @@ class NativeFile:
             return "platform"
         if not any(plat.values()):
             return "truth"
-        if any(truth[f] & plat[f] for f in HASH_FIELDS):
+        shared = [f for f in HASH_FIELDS if truth[f] and plat[f]]
+        if any(truth[f] & plat[f] for f in shared):
             return "both"
-        return "truth"
+        t_size = (self.truth or {}).get("size")
+        p_size = (self.platform or {}).get("size")
+        sizes_differ = isinstance(t_size, int) and isinstance(p_size, int) and t_size != p_size
+        return "truth" if shared or sizes_differ else "both"
 
     def hashes(self, field_name: str) -> list[str]:
         """Accepted values for a hash, truth first when it has an opinion.
