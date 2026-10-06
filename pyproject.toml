@@ -16,7 +16,7 @@ dependencies = [
 # and the CI contract check are the only callers, and no user path imports it.
 [project.optional-dependencies]
 dev = [
-    "jsonschema>=4.23",
+    "jsonschema[format-nongpl]>=4.23",
 ]
 # The site build the repo generates and documents. Both were hard
 # requirements of deploy-site.yml and of wiki/release-process.md while being

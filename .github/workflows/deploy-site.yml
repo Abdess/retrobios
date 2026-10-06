@@ -84,7 +84,7 @@ jobs:
 
       # mkdocs-material >= 9.7.5 caps mkdocs < 2; the upper bound keeps a major
       # theme release from changing the site without a deliberate bump here.
-      - run: pip install pyyaml jsonschema==4.26.0 "mkdocs-material>=9.7.5,<10" "pymdown-extensions>=10.14"
+      - run: pip install pyyaml "jsonschema[format-nongpl]==4.26.0" "mkdocs-material>=9.7.5,<10" "pymdown-extensions>=10.14"
 
       - name: Validate data contracts
         run: python scripts/validate_schemas.py

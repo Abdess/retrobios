@@ -570,6 +570,26 @@ class PipelineRegressions(unittest.TestCase):
         self.assertTrue(full_models, truth_runs)
 
 
+class SchemaFormatsAreChecked(unittest.TestCase):
+    """date-time and uri need jsonschema's format extras; without them the
+    published format constraints were accepted unread."""
+
+    @unittest.skipUnless(HAS_JSONSCHEMA, "validating a schema needs jsonschema")
+    def test_a_missing_checker_is_named(self):
+        import validate_schemas
+
+        empty = mock.Mock(checkers={})
+        with mock.patch.object(validate_schemas, "FormatChecker", return_value=empty):
+            self.assertEqual(validate_schemas.unchecked_formats(), ["date-time", "uri"])
+
+    def test_every_install_asks_for_the_extras(self):
+        for path in (".github/workflows/validate.yml", ".github/workflows/deploy-site.yml",
+                     "pyproject.toml"):
+            text = (ROOT / path).read_text(encoding="utf-8")
+            with self.subTest(path=path):
+                self.assertNotRegex(text, r"jsonschema(?!\[format)[=>]")
+
+
 class ResolverRegressions(unittest.TestCase):
     def _database(self, entries: dict[str, Path], suffix: str | None = None) -> dict:
         files = {}
