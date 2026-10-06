@@ -675,8 +675,8 @@ def anchor_block(
     pin = _normalize(pin_lines)
     head = _normalize(head_lines)
     lo, hi = start - 1, end
-    if lo < 0 or lo >= len(pin):
-        return AnchorResult("GONE", None, None, [])
+    if lo < 0 or hi > len(pin):
+        return AnchorResult("GONE", None, None, [], "cited range ends past the end of the file")
     if not any(pin[lo:hi]):
         return AnchorResult("CHANGED", None, None, [], "cited range is blank")
 
@@ -910,17 +910,22 @@ def anchor_part(
             reason = "written against HEAD, pin names an older revision"
         return PartResult(part, "GONE", None, None, None, [], reason, slug, url)
 
-    if part.start > len(pin_lines) and _written_against_head(part, head_lines):
+    end = part.end or part.start
+    if end > len(pin_lines):
         # The file is there and the line is not yet: the pinned revision is
         # shorter than the one the ref was written against. nestopia cited
         # the palette and database loads at 2041 and 2063, which is where
-        # HEAD carries them, over a pin four hundred lines shorter.
-        return PartResult(
-            part, "GONE", None, None, None, [],
-            "written against HEAD, pin names an older revision", slug, url,
+        # HEAD carries them, over a pin four hundred lines shorter. A range
+        # that only ends past the file is no better: dolphin cited 239-323 in
+        # a 317-line NANDImporter.cpp, and the block found above the end
+        # anchored it.
+        reason = (
+            "written against HEAD, pin names an older revision"
+            if _written_against_head(part, head_lines)
+            else "cited range ends past the end of the file"
         )
+        return PartResult(part, "GONE", None, None, None, [], reason, slug, url)
 
-    end = part.end or part.start
     anchored = anchor_block(pin_lines, head_lines, part.start, end)
     note = anchored.reason
     if anchored.status in REVIEW_STATUSES:
@@ -1168,7 +1173,7 @@ def verify_at_pin(part: RefPart, pin_lines, tokens, hash_tokens=()) -> PartResul
         )
     if part.start is None:
         return PartResult(part, "ANCHORED", None, None, None, [])
-    if part.start > len(pin_lines):
+    if (part.end or part.start) > len(pin_lines):
         return PartResult(
             part, "GONE", None, None, None, [], "beyond the end of the file"
         )
