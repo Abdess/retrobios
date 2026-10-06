@@ -84,7 +84,7 @@ platform_details:
       size: 4096
 
   load_priority:
-    source_ref: "source/PokeMini.c:515-523"
+    source_ref: "source/PokeMini.c:500-509"
     note: |
       During PokeMini_Reset(), the core first reloads FreeBIOS as a
       safe baseline, then attempts to load bios.min from disk. If
