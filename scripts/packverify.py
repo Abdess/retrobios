@@ -72,7 +72,7 @@ def verify_pack(
             if info.is_dir():
                 continue
             name = info.filename
-            if name.startswith("INSTRUCTIONS_") or name in (
+            if name.startswith(("INSTRUCTIONS_", "RENAMED_")) or name in (
                 "manifest.json",
                 "README.txt",
             ):

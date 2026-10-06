@@ -28,6 +28,7 @@ import zipfile
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
+from common import resolve_platform_cores as _platform_cores
 from common import (
     apply_target_overrides,
     artifact_lock,
@@ -73,6 +74,7 @@ from nativemode import (
     reads_file_contents,
 )
 from validation import (
+    agnostic_substitute,
     _build_validation_index,
     check_file_validation,
     filter_files_by_mode,
@@ -600,6 +602,10 @@ def generate_pack(
     config = load_platform_config(platform_name, platforms_dir)
     if zip_contents is None:
         zip_contents = {}
+    if emu_profiles is None:
+        # The pipeline always passes them; a caller that does not must get the
+        # same pack, not one built without validation, slots or agnostic cores.
+        emu_profiles = load_emulator_profiles(emulators_dir)
 
     verification_mode = config.get("verification_mode", "existence")
     platform_display = config.get("platform", platform_name)
@@ -641,6 +647,7 @@ def generate_pack(
     from common import resolve_platform_cores
 
     validation_index = {}
+    platform_profiles: dict[str, dict] = {}
     if emu_profiles:
         platform_profiles = {
             name: emu_profiles[name]
@@ -806,38 +813,16 @@ def generate_pack(
                     continue
 
                 if status == "not_found":
-                    # Agnostic fallback: if an agnostic core covers this system,
-                    # find any matching file in the DB
-                    by_name = db.get("indexes", {}).get("by_name", {})
+                    # A filename-agnostic core takes any image of its system,
+                    # renamed; only an existence frontend accepts that.
                     files_db = db.get("files", {})
                     agnostic_path = None
                     agnostic_resolved = False
-                    if emu_profiles:
-                        for _emu_key, _emu_prof in emu_profiles.items():
-                            if _emu_prof.get("bios_mode") != "agnostic":
-                                continue
-                            if sys_id not in set(_emu_prof.get("systems", [])):
-                                continue
-                            for _ef in _emu_prof.get("files", []):
-                                ef_name = _ef.get("name", "")
-                                for _sha1 in by_name.get(ef_name, []):
-                                    _entry = files_db.get(_sha1, {})
-                                    _path = _entry.get("path", "")
-                                    if _path:
-                                        _prefix = _path.rsplit("/", 1)[0] + "/"
-                                        for _s, _e in files_db.items():
-                                            if _e.get("path", "").startswith(_prefix):
-                                                if size_fits(_ef, _e.get("size", 0)):
-                                                    if os.path.exists(_e["path"]):
-                                                        local_path = _e["path"]
-                                                        agnostic_path = _prefix
-                                                        agnostic_resolved = True
-                                                        break
-                                        break
-                                if agnostic_resolved:
-                                    break
-                            if agnostic_resolved:
-                                break
+                    if not reads_file_contents(verification_mode):
+                        found = agnostic_substitute(file_entry, sys_id, db, platform_profiles)
+                        if found:
+                            local_path, agnostic_path = found
+                            agnostic_resolved = True
 
                     if agnostic_resolved and local_path:
                         # Write rename README
@@ -2968,6 +2953,10 @@ def generate_manifest(
     base_dest = config.get("base_destination", "")
     case_insensitive = config.get("case_insensitive_fs", False)
     verification_mode = config.get("verification_mode", "existence")
+    manifest_profiles = {
+        name: emu_profiles[name]
+        for name in _platform_cores(config, emu_profiles)
+    }
 
     # Load registry for install metadata
     registry: dict = {}
@@ -3001,6 +2990,7 @@ def generate_manifest(
     # Sizes of the files the pack carries and the installer cannot fetch: the
     # collection does not index them, a data directory cache answered.
     pack_only_sizes: list[int] = []
+    rename_notes: set[str] = set()
     if data_registry is None:
         data_registry = load_data_dir_registry(platforms_dir)
     slot_overrides = slots.pack_overrides(
@@ -3104,6 +3094,13 @@ def generate_manifest(
                 override = slot_overrides.get(full_dest)
                 if override:
                     local_path, status = override, "slot_arbitrated"
+                if status == "not_found" and not reads_file_contents(verification_mode):
+                    found = agnostic_substitute(file_entry, sys_id, db, manifest_profiles)
+                    if found:
+                        local_path, status = found[0], "agnostic_fallback"
+                        if os.path.basename(local_path) != file_entry.get("name", ""):
+                            # The pack explains the rename in a note of its own.
+                            rename_notes.add(file_entry.get("name", ""))
                 if (
                     status == "hash_mismatch"
                     and local_path
@@ -3228,7 +3225,10 @@ def generate_manifest(
         "standalone_copies": standalone_copies,
         "total_files": len(manifest_files),
         "total_size": total_size,
-        "pack_files": len(manifest_files) + len(data_sizes) + len(PACK_DOCUMENTS),
+        "pack_files": (
+            len(manifest_files) + len(data_sizes) + len(PACK_DOCUMENTS)
+            + len(rename_notes)
+        ),
         "pack_size": total_size + sum(data_sizes),
         "total_omitted": len(omitted_by_destination),
         "omitted_files": sorted(

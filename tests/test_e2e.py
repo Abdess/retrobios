@@ -848,6 +848,13 @@ class TestE2E(unittest.TestCase):
         r = check_inside_zip(self.files["bad_inner.zip"]["path"], "inner.rom", "wrong")
         self.assertEqual(r, "untested")
 
+    def test_20b_agnostic_core_fills_existence_slots(self):
+        """An agnostic core on the platform serves a missing slot, as the pack does."""
+        config = load_platform_config("test_existence", self.platforms_dir)
+        result = verify_platform(config, self.db, self.emulators_dir)
+        c = result["severity_counts"]
+        self.assertEqual(c[Severity.OK], result["total_files"])
+
     def test_13_check_inside_zip_not_found(self):
         r = check_inside_zip(self.files["missing_inner.zip"]["path"], "nope.rom", "abc")
         self.assertEqual(r, "not_in_zip")
@@ -859,7 +866,13 @@ class TestE2E(unittest.TestCase):
 
     def test_20_verify_existence_platform(self):
         config = load_platform_config("test_existence", self.platforms_dir)
-        result = verify_platform(config, self.db, self.emulators_dir)
+        # Without the filename-agnostic core, which would serve the two
+        # missing slots under existence (test_20b covers that case).
+        profiles = {
+            k: v for k, v in load_emulator_profiles(self.emulators_dir).items()
+            if v.get("bios_mode") != "agnostic"
+        }
+        result = verify_platform(config, self.db, self.emulators_dir, emu_profiles=profiles)
         c = result["severity_counts"]
         total = result["total_files"]
         # 2 present (1 req + 1 opt), 2 missing (1 req WARNING + 1 opt INFO)
@@ -3704,7 +3717,7 @@ class TestE2E(unittest.TestCase):
             zip_names = {
                 n
                 for n in zf.namelist()
-                if not n.startswith("INSTRUCTIONS_")
+                if not n.startswith(("INSTRUCTIONS_", "RENAMED_"))
                 and n != "manifest.json"
                 and n != "README.txt"
             }
