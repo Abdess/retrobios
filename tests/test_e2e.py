@@ -6011,6 +6011,13 @@ struct BurnDriver BurnDrvneogeo = {
             (["--system", "sony-playstation"], ["--refresh-data"], "refuse"),
             (["--from-md5", "d8f1"], ["--refresh-data"], "refuse"),
             (["--platform", "retroarch", "--offline"], ["--refresh-data"], "refuse"),
+            # Only --all chooses among platforms, as verify.py already says.
+            (["--platform", "retroarch"], ["--include-archived"], "refuse"),
+            (["--emulator", "handy"], ["--include-archived"], "refuse"),
+            (["--system", "atari-lynx"], ["--include-archived"], "refuse"),
+            (["--from-md5", "d8f1"], ["--include-archived"], "refuse"),
+            (["--platform", "retroarch", "--verify-packs"], ["--include-archived"],
+             "refuse"),
         ]
         for mode, flag, expected in matrix:
             with self.subTest(mode=mode, flag=flag):
