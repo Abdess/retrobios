@@ -363,5 +363,50 @@ class RepositoryWideEvidence(unittest.TestCase):
         print(f"\n  entries resolving to hash_mismatch: {len(offenders)}")
 
 
+
+class StandaloneSlotsFollowThePack(unittest.TestCase):
+    """verify_emulator keyed its slots by `path` while the emulator pack places
+    and dedups by standalone_path under --standalone: two entries the pack
+    ships to two folders were one alternative in the report."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        self.emulators = self.root / "emulators"
+        self.emulators.mkdir()
+        rom = self.root / "a.rom"
+        rom.write_bytes(b"one rom read from two folders")
+        self.db = _db(rom, "a.rom")
+        (self.emulators / "dual.yml").write_text(
+            "emulator: dual\n"
+            "type: standalone + libretro\n"
+            "systems: [demo-system]\n"
+            "files:\n"
+            "  - name: a.rom\n"
+            "    path: bios/a.rom\n"
+            "    standalone_path: A/a.rom\n"
+            "  - name: a.rom\n"
+            "    path: bios/a.rom\n"
+            "    standalone_path: B/a.rom\n"
+        )
+        from common import _emulator_profiles_cache
+
+        _emulator_profiles_cache.clear()
+
+    def tearDown(self):
+        from common import _emulator_profiles_cache
+
+        _emulator_profiles_cache.clear()
+        self._tmp.cleanup()
+
+    def test_each_standalone_folder_is_a_slot(self):
+        standalone = verify.verify_emulator(
+            ["dual"], str(self.emulators), self.db, standalone=True
+        )
+        core = verify.verify_emulator(["dual"], str(self.emulators), self.db)
+        self.assertEqual(standalone["total_files"], 2)
+        self.assertEqual(core["total_files"], 1)
+
+
 if __name__ == "__main__":
     unittest.main()
