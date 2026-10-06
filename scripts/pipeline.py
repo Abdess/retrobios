@@ -26,6 +26,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import contextlib
 import re
 import subprocess
 import sys
@@ -33,7 +34,7 @@ import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from common import ArtifactLockBusy, artifact_lock
+from common import ArtifactLockBusy, artifact_lock, hold_artifact_lock
 
 
 def run(cmd: list[str], label: str) -> tuple[bool, str]:
@@ -340,11 +341,14 @@ def main():
 
     # A second run on the same output directory is refused before any work:
     # the database rebuild alone takes minutes, and the reader holding the
-    # directory would otherwise see the answer only after all of it.
-    if not args.skip_packs and Path(args.output_dir).is_dir():
+    # directory would otherwise see the answer only after all of it. The
+    # hold lasts until this process exits: taken step by step, it let another
+    # run purge the packs between the build and the integrity check, which
+    # then reported every platform SKIP and passed.
+    held = contextlib.ExitStack()
+    if not args.skip_packs:
         try:
-            with artifact_lock(args.output_dir):
-                pass
+            held.enter_context(hold_artifact_lock(args.output_dir))
         except ArtifactLockBusy as exc:
             print(f"ERROR: {exc}")
             sys.exit(1)
@@ -659,6 +663,7 @@ def main():
     print(f"{'=' * 60}")
     print(f"  Pipeline {'COMPLETE' if all_ok else 'FINISHED WITH ERRORS'}")
     print(f"{'=' * 60}")
+    held.close()
     sys.exit(0 if all_ok else 1)
 
 
