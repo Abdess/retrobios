@@ -31,6 +31,25 @@ from packresolve import resolve_file
 from common import resolve_platform_cores
 from common import sanitize_pack_path
 import zipfile
+def _members_are_held(data: bytes, by_md5: dict, db: dict) -> bool:
+    """Whether every member of an archive is a dump the collection holds."""
+    import io
+
+    held_inside = build_zip_contents_index(db)
+    try:
+        with zipfile.ZipFile(io.BytesIO(data)) as archive:
+            members = [i for i in archive.infolist() if not i.is_dir()]
+            if not members:
+                return False
+            for info in members:
+                digest = hashlib.md5(archive.read(info)).hexdigest()
+                if digest not in by_md5 and digest not in held_inside:
+                    return False
+    except (zipfile.BadZipFile, OSError):
+        return False
+    return True
+
+
 def verify_pack(
     zip_path: str, db: dict, data_registry: dict | None = None
 ) -> tuple[bool, dict]:
@@ -182,6 +201,19 @@ def verify_pack(
                                 break
                         except (zipfile.BadZipFile, OSError):
                             continue
+
+            # An archive the builder assembled (a MAME clone set): every
+            # member must be a dump the collection holds, loose or inside a
+            # romset.
+            if status == "untracked" and name.endswith(".zip"):
+                if _members_are_held(zf.read(name), by_md5, db):
+                    status = "verified_members"
+                    file_name = os.path.basename(name)
+
+            if status == "untracked":
+                # Bytes nothing recognises: written wrong, or a source that
+                # no longer matches. Counted and passed, it went unseen.
+                errors.append(f"{name}: content matches no collected file")
 
             manifest["files"].append(
                 {
