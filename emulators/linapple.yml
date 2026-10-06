@@ -4,7 +4,7 @@ core_classification: community_fork
 source: "https://github.com/linappleii/linapple"
 upstream: "https://github.com/AppleWin/AppleWin"
 profiled_date: "2026-10-04"
-source_commit: "02f948d92b0c4df3272ff2ccb0dfcc4daac3e430"
+source_commit: "42e4321d60dc066470151f76c1cd3fe5e88a695c"
 core_version: "3.0.0"
 display_name: "Apple - Apple II (LinApple)"
 cores:
@@ -16,24 +16,25 @@ mode: standalone
 notes: |
   SDL port of AppleWin for Linux. The SourceForge project was abandoned and
   its forks were gathered under the linappleii organization
-  (README.md:163-170). Five frontends build from one core: sdl1, sdl2, sdl3,
+  (README.md:166-173). Five frontends build from one core: sdl1, sdl2, sdl3,
   tui and headless (src/frontends/).
 
   The ROMs the emulator runs are compiled into the binary.
   scripts/generate_roms.sh turns res/roms/*.rom into EmbeddedRoms.h and
   EmbeddedRoms.cpp, once at configure time and again at build time
-  (CMakeLists.txt:308-346), each image behind an ENABLE_ROM_* macro
-  (scripts/generate_roms.sh:97-119). Nineteen images go through the generator:
-  ten system ROMs, four character generator ROMs and five card ROMs. The
-  printer card and the clock card carry their firmware as arrays in their own
-  source files (src/apple2/peripherals/printer/Printer.cpp:30,
+  (CMakeLists.txt:301-338), each image behind an ENABLE_ROM_* macro
+  (scripts/generate_roms.sh:97-118). Eighteen images go through the generator:
+  ten system ROMs, four character generator ROMs and four card ROMs. The
+  printer card, the Super Serial Card and the clock card carry their firmware
+  as arrays in their own source files
+  (src/apple2/peripherals/printer/Printer.cpp:30,
+  src/apple2/peripherals/super_serial_card/SuperSerialRom.h:16,
   src/apple2/peripherals/clock/ClockCard.cpp:20), and the Mockingboard
   registers no ROM.
 
   What a macro is set to decides whether a machine model runs at all.
-  CMakeLists.txt:57-145 leaves the Apple ][, ][+, J-Plus, //e and Enhanced //e
-  system ROMs ON, along with the Disk II, Super Serial Card and mouse
-  firmware. The three clone options are OFF: ENABLE_ROM_CLONE_BASE64A,
+  CMakeLists.txt:57-131 leaves the Apple ][, ][+, J-Plus, //e and Enhanced //e
+  system ROMs ON, along with the Disk II and mouse firmware. The three clone options are OFF: ENABLE_ROM_CLONE_BASE64A,
   ENABLE_ROM_CLONE_PRAVETS and ENABLE_ROM_CLONE_TK3000E
   (CMakeLists.txt:95-97). Selecting one of those machine types on a default
   build reaches mem_initialize with no rom_data, which prints the model name
@@ -45,14 +46,14 @@ notes: |
   A custom ROM takes precedence over anything embedded. load_custom_rom opens
   the path as given, then through Path::find_data_file, and refuses a file
   below 12288 or above 65536 bytes, which stops the start
-  (src/frontends/common/AppController.cpp:104-148,228-230). mem_initialize
+  (src/frontends/common/AppController.cpp:127-171,251-253). mem_initialize
   accepts the buffer at exactly 16384 or 12288 bytes, or larger, taking the
   trailing 16384 for the //e-class types and the trailing 12288 otherwise
   (src/apple2/Memory.cpp:1038-1059). No hash or name is checked; the file is
   whatever the user points at.
 
   Character generators are res/charset40*.png, converted to XPM by CMake
-  (CMakeLists.txt:277-306) and included at src/apple2/Video.cpp:39-43. One of
+  (CMakeLists.txt:270-299) and included at src/apple2/Video.cpp:39-43. One of
   five is chosen from the machine type and the keyboard language
   (src/apple2/Video.cpp:1228-1252). The status font and the splash screen are
   XPM as well (src/core/Asset.cpp:15-16,57,63). The four *_Video.rom images
@@ -60,7 +61,7 @@ notes: |
 
   Master.dsk is inserted into slot 6 drive 1 at startup unless the command
   line names a disk or the configuration autoloads one
-  (src/frontends/common/AppController.cpp:171-192). asset_find_master_disk
+  (src/frontends/common/AppController.cpp:194-215). asset_find_master_disk
   resolves it through Path::find_data_file (src/core/Asset.cpp:25-39), which
   walks the user data and config directories, the executable directory and its
   res/ neighbours, the share and etc prefixes beside it, the compiled-in
@@ -80,8 +81,9 @@ notes: |
   debugger running without its symbols (src/Debugger/Debugger_Symbols.cpp:495).
 
   Peripheral cards are linked into the executable by default. With
-  BUILD_SHARED_PERIPHERALS, OFF at CMakeLists.txt:43, each card builds as a
-  shared object, and peripheral_plugins_init opens every *.so found in the
+  BUILD_SHARED_PERIPHERALS, OFF at CMakeLists.txt:43, each card that
+  add_peripheral does not force built-in builds as a shared object
+  (CMakeLists.txt:554-555,662-666), and peripheral_plugins_init opens every *.so found in the
   plugin search paths in either build
   (src/apple2/peripherals/Peripheral_Internal.cpp:192-219,
   src/core/Util_Path.h:102-114).
@@ -149,7 +151,7 @@ files:
     size: 49152
     md5: 352fdbcae14c6a8c0398822c7a273309
     sha1: f1c779af480b5bda2bdd03950c1201a5c5143bea
-    source_ref: "CMakeLists.txt:95,99-103; scripts/generate_roms.sh:107; src/frontends/common/AppController.cpp:125-136; src/apple2/Memory.cpp:99-100,1038-1059,1124-1134"
+    source_ref: "CMakeLists.txt:95,99-103; scripts/generate_roms.sh:107; src/frontends/common/AppController.cpp:148-159; src/apple2/Memory.cpp:99-100,1038-1059,1124-1134"
     note: >
       Larger than a system ROM: mem_initialize takes the trailing 12288 bytes
       for this machine type.
@@ -163,7 +165,7 @@ files:
     size: 12288
     md5: c619b7edfcf021f3b8fd20d9386676ba
     sha1: 8bd7ced83e209a15e9b19a05a5ef4b8e996dc1a5
-    source_ref: "CMakeLists.txt:96,105-109; scripts/generate_roms.sh:109; src/frontends/common/AppController.cpp:125-136; src/apple2/Memory.cpp:101-102,1038-1059,1124-1134"
+    source_ref: "CMakeLists.txt:96,105-109; scripts/generate_roms.sh:109; src/frontends/common/AppController.cpp:148-159; src/apple2/Memory.cpp:101-102,1038-1059,1124-1134"
 
   - name: PRAVETS8M.ROM
     required: false
@@ -174,7 +176,7 @@ files:
     size: 12288
     md5: 76c79535f7cf77973e2c711aa977a124
     sha1: f1b4ff018acf95f3355f0d575b66a188d728b687
-    source_ref: "CMakeLists.txt:96,105-109; scripts/generate_roms.sh:111; src/frontends/common/AppController.cpp:125-136; src/apple2/Memory.cpp:103-104,1038-1059,1124-1134"
+    source_ref: "CMakeLists.txt:96,105-109; scripts/generate_roms.sh:111; src/frontends/common/AppController.cpp:148-159; src/apple2/Memory.cpp:103-104,1038-1059,1124-1134"
 
   - name: PRAVETS8C.ROM
     required: false
@@ -185,7 +187,7 @@ files:
     size: 16384
     md5: 1896d7b98dd940c89f7c8ea899b71006
     sha1: c976fe56e57706c161f513a82ba3e0d8cda83904
-    source_ref: "CMakeLists.txt:96,105-109; scripts/generate_roms.sh:110; src/frontends/common/AppController.cpp:125-136; src/apple2/Memory.cpp:105-106,1038-1059,1124-1134"
+    source_ref: "CMakeLists.txt:96,105-109; scripts/generate_roms.sh:110; src/frontends/common/AppController.cpp:148-159; src/apple2/Memory.cpp:105-106,1038-1059,1124-1134"
     note: >
       A //e-class type: mem_initialize takes the trailing 16384 bytes when the
       file is larger.
@@ -199,7 +201,7 @@ files:
     size: 16384
     md5: 8d84b614b545d4eec8799d3f325332cb
     sha1: f163e5753c18ff0e812a448e8da406f102600edf
-    source_ref: "CMakeLists.txt:97,111-115; scripts/generate_roms.sh:112; src/frontends/common/AppController.cpp:125-136; src/apple2/Memory.cpp:107-108,1038-1059,1124-1134"
+    source_ref: "CMakeLists.txt:97,111-115; scripts/generate_roms.sh:112; src/frontends/common/AppController.cpp:148-159; src/apple2/Memory.cpp:107-108,1038-1059,1124-1134"
     note: >
       A //e-class type: mem_initialize takes the trailing 16384 bytes when the
       file is larger.
@@ -209,7 +211,7 @@ analysis:
     mechanism: >
       res/roms/*.rom compiled into EmbeddedRoms.cpp by scripts/generate_roms.sh
       at configure and build time, each behind an ENABLE_ROM_* macro
-    source_ref: "CMakeLists.txt:57-145,308-346; scripts/generate_roms.sh:97-119"
+    source_ref: "CMakeLists.txt:57-131,301-338; scripts/generate_roms.sh:97-118"
     extraction: "hashes computed from the res/roms images the generator reads"
 
     system_roms:
@@ -356,7 +358,7 @@ analysis:
         image: res/roms/DISK2.rom
         cmake_option: ENABLE_ROM_DISK2
         default: on
-        source_ref: "CMakeLists.txt:118,121-125; scripts/generate_roms.sh:115; src/apple2/peripherals/disk/Disk.cpp:1125-1127"
+        source_ref: "CMakeLists.txt:118,120-124; scripts/generate_roms.sh:115; src/apple2/peripherals/disk/Disk.cpp:1125-1127"
         size: 256
         md5: 2020aa1413ff77fe29353f3ee72dc295
         sha1: d4181c9f046aafc3fb326b381baac809d9e38d16
@@ -367,7 +369,7 @@ analysis:
         image: res/roms/DISK2-P6.rom
         cmake_option: ENABLE_ROM_DISK2
         default: on
-        source_ref: "scripts/generate_roms.sh:117; src/apple2/peripherals/disk/Disk.cpp:618-624; CMakeLists.txt:942-955"
+        source_ref: "scripts/generate_roms.sh:117; src/apple2/peripherals/disk/Disk.cpp:618-624; CMakeLists.txt:957-970"
         size: 256
         md5: 5f1be0c1cdff26f5956eef9643911886
         sha1: bc39fbd5b9a8d2287ac5d0a42e639fc4d3c2f9d4
@@ -389,14 +391,18 @@ analysis:
 
       - device: "Super Serial Card"
         slot: 2
-        symbol: g_rom_ssc
+        symbol: super_serial_rom
         image: res/roms/SSC.rom
-        cmake_option: ENABLE_ROM_SSC
-        default: on
-        source_ref: "CMakeLists.txt:119,127-131; scripts/generate_roms.sh:118; src/apple2/peripherals/super_serial_card/SuperSerial.cpp:250-254"
+        source_ref: "src/apple2/peripherals/super_serial_card/SuperSerialRom.h:8-16; src/apple2/peripherals/super_serial_card/SuperSerial.cpp:356-358; CMakeLists.txt:884-887"
         size: 2048
         md5: 67c0d61ab0911183faf05270f881a97e
         sha1: 6dab633470c6bc4cb3e81d09fda46597caf8ee57
+        note: >
+          Not generated and behind no cmake option: the card carries the 2048
+          bytes as an array in SuperSerialRom.h, the last page mapped at $Cn00
+          and the whole image at $C800. The generator does not read
+          res/roms/SSC.rom; a build test pins its SHA-1 as the reference of
+          that transcription.
 
       - device: "Mouse interface card"
         slot: 4
@@ -404,7 +410,7 @@ analysis:
         image: res/roms/MouseInterface.rom
         cmake_option: ENABLE_ROM_MOUSE
         default: on
-        source_ref: "CMakeLists.txt:133,135-139; scripts/generate_roms.sh:119; src/apple2/peripherals/mouse/Mouse.cpp:537-541"
+        source_ref: "CMakeLists.txt:126,128-132; scripts/generate_roms.sh:118; src/apple2/peripherals/mouse/Mouse.cpp:537-541"
         size: 2048
         md5: 22563ab338024dac7b03510371d49c57
         sha1: 3a9d881a8a8d30f55b9719aceebbcf717f829d6f
@@ -413,7 +419,7 @@ analysis:
         slot: 1
         symbol: printer_rom
         image: res/roms/Parallel.rom
-        source_ref: "src/apple2/peripherals/printer/Printer.cpp:30-53,215; CMakeLists.txt:881-883"
+        source_ref: "src/apple2/peripherals/printer/Printer.cpp:30-53,215; CMakeLists.txt:872-874"
         size: 256
         md5: 5902996f16dc78fc013f6e1db14805b3
         sha1: c75c751589cbcc1ad4ab4f63676af7abadd86f5b
