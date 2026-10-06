@@ -201,7 +201,7 @@ class PackCarriesADirectory(DirectoryFixture):
         out.mkdir()
         zip_path = builder.generate_pack(
             "demo", str(self.platforms), self._db(), str(self.bios), str(out),
-            include_extras=True, emulators_dir=str(self.emulators),
+            emulators_dir=str(self.emulators),
             emu_profiles=profiles, offline=True,
         )
         with zipfile.ZipFile(zip_path) as archive:

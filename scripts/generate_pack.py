@@ -583,7 +583,6 @@ def generate_pack(
     db: dict,
     bios_dir: str,
     output_dir: str,
-    include_extras: bool = False,
     emulators_dir: str = "emulators",
     zip_contents: dict | None = None,
     data_registry: dict | None = None,
@@ -2353,7 +2352,6 @@ def _run_platform_packs(
                         db,
                         args.bios_dir,
                         args.output_dir,
-                        include_extras=args.include_extras,
                         emulators_dir=args.emulators_dir,
                         zip_contents=zip_contents,
                         data_registry=data_registry,
@@ -2590,11 +2588,6 @@ def main():
     parser.add_argument("--db", default=DEFAULT_DB_FILE, help="Path to database.json")
     parser.add_argument("--bios-dir", default=DEFAULT_BIOS_DIR)
     parser.add_argument("--output-dir", "-o", default=DEFAULT_OUTPUT_DIR)
-    parser.add_argument(
-        "--include-extras",
-        action="store_true",
-        help="(no-op) Core requirements are always included",
-    )
     parser.add_argument("--emulators-dir", default="emulators")
     parser.add_argument(
         "--offline",

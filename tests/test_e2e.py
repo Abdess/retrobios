@@ -6018,6 +6018,9 @@ struct BurnDriver BurnDrvneogeo = {
             (["--from-md5", "d8f1"], ["--include-archived"], "refuse"),
             (["--platform", "retroarch", "--verify-packs"], ["--include-archived"],
              "refuse"),
+            # Documented as adding core files, read by nothing.
+            (["--emulator", "handy"], ["--include-extras"], "refuse"),
+            (["--system", "atari-lynx"], ["--include-extras"], "refuse"),
         ]
         for mode, flag, expected in matrix:
             with self.subTest(mode=mode, flag=flag):
