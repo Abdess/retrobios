@@ -118,6 +118,35 @@ def release_totals(platform_name: str, record: dict) -> tuple[int | None, int | 
     return pack["files"], pack["extracted_size"]
 
 
+def extract_targets(platforms_dir: str) -> list[tuple[str, str]]:
+    """(display name, folder) per registered platform, where its pack extracts.
+
+    Read from the registry so the README, the site and the pack guide answer
+    from one place. Sorted by display name.
+    """
+    rows = [
+        (load_platform_config(key, platforms_dir).get("platform", key), entry["extract_to"])
+        for key, entry in load_platform_registry(platforms_dir).items()
+        if entry.get("extract_to")
+    ]
+    return sorted(rows, key=lambda row: row[0].casefold())
+
+
+def extract_notes(platforms_dir: str) -> list[str]:
+    """A pack whose entries carry their own root extracts above the BIOS folder."""
+    folders = dict(extract_targets(platforms_dir))
+    notes = []
+    for key in sorted(load_platform_registry(platforms_dir)):
+        config = load_platform_config(key, platforms_dir)
+        display = config.get("platform", key)
+        if config.get("base_destination") == "" and display in folders:
+            notes.append(
+                f"The {display} pack already carries its own `bios/` folder, so it"
+                f" extracts into `{folders[display]}` rather than into the BIOS folder."
+            )
+    return notes
+
+
 def download_table(
     coverages: dict,
     archived: set[str],
@@ -365,18 +394,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     # a pack whose entries already carry their own root (RetroDECK) extracts
     # one level above it.
     extract_paths = {
-        "RetroArch": "`system/`",
-        "Lakka": "`/storage/system/`",
-        "Batocera": "`/userdata/bios/`",
-        "BizHawk": "`Firmware/`",
-        "Recalbox": "`/recalbox/share/bios/`",
-        "RetroBat": "`bios/`",
-        "RetroPie": "`~/RetroPie/BIOS/`",
-        "RetroDECK": "`~/retrodeck/`",
-        "EmuDeck": "`~/Emulation/bios/`",
-        "RomM": "`bios/{platform_slug}/`",
-        "ROCKNIX": "`/storage/roms/bios/`",
-        "MiSTer FPGA": "`/media/fat/games/`",
+        display: f"`{folder}`" for display, folder in extract_targets(platforms_dir)
     }
     archived = {
         name
@@ -390,12 +408,11 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         )
     )
 
+    for note in extract_notes(platforms_dir):
+        lines.extend(["", note])
     if archived:
         lines.extend(
             [
-                "",
-                "The RetroDECK pack already contains its own `bios/` folder, so it"
-                " extracts into `~/retrodeck/` rather than into the BIOS folder.",
                 "",
                 "\\* Archived: the configuration is kept and packs are still built,"
                 " but upstream is no longer scraped on a schedule.",

@@ -51,7 +51,13 @@ from nativemode import reads_file_contents
 
 
 yaml = require_yaml()
-from generate_readme import compute_coverage, contributing_text, release_totals
+from generate_readme import (
+    compute_coverage,
+    contributing_text,
+    extract_notes,
+    extract_targets,
+    release_totals,
+)
 from profile_sync import source_ref_values, split_source_ref
 from provenance_report import build_report
 import release_record
@@ -200,7 +206,11 @@ def _timestamp() -> str:
 
 
 def generate_home(
-    db: dict, coverages: dict, profiles: dict, registry: dict | None = None
+    db: dict,
+    coverages: dict,
+    profiles: dict,
+    registry: dict | None = None,
+    platforms_dir: str = "platforms",
 ) -> str:
     total_files = db.get("total_files", 0)
     total_size = db.get("total_size", 0)
@@ -318,22 +328,14 @@ def generate_home(
             "",
             "    | Platform | Extract to |",
             "    |----------|-----------|",
-            "    | RetroArch | `system/` |",
-            "    | Batocera | `/userdata/bios/` |",
-            "    | BizHawk | `Firmware/` |",
-            "    | EmuDeck | `~/Emulation/bios/` |",
-            "    | Lakka | `/storage/system/` |",
-            "    | MiSTer FPGA | `/media/fat/games/` |",
-            "    | ROCKNIX | `/storage/roms/bios/` |",
-            "    | Recalbox | `/recalbox/share/bios/` |",
-            "    | RetroBat | `bios/` |",
-            "    | RetroDECK | `~/retrodeck/` |",
-            "    | RetroPie | `~/RetroPie/BIOS/` |",
-            "    | RomM | `bios/{platform_slug}/` |",
+            *(
+                f"    | {display} | `{folder}` |"
+                for display, folder in extract_targets(platforms_dir)
+            ),
             "",
-            "    The RetroDECK pack already carries its own `bios/` folder, so it "
-            "extracts one level above it. Every other pack extracts straight into "
-            "the BIOS folder. [Full instructions per setup](which-pack.md).",
+            *(f"    {note}" for note in extract_notes(platforms_dir)),
+            "    Every other pack extracts straight into the BIOS folder."
+            " [Full instructions per setup](which-pack.md).",
             "",
         ]
     )
@@ -3608,7 +3610,9 @@ def main():
     # Generate home
     print("Generating home page...")
     write_if_changed(
-        str(docs / "index.md"), generate_home(db, coverages, profiles, registry)
+        str(docs / "index.md"), generate_home(
+            db, coverages, profiles, registry, args.platforms_dir
+        )
     )
 
     stats = compute_stats(db, coverages, profiles)
