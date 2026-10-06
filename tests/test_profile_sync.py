@@ -12,6 +12,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import yaml
 
@@ -2162,7 +2163,7 @@ class TestWriteDryRun(unittest.TestCase):
         base = dict(
             emulators_dir=str(self.dir), backfill_commits=False,
             rebase_refs=False, bump_commit=False, accept_changed=False,
-            dry_run=True,
+            dry_run=True, cache_dir=str(self.dir), offline=True,
         )
         base.update(over)
         return argparse.Namespace(**base)
@@ -2213,6 +2214,40 @@ class TestWriteDryRun(unittest.TestCase):
         )
         self.assertFalse(bump_commit(self.path, report))
         self.assertEqual(self._run(self._args(bump_commit=True), report), "")
+
+    def test_two_writing_pins_give_two_readings(self):
+        """vitaquake2: written at one pin, re-pinned under the same text. Each
+        pin is a reading; a run settles when every reading agrees."""
+        revisions = [
+            ("c2", {"source_commit": "pin2", "notes": "x"}),
+            ("c1", {"source_commit": "pin1", "notes": "x"}),
+        ]
+        repo = object()
+        readings, ambiguous = profile_sync._writing_pairs(
+            {"source_commit": "pin2"}, [("source", repo)], revisions, "c1"
+        )
+        self.assertEqual(readings, [[(repo, "pin1", "pin2")], []])
+        self.assertTrue(ambiguous)
+
+    def test_stale_prose_holds_the_pin(self):
+        """boom3: a note written at an older pin is not anchored from this one."""
+        before = self.path.read_text()
+        part = PartResult(
+            RefPart("a.c", 10, 12, "a.c:10-12"), "ANCHORED", None, 10, 12, []
+        )
+        report = ProfileReport(
+            name="p", repo="o/n", pin="pin", head="newhead",
+            entries=[EntryReport("a.bin", "a.c:10-12", "ANCHORED", [part])],
+            counts={"ANCHORED": 1},
+        )
+        stale = ["read again: notes: FileSystem.cpp:2125 (pin moved under this text)"]
+        errors = io.StringIO()
+        with mock.patch.object(profile_sync, "realign_prose", return_value=stale), \
+                contextlib.redirect_stderr(errors):
+            output = self._run(self._args(bump_commit=True, dry_run=False), report)
+        self.assertNotIn("source_commit ->", output)
+        self.assertIn("older pin", errors.getvalue())
+        self.assertEqual(self.path.read_text(), before)
 
     def test_bump_states_the_pin_and_leaves_the_file(self):
         before = self.path.read_text()
@@ -2438,7 +2473,7 @@ class TestRebaseWaitsForThePin(unittest.TestCase):
         args = argparse.Namespace(
             emulators_dir=str(self.path.parent), backfill_commits=False,
             rebase_refs=True, bump_commit=True, accept_changed=False,
-            dry_run=False,
+            dry_run=False, cache_dir=str(self.path.parent), offline=True,
         )
         out, err = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
