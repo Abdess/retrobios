@@ -73,6 +73,7 @@ from nativemode import (
     reads_file_contents,
 )
 from validation import (
+    existence_discrepancy,
     destination_owners,
     validated_choice,
     inner_rom_check,
@@ -908,15 +909,9 @@ def generate_pack(
                     # their code never reads the bytes. An upstream hash that
                     # contradicts a local dump is reported, not acted on.
                     if status == "hash_mismatch" and local_path:
-                        declared = file_entry.get("md5", "") or file_entry.get(
-                            "sha1", ""
-                        )
-                        actual = compute_hashes(local_path)
                         file_reasons.setdefault(
                             dedup_key,
-                            f"packed per {platform_display} existence check; "
-                            f"declared hash {declared}, file md5 "
-                            f"{actual['md5']} sha1 {actual['sha1']}",
+                            existence_discrepancy(file_entry, local_path, platform_display),
                         )
                     file_status.setdefault(dedup_key, "ok")
 
