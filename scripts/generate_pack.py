@@ -598,8 +598,13 @@ def generate_pack(
     target_name: str | None = None,
     one_per_slot: bool = False,
     offline: bool | None = None,
+    pack_name: str | None = None,
 ) -> str | None:
     """Generate a ZIP pack for a platform.
+
+    ``pack_name`` replaces the derived file name: a split part is named after
+    its group, and a name built from every system of a hundred-system group
+    is longer than a file name can be.
 
     Returns the path to the generated ZIP, or None on failure.
     """
@@ -620,7 +625,7 @@ def generate_pack(
     )
     narrow_tags = "".join(tag for tag, _label in narrowings)
     stem = _platform_pack_stem([platform_name], platform_name, platforms_dir)
-    zip_name = f"{stem}{narrow_tags}_BIOS_Pack{_system_tag(system_filter)}.zip"
+    zip_name = pack_name or f"{stem}{narrow_tags}_BIOS_Pack{_system_tag(system_filter)}.zip"
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
 
@@ -1683,10 +1688,13 @@ def generate_split_packs(
     # Two groupings write different files; without the tag they accumulate in
     # one directory under one SHA256SUMS.txt.
     group_tag = "" if group_by == "system" else f"_By{group_by.title()}"
-    split_dir = os.path.join(
-        output_dir,
-        f"{platform_display.replace(' ', '_')}{split_tags}{group_tag}_Split",
-    )
+    # The parts carry the version, so the directory does too: a rescrape that
+    # moves the version would otherwise leave the old parts beside the new
+    # under one SHA256SUMS.txt.
+    version = config.get("version", config.get("dat_version", ""))
+    ver_tag = f"_{version.replace(' ', '')}" if version else ""
+    part_prefix = f"{platform_display.replace(' ', '_')}{ver_tag}{split_tags}"
+    split_dir = os.path.join(output_dir, f"{part_prefix}{group_tag}_Split")
     os.makedirs(split_dir, exist_ok=True)
 
     systems = config.get("systems", {})
@@ -1710,14 +1718,6 @@ def generate_split_packs(
         )
     else:
         all_extras = []
-    version = config.get("version", config.get("dat_version", ""))
-    ver_tag = f"_{version.replace(' ', '')}" if version else ""
-    narrow_tags = "".join(
-        tag
-        for tag, _label in _narrowings(
-            source, regions, target_name, one_per_slot, required_only
-        )
-    )
     results = []
     for group_name, group_system_ids in sorted(groups.items()):
         group_extras = _extras_for_systems(all_extras, group_system_ids)
@@ -1740,14 +1740,9 @@ def generate_split_packs(
             target_name=target_name,
             one_per_slot=one_per_slot,
             offline=offline,
+            pack_name=f"{part_prefix}_{_name_part(group_name, '_')}_BIOS_Pack.zip",
         )
         if zip_path:
-            safe_group = _name_part(group_name, "_")
-            new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{narrow_tags}_{safe_group}_BIOS_Pack.zip"
-            new_path = os.path.join(split_dir, new_name)
-            if new_path != zip_path:
-                os.rename(zip_path, new_path)
-                zip_path = new_path
             results.append(zip_path)
 
     # Extras whose system the platform does not declare, or that name none,
@@ -1768,16 +1763,10 @@ def generate_split_packs(
             target_cores=target_cores, required_only=required_only,
             precomputed_extras=undistributed, extras_only=True, source=source,
             regions=regions, target_name=target_name, one_per_slot=one_per_slot,
-            offline=offline,
+            offline=offline, pack_name=f"{part_prefix}_Other_Cores_BIOS_Pack.zip",
         )
         if zip_path:
-            new_path = os.path.join(
-                split_dir,
-                f"{platform_display.replace(' ', '_')}{ver_tag}{narrow_tags}"
-                "_Other_Cores_BIOS_Pack.zip",
-            )
-            os.replace(zip_path, new_path)
-            results.append(new_path)
+            results.append(zip_path)
 
     return results
 
