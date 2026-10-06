@@ -86,7 +86,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 
 | Platform | On its BIOS list | Files its emulators load | Checked by |
 |----------|-----------------:|-------------------------:|------------|
-| Batocera | 353/353 | 12,274/12,704 | MD5 hash |
+| Batocera | 353/353 | 12,306/12,737 | MD5 hash |
 | BizHawk | 118/118 | 649/650 | SHA1 hash |
 | EmuDeck | 168/168 | 381/383 | MD5 hash |
 | Lakka | 527/527 | 5,263/5,293 | file presence |
@@ -95,7 +95,7 @@ Full list with per-file details: **[https://abdess.github.io/retrobios/](https:/
 | Recalbox | 351/351 | 2,727/2,735 | MD5 hash |
 | RetroArch | 527/527 | 5,263/5,293 | file presence |
 | RetroBat | 348/348 | 11,748/12,178 | MD5 hash |
-| RetroDECK | 2,008/2,008 | 5,280/5,330 | MD5 hash |
+| RetroDECK | 2,008/2,008 | 5,295/5,345 | MD5 hash |
 | RetroPie * | 527/527 | 9,182/9,324 | file presence |
 | RomM | 381/381 | 624/630 | MD5 hash |
 
@@ -180,4 +180,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-10-05T23:10:58Z*
+*Auto-generated on 2026-10-06T00:34:45Z*

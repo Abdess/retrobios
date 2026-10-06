@@ -5,7 +5,7 @@
   "platform": "retrodeck",
   "display_name": "RetroDECK",
   "version": "1.0",
-  "generated": "2026-10-05T22:37:20Z",
+  "generated": "2026-10-06T00:05:31Z",
   "base_destination": "",
   "detect": [
     {
@@ -237,10 +237,10 @@
       }
     }
   ],
-  "total_files": 7666,
-  "total_size": 8628902718,
-  "pack_files": 7668,
-  "pack_size": 8628902718,
+  "total_files": 7681,
+  "total_size": 8629884322,
+  "pack_files": 7683,
+  "pack_size": 8629884322,
   "total_omitted": 16,
   "omitted_files": [
     {
@@ -17652,7 +17652,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/keys.txt",
+      "dest": "bios/keys.txt",
       "sha1": "9edc52be45201ec99f6e4ceb5dc6abfc633c4eae",
       "sha256": "c5b9ee2a14cf6a0effb3b2f0f4b93be75823da80ebf5f0ca6a0f2be8b5aa5bfd",
       "size": 449507,
@@ -17662,7 +17662,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/otp.bin",
+      "dest": "bios/otp.bin",
       "sha1": "f0332b7252e9c01b30bf5d5a63ceb22dc47968aa",
       "sha256": "93c2e20cc377f2cb0fa9a2ee58c39be22e00baa94b890545e585e53b3eb4039f",
       "size": 256,
@@ -17672,7 +17672,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/seeprom.bin",
+      "dest": "bios/seeprom.bin",
       "sha1": "d08ffcf19945b63c7baf35d9965a9cd6bf61332b",
       "sha256": "eab425e6e65430232ec87a776d352f8fe1be4905df3a6bdaa0941c03e20069bc",
       "size": 512,
@@ -17682,7 +17682,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/resources/sharedFonts/CafeCn.ttf",
+      "dest": "bios/resources/sharedFonts/CafeCn.ttf",
       "sha1": "2d95227b9b3eaf1c74d9293ecd0d190ec7ffbbe3",
       "sha256": "6afd751a9bb76bc788efb50a138c6f3765624ee84d8d8203be04d871ade40a6a",
       "size": 9664448,
@@ -17692,7 +17692,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/resources/sharedFonts/CafeKr.ttf",
+      "dest": "bios/resources/sharedFonts/CafeKr.ttf",
       "sha1": "f0ef38fcc6133c24f4f38ff9b5c06b37e970d3cc",
       "sha256": "c3c326f6ce1899e391dc4996b10a0c30558c5b8f36dfbaa418976862b3e2dffb",
       "size": 5626464,
@@ -17702,7 +17702,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/resources/sharedFonts/CafeStd.ttf",
+      "dest": "bios/resources/sharedFonts/CafeStd.ttf",
       "sha1": "da0d4bcc3b13339179bee946eba16adfd731b4d3",
       "sha256": "59e2494727b8e7a7bbf48c8749f2dbc07d438c9fabeaa9847a08ec690f9888a1",
       "size": 5363768,
@@ -17712,7 +17712,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/resources/sharedFonts/CafeTw.ttf",
+      "dest": "bios/resources/sharedFonts/CafeTw.ttf",
       "sha1": "8ec796192ebc710f23ab6bd55453cae523b70444",
       "sha256": "c8f9e16345dbc3b6e165fe12435486a748e730ebe6002b5d713efe73d171d51c",
       "size": 6593548,
@@ -17722,7 +17722,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/shareddata.bin",
+      "dest": "bios/shareddata.bin",
       "sha1": "cd34a0ee9b7a8cbb9c9eae34739704a9dd4dd413",
       "sha256": "662bc6c693c88040531fbe51186ce203e188d1c67ad788b2013b3c91ce595420",
       "size": 33554432,
@@ -17732,7 +17732,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/cafeLibs/snd_user.rpl",
+      "dest": "bios/cafeLibs/snd_user.rpl",
       "sha1": "4e0ff91f1881203e404cd41ec34725b43eec5cf2",
       "sha256": "45b0dbe8926a263d86bc4e77084815e58336b9b437196d48bc3da3c5b2b2675e",
       "size": 84032,
@@ -17742,7 +17742,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/cafeLibs/snduser2.rpl",
+      "dest": "bios/cafeLibs/snduser2.rpl",
       "sha1": "38eac5a4695e777b25c8f8a472f36e35c5a88fc4",
       "sha256": "ce928ad53d8497b6626ef3893cc0427c9ea36f0a63e82e2530179afa354eb15e",
       "size": 111360,
@@ -17752,7 +17752,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/cafeLibs/swkbd.rpl",
+      "dest": "bios/cafeLibs/swkbd.rpl",
       "sha1": "4d88ddd169da56de721e4aa9e213a421f7221b4b",
       "sha256": "94532b2639819e121ba69d75f5eabdf00988f87609c9ab9afe5ba1ca01eef4ea",
       "size": 1116288,
@@ -17762,7 +17762,7 @@
       ]
     },
     {
-      "dest": "bios/Cemu/cafeLibs/erreula.rpl",
+      "dest": "bios/cafeLibs/erreula.rpl",
       "sha1": "8c04ae8fea6e6d7431d9be8599377eca2dd690da",
       "sha256": "f259a75dba800856afdda263664c6f8563b59692d5694e64d763654550d294fc",
       "size": 790080,
@@ -17939,6 +17939,156 @@
       "sha256": "c5b0f8dfcec6b9ed2ac38b8bc69a4db7c209dc177d243c8df2bddf9e39171e5f",
       "size": 897,
       "repo_path": "bios/Nintendo/Wii/rootca.pem",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8723a_fw.bin",
+      "sha1": "2937529b25c46e29429811829988f56f28142a41",
+      "sha256": "756951ee36e417c0714b00547a6175d5d5decbe1e4cf7585f211019150c7cd10",
+      "size": 24548,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8723a_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8723b_fw.bin",
+      "sha1": "5c43fb17ef04a2ee13f9e697f685f68f0d0d1096",
+      "sha256": "c9c8a9f6ebd90b7449a7e4d38ee39952dc7cc47d6c1d054e42cfbb5e4d818853",
+      "size": 45048,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8723b_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8723d_fw.bin",
+      "sha1": "a9182178ae400dd68b3e82f5f4c650001e9d1b85",
+      "sha256": "6b70723b2db9b658cd9535fe36f1494b4494699e1ad07920c9356f8bd90d9263",
+      "size": 52080,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8723d_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8761a_fw.bin",
+      "sha1": "7eca505aad586772d66c3d6336d450c591e10670",
+      "sha256": "581e5e81f5b51a29f475f8a276be95ad3210b3e3065987541c508e7f7a83a462",
+      "size": 74488,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8761a_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8761bu_fw.bin",
+      "sha1": "f5bf3a7fc9605ee31b3904d64b89ce0fa3d9eaf5",
+      "sha256": "1d7a9597349ad89344fa16c1913d3e39e9a12e966e417ca16871bc79bbe59edb",
+      "size": 44484,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8761bu_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8821a_fw.bin",
+      "sha1": "0183b48cda05bd4aed70b9f0b762eea5d2fc3b1d",
+      "sha256": "3ed5077f8f02ff2b06be257691dc72061efac976cd2dc174057833624c820b9d",
+      "size": 37420,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8821a_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8821c_fw.bin",
+      "sha1": "9a192c6a003390a5eab017fe79d42514ec6712e7",
+      "sha256": "dfe7ef772d078ec09490c02190a32fcd40b3eaf3b040049d8930eb80e6d5743c",
+      "size": 54636,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8821c_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8822b_fw.bin",
+      "sha1": "d5ec968f1609b1c436ad25db7d34f5e393373396",
+      "sha256": "eecef2c3b2ff03c3a41292a93a25eca6f4ec38eb4a7491a3651b530be89a04fc",
+      "size": 51176,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8822b_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8822cu_fw.bin",
+      "sha1": "08751f476d0d0aa165af020ed19d2ed1fbaeeef6",
+      "sha256": "09d81457457a7760b867c715517d12dd3919f9ecec7b080f2985e75f1563209f",
+      "size": 38207,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8822cu_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8851bu_fw.bin",
+      "sha1": "0e877d65077a42db4971c7f930dddc7b63047617",
+      "sha256": "7fcf88c00b2548a5ff157102a35722db5e4be655dab1ce8d9bddb6df85f88f24",
+      "size": 49760,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8851bu_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8852au_fw.bin",
+      "sha1": "24118f0e3b1ac5be44abacd4fa0bc07e2364e223",
+      "sha256": "56be2eb99d36109bb5e01eee171573b6f3dd041238c01cd97ce4f01df8dbf09e",
+      "size": 67188,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8852au_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8852bu_fw.bin",
+      "sha1": "22cacf5d1b9da25801cd5d6e8b7f06dff0965439",
+      "sha256": "c2b0d34a4ff8a8ea136993f0dc4ba657522d84231b4094c2a53cda39afc91c57",
+      "size": 129733,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8852bu_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8852cu_fw.bin",
+      "sha1": "acd067bdc7933d1d9b8f2d72a750de5d125a5529",
+      "sha256": "9b8b27741a914c1cecc1ab9837194236890522101a57ba1898eb55f8d538dae0",
+      "size": 113336,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8852cu_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8852btu_fw.bin",
+      "sha1": "eb1139c1b27429eef639b6002b16212d702ad378",
+      "sha256": "bd162fd3b70e805cf7a8098f22f4ddf5d89da58fafff97d87da1a1e2e0cbeb80",
+      "size": 128140,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8852btu_fw.bin",
+      "cores": [
+        "dolphin"
+      ]
+    },
+    {
+      "dest": "bios/Load/Firmware/rtl_bt/rtl8922au_fw.bin",
+      "sha1": "088a3cf44d2372cdb557241bbbf519bcbbac156f",
+      "sha256": "112290ca9dc3985034f572594812f0deb8530dd031686461b55cac43a1c35a79",
+      "size": 71360,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8922au_fw.bin",
       "cores": [
         "dolphin"
       ]
@@ -68334,7 +68484,7 @@
       ]
     },
     {
-      "dest": "bios/xbox_eeprom.bin",
+      "dest": "bios/eeprom.bin",
       "sha1": "ff3e7eaf715fe5612e46fc984d686ed3b115baef",
       "sha256": "e652203e6d91140729c29588b18ff8838896cdeb9a3100fbf8d20763af27c9d2",
       "size": 256,
