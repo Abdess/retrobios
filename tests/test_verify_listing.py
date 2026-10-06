@@ -96,5 +96,24 @@ class EmulatorPackReadsThePlatformsDir(unittest.TestCase):
         self.assertEqual(seen, ["elsewhere"])
 
 
+
+class CoreArchivesAreCounted(unittest.TestCase):
+    def test_a_missing_required_bios_zip_is_printed(self):
+        import contextlib  # noqa: PLC0415
+        import io  # noqa: PLC0415
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import verify  # noqa: PLC0415
+
+        result = {"undeclared_files": [
+            {"name": "neogeo.zip", "category": "bios_zip", "required": True,
+             "in_repo": False, "emulator": "fbneo"},
+        ]}
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            verify._print_undeclared_section(result, verbose=False)
+        self.assertIn("1 required missing", out.getvalue())
+        self.assertIn("neogeo.zip", out.getvalue())
+
 if __name__ == "__main__":
     unittest.main()

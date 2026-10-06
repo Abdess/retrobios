@@ -1122,8 +1122,11 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
     if not undeclared:
         return
 
-    bios_files = [u for u in undeclared if u.get("category", "bios") == "bios"]
+    # Everything that is not game data is firmware the core loads, archives
+    # included: a bios_zip sat in neither list, so a required one that was
+    # missing was never printed.
     game_data = [u for u in undeclared if u.get("category", "bios") == "game_data"]
+    bios_files = [u for u in undeclared if u.get("category", "bios") != "game_data"]
 
     req_not_in_repo = [
         u
