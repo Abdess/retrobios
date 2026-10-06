@@ -62,6 +62,7 @@ from common import (
     yaml_load,
 )
 import packresolve
+from refresh_data_dirs import cache_lock
 import region as region_mod
 import slot as slot_mod
 import slots
@@ -345,22 +346,25 @@ def _data_directory_members(
                 dd_prefix = base_dest
             else:
                 dd_prefix = dd_dest
-            for root, _dirs, filenames in os.walk(local_path):
-                for fname in filenames:
-                    src = os.path.join(root, fname)
-                    rel = os.path.relpath(src, local_path)
-                    full = f"{dd_prefix}/{rel}"
-                    if full in seen_destinations or (
-                        full.lower() in seen_lower and case_insensitive
-                    ):
-                        continue
-                    if _has_path_conflict(full, seen_destinations, seen_parents):
-                        continue
-                    seen_destinations.add(full)
-                    _register_path(full, seen_destinations, seen_parents)
-                    if case_insensitive:
-                        seen_lower.add(full.lower())
-                    yield src, full
+            # Held while the caller writes what is yielded: a refresh swapping
+            # the tree waits until the walk is done.
+            with cache_lock(local_path, shared=True):
+                for root, _dirs, filenames in os.walk(local_path):
+                    for fname in filenames:
+                        src = os.path.join(root, fname)
+                        rel = os.path.relpath(src, local_path)
+                        full = f"{dd_prefix}/{rel}"
+                        if full in seen_destinations or (
+                            full.lower() in seen_lower and case_insensitive
+                        ):
+                            continue
+                        if _has_path_conflict(full, seen_destinations, seen_parents):
+                            continue
+                        seen_destinations.add(full)
+                        _register_path(full, seen_destinations, seen_parents)
+                        if case_insensitive:
+                            seen_lower.add(full.lower())
+                        yield src, full
 
 
 def _pack_data_directories(
