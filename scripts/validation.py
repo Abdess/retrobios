@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import os
 
-from common import compute_hashes
+from common import compute_hashes, size_fits
 from hashing import parse_md5_list
 
 # Validation types that require console-specific cryptographic keys.
@@ -391,4 +391,43 @@ def find_validated_variant(
             continue
         if check_file_validation(path, fname, validation_index, bios_dir) is None:
             return path
+    return None
+
+
+def agnostic_substitute(
+    file_entry: dict, sys_id: str, db: dict, platform_profiles: dict[str, dict]
+) -> tuple[str, str] | None:
+    """(path, directory) of a held file a filename-agnostic core can boot.
+
+    A core with `bios_mode: agnostic` (PCSX2 picks any image in its BIOS
+    folder) is served by any image of the right size, renamed to what the
+    platform declares. That only satisfies a frontend that checks existence:
+    a digest frontend compares the bytes. Only the platform's own cores are
+    asked, and the pack and verify read this one answer. An entry that
+    declares a content hash names one file: no substitute stands for it.
+    """
+    if any(file_entry.get(h) for h in ("sha1", "md5", "sha256", "crc32")):
+        return None
+    by_name = db.get("indexes", {}).get("by_name", {})
+    files_db = db.get("files", {})
+    for profile in platform_profiles.values():
+        if profile.get("bios_mode") != "agnostic":
+            continue
+        if sys_id not in set(profile.get("systems", [])):
+            continue
+        for entry in profile.get("files", []):
+            for sha1 in by_name.get(entry.get("name", ""), []):
+                path = files_db.get(sha1, {}).get("path", "")
+                if not path:
+                    continue
+                prefix = path.rsplit("/", 1)[0] + "/"
+                for candidate in files_db.values():
+                    held = candidate.get("path", "")
+                    if (
+                        held.startswith(prefix)
+                        and size_fits(entry, candidate.get("size", 0))
+                        and os.path.exists(held)
+                    ):
+                        return held, prefix
+                break
     return None

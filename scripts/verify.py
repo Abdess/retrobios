@@ -67,6 +67,7 @@ from nativemode import (
     reads_file_contents,
 )
 from validation import (
+    agnostic_substitute,
     _build_validation_index,
     _parse_validation,
     build_ground_truth,
@@ -760,6 +761,7 @@ def verify_platform(
     # cpc6128.rom against cap32's 32K one) has nothing to say about a
     # RetroArch pack.
     plat_cores = resolve_platform_cores(config, profiles)
+    platform_profiles = {name: profiles[name] for name in plat_cores}
     validation_index = _build_validation_index(
         {name: profiles[name] for name in plat_cores}
     )
@@ -827,6 +829,10 @@ def verify_platform(
             )
             if override:
                 local_path, resolve_status = override, "slot_arbitrated"
+            if not reads_file_contents(mode) and local_path is None:
+                found = agnostic_substitute(file_entry, sys_id, db, platform_profiles)
+                if found:
+                    local_path, resolve_status = found[0], "agnostic_fallback"
             if not reads_file_contents(mode):
                 result = verify_entry_existence(
                     file_entry,
