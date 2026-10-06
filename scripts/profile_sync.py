@@ -227,6 +227,24 @@ def collect_tokens(entry: dict) -> list[str]:
     return tokens
 
 
+_VERSION_NOTE_RE = re.compile(r"\(\s*v?(\d+(?:\.\d+)+)\s*\)")
+
+
+def cites_another_version(part: RefPart, core_version: object) -> str | None:
+    """The version a part's annotation names, when it is not the documented one.
+
+    A profile may cite two programs side by side, `main.cpp:407-411 (v0.0.11)`
+    beside its v0.16.0 pin. The annotation was dropped as prose and the part
+    compared with the pin, where it fell on unrelated code yet read ANCHORED.
+    """
+    match = _VERSION_NOTE_RE.search(part.raw or "")
+    if not match:
+        return None
+    declared = core_version.values() if isinstance(core_version, dict) else [core_version]
+    documented = {str(v or "").strip().lstrip("vV") for v in declared}
+    return None if match.group(1) in documented else match.group(1)
+
+
 def is_external_citation(path: str) -> bool:
     """True when a ref names a project rather than a path in a known repo.
 
@@ -1670,12 +1688,26 @@ def build_report(
         view, _ = resolve_path(part.path, part.start, tuple(tokens))
         return view.pin == view.head
 
+    def judge(part, flag, tokens, hashes) -> PartResult:
+        other = cites_another_version(part, profile.get("core_version"))
+        if other:
+            # ti99sim cites v0.0.11 beside its v0.16.0 pin: no revision of
+            # the pinned repository holds that program, so it cannot anchor.
+            return PartResult(
+                part, "EXTERNAL", None, None, None, [],
+                f"annotated for version {other}, not the documented one",
+            )
+        if flag:
+            return verify_at_pin(
+                part, fetch(PIN, part.path, part.start, tokens), tokens, hashes
+            )
+        return anchor_across_views(part, tokens)
+
     staged = []
     for entry_name, ref, tokens, hashes, ref_parts, citation in refs:
         flags = [self_checked(part, tokens) for part in ref_parts]
         judged = [
-            verify_at_pin(part, fetch(PIN, part.path, part.start, tokens), tokens, hashes)
-            if flag else anchor_across_views(part, tokens)
+            judge(part, flag, tokens, hashes)
             for part, flag in zip(ref_parts, flags)
         ]
         staged.append((entry_name, ref, citation, reconcile_self_check(judged, flags)))
