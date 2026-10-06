@@ -73,6 +73,8 @@ from nativemode import (
     reads_file_contents,
 )
 from validation import (
+    destination_owners,
+    validated_choice,
     inner_rom_check,
     settle_mismatch,
     agnostic_substitute,
@@ -643,6 +645,7 @@ def generate_pack(
             for name in resolve_platform_cores(config, emu_profiles)
         }
         validation_index = _build_validation_index(platform_profiles)
+    validation_owners = destination_owners(platform_profiles)
     slot_overrides = slots.pack_overrides(
         config, emu_profiles or {}, db, zip_contents, data_registry
     )
@@ -904,33 +907,15 @@ def generate_pack(
                 # Platform verification (existence/md5) is the authority for pack status.
                 # Emulator checks are supplementary -logged but don't downgrade.
                 # When a discrepancy is found, try to find a file satisfying both.
-                if (
-                    file_status.get(dedup_key) == "ok"
-                    and local_path
-                    and validation_index
-                ):
-                    fname = file_entry.get("name", "")
-                    check = check_file_validation(
-                        local_path, fname, validation_index, bios_dir
+                if file_status.get(dedup_key) == "ok":
+                    local_path, disagreement = validated_choice(
+                        file_entry, local_path, db, validation_index, bios_dir,
+                        digest_algorithm(verification_mode), dest, validation_owners,
                     )
-                    if check:
-                        reason, emus_list = check
-                        better = find_validated_variant(
-                            file_entry,
-                            db,
-                            local_path,
-                            validation_index,
-                            bios_dir,
-                            platform_digest=digest_algorithm(verification_mode),
+                    if disagreement:
+                        file_reasons.setdefault(
+                            dedup_key, f"{platform_display} says OK but {disagreement}"
                         )
-                        if better:
-                            local_path = better
-                        else:
-                            emus = ", ".join(emus_list)
-                            file_reasons.setdefault(
-                                dedup_key,
-                                f"{platform_display} says OK but {emus} says {reason}",
-                            )
 
                 if already_packed:
                     continue
@@ -3039,6 +3024,8 @@ def generate_manifest(
         name: emu_profiles[name]
         for name in _platform_cores(config, emu_profiles)
     }
+    manifest_validation = _build_validation_index(manifest_profiles)
+    manifest_owners = destination_owners(manifest_profiles)
 
     # Load registry for install metadata
     registry: dict = {}
@@ -3179,6 +3166,12 @@ def generate_manifest(
                 ):
                     record_omission(full_dest, file_entry, sys_id, status, None)
                     continue
+                # The variant the pack ships when an emulator rejects the
+                # resolved file: the installer must place the same bytes.
+                local_path, _disagreement = validated_choice(
+                    file_entry, local_path, db, manifest_validation, bios_dir,
+                    digest_algorithm(verification_mode), dest, manifest_owners,
+                )
 
                 # Get SHA1 and size. The installer fetches by hash, so record
                 # the copy this repo holds: an upstream hash carried by no
