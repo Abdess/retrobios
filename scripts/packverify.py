@@ -17,6 +17,7 @@ from packpaths import _register_path
 from ziptools import build_zip_contents_index
 from ziptools import check_inside_zip
 from nativemode import digest_algorithm
+from validation import frontend_digest_matches
 from nativemode import hash_mismatch_excludes_file
 import hashlib
 from common import filter_systems_by_target
@@ -405,6 +406,11 @@ def _intentional_hash_exclusion(
             offline=True,
         )
         if status != "hash_mismatch":
+            return False
+        if not entry.get("zipped_file") and frontend_digest_matches(
+            entry, local_path, digest_algorithm(verification_mode)
+        ):
+            # The frontend's own digest accepts it: the builder ships it.
             return False
 
         # A container can mismatch the outer declaration while still carrying
