@@ -498,5 +498,56 @@ class DownloadFailuresAndRevisions(unittest.TestCase):
             ["PS3UPDAT.PUP", "PS3UPDAT.PUP.ed8ab192"],
         )
 
+
+class GameDataHasOneDefinition(unittest.TestCase):
+    """The release notes and the composition table sorted game data apart.
+
+    The notes knew two engine trees, the table sixteen: fifteen assets of
+    Doom, Quake, Half-Life and Descent were listed as "Other". The Ur-Quan
+    Masters tree was in neither.
+    """
+
+    def test_the_release_section_follows_the_composition_tier(self):
+        import check_release_assets
+
+        for path in (
+            "bios/Id Software/Doom 3/demo/demo00.pk4",
+            "bios/Valve/Half-Life/valve/pak0.pak",
+            "bios/Toys for Bob/The Ur-Quan Masters/uqm-0.8.0-voice.uqm",
+        ):
+            with self.subTest(path=path):
+                self.assertEqual(common.composition_tier(path), "game_data")
+                self.assertEqual(
+                    check_release_assets._section_for(path), "Game engine data"
+                )
+
+    def test_a_tree_of_game_data_alone_is_a_game_data_tree(self):
+        db_path = REPO_ROOT / "database.json"
+        if not db_path.exists():
+            self.skipTest("database.json not generated")
+        db = json.loads(db_path.read_text(encoding="utf-8"))
+        profiles = common.load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        names: dict[str, set[str]] = {}
+        for profile in profiles.values():
+            for entry in profile.get("files") or []:
+                category = entry.get("category", "bios")
+                for name in [entry.get("name"), *(entry.get("aliases") or [])]:
+                    if name:
+                        names.setdefault(name, set()).add(category)
+        trees: dict[str, set[str]] = {}
+        for record in db["files"].values():
+            parts = record["path"].split("/")
+            if len(parts) > 2 and parts[0] == "bios":
+                trees.setdefault(parts[1], set()).update(
+                    names.get(record["name"], {"unreferenced"})
+                )
+        only_game_data = sorted(
+            top for top, categories in trees.items() if categories == {"game_data"}
+        )
+        self.assertEqual(
+            [top for top in only_game_data if top not in common.GAME_DATA_TOPS], []
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

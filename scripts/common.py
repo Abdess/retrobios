@@ -1076,6 +1076,7 @@ GAME_DATA_TOPS = (
     "Interplay",
     "Monolith",
     "Softdisk",
+    "Toys for Bob",
     "Valve",
 )
 
