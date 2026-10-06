@@ -17,7 +17,7 @@ from packpaths import _register_path
 from ziptools import build_zip_contents_index
 from ziptools import check_inside_zip
 from nativemode import digest_algorithm
-from validation import frontend_digest_matches
+from validation import settle_mismatch
 from nativemode import hash_mismatch_excludes_file
 import hashlib
 from common import filter_systems_by_target
@@ -31,11 +31,12 @@ from packresolve import resolve_file
 from common import resolve_platform_cores
 from common import sanitize_pack_path
 import zipfile
-def _members_are_held(data: bytes, by_md5: dict, db: dict) -> bool:
-    """Whether every member of an archive is a dump the collection holds."""
-    import io
+import io
+from collections.abc import Callable
 
-    held_inside = build_zip_contents_index(db)
+
+def _members_are_held(data: bytes, by_md5: dict, held_inside: dict) -> bool:
+    """Whether every member of an archive is a dump the collection holds."""
     try:
         with zipfile.ZipFile(io.BytesIO(data)) as archive:
             members = [i for i in archive.infolist() if not i.is_dir()]
@@ -50,6 +51,42 @@ def _members_are_held(data: bytes, by_md5: dict, db: dict) -> bool:
     return True
 
 
+def _once(build: Callable[[], dict]) -> Callable[[], dict]:
+    """A value built on first use and kept."""
+    built: list[dict] = []
+
+    def get() -> dict:
+        if not built:
+            built.append(build())
+        return built[0]
+
+    return get
+
+
+def _settle_untracked(
+    status: str,
+    name: str,
+    zf: zipfile.ZipFile,
+    by_md5: dict,
+    held_inside: Callable[[], dict],
+    errors: list[str],
+    file_name: str,
+) -> tuple[str, str]:
+    """Status of a member no hash recognised, and the name to record.
+
+    An archive the builder assembled (a MAME clone set) passes when every
+    member is a dump the collection holds, loose or inside a romset. Bytes
+    nothing recognises were written wrong or come from a source that no
+    longer matches: counted and passed, they went unseen.
+    """
+    if status != "untracked":
+        return status, file_name
+    if name.endswith(".zip") and _members_are_held(zf.read(name), by_md5, held_inside()):
+        return "verified_members", os.path.basename(name)
+    errors.append(f"{name}: content matches no collected file")
+    return "untracked", file_name
+
+
 def verify_pack(
     zip_path: str, db: dict, data_registry: dict | None = None
 ) -> tuple[bool, dict]:
@@ -61,6 +98,9 @@ def verify_pack(
     """
     files_db = db.get("files", {})  # SHA1 -> file_info
     by_md5 = db.get("indexes", {}).get("by_md5", {})  # MD5 -> SHA1
+    # Built on the first archive no hash recognises, once per pack: the
+    # index opens every archive of the collection.
+    held_inside = _once(lambda: build_zip_contents_index(db))
     by_name = db.get("indexes", {}).get("by_name", {})  # name -> [SHA1]
 
     # Data directory file index
@@ -202,21 +242,9 @@ def verify_pack(
                         except (zipfile.BadZipFile, OSError):
                             continue
 
-            # An archive the builder assembled (a MAME clone set): every
-            # member must be a dump the collection holds, loose or inside a
-            # romset.
-            if (
-                status == "untracked"
-                and name.endswith(".zip")
-                and _members_are_held(zf.read(name), by_md5, db)
-            ):
-                status = "verified_members"
-                file_name = os.path.basename(name)
-
-            if status == "untracked":
-                # Bytes nothing recognises: written wrong, or a source that
-                # no longer matches. Counted and passed, it went unseen.
-                errors.append(f"{name}: content matches no collected file")
+            status, file_name = _settle_untracked(
+                status, name, zf, by_md5, held_inside, errors, file_name
+            )
 
             manifest["files"].append(
                 {
@@ -440,27 +468,10 @@ def _intentional_hash_exclusion(
             data_dir_registry=data_dir_registry,
             offline=True,
         )
-        if status != "hash_mismatch":
+        # The builder ships what the frontend would accept: the exact inner
+        # ROM of a zipped_file entry, or a file its own digest matches.
+        if settle_mismatch(entry, local_path, status, verification_mode) != "hash_mismatch":
             return False
-        if not entry.get("zipped_file") and frontend_digest_matches(
-            entry, local_path, digest_algorithm(verification_mode)
-        ):
-            # The frontend's own digest accepts it: the builder ships it.
-            return False
-
-        # A container can mismatch the outer declaration while still carrying
-        # the exact inner ROM requested by Batocera-style zipped_file entries.
-        zipped_file = entry.get("zipped_file")
-        if zipped_file and local_path:
-            declared = str(entry.get("md5") or "")
-            candidates = [value.strip() for value in declared.split(",") if value.strip()]
-            if not candidates:
-                candidates = [""]
-            if any(
-                check_inside_zip(local_path, zipped_file, candidate) == "ok"
-                for candidate in candidates
-            ):
-                return False
     return True
 
 def _structural_errors(zf, zip_set: set) -> list[str]:

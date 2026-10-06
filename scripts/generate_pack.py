@@ -35,7 +35,6 @@ from common import (
     ArtifactLockBusy,
     build_target_cores_cache,
     build_zip_contents_index,
-    check_inside_zip,
     compute_hashes,
     expand_directory_entries,
     expand_platform_declared_names,
@@ -58,7 +57,6 @@ from common import (
     resolve_local_file,
     sanitize_pack_path,
     select_emulator_profiles,
-    size_fits,
     yaml_load,
 )
 import packresolve
@@ -75,6 +73,8 @@ from nativemode import (
     reads_file_contents,
 )
 from validation import (
+    inner_rom_check,
+    settle_mismatch,
     agnostic_substitute,
     frontend_digest_matches,
     _build_validation_index,
@@ -287,24 +287,6 @@ def download_external(file_entry: dict, dest_path: str) -> bool:
 PACK_DOCUMENTS = ("README.txt", "manifest.json")
 
 
-def _inner_rom_check(file_entry: dict, local_path: str) -> str:
-    """How an archive answers an entry that pins a ROM inside it.
-
-    Batocera, RetroBat and ROCKNIX hash a member of the ZIP, never the ZIP:
-    the resolver hands back the archive as a mismatch and this decides it.
-    Returns check_inside_zip's answer for the first accepted MD5 that
-    matches, else for the last one tried. The pack and the install manifest
-    both read it, so a file one of them ships is a file the other lists.
-    """
-    declared = [m.strip() for m in file_entry.get("md5", "").split(",") if m.strip()]
-    result = "not_in_zip"
-    for candidate in declared or [""]:
-        result = check_inside_zip(local_path, file_entry["zipped_file"], candidate)
-        if result == "ok":
-            break
-    return result
-
-
 def _data_directory_members(
     pack_systems: dict,
     data_registry: dict | None,
@@ -494,7 +476,7 @@ def _preferred_entries(
             def accepted(path: str | None) -> int:
                 if not path or not path.endswith(".zip"):
                     return -1
-                return sum(_inner_rom_check(fe, path) == "ok" for fe in members)
+                return sum(inner_rom_check(fe, path) == "ok" for fe in members)
 
             fe, path, _st = max(resolved, key=lambda item: accepted(item[1]))
             if accepted(path) > 0:
@@ -874,7 +856,7 @@ def generate_pack(
                 ):
                     zf_name = file_entry.get("zipped_file")
                     if zf_name and local_path:
-                        last_result = _inner_rom_check(file_entry, local_path)
+                        last_result = inner_rom_check(file_entry, local_path)
                         zip_ok = last_result == "ok"
                         if zip_ok:
                             status = "zip_exact"
@@ -2973,26 +2955,6 @@ def _manifest_core_entries(
     return total_size
 
 
-def _settle_mismatch(
-    file_entry: dict, local_path: str | None, status: str, verification_mode: str
-) -> str:
-    """Upgrade a hash mismatch the frontend itself would accept.
-
-    Batocera pins the md5 of a ROM inside the archive (zipped_file), and a
-    frontend that hashes one digest accepts a file whose other declared
-    hashes disagree.
-    """
-    if status != "hash_mismatch" or not local_path:
-        return status
-    if file_entry.get("zipped_file"):
-        return "zip_exact" if _inner_rom_check(file_entry, local_path) == "ok" else status
-    if hash_mismatch_excludes_file(verification_mode) and frontend_digest_matches(
-        file_entry, local_path, digest_algorithm(verification_mode)
-    ):
-        return "frontend_digest_exact"
-    return status
-
-
 def _manifest_region_drops(
     config: dict,
     pack_systems: dict,
@@ -3191,7 +3153,7 @@ def generate_manifest(
                         if os.path.basename(local_path) != file_entry.get("name", ""):
                             # The pack explains the rename in a note of its own.
                             rename_notes.add(file_entry.get("name", ""))
-                status = _settle_mismatch(file_entry, local_path, status, verification_mode)
+                status = settle_mismatch(file_entry, local_path, status, verification_mode)
                 # An existence platform never reads the bytes, so a declared
                 # hash the local dump contradicts is not a reason to withhold
                 # the file. Hash platforms would reject it, so they omit it.
