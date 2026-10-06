@@ -5992,6 +5992,18 @@ struct BurnDriver BurnDrvneogeo = {
              "refuse"),
             (["--all", "--all-variants", "--verify-packs"], ["--split"],
              "refuse"),
+            # Every flag a quick mode does not read, from one table.
+            (["--platform", "retroarch", "--verify-packs"], ["--split"], "refuse"),
+            (["--platform", "retroarch", "--verify-packs"], ["--manifest"], "refuse"),
+            (["--platform", "retroarch", "--verify-packs"], ["--emulator", "handy"],
+             "refuse"),
+            (["--manifest-targets"], ["--platform", "batocera"], "refuse"),
+            (["--manifest-targets"], ["--system", "sony-playstation"], "refuse"),
+            (["--manifest-targets"], ["--all"], "refuse"),
+            (["--platform", "retroarch", "--from-md5", "d8f1"], ["--manifest"],
+             "refuse"),
+            (["--list-systems"], ["--region", "us"], "refuse"),
+            (["--list-emulators"], ["--target", "switch"], "refuse"),
         ]
         for mode, flag, expected in matrix:
             with self.subTest(mode=mode, flag=flag):
