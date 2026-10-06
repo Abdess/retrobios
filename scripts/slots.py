@@ -319,6 +319,15 @@ def pack_overrides(
     return overrides
 
 
+def _strongest(claims: list[Claim]) -> Claim:
+    """The profile claim with the strongest proof; the first emulator breaks ties.
+
+    yaps2 pins its GameIndex.yaml by sha1 while armsx2 and lrps2 only match a
+    path: alphabetical order served armsx2's copy to all three.
+    """
+    return max(claims, key=lambda claim: (_claim_rank(claim), -claims.index(claim)))
+
+
 def arbitrate(conflict: Conflict, mode: str, addressee: str = "platform") -> Decision:
     """Decide a contested destination for the pack being built.
 
@@ -333,7 +342,7 @@ def arbitrate(conflict: Conflict, mode: str, addressee: str = "platform") -> Dec
     addressee decides; the loss is reported rather than absorbed, because the
     cause is an upstream declaration that needs fixing at its source.
     """
-    profile = conflict.profile_claims[0]
+    profile = _strongest(conflict.profile_claims)
     if addressee == "emulator":
         return Decision(conflict, profile, ADDRESSEE)
     if not nativemode.reads_file_contents(mode):
@@ -345,11 +354,24 @@ def format_decision(decision: Decision) -> str:
     """One line naming the contested slot, the winner and the ground for it."""
     conflict = decision.conflict
     if decision.serves_both:
-        return (
-            f"{conflict.destination}: serve {decision.winner.local_path} "
-            f"({', '.join(conflict.emulators) or 'profile'}); the frontend only "
+        winner = decision.winner.local_path
+        served = sorted({
+            c.emulator for c in conflict.profile_claims
+            if c.emulator and c.local_path == winner
+        })
+        others = sorted({
+            c.emulator for c in conflict.profile_claims
+            if c.emulator and c.local_path != winner
+        })
+        line = (
+            f"{conflict.destination}: serve {winner} "
+            f"({', '.join(served) or 'profile'}); the frontend only "
             "checks the path, so both are satisfied"
         )
+        if others:
+            # One path holds one file: an emulator pinning another is not served.
+            line += f"; {', '.join(others)} expected another file"
+        return line
     if decision.reason == ADDRESSEE:
         return (
             f"{conflict.destination}: serve {decision.winner.local_path}, "
