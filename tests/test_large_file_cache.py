@@ -435,5 +435,68 @@ class ReleaseAssetNames(unittest.TestCase):
             self.assertTrue(Path(cache, names[self.ET]).exists())
 
 
+class _StalledResponse(io.BytesIO):
+    """Serves one chunk, then the stream stalls."""
+
+    def __init__(self):
+        super().__init__(PAYLOAD_A)
+        self._served = False
+
+    def read(self, size: int = -1) -> bytes:
+        if self._served:
+            raise TimeoutError("read timed out")
+        self._served = True
+        return super().read(4096)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+class DownloadFailuresAndRevisions(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.mkdtemp(dir=REPO_ROOT / "tmp")
+        self._urlopen = largefiles.urllib.request.urlopen
+        self.addCleanup(setattr, largefiles.urllib.request, "urlopen", self._urlopen)
+
+    def tearDown(self):
+        import shutil
+
+        shutil.rmtree(self.dir, ignore_errors=True)
+
+    def test_a_stalled_stream_leaves_no_scratch(self):
+        largefiles.urllib.request.urlopen = lambda *a, **k: _StalledResponse()
+        result = largefiles.fetch_large_file(
+            "big.bin", self.dir, expected_md5=hashlib.md5(PAYLOAD_A).hexdigest(),
+            registered=[],
+        )
+        self.assertIsNone(result)
+        self.assertEqual(os.listdir(self.dir), [])
+
+    def test_another_revision_is_kept_not_evicted(self):
+        cached = Path(self.dir, "PS3UPDAT.PUP")
+        cached.write_bytes(PAYLOAD_A)
+        largefiles.urllib.request.urlopen = lambda *a, **k: (_ for _ in ()).throw(
+            urllib.error.URLError("offline")
+        )
+        result = largefiles.fetch_large_file(
+            "PS3UPDAT.PUP", self.dir, expected_md5=hashlib.md5(PAYLOAD_B).hexdigest(),
+            registered=[],
+        )
+        self.assertIsNone(result)
+        self.assertTrue(cached.exists())
+
+    def test_a_variant_asset_is_a_candidate(self):
+        registered = [
+            "bios/Sony/PlayStation 3/PS3UPDAT.PUP",
+            "bios/Sony/PlayStation 3/.variants/PS3UPDAT.PUP.ed8ab192",
+        ]
+        self.assertEqual(
+            largefiles.asset_candidates("PS3UPDAT.PUP", registered),
+            ["PS3UPDAT.PUP", "PS3UPDAT.PUP.ed8ab192"],
+        )
+
 if __name__ == "__main__":
     unittest.main()

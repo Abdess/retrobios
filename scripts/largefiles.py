@@ -6,7 +6,9 @@ against the hash the caller declares."""
 from __future__ import annotations
 
 import contextlib
+import http.client
 import os
+import sys
 import re
 import tempfile
 import urllib.error
@@ -98,6 +100,13 @@ def asset_candidates(name: str, registered: Iterable[str]) -> list[str]:
     matches = [
         names[p] for p in sorted(names) if os.path.basename(p) == name
     ]
+    # A pinned revision is stored as .variants/<name>.<md5 prefix>: ROCKNIX
+    # pins PS3UPDAT.PUP to the variant, and asking for the bare name never
+    # reached its asset.
+    matches += [
+        names[p] for p in sorted(names)
+        if "/.variants/" in p and os.path.basename(p).startswith(name + ".")
+    ]
     return matches or [name]
 
 
@@ -150,21 +159,15 @@ def _fetch_asset(
             hashes = None
         if hashes is None:
             pass
-        elif expected_sha1 or expected_md5:
-            if expected_sha1 and hashes["sha1"].lower() != expected_sha1.lower():
-                _drop(cached)
-            elif expected_md5:
-                md5_list = [
-                    m.strip().lower() for m in expected_md5.split(",") if m.strip()
-                ]
-                if hashes["md5"].lower() not in md5_list:
-                    _drop(cached)
-                else:
-                    return cached
-            else:
-                return cached
-        else:
+        elif not (expected_sha1 or expected_md5) or _matches(
+            hashes, expected_sha1, expected_md5
+        ):
             return cached
+        else:
+            # A verified copy of this asset that answers another hash: the
+            # caller wants a different revision under the same name. Keeping
+            # it is what lets the next caller for the primary find it.
+            return None
 
     if offline:
         return None
@@ -182,42 +185,46 @@ def _fetch_asset(
     if " " in name:
         candidates.append(name.replace(" ", "."))
 
-    downloaded = False
-    for candidate in candidates:
-        encoded_name = urllib.parse.quote(candidate)
-        url = (
-            f"https://github.com/{LARGE_FILES_REPO}/releases/download/"
-            f"{LARGE_FILES_RELEASE}/{encoded_name}"
-        )
-        try:
-            req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
-            with urllib.request.urlopen(req, timeout=300) as resp:
-                with open(tmp_path, "wb") as f:
-                    while True:
-                        chunk = resp.read(65536)
-                        if not chunk:
-                            break
-                        f.write(chunk)
-            downloaded = True
-            break
-        except (urllib.error.URLError, urllib.error.HTTPError):
-            if os.path.exists(tmp_path):
-                os.unlink(tmp_path)
-
-    if not downloaded:
-        if os.path.exists(tmp_path):
-            os.unlink(tmp_path)
-        return None
-
-    if expected_sha1 or expected_md5:
-        hashes = compute_hashes(tmp_path)
-        if expected_sha1 and hashes["sha1"].lower() != expected_sha1.lower():
-            os.unlink(tmp_path)
+    try:
+        downloaded = False
+        for candidate in candidates:
+            encoded_name = urllib.parse.quote(candidate)
+            url = (
+                f"https://github.com/{LARGE_FILES_REPO}/releases/download/"
+                f"{LARGE_FILES_RELEASE}/{encoded_name}"
+            )
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
+                with urllib.request.urlopen(req, timeout=300) as resp:
+                    with open(tmp_path, "wb") as f:
+                        while True:
+                            chunk = resp.read(65536)
+                            if not chunk:
+                                break
+                            f.write(chunk)
+                downloaded = True
+                break
+            except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
+                # A stalled or cut stream is a timeout or IncompleteRead, not
+                # a URLError: it escaped this handler and left its scratch.
+                print(f"  large file {candidate}: {exc}", file=sys.stderr)
+        if not downloaded:
             return None
-        if expected_md5:
-            md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
-            if hashes["md5"].lower() not in md5_list:
-                os.unlink(tmp_path)
-                return None
-    os.replace(tmp_path, cached)
-    return cached
+        if (expected_sha1 or expected_md5) and not _matches(
+            compute_hashes(tmp_path), expected_sha1, expected_md5
+        ):
+            return None
+        os.replace(tmp_path, cached)
+        return cached
+    finally:
+        _drop(tmp_path)
+
+
+def _matches(hashes: dict, expected_sha1: str, expected_md5: str) -> bool:
+    """Whether computed hashes answer the caller's declaration."""
+    if expected_sha1 and hashes["sha1"].lower() != expected_sha1.lower():
+        return False
+    if expected_md5:
+        md5_list = [m.strip().lower() for m in expected_md5.split(",") if m.strip()]
+        return hashes["md5"].lower() in md5_list
+    return True
