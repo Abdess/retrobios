@@ -13,7 +13,7 @@ import zipfile
 from collections import OrderedDict
 
 from .base_exporter import BaseExporter
-from .baseline import NativeSystem, Report
+from .baseline import NativeFile, NativeSystem, Report
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/ajgowans/BiosDB_MiSTer/db/bios_db.json.zip"
@@ -57,6 +57,13 @@ class Exporter(BaseExporter):
         with zipfile.ZipFile(io.BytesIO(raw)) as archive:
             return {_DB_NAME: archive.read(_DB_NAME).decode("utf-8")}
 
+    def states(self, fe: NativeFile, field_name: str) -> bool:
+        """A correction whose path the database does not hold is not written."""
+        written = getattr(self, "_written", None)
+        if written is not None and id(fe) not in written:
+            return False
+        return super().states(fe, field_name)
+
     def _by_path(self, systems: dict[str, NativeSystem]) -> dict[str, object]:
         indexed: dict[str, object] = {}
         for system in systems.values():
@@ -80,11 +87,13 @@ class Exporter(BaseExporter):
             )
         database = json.loads(original, object_pairs_hook=OrderedDict)
         indexed = self._by_path(systems)
+        self._written = set()
 
         for path, entry in database.get("files", {}).items():
             fe = indexed.get(path)
             if fe is None:
                 continue
+            self._written.add(id(fe))
             md5 = fe.hash("md5")
             if md5:
                 entry["hash"] = md5

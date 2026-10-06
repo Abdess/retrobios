@@ -181,6 +181,22 @@ class BizHawkCountsWhatItWrites(unittest.TestCase):
         self.assertFalse(exporter.states(first, "sha1"))
 
 
+class MisterCountsWhatItWrites(unittest.TestCase):
+    def test_a_path_the_database_lacks_is_not_counted(self):
+        from exporter.misterfpga_exporter import Exporter as Mister
+
+        held = NativeFile("boot.rom", "NES/boot.rom", "nes", platform={"md5": A},
+                          truth={"md5": B}, corrections=["md5"])
+        absent = NativeFile("boot.rom", "SNES/boot.rom", "snes", platform={"md5": A},
+                            truth={"md5": C}, corrections=["md5"])
+        systems = {"nes": NativeSystem("nes", files=[held]), "snes": NativeSystem("snes", files=[absent])}
+        database = {"db_id": "x", "files": {"games/NES/boot.rom": {"hash": A, "url": "u"}}}
+        exporter = Mister()
+        exporter.render(systems, None, {"bios_db.json": json.dumps(database)})
+        self.assertTrue(exporter.states(held, "md5"))
+        self.assertFalse(exporter.states(absent, "md5"))
+
+
 class ModelKeepsOneFileOneEntry(unittest.TestCase):
     def test_size_describes_the_hash_written(self):
         fe = NativeFile("boot.bin", "dc/boot.bin", "dc",
