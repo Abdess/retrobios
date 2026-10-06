@@ -591,6 +591,7 @@ def generate_pack(
     required_only: bool = False,
     system_filter: list[str] | None = None,
     precomputed_extras: list[dict] | None = None,
+    extras_only: bool = False,
     source: str = "full",
     flatten: bool = True,
     regions: list[str] | None = None,
@@ -690,6 +691,10 @@ def generate_pack(
             )
             return None
         pack_systems = filtered
+    if extras_only:
+        # The part of a split that carries the core extras no platform system
+        # owns: the platform's own files and trees went to the other parts.
+        pack_systems = {}
 
     preferred_entries: dict[str, int] = {}
     if source != "truth":
@@ -1707,6 +1712,14 @@ def generate_split_packs(
         )
     else:
         all_extras = []
+    version = config.get("version", config.get("dat_version", ""))
+    ver_tag = f"_{version.replace(' ', '')}" if version else ""
+    narrow_tags = "".join(
+        tag
+        for tag, _label in _narrowings(
+            source, regions, target_name, one_per_slot, required_only
+        )
+    )
     results = []
     for group_name, group_system_ids in sorted(groups.items()):
         group_extras = _extras_for_systems(all_extras, group_system_ids)
@@ -1731,14 +1744,6 @@ def generate_split_packs(
             offline=offline,
         )
         if zip_path:
-            version = config.get("version", config.get("dat_version", ""))
-            ver_tag = f"_{version.replace(' ', '')}" if version else ""
-            narrow_tags = "".join(
-                tag
-                for tag, _label in _narrowings(
-                    source, regions, target_name, one_per_slot, required_only
-                )
-            )
             safe_group = _name_part(group_name, "_")
             new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{narrow_tags}_{safe_group}_BIOS_Pack.zip"
             new_path = os.path.join(split_dir, new_name)
@@ -1747,7 +1752,9 @@ def generate_split_packs(
                 zip_path = new_path
             results.append(zip_path)
 
-    # Warn about extras that couldn't be distributed (emulators without systems: field)
+    # Extras whose system the platform does not declare, or that name none,
+    # belong to no group: they go in a part of their own, or the parts would
+    # not add up to the full pack (4507 of RetroArch's 5430 were left out).
     distributed = {
         id(fe)
         for fe in _extras_for_systems(
@@ -1756,12 +1763,23 @@ def generate_split_packs(
     }
     undistributed = [fe for fe in all_extras if id(fe) not in distributed]
     if undistributed:
-        emus = sorted({fe.get("source_emulator", "?") for fe in undistributed})
-        print(
-            f"  NOTE: {len(undistributed)} core extras from {len(emus)} emulators "
-            f"not in split packs (missing systems: field in profiles: "
-            f"{', '.join(emus[:5])}{'...' if len(emus) > 5 else ''})"
+        zip_path = generate_pack(
+            platform_name, platforms_dir, db, bios_dir, split_dir,
+            emulators_dir=emulators_dir, zip_contents=zip_contents,
+            data_registry=data_registry, emu_profiles=emu_profiles,
+            target_cores=target_cores, required_only=required_only,
+            precomputed_extras=undistributed, extras_only=True, source=source,
+            regions=regions, target_name=target_name, one_per_slot=one_per_slot,
+            offline=offline,
         )
+        if zip_path:
+            new_path = os.path.join(
+                split_dir,
+                f"{platform_display.replace(' ', '_')}{ver_tag}{narrow_tags}"
+                "_Other_Cores_BIOS_Pack.zip",
+            )
+            os.replace(zip_path, new_path)
+            results.append(new_path)
 
     return results
 
