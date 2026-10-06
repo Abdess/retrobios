@@ -1542,35 +1542,39 @@ def generate_system_pack(
     sys_display = "_".join(
         _name_part("_".join(w.title() for w in sid.split("-"))) for sid in system_ids
     )
-    result = generate_emulator_pack(
-        matching,
-        emulators_dir,
-        db,
-        bios_dir,
-        output_dir,
-        standalone,
-        zip_contents,
-        required_only=required_only,
-        regions=regions,
-        offline=offline,
-        platforms_dir=platforms_dir,
-    )
-    if result:
-        # Rename to system-based name. Every dimension goes through the one
-        # list: keeping only the region tag made --system X --required-only
-        # overwrite the pack built without it.
+    # Built in a scratch directory: under its emulator name in output_dir it
+    # overwrote, then carried away, an --emulator pack already there.
+    os.makedirs(output_dir, exist_ok=True)
+    scratch = tempfile.mkdtemp(prefix=".system-", dir=output_dir)
+    try:
+        result = generate_emulator_pack(
+            matching,
+            emulators_dir,
+            db,
+            bios_dir,
+            scratch,
+            standalone,
+            zip_contents,
+            required_only=required_only,
+            regions=regions,
+            offline=offline,
+            platforms_dir=platforms_dir,
+        )
+        if not result:
+            return None
+        # Every dimension goes through the one list: keeping only the region
+        # tag made --system X --required-only overwrite the pack built without it.
         tags = "".join(
             tag
             for tag, _label in _narrowings(
                 "full", regions, None, False, required_only, standalone=standalone
             )
         )
-        new_name = f"{sys_display}{tags}_BIOS_Pack.zip"
-        new_path = os.path.join(output_dir, new_name)
-        if new_path != result:
-            os.rename(result, new_path)
-            result = new_path
-    return result
+        new_path = os.path.join(output_dir, f"{sys_display}{tags}_BIOS_Pack.zip")
+        os.replace(result, new_path)
+        return new_path
+    finally:
+        shutil.rmtree(scratch, ignore_errors=True)
 
 
 def list_platforms(platforms_dir: str) -> list[str]:
