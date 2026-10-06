@@ -196,6 +196,13 @@ class MisterCountsWhatItWrites(unittest.TestCase):
 
 
 class ModelKeepsOneFileOneEntry(unittest.TestCase):
+    def test_a_list_of_sizes_is_not_one_size(self):
+        """A profile may accept several revisions; int() on the list crashed."""
+        several = NativeFile("a.bin", "a.bin", "s", truth={"size": [1024, 2048], "crc32": "aaaaaaaa"})
+        single = NativeFile("b.bin", "b.bin", "s", truth={"size": [1024], "crc32": "aaaaaaaa"})
+        self.assertIsNone(several.size())
+        self.assertEqual(single.size(), 1024)
+
     def test_size_describes_the_hash_written(self):
         fe = NativeFile("boot.bin", "dc/boot.bin", "dc",
                         platform={"size": 2097152, "md5": A}, truth={"size": 480})
