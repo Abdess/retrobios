@@ -62,7 +62,6 @@ files:
     size: 2097152
     crc32: "54c0c963"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:58-65"
 
   # -------------------------------------------------------
@@ -75,7 +74,6 @@ files:
     crc32: "79434781"
     required: true
     aliases: [basic2.rom]
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:78-85"
 
   - name: os12.rom
@@ -84,7 +82,6 @@ files:
     size: 16384
     crc32: "3c14fc70"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:436-443"
 
   - name: dfs09.rom
@@ -94,7 +91,6 @@ files:
     crc32: "3ce609cf"
     required: false
     note: "Conditional: only when using 8271 disk interface"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:444-451"
 
   - name: dfs-2.26.rom
@@ -104,7 +100,6 @@ files:
     crc32: "5ae33e94"
     required: false
     note: "Conditional: needed for 1770 DFS or tube processor"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:452-459"
 
   - name: adfs-1.30.rom
@@ -114,7 +109,6 @@ files:
     crc32: "d3855588"
     required: false
     note: "Conditional: needed for ADFS support"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:460-467"
 
   - name: ADT-1.40.rom
@@ -124,7 +118,6 @@ files:
     crc32: "8314fed0"
     required: false
     note: "Optional: fetched separately, silently skipped if absent"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:468-475"
 
   - name: TUBE110.rom
@@ -134,7 +127,6 @@ files:
     crc32: "9ec2dbd0"
     required: false
     note: "Conditional: needed for 6502 tube processor"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:476-483"
 
   - name: Z80_122.rom
@@ -144,7 +136,6 @@ files:
     crc32: "b5851efc"
     required: false
     note: "Conditional: needed for Z80 tube processor"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:484-491"
 
   # -------------------------------------------------------
@@ -156,7 +147,6 @@ files:
     size: 16384
     crc32: "79434781"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:90-97"
 
   - name: os.rom
@@ -165,7 +155,6 @@ files:
     size: 16384
     crc32: "bf63fb1f"
     required: true
-    mode: standalone
     note: >
       The catalogue accepts five images: 406a42ce, 0886741b, bf63fb1f, 6fea0978
       and d61135d7. They differ only in the credits text, which lives on the IO
@@ -179,7 +168,6 @@ files:
     crc32: "51523993"
     required: false
     note: "Conditional: needed for PRES ADFS"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:98-105"
 
   - name: ADFS-E00_2.rom
@@ -189,7 +177,6 @@ files:
     crc32: "8d17de0e"
     required: false
     note: "Conditional: needed for PRES ADFS"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:106-113"
 
   - name: adfs.rom
@@ -199,7 +186,6 @@ files:
     crc32: "3289bdc6"
     required: false
     note: "Conditional: needed for Acorn ADFS"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:114-121"
 
   - name: DFS-1770-2.20.rom
@@ -209,7 +195,6 @@ files:
     crc32: "f3dc9bc5"
     required: false
     note: "Conditional: needed for DFS disk images"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:122-129"
 
   - name: ELK130E.rom
@@ -219,7 +204,6 @@ files:
     crc32: "a923368d"
     required: false
     note: "Conditional: needed for IDE interface"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:130-137"
 
   - name: AP6v133.rom
@@ -229,7 +213,6 @@ files:
     crc32: "e0013cfc"
     required: false
     note: "Conditional: needed for AP6 commands. The catalogue records crc32 e0013cfc, which is the 7772-byte RetroHardware Plus 1 Support 1.33c build of 16 Jun 2020, and declares 8 KiB: Request::Node::validate() resizes the loaded image to 8192 bytes and the fetcher reads any length."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:138-145, Machines/Utility/ROMCatalogue.cpp:1484-1499, OSBindings/SDL/main.cpp:756-783"
 
   # -------------------------------------------------------
@@ -241,7 +224,6 @@ files:
     size: 262144
     crc32: "c4f0f55f"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:193-200"
 
   # -------------------------------------------------------
@@ -255,7 +237,6 @@ files:
     crc32: "815752df"
     required: false
     note: "Built into binary. Required for CPC 464 model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:261-268, Machines/Utility/ROMLibrary.cpp:14535"
 
   - name: basic464.rom
@@ -265,7 +246,6 @@ files:
     crc32: "7d9a3bac"
     required: false
     note: "Built into binary. Required for CPC 464 model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:269-276, Machines/Utility/ROMLibrary.cpp:14532"
 
   - name: os664.rom
@@ -275,7 +255,6 @@ files:
     crc32: "3f5a6dc4"
     required: false
     note: "Built into binary. Required for CPC 664 model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:277-283, Machines/Utility/ROMLibrary.cpp:14537"
 
   - name: basic664.rom
@@ -285,7 +264,6 @@ files:
     crc32: "32fee492"
     required: false
     note: "Built into binary. Required for CPC 664 model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:284-291, Machines/Utility/ROMLibrary.cpp:14534"
 
   - name: os6128.rom
@@ -295,7 +273,6 @@ files:
     crc32: "0219bb74"
     required: false
     note: "Built into binary. Required for CPC 6128 model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:292-299, Machines/Utility/ROMLibrary.cpp:14536"
 
   - name: basic6128.rom
@@ -305,7 +282,6 @@ files:
     crc32: "ca6af63d"
     required: false
     note: "Built into binary. Required for CPC 6128 model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:300-307, Machines/Utility/ROMLibrary.cpp:14533"
 
   - name: amsdos.rom
@@ -315,7 +291,6 @@ files:
     crc32: "1fe22ecd"
     required: false
     note: "Built into binary. Needed for CPC 664/6128 disk support."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:253-260, Machines/Utility/ROMLibrary.cpp:14531"
 
   # -------------------------------------------------------
@@ -328,7 +303,6 @@ files:
     crc32: "ba210588"
     required: true
     note: "Required for original Apple II model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:336-343"
 
   - name: apple2.rom
@@ -338,7 +312,6 @@ files:
     crc32: "f66f9c26"
     required: true
     note: "Required for Apple II+ model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:328-335"
 
   - name: apple2eu.rom
@@ -348,7 +321,6 @@ files:
     crc32: "e12be18d"
     required: true
     note: "Required for Apple IIe model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:320-327"
 
   - name: apple2e.rom
@@ -358,7 +330,6 @@ files:
     crc32: "65989942"
     required: true
     note: "Required for Enhanced IIe model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:312-319"
 
   - name: apple2-character.rom
@@ -368,7 +339,6 @@ files:
     crc32: "64f415c6"
     required: true
     note: "Required for Apple II and II+ models"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:344-351"
 
   - name: apple2eu-character.rom
@@ -378,7 +348,6 @@ files:
     crc32: "816a86f1"
     required: true
     note: "Required for Apple IIe model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:352-359"
 
   - name: apple2e-character.rom
@@ -388,7 +357,6 @@ files:
     crc32: "2651014d"
     required: true
     note: "Required for Enhanced IIe model. Also used by Apple IIgs."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:360-367"
 
   - name: scsi.rom
@@ -398,7 +366,6 @@ files:
     crc32: "5aff85d3"
     required: false
     note: "Conditional: needed for SCSI controller"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:368-375"
 
   # -------------------------------------------------------
@@ -411,7 +378,6 @@ files:
     crc32: "42f124b0"
     required: true
     note: "Required for ROM01 model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:380-387"
 
   - name: apple2gs.rom2
@@ -421,7 +387,6 @@ files:
     crc32: "de7ddf29"
     required: true
     note: "Required for ROM03 model (default)"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:388-395"
 
   - name: apple2gs.chr
@@ -430,7 +395,6 @@ files:
     size: 4096
     crc32: "91e53cd8"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:396-403"
 
   - name: "341s0632-2"
@@ -439,7 +403,6 @@ files:
     size: 4096
     crc32: "e1c11fb0"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:404-411"
 
   # -------------------------------------------------------
@@ -451,7 +414,6 @@ files:
     size: 196608
     crc32: "1a586c64"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:416-423"
 
   # -------------------------------------------------------
@@ -463,7 +425,6 @@ files:
     size: 8192
     crc32: "3aa93ef3"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:496-503"
 
   # -------------------------------------------------------
@@ -477,7 +438,6 @@ files:
     crc32: "718d42b1"
     required: false
     note: "Conditional: needed when VIC-20 has 1540 drive"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:508-515"
 
   - name: 1541.bin
@@ -487,7 +447,6 @@ files:
     crc32: "fb760019"
     required: false
     note: "Conditional: needed when Plus/4 has 1541 drive"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:516-523"
 
   # -------------------------------------------------------
@@ -501,7 +460,6 @@ files:
     crc32: "ce7144f6"
     required: false
     note: "Conditional: needed for 16-sector disk controller"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:528-535"
 
   - name: state-machine-16.rom
@@ -518,7 +476,6 @@ files:
       other image is read as the unadulterated P6 PROM (9796a238), its address
       lines and the top nibble of each value remapped into that order. Both give
       the same internal table.
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:536-543, Components/DiskII/DiskII.cpp:187-239"
 
   - name: boot-13.rom
@@ -528,7 +485,6 @@ files:
     crc32: "d34eb2ff"
     required: false
     note: "Conditional: needed for 13-sector disk controller"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:544-551"
 
   - name: state-machine-13.rom
@@ -538,7 +494,6 @@ files:
     crc32: "62e22620"
     required: false
     note: "Conditional: needed for 13-sector disk controller"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:552-559"
 
   # -------------------------------------------------------
@@ -552,7 +507,6 @@ files:
     required: true
     aliases: ["Exos (198x)(Enterprise).bin"]
     note: "One EXOS version required. Selected by target or any available."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:600-607"
 
   - name: exos20.bin
@@ -563,7 +517,6 @@ files:
     required: true
     aliases: ["Expandible OS v2.0 (1984)(Intelligent Software).bin"]
     note: "Alternative EXOS version"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:611-618"
 
   - name: exos21.bin
@@ -574,7 +527,6 @@ files:
     required: true
     aliases: ["Expandible OS v2.1 (1985)(Intelligent Software).bin"]
     note: "Alternative EXOS version"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:622-629"
 
   - name: exos23.bin
@@ -585,7 +537,6 @@ files:
     required: true
     aliases: ["Expandible OS v2.3 (1987)(Intelligent Software).bin"]
     note: "Alternative EXOS version"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:633-640"
 
   - name: basic10.bin
@@ -595,7 +546,6 @@ files:
     crc32: "d62e4fb7"
     required: true
     note: "One BASIC version required. v1.0 single-file version."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:645-652"
 
   - name: "BASIC 1.0 - EPROM 1-2 (198x)(Enterprise).bin"
@@ -605,7 +555,6 @@ files:
     crc32: "37bf48e1"
     required: false
     note: "Alternative: both parts needed together as substitute for basic10.bin"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:653-660"
 
   - name: "BASIC 1.0 - EPROM 2-2 (198x)(Enterprise).bin"
@@ -615,7 +564,6 @@ files:
     crc32: "c5298c79"
     required: false
     note: "Alternative: both parts needed together as substitute for basic10.bin"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:661-668"
 
   - name: basic11.bin
@@ -625,7 +573,6 @@ files:
     crc32: "683cf455"
     required: true
     note: "Alternative BASIC version"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:669-676"
 
   - name: "BASIC 1.1 - EPROM 1.1 (198x)(Enterprise).bin"
@@ -635,7 +582,6 @@ files:
     crc32: "c96b7602"
     required: false
     note: "Alternative format of BASIC v1.1 with trailing byte"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:677-684"
 
   - name: basic21.bin
@@ -648,7 +594,6 @@ files:
       - "BASIC Interpreter v2.1 (1985)(Intelligent Software).bin"
       - "BASIC Interpreter v2.1 (1985)(Intelligent Software)[a].bin"
     note: "Alternative BASIC version"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:685-693"
 
   - name: epdos.bin
@@ -659,7 +604,6 @@ files:
     required: false
     aliases: ["EPDOS v1.7 (19xx)(Haluska, Laszlo).bin"]
     note: "Conditional: needed for EPDOS disk interface"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:698-705"
 
   - name: exdos.bin
@@ -670,7 +614,6 @@ files:
     required: false
     aliases: ["EX-DOS EPROM (198x)(Enterprise).bin"]
     note: "Conditional: needed when DOS is set to EXDOS"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:709-716"
 
   # -------------------------------------------------------
@@ -683,7 +626,6 @@ files:
     crc32: "6d0c8a28"
     required: true
     note: "Required for Macintosh 128k model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:724-731"
 
   - name: mac512k.rom
@@ -693,7 +635,6 @@ files:
     crc32: "cf759e0d"
     required: true
     note: "Required for Macintosh 512k model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:732-739"
 
   - name: macplus.rom
@@ -708,7 +649,6 @@ files:
       checksum 4D1F8172 of the third Mac Plus revision. The
       machine copies whichever is supplied into its 128 KiB ROM without
       reading the revision.
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:740-751, Machines/Apple/Macintosh/Macintosh.cpp:127-144"
 
   # -------------------------------------------------------
@@ -722,7 +662,6 @@ files:
     crc32: "0072ed54"
     required: false
     note: "Optional. Boots cartridge directly if absent."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:764-771"
 
   - name: japanese-bios.sms
@@ -733,7 +672,6 @@ files:
     crc32: "48d44a13"
     required: false
     note: "Optional. Used for Japan region. Boots without if absent."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:756-763"
 
   # -------------------------------------------------------
@@ -747,7 +685,6 @@ files:
     crc32: "94ee12f3"
     required: true
     note: "Required for MSX1. Region bytes patched in memory if regional BIOS absent."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:777-784"
 
   - name: msx-japanese.rom
@@ -758,7 +695,6 @@ files:
     crc32: "ee229390"
     required: false
     note: "Alternative to msx.rom for Japanese region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:785-792"
 
   - name: msx-american.rom
@@ -768,7 +704,6 @@ files:
     size: 32768
     required: false
     note: "Alternative to msx.rom for American region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:793-800"
 
   - name: msx-european.rom
@@ -778,7 +713,6 @@ files:
     size: 32768
     required: false
     note: "Alternative to msx.rom for European region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:801-808"
 
   - name: disk.rom
@@ -788,7 +722,6 @@ files:
     crc32: "721f61df"
     required: false
     note: "Conditional: needed for disk drive support"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:809-816"
 
   - name: msx2.rom
@@ -799,7 +732,6 @@ files:
     crc32: "6cdaf3a5"
     required: true
     note: "Required for MSX2"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:818-825"
 
   - name: msx2ext.rom
@@ -810,7 +742,6 @@ files:
     crc32: "66237ecf"
     required: true
     note: "Required for MSX2"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:826-833"
 
   - name: fmpac.rom
@@ -820,7 +751,6 @@ files:
     crc32: "0e84505d"
     required: false
     note: "Conditional: needed for MSX-Music support"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:834-841"
 
   # -------------------------------------------------------
@@ -833,7 +763,6 @@ files:
     crc32: "f18710b4"
     required: true
     note: "Required for Oric-1 model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:870-877"
 
   - name: basic11.rom
@@ -843,7 +772,6 @@ files:
     crc32: "c3a92bef"
     required: true
     note: "Required for Oric Atmos model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:878-885"
 
   - name: pravetz.rom
@@ -853,7 +781,6 @@ files:
     crc32: "58079502"
     required: true
     note: "Required for Pravetz 8D model"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:886-893"
 
   - name: colour.rom
@@ -863,7 +790,6 @@ files:
     crc32: "d50fca65"
     required: false
     note: "Optional. Enables colour video output."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:846-853"
 
   - name: ORIC.PAL-PROM-TBP24S10-1ab9b572.bin
@@ -873,7 +799,6 @@ files:
     crc32: "1ab9b572"
     required: false
     note: "Optional. Alternative colour ROM."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:854-861"
 
   - name: PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin
@@ -883,7 +808,6 @@ files:
     crc32: "1576a69b"
     required: false
     note: "Optional. Colour ROM for Pravetz model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:862-869"
 
   - name: bd500.rom
@@ -893,7 +817,6 @@ files:
     crc32: "61952e34"
     required: false
     note: "Conditional: needed for Byte Drive 500 disk interface"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:894-901"
 
   - name: jasmin.rom
@@ -903,7 +826,6 @@ files:
     crc32: "37220e89"
     required: false
     note: "Conditional: needed for Jasmin disk interface"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:902-909"
 
   - name: microdisc.rom
@@ -913,7 +835,6 @@ files:
     crc32: "a9664a9c"
     required: false
     note: "Conditional: needed for Microdisc disk interface"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:910-917"
 
   - name: 8dos.rom
@@ -923,7 +844,6 @@ files:
     crc32: "49a74c06"
     required: false
     note: "Conditional: needed for Pravetz 8-DOS disk interface"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:918-925"
 
   # -------------------------------------------------------
@@ -936,7 +856,6 @@ files:
     crc32: "9576944c"
     required: true
     note: "Required for XT-class emulation"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:930-937"
 
   - name: GLaTICK_0.8.5_AT.ROM
@@ -946,7 +865,6 @@ files:
     crc32: "371ea3f1"
     required: false
     note: "XT-class RTC option ROM"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:938-945"
 
   - name: "Phoenix 80286 ROM BIOS Version 3.05.bin"
@@ -956,7 +874,6 @@ files:
     crc32: "8d0d318a"
     required: true
     note: "Required for AT-class emulation (alternative to IBM AT BIOS)"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:946-953"
 
   - name: at-bios.bin
@@ -966,7 +883,6 @@ files:
     crc32: "674426be"
     required: true
     note: "AT-class: single-file IBM AT BIOS (alternative to split U27/U47)"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:954-961"
 
   - name: BIOS_5170_15NOV85_U27_61X9266_27256.BIN
@@ -976,7 +892,6 @@ files:
     crc32: "4995be7a"
     required: false
     note: "AT-class: split BIOS, used with U47 chip"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:962-969"
 
   - name: BIOS_5170_15NOV85_U47_61X9265_27256.BIN
@@ -986,7 +901,6 @@ files:
     crc32: "c32713e4"
     required: false
     note: "AT-class: split BIOS, used with U27 chip"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:970-977"
 
   - name: CGA.F08
@@ -996,7 +910,6 @@ files:
     crc32: "a362ffe6"
     required: true
     note: "Required for CGA video adapter"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:978-985"
 
   - name: EUMDA9.F14
@@ -1006,7 +919,6 @@ files:
     crc32: "7754882a"
     required: true
     note: "Required for MDA video adapter"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:986-993"
 
   - name: ibm_6277356_ega_card_u44_27128.bin
@@ -1016,7 +928,6 @@ files:
     crc32: "2f2fbc40"
     required: false
     note: "Needed for EGA video adapter"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:994-1001"
 
   - name: ibm_vga.bin
@@ -1026,7 +937,6 @@ files:
     crc32: "03b3f90d"
     required: false
     note: "Needed for VGA video adapter"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1002-1009"
 
   - name: ibm-basic-1.10.rom
@@ -1036,7 +946,6 @@ files:
     crc32: "ebacb791"
     required: false
     note: "Required for AT-class with IBM BIOS (not needed with Phoenix)"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1010-1017"
 
   # -------------------------------------------------------
@@ -1048,7 +957,6 @@ files:
     size: 16384
     crc32: "74eaae87"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1046-1053"
 
   - name: kernal.318004-05.bin
@@ -1058,7 +966,6 @@ files:
     crc32: "71c07bd4"
     required: true
     note: "Default kernel version requested by machine code"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1038-1045"
 
   - name: kernal.318004-03.bin
@@ -1068,7 +975,6 @@ files:
     crc32: "77bab934"
     required: false
     note: "Alternative kernel version (in catalogue but not default)"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1022-1029"
 
   - name: kernal.318004-04.bin
@@ -1078,7 +984,6 @@ files:
     crc32: "be54ed79"
     required: false
     note: "Alternative kernel version (in catalogue but not default)"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1030-1037"
 
   # -------------------------------------------------------
@@ -1090,7 +995,6 @@ files:
     size: 16384
     crc32: "f62d2f3a"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1157-1164"
 
   - name: mo5-v1.1.rom
@@ -1099,7 +1003,6 @@ files:
     size: 16384
     crc32: "237c60bf"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1165-1172"
 
   - name: mo6-v1.rom
@@ -1108,7 +1011,6 @@ files:
     size: 65536
     crc32: "45e859c6"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1173-1180"
 
   - name: mo6-v2.rom
@@ -1117,7 +1019,6 @@ files:
     size: 65536
     crc32: "b4430a3b"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1181-1188"
 
   - name: mo6-v3.rom
@@ -1126,7 +1027,6 @@ files:
     size: 65536
     crc32: "7a012322"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1189-1196"
 
   - name: pc128.rom
@@ -1135,7 +1035,6 @@ files:
     size: 65536
     crc32: "fc173504"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1197-1204"
 
   - name: cd90-640.rom
@@ -1145,7 +1044,6 @@ files:
     crc32: "5114c0a5"
     required: false
     note: "Requested on top of the machine ROM when a disk is attached."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1206-1213"
 
   # -------------------------------------------------------
@@ -1157,7 +1055,6 @@ files:
     size: 8192
     crc32: "db4c43c1"
     required: true
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1218-1225"
 
   - name: characters-english.bin
@@ -1168,7 +1065,6 @@ files:
     crc32: "83e032a6"
     required: true
     note: "Required for English region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1226-1233"
 
   - name: kernel-pal.bin
@@ -1179,7 +1075,6 @@ files:
     crc32: "4be07cb4"
     required: true
     note: "Required for English PAL region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1234-1241"
 
   - name: kernel-ntsc.bin
@@ -1190,7 +1085,6 @@ files:
     crc32: "e5e7c174"
     required: true
     note: "Required for English NTSC region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1242-1249"
 
   - name: characters-danish.bin
@@ -1201,7 +1095,6 @@ files:
     crc32: "7fc11454"
     required: false
     note: "Required for Danish region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1250-1257"
 
   - name: kernel-danish.bin
@@ -1212,7 +1105,6 @@ files:
     crc32: "02adaf16"
     required: false
     note: "Required for Danish region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1258-1265"
 
   - name: characters-japanese.bin
@@ -1223,7 +1115,6 @@ files:
     crc32: "fcfd8a4b"
     required: false
     note: "Required for Japanese region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1266-1273"
 
   - name: kernel-japanese.bin
@@ -1234,7 +1125,6 @@ files:
     crc32: "336900d7"
     required: false
     note: "Required for Japanese region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1274-1281"
 
   - name: characters-swedish.bin
@@ -1245,7 +1135,6 @@ files:
     crc32: "d808551d"
     required: false
     note: "Required for Swedish region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1282-1289"
 
   - name: kernel-swedish.bin
@@ -1256,7 +1145,6 @@ files:
     crc32: "b2a60662"
     required: false
     note: "Required for Swedish region"
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1290-1297"
 
   # -------------------------------------------------------
@@ -1270,7 +1158,6 @@ files:
     crc32: "ddee531f"
     required: false
     note: "Built into binary. Required for 16K/48K model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1302-1309, Machines/Utility/ROMLibrary.cpp:14539"
 
   - name: 128.rom
@@ -1280,7 +1167,6 @@ files:
     crc32: "2cbe8995"
     required: false
     note: "Built into binary. Required for 128K model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1310-1317, Machines/Utility/ROMLibrary.cpp:14540"
 
   - name: plus2.rom
@@ -1290,7 +1176,6 @@ files:
     crc32: "e7a517dc"
     required: false
     note: "Built into binary. Required for +2 model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1318-1325, Machines/Utility/ROMLibrary.cpp:14541"
 
   - name: plus3.rom
@@ -1300,7 +1185,6 @@ files:
     crc32: "96e3c17a"
     required: false
     note: "Built into binary. Required for +2a/+3 model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1326-1336, Machines/Utility/ROMLibrary.cpp:14542"
 
   # -------------------------------------------------------
@@ -1314,7 +1198,6 @@ files:
     crc32: "4c7fc597"
     required: false
     note: "Built into binary. Required for ZX80 model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1341-1348, Machines/Utility/ROMLibrary.cpp:14544"
 
   - name: zx81.rom
@@ -1324,5 +1207,4 @@ files:
     crc32: "4b1dd6eb"
     required: false
     note: "Built into binary. Required for ZX81 model."
-    mode: standalone
     source_ref: "Machines/Utility/ROMCatalogue.cpp:1349-1356, Machines/Utility/ROMLibrary.cpp:14545"

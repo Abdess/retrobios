@@ -93,7 +93,6 @@ files:
   - name: colecovision.rom
     system: colecovision
     required: true
-    mode: standalone
     sha256: "990bf1956f10207d8781b619eb74f89b00d921c8d45c95c334c16c8cceca09ad"
     validation: [sha256]
     description: "ColecoVision BIOS"
@@ -103,7 +102,6 @@ files:
   - name: disksys.rom
     system: famicom-disk-system
     required: true
-    mode: standalone
     sha256: "fdc1a76e654feea993fcb38366e05ee5f4eb641f86fe6bebaeefd412e112dd72"
     validation: [sha256]
     description: "Famicom Disk System BIOS"
@@ -113,7 +111,6 @@ files:
   - name: gba_bios.bin
     system: game-boy-advance
     required: true
-    mode: standalone
     sha256: "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570"
     validation: [sha256]
     description: "GBA BIOS"
@@ -123,7 +120,6 @@ files:
   - name: bios.gg
     system: game-gear
     required: false
-    mode: standalone
     sha256: "8c8a21335038285cfa03dc076100c1f0bfadf3e4ff70796f11f3dfaaab60eee2"
     validation: [sha256]
     description: "Game Gear BIOS"
@@ -134,7 +130,6 @@ files:
     system: master-system
     region: [north-america]
     required: false
-    mode: standalone
     sha256: "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50"
     validation: [sha256]
     description: "Master System BIOS (US)"
@@ -144,7 +139,6 @@ files:
     system: master-system
     region: [japan]
     required: false
-    mode: standalone
     sha256: "67846e26764bd862f19179294347f7353a4166b62ac4198a5ec32933b7da486e"
     validation: [sha256]
     description: "Master System BIOS (Japan)"
@@ -154,7 +148,6 @@ files:
     system: master-system
     region: [europe]
     required: false
-    mode: standalone
     sha256: "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50"
     validation: [sha256]
     description: "Master System BIOS (Europe), same binary as US"
@@ -166,7 +159,6 @@ files:
     system: mega-cd
     region: [north-america]
     required: true
-    mode: standalone
     sha256: "fb477cdbf94c84424c2feca4fe40656d85393fe7b7b401911b45ad2eb991258c"
     validation: [sha256]
     description: "Mega CD / Sega CD BIOS (US)"
@@ -176,7 +168,6 @@ files:
     system: mega-cd
     region: [japan]
     required: true
-    mode: standalone
     sha256: "7133fc2dd2fe5b7d0acd53a5f10f3d00b5d31270239ad20d74ef32393e24af88"
     validation: [sha256]
     description: "Mega CD BIOS (Japan)"
@@ -186,7 +177,6 @@ files:
     system: mega-cd
     region: [europe]
     required: true
-    mode: standalone
     sha256: "fe608a2a07676a23ab5fd5eee2f53c9e2526d69a28aa16ccd85c0ec42e6933cb"
     validation: [sha256]
     description: "Mega CD BIOS (Europe)"
@@ -197,7 +187,6 @@ files:
     system: mega-ld
     region: [north-america]
     required: true
-    mode: standalone
     sha256: "e89b5a319f66406611ec82fe5c4aa6827c175a05135bd7bd177366cba0465021"
     validation: [sha256]
     description: "LaserActive SEGA PAC BIOS (US), v1.04"
@@ -207,7 +196,6 @@ files:
     system: mega-ld
     region: [japan]
     required: true
-    mode: standalone
     sha256: "dca942d977217f703d8d1c6eb1aeb6b32c78ecc421486bbb46c459d385161c94"
     validation: [sha256]
     description: "LaserActive SEGA PAC BIOS (Japan), v1.02"
@@ -217,7 +205,6 @@ files:
   - name: MSX.ROM
     system: msx
     required: true
-    mode: standalone
     sha256: "413a2b601a94b3792e054be2439cc77a1819cceadbfa9542f88d51c7480f2ef0"
     validation: [sha256]
     description: "MSX BIOS ROM (Japan)"
@@ -227,7 +214,6 @@ files:
   - name: MSX2.ROM
     system: msx2
     required: true
-    mode: standalone
     sha256: "0c672d86ead61a97f49a583b88b7c1905da120645cd44f0c9f2baf4f4631e0b1"
     validation: [sha256]
     description: "MSX2 main BIOS ROM (Japan)"
@@ -236,7 +222,6 @@ files:
   - name: MSX2EXT.ROM
     system: msx2
     required: true
-    mode: standalone
     sha256: "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300"
     validation: [sha256]
     description: "MSX2 sub ROM (Japan)"
@@ -246,7 +231,6 @@ files:
   - name: neo-epo.bin
     system: neo-geo
     required: true
-    mode: standalone
     description: "Neo Geo AES BIOS. Accepts neogeo.zip (extracts neo-epo.bin) or direct file. Byte-swapped on load."
     source_ref: "desktop-ui/emulator/neo-geo-aes.cpp:14, mia/system/neo-geo-aes.cpp:16"
 
@@ -254,7 +238,6 @@ files:
   - name: sp-45.sp1
     system: neo-geo
     required: true
-    mode: standalone
     description: "Neo Geo MVS BIOS. Accepts neogeo.zip (extracts sp-45.sp1) or direct file. Byte-swapped on load."
     source_ref: "desktop-ui/emulator/neo-geo-mvs.cpp:15, mia/system/neo-geo-mvs.cpp:16"
 
@@ -262,7 +245,6 @@ files:
   - name: ngp_bios.rom
     system: neo-geo-pocket
     required: true
-    mode: standalone
     sha256: "0293555b21c4fac516d25199df7809b26beeae150e1d4504a050db32264a6ad7"
     validation: [sha256]
     description: "Neo Geo Pocket BIOS"
@@ -272,7 +254,6 @@ files:
   - name: ngpc_bios.rom
     system: neo-geo-pocket-color
     required: true
-    mode: standalone
     sha256: "8fb845a2f71514cec20728e2f0fecfade69444f8d50898b92c2259f1ba63e10d"
     validation: [sha256]
     description: "Neo Geo Pocket Color BIOS"
@@ -283,7 +264,6 @@ files:
     system: nintendo-64dd
     region: [japan]
     required: true
-    mode: standalone
     sha256: "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b"
     validation: [sha256]
     description: "Nintendo 64DD IPL ROM (Japan retail)"
@@ -293,7 +273,6 @@ files:
     system: nintendo-64dd
     region: [north-america]
     required: true
-    mode: standalone
     sha256: "e9fec87a45fba02399e88064b9e2f8cf0f2106e351c58279a87f05da5bc984ad"
     validation: [sha256]
     description: "Nintendo 64DD IPL ROM (US dev kit)"
@@ -302,7 +281,6 @@ files:
   - name: 64dd_ipl_DEV.bin
     system: nintendo-64dd
     required: true
-    mode: standalone
     sha256: "9c2962a8b994a29e4cd04b3a6e4ed730a751414655ab6a9799ebf5fc08b79d44"
     validation: [sha256]
     description: "Nintendo 64DD IPL ROM (development)"
@@ -312,7 +290,6 @@ files:
   - name: syscard1.pce
     system: pc-engine-cd
     required: true
-    mode: standalone
     sha256: "afe9f27f91ac918348555b86298b4f984643eafa2773196f2c5441ea84f0c3bb"
     validation: [sha256]
     description: "PC Engine CD-ROM2 System Card v1.0 (Japan). Also used by PC Engine LD."
@@ -321,7 +298,6 @@ files:
   - name: syscard3.pce
     system: pc-engine-cd
     required: true
-    mode: standalone
     sha256: "e11527b3b96ce112a037138988ca72fd117a6b0779c2480d9e03eaebece3d9ce"
     validation: [sha256]
     description: "Super CD-ROM2 System Card v3.0 (Japan). Also used by SuperGrafx CD as Arcade Card."
@@ -330,7 +306,6 @@ files:
   - name: syscard3u.pce
     system: pc-engine-cd
     required: true
-    mode: standalone
     sha256: "cadac2725711b3c442bcf237b02f5a5210c96f17625c35fa58f009e0ed39e4db"
     validation: [sha256]
     description: "TurboGrafx-CD Super System Card v3.0 (US)"
@@ -339,7 +314,6 @@ files:
   - name: games_express.pce
     system: pc-engine-cd
     required: true
-    mode: standalone
     sha256: "4b86bb96a48a4ca8375fc0109631d0b1d64f255a03b01de70594d40788ba6c3d"
     validation: [sha256]
     description: "Games Express CD Card (Japan). Also used by PC Engine LD."
@@ -349,7 +323,6 @@ files:
   - name: pac-n10.pce
     system: pc-engine-ld
     required: true
-    mode: standalone
     sha256: "0e87a3385a27b3a4cac51934819b7eefa5b3d690768d2495633838488cd0e2e4"
     validation: [sha256]
     description: "NEC PAC-N10 LaserActive module (US)"
@@ -358,7 +331,6 @@ files:
   - name: pac-n1.pce
     system: pc-engine-ld
     required: true
-    mode: standalone
     sha256: "459325690a458baebd77495c91e37c4dddfdd542ba13a821ce954e5bb245627f"
     validation: [sha256]
     description: "NEC PAC-N1 LaserActive module (Japan)"
@@ -367,7 +339,6 @@ files:
   - name: pce-lp1.pce
     system: pc-engine-ld
     required: true
-    mode: standalone
     sha256: "3f43b3b577117d84002e99cb0baeb97b0d65b1d70b4adadc68817185c6a687f0"
     validation: [sha256]
     description: "NEC PCE-LP1 LaserActive module (Japan)"
@@ -377,7 +348,6 @@ files:
   - name: scph5501.bin
     system: sony-playstation
     required: true
-    mode: standalone
     sha256: "11052b6499e466bbf0a709b1f9cb6834a9418e66680387912451e971cf8a1fef"
     validation: [sha256]
     description: "PlayStation BIOS (US)"
@@ -386,7 +356,6 @@ files:
   - name: scph5500.bin
     system: sony-playstation
     required: true
-    mode: standalone
     sha256: "9c0421858e217805f4abe18698afea8d5aa36ff0727eb8484944e00eb5e7eadb"
     validation: [sha256]
     description: "PlayStation BIOS (Japan)"
@@ -395,7 +364,6 @@ files:
   - name: scph5502.bin
     system: sony-playstation
     required: true
-    mode: standalone
     sha256: "1faaa18fa820a0225e488d9f086296b8e6c46df739666093987ff7d8fd352c09"
     validation: [sha256]
     description: "PlayStation BIOS (Europe)"
@@ -406,7 +374,6 @@ files:
     system: saturn
     region: [north-america]
     required: true
-    mode: standalone
     description: "Sega Saturn BIOS (US)"
     source_ref: "desktop-ui/emulator/saturn.cpp:14"
 
@@ -414,7 +381,6 @@ files:
     system: saturn
     region: [japan]
     required: true
-    mode: standalone
     description: "Sega Saturn BIOS (Japan)"
     source_ref: "desktop-ui/emulator/saturn.cpp:15"
 
@@ -422,7 +388,6 @@ files:
     system: saturn
     region: [europe]
     required: true
-    mode: standalone
     description: "Sega Saturn BIOS (Europe)"
     source_ref: "desktop-ui/emulator/saturn.cpp:16"
 
@@ -430,7 +395,6 @@ files:
   - name: SGB1.sfc
     system: super-famicom
     required: false
-    mode: standalone
     category: game_data
     description: "Super Game Boy cartridge ROM. Loaded via CLI as SFC cartridge alongside GB game."
     source_ref: "EmuDeck emuDeckares.sh (launcher)"
@@ -438,7 +402,6 @@ files:
   - name: SGB2.sfc
     system: super-famicom
     required: false
-    mode: standalone
     category: game_data
     description: "Super Game Boy 2 cartridge ROM. Loaded via CLI as SFC cartridge alongside GB game."
     source_ref: "EmuDeck emuDeckares.sh (launcher)"
@@ -446,7 +409,6 @@ files:
   - name: STBIOS.bin
     system: super-famicom
     required: false
-    mode: standalone
     category: game_data
     description: "SuFami Turbo adapter BIOS. Loaded via CLI as SFC cartridge alongside SuFami games."
     source_ref: "EmuDeck emuDeckares.sh (launcher)"
@@ -454,7 +416,6 @@ files:
   - name: BS-X.bin
     system: super-famicom
     required: false
-    mode: standalone
     category: game_data
     description: "Satellaview BS-X Town cartridge ROM. Loaded via CLI as SFC cartridge for BS games."
     source_ref: "EmuDeck emuDeckares.sh (launcher)"
