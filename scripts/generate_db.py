@@ -488,9 +488,23 @@ def _collect_all_aliases(files: dict) -> dict:
                         emu_config = yaml_load(f) or {}
                 except (yaml.YAMLError, OSError):
                     continue
+                # A profile whose entries name each other (dosbox-x opens
+                # MT32_CONTROL.ROM and CM32L_CONTROL.ROM alike, so each entry
+                # aliases the other) states that ITS slot takes either name.
+                # Indexed globally that became evidence for every emulator:
+                # ScummVM's MT-32 slot received the CM-32L ROMs.
+                primary_names = {
+                    str(fe.get("name", "")).lower()
+                    for fe in emu_config.get("files", [])
+                    if isinstance(fe, dict)
+                }
                 for file_entry in emu_config.get("files", []):
-                    entry_aliases = list(file_entry.get("aliases") or [])
                     entry_name = file_entry.get("name", "")
+                    entry_aliases = [
+                        alias for alias in file_entry.get("aliases") or []
+                        if str(alias).lower() == str(entry_name).lower()
+                        or str(alias).lower() not in primary_names
+                    ]
                     # A profile may accept several revisions: each held one
                     # is designated by the entry, none of them by guess.
                     matched: set[str] = {

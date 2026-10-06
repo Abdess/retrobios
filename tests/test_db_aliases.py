@@ -111,5 +111,29 @@ class AcceptedRevisionLists(unittest.TestCase):
         for sha in ("s1", "s2"):
             self.assertEqual([a["name"] for a in aliases.get(sha, [])], ["MT32_CONTROL.ROM"])
 
+class CrossNamingStaysInItsProfile(unittest.TestCase):
+    def test_an_alias_naming_a_sibling_entry_is_not_indexed(self):
+        """dosbox-x aliases MT32_CONTROL.ROM and CM32L_CONTROL.ROM to each other."""
+        import generate_db
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            previous = os.getcwd()
+            os.chdir(tmp)
+            try:
+                Path("emulators").mkdir()
+                Path("emulators/d.yml").write_text(
+                    'files:\n'
+                    '  - name: "MT32_CONTROL.ROM"\n    sha1: "mt"\n    aliases: ["CM32L_CONTROL.ROM"]\n'
+                    '  - name: "CM32L_CONTROL.ROM"\n    sha1: "cm"\n    aliases: ["MT32_CONTROL.ROM"]\n'
+                )
+                aliases = generate_db._collect_all_aliases({
+                    "mt": {"name": "mt32_control.rom", "path": "a", "md5": "m1"},
+                    "cm": {"name": "cm32l_control.rom", "path": "b", "md5": "m2"},
+                })
+            finally:
+                os.chdir(previous)
+        self.assertEqual([a["name"] for a in aliases["mt"]], ["MT32_CONTROL.ROM"])
+        self.assertEqual([a["name"] for a in aliases["cm"]], ["CM32L_CONTROL.ROM"])
+
 if __name__ == "__main__":
     unittest.main()
