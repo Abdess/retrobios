@@ -280,15 +280,41 @@ class PreservedLargeFileEntries(unittest.TestCase):
         self.assertEqual(count, 1)
         self.assertIn("b" * 40, files)
 
-    def test_verified_cache_hit_repoints_the_entry(self):
+    def test_a_fetched_asset_returns_to_its_registered_path(self):
+        cache = self.tmp / "cache" / "FW.PUP"
+        cache.parent.mkdir()
+        cache.write_bytes(b"firmware")
+        common.fetch_large_file = lambda *a, **k: str(cache)
+        db_path = self._write_db(
+            {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        )
+        files: dict = {}
+        count = self.generate_db._preserve_large_file_entries(files, db_path)
+        self.assertEqual(count, 1)
+        self.assertEqual(files["b" * 40]["path"], "bios/Sony/PS3/FW.PUP")
+        self.assertEqual((self.tmp / "bios/Sony/PS3/FW.PUP").read_bytes(), b"firmware")
+
+    def test_a_file_sharing_only_the_name_is_not_preserved(self):
+        common.fetch_large_file = lambda *a, **k: "/cache/large/FW.PUP"
+        db_path = self._write_db(
+            {"c" * 40: {"name": "FW.PUP", "path": "bios/Sony/PSP/FW.PUP"}}
+        )
+        files: dict = {}
+        self.assertEqual(
+            self.generate_db._preserve_large_file_entries(files, db_path), 0
+        )
+        self.assertEqual(files, {})
+
+    def test_a_second_revision_under_a_rescanned_path_is_dropped(self):
         common.fetch_large_file = lambda *a, **k: "/cache/large/FW.PUP"
         db_path = self._write_db(
             {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
         files = {"a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
-        count = self.generate_db._preserve_large_file_entries(files, db_path)
-        self.assertEqual(count, 1)
-        self.assertEqual(files["b" * 40]["path"], "/cache/large/FW.PUP")
+        self.assertEqual(
+            self.generate_db._preserve_large_file_entries(files, db_path), 0
+        )
+        self.assertEqual(list(files), ["a" * 40])
 
 
 class ReleaseAssetNames(unittest.TestCase):
