@@ -206,7 +206,7 @@ class Reconciliation(unittest.TestCase):
                     if entry.platform is None:
                         continue
                     with self.subTest(platform=name, file=entry.name):
-                        self.assertTrue(cls.writable(entry))
+                        self.assertTrue(cls().writable(entry))
 
     def test_an_addition_the_format_cannot_express_is_refused(self):
         truth = {

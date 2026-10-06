@@ -183,6 +183,21 @@ class OneFileOneIdentity(unittest.TestCase):
         declared = next(f for f in systems["dc"].files if f.platform is not None)
         self.assertIsNone(declared.truth)
 
+class RommKeepsItsOwnKeys(unittest.TestCase):
+    def test_a_same_named_addition_does_not_replace_their_entry(self):
+        """fbneo's 480-byte boot.bin overwrote RomM's Dreamcast boot.bin."""
+        from exporter.romm_exporter import Exporter as Romm
+
+        theirs = NativeFile("boot.bin", "dc/boot.bin", "dc",
+                            platform={"size": 2097152, "md5": A})
+        ours = NativeFile("boot.bin", "fbneo/boot.bin", "dc",
+                          truth={"size": 480, "crc32": "f0774fc2"})
+        exporter = Romm()
+        produced = exporter.render({"dc": NativeSystem("dc", files=[theirs, ours])}, None, {})
+        written = json.loads(produced[exporter.native_filename()])
+        self.assertEqual(written["dc:boot.bin"]["size"], "2097152")
+        self.assertFalse(exporter.writable(ours))
+
 class RecalboxKeepsItsOwnNotes(unittest.TestCase):
     def test_no_profile_prose_reaches_a_note(self):
         fe = NativeFile("bios.bin", "bios.bin", "psx", platform={"md5": A},

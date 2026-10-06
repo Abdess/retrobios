@@ -29,6 +29,9 @@ SOURCE_URL = (
 class Exporter(BaseExporter):
     """Write RomM's known_bios_files.json, corrected."""
 
+    # (system, filename) keys the platform itself declares, set by render.
+    _platform_keys: frozenset[tuple[str, str]] = frozenset()
+
     @staticmethod
     def platform_name() -> str:
         return "romm"
@@ -61,16 +64,20 @@ class Exporter(BaseExporter):
         """
         return native_id in SLUG_MAP
 
-    @classmethod
-    def writable(cls, fe: NativeFile, require: str = "") -> bool:
+    def writable(self, fe: NativeFile, require: str = "") -> bool:
         """What RomM already ships stays; the conditions gate additions.
 
         An entry of theirs that could never verify is still theirs, and the
-        round trip is not the place to decide otherwise.
+        round trip is not the place to decide otherwise. An addition whose
+        slug:filename key the platform already holds cannot be written: the
+        fixture is a dict, and the second write replaced RomM's Dreamcast
+        boot.bin with fbneo's 480-byte file of the same name.
         """
         if fe.platform is not None:
             return True
-        return cls._verifiable(fe) and cls._known_platform(fe.native_system)
+        if (fe.native_system, fe.name) in self._platform_keys:
+            return False
+        return self._verifiable(fe) and self._known_platform(fe.native_system)
 
     def render(
         self,
@@ -80,6 +87,12 @@ class Exporter(BaseExporter):
         scraped: dict | None = None,
     ) -> dict[str, str]:
         output: OrderedDict[str, dict] = OrderedDict()
+        self._platform_keys = {
+            (system.native_id, fe.name)
+            for system in systems.values()
+            for fe in system.files
+            if fe.platform is not None
+        }
 
         for system in sorted(systems.values(), key=lambda s: s.native_id):
             for fe in sorted(system.files, key=lambda f: f.name):
