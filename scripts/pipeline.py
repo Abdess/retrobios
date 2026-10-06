@@ -404,6 +404,11 @@ def main():
         if args.target:
             truth_cmd.extend(["--target", args.target])
         ok, _ = run(truth_cmd, "2c generate truth")
+        # A native file is one per platform, never per target: the export
+        # corrects it against the full model, which a targeted run does not
+        # write.
+        if ok and args.with_export and args.target:
+            ok, _ = run(truth_cmd[:-2], "2c generate truth (export model)")
         results["generate_truth"] = ok
         all_ok = all_ok and ok
     else:
