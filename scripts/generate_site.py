@@ -31,6 +31,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    build_zip_contents_index,
     compute_composition,
     count_catalog_matched,
     list_registered_platforms,
@@ -43,6 +44,7 @@ from common import (
     write_if_changed as _write_artifact,
     yaml_load,
 )
+from cross_reference import FileConsumers
 from nativemode import reads_file_contents
 
 
@@ -1647,8 +1649,7 @@ def generate_provenance_page(db: dict, report: dict) -> str:
 def generate_system_page(
     manufacturer: str,
     consoles: dict[str, list],
-    platform_files: dict[str, set],
-    emulator_files: dict[str, dict],
+    consumers: FileConsumers,
 ) -> str:
     manufacturer.lower().replace(" ", "-")
     lines = [
@@ -1671,13 +1672,9 @@ def generate_system_page(
             md5_full = f.get("md5", "unknown")
             size = _fmt_size(f.get("size", 0))
 
-            # Cross-reference
-            plats = sorted(p for p, names in platform_files.items() if name in names)
-            emus = sorted(
-                e
-                for e, data in emulator_files.items()
-                if name in data.get("files", set())
-            )
+            # Who reads this file, not who reads a file of this name
+            plats = sorted(consumers.platforms.get(sha1_full, ()))
+            emus = sorted(consumers.emulators.get(sha1_full, ()))
 
             # Truncated hashes for readability
             sha1_short = sha1_full[:12] if sha1_full != "unknown" else "-"
@@ -1935,7 +1932,7 @@ def _file_badges(f: dict, in_repo: bool) -> list[str]:
 def _render_emulator_file(
     f: dict,
     profile: dict,
-    platform_files: dict | None,
+    consumers: FileConsumers | None,
     files: list,
     _file_available,
 ) -> list[str]:
@@ -2049,10 +2046,9 @@ def _render_emulator_file(
         details.append(
             f"Source: {_source_ref_markdown(profile, source_ref)}"
         )
-    if platform_files:
-        plats = sorted(
-            p for p, names in platform_files.items() if fname in names
-        )
+    if consumers:
+        sha1 = consumers.sha1_of(f, f.get("path") or "")
+        plats = sorted(consumers.platforms.get(sha1, ())) if sha1 else []
         if plats:
             plat_links = [_platform_link(p, p, "../") for p in plats]
             details.append(f"Platforms: {', '.join(plat_links)}")
@@ -2255,7 +2251,7 @@ def generate_emulator_page(
     name: str,
     profile: dict,
     db: dict,
-    platform_files: dict | None = None,
+    consumers: FileConsumers | None = None,
     data_names: set[str] | None = None,
 ) -> str:
     if profile.get("type") == "alias":
@@ -2404,7 +2400,7 @@ def generate_emulator_page(
         for f in files:
             lines.extend(
                 _render_emulator_file(
-                    f, profile, platform_files, files, _file_available
+                    f, profile, consumers, files, _file_available
                 )
             )
 
@@ -3247,30 +3243,21 @@ def generate_wiki_data_model(db: dict, profiles: dict) -> str:
 # Build cross-reference indexes
 
 
-def _build_platform_file_index(coverages: dict) -> dict[str, set]:
-    """Map platform_name -> set of declared file names."""
-    index = {}
-    for name, cov in coverages.items():
-        names = set()
-        config = cov["config"]
-        for system in config.get("systems", {}).values():
-            for fe in system.get("files", []):
-                names.add(fe.get("name", ""))
-        index[name] = names
-    return index
+def _build_file_consumers(db: dict, coverages: dict, profiles: dict) -> FileConsumers:
+    """Which platforms and emulators read each collected file."""
+    consumers = FileConsumers(db, build_zip_contents_index(db))
+    consumers.add_platforms({name: cov["config"] for name, cov in coverages.items()})
+    consumers.add_emulators(profiles)
+    return consumers
 
 
 def _build_emulator_file_index(profiles: dict) -> dict[str, dict]:
-    """Map emulator_name -> {files: set, systems: set} for cross-reference."""
-    index = {}
-    for name, profile in profiles.items():
-        if profile.get("type") == "alias":
-            continue
-        index[name] = {
-            "files": {f.get("name", "") for f in profile.get("files", [])},
-            "systems": set(profile.get("systems", [])),
-        }
-    return index
+    """Map emulator_name -> {systems: set}, for the platform pages."""
+    return {
+        name: {"systems": set(profile.get("systems", []))}
+        for name, profile in profiles.items()
+        if profile.get("type") != "alias"
+    }
 
 
 # mkdocs.yml nav generator
@@ -3614,7 +3601,7 @@ def main():
     )
 
     # Build cross-reference indexes
-    platform_files = _build_platform_file_index(coverages)
+    consumers = _build_file_consumers(db, coverages, profiles)
     emulator_files = _build_emulator_file_index(profiles)
 
     # Generate home
@@ -3671,7 +3658,7 @@ def main():
     )
     for mfr, consoles in manufacturers.items():
         slug = mfr.lower().replace(" ", "-")
-        page = generate_system_page(mfr, consoles, platform_files, emulator_files)
+        page = generate_system_page(mfr, consoles, consumers)
         write_if_changed(str(docs / "systems" / f"{slug}.md"), page)
 
     # Generate emulator pages
@@ -3685,7 +3672,7 @@ def main():
         if profile.get("type") not in ("alias", "test")
     }
     for name, profile in public_profiles.items():
-        page = generate_emulator_page(name, profile, db, platform_files, suppl_names)
+        page = generate_emulator_page(name, profile, db, consumers, suppl_names)
         write_if_changed(str(docs / "emulators" / f"{name}.md"), page)
 
     # Generate cross-reference page

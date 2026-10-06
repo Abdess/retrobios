@@ -29,6 +29,7 @@ from common import (
     name_match_size_ok,
     parse_md5_list,
     require_yaml,
+    resolve_local_file,
     runs_standalone,
 )
 from validation import read_from_system_dir
@@ -198,6 +199,56 @@ def _data_hit(
     if fname.endswith("/") or (file_entry or {}).get("type") == "directory":
         looked_up = [name.rstrip("/") + "/" for name in looked_up]
     return any(name in data_names for name in looked_up)
+
+
+class FileConsumers:
+    """Who reads each collected file, joined through the resolver.
+
+    The site joined database files to emulators and platforms by bare name:
+    each of the four pak0.pk3 of four games was attributed to every engine
+    reading a pak0.pk3. A consumer here is an entry that resolves to the
+    file by the evidence the pack uses, so a homonym is nobody's file.
+    """
+
+    def __init__(self, db: dict, zip_contents: dict | None = None) -> None:
+        self._db = db
+        self._zip_contents = zip_contents
+        self._sha1_by_path = {
+            path: sha1
+            for sha1, entry in db.get("files", {}).items()
+            for path in {entry.get("path", ""), *entry.get("paths", [])}
+            if path
+        }
+        self.platforms: dict[str, set[str]] = {}
+        self.emulators: dict[str, set[str]] = {}
+
+    def sha1_of(self, entry: dict, dest: str = "") -> str | None:
+        """The collected file an entry resolves to, or None."""
+        if not entry.get("name"):
+            return None
+        path, status = resolve_local_file(
+            entry, self._db, self._zip_contents, dest_hint=dest
+        )
+        if not path or status in ("not_found", "hash_mismatch"):
+            return None
+        return self._sha1_by_path.get(path)
+
+    def add_platforms(self, configs: dict[str, dict]) -> None:
+        for name, config in configs.items():
+            for system in config.get("systems", {}).values():
+                for entry in system.get("files", []):
+                    sha1 = self.sha1_of(entry, entry.get("destination", ""))
+                    if sha1:
+                        self.platforms.setdefault(sha1, set()).add(name)
+
+    def add_emulators(self, profiles: dict[str, dict]) -> None:
+        for name, profile in profiles.items():
+            if profile.get("type") == "alias":
+                continue
+            for entry in profile.get("files", []):
+                sha1 = self.sha1_of(entry, entry.get("path") or "")
+                if sha1:
+                    self.emulators.setdefault(sha1, set()).add(name)
 
 
 def entry_source(f: dict, index: dict) -> str | None:
