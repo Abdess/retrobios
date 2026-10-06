@@ -1,8 +1,9 @@
-"""Scraper for RetroPie libretro core availability per platform.
+"""Scraper for RetroPie package availability per platform.
 
-Source: https://github.com/RetroPie/RetroPie-Setup/tree/master/scriptmodules/libretrocores
-Parses rp_module_id and rp_module_flags from each scriptmodule to determine
-which platforms each core supports.
+Source: https://github.com/RetroPie/RetroPie-Setup/tree/master/scriptmodules
+Parses rp_module_id and rp_module_flags from each scriptmodule of the
+package sections the platform list reads (emulators, libretrocores, ports)
+to determine which platforms each package supports.
 """
 
 from __future__ import annotations
@@ -23,23 +24,31 @@ from . import BaseTargetScraper
 PLATFORM_NAME = "retropie"
 
 GITHUB_API_URL = (
-    "https://api.github.com/repos/RetroPie/RetroPie-Setup/contents"
-    "/scriptmodules/libretrocores"
+    "https://api.github.com/repos/RetroPie/RetroPie-Setup/contents/scriptmodules"
 )
 RAW_BASE_URL = (
-    "https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master"
-    "/scriptmodules/libretrocores/"
+    "https://raw.githubusercontent.com/RetroPie/RetroPie-Setup/master/scriptmodules/"
 )
+# The sections the platform scraper reads: a standalone package missing here
+# is filtered out of every targeted pack.
+PACKAGE_DIRS = ("emulators", "libretrocores", "ports")
 
-# Platform flag sets: flags that the platform possesses
+# The flags RetroPie's set_platform_defaults, cpu_* and platform_* functions
+# give each platform (scriptmodules/system.sh), with the video stack of the
+# images it ships: videocore and dispmanx on rpi1-3, kms with fkms dispmanx
+# on rpi4 (buster), kms on rpi5.
 PLATFORM_FLAGS: dict[str, set[str]] = {
-    "rpi1": {"arm", "armv6", "rpi", "gles"},
-    "rpi2": {"arm", "armv7", "neon", "rpi", "gles"},
-    "rpi3": {"arm", "armv8", "neon", "rpi", "gles"},
-    "rpi4": {"arm", "armv8", "neon", "rpi", "gles", "gles3", "gles31"},
-    "rpi5": {"arm", "armv8", "neon", "rpi", "gles", "gles3", "gles31"},
-    "x86": {"x86"},
-    "x86_64": {"x86"},
+    "rpi1": {"rpi1", "32bit", "arm", "armv6", "rpi", "gles", "videocore", "dispmanx"},
+    "rpi2": {"rpi2", "32bit", "arm", "armv7", "neon", "rpi", "gles", "videocore",
+             "dispmanx"},
+    "rpi3": {"rpi3", "32bit", "arm", "armv8", "neon", "rpi", "gles", "videocore",
+             "dispmanx"},
+    "rpi4": {"rpi4", "32bit", "arm", "armv8", "neon", "rpi", "gles", "gles3", "gles31",
+             "mesa", "kms", "dispmanx"},
+    "rpi5": {"rpi5", "32bit", "arm", "armv8", "neon", "rpi", "gles", "gles3", "gles31",
+             "mesa", "kms"},
+    "x86": {"x86", "32bit", "gl", "vulkan", "x11"},
+    "x86_64": {"x86", "64bit", "gl", "vulkan", "x11"},
 }
 
 ARCH_MAP: dict[str, str] = {
@@ -51,9 +60,6 @@ ARCH_MAP: dict[str, str] = {
     "x86": "x86",
     "x86_64": "x86_64",
 }
-
-# Flags that are build directives, not platform restrictions
-_BUILD_FLAGS = {"nodistcc"}
 
 _MODULE_ID_RE = re.compile(r'rp_module_id\s*=\s*["\']([^"\']+)["\']')
 _MODULE_FLAGS_RE = re.compile(r'rp_module_flags\s*=\s*["\']([^"\']*)["\']')
@@ -74,24 +80,25 @@ def _fetch(url: str, accept: str = "text/plain") -> str:
 
 
 def _is_available(flags_str: str, platform: str) -> bool:
-    """Return True if the core is available on the given platform."""
+    """Whether RetroPie enables a module on *platform*.
+
+    Port of rp_registerModule (scriptmodules/packages.sh): flags are read in
+    order from an enabled default; !all disables, a flag the platform has
+    enables, !flag disables when the platform has it. A flag the platform
+    does not know (sdl1, nodistcc) changes nothing, and a comparison against
+    the build host (:$__gcc_version:-lt:7) cannot be decided here, so it
+    leaves the module as it was.
+    """
     platform_has = PLATFORM_FLAGS.get(platform, set())
-    tokens = flags_str.split() if flags_str.strip() else []
-
-    for token in tokens:
-        if token in _BUILD_FLAGS:
-            continue
-        if token.startswith("!"):
-            # Exclusion: if platform has this flag, core is excluded
-            flag = token[1:]
-            if flag in platform_has:
-                return False
-        else:
-            # Requirement: platform must have this flag
-            if token not in platform_has:
-                return False
-
-    return True
+    enabled = True
+    for token in flags_str.split():
+        if token == "!all":
+            enabled = False
+        elif token in platform_has:
+            enabled = True
+        elif token.startswith("!") and token[1:] in platform_has:
+            enabled = False
+    return enabled
 
 
 def _parse_module(content: str) -> tuple[str | None, str]:
@@ -104,17 +111,23 @@ def _parse_module(content: str) -> tuple[str | None, str]:
 
 
 class Scraper(BaseTargetScraper):
-    """Fetches RetroPie libretro core availability by parsing scriptmodules."""
+    """Fetches RetroPie package availability by parsing scriptmodules."""
 
     def __init__(self, url: str = GITHUB_API_URL):
         super().__init__(url=url)
 
     def _list_scriptmodules(self) -> list[str]:
-        """Return list of .sh filenames from the libretrocores directory."""
-        entries = json.loads(_fetch(self.url, accept="application/vnd.github+json"))
-        names = [e["name"] for e in entries if e.get("name", "").endswith(".sh")]
-        if not names:
-            raise RuntimeError(f"no scriptmodules listed at {self.url}")
+        """Return section/filename for every .sh of the package sections."""
+        names: list[str] = []
+        for section in PACKAGE_DIRS:
+            url = f"{self.url}/{section}"
+            entries = json.loads(_fetch(url, accept="application/vnd.github+json"))
+            listed = [
+                f"{section}/{e['name']}" for e in entries if e.get("name", "").endswith(".sh")
+            ]
+            if not listed:
+                raise RuntimeError(f"no scriptmodules listed at {url}")
+            names.extend(listed)
         return names
 
     def _fetch_module(self, filename: str) -> str:
@@ -133,12 +146,12 @@ class Scraper(BaseTargetScraper):
             if not module_id:
                 print(f"  warning: no rp_module_id in {filename}", file=sys.stderr)
                 continue
-            # Normalize: strip lr- prefix and convert hyphens to underscores
-            # to match emulator profile keys (lr-beetle-psx -> beetle_psx)
+            # A libretro package is lr-<core> with the buildbot name hyphenated
+            # (lr-beetle-psx -> beetle_psx); a standalone package keeps the id
+            # the platform list carries (dosbox-staging).
             core_name = module_id
             if core_name.startswith("lr-"):
-                core_name = core_name[3:]
-            core_name = core_name.replace("-", "_")
+                core_name = core_name[3:].replace("-", "_")
             for platform in PLATFORM_FLAGS:
                 if _is_available(flags, platform):
                     platform_cores[platform].append(core_name)
@@ -163,7 +176,7 @@ class Scraper(BaseTargetScraper):
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Scrape RetroPie libretro core targets from scriptmodules"
+        description="Scrape RetroPie package targets from scriptmodules"
     )
     parser.add_argument("--dry-run", action="store_true", help="Show target summary")
     parser.add_argument("--output", "-o", help="Output YAML file")

@@ -1,12 +1,20 @@
 platform: retropie
-source: https://api.github.com/repos/RetroPie/RetroPie-Setup/contents/scriptmodules/libretrocores
-scraped_at: '2026-10-04T12:32:13Z'
+source: https://api.github.com/repos/RetroPie/RetroPie-Setup/contents/scriptmodules
+scraped_at: '2026-10-06T03:21:52Z'
 targets:
   rpi1:
     architecture: armv6
     cores:
     - '81'
+    - advmame
+    - advmame-0.94
+    - advmame-1.4
+    - ags
+    - alephone
+    - amiberry
     - atari800
+    - atari800
+    - basilisk
     - beetle_lynx
     - beetle_ngp
     - beetle_pce_fast
@@ -16,29 +24,61 @@ targets:
     - beetle_wswan
     - bennugd
     - bluemsx
+    - cannonball
     - caprice32
+    - capricerpi
+    - cdogs-sdl
+    - cgenius
+    - coolcv
+    - daphne
+    - darkplaces-quake
     - desmume
     - desmume2015
+    - dgen
     - dinothawr
     - dirksimple
     - dosbox
+    - dosbox
+    - dosbox-sdl2
+    - dosbox-staging
     - dosbox_pure
+    - dsda-doom
+    - dxx-rebirth
+    - eduke32
     - ep128emu
     - fbalpha2012
     - fbneo
+    - fbzx
     - fceumm
     - fmsx
     - freechaf
     - freeintv
+    - frotz
+    - fuse
     - fuse
     - gambatte
     - geargrafx
     - gearsystem
+    - gemrb
     - genesis_plus_gx
+    - giana
+    - gngeopi
+    - gpsp
     - gpsp
     - gw
     - handy
     - hatari
+    - hatari
+    - hypseus
+    - ionfury
+    - jumpnbump
+    - jzintv
+    - kodi
+    - linapple
+    - lincity-ng
+    - love
+    - love-0.10.2
+    - lzdoom
     - mame
     - mame2000
     - mame2003
@@ -46,53 +86,113 @@ targets:
     - mame2010
     - mame2015
     - mame2016
+    - mame4all
     - mess
     - mess2016
     - mgba
+    - micropolis
+    - minecraft
+    - minivmac
     - mrboom
     - mupen64plus
+    - mupen64plus
     - mupen64plus_next
+    - mysticmine
     - neocd
     - nestopia
     - np2kai
+    - np2pi
     - nxengine
     - o2em
+    - openblok
+    - openbor
+    - openmsx
+    - openttd
+    - opentyrian
     - opera
+    - oricutron
+    - osmose
     - parallel_n64
+    - pcsx-rearmed
     - pcsx_rearmed
     - picodrive
+    - pifba
+    - pisnes
     - pokemini
     - ppsspp
+    - ppsspp
+    - ppsspp-1.5.4
     - prboom
     - prosystem
     - puae
     - puae2021
     - px68k
+    - px68k
+    - quake3
+    - quasi88
     - quasi88
     - quicknes
     - retro8
+    - retroarch
+    - rpix86
     - scummvm
+    - scummvm
+    - scummvm-sdl1
+    - sdlpop
+    - sdltrs
+    - simcoupe
     - smsplus_gx
+    - smw
+    - snes9x
     - snes9x
     - snes9x2002
     - snes9x2005
     - snes9x2010
+    - solarus
+    - splitwolf
+    - srb2
+    - stella
     - stella
     - stella2014
+    - stratagus
     - superflappybirds
+    - supertux
     - tgbdual
     - theodore
+    - ti99sim
+    - ti99sim-sdl1
     - tic80
     - tyrquake
+    - tyrquake
+    - uae4all
+    - uae4arm
+    - uae4arm
+    - uqm
     - vecx
     - vice
+    - vice
+    - vvvvvv
+    - wolf4sdl
     - x1
+    - xm7
     - xrick
+    - xrick
+    - xroar
+    - yquake2
+    - zesarux
   rpi2:
     architecture: armv7
     cores:
     - '81'
+    - advmame
+    - advmame-0.94
+    - advmame-1.4
+    - ags
+    - alephone
+    - amiberry
     - atari800
+    - atari800
+    - basilisk
     - beetle_lynx
     - beetle_ngp
     - beetle_pce
@@ -105,31 +205,65 @@ targets:
     - bennugd
     - bluemsx
     - bsnes
+    - cannonball
     - caprice32
+    - capricerpi
+    - cdogs-sdl
+    - cgenius
+    - coolcv
+    - daphne
+    - darkplaces-quake
     - desmume
     - desmume2015
+    - dgen
     - dinothawr
     - dirksimple
     - dosbox
+    - dosbox
+    - dosbox-sdl2
+    - dosbox-staging
     - dosbox_pure
+    - drastic
+    - dsda-doom
+    - dxx-rebirth
+    - eduke32
     - ep128emu
     - fbalpha2012
     - fbneo
+    - fbzx
     - fceumm
     - flycast
-    - flycast_dev
     - fmsx
     - freechaf
     - freeintv
+    - frotz
+    - fuse
     - fuse
     - gambatte
     - geargrafx
     - gearsystem
+    - gemrb
     - genesis_plus_gx
+    - giana
+    - gngeopi
+    - gpsp
     - gpsp
     - gw
+    - gzdoom
     - handy
     - hatari
+    - hatari
+    - hypseus
+    - ionfury
+    - jumpnbump
+    - jzintv
+    - kodi
+    - linapple
+    - lincity-ng
+    - love
+    - love-0.10.2
+    - lzdoom
+    - mame
     - mame
     - mame2000
     - mame2003
@@ -137,57 +271,118 @@ targets:
     - mame2010
     - mame2015
     - mame2016
+    - mame4all
     - mesen
     - mess
     - mess2016
     - mgba
+    - micropolis
+    - minecraft
+    - minivmac
     - mrboom
     - mupen64plus
+    - mupen64plus
     - mupen64plus_next
+    - mysticmine
     - neocd
     - nestopia
     - np2kai
+    - np2pi
     - nxengine
     - o2em
+    - openblok
+    - openbor
+    - openmsx
+    - openttd
+    - opentyrian
     - opera
+    - oricutron
+    - osmose
     - parallel_n64
+    - pcsx-rearmed
     - pcsx_rearmed
     - picodrive
+    - pifba
+    - pisnes
     - pokemini
     - ppsspp
+    - ppsspp
+    - ppsspp-1.5.4
     - prboom
     - prosystem
     - puae
     - puae2021
     - px68k
+    - px68k
+    - quake3
+    - quasi88
     - quasi88
     - quicknes
+    - reicast
     - retro8
+    - retroarch
+    - rpix86
     - scummvm
+    - scummvm
+    - scummvm-sdl1
+    - sdlpop
+    - sdltrs
+    - simcoupe
     - smsplus_gx
+    - smw
+    - snes9x
     - snes9x
     - snes9x2002
     - snes9x2005
     - snes9x2010
+    - solarus
+    - splitwolf
+    - srb2
+    - stella
     - stella
     - stella2014
+    - stratagus
     - superflappybirds
+    - supertux
     - tgbdual
     - theodore
+    - ti99sim
+    - ti99sim-sdl1
     - tic80
     - tyrquake
+    - tyrquake
+    - uae4all
+    - uae4arm
+    - uae4arm
+    - uqm
     - vba_next
     - vecx
     - vice
+    - vice
     - virtualjaguar
+    - vvvvvv
+    - wolf4sdl
     - x1
+    - xm7
     - xrick
+    - xrick
+    - xroar
     - yabause
+    - yquake2
+    - zesarux
   rpi3:
     architecture: armv7
     cores:
     - '81'
+    - advmame
+    - advmame-0.94
+    - advmame-1.4
+    - ags
+    - alephone
+    - amiberry
     - atari800
+    - atari800
+    - basilisk
     - beetle_lynx
     - beetle_ngp
     - beetle_pce
@@ -200,31 +395,65 @@ targets:
     - bennugd
     - bluemsx
     - bsnes
+    - cannonball
     - caprice32
+    - capricerpi
+    - cdogs-sdl
+    - cgenius
+    - coolcv
+    - daphne
+    - darkplaces-quake
     - desmume
     - desmume2015
+    - dgen
     - dinothawr
     - dirksimple
     - dosbox
+    - dosbox
+    - dosbox-sdl2
+    - dosbox-staging
     - dosbox_pure
+    - drastic
+    - dsda-doom
+    - dxx-rebirth
+    - eduke32
     - ep128emu
     - fbalpha2012
     - fbneo
+    - fbzx
     - fceumm
     - flycast
-    - flycast_dev
     - fmsx
     - freechaf
     - freeintv
+    - frotz
+    - fuse
     - fuse
     - gambatte
     - geargrafx
     - gearsystem
+    - gemrb
     - genesis_plus_gx
+    - giana
+    - gngeopi
+    - gpsp
     - gpsp
     - gw
+    - gzdoom
     - handy
     - hatari
+    - hatari
+    - hypseus
+    - ionfury
+    - jumpnbump
+    - jzintv
+    - kodi
+    - linapple
+    - lincity-ng
+    - love
+    - love-0.10.2
+    - lzdoom
+    - mame
     - mame
     - mame2000
     - mame2003
@@ -232,57 +461,118 @@ targets:
     - mame2010
     - mame2015
     - mame2016
+    - mame4all
     - mesen
     - mess
     - mess2016
     - mgba
+    - micropolis
+    - minecraft
+    - minivmac
     - mrboom
     - mupen64plus
+    - mupen64plus
     - mupen64plus_next
+    - mysticmine
     - neocd
     - nestopia
     - np2kai
+    - np2pi
     - nxengine
     - o2em
+    - openblok
+    - openbor
+    - openmsx
+    - openttd
+    - opentyrian
     - opera
+    - oricutron
+    - osmose
     - parallel_n64
+    - pcsx-rearmed
     - pcsx_rearmed
     - picodrive
+    - pifba
+    - pisnes
     - pokemini
     - ppsspp
+    - ppsspp
+    - ppsspp-1.5.4
     - prboom
     - prosystem
     - puae
     - puae2021
     - px68k
+    - px68k
+    - quake3
+    - quasi88
     - quasi88
     - quicknes
+    - reicast
     - retro8
+    - retroarch
+    - rpix86
     - scummvm
+    - scummvm
+    - scummvm-sdl1
+    - sdlpop
+    - sdltrs
+    - simcoupe
     - smsplus_gx
+    - smw
+    - snes9x
     - snes9x
     - snes9x2002
     - snes9x2005
     - snes9x2010
+    - solarus
+    - splitwolf
+    - srb2
+    - steamlink
+    - stella
     - stella
     - stella2014
+    - stratagus
     - superflappybirds
+    - supermodel3
+    - supertux
     - tgbdual
     - theodore
+    - ti99sim
+    - ti99sim-sdl1
     - tic80
     - tyrquake
+    - tyrquake
+    - uae4all
+    - uae4arm
+    - uae4arm
+    - uqm
     - vba_next
     - vecx
     - vice
+    - vice
     - virtualjaguar
+    - vvvvvv
+    - wolf4sdl
     - x1
+    - xm7
     - xrick
+    - xrick
+    - xroar
     - yabause
+    - yquake2
+    - zesarux
   rpi4:
     architecture: aarch64
     cores:
     - '81'
+    - advmame
+    - ags
+    - alephone
+    - amiberry
     - atari800
+    - atari800
+    - basilisk
     - beetle_lynx
     - beetle_ngp
     - beetle_pce
@@ -295,31 +585,63 @@ targets:
     - bennugd
     - bluemsx
     - bsnes
+    - cannonball
     - caprice32
+    - capricerpi
+    - cdogs-sdl
+    - cgenius
+    - daphne
+    - darkplaces-quake
     - desmume
     - desmume2015
     - dinothawr
     - dirksimple
     - dosbox
+    - dosbox
+    - dosbox-sdl2
+    - dosbox-staging
     - dosbox_pure
+    - drastic
+    - dsda-doom
+    - dxx-rebirth
+    - eduke32
     - ep128emu
     - fbalpha2012
     - fbneo
+    - fbzx
     - fceumm
+    - flycast
     - flycast
     - flycast_dev
     - fmsx
     - freechaf
     - freeintv
+    - frotz
+    - fuse
     - fuse
     - gambatte
     - geargrafx
     - gearsystem
+    - gemrb
     - genesis_plus_gx
     - gpsp
     - gw
+    - gzdoom
     - handy
     - hatari
+    - hatari
+    - hypseus
+    - ionfury
+    - ioquake3
+    - jumpnbump
+    - jzintv
+    - kodi
+    - linapple
+    - lincity-ng
+    - love
+    - love-0.10.2
+    - lzdoom
+    - mame
     - mame
     - mame2000
     - mame2003
@@ -331,53 +653,103 @@ targets:
     - mess
     - mess2016
     - mgba
+    - micropolis
+    - minivmac
     - mrboom
     - mupen64plus
+    - mupen64plus
     - mupen64plus_next
+    - mysticmine
     - neocd
     - nestopia
     - np2kai
+    - np2pi
     - nxengine
     - o2em
+    - openblok
+    - openbor
+    - openmsx
+    - openttd
+    - opentyrian
     - opera
+    - oricutron
+    - osmose
     - parallel_n64
     - pcsx_rearmed
     - picodrive
     - pokemini
+    - ppsspp
     - ppsspp
     - prboom
     - prosystem
     - puae
     - puae2021
     - px68k
+    - px68k
+    - quasi88
     - quasi88
     - quicknes
+    - redream
+    - reicast
     - retro8
+    - retroarch
     - scummvm
+    - scummvm
+    - sdlpop
+    - sdltrs
+    - simcoupe
     - smsplus_gx
+    - smw
     - snes9x
     - snes9x2002
     - snes9x2005
     - snes9x2010
+    - solarus
+    - splitwolf
+    - srb2
+    - steamlink
+    - stella
     - stella
     - stella2014
     - superflappybirds
+    - supermodel3
+    - supertux
     - tgbdual
     - theodore
+    - ti99sim
+    - ti99sim-sdl1
     - tic80
     - tyrquake
+    - tyrquake
+    - uae4arm
+    - uae4arm
+    - uqm
     - vba_next
     - vecx
     - vice
+    - vice
     - virtualjaguar
+    - vvvvvv
+    - wolf4sdl
     - x1
     - xrick
+    - xrick
+    - xroar
+    - yabasanshiro
     - yabause
+    - yquake2
+    - zesarux
   rpi5:
     architecture: aarch64
     cores:
     - '81'
+    - advmame
+    - ags
+    - alephone
+    - amiberry
     - atari800
+    - atari800
+    - basilisk
     - beetle_lynx
     - beetle_ngp
     - beetle_pce
@@ -390,31 +762,63 @@ targets:
     - bennugd
     - bluemsx
     - bsnes
+    - cannonball
     - caprice32
+    - capricerpi
+    - cdogs-sdl
+    - cgenius
+    - daphne
+    - darkplaces-quake
     - desmume
     - desmume2015
     - dinothawr
     - dirksimple
     - dosbox
+    - dosbox
+    - dosbox-sdl2
+    - dosbox-staging
     - dosbox_pure
+    - drastic
+    - dsda-doom
+    - dxx-rebirth
+    - eduke32
     - ep128emu
     - fbalpha2012
     - fbneo
+    - fbzx
     - fceumm
+    - flycast
     - flycast
     - flycast_dev
     - fmsx
     - freechaf
     - freeintv
+    - frotz
+    - fuse
     - fuse
     - gambatte
     - geargrafx
     - gearsystem
+    - gemrb
     - genesis_plus_gx
     - gpsp
     - gw
+    - gzdoom
     - handy
     - hatari
+    - hatari
+    - hypseus
+    - ionfury
+    - ioquake3
+    - jumpnbump
+    - jzintv
+    - kodi
+    - linapple
+    - lincity-ng
+    - love
+    - love-0.10.2
+    - lzdoom
+    - mame
     - mame
     - mame2000
     - mame2003
@@ -426,53 +830,104 @@ targets:
     - mess
     - mess2016
     - mgba
+    - micropolis
+    - minivmac
     - mrboom
     - mupen64plus
+    - mupen64plus
     - mupen64plus_next
+    - mysticmine
     - neocd
     - nestopia
     - np2kai
+    - np2pi
     - nxengine
     - o2em
+    - openblok
+    - openbor
+    - openmsx
+    - openttd
+    - opentyrian
     - opera
+    - oricutron
+    - osmose
     - parallel_n64
     - pcsx_rearmed
     - picodrive
     - pokemini
+    - ppsspp
     - ppsspp
     - prboom
     - prosystem
     - puae
     - puae2021
     - px68k
+    - px68k
+    - quasi88
     - quasi88
     - quicknes
+    - redream
+    - reicast
     - retro8
+    - retroarch
     - scummvm
+    - scummvm
+    - sdlpop
+    - sdltrs
+    - simcoupe
     - smsplus_gx
+    - smw
     - snes9x
     - snes9x2002
     - snes9x2005
     - snes9x2010
+    - solarus
+    - splitwolf
+    - srb2
+    - steamlink
+    - stella
     - stella
     - stella2014
     - superflappybirds
+    - supermodel3
+    - supertux
     - tgbdual
     - theodore
+    - ti99sim
+    - ti99sim-sdl1
     - tic80
     - tyrquake
+    - tyrquake
+    - uae4arm
+    - uqm
     - vba_next
     - vecx
     - vice
+    - vice
     - virtualjaguar
+    - vvvvvv
+    - wolf4sdl
     - x1
     - xrick
+    - xrick
+    - xroar
+    - yabasanshiro
     - yabause
+    - yquake2
+    - zesarux
   x86:
     architecture: x86
     cores:
     - '81'
+    - advmame
+    - advmame-0.94
+    - advmame-1.4
+    - ags
+    - alephone
+    - amiberry
     - atari800
+    - atari800
+    - basilisk
     - beetle_lynx
     - beetle_ngp
     - beetle_pce
@@ -486,32 +941,64 @@ targets:
     - bennugd
     - bluemsx
     - bsnes
+    - cannonball
     - caprice32
+    - capricerpi
+    - cdogs-sdl
+    - cgenius
+    - darkplaces-quake
     - desmume
     - desmume2015
+    - dgen
     - dinothawr
     - dirksimple
     - dosbox
+    - dosbox
+    - dosbox-sdl2
+    - dosbox-staging
     - dosbox_pure
+    - dsda-doom
+    - dxx-rebirth
+    - eduke32
     - ep128emu
     - fbalpha2012
     - fbneo
+    - fbzx
     - fceumm
+    - flycast
     - flycast
     - flycast_dev
     - fmsx
     - freechaf
     - freeintv
+    - frotz
+    - fs-uae
+    - fuse
     - fuse
     - gambatte
     - geargrafx
     - gearsystem
+    - gemrb
     - genesis_plus_gx
     - gpsp
     - gw
+    - gzdoom
     - handy
     - hatari
+    - hatari
+    - hypseus
+    - ionfury
+    - ioquake3
+    - jumpnbump
+    - jzintv
+    - kodi
     - kronos
+    - linapple
+    - lincity-ng
+    - love
+    - love-0.10.2
+    - lzdoom
+    - mame
     - mame
     - mame2000
     - mame2003
@@ -523,52 +1010,101 @@ targets:
     - mess
     - mess2016
     - mgba
+    - micropolis
+    - minivmac
     - mrboom
     - mupen64plus
+    - mupen64plus
     - mupen64plus_next
+    - mysticmine
     - neocd
     - nestopia
     - np2kai
     - nxengine
     - o2em
+    - openblok
+    - openmsx
+    - openpht
+    - openttd
+    - opentyrian
     - opera
+    - oricutron
+    - osmose
     - parallel_n64
+    - pcsx2
     - pcsx_rearmed
     - picodrive
     - pokemini
+    - ppsspp
     - ppsspp
     - prboom
     - prosystem
     - puae
     - puae2021
     - px68k
+    - px68k
+    - quasi88
     - quasi88
     - quicknes
+    - reicast
     - retro8
+    - retroarch
     - scummvm
+    - scummvm
+    - sdlpop
+    - sdltrs
+    - simcoupe
     - smsplus_gx
+    - smw
     - snes9x
     - snes9x2005
     - snes9x2010
+    - solarus
+    - splitwolf
+    - srb2
+    - stella
     - stella
     - stella2014
+    - stratagus
     - superflappybirds
+    - supermodel3
+    - supertux
     - tgbdual
     - theodore
+    - ti99sim
+    - ti99sim-sdl1
     - tic80
     - tyrquake
+    - tyrquake
+    - uqm
     - vba_next
     - vecx
     - vice
+    - vice
     - virtualjaguar
+    - vvvvvv
+    - wolf4sdl
     - x1
+    - xm7
     - xrick
+    - xrick
+    - xroar
     - yabause
+    - yquake2
+    - zesarux
   x86_64:
     architecture: x86_64
     cores:
     - '81'
+    - advmame
+    - advmame-0.94
+    - advmame-1.4
+    - ags
+    - alephone
+    - amiberry
     - atari800
+    - atari800
+    - basilisk
     - beetle_lynx
     - beetle_ngp
     - beetle_pce
@@ -582,32 +1118,66 @@ targets:
     - bennugd
     - bluemsx
     - bsnes
+    - cannonball
     - caprice32
+    - capricerpi
+    - cdogs-sdl
+    - cgenius
+    - darkplaces-quake
     - desmume
     - desmume2015
+    - dgen
     - dinothawr
     - dirksimple
+    - dolphin
+    - dolphin
     - dosbox
+    - dosbox
+    - dosbox-sdl2
+    - dosbox-staging
     - dosbox_pure
+    - dsda-doom
+    - dxx-rebirth
+    - eduke32
     - ep128emu
     - fbalpha2012
     - fbneo
+    - fbzx
     - fceumm
+    - flycast
     - flycast
     - flycast_dev
     - fmsx
     - freechaf
     - freeintv
+    - frotz
+    - fs-uae
+    - fuse
     - fuse
     - gambatte
     - geargrafx
     - gearsystem
+    - gemrb
     - genesis_plus_gx
     - gpsp
     - gw
+    - gzdoom
     - handy
     - hatari
+    - hatari
+    - hypseus
+    - ionfury
+    - ioquake3
+    - jumpnbump
+    - jzintv
+    - kodi
     - kronos
+    - linapple
+    - lincity-ng
+    - love
+    - love-0.10.2
+    - lzdoom
+    - mame
     - mame
     - mame2000
     - mame2003
@@ -619,44 +1189,85 @@ targets:
     - mess
     - mess2016
     - mgba
+    - micropolis
+    - minivmac
     - mrboom
     - mupen64plus
+    - mupen64plus
     - mupen64plus_next
+    - mysticmine
     - neocd
     - nestopia
     - np2kai
     - nxengine
     - o2em
+    - openblok
+    - openmsx
+    - openpht
+    - openttd
+    - opentyrian
     - opera
+    - oricutron
+    - osmose
     - parallel_n64
+    - pcsx2
     - pcsx_rearmed
     - picodrive
     - pokemini
+    - ppsspp
     - ppsspp
     - prboom
     - prosystem
     - puae
     - puae2021
     - px68k
+    - px68k
+    - quasi88
     - quasi88
     - quicknes
+    - reicast
     - retro8
+    - retroarch
     - scummvm
+    - scummvm
+    - sdlpop
+    - sdltrs
+    - simcoupe
     - smsplus_gx
+    - smw
     - snes9x
     - snes9x2005
     - snes9x2010
+    - solarus
+    - splitwolf
+    - srb2
+    - stella
     - stella
     - stella2014
+    - stratagus
     - superflappybirds
+    - supermodel3
+    - supertux
     - tgbdual
     - theodore
+    - ti99sim
+    - ti99sim-sdl1
     - tic80
     - tyrquake
+    - tyrquake
+    - uqm
     - vba_next
     - vecx
     - vice
+    - vice
     - virtualjaguar
+    - vvvvvv
+    - wolf4sdl
     - x1
+    - xm7
     - xrick
+    - xrick
+    - xroar
     - yabause
+    - yquake2
+    - zesarux
