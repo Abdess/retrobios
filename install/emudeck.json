@@ -5,7 +5,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-10-06T06:50:25Z",
+  "generated": "2026-10-06T10:11:17Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -250,10 +250,10 @@
       }
     }
   ],
-  "total_files": 569,
-  "total_size": 3452230081,
-  "pack_files": 571,
-  "pack_size": 3452230081,
+  "total_files": 619,
+  "total_size": 3473031414,
+  "pack_files": 621,
+  "pack_size": 3473031414,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -530,6 +530,316 @@
       "cores": null
     },
     {
+      "dest": "gba_bios.bin",
+      "sha1": "300c20df6731a33952ded8c436f7f186d25d3492",
+      "sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
+      "size": 16384,
+      "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "bios.gg",
+      "sha1": "914aa165e3d879f060be77870d345b60cfeb4ede",
+      "sha256": "8c8a21335038285cfa03dc076100c1f0bfadf3e4ff70796f11f3dfaaab60eee2",
+      "size": 1024,
+      "repo_path": "bios/Sega/Game Gear/GG_majesco.gg",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "bios_U.sms",
+      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+      "size": 8192,
+      "repo_path": "bios/Other/zesarux/sms.rom",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "bios_J.sms",
+      "sha1": "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2",
+      "sha256": "67846e26764bd862f19179294347f7353a4166b62ac4198a5ec32933b7da486e",
+      "size": 8192,
+      "repo_path": "bios/Sega/Master System/MasterSystem/japanese-bios.sms",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "bios_E.sms",
+      "sha1": "c315672807d8ddb8d91443729405c766dd95cae7",
+      "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
+      "size": 8192,
+      "repo_path": "bios/Other/zesarux/sms.rom",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "mega_ld_bios_U.bin",
+      "sha1": "aa811861f8874775075bd3f53008c8aaf59b07db",
+      "sha256": "e89b5a319f66406611ec82fe5c4aa6827c175a05135bd7bd177366cba0465021",
+      "size": 131072,
+      "repo_path": "bios/Pioneer/LaserActive/Pioneer LaserActive Sega PAC Boot ROM v1.04 (1993)(Pioneer - Sega)(US).bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "mega_ld_bios_J.bin",
+      "sha1": "26237b333db4a4c6770297fa5e655ea95840d5d9",
+      "sha256": "dca942d977217f703d8d1c6eb1aeb6b32c78ecc421486bbb46c459d385161c94",
+      "size": 131072,
+      "repo_path": "bios/Pioneer/LaserActive/Pioneer LaserActive Sega PAC Boot ROM v1.02 (1993)(Pioneer - Sega)(JP)(en-ja).bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "MSX.ROM",
+      "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
+      "sha256": "413a2b601a94b3792e054be2439cc77a1819cceadbfa9542f88d51c7480f2ef0",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/CLK/msx-japanese.rom",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "MSX2.ROM",
+      "sha1": "0081ea0d25bc5cd8d70b60ad8cfdc7307812c0fd",
+      "sha256": "0c672d86ead61a97f49a583b88b7c1905da120645cd44f0c9f2baf4f4631e0b1",
+      "size": 32768,
+      "repo_path": "bios/Other/msx-emu/Machines/Shared Roms/MSX2J.rom",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "MSX2EXT.ROM",
+      "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
+      "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "neo-epo.bin",
+      "sha1": "1b3b22092f30c4d1b2c15f04d1670eb1e9fbea07",
+      "sha256": "70f7906d68acbc3630b6e7792ebb485288b05ca72c6d4c243e07e230aae8d1e4",
+      "size": 131072,
+      "repo_path": "bios/SNK/Neo Geo/neo-epo.bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "sp-45.sp1",
+      "sha1": "cdf1f49e3ff2bac528c21ed28449cf35b7957dc1",
+      "sha256": "0fbeee82b463187d6360e92811f1fad58649feb8ab2584c524222d0b5bf53a17",
+      "size": 524288,
+      "repo_path": "bios/SNK/Neo Geo/sp-45.sp1",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "ngp_bios.rom",
+      "sha1": "2f6429b68446536d8b03f35d02f1e98beb6460a0",
+      "sha256": "0293555b21c4fac516d25199df7809b26beeae150e1d4504a050db32264a6ad7",
+      "size": 65536,
+      "repo_path": "bios/SNK/Neo Geo Pocket/SNK Neo-Geo Pocket BIOS (1998)(SNK)(en-ja).bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "ngpc_bios.rom",
+      "sha1": "edc13192054a59be49c6d55f83b70e2510968e86",
+      "sha256": "8fb845a2f71514cec20728e2f0fecfade69444f8d50898b92c2259f1ba63e10d",
+      "size": 65536,
+      "repo_path": "bios/SNK/Neo Geo Pocket/SNK Neo-Geo Pocket Color BIOS (1999)(SNK)(en-ja).bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "64dd_ipl_J.bin",
+      "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
+      "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
+      "size": 4194304,
+      "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "64dd_ipl_U.bin",
+      "sha1": "3c5b93ca231550c68693a14f03cea8d5dbd1be9e",
+      "sha256": "e9fec87a45fba02399e88064b9e2f8cf0f2106e351c58279a87f05da5bc984ad",
+      "size": 4194304,
+      "repo_path": "bios/Nintendo/64DD/64DD_IPL_USA.bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "64dd_ipl_DEV.bin",
+      "sha1": "10c4173c2a7eb09c6579818f72ef18fa0b6d32de",
+      "sha256": "9c2962a8b994a29e4cd04b3a6e4ed730a751414655ab6a9799ebf5fc08b79d44",
+      "size": 4194304,
+      "repo_path": "bios/Nintendo/64DD/64DD_IPL_DEV.bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "syscard1.pce",
+      "sha1": "a39a66da7de6ba94ab84d04eef7afeec7d4ee66a",
+      "sha256": "afe9f27f91ac918348555b86298b4f984643eafa2773196f2c5441ea84f0c3bb",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard1.pce",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "syscard3.pce",
+      "sha1": "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c",
+      "sha256": "e11527b3b96ce112a037138988ca72fd117a6b0779c2480d9e03eaebece3d9ce",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard3.pce",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "syscard3u.pce",
+      "sha1": "d02611d99921986147c753df14c7349b31d71950",
+      "sha256": "cadac2725711b3c442bcf237b02f5a5210c96f17625c35fa58f009e0ed39e4db",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard3u.pce",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "games_express.pce",
+      "sha1": "014881a959e045e00f4db8f52955200865d40280",
+      "sha256": "4b86bb96a48a4ca8375fc0109631d0b1d64f255a03b01de70594d40788ba6c3d",
+      "size": 32768,
+      "repo_path": "bios/NEC/PC Engine/gecard.pce",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "pac-n10.pce",
+      "sha1": "f7412aa822d70a55b2ff3d7095137263dc54f6b6",
+      "sha256": "0e87a3385a27b3a4cac51934819b7eefa5b3d690768d2495633838488cd0e2e4",
+      "size": 524288,
+      "repo_path": "bios/Pioneer/LaserActive/[BIOS] LaserActive PAC-N10 (US) (v1.02).bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "pac-n1.pce",
+      "sha1": "6973e2593e66fd21627fedccec98d4a364afaaff",
+      "sha256": "459325690a458baebd77495c91e37c4dddfdd542ba13a821ce954e5bb245627f",
+      "size": 524288,
+      "repo_path": "bios/Pioneer/LaserActive/[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "pce-lp1.pce",
+      "sha1": "c1b9202cbe072db12114b223a9ba5374b30718fb",
+      "sha256": "3f43b3b577117d84002e99cb0baeb97b0d65b1d70b4adadc68817185c6a687f0",
+      "size": 524288,
+      "repo_path": "bios/Pioneer/LaserActive/[BIOS] LaserActive PCE-LP1 (Japan) (v1.02).bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "saturn_bios_U.bin",
+      "sha1": "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3",
+      "sha256": "96e106f740ab448cf89f0dd49dfbac7fe5391cb6bd6e14ad5e3061c13330266f",
+      "size": 524288,
+      "repo_path": "bios/Sega/Saturn/SAT_1.00-(U+E).bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "saturn_bios_J.bin",
+      "sha1": "df94c5b4d47eb3cc404d88b33a8fda237eaf4720",
+      "sha256": "dcfef4b99605f872b6c3b6d05c045385cdea3d1b702906a0ed930df7bcb7deac",
+      "size": 524288,
+      "repo_path": "bios/Sega/Saturn/SAT_1.01-(J).bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "saturn_bios_E.bin",
+      "sha1": "faa8ea183a6d7bbe5d4e03bb1332519800d3fbc3",
+      "sha256": "96e106f740ab448cf89f0dd49dfbac7fe5391cb6bd6e14ad5e3061c13330266f",
+      "size": 524288,
+      "repo_path": "bios/Sega/Saturn/SAT_1.00-(U+E).bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "SGB1.sfc",
+      "sha1": "973e10840db683cf3faf61bd443090786b3a9f04",
+      "sha256": "a75160f7b89b1f0e20fd2f6441bb86285c7378db5035ef6885485eaff6059376",
+      "size": 262144,
+      "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "SGB2.sfc",
+      "sha1": "e5b2922ca137051059e4269b236d07a22c07bc84",
+      "sha256": "c172498a23d1176672931bab33b629c7d28f914a43dca9e540b8af1b37ccf2c6",
+      "size": 524288,
+      "repo_path": "bios/Nintendo/Super Game Boy/SGB2.sfc/program.rom",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "STBIOS.bin",
+      "sha1": "ef86ea192eed03d5c413fdbbfd46043be1d7a127",
+      "sha256": "edacb453da14f825f05d1134d6035f4bf034e55f7cfb97c70c4ee107eabc7342",
+      "size": 262144,
+      "repo_path": "bios/Nintendo/SuFami Turbo/STBIOS.bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
+      "dest": "BS-X.bin",
+      "sha1": "4891d739a8a8b67923681bad4fb67edab2e90e50",
+      "sha256": "a49827b45ff9ac9cf5b4658190e1428e59251bc82d8a63d8e9e0f71e439f008f",
+      "size": 1048576,
+      "repo_path": "bios/Nintendo/SNES/BS-X.bin",
+      "cores": [
+        "ares"
+      ]
+    },
+    {
       "dest": "sysdata/shared_font.bin",
       "sha1": "60022d6d026c8df950722478aab25702a0dfa067",
       "sha256": "a06aaf6b50ebc38ebdccc59b913d4a1c0cc7005289957530acaaf78ffc49dddd",
@@ -697,6 +1007,36 @@
       "repo_path": "bios/Nintendo/Wii U/cafeLibs/erreula.rpl",
       "cores": [
         "cemu"
+      ]
+    },
+    {
+      "dest": "switch/title.keys",
+      "sha1": "bfee8e708dc4c8f27bfe51a12d57caaa0b7f74de",
+      "sha256": "3ed66f7e82df79922739c6c2d34de90bc36a48d13acdff24f9d51013bd8c0677",
+      "size": 1224,
+      "repo_path": "bios/Nintendo/Switch/title.keys",
+      "cores": [
+        "citron"
+      ]
+    },
+    {
+      "dest": "switch/console.keys",
+      "sha1": "721ca59a261d04af13fb84497ad79b6d8c6b7609",
+      "sha256": "b98c31cc764c49b8259142de3ada5bb7440ce0fd11315ae64294ddb0d56a523d",
+      "size": 451,
+      "repo_path": "bios/Other/citron/switch/console.keys",
+      "cores": [
+        "citron"
+      ]
+    },
+    {
+      "dest": "switch/key_retail.bin",
+      "sha1": "bbdbb49a917d14f7a997d327ba40d40c39e606ce",
+      "sha256": "7f9283654ec1097fbdff31de946651ae60c2854afb544abe8963d389639c710e",
+      "size": 160,
+      "repo_path": "bios/Other/citron/switch/key_retail.bin",
+      "cores": [
+        "citron"
       ]
     },
     {
@@ -1839,6 +2179,16 @@
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
       "cores": [
         "duckstation"
+      ]
+    },
+    {
+      "dest": "switch/dev.keys",
+      "sha1": "fc916ff462b842983d4061d09230163ac4b38f16",
+      "sha256": "72685b5ce6c7ea3e18e3e0d98be1a99de8197299ee15429687b27df614ec92b9",
+      "size": 781,
+      "repo_path": "bios/Other/eden/switch/dev.keys",
+      "cores": [
+        "eden"
       ]
     },
     {
@@ -3552,16 +3902,6 @@
       ]
     },
     {
-      "dest": "gba_bios.bin",
-      "sha1": "300c20df6731a33952ded8c436f7f186d25d3492",
-      "sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
-      "size": 16384,
-      "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
-      "cores": [
-        "mgba"
-      ]
-    },
-    {
       "dest": "gb_bios.bin",
       "sha1": "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
       "sha256": "cf053eccb4ccafff9e67339d4e78e98dce7d1ed59be819d2a1ba2232c6fce1c7",
@@ -3629,6 +3969,156 @@
       "repo_path": "bios/Other/ppsspp/PPSSPP/ppge_atlas.meta",
       "cores": [
         "ppsspp"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8723a_fw.bin",
+      "sha1": "2937529b25c46e29429811829988f56f28142a41",
+      "sha256": "756951ee36e417c0714b00547a6175d5d5decbe1e4cf7585f211019150c7cd10",
+      "size": 24548,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8723a_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8723b_fw.bin",
+      "sha1": "5c43fb17ef04a2ee13f9e697f685f68f0d0d1096",
+      "sha256": "c9c8a9f6ebd90b7449a7e4d38ee39952dc7cc47d6c1d054e42cfbb5e4d818853",
+      "size": 45048,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8723b_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8723d_fw.bin",
+      "sha1": "a9182178ae400dd68b3e82f5f4c650001e9d1b85",
+      "sha256": "6b70723b2db9b658cd9535fe36f1494b4494699e1ad07920c9356f8bd90d9263",
+      "size": 52080,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8723d_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8761a_fw.bin",
+      "sha1": "7eca505aad586772d66c3d6336d450c591e10670",
+      "sha256": "581e5e81f5b51a29f475f8a276be95ad3210b3e3065987541c508e7f7a83a462",
+      "size": 74488,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8761a_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8761bu_fw.bin",
+      "sha1": "f5bf3a7fc9605ee31b3904d64b89ce0fa3d9eaf5",
+      "sha256": "1d7a9597349ad89344fa16c1913d3e39e9a12e966e417ca16871bc79bbe59edb",
+      "size": 44484,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8761bu_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8821a_fw.bin",
+      "sha1": "0183b48cda05bd4aed70b9f0b762eea5d2fc3b1d",
+      "sha256": "3ed5077f8f02ff2b06be257691dc72061efac976cd2dc174057833624c820b9d",
+      "size": 37420,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8821a_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8821c_fw.bin",
+      "sha1": "9a192c6a003390a5eab017fe79d42514ec6712e7",
+      "sha256": "dfe7ef772d078ec09490c02190a32fcd40b3eaf3b040049d8930eb80e6d5743c",
+      "size": 54636,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8821c_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8822b_fw.bin",
+      "sha1": "d5ec968f1609b1c436ad25db7d34f5e393373396",
+      "sha256": "eecef2c3b2ff03c3a41292a93a25eca6f4ec38eb4a7491a3651b530be89a04fc",
+      "size": 51176,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8822b_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8822cu_fw.bin",
+      "sha1": "08751f476d0d0aa165af020ed19d2ed1fbaeeef6",
+      "sha256": "09d81457457a7760b867c715517d12dd3919f9ecec7b080f2985e75f1563209f",
+      "size": 38207,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8822cu_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8851bu_fw.bin",
+      "sha1": "0e877d65077a42db4971c7f930dddc7b63047617",
+      "sha256": "7fcf88c00b2548a5ff157102a35722db5e4be655dab1ce8d9bddb6df85f88f24",
+      "size": 49760,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8851bu_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8852au_fw.bin",
+      "sha1": "24118f0e3b1ac5be44abacd4fa0bc07e2364e223",
+      "sha256": "56be2eb99d36109bb5e01eee171573b6f3dd041238c01cd97ce4f01df8dbf09e",
+      "size": 67188,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8852au_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8852bu_fw.bin",
+      "sha1": "22cacf5d1b9da25801cd5d6e8b7f06dff0965439",
+      "sha256": "c2b0d34a4ff8a8ea136993f0dc4ba657522d84231b4094c2a53cda39afc91c57",
+      "size": 129733,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8852bu_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8852cu_fw.bin",
+      "sha1": "acd067bdc7933d1d9b8f2d72a750de5d125a5529",
+      "sha256": "9b8b27741a914c1cecc1ab9837194236890522101a57ba1898eb55f8d538dae0",
+      "size": 113336,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8852cu_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8852btu_fw.bin",
+      "sha1": "eb1139c1b27429eef639b6002b16212d702ad378",
+      "sha256": "bd162fd3b70e805cf7a8098f22f4ddf5d89da58fafff97d87da1a1e2e0cbeb80",
+      "size": 128140,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8852btu_fw.bin",
+      "cores": [
+        "primehack"
+      ]
+    },
+    {
+      "dest": "Load/Firmware/rtl_bt/rtl8922au_fw.bin",
+      "sha1": "088a3cf44d2372cdb557241bbbf519bcbbac156f",
+      "sha256": "112290ca9dc3985034f572594812f0deb8530dd031686461b55cac43a1c35a79",
+      "size": 71360,
+      "repo_path": "bios/Nintendo/GameCube/Load/Firmware/rtl_bt/rtl8922au_fw.bin",
+      "cores": [
+        "primehack"
       ]
     },
     {
@@ -4565,6 +5055,16 @@
       "repo_path": "bios/Nintendo/Wii U/keys.txt",
       "cores": [
         "cemu"
+      ]
+    },
+    {
+      "dest": "switch/prod.keys",
+      "sha1": "c146b651696d25287241f4bab18226e488bc45b3",
+      "sha256": "039895c6e93a0c6208c3af27da8c3fc408083873a96f2320dc334a6fa252c112",
+      "size": 16025,
+      "repo_path": "bios/Nintendo/Switch/prod.keys",
+      "cores": [
+        "citron"
       ]
     },
     {
