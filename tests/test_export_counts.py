@@ -42,6 +42,15 @@ class RetroDeckWritesWhatItCounts(unittest.TestCase):
         self.assertEqual(by_system, {"atari5200": f"{A},{B}", "atari800": C})
         self.assertEqual(len(merged), 2)
 
+    def test_revisions_under_one_name_keep_their_own_hash(self):
+        existing = [
+            {"filename": "64DD_IPL.bin", "system": "n64dd", "md5": A},
+            {"filename": "64DD_IPL.bin", "system": "n64dd", "md5": B},
+        ]
+        ours = [OrderedDict(filename="64DD_IPL.bin", system="n64dd", md5=f"{A},{C}")]
+        merged = RetroDeck._merge(existing, ours)
+        self.assertEqual([e["md5"] for e in merged], [f"{A},{C}", B])
+
     def test_a_list_of_systems_is_kept(self):
         existing = [{"filename": "neogeo.zip", "system": ["neogeo", "fbneo"], "md5": A}]
         ours = [OrderedDict(filename="neogeo.zip", system="fbneo", md5=B)]
