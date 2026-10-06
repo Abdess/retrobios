@@ -318,5 +318,13 @@ class RepeatedDestinations(unittest.TestCase):
         self.assertEqual(diff.files_changed, ["pce/syscard3.pce"])
 
 
+class PinsWithExtras(unittest.TestCase):
+    def test_an_extras_bracket_keeps_its_pin(self):
+        from check_freshness import parse_pip_pins  # noqa: PLC0415
+
+        pins = parse_pip_pins('  run: pip install pyyaml "jsonschema[format-nongpl]==4.26.0"')
+        self.assertEqual(pins["jsonschema"], "==4.26.0")
+
+
 if __name__ == "__main__":
     unittest.main()

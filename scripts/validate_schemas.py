@@ -254,6 +254,20 @@ def _semantic_install_checks(path: Path, manifest: dict) -> list[str]:
     return out
 
 
+def unchecked_formats() -> list[str]:
+    """Formats the schemas declare that this jsonschema install cannot check.
+
+    date-time and uri need the format extras; without them the ten format
+    constraints of the published schemas were accepted unread.
+    """
+    used = {
+        match
+        for path in SCHEMAS.glob("*.json")
+        for match in re.findall(r'"format"\s*:\s*"([^"]+)"', path.read_text(encoding="utf-8"))
+    }
+    return sorted(used - set(FormatChecker().checkers))
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -262,6 +276,16 @@ def main() -> int:
         help="validate emulator/platform YAML only",
     )
     args = parser.parse_args()
+
+    unchecked = unchecked_formats()
+    if unchecked:
+        # jsonschema skips a format it has no checker for, silently.
+        print(
+            f"ERROR no checker for format(s) {', '.join(unchecked)}: "
+            'install "jsonschema[format-nongpl]"',
+            file=sys.stderr,
+        )
+        return 1
 
     errors: list[str] = []
     errors.extend(

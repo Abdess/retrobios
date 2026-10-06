@@ -112,7 +112,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install pyyaml jsonschema==4.26.0
+        run: pip install pyyaml "jsonschema[format-nongpl]==4.26.0"
 
       - name: Validate platform configs and emulator profiles
         run: python scripts/validate_schemas.py --source-only
@@ -127,7 +127,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install pyyaml jsonschema==4.26.0
+        run: pip install pyyaml "jsonschema[format-nongpl]==4.26.0"
 
       # The exporter fidelity cases compare what we hand back against the
       # file each platform publishes, so they need those files. They skip
