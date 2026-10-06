@@ -205,10 +205,13 @@ def verify_pack(
             # An archive the builder assembled (a MAME clone set): every
             # member must be a dump the collection holds, loose or inside a
             # romset.
-            if status == "untracked" and name.endswith(".zip"):
-                if _members_are_held(zf.read(name), by_md5, db):
-                    status = "verified_members"
-                    file_name = os.path.basename(name)
+            if (
+                status == "untracked"
+                and name.endswith(".zip")
+                and _members_are_held(zf.read(name), by_md5, db)
+            ):
+                status = "verified_members"
+                file_name = os.path.basename(name)
 
             if status == "untracked":
                 # Bytes nothing recognises: written wrong, or a source that

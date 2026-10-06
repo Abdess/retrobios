@@ -23,6 +23,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import refresh_data_dirs as rdd  # noqa: E402
+from generate_pack import _data_directory_members  # noqa: E402
 
 
 def _zip_bytes(files: dict[str, bytes]) -> bytes:
@@ -117,9 +118,8 @@ class RefreshConcurrency(unittest.TestCase):
 
 class PackWalkHoldsTheCache(unittest.TestCase):
     def test_a_refresh_waits_for_the_walk(self):
-        import fcntl
+        import fcntl  # noqa: PLC0415
 
-        from generate_pack import _data_directory_members
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             cache = Path(tmp) / "data" / "sdlpal"
@@ -130,9 +130,11 @@ class PackWalkHoldsTheCache(unittest.TestCase):
             registry = {"sdlpal": {"local_cache": str(cache)}}
             walk = _data_directory_members(systems, registry, "p", "", False, set(), set(), set())
             next(walk)
-            with open(cache.with_name(".sdlpal.lock"), "a") as handle:
-                with self.assertRaises(BlockingIOError):
-                    fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            with (
+                open(cache.with_name(".sdlpal.lock"), "a") as handle,
+                self.assertRaises(BlockingIOError),
+            ):
+                fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
             list(walk)
             with open(cache.with_name(".sdlpal.lock"), "a") as handle:
                 fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)

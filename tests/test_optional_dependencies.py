@@ -45,6 +45,7 @@ class SuiteWithoutJsonschema(unittest.TestCase):
             [sys.executable, "-c", HIDE_AND_RUN, *names],
             cwd=REPO_ROOT,
             capture_output=True,
+            check=False,
             text=True,
             timeout=600,
         )

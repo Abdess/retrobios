@@ -480,6 +480,26 @@ def _hash_set(entry: dict) -> set[str]:
     return values
 
 
+def _path_tail(value: object) -> str:
+    return str(value or "").replace("\\", "/").casefold()
+
+
+def _pair_rank(truth_entry: dict, scraped_entry: dict) -> tuple[bool, bool, bool, bool]:
+    """How well a same-named truth entry describes a scraped one.
+
+    Exact path suffix, then same directory, then primary name over alias,
+    then a shared hash.
+    """
+    destination = _path_tail(scraped_entry.get("destination"))
+    t_path = _path_tail(truth_entry.get("path"))
+    return (
+        bool(t_path) and destination.endswith(t_path),
+        "/" in t_path and t_path.rsplit("/", 1)[0] == destination.rpartition("/")[0],
+        truth_entry["name"].lower() == scraped_entry["name"].lower(),
+        bool(_hash_set(scraped_entry) & _hash_set(truth_entry)),
+    )
+
+
 def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     """Compare files between truth and scraped for a single system.
 
@@ -502,9 +522,6 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     extra_phantom: list[dict] = []
     extra_unprofiled: list[dict] = []
 
-    def _tail(value: object) -> str:
-        return str(value or "").replace("\\", "/").casefold()
-
     matched: set[int] = set()
     unmatched_scraped: dict[int, dict] = {}
     for s_position, s_entry in enumerate(scraped_files):
@@ -515,20 +532,9 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
             if s_entry["name"].lower() not in truth_index:
                 unmatched_scraped[s_position] = s_entry
             continue
-        destination = _tail(s_entry.get("destination"))
-        s_hashes = _hash_set(s_entry)
-
-        def rank(position: int) -> tuple[bool, bool, bool, bool]:
-            t = truth_files[position]
-            t_path = _tail(t.get("path"))
-            return (
-                bool(t_path) and destination.endswith(t_path),
-                "/" in t_path and t_path.rsplit("/", 1)[0] == destination.rpartition("/")[0],
-                t["name"].lower() == s_entry["name"].lower(),
-                bool(s_hashes & _hash_set(t)),
-            )
-
-        t_position = max(candidates, key=rank)
+        # The first best candidate wins, as max() keeps the first maximum.
+        ranked = [(_pair_rank(truth_files[p], s_entry), p) for p in candidates]
+        t_position = max(ranked, key=lambda pair: pair[0])[1]
         matched.add(t_position)
         t_entry = truth_files[t_position]
 
@@ -594,7 +600,7 @@ def _diff_system(truth_sys: dict, scraped_sys: dict) -> dict:
     # file.
     seen_extra: set[tuple[str, str]] = set()
     for s_key, s_entry in unmatched_scraped.items():
-        key = (s_entry["name"].lower(), _tail(s_entry.get("destination")))
+        key = (s_entry["name"].lower(), _path_tail(s_entry.get("destination")))
         if s_key in rename_matched_scraped or key in seen_extra:
             continue
         seen_extra.add(key)

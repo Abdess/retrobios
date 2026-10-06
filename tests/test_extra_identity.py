@@ -16,6 +16,8 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from common import PROFILE_IDENTITY_FIELDS  # noqa: E402
+from packextras import _collect_emulator_extras  # noqa: E402
+from verify import find_undeclared_files  # noqa: E402
 
 ENTRY = {
     "name": "bios.rom",
@@ -29,9 +31,6 @@ ENTRY = {
 
 class IdentityTravels(unittest.TestCase):
     def test_report_and_extra_keep_every_identity_field(self):
-        from packextras import _collect_emulator_extras
-        from verify import find_undeclared_files
-
         profile = {
             "emulator": "NP2kai",
             "type": "libretro",

@@ -24,7 +24,7 @@ class RequiredOnlyArchives(unittest.TestCase):
             result = subprocess.run(
                 [sys.executable, "scripts/generate_pack.py", "--emulator", "geolith",
                  "--required-only", "--offline", "--output-dir", tmp],
-                capture_output=True, text=True, cwd=REPO_ROOT, timeout=600,
+                capture_output=True, check=False, text=True, cwd=REPO_ROOT, timeout=600,
             )
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             pack = next(Path(tmp).glob("*.zip"))

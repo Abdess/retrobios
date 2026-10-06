@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import hashlib
 import io
+import json
+import re
 import sys
 import tempfile
 import unittest
@@ -18,12 +20,11 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from packverify import verify_pack  # noqa: E402
 
 
 class MembersMustBeKnown(unittest.TestCase):
     def test_unknown_bytes_are_an_error_and_assembled_sets_pass(self):
-        from packverify import verify_pack
-
         known = b"known rom" * 10
         md5 = hashlib.md5(known).hexdigest()
         inner = io.BytesIO()
@@ -46,9 +47,6 @@ class SchemaAcceptsEveryStatus(unittest.TestCase):
     """verified_members reached every pack manifest and the schema refused it."""
 
     def test_each_status_packverify_writes_is_in_the_schema(self):
-        import json
-        import re
-
         source = (REPO_ROOT / "scripts" / "packverify.py").read_text(encoding="utf-8")
         written = set(re.findall(r'status = "([a-z_]+)"', source))
         schema = json.loads(

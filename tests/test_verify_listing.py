@@ -12,7 +12,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 
 def _run(*argv: str) -> subprocess.CompletedProcess:
     return subprocess.run(
-        [sys.executable, *argv], capture_output=True, text=True, cwd=REPO_ROOT, timeout=300
+        [sys.executable, *argv], capture_output=True, check=False, text=True, cwd=REPO_ROOT, timeout=300
     )
 
 

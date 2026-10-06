@@ -18,6 +18,7 @@ from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+import generate_db  # noqa: E402
 
 
 class _NoCoreInfo:
@@ -27,8 +28,6 @@ class _NoCoreInfo:
 
 class AliasesNeedAnUnambiguousName(unittest.TestCase):
     def _aliases(self, files: dict) -> dict:
-        import generate_db
-
         stub = types.ModuleType("scraper.coreinfo_scraper")
         stub.Scraper = _NoCoreInfo
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
@@ -71,8 +70,6 @@ class NoNetworkInTheBuild(unittest.TestCase):
         self.assertNotIn("urllib.request", source)
 
     def test_hash_proven_entry_registers_its_own_name(self):
-        import generate_db
-
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
@@ -91,8 +88,6 @@ class NoNetworkInTheBuild(unittest.TestCase):
 class AcceptedRevisionLists(unittest.TestCase):
     def test_a_list_of_sha1_names_every_held_revision(self):
         """A profile accepting several revisions writes sha1 as a list."""
-        import generate_db
-
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             previous = os.getcwd()
             os.chdir(tmp)
@@ -114,8 +109,6 @@ class AcceptedRevisionLists(unittest.TestCase):
 class CrossNamingStaysInItsProfile(unittest.TestCase):
     def test_an_alias_naming_a_sibling_entry_is_not_indexed(self):
         """dosbox-x aliases MT32_CONTROL.ROM and CM32L_CONTROL.ROM to each other."""
-        import generate_db
-
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             previous = os.getcwd()
             os.chdir(tmp)

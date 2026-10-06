@@ -10,14 +10,16 @@ discrepancy that does not exist. Content decides, as everywhere else here.
 from __future__ import annotations
 
 import pathlib
+import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from truth import _match_renames  # noqa: E402
+from truth import _diff_system, _match_renames, _merge_file_into_system  # noqa: E402
 
 
 def _entry(name: str, **hashes) -> dict:
@@ -33,16 +35,13 @@ class ATargetedModelIsItsOwnArtifact(unittest.TestCase):
     """
 
     def test_a_target_writes_beside_the_full_model(self):
-        import subprocess
-        import tempfile
-
         repo = pathlib.Path(__file__).resolve().parent.parent
         with tempfile.TemporaryDirectory(dir=str(repo / "tmp")) as directory:
             for extra in ([], ["--target", "browser"]):
                 proc = subprocess.run(
                     [sys.executable, "scripts/generate_truth.py", "--platform",
                      "romm", *extra, "--output-dir", directory],
-                    capture_output=True, text=True, cwd=str(repo), timeout=400,
+                    capture_output=True, check=False, text=True, cwd=str(repo), timeout=400,
                 )
                 self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             produced = sorted(
@@ -60,16 +59,13 @@ class ADiffThatComparedNothingFails(unittest.TestCase):
     """diff_truth --all skipped every platform without a model and exited 0."""
 
     def test_an_empty_truth_directory_is_an_error(self):
-        import subprocess
-        import tempfile
-
         repo = pathlib.Path(__file__).resolve().parent.parent
         with tempfile.TemporaryDirectory(dir=str(repo / "tmp")) as directory:
             for selection in (["--all"], ["--platform", "retroarch"]):
                 proc = subprocess.run(
                     [sys.executable, "scripts/diff_truth.py", *selection,
                      "--truth-dir", directory, "--json"],
-                    capture_output=True, text=True, cwd=str(repo), timeout=120,
+                    capture_output=True, check=False, text=True, cwd=str(repo), timeout=120,
                 )
                 self.assertEqual(proc.returncode, 1, selection)
                 self.assertIn("skip", proc.stderr)
@@ -81,8 +77,6 @@ class OneNameSeveralFiles(unittest.TestCase):
     REGIONS = {"USA": "a" * 32, "EUR": "b" * 32, "JAP": "c" * 32}
 
     def _system(self) -> dict:
-        from truth import _merge_file_into_system
-
         system: dict = {}
         for core in ("dolphin", "ishiiruka"):
             for region, md5 in self.REGIONS.items():
@@ -105,8 +99,6 @@ class OneNameSeveralFiles(unittest.TestCase):
             self.assertEqual(entry["_cores"] - {"other"}, {"dolphin", "ishiiruka"})
 
     def test_revisions_under_one_name_and_no_path_stay_one_file(self):
-        from truth import _merge_file_into_system
-
         system: dict = {}
         for md5 in ("a" * 32, "b" * 32):
             _merge_file_into_system(
@@ -115,8 +107,6 @@ class OneNameSeveralFiles(unittest.TestCase):
         self.assertEqual(len(system["files"]), 1)
 
     def test_the_diff_pairs_each_by_destination(self):
-        from truth import _diff_system
-
         scraped = {"files": [
             {"name": "IPL.bin", "destination": f"dolphin-emu/Sys/GC/{region}/IPL.bin",
              "md5": md5}

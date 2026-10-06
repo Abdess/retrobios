@@ -8,6 +8,7 @@ packs built for it shrank without an error.
 
 from __future__ import annotations
 
+import json
 import sys
 import unittest
 import urllib.error
@@ -35,10 +36,12 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
             retropie_targets_scraper,
             retroarch_targets_scraper,
         ):
-            with self.subTest(scraper=module.__name__):
-                with mock.patch.object(module.urllib.request, "urlopen", _refuse):
-                    with self.assertRaises(RuntimeError):
-                        module.Scraper().fetch_targets()
+            with (
+                self.subTest(scraper=module.__name__),
+                mock.patch.object(module.urllib.request, "urlopen", _refuse),
+                self.assertRaises(RuntimeError),
+            ):
+                module.Scraper().fetch_targets()
 
     def test_an_empty_listing_is_not_a_target(self):
         class _Empty:
@@ -52,12 +55,12 @@ class FailedRequestsStopTheScrape(unittest.TestCase):
                 return b"[]"
 
         for module in (emudeck_targets_scraper, retropie_targets_scraper):
-            with self.subTest(scraper=module.__name__):
-                with mock.patch.object(
-                    module.urllib.request, "urlopen", lambda *a, **k: _Empty()
-                ):
-                    with self.assertRaises(RuntimeError):
-                        module.Scraper().fetch_targets()
+            with (
+                self.subTest(scraper=module.__name__),
+                mock.patch.object(module.urllib.request, "urlopen", lambda *_a, **_k: _Empty()),
+                self.assertRaises(RuntimeError),
+            ):
+                module.Scraper().fetch_targets()
 
 
 
@@ -101,8 +104,6 @@ class RetroPieModuleFlags(unittest.TestCase):
         }
 
         def fake_fetch(url, accept="text/plain"):
-            import json
-
             section = url.rstrip("/").rsplit("/", 1)[-1]
             if section in listings:
                 return json.dumps(listings[section])

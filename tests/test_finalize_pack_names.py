@@ -16,12 +16,11 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
+from generate_pack import verify_and_finalize_packs  # noqa: E402
 
 
 class FinalizeByExactName(unittest.TestCase):
     def test_a_custom_pack_is_not_judged_as_the_platform_pack(self):
-        from generate_pack import verify_and_finalize_packs
-
         previous = os.getcwd()
         os.chdir(REPO_ROOT)
         self.addCleanup(os.chdir, previous)
