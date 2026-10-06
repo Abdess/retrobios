@@ -2389,6 +2389,75 @@ def _run_platform_packs(
         sys.exit(1)
 
 
+def _refuse_unapplied_flags(args, parser) -> None:
+    """Refuse every flag the requested mode would not apply.
+
+    A mode applies a narrowing flag or refuses it: a swallowed flag answers
+    about an artifact the caller did not name. Run before any quick-exit
+    mode, since --verify-packs and --manifest-targets return early.
+    """
+    # Parsed before the quick-exit modes: --verify-packs returns early and
+    # still needs the region priority list to narrow its expectation.
+    args.regions = []
+    if args.region:
+        try:
+            args.regions = region_mod.parse_requested(args.region)
+        except ValueError as exc:
+            parser.error(str(exc))
+        if args.manifest_targets:
+            parser.error("--region is incompatible with --manifest-targets")
+    if args.one_per_slot and args.manifest_targets:
+        parser.error("--one-per-slot is incompatible with --manifest-targets")
+
+    # --all-variants builds the six source x required combinations itself:
+    # a --source or --required-only beside it would be overridden, and the
+    # modes that build one pack (emulator, system, hashes) never read it.
+    if args.all_variants:
+        for flag, given in (
+            ("--source", args.source != "full"),
+            ("--required-only", args.required_only),
+            ("--emulator", args.emulator),
+            ("--from-md5", args.from_md5 or args.from_md5_file),
+        ):
+            if given:
+                parser.error(f"{flag} is incompatible with --all-variants")
+        if args.system and not (args.platform or args.all):
+            parser.error("--all-variants requires --platform or --all")
+        if args.verify_packs and args.manifest:
+            parser.error("--verify-packs is incompatible with --manifest")
+        if args.verify_packs:
+            # The check that follows the build reads the full pack's name.
+            for flag, given in (
+                ("--system", args.system),
+                ("--one-per-slot", args.one_per_slot),
+                ("--split", args.split),
+            ):
+                if given:
+                    parser.error(f"{flag} is incompatible with --verify-packs")
+
+    if args.verify_packs and not args.all_variants:
+        # Checks packs already on disk against the platform's own list,
+        # narrowed by region and target; it narrows by nothing else.
+        for flag, given in (
+            ("--one-per-slot", args.one_per_slot),
+            ("--required-only", args.required_only),
+            ("--source", args.source != "full"),
+            ("--system", args.system),
+        ):
+            if given:
+                parser.error(f"{flag} is incompatible with --verify-packs")
+    if args.manifest_targets:
+        # One manifest per hardware target, from the target files themselves:
+        # it reads none of the narrowing flags.
+        for flag, given in (
+            ("--target", args.target),
+            ("--required-only", args.required_only),
+            ("--source", args.source != "full"),
+        ):
+            if given:
+                parser.error(f"{flag} is incompatible with --manifest-targets")
+
+
 def main():
 
     parser = argparse.ArgumentParser(description="Generate platform BIOS ZIP packs")
@@ -2493,74 +2562,15 @@ def main():
     args = parser.parse_args()
     packresolve.set_offline(bool(args.offline))
 
-    # Parsed before the quick-exit modes: --verify-packs returns early and
-    # still needs the region priority list to narrow its expectation.
-    args.regions = []
-    if args.region:
-        try:
-            args.regions = region_mod.parse_requested(args.region)
-        except ValueError as exc:
-            parser.error(str(exc))
-        if args.manifest_targets:
-            parser.error("--region is incompatible with --manifest-targets")
-    if args.one_per_slot and args.manifest_targets:
-        parser.error("--one-per-slot is incompatible with --manifest-targets")
-
-    # --all-variants builds the six source x required combinations itself:
-    # a --source or --required-only beside it would be overridden, and the
-    # modes that build one pack (emulator, system, hashes) never read it.
-    if args.all_variants:
-        for flag, given in (
-            ("--source", args.source != "full"),
-            ("--required-only", args.required_only),
-            ("--emulator", args.emulator),
-            ("--from-md5", args.from_md5 or args.from_md5_file),
-        ):
-            if given:
-                parser.error(f"{flag} is incompatible with --all-variants")
-        if args.system and not (args.platform or args.all):
-            parser.error("--all-variants requires --platform or --all")
-        if args.verify_packs and args.manifest:
-            parser.error("--verify-packs is incompatible with --manifest")
-        if args.verify_packs:
-            # The check that follows the build reads the full pack's name.
-            for flag, given in (
-                ("--system", args.system),
-                ("--one-per-slot", args.one_per_slot),
-                ("--split", args.split),
-            ):
-                if given:
-                    parser.error(f"{flag} is incompatible with --verify-packs")
+    _refuse_unapplied_flags(args, parser)
 
     # Quick-exit modes: --verify-packs alone = verify existing packs only
     # Combined with --all-variants, generation runs first then verify
     if args.verify_packs and not args.all_variants:
-        # This mode checks packs already on disk against the platform's own
-        # list, narrowed by the region priority above and by --target. A
-        # narrowing flag it cannot honour is refused rather than dropped: a
-        # dropped flag answers about an artifact the caller did not name.
-        for flag, given in (
-            ("--one-per-slot", args.one_per_slot),
-            ("--required-only", args.required_only),
-            ("--source", args.source != "full"),
-            ("--system", args.system),
-        ):
-            if given:
-                parser.error(f"{flag} is incompatible with --verify-packs")
         with _pack_output_lock(args.output_dir, exclusive=False):
             _run_verify_packs(args)
         return
     if args.manifest_targets:
-        # This mode writes one manifest per hardware target from the target
-        # files themselves; it reads none of the narrowing flags. --region and
-        # --one-per-slot are refused above, and these three the same way.
-        for flag, given in (
-            ("--target", args.target),
-            ("--required-only", args.required_only),
-            ("--source", args.source != "full"),
-        ):
-            if given:
-                parser.error(f"{flag} is incompatible with --manifest-targets")
         with _pack_output_lock(args.output_dir):
             generate_target_manifests(
                 os.path.join(args.platforms_dir, "targets"), args.output_dir
