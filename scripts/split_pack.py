@@ -21,6 +21,8 @@ import sys
 import zipfile
 from pathlib import Path
 
+from artifacts import ArtifactLockBusy, artifact_lock
+
 # "Each file included in a release must be under 2 GiB."
 ASSET_LIMIT = 2 * 1024**3
 
@@ -222,12 +224,17 @@ def main() -> int:
         help="a part stays under this many bytes (K, M, G suffixes; default 2G)",
     )
     args = parser.parse_args()
+    # The packs are rewritten in place by generate_pack under this lock: a
+    # build running beside the split mixes its bytes into the pack being
+    # read, or writes a pack that the split then deletes.
+    directory = args.target if args.target.is_dir() else args.target.parent
     try:
-        if args.target.is_dir():
-            published = split_directory(args.target, args.max_size)
-        else:
-            published = split_pack(args.target, args.max_size)
-    except (OSError, ValueError, zipfile.BadZipFile) as exc:
+        with artifact_lock(str(directory)):
+            if args.target.is_dir():
+                published = split_directory(args.target, args.max_size)
+            else:
+                published = split_pack(args.target, args.max_size)
+    except (ArtifactLockBusy, OSError, ValueError, zipfile.BadZipFile) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
     for path in published:

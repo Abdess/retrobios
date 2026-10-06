@@ -135,6 +135,32 @@ class PartsAreArchives(SplitFixture):
         self.assertTrue(modes["bin/engine"] & stat.S_IXUSR)
 
 
+class SplitHoldsTheDirectory(SplitFixture):
+    """split_pack read and deleted packs in a directory a build was writing:
+    the build could truncate the pack under the split, or the split delete
+    the pack the build had just written."""
+
+    def test_a_held_directory_is_left_alone(self):
+        import subprocess
+
+        from artifacts import artifact_lock
+
+        for target in (self.dist, self.pack):
+            with self.subTest(target=target.name), artifact_lock(str(self.dist)):
+                proc = subprocess.run(
+                    [sys.executable, "scripts/split_pack.py", str(target),
+                     "--max-size", str(LIMIT)],
+                    cwd=str(REPO_ROOT), capture_output=True, text=True,
+                    timeout=60, check=False,
+                )
+                self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
+                self.assertIn("in use by another run", proc.stderr)
+                self.assertTrue(self.pack.exists())
+                self.assertEqual(
+                    sorted(p.name for p in self.dist.glob("*.zip")), [self.pack.name]
+                )
+
+
 class PartsAreNotTakenForPacks(SplitFixture):
     def test_a_part_is_recognised_by_its_name(self):
         self.assertTrue(split_pack.is_part("RetroArch_BIOS_Pack.part1of2.zip"))
