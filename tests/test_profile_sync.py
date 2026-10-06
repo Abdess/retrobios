@@ -2510,6 +2510,24 @@ class TestBumpCommit(unittest.TestCase):
         self.assertEqual(written["source_commit"], "newhead")
         self.assertEqual(written["upstream_commit"], "uphead")
 
+    def test_refused_for_a_pin_keyed_by_build_mode(self):
+        """mesence, supermodel, xemu: str(dict) never matched a line."""
+        text = self.path.read_text(encoding="utf-8")
+        self.path.write_text(
+            "source_commit:\n  standalone: \"aaa\"\n  libretro: \"bbb\"\n"
+            + "\n".join(l for l in text.splitlines() if not l.startswith("source_commit"))
+            + "\n",
+            encoding="utf-8",
+        )
+        report = ProfileReport(
+            name="p", repo="o/n", pin="aaa", head="newhead",
+            entries=[], counts={"ANCHORED": 1},
+        )
+        before = self.path.read_text(encoding="utf-8")
+        with contextlib.redirect_stderr(io.StringIO()):
+            self.assertFalse(bump_commit(self.path, report))
+        self.assertEqual(self.path.read_text(encoding="utf-8"), before)
+
     def test_refused_when_pinned_to_a_superseded_tag(self):
         report = ProfileReport(
             name="p", repo="o/n", pin="pin", head="newhead",
