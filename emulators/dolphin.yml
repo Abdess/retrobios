@@ -148,7 +148,7 @@ files:
     required: false
     hle_fallback: true
     note: "BootMii NAND backup. Can be imported to populate Wii NAND with channels, saves, system menu"
-    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:26-39,42-89"
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:27-45,47-92"
 
   - name: "keys.bin"
     path: null
@@ -156,7 +156,7 @@ files:
     required: false
     hle_fallback: true
     note: "OTP/SEEPROM dump (Wii encryption keys). Needed if not appended to nand.bin for NAND import"
-    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:20, Source/Core/DiscIO/NANDImporter.cpp:82-94, Source/Core/DiscIO/NANDImporter.h:46"
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:20, Source/Core/DiscIO/NANDImporter.cpp:77-91, Source/Core/DiscIO/NANDImporter.h:35-38"
 
   # -- Wii SD Card Image --
   - name: "WiiSD.raw"
@@ -189,21 +189,21 @@ files:
     required: false
     hle_fallback: true
     note: "SSL client certificate. Auto-extracted from IOS13 content during NAND import"
-    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:239-323"
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:220-304"
 
   - name: "clientcakey.pem"
     path: "Wii/clientcakey.pem"
     required: false
     hle_fallback: true
     note: "SSL client private key. Auto-extracted from IOS13 content during NAND import"
-    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:275"
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:256"
 
   - name: "rootca.pem"
     path: "Wii/rootca.pem"
     required: false
     hle_fallback: true
     note: "SSL root CA certificate. Auto-extracted from IOS13 content during NAND import"
-    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:276"
+    source_ref: "Source/Core/DiscIO/NANDImporter.cpp:257"
 
   # -- Realtek Bluetooth firmware (Wiimote passthrough) --
   # Required for real Wiimote connectivity via USB Bluetooth adapters with Realtek chipsets.
