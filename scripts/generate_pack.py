@@ -520,6 +520,7 @@ def _select_variants(
     source: str,
     regions,
     one_per_slot: bool,
+    required_only: bool = False,
 ) -> tuple[set, list, list]:
     """Which regional and slot alternatives this pack leaves out.
 
@@ -545,6 +546,7 @@ def _select_variants(
             target_cores=target_cores,
             include_extras=(source != "platform"),
             include_all=(source == "truth"),
+            required_only=required_only,
         )
     if regions:
         region_index = region_mod.build_region_index(emu_profiles or {})
@@ -704,7 +706,7 @@ def generate_pack(
     # direction. Runs only when --region is given.
     region_drops, region_fallbacks, slot_undecidable = _select_variants(
         config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
-        target_cores, source, regions, one_per_slot,
+        target_cores, source, regions, one_per_slot, required_only,
     )
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
@@ -3077,6 +3079,7 @@ def generate_manifest(
             target_cores=target_cores,
             include_extras=(source != "platform"),
             include_all=(source == "truth"),
+            required_only=required_only,
         )
         region_drops = region_mod.resolve_region_drops(
             region_groups, region_index, regions
