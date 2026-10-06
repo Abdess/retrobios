@@ -641,8 +641,14 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     return "\n".join(lines) + "\n"
 
 
-def generate_contributing() -> str:
-    return f"""# Contributing to RetroBIOS
+def contributing_text(link, title: str, site_words: str) -> str:
+    """The contribution guide, one text for the repository and the site.
+
+    Two copies drifted apart: four steps to add a platform here, five on the
+    site. *link* renders a site page (absolute URL for the README, relative
+    .md for MkDocs); *site_words* names the site from where the text is read.
+    """
+    return f"""{title}
 
 ## Add a BIOS file
 
@@ -651,7 +657,7 @@ def generate_contributing() -> str:
 3. Variants (alternate hashes for the same file): `bios/Manufacturer/Console/.variants/`
 4. Open a Pull Request - hashes are verified automatically and reported as a comment
 
-The [dump provenance]({SITE_URL}provenance/) page lists catalogued dumps still
+The [dump provenance]({link("provenance")}) page lists catalogued dumps still
 missing from the collection, with their hashes. A file matching one of those is
 the most useful contribution.
 
@@ -662,7 +668,7 @@ the most useful contribution.
 3. Register it in `platforms/_registry.yml`
 4. Generate the platform YAML and test: `python scripts/verify.py --platform <name>`
 
-Full walkthrough: [adding a platform]({SITE_URL}wiki/adding-a-platform/).
+Full walkthrough: [adding a platform]({link("wiki/adding-a-platform")}).
 
 ## Add an emulator profile
 
@@ -672,7 +678,7 @@ Full walkthrough: [adding a platform]({SITE_URL}wiki/adding-a-platform/).
 4. Write the YAML to `emulators/<name>.yml`
 5. Test: `python scripts/cross_reference.py --emulator <name>`
 
-Full walkthrough: [profiling guide]({SITE_URL}wiki/profiling/).
+Full walkthrough: [profiling guide]({link("wiki/profiling")}).
 
 ## File conventions
 
@@ -697,8 +703,16 @@ configs, validates the YAML against the schemas, runs the test suite, and posts
 a report on the PR.
 
 Contributors who add platform support are credited in the README,
-on the documentation site, and in the BIOS packs.
+{site_words}, and in the BIOS packs.
 """
+
+
+def generate_contributing() -> str:
+    return contributing_text(
+        lambda page: f"{SITE_URL}{page}/",
+        "# Contributing to RetroBIOS",
+        "on the documentation site",
+    )
 
 
 def main():
