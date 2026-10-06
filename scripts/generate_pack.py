@@ -1257,7 +1257,9 @@ def generate_emulator_pack(
     os.makedirs(output_dir, exist_ok=True)
 
     region_drops: set[str] = (
-        emulator_region_drops(selected, standalone, regions) if regions else set()
+        emulator_region_drops(selected, standalone, regions, required_only)
+        if regions
+        else set()
     )
 
     total_files = 0
