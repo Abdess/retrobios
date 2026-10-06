@@ -205,6 +205,20 @@ class OneMd5FormatsAddWhole(unittest.TestCase):
         self.assertTrue(Batocera.writable(single))
 
 
+class BizHawkKeepsItsOwnHashes(unittest.TestCase):
+    def test_a_declared_sha1_is_not_replaced(self):
+        """FBNeo's MSX.rom replaced the SHA1 MSXHawk accepts in BizHawk's code."""
+        sha_bizhawk, sha_fbneo = "4" * 40, "e" * 40
+        fe = NativeFile("MSX.rom", "MSX.rom", "MSX", platform={"sha1": sha_bizhawk},
+                        truth={"sha1": sha_fbneo}, corrections=["sha1"])
+        exporter = BizHawk()
+        source = f'FirmwareAndOption("{sha_bizhawk.upper()}", 32768, "MSX", "b", "MSX.rom", "d");\n'
+        produced = exporter.render({"MSX": NativeSystem("MSX", files=[fe])}, None,
+                                   {exporter.native_filename(): source})
+        self.assertIn(sha_bizhawk.upper(), produced[exporter.native_filename()])
+        self.assertFalse(exporter.states(fe, "sha1"))
+
+
 class ModelKeepsOneFileOneEntry(unittest.TestCase):
     def test_a_list_of_sizes_is_not_one_size(self):
         """A profile may accept several revisions; int() on the list crashed."""
