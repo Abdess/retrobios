@@ -284,5 +284,35 @@ class ControllerDatabasesAreTheirOwn(unittest.TestCase):
                 self.assertNotIn("C-Dogs", path or "")
 
 
+class SwitchKeysAreTheNewestSet(unittest.TestCase):
+    """A harvested key set under Arcade/ won the name tie: master_key_10 shipped
+    where the collection held master_key_12."""
+
+    def test_every_switch_profile_gets_the_newest_master_key(self):
+        db_path = REPO_ROOT / "database.json"
+        if not db_path.exists():
+            self.skipTest("no database.json")
+        db = load_database(str(db_path))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        held = [
+            Path(entry["path"]) for entry in db["files"].values()
+            if entry["name"] == "prod.keys" and (REPO_ROOT / entry["path"]).exists()
+        ]
+
+        def newest(path: Path) -> int:
+            keys = [
+                line.split("=")[0].strip() for line in path.read_text(errors="replace").splitlines()
+                if line.startswith("master_key_")
+            ]
+            return max((int(k.rsplit("_", 1)[1], 16) for k in keys), default=-1)
+
+        best = max(newest(REPO_ROOT / p) for p in held)
+        for key in ("yuzu", "citron", "eden", "suyu", "ryujinx", "kenji-nx", "skyline"):
+            entry = next(e for e in profiles[key]["files"] if e["name"] == "prod.keys")
+            with self.subTest(profile=key):
+                path, _status = resolve_local_file(entry, db, dest_hint=entry.get("path") or "")
+                self.assertEqual(newest(REPO_ROOT / path), best)
+
+
 if __name__ == "__main__":
     unittest.main()
