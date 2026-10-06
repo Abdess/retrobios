@@ -11,6 +11,8 @@ import os
 
 from common import compute_hashes, size_fits
 from hashing import parse_md5_list
+from nativemode import digest_algorithm, hash_mismatch_excludes_file
+from ziptools import check_inside_zip
 
 # Validation types that require console-specific cryptographic keys.
 # verify.py cannot reproduce these -size checks still apply if combined.
@@ -450,3 +452,41 @@ def frontend_digest_matches(file_entry: dict, local_path: str, algorithm: str) -
     if not declared or not local_path:
         return False
     return compute_hashes(local_path)[algorithm].lower() in declared
+
+
+def inner_rom_check(file_entry: dict, local_path: str) -> str:
+    """How an archive answers an entry that pins a ROM inside it.
+
+    Batocera, RetroBat and ROCKNIX hash a member of the ZIP, never the ZIP:
+    the resolver hands back the archive as a mismatch and this decides it.
+    Returns check_inside_zip's answer for the first accepted MD5 that
+    matches, else for the last one tried. The pack and the install manifest
+    both read it, so a file one of them ships is a file the other lists.
+    """
+    declared = [m.strip() for m in file_entry.get("md5", "").split(",") if m.strip()]
+    result = "not_in_zip"
+    for candidate in declared or [""]:
+        result = check_inside_zip(local_path, file_entry["zipped_file"], candidate)
+        if result == "ok":
+            break
+    return result
+
+
+def settle_mismatch(
+    file_entry: dict, local_path: str | None, status: str, verification_mode: str
+) -> str:
+    """Upgrade a hash mismatch the frontend itself would accept.
+
+    Batocera pins the md5 of a ROM inside the archive (zipped_file), and a
+    frontend that hashes one digest accepts a file whose other declared
+    hashes disagree.
+    """
+    if status != "hash_mismatch" or not local_path:
+        return status
+    if file_entry.get("zipped_file"):
+        return "zip_exact" if inner_rom_check(file_entry, local_path) == "ok" else status
+    if hash_mismatch_excludes_file(verification_mode) and frontend_digest_matches(
+        file_entry, local_path, digest_algorithm(verification_mode)
+    ):
+        return "frontend_digest_exact"
+    return status
