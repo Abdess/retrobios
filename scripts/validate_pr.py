@@ -22,7 +22,6 @@ import json
 import os
 import subprocess
 import sys
-from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (

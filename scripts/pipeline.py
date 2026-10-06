@@ -214,6 +214,12 @@ class _Skipped:
 SKIPPED = _Skipped()
 
 
+def _refuse_unapplied_flags(parser: argparse.ArgumentParser, args) -> None:
+    """--all-variants builds every source itself: a --source beside it is dropped."""
+    if args.all_variants and args.source != "full":
+        parser.error("--source is incompatible with --all-variants")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run the full retrobios pipeline")
     parser.add_argument(
@@ -258,8 +264,7 @@ def main():
         help="Export native formats (implies --with-truth)",
     )
     args = parser.parse_args()
-    if args.all_variants and args.source != "full":
-        parser.error("--source is incompatible with --all-variants")
+    _refuse_unapplied_flags(parser, args)
 
     # A second run on the same output directory is refused before any work:
     # the database rebuild alone takes minutes, and the reader holding the
@@ -460,7 +465,7 @@ def main():
         "3b/8 slot arbitration",
     )
     results["slots"] = ok
-    all_ok = all_ok and ok
+    all_ok &= ok
 
     # Step 4: Generate packs
     pack_output = ""
