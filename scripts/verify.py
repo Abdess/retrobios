@@ -79,7 +79,7 @@ from validation import (
     check_file_validation,
     filter_files_by_mode,
     find_validated_variant,
-    read_from_system_dir,
+    outside_gap_scope,
 )
 
 DEFAULT_DB = "database.json"
@@ -394,21 +394,7 @@ def _candidate_verdict(
     """
     if file_entry.get("unsourceable"):
         return "settled"
-    # Placeholders stand for a family of files, not a file.
-    if "<" in fname or ">" in fname or "*" in fname:
-        return "skip"
-    # An explicit null path means the user imports it through the UI.
-    if "path" in file_entry and file_entry["path"] is None:
-        return "skip"
-    file_mode = file_entry.get("mode")
-    if file_mode == "standalone" and not is_standalone:
-        return "skip"
-    if file_mode == "libretro" and is_standalone:
-        return "skip"
-    if not read_from_system_dir(file_entry):
-        return "skip"
-    # Filename-agnostic entries are answered by the builder's own scan.
-    if file_entry.get("agnostic"):
+    if outside_gap_scope(file_entry, is_standalone):
         return "skip"
     if not include_all:
         archive = file_entry.get("archive")

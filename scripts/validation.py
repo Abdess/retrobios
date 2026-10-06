@@ -324,6 +324,28 @@ def read_from_system_dir(file_entry: dict) -> bool:
     return not load_from or load_from == "system_dir"
 
 
+def outside_gap_scope(file_entry: dict, is_standalone: bool) -> bool:
+    """Whether an entry is a file the platform's pack would carry for this build.
+
+    Read by the gap report and by verify's undeclared-file pass, so both set
+    aside the same entries: a placeholder standing for a family of files, a
+    file the user imports through the UI (``path: null``), an entry of the
+    build the platform does not run, a file read outside the system
+    directory, and a filename-agnostic entry the builder scans for itself.
+    """
+    name = file_entry.get("name", "")
+    if "<" in name or ">" in name or "*" in name:
+        return True
+    if "path" in file_entry and file_entry["path"] is None:
+        return True
+    mode = file_entry.get("mode")
+    if (mode == "standalone" and not is_standalone) or (
+        mode == "libretro" and is_standalone
+    ):
+        return True
+    return not read_from_system_dir(file_entry) or bool(file_entry.get("agnostic"))
+
+
 def filter_files_by_mode(files: list[dict], standalone: bool) -> list[dict]:
     """Filter file entries by libretro/standalone mode."""
     result = []
