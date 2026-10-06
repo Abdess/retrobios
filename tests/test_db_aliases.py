@@ -88,5 +88,28 @@ class NoNetworkInTheBuild(unittest.TestCase):
                 os.chdir(previous)
         self.assertEqual([a["name"] for a in aliases.get("s1", [])], ["writer.rom"])
 
+class AcceptedRevisionLists(unittest.TestCase):
+    def test_a_list_of_sha1_names_every_held_revision(self):
+        """A profile accepting several revisions writes sha1 as a list."""
+        import generate_db
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            previous = os.getcwd()
+            os.chdir(tmp)
+            try:
+                Path("emulators").mkdir()
+                Path("emulators/m.yml").write_text(
+                    'files:\n  - name: "MT32_CONTROL.ROM"\n'
+                    '    sha1: ["s1", "s2", "absent"]\n'
+                )
+                aliases = generate_db._collect_all_aliases({
+                    "s1": {"name": "ctrl_1_04.rom", "path": "a", "md5": "m1"},
+                    "s2": {"name": "ctrl_1_05.rom", "path": "b", "md5": "m2"},
+                })
+            finally:
+                os.chdir(previous)
+        for sha in ("s1", "s2"):
+            self.assertEqual([a["name"] for a in aliases.get(sha, [])], ["MT32_CONTROL.ROM"])
+
 if __name__ == "__main__":
     unittest.main()

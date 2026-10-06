@@ -395,6 +395,14 @@ def main():
     return 0
 
 
+def _as_list(value: object) -> list[str]:
+    """A hash field as lowercase values, whether written alone or as a list."""
+    if not value:
+        return []
+    values = value if isinstance(value, list) else str(value).split(",")
+    return [str(v).strip().lower() for v in values if str(v).strip()]
+
+
 def _collect_all_aliases(files: dict) -> dict:
     """Collect alternate filenames from platform YAMLs, core-info, and known aliases.
 
@@ -483,16 +491,20 @@ def _collect_all_aliases(files: dict) -> dict:
                 for file_entry in emu_config.get("files", []):
                     entry_aliases = list(file_entry.get("aliases") or [])
                     entry_name = file_entry.get("name", "")
-                    sha1 = file_entry.get("sha1", "")
-                    md5 = file_entry.get("md5", "")
-                    matched = None
-                    if sha1 and sha1 in files:
-                        matched = sha1
+                    # A profile may accept several revisions: each held one
+                    # is designated by the entry, none of them by guess.
+                    matched: set[str] = {
+                        value for value in _as_list(file_entry.get("sha1"))
+                        if value in files
+                    }
+                    matched |= {
+                        md5_to_sha1[value]
+                        for value in _as_list(file_entry.get("md5"))
+                        if value in md5_to_sha1
+                    }
+                    if matched:
                         # Proven by content, the profile's own name designates
                         # the file whatever the collection calls it.
-                        entry_aliases.insert(0, entry_name)
-                    elif md5 and md5 in md5_to_sha1:
-                        matched = md5_to_sha1[md5]
                         entry_aliases.insert(0, entry_name)
                     if not entry_aliases:
                         continue
@@ -500,10 +512,10 @@ def _collect_all_aliases(files: dict) -> dict:
                         # A name carried by several files names none of them:
                         # quasi88's disk.rom aliases went to whichever
                         # disk.rom the scan met last, a Tandy CoCo ROM.
-                        matched = name_to_sha1[entry_name]
-                    if matched:
+                        matched = {name_to_sha1[entry_name]}
+                    for sha in sorted(matched):
                         for alias_name in entry_aliases:
-                            _add_alias(alias_name, matched)
+                            _add_alias(alias_name, sha)
         except ImportError:
             pass
 
