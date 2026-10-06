@@ -15,7 +15,7 @@ systems: [sony-playstation-2]
 notes: |
   Filename-agnostic BIOS detection. Scans bios/ for any file between 4-8 MB
   with valid romdir structure (RESET + ROMVER entries). No hash validation.
-  Companion files (.rom1, .rom2, .nvm, .mec) derive paths from selected BIOS.
+  Companion files (.rom1, .rom2, .nvm, .mec) derive their names from the selected BIOS.
   ROM1 (DVD player) and ROM2 (Chinese extension) silently skipped if missing.
   NVM and MEC auto-created with defaults if missing.
 
@@ -28,23 +28,35 @@ files:
     source_ref: "pcsx2/ps2/BiosTools.cpp:258-362"
     note: "Accepts any file 4-8 MB with valid romdir (RESET + ROMVER). Naming convention ps2-VVVVr-YYYYMMDD.bin (version, region, date)."
 
-  - name: rom1.bin
+  - name: ps2-0230a-20080220.rom1
     required: false
     max_size: 4194304
-    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241,366"
-    note: "DVD player ROM. Tries {biospath}.rom1 then {biosbase}.rom1. Silently skipped if missing."
+    description: "DVD player ROM"
+    note: "Tried as {bios}.rom1 then {biosbase}.rom1, opened case-insensitively. Copied to the ROM1 region. Logged and skipped when absent."
+    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:366"
 
-  - name: ROM2.BIN
+  - name: ps2-0230a-20080220.rom2
     required: false
     max_size: 4194304
-    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241,367"
-    note: "Chinese ROM extension. Same naming convention as rom1. Only present on Chinese region consoles."
+    description: "Chinese ROM extension"
+    note: "Same two-step naming as rom1. Only Chinese region consoles carry one."
+    source_ref: "pcsx2/ps2/BiosTools.cpp:214-241, pcsx2/ps2/BiosTools.cpp:367"
 
-  - name: EROM.BIN
+  - name: ps2-0230a-20080220.nvm
     required: false
-    source_ref: "pcsx2/ps2/BiosTools.cpp"
-    note: "Extended ROM. Present in some BIOS dumps but not loaded by PCSX2 code via LoadExtraRom."
-    path: null
+    hle_fallback: true
+    size: 1024
+    description: "Console NVRAM"
+    note: "Read at the BIOS path with the extension replaced by nvm, opened case-insensitively. Built in memory from region defaults when absent or blank."
+    source_ref: "pcsx2/CDVD/CDVD.cpp:160-188"
+
+  - name: ps2-0230a-20080220.mec
+    required: false
+    hle_fallback: true
+    size: 4
+    description: "Mechacon version"
+    note: "Read at the BIOS path with the extension replaced by mec. Defaults to 0x00020603 and is written back when it cannot be read."
+    source_ref: "pcsx2/CDVD/CDVD.cpp:190-204"
 
   - name: eeprom.dat
     required: false

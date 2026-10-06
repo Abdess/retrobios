@@ -266,7 +266,66 @@ def _agnostic_scan_extras(
                         "agnostic_scan": True,
                     }
                 )
+                for companion_sha1, companion in _companions(
+                    path, scan_name, _companion_extensions(profile, fname), files_db
+                ):
+                    companion_dest = f"{folder}/{companion['name']}" if folder else companion["name"]
+                    companion_full = (
+                        f"{extras_prefix}/{companion_dest}" if extras_prefix else companion_dest
+                    )
+                    if companion_full in seen_dests:
+                        continue
+                    seen_dests.add(companion_full)
+                    extras.append({
+                        "name": companion["name"],
+                        "destination": companion_dest,
+                        "sha1": companion_sha1,
+                        "required": False,
+                        "hle_fallback": False,
+                        "source_emulator": profile.get("emulator", emu_name),
+                        "source_profile": emu_name,
+                        "source_system": f.get("system"),
+                        "source_systems": list(profile.get("systems", [])),
+                        "region": f.get("region"),
+                        "variant_group": f.get("variant_group"),
+                        "agnostic_scan": True,
+                    })
     return extras
+
+
+def _companion_extensions(profile: dict, seed_name: str) -> set[str]:
+    """Extensions the profile declares beside a free-named BIOS entry.
+
+    PCSX2 reads `<bios>.rom1` or the BIOS path with its extension replaced
+    (`<stem>.rom1`), and likewise nvm and mec (BiosTools.cpp:214-229,
+    CDVD.cpp:160-195). A profile states that by naming the companions after
+    its BIOS entry: ps2-0230a-20080220.rom1 beside ps2-0230a-20080220.bin.
+    """
+    stem = seed_name.rsplit(".", 1)[0].lower()
+    exts: set[str] = set()
+    for entry in profile.get("files", []):
+        other = str(entry.get("name", "")).lower()
+        if other != seed_name.lower() and other.startswith(stem + "."):
+            exts.add(other[len(stem) + 1:])
+    return exts
+
+
+def _companions(
+    image_path: str, image_name: str, extensions: set[str], files_db: dict
+) -> list[tuple[str, dict]]:
+    """Files beside a scanned image that the core opens as its companions."""
+    if not extensions:
+        return []
+    directory = image_path.rsplit("/", 1)[0] + "/"
+    stem = image_name.rsplit(".", 1)[0].lower()
+    wanted = {f"{image_name.lower()}.{ext}" for ext in extensions}
+    wanted |= {f"{stem}.{ext}" for ext in extensions}
+    return sorted(
+        (sha1, entry)
+        for sha1, entry in files_db.items()
+        if entry.get("path", "").rsplit("/", 1)[0] + "/" == directory
+        and str(entry.get("name", "")).lower() in wanted
+    )
 
 
 def _archive_prefix_extras(

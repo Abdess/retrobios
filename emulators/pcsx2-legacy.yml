@@ -78,7 +78,7 @@ files:
     note: "Any file in the BIOS folder whose romdir holds RESET and ROMVER is accepted, whatever its name or size. Naming convention ps2-VVVVr-YYYYMMDD.bin carries version, region and date."
     source_ref: "pcsx2/ps2/BiosTools.cpp:261-323, pcsx2/ps2/BiosTools.cpp:74-167"
 
-  - name: rom1.bin
+  - name: ps2-0230a-20080220.rom1
     system: sony-playstation-2
     required: false
     max_size: 262144
@@ -86,7 +86,7 @@ files:
     note: "Tried as {bios}.rom1 then {biosbase}.rom1. Read into the 256 KB ROM1 region and truncated to it. Logged and skipped when absent."
     source_ref: "pcsx2/ps2/BiosTools.cpp:190-229, pcsx2/ps2/BiosTools.cpp:298, pcsx2/MemoryTypes.h:22"
 
-  - name: ROM2.BIN
+  - name: ps2-0230a-20080220.rom2
     system: sony-playstation-2
     required: false
     max_size: 524288
@@ -94,13 +94,31 @@ files:
     note: "Tried as {bios}.rom2 then {biosbase}.rom2. Read into the 512 KB ROM2 region and truncated to it. Present on Chinese region consoles."
     source_ref: "pcsx2/ps2/BiosTools.cpp:190-229, pcsx2/ps2/BiosTools.cpp:299, pcsx2/MemoryTypes.h:23"
 
-  - name: EROM.BIN
+  - name: ps2-0230a-20080220.erom
     system: sony-playstation-2
     required: false
     max_size: 1835008
     description: "DVD player extension ROM"
     note: "Tried as {bios}.erom then {biosbase}.erom. Read into the 1.75 MB EROM region and truncated to it."
     source_ref: "pcsx2/ps2/BiosTools.cpp:190-229, pcsx2/ps2/BiosTools.cpp:300, pcsx2/MemoryTypes.h:24"
+
+  - name: ps2-0230a-20080220.nvm
+    system: sony-playstation-2
+    required: false
+    hle_fallback: true
+    min_size: 1024
+    description: "Console NVRAM"
+    note: "Read at the BIOS path with the extension set to nvm. A substitute is written when the file is shorter than 1024 bytes."
+    source_ref: "pcsx2/CDVD/CDVD.cpp:138-149"
+
+  - name: ps2-0230a-20080220.mec
+    system: sony-playstation-2
+    required: false
+    hle_fallback: true
+    size: 4
+    description: "Mechacon version"
+    note: "Read at the BIOS path with the extension set to mec. A 4-byte substitute (03 06 02 00) is written when the file is shorter."
+    source_ref: "pcsx2/CDVD/CDVD.cpp:93-122"
 
   - name: eeprom.dat
     system: sony-playstation-2
