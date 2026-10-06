@@ -169,6 +169,17 @@ class Exporter(BaseExporter):
 
         merged: list[OrderedDict] = []
         corrected: set[tuple[str, str]] = set()
+        entries = [e for e in existing if isinstance(e, dict)] if isinstance(existing, list) else []
+        # A name and system declared several times are several revisions (the
+        # 64DD IPL USA and Dev): one entry of ours corrects the revision it
+        # shares a hash with, never all of them.
+        seen_keys: dict[tuple[str, str], int] = {}
+        for entry in entries:
+            declared = entry.get("system")
+            systems = declared if isinstance(declared, list) else [declared] if declared else []
+            for system in systems:
+                key = (str(entry.get("filename", "")), str(system))
+                seen_keys[key] = seen_keys.get(key, 0) + 1
         for entry in existing if isinstance(existing, list) else []:
             if not isinstance(entry, dict):
                 continue
@@ -186,6 +197,16 @@ class Exporter(BaseExporter):
                 # system alone declares the name.
                 named = [k for k in by_key if k[0] == name]
                 keys = named if len(named) == 1 else []
+            if keys and seen_keys.get(keys[0], 0) > 1:
+                theirs = {m.strip().lower() for m in str(entry.get("md5", "")).split(",") if m.strip()}
+                ours = {
+                    m.strip().lower()
+                    for m in str(by_key[keys[0]].get("md5", "")).split(",") if m.strip()
+                }
+                if not theirs & ours:
+                    merged.append(OrderedDict(entry))
+                    corrected.update(keys)
+                    continue
             if not keys:
                 merged.append(OrderedDict(entry))
                 continue
