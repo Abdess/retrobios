@@ -4,8 +4,8 @@ core_classification: official_port
 source: "https://git.libretro.com/libretro/wqxemu"
 upstream: "https://github.com/AloysHF/WQXEmu"
 profiled_date: "2026-09-17"
-source_commit: "868b644df757379b15a04c7354f8f756d11076c3"
-upstream_commit: "7191df429042116e707ba68f5b2d2a8ae567b2ad"
+source_commit: "c41a6f26f6e1a5ff2b15f0b63e6103bd8889df22"
+upstream_commit: "c41a6f26f6e1a5ff2b15f0b63e6103bd8889df22"
 core_version: "0.1.0"
 display_name: "Wenquxing - Electronic Dictionary (WQXEmu)"
 cores:
@@ -63,10 +63,12 @@ notes: |
   The standalone binary takes the same files as explicit --rom, --nor,
   --nand and --nand0 paths and has no default directory; --model selects
   the machine, otherwise detect_model guesses it from the file sizes
-  (crates/wqxemu/src/main.rs:27-42, crates/wqxemu/src/main.rs:239-274,
-  crates/wqxemu/src/main.rs:276-288,
+  (crates/wqxemu/src/main.rs:27-42, crates/wqxemu/src/main.rs:243-278,
+  crates/wqxemu/src/main.rs:280-292,
   crates/wqxemu-core/src/machines/mod.rs:38-87). Its device skins are
-  include_bytes! PNGs (crates/wqxemu/src/keypad.rs:59-66).
+  include_bytes! PNGs, or drawn by code_skin when --skin code is given
+  (crates/wqxemu/src/main.rs:65-67, crates/wqxemu/src/keypad.rs:86-91,
+  crates/wqxemu/src/keypad.rs:220-227).
 
   The libretro-core-info file names the PC1000 NOR image pc1000.fls. The
   code opens pc1000.nor since commit 0a8f7a5 of 2026-08-23; the v0.1.0
@@ -201,7 +203,7 @@ files:
       64 pages of the NAND array. No size check. The libretro core always
       puts it in the NC2000 set and the standalone binary requires
       --nand0 for this model, so a missing file stops the start.
-    source_ref: "crates/wqxemu-libretro/src/lib.rs:232-237, crates/wqxemu-core/src/machines/nc2000.rs:24, crates/wqxemu-core/src/machines/nc2000.rs:283-288, crates/wqxemu-core/src/machines/nc2000.rs:298-301, crates/wqxemu/src/main.rs:260-265"
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:232-237, crates/wqxemu-core/src/machines/nc2000.rs:24, crates/wqxemu-core/src/machines/nc2000.rs:283-288, crates/wqxemu-core/src/machines/nc2000.rs:298-301, crates/wqxemu/src/main.rs:264-269"
 
   - name: nc3000.nor
     path: WQXEmu/nc3000/nc3000.nor
@@ -244,4 +246,4 @@ files:
       optional for this model. Without it the core writes the marker
       "ggv nc3000" at offset 528 of an erased first plane and the machine
       boots the same way.
-    source_ref: "crates/wqxemu-libretro/src/lib.rs:238-246, crates/wqxemu-core/src/machines/nc3000.rs:27-31, crates/wqxemu-core/src/machines/nc3000.rs:290-297, crates/wqxemu-core/src/machines/nc3000.rs:342-350, crates/wqxemu/src/main.rs:266-270"
+    source_ref: "crates/wqxemu-libretro/src/lib.rs:238-246, crates/wqxemu-core/src/machines/nc3000.rs:27-31, crates/wqxemu-core/src/machines/nc3000.rs:290-297, crates/wqxemu-core/src/machines/nc3000.rs:342-350, crates/wqxemu/src/main.rs:270-274"
