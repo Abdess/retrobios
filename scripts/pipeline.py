@@ -226,6 +226,75 @@ def _refuse_unapplied_flags(parser: argparse.ArgumentParser, args) -> None:
         parser.error("--source is incompatible with --all-variants")
 
 
+def _truth_steps(args: argparse.Namespace, results: dict) -> bool:
+    """Steps 2c to 2e: truth model, its diff, the native export."""
+    all_ok = True
+    # Step 2c: Generate truth YAMLs
+    # A targeted run writes its model in a subdirectory of its own, and the
+    # diff has to read the same one or it compares a narrowed model against
+    # the whole scrape.
+    truth_dir = Path(args.output_dir) / "truth"
+    if args.target:
+        truth_dir = truth_dir / re.sub(
+            r"[^a-z0-9]+", "-", args.target.strip().lower()
+        ).strip("-")
+
+    if args.with_truth or args.with_export:
+        truth_cmd = [
+            sys.executable,
+            "scripts/generate_truth.py",
+            "--all",
+            "--output-dir",
+            str(Path(args.output_dir) / "truth"),
+        ]
+        if args.target:
+            truth_cmd.extend(["--target", args.target])
+        ok, _ = run(truth_cmd, "2c generate truth")
+        # A native file is one per platform, never per target: the export
+        # corrects it against the full model, which a targeted run does not
+        # write.
+        if ok and args.with_export and args.target:
+            ok, _ = run(truth_cmd[:-2], "2c generate truth (export model)")
+        results["generate_truth"] = ok
+        all_ok = all_ok and ok
+    else:
+        results["generate_truth"] = SKIPPED
+
+    # Step 2d: Diff truth vs scraped
+    if args.with_truth or args.with_export:
+        diff_cmd = [sys.executable, "scripts/diff_truth.py", "--all"]
+        diff_cmd.extend(["--truth-dir", str(truth_dir)])
+        ok, _ = run(diff_cmd, "2d diff truth")
+        results["diff_truth"] = ok
+        all_ok = all_ok and ok
+    else:
+        results["diff_truth"] = SKIPPED
+
+    # Step 2e: Export native formats
+    if args.with_export:
+        export_cmd = [
+            sys.executable,
+            "scripts/export_native.py",
+            "--all",
+            "--output-dir",
+            str(Path(args.output_dir) / "upstream"),
+            "--truth-dir",
+            str(Path(args.output_dir) / "truth"),
+        ]
+        # Seven of the formats carry code, so the export patches the
+        # platform's own file rather than regenerating it. Offline that
+        # file has to be in the cache already.
+        if not args.offline:
+            export_cmd.append("--fetch")
+        ok, _ = run(export_cmd, "2e export native")
+        results["export_native"] = ok
+        all_ok = all_ok and ok
+    else:
+        results["export_native"] = SKIPPED
+
+    return all_ok
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run the full retrobios pipeline")
     parser.add_argument(
@@ -383,68 +452,7 @@ def main():
         print("\n--- 2b2 check release assets: SKIPPED (--offline) ---")
         results["check_release_assets"] = SKIPPED
 
-    # Step 2c: Generate truth YAMLs
-    # A targeted run writes its model in a subdirectory of its own, and the
-    # diff has to read the same one or it compares a narrowed model against
-    # the whole scrape.
-    truth_dir = Path(args.output_dir) / "truth"
-    if args.target:
-        truth_dir = truth_dir / re.sub(
-            r"[^a-z0-9]+", "-", args.target.strip().lower()
-        ).strip("-")
-
-    if args.with_truth or args.with_export:
-        truth_cmd = [
-            sys.executable,
-            "scripts/generate_truth.py",
-            "--all",
-            "--output-dir",
-            str(Path(args.output_dir) / "truth"),
-        ]
-        if args.target:
-            truth_cmd.extend(["--target", args.target])
-        ok, _ = run(truth_cmd, "2c generate truth")
-        # A native file is one per platform, never per target: the export
-        # corrects it against the full model, which a targeted run does not
-        # write.
-        if ok and args.with_export and args.target:
-            ok, _ = run(truth_cmd[:-2], "2c generate truth (export model)")
-        results["generate_truth"] = ok
-        all_ok = all_ok and ok
-    else:
-        results["generate_truth"] = SKIPPED
-
-    # Step 2d: Diff truth vs scraped
-    if args.with_truth or args.with_export:
-        diff_cmd = [sys.executable, "scripts/diff_truth.py", "--all"]
-        diff_cmd.extend(["--truth-dir", str(truth_dir)])
-        ok, _ = run(diff_cmd, "2d diff truth")
-        results["diff_truth"] = ok
-        all_ok = all_ok and ok
-    else:
-        results["diff_truth"] = SKIPPED
-
-    # Step 2e: Export native formats
-    if args.with_export:
-        export_cmd = [
-            sys.executable,
-            "scripts/export_native.py",
-            "--all",
-            "--output-dir",
-            str(Path(args.output_dir) / "upstream"),
-            "--truth-dir",
-            str(Path(args.output_dir) / "truth"),
-        ]
-        # Seven of the formats carry code, so the export patches the
-        # platform's own file rather than regenerating it. Offline that
-        # file has to be in the cache already.
-        if not args.offline:
-            export_cmd.append("--fetch")
-        ok, _ = run(export_cmd, "2e export native")
-        results["export_native"] = ok
-        all_ok = all_ok and ok
-    else:
-        results["export_native"] = SKIPPED
+    all_ok = _truth_steps(args, results) and all_ok
 
     # Step 3: Verify
     verify_cmd = [sys.executable, "scripts/verify.py", "--all"]
