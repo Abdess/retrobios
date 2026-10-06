@@ -88,13 +88,15 @@ class RetroPieModuleFlags(unittest.TestCase):
 
     def test_standalone_sections_are_listed_and_keep_their_id(self):
         listings = {
-            "emulators": [{"name": "dosbox-staging.sh"}],
-            "libretrocores": [{"name": "lr-beetle-psx.sh"}],
+            "emulators": [{"name": "dosbox-staging.sh"}, {"name": "dosbox.sh"}],
+            "libretrocores": [{"name": "lr-beetle-psx.sh"}, {"name": "lr-dosbox.sh"}],
             "ports": [{"name": "openbor.sh"}],
         }
         modules = {
             "emulators/dosbox-staging.sh": 'rp_module_id="dosbox-staging"\nrp_module_flags="sdl2"',
             "libretrocores/lr-beetle-psx.sh": 'rp_module_id="lr-beetle-psx"',
+            "libretrocores/lr-dosbox.sh": 'rp_module_id="lr-dosbox"',
+            "emulators/dosbox.sh": 'rp_module_id="dosbox"\nrp_module_flags="sdl1 !mali"',
             "ports/openbor.sh": 'rp_module_id="openbor"\nrp_module_flags="sdl1 !mali !x11"',
         }
 
@@ -108,8 +110,10 @@ class RetroPieModuleFlags(unittest.TestCase):
 
         with mock.patch.object(retropie_targets_scraper, "_fetch", fake_fetch):
             targets = retropie_targets_scraper.Scraper().fetch_targets()["targets"]
-        self.assertEqual(targets["rpi4"]["cores"], ["beetle_psx", "dosbox-staging", "openbor"])
-        self.assertEqual(targets["x86_64"]["cores"], ["beetle_psx", "dosbox-staging"])
+        self.assertEqual(
+            targets["rpi4"]["cores"], ["beetle_psx", "dosbox", "dosbox-staging", "openbor"]
+        )
+        self.assertEqual(targets["x86_64"]["cores"], ["beetle_psx", "dosbox", "dosbox-staging"])
 
 
 if __name__ == "__main__":
