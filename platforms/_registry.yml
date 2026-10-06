@@ -625,6 +625,8 @@ platforms:
     source_url: https://raw.githubusercontent.com/RetroBat-Official/emulatorlauncher/master/batocera-systems/Resources/batocera-systems.json
     source_format: json
     hash_type: md5
+    # Windows: names differing only by case land on one file.
+    case_insensitive_fs: true
     schedule: weekly
     cores:
     - '81'
@@ -812,6 +814,8 @@ platforms:
     source_wiki: https://raw.githubusercontent.com/EmuDeck/emudeck.github.io/main/docs/tables/
     source_format: bash_script+csv
     hash_type: md5
+    # Windows: names differing only by case land on one file.
+    case_insensitive_fs: true
     schedule: weekly
     target_scraper: emudeck_targets
     target_source: https://github.com/dragoonDorise/EmuDeck
@@ -976,6 +980,8 @@ platforms:
     source_url: https://raw.githubusercontent.com/TASEmulators/BizHawk/master/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs
     source_format: csharp_firmware_database
     hash_type: sha1
+    # Windows: names differing only by case land on one file.
+    case_insensitive_fs: true
     schedule: monthly
     cores:
     - applewin
