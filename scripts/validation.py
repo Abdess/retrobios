@@ -559,3 +559,15 @@ def validated_choice(
         return better, None
     reason, emulators = check
     return local_path, f"{', '.join(emulators)} says {reason}"
+
+
+def existence_discrepancy(file_entry: dict, local_path: str, platform_display: str) -> str:
+    """What an existence platform is told when its declared hash contradicts
+    the file it loads: the file is kept, the gap is said out loud. The pack
+    and verify both print this one line."""
+    declared = file_entry.get("md5", "") or file_entry.get("sha1", "")
+    actual = compute_hashes(local_path)
+    return (
+        f"packed per {platform_display} existence check; declared hash {declared}, "
+        f"file md5 {actual['md5']} sha1 {actual['sha1']}"
+    )

@@ -69,6 +69,7 @@ from nativemode import (
     reads_file_contents,
 )
 from validation import (
+    existence_discrepancy,
     destination_owners,
     validated_choice,
     agnostic_substitute,
@@ -124,6 +125,8 @@ def verify_entry_existence(
     db: dict | None = None,
     destination: str = "",
     owners: dict | None = None,
+    resolve_status: str = "",
+    platform_display: str = "",
 ) -> dict:
     """RetroArch verification: path_is_valid() -file exists = OK."""
     name = file_entry.get("name", "")
@@ -131,6 +134,13 @@ def verify_entry_existence(
     if not local_path:
         return {"name": name, "status": Status.MISSING, "required": required}
     result = {"name": name, "status": Status.OK, "required": required}
+    if resolve_status == "hash_mismatch":
+        # The frontend reads no bytes, so the file stays; the declared hash
+        # it contradicts is reported, as the pack does.
+        result["discrepancy"] = existence_discrepancy(
+            file_entry, local_path, platform_display
+        )
+        return result
     if not validation_index:
         return result
     if db:
@@ -874,6 +884,8 @@ def verify_platform(
                     db,
                     destination,
                     validation_owners,
+                    resolve_status,
+                    config.get("platform", ""),
                 )
             elif digest_algorithm(mode) == "sha1":
                 result = verify_entry_sha1(file_entry, local_path)

@@ -115,5 +115,24 @@ class CoreArchivesAreCounted(unittest.TestCase):
         self.assertIn("1 required missing", out.getvalue())
         self.assertIn("neogeo.zip", out.getvalue())
 
+
+class ExistenceReportsWhatThePackReports(unittest.TestCase):
+    def test_a_contradicted_hash_is_a_discrepancy(self):
+        """30 RetroArch entries printed DISCREPANCY in the pack, nothing in verify."""
+        import tempfile  # noqa: PLC0415
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import verify  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            path = Path(tmp) / "aes.zip"
+            path.write_bytes(b"local dump")
+            entry = {"name": "aes.zip", "md5": "9d2ff2333e23910cf56f7f785609d36a"}
+            result = verify.verify_entry_existence(
+                entry, str(path), resolve_status="hash_mismatch", platform_display="RetroArch"
+            )
+        self.assertEqual(result["status"], verify.Status.OK)
+        self.assertIn("declared hash 9d2ff233", result["discrepancy"])
+
 if __name__ == "__main__":
     unittest.main()
