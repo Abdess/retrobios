@@ -399,6 +399,19 @@ def _as_list(value: object) -> list[str]:
     return [str(v).strip().lower() for v in values if str(v).strip()]
 
 
+def _primary_names(entries: list) -> set[str]:
+    return {str(fe.get("name", "")).lower() for fe in entries if isinstance(fe, dict)}
+
+
+def _own_aliases(file_entry: dict, primary_names: set[str]) -> list[str]:
+    """Aliases that name no other entry of the same profile."""
+    name = str(file_entry.get("name", "")).lower()
+    return [
+        alias for alias in file_entry.get("aliases") or []
+        if str(alias).lower() == name or str(alias).lower() not in primary_names
+    ]
+
+
 def _collect_all_aliases(files: dict) -> dict:
     """Collect alternate filenames from platform YAMLs, core-info, and known aliases.
 
@@ -489,18 +502,10 @@ def _collect_all_aliases(files: dict) -> dict:
                 # aliases the other) states that ITS slot takes either name.
                 # Indexed globally that became evidence for every emulator:
                 # ScummVM's MT-32 slot received the CM-32L ROMs.
-                primary_names = {
-                    str(fe.get("name", "")).lower()
-                    for fe in emu_config.get("files", [])
-                    if isinstance(fe, dict)
-                }
+                primary_names = _primary_names(emu_config.get("files", []))
                 for file_entry in emu_config.get("files", []):
                     entry_name = file_entry.get("name", "")
-                    entry_aliases = [
-                        alias for alias in file_entry.get("aliases") or []
-                        if str(alias).lower() == str(entry_name).lower()
-                        or str(alias).lower() not in primary_names
-                    ]
+                    entry_aliases = _own_aliases(file_entry, primary_names)
                     # A profile may accept several revisions: each held one
                     # is designated by the entry, none of them by guess.
                     matched: set[str] = {
