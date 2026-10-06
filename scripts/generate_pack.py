@@ -968,8 +968,16 @@ def generate_pack(
           core_files = []
       elif precomputed_extras is not None:
           core_files = precomputed_extras
-      elif system_filter and source != "truth":
-          core_files = []
+      elif system_filter:
+          # The systems asked for, with what their cores need: the split
+          # packs get exactly this, and a full pack of one system had none.
+          core_files = _extras_for_systems(
+              _collect_emulator_extras(
+                  config, emulators_dir, db, set(), base_dest, emu_profiles,
+                  target_cores=target_cores, include_all=(source == "truth"),
+              ),
+              system_filter,
+          )
       else:
           core_files = _collect_emulator_extras(
               config,
@@ -982,22 +990,6 @@ def generate_pack(
               include_all=(source == "truth"),
           )
 
-      # Truth mode + system_filter: filter core files by system ID
-      if system_filter and source == "truth" and core_files:
-          from common import _norm_system_id
-
-          norm_filter = {_norm_system_id(s) for s in system_filter} | set(
-              system_filter
-          )
-          core_files = [
-              fe
-              for fe in core_files
-              if (
-                  set(_extra_system_ids(fe))
-                  | {_norm_system_id(s) for s in _extra_system_ids(fe)}
-              )
-              & norm_filter
-          ]
       core_count = 0
       for fe in core_files:
           if required_only and fe.get("required") is False:
@@ -1602,6 +1594,24 @@ def _group_systems_by_manufacturer(
     return groups
 
 
+def _extras_for_systems(extras: list[dict], system_ids: list[str]) -> list[dict]:
+    """Core extras owned by one of the given systems.
+
+    Extras carry their profile/system identity directly; display labels are
+    presentation only and must never drive routing.
+    """
+    from common import _norm_system_id
+
+    wanted = set(system_ids) | {_norm_system_id(s) for s in system_ids}
+    return [
+        fe for fe in extras
+        if (
+            set(_extra_system_ids(fe))
+            | {_norm_system_id(s) for s in _extra_system_ids(fe)}
+        ) & wanted
+    ]
+
+
 def generate_split_packs(
     platform_name: str,
     platforms_dir: str,
@@ -1662,26 +1672,9 @@ def generate_split_packs(
         )
     else:
         all_extras = []
-    # Extras carry their profile/system identity directly; display labels are
-    # presentation only and must never drive routing.
-    from common import _norm_system_id
-
-    {_norm_system_id(s): s for s in systems}
-
     results = []
     for group_name, group_system_ids in sorted(groups.items()):
-        group_sys_set = set(group_system_ids)
-        group_norm = {_norm_system_id(s) for s in group_system_ids}
-        group_match = group_sys_set | group_norm
-        group_extras = [
-            fe
-            for fe in all_extras
-            if (
-                set(_extra_system_ids(fe))
-                | {_norm_system_id(s) for s in _extra_system_ids(fe)}
-            )
-            & group_match
-        ]
+        group_extras = _extras_for_systems(all_extras, group_system_ids)
         zip_path = generate_pack(
             platform_name,
             platforms_dir,
