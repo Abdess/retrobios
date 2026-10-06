@@ -168,7 +168,7 @@ complete.
 
 Every dimension that removes files appears in the output filename and in the
 pack README, because the five places that name an artefact (the pack, the
-`--split` rename, the `_Split` directory, the grouped-alias rename and the
+`--split` parts, the `_Split` directory, the grouped-alias rename and the
 manifest) all build from one list (`_narrowings` in `generate_pack.py`). A pack narrowed three ways is called
 `Recalbox_10.0.8_NorthAmerica_OnePerSlot_Required_BIOS_Pack.zip` and opens with
 a `PACK TYPE: Narrowed` block listing the three. Adding a new way to narrow a
