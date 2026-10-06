@@ -151,16 +151,18 @@ files:
     source_ref: "cbus/ideio.c:1928-1930, cbus/ideio.c:1944-1981"
 
   # -- SCSI BIOS ROM --
-  # Loaded by scsiio.c:219. 16 KB (0x4000). Falls back to scsibios[] stub.
+  # Read into a 0x4000 buffer; any non-empty read is kept. Falls back to the
+  # scsibios[] stub.
   - name: "scsi.rom"
     path: "np2kai/scsi.rom"
-    size: 16384
+    max_size: 16384
     required: false
     hle_fallback: true
     note: >
-      SCSI controller BIOS ROM (16 KB). The core includes a built-in
+      SCSI controller BIOS ROM, up to 16 KB: the full-size test is commented
+      out and a shorter file is used as read. The core includes a built-in
       SCSI BIOS stub as fallback.
-    source_ref: "cbus/scsiio.c:214-231"
+    source_ref: "cbus/scsiio.c:720-732"
 
   # -- SASI BIOS ROM --
   # Loaded by sasiio.c:455. 4 KB (0x1000). Falls back to sasibios[] stub.

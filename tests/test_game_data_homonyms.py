@@ -314,5 +314,20 @@ class SwitchKeysAreTheNewestSet(unittest.TestCase):
                 self.assertEqual(newest(REPO_ROOT / path), best)
 
 
+class Pc98ScsiBiosIsNotTheAppleCard(unittest.TestCase):
+    """np2kai declared an exact 16 KB its loader never requires; the Apple II
+    SCSI card ROM of that size won the name tie over the PC-98 BIOS."""
+
+    def test_np2kai_resolves_the_pc98_rom(self):
+        db_path = REPO_ROOT / "database.json"
+        if not db_path.exists():
+            self.skipTest("no database.json")
+        db = load_database(str(db_path))
+        profile = load_emulator_profiles(str(REPO_ROOT / "emulators"))["np2kai"]
+        entry = next(e for e in profile["files"] if e["name"] == "scsi.rom")
+        path, _status = resolve_local_file(entry, db, dest_hint=entry["path"])
+        self.assertIn("PC-98", path or "")
+
+
 if __name__ == "__main__":
     unittest.main()
