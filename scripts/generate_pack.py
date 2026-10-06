@@ -3480,12 +3480,15 @@ def verify_and_finalize_packs(
     all_ok = True
 
     # Map ZIP names to platform names
+    # By the exact name this run's reduction gives a platform's pack, never by
+    # substring: a _Custom or regional pack left by another run was judged
+    # against this run's expectation and failed it.
+    registered = list_registered_platforms(platforms_dir, include_archived=True)
+    expected = _expected_pack_names(registered, platforms_dir, regions, target_name)
     pack_to_platform: dict[str, list[str]] = {}
     for name in _pack_archives(output_dir):
-        for pname in list_registered_platforms(platforms_dir, include_archived=True):
-            cfg = load_platform_config(pname, platforms_dir)
-            display = cfg.get("platform", pname).replace(" ", "_")
-            if display in name or display.replace("_", "") in name.replace("_", ""):
+        for pname in registered:
+            if name in expected[pname]:
                 pack_to_platform.setdefault(name, []).append(pname)
 
     for name in _pack_archives(output_dir):
