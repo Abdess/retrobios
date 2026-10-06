@@ -56,6 +56,25 @@ class ATargetedModelIsItsOwnArtifact(unittest.TestCase):
             )
 
 
+class ADiffThatComparedNothingFails(unittest.TestCase):
+    """diff_truth --all skipped every platform without a model and exited 0."""
+
+    def test_an_empty_truth_directory_is_an_error(self):
+        import subprocess
+        import tempfile
+
+        repo = pathlib.Path(__file__).resolve().parent.parent
+        with tempfile.TemporaryDirectory(dir=str(repo / "tmp")) as directory:
+            for selection in (["--all"], ["--platform", "retroarch"]):
+                proc = subprocess.run(
+                    [sys.executable, "scripts/diff_truth.py", *selection,
+                     "--truth-dir", directory, "--json"],
+                    capture_output=True, text=True, cwd=str(repo), timeout=120,
+                )
+                self.assertEqual(proc.returncode, 1, selection)
+                self.assertIn("skip", proc.stderr)
+
+
 class RenameMatching(unittest.TestCase):
     def test_a_shared_sha1_pairs_the_two_names(self):
         truth = [_entry("bios_CD_U.bin", sha1="a" * 40)]
