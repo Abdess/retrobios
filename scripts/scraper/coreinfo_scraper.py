@@ -295,7 +295,7 @@ class Scraper(BaseScraper):
     def fetch_metadata(self) -> dict:
         """Fetch version info from GitHub."""
         version = fetch_github_latest_version("libretro/libretro-core-info")
-        return {"version": version or ""}
+        return {"version": version}
 
 
 def main():

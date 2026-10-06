@@ -41,10 +41,8 @@ PLATFORM_NAME = "bizhawk"
 
 GITHUB_REPO = "TASEmulators/BizHawk"
 
-_STABLE_TAG = fetch_github_latest_version(GITHUB_REPO) or "master"
-
 SOURCE_URL = (
-    f"https://raw.githubusercontent.com/TASEmulators/BizHawk/{_STABLE_TAG}"
+    "https://raw.githubusercontent.com/TASEmulators/BizHawk/{tag}"
     "/src/BizHawk.Emulation.Common/Database/FirmwareDatabase.cs"
 )
 
@@ -332,7 +330,8 @@ class Scraper(BaseScraper):
     """BizHawk firmware database scraper."""
 
     def __init__(self):
-        super().__init__(url=SOURCE_URL)
+        self.tag = fetch_github_latest_version(GITHUB_REPO)
+        super().__init__(url=SOURCE_URL.format(tag=self.tag))
 
     def validate_format(self, raw_data: str) -> bool:
         return "FirmwareDatabase" in raw_data and "FirmwareAndOption" in raw_data
@@ -372,13 +371,11 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(requirement_entry(req))
 
-        version = _STABLE_TAG if _STABLE_TAG != "master" else ""
-
         return {
             "platform": "BizHawk",
-            "version": version,
+            "version": self.tag,
             "homepage": "https://tasvideos.org/BizHawk",
-            "source": SOURCE_URL,
+            "source": self.url,
             "base_destination": "Firmware",
             "hash_type": "sha1",
             "verification_mode": "sha1",

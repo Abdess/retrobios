@@ -426,13 +426,7 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(requirement_entry(req))
 
-        version = ""
-        try:
-            v = fetch_github_latest_version("dragoonDorise/EmuDeck")
-            if v:
-                version = v
-        except (ConnectionError, ValueError, OSError):
-            pass
+        version = fetch_github_latest_version("dragoonDorise/EmuDeck")
 
         cores = self._fetch_installed_emulators()
 

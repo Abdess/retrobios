@@ -181,7 +181,7 @@ class Scraper(BaseScraper):
 
         return {
             "platform": "ROCKNIX",
-            "version": fetch_github_latest_version(GITHUB_REPO) or "",
+            "version": fetch_github_latest_version(GITHUB_REPO),
             "homepage": "https://rocknix.org",
             "source": SOURCE_URL,
             "base_destination": "bios",

@@ -19,7 +19,12 @@ from pathlib import Path
 
 from common import yaml_load
 
-from .base_scraper import BaseScraper, BiosRequirement, requirement_entry
+from .base_scraper import (
+    BaseScraper,
+    BiosRequirement,
+    github_headers,
+    requirement_entry,
+)
 
 PLATFORM_NAME = "batocera"
 
@@ -38,39 +43,32 @@ def pick_stable_tag(names: list[str]) -> str | None:
     return max(stable)[1] if stable else None
 
 
-def fetch_stable_tag() -> str | None:
-    """Return the newest stable batocera-N(.M) tag name."""
-    import json
-    import os
-    import urllib.error
-    import urllib.request
+def fetch_stable_tag() -> str:
+    """Return the newest stable batocera-N(.M) tag name.
 
+    Raises rather than falling back to master: the YAML records the tag
+    it was read from, and the exporter patches that revision.
+    """
     url = "https://api.github.com/repos/batocera-linux/batocera.linux/tags?per_page=100"
-    headers = {
-        "User-Agent": "retrobios-scraper/1.0",
-        "Accept": "application/vnd.github.v3+json",
-    }
-    token = os.environ.get("GITHUB_TOKEN")
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
     try:
-        req = urllib.request.Request(url, headers=headers)
+        req = urllib.request.Request(url, headers=github_headers())
         with urllib.request.urlopen(req, timeout=15) as resp:
             tags = json.loads(resp.read())
-    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError):
-        return None
-    return pick_stable_tag([tag["name"] for tag in tags])
+    except (urllib.error.URLError, json.JSONDecodeError) as e:
+        raise RuntimeError(f"cannot list batocera tags: {e}") from e
+    tag = pick_stable_tag([tag["name"] for tag in tags])
+    if not tag:
+        raise RuntimeError("no stable batocera tag among the latest 100")
+    return tag
 
-
-_STABLE_TAG = fetch_stable_tag() or "master"
 
 SOURCE_URL = (
-    f"{_RAW_BASE}/{_STABLE_TAG}"
+    _RAW_BASE + "/{tag}"
     "/package/batocera/core/batocera-scripts/scripts/batocera-systems"
 )
 
 CONFIGGEN_DEFAULTS_URL = (
-    f"{_RAW_BASE}/{_STABLE_TAG}"
+    _RAW_BASE + "/{tag}"
     "/package/batocera/core/batocera-configgen/configs/"
     "configgen-defaults.yml"
 )
@@ -186,8 +184,9 @@ def _resolve_truncated_md5(md5: str, md5_index: dict[str, str]) -> str:
 class Scraper(BaseScraper):
     """Scraper for batocera-systems Python dict."""
 
-    def __init__(self, url: str = SOURCE_URL):
-        super().__init__(url=url)
+    def __init__(self):
+        self.tag = fetch_stable_tag()
+        super().__init__(url=SOURCE_URL.format(tag=self.tag))
 
     def _fetch_cores(self) -> tuple[list[str], list[str]]:
         """Extract core names and standalone cores from configgen-defaults.yml.
@@ -195,16 +194,17 @@ class Scraper(BaseScraper):
         Returns (all_cores, standalone_cores) where standalone_cores are
         those with emulator != "libretro".
         """
+        url = CONFIGGEN_DEFAULTS_URL.format(tag=self.tag)
         try:
             req = urllib.request.Request(
-                CONFIGGEN_DEFAULTS_URL,
+                url,
                 headers={"User-Agent": "retrobios-scraper/1.0"},
             )
             with urllib.request.urlopen(req, timeout=30) as resp:
                 raw = resp.read().decode("utf-8")
         except urllib.error.URLError as e:
             raise ConnectionError(
-                f"Failed to fetch {CONFIGGEN_DEFAULTS_URL}: {e}"
+                f"Failed to fetch {url}: {e}"
             ) from e
         data = yaml_load(raw)
         cores: set[str] = set()
@@ -372,25 +372,12 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(requirement_entry(req))
 
-        batocera_version = ""
-        if _STABLE_TAG != "master":
-            batocera_version = _STABLE_TAG.removeprefix("batocera-")
-        if not batocera_version:
-            # Preserve existing version when fetch fails (offline mode)
-            existing = (
-                Path(__file__).resolve().parents[2] / "platforms" / "batocera.yml"
-            )
-            if existing.exists():
-                with open(existing) as f:
-                    old = yaml_load(f) or {}
-                batocera_version = str(old.get("version", ""))
-
         cores, standalone = self._fetch_cores()
         result = {
             "platform": "Batocera",
-            "version": batocera_version or "",
+            "version": self.tag.removeprefix("batocera-"),
             "homepage": "https://batocera.org",
-            "source": SOURCE_URL,
+            "source": self.url,
             "base_destination": "bios",
             "hash_type": "md5",
             "verification_mode": "md5",

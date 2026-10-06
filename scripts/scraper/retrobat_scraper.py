@@ -160,10 +160,7 @@ class Scraper(BaseScraper):
 
             systems[req.system]["files"].append(requirement_entry(req))
 
-        version = ""
-        tag = fetch_github_latest_version(GITHUB_REPO)
-        if tag:
-            version = tag
+        version = fetch_github_latest_version(GITHUB_REPO)
 
         return {
             "platform": "RetroBat",
