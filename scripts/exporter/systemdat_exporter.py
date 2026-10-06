@@ -6,6 +6,8 @@ libretro gives them, matching libretro-database/dat/System.dat.
 
 from __future__ import annotations
 
+import re
+
 import sys
 from pathlib import Path
 
@@ -21,9 +23,17 @@ SOURCE_URL = (
 )
 
 
-def _quote(name: str) -> str:
-    """Quote a ROM name the way the original does: only when it must be."""
-    return f'"{name}"' if any(c in name for c in ' ()') else name
+_QUOTED_NAME = re.compile(r'rom \( name "([^"]+)"')
+
+
+def _quote(name: str, quoted: frozenset[str] = frozenset()) -> str:
+    """Quote a ROM name the way the original does.
+
+    Where it must be, and where the maintainers chose to: the file quotes
+    246 names it did not need to, and writing them bare put a quoting change
+    on every one of those lines of the diff.
+    """
+    return f'"{name}"' if name in quoted or any(c in name for c in ' ()') else name
 
 
 class Exporter(BaseExporter):
@@ -108,6 +118,7 @@ class Exporter(BaseExporter):
     ) -> dict[str, str]:
         lines = self._header(originals, scraped)
         lines.extend(["game (", '\tname "System"', '\tcomment "System"'])
+        quoted = frozenset(_QUOTED_NAME.findall(originals.get(self.native_filename(), "")))
 
         for system, files in sorted(
             self.exportable(systems), key=lambda pair: pair[0].native_id
@@ -116,7 +127,7 @@ class Exporter(BaseExporter):
             for fe in files:
                 if not any(fe.hash(h) for h in ("crc32", "md5", "sha1")):
                     continue
-                parts = [f"name {_quote(self._rom_name(fe))}"]
+                parts = [f"name {_quote(self._rom_name(fe), quoted)}"]
                 size = fe.size()
                 if size:
                     parts.append(f"size {size}")
