@@ -261,8 +261,9 @@ files:
       Named in the audio BIOS region by irrmaze, neogeo, svcboot, svcplus,
       svcplusa and svcsplus, and reached in this archive by the parent lookup of
       irrmaze. The region is exempt from the fatal path and the buffer it lands
-      in is never read by the emulation.
-    source_ref: "NEO.emu/res/romsets/irrmaze.drv, NEO.emu/src/gngeo/roms.c:1034-1039,1413-1418,1440-1461, NEO.emu/src/gngeo/roms.h:63"
+      in is never read by the emulation
+      (NEO.emu/src/gngeo/roms.c:1034-1039,1413-1418,1440-1461).
+    source_ref: "NEO.emu/res/romsets/irrmaze.drv, NEO.emu/src/gngeo/roms.h:9,62"
 
   - name: "gngeo_data.zip"
     system: snk-neogeo-mvs
