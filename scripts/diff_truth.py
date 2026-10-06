@@ -179,26 +179,23 @@ def main() -> None:
 
     reports: list[dict] = []
     formatter = _format_markdown if args.format == "markdown" else _format_terminal
+    compared = 0
 
     for platform in platforms:
         truth = _load_truth(args.truth_dir, platform)
         if truth is None:
-            if not args.json_output:
-                print(
-                    f"skip {platform}: no truth YAML in {args.truth_dir}/",
-                    file=sys.stderr,
-                )
+            print(f"skip {platform}: no truth YAML in {args.truth_dir}/", file=sys.stderr)
             continue
 
         try:
             scraped = load_platform_config(platform, args.platforms_dir)
         except FileNotFoundError:
-            if not args.json_output:
-                print(f"skip {platform}: no scraped config", file=sys.stderr)
+            print(f"skip {platform}: no scraped config", file=sys.stderr)
             continue
 
         report = diff_platform_truth(truth, scraped)
         report["platform"] = platform
+        compared += 1
 
         if args.json_output:
             reports.append(report)
@@ -209,6 +206,10 @@ def main() -> None:
     if args.json_output:
         json.dump(reports, sys.stdout, indent=2)
         print()
+
+    if compared < len(platforms) and (args.platform or not compared):
+        print(f"compared {compared} of {len(platforms)} platform(s)", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
