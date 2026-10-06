@@ -495,16 +495,20 @@ def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str
         return paths
     hint = dest_hint or file_entry.get("path") or file_entry.get("destination") or ""
     wanted = _affinity_tokens(hint.rsplit("/", 1)[0] if "/" in hint else "")
+    owners: set[str] = set()
     for owner in (file_entry.get("source_profile"), file_entry.get("source_emulator")):
         if owner:
-            wanted |= _affinity_tokens(str(owner).replace(" ", ""))
+            owners |= _affinity_tokens(str(owner).replace(" ", ""))
     sized = any(file_entry.get(k) for k in ("size", "min_size", "max_size"))
 
-    def score(path: str) -> tuple[int, int]:
+    def score(path: str) -> tuple[int, bool, int]:
         fits = 0
         if sized and os.path.exists(path):
             fits = int(size_fits(file_entry, os.path.getsize(path)))
-        return fits, len(wanted & _affinity_tokens(path.rsplit("/", 1)[0]))
+        tokens = _affinity_tokens(path.rsplit("/", 1)[0])
+        # The owner's own copy ranks above any shared tree segment: NetherSX2's
+        # shaders/common/ beat armsx2's own fxaa.fx on two directory tokens.
+        return fits, bool(owners & tokens), len(wanted & tokens)
 
     return sorted(paths, key=score, reverse=True)
 
