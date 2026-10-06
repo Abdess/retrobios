@@ -2973,6 +2973,58 @@ def _manifest_core_entries(
     return total_size
 
 
+def _settle_mismatch(
+    file_entry: dict, local_path: str | None, status: str, verification_mode: str
+) -> str:
+    """Upgrade a hash mismatch the frontend itself would accept.
+
+    Batocera pins the md5 of a ROM inside the archive (zipped_file), and a
+    frontend that hashes one digest accepts a file whose other declared
+    hashes disagree.
+    """
+    if status != "hash_mismatch" or not local_path:
+        return status
+    if file_entry.get("zipped_file"):
+        return "zip_exact" if _inner_rom_check(file_entry, local_path) == "ok" else status
+    if hash_mismatch_excludes_file(verification_mode) and frontend_digest_matches(
+        file_entry, local_path, digest_algorithm(verification_mode)
+    ):
+        return "frontend_digest_exact"
+    return status
+
+
+def _manifest_region_drops(
+    config: dict,
+    pack_systems: dict,
+    emulators_dir: str,
+    db: dict,
+    base_dest: str,
+    emu_profiles: dict,
+    target_cores: set[str] | None,
+    source: str,
+    required_only: bool,
+    regions: list[str] | None,
+) -> set[str]:
+    """Destinations a region list removes, grouped as the pack groups them."""
+    if not regions:
+        return set()
+    region_groups, _extra_dests = platform_region_groups(
+        config,
+        pack_systems,
+        emulators_dir,
+        db,
+        base_dest,
+        emu_profiles,
+        target_cores=target_cores,
+        include_extras=(source != "platform"),
+        include_all=(source == "truth"),
+        required_only=required_only,
+    )
+    return region_mod.resolve_region_drops(
+        region_groups, region_mod.build_region_index(emu_profiles), regions
+    )
+
+
 def generate_manifest(
     platform_name: str,
     platforms_dir: str,
@@ -3023,9 +3075,7 @@ def generate_manifest(
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     # Filter systems by target
-    from common import resolve_platform_cores
-
-    plat_cores = resolve_platform_cores(config, emu_profiles) if target_cores else None
+    plat_cores = _platform_cores(config, emu_profiles) if target_cores else None
     pack_systems = filter_systems_by_target(
         config.get("systems", {}),
         emu_profiles,
@@ -3070,24 +3120,10 @@ def generate_manifest(
             "cores": cores,
         }
 
-    region_drops: set[str] = set()
-    if regions:
-        region_index = region_mod.build_region_index(emu_profiles)
-        region_groups, _extra_dests = platform_region_groups(
-            config,
-            pack_systems,
-            emulators_dir,
-            db,
-            base_dest,
-            emu_profiles,
-            target_cores=target_cores,
-            include_extras=(source != "platform"),
-            include_all=(source == "truth"),
-            required_only=required_only,
-        )
-        region_drops = region_mod.resolve_region_drops(
-            region_groups, region_index, regions
-        )
+    region_drops = _manifest_region_drops(
+        config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
+        target_cores, source, required_only, regions,
+    )
 
     # Phase 1: baseline files
     if source != "truth":
@@ -3136,17 +3172,18 @@ def generate_manifest(
                     )
                     continue
 
-                local_path, status = resolve_file(
-                    file_entry,
-                    db,
-                    bios_dir,
-                    zip_contents,
-                    data_dir_registry=data_registry,
-                    offline=offline,
-                )
                 override = slot_overrides.get(full_dest)
                 if override:
                     local_path, status = override, "slot_arbitrated"
+                else:
+                    local_path, status = resolve_file(
+                        file_entry,
+                        db,
+                        bios_dir,
+                        zip_contents,
+                        data_dir_registry=data_registry,
+                        offline=offline,
+                    )
                 if status == "not_found" and not reads_file_contents(verification_mode):
                     found = agnostic_substitute(file_entry, sys_id, db, manifest_profiles)
                     if found:
@@ -3154,23 +3191,7 @@ def generate_manifest(
                         if os.path.basename(local_path) != file_entry.get("name", ""):
                             # The pack explains the rename in a note of its own.
                             rename_notes.add(file_entry.get("name", ""))
-                if (
-                    status == "hash_mismatch"
-                    and local_path
-                    and file_entry.get("zipped_file")
-                    and _inner_rom_check(file_entry, local_path) == "ok"
-                ):
-                    status = "zip_exact"
-                if (
-                    status == "hash_mismatch"
-                    and local_path
-                    and not file_entry.get("zipped_file")
-                    and hash_mismatch_excludes_file(verification_mode)
-                    and frontend_digest_matches(
-                        file_entry, local_path, digest_algorithm(verification_mode)
-                    )
-                ):
-                    status = "frontend_digest_exact"
+                status = _settle_mismatch(file_entry, local_path, status, verification_mode)
                 # An existence platform never reads the bytes, so a declared
                 # hash the local dump contradicts is not a reason to withhold
                 # the file. Hash platforms would reject it, so they omit it.
