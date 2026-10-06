@@ -203,6 +203,18 @@ def _system_tag(system_filter: list[str] | None) -> str:
     return "_" + "_".join(display_parts)
 
 
+_UNSAFE_IN_NAME = re.compile(r'[/\\:*?"<>|]')
+
+
+def _name_part(text: str, space: str = "") -> str:
+    """A display name made safe to stand in a file name.
+
+    'FinalBurn Neo (CPS-1/CPS-2)' named a directory that did not exist; a
+    Windows user cannot write ':' or '?' either.
+    """
+    return _UNSAFE_IN_NAME.sub("-", text.replace(" ", space))
+
+
 def _platform_pack_stem(
     group_platforms: list[str], representative: str, platforms_dir: str
 ) -> str:
@@ -213,14 +225,14 @@ def _platform_pack_stem(
     """
     rep_cfg = load_platform_config(representative, platforms_dir)
     version = rep_cfg.get("version", rep_cfg.get("dat_version", ""))
-    version_tag = f"_{version.replace(' ', '')}" if version else ""
+    version_tag = f"_{_name_part(str(version))}" if version else ""
     if len(group_platforms) <= 1:
-        return rep_cfg.get("platform", representative).replace(" ", "_") + version_tag
+        return _name_part(rep_cfg.get("platform", representative), "_") + version_tag
     names = [
         load_platform_config(p, platforms_dir).get("platform", p)
         for p in group_platforms
     ]
-    return "_".join(n.replace(" ", "") for n in names) + version_tag
+    return "_".join(_name_part(n) for n in names) + version_tag
 
 
 
@@ -1231,7 +1243,7 @@ def generate_emulator_pack(
         return None
 
     # ZIP naming
-    display_names = [p.get("emulator", n).replace(" ", "") for n, p in selected]
+    display_names = [_name_part(p.get("emulator", n)) for n, p in selected]
     validation_index = _build_validation_index(dict(selected))
     narrow_tags = "".join(
         tag
@@ -1524,7 +1536,7 @@ def generate_system_pack(
 
     # Use system-based ZIP name
     sys_display = "_".join(
-        "_".join(w.title() for w in sid.split("-")) for sid in system_ids
+        _name_part("_".join(w.title() for w in sid.split("-"))) for sid in system_ids
     )
     result = generate_emulator_pack(
         matching,
@@ -1697,7 +1709,7 @@ def generate_split_packs(
                     source, regions, target_name, one_per_slot, required_only
                 )
             )
-            safe_group = group_name.replace(" ", "_")
+            safe_group = _name_part(group_name, "_")
             new_name = f"{platform_display.replace(' ', '_')}{ver_tag}{narrow_tags}_{safe_group}_BIOS_Pack.zip"
             new_path = os.path.join(split_dir, new_name)
             if new_path != zip_path:
@@ -1777,7 +1789,7 @@ def generate_md5_pack(
         )
     )
     zip_name = (
-        f"{context_name.replace(' ', '_')}_Custom{custom_tags}_BIOS_Pack.zip"
+        f"{_name_part(context_name, '_')}_Custom{custom_tags}_BIOS_Pack.zip"
     )
     zip_path = os.path.join(output_dir, zip_name)
     os.makedirs(output_dir, exist_ok=True)
