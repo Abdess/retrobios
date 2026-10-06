@@ -303,6 +303,13 @@ class TestWorstStatus(unittest.TestCase):
 
 
 class TestAnchorBlock(unittest.TestCase):
+    def test_a_range_ending_past_the_file_is_gone(self):
+        """dolphin cited NANDImporter.cpp:239-323 in a 317-line file; the
+        part inside the file anchored, and the ref read as sound."""
+        lines = [f"line {n}" for n in range(1, 11)]
+        self.assertEqual(anchor_block(lines, list(lines), 8, 14).status, "GONE")
+        self.assertEqual(anchor_block(lines, list(lines), 8, 10).status, "ANCHORED")
+
     def test_anchored_same_position(self):
         lines = ["a", "target", "b"]
         result = anchor_block(lines, list(lines), 2, 2)
@@ -387,6 +394,13 @@ class TestVerifyAtPin(unittest.TestCase):
     """A tag-pinned profile is judged on self-consistency, not on HEAD."""
 
     LINES = ["pad", "pad", 'ROM_LOAD("bios.bin", CRC(deadbeef))', "pad"]
+
+    def test_a_range_ending_past_the_file_is_gone(self):
+        """mame cited casloopy.cpp:2105-2462 in a 2105-line file."""
+        part = RefPart("a.c", 3, 9, "a.c:3-9")
+        self.assertEqual(
+            profile_sync.verify_at_pin(part, self.LINES, ["deadbeef"]).status, "GONE"
+        )
 
     def test_declared_value_present(self):
         part = RefPart("a.c", 3, 3, "a.c:3")
