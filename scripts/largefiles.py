@@ -163,11 +163,15 @@ def _fetch_asset(
             hashes, expected_sha1, expected_md5
         ):
             return cached
-        else:
-            # A verified copy of this asset that answers another hash: the
-            # caller wants a different revision under the same name. Keeping
-            # it is what lets the next caller for the primary find it.
+        elif offline or _served_size(name) in (None, os.path.getsize(cached)):
+            # A copy of this asset that answers another hash: the caller
+            # wants a different revision under the same name, and the
+            # release still serves this one. Keeping it is what lets the
+            # next caller for the primary find it.
             return None
+        # Otherwise the release was re-uploaded since this copy was cached
+        # (gh release upload --clobber): only a download can answer, and
+        # it replaces the copy only if it verifies.
 
     if offline:
         return None
@@ -179,20 +183,9 @@ def _fetch_asset(
         dir=dest_dir, prefix=os.path.basename(cached) + ".", suffix=".tmp"
     )
     os.close(tmp_fd)
-    # GitHub rewrites spaces to dots in release asset names, so a file whose
-    # name contains spaces is published under a dotted name.
-    candidates = [name]
-    if " " in name:
-        candidates.append(name.replace(" ", "."))
-
     try:
         downloaded = False
-        for candidate in candidates:
-            encoded_name = urllib.parse.quote(candidate)
-            url = (
-                f"https://github.com/{LARGE_FILES_REPO}/releases/download/"
-                f"{LARGE_FILES_RELEASE}/{encoded_name}"
-            )
+        for candidate, url in _asset_urls(name):
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": "retrobios/1.0"})
                 with urllib.request.urlopen(req, timeout=300) as resp:
@@ -218,6 +211,44 @@ def _fetch_asset(
         return cached
     finally:
         _drop(tmp_path)
+
+
+def _asset_urls(name: str) -> list[tuple[str, str]]:
+    """Release URLs an asset may be published under, with their names.
+
+    GitHub rewrites spaces to dots in release asset names, so a file whose
+    name contains spaces is published under a dotted name.
+    """
+    candidates = [name]
+    if " " in name:
+        candidates.append(name.replace(" ", "."))
+    return [
+        (
+            candidate,
+            (
+                f"https://github.com/{LARGE_FILES_REPO}/releases/download/"
+                f"{LARGE_FILES_RELEASE}/{urllib.parse.quote(candidate)}"
+            ),
+        )
+        for candidate in candidates
+    ]
+
+
+def _served_size(name: str) -> int | None:
+    """Size of the asset the release serves now, or None when unreadable."""
+    for candidate, url in _asset_urls(name):
+        try:
+            req = urllib.request.Request(
+                url, method="HEAD", headers={"User-Agent": "retrobios/1.0"}
+            )
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                length = resp.headers.get("Content-Length")
+        except (urllib.error.URLError, OSError, http.client.HTTPException) as exc:
+            print(f"  large file {candidate}: {exc}", file=sys.stderr)
+            continue
+        if length and length.isdigit():
+            return int(length)
+    return None
 
 
 def _matches(hashes: dict, expected_sha1: str, expected_md5: str) -> bool:
