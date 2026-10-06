@@ -219,6 +219,17 @@ class BizHawkKeepsItsOwnHashes(unittest.TestCase):
         self.assertFalse(exporter.states(fe, "sha1"))
 
 
+class SystemDatKeepsItsQuoting(unittest.TestCase):
+    def test_a_name_the_original_quotes_stays_quoted(self):
+        from exporter.systemdat_exporter import _quote  # noqa: PLC0415
+
+        quoted = frozenset({"dolphin-emu/Sys/GC/USA/IPL.bin"})
+        self.assertEqual(_quote("dolphin-emu/Sys/GC/USA/IPL.bin", quoted),
+                         '"dolphin-emu/Sys/GC/USA/IPL.bin"')
+        self.assertEqual(_quote("bk/B11M_BOS.ROM", quoted), "bk/B11M_BOS.ROM")
+        self.assertEqual(_quote("a b.bin"), '"a b.bin"')
+
+
 class ModelKeepsOneFileOneEntry(unittest.TestCase):
     def test_a_list_of_sizes_is_not_one_size(self):
         """A profile may accept several revisions; int() on the list crashed."""
