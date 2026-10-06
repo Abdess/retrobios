@@ -416,6 +416,14 @@ class TestVerifyAtPin(unittest.TestCase):
         self.assertEqual(result.status, "MOVED")
         self.assertEqual(result.start, 7)
 
+    def test_a_part_annotated_for_another_version(self):
+        """ti99sim cites v0.0.11 beside its v0.16.0 pin."""
+        other = RefPart("src/sdl/main.cpp", 407, 411, "src/sdl/main.cpp:407-411 (v0.0.11)")
+        same = RefPart("src/core/ti994a.cpp", 122, 131, "src/core/ti994a.cpp:122-131 (v0.16.0)")
+        self.assertEqual(profile_sync.cites_another_version(other, "0.16.0"), "0.0.11")
+        self.assertIsNone(profile_sync.cites_another_version(same, "0.16.0"))
+        self.assertIsNone(profile_sync.cites_another_version(same, {"libretro": "v0.16.0"}))
+
     def test_a_name_stem_elsewhere_does_not_move_a_ref(self):
         """linapple cites the PRAVETS82 option; the stem also names an install line."""
         lines = ['option(ENABLE_ROM_CLONE_PRAVETS "" OFF)', "", "", "", "", "",
