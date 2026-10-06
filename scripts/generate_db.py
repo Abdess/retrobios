@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -257,33 +258,33 @@ def save_cache(cache_path: str, cache: dict):
         json.dump(cache, f)
 
 
-def _load_gitignored_large_files() -> dict[str, str]:
-    """Read .gitignore and return {filename: bios_path} for large files."""
+def _load_gitignored_large_files() -> set[str]:
+    """The bios/ paths .gitignore registers as release assets."""
     gitignore = Path(".gitignore")
     if not gitignore.exists():
-        return {}
-    entries = {}
-    for line in gitignore.read_text().splitlines():
-        line = line.strip()
-        if line.startswith("bios/") and not line.startswith("#"):
-            name = Path(line).name
-            entries[name] = line
-    return entries
+        return set()
+    return {
+        line.strip()
+        for line in gitignore.read_text().splitlines()
+        if line.strip().startswith("bios/")
+    }
 
 
 def _preserve_large_file_entries(files: dict, db_path: str) -> int:
-    """Preserve database entries for large files not on disk.
+    """Keep the entries of release assets the checkout does not hold.
 
-    Large files (>50 MB) are stored as GitHub release assets and listed
-    in .gitignore. When generate_db runs locally without them, their
-    entries would be lost. This reads the existing database, downloads
-    missing files from the release, and re-adds entries with paths
-    pointing to the local cache.
+    Files kept out of git live as assets of the large-files release, and
+    .gitignore registers their paths. An entry survives a scan that missed
+    its file only under that registered path: a bare name is shared by
+    other files (pak0.pk3, history.db), and a path rewritten into the
+    download cache is no longer one .gitignore knows, so the manifest
+    would send the installer to the repository for it. A fetched asset is
+    written back to its registered path.
     """
     from common import fetch_large_file
 
-    large_files = _load_gitignored_large_files()
-    if not large_files:
+    registered = _load_gitignored_large_files()
+    if not registered:
         return 0
 
     try:
@@ -299,22 +300,17 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
 
     count = 0
     for sha1, entry in existing_db.get("files", {}).items():
-        if sha1 in files:
-            continue
-        name = entry.get("name", "")
         path = entry.get("path", "")
-        # Match by gitignored bios/ path OR by filename of a known large file
-        if path not in large_files.values() and name not in large_files:
+        if sha1 in files or path not in registered or path in scanned_paths:
             continue
         cached = fetch_large_file(
-            path if path in large_files.values() else name,
+            path,
             expected_sha1=entry.get("sha1", ""),
             expected_md5=entry.get("md5", ""),
         )
-        if cached:
-            entry = {**entry, "path": cached}
-        elif path in scanned_paths:
-            continue
+        if cached and not os.path.exists(path):
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            shutil.copy2(cached, path)
         files[sha1] = entry
         count += 1
     return count
