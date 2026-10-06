@@ -278,3 +278,14 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
 
         with mock.patch.dict("os.environ", {"GITHUB_TOKEN": "t0k"}):
             self.assertEqual(github_headers()["Authorization"], "Bearer t0k")
+
+    def test_emudeck_cores_raise(self):
+        """EmuDeck wrote cores: [] when the GitHub listing was refused."""
+        from unittest import mock
+
+        from scraper.emudeck_scraper import Scraper
+
+        with mock.patch("urllib.request.urlopen", self._refuse), self.assertRaises(
+            RuntimeError
+        ):
+            Scraper()._fetch_installed_emulators()

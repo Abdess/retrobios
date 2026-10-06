@@ -22,6 +22,7 @@ try:
         BaseScraper,
         BiosRequirement,
         fetch_github_latest_version,
+        github_headers,
         requirement_entry,
     )
 except ImportError:
@@ -29,6 +30,7 @@ except ImportError:
         BaseScraper,
         BiosRequirement,
         fetch_github_latest_version,
+        github_headers,
         requirement_entry,
     )
 
@@ -462,17 +464,15 @@ class Scraper(BaseScraper):
         skip = {"retroarch_maincfg", "retroarch"}
 
         try:
-            req = urllib.request.Request(
-                api_url,
-                headers={"User-Agent": "retrobios-scraper/1.0"},
-            )
-            data = json.loads(urllib.request.urlopen(req, timeout=30).read())
-        except (urllib.error.URLError, OSError):
-            return []
+            req = urllib.request.Request(api_url, headers=github_headers())
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                data = json.loads(resp.read())
+        except (urllib.error.URLError, json.JSONDecodeError) as e:
+            raise RuntimeError(f"cannot list EmuDeck EmuScripts: {e}") from e
 
         cores: list[str] = []
         seen: set[str] = set()
-        for entry in data:
+        for entry in data if isinstance(data, list) else []:
             name = entry.get("name", "")
             if not name.endswith(".sh"):
                 continue
@@ -487,6 +487,8 @@ class Scraper(BaseScraper):
             if core not in seen:
                 seen.add(core)
                 cores.append(core)
+        if not cores:
+            raise RuntimeError(f"no emulator script in {api_url}")
         return sorted(cores)
 
 
