@@ -69,6 +69,8 @@ from nativemode import (
     reads_file_contents,
 )
 from validation import (
+    destination_owners,
+    validated_choice,
     agnostic_substitute,
     _build_validation_index,
     _parse_validation,
@@ -117,6 +119,8 @@ def verify_entry_existence(
     local_path: str | None,
     validation_index: dict[str, dict] | None = None,
     db: dict | None = None,
+    destination: str = "",
+    owners: dict | None = None,
 ) -> dict:
     """RetroArch verification: path_is_valid() -file exists = OK."""
     name = file_entry.get("name", "")
@@ -124,22 +128,20 @@ def verify_entry_existence(
     if not local_path:
         return {"name": name, "status": Status.MISSING, "required": required}
     result = {"name": name, "status": Status.OK, "required": required}
-    if validation_index:
+    if not validation_index:
+        return result
+    if db:
+        # The pack ships the variant this returns, so a disagreement it
+        # settles is not reported.
+        _chosen, disagreement = validated_choice(
+            file_entry, local_path, db, validation_index, "bios", None,
+            destination, owners,
+        )
+    else:
         check = check_file_validation(local_path, name, validation_index)
-        if check:
-            reason, emus_list = check
-            suppressed = False
-            if db:
-                better = find_validated_variant(
-                    file_entry, db, local_path, validation_index,
-                )
-                if better:
-                    suppressed = True
-            if not suppressed:
-                emus = ", ".join(emus_list)
-                result["discrepancy"] = (
-                    f"file present (OK) but {emus} says {reason}"
-                )
+        disagreement = f"{', '.join(check[1])} says {check[0]}" if check else None
+    if disagreement:
+        result["discrepancy"] = f"file present (OK) but {disagreement}"
     return result
 
 
@@ -802,6 +804,7 @@ def verify_platform(
         if f.get("hle_fallback")
     }
     validation_index = _build_validation_index(platform_profiles)
+    validation_owners = destination_owners(platform_profiles)
 
     # Filter systems by target
     if not target_cores:
@@ -857,12 +860,17 @@ def verify_platform(
                 file_entry, sys_id, db, zip_contents, data_dir_registry,
                 slot_overrides, mode, platform_profiles,
             )
+            destination = sanitize_pack_path(
+                file_entry.get("destination", file_entry.get("name", ""))
+            )
             if not reads_file_contents(mode):
                 result = verify_entry_existence(
                     file_entry,
                     local_path,
                     validation_index,
                     db,
+                    destination,
+                    validation_owners,
                 )
             elif digest_algorithm(mode) == "sha1":
                 result = verify_entry_sha1(file_entry, local_path)
@@ -871,25 +879,13 @@ def verify_platform(
                 # Emulator-level validation: informational for platform packs.
                 # Platform verification (MD5) is the authority. Emulator
                 # mismatches are reported as discrepancies, not failures.
-                if result["status"] == Status.OK and local_path and validation_index:
-                    fname = file_entry.get("name", "")
-                    check = check_file_validation(
-                        local_path, fname, validation_index,
+                if result["status"] == Status.OK:
+                    _chosen, disagreement = validated_choice(
+                        file_entry, local_path, db, validation_index, "bios",
+                        digest_algorithm(mode), destination, validation_owners,
                     )
-                    if check:
-                        reason, emus_list = check
-                        better = find_validated_variant(
-                            file_entry,
-                            db,
-                            local_path,
-                            validation_index,
-                            platform_digest=digest_algorithm(mode),
-                        )
-                        if not better:
-                            emus = ", ".join(emus_list)
-                            result["discrepancy"] = (
-                                f"{platform} says OK but {emus} says {reason}"
-                            )
+                    if disagreement:
+                        result["discrepancy"] = f"{platform} says OK but {disagreement}"
             result["system"] = sys_id
             result["hle_fallback"] = hle_index.get(file_entry.get("name", ""), False)
             result["ground_truth"] = build_ground_truth(
@@ -1259,6 +1255,7 @@ def verify_emulator(
     db: dict,
     standalone: bool = False,
     regions: list[str] | None = None,
+    platforms_dir: str | None = None,
 ) -> dict:
     """Verify files for specific emulator profiles.
 
@@ -1277,7 +1274,7 @@ def verify_emulator(
     selected_profiles = {n: p for n, p in selected}
     validation_index = _build_validation_index(selected_profiles)
     data_registry = load_data_dir_registry(
-        os.path.join(os.path.dirname(__file__), "..", "platforms")
+        platforms_dir or os.path.join(os.path.dirname(__file__), "..", "platforms")
     )
 
     details = []
@@ -1556,6 +1553,7 @@ def verify_system(
     db: dict,
     standalone: bool = False,
     regions: list[str] | None = None,
+    platforms_dir: str | None = None,
 ) -> dict:
     """Verify files for all emulators supporting given system IDs."""
     profiles = load_emulator_profiles(emulators_dir)
@@ -1590,7 +1588,9 @@ def verify_system(
         )
         sys.exit(1)
 
-    return verify_emulator(matching, emulators_dir, db, standalone, regions=regions)
+    return verify_emulator(
+        matching, emulators_dir, db, standalone, regions=regions, platforms_dir=platforms_dir
+    )
 
 
 def print_emulator_result(result: dict, verbose: bool = False) -> None:
@@ -1718,6 +1718,9 @@ def _refuse_listing_narrowings(
         ("--system", args.system),
         ("--region", getattr(args, "region", None)),
         ("--target", getattr(args, "target", None)),
+        ("--standalone", args.standalone),
+        ("--include-archived", args.include_archived),
+        ("--json", args.json),
     ):
         if on:
             parser.error(f"{flag} is incompatible with {listing}")
@@ -1807,6 +1810,8 @@ def main():
         )
     if args.standalone and not (args.emulator or args.system):
         parser.error("--standalone requires --emulator or --system")
+    if args.include_archived and not args.all:
+        parser.error("--include-archived requires --all")
     if args.target and not (args.platform or args.all):
         parser.error("--target requires --platform or --all")
     if args.target and (args.emulator or args.system):
@@ -1820,7 +1825,7 @@ def main():
         names = [n.strip() for n in args.emulator.split(",") if n.strip()]
         result = verify_emulator(
             names, args.emulators_dir, db, args.standalone,
-            regions=requested_regions,
+            regions=requested_regions, platforms_dir=args.platforms_dir,
         )
         if args.json:
             result["details"] = [
@@ -1836,7 +1841,7 @@ def main():
         system_ids = [s.strip() for s in args.system.split(",") if s.strip()]
         result = verify_system(
             system_ids, args.emulators_dir, db, args.standalone,
-            regions=requested_regions,
+            regions=requested_regions, platforms_dir=args.platforms_dir,
         )
         if args.json:
             result["details"] = [
