@@ -32,5 +32,21 @@ class DeclaredSizeOrders(unittest.TestCase):
             self.assertEqual(kept, [str(big), str(small)])
 
 
+
+class OwnerOutranksSharedTree(unittest.TestCase):
+    def test_the_owners_copy_beats_two_matching_segments(self):
+        """armsx2's fxaa.fx lost to NetherSX2's under shaders/common/."""
+        from common import _by_affinity  # noqa: PLC0415
+
+        paths = [
+            "bios/Other/nethersx2/assets/shaders/common/fxaa.fx",
+            "bios/Other/armsx2/fxaa.fx",
+        ]
+        ordered = _by_affinity(
+            paths, {"name": "fxaa.fx", "source_profile": "armsx2"},
+            "pcsx2/resources/shaders/common/fxaa.fx",
+        )
+        self.assertEqual(ordered[0], "bios/Other/armsx2/fxaa.fx")
+
 if __name__ == "__main__":
     unittest.main()
