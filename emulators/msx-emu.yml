@@ -98,7 +98,7 @@ notes: |
   MSX.emu/src/blueMSX/Memory/romMapperDRAM.c:88-99), and the Philips FDC, Panasonic
   FDC and MoonSound mappers test nothing at all
   (MSX.emu/src/blueMSX/Memory/romMapperPhilipsFdc.c:139-146,
-  MSX.emu/src/blueMSX/Memory/romMapperTC8566AF.c:236-262,
+  MSX.emu/src/blueMSX/Memory/romMapperTC8566AF.c:228-255,
   MSX.emu/src/blueMSX/Memory/romMapperMoonsound.c:129-158).
 
   The ROM database is compiled in. mediaDbGuessRom matches a cartridge's SHA-1 against
@@ -396,7 +396,7 @@ files:
     required: true
     size: 16384
     description: "Panasonic floppy disk ROM of the MSX2+ machine"
-    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperTC8566AF.c:236-262"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperTC8566AF.c:228-255"
 
   - name: "MSXTR.rom"
     path: "Machines/Shared Roms/MSXTR.rom"
@@ -436,7 +436,7 @@ files:
     required: true
     size: 65536
     description: "MSX-DOS 2.3 disk ROM of the turbo R machine"
-    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperTC8566AF.c:236-262"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468,1168-1181, MSX.emu/src/main/RomLoader.cc:57-92,94-133, MSX.emu/src/blueMSX/Memory/romMapperTC8566AF.c:228-255"
 
   - name: "coleco.rom"
     path: "Machines/COL - ColecoVision/coleco.rom"
