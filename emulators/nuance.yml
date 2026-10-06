@@ -61,9 +61,10 @@ files:
     md5: "23bf80c259f182f582beeb368aba98f5"
     required: true
     bundled: true
-    source_ref: "src/libretro.cpp:332-371, src/NuonEnvironment.cpp:595, src/NuonEnvironment.cpp:617-619, src/bios.cpp:566-582, src/coff.cpp:47-70"
+    source_ref: "src/libretro.cpp:332-371, src/NuonEnvironment.cpp:595, src/NuonEnvironment.cpp:617-619, src/bios.cpp:566-582"
     note: >
-      Loaded into MPE3 by InitBios. The 2007 build shipped in the release
+      Loaded into MPE3 by InitBios through LoadCoffFile, which rejects a file
+      whose magic is not 0x0120 (src/coff.cpp:47-71). The 2007 build shipped in the release
       archives (19410 bytes, sha1 4f42ed8f5e171cc79112d1c1e201381e83b1fc0d)
       loads the same way.
 

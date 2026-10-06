@@ -458,10 +458,11 @@ files:
     sha1: 0a16f66d7816d73af3b28dea2bb292415695f6f7
     description: "Vulkan texture function shader"
     note: >-
-      Read into the device at creation and specialised per draw. A source
-      that cannot be read fails GSDeviceVK::Create, and Vulkan is the backend
-      the libretro core presents through.
-    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2308-2317, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5349-5364, pcsx2/GS/Renderers/Common/GSDevice.cpp:372-375"
+      Read from the resources directory into the device at creation
+      (pcsx2/GS/Renderers/Common/GSDevice.cpp:372-375) and specialised per
+      draw. A source that cannot be read fails GSDeviceVK::Create, and Vulkan
+      is the backend the libretro core presents through.
+    source_ref: "pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:2308-2317, pcsx2/GS/Renderers/Vulkan/GSDeviceVK.cpp:5349-5364"
 
   - name: convert.glsl
     path: pcsx2/resources/shaders/vulkan/convert.glsl
@@ -828,7 +829,7 @@ files:
       Named as the placeholder texture when the fullscreen interface
       initialises; that initialisation fails without it and the interface
       stays closed.
-    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:335-341, pcsx2/ImGui/ImGuiFullscreen.cpp:292-300"
+    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:335-341, pcsx2/ImGui/ImGuiFullscreen.cpp:216-226, 292-300"
 
   - name: no-save.png
     path: pcsx2/resources/fullscreenui/no-save.png
@@ -1381,7 +1382,8 @@ files:
     size: 656
     sha1: d168d39632798f8be799d21bd0a0c9ca13533272
     description: "Flag icon, game list region unclassified"
-    source_ref: "pcsx2/ImGui/FullscreenUI.cpp:2846, pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486"
+    note: "Opened as icons/flags/Other.svg by the fullscreen game list (pcsx2/ImGui/FullscreenUI.cpp:2846)."
+    source_ref: "pcsx2/GameList.cpp:155-190, pcsx2-qt/GameList/GameListModel.cpp:486"
 
   - name: pl.svg
     path: pcsx2/resources/icons/flags/pl.svg

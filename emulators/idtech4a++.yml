@@ -238,9 +238,11 @@ files:
     description: "SoundFont for the MIDI devices"
     note: >-
       Collected by scanning a `soundfonts` directory added to the search paths of
-      the config file; every .sf2 and zipped GUS patch set found there becomes a
-      menu entry.
-    source_ref: "Q3E/src/main/jni/zdoom/src/gameconfigfile.cpp:220, 258, Q3E/src/main/jni/zdoom/src/common/audio/music/i_soundfont.cpp:335-370"
+      the config file (Q3E/src/main/jni/zdoom/src/gameconfigfile.cpp:220, 258);
+      every .sf2 and zipped GUS patch set found there becomes a menu entry.
+      fluid_patchset defaults to GAMENAMELOWERCASE, "uzdoom", which
+      FindSoundFont matches against the file base name.
+    source_ref: "Q3E/src/main/jni/zdoom/src/version.h:110, Q3E/src/main/jni/zdoom/src/common/audio/music/music_config.cpp:119, Q3E/src/main/jni/zdoom/src/common/audio/music/i_soundfont.cpp:335-370, 458-468"
 
   - name: GENMIDI.GS.wopl
     required: false
@@ -280,12 +282,12 @@ files:
     description: "ECWolf engine resource archive"
     note: >-
       Named by MAIN_PK3 and passed to the game selector with the program
-      directory; failing to open it ends the process with "Could not open
-      ecwolf.pk3!". It holds the IWADINFO rules that identify which Wolfenstein
+      directory (Q3E/src/main/jni/ecwolf/src/wl_main.cpp:1294-1307); failing
+      to open it ends the process with "Could not open ecwolf.pk3!". It holds the IWADINFO rules that identify which Wolfenstein
       data set is present, the palettes and the actor definitions. This build
       reads it from disk after extraction, unlike the libretro core which
       compiles it in.
-    source_ref: "Q3E/src/main/jni/ecwolf/src/version.h:12, Q3E/src/main/jni/ecwolf/src/wl_iwad.cpp:604, Q3E/src/main/jni/ecwolf/src/wl_main.cpp:1294-1307, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:186-195"
+    source_ref: "Q3E/src/main/jni/ecwolf/src/version.h:12, Q3E/src/main/jni/ecwolf/src/wl_iwad.cpp:604, Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:186-195"
 
   - name: glprogs.pk4
     required: true
@@ -403,7 +405,7 @@ files:
       Unpacked into `files/` under the Source standalone directory. It carries
       the DejaVu, Droid Sans Fallback, Itim and Liberation faces the engine
       substitutes for the Windows fonts, and extras_dir.vpk.
-    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:164-173, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:938-961, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:396"
+    source_ref: "Q3E/src/main/java/com/n0n3m4/q3e/Q3EPatchResourceManager.java:164-173, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameHelper.java:938-961, Q3E/src/main/java/com/n0n3m4/q3e/Q3EGameConstants.java:383, 396"
 
   - name: d3_sabot_a7.pk4
     required: false

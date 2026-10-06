@@ -132,11 +132,11 @@ files:
       name and crc32 of every file that fills them, the stepping, the PCI bridge, the
       encryption key, the drive board, net board and MPEG board the machine carries, the
       patches to apply and the parent set to fall back on. Handed to the GameLoader
-      constructor, parsed as XML, and a game load is refused outright when the file is
-      not there. The Kotlin launcher parses the same copy out of the assets for its game
+      constructor, parsed as XML (Src/GameLoader.cpp:492-502, 930-933), and a game
+      load is refused outright when the file is not there. The Kotlin launcher parses the same copy out of the assets for its game
       list and its per-game input hints. Byte identical to the copy in the repository
       root Config directory.
-    source_ref: "android/app/src/main/cpp/native-lib.cpp:568-580, 1096-1114, Src/GameLoader.cpp:492-502, 930-933, Src/Util/ConfigBuilders.cpp:60-73, android/app/src/main/java/com/izzy2lost/super3/GameXml.kt:23-24, android/app/src/main/java/com/izzy2lost/super3/MainActivity.kt:1211"
+    source_ref: "android/app/src/main/cpp/native-lib.cpp:568-580, 1096-1114, Src/Util/ConfigBuilders.cpp:60-73, android/app/src/main/java/com/izzy2lost/super3/GameXml.kt:23-24, android/app/src/main/java/com/izzy2lost/super3/MainActivity.kt:1211"
 
   - name: Supermodel.ini
     path: "Config/Supermodel.ini"

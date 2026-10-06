@@ -254,7 +254,7 @@ files:
     size: 408
     sha1: "483b2c34fcb3ddcf650314e45104f358ef74c98b"
     description: "MSX1 machine definition"
-    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/EmuMenuViews.cc:32-97"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/EmuMenuViews.cc:32-97"
 
   - name: "config.ini"
     path: "Machines/MSX2/config.ini"
@@ -264,7 +264,8 @@ files:
     size: 649
     sha1: "460ded0dbfc0285490da87a446b0321b6496aa5b"
     description: "MSX2 machine definition, the default MSX machine"
-    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/EmuMenuViews.cc:32-97"
+    note: "Default of the machine name option (MSX.emu/src/main/system.ccm:75)."
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/EmuMenuViews.cc:32-97"
 
   - name: "config.ini"
     path: "Machines/MSX2+/config.ini"
@@ -274,7 +275,7 @@ files:
     size: 773
     sha1: "cb7d14a17c4f4632f17ba5a64160cdd876dd6010"
     description: "MSX2+ machine definition"
-    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/EmuMenuViews.cc:32-97"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/EmuMenuViews.cc:32-97"
 
   - name: "config.ini"
     path: "Machines/MSXturboR/config.ini"
@@ -284,7 +285,7 @@ files:
     size: 941
     sha1: "9836d109ec7879374dcd044da149f1b5aafd4664"
     description: "MSX turbo R machine definition"
-    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/EmuMenuViews.cc:32-97"
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/EmuMenuViews.cc:32-97"
 
   - name: "config.ini"
     path: "Machines/COL - ColecoVision/config.ini"
@@ -294,7 +295,8 @@ files:
     size: 347
     sha1: "0f0b7b73ba6f8677dfc5c824bb3edf6df2ff653e"
     description: "ColecoVision machine definition, the default Coleco machine"
-    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/system.ccm:75-76, MSX.emu/src/main/EmuMenuViews.cc:32-97"
+    note: "Default of the machine name option (MSX.emu/src/main/system.ccm:76)."
+    source_ref: "MSX.emu/src/blueMSX/Board/Machine.c:300-339,450-468, MSX.emu/src/main/RomLoader.cc:135-144, MSX.emu/src/main/EmuMenuViews.cc:32-97"
 
   - name: "MSX.rom"
     path: "Machines/Shared Roms/MSX.rom"

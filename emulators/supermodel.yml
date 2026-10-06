@@ -93,8 +93,8 @@ files:
     sha1: "6871a47de90ca67f9ff8e4e280416851a8164563"
     md5: "0c7cfc0cba2f2cd674d94e093936f9f8"
     description: "ROM set definitions"
-    note: "Parsed at startup into the game database. Every ROM region, file name and CRC32 the loader matches against comes from here, so an unreadable file leaves no set to resolve and the launch returns before the emulator is built. The path is a config key, so -game-xml-file moves it. Nothing about the file is verified beyond parsing; the hash is that of the copy the pinned revision ships."
-    source_ref: "Src/OSD/SDL/Main.cpp:117, Src/OSD/SDL/Main.cpp:1500, Src/OSD/SDL/Main.cpp:1957, Src/OSD/SDL/Main.cpp:2319-2329, Src/GameLoader.cpp:549-559, Src/GameLoader.cpp:1014-1017"
+    note: "Parsed at startup into the game database (Src/GameLoader.cpp:549-559, 1014-1017). Every ROM region, file name and CRC32 the loader matches against comes from here, so an unreadable file leaves no set to resolve and the launch returns before the emulator is built. The path is a config key, so -game-xml-file moves it. Nothing about the file is verified beyond parsing; the hash is that of the copy the pinned revision ships."
+    source_ref: "Src/OSD/SDL/Main.cpp:117, Src/OSD/SDL/Main.cpp:1500, Src/OSD/SDL/Main.cpp:1957, Src/OSD/SDL/Main.cpp:2319-2329"
 
   - name: Games.xml
     path: "supermodel/Games.xml"
@@ -110,8 +110,8 @@ files:
       - "2d16307ceb658636a05d34c7ba935b48"
       - "29fd5bc40cea222e040c1a1cfd60ea2e"
     description: "ROM set definitions, libretro copy"
-    note: "Read through the VFS from {system}/supermodel/Games.xml, or Config/Games.xml under it, and parsed from memory. When the read yields nothing the bytes compiled in from Config/Games.xml are parsed instead, so the core identifies every set without a file on disk; a file that is present takes precedence. The second hash is the embedded array, which predates the indentation cleanup of the repository copy by one tab."
-    source_ref: "Src/OSD/libretro/LibretroWrapper.cpp:187-206, Src/OSD/libretro/LibretroWrapper.cpp:221-222, Src/OSD/libretro/LibretroWrapper.cpp:822, Src/OSD/libretro/LibretroWrapper.cpp:834-859, Src/GameLoader.cpp:1019-1030, Makefile:651-653"
+    note: "Read through the VFS from {system}/supermodel/Games.xml, or Config/Games.xml under it, and parsed from memory (Src/GameLoader.cpp:1019-1030). When the read yields nothing the bytes compiled in from Config/Games.xml are parsed instead, so the core identifies every set without a file on disk; a file that is present takes precedence. The second hash is the embedded array, which predates the indentation cleanup of the repository copy by one tab."
+    source_ref: "Src/OSD/libretro/LibretroWrapper.cpp:187-206, Src/OSD/libretro/LibretroWrapper.cpp:221-222, Src/OSD/libretro/LibretroWrapper.cpp:822, Src/OSD/libretro/LibretroWrapper.cpp:834-859, Makefile:651-653"
 
   - name: Supermodel.ini
     path: "supermodel/Supermodel.ini"
