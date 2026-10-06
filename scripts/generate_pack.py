@@ -75,6 +75,7 @@ from nativemode import (
 )
 from validation import (
     agnostic_substitute,
+    frontend_digest_matches,
     _build_validation_index,
     check_file_validation,
     filter_files_by_mode,
@@ -885,6 +886,11 @@ def generate_pack(
                             )
                         if not zip_ok:
                             continue
+                    elif frontend_digest_matches(
+                        file_entry, local_path, digest_algorithm(verification_mode)
+                    ):
+                        status = "frontend_digest_exact"
+                        file_status.setdefault(dedup_key, "ok")
                     else:
                         file_status[dedup_key] = "excluded"
                         file_reasons[dedup_key] = "hash mismatch"
@@ -3108,6 +3114,16 @@ def generate_manifest(
                     and _inner_rom_check(file_entry, local_path) == "ok"
                 ):
                     status = "zip_exact"
+                if (
+                    status == "hash_mismatch"
+                    and local_path
+                    and not file_entry.get("zipped_file")
+                    and hash_mismatch_excludes_file(verification_mode)
+                    and frontend_digest_matches(
+                        file_entry, local_path, digest_algorithm(verification_mode)
+                    )
+                ):
+                    status = "frontend_digest_exact"
                 # An existence platform never reads the bytes, so a declared
                 # hash the local dump contradicts is not a reason to withhold
                 # the file. Hash platforms would reject it, so they omit it.

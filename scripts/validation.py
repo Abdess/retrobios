@@ -431,3 +431,22 @@ def agnostic_substitute(
                         return held, prefix
                 break
     return None
+
+
+def frontend_digest_matches(file_entry: dict, local_path: str, algorithm: str) -> bool:
+    """Whether the frontend's own digest accepts the file.
+
+    resolve_local_file calls a file `hash_mismatch` when any declared hash
+    disagrees, but a frontend compares one digest. RomM's list carries md5,
+    sha1 and crc32: a mistyped crc32 next to the right md5 must not withhold
+    a file RomM accepts. Same comparison as verify_entry_md5/_sha1.
+    """
+    if algorithm == "md5":
+        declared = parse_md5_list(file_entry.get("md5"))
+    else:
+        value = file_entry.get(algorithm)
+        values = value if isinstance(value, list) else [value]
+        declared = [str(v).strip().lower() for v in values if v]
+    if not declared or not local_path:
+        return False
+    return compute_hashes(local_path)[algorithm].lower() in declared
