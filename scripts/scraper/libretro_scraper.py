@@ -15,6 +15,7 @@ from .base_scraper import (
     BaseScraper,
     BiosRequirement,
     fetch_github_latest_version,
+    github_headers,
     requirement_entry,
 )
 from .dat_parser import parse_dat, parse_dat_metadata, validate_dat_format
@@ -166,71 +167,57 @@ class Scraper(BaseScraper):
 
     def _fetch_core_metadata(self) -> dict[str, dict]:
         """Fetch per-core metadata from libretro-core-info .info files."""
-        metadata = {}
+        import json
+
+        from .coreinfo_scraper import CORE_SYSTEM_MAP
+
+        url = "https://api.github.com/repos/libretro/libretro-core-info/git/trees/master?recursive=1"
         try:
-            url = "https://api.github.com/repos/libretro/libretro-core-info/git/trees/master?recursive=1"
-            req = urllib.request.Request(
-                url,
-                headers={
-                    "User-Agent": "retrobios-scraper/1.0",
-                    "Accept": "application/vnd.github.v3+json",
-                },
-            )
+            req = urllib.request.Request(url, headers=github_headers())
             with urllib.request.urlopen(req, timeout=30) as resp:
-                import json
-
                 tree = json.loads(resp.read())
+        except (urllib.error.URLError, json.JSONDecodeError) as e:
+            raise RuntimeError(f"cannot list libretro-core-info: {e}") from e
 
-            info_files = [
-                item["path"]
-                for item in tree.get("tree", [])
-                if item["path"].endswith("_libretro.info")
-            ]
+        info_files = [
+            item["path"]
+            for item in tree.get("tree", [])
+            if item["path"].endswith("_libretro.info")
+        ]
+        if not info_files:
+            raise RuntimeError(f"no .info file in {url}")
 
-            for filename in info_files:
-                core_name = filename.replace("_libretro.info", "")
-                try:
-                    info_url = f"https://raw.githubusercontent.com/libretro/libretro-core-info/master/{filename}"
-                    req = urllib.request.Request(
-                        info_url, headers={"User-Agent": "retrobios-scraper/1.0"}
-                    )
-                    with urllib.request.urlopen(req, timeout=10) as resp:
-                        content = resp.read().decode("utf-8")
+        metadata: dict[str, dict] = {}
+        for filename in info_files:
+            core_name = filename.replace("_libretro.info", "")
+            system_slug = CORE_SYSTEM_MAP.get(core_name)
+            if not system_slug or system_slug in metadata:
+                continue
+            info_url = f"https://raw.githubusercontent.com/libretro/libretro-core-info/master/{filename}"
+            try:
+                req = urllib.request.Request(
+                    info_url, headers={"User-Agent": "retrobios-scraper/1.0"}
+                )
+                with urllib.request.urlopen(req, timeout=10) as resp:
+                    content = resp.read().decode("utf-8")
+            except urllib.error.URLError as e:
+                raise RuntimeError(f"cannot fetch {info_url}: {e}") from e
 
-                    info = {}
-                    for line in content.split("\n"):
-                        line = line.strip()
-                        if " = " in line:
-                            key, _, value = line.partition(" = ")
-                            info[key.strip()] = value.strip().strip('"')
+            info = {}
+            for line in content.split("\n"):
+                key, sep, value = line.strip().partition(" = ")
+                if sep:
+                    info[key.strip()] = value.strip().strip('"')
 
-                    fw_count = int(info.get("firmware_count", "0"))
-                    if fw_count == 0:
-                        continue
-
-                    system_name = info.get("systemname", "")
-                    manufacturer = info.get("manufacturer", "")
-                    display_name = info.get("display_name", "")
-                    info.get("categories", "")
-
-                    # Map core to our system slug via firmware paths
-                    from .coreinfo_scraper import CORE_SYSTEM_MAP
-
-                    system_slug = CORE_SYSTEM_MAP.get(core_name)
-                    if not system_slug:
-                        continue
-
-                    if system_slug not in metadata:
-                        metadata[system_slug] = {
-                            "core": core_name,
-                            "manufacturer": manufacturer,
-                            "display_name": display_name or system_name,
-                            "docs": f"https://docs.libretro.com/library/{core_name}/",
-                        }
-                except (urllib.error.URLError, urllib.error.HTTPError):
-                    continue
-        except (ConnectionError, ValueError, OSError):
-            pass
+            if int(info.get("firmware_count", "0")) == 0:
+                continue
+            metadata[system_slug] = {
+                "core": core_name,
+                "manufacturer": info.get("manufacturer", ""),
+                "display_name": info.get("display_name", "")
+                or info.get("systemname", ""),
+                "docs": f"https://docs.libretro.com/library/{core_name}/",
+            }
 
         return metadata
 

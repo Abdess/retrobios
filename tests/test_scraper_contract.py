@@ -289,3 +289,15 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
             RuntimeError
         ):
             Scraper()._fetch_installed_emulators()
+
+    def test_libretro_core_metadata_raises(self):
+        """libretro dropped every system name and manufacturer when the
+        core-info listing was refused."""
+        from unittest import mock
+
+        from scraper.libretro_scraper import Scraper
+
+        with mock.patch("urllib.request.urlopen", self._refuse), self.assertRaises(
+            RuntimeError
+        ):
+            Scraper()._fetch_core_metadata()
