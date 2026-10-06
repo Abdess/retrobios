@@ -61,7 +61,7 @@ notes: |
   the JVM default soundbank in place. VlcDir points at a VLC installation that
   vlcj scans for libvlc.
   ref: src/media/emulator/media/EmulatorMIDI.java:26-36,
-       src/main/emulator/ui/swt/Property.java:1860-1901
+       src/main/emulator/ui/swt/Property.java:1863-1904
 
 files:
   - name: M7_EmuSmw7.dll
