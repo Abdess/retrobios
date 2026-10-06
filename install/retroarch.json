@@ -5,7 +5,7 @@
   "platform": "retroarch",
   "display_name": "RetroArch",
   "version": "1.0",
-  "generated": "2026-10-05T22:37:20Z",
+  "generated": "2026-10-06T03:26:07Z",
   "base_destination": "system",
   "detect": [
     {
@@ -255,153 +255,12 @@
       }
     }
   ],
-  "total_files": 5849,
-  "total_size": 6395485306,
-  "pack_files": 8492,
-  "pack_size": 6436018470,
-  "total_omitted": 14,
-  "omitted_files": [
-    {
-      "dest": "SC-55/WAVEROM3.BIN",
-      "name": "WAVEROM3.BIN",
-      "system": "dos",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "dosbox"
-      ]
-    },
-    {
-      "dest": "SufamiTurbo.sfc",
-      "name": "SufamiTurbo.sfc",
-      "system": "nintendo-sufami-turbo",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "[BIOS] Games Express CD Card (Japan).pce",
-      "name": "[BIOS] Games Express CD Card (Japan).pce",
-      "system": "nec-pc-engine-cd",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "[BIOS] Super CD-ROM System (Japan) (v3.0).pce",
-      "name": "[BIOS] Super CD-ROM System (Japan) (v3.0).pce",
-      "system": "nec-pc-engine-cd",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "dsp1.rom",
-      "name": "dsp1.rom",
-      "system": "nintendo-snes",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "dsp1b.rom",
-      "name": "dsp1b.rom",
-      "system": "nintendo-snes",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "dsp2.rom",
-      "name": "dsp2.rom",
-      "system": "nintendo-snes",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "dsp3.rom",
-      "name": "dsp3.rom",
-      "system": "nintendo-snes",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "dsp4.rom",
-      "name": "dsp4.rom",
-      "system": "nintendo-snes",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "jagboot.rom",
-      "name": "jagboot.rom",
-      "system": "atari-jaguar",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "virtualjaguar"
-      ]
-    },
-    {
-      "dest": "jagboot_m.rom",
-      "name": "jagboot_m.rom",
-      "system": "atari-jaguar",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "virtualjaguar"
-      ]
-    },
-    {
-      "dest": "st010.rom",
-      "name": "st010.rom",
-      "system": "nintendo-snes",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "st011.rom",
-      "name": "st011.rom",
-      "system": "nintendo-snes",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "st018.rom",
-      "name": "st018.rom",
-      "system": "nintendo-snes",
-      "required": true,
-      "reason": "not_found",
-      "cores": [
-        "mesence"
-      ]
-    }
-  ],
+  "total_files": 5867,
+  "total_size": 6399851574,
+  "pack_files": 8510,
+  "pack_size": 6440384738,
+  "total_omitted": 0,
+  "omitted_files": [],
   "files": [
     {
       "dest": "3do_arcade_saot.bin",
@@ -4495,10 +4354,10 @@
     },
     {
       "dest": "pcsx2/resources/GameIndex.yaml",
-      "sha1": "40ecf6138c99a0aba775ef93240b295025a45500",
-      "sha256": "483face8f50f5e96d89528059522be3766b44f5e07e854bae1fa92ff0111d0a7",
-      "size": 2665743,
-      "repo_path": "bios/Sony/PlayStation 2/resources/GameIndex.yaml",
+      "sha1": "7efb2ed721cf0c0f0677324e09be311a8337e793",
+      "sha256": "3bf3c54d6f16d88d3669be698179bb8c2fb981ee5ce71bcb952719429a838cc1",
+      "size": 2693579,
+      "repo_path": "bios/Other/yaps2/GameIndex.yaml",
       "cores": null
     },
     {
@@ -6131,10 +5990,10 @@
     },
     {
       "dest": "Cemu/otp.bin",
-      "sha1": "f0332b7252e9c01b30bf5d5a63ceb22dc47968aa",
-      "sha256": "93c2e20cc377f2cb0fa9a2ee58c39be22e00baa94b890545e585e53b3eb4039f",
-      "size": 256,
-      "repo_path": "bios/Nintendo/3DS/Citra/sysdata/otp.bin",
+      "sha1": "aa4ebc7f94c22b04945b6c9232547ada10b71f6f",
+      "sha256": "a12993f7fe069098ab6fe1cdb43099a1dfb568223bef08ed5cb43ec93d9ff2de",
+      "size": 1024,
+      "repo_path": "bios/Nintendo/Wii U/otp.bin",
       "cores": [
         "cemu"
       ]
@@ -6397,6 +6256,16 @@
       "sha256": "5b753f6cef4cfc7fcafe1430fecbb94a739b874e55356246a46abe24097ee491",
       "size": 1048576,
       "repo_path": "bios/Roland/sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/waverom2.bin",
+      "cores": [
+        "dosbox"
+      ]
+    },
+    {
+      "dest": "SC-55/WAVEROM3.BIN",
+      "sha1": "7454b817778179806f3f9d1985b3a2ef67ace76f",
+      "sha256": "334b2d16be3c2362210fdbec1c866ad58badeb0f84fd9bf5d0ac599baf077cc2",
+      "size": 1048576,
+      "repo_path": "bios/Roland/sounddata/Nuked-SC55-Resources/ROMs/SC-55-v1.00/sc55_waverom3.bin",
       "cores": [
         "dosbox"
       ]
@@ -25830,6 +25699,96 @@
       ]
     },
     {
+      "dest": "dsp1.rom",
+      "sha1": "188d471fefea71eb53f0ee7064697ff0971b1014",
+      "sha256": "91e87d11e1c30d172556bed2211cce2efa94ba595f58c5d264809ef4d363a97b",
+      "size": 8192,
+      "repo_path": "bios/Nintendo/SNES/SNES_dsp1.rom",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
+      "dest": "dsp1b.rom",
+      "sha1": "78b724811f5f18d8c67669d9390397eb1a47a5e2",
+      "sha256": "d789cb3c36b05c0b23b6c6f23be7aa37c6e78b6ee9ceac8d2d2aa9d8c4d35fa9",
+      "size": 8192,
+      "repo_path": "bios/Nintendo/SNES/SNES_dsp1b.rom",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
+      "dest": "dsp2.rom",
+      "sha1": "198c4b1c3bfc6d69e734c5957af3dbfa26238dfb",
+      "sha256": "03ef4ef26c9f701346708cb5d07847b5203cf1b0818bf2930acd34510ffdd717",
+      "size": 8192,
+      "repo_path": "bios/Nintendo/SNES/SNES_dsp2.rom",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
+      "dest": "dsp3.rom",
+      "sha1": "558da7cb3bd3876a6ca693661ffc6c110e948cf9",
+      "sha256": "0971b08f396c32e61989d1067dddf8e4b14649d548b2188f7c541b03d7c69e4e",
+      "size": 8192,
+      "repo_path": "bios/Nintendo/SNES/SNES_dsp3.rom",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
+      "dest": "dsp4.rom",
+      "sha1": "af6478aecb6f1b67177e79c82ca04c56250a8c72",
+      "sha256": "752d03b2d74441e430b7f713001fa241f8bbcfc1a0d890ed4143f174dbe031da",
+      "size": 8192,
+      "repo_path": "bios/Nintendo/SNES/SNES_dsp4.rom",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
+      "dest": "st010.rom",
+      "sha1": "6472828403de3589433a906e2c3f3d274c0ff008",
+      "sha256": "fa9bced838fedea11c6f6ace33d1878024bdd0d02cc9485899d0bdd4015ec24c",
+      "size": 53248,
+      "repo_path": "bios/Nintendo/SNES/SNES_st010.rom",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
+      "dest": "st011.rom",
+      "sha1": "fecbae2cec76c710422486baa186ffa7ca1cf925",
+      "sha256": "8b2b3f3f3e6e29f4d21d8bc736b400bc988b7d2214ebee15643f01c1fee2f364",
+      "size": 53248,
+      "repo_path": "bios/Nintendo/SNES/SNES_st011.rom",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
+      "dest": "st018.rom",
+      "sha1": "91383b92745cc7cc4f15409ac5bc2c2f699a43f1",
+      "sha256": "6df209ab5d2524d1839c038be400ae5eb20dafc14a3771a3239cd9e8acd53806",
+      "size": 163840,
+      "repo_path": "bios/Nintendo/SNES/SNES_st018.rom",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
+      "dest": "SufamiTurbo.sfc",
+      "sha1": "ef86ea192eed03d5c413fdbbfd46043be1d7a127",
+      "sha256": "edacb453da14f825f05d1134d6035f4bf034e55f7cfb97c70c4ee107eabc7342",
+      "size": 262144,
+      "repo_path": "bios/Nintendo/SuFami Turbo/STBIOS.bin",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
       "dest": "ymf288_adpcm_rom.bin",
       "sha1": "50b6c3e288eaa12ad275d4f323267bb72b0445df",
       "sha256": "53afd0fa9c62eda3e2be939e23f3adf48a2af8ad37bb1640261726c5d5adeba8",
@@ -25855,6 +25814,26 @@
       "sha256": "7eee6516f351ccc7db286587917bec415a1d8042ff5ef87c279f38200a3418dd",
       "size": 548608,
       "repo_path": "bios/Nintendo/NES/MesenNesDB.txt",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
+      "dest": "[BIOS] Super CD-ROM System (Japan) (v3.0).pce",
+      "sha1": "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c",
+      "sha256": "e11527b3b96ce112a037138988ca72fd117a6b0779c2480d9e03eaebece3d9ce",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard3.pce",
+      "cores": [
+        "mesence"
+      ]
+    },
+    {
+      "dest": "[BIOS] Games Express CD Card (Japan).pce",
+      "sha1": "014881a959e045e00f4db8f52955200865d40280",
+      "sha256": "4b86bb96a48a4ca8375fc0109631d0b1d64f255a03b01de70594d40788ba6c3d",
+      "size": 32768,
+      "repo_path": "bios/NEC/PC Engine/gecard.pce",
       "cores": [
         "mesence"
       ]
@@ -47751,10 +47730,10 @@
     },
     {
       "dest": "np2kai/scsi.rom",
-      "sha1": "3d7166f05daad1b022fa04c2569e788580158095",
-      "sha256": "9809ed07796454d5524cce240c4f815496b82fae3644aba80778612c618d5cf7",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/scsi.rom",
+      "sha1": "451c85c46b92e6ad2ad930f055ccf0fe3049936d",
+      "sha256": "5e1efe51b2c8be901ab4283c671bd84364a574845b7269f92bdddc4dae9ae5d5",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/AppleII/scsi.rom",
       "cores": [
         "np2kai"
       ]
@@ -55646,6 +55625,26 @@
       ]
     },
     {
+      "dest": "jagboot.rom",
+      "sha1": "af643900fea84234e08b616a6d27f03f0a61db96",
+      "sha256": "f0bd29599b3dfca7f5620c011256c1dc45c9d82c428a318f965c2ba3ded2e9f9",
+      "size": 131072,
+      "repo_path": "bios/Atari/Jaguar/boot.rom",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "jagboot_m.rom",
+      "sha1": "af643900fea84234e08b616a6d27f03f0a61db96",
+      "sha256": "f0bd29599b3dfca7f5620c011256c1dc45c9d82c428a318f965c2ba3ded2e9f9",
+      "size": 131072,
+      "repo_path": "bios/Atari/Jaguar/boot.rom",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
       "dest": "WQXEmu/nc1020/obj_lu.bin",
       "sha1": "64b8a315ecbc420ae594ccced43498392988669e",
       "sha256": "d3bdc7847f3de1f7b58f12a07e51b3ca7f6d136d5f00ba626e39c591ea246c97",
@@ -56729,20 +56728,20 @@
     },
     {
       "dest": "SC-55/ROM1.BIN",
-      "sha1": "aea7a4c0c7ffe1f212f7b9faecfd728862ac6904",
-      "sha256": "d7f03bf65c1f98c9c1226f4e1d1ecd4ac778a2dc4a332568ab0d5fee7ede9042",
-      "size": 4096,
-      "repo_path": "bios/Galaksija/ROM1.BIN",
+      "sha1": "b91bb1d9dccffe831b7cfde7800a3fe32b2fbda6",
+      "sha256": "8a1eb33c7599b746c0c50283e4349a1bb1773b5c0ec0e9661219bf6c067d2042",
+      "size": 32768,
+      "repo_path": "bios/Roland/soundcanvas-roms/SC-55mk2-v1.01/rom1.bin",
       "cores": [
         "dosbox"
       ]
     },
     {
       "dest": "SC-55/ROM2.BIN",
-      "sha1": "1bae895fbdd658cfb56c53cc2139282cc1e778de",
-      "sha256": "9fc01e6beab84e61e0267fa39e23c649cdf2ccd25ad1cbfc2de0facfd160e723",
-      "size": 8192,
-      "repo_path": "bios/Sony/PlayStation 2/ROM2.BIN",
+      "sha1": "078cb5feea05e80bb9a1bb857a2163ee434fd053",
+      "sha256": "a4c9fd821059054c7e7681d61f49ce6f42ed2fe407a7ec1ba0dfdc9722582ce0",
+      "size": 524288,
+      "repo_path": "bios/Roland/sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/rom2.bin",
       "cores": [
         "dosbox"
       ]
@@ -56809,10 +56808,10 @@
     },
     {
       "dest": "np2/bios.rom",
-      "sha1": "1f5f7013f18c08ff50d7942e76c4fbd782412414",
-      "sha256": "863df0975a305110a7da4591b704e8f5dc7302f03c63603aa2dcd03e84c36ff9",
-      "size": 65536,
-      "repo_path": "bios/IBM/PC/ibmpcjr/bios.rom",
+      "sha1": "76a7360502fa0296ea93b4c537174610a834d367",
+      "sha256": "d0f5b6d96a01295ab5436d7852d2c9eea1faa87fcf016b7e6599cdd689266cd2",
+      "size": 98304,
+      "repo_path": "bios/NEC/PC-98/bios.rom",
       "cores": [
         "nekop2"
       ]
@@ -56839,20 +56838,20 @@
     },
     {
       "dest": "scummvm/extra/MT32_CONTROL.ROM",
-      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
-      "sha256": "08d68695e5bff6bbcbb751d6e4453db9f5ead0b5f41e86480798a04376dfe090",
+      "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
+      "sha256": "a73a06c23ed38370e58a11fb1b86f7ea4c547061a60d7aa62bae446235fd2dff",
       "size": 65536,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/mt32_control.rom",
       "cores": [
         "scummvm"
       ]
     },
     {
       "dest": "scummvm/extra/MT32_PCM.ROM",
-      "sha1": "289cc298ad532b702461bfc738009d9ebe8025ea",
-      "sha256": "0dc50190bb7ea3fb212c970346b771a511772b528801e7eda6d27efda8c40698",
-      "size": 1048576,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
+      "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
+      "sha256": "d9164063f293410cf33f2f64cdcea6893b44723fe41938e07ec9aef58b406238",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_mt32.rom",
       "cores": [
         "scummvm"
       ]
@@ -57490,6 +57489,16 @@
       ]
     },
     {
+      "dest": "pcsx2/bios/SCPH-10000.MEC",
+      "sha1": "3f8affbe07024ccd2f5b8374072d0928c583a862",
+      "sha256": "fbbfc6c156266ac7e9afb37f0cc53fb78fadf2f09f580e56b2da57e6539e463b",
+      "size": 4,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.MEC",
+      "cores": [
+        "yaps2"
+      ]
+    },
+    {
       "dest": "pcsx2/bios/SCPH-30004R.bin",
       "sha1": "8fa040852d4b8688f0c84bcfffc65eb208f2b432",
       "sha256": "ee7ae4cc152588b7da1dab17494a321ceafafaf799769baea4e8a28afa5044b1",
@@ -57520,6 +57529,36 @@
       ]
     },
     {
+      "dest": "pcsx2/bios/SCPH-50009_BIOS_V10_CHN_190.NVM",
+      "sha1": "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65",
+      "sha256": "5b255bce650e66efeeb3b0bebc0dff705600d05aa2e076a315d02c6a7ed6ac9a",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.NVM",
+      "cores": [
+        "yaps2"
+      ]
+    },
+    {
+      "dest": "pcsx2/bios/SCPH-50009_BIOS_V10_CHN_190.ROM2",
+      "sha1": "7aef1dd6de4b4f64f31daad615bbccdb3e62e79c",
+      "sha256": "8dc012640186c46a39fcdd64a8ab9430080a220bd0630da58c977f35725de5cf",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM2",
+      "cores": [
+        "yaps2"
+      ]
+    },
+    {
+      "dest": "pcsx2/bios/SCPH-50009_BIOS_V10_CHN_190.ROM1",
+      "sha1": "b284280341f16b1581c28ff81934bfdf403da1f0",
+      "sha256": "ad812eb36b8e7daa6106411e43840f70175f012a7a7dd289965872fe43933cc4",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM1",
+      "cores": [
+        "yaps2"
+      ]
+    },
+    {
       "dest": "pcsx2/bios/SCPH-70004.BIN",
       "sha1": "434bc0b4eb4827da0773ec0795aadc5162569a07",
       "sha256": "d6653f4e93be2f6f9e9d690a934f26cf0f6ad4e348b69f41ef736732c3a6685b",
@@ -57530,11 +57569,31 @@
       ]
     },
     {
+      "dest": "pcsx2/bios/SCPH-70004.ROM1",
+      "sha1": "cc44355ded232a2ba5309bb24d4cd55af08696b2",
+      "sha256": "b86fbccaa111ca7497630337dafea7da7320fc4f924ada22b92145ef806e7b42",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.ROM1",
+      "cores": [
+        "yaps2"
+      ]
+    },
+    {
       "dest": "pcsx2/bios/SCPH-70008_BIOS_V12_RUS_200.BIN",
       "sha1": "cce6fac0f7e682ad167e1e828b2d53192c3d5051",
       "sha256": "d6da9154a9954cafd9d3df44609236ba86c197a0b7d75380f952c4cb910b67f6",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.BIN",
+      "cores": [
+        "yaps2"
+      ]
+    },
+    {
+      "dest": "pcsx2/bios/SCPH-70008_BIOS_V12_RUS_200.NVM",
+      "sha1": "6611151e8f599230cdf19a17318e7e5ddc781961",
+      "sha256": "b1704c7da37f03db017ad7576508c61b250d9ed4f3ceda8732ea91a3034f6cbf",
+      "size": 1024,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.NVM",
       "cores": [
         "yaps2"
       ]
@@ -57790,31 +57849,11 @@
       ]
     },
     {
-      "dest": "pcsx2/bios/SCPH-50009_BIOS_V10_CHN_190.NVM",
-      "sha1": "3ffa2e74c8c8ce0e10e2069956f12d2407b91c65",
-      "sha256": "5b255bce650e66efeeb3b0bebc0dff705600d05aa2e076a315d02c6a7ed6ac9a",
-      "size": 1024,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.NVM",
-      "cores": [
-        "yaps2"
-      ]
-    },
-    {
       "dest": "pcsx2/bios/SCPH-70006_BIOS_V12_HK_200.NVM",
       "sha1": "06ccc54cdbe8b017a629155ccb66310cba9c4720",
       "sha256": "48ea5461a794fbc366798776e1dd5b734a25d0f140d75c23b642d99e48e2b76f",
       "size": 1024,
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70006_BIOS_V12_HK_200.NVM",
-      "cores": [
-        "yaps2"
-      ]
-    },
-    {
-      "dest": "pcsx2/bios/SCPH-70008_BIOS_V12_RUS_200.NVM",
-      "sha1": "6611151e8f599230cdf19a17318e7e5ddc781961",
-      "sha256": "b1704c7da37f03db017ad7576508c61b250d9ed4f3ceda8732ea91a3034f6cbf",
-      "size": 1024,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.NVM",
       "cores": [
         "yaps2"
       ]
@@ -57850,6 +57889,16 @@
       ]
     },
     {
+      "dest": "pcsx2/bios/SCPH-90006_BIOS_VX_HK _230.ROM1",
+      "sha1": "b96cf94772f01b8434038285896467884a84b0c2",
+      "sha256": "1b7c68be427e6f571596ef6b444e8b86d1b4e2a226d62f6bfc86717a798f2317",
+      "size": 524288,
+      "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.ROM1",
+      "cores": [
+        "yaps2"
+      ]
+    },
+    {
       "dest": "pcsx2/bios/ps2-0230a-20080220.nvm",
       "sha1": "258ad0f26b0b269462bbd9acbb5506d5dfbcc3d5",
       "sha256": "e017efa804f1f7d4d3da82b67d7370c5be062b4860f1cff4f898f93437d691a0",
@@ -57875,16 +57924,6 @@
       "sha256": "c4527ec1c2a3aafc6a6b31d3c455d352f28a21ea905ba7df7d7247c9cb4b9e9b",
       "size": 1024,
       "repo_path": "bios/Sony/PlayStation 2/scph39001.nvm",
-      "cores": [
-        "yaps2"
-      ]
-    },
-    {
-      "dest": "pcsx2/bios/SCPH-10000.MEC",
-      "sha1": "3f8affbe07024ccd2f5b8374072d0928c583a862",
-      "sha256": "fbbfc6c156266ac7e9afb37f0cc53fb78fadf2f09f580e56b2da57e6539e463b",
-      "size": 4,
-      "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.MEC",
       "cores": [
         "yaps2"
       ]

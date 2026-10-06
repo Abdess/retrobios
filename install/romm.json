@@ -5,7 +5,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-10-05T20:14:26Z",
+  "generated": "2026-10-06T03:26:07Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -16,9 +16,9 @@
   ],
   "standalone_copies": [],
   "total_files": 958,
-  "total_size": 1580732707,
+  "total_size": 1580216611,
   "pack_files": 960,
-  "pack_size": 1580732707,
+  "pack_size": 1580216611,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -3812,20 +3812,20 @@
     },
     {
       "dest": "nds/dsi_bios9.bin",
-      "sha1": "db61fa39ddbc5f5ed71fb19cda47609ef0201723",
-      "sha256": "664c608bd6ccfe583e87b3b924afa00f8697dc7ca92eeb6d206d68abb03d2e10",
+      "sha1": "719b9eef33692406d7170ff526069615759c4dfc",
+      "sha256": "6e9f70b51dc4f26289b597f14e2513620c2af964374a95f4c5a62b5cad199afc",
       "size": 65536,
-      "repo_path": "bios/Nintendo/DS/dsi_bios9.bin",
+      "repo_path": "bios/Nintendo/DS/NDS_Bios9i.bin",
       "cores": [
         "melonds"
       ]
     },
     {
       "dest": "nds/dsi_bios7.bin",
-      "sha1": "d2b17224e156ee5e55b5d8d9f323b1c9b86dd951",
-      "sha256": "28a13952901b4065ef3f08c3252b49a00b6525e301b7ddaa3a390b4c7cbef901",
+      "sha1": "c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53",
+      "sha256": "12a03016ba07cfd874fc002df49a2c6eb2414eb7cfa395c2043035ec5e9193e8",
       "size": 65536,
-      "repo_path": "bios/Nintendo/DS/dsi_bios7.bin",
+      "repo_path": "bios/Nintendo/DS/NDS_Bios7i.bin",
       "cores": [
         "melonds"
       ]
@@ -4632,10 +4632,10 @@
     },
     {
       "dest": "pc-9800-series/np2kai/scsi.rom",
-      "sha1": "3d7166f05daad1b022fa04c2569e788580158095",
-      "sha256": "9809ed07796454d5524cce240c4f815496b82fae3644aba80778612c618d5cf7",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/scsi.rom",
+      "sha1": "451c85c46b92e6ad2ad930f055ccf0fe3049936d",
+      "sha256": "5e1efe51b2c8be901ab4283c671bd84364a574845b7269f92bdddc4dae9ae5d5",
+      "size": 16384,
+      "repo_path": "bios/Other/Clock Signal/AppleII/scsi.rom",
       "cores": [
         "np2kai"
       ]
@@ -7642,20 +7642,20 @@
     },
     {
       "dest": "scummvm/scummvm/extra/MT32_CONTROL.ROM",
-      "sha1": "a439fbb390da38cada95a7cbb1d6ca199cd66ef8",
-      "sha256": "08d68695e5bff6bbcbb751d6e4453db9f5ead0b5f41e86480798a04376dfe090",
+      "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
+      "sha256": "a73a06c23ed38370e58a11fb1b86f7ea4c547061a60d7aa62bae446235fd2dff",
       "size": 65536,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/cm32l_control.rom",
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/mt32_control.rom",
       "cores": [
         "scummvm"
       ]
     },
     {
       "dest": "scummvm/scummvm/extra/MT32_PCM.ROM",
-      "sha1": "289cc298ad532b702461bfc738009d9ebe8025ea",
-      "sha256": "0dc50190bb7ea3fb212c970346b771a511772b528801e7eda6d27efda8c40698",
-      "size": 1048576,
-      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_cm32l.rom",
+      "sha1": "f6b1eebc4b2d200ec6d3d21d51325d5b48c60252",
+      "sha256": "d9164063f293410cf33f2f64cdcea6893b44723fe41938e07ec9aef58b406238",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/mt32-roms/pcm_mt32.rom",
       "cores": [
         "scummvm"
       ]

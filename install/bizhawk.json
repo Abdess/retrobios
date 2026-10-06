@@ -5,7 +5,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-10-05T20:14:26Z",
+  "generated": "2026-10-06T03:26:07Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -20,33 +20,12 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 816,
-  "total_size": 2570871683,
-  "pack_files": 818,
-  "pack_size": 2570871683,
-  "total_omitted": 2,
-  "omitted_files": [
-    {
-      "dest": "jagboot.rom",
-      "name": "jagboot.rom",
-      "system": "atari-jaguar",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "virtualjaguar"
-      ]
-    },
-    {
-      "dest": "jagboot_m.rom",
-      "name": "jagboot_m.rom",
-      "system": "atari-jaguar",
-      "required": false,
-      "reason": "not_found",
-      "cores": [
-        "virtualjaguar"
-      ]
-    }
-  ],
+  "total_files": 817,
+  "total_size": 2571002755,
+  "pack_files": 819,
+  "pack_size": 2571002755,
+  "total_omitted": 0,
+  "omitted_files": [],
   "files": [
     {
       "dest": "panafz1.bin",
@@ -3422,30 +3401,20 @@
     },
     {
       "dest": "dsi_bios9.bin",
-      "sha1": "db61fa39ddbc5f5ed71fb19cda47609ef0201723",
-      "sha256": "664c608bd6ccfe583e87b3b924afa00f8697dc7ca92eeb6d206d68abb03d2e10",
+      "sha1": "719b9eef33692406d7170ff526069615759c4dfc",
+      "sha256": "6e9f70b51dc4f26289b597f14e2513620c2af964374a95f4c5a62b5cad199afc",
       "size": 65536,
-      "repo_path": "bios/Nintendo/DS/dsi_bios9.bin",
+      "repo_path": "bios/Nintendo/DS/NDS_Bios9i.bin",
       "cores": [
         "melonds"
       ]
     },
     {
       "dest": "dsi_bios7.bin",
-      "sha1": "d2b17224e156ee5e55b5d8d9f323b1c9b86dd951",
-      "sha256": "28a13952901b4065ef3f08c3252b49a00b6525e301b7ddaa3a390b4c7cbef901",
+      "sha1": "c7c7570bfe51c3c7c5da3b01331b94e7e7cb4f53",
+      "sha256": "12a03016ba07cfd874fc002df49a2c6eb2414eb7cfa395c2043035ec5e9193e8",
       "size": 65536,
-      "repo_path": "bios/Nintendo/DS/dsi_bios7.bin",
-      "cores": [
-        "melonds"
-      ]
-    },
-    {
-      "dest": "dsi_firmware.bin",
-      "sha1": "d2a5af338f09c5cbdd5d7628db5b9c075c69b616",
-      "sha256": "1d7c771de535e6e07182fc9820ac32e76c6f0b5bcefd256a861fdfab144761ec",
-      "size": 131072,
-      "repo_path": "bios/Nintendo/Nintendo DS/dsi_firmware.bin",
+      "repo_path": "bios/Nintendo/DS/NDS_Bios7i.bin",
       "cores": [
         "melonds"
       ]
@@ -6836,6 +6805,26 @@
       "sha256": "f8d03a5a31fc3bd01a4f85f60d3dbe1656a6770f2a9ca9bad0a66c03ed1bd512",
       "size": 262144,
       "repo_path": "bios/Atari/Jaguar/[BIOS] Atari Jaguar Developer CD (World).j64",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "jagboot.rom",
+      "sha1": "af643900fea84234e08b616a6d27f03f0a61db96",
+      "sha256": "f0bd29599b3dfca7f5620c011256c1dc45c9d82c428a318f965c2ba3ded2e9f9",
+      "size": 131072,
+      "repo_path": "bios/Atari/Jaguar/boot.rom",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "jagboot_m.rom",
+      "sha1": "af643900fea84234e08b616a6d27f03f0a61db96",
+      "sha256": "f0bd29599b3dfca7f5620c011256c1dc45c9d82c428a318f965c2ba3ded2e9f9",
+      "size": 131072,
+      "repo_path": "bios/Atari/Jaguar/boot.rom",
       "cores": [
         "virtualjaguar"
       ]
