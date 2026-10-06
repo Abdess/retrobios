@@ -329,5 +329,33 @@ class Pc98ScsiBiosIsNotTheAppleCard(unittest.TestCase):
         self.assertIn("PC-98", path or "")
 
 
+class BundledFilesComeFromTheirOwnTree(unittest.TestCase):
+    """EmuCoreX was served NetherSX2's shaders and Supermodel-Dojo super3's
+    Games.xml: the collection lacked their copies and the ties were broken by
+    index order."""
+
+    CASES = (
+        ("emucorex", "tfx.glsl"),
+        ("emucorex", "fxaa.fx"),
+        ("emucorex", "GameIndex.yaml"),
+        ("supermodel-dojo", "Games.xml"),
+    )
+
+    def test_each_resolves_to_its_owner(self):
+        db_path = REPO_ROOT / "database.json"
+        if not db_path.exists():
+            self.skipTest("no database.json")
+        db = load_database(str(db_path))
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        for owner, name in self.CASES:
+            entry = next(e for e in profiles[owner]["files"] if e["name"] == name)
+            with self.subTest(profile=owner, file=name):
+                path, _status = resolve_local_file(
+                    dict(entry, source_profile=owner), db,
+                    dest_hint=entry.get("path") or entry.get("standalone_path") or "",
+                )
+                self.assertIn(f"/{owner}/", path or "")
+
+
 if __name__ == "__main__":
     unittest.main()
