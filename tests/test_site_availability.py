@@ -17,7 +17,8 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from generate_site import _availability_check, _file_badges
+from common import load_database  # noqa: E402
+from generate_site import _availability_check, _file_badges  # noqa: E402
 
 SHA1 = "a" * 40
 DB = {
@@ -40,8 +41,6 @@ class UnsourceableIsNotHeld(unittest.TestCase):
         self.assertNotIn("in repo", badges)
 
     def test_no_profile_entry_is_shown_held(self):
-        from common import load_database
-
         db_path = REPO_ROOT / "database.json"
         if not db_path.exists():
             self.skipTest("database.json is not built")

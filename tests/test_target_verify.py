@@ -17,8 +17,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from common import build_target_cores_cache
-from generate_pack import _target_cores_for
+from common import build_target_cores_cache  # noqa: E402
+from generate_pack import _target_cores_for  # noqa: E402
 
 
 class CheckReadsTheTargetLikeTheBuild(unittest.TestCase):

@@ -19,7 +19,12 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from truth import _diff_system, _match_renames, _merge_file_into_system  # noqa: E402
+from truth import (  # noqa: E402
+    _diff_system,
+    _match_renames,
+    _merge_file_into_system,
+    generate_platform_truth,
+)
 
 
 def _entry(name: str, **hashes) -> dict:
@@ -205,8 +210,6 @@ class OnlySystemDirectoryEntries(unittest.TestCase):
     verify deliberately leave them out of."""
 
     def test_a_file_read_elsewhere_is_not_asked_of_the_platform(self):
-        from truth import generate_platform_truth
-
         profiles = {
             "core": {
                 "emulator": "Core",
