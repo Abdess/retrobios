@@ -123,6 +123,49 @@ class HashesTheFormatCannotHold(unittest.TestCase):
         self.assertFalse(EmuDeck().states(unhashed, "md5"))
 
 
+class EmuDeckWritesItsCorrections(unittest.TestCase):
+    """A correction replaced nothing: every withdrawal was refused, the run
+    counted the correction anyway and validate failed on it."""
+
+    SCRIPT = "checkPS1BIOS(){\n  local hashes=(%s)\n}\n"
+
+    def _systems(self, corrected: NativeFile, other: NativeFile) -> dict:
+        from scraper.emudeck_scraper import FUNCTION_HASH_MAP
+
+        system_id = FUNCTION_HASH_MAP["checkPS1BIOS"]
+        corrected.native_system = other.native_system = system_id
+        return {system_id: NativeSystem(system_id, files=[corrected, other])}
+
+    def test_a_correction_replaces_its_value(self):
+        corrected = NativeFile("scph5501.bin", "scph5501.bin", "psx",
+                               platform={"md5": A}, truth={"md5": B}, corrections=["md5"])
+        other = NativeFile("scph1001.bin", "scph1001.bin", "psx", platform={"md5": C})
+        systems = self._systems(corrected, other)
+        exporter = EmuDeck()
+        produced = exporter.render(systems, None, {"checkBIOS.sh": self.SCRIPT % f"{A} {C}"})
+        text = produced["checkBIOS.sh"]
+        self.assertIn(B, text)
+        self.assertNotIn(A, text)
+        self.assertTrue(exporter.states(corrected, "md5"))
+        self.assertEqual(
+            [i for i in exporter.validate(systems, produced) if "checkPS1BIOS" in i], []
+        )
+
+    def test_a_withdrawal_is_refused_and_not_counted(self):
+        corrected = NativeFile("scph5501.bin", "scph5501.bin", "psx",
+                               platform={"md5": A}, truth={"md5": B}, corrections=["md5"])
+        other = NativeFile("scph1001.bin", "scph1001.bin", "psx", platform={"md5": C})
+        systems = self._systems(corrected, other)
+        exporter = EmuDeck()
+        d = "d" * 32
+        produced = exporter.render(systems, None, {"checkBIOS.sh": self.SCRIPT % f"{A} {C} {d}"})
+        self.assertIn(d, produced["checkBIOS.sh"])
+        self.assertFalse(exporter.states(corrected, "md5"))
+        self.assertEqual(
+            [i for i in exporter.validate(systems, produced) if "checkPS1BIOS" in i], []
+        )
+
+
 class ModelKeepsOneFileOneEntry(unittest.TestCase):
     def test_size_describes_the_hash_written(self):
         fe = NativeFile("boot.bin", "dc/boot.bin", "dc",
