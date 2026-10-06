@@ -34,6 +34,7 @@ import slots
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    PROFILE_IDENTITY_FIELDS,
     build_target_cores_cache,
     build_zip_contents_index,
     check_inside_zip,
@@ -602,6 +603,11 @@ def find_undeclared_files(
                     "checks": sorted(checks) if checks else [],
                     "source_ref": f.get("source_ref"),
                     "expected": _build_expected(f, checks),
+                    **{
+                        field: f.get(field)
+                        for field in PROFILE_IDENTITY_FIELDS
+                        if f.get(field) not in (None, "", [])
+                    },
                     "sha1": f.get("sha1"),
                     "md5": f.get("md5"),
                 }

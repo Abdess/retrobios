@@ -6,6 +6,7 @@ this module builds so the report and the pack withdraw the same files."""
 
 from __future__ import annotations
 
+from common import PROFILE_IDENTITY_FIELDS
 from common import expand_platform_declared_names
 from common import load_emulator_profiles
 from common import resolution_is_hash_exact
@@ -442,7 +443,7 @@ def _collect_emulator_extras(
         # validation block; dropping those fields here would let a same-named
         # but different payload enter a generated pack.
         expected = u.get("expected") or {}
-        for identity in ("sha1", "md5", "sha256", "crc32", "size"):
+        for identity in PROFILE_IDENTITY_FIELDS:
             declared = u.get(identity)
             if declared in (None, "", []):
                 declared = expected.get(identity)
@@ -527,7 +528,7 @@ def _collect_emulator_extras(
             # The same identity the first pass carries: without it the copy
             # resolves on its name alone and a same-named file of another
             # game fills the slot the profile marks as not held.
-            for identity in ("sha1", "md5", "sha256", "crc32", "size", "unsourceable"):
+            for identity in PROFILE_IDENTITY_FIELDS:
                 if f.get(identity) not in (None, "", []):
                     extra[identity] = f[identity]
             extras.append(extra)
