@@ -415,6 +415,17 @@ class TestVerifyAtPin(unittest.TestCase):
         self.assertEqual(result.status, "MOVED")
         self.assertEqual(result.start, 7)
 
+    def test_a_name_stem_elsewhere_does_not_move_a_ref(self):
+        """linapple cites the PRAVETS82 option; the stem also names an install line."""
+        lines = ['option(ENABLE_ROM_CLONE_PRAVETS "" OFF)', "", "", "", "", "",
+                 "", "", "", "", "", "", "res/roms/pravets82.rom"]
+        part = RefPart("CMakeLists.txt", 1, 1, "CMakeLists.txt:1")
+        result = profile_sync.verify_at_pin(
+            part, lines, ["0123456789abcdef0123456789abcdef", "pravets82"],
+            ["0123456789abcdef0123456789abcdef"],
+        )
+        self.assertEqual(result.status, "ANCHORED")
+
     def test_declared_value_on_several_lines_is_ambiguous(self):
         lines = ["load()", "", "", "", 'a("cafebabe")', "", 'b("cafebabe")']
         part = RefPart("a.c", 1, 1, "a.c:1")

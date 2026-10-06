@@ -1183,8 +1183,8 @@ def verify_at_pin(part: RefPart, pin_lines, tokens, hash_tokens=()) -> PartResul
         {
             index
             for index, line in enumerate(pin_lines, 1)
-            for token in tokens
-            if token in line.lower()
+            for token in hash_tokens
+            if token.lower() in line.lower()
         }
     )
     if not elsewhere:
