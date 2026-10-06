@@ -46,5 +46,15 @@ class GuidesPointAtTheReadPath(unittest.TestCase):
                 )
 
 
+class GuidesNameShippedInstallers(unittest.TestCase):
+    def test_every_installer_named_exists(self):
+        """RetroBat's guide sent users to an install.bat no release carries."""
+        import re
+
+        source = (REPO_ROOT / "scripts" / "packreadme.py").read_text(encoding="utf-8")
+        for name in set(re.findall(r"install\.(?:bat|ps1|sh|py)", source)):
+            with self.subTest(installer=name):
+                self.assertTrue((REPO_ROOT / name).is_file())
+
 if __name__ == "__main__":
     unittest.main()
