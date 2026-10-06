@@ -2480,6 +2480,10 @@ def _refuse_unapplied_flags(args, parser) -> None:
     about an artifact the caller did not name. Run before any quick-exit
     mode, since --verify-packs and --manifest-targets return early.
     """
+    # Only --all chooses among registered platforms; every other mode names
+    # its own platform, emulator, system or hash.
+    if args.include_archived and not args.all:
+        parser.error("--include-archived requires --all")
     # Parsed before the quick-exit modes: --verify-packs returns early and
     # still needs the region priority list to narrow its expectation.
     args.regions = []
