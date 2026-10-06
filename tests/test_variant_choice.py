@@ -81,8 +81,10 @@ class OneImplementation(unittest.TestCase):
         for name in ("verify.py", "generate_pack.py"):
             source = (REPO_ROOT / "scripts" / name).read_text(encoding="utf-8")
             with self.subTest(module=name):
-                self.assertGreaterEqual(len(re.findall(r"find_validated_variant\(", source)), 2
-                                        if name == "generate_pack.py" else 3)
+                # Directly or through validated_choice, the one place that
+                # picks the variant a destination ships.
+                calls = re.findall(r"(?:find_validated_variant|validated_choice)\(", source)
+                self.assertGreaterEqual(len(calls), 2 if name == "generate_pack.py" else 3)
 
 
 if __name__ == "__main__":
