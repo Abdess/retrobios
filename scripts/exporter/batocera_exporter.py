@@ -41,6 +41,18 @@ class Exporter(BaseExporter):
     def carries() -> frozenset[str]:
         return frozenset({"md5"})
 
+    @classmethod
+    def writable(cls, fe: NativeFile, require: str = "") -> bool:
+        """An addition the format can state whole.
+
+        checkBios compares one md5 for a plain file (altmd5 is read only for
+        a zippedFile): written with the first of four, retrodream's boot.bin
+        refused the three other dumps the core accepts.
+        """
+        if fe.platform is None and len(set(fe.hashes("md5"))) > 1:
+            return False
+        return super().writable(fe, require)
+
     @staticmethod
     def native_sources() -> dict[str, str]:
         return {"batocera-systems": SOURCE_URL}
