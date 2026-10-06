@@ -355,6 +355,12 @@ class TestFallbackGroups(unittest.TestCase):
             region.fallback_groups(groups, self.index, ["north-america"]), ["fds"]
         )
 
+    def test_an_untagged_bios_answers_every_region(self):
+        """VICE's generic kernal is untagged beside its Japanese one: the C64
+        was reported as having no BIOS for North America."""
+        groups = {"fds": [("disksys.rom", "disksys.rom"), ("generic.rom", "generic.rom")]}
+        self.assertEqual(region.fallback_groups(groups, self.index, ["north-america"]), [])
+
     def test_no_requested_regions_reports_nothing(self):
         groups = {"fds": [("disksys.rom", "disksys.rom")]}
         self.assertEqual(region.fallback_groups(groups, self.index, []), [])

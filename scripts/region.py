@@ -255,16 +255,25 @@ def fallback_groups(
     index: dict[str, dict],
     requested: list[str],
 ) -> list[str]:
-    """Group IDs where no candidate matched, so the whole group was kept."""
+    """Group IDs where no candidate matched, so the whole group was kept.
+
+    A world file, or one that declares no region at all, answers every
+    region: the C64 kernal VICE loads by default is untagged, and a group
+    holding it beside a Japanese and a Swedish kernal does have a BIOS for
+    North America.
+    """
     if not requested:
         return []
     out: list[str] = []
     for group_id, members in groups.items():
         ranked = _competing_ranks(members, index, requested)
-        has_world = any(
-            WORLD in lookup_regions(index, destination, name)
-            for destination, name in members
+        served = any(
+            not regions or WORLD in regions
+            for regions in (
+                lookup_regions(index, destination, name)
+                for destination, name in members
+            )
         )
-        if ranked and not has_world and min(r for r, _ in ranked) == len(requested):
+        if ranked and not served and min(r for r, _ in ranked) == len(requested):
             out.append(group_id)
     return sorted(out)
