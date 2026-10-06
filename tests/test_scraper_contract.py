@@ -229,9 +229,6 @@ class RecalboxBuildMode(unittest.TestCase):
         self.assertEqual(standalone, ["amiberry", "dolphin", "hatari"])
 
 
-if __name__ == "__main__":
-    unittest.main()
-
 
 class UnreadableReleaseStopsTheScrape(unittest.TestCase):
     """A failed tag lookup fell back to master, or to an empty or invented
@@ -301,3 +298,7 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
             RuntimeError
         ):
             Scraper()._fetch_core_metadata()
+
+
+if __name__ == "__main__":
+    unittest.main()
