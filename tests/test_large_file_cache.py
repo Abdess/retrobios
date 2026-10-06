@@ -19,6 +19,7 @@ import threading
 import unittest
 import urllib.error
 from pathlib import Path
+from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
@@ -295,6 +296,25 @@ class PreservedLargeFileEntries(unittest.TestCase):
         self.assertEqual(count, 1)
         self.assertEqual(files["b" * 40]["path"], "bios/Sony/PS3/FW.PUP")
         self.assertEqual((self.tmp / "bios/Sony/PS3/FW.PUP").read_bytes(), b"firmware")
+
+    def test_an_interrupted_restore_leaves_no_file_behind(self):
+        cache = self.tmp / "cache" / "FW.PUP"
+        cache.parent.mkdir()
+        cache.write_bytes(b"firmware")
+        common.fetch_large_file = lambda *_a, **_k: str(cache)
+        db_path = self._write_db(
+            {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
+        )
+
+        def interrupted(_src, dst, *_a, **_k):
+            Path(dst).write_bytes(b"firm")
+            raise KeyboardInterrupt
+
+        with mock.patch.object(self.generate_db.shutil, "copy2", interrupted), \
+                self.assertRaises(KeyboardInterrupt):
+            self.generate_db._preserve_large_file_entries({}, db_path)
+        directory = self.tmp / "bios/Sony/PS3"
+        self.assertEqual(list(directory.iterdir()), [])
 
     def test_a_file_sharing_only_the_name_is_not_preserved(self):
         common.fetch_large_file = lambda *_a, **_k: "/cache/large/FW.PUP"

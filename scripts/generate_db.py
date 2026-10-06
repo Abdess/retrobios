@@ -15,6 +15,7 @@ import json
 import os
 import shutil
 import sys
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -270,6 +271,24 @@ def _load_gitignored_large_files() -> set[str]:
     }
 
 
+def _restore(cached: str, path: str) -> None:
+    """Copy a fetched asset to its registered path, whole or not at all.
+
+    An interrupted copy at the final name is a truncated file the next scan
+    hashes and publishes; a scratch beside it is swapped in only once full.
+    """
+    directory = os.path.dirname(path)
+    os.makedirs(directory, exist_ok=True)
+    fd, scratch = tempfile.mkstemp(dir=directory, prefix=".restore-")
+    os.close(fd)
+    try:
+        shutil.copy2(cached, scratch)
+        os.replace(scratch, path)
+    finally:
+        if os.path.exists(scratch):
+            os.remove(scratch)
+
+
 def _preserve_large_file_entries(files: dict, db_path: str) -> int:
     """Keep the entries of release assets the checkout does not hold.
 
@@ -309,8 +328,7 @@ def _preserve_large_file_entries(files: dict, db_path: str) -> int:
             expected_md5=entry.get("md5", ""),
         )
         if cached and not os.path.exists(path):
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            shutil.copy2(cached, path)
+            _restore(cached, path)
         files[sha1] = entry
         count += 1
     return count
