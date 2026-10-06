@@ -38,10 +38,9 @@ from common import (
     load_emulator_profiles,
     load_provenance_snapshots,
     parse_md5_list,
-    preferred_profile,
     require_yaml,
+    resolve_platform_cores,
     unique_emulator_profiles,
-    upstream_profile_index,
     write_if_changed as _write_artifact,
     yaml_load,
 )
@@ -2925,7 +2924,7 @@ def generate_gap_analysis(
 
 
 def _render_xref_by_platform(
-    coverages: dict, unique: dict, core_to_profile: dict
+    coverages: dict, unique: dict
 ) -> list[str]:
     """Which cores each platform pulls in, and what they need."""
     lines: list[str] = []
@@ -2944,26 +2943,14 @@ def _render_xref_by_platform(
         )
         lines.append("")
 
-        # Resolve which profiles this platform uses
-        if platform_cores == "all_libretro":
-            matched = {
-                k: v for k, v in unique.items() if "libretro" in v.get("type", "")
-            }
-        elif isinstance(platform_cores, list):
-            matched = {}
-            for cname in platform_cores:
-                cname_str = str(cname)
-                if cname_str in unique:
-                    matched[cname_str] = unique[cname_str]
-                elif cname_str in core_to_profile:
-                    pkey = core_to_profile[cname_str]
-                    matched[pkey] = unique[pkey]
-        else:
-            # Fallback: system intersection
-            psystems = set(config.get("systems", {}).keys())
-            matched = {
-                k: v for k, v in unique.items() if set(v.get("systems", [])) & psystems
-            }
+        # The cores the builder and verify resolve: a hand copy here dropped
+        # the libretro set a list naming retroarch pulls in, and the system
+        # fallback EmuDeck relies on.
+        matched = {
+            key: unique[key]
+            for key in resolve_platform_cores(config, unique)
+            if key in unique
+        }
 
         if platform_cores == "all_libretro":
             lines.append(f"    **{len(matched)} cores** (all libretro)")
@@ -3027,7 +3014,7 @@ def _render_xref_by_platform(
 
 
 def _render_xref_by_upstream(
-    coverages: dict, unique: dict, core_to_profile: dict
+    coverages: dict, unique: dict
 ) -> list[str]:
     """The same relation read the other way: one row per upstream."""
     lines: list[str] = []
@@ -3052,20 +3039,8 @@ def _render_xref_by_upstream(
     # Build platform membership per core
     platform_membership: dict[str, set[str]] = {}
     for pname, cov in coverages.items():
-        config = cov["config"]
-        pcores = config.get("cores", [])
-        if pcores == "all_libretro":
-            for k, v in unique.items():
-                if "libretro" in v.get("type", ""):
-                    platform_membership.setdefault(k, set()).add(pname)
-        elif isinstance(pcores, list):
-            for cname in pcores:
-                cname_str = str(cname)
-                if cname_str in unique:
-                    platform_membership.setdefault(cname_str, set()).add(pname)
-                elif cname_str in core_to_profile:
-                    pkey = core_to_profile[cname_str]
-                    platform_membership.setdefault(pkey, set()).add(pname)
+        for key in resolve_platform_cores(cov["config"], unique):
+            platform_membership.setdefault(key, set()).add(pname)
 
     for upstream_url in sorted(by_upstream.keys()):
         cores = by_upstream[upstream_url]
@@ -3102,12 +3077,6 @@ def generate_cross_reference(
         k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")
     }
 
-    # Core name -> the profile it designates, the rule target filtering uses.
-    index = upstream_profile_index(unique)
-    core_to_profile: dict[str, str] = {
-        core: preferred_profile(index, core) for core in index
-    }
-
     total_cores = len(unique)
     total_upstreams = len({
         p.get("upstream", p.get("source", ""))
@@ -3131,8 +3100,8 @@ def generate_cross_reference(
         "",
     ]
 
-    lines.extend(_render_xref_by_platform(coverages, unique, core_to_profile))
-    lines.extend(_render_xref_by_upstream(coverages, unique, core_to_profile))
+    lines.extend(_render_xref_by_platform(coverages, unique))
+    lines.extend(_render_xref_by_upstream(coverages, unique))
 
     lines.extend(["", f"*Generated on {_timestamp()}*"])
     return "\n".join(lines) + "\n"
