@@ -123,6 +123,10 @@ def _merge_file_into_system(
             existing.setdefault("_source_refs", set())
         if file_entry.get("required") and not existing.get("required"):
             existing["required"] = True
+        if file_entry.get("required"):
+            # Which cores need it: `required` above is the union, true when
+            # any core needs it, and a package of one core must not read it.
+            existing["_required_by"] = existing.get("_required_by", set()) | {emu_name}
         for h in ("sha1", "md5", "sha256", "crc32"):
             theirs = file_entry.get(h, "")
             ours = existing.get(h, "")
@@ -214,6 +218,7 @@ def _merge_file_into_system(
     elif isinstance(crc, str) and crc != crc.lower():
         entry["crc32"] = crc.lower()
     entry["_cores"] = {emu_name}
+    entry["_required_by"] = {emu_name} if file_entry.get("required") else set()
     sr = file_entry.get("source_ref")
     if sr is not None:
         sr_key = _serialize_source_ref(sr)
@@ -387,6 +392,7 @@ def generate_platform_truth(
     for sys_id, sys_data in systems.items():
         for fe in sys_data.get("files", []):
             fe["_cores"] = sorted(fe.get("_cores", set()))
+            fe["_required_by"] = sorted(fe.get("_required_by", set()))
             fe["_source_refs"] = sorted(fe.get("_source_refs", set()))
         # Add per-system coverage
         cov = system_cores.get(sys_id, {})
