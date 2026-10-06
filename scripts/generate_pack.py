@@ -2019,6 +2019,7 @@ def _validate_args(args, parser):
         parser.error("--source requires --platform or --all")
     if has_from_md5:
         for flag, given in (
+            ("--manifest", args.manifest),
             ("--target", args.target),
             ("--required-only", args.required_only),
             ("--source", source_given),
@@ -2431,27 +2432,70 @@ def _refuse_unapplied_flags(args, parser) -> None:
         parser.error("--one-per-slot is incompatible with --manifest-targets")
 
     _refuse_for_all_variants(args, parser)
-    if args.verify_packs and not args.all_variants:
-        # Checks packs already on disk against the platform's own list,
-        # narrowed by region and target; it narrows by nothing else.
-        for flag, given in (
-            ("--one-per-slot", args.one_per_slot),
-            ("--required-only", args.required_only),
-            ("--source", args.source != "full"),
-            ("--system", args.system),
-        ):
-            if given:
-                parser.error(f"{flag} is incompatible with --verify-packs")
-    if args.manifest_targets:
-        # One manifest per hardware target, from the target files themselves:
-        # it reads none of the narrowing flags.
-        for flag, given in (
-            ("--target", args.target),
-            ("--required-only", args.required_only),
-            ("--source", args.source != "full"),
-        ):
-            if given:
-                parser.error(f"{flag} is incompatible with --manifest-targets")
+    mode = next(
+        (
+            name for name, on in (
+                ("--manifest-targets", args.manifest_targets),
+                ("--verify-packs", args.verify_packs and not args.all_variants),
+                ("--list", args.list),
+                ("--list-emulators", args.list_emulators),
+                ("--list-systems", args.list_systems),
+                ("--list-targets", args.list_targets),
+            ) if on
+        ),
+        None,
+    )
+    if mode is None:
+        return
+    given = _given_flags(args)
+    for flag in sorted(given - QUICK_MODE_FLAGS[mode] - {mode}):
+        parser.error(f"{flag} is incompatible with {mode}")
+
+
+# What each mode that returns early reads. Anything else given beside it is
+# refused: the mode would answer about an artifact the caller did not name.
+QUICK_MODE_FLAGS: dict[str, set[str]] = {
+    # Checks packs already on disk against the platform's own list, narrowed
+    # by region and target and by nothing else.
+    "--verify-packs": {"--platform", "--all", "--target", "--region", "--include-archived"},
+    # One manifest per hardware target, from the target files themselves.
+    "--manifest-targets": set(),
+    "--list": set(),
+    "--list-emulators": set(),
+    "--list-systems": {"--platform"},
+    "--list-targets": {"--platform"},
+}
+
+
+def _given_flags(args) -> set[str]:
+    """Flags that select or narrow what a run produces, as typed."""
+    flags = {
+        "--platform": args.platform,
+        "--all": args.all,
+        "--emulator": args.emulator,
+        "--system": args.system,
+        "--standalone": args.standalone,
+        "--split": args.split,
+        "--group-by": args.group_by != "system",
+        "--manifest": args.manifest,
+        "--manifest-targets": args.manifest_targets,
+        "--verify-packs": args.verify_packs,
+        "--all-variants": args.all_variants,
+        "--from-md5": args.from_md5,
+        "--from-md5-file": args.from_md5_file,
+        "--required-only": args.required_only,
+        "--source": args.source != "full",
+        "--target": args.target,
+        "--region": args.region,
+        "--one-per-slot": args.one_per_slot,
+        "--list": args.list,
+        "--list-emulators": args.list_emulators,
+        "--list-systems": args.list_systems,
+        "--list-targets": args.list_targets,
+        "--include-archived": args.include_archived,
+        "--refresh-data": args.refresh_data,
+    }
+    return {flag for flag, on in flags.items() if on}
 
 
 def main():

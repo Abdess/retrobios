@@ -35,6 +35,7 @@ import slots
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
     PROFILE_IDENTITY_FIELDS,
+    list_platform_system_ids,
     build_target_cores_cache,
     build_zip_contents_index,
     check_inside_zip,
@@ -1716,11 +1717,36 @@ def main():
         except ValueError as exc:
             parser.error(str(exc))
 
+    # A listing mode reads --platform at most; anything else that narrows is
+    # refused rather than printed past (generate_pack applies the same table).
+    listing = next(
+        (flag for flag, on in (
+            ("--list-emulators", args.list_emulators),
+            ("--list-systems", args.list_systems),
+            ("--list-targets", args.list_targets),
+        ) if on),
+        None,
+    )
+    if listing:
+        reads_platform = listing != "--list-emulators"
+        for flag, on in (
+            ("--platform", args.platform and not reads_platform),
+            ("--all", args.all),
+            ("--emulator", args.emulator),
+            ("--system", args.system),
+            ("--region", getattr(args, "region", None)),
+            ("--target", getattr(args, "target", None)),
+        ):
+            if on:
+                parser.error(f"{flag} is incompatible with {listing}")
     if args.list_emulators:
         list_emulator_profiles(args.emulators_dir)
         return
     if args.list_systems:
-        list_system_ids(args.emulators_dir)
+        if args.platform:
+            list_platform_system_ids(args.platform, args.platforms_dir)
+        else:
+            list_system_ids(args.emulators_dir)
         return
 
     if args.list_targets:
