@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import os
 import stat
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -26,6 +27,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import generate_pack as builder  # noqa: E402
+from artifacts import artifact_lock  # noqa: E402
 import split_pack  # noqa: E402
 
 LIMIT = 4096
@@ -141,10 +143,6 @@ class SplitHoldsTheDirectory(SplitFixture):
     the pack the build had just written."""
 
     def test_a_held_directory_is_left_alone(self):
-        import subprocess
-
-        from artifacts import artifact_lock
-
         for target in (self.dist, self.pack):
             with self.subTest(target=target.name), artifact_lock(str(self.dist)):
                 proc = subprocess.run(

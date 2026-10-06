@@ -10,17 +10,23 @@ exercised is a promise to contributors backed by nothing.
 
 from __future__ import annotations
 
+import importlib
 import sys
 import unittest
+import urllib.error
 from pathlib import Path
+from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
+from scraper import emudeck_scraper, libretro_scraper  # noqa: E402
 from scraper.base_scraper import (  # noqa: E402
     BaseScraper,
     BiosRequirement,
     ChangeSet,
+    fetch_github_latest_version,
+    github_headers,
 )
 
 
@@ -238,14 +244,9 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
 
     @staticmethod
     def _refuse(*_args, **_kwargs):
-        import urllib.error
-
         raise urllib.error.HTTPError("https://api.github.com/x", 403, "rate limited", {}, None)
 
     def test_every_pinned_scraper_raises(self):
-        import importlib
-        from unittest import mock
-
         for name in (
             "scraper.bizhawk_scraper",
             "scraper.romm_scraper",
@@ -259,45 +260,29 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
                 module.Scraper()
 
     def test_a_release_lookup_raises(self):
-        from unittest import mock
-
-        from scraper.base_scraper import fetch_github_latest_version
-
         with mock.patch("urllib.request.urlopen", self._refuse), self.assertRaises(
             RuntimeError
         ):
             fetch_github_latest_version("libretro/RetroArch")
 
     def test_the_token_is_sent(self):
-        from unittest import mock
-
-        from scraper.base_scraper import github_headers
-
         with mock.patch.dict("os.environ", {"GITHUB_TOKEN": "t0k"}):
             self.assertEqual(github_headers()["Authorization"], "Bearer t0k")
 
     def test_emudeck_cores_raise(self):
         """EmuDeck wrote cores: [] when the GitHub listing was refused."""
-        from unittest import mock
-
-        from scraper.emudeck_scraper import Scraper
-
         with mock.patch("urllib.request.urlopen", self._refuse), self.assertRaises(
             RuntimeError
         ):
-            Scraper()._fetch_installed_emulators()
+            emudeck_scraper.Scraper()._fetch_installed_emulators()
 
     def test_libretro_core_metadata_raises(self):
         """libretro dropped every system name and manufacturer when the
         core-info listing was refused."""
-        from unittest import mock
-
-        from scraper.libretro_scraper import Scraper
-
         with mock.patch("urllib.request.urlopen", self._refuse), self.assertRaises(
             RuntimeError
         ):
-            Scraper()._fetch_core_metadata()
+            libretro_scraper.Scraper()._fetch_core_metadata()
 
 
 if __name__ == "__main__":

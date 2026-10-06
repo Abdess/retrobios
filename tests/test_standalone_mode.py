@@ -11,12 +11,16 @@ standalone_cores dropped them from its pack.
 from __future__ import annotations
 
 import json
+import sys
 import unittest
 from pathlib import Path
 
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from cross_reference import cross_reference  # noqa: E402
 
 DUAL_PROFILE = {
     "emulator": "Dual",
@@ -73,11 +77,6 @@ class CrossReferenceReadsTheBuildThePlatformRuns(unittest.TestCase):
     where verify and the pack builder found 26."""
 
     def _gaps(self, standalone_cores):
-        import sys
-
-        sys.path.insert(0, str(REPO_ROOT / "scripts"))
-        from cross_reference import cross_reference
-
         empty_db = {"files": {}, "indexes": {}}
         report = cross_reference(
             {"dual": DUAL_PROFILE}, {}, empty_db, standalone_cores=standalone_cores
