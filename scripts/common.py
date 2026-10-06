@@ -1733,6 +1733,7 @@ from artifacts import (  # noqa: E402,F401
     write_if_changed,
     ArtifactLockBusy,
     artifact_lock,
+    hold_artifact_lock,
     _TIMESTAMP_PATTERNS,
     _strip_timestamps,
 )

@@ -17,7 +17,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from common import ArtifactLockBusy, artifact_lock  # noqa: E402
+from common import ArtifactLockBusy, artifact_lock, hold_artifact_lock  # noqa: E402
 
 
 class ArtifactLockTest(unittest.TestCase):
@@ -154,6 +154,43 @@ class PackLockCliTest(unittest.TestCase):
             )
         self.assertEqual(proc.returncode, 1, proc.stdout + proc.stderr)
         self.assertIn("is in use by another run", proc.stdout)
+
+
+class HeldLockTest(unittest.TestCase):
+    """pipeline.py took the lock step by step: between the pack build and the
+    integrity check dist/ was free, another run's purge emptied it, and the
+    check reported every platform SKIP and passed."""
+
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+
+    def _child_locks(self, env: dict) -> subprocess.CompletedProcess:
+        code = (
+            "import sys; sys.path.insert(0, 'scripts')\n"
+            "from common import artifact_lock\n"
+            f"with artifact_lock({self.dir!r}):\n    pass\n"
+        )
+        return subprocess.run(
+            [sys.executable, "-c", code], cwd=str(REPO_ROOT), env=env,
+            capture_output=True, text=True, timeout=60, check=False,
+        )
+
+    def test_a_spawned_step_inherits_the_hold(self):
+        with hold_artifact_lock(self.dir):
+            self.assertEqual(self._child_locks(dict(os.environ)).returncode, 0)
+
+    def test_any_other_run_is_refused_for_the_whole_hold(self):
+        with hold_artifact_lock(self.dir):
+            env = {k: v for k, v in os.environ.items() if not k.startswith("RETROBIOS_")}
+            proc = self._child_locks(env)
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("ArtifactLockBusy", proc.stderr)
+        self.assertNotIn("RETROBIOS_HELD_ARTIFACT_DIR", os.environ)
+        self.assertEqual(self._child_locks(dict(os.environ)).returncode, 0)
+
+    def test_the_pipeline_holds_its_output_for_the_run(self):
+        source = (REPO_ROOT / "scripts" / "pipeline.py").read_text(encoding="utf-8")
+        self.assertIn("hold_artifact_lock(args.output_dir)", source)
 
 
 if __name__ == "__main__":

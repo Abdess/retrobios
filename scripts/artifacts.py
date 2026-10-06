@@ -72,6 +72,11 @@ def _strip_timestamps(text: str) -> str:
 class ArtifactLockBusy(RuntimeError):
     """Raised when another process already holds the artifact directory."""
 
+# A run that holds an artifact directory for its whole duration names it
+# here for the steps it spawns: they would otherwise be refused by it.
+HELD_LOCK_ENV = "RETROBIOS_HELD_ARTIFACT_DIR"
+
+
 @contextlib.contextmanager
 def artifact_lock(directory: str, exclusive: bool = True):
     """Serialize access to a shared artifact directory across processes.
@@ -88,6 +93,9 @@ def artifact_lock(directory: str, exclusive: bool = True):
         return
 
     os.makedirs(directory, exist_ok=True)
+    if os.environ.get(HELD_LOCK_ENV) == os.path.realpath(directory):
+        yield
+        return
     lock_path = os.path.join(directory, ".lock")
     mode = fcntl.LOCK_EX if exclusive else fcntl.LOCK_SH
     with open(lock_path, "w") as handle:
@@ -102,6 +110,26 @@ def artifact_lock(directory: str, exclusive: bool = True):
             yield
         finally:
             fcntl.flock(handle, fcntl.LOCK_UN)
+
+
+@contextlib.contextmanager
+def hold_artifact_lock(directory: str):
+    """Hold a directory exclusively across several child steps.
+
+    A lock taken step by step frees the directory between them: another
+    run can purge the packs one step built before the next step checks
+    them. The children this process spawns inherit the hold.
+    """
+    with artifact_lock(directory):
+        previous = os.environ.get(HELD_LOCK_ENV)
+        os.environ[HELD_LOCK_ENV] = os.path.realpath(directory)
+        try:
+            yield
+        finally:
+            if previous is None:
+                os.environ.pop(HELD_LOCK_ENV, None)
+            else:
+                os.environ[HELD_LOCK_ENV] = previous
 
 def _build_timestamp(db: dict | None = None) -> str:
     """Timestamp for generated artifacts.
