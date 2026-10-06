@@ -142,12 +142,23 @@ class Exporter(BaseExporter):
 
     @classmethod
     def _insertion_point(cls, help_text: str) -> int | None:
-        """Where a name joins the list, or None when there is no list."""
+        """Where a name joins the list, or None when there is no list.
+
+        A list of alternatives ("a or b", "a/b") is not an enumeration: an
+        appended ", c" reads as one more required file and the plural turns
+        "one of these" into "all of these". Such a list is left alone.
+        """
         clause = _BIOS_CLAUSE.search(help_text)
         if clause is None:
             return None
-        names = cls._names_in(clause.group(0))
-        return clause.start() + names[-1].end() if names else None
+        text = clause.group(0)
+        names = cls._names_in(text)
+        if not names:
+            return None
+        between = text[names[0].start():names[-1].end()]
+        if re.search(r"\bor\b|/", between):
+            return None
+        return clause.start() + names[-1].end()
 
     @staticmethod
     def _in_search_order(candidates: list[NativeFile]) -> list[str]:
@@ -163,6 +174,19 @@ class Exporter(BaseExporter):
             if fe.name not in names:
                 names.append(fe.name)
         return names
+
+    @staticmethod
+    def _required_for(fe: NativeFile, core: str) -> bool:
+        """Whether the package's own core needs the file.
+
+        The merged `required` is true when any core needs it: pcsx_rearmed
+        runs in HLE without a BIOS, yet four were proposed as required for
+        its package because other PSX cores require them.
+        """
+        required_by = (fe.truth or {}).get("_required_by")
+        if required_by is None:
+            return fe.required
+        return core in required_by
 
     @staticmethod
     def _join(names: list[str]) -> str:
@@ -235,7 +259,7 @@ class Exporter(BaseExporter):
             candidates = [
                 fe
                 for fe in files
-                if fe.required
+                if self._required_for(fe, core or "")
                 and not (
                     {fe.name.lower()}
                     | {str(a).lower() for a in (fe.native("aliases", []) or [])}

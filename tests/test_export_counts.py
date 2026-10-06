@@ -177,5 +177,23 @@ class RecalboxKeepsItsOwnNotes(unittest.TestCase):
                         truth={"md5": A, "note": "Loaded at libretro.c:120"})
         self.assertNotIn("note=", Recalbox()._bios_element(fe, "psx"))
 
+class RetroPieProposals(unittest.TestCase):
+    def test_required_is_read_for_the_package_core(self):
+        from exporter.retropie_exporter import Exporter as RetroPie
+
+        fe = NativeFile("scph5501.bin", "scph5501.bin", "psx",
+                        truth={"required": True, "_required_by": ["beetle_psx"],
+                               "_cores": ["beetle_psx", "pcsx_rearmed"]})
+        self.assertTrue(RetroPie._required_for(fe, "beetle_psx"))
+        self.assertFalse(RetroPie._required_for(fe, "pcsx_rearmed"))
+
+    def test_a_list_of_alternatives_is_not_extended(self):
+        from exporter.retropie_exporter import Exporter as RetroPie
+
+        alternatives = "Copy the required BIOS file a.rom or b.rom to $biosdir"
+        enumeration = "Copy the required BIOS files a.rom and b.rom to $biosdir"
+        self.assertIsNone(RetroPie._insertion_point(alternatives))
+        self.assertIsNotNone(RetroPie._insertion_point(enumeration))
+
 if __name__ == "__main__":
     unittest.main()
