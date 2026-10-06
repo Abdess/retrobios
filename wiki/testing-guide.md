@@ -38,8 +38,12 @@ python -m unittest tests.test_site_exports -v
 python -m unittest tests.test_site_validation -v
 ```
 
-The only dependency is `pyyaml`. No test framework beyond the standard
-library `unittest` module.
+Running the build needs `pyyaml` alone, and so does most of the suite. The
+schema contract tests also need `jsonschema[format-nongpl]`, which the CI
+installs: without it they are reported as skipped, so install it before a pull
+request that touches a profile, a platform file or a schema
+(`pip install "jsonschema[format-nongpl]"`). No test framework beyond the
+standard library `unittest` module.
 
 ## Modules at a glance
 

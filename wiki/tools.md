@@ -1,6 +1,7 @@
 # Tools - RetroBIOS
 
-All tools are Python scripts in `scripts/`. Single dependency: `pyyaml`.
+All tools are Python scripts in `scripts/`. They depend on `pyyaml`; only
+`validate_schemas.py` also needs `jsonschema[format-nongpl]`.
 
 ## Pipeline
 

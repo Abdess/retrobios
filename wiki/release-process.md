@@ -26,32 +26,41 @@ hosted runner should rebuild and re-upload.
 ## deploy-site.yml - Deploy Documentation Site
 
 **Trigger.** Push to `main` when any of these paths change: `platforms/`,
-`emulators/`, `provenance/`, `wiki/`, `scripts/generate_site.py`,
-`scripts/generate_readme.py`, `scripts/verify.py`, `scripts/common.py`,
-`database.json`, `release.json`, `mkdocs.yml`. Also manual dispatch.
+`emulators/`, `provenance/`, `wiki/`, `schemas/`, `tests/`, `docs_assets/`,
+`install/`, `install.py`, `database.json`, `release.json`, `mkdocs.yml`, the
+workflow itself, and every script the build runs or imports. Also manual
+dispatch.
 
-The list is the set of inputs the site is generated from. Adding a new input to
-`generate_site.py` means adding its path here, or the site silently goes stale.
+The list is the set of inputs the site is generated from. A script that
+`generate_site.py`, `generate_readme.py` or another build step starts to import
+must be added to it, or the site silently goes stale;
+`tests/test_workflow_paths.py` computes the import closure and fails when one
+is missing.
 
 **Steps:**
 
 1. Checkout, Python 3.12
-2. Install `pyyaml`, `mkdocs-material>=9.7.5,<10`, `pymdown-extensions>=10.14`
-3. Restore large files from the `large-files` release, refresh data directories
-4. Run `generate_site.py` (converts YAML data into MkDocs pages and rewrites
+2. Install `pyyaml`, `jsonschema[format-nongpl]==4.26.0`,
+   `mkdocs-material>=9.7.5,<10`, `pymdown-extensions>=10.14`
+3. Run `validate_schemas.py`: the data contracts, checked before anything is
+   generated (see below)
+4. Restore large files from the `large-files` release, refresh data directories
+5. Run `generate_site.py` (converts YAML data into MkDocs pages and rewrites
    `mkdocs.yml`)
-5. Run `generate_readme.py` (rebuilds README.md and CONTRIBUTING.md)
-6. `mkdocs build --strict` to produce the static site
-7. Run `validate_site.py` on the rendered HTML (metadata, headings, image
+6. Run `generate_readme.py` (rebuilds README.md and CONTRIBUTING.md)
+7. `mkdocs build --strict` to produce the static site
+8. Run `validate_site.py` on the rendered HTML (metadata, headings, image
    alternatives, duplicate ids, local links and fragments)
-8. Require the committed README and CONTRIBUTING to match what the generator
+9. Require the committed README and CONTRIBUTING to match what the generator
    just produced. `write_if_changed()` compares content with the timestamp line
    stripped, so a run that only moves the clock leaves the files untouched and
    the check stays meaningful
-9. Upload artifact, deploy to GitHub Pages
+10. Upload artifact, deploy to GitHub Pages
 
-Data contracts are validated with `scripts/validate_schemas.py` before the site
-is generated: `database.json`, the install and target manifests, the site API
+Data contracts are validated with `scripts/validate_schemas.py` at step 3, before
+the site is generated. It refuses to run without the checkers for the `date-time`
+and `uri` formats the schemas declare, which `jsonschema` only has with the
+`format-nongpl` extra. It covers `database.json`, the install and target manifests, the site API
 envelopes and the stats file, plus the semantic invariants those schemas cannot
 express (declared totals matching their lists, no destination both installed
 and omitted).
