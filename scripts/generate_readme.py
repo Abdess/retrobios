@@ -15,6 +15,7 @@ import json
 import os
 import sys
 from datetime import datetime, timezone
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
@@ -33,17 +34,24 @@ import release_record
 from verify import verify_platform
 
 
+# The repository's profiles wherever the script is run from: a bare
+# "emulators" read the working directory, and a run elsewhere counted 0 cores.
+_EMULATORS_DIR = str(Path(__file__).resolve().parent.parent / "emulators")
+
+
 def compute_coverage(
     platform_name: str,
     platforms_dir: str,
     db: dict,
     data_registry: dict | None = None,
     supplemental_names: set[str] | None = None,
+    emulators_dir: str = _EMULATORS_DIR,
 ) -> dict:
     config = load_platform_config(platform_name, platforms_dir)
     result = verify_platform(
         config,
         db,
+        emulators_dir,
         data_dir_registry=data_registry,
         supplemental_names=supplemental_names,
     )
@@ -59,7 +67,7 @@ def compute_coverage(
     core_missing = len(undeclared) - core_present
     # Files a profile marks unsourceable never reach the undeclared list, so
     # the gap they represent has to be counted back in.
-    profiles = load_emulator_profiles("emulators")
+    profiles = load_emulator_profiles(emulators_dir)
     unsourceable_names = {
         f.get("name", "")
         for emu in resolve_platform_cores(config, profiles)
