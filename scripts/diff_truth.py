@@ -207,7 +207,8 @@ def main() -> None:
         json.dump(reports, sys.stdout, indent=2)
         print()
 
-    if compared < len(platforms) and (args.platform or not compared):
+    # A named platform must be compared; --all must compare at least one.
+    if compared < (len(platforms) if args.platform else 1):
         print(f"compared {compared} of {len(platforms)} platform(s)", file=sys.stderr)
         sys.exit(1)
 

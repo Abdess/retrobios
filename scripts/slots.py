@@ -350,6 +350,14 @@ def arbitrate(conflict: Conflict, mode: str, addressee: str = "platform") -> Dec
     return Decision(conflict, conflict.platform_claim, FRONTEND_CHECKS_CONTENT)
 
 
+def _pinned_elsewhere(claims: list[Claim], winner: str | None) -> set[str]:
+    """Emulators that pin content the served file does not carry."""
+    return {
+        c.emulator for c in claims
+        if c.emulator and c.local_path != winner and resolution_is_hash_exact(c.status)
+    }
+
+
 def format_decision(decision: Decision) -> str:
     """One line naming the contested slot, the winner and the ground for it."""
     conflict = decision.conflict
@@ -357,11 +365,7 @@ def format_decision(decision: Decision) -> str:
         winner = decision.winner.local_path
         # A claim that only matched a path is answered by whatever file sits
         # there; only one that pins content can be left wanting.
-        pinned_elsewhere = {
-            c.emulator for c in conflict.profile_claims
-            if c.emulator and c.local_path != winner
-            and resolution_is_hash_exact(c.status)
-        }
+        pinned_elsewhere = _pinned_elsewhere(conflict.profile_claims, winner)
         served = sorted({
             c.emulator for c in conflict.profile_claims if c.emulator
         } - pinned_elsewhere)

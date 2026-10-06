@@ -71,6 +71,14 @@ def parse_verify_counts(output: str) -> dict[str, tuple[int, int]]:
     return counts
 
 
+def _full_pack_label(label: str) -> str:
+    """The pack name, or "" for a reduced variant such as [source=platform]."""
+    meta = re.search(r"\s+\[([^\]]+)\]$", label)
+    if meta is None:
+        return label
+    return label[: meta.start()] if meta.group(1) == "source=full" else ""
+
+
 def parse_pack_counts(output: str) -> dict[str, tuple[int, int]]:
     """Extract per-pack OK/total from generate_pack output.
 
@@ -85,11 +93,7 @@ def parse_pack_counts(output: str) -> dict[str, tuple[int, int]]:
             # the full, unreduced pack is what verify describes: with
             # --all-variants the six variants shared one label and the last
             # (platform, required) was compared to the full report.
-            label = m.group(1).strip()
-            meta = re.search(r"\s+\[([^\]]+)\]$", label)
-            current_label = label[: meta.start()] if meta else label
-            if meta and meta.group(1) != "source=full":
-                current_label = ""
+            current_label = _full_pack_label(m.group(1).strip())
             continue
         if not current_label:
             continue
@@ -99,7 +103,6 @@ def parse_pack_counts(output: str) -> dict[str, tuple[int, int]]:
         base_m = re.search(r"\((\d+) baseline", line)
         ok_m = re.search(r"(\d+)/(\d+) files OK", line)
         if base_m and ok_m:
-            int(base_m.group(1))
             ok, total = int(ok_m.group(1)), int(ok_m.group(2))
             counts[current_label] = (ok, total)
         elif ok_m:
