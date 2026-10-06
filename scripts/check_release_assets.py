@@ -24,7 +24,7 @@ import sys
 from collections.abc import Iterable
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_database
+from common import composition_tier, load_database
 from largefiles import (
     LARGE_FILES_RELEASE,
     LARGE_FILES_REPO,
@@ -129,7 +129,7 @@ def _section_for(path: str) -> str:
         return "Arcade"
     if top == "QEMU":
         return "Virtual machine firmware"
-    if top in ("RPG Maker", "ScummVM"):
+    if composition_tier(path) == "game_data":
         return "Game engine data"
     if top in ("Apple", "Commodore", "Atari", "Sinclair", "Amstrad"):
         return "Computer"
