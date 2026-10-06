@@ -626,6 +626,7 @@ def platform_region_groups(
     target_cores: set[str] | None = None,
     include_extras: bool = True,
     include_all: bool = False,
+    required_only: bool = False,
 ) -> tuple[dict[str, list[tuple[str, str]]], dict[tuple[str, str, str], str]]:
     """Group a platform's pack candidates the way region filtering reads them.
 
@@ -639,6 +640,10 @@ def platform_region_groups(
     for sys_id, system in systems.items():
         members = groups.setdefault(sys_id, [])
         for file_entry in system.get("files", []):
+            if required_only and file_entry.get("required") is False:
+                # Decided over what the pack keeps: an optional winner
+                # removed afterwards left its slot empty.
+                continue
             dest = sanitize_pack_path(
                 file_entry.get("destination", file_entry.get("name", ""))
             )
@@ -659,6 +664,8 @@ def platform_region_groups(
         target_cores=target_cores,
         include_all=include_all,
     ):
+        if required_only and extra.get("required") is False:
+            continue
         dest = sanitize_pack_path(extra.get("destination", extra.get("name", "")))
         if not dest:
             continue
