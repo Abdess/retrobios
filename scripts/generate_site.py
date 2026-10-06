@@ -525,7 +525,7 @@ def build_emulator_gap_report(
     The gap analysis page and the published gaps export must not compute this
     twice and drift; both read this one report.
     """
-    from common import expand_platform_declared_names
+    from common import _norm_system_id, expand_platform_declared_names
     from cross_reference import cross_reference as run_cross_reference
 
     all_declared: set[str] = set()
@@ -538,7 +538,7 @@ def build_emulator_gap_report(
             for fe in system.get("files", []):
                 fname = fe.get("name", "")
                 if fname:
-                    declared.setdefault(sys_id, set()).add(fname)
+                    declared.setdefault(_norm_system_id(sys_id), set()).add(fname)
 
     unique_profiles = {
         k: v
@@ -2217,46 +2217,30 @@ def _availability_check(db: dict, data_names):
     missing while the gap report called it held would describe a
     different collection on two pages of the same site.
     """
-    from cross_reference import _resolve_source
+    from cross_reference import entry_source
 
     by_name = db.get("indexes", {}).get("by_name", {})
     by_name_lower = {k.lower(): k for k in by_name}
     by_path_suffix = db.get("indexes", {}).get("by_path_suffix", {})
-    by_md5 = db.get("indexes", {}).get("by_md5", {})
-    db_files = db.get("files", {})
+
+    index = {
+        "by_name": by_name,
+        "by_name_lower": by_name_lower,
+        "by_path_suffix": by_path_suffix,
+        "by_md5": db.get("indexes", {}).get("by_md5", {}),
+        "by_sha256": db.get("indexes", {}).get("by_sha256", {}),
+        "by_crc32": db.get("indexes", {}).get("by_crc32", {}),
+        "db_files": db.get("files", {}),
+        "data_names": data_names,
+    }
 
     def _file_available(f: dict) -> bool:
         """Check if a file is available using the same resolution as cross_reference."""
-        fname = f.get("name", "")
-        if not fname:
+        if not f.get("name"):
             return False
-        storage = f.get("storage", "")
-        if storage in ("release", "large_file"):
+        if f.get("storage", "") in ("release", "large_file"):
             return True
-        src = _resolve_source(
-            fname, by_name, by_name_lower, data_names, by_path_suffix,
-            f, db_files,
-        )
-        if src is not None:
-            return True
-        path_field = f.get("path", "")
-        if path_field and path_field != fname:
-            src = _resolve_source(
-                path_field, by_name, by_name_lower, data_names,
-                by_path_suffix, f, db_files,
-            )
-            if src is not None:
-                return True
-        md5_raw = f.get("md5", "")
-        if md5_raw:
-            for md5_val in parse_md5_list(md5_raw):
-                if by_md5.get(md5_val):
-                    return True
-        # A profile lists several sha1 when the code accepts several dumps.
-        sha1 = f.get("sha1") or []
-        if any(value in db_files for value in ([sha1] if isinstance(sha1, str) else sha1)):
-            return True
-        return False
+        return entry_source(f, index) is not None
 
     return _file_available
 
