@@ -492,6 +492,16 @@ class PipelineRegressions(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertFalse(pipeline.check_consistency(verify, pack))
 
+    def test_only_the_full_variant_feeds_the_comparison(self):
+        """--all-variants printed six packs under one label; the last won."""
+        output = "\n".join([
+            "Generating pack for RetroArch [source=full]...",
+            "  a.zip: 5 files packed (5 baseline + 0 from cores), 535/535 files OK",
+            "Generating pack for RetroArch [source=platform, required]...",
+            "  b.zip: 5 files packed (5 baseline + 0 from cores), 530/530 files OK",
+        ])
+        self.assertEqual(pipeline.parse_pack_counts(output), {"RetroArch": (535, 535)})
+
     def test_slot_step_reaches_the_summary(self):
         source = Path(pipeline.__file__).read_text(encoding="utf-8")
         self.assertIn('results["slots"] = ok', source)
