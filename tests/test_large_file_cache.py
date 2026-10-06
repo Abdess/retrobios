@@ -259,7 +259,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         return path
 
     def test_stale_entry_for_a_rescanned_path_is_dropped(self):
-        common.fetch_large_file = lambda *a, **k: None
+        common.fetch_large_file = lambda *_a, **_k: None
         db_path = self._write_db(
             {
                 "a" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"},
@@ -273,7 +273,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         self.assertEqual(list(files), ["a" * 40])
 
     def test_absent_large_file_is_still_preserved(self):
-        common.fetch_large_file = lambda *a, **k: None
+        common.fetch_large_file = lambda *_a, **_k: None
         db_path = self._write_db(
             {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
@@ -286,7 +286,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         cache = self.tmp / "cache" / "FW.PUP"
         cache.parent.mkdir()
         cache.write_bytes(b"firmware")
-        common.fetch_large_file = lambda *a, **k: str(cache)
+        common.fetch_large_file = lambda *_a, **_k: str(cache)
         db_path = self._write_db(
             {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
@@ -297,7 +297,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         self.assertEqual((self.tmp / "bios/Sony/PS3/FW.PUP").read_bytes(), b"firmware")
 
     def test_a_file_sharing_only_the_name_is_not_preserved(self):
-        common.fetch_large_file = lambda *a, **k: "/cache/large/FW.PUP"
+        common.fetch_large_file = lambda *_a, **_k: "/cache/large/FW.PUP"
         db_path = self._write_db(
             {"c" * 40: {"name": "FW.PUP", "path": "bios/Sony/PSP/FW.PUP"}}
         )
@@ -308,7 +308,7 @@ class PreservedLargeFileEntries(unittest.TestCase):
         self.assertEqual(files, {})
 
     def test_a_second_revision_under_a_rescanned_path_is_dropped(self):
-        common.fetch_large_file = lambda *a, **k: "/cache/large/FW.PUP"
+        common.fetch_large_file = lambda *_a, **_k: "/cache/large/FW.PUP"
         db_path = self._write_db(
             {"b" * 40: {"name": "FW.PUP", "path": "bios/Sony/PS3/FW.PUP"}}
         )
@@ -492,7 +492,7 @@ class DownloadFailuresAndRevisions(unittest.TestCase):
         shutil.rmtree(self.dir, ignore_errors=True)
 
     def test_a_stalled_stream_leaves_no_scratch(self):
-        largefiles.urllib.request.urlopen = lambda *a, **k: _StalledResponse()
+        largefiles.urllib.request.urlopen = lambda *_a, **_k: _StalledResponse()
         result = largefiles.fetch_large_file(
             "big.bin", self.dir, expected_md5=hashlib.md5(PAYLOAD_A).hexdigest(),
             registered=[],
@@ -503,7 +503,7 @@ class DownloadFailuresAndRevisions(unittest.TestCase):
     def test_another_revision_is_kept_not_evicted(self):
         cached = Path(self.dir, "PS3UPDAT.PUP")
         cached.write_bytes(PAYLOAD_A)
-        largefiles.urllib.request.urlopen = lambda *a, **k: (_ for _ in ()).throw(
+        largefiles.urllib.request.urlopen = lambda *_a, **_k: (_ for _ in ()).throw(
             urllib.error.URLError("offline")
         )
         result = largefiles.fetch_large_file(
@@ -560,7 +560,7 @@ class GameDataHasOneDefinition(unittest.TestCase):
         trees: dict[str, set[str]] = {}
         for record in db["files"].values():
             parts = record["path"].split("/")
-            if len(parts) > 2 and parts[0] == "bios":
+            if parts[0] == "bios" and parts[2:]:
                 trees.setdefault(parts[1], set()).update(
                     names.get(record["name"], {"unreferenced"})
                 )
