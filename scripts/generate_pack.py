@@ -2389,6 +2389,36 @@ def _run_platform_packs(
         sys.exit(1)
 
 
+def _refuse_for_all_variants(args, parser) -> None:
+    """Flags --all-variants would override, or modes that never read it."""
+    if not args.all_variants:
+        return
+    # It builds the six source x required combinations itself: a --source
+    # or --required-only beside it would be overridden, and the modes that
+    # build one pack (emulator, system, hashes) never read it.
+    for flag, given in (
+        ("--source", args.source != "full"),
+        ("--required-only", args.required_only),
+        ("--emulator", args.emulator),
+        ("--from-md5", args.from_md5 or args.from_md5_file),
+    ):
+        if given:
+            parser.error(f"{flag} is incompatible with --all-variants")
+    if args.system and not (args.platform or args.all):
+        parser.error("--all-variants requires --platform or --all")
+    if args.verify_packs and args.manifest:
+        parser.error("--verify-packs is incompatible with --manifest")
+    if args.verify_packs:
+        # The check that follows the build reads the full pack's name.
+        for flag, given in (
+            ("--system", args.system),
+            ("--one-per-slot", args.one_per_slot),
+            ("--split", args.split),
+        ):
+            if given:
+                parser.error(f"{flag} is incompatible with --verify-packs")
+
+
 def _refuse_unapplied_flags(args, parser) -> None:
     """Refuse every flag the requested mode would not apply.
 
@@ -2409,32 +2439,7 @@ def _refuse_unapplied_flags(args, parser) -> None:
     if args.one_per_slot and args.manifest_targets:
         parser.error("--one-per-slot is incompatible with --manifest-targets")
 
-    # --all-variants builds the six source x required combinations itself:
-    # a --source or --required-only beside it would be overridden, and the
-    # modes that build one pack (emulator, system, hashes) never read it.
-    if args.all_variants:
-        for flag, given in (
-            ("--source", args.source != "full"),
-            ("--required-only", args.required_only),
-            ("--emulator", args.emulator),
-            ("--from-md5", args.from_md5 or args.from_md5_file),
-        ):
-            if given:
-                parser.error(f"{flag} is incompatible with --all-variants")
-        if args.system and not (args.platform or args.all):
-            parser.error("--all-variants requires --platform or --all")
-        if args.verify_packs and args.manifest:
-            parser.error("--verify-packs is incompatible with --manifest")
-        if args.verify_packs:
-            # The check that follows the build reads the full pack's name.
-            for flag, given in (
-                ("--system", args.system),
-                ("--one-per-slot", args.one_per_slot),
-                ("--split", args.split),
-            ):
-                if given:
-                    parser.error(f"{flag} is incompatible with --verify-packs")
-
+    _refuse_for_all_variants(args, parser)
     if args.verify_packs and not args.all_variants:
         # Checks packs already on disk against the platform's own list,
         # narrowed by region and target; it narrows by nothing else.
