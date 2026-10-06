@@ -57,6 +57,24 @@ class NativeFile:
             return "both"
         return "platform" if self.platform is not None else "truth"
 
+    def _identity_source(self) -> str:
+        """Which side's content fields describe the file: one side, or both.
+
+        Mixing them field by field wrote the truth's size and crc beside the
+        platform's sha1, a record no file satisfies. Both sides are merged
+        only where they agree on some hash; where they contradict, the truth
+        decides alone; where the truth declares none, the platform does.
+        """
+        truth = {f: set(_hash_values(self.truth or {}, f)) for f in HASH_FIELDS}
+        plat = {f: set(_hash_values(self.platform or {}, f)) for f in HASH_FIELDS}
+        if not any(truth.values()):
+            return "platform"
+        if not any(plat.values()):
+            return "truth"
+        if any(truth[f] & plat[f] for f in HASH_FIELDS):
+            return "both"
+        return "truth"
+
     def hashes(self, field_name: str) -> list[str]:
         """Accepted values for a hash, truth first when it has an opinion.
 
@@ -67,6 +85,11 @@ class NativeFile:
         """
         truth_values = _hash_values(self.truth or {}, field_name)
         platform_values = _hash_values(self.platform or {}, field_name)
+        source = self._identity_source()
+        if source == "platform":
+            return platform_values
+        if source == "truth":
+            return truth_values
         if truth_values and platform_values and not set(truth_values) & set(
             platform_values
         ):
@@ -113,8 +136,8 @@ class NativeFile:
         a name-matched 480-byte fbneo boot.bin turned RomM's Dreamcast
         boot.bin into size 480 beside its 2 MB md5, which never verifies.
         """
-        truth_hashed = any(_hash_values(self.truth or {}, f) for f in HASH_FIELDS)
-        order = (self.truth, self.platform) if truth_hashed else (self.platform, self.truth)
+        source = self._identity_source()
+        order = (self.platform, self.truth) if source == "platform" else (self.truth, self.platform)
         for entry in order:
             if entry and entry.get("size"):
                 return int(entry["size"])
@@ -289,7 +312,15 @@ def build_native_model(
 
             def by_name(candidate: NativeFile) -> bool:
                 theirs = _match_key(candidate.platform or {})[1]
-                return bool(t_name) and theirs == t_name
+                if not t_name or theirs != t_name:
+                    return False
+                # A shared name with two declared sizes is two files: fbneo's
+                # 480-byte boot.bin is not RomM's 2 MB Dreamcast boot.bin.
+                t_size = truth_entry.get("size")
+                p_size = (candidate.platform or {}).get("size")
+                if isinstance(t_size, int) and isinstance(p_size, int) and t_size != p_size:
+                    return False
+                return True
 
             def by_hash(candidate: NativeFile) -> bool:
                 if not t_hashes:

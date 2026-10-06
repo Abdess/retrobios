@@ -135,5 +135,30 @@ class ModelKeepsOneFileOneEntry(unittest.TestCase):
         self.assertEqual(len(systems["psx"].files), 1)
 
 
+class OneFileOneIdentity(unittest.TestCase):
+    def test_a_contradicting_truth_does_not_borrow_platform_fields(self):
+        fe = NativeFile("boot.bin", "dc/boot.bin", "dc",
+                        platform={"size": 2097152, "md5": A, "sha1": "1" * 40, "crc32": "aaaaaaaa"},
+                        truth={"size": 480, "crc32": "bbbbbbbb"})
+        self.assertEqual(fe.hashes("sha1"), [])
+        self.assertEqual(fe.hashes("crc32"), ["bbbbbbbb"])
+        self.assertEqual(fe.size(), 480)
+
+    def test_agreeing_sides_still_merge(self):
+        fe = NativeFile("x.bin", "x.bin", "s",
+                        platform={"md5": A, "sha1": "1" * 40}, truth={"md5": A})
+        self.assertEqual(fe.hashes("sha1"), ["1" * 40])
+
+    def test_a_name_with_another_size_is_another_file(self):
+        scraped = {"systems": {"dc": {"files": [
+            {"name": "boot.bin", "destination": "dc/boot.bin", "size": 2097152, "md5": A},
+        ]}}}
+        truth = {"systems": {"dc": {"files": [
+            {"name": "boot.bin", "path": "fbneo/boot.bin", "size": 480, "crc32": "bbbbbbbb"},
+        ]}}}
+        systems, _report = build_native_model(truth, scraped)
+        declared = next(f for f in systems["dc"].files if f.platform is not None)
+        self.assertIsNone(declared.truth)
+
 if __name__ == "__main__":
     unittest.main()
