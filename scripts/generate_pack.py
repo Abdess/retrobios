@@ -2457,6 +2457,18 @@ def _refuse_unapplied_flags(args, parser) -> None:
             parser.error("--region is incompatible with --manifest-targets")
     if args.one_per_slot and args.manifest_targets:
         parser.error("--one-per-slot is incompatible with --manifest-targets")
+    # Only the platform pack path refreshes the data directories; elsewhere
+    # the cache on disk was packed as it stood.
+    if args.refresh_data:
+        if args.offline:
+            parser.error("--refresh-data is incompatible with --offline")
+        for flag, on in (
+            ("--emulator", args.emulator),
+            ("--system", args.system and not (args.platform or args.all)),
+            ("--from-md5", args.from_md5 or args.from_md5_file),
+        ):
+            if on:
+                parser.error(f"--refresh-data is incompatible with {flag}")
 
     _refuse_for_all_variants(args, parser)
     mode = next(
