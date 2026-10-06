@@ -32,7 +32,7 @@ from common import (
     resolve_local_file,
     runs_standalone,
 )
-from validation import read_from_system_dir
+from validation import outside_gap_scope
 
 yaml = require_yaml()
 
@@ -369,26 +369,7 @@ def _cross_reference_profile(
             })
             continue
 
-        # Skip pattern placeholders (e.g., <bios>.bin, <user-selected>.bin)
-        if "<" in fname or ">" in fname or "*" in fname:
-            continue
-
-        # Skip UI-imported files with explicit path: null (not resolvable by pack)
-        if "path" in f and f["path"] is None:
-            continue
-
-        # Skip the entries of the build the platform does not run
-        file_mode = f.get("mode", "both")
-        if file_mode == "standalone" and not is_standalone:
-            continue
-        if file_mode == "libretro" and is_standalone:
-            continue
-
-        if not read_from_system_dir(f):
-            continue
-
-        # Skip filename-agnostic files (handled by agnostic scan)
-        if f.get("agnostic"):
+        if outside_gap_scope(f, is_standalone):
             continue
 
         archive = f.get("archive")
@@ -624,7 +605,7 @@ def main():
         config = load_platform_config(args.platform, args.platforms_dir)
         relevant = resolve_platform_cores(config, profiles, target_cores=target_cores)
         profiles = {k: v for k, v in profiles.items() if k in relevant}
-        standalone_cores = {str(c) for c in config.get("standalone_cores", [])}
+        standalone_cores = set(map(str, config.get("standalone_cores", [])))
 
     if not profiles:
         print("No emulator profiles found.", file=sys.stderr)
