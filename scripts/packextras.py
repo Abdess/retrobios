@@ -709,7 +709,10 @@ def platform_region_groups(
     return groups, extra_dests
 
 def emulator_region_drops(
-    selected: list[tuple[str, dict]], standalone: bool, regions: list[str]
+    selected: list[tuple[str, dict]],
+    standalone: bool,
+    regions: list[str],
+    required_only: bool = False,
 ) -> set[str]:
     """Destinations an emulator-mode `--region` withdraws.
 
@@ -726,7 +729,10 @@ def emulator_region_drops(
     region_groups: dict[str, list[tuple[str, str]]] = {}
     for emu_name, profile in sorted(selected):
         structure = profile.get("pack_structure")
-        for fe in filter_files_by_mode(profile.get("files", []), standalone):
+        # Decided over what the pack keeps, as on the platform side: an
+        # optional winner removed afterwards left its slot empty.
+        entries = filter_files_by_mode(profile.get("files", []), standalone)
+        for fe in _kept(entries, required_only):
             dest = _resolve_destination(fe, structure, standalone)
             if dest:
                 group_id = _emulator_region_group(emu_name, profile, fe)

@@ -42,5 +42,20 @@ class RequiredOnlyBeforeRegion(unittest.TestCase):
             self.assertIn("required_only", {kw.arg for kw in call.keywords})
 
 
+class EmulatorModeToo(unittest.TestCase):
+    """--emulator mednafen_pce_fast --region us --required-only shipped 0 files:
+    the optional US cards won the group, then --required-only removed them."""
+
+    def test_the_required_card_survives(self):
+        from packextras import emulator_region_drops  # noqa: PLC0415
+
+        profile = {"systems": ["nec-pc-engine"], "files": [
+            {"name": "syscard3.pce", "required": True, "region": ["japan"]},
+            {"name": "syscard3u.pce", "required": False, "region": ["north-america"]},
+        ]}
+        drops = emulator_region_drops([("pce", profile)], False, ["north-america"], True)
+        self.assertNotIn("syscard3.pce", drops)
+
+
 if __name__ == "__main__":
     unittest.main()
