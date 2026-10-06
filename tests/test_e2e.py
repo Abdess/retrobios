@@ -6004,6 +6004,11 @@ struct BurnDriver BurnDrvneogeo = {
              "refuse"),
             (["--list-systems"], ["--region", "us"], "refuse"),
             (["--list-emulators"], ["--target", "switch"], "refuse"),
+            # Only the platform path refreshes data directories.
+            (["--emulator", "dolphin"], ["--refresh-data"], "refuse"),
+            (["--system", "sony-playstation"], ["--refresh-data"], "refuse"),
+            (["--from-md5", "d8f1"], ["--refresh-data"], "refuse"),
+            (["--platform", "retroarch", "--offline"], ["--refresh-data"], "refuse"),
         ]
         for mode, flag, expected in matrix:
             with self.subTest(mode=mode, flag=flag):
