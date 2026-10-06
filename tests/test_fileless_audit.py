@@ -12,6 +12,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -110,20 +111,28 @@ class TestCorpusIsAnswered(unittest.TestCase):
             self.skipTest("no upstream cache")
         from safeparse import yaml_load
 
+        fetch = fileless_audit.upstream.fetch_file
+        read = []
+
+        def counted(*args, **kwargs):
+            lines = fetch(*args, **kwargs)
+            if lines is not None:
+                read.append(args[2])
+            return lines
+
         flagged = []
-        for path in sorted((ROOT / "emulators").glob("*.yml")):
-            with path.open(encoding="utf-8") as handle:
-                document = yaml_load(handle) or {}
-            if document.get("files"):
-                continue
-            try:
-                hits = fileless_audit.audit(
+        with mock.patch.object(fileless_audit.upstream, "fetch_file", counted):
+            for path in sorted((ROOT / "emulators").glob("*.yml")):
+                with path.open(encoding="utf-8") as handle:
+                    document = yaml_load(handle) or {}
+                if document.get("files"):
+                    continue
+                if fileless_audit.audit(
                     path.stem, str(ROOT / "emulators"), str(ROOT / ".cache"), True
-                )
-            except Exception:
-                continue
-            if hits:
-                flagged.append(path.stem)
+                ):
+                    flagged.append(path.stem)
+        if not read:
+            self.skipTest("the upstream cache holds no source a fileless profile cites")
         self.assertEqual(
             flagged, [],
             "these declare no files and their source asks for a directory, "
