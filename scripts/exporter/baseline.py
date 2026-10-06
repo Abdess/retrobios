@@ -323,12 +323,20 @@ def build_native_model(
             ]
 
             def by_destination(candidate: NativeFile) -> bool:
+                # Dolphin writes dolphin-emu/Sys/GC/USA/IPL.bin for the truth's
+                # GC/USA/IPL.bin: a destination ending in the path is the file.
                 theirs = _match_key(candidate.platform or {})[0]
-                return bool(t_dest) and theirs == t_dest
+                return bool(t_dest) and (theirs == t_dest or theirs.endswith("/" + t_dest))
 
             def by_name(candidate: NativeFile) -> bool:
-                theirs = _match_key(candidate.platform or {})[1]
+                theirs_dest, theirs = _match_key(candidate.platform or {})
                 if not t_name or theirs != t_name:
+                    return False
+                # Two declared directories that differ name two files: the
+                # truth's BeebFile/BIOS.rom is not Recalbox's np2kai/bios.rom.
+                if "/" in t_dest and "/" in theirs_dest and not theirs_dest.endswith(
+                    "/" + t_dest.rsplit("/", 1)[0].rsplit("/", 1)[-1] + "/" + t_name
+                ):
                     return False
                 # A shared name with two declared sizes is two files: fbneo's
                 # 480-byte boot.bin is not RomM's 2 MB Dreamcast boot.bin.

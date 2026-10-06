@@ -115,6 +115,17 @@ class OneNameSeveralFiles(unittest.TestCase):
         self.assertEqual(_diff_system(self._system(), scraped), {})
 
 
+class DifferentContentsStayApart(unittest.TestCase):
+    def test_two_cores_same_name_different_contents(self):
+        """beebem's BBC BIOS.rom and np2kai's PC-98 bios.rom merged into one."""
+        system: dict = {}
+        _merge_file_into_system(system, {"name": "bios.rom", "path": "np2kai/bios.rom",
+                                         "md5": "a" * 32}, "np2kai", None)
+        _merge_file_into_system(system, {"name": "bios.rom", "path": "BeebFile/BIOS.rom",
+                                         "md5": "b" * 32, "size": 16384}, "beebem", None)
+        self.assertEqual(len(system["files"]), 2)
+
+
 class RenameMatching(unittest.TestCase):
     def test_a_shared_sha1_pairs_the_two_names(self):
         truth = [_entry("bios_CD_U.bin", sha1="a" * 40)]
