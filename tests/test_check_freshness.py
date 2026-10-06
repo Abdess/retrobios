@@ -304,5 +304,19 @@ class RepositoryWiringTests(unittest.TestCase):
         self.assertIn("[data]", text)
 
 
+class RepeatedDestinations(unittest.TestCase):
+    def test_a_change_to_an_earlier_declaration_is_seen(self):
+        from check_freshness import diff_platform  # noqa: PLC0415
+
+        def platform(first_md5: str) -> dict:
+            return {"systems": {"pce": {"files": [
+                {"name": "syscard3.pce", "destination": "syscard3.pce", "md5": first_md5},
+                {"name": "syscard3.pce", "destination": "syscard3.pce", "md5": "b" * 32},
+            ]}}}
+
+        diff = diff_platform(platform("a" * 32), platform("c" * 32))
+        self.assertEqual(diff.files_changed, ["pce/syscard3.pce"])
+
+
 if __name__ == "__main__":
     unittest.main()

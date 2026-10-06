@@ -157,6 +157,22 @@ def _core_names(config: dict) -> set[str]:
     return names
 
 
+def _keyed_files(files: list[dict]) -> dict[str, dict]:
+    """Each declaration under its own key.
+
+    A platform declares one destination several times (an archive once per
+    inner ROM, MD5 alternatives): keyed by destination alone, the dict kept
+    the last and a change to the others read as identical.
+    """
+    keyed: dict[str, dict] = {}
+    seen: dict[str, int] = {}
+    for f in files:
+        key = _file_key(f)
+        seen[key] = seen.get(key, 0) + 1
+        keyed[key if seen[key] == 1 else f"{key}#{seen[key]}"] = f
+    return keyed
+
+
 def diff_platform(old: dict, new: dict) -> PlatformDiff:
     """Compare two platform files the way a reviewer reads the diff.
 
@@ -172,12 +188,8 @@ def diff_platform(old: dict, new: dict) -> PlatformDiff:
     diff.systems_added = sorted(set(new_systems) - set(old_systems))
     diff.systems_removed = sorted(set(old_systems) - set(new_systems))
     for system in sorted(set(old_systems) & set(new_systems)):
-        old_files = {
-            _file_key(f): f for f in (old_systems[system] or {}).get("files") or []
-        }
-        new_files = {
-            _file_key(f): f for f in (new_systems[system] or {}).get("files") or []
-        }
+        old_files = _keyed_files((old_systems[system] or {}).get("files") or [])
+        new_files = _keyed_files((new_systems[system] or {}).get("files") or [])
         diff.files_added.extend(
             f"{system}/{k}" for k in sorted(set(new_files) - set(old_files))
         )
