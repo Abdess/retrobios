@@ -155,6 +155,18 @@ class OneFileOneIdentity(unittest.TestCase):
         self.assertEqual(fe.hashes("crc32"), ["bbbbbbbb"])
         self.assertEqual(fe.size(), 480)
 
+    def test_different_fields_are_not_a_contradiction(self):
+        """bios7.bin: the truth's crc32 beside Batocera's md5 is one dump."""
+        fe = NativeFile("bios7.bin", "bios/bios7.bin", "nds",
+                        platform={"md5": A}, truth={"crc32": "1280f0d5"})
+        self.assertEqual(fe.hashes("md5"), [A])
+        self.assertEqual(fe.hashes("crc32"), ["1280f0d5"])
+
+    def test_different_sizes_still_contradict(self):
+        fe = NativeFile("boot.bin", "dc/boot.bin", "dc",
+                        platform={"size": 2097152, "md5": A}, truth={"size": 480, "crc32": "bbbbbbbb"})
+        self.assertEqual(fe.hashes("md5"), [])
+
     def test_agreeing_sides_still_merge(self):
         fe = NativeFile("x.bin", "x.bin", "s",
                         platform={"md5": A, "sha1": "1" * 40}, truth={"md5": A})
