@@ -2459,15 +2459,21 @@ def bump_commit(
     if pending_recale(report, accept_changed, text):
         return False
     document = yaml.safe_load(text)
+    if any(isinstance(document.get(f), dict) for f in ("source_commit", "upstream_commit")):
+        # A pin per build mode names one revision per repository, and the
+        # report heads only the primary one: rewriting str(dict) was a
+        # refused write on mesence, supermodel and xemu.
+        print(
+            f"{path.stem}: pins keyed by build mode are advanced by hand",
+            file=sys.stderr,
+        )
+        return False
     upstream_moves = bool(
         report.upstream_head and report.upstream_pin != report.upstream_head
     )
     if document.get("source_commit") == report.head and not upstream_moves:
         # Rewriting the pin to the value it already holds is not a bump, and
         # announcing it buries the profiles that did move.
-        return False
-    if isinstance(document.get("upstream_commit"), dict):
-        # A pin per build mode names no single upstream revision to advance.
         return False
     expected = dict(document)
     expected["source_commit"] = report.head
