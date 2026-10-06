@@ -197,5 +197,33 @@ class RenameMatching(unittest.TestCase):
         self.assertNotIn("lonely.bin", matched_truth)
 
 
+
+class OnlySystemDirectoryEntries(unittest.TestCase):
+    """The truth kept files read from the save, content or working directory:
+    diff_truth listed Cemu's mlc01 certificates, panda3ds's seeddb.bin and
+    neo-emu's neogeo.zip as missing from platform lists that the pack and
+    verify deliberately leave them out of."""
+
+    def test_a_file_read_elsewhere_is_not_asked_of_the_platform(self):
+        from truth import generate_platform_truth
+
+        profiles = {
+            "core": {
+                "emulator": "Core",
+                "type": "libretro",
+                "systems": ["sys"],
+                "files": [
+                    {"name": "bios.bin", "sha1": "a" * 40},
+                    {"name": "explicit.bin", "sha1": "b" * 40, "load_from": "system_dir"},
+                    {"name": "cert.der", "sha1": "c" * 40, "load_from": "save_dir"},
+                    {"name": "game.zip", "sha1": "d" * 40, "load_from": "content_dir"},
+                ],
+            }
+        }
+        result = generate_platform_truth("p", {"cores": ["core"]}, {}, profiles)
+        names = sorted(f["name"] for f in result["systems"]["sys"]["files"])
+        self.assertEqual(names, ["bios.bin", "explicit.bin"])
+
+
 if __name__ == "__main__":
     unittest.main()

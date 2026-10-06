@@ -14,6 +14,7 @@ from common import resolve_local_file
 from common import runs_standalone
 from common import sanitize_pack_path
 from common import size_fits
+from validation import read_from_system_dir
 def _emulator_systems_index(emu_profiles: dict | None) -> dict[str, list[str]]:
     """Map both the profile key and its display name to the profile's systems.
 
@@ -564,9 +565,7 @@ def _collect_emulator_extras(
                 continue
             if file_mode == "libretro" and is_standalone:
                 continue
-            # Skip files loaded from non-system directories (save_dir, content_dir)
-            load_from = f.get("load_from", "")
-            if load_from and load_from != "system_dir":
+            if not read_from_system_dir(f):
                 continue
             if is_standalone:
                 raw = f.get("standalone_path") or f.get("path") or fname

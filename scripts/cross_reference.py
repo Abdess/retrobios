@@ -31,6 +31,7 @@ from common import (
     require_yaml,
     runs_standalone,
 )
+from validation import read_from_system_dir
 
 yaml = require_yaml()
 
@@ -332,9 +333,7 @@ def _cross_reference_profile(
         if file_mode == "libretro" and is_standalone:
             continue
 
-        # Skip files loaded from non-system directories (save_dir, content_dir)
-        load_from = f.get("load_from", "")
-        if load_from and load_from != "system_dir":
+        if not read_from_system_dir(f):
             continue
 
         # Skip filename-agnostic files (handled by agnostic scan)
