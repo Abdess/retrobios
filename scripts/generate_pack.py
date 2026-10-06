@@ -872,8 +872,12 @@ def generate_pack(
                             file_reasons[dedup_key] = "not found"
                         continue
 
-                if status == "hash_mismatch" and hash_mismatch_excludes_file(
-                    verification_mode
+                # Batocera hashes the member, never the ZIP: a zipped_file entry
+                # is checked inside the archive whatever the outer resolution
+                # said, as verify does. An archive without the member passed.
+                inner_checked = bool(file_entry.get("zipped_file") and local_path)
+                if hash_mismatch_excludes_file(verification_mode) and (
+                    status == "hash_mismatch" or inner_checked
                 ):
                     zf_name = file_entry.get("zipped_file")
                     if zf_name and local_path:
