@@ -52,8 +52,8 @@ def load_registry(registry_path: str = DEFAULT_REGISTRY) -> dict[str, dict]:
 
 
 @contextlib.contextmanager
-def _file_lock(lock_path: Path):
-    """Hold an exclusive lock on lock_path, waiting for it if taken.
+def _file_lock(lock_path: Path, shared: bool = False):
+    """Hold a lock on lock_path, waiting for it if taken.
 
     Several sessions refresh the same data directories: without it, two
     swaps of one tree interleave and the second lands inside the first.
@@ -65,12 +65,22 @@ def _file_lock(lock_path: Path):
         yield
         return
     lock_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(lock_path, "w") as handle:
-        fcntl.flock(handle, fcntl.LOCK_EX)
+    with open(lock_path, "a") as handle:
+        fcntl.flock(handle, fcntl.LOCK_SH if shared else fcntl.LOCK_EX)
         try:
             yield
         finally:
             fcntl.flock(handle, fcntl.LOCK_UN)
+
+
+def cache_lock(cache_dir: str | Path, shared: bool = False):
+    """The lock a refresh holds while it swaps cache_dir.
+
+    A reader takes it shared: a pack walking data/sdlpal while another run
+    swapped the tree shipped part of it, or nothing.
+    """
+    cache_dir = Path(cache_dir)
+    return _file_lock(cache_dir.with_name(f".{cache_dir.name}.lock"), shared=shared)
 
 
 def _load_versions(versions_path: str = VERSIONS_FILE) -> dict[str, dict]:
@@ -381,8 +391,7 @@ def refresh_entry(
     """
     if dry_run:
         return _refresh_entry(key, entry, force, dry_run, versions_path)
-    cache_dir = Path(entry["local_cache"])
-    with _file_lock(cache_dir.with_name(f".{cache_dir.name}.lock")):
+    with cache_lock(entry["local_cache"]):
         return _refresh_entry(key, entry, force, dry_run, versions_path)
 
 

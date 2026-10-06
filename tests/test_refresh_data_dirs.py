@@ -115,5 +115,28 @@ class RefreshConcurrency(unittest.TestCase):
         self.assertEqual(sorted(rdd._load_versions(self.versions)), sorted(keys))
 
 
+class PackWalkHoldsTheCache(unittest.TestCase):
+    def test_a_refresh_waits_for_the_walk(self):
+        import fcntl
+
+        from generate_pack import _data_directory_members
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            cache = Path(tmp) / "data" / "sdlpal"
+            cache.mkdir(parents=True)
+            (cache / "a.mkf").write_bytes(b"a")
+            (cache / "b.mkf").write_bytes(b"b")
+            systems = {"s": {"data_directories": [{"ref": "sdlpal", "destination": "sdlpal"}]}}
+            registry = {"sdlpal": {"local_cache": str(cache)}}
+            walk = _data_directory_members(systems, registry, "p", "", False, set(), set(), set())
+            next(walk)
+            with open(cache.with_name(".sdlpal.lock"), "a") as handle:
+                with self.assertRaises(BlockingIOError):
+                    fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            list(walk)
+            with open(cache.with_name(".sdlpal.lock"), "a") as handle:
+                fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                fcntl.flock(handle, fcntl.LOCK_UN)
+
 if __name__ == "__main__":
     unittest.main()
