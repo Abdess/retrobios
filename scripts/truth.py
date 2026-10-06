@@ -178,11 +178,17 @@ def _same_file(files: list[dict], file_entry: dict, emu_name: str) -> dict | Non
     )
 
 
+def _declared(entry: dict, field: str) -> set[str]:
+    """The values an entry declares for a hash field, one or a list."""
+    value = entry.get(field)
+    values = value if isinstance(value, list) else [value]
+    return {str(v).lower() for v in values if v}
+
+
 def _contents_disagree(a: dict, b: dict) -> bool:
     """A hash both declare without a value in common, or two declared sizes."""
     for field in ("sha1", "md5", "sha256", "crc32"):
-        ours = {str(v).lower() for v in (a.get(field) if isinstance(a.get(field), list) else [a.get(field)]) if v}
-        theirs = {str(v).lower() for v in (b.get(field) if isinstance(b.get(field), list) else [b.get(field)]) if v}
+        ours, theirs = _declared(a, field), _declared(b, field)
         if ours and theirs and not ours & theirs:
             return True
     size_a, size_b = a.get("size"), b.get("size")
@@ -294,6 +300,16 @@ def _has_exploitable_data(entry: dict) -> bool:
     )
 
 
+def _system_dir_files(profile: dict, standalone: bool) -> list[dict]:
+    """Entries of the build the platform runs, read from the system directory."""
+    return list(
+        filter(
+            read_from_system_dir,
+            filter_files_by_mode(profile.get("files", []), standalone=standalone),
+        )
+    )
+
+
 def generate_platform_truth(
     platform_name: str,
     config: dict,
@@ -372,14 +388,11 @@ def generate_platform_truth(
             continue
         cores_profiled.add(emu_name)
 
-        filtered = filter_files_by_mode(
-            profile.get("files", []),
-            standalone=runs_standalone(emu_name, profile, standalone_set),
+        filtered = _system_dir_files(
+            profile, runs_standalone(emu_name, profile, standalone_set)
         )
 
         for fe in filtered:
-            if not read_from_system_dir(fe):
-                continue
             profile_sid = fe.get("system", "")
             if not profile_sid:
                 sys_ids = profile.get("systems", [])

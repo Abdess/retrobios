@@ -147,6 +147,15 @@ def extract_notes(platforms_dir: str) -> list[str]:
     return notes
 
 
+def _extract_cells(platforms_dir: str) -> dict[str, str]:
+    """The download table's "Extract to" cell, by display name."""
+    return {display: f"`{folder}`" for display, folder in extract_targets(platforms_dir)}
+
+
+def _paragraphs(texts: list[str]) -> list[str]:
+    return [line for text in texts for line in ("", text)]
+
+
 def download_table(
     coverages: dict,
     archived: set[str],
@@ -393,9 +402,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
     # Where the pack itself is extracted, which is not always the BIOS folder:
     # a pack whose entries already carry their own root (RetroDECK) extracts
     # one level above it.
-    extract_paths = {
-        display: f"`{folder}`" for display, folder in extract_targets(platforms_dir)
-    }
+    extract_paths = _extract_cells(platforms_dir)
     archived = {
         name
         for name, entry in load_platform_registry(platforms_dir).items()
@@ -408,8 +415,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         )
     )
 
-    for note in extract_notes(platforms_dir):
-        lines.extend(["", note])
+    lines.extend(_paragraphs(extract_notes(platforms_dir)))
     if archived:
         lines.extend(
             [

@@ -163,7 +163,7 @@ def _fetch_asset(
             hashes, expected_sha1, expected_md5
         ):
             return cached
-        elif offline or _served_size(name) in (None, os.path.getsize(cached)):
+        elif not _replaced_on_release(name, cached, offline):
             # A copy of this asset that answers another hash: the caller
             # wants a different revision under the same name, and the
             # release still serves this one. Keeping it is what lets the
@@ -232,6 +232,18 @@ def _asset_urls(name: str) -> list[tuple[str, str]]:
         )
         for candidate in candidates
     ]
+
+
+def _replaced_on_release(name: str, cached: str, offline: bool) -> bool:
+    """Whether the release now serves other bytes than the cached copy.
+
+    Sizes are compared, as check_release_assets does: a request per asset,
+    no download. Offline or unreadable, the copy is assumed current.
+    """
+    if offline:
+        return False
+    served = _served_size(name)
+    return served is not None and served != os.path.getsize(cached)
 
 
 def _served_size(name: str) -> int | None:
