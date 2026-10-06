@@ -2628,10 +2628,14 @@ def _realign_part(
 
 def _writing_pairs(
     document: dict, repos: list, revisions: list[tuple[str, dict]], intro_sha: str
-) -> tuple[list, list[str]]:
-    """(repo, writing pin, current pin) per declared repository, and the
-    repositories whose writing pin the history cannot single out."""
-    pairs = []
+) -> tuple[list[list], list[str]]:
+    """Every reading of where the text was written, and the ambiguities.
+
+    Each reading lists (repo, writing pin, current pin) per declared
+    repository. A repository whose text lived under several pins gives one
+    reading per pin; the caller settles them when they all agree.
+    """
+    options: list[list] = []
     ambiguous: list[str] = []
     for pin_field, repo in repos:
         current = document.get(f"{pin_field}_commit")
@@ -2640,9 +2644,15 @@ def _writing_pairs(
         written = _writing_pins(revisions, intro_sha, f"{pin_field}_commit")
         if len(written) > 1:
             ambiguous.append(f"{pin_field}_commit {' -> '.join(written)}")
-        elif written and written[0] != current:
-            pairs.append((repo, written[0], current))
-    return pairs, ambiguous
+        moved = [(repo, pin, current) for pin in written if pin != current]
+        # The current pin among the candidates reads as "no move" for that
+        # repository, which the other candidates must then agree with.
+        options.append(moved + ([None] if current in written else []))
+    readings = [
+        [pair for pair in combo if pair is not None]
+        for combo in itertools.product(*options)
+    ] if options else [[]]
+    return readings, ambiguous
 
 
 def realign_prose(
@@ -2703,22 +2713,29 @@ def realign_prose(
         if intro_sha is None:
             # The scalar is not committed yet: written now, under this pin.
             continue
-        pairs, ambiguous = _writing_pairs(document, repos, revisions, intro_sha)
-        if ambiguous:
-            # Moving from the wrong one rewrites a correct citation onto
-            # someone else's code, with nothing to show it happened.
-            messages.extend(
-                f"read again: {citation.field}: {citation.ref} (pin moved under "
-                f"this text: {item}; the history does not say which it describes)"
-                for item in ambiguous
-            )
-            continue
-        if not pairs:
+        readings, ambiguous = _writing_pairs(document, repos, revisions, intro_sha)
+        if not any(readings):
             continue
         moves: dict[int, tuple[int, int, str | None]] = {}
         blocked: list[str] = []
         for index, part in enumerate(citation.parts):
-            outcome = _realign_part(part, pairs, cache_dir, offline)
+            # Several pins under one text: the history cannot say which the
+            # text describes, but when the cited range lands in the same
+            # place from every one of them the question does not matter.
+            results = [
+                _realign_part(part, pairs, cache_dir, offline) if pairs else None
+                for pairs in readings
+            ]
+            outcomes = {repr(result): result for result in results}
+            if len(outcomes) > 1:
+                # Moving from the wrong one rewrites a correct citation onto
+                # someone else's code, with nothing to show it happened.
+                blocked.extend(
+                    f"pin moved under this text: {item}; the readings disagree"
+                    for item in ambiguous
+                )
+                continue
+            outcome = next(iter(outcomes.values()))
             if outcome is None:
                 continue
             state, payload = outcome
@@ -2872,6 +2889,18 @@ def _apply_writes(args, name: str, profile: dict, report: ProfileReport) -> None
         elif backfill_commit(path, report.pin):
             print(f"{name}: source_commit {report.pin[:7]}")
     if not (args.rebase_refs or args.bump_commit):
+        return
+    # Prose written under an older pin describes that revision: anchored from
+    # the current pin, a recale or a bump follows someone else's code
+    # (boom3 FileSystem.cpp:2125, written at b810234e, an unrelated
+    # OpenFileRead at 132dfddb). It moves first, from the pin it was written at.
+    stale = realign_prose(path, args.cache_dir, args.offline, dry_run=True)
+    if stale:
+        print(
+            f"{name}: {len(stale)} prose citation(s) written under an older pin; "
+            "run --realign-prose or read them before the pin moves",
+            file=sys.stderr,
+        )
         return
     with tempfile.TemporaryDirectory() as scratch:
         # Always work on a copy. A dry run reports what it left there; a real
