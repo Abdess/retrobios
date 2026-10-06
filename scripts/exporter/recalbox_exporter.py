@@ -84,7 +84,9 @@ class Exporter(BaseExporter):
         elif hash_match is True:
             attrs.append('hashMatchMandatory="true"')
 
-        note = " ".join(str(fe.native("note", "")).split())
+        # The platform's own note only: ours is prose about our profiles, with
+        # file:line citations, and the format does not carry note corrections.
+        note = " ".join(str((fe.platform or {}).get("note") or "").split())
         if note:
             attrs.append(f"note={quoteattr(note)}")
 
