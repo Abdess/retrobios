@@ -113,5 +113,18 @@ class RetroPieModuleFlags(unittest.TestCase):
         self.assertEqual(targets["x86_64"]["cores"], ["beetle_psx", "dosbox", "dosbox-staging"])
 
 
+
+class HashScrapersRefuseAnUnknownVersion(unittest.TestCase):
+    """mame_hash_scraper wrote core_version "unknown" after a failed API call
+    and cached it for a day; the pipeline step still read OK."""
+
+    def test_mame_raises(self):
+        from scripts.scraper import mame_hash_scraper  # noqa: PLC0415
+
+        with mock.patch.object(mame_hash_scraper.urllib.request, "urlopen", _refuse), \
+                self.assertRaises(RuntimeError):
+            mame_hash_scraper._get_version()
+
+
 if __name__ == "__main__":
     unittest.main()
