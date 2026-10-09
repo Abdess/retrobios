@@ -271,5 +271,21 @@ class PathPriority(unittest.TestCase):
         self.assertFalse(dedup._in_nodedup_dir("bios/Sony/PlayStation/scph.bin"))
 
 
+class TheNoDedupListIsPinned(unittest.TestCase):
+    """Every directory the dedup must leave alone, with the reason written
+    beside it in dedup.py. Only RPG Maker and ScummVM were tested; a merge
+    that dropped c64-emu would have the name step serve the C128 keymap to
+    three machines again, with the suite green."""
+
+    def test_every_tree_read_by_path_stays_undeduplicated(self):
+        from scripts.dedup import NODEDUP_DIRS  # noqa: PLC0415
+
+        expected = {
+            "RPG Maker", "ScummVM", "tzdata", "c64-emu", "PinMAME", "BBK",
+            "C-Dogs SDL", "Ikemen GO", "Theme Hospital", "TheXTech", "Softdisk",
+        }
+        self.assertEqual(expected - set(NODEDUP_DIRS), set())
+
+
 if __name__ == "__main__":
     unittest.main()
