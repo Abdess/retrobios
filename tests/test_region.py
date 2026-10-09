@@ -436,26 +436,32 @@ class TestVerifyModesHonourRegion(unittest.TestCase):
     """
 
     def _run(self, *args: str) -> str:
+        """The report, from a run that succeeded.
+
+        A run that crashed produced an empty stdout, different from the
+        plain report, and the test read the difference as narrowing.
+        """
         import subprocess
 
         repo = os.path.join(os.path.dirname(__file__), "..")
-        return subprocess.run(
+        completed = subprocess.run(
             [sys.executable, "scripts/verify.py", *args],
-            capture_output=True, text=True, cwd=repo, timeout=900,
-        ).stdout
+            capture_output=True, text=True, cwd=repo, timeout=900, check=False,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr[-2000:])
+        self.assertTrue(completed.stdout.strip(), "an empty report is not a report")
+        return completed.stdout
 
     def test_emulator_mode_narrows(self):
         plain = self._run("--emulator", "duckstation")
-        filtered = self._run("--emulator", "duckstation", "--region", "us")
         if "duckstation" not in plain:
             self.skipTest("duckstation profile not present")
+        filtered = self._run("--emulator", "duckstation", "--region", "us")
         self.assertNotEqual(plain, filtered)
 
     def test_system_mode_narrows(self):
         plain = self._run("--system", "sony-playstation")
         filtered = self._run("--system", "sony-playstation", "--region", "us")
-        if not plain.strip():
-            self.skipTest("system not present")
         self.assertNotEqual(plain, filtered)
 
 
