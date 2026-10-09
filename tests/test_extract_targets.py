@@ -56,5 +56,21 @@ class ExtractTargets(unittest.TestCase):
         self.assertNotIn('"    | RetroDECK | `~/retrodeck/` |"', site)
 
 
+class ThePackGuideNamesTheInstallerDefault(unittest.TestCase):
+    """The pack README, the registry and install.py each wrote RetroBat's
+    default folder by hand, and two of the three said the home directory
+    where the installer (installer.iss) says C:\\RetroBat."""
+
+    def test_retrobat_guide_matches_the_registry(self):
+        registry = load_platform_registry(PLATFORMS)
+        first = next(
+            rule["path"] for rule in registry["retrobat"]["install"]["detect"]
+            if rule["os"] == "windows" and rule["method"] == "path_exists"
+        )
+        guide = (REPO_ROOT / "scripts" / "packreadme.py").read_text(encoding="utf-8")
+        self.assertEqual(first, "C:\\RetroBat\\bios")
+        self.assertIn("(default: C:\\\\RetroBat\\\\bios\\\\)", guide)
+
+
 if __name__ == "__main__":
     unittest.main()

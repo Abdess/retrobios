@@ -805,6 +805,10 @@ platforms:
     target_source: null
     install:
       detect:
+      # installer.iss: DefaultDirName=C:\RetroBat, the first place to look.
+      - os: windows
+        method: path_exists
+        path: 'C:\RetroBat\bios'
       - os: windows
         method: path_exists
         path: '%USERPROFILE%\RetroBat\bios'
