@@ -34,6 +34,7 @@ import slots
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
+    profiles_for_systems,
     PROFILE_IDENTITY_FIELDS,
     list_available_targets,
     list_platform_system_ids,
@@ -716,6 +717,17 @@ def find_exclusion_notes(
 # Platform verification
 
 
+def _mark_unplaced(config: dict, undeclared: list[dict], profiles: dict) -> None:
+    """What the builder cannot place is not in the pack, held or not."""
+    from packextras import unplaceable_extras
+
+    unplaced = unplaceable_extras(config, undeclared, profiles)
+    for u in undeclared:
+        if (u.get("emulator", ""), u.get("name", ""), u.get("path") or "") in unplaced:
+            u["in_pack"] = False
+            u["omitted"] = "no platform slug for its system"
+
+
 def _twin_index(
     verify_systems: dict, db: dict, base_dest: str, zip_contents: dict,
     data_dir_registry: dict | None,
@@ -1020,6 +1032,7 @@ def verify_platform(
             )
             not in region_drops
         ]
+    _mark_unplaced(config, undeclared, profiles)
     exclusions = find_exclusion_notes(
         config, emulators_dir, emu_profiles, target_cores=target_cores
     )
@@ -1191,17 +1204,27 @@ def _print_undeclared_entry(u: dict, prefix: str, verbose: bool) -> None:
             print(f"      [{'+'.join(checks)}]")
 
 
+def _split_undeclared(undeclared: list[dict]) -> tuple[list[dict], list[dict], list[dict]]:
+    """Game data, firmware the pack places, firmware it holds but cannot place.
+
+    Everything that is not game data is firmware the core loads, archives
+    included: a bios_zip sat in neither list, so a required one that was
+    missing was never printed.
+    """
+    game_data = [u for u in undeclared if u.get("category", "bios") == "game_data"]
+    firmware = [u for u in undeclared if u.get("category", "bios") != "game_data"]
+    unplaced = [u for u in firmware if u["in_repo"] and not u.get("in_pack", True)]
+    placed = [u for u in firmware if u.get("in_pack", True)]
+    return game_data, placed, unplaced
+
+
 def _print_undeclared_section(result: dict, verbose: bool) -> None:
     """Print cross-reference section for undeclared files used by cores."""
     undeclared = result.get("undeclared_files", [])
     if not undeclared:
         return
 
-    # Everything that is not game data is firmware the core loads, archives
-    # included: a bios_zip sat in neither list, so a required one that was
-    # missing was never printed.
-    game_data = [u for u in undeclared if u.get("category", "bios") == "game_data"]
-    bios_files = [u for u in undeclared if u.get("category", "bios") != "game_data"]
+    game_data, bios_files, unplaced = _split_undeclared(undeclared)
 
     req_not_in_repo = [
         u
@@ -1224,6 +1247,8 @@ def _print_undeclared_section(result: dict, verbose: bool) -> None:
     print(
         f"  Core files: {core_in_pack} in pack, {core_missing_req} required missing, {core_missing_opt} optional missing"
     )
+    if unplaced:
+        print(f"  Core files held but not packed: {len(unplaced)} ({unplaced[0]['omitted']})")
 
     for u in req_not_in_repo:
         _print_undeclared_entry(u, "MISSING (required)", verbose)
@@ -1637,16 +1662,7 @@ def verify_system(
 ) -> dict:
     """Verify files for all emulators supporting given system IDs."""
     profiles = load_emulator_profiles(emulators_dir)
-    matching = []
-    for name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias", "test"):
-            continue
-        emu_systems = set(profile.get("systems", []))
-        if emu_systems & set(system_ids):
-            ptype = profile.get("type", "libretro")
-            if standalone and "standalone" not in ptype:
-                continue  # skip non-standalone in standalone mode
-            matching.append(name)
+    matching = profiles_for_systems(profiles, system_ids, standalone)
 
     if not matching:
         all_systems: set[str] = set()

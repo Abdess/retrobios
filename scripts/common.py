@@ -994,6 +994,27 @@ class ProfileSelectionError(ValueError):
     """A named profile cannot answer for itself."""
 
 
+def profiles_for_systems(
+    profiles: dict, system_ids: list[str], standalone: bool = False
+) -> list[str]:
+    """Profile keys that serve any of the systems, spelled either way.
+
+    Compared on the normalized id: stella2014 writes atari_2600 where every
+    other profile writes atari-2600, and an exact match built two different
+    packs under one file name, the second replacing the first.
+    """
+    wanted = {_norm_system_id(sid) for sid in system_ids}
+    matching = []
+    for name, profile in sorted(profiles.items()):
+        if profile.get("type") in ("launcher", "alias", "test"):
+            continue
+        if standalone and "standalone" not in profile.get("type", "libretro"):
+            continue
+        if wanted & {_norm_system_id(sid) for sid in profile.get("systems", [])}:
+            matching.append(name)
+    return matching
+
+
 def select_emulator_profiles(
     profile_names: list[str],
     all_profiles: dict,
@@ -1768,6 +1789,8 @@ from ziptools import (  # noqa: E402,F401
 )
 from artifacts import (  # noqa: E402,F401
     write_if_changed,
+    write_text_atomic,
+    copy_file_atomic,
     ArtifactLockBusy,
     artifact_lock,
     hold_artifact_lock,

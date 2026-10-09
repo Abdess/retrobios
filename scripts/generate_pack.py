@@ -31,6 +31,8 @@ sys.path.insert(0, os.path.dirname(__file__))
 from common import resolve_platform_cores as _platform_cores
 from common import (
     apply_target_overrides,
+    profiles_for_systems,
+    write_text_atomic,
     artifact_lock,
     ArtifactLockBusy,
     build_target_cores_cache,
@@ -1559,16 +1561,7 @@ def generate_system_pack(
 ) -> str | None:
     """Generate a ZIP pack for all emulators supporting given system IDs."""
     profiles = load_emulator_profiles(emulators_dir)
-    matching = []
-    for name, profile in sorted(profiles.items()):
-        if profile.get("type") in ("launcher", "alias", "test"):
-            continue
-        emu_systems = set(profile.get("systems", []))
-        if emu_systems & set(system_ids):
-            ptype = profile.get("type", "libretro")
-            if standalone and "standalone" not in ptype:
-                continue
-            matching.append(name)
+    matching = profiles_for_systems(profiles, system_ids, standalone)
 
     if not matching:
         all_systems: set[str] = set()
@@ -1590,10 +1583,9 @@ def generate_system_pack(
         )
         return None
 
-    # Use system-based ZIP name
-    sys_display = "_".join(
-        _name_part("_".join(w.title() for w in sid.split("-"))) for sid in system_ids
-    )
+    # Named like the platform's --system tag: one spelling of a system is
+    # one file name, and one selection.
+    sys_display = "_".join(_system_display_name(sid) for sid in system_ids)
     # Built in a scratch directory: under its emulator name in output_dir it
     # overwrote, then carried away, an --emulator pack already there.
     os.makedirs(output_dir, exist_ok=True)
@@ -1829,7 +1821,16 @@ def generate_md5_pack(
     if emulator_name and emulators_dir:
         profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
         if emulator_name in profiles:
-            profile = profiles[emulator_name]
+            # The same gate as --emulator: a core with no standalone build
+            # has no standalone layout, and a pack named for one would be
+            # the libretro pack under a name that promises otherwise.
+            try:
+                (_name, profile), = select_emulator_profiles(
+                    [emulator_name], profiles, standalone
+                )
+            except ProfileSelectionError as exc:
+                print(f"Error: {exc}", file=sys.stderr)
+                return None
             emu_display = profile.get("emulator", emulator_name)
             emu_pack_structure = profile.get("pack_structure")
             for fe in profile.get("files", []):
@@ -2002,9 +2003,7 @@ def generate_target_manifests(targets_dir: str, output_dir: str) -> None:
                 result[alias] = result[target_name]
 
         out_path = Path(output_dir) / f"{yml_file.stem}.json"
-        with open(out_path, "w") as f:
-            json.dump(result, f, indent=2, sort_keys=True)
-            f.write("\n")
+        write_text_atomic(out_path, json.dumps(result, indent=2, sort_keys=True) + "\n")
         count += 1
         print(f"  {yml_file.stem}: {len(result)} targets")
     print(f"Generated {count} target manifest(s) in {output_dir}")
@@ -2106,8 +2105,7 @@ def _write_manifest_if_changed(path: str, manifest: dict) -> None:
             new_cmp = {k: v for k, v in manifest.items() if k != "generated"}
             if old_cmp == new_cmp:
                 return  # no content change, keep existing timestamp
-    with open(path, "w") as f:
-        f.write(new_json)
+    write_text_atomic(path, new_json)
 
 
 def _run_manifest_mode(
@@ -2300,6 +2298,11 @@ def _pack_label(source: str, required_only: bool) -> str:
     return f"[source={source}, required]" if required_only else f"[source={source}]"
 
 
+def _produced(split: bool, zip_path, zip_paths) -> bool:
+    """Whether the build wrote what the run asked for."""
+    return bool(zip_paths if split else zip_path)
+
+
 def _run_platform_packs(
     args,
     groups,
@@ -2402,6 +2405,12 @@ def _run_platform_packs(
             except (FileNotFoundError, OSError, yaml.YAMLError) as e:
                 print(f"  ERROR: {e}")
                 failed.append(representative)
+            else:
+                # A builder that declined (no system left under the target)
+                # produced nothing: the run must say so, not verify whatever
+                # the output directory already held and exit 0.
+                if not _produced(args.split, zip_path, zip_paths):
+                    failed.append(representative)
 
     print("\nVerifying packs and generating manifests...")
     skip_conf = bool(system_filter or args.split)
@@ -3081,6 +3090,18 @@ def _manifest_region_drops(
     )
 
 
+def _record_unplaceable(unplaceable: list[dict], record_omission) -> None:
+    """Held by the collection, nowhere to put it on this platform.
+
+    Said in the manifest, where RomM's DOSBox Pure ROMs were simply absent.
+    """
+    for u in unplaceable:
+        record_omission(
+            u.get("path") or u.get("name", ""), u, u.get("system") or "",
+            "no_platform_slug", [u.get("emulator", "")],
+        )
+
+
 def generate_manifest(
     platform_name: str,
     platforms_dir: str,
@@ -3322,6 +3343,7 @@ def generate_manifest(
                     seen_lower.add(dedup_key.lower())
 
     # Phase 2: core complement (emulator extras)
+    unplaceable: list[dict] = []
     if source != "platform":
         core_files = _collect_emulator_extras(
             config,
@@ -3332,9 +3354,11 @@ def generate_manifest(
             emu_profiles,
             target_cores=target_cores,
             include_all=(source == "truth"),
+            unplaceable=unplaceable,
         )
     else:
         core_files = []
+    _record_unplaceable(unplaceable, record_omission)
     total_size += _manifest_core_entries(
         core_files, config, db, bios_dir, base_dest, repo_root,
         zip_contents, offline, region_drops, case_insensitive,
