@@ -242,10 +242,14 @@ def find_conflicts(
             continue
         by_slot.setdefault(key, []).append(claim)
 
+    # A declaration that lists several accepted hashes is satisfied by any of
+    # them: Recalbox names both scph1001.bin revisions, and mesence names
+    # four BS-X dumps among which System.dat pins one. The resolver stops on
+    # the first it finds, so the paths differ while both layers agree.
     disputed = {
         key: claims
         for key, claims in by_slot.items()
-        if all(c.local_path != by_dest[key].local_path for c in claims)
+        if not any(_satisfies(c, by_dest[key], db) for c in claims)
     }
 
     return [
@@ -455,6 +459,51 @@ def find_collisions(
     return collisions
 
 
+def _satisfies(profile: Claim, platform: Claim, db: dict) -> bool:
+    """Whether the two layers agree on what ships at this destination.
+
+    They agree when they resolve to the same file, when the platform's own
+    hash list accepts the profile's file, or when the profile's accepts the
+    platform's. A contradiction needs both lists to reject the other side.
+    """
+    if profile.local_path == platform.local_path:
+        return True
+    if (
+        profile.local_path
+        and _lists_hashes(platform.entry)
+        and _accepted_by_all(profile.local_path, [platform.entry], db)
+    ):
+        return True
+    return bool(
+        platform.local_path
+        and _lists_hashes(profile.entry)
+        and _accepted_by_all(platform.local_path, [profile.entry], db)
+    )
+
+
+def _lists_hashes(entry: dict) -> bool:
+    """Whether a declaration says anything about content at all."""
+    return any(
+        _declared_hashes(entry, field_name)
+        for field_name in ("md5", "sha1", "sha256", "crc32")
+    )
+
+
+def _declared_hashes(entry: dict, field_name: str) -> set[str]:
+    """Hashes an entry accepts for one field, declared as a string or a list."""
+    value = entry.get(field_name)
+    values = value if isinstance(value, list) else [value]
+    # Recalbox writes its md5 list comma separated, and profiles do the
+    # same for sha256 (mesence names four BS-X dumps in one string).
+    return {
+        part.strip().lower()
+        for v in values
+        if v
+        for part in str(v).split(",")
+        if part.strip()
+    }
+
+
 def _accepted_by_all(path: str, entries: list[dict], db: dict) -> bool:
     """Whether every declaration's own hashes accept the file at path."""
     record = next(
@@ -470,13 +519,10 @@ def _accepted_by_all(path: str, entries: list[dict], db: dict) -> bool:
             ):
                 return False
             continue
-        md5s = parse_md5_list(entry.get("md5"))
-        if md5s and str(record.get("md5", "")).lower() not in md5s:
-            return False
-        sha1 = entry.get("sha1")
-        sha1s = [sha1] if isinstance(sha1, str) else list(sha1 or [])
-        if sha1s and str(record.get("sha1", "")).lower() not in {h.lower() for h in sha1s}:
-            return False
+        for field_name in ("md5", "sha1", "sha256", "crc32"):
+            declared = _declared_hashes(entry, field_name)
+            if declared and str(record.get(field_name, "")).lower() not in declared:
+                return False
     return True
 
 

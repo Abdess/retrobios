@@ -157,6 +157,32 @@ class TestConflicts(unittest.TestCase):
         conflicts = slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
         self.assertEqual(conflicts, [])
 
+    def test_a_platform_list_naming_the_profile_file_is_agreement(self):
+        """Recalbox names both scph1001.bin revisions; the resolver stops on
+        the first, the profile pins the other, and --strict reported a
+        contradiction nobody has to correct."""
+        conflicts = slots.find_conflicts(
+            self._config(f"{'m' * 32},{'n' * 32}"),
+            self._profile("GC/JAP/IPL.bin"),
+            REGIONS_DB,
+        )
+        self.assertEqual(conflicts, [])
+
+    def test_a_profile_list_naming_the_shipped_file_is_agreement(self):
+        """mesence accepts four BS-X dumps, one of which System.dat pins;
+        the slot read as contested and the pack swapped the catalogued
+        dump for an uncatalogued one."""
+        profile = {
+            "mesence": {
+                "files": [
+                    {"name": "IPL.bin", "path": "GC/JAP/IPL.bin",
+                     "md5": [ "n" * 32, "m" * 32 ]},
+                ]
+            }
+        }
+        conflicts = slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
+        self.assertEqual(conflicts, [])
+
     def test_a_name_only_resolution_asserts_nothing(self):
         # No hash and no path that the repository carries: the entry is
         # answered by filename alone and cannot contradict anything.
