@@ -25,7 +25,7 @@ files:
     min_size: 4194304
     max_size: 8388608
     validation: [size]
-    source_ref: "pcsx2/ps2/BiosTools.cpp:258-362"
+    source_ref: "pcsx2/ps2/BiosTools.cpp:16-17,80-197,258-283,317-370"
     note: "Accepts any file 4-8 MB with valid romdir (RESET + ROMVER). Naming convention ps2-VVVVr-YYYYMMDD.bin (version, region, date)."
 
   - name: ps2-0230a-20080220.rom1
@@ -48,7 +48,7 @@ files:
     size: 1024
     description: "Console NVRAM"
     note: "Read at the BIOS path with the extension replaced by nvm, opened case-insensitively. Built in memory from region defaults when absent or blank."
-    source_ref: "pcsx2/CDVD/CDVD.cpp:160-188"
+    source_ref: "pcsx2/CDVD/CDVD.cpp:165-189"
 
   - name: ps2-0230a-20080220.mec
     required: false
@@ -66,22 +66,28 @@ files:
     note: "DEV9 network adapter EEPROM. Falls back to built-in defaults if missing."
 
   - name: GameIndex.yaml
-    path: pcsx2/resources/GameIndex.yaml
+    path: resources/GameIndex.yaml
     required: false
-    mode: libretro
-    source_ref: "pcsx2/GameDatabase.cpp:46, pcsx2/GameDatabase.cpp:896"
-    note: "Game compatibility database. OSD warning if missing."
+    bundled: true
+    category: game_data
+    description: "per-title compatibility and fix database"
+    source_ref: "pcsx2/GameDatabase.cpp:39, pcsx2/GameDatabase.cpp:1026-1035"
+    note: "Read from the resources directory shipped with the application. Console error and no per-title fixes if missing."
 
-  - name: cheats_ws.zip
-    path: pcsx2/resources/cheats_ws.zip
+  - name: RedumpDatabase.yaml
+    path: resources/RedumpDatabase.yaml
     required: false
-    mode: libretro
-    source_ref: "pcsx2/VMManager.cpp:348-361"
-    note: "Widescreen patches archive."
+    bundled: true
+    category: game_data
+    description: "disc hash database"
+    source_ref: "pcsx2/GameDatabase.cpp:1133, pcsx2/GameDatabase.cpp:1188-1197"
+    note: "Read from the resources directory shipped with the application, used to name a disc from its dump."
 
-  - name: cheats_ni.zip
-    path: pcsx2/resources/cheats_ni.zip
+  - name: patches.zip
+    path: resources/patches.zip
     required: false
-    mode: libretro
-    source_ref: "pcsx2/VMManager.cpp:383-396"
-    note: "No-interlacing patches archive."
+    bundled: true
+    category: game_data
+    description: "built-in game patch archive"
+    source_ref: "pcsx2/Patch.cpp:117, pcsx2/Patch.cpp:289-318"
+    note: "Opened read only from the resources directory shipped with the application and searched for the pnach matching the running serial and CRC. Widescreen and no-interlacing patches live inside it."
