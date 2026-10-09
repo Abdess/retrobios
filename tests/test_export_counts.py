@@ -355,5 +355,76 @@ class RetroPieProposals(unittest.TestCase):
         self.assertIsNone(RetroPie._insertion_point(alternatives))
         self.assertIsNotNone(RetroPie._insertion_point(enumeration))
 
+
+class BizHawkRewritesOnlyWhatItDeclares(unittest.TestCase):
+    def test_a_truth_only_homonym_does_not_rewrite_a_declared_call(self):
+        """opera's panafz10-norsa.bin, absent from BizHawk's list, would have
+        rewritten the 3DO call of the same name by index on the name alone."""
+        sha_bizhawk, sha_other = "4" * 40, "e" * 40
+        declared = NativeFile("bios.bin", "bios.bin", "SYSB", platform={"sha1": sha_bizhawk})
+        truth_only = NativeFile("bios.bin", "bios.bin", "sys-a", truth={"sha1": sha_other})
+        exporter = BizHawk()
+        source = f'File("{sha_bizhawk.upper()}", 10, "bios.bin")\n'
+        produced = exporter.render(
+            {"SYSB": NativeSystem("SYSB", files=[declared]),
+             "sys-a": NativeSystem("sys-a", files=[truth_only])},
+            None, {exporter.native_filename(): source},
+        )
+        self.assertIn(sha_bizhawk.upper(), produced[exporter.native_filename()])
+        self.assertNotIn(sha_other.upper(), produced[exporter.native_filename()])
+
+
+class RetroDeckCorrectsOnlyWhatItCarries(unittest.TestCase):
+    def test_paths_and_description_stay_the_maintainers(self):
+        """neogeo.zip lost its four search directories to a path that does
+        not exist, and 26 descriptions were rewritten."""
+        from collections import OrderedDict  # noqa: PLC0415
+
+        existing = [{"filename": "neogeo.zip", "system": "neogeo", "md5": A,
+                     "paths": ["$roms_path/neogeo", "$roms_path/fbneo", "$bios_path"],
+                     "description": "Neo Geo BIOS"}]
+        ours = [OrderedDict([("filename", "neogeo.zip"), ("md5", B), ("system", "neogeo"),
+                             ("description", "generated"), ("paths", "$bios_path/roms/neogeo")])]
+        merged = RetroDeck._merge(existing, ours)
+        self.assertEqual(merged[0]["md5"], B)
+        self.assertEqual(merged[0]["paths"], ["$roms_path/neogeo", "$roms_path/fbneo", "$bios_path"])
+        self.assertEqual(merged[0]["description"], "Neo Geo BIOS")
+
+    def test_a_hash_no_revision_shares_is_appended(self):
+        """IPL.n64 declared twice, both contradicted: counted corrected,
+        written nowhere."""
+        from collections import OrderedDict  # noqa: PLC0415
+
+        existing = [{"filename": "IPL.n64", "system": "n64dd", "md5": A},
+                    {"filename": "IPL.n64", "system": "n64dd", "md5": B}]
+        ours = [OrderedDict([("filename", "IPL.n64"), ("md5", C), ("system", "n64dd")])]
+        merged = RetroDeck._merge(existing, ours)
+        self.assertEqual([e["md5"] for e in merged], [A, B, C])
+
+
+class BatoceraKeepsTheRunnerKeys(unittest.TestCase):
+    def test_emulator_and_core_travel_with_a_rewritten_entry(self):
+        """checkBios skips a BIOS whose emulator or core is not installed;
+        rewritten without the keys, vectrex's MAME BIOS was wanted by every
+        build."""
+        from exporter.batocera_exporter import Exporter as Batocera  # noqa: PLC0415
+
+        fe = NativeFile("bios.bin", "bios.bin", "vectrex", platform={"md5": A},
+                        truth={"md5": B}, corrections=["md5"])
+        fe.native_data = {"native_path": "bios/bios.bin"}
+        system = NativeSystem("vectrex", files=[fe])
+        original = (
+            '    "vectrex": { "name": "Vectrex", "emulator": "libretro", "core": "mame", '
+            '"biosFiles": [ { "md5": "' + A + '", "file": "bios/bios.bin", '
+            '"emulator": "libretro", "core": "mame" } ] },'
+        )
+        exporter = Batocera()
+        line = exporter._entry_line(system, [fe], exporter._parse_entry([original]))
+        parsed = exporter._parse_entry([line])["vectrex"]
+        self.assertEqual((parsed["emulator"], parsed["core"]), ("libretro", "mame"))
+        self.assertEqual(parsed["biosFiles"][0]["core"], "mame")
+        self.assertEqual(parsed["biosFiles"][0]["md5"], B)
+
+
 if __name__ == "__main__":
     unittest.main()

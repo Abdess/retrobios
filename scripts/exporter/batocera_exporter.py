@@ -62,10 +62,29 @@ class Exporter(BaseExporter):
         # The data block is a fraction of the file; the rest is the checker.
         return True
 
-    def _bios_files(self, files: list[NativeFile]) -> str:
-        return ", ".join(self._bios_items(files))
+    def _bios_files(self, files: list[NativeFile], before: dict | None = None) -> str:
+        return ", ".join(self._bios_items(files, before))
 
-    def _bios_items(self, files: list[NativeFile]) -> list[str]:
+    @staticmethod
+    def _runner_keys(item: dict | None) -> list[str]:
+        """The emulator and core checkBios reads through coreExists().
+
+        Not in our model, so they travel from the maintainer's own entry: a
+        rewritten item without them made the checker treat the BIOS as
+        wanted by every build (vectrex, tvc, macintosh, bk).
+        """
+        return [
+            f'"{key}": "{item[key]}"'
+            for key in ("emulator", "core")
+            if item and isinstance(item.get(key), str)
+        ]
+
+    def _bios_items(self, files: list[NativeFile], before: dict | None = None) -> list[str]:
+        originals = {
+            str(item.get("file", "")): item
+            for item in (before or {}).get("biosFiles", [])
+            if isinstance(item, dict)
+        }
         parts: list[str] = []
         for fe in files:
             # The platform states an unhashed file as an empty md5 rather
@@ -80,14 +99,25 @@ class Exporter(BaseExporter):
             zipped = fe.native("zipped_file", "")
             if zipped:
                 item.append(f'"zippedFile": "{zipped}"')
+            item.extend(self._runner_keys(originals.get(path)))
             parts.append("{ " + ", ".join(item) + " }")
         return parts
 
-    def _entry_line(self, system: NativeSystem, files: list[NativeFile]) -> str:
+    @staticmethod
+    def _own_entry(system: NativeSystem, before: dict | None) -> dict:
+        """The maintainer's entry for this system, out of the parsed pair."""
+        inner = (before or {}).get(system.native_id)
+        return inner if isinstance(inner, dict) else {}
+
+    def _entry_line(
+        self, system: NativeSystem, files: list[NativeFile], before: dict | None = None
+    ) -> str:
+        own = self._own_entry(system, before)
+        runner = "".join(f"{key}, " for key in self._runner_keys(own))
         return (
             f'{_INDENT}"{system.native_id}": '
-            f'{{ "name": "{self.display_name(system)}", '
-            f'"biosFiles": [ {self._bios_files(files)} ] }},'
+            f'{{ "name": "{self.display_name(system)}", {runner}'
+            f'"biosFiles": [ {self._bios_files(files, own)} ] }},'
         )
 
     @staticmethod
@@ -127,14 +157,17 @@ class Exporter(BaseExporter):
     ) -> list[str]:
         """One entry, keeping the layout and the notes it was written with."""
         trailing, leading = self._item_notes(original)
-        items = self._bios_items(files)
+        before = self._parse_entry(original)
+        own = self._own_entry(system, before)
+        items = self._bios_items(files, own)
         one_line = len(original) == 1 and not trailing and not leading
         if one_line:
-            return [self._entry_line(system, files)]
+            return [self._entry_line(system, files, before)]
 
+        runner = "".join(f"{key}, " for key in self._runner_keys(own))
         head = (
             f'{_INDENT}"{system.native_id}": '
-            f'{{ "name": "{self.display_name(system)}", "biosFiles": ['
+            f'{{ "name": "{self.display_name(system)}", {runner}"biosFiles": ['
         )
         pad = " " * (len(_INDENT) + 4)
         lines = [head]
@@ -244,8 +277,8 @@ class Exporter(BaseExporter):
                 continue
             written.add(key)
             original_lines = body[start:end + 1]
-            replacement = self._entry_line(*pair)
             before = self._parse_entry(original_lines)
+            replacement = self._entry_line(*pair, before)
             after = self._parse_entry([replacement])
             if before is not None and before == after:
                 # Nothing changed: keep the maintainer's own lines, comments

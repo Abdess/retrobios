@@ -82,8 +82,15 @@ class Exporter(BaseExporter):
             for fe in system.files:
                 # A SHA1 BizHawk declares is BizHawk's own code, the authority
                 # for its cores: the truth's MSX.rom came from FBNeo and would
-                # have made MSXHawk refuse the dump it accepts.
-                if fe.hash("sha1") and not _hash_values(fe.platform or {}, "sha1"):
+                # have made MSXHawk refuse the dump it accepts. An entry the
+                # database never declared (can_add refuses it) names no call
+                # of its own either: by name it would rewrite the homonym of
+                # another system.
+                if (
+                    fe.platform is not None
+                    and fe.hash("sha1")
+                    and not _hash_values(fe.platform, "sha1")
+                ):
                     seen.setdefault(fe.name.casefold(), []).append(fe)
         resolved: dict[str, NativeFile] = {}
         for name, entries in seen.items():

@@ -176,8 +176,8 @@ class Exporter(BaseExporter):
                 return nested, "bios"
         return None
 
-    @staticmethod
-    def _merge(existing: object, ours: list[OrderedDict]) -> list[OrderedDict]:
+    @classmethod
+    def _merge(cls, existing: object, ours: list[OrderedDict]) -> list[OrderedDict]:
         """Correct the component's own list; never replace it.
 
         Assigning our entries wholesale dropped every file RetroDECK declares
@@ -206,6 +206,9 @@ class Exporter(BaseExporter):
             for system in _systems_of(entry):
                 key = (str(entry.get("filename", "")), system)
                 seen_keys[key] = seen_keys.get(key, 0) + 1
+        # A hash no revision shares is a revision the platform does not
+        # know: appended, not counted corrected against entries kept as
+        # they were (the 64DD IPL declared twice, both contradicted).
         for entry in entries:
             keys = _matching_keys(entry, by_key)
             other_revision = (
@@ -213,18 +216,17 @@ class Exporter(BaseExporter):
                 and seen_keys.get(keys[0], 0) > 1
                 and not _md5_set(entry.get("md5")) & _md5_set(by_key[keys[0]].get("md5"))
             )
-            if other_revision:
-                merged.append(OrderedDict(entry))
-                corrected.update(keys)
-                continue
-            if not keys:
+            if other_revision or not keys:
                 merged.append(OrderedDict(entry))
                 continue
             declared = entry.get("system")
             combined = OrderedDict(entry)
+            # Only what the format says it corrects: the maintainer's
+            # description and search paths are theirs (neogeo.zip lost its
+            # four roms directories to a path that does not exist).
             combined.update(
                 (field, value) for field, value in by_key[keys[0]].items()
-                if not (field == "system" and declared)
+                if field in cls.carries() and not (field == "system" and declared)
             )
             merged.append(combined)
             corrected.update(keys)
