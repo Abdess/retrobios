@@ -85,6 +85,7 @@ class ADeclinedBuildIsAFailure(unittest.TestCase):
                 capture_output=True, text=True, cwd=str(REPO_ROOT), timeout=600, check=False,
             )
             self.assertNotEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+            self.assertNotIn("Traceback", proc.stderr, proc.stderr)
             self.assertEqual([p for p in os.listdir(tmp) if p.endswith(".zip")], [])
 
 

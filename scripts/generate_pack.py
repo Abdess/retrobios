@@ -2337,6 +2337,8 @@ def _run_platform_packs(
             else:
                 print(f"\nGenerating pack for {representative} {_pack_label(source, required_only)}...")
 
+            zip_path = None
+            zip_paths: list = []
             try:
                 tc = target_cores_cache.get(representative) if args.target else None
                 if args.split:
