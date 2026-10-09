@@ -120,7 +120,8 @@ def _os_default_dests(os_type: str) -> dict[str, Path]:
         appdata = Path(os.environ.get("APPDATA", str(home / "AppData" / "Roaming")))
         return {
             "retroarch": appdata / "RetroArch" / "system",
-            "retrobat": profile / "RetroBat" / "bios",
+            # RetroBat's installer defaults to C:\RetroBat (installer.iss).
+            "retrobat": Path("C:/RetroBat/bios"),
             "bizhawk": profile / "BizHawk" / "Firmware",
         }
     if os_type == "darwin":
@@ -1294,7 +1295,7 @@ def download_files(
 def do_standalone_copies(
     manifest: dict, bios_path: Path, os_type: str,
     extra_dirs: dict[str, Path] | None = None,
-) -> tuple[int, int]:
+) -> tuple[int, int, int]:
     """Copy BIOS files to standalone emulator directories.
 
     Supports:
@@ -1307,16 +1308,19 @@ def do_standalone_copies(
     default per-OS locations, for setups such as LaunchBox that keep their
     emulators outside them. The layout below the root is the same.
 
-    Returns (copied_count, skipped_count).
+    Returns (copied, skipped, failed): skipped is a target directory that
+    does not exist, failed a copy the system refused (permission, disk
+    full, read-only mount), which used to be counted as "dir not found".
     """
     from fnmatch import fnmatch
 
     copies = manifest.get("standalone_copies", [])
     if not copies:
-        return 0, 0
+        return 0, 0, 0
 
     copied = 0
     skipped = 0
+    failed = 0
 
     for entry in copies:
         # Note entries: print message if emulator detected
@@ -1375,10 +1379,11 @@ def do_standalone_copies(
                 try:
                     shutil.copy2(src, dest)
                     copied += 1
-                except OSError:
-                    skipped += 1
+                except OSError as exc:
+                    print(f"  ERROR: {dest}: {exc.strerror or exc}")
+                    failed += 1
 
-    return copied, skipped
+    return copied, skipped, failed
 
 
 def format_size(n: int) -> str:
@@ -1738,11 +1743,15 @@ def main() -> None:
             print("\nStandalone emulators:")
             lb_root = launchbox_root(os_type)
             extra_dirs = launchbox_bios_dirs(lb_root) if lb_root else None
-            copied, skipped = do_standalone_copies(
+            copied, skipped, copy_failed = do_standalone_copies(
                 manifest, bios_path, os_type, extra_dirs
             )
-            if copied or skipped:
-                print(f"  {copied} copied, {skipped} skipped (dir not found)")
+            if copied or skipped or copy_failed:
+                print(
+                    f"  {copied} copied, {skipped} skipped (dir not found), "
+                    f"{copy_failed} failed"
+                )
+            total_errors += copy_failed
         elif manifest.get("standalone_copies") and not args.check:
             print(
                 "\nStandalone copies skipped "

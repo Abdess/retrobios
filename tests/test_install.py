@@ -218,6 +218,15 @@ class TestDefaultsFollowTheRegistry(unittest.TestCase):
                     with self.subTest(platform=name, os=os_type):
                         self.assertIn(install._default_dest(os_type, name), candidates)
                         checked += 1
+                # The installer's own default comes first in the registry and
+                # is the one the pack guide and the installer name.
+                first = next(
+                    (self._expand(rule["path"]) for rule in (entry.get("install") or {}).get("detect", [])
+                     if rule.get("os") == "windows" and rule.get("method") == "path_exists"),
+                    None,
+                )
+                if name == "retrobat":
+                    self.assertEqual(install._default_dest("windows", name), first)
         self.assertGreater(checked, 10)
 
 
@@ -789,7 +798,7 @@ class TestStandaloneCopiesExtraDirs(unittest.TestCase):
         (bios / "ps2-0230a.bin").write_text("rom")
         extra = Path(tempfile.mkdtemp()) / "bios"
         extra.mkdir()
-        copied, _ = install.do_standalone_copies(
+        copied, _, _ = install.do_standalone_copies(
             self._manifest(), bios, "windows", {"pcsx2": extra}
         )
         self.assertEqual(copied, 1)
@@ -801,7 +810,7 @@ class TestStandaloneCopiesExtraDirs(unittest.TestCase):
         (bios / "GC" / "USA" / "IPL.bin").write_text("ipl")
         user = Path(tempfile.mkdtemp()) / "User"
         (user / "GC" / "USA").mkdir(parents=True)
-        copied, _ = install.do_standalone_copies(
+        copied, _, _ = install.do_standalone_copies(
             self._manifest(), bios, "windows", {"dolphin": user}
         )
         self.assertEqual(copied, 1)
@@ -811,8 +820,62 @@ class TestStandaloneCopiesExtraDirs(unittest.TestCase):
         bios = Path(tempfile.mkdtemp())
         (bios / "ps2-0230a.bin").write_text("rom")
         self.assertEqual(
-            install.do_standalone_copies(self._manifest(), bios, "windows"), (0, 0)
+            install.do_standalone_copies(self._manifest(), bios, "windows"), (0, 0, 0)
         )
+
+
+class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
+    """install.py runs where the bootstraps let it run: Python 3.8, stdlib only.
+
+    The suite runs on 3.12 with pyyaml installed, so a removeprefix() or an
+    import of yaml kept every test green and died at the user's first run,
+    after the bootstrap had told them 3.8 was enough.
+    """
+
+    SOURCE = (REPO_ROOT / "install.py").read_text(encoding="utf-8")
+
+    def test_the_grammar_is_python_38(self):
+        import ast  # noqa: PLC0415
+
+        ast.parse(self.SOURCE, filename="install.py", feature_version=(3, 8))
+
+    def test_every_import_is_standard_library(self):
+        import ast  # noqa: PLC0415
+        import sys  # noqa: PLC0415
+
+        tree = ast.parse(self.SOURCE)
+        imported = set()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                imported.update(alias.name.split(".")[0] for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
+                imported.add(node.module.split(".")[0])
+        self.assertEqual(sorted(imported - set(sys.stdlib_module_names)), [])
+
+    def test_no_api_newer_than_38(self):
+        newer = (".removeprefix(", ".removesuffix(", "zoneinfo", "graphlib",
+                 "functools.cache(", ".bit_count(", "math.lcm(", "math.nextafter(")
+        used = [api for api in newer if api in self.SOURCE]
+        self.assertEqual(used, [])
+
+
+class ARefusedCopyIsAnError(unittest.TestCase):
+    """A PermissionError on a standalone copy was counted as "dir not found"
+    and the run ended on Done with exit code 0."""
+
+    def test_a_refused_copy_is_counted_failed_not_skipped(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            bios = Path(tmp, "bios")
+            bios.mkdir()
+            (bios / "prod.keys").write_bytes(b"k")
+            target = Path(tmp, "keys")
+            target.mkdir()
+            manifest = {"standalone_copies": [
+                {"file": "prod.keys", "targets": {"linux": [str(target)]}}
+            ]}
+            with unittest.mock.patch("shutil.copy2", side_effect=PermissionError(13, "denied")):
+                result = install.do_standalone_copies(manifest, bios, "linux")
+        self.assertEqual(result, (0, 0, 1))
 
 
 class TargetFlagIsAppliedOrRefused(unittest.TestCase):
@@ -844,11 +907,12 @@ class TargetFlagIsAppliedOrRefused(unittest.TestCase):
         for name in ("install/targets/retroarch.json",):
             path = REPO_ROOT / name
             if not path.is_file():
-                continue
+                self.skipTest(f"{name} not generated yet")
             targets = json.loads(path.read_text())
             for alias in ("switch", "ps2", "psp"):
-                if alias not in targets:
-                    continue
+                # An alias the builder accepts and the manifest lacks is a
+                # documented word that fails on the installer's side.
+                self.assertIn(alias, targets, f"builder accepts --target {alias}")
                 with self.subTest(alias=alias):
                     resolved = load_target_config(
                         "retroarch", alias, str(REPO_ROOT / "platforms")
@@ -1007,7 +1071,7 @@ class TestStandaloneCopyTargetsAreUntrusted(unittest.TestCase):
         outside.write_text("untouched")
         (target / "boot.bin").symlink_to(outside)
 
-        copied, skipped = install.do_standalone_copies(
+        copied, skipped, _ = install.do_standalone_copies(
             self._manifest(str(target)), bios, "linux"
         )
         self.assertEqual(copied, 0)
