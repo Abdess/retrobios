@@ -152,12 +152,13 @@ def print_report(report: dict) -> None:
     print(f"\nSummary: {', '.join(parts)}")
 
 
-def update_changed(report: dict) -> None:
-    """Refresh entries that have changed."""
+def update_changed(report: dict) -> list[str]:
+    """Refresh entries that have changed; the keys whose refresh failed."""
+    failed: list[str] = []
     for e in report.get("entries", []):
         if e["status"] == "UPDATED" and e.get("key"):
             log.info("refreshing %s ...", e["key"])
-            subprocess.run(
+            result = subprocess.run(
                 [
                     sys.executable,
                     "scripts/refresh_data_dirs.py",
@@ -167,6 +168,10 @@ def update_changed(report: dict) -> None:
                 ],
                 check=False,
             )
+            if result.returncode != 0:
+                log.error("refresh of %s failed (exit %d)", e["key"], result.returncode)
+                failed.append(e["key"])
+    return failed
 
 
 def main() -> None:
@@ -194,7 +199,10 @@ def main() -> None:
         print_report(report)
 
     if args.update:
-        update_changed(report)
+        failed = update_changed(report)
+        if failed:
+            print(f"ERROR: refresh failed for {', '.join(failed)}", file=sys.stderr)
+            sys.exit(1)
 
     # Unreachable upstream means the freshness question was not answered, and
     # a zero exit says it was answered "fresh".

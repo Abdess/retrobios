@@ -228,33 +228,42 @@ def validate_file(
 
 
 def get_changed_files() -> list[str]:
-    """Get list of changed files in current PR/branch using git."""
-    try:
-        for base in ("main", "master", "v2"):
-            try:
-                result = subprocess.run(
-                    ["git", "diff", "--name-only", f"origin/{base}...HEAD"],
-                    capture_output=True,
-                    text=True,
-                    check=True,
-                )
-                files = [
-                    f
-                    for f in result.stdout.strip().split("\n")
-                    if f.startswith("bios/")
-                ]
-                if files:
-                    return files
-            except subprocess.CalledProcessError:
-                continue
-    except (subprocess.CalledProcessError, OSError):
-        pass
+    """BIOS files the branch changes against origin's main line.
 
+    A base git cannot resolve is skipped; when none resolves the staged
+    changes are read and said so. A git that fails outright is an error,
+    never "nothing changed": a clone whose remote is not called origin
+    used to answer that no BIOS had changed while the branch committed one.
+    """
+    compared = False
+    for base in ("main", "master", "v2"):
+        result = subprocess.run(
+            ["git", "diff", "--name-only", f"origin/{base}...HEAD"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if result.returncode != 0:
+            continue
+        compared = True
+        files = [f for f in result.stdout.strip().split("\n") if f.startswith("bios/")]
+        if files:
+            return files
+    if compared:
+        return []
+    print(
+        "no origin/main, origin/master or origin/v2 to compare against; "
+        "reading the staged changes only",
+        file=sys.stderr,
+    )
     result = subprocess.run(
         ["git", "diff", "--cached", "--name-only"],
         capture_output=True,
         text=True,
+        check=False,
     )
+    if result.returncode != 0:
+        raise RuntimeError(f"git diff --cached failed: {result.stderr.strip()}")
     return [f for f in result.stdout.strip().split("\n") if f.startswith("bios/") and f]
 
 
@@ -274,7 +283,11 @@ def main():
 
     files = args.files
     if args.changed:
-        files = get_changed_files()
+        try:
+            files = get_changed_files()
+        except (RuntimeError, OSError) as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            sys.exit(2)
         if not files:
             print("No changed BIOS files detected")
             return
