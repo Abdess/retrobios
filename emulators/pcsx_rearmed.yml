@@ -59,14 +59,14 @@ files:
   # -- Fallback BIOS filenames (searched in order after scph550x) --
 
   - name: "psxonpsp660.bin"
-    description: "PSP embedded PS1 BIOS (region detected at runtime)"
-    region: [world]
+    description: "PSP embedded PS1 BIOS, filed as the Japanese BIOS"
+    region: [japan]
     size: 524288
     required: false
     hle_fallback: true
     validation: [size]
-    source_ref: "frontend/libretro.c:3864-3867 (listed_bios[3])"
-    note: "Region detected from content at runtime. Must be 512 KB in libretro context."
+    source_ref: "frontend/libretro.c:3864-3867 (listed_bios[3]), frontend/libretro.c:3654-3669 (try_use_bios region guess)"
+    note: "The core reads the region out of the image: bytes 0x7ff51 are ' J' in this dump, so it takes the JP slot (' E' takes EU, anything else US), one image per slot, first found kept. The disc licence picks the slot at boot (Config.Bios[Config.PsxRegion]); a US or EU disc only reaches this file when its own slot is empty. Must be 512 KB."
 
   - name: "scph101.bin"
     description: "SCPH-101 (v4.4 03-24-00 A) - PSone US"
