@@ -84,6 +84,7 @@ from validation import (
 
 DEFAULT_DB = "database.json"
 DEFAULT_PLATFORMS_DIR = "platforms"
+DEFAULT_BIOS_DIR = "bios"
 # The repository's platforms wherever the script runs from, for library calls
 # that pass no directory.
 _REPO_PLATFORMS = os.path.join(os.path.dirname(__file__), "..", "platforms")
@@ -715,6 +716,64 @@ def find_exclusion_notes(
 # Platform verification
 
 
+def _twin_index(
+    verify_systems: dict, db: dict, base_dest: str, zip_contents: dict,
+    data_dir_registry: dict | None,
+) -> tuple[dict[str, int], dict[int, tuple[str, dict]]]:
+    """Which declaration the pack ships at each destination, and every declaration by id."""
+    from generate_pack import _preferred_entries
+
+    preferred_entries = _preferred_entries(
+        verify_systems, db, DEFAULT_BIOS_DIR, base_dest, False,
+        zip_contents, data_dir_registry, True,
+    )
+    winners = {
+        id(fe): (sid, fe)
+        for sid, system in verify_systems.items()
+        for fe in system.get("files", [])
+    }
+    return preferred_entries, winners
+
+
+def _resolve_declaration(
+    file_entry: dict, sys_id: str, twins: tuple, db: dict, zip_contents: dict,
+    data_dir_registry: dict | None, slot_overrides: dict, mode: str,
+    platform_profiles: dict,
+) -> tuple[str | None, str, str | None]:
+    """Resolve a declaration to the file the pack ships at its destination.
+
+    When another declaration holds the destination, that one's file is
+    returned and the evidence reset: the winner's hash match is not this
+    declaration's, which is hashed against the shipped file.
+    """
+    preferred_entries, winners, base_dest = twins
+    bare = sanitize_pack_path(file_entry.get("destination", file_entry.get("name", "")))
+    preferred = preferred_entries.get(f"{base_dest}/{bare}" if base_dest else bare)
+    held_by, winner = (None, file_entry)
+    if preferred is not None and preferred != id(file_entry):
+        held_by, winner = winners[preferred]
+    local_path, resolve_status = _resolve_for_platform(
+        winner, held_by or sys_id, db, zip_contents, data_dir_registry,
+        slot_overrides, mode, platform_profiles,
+    )
+    return local_path, "" if held_by else resolve_status, held_by
+
+
+def _twin_unmet(result: dict, held_by: str | None) -> bool:
+    """Mark a declaration unmet at a path another declaration holds.
+
+    The path is answered by the winner's file, which the pack counts once;
+    this declaration's failure is reported, never folded into the
+    destination's status.
+    """
+    if held_by is None or result["status"] == Status.OK:
+        return False
+    result["discrepancy"] = (
+        f"{result.get('name', '')} is not met at the path {held_by} holds"
+    )
+    return True
+
+
 def _resolve_for_platform(
     file_entry: dict,
     sys_id: str,
@@ -845,6 +904,15 @@ def verify_platform(
             region_groups, region_mod.build_region_index(profiles), regions
         )
 
+    # A destination two systems declare with two hashes ships one file, the
+    # one the builder prefers. The other declaration is scored against that
+    # file, as the frontend will score it after installation: RetroDECK's
+    # xroar component hashes bios/disk.rom and finds the PC-88 ROM.
+    base_dest = config.get("base_destination", "")
+    preferred_entries, winners = _twin_index(
+        verify_systems, db, base_dest, zip_contents, data_dir_registry
+    )
+
     for sys_id, system in verify_systems.items():
         for file_entry in system.get("files", []):
             if region_drops and (
@@ -854,9 +922,10 @@ def verify_platform(
                 in region_drops
             ):
                 continue
-            local_path, resolve_status = _resolve_for_platform(
-                file_entry, sys_id, db, zip_contents, data_dir_registry,
-                slot_overrides, mode, platform_profiles,
+            local_path, resolve_status, held_by = _resolve_declaration(
+                file_entry, sys_id, (preferred_entries, winners, base_dest),
+                db, zip_contents, data_dir_registry, slot_overrides, mode,
+                platform_profiles,
             )
             destination = sanitize_pack_path(
                 file_entry.get("destination", file_entry.get("name", ""))
@@ -893,6 +962,8 @@ def verify_platform(
                 validation_index,
             )
             details.append(result)
+            if _twin_unmet(result, held_by):
+                continue
 
             # Aggregate by destination
             dest = file_entry.get("destination", file_entry.get("name", ""))
@@ -1048,6 +1119,10 @@ def _print_detail_entries(details: list[dict], seen: set[str], verbose: bool) ->
     """Print UNTESTED, MISSING, and DISCREPANCY entries from verification details."""
     for d in details:
         if d["status"] == Status.UNTESTED:
+            if d.get("discrepancy"):
+                # Reported below with the ground for it: a declaration
+                # unmet at a path another declaration holds.
+                continue
             key = f"{d['system']}/{d['name']}"
             if key in seen:
                 continue
