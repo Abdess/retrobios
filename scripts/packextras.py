@@ -134,6 +134,42 @@ def _map_emulator_to_slug(
             return sys_to_slug.get(target, "")
     return ""
 
+def _slug_for(
+    u: dict, profiles: dict, platform_systems: set, norm_map: dict, sys_to_slug: dict
+) -> str:
+    """The platform slug a report entry's emulator files under, or empty."""
+    emu_name = u.get("profile") or u.get("emulator", "")
+    profile = profiles.get(emu_name, {})
+    if not profile:
+        # The report names the display name where the key failed.
+        profile = next(
+            (pp for pp in profiles.values() if pp.get("emulator") == emu_name), {}
+        )
+    return _map_emulator_to_slug(profile, platform_systems, norm_map, sys_to_slug)
+
+
+def unplaceable_extras(config: dict, undeclared: list[dict], profiles: dict) -> set:
+    """Keys of the report entries a slug-based platform cannot place.
+
+    RomM files every BIOS under the slug of its system and knows no slug
+    for DOS or for the arcade sets MAME 2003 reads; the builder skipped
+    those entries and the report counted them in the pack.
+    """
+    from common import _norm_system_id
+
+    is_slug_based, sys_to_slug = _detect_slug_structure(config)
+    if not is_slug_based:
+        return set()
+    platform_systems = set(config.get("systems", {}).keys())
+    norm_map = {_norm_system_id(sid): sid for sid in platform_systems}
+    return {
+        (u.get("emulator", ""), u.get("name", ""), u.get("path") or "")
+        for u in undeclared
+        if u.get("in_repo")
+        and not _slug_for(u, profiles, platform_systems, norm_map, sys_to_slug)
+    }
+
+
 def _agnostic_scan_extras(
     profiles: dict,
     relevant: set,
@@ -412,8 +448,17 @@ def _collect_emulator_extras(
     emu_profiles: dict | None = None,
     target_cores: set[str] | None = None,
     include_all: bool = False,
+    claimants: dict[tuple[str, str, str], str] | None = None,
+    unplaceable: list[dict] | None = None,
 ) -> list[dict]:
     """Collect core requirement files from emulator profiles not in the platform pack.
+
+    ``claimants`` receives the destination of every report entry that
+    asked for one, the ones a sibling already took included: the region
+    report withdraws by that key, and an entry without one stayed listed
+    after the builder had withdrawn its destination. ``unplaceable``
+    receives the entries a slug-based platform cannot place, so the
+    manifest and the report can say so instead of counting them packed.
 
     Uses the same system-overlap matching as verify.py cross-reference:
     - Matches emulators by shared system IDs with the platform
@@ -472,25 +517,18 @@ def _collect_emulator_extras(
 
         # Slug-based platforms: prefix dest with system slug
         if is_slug_based:
-            emu_name = u.get("profile") or u.get("emulator", "")
-            profile = profiles.get(emu_name, {})
-            # Try finding profile by display name if key lookup failed
-            if not profile:
-                for pn, pp in profiles.items():
-                    if pp.get("emulator") == emu_name:
-                        profile = pp
-                        break
-            slug = _map_emulator_to_slug(
-                profile,
-                platform_systems,
-                norm_map,
-                sys_to_slug,
-            )
+            slug = _slug_for(u, profiles, platform_systems, norm_map, sys_to_slug)
             if not slug:
-                continue  # can't place without slug
+                if unplaceable is not None:
+                    unplaceable.append(u)
+                continue
             dest = f"{slug}/{dest}"
 
         full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
+        if claimants is not None:
+            claimants[(u.get("emulator", ""), u.get("name", ""), u.get("path") or "")] = (
+                sanitize_pack_path(dest)
+            )
         if full_dest in seen_dests:
             continue
         seen_dests.add(full_dest)
@@ -681,6 +719,7 @@ def platform_region_groups(
         emu_profiles,
         target_cores=target_cores,
         include_all=include_all,
+        claimants=extra_dests,
     )
     for extra in _kept(extras, required_only):
         dest = sanitize_pack_path(extra.get("destination", extra.get("name", "")))
