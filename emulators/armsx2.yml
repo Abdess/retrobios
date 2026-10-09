@@ -272,6 +272,8 @@ files:
     standalone_path: resources/GameIndex.yaml
     required: false
     bundled: true
+    sha1: 72bfdf91fa11a86e2810a7c167cdcf11e20418a8
+    size: 2690355
     description: "Game database"
     note: >-
       Read from the resources folder, keyed by serial, carrying the per-game
@@ -297,6 +299,8 @@ files:
     standalone_path: resources/RedumpDatabase.yaml
     required: false
     bundled: true
+    sha1: bf2c73d668cd671df8adfe2ec3c7074e8ba9176a
+    size: 1917242
     description: "Disc track hash database"
     note: >-
       Loaded on the first hash lookup and used to tell the user whether a dump
@@ -308,6 +312,8 @@ files:
     standalone_path: resources/patches.zip
     required: false
     bundled: true
+    sha1: f7d0f1606c87019f00109ebdf0f260299f0a72da
+    size: 2007224
     description: "Game patch archive"
     note: >-
       Per-game pnach entries matched on serial and disc CRC. The patches and
@@ -787,6 +793,8 @@ files:
     standalone_path: resources/sounds/achievements/unlock.wav
     required: false
     bundled: true
+    sha1: da328a0a3074ec86fee2d6741bfc2e5a1f68d063
+    size: 202702
     description: "Achievement unlock sound"
     source_ref: "pcsx2/Achievements.cpp:69, pcsx2/Achievements.cpp:1278-1284, pcsx2/Achievements.cpp:1581"
 

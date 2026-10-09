@@ -69,6 +69,8 @@ files:
     path: resources/GameIndex.yaml
     required: false
     bundled: true
+    sha1: 5e2d50a3376dc6a0750505bec68626d39a5bd4c1
+    size: 2683897
     category: game_data
     description: "per-title compatibility and fix database"
     source_ref: "pcsx2/GameDatabase.cpp:39, pcsx2/GameDatabase.cpp:1026-1035"
@@ -78,6 +80,8 @@ files:
     path: resources/RedumpDatabase.yaml
     required: false
     bundled: true
+    sha1: bf2c73d668cd671df8adfe2ec3c7074e8ba9176a
+    size: 1917242
     category: game_data
     description: "disc hash database"
     source_ref: "pcsx2/GameDatabase.cpp:1133, pcsx2/GameDatabase.cpp:1188-1197"

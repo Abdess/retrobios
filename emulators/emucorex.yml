@@ -289,6 +289,8 @@ files:
     system: sony-playstation-2
     required: false
     bundled: true
+    sha1: 2d9878fdd70979ecf6dd0da7652efd3797c26039
+    size: 2697551
     category: game_data
     description: "per-title compatibility and fix database"
     note: >-
@@ -303,6 +305,8 @@ files:
     system: sony-playstation-2
     required: false
     bundled: true
+    sha1: dceb4536fba7fb89452864fc512a4d071a19eae0
+    size: 1906463
     category: game_data
     description: "disc hash database"
     note: >-
@@ -315,6 +319,8 @@ files:
     system: sony-playstation-2
     required: false
     bundled: true
+    sha1: a3d939af27fe0929e61b8e20d49ef58316c0a66c
+    size: 2091144
     category: game_data
     description: "built-in game patch archive"
     note: >-
@@ -554,6 +560,8 @@ files:
 
   - name: unlock.wav
     path: resources/sounds/achievements/unlock.wav
+    sha1: da328a0a3074ec86fee2d6741bfc2e5a1f68d063
+    size: 202702
     system: sony-playstation-2
     required: false
     description: "achievement unlock sound"

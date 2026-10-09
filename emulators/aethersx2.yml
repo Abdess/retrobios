@@ -148,6 +148,9 @@ files:
     path: resources/GameIndex.yaml
     required: false
     bundled: true
+    sha1:
+      - 997fdfb1c1873c1a43972b2984ac0da61fd47b14
+      - 71fc274cbe27f382afb0324024ebdc6f59aa666d
     description: "Game database"
     note: "Read from the resources folder, keyed by serial, and carrying the per-game fixes, patches and settings overrides. Parsed into gamedb.cache in the cache folder and reparsed whenever the modification time moves."
     source_ref: "aethersx2/pcsx2/GameDatabase.cpp:35-36, aethersx2/pcsx2/GameDatabase.cpp:348-352, aethersx2/pcsx2/GameDatabase.cpp:523-535"
