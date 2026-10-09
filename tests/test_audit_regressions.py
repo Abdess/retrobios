@@ -1325,7 +1325,10 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
 
     def test_an_unresolvable_file_is_recorded_as_omitted(self):
         """The reason must be one install.py knows how to report."""
-        allowed = {"hash_mismatch", "not_found", "external", "user_provided"}
+        allowed = {
+            "hash_mismatch", "not_found", "external", "user_provided",
+            "no_platform_slug",
+        }
         for path in sorted((ROOT / "install").glob("*.json")):
             with self.subTest(manifest=path.name):
                 data = json.loads(path.read_text())

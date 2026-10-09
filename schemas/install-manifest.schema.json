@@ -129,7 +129,8 @@
               "hash_mismatch",
               "not_found",
               "external",
-              "user_provided"
+              "user_provided",
+              "no_platform_slug"
             ]
           },
           "cores": {
