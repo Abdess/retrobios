@@ -939,17 +939,37 @@ class RegionRegressions(unittest.TestCase):
         )
         self.assertNotEqual(north_america, europe)
 
-    def test_region_audit_accepts_list_valued_md5(self):
-        sha1 = "a" * 40
-        md5 = "b" * 32
-        db = {
-            "files": {sha1: {}},
-            "indexes": {"by_md5": {md5: sha1}, "by_name": {}},
-        }
-        self.assertEqual(
-            region_audit.resolve_sha1({"name": "bios.bin", "md5": [md5]}, db),
-            sha1,
-        )
+    def test_region_audit_resolves_the_way_the_pack_does(self):
+        """A private resolver read sha1, md5 and a lone name: an entry
+        identified by its path (Dolphin's three IPL.bin) was never checked."""
+        import hashlib  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory(dir=TMP_ROOT) as directory:
+            previous = os.getcwd()
+            os.chdir(directory)
+            self.addCleanup(os.chdir, previous)
+            files, shas = {}, {}
+            for rel, payload in (("bios/GC/USA/IPL.bin", b"usa"), ("bios/GC/JAP/IPL.bin", b"jap")):
+                Path(rel).parent.mkdir(parents=True, exist_ok=True)
+                Path(rel).write_bytes(payload)
+                sha1 = hashlib.sha1(payload).hexdigest()
+                shas[rel] = sha1
+                files[sha1] = {"path": rel, "name": "IPL.bin", "size": len(payload), "sha1": sha1,
+                               "md5": hashlib.md5(payload).hexdigest(),
+                               "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000001"}
+            from scripts import generate_db  # noqa: PLC0415
+
+            db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+            by_md5 = {e["md5"]: s for s, e in files.items()}
+            self.assertEqual(
+                region_audit.resolve_sha1({"name": "IPL.bin", "md5": [files[shas["bios/GC/USA/IPL.bin"]]["md5"]]}, db),
+                shas["bios/GC/USA/IPL.bin"],
+            )
+            self.assertEqual(
+                region_audit.resolve_sha1({"name": "IPL.bin", "path": "GC/JAP/IPL.bin"}, db),
+                shas["bios/GC/JAP/IPL.bin"],
+            )
+            self.assertTrue(by_md5)
 
 
 class ArchiveSecurityRegressions(unittest.TestCase):

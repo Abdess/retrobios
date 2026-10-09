@@ -19,7 +19,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import region
-from common import load_emulator_profiles, load_database, parse_md5_list
+from common import load_database, load_emulator_profiles, resolve_local_file
 
 # No-Intro filename tokens: full English territory names.
 NOINTRO = {
@@ -100,24 +100,21 @@ def catalog_regions(db: dict) -> dict[str, tuple[set[str], str]]:
     return out
 
 
-def resolve_sha1(file_entry: dict, db: dict) -> str | None:
-    """Resolve a profile file entry to a repo SHA1, or None when ambiguous."""
-    files = db["files"]
-    indexes = db["indexes"]
-    raw_sha1 = file_entry.get("sha1")
-    declared = raw_sha1 if isinstance(raw_sha1, list) else [raw_sha1]
-    sha1_hits = [str(value).lower() for value in declared if value]
-    sha1_hits = [value for value in sha1_hits if value in files]
-    if len(sha1_hits) == 1:
-        return sha1_hits[0]
-    for md5 in parse_md5_list(file_entry.get("md5")):
-        hit = indexes["by_md5"].get(md5)
-        if hit:
-            return hit
-    hits = indexes["by_name"].get(file_entry.get("name", ""), [])
-    if isinstance(hits, str):
-        hits = [hits]
-    return hits[0] if len(hits) == 1 else None
+def resolve_sha1(file_entry: dict, db: dict, by_path: dict | None = None) -> str | None:
+    """The repo SHA1 a profile entry resolves to, by the pack's own resolver.
+
+    A private resolver read sha1, then md5, then a lone name: entries that
+    identify their file by path (Dolphin's three IPL.bin), by crc32
+    (geargrafx) or by sha256 (mednafen) were never checked at all.
+    """
+    if by_path is None:
+        by_path = {entry.get("path", ""): sha1 for sha1, entry in db["files"].items()}
+    path, status = resolve_local_file(
+        file_entry, db, dest_hint=file_entry.get("path") or ""
+    )
+    if not path or status in ("not_found", "hash_mismatch"):
+        return None
+    return by_path.get(path)
 
 
 def build_report(profiles: dict, db: dict) -> dict:
@@ -130,6 +127,7 @@ def build_report(profiles: dict, db: dict) -> dict:
     for slugs, _name in catalog.values():
         vocabulary.update(slugs)
 
+    by_path = {entry.get("path", ""): sha1 for sha1, entry in db["files"].items()}
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):
             continue
@@ -137,7 +135,7 @@ def build_report(profiles: dict, db: dict) -> dict:
             if not isinstance(f, dict) or not f.get("region"):
                 continue
             declared = region.normalize_declared(f["region"])
-            sha1 = resolve_sha1(f, db)
+            sha1 = resolve_sha1(dict(f, source_profile=emu_name), db, by_path)
             if not sha1 or sha1 not in catalog:
                 unchecked += 1
                 continue
