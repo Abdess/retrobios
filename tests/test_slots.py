@@ -183,6 +183,20 @@ class TestConflicts(unittest.TestCase):
         conflicts = slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
         self.assertEqual(conflicts, [])
 
+    def test_an_entry_the_pack_never_carries_claims_nothing(self):
+        """A file read from the save directory, declared with the sha1 of
+        another dump, arbitrated the platform's file off its own path."""
+        profile = {
+            "core": {
+                "files": [
+                    {"name": "IPL.bin", "path": "GC/JAP/IPL.bin", "md5": "n" * 32,
+                     "load_from": "save_dir"},
+                ]
+            }
+        }
+        conflicts = slots.find_conflicts(self._config("m" * 32), profile, REGIONS_DB)
+        self.assertEqual(conflicts, [])
+
     def test_a_name_only_resolution_asserts_nothing(self):
         # No hash and no path that the repository carries: the entry is
         # answered by filename alone and cannot contradict anything.

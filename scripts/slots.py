@@ -28,6 +28,7 @@ from common import (
     resolve_local_file,
     runs_standalone,
 )
+from validation import outside_gap_scope
 
 # A profile entry can prove a slot without declaring a hash: Dolphin names no
 # checksum for the GameCube boot ROM because its source names none, and the
@@ -155,10 +156,10 @@ def profile_claims(
         for entry in profile.get("files") or []:
             if not isinstance(entry, dict):
                 continue
-            entry_mode = entry.get("mode")
-            if entry_mode == "standalone" and not is_standalone:
-                continue
-            if entry_mode == "libretro" and is_standalone:
+            # The same rule as the gap report and the builder: an entry the
+            # pack never carries (read from the save directory, a
+            # placeholder, a filename-agnostic scan) arbitrates nothing.
+            if outside_gap_scope(entry, is_standalone):
                 continue
             # A member of a romset is not a file at the BIOS root: the archive
             # holding it is what occupies a destination, and it is declared
