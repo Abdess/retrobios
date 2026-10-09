@@ -267,6 +267,32 @@ def get_changed_files() -> list[str]:
     return [f for f in result.stdout.strip().split("\n") if f.startswith("bios/") and f]
 
 
+def _files_to_validate(args, parser) -> list:
+    """The files named on the command line, or the changed ones."""
+    if not args.changed:
+        if not args.files:
+            parser.error("No files specified. Use --changed or provide file paths.")
+        return args.files
+    try:
+        files = get_changed_files()
+    except (RuntimeError, OSError) as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        sys.exit(2)
+    if not files:
+        print("No changed BIOS files detected")
+    return files
+
+
+def _load_database_if_any(path):
+    try:
+        return load_database(path)
+    except FileNotFoundError:
+        return None
+    except json.JSONDecodeError as e:
+        print(f"WARNING: corrupt database.json: {e}", file=sys.stderr)
+        return None
+
+
 def main():
     parser = argparse.ArgumentParser(description="Validate BIOS file contributions")
     parser.add_argument("files", nargs="*", help="Files to validate")
@@ -281,27 +307,11 @@ def main():
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     args = parser.parse_args()
 
-    files = args.files
-    if args.changed:
-        try:
-            files = get_changed_files()
-        except (RuntimeError, OSError) as exc:
-            print(f"Error: {exc}", file=sys.stderr)
-            sys.exit(2)
-        if not files:
-            print("No changed BIOS files detected")
-            return
-
+    files = _files_to_validate(args, parser)
     if not files:
-        parser.error("No files specified. Use --changed or provide file paths.")
+        return
 
-    try:
-        db = load_database(args.db)
-    except FileNotFoundError:
-        db = None
-    except json.JSONDecodeError as e:
-        print(f"WARNING: corrupt database.json: {e}", file=sys.stderr)
-        db = None
+    db = _load_database_if_any(args.db)
     platform_hashes = load_platform_hashes(args.platforms_dir)
 
     results = []
