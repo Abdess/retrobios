@@ -5,7 +5,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "1.0",
-  "generated": "2026-10-06T06:50:25Z",
+  "generated": "2026-10-09T20:41:14Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,10 +237,10 @@
       }
     }
   ],
-  "total_files": 3229,
-  "total_size": 4193661699,
-  "pack_files": 3231,
-  "pack_size": 4193661699,
+  "total_files": 3220,
+  "total_size": 4192446979,
+  "pack_files": 3222,
+  "pack_size": 4192446979,
   "total_omitted": 1,
   "omitted_files": [
     {
@@ -3384,31 +3384,11 @@
       ]
     },
     {
-      "dest": "cd32.rom",
-      "sha1": "3525be8887f79b5929e017b42380a79edfee542d",
-      "sha256": "3586355514947b5ab48c8755dc004fab94f188b19e7bce491c8f9693499e830b",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-310-cd32.rom",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
       "dest": "cd32ext.rom",
       "sha1": "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f",
       "sha256": "d964826432559994ffe329f643fd4e42dbbff313362d9434945725d7119cae87",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-ext-310-cd32.rom",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "cdtv.rom",
-      "sha1": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
-      "sha256": "6e48bb768539e8dae352553e5fdfa860682edaf9e26b105fadd8e26103171765",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/amiga-ext-130-cdtv.rom",
       "cores": [
         "amiberry"
       ]
@@ -4111,16 +4091,6 @@
       "repo_path": "bios/Sega/Saturn/satar4mp.bin",
       "cores": [
         "beetle_saturn"
-      ]
-    },
-    {
-      "dest": "bk/BASIC10.ROM",
-      "sha1": "af7eae90c398ec12942a408fa5ac2722e331738c",
-      "sha256": "24be347356715352fcab480ed1559302d47d598255980a32150eba1431b462b8",
-      "size": 24576,
-      "repo_path": "bios/Elektronika/BK/BASIC10.ROM",
-      "cores": [
-        "bk"
       ]
     },
     {
@@ -21454,16 +21424,6 @@
       ]
     },
     {
-      "dest": "dc/dc_nvmem.bin",
-      "sha1": "72c65f2a11ee7b72b77b9945187b7a332632e14a",
-      "sha256": "15a9bc3aa59fa998c03bfe0b1cf6cb1958c1660e8e72b3d7195b653f44038407",
-      "size": 131072,
-      "repo_path": "bios/Sega/Dreamcast/dc_nvmem.bin",
-      "cores": [
-        "flycast"
-      ]
-    },
-    {
       "dest": "dc/font.bin",
       "sha1": "94c6ff701f79742ee23c0a028ac0be5aead77c73",
       "sha256": "5e7773bcffda1f21ba8d3fb1ab8f98057215b098f7fed86b0138ede5f1a7dbd0",
@@ -21864,16 +21824,6 @@
       ]
     },
     {
-      "dest": "colecovision.rom",
-      "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
-      "sha256": "990bf1956f10207d8781b619eb74f89b00d921c8d45c95c334c16c8cceca09ad",
-      "size": 8192,
-      "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
-      "cores": [
-        "gearcoleco"
-      ]
-    },
-    {
       "dest": "eos.rom",
       "sha1": "ad3c20ef444f10af7ae8eb75c81e500d9b1bba3d",
       "sha256": "cd012db8816fcebf0790fbc30f16d003ecd9ccfea844451c04b4a78c631cced3",
@@ -21989,16 +21939,6 @@
       "sha256": "34cd454c6201bfd26839d6ace2ff6b1231e09d6279e49b4890311756dc3825fb",
       "size": 131072,
       "repo_path": "bios/Apple/Apple IIGS/ROM",
-      "cores": [
-        "gsplus"
-      ]
-    },
-    {
-      "dest": "c600.rom",
-      "sha1": "d4181c9f046aafc3fb326b381baac809d9e38d16",
-      "sha256": "de1e3e035878bab43d0af8fe38f5839c527e9548647036598ee6fe7ec74d2a7d",
-      "size": 256,
-      "repo_path": "bios/Apple/Apple II/AppleIIe_DiskII.rom",
       "cores": [
         "gsplus"
       ]
@@ -28044,16 +27984,6 @@
       ]
     },
     {
-      "dest": "quasi88/n88sub.rom",
-      "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
-      "sha256": "9dc63118728a171ce2ed437ad38ef280b8b7bcf4a5a95fedf18946501b010456",
-      "size": 2048,
-      "repo_path": "bios/NEC/PC-98/N88SUB.ROM",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
       "dest": "quasi88/n88knj2.rom",
       "sha1": "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53",
       "sha256": "5c31df4b892e730d1ba7f80fd5583e838ae5583ba52408088da74b9ff422e5fe",
@@ -28929,26 +28859,6 @@
       "sha256": "f8d03a5a31fc3bd01a4f85f60d3dbe1656a6770f2a9ca9bad0a66c03ed1bd512",
       "size": 262144,
       "repo_path": "bios/Atari/Jaguar/[BIOS] Atari Jaguar Developer CD (World).j64",
-      "cores": [
-        "virtualjaguar"
-      ]
-    },
-    {
-      "dest": "jagboot.rom",
-      "sha1": "af643900fea84234e08b616a6d27f03f0a61db96",
-      "sha256": "f0bd29599b3dfca7f5620c011256c1dc45c9d82c428a318f965c2ba3ded2e9f9",
-      "size": 131072,
-      "repo_path": "bios/Atari/Jaguar/boot.rom",
-      "cores": [
-        "virtualjaguar"
-      ]
-    },
-    {
-      "dest": "jagboot_m.rom",
-      "sha1": "af643900fea84234e08b616a6d27f03f0a61db96",
-      "sha256": "f0bd29599b3dfca7f5620c011256c1dc45c9d82c428a318f965c2ba3ded2e9f9",
-      "size": 131072,
-      "repo_path": "bios/Atari/Jaguar/boot.rom",
       "cores": [
         "virtualjaguar"
       ]

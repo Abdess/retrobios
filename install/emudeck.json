@@ -5,7 +5,7 @@
   "platform": "emudeck",
   "display_name": "EmuDeck",
   "version": "1.0",
-  "generated": "2026-10-06T10:11:17Z",
+  "generated": "2026-10-09T20:41:14Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -250,10 +250,10 @@
       }
     }
   ],
-  "total_files": 619,
-  "total_size": 3473031414,
-  "pack_files": 621,
-  "pack_size": 3473031414,
+  "total_files": 618,
+  "total_size": 3472900342,
+  "pack_files": 620,
+  "pack_size": 3472900342,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -2189,16 +2189,6 @@
       "repo_path": "bios/Other/eden/switch/dev.keys",
       "cores": [
         "eden"
-      ]
-    },
-    {
-      "dest": "dc/dc_nvmem.bin",
-      "sha1": "72c65f2a11ee7b72b77b9945187b7a332632e14a",
-      "sha256": "15a9bc3aa59fa998c03bfe0b1cf6cb1958c1660e8e72b3d7195b653f44038407",
-      "size": 131072,
-      "repo_path": "bios/Sega/Dreamcast/dc_nvmem.bin",
-      "cores": [
-        "flycast"
       ]
     },
     {

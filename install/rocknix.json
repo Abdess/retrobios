@@ -5,7 +5,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-10-06T06:50:25Z",
+  "generated": "2026-10-09T20:41:14Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -17,10 +17,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 5804,
-  "total_size": 6570724300,
-  "pack_files": 5806,
-  "pack_size": 6570724300,
+  "total_files": 5802,
+  "total_size": 6570592972,
+  "pack_files": 5804,
+  "pack_size": 6570592972,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -15718,16 +15718,6 @@
       "repo_path": "bios/Nintendo/NES/nes.pal",
       "cores": [
         "fceumm"
-      ]
-    },
-    {
-      "dest": "dc/dc_nvmem.bin",
-      "sha1": "72c65f2a11ee7b72b77b9945187b7a332632e14a",
-      "sha256": "15a9bc3aa59fa998c03bfe0b1cf6cb1958c1660e8e72b3d7195b653f44038407",
-      "size": 131072,
-      "repo_path": "bios/Sega/Dreamcast/dc_nvmem.bin",
-      "cores": [
-        "flycast"
       ]
     },
     {
@@ -53059,26 +53049,6 @@
       ]
     },
     {
-      "dest": "SkyEmu/cgb_boot.bin",
-      "sha1": "80e3ee82416c1a74827a5459fde32f04bf51a1f6",
-      "sha256": "119470a9cf9f0d85f0c7ba5a6cadffeec07eb9862719086d1a9808189605e388",
-      "size": 2304,
-      "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
-      "cores": [
-        "skyemu"
-      ]
-    },
-    {
-      "dest": "SkyEmu/dmg_rom.bin",
-      "sha1": "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
-      "sha256": "cf053eccb4ccafff9e67339d4e78e98dce7d1ed59be819d2a1ba2232c6fce1c7",
-      "size": 256,
-      "repo_path": "bios/Nintendo/Game Boy/GB_dmg.bin",
-      "cores": [
-        "skyemu"
-      ]
-    },
-    {
       "dest": "SkyEmu/nds7.bin",
       "sha1": "24f67bdea115a2c847c8813a262502ee1607b7df",
       "sha256": "ba65f690eb04ec92db67c0e299e21ad71de087d6d5de8a9cb17a62eaab563c17",
@@ -56108,6 +56078,16 @@
       "repo_path": "bios/Sega/Saturn/sega_100.bin",
       "cores": [
         "kronos"
+      ]
+    },
+    {
+      "dest": "SkyEmu/cgb_boot.bin",
+      "sha1": "80e3ee82416c1a74827a5459fde32f04bf51a1f6",
+      "sha256": "119470a9cf9f0d85f0c7ba5a6cadffeec07eb9862719086d1a9808189605e388",
+      "size": 2304,
+      "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
+      "cores": [
+        "skyemu"
       ]
     },
     {

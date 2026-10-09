@@ -5,7 +5,7 @@
   "platform": "batocera",
   "display_name": "Batocera",
   "version": "1.0",
-  "generated": "2026-10-06T06:50:25Z",
+  "generated": "2026-10-09T20:41:14Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -237,10 +237,10 @@
       }
     }
   ],
-  "total_files": 12826,
-  "total_size": 8065338769,
-  "pack_files": 12828,
-  "pack_size": 8065338769,
+  "total_files": 12808,
+  "total_size": 8059515793,
+  "pack_files": 12810,
+  "pack_size": 8059515793,
   "total_omitted": 30,
   "omitted_files": [
     {
@@ -3463,36 +3463,6 @@
       "sha256": "ee05862d8102a08436ac4056da7d549db31625c7d47b24dfb7b3c9a5c113ca53",
       "size": 262144,
       "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "cd32.rom",
-      "sha1": "3525be8887f79b5929e017b42380a79edfee542d",
-      "sha256": "3586355514947b5ab48c8755dc004fab94f188b19e7bce491c8f9693499e830b",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-310-cd32.rom",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "cd32ext.rom",
-      "sha1": "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f",
-      "sha256": "d964826432559994ffe329f643fd4e42dbbff313362d9434945725d7119cae87",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/amiga-ext-310-cd32.rom",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "cdtv.rom",
-      "sha1": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
-      "sha256": "6e48bb768539e8dae352553e5fdfa860682edaf9e26b105fadd8e26103171765",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/amiga-ext-130-cdtv.rom",
       "cores": [
         "amiberry"
       ]
@@ -41018,16 +40988,6 @@
       ]
     },
     {
-      "dest": "Acorn/basic.rom",
-      "sha1": "4a7393f3a45ea309f744441c16723e2ef447a281",
-      "sha256": "45bd55dc0f6f0f8f1fe9e2481de7def206565eec8f600ba3068b849ca4132079",
-      "size": 16384,
-      "repo_path": "bios/Acorn/BBC Micro/basic2.rom",
-      "cores": [
-        "clk"
-      ]
-    },
-    {
       "dest": "BBCMicro/dfs09.rom",
       "sha1": "5cc0f14b8f46855c70eaa653cca4ad079b458732",
       "sha256": "ea8230cf0e93bd874df81d12f797a2cbd5038dca6b3cdd05d4193673086f9a6c",
@@ -41608,16 +41568,6 @@
       ]
     },
     {
-      "dest": "MSX/MSX.ROM",
-      "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
-      "sha256": "999564a371dd2fdf7fbe8d853e82a68d557c27b7d87417639b2fa17704b83f78",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX.ROM",
-      "cores": [
-        "clk"
-      ]
-    },
-    {
       "dest": "MSX/msx-japanese.rom",
       "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
       "sha256": "413a2b601a94b3792e054be2439cc77a1819cceadbfa9542f88d51c7480f2ef0",
@@ -41653,26 +41603,6 @@
       "sha256": "31740a761447d7590c304338d389b0ae114546a8b9f79c9ffd5e374f80b7d354",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/DISK.ROM",
-      "cores": [
-        "clk"
-      ]
-    },
-    {
-      "dest": "MSX/MSX2.ROM",
-      "sha1": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
-      "sha256": "4bc4ae85ca5f28246cd3e7b7e017d298ddd375603657f84ef2c7954bc2d9b919",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2.ROM",
-      "cores": [
-        "clk"
-      ]
-    },
-    {
-      "dest": "MSX/MSX2EXT.ROM",
-      "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
-      "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
       "cores": [
         "clk"
       ]
@@ -84774,36 +84704,6 @@
       ]
     },
     {
-      "dest": "dmg_boot.bin",
-      "sha1": "1db57a1e8b6e4096f811587f9eab0c6675fd9755",
-      "sha256": "6f64da4cecd7e54e2f928eb3e3ba7810a7a567d0d247cc71737d1771e073a916",
-      "size": 256,
-      "repo_path": "bios/Nintendo/Game Boy/dmg_boot.bin",
-      "cores": [
-        "mesen-s"
-      ]
-    },
-    {
-      "dest": "cgb_boot.bin",
-      "sha1": "80e3ee82416c1a74827a5459fde32f04bf51a1f6",
-      "sha256": "119470a9cf9f0d85f0c7ba5a6cadffeec07eb9862719086d1a9808189605e388",
-      "size": 2304,
-      "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
-      "cores": [
-        "mesen-s"
-      ]
-    },
-    {
-      "dest": "Mupen64plus/IPL.n64",
-      "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
-      "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
-      "size": 4194304,
-      "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
-      "cores": [
-        "mupen64plus_next"
-      ]
-    },
-    {
       "dest": "Mupen64plus/font.ttf",
       "sha1": "1d7f6fa0c34e3d50be52c16a0816bebac309fe41",
       "sha256": "c4c45690b345435b2cba52ecabe275f05e49b389b39fe68ad03afbb551288d3d",
@@ -89574,86 +89474,6 @@
       ]
     },
     {
-      "dest": "quasi88/n88.rom",
-      "sha1": "3518193b8207bdebf22c1380c2db8c554baff329",
-      "sha256": "d76f9118f9994eb391a0dc9c1fbfbfa2e9bc584a65da75f3ba7065d3c03cab76",
-      "size": 32768,
-      "repo_path": "bios/NEC/PC-98/n88.rom",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
-      "dest": "quasi88/n88_0.rom",
-      "sha1": "d1ae642aed4f0584eeb81ff50180db694e5101d4",
-      "sha256": "8b584cd9143a670ddfce657ca65067c86f6be1db757a3085f48b1479ac6e8cf3",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_0.rom",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
-      "dest": "quasi88/n88_1.rom",
-      "sha1": "4ae4d37409ff99411a623da9f6a44192170a854e",
-      "sha256": "810936574cdf68849822a1570046091f0bad0590dee3635dbc89a4cc4e099555",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_1.rom",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
-      "dest": "quasi88/n88_2.rom",
-      "sha1": "e94278682ef9e9bbb82201f72c50382748dcea2a",
-      "sha256": "7d361b1bfd8523cd580bd9ca73902154556fbf45f60f0f539beef397d9462646",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_2.rom",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
-      "dest": "quasi88/n88_3.rom",
-      "sha1": "af452aed79b072c4d17985830b7c5dca64d4b412",
-      "sha256": "3dc431af6e0c724582a3aa49e5c22cb9cc99d8298a4cce500e62bbaf1bc4bffb",
-      "size": 8192,
-      "repo_path": "bios/NEC/PC-98/n88_3.rom",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
-      "dest": "quasi88/n88n.rom",
-      "sha1": "063609dd518c124a4fc9ba35d1bae35771666a34",
-      "sha256": "4db0b25bf25fd063b08fde9e76d7504440cd322a8ab6b72c4ee7d8ea98ce0839",
-      "size": 32768,
-      "repo_path": "bios/NEC/PC-98/n88n.rom",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
-      "dest": "quasi88/n88sub.rom",
-      "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
-      "sha256": "9dc63118728a171ce2ed437ad38ef280b8b7bcf4a5a95fedf18946501b010456",
-      "size": 2048,
-      "repo_path": "bios/NEC/PC-98/N88SUB.ROM",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
-      "dest": "quasi88/n88knj1.rom",
-      "sha1": "82e11a177af6a5091dd67f50a2f4bafda84d6556",
-      "sha256": "7608040cffb1951e5cc567abb63f75b5746777a1ba96196c1b75606b793bb4bb",
-      "size": 131072,
-      "repo_path": "bios/NEC/PC-88/KANJI1.ROM",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
       "dest": "quasi88/n88knj2.rom",
       "sha1": "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53",
       "sha256": "5c31df4b892e730d1ba7f80fd5583e838ae5583ba52408088da74b9ff422e5fe",
@@ -89669,16 +89489,6 @@
       "sha256": "25773eaee3af617db08d26602d8f4cdc7d42ed946ca510d3b1d96fe1645af63c",
       "size": 524288,
       "repo_path": "bios/NEC/PC-98/n88jisho.rom",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
-      "dest": "quasi88/font.rom",
-      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
-      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
-      "size": 2048,
-      "repo_path": "bios/NEC/PC-88/font.rom",
       "cores": [
         "quasi88"
       ]
@@ -126209,6 +126019,16 @@
       "repo_path": "bios/Arcade/Arcade/warzard.zip",
       "cores": [
         "fbneo"
+      ]
+    },
+    {
+      "dest": "Acorn/basic.rom",
+      "sha1": "4a7393f3a45ea309f744441c16723e2ef447a281",
+      "sha256": "45bd55dc0f6f0f8f1fe9e2481de7def206565eec8f600ba3068b849ca4132079",
+      "size": 16384,
+      "repo_path": "bios/Acorn/BBC Micro/basic2.rom",
+      "cores": [
+        "clk"
       ]
     },
     {

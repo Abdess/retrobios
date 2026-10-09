@@ -5,7 +5,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "1.0",
-  "generated": "2026-10-06T10:11:17Z",
+  "generated": "2026-10-09T20:41:14Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -15,12 +15,543 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1089,
-  "total_size": 1586368550,
-  "pack_files": 1091,
-  "pack_size": 1586368550,
-  "total_omitted": 0,
-  "omitted_files": [],
+  "total_files": 1085,
+  "total_size": 1582092326,
+  "pack_files": 1087,
+  "pack_size": 1582092326,
+  "total_omitted": 53,
+  "omitted_files": [
+    {
+      "dest": "CM32LN_CONTROL.ROM",
+      "name": "CM32LN_CONTROL.ROM",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "CM32L_CONTROL.ROM",
+      "name": "CM32L_CONTROL.ROM",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "CM32L_PCM.ROM",
+      "name": "CM32L_PCM.ROM",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "DOSBOX.SF2",
+      "name": "DOSBOX.SF2",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "JiffyDOS_1541-II.bin",
+      "name": "JiffyDOS_1541-II.bin",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "VICE x128"
+      ]
+    },
+    {
+      "dest": "JiffyDOS_1571_repl310654.bin",
+      "name": "JiffyDOS_1571_repl310654.bin",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "VICE x128"
+      ]
+    },
+    {
+      "dest": "JiffyDOS_1581.bin",
+      "name": "JiffyDOS_1581.bin",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "VICE x128"
+      ]
+    },
+    {
+      "dest": "JiffyDOS_C128.bin",
+      "name": "JiffyDOS_C128.bin",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "VICE x128"
+      ]
+    },
+    {
+      "dest": "JiffyDOS_C64.bin",
+      "name": "JiffyDOS_C64.bin",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "VICE x128"
+      ]
+    },
+    {
+      "dest": "JiffyDOS_SX-64.bin",
+      "name": "JiffyDOS_SX-64.bin",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "VICE x64"
+      ]
+    },
+    {
+      "dest": "MT32_CONTROL.ROM",
+      "name": "MT32_CONTROL.ROM",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "MT32_PCM.ROM",
+      "name": "MT32_PCM.ROM",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "[BIOS] Atari Jaguar CD (World).j64",
+      "name": "[BIOS] Atari Jaguar CD (World).j64",
+      "system": "atari-jaguar",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Virtual Jaguar"
+      ]
+    },
+    {
+      "dest": "[BIOS] Atari Jaguar Developer CD (World).j64",
+      "name": "[BIOS] Atari Jaguar Developer CD (World).j64",
+      "system": "atari-jaguar",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Virtual Jaguar"
+      ]
+    },
+    {
+      "dest": "acpsx.zip",
+      "name": "acpsx.zip",
+      "system": "zn1-acclaim",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "chargen-901460-02.bin",
+      "name": "chargen-901460-02.bin",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "VICE xvic"
+      ]
+    },
+    {
+      "dest": "cpzn1.zip",
+      "name": "cpzn1.zip",
+      "system": "zn1-capcom",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "cpzn2.zip",
+      "name": "cpzn2.zip",
+      "system": "zn2-capcom",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "cvs.zip",
+      "name": "cvs.zip",
+      "system": "century-cvs",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "fbalpha2012/hiscore.dat",
+      "name": "hiscore.dat",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "FB Alpha 2012 CPS-1"
+      ]
+    },
+    {
+      "dest": "jagboot.rom",
+      "name": "jagboot.rom",
+      "system": "atari-jaguar",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Virtual Jaguar"
+      ]
+    },
+    {
+      "dest": "jagboot_m.rom",
+      "name": "jagboot_m.rom",
+      "system": "atari-jaguar",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Virtual Jaguar"
+      ]
+    },
+    {
+      "dest": "kernal-901227-01.bin",
+      "name": "kernal-901227-01.bin",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "VICE x64"
+      ]
+    },
+    {
+      "dest": "kernal-901227-02.bin",
+      "name": "kernal-901227-02.bin",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "VICE x64"
+      ]
+    },
+    {
+      "dest": "kernal.901486-02.bin",
+      "name": "kernal.901486-02.bin",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "VICE xvic"
+      ]
+    },
+    {
+      "dest": "konamigx.zip",
+      "name": "konamigx.zip",
+      "system": "konami-gx",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "kvb1.wav",
+      "name": "kvb1.wav",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvb2.wav",
+      "name": "kvb2.wav",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvb3.wav",
+      "name": "kvb3.wav",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvs1.wav",
+      "name": "kvs1.wav",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvs2.wav",
+      "name": "kvs2.wav",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvs3.wav",
+      "name": "kvs3.wav",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "kvshared.wav",
+      "name": "kvshared.wav",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "Stella 2014"
+      ]
+    },
+    {
+      "dest": "mame2003-plus/cheat.dat",
+      "name": "cheat.dat",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003-Plus"
+      ]
+    },
+    {
+      "dest": "mame2003-plus/hiscore.dat",
+      "name": "hiscore.dat",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003-Plus"
+      ]
+    },
+    {
+      "dest": "mame2003-plus/history.dat",
+      "name": "history.dat",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003-Plus"
+      ]
+    },
+    {
+      "dest": "mame2003-plus/mameinfo.dat",
+      "name": "mameinfo.dat",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003-Plus"
+      ]
+    },
+    {
+      "dest": "mame2003/cheat.dat",
+      "name": "cheat.dat",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "mame2003/hiscore.dat",
+      "name": "hiscore.dat",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "mame2003/history.dat",
+      "name": "history.dat",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "mame2003/mameinfo.dat",
+      "name": "mameinfo.dat",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "megaplay.zip",
+      "name": "megaplay.zip",
+      "system": "sega-megaplay",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "megatech.zip",
+      "name": "megatech.zip",
+      "system": "sega-megatech",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "nss.zip",
+      "name": "nss.zip",
+      "system": "nintendo-nss",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "playch10.zip",
+      "name": "playch10.zip",
+      "system": "nintendo-playch10",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "same_cdi/bios/cdi490a.zip",
+      "name": "cdi490a.zip",
+      "system": "cdi",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "SAME CDi"
+      ]
+    },
+    {
+      "dest": "same_cdi/bios/cdi910.zip",
+      "name": "cdi910.zip",
+      "system": "cdi",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "SAME CDi"
+      ]
+    },
+    {
+      "dest": "same_cdi/bios/cdimono1.zip",
+      "name": "cdimono1.zip",
+      "system": "cdi",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "SAME CDi"
+      ]
+    },
+    {
+      "dest": "same_cdi/bios/cdimono2.zip",
+      "name": "cdimono2.zip",
+      "system": "cdi",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "SAME CDi"
+      ]
+    },
+    {
+      "dest": "sncwgltd.zip",
+      "name": "sncwgltd.zip",
+      "system": "zn1-video-system",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "stvbios.zip",
+      "name": "stvbios.zip",
+      "system": "sega-stv",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "taitofx1.zip",
+      "name": "taitofx1.zip",
+      "system": "zn1-taito",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    },
+    {
+      "dest": "tps.zip",
+      "name": "tps.zip",
+      "system": "zn1-tecmo",
+      "required": true,
+      "reason": "no_platform_slug",
+      "cores": [
+        "MAME 2003"
+      ]
+    }
+  ],
   "files": [
     {
       "dest": "3do/3do_arcade_saot.bin",
@@ -3741,16 +4272,6 @@
       ]
     },
     {
-      "dest": "acpc/MSX/MSX.ROM",
-      "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
-      "sha256": "999564a371dd2fdf7fbe8d853e82a68d557c27b7d87417639b2fa17704b83f78",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX.ROM",
-      "cores": [
-        "clk"
-      ]
-    },
-    {
       "dest": "acpc/MSX/msx-japanese.rom",
       "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
       "sha256": "413a2b601a94b3792e054be2439cc77a1819cceadbfa9542f88d51c7480f2ef0",
@@ -3786,26 +4307,6 @@
       "sha256": "31740a761447d7590c304338d389b0ae114546a8b9f79c9ffd5e374f80b7d354",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/DISK.ROM",
-      "cores": [
-        "clk"
-      ]
-    },
-    {
-      "dest": "acpc/MSX/MSX2.ROM",
-      "sha1": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
-      "sha256": "4bc4ae85ca5f28246cd3e7b7e017d298ddd375603657f84ef2c7954bc2d9b919",
-      "size": 32768,
-      "repo_path": "bios/Microsoft/MSX/MSX2.ROM",
-      "cores": [
-        "clk"
-      ]
-    },
-    {
-      "dest": "acpc/MSX/MSX2EXT.ROM",
-      "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
-      "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
-      "size": 16384,
-      "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
       "cores": [
         "clk"
       ]
@@ -5018,16 +5519,6 @@
       "repo_path": "bios/Apple/Macintosh II/MacIIx.ROM",
       "cores": [
         "minivmac"
-      ]
-    },
-    {
-      "dest": "64dd/Mupen64plus/IPL.n64",
-      "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
-      "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
-      "size": 4194304,
-      "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
-      "cores": [
-        "mupen64plus_next"
       ]
     },
     {

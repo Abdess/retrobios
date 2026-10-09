@@ -5,7 +5,7 @@
   "platform": "lakka",
   "display_name": "Lakka",
   "version": "1.0",
-  "generated": "2026-10-06T06:50:25Z",
+  "generated": "2026-10-09T20:41:14Z",
   "base_destination": "system",
   "detect": [
     {
@@ -16,10 +16,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 5867,
-  "total_size": 6399839286,
-  "pack_files": 8510,
-  "pack_size": 6440372450,
+  "total_files": 5861,
+  "total_size": 6398490526,
+  "pack_files": 8504,
+  "pack_size": 6439023690,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -1320,14 +1320,6 @@
       "cores": null
     },
     {
-      "dest": "quasi88/N88SUB.ROM",
-      "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
-      "sha256": "9dc63118728a171ce2ed437ad38ef280b8b7bcf4a5a95fedf18946501b010456",
-      "size": 2048,
-      "repo_path": "bios/NEC/PC-98/N88SUB.ROM",
-      "cores": null
-    },
-    {
       "dest": "quasi88/N88EXT0.ROM",
       "sha1": "d239c26ad7ac5efac6e947b0e9549b1534aa970d",
       "sha256": "290286a513c39af02581481958b8f1291c0ee8409b3940ae808352e0c3a2e2f8",
@@ -1867,10 +1859,10 @@
     },
     {
       "dest": "BS-X.bin",
-      "sha1": "4891d739a8a8b67923681bad4fb67edab2e90e50",
-      "sha256": "a49827b45ff9ac9cf5b4658190e1428e59251bc82d8a63d8e9e0f71e439f008f",
+      "sha1": "604556b2e62860af18db5a77f2956ebc75450020",
+      "sha256": "3ce321496edc5d77038de2034eb3fb354d7724afd0bc7fd0319f3eb5d57b984d",
       "size": 1048576,
-      "repo_path": "bios/Nintendo/SNES/BS-X.bin",
+      "repo_path": "bios/Nintendo/SNES/Satellaview_BS-X.sfc",
       "cores": null
     },
     {
@@ -4115,10 +4107,10 @@
     },
     {
       "dest": "pcsx2/resources/GameIndex.yaml",
-      "sha1": "7efb2ed721cf0c0f0677324e09be311a8337e793",
-      "sha256": "3bf3c54d6f16d88d3669be698179bb8c2fb981ee5ce71bcb952719429a838cc1",
-      "size": 2693579,
-      "repo_path": "bios/Other/yaps2/GameIndex.yaml",
+      "sha1": "72bfdf91fa11a86e2810a7c167cdcf11e20418a8",
+      "sha256": "61c77b789ccde856096f024e4a3eef6891e15ca59c127e0dd13e762a7d338a7e",
+      "size": 2690355,
+      "repo_path": "bios/Other/armsx2/pcsx2/resources/GameIndex.yaml",
       "cores": null
     },
     {
@@ -4270,31 +4262,11 @@
       ]
     },
     {
-      "dest": "cd32.rom",
-      "sha1": "3525be8887f79b5929e017b42380a79edfee542d",
-      "sha256": "3586355514947b5ab48c8755dc004fab94f188b19e7bce491c8f9693499e830b",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-310-cd32.rom",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
       "dest": "cd32ext.rom",
       "sha1": "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f",
       "sha256": "d964826432559994ffe329f643fd4e42dbbff313362d9434945725d7119cae87",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-ext-310-cd32.rom",
-      "cores": [
-        "amiberry"
-      ]
-    },
-    {
-      "dest": "cdtv.rom",
-      "sha1": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
-      "sha256": "6e48bb768539e8dae352553e5fdfa860682edaf9e26b105fadd8e26103171765",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/amiga-ext-130-cdtv.rom",
       "cores": [
         "amiberry"
       ]
@@ -25540,16 +25512,6 @@
       ]
     },
     {
-      "dest": "SufamiTurbo.sfc",
-      "sha1": "ef86ea192eed03d5c413fdbbfd46043be1d7a127",
-      "sha256": "edacb453da14f825f05d1134d6035f4bf034e55f7cfb97c70c4ee107eabc7342",
-      "size": 262144,
-      "repo_path": "bios/Nintendo/SuFami Turbo/STBIOS.bin",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
       "dest": "ymf288_adpcm_rom.bin",
       "sha1": "50b6c3e288eaa12ad275d4f323267bb72b0445df",
       "sha256": "53afd0fa9c62eda3e2be939e23f3adf48a2af8ad37bb1640261726c5d5adeba8",
@@ -25575,26 +25537,6 @@
       "sha256": "7eee6516f351ccc7db286587917bec415a1d8042ff5ef87c279f38200a3418dd",
       "size": 548608,
       "repo_path": "bios/Nintendo/NES/MesenNesDB.txt",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "[BIOS] Super CD-ROM System (Japan) (v3.0).pce",
-      "sha1": "79f5ff55dd10187c7fd7b8daab0b3ffbd1f56a2c",
-      "sha256": "e11527b3b96ce112a037138988ca72fd117a6b0779c2480d9e03eaebece3d9ce",
-      "size": 262144,
-      "repo_path": "bios/NEC/PC Engine/syscard3.pce",
-      "cores": [
-        "mesence"
-      ]
-    },
-    {
-      "dest": "[BIOS] Games Express CD Card (Japan).pce",
-      "sha1": "014881a959e045e00f4db8f52955200865d40280",
-      "sha256": "4b86bb96a48a4ca8375fc0109631d0b1d64f255a03b01de70594d40788ba6c3d",
-      "size": 32768,
-      "repo_path": "bios/NEC/PC Engine/gecard.pce",
       "cores": [
         "mesence"
       ]
@@ -53086,16 +53028,6 @@
       ]
     },
     {
-      "dest": "quasi88/font.rom",
-      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
-      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
-      "size": 2048,
-      "repo_path": "bios/NEC/PC-88/font.rom",
-      "cores": [
-        "quasi88"
-      ]
-    },
-    {
       "dest": "quasi88/font2.rom",
       "sha1": "0a056b6d28b4b9e29a2d255bdaa25c24f176cf1e",
       "sha256": "d35d380c8a716c086cdee9f821c879a01196eeec4e52c94a93f79631248c11ba",
@@ -56595,6 +56527,16 @@
       "repo_path": "bios/NEC/PC-98/sound.rom",
       "cores": [
         "nekop2"
+      ]
+    },
+    {
+      "dest": "quasi88/font.rom",
+      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
+      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/font.rom",
+      "cores": [
+        "quasi88"
       ]
     },
     {

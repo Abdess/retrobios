@@ -5,7 +5,7 @@
   "platform": "bizhawk",
   "display_name": "BizHawk",
   "version": "1.0",
-  "generated": "2026-10-06T10:11:17Z",
+  "generated": "2026-10-09T20:41:14Z",
   "base_destination": "Firmware",
   "detect": [
     {
@@ -20,10 +20,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 954,
-  "total_size": 2588624930,
-  "pack_files": 956,
-  "pack_size": 2588624930,
+  "total_files": 948,
+  "total_size": 2585741346,
+  "pack_files": 950,
+  "pack_size": 2585741346,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -7840,31 +7840,11 @@
       ]
     },
     {
-      "dest": "kick34005.A500",
-      "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
-      "sha256": "ee05862d8102a08436ac4056da7d549db31625c7d47b24dfb7b3c9a5c113ca53",
-      "size": 262144,
-      "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
-      "cores": [
-        "puae"
-      ]
-    },
-    {
       "dest": "kick37175.A500",
       "sha1": "c5839f5cb98a7a8947065c3ed2f14f5f42e334a1",
       "sha256": "d0b70e8a1772614b897f92c33cb299bed3fc8e3de488fc12f67f97fc2486eb79",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-204.rom",
-      "cores": [
-        "puae"
-      ]
-    },
-    {
-      "dest": "kick37350.A600",
-      "sha1": "02843c4253bbd29aba535b0aa3bd9a85034ecde4",
-      "sha256": "8d57d6e9d976df42d91ff9d10a5eedaede1a00e3b4b34cad750ca5ff7229f28a",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-205-a600.rom",
       "cores": [
         "puae"
       ]
@@ -7890,16 +7870,6 @@
       ]
     },
     {
-      "dest": "kick40068.A1200",
-      "sha1": "e21545723fe8374e91342617604f1b3d703094f1",
-      "sha256": "6d43840d4099a74170ea0f0425b6257c3891ebcaa39c4d1840075a9ab22b5707",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-310-a1200.rom",
-      "cores": [
-        "puae"
-      ]
-    },
-    {
       "dest": "kick39106.A4000",
       "sha1": "f0b4e9e29e12218c2d5bd7020e4e785297d91fd7",
       "sha256": "b859d9fb3d868a8328a4a363d44934eb1ee1c73955aa98576c7ffe3feed3d3ff",
@@ -7910,41 +7880,11 @@
       ]
     },
     {
-      "dest": "kick40068.A4000",
-      "sha1": "5fe04842d04a489720f0f4bb0e46948199406f49",
-      "sha256": "71236ed62c85394a3ad7d0d8d65405bac7a10083e06ba6b82120dacc7a00fe9a",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-310-a4000.rom",
-      "cores": [
-        "puae"
-      ]
-    },
-    {
       "dest": "kick34005.CDTV",
       "sha1": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
       "sha256": "6e48bb768539e8dae352553e5fdfa860682edaf9e26b105fadd8e26103171765",
       "size": 262144,
       "repo_path": "bios/Commodore/Amiga/amiga-ext-130-cdtv.rom",
-      "cores": [
-        "puae"
-      ]
-    },
-    {
-      "dest": "kick40060.CD32",
-      "sha1": "3525be8887f79b5929e017b42380a79edfee542d",
-      "sha256": "3586355514947b5ab48c8755dc004fab94f188b19e7bce491c8f9693499e830b",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/amiga-os-310-cd32.rom",
-      "cores": [
-        "puae"
-      ]
-    },
-    {
-      "dest": "kick40060.CD32.ext",
-      "sha1": "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f",
-      "sha256": "d964826432559994ffe329f643fd4e42dbbff313362d9434945725d7119cae87",
-      "size": 524288,
-      "repo_path": "bios/Commodore/Amiga/amiga-ext-310-cd32.rom",
       "cores": [
         "puae"
       ]
