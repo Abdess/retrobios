@@ -386,6 +386,9 @@ def main():
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "total_files": len(files),
         "total_size": total_size,
+        # The tree these paths belong to: dedup writes _mame_clones.json
+        # beside it, and the resolver reads the map there, not at the repo root.
+        "bios_dir": os.path.normpath(args.bios_dir),
         "files": files,
         "indexes": indexes,
     }

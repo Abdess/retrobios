@@ -6356,7 +6356,7 @@ struct BurnDriver BurnDrvneogeo = {
 
         db = self._gap_db("v4bios.zip", "a" * 40, "465c4e1c")
         original = cross_reference.get_mame_clone_map
-        cross_reference.get_mame_clone_map = lambda: {"bctvidbs.zip": "v4bios.zip"}
+        cross_reference.get_mame_clone_map = lambda *_a: {"bctvidbs.zip": "v4bios.zip"}
         try:
             entry = {"name": "bctvidbs.zip", "required": True}
             self.assertEqual(self._gap_source(entry, db), "bios")

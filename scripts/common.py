@@ -912,7 +912,7 @@ def resolve_local_file(
 
     # MAME clone fallback: if a file was deduped, resolve via canonical
     if _depth < 3 and not has_strong_hash:
-        clone_map = get_mame_clone_map()
+        clone_map = get_mame_clone_map(db.get("bios_dir"))
         canonical = clone_map.get(name)
         if canonical and canonical != name:
             canonical_entry = {"name": canonical}
@@ -960,28 +960,34 @@ def resolve_local_file(
     return None, "not_found"
 
 
-_mame_clone_map_cache: dict[str, str] | None = None
+_mame_clone_map_cache: dict[str, dict[str, str]] = {}
 
 
-def get_mame_clone_map() -> dict[str, str]:
-    """Load and cache the MAME clone map (clone_name -> canonical_name)."""
-    global _mame_clone_map_cache
-    if _mame_clone_map_cache is not None:
-        return _mame_clone_map_cache
-    clone_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        "_mame_clones.json",
-    )
+def get_mame_clone_map(bios_dir: str | None = None) -> dict[str, str]:
+    """The MAME clone map (clone_name -> canonical_name) of a scanned tree.
+
+    dedup.py writes _mame_clones.json beside the tree it scanned, and the
+    map of one tree says nothing about another: read from the repository
+    root whatever ``--bios-dir`` said, an alternate tree's renamed clones
+    fell out of its packs. Without a tree the repository's own is read.
+    """
+    if bios_dir is None:
+        bios_dir = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "bios"
+        )
+    clone_path = os.path.join(os.path.dirname(os.path.abspath(bios_dir)), "_mame_clones.json")
+    cached = _mame_clone_map_cache.get(clone_path)
+    if cached is not None:
+        return cached
+    clone_map: dict[str, str] = {}
     if os.path.exists(clone_path):
         with open(clone_path) as f:
             data = json.load(f)
-        _mame_clone_map_cache = {}
         for canonical, info in data.items():
             for clone in info.get("clones", []):
-                _mame_clone_map_cache[clone] = canonical
-    else:
-        _mame_clone_map_cache = {}
-    return _mame_clone_map_cache
+                clone_map[clone] = canonical
+    _mame_clone_map_cache[clone_path] = clone_map
+    return clone_map
 
 
 
