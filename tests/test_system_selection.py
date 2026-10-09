@@ -40,6 +40,23 @@ class SpellingsAgree(unittest.TestCase):
         self.assertEqual(builder._system_display_name("msxturboR"), builder._system_display_name("msxturbor"))
 
 
+class TheListingCountsLikeTheSelection(unittest.TestCase):
+    def test_one_system_is_listed_once_with_every_profile(self):
+        import contextlib  # noqa: PLC0415
+        import io  # noqa: PLC0415
+
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            common.list_system_ids(str(REPO_ROOT / "emulators"))
+        lines = {line.split()[0]: line for line in out.getvalue().splitlines() if line.strip()}
+        profiles = common.load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        for spellings in (("3do", "panasonic-3do"), ("atari-2600", "atari_2600")):
+            listed = [s for s in spellings if s in lines]
+            self.assertEqual(len(listed), 1, f"{spellings}: one line per system")
+            count = len(common.profiles_for_systems(profiles, [spellings[0]]))
+            self.assertIn(f"({count} emulator", lines[listed[0]])
+
+
 class StandaloneNeedsAStandaloneBuild(unittest.TestCase):
     def test_a_custom_pack_refuses_it_for_a_libretro_core(self):
         with tempfile.TemporaryDirectory() as tmp:

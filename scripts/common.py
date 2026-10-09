@@ -1709,17 +1709,24 @@ def list_emulator_profiles(emulators_dir: str, skip_aliases: bool = True) -> Non
 
 
 def list_system_ids(emulators_dir: str) -> None:
-    """Print available system IDs with emulator count."""
+    """Print available system IDs with emulator count.
+
+    Counted on the normalized id, as --system selects: listed per spelling,
+    3do showed two emulators and panasonic-3do six for one system.
+    """
     profiles = load_emulator_profiles(emulators_dir)
-    system_emus: dict[str, list[str]] = {}
-    for name, p in profiles.items():
+    system_emus: dict[str, set[str]] = {}
+    spelling: dict[str, str] = {}
+    for name, p in sorted(profiles.items()):
         if p.get("type") in ("alias", "test", "launcher"):
             continue
         for sys_id in p.get("systems", []):
-            system_emus.setdefault(sys_id, []).append(name)
-    for sys_id in sorted(system_emus):
-        count = len(system_emus[sys_id])
-        print(f"  {sys_id:35s} ({count} emulator{'s' if count > 1 else ''})")
+            key = _norm_system_id(sys_id)
+            system_emus.setdefault(key, set()).add(name)
+            spelling.setdefault(key, sys_id)
+    for key in sorted(system_emus, key=lambda k: spelling[k]):
+        count = len(system_emus[key])
+        print(f"  {spelling[key]:35s} ({count} emulator{'s' if count > 1 else ''})")
 
 
 def list_platform_system_ids(platform_name: str, platforms_dir: str) -> None:
