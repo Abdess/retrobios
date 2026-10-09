@@ -70,6 +70,25 @@ def load_platform_files(
     return declared, platform_data_dirs
 
 
+def declared_names(platforms_dir: str, platforms: list[str] | None, db: dict) -> set[str]:
+    """Every name the platforms declare, under every spelling the database knows.
+
+    The report judged "undeclared" per normalized system id, which does not
+    bring bk and elektronika-bk, or nintendo-sgb and nintendo-super-game-boy,
+    together: 646 entries whose exact name a platform declares were counted
+    undeclared, while verify and the site read one flat set.
+    """
+    from common import expand_platform_declared_names
+
+    names: set[str] = set()
+    for platform_name in platforms or list_registered_platforms(
+        platforms_dir, include_archived=True
+    ):
+        config = load_platform_config(platform_name, platforms_dir)
+        names.update(expand_platform_declared_names(config, db))
+    return names
+
+
 def _build_supplemental_index(
     data_root: str = "data", bios_root: str = "bios"
 ) -> set[str]:
@@ -135,6 +154,7 @@ def _resolve_source(
     by_path_suffix: dict | None = None,
     file_entry: dict | None = None,
     db_files: dict | None = None,
+    bios_dir: str | None = None,
 ) -> str | None:
     """Return the source category for a file, or None if not found.
 
@@ -177,7 +197,7 @@ def _resolve_source(
         return "bios"
     # bios/ under the canonical MAME set name, as resolve_local_file does:
     # a renamed archive is held once, under the name the dedup kept.
-    canonical = get_mame_clone_map().get(fname)
+    canonical = get_mame_clone_map(bios_dir).get(fname)
     if canonical and canonical != fname:
         if canonical in by_name and _name_hit(canonical):
             return "bios"
@@ -269,6 +289,7 @@ def entry_source(f: dict, index: dict) -> str | None:
             continue
         source = _resolve_source(
             candidate, by_name, by_name_lower, data_names, by_path_suffix, f, db_files,
+            index.get("bios_dir"),
         )
         if source is not None:
             return source
@@ -513,6 +534,7 @@ def cross_reference(
         "db_files": db_files,
         "data_names": data_names,
         "all_declared": all_declared,
+        "bios_dir": db.get("bios_dir"),
     }
     for emu_name, profile in profiles.items():
         _cross_reference_profile(
@@ -611,13 +633,13 @@ def main():
         print("No emulator profiles found.", file=sys.stderr)
         return
 
-    declared, plat_data_dirs = load_platform_files(
-        args.platforms_dir, [args.platform] if args.platform else None
-    )
+    selected = [args.platform] if args.platform else None
+    declared, plat_data_dirs = load_platform_files(args.platforms_dir, selected)
     db = load_database(args.db)
     data_names = _build_supplemental_index()
     report = cross_reference(
         profiles, declared, db, plat_data_dirs, data_names,
+        all_declared=declared_names(args.platforms_dir, selected, db),
         standalone_cores=standalone_cores,
     )
 
