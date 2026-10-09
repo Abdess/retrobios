@@ -723,10 +723,13 @@ def generate_pack(
 
     preferred_entries: dict[str, int] = {}
     if source != "truth":
-        # A manifest lists the full set and carries no data directories, so
-        # the preference is resolved with neither narrowing nor a cache.
+        # Decided among the declarations this pack keeps: a preferred entry
+        # that --required-only drops must not silence its required twin, or
+        # the destination leaves the pack without a trace (RetroDECK's four
+        # Atari 5200 ROMs, optional under atari-400-800 and required under
+        # atari-5200). No data directories: the choice is about the baseline.
         preferred_entries = _preferred_entries(
-            pack_systems, db, bios_dir, base_dest, False,
+            pack_systems, db, bios_dir, base_dest, required_only,
             zip_contents, None, offline,
         )
 
@@ -3187,10 +3190,10 @@ def generate_manifest(
         # constrained sibling claim it; without the same rule here the
         # manifest named whatever answered to the name, so the pack and the
         # installer disagreed about which file a destination means.
-        # A manifest lists the full set and carries no data directories, so
-        # the preference is resolved with neither narrowing nor a cache.
+        # Decided among the declarations this manifest keeps, as the pack
+        # does; a manifest carries no data directories.
         preferred_entries = _preferred_entries(
-            pack_systems, db, bios_dir, base_dest, False,
+            pack_systems, db, bios_dir, base_dest, required_only,
             zip_contents, None, offline,
         )
         for sys_id, system in sorted(pack_systems.items()):
