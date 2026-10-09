@@ -489,6 +489,51 @@ def _owner_tokens(file_entry: dict) -> set[str]:
     return tokens
 
 
+def _foreign_tree(path: str, owners: set[str]) -> bool:
+    """Whether a path lives in the tree of an emulator that is not the asker.
+
+    bios/Other/<emulator>/ holds what one emulator ships. A same-named file
+    found there answers that emulator's entry, not another's: EmuCoreX's
+    unlock.wav was served from NetherSX2's tree, and upstream PCSX2's
+    GameIndex.yaml from EmuCoreX's, while the system directory held a copy.
+    """
+    parts = path.split("/")
+    if not owners or len(parts) < 4 or parts[0] != "bios" or parts[1] != "Other":
+        return False
+    return not (owners & _affinity_tokens(parts[2]))
+
+
+def _rank_tail_candidates(
+    candidates: list[str], start: int, tail: str, files_db: dict, owners: set[str]
+) -> list[str]:
+    """Order the files a destination tail designates, the likeliest first.
+
+    A shortened tail found only in another emulator's tree is that
+    emulator's asset, not evidence about this entry. A full tail claimed
+    twice goes to the file whose path carries the least on top of the
+    destination, then to the owner's own copy (super3's Games.xml was served
+    to Supermodel-Dojo by index order alone), then to any copy outside
+    another emulator's tree (upstream PCSX2 took EmuCoreX's GameIndex.yaml
+    over the system directory's).
+    """
+    def path_of(sha1: str) -> str:
+        return files_db.get(sha1, {}).get("path", "")
+
+    if start:
+        candidates = [h for h in candidates if not _foreign_tree(path_of(h), owners)]
+    if len(candidates) < 2:
+        return candidates
+    depth = len(tail.split("/"))
+    return sorted(
+        candidates,
+        key=lambda h: (
+            len(path_of(h).split("/")) - depth,
+            not owners & _affinity_tokens(path_of(h).rsplit("/", 1)[0]),
+            _foreign_tree(path_of(h), owners),
+        ),
+    )
+
+
 def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str]:
     """Same-named candidates, the likeliest first.
 
@@ -507,14 +552,15 @@ def _by_affinity(paths: list[str], file_entry: dict, dest_hint: str) -> list[str
     owners = _owner_tokens(file_entry)
     sized = any(file_entry.get(k) for k in ("size", "min_size", "max_size"))
 
-    def score(path: str) -> tuple[int, bool, int]:
+    def score(path: str) -> tuple[int, bool, bool, int]:
         fits = 0
         if sized and os.path.exists(path):
             fits = int(size_fits(file_entry, os.path.getsize(path)))
         tokens = _affinity_tokens(path.rsplit("/", 1)[0])
         # The owner's own copy ranks above any shared tree segment: NetherSX2's
         # shaders/common/ beat armsx2's own fxaa.fx on two directory tokens.
-        return fits, bool(owners & tokens), len(wanted & tokens)
+        # Another emulator's own tree ranks below everything else.
+        return fits, bool(owners & tokens), not _foreign_tree(path, owners | wanted), len(wanted & tokens)
 
     return sorted(paths, key=score, reverse=True)
 
@@ -716,9 +762,14 @@ def resolve_local_file(
         # stops describing this file and starts describing whichever emulator
         # happens to store the same asset tree.
         hint_parts = dest_hint.split("/")
+        # The asking profile and the destination's own directories both name
+        # whose tree a copy may come from.
+        owners = _owner_tokens(file_entry) | _affinity_tokens("/".join(hint_parts[:-1]))
         for start in range(min(2, len(hint_parts) - 1)):
             tail = "/".join(hint_parts[start:])
-            candidates = by_path_suffix.get(tail, [])
+            candidates = _rank_tail_candidates(
+                by_path_suffix.get(tail, []), start, tail, files_db, owners
+            )
             if start and len(candidates) > 1:
                 continue
             # The index names the file this destination designates. Not on
@@ -729,20 +780,6 @@ def resolve_local_file(
                 for h in candidates
             ):
                 own_file_absent = True
-            if len(candidates) > 1:
-                depth = len(tail.split("/"))
-                # At equal depth the owner's own copy: super3's Games.xml was
-                # served to Supermodel-Dojo by index order alone.
-                owners = _owner_tokens(file_entry)
-                candidates = sorted(
-                    candidates,
-                    key=lambda h: (
-                        len(files_db.get(h, {}).get("path", "").split("/")) - depth,
-                        not owners & _affinity_tokens(
-                            files_db.get(h, {}).get("path", "").rsplit("/", 1)[0]
-                        ),
-                    ),
-                )
             for match_sha1 in candidates:
                 if match_sha1 not in files_db:
                     continue
