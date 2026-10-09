@@ -163,22 +163,15 @@ shared_groups:
   # QUASI88 searches "quasi88/" subfolder first
   # ref: quasi88-libretro/src/LIBRETRO/libretro.c:463 — snprintf(..., "%s%cquasi88%c%s", ...)
   quasi88:
-    - name: N88.ROM
-      destination: quasi88/N88.ROM
-      required: true
-      md5: "4f984e04a99d56c4cfe36115415d6eb8"
-    - name: N88SUB.ROM
-      destination: quasi88/N88SUB.ROM
-      required: true
-      md5: "793f86784e5608352a5d7f03f03e0858"
-    - name: N88N.ROM
-      destination: quasi88/N88N.ROM
-      required: true
-      md5: "2ff07b8769367321128e03924af668a0"
-    - name: N88KNJ1.ROM
-      destination: quasi88/N88KNJ1.ROM
-      required: true
-      md5: "d81c6d5d7ad1a4bbbd6ae22a01257603"
+    # Only what System.dat does not declare for nec-pc-88: the mkII SR
+    # extension ROMs that match N88.ROM (MAME pc8801mk2sr: 710a63ec, c0bd2aa6,
+    # af2b6efa, 7713c519). The core reads N88EXTn.ROM before n88_n.rom
+    # (src/LIBRETRO/libretro.c:109-112), so they win over the n88_n.rom dumps
+    # System.dat pairs with that main ROM, which come from other models (n88_0
+    # 61984bab is the original PC-8801's). N88SUB.ROM, N88.ROM, N88N.ROM and
+    # N88KNJ1.ROM are the native disk.rom, n88.rom, n88n.rom and n88knj1.rom
+    # under the other spelling the core tries: aliases in the profile, not
+    # files of their own here, or the pack carried disk.rom twice.
     - name: N88EXT0.ROM
       destination: quasi88/N88EXT0.ROM
       required: true
@@ -195,27 +188,6 @@ shared_groups:
       destination: quasi88/N88EXT3.ROM
       required: true
       md5: "fc4b76a402ba501e6ba6de4b3e8b4273"
-    # N88EXT0-3.ROM above are the mkII SR extension ROMs that match N88.ROM
-    # (MAME pc8801mk2sr: 710a63ec, c0bd2aa6, af2b6efa, 7713c519). The core
-    # reads N88EXTn.ROM before n88_n.rom (src/LIBRETRO/libretro.c:109-112),
-    # so they win over the n88_n.rom dumps System.dat pairs with that main ROM,
-    # which come from other models (n88_0 61984bab is the original PC-8801's).
-    - name: n88_0.rom
-      destination: quasi88/n88_0.rom
-      required: false
-      md5: "e28fe3f520bea594350ea8fb00395370"
-    - name: n88_1.rom
-      destination: quasi88/n88_1.rom
-      required: false
-      md5: "a8e298da7ac947669bcb1ff25cee0a83"
-    - name: n88_2.rom
-      destination: quasi88/n88_2.rom
-      required: false
-      md5: "9d03154fd9abfc28c4e6d4dc705e6e23"
-    - name: n88_3.rom
-      destination: quasi88/n88_3.rom
-      required: false
-      md5: "e1791f8154f1cdf22b576a1a365b6e1f"
 
   # Sinclair ZX Spectrum — Fuse core (Pentagon/Scorpion ROMs)
   # VERIFIED: fuse-libretro/src/compat/paths.c compat_get_next_path()
