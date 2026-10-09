@@ -482,6 +482,20 @@ class PipelineRegressions(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertFalse(pipeline.check_consistency(verify, pack))
 
+    def test_a_pack_more_optimistic_than_verify_is_a_failure(self):
+        """The invariant held one way only: a pack counting more OK files
+        than the report passed as 'pack resolves more'."""
+        verify = "DupTest: 0/1 OK, 1 untested [md5]"
+        pack = "\n".join(
+            [
+                "Generating pack for DupTest [source=full]...",
+                "  x/DupTest_1_BIOS_Pack.zip: 1 files packed (1 baseline + 0 from cores), "
+                "1/1 files OK [md5]",
+            ]
+        )
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertFalse(pipeline.check_consistency(verify, pack))
+
     def test_nothing_parsed_is_not_consistent(self):
         """A changed output format must not pass with no platform compared."""
         with contextlib.redirect_stdout(io.StringIO()):

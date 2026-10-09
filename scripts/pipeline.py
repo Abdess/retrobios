@@ -198,9 +198,13 @@ def check_consistency(verify_output: str, pack_output: str) -> bool:
                     f"  {v_label}: verify {v_ok}/{v_total} == pack {p_ok}/{p_total} OK"
                 )
             else:
+                # The invariant runs both ways: a builder more optimistic
+                # than the report ships files the report never vouched for.
                 print(
-                    f"  {v_label}: verify {v_ok}/{v_total}, pack {p_ok}/{p_total} OK (pack resolves more)"
+                    f"  {v_label}: MISMATCH pack {p_ok}/{p_total} OK "
+                    f"> verify {v_ok}/{v_total}"
                 )
+                all_ok = False
         else:
             print(f"  {v_label}: {v_ok}/{v_total} (no separate pack)")
             all_ok = False
