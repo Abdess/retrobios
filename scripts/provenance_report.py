@@ -88,6 +88,13 @@ def build_report(db: dict, snapshots: dict, members: dict | None = None) -> dict
     by_md5_size = {
         (entry.get("md5", ""), entry.get("size", 0)) for entry in by_sha1.values()
     }
+    # Redump lists some dumps by crc32 alone (ps2-0101jd-20030110, DTL-H10100):
+    # collected as a loose file it would stay MISSING for good without this.
+    by_crc32_size = {
+        (str(entry.get("crc32", "")).lower(), entry.get("size", 0))
+        for entry in by_sha1.values()
+        if entry.get("crc32")
+    }
 
     report = {}
     for source, snapshot in sorted(snapshots.items()):
@@ -98,6 +105,7 @@ def build_report(db: dict, snapshots: dict, members: dict | None = None) -> dict
             if (
                 entry.get("sha1") in by_sha1
                 or (entry.get("md5"), entry.get("size")) in by_md5_size
+                or (str(entry.get("crc32") or "").lower(), entry.get("size")) in by_crc32_size
                 or _held_in_archive(entry, members)
             ):
                 matched += 1

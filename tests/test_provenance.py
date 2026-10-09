@@ -353,6 +353,20 @@ class TestProvenanceReport(unittest.TestCase):
             report["redump"]["covered_dats"], ["Sony - PlayStation - BIOS Images"]
         )
 
+    def test_a_loose_file_matches_by_crc32_and_size(self):
+        """Redump lists DTL-H10100's image by crc32 alone; collected as a
+        loose file it stayed MISSING for good."""
+        db = {"files": {"f" * 40: {"name": "ps2-0101jd.bin", "size": 4194304,
+                                   "md5": "e" * 32, "crc32": "E9836A0C"}}}
+        snapshots = {"redump": {"source": "redump", "imported_at": "2026-10-09",
+                                "dats": {"PS2 BIOS": "2026-10-01"},
+                                "entries": [{"name": "ps2-0101jd.bin", "size": 4194304,
+                                             "crc32": "e9836a0c", "md5": "", "sha1": "",
+                                             "dat": "PS2 BIOS"}]}}
+        report = build_report(db, snapshots)
+        self.assertEqual(report["redump"]["matched"], 1)
+        self.assertEqual(report["redump"]["missing"], [])
+
     def test_uncovered_dat_entries_are_out_of_scope(self):
         """Entries from a DAT the collection never matches are not targets.
 
