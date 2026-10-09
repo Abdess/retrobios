@@ -576,6 +576,16 @@ class TestReportAndBuilderNarrowTogether(unittest.TestCase):
                     "or emulator_region_drops",
                 )
 
+    def test_the_verifier_reads_the_grouping_where_it_lives(self):
+        """Imported through the builder's CLI module, the verdict of a
+        --region run depended on that module compiling, and seven scripts
+        entered the site workflow's trigger paths for one function."""
+        source = (Path(__file__).resolve().parent.parent / "scripts" / "verify.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn("from generate_pack import platform_region_groups", source)
+        self.assertIn("from packextras import platform_region_groups", source)
+
     def test_emulator_report_keeps_what_the_emulator_pack_keeps(self):
         """O2EM: --region us left the Videopac BIOSes in the pack, not in the report."""
         repo = Path(__file__).resolve().parent.parent

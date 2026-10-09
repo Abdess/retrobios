@@ -901,7 +901,7 @@ def verify_platform(
         # pass reads.  Grouping the platform files here and the core extras
         # there let the two answer differently on one request: the report kept
         # every core extra a region run withdraws from the pack.
-        from generate_pack import platform_region_groups
+        from packextras import platform_region_groups
 
         region_groups, region_extra_dests = platform_region_groups(
             config,
