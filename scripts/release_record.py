@@ -24,6 +24,7 @@ import zipfile
 from pathlib import Path
 
 import split_pack
+from common import write_text_atomic
 
 RECORD = "release.json"
 
@@ -124,7 +125,7 @@ def main() -> int:
         print(f"Error: {line}", file=sys.stderr)
     if mismatches:
         return 1
-    args.output.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+    write_text_atomic(str(args.output), json.dumps(record, indent=2) + "\n")
     print(f"Wrote {args.output}")
     return 0
 

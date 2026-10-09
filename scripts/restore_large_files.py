@@ -19,11 +19,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import os
-import shutil
 import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
-from common import load_database
+from common import copy_file_atomic, load_database
 
 
 def gitignored_paths(gitignore: str) -> set[str]:
@@ -72,7 +71,9 @@ def restore(
             unsatisfied.append(path)
             continue
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        shutil.copy2(source, path)
+        # Whole or absent: a scan running beside a plain copy hashed the
+        # truncated file and published that in the database.
+        copy_file_atomic(source, path)
         print(f"Restored: {path}")
         restored += 1
     print(f"Total: {restored} files restored")

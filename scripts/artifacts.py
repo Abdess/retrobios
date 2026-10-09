@@ -43,11 +43,18 @@ def write_if_changed(path: str, content: str, normalize=None) -> bool:
         )
         if _strip_timestamps(before) == _strip_timestamps(after):
             return False
-    # Truncate-then-write leaves a half-written artifact behind an interrupt,
-    # and every generator in the repo funnels through here: a partial
-    # database.json or README.md is committed-looking and silently wrong.
-    # The scratch file sits beside the target so the rename stays on one
-    # filesystem, which is what makes it atomic.
+    write_text_atomic(path, content)
+    return True
+
+
+def write_text_atomic(path: str, content: str) -> None:
+    """Write a whole file or nothing.
+
+    Truncate-then-write leaves a half-written artifact behind an interrupt:
+    a partial database.json, manifest or README.md is committed-looking and
+    silently wrong. The scratch file sits beside the target so the rename
+    stays on one filesystem, which is what makes it atomic.
+    """
     directory = os.path.dirname(os.path.abspath(path))
     handle, scratch = tempfile.mkstemp(
         dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
@@ -60,7 +67,24 @@ def write_if_changed(path: str, content: str, normalize=None) -> bool:
         with contextlib.suppress(OSError):
             os.unlink(scratch)
         raise
-    return True
+
+
+def copy_file_atomic(source: str, path: str) -> None:
+    """Copy a file into place whole or not at all, metadata included."""
+    import shutil
+
+    directory = os.path.dirname(os.path.abspath(path))
+    handle, scratch = tempfile.mkstemp(
+        dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
+    )
+    os.close(handle)
+    try:
+        shutil.copy2(source, scratch)
+        os.replace(scratch, path)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            os.unlink(scratch)
+        raise
 
 def _strip_timestamps(text: str) -> str:
     """Remove known timestamp patterns for content comparison."""
