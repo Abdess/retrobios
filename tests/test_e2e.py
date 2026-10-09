@@ -3833,7 +3833,7 @@ class TestE2E(unittest.TestCase):
                 }
             ],
         }
-        copied, skipped = do_standalone_copies(manifest, bios_dir, "linux")
+        copied, skipped, _ = do_standalone_copies(manifest, bios_dir, "linux")
         self.assertEqual(copied, 1)
         self.assertEqual(skipped, 1)
         self.assertTrue((yuzu_dir / "prod.keys").exists())
