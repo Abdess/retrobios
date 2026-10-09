@@ -399,8 +399,11 @@ def _candidate_verdict(
     if outside_gap_scope(file_entry, is_standalone):
         return "skip"
     if not include_all:
-        archive = file_entry.get("archive")
-        if fname in declared_names or (archive and archive in declared_names):
+        # A platform declaring any name the core answers to has met the
+        # requirement: quasi88 reads n88sub.rom or disk.rom, and System.dat
+        # names disk.rom. Without the aliases the pack carried the ROM twice.
+        answers = {fname, file_entry.get("archive") or "", *file_entry.get("aliases", [])}
+        if answers & declared_names:
             return "settled"
     return "keep"
 

@@ -61,5 +61,36 @@ class SharedGroupsAddOnly(unittest.TestCase):
                             repeated.append(f"{platform}:{fe['name']} = {other}")
         self.assertEqual(repeated, [])
 
+class ADeclaredAliasSettlesTheRequirement(unittest.TestCase):
+    """quasi88 reads n88sub.rom or disk.rom; System.dat names disk.rom. The
+    gap pass compared the entry's name alone and the pack carried the same
+    2 KB ROM a second time as quasi88/n88sub.rom."""
+
+    def test_a_platform_naming_an_alias_has_met_the_entry(self):
+        import os  # noqa: PLC0415
+        import tempfile  # noqa: PLC0415
+
+        from common import _emulator_profiles_cache  # noqa: PLC0415
+        from verify import find_undeclared_files  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "emulators").mkdir()
+            Path(tmp, "emulators", "quasi88.yml").write_text(
+                "emulator: QUASI88\ntype: libretro\nsystems: [nec-pc-88]\ncores: [quasi88]\n"
+                "files:\n  - name: n88sub.rom\n    aliases: [N88SUB.ROM, disk.rom]\n"
+                "    required: true\n"
+            )
+            _emulator_profiles_cache.clear()
+            self.addCleanup(_emulator_profiles_cache.clear)
+            config = {"platform": "P", "verification_mode": "existence", "cores": "all_libretro",
+                      "systems": {"nec-pc-88": {"files": [{"name": "disk.rom", "destination": "quasi88/disk.rom"}]}}}
+            db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {}, "by_path_suffix": {}}}
+            previous = os.getcwd()
+            os.chdir(tmp)
+            self.addCleanup(os.chdir, previous)
+            undeclared = find_undeclared_files(config, "emulators", db, data_names=set())
+        self.assertEqual([u["name"] for u in undeclared], [])
+
+
 if __name__ == "__main__":
     unittest.main()
