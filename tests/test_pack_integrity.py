@@ -48,13 +48,25 @@ def _registered_platforms() -> list[str]:
     return list_registered_platforms(PLATFORMS_DIR, include_archived=True)
 
 
-def _profiles_newer_than(path: str) -> list[str]:
-    """Profiles modified after the pack was built."""
+def _profiles_newer_than(path: str, platform_name: str) -> list[str]:
+    """Profiles of this platform's emulators modified after the pack was built.
+
+    A profile the platform never resolves cannot have changed its pack: a
+    comment edited in any of 500 profiles used to disarm the integrity
+    check of every pack on disk.
+    """
+    sys.path.insert(0, os.path.join(REPO_ROOT, "scripts"))
+    from common import load_emulator_profiles, load_platform_config, resolve_platform_cores
+
     built = os.path.getmtime(path)
+    config = load_platform_config(platform_name, PLATFORMS_DIR)
+    profiles = load_emulator_profiles(EMULATORS_DIR)
+    relevant = resolve_platform_cores(config, profiles)
     return [
         os.path.basename(p)
         for p in glob.glob(os.path.join(EMULATORS_DIR, "*.yml"))
-        if os.path.getmtime(p) > built
+        if os.path.splitext(os.path.basename(p))[0] in relevant
+        and os.path.getmtime(p) > built
     ]
 
 
@@ -87,7 +99,7 @@ class PackIntegrityTest(unittest.TestCase):
         # goes red depends on how far along that build is.
         if "is in use by another run" in (result.stdout + result.stderr):
             self.skipTest(f"dist/ is being written; {platform_name} not verifiable")
-        newer = _profiles_newer_than(pack)
+        newer = _profiles_newer_than(pack, platform_name)
         if newer:
             self.skipTest(
                 f"{platform_name} pack predates {len(newer)} profile(s) "
