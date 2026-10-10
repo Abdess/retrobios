@@ -26,6 +26,7 @@ from common import (  # noqa: E402
     load_data_dir_registry,
     load_database,
     load_emulator_profiles,
+    resolution_is_hash_exact,
     resolve_local_file,
 )
 
@@ -36,7 +37,12 @@ def homonyms(claims: list[tuple[str, str, str, str]]) -> list[tuple[str, str, st
 
     claims: (profile, destination, status, local file).
     """
-    by_path = {local for _, _, status, local in claims if status == "path_exact"}
+    # Reached by its path or by its content: a hash is at least as strong a
+    # proof, and an owner that gained a sha1 stopped protecting its file.
+    by_path = {
+        local for _, _, status, local in claims
+        if status == "path_exact" or resolution_is_hash_exact(status)
+    }
     found = []
     for profile, dest, status, local in claims:
         if status != "name_exact" or local not in by_path:
@@ -54,6 +60,15 @@ class HomonymRule(unittest.TestCase):
     def test_a_name_claim_on_a_file_another_entry_reaches_by_path_is_named(self):
         claims = [
             ("quake2", "baseq2/pak0.pak", "path_exact", "bios/Q2/baseq2/pak0.pak"),
+            ("halflife", "valve/pak0.pak", "name_exact", "bios/Q2/baseq2/pak0.pak"),
+        ]
+        self.assertEqual(
+            homonyms(claims), [("halflife", "valve/pak0.pak", "bios/Q2/baseq2/pak0.pak")]
+        )
+
+    def test_an_owner_proven_by_hash_still_protects_its_file(self):
+        claims = [
+            ("quake2", "baseq2/pak0.pak", "sha1_exact", "bios/Q2/baseq2/pak0.pak"),
             ("halflife", "valve/pak0.pak", "name_exact", "bios/Q2/baseq2/pak0.pak"),
         ]
         self.assertEqual(
