@@ -442,7 +442,6 @@ def _preferred_entries(
     base_dest: str,
     required_only: bool,
     zip_contents,
-    data_registry,
     offline,
 ) -> dict[str, int]:
     """Which declaration wins when several claim the same destination.
@@ -451,6 +450,9 @@ def _preferred_entries(
     in one and hash-constrained in another. First-come dedup would let
     the bare entry pack whatever answers to the name, so a constrained
     sibling that resolves by content claims the destination instead.
+    The choice is about the baseline and reads no data directory, for the
+    pack, the manifest and verify alike: verify alone passed the registry
+    and could crown a declaration only a data/ cache satisfies.
     """
     preferred_entries: dict[str, int] = {}
     dest_entries: dict[str, list[dict]] = {}
@@ -481,7 +483,6 @@ def _preferred_entries(
                 db,
                 bios_dir,
                 zip_contents,
-                data_dir_registry=data_registry,
                 offline=offline,
             ))
             for fe in constrained
@@ -734,7 +735,7 @@ def generate_pack(
         # atari-5200). No data directories: the choice is about the baseline.
         preferred_entries = _preferred_entries(
             pack_systems, db, bios_dir, base_dest, required_only,
-            zip_contents, None, offline,
+            zip_contents, offline,
         )
 
     # Region selection is decided once, over both the platform baseline and the
@@ -3362,7 +3363,7 @@ def generate_manifest(
         # does; a manifest carries no data directories.
         preferred_entries = _preferred_entries(
             pack_systems, db, bios_dir, base_dest, required_only,
-            zip_contents, None, offline,
+            zip_contents, offline,
         )
         for sys_id, system in sorted(pack_systems.items()):
             for file_entry in system.get("files", []):

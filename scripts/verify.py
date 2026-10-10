@@ -776,14 +776,13 @@ def _mark_unplaced(config: dict, undeclared: list[dict], profiles: dict) -> None
 
 def _twin_index(
     verify_systems: dict, db: dict, base_dest: str, zip_contents: dict,
-    data_dir_registry: dict | None,
 ) -> tuple[dict[str, int], dict[int, tuple[str, dict]]]:
     """Which declaration the pack ships at each destination, and every declaration by id."""
     from generate_pack import _preferred_entries
 
     preferred_entries = _preferred_entries(
         verify_systems, db, DEFAULT_BIOS_DIR, base_dest, False,
-        zip_contents, data_dir_registry, True,
+        zip_contents, True,
     )
     winners = {
         id(fe): (sid, fe)
@@ -968,7 +967,7 @@ def verify_platform(
     # xroar component hashes bios/disk.rom and finds the PC-88 ROM.
     base_dest = config.get("base_destination", "")
     preferred_entries, winners = _twin_index(
-        verify_systems, db, base_dest, zip_contents, data_dir_registry
+        verify_systems, db, base_dest, zip_contents
     )
 
     for sys_id, system in verify_systems.items():

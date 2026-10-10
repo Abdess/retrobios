@@ -54,10 +54,24 @@ class PreferredArchive(unittest.TestCase):
             ]
             systems = {"s": {"files": declarations}}
             preferred = generate_pack._preferred_entries(
-                systems, db, "bios", "", False, {}, None, True)
+                systems, db, "bios", "", False, {}, True)
             chosen = next(fe for fe in declarations if id(fe) == preferred["set.zip"])
             path, _status = generate_pack.resolve_file(chosen, db, "bios", {}, offline=True)
             self.assertEqual(path, "bios/b/set.zip")
+
+
+class OneWinnerRuleForEveryReader(unittest.TestCase):
+    """verify passed the data-directory registry to the winner rule, the pack
+    and the manifest passed none: a declaration only a data/ cache satisfies
+    won in the report and lost in the pack. The rule takes no registry."""
+
+    def test_the_rule_reads_no_data_directory(self):
+        import inspect  # noqa: PLC0415
+
+        import generate_pack  # noqa: PLC0415
+
+        parameters = inspect.signature(generate_pack._preferred_entries).parameters
+        self.assertFalse([name for name in parameters if "registry" in name])
 
 
 class IntegrityChecksEveryMember(unittest.TestCase):
