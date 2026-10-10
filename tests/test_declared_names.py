@@ -45,5 +45,23 @@ class FlatDeclaredSet(unittest.TestCase):
         self.assertLess(flat["bk"]["gaps"], per_system["bk"]["gaps"])
 
 
+
+class AnAliasIsADeclaration(unittest.TestCase):
+    """RetroArch lists amiberry's cd32.rom as kick40060.CD32, an alias the
+    profile declares; the gap report still called cd32.rom undeclared."""
+
+    def test_a_file_declared_under_its_alias_is_covered(self):
+        profiles = {"amiberry": {
+            "emulator": "Amiberry", "type": "libretro", "systems": ["commodore-amiga"],
+            "files": [{"name": "cd32.rom", "aliases": ["kick40060.CD32"], "size": 524288}],
+        }}
+        db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {},
+                                        "by_path_suffix": {}}}
+        report = cross_reference(
+            profiles, {}, db, {}, {"by_name": {}},
+            all_declared={"kick40060.CD32"},
+        )
+        self.assertEqual(report["amiberry"]["gap_details"], [])
+
 if __name__ == "__main__":
     unittest.main()

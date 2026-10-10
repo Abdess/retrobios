@@ -402,8 +402,11 @@ def _cross_reference_profile(
 
         archive = f.get("archive")
 
-        # Check platform declaration (by name or archive)
-        in_platform = fname in platform_names
+        # Check platform declaration: by name, by an alias the core answers
+        # to (RetroArch lists amiberry's cd32.rom as kick40060.CD32), or by
+        # archive.
+        answers = {fname, *f.get("aliases", [])}
+        in_platform = bool(answers & platform_names)
         if not in_platform and archive:
             in_platform = archive in platform_names
 
