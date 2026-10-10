@@ -24,6 +24,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from artifacts import file_lock, write_bytes_atomic, write_text_atomic
 from common import list_registered_platforms, load_platform_config, yaml_load
 from exporter import discover_exporters
 from exporter.baseline import build_native_model
@@ -80,9 +81,12 @@ def fetch(
     it is what a rescrape calls, so the original and its transcription
     describe the same moment.
     """
-    recorded = _load_sources(index)
     key = source_key(destination, index)
-    if not refresh and destination.exists() and recorded.get(key, url) == url:
+    if (
+        not refresh
+        and destination.exists()
+        and _load_sources(index).get(key, url) == url
+    ):
         return destination.read_bytes()
     request = urllib.request.Request(url, headers={"User-Agent": _USER_AGENT})
     with urllib.request.urlopen(request, timeout=60) as response:
@@ -90,13 +94,17 @@ def fetch(
     if len(payload) > _MAX_BYTES:
         raise ValueError(f"{url}: response larger than {_MAX_BYTES} bytes")
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_bytes(payload)
+    write_bytes_atomic(str(destination), payload)
     if index is not None:
-        recorded[key] = url
+        # Platforms refresh in parallel: the index is read again under the
+        # lock, or the last writer erased what the others had recorded.
         index.parent.mkdir(parents=True, exist_ok=True)
-        index.write_text(
-            json.dumps(recorded, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-        )
+        with file_lock(index.with_name(f".{index.name}.lock")):
+            recorded = _load_sources(index)
+            recorded[key] = url
+            write_text_atomic(
+                str(index), json.dumps(recorded, indent=2, sort_keys=True) + "\n"
+            )
     return payload
 
 

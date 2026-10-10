@@ -69,6 +69,44 @@ def write_text_atomic(path: str, content: str) -> None:
         raise
 
 
+def write_bytes_atomic(path: str, content: bytes) -> None:
+    """Write a whole binary file or nothing, as write_text_atomic does."""
+    directory = os.path.dirname(os.path.abspath(path))
+    handle, scratch = tempfile.mkstemp(
+        dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
+    )
+    try:
+        with os.fdopen(handle, "wb") as f:
+            f.write(content)
+        os.replace(scratch, path)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            os.unlink(scratch)
+        raise
+
+
+@contextlib.contextmanager
+def file_lock(lock_path: str | os.PathLike, shared: bool = False):
+    """Hold a lock on lock_path, waiting for it if taken.
+
+    Several sessions refresh the same caches: without it, two swaps of one
+    tree interleave, or two read-modify-writes of one index lose an entry.
+    On platforms without flock the lock is a no-op.
+    """
+    try:
+        import fcntl
+    except ImportError:
+        yield
+        return
+    os.makedirs(os.path.dirname(os.path.abspath(lock_path)), exist_ok=True)
+    with open(lock_path, "a") as handle:
+        fcntl.flock(handle, fcntl.LOCK_SH if shared else fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle, fcntl.LOCK_UN)
+
+
 def copy_file_atomic(source: str, path: str) -> None:
     """Copy a file into place whole or not at all, metadata included."""
     import shutil

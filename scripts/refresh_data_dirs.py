@@ -24,6 +24,7 @@ import urllib.error
 import urllib.request
 import zipfile
 from pathlib import Path
+from artifacts import file_lock as _file_lock
 from common import yaml_load
 
 try:
@@ -49,28 +50,6 @@ def load_registry(registry_path: str = DEFAULT_REGISTRY) -> dict[str, dict]:
     with open(path) as f:
         data = yaml_load(f) or {}
     return data.get("data_directories", {})
-
-
-@contextlib.contextmanager
-def _file_lock(lock_path: Path, shared: bool = False):
-    """Hold a lock on lock_path, waiting for it if taken.
-
-    Several sessions refresh the same data directories: without it, two
-    swaps of one tree interleave and the second lands inside the first.
-    On platforms without flock the lock is a no-op.
-    """
-    try:
-        import fcntl
-    except ImportError:
-        yield
-        return
-    lock_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(lock_path, "a") as handle:
-        fcntl.flock(handle, fcntl.LOCK_SH if shared else fcntl.LOCK_EX)
-        try:
-            yield
-        finally:
-            fcntl.flock(handle, fcntl.LOCK_UN)
 
 
 def cache_lock(cache_dir: str | Path, shared: bool = False):

@@ -93,5 +93,41 @@ class EveryWriterGoesThroughIt(unittest.TestCase):
                 target.read_bytes().decode("utf-8"), "name: \u00e9mulateur \u2014 \u30d5\n"
             )
 
+
+class TheNativeIndexKeepsEveryPlatform(unittest.TestCase):
+    """Native originals refresh platform by platform, in parallel. Each run
+    rewrote the whole URL index it had read before downloading, and the last
+    writer erased the others' entries."""
+
+    def test_an_entry_recorded_during_a_download_survives(self):
+        import io
+        import json
+
+        import export_native
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
+            root = Path(directory)
+            index = root / export_native.SOURCES_INDEX
+
+            class Response(io.BytesIO):
+                def __enter__(self):
+                    return self
+
+                def __exit__(self, *exc):
+                    return False
+
+            def other_run_records_meanwhile(request, timeout):
+                index.write_text(json.dumps({"retrobat/file.json": "https://b"}))
+                return Response(b"payload")
+
+            with mock.patch.object(
+                export_native.urllib.request, "urlopen", other_run_records_meanwhile
+            ):
+                export_native.fetch("https://a", root / "batocera" / "file", index)
+            recorded = json.loads(index.read_text())
+            self.assertEqual(recorded.get("retrobat/file.json"), "https://b")
+            self.assertEqual(recorded.get("batocera/file"), "https://a")
+            self.assertEqual((root / "batocera" / "file").read_bytes(), b"payload")
+
 if __name__ == "__main__":
     unittest.main()
