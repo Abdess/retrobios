@@ -413,6 +413,7 @@ def generate_platform_truth(
         return norm_to_platform.get(normed, profile_sid)
 
     systems: dict[str, dict] = {}
+    unattributed: dict[str, int] = {}
     cores_profiled: set[str] = set()
     cores_unprofiled: set[str] = set()
     # Track which cores contribute to each system
@@ -429,12 +430,30 @@ def generate_platform_truth(
             profile, runs_standalone(emu_name, profile, standalone_set)
         ))
 
+        on_platform = {
+            _map_sys_id(sid) for sid in profile.get("systems", [])
+        } & platform_sys_ids
         for fe in filtered:
             profile_sid = fe.get("system", "")
-            if not profile_sid:
-                sys_ids = profile.get("systems", [])
-                profile_sid = sys_ids[0] if sys_ids else "unknown"
-            sys_id = _map_sys_id(profile_sid, fe.get("name", ""))
+            sys_ids = profile.get("systems", [])
+            if profile_sid:
+                sys_id = _map_sys_id(profile_sid, fe.get("name", ""))
+            elif len(sys_ids) <= 1:
+                sys_id = _map_sys_id(sys_ids[0] if sys_ids else "unknown", fe.get("name", ""))
+            else:
+                # A multi-system profile's entry without a system: the
+                # platform's own declaration of the name decides, or the one
+                # profile system the platform has. Otherwise it is not filed:
+                # the first system was a guess, and CLK's Apple, Mac, ZX and
+                # Amiga ROMs went to RomM as Amstrad CPC firmware.
+                declared = file_to_plat_sys.get(fe.get("name", "").lower())
+                if declared:
+                    sys_id = declared
+                elif len(on_platform) == 1:
+                    sys_id = next(iter(on_platform))
+                else:
+                    unattributed[emu_name] = unattributed.get(emu_name, 0) + 1
+                    continue
             system = systems.setdefault(sys_id, {})
             _merge_file_into_system(system, fe, emu_name, db)
             # Track core contribution per system
@@ -506,6 +525,9 @@ def generate_platform_truth(
             "cores_resolved": len(resolved),
             "cores_profiled": len(cores_profiled),
             "cores_unprofiled": sorted(cores_unprofiled),
+            # Entries of multi-system cores no system of this platform can
+            # be said to own: counted, never filed under a guess.
+            "unattributed": dict(sorted(unattributed.items())),
         },
     }
 

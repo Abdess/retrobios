@@ -95,5 +95,41 @@ class AnArchiveStandsForItsMembers(unittest.TestCase):
         self.assertEqual([(f["name"], f["size"]) for f in dreamcast], [("boot.bin", 2097152)])
         self.assertEqual(dreamcast[0]["_cores"], ["retrodream"])
 
+
+class AnUnattributedEntryIsNotGuessed(unittest.TestCase):
+    """CLK names twenty-three machines and none of its ROMs says which: all
+    of them went under amstrad-cpc, its first system, and the RomM export
+    listed Apple, Mac, ZX and Amiga firmware as Amstrad CPC firmware."""
+
+    PROFILE = {
+        "emulator": "CLK", "type": "libretro",
+        "systems": ["amstrad-cpc", "apple-ii", "sinclair-zx81"],
+        "files": [{"name": "apple2gs.rom", "size": 131072},
+                  {"name": "zx81.rom", "size": 8192}],
+    }
+
+    def truth(self, systems):
+        config = {"cores": ["clk"], "systems": systems}
+        return generate_platform_truth("p", config, {}, {"clk": self.PROFILE})
+
+    def test_several_candidate_systems_file_nothing(self):
+        truth = self.truth({"amstrad-cpc": {"files": []}, "apple-ii": {"files": []}})
+        self.assertEqual(_names(truth), set())
+        self.assertEqual(truth["_coverage"]["unattributed"], {"clk": 2})
+
+    def test_the_platform_declaration_decides(self):
+        truth = self.truth({"amstrad-cpc": {"files": []},
+                            "apple-ii": {"files": [{"name": "apple2gs.rom"}]}})
+        self.assertEqual(
+            [f["name"] for f in truth["systems"]["apple-ii"]["files"]], ["apple2gs.rom"]
+        )
+
+    def test_one_candidate_system_takes_them(self):
+        truth = self.truth({"sinclair-zx81": {"files": []}})
+        self.assertEqual(
+            sorted(f["name"] for f in truth["systems"]["sinclair-zx81"]["files"]),
+            ["apple2gs.rom", "zx81.rom"],
+        )
+
 if __name__ == "__main__":
     unittest.main()
