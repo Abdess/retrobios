@@ -130,6 +130,10 @@ _REGION_PARENT = {
 REGIONS = frozenset({WORLD_REGION} | set(REGION_TREE) | set(_REGION_PARENT))
 MAX_SELECTION_TAGS = 1000
 SELECTION_FIELDS = ("systems", "regions", "region_groups", "region_system_groups")
+# The files cores load for systems the platform does not list (game engines,
+# computers): no system of the platform owns them, and choosing systems
+# leaves them out unless this name is chosen too.
+OTHER_SYSTEMS = "other"
 
 # Platforms with a manifest in install/. Manifest URLs are case sensitive,
 # so user input is normalized against this list before any fetch.
@@ -1153,11 +1157,12 @@ def region_drops(
 
 
 def entry_systems(entry: dict) -> list[str]:
-    """The systems a file serves: a list on files, one name on omissions."""
-    systems = entry.get("systems")
-    if systems:
-        return list(systems)
-    return [entry["system"]] if entry.get("system") else []
+    """The platform systems a file or an omission belongs to.
+
+    An omission's `system` is spelled the way its profile spells it; only
+    `systems` names the platform's own, the ones --system accepts.
+    """
+    return list(entry.get("systems") or [])
 
 
 def narrow(
@@ -1183,9 +1188,16 @@ def narrow(
         omitted = [o for o in omitted if o["dest"] not in dropped]
     if systems:
         wanted = set(systems)
-        files = [f for f in files if wanted & set(entry_systems(f))]
-        omitted = [o for o in omitted if wanted & set(entry_systems(o))]
+        files = [f for f in files if _chosen(f, wanted)]
+        omitted = [o for o in omitted if _chosen(o, wanted)]
     return files, omitted
+
+
+def _chosen(entry: dict, wanted: set[str]) -> bool:
+    systems = entry_systems(entry)
+    if not systems:
+        return OTHER_SYSTEMS in wanted
+    return bool(wanted & set(systems))
 
 
 def records_selection(files: list[dict]) -> bool:
@@ -1196,13 +1208,16 @@ def records_selection(files: list[dict]) -> bool:
 def available_choices(files: list[dict], omitted: list[dict]) -> dict[str, list[str]]:
     """The systems, cores and regions a manifest lets one narrow to."""
     systems = {s for e in files + omitted for s in entry_systems(e)}
+    ordered = sorted(systems)
+    if any(not entry_systems(f) for f in files):
+        ordered.append(OTHER_SYSTEMS)
     cores = {c for f in files for c in (f.get("cores") or [])}
     regions = {
         r for e in files + omitted for r in (e.get("regions") or [])
         if r != WORLD_REGION
     }
     return {
-        "systems": sorted(systems),
+        "systems": ordered,
         "cores": sorted(cores),
         "regions": sorted(regions),
     }
@@ -1812,8 +1827,11 @@ def _prompt_custom_selection(
             break
 
     choices = available_choices(files, omitted)
+    if OTHER_SYSTEMS in choices["systems"]:
+        print(f"\n'{OTHER_SYSTEMS}' holds what cores load for systems this platform")
+        print("does not list, such as game engines and extra computers.")
     systems = _pick("Systems:", [
-        (name, [f for f in files if name in entry_systems(f)])
+        (name, [f for f in files if _chosen(f, {name})])
         for name in choices["systems"]
     ])
     kept, kept_omitted = narrow(files, omitted, systems, [], [])
@@ -1866,7 +1884,7 @@ def _print_choices(
     width = min(max(len(name) for name in names), 40)
     for name in names:
         held = (
-            [f for f in files if name in entry_systems(f)]
+            [f for f in files if _chosen(f, {name})]
             if systems
             else [f for f in files if name in (f.get("cores") or [])]
         )

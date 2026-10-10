@@ -106,6 +106,7 @@ class Narrowing(unittest.TestCase):
     ]
     OMITTED = [
         {"dest": "scph5502.bin", "name": "scph5502.bin", "system": "sony-playstation",
+         "systems": ["sony-playstation"],
          "required": True, "reason": "not_found", "cores": None,
          "regions": ["europe"], "region_system_groups": ["sony-playstation"]},
     ]
@@ -142,6 +143,19 @@ class Narrowing(unittest.TestCase):
         files, _ = self._dests([], [], ["brazil"])
         self.assertIn("scph5500.bin", files)
         self.assertIn("scph5501.bin", files)
+
+    def test_other_holds_what_no_platform_system_owns(self):
+        files = [
+            {"dest": "pak0.pak", "size": 1, "cores": ["tyrquake"]},
+            {"dest": "gba_bios.bin", "size": 1, "cores": None,
+             "systems": ["nintendo-gba"]},
+        ]
+        self.assertEqual(install.available_choices(files, [])["systems"],
+                         ["nintendo-gba", "other"])
+        kept, _ = install.narrow(files, [], ["nintendo-gba"], [], [])
+        self.assertEqual([f["dest"] for f in kept], ["gba_bios.bin"])
+        kept, _ = install.narrow(files, [], ["other"], [], [])
+        self.assertEqual([f["dest"] for f in kept], ["pak0.pak"])
 
     def test_a_core_variant_competes_across_systems(self):
         """PicoDrive files its US Mega CD BIOS under sega-segacd and the EU

@@ -118,7 +118,10 @@ Retroarch: 5861 files, 6.0 GB.
 `c` walks through three numbered lists, each answered with numbers such as
 `1,4,7-9`, or Enter to keep everything on that axis.
 
-- **Systems.** The consoles and computers the platform declares.
+- **Systems.** The consoles and computers the platform declares. A last
+  entry, `other`, holds what cores load for systems the platform does not
+  list, such as game engines and extra computers. Choosing systems leaves it
+  out unless it is chosen too, as `generate_pack.py --system` does.
 - **Cores.** The platform's own BIOS list for the chosen systems is always
   kept; this narrows only the extra files each emulator core loads beyond it.
   Asked only when the chosen systems have such files.
@@ -164,7 +167,7 @@ what the options name, everything by default.
 | `--platform NAME` | Install for this platform instead of the detected one. Unknown names are refused with the available list |
 | `--dest PATH` | Destination directory, overriding detection. With `--dest` alone the file list is RetroArch's |
 | `--target NAME` | Keep only the files the cores of that hardware target need. An unknown target is refused rather than ignored, since carrying on would install everything |
-| `--system NAMES` | Install only these systems. Comma-separated or repeated; `--list-systems` prints the names |
+| `--system NAMES` | Install only these systems. Comma-separated or repeated; `--list-systems` prints the names, `other` included |
 | `--core NAMES` | Keep the platform's own list and only the extra files these cores load; `--list-cores` prints the names |
 | `--region LIST` | Preferred regions, best first (`us,eu,jp`): keep one BIOS per region where a system has several. Accepts the names and aliases of `generate_pack.py --region` |
 | `--list-systems` | Print a platform's systems with the files and size each holds |
