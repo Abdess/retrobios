@@ -19,7 +19,7 @@
   "total_size": 1586335782,
   "pack_files": 1090,
   "pack_size": 1586335782,
-  "total_omitted": 53,
+  "total_omitted": 58,
   "omitted_files": [
     {
       "dest": "CM32LN_CONTROL.ROM",
@@ -134,6 +134,56 @@
     {
       "dest": "MT32_PCM.ROM",
       "name": "MT32_PCM.ROM",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "SC-55/ROM1.BIN",
+      "name": "ROM1.BIN",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "SC-55/ROM2.BIN",
+      "name": "ROM2.BIN",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "SC-55/ROM_SM.BIN",
+      "name": "ROM_SM.BIN",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "SC-55/WAVEROM1.BIN",
+      "name": "WAVEROM1.BIN",
+      "system": "",
+      "required": false,
+      "reason": "no_platform_slug",
+      "cores": [
+        "DOSBox Pure"
+      ]
+    },
+    {
+      "dest": "SC-55/WAVEROM2.BIN",
+      "name": "WAVEROM2.BIN",
       "system": "",
       "required": false,
       "reason": "no_platform_slug",

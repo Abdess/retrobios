@@ -241,10 +241,10 @@
       }
     }
   ],
-  "total_files": 12402,
-  "total_size": 8504569229,
-  "pack_files": 12404,
-  "pack_size": 8504569229,
+  "total_files": 12407,
+  "total_size": 8508276109,
+  "pack_files": 12409,
+  "pack_size": 8508276109,
   "total_omitted": 30,
   "omitted_files": [
     {
@@ -48995,6 +48995,56 @@
       "sha256": "9575028c7a1f589f5770fccc8cff2734566af40cd26ed836944e9a5152688cfe",
       "size": 32319396,
       "repo_path": "bios/DOS/DOSBox/DOSBOX.SF2",
+      "cores": [
+        "dosbox_pure"
+      ]
+    },
+    {
+      "dest": "SC-55/ROM1.BIN",
+      "sha1": "b91bb1d9dccffe831b7cfde7800a3fe32b2fbda6",
+      "sha256": "8a1eb33c7599b746c0c50283e4349a1bb1773b5c0ec0e9661219bf6c067d2042",
+      "size": 32768,
+      "repo_path": "bios/Roland/soundcanvas-roms/SC-55mk2-v1.01/rom1.bin",
+      "cores": [
+        "dosbox_pure"
+      ]
+    },
+    {
+      "dest": "SC-55/ROM2.BIN",
+      "sha1": "078cb5feea05e80bb9a1bb857a2163ee434fd053",
+      "sha256": "a4c9fd821059054c7e7681d61f49ce6f42ed2fe407a7ec1ba0dfdc9722582ce0",
+      "size": 524288,
+      "repo_path": "bios/Roland/sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/rom2.bin",
+      "cores": [
+        "dosbox_pure"
+      ]
+    },
+    {
+      "dest": "SC-55/ROM_SM.BIN",
+      "sha1": "4d48578d811a762a8e7bfaf18989bcac70ae1ba4",
+      "sha256": "b0b5f865a403f7308b4be8d0ed3ba2ed1c22db881b8a8326769dea222f6431d8",
+      "size": 4096,
+      "repo_path": "bios/Roland/sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/rom_sm.bin",
+      "cores": [
+        "dosbox_pure"
+      ]
+    },
+    {
+      "dest": "SC-55/WAVEROM1.BIN",
+      "sha1": "96708cb21381c2fd03de4babbf7aea301c7594a6",
+      "sha256": "c6429e21b9b3a02fbd68ef0b2053668433bee0bccd537a71841bc70b8874243b",
+      "size": 2097152,
+      "repo_path": "bios/Roland/sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/waverom1.bin",
+      "cores": [
+        "dosbox_pure"
+      ]
+    },
+    {
+      "dest": "SC-55/WAVEROM2.BIN",
+      "sha1": "4d91cdeaed048d653dbf846a221003c3a3f08279",
+      "sha256": "5b753f6cef4cfc7fcafe1430fecbb94a739b874e55356246a46abe24097ee491",
+      "size": 1048576,
+      "repo_path": "bios/Roland/sounddata/Nuked-SC55-Resources/ROMs/SC-55mk2-v1.01/waverom2.bin",
       "cores": [
         "dosbox_pure"
       ]
