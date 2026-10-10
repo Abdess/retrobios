@@ -239,6 +239,50 @@ def list_registered_platforms(
     return platforms
 
 
+def _target_overrides(platform_name: str, targets_dir: str) -> dict:
+    overrides_file = os.path.join(targets_dir, "_overrides.yml")
+    if not os.path.exists(overrides_file):
+        return {}
+    with open(overrides_file) as f:
+        all_overrides = yaml_load(f) or {}
+    return all_overrides.get(platform_name, {}).get("targets", {})
+
+
+def _target_alias_index(targets: dict, overrides: dict) -> dict[str, str]:
+    """Every name a target answers to, mapped to the name its file uses."""
+    alias_index: dict[str, str] = {}
+    for tname in targets:
+        alias_index[tname] = tname
+        for alias in overrides.get(tname, {}).get("aliases", []):
+            alias_index[alias] = tname
+    return alias_index
+
+
+def canonical_target_name(
+    platforms: list[str], target: str, platforms_dir: str = "platforms"
+) -> str:
+    """The name a target is filed under, whichever alias was typed.
+
+    `switch`, `nx` and `nintendo-switch` named three packs of one target, and
+    --verify-packs looked for a name no build had written. The typed name is
+    kept when no platform knows it or when platforms file it differently.
+    """
+    targets_dir = os.path.join(platforms_dir, "targets")
+    found: set[str] = set()
+    for platform_name in platforms:
+        target_file = os.path.join(targets_dir, f"{platform_name}.yml")
+        if not os.path.exists(target_file):
+            continue
+        with open(target_file) as f:
+            targets = (yaml_load(f) or {}).get("targets", {})
+        canonical = _target_alias_index(
+            targets, _target_overrides(platform_name, targets_dir)
+        ).get(target)
+        if canonical:
+            found.add(canonical)
+    return found.pop() if len(found) == 1 else target
+
+
 def load_target_config(
     platform_name: str,
     target: str,
@@ -260,19 +304,8 @@ def load_target_config(
         data = yaml_load(f) or {}
 
     targets = data.get("targets", {})
-
-    overrides_file = os.path.join(targets_dir, "_overrides.yml")
-    overrides = {}
-    if os.path.exists(overrides_file):
-        with open(overrides_file) as f:
-            all_overrides = yaml_load(f) or {}
-        overrides = all_overrides.get(platform_name, {}).get("targets", {})
-
-    alias_index: dict[str, str] = {}
-    for tname in targets:
-        alias_index[tname] = tname
-        for alias in overrides.get(tname, {}).get("aliases", []):
-            alias_index[alias] = tname
+    overrides = _target_overrides(platform_name, targets_dir)
+    alias_index = _target_alias_index(targets, overrides)
 
     canonical = alias_index.get(target)
     if canonical is None:

@@ -45,6 +45,7 @@ from common import (
     group_identical_platforms,
     list_emulator_profiles,
     list_platform_system_ids,
+    canonical_target_name,
     list_registered_platforms,
     list_system_ids,
     load_data_dir_registry,
@@ -2766,6 +2767,16 @@ def main():
     packresolve.set_offline(bool(args.offline))
 
     _refuse_unapplied_flags(args, parser)
+    if args.target:
+        # Named once, by the name the target is filed under: every artifact
+        # name below derives from it.
+        args.target = canonical_target_name(
+            [args.platform]
+            if args.platform
+            else list_registered_platforms(args.platforms_dir, include_archived=True),
+            args.target,
+            args.platforms_dir,
+        )
 
     # Quick-exit modes: --verify-packs alone = verify existing packs only
     # Combined with --all-variants, generation runs first then verify
