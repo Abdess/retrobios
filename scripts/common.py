@@ -6,6 +6,8 @@ and file resolution - eliminates DRY violations across scripts.
 
 from __future__ import annotations
 
+from collections import Counter
+
 import hashlib
 import functools
 import json
@@ -1703,27 +1705,32 @@ def filter_systems_by_target(
 def platform_declarations(
     config: dict, db: dict, *, enrich: bool = True
 ) -> dict[str, list[tuple[int | None, str]]]:
-    """Every file name a platform declares, with each declaration's size and destination.
+    """Every file name a platform declares, with each declaration's size and slot.
 
     A name alone does not say which file a declaration is: RetroArch declares
     galaksija/ROM1.BIN, a 4 KiB ROM, and DOSBox reads a 32 KiB SC-55 ROM1.BIN.
     The size, from the platform entry or else from the file its hash names,
     tells a declaration of the same file from a same-named one; None stands
-    for a size nobody knows. The destination, sanitized and case-folded, is
-    the slot the declaration fills.
+    for a size nobody knows. The slot is the declared destination, sanitized
+    and case-folded, relative to the directory core files go to: RetroDECK
+    writes bios/ in front of every destination, the others put it in
+    base_destination.
 
     With ``enrich``, a declaration also answers for the canonical name and
     the aliases the database knows its MD5 under. This handles a platform
     declaring a file under a different name than the emulator profile
     (e.g. Batocera ROM1 vs gsplus ROM).
     """
+    prefix = "" if config.get("base_destination") else declared_root(config).lower()
     declared: dict[str, list[tuple[int | None, str]]] = {}
     by_md5 = db.get("indexes", {}).get("by_md5", {})
     files_db = db.get("files", {})
     for system in config.get("systems", {}).values():
         for fe in system.get("files", []):
             name = fe.get("name", "")
-            dest = sanitize_pack_path(fe.get("destination") or name).lower()
+            slot = sanitize_pack_path(fe.get("destination") or name).lower()
+            if prefix and slot.startswith(prefix + "/"):
+                slot = slot[len(prefix) + 1:]
             # A zipped_file entry pins a member of the archive it names: its
             # md5 and its size, when stated, are not the archive's.
             by_hash: dict = {}
@@ -1738,14 +1745,31 @@ def platform_declarations(
                         (fe.get("sha1") or "").lower(), by_hash
                     ).get("size")
             if name:
-                declared.setdefault(name, []).append((size, dest))
+                declared.setdefault(name, []).append((size, slot))
             if not enrich:
                 continue
-            known = by_hash
-            for other in (known.get("name", ""), *known.get("aliases", [])):
+            for other in (by_hash.get("name", ""), *by_hash.get("aliases", [])):
                 if other:
-                    declared.setdefault(other, []).append((known.get("size"), dest))
+                    declared.setdefault(other, []).append((by_hash.get("size"), slot))
     return declared
+
+
+def declared_root(config: dict) -> str:
+    """The directory nearly every declared destination starts with, if any.
+
+    A platform without base_destination writes it into each destination;
+    core files go under the same directory.
+    """
+    roots = [
+        d.split("/", 1)[0]
+        for system in config.get("systems", {}).values()
+        for f in system.get("files", [])
+        if "/" in (d := f.get("destination", "") or "")
+    ]
+    if not roots:
+        return ""
+    root, count = Counter(roots).most_common(1)[0]
+    return root if count / len(roots) > 0.9 else ""
 
 
 def expand_platform_declared_names(config: dict, db: dict) -> set[str]:

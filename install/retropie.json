@@ -15,10 +15,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 9892,
-  "total_size": 8731913084,
-  "pack_files": 12535,
-  "pack_size": 8772445611,
+  "total_files": 9896,
+  "total_size": 8732261244,
+  "pack_files": 12539,
+  "pack_size": 8772793771,
   "total_omitted": 8,
   "omitted_files": [
     {
@@ -44013,6 +44013,19 @@
       "release_asset": "easyrpg.soundfont"
     },
     {
+      "dest": "system.rom",
+      "sha1": "1f5f7013f18c08ff50d7942e76c4fbd782412414",
+      "sha256": "863df0975a305110a7da4591b704e8f5dc7302f03c63603aa2dcd03e84c36ff9",
+      "size": 65536,
+      "repo_path": "bios/IBM/PC/ibmpcjr/bios.rom",
+      "cores": [
+        "dosbox-staging"
+      ],
+      "systems": [
+        "dos"
+      ]
+    },
+    {
       "dest": "IBM PC Cassette BASIC ROM",
       "sha1": "07449ebca18f979b9ab748582b736e402f2bf940",
       "sha256": "3033d1a54c99d7e2aa1fc7c8c2e51a56ae1b61bf4e70e8aa580f43c43e37a63e",
@@ -44065,6 +44078,19 @@
       ]
     },
     {
+      "dest": "system/nds_bios_arm9.bin",
+      "sha1": "bfaac75f101c135e32e2aaf541de6b1be4c8c62d",
+      "sha256": "1693983a7707ae394786fa526c0552457888a51d4e410d715ef07acd5a540555",
+      "size": 4096,
+      "repo_path": "bios/Nintendo/DS/NDS_Bios9.bin",
+      "cores": [
+        "drastic"
+      ],
+      "systems": [
+        "nintendo-ds"
+      ]
+    },
+    {
       "dest": "system/drastic_bios_arm9.bin",
       "sha1": "4dc29a1560e1cbd7afef1998f7a6c25c5db1cc3a",
       "sha256": "0a4e88c5dfd20ce669b8df45d009974f23fe7cb9b1f2148dbf30b6445eca9bc5",
@@ -44078,11 +44104,37 @@
       ]
     },
     {
+      "dest": "system/nds_bios_arm7.bin",
+      "sha1": "24f67bdea115a2c847c8813a262502ee1607b7df",
+      "sha256": "ba65f690eb04ec92db67c0e299e21ad71de087d6d5de8a9cb17a62eaab563c17",
+      "size": 16384,
+      "repo_path": "bios/Nintendo/DS/NDS_Bios7.bin",
+      "cores": [
+        "drastic"
+      ],
+      "systems": [
+        "nintendo-ds"
+      ]
+    },
+    {
       "dest": "system/drastic_bios_arm7.bin",
       "sha1": "31ae916c85d012582c7cdf47de6943ac6778253b",
       "sha256": "6ad5072c3920fd6c8eba2c49d2dd058c296564a11d6013807124a919cf0d66e6",
       "size": 16384,
       "repo_path": "bios/Other/drastic/system/drastic_bios_arm7.bin",
+      "cores": [
+        "drastic"
+      ],
+      "systems": [
+        "nintendo-ds"
+      ]
+    },
+    {
+      "dest": "system/nds_firmware.bin",
+      "sha1": "87dae2500e889737af51f4a5b5845770a62482f5",
+      "sha256": "330c59198faec64b40e96cc875b422d340fc9ab1a9e32e9bd9b7baa1dbe6ba7f",
+      "size": 262144,
+      "repo_path": "bios/Nintendo/DS/NDS_Lite_Firmware.bin",
       "cores": [
         "drastic"
       ],
@@ -95594,6 +95646,19 @@
       ]
     },
     {
+      "dest": "quasi88/font.rom",
+      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
+      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/font.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
       "dest": "quasi88/font2.rom",
       "sha1": "0a056b6d28b4b9e29a2d255bdaa25c24f176cf1e",
       "sha256": "d35d380c8a716c086cdee9f821c879a01196eeec4e52c94a93f79631248c11ba",
@@ -101402,19 +101467,6 @@
       ],
       "systems": [
         "sony-playstation-2"
-      ]
-    },
-    {
-      "dest": "quasi88/font.rom",
-      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
-      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
-      "size": 2048,
-      "repo_path": "bios/NEC/PC-88/font.rom",
-      "cores": [
-        "quasi88"
-      ],
-      "systems": [
-        "nec-pc-88"
       ]
     },
     {

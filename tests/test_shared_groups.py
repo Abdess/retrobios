@@ -77,12 +77,13 @@ class ADeclaredAliasSettlesTheRequirement(unittest.TestCase):
             Path(tmp, "emulators").mkdir()
             Path(tmp, "emulators", "quasi88.yml").write_text(
                 "emulator: QUASI88\ntype: libretro\nsystems: [nec-pc-88]\ncores: [quasi88]\n"
-                "files:\n  - name: n88sub.rom\n    aliases: [N88SUB.ROM, disk.rom]\n"
-                "    required: true\n"
+                "files:\n  - name: n88sub.rom\n    path: quasi88/n88sub.rom\n"
+                "    aliases: [N88SUB.ROM, disk.rom]\n    required: true\n"
             )
             _emulator_profiles_cache.clear()
             self.addCleanup(_emulator_profiles_cache.clear)
             config = {"platform": "P", "verification_mode": "existence", "cores": "all_libretro",
+                      "base_destination": "system",
                       "systems": {"nec-pc-88": {"files": [{"name": "disk.rom", "destination": "quasi88/disk.rom"}]}}}
             db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {}, "by_path_suffix": {}}}
             previous = os.getcwd()
@@ -117,6 +118,7 @@ class ASameNamedFileOfAnotherSizeSettlesNothing(unittest.TestCase):
             _emulator_profiles_cache.clear()
             self.addCleanup(_emulator_profiles_cache.clear)
             config = {"platform": "P", "verification_mode": "existence", "cores": "all_libretro",
+                      "base_destination": "system",
                       "systems": {"galaksija": {"files": [
                           {"name": "ROM1.BIN", "destination": destination,
                            "size": declared_size, "md5": md5}]}}}
@@ -149,6 +151,62 @@ class ASameNamedFileOfAnotherSizeSettlesNothing(unittest.TestCase):
         """Same destination, other size: which bytes fill the slot is the slot
         arbitration's call, and the builder leaves a taken slot alone."""
         self.assertEqual(self.undeclared(4096, destination="SC-55/ROM1.BIN"), [])
+
+
+class AnAliasAnswersOnlyWhereTheCoreReadsIt(unittest.TestCase):
+    """CLK reads MSX/MSX.ROM and answers to MSX.ROM; RetroDECK declares
+    bios/MSX.ROM at the root for fMSX. The alias settled CLK's entry and the
+    pack left CLK without an MSX BIOS: the builder copies a file declared
+    elsewhere to a core's path under the core's own name, never an alias."""
+
+    PROFILE = (
+        "emulator: CLK\ntype: libretro\nsystems: [msx]\ncores: [clk]\n"
+        "files:\n  - name: msx.rom\n    aliases: [MSX.ROM]\n    path: MSX/MSX.ROM\n"
+        "    required: true\n"
+    )
+
+    def undeclared(self, destination, base_destination="", size=None):
+        import os  # noqa: PLC0415
+        import tempfile  # noqa: PLC0415
+
+        from common import _emulator_profiles_cache  # noqa: PLC0415
+        from verify import find_undeclared_files  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "emulators").mkdir()
+            Path(tmp, "emulators", "clk.yml").write_text(self.PROFILE)
+            _emulator_profiles_cache.clear()
+            self.addCleanup(_emulator_profiles_cache.clear)
+            config = {"platform": "P", "verification_mode": "md5", "cores": ["clk"],
+                      "base_destination": base_destination,
+                      "systems": {"msx": {"files": [
+                          {"name": "MSX.ROM", "destination": destination, "size": size},
+                          {"name": "other.rom", "destination": "bios/other.rom"}]}}}
+            db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {}, "by_path_suffix": {}}}
+            previous = os.getcwd()
+            os.chdir(tmp)
+            try:
+                return [u["path"] for u in find_undeclared_files(config, "emulators", db, data_names=set())]
+            finally:
+                os.chdir(previous)
+
+    def test_an_alias_declared_at_another_path_leaves_the_entry_open(self):
+        self.assertEqual(self.undeclared("bios/MSX.ROM"), ["MSX/MSX.ROM"])
+
+    def test_an_alias_declared_where_the_core_reads_settles_it(self):
+        """RetroDECK writes bios/ into every destination; core paths start below it."""
+        self.assertEqual(self.undeclared("bios/MSX/MSX.ROM"), [])
+
+    def test_an_alias_in_place_at_a_rejected_size_leaves_it_open(self):
+        """RetroBat's root DISK.ROM is the 16 KiB MSX disk ROM; gsplus reads a
+        256-byte DISK.ROM or c600.rom there and checks the size."""
+        self.PROFILE = (
+            "emulator: GSplus\ntype: libretro\nsystems: [msx]\ncores: [clk]\n"
+            "files:\n  - name: c600.rom\n    aliases: [MSX.ROM]\n"
+            "    size: 256\n    validation: [size]\n"
+        )
+        self.assertEqual(self.undeclared("MSX.ROM", "bios", size=16384), ["c600.rom"])
+        self.assertEqual(self.undeclared("MSX.ROM", "bios", size=256), [])
 
 
 if __name__ == "__main__":

@@ -237,10 +237,10 @@
       }
     }
   ],
-  "total_files": 12808,
-  "total_size": 8059073630,
-  "pack_files": 12810,
-  "pack_size": 8059073630,
+  "total_files": 12816,
+  "total_size": 8064662622,
+  "pack_files": 12818,
+  "pack_size": 8064662622,
   "total_omitted": 30,
   "omitted_files": [
     {
@@ -4639,6 +4639,36 @@
       ],
       "systems": [
         "commodore-amiga"
+      ]
+    },
+    {
+      "dest": "cd32.rom",
+      "sha1": "3525be8887f79b5929e017b42380a79edfee542d",
+      "sha256": "3586355514947b5ab48c8755dc004fab94f188b19e7bce491c8f9693499e830b",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-os-310-cd32.rom",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "cd32ext.rom",
+      "sha1": "5bef3d628ce59cc02a66e6e4ae0da48f60e78f7f",
+      "sha256": "d964826432559994ffe329f643fd4e42dbbff313362d9434945725d7119cae87",
+      "size": 524288,
+      "repo_path": "bios/Commodore/Amiga/amiga-ext-310-cd32.rom",
+      "cores": [
+        "amiberry"
+      ]
+    },
+    {
+      "dest": "cdtv.rom",
+      "sha1": "7ba40ffa17e500ed9fed041f3424bd81d9c907be",
+      "sha256": "6e48bb768539e8dae352553e5fdfa860682edaf9e26b105fadd8e26103171765",
+      "size": 262144,
+      "repo_path": "bios/Commodore/Amiga/amiga-ext-130-cdtv.rom",
+      "cores": [
+        "amiberry"
       ]
     },
     {
@@ -43642,6 +43672,27 @@
       ]
     },
     {
+      "dest": "MSX/MSX.ROM",
+      "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
+      "sha256": "999564a371dd2fdf7fbe8d853e82a68d557c27b7d87417639b2fa17704b83f78",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX.ROM",
+      "cores": [
+        "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "apple-iigs",
+        "archimedes",
+        "atari-st",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "electron",
+        "enterprise-64-128",
+        "microsoft-msx"
+      ]
+    },
+    {
       "dest": "MSX/msx-japanese.rom",
       "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
       "sha256": "413a2b601a94b3792e054be2439cc77a1819cceadbfa9542f88d51c7480f2ef0",
@@ -43728,6 +43779,48 @@
       "sha256": "31740a761447d7590c304338d389b0ae114546a8b9f79c9ffd5e374f80b7d354",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/DISK.ROM",
+      "cores": [
+        "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "apple-iigs",
+        "archimedes",
+        "atari-st",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "electron",
+        "enterprise-64-128",
+        "microsoft-msx"
+      ]
+    },
+    {
+      "dest": "MSX/MSX2.ROM",
+      "sha1": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
+      "sha256": "4bc4ae85ca5f28246cd3e7b7e017d298ddd375603657f84ef2c7954bc2d9b919",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX2.ROM",
+      "cores": [
+        "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "apple-iigs",
+        "archimedes",
+        "atari-st",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "electron",
+        "enterprise-64-128",
+        "microsoft-msx"
+      ]
+    },
+    {
+      "dest": "MSX/MSX2EXT.ROM",
+      "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
+      "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
       "cores": [
         "clk"
       ],
@@ -90394,6 +90487,19 @@
       ]
     },
     {
+      "dest": "Mupen64plus/IPL.n64",
+      "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
+      "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
+      "size": 4194304,
+      "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
+      "cores": [
+        "mupen64plus_next"
+      ],
+      "systems": [
+        "nintendo-64dd"
+      ]
+    },
+    {
       "dest": "Mupen64plus/font.ttf",
       "sha1": "1d7f6fa0c34e3d50be52c16a0816bebac309fe41",
       "sha256": "c4c45690b345435b2cba52ecabe275f05e49b389b39fe68ad03afbb551288d3d",
@@ -96175,6 +96281,20 @@
       "sha256": "25773eaee3af617db08d26602d8f4cdc7d42ed946ca510d3b1d96fe1645af63c",
       "size": 524288,
       "repo_path": "bios/NEC/PC-98/n88jisho.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88",
+        "pc80"
+      ]
+    },
+    {
+      "dest": "quasi88/font.rom",
+      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
+      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/font.rom",
       "cores": [
         "quasi88"
       ],

@@ -7,7 +7,7 @@ this module builds so the report and the pack withdraw the same files."""
 from __future__ import annotations
 
 from common import PROFILE_IDENTITY_FIELDS
-from common import expand_platform_declared_names, platform_declarations
+from common import declared_root, expand_platform_declared_names, platform_declarations
 from common import load_emulator_profiles
 from common import resolution_is_hash_exact
 from common import resolve_local_file
@@ -33,29 +33,12 @@ def _emulator_systems_index(emu_profiles: dict | None) -> dict[str, list[str]]:
     return index
 
 def _detect_extras_prefix(config: dict, base_dest: str) -> str:
-    """Detect the effective BIOS prefix for core extras.
+    """The prefix core-extra destinations take (may be empty).
 
-    When base_destination is empty (RetroDECK), infer the prefix from
-    the dominant root of YAML-declared destinations.  Returns the prefix
-    to prepend to every core-extra destination (may be empty).
+    When base_destination is empty (RetroDECK), it is the dominant root of
+    the YAML-declared destinations.
     """
-    if base_dest:
-        return base_dest
-    dests: list[str] = []
-    for sys_data in config.get("systems", {}).values():
-        for f in sys_data.get("files", []):
-            d = f.get("destination", "")
-            if d and "/" in d:
-                dests.append(d)
-    if not dests:
-        return ""
-    from collections import Counter
-
-    roots = Counter(d.split("/", 1)[0] for d in dests)
-    most_common, count = roots.most_common(1)[0]
-    if count / len(dests) > 0.9:
-        return most_common
-    return ""
+    return base_dest or declared_root(config)
 
 def _detect_slug_structure(config: dict) -> tuple[bool, dict[str, str]]:
     """Detect whether a platform uses per-system slug destinations.

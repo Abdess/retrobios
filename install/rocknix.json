@@ -17,10 +17,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 5802,
-  "total_size": 6570150809,
-  "pack_files": 5804,
-  "pack_size": 6570150809,
+  "total_files": 5803,
+  "total_size": 6570151065,
+  "pack_files": 5805,
+  "pack_size": 6570151065,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -54252,6 +54252,38 @@
       ]
     },
     {
+      "dest": "SkyEmu/cgb_boot.bin",
+      "sha1": "80e3ee82416c1a74827a5459fde32f04bf51a1f6",
+      "sha256": "119470a9cf9f0d85f0c7ba5a6cadffeec07eb9862719086d1a9808189605e388",
+      "size": 2304,
+      "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
+      "cores": [
+        "skyemu"
+      ],
+      "systems": [
+        "nintendo-ds",
+        "nintendo-gb",
+        "nintendo-gba",
+        "nintendo-gbc"
+      ]
+    },
+    {
+      "dest": "SkyEmu/dmg_rom.bin",
+      "sha1": "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
+      "sha256": "cf053eccb4ccafff9e67339d4e78e98dce7d1ed59be819d2a1ba2232c6fce1c7",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Game Boy/GB_dmg.bin",
+      "cores": [
+        "skyemu"
+      ],
+      "systems": [
+        "nintendo-ds",
+        "nintendo-gb",
+        "nintendo-gba",
+        "nintendo-gbc"
+      ]
+    },
+    {
       "dest": "SkyEmu/nds7.bin",
       "sha1": "24f67bdea115a2c847c8813a262502ee1607b7df",
       "sha256": "ba65f690eb04ec92db67c0e299e21ad71de087d6d5de8a9cb17a62eaab563c17",
@@ -57418,22 +57450,6 @@
       ],
       "systems": [
         "sega-saturn"
-      ]
-    },
-    {
-      "dest": "SkyEmu/cgb_boot.bin",
-      "sha1": "80e3ee82416c1a74827a5459fde32f04bf51a1f6",
-      "sha256": "119470a9cf9f0d85f0c7ba5a6cadffeec07eb9862719086d1a9808189605e388",
-      "size": 2304,
-      "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
-      "cores": [
-        "skyemu"
-      ],
-      "systems": [
-        "nintendo-ds",
-        "nintendo-gb",
-        "nintendo-gba",
-        "nintendo-gbc"
       ]
     },
     {

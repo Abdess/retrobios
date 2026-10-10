@@ -237,10 +237,10 @@
       }
     }
   ],
-  "total_files": 7791,
-  "total_size": 8621760123,
-  "pack_files": 7793,
-  "pack_size": 8621760123,
+  "total_files": 7800,
+  "total_size": 8626179963,
+  "pack_files": 7802,
+  "pack_size": 8626179963,
   "total_omitted": 1,
   "omitted_files": [
     {
@@ -25231,6 +25231,28 @@
       ]
     },
     {
+      "dest": "bios/MSX/MSX.ROM",
+      "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
+      "sha256": "999564a371dd2fdf7fbe8d853e82a68d557c27b7d87417639b2fa17704b83f78",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX.ROM",
+      "cores": [
+        "clk"
+      ],
+      "systems": [
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "atari-st",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ]
+    },
+    {
       "dest": "bios/MSX/msx-japanese.rom",
       "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
       "sha256": "413a2b601a94b3792e054be2439cc77a1819cceadbfa9542f88d51c7480f2ef0",
@@ -25312,6 +25334,50 @@
       ],
       "region_groups": [
         "Clock Signal (CLK):file:MSX/msx-european.rom"
+      ]
+    },
+    {
+      "dest": "bios/MSX/MSX2.ROM",
+      "sha1": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
+      "sha256": "4bc4ae85ca5f28246cd3e7b7e017d298ddd375603657f84ef2c7954bc2d9b919",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX2.ROM",
+      "cores": [
+        "clk"
+      ],
+      "systems": [
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "atari-st",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ]
+    },
+    {
+      "dest": "bios/MSX/MSX2EXT.ROM",
+      "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
+      "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
+      "cores": [
+        "clk"
+      ],
+      "systems": [
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "atari-st",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -68653,6 +68719,19 @@
       ]
     },
     {
+      "dest": "bios/Mupen64plus/IPL.n64",
+      "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
+      "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
+      "size": 4194304,
+      "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
+      "cores": [
+        "mupen64plus_next"
+      ],
+      "systems": [
+        "nintendo-64dd"
+      ]
+    },
+    {
       "dest": "bios/Mupen64plus/font.ttf",
       "sha1": "1d7f6fa0c34e3d50be52c16a0816bebac309fe41",
       "sha256": "c4c45690b345435b2cba52ecabe275f05e49b389b39fe68ad03afbb551288d3d",
@@ -69703,6 +69782,97 @@
       ],
       "systems": [
         "nintendo-ds"
+      ]
+    },
+    {
+      "dest": "bios/np2kai/2608_bd.wav",
+      "sha1": "0a56c142ef40cec50f3ee56a6e42d0029c9e2818",
+      "sha256": "802fb0ce40878e98335fc56d11eff6382982e9f09ebc83055b0a469df13f7900",
+      "size": 19192,
+      "repo_path": "bios/NEC/PC-98/2608_bd.wav",
+      "cores": [
+        "np2kai"
+      ],
+      "systems": [
+        "nec-pc-98"
+      ]
+    },
+    {
+      "dest": "bios/np2kai/2608_sd.wav",
+      "sha1": "3c79663ef74c0b0439d13351326eb1c52a657008",
+      "sha256": "e5877cd1e4821cbbc9a450491a189032c82906c05f7fc9f2e48ee0d06b3ad18c",
+      "size": 15558,
+      "repo_path": "bios/NEC/PC-98/2608_sd.wav",
+      "cores": [
+        "np2kai"
+      ],
+      "systems": [
+        "nec-pc-98"
+      ]
+    },
+    {
+      "dest": "bios/np2kai/2608_top.wav",
+      "sha1": "aa4a8f766a86b830687d5083fd3b9db0652f46fc",
+      "sha256": "d7bcf2da99a09589096e9bcee98da43303c588cca4e89b1a263adace52038cd3",
+      "size": 57016,
+      "repo_path": "bios/NEC/PC-98/2608_top.wav",
+      "cores": [
+        "np2kai"
+      ],
+      "systems": [
+        "nec-pc-98"
+      ]
+    },
+    {
+      "dest": "bios/np2kai/2608_hh.wav",
+      "sha1": "12f676cef249b82480b6f19c454e234b435ca7b6",
+      "sha256": "216c81ff9a84af0dfbf21dd8df6827c25fca9fdeefe9bc8426f7a00d6ff2264e",
+      "size": 36722,
+      "repo_path": "bios/NEC/PC-98/2608_hh.wav",
+      "cores": [
+        "np2kai"
+      ],
+      "systems": [
+        "nec-pc-98"
+      ]
+    },
+    {
+      "dest": "bios/np2kai/2608_tom.wav",
+      "sha1": "9513fb4a3f41e75a972a273a5104cbd834c1e2c5",
+      "sha256": "8e2c9ccfa8caff03dbd0d945d7c1d4de15292817409fe6fabda07f008f97dbc6",
+      "size": 23092,
+      "repo_path": "bios/NEC/PC-98/2608_tom.wav",
+      "cores": [
+        "np2kai"
+      ],
+      "systems": [
+        "nec-pc-98"
+      ]
+    },
+    {
+      "dest": "bios/np2kai/2608_rim.wav",
+      "sha1": "c65592330c9dd84011151daed52f9aec926b7e56",
+      "sha256": "6f7d1996001c74452a9ca68b41a2767925b5b947c699096a8ad15bbc658af5a3",
+      "size": 5288,
+      "repo_path": "bios/NEC/PC-98/2608_rim.wav",
+      "cores": [
+        "np2kai"
+      ],
+      "systems": [
+        "nec-pc-98"
+      ]
+    },
+    {
+      "dest": "bios/np2kai/ide.rom",
+      "sha1": "0877ffb4b4d1c18283468be3579b72ed8c22e3ac",
+      "sha256": "c15220d1c448bfd3aa268ef8de41dce14a9b3ba90171aaae539d6d94721ff4e0",
+      "size": 8192,
+      "repo_path": "bios/NEC/PC-98/ide.rom",
+      "cores": [
+        "np2kai"
+      ],
+      "systems": [
+        "nec-pc-98"
       ]
     },
     {
@@ -76248,6 +76418,58 @@
       ]
     },
     {
+      "dest": "bios/quasi88/n88sub.rom",
+      "sha1": "bb7103a0818850a039c67ff666a31ce49a8d516f",
+      "sha256": "9dc63118728a171ce2ed437ad38ef280b8b7bcf4a5a95fedf18946501b010456",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-98/N88SUB.ROM",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "bios/quasi88/n88knj2.rom",
+      "sha1": "b86b932cb4ce34472e0fe0f01a4a4350e15dcb53",
+      "sha256": "5c31df4b892e730d1ba7f80fd5583e838ae5583ba52408088da74b9ff422e5fe",
+      "size": 131072,
+      "repo_path": "bios/NEC/PC-98/n88knj2.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "bios/quasi88/n88jisho.rom",
+      "sha1": "deef0cc2a9734ba891a6d6c022aa70ffc66f783e",
+      "sha256": "25773eaee3af617db08d26602d8f4cdc7d42ed946ca510d3b1d96fe1645af63c",
+      "size": 524288,
+      "repo_path": "bios/NEC/PC-98/n88jisho.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
+      "dest": "bios/quasi88/font.rom",
+      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
+      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/font.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
+      ]
+    },
+    {
       "dest": "bios/quasi88/font2.rom",
       "sha1": "0a056b6d28b4b9e29a2d255bdaa25c24f176cf1e",
       "sha256": "d35d380c8a716c086cdee9f821c879a01196eeec4e52c94a93f79631248c11ba",
@@ -77740,6 +77962,38 @@
       "repo_path": "bios/Other/sdlpal/sdlpal/6.avi",
       "cores": [
         "sdlpal"
+      ]
+    },
+    {
+      "dest": "bios/SkyEmu/cgb_boot.bin",
+      "sha1": "80e3ee82416c1a74827a5459fde32f04bf51a1f6",
+      "sha256": "119470a9cf9f0d85f0c7ba5a6cadffeec07eb9862719086d1a9808189605e388",
+      "size": 2304,
+      "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
+      "cores": [
+        "skyemu"
+      ],
+      "systems": [
+        "nintendo-ds",
+        "nintendo-gb",
+        "nintendo-gba",
+        "nintendo-gbc"
+      ]
+    },
+    {
+      "dest": "bios/SkyEmu/dmg_rom.bin",
+      "sha1": "4ed31ec6b0b175bb109c0eb5fd3d193da823339f",
+      "sha256": "cf053eccb4ccafff9e67339d4e78e98dce7d1ed59be819d2a1ba2232c6fce1c7",
+      "size": 256,
+      "repo_path": "bios/Nintendo/Game Boy/GB_dmg.bin",
+      "cores": [
+        "skyemu"
+      ],
+      "systems": [
+        "nintendo-ds",
+        "nintendo-gb",
+        "nintendo-gba",
+        "nintendo-gbc"
       ]
     },
     {
@@ -82440,84 +82694,6 @@
       ]
     },
     {
-      "dest": "bios/np2kai/2608_bd.wav",
-      "sha1": "0a56c142ef40cec50f3ee56a6e42d0029c9e2818",
-      "sha256": "802fb0ce40878e98335fc56d11eff6382982e9f09ebc83055b0a469df13f7900",
-      "size": 19192,
-      "repo_path": "bios/NEC/PC-98/2608_bd.wav",
-      "cores": [
-        "np2kai"
-      ],
-      "systems": [
-        "nec-pc-98"
-      ]
-    },
-    {
-      "dest": "bios/np2kai/2608_sd.wav",
-      "sha1": "3c79663ef74c0b0439d13351326eb1c52a657008",
-      "sha256": "e5877cd1e4821cbbc9a450491a189032c82906c05f7fc9f2e48ee0d06b3ad18c",
-      "size": 15558,
-      "repo_path": "bios/NEC/PC-98/2608_sd.wav",
-      "cores": [
-        "np2kai"
-      ],
-      "systems": [
-        "nec-pc-98"
-      ]
-    },
-    {
-      "dest": "bios/np2kai/2608_top.wav",
-      "sha1": "aa4a8f766a86b830687d5083fd3b9db0652f46fc",
-      "sha256": "d7bcf2da99a09589096e9bcee98da43303c588cca4e89b1a263adace52038cd3",
-      "size": 57016,
-      "repo_path": "bios/NEC/PC-98/2608_top.wav",
-      "cores": [
-        "np2kai"
-      ],
-      "systems": [
-        "nec-pc-98"
-      ]
-    },
-    {
-      "dest": "bios/np2kai/2608_hh.wav",
-      "sha1": "12f676cef249b82480b6f19c454e234b435ca7b6",
-      "sha256": "216c81ff9a84af0dfbf21dd8df6827c25fca9fdeefe9bc8426f7a00d6ff2264e",
-      "size": 36722,
-      "repo_path": "bios/NEC/PC-98/2608_hh.wav",
-      "cores": [
-        "np2kai"
-      ],
-      "systems": [
-        "nec-pc-98"
-      ]
-    },
-    {
-      "dest": "bios/np2kai/2608_tom.wav",
-      "sha1": "9513fb4a3f41e75a972a273a5104cbd834c1e2c5",
-      "sha256": "8e2c9ccfa8caff03dbd0d945d7c1d4de15292817409fe6fabda07f008f97dbc6",
-      "size": 23092,
-      "repo_path": "bios/NEC/PC-98/2608_tom.wav",
-      "cores": [
-        "np2kai"
-      ],
-      "systems": [
-        "nec-pc-98"
-      ]
-    },
-    {
-      "dest": "bios/np2kai/2608_rim.wav",
-      "sha1": "c65592330c9dd84011151daed52f9aec926b7e56",
-      "sha256": "6f7d1996001c74452a9ca68b41a2767925b5b947c699096a8ad15bbc658af5a3",
-      "size": 5288,
-      "repo_path": "bios/NEC/PC-98/2608_rim.wav",
-      "cores": [
-        "np2kai"
-      ],
-      "systems": [
-        "nec-pc-98"
-      ]
-    },
-    {
       "dest": "bios/PPSSPP/ppge_atlas.zim",
       "sha1": "30a33f3651f8e1b0967a5dfe6ff714baebcce41a",
       "sha256": "3ab7fcf6956d0281ada94d501fc6d1cfa8fc034f139e25fed6c829f723d92a95",
@@ -82687,19 +82863,6 @@
       ]
     },
     {
-      "dest": "bios/quasi88/n88jisho.rom",
-      "sha1": "deef0cc2a9734ba891a6d6c022aa70ffc66f783e",
-      "sha256": "25773eaee3af617db08d26602d8f4cdc7d42ed946ca510d3b1d96fe1645af63c",
-      "size": 524288,
-      "repo_path": "bios/NEC/PC-98/n88jisho.rom",
-      "cores": [
-        "quasi88"
-      ],
-      "systems": [
-        "nec-pc-88"
-      ]
-    },
-    {
       "dest": "bios/same_cdi/bios/cdimono1.zip",
       "sha1": "36771315484a1f57227e23278df91b84b5d7d3be",
       "sha256": "eaf5f0cfd642eae919fb52eb3d7d1ecb074b302260f698fabb7b584869354833",
@@ -82723,22 +82886,6 @@
       ],
       "systems": [
         "philips-cdi"
-      ]
-    },
-    {
-      "dest": "bios/SkyEmu/cgb_boot.bin",
-      "sha1": "80e3ee82416c1a74827a5459fde32f04bf51a1f6",
-      "sha256": "119470a9cf9f0d85f0c7ba5a6cadffeec07eb9862719086d1a9808189605e388",
-      "size": 2304,
-      "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
-      "cores": [
-        "skyemu"
-      ],
-      "systems": [
-        "nintendo-ds",
-        "nintendo-gb",
-        "nintendo-gba",
-        "nintendo-gbc"
       ]
     },
     {

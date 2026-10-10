@@ -241,10 +241,10 @@
       }
     }
   ],
-  "total_files": 12398,
-  "total_size": 8504485261,
-  "pack_files": 12400,
-  "pack_size": 8504485261,
+  "total_files": 12402,
+  "total_size": 8504569229,
+  "pack_files": 12404,
+  "pack_size": 8504569229,
   "total_omitted": 30,
   "omitted_files": [
     {
@@ -43582,6 +43582,26 @@
       ]
     },
     {
+      "dest": "MSX/MSX.ROM",
+      "sha1": "409e82adac40f6bdd18eb6c84e8b2fbdc7fb5498",
+      "sha256": "999564a371dd2fdf7fbe8d853e82a68d557c27b7d87417639b2fa17704b83f78",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX.ROM",
+      "cores": [
+        "clk"
+      ],
+      "systems": [
+        "archimedes",
+        "atarist",
+        "bbcmicro",
+        "colecovision",
+        "electron",
+        "mastersystem",
+        "msx",
+        "msx2"
+      ]
+    },
+    {
       "dest": "MSX/msx-japanese.rom",
       "sha1": "302afb5d8be26c758309ca3df611ae69cced2821",
       "sha256": "413a2b601a94b3792e054be2439cc77a1819cceadbfa9542f88d51c7480f2ef0",
@@ -43665,6 +43685,46 @@
       "sha256": "31740a761447d7590c304338d389b0ae114546a8b9f79c9ffd5e374f80b7d354",
       "size": 16384,
       "repo_path": "bios/Microsoft/MSX/DISK.ROM",
+      "cores": [
+        "clk"
+      ],
+      "systems": [
+        "archimedes",
+        "atarist",
+        "bbcmicro",
+        "colecovision",
+        "electron",
+        "mastersystem",
+        "msx",
+        "msx2"
+      ]
+    },
+    {
+      "dest": "MSX/MSX2.ROM",
+      "sha1": "6103b39f1e38d1aa2d84b1c3219c44f1abb5436e",
+      "sha256": "4bc4ae85ca5f28246cd3e7b7e017d298ddd375603657f84ef2c7954bc2d9b919",
+      "size": 32768,
+      "repo_path": "bios/Microsoft/MSX/MSX2.ROM",
+      "cores": [
+        "clk"
+      ],
+      "systems": [
+        "archimedes",
+        "atarist",
+        "bbcmicro",
+        "colecovision",
+        "electron",
+        "mastersystem",
+        "msx",
+        "msx2"
+      ]
+    },
+    {
+      "dest": "MSX/MSX2EXT.ROM",
+      "sha1": "5c1f9c7fb655e43d38e5dd1fcc6b942b2ff68b02",
+      "sha256": "6c6f421a10c428d960b7ecc990f99af1c638147f747bddca7b0bf0e2ab738300",
+      "size": 16384,
+      "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
       "cores": [
         "clk"
       ],
@@ -92421,6 +92481,19 @@
       "sha256": "25773eaee3af617db08d26602d8f4cdc7d42ed946ca510d3b1d96fe1645af63c",
       "size": 524288,
       "repo_path": "bios/NEC/PC-98/n88jisho.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "pc88"
+      ]
+    },
+    {
+      "dest": "quasi88/font.rom",
+      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
+      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/font.rom",
       "cores": [
         "quasi88"
       ],

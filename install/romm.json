@@ -15,10 +15,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1085,
-  "total_size": 1582092326,
-  "pack_files": 1087,
-  "pack_size": 1582092326,
+  "total_files": 1086,
+  "total_size": 1586286630,
+  "pack_files": 1088,
+  "pack_size": 1586286630,
   "total_omitted": 53,
   "omitted_files": [
     {
@@ -8164,6 +8164,19 @@
       ],
       "systems": [
         "apple-macintosh-ii"
+      ]
+    },
+    {
+      "dest": "64dd/Mupen64plus/IPL.n64",
+      "sha1": "bf861922dcb78c316360e3e742f4f70ff63c9bc3",
+      "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
+      "size": 4194304,
+      "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
+      "cores": [
+        "mupen64plus_next"
+      ],
+      "systems": [
+        "nintendo-64dd"
       ]
     },
     {

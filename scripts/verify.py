@@ -415,28 +415,37 @@ def _candidate_verdict(
     if outside_gap_scope(file_entry, is_standalone):
         return "skip"
     if not include_all:
-        # A platform declaring any name the core answers to has met the
-        # requirement: quasi88 reads n88sub.rom or disk.rom, and System.dat
-        # names disk.rom. Without the aliases the pack carried the ROM twice.
-        # The archive answers by its name. A loose file answers where the
-        # declaration fills the entry's own slot, whose content the slot
-        # arbitration decides, or elsewhere at a size the core accepts:
-        # Galaksija's 4 KiB ROM1.BIN does not stand for DOSBox's 32 KiB
-        # SC-55 one.
+        # A platform declaring the name the core reads has met the
+        # requirement where the declaration fills the entry's own slot,
+        # whose content the slot arbitration decides, or elsewhere at a size
+        # the core accepts: the builder copies that file to the core's path.
+        # Galaksija's 4 KiB ROM1.BIN does not stand for DOSBox's 32 KiB SC-55
+        # one. The builder copies nothing for an alias, so an alias answers
+        # only where the core reads it: quasi88 reads n88sub.rom or disk.rom
+        # in quasi88/, and System.dat names quasi88/disk.rom. RetroDECK's
+        # root MSX.ROM is not CLK's MSX/MSX.ROM, and RetroBat's 16 KiB MSX
+        # DISK.ROM at the root is not the 256-byte Disk II ROM gsplus also
+        # accepts as c600.rom. The archive answers by its name.
         if file_entry.get("archive") in declared_names:
             return "settled"
-        slot = sanitize_pack_path(dest).lower()
+        slot = sanitize_pack_path(dest or fname).lower()
+        directory = slot if dest.endswith("/") else slot.rpartition("/")[0]
         for name in (fname, *file_entry.get("aliases", [])):
             if name not in declared_names:
                 continue
-            declarations = (
-                declared_names[name]
-                if isinstance(declared_names, Mapping)
-                else [(None, "")]
-            )
+            if not isinstance(declared_names, Mapping):
+                return "settled"
+            if name == fname:
+                if any(
+                    where == slot or name_match_size_ok(file_entry, size)
+                    for size, where in declared_names[name]
+                ):
+                    return "settled"
+                continue
+            read_at = f"{directory}/{name}".lower() if directory else name.lower()
             if any(
-                (slot and where == slot) or name_match_size_ok(file_entry, size)
-                for size, where in declarations
+                where == read_at and name_match_size_ok(file_entry, size)
+                for size, where in declared_names[name]
             ):
                 return "settled"
     return "keep"
