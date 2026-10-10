@@ -1670,38 +1670,57 @@ def filter_systems_by_target(
     return filtered
 
 
-def expand_platform_declared_names(config: dict, db: dict) -> set[str]:
-    """Build set of file names declared by a platform config.
+def platform_declarations(
+    config: dict, db: dict, *, enrich: bool = True
+) -> dict[str, list[tuple[int | None, str]]]:
+    """Every file name a platform declares, with each declaration's size and destination.
 
-    Enriches the set with canonical names and aliases from the database
-    by resolving each platform file's MD5 through by_md5.  This handles
-    cases where a platform declares a file under a different name than
-    the emulator profile (e.g. Batocera ROM1 vs gsplus ROM).
+    A name alone does not say which file a declaration is: RetroArch declares
+    galaksija/ROM1.BIN, a 4 KiB ROM, and DOSBox reads a 32 KiB SC-55 ROM1.BIN.
+    The size, from the platform entry or else from the file its hash names,
+    tells a declaration of the same file from a same-named one; None stands
+    for a size nobody knows. The destination, sanitized and case-folded, is
+    the slot the declaration fills.
+
+    With ``enrich``, a declaration also answers for the canonical name and
+    the aliases the database knows its MD5 under. This handles a platform
+    declaring a file under a different name than the emulator profile
+    (e.g. Batocera ROM1 vs gsplus ROM).
     """
-    declared: set[str] = set()
+    declared: dict[str, list[tuple[int | None, str]]] = {}
     by_md5 = db.get("indexes", {}).get("by_md5", {})
     files_db = db.get("files", {})
     for system in config.get("systems", {}).values():
         for fe in system.get("files", []):
             name = fe.get("name", "")
+            dest = sanitize_pack_path(fe.get("destination") or name).lower()
+            # A zipped_file entry pins a member of the archive it names: its
+            # md5 and its size, when stated, are not the archive's.
+            by_hash: dict = {}
+            size = None
+            if not fe.get("zipped_file"):
+                md5 = (fe.get("md5") or "").lower()
+                if md5 and "," not in md5:
+                    by_hash = files_db.get(by_md5.get(md5, ""), {})
+                size = fe.get("size")
+                if size is None:
+                    size = files_db.get(
+                        (fe.get("sha1") or "").lower(), by_hash
+                    ).get("size")
             if name:
-                declared.add(name)
-            md5 = fe.get("md5", "")
-            if not md5:
+                declared.setdefault(name, []).append((size, dest))
+            if not enrich:
                 continue
-            # Skip multi-hash and zipped_file entries (inner ROM MD5, not file MD5)
-            if "," in md5 or fe.get("zipped_file"):
-                continue
-            sha1 = by_md5.get(md5.lower())
-            if not sha1:
-                continue
-            entry = files_db.get(sha1, {})
-            db_name = entry.get("name", "")
-            if db_name:
-                declared.add(db_name)
-            for alias in entry.get("aliases", []):
-                declared.add(alias)
+            known = by_hash
+            for other in (known.get("name", ""), *known.get("aliases", [])):
+                if other:
+                    declared.setdefault(other, []).append((known.get("size"), dest))
     return declared
+
+
+def expand_platform_declared_names(config: dict, db: dict) -> set[str]:
+    """The names a platform declares, enriched as `platform_declarations`."""
+    return set(platform_declarations(config, db))
 
 
 import re

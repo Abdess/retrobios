@@ -241,10 +241,10 @@
       }
     }
   ],
-  "total_files": 12397,
-  "total_size": 8504485005,
-  "pack_files": 12399,
-  "pack_size": 8504485005,
+  "total_files": 12398,
+  "total_size": 8504485261,
+  "pack_files": 12400,
+  "pack_size": 8504485261,
   "total_omitted": 30,
   "omitted_files": [
     {
@@ -61416,6 +61416,16 @@
       "repo_path": "bios/Sega/Mega Drive/sk2chip.bin",
       "cores": [
         "genesis_plus_gx"
+      ]
+    },
+    {
+      "dest": "c600.rom",
+      "sha1": "d4181c9f046aafc3fb326b381baac809d9e38d16",
+      "sha256": "de1e3e035878bab43d0af8fe38f5839c527e9548647036598ee6fe7ec74d2a7d",
+      "size": 256,
+      "repo_path": "bios/Apple/Apple II/AppleIIe_DiskII.rom",
+      "cores": [
+        "gsplus"
       ]
     },
     {

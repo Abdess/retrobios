@@ -29,6 +29,7 @@ import json
 import os
 import sys
 import zipfile
+from collections.abc import Mapping
 
 import slots
 
@@ -43,7 +44,8 @@ from common import (
     check_inside_zip,
     compute_hashes,
     expand_directory_entries,
-    expand_platform_declared_names,
+    name_match_size_ok,
+    platform_declarations,
     filter_systems_by_target,
     group_identical_platforms,
     list_emulator_profiles,
@@ -396,7 +398,8 @@ def _candidate_verdict(
     fname: str,
     is_standalone: bool,
     include_all: bool,
-    declared_names: set,
+    declared_names: Mapping[str, list[tuple[int | None, str]]] | set[str],
+    dest: str = "",
 ) -> str:
     """Whether a profile entry can be a gap, and whether it is settled.
 
@@ -415,9 +418,27 @@ def _candidate_verdict(
         # A platform declaring any name the core answers to has met the
         # requirement: quasi88 reads n88sub.rom or disk.rom, and System.dat
         # names disk.rom. Without the aliases the pack carried the ROM twice.
-        answers = {fname, file_entry.get("archive") or "", *file_entry.get("aliases", [])}
-        if answers & declared_names:
+        # The archive answers by its name. A loose file answers where the
+        # declaration fills the entry's own slot, whose content the slot
+        # arbitration decides, or elsewhere at a size the core accepts:
+        # Galaksija's 4 KiB ROM1.BIN does not stand for DOSBox's 32 KiB
+        # SC-55 one.
+        if file_entry.get("archive") in declared_names:
             return "settled"
+        slot = sanitize_pack_path(dest).lower()
+        for name in (fname, *file_entry.get("aliases", [])):
+            if name not in declared_names:
+                continue
+            declarations = (
+                declared_names[name]
+                if isinstance(declared_names, Mapping)
+                else [(None, "")]
+            )
+            if any(
+                (slot and where == slot) or name_match_size_ok(file_entry, size)
+                for size, where in declarations
+            ):
+                return "settled"
     return "keep"
 
 
@@ -438,16 +459,16 @@ def find_undeclared_files(
     target_cores: set[str] | None = None,
     data_names: set[str] | None = None,
     include_all: bool = False,
-    declared_names: set[str] | None = None,
+    declared_names: Mapping[str, list[tuple[int | None, str]]] | None = None,
 ) -> list[dict]:
     """Find files needed by cores but not declared in platform config.
 
-    declared_names overrides the default enriched set from
-    expand_platform_declared_names.  Pass a strict set (YAML names only)
-    when building packs so alias-only names still get packed.
+    declared_names overrides the default enriched declarations from
+    platform_declarations.  Pass the strict ones (YAML names only) when
+    building packs so alias-only names still get packed.
     """
     if declared_names is None:
-        declared_names = expand_platform_declared_names(config, db)
+        declared_names = platform_declarations(config, db)
 
     # Whether the builder drops a file whose local copy contradicts its
     # declared hash, which decides if such a copy counts as held here.
@@ -523,7 +544,7 @@ def find_undeclared_files(
             if not fname or seen_key in seen_files:
                 continue
             verdict = _candidate_verdict(
-                f, fname, is_standalone, include_all, declared_names
+                f, fname, is_standalone, include_all, declared_names, dest
             )
             if verdict == "settled":
                 seen_files.add(seen_key)

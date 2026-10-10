@@ -92,5 +92,64 @@ class ADeclaredAliasSettlesTheRequirement(unittest.TestCase):
         self.assertEqual([u["name"] for u in undeclared], [])
 
 
+class ASameNamedFileOfAnotherSizeSettlesNothing(unittest.TestCase):
+    """RetroArch declares Galaksija's ROM1.BIN, a 4 KiB ROM; DOSBox reads a
+    32 KiB SC-55 ROM1.BIN and checks its size. The gap pass settled DOSBox's
+    entry on the name alone: the report never listed SC-55/ROM1.BIN, and a
+    missing dump would have shown no gap."""
+
+    PROFILE = (
+        "emulator: DOSBox\ntype: libretro\nsystems: [dos]\ncores: [dosbox]\n"
+        "files:\n  - name: ROM1.BIN\n    path: SC-55/ROM1.BIN\n"
+        "    size: 32768\n    validation: [size]\n"
+    )
+
+    def undeclared(self, declared_size, destination="galaksija/ROM1.BIN", md5=None, db_size=None):
+        import os  # noqa: PLC0415
+        import tempfile  # noqa: PLC0415
+
+        from common import _emulator_profiles_cache  # noqa: PLC0415
+        from verify import find_undeclared_files  # noqa: PLC0415
+
+        with tempfile.TemporaryDirectory() as tmp:
+            Path(tmp, "emulators").mkdir()
+            Path(tmp, "emulators", "dosbox.yml").write_text(self.PROFILE)
+            _emulator_profiles_cache.clear()
+            self.addCleanup(_emulator_profiles_cache.clear)
+            config = {"platform": "P", "verification_mode": "existence", "cores": "all_libretro",
+                      "systems": {"galaksija": {"files": [
+                          {"name": "ROM1.BIN", "destination": destination,
+                           "size": declared_size, "md5": md5}]}}}
+            db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {}, "by_path_suffix": {}}}
+            if md5:
+                db["files"]["a" * 40] = {"name": "ROM1.BIN", "size": db_size}
+                db["indexes"]["by_md5"][md5] = "a" * 40
+            previous = os.getcwd()
+            os.chdir(tmp)
+            self.addCleanup(os.chdir, previous)
+            return [u["path"] for u in find_undeclared_files(config, "emulators", db, data_names=set())]
+
+    def test_a_declaration_at_a_size_the_core_rejects_leaves_the_gap_open(self):
+        self.assertEqual(self.undeclared(4096), ["SC-55/ROM1.BIN"])
+
+    def test_a_declaration_at_an_accepted_size_settles_it(self):
+        self.assertEqual(self.undeclared(32768), [])
+
+    def test_a_declaration_without_a_size_still_settles_it(self):
+        self.assertEqual(self.undeclared(None), [])
+
+    def test_the_size_of_the_file_its_hash_names_stands_in(self):
+        """Batocera writes no size: its md5 names the file, and the file's size
+        decides. MT32_CONTROL.ROM at 64 KiB covered DOSBox's 128 KiB entries."""
+        self.assertEqual(
+            self.undeclared(None, md5="b" * 32, db_size=4096), ["SC-55/ROM1.BIN"]
+        )
+
+    def test_a_declaration_filling_the_entry_slot_settles_it(self):
+        """Same destination, other size: which bytes fill the slot is the slot
+        arbitration's call, and the builder leaves a taken slot alone."""
+        self.assertEqual(self.undeclared(4096, destination="SC-55/ROM1.BIN"), [])
+
+
 if __name__ == "__main__":
     unittest.main()

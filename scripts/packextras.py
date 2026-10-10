@@ -7,7 +7,7 @@ this module builds so the report and the pack withdraw the same files."""
 from __future__ import annotations
 
 from common import PROFILE_IDENTITY_FIELDS
-from common import expand_platform_declared_names
+from common import expand_platform_declared_names, platform_declarations
 from common import load_emulator_profiles
 from common import resolution_is_hash_exact
 from common import resolve_local_file
@@ -494,12 +494,7 @@ def _collect_emulator_extras(
 
     # Use strict YAML names (no DB alias enrichment) so that files known
     # under an alias still get packed at the emulator's expected path.
-    yaml_names: set[str] = set()
-    for system in config.get("systems", {}).values():
-        for fe in system.get("files", []):
-            name = fe.get("name", "")
-            if name:
-                yaml_names.add(name)
+    yaml_names = platform_declarations(config, db, enrich=False)
 
     undeclared = find_undeclared_files(
         config, emulators_dir, db, emu_profiles, target_cores=target_cores,

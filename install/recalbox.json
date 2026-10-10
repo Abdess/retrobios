@@ -237,10 +237,10 @@
       }
     }
   ],
-  "total_files": 3220,
-  "total_size": 4192446979,
-  "pack_files": 3222,
-  "pack_size": 4192446979,
+  "total_files": 3225,
+  "total_size": 4193257987,
+  "pack_files": 3227,
+  "pack_size": 4193257987,
   "total_omitted": 1,
   "omitted_files": [
     {
@@ -5336,6 +5336,16 @@
       ],
       "systems": [
         "sega-saturn"
+      ]
+    },
+    {
+      "dest": "bk/BASIC10.ROM",
+      "sha1": "af7eae90c398ec12942a408fa5ac2722e331738c",
+      "sha256": "24be347356715352fcab480ed1559302d47d598255980a32150eba1431b462b8",
+      "size": 24576,
+      "repo_path": "bios/Elektronika/BK/BASIC10.ROM",
+      "cores": [
+        "bk"
       ]
     },
     {
@@ -24116,6 +24126,32 @@
       ]
     },
     {
+      "dest": "syscard2.pce",
+      "sha1": "88da02e2503f7c32810f5d93a34849d470742b6d",
+      "sha256": "0deb13845c7e44ea78a25bbbe324afd60a0ec29ea5a4cf5780349f1598d24cd3",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard2.pce",
+      "cores": [
+        "geargrafx"
+      ],
+      "systems": [
+        "nec-pc-engine"
+      ]
+    },
+    {
+      "dest": "syscard1.pce",
+      "sha1": "a39a66da7de6ba94ab84d04eef7afeec7d4ee66a",
+      "sha256": "afe9f27f91ac918348555b86298b4f984643eafa2773196f2c5441ea84f0c3bb",
+      "size": 262144,
+      "repo_path": "bios/NEC/PC Engine/syscard1.pce",
+      "cores": [
+        "geargrafx"
+      ],
+      "systems": [
+        "nec-pc-engine"
+      ]
+    },
+    {
       "dest": "pac-n1.bin",
       "sha1": "6973e2593e66fd21627fedccec98d4a364afaaff",
       "sha256": "459325690a458baebd77495c91e37c4dddfdd542ba13a821ce954e5bb245627f",
@@ -32981,6 +33017,26 @@
       "sha256": "f8d03a5a31fc3bd01a4f85f60d3dbe1656a6770f2a9ca9bad0a66c03ed1bd512",
       "size": 262144,
       "repo_path": "bios/Atari/Jaguar/[BIOS] Atari Jaguar Developer CD (World).j64",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "jagboot.rom",
+      "sha1": "af643900fea84234e08b616a6d27f03f0a61db96",
+      "sha256": "f0bd29599b3dfca7f5620c011256c1dc45c9d82c428a318f965c2ba3ded2e9f9",
+      "size": 131072,
+      "repo_path": "bios/Atari/Jaguar/boot.rom",
+      "cores": [
+        "virtualjaguar"
+      ]
+    },
+    {
+      "dest": "jagboot_m.rom",
+      "sha1": "af643900fea84234e08b616a6d27f03f0a61db96",
+      "sha256": "f0bd29599b3dfca7f5620c011256c1dc45c9d82c428a318f965c2ba3ded2e9f9",
+      "size": 131072,
+      "repo_path": "bios/Atari/Jaguar/boot.rom",
       "cores": [
         "virtualjaguar"
       ]
