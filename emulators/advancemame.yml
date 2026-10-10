@@ -4,7 +4,7 @@ core_classification: enhanced_fork
 source: "https://github.com/amadvance/advancemame"
 upstream: "https://www.mamedev.org"
 profiled_date: "2026-08-08"
-source_commit: "0f6a7677ad42b4dfdfa36b046f74bef5238d5837"
+source_commit: "21f8f6f79d8a9abe9f23b1a070841963774cf65d"
 core_version: "5.0"
 mame_version: "0.106"
 display_name: "Arcade (AdvanceMAME)"
