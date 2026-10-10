@@ -28,8 +28,11 @@ class BaseTargetScraper(ABC):
             import yaml
         except ImportError:
             raise ImportError("PyYAML required: pip install pyyaml")
-        with open(output_path, "w") as f:
-            yaml.dump(data, f, default_flow_style=False, sort_keys=False)
+        from common import write_text_atomic
+
+        write_text_atomic(
+            output_path, yaml.dump(data, default_flow_style=False, sort_keys=False)
+        )
 
 
 _scrapers: dict[str, type] = {}

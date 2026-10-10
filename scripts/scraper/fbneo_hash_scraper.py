@@ -20,7 +20,7 @@ from typing import Any
 
 import yaml
 
-from common import yaml_load
+from common import write_text_atomic, yaml_load
 
 from scripts.scraper._hash_merge import compute_diff, merge_fbneo_profile
 from scripts.scraper.fbneo_parser import parse_fbneo_source_tree
@@ -187,9 +187,8 @@ def fetch_and_cache(force: bool = False) -> dict[str, Any]:
         }
 
         CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
-        CACHE_PATH.write_text(
-            json.dumps(cache, indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
+        write_text_atomic(
+            str(CACHE_PATH), json.dumps(cache, indent=2, ensure_ascii=False) + "\n"
         )
         log.info("wrote %d BIOS sets to %s", len(bios_sets), CACHE_PATH)
 

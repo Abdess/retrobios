@@ -12,7 +12,7 @@ import yaml
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
-from common import yaml_load
+from common import write_text_atomic, yaml_load
 
 
 @dataclass
@@ -373,11 +373,12 @@ def scraper_cli(
                 for field in ("data_directories",):
                     if field in old_sys and field not in sys_data:
                         sys_data[field] = old_sys[field]
-        with open(output_path, "w") as f:
-            yaml.dump(
-                config, f, Dumper=_PlatformDumper,
-                default_flow_style=False, allow_unicode=True, sort_keys=False,
-            )
+        # Written whole or not at all: a reader in the middle of a streamed
+        # dump parsed a valid platform with a fraction of its systems.
+        write_text_atomic(output_path, yaml.dump(
+            config, Dumper=_PlatformDumper,
+            default_flow_style=False, allow_unicode=True, sort_keys=False,
+        ))
         print(f"Written {len(reqs)} entries to {args.output}")
         return
 

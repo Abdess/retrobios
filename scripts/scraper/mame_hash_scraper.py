@@ -22,7 +22,7 @@ from typing import Any
 
 import yaml
 
-from common import yaml_load
+from common import write_text_atomic, yaml_load
 
 from ._hash_merge import compute_diff, merge_mame_profile
 from .mame_parser import parse_mame_source_tree
@@ -66,8 +66,9 @@ def _is_stale(cache: dict[str, Any] | None) -> bool:
 
 def _write_cache(data: dict[str, Any]) -> None:
     _CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(_CACHE_PATH, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    write_text_atomic(
+        str(_CACHE_PATH), json.dumps(data, indent=2, ensure_ascii=False)
+    )
     log.info("cache written to %s", _CACHE_PATH)
 
 

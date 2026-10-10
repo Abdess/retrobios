@@ -60,7 +60,7 @@ def write_text_atomic(path: str, content: str) -> None:
         dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
     )
     try:
-        with os.fdopen(handle, "w") as f:
+        with os.fdopen(handle, "w", encoding="utf-8") as f:
             f.write(content)
         os.replace(scratch, path)
     except BaseException:

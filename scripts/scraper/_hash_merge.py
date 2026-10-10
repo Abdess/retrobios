@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 
-from common import yaml_load
+from common import write_text_atomic, yaml_load
 
 
 _MAME_RELEASE_RE = re.compile(r"^0\.\d+")
@@ -390,7 +390,7 @@ def _backup_and_write(path: str, data: dict) -> None:
     patched = _patch_bios_entries(patched, data.get("files", []))
     patched = _append_new_entries(patched, data.get("files", []), original)
 
-    p.write_text(patched, encoding="utf-8")
+    write_text_atomic(str(p), patched)
 
 
 def _patch_core_version(text: str, version: str) -> str:
@@ -606,4 +606,4 @@ def _backup_and_write_fbneo(path: str, data: dict, hashes: dict) -> None:
             lines.append("")
         patched = patched.rstrip("\n") + "\n\n" + "\n".join(lines)
 
-    p.write_text(patched, encoding="utf-8")
+    write_text_atomic(str(p), patched)

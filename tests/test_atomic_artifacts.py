@@ -65,5 +65,33 @@ class EveryWriterGoesThroughIt(unittest.TestCase):
         self.assertNotIn("shutil.copy2(source, path)", (scripts / "restore_large_files.py").read_text())
 
 
+    def test_scrapers_write_whole_files(self):
+        """A streamed yaml.dump into platforms/<x>.yml let a concurrent reader
+        parse a valid platform holding a fraction of its systems."""
+        import re
+
+        streamed = re.compile(
+            r"open\([^)]*['\"](?:w|wb|a)['\"]|\.write_text\(|\.write_bytes\("
+        )
+        offenders = [
+            f"{path.relative_to(REPO_ROOT)}:{number}"
+            for path in sorted((REPO_ROOT / "scripts" / "scraper").rglob("*.py"))
+            for number, line in enumerate(
+                path.read_text(encoding="utf-8").splitlines(), 1
+            )
+            if streamed.search(line)
+        ]
+        self.assertEqual(offenders, [])
+
+    def test_the_text_is_utf8_whatever_the_locale(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "out.yml"
+            artifacts.write_text_atomic(str(target), "name: \u00e9mulateur \u2014 \u30d5\n")
+            self.assertEqual(
+                target.read_bytes().decode("utf-8"), "name: \u00e9mulateur \u2014 \u30d5\n"
+            )
+
 if __name__ == "__main__":
     unittest.main()
