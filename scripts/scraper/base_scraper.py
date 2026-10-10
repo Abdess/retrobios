@@ -35,6 +35,9 @@ class BiosRequirement:
     # is not always derivable from ours: libretro writes iplromco.dat bare
     # but ep128emu/roms/cpc464.rom with its directory.
     native_path: str | None = None
+    # The native system whose entry this one repeats under another system.
+    # The platform's own file does not carry the copy: an export skips it.
+    mirror_of: str | None = None
     # Fields the platform declares that have no equivalent in our model.
     # Kept verbatim so the native file can be written back unchanged.
     native: dict[str, object] = field(default_factory=dict)
@@ -95,6 +98,8 @@ def requirement_entry(req: BiosRequirement) -> dict:
         entry["native_system"] = req.native_id
     if req.native_path and req.native_path != req.name:
         entry["native_path"] = req.native_path
+    if req.mirror_of:
+        entry["mirror_of"] = req.mirror_of
     for key in sorted(req.native):
         value = req.native[key]
         if value not in (None, "", [], {}):

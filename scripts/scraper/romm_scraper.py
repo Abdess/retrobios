@@ -175,6 +175,7 @@ class Scraper(BaseScraper):
                         destination=f"{slug}/{filename}",
                         required=True,
                         native_id=slug,
+                        mirror_of=None if slug == igdb_slug else igdb_slug,
                     )
                 )
 

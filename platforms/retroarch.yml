@@ -384,6 +384,7 @@ systems:
     - name: qsound.zip
       destination: qsound.zip
       required: true
+      curated: true
     native_id: Arcade
     core: fbneo
     manufacturer: Various
@@ -1907,24 +1908,31 @@ systems:
     - name: gc-ntsc-12.bin
       destination: dolphin-emu/Sys/GC/USA/IPL.bin
       required: false
+      curated: true
     - name: gc-pal-12.bin
       destination: dolphin-emu/Sys/GC/EUR/IPL.bin
       required: false
+      curated: true
     - name: gc-ntsc-12.bin
       destination: dolphin-emu/Sys/GC/JAP/IPL.bin
       required: false
+      curated: true
     - name: dsp_coef.bin
       destination: dolphin-emu/Sys/GC/dsp_coef.bin
       required: true
+      curated: true
     - name: dsp_rom.bin
       destination: dolphin-emu/Sys/GC/dsp_rom.bin
       required: true
+      curated: true
     - name: font_western.bin
       destination: dolphin-emu/Sys/GC/font_western.bin
       required: false
+      curated: true
     - name: font_japanese.bin
       destination: dolphin-emu/Sys/GC/font_japanese.bin
       required: false
+      curated: true
     native_id: Nintendo - GameCube
     core: dolphin
     manufacturer: Nintendo
@@ -1997,15 +2005,19 @@ systems:
     - name: dsi_bios7.bin
       destination: dsi_bios7.bin
       required: true
+      curated: true
     - name: dsi_bios9.bin
       destination: dsi_bios9.bin
       required: true
+      curated: true
     - name: dsi_firmware.bin
       destination: dsi_firmware.bin
       required: true
+      curated: true
     - name: dsi_nand.bin
       destination: dsi_nand.bin
       required: true
+      curated: true
     native_id: Nintendo - Nintendo DS
     core: desmume
     manufacturer: Nintendo
@@ -2554,6 +2566,7 @@ systems:
     - name: segasp.zip
       destination: dc/segasp.zip
       required: true
+      curated: true
     native_id: Sega - Dreamcast-based Arcade
   sega-game-gear:
     files:
@@ -4731,6 +4744,7 @@ systems:
     - name: data.zip
       destination: xrick/data.zip
       required: true
+      curated: true
     core: xrick
     manufacturer: Other
     docs: "https://docs.libretro.com/library/xrick/"

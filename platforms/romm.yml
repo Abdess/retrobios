@@ -787,6 +787,7 @@ systems:
       crc32: 51a12d90
       size: 32768
       native_system: turbografx-cd
+      mirror_of: tg16
     - name: gexpress.pce
       destination: turbografx-cd/gexpress.pce
       required: true
@@ -795,6 +796,7 @@ systems:
       crc32: 51a12d90
       size: 32768
       native_system: turbografx-cd
+      mirror_of: tg16
     - name: syscard1.pce
       destination: turbografx-cd/syscard1.pce
       required: true
@@ -803,6 +805,7 @@ systems:
       crc32: 3f9f95a4
       size: 262144
       native_system: turbografx-cd
+      mirror_of: tg16
     - name: syscard2.pce
       destination: turbografx-cd/syscard2.pce
       required: true
@@ -811,6 +814,7 @@ systems:
       crc32: 283b74e0
       size: 262144
       native_system: turbografx-cd
+      mirror_of: tg16
     - name: syscard2u.pce
       destination: turbografx-cd/syscard2u.pce
       required: true
@@ -819,6 +823,7 @@ systems:
       crc32: ff2a5ec3
       size: 262144
       native_system: turbografx-cd
+      mirror_of: tg16
     - name: syscard3.pce
       destination: turbografx-cd/syscard3.pce
       required: true
@@ -827,6 +832,7 @@ systems:
       crc32: 6d9a73ef
       size: 262144
       native_system: turbografx-cd
+      mirror_of: tg16
     - name: syscard3u.pce
       destination: turbografx-cd/syscard3u.pce
       required: true
@@ -835,6 +841,7 @@ systems:
       crc32: 2b5b75fe
       size: 262144
       native_system: turbografx-cd
+      mirror_of: tg16
   nec-pc-98:
     files:
     - name: 2608_bd.wav

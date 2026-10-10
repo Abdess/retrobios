@@ -205,7 +205,34 @@ def load_inputs(
         scraped = load_platform_config(platform, platforms_dir)
     except (FileNotFoundError, OSError):
         scraped = None
-    return truth, scraped
+    return truth, _native_layer(scraped)
+
+
+def _native_layer(config: dict | None) -> dict | None:
+    """The platform config without what we add to it.
+
+    A shared group's files join the config for the pack, but the platform's
+    file does not carry them: counted kept, they were written into
+    libretro's System.dat (N88EXT0-3.ROM) as if libretro declared them. What
+    a core needs from a group reaches the export through the truth, as an
+    addition the format's gates apply to. A scraper's mirror of an entry
+    under another system (RomM's tg16 firmware under turbografx-cd), and a
+    file our scraper adds from the cores' source (Dolphin's DSP ROMs in
+    RetroArch's config), are not in the platform's file either.
+    """
+    if config is None:
+        return None
+    systems = {
+        sys_id: {
+            **system,
+            "files": [
+                f for f in system.get("files", [])
+                if not ({"shared_group", "mirror_of", "curated"} & f.keys())
+            ],
+        }
+        for sys_id, system in config.get("systems", {}).items()
+    }
+    return {**config, "systems": systems}
 
 
 def refresh_cache(

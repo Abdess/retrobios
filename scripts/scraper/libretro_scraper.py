@@ -279,9 +279,14 @@ class Scraper(BaseScraper):
                 "docs": "https://docs.libretro.com/library/xrick/",
             },
         }
+        # Every entry below is ours, not System.dat's: marked curated so an
+        # export of System.dat does not take it for libretro's.
         for sys_id, sys_data in EXTRA_SYSTEMS.items():
             if sys_id not in systems:
-                systems[sys_id] = sys_data
+                systems[sys_id] = {
+                    **sys_data,
+                    "files": [{**f, "curated": True} for f in sys_data["files"]],
+                }
 
         # Arcade BIOS present in the repo but absent from System.dat.
         # FBNeo expects them in system/ or system/fbneo/.
@@ -310,7 +315,7 @@ class Scraper(BaseScraper):
             existing = {f["name"] for f in systems["arcade"].get("files", [])}
             for ef in EXTRA_ARCADE_FILES:
                 if ef["name"] not in existing:
-                    systems["arcade"]["files"].append(ef)
+                    systems["arcade"]["files"].append({**ef, "curated": True})
 
         # segasp.zip for Sega System SP (Flycast)
         if "sega-dreamcast-arcade" in systems:
@@ -323,6 +328,7 @@ class Scraper(BaseScraper):
                         "name": "segasp.zip",
                         "destination": "dc/segasp.zip",
                         "required": True,
+                        "curated": True,
                     }
                 )
 
@@ -442,7 +448,7 @@ class Scraper(BaseScraper):
                 for ef in extra_files:
                     key = (ef["name"], ef.get("destination", ef["name"]))
                     if key not in existing:
-                        systems[sys_id]["files"].append(ef)
+                        systems[sys_id]["files"].append({**ef, "curated": True})
                         existing.add(key)
 
         # ep128emu shared group for Enterprise

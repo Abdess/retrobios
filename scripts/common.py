@@ -159,7 +159,11 @@ def load_platform_config(platform_name: str, platforms_dir: str = "platforms") -
                         key = (gf.get("name"), gf.get("destination", gf.get("name")))
                         dest_lower = gf.get("destination", gf.get("name", "")).lower()
                         if key not in existing and dest_lower not in existing_lower:
-                            system.setdefault("files", []).append(gf)
+                            # Marked as ours: the platform's own file does not
+                            # carry it, and an export must not count it kept.
+                            system.setdefault("files", []).append(
+                                {**gf, "shared_group": group_name}
+                            )
                             existing.add(key)
 
     # Merge metadata from _registry.yml. The registry is our curated source;

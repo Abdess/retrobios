@@ -280,6 +280,14 @@
           "type": "string",
           "description": "System id the platform itself uses for this file"
         },
+        "mirror_of": {
+          "type": "string",
+          "description": "Native system whose entry this one repeats; the platform's own file does not carry the copy"
+        },
+        "curated": {
+          "type": "boolean",
+          "description": "Added by our scraper from the cores' source, not declared in the platform's own file"
+        },
         "native_name": {
           "type": "string",
           "description": "Display name the platform gives its own system"
