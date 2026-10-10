@@ -83,7 +83,7 @@ notes: |
 
 files:
   - name: "<bios>.bin"
-    path: "pcsx2/bios/"
+    path: "pcsx2/bios/<bios>.bin"
     description: "PS2 BIOS image"
     min_size: 4194304
     max_size: 8388608
@@ -96,7 +96,7 @@ files:
       auto selection accept any size that passes the romdir check.
 
   - name: "<bios>.rom1"
-    path: "pcsx2/bios/"
+    path: "pcsx2/bios/<bios>.rom1"
     description: "DVD player ROM"
     max_size: 4194304
     required: false
@@ -106,7 +106,7 @@ files:
       skipped with a console line when absent.
 
   - name: "<bios>.rom2"
-    path: "pcsx2/bios/"
+    path: "pcsx2/bios/<bios>.rom2"
     description: "Chinese ROM extension"
     max_size: 4194304
     required: false
@@ -115,7 +115,7 @@ files:
       Same lookup as rom1. Present on Chinese region consoles only.
 
   - name: "<bios>.nvm"
-    path: "pcsx2/bios/"
+    path: "pcsx2/bios/<bios>.nvm"
     description: "Console NVRAM (region parameters, language, iLink ID, OSD settings)"
     size: 1024
     required: false
@@ -127,7 +127,7 @@ files:
       on save.
 
   - name: "<bios>.mec"
-    path: "pcsx2/bios/"
+    path: "pcsx2/bios/<bios>.mec"
     description: "Mechacon version, one u32"
     size: 4
     required: false

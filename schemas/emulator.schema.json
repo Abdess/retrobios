@@ -646,6 +646,25 @@
           },
           {
             "if": {
+              "anyOf": [
+                {
+                  "required": ["path"],
+                  "properties": {"path": {"type": "string", "pattern": "/$"}}
+                },
+                {
+                  "required": ["standalone_path"],
+                  "properties": {"standalone_path": {"type": "string", "pattern": "/$"}}
+                }
+              ]
+            },
+            "then": {
+              "required": [
+                "type"
+              ]
+            }
+          },
+          {
+            "if": {
               "required": [
                 "type"
               ]

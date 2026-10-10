@@ -30,7 +30,7 @@ notes: |
 
 files:
   - name: "<bios>.bin"
-    path: "pcsx2/bios/"
+    path: "pcsx2/bios/<bios>.bin"
     required: true
     description: "PS2 BIOS binary"
     min_size: 4194304
@@ -43,7 +43,7 @@ files:
       pcsx2_bios. Falls back to first valid BIOS found if configured BIOS is missing.
 
   - name: "<bios>.rom1"
-    path: "pcsx2/bios/"
+    path: "pcsx2/bios/<bios>.rom1"
     required: false
     max_size: 4194304
     description: "DVD player ROM"
@@ -53,7 +53,7 @@ files:
       (extension replaced). Silently skipped if not found.
 
   - name: "<bios>.rom2"
-    path: "pcsx2/bios/"
+    path: "pcsx2/bios/<bios>.rom2"
     required: false
     max_size: 524288
     description: "Chinese ROM extension"
@@ -63,7 +63,7 @@ files:
       Only present on Chinese region consoles.
 
   - name: "<bios>.nvm"
-    path: "pcsx2/bios/"
+    path: "pcsx2/bios/<bios>.nvm"
     required: false
     hle_fallback: true
     size: 1024
@@ -75,7 +75,7 @@ files:
       Auto-created with region-appropriate defaults if missing or invalid.
 
   - name: "<bios>.mec"
-    path: "pcsx2/bios/"
+    path: "pcsx2/bios/<bios>.mec"
     required: false
     hle_fallback: true
     size: 4

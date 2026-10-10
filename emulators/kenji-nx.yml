@@ -187,7 +187,7 @@ files:
 
   - name: "<CaCertificateId>.der"
     required: false
-    path: system/ssl/
+    path: "system/ssl/<CaCertificateId>.der"
     unsourceable: "replacement certificate the user picks for one certificate authority, with no canonical artefact behind the name"
     description: "Override for one built-in root certificate"
     note: >-
@@ -199,7 +199,7 @@ files:
 
   - name: "<driver>.zip"
     required: false
-    path: drivers/
+    path: "drivers/<driver>.zip"
     unsourceable: "third-party Vulkan driver built for one GPU family, not an emulator artefact"
     description: "Replacement Vulkan driver for the Android build"
     note: >-

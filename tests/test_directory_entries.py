@@ -270,6 +270,16 @@ class ProfileContract(unittest.TestCase):
         self.assertTrue(self._errors({"name": "voice/"}))
         self.assertEqual(self._errors({"name": "voice/", "type": "directory"}), [])
 
+    def test_a_file_path_names_its_file(self):
+        """`path: switch/` on prod.keys and title.keys sent every key to one
+        destination: the emulator pack shipped a file named `switch` and
+        verify counted five keys as one."""
+        self.assertTrue(self._errors({"name": "prod.keys", "path": "switch/"}))
+        self.assertTrue(
+            self._errors({"name": "prod.keys", "standalone_path": "keys/"})
+        )
+        self.assertEqual(self._errors({"name": "prod.keys", "path": "switch/prod.keys"}), [])
+
     def test_the_marker_takes_no_other_value(self):
         self.assertTrue(self._errors({"name": "RTP", "path": "rtp/", "type": "folder"}))
 
@@ -297,7 +307,11 @@ class ProfileContract(unittest.TestCase):
         path = entry.get("path")
         if entry.get("type") == "directory":
             return isinstance(path, str) and not path.endswith("/")
-        return name.endswith("/") or "type" in entry
+        slashed = any(
+            isinstance(entry.get(key), str) and entry[key].endswith("/")
+            for key in ("path", "standalone_path")
+        )
+        return name.endswith("/") or "type" in entry or slashed
 
 
 class CollectionScanAndIgnoreRules(unittest.TestCase):

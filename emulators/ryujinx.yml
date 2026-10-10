@@ -20,19 +20,19 @@ mode: standalone
 files:
   - name: "prod.keys"
     required: true
-    path: "switch/"
+    path: "switch/prod.keys"
     note: "Switch production keys for NCA decryption"
     source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:239"
 
   - name: "title.keys"
     required: false
-    path: "switch/"
+    path: "switch/title.keys"
     note: "Per-title decryption keys, needed for specific game content"
     source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:240"
 
   - name: "console.keys"
     required: false
-    path: "switch/"
+    path: "switch/console.keys"
     note: "Console-specific keys for encrypted content"
     source_ref: "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs:241"
 

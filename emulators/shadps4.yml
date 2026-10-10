@@ -48,20 +48,20 @@ files:
   - name: "libSceLibcInternal.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceLibcInternal.sprx"
     description: "PS4 C standard library"
     source_ref: "src/core/linker.cpp:80-91"
 
   - name: "libSceNgs2.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceNgs2.sprx"
     description: "PS4 next-generation audio system"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:217"
 
   - name: "libSceUlt.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceUlt.sprx"
     description: "PS4 user-level threading library"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:218"
@@ -69,13 +69,13 @@ files:
   - name: "libSceRtc.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceRtc.sprx"
     description: "PS4 real-time clock library"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:221"
 
   - name: "libSceJpegDec.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceJpegDec.sprx"
     description: "PS4 JPEG decoder"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:222"
@@ -83,83 +83,83 @@ files:
   - name: "libSceJpegEnc.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceJpegEnc.sprx"
     description: "PS4 JPEG encoder"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:223"
 
   - name: "libScePngEnc.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libScePngEnc.sprx"
     description: "PS4 PNG encoder"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:225"
 
   - name: "libSceJson.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceJson.sprx"
     description: "PS4 JSON parser"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:226"
 
   - name: "libSceJson2.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceJson2.sprx"
     description: "PS4 JSON v2 parser"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:227"
 
   - name: "libSceCesCs.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceCesCs.sprx"
     description: "PS4 character encoding conversion"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:228"
 
   - name: "libSceAt9Enc.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceAt9Enc.sprx"
     description: "PS4 ATRAC9 encoder"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:229"
 
   - name: "libSceAudiodec.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceAudiodec.sprx"
     description: "PS4 audio decoder"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:230"
 
   - name: "libSceAudiodecCpu.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceAudiodecCpu.sprx"
     description: "PS4 CPU audio decoder"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:231"
 
   - name: "libSceAudiodecCpuDdp.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceAudiodecCpuDdp.sprx"
     description: "PS4 CPU Dolby Digital Plus decoder"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:232"
 
   - name: "libSceAudiodecCpuM4aac.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceAudiodecCpuM4aac.sprx"
     description: "PS4 CPU AAC decoder"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:233"
 
   - name: "libSceAudiodecCpuDtsHdLbr.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceAudiodecCpuDtsHdLbr.sprx"
     description: "PS4 CPU DTS-HD LBR decoder"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:234"
 
   - name: "libSceAudiodecCpuHevag.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceAudiodecCpuHevag.sprx"
     description: "PS4 CPU HEVAG decoder"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:235"
@@ -167,34 +167,34 @@ files:
   - name: "libSceFont.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceFont.sprx"
     description: "PS4 font rendering library"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:236"
 
   - name: "libSceFontFt.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceFontFt.sprx"
     description: "PS4 FreeType font library"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:237"
 
   - name: "libSceFreeTypeOt.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceFreeTypeOt.sprx"
     description: "PS4 FreeType OpenType library"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:238"
 
   - name: "libSceFreeTypeOl.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceFreeTypeOl.sprx"
     description: "PS4 FreeType outline library"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:239"
 
   - name: "libSceFreeTypeOptOl.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceFreeTypeOptOl.sprx"
     description: "PS4 FreeType optimised outline library"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:240"
@@ -202,13 +202,13 @@ files:
   - name: "libSceRudp.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceRudp.sprx"
     description: "PS4 reliable UDP library"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:243"
 
   - name: "libSceWkFontConfig.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceWkFontConfig.sprx"
     description: "PS4 WebKit font configuration"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:244"
@@ -216,13 +216,13 @@ files:
   - name: "libSceSystemGesture.sprx"
     required: false
     hle_fallback: true
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceSystemGesture.sprx"
     description: "PS4 system gesture recognition"
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:249"
 
   - name: "libSceXml.sprx"
     required: false
-    path: "shadps4/sys_modules/"
+    path: "shadps4/sys_modules/libSceXml.sprx"
     description: "PS4 XML parser"
     note: "No HLE implementation; the module is stubbed when absent."
     source_ref: "src/core/libraries/sysmodule/sysmodule_internal.cpp:250"
