@@ -1104,7 +1104,7 @@ def _region_rank(file_regions: set[str], requested: list[str]) -> int:
 
 
 def region_drops(
-    entries: list[dict], requested: list[str], systems: "list[str] | None" = None
+    entries: list[dict], requested: list[str], systems: list[str] | None = None
 ) -> set[str]:
     """Destinations a region priority list withdraws.
 
@@ -1807,7 +1807,7 @@ def _pick(title: str, rows: list[tuple[str, list[dict]]], ordered: bool = False)
 
 def _prompt_custom_selection(
     plat: str, files: list[dict], omitted: list[dict]
-) -> "tuple[list[str], list[str], list[str]] | None":
+) -> tuple[list[str], list[str], list[str]] | None:
     """Offer to narrow the install by system, core and region.
 
     Enter installs everything, the default most runs want. Returns None
@@ -1893,7 +1893,7 @@ def _print_choices(
 
 def _requested_narrowing(
     args: argparse.Namespace, plat: str, files: list[dict], omitted: list[dict]
-) -> "tuple[list[str], list[str], list[str]] | None":
+) -> tuple[list[str], list[str], list[str]] | None:
     """The systems, cores and regions named on the command line, checked."""
     if not (args.system or args.core or args.region):
         return None

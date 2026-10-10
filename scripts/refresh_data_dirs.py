@@ -189,7 +189,7 @@ def get_remote_sha(source_url: str, version: str) -> str | None:
         return None
 
 
-class NothingExtracted(Exception):
+class NothingExtractedError(Exception):
     """An archive that yields no file for the cache.
 
     Promoting it replaced the cache with an empty directory, recorded the new
@@ -282,7 +282,7 @@ def _download_and_extract(
                     file_count += 1
 
         if not file_count:
-            raise NothingExtracted(f"no file under {source_path} in the archive")
+            raise NothingExtractedError(f"no file under {source_path} in the archive")
         _promote(extract_dir, cache_dir, Path(tmpdir))
 
     return file_count
@@ -345,7 +345,7 @@ def _download_and_extract_zip(
                 file_count += 1
 
         if not file_count:
-            raise NothingExtracted("the archive holds no file to extract")
+            raise NothingExtractedError("the archive holds no file to extract")
         # The old tree is stepped aside rather than deleted: removing it
         # first and then failing to move the new one in left the cache with
         # nothing at all, and the next run reads that as "never fetched".
@@ -451,7 +451,7 @@ def _refresh_entry(
         OSError,
         tarfile.TarError,
         zipfile.BadZipFile,
-        NothingExtracted,
+        NothingExtractedError,
     ) as exc:
         log.warning("[%s] download failed: %s", key, exc)
         return None

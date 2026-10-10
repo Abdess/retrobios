@@ -34,7 +34,7 @@ def _match_key(value: str) -> str:
     return re.sub(r"[^a-z0-9]", "", value.lower())
 
 
-class UnfinishedSplit(Exception):
+class UnfinishedSplitError(Exception):
     """A pack lies beside its own parts: a split is running or was killed."""
 
 
@@ -54,10 +54,10 @@ def _read_record(dist: Path, tag: str) -> dict:
     assets: dict[str, list[Path]] = {}
     for path in sorted(dist.glob("*_BIOS_Pack*.zip")):
         assets.setdefault(split_pack.pack_of(path.name), []).append(path)
-    for name, paths in sorted(assets.items()):
+    for paths in assets.values():
         whole = [p for p in paths if not split_pack.is_part(p.name)]
         if whole and len(paths) > len(whole):
-            raise UnfinishedSplit(
+            raise UnfinishedSplitError(
                 f"{whole[0].name} lies beside its parts: the split did not finish"
             )
 
@@ -133,7 +133,7 @@ def main() -> int:
 
     try:
         record = build_record(args.dist, args.tag)
-    except (UnfinishedSplit, ArtifactLockBusy) as exc:
+    except (UnfinishedSplitError, ArtifactLockBusy) as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1
     if not record["packs"]:

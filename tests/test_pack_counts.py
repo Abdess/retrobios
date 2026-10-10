@@ -359,7 +359,7 @@ class ReleaseRecord(unittest.TestCase):
             "Demo_2.0_BIOS_Pack.zip",
             {f"dir/file{n}.bin": bytes([n]) * 700 + bytes(range(256)) for n in range(6)},
         )
-        with self.assertRaises(release_record.UnfinishedSplit):
+        with self.assertRaises(release_record.UnfinishedSplitError):
             release_record.build_record(self.dist, "v1")
 
     def test_a_directory_being_written_is_not_read(self):
