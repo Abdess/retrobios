@@ -18,6 +18,7 @@ from common import yaml_load
 
 
 _MAME_RELEASE_RE = re.compile(r"^0\.\d+")
+_MAMEDEV = "https://github.com/mamedev/mame"
 
 
 def merge_mame_profile(
@@ -45,6 +46,11 @@ def merge_mame_profile(
     # never built from.
     if _MAME_RELEASE_RE.match(str(profile.get("core_version") or "")):
         profile["core_version"] = hashes.get("version", profile.get("core_version"))
+        # The refs about to be written are line numbers of that release's
+        # mamedev/mame tree: the pin moves with them, or the profile cites
+        # lines its declared revision does not hold.
+        if profile.get("upstream") == _MAMEDEV and hashes.get("commit"):
+            profile["upstream_commit"] = hashes["commit"]
 
     files = profile.get("files", [])
     bios_zip, non_bios = _split_files(files, lambda f: f.get("category") == "bios_zip")
@@ -380,6 +386,7 @@ def _backup_and_write(path: str, data: dict) -> None:
 
     original = p.read_text(encoding="utf-8")
     patched = _patch_core_version(original, data.get("core_version", ""))
+    patched = _patch_scalar(patched, "upstream_commit", data.get("upstream_commit", ""))
     patched = _patch_bios_entries(patched, data.get("files", []))
     patched = _append_new_entries(patched, data.get("files", []), original)
 
@@ -388,13 +395,16 @@ def _backup_and_write(path: str, data: dict) -> None:
 
 def _patch_core_version(text: str, version: str) -> str:
     """Replace core_version value in-place."""
-    if not version:
-        return text
-    import re
+    return _patch_scalar(text, "core_version", version)
 
+
+def _patch_scalar(text: str, key: str, value: str) -> str:
+    """Replace a top-level scalar in-place, quoted; absent value, no change."""
+    if not value:
+        return text
     return re.sub(
-        r"^(core_version:\s*).*$",
-        rf'\g<1>"{version}"',
+        rf"^({re.escape(key)}:\s*).*$",
+        rf'\g<1>"{value}"',
         text,
         count=1,
         flags=re.MULTILINE,

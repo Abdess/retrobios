@@ -86,17 +86,25 @@ def _run_git(
     )
 
 
-def _sparse_clone() -> None:
+def _sparse_clone(tag: str) -> None:
+    """Clone the release the data will be labelled with, not master.
+
+    The version comes from the latest release; cloning master gave line
+    numbers and hashes of a later revision under that release's label, and
+    the profiles cited lines no declared revision holds.
+    """
     if _CLONE_DIR.exists():
         shutil.rmtree(_CLONE_DIR)
     _CLONE_DIR.parent.mkdir(parents=True, exist_ok=True)
 
-    log.info("sparse cloning mamedev/mame into %s", _CLONE_DIR)
+    log.info("sparse cloning mamedev/mame %s into %s", tag, _CLONE_DIR)
     _run_git(
         [
             "clone",
             "--depth",
             "1",
+            "--branch",
+            tag,
             "--filter=blob:none",
             "--sparse",
             _REPO_URL,
@@ -110,7 +118,12 @@ def _sparse_clone() -> None:
 
 
 def _get_version() -> str:
-    """The latest MAME release, from the GitHub API.
+    """The latest MAME release version, such as 0.289."""
+    return _parse_version_tag(_get_release_tag())
+
+
+def _get_release_tag() -> str:
+    """The latest MAME release tag, from the GitHub API.
 
     version.cpp is generated at build time, not in the repo. A failed lookup
     raises: "unknown" was cached for a day and written as core_version.
@@ -131,7 +144,7 @@ def _get_version() -> str:
         raise RuntimeError(f"cannot read the MAME release from {url}: {exc}") from exc
     if not tag:
         raise RuntimeError(f"no tag_name in {url}")
-    return _parse_version_tag(tag)
+    return tag
 
 
 def _parse_version_tag(tag: str) -> str:
@@ -251,9 +264,10 @@ def _fetch_hashes(force: bool) -> dict[str, Any]:
         return cache  # type: ignore[return-value]
 
     try:
-        _sparse_clone()
+        tag = _get_release_tag()
+        _sparse_clone(tag)
         bios_sets = parse_mame_source_tree(str(_CLONE_DIR))
-        version = _get_version()
+        version = _parse_version_tag(tag)
         commit = _get_commit()
 
         data: dict[str, Any] = {

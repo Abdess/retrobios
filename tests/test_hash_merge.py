@@ -311,6 +311,64 @@ class TestMameMerge(unittest.TestCase):
             self.assertEqual(entry["source_ref"], "src/mame/neogeo/neogeo.cpp:2432")
 
 
+class TheMamePinMovesWithItsRefs(unittest.TestCase):
+    """The refs the merge writes are line numbers of the scraped release:
+    leaving upstream_commit on an older revision made the profile cite lines
+    its declared revision does not hold (pgm.cpp:5548 is a comment there)."""
+
+    def _merged_text(self, **profile_overrides) -> str:
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td)
+            profile_path = _write_yaml(
+                p / "mame.yml", _make_mame_profile(**profile_overrides)
+            )
+            hashes_path = _write_json(
+                p / "hashes.json", _make_mame_hashes(commit="f" * 40)
+            )
+            merge_mame_profile(profile_path, hashes_path, write=True)
+            return Path(profile_path).read_text(encoding="utf-8")
+
+    def test_the_upstream_pin_follows_the_release(self):
+        text = self._merged_text(
+            upstream="https://github.com/mamedev/mame", upstream_commit="a" * 40
+        )
+        written = yaml.safe_load(text)
+        self.assertEqual(written["upstream_commit"], "f" * 40)
+        self.assertEqual(written["core_version"], "0.286")
+
+    def test_a_fork_keeps_its_own_pin(self):
+        text = self._merged_text(
+            upstream="https://github.com/example/fork", upstream_commit="a" * 40
+        )
+        self.assertEqual(yaml.safe_load(text)["upstream_commit"], "a" * 40)
+
+
+class TheScraperClonesTheReleaseItLabels(unittest.TestCase):
+    """Cloning master and labelling it with the latest release tag gave
+    master's line numbers and hashes under the release's name."""
+
+    def test_clone_and_version_come_from_one_tag(self):
+        from unittest import mock
+
+        from scripts.scraper import mame_hash_scraper as scraper
+
+        calls: list[list[str]] = []
+        with mock.patch.object(scraper, "_get_release_tag", return_value="mame0289"), \
+                mock.patch.object(scraper, "_run_git",
+                                  side_effect=lambda args, cwd=None: calls.append(args)), \
+                mock.patch.object(scraper, "parse_mame_source_tree", return_value={}), \
+                mock.patch.object(scraper, "_get_commit", return_value="c" * 40), \
+                mock.patch.object(scraper, "_write_cache"), \
+                mock.patch.object(scraper, "_cleanup"), \
+                mock.patch.object(scraper, "_load_cache", return_value={}), \
+                mock.patch.object(scraper, "_is_stale", return_value=True):
+            data = scraper._fetch_hashes(force=True)
+        clone = next(args for args in calls if args[0] == "clone")
+        self.assertEqual(clone[clone.index("--branch") + 1], "mame0289")
+        self.assertEqual(data["version"], "0.289")
+        self.assertEqual(data["commit"], "c" * 40)
+
+
 class TestFbneoMerge(unittest.TestCase):
     """Tests for merge_fbneo_profile."""
 
