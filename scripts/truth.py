@@ -310,6 +310,43 @@ def _system_dir_files(profile: dict, standalone: bool) -> list[dict]:
     )
 
 
+def _archives_not_members(files: list[dict]) -> list[dict]:
+    """A profile's entries with the members of each archive folded into it.
+
+    fbneo declares bubsys.zip as the ROMs it holds, each carrying
+    `archive: bubsys.zip`. The platform reads the archive, never a member:
+    as loose files the members were added to RetroArch's System.dat, and
+    the 480-byte boot.bin was filed under the Dreamcast by its bare name.
+    The archive stands in their place with the members as its contents,
+    the shape a profile that declares the archive itself already has.
+    """
+    out: list[dict] = []
+    archives: dict[tuple[str, str], dict] = {}
+    for fe in files:
+        archive = fe.get("archive")
+        if not archive:
+            out.append(fe)
+            continue
+        key = (archive, fe.get("system", ""))
+        entry = archives.get(key)
+        if entry is None:
+            entry = {"name": archive, "category": "bios_zip", "contents": []}
+            if fe.get("system"):
+                entry["system"] = fe["system"]
+            if fe.get("source_ref") is not None:
+                entry["source_ref"] = fe["source_ref"]
+            archives[key] = entry
+            out.append(entry)
+        if fe.get("required"):
+            entry["required"] = True
+        entry["contents"].append({
+            field: fe[field]
+            for field in ("name", "size", "crc32", "sha1", "md5")
+            if fe.get(field) is not None
+        })
+    return out
+
+
 def generate_platform_truth(
     platform_name: str,
     config: dict,
@@ -388,9 +425,9 @@ def generate_platform_truth(
             continue
         cores_profiled.add(emu_name)
 
-        filtered = _system_dir_files(
+        filtered = _archives_not_members(_system_dir_files(
             profile, runs_standalone(emu_name, profile, standalone_set)
-        )
+        ))
 
         for fe in filtered:
             profile_sid = fe.get("system", "")

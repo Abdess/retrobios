@@ -51,5 +51,49 @@ class TruthFollowsRunsStandalone(unittest.TestCase):
         self.assertEqual(_names(truth), {"both.bin", "only_sa.bin"})
 
 
+
+class AnArchiveStandsForItsMembers(unittest.TestCase):
+    """fbneo declares bubsys.zip as the ROMs inside it. As loose truth files
+    the members were added to RetroArch's System.dat, and the 480-byte
+    boot.bin, filed under the Dreamcast by its bare name, merged with
+    RetroDream's 2 MB BIOS."""
+
+    PROFILES = {
+        "fbneo": {
+            "emulator": "FBNeo", "type": "libretro", "systems": ["konami-bubsys"],
+            "files": [
+                {"name": "boot.bin", "archive": "bubsys.zip", "system": "konami-bubsys",
+                 "required": True, "size": 480, "crc32": "f0774fc2"},
+                {"name": "400b03.8g", "archive": "bubsys.zip", "system": "konami-bubsys",
+                 "required": True, "size": 8192, "crc32": "85c2afc5"},
+            ],
+        },
+        "retrodream": {
+            "emulator": "RetroDream", "type": "libretro", "systems": ["sega-dreamcast"],
+            "files": [{"name": "boot.bin", "path": "boot.bin", "system": "sega-dreamcast",
+                       "size": 2097152, "md5": "e10c53c2f8b90bab96ead2d368858623"}],
+        },
+    }
+    CONFIG = {
+        "cores": ["fbneo", "retrodream"],
+        "systems": {"sega-dreamcast": {"files": [
+            {"name": "boot.bin", "destination": "dc/boot.bin"}]}},
+    }
+
+    def test_the_archive_is_the_file(self):
+        truth = generate_platform_truth("p", self.CONFIG, {}, self.PROFILES)
+        bubsys = truth["systems"]["konami-bubsys"]["files"]
+        self.assertEqual([f["name"] for f in bubsys], ["bubsys.zip"])
+        self.assertEqual(
+            sorted(m["name"] for m in bubsys[0]["contents"]), ["400b03.8g", "boot.bin"]
+        )
+        self.assertTrue(bubsys[0]["required"])
+
+    def test_a_member_name_claims_no_other_system(self):
+        truth = generate_platform_truth("p", self.CONFIG, {}, self.PROFILES)
+        dreamcast = truth["systems"]["sega-dreamcast"]["files"]
+        self.assertEqual([(f["name"], f["size"]) for f in dreamcast], [("boot.bin", 2097152)])
+        self.assertEqual(dreamcast[0]["_cores"], ["retrodream"])
+
 if __name__ == "__main__":
     unittest.main()
