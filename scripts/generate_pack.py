@@ -1826,6 +1826,33 @@ def generate_split_packs(
     return results
 
 
+def _entry_for_file(candidates: list[dict], held: dict) -> dict:
+    """The declaration a held file answers when several share its name.
+
+    BBKEmu declares 8.BIN once per model; the last one won, and the A4980
+    dump went to the A4988 folder. The declared hash decides, then the
+    destination the collection's own path ends with, then the last one.
+    """
+    def declared(fe: dict, key: str) -> set[str]:
+        value = fe.get(key)
+        values = value if isinstance(value, list) else str(value or "").split(",")
+        return {str(v).strip().lower() for v in values if str(v).strip()}
+
+    for fe in candidates:
+        if any(
+            str(held.get(key, "")).lower() in declared(fe, key)
+            for key in ("sha1", "md5", "sha256", "crc32")
+            if held.get(key)
+        ):
+            return fe
+    held_paths = [str(held.get("path", ""))] + [str(p) for p in held.get("paths") or []]
+    for fe in candidates:
+        tail = str(fe.get("path") or fe.get("destination") or "").lower()
+        if tail and any(path.lower().endswith("/" + tail) for path in held_paths):
+            return fe
+    return candidates[-1]
+
+
 def generate_md5_pack(
     hashes: list[tuple[str, str]],
     db: dict,
@@ -1845,7 +1872,7 @@ def generate_md5_pack(
     if zip_contents is None:
         zip_contents = {}
 
-    plat_file_index: dict[str, dict] = {}
+    plat_file_index: dict[str, list[dict]] = {}
     base_dest = ""
     plat_display = "Custom"
     if platform_name and platforms_dir:
@@ -1854,7 +1881,7 @@ def generate_md5_pack(
         plat_display = config.get("platform", platform_name)
         for _sys_id, system in config.get("systems", {}).items():
             for fe in system.get("files", []):
-                plat_file_index[fe.get("name", "").lower()] = fe
+                plat_file_index.setdefault(fe.get("name", "").lower(), []).append(fe)
 
     emu_pack_structure = None
     emu_display = ""
@@ -1873,9 +1900,9 @@ def generate_md5_pack(
         emu_display = profile.get("emulator", emulator_name)
         emu_pack_structure = profile.get("pack_structure")
         for fe in profile.get("files", []):
-            plat_file_index[fe.get("name", "").lower()] = fe
+            plat_file_index.setdefault(fe.get("name", "").lower(), []).append(fe)
             for alias in fe.get("aliases", []):
-                plat_file_index[alias.lower()] = fe
+                plat_file_index.setdefault(alias.lower(), []).append(fe)
 
     context_name = plat_display if platform_name else (emu_display or "Custom")
     # --standalone changes the destination layout, so a run with it must not
@@ -1920,11 +1947,16 @@ def generate_md5_pack(
             matched_fe = None
             for lookup_name in [name] + aliases:
                 if lookup_name.lower() in plat_file_index:
-                    matched_fe = plat_file_index[lookup_name.lower()]
+                    matched_fe = _entry_for_file(
+                        plat_file_index[lookup_name.lower()], entry
+                    )
                     break
 
             if matched_fe:
-                if emulator_name and emu_pack_structure is not None:
+                if emulator_name:
+                    # Laid out as the emulator pack lays it out: a profile
+                    # without pack_structure still names its path and its
+                    # standalone_path, and --standalone has to reach them.
                     dest = _resolve_destination(
                         matched_fe, emu_pack_structure, standalone
                     )
