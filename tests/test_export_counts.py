@@ -362,6 +362,28 @@ class RecalboxKeepsItsOwnNotes(unittest.TestCase):
                         truth={"md5": A, "note": "Loaded at libretro.c:120"})
         self.assertNotIn("note=", Recalbox()._bios_element(fe, "psx"))
 
+class RommWritesOneEntryPerKey(unittest.TestCase):
+    """Two additions under one slug:filename key: the second overwrote the
+    first in RomM's dict and both were counted landed."""
+
+    def test_the_second_addition_under_a_key_is_not_writable(self):
+        from exporter.romm_exporter import Exporter as Romm  # noqa: PLC0415
+
+        first = NativeFile("basic.rom", "Acorn/basic.rom", "acpc",
+                           truth={"size": 16384, "md5": A})
+        second = NativeFile("basic.rom", "Electron/basic.rom", "acpc",
+                            truth={"size": 16384, "md5": B})
+        exporter = Romm()
+        produced = exporter.render(
+            {"acpc": NativeSystem("acpc", files=[first, second])}, None, {}, None
+        )
+        data = json.loads(produced[exporter.native_filename()])
+        self.assertEqual(list(data), ["acpc:basic.rom"])
+        self.assertEqual(
+            [exporter.writable(first), exporter.writable(second)], [True, False]
+        )
+
+
 class RetroPieProposals(unittest.TestCase):
     def test_required_is_read_for_the_package_core(self):
         fe = NativeFile("scph5501.bin", "scph5501.bin", "psx",

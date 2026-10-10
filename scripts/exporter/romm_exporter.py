@@ -29,8 +29,12 @@ SOURCE_URL = (
 class Exporter(BaseExporter):
     """Write RomM's known_bios_files.json, corrected."""
 
-    # (system, filename) keys the platform itself declares, set by render.
-    _platform_keys: frozenset[tuple[str, str]] = frozenset()
+    def __init__(self) -> None:
+        super().__init__()
+        # (system, filename) keys the platform itself declares, and the
+        # addition that claims each other key first: both set by render.
+        self._platform_keys: set[tuple[str, str]] = set()
+        self._first_addition: dict[tuple[str, str], int] = {}
 
     @staticmethod
     def platform_name() -> str:
@@ -75,9 +79,15 @@ class Exporter(BaseExporter):
         """
         if fe.platform is not None:
             return True
-        if (fe.native_system, fe.name) in self._platform_keys:
+        key = (fe.native_system, fe.name)
+        if key in self._platform_keys:
             return False
-        return self._verifiable(fe) and self._known_platform(fe.native_system)
+        if not (self._verifiable(fe) and self._known_platform(fe.native_system)):
+            return False
+        # Two additions under one key: the second would overwrite the first
+        # in the dict and both were counted landed. The first one in render
+        # order is written, the other is not.
+        return self._first_addition.get(key, id(fe)) == id(fe)
 
     def render(
         self,
@@ -93,6 +103,17 @@ class Exporter(BaseExporter):
             for fe in system.files
             if fe.platform is not None
         }
+        self._first_addition = {}
+        for system in sorted(systems.values(), key=lambda s: s.native_id):
+            for fe in sorted(system.files, key=lambda f: f.name):
+                key = (fe.native_system, fe.name)
+                if (
+                    fe.platform is None
+                    and key not in self._platform_keys
+                    and self._verifiable(fe)
+                    and self._known_platform(fe.native_system)
+                ):
+                    self._first_addition.setdefault(key, id(fe))
 
         for system in sorted(systems.values(), key=lambda s: s.native_id):
             for fe in sorted(system.files, key=lambda f: f.name):
