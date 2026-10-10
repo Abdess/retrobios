@@ -855,8 +855,93 @@ class InstallerStaysOnPython38AndTheStdlib(unittest.TestCase):
 
     def test_no_api_newer_than_38(self):
         newer = (".removeprefix(", ".removesuffix(", "zoneinfo", "graphlib",
-                 "functools.cache(", ".bit_count(", "math.lcm(", "math.nextafter(")
+                 "functools.cache(", ".bit_count(", "math.lcm(", "math.nextafter(",
+                 "tomllib", ".is_relative_to(", ".with_stem(", ".hardlink_to(",
+                 "itertools.pairwise(", "str.removeprefix", "types.NoneType")
         used = [api for api in newer if api in self.SOURCE]
+        self.assertEqual(used, [])
+
+    def test_a_python_38_interpreter_compiles_and_imports_it(self):
+        """ast.parse(feature_version=(3, 8)) on 3.12 accepts parenthesized
+        context managers and PEP 701 f-strings: only a 3.8 interpreter says."""
+        import shutil  # noqa: PLC0415
+        import subprocess  # noqa: PLC0415
+
+        python38 = shutil.which("python3.8")
+        if python38 is None:
+            self.skipTest("no python3.8 on PATH; the static checks below still run")
+        code = (
+            "import importlib.util; "
+            "spec = importlib.util.spec_from_file_location('install', 'install.py'); "
+            "spec.loader.exec_module(importlib.util.module_from_spec(spec))"
+        )
+        proc = subprocess.run(
+            [python38, "-I", "-c", code], cwd=REPO_ROOT,
+            capture_output=True, text=True, timeout=60, check=False,
+        )
+        self.assertEqual(proc.returncode, 0, proc.stderr)
+
+    def test_no_syntax_a_312_parser_lets_through(self):
+        """Parenthesized context managers (3.9) and f-strings reusing their
+        own quote or a backslash inside a replacement field (3.12)."""
+        import io  # noqa: PLC0415
+        import tokenize  # noqa: PLC0415
+
+        found = []
+        tokens = list(tokenize.generate_tokens(io.StringIO(self.SOURCE).readline))
+        for i, tok in enumerate(tokens):
+            if tok.type == tokenize.NAME and tok.string == "with" and i + 1 < len(tokens):
+                if tokens[i + 1].string != "(":
+                    continue
+                depth = 0
+                for inner in tokens[i + 1:]:
+                    if inner.string in "([{" and inner.type == tokenize.OP:
+                        depth += 1
+                    elif inner.string in ")]}" and inner.type == tokenize.OP:
+                        depth -= 1
+                        if depth == 0:
+                            break
+                    elif depth == 1 and inner.type == tokenize.NAME and inner.string == "as":
+                        found.append(f"line {tok.start[0]}: parenthesized with")
+                        break
+        fstring_start = getattr(tokenize, "FSTRING_START", None)
+        if fstring_start is not None:
+            stack = []
+            for tok in tokens:
+                if tok.type == fstring_start:
+                    if stack:
+                        found.append(f"line {tok.start[0]}: f-string inside an f-string")
+                    stack.append(tok.string[-1])
+                elif tok.type == tokenize.FSTRING_END:
+                    stack.pop()
+                elif stack and tok.type == tokenize.STRING and stack[-1] in tok.string:
+                    found.append(f"line {tok.start[0]}: f-string reuses its quote")
+                elif stack and tok.type == tokenize.FSTRING_MIDDLE:
+                    continue
+                elif stack and tok.type == tokenize.ERRORTOKEN and tok.string == "\\":
+                    found.append(f"line {tok.start[0]}: backslash in an f-string field")
+        self.assertEqual(found, [])
+
+    def test_no_runtime_generic_builtin(self):
+        """dict[str, Path] outside an annotation runs on 3.9 and later only."""
+        import ast  # noqa: PLC0415
+
+        tree = ast.parse(self.SOURCE)
+        annotations = set()
+        for node in ast.walk(tree):
+            for field in ("annotation", "returns"):
+                sub = getattr(node, field, None)
+                if sub is not None:
+                    annotations.update(id(n) for n in ast.walk(sub))
+        generic = {"dict", "list", "tuple", "set", "frozenset", "type"}
+        used = sorted(
+            f"line {node.lineno}: {node.value.id}[...]"
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Subscript)
+            and isinstance(node.value, ast.Name)
+            and node.value.id in generic
+            and id(node) not in annotations
+        )
         self.assertEqual(used, [])
 
 
