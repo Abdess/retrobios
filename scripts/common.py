@@ -1651,11 +1651,41 @@ def filter_systems_by_target(
                 norm_key = _norm_sid(sid)
                 norm_plat_system_cores.setdefault(norm_key, set()).add(name)
 
+    # A platform can file a system under an id no profile uses: Batocera's
+    # enterprise-64-128 is ep128emu's enterprise-64 and enterprise-128, and
+    # only CLK, off most targets, carries the joined id. The destinations a
+    # system declares name the cores that read its files. A bare name proves
+    # nothing (bios.bin belongs to many systems), so only a path counts.
+    dest_cores: dict[str, set[str]] = {}
+    for name, p in profiles.items():
+        if p.get("type") == "alias":
+            continue
+        for f in p.get("files", []):
+            for key in ("path", "standalone_path"):
+                dest = f.get(key)
+                if not isinstance(dest, str):
+                    continue
+                if dest.endswith("/"):
+                    dest += f.get("name", "")
+                dest = sanitize_pack_path(dest).lower()
+                if "/" in dest:
+                    dest_cores.setdefault(dest, set()).add(name)
+
     filtered = {}
     for sys_id, sys_data in systems.items():
         norm_key = _norm_sid(sys_id)
-        all_cores = norm_system_cores.get(norm_key, set())
+        file_cores = {
+            core
+            for fe in sys_data.get("files", [])
+            for core in dest_cores.get(
+                sanitize_pack_path(fe.get("destination") or fe.get("name", "")).lower(),
+                (),
+            )
+        }
+        all_cores = norm_system_cores.get(norm_key, set()) | file_cores
         plat_cores_here = norm_plat_system_cores.get(norm_key, set())
+        if platform_cores is not None:
+            plat_cores_here = plat_cores_here | (file_cores & set(platform_cores))
 
         if not all_cores and not plat_cores_here:
             # No profile maps to this system -keep it
