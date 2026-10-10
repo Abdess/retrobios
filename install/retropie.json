@@ -468,7 +468,8 @@
       "repo_path": "bios/Arcade/Arcade/.variants/fdsbios.zip.c25686d2",
       "cores": null,
       "systems": [
-        "arcade"
+        "arcade",
+        "nintendo-fds"
       ]
     },
     {
@@ -483,6 +484,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ]
@@ -57803,6 +57805,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ],
@@ -57822,6 +57825,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ],
@@ -57841,6 +57845,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ],
@@ -94719,6 +94724,9 @@
       "cores": [
         "picodrive"
       ],
+      "systems": [
+        "sega-mega-cd"
+      ],
       "regions": [
         "north-america"
       ],
@@ -94736,6 +94744,9 @@
       "cores": [
         "picodrive"
       ],
+      "systems": [
+        "sega-mega-cd"
+      ],
       "regions": [
         "north-america"
       ],
@@ -94752,6 +94763,9 @@
       "repo_path": "bios/Sega/Mega CD/bios_CD_U.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
       ]
     },
     {
@@ -101277,6 +101291,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ]
@@ -101734,6 +101749,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ]
@@ -101751,6 +101767,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ]
@@ -102119,6 +102136,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ]

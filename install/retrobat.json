@@ -60804,6 +60804,7 @@
       "systems": [
         "channelf",
         "colecovision",
+        "fds",
         "msx",
         "neogeocd"
       ]
@@ -60820,6 +60821,7 @@
       "systems": [
         "channelf",
         "colecovision",
+        "fds",
         "msx",
         "neogeocd"
       ],
@@ -60838,6 +60840,7 @@
       "systems": [
         "channelf",
         "colecovision",
+        "fds",
         "msx",
         "neogeocd"
       ],
@@ -60856,6 +60859,7 @@
       "systems": [
         "channelf",
         "colecovision",
+        "fds",
         "msx",
         "neogeocd"
       ],
@@ -92140,6 +92144,9 @@
       "cores": [
         "picodrive"
       ],
+      "systems": [
+        "megacd"
+      ],
       "regions": [
         "north-america"
       ],
@@ -92157,6 +92164,9 @@
       "cores": [
         "picodrive"
       ],
+      "systems": [
+        "megacd"
+      ],
       "regions": [
         "north-america"
       ],
@@ -92173,6 +92183,9 @@
       "repo_path": "bios/Sega/Mega CD/bios_CD_U.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "megacd"
       ]
     },
     {
@@ -127877,6 +127890,9 @@
       "repo_path": "bios/Arcade/Arcade/fdsbios.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "fds"
       ]
     },
     {
@@ -128274,6 +128290,7 @@
       "systems": [
         "channelf",
         "colecovision",
+        "fds",
         "msx",
         "neogeocd"
       ]
@@ -128403,6 +128420,7 @@
       "systems": [
         "channelf",
         "colecovision",
+        "fds",
         "msx",
         "neogeocd"
       ]
@@ -128419,6 +128437,7 @@
       "systems": [
         "channelf",
         "colecovision",
+        "fds",
         "msx",
         "neogeocd"
       ]
@@ -128537,6 +128556,9 @@
       "repo_path": "bios/Arcade/Arcade/fdsbios.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "fds"
       ]
     },
     {
@@ -128987,6 +129009,7 @@
       "systems": [
         "channelf",
         "colecovision",
+        "fds",
         "msx",
         "neogeocd"
       ]

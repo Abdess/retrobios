@@ -15,10 +15,10 @@
     }
   ],
   "standalone_copies": [],
-  "total_files": 1086,
-  "total_size": 1586286630,
-  "pack_files": 1088,
-  "pack_size": 1586286630,
+  "total_files": 1088,
+  "total_size": 1586335782,
+  "pack_files": 1090,
+  "pack_size": 1586335782,
   "total_omitted": 53,
   "omitted_files": [
     {
@@ -7446,7 +7446,7 @@
       ]
     },
     {
-      "dest": "acpc/ep128emu/roms/zx128.rom",
+      "dest": "zxs/ep128emu/roms/zx128.rom",
       "sha1": "16375d42ea109b47edded7a16028de7fdb3013a1",
       "sha256": "c1ff621d7910105d4ee45c31e9fd8fd0d79a545c78b66c69a562ee1ffbae8d72",
       "size": 32768,
@@ -7459,7 +7459,7 @@
       ]
     },
     {
-      "dest": "acpc/ep128emu/roms/zx48.rom",
+      "dest": "zxs/ep128emu/roms/zx48.rom",
       "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
       "sha256": "d55daa439b673b0e3f5897f99ac37ecb45f974d1862b4dadb85dec34af99cb42",
       "size": 16384,
@@ -7469,6 +7469,36 @@
       ],
       "systems": [
         "sinclair-zx-spectrum"
+      ]
+    },
+    {
+      "dest": "acpc/ep128emu/roms/zx128.rom",
+      "sha1": "16375d42ea109b47edded7a16028de7fdb3013a1",
+      "sha256": "c1ff621d7910105d4ee45c31e9fd8fd0d79a545c78b66c69a562ee1ffbae8d72",
+      "size": 32768,
+      "repo_path": "bios/Enterprise/64-128/zx128.rom",
+      "cores": [
+        "ep128emu_core"
+      ],
+      "systems": [
+        "amstrad-cpc",
+        "sinclair-zx-spectrum",
+        "videoton-tvc"
+      ]
+    },
+    {
+      "dest": "acpc/ep128emu/roms/zx48.rom",
+      "sha1": "5ea7c2b824672e914525d1d5c419d71b84a426a2",
+      "sha256": "d55daa439b673b0e3f5897f99ac37ecb45f974d1862b4dadb85dec34af99cb42",
+      "size": 16384,
+      "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
+      "cores": [
+        "ep128emu_core"
+      ],
+      "systems": [
+        "amstrad-cpc",
+        "sinclair-zx-spectrum",
+        "videoton-tvc"
       ]
     },
     {
@@ -7484,6 +7514,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ]
@@ -7501,6 +7532,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ],
@@ -7520,6 +7552,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ],
@@ -7539,6 +7572,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ],
@@ -7546,7 +7580,7 @@
       "release_asset": "twotiger.zip"
     },
     {
-      "dest": "fds/gamegenie.nes",
+      "dest": "nes/gamegenie.nes",
       "sha1": "f430a0d752a9fa0c7032db8131f9090d18f71779",
       "sha256": "623ee3c09a175b3e5ccb15a295d17b135b9f3cc30397bbd781a5ba0a41ec6d48",
       "size": 24592,
@@ -7559,7 +7593,7 @@
       ]
     },
     {
-      "dest": "fds/nes.pal",
+      "dest": "nes/nes.pal",
       "sha1": "37027d92e1015b82a7dc5c43e9f1649a961577ab",
       "sha256": "26072575abb8a28c1f541b8cbcf6386a9bb136c6ff397fc76d649b8e10f220fb",
       "size": 192,
@@ -8232,7 +8266,7 @@
       ]
     },
     {
-      "dest": "fds/custom.pal",
+      "dest": "nes/custom.pal",
       "sha1": "c7635019127aa28d84d28ae48304bfca6d5baefb",
       "sha256": "3242424dbf90c081fffe87de7e9a4d908440c56b084cfee17e0f39a63b3118b4",
       "size": 192,
@@ -8245,7 +8279,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/00.wav",
+      "dest": "nes/nestopia/samples/moepro/00.wav",
       "sha1": "1b74c4bb6e9cc837899c4ea52fc15bf80eeb0f95",
       "sha256": "4058860cbd6f836b1150464fc9dd508f7f6d6501dec2122a169f2430e98f4042",
       "size": 60848,
@@ -8258,7 +8292,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/01.wav",
+      "dest": "nes/nestopia/samples/moepro/01.wav",
       "sha1": "52fab1fdb4a55d97ddb0401f176fafc84943e57a",
       "sha256": "b47932288f4d4942ee542f4f6299d84289aaff13d709cdfbe4ed3855c0865427",
       "size": 37296,
@@ -8271,7 +8305,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/02.wav",
+      "dest": "nes/nestopia/samples/moepro/02.wav",
       "sha1": "0c9428d948926c3aa482a428078a60db3f7ef91e",
       "sha256": "cec9dd88a1b283f6c0412aac08eadd1e703fedb4474761b6f02c0623bf4862e3",
       "size": 45742,
@@ -8284,7 +8318,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/03.wav",
+      "dest": "nes/nestopia/samples/moepro/03.wav",
       "sha1": "fd268be49fd638147b1f7218ae1c40657680ccfd",
       "sha256": "e103fa946d2e9192acb8c4c07df25d2ef775f676602cff2d129320f59d81de53",
       "size": 75950,
@@ -8297,7 +8331,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/04.wav",
+      "dest": "nes/nestopia/samples/moepro/04.wav",
       "sha1": "3b6199db98d320d5bb2ea8691d30227e7ed118db",
       "sha256": "529064f95a8e0b9f6cecb3a51c408dbe0847347089d444d45e27431428ce23b0",
       "size": 59056,
@@ -8310,7 +8344,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/05.wav",
+      "dest": "nes/nestopia/samples/moepro/05.wav",
       "sha1": "92a0159ad88105b78dd42430307f8a98dd6976f3",
       "sha256": "b7d3bd609cee374ac79588f27882e15640d3e45b429c60dbbdba5d4737cc491b",
       "size": 52402,
@@ -8323,7 +8357,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/06.wav",
+      "dest": "nes/nestopia/samples/moepro/06.wav",
       "sha1": "d1fd28c8be92a1aed763153da0697640d91d0cdc",
       "sha256": "0a1358bc8cbb7233bb6cedd991c4d3d941ab7489b8fc91b2e9924393e16e58c3",
       "size": 25644,
@@ -8336,7 +8370,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/07.wav",
+      "dest": "nes/nestopia/samples/moepro/07.wav",
       "sha1": "a26a951feba976a83ebfd0fff3818085840d5aa7",
       "sha256": "09bb903d5ff56b1fd10fc99da7cb7d2b251c461d0e7a27ed071ae4c1f873f342",
       "size": 58796,
@@ -8349,7 +8383,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/08.wav",
+      "dest": "nes/nestopia/samples/moepro/08.wav",
       "sha1": "7eee02c56b24ae23ed02ef84a9811a733d07c803",
       "sha256": "3d974d808f03bd6fc43638564519bd6fbb8a2a9030a5a99cb6defd1158d17c10",
       "size": 61104,
@@ -8362,7 +8396,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/09.wav",
+      "dest": "nes/nestopia/samples/moepro/09.wav",
       "sha1": "5b31c4b303d05afc804587836709f47718bd3307",
       "sha256": "947f79c00b53bb7c078d232327a870d8bc3e4700389a5e40ad85d6c2bb48a6a4",
       "size": 79024,
@@ -8375,7 +8409,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/10.wav",
+      "dest": "nes/nestopia/samples/moepro/10.wav",
       "sha1": "974fd66cfbb53b525fd2158101e25a8309a471cd",
       "sha256": "1b62e83b6957799b7f10c1817045e4561c85d04136ee00990cbd7b72c277e012",
       "size": 55986,
@@ -8388,7 +8422,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/11.wav",
+      "dest": "nes/nestopia/samples/moepro/11.wav",
       "sha1": "20a7f931f614e9d2b5e9d7cf108604c62acfbb98",
       "sha256": "da62982e81026fcd38a60ea31589247b3bb107052080b21f98f831426e8b08c4",
       "size": 59310,
@@ -8401,7 +8435,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/12.wav",
+      "dest": "nes/nestopia/samples/moepro/12.wav",
       "sha1": "45ff533fa8f99e3225a20a370bb2cde1c1405377",
       "sha256": "256b691cce30a4e123cb321475b10c484bf80d0b91efbeb68d1e78bb8cf197cc",
       "size": 33198,
@@ -8414,7 +8448,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/13.wav",
+      "dest": "nes/nestopia/samples/moepro/13.wav",
       "sha1": "f228ba0b8862ea0b57f193a0719ce4346585e93d",
       "sha256": "11e15546d86fbdd003a793c3848bd9005a1c48cb2e523c1ad64370f971cca608",
       "size": 49714,
@@ -8427,7 +8461,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/14.wav",
+      "dest": "nes/nestopia/samples/moepro/14.wav",
       "sha1": "bd20174499ce3167ba2f90a33fbe4465d0c39d42",
       "sha256": "9b0bf62bdb3c92096b4078db48e84e9e65d99e12da8ac078a83064da62413251",
       "size": 35246,
@@ -8440,7 +8474,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro/15.wav",
+      "dest": "nes/nestopia/samples/moepro/15.wav",
       "sha1": "4f8256764b5d41ef3a7385dcd1aa872efc337d80",
       "sha256": "71592070407c7f7491973f35c4585dae96628405fda21ba149c08855e36f58ae",
       "size": 267952,
@@ -8453,7 +8487,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/00.wav",
+      "dest": "nes/nestopia/samples/moepro88/00.wav",
       "sha1": "f8b567102356e811ec6e2bc7597d3a824ba56094",
       "sha256": "da80258977fc3230d03f50105e85174e7733d8210c3e02ffbc803727e33229c9",
       "size": 25132,
@@ -8466,7 +8500,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/01.wav",
+      "dest": "nes/nestopia/samples/moepro88/01.wav",
       "sha1": "0857f5f60907b6c0f74e750c56955f9329299958",
       "sha256": "35da7d4382896e3bf407b1ae1cdca8362ccf8d08dc84458904a1264b93669008",
       "size": 29874,
@@ -8479,7 +8513,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/02.wav",
+      "dest": "nes/nestopia/samples/moepro88/02.wav",
       "sha1": "a15c041a9fec99b7ca573a497dc9c534c7ccfc42",
       "sha256": "04d33e305279e13251c0b1bbac06e595551632960a8b379f9d4d1fec5363551d",
       "size": 25454,
@@ -8492,7 +8526,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/03.wav",
+      "dest": "nes/nestopia/samples/moepro88/03.wav",
       "sha1": "360dd1ca6c2ec85d46fcb65492ffc6fd29e99513",
       "sha256": "6aecc31c6de164d0226bc7c6bc3ed32398d41c0c35b8014972691beac9cb1b05",
       "size": 26028,
@@ -8505,7 +8539,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/04.wav",
+      "dest": "nes/nestopia/samples/moepro88/04.wav",
       "sha1": "6113543e0dbcc1054f31ae6ea5958fd01f9f9896",
       "sha256": "6d3bf3b45947179cd9e4403a5d28fd85da633d88d58cb872f0d27553d73586e9",
       "size": 36144,
@@ -8518,7 +8552,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/05.wav",
+      "dest": "nes/nestopia/samples/moepro88/05.wav",
       "sha1": "d0798d0e52c64a854735dffd2d2acb648fba8438",
       "sha256": "943f50ab1006d76846fee13c43da82034558bb458dc508915ae57935b488bb3f",
       "size": 35884,
@@ -8531,7 +8565,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/06.wav",
+      "dest": "nes/nestopia/samples/moepro88/06.wav",
       "sha1": "0314c1f5cea4f42cd2fb3e8bdb5bee97fd5cf21e",
       "sha256": "31cf7b9b066d89512b5d7f5e28c3bfd65a176fefc6f573348f55a6dc3fa32b5e",
       "size": 34990,
@@ -8544,7 +8578,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/07.wav",
+      "dest": "nes/nestopia/samples/moepro88/07.wav",
       "sha1": "aa203345b22e061423a9c79eb863915fe6154f4b",
       "sha256": "2be2631433b24005cd591a531f47c2ad7c3c50f84c3f0d8f0a4d885fa8120c2f",
       "size": 49580,
@@ -8557,7 +8591,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/08.wav",
+      "dest": "nes/nestopia/samples/moepro88/08.wav",
       "sha1": "b6cb08d400c59d004ad48515a4843620e13c7417",
       "sha256": "85f12222051e3e97cdf13bb829da271b4ca04282e08a215c745e4231d7e81ba3",
       "size": 49966,
@@ -8570,7 +8604,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/09.wav",
+      "dest": "nes/nestopia/samples/moepro88/09.wav",
       "sha1": "77b8866343f1df80209753a45f01b89801b19e36",
       "sha256": "c50ccacc0b92c75bf8344d7d51dcf2cd97ac6349e3d8a10b24ab4b5c10a99bde",
       "size": 49716,
@@ -8583,7 +8617,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/10.wav",
+      "dest": "nes/nestopia/samples/moepro88/10.wav",
       "sha1": "c75ca7eeb03f83d52c94eab2910d2cc8338cdd31",
       "sha256": "f7c442195deceae94d024ce8fd74a7410d647796a6716c2b8961f322a4299d4d",
       "size": 56752,
@@ -8596,7 +8630,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/11.wav",
+      "dest": "nes/nestopia/samples/moepro88/11.wav",
       "sha1": "b56aa41c1a7b8e916006f1bec91091017e92561c",
       "sha256": "0be1ca9e8f1b7df7af72a89c30d53f2afe39ca30feca4034beb535192e2a5b17",
       "size": 58542,
@@ -8609,7 +8643,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/12.wav",
+      "dest": "nes/nestopia/samples/moepro88/12.wav",
       "sha1": "8bbe02be18839d75a6e45097ff510a1deba14de4",
       "sha256": "985cb0729026abef70017d2baac04cdcf8e3774ff17ef3ceb04e58c36750c94c",
       "size": 34994,
@@ -8622,7 +8656,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/13.wav",
+      "dest": "nes/nestopia/samples/moepro88/13.wav",
       "sha1": "2ca976d877a8b7c7b5d3e70409c10d8c356dcf4d",
       "sha256": "d6d8879abbd09b4342031bde0f460a513bfb9cbb7681bcd817488c5071cedcac",
       "size": 31410,
@@ -8635,7 +8669,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/14.wav",
+      "dest": "nes/nestopia/samples/moepro88/14.wav",
       "sha1": "54d198f58430fae05ed156c3fb44ecf24a74d27f",
       "sha256": "50dc1ae6ed2a1deb863843d851f826942327f2d149cc60611e1db474d3619dd7",
       "size": 128176,
@@ -8648,7 +8682,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/15.wav",
+      "dest": "nes/nestopia/samples/moepro88/15.wav",
       "sha1": "8728ea5b384732883a1829cdf98de6e1ceb4d0ca",
       "sha256": "3d950ecf7dfc4984f5de560602e64ffd1d14d5713481999da7bc11174507d20c",
       "size": 26416,
@@ -8661,7 +8695,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/16.wav",
+      "dest": "nes/nestopia/samples/moepro88/16.wav",
       "sha1": "b8000eada705cf56630266b151564d054d3e2a06",
       "sha256": "24d5db4ca2d256752cd049a330cb406196c05f4cfe8036beb309e0e4533d21de",
       "size": 44,
@@ -8674,7 +8708,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/17.wav",
+      "dest": "nes/nestopia/samples/moepro88/17.wav",
       "sha1": "c6d2242fccde849977cc1602b8fbed55ae1a9526",
       "sha256": "097350aacacacf391c02d5a0eb67e74d63a006f4b324dae846d95dec1d971289",
       "size": 25390,
@@ -8687,7 +8721,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/18.wav",
+      "dest": "nes/nestopia/samples/moepro88/18.wav",
       "sha1": "bde661ddbcd8b1e20dd36b89161d726fb01b74b7",
       "sha256": "46252f277268d13b67f67ed056b770ad284daf9cb6234e41c954b3e6e4d17e67",
       "size": 28590,
@@ -8700,7 +8734,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/moepro88/19.wav",
+      "dest": "nes/nestopia/samples/moepro88/19.wav",
       "sha1": "07ba02cbee4e065a7b2100c8288e954ec42ddc56",
       "sha256": "13a73abb7eaaf2b90e7546aa4d53f300bfd6b7adf8c486ca5267528064d93d22",
       "size": 269490,
@@ -8713,7 +8747,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/00.wav",
+      "dest": "nes/nestopia/samples/mptennis/00.wav",
       "sha1": "b8000eada705cf56630266b151564d054d3e2a06",
       "sha256": "24d5db4ca2d256752cd049a330cb406196c05f4cfe8036beb309e0e4533d21de",
       "size": 44,
@@ -8726,7 +8760,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/01.wav",
+      "dest": "nes/nestopia/samples/mptennis/01.wav",
       "sha1": "b8000eada705cf56630266b151564d054d3e2a06",
       "sha256": "24d5db4ca2d256752cd049a330cb406196c05f4cfe8036beb309e0e4533d21de",
       "size": 44,
@@ -8739,7 +8773,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/02.wav",
+      "dest": "nes/nestopia/samples/mptennis/02.wav",
       "sha1": "fe31302c9ea88867b695b98bfaf9eefefdabd55c",
       "sha256": "e2211de611a4d3c63c46ced0415207608caedd2a13a2095ec1648d1b241eac09",
       "size": 58796,
@@ -8752,7 +8786,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/03.wav",
+      "dest": "nes/nestopia/samples/mptennis/03.wav",
       "sha1": "091d6f2937c2623c9a367c2e518fa3cb482d7763",
       "sha256": "52a3dbae444ddb5cbd840684055447cfe4604181c054dc9cc96e8dac704738a2",
       "size": 57260,
@@ -8765,7 +8799,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/04.wav",
+      "dest": "nes/nestopia/samples/mptennis/04.wav",
       "sha1": "070844d19896ec801af711e3588f9073f0a9e320",
       "sha256": "777376c8fee03bab363bf42626bb479d49549929f337129c27fc1595ddf87595",
       "size": 42412,
@@ -8778,7 +8812,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/05.wav",
+      "dest": "nes/nestopia/samples/mptennis/05.wav",
       "sha1": "e172e6f6df89a1144a6a96f1f21c107fbe0e3a7c",
       "sha256": "6d0ef71f81af12671f0376c698f765476778cfbd094c4eb6bd24b60a23b73048",
       "size": 39724,
@@ -8791,7 +8825,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/06.wav",
+      "dest": "nes/nestopia/samples/mptennis/06.wav",
       "sha1": "aee63e58e12a60063ac8867d88f3ae36d32a1f49",
       "sha256": "385d7eb688b007fed90c74c9544cbbb1d257e16309c2ea08ae77038df61d379e",
       "size": 82732,
@@ -8804,7 +8838,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/07.wav",
+      "dest": "nes/nestopia/samples/mptennis/07.wav",
       "sha1": "c9be7b35ef33afad5e4f51555268754cf6448bfc",
       "sha256": "4851edf631d90ff072ed4dd711e79c159e15d30e76fea4636f5518bf264cdee1",
       "size": 58028,
@@ -8817,7 +8851,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/08.wav",
+      "dest": "nes/nestopia/samples/mptennis/08.wav",
       "sha1": "f02e19872ba68325624764d3b2a3a1bcbaa35460",
       "sha256": "52084aa182baadb479575ce5d626063acf6acce51920095b070bac4cb030e9e3",
       "size": 66732,
@@ -8830,7 +8864,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/09.wav",
+      "dest": "nes/nestopia/samples/mptennis/09.wav",
       "sha1": "9e1676e1c6bddf1c82b376849d1489eb7b15daa1",
       "sha256": "a3334eca7325f1ddb258d78ca61193667a41d01993922afe3f36a0a9d2555915",
       "size": 57132,
@@ -8843,7 +8877,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/10.wav",
+      "dest": "nes/nestopia/samples/mptennis/10.wav",
       "sha1": "db6765a86441e18f24e80216fb0cf76fc0968766",
       "sha256": "1f877dd857c3abcdececa24d3701a31413bdcafac2117e49f4685c8737c7d9e0",
       "size": 50860,
@@ -8856,7 +8890,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/11.wav",
+      "dest": "nes/nestopia/samples/mptennis/11.wav",
       "sha1": "c9959e4557e36f4aca8d69fefe2718707eab1029",
       "sha256": "4bbc4feca42cd84c088df080c05cb9d9e81330c75721f90ca972e2b7968b197f",
       "size": 53490,
@@ -8869,7 +8903,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/12.wav",
+      "dest": "nes/nestopia/samples/mptennis/12.wav",
       "sha1": "c506ed3cbeb845a13289dd43d307ffec6c757e3a",
       "sha256": "240cbeb3fceb005c3cd8228c2390015fd4379c2cf42152dc50f9e3143c4afc34",
       "size": 54572,
@@ -8882,7 +8916,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/13.wav",
+      "dest": "nes/nestopia/samples/mptennis/13.wav",
       "sha1": "742d43677acbb31d3d5fa0f85c516f669ea15a19",
       "sha256": "1ebd5c4f0dae2c66db0be7cc32e758a68f21bba5d708c1cdccdeb993428c0c0a",
       "size": 271406,
@@ -8895,7 +8929,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/14.wav",
+      "dest": "nes/nestopia/samples/mptennis/14.wav",
       "sha1": "9dc641f4dbe747ff4c0a6f45741eb74fc84241b1",
       "sha256": "7b9492573be3b4cedff5b7626847ea99f4712e660c2f50dd4ea0256e20748859",
       "size": 46510,
@@ -8908,7 +8942,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/15.wav",
+      "dest": "nes/nestopia/samples/mptennis/15.wav",
       "sha1": "8037dbd1b9145d1ba80ce4792c84b441dc7542ca",
       "sha256": "eb58e615f2cc0d5fc037c78774dd9b6cd2c5b4d8b308484c3fad14f5ab9996d6",
       "size": 41900,
@@ -8921,7 +8955,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/16.wav",
+      "dest": "nes/nestopia/samples/mptennis/16.wav",
       "sha1": "52549dc98c47518bbaf8b5aa301aa6c2f69059fe",
       "sha256": "72b2ee6ccb7317eeb89a7cb7f6f09fb35b41bc00e7af278ce4d18f7c3b9f5b0a",
       "size": 47532,
@@ -8934,7 +8968,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/17.wav",
+      "dest": "nes/nestopia/samples/mptennis/17.wav",
       "sha1": "5928470e1d2128ba55d94d997ac272443841275c",
       "sha256": "260aa6efe08e01ffa5eba227335a779a16665eb583e1d2e77ec25ce79a739f40",
       "size": 31664,
@@ -8947,7 +8981,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/18.wav",
+      "dest": "nes/nestopia/samples/mptennis/18.wav",
       "sha1": "6c03f293381976075f8ba305f473194727e64fd0",
       "sha256": "7b7f099d4049604af9d6dc9320fbc06e6397328974303f0d33892b0ac150455a",
       "size": 58924,
@@ -8960,7 +8994,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/mptennis/19.wav",
+      "dest": "nes/nestopia/samples/mptennis/19.wav",
       "sha1": "b8000eada705cf56630266b151564d054d3e2a06",
       "sha256": "24d5db4ca2d256752cd049a330cb406196c05f4cfe8036beb309e0e4533d21de",
       "size": 44,
@@ -8973,7 +9007,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/terao/00.wav",
+      "dest": "nes/nestopia/samples/terao/00.wav",
       "sha1": "20b7b3e2323e69e693070b468ecd155e72c8d137",
       "sha256": "b42f0fe924e7a46b7c690dc20b40ddde98976b7eb110447b14b33b0d47ce1e26",
       "size": 90798,
@@ -8986,7 +9020,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/terao/01.wav",
+      "dest": "nes/nestopia/samples/terao/01.wav",
       "sha1": "bbf5de2ba467281dc81f836d04be8b347dcbdec5",
       "sha256": "8ef8c381610f561c482385264271609fd934fbd811f594d4fcb0138df42cfacf",
       "size": 54700,
@@ -8999,7 +9033,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/terao/02.wav",
+      "dest": "nes/nestopia/samples/terao/02.wav",
       "sha1": "d10e446d888c759fb7481957b6d448802885de88",
       "sha256": "967b336e8aeee82be78fd5f69107e5d683c5a6ef369cbd86d323681d88efde17",
       "size": 48044,
@@ -9012,7 +9046,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/terao/03.wav",
+      "dest": "nes/nestopia/samples/terao/03.wav",
       "sha1": "c7ba780c28a68dd84cad9455d091d4ca5cb07612",
       "sha256": "e4080be9568dd021b8af1233f8c6e7b00be9fb1b0f146e3a4300d8ce93ed5d46",
       "size": 83634,
@@ -9025,7 +9059,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/terao/04.wav",
+      "dest": "nes/nestopia/samples/terao/04.wav",
       "sha1": "40c1a36528eb45a4c6a20211501380258c392ce8",
       "sha256": "584400c9b80c33c39aed22767f52c483d3896fe48b56dee6c8ac7e39a54533b2",
       "size": 77740,
@@ -9038,7 +9072,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/terao/05.wav",
+      "dest": "nes/nestopia/samples/terao/05.wav",
       "sha1": "875f12a1ede52c4353cab2c414b3d3506cafd333",
       "sha256": "eaa7107775199ccde7d885665aa5d9d765d12bf13c0bc080f306e5e0b1b628e0",
       "size": 80812,
@@ -9051,7 +9085,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/ftaerobi/00.wav",
+      "dest": "nes/nestopia/samples/ftaerobi/00.wav",
       "sha1": "06bf992519d72743dc507e6ee2568110513457e5",
       "sha256": "85cc7417c9c6ae27155c5366bc7c470feb39debb8f011ef1bd100ee469f6e9f8",
       "size": 378030,
@@ -9064,7 +9098,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/ftaerobi/01.wav",
+      "dest": "nes/nestopia/samples/ftaerobi/01.wav",
       "sha1": "17243274babc5cb3b880e0cf1946a0654d956e01",
       "sha256": "20eb350c397b1147d8d4d4ba2f823dc71ee13fc117de0c1861911680c159ab73",
       "size": 145582,
@@ -9077,7 +9111,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/ftaerobi/02.wav",
+      "dest": "nes/nestopia/samples/ftaerobi/02.wav",
       "sha1": "e4cb2172905fe415c7452aa8dd1d520d314f6c0c",
       "sha256": "9b8ce8c248ac3512297c94a77b68ba1b8d90841aedbda2938fc987bab5aa1a30",
       "size": 114606,
@@ -9090,7 +9124,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/ftaerobi/03.wav",
+      "dest": "nes/nestopia/samples/ftaerobi/03.wav",
       "sha1": "232d761ddff41318382a4abd5df1307ed1add968",
       "sha256": "3a75335960c5a233e81f63590291a3bddb5f59029bd26e264fd4ecdfe24a5423",
       "size": 311470,
@@ -9103,7 +9137,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/ftaerobi/04.wav",
+      "dest": "nes/nestopia/samples/ftaerobi/04.wav",
       "sha1": "fed7c58429927e42fc8e036e69c75dd3ec284dcf",
       "sha256": "0a7383994194d01007faf8b41e130afe1b057e44861ee85947031a5c5dea3d64",
       "size": 94382,
@@ -9116,7 +9150,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/ftaerobi/05.wav",
+      "dest": "nes/nestopia/samples/ftaerobi/05.wav",
       "sha1": "efc454741d89fbea6afa4b2c1e9bd12931c0e51a",
       "sha256": "8f65734fa5bff9d73c24d01d9124c245a8f022e30277a67c9db2750e55119e14",
       "size": 95404,
@@ -9129,7 +9163,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/ftaerobi/06.wav",
+      "dest": "nes/nestopia/samples/ftaerobi/06.wav",
       "sha1": "c2a19619759420d438fa7aaa14919b79241dd3b6",
       "sha256": "5968343313ca1d9b4c6463c9620ff02f3c3baef9c63d28b585e04a0e9f9bcc6c",
       "size": 98476,
@@ -9142,7 +9176,7 @@
       ]
     },
     {
-      "dest": "fds/nestopia/samples/ftaerobi/07.wav",
+      "dest": "nes/nestopia/samples/ftaerobi/07.wav",
       "sha1": "ad9aed9a52134e469a7856e43d81985a9368ddbe",
       "sha256": "2fc244c5d7b832840caa3fda2048b42858083b7b780ff0d84c86d2c22efa107a",
       "size": 90284,
@@ -13003,13 +13037,16 @@
       ]
     },
     {
-      "dest": "gamegear/us_scd2_9306.bin",
+      "dest": "segacd/us_scd2_9306.bin",
       "sha1": "5adb6c3af218c60868e6b723ec47e36bbdf5e6f0",
       "sha256": "b1c2036b79467514eaaa69c76e5ba83801621e821059caa53cb921a0b21e3af4",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/us_scd2_9306.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
       ],
       "regions": [
         "north-america"
@@ -13020,13 +13057,16 @@
       "priority": 1
     },
     {
-      "dest": "gamegear/SegaCDBIOS9303.bin",
+      "dest": "segacd/SegaCDBIOS9303.bin",
       "sha1": "5a8c4b91d3034c1448aac4b5dc9a6484fce51636",
       "sha256": "fb477cdbf94c84424c2feca4fe40656d85393fe7b7b401911b45ad2eb991258c",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
       ],
       "regions": [
         "north-america"
@@ -13037,17 +13077,20 @@
       "priority": 2
     },
     {
-      "dest": "gamegear/us_scd1_9210.bin",
+      "dest": "segacd/us_scd1_9210.bin",
       "sha1": "f4f315adcef9b8feb0364c21ab7f0eaf5457f3ed",
       "sha256": "807384678ef259494d943eddb6954dfc7069693d0dde0c424e2028488d88e81a",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/bios_CD_U.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
       ]
     },
     {
-      "dest": "gamegear/eu_mcd2_9306.bin",
+      "dest": "segacd/eu_mcd2_9306.bin",
       "sha1": "f5f60f03501908962446ee02fc27d98694dd157d",
       "sha256": "71eb86242d8d155ead2ab86721ef5ca236aba004018c500d46e55fc81ddd79b4",
       "size": 131072,
@@ -13067,7 +13110,7 @@
       "priority": 1
     },
     {
-      "dest": "gamegear/eu_mcd2_9303.bin",
+      "dest": "segacd/eu_mcd2_9303.bin",
       "sha1": "7063192ae9f6b696c5b81bc8f0a9fe6f0c400e58",
       "sha256": "fe608a2a07676a23ab5fd5eee2f53c9e2526d69a28aa16ccd85c0ec42e6933cb",
       "size": 131072,
@@ -13087,7 +13130,7 @@
       "priority": 2
     },
     {
-      "dest": "gamegear/eu_mcd1_9210.bin",
+      "dest": "segacd/eu_mcd1_9210.bin",
       "sha1": "f891e0ea651e2232af0c5c4cb46a0cae2ee8f356",
       "sha256": "16735df92fcc1d0fc6a1eced244867e95281c5006340926082b74e363e073dc4",
       "size": 131072,
@@ -13107,7 +13150,7 @@
       "priority": 3
     },
     {
-      "dest": "gamegear/jp_mcd2_921222.bin",
+      "dest": "segacd/jp_mcd2_921222.bin",
       "sha1": "d203cfe22c03ae479dd8ca33840cf8d9776eb3ff",
       "sha256": "7133fc2dd2fe5b7d0acd53a5f10f3d00b5d31270239ad20d74ef32393e24af88",
       "size": 131072,
@@ -13127,7 +13170,7 @@
       "priority": 1
     },
     {
-      "dest": "gamegear/jp_mcd1_9112.bin",
+      "dest": "segacd/jp_mcd1_9112.bin",
       "sha1": "e4193c6ae44c3cea002707d2a88f1fbcced664de",
       "sha256": "e8dbee3edcd1b2751c72c1d9ae0dac1aacd9203804bfc1a35ea098d8778bcb1c",
       "size": 131072,
@@ -13147,7 +13190,7 @@
       "priority": 2
     },
     {
-      "dest": "gamegear/jp_mcd1_9111.bin",
+      "dest": "segacd/jp_mcd1_9111.bin",
       "sha1": "4846f448160059a7da0215a5df12ca160f26dd69",
       "sha256": "923eb9da740f98ab1572085e3d351e2c0982df0906b0b99efb68a9997c94cf8f",
       "size": 131072,
@@ -14280,7 +14323,7 @@
       ]
     },
     {
-      "dest": "gamegear/BIOS.col",
+      "dest": "colecovision/BIOS.col",
       "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
       "sha256": "990bf1956f10207d8781b619eb74f89b00d921c8d45c95c334c16c8cceca09ad",
       "size": 8192,
@@ -14539,6 +14582,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ]
@@ -14556,12 +14600,13 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ]
     },
     {
-      "dest": "colecovision/channelf.zip",
+      "dest": "fairchild-channel-f/channelf.zip",
       "sha1": "1cb23b462b990241013deb4b5e07ce741af28267",
       "sha256": "c158f7c177c61c7b441eb1061e5148737597e871cbcfa1e2d60ace15e90c8e70",
       "size": 2705,
@@ -14587,7 +14632,7 @@
       ]
     },
     {
-      "dest": "colecovision/dsp1.zip",
+      "dest": "snes/dsp1.zip",
       "sha1": "c720161b382fbc6b36e58b9df67f4a872d9bebc1",
       "sha256": "3443129eecb19be2bc3f7df34bd8fc476388adea323ee8b6a8cadaff99b283b0",
       "size": 10354,
@@ -14600,7 +14645,7 @@
       ]
     },
     {
-      "dest": "colecovision/dsp1b.zip",
+      "dest": "snes/dsp1b.zip",
       "sha1": "71b5e30189de3df990f2500ba932bbc815a71010",
       "sha256": "72b06b1f7dbbcc7d0d5df95a098ddb37166feb6a469fa4019da4eb7b78247be4",
       "size": 4119,
@@ -14613,7 +14658,7 @@
       ]
     },
     {
-      "dest": "colecovision/dsp2.zip",
+      "dest": "snes/dsp2.zip",
       "sha1": "2dfb572191187acdaeacb6f128bf8b0acc065bdb",
       "sha256": "e0ea4e68d82d39ea54649bbd9f5f00553c32edebd49a75c9441053633cf5f6af",
       "size": 2968,
@@ -14626,7 +14671,7 @@
       ]
     },
     {
-      "dest": "colecovision/dsp3.zip",
+      "dest": "snes/dsp3.zip",
       "sha1": "bc2129b05a701fdbc432d8092f54ecad4c0088c7",
       "sha256": "a46ae93c36fa6b0232881844188c9fee2a855e7e80284080b2fe887079ed4c4f",
       "size": 3531,
@@ -14639,7 +14684,7 @@
       ]
     },
     {
-      "dest": "colecovision/dsp4.zip",
+      "dest": "snes/dsp4.zip",
       "sha1": "4394045a514872c6ca2aa86106bf8b5ac0104b09",
       "sha256": "ee4c8eb5e66b3a1148617134442829e67fb78a2a3ee1180e96048d5f90582fcb",
       "size": 3396,
@@ -14652,13 +14697,16 @@
       ]
     },
     {
-      "dest": "colecovision/fdsbios.zip",
+      "dest": "fds/fdsbios.zip",
       "sha1": "199e05ebd1966d23877c8aed60f3502115b70a2e",
       "sha256": "72149ca0a0c07126b0731c3a39a68e7f579693322a2f48ee94e1db72b3e13e65",
       "size": 8312,
       "repo_path": "bios/Arcade/Arcade/fdsbios.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-fds"
       ]
     },
     {
@@ -15005,7 +15053,7 @@
       ]
     },
     {
-      "dest": "colecovision/st010.zip",
+      "dest": "snes/st010.zip",
       "sha1": "a6c6acd09c690b8efa85c96993fee85bede0b7fc",
       "sha256": "83209f92aaa22160247a9f57d671d46b6ac2cae767a2ce689c64423c4804379a",
       "size": 69800,
@@ -15018,7 +15066,7 @@
       ]
     },
     {
-      "dest": "colecovision/st011.zip",
+      "dest": "snes/st011.zip",
       "sha1": "441a7d2a63e5f1a2d94a62404fa8afad99e7634a",
       "sha256": "1960aae8984b2380ec759a747e2d8162ad7b55501b7edd57b7005cea4adfb268",
       "size": 69800,
@@ -15043,6 +15091,7 @@
         "coleco-colecovision",
         "fairchild-channel-f",
         "microsoft-msx",
+        "nintendo-fds",
         "nintendo-snes",
         "snk-neogeo-cd"
       ]

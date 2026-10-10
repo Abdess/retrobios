@@ -23643,6 +23643,7 @@
       "systems": [
         "coleco-colecovision",
         "fairchild-channel-f",
+        "nintendo-fds",
         "snk-neogeo-cd"
       ]
     },
@@ -23658,6 +23659,7 @@
       "systems": [
         "coleco-colecovision",
         "fairchild-channel-f",
+        "nintendo-fds",
         "snk-neogeo-cd"
       ],
       "storage": "release",
@@ -23675,6 +23677,7 @@
       "systems": [
         "coleco-colecovision",
         "fairchild-channel-f",
+        "nintendo-fds",
         "snk-neogeo-cd"
       ],
       "storage": "release",
@@ -23692,6 +23695,7 @@
       "systems": [
         "coleco-colecovision",
         "fairchild-channel-f",
+        "nintendo-fds",
         "snk-neogeo-cd"
       ],
       "storage": "release",
@@ -31771,6 +31775,9 @@
       "cores": [
         "picodrive"
       ],
+      "systems": [
+        "sega-mega-cd"
+      ],
       "regions": [
         "north-america"
       ],
@@ -31788,6 +31795,9 @@
       "cores": [
         "picodrive"
       ],
+      "systems": [
+        "sega-mega-cd"
+      ],
       "regions": [
         "north-america"
       ],
@@ -31804,6 +31814,9 @@
       "repo_path": "bios/Sega/Mega CD/bios_CD_U.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
       ]
     },
     {
@@ -33740,6 +33753,9 @@
       "repo_path": "bios/Arcade/Arcade/fdsbios.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-fds"
       ]
     },
     {
@@ -34134,6 +34150,7 @@
       "systems": [
         "coleco-colecovision",
         "fairchild-channel-f",
+        "nintendo-fds",
         "snk-neogeo-cd"
       ]
     },
@@ -34307,6 +34324,7 @@
       "systems": [
         "coleco-colecovision",
         "fairchild-channel-f",
+        "nintendo-fds",
         "snk-neogeo-cd"
       ]
     },
@@ -34322,6 +34340,7 @@
       "systems": [
         "coleco-colecovision",
         "fairchild-channel-f",
+        "nintendo-fds",
         "snk-neogeo-cd"
       ]
     },
@@ -34439,6 +34458,9 @@
       "repo_path": "bios/Arcade/Arcade/fdsbios.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-fds"
       ]
     },
     {
@@ -34886,6 +34908,7 @@
       "systems": [
         "coleco-colecovision",
         "fairchild-channel-f",
+        "nintendo-fds",
         "snk-neogeo-cd"
       ]
     },

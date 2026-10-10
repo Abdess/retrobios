@@ -12,7 +12,7 @@ systems:
   - sega-megadrive
   - sega-genesis
   - sega-megacd
-  - sega-segacd
+  - sega-megacd
   - sega-32x
   - sega-mastersystem
   - sega-gamegear
@@ -63,7 +63,7 @@ files:
   # Mega CD / Sega CD - US region
   # -------------------------------------------------------
   - name: "us_scd2_9306.bin"
-    system: sega-segacd
+    system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [north-america]
     priority: 1
@@ -73,7 +73,7 @@ files:
     source_ref: "platform/libretro/libretro.c:1273"
 
   - name: "SegaCDBIOS9303.bin"
-    system: sega-segacd
+    system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [north-america]
     priority: 2
@@ -83,7 +83,7 @@ files:
     source_ref: "platform/libretro/libretro.c:1273"
 
   - name: "us_scd1_9210.bin"
-    system: sega-segacd
+    system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [north-america]
     priority: 3
@@ -93,7 +93,7 @@ files:
     source_ref: "platform/libretro/libretro.c:1273"
 
   - name: "bios_CD_U.bin"
-    system: sega-segacd
+    system: sega-megacd
     variant_group: "mega-cd-bios"
     region: [north-america]
     priority: 4

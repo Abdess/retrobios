@@ -21,7 +21,7 @@ systems:
   - coleco-colecovision
   - sinclair-spectrum
   - msx
-  - nes-fds
+  - nintendo-fds
   - super-kaneko-nova
   - deco-cassette
   - namco-na1
@@ -1061,7 +1061,7 @@ files:
   # -------------------------------------------------------
   - name: "fdsbios.nes"
     archive: fdsbios.zip
-    system: nes-fds
+    system: nintendo-fds
     required: true
     size: 8192  # 0x2000
     crc32: "5e607dcf"

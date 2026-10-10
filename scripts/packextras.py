@@ -120,7 +120,19 @@ def _map_emulator_to_slug(
 def _slug_for(
     u: dict, profiles: dict, platform_systems: set, norm_map: dict, sys_to_slug: dict
 ) -> str:
-    """The platform slug a report entry's emulator files under, or empty."""
+    """The platform slug a report entry files under, or empty.
+
+    The entry's own system decides first: picodrive's Mega CD BIOS belongs
+    under segacd/, where RomM looks for a Mega CD game's firmware, not under
+    gamegear/, the first of the emulator's systems.
+    """
+    own = u.get("system")
+    if own:
+        slug = _map_emulator_to_slug(
+            {"systems": [own]}, platform_systems, norm_map, sys_to_slug
+        )
+        if slug:
+            return slug
     emu_name = u.get("profile") or u.get("emulator", "")
     profile = profiles.get(emu_name, {})
     if not profile:

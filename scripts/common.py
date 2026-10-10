@@ -1593,6 +1593,11 @@ SYSTEM_ALIASES: dict[str, str] = {
     "sega32x": "sega-32x",
     "segastv": "sega-stv",
     "ti994a": "ti99",
+    # Other spellings of one machine: RomM files the Mega CD as sega-mega-cd
+    # and the disk system as nintendo-fds, which normalize to the ids the
+    # profiles use only through these.
+    "sega-segacd": "sega-megacd",
+    "nes-fds": "nintendo-fds",
 }
 
 

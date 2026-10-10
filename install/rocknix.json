@@ -51758,6 +51758,9 @@
       "cores": [
         "picodrive"
       ],
+      "systems": [
+        "sega-mega-cd"
+      ],
       "regions": [
         "north-america"
       ],
@@ -51775,6 +51778,9 @@
       "cores": [
         "picodrive"
       ],
+      "systems": [
+        "sega-mega-cd"
+      ],
       "regions": [
         "north-america"
       ],
@@ -51791,6 +51797,9 @@
       "repo_path": "bios/Sega/Mega CD/bios_CD_U.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
       ]
     },
     {
