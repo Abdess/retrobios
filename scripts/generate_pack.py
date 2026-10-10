@@ -2946,6 +2946,49 @@ def _get_repo_path(sha1: str, db: dict) -> str:
     return entry.get("path", "")
 
 
+def _manifest_entry(
+    local_path: str | None,
+    dest: str,
+    cores: list[str] | None,
+    db: dict,
+    repo_root: str,
+) -> tuple[dict | None, int]:
+    """The download record of a resolved file, and the size it occupies.
+
+    The installer fetches by hash, so the entry records the copy this
+    repository holds: an upstream hash carried by no local file resolves to
+    no URL. An entry needs somewhere to be fetched from, and a file the
+    database does not index (a data directory, a copy added since the last
+    scan, a hash computed wrong) has neither a repo path nor a release
+    asset. None then, so the caller records an omission instead of a dead
+    entry that makes the installer refuse the whole manifest.
+    """
+    sha1 = ""
+    sha256 = ""
+    file_size = 0
+    if local_path and os.path.exists(local_path):
+        file_size = os.path.getsize(local_path)
+        hashes = compute_hashes(local_path)
+        sha1 = hashes["sha1"]
+        sha256 = hashes["sha256"]
+    repo_path = _get_repo_path(sha1, db) if sha1 else ""
+    is_release_asset = _is_release_asset(local_path or "", repo_root)
+    if not repo_path and not is_release_asset:
+        return None, file_size
+    entry: dict = {
+        "dest": dest,
+        "sha1": sha1,
+        "sha256": sha256,
+        "size": file_size,
+        "repo_path": repo_path,
+        "cores": cores,
+    }
+    if is_release_asset:
+        entry["storage"] = "release"
+        entry["release_asset"] = _release_asset_name(local_path, repo_root)
+    return entry, file_size
+
+
 def _manifest_core_entries(
     core_files: list,
     config: dict,
@@ -2963,6 +3006,7 @@ def _manifest_core_entries(
     manifest_files: list,
     omitted_by_destination: dict,
     record_omission,
+    pack_only_sizes: list[int],
     required_only: bool = False,
 ) -> int:
     """Add the files a platform's cores need but its list does not name.
@@ -3018,16 +3062,6 @@ def _manifest_core_entries(
             )
             continue
 
-        sha1 = ""
-        sha256 = ""
-        file_size = 0
-        if local_path and os.path.exists(local_path):
-            file_size = os.path.getsize(local_path)
-            hashes = compute_hashes(local_path)
-            sha1 = hashes["sha1"]
-            sha256 = hashes["sha256"]
-
-        repo_path = _get_repo_path(sha1, db) if sha1 else ""
         source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
 
         # Manifest dests are relative to base_destination; keep the inferred
@@ -3036,18 +3070,19 @@ def _manifest_core_entries(
         if base_dest and manifest_dest.startswith(f"{base_dest}/"):
             manifest_dest = manifest_dest[len(base_dest) + 1:]
 
-        entry = {
-            "dest": manifest_dest,
-            "sha1": sha1,
-            "sha256": sha256,
-            "size": file_size,
-            "repo_path": repo_path,
-            "cores": [source_emu] if source_emu else [],
-        }
-
-        if _is_release_asset(local_path or "", repo_root):
-            entry["storage"] = "release"
-            entry["release_asset"] = _release_asset_name(local_path, repo_root)
+        entry, file_size = _manifest_entry(
+            local_path, manifest_dest, [source_emu] if source_emu else [],
+            db, repo_root,
+        )
+        if entry is None:
+            systems = _extra_system_ids(fe)
+            record_omission(
+                full_dest, fe, systems[0] if systems else "", "not_found",
+                [source_emu] if source_emu else [],
+            )
+            if file_size:
+                pack_only_sizes.append(file_size)
+            continue
 
         manifest_files.append(entry)
         omitted_by_destination.pop(full_dest, None)
@@ -3289,29 +3324,10 @@ def generate_manifest(
                     digest_algorithm(verification_mode), dest, manifest_owners,
                 )
 
-                # Get SHA1 and size. The installer fetches by hash, so record
-                # the copy this repo holds: an upstream hash carried by no
-                # local file resolves to no download URL at all.
-                sha1 = ""
-                sha256 = ""
-                file_size = 0
-                if local_path and os.path.exists(local_path):
-                    file_size = os.path.getsize(local_path)
-                    hashes = compute_hashes(local_path)
-                    sha1 = hashes["sha1"]
-                    sha256 = hashes["sha256"]
-
-                repo_path = _get_repo_path(sha1, db) if sha1 else ""
-                is_release_asset = _is_release_asset(local_path or "", repo_root)
-
-                # An entry needs somewhere to be fetched from. Resolution can
-                # land on a file the database does not index -- a data
-                # directory, or a copy added since the last scan -- and then
-                # neither a repo path nor a release asset exists, so the
-                # installer would list a file it can never download. Recording
-                # it as omitted keeps that visible instead of shipping a dead
-                # entry.
-                if not repo_path and not is_release_asset:
+                entry, file_size = _manifest_entry(
+                    local_path, dest, None, db, repo_root
+                )
+                if entry is None:
                     record_omission(full_dest, file_entry, sys_id, "not_found", None)
                     if file_size and full_dest not in seen_destinations:
                         pack_only_sizes.append(file_size)
@@ -3320,21 +3336,6 @@ def generate_manifest(
                         if case_insensitive:
                             seen_lower.add(dedup_key.lower())
                     continue
-
-                entry: dict = {
-                    "dest": dest,
-                    "sha1": sha1,
-                    "sha256": sha256,
-                    "size": file_size,
-                    "repo_path": repo_path,
-                    "cores": None,
-                }
-
-                if is_release_asset:
-                    entry["storage"] = "release"
-                    entry["release_asset"] = _release_asset_name(
-                        local_path, repo_root
-                    )
 
                 manifest_files.append(entry)
                 omitted_by_destination.pop(full_dest, None)
@@ -3365,7 +3366,7 @@ def generate_manifest(
         core_files, config, db, bios_dir, base_dest, repo_root,
         zip_contents, offline, region_drops, case_insensitive,
         seen_destinations, seen_lower, seen_parents, manifest_files,
-        omitted_by_destination, record_omission, required_only,
+        omitted_by_destination, record_omission, pack_only_sizes, required_only,
     )
 
     # Phase 3: data directories. The installer does not fetch them, so they
