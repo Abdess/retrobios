@@ -363,21 +363,20 @@ def list_available_targets(
     with open(target_file) as f:
         data = yaml_load(f) or {}
 
-    overrides_file = os.path.join(targets_dir, "_overrides.yml")
-    overrides = {}
-    if os.path.exists(overrides_file):
-        with open(overrides_file) as f:
-            all_overrides = yaml_load(f) or {}
-        overrides = all_overrides.get(platform_name, {}).get("targets", {})
+    # The count --target filters on: overrides applied, as load_target_config
+    # applies them. The scraped list counted Batocera's machine variants and
+    # launchers, 198 cores shown for 187 used.
+    overrides = _target_overrides(platform_name, targets_dir)
 
     result = []
     for tname, tdata in sorted(data.get("targets", {}).items()):
-        aliases = overrides.get(tname, {}).get("aliases", [])
+        aliases = (overrides.get(tname) or {}).get("aliases", [])
+        cores = {str(c) for c in tdata.get("cores", [])}
         result.append(
             {
                 "name": tname,
                 "architecture": tdata.get("architecture", ""),
-                "core_count": len(tdata.get("cores", [])),
+                "core_count": len(apply_target_overrides(cores, overrides, tname)),
                 "aliases": aliases,
             }
         )

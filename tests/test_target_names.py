@@ -54,5 +54,26 @@ class TheBuilderNamesByTheCanonicalTarget(unittest.TestCase):
             )
 
 
+
+class TheListingCountsWhatTheFilterUses(unittest.TestCase):
+    """--list-targets showed Batocera x86_64 with 198 cores; --target x86_64
+    filters on 187 once _overrides.yml removes machine variants and launchers."""
+
+    def test_every_listed_count_is_the_filtered_set(self):
+        from common import list_available_targets, load_target_config  # noqa: PLC0415
+
+        platforms = str(REPO_ROOT / "platforms")
+        checked = 0
+        for target_file in sorted((REPO_ROOT / "platforms" / "targets").glob("[!_]*.yml")):
+            platform = target_file.stem
+            for row in list_available_targets(platform, platforms):
+                with self.subTest(platform=platform, target=row["name"]):
+                    self.assertEqual(
+                        row["core_count"],
+                        len(load_target_config(platform, row["name"], platforms)),
+                    )
+                checked += 1
+        self.assertGreater(checked, 0)
+
 if __name__ == "__main__":
     unittest.main()
