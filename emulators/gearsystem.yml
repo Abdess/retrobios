@@ -34,17 +34,17 @@ files:
   - name: "bios.sms"
     system: sega-mastersystem
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:777, platforms/libretro/libretro.cpp:780 (load_bootroms)"
+    source_ref: "platforms/libretro/libretro.cpp:736, platforms/libretro/libretro.cpp:731-743 (load_bootroms)"
 
   - name: "bios.gg"
     system: sega-gamegear
     required: false
-    source_ref: "platforms/libretro/libretro.cpp:1067, platforms/libretro/libretro.cpp:780 (load_bootroms)"
+    source_ref: "platforms/libretro/libretro.cpp:737, platforms/libretro/libretro.cpp:731-743 (load_bootroms)"
 
 platform_details:
   mastersystem:
     bios_filename: "bios.sms"
-    source_ref: "src/Memory.cpp:227-232"
+    source_ref: "src/Memory.cpp:267-272"
     note: |
       Boot ROM loaded via LoadBootromSMS() -> LoadBootroom(path, false).
       Raw binary read, stored in m_pBootromSMS. Bank count computed as
@@ -52,7 +52,7 @@ platform_details:
 
   gamegear:
     bios_filename: "bios.gg"
-    source_ref: "src/Memory.cpp:234-239"
+    source_ref: "src/Memory.cpp:274-279"
     note: |
       Boot ROM loaded via LoadBootromGG() -> LoadBootroom(path, true).
       Raw binary read, stored in m_pBootromGG. Same bank computation.

@@ -30,7 +30,7 @@ notes: |
   only by the two settings screens, which fall back to the real filename when it
   is null.
   ref: src/core/bios.h:41-43 (field declarations)
-  ref: src/duckstation-qt/biossettingswidget.cpp:149, src/core/fullscreenui_settings.cpp:3301
+  ref: src/duckstation-qt/biossettingswidget.cpp:149, src/core/fullscreenui_settings.cpp:3281
   Lower priority = preferred. PS2 deprioritized (>= 100) for dynamic fast boot.
   Late PAL deprioritized (>= 150) due to additional regional checks.
   OpenBIOS detected by signature at offset 0x78, not by hash.

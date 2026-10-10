@@ -51,5 +51,5 @@ files:
     md5: "72ae1b47820fcc93cc0df9c428d0face"
     sha1: "5f4aed208301449c2e9514edfd325fe9dead76fa"
     crc32: "a5751b99"
-    source_ref: "src/d_main.c:1438-1476 (PACKAGE .wad load), libretro/libretro.c:4254-4330 (I_FindFile search), src/config.h:39 (PACKAGE=prboom)"
+    source_ref: "src/d_main.c:1449-1465 (PACKAGE .wad load), libretro/libretro.c:4171-4252 (I_FindFile search), src/config.h:39 (PACKAGE=prboom)"
     note: "Searched in system/prboom/ then system/. Falls back to internal defaults if missing, but menus and HUD may render incorrectly without it."
