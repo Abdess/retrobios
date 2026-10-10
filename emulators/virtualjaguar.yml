@@ -112,10 +112,11 @@ files:
     required: false
     size: 131072
     validation: [size]
-    aliases:
-      - boot.rom
+    sha1: "af643900fea84234e08b616a6d27f03f0a61db96"
+    md5: "6e844759720226e58d55ecaf33608a13"
+    crc32: "ae25bdf5"
     description: "Model-M cart boot ROM, read when the BIOS type is Model M"
-    source_ref: "libretro.c:5358-5380"
+    source_ref: "libretro.c:5358-5380, src/bios/jagbios_m.c:9"
     note: >-
       Read from the system directory only, as jagboot_m.rom, and only when
       biosType is BT_M_SERIES. A short read falls back to the embedded
