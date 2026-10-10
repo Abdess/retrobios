@@ -52,12 +52,15 @@ class Exporter(BaseExporter):
     def native_sources() -> dict[str, str]:
         return {"es_bios.xml": SOURCE_URL, "es_bios.xsd": SCHEMA_URL}
 
-    def _path(self, fe: NativeFile, native_id: str) -> str:
+    def _path(self, fe: NativeFile) -> str:
         """The path Recalbox reads, pipe-joined when it accepts several.
 
         A path Recalbox already states is reproduced exactly: several of its
         entries sit at the BIOS root with no directory at all, and prefixing
-        them with the system would point the frontend somewhere else.
+        them with the system would point the frontend somewhere else. An
+        addition goes where the core reads it, relative to the BIOS directory
+        Recalbox gives its cores: DuckStation reads scph5000.bin at the root,
+        not under psx/.
         """
         if fe.platform is not None:
             path = str(fe.platform.get("destination") or fe.name)
@@ -65,11 +68,10 @@ class Exporter(BaseExporter):
             if alternatives:
                 return "|".join([path, *[str(a) for a in alternatives]])
             return path
-        dest = fe.destination or fe.name
-        return dest if "/" in dest else f"{native_id}/{dest}"
+        return fe.destination or fe.name
 
     def _bios_element(self, fe: NativeFile, native_id: str) -> str:
-        attrs = [f"path={quoteattr(self._path(fe, native_id))}"]
+        attrs = [f"path={quoteattr(self._path(fe))}"]
         attrs.append(f'md5={quoteattr(",".join(fe.hashes("md5")))}')
         attrs.append(f'core={quoteattr(",".join(fe.cores()))}')
 
@@ -162,6 +164,6 @@ class Exporter(BaseExporter):
             for fe in system.files:
                 if not self.writable(fe):
                     continue
-                if self._path(fe, system.native_id).casefold() not in exported:
+                if self._path(fe).casefold() not in exported:
                     issues.append(f"absent: {system.native_id}/{fe.name}")
         return issues

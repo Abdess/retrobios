@@ -574,6 +574,22 @@ class RecalboxExport(unittest.TestCase):
         exporter, systems, produced = self._render()
         self.assertEqual(exporter.validate(systems, produced), [])
 
+    def test_an_addition_goes_where_the_core_reads_it(self):
+        """DuckStation reads scph5000.bin at the BIOS root; the export wrote
+        psx/scph5000.bin, a path no core opens."""
+        import copy  # noqa: PLC0415
+
+        truth = copy.deepcopy(TRUTH)
+        truth["systems"]["sony-playstation"]["files"].append({
+            "name": "scph5000.bin", "md5": "57a06303dfa9cf9351222dfcbb4a29d9",
+            "size": 524288, "required": False, "_cores": ["duckstation"],
+        })
+        systems, report = build_native_model(truth, SCRAPED)
+        produced = discover_exporters()["recalbox"]().render(systems, report, {}, None)
+        paths = {e.get("path") for e in ET.fromstring(produced["es_bios.xml"]).iter("bios")}
+        self.assertIn("scph5000.bin", paths)
+        self.assertNotIn("psx/scph5000.bin", paths)
+
     def test_a_truncated_export_is_reported(self):
         exporter, systems, _ = self._render()
         empty = {
