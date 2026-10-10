@@ -1453,6 +1453,63 @@ class TestBuildReport(unittest.TestCase):
         report = build_report("mame", profile, self.dir)
         self.assertEqual(report.entries[0].status, "ANCHORED")
 
+    def test_an_emptied_upstream_does_not_hide_the_ports_change(self):
+        # dosbox-pure moved to Codeberg and emptied its GitHub repository.
+        # The rename search run for that repository picked up the port's
+        # .info, .sln and .vcxproj sharing the file's root, and that
+        # AMBIGUOUS outranked the port's own CHANGED.
+        pin_lines = ["a", "scan the system folder", "for ROM.BIN", "c"]
+        self.files[("portpin", "core.cpp")] = list(pin_lines)
+        self.files[("porthead", "core.cpp")] = ["a", "scan every folder", "for nothing", "c"]
+        self.files[("uppin", "core.cpp")] = list(pin_lines)
+        for name in ("core.info", "core.sln", "core.vcxproj"):
+            self.files[("porthead", name)] = ["x"]
+        heads = {"o/port": "porthead", "o/up": "uphead"}
+        profile_sync.upstream.resolve_head = (
+            lambda repo, cache, offline=False, branch=None: heads[repo.slug]
+        )
+        profile_sync.upstream.list_tree = (
+            lambda repo, sha, cache_dir, offline=False: (
+                sorted(path for revision, path in self.files if revision == sha), False
+            )
+        )
+        profile = {
+            "emulator": "Pure",
+            "source": "https://github.com/o/port",
+            "upstream": "https://github.com/o/up",
+            "source_commit": "portpin",
+            "upstream_commit": "uppin",
+            "notes": "The scan accepts it (core.cpp:2-3).",
+            "files": [],
+        }
+        report = build_report("pure", profile, self.dir)
+        self.assertEqual([e.status for e in report.entries], ["CHANGED"])
+
+    def test_a_tie_reports_the_owning_repository(self):
+        # Both repositories call the ref GONE. mamedev, which the citation is
+        # attributed to, says why: the ref was written against HEAD. The port
+        # only says the range runs past its file.
+        self.files[("portpin", "src/stv.cpp")] = ["x"]
+        self.files[("porthead", "src/stv.cpp")] = ["x"]
+        self.files[("uppin", "src/stv.cpp")] = ["x"]
+        self.files[("uphead", "src/stv.cpp")] = ["x", "y", "GAME( 1996, stvbios,"]
+        heads = {"o/port": "porthead", "o/up": "uphead"}
+        profile_sync.upstream.resolve_head = (
+            lambda repo, cache, offline=False, branch=None: heads[repo.slug]
+        )
+        profile = {
+            "emulator": "MAME",
+            "source": "https://github.com/o/port",
+            "upstream": "https://github.com/o/up",
+            "source_commit": "portpin",
+            "upstream_commit": "uppin",
+            "files": [{"name": "stvbios.zip", "source_ref": "src/stv.cpp:3"}],
+        }
+        report = build_report("mame", profile, self.dir)
+        entry = report.entries[0]
+        self.assertEqual(entry.status, "GONE")
+        self.assertIn("written against HEAD", entry.parts[0].reason)
+
     def test_pin_on_the_declared_version_tag_is_flagged(self):
         self.files[("pinsha", "a.c")] = ["x", "hit"]
         self.files[("headsha", "a.c")] = ["x", "hit"]

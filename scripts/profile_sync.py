@@ -1666,10 +1666,17 @@ def build_report(
         token on the cited line, so no single attribution can be right for all
         of them; taking the best outcome across repositories settles it.
         """
+        owner, _actual = resolve_path(part.path, part.start, tuple(tokens))
+        carrying = [
+            view for view in views
+            if fetch_from(view.repo, view.pin, part.path) is not None
+        ]
+        live = {
+            id(view) for view in carrying
+            if fetch_from(view.repo, view.head, part.path) is not None
+        }
         best = None
-        for view in views:
-            if fetch_from(view.repo, view.pin, part.path) is None:
-                continue
+        for view in carrying:
             result = anchor_part(
                 part,
                 lambda which, path, start=None, toks=(), _v=view: fetch(
@@ -1681,8 +1688,19 @@ def build_report(
                 ),
                 tokens,
             )
+            if (
+                live and id(view) not in live
+                and result.status in ("AMBIGUOUS", "GONE")
+            ):
+                # dosbox-pure's upstream was emptied: its rename search
+                # offered the .info, .sln and .vcxproj as candidates and hid
+                # the real change in the port that still carries the file.
+                continue
             rank = STATUS_ORDER.index(result.status)
-            if best is None or rank < best[0]:
+            # On a tie the repository the citation is attributed to speaks:
+            # mame's "written against HEAD, pin names an older revision" was
+            # replaced by whatever the first repository said.
+            if best is None or rank < best[0] or (rank == best[0] and view is owner):
                 best = (rank, result)
         return best[1] if best else anchor_part(
             part, fetch, rename_getter, describe, tokens
