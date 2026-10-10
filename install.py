@@ -980,6 +980,24 @@ def _validate_manifest(data: object, plat: str) -> dict:
     for index, entry in enumerate(copies):
         if not isinstance(entry, dict):
             raise ValueError(f"standalone_copies[{index}] must be an object")
+        # The shape do_standalone_copies reads, checked here: a note with a
+        # list for detect, a copy naming neither file nor pattern, or a list
+        # for emulator passed and crashed the copy step after the download.
+        where = f"standalone_copies[{index}]"
+        if "note" in entry:
+            detect = entry.get("detect", {})
+            if not isinstance(entry["note"], str) or not isinstance(detect, dict):
+                raise ValueError(f"invalid note entry at {where}")
+            for values in detect.values():
+                if not isinstance(values, list) or not all(
+                    isinstance(value, str) for value in values
+                ):
+                    raise ValueError(f"invalid note entry at {where}")
+            continue
+        if "file" not in entry and "pattern" not in entry:
+            raise ValueError(f"{where} names neither a file nor a pattern")
+        if not isinstance(entry.get("emulator", ""), str):
+            raise ValueError(f"invalid emulator at {where}")
         if "file" in entry:
             _safe_relative_path(
                 entry["file"], f"standalone_copies[{index}].file"

@@ -1138,6 +1138,19 @@ class TestStandaloneCopyTargetsAreUntrusted(unittest.TestCase):
         with self.assertRaises(ValueError):
             install._validate_manifest(manifest, "retroarch")
 
+    def test_entries_the_copy_step_cannot_read_are_refused(self):
+        """Each passed validation and crashed do_standalone_copies after the
+        download: a list for detect, no file nor pattern, a list for emulator."""
+        for entry in (
+            {"note": "hi", "detect": ["/x"]},
+            {"emulator": "pcsx2", "targets": {"linux": ["/tmp"]}},
+            {"file": "bios/x.bin", "emulator": ["a"], "targets": {"linux": ["/tmp"]}},
+        ):
+            manifest = {"manifest_version": 2, "platform": "retroarch", "files": [],
+                        "standalone_copies": [entry]}
+            with self.subTest(entry=entry), self.assertRaises(ValueError):
+                install._validate_manifest(manifest, "retroarch")
+
     def test_plain_absolute_target_still_works(self):
         manifest = {
             "manifest_version": 2,
