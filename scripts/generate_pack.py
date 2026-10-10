@@ -1085,17 +1085,21 @@ def generate_pack(
           else:
               _add_pack_member(zf, local_path, flat_dest)
           if file_status.get(full_dest) in ("missing", "excluded"):
-              previous = file_status[full_dest]
-              file_status[full_dest] = "ok"
-              if previous == "excluded":
-                  source_name = fe.get("source_profile") or fe.get(
-                      "source_emulator", "core profile"
-                  )
+              source_name = fe.get("source_profile") or fe.get(
+                  "source_emulator", "core profile"
+              )
+              if reads_file_contents(verification_mode):
+                  # The frontend hashes what sits at the path, and the core's
+                  # copy is not the hash it declares: the file ships for the
+                  # core, the platform's own check still fails, as verify says.
                   file_reasons[full_dest] = (
                       "platform-declared hash unavailable; "
-                      f"packed the validated {source_name} requirement"
+                      f"packed the validated {source_name} requirement, "
+                      "which the platform check does not accept"
                   )
               else:
+                  # An existence frontend is satisfied by any file at the path.
+                  file_status[full_dest] = "ok"
                   file_reasons.pop(full_dest, None)
           seen_destinations.add(full_dest)
           _register_path(full_dest, seen_destinations, seen_parents)
