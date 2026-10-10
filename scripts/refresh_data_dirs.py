@@ -447,6 +447,15 @@ def _refresh_entry(
         )
         return True
 
+    if remote_tag is None:
+        # Read before the download. A release published in between then
+        # leaves an older tag on newer content, which the next run refreshes;
+        # read after, it left a newer tag on older content, trusted for good.
+        if source_type == "zip":
+            remote_tag = _get_remote_etag(source_url)
+        else:
+            remote_tag = get_remote_sha(entry["source_url"], version)
+
     try:
         if source_type == "zip":
             strip = entry.get("strip_components", 0)
@@ -468,11 +477,6 @@ def _refresh_entry(
         log.warning("[%s] download failed: %s", key, exc)
         return None
 
-    if remote_tag is None:
-        if source_type == "zip":
-            remote_tag = _get_remote_etag(source_url)
-        else:
-            remote_tag = get_remote_sha(entry["source_url"], version)
     _record_version(key, {"sha": remote_tag or "", "version": version}, versions_path)
 
     log.info("[%s] refreshed: %d files extracted to %s", key, file_count, local_cache)

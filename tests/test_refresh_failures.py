@@ -8,6 +8,7 @@ failed, the cache left at the old version.
 
 from __future__ import annotations
 
+import json
 import shutil
 import subprocess
 import sys
@@ -103,6 +104,34 @@ class AnEmptyExtractionKeepsTheCache(unittest.TestCase):
         with self.assertRaises(self.module.NothingExtracted):
             self.module._download_and_extract_zip(archive.as_uri(), str(self.cache))
         self.assertEqual((self.cache / "keep.dat").read_bytes(), b"cached")
+
+
+class TheVersionIsReadBeforeTheDownload(unittest.TestCase):
+    """The buildbot republishes nightly. Read after the download, the tag
+    named the new build while the cache held the old one, and every later
+    run called it up to date."""
+
+    def test_a_build_published_during_the_download(self):
+        import refresh_data_dirs as rdd
+
+        root = Path(tempfile.mkdtemp(dir=REPO_ROOT / "tmp"))
+        self.addCleanup(shutil.rmtree, root, True)
+        state = {"downloaded": False}
+
+        def etag(_url):
+            return "build-2" if state["downloaded"] else "build-1"
+
+        def download(*_args, **_kwargs):
+            state["downloaded"] = True
+            return 3
+
+        versions = root / "versions.json"
+        entry = {"source_type": "zip", "source_url": "https://example.invalid/Sys.zip",
+                 "local_cache": str(root / "cache")}
+        with mock.patch.object(rdd, "_get_remote_etag", etag), \
+                mock.patch.object(rdd, "_download_and_extract_zip", download):
+            self.assertTrue(rdd._refresh_entry("sys", entry, True, False, str(versions)))
+        self.assertEqual(json.loads(versions.read_text())["sys"]["sha"], "build-1")
 
 
 if __name__ == "__main__":
