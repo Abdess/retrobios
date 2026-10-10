@@ -90,6 +90,7 @@ files:
   # ============================================================
 
   - name: "48.rom"
+    sha1: "5ea7c2b824672e914525d1d5c419d71b84a426a2"
     size: 16384
     validation: [size]
     required: true
@@ -100,6 +101,7 @@ files:
     note: "48K BASIC. Also loaded four times over as the TBBlue fast-boot image (src/cpu.c:3653-3662)."
 
   - name: "48es.rom"
+    sha1: "9e535e2e24231ccb65e33d107f6d0ceb23e99477"
     size: 16384
     validation: [size]
     required: true
@@ -109,6 +111,7 @@ files:
     note: "Spanish 48K+ ROM, selected for MACHINE_ID_SPECTRUM_48_PLUS_SPA."
 
   - name: "inves.rom"
+    sha1: "d020440638aff4d39467128413ef795677be9c23"
     size: 16384
     validation: [size]
     required: true
@@ -118,6 +121,7 @@ files:
     note: "Investronica Inves Spectrum+. Loaded at memoria_spectrum[65536] (src/cpu.c:3551-3557)."
 
   - name: "128.rom"
+    sha1: "16375d42ea109b47edded7a16028de7fdb3013a1"
     size: 32768
     validation: [size]
     required: true
@@ -126,6 +130,7 @@ files:
     source_ref: "src/cpu.c:3312-3314, src/utils.c:4100"
 
   - name: "128s.rom"
+    sha1: "57c0b6681224378ce1d279fde13d644478423783"
     size: 32768
     validation: [size]
     required: true
@@ -134,6 +139,7 @@ files:
     source_ref: "src/cpu.c:3316-3318, src/utils.c:4100"
 
   - name: "p2.rom"
+    sha1: "8cafb292af58617907b9e6b9093d3588a75849b8"
     size: 32768
     validation: [size]
     required: true
@@ -143,6 +149,7 @@ files:
     note: "ZX Spectrum +2."
 
   - name: "p2f.rom"
+    sha1: "8a5be00921afd4e2c74059c217b31b9fb51c3d41"
     size: 32768
     validation: [size]
     required: true
@@ -151,6 +158,7 @@ files:
     source_ref: "src/cpu.c:3327-3329, src/utils.c:4100"
 
   - name: "p2s.rom"
+    sha1: "baca5d798b3e786078feded19486d9fc29dbd4b7"
     size: 32768
     validation: [size]
     required: true
@@ -159,6 +167,7 @@ files:
     source_ref: "src/cpu.c:3331-3333, src/utils.c:4100"
 
   - name: "p2a40.rom"
+    sha1: "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4"
     size: 65536
     validation: [size]
     required: true
@@ -168,6 +177,7 @@ files:
     note: "+2A/+3 ROM v4.0."
 
   - name: "p2a41.rom"
+    sha1: "500c0945760abeefcbd08bc22c0d07b14b336cf0"
     size: 65536
     validation: [size]
     required: true
@@ -177,6 +187,7 @@ files:
     note: "+2A/+3 ROM v4.1."
 
   - name: "p2as.rom"
+    sha1: "a4b311135ccbe010318dcb872dae2c8f078c7447"
     size: 65536
     validation: [size]
     required: true
@@ -185,6 +196,7 @@ files:
     source_ref: "src/cpu.c:3347-3350, src/utils.c:4102"
 
   - name: "pentagon.rom"
+    sha1: "a584272f21dc82c14b7d4f1ed440e23a976e71f0"
     size: 32768
     validation: [size]
     required: true
@@ -193,6 +205,7 @@ files:
     source_ref: "src/cpu.c:3381-3383, src/utils.c:4100 (MACHINE_IS_SPECTRUM_128_P2 covers Pentagon, src/cpu.h:545)"
 
   - name: "se.rom"
+    sha1: "14321f2092b8af21b52b35c1518d9a753d6618d4"
     size: 32768
     validation: [size]
     required: true
@@ -202,6 +215,7 @@ files:
     note: "Chloe 140SE/280SE, SE Basic IV."
 
   - name: "chrome.rom"
+    sha1: "fb305656769765224c58ca02445d4bf041891d18"
     size: 65536
     validation: [size]
     required: true
@@ -210,6 +224,7 @@ files:
     source_ref: "src/cpu.c:3406-3408, src/utils.c:4112"
 
   - name: "prism.rom"
+    sha1: "6e03d87f868c40d5662ef6906931c77ba1b8b2c2"
     size: 327680
     validation: [size]
     required: true
@@ -219,6 +234,7 @@ files:
     note: "20 pages of 16K. Page map documented at src/cpu.c:3622-3638."
 
   - name: "prism_failsafe.rom"
+    sha1: "d020440638aff4d39467128413ef795677be9c23"
     size: 16384
     validation: [size]
     required: true
@@ -228,6 +244,7 @@ files:
     note: "Loaded straight after prism.rom by prism_load_failsafe_rom(). The only ROM whose absence is fatal: the loader calls cpu_panic both when the file is missing and when the read is not 16384 bytes."
 
   - name: "zxuno_bootloader.rom"
+    sha1: "0afcb798128e6587e7ea0787714568f7b68be012"
     size: 8126
     required: true
     bundled: true
@@ -236,6 +253,7 @@ files:
     size_note: "Read caps at 8192 bytes and only errors when fewer than 1 byte is read, so no exact size check. get_rom_size returns 214 for ZX-Uno (src/utils.c:4104) but that value is unused on this path."
 
   - name: "zxevo_tsconf.rom"
+    sha1: "2551026b7d63a2627f79701e26688a7d715dc96a"
     size: 524288
     validation: [size]
     required: true
@@ -244,6 +262,7 @@ files:
     source_ref: "src/cpu.c:3410-3412, src/utils.c:4114"
 
   - name: "zxevo_baseconf.rom"
+    sha1: "1570048704f11dc239060ee4f63190d199c94987"
     size: 524288
     validation: [size]
     required: true
@@ -257,6 +276,7 @@ files:
   # ============================================================
 
   - name: "tbblue_loader.rom"
+    sha1: "8b2e927d0523bc27bffcc34c39527ab0d2362e0c"
     size: 8192
     validation: [size]
     required: true
@@ -266,6 +286,7 @@ files:
     note: "FPGA loader, mirrored to 16K at src/cpu.c:3665. Bypassed when --tbblue-fast-boot-mode selects 48.rom instead."
 
   - name: "tbblue.mmc"
+    sha1: "e838e1d63dc9c1e518a79195c9512042dffb765f"
     size: 67108864
     required: false
     bundled: true
@@ -279,6 +300,7 @@ files:
   # ============================================================
 
   - name: "tk90x.rom"
+    sha1: "9a943a008be13194fb006bddffa7d22d2277813f"
     size: 16384
     validation: [size]
     required: true
@@ -287,6 +309,7 @@ files:
     source_ref: "src/cpu.c:3294-3296, src/utils.c:4098"
 
   - name: "tk90xs.rom"
+    sha1: "a9421b9e3a17689b7392da1f72dc71dd46e09ab1"
     size: 16384
     validation: [size]
     required: true
@@ -295,6 +318,7 @@ files:
     source_ref: "src/cpu.c:3298-3300, src/utils.c:4098"
 
   - name: "tk95.rom"
+    sha1: "94edc401d43b0e9a9cdc1d35de4b6462dc414ab3"
     size: 16384
     validation: [size]
     required: true
@@ -303,6 +327,7 @@ files:
     source_ref: "src/cpu.c:3302-3304, src/utils.c:4098"
 
   - name: "tk95es.rom"
+    sha1: "54f3445374d1758a3133232672e8783cb4fc7a32"
     size: 16384
     validation: [size]
     required: true
@@ -315,6 +340,7 @@ files:
   # ============================================================
 
   - name: "tc2048.rom"
+    sha1: "febb2d495b6eda7cdcb4074935d6e9d9f328972d"
     size: 16384
     validation: [size]
     required: true
@@ -323,6 +349,7 @@ files:
     source_ref: "src/cpu.c:3418-3420, src/utils.c:4098 (TC2048 falls under MACHINE_IS_SPECTRUM_16_48, src/cpu.h:543)"
 
   - name: "ts2068.rom"
+    sha1: "34cd8113bf75b65a4da6eea355f9d46ad635f7e4"
     size: 24576
     validation: [size]
     required: true
@@ -332,6 +359,7 @@ files:
     note: "Read as two blocks: 16384 into the main ROM table, then 8192 into the EX ROM table. Serves TS2068 and TC2068."
 
   - name: "ts1500.rom"
+    sha1: "3eb437359221b4406d236085ec66fa02278e7495"
     size: 8192
     validation: [size]
     required: true
@@ -344,6 +372,7 @@ files:
   # ============================================================
 
   - name: "zx80.rom"
+    sha1: "b6769a3197c77009e0933e038c15b43cf4c98c7a"
     size: [4096, 8192]
     validation: [size]
     required: true
@@ -353,6 +382,7 @@ files:
     note: "Serves ZX80, TK80 and TK82. An 8192-byte file is accepted as-is so the ZX81 ROM can run on a ZX80 (src/cpu.c:3758)."
 
   - name: "zx81.rom"
+    sha1: "7b143ee964e9ada89d1f9e88f0bd48d919184cfc"
     size: 8192
     validation: [size]
     required: true
@@ -362,6 +392,7 @@ files:
     note: "Serves ZX81, Timex TS1000, TK82C, TK83 and the Czerweny CZ 1000/1500 models."
 
   - name: "tk85.rom"
+    sha1: "7b961a1733fc047eb682150a32e17bca10a018d2"
     size: 10240
     validation: [size]
     required: true
@@ -371,6 +402,7 @@ files:
     note: "The TK85 test precedes the generic ZX81 test in get_rom_size, so 10240 wins over 8192."
 
   - name: "zxpand_zx81.rom"
+    sha1: "3bdbf55720cf9623431a4d4017fa8f165aac4a66"
     size: 8192
     validation: [size]
     required: false
@@ -380,6 +412,7 @@ files:
     note: "ZXpand interface firmware. A short read disables ZXpand emulation."
 
   - name: "zxpand_zx80.rom"
+    sha1: "8968261beab240e8a06e8cfe9e070987d860064b"
     size: 8192
     validation: [size]
     required: false
@@ -388,6 +421,7 @@ files:
     source_ref: "src/storage/zxpand.c:72, src/storage/zxpand.c:240, src/storage/zxpand.c:246-254"
 
   - name: "ace.rom"
+    sha1: "597ba8a15a292688333c84dc9fd35172abe5e7e6"
     size: 8192
     validation: [size]
     required: true
@@ -400,6 +434,7 @@ files:
   # ============================================================
 
   - name: "ql_js.rom"
+    sha1: "6e1e3cae275d0cd58977258c0b13480c8e910138"
     size: 49152
     min_size: 16384
     validation: [size]
@@ -410,6 +445,7 @@ files:
     size_note: "Reads up to 131072 bytes and errors only below 16384, so the check is a minimum rather than an exact size."
 
   - name: "ql_jm.rom"
+    sha1: "6a8468dcdb27dc1b194febba8c957c4ef4313538"
     size: 49152
     required: false
     bundled: true
@@ -418,6 +454,7 @@ files:
     note: "JM release. Reachable through --romfile; the switch selects ql_js.rom."
 
   - name: "tkii220.rom"
+    sha1: "f364472a81352479290e388e9a5afb57a0de8249"
     size: 16384
     required: false
     bundled: true
@@ -426,6 +463,7 @@ files:
     note: "QJUMP Toolkit II 2.20, the ROM ql.c names as the example for --ql-rom-c000-file. ql_load_extra_roms() runs after the system ROM and reads 16K into memoria_ql at 0xC000 from the path the option gives; the read count is not checked."
 
   - name: "qsound_V1.94.rom"
+    sha1: "622a81dce98524148f067780c17eddbaf46e27f6"
     aliases: ["Qsound_V1.94.rom"]
     size: 8192
     required: false
@@ -435,6 +473,7 @@ files:
     note: "QL Qsound firmware, read into memoria_ql at 0xC0000 once --ql-qsound-enabled is set; the read count is not checked and --ql-qsound-rom points the loader at another file. QSOUND_ROM_FILE is spelled qsound_V1.94.rom while the shipped file is Qsound_V1.94.rom, so the default only resolves on a case-insensitive filesystem."
 
   - name: "Z88OZ47.rom"
+    sha1: "35e528e81d8f4e5860adf4160a3da0926525c8fa"
     size: 524288
     required: true
     bundled: true
@@ -443,6 +482,7 @@ files:
     size_note: "Reads up to 512K and errors only when nothing is read; z88_internal_rom_size is derived from the byte count, so any size is accepted."
 
   - name: "mk14.rom"
+    sha1: "802dc637ce5391a2a6627f76f919b12a869b56ef"
     size: 512
     validation: [size]
     required: true
@@ -455,6 +495,7 @@ files:
   # ============================================================
 
   - name: "cpc464.rom"
+    sha1: "56d39c463da60968d93e58b4ba0e675829412a20"
     size: 32768
     validation: [size]
     required: true
@@ -464,6 +505,7 @@ files:
     note: "Serves CPC 464 and CPC 4128."
 
   - name: "cpc664.rom"
+    sha1: "4a38f7f5bf7fd0a95cf882433c69e67251a46868"
     size: 49152
     validation: [size]
     required: true
@@ -472,6 +514,7 @@ files:
     source_ref: "src/cpu.c:3476-3478, src/utils.c:4142"
 
   - name: "cpc6128.rom"
+    sha1: "29dd0487dc5a96cd00966d074de8700ddd4ee18b"
     size: 49152
     validation: [size]
     required: true
@@ -480,6 +523,7 @@ files:
     source_ref: "src/cpu.c:3480-3482, src/utils.c:4142"
 
   - name: "pcw_boot.rom"
+    sha1: "245a173cfc7976a4cae8d255f3d1422aeaf5f09a"
     size: 275
     validation: [size]
     required: true
@@ -489,6 +533,7 @@ files:
     note: "Boot block the PCW pulls into RAM rather than a mapped ROM (src/cpu.c:3849). Serves PCW 8256 and 8512."
 
   - name: "pcw_8x_boot1.dsk"
+    sha1: "3be724b3bfa01d03931463b8501ffb5c3f3621b7"
     size: 194864
     required: false
     bundled: true
@@ -497,6 +542,7 @@ files:
     note: "LocoScript boot disc, inserted by pcw_boot_locoscript()."
 
   - name: "pcw_8x_boot2.dsk"
+    sha1: "4c13bba076897076322b375e34f87306640cf0d6"
     size: 194864
     required: false
     bundled: true
@@ -509,6 +555,7 @@ files:
   # ============================================================
 
   - name: "samcoupe.rom"
+    sha1: "c86601633fb61a8c517f7657aad9af4e6870f2ee"
     size: 32768
     validation: [size]
     required: true
@@ -517,6 +564,7 @@ files:
     source_ref: "src/cpu.c:3484-3487, src/utils.c:4144"
 
   - name: "atomlite.rom"
+    sha1: "b2303b7200f5a17b54b841af9f0604db7bbdd1ab"
     size: 32768
     validation: [size]
     required: false
@@ -526,6 +574,7 @@ files:
     note: "Replaces samcoupe.rom when Atom Lite emulation is on."
 
   - name: "samram.rom"
+    sha1: "acac00b8b342d19ce9bb35a8744a9c0060d5eedd"
     size: 32768
     validation: [size]
     required: false
@@ -535,6 +584,7 @@ files:
     note: "SamRam interface firmware, opened from a path the user selects."
 
   - name: "samram_eng.rom"
+    sha1: "5344ee16523862fa66e9397d1f8cfa2b2cbaf341"
     size: 32768
     validation: [size]
     required: false
@@ -548,6 +598,7 @@ files:
   # ============================================================
 
   - name: "coleco.rom"
+    sha1: "99ba9be24ada3e86e5c17aeecb7a2d68c5edfe59"
     size: 8192
     validation: [size]
     required: true
@@ -556,6 +607,7 @@ files:
     source_ref: "src/cpu.c:3385-3387, src/utils.c:4120"
 
   - name: "sg1000.rom"
+    sha1: "fdea3168fda81e5f25f7dee3a7231192a492836e"
     size: 155
     required: true
     bundled: true
@@ -564,6 +616,7 @@ files:
     size_note: "Nothing is read from this file. The SG-1000 branch is empty and the source comment states the file only has to exist for the open to succeed."
 
   - name: "sms.rom"
+    sha1: "c315672807d8ddb8d91443729405c766dd95cae7"
     size: 8192
     validation: [size]
     required: true
@@ -572,6 +625,7 @@ files:
     source_ref: "src/cpu.c:3393-3395, src/utils.c:4124"
 
   - name: "msx.rom"
+    sha1: "e998f0c441f4f1800ef44e42cd1659150206cf79"
     size: 32768
     validation: [size]
     required: true
@@ -580,6 +634,7 @@ files:
     source_ref: "src/cpu.c:3397-3399, src/utils.c:4126"
 
   - name: "svi.rom"
+    sha1: "7d8daf52f78371ca2c9443e04827c8e1f98c8f2c"
     size: 32768
     validation: [size]
     required: true
@@ -593,6 +648,7 @@ files:
   # ============================================================
 
   - name: "esxmmc085.rom"
+    sha1: "aa4c31dc9b08d80d0107b580d5a9216d23214776"
     size: 8192
     validation: [size]
     required: false
@@ -602,6 +658,7 @@ files:
     note: "divMMC esxdos firmware, the default when --divmmc-rom is unset. Needed by --enable-esxdos-handler, which the ES-DE zxnext command line sets."
 
   - name: "esxide085.rom"
+    sha1: "178bae9e9209c43282e12c09884562e4ddf07e68"
     size: 8192
     validation: [size]
     required: false
@@ -611,6 +668,7 @@ files:
     note: "divIDE esxdos firmware, the default when --divide-rom is unset."
 
   - name: "unodos3.rom"
+    sha1: "cdb90bd05b073ec7a5f875444e29ab0f6bcee9ac"
     size: 8192
     validation: [size]
     required: false
@@ -620,6 +678,7 @@ files:
     note: "divMMC firmware substituted for esxmmc085.rom on Chloe machines."
 
   - name: "trdos.rom"
+    sha1: "0a74bd34538a03d0e1d214b425d95c14ad10c8c4"
     size: 16384
     validation: [size]
     required: false
@@ -629,6 +688,7 @@ files:
     note: "Beta Disk / TR-DOS firmware."
 
   - name: "if1-v1.rom"
+    sha1: "4ffd9ed9c00cdc6f92ce69fdd8b618ef1203f48e"
     size: [8192, 16384]
     validation: [size]
     required: false
@@ -638,6 +698,7 @@ files:
     note: "Interface 1 firmware version 1, selected when if1_rom_version is 1. The load accepts 8192 or 16384 bytes and disables Interface 1 emulation otherwise."
 
   - name: "if1-v2.rom"
+    sha1: "5cfb6bca4177c45fefd571734576b55e3a127c08"
     size: [8192, 16384]
     validation: [size]
     required: false
@@ -647,6 +708,7 @@ files:
     note: "Interface 1 firmware version 2, the default branch of if1_return_rom_name()."
 
   - name: "hilow_datadrive.rom"
+    sha1: "fd3f165860c2564847805cfa7a7f769a627a687c"
     size: 8192
     validation: [size]
     required: false
@@ -656,6 +718,7 @@ files:
     note: "HiLow Data Drive firmware."
 
   - name: "zxmmcplus.flash"
+    sha1: "9f0697c261c37e92bf2e488e3db223443c341b9d"
     size: 1048576
     validation: [size]
     required: false
@@ -666,6 +729,7 @@ files:
     size_note: "The image holds ROM and RAM together, so the check is ZXMMCPLUS_FLASHROM_SIZE + ZXMMCPLUS_RAM_SIZE, not the 512K ROM constant alone."
 
   - name: "zxuno.flash"
+    sha1: "bb6740f15b5ed8d1d60f7f61f0737f769215ca57"
     size: 4194304
     validation: [size]
     required: false
@@ -679,6 +743,7 @@ files:
   # ============================================================
 
   - name: "mf1.rom"
+    sha1: "ba28754a3cc31a4ca579829ed4310c313409cf5d"
     size: 8192
     validation: [size]
     required: false
@@ -688,6 +753,7 @@ files:
     note: "Multiface One. The file selector rejects anything that is not exactly 8 KB."
 
   - name: "mf128.rom"
+    sha1: "f03f4ecbcf4a654f4775d16bda0d4cc47f884379"
     size: 8192
     validation: [size]
     required: false
@@ -697,6 +763,7 @@ files:
     note: "Multiface 128."
 
   - name: "mf3.rom"
+    sha1: "5d74d2e2e5a537639da92ff120f8a6d86f474495"
     size: 8192
     validation: [size]
     required: false
@@ -706,6 +773,7 @@ files:
     note: "Multiface 3."
 
   - name: "specmate.rom"
+    sha1: "c8f128610eeb5142d4d80f28e5dd07b7a5ab6b84"
     size: 8192
     validation: [size]
     required: false
@@ -714,6 +782,7 @@ files:
     source_ref: "src/copy_interfaces/specmate.h:27, src/copy_interfaces/specmate.h:29, src/copy_interfaces/specmate.c:189-205"
 
   - name: "phoenix3.rom"
+    sha1: "d4f01500e0383a1cf34683fb30d96230c14c7da3"
     size: 16384
     validation: [size]
     required: false
@@ -722,6 +791,7 @@ files:
     source_ref: "src/copy_interfaces/phoenix.h:27, src/copy_interfaces/phoenix.h:29, src/copy_interfaces/phoenix.c:142"
 
   - name: "defcon.rom"
+    sha1: "4c7d702e295a3383326606b805eab74affc501ba"
     size: 16384
     validation: [size]
     required: false
@@ -730,6 +800,7 @@ files:
     source_ref: "src/copy_interfaces/defcon.h:27, src/copy_interfaces/defcon.h:29, src/copy_interfaces/defcon.c:139"
 
   - name: "dinamid3.rom"
+    sha1: "9ee4ca7abee12ba6fb34aede2185f6aa3cb2800b"
     size: 2048
     validation: [size]
     required: false
@@ -738,6 +809,7 @@ files:
     source_ref: "src/copy_interfaces/dinamid3.h:27, src/copy_interfaces/dinamid3.h:29, src/copy_interfaces/dinamid3.c:142"
 
   - name: "interface007.rom"
+    sha1: "81af60ecd412854069227487417eb80b6c89934d"
     size: 2048
     validation: [size]
     required: false
@@ -746,6 +818,7 @@ files:
     source_ref: "src/copy_interfaces/interface007.h:27, src/copy_interfaces/interface007.h:29, src/copy_interfaces/interface007.c:143"
 
   - name: "ramjet2.rom"
+    sha1: "a3852ee24ab57e0e1d800c9d99cd244f7363449b"
     size: 16384
     validation: [size]
     required: false
@@ -754,6 +827,7 @@ files:
     source_ref: "src/copy_interfaces/ramjet.h:27, src/copy_interfaces/ramjet.h:28-30, src/copy_interfaces/ramjet.c:165"
 
   - name: "ramjet3.rom"
+    sha1: "362589adb01ebbf006a162e76062921c03ceb26e"
     size: 16384
     validation: [size]
     required: false
@@ -762,6 +836,7 @@ files:
     source_ref: "src/copy_interfaces/ramjet.h:28, src/copy_interfaces/ramjet.c:165"
 
   - name: "transtape2.rom"
+    sha1: "45d3e32d58b1c405b75ee72d80153dd0305bbd9d"
     size: 16384
     validation: [size]
     required: false
@@ -771,6 +846,7 @@ files:
     note: "Selected when transtape_version is 2."
 
   - name: "transtape3-vC.rom"
+    sha1: "b7ec72fa0a55243a53c55d649e0555acea25d0c1"
     size: 16384
     validation: [size]
     required: false
@@ -780,6 +856,7 @@ files:
     note: "Default for Transtape version 3."
 
   - name: "transtape3-vA.rom"
+    sha1: "c627527551e441a000184565a72df8ff37fce891"
     size: 16384
     validation: [size]
     required: false
@@ -789,6 +866,7 @@ files:
     note: "Revision A, reached through the user-set transtape_rom_filename and loaded by the same size-checked path as the defaults."
 
   - name: "transtape3-vB.rom"
+    sha1: "82bf848bac698d1ffd9ca809c4293f004152645a"
     size: 16384
     validation: [size]
     required: false
@@ -798,6 +876,7 @@ files:
     note: "Revision B, reached through the user-set transtape_rom_filename."
 
   - name: "hilow_barbanegra.rom"
+    sha1: "3b3862943758ad35f340537b742ca25a8286267a"
     size: 8192
     validation: [size]
     required: false
@@ -806,6 +885,7 @@ files:
     source_ref: "src/copy_interfaces/hilow_barbanegra.h:27, src/copy_interfaces/hilow_barbanegra.h:30, src/copy_interfaces/hilow_barbanegra.c:282"
 
   - name: "mhpokeador.rom"
+    sha1: "557f91755ede646a89e1146904a6d713f38d6b05"
     size: 1024
     validation: [size]
     required: false
@@ -814,6 +894,7 @@ files:
     source_ref: "src/copy_interfaces/mhpokeador.h:27, src/copy_interfaces/mhpokeador.h:39, src/copy_interfaces/mhpokeador.c:264"
 
   - name: "mhpokeador-transfer.rom"
+    sha1: "4099c5d8f65a25bc0053e5730b7c40a29bcfb614"
     size: 1024
     validation: [size]
     required: false
@@ -822,6 +903,7 @@ files:
     source_ref: "src/copy_interfaces/mhpokeador.h:28, src/copy_interfaces/mhpokeador.c:264"
 
   - name: "mhpokeador-salvapan.rom"
+    sha1: "4e438541ec2da0c3b9cf2cbf0cc3f5bc6cfb295e"
     size: 1024
     validation: [size]
     required: false
@@ -830,6 +912,7 @@ files:
     source_ref: "src/copy_interfaces/mhpokeador.h:29, src/copy_interfaces/mhpokeador.c:264"
 
   - name: "mantransfev3.bin"
+    sha1: "e134a38468ed84d53df164d97fa24990aa557da3"
     size: 200
     required: false
     bundled: true
@@ -842,6 +925,7 @@ files:
   # ============================================================
 
   - name: "gs105a.rom"
+    sha1: "1ba78923dc7d803e7995c165992e14e4608c2153"
     size: 32768
     validation: [size]
     required: false
@@ -851,6 +935,7 @@ files:
     note: "General Sound firmware v1.05a. GS_ROM_SIZE is in KB and the read is GS_ROM_SIZE*1024."
 
   - name: "gs104.rom"
+    sha1: "c865121306eb3a7d811d82fbcc653b4dc1d6fa3d"
     size: 32768
     required: false
     bundled: true
@@ -864,6 +949,7 @@ files:
   # ============================================================
 
   - name: "80-lec.rom"
+    sha1: "bb7a77d66e95d2e28ebb610e543c065e0d428619"
     size: 16384
     required: false
     bundled: true
@@ -871,6 +957,7 @@ files:
     source_ref: "src/start.c:4876-4880, src/cpu.c:3520-3523"
 
   - name: "tk90x_v1br.rom"
+    sha1: "eab2eab803d8ec717b55a915de3bcb931b410a2f"
     size: 16384
     required: false
     bundled: true
@@ -878,6 +965,7 @@ files:
     source_ref: "src/ALTERNATEROMS:97, src/start.c:4876-4880, src/cpu.c:3520-3523"
 
   - name: "tk90x_v2es.rom"
+    sha1: "a9af9c4d38882e2bd85086fc0c2d8d9afe90afad"
     size: 16384
     required: false
     bundled: true
@@ -886,6 +974,7 @@ files:
     note: "Corrected TK90X ROM."
 
   - name: "tk95es_modif.rom"
+    sha1: "1dd39ee98e236389467e91a86cf5d8ed52583ba5"
     size: 16384
     required: false
     bundled: true
@@ -894,6 +983,7 @@ files:
     note: "TK95 Spanish ROM with message and symbol fixes by Rodolfo Edison Guerra."
 
   - name: "Z88OZ431.rom"
+    sha1: "82e12674ba91eb85d4904c3948e4167aea6fd1b7"
     size: 524288
     required: false
     bundled: true
@@ -901,6 +991,7 @@ files:
     source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88OZ441.rom"
+    sha1: "778d188c201bd9eb6bf795e0cc8344a87600cd45"
     size: 524288
     required: false
     bundled: true
@@ -908,6 +999,7 @@ files:
     source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88OZ45.rom"
+    sha1: "aecf46de3563c6c6443e9780d633d7b7507e79ef"
     size: 524288
     required: false
     bundled: true
@@ -915,6 +1007,7 @@ files:
     source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88OZ46.rom"
+    sha1: "9e0e29baa3720abcbb8006cda8f19ea365faf20e"
     size: 524288
     required: false
     bundled: true
@@ -922,6 +1015,7 @@ files:
     source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88UK220.rom"
+    sha1: "5d89e8d98d2cc0acb8cd42dbfca601b7bd09c51e"
     size: 131072
     required: false
     bundled: true
@@ -929,6 +1023,7 @@ files:
     source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88UK300.rom"
+    sha1: "ceb688025b79454cf229cae4dbd0449df2747f79"
     size: 131072
     required: false
     bundled: true
@@ -936,6 +1031,7 @@ files:
     source_ref: "src/ALTERNATEROMS:83-92, src/start.c:4876-4880"
 
   - name: "Z88UK400.rom"
+    sha1: "23c63ceced72d0a9031cba08d2ebc72ca336921d"
     size: 131072
     required: false
     bundled: true
@@ -944,6 +1040,7 @@ files:
 
   - name: "aszmice07.rom"
     path: "alternate_roms/aszmice07.rom"
+    sha1: "7a37a248572689c8ac226c082b7026972d399b1c"
     size: 8192
     required: false
     bundled: true
@@ -953,6 +1050,7 @@ files:
 
   - name: "sp-rom.rom"
     path: "alternate_roms/sp-rom.rom"
+    sha1: "ef4b575b5b5cc18a3e6c71c241c65aa18957e2d5"
     size: 4096
     required: false
     bundled: true
@@ -962,6 +1060,7 @@ files:
 
   - name: "ace.rom"
     path: "alternate_roms/ace.rom"
+    sha1: "6e5c9416a1cc89fe4012627f496f71ff2bb07b81"
     size: 8192
     required: false
     bundled: true
@@ -972,6 +1071,7 @@ files:
 
   - name: "opense.rom"
     path: "alternate_roms/opense.rom"
+    sha1: "24a339c5c163a687a8fed50f93714c6450e2562d"
     size: 16384
     required: false
     bundled: true
@@ -981,6 +1081,7 @@ files:
 
   - name: "sebasic4_rom1.rom"
     path: "alternate_roms/sebasic4_rom1.rom"
+    sha1: "d7092d6d55ee8280057399362b5798d1f65d8eeb"
     size: 16384
     required: false
     bundled: true
@@ -990,6 +1091,7 @@ files:
 
   - name: "derby_p_32K.rom"
     path: "alternate_roms/derby_p_32K.rom"
+    sha1: "f9c337782f9a4781548528841babd5bd13f2b745"
     size: 32768
     required: false
     bundled: true
@@ -999,6 +1101,7 @@ files:
 
   - name: "derby_pp_64K.rom"
     path: "alternate_roms/derby_pp_64K.rom"
+    sha1: "7eaaf1ff19f74d5449033bacce9834d7b13022a9"
     size: 65536
     required: false
     bundled: true
@@ -1008,6 +1111,7 @@ files:
 
   - name: "plus2c.rom"
     path: "alternate_roms/plus2c.rom"
+    sha1: "98effb0e2dc4ecf6e9f70be9828a688341396c0c"
     size: 32768
     required: false
     bundled: true
@@ -1017,6 +1121,7 @@ files:
 
   - name: "plus2b.rom"
     path: "alternate_roms/plus2b.rom"
+    sha1: "420d8f1cd7bd75a79803eaa49e191d90cfd24f38"
     size: 65536
     required: false
     bundled: true
@@ -1026,6 +1131,7 @@ files:
 
   - name: "plus3e_mmcen3eE.rom"
     path: "alternate_roms/plus3e_mmcen3eE.rom"
+    sha1: "a579f9c3571669294dad37b04dcb889a9c147d94"
     size: 65536
     required: false
     bundled: true
@@ -1035,6 +1141,7 @@ files:
 
   - name: "plus3e_mmces3eE.rom"
     path: "alternate_roms/plus3e_mmces3eE.rom"
+    sha1: "44e98a3dfc966f7c8725c252487a44a2c0b450d6"
     size: 65536
     required: false
     bundled: true
@@ -1044,6 +1151,7 @@ files:
 
   - name: "plus3e_sm8en3eE.rom"
     path: "alternate_roms/plus3e_sm8en3eE.rom"
+    sha1: "89b6227798a88a6ad0e3b9e58db979694912ee04"
     size: 65536
     required: false
     bundled: true
@@ -1053,6 +1161,7 @@ files:
 
   - name: "plus3e_sm8es3eE.rom"
     path: "alternate_roms/plus3e_sm8es3eE.rom"
+    sha1: "a5b62b647ccaec4af9989b8fd7857d5f6426ae5d"
     size: 65536
     required: false
     bundled: true
