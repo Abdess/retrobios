@@ -5,7 +5,7 @@
   "platform": "rocknix",
   "display_name": "ROCKNIX",
   "version": "1.0",
-  "generated": "2026-10-09T20:41:14Z",
+  "generated": "2026-10-10T05:24:26Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -18,9 +18,9 @@
   ],
   "standalone_copies": [],
   "total_files": 5802,
-  "total_size": 6570592972,
+  "total_size": 6570150809,
   "pack_files": 5804,
-  "pack_size": 6570592972,
+  "pack_size": 6570150809,
   "total_omitted": 0,
   "omitted_files": [],
   "files": [
@@ -777,10 +777,10 @@
     },
     {
       "dest": "sysdata/keys.txt",
-      "sha1": "9edc52be45201ec99f6e4ceb5dc6abfc633c4eae",
-      "sha256": "c5b9ee2a14cf6a0effb3b2f0f4b93be75823da80ebf5f0ca6a0f2be8b5aa5bfd",
-      "size": 449507,
-      "repo_path": "bios/Nintendo/Wii U/keys.txt",
+      "sha1": "5fab786695311433602028cd89898689c5df0898",
+      "sha256": "dee8cbca96b74e81d19b0292f8c6255f0e2b23d8551f82cacd086c2eead35ea4",
+      "size": 7344,
+      "repo_path": "bios/Other/azahar/sysdata/keys.txt",
       "cores": [
         "azahar"
       ]

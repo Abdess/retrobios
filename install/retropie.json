@@ -5,7 +5,7 @@
   "platform": "retropie",
   "display_name": "RetroPie",
   "version": "1.0",
-  "generated": "2026-10-09T20:41:14Z",
+  "generated": "2026-10-10T05:24:26Z",
   "base_destination": "BIOS",
   "detect": [
     {
@@ -16,9 +16,9 @@
   ],
   "standalone_copies": [],
   "total_files": 9890,
-  "total_size": 8732256943,
+  "total_size": 8731814780,
   "pack_files": 12533,
-  "pack_size": 8772789470,
+  "pack_size": 8772347307,
   "total_omitted": 8,
   "omitted_files": [
     {
@@ -6391,10 +6391,10 @@
     },
     {
       "dest": "sysdata/keys.txt",
-      "sha1": "9edc52be45201ec99f6e4ceb5dc6abfc633c4eae",
-      "sha256": "c5b9ee2a14cf6a0effb3b2f0f4b93be75823da80ebf5f0ca6a0f2be8b5aa5bfd",
-      "size": 449507,
-      "repo_path": "bios/Nintendo/Wii U/keys.txt",
+      "sha1": "5fab786695311433602028cd89898689c5df0898",
+      "sha256": "dee8cbca96b74e81d19b0292f8c6255f0e2b23d8551f82cacd086c2eead35ea4",
+      "size": 7344,
+      "repo_path": "bios/Other/azahar/sysdata/keys.txt",
       "cores": [
         "azahar"
       ]
@@ -99879,10 +99879,10 @@
     },
     {
       "dest": "ace.rom",
-      "sha1": "6e5c9416a1cc89fe4012627f496f71ff2bb07b81",
-      "sha256": "fe2644dbdf1728ba73e467fff2c30f4d4dbccf71271cd92c78fec6fcc02c4f27",
+      "sha1": "597ba8a15a292688333c84dc9fd35172abe5e7e6",
+      "sha256": "6c898799cd9782f24e98dfb4302d01984daabb9cffe353a2d491212bea0b6d2d",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/ace.rom",
+      "repo_path": "bios/Jupiter/ACE/jupiterace.rom",
       "cores": [
         "zesarux"
       ]
@@ -100162,10 +100162,10 @@
     },
     {
       "dest": "mf1.rom",
-      "sha1": "50fba2d628f3a2e9219f72980e4efd62fc9ec1f8",
-      "sha256": "3dc3ed5a0264dfa547420fc5a79b7b2912b089d12d2936d7fca2c5fb181e25a5",
+      "sha1": "ba28754a3cc31a4ca579829ed4310c313409cf5d",
+      "sha256": "865bd40de41daaf6d18f1869e176fb257ac4bf6c4c76a292d323528affbb8dac",
       "size": 8192,
-      "repo_path": "bios/Sinclair/ZX Spectrum/fuse/mf1.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/mf1.rom",
       "cores": [
         "zesarux"
       ],
@@ -100175,10 +100175,10 @@
     },
     {
       "dest": "mf128.rom",
-      "sha1": "8df204ab490b87c389971ce0c7fb5f9cbd281f14",
-      "sha256": "06b30184ff8fbb21c125234f753276ccb6d48877f8cdd02324bb68b42f50bd24",
+      "sha1": "f03f4ecbcf4a654f4775d16bda0d4cc47f884379",
+      "sha256": "28fd3d73de0ecbdec41a06d1f9d6b0ef2f31afccfe36fa9d10d9f3af1f9e88d8",
       "size": 8192,
-      "repo_path": "bios/Sinclair/ZX Spectrum/fuse/mf128.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/multiface128.rom",
       "cores": [
         "zesarux"
       ],
@@ -100188,10 +100188,10 @@
     },
     {
       "dest": "mf3.rom",
-      "sha1": "983699a07665186f498f5827f9b35c442c2178ba",
-      "sha256": "8b2b2204b07cf5ac9add21ab6809eb2320141f995c38942e63f04c0014cc4250",
+      "sha1": "5d74d2e2e5a537639da92ff120f8a6d86f474495",
+      "sha256": "34f65a3b249eaacc68ecc63a4f663ee144c8b93c38e4528689df32378872a3eb",
       "size": 8192,
-      "repo_path": "bios/Sinclair/ZX Spectrum/fuse/mf3.rom",
+      "repo_path": "bios/Sinclair/ZX Spectrum/multiface3.rom",
       "cores": [
         "zesarux"
       ],
@@ -100580,7 +100580,7 @@
       "sha1": "6e5c9416a1cc89fe4012627f496f71ff2bb07b81",
       "sha256": "fe2644dbdf1728ba73e467fff2c30f4d4dbccf71271cd92c78fec6fcc02c4f27",
       "size": 8192,
-      "repo_path": "bios/Other/zesarux/ace.rom",
+      "repo_path": "bios/Other/zesarux/alternate_roms/ace.rom",
       "cores": [
         "zesarux"
       ]
