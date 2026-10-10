@@ -3372,6 +3372,33 @@ class TestRealignProse(unittest.TestCase):
         )
         self.assertEqual(self.path.read_text(), before)
 
+    def test_a_citation_in_an_unmoved_upstream_needs_no_reading(self):
+        """nethersx2 cites AetherSX2 files that only its upstream carries,
+        at an upstream pin that never moved. The port's pin did move under
+        the text, and the reading through the port called each file absent
+        while the other said nothing: thirteen disagreements on every run."""
+        sample = (
+            'emulator: Test\n'
+            'source: "https://github.com/o/port"\n'
+            'upstream: "https://github.com/o/up"\n'
+            'source_commit: "oldpin"\n'
+            'upstream_commit: "uppin"\n'
+            'notes: |\n'
+            '  The BIOS check lives upstream (up.c:5).\n'
+        )
+        self._git("init", "-q")
+        self._git("config", "user.email", "t@t")
+        self._git("config", "user.name", "t")
+        self._commit(sample, "profile")
+        self._commit(sample.replace('"oldpin"', '"pin"'), "advance the port")
+        self.files[("uppin", "up.c")] = ["a", "b", "c", "d", "check bios"]
+        before = self.path.read_text()
+        messages = profile_sync.realign_prose(self.path, self.tmp.name, dry_run=True)
+        self.assertFalse(
+            any("readings disagree" in m for m in messages), messages
+        )
+        self.assertEqual(self.path.read_text(), before)
+
     def test_dry_run_writes_nothing(self):
         self._repo_with_advanced_pin()
         self.files[("oldpin", "a.c")] = ["x"] * 9 + ["subject"]

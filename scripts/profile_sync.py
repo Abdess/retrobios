@@ -2654,9 +2654,15 @@ def _resolve_at(
 
 
 def _realign_part(
-    part: RefPart, pairs, cache_dir: str, offline: bool
+    part: RefPart, pairs, cache_dir: str, offline: bool, pinned=()
 ) -> tuple[str, object] | None:
-    """One range, anchored from its writing revision to the current pin."""
+    """One range, anchored from its writing revision to the current pin.
+
+    `pinned` lists every declared (repository, current pin). A path no moved
+    repository carries but an unmoved one does lives where nothing moved:
+    it needs no move, and calling it absent made two readings of the same
+    history disagree on every run (nethersx2's AetherSX2 citations).
+    """
     if is_external_citation(part.path):
         return None
     unclear = None
@@ -2683,6 +2689,13 @@ def _realign_part(
         return "skip", f"{part.path}:{part.start} {anchored.status.lower()}"
     if unclear:
         return "skip", f"{part.path}: {unclear}"
+    moved = {repo for repo, _written, _current in pairs}
+    if any(
+        upstream.fetch_file(repo, pin, part.path, cache_dir, offline) is not None
+        for repo, pin in pinned
+        if repo not in moved
+    ):
+        return None
     return "skip", f"{part.path} absent at the writing revision"
 
 
@@ -2722,6 +2735,7 @@ def _realign_citation(
     ambiguous: list[str],
     cache_dir: str,
     offline: bool,
+    pinned=(),
 ) -> tuple[dict[int, tuple[int, int, str | None]], list[str]]:
     """The moves one prose run needs, and what blocks them.
 
@@ -2737,7 +2751,7 @@ def _realign_citation(
         outcomes = {
             repr(result): result
             for result in (
-                _realign_part(part, pairs, cache_dir, offline) if pairs else None
+                _realign_part(part, pairs, cache_dir, offline, pinned) if pairs else None
                 for pairs in readings
             )
         }
@@ -2784,6 +2798,12 @@ def realign_prose(
     repos = [(field, repo) for field, repo in repos if repo is not None]
     if not repos:
         return []
+    pinned = [
+        (repo, document[f"{field}_commit"])
+        for field, repo in repos
+        if isinstance(document.get(f"{field}_commit"), str)
+        and document[f"{field}_commit"]
+    ]
     history = _git_history(path)
     if not history:
         return []
@@ -2819,7 +2839,9 @@ def realign_prose(
         readings, ambiguous = _writing_pairs(document, repos, revisions, intro_sha)
         if not any(readings):
             continue
-        moves, blocked = _realign_citation(citation, readings, ambiguous, cache_dir, offline)
+        moves, blocked = _realign_citation(
+            citation, readings, ambiguous, cache_dir, offline, pinned
+        )
         if blocked:
             # Half a run must not move: the untouched ranges would read as
             # already realigned when they were never even located.
