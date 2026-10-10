@@ -8,6 +8,7 @@ failed, the cache left at the old version.
 
 from __future__ import annotations
 
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -61,6 +62,47 @@ class RefreshFailuresAreFailures(unittest.TestCase):
         source = (REPO_ROOT / "scripts" / "check_buildbot_system.py").read_text(encoding="utf-8")
         self.assertIn("failed = update_changed(report)", source)
         self.assertIn("sys.exit(1)", source[source.index("failed = update_changed(report)"):])
+
+
+class AnEmptyExtractionKeepsTheCache(unittest.TestCase):
+    """An archive without the cited subtree replaced the cache with an empty
+    directory, recorded the version and reported success."""
+
+    def setUp(self):
+        import refresh_data_dirs
+
+        self.module = refresh_data_dirs
+        scratch = Path(__file__).resolve().parent.parent / "tmp"
+        scratch.mkdir(exist_ok=True)
+        self.root = Path(tempfile.mkdtemp(dir=scratch))
+        self.addCleanup(shutil.rmtree, self.root, True)
+        self.cache = self.root / "cache"
+        self.cache.mkdir()
+        (self.cache / "keep.dat").write_bytes(b"cached")
+
+    def test_a_tarball_without_the_subtree(self):
+        import tarfile
+
+        archive = self.root / "archive.tar.gz"
+        payload = self.root / "a.txt"
+        payload.write_bytes(b"x")
+        with tarfile.open(archive, "w:gz") as tf:
+            tf.add(payload, arcname="repo-main/OtherDir/a.txt")
+        with self.assertRaises(self.module.NothingExtracted):
+            self.module._download_and_extract(
+                archive.as_uri(), "repo-main/Data/Sys", str(self.cache), []
+            )
+        self.assertEqual((self.cache / "keep.dat").read_bytes(), b"cached")
+
+    def test_a_zip_with_no_file(self):
+        import zipfile
+
+        archive = self.root / "archive.zip"
+        with zipfile.ZipFile(archive, "w") as zf:
+            zf.writestr("only/", b"")
+        with self.assertRaises(self.module.NothingExtracted):
+            self.module._download_and_extract_zip(archive.as_uri(), str(self.cache))
+        self.assertEqual((self.cache / "keep.dat").read_bytes(), b"cached")
 
 
 if __name__ == "__main__":

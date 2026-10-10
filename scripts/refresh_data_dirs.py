@@ -210,6 +210,15 @@ def get_remote_sha(source_url: str, version: str) -> str | None:
         return None
 
 
+class NothingExtracted(Exception):
+    """An archive that yields no file for the cache.
+
+    Promoting it replaced the cache with an empty directory, recorded the new
+    version and reported success, so the next run read "up to date" and the
+    packs left without the directory.
+    """
+
+
 def _is_safe_tar_member(member: tarfile.TarInfo, dest: Path) -> bool:
     """Reject path traversal, absolute paths, and symlinks in tar members."""
     if member.issym() or member.islnk():
@@ -293,6 +302,8 @@ def _download_and_extract(
                             shutil.copyfileobj(src, dst)
                     file_count += 1
 
+        if not file_count:
+            raise NothingExtracted(f"no file under {source_path} in the archive")
         _promote(extract_dir, cache_dir, Path(tmpdir))
 
     return file_count
@@ -354,6 +365,8 @@ def _download_and_extract_zip(
                     shutil.copyfileobj(src, dst)
                 file_count += 1
 
+        if not file_count:
+            raise NothingExtracted("the archive holds no file to extract")
         # The old tree is stepped aside rather than deleted: removing it
         # first and then failing to move the new one in left the cache with
         # nothing at all, and the next run reads that as "never fetched".
@@ -450,6 +463,7 @@ def _refresh_entry(
         OSError,
         tarfile.TarError,
         zipfile.BadZipFile,
+        NothingExtracted,
     ) as exc:
         log.warning("[%s] download failed: %s", key, exc)
         return None
