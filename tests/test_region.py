@@ -668,6 +668,9 @@ class RegionalRequestsKeepWhatTheCodeLoads(unittest.TestCase):
         ("beetle_psx", ["brazil"], "scph5501.bin"),
         ("mednafen", ["south-korea", "europe"], "epr-17952a.ic8"),
         ("mednafen", ["australia", "north-america"], "scph5502.bin"),
+        ("bluemsx", ["south-korea"], "Machines/Shared Roms/KANJI.rom"),
+        ("bluemsx", ["south-korea"], "Machines/Shared Roms/MSXKANJI.rom"),
+        ("bluemsx", ["japan"], "Machines/Shared Roms/HANGUL.rom"),
     )
 
     def test_each_request_keeps_its_file(self):
@@ -679,6 +682,25 @@ class RegionalRequestsKeepWhatTheCodeLoads(unittest.TestCase):
                 drops = emulator_region_drops([(name, profiles[name])], False, regions)
                 self.assertNotIn(kept, drops)
 
+
+
+class FontRomsCarryNoTerritory(unittest.TestCase):
+    """A CJK font ROM is a language, not a territory. blueMSX tagged KANJI.rom
+    and MSXKANJI.rom [japan], which a --region south-korea request withdrew
+    from the generic MSX2+ machine whose config.ini loads both."""
+
+    def test_no_kanji_or_hangul_font_declares_a_region(self):
+        profiles = common.load_emulator_profiles(
+            os.path.join(os.path.dirname(__file__), "..", "emulators")
+        )
+        tagged = [
+            f"{name}:{entry['name']}"
+            for name, profile in profiles.items()
+            for entry in profile.get("files", [])
+            if any(word in entry.get("name", "").lower() for word in ("kanji", "hangul"))
+            and entry.get("region")
+        ]
+        self.assertEqual(tagged, [])
 
 if __name__ == "__main__":
     unittest.main()

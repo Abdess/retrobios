@@ -406,7 +406,6 @@ files:
 
   - name: KANJI.rom
     path: "Machines/Shared Roms/KANJI.rom"
-    region: [japan]
     size: 262144
     required: false
     note: "Kanji font ROM (256 KB). Used by MSX2+, turboR, and Japanese MSX2 machines."
@@ -414,7 +413,6 @@ files:
 
   - name: MSXKANJI.rom
     path: "Machines/Shared Roms/MSXKANJI.rom"
-    region: [japan]
     size: 32768
     required: false
     note: "MSX-Kanji driver ROM. Used by MSX2+, turboR, and Japanese MSX2 for kanji display."
@@ -456,7 +454,6 @@ files:
 
   - name: HANGUL.rom
     path: "Machines/Shared Roms/HANGUL.rom"
-    region: [south-korea]
     size: 131072
     required: false
     note: "Korean Hangul font ROM (128 KB)."
