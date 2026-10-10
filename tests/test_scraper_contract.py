@@ -285,5 +285,22 @@ class UnreadableReleaseStopsTheScrape(unittest.TestCase):
             libretro_scraper.Scraper()._fetch_core_metadata()
 
 
+
+class EveryGitHubApiCallerSendsTheToken(unittest.TestCase):
+    """romset_dat_importer and coreinfo_scraper called api.github.com with no
+    token: past the anonymous quota, --fetch failed with 403 while
+    refresh_stale had put a token in their environment."""
+
+    def test_each_module_naming_the_api_reads_the_token(self):
+        scripts = Path(__file__).resolve().parent.parent / "scripts"
+        silent = sorted(
+            str(path.relative_to(scripts))
+            for path in scripts.rglob("*.py")
+            if "api.github.com" in (source := path.read_text(encoding="utf-8"))
+            and "GITHUB_TOKEN" not in source
+            and "github_headers(" not in source
+        )
+        self.assertEqual(silent, [])
+
 if __name__ == "__main__":
     unittest.main()

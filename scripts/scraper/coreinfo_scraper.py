@@ -20,7 +20,12 @@ import urllib.error
 import urllib.request
 
 try:
-    from .base_scraper import BaseScraper, BiosRequirement, fetch_github_latest_version
+    from .base_scraper import (
+        BaseScraper,
+        BiosRequirement,
+        fetch_github_latest_version,
+        github_headers,
+    )
 except ImportError:
     # Allow running directly: python scripts/scraper/coreinfo_scraper.py
     import os
@@ -30,6 +35,7 @@ except ImportError:
         BaseScraper,
         BiosRequirement,
         fetch_github_latest_version,
+        github_headers,
     )
 
 PLATFORM_NAME = "libretro_coreinfo"
@@ -209,13 +215,7 @@ class Scraper(BaseScraper):
         # Use the tree API to get all files at once
         url = f"{GITHUB_API}/git/trees/master?recursive=1"
         try:
-            req = urllib.request.Request(
-                url,
-                headers={
-                    "User-Agent": "retrobios-scraper/1.0",
-                    "Accept": "application/vnd.github.v3+json",
-                },
-            )
+            req = urllib.request.Request(url, headers=github_headers())
             with urllib.request.urlopen(req, timeout=30) as resp:
                 data = json.loads(resp.read())
 

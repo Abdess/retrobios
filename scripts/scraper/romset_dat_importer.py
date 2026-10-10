@@ -318,7 +318,9 @@ FBNEO_DATS_API = "https://api.github.com/repos/libretro/FBNeo/contents/dats"
 
 
 def _api_json(url: str) -> object:
-    request = urllib.request.Request(url, headers={"User-Agent": "retrobios"})
+    from .base_scraper import github_headers
+
+    request = urllib.request.Request(url, headers=github_headers())
     with urllib.request.urlopen(request, timeout=60) as response:
         return json.load(response)
 

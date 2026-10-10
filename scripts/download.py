@@ -88,13 +88,16 @@ class Pack:
 def get_latest_release() -> dict:
     """Fetch latest release info from GitHub API."""
     url = f"{API}/repos/{REPO}/releases/latest"
-    req = urllib.request.Request(
-        url,
-        headers={
-            "User-Agent": "retrobios-downloader/1.0",
-            "Accept": "application/vnd.github.v3+json",
-        },
-    )
+    headers = {
+        "User-Agent": "retrobios-downloader/1.0",
+        "Accept": "application/vnd.github.v3+json",
+    }
+    # The anonymous quota is 60 calls an hour per address. The token goes to
+    # GitHub's API only: RETROBIOS_API can name any host.
+    token = os.environ.get("GITHUB_TOKEN")
+    if token and urllib.parse.urlsplit(url).hostname == "api.github.com":
+        headers["Authorization"] = f"Bearer {token}"
+    req = urllib.request.Request(url, headers=headers)
 
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
