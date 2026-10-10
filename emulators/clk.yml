@@ -58,6 +58,7 @@ files:
   # -------------------------------------------------------
   - name: ROM311
     path: Archimedes/ROM311
+    system: acorn-archimedes
     description: "RISC OS v3.11"
     size: 2097152
     crc32: "54c0c963"
@@ -78,6 +79,7 @@ files:
 
   - name: os12.rom
     path: BBCMicro/os12.rom
+    system: acorn-bbc-micro
     description: "BBC MOS v1.2"
     size: 16384
     crc32: "3c14fc70"
@@ -95,6 +97,7 @@ files:
 
   - name: dfs-2.26.rom
     path: BBCMicro/dfs-2.26.rom
+    system: acorn-bbc-micro
     description: "Acorn 1770 DFS 2.26 ROM"
     size: 16384
     crc32: "5ae33e94"
@@ -104,6 +107,7 @@ files:
 
   - name: adfs-1.30.rom
     path: BBCMicro/adfs-1.30.rom
+    system: acorn-bbc-micro
     description: "Acorn ADFS 1.30 ROM"
     size: 16384
     crc32: "d3855588"
@@ -113,6 +117,7 @@ files:
 
   - name: ADT-1.40.rom
     path: BBCMicro/ADT-1.40.rom
+    system: acorn-bbc-micro
     description: "Advanced Disc Toolkit 1.40 ROM"
     size: 16384
     crc32: "8314fed0"
@@ -122,6 +127,7 @@ files:
 
   - name: TUBE110.rom
     path: BBCMicro/TUBE110.rom
+    system: acorn-bbc-micro
     description: "6502 Tube 1.10 Boot ROM"
     size: 2048
     crc32: "9ec2dbd0"
@@ -131,6 +137,7 @@ files:
 
   - name: Z80_122.rom
     path: BBCMicro/Z80_122.rom
+    system: acorn-bbc-micro
     description: "Z80 Tube 1.22 Boot ROM"
     size: 4096
     crc32: "b5851efc"
@@ -151,6 +158,7 @@ files:
 
   - name: os.rom
     path: Electron/os.rom
+    system: acorn-electron
     description: "Electron MOS ROM v1.00"
     size: 16384
     crc32: "bf63fb1f"
@@ -163,6 +171,7 @@ files:
 
   - name: ADFS-E00_1.rom
     path: Electron/ADFS-E00_1.rom
+    system: acorn-electron
     description: "E00 ADFS ROM, first slot"
     size: 16384
     crc32: "51523993"
@@ -172,6 +181,7 @@ files:
 
   - name: ADFS-E00_2.rom
     path: Electron/ADFS-E00_2.rom
+    system: acorn-electron
     description: "E00 ADFS ROM, second slot"
     size: 16384
     crc32: "8d17de0e"
@@ -181,6 +191,7 @@ files:
 
   - name: adfs.rom
     path: Electron/adfs.rom
+    system: acorn-electron
     description: "Acorn ADFS ROM"
     size: 16384
     crc32: "3289bdc6"
@@ -190,6 +201,7 @@ files:
 
   - name: DFS-1770-2.20.rom
     path: Electron/DFS-1770-2.20.rom
+    system: acorn-electron
     description: "1770 DFS ROM"
     size: 16384
     crc32: "f3dc9bc5"
@@ -208,6 +220,7 @@ files:
 
   - name: AP6v133.rom
     path: Electron/AP6v133.rom
+    system: acorn-electron
     description: "Advanced Plus 6 ROM"
     size: 7772
     crc32: "e0013cfc"
@@ -220,6 +233,7 @@ files:
   # -------------------------------------------------------
   - name: Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom
     path: Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom
+    system: amiga
     description: "A500/A1000/A2000/CDTV Kickstart 1.3 ROM"
     size: 262144
     crc32: "c4f0f55f"
@@ -232,6 +246,7 @@ files:
   # -------------------------------------------------------
   - name: os464.rom
     path: AmstradCPC/os464.rom
+    system: amstrad-cpc
     description: "CPC 464 firmware"
     size: 16384
     crc32: "815752df"
@@ -241,6 +256,7 @@ files:
 
   - name: basic464.rom
     path: AmstradCPC/basic464.rom
+    system: amstrad-cpc
     description: "CPC 464 BASIC ROM"
     size: 16384
     crc32: "7d9a3bac"
@@ -250,6 +266,7 @@ files:
 
   - name: os664.rom
     path: AmstradCPC/os664.rom
+    system: amstrad-cpc
     description: "CPC 664 firmware"
     size: 16384
     crc32: "3f5a6dc4"
@@ -259,6 +276,7 @@ files:
 
   - name: basic664.rom
     path: AmstradCPC/basic664.rom
+    system: amstrad-cpc
     description: "CPC 664 BASIC ROM"
     size: 16384
     crc32: "32fee492"
@@ -268,6 +286,7 @@ files:
 
   - name: os6128.rom
     path: AmstradCPC/os6128.rom
+    system: amstrad-cpc
     description: "CPC 6128 firmware"
     size: 16384
     crc32: "0219bb74"
@@ -277,6 +296,7 @@ files:
 
   - name: basic6128.rom
     path: AmstradCPC/basic6128.rom
+    system: amstrad-cpc
     description: "CPC 6128 BASIC ROM"
     size: 16384
     crc32: "ca6af63d"
@@ -286,6 +306,7 @@ files:
 
   - name: amsdos.rom
     path: AmstradCPC/amsdos.rom
+    system: amstrad-cpc
     description: "Amstrad Disk Operating System"
     size: 16384
     crc32: "1fe22ecd"
@@ -298,6 +319,7 @@ files:
   # -------------------------------------------------------
   - name: apple2o.rom
     path: AppleII/apple2o.rom
+    system: apple-ii
     description: "Original Apple II ROM"
     size: 12288
     crc32: "ba210588"
@@ -307,6 +329,7 @@ files:
 
   - name: apple2.rom
     path: AppleII/apple2.rom
+    system: apple-ii
     description: "Apple II+ ROM"
     size: 12288
     crc32: "f66f9c26"
@@ -316,6 +339,7 @@ files:
 
   - name: apple2eu.rom
     path: AppleII/apple2eu.rom
+    system: apple-ii
     description: "Apple IIe ROM"
     size: 32768
     crc32: "e12be18d"
@@ -325,6 +349,7 @@ files:
 
   - name: apple2e.rom
     path: AppleII/apple2e.rom
+    system: apple-ii
     description: "Enhanced Apple IIe ROM"
     size: 32768
     crc32: "65989942"
@@ -334,6 +359,7 @@ files:
 
   - name: apple2-character.rom
     path: AppleII/apple2-character.rom
+    system: apple-ii
     description: "Apple II/II+ character ROM"
     size: 2048
     crc32: "64f415c6"
@@ -343,6 +369,7 @@ files:
 
   - name: apple2eu-character.rom
     path: AppleII/apple2eu-character.rom
+    system: apple-ii
     description: "Apple IIe character ROM"
     size: 4096
     crc32: "816a86f1"
@@ -361,6 +388,7 @@ files:
 
   - name: scsi.rom
     path: AppleII/scsi.rom
+    system: apple-ii
     description: "Apple II SCSI card ROM"
     size: 16384
     crc32: "5aff85d3"
@@ -373,6 +401,7 @@ files:
   # -------------------------------------------------------
   - name: apple2gs.rom
     path: AppleIIgs/apple2gs.rom
+    system: apple-iigs
     description: "Apple IIgs ROM01"
     size: 131072
     crc32: "42f124b0"
@@ -382,6 +411,7 @@ files:
 
   - name: apple2gs.rom2
     path: AppleIIgs/apple2gs.rom2
+    system: apple-iigs
     description: "Apple IIgs ROM03"
     size: 262144
     crc32: "de7ddf29"
@@ -399,6 +429,7 @@ files:
 
   - name: "341s0632-2"
     path: "AppleIIgs/341s0632-2"
+    system: apple-iigs
     description: "Apple IIgs ROM03 ADB microcontroller ROM"
     size: 4096
     crc32: "e1c11fb0"
@@ -410,6 +441,7 @@ files:
   # -------------------------------------------------------
   - name: tos100.img
     path: AtariST/tos100.img
+    system: atari-st
     description: "UK TOS 1.00 ROM"
     size: 196608
     crc32: "1a586c64"
@@ -421,6 +453,7 @@ files:
   # -------------------------------------------------------
   - name: coleco.rom
     path: ColecoVision/coleco.rom
+    system: colecovision
     description: "ColecoVision BIOS"
     size: 8192
     crc32: "3aa93ef3"
@@ -455,6 +488,7 @@ files:
   # -------------------------------------------------------
   - name: boot-16.rom
     path: DiskII/boot-16.rom
+    system: apple-ii
     description: "Disk II 16-sector boot ROM"
     size: 256
     crc32: "ce7144f6"
@@ -480,6 +514,7 @@ files:
 
   - name: boot-13.rom
     path: DiskII/boot-13.rom
+    system: apple-ii
     description: "Disk II 13-sector boot ROM"
     size: 256
     crc32: "d34eb2ff"
@@ -501,6 +536,7 @@ files:
   # -------------------------------------------------------
   - name: exos10.bin
     path: Enterprise/exos10.bin
+    system: enterprise-64-128
     description: "Enterprise EXOS ROM v1.0"
     size: 32768
     crc32: "30b26387"
@@ -511,6 +547,7 @@ files:
 
   - name: exos20.bin
     path: Enterprise/exos20.bin
+    system: enterprise-64-128
     description: "Enterprise EXOS ROM v2.0"
     size: 32768
     crc32: "d421795f"
@@ -521,6 +558,7 @@ files:
 
   - name: exos21.bin
     path: Enterprise/exos21.bin
+    system: enterprise-64-128
     description: "Enterprise EXOS ROM v2.1"
     size: 32768
     crc32: "982a3b44"
@@ -531,6 +569,7 @@ files:
 
   - name: exos23.bin
     path: Enterprise/exos23.bin
+    system: enterprise-64-128
     description: "Enterprise EXOS ROM v2.3"
     size: 65536
     crc32: "24838410"
@@ -541,6 +580,7 @@ files:
 
   - name: basic10.bin
     path: Enterprise/basic10.bin
+    system: enterprise-64-128
     description: "Enterprise BASIC ROM v1.0"
     size: 16384
     crc32: "d62e4fb7"
@@ -550,6 +590,7 @@ files:
 
   - name: "BASIC 1.0 - EPROM 1-2 (198x)(Enterprise).bin"
     path: "Enterprise/BASIC 1.0 - EPROM 1-2 (198x)(Enterprise).bin"
+    system: enterprise-64-128
     description: "Enterprise BASIC ROM v1.0, Part 1"
     size: 8193
     crc32: "37bf48e1"
@@ -559,6 +600,7 @@ files:
 
   - name: "BASIC 1.0 - EPROM 2-2 (198x)(Enterprise).bin"
     path: "Enterprise/BASIC 1.0 - EPROM 2-2 (198x)(Enterprise).bin"
+    system: enterprise-64-128
     description: "Enterprise BASIC ROM v1.0, Part 2"
     size: 8193
     crc32: "c5298c79"
@@ -568,6 +610,7 @@ files:
 
   - name: basic11.bin
     path: Enterprise/basic11.bin
+    system: enterprise-64-128
     description: "Enterprise BASIC ROM v1.1"
     size: 16384
     crc32: "683cf455"
@@ -577,6 +620,7 @@ files:
 
   - name: "BASIC 1.1 - EPROM 1.1 (198x)(Enterprise).bin"
     path: "Enterprise/BASIC 1.1 - EPROM 1.1 (198x)(Enterprise).bin"
+    system: enterprise-64-128
     description: "Enterprise BASIC ROM v1.1, with trailing byte"
     size: 16385
     crc32: "c96b7602"
@@ -586,6 +630,7 @@ files:
 
   - name: basic21.bin
     path: Enterprise/basic21.bin
+    system: enterprise-64-128
     description: "Enterprise BASIC ROM v2.1"
     size: 16384
     crc32: "55f96251"
@@ -598,6 +643,7 @@ files:
 
   - name: epdos.bin
     path: Enterprise/epdos.bin
+    system: enterprise-64-128
     description: "Enterprise EPDOS ROM"
     size: 32768
     crc32: "201319eb"
@@ -608,6 +654,7 @@ files:
 
   - name: exdos.bin
     path: Enterprise/exdos.bin
+    system: enterprise-64-128
     description: "Enterprise EXDOS ROM"
     size: 16384
     crc32: "e6daa0e9"
@@ -621,6 +668,7 @@ files:
   # -------------------------------------------------------
   - name: mac128k.rom
     path: Macintosh/mac128k.rom
+    system: apple-macintosh
     description: "Macintosh 128k ROM"
     size: 65536
     crc32: "6d0c8a28"
@@ -630,6 +678,7 @@ files:
 
   - name: mac512k.rom
     path: Macintosh/mac512k.rom
+    system: apple-macintosh
     description: "Macintosh 512k ROM"
     size: 65536
     crc32: "cf759e0d"
@@ -639,6 +688,7 @@ files:
 
   - name: macplus.rom
     path: Macintosh/macplus.rom
+    system: apple-macintosh
     description: "Macintosh Plus ROM"
     size: 131072
     crc32: "b2102e8e"
@@ -656,6 +706,7 @@ files:
   # -------------------------------------------------------
   - name: bios.sms
     path: MasterSystem/bios.sms
+    system: sega-mastersystem
     description: "European/US Master System BIOS"
     region: [north-america, europe]
     size: 8192
@@ -666,6 +717,7 @@ files:
 
   - name: japanese-bios.sms
     path: MasterSystem/japanese-bios.sms
+    system: sega-mastersystem
     description: "Japanese Master System BIOS"
     region: [japan]
     size: 8192
@@ -680,6 +732,7 @@ files:
   - name: msx.rom
     aliases: [MSX.ROM]
     path: MSX/MSX.ROM
+    system: microsoft-msx
     description: "Generic MSX BIOS"
     size: 32768
     crc32: "94ee12f3"
@@ -689,6 +742,7 @@ files:
 
   - name: msx-japanese.rom
     path: MSX/msx-japanese.rom
+    system: microsoft-msx
     description: "Japanese MSX BIOS"
     region: [japan]
     size: 32768
@@ -699,6 +753,7 @@ files:
 
   - name: msx-american.rom
     path: MSX/msx-american.rom
+    system: microsoft-msx
     description: "American MSX BIOS"
     region: [north-america]
     size: 32768
@@ -708,6 +763,7 @@ files:
 
   - name: msx-european.rom
     path: MSX/msx-european.rom
+    system: microsoft-msx
     description: "European MSX BIOS"
     region: [europe]
     size: 32768
@@ -727,6 +783,7 @@ files:
   - name: msx2.rom
     aliases: [MSX2.ROM]
     path: MSX/MSX2.ROM
+    system: microsoft-msx2
     description: "Generic MSX2 BIOS"
     size: 32768
     crc32: "6cdaf3a5"
@@ -737,6 +794,7 @@ files:
   - name: msx2ext.rom
     aliases: [MSX2EXT.ROM]
     path: MSX/MSX2EXT.ROM
+    system: microsoft-msx2
     description: "MSX2 extension ROM"
     size: 16384
     crc32: "66237ecf"
@@ -758,6 +816,7 @@ files:
   # -------------------------------------------------------
   - name: basic10.rom
     path: Oric/basic10.rom
+    system: oric
     description: "Oric BASIC 1.0"
     size: 16384
     crc32: "f18710b4"
@@ -767,6 +826,7 @@ files:
 
   - name: basic11.rom
     path: Oric/basic11.rom
+    system: oric
     description: "Oric BASIC 1.1"
     size: 16384
     crc32: "c3a92bef"
@@ -776,6 +836,7 @@ files:
 
   - name: pravetz.rom
     path: Oric/pravetz.rom
+    system: oric
     description: "Pravetz BASIC"
     size: 16384
     crc32: "58079502"
@@ -785,6 +846,7 @@ files:
 
   - name: colour.rom
     path: Oric/colour.rom
+    system: oric
     description: "Oric colour ROM (128-byte version)"
     size: 128
     crc32: "d50fca65"
@@ -794,6 +856,7 @@ files:
 
   - name: ORIC.PAL-PROM-TBP24S10-1ab9b572.bin
     path: Oric/ORIC.PAL-PROM-TBP24S10-1ab9b572.bin
+    system: oric
     description: "Oric colour ROM (256-byte version)"
     size: 256
     crc32: "1ab9b572"
@@ -803,6 +866,7 @@ files:
 
   - name: PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin
     path: Oric/PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin
+    system: oric
     description: "Pravetz 8D colour ROM"
     size: 256
     crc32: "1576a69b"
@@ -812,6 +876,7 @@ files:
 
   - name: bd500.rom
     path: Oric/bd500.rom
+    system: oric
     description: "Oric Byte Drive 500 ROM"
     size: 8192
     crc32: "61952e34"
@@ -821,6 +886,7 @@ files:
 
   - name: jasmin.rom
     path: Oric/jasmin.rom
+    system: oric
     description: "Oric Jasmin ROM"
     size: 2048
     crc32: "37220e89"
@@ -830,6 +896,7 @@ files:
 
   - name: microdisc.rom
     path: Oric/microdisc.rom
+    system: oric
     description: "Oric Microdisc ROM"
     size: 8192
     crc32: "a9664a9c"
@@ -839,6 +906,7 @@ files:
 
   - name: 8dos.rom
     path: Oric/8dos.rom
+    system: oric
     description: "8DOS boot ROM"
     size: 512
     crc32: "49a74c06"
@@ -851,6 +919,7 @@ files:
   # -------------------------------------------------------
   - name: GLABIOS_0.2.5_8T.ROM
     path: PCCompatible/GLABIOS_0.2.5_8T.ROM
+    system: pc-compatible
     description: "8088 GLaBIOS 0.2.5"
     size: 8192
     crc32: "9576944c"
@@ -860,6 +929,7 @@ files:
 
   - name: GLaTICK_0.8.5_AT.ROM
     path: PCCompatible/GLaTICK_0.8.5_AT.ROM
+    system: pc-compatible
     description: "AT GLaTICK 0.8.5 RTC option ROM"
     size: 2048
     crc32: "371ea3f1"
@@ -869,6 +939,7 @@ files:
 
   - name: "Phoenix 80286 ROM BIOS Version 3.05.bin"
     path: "PCCompatible/Phoenix 80286 ROM BIOS Version 3.05.bin"
+    system: pc-compatible
     description: "Phoenix 80286 BIOS 3.05"
     size: 32768
     crc32: "8d0d318a"
@@ -878,6 +949,7 @@ files:
 
   - name: at-bios.bin
     path: PCCompatible/at-bios.bin
+    system: pc-compatible
     description: "IBM PC AT BIOS v3"
     size: 65536
     crc32: "674426be"
@@ -887,6 +959,7 @@ files:
 
   - name: BIOS_5170_15NOV85_U27_61X9266_27256.BIN
     path: PCCompatible/BIOS_5170_15NOV85_U27_61X9266_27256.BIN
+    system: pc-compatible
     description: "IBM PC AT BIOS, Nov 1985, U27 chip"
     size: 32768
     crc32: "4995be7a"
@@ -896,6 +969,7 @@ files:
 
   - name: BIOS_5170_15NOV85_U47_61X9265_27256.BIN
     path: PCCompatible/BIOS_5170_15NOV85_U47_61X9265_27256.BIN
+    system: pc-compatible
     description: "IBM PC AT BIOS, Nov 1985, U47 chip"
     size: 32768
     crc32: "c32713e4"
@@ -905,6 +979,7 @@ files:
 
   - name: CGA.F08
     path: PCCompatible/CGA.F08
+    system: pc-compatible
     description: "IBM CGA font"
     size: 2048
     crc32: "a362ffe6"
@@ -914,6 +989,7 @@ files:
 
   - name: EUMDA9.F14
     path: PCCompatible/EUMDA9.F14
+    system: pc-compatible
     description: "IBM MDA font"
     size: 3584
     crc32: "7754882a"
@@ -941,6 +1017,7 @@ files:
 
   - name: ibm-basic-1.10.rom
     path: PCCompatible/ibm-basic-1.10.rom
+    system: pc-compatible
     description: "IBM ROM BASIC 1.10"
     size: 32768
     crc32: "ebacb791"
@@ -953,6 +1030,7 @@ files:
   # -------------------------------------------------------
   - name: basic.318006-01.bin
     path: Plus4/basic.318006-01.bin
+    system: commodore-plus4
     description: "C16+4 BASIC ROM"
     size: 16384
     crc32: "74eaae87"
@@ -961,6 +1039,7 @@ files:
 
   - name: kernal.318004-05.bin
     path: Plus4/kernal.318004-05.bin
+    system: commodore-plus4
     description: "C16+4 kernel, PAL-G revision 5"
     size: 16384
     crc32: "71c07bd4"
@@ -991,6 +1070,7 @@ files:
   # -------------------------------------------------------
   - name: mo5-v1.0.rom
     path: Thomson/mo5-v1.0.rom
+    system: thomson-mo5
     description: "Thomson MO5 ROM, version 1"
     size: 16384
     crc32: "f62d2f3a"
@@ -999,6 +1079,7 @@ files:
 
   - name: mo5-v1.1.rom
     path: Thomson/mo5-v1.1.rom
+    system: thomson-mo5
     description: "Thomson MO5 ROM, version 1.1"
     size: 16384
     crc32: "237c60bf"
@@ -1007,6 +1088,7 @@ files:
 
   - name: mo6-v1.rom
     path: Thomson/mo6-v1.rom
+    system: thomson-mo6
     description: "Thomson MO6 ROM, version 1"
     size: 65536
     crc32: "45e859c6"
@@ -1015,6 +1097,7 @@ files:
 
   - name: mo6-v2.rom
     path: Thomson/mo6-v2.rom
+    system: thomson-mo6
     description: "Thomson MO6 ROM, version 2"
     size: 65536
     crc32: "b4430a3b"
@@ -1023,6 +1106,7 @@ files:
 
   - name: mo6-v3.rom
     path: Thomson/mo6-v3.rom
+    system: thomson-mo6
     description: "Thomson MO6 ROM, version 3"
     size: 65536
     crc32: "7a012322"
@@ -1051,6 +1135,7 @@ files:
   # -------------------------------------------------------
   - name: basic.bin
     path: Vic20/basic.bin
+    system: commodore-vic20
     description: "VIC-20 BASIC ROM"
     size: 8192
     crc32: "db4c43c1"
@@ -1059,6 +1144,7 @@ files:
 
   - name: characters-english.bin
     path: Vic20/characters-english.bin
+    system: commodore-vic20
     description: "English-language VIC-20 character ROM"
     region: [north-america, europe]
     size: 4096
@@ -1069,6 +1155,7 @@ files:
 
   - name: kernel-pal.bin
     path: Vic20/kernel-pal.bin
+    system: commodore-vic20
     description: "English-language PAL VIC-20 kernel ROM"
     region: [europe]
     size: 8192
@@ -1079,6 +1166,7 @@ files:
 
   - name: kernel-ntsc.bin
     path: Vic20/kernel-ntsc.bin
+    system: commodore-vic20
     description: "English-language NTSC VIC-20 kernel ROM"
     region: [north-america]
     size: 8192
@@ -1089,6 +1177,7 @@ files:
 
   - name: characters-danish.bin
     path: Vic20/characters-danish.bin
+    system: commodore-vic20
     description: "Danish VIC-20 character ROM"
     region: [denmark]
     size: 4096
@@ -1099,6 +1188,7 @@ files:
 
   - name: kernel-danish.bin
     path: Vic20/kernel-danish.bin
+    system: commodore-vic20
     description: "Danish VIC-20 kernel ROM"
     region: [denmark]
     size: 8192
@@ -1109,6 +1199,7 @@ files:
 
   - name: characters-japanese.bin
     path: Vic20/characters-japanese.bin
+    system: commodore-vic20
     description: "Japanese VIC-20 character ROM"
     region: [japan]
     size: 4096
@@ -1119,6 +1210,7 @@ files:
 
   - name: kernel-japanese.bin
     path: Vic20/kernel-japanese.bin
+    system: commodore-vic20
     description: "Japanese VIC-20 kernel ROM"
     region: [japan]
     size: 8192
@@ -1129,6 +1221,7 @@ files:
 
   - name: characters-swedish.bin
     path: Vic20/characters-swedish.bin
+    system: commodore-vic20
     description: "Swedish VIC-20 character ROM"
     region: [sweden]
     size: 4096
@@ -1139,6 +1232,7 @@ files:
 
   - name: kernel-swedish.bin
     path: Vic20/kernel-swedish.bin
+    system: commodore-vic20
     description: "Swedish VIC-20 kernel ROM"
     region: [sweden]
     size: 8192
@@ -1153,6 +1247,7 @@ files:
   # -------------------------------------------------------
   - name: 48.rom
     path: ZXSpectrum/48.rom
+    system: sinclair-zx-spectrum
     description: "ZX Spectrum 48K ROM"
     size: 16384
     crc32: "ddee531f"
@@ -1162,6 +1257,7 @@ files:
 
   - name: 128.rom
     path: ZXSpectrum/128.rom
+    system: sinclair-zx-spectrum
     description: "ZX Spectrum 128K ROM"
     size: 32768
     crc32: "2cbe8995"
@@ -1171,6 +1267,7 @@ files:
 
   - name: plus2.rom
     path: ZXSpectrum/plus2.rom
+    system: sinclair-zx-spectrum
     description: "ZX Spectrum +2 ROM"
     size: 32768
     crc32: "e7a517dc"
@@ -1180,6 +1277,7 @@ files:
 
   - name: plus3.rom
     path: ZXSpectrum/plus3.rom
+    system: sinclair-zx-spectrum
     description: "ZX Spectrum +2a/+3 ROM"
     size: 65536
     crc32: "96e3c17a"
@@ -1193,6 +1291,7 @@ files:
   # -------------------------------------------------------
   - name: zx80.rom
     path: ZX8081/zx80.rom
+    system: sinclair-zx80-81
     description: "ZX80 BASIC ROM"
     size: 4096
     crc32: "4c7fc597"
@@ -1202,6 +1301,7 @@ files:
 
   - name: zx81.rom
     path: ZX8081/zx81.rom
+    system: sinclair-zx80-81
     description: "ZX81 BASIC ROM"
     size: 8192
     crc32: "4b1dd6eb"

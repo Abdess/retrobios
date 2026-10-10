@@ -4932,16 +4932,6 @@
       "repo_path": "bios/Acorn/Archimedes/ROM311",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -4972,16 +4962,6 @@
       "repo_path": "bios/Acorn/BBC Micro/os12.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5012,16 +4992,6 @@
       "repo_path": "bios/Acorn/BBC Micro/dfs-2.26.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5032,16 +5002,6 @@
       "repo_path": "bios/Other/Clock Signal/BBCMicro/adfs-1.30.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5052,16 +5012,6 @@
       "repo_path": "bios/Other/Clock Signal/BBCMicro/ADT-1.40.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5072,16 +5022,6 @@
       "repo_path": "bios/Other/Clock Signal/BBCMicro/TUBE110.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5092,16 +5032,6 @@
       "repo_path": "bios/Other/Clock Signal/BBCMicro/Z80_122.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5132,16 +5062,6 @@
       "repo_path": "bios/Acorn/Electron/os.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5152,16 +5072,6 @@
       "repo_path": "bios/Other/Clock Signal/Electron/ADFS-E00_1.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5172,16 +5082,6 @@
       "repo_path": "bios/Other/Clock Signal/Electron/ADFS-E00_2.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5192,16 +5092,6 @@
       "repo_path": "bios/Other/Clock Signal/Electron/adfs.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5212,16 +5102,6 @@
       "repo_path": "bios/Other/Clock Signal/Electron/DFS-1770-2.20.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5252,20 +5132,10 @@
       "repo_path": "bios/Other/Clock Signal/Electron/AP6v133.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
-      "dest": "acpc/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
+      "dest": "amiga/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
       "sha1": "891e9a547772fe0c6c19b610baf8bc4ea7fcb785",
       "sha256": "ee05862d8102a08436ac4056da7d549db31625c7d47b24dfb7b3c9a5c113ca53",
       "size": 262144,
@@ -5274,14 +5144,7 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "commodore-amiga"
       ]
     },
     {
@@ -5294,14 +5157,7 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "amstrad-cpc"
       ]
     },
     {
@@ -5314,14 +5170,7 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "amstrad-cpc"
       ]
     },
     {
@@ -5334,14 +5183,7 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "amstrad-cpc"
       ]
     },
     {
@@ -5354,14 +5196,7 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "amstrad-cpc"
       ]
     },
     {
@@ -5374,14 +5209,7 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "amstrad-cpc"
       ]
     },
     {
@@ -5394,14 +5222,7 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "amstrad-cpc"
       ]
     },
     {
@@ -5414,14 +5235,7 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "amstrad-cpc"
       ]
     },
     {
@@ -5432,16 +5246,6 @@
       "repo_path": "bios/Apple/Apple II/apple2o.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5452,16 +5256,6 @@
       "repo_path": "bios/Apple/Apple II/apple2.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5472,16 +5266,6 @@
       "repo_path": "bios/Apple/Apple II/apple2eu.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5492,16 +5276,6 @@
       "repo_path": "bios/Apple/Apple II/apple2e.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5512,16 +5286,6 @@
       "repo_path": "bios/Apple/Apple II/apple2-character.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5532,16 +5296,6 @@
       "repo_path": "bios/Apple/Apple II/apple2eu-character.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5572,16 +5326,6 @@
       "repo_path": "bios/Other/Clock Signal/AppleII/scsi.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5592,16 +5336,6 @@
       "repo_path": "bios/Apple/Apple IIGS/ROM",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5612,16 +5346,6 @@
       "repo_path": "bios/Apple/Apple II/apple2gs.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5652,20 +5376,10 @@
       "repo_path": "bios/Apple/Apple II/341s0632-2",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
-      "dest": "acpc/AtariST/tos100.img",
+      "dest": "atari-st/AtariST/tos100.img",
       "sha1": "9a6e4c88533a9eaa4d55cdc040e47443e0226eb2",
       "sha256": "5771f9fd1391d3ae0b513ab3fd67aec30fb1843753e7e0345f92615e72c36797",
       "size": 196608,
@@ -5674,18 +5388,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "atari-st"
       ]
     },
     {
-      "dest": "acpc/ColecoVision/coleco.rom",
+      "dest": "colecovision/ColecoVision/coleco.rom",
       "sha1": "45bedc4cbdeac66c7df59e9e599195c778d86a92",
       "sha256": "990bf1956f10207d8781b619eb74f89b00d921c8d45c95c334c16c8cceca09ad",
       "size": 8192,
@@ -5694,14 +5401,7 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "coleco-colecovision"
       ]
     },
     {
@@ -5752,16 +5452,6 @@
       "repo_path": "bios/Apple/Apple II/AppleIIe_DiskII.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5792,16 +5482,6 @@
       "repo_path": "bios/Apple/Apple II/DiskII/boot-13.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -5825,7 +5505,7 @@
       ]
     },
     {
-      "dest": "acpc/Enterprise/exos10.bin",
+      "dest": "enterprise/Enterprise/exos10.bin",
       "sha1": "dbe6ceeb5a5d7f2a3ef9777478b26a7fbc2ba0f6",
       "sha256": "fc44b3859f8ea41e2219aaa39834dd8f40ce0a293b6aacfe0bef9a0f82f80449",
       "size": 32768,
@@ -5834,18 +5514,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/exos20.bin",
+      "dest": "enterprise/Enterprise/exos20.bin",
       "sha1": "6033a0535136c40c47137e4d1cd9273c06d5fdff",
       "sha256": "f1eb6cd3e3fc2475e07eb13a5a6aeaea71acd938e54b815f9417610cbb52d228",
       "size": 32768,
@@ -5854,18 +5527,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/exos21.bin",
+      "dest": "enterprise/Enterprise/exos21.bin",
       "sha1": "55315b20fecb4441a07ee4bc5dc7153f396e0a2e",
       "sha256": "ff370bb0bb0ae85f87861d837d82071d64257b129731c5e549ef5da8ade4356b",
       "size": 32768,
@@ -5874,18 +5540,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/exos23.bin",
+      "dest": "enterprise/Enterprise/exos23.bin",
       "sha1": "c6241e1c248193108ce38b9a8e9dd33972cf47ba",
       "sha256": "7d4be98066acc92ad87afac84b5c3165a1e336b77ce6e002cc031296769de18f",
       "size": 65536,
@@ -5894,18 +5553,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/basic10.bin",
+      "dest": "enterprise/Enterprise/basic10.bin",
       "sha1": "36e12c4ea782ca769225178f61b55bc9a9afb927",
       "sha256": "a465d9c639c2ef84b651964b786f7672e5a32bb32ca9f7fe6d1a905470e1283d",
       "size": 16384,
@@ -5914,18 +5566,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/BASIC 1.0 - EPROM 1-2 (198x)(Enterprise).bin",
+      "dest": "enterprise/Enterprise/BASIC 1.0 - EPROM 1-2 (198x)(Enterprise).bin",
       "sha1": "6116382b057d29c2b8d308edaab367bd1ec8f797",
       "sha256": "b9dd63a82d6009f9d4ab26d8dd2c70382ac3a81ae1aa727f16c745fc8dc44091",
       "size": 8193,
@@ -5934,18 +5579,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/BASIC 1.0 - EPROM 2-2 (198x)(Enterprise).bin",
+      "dest": "enterprise/Enterprise/BASIC 1.0 - EPROM 2-2 (198x)(Enterprise).bin",
       "sha1": "c5d929677e163a068df92c1640b218979bac9270",
       "sha256": "4e84927b21f4941ca709abc868854f2ade57575e3f531336ffc8666ab86cfc80",
       "size": 8193,
@@ -5954,18 +5592,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/basic11.bin",
+      "dest": "enterprise/Enterprise/basic11.bin",
       "sha1": "50a548d1df3ea86f9b5fa669afd8ff124050e776",
       "sha256": "880559bc2368bc4742dab609bb3cdf65e12ae6f2db1894b73630cb2e88b4b445",
       "size": 16384,
@@ -5974,18 +5605,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/BASIC 1.1 - EPROM 1.1 (198x)(Enterprise).bin",
+      "dest": "enterprise/Enterprise/BASIC 1.1 - EPROM 1.1 (198x)(Enterprise).bin",
       "sha1": "16232fa105df04b02b657dbd98a0c07bf474c0aa",
       "sha256": "dc04473ae933518f681e753f5cc7c42e432704548a1f16996aad6b73d53c6c05",
       "size": 16385,
@@ -5994,18 +5618,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/basic21.bin",
+      "dest": "enterprise/Enterprise/basic21.bin",
       "sha1": "03bbb386cf530e804363acdfc1d13e64cf28af2e",
       "sha256": "c46ffd233b473092c99af3ca8aa321c3bf0605208157738ae46af661eeda7ccf",
       "size": 16384,
@@ -6014,18 +5631,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/epdos.bin",
+      "dest": "enterprise/Enterprise/epdos.bin",
       "sha1": "08da5017cb95c9f5edf07a66903eef414621cd7d",
       "sha256": "8c38fd64624a894376cbdf02de431da7e1c28a695783d780d21cd08a26d91973",
       "size": 32768,
@@ -6034,18 +5644,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
-      "dest": "acpc/Enterprise/exdos.bin",
+      "dest": "enterprise/Enterprise/exdos.bin",
       "sha1": "05ba161aa8796c04f227eb2d52496943ada814f2",
       "sha256": "3ccbfa1cf33000fe1645c2b71caa90df0d75acb32f44c9b403057a638d09d07d",
       "size": 16384,
@@ -6054,14 +5657,7 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "enterprise-64-128"
       ]
     },
     {
@@ -6072,16 +5668,6 @@
       "repo_path": "bios/Apple/Macintosh/mac128k.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6092,16 +5678,6 @@
       "repo_path": "bios/Apple/Macintosh/mac512k.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6112,20 +5688,10 @@
       "repo_path": "bios/Apple/Macintosh/macplus.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
-      "dest": "acpc/MasterSystem/japanese-bios.sms",
+      "dest": "sms/MasterSystem/japanese-bios.sms",
       "sha1": "a8c1b39a2e41137835eda6a5de6d46dd9fadbaf2",
       "sha256": "67846e26764bd862f19179294347f7353a4166b62ac4198a5ec32933b7da486e",
       "size": 8192,
@@ -6134,20 +5700,13 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "sega-master-system"
       ],
       "regions": [
         "japan"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/MasterSystem/japanese-bios.sms"
+        "sega-mastersystem"
       ]
     },
     {
@@ -6160,20 +5719,13 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "microsoft-msx"
       ],
       "regions": [
         "japan"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/MSX/msx-japanese.rom"
+        "microsoft-msx"
       ]
     },
     {
@@ -6186,20 +5738,13 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "microsoft-msx"
       ],
       "regions": [
         "north-america"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/MSX/msx-american.rom"
+        "microsoft-msx"
       ]
     },
     {
@@ -6212,20 +5757,13 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
+        "microsoft-msx"
       ],
       "regions": [
         "europe"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/MSX/msx-european.rom"
+        "microsoft-msx"
       ]
     },
     {
@@ -6276,16 +5814,6 @@
       "repo_path": "bios/Oric/Oric/basic10.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6296,16 +5824,6 @@
       "repo_path": "bios/Oric/Oric/basic11b.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6316,16 +5834,6 @@
       "repo_path": "bios/Oric/Oric/pravetz.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6336,16 +5844,6 @@
       "repo_path": "bios/Oric/Oric/Oric/colour.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6356,16 +5854,6 @@
       "repo_path": "bios/Other/Clock Signal/Oric/ORIC.PAL-PROM-TBP24S10-1ab9b572.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6376,16 +5864,6 @@
       "repo_path": "bios/Other/Clock Signal/Oric/PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6396,16 +5874,6 @@
       "repo_path": "bios/Oric/Oric/bd500.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6416,16 +5884,6 @@
       "repo_path": "bios/Oric/Oric/jasmin.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6436,16 +5894,6 @@
       "repo_path": "bios/Oric/Oric/microdis.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6456,16 +5904,6 @@
       "repo_path": "bios/Other/Clock Signal/Oric/8dos.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6476,16 +5914,6 @@
       "repo_path": "bios/IBM/PC/GLABIOS_0.2.5_8T.ROM",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6496,16 +5924,6 @@
       "repo_path": "bios/IBM/PC/GLaTICK_0.8.5_AT.ROM",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6516,16 +5934,6 @@
       "repo_path": "bios/IBM/PC/Phoenix 80286 ROM BIOS Version 3.05.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6536,16 +5944,6 @@
       "repo_path": "bios/IBM/PC/at-bios.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6556,16 +5954,6 @@
       "repo_path": "bios/IBM/PC Compatible/PCCompatible/BIOS_5170_15NOV85_U27_61X9266_27256.BIN",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6576,16 +5964,6 @@
       "repo_path": "bios/IBM/PC Compatible/PCCompatible/BIOS_5170_15NOV85_U47_61X9265_27256.BIN",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6596,16 +5974,6 @@
       "repo_path": "bios/IBM/PC/CGA.F08",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6616,16 +5984,6 @@
       "repo_path": "bios/IBM/PC/EUMDA9.F14",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6676,16 +6034,6 @@
       "repo_path": "bios/IBM/PC Compatible/PCCompatible/ibm-basic-1.10.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6696,16 +6044,6 @@
       "repo_path": "bios/Commodore/C128/vice/PLUS4/basic-318006-01.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6716,16 +6054,6 @@
       "repo_path": "bios/Commodore/C128/vice/PLUS4/kernal-318004-05.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6776,16 +6104,6 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo5-v1.0.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6796,16 +6114,6 @@
       "repo_path": "bios/Thomson/MO5/mo5-v1.1.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6816,16 +6124,6 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v1.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6836,16 +6134,6 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v2.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6856,16 +6144,6 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v3.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6916,16 +6194,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/basic-901486-01.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -6937,22 +6205,12 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
-      ],
       "regions": [
         "europe",
         "north-america"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/Vic20/characters-english.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -6964,21 +6222,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
-      ],
       "regions": [
         "europe"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/Vic20/kernel-pal.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -6990,21 +6238,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
-      ],
       "regions": [
         "north-america"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/Vic20/kernel-ntsc.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -7016,21 +6254,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
-      ],
       "regions": [
         "denmark"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/Vic20/characters-danish.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -7042,21 +6270,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
-      ],
       "regions": [
         "denmark"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/Vic20/kernel-danish.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -7068,21 +6286,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
-      ],
       "regions": [
         "japan"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/Vic20/characters-japanese.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -7094,21 +6302,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
-      ],
       "regions": [
         "japan"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/Vic20/kernel-japanese.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -7120,21 +6318,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
-      ],
       "regions": [
         "sweden"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/Vic20/characters-swedish.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -7146,25 +6334,15 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
-      ],
       "regions": [
         "sweden"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:acpc/Vic20/kernel-swedish.bin"
+        "commodore-vic20"
       ]
     },
     {
-      "dest": "acpc/ZXSpectrum/128.rom",
+      "dest": "zxs/ZXSpectrum/128.rom",
       "sha1": "16375d42ea109b47edded7a16028de7fdb3013a1",
       "sha256": "c1ff621d7910105d4ee45c31e9fd8fd0d79a545c78b66c69a562ee1ffbae8d72",
       "size": 32768,
@@ -7173,18 +6351,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
         "sinclair-zx-spectrum"
       ]
     },
     {
-      "dest": "acpc/ZXSpectrum/plus2.rom",
+      "dest": "zxs/ZXSpectrum/plus2.rom",
       "sha1": "8cafb292af58617907b9e6b9093d3588a75849b8",
       "sha256": "dae0690d8b433ea22b76b62520341f784071dbde0d02f50af0e3fd20fc6bca4a",
       "size": 32768,
@@ -7193,18 +6364,11 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
         "sinclair-zx-spectrum"
       ]
     },
     {
-      "dest": "acpc/ZXSpectrum/plus3.rom",
+      "dest": "zxs/ZXSpectrum/plus3.rom",
       "sha1": "929bf1a5e5687ebd8d7245f9b513a596c0ec21a4",
       "sha256": "ee8218fa43ecb672ed45370114294228213a82318c6d1b007ec86bee3293d1f2",
       "size": 65536,
@@ -7213,13 +6377,6 @@
         "clk"
       ],
       "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
         "sinclair-zx-spectrum"
       ]
     },
@@ -7231,16 +6388,6 @@
       "repo_path": "bios/Sinclair/ZX 80/zx80.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -7251,16 +6398,6 @@
       "repo_path": "bios/Sinclair/ZX 81/zx81.edition3.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "amstrad-cpc",
-        "atari-st",
-        "coleco-colecovision",
-        "commodore-amiga",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "sega-master-system",
-        "sinclair-zx-spectrum"
       ]
     },
     {

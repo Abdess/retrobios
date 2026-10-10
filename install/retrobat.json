@@ -42358,14 +42358,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "archimedes"
       ]
     },
     {
@@ -42398,14 +42391,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "bbcmicro"
       ]
     },
     {
@@ -42438,14 +42424,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "bbcmicro"
       ]
     },
     {
@@ -42458,14 +42437,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "bbcmicro"
       ]
     },
     {
@@ -42478,14 +42450,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "bbcmicro"
       ]
     },
     {
@@ -42498,14 +42463,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "bbcmicro"
       ]
     },
     {
@@ -42518,14 +42476,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "bbcmicro"
       ]
     },
     {
@@ -42558,14 +42509,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "electron"
       ]
     },
     {
@@ -42578,14 +42522,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "electron"
       ]
     },
     {
@@ -42598,14 +42535,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "electron"
       ]
     },
     {
@@ -42618,14 +42548,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "electron"
       ]
     },
     {
@@ -42638,14 +42561,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "electron"
       ]
     },
     {
@@ -42678,14 +42594,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "electron"
       ]
     },
     {
@@ -42696,16 +42605,6 @@
       "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42716,16 +42615,6 @@
       "repo_path": "bios/Amstrad/CPC/os464.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42736,16 +42625,6 @@
       "repo_path": "bios/Amstrad/CPC/basic464.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42756,16 +42635,6 @@
       "repo_path": "bios/Amstrad/CPC/os664.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42776,16 +42645,6 @@
       "repo_path": "bios/Amstrad/CPC/basic664.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42796,16 +42655,6 @@
       "repo_path": "bios/Amstrad/CPC/os6128.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42816,16 +42665,6 @@
       "repo_path": "bios/Amstrad/CPC/basic6128.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42836,16 +42675,6 @@
       "repo_path": "bios/Amstrad/CPC/amsdos.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42856,16 +42685,6 @@
       "repo_path": "bios/Apple/Apple II/apple2o.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42876,16 +42695,6 @@
       "repo_path": "bios/Apple/Apple II/apple2.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42896,16 +42705,6 @@
       "repo_path": "bios/Apple/Apple II/apple2eu.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42916,16 +42715,6 @@
       "repo_path": "bios/Apple/Apple II/apple2e.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42936,16 +42725,6 @@
       "repo_path": "bios/Apple/Apple II/apple2-character.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42956,16 +42735,6 @@
       "repo_path": "bios/Apple/Apple II/apple2eu-character.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -42996,16 +42765,6 @@
       "repo_path": "bios/Other/Clock Signal/AppleII/scsi.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43016,16 +42775,6 @@
       "repo_path": "bios/Apple/Apple IIGS/ROM",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43036,16 +42785,6 @@
       "repo_path": "bios/Apple/Apple II/apple2gs.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43076,16 +42815,6 @@
       "repo_path": "bios/Apple/Apple II/341s0632-2",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43098,14 +42827,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "atarist"
       ]
     },
     {
@@ -43156,16 +42878,6 @@
       "repo_path": "bios/Apple/Apple II/AppleIIe_DiskII.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43196,16 +42908,6 @@
       "repo_path": "bios/Apple/Apple II/DiskII/boot-13.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43236,16 +42938,6 @@
       "repo_path": "bios/Enterprise/64-128/exos10.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43256,16 +42948,6 @@
       "repo_path": "bios/Enterprise/64-128/exos20.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43276,16 +42958,6 @@
       "repo_path": "bios/Enterprise/64-128/exos21.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43296,16 +42968,6 @@
       "repo_path": "bios/Enterprise/64-128/exos23.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43316,16 +42978,6 @@
       "repo_path": "bios/Enterprise/64-128/basic10.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43336,16 +42988,6 @@
       "repo_path": "bios/Enterprise/64-128/BASIC 1.0 - EPROM 1-2 (198x)(Enterprise).bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43356,16 +42998,6 @@
       "repo_path": "bios/Enterprise/64-128/BASIC 1.0 - EPROM 2-2 (198x)(Enterprise).bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43376,16 +43008,6 @@
       "repo_path": "bios/Enterprise/64-128/basic11.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43396,16 +43018,6 @@
       "repo_path": "bios/Enterprise/64-128/BASIC 1.1 - EPROM 1.1 (198x)(Enterprise).bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43416,16 +43028,6 @@
       "repo_path": "bios/Enterprise/64-128/basic21.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43436,16 +43038,6 @@
       "repo_path": "bios/Enterprise/64-128/epdos.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43456,16 +43048,6 @@
       "repo_path": "bios/Enterprise/64-128/exdos.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43476,16 +43058,6 @@
       "repo_path": "bios/Apple/Macintosh/mac128k.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43496,16 +43068,6 @@
       "repo_path": "bios/Apple/Macintosh/mac512k.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43516,16 +43078,6 @@
       "repo_path": "bios/Apple/Macintosh/macplus.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43538,21 +43090,14 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "mastersystem"
       ],
       "regions": [
         "europe",
         "north-america"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:MasterSystem/bios.sms"
+        "sega-mastersystem"
       ]
     },
     {
@@ -43565,20 +43110,13 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "mastersystem"
       ],
       "regions": [
         "japan"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:MasterSystem/japanese-bios.sms"
+        "sega-mastersystem"
       ]
     },
     {
@@ -43591,14 +43129,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "msx"
       ]
     },
     {
@@ -43611,20 +43142,13 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "msx"
       ],
       "regions": [
         "japan"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:MSX/msx-japanese.rom"
+        "microsoft-msx"
       ]
     },
     {
@@ -43637,20 +43161,13 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "msx"
       ],
       "regions": [
         "north-america"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:MSX/msx-american.rom"
+        "microsoft-msx"
       ]
     },
     {
@@ -43663,20 +43180,13 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "msx"
       ],
       "regions": [
         "europe"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:MSX/msx-european.rom"
+        "microsoft-msx"
       ]
     },
     {
@@ -43709,13 +43219,6 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
         "msx2"
       ]
     },
@@ -43729,13 +43232,6 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
         "msx2"
       ]
     },
@@ -43747,16 +43243,6 @@
       "repo_path": "bios/Oric/Oric/basic10.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43767,16 +43253,6 @@
       "repo_path": "bios/Oric/Oric/basic11b.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43787,16 +43263,6 @@
       "repo_path": "bios/Oric/Oric/pravetz.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43807,16 +43273,6 @@
       "repo_path": "bios/Oric/Oric/Oric/colour.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43827,16 +43283,6 @@
       "repo_path": "bios/Other/Clock Signal/Oric/ORIC.PAL-PROM-TBP24S10-1ab9b572.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43847,16 +43293,6 @@
       "repo_path": "bios/Other/Clock Signal/Oric/PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43867,16 +43303,6 @@
       "repo_path": "bios/Oric/Oric/bd500.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43887,16 +43313,6 @@
       "repo_path": "bios/Oric/Oric/jasmin.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43907,16 +43323,6 @@
       "repo_path": "bios/Oric/Oric/microdis.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43927,16 +43333,6 @@
       "repo_path": "bios/Other/Clock Signal/Oric/8dos.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43947,16 +43343,6 @@
       "repo_path": "bios/IBM/PC/GLABIOS_0.2.5_8T.ROM",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43967,16 +43353,6 @@
       "repo_path": "bios/IBM/PC/GLaTICK_0.8.5_AT.ROM",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -43987,16 +43363,6 @@
       "repo_path": "bios/IBM/PC/Phoenix 80286 ROM BIOS Version 3.05.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44007,16 +43373,6 @@
       "repo_path": "bios/IBM/PC/at-bios.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44027,16 +43383,6 @@
       "repo_path": "bios/IBM/PC Compatible/PCCompatible/BIOS_5170_15NOV85_U27_61X9266_27256.BIN",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44047,16 +43393,6 @@
       "repo_path": "bios/IBM/PC Compatible/PCCompatible/BIOS_5170_15NOV85_U47_61X9265_27256.BIN",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44067,16 +43403,6 @@
       "repo_path": "bios/IBM/PC/CGA.F08",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44087,16 +43413,6 @@
       "repo_path": "bios/IBM/PC/EUMDA9.F14",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44147,16 +43463,6 @@
       "repo_path": "bios/IBM/PC Compatible/PCCompatible/ibm-basic-1.10.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44167,16 +43473,6 @@
       "repo_path": "bios/Commodore/C128/vice/PLUS4/basic-318006-01.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44187,16 +43483,6 @@
       "repo_path": "bios/Commodore/C128/vice/PLUS4/kernal-318004-05.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44247,16 +43533,6 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo5-v1.0.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44267,16 +43543,6 @@
       "repo_path": "bios/Thomson/MO5/mo5-v1.1.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44287,16 +43553,6 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v1.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44307,16 +43563,6 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v2.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44327,16 +43573,6 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v3.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44387,16 +43623,6 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/basic-901486-01.bin",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44408,22 +43634,12 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
-      ],
       "regions": [
         "europe",
         "north-america"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:Vic20/characters-english.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -44435,21 +43651,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
-      ],
       "regions": [
         "europe"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:Vic20/kernel-pal.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -44461,21 +43667,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
-      ],
       "regions": [
         "north-america"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:Vic20/kernel-ntsc.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -44487,21 +43683,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
-      ],
       "regions": [
         "denmark"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:Vic20/characters-danish.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -44513,21 +43699,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
-      ],
       "regions": [
         "denmark"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:Vic20/kernel-danish.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -44539,21 +43715,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
-      ],
       "regions": [
         "japan"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:Vic20/characters-japanese.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -44565,21 +43731,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
-      ],
       "regions": [
         "japan"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:Vic20/kernel-japanese.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -44591,21 +43747,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
-      ],
       "regions": [
         "sweden"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:Vic20/characters-swedish.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -44617,21 +43763,11 @@
       "cores": [
         "clk"
       ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
-      ],
       "regions": [
         "sweden"
       ],
       "region_groups": [
-        "Clock Signal (CLK):file:Vic20/kernel-swedish.bin"
+        "commodore-vic20"
       ]
     },
     {
@@ -44642,16 +43778,6 @@
       "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44662,16 +43788,6 @@
       "repo_path": "bios/Enterprise/64-128/zx128.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44682,16 +43798,6 @@
       "repo_path": "bios/Other/zesarux/p2.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44702,16 +43808,6 @@
       "repo_path": "bios/Other/zesarux/p2a40.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44722,16 +43818,6 @@
       "repo_path": "bios/Sinclair/ZX 80/zx80.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -44742,16 +43828,6 @@
       "repo_path": "bios/Sinclair/ZX 81/zx81.edition3.rom",
       "cores": [
         "clk"
-      ],
-      "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
       ]
     },
     {
@@ -128378,14 +127454,7 @@
         "clk"
       ],
       "systems": [
-        "archimedes",
-        "atarist",
-        "bbcmicro",
-        "colecovision",
-        "electron",
-        "mastersystem",
-        "msx",
-        "msx2"
+        "colecovision"
       ]
     },
     {
