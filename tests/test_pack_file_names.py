@@ -63,7 +63,7 @@ class SystemPackLeavesTheEmulatorPack(unittest.TestCase):
                 )
             names = sorted(p.name for p in Path(tmp).iterdir())
             self.assertIn("EmuSCV_BIOS_Pack.zip", names)
-            self.assertIn("Scv_BIOS_Pack.zip", names)
+            self.assertIn("Scv_System_BIOS_Pack.zip", names)
             self.assertFalse([n for n in names if n.startswith(".system-")])
 
 
