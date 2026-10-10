@@ -24,7 +24,7 @@ import zipfile
 from pathlib import Path
 
 import split_pack
-from common import write_text_atomic
+from common import ArtifactLockBusy, artifact_lock, write_text_atomic
 
 RECORD = "release.json"
 
@@ -34,11 +34,32 @@ def _match_key(value: str) -> str:
     return re.sub(r"[^a-z0-9]", "", value.lower())
 
 
+class UnfinishedSplit(Exception):
+    """A pack lies beside its own parts: a split is running or was killed."""
+
+
 def build_record(dist: Path, tag: str) -> dict:
-    """Read every pack of a directory, parts counted once across them."""
+    """Read every pack of a directory, parts counted once across them.
+
+    Read under the shared artifact lock, so a split that is reading its parts
+    back cannot be recorded half done. A pack still beside its parts after
+    that is a split that never finished: summed, it doubled the download size
+    and named an asset that is never published.
+    """
+    with artifact_lock(str(dist), exclusive=False):
+        return _read_record(Path(dist), tag)
+
+
+def _read_record(dist: Path, tag: str) -> dict:
     assets: dict[str, list[Path]] = {}
-    for path in sorted(Path(dist).glob("*_BIOS_Pack*.zip")):
+    for path in sorted(dist.glob("*_BIOS_Pack*.zip")):
         assets.setdefault(split_pack.pack_of(path.name), []).append(path)
+    for name, paths in sorted(assets.items()):
+        whole = [p for p in paths if not split_pack.is_part(p.name)]
+        if whole and len(paths) > len(whole):
+            raise UnfinishedSplit(
+                f"{whole[0].name} lies beside its parts: the split did not finish"
+            )
 
     packs = {}
     for name, paths in sorted(assets.items()):
@@ -110,7 +131,11 @@ def main() -> int:
     parser.add_argument("--output", default=RECORD, type=Path)
     args = parser.parse_args()
 
-    record = build_record(args.dist, args.tag)
+    try:
+        record = build_record(args.dist, args.tag)
+    except (UnfinishedSplit, ArtifactLockBusy) as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        return 1
     if not record["packs"]:
         print(f"Error: no pack in {args.dist}", file=sys.stderr)
         return 1

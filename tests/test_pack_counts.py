@@ -352,6 +352,22 @@ class ReleaseRecord(unittest.TestCase):
         )
 
 
+    def test_a_pack_beside_its_parts_is_refused(self):
+        """A split reading its parts back, or one killed before removing the
+        pack, leaves both: summed, the download size doubled."""
+        self._pack(
+            "Demo_2.0_BIOS_Pack.zip",
+            {f"dir/file{n}.bin": bytes([n]) * 700 + bytes(range(256)) for n in range(6)},
+        )
+        with self.assertRaises(release_record.UnfinishedSplit):
+            release_record.build_record(self.dist, "v1")
+
+    def test_a_directory_being_written_is_not_read(self):
+        with common.artifact_lock(str(self.dist)), \
+                self.assertRaises(common.ArtifactLockBusy):
+            release_record.build_record(self.dist, "v1")
+
+
 class TheCollectionTotalNamesTheCollection(unittest.TestCase):
     COMPOSITION = {
         "systems": {"files": 5030},
