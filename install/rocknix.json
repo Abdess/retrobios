@@ -30,7 +30,10 @@
       "sha256": "e99e3a772bf5f5d262786aee895664eb96136196e37732fe66e14ae062f20335",
       "size": 512,
       "repo_path": "bios/Microsoft/Xbox/mcpx_1.0.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "microsoft-xbox"
+      ]
     },
     {
       "dest": "xemu/bios/Complex_4627v1.03.bin",
@@ -38,7 +41,10 @@
       "sha256": "1de4c87effe40d44f95581d204f9fa0600fbd5fe2171692316dcf97af0f4113f",
       "size": 1048576,
       "repo_path": "bios/Microsoft/Xbox/Complex.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "microsoft-xbox"
+      ]
     },
     {
       "dest": "firmware.bin",
@@ -46,7 +52,10 @@
       "sha256": "b5f5913048244b60f67a58eeac13ca48c1878dcb2aed3ab4fc874b098438ab34",
       "size": 262144,
       "repo_path": "bios/Nintendo/Nintendo DS/dsfirmware.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "bios7.bin",
@@ -54,7 +63,10 @@
       "sha256": "ba65f690eb04ec92db67c0e299e21ad71de087d6d5de8a9cb17a62eaab563c17",
       "size": 16384,
       "repo_path": "bios/Nintendo/DS/NDS_Bios7.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "bios9.bin",
@@ -62,7 +74,10 @@
       "sha256": "1693983a7707ae394786fa526c0552457888a51d4e410d715ef07acd5a540555",
       "size": 4096,
       "repo_path": "bios/Nintendo/DS/NDS_Bios9.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "dsi_bios7.bin",
@@ -70,7 +85,10 @@
       "sha256": "2946281e730e71f7cafdb125f5cb60fed944ca5d610ee1e082c441b602b5f4e2",
       "size": 65536,
       "repo_path": "bios/Nintendo/Nintendo DS/biosdsi7.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "dsi_bios9.bin",
@@ -78,7 +96,10 @@
       "sha256": "47538922a8e8a8e79b922ff1203863ef5c40d9c54656a8d2c89c56ece52029ce",
       "size": 65536,
       "repo_path": "bios/Nintendo/Nintendo DS/biosdsi9.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "dsi_firmware.bin",
@@ -86,7 +107,10 @@
       "sha256": "a52e281c4dfc8f2da61e7a193d0f40e15eff6f6142ba80bf48ffe755624e2017",
       "size": 131072,
       "repo_path": "bios/Nintendo/Nintendo DS/dsifirmware.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "dsi_nand.bin",
@@ -95,6 +119,9 @@
       "size": 251658304,
       "repo_path": "bios/Nintendo/DS/.variants/dsi_nand.bin.8b79a73c",
       "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ],
       "storage": "release",
       "release_asset": "dsi_nand.bin.8b79a73c"
     },
@@ -104,7 +131,21 @@
       "sha256": "85ffcbc834238eb24c87fce27ba7b438cc53a77db013a0a7c59c78e0af08cb84",
       "size": 2097152,
       "repo_path": "bios/Nintendo/GameCube/GC/EUR/IPL.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gamecube"
+      ],
+      "regions": [
+        "europe"
+      ],
+      "region_groups": [
+        "nintendo-gamecube",
+        "nintendo-wii",
+        "sega-triforce"
+      ],
+      "region_system_groups": [
+        "nintendo-gamecube"
+      ]
     },
     {
       "dest": "GC/JAP/IPL.bin",
@@ -112,7 +153,21 @@
       "sha256": "7c833f95839c226699108b93ab6acbe772788bfa3f05132b8ced5e78f5bc9a26",
       "size": 2097152,
       "repo_path": "bios/Nintendo/GameCube/GC/USA/IPL.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gamecube"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "nintendo-gamecube",
+        "nintendo-wii",
+        "sega-triforce"
+      ],
+      "region_system_groups": [
+        "nintendo-gamecube"
+      ]
     },
     {
       "dest": "GC/USA/IPL.bin",
@@ -120,7 +175,21 @@
       "sha256": "7c833f95839c226699108b93ab6acbe772788bfa3f05132b8ced5e78f5bc9a26",
       "size": 2097152,
       "repo_path": "bios/Nintendo/GameCube/GC/USA/IPL.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gamecube"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "nintendo-gamecube",
+        "nintendo-wii",
+        "sega-triforce"
+      ],
+      "region_system_groups": [
+        "nintendo-gamecube"
+      ]
     },
     {
       "dest": "gb_bios.bin",
@@ -128,7 +197,10 @@
       "sha256": "cf053eccb4ccafff9e67339d4e78e98dce7d1ed59be819d2a1ba2232c6fce1c7",
       "size": 256,
       "repo_path": "bios/Nintendo/Game Boy/GB_dmg.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gb"
+      ]
     },
     {
       "dest": "gba_bios.bin",
@@ -136,7 +208,10 @@
       "sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
       "size": 16384,
       "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gba"
+      ]
     },
     {
       "dest": "gbc_bios.bin",
@@ -144,7 +219,10 @@
       "sha256": "b4f2e416a35eef52cba161b159c7c8523a92594facb924b3ede0d722867c50c7",
       "size": 2304,
       "repo_path": "bios/Nintendo/Game Boy Color/GBC_cgb.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gbc"
+      ]
     },
     {
       "dest": "dc/dc_boot.bin",
@@ -152,7 +230,10 @@
       "sha256": "88d6a666495ad14ab5988d8cb730533cfc94ec2cfd53a7eeda14642ab0d4abf9",
       "size": 2097152,
       "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-dreamcast"
+      ]
     },
     {
       "dest": "dc/dc_flash.bin",
@@ -160,7 +241,10 @@
       "sha256": "dd8b365521a9c08bb4c170da3592212580f7251f35a45d6083774d1c030bc3e3",
       "size": 131072,
       "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-dreamcast"
+      ]
     },
     {
       "dest": "dc/naomi_boot.bin",
@@ -168,7 +252,10 @@
       "sha256": "d821817411834ea0e98ae48b1e2268b12e7d599630556fa5da1792c6e1a2c66f",
       "size": 2097152,
       "repo_path": "bios/Sega/Dreamcast/naomi_boot.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-dreamcast"
+      ]
     },
     {
       "dest": "bios.gg",
@@ -176,7 +263,10 @@
       "sha256": "8c8a21335038285cfa03dc076100c1f0bfadf3e4ff70796f11f3dfaaab60eee2",
       "size": 1024,
       "repo_path": "bios/Sega/Game Gear/GG_majesco.gg",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-game-gear"
+      ]
     },
     {
       "dest": "bios.sms",
@@ -184,7 +274,10 @@
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
       "repo_path": "bios/Other/zesarux/sms.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-master-system"
+      ]
     },
     {
       "dest": "bios_CD_E.bin",
@@ -192,7 +285,10 @@
       "sha256": "16735df92fcc1d0fc6a1eced244867e95281c5006340926082b74e363e073dc4",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/MCD_eu_100.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-cd"
+      ]
     },
     {
       "dest": "bios_CD_U.bin",
@@ -200,7 +296,10 @@
       "sha256": "807384678ef259494d943eddb6954dfc7069693d0dde0c424e2028488d88e81a",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/bios_CD_U.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-cd"
+      ]
     },
     {
       "dest": "bios_CD_J.bin",
@@ -208,7 +307,10 @@
       "sha256": "923eb9da740f98ab1572085e3d351e2c0982df0906b0b99efb68a9997c94cf8f",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/MCD_jp_100p.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-cd"
+      ]
     },
     {
       "dest": "sega_101.bin",
@@ -216,7 +318,10 @@
       "sha256": "dcfef4b99605f872b6c3b6d05c045385cdea3d1b702906a0ed930df7bcb7deac",
       "size": 524288,
       "repo_path": "bios/Sega/Saturn/SAT_1.01-(J).bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "mpr-17933.bin",
@@ -224,7 +329,10 @@
       "sha256": "96e106f740ab448cf89f0dd49dfbac7fe5391cb6bd6e14ad5e3061c13330266f",
       "size": 524288,
       "repo_path": "bios/Sega/Saturn/SAT_1.00-(U+E).bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "mpr-18811-mx.ic1",
@@ -232,7 +340,10 @@
       "sha256": "1dd154a9fcee1816749502b5b2497bf4b1f2d973df38d0984905ee83b12d5e81",
       "size": 2097152,
       "repo_path": "bios/Sega/Saturn/SAT_KoF95.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "mpr-19367-mx.ic1",
@@ -240,7 +351,10 @@
       "sha256": "6e3b35af6e45d9005460cfe44e3907563bde7a4636926ebd316dc84913efdd1b",
       "size": 2097152,
       "repo_path": "bios/Sega/Saturn/SAT_Ultraman.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "saturn_bios.bin",
@@ -248,7 +362,10 @@
       "sha256": "ae4058627bb5db9be6d8d83c6be95a4aa981acc8a89042e517e73317886c8bc2",
       "size": 524288,
       "repo_path": "bios/Sega/Saturn/sega_100.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "psxonpsp660.bin",
@@ -256,7 +373,10 @@
       "sha256": "cbe758e1c8ece593c8e14ce1e8b3436428a01c608032a02613b3a4b442b4d712",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/psxonpsp660.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "scph101.bin",
@@ -264,7 +384,16 @@
       "sha256": "aca9cbfa974b933646baad6556a867eca9b81ce65d8af343a7843f7775b9ffc8",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph101.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_system_groups": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "scph1001.bin",
@@ -272,7 +401,10 @@
       "sha256": "42e4124be7623e2e28b1db0d8d426539646faee49d74b71166d8ba5bd7c472ed",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph1001_v20.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "scph5500.bin",
@@ -280,7 +412,10 @@
       "sha256": "9c0421858e217805f4abe18698afea8d5aa36ff0727eb8484944e00eb5e7eadb",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph5500.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "scph5501.bin",
@@ -288,7 +423,10 @@
       "sha256": "11052b6499e466bbf0a709b1f9cb6834a9418e66680387912451e971cf8a1fef",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph5501.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "scph5502.bin",
@@ -296,7 +434,10 @@
       "sha256": "1faaa18fa820a0225e488d9f086296b8e6c46df739666093987ff7d8fd352c09",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph5502.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "scph7001.bin",
@@ -304,7 +445,10 @@
       "sha256": "39dcc1a0717036c9b6ac52fefd1ee7a57d3808e8cfbc755879fa685a0a738278",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph7001.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "pcsx2/bios/ps2-0230a-20080220.bin",
@@ -312,7 +456,10 @@
       "sha256": "f609ed1ca62437519828cdd824b5ea79417fd756e71a4178443483e3781fedd2",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation-2"
+      ]
     },
     {
       "dest": "aethersx2/bios/ps2-0230a-20080220.bin",
@@ -320,7 +467,10 @@
       "sha256": "f609ed1ca62437519828cdd824b5ea79417fd756e71a4178443483e3781fedd2",
       "size": 4194304,
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation-2"
+      ]
     },
     {
       "dest": "PS3UPDAT.PUP",
@@ -329,6 +479,9 @@
       "size": 206197916,
       "repo_path": "bios/Sony/PlayStation 3/.variants/PS3UPDAT.PUP.ed8ab192",
       "cores": null,
+      "systems": [
+        "sony-playstation-3"
+      ],
       "storage": "release",
       "release_asset": "PS3UPDAT.PUP.ed8ab192"
     },
@@ -800,6 +953,15 @@
       "repo_path": "bios/Sony/PlayStation/scph5903.bin",
       "cores": [
         "beetle_psx"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -810,6 +972,9 @@
       "repo_path": "bios/Sony/PlayStation/ps1_rom.bin",
       "cores": [
         "beetle_psx"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -820,6 +985,9 @@
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
       "cores": [
         "beetle_psx"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -840,6 +1008,16 @@
       "repo_path": "bios/Sega/ST-V/epr-17952a.ic8",
       "cores": [
         "beetle_saturn"
+      ],
+      "regions": [
+        "asia-pal",
+        "brazil",
+        "latin-america",
+        "north-america",
+        "south-korea"
+      ],
+      "region_groups": [
+        "sega-stv"
       ]
     },
     {
@@ -850,6 +1028,14 @@
       "repo_path": "bios/Sega/ST-V/epr-17954a.ic8",
       "cores": [
         "beetle_saturn"
+      ],
+      "regions": [
+        "asia-pal",
+        "europe",
+        "south-korea"
+      ],
+      "region_groups": [
+        "sega-stv"
       ]
     },
     {
@@ -870,6 +1056,9 @@
       "repo_path": "bios/Sega/Saturn/mpeg_card.bin",
       "cores": [
         "beetle_saturn"
+      ],
+      "systems": [
+        "sega-saturn"
       ]
     },
     {
@@ -880,6 +1069,9 @@
       "repo_path": "bios/Sega/Saturn/satar4mp.bin",
       "cores": [
         "beetle_saturn"
+      ],
+      "systems": [
+        "sega-saturn"
       ]
     },
     {
@@ -1090,6 +1282,12 @@
       "repo_path": "bios/Microsoft/MSX/MSXR2.rom",
       "cores": [
         "bluemsx"
+      ],
+      "regions": [
+        "russia"
+      ],
+      "region_groups": [
+        "msx"
       ]
     },
     {
@@ -2580,6 +2778,9 @@
       "repo_path": "bios/Microsoft/Xbox/cromwell_1024.bin",
       "cores": [
         "directxbox"
+      ],
+      "systems": [
+        "microsoft-xbox"
       ]
     },
     {
@@ -2590,6 +2791,9 @@
       "repo_path": "bios/Nintendo/GameCube/Sys/GC/dsp_rom.bin",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ]
     },
     {
@@ -2600,6 +2804,9 @@
       "repo_path": "bios/Nintendo/GameCube/.variants/dsp_coef.bin.c116d867",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ]
     },
     {
@@ -2610,6 +2817,9 @@
       "repo_path": "bios/Other/dolphin-mmjr/font_western.bin",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ]
     },
     {
@@ -2620,6 +2830,9 @@
       "repo_path": "bios/Other/dolphin-mmjr/font_japanese.bin",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ]
     },
     {
@@ -2640,6 +2853,9 @@
       "repo_path": "bios/Nintendo/Wii/SYSCONF",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ]
     },
     {
@@ -2650,6 +2866,9 @@
       "repo_path": "bios/Nintendo/Wii/setting.txt",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ]
     },
     {
@@ -2660,6 +2879,9 @@
       "repo_path": "bios/Nintendo/Wii/WiiSD.raw",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ],
       "storage": "release",
       "release_asset": "WiiSD.raw"
@@ -2672,6 +2894,9 @@
       "repo_path": "bios/Nintendo/Wii/clientca.pem",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ]
     },
     {
@@ -2682,6 +2907,9 @@
       "repo_path": "bios/Nintendo/Wii/clientcakey.pem",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ]
     },
     {
@@ -2692,6 +2920,9 @@
       "repo_path": "bios/Nintendo/Wii/rootca.pem",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ]
     },
     {
@@ -2882,6 +3113,9 @@
       "repo_path": "bios/Sony/PlayStation/scph1000.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2892,6 +3126,9 @@
       "repo_path": "bios/Sony/PlayStation/scph1002.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2902,6 +3139,9 @@
       "repo_path": "bios/Sony/PlayStation/scph1002b.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2912,6 +3152,9 @@
       "repo_path": "bios/Sony/PlayStation/scph1002c.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2922,6 +3165,9 @@
       "repo_path": "bios/Sony/PlayStation/dtlh1100.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2932,6 +3178,9 @@
       "repo_path": "bios/Sony/PlayStation/scph3000.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2942,6 +3191,9 @@
       "repo_path": "bios/Sony/PlayStation/scph1001_v20.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2952,6 +3204,9 @@
       "repo_path": "bios/Sony/PlayStation/scph3500.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2962,6 +3217,9 @@
       "repo_path": "bios/Sony/PlayStation/scph1001_v21.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2972,6 +3230,9 @@
       "repo_path": "bios/Sony/PlayStation/scph5000.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2982,6 +3243,9 @@
       "repo_path": "bios/Sony/PlayStation/scph7000.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -2992,6 +3256,15 @@
       "repo_path": "bios/Sony/PlayStation/scph7000w.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3002,6 +3275,9 @@
       "repo_path": "bios/Sony/PlayStation/scph7002.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -3012,6 +3288,9 @@
       "repo_path": "bios/Sony/PlayStation/scph100.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -3022,6 +3301,15 @@
       "repo_path": "bios/Sony/PlayStation/scph101_v44.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3032,6 +3320,9 @@
       "repo_path": "bios/Sony/PlayStation/scph101.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -3042,6 +3333,9 @@
       "repo_path": "bios/Sony/PlayStation/scph102.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -3052,6 +3346,9 @@
       "repo_path": "bios/Sony/PlayStation/scph102B.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -3062,6 +3359,15 @@
       "repo_path": "bios/Sony/PlayStation/scph1000r.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3072,6 +3378,15 @@
       "repo_path": "bios/Sony/PlayStation/ps2-50j.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3082,6 +3397,16 @@
       "repo_path": "bios/Sony/PlayStation/ps2_scph30003.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3092,6 +3417,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0100jd-20000117.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "world"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3102,6 +3436,15 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "world"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3112,6 +3455,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0101jd-20000217.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "world"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3122,6 +3474,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0101j-20000217.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "world"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3132,6 +3493,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0101xd-20000224.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "world"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3142,6 +3512,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0110ad-20000727.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3152,6 +3531,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0110a-20000727.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3162,6 +3550,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120a-20000902.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3172,6 +3569,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3182,6 +3589,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902-20030110.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3192,6 +3609,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120e-20000902.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3202,6 +3629,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-185015.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3212,6 +3648,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-191435.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3222,6 +3667,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150ad-20001228-20030520.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3232,6 +3686,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150a-20001228.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3242,6 +3705,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150ed-20001228-20030520.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3252,6 +3725,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150e-20001228.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3262,6 +3745,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150jd-20010118.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3272,6 +3764,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150j-20010118.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3282,6 +3783,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20010427.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3292,6 +3802,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20010427.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3302,6 +3821,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20010704.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3312,6 +3840,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20010704.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3322,6 +3860,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20011004.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3332,6 +3879,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20011004.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3342,6 +3899,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20010730.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3352,6 +3918,15 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-39001.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3362,6 +3937,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20020319.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3372,6 +3957,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20020426.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3382,6 +3976,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20020426.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3392,6 +3996,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20020426.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3402,6 +4015,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170jd-20030206.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3412,6 +4034,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170j-20030206.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3422,6 +4053,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170ed-20030227.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3432,6 +4073,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170e-20030227.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3442,6 +4093,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170ad-20030325.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3452,6 +4112,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170a-20030325.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3462,6 +4131,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0180cd-20030224.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3472,6 +4150,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0180j-20031028.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3482,6 +4169,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190j-20030623.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3492,6 +4188,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190ad-20030623.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3502,6 +4207,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190a-20030623.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3512,6 +4226,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190e-20030623.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3522,6 +4246,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2_scph50006.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3532,6 +4265,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190k-20030623.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3542,6 +4284,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2_scph50008.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3552,6 +4304,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190c-20030623.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3562,6 +4323,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190j-20030822.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3572,6 +4342,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190e-20030822.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3582,6 +4362,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190a-20040329.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3592,6 +4381,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0200j-20040614.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3602,6 +4400,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0200a-20040614.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3612,6 +4419,16 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3622,6 +4439,16 @@
       "repo_path": "bios/Sony/PlayStation/ps2_scph70002_alt.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3632,6 +4459,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0200ed-20040614.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3642,6 +4479,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0200h-20040614.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3652,6 +4498,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0210j-20040917.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3662,6 +4517,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220jd-20050620.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3672,6 +4536,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20050620.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3682,6 +4555,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220ad-20050620.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3692,6 +4574,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20050620.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3702,6 +4593,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20050620.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3712,6 +4613,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20050620.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3722,6 +4632,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20060210.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3732,6 +4651,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20060210.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3742,6 +4670,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20060210.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3752,6 +4690,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20060210.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3762,6 +4709,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220jd-20060905.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3772,6 +4728,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20060905.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3782,6 +4747,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220ad-20060905.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3792,6 +4766,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20060905.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3802,6 +4785,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20060905.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3812,6 +4805,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20060905.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3822,6 +4824,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230j-20080220.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3832,6 +4843,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3842,6 +4862,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230e-20080220.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3852,6 +4882,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230h-20080220.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -3862,6 +4901,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0250e-20100415.bin",
       "cores": [
         "duckstation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -15314,6 +16363,9 @@
       "repo_path": "bios/Nintendo/Game Boy/dmg_boot.bin",
       "cores": [
         "emux_gb"
+      ],
+      "systems": [
+        "nintendo-gb"
       ]
     },
     {
@@ -15434,6 +16486,12 @@
       "repo_path": "bios/Enterprise/64-128/brd.rom",
       "cores": [
         "ep128emu"
+      ],
+      "regions": [
+        "germany"
+      ],
+      "region_groups": [
+        "enterprise-128"
       ]
     },
     {
@@ -15728,6 +16786,9 @@
       "repo_path": "bios/Sega/Dreamcast/font.bin",
       "cores": [
         "flycast"
+      ],
+      "systems": [
+        "sega-dreamcast"
       ]
     },
     {
@@ -16638,6 +17699,10 @@
       "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
       "cores": [
         "gearboy"
+      ],
+      "systems": [
+        "nintendo-gb",
+        "nintendo-gbc"
       ]
     },
     {
@@ -16678,6 +17743,15 @@
       "repo_path": "bios/Pioneer/LaserActive/[BIOS] LaserActive PAC-N1 (Japan) (v1.02).bin",
       "cores": [
         "geargrafx"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "laseractive",
+        "nec-pc-engine",
+        "nec-pc-engine-cd",
+        "nec-supergrafx"
       ]
     },
     {
@@ -16688,6 +17762,15 @@
       "repo_path": "bios/Pioneer/LaserActive/[BIOS] LaserActive PCE-LP1 (Japan) (v1.02).bin",
       "cores": [
         "geargrafx"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "laseractive",
+        "nec-pc-engine",
+        "nec-pc-engine-cd",
+        "nec-supergrafx"
       ]
     },
     {
@@ -16698,6 +17781,15 @@
       "repo_path": "bios/Pioneer/LaserActive/[BIOS] LaserActive PAC-N10 (US) (v1.02).bin",
       "cores": [
         "geargrafx"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "laseractive",
+        "nec-pc-engine",
+        "nec-pc-engine-cd",
+        "nec-supergrafx"
       ]
     },
     {
@@ -16708,6 +17800,9 @@
       "repo_path": "bios/Sega/Master System/.variants/bios_U.sms.ee2c29ba",
       "cores": [
         "genesis_plus_gx"
+      ],
+      "systems": [
+        "sega-master-system"
       ]
     },
     {
@@ -16718,6 +17813,9 @@
       "repo_path": "bios/Sega/Master System/.variants/bios_E.sms.81c3476b",
       "cores": [
         "genesis_plus_gx"
+      ],
+      "systems": [
+        "sega-master-system"
       ]
     },
     {
@@ -16728,6 +17826,9 @@
       "repo_path": "bios/Sega/Master System/MasterSystem/japanese-bios.sms",
       "cores": [
         "genesis_plus_gx"
+      ],
+      "systems": [
+        "sega-master-system"
       ]
     },
     {
@@ -16898,6 +17999,9 @@
       "repo_path": "bios/Nintendo/Wii/sd.raw",
       "cores": [
         "ishiiruka"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ],
       "storage": "release",
       "release_asset": "sd.raw"
@@ -23320,6 +24424,10 @@
       "repo_path": "bios/Nintendo/Super Game Boy/sgb_boot.bin",
       "cores": [
         "mesen-s"
+      ],
+      "systems": [
+        "nintendo-gb",
+        "nintendo-gbc"
       ]
     },
     {
@@ -23330,6 +24438,10 @@
       "repo_path": "bios/Nintendo/Super Game Boy/sgb2_boot.bin",
       "cores": [
         "mesen-s"
+      ],
+      "systems": [
+        "nintendo-gb",
+        "nintendo-gbc"
       ]
     },
     {
@@ -45590,6 +46702,9 @@
       "repo_path": "bios/Nintendo/Nintendo DS/dsi_sd_card.bin",
       "cores": [
         "noods"
+      ],
+      "systems": [
+        "nintendo-ds"
       ]
     },
     {
@@ -50560,6 +51675,11 @@
       "repo_path": "bios/Sega/Mega Drive/carthw.cfg",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-game-gear",
+        "sega-master-system",
+        "sega-mega-cd"
       ]
     },
     {
@@ -50570,6 +51690,12 @@
       "repo_path": "bios/Sega/Mega CD/us_scd2_9306.bin",
       "cores": [
         "picodrive"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -50580,6 +51706,12 @@
       "repo_path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
       "cores": [
         "picodrive"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -50600,6 +51732,15 @@
       "repo_path": "bios/Sega/Mega CD/eu_mcd2_9306.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
+      ],
+      "regions": [
+        "europe"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -50610,6 +51751,15 @@
       "repo_path": "bios/Sega/Mega CD/eu_mcd2_9303.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
+      ],
+      "regions": [
+        "europe"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -50620,6 +51770,15 @@
       "repo_path": "bios/Sega/Mega CD/MCD_eu_100.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
+      ],
+      "regions": [
+        "europe"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -50630,6 +51789,15 @@
       "repo_path": "bios/Sega/Mega CD/jp_mcd2_921222.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -50640,6 +51808,15 @@
       "repo_path": "bios/Sega/Mega CD/jp_mcd1_9112.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -50650,6 +51827,15 @@
       "repo_path": "bios/Sega/Mega CD/MCD_jp_100p.bin",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-mega-cd"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -51836,6 +53022,9 @@
       "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
       "cores": [
         "redream"
+      ],
+      "systems": [
+        "sega-dreamcast"
       ]
     },
     {
@@ -51846,6 +53035,9 @@
       "repo_path": "bios/Sega/Dreamcast/dc_bios.bin",
       "cores": [
         "retrodream"
+      ],
+      "systems": [
+        "sega-dreamcast"
       ]
     },
     {
@@ -51856,6 +53048,9 @@
       "repo_path": "bios/Sega/Dreamcast/dc_flash.bin",
       "cores": [
         "retrodream"
+      ],
+      "systems": [
+        "sega-dreamcast"
       ]
     },
     {
@@ -52146,6 +53341,16 @@
       "repo_path": "bios/Sony/PlayStation/scph1002.bin",
       "cores": [
         "rustation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -52156,6 +53361,16 @@
       "repo_path": "bios/Sony/PlayStation/scph102.bin",
       "cores": [
         "rustation"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -52226,6 +53441,9 @@
       "repo_path": "bios/Nintendo/Game Boy Color/agb_boot.bin",
       "cores": [
         "sameboy"
+      ],
+      "systems": [
+        "nintendo-gbc"
       ]
     },
     {
@@ -53056,6 +54274,12 @@
       "repo_path": "bios/Nintendo/DS/NDS_Bios7.bin",
       "cores": [
         "skyemu"
+      ],
+      "systems": [
+        "nintendo-ds",
+        "nintendo-gb",
+        "nintendo-gba",
+        "nintendo-gbc"
       ]
     },
     {
@@ -53066,6 +54290,12 @@
       "repo_path": "bios/Nintendo/DS/NDS_Bios9.bin",
       "cores": [
         "skyemu"
+      ],
+      "systems": [
+        "nintendo-ds",
+        "nintendo-gb",
+        "nintendo-gba",
+        "nintendo-gbc"
       ]
     },
     {
@@ -53786,6 +55016,12 @@
       "repo_path": "bios/Commodore/C128/vice/C64/kernal-906145-02.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "commodore-c64"
       ]
     },
     {
@@ -53806,6 +55042,12 @@
       "repo_path": "bios/Commodore/C128/vice/C64/chargen-906143-02.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "commodore-c64"
       ]
     },
     {
@@ -53826,6 +55068,12 @@
       "repo_path": "bios/Commodore/C128/vice/C128/kernal-315078-03.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "germany"
+      ],
+      "region_groups": [
+        "commodore-c128"
       ]
     },
     {
@@ -53846,6 +55094,12 @@
       "repo_path": "bios/Commodore/C128/vice/C128/kernal-318034-01.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "sweden"
+      ],
+      "region_groups": [
+        "commodore-c128"
       ]
     },
     {
@@ -53866,6 +55120,12 @@
       "repo_path": "bios/Commodore/C128/vice/C128/kernalfr",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "france"
+      ],
+      "region_groups": [
+        "commodore-c128"
       ]
     },
     {
@@ -53876,6 +55136,12 @@
       "repo_path": "bios/Commodore/C128/vice/C128/kernalit",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "italy"
+      ],
+      "region_groups": [
+        "commodore-c128"
       ]
     },
     {
@@ -53946,6 +55212,12 @@
       "repo_path": "bios/Commodore/C128/vice/C128/kernal64-325182-01.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "sweden"
+      ],
+      "region_groups": [
+        "commodore-c128"
       ]
     },
     {
@@ -53966,6 +55238,12 @@
       "repo_path": "bios/Commodore/C128/vice/C128/chargen-315079-01.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "germany"
+      ],
+      "region_groups": [
+        "commodore-c128"
       ]
     },
     {
@@ -53976,6 +55254,13 @@
       "repo_path": "bios/Commodore/C128/vice/C128/chargen-325167-02.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "france",
+        "italy"
+      ],
+      "region_groups": [
+        "commodore-c128"
       ]
     },
     {
@@ -54006,6 +55291,13 @@
       "repo_path": "bios/Commodore/C128/vice/C128/chargen-325181-01.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "finland",
+        "sweden"
+      ],
+      "region_groups": [
+        "commodore-c128"
       ]
     },
     {
@@ -54086,6 +55378,12 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-02.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "commodore-vic20"
       ]
     },
     {
@@ -54106,6 +55404,12 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "commodore-vic20"
       ]
     },
     {
@@ -54506,6 +55810,12 @@
       "repo_path": "bios/Commodore/C128/vice/C64/chargen-906143-02.bin",
       "cores": [
         "vice"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "commodore-c64"
       ]
     },
     {
@@ -54846,6 +56156,12 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-02.bin",
       "cores": [
         "vice_xvic"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "commodore-vic20"
       ]
     },
     {
@@ -54856,6 +56172,12 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
       "cores": [
         "vice_xvic"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "commodore-vic20"
       ]
     },
     {
@@ -55128,6 +56450,12 @@
       "repo_path": "bios/Commodore/C128/vice/C64/kernal-906145-02.bin",
       "cores": [
         "x64sdl"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "commodore-c64"
       ]
     },
     {
@@ -55138,6 +56466,12 @@
       "repo_path": "bios/Commodore/C128/vice/C64/chargen-906143-02.bin",
       "cores": [
         "x64sdl"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "commodore-c64"
       ]
     },
     {
@@ -55318,6 +56652,9 @@
       "repo_path": "bios/Microsoft/Xbox/Complex_4627.bin",
       "cores": [
         "xemu"
+      ],
+      "systems": [
+        "microsoft-xbox"
       ]
     },
     {
@@ -55328,6 +56665,9 @@
       "repo_path": "bios/Microsoft/Xbox/xbox_eeprom.bin",
       "cores": [
         "xemu"
+      ],
+      "systems": [
+        "microsoft-xbox"
       ]
     },
     {
@@ -55338,6 +56678,9 @@
       "repo_path": "bios/Microsoft/Xbox/xbox_hdd.qcow2",
       "cores": [
         "xemu"
+      ],
+      "systems": [
+        "microsoft-xbox"
       ]
     },
     {
@@ -55348,6 +56691,9 @@
       "repo_path": "bios/Other/xemu/wpcap.dll",
       "cores": [
         "xemu"
+      ],
+      "systems": [
+        "microsoft-xbox"
       ]
     },
     {
@@ -55368,6 +56714,9 @@
       "repo_path": "bios/Sega/Saturn/cdb/cdb106.bin",
       "cores": [
         "ymir"
+      ],
+      "systems": [
+        "sega-saturn"
       ]
     },
     {
@@ -56068,6 +57417,9 @@
       "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
       "cores": [
         "dolphin"
+      ],
+      "systems": [
+        "nintendo-gamecube"
       ]
     },
     {
@@ -56078,6 +57430,9 @@
       "repo_path": "bios/Sega/Saturn/sega_100.bin",
       "cores": [
         "kronos"
+      ],
+      "systems": [
+        "sega-saturn"
       ]
     },
     {
@@ -56088,6 +57443,12 @@
       "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
       "cores": [
         "skyemu"
+      ],
+      "systems": [
+        "nintendo-ds",
+        "nintendo-gb",
+        "nintendo-gba",
+        "nintendo-gbc"
       ]
     },
     {
@@ -56098,6 +57459,12 @@
       "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
       "cores": [
         "skyemu"
+      ],
+      "systems": [
+        "nintendo-ds",
+        "nintendo-gb",
+        "nintendo-gba",
+        "nintendo-gbc"
       ]
     },
     {
@@ -56108,6 +57475,12 @@
       "repo_path": "bios/Nintendo/Nintendo DS/firmware.bin",
       "cores": [
         "skyemu"
+      ],
+      "systems": [
+        "nintendo-ds",
+        "nintendo-gb",
+        "nintendo-gba",
+        "nintendo-gbc"
       ]
     },
     {
@@ -56718,6 +58091,9 @@
       "repo_path": "bios/Sony/PlayStation 2/eeprom.dat",
       "cores": [
         "armsx2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56728,6 +58104,9 @@
       "repo_path": "bios/Other/armsx2/arcade/proverb.zip",
       "cores": [
         "armsx2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56810,6 +58189,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-300e.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56820,6 +58202,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-300u.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56830,6 +58215,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302c.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56840,6 +58228,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302e.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56850,6 +58241,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-302u.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56860,6 +58254,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-310.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56870,6 +58267,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-311.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56880,6 +58280,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56890,6 +58293,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-10000.MEC",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56900,6 +58306,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-30004R.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56910,6 +58319,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-39001.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56920,6 +58332,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.BIN",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56930,6 +58345,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.NVM",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56940,6 +58358,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM2",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56950,6 +58371,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-50009_BIOS_V10_CHN_190.ROM1",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56960,6 +58384,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.BIN",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56970,6 +58397,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70004.ROM1",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56980,6 +58410,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.BIN",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -56990,6 +58423,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70008_BIOS_V12_RUS_200.NVM",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57000,6 +58436,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0100jd-20000117.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57010,6 +58449,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0101j-20000217.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57020,6 +58462,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0101jd-20000217.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57030,6 +58475,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0101xd-20000224.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57040,6 +58488,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0110a-20000727.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57050,6 +58501,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0110ad-20000727.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57060,6 +58514,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120a-20000902.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57070,6 +58527,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120e-20000902.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57080,6 +58540,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902-20030110.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57090,6 +58553,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120ed-20000902.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57100,6 +58566,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-185015.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57110,6 +58579,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0120j-20001027-191435.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57120,6 +58592,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150a-20001228.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57130,6 +58605,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150ad-20001228-20030520.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57140,6 +58618,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150e-20001228.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57150,6 +58631,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150ed-20001228-20030520.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57160,6 +58644,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150j-20010118.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57170,6 +58657,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0150jd-20010118.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57180,6 +58670,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20010427.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57190,6 +58683,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20010704.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57200,6 +58696,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160a-20011004.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57210,6 +58709,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20010704.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57220,6 +58722,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20011004.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57230,6 +58735,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20020319.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57240,6 +58748,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160e-20020426.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57250,6 +58761,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20010730.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57260,6 +58774,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20020426.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57270,6 +58787,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160h-20030602.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57280,6 +58800,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20010427.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57290,6 +58813,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20011004.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57300,6 +58826,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0160j-20020426.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57310,6 +58839,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170a-20030325.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57320,6 +58852,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170ad-20030325.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57330,6 +58865,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170e-20030227.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57340,6 +58878,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170ed-20030227.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57350,6 +58891,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170j-20030206.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57360,6 +58904,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0170jd-20030206.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57370,6 +58917,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0180cd-20030224.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57380,6 +58930,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0180j-20031028.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57390,6 +58943,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190a-20030623.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57400,6 +58956,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190a-20040329.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57410,6 +58969,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190ad-20030623.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57420,6 +58982,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190c-20030623.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57430,6 +58995,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190cd-20030623.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57440,6 +59008,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190e-20030623.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57450,6 +59021,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190e-20030822.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57460,6 +59034,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190h-20030623.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57470,6 +59047,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190j-20030623.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57480,6 +59060,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190j-20030822.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57490,6 +59073,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190k-20030623.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57500,6 +59086,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0190r-20030623.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57510,6 +59099,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0200a-20040614.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57520,6 +59112,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0200ad-20040614.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57530,6 +59125,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0200ed-20040614.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57540,6 +59138,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0200h-20040614.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57550,6 +59151,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0200j-20040614.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57560,6 +59164,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0210j-20040917.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57570,6 +59177,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20050620.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57580,6 +59190,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20060210.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57590,6 +59203,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220a-20060905.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57600,6 +59216,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220ad-20050620.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57610,6 +59229,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220ad-20060905.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57620,6 +59242,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20050620.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57630,6 +59255,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20060210.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57640,6 +59268,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220e-20060905.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57650,6 +59281,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20050620.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57660,6 +59294,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20060210.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57670,6 +59307,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220h-20060905.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57680,6 +59320,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20050620.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57690,6 +59333,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20060210.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57700,6 +59346,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220j-20060905.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57710,6 +59359,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220jd-20050620.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57720,6 +59372,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0220jd-20060905.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57730,6 +59385,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230e-20080220.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57740,6 +59398,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230h-20080220.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57750,6 +59411,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230j-20080220.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57760,6 +59424,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0250e-20100415.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57770,6 +59437,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0250j-20100415.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57780,6 +59450,15 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2_scph50006.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57790,6 +59469,16 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2_scph50008.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
+      ],
+      "regions": [
+        "europe",
+        "oceania"
+      ],
+      "region_groups": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57800,6 +59489,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-110u.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57810,6 +59502,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-120e.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57820,6 +59515,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-120u.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57830,6 +59528,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-130e.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57840,6 +59541,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-130u.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57850,6 +59554,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-200j.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57860,6 +59567,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-210e.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57870,6 +59580,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-210j.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57880,6 +59593,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-210u.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57890,6 +59606,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-212g.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57900,6 +59619,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-212u.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57910,6 +59632,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-213e.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57920,6 +59645,9 @@
       "repo_path": "bios/Sony/PlayStation 2/DVD Firmware/ps2-dvd-215g.bin",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57930,6 +59658,9 @@
       "repo_path": "bios/Sony/PlayStation 2/.variants/SCPH30004R.nvm.5e0200d0",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57940,6 +59671,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-70006_BIOS_V12_HK_200.NVM",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57950,6 +59684,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-75008_BIOS_V14_RUS_220.NVM",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57960,6 +59697,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-77008_BIOS_V15_RUS_220.NVM",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57970,6 +59710,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.NVM",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57980,6 +59723,9 @@
       "repo_path": "bios/Sony/PlayStation 2/SCPH-90006_BIOS_VX_HK _230.ROM1",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -57990,6 +59736,9 @@
       "repo_path": "bios/Sony/PlayStation 2/ps2-0230a-20080220.nvm",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -58000,6 +59749,9 @@
       "repo_path": "bios/Sony/PlayStation 2/scph30004fr.nvm",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     },
     {
@@ -58010,6 +59762,9 @@
       "repo_path": "bios/Sony/PlayStation 2/scph39001.nvm",
       "cores": [
         "yaps2"
+      ],
+      "systems": [
+        "sony-playstation-2"
       ]
     }
   ]

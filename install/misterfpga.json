@@ -5,7 +5,7 @@
   "platform": "misterfpga",
   "display_name": "MiSTer FPGA",
   "version": "1.0",
-  "generated": "2026-10-04T20:41:16Z",
+  "generated": "2026-10-09T20:41:14Z",
   "base_destination": "games",
   "detect": [
     {
@@ -29,7 +29,10 @@
       "sha256": "41b5b8e7c44e55eaf5cfd4f2a58df42f4a1bbc776723368fb25bf118dd631b1b",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/panafz1.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "3DO/kanji.rom",
@@ -37,7 +40,10 @@
       "sha256": "8974193e76cf255ebc40fe20b95b405db2cc1ea07910584380e50c6d9ca181aa",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/panafz1j-kanji.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "Apple-IIgs/boot.rom",
@@ -45,7 +51,10 @@
       "sha256": "01398a51b3aa16c40bb3d5df43494316cc12eebb87871712cecc396e1beb2df8",
       "size": 262144,
       "repo_path": "bios/Apple/Apple II/apple2gs.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "apple-iigs"
+      ]
     },
     {
       "dest": "Apple-IIgs/boot1.rom",
@@ -53,7 +62,10 @@
       "sha256": "34cd454c6201bfd26839d6ace2ff6b1231e09d6279e49b4890311756dc3825fb",
       "size": 131072,
       "repo_path": "bios/Apple/Apple IIGS/ROM",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "apple-iigs"
+      ]
     },
     {
       "dest": "Jaguar/boot.rom",
@@ -61,7 +73,10 @@
       "sha256": "f0bd29599b3dfca7f5620c011256c1dc45c9d82c428a318f965c2ba3ded2e9f9",
       "size": 131072,
       "repo_path": "bios/Atari/Jaguar/boot.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "atari-jaguar"
+      ]
     },
     {
       "dest": "Jaguar/boot1.rom",
@@ -69,7 +84,10 @@
       "sha256": "7ebadb56f8082c86d6f74e2c38e02b218db420d3049f8f9c988f6490dc7f9fc0",
       "size": 262144,
       "repo_path": "bios/Atari/Jaguar/boot1.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "atari-jaguar"
+      ]
     },
     {
       "dest": "Jaguar/boot2.rom",
@@ -77,7 +95,10 @@
       "sha256": "bf02591cfe4ab4f082ea23c447da5c53afbfddace6d700b785ba04b7ac5c64e0",
       "size": 131072,
       "repo_path": "bios/Atari/Jaguar/boot2.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "atari-jaguar"
+      ]
     },
     {
       "dest": "AtariLynx/boot.rom",
@@ -85,7 +106,10 @@
       "sha256": "c26a36c1990bcf841155e5a6fea4d2ee1a4d53b3cc772e70f257a962ad43b383",
       "size": 512,
       "repo_path": "bios/Atari/Lynx/Atari_LYNX_boot.img",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "atari-lynx"
+      ]
     },
     {
       "dest": "Astrocade/boot.rom",
@@ -93,7 +117,10 @@
       "sha256": "f01220d94b82145a6d18f114ff59be9c178f69de24f8ad0f4d19eee8b86b17c7",
       "size": 8192,
       "repo_path": "bios/Bally/Astrocade/astro.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "bally-astrocade"
+      ]
     },
     {
       "dest": "Casio_PV-2000/boot0.rom",
@@ -101,7 +128,10 @@
       "sha256": "2587d206eb63917848ea30e14232448ed4f873c6796a22e2bf6543b01f46308e",
       "size": 16384,
       "repo_path": "bios/Casio/PV-2000/hn613128pc64.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "casio-pv2000"
+      ]
     },
     {
       "dest": "CreatiVision/boot.rom",
@@ -109,7 +139,10 @@
       "sha256": "48a7fda99c1b9c0d90b70de0b4a9431a5a781f94d1874ee6d91830a638c9e5c3",
       "size": 16384,
       "repo_path": "bios/VTech/CreatiVision/laser2001.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "creativision"
+      ]
     },
     {
       "dest": "SCV/boot.rom",
@@ -117,7 +150,10 @@
       "sha256": "25c7ff2d735d1ae895af9262f31e083c5c1bd99a8f31b5b378dfbc0f166ec97f",
       "size": 6144,
       "repo_path": "bios/Epoch/Super Cassette Vision/boot.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "epoch-scv"
+      ]
     },
     {
       "dest": "Gamate/boot.rom",
@@ -125,7 +161,10 @@
       "sha256": "26f206fa4eedbe040f619e3af78efa1d38588535b1d746f6a462da639ced4b1e",
       "size": 4096,
       "repo_path": "bios/Bit Corporation/Gamate/gamate_bios_umc.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "gamate"
+      ]
     },
     {
       "dest": "GameKing/boot.rom",
@@ -133,7 +172,10 @@
       "sha256": "7843fd082889cac046d446160f38755f7c8c4a8e4f9dd9d5104b185f0bc1dec4",
       "size": 524288,
       "repo_path": "bios/TimeTop/GameKing/boot.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "gameking"
+      ]
     },
     {
       "dest": "Interact/boot.rom",
@@ -141,7 +183,10 @@
       "sha256": "e0888ba82382aabb7557aa4a3445e613bd7f33bae1af5ece211e2cb6bc9ffa82",
       "size": 2048,
       "repo_path": "bios/Interact/Home Computer/interact.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "interact"
+      ]
     },
     {
       "dest": "Loopy/boot0.rom",
@@ -149,7 +194,10 @@
       "sha256": "82a8d6add06e324e36c71b0a7a92d607af3db5e65574a6892794d70df668e9d5",
       "size": 32768,
       "repo_path": "bios/Casio/Loopy/boot0.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "loopy"
+      ]
     },
     {
       "dest": "Loopy/boot1.rom",
@@ -157,7 +205,10 @@
       "sha256": "7540ff64268e500a34fb83c8642510d341440ac6258f6c36851e182870e40f75",
       "size": 524288,
       "repo_path": "bios/Casio/Loopy/boot1.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "loopy"
+      ]
     },
     {
       "dest": "Marty/mrom.m36",
@@ -165,7 +216,10 @@
       "sha256": "2cd7466183ba965259df35ff078b7b057a99086feea0050ddf87aebc6932f429",
       "size": 2097152,
       "repo_path": "bios/Fujitsu/FM Towns/mrom.m36",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "marty"
+      ]
     },
     {
       "dest": "Marty/mrom.m37",
@@ -173,7 +227,10 @@
       "sha256": "10fc6d984d0a440c3410d805f4bea247fb5dd5a509befff481164923f883797d",
       "size": 2097152,
       "repo_path": "bios/Fujitsu/FM Towns/mrom.m37",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "marty"
+      ]
     },
     {
       "dest": "Intellivision/boot0.rom",
@@ -181,7 +238,10 @@
       "sha256": "1aeb614856beba95463166daf09304b414d5617d3f37d221724b3337fc4b2722",
       "size": 8192,
       "repo_path": "bios/Mattel/Intellivision/INTV_EROM.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "mattel-intellivision"
+      ]
     },
     {
       "dest": "Intellivision/boot1.rom",
@@ -189,7 +249,10 @@
       "sha256": "a80b6841182547d08635ad30a6af71441c4c9eed9391b3dd22feb30d8e50cc85",
       "size": 2048,
       "repo_path": "bios/Mattel/Intellivision/INTV_GROM.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "mattel-intellivision"
+      ]
     },
     {
       "dest": "Intellivision/boot2.rom",
@@ -197,7 +260,10 @@
       "sha256": "dabade432af1523f43029057071ca8c1ed3604498c784603e8733023382ad7a5",
       "size": 2048,
       "repo_path": "bios/Mattel/Intellivision/IVOICE.BIN",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "mattel-intellivision"
+      ]
     },
     {
       "dest": "Intellivision/boot3.rom",
@@ -205,7 +271,10 @@
       "sha256": "2fcea60039c4a8836b9bb71e391d70a145c724b4dae516be733fe842ba6687c7",
       "size": 24576,
       "repo_path": "bios/Mattel/Intellivision/ECS.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "mattel-intellivision"
+      ]
     },
     {
       "dest": "MSX1/boot.rom",
@@ -213,7 +282,10 @@
       "sha256": "04fd77f02f652770cbb3cc6b4a594cc736d56486a106c1068965f1fe090746a5",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/share/systemroms/vg8020_basic-bios1.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ]
     },
     {
       "dest": "PC8801/boot.rom",
@@ -221,7 +293,10 @@
       "sha256": "0dc3fcf58c90c1f119a710babd54b57babf81ba8573c070b33f0cc21948b3086",
       "size": 393216,
       "repo_path": "bios/NEC/PC-88/PC8801 MKII SR BIOS.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nec-pc-88"
+      ]
     },
     {
       "dest": "TGFX16-CD/cd_bios.rom",
@@ -229,7 +304,10 @@
       "sha256": "b057e09822c3767120ba56f2ce02f089b5824d4b489ea3cd7ad9405b3a339a52",
       "size": 262144,
       "repo_path": "bios/NEC/PC Engine CD/Super CD 3.1.pce",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nec-pc-engine-cd"
+      ]
     },
     {
       "dest": "NGPC/boot0.rom",
@@ -237,7 +315,10 @@
       "sha256": "8fb845a2f71514cec20728e2f0fecfade69444f8d50898b92c2259f1ba63e10d",
       "size": 65536,
       "repo_path": "bios/SNK/Neo Geo Pocket/SNK Neo-Geo Pocket Color BIOS (1999)(SNK)(en-ja).bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "ngpc"
+      ]
     },
     {
       "dest": "NGPC/boot1.rom",
@@ -245,7 +326,10 @@
       "sha256": "0293555b21c4fac516d25199df7809b26beeae150e1d4504a050db32264a6ad7",
       "size": 65536,
       "repo_path": "bios/SNK/Neo Geo Pocket/SNK Neo-Geo Pocket BIOS (1998)(SNK)(en-ja).bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "ngpc"
+      ]
     },
     {
       "dest": "N64/boot.rom",
@@ -253,7 +337,10 @@
       "sha256": "fa7b09795ef1e54461e59f6f2d902368133e3f1cd980e34383e6a780d74beffd",
       "size": 1984,
       "repo_path": "bios/Nintendo/Nintendo 64/boot.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-64"
+      ]
     },
     {
       "dest": "N64/boot1.rom",
@@ -261,7 +348,10 @@
       "sha256": "79c81fffae934b6df251da6c3a394f52c6a0eaa07115a3b9677743e3c1335f4a",
       "size": 1984,
       "repo_path": "bios/Nintendo/Nintendo 64/boot1.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-64"
+      ]
     },
     {
       "dest": "N64/boot3.rom",
@@ -269,7 +359,10 @@
       "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
       "size": 4194304,
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-64"
+      ]
     },
     {
       "dest": "N64/boot4.rom",
@@ -277,7 +370,10 @@
       "sha256": "9c2962a8b994a29e4cd04b3a6e4ed730a751414655ab6a9799ebf5fc08b79d44",
       "size": 4194304,
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_DEV.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-64"
+      ]
     },
     {
       "dest": "N64/boot5.rom",
@@ -285,7 +381,10 @@
       "sha256": "e9fec87a45fba02399e88064b9e2f8cf0f2106e351c58279a87f05da5bc984ad",
       "size": 4194304,
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_USA.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-64"
+      ]
     },
     {
       "dest": "GAMEBOY/boot1.rom",
@@ -293,7 +392,10 @@
       "sha256": "b4f2e416a35eef52cba161b159c7c8523a92594facb924b3ede0d722867c50c7",
       "size": 2304,
       "repo_path": "bios/Nintendo/Game Boy Color/GBC_cgb.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gb"
+      ]
     },
     {
       "dest": "GBA/boot.rom",
@@ -301,7 +403,10 @@
       "sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
       "size": 16384,
       "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gba"
+      ]
     },
     {
       "dest": "NES/boot0.rom",
@@ -309,7 +414,10 @@
       "sha256": "99c18490ed9002d9c6d999b9d8d15be5c051bdfa7cc7e73318053c9a994b0178",
       "size": 8192,
       "repo_path": "bios/Arcade/FBNeo/fdsbios.nes",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-nes"
+      ]
     },
     {
       "dest": "PokemonMini/boot.rom",
@@ -317,7 +425,10 @@
       "sha256": "45a1c7f28b9ad585e67f047abe9c1c956724bfcab8c9011002af4274e7c50e8f",
       "size": 4096,
       "repo_path": "bios/Nintendo/Pokemon Mini/bios.min",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-pokemon-mini"
+      ]
     },
     {
       "dest": "SGB/Super Game Boy 2.sfc",
@@ -325,7 +436,10 @@
       "sha256": "c172498a23d1176672931bab33b629c7d28f914a43dca9e540b8af1b37ccf2c6",
       "size": 524288,
       "repo_path": "bios/Nintendo/Super Game Boy/SGB2.sfc/program.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-sgb"
+      ]
     },
     {
       "dest": "SGB/Super Game Boy.sfc",
@@ -333,7 +447,10 @@
       "sha256": "a75160f7b89b1f0e20fd2f6441bb86285c7378db5035ef6885485eaff6059376",
       "size": 262144,
       "repo_path": "bios/Nintendo/Super Game Boy/SGB1.sfc/program.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-sgb"
+      ]
     },
     {
       "dest": "SNES/bsx_bios.rom",
@@ -341,7 +458,10 @@
       "sha256": "a49827b45ff9ac9cf5b4658190e1428e59251bc82d8a63d8e9e0f71e439f008f",
       "size": 1048576,
       "repo_path": "bios/Nintendo/SNES/BS-X.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "CD-i/boot0.rom",
@@ -349,7 +469,10 @@
       "sha256": "fd123e66beadaf844cb220a44166ea33f9fd0d64bafb9e6399febff445429db2",
       "size": 524288,
       "repo_path": "bios/Philips/CD-i/cdi220b.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "philips-cdi"
+      ]
     },
     {
       "dest": "CD-i/boot1.rom",
@@ -357,7 +480,10 @@
       "sha256": "15794460f2ad630f6dd483a02ef958818c7a5c65f8afe76364bc9ffb7ccad3cc",
       "size": 8192,
       "repo_path": "bios/Philips/CD-i/zx405042p__cdi_slave_2.0__b43t__zzmk9213.mc68hc705c8a_withtestrom.7206",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "philips-cdi"
+      ]
     },
     {
       "dest": "CD-i/boot2.rom",
@@ -365,7 +491,10 @@
       "sha256": "e8a8cabb23650b53c2cb0763c3a1409f6c0d580a52fbe8ef834d44d4021db165",
       "size": 131072,
       "repo_path": "bios/Philips/CD-i/vmpega_split.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "philips-cdi"
+      ]
     },
     {
       "dest": "PocketChallengeV2/boot.rom",
@@ -373,7 +502,10 @@
       "sha256": "bf4480dbea1c47c8b54ce7be9382bc1006148f431fbe4277e136351fa74f635e",
       "size": 4096,
       "repo_path": "bios/Bandai/WonderSwan/bootrom.ws",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "pocket-challenge-v2"
+      ]
     },
     {
       "dest": "PocketChallengeV2/boot1.rom",
@@ -381,7 +513,10 @@
       "sha256": "f5a5c044d84ce1681f94e9ef74287cb989784497be5bd5108df17908dfa55db2",
       "size": 8192,
       "repo_path": "bios/Bandai/WonderSwan/bootrom.wsc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "pocket-challenge-v2"
+      ]
     },
     {
       "dest": "MegaCD/Europe/cd_bios.rom",
@@ -389,7 +524,10 @@
       "sha256": "fe608a2a07676a23ab5fd5eee2f53c9e2526d69a28aa16ccd85c0ec42e6933cb",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/eu_mcd2_9303.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-cd"
+      ]
     },
     {
       "dest": "MegaCD/Japan/cd_bios.rom",
@@ -397,7 +535,10 @@
       "sha256": "7133fc2dd2fe5b7d0acd53a5f10f3d00b5d31270239ad20d74ef32393e24af88",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/jp_mcd2_921222.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-cd"
+      ]
     },
     {
       "dest": "MegaCD/USA/cd_bios.rom",
@@ -405,7 +546,10 @@
       "sha256": "fb477cdbf94c84424c2feca4fe40656d85393fe7b7b401911b45ad2eb991258c",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-cd"
+      ]
     },
     {
       "dest": "MegaCD/boot.rom",
@@ -413,7 +557,10 @@
       "sha256": "59403e7f8be1d4e98d673cca17cfec072770a56415165ad7ac88dcd3f7273317",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/US Sega CD 2 (Region Free) 930601 l_oliveira.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-cd"
+      ]
     },
     {
       "dest": "Saturn/boot.rom",
@@ -421,7 +568,10 @@
       "sha256": "37561c4444bec52ae1aae31de5579f1856d5b23002ee083ade42f9ed13c8616f",
       "size": 524288,
       "repo_path": "bios/Sega/Saturn/.variants/hisaturn_v103.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "NEOGEO/000-lo.lo",
@@ -429,7 +579,10 @@
       "sha256": "2a76f023dc578804c6bcd58ed514ffc04fcb433b3bd75d4452575ffda57a0707",
       "size": 131072,
       "repo_path": "bios/SNK/Neo Geo CD/000-lo.lo",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "snk-neogeo"
+      ]
     },
     {
       "dest": "NEOGEO/neo-epo.sp1",
@@ -437,7 +590,10 @@
       "sha256": "70f7906d68acbc3630b6e7792ebb485288b05ca72c6d4c243e07e230aae8d1e4",
       "size": 131072,
       "repo_path": "bios/SNK/Neo Geo/neo-epo.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "snk-neogeo"
+      ]
     },
     {
       "dest": "NEOGEO/sfix.sfix",
@@ -445,7 +601,10 @@
       "sha256": "fcf51e688c006408be92c5adaf37d4302d05e7e681193dd0623072e53915c90e",
       "size": 131072,
       "repo_path": "bios/SNK/Neo Geo/sfix.sfix",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "snk-neogeo"
+      ]
     },
     {
       "dest": "NEOGEO/sp-s2.sp1",
@@ -453,7 +612,10 @@
       "sha256": "ae1c5cc9a0acdead8a3d5a16ee84f575582f2209677464b05a2b8b0451f658a1",
       "size": 131072,
       "repo_path": "bios/SNK/Neo Geo/sp-s2.sp1",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "snk-neogeo"
+      ]
     },
     {
       "dest": "NEOGEO/uni-bios.rom",
@@ -461,7 +623,10 @@
       "sha256": "e016ce75097df0b5f5910e8eb4914439f5c77511de65df5a1e089eef147b256b",
       "size": 131072,
       "repo_path": "bios/SNK/Neo Geo/uni-bios_4_0.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "snk-neogeo"
+      ]
     },
     {
       "dest": "NeoGeo-CD/neocd.bin",
@@ -469,7 +634,10 @@
       "sha256": "2e93af5848080ea04d17a7841b742f009330d30e4ff40c3410547581d921c892",
       "size": 524288,
       "repo_path": "bios/SNK/Neo Geo CD/neocd.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "snk-neogeo-cd"
+      ]
     },
     {
       "dest": "NeoGeo-CD/top-sp1.bin",
@@ -477,7 +645,10 @@
       "sha256": "c11c33589b2057008a7e4c7c700fcd989a8c0f95f869e7e7539fdd00414d99a7",
       "size": 524288,
       "repo_path": "bios/SNK/Neo Geo CD/top-sp1.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "snk-neogeo-cd"
+      ]
     },
     {
       "dest": "NeoGeo-CD/uni-bioscd.rom",
@@ -485,7 +656,10 @@
       "sha256": "1c3ec20824a58e5f5cbf47ccc2c91a10f34d21cfa2791b3413cea89b0c920db8",
       "size": 524288,
       "repo_path": "bios/SNK/Neo Geo/uni-bioscd33.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "snk-neogeo-cd"
+      ]
     },
     {
       "dest": "PSX/boot.rom",
@@ -493,7 +667,10 @@
       "sha256": "39dcc1a0717036c9b6ac52fefd1ee7a57d3808e8cfbc755879fa685a0a738278",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph7001.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "PSX/boot1.rom",
@@ -501,7 +678,10 @@
       "sha256": "e900504d1755f021f861b82c8258c5e6658c7b592f800cccd91f5d32ea380d28",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph7000.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "PSX/boot2.rom",
@@ -509,7 +689,10 @@
       "sha256": "5e84a94818cf5282f4217591fefd88be36b9b174b3cc7cb0bcd75199beb450f1",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/scph7002.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "PSX/sbi.zip",
@@ -517,7 +700,10 @@
       "sha256": "32db7bb64131623fa912ef30a85f7d70cee2abbca56c21d360d2025e12b8aca9",
       "size": 218953,
       "repo_path": "bios/Sony/PlayStation/sbi.zip",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "Studio-II/boot0.rom",
@@ -525,7 +711,10 @@
       "sha256": "1e7ae3cd972eb39681e6c6df5f1ac6f7d86c9e59788e40d6b4c948375e9ca5f7",
       "size": 2048,
       "repo_path": "bios/RCA/Studio II/boot0.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "studio-ii"
+      ]
     },
     {
       "dest": "Studio-II/boot1.rom",
@@ -533,7 +722,10 @@
       "sha256": "e90cb0c5be993689a2d4fa03e664f5943967160153520d435391aaefff06da35",
       "size": 4096,
       "repo_path": "bios/RCA/Studio II/boot1.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "studio-ii"
+      ]
     },
     {
       "dest": "Studio-II/boot2.rom",
@@ -541,7 +733,10 @@
       "sha256": "a0d6c1852fb407f86d25c802441ff15ec7fd041683c6a9ae0d23db0ca0df8c0b",
       "size": 4096,
       "repo_path": "bios/RCA/Studio II/boot2.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "studio-ii"
+      ]
     },
     {
       "dest": "Studio-II/boot3.rom",
@@ -549,7 +744,10 @@
       "sha256": "7a95530b9be7fe487e027a5ea7ffe4a7561762cc3fc8cdc535d6f36e5f23c8a0",
       "size": 2048,
       "repo_path": "bios/RCA/Studio II/boot3.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "studio-ii"
+      ]
     },
     {
       "dest": "Studio-II/chip8.bin",
@@ -557,7 +755,10 @@
       "sha256": "8764ba7e02fe00489997b45ac1f15f188f726cbcd5311e252225e62eb58d6d04",
       "size": 768,
       "repo_path": "bios/RCA/Studio II/boot4.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "studio-ii"
+      ]
     },
     {
       "dest": "Studio-II/openstudio2.bin",
@@ -565,7 +766,10 @@
       "sha256": "36ddd9ffa17a194bd8103efb807e104a529134685502839a4f14ea4d5de648ad",
       "size": 2048,
       "repo_path": "bios/RCA/Studio II/openstudio2.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "studio-ii"
+      ]
     },
     {
       "dest": "SuperAcan/boot0.rom",
@@ -573,7 +777,10 @@
       "sha256": "2e4d88bec69b5e7e4803368c233ce0d20f6dd107c5af0cfcc0089d310c695d7c",
       "size": 4096,
       "repo_path": "bios/Funtech/Super A'Can/boot0.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "superacan"
+      ]
     },
     {
       "dest": "SuperAcan/boot1.rom",
@@ -581,7 +788,10 @@
       "sha256": "219f51bcb8544fe733bf784e087544f97aa5457945260c7fa07a8639f30f3a68",
       "size": 8192,
       "repo_path": "bios/Funtech/Super A'Can/boot1.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "superacan"
+      ]
     },
     {
       "dest": "SuperAcan/boot2.rom",
@@ -589,7 +799,10 @@
       "sha256": "9889590805a97b7bb439d853d9ae4d6b31067bacb8225ab0538f3491dedab4b8",
       "size": 8192,
       "repo_path": "bios/Funtech/Super A'Can/boot2.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "superacan"
+      ]
     },
     {
       "dest": "COCO3/boot0.rom",
@@ -597,7 +810,10 @@
       "sha256": "ad358430568250eb8330a37f85361d9ce67e5ae6d5a28c17b31802cd3953a5d2",
       "size": 32768,
       "repo_path": "bios/Tandy/CoCo/coco3.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "tandy-coco"
+      ]
     },
     {
       "dest": "COCO3/boot1.rom",
@@ -605,7 +821,10 @@
       "sha256": "1c40c5a74e72edaeecc2511fee1aab347eae2c3d5fc6778cb622e3df14d63157",
       "size": 8192,
       "repo_path": "bios/Tandy/CoCo/disk11.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "tandy-coco"
+      ]
     },
     {
       "dest": "COCO3/boot2.rom",
@@ -613,7 +832,10 @@
       "sha256": "1a5a3e95522296f66a192e9a7ca0725ecc88862f9bb31f50ef37ae789404692f",
       "size": 8192,
       "repo_path": "bios/Tandy/CoCo/orch90.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "tandy-coco"
+      ]
     },
     {
       "dest": "TI-99_4A/boot0.rom",
@@ -621,7 +843,10 @@
       "sha256": "53ad354861a62b9144e02e878845c7e1a5dd75342b715047db64b780954f7c88",
       "size": 196608,
       "repo_path": "bios/Texas Instruments/TI-99/boot0.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "ti99"
+      ]
     },
     {
       "dest": "GameCom/boot.rom",
@@ -629,7 +854,10 @@
       "sha256": "64cbaa1a5e8bae8fae90a7affd6743df5d23edfc4e1e23002ca77c8b7ec1bb64",
       "size": 262144,
       "repo_path": "bios/Tiger/Game.com/GameCom External BIOS (Kitrinx v0.03).bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "tiger-game-com"
+      ]
     },
     {
       "dest": "VideoBrain/boot.rom",
@@ -637,7 +865,10 @@
       "sha256": "545b466e7cc0c2cce7e9479857dbedee1476fc56245f0de45f816c1b99b75562",
       "size": 4096,
       "repo_path": "bios/VideoBrain/Family Computer/boot.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "videobrain"
+      ]
     },
     {
       "dest": "WonderSwan/boot.rom",
@@ -645,7 +876,10 @@
       "sha256": "bf4480dbea1c47c8b54ce7be9382bc1006148f431fbe4277e136351fa74f635e",
       "size": 4096,
       "repo_path": "bios/Bandai/WonderSwan/bootrom.ws",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "wonderswan"
+      ]
     },
     {
       "dest": "WonderSwan/boot1.rom",
@@ -653,7 +887,10 @@
       "sha256": "f5a5c044d84ce1681f94e9ef74287cb989784497be5bd5108df17908dfa55db2",
       "size": 8192,
       "repo_path": "bios/Bandai/WonderSwan/bootrom.wsc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "wonderswan"
+      ]
     },
     {
       "dest": "WonderSwanColor/boot.rom",
@@ -661,7 +898,10 @@
       "sha256": "bf4480dbea1c47c8b54ce7be9382bc1006148f431fbe4277e136351fa74f635e",
       "size": 4096,
       "repo_path": "bios/Bandai/WonderSwan/bootrom.ws",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "wonderswan-color"
+      ]
     },
     {
       "dest": "WonderSwanColor/boot1.rom",
@@ -669,7 +909,10 @@
       "sha256": "f5a5c044d84ce1681f94e9ef74287cb989784497be5bd5108df17908dfa55db2",
       "size": 8192,
       "repo_path": "bios/Bandai/WonderSwan/bootrom.wsc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "wonderswan-color"
+      ]
     }
   ]
 }

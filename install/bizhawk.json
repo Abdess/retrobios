@@ -33,7 +33,10 @@
       "sha256": "41b5b8e7c44e55eaf5cfd4f2a58df42f4a1bbc776723368fb25bf118dd631b1b",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/panafz1.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "panafz1e.bin",
@@ -41,7 +44,10 @@
       "sha256": "6f7d03d82b33605399d8b49408477184f483409e976c46ca69c073d03e228898",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/3do_panafz1e.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "panafz1j.bin",
@@ -49,7 +55,10 @@
       "sha256": "f356b28b1b35ec27c8697f70d9e0118c4f20609ac5586b9ee4f9241aea96336b",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/panafz1j.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "panafz10.bin",
@@ -57,7 +66,10 @@
       "sha256": "8d72334395cfc98e44c89804eabf036cf95a23645353e7fe8ab886445a3b6354",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/panafz10.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "panafz10e-anvil.bin",
@@ -65,7 +77,10 @@
       "sha256": "bf83957563970804fa90d0fee02e25c3befe054209d9df488c019715a80b455a",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/panafz10e-anvil.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "panafz10j.bin",
@@ -73,7 +88,10 @@
       "sha256": "74eba0f5e1a22ff08635ea2e03db766d131a79247e096e1b40aeba900c6393ab",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/3do_panafz10j.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "goldstar.bin",
@@ -81,7 +99,10 @@
       "sha256": "4162ec1bc0f0f449c0457413e8ae8d1e8e351e67e0ccca20d0ac86813e7cfe9b",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/goldstar.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "goldstar_fc1_enc.bin",
@@ -89,7 +110,10 @@
       "sha256": "69298acb4bcfb99b24cf42cc14d423b44880c3be15df2237534641989358b63f",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/3do_goldstar_fc1_enc.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "sanyotry.bin",
@@ -97,7 +121,10 @@
       "sha256": "c1e6bf926afd48d5ea408871a23ba6b4a9b07da411246185ab3d7bb5e435b039",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/sanyotry.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "sanyo_hc21_b3_unenc.bin",
@@ -105,7 +132,10 @@
       "sha256": "91f61a226ab9b8fc53cb643979bd9916eaf45283a43c06f1518a0b41541a6dab",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/3do_sanyo_hc21_b3_unenc.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "3do_arcade_saot.bin",
@@ -113,7 +143,10 @@
       "sha256": "72a88b5b47b76bd5604b30c102c948fa7e0ee90ccbc83aba496c45cf90b5a0e7",
       "size": 524288,
       "repo_path": "bios/3DO Company/3DO/3do_arcade_saot.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "3do_devkit_1.0fc2.bin",
@@ -121,7 +154,10 @@
       "sha256": "9914f1e581e08cd722ed4c3f9c82f1ebf3453ecf0f0e78b56052f59b7b980509",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/3do_devkit_1.0fc2.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "panafz1-kanji.bin",
@@ -129,7 +165,10 @@
       "sha256": "303cd0812f2d2f3e703fe901c5d54e1e94c5c78f7e6c9321c2ca66fafa4f9bc6",
       "size": 933636,
       "repo_path": "bios/3DO Company/3DO/panafz1-kanji.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "panafz10ja-anvil-kanji.bin",
@@ -137,7 +176,10 @@
       "sha256": "4db281ad37c21ede8cbe343b349f4cd6c3ffc3c47ae2e0de8cedaf043faea97a",
       "size": 1048576,
       "repo_path": "bios/3DO Company/3DO/panafz10ja-anvil-kanji.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "3do"
+      ]
     },
     {
       "dest": "AppleIIe.rom",
@@ -145,7 +187,10 @@
       "sha256": "aab38a03ca8deabbb2f868733148c2efd6f655a59cd9c5d058ef3e0b7aa86a1a",
       "size": 16384,
       "repo_path": "bios/Apple/Apple II/AppleIIe.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "apple-ii"
+      ]
     },
     {
       "dest": "AppleIIe_DiskII.rom",
@@ -153,7 +198,10 @@
       "sha256": "de1e3e035878bab43d0af8fe38f5839c527e9548647036598ee6fe7ec74d2a7d",
       "size": 256,
       "repo_path": "bios/Apple/Apple II/AppleIIe_DiskII.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "apple-ii"
+      ]
     },
     {
       "dest": "A78_PAL_BIOS.bin",
@@ -161,7 +209,10 @@
       "sha256": "63e1884e27c89d47e968e2c31dd268e17b415be590865739d5b366c76c123c48",
       "size": 16384,
       "repo_path": "bios/Atari/7800/7800 BIOS (E).rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "atari-7800"
+      ]
     },
     {
       "dest": "A78_highscore.bin",
@@ -169,7 +220,10 @@
       "sha256": "368a5b43b9ab18c7108341e7da5cb3c65dbe5ca1d8334eb8654bf3d73b6f6308",
       "size": 4096,
       "repo_path": "bios/Atari/7800/A78_highscore.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "atari-7800"
+      ]
     },
     {
       "dest": "A78_NTSC_bios.bin",
@@ -177,7 +231,10 @@
       "sha256": "7d94551defcd8e7b045a34255654d6d169a683f63062d51dee3eedabf2042db0",
       "size": 4096,
       "repo_path": "bios/Atari/7800/7800 BIOS (U).rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "atari-7800"
+      ]
     },
     {
       "dest": "Atari_LYNX_boot.img",
@@ -185,7 +242,10 @@
       "sha256": "c26a36c1990bcf841155e5a6fea4d2ee1a4d53b3cc772e70f257a962ad43b383",
       "size": 512,
       "repo_path": "bios/Atari/Lynx/Atari_LYNX_boot.img",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "atari-lynx"
+      ]
     },
     {
       "dest": "Coleco_Bios.bin",
@@ -193,7 +253,10 @@
       "sha256": "990bf1956f10207d8781b619eb74f89b00d921c8d45c95c334c16c8cceca09ad",
       "size": 8192,
       "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "coleco-colecovision"
+      ]
     },
     {
       "dest": "amiga-os-130.rom",
@@ -201,7 +264,10 @@
       "sha256": "ee05862d8102a08436ac4056da7d549db31625c7d47b24dfb7b3c9a5c113ca53",
       "size": 262144,
       "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-amiga"
+      ]
     },
     {
       "dest": "amiga-os-205-a600.rom",
@@ -209,7 +275,10 @@
       "sha256": "8d57d6e9d976df42d91ff9d10a5eedaede1a00e3b4b34cad750ca5ff7229f28a",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-205-a600.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-amiga"
+      ]
     },
     {
       "dest": "amiga-os-310-a1200.rom",
@@ -217,7 +286,10 @@
       "sha256": "6d43840d4099a74170ea0f0425b6257c3891ebcaa39c4d1840075a9ab22b5707",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-310-a1200.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-amiga"
+      ]
     },
     {
       "dest": "amiga-os-310-a4000.rom",
@@ -225,7 +297,10 @@
       "sha256": "71236ed62c85394a3ad7d0d8d65405bac7a10083e06ba6b82120dacc7a00fe9a",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-310-a4000.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-amiga"
+      ]
     },
     {
       "dest": "amiga-os-310-cd32.rom",
@@ -233,7 +308,10 @@
       "sha256": "3586355514947b5ab48c8755dc004fab94f188b19e7bce491c8f9693499e830b",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-os-310-cd32.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-amiga"
+      ]
     },
     {
       "dest": "amiga-os-310-cd32-ext.rom",
@@ -241,7 +319,10 @@
       "sha256": "d964826432559994ffe329f643fd4e42dbbff313362d9434945725d7119cae87",
       "size": 524288,
       "repo_path": "bios/Commodore/Amiga/amiga-ext-310-cd32.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-amiga"
+      ]
     },
     {
       "dest": "C64_Kernal.bin",
@@ -249,7 +330,10 @@
       "sha256": "83c60d47047d7beab8e5b7bf6f67f80daa088b7a6a27de0d7e016f6484042721",
       "size": 8192,
       "repo_path": "bios/Commodore/C128/vice/C128/kernal-901227-03.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-c64"
+      ]
     },
     {
       "dest": "C64_Basic.bin",
@@ -257,7 +341,10 @@
       "sha256": "89878cea0a268734696de11c4bae593eaaa506465d2029d619c0e0cbccdfa62d",
       "size": 8192,
       "repo_path": "bios/Commodore/C128/vice/C128/basic-901226-01.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-c64"
+      ]
     },
     {
       "dest": "C64_Chargen.bin",
@@ -265,7 +352,10 @@
       "sha256": "fd0d53b8480e86163ac98998976c72cc58d5dd8eb824ed7b829774e74213b420",
       "size": 4096,
       "repo_path": "bios/Commodore/C128/vice/C64/chargen-901225-01.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-c64"
+      ]
     },
     {
       "dest": "C64_Drive-1541.bin",
@@ -273,7 +363,10 @@
       "sha256": "d1d45afb46fd4e2b48d93ca367b889d75654a3b7acf73044e51f6d880c09369e",
       "size": 16384,
       "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1541-325302-01+901229-05.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-c64"
+      ]
     },
     {
       "dest": "C64_Drive-1541ii.bin",
@@ -281,7 +374,10 @@
       "sha256": "326c289c38753323d7e8167897447cf61ef35189d82eb8d75210ece949adda7c",
       "size": 16384,
       "repo_path": "bios/Commodore/C128/vice/DRIVES/dos1541ii-251968-03.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "commodore-c64"
+      ]
     },
     {
       "dest": "doom2.wad",
@@ -289,7 +385,10 @@
       "sha256": "10d67824b11025ddd9198e8cfc87ca335ee6e2d3e63af4180fa9b8a471893255",
       "size": 14604584,
       "repo_path": "bios/Id Software/Doom/DOOM2.WAD",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "doom"
+      ]
     },
     {
       "dest": "ChannelF_SL31253.rom",
@@ -297,7 +396,10 @@
       "sha256": "876a263d28d8f9e9f51785b91269393f06599debae9ba2ef1cba67a283504e2c",
       "size": 1024,
       "repo_path": "bios/Arcade/FBNeo/sl31253.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "fairchild-channel-f"
+      ]
     },
     {
       "dest": "ChannelF_SL31254.rom",
@@ -305,7 +407,10 @@
       "sha256": "a8d2c0d958b8ea0ee2855b5416993c149a3050cb3c85b781404d3c2a233defc1",
       "size": 1024,
       "repo_path": "bios/Arcade/FBNeo/sl31254.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "fairchild-channel-f"
+      ]
     },
     {
       "dest": "ChannelF_sl90025.rom",
@@ -313,7 +418,10 @@
       "sha256": "bf3755d849438034f3ff92bde357310074c09088b22cf33e512ec06c65d4eaab",
       "size": 1024,
       "repo_path": "bios/Arcade/FBNeo/sl90025.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "fairchild-channel-f"
+      ]
     },
     {
       "dest": "VEC_Bios.bin",
@@ -321,7 +429,10 @@
       "sha256": "480cd76805efe1c87e2412d494ed03918049d7bb9da3b97a5647b768c3468eac",
       "size": 4096,
       "repo_path": "bios/GCE/Vectrex/VEC_Bios.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "gce-vectrex"
+      ]
     },
     {
       "dest": "VEC_Minestorm.vec",
@@ -329,7 +440,10 @@
       "sha256": "320ccdcc1b5632ebde310b6416c26f49e2faa02c6b485a5e142a22dc616d0d14",
       "size": 8192,
       "repo_path": "bios/GCE/Vectrex/VEC_Minestorm.vec",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "gce-vectrex"
+      ]
     },
     {
       "dest": "INTV_EROM.bin",
@@ -337,7 +451,10 @@
       "sha256": "1aeb614856beba95463166daf09304b414d5617d3f37d221724b3337fc4b2722",
       "size": 8192,
       "repo_path": "bios/Mattel/Intellivision/INTV_EROM.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "mattel-intellivision"
+      ]
     },
     {
       "dest": "INTV_GROM.bin",
@@ -345,7 +462,10 @@
       "sha256": "a80b6841182547d08635ad30a6af71441c4c9eed9391b3dd22feb30d8e50cc85",
       "size": 2048,
       "repo_path": "bios/Mattel/Intellivision/INTV_GROM.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "mattel-intellivision"
+      ]
     },
     {
       "dest": "MSX_cbios_main_msx1.rom",
@@ -353,7 +473,10 @@
       "sha256": "921d35edf143f1fde8e53570f92f85e05854610d6a5ea76cce881f2f9040cd9c",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/MSX_cbios_main_msx1.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ]
     },
     {
       "dest": "MSX_8020-20bios.rom",
@@ -361,7 +484,10 @@
       "sha256": "1c85dac5536fa3ba6f2cb70deba02ff680b34ac6cc787d2977258bd663a99555",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/MSX_8020-20bios.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ]
     },
     {
       "dest": "MSX_4000bios.rom",
@@ -369,7 +495,10 @@
       "sha256": "f6e9614bd14e048615bcd1518626a331ab65fa7bd14b239fe7f52d9885b8e6c3",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/MSX_4000bios.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ]
     },
     {
       "dest": "MSX.rom",
@@ -377,7 +506,10 @@
       "sha256": "999564a371dd2fdf7fbe8d853e82a68d557c27b7d87417639b2fa17704b83f78",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/MSX.ROM",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ]
     },
     {
       "dest": "MSX_1.0.rom",
@@ -385,7 +517,10 @@
       "sha256": "3b33130d959337be63182c4eae217797774b52322f8eb9e35ab20747412ed417",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/CLK/msx-american.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ]
     },
     {
       "dest": "MSX_jpn.rom",
@@ -393,7 +528,10 @@
       "sha256": "413a2b601a94b3792e054be2439cc77a1819cceadbfa9542f88d51c7480f2ef0",
       "size": 32768,
       "repo_path": "bios/Microsoft/MSX/CLK/msx-japanese.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "microsoft-msx"
+      ]
     },
     {
       "dest": "PCECD_3.0-(J).pce",
@@ -401,7 +539,10 @@
       "sha256": "e11527b3b96ce112a037138988ca72fd117a6b0779c2480d9e03eaebece3d9ce",
       "size": 262144,
       "repo_path": "bios/NEC/PC Engine/syscard3.pce",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nec-pc-engine-cd"
+      ]
     },
     {
       "dest": "PCECD_gecard.pce",
@@ -409,7 +550,10 @@
       "sha256": "4b86bb96a48a4ca8375fc0109631d0b1d64f255a03b01de70594d40788ba6c3d",
       "size": 32768,
       "repo_path": "bios/NEC/PC Engine/gecard.pce",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nec-pc-engine-cd"
+      ]
     },
     {
       "dest": "PCFX_bios.bin",
@@ -417,7 +561,10 @@
       "sha256": "4b44ccf5d84cc83daa2e6a2bee00fdafa14eb58bdf5859e96d8861a891675417",
       "size": 1048576,
       "repo_path": "bios/NEC/PC-FX/PCFX_bios.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nec-pc-fx"
+      ]
     },
     {
       "dest": "PCFX_fx-scsi.rom",
@@ -425,7 +572,10 @@
       "sha256": "7a2cf2cf33dc03e4520ad5ccd770ed967c0087fde540dca72b0e9ebd0e585623",
       "size": 524288,
       "repo_path": "bios/NEC/PC-FX/PCFX_fx-scsi.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nec-pc-fx"
+      ]
     },
     {
       "dest": "aes_keys.txt",
@@ -433,7 +583,10 @@
       "sha256": "0d866e062cf62275fbb291ba44af253e67fdc5bd76c7640b6c4a9dfe742510d9",
       "size": 7357,
       "repo_path": "bios/Nintendo/3DS/aes_keys.txt",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-3ds"
+      ]
     },
     {
       "dest": "seeddb.bin",
@@ -441,7 +594,10 @@
       "sha256": "ff485c60090185aff05354ece01f86b61f6020332bed0f9090c58d4678e5a180",
       "size": 53264,
       "repo_path": "bios/Nintendo/3DS/Citra/sysdata/seeddb.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-3ds"
+      ]
     },
     {
       "dest": "64DD_IPL_DEV.bin",
@@ -449,7 +605,10 @@
       "sha256": "9c2962a8b994a29e4cd04b3a6e4ed730a751414655ab6a9799ebf5fc08b79d44",
       "size": 4194304,
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_DEV.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-64dd"
+      ]
     },
     {
       "dest": "64DD_IPL_USA.bin",
@@ -457,7 +616,16 @@
       "sha256": "e9fec87a45fba02399e88064b9e2f8cf0f2106e351c58279a87f05da5bc984ad",
       "size": 4194304,
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_USA.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-64dd"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_system_groups": [
+        "nintendo-64dd"
+      ]
     },
     {
       "dest": "64DD_IPL_v12_JPN.bin",
@@ -465,7 +633,16 @@
       "sha256": "806400ec0df94b0755de6c5b8249d6b6a9866124c5ddbdac198bde22499bfb8b",
       "size": 4194304,
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-64dd"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_system_groups": [
+        "nintendo-64dd"
+      ]
     },
     {
       "dest": "NDS_Bios7.bin",
@@ -473,7 +650,10 @@
       "sha256": "ba65f690eb04ec92db67c0e299e21ad71de087d6d5de8a9cb17a62eaab563c17",
       "size": 16384,
       "repo_path": "bios/Nintendo/DS/NDS_Bios7.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "NDS_Bios9.bin",
@@ -481,7 +661,10 @@
       "sha256": "1693983a7707ae394786fa526c0552457888a51d4e410d715ef07acd5a540555",
       "size": 4096,
       "repo_path": "bios/Nintendo/DS/NDS_Bios9.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "NDS_Bios7i.bin",
@@ -489,7 +672,10 @@
       "sha256": "12a03016ba07cfd874fc002df49a2c6eb2414eb7cfa395c2043035ec5e9193e8",
       "size": 65536,
       "repo_path": "bios/Nintendo/DS/NDS_Bios7i.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "NDS_Bios9i.bin",
@@ -497,7 +683,10 @@
       "sha256": "6e9f70b51dc4f26289b597f14e2513620c2af964374a95f4c5a62b5cad199afc",
       "size": 65536,
       "repo_path": "bios/Nintendo/DS/NDS_Bios9i.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "DSi_Firmware.bin",
@@ -505,7 +694,10 @@
       "sha256": "b11199b686515ae97c74ce7274f64d63372187f52fd8c99a8746dc769a33950f",
       "size": 131072,
       "repo_path": "bios/Nintendo/DS/DSi_Firmware.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ]
     },
     {
       "dest": "DSi_Nand_JPN.bin",
@@ -514,6 +706,9 @@
       "size": 251658304,
       "repo_path": "bios/Nintendo/DS/DSi_Nand_JPN.bin",
       "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ],
       "storage": "release",
       "release_asset": "DSi_Nand_JPN.bin"
     },
@@ -524,6 +719,9 @@
       "size": 251658304,
       "repo_path": "bios/Nintendo/DS/DSi_Nand_EUR.bin",
       "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ],
       "storage": "release",
       "release_asset": "DSi_Nand_EUR.bin"
     },
@@ -534,6 +732,9 @@
       "size": 251658304,
       "repo_path": "bios/Nintendo/DS/DSi_Nand_USA.bin",
       "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ],
       "storage": "release",
       "release_asset": "DSi_Nand_USA.bin"
     },
@@ -544,6 +745,9 @@
       "size": 251658304,
       "repo_path": "bios/Nintendo/DS/DSi_Nand_AUS.bin",
       "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ],
       "storage": "release",
       "release_asset": "DSi_Nand_AUS.bin"
     },
@@ -554,6 +758,9 @@
       "size": 251658304,
       "repo_path": "bios/Nintendo/DS/DSi_Nand_CHN.bin",
       "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ],
       "storage": "release",
       "release_asset": "DSi_Nand_CHN.bin"
     },
@@ -564,6 +771,9 @@
       "size": 251658304,
       "repo_path": "bios/Nintendo/DS/DSi_Nand_KOR.bin",
       "cores": null,
+      "systems": [
+        "nintendo-ds"
+      ],
       "storage": "release",
       "release_asset": "DSi_Nand_KOR.bin"
     },
@@ -573,7 +783,10 @@
       "sha256": "cf053eccb4ccafff9e67339d4e78e98dce7d1ed59be819d2a1ba2232c6fce1c7",
       "size": 256,
       "repo_path": "bios/Nintendo/Game Boy/GB_dmg.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gb"
+      ]
     },
     {
       "dest": "GB_sgb.bin",
@@ -581,7 +794,10 @@
       "sha256": "0e4ddff32fc9d1eeaae812a157dd246459b00c9e14f2f61751f661f32361e360",
       "size": 256,
       "repo_path": "bios/Nintendo/Game Boy/GB_sgb.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gb"
+      ]
     },
     {
       "dest": "GB_sgb2.bin",
@@ -589,7 +805,10 @@
       "sha256": "fd243c4fb27008986316ce3df29e9cfbcdc0cd52704970555a8bb76edbec3988",
       "size": 256,
       "repo_path": "bios/Nintendo/Game Boy/GB_sgb2.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gb"
+      ]
     },
     {
       "dest": "GBA_bios.rom",
@@ -597,7 +816,10 @@
       "sha256": "fd2547724b505f487e6dcb29ec2ecff3af35a841a77ab2e85fd87350abd36570",
       "size": 16384,
       "repo_path": "bios/Nintendo/Game Boy Advance/GBA_bios.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gba"
+      ]
     },
     {
       "dest": "GBC_cgb.bin",
@@ -605,7 +827,10 @@
       "sha256": "b4f2e416a35eef52cba161b159c7c8523a92594facb924b3ede0d722867c50c7",
       "size": 2304,
       "repo_path": "bios/Nintendo/Game Boy Color/GBC_cgb.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gbc"
+      ]
     },
     {
       "dest": "GBC_agb.bin",
@@ -613,7 +838,10 @@
       "sha256": "fe3cceb79930c4cb6c6f62f742c2562fd4c96b827584ef8ea89d49b387bd6860",
       "size": 2304,
       "repo_path": "bios/Nintendo/Game Boy Color/GBC_agb.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-gbc"
+      ]
     },
     {
       "dest": "FDS_disksys-nintendo.rom",
@@ -621,7 +849,10 @@
       "sha256": "99c18490ed9002d9c6d999b9d8d15be5c051bdfa7cc7e73318053c9a994b0178",
       "size": 8192,
       "repo_path": "bios/Arcade/FBNeo/fdsbios.nes",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-nes"
+      ]
     },
     {
       "dest": "Satellaview_BS-X.sfc",
@@ -629,7 +860,10 @@
       "sha256": "3ce321496edc5d77038de2034eb3fb354d7724afd0bc7fd0319f3eb5d57b984d",
       "size": 1048576,
       "repo_path": "bios/Nintendo/SNES/Satellaview_BS-X.sfc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-satellaview"
+      ]
     },
     {
       "dest": "Satellaview_Mahjong.sfc",
@@ -637,7 +871,10 @@
       "sha256": "23b320be74b9fc20de512080be3051575ba36c3246d5c4ee224f31a2fa7808f5",
       "size": 1048576,
       "repo_path": "bios/Nintendo/SNES/Satellaview_Mahjong.sfc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-satellaview"
+      ]
     },
     {
       "dest": "Satellaview_GNEXT.sfc",
@@ -645,7 +882,10 @@
       "sha256": "208f5ecb7a82b33629e67f39e96b7aa7a992cb2fcc3d1e4eb959abb0a8b7dd95",
       "size": 1572864,
       "repo_path": "bios/Nintendo/SNES/Satellaview_GNEXT.sfc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-satellaview"
+      ]
     },
     {
       "dest": "Satellaview_RPG_Tsukuru.sfc",
@@ -653,7 +893,10 @@
       "sha256": "d1e0d1c930011d22423cb7cde8feac445a00705da8067a4e53a735b08389a19d",
       "size": 2097152,
       "repo_path": "bios/Nintendo/SNES/Satellaview_RPG_Tsukuru.sfc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-satellaview"
+      ]
     },
     {
       "dest": "Satellaview_SameGame.sfc",
@@ -661,7 +904,10 @@
       "sha256": "3a709383208d8258dceb20a5e566903326515ba42931bf97fd389a415a13a72d",
       "size": 1048576,
       "repo_path": "bios/Nintendo/SNES/Satellaview_SameGame.sfc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-satellaview"
+      ]
     },
     {
       "dest": "Satellaview_Derby_Stallion_96.sfc",
@@ -669,7 +915,10 @@
       "sha256": "38a855229eab468c3ede7573db73082c66b157adfc7af787ccac50559b747f5f",
       "size": 3145728,
       "repo_path": "bios/Nintendo/SNES/Satellaview_Derby_Stallion_96.sfc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-satellaview"
+      ]
     },
     {
       "dest": "Satellaview_Ongaku_Tsukuru.sfc",
@@ -677,7 +926,10 @@
       "sha256": "d712adecbde70a74c4a580fe90a45d0d19f2641d1b4e091d507bddeec9601de1",
       "size": 1048576,
       "repo_path": "bios/Nintendo/SNES/Satellaview_Ongaku_Tsukuru.sfc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-satellaview"
+      ]
     },
     {
       "dest": "Satellaview_SoundNovel_Tsukuru.sfc",
@@ -685,7 +937,10 @@
       "sha256": "7be858fc681df6728650f460d67fe6c80d816d5fbfc530c11153f652f8b1878e",
       "size": 3145728,
       "repo_path": "bios/Nintendo/SNES/Satellaview_SoundNovel_Tsukuru.sfc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-satellaview"
+      ]
     },
     {
       "dest": "Satellaview_Bass_Tsuri.sfc",
@@ -693,7 +948,10 @@
       "sha256": "4dfba33201de6b5dec952d0f327aeb44ed784c025a72c982356dd41b52efc219",
       "size": 4194304,
       "repo_path": "bios/Nintendo/SNES/Satellaview_Bass_Tsuri.sfc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-satellaview"
+      ]
     },
     {
       "dest": "SNES_cx4.rom",
@@ -701,7 +959,10 @@
       "sha256": "ae8d4d1961b93421ff00b3caa1d0f0ce7783e749772a3369c36b3dbf0d37ef18",
       "size": 3072,
       "repo_path": "bios/Nintendo/SNES/SNES_cx4.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "SNES_dsp1.rom",
@@ -709,7 +970,10 @@
       "sha256": "91e87d11e1c30d172556bed2211cce2efa94ba595f58c5d264809ef4d363a97b",
       "size": 8192,
       "repo_path": "bios/Nintendo/SNES/SNES_dsp1.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "SNES_dsp1b.rom",
@@ -717,7 +981,10 @@
       "sha256": "d789cb3c36b05c0b23b6c6f23be7aa37c6e78b6ee9ceac8d2d2aa9d8c4d35fa9",
       "size": 8192,
       "repo_path": "bios/Nintendo/SNES/SNES_dsp1b.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "SNES_dsp2.rom",
@@ -725,7 +992,10 @@
       "sha256": "03ef4ef26c9f701346708cb5d07847b5203cf1b0818bf2930acd34510ffdd717",
       "size": 8192,
       "repo_path": "bios/Nintendo/SNES/SNES_dsp2.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "SNES_dsp3.rom",
@@ -733,7 +1003,10 @@
       "sha256": "0971b08f396c32e61989d1067dddf8e4b14649d548b2188f7c541b03d7c69e4e",
       "size": 8192,
       "repo_path": "bios/Nintendo/SNES/SNES_dsp3.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "SNES_dsp4.rom",
@@ -741,7 +1014,10 @@
       "sha256": "752d03b2d74441e430b7f713001fa241f8bbcfc1a0d890ed4143f174dbe031da",
       "size": 8192,
       "repo_path": "bios/Nintendo/SNES/SNES_dsp4.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "SNES_st010.rom",
@@ -749,7 +1025,10 @@
       "sha256": "fa9bced838fedea11c6f6ace33d1878024bdd0d02cc9485899d0bdd4015ec24c",
       "size": 53248,
       "repo_path": "bios/Nintendo/SNES/SNES_st010.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "SNES_st011.rom",
@@ -757,7 +1036,10 @@
       "sha256": "8b2b3f3f3e6e29f4d21d8bc736b400bc988b7d2214ebee15643f01c1fee2f364",
       "size": 53248,
       "repo_path": "bios/Nintendo/SNES/SNES_st011.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "SNES_st018.rom",
@@ -765,7 +1047,10 @@
       "sha256": "6df209ab5d2524d1839c038be400ae5eb20dafc14a3771a3239cd9e8acd53806",
       "size": 163840,
       "repo_path": "bios/Nintendo/SNES/SNES_st018.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "SNES_SGB_(JU).sfc",
@@ -773,7 +1058,10 @@
       "sha256": "bba9c269273bedb9b38bd5eb23bfaa6e509b8decc7cb80bb5513905af04f4ceb",
       "size": 262144,
       "repo_path": "bios/Nintendo/SNES/SNES_SGB_(JU).sfc",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "SNES_SGB2_(J).sfc",
@@ -781,7 +1069,10 @@
       "sha256": "c172498a23d1176672931bab33b629c7d28f914a43dca9e540b8af1b37ccf2c6",
       "size": 524288,
       "repo_path": "bios/Nintendo/Super Game Boy/SGB2.sfc/program.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "nintendo-snes"
+      ]
     },
     {
       "dest": "O2_Odyssey2.bin",
@@ -789,7 +1080,10 @@
       "sha256": "cb0c5d9ed64f7c1d8870333451832638885b9aa3d7013f0c05fd2a20a5e5bfef",
       "size": 1024,
       "repo_path": "bios/Magnavox/Odyssey2/o2rom.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "philips-videopac"
+      ]
     },
     {
       "dest": "O2_PhillipsC52.bin",
@@ -797,7 +1091,10 @@
       "sha256": "2ab1b2c7f4b28a74d0ecf3e073088fac19ce40866404420c70576e1862bb5502",
       "size": 1024,
       "repo_path": "bios/Philips/Videopac/O2_PhillipsC52.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "philips-videopac"
+      ]
     },
     {
       "dest": "O2_G7400_bios.bin",
@@ -805,7 +1102,10 @@
       "sha256": "8e0413c324a748ca2e493652b8089aa1db129e1ba115b5f58a99e32cebe063e1",
       "size": 1024,
       "repo_path": "bios/Philips/Videopac/O2_G7400_bios.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "philips-videopac"
+      ]
     },
     {
       "dest": "32X_G_BIOS.BIN",
@@ -813,7 +1113,10 @@
       "sha256": "a2d6b6e1544467e27d404634de6e6b0a54ed4b3babb6b71739a260e1be04ebfc",
       "size": 256,
       "repo_path": "bios/Sega/32X/32X_G_BIOS.BIN",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-32x"
+      ]
     },
     {
       "dest": "32X_M_BIOS.BIN",
@@ -821,7 +1124,10 @@
       "sha256": "4c6128229bd24dae5f11d3f569ca592665f141bef26cef937e2ce4d9b548cc3b",
       "size": 2048,
       "repo_path": "bios/Sega/32X/32X_M_BIOS.BIN",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-32x"
+      ]
     },
     {
       "dest": "32X_S_BIOS.BIN",
@@ -829,7 +1135,10 @@
       "sha256": "7bde4245ce00c51a23a1ce73a881752e7b14dc12416e175352a3807338e04745",
       "size": 1024,
       "repo_path": "bios/Sega/32X/32X_S_BIOS.BIN",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-32x"
+      ]
     },
     {
       "dest": "GG_majesco.gg",
@@ -837,7 +1146,10 @@
       "sha256": "8c8a21335038285cfa03dc076100c1f0bfadf3e4ff70796f11f3dfaaab60eee2",
       "size": 1024,
       "repo_path": "bios/Sega/Game Gear/GG_majesco.gg",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-game-gear"
+      ]
     },
     {
       "dest": "SMS_us_1.3.sms",
@@ -845,7 +1157,10 @@
       "sha256": "477617917a12a30f9f43844909dc2de6e6a617430f5c9a36306c86414a670d50",
       "size": 8192,
       "repo_path": "bios/Other/zesarux/sms.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-master-system"
+      ]
     },
     {
       "dest": "SMS_jp_2.1.sms",
@@ -853,7 +1168,10 @@
       "sha256": "67846e26764bd862f19179294347f7353a4166b62ac4198a5ec32933b7da486e",
       "size": 8192,
       "repo_path": "bios/Sega/Master System/MasterSystem/japanese-bios.sms",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-master-system"
+      ]
     },
     {
       "dest": "SMS_kr.sms",
@@ -861,7 +1179,10 @@
       "sha256": "57abf3c00c82a8e042ebeb2bfe412adac9ba005e9009845236390de3ee645248",
       "size": 131072,
       "repo_path": "bios/Sega/Master System/SMS_kr.sms",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-master-system"
+      ]
     },
     {
       "dest": "GEN_boot.md",
@@ -869,7 +1190,10 @@
       "sha256": "5a5497f47bf3892d60476151494b8e5b7949e6db728ed513d162095d54de1b9a",
       "size": 2048,
       "repo_path": "bios/Sega/Mega Drive/GEN_boot.md",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-drive"
+      ]
     },
     {
       "dest": "MCD_eu_100.bin",
@@ -877,7 +1201,10 @@
       "sha256": "16735df92fcc1d0fc6a1eced244867e95281c5006340926082b74e363e073dc4",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/MCD_eu_100.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-drive"
+      ]
     },
     {
       "dest": "MCD_jp_100p.bin",
@@ -885,7 +1212,10 @@
       "sha256": "923eb9da740f98ab1572085e3d351e2c0982df0906b0b99efb68a9997c94cf8f",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/MCD_jp_100p.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-drive"
+      ]
     },
     {
       "dest": "SCD_m1_us_110.bin",
@@ -893,7 +1223,10 @@
       "sha256": "807384678ef259494d943eddb6954dfc7069693d0dde0c424e2028488d88e81a",
       "size": 131072,
       "repo_path": "bios/Sega/Mega CD/bios_CD_U.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-mega-drive"
+      ]
     },
     {
       "dest": "SAT_KoF95.bin",
@@ -901,7 +1234,10 @@
       "sha256": "1dd154a9fcee1816749502b5b2497bf4b1f2d973df38d0984905ee83b12d5e81",
       "size": 2097152,
       "repo_path": "bios/Sega/Saturn/SAT_KoF95.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "SAT_Ultraman.bin",
@@ -909,7 +1245,10 @@
       "sha256": "6e3b35af6e45d9005460cfe44e3907563bde7a4636926ebd316dc84913efdd1b",
       "size": 2097152,
       "repo_path": "bios/Sega/Saturn/SAT_Ultraman.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "SAT_1.01-(J).bin",
@@ -917,7 +1256,10 @@
       "sha256": "dcfef4b99605f872b6c3b6d05c045385cdea3d1b702906a0ed930df7bcb7deac",
       "size": 524288,
       "repo_path": "bios/Sega/Saturn/SAT_1.01-(J).bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "SAT_1.00-(U+E).bin",
@@ -925,7 +1267,10 @@
       "sha256": "96e106f740ab448cf89f0dd49dfbac7fe5391cb6bd6e14ad5e3061c13330266f",
       "size": 524288,
       "repo_path": "bios/Sega/Saturn/SAT_1.00-(U+E).bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "SAT_STV_20091-(J).bin",
@@ -933,7 +1278,10 @@
       "sha256": "ac778ec04aaa4df296d30743536da3de31281f8ae5c94d7be433dcc84e25d85b",
       "size": 524288,
       "repo_path": "bios/Sega/ST-V/epr-20091.ic8",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "SAT_STV_17952A-(U).bin",
@@ -941,7 +1289,10 @@
       "sha256": "bac5a52794cf424271f073df228e0b0eb042dede6a3b829eb49abf155e7e0137",
       "size": 524288,
       "repo_path": "bios/Sega/ST-V/epr-17952a.ic8",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "SAT_STV_17954A-(E).bin",
@@ -949,7 +1300,10 @@
       "sha256": "3e6f91506031badc4ebdf7fe5b4f33180222a369b575522861688d3b27322a68",
       "size": 524288,
       "repo_path": "bios/Sega/ST-V/epr-17954a.ic8",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sega-saturn"
+      ]
     },
     {
       "dest": "ZX_pentagon.rom",
@@ -957,7 +1311,10 @@
       "sha256": "7b88abff5964f0cf38481ac51bf035be2c01b8827569876b3d15eb3ac340fef3",
       "size": 32768,
       "repo_path": "bios/Other/zesarux/pentagon.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sinclair-zx-spectrum"
+      ]
     },
     {
       "dest": "ZX_trdos.rom",
@@ -965,7 +1322,10 @@
       "sha256": "1a029b414f474dfa80dfa4272338e1dd23b7d08615be9db127a2404e2b5e5acf",
       "size": 16384,
       "repo_path": "bios/Sinclair/ZX Spectrum/ZX_trdos.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sinclair-zx-spectrum"
+      ]
     },
     {
       "dest": "PSX_DTLH2000.bin",
@@ -973,7 +1333,10 @@
       "sha256": "7f38da2e456540d267060175a7a1e3b4c39292d964051abd8b322c05367af04f",
       "size": 524288,
       "repo_path": "bios/Sony/PlayStation/PSX_DTLH2000.bin",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "sony-playstation"
+      ]
     },
     {
       "dest": "TI83_110.rom",
@@ -981,7 +1344,10 @@
       "sha256": "e399506c8c473433c892be26a6ff0ac3226cb213ed0fae55c360a861f3dc4b3a",
       "size": 262144,
       "repo_path": "bios/Texas Instruments/TI-83/TI83_110.rom",
-      "cores": null
+      "cores": null,
+      "systems": [
+        "texas-instruments-ti-83"
+      ]
     },
     {
       "dest": "colecovision.rom",
@@ -991,6 +1357,9 @@
       "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "coleco-colecovision"
       ]
     },
     {
@@ -1021,6 +1390,9 @@
       "repo_path": "bios/Sega/Game Gear/GG_majesco.gg",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "sega-game-gear"
       ]
     },
     {
@@ -1031,6 +1403,9 @@
       "repo_path": "bios/Other/zesarux/sms.rom",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "sega-master-system"
       ]
     },
     {
@@ -1041,6 +1416,9 @@
       "repo_path": "bios/Sega/Master System/MasterSystem/japanese-bios.sms",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "sega-master-system"
       ]
     },
     {
@@ -1051,6 +1429,9 @@
       "repo_path": "bios/Other/zesarux/sms.rom",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "sega-master-system"
       ]
     },
     {
@@ -1091,6 +1472,12 @@
       "repo_path": "bios/Pioneer/LaserActive/Pioneer LaserActive Sega PAC Boot ROM v1.04 (1993)(Pioneer - Sega)(US).bin",
       "cores": [
         "ares"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "mega-ld"
       ]
     },
     {
@@ -1101,6 +1488,12 @@
       "repo_path": "bios/Pioneer/LaserActive/Pioneer LaserActive Sega PAC Boot ROM v1.02 (1993)(Pioneer - Sega)(JP)(en-ja).bin",
       "cores": [
         "ares"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "mega-ld"
       ]
     },
     {
@@ -1171,6 +1564,15 @@
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "nintendo-64dd"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "nintendo-64dd"
       ]
     },
     {
@@ -1181,6 +1583,15 @@
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_USA.bin",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "nintendo-64dd"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "nintendo-64dd"
       ]
     },
     {
@@ -1191,6 +1602,9 @@
       "repo_path": "bios/NEC/PC Engine/syscard1.pce",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "nec-pc-engine-cd"
       ]
     },
     {
@@ -1201,6 +1615,9 @@
       "repo_path": "bios/NEC/PC Engine/syscard3.pce",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "nec-pc-engine-cd"
       ]
     },
     {
@@ -1211,6 +1628,9 @@
       "repo_path": "bios/NEC/PC Engine/syscard3u.pce",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "nec-pc-engine-cd"
       ]
     },
     {
@@ -1221,6 +1641,9 @@
       "repo_path": "bios/NEC/PC Engine/gecard.pce",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "nec-pc-engine-cd"
       ]
     },
     {
@@ -1261,6 +1684,9 @@
       "repo_path": "bios/Sony/PlayStation/scph5501.bin",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -1271,6 +1697,9 @@
       "repo_path": "bios/Sony/PlayStation/scph5500.bin",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -1281,6 +1710,9 @@
       "repo_path": "bios/Sony/PlayStation/scph5502.bin",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -1291,6 +1723,15 @@
       "repo_path": "bios/Sega/Saturn/SAT_1.00-(U+E).bin",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "sega-saturn"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "saturn"
       ]
     },
     {
@@ -1301,6 +1742,15 @@
       "repo_path": "bios/Sega/Saturn/SAT_1.01-(J).bin",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "sega-saturn"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "saturn"
       ]
     },
     {
@@ -1311,6 +1761,15 @@
       "repo_path": "bios/Sega/Saturn/SAT_1.00-(U+E).bin",
       "cores": [
         "ares"
+      ],
+      "systems": [
+        "sega-saturn"
+      ],
+      "regions": [
+        "europe"
+      ],
+      "region_groups": [
+        "saturn"
       ]
     },
     {
@@ -1361,6 +1820,9 @@
       "repo_path": "bios/Nintendo/Wii U/keys.txt",
       "cores": [
         "azahar"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -1371,6 +1833,9 @@
       "repo_path": "bios/Nintendo/3DS/Citra/sysdata/shared_font.bin",
       "cores": [
         "azahar"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -1381,6 +1846,9 @@
       "repo_path": "bios/Nintendo/3DS/Citra/sysdata/otp.bin",
       "cores": [
         "azahar"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -1391,6 +1859,9 @@
       "repo_path": "bios/Nintendo/3DS/Citra/nand/private/movable.sed",
       "cores": [
         "azahar"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -1401,6 +1872,9 @@
       "repo_path": "bios/Nintendo/3DS/Citra/nand/rw/sys/SecureInfo_A",
       "cores": [
         "azahar"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -1411,6 +1885,9 @@
       "repo_path": "bios/Nintendo/3DS/Citra/nand/rw/sys/LocalFriendCodeSeed_B",
       "cores": [
         "azahar"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -1451,6 +1928,9 @@
       "repo_path": "bios/NEC/PC-FX/PCFX_bios.bin",
       "cores": [
         "beetle_pcfx"
+      ],
+      "systems": [
+        "nec-pc-fx"
       ]
     },
     {
@@ -1461,6 +1941,15 @@
       "repo_path": "bios/Sony/PlayStation/scph5903.bin",
       "cores": [
         "beetle_psx"
+      ],
+      "systems": [
+        "sony-playstation"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "sony-playstation"
       ]
     },
     {
@@ -1471,6 +1960,9 @@
       "repo_path": "bios/Sony/PlayStation/psxonpsp660.bin",
       "cores": [
         "beetle_psx"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -1481,6 +1973,9 @@
       "repo_path": "bios/Sony/PlayStation/ps1_rom.bin",
       "cores": [
         "beetle_psx"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -1491,6 +1986,9 @@
       "repo_path": "bios/Sony/PlayStation/openbios.bin",
       "cores": [
         "beetle_psx"
+      ],
+      "systems": [
+        "sony-playstation"
       ]
     },
     {
@@ -1501,6 +1999,9 @@
       "repo_path": "bios/Sega/Saturn/SAT_1.01-(J).bin",
       "cores": [
         "beetle_saturn"
+      ],
+      "systems": [
+        "sega-saturn"
       ]
     },
     {
@@ -1511,6 +2012,9 @@
       "repo_path": "bios/Sega/Saturn/SAT_1.00-(U+E).bin",
       "cores": [
         "beetle_saturn"
+      ],
+      "systems": [
+        "sega-saturn"
       ]
     },
     {
@@ -1521,6 +2025,9 @@
       "repo_path": "bios/Sega/Saturn/SAT_KoF95.bin",
       "cores": [
         "beetle_saturn"
+      ],
+      "systems": [
+        "sega-saturn"
       ]
     },
     {
@@ -1531,6 +2038,9 @@
       "repo_path": "bios/Sega/Saturn/SAT_Ultraman.bin",
       "cores": [
         "beetle_saturn"
+      ],
+      "systems": [
+        "sega-saturn"
       ]
     },
     {
@@ -1551,6 +2061,16 @@
       "repo_path": "bios/Sega/ST-V/epr-17952a.ic8",
       "cores": [
         "beetle_saturn"
+      ],
+      "regions": [
+        "asia-pal",
+        "brazil",
+        "latin-america",
+        "north-america",
+        "south-korea"
+      ],
+      "region_groups": [
+        "sega-stv"
       ]
     },
     {
@@ -1561,6 +2081,14 @@
       "repo_path": "bios/Sega/ST-V/epr-17954a.ic8",
       "cores": [
         "beetle_saturn"
+      ],
+      "regions": [
+        "asia-pal",
+        "europe",
+        "south-korea"
+      ],
+      "region_groups": [
+        "sega-stv"
       ]
     },
     {
@@ -1581,6 +2109,9 @@
       "repo_path": "bios/Sega/Saturn/mpeg_card.bin",
       "cores": [
         "beetle_saturn"
+      ],
+      "systems": [
+        "sega-saturn"
       ]
     },
     {
@@ -1591,6 +2122,9 @@
       "repo_path": "bios/Sega/Saturn/satar4mp.bin",
       "cores": [
         "beetle_saturn"
+      ],
+      "systems": [
+        "sega-saturn"
       ]
     },
     {
@@ -1601,6 +2135,9 @@
       "repo_path": "bios/Nintendo/SNES/dsp1.program.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1611,6 +2148,9 @@
       "repo_path": "bios/Nintendo/SNES/dsp1.data.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1621,6 +2161,9 @@
       "repo_path": "bios/Nintendo/SNES/dsp1b.program.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1631,6 +2174,9 @@
       "repo_path": "bios/Nintendo/SNES/dsp1b.data.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1641,6 +2187,9 @@
       "repo_path": "bios/Nintendo/SNES/dsp2.program.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1651,6 +2200,9 @@
       "repo_path": "bios/Nintendo/SNES/dsp2.data.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1661,6 +2213,9 @@
       "repo_path": "bios/Nintendo/SNES/dsp3.program.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1671,6 +2226,9 @@
       "repo_path": "bios/Nintendo/SNES/dsp3.data.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1681,6 +2239,9 @@
       "repo_path": "bios/Nintendo/SNES/dsp4.program.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1691,6 +2252,9 @@
       "repo_path": "bios/Nintendo/SNES/dsp4.data.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1701,6 +2265,9 @@
       "repo_path": "bios/Nintendo/SNES/st010.program.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1711,6 +2278,9 @@
       "repo_path": "bios/Nintendo/SNES/st010.data.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1721,6 +2291,9 @@
       "repo_path": "bios/Nintendo/SNES/st011.program.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1731,6 +2304,9 @@
       "repo_path": "bios/Nintendo/SNES/st011.data.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1741,6 +2317,9 @@
       "repo_path": "bios/Nintendo/SNES/st018.program.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1751,6 +2330,9 @@
       "repo_path": "bios/Nintendo/SNES/st018.data.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1761,6 +2343,9 @@
       "repo_path": "bios/Nintendo/SNES/SNES_cx4.rom",
       "cores": [
         "bsnes"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -1771,6 +2356,9 @@
       "repo_path": "bios/Nintendo/3DS/boot9.bin",
       "cores": [
         "citra"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -1781,6 +2369,9 @@
       "repo_path": "bios/Nintendo/3DS/Citra/sysdata/shared_font.bin",
       "cores": [
         "citra"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -1791,6 +2382,14 @@
       "repo_path": "bios/Acorn/Archimedes/ROM311",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1801,6 +2400,14 @@
       "repo_path": "bios/Acorn/BBC Micro/basic2.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1811,6 +2418,14 @@
       "repo_path": "bios/Acorn/BBC Micro/os12.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1821,6 +2436,14 @@
       "repo_path": "bios/Other/Clock Signal/BBCMicro/dfs09.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1831,6 +2454,14 @@
       "repo_path": "bios/Acorn/BBC Micro/dfs-2.26.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1841,6 +2472,14 @@
       "repo_path": "bios/Other/Clock Signal/BBCMicro/adfs-1.30.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1851,6 +2490,14 @@
       "repo_path": "bios/Other/Clock Signal/BBCMicro/ADT-1.40.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1861,6 +2508,14 @@
       "repo_path": "bios/Other/Clock Signal/BBCMicro/TUBE110.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1871,6 +2526,14 @@
       "repo_path": "bios/Other/Clock Signal/BBCMicro/Z80_122.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1881,6 +2544,14 @@
       "repo_path": "bios/Acorn/BBC Micro/basic2.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1891,6 +2562,14 @@
       "repo_path": "bios/Acorn/Electron/os.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1901,6 +2580,14 @@
       "repo_path": "bios/Other/Clock Signal/Electron/ADFS-E00_1.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1911,6 +2598,14 @@
       "repo_path": "bios/Other/Clock Signal/Electron/ADFS-E00_2.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1921,6 +2616,14 @@
       "repo_path": "bios/Other/Clock Signal/Electron/adfs.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1931,6 +2634,14 @@
       "repo_path": "bios/Other/Clock Signal/Electron/DFS-1770-2.20.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1941,6 +2652,14 @@
       "repo_path": "bios/Other/Clock Signal/Electron/ELK130E.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1951,6 +2670,14 @@
       "repo_path": "bios/Other/Clock Signal/Electron/AP6v133.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1961,6 +2688,14 @@
       "repo_path": "bios/Commodore/Amiga/Kickstart-v1.3-rev34.5-1987-Commodore-A500-A1000-A2000-CDTV.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1971,6 +2706,14 @@
       "repo_path": "bios/Amstrad/CPC/os464.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1981,6 +2724,14 @@
       "repo_path": "bios/Amstrad/CPC/basic464.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -1991,6 +2742,14 @@
       "repo_path": "bios/Amstrad/CPC/os664.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2001,6 +2760,14 @@
       "repo_path": "bios/Amstrad/CPC/basic664.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2011,6 +2778,14 @@
       "repo_path": "bios/Amstrad/CPC/os6128.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2021,6 +2796,14 @@
       "repo_path": "bios/Amstrad/CPC/basic6128.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2031,6 +2814,14 @@
       "repo_path": "bios/Amstrad/CPC/amsdos.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2041,6 +2832,14 @@
       "repo_path": "bios/Apple/Apple II/apple2o.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2051,6 +2850,14 @@
       "repo_path": "bios/Apple/Apple II/apple2.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2061,6 +2868,14 @@
       "repo_path": "bios/Apple/Apple II/apple2eu.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2071,6 +2886,14 @@
       "repo_path": "bios/Apple/Apple II/apple2e.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2081,6 +2904,14 @@
       "repo_path": "bios/Apple/Apple II/apple2-character.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2091,6 +2922,14 @@
       "repo_path": "bios/Apple/Apple II/apple2eu-character.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2101,6 +2940,14 @@
       "repo_path": "bios/Apple/Apple II/apple2e-character.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2111,6 +2958,14 @@
       "repo_path": "bios/Other/Clock Signal/AppleII/scsi.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2121,6 +2976,14 @@
       "repo_path": "bios/Apple/Apple IIGS/ROM",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2131,6 +2994,14 @@
       "repo_path": "bios/Apple/Apple II/apple2gs.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2141,6 +3012,14 @@
       "repo_path": "bios/Apple/Apple II/apple2gs.chr",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2151,6 +3030,14 @@
       "repo_path": "bios/Apple/Apple II/341s0632-2",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2161,6 +3048,14 @@
       "repo_path": "bios/Atari/ST/st.img",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2171,6 +3066,14 @@
       "repo_path": "bios/Coleco/ColecoVision/BIOS.col",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2181,6 +3084,14 @@
       "repo_path": "bios/Commodore/C64/Commodore1540/1540.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2191,6 +3102,14 @@
       "repo_path": "bios/Commodore/C64/Commodore1540/1541.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2201,6 +3120,14 @@
       "repo_path": "bios/Apple/Apple II/AppleIIe_DiskII.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2211,6 +3138,14 @@
       "repo_path": "bios/Apple/Apple II/DiskII/state-machine-16.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2221,6 +3156,14 @@
       "repo_path": "bios/Apple/Apple II/DiskII/boot-13.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2231,6 +3174,14 @@
       "repo_path": "bios/Apple/Apple II/DiskII/state-machine-13.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2241,6 +3192,14 @@
       "repo_path": "bios/Enterprise/64-128/exos10.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2251,6 +3210,14 @@
       "repo_path": "bios/Enterprise/64-128/exos20.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2261,6 +3228,14 @@
       "repo_path": "bios/Enterprise/64-128/exos21.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2271,6 +3246,14 @@
       "repo_path": "bios/Enterprise/64-128/exos23.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2281,6 +3264,14 @@
       "repo_path": "bios/Enterprise/64-128/basic10.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2291,6 +3282,14 @@
       "repo_path": "bios/Enterprise/64-128/BASIC 1.0 - EPROM 1-2 (198x)(Enterprise).bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2301,6 +3300,14 @@
       "repo_path": "bios/Enterprise/64-128/BASIC 1.0 - EPROM 2-2 (198x)(Enterprise).bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2311,6 +3318,14 @@
       "repo_path": "bios/Enterprise/64-128/basic11.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2321,6 +3336,14 @@
       "repo_path": "bios/Enterprise/64-128/BASIC 1.1 - EPROM 1.1 (198x)(Enterprise).bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2331,6 +3354,14 @@
       "repo_path": "bios/Enterprise/64-128/basic21.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2341,6 +3372,14 @@
       "repo_path": "bios/Enterprise/64-128/epdos.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2351,6 +3390,14 @@
       "repo_path": "bios/Enterprise/64-128/exdos.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2361,6 +3408,14 @@
       "repo_path": "bios/Apple/Macintosh/mac128k.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2371,6 +3426,14 @@
       "repo_path": "bios/Apple/Macintosh/mac512k.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2381,6 +3444,14 @@
       "repo_path": "bios/Apple/Macintosh/macplus.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2391,6 +3462,43 @@
       "repo_path": "bios/Other/zesarux/sms.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "europe",
+        "north-america"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2401,6 +3509,42 @@
       "repo_path": "bios/Sega/Master System/MasterSystem/japanese-bios.sms",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2411,6 +3555,14 @@
       "repo_path": "bios/Microsoft/MSX/MSX.ROM",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2421,6 +3573,42 @@
       "repo_path": "bios/Microsoft/MSX/CLK/msx-japanese.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2431,6 +3619,42 @@
       "repo_path": "bios/Microsoft/MSX/CLK/msx-american.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2441,6 +3665,42 @@
       "repo_path": "bios/Microsoft/MSX/CLK/msx-european.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "europe"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2451,6 +3711,14 @@
       "repo_path": "bios/Microsoft/MSX/DISK.ROM",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2461,6 +3729,14 @@
       "repo_path": "bios/Microsoft/MSX/MSX2.ROM",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2471,6 +3747,14 @@
       "repo_path": "bios/Microsoft/MSX/MSX2EXT.ROM",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2481,6 +3765,14 @@
       "repo_path": "bios/Microsoft/MSX/FMPAC.ROM",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2491,6 +3783,14 @@
       "repo_path": "bios/Oric/Oric/basic10.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2501,6 +3801,14 @@
       "repo_path": "bios/Oric/Oric/basic11b.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2511,6 +3819,14 @@
       "repo_path": "bios/Oric/Oric/pravetz.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2521,6 +3837,14 @@
       "repo_path": "bios/Oric/Oric/Oric/colour.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2531,6 +3855,14 @@
       "repo_path": "bios/Other/Clock Signal/Oric/ORIC.PAL-PROM-TBP24S10-1ab9b572.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2541,6 +3873,14 @@
       "repo_path": "bios/Other/Clock Signal/Oric/PRAVETZ-8D.PAL-PROM-82S129-1576a69b.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2551,6 +3891,14 @@
       "repo_path": "bios/Oric/Oric/bd500.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2561,6 +3909,14 @@
       "repo_path": "bios/Oric/Oric/jasmin.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2571,6 +3927,14 @@
       "repo_path": "bios/Oric/Oric/microdis.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2581,6 +3945,14 @@
       "repo_path": "bios/Other/Clock Signal/Oric/8dos.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2591,6 +3963,14 @@
       "repo_path": "bios/IBM/PC/GLABIOS_0.2.5_8T.ROM",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2601,6 +3981,14 @@
       "repo_path": "bios/IBM/PC/GLaTICK_0.8.5_AT.ROM",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2611,6 +3999,14 @@
       "repo_path": "bios/IBM/PC/Phoenix 80286 ROM BIOS Version 3.05.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2621,6 +4017,14 @@
       "repo_path": "bios/IBM/PC/at-bios.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2631,6 +4035,14 @@
       "repo_path": "bios/IBM/PC Compatible/PCCompatible/BIOS_5170_15NOV85_U27_61X9266_27256.BIN",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2641,6 +4053,14 @@
       "repo_path": "bios/IBM/PC Compatible/PCCompatible/BIOS_5170_15NOV85_U47_61X9265_27256.BIN",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2651,6 +4071,14 @@
       "repo_path": "bios/IBM/PC/CGA.F08",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2661,6 +4089,14 @@
       "repo_path": "bios/IBM/PC/EUMDA9.F14",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2671,6 +4107,14 @@
       "repo_path": "bios/Other/pcem/roms/ibm_6277356_ega_card_u44_27128.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2681,6 +4125,14 @@
       "repo_path": "bios/IBM/PC/ibm_vga.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2691,6 +4143,14 @@
       "repo_path": "bios/IBM/PC Compatible/PCCompatible/ibm-basic-1.10.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2701,6 +4161,14 @@
       "repo_path": "bios/Commodore/C128/vice/PLUS4/basic-318006-01.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2711,6 +4179,14 @@
       "repo_path": "bios/Commodore/C128/vice/PLUS4/kernal-318004-05.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2721,6 +4197,14 @@
       "repo_path": "bios/Commodore/Plus4/kernal.318004-03.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2731,6 +4215,14 @@
       "repo_path": "bios/Commodore/Plus4/kernal.318004-04.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2741,6 +4233,14 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo5-v1.0.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2751,6 +4251,14 @@
       "repo_path": "bios/Thomson/MO5/mo5-v1.1.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2761,6 +4269,14 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v1.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2771,6 +4287,14 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v2.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2781,6 +4305,14 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/mo6-v3.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2791,6 +4323,14 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/pc128.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2801,6 +4341,14 @@
       "repo_path": "bios/Other/Clock Signal/Thomson/cd90-640.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2811,6 +4359,14 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/basic-901486-01.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2821,6 +4377,43 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-03.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "europe",
+        "north-america"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2831,6 +4424,42 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-07.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "europe"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2841,6 +4470,42 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-06.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2851,6 +4516,42 @@
       "repo_path": "bios/Commodore/VIC-20/characters-danish.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "denmark"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2861,6 +4562,42 @@
       "repo_path": "bios/Commodore/VIC-20/kernel-danish.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "denmark"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2871,6 +4608,42 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/chargen-901460-02.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2881,6 +4654,42 @@
       "repo_path": "bios/Commodore/C128/vice/VIC20/kernal.901486-02.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2891,6 +4700,42 @@
       "repo_path": "bios/Commodore/VIC-20/characters-swedish.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "sweden"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2901,6 +4746,42 @@
       "repo_path": "bios/Commodore/VIC-20/kernel-swedish.bin",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
+      ],
+      "regions": [
+        "sweden"
+      ],
+      "region_groups": [
+        "acorn-archimedes",
+        "acorn-bbc-micro",
+        "acorn-electron",
+        "amiga",
+        "amstrad-cpc",
+        "apple-ii",
+        "apple-iigs",
+        "apple-macintosh",
+        "atari-2600",
+        "atari-st",
+        "colecovision",
+        "commodore-plus4",
+        "commodore-vic20",
+        "enterprise-64-128",
+        "microsoft-msx",
+        "microsoft-msx2",
+        "oric",
+        "pc-compatible",
+        "sega-mastersystem",
+        "sinclair-zx-spectrum",
+        "sinclair-zx80-81",
+        "thomson-mo5",
+        "thomson-mo6"
       ]
     },
     {
@@ -2911,6 +4792,14 @@
       "repo_path": "bios/Arcade/FBNeo/spectrum.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2921,6 +4810,14 @@
       "repo_path": "bios/Enterprise/64-128/zx128.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2931,6 +4828,14 @@
       "repo_path": "bios/Other/zesarux/p2.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2941,6 +4846,14 @@
       "repo_path": "bios/Other/zesarux/p2a40.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2951,6 +4864,14 @@
       "repo_path": "bios/Sinclair/ZX 80/zx80.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2961,6 +4882,14 @@
       "repo_path": "bios/Sinclair/ZX 81/zx81.edition3.rom",
       "cores": [
         "clk"
+      ],
+      "systems": [
+        "apple-ii",
+        "coleco-colecovision",
+        "commodore-amiga",
+        "microsoft-msx",
+        "sega-master-system",
+        "sinclair-zx-spectrum"
       ]
     },
     {
@@ -2971,6 +4900,12 @@
       "repo_path": "bios/Arcade/FBNeo/hiscore.dat",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "fairchild-channel-f",
+        "microsoft-msx",
+        "nintendo-snes"
       ]
     },
     {
@@ -2981,6 +4916,12 @@
       "repo_path": "bios/Other/fbneo/fbneo/samples/donpachi.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "fairchild-channel-f",
+        "microsoft-msx",
+        "nintendo-snes"
       ],
       "storage": "release",
       "release_asset": "donpachi.zip"
@@ -2994,6 +4935,12 @@
       "cores": [
         "fbneo"
       ],
+      "systems": [
+        "coleco-colecovision",
+        "fairchild-channel-f",
+        "microsoft-msx",
+        "nintendo-snes"
+      ],
       "storage": "release",
       "release_asset": "sfz3mix.zip"
     },
@@ -3006,6 +4953,12 @@
       "cores": [
         "fbneo"
       ],
+      "systems": [
+        "coleco-colecovision",
+        "fairchild-channel-f",
+        "microsoft-msx",
+        "nintendo-snes"
+      ],
       "storage": "release",
       "release_asset": "twotiger.zip"
     },
@@ -3017,6 +4970,9 @@
       "repo_path": "bios/Arcade/FBNeo/sl31253.rom",
       "cores": [
         "freechaf"
+      ],
+      "systems": [
+        "fairchild-channel-f"
       ]
     },
     {
@@ -3027,6 +4983,9 @@
       "repo_path": "bios/Arcade/FBNeo/sl31254.rom",
       "cores": [
         "freechaf"
+      ],
+      "systems": [
+        "fairchild-channel-f"
       ]
     },
     {
@@ -3037,6 +4996,9 @@
       "repo_path": "bios/Arcade/FBNeo/sl90025.rom",
       "cores": [
         "freechaf"
+      ],
+      "systems": [
+        "fairchild-channel-f"
       ]
     },
     {
@@ -3047,6 +5009,9 @@
       "repo_path": "bios/Mattel/Intellivision/INTV_EROM.bin",
       "cores": [
         "freeintv"
+      ],
+      "systems": [
+        "mattel-intellivision"
       ]
     },
     {
@@ -3057,6 +5022,9 @@
       "repo_path": "bios/Mattel/Intellivision/INTV_GROM.bin",
       "cores": [
         "freeintv"
+      ],
+      "systems": [
+        "mattel-intellivision"
       ]
     },
     {
@@ -3067,6 +5035,9 @@
       "repo_path": "bios/Nintendo/Game Boy/GB_dmg.bin",
       "cores": [
         "gambatte"
+      ],
+      "systems": [
+        "nintendo-gb"
       ]
     },
     {
@@ -3077,6 +5048,9 @@
       "repo_path": "bios/Nintendo/Game Boy Color/GBC_cgb.bin",
       "cores": [
         "gambatte"
+      ],
+      "systems": [
+        "nintendo-gbc"
       ]
     },
     {
@@ -3087,6 +5061,9 @@
       "repo_path": "bios/Sega/Mega Drive/GEN_boot.md",
       "cores": [
         "genesis_plus_gx"
+      ],
+      "systems": [
+        "sega-mega-drive"
       ]
     },
     {
@@ -3097,6 +5074,9 @@
       "repo_path": "bios/Sega/Mega Drive/ggenie.bin",
       "cores": [
         "genesis_plus_gx"
+      ],
+      "systems": [
+        "sega-mega-drive"
       ]
     },
     {
@@ -3107,6 +5087,9 @@
       "repo_path": "bios/Sega/Mega Drive/areplay.bin",
       "cores": [
         "genesis_plus_gx"
+      ],
+      "systems": [
+        "sega-mega-drive"
       ]
     },
     {
@@ -3117,6 +5100,9 @@
       "repo_path": "bios/Sega/Mega Drive/sk.bin",
       "cores": [
         "genesis_plus_gx"
+      ],
+      "systems": [
+        "sega-mega-drive"
       ]
     },
     {
@@ -3127,6 +5113,9 @@
       "repo_path": "bios/Sega/Mega Drive/sk2chip.bin",
       "cores": [
         "genesis_plus_gx"
+      ],
+      "systems": [
+        "sega-mega-drive"
       ]
     },
     {
@@ -3137,6 +5126,9 @@
       "repo_path": "bios/Atari/Lynx/Atari_LYNX_boot.img",
       "cores": [
         "handy"
+      ],
+      "systems": [
+        "atari-lynx"
       ]
     },
     {
@@ -3147,6 +5139,9 @@
       "repo_path": "bios/Atari/Lynx/howard.o",
       "cores": [
         "handy"
+      ],
+      "systems": [
+        "atari-lynx"
       ]
     },
     {
@@ -3217,6 +5212,9 @@
       "repo_path": "bios/Arcade/MAME/hod2bios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3227,6 +5225,9 @@
       "repo_path": "bios/Arcade/MAME/f355dlx.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3237,6 +5238,9 @@
       "repo_path": "bios/Arcade/MAME/f355bios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3247,6 +5251,9 @@
       "repo_path": "bios/Arcade/MAME/airlbios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3267,6 +5274,9 @@
       "repo_path": "bios/Arcade/MAME/segasp.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3307,6 +5317,9 @@
       "repo_path": "bios/Arcade/MAME/shtzone.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3317,6 +5330,9 @@
       "repo_path": "bios/Arcade/MAME/sammymdl.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3347,6 +5363,9 @@
       "repo_path": "bios/Arcade/MAME/isgsm.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3357,6 +5376,9 @@
       "repo_path": "bios/Arcade/MAME/systemy2.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3407,6 +5429,9 @@
       "repo_path": "bios/Arcade/MAME/aleck64.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3467,6 +5492,9 @@
       "repo_path": "bios/Arcade/MAME/konamigx.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3487,6 +5515,9 @@
       "repo_path": "bios/Arcade/MAME/kviper.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3507,6 +5538,9 @@
       "repo_path": "bios/Arcade/Arcade/bubsys.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3517,6 +5551,9 @@
       "repo_path": "bios/Arcade/Arcade/konendev.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3527,6 +5564,9 @@
       "repo_path": "bios/Arcade/Arcade/kpython.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3537,6 +5577,9 @@
       "repo_path": "bios/Arcade/Arcade/kpython2.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3567,6 +5610,9 @@
       "repo_path": "bios/Arcade/MAME/coh1000t.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3577,6 +5623,9 @@
       "repo_path": "bios/Arcade/MAME/coh1000a.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3587,6 +5636,9 @@
       "repo_path": "bios/Arcade/MAME/coh1000w.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3597,6 +5649,9 @@
       "repo_path": "bios/Arcade/MAME/coh1001l.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3607,6 +5662,9 @@
       "repo_path": "bios/Arcade/MAME/coh1002v.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3617,6 +5675,9 @@
       "repo_path": "bios/Arcade/MAME/coh1002e.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3627,6 +5688,9 @@
       "repo_path": "bios/Arcade/MAME/coh1002m.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3637,6 +5701,9 @@
       "repo_path": "bios/Arcade/MAME/coh3002t.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3647,6 +5714,9 @@
       "repo_path": "bios/Arcade/MAME/coh1002t.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3657,6 +5727,9 @@
       "repo_path": "bios/Arcade/MAME/taitotz.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3677,6 +5750,9 @@
       "repo_path": "bios/Arcade/Arcade/mac2bios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3687,6 +5763,9 @@
       "repo_path": "bios/Arcade/MAME/macsbios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3697,6 +5776,9 @@
       "repo_path": "bios/Arcade/Arcade/3dobios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3707,6 +5789,9 @@
       "repo_path": "bios/Arcade/Arcade/alg3do.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3727,6 +5812,9 @@
       "repo_path": "bios/Arcade/Arcade/ar_bios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3737,6 +5825,9 @@
       "repo_path": "bios/Arcade/MAME/alg_bios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3747,6 +5838,9 @@
       "repo_path": "bios/Arcade/MAME/atarisy1.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3757,6 +5851,9 @@
       "repo_path": "bios/Arcade/MAME/maxaflex.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3767,6 +5864,9 @@
       "repo_path": "bios/Arcade/MAME/crysbios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3777,6 +5877,9 @@
       "repo_path": "bios/Arcade/MAME/galgbios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3787,6 +5890,9 @@
       "repo_path": "bios/Arcade/MAME/aristmk5.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3797,6 +5903,9 @@
       "repo_path": "bios/Arcade/MAME/aristmk6.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3807,6 +5916,9 @@
       "repo_path": "bios/Arcade/MAME/aristmk7.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3817,6 +5929,9 @@
       "repo_path": "bios/Arcade/MAME/allied.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3827,6 +5942,9 @@
       "repo_path": "bios/Arcade/MAME/gp_110.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3837,6 +5955,9 @@
       "repo_path": "bios/Arcade/MAME/gts1.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3847,6 +5968,9 @@
       "repo_path": "bios/Arcade/MAME/recel.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3857,6 +5981,9 @@
       "repo_path": "bios/Arcade/MAME/slvrball.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3867,6 +5994,9 @@
       "repo_path": "bios/Arcade/Arcade/nichidvd.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3877,6 +6007,9 @@
       "repo_path": "bios/Arcade/Arcade/cedmag.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3887,6 +6020,9 @@
       "repo_path": "bios/Arcade/MAME/iteagle.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3897,6 +6033,9 @@
       "repo_path": "bios/Arcade/MAME/su2000.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3907,6 +6046,9 @@
       "repo_path": "bios/Arcade/MAME/tourvis.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3917,6 +6059,9 @@
       "repo_path": "bios/Arcade/MAME/v4bios.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3927,6 +6072,9 @@
       "repo_path": "bios/Arcade/MAME/miuchiz.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -3937,6 +6085,9 @@
       "repo_path": "bios/Arcade/MAME/pumpitup.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4537,6 +6688,9 @@
       "repo_path": "bios/Arcade/MAME/qsound.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4547,6 +6701,9 @@
       "repo_path": "bios/Arcade/MAME/ym2413.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4557,6 +6714,9 @@
       "repo_path": "bios/Arcade/MAME/ym2608.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4567,6 +6727,9 @@
       "repo_path": "bios/Arcade/Arcade/ekara.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4577,6 +6740,9 @@
       "repo_path": "bios/Arcade/Arcade/ekaraa.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4587,6 +6753,9 @@
       "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4597,6 +6766,9 @@
       "repo_path": "bios/Arcade/Arcade/ekarag.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4607,6 +6779,9 @@
       "repo_path": "bios/Arcade/Arcade/ekaras.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4617,6 +6792,9 @@
       "repo_path": "bios/Arcade/Arcade/isinger.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4627,6 +6805,9 @@
       "repo_path": "bios/Arcade/Arcade/ekaraphs.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4637,6 +6818,9 @@
       "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4647,6 +6831,9 @@
       "repo_path": "bios/Arcade/Arcade/ekaramix.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4657,6 +6844,9 @@
       "repo_path": "bios/Arcade/Arcade/ddrfammt.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4667,6 +6857,9 @@
       "repo_path": "bios/Arcade/Arcade/popira.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4677,6 +6870,9 @@
       "repo_path": "bios/Arcade/Arcade/popirak.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4687,6 +6883,9 @@
       "repo_path": "bios/Arcade/Arcade/popira2.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4697,6 +6896,9 @@
       "repo_path": "bios/Arcade/Arcade/taikodp.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4707,6 +6909,9 @@
       "repo_path": "bios/Arcade/Arcade/jpopira.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4717,6 +6922,9 @@
       "repo_path": "bios/Arcade/Arcade/evio.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4727,6 +6935,9 @@
       "repo_path": "bios/Arcade/Arcade/tak_daig.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4737,6 +6948,9 @@
       "repo_path": "bios/Arcade/Arcade/gcslottv.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4747,6 +6961,9 @@
       "repo_path": "bios/Arcade/Arcade/hikara.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4757,6 +6974,9 @@
       "repo_path": "bios/Arcade/MAME/galgames.zip",
       "cores": [
         "mame"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -4767,6 +6987,9 @@
       "repo_path": "bios/Nintendo/DS/NDS_Bios9.bin",
       "cores": [
         "melonds"
+      ],
+      "systems": [
+        "nintendo-ds"
       ]
     },
     {
@@ -4777,6 +7000,9 @@
       "repo_path": "bios/Nintendo/DS/NDS_Bios7.bin",
       "cores": [
         "melonds"
+      ],
+      "systems": [
+        "nintendo-ds"
       ]
     },
     {
@@ -4787,6 +7013,9 @@
       "repo_path": "bios/Nintendo/Nintendo DS/firmware.bin",
       "cores": [
         "melonds"
+      ],
+      "systems": [
+        "nintendo-ds"
       ]
     },
     {
@@ -4837,6 +7066,9 @@
       "repo_path": "bios/Nintendo/64DD/64DD_IPL_v12_JPN.bin",
       "cores": [
         "mupen64plus_next"
+      ],
+      "systems": [
+        "nintendo-64dd"
       ]
     },
     {
@@ -4847,6 +7079,9 @@
       "repo_path": "bios/Nintendo/Nintendo 64DD/Mupen64plus/font.ttf",
       "cores": [
         "mupen64plus_next"
+      ],
+      "systems": [
+        "nintendo-64dd"
       ]
     },
     {
@@ -4857,6 +7092,9 @@
       "repo_path": "bios/Texas Instruments/TI-83/ti83se.rom",
       "cores": [
         "numero"
+      ],
+      "systems": [
+        "texas-instruments-ti-83"
       ]
     },
     {
@@ -4867,6 +7105,9 @@
       "repo_path": "bios/Texas Instruments/TI-83/ti83plus.rom",
       "cores": [
         "numero"
+      ],
+      "systems": [
+        "texas-instruments-ti-83"
       ]
     },
     {
@@ -4877,6 +7118,9 @@
       "repo_path": "bios/Texas Instruments/TI-83/ti83.rom",
       "cores": [
         "numero"
+      ],
+      "systems": [
+        "texas-instruments-ti-83"
       ]
     },
     {
@@ -4897,6 +7141,9 @@
       "repo_path": "bios/Philips/Videopac/O2_PhillipsC52.bin",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -4907,6 +7154,9 @@
       "repo_path": "bios/Philips/Videopac/O2_G7400_bios.bin",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -4917,6 +7167,9 @@
       "repo_path": "bios/Philips/Videopac+/jopac.bin",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -4927,6 +7180,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E480.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -4937,6 +7193,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E481.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -4947,6 +7206,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E481.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -4957,6 +7219,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E483.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -4967,6 +7232,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E484.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -4977,6 +7245,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E485.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -4987,6 +7258,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E486.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -4997,6 +7271,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E487.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5007,6 +7284,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E488.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5017,6 +7297,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E489.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5027,6 +7310,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E48A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5037,6 +7323,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E48B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5047,6 +7336,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E48C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5057,6 +7349,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E48D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5067,6 +7362,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E48E.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5077,6 +7375,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E48F.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5087,6 +7388,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E490.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5097,6 +7401,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E491.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5107,6 +7414,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E492.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5117,6 +7427,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E493.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5127,6 +7440,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E494.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5137,6 +7453,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E495.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5147,6 +7466,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E496.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5157,6 +7479,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E497.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5167,6 +7492,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E498.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5177,6 +7505,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E499.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5187,6 +7518,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E49A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5197,6 +7531,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E49B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5207,6 +7544,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E49C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5217,6 +7557,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E49D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5227,6 +7570,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E49E.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5237,6 +7583,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E49F.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5247,6 +7596,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4A0.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5257,6 +7609,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4A1.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5267,6 +7622,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4A2.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5277,6 +7635,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4A3.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5287,6 +7648,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4A4.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5297,6 +7661,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4A5.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5307,6 +7674,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4A6.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5317,6 +7687,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4A7.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5327,6 +7700,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4A8.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5337,6 +7713,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4A9.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5347,6 +7726,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4AA.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5357,6 +7739,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4AB.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5367,6 +7752,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4AC.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5377,6 +7765,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4AD.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5387,6 +7778,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4AE.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5397,6 +7791,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4AF.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5407,6 +7804,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4B0.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5417,6 +7817,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4B1.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5427,6 +7830,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4B2.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5437,6 +7843,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4B3.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5447,6 +7856,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4B4.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5457,6 +7869,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4B5.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5467,6 +7882,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4B6.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5477,6 +7895,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4B7.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5487,6 +7908,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4B8.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5497,6 +7921,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4B9.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5507,6 +7934,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4BA.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5517,6 +7947,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4BB.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5527,6 +7960,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4BC.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5537,6 +7973,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4BD.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5547,6 +7986,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4BE.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5557,6 +7999,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4BF.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5567,6 +8012,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4C0.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5577,6 +8025,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4C1.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5587,6 +8038,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4C2.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5597,6 +8051,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4C3.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5607,6 +8064,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4C4.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5617,6 +8077,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4C5.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5627,6 +8090,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4C6.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5637,6 +8103,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4C7.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5647,6 +8116,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4C8.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5657,6 +8129,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4C9.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5667,6 +8142,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4CA.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5677,6 +8155,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4FA.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5687,6 +8168,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E4FB.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5697,6 +8181,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E880.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5707,6 +8194,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E881.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5717,6 +8207,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E882.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5727,6 +8220,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E883.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5737,6 +8233,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E884.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5747,6 +8246,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E885.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5757,6 +8259,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E886.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5767,6 +8272,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E887.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5777,6 +8285,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E888.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5787,6 +8298,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E889.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5797,6 +8311,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E88A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5807,6 +8324,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E88B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5817,6 +8337,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E88C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5827,6 +8350,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E88D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5837,6 +8363,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E88E.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5847,6 +8376,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E88F.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5857,6 +8389,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E890.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5867,6 +8402,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E891.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5877,6 +8415,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E892.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5887,6 +8428,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E893.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5897,6 +8441,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E894.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5907,6 +8454,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E895.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5917,6 +8467,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E980.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5927,6 +8480,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E981.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5937,6 +8493,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E982.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5947,6 +8506,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E983.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5957,6 +8519,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E984.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5967,6 +8532,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E985.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5977,6 +8545,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E986.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5987,6 +8558,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E987.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -5997,6 +8571,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E988.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6007,6 +8584,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E989.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6017,6 +8597,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E98A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6027,6 +8610,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E98B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6037,6 +8623,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E98C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6047,6 +8636,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E98D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6057,6 +8649,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E98E.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6067,6 +8662,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E98F.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6077,6 +8675,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E990.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6087,6 +8688,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E991.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6097,6 +8701,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E992.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6107,6 +8714,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E993.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6117,6 +8727,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E994.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6127,6 +8740,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E995.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6137,6 +8753,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/E996.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6147,6 +8766,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA80.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6157,6 +8779,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA81.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6167,6 +8792,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA82.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6177,6 +8805,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA83.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6187,6 +8818,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA84.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6197,6 +8831,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA85.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6207,6 +8844,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA86.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6217,6 +8857,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA87.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6227,6 +8870,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA88.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6237,6 +8883,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA89.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6247,6 +8896,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA8A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6257,6 +8909,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA8B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6267,6 +8922,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA8C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6277,6 +8935,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA8D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6287,6 +8948,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA8E.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6297,6 +8961,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA8F.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6307,6 +8974,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA90.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6317,6 +8987,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA91.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6327,6 +9000,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA92.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6337,6 +9013,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA93.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6347,6 +9026,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA94.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6357,6 +9039,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA95.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6367,6 +9052,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA96.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6377,6 +9065,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA97.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6387,6 +9078,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA98.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6397,6 +9091,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA99.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6407,6 +9104,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA9A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6417,6 +9117,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA9B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6427,6 +9130,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA9C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6437,6 +9143,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA9D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6447,6 +9156,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA9E.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6457,6 +9169,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EA9F.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6467,6 +9182,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EAA0.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6477,6 +9195,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EAA1.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6487,6 +9208,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EAA2.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6497,6 +9221,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EAA3.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6507,6 +9234,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EAA4.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6517,6 +9247,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EAA5.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6527,6 +9260,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EAA6.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6537,6 +9273,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EAA7.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6547,6 +9286,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB80.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6557,6 +9299,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB81.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6567,6 +9312,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB82.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6577,6 +9325,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB83.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6587,6 +9338,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB84.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6597,6 +9351,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB85.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6607,6 +9364,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB86.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6617,6 +9377,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB87.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6627,6 +9390,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB88.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6637,6 +9403,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB89.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6647,6 +9416,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB8A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6657,6 +9429,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB8B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6667,6 +9442,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB8C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6677,6 +9455,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB8D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6687,6 +9468,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB8E.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6697,6 +9481,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB8F.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6707,6 +9494,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB90.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6717,6 +9507,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB91.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6727,6 +9520,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB92.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6737,6 +9533,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB93.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6747,6 +9546,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB94.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6757,6 +9559,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB95.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6767,6 +9572,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB96.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6777,6 +9585,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB97.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6787,6 +9598,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB98.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6797,6 +9611,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB99.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6807,6 +9624,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB9A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6817,6 +9637,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB9B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6827,6 +9650,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB9C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6837,6 +9663,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EB9D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6847,6 +9676,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC80.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6857,6 +9689,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC81.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6867,6 +9702,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC82.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6877,6 +9715,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC83.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6887,6 +9728,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC84.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6897,6 +9741,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC85.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6907,6 +9754,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC86.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6917,6 +9767,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC87.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6927,6 +9780,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC88.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6937,6 +9793,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC89.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6947,6 +9806,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC8A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6957,6 +9819,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC8B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6967,6 +9832,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC8C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6977,6 +9845,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC8D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6987,6 +9858,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC8E.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -6997,6 +9871,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC8F.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7007,6 +9884,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC90.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7017,6 +9897,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC91.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7027,6 +9910,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC92.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7037,6 +9923,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC93.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7047,6 +9936,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC94.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7057,6 +9949,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC95.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7067,6 +9962,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC96.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7077,6 +9975,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC97.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7087,6 +9988,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC98.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7097,6 +10001,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC99.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7107,6 +10014,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC9A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7117,6 +10027,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EC9B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7127,6 +10040,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED80.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7137,6 +10053,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED81.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7147,6 +10066,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED82.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7157,6 +10079,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED83.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7167,6 +10092,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED84.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7177,6 +10105,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED85.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7187,6 +10118,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED86.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7197,6 +10131,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED87.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7207,6 +10144,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED88.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7217,6 +10157,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED89.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7227,6 +10170,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED8A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7237,6 +10183,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED8B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7247,6 +10196,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED8C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7257,6 +10209,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED8D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7267,6 +10222,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED8E.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7277,6 +10235,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED8F.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7287,6 +10248,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED90.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7297,6 +10261,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED91.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7307,6 +10274,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED92.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7317,6 +10287,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED93.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7327,6 +10300,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED94.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7337,6 +10313,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED95.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7347,6 +10326,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED96.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7357,6 +10339,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED97.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7367,6 +10352,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED98.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7377,6 +10365,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED99.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7387,6 +10378,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/ED9A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7397,6 +10391,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE80.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7407,6 +10404,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE81.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7417,6 +10417,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE82.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7427,6 +10430,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE83.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7437,6 +10443,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE84.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7447,6 +10456,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE85.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7457,6 +10469,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE86.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7467,6 +10482,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE87.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7477,6 +10495,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE88.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7487,6 +10508,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE89.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7497,6 +10521,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE8A.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7507,6 +10534,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE8B.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7517,6 +10547,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE8C.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7527,6 +10560,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE8D.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7537,6 +10573,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE8E.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7547,6 +10586,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE8F.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7557,6 +10599,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE90.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7567,6 +10612,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE91.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7577,6 +10625,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE92.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7587,6 +10638,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE93.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7597,6 +10651,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE94.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7607,6 +10664,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE95.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7617,6 +10677,9 @@
       "repo_path": "bios/Magnavox/Odyssey2/voice/EE96.WAV",
       "cores": [
         "o2em"
+      ],
+      "systems": [
+        "philips-videopac"
       ]
     },
     {
@@ -7627,6 +10690,9 @@
       "repo_path": "bios/3DO Company/3DO/panafz1j-norsa.bin",
       "cores": [
         "opera"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -7637,6 +10703,9 @@
       "repo_path": "bios/3DO Company/3DO/panafz10-norsa.bin",
       "cores": [
         "opera"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -7647,6 +10716,9 @@
       "repo_path": "bios/3DO Company/3DO/panafz10e-anvil-norsa.bin",
       "cores": [
         "opera"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -7657,6 +10729,9 @@
       "repo_path": "bios/3DO Company/3DO/panafz1j-kanji.bin",
       "cores": [
         "opera"
+      ],
+      "systems": [
+        "3do"
       ]
     },
     {
@@ -7667,6 +10742,12 @@
       "repo_path": "bios/Sega/Mega Drive/carthw.cfg",
       "cores": [
         "picodrive"
+      ],
+      "systems": [
+        "sega-32x",
+        "sega-game-gear",
+        "sega-master-system",
+        "sega-mega-drive"
       ]
     },
     {
@@ -7677,6 +10758,12 @@
       "repo_path": "bios/Sega/Mega CD/us_scd2_9306.bin",
       "cores": [
         "picodrive"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -7687,6 +10774,12 @@
       "repo_path": "bios/Sega/Mega CD/SegaCDBIOS9303.bin",
       "cores": [
         "picodrive"
+      ],
+      "regions": [
+        "north-america"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -7707,6 +10800,12 @@
       "repo_path": "bios/Sega/Mega CD/eu_mcd2_9306.bin",
       "cores": [
         "picodrive"
+      ],
+      "regions": [
+        "europe"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -7717,6 +10816,12 @@
       "repo_path": "bios/Sega/Mega CD/eu_mcd2_9303.bin",
       "cores": [
         "picodrive"
+      ],
+      "regions": [
+        "europe"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -7727,6 +10832,12 @@
       "repo_path": "bios/Sega/Mega CD/MCD_eu_100.bin",
       "cores": [
         "picodrive"
+      ],
+      "regions": [
+        "europe"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -7737,6 +10848,12 @@
       "repo_path": "bios/Sega/Mega CD/jp_mcd2_921222.bin",
       "cores": [
         "picodrive"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -7747,6 +10864,12 @@
       "repo_path": "bios/Sega/Mega CD/jp_mcd1_9112.bin",
       "cores": [
         "picodrive"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -7757,6 +10880,12 @@
       "repo_path": "bios/Sega/Mega CD/MCD_jp_100p.bin",
       "cores": [
         "picodrive"
+      ],
+      "regions": [
+        "japan"
+      ],
+      "region_groups": [
+        "PicoDrive:variant:mega-cd-bios"
       ]
     },
     {
@@ -7787,6 +10916,9 @@
       "repo_path": "bios/Id Software/Doom/prboom.wad",
       "cores": [
         "prboom"
+      ],
+      "systems": [
+        "doom"
       ]
     },
     {
@@ -7797,6 +10929,9 @@
       "repo_path": "bios/Atari/7800/7800 BIOS (U).rom",
       "cores": [
         "prosystem"
+      ],
+      "systems": [
+        "atari-7800"
       ]
     },
     {
@@ -7807,6 +10942,9 @@
       "repo_path": "bios/Atari/7800/7800 BIOS (E).rom",
       "cores": [
         "prosystem"
+      ],
+      "systems": [
+        "atari-7800"
       ]
     },
     {
@@ -7817,6 +10955,9 @@
       "repo_path": "bios/Commodore/Amiga/kick31034.A1000",
       "cores": [
         "puae"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {
@@ -7827,6 +10968,9 @@
       "repo_path": "bios/Commodore/Amiga/kick32034.A1000",
       "cores": [
         "puae"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {
@@ -7837,6 +10981,9 @@
       "repo_path": "bios/Commodore/Amiga/amiga-os-120.rom",
       "cores": [
         "puae"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {
@@ -7847,6 +10994,9 @@
       "repo_path": "bios/Commodore/Amiga/amiga-os-204.rom",
       "cores": [
         "puae"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {
@@ -7857,6 +11007,9 @@
       "repo_path": "bios/Commodore/Amiga/kick31.rom",
       "cores": [
         "puae"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {
@@ -7867,6 +11020,9 @@
       "repo_path": "bios/Commodore/Amiga/kick39106.A1200",
       "cores": [
         "puae"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {
@@ -7877,6 +11033,9 @@
       "repo_path": "bios/Commodore/Amiga/kick39106.A4000",
       "cores": [
         "puae"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {
@@ -7897,6 +11056,9 @@
       "repo_path": "bios/Commodore/Amiga/rom.key",
       "cores": [
         "puae"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {
@@ -7907,6 +11069,9 @@
       "repo_path": "bios/Commodore/Amiga/WHDLoad.prefs",
       "cores": [
         "puae"
+      ],
+      "systems": [
+        "commodore-amiga"
       ]
     },
     {
@@ -7917,6 +11082,9 @@
       "repo_path": "bios/Nintendo/Game Boy/dmg_boot.bin",
       "cores": [
         "sameboy"
+      ],
+      "systems": [
+        "nintendo-gb"
       ]
     },
     {
@@ -7947,6 +11115,9 @@
       "repo_path": "bios/Nintendo/Game Boy Color/cgb_boot.bin",
       "cores": [
         "sameboy"
+      ],
+      "systems": [
+        "nintendo-gbc"
       ]
     },
     {
@@ -7957,6 +11128,9 @@
       "repo_path": "bios/Nintendo/Game Boy Color/agb_boot.bin",
       "cores": [
         "sameboy"
+      ],
+      "systems": [
+        "nintendo-gbc"
       ]
     },
     {
@@ -8037,6 +11211,9 @@
       "repo_path": "bios/Commodore/C128/JiffyDOS_C64.bin",
       "cores": [
         "vice_x64"
+      ],
+      "systems": [
+        "commodore-c64"
       ]
     },
     {
@@ -8047,6 +11224,9 @@
       "repo_path": "bios/Commodore/C64/JiffyDOS_SX-64.bin",
       "cores": [
         "vice_x64"
+      ],
+      "systems": [
+        "commodore-c64"
       ]
     },
     {
@@ -8057,6 +11237,9 @@
       "repo_path": "bios/Commodore/C128/JiffyDOS_1541-II.bin",
       "cores": [
         "vice_x64"
+      ],
+      "systems": [
+        "commodore-c64"
       ]
     },
     {
@@ -8067,6 +11250,9 @@
       "repo_path": "bios/Commodore/C128/JiffyDOS_1571_repl310654.bin",
       "cores": [
         "vice_x64"
+      ],
+      "systems": [
+        "commodore-c64"
       ]
     },
     {
@@ -8077,6 +11263,9 @@
       "repo_path": "bios/Commodore/C128/JiffyDOS_1581.bin",
       "cores": [
         "vice_x64"
+      ],
+      "systems": [
+        "commodore-c64"
       ]
     },
     {
@@ -8087,6 +11276,9 @@
       "repo_path": "bios/Commodore/C128/vice/C64/kernal-901227-01.bin",
       "cores": [
         "vice_x64"
+      ],
+      "systems": [
+        "commodore-c64"
       ]
     },
     {
@@ -8097,6 +11289,9 @@
       "repo_path": "bios/Commodore/C128/vice/C64/kernal-901227-02.bin",
       "cores": [
         "vice_x64"
+      ],
+      "systems": [
+        "commodore-c64"
       ]
     },
     {
@@ -8157,6 +11352,9 @@
       "repo_path": "bios/Arcade/Arcade/channelf.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "fairchild-channel-f"
       ]
     },
     {
@@ -8167,6 +11365,9 @@
       "repo_path": "bios/Arcade/Arcade/coleco.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "coleco-colecovision"
       ]
     },
     {
@@ -8177,6 +11378,9 @@
       "repo_path": "bios/Arcade/Arcade/dsp1.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8187,6 +11391,9 @@
       "repo_path": "bios/Arcade/Arcade/dsp1b.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8197,6 +11404,9 @@
       "repo_path": "bios/Arcade/Arcade/dsp2.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8207,6 +11417,9 @@
       "repo_path": "bios/Arcade/Arcade/dsp3.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8217,6 +11430,9 @@
       "repo_path": "bios/Arcade/Arcade/dsp4.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8237,6 +11453,12 @@
       "repo_path": "bios/Arcade/Arcade/gba.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "fairchild-channel-f",
+        "microsoft-msx",
+        "nintendo-snes"
       ]
     },
     {
@@ -8347,6 +11569,9 @@
       "repo_path": "bios/Arcade/Arcade/msx.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "microsoft-msx"
       ]
     },
     {
@@ -8617,6 +11842,9 @@
       "repo_path": "bios/Arcade/Arcade/st010.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8627,6 +11855,9 @@
       "repo_path": "bios/Arcade/Arcade/st011.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8637,6 +11868,12 @@
       "repo_path": "bios/Arcade/Arcade/st018.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "fairchild-channel-f",
+        "microsoft-msx",
+        "nintendo-snes"
       ]
     },
     {
@@ -8657,6 +11894,9 @@
       "repo_path": "bios/Nintendo/3DS/Citra/sysdata/seeddb.bin",
       "cores": [
         "azahar"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -8667,6 +11907,9 @@
       "repo_path": "bios/Nintendo/3DS/aes_keys.txt",
       "cores": [
         "citra"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -8677,6 +11920,9 @@
       "repo_path": "bios/Nintendo/3DS/Citra/sysdata/seeddb.bin",
       "cores": [
         "citra"
+      ],
+      "systems": [
+        "nintendo-3ds"
       ]
     },
     {
@@ -8687,6 +11933,12 @@
       "repo_path": "bios/Bally/Astrocade/astrocde.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "fairchild-channel-f",
+        "microsoft-msx",
+        "nintendo-snes"
       ]
     },
     {
@@ -8697,6 +11949,12 @@
       "repo_path": "bios/Arcade/Arcade/atarisy1.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "fairchild-channel-f",
+        "microsoft-msx",
+        "nintendo-snes"
       ]
     },
     {
@@ -8727,6 +11985,9 @@
       "repo_path": "bios/Arcade/Arcade/channelf.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "fairchild-channel-f"
       ]
     },
     {
@@ -8737,6 +11998,9 @@
       "repo_path": "bios/Arcade/Arcade/coleco.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "coleco-colecovision"
       ]
     },
     {
@@ -8757,6 +12021,9 @@
       "repo_path": "bios/Arcade/Arcade/dsp1.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8767,6 +12034,9 @@
       "repo_path": "bios/Arcade/Arcade/dsp1b.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8777,6 +12047,9 @@
       "repo_path": "bios/Arcade/Arcade/dsp2.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8787,6 +12060,9 @@
       "repo_path": "bios/Arcade/Arcade/dsp3.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8797,6 +12073,9 @@
       "repo_path": "bios/Arcade/Arcade/dsp4.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -8817,6 +12096,12 @@
       "repo_path": "bios/Arcade/Arcade/gba.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "fairchild-channel-f",
+        "microsoft-msx",
+        "nintendo-snes"
       ]
     },
     {
@@ -8937,6 +12222,9 @@
       "repo_path": "bios/Arcade/Arcade/msx.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "microsoft-msx"
       ]
     },
     {
@@ -9237,6 +12525,9 @@
       "repo_path": "bios/Arcade/Arcade/st010.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -9247,6 +12538,9 @@
       "repo_path": "bios/Arcade/Arcade/st011.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "nintendo-snes"
       ]
     },
     {
@@ -9257,6 +12551,12 @@
       "repo_path": "bios/Arcade/Arcade/st018.zip",
       "cores": [
         "fbneo"
+      ],
+      "systems": [
+        "coleco-colecovision",
+        "fairchild-channel-f",
+        "microsoft-msx",
+        "nintendo-snes"
       ]
     },
     {

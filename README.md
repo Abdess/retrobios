@@ -32,7 +32,7 @@ The script auto-detects your platform, downloads only missing files, and verifie
 
 ## Download BIOS packs
 
-One pack per platform, and it holds everything the platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. The installer above does the same file by file, and `--target` narrows it to one machine; for a region or a bare minimum, build your own pack below.
+One pack per platform, and it holds everything the platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. The installer above does the same file by file. At a terminal it asks whether to install everything or to choose systems, cores and regions, and `--system`, `--core`, `--region` and `--target` make the same choice without questions; for a bare minimum, build your own pack below.
 Files is how many the pack holds once extracted, the figure a file manager shows for the folder. It differs from one platform to the next because a pack carries only what that platform's emulators load. The size is what the files occupy once extracted; the ZIP itself downloads smaller.
 
 A pack over 2 GB comes in several parts, and every part is needed. How to open them depends on their name:
@@ -180,4 +180,4 @@ The scripts and tooling are released under the [MIT License](LICENSE).
 The BIOS and firmware files are not covered by that license: they are third-party system software, preserved and provided for personal backup, archival, and interoperability with emulation software. [NOTICE](NOTICE) sets out their status and how to ask for a file to be removed.
 The reasoning, and where it is weakest, is in the [FAQ](https://abdess.github.io/retrobios/wiki/faq/#is-this-legal).
 
-*Auto-generated on 2026-10-09T23:59:06Z*
+*Auto-generated on 2026-10-10T02:54:25Z*
