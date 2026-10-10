@@ -746,14 +746,26 @@ def platform_region_groups(
 
 def extra_region_groups(extra: dict) -> list[str]:
     """The region groups a core extra competes in."""
+    emulator = extra.get("source_emulator", "")
     variant = extra.get("variant_group")
     if variant:
         # A variant group is one slot of one core, whatever system each
         # member is filed under: PicoDrive files its US Mega CD BIOS under
         # sega-segacd and the EU/JP ones under sega-megacd, and find_bios
         # picks one of the twelve. Keyed as emulator mode keys it.
-        return [f"{extra.get('source_emulator', '')}:variant:{variant}"]
-    return _extra_system_ids(extra) or ["_extras"]
+        return [f"{emulator}:variant:{variant}"]
+    explicit = extra.get("source_system")
+    if explicit:
+        return [str(explicit)]
+    systems = [str(s) for s in extra.get("source_systems", []) if s]
+    if len(systems) == 1:
+        return systems
+    # No system names the machine this file is chosen for. Filed under every
+    # system of a 30-system profile, CLK's American MSX ROM made the
+    # Enterprise group drop its German ROM. Alone, it drops nothing and is
+    # never dropped.
+    destination = extra.get("destination", extra.get("name", ""))
+    return [f"{emulator}:file:{destination}"]
 
 def emulator_region_drops(
     selected: list[tuple[str, dict]],
