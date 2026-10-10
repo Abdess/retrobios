@@ -1654,7 +1654,12 @@ def generate_system_pack(
                 "full", regions, None, False, required_only, standalone=standalone
             )
         )
-        new_path = os.path.join(output_dir, f"{sys_display}{tags}_BIOS_Pack.zip")
+        # The selection mode is part of the name: `--system sega-triforce`
+        # and `--emulator triforce` both wrote Triforce_BIOS_Pack.zip, and
+        # the second run replaced the first without a word.
+        new_path = os.path.join(
+            output_dir, f"{sys_display}_System{tags}_BIOS_Pack.zip"
+        )
         os.replace(result, new_path)
         return new_path
     finally:

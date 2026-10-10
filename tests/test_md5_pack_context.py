@@ -62,5 +62,56 @@ class TheEmulatorContextIsChecked(unittest.TestCase):
         self.assertEqual(proc.returncode, 0, proc.stderr)
         self.assertEqual(names, ["system/BBKEmu/A4980/8.BIN"])
 
+
+class SystemAndEmulatorPacksKeepTheirNames(unittest.TestCase):
+    """`--system sega-triforce` and `--emulator triforce` both wrote
+    Triforce_BIOS_Pack.zip: whichever ran second replaced the other."""
+
+    def test_the_two_selections_write_two_files(self):
+        import hashlib
+
+        import yaml
+
+        sys.path.insert(0, str(REPO_ROOT / "scripts"))
+        import common
+        import generate_db
+        import generate_pack as gp
+
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as directory:
+            root = Path(directory)
+            (root / "bios").mkdir()
+            (root / "emulators").mkdir()
+            out = root / "dist"
+            payload = b"triforce bios"
+            (root / "bios" / "segaboot.gcm").write_bytes(payload)
+            sha1 = hashlib.sha1(payload).hexdigest()
+            files = {sha1: {
+                "path": str(root / "bios" / "segaboot.gcm"), "name": "segaboot.gcm",
+                "size": len(payload), "sha1": sha1,
+                "md5": hashlib.md5(payload).hexdigest(),
+                "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "0",
+            }}
+            db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+            (root / "emulators" / "triforce.yml").write_text(yaml.dump({
+                "emulator": "Triforce", "type": "libretro", "cores": ["triforce"],
+                "systems": ["sega-triforce"],
+                "files": [{"name": "segaboot.gcm", "required": True}],
+            }))
+            common._emulator_profiles_cache.clear()
+            try:
+                emulator_pack = gp.generate_emulator_pack(
+                    ["triforce"], str(root / "emulators"), db, str(root / "bios"),
+                    str(out), offline=True,
+                )
+                system_pack = gp.generate_system_pack(
+                    ["sega-triforce"], str(root / "emulators"), db,
+                    str(root / "bios"), str(out), offline=True,
+                )
+            finally:
+                common._emulator_profiles_cache.clear()
+            self.assertNotEqual(Path(emulator_pack).name, Path(system_pack).name)
+            self.assertTrue(Path(emulator_pack).exists())
+            self.assertTrue(Path(system_pack).exists())
+
 if __name__ == "__main__":
     unittest.main()
