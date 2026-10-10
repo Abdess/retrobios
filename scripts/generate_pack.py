@@ -780,9 +780,24 @@ def generate_pack(
 
                 if _has_path_conflict(full_dest, seen_destinations, seen_parents):
                     # Content ships under the conflicting shape (file vs dir,
-                    # e.g. SGB1.sfc): count it so pack totals match verify.py,
-                    # which resolves each declaration independently
-                    file_status.setdefault(dedup_key, "ok")
+                    # e.g. SGB1.sfc). verify.py resolves each declaration on
+                    # its own, so this one is counted by what it resolves to:
+                    # an unresolved one counted OK had the pack claim a file
+                    # verify reports missing.
+                    _conflict_path, conflict_status = resolve_file(
+                        file_entry, db, bios_dir, zip_contents,
+                        data_dir_registry=data_registry, offline=offline,
+                    )
+                    if conflict_status == "not_found":
+                        file_status[dedup_key] = "missing"
+                        file_reasons[dedup_key] = "not found"
+                    elif conflict_status == "hash_mismatch" and (
+                        hash_mismatch_excludes_file(verification_mode)
+                    ):
+                        file_status[dedup_key] = "excluded"
+                        file_reasons[dedup_key] = "hash mismatch"
+                    else:
+                        file_status.setdefault(dedup_key, "ok")
                     continue
 
                 storage = file_entry.get("storage", "embedded")
