@@ -325,8 +325,13 @@ def build_native_model(
             def by_destination(candidate: NativeFile, t_dest: str = t_dest) -> bool:
                 # Dolphin writes dolphin-emu/Sys/GC/USA/IPL.bin for the truth's
                 # GC/USA/IPL.bin: a destination ending in the path is the file.
+                # A bare name is no path: dc/boot.bin ends in /boot.bin, and
+                # fbneo's 480-byte boot.bin is not that 2 MB Dreamcast BIOS.
+                # Names go through by_name and its size guard.
                 theirs = _match_key(candidate.platform or {})[0]
-                return bool(t_dest) and (theirs == t_dest or theirs.endswith("/" + t_dest))
+                if not t_dest:
+                    return False
+                return theirs == t_dest or ("/" in t_dest and theirs.endswith("/" + t_dest))
 
             def by_name(
                 candidate: NativeFile,

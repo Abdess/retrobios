@@ -120,6 +120,22 @@ def model(truth: dict = TRUTH, scraped: dict | None = SCRAPED):
 class Reconciliation(unittest.TestCase):
     """The platform's file corrected, not replaced by ours."""
 
+    def test_a_bare_truth_name_is_not_a_path_suffix(self):
+        """fbneo's boot.bin has no path; libretro's dc/boot.bin ends in
+        /boot.bin. The suffix paired them past the size guard and wrote the
+        480-byte file's size and hashes over the 2 MB Dreamcast BIOS."""
+        truth = {"systems": {"sega-dreamcast": {"files": [
+            {"name": "boot.bin", "size": 480, "crc32": "f0774fc2"}]}}}
+        scraped = {"systems": {"sega-dreamcast": {"native_id": "dc", "files": [
+            {"name": "boot.bin", "destination": "dc/boot.bin", "native_system": "dc",
+             "size": 2097152, "crc32": "89f2b1a1"}]}}}
+        systems, report = build_native_model(truth, scraped)
+        platform_entry = next(
+            fe for fe in systems["dc"].files if fe.destination == "dc/boot.bin"
+        )
+        self.assertIsNone(platform_entry.truth)
+        self.assertEqual(report.hashes_corrected, [])
+
     def test_a_file_the_truth_says_nothing_about_is_kept(self):
         systems, _ = model()
         names = {fe.name for fe in systems["psx"].files}
