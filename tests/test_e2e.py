@@ -6151,26 +6151,43 @@ struct BurnDriver BurnDrvneogeo = {
         self.assertIn("sony-playstation", readme)
 
     def test_extras_group_under_their_system_not_a_shared_bucket(self):
-        """find_undeclared_files reports the display name, the profiles are
-        keyed by slug; a key-only lookup put nearly every core extra in one
-        bucket and lost the per-system grouping both narrowing passes need."""
-        from generate_pack import _emulator_systems_index
+        """A core extra competes in its system's group: the chain from the
+        gap report (system, systems) to platform_region_groups, not a
+        dictionary built by hand. Without it every extra stood alone and
+        --region compared nothing."""
+        import hashlib  # noqa: PLC0415
 
-        index = _emulator_systems_index(
-            {
-                "beetle_psx": {
-                    "emulator": "Beetle PSX (Mednafen PSX)",
-                    "systems": ["sony-playstation"],
-                },
-                "beebem": {"emulator": "beebem", "systems": ["bbc-micro-b"]},
-            }
+        from packextras import platform_region_groups  # noqa: PLC0415
+
+        files, by_name = {}, {}
+        for name in ("core_us.bin", "core_jp.bin"):
+            payload = name.encode()
+            path = os.path.join(self.bios_dir, name)
+            with open(path, "wb") as handle:
+                handle.write(payload)
+            sha1 = hashlib.sha1(payload).hexdigest()
+            files[sha1] = {"path": path, "name": name, "size": len(payload),
+                           "md5": hashlib.md5(payload).hexdigest()}
+            by_name[name] = [sha1]
+        db = {"files": files, "indexes": {"by_name": by_name, "by_md5": {},
+                                          "by_crc32": {}, "by_path_suffix": {}}}
+        profiles = {"psxcore": {
+            "emulator": "PSX Core (Display Name)", "type": "libretro",
+            "systems": ["sony-playstation"],
+            "files": [{"name": "core_us.bin", "region": ["north-america"]},
+                      {"name": "core_jp.bin", "region": ["japan"]}],
+        }}
+        config = {"platform": "P", "cores": ["psxcore"], "base_destination": "system",
+                  "systems": {"sony-playstation": {"files": [
+                      {"name": "declared.bin", "destination": "declared.bin"}]}}}
+        groups, _ = platform_region_groups(
+            config, config["systems"], self.emulators_dir, db, "system", profiles,
         )
-        self.assertEqual(index["beetle_psx"], ["sony-playstation"])
         self.assertEqual(
-            index["Beetle PSX (Mednafen PSX)"], ["sony-playstation"]
+            sorted(groups["sony-playstation"]),
+            [("core_jp.bin", "core_jp.bin"), ("core_us.bin", "core_us.bin"),
+             ("declared.bin", "declared.bin")],
         )
-        self.assertEqual(index["beebem"], ["bbc-micro-b"])
-        self.assertNotIn("_extras", index)
 
     def test_slot_narrowed_pack_gets_its_own_name(self):
         names = {

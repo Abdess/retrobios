@@ -15,22 +15,7 @@ from common import runs_standalone
 from common import sanitize_pack_path
 from common import size_fits
 from validation import read_from_system_dir
-def _emulator_systems_index(emu_profiles: dict | None) -> dict[str, list[str]]:
-    """Map both the profile key and its display name to the profile's systems.
 
-    find_undeclared_files reports the display name ("Beetle PSX (Mednafen
-    PSX)"), while the profile dictionary is keyed by slug. A key-only lookup
-    therefore missed almost every core, dropping its files into one shared
-    bucket and losing the per-system grouping the narrowing passes rely on.
-    """
-    index: dict[str, list[str]] = {}
-    for key, profile in (emu_profiles or {}).items():
-        systems = list(profile.get("systems", []))
-        index[key] = systems
-        display = profile.get("emulator", "")
-        if display:
-            index.setdefault(display, systems)
-    return index
 
 def _detect_extras_prefix(config: dict, base_dest: str) -> str:
     """The prefix core-extra destinations take (may be empty).

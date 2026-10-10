@@ -3798,7 +3798,6 @@ from packextras import (  # noqa: E402,F401
     _detect_extras_prefix,
     _detect_slug_structure,
     _map_emulator_to_slug,
-    _emulator_systems_index,
     _collect_emulator_extras,
     _extra_system_ids,
     platform_region_groups,
