@@ -9,6 +9,7 @@ failed, the cache left at the old version.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -26,9 +27,12 @@ import check_buildbot_system  # noqa: E402
 class GitThatCannotAnswer(unittest.TestCase):
     def test_outside_a_repository_is_an_error_not_an_empty_change(self):
         with tempfile.TemporaryDirectory() as tmp:
+            # TMPDIR may lie inside this repository (the audit gate puts it in
+            # tmp/): git must not find the enclosing work tree from there.
+            env = dict(os.environ, GIT_CEILING_DIRECTORIES=str(Path(tmp).parent))
             proc = subprocess.run(
                 [sys.executable, str(REPO_ROOT / "scripts" / "validate_pr.py"), "--changed"],
-                cwd=tmp, capture_output=True, text=True, timeout=60, check=False,
+                cwd=tmp, env=env, capture_output=True, text=True, timeout=60, check=False,
             )
         self.assertEqual(proc.returncode, 2, proc.stdout + proc.stderr)
         self.assertNotIn("No changed BIOS files detected", proc.stdout)
@@ -89,7 +93,7 @@ class AnEmptyExtractionKeepsTheCache(unittest.TestCase):
         payload.write_bytes(b"x")
         with tarfile.open(archive, "w:gz") as tf:
             tf.add(payload, arcname="repo-main/OtherDir/a.txt")
-        with self.assertRaises(self.module.NothingExtracted):
+        with self.assertRaises(self.module.NothingExtractedError):
             self.module._download_and_extract(
                 archive.as_uri(), "repo-main/Data/Sys", str(self.cache), []
             )
@@ -101,7 +105,7 @@ class AnEmptyExtractionKeepsTheCache(unittest.TestCase):
         archive = self.root / "archive.zip"
         with zipfile.ZipFile(archive, "w") as zf:
             zf.writestr("only/", b"")
-        with self.assertRaises(self.module.NothingExtracted):
+        with self.assertRaises(self.module.NothingExtractedError):
             self.module._download_and_extract_zip(archive.as_uri(), str(self.cache))
         self.assertEqual((self.cache / "keep.dat").read_bytes(), b"cached")
 
