@@ -1325,15 +1325,28 @@ class EveryManifestEntryIsFetchable(unittest.TestCase):
 
     def test_an_unresolvable_file_is_recorded_as_omitted(self):
         """The reason must be one install.py knows how to report."""
-        allowed = {
-            "hash_mismatch", "not_found", "external", "user_provided",
-            "no_platform_slug",
-        }
         for path in sorted((ROOT / "install").glob("*.json")):
             with self.subTest(manifest=path.name):
                 data = json.loads(path.read_text())
                 for entry in data.get("omitted_files", []):
-                    self.assertIn(entry.get("reason"), allowed)
+                    self.assertIn(entry.get("reason"), install.OMISSION_REASONS)
+
+    def test_the_installer_accepts_every_published_manifest(self):
+        """A reason the schema allowed and the installer did not made the
+        installer refuse the whole RomM manifest: no RomM install ran."""
+        for path in sorted((ROOT / "install").glob("*.json")):
+            with self.subTest(manifest=path.name):
+                data = json.loads(path.read_text())
+                install._validate_manifest(data, data["platform"])
+
+    def test_schema_and_installer_name_the_same_reasons(self):
+        schema = json.loads(
+            (ROOT / "schemas" / "install-manifest.schema.json").read_text()
+        )
+        reasons = schema["properties"]["omitted_files"]["items"]["properties"][
+            "reason"
+        ]["enum"]
+        self.assertEqual(set(reasons), set(install.OMISSION_REASONS))
 
     def _manifests(self) -> list[Path]:
         paths = sorted((ROOT / "install").glob("*.json"))

@@ -81,6 +81,15 @@ MAX_TARGETS_BYTES = 4 * 1024 * 1024
 MAX_MANIFEST_FILES = 100_000
 MAX_DOWNLOAD_SIZE = 1024 * 1024 * 1024
 MAX_TOTAL_DOWNLOAD_SIZE = 64 * 1024 * 1024 * 1024
+# Why a manifest leaves a file out, as the installer words it. The manifest
+# schema and the generator are held to this list by the tests.
+OMISSION_REASONS = {
+    "hash_mismatch": "hash mismatch",
+    "not_found": "not found",
+    "external": "external",
+    "user_provided": "user provided",
+    "no_platform_slug": "no platform folder",
+}
 _SHA1_RE = re.compile(r"^[0-9a-fA-F]{40}$")
 _SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 
@@ -874,9 +883,6 @@ def _validate_manifest(data: object, plat: str) -> dict:
     if not isinstance(omitted, list) or len(omitted) > MAX_MANIFEST_FILES:
         raise ValueError("invalid omitted_files list")
     seen_omitted: set[str] = set()
-    allowed_omission_reasons = {
-        "hash_mismatch", "not_found", "external", "user_provided"
-    }
     for index, entry in enumerate(omitted):
         if not isinstance(entry, dict):
             raise ValueError(f"omitted_files[{index}] must be an object")
@@ -894,7 +900,7 @@ def _validate_manifest(data: object, plat: str) -> dict:
             raise ValueError(f"invalid omitted system for {dest}")
         if not isinstance(entry.get("required"), bool):
             raise ValueError(f"invalid omitted required flag for {dest}")
-        if entry.get("reason") not in allowed_omission_reasons:
+        if entry.get("reason") not in OMISSION_REASONS:
             raise ValueError(f"invalid omission reason for {dest}")
         cores = entry.get("cores")
         if cores is not None and (
@@ -1677,7 +1683,7 @@ def main() -> None:
                 reason = entry.get("reason", "unknown")
                 reasons[reason] = reasons.get(reason, 0) + 1
             reason_summary = ", ".join(
-                f"{reason.replace('_', ' ')}: {count}"
+                f"{OMISSION_REASONS.get(reason, reason)}: {count}"
                 for reason, count in sorted(reasons.items())
             )
             print(
