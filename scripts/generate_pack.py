@@ -1860,23 +1860,22 @@ def generate_md5_pack(
     emu_display = ""
     if emulator_name and emulators_dir:
         profiles = load_emulator_profiles(emulators_dir, skip_aliases=False)
-        if emulator_name in profiles:
-            # The same gate as --emulator: a core with no standalone build
-            # has no standalone layout, and a pack named for one would be
-            # the libretro pack under a name that promises otherwise.
-            try:
-                (_name, profile), = select_emulator_profiles(
-                    [emulator_name], profiles, standalone
-                )
-            except ProfileSelectionError as exc:
-                print(f"Error: {exc}", file=sys.stderr)
-                return None
-            emu_display = profile.get("emulator", emulator_name)
-            emu_pack_structure = profile.get("pack_structure")
-            for fe in profile.get("files", []):
-                plat_file_index[fe.get("name", "").lower()] = fe
-                for alias in fe.get("aliases", []):
-                    plat_file_index[alias.lower()] = fe
+        # The same gate as --emulator, unknown names included: a typo or a
+        # buildbot name gave a generic pack in the layout of no emulator. A
+        # core with no standalone build has no standalone layout either.
+        try:
+            (_name, profile), = select_emulator_profiles(
+                [emulator_name], profiles, standalone
+            )
+        except ProfileSelectionError as exc:
+            print(f"Error: {exc}", file=sys.stderr)
+            return None
+        emu_display = profile.get("emulator", emulator_name)
+        emu_pack_structure = profile.get("pack_structure")
+        for fe in profile.get("files", []):
+            plat_file_index[fe.get("name", "").lower()] = fe
+            for alias in fe.get("aliases", []):
+                plat_file_index[alias.lower()] = fe
 
     context_name = plat_display if platform_name else (emu_display or "Custom")
     # --standalone changes the destination layout, so a run with it must not
