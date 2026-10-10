@@ -1733,7 +1733,7 @@ def platform_declarations(
     declaring a file under a different name than the emulator profile
     (e.g. Batocera ROM1 vs gsplus ROM).
     """
-    prefix = "" if config.get("base_destination") else declared_root(config).lower()
+    prefix = declared_root(config).lower()
     declared: dict[str, list[tuple[int | None, str]]] = {}
     by_md5 = db.get("indexes", {}).get("by_md5", {})
     files_db = db.get("files", {})
@@ -1767,11 +1767,15 @@ def platform_declarations(
 
 
 def declared_root(config: dict) -> str:
-    """The directory nearly every declared destination starts with, if any.
+    """The BIOS directory a platform writes into every destination, if any.
 
-    A platform without base_destination writes it into each destination;
-    core files go under the same directory.
+    Only a platform whose base_destination is explicitly empty does that
+    (RetroDECK writes bios/ in front of each file), and core files go under
+    the same directory. A config that does not state a base says nothing,
+    and its common folder is a system's, not the BIOS root.
     """
+    if config.get("base_destination", None) != "":
+        return ""
     roots = [
         d.split("/", 1)[0]
         for system in config.get("systems", {}).values()

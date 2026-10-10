@@ -436,6 +436,45 @@ def _archive_prefix_extras(
     return extras
 
 
+class ExtraPlacement:
+    """Where a pack puts a core's file, decided once for every reader.
+
+    The builder, and slots.py judging what a destination holds, both read
+    this: placed apart, slot arbitration compared RetroDECK's bios/ claims
+    with core claims at the root and never saw them meet.
+    """
+
+    def __init__(self, config: dict, base_dest: str, profiles: dict) -> None:
+        from common import _norm_system_id
+
+        self.prefix = _detect_extras_prefix(config, base_dest)
+        self.slug_based, self.sys_to_slug = _detect_slug_structure(config)
+        self.platform_systems = set(config.get("systems", {}).keys())
+        self.norm_map = (
+            {_norm_system_id(sid): sid for sid in self.platform_systems}
+            if self.slug_based
+            else {}
+        )
+        self.profiles = profiles
+
+    def place(self, entry: dict, dest: str) -> tuple[str, str] | None:
+        """(pack-relative destination, full destination), or None.
+
+        ``entry`` names its profile and may name its own system. A
+        slug-based platform cannot place a file of a system it has no
+        folder for.
+        """
+        if self.slug_based:
+            slug = _slug_for(
+                entry, self.profiles, self.platform_systems, self.norm_map,
+                self.sys_to_slug,
+            )
+            if not slug:
+                return None
+            dest = f"{slug}/{dest}"
+        return dest, (f"{self.prefix}/{dest}" if self.prefix else dest)
+
+
 def _collect_emulator_extras(
     config: dict,
     emulators_dir: str,
@@ -469,7 +508,7 @@ def _collect_emulator_extras(
 
     Works for ANY platform (RetroArch, Batocera, Recalbox, etc.)
     """
-    from common import _norm_system_id, resolve_platform_cores
+    from common import resolve_platform_cores
     from verify import find_undeclared_files
 
     profiles = (
@@ -479,13 +518,9 @@ def _collect_emulator_extras(
     )
 
     # Detect destination conventions for core extras
-    extras_prefix = _detect_extras_prefix(config, base_dest)
-    is_slug_based, sys_to_slug = _detect_slug_structure(config)
-    platform_systems = set(config.get("systems", {}).keys())
-    norm_map: dict[str, str] = {}
-    if is_slug_based:
-        for sid in platform_systems:
-            norm_map[_norm_system_id(sid)] = sid
+    placement = ExtraPlacement(config, base_dest, profiles)
+    extras_prefix = placement.prefix
+    is_slug_based = placement.slug_based
 
     # Use strict YAML names (no DB alias enrichment) so that files known
     # under an alias still get packed at the emulator's expected path.
@@ -508,15 +543,12 @@ def _collect_emulator_extras(
         dest = f"{raw_dest}{u['name']}" if raw_dest.endswith("/") else raw_dest
 
         # Slug-based platforms: prefix dest with system slug
-        if is_slug_based:
-            slug = _slug_for(u, profiles, platform_systems, norm_map, sys_to_slug)
-            if not slug:
-                if unplaceable is not None:
-                    unplaceable.append(u)
-                continue
-            dest = f"{slug}/{dest}"
-
-        full_dest = f"{extras_prefix}/{dest}" if extras_prefix else dest
+        placed = placement.place(u, dest)
+        if placed is None:
+            if unplaceable is not None:
+                unplaceable.append(u)
+            continue
+        dest, full_dest = placed
         if claimants is not None:
             claimants[(u.get("emulator", ""), u.get("name", ""), u.get("path") or "")] = (
                 sanitize_pack_path(dest)

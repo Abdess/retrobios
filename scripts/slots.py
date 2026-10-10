@@ -136,8 +136,13 @@ def profile_claims(
     standalone_cores: set[str] | None = None,
     zip_contents: dict | None = None,
     data_dir_registry: dict | None = None,
+    config: dict | None = None,
 ) -> list[Claim]:
     """What each emulator profile says belongs at each destination it names.
+
+    With the platform's config, a claim sits where the pack puts the core's
+    file (ExtraPlacement): under RetroDECK's bios/, under RomM's system
+    folder. A file the platform cannot place claims nothing.
 
     A file can exist in one build of an emulator and not the other, and the
     two builds read from different directories. The mode is decided per
@@ -148,6 +153,11 @@ def profile_claims(
     ``standalone_path``. This is the gate verify already applies.
     """
     standalone_cores = standalone_cores or set()
+    placement = None
+    if config is not None:
+        from packextras import ExtraPlacement  # noqa: PLC0415
+
+        placement = ExtraPlacement(config, base_dest, profiles)
     claims: list[Claim] = []
     for emu_name, profile in sorted(profiles.items()):
         if profile.get("type") in ("launcher", "alias"):
@@ -174,7 +184,15 @@ def profile_claims(
             ) or entry.get("name") or ""
             if not dest:
                 continue
-            full = f"{base_dest}/{dest}" if base_dest else dest
+            if placement is None:
+                full = f"{base_dest}/{dest}" if base_dest else dest
+            else:
+                placed = placement.place(
+                    {"profile": emu_name, "system": entry.get("system")}, dest
+                )
+                if placed is None:
+                    continue
+                full = placed[1]
             # The owner's own copy is the one the builder ships.
             local, status = resolve_local_file(
                 {**entry, "source_profile": emu_name},
@@ -236,7 +254,8 @@ def find_conflicts(
     # claim at all matches what ships is a disagreement.
     by_slot: dict[str, list[Claim]] = {}
     for claim in profile_claims(
-        profiles, db, base_dest, standalone_cores, zip_contents, data_dir_registry
+        profiles, db, base_dest, standalone_cores, zip_contents, data_dir_registry,
+        config=config,
     ):
         key = _normalize(claim.destination)
         platform = by_dest.get(key)

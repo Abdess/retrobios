@@ -125,6 +125,17 @@ class TestConflicts(unittest.TestCase):
             }
         }
 
+    def test_a_core_claim_sits_where_the_pack_puts_it(self):
+        """RetroDECK writes bios/ into every destination and leaves its base
+        empty; core files go under bios/ too. Claimed at the root, they never
+        met the platform's and four contradictions went unreported."""
+        config = {"base_destination": "", "systems": {"console": {"files": [
+            {"name": "IPL.bin", "destination": "bios/GC/JAP/IPL.bin", "md5": "m" * 32},
+            {"name": "other.bin", "destination": "bios/other.bin"},
+        ]}}}
+        conflicts = slots.find_conflicts(config, self._profile("GC/JAP/IPL.bin"), REGIONS_DB)
+        self.assertEqual([c.destination for c in conflicts], ["bios/GC/JAP/IPL.bin"])
+
     def test_wrong_region_under_a_region_slot_is_reported(self):
         conflicts = slots.find_conflicts(
             self._config("m" * 32), self._profile("GC/JAP/IPL.bin"), REGIONS_DB
