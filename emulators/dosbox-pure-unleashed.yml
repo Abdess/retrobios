@@ -1,8 +1,8 @@
 emulator: DOSBox Pure Unleashed
 type: standalone
 core_classification: official_port
-source: "https://github.com/schellingb/dosbox-pure-unleashed"
-upstream: "https://github.com/schellingb/dosbox-pure"
+source: "https://codeberg.org/schelling/dosbox-pure-unleashed"
+upstream: "https://codeberg.org/schelling/dosbox-pure"
 source_commit: "4a11412248ca4c862751a7d9e6818023795031e9"
 upstream_commit: "7f6e8fb7385fa446d1444d671063268520bf9b54"
 logo: "https://raw.githubusercontent.com/schellingb/dosbox-pure-unleashed/main/images/logo.png"

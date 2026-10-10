@@ -2,7 +2,7 @@ emulator: DOSBox Pure
 type: standalone + libretro
 core_classification: enhanced_fork
 source: "https://github.com/libretro/dosbox-pure"
-upstream: "https://github.com/schellingb/dosbox-pure"
+upstream: "https://codeberg.org/schelling/dosbox-pure"
 logo: "https://raw.githubusercontent.com/schellingb/dosbox-pure/main/images/logo.png"
 profiled_date: "2026-03-23"
 source_commit: "a4a0bab7f8931433588f2fcad9045c85b277373d"
