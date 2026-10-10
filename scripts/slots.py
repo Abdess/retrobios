@@ -175,8 +175,9 @@ def profile_claims(
             if not dest:
                 continue
             full = f"{base_dest}/{dest}" if base_dest else dest
+            # The owner's own copy is the one the builder ships.
             local, status = resolve_local_file(
-                entry,
+                {**entry, "source_profile": emu_name},
                 db,
                 zip_contents,
                 dest_hint=dest,

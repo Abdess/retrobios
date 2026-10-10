@@ -242,10 +242,17 @@ class FileConsumers:
         self.platforms: dict[str, set[str]] = {}
         self.emulators: dict[str, set[str]] = {}
 
-    def sha1_of(self, entry: dict, dest: str = "") -> str | None:
-        """The collected file an entry resolves to, or None."""
+    def sha1_of(self, entry: dict, dest: str = "", owner: str = "") -> str | None:
+        """The collected file an entry resolves to, or None.
+
+        A profile entry names its owner, as the builder does: without it the
+        name step chose another tree's copy, and the page credited the file
+        the pack does not ship.
+        """
         if not entry.get("name"):
             return None
+        if owner:
+            entry = {**entry, "source_profile": owner}
         path, status = resolve_local_file(
             entry, self._db, self._zip_contents, dest_hint=dest
         )
@@ -266,7 +273,7 @@ class FileConsumers:
             if profile.get("type") == "alias":
                 continue
             for entry in profile.get("files", []):
-                sha1 = self.sha1_of(entry, entry.get("path") or "")
+                sha1 = self.sha1_of(entry, entry.get("path") or "", owner=name)
                 if sha1:
                     self.emulators.setdefault(sha1, set()).add(name)
 

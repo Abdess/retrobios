@@ -213,7 +213,9 @@ def _agnostic_scan_extras(
             if not isinstance(candidate, dict):
                 continue
             local, status = resolve_local_file(
-                candidate, db, dest_hint=candidate.get("path", "")
+                {**candidate, "source_profile": emu_name},
+                db,
+                dest_hint=candidate.get("path", ""),
             )
             if not local or "/" not in local:
                 continue
