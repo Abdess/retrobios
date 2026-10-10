@@ -19,6 +19,7 @@ from ziptools import check_inside_zip
 from nativemode import digest_algorithm
 from validation import settle_mismatch
 from nativemode import hash_mismatch_excludes_file
+import functools
 import hashlib
 from common import filter_systems_by_target
 from common import load_emulator_profiles
@@ -33,6 +34,16 @@ from common import sanitize_pack_path
 import zipfile
 import io
 from collections.abc import Callable
+
+
+@functools.lru_cache(maxsize=None)
+def _file_sha1(path: str) -> str:
+    """SHA-1 of a cached data-directory file, read once per run."""
+    digest = hashlib.sha1()
+    with open(path, "rb") as handle:
+        for chunk in iter(lambda: handle.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _members_are_held(data: bytes, by_md5: dict, held_inside: dict) -> bool:
@@ -215,7 +226,10 @@ def verify_pack(
                 for _dp in _cands:
                     if not os.path.exists(_dp):
                         continue
-                    if os.path.getsize(_dp) == size:
+                    # The content, not the size: a member written corrupt
+                    # keeps its length, and a same-sized homonym from another
+                    # cache is another file.
+                    if os.path.getsize(_dp) == size and _file_sha1(_dp) == sha1:
                         status = "verified_data"
                         file_name = _bn
                         break

@@ -43,6 +43,29 @@ class MembersMustBeKnown(unittest.TestCase):
         self.assertTrue(any("garbled.bin" in e for e in manifest["errors"]))
 
 
+class DataMembersAreCheckedByContent(unittest.TestCase):
+    """A data-directory member was verified by name and size: bytes altered
+    while the pack was written kept their length and passed."""
+
+    def test_same_size_other_bytes_is_an_error(self):
+        good = b"A" * 64
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
+            cache = Path(tmp) / "cache"
+            (cache / "Sys").mkdir(parents=True)
+            (cache / "Sys" / "font.bin").write_bytes(good)
+            registry = {"demo": {"local_cache": str(cache)}}
+            db = {"files": {}, "indexes": {"by_md5": {}, "by_name": {}}}
+            pack = Path(tmp) / "P_BIOS_Pack.zip"
+            with zipfile.ZipFile(pack, "w") as zf:
+                zf.writestr("system/Sys/font.bin", good)
+                zf.writestr("system/Sys/other/font.bin", b"B" * 64)
+            ok, manifest = verify_pack(str(pack), db, registry)
+        statuses = {f["path"]: f["status"] for f in manifest["files"]}
+        self.assertEqual(statuses["system/Sys/font.bin"], "verified_data")
+        self.assertNotEqual(statuses["system/Sys/other/font.bin"], "verified_data")
+        self.assertFalse(ok)
+
+
 class SchemaAcceptsEveryStatus(unittest.TestCase):
     """verified_members reached every pack manifest and the schema refused it."""
 
