@@ -1840,10 +1840,10 @@
     },
     {
       "dest": "sysdata/otp.bin",
-      "sha1": "f0332b7252e9c01b30bf5d5a63ceb22dc47968aa",
-      "sha256": "93c2e20cc377f2cb0fa9a2ee58c39be22e00baa94b890545e585e53b3eb4039f",
+      "sha1": "49489245b400f62c62faf1736b7f0a70714d3c49",
+      "sha256": "e2f1810ceff3d1fd4f1c08ffc1f4d47aa8efca551edd24cd5686205c71a3b13b",
       "size": 256,
-      "repo_path": "bios/Nintendo/3DS/Citra/sysdata/otp.bin",
+      "repo_path": "bios/Nintendo/3DS/otp.bin",
       "cores": [
         "azahar"
       ],

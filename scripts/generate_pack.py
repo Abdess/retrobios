@@ -1068,6 +1068,16 @@ def generate_pack(
           )
           if status in ("not_found", "external", "user_provided") or not local_path:
               continue
+          # The emulator's own check picks the copy, as for a declared file
+          # and in the emulator pack: the name led RetroArch's GC/dsp_rom.bin
+          # to Dolphin's obsolete v0.3.1 free ROM, beside Nintendo's coef
+          # ROM, a pair Dolphin warns about at every start.
+          local_path, disagreement = validated_choice(
+              fe, local_path, db, validation_index, bios_dir, None, dest,
+              validation_owners,
+          )
+          if disagreement:
+              core_discrepancies.append(f"{full_dest} -{disagreement}")
           if status == "hash_mismatch":
               # The core's declared hash comes from its source, the local dump
               # is what the collection holds. Shipping it keeps the emulator
@@ -3100,6 +3110,8 @@ def _manifest_core_entries(
     pack_only_sizes: list[int],
     selection: SelectionIndex,
     required_only: bool = False,
+    validation_index: dict | None = None,
+    owners: dict | None = None,
 ) -> int:
     """Add the files a platform's cores need but its list does not name.
 
@@ -3153,6 +3165,10 @@ def _manifest_core_entries(
                 [source_emu] if source_emu else [],
             )
             continue
+        # The copy the emulator accepts, as the pack ships it.
+        local_path, _disagreement = validated_choice(
+            fe, local_path, db, validation_index or {}, bios_dir, None, dest, owners,
+        )
 
         source_emu = fe.get("source_profile") or fe.get("source_emulator", "")
 
@@ -3479,7 +3495,7 @@ def generate_manifest(
         zip_contents, offline, region_drops, case_insensitive,
         seen_destinations, seen_lower, seen_parents, manifest_files,
         omitted_by_destination, record_omission, pack_only_sizes, selection,
-        required_only,
+        required_only, manifest_validation, manifest_owners,
     )
 
     # Phase 3: data directories. The installer does not fetch them, so they

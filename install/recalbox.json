@@ -9824,10 +9824,10 @@
     },
     {
       "dest": "GC/dsp_rom.bin",
-      "sha1": "f4f683a49d7eb4155566f793f2c1c27e90159992",
-      "sha256": "7f33e6600722791ccee5fd15d4330af8d8f74165f7d1ded6738684c0294aaffe",
+      "sha1": "3c6cc6e04fdd0b2a392d7a6ed769455444846be7",
+      "sha256": "49d987ee1eab29a157425b82d54516957a81e1bac247c8834e494642605c3e8c",
       "size": 8192,
-      "repo_path": "bios/Nintendo/GameCube/Sys/GC/dsp_rom.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.3c6cc6e0",
       "cores": [
         "dolphin"
       ],

@@ -1036,10 +1036,10 @@
     },
     {
       "dest": "sysdata/otp.bin",
-      "sha1": "f0332b7252e9c01b30bf5d5a63ceb22dc47968aa",
-      "sha256": "93c2e20cc377f2cb0fa9a2ee58c39be22e00baa94b890545e585e53b3eb4039f",
+      "sha1": "49489245b400f62c62faf1736b7f0a70714d3c49",
+      "sha256": "e2f1810ceff3d1fd4f1c08ffc1f4d47aa8efca551edd24cd5686205c71a3b13b",
       "size": 256,
-      "repo_path": "bios/Nintendo/3DS/Citra/sysdata/otp.bin",
+      "repo_path": "bios/Nintendo/3DS/otp.bin",
       "cores": [
         "azahar"
       ],
@@ -1270,10 +1270,10 @@
     },
     {
       "dest": "GC/dsp_rom.bin",
-      "sha1": "f4f683a49d7eb4155566f793f2c1c27e90159992",
-      "sha256": "7f33e6600722791ccee5fd15d4330af8d8f74165f7d1ded6738684c0294aaffe",
+      "sha1": "3c6cc6e04fdd0b2a392d7a6ed769455444846be7",
+      "sha256": "49d987ee1eab29a157425b82d54516957a81e1bac247c8834e494642605c3e8c",
       "size": 8192,
-      "repo_path": "bios/Nintendo/GameCube/Sys/GC/dsp_rom.bin",
+      "repo_path": "bios/Nintendo/GameCube/.variants/dsp_rom.bin.3c6cc6e0",
       "cores": [
         "dolphin"
       ],

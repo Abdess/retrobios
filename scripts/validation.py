@@ -56,6 +56,84 @@ def _parse_validation(validation: list | dict | None) -> list[str]:
     return []
 
 
+def _entry_rule(emu_name: str, f: dict, checks: set[str]) -> dict:
+    """One profile entry's own checks, kept apart from the merged view.
+
+    Merged by name, Azahar's crypto check on the 3DS otp.bin judged Cemu's
+    1 KiB Wii U otp.bin, and the variant search handed Cemu the 3DS file.
+    """
+    def values(field: str) -> set[str]:
+        raw = f.get(field)
+        if not raw or field not in checks:
+            return set()
+        items = raw if isinstance(raw, list) else str(raw).split(",")
+        out = set()
+        for item in items:
+            norm = str(item).strip().lower()
+            if field == "crc32" and norm.startswith("0x"):
+                norm = norm[2:]
+            if norm:
+                out.add(norm)
+        return out
+
+    raw_size = f.get("size") if "size" in checks else None
+    adler = f.get("known_hash_adler32") or f.get("adler32")
+    adler_values = adler if isinstance(adler, list) else [adler] if adler else []
+    return {
+        "emulator": emu_name,
+        "checks": set(checks),
+        "sizes": set(raw_size if isinstance(raw_size, list) else [raw_size])
+        - {None},
+        "min_size": f.get("min_size") if "size" in checks else None,
+        "max_size": f.get("max_size") if "size" in checks else None,
+        "crc32": values("crc32"),
+        "md5": values("md5"),
+        "sha1": values("sha1"),
+        "sha256": values("sha256"),
+        "adler32": {
+            str(v).lower().removeprefix("0x") for v in adler_values if v
+        },
+        "adler32_byteswap": bool(f.get("adler32_byteswap")),
+        "crypto": {c for c in checks if c in _CRYPTO_CHECKS},
+    }
+
+
+def _rule_failure(
+    rule: dict, local_path: str, filename: str, bios_dir: str, hashes: dict,
+) -> str | None:
+    """Why one entry's checks reject a file, or None when they accept it."""
+    actual_size = os.path.getsize(local_path)
+    if rule["sizes"] and actual_size not in rule["sizes"]:
+        accepted = ",".join(str(s) for s in sorted(rule["sizes"]))
+        return f"size mismatch: got {actual_size}, accepted [{accepted}]"
+    if rule["min_size"] is not None and actual_size < rule["min_size"]:
+        return f"size too small: min {rule['min_size']}, got {actual_size}"
+    if rule["max_size"] is not None and actual_size > rule["max_size"]:
+        return f"size too large: max {rule['max_size']}, got {actual_size}"
+    for hash_type in ("crc32", "md5", "sha1", "sha256"):
+        if rule[hash_type]:
+            if not hashes:
+                hashes.update(compute_hashes(local_path))
+            if hashes[hash_type].lower() not in rule[hash_type]:
+                accepted = ",".join(sorted(rule[hash_type]))
+                return f"{hash_type} mismatch: got {hashes[hash_type]}, accepted [{accepted}]"
+    if rule["adler32"]:
+        if rule["adler32_byteswap"]:
+            actual = _adler32_byteswapped(local_path)
+        else:
+            if not hashes:
+                hashes.update(compute_hashes(local_path))
+            actual = hashes["adler32"].lower()
+        if actual not in rule["adler32"]:
+            accepted = ",".join(sorted(rule["adler32"]))
+            return f"adler32 mismatch: got 0x{actual}, accepted [{accepted}]"
+    if rule["crypto"]:
+        from crypto_verify import check_crypto_validation
+
+        return check_crypto_validation(local_path, filename, bios_dir)
+    return None
+
+
 def _build_validation_index(profiles: dict) -> dict[str, dict]:
     """Build per-filename validation rules from emulator profiles.
 
@@ -98,7 +176,9 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
                     "crypto_only": set(),
                     "emulators": set(),
                     "per_emulator": {},
+                    "rules": [],
                 }
+            index[fname]["rules"].append(_entry_rule(emu_name, f, checks))
             index[fname]["emulators"].add(emu_name)
             index[fname]["checks"].update(checks)
             # Track non-reproducible crypto checks
@@ -143,8 +223,8 @@ def _build_validation_index(profiles: dict) -> dict[str, dict]:
             # Adler32 -stored as known_hash_adler32 field (not in validation: list
             # for Dolphin, but support it in both forms for future profiles)
             adler_val = f.get("known_hash_adler32") or f.get("adler32")
-            if adler_val:
-                norm = adler_val.lower()
+            for value in adler_val if isinstance(adler_val, list) else [adler_val] if adler_val else []:
+                norm = str(value).lower()
                 if norm.startswith("0x"):
                     norm = norm[2:]
                 index[fname]["adler32"].add(norm)
@@ -233,11 +313,17 @@ def check_file_validation(
     filename: str,
     validation_index: dict[str, dict],
     bios_dir: str = "bios",
+    emulators: set[str] | None = None,
 ) -> tuple[str, list[str]] | None:
     """Check emulator-level validation on a resolved file.
 
     Supports: size (exact/min/max), crc32, md5, sha1, adler32,
     signature (RSA-2048 PKCS1v15 SHA256), crypto (AES-128-CBC + SHA256).
+
+    With ``emulators``, the cores that read the file's destination, each of
+    them must accept it through one of its own entries for the name, the
+    way each runs its own check. Without, the checks of every core naming
+    the file are merged.
 
     Returns None if all checks pass or no validation applies.
     Returns (reason, emulators) tuple on failure, where *emulators*
@@ -246,6 +332,23 @@ def check_file_validation(
     entry = validation_index.get(filename)
     if not entry:
         return None
+    if emulators is not None:
+        hashes: dict = {}
+        failures: dict[str, str] = {}
+        for emu in sorted(emulators):
+            rules = [r for r in entry.get("rules", []) if r["emulator"] == emu]
+            if not rules:
+                continue
+            reasons = [
+                _rule_failure(rule, local_path, filename, bios_dir, hashes)
+                for rule in rules
+            ]
+            if all(reasons):
+                failures[emu] = reasons[0]
+        if not failures:
+            return None
+        first = sorted(failures)[0]
+        return failures[first], sorted(failures)
     checks = entry["checks"]
     pe = entry.get("per_emulator", {})
 
@@ -366,6 +469,7 @@ def find_validated_variant(
     validation_index: dict,
     bios_dir: str = "bios",
     platform_digest: str | None = None,
+    emulators: set[str] | None = None,
 ) -> str | None:
     """A held file the emulator's own checks accept, in place of current_path.
 
@@ -424,7 +528,9 @@ def find_validated_variant(
         seen.add(real)
         if accepted and str(entry.get(platform_digest, "")).lower() not in accepted:
             continue
-        if check_file_validation(path, fname, validation_index, bios_dir) is None:
+        if check_file_validation(
+            path, fname, validation_index, bios_dir, emulators
+        ) is None:
             return path
     return None
 
@@ -575,18 +681,24 @@ def validated_choice(
         return local_path, None
     name = file_entry.get("name", "")
     rules = validation_index.get(name)
+    judges: set[str] | None = None
     if rules and owners and destination:
         owning = _owners_of(destination, name, owners)
-        if owning and not owning & set(rules["emulators"]):
+        if not owning & set(rules["emulators"]):
+            # No core that checks this name reads this destination: PC-98's
+            # bios.rom rules have no say over roms/ibmpcjr/bios.rom.
             return local_path, None
+        # The cores that read this destination judge it, each by its own
+        # entries.
+        judges = owning & set(rules["emulators"])
     check = check_file_validation(
-        local_path, file_entry.get("name", ""), validation_index, bios_dir
+        local_path, file_entry.get("name", ""), validation_index, bios_dir, judges
     )
     if not check:
         return local_path, None
     better = find_validated_variant(
         file_entry, db, local_path, validation_index, bios_dir,
-        platform_digest=platform_digest,
+        platform_digest=platform_digest, emulators=judges,
     )
     if better:
         return better, None
