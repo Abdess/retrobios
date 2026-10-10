@@ -1349,6 +1349,8 @@ def generate_emulator_pack(
 
     total_files = 0
     missing_files = []
+    rejected_files: list[str] = []
+    discrepancies: list[str] = []
     seen_destinations: set[str] = set()
     seen_lower: set[str] = set()
     seen_parents: set[str] = (
@@ -1515,15 +1517,27 @@ def generate_emulator_pack(
 
                 # The file verify --emulator credits is the one shipped: a
                 # dump the core's own check rejects gives way to a held one
-                # it accepts (azahar's otp.bin, dolphin's dsp_rom.bin).
-                if check_file_validation(
+                # it accepts (azahar's otp.bin, dolphin's dsp_rom.bin). With
+                # none, the core would refuse what the pack ships: it is named
+                # and left out, as verify reports it.
+                refused = check_file_validation(
                     local_path, fe["name"], validation_index, bios_dir
-                ):
+                )
+                if refused:
                     better = find_validated_variant(
                         fe, db, local_path, validation_index, bios_dir
                     )
-                    if better:
-                        local_path = better
+                    if not better:
+                        reason, _owners = refused
+                        rejected_files.append(f"{fe['name']} -{reason}")
+                        continue
+                    local_path = better
+                elif status == "hash_mismatch":
+                    # Not a check the core runs, so the file still serves;
+                    # it is not the dump the profile documents, and says so.
+                    discrepancies.append(
+                        f"{fe['name']} -not the dump the {emu_name} profile declares"
+                    )
 
                 # SHA1 dedup: skip if same physical file AND same destination
                 # (but allow same file to be packed under different destinations,
@@ -1545,7 +1559,7 @@ def generate_emulator_pack(
                 total_files += 1
 
     # Remove empty ZIP (no files packed and no missing = nothing to ship)
-    if total_files == 0 and not missing_files:
+    if total_files == 0 and not missing_files and not rejected_files:
         os.unlink(zip_path)
 
     # Report
@@ -1555,15 +1569,21 @@ def generate_emulator_pack(
     parts = [f"{ok_count} files packed"]
     if missing_count:
         parts.append(f"{missing_count} missing")
+    if rejected_files:
+        parts.append(f"{len(rejected_files)} refused by the core")
     print(f"  {zip_path}: {', '.join(parts)}")
     for name in missing_files:
         print(f"  MISSING: {name}")
+    for line in rejected_files:
+        print(f"  REFUSED: {line}")
+    for line in discrepancies:
+        print(f"  DISCREPANCY: {line}")
     for ref in sorted(set(data_dir_notices)):
         print(
             f"  Note: data directory '{ref}' required but not included (use refresh_data_dirs.py)"
         )
 
-    return zip_path if total_files > 0 or missing_files else None
+    return zip_path if total_files > 0 or missing_files or rejected_files else None
 
 
 def generate_system_pack(

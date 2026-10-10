@@ -167,5 +167,61 @@ class AnExtraDoesNotPassAHashCheck(unittest.TestCase):
         self.assertEqual(int(packed.group(1)), 0, report.getvalue())
 
 
+
+class TheEmulatorPackShipsWhatTheCoreAccepts(unittest.TestCase):
+    """BasiliskII wants a 512 KB to 1 MB ROM. The only ROM held was 128 KB:
+    the emulator pack shipped it silently and verify --emulator announced
+    1/1 OK above the line saying the core would refuse it."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self._tmp.name)
+        bios = self.root / "bios" / "Apple"
+        self.emulators = self.root / "emulators"
+        for directory in (bios, self.emulators):
+            directory.mkdir(parents=True)
+        payload = b"r" * 131072
+        (bios / "ROM").write_bytes(payload)
+        sha1 = hashlib.sha1(payload).hexdigest()
+        files = {sha1: {
+            "path": str(bios / "ROM"), "name": "ROM", "size": len(payload),
+            "sha1": sha1, "md5": hashlib.md5(payload).hexdigest(),
+            "sha256": hashlib.sha256(payload).hexdigest(), "crc32": "00000003",
+        }}
+        self.db = {"files": files, "indexes": generate_db.build_indexes(files, {})}
+        profile = {
+            "emulator": "Mac", "type": "libretro", "cores": ["mac"],
+            "systems": ["apple-macintosh"],
+            "files": [{"name": "ROM", "required": True, "min_size": 524288,
+                       "max_size": 1048576, "validation": ["size"]}],
+        }
+        (self.emulators / "mac.yml").write_text(yaml.dump(profile))
+        common._emulator_profiles_cache.clear()
+
+    def tearDown(self):
+        common._emulator_profiles_cache.clear()
+        self._tmp.cleanup()
+
+    def test_the_refused_rom_is_named_not_shipped(self):
+        import zipfile
+
+        out = self.root / "dist"
+        out.mkdir()
+        report = io.StringIO()
+        with contextlib.redirect_stdout(report):
+            zip_path = builder.generate_emulator_pack(
+                ["mac"], str(self.emulators), self.db, str(self.root / "bios"),
+                str(out), offline=True,
+            )
+        self.assertIn("REFUSED: ROM", report.getvalue())
+        with zipfile.ZipFile(zip_path) as archive:
+            self.assertNotIn("ROM", archive.namelist())
+
+    def test_verify_does_not_call_it_ok(self):
+        from verify import Severity, verify_emulator
+
+        result = verify_emulator(["mac"], str(self.emulators), self.db)
+        self.assertEqual(result["severity_counts"][Severity.OK], 0)
+
 if __name__ == "__main__":
     unittest.main()

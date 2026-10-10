@@ -287,6 +287,19 @@ def verify_entry_sha1(
 # Severity mapping per platform
 
 
+def _emulator_severity(status: str, required: bool, hle_fallback: bool) -> str:
+    """Severity when the emulator's own code is the check.
+
+    A file present but refused by the core's validation, or a different dump
+    than the one the profile declares, is not a file the core runs with:
+    read in existence mode it counted OK, and `verify --emulator` announced
+    1/1 OK above the line that said the core would refuse it.
+    """
+    if status == Status.UNTESTED:
+        return Severity.WARNING
+    return compute_severity(status, required, "existence", hle_fallback)
+
+
 def compute_severity(
     status: str,
     required: bool,
@@ -1499,7 +1512,7 @@ def verify_emulator(
                     prev, 0
                 ):
                     file_status[dest] = cur
-                sev = compute_severity(cur, required, "existence", False)
+                sev = _emulator_severity(cur, required, False)
                 prev_sev = file_severity.get(dest)
                 if prev_sev is None or _SEVERITY_ORDER.get(
                     sev, 0
@@ -1612,7 +1625,7 @@ def verify_emulator(
                     prev, 0
                 ):
                     file_status[dest] = cur
-                sev = compute_severity(cur, required, "existence", hle)
+                sev = _emulator_severity(cur, required, hle)
                 prev_sev = file_severity.get(dest)
                 if prev_sev is None or _SEVERITY_ORDER.get(
                     sev, 0
