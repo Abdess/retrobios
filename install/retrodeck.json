@@ -25227,29 +25227,7 @@
         "japan"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:MasterSystem/japanese-bios.sms"
       ]
     },
     {
@@ -25277,29 +25255,7 @@
         "japan"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:MSX/msx-japanese.rom"
       ]
     },
     {
@@ -25327,29 +25283,7 @@
         "north-america"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:MSX/msx-american.rom"
       ]
     },
     {
@@ -25377,29 +25311,7 @@
         "europe"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:MSX/msx-european.rom"
       ]
     },
     {
@@ -26176,29 +26088,7 @@
         "north-america"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:Vic20/characters-english.bin"
       ]
     },
     {
@@ -26226,29 +26116,7 @@
         "europe"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:Vic20/kernel-pal.bin"
       ]
     },
     {
@@ -26276,29 +26144,7 @@
         "north-america"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:Vic20/kernel-ntsc.bin"
       ]
     },
     {
@@ -26326,29 +26172,7 @@
         "denmark"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:Vic20/characters-danish.bin"
       ]
     },
     {
@@ -26376,29 +26200,7 @@
         "denmark"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:Vic20/kernel-danish.bin"
       ]
     },
     {
@@ -26426,29 +26228,7 @@
         "japan"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:Vic20/characters-japanese.bin"
       ]
     },
     {
@@ -26476,29 +26256,7 @@
         "japan"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:Vic20/kernel-japanese.bin"
       ]
     },
     {
@@ -26526,29 +26284,7 @@
         "sweden"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:Vic20/characters-swedish.bin"
       ]
     },
     {
@@ -26576,29 +26312,7 @@
         "sweden"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:Vic20/kernel-swedish.bin"
       ]
     },
     {
@@ -26762,9 +26476,7 @@
         "north-america"
       ],
       "region_groups": [
-        "nintendo-gamecube",
-        "nintendo-wii",
-        "sega-triforce"
+        "Dolphin:file:GC/USA/IPL.bin"
       ]
     },
     {
@@ -26783,9 +26495,7 @@
         "europe"
       ],
       "region_groups": [
-        "nintendo-gamecube",
-        "nintendo-wii",
-        "sega-triforce"
+        "Dolphin:file:GC/EUR/IPL.bin"
       ]
     },
     {
@@ -26804,9 +26514,7 @@
         "japan"
       ],
       "region_groups": [
-        "nintendo-gamecube",
-        "nintendo-wii",
-        "sega-triforce"
+        "Dolphin:file:GC/JAP/IPL.bin"
       ]
     },
     {
@@ -41602,10 +41310,7 @@
         "japan"
       ],
       "region_groups": [
-        "laseractive",
-        "nec-pc-engine",
-        "nec-pc-engine-cd",
-        "nec-supergrafx"
+        "Geargrafx:file:pac-n1.bin"
       ]
     },
     {
@@ -41624,10 +41329,7 @@
         "japan"
       ],
       "region_groups": [
-        "laseractive",
-        "nec-pc-engine",
-        "nec-pc-engine-cd",
-        "nec-supergrafx"
+        "Geargrafx:file:pce-lp1.bin"
       ]
     },
     {
@@ -41646,10 +41348,7 @@
         "north-america"
       ],
       "region_groups": [
-        "laseractive",
-        "nec-pc-engine",
-        "nec-pc-engine-cd",
-        "nec-supergrafx"
+        "Geargrafx:file:pac-n10.bin"
       ]
     },
     {
@@ -82250,29 +81949,7 @@
         "north-america"
       ],
       "region_groups": [
-        "acorn-archimedes",
-        "acorn-bbc-micro",
-        "acorn-electron",
-        "amiga",
-        "amstrad-cpc",
-        "apple-ii",
-        "apple-iigs",
-        "apple-macintosh",
-        "atari-2600",
-        "atari-st",
-        "colecovision",
-        "commodore-plus4",
-        "commodore-vic20",
-        "enterprise-64-128",
-        "microsoft-msx",
-        "microsoft-msx2",
-        "oric",
-        "pc-compatible",
-        "sega-mastersystem",
-        "sinclair-zx-spectrum",
-        "sinclair-zx80-81",
-        "thomson-mo5",
-        "thomson-mo6"
+        "Clock Signal (CLK):file:MasterSystem/bios.sms"
       ]
     },
     {

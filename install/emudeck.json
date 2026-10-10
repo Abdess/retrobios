@@ -6474,9 +6474,7 @@
         "north-america"
       ],
       "region_groups": [
-        "nintendo-gamecube",
-        "nintendo-wii",
-        "sega-triforce"
+        "Dolphin:file:GC/USA/IPL.bin"
       ]
     },
     {
@@ -6495,9 +6493,7 @@
         "europe"
       ],
       "region_groups": [
-        "nintendo-gamecube",
-        "nintendo-wii",
-        "sega-triforce"
+        "Dolphin:file:GC/EUR/IPL.bin"
       ]
     },
     {
@@ -6516,9 +6512,7 @@
         "japan"
       ],
       "region_groups": [
-        "nintendo-gamecube",
-        "nintendo-wii",
-        "sega-triforce"
+        "Dolphin:file:GC/JAP/IPL.bin"
       ]
     },
     {

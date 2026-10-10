@@ -139,9 +139,7 @@
         "europe"
       ],
       "region_groups": [
-        "nintendo-gamecube",
-        "nintendo-wii",
-        "sega-triforce"
+        "Dolphin:file:GC/EUR/IPL.bin"
       ],
       "region_system_groups": [
         "nintendo-gamecube"
@@ -161,9 +159,7 @@
         "japan"
       ],
       "region_groups": [
-        "nintendo-gamecube",
-        "nintendo-wii",
-        "sega-triforce"
+        "Dolphin:file:GC/JAP/IPL.bin"
       ],
       "region_system_groups": [
         "nintendo-gamecube"
@@ -183,9 +179,7 @@
         "north-america"
       ],
       "region_groups": [
-        "nintendo-gamecube",
-        "nintendo-wii",
-        "sega-triforce"
+        "Dolphin:file:GC/USA/IPL.bin"
       ],
       "region_system_groups": [
         "nintendo-gamecube"
@@ -17748,10 +17742,7 @@
         "japan"
       ],
       "region_groups": [
-        "laseractive",
-        "nec-pc-engine",
-        "nec-pc-engine-cd",
-        "nec-supergrafx"
+        "Geargrafx:file:pac-n1.bin"
       ]
     },
     {
@@ -17767,10 +17758,7 @@
         "japan"
       ],
       "region_groups": [
-        "laseractive",
-        "nec-pc-engine",
-        "nec-pc-engine-cd",
-        "nec-supergrafx"
+        "Geargrafx:file:pce-lp1.bin"
       ]
     },
     {
@@ -17786,10 +17774,7 @@
         "north-america"
       ],
       "region_groups": [
-        "laseractive",
-        "nec-pc-engine",
-        "nec-pc-engine-cd",
-        "nec-supergrafx"
+        "Geargrafx:file:pac-n10.bin"
       ]
     },
     {
