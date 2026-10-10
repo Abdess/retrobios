@@ -57,6 +57,27 @@ class RetroDeckWritesWhatItCounts(unittest.TestCase):
         merged = RetroDeck._merge(existing, ours)
         self.assertEqual([e["md5"] for e in merged], [f"{A},{C}", B])
 
+    def test_an_addition_at_another_path_is_written(self):
+        """melonDS: RetroDECK declares firmware.bin at the root; the truth adds
+        SkyEmu/firmware.bin. Keyed by name and system, the addition vanished
+        and the report still counted it."""
+        existing = [{"filename": "firmware.bin", "system": "nds", "md5": A}]
+        addition = OrderedDict(filename="firmware.bin", system="nds", md5=B,
+                               paths="$bios_path/SkyEmu")
+        merged = RetroDeck._merge(existing, [], [addition])
+        self.assertEqual(
+            [(e["md5"], e.get("paths")) for e in merged],
+            [(A, None), (B, "$bios_path/SkyEmu")],
+        )
+
+    def test_an_addition_never_corrects_a_platform_entry(self):
+        existing = [{"filename": "firmware.bin", "system": "nds", "md5": A}]
+        addition = OrderedDict(filename="firmware.bin", system="nds", md5=B,
+                               paths="$bios_path/SkyEmu")
+        merged = RetroDeck._merge(existing, [], [addition, addition])
+        self.assertEqual(merged[0]["md5"], A)
+        self.assertEqual(len(merged), 2)
+
     def test_a_list_of_systems_is_kept(self):
         existing = [{"filename": "neogeo.zip", "system": ["neogeo", "fbneo"], "md5": A}]
         ours = [OrderedDict(filename="neogeo.zip", system="fbneo", md5=B)]

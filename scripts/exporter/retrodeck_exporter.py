@@ -37,6 +37,14 @@ def _md5_set(value: object) -> set[str]:
     return {m.strip().lower() for m in str(value or "").split(",") if m.strip()}
 
 
+def _paths_key(entry: dict) -> tuple[str, ...]:
+    """Where an entry says the file goes: no paths is the BIOS root."""
+    paths = entry.get("paths")
+    if isinstance(paths, list):
+        return tuple(sorted(str(p) for p in paths))
+    return (str(paths),) if paths else ()
+
+
 def _matching_keys(
     entry: dict, by_key: dict[tuple[str, str], OrderedDict]
 ) -> list[tuple[str, str]]:
@@ -177,7 +185,12 @@ class Exporter(BaseExporter):
         return None
 
     @classmethod
-    def _merge(cls, existing: object, ours: list[OrderedDict]) -> list[OrderedDict]:
+    def _merge(
+        cls,
+        existing: object,
+        ours: list[OrderedDict],
+        additions: list[OrderedDict] | None = None,
+    ) -> list[OrderedDict]:
         """Correct the component's own list; never replace it.
 
         Assigning our entries wholesale dropped every file RetroDECK declares
@@ -234,6 +247,21 @@ class Exporter(BaseExporter):
         merged.extend(
             entry for key, entry in by_key.items() if key not in corrected
         )
+        # A file the platform does not declare is appended unless the list
+        # already holds that name for that system at that path. The key
+        # above is name and system only, and folded melonDS's SkyEmu/
+        # firmware.bin into the root firmware.bin the platform declares,
+        # while the report counted it added.
+        held = {
+            (str(e.get("filename", "")), system, _paths_key(e))
+            for e in merged
+            for system in (_systems_of(e) or [""])
+        }
+        for entry in additions or []:
+            key = (str(entry.get("filename", "")), str(entry.get("system", "")), _paths_key(entry))
+            if key[0] and key not in held:
+                held.add(key)
+                merged.append(entry)
         return merged
 
     def render(
@@ -257,16 +285,17 @@ class Exporter(BaseExporter):
             except json.JSONDecodeError:
                 continue
 
-            entries = [self._entry(fe) for fe in files]
+            entries = [self._entry(fe) for fe in files if fe.platform is not None]
+            additions = [self._entry(fe) for fe in files if fe.platform is None]
             for component_value in manifest.values():
                 if not isinstance(component_value, dict):
                     continue
                 holder = self._bios_holder(component_value)
                 if holder is None:
-                    component_value["bios"] = self._merge(None, entries)
+                    component_value["bios"] = self._merge(None, entries, additions)
                 else:
                     container, key = holder
-                    container[key] = self._merge(container.get(key), entries)
+                    container[key] = self._merge(container.get(key), entries, additions)
                 break
 
             produced[path] = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
@@ -293,6 +322,7 @@ class Exporter(BaseExporter):
                 continue
 
             declared: set[str] = set()
+            placed: set[tuple[str, tuple[str, ...]]] = set()
             for component_value in manifest.values():
                 if not isinstance(component_value, dict):
                     continue
@@ -302,6 +332,7 @@ class Exporter(BaseExporter):
                 container, key = holder
                 for entry in container[key]:
                     declared.add(entry.get("filename", ""))
+                    placed.add((entry.get("filename", ""), _paths_key(entry)))
                 if not component_value.get("name") and not component_value.get(
                     "system"
                 ):
@@ -310,4 +341,8 @@ class Exporter(BaseExporter):
             for fe in files:
                 if fe.name not in declared:
                     issues.append(f"absent from {path}: {fe.name}")
+                elif fe.platform is None and (
+                    fe.name, _paths_key(self._entry(fe))
+                ) not in placed:
+                    issues.append(f"absent from {path}: {fe.destination or fe.name}")
         return issues
