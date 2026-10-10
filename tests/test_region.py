@@ -265,6 +265,25 @@ class TestResolveRegionDrops(unittest.TestCase):
     def _drops(self, groups, requested):
         return region.resolve_region_drops(groups, self.index, requested)
 
+    def test_a_world_file_the_code_ranks_lower_keeps_the_regional_ones(self):
+        """DuckStation looks for its PS1 images (5) before the world PS2 ones
+        (100): asked for Brazil, it kept only the PS2 fallbacks."""
+        index = region.build_region_index({"duckstation": {"files": [
+            {"name": "scph5501.bin", "region": ["north-america"], "priority": 5},
+            {"name": "ps2_scph30001.bin", "region": ["north-america"], "priority": 150},
+            {"name": "ps2_scph10000.bin", "region": ["world"], "priority": 100},
+        ]}})
+        groups = {"psx": [(n, n) for n in ("scph5501.bin", "ps2_scph30001.bin",
+                                            "ps2_scph10000.bin")]}
+        self.assertEqual(
+            region.resolve_region_drops(groups, index, ["brazil"]), {"ps2_scph30001.bin"}
+        )
+
+    def test_without_ranks_the_world_file_still_wins(self):
+        groups = {"psx": [("scph5501.bin", "scph5501.bin"),
+                          ("psxonpsp660.bin", "psxonpsp660.bin")]}
+        self.assertEqual(self._drops(groups, ["brazil"]), {"scph5501.bin"})
+
     def test_best_rank_wins_and_siblings_drop(self):
         groups = {
             "psx": [
@@ -677,6 +696,8 @@ class RegionalRequestsKeepWhatTheCodeLoads(unittest.TestCase):
         ("ace-dl", ["denmark"], "private/firmware/XMEM_FW_3_15_UK.rom"),
         ("ace-dl", ["spain"], "private/hacker/hacker481fr.rom"),
         ("ace-dl", ["france"], "private/firmware/Amstrad_s4.cpr"),
+        ("duckstation", ["brazil"], "scph5501.bin"),
+        ("duckstation", ["south-korea"], "scph5500.bin"),
     )
 
     def test_each_request_keeps_its_file(self):

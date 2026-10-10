@@ -8091,7 +8091,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 10
     },
     {
       "dest": "scph101_v45.bin",
@@ -8149,7 +8150,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 10
     },
     {
       "dest": "ps2_scph18000.bin",
@@ -8168,7 +8170,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30003.bin",
@@ -8188,7 +8191,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2_dtlh10000_0117.bin",
@@ -8207,7 +8211,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph10000_0117.bin",
@@ -8226,7 +8231,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh10000_0217.bin",
@@ -8245,7 +8251,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph10000_15000.bin",
@@ -8264,7 +8271,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh10000_0224.bin",
@@ -8283,7 +8291,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh30001.bin",
@@ -8302,7 +8311,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30001_0727.bin",
@@ -8321,7 +8331,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30001_0902.bin",
@@ -8340,7 +8351,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh30002.bin",
@@ -8360,7 +8372,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2_dtlh30102_0902.bin",
@@ -8380,7 +8393,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2_scph30002_0902.bin",
@@ -8400,7 +8414,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph18000_gh003.bin",
@@ -8419,7 +8434,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph18000_gh008.bin",
@@ -8438,7 +8454,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh30101.bin",
@@ -8457,7 +8474,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30001_35001.bin",
@@ -8476,7 +8494,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh30102_1228.bin",
@@ -8496,7 +8515,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2_scph30002_1228.bin",
@@ -8516,7 +8536,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh30000.bin",
@@ -8535,7 +8556,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30000_35000.bin",
@@ -8554,7 +8576,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30001r_0427.bin",
@@ -8573,7 +8596,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30000_0427.bin",
@@ -8592,7 +8616,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30001r_0704.bin",
@@ -8611,7 +8636,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30002r_0704.bin",
@@ -8631,7 +8657,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30001r_1004.bin",
@@ -8650,7 +8677,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30002r_1004.bin",
@@ -8670,7 +8698,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph30005r.bin",
@@ -8689,7 +8718,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph39001.bin",
@@ -8708,7 +8738,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph39002.bin",
@@ -8728,7 +8759,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph37000_39000.bin",
@@ -8747,7 +8779,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph39008.bin",
@@ -8767,7 +8800,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2_scph39005.bin",
@@ -8786,7 +8820,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh50000.bin",
@@ -8805,7 +8840,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph50000_55000.bin",
@@ -8824,7 +8860,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh50002.bin",
@@ -8844,7 +8881,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2_scph50002_0227.bin",
@@ -8864,7 +8902,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh50001_0325.bin",
@@ -8883,7 +8922,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph50001_0325.bin",
@@ -8902,7 +8942,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh50009.bin",
@@ -8921,7 +8962,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_desr5000.bin",
@@ -8940,7 +8982,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph55000_0623.bin",
@@ -8959,7 +9002,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh50001_0623.bin",
@@ -8978,7 +9022,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph50001_0623.bin",
@@ -8997,7 +9042,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph50002_0623.bin",
@@ -9017,7 +9063,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph50006.bin",
@@ -9036,7 +9083,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph50005.bin",
@@ -9055,7 +9103,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph50008.bin",
@@ -9075,7 +9124,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2_scph50009.bin",
@@ -9094,7 +9144,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph50000_0822.bin",
@@ -9113,7 +9164,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph50004_0822.bin",
@@ -9133,7 +9185,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2_scph50011.bin",
@@ -9152,7 +9205,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph70000.bin",
@@ -9171,7 +9225,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph70001.bin",
@@ -9190,7 +9245,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph70002.bin",
@@ -9210,7 +9266,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph70002_alt.bin",
@@ -9230,7 +9287,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2_dtlh70002.bin",
@@ -9250,7 +9308,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2_scph70005.bin",
@@ -9269,7 +9328,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_desr5500.bin",
@@ -9288,7 +9348,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh75000.bin",
@@ -9307,7 +9368,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph75000.bin",
@@ -9326,7 +9388,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh75000a.bin",
@@ -9345,7 +9408,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph75001.bin",
@@ -9364,7 +9428,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph75002.bin",
@@ -9384,7 +9449,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph75006.bin",
@@ -9403,7 +9469,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph77000.bin",
@@ -9422,7 +9489,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph77001.bin",
@@ -9441,7 +9509,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph77002.bin",
@@ -9461,7 +9530,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph77006.bin",
@@ -9480,7 +9550,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh90000_j.bin",
@@ -9499,7 +9570,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph79000_90000.bin",
@@ -9518,7 +9590,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_dtlh90000_a.bin",
@@ -9537,7 +9610,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph79001_90001.bin",
@@ -9556,7 +9630,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph79002_90002.bin",
@@ -9576,7 +9651,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph79006_90006.bin",
@@ -9595,7 +9671,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph90000_0220.bin",
@@ -9614,7 +9691,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph90001_0220.bin",
@@ -9633,7 +9711,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph90002_0220.bin",
@@ -9653,7 +9732,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph90005_0220.bin",
@@ -9672,7 +9752,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_kdl22px300.bin",
@@ -9692,7 +9773,8 @@
       ],
       "region_groups": [
         "sony-playstation"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "easyrpg.soundfont",
@@ -56777,7 +56859,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 1
     },
     {
       "dest": "SegaCDBIOS9303.bin",
@@ -56793,7 +56876,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 2
     },
     {
       "dest": "us_scd1_9210.bin",
@@ -56822,7 +56906,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 1
     },
     {
       "dest": "eu_mcd2_9303.bin",
@@ -56841,7 +56926,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 2
     },
     {
       "dest": "eu_mcd1_9210.bin",
@@ -56860,7 +56946,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 3
     },
     {
       "dest": "jp_mcd2_921222.bin",
@@ -56879,7 +56966,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 1
     },
     {
       "dest": "jp_mcd1_9112.bin",
@@ -56898,7 +56986,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 2
     },
     {
       "dest": "jp_mcd1_9111.bin",
@@ -56917,7 +57006,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 3
     },
     {
       "dest": "32X_G_BIOS.BIN",
@@ -57778,6 +57868,19 @@
       "repo_path": "bios/QEMU/virtex-ml507.dtb",
       "cores": [
         "qemu"
+      ]
+    },
+    {
+      "dest": "quasi88/font.rom",
+      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
+      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
+      "size": 2048,
+      "repo_path": "bios/NEC/PC-88/font.rom",
+      "cores": [
+        "quasi88"
+      ],
+      "systems": [
+        "nec-pc-88"
       ]
     },
     {
@@ -61689,19 +61792,6 @@
       ]
     },
     {
-      "dest": "quasi88/font.rom",
-      "sha1": "84b90f69671d4b72e8f219e1fe7cd667e976cf7f",
-      "sha256": "3227087599afd9304f260cdeb3bf1533e39e425cf444ceb3c24f55f561e71a0c",
-      "size": 2048,
-      "repo_path": "bios/NEC/PC-88/font.rom",
-      "cores": [
-        "quasi88"
-      ],
-      "systems": [
-        "nec-pc-88"
-      ]
-    },
-    {
       "dest": "scummvm/extra/MT32_CONTROL.ROM",
       "sha1": "b083518fffb7f66b03c23b7eb4f868e62dc5a987",
       "sha256": "a73a06c23ed38370e58a11fb1b86f7ea4c547061a60d7aa62bae446235fd2dff",
@@ -62772,7 +62862,8 @@
       ],
       "region_groups": [
         "sony-playstation-2"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "pcsx2/bios/ps2_scph50008.bin",
@@ -62792,7 +62883,8 @@
       ],
       "region_groups": [
         "sony-playstation-2"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "pcsx2/bios/ps2-dvd-110u.bin",

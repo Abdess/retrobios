@@ -92145,7 +92145,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 1
     },
     {
       "dest": "SegaCDBIOS9303.bin",
@@ -92161,7 +92162,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 2
     },
     {
       "dest": "us_scd1_9210.bin",
@@ -92190,7 +92192,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 1
     },
     {
       "dest": "eu_mcd2_9303.bin",
@@ -92209,7 +92212,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 2
     },
     {
       "dest": "eu_mcd1_9210.bin",
@@ -92228,7 +92232,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 3
     },
     {
       "dest": "jp_mcd2_921222.bin",
@@ -92247,7 +92252,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 1
     },
     {
       "dest": "jp_mcd1_9112.bin",
@@ -92266,7 +92272,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 2
     },
     {
       "dest": "jp_mcd1_9111.bin",
@@ -92285,7 +92292,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 3
     },
     {
       "dest": "PPSSPP/ppge_atlas.zim",
@@ -130391,7 +130399,8 @@
       ],
       "region_groups": [
         "sony-playstation-2"
-      ]
+      ],
+      "priority": 100
     },
     {
       "dest": "ps2_scph50008.bin",
@@ -130411,7 +130420,8 @@
       ],
       "region_groups": [
         "sony-playstation-2"
-      ]
+      ],
+      "priority": 150
     },
     {
       "dest": "ps2-dvd-110u.bin",

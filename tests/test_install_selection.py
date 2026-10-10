@@ -64,16 +64,21 @@ class TheRegionRuleIsTheBuilders(unittest.TestCase):
                         if rng.random() < 0.2
                         else set(rng.sample(self.POOL, rng.randint(1, 2)))
                     )
+                    priority = rng.choice([None, None, 5, 10, 100, 200])
                     entries[dest] = {"dest": dest, "regions": sorted(regions),
                                      "region_groups": []}
+                    if priority is not None:
+                        entries[dest]["priority"] = priority
                     index[dest] = {"regions": regions,
-                                   "has_untagged": not regions, "emulators": []}
+                                   "has_untagged": not regions, "emulators": [],
+                                   "priorities": {priority}}
                 groups.setdefault(f"g{g}", []).append((dest, dest))
                 if f"g{g}" not in entries[dest]["region_groups"]:
                     entries[dest]["region_groups"].append(f"g{g}")
         for entry in entries.values():
             if not entry["regions"]:
                 del entry["regions"], entry["region_groups"]
+                entry.pop("priority", None)
         requested = rng.sample(["north-america", "europe", "japan", "uk", "canada"],
                                rng.randint(1, 3))
         return groups, index, list(entries.values()), requested

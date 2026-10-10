@@ -1110,9 +1110,9 @@ def region_drops(
 
     The pack builder's rule (region.resolve_region_drops), replayed over the
     groups the manifest records. Per group, the best-ranked regional file
-    stays; a world file beats unmatched regional ones; when nothing matches
-    and no world file exists, every regional file stays, so a group is never
-    emptied. A file with no region never competes and always stays.
+    stays; a world file beats unmatched regional ones the code does not search
+    before it (`priority`, lower first); when nothing matches and no world
+    file exists, every regional file stays, so a group is never emptied. A file with no region never competes and always stays.
 
     A core extra competes whatever systems are chosen; a platform's own
     declaration competes only when its system is kept, as in the pack.
@@ -1120,7 +1120,7 @@ def region_drops(
     if not requested:
         return set()
     kept_systems = set(systems) if systems else None
-    groups: dict[str, list[tuple[set, str]]] = {}
+    groups: dict[str, list[tuple[set, str, object]]] = {}
     for entry in entries:
         regions = entry.get("regions")
         if not regions:
@@ -1130,15 +1130,19 @@ def region_drops(
             group for group in entry.get("region_system_groups") or []
             if kept_systems is None or group in kept_systems
         ]
+        priority = entry.get("priority")
+        if not isinstance(priority, int) or isinstance(priority, bool):
+            priority = None
         for group in joined:
-            groups.setdefault(group, []).append((set(regions), entry["dest"]))
+            groups.setdefault(group, []).append((set(regions), entry["dest"], priority))
     keep: set[str] = set()
     drop: set[str] = set()
     for members in groups.values():
-        world = {dest for regions, dest in members if WORLD_REGION in regions}
+        world = {dest for regions, dest, _p in members if WORLD_REGION in regions}
+        ranks = {dest: priority for _regions, dest, priority in members}
         regional = [
             (_region_rank(regions, requested), dest)
-            for regions, dest in members
+            for regions, dest, _p in members
             if WORLD_REGION not in regions
         ]
         keep |= world
@@ -1150,7 +1154,14 @@ def region_drops(
             keep |= {dest for rank, dest in matched if rank == best}
             drop |= {dest for _rank, dest in regional}
         elif world:
-            drop |= {dest for _rank, dest in regional}
+            world_ranks = [ranks[dest] for dest in world]
+            best_world = min(world_ranks) if None not in world_ranks else None
+            for _rank, dest in regional:
+                ours = ranks[dest]
+                if best_world is not None and ours is not None and ours < best_world:
+                    keep.add(dest)
+                else:
+                    drop.add(dest)
         else:
             keep |= {dest for _rank, dest in regional}
     return drop - keep

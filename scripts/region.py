@@ -150,12 +150,15 @@ def build_region_index(profiles: dict) -> dict[str, dict]:
             # Path-keyed so same-named entries stay separate (Dolphin declares
             # three IPL.bin), name-keyed so a candidate identified by name alone
             # sees the union and is never dropped on ambiguity.
+            priority = f.get("priority")
             for key in {path, name} - {""}:
                 entry = index.setdefault(
                     key,
-                    {"regions": set(), "has_untagged": False, "emulators": []},
+                    {"regions": set(), "has_untagged": False, "emulators": [],
+                     "priorities": set()},
                 )
                 entry["regions"] |= regions
+                entry["priorities"].add(priority if isinstance(priority, int) else None)
                 if not regions:
                     entry["has_untagged"] = True
                 if emu_name not in entry["emulators"]:
@@ -185,6 +188,33 @@ def lookup_regions(index: dict[str, dict], destination: str, name: str) -> set[s
     return set(entry["regions"])
 
 
+def _index_entry(index: dict[str, dict], destination: str, name: str) -> dict | None:
+    """The index entry a candidate resolves to, by the lookup_regions order."""
+    if destination:
+        entry = index.get(destination)
+        if entry:
+            return entry
+        parts = destination.split("/")
+        for i in range(1, len(parts)):
+            entry = index.get("/".join(parts[i:]))
+            if entry:
+                return entry
+    return index.get(name)
+
+
+def lookup_priority(index: dict[str, dict], destination: str, name: str) -> int | None:
+    """The search rank the code gives a candidate, lower first.
+
+    None when no entry declares one, or when two declarations disagree: a
+    rank in doubt cannot decide what to drop.
+    """
+    entry = _index_entry(index, destination, name)
+    priorities = (entry or {}).get("priorities", set())
+    if len(priorities) != 1:
+        return None
+    return next(iter(priorities))
+
+
 def _competing_ranks(
     members: list[tuple[str, str]],
     index: dict[str, dict],
@@ -212,8 +242,8 @@ def resolve_region_drops(
     """Destinations to skip for a requested region priority list.
 
     Per group, an exact/parent regional match beats other regional candidates.
-    A world candidate beats unmatched regional fallbacks, while untagged files
-    always survive.  If neither a requested nor a world candidate exists, all
+    A world candidate beats unmatched regional fallbacks the code does not
+    search before it, while untagged files always survive.  If neither a requested nor a world candidate exists, all
     regional candidates survive so filtering can never empty a group.
     """
     if not requested:
@@ -243,7 +273,24 @@ def resolve_region_drops(
             keep |= {destination for r, destination in matched if r == best}
             drop |= {destination for _r, destination in regional if destination not in keep}
         elif world:
-            drop |= {destination for _r, destination in regional}
+            # A world file beats an unmatched regional one, unless the code
+            # provably looks for the regional one first: DuckStation ranks its
+            # PS1 images 5 to 50 and its world PS2 images 100, so a request
+            # for Brazil would otherwise leave it only the PS2 fallbacks.
+            world_ranks = [
+                lookup_priority(index, destination, name)
+                for destination, name in members
+                if destination in world
+            ]
+            known = None not in world_ranks
+            best_world = min(world_ranks) if known and world_ranks else None
+            for _r, destination in regional:
+                name = next(n for d, n in members if d == destination)
+                ours = lookup_priority(index, destination, name)
+                if best_world is not None and ours is not None and ours < best_world:
+                    keep.add(destination)
+                else:
+                    drop.add(destination)
         else:
             # Preserve every unmatched candidate as a visible fallback.
             keep |= {destination for _r, destination in regional}

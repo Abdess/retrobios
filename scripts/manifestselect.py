@@ -90,7 +90,7 @@ class SelectionIndex:
         `systems` drives --system. A regional entry adds its regions,
         `region_groups` it always competes in as a core extra, and
         `region_system_groups` it competes in only when that platform system
-        is kept. An entry that never competes carries no region field: an
+        is kept, and `priority` the rank the code searches it at. An entry that never competes carries no region field: an
         untagged file always survives a region filter.
         """
         out: dict = {}
@@ -109,4 +109,9 @@ class SelectionIndex:
         declared = self.declared_by.get(dest)
         if declared:
             out["region_system_groups"] = sorted(declared)
+        # The code's search rank decides whether a world file may withdraw
+        # this one when no region matches.
+        priority = region_mod.lookup_priority(self.region_index, dest, name)
+        if priority is not None:
+            out["priority"] = priority
         return out

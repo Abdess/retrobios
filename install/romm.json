@@ -13016,7 +13016,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 1
     },
     {
       "dest": "gamegear/SegaCDBIOS9303.bin",
@@ -13032,7 +13033,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 2
     },
     {
       "dest": "gamegear/us_scd1_9210.bin",
@@ -13061,7 +13063,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 1
     },
     {
       "dest": "gamegear/eu_mcd2_9303.bin",
@@ -13080,7 +13083,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 2
     },
     {
       "dest": "gamegear/eu_mcd1_9210.bin",
@@ -13099,7 +13103,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 3
     },
     {
       "dest": "gamegear/jp_mcd2_921222.bin",
@@ -13118,7 +13123,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 1
     },
     {
       "dest": "gamegear/jp_mcd1_9112.bin",
@@ -13137,7 +13143,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 2
     },
     {
       "dest": "gamegear/jp_mcd1_9111.bin",
@@ -13156,7 +13163,8 @@
       ],
       "region_groups": [
         "PicoDrive:variant:mega-cd-bios"
-      ]
+      ],
+      "priority": 3
     },
     {
       "dest": "gamegear/32X_G_BIOS.BIN",

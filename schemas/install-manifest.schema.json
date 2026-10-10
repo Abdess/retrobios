@@ -229,6 +229,10 @@
             "minItems": 1,
             "maxItems": 1000,
             "uniqueItems": true
+          },
+          "priority": {
+            "description": "The rank the code searches the file at, lower first: a world file withdraws an unmatched regional one only when it ranks no worse.",
+            "type": "integer"
           }
         }
       }
@@ -369,6 +373,10 @@
             "minItems": 1,
             "maxItems": 1000,
             "uniqueItems": true
+          },
+          "priority": {
+            "description": "The rank the code searches the file at, lower first: a world file withdraws an unmatched regional one only when it ranks no worse.",
+            "type": "integer"
           }
         },
         "oneOf": [
