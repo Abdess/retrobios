@@ -64,22 +64,22 @@ files:
     size: 8192
     required: false
     hle_fallback: true
-    validation: [size]
-    known_hash_adler32: "0x66f334fe"
+    validation: [size, adler32]
+    known_hash_adler32: ["0x66f334fe", "0x128ea7a2"]
     adler32_byteswap: true
     note: "DSP instruction ROM for LLE audio. Free replacement included"
-    source_ref: "Source/Core/Common/CommonPaths.h:112, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:142-150, Source/Core/Core/DSP/DSPCore.cpp:48,67"
+    source_ref: "Source/Core/Common/CommonPaths.h:112, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:142-150, Source/Core/Core/DSP/DSPCore.cpp:48,67, Source/Core/Core/DSP/DSPCore.cpp:38-105"
 
   - name: "dsp_coef.bin"
     path: "GC/dsp_coef.bin"
     size: 4096
     required: false
     hle_fallback: true
-    validation: [size]
-    known_hash_adler32: "0xf3b93527"
+    validation: [size, adler32]
+    known_hash_adler32: ["0xf3b93527", "0xa4a575f5"]
     adler32_byteswap: true
     note: "DSP coefficient ROM for LLE audio and HLE polyphase resampling. Free replacement included"
-    source_ref: "Source/Core/Common/CommonPaths.h:113, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:143-153, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:43-72, Source/Core/Core/DSP/DSPCore.cpp:48,68"
+    source_ref: "Source/Core/Common/CommonPaths.h:113, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:143-153, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:43-72, Source/Core/Core/DSP/DSPCore.cpp:48,68, Source/Core/Core/DSP/DSPCore.cpp:38-105"
 
   # -- GameCube Fonts --
   # Bundled free alternatives exist but have padding differences causing misplaced text.

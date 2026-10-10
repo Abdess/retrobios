@@ -515,9 +515,24 @@
             "pattern": "^[a-fA-F0-9]{8}$"
           },
           "known_hash_adler32": {
-            "type": [
-              "string",
-              "integer"
+            "description": "Adler-32 values the code accepts; a list when several revisions pass.",
+            "oneOf": [
+              {
+                "type": [
+                  "string",
+                  "integer"
+                ]
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": [
+                    "string",
+                    "integer"
+                  ]
+                },
+                "minItems": 1
+              }
             ]
           },
           "validation": {
@@ -648,12 +663,26 @@
             "if": {
               "anyOf": [
                 {
-                  "required": ["path"],
-                  "properties": {"path": {"type": "string", "pattern": "/$"}}
+                  "required": [
+                    "path"
+                  ],
+                  "properties": {
+                    "path": {
+                      "type": "string",
+                      "pattern": "/$"
+                    }
+                  }
                 },
                 {
-                  "required": ["standalone_path"],
-                  "properties": {"standalone_path": {"type": "string", "pattern": "/$"}}
+                  "required": [
+                    "standalone_path"
+                  ],
+                  "properties": {
+                    "standalone_path": {
+                      "type": "string",
+                      "pattern": "/$"
+                    }
+                  }
                 }
               ]
             },

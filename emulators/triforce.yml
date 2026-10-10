@@ -227,12 +227,12 @@ files:
     path: "GC/dsp_rom.bin"
     description: "DSP instruction ROM"
     size: 8192
-    validation: [size]
-    known_hash_adler32: "0x66f334fe"
+    validation: [size, adler32]
+    known_hash_adler32: ["0x66f334fe", "0xe789b5a5"]
     adler32_byteswap: true
     required: false
     hle_fallback: true
-    source_ref: "Source/Core/Common/CommonPaths.h:145, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:87-105,109-118, Source/Core/Core/DSP/DSPCore.h:44, Source/Core/Core/DSP/DSPCore.cpp:36-38"
+    source_ref: "Source/Core/Common/CommonPaths.h:145, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:87-105,109-118, Source/Core/Core/DSP/DSPCore.h:44, Source/Core/Core/DSP/DSPCore.cpp:36-38, Source/Core/Core/DSP/DSPCore.cpp:28-102"
     note: >
       LoadDSPRom rejects any file whose length differs from DSP_IROM_BYTE_SIZE and
       swaps every 16 bit word before storing it, so the Adler32 in the source is
@@ -245,12 +245,12 @@ files:
     path: "GC/dsp_coef.bin"
     description: "DSP coefficient ROM"
     size: 4096
-    validation: [size]
-    known_hash_adler32: "0xf3b93527"
+    validation: [size, adler32]
+    known_hash_adler32: ["0xf3b93527", "0xa4a575f5"]
     adler32_byteswap: true
     required: false
     hle_fallback: true
-    source_ref: "Source/Core/Common/CommonPaths.h:146, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:87-105,110-119, Source/Core/Core/DSP/DSPCore.h:58, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:61-62"
+    source_ref: "Source/Core/Common/CommonPaths.h:146, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:87-105,110-119, Source/Core/Core/DSP/DSPCore.h:58, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:61-62, Source/Core/Core/DSP/DSPCore.cpp:28-102"
     note: >
       Also read by the HLE AX ucode for polyphase resampling. Adler32 is taken over
       the byte-swapped data (Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:100-102).

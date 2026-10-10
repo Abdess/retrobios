@@ -135,8 +135,8 @@ files:
     required: false
     hle_fallback: true
     size: 8192
-    validation: [size]
-    known_hash_adler32: "0x66f334fe"
+    validation: [size, adler32]
+    known_hash_adler32: ["0x66f334fe", "0x128ea7a2"]
     adler32_byteswap: true
     description: "DSP instruction ROM"
     note: "DSP LLE only, and LLE aborts when the file is absent or not 8192 bytes. The adler32 is taken over the byte-swapped image and the value here is the Nintendo pair; five replacement pairs are also accepted."
@@ -147,12 +147,12 @@ files:
     required: false
     hle_fallback: true
     size: 4096
-    validation: [size]
-    known_hash_adler32: "0xf3b93527"
+    validation: [size, adler32]
+    known_hash_adler32: ["0xf3b93527", "0xa4a575f5"]
     adler32_byteswap: true
     description: "DSP coefficient ROM"
     note: "Read by DSP LLE alongside the instruction ROM, and by the AX ucode under HLE for polyphase resampling, which drops any file that is not 0x1000 bytes and plays on without it."
-    source_ref: "Source/Core/Common/CommonPaths.h:109, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:120-152, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:45-70, Source/Core/Core/DSP/DSPCore.h:49"
+    source_ref: "Source/Core/Common/CommonPaths.h:109, Source/Core/Core/HW/DSPLLE/DSPLLE.cpp:120-152, Source/Core/Core/HW/DSPHLE/UCodes/AX.cpp:45-70, Source/Core/Core/DSP/DSPCore.h:49, Source/Core/Core/DSP/DSPCore.cpp:38-105"
 
   - name: codehandler.bin
     path: null
