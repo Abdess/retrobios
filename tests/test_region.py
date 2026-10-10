@@ -671,6 +671,12 @@ class RegionalRequestsKeepWhatTheCodeLoads(unittest.TestCase):
         ("bluemsx", ["south-korea"], "Machines/Shared Roms/KANJI.rom"),
         ("bluemsx", ["south-korea"], "Machines/Shared Roms/MSXKANJI.rom"),
         ("bluemsx", ["japan"], "Machines/Shared Roms/HANGUL.rom"),
+        ("ace-dl", ["france"], "private/firmware/OS6128_UK.rom"),
+        ("ace-dl", ["spain"], "private/firmware/OS664_UK.rom"),
+        ("ace-dl", ["spain"], "private/firmware/OS464_FR.rom"),
+        ("ace-dl", ["denmark"], "private/firmware/XMEM_FW_3_15_UK.rom"),
+        ("ace-dl", ["spain"], "private/hacker/hacker481fr.rom"),
+        ("ace-dl", ["france"], "private/firmware/Amstrad_s4.cpr"),
     )
 
     def test_each_request_keeps_its_file(self):
