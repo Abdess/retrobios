@@ -8,9 +8,9 @@ upstream: "https://github.com/EKA2L1/EKA2L1"
 profiled_date: "2026-09-17"
 source_commit:
   standalone: "1fcfadbff7f8b81d8c17bc82d04b0c94d16803bf"
-  libretro: "97ac3df6767f819c95405e4c86e7007d2e8ae61d"
+  libretro: "1c49c1bcde3853273cd520a5360bff756f872e06"
 upstream_commit:
-  libretro: "47b4ad76a6dd7d3656f52be86dfd5b9ff9a50c70"
+  libretro: "11f5b6cd141c0884a130ee45743f1f5e17bb1783"
 core_version: "0.0.9"
 display_name: "Nokia - Symbian / N-Gage (EKA2L1)"
 cores:
@@ -27,13 +27,13 @@ notes: |
   N-Gage 2.0 libraries and the game libraries from S60v1 to Symbian Belle. One
   tree builds the Qt desktop frontend, the Android and iOS applications, and a
   libretro core; the core lives on the libretro branch of the WizzardSK fork,
-  merged from upstream at 47b4ad76. The tip of that branch, 7a40bb0d, merges
-  upstream 0b7d9d67 and does not build the core: content.cpp still calls
-  install_firmware and install_rom_with_optional_rpkg without the
-  isolate_drives argument they take from that merge on. The libretro pin is the
-  last revision of the branch that builds.
+  rebased on the upstream revision named in its upstream.version, 11f5b6cd.
+  content.cpp passes isolate_drives false to install_firmware and
+  install_rom_with_optional_rpkg, so drives C, D and E are shared between
+  devices.
   ref: README.md:20, README.md:29-32, src/emu/CMakeLists.txt:61-62,
-       CMakeLists.txt:18, .gitlab-ci.yml:14-22, src/emu/libretro/src/content.cpp:96-100,
+       CMakeLists.txt:18, .gitlab-ci.yml:17-25, src/emu/libretro/CMakeLists.txt:40-46,
+       src/emu/libretro/src/content.cpp:178-184,
        src/emu/system/src/installation/rpkg.cpp:208-210,
        src/emu/system/src/installation/firmware.cpp:290-293
 
@@ -54,12 +54,12 @@ notes: |
   sw.txt or langsw.txt under z:\resource\versions, sw.txt or langsw.txt under
   z:\system\versions, or z:\system\install\sonyericssonp90xplatform.sis. That
   is the N-Gage case: its files are unpacked to drives/z/, the firmware code is
-  read from them and the image is copied to SYM.ROM. The libretro pin tests
-  z:\system\versions\sw.txt alone. Any other image needs the RPKG made by the
-  Dumber tool beside it, which supplies the ROFS. A .vpl variant packing list
-  names the .fpsx flash images of a factory firmware, from which the core image,
-  the ROFS and the drive contents are extracted. The names of the dump files
-  are free; SYM.ROM is the name the installers give the resident copy.
+  read from them and the image is copied to SYM.ROM. Any other image needs
+  the RPKG made by the Dumber tool beside it, which supplies the ROFS. A .vpl
+  variant packing list names the .fpsx flash images of a factory firmware,
+  from which the core image, the ROFS and the drive contents are extracted.
+  The names of the dump files are free; SYM.ROM is the name the installers
+  give the resident copy.
   ref: src/emu/system/src/installation/rpkg.cpp:44-68,
        src/emu/system/src/software.cpp:396-408,
        src/emu/system/src/installation/rpkg.cpp:132-199,
@@ -97,11 +97,11 @@ notes: |
   <system>/eka2l1/libretro-content.txt against the UID it registered, or a
   .eka2l1 text shortcut naming the UID of an application already installed.
   supports_no_game is false. is_experimental is true in the .info.
-  ref: src/emu/libretro/src/main.cpp:51-53, src/emu/libretro/src/state.cpp:12-17,
-       src/emu/libretro/src/main.cpp:82-100, src/emu/libretro/src/content.cpp:44-111,
-       src/emu/libretro/src/main.cpp:161-169, src/emu/libretro/src/main.cpp:68-69,
-       src/emu/libretro/src/main.cpp:116-117, src/emu/libretro/src/content.cpp:119,
-       src/emu/libretro/src/content.cpp:244-249
+  ref: src/emu/libretro/src/main.cpp:55-57, src/emu/libretro/src/state.cpp:12-17,
+       src/emu/libretro/src/main.cpp:92-110, src/emu/libretro/src/content.cpp:129-195,
+       src/emu/libretro/src/main.cpp:173-181, src/emu/libretro/src/main.cpp:72-73,
+       src/emu/libretro/src/main.cpp:126-127, src/emu/libretro/src/content.cpp:203,
+       src/emu/libretro/src/content.cpp:350-355
 
   At this revision the libretro build stages none of the shipped resource
   folders and never calls set_runtime_resource_root, so the GL shaders, the
@@ -110,8 +110,8 @@ notes: |
   and creates no audio or controller driver, so the patch libraries, the Lua
   scripts, the MIDI banks and the controller database are not read there.
   Those entries carry mode standalone.
-  ref: src/emu/libretro/CMakeLists.txt:8-45, src/emu/libretro/src/thread.cpp:19-38,
-       src/emu/libretro/src/thread.cpp:41-60, src/emu/libretro/src/thread.cpp:83-89,
+  ref: src/emu/libretro/CMakeLists.txt:8-72, src/emu/libretro/src/thread.cpp:20-61,
+       src/emu/libretro/src/thread.cpp:87-93,
        src/emu/common/src/path.cpp:427-450, src/emu/system/src/epoc.cpp:1389-1410
 
   Shipped runtime files are read at their own name below the working
@@ -156,7 +156,7 @@ notes: |
        src/emu/config/src/panic_blacklist.cpp:27-35, src/emu/config/src/app_settings.cpp:82-114,
        src/emu/utils/src/panic.cpp:32-38, src/emu/scripting/src/manager.cpp:196-202,
        src/emu/scripting/src/manager.cpp:230-256, src/emu/services/src/fbs/fbs.cpp:443,
-       src/emu/services/src/fbs/impls/font.cpp:1185-1208, .gitlab-ci.yml:19,
+       src/emu/services/src/fbs/impls/font.cpp:1185-1208, .gitlab-ci.yml:22,
        src/emu/qt/CMakeLists.txt:264-278, src/emu/qt/CMakeLists.txt:289-290,
        src/emu/qt/CMakeLists.txt:376-377, cmake/Symbian.cmake:20-31
 
@@ -182,7 +182,7 @@ files:
       dump, an EKA2 image with its RPKG, or a VPL with its .fpsx images.
     source_ref:
       standalone: "src/emu/system/src/epoc.cpp:1486-1494, src/emu/system/src/epoc.cpp:824-848, src/emu/system/include/system/consts.h:23-25, src/emu/system/src/installation/rpkg.cpp:44-68, src/emu/system/src/installation/rpkg.cpp:196-199, src/emu/qt/src/device_install_dialog.cpp:162-172"
-      libretro: "src/emu/libretro/src/main.cpp:82-100, src/emu/libretro/src/content.cpp:44-111, src/emu/libretro/src/main.cpp:161-169, src/emu/system/src/installation/rpkg.cpp:202-248"
+      libretro: "src/emu/libretro/src/main.cpp:92-110, src/emu/libretro/src/content.cpp:129-195, src/emu/libretro/src/main.cpp:173-181, src/emu/system/src/installation/rpkg.cpp:208-255"
 
   - name: audiooutputrouting.dll.map
     standalone_path: patch/audiooutputrouting.dll.map
