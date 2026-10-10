@@ -372,7 +372,7 @@ def generate_readme(db: dict, platforms_dir: str) -> str:
         "",
         "## Download BIOS packs",
         "",
-        "One pack per platform, and it holds everything the platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. The installer above does the same file by file, and `--target` narrows it to one machine; for a region or a bare minimum, build your own pack below.",
+        "One pack per platform, and it holds everything the platform runs: its own BIOS list plus every file its emulator cores load. Pick your platform, download the ZIP, extract to the BIOS path. The installer above does the same file by file. At a terminal it asks whether to install everything or to choose systems, cores and regions, and `--system`, `--core`, `--region` and `--target` make the same choice without questions; for a bare minimum, build your own pack below.",
         "Files is how many the pack holds once extracted, the figure a file"
         " manager shows for the folder. It differs from one platform to the"
         " next because a pack carries only what that platform's emulators"

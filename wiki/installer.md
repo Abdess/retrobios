@@ -67,6 +67,11 @@ Run from a clone, `install.sh` and `install.ps1` reuse the `install.py` sitting
 next to them and skip the download entirely; piped from stdin, `install.sh`
 never treats the working directory as a trusted location for it.
 
+Piped from `curl`, the shell's standard input is the script itself, so
+`install.sh` hands the installer the terminal (`/dev/tty`) when there is one.
+Without that, every question the installer can ask was skipped on Linux and
+macOS.
+
 ## What the installer does
 
 1. Detects the host OS and the platforms installed on it.
@@ -75,7 +80,8 @@ never treats the working directory as a trusted location for it.
    always come from one commit.
 3. Prints the file count and total size, then a safety notice counting the
    entries the collection cannot serve, how many of those the platform marks
-   required, and why.
+   required, and why. At a terminal, it then offers to install everything or
+   to choose systems, cores and regions (see below).
 4. Hashes what is already in the destination and reports how many entries are
    present, verified, or present with the wrong contents.
 5. Downloads what is missing or wrong, up to 8 files at a time.
@@ -97,6 +103,60 @@ Checking existing files...
   1872 files need downloading.
 ```
 
+## Choosing what to install
+
+By default the installer fetches everything the platform runs. At a terminal,
+after detection, it asks:
+
+```
+Retroarch: 5861 files, 6.0 GB.
+  Enter) install everything
+  c) choose systems, cores and regions
+  q) quit
+```
+
+`c` walks through three numbered lists, each answered with numbers such as
+`1,4,7-9`, or Enter to keep everything on that axis.
+
+- **Systems.** The consoles and computers the platform declares.
+- **Cores.** The platform's own BIOS list for the chosen systems is always
+  kept; this narrows only the extra files each emulator core loads beyond it.
+  Asked only when the chosen systems have such files.
+- **Regions.** Asked only when a chosen system has one BIOS per region. The
+  numbers give an order of preference: `2,1` keeps the second region where a
+  file for it exists, and the first one elsewhere.
+
+The run then prints the options that repeat the same choice without
+questions, for instance
+`--platform retroarch --system sony-playstation --region north-america`.
+
+The same choices on the command line:
+
+```bash
+python install.py --platform retroarch --list-systems
+python install.py --platform retroarch --system sony-playstation,nintendo-gba
+python install.py --platform retroarch --system sony-playstation --core pcsx_rearmed
+python install.py --platform recalbox --region us,eu,jp
+```
+
+A name the platform does not have is refused with the list of the ones it
+has, before anything is downloaded: carrying on would install something other
+than what was asked. A system name that itself contains commas, as Recalbox's
+`msx1,msx2,msxturbor` does, is read as one name.
+
+The region rule is the one `generate_pack.py --region` applies, and a test
+holds the two to the same file list. In each group of regional alternatives
+the best-ranked match stays; a file declared for every region beats regional
+files that match nothing asked; when nothing matches, every regional file
+stays, so no system is left without its BIOS. A file the emulator does not
+select by region always stays. The manifest records, for each file, the
+systems that declare it, and for a regional file, its regions and the groups
+it competes in; the installer reads nothing else.
+
+The questions are asked only when standard input is a terminal. Piped,
+scripted or run with `--no-input`, the installer asks nothing and installs
+what the options name, everything by default.
+
 ## Options
 
 | Option | Effect |
@@ -104,6 +164,12 @@ Checking existing files...
 | `--platform NAME` | Install for this platform instead of the detected one. Unknown names are refused with the available list |
 | `--dest PATH` | Destination directory, overriding detection. With `--dest` alone the file list is RetroArch's |
 | `--target NAME` | Keep only the files the cores of that hardware target need. An unknown target is refused rather than ignored, since carrying on would install everything |
+| `--system NAMES` | Install only these systems. Comma-separated or repeated; `--list-systems` prints the names |
+| `--core NAMES` | Keep the platform's own list and only the extra files these cores load; `--list-cores` prints the names |
+| `--region LIST` | Preferred regions, best first (`us,eu,jp`): keep one BIOS per region where a system has several. Accepts the names and aliases of `generate_pack.py --region` |
+| `--list-systems` | Print a platform's systems with the files and size each holds |
+| `--list-cores` | Print the cores whose extra files a platform installs |
+| `--no-input` | Never ask a question, even at a terminal |
 | `--check` | Report and exit without writing |
 | `--list-platforms` | Print the supported platforms and what was detected here |
 | `--list-targets` | Print the hardware targets a platform publishes, with the core count each carries |

@@ -3405,11 +3405,13 @@ guarantee either: source profiles can document files nobody has dumped or
 that only the user can provide, all of them visible in the
 [gap analysis](gaps.md).
 
-Want less than everything? The installer takes `--target switch` to install
-only what one machine's cores need. From a clone of the repository,
-`python scripts/generate_pack.py --platform retroarch --region us` keeps one
-BIOS per region and `--required-only` the bare minimum each core needs to
-start; `--help` lists every way to build your own.
+Want less than everything? At a terminal the installer asks whether to install
+everything or to choose systems, cores and regions, and `--system`, `--core`,
+`--region` and `--target` make the same choice without questions (see the
+[installer reference](wiki/installer.md#choosing-what-to-install)). From a
+clone of the repository, `python scripts/generate_pack.py --platform retroarch
+--region us` builds the same narrowing as a pack and `--required-only` the bare
+minimum each core needs to start; `--help` lists every way to build your own.
 
 ---
 

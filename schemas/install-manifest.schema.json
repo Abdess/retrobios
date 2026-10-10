@@ -146,6 +146,89 @@
                 "uniqueItems": true
               }
             ]
+          },
+          "regions": {
+            "description": "The regions the emulator code selects the file for. Absent when it never competes.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "argentina",
+                "asia",
+                "asia-ntsc",
+                "asia-pal",
+                "australia",
+                "brazil",
+                "canada",
+                "china",
+                "denmark",
+                "europe",
+                "finland",
+                "france",
+                "germany",
+                "greece",
+                "hong-kong",
+                "india",
+                "italy",
+                "japan",
+                "latin-america",
+                "mexico",
+                "netherlands",
+                "new-zealand",
+                "north-america",
+                "norway",
+                "oceania",
+                "poland",
+                "portugal",
+                "russia",
+                "singapore",
+                "south-korea",
+                "spain",
+                "sweden",
+                "taiwan",
+                "uk",
+                "world"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 1000,
+            "uniqueItems": true
+          },
+          "region_groups": {
+            "description": "Groups the file competes in as a core extra, whatever systems are chosen.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "minItems": 1,
+            "maxItems": 1000,
+            "uniqueItems": true
+          },
+          "region_system_groups": {
+            "description": "Groups the file competes in as the platform's own declaration: present only when that system is kept.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "minItems": 1,
+            "maxItems": 1000,
+            "uniqueItems": true
+          },
+          "systems": {
+            "description": "Every platform system that declares the file, for the installer's --system.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "minItems": 1,
+            "maxItems": 1000,
+            "uniqueItems": true
           }
         }
       }
@@ -203,6 +286,89 @@
           "release_asset": {
             "type": "string",
             "pattern": "^[^/\\\\]+$"
+          },
+          "systems": {
+            "description": "Every platform system that declares the file, for the installer's --system.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "minItems": 1,
+            "maxItems": 1000,
+            "uniqueItems": true
+          },
+          "regions": {
+            "description": "The regions the emulator code selects the file for. Absent when it never competes.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "argentina",
+                "asia",
+                "asia-ntsc",
+                "asia-pal",
+                "australia",
+                "brazil",
+                "canada",
+                "china",
+                "denmark",
+                "europe",
+                "finland",
+                "france",
+                "germany",
+                "greece",
+                "hong-kong",
+                "india",
+                "italy",
+                "japan",
+                "latin-america",
+                "mexico",
+                "netherlands",
+                "new-zealand",
+                "north-america",
+                "norway",
+                "oceania",
+                "poland",
+                "portugal",
+                "russia",
+                "singapore",
+                "south-korea",
+                "spain",
+                "sweden",
+                "taiwan",
+                "uk",
+                "world"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 1000,
+            "uniqueItems": true
+          },
+          "region_groups": {
+            "description": "Groups the file competes in as a core extra, whatever systems are chosen.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "minItems": 1,
+            "maxItems": 1000,
+            "uniqueItems": true
+          },
+          "region_system_groups": {
+            "description": "Groups the file competes in as the platform's own declaration: present only when that system is kept.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            "minItems": 1,
+            "maxItems": 1000,
+            "uniqueItems": true
           }
         },
         "oneOf": [

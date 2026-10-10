@@ -685,6 +685,7 @@ def platform_region_groups(
     include_extras: bool = True,
     include_all: bool = False,
     required_only: bool = False,
+    extras_out: list[dict] | None = None,
 ) -> tuple[dict[str, list[tuple[str, str]]], dict[tuple[str, str, str], str]]:
     """Group a platform's pack candidates the way region filtering reads them.
 
@@ -692,7 +693,8 @@ def platform_region_groups(
     grouped under, keyed by (emulator, name).  verify.py needs that mapping to
     withdraw from its report exactly what the builder withdraws from the pack:
     grouping the declared files here and the core extras there would let the
-    two answer differently on the same request.
+    two answer differently on the same request.  `extras_out` receives the
+    core extras that were grouped, for the install manifest.
     """
     groups: dict[str, list[tuple[str, str]]] = {}
     for sys_id, system in systems.items():
@@ -733,18 +735,23 @@ def platform_region_groups(
                 extra.get("source_path", ""),
             )
         ] = dest
-        variant = extra.get("variant_group")
-        if variant:
-            # A variant group is one slot of one core, whatever system each
-            # member is filed under: PicoDrive files its US Mega CD BIOS under
-            # sega-segacd and the EU/JP ones under sega-megacd, and find_bios
-            # picks one of the twelve. Keyed as emulator mode keys it.
-            group_ids = [f"{extra.get('source_emulator', '')}:variant:{variant}"]
-        else:
-            group_ids = _extra_system_ids(extra) or ["_extras"]
-        for group_id in group_ids:
+        for group_id in extra_region_groups(extra):
             groups.setdefault(group_id, []).append((dest, name))
+        if extras_out is not None:
+            extras_out.append(extra)
     return groups, extra_dests
+
+
+def extra_region_groups(extra: dict) -> list[str]:
+    """The region groups a core extra competes in."""
+    variant = extra.get("variant_group")
+    if variant:
+        # A variant group is one slot of one core, whatever system each
+        # member is filed under: PicoDrive files its US Mega CD BIOS under
+        # sega-segacd and the EU/JP ones under sega-megacd, and find_bios
+        # picks one of the twelve. Keyed as emulator mode keys it.
+        return [f"{extra.get('source_emulator', '')}:variant:{variant}"]
+    return _extra_system_ids(extra) or ["_extras"]
 
 def emulator_region_drops(
     selected: list[tuple[str, dict]],

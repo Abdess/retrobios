@@ -64,6 +64,7 @@ from common import (
 import packresolve
 from refresh_data_dirs import cache_lock
 import region as region_mod
+from manifestselect import SelectionIndex
 import slot as slot_mod
 import slots
 import split_pack
@@ -2952,6 +2953,7 @@ def _manifest_entry(
     cores: list[str] | None,
     db: dict,
     repo_root: str,
+    selection_fields: dict,
 ) -> tuple[dict | None, int]:
     """The download record of a resolved file, and the size it occupies.
 
@@ -2962,6 +2964,7 @@ def _manifest_entry(
     scan, a hash computed wrong) has neither a repo path nor a release
     asset. None then, so the caller records an omission instead of a dead
     entry that makes the installer refuse the whole manifest.
+    `selection_fields` carries what the installer narrows on.
     """
     sha1 = ""
     sha256 = ""
@@ -2982,6 +2985,7 @@ def _manifest_entry(
         "size": file_size,
         "repo_path": repo_path,
         "cores": cores,
+        **selection_fields,
     }
     if is_release_asset:
         entry["storage"] = "release"
@@ -3007,6 +3011,7 @@ def _manifest_core_entries(
     omitted_by_destination: dict,
     record_omission,
     pack_only_sizes: list[int],
+    selection: SelectionIndex,
     required_only: bool = False,
 ) -> int:
     """Add the files a platform's cores need but its list does not name.
@@ -3073,6 +3078,7 @@ def _manifest_core_entries(
         entry, file_size = _manifest_entry(
             local_path, manifest_dest, [source_emu] if source_emu else [],
             db, repo_root,
+            selection.fields(dest, fe.get("name", "")),
         )
         if entry is None:
             systems = _extra_system_ids(fe)
@@ -3095,7 +3101,7 @@ def _manifest_core_entries(
     return total_size
 
 
-def _manifest_region_drops(
+def _manifest_selection(
     config: dict,
     pack_systems: dict,
     emulators_dir: str,
@@ -3106,10 +3112,13 @@ def _manifest_region_drops(
     source: str,
     required_only: bool,
     regions: list[str] | None,
-) -> set[str]:
-    """Destinations a region list removes, grouped as the pack groups them."""
-    if not regions:
-        return set()
+) -> tuple[set[str], SelectionIndex]:
+    """Destinations a region list removes, and the groups the installer replays.
+
+    Grouped as the pack groups them, so a region the installer applies to
+    the full manifest withdraws what `--region` withdraws from the pack.
+    """
+    extras: list[dict] = []
     region_groups, _extra_dests = platform_region_groups(
         config,
         pack_systems,
@@ -3121,9 +3130,16 @@ def _manifest_region_drops(
         include_extras=(source != "platform"),
         include_all=(source == "truth"),
         required_only=required_only,
+        extras_out=extras,
     )
-    return region_mod.resolve_region_drops(
-        region_groups, region_mod.build_region_index(emu_profiles), regions
+    region_index = region_mod.build_region_index(emu_profiles)
+    drops = (
+        region_mod.resolve_region_drops(region_groups, region_index, regions)
+        if regions
+        else set()
+    )
+    return drops, SelectionIndex.build(
+        region_groups, region_index, pack_systems, extras, required_only
     )
 
 
@@ -3234,9 +3250,17 @@ def generate_manifest(
             "required": bool(file_entry.get("required", True)),
             "reason": reason,
             "cores": cores,
+            # The builder counts an unavailable regional file in its groups:
+            # the installer must too, or it keeps a fallback the pack drops.
+            **selection.fields(
+                sanitize_pack_path(
+                    file_entry.get("destination", file_entry.get("name", ""))
+                ),
+                str(file_entry.get("name") or ""),
+            ),
         }
 
-    region_drops = _manifest_region_drops(
+    region_drops, selection = _manifest_selection(
         config, pack_systems, emulators_dir, db, base_dest, emu_profiles,
         target_cores, source, required_only, regions,
     )
@@ -3325,7 +3349,8 @@ def generate_manifest(
                 )
 
                 entry, file_size = _manifest_entry(
-                    local_path, dest, None, db, repo_root
+                    local_path, dest, None, db, repo_root,
+                    selection.fields(dest, file_entry["name"]),
                 )
                 if entry is None:
                     record_omission(full_dest, file_entry, sys_id, "not_found", None)
@@ -3366,7 +3391,8 @@ def generate_manifest(
         core_files, config, db, bios_dir, base_dest, repo_root,
         zip_contents, offline, region_drops, case_insensitive,
         seen_destinations, seen_lower, seen_parents, manifest_files,
-        omitted_by_destination, record_omission, pack_only_sizes, required_only,
+        omitted_by_destination, record_omission, pack_only_sizes, selection,
+        required_only,
     )
 
     # Phase 3: data directories. The installer does not fetch them, so they

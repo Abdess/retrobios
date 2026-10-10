@@ -20,6 +20,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import generate_pack as gp  # noqa: E402
+from manifestselect import SelectionIndex  # noqa: E402
 
 
 def _held_file(db: dict) -> tuple[str, dict] | None:
@@ -60,7 +61,7 @@ class AnEntryWithoutSourceIsAnOmission(unittest.TestCase):
             gp._manifest_core_entries(
                 [extra], {}, self.db, str(REPO_ROOT / "bios"), "", str(REPO_ROOT),
                 {}, True, set(), False, set(), set(), set(), files, {},
-                record, pack_only,
+                record, pack_only, SelectionIndex.build({}, {}, {}, []),
             )
         return files, omitted, pack_only
 

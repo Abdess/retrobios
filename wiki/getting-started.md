@@ -41,6 +41,10 @@ Override detection when needed:
 ```bash
 python install.py --platform retroarch --dest ~/custom/bios
 python install.py --target switch      # keep only files for that hardware
+python install.py --list-systems       # systems a platform holds, with sizes
+python install.py --system sony-playstation,nintendo-gba
+python install.py --region us,eu,jp    # one BIOS per region, best first
+python install.py --no-input           # ask nothing, even at a terminal
 python install.py --check              # verify existing files, download nothing
 python install.py --list-platforms     # supported platforms and what was detected
 python install.py --list-targets       # hardware targets for a platform

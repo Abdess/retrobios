@@ -10,6 +10,7 @@ Usage:
     python install.py --platform retroarch --dest ~/custom/bios
     python install.py --check
     python install.py --list-platforms
+    python install.py --platform retroarch --system sony-playstation --region us
 """
 from __future__ import annotations
 
@@ -92,6 +93,43 @@ OMISSION_REASONS = {
 }
 _SHA1_RE = re.compile(r"^[0-9a-fA-F]{40}$")
 _SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
+
+# The region vocabulary of scripts/region.py, which this file cannot import.
+# A test holds the two copies equal.
+WORLD_REGION = "world"
+REGION_TREE: dict[str, frozenset] = {
+    "north-america": frozenset({"canada"}),
+    "latin-america": frozenset({"brazil", "mexico", "argentina"}),
+    "europe": frozenset({
+        "uk", "france", "germany", "italy", "spain", "netherlands", "portugal",
+        "greece", "poland", "russia", "sweden", "norway", "denmark", "finland",
+    }),
+    "asia": frozenset({
+        "japan", "south-korea", "china", "taiwan", "hong-kong", "singapore",
+        "india", "asia-ntsc", "asia-pal",
+    }),
+    "oceania": frozenset({"australia", "new-zealand"}),
+}
+REGION_ALIASES: dict[str, str] = {
+    "jp": "japan",
+    "ntsc-j": "japan",
+    "us": "north-america",
+    "usa": "north-america",
+    "na": "north-america",
+    "ntsc-u": "north-america",
+    "eu": "europe",
+    "pal": "europe",
+    "kr": "south-korea",
+    "korea": "south-korea",
+    "auto": WORLD_REGION,
+    "gb": "uk",
+}
+_REGION_PARENT = {
+    member: parent for parent, members in REGION_TREE.items() for member in members
+}
+REGIONS = frozenset({WORLD_REGION} | set(REGION_TREE) | set(_REGION_PARENT))
+MAX_SELECTION_TAGS = 1000
+SELECTION_FIELDS = ("systems", "regions", "region_groups", "region_system_groups")
 
 # Platforms with a manifest in install/. Manifest URLs are case sensitive,
 # so user input is normalized against this list before any fetch.
@@ -813,6 +851,19 @@ def _destination_path(root: Path, value: object) -> Path:
     return root.resolve() / Path(*relative.parts)
 
 
+def _check_tags(entry: dict, field: str, where: str) -> None:
+    """A selection field is absent or a short list of short strings."""
+    value = entry.get(field)
+    if value is None:
+        return
+    if (
+        not isinstance(value, list)
+        or len(value) > MAX_SELECTION_TAGS
+        or not all(isinstance(tag, str) and 0 < len(tag) <= 256 for tag in value)
+    ):
+        raise ValueError(f"invalid {field} for {where}")
+
+
 def _validate_manifest(data: object, plat: str) -> dict:
     """Validate the untrusted install-manifest boundary using stdlib only."""
     if not isinstance(data, dict):
@@ -871,6 +922,8 @@ def _validate_manifest(data: object, plat: str) -> dict:
             not isinstance(cores, list) or not all(isinstance(core, str) for core in cores)
         ):
             raise ValueError(f"invalid cores list for {dest}")
+        for field in SELECTION_FIELDS:
+            _check_tags(entry, field, dest)
 
     declared_total_files = data.get("total_files")
     if declared_total_files is not None and declared_total_files != len(files):
@@ -908,6 +961,8 @@ def _validate_manifest(data: object, plat: str) -> dict:
             or not all(isinstance(core, str) for core in cores)
         ):
             raise ValueError(f"invalid omitted cores list for {dest}")
+        for field in SELECTION_FIELDS:
+            _check_tags(entry, field, dest)
     declared_total_omitted = data.get("total_omitted")
     if (
         declared_total_omitted is not None
@@ -1022,6 +1077,206 @@ def _filter_by_target(
         if cores is None or any(c in target_set for c in cores):
             result.append(f)
     return result
+
+
+def canonical_region(raw: str) -> str:
+    """One region name or alias, spelled the way manifests spell it."""
+    key = raw.strip().lower()
+    key = REGION_ALIASES.get(key, key)
+    if key not in REGIONS:
+        raise ValueError(f"unknown region: {raw.strip()}")
+    return key
+
+
+def _region_comparable(a: str, b: str) -> bool:
+    return a == b or _REGION_PARENT.get(a) == b or _REGION_PARENT.get(b) == a
+
+
+def _region_rank(file_regions: set[str], requested: list[str]) -> int:
+    for index, wanted in enumerate(requested):
+        if any(_region_comparable(wanted, region) for region in file_regions):
+            return index
+    return len(requested)
+
+
+def region_drops(
+    entries: list[dict], requested: list[str], systems: "list[str] | None" = None
+) -> set[str]:
+    """Destinations a region priority list withdraws.
+
+    The pack builder's rule (region.resolve_region_drops), replayed over the
+    groups the manifest records. Per group, the best-ranked regional file
+    stays; a world file beats unmatched regional ones; when nothing matches
+    and no world file exists, every regional file stays, so a group is never
+    emptied. A file with no region never competes and always stays.
+
+    A core extra competes whatever systems are chosen; a platform's own
+    declaration competes only when its system is kept, as in the pack.
+    """
+    if not requested:
+        return set()
+    kept_systems = set(systems) if systems else None
+    groups: dict[str, list[tuple[set, str]]] = {}
+    for entry in entries:
+        regions = entry.get("regions")
+        if not regions:
+            continue
+        joined = list(entry.get("region_groups") or [])
+        joined += [
+            group for group in entry.get("region_system_groups") or []
+            if kept_systems is None or group in kept_systems
+        ]
+        for group in joined:
+            groups.setdefault(group, []).append((set(regions), entry["dest"]))
+    keep: set[str] = set()
+    drop: set[str] = set()
+    for members in groups.values():
+        world = {dest for regions, dest in members if WORLD_REGION in regions}
+        regional = [
+            (_region_rank(regions, requested), dest)
+            for regions, dest in members
+            if WORLD_REGION not in regions
+        ]
+        keep |= world
+        if not regional:
+            continue
+        matched = [(rank, dest) for rank, dest in regional if rank < len(requested)]
+        if matched:
+            best = min(rank for rank, _dest in matched)
+            keep |= {dest for rank, dest in matched if rank == best}
+            drop |= {dest for _rank, dest in regional}
+        elif world:
+            drop |= {dest for _rank, dest in regional}
+        else:
+            keep |= {dest for _rank, dest in regional}
+    return drop - keep
+
+
+def entry_systems(entry: dict) -> list[str]:
+    """The systems a file serves: a list on files, one name on omissions."""
+    systems = entry.get("systems")
+    if systems:
+        return list(systems)
+    return [entry["system"]] if entry.get("system") else []
+
+
+def narrow(
+    files: list[dict],
+    omitted: list[dict],
+    systems: list[str],
+    cores: list[str],
+    regions: list[str],
+) -> tuple[list[dict], list[dict]]:
+    """Keep what the chosen systems, cores and regions need.
+
+    A core choice keeps the platform's own list and narrows only the files
+    cores load, the rule --target already follows. Regions are then decided
+    the way the pack builder decides them under --system: over the chosen
+    systems' declarations and every core extra. The system filter comes last.
+    """
+    if cores:
+        files = _filter_by_target(files, cores)
+        omitted = _filter_by_target(omitted, cores)
+    if regions:
+        dropped = region_drops(files + omitted, regions, systems)
+        files = [f for f in files if f["dest"] not in dropped]
+        omitted = [o for o in omitted if o["dest"] not in dropped]
+    if systems:
+        wanted = set(systems)
+        files = [f for f in files if wanted & set(entry_systems(f))]
+        omitted = [o for o in omitted if wanted & set(entry_systems(o))]
+    return files, omitted
+
+
+def records_selection(files: list[dict]) -> bool:
+    """Whether a manifest carries what narrowing reads; older ones do not."""
+    return any("systems" in entry for entry in files)
+
+
+def available_choices(files: list[dict], omitted: list[dict]) -> dict[str, list[str]]:
+    """The systems, cores and regions a manifest lets one narrow to."""
+    systems = {s for e in files + omitted for s in entry_systems(e)}
+    cores = {c for f in files for c in (f.get("cores") or [])}
+    regions = {
+        r for e in files + omitted for r in (e.get("regions") or [])
+        if r != WORLD_REGION
+    }
+    return {
+        "systems": sorted(systems),
+        "cores": sorted(cores),
+        "regions": sorted(regions),
+    }
+
+
+def resolve_choices(values: list[str], known: list[str], label: str) -> list[str]:
+    """Names given on the command line, matched without regard to case.
+
+    Each value is one name or a comma-separated list. A whole value that is
+    itself a name wins over splitting it: Recalbox names one system
+    `msx1,msx2,msxturbor`. An unknown name is refused, never ignored, since
+    carrying on would install something other than what was asked.
+    """
+    by_lower = {name.lower(): name for name in known}
+    chosen: list[str] = []
+    unknown: list[str] = []
+    for value in values:
+        value = value.strip()
+        tokens = [value] if value.lower() in by_lower else value.split(",")
+        for token in (t.strip() for t in tokens):
+            if not token:
+                continue
+            name = by_lower.get(token.lower())
+            if name is None:
+                unknown.append(token)
+            elif name not in chosen:
+                chosen.append(name)
+    if unknown:
+        available = ", ".join(known) if known else "none"
+        raise ValueError(
+            f"unknown {label}: {', '.join(unknown)} (available: {available})"
+        )
+    if values and not chosen:
+        raise ValueError(f"--{label} needs at least one name")
+    return chosen
+
+
+def resolve_regions(values: list[str]) -> list[str]:
+    """A region priority list, best first, from names or aliases."""
+    chosen: list[str] = []
+    for value in values:
+        for token in value.split(","):
+            if token.strip():
+                region = canonical_region(token)
+                if region not in chosen:
+                    chosen.append(region)
+    if values and not chosen:
+        raise ValueError("--region needs at least one region")
+    return chosen
+
+
+def parse_selection(text: str, count: int, ordered: bool = False) -> list[int]:
+    """Numbers typed at a prompt: `3`, `1,4`, `2-5`, or `all`, 1-based.
+
+    Returned sorted, or in the typed order when the order is a priority.
+    """
+    if text.strip().lower() in ("all", "*"):
+        return list(range(1, count + 1))
+    chosen: list[int] = []
+    for token in (t.strip() for t in text.split(",")):
+        if not token:
+            continue
+        low, sep, high = token.partition("-")
+        try:
+            start = int(low)
+            end = int(high) if sep else start
+        except ValueError:
+            raise ValueError(f"not a number or range: {token}") from None
+        if start > end or start < 1 or end > count:
+            raise ValueError(f"out of range: {token} (1-{count})")
+        for number in range(start, end + 1):
+            if number not in chosen:
+                chosen.append(number)
+    return chosen if ordered else sorted(chosen)
 
 
 def _digest_file(path: Path, algorithms: tuple[str, ...]) -> dict[str, str]:
@@ -1498,6 +1753,152 @@ def _prompt_platform_choice(
             return platforms
 
 
+def _ask(prompt: str) -> str:
+    try:
+        return input(prompt).strip()
+    except (EOFError, KeyboardInterrupt):
+        print()
+        sys.exit(0)
+
+
+def _sized(files: list[dict]) -> str:
+    return f"{_plural(len(files), 'file')}, {format_size(sum(f.get('size', 0) for f in files))}"
+
+
+def _pick(title: str, rows: list[tuple[str, list[dict]]], ordered: bool = False) -> list[str]:
+    """Numbered list of names; an empty answer keeps every one."""
+    if not rows:
+        return []
+    print(f"\n{title}")
+    width = len(str(len(rows)))
+    name_width = min(max(len(name) for name, _files in rows), 32)
+    for index, (name, files) in enumerate(rows, 1):
+        print(f"  {index:>{width}}) {name:<{name_width}}  {_sized(files)}")
+    hint = "order of preference, e.g. 2,1" if ordered else "e.g. 1,3-5"
+    while True:
+        text = _ask(f"Numbers ({hint}), Enter for all, q to quit: ")
+        if not text:
+            return []
+        if text.lower() == "q":
+            sys.exit(0)
+        try:
+            chosen = parse_selection(text, len(rows), ordered=ordered)
+        except ValueError as exc:
+            print(f"  {exc}")
+            continue
+        if chosen:
+            return [rows[number - 1][0] for number in chosen]
+
+
+def _prompt_custom_selection(
+    plat: str, files: list[dict], omitted: list[dict]
+) -> "tuple[list[str], list[str], list[str]] | None":
+    """Offer to narrow the install by system, core and region.
+
+    Enter installs everything, the default most runs want. Returns None
+    then, or the three choices; each empty list keeps everything on its axis.
+    """
+    print(f"\n{plat.capitalize()}: {_sized(files)}.")
+    print("  Enter) install everything")
+    print("  c) choose systems, cores and regions")
+    print("  q) quit")
+    while True:
+        answer = _ask("> ").lower()
+        if answer == "":
+            return None
+        if answer == "q":
+            sys.exit(0)
+        if answer == "c":
+            break
+
+    choices = available_choices(files, omitted)
+    systems = _pick("Systems:", [
+        (name, [f for f in files if name in entry_systems(f)])
+        for name in choices["systems"]
+    ])
+    kept, kept_omitted = narrow(files, omitted, systems, [], [])
+
+    cores: list[str] = []
+    core_names = available_choices(kept, kept_omitted)["cores"]
+    if core_names:
+        print("\nThe platform's own files for these systems are always kept;")
+        print("the extra files each core loads can be narrowed.")
+        cores = _pick("Cores:", [
+            (name, [f for f in kept if name in (f.get("cores") or [])])
+            for name in core_names
+        ])
+        kept, kept_omitted = narrow(kept, kept_omitted, [], cores, [])
+
+    regions: list[str] = []
+    region_names = available_choices(kept, kept_omitted)["regions"]
+    if region_names:
+        print("\nSome systems have one BIOS per region. Keeping only the")
+        print("preferred region removes the others where a match exists.")
+        regions = _pick("Regions:", [
+            (name, [f for f in kept if name in (f.get("regions") or [])])
+            for name in region_names
+        ], ordered=True)
+    return systems, cores, regions
+
+
+def _same_choice_hint(plat: str, systems: list[str], cores: list[str], regions: list[str]) -> str:
+    """The options that repeat a choice made at the prompts."""
+    def quoted(value: str) -> str:
+        return f'"{value}"' if any(c in value for c in " ;&|") else value
+
+    parts = [f"--platform {plat}"]
+    parts += [f"--system {quoted(name)}" for name in systems]
+    parts += [f"--core {quoted(name)}" for name in cores]
+    if regions:
+        parts.append(f"--region {','.join(regions)}")
+    return " ".join(parts)
+
+
+def _print_choices(
+    plat: str, files: list[dict], omitted: list[dict], systems: bool
+) -> None:
+    """What --system or --core accepts for a platform, with what each holds."""
+    choices = available_choices(files, omitted)
+    names = choices["systems"] if systems else choices["cores"]
+    if not names:
+        print(f"  {plat} records no {'systems' if systems else 'cores'}")
+        return
+    width = min(max(len(name) for name in names), 40)
+    for name in names:
+        held = (
+            [f for f in files if name in entry_systems(f)]
+            if systems
+            else [f for f in files if name in (f.get("cores") or [])]
+        )
+        print(f"  {name:<{width}}  {_sized(held)}")
+
+
+def _requested_narrowing(
+    args: argparse.Namespace, plat: str, files: list[dict], omitted: list[dict]
+) -> "tuple[list[str], list[str], list[str]] | None":
+    """The systems, cores and regions named on the command line, checked."""
+    if not (args.system or args.core or args.region):
+        return None
+    if not records_selection(files):
+        # Without the fields, a region filter would match nothing and install
+        # everything: refused rather than ignored.
+        print(
+            f"Error: the {plat} file list records no systems or regions; "
+            "narrowing needs a newer one",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    choices = available_choices(files, omitted)
+    try:
+        systems = resolve_choices(args.system or [], choices["systems"], "system")
+        cores = resolve_choices(args.core or [], choices["cores"], "core")
+        regions = resolve_regions(args.region or [])
+    except ValueError as exc:
+        print(f"Error: {plat}: {exc}", file=sys.stderr)
+        sys.exit(1)
+    return systems, cores, regions
+
+
 def main() -> None:
     """Entry point."""
     parser = argparse.ArgumentParser(
@@ -1547,10 +1948,56 @@ def main() -> None:
         action="store_true",
         help="opt in to copies into detected standalone-emulator directories",
     )
+    parser.add_argument(
+        "--system",
+        action="append",
+        metavar="NAME",
+        help="install only these systems (repeat or comma-separate; see --list-systems)",
+    )
+    parser.add_argument(
+        "--core",
+        action="append",
+        metavar="NAME",
+        help="keep only the extra files these cores load (see --list-cores)",
+    )
+    parser.add_argument(
+        "--region",
+        action="append",
+        metavar="LIST",
+        help="preferred regions, best first, e.g. us,eu,jp: keep one BIOS per "
+             "region where a system has several",
+    )
+    parser.add_argument(
+        "--list-systems",
+        action="store_true",
+        help="list a platform's systems with their file counts and exit",
+    )
+    parser.add_argument(
+        "--list-cores",
+        action="store_true",
+        help="list the cores whose extra files a platform installs and exit",
+    )
+    parser.add_argument(
+        "--no-input",
+        action="store_true",
+        help="never ask a question; fail where an answer is needed",
+    )
 
     args = parser.parse_args()
     if not 1 <= args.jobs <= 32:
         parser.error("--jobs must be between 1 and 32")
+    if args.region:
+        try:
+            resolve_regions(args.region)
+        except ValueError as exc:
+            parser.error(f"{exc} (known: {', '.join(sorted(REGIONS))})")
+    for option, values in (("--system", args.system), ("--core", args.core)):
+        if values is not None and not any(
+            token.strip() for value in values for token in value.split(",")
+        ):
+            parser.error(f"{option} needs at least one name")
+    interactive = sys.stdin.isatty() and not args.no_input
+    listing = args.list_targets or args.list_systems or args.list_cores
     print("RetroBIOS\n")
 
     os_type = detect_os()
@@ -1598,7 +2045,7 @@ def main() -> None:
         platforms = detect_platforms(os_type)
         if not platforms:
             print("  No supported platform detected.")
-            if not sys.stdin.isatty() or args.list_targets:
+            if not interactive or listing:
                 for line in _manual_usage_hint(os_type):
                     print(line)
                 sys.exit(1)
@@ -1606,7 +2053,7 @@ def main() -> None:
         for name, path in platforms:
             print(f"  Found {name.capitalize()} at {path}")
 
-    if len(platforms) > 1 and not args.list_targets and sys.stdin.isatty():
+    if len(platforms) > 1 and not listing and interactive:
         platforms = _prompt_platform_choice(platforms)
 
     total_downloaded = 0
@@ -1671,6 +2118,27 @@ def main() -> None:
                 files = _filter_by_target(files, target_cores)
                 omitted_files = _filter_by_target(omitted_files, target_cores)
                 print(f"  Filtered {before} -> {len(files)} files for target {args.target}")
+
+        selection = _requested_narrowing(args, plat_name, files, omitted_files)
+        if (
+            selection is None
+            and interactive
+            and not args.check
+            and not listing
+            and records_selection(files)
+        ):
+            selection = _prompt_custom_selection(plat_name, files, omitted_files)
+            if selection is not None:
+                print("\n  Same choice without questions: "
+                      + _same_choice_hint(plat_name, *selection))
+        if selection is not None:
+            before = len(files)
+            files, omitted_files = narrow(files, omitted_files, *selection)
+            print(f"  Narrowed {before} -> {len(files)} files")
+
+        if args.list_systems or args.list_cores:
+            _print_choices(plat_name, files, omitted_files, args.list_systems)
+            continue
 
         total_size = sum(f.get("size", 0) for f in files)
         print(f"  {len(files)} files ({format_size(total_size)})")
@@ -1764,7 +2232,7 @@ def main() -> None:
                 "(use --standalone-copies to opt in)."
             )
 
-    if not args.check and not args.list_targets:
+    if not args.check and not listing:
         _report_outcome(
             installed_paths,
             total_downloaded,
