@@ -248,7 +248,9 @@ class Scraper(BaseScraper):
             raise ConnectionError(f"Failed to fetch component tree: {e}") from e
 
         if tree.get("truncated"):
-            print("  WARNING: GitHub tree response truncated", file=sys.stderr)
+            # A partial tree lists some components: writing the YAML from it
+            # drops the others' systems without a word.
+            raise ConnectionError("GitHub tree response truncated")
 
         component_dirs = [
             item["path"]
@@ -260,16 +262,24 @@ class Scraper(BaseScraper):
         for comp in sorted(component_dirs):
             url = f"{RAW_BASE}/{comp}/component_manifest.json"
             print(f"  {comp} ...", file=sys.stderr, end="", flush=True)
+            # Only a 404 says the component has no manifest. A 429, a 503 or
+            # a dropped connection is no answer: skipping it wrote
+            # retrodeck.yml without that component's systems, exit code 0.
             try:
                 req = urllib.request.Request(url, headers=headers)
                 with urllib.request.urlopen(req, timeout=15) as resp:
                     data = json.loads(resp.read().decode())
-                manifests.append((comp, data))
-                print(" ok", file=sys.stderr)
-            except (urllib.error.HTTPError, urllib.error.URLError):
-                print(" skip", file=sys.stderr)
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    print(" no manifest", file=sys.stderr)
+                    continue
+                raise ConnectionError(f"{url}: HTTP {e.code}") from e
+            except urllib.error.URLError as e:
+                raise ConnectionError(f"{url}: {e.reason}") from e
             except json.JSONDecodeError as e:
-                print(f" parse error: {e}", file=sys.stderr)
+                raise ValueError(f"{url}: not JSON: {e}") from e
+            manifests.append((comp, data))
+            print(" ok", file=sys.stderr)
         return manifests
 
     def _fetch_local_manifests(self) -> list[tuple[str, dict]]:
