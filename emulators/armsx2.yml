@@ -506,6 +506,7 @@ files:
   - name: cas.glsl
     path: pcsx2/resources/shaders/vulkan/cas.glsl
     standalone_path: resources/shaders/vulkan/cas.glsl
+    sha1: "005cecf1a5e20b05407d55d0aad22cf81ad66c31"
     required: false
     bundled: true
     description: "Vulkan contrast adaptive sharpening shader"
