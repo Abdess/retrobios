@@ -56,8 +56,10 @@ files:
     system: nintendo-3ds
     required: false
     hle_fallback: true
-    note: "AES key slots, common keys and NFC secrets; embedded encrypted blob used if missing"
-    source_ref: "src/core/hw/aes/key.cpp:225-364, src/core/hw/aes/key.cpp:473-613"
+    sha1: "5288772be438b86978a801e6dcb14228ad3a20af"
+    md5: "4812e96097b7fc1bdd7b40366208b7a7"
+    note: "AES key slots, common keys and NFC secrets; embedded encrypted blob used if missing: default_keys_enc, AES-CBC with a zero key and IV, the hashes are those of the decrypted text"
+    source_ref: "src/core/hw/aes/key.cpp:225-364, src/core/hw/aes/key.cpp:473-613, src/core/hw/default_keys.h:11"
 
   - name: aes_keys.txt
     path: sysdata/aes_keys.txt

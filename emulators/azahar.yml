@@ -38,8 +38,10 @@ files:
     system: nintendo-3ds
     required: false
     hle_fallback: true
-    note: "embedded encrypted fallback if missing"
-    source_ref: "src/core/hw/aes/key.cpp:283, src/common/common_paths.h:83"
+    sha1: "5fab786695311433602028cd89898689c5df0898"
+    md5: "cb52d323b13129a2f0bc3e3e911e567f"
+    note: "embedded encrypted fallback if missing: default_keys_enc, AES-CBC with a zero key and IV; the hashes are those of the decrypted text without its PKCS#7 block"
+    source_ref: "src/core/hw/aes/key.cpp:283-300, src/common/common_paths.h:83, src/core/hw/default_keys.h:4-5"
 
   - name: shared_font.bin
     path: sysdata/shared_font.bin
