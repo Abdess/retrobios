@@ -112,12 +112,13 @@ class TestCorpusStaysCorrect(unittest.TestCase):
     """
 
     def test_every_mame_family_ref_names_its_own_set(self):
-        if not (ROOT / ".cache").is_dir():
+        cache = ROOT / mame_ref_audit.upstream.CACHE_DIR
+        if not cache.is_dir():
             self.skipTest("no upstream cache")
         for name in ("mame", "mamearcade", "mamemess", "groovymame"):
             with self.subTest(emulator=name):
                 findings, agreed, _ = mame_ref_audit.audit(
-                    name, str(ROOT / "emulators"), str(ROOT / ".cache"), True
+                    name, str(ROOT / "emulators"), str(cache), True
                 )
                 if not agreed and not findings:
                     self.skipTest(f"{name}: driver sources not cached")

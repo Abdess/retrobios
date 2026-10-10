@@ -115,7 +115,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("emulators", nargs="+")
     parser.add_argument("--emulators-dir", default="emulators")
-    parser.add_argument("--cache-dir", default=".cache")
+    parser.add_argument("--cache-dir", default=upstream.CACHE_DIR)
     parser.add_argument("--offline", action="store_true")
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()

@@ -31,7 +31,7 @@ import upstream
 from common import load_emulator_profiles
 from upstream import CompareResult, find_renamed
 
-DEFAULT_CACHE = ".cache/upstream"
+DEFAULT_CACHE = upstream.CACHE_DIR
 ANON_QUOTA = 60
 TRIAGE_PATH_SAMPLE = 5
 

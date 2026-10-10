@@ -1057,7 +1057,7 @@ def main() -> int:
     parser.add_argument("--profiles", action="store_true", help="also run profile_sync (slow)")
     parser.add_argument("--offline", action="store_true", help="no network, local ages only")
     parser.add_argument("--jobs", type=int, default=4, help="parallel scrapers")
-    parser.add_argument("--cache-dir", default=".cache/upstream")
+    parser.add_argument("--cache-dir", default=upstream.CACHE_DIR)
     parser.add_argument("--native-cache-dir", default=export_native.DEFAULT_CACHE)
     parser.add_argument("--truth-dir", default="dist/truth")
     parser.add_argument("--platforms-dir", default="platforms")

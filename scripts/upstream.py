@@ -21,6 +21,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 USER_AGENT = "retrobios-profile-sync/1.0"
+# Where fetched upstream files live, shared by every reader of this cache.
+CACHE_DIR = ".cache/upstream"
 ABSENT = "\0absent\0"
 GITHUB_COMPARE_CAP = 300
 RETRIES = 3
