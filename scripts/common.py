@@ -1684,12 +1684,16 @@ def filter_systems_by_target(
                 (),
             )
         }
-        all_cores = norm_system_cores.get(norm_key, set()) | file_cores
+        all_cores = norm_system_cores.get(norm_key, set())
         plat_cores_here = norm_plat_system_cores.get(norm_key, set())
-        if platform_cores is not None:
-            plat_cores_here = plat_cores_here | (file_cores & set(platform_cores))
 
-        if not all_cores and not plat_cores_here:
+        if file_cores & expanded_target:
+            # An on-target core reads the system's files. The evidence only
+            # keeps: a path shared with an off-target core says nothing of the
+            # other files, and Batocera's bbc runs on MAME, which no profile
+            # ties to bbcb.zip, while CLK reads two of its ROMs.
+            filtered[sys_id] = sys_data
+        elif not all_cores and not plat_cores_here:
             # No profile maps to this system -keep it
             filtered[sys_id] = sys_data
         elif all_cores & expanded_target:

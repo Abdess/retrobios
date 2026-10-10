@@ -56,6 +56,25 @@ class TargetSystems(unittest.TestCase):
     def test_without_that_evidence_the_off_target_core_drops_it(self):
         self.assertEqual(self.kept(systems("Enterprise/exos10.bin")), [])
 
+    def test_a_path_an_off_target_core_reads_excludes_nothing(self):
+        """Batocera's bbc runs on MAME, which no profile ties to bbcb.zip; CLK
+        reads two of its ROMs. With CLK off the target the system stayed
+        unknown before and must stay kept."""
+        declared = {"bbc": {"files": [
+            {"name": "os12.rom", "destination": "BBCMicro/os12.rom"},
+            {"name": "bbcb.zip", "destination": "bbcb.zip"},
+        ]}}
+        profiles = dict(PROFILES)
+        profiles["clk"] = dict(PROFILES["clk"], files=[
+            {"name": "os12.rom", "path": "BBCMicro/os12.rom"}])
+        self.assertEqual(
+            sorted(filter_systems_by_target(
+                declared, profiles, {"ep128emu_core"},
+                platform_cores={"ep128emu_core", "clk"},
+            )),
+            ["bbc"],
+        )
+
     def test_a_bare_name_is_no_evidence(self):
         declared = {"enterprise-64-128": {"files": [{"name": "bios.bin"}]}}
         self.assertEqual(
