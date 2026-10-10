@@ -9,6 +9,7 @@ import importlib.util
 import io
 import json
 import os
+import shlex
 import re
 import shutil
 import subprocess
@@ -1459,6 +1460,47 @@ class TestAvailablePlatforms(unittest.TestCase):
             self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
             self.assertTrue(marker.is_file(), "piped bootstrap did not download install.py")
             self.assertIn("retroarch", proc.stdout)
+
+    @unittest.skipUnless(shutil.which("script"), "script(1) provides the terminal")
+    def test_piped_one_liner_hands_the_terminal_to_the_installer(self):
+        """curl | sh gives the installer the script as stdin, so isatty()
+        was false and every question it asks was skipped on Linux and Mac."""
+        scratch = REPO_ROOT / "tmp" / "tests"
+        scratch.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=scratch) as directory:
+            root = Path(directory)
+            probe = root / "probe.py"
+            probe.write_text(
+                "import sys\nprint('installer stdin is a terminal:', sys.stdin.isatty())\n",
+                encoding="utf-8",
+            )
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            (fake_bin / "curl").write_text(
+                "#!/bin/sh\n"
+                "output=\n"
+                "while [ \"$#\" -gt 0 ]; do\n"
+                "  if [ \"$1\" = --output ]; then output=$2; shift 2; else shift; fi\n"
+                "done\n"
+                f"cp -- {shlex.quote(str(probe))} \"$output\"\n",
+                encoding="utf-8",
+            )
+            (fake_bin / "curl").chmod(0o755)
+            env = os.environ.copy()
+            env.update(
+                PATH=f"{fake_bin}{os.pathsep}{env['PATH']}",
+                TMPDIR=str(root),
+                RETROBIOS_INSTALL_URL="https://example.invalid/install.py",
+                RETROBIOS_INSTALL_SHA256=hashlib.sha256(probe.read_bytes()).hexdigest(),
+            )
+            piped = f"sh -s < {shlex.quote(str(REPO_ROOT / 'install.sh'))}"
+            proc = subprocess.run(
+                ["script", "-qec", piped, "/dev/null"],
+                cwd=root, env=env, capture_output=True, text=True, timeout=30,
+                check=False,
+            )
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertIn("installer stdin is a terminal: True", proc.stdout)
 
 
 class TargetListFailureIsNotAnAnswer(unittest.TestCase):

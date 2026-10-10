@@ -97,4 +97,11 @@ if [ -z "$PYTHON" ]; then
   exit 1
 fi
 
-"$PYTHON" "$INSTALLER" "$@"
+# Piped from curl, standard input is this script, not the terminal: the
+# installer would skip every question it can ask. Hand it the terminal when
+# there is one.
+if [ ! -t 0 ] && (: </dev/tty) 2>/dev/null; then
+  "$PYTHON" "$INSTALLER" "$@" </dev/tty
+else
+  "$PYTHON" "$INSTALLER" "$@"
+fi
