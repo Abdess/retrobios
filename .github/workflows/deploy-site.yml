@@ -22,6 +22,7 @@ on:
       - "scripts/hashing.py"
       - "scripts/largefiles.py"
       - "scripts/list_platforms.py"
+      - "scripts/manifestselect.py"
       - "scripts/nativemode.py"
       - "scripts/packextras.py"
       - "scripts/packpaths.py"
