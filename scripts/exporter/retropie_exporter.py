@@ -48,6 +48,7 @@ _FILENAME = re.compile(r"[A-Za-z0-9][\w.+-]*\.[A-Za-z0-9]{1,5}\b")
 # than by a sentence template, and the names in it are the list to extend.
 _BIOS_CLAUSE = re.compile(r"BIOS\b.*?(?=\\n|$)", re.DOTALL)
 _BIOS_NOUN = re.compile(r"BIOS (files?)\b")
+_SEPARATOR = re.compile(r"\s*(?:,\s*(?:and\s+)?|and\s+)")
 
 
 class Exporter(BaseExporter):
@@ -141,12 +142,13 @@ class Exporter(BaseExporter):
         return {match.group(0).lower() for match in cls._names_in(plain)}
 
     @classmethod
-    def _insertion_point(cls, help_text: str) -> int | None:
-        """Where a name joins the list, or None when there is no list.
+    def _enumeration(cls, help_text: str) -> tuple[int, int, list[str]] | None:
+        """The list of names to extend: its span and its names, or None.
 
         A list of alternatives ("a or b", "a/b") is not an enumeration: an
         appended ", c" reads as one more required file and the plural turns
-        "one of these" into "all of these". Such a list is left alone.
+        "one of these" into "all of these". Such a list is left alone, and so
+        is one with words between its names, which a rewrite would lose.
         """
         clause = _BIOS_CLAUSE.search(help_text)
         if clause is None:
@@ -158,7 +160,14 @@ class Exporter(BaseExporter):
         between = text[names[0].start():names[-1].end()]
         if re.search(r"\bor\b|/", between):
             return None
-        return clause.start() + names[-1].end()
+        gaps = [text[a.end():b.start()] for a, b in zip(names, names[1:])]
+        if not all(_SEPARATOR.fullmatch(gap) for gap in gaps):
+            return None
+        return (
+            clause.start() + names[0].start(),
+            clause.start() + names[-1].end(),
+            [match.group(0) for match in names],
+        )
 
     @staticmethod
     def _in_search_order(candidates: list[NativeFile]) -> list[str]:
@@ -194,6 +203,21 @@ class Exporter(BaseExporter):
         if len(names) == 1:
             return names[0]
         return ", ".join(names[:-1]) + " and " + names[-1]
+
+    @classmethod
+    def _extended(
+        cls,
+        help_text: str,
+        enumeration: tuple[int, int, list[str]],
+        missing: list[str],
+    ) -> str:
+        """The help with the names added to its list.
+
+        The whole list is written again so the "and" moves before the last
+        name: appending ", c and d" after "a and b" read "a and b, c and d".
+        """
+        start, end, written = enumeration
+        return help_text[:start] + cls._join([*written, *missing]) + help_text[end:]
 
     def modules(self, originals: dict[str, str]) -> dict[str, tuple[str, str]]:
         """Module id and help string of every script that mentions BIOS."""
@@ -270,8 +294,8 @@ class Exporter(BaseExporter):
             if not missing:
                 continue
 
-            insert_at = self._insertion_point(help_text)
-            if insert_at is None:
+            enumeration = self._enumeration(help_text)
+            if enumeration is None:
                 # No enumeration to extend, and a sentence we would have to
                 # write ourselves is a documentation change, not a correction.
                 skip("names no file to extend", module_id)
@@ -281,12 +305,7 @@ class Exporter(BaseExporter):
                 skip("more names than the help enumerates", module_id)
                 continue
 
-            new_help = (
-                help_text[:insert_at]
-                + ", "
-                + self._join(missing)
-                + help_text[insert_at:]
-            )
+            new_help = self._extended(help_text, enumeration, missing)
             if len(listed) + len(missing) > 1:
                 new_help = _BIOS_NOUN.sub("BIOS files", new_help, count=1)
             produced[relative] = originals[relative].replace(

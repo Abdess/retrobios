@@ -373,8 +373,35 @@ class RetroPieProposals(unittest.TestCase):
     def test_a_list_of_alternatives_is_not_extended(self):
         alternatives = "Copy the required BIOS file a.rom or b.rom to $biosdir"
         enumeration = "Copy the required BIOS files a.rom and b.rom to $biosdir"
-        self.assertIsNone(RetroPie._insertion_point(alternatives))
-        self.assertIsNotNone(RetroPie._insertion_point(enumeration))
+        self.assertIsNone(RetroPie._enumeration(alternatives))
+        self.assertIsNotNone(RetroPie._enumeration(enumeration))
+
+    def test_an_extended_list_keeps_retropies_idiom(self):
+        """lr-geargrafx read "syscard3.pce and gexpress.pce, pac-n1.bin and
+        pac-n10.bin to $biosdir"."""
+        cases = (
+            ("Copy the required BIOS files syscard3.pce and gexpress.pce to $biosdir",
+             ["pac-n1.bin", "pac-n10.bin"],
+             "Copy the required BIOS files syscard3.pce, gexpress.pce, pac-n1.bin"
+             " and pac-n10.bin to $biosdir"),
+            ("Copy the required BIOS file saturn_bios.bin to $biosdir",
+             ["mpr-17933.bin"],
+             "Copy the required BIOS file saturn_bios.bin and mpr-17933.bin to $biosdir"),
+            ("requires the BIOS files a.bin, b.bin copied to $biosdir",
+             ["c.bin"],
+             "requires the BIOS files a.bin, b.bin and c.bin copied to $biosdir"),
+        )
+        for help_text, missing, expected in cases:
+            with self.subTest(help_text=help_text):
+                enumeration = RetroPie._enumeration(help_text)
+                self.assertEqual(
+                    RetroPie._extended(help_text, enumeration, missing), expected
+                )
+
+    def test_words_between_names_are_not_rewritten(self):
+        self.assertIsNone(
+            RetroPie._enumeration("BIOS files a.bin (US) and b.bin to $biosdir")
+        )
 
 
 class BizHawkRewritesOnlyWhatItDeclares(unittest.TestCase):
