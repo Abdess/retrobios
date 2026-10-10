@@ -1,100 +1,103 @@
 {
-  "tag": "v2026.09.04",
+  "tag": "v2026.10.10",
   "packs": {
     "Batocera_43.1_BIOS_Pack.zip": {
-      "files": 1839,
-      "extracted_size": 4320230269,
-      "download_size": 2557851727,
+      "files": 12810,
+      "extracted_size": 8062660183,
+      "download_size": 5570768859,
       "assets": [
-        "Batocera_43.1_BIOS_Pack.zip.001",
-        "Batocera_43.1_BIOS_Pack.zip.002"
+        "Batocera_43.1_BIOS_Pack.part1of3.zip",
+        "Batocera_43.1_BIOS_Pack.part2of3.zip",
+        "Batocera_43.1_BIOS_Pack.part3of3.zip"
       ]
     },
     "BizHawk_2.11.1_BIOS_Pack.zip": {
-      "files": 542,
-      "extracted_size": 2332771486,
-      "download_size": 1223296442,
+      "files": 950,
+      "extracted_size": 2585360680,
+      "download_size": 1469752558,
       "assets": [
         "BizHawk_2.11.1_BIOS_Pack.zip"
       ]
     },
-    "EmuDeck_2.3.8_BIOS_Pack.zip": {
-      "files": 624,
-      "extracted_size": 3398423896,
-      "download_size": 1889509442,
+    "EmuDeck_2.7EA_BIOS_Pack.zip": {
+      "files": 620,
+      "extracted_size": 3473777719,
+      "download_size": 1939696164,
       "assets": [
-        "EmuDeck_2.3.8_BIOS_Pack.zip"
+        "EmuDeck_2.7EA_BIOS_Pack.zip"
       ]
     },
-    "MiSTer_FPGA_2026-08-29_BIOS_Pack.zip": {
-      "files": 74,
-      "extracted_size": 25209623,
-      "download_size": 16769418,
+    "MiSTer_FPGA_2026-09-29_BIOS_Pack.zip": {
+      "files": 83,
+      "extracted_size": 29989684,
+      "download_size": 18787872,
       "assets": [
-        "MiSTer_FPGA_2026-08-29_BIOS_Pack.zip"
+        "MiSTer_FPGA_2026-09-29_BIOS_Pack.zip"
       ]
     },
-    "ROCKNIX_20260901_BIOS_Pack.zip": {
-      "files": 1741,
-      "extracted_size": 5715015067,
-      "download_size": 3337595108,
+    "ROCKNIX_20261001_BIOS_Pack.zip": {
+      "files": 5804,
+      "extracted_size": 6538611412,
+      "download_size": 4022886600,
       "assets": [
-        "ROCKNIX_20260901_BIOS_Pack.zip.001",
-        "ROCKNIX_20260901_BIOS_Pack.zip.002"
+        "ROCKNIX_20261001_BIOS_Pack.part1of2.zip",
+        "ROCKNIX_20261001_BIOS_Pack.part2of2.zip"
       ]
     },
-    "Recalbox_10.0.8_BIOS_Pack.zip": {
-      "files": 1330,
-      "extracted_size": 3883703707,
-      "download_size": 2096847659,
+    "Recalbox_10.1.1_BIOS_Pack.zip": {
+      "files": 3222,
+      "extracted_size": 4173452215,
+      "download_size": 2367991387,
       "assets": [
-        "Recalbox_10.0.8_BIOS_Pack.zip.001",
-        "Recalbox_10.0.8_BIOS_Pack.zip.002"
+        "Recalbox_10.1.1_BIOS_Pack.part1of2.zip",
+        "Recalbox_10.1.1_BIOS_Pack.part2of2.zip"
       ]
     },
     "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip": {
-      "files": 4525,
-      "extracted_size": 5882727352,
-      "download_size": 3349430771,
+      "files": 8504,
+      "extracted_size": 6407344187,
+      "download_size": 3853113197,
       "assets": [
-        "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip.001",
-        "RetroArch_Lakka_v1.22.2_BIOS_Pack.zip.002"
+        "RetroArch_Lakka_v1.22.2_BIOS_Pack.part1of2.zip",
+        "RetroArch_Lakka_v1.22.2_BIOS_Pack.part2of2.zip"
       ]
     },
     "RetroBat_8.2.1_BIOS_Pack.zip": {
-      "files": 1466,
-      "extracted_size": 4724194892,
-      "download_size": 3105818817,
+      "files": 12399,
+      "extracted_size": 8493976396,
+      "download_size": 6134642511,
       "assets": [
-        "RetroBat_8.2.1_BIOS_Pack.zip.001",
-        "RetroBat_8.2.1_BIOS_Pack.zip.002"
+        "RetroBat_8.2.1_BIOS_Pack.part1of3.zip",
+        "RetroBat_8.2.1_BIOS_Pack.part2of3.zip",
+        "RetroBat_8.2.1_BIOS_Pack.part3of3.zip"
       ]
     },
-    "RetroDECK_0.10.9b_BIOS_Pack.zip": {
-      "files": 3519,
-      "extracted_size": 6627934502,
-      "download_size": 4132852872,
+    "RetroDECK_0.10.10b_BIOS_Pack.zip": {
+      "files": 7793,
+      "extracted_size": 8590201314,
+      "download_size": 5469112852,
       "assets": [
-        "RetroDECK_0.10.9b_BIOS_Pack.zip.001",
-        "RetroDECK_0.10.9b_BIOS_Pack.zip.002",
-        "RetroDECK_0.10.9b_BIOS_Pack.zip.003"
+        "RetroDECK_0.10.10b_BIOS_Pack.part1of3.zip",
+        "RetroDECK_0.10.10b_BIOS_Pack.part2of3.zip",
+        "RetroDECK_0.10.10b_BIOS_Pack.part3of3.zip"
       ]
     },
-    "RetroPie_v1.22.2_BIOS_Pack.zip": {
-      "files": 4525,
-      "extracted_size": 5882738533,
-      "download_size": 3349391169,
+    "RetroPie_4.8.12_BIOS_Pack.zip": {
+      "files": 12533,
+      "extracted_size": 8742145940,
+      "download_size": 5482623403,
       "assets": [
-        "RetroPie_v1.22.2_BIOS_Pack.zip.001",
-        "RetroPie_v1.22.2_BIOS_Pack.zip.002"
+        "RetroPie_4.8.12_BIOS_Pack.part1of3.zip",
+        "RetroPie_4.8.12_BIOS_Pack.part2of3.zip",
+        "RetroPie_4.8.12_BIOS_Pack.part3of3.zip"
       ]
     },
-    "RomM_5.2.0_BIOS_Pack.zip": {
-      "files": 617,
-      "extracted_size": 1370456481,
-      "download_size": 765186250,
+    "RomM_5.3.1_BIOS_Pack.zip": {
+      "files": 1087,
+      "extracted_size": 1581830590,
+      "download_size": 973353236,
       "assets": [
-        "RomM_5.2.0_BIOS_Pack.zip"
+        "RomM_5.3.1_BIOS_Pack.zip"
       ]
     }
   }
