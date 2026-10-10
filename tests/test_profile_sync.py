@@ -1510,6 +1510,29 @@ class TestBuildReport(unittest.TestCase):
         self.assertEqual(entry.status, "GONE")
         self.assertIn("written against HEAD", entry.parts[0].reason)
 
+    def test_a_pin_off_the_tracked_history_is_reported(self):
+        # advancemame's master was rewritten: its pin still answered, from
+        # the forge's orphaned objects, and every ref read ANCHORED.
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        profile_sync.upstream.compare = (
+            lambda repo, base, head, cache_dir, offline=False: CompareResult([], False, True)
+        )
+        report = build_report("test", self._profile(["a.c:2"]), self.dir)
+        self.assertEqual(len(report.orphaned), 1)
+        self.assertGreater(report.needs_review(), 0)
+        self.assertIn("orphaned pin", profile_sync.format_report(report))
+
+    def test_a_frozen_tag_is_off_the_branch_on_purpose(self):
+        self.files[("pinsha", "a.c")] = ["x", "hit"]
+        self.files[("headsha", "a.c")] = ["x", "hit"]
+        self.tag_commits = {"v1.6.0": "pinsha"}
+        profile_sync.upstream.compare = (
+            lambda repo, base, head, cache_dir, offline=False: CompareResult([], False, True)
+        )
+        report = build_report("test", self._versioned("1.6.0"), self.dir)
+        self.assertEqual(report.orphaned, [])
+
     def test_pin_on_the_declared_version_tag_is_flagged(self):
         self.files[("pinsha", "a.c")] = ["x", "hit"]
         self.files[("headsha", "a.c")] = ["x", "hit"]

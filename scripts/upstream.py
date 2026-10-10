@@ -122,6 +122,10 @@ class FileChange:
 class CompareResult:
     files: list[FileChange]
     truncated: bool
+    # The forge reports the two revisions on separate lines of history: the
+    # base is no ancestor of the head. A pin in that state survives only
+    # while the forge keeps the orphaned object (advancemame, 2026-10-05).
+    diverged: bool = False
 
 
 def parse_repo(url: str) -> Repo | None:
@@ -526,7 +530,7 @@ def compare(
     else:
         files = _changes_from_github(payload)
     truncated = bool(payload.get("truncated")) or len(files) >= GITHUB_COMPARE_CAP
-    return CompareResult(files, truncated)
+    return CompareResult(files, truncated, payload.get("status") == "diverged")
 
 
 def find_renamed(result: CompareResult, path: str) -> str | None:

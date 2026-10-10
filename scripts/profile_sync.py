@@ -1047,10 +1047,15 @@ class ProfileReport:
     upstream_pin: str | None = None
     upstream_head: str | None = None
     upstream_origin: str | None = None
+    # Repositories whose pin is no ancestor of the branch the profile
+    # tracks: history was rewritten, or the pin lies on another branch.
+    orphaned: list[str] = field(default_factory=list)
 
     def needs_review(self) -> int:
         counts = self.counts or {}
-        return sum(counts.get(status, 0) for status in REVIEW_STATUSES)
+        return sum(counts.get(status, 0) for status in REVIEW_STATUSES) + len(
+            self.orphaned
+        )
 
 
 def select_repo(profile: dict) -> upstream.Repo | None:
@@ -1422,6 +1427,16 @@ def build_report(
     report.pinned_tag = frozen or detect_pinned_tag(
         profile, views, cache_dir, offline
     )
+    if not report.pinned_tag:
+        # A tag or a held pin is off the tracked branch by design.
+        report.orphaned = [
+            f"{view.repo.slug}: pin {view.pin[:8]} is no ancestor of {view.head[:8]}"
+            for view in views
+            if view.pin != view.head
+            and upstream.compare(
+                view.repo, view.pin, view.head, cache_dir, offline
+            ).diverged
+        ]
 
     # A profile carrying no source_ref still has a pin worth writing and a
     # version worth checking, so the revisions above are resolved first.
@@ -1814,6 +1829,8 @@ def format_report(report: ProfileReport, changed_only: bool = False) -> str:
         lines.append("  pin is HEAD: checked for self-consistency")
     for url in report.unread or []:
         lines.append(f"  not read (unsupported host): {url}")
+    for line in report.orphaned:
+        lines.append(f"  orphaned pin: {line}")
     if report.skipped:
         lines.append(f"  skipped: {report.skipped}")
         return "\n".join(lines)
