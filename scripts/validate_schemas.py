@@ -8,6 +8,7 @@ import json
 import re
 import sys
 import zipfile
+from collections.abc import Callable
 from pathlib import Path, PurePosixPath
 
 import yaml
@@ -123,7 +124,11 @@ def _checks_without_values(path: Path, document: object) -> list[str]:
     return out
 
 
-def _validate_json_files(paths: list[Path], schema_name: str) -> list[str]:
+def _validate_json_files(
+    paths: list[Path],
+    schema_name: str,
+    semantic_check: Callable[[Path, object], list[str]] | None = None,
+) -> list[str]:
     validator = _validator(schema_name)
     out: list[str] = []
     for path in paths:
@@ -132,7 +137,10 @@ def _validate_json_files(paths: list[Path], schema_name: str) -> list[str]:
         except (OSError, json.JSONDecodeError) as exc:
             out.append(f"{path.relative_to(ROOT)}: {exc}")
             continue
-        out.extend(_errors(validator, data, str(path.relative_to(ROOT))))
+        validation_errors = _errors(validator, data, str(path.relative_to(ROOT)))
+        out.extend(validation_errors)
+        if not validation_errors and semantic_check is not None:
+            out.extend(semantic_check(path, data))
     return out
 
 
@@ -407,16 +415,20 @@ def main() -> int:
 
     if not args.source_only:
         database_path = ROOT / "database.json"
-        errors.extend(_validate_json_files([database_path], "database.schema.json"))
-        if database_path.exists():
-            errors.extend(_semantic_database_checks(_load_json(database_path)))
+        errors.extend(
+            _validate_json_files(
+                [database_path],
+                "database.schema.json",
+                lambda _path, database: _semantic_database_checks(database),
+            )
+        )
 
         install_paths = sorted((ROOT / "install").glob("*.json"))
         errors.extend(
-            _validate_json_files(install_paths, "install-manifest.schema.json")
+            _validate_json_files(
+                install_paths, "install-manifest.schema.json", _semantic_install_checks
+            )
         )
-        for path in install_paths:
-            errors.extend(_semantic_install_checks(path, _load_json(path)))
 
         target_paths = sorted((ROOT / "install" / "targets").glob("*.json"))
         errors.extend(
@@ -448,10 +460,12 @@ def main() -> int:
             (api_dir / "systems").glob("*.json")
         )
         errors.extend(
-            _validate_json_files(envelope_paths, "site-api-envelope.schema.json")
+            _validate_json_files(
+                envelope_paths,
+                "site-api-envelope.schema.json",
+                _semantic_envelope_checks,
+            )
         )
-        for path in envelope_paths:
-            errors.extend(_semantic_envelope_checks(path, _load_json(path)))
 
         errors.extend(_validate_pack_manifests(ROOT / "dist"))
 
