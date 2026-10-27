@@ -4,7 +4,7 @@ core_classification: game_engine
 source: "https://github.com/deathkiller/jazz2-native"
 upstream: "https://github.com/deathkiller/jazz2-native"
 profiled_date: "2026-10-04"
-source_commit: "27931b28c5bdfff2d82816d5f2bc2d5e45ced909"
+source_commit: "ff9ddb7be9c84bdcf71b22d9380da06135edeb62"
 core_version: "3.9.0"
 display_name: "Jazz Jackrabbit 2 (Jazz² Resurrection)"
 cores: [jazz2]
@@ -13,20 +13,20 @@ systems: [jazz-jackrabbit-2]
 data_root:
   android:
     path: "Android/data/jazz2.resurrection/files"
-    source_ref: "Sources/Jazz2/ContentResolver.cpp:386-437, Sources/Shared/IO/AndroidAssetStream.cpp:213-216, CMakeLists.txt:35, Sources/nCine/Backends/Android/Bridge/app/build.gradle.in:11"
+    source_ref: "Sources/Jazz2/ContentResolver.cpp:426-477, Sources/Shared/IO/AndroidAssetStream.cpp:213-216, CMakeLists.txt:35, Sources/nCine/Backends/Android/Bridge/app/build.gradle.in:11"
     note: "with all-files access, the first of Games/Jazz² Resurrection, Games/Jazz2 Resurrection, Download/Jazz² Resurrection and Download/Jazz2 Resurrection on shared storage that holds Source, else the first one"
   ios:
     path: "Documents"
-    source_ref: "Sources/Jazz2/ContentResolver.cpp:445-449, 717-718"
+    source_ref: "Sources/Jazz2/ContentResolver.cpp:485-489, Sources/Jazz2/ContentResolver.cpp:757-758"
   windows:
     path: "<folder of Jazz2.exe>"
-    source_ref: "Sources/nCine/MainApplication.cpp:696-715, Sources/Jazz2/ContentResolver.cpp:242-243, 349-350"
+    source_ref: "Sources/nCine/MainApplication.cpp:696-715, Sources/Jazz2/ContentResolver.cpp:243-244, Sources/Jazz2/ContentResolver.cpp:389-390"
   macos:
     path: "~/Library/Application Support/Jazz² Resurrection"
-    source_ref: "Sources/Jazz2/ContentResolver.cpp:450-454, Sources/Shared/IO/FileSystem.cpp:1756-1781, 1713-1720"
+    source_ref: "Sources/Jazz2/ContentResolver.cpp:490-494, Sources/Shared/IO/FileSystem.cpp:1767-1792, Sources/Shared/IO/FileSystem.cpp:1724-1731"
   linux:
     path: "$XDG_DATA_HOME/jazz2, else ~/.local/share/jazz2"
-    source_ref: "Sources/Jazz2/ContentResolver.cpp:455-531, Sources/Shared/IO/FileSystem.cpp:1922-1935, CMakeLists.txt:30, cmake/ncine_options.cmake:408-409"
+    source_ref: "Sources/Jazz2/ContentResolver.cpp:495-571, Sources/Shared/IO/FileSystem.cpp:1933-1946, CMakeLists.txt:30, cmake/ncine_options.cmake:408-409"
     note: "the folder of the executable for a portable copy with Content beside it. $XDG_DATA_HOME/Jazz² Resurrection when it already holds Cache. The AppImage uses the folder of the .AppImage when its Source holds Anims.j2a"
 
 notes: |
@@ -34,18 +34,18 @@ notes: |
   ships its own Content/ tree (animations, metadata, translations) that
   sits next to the executable in a portable copy, or under
   <prefix>/share/<package>/ once installed.
-  ref: Sources/Jazz2/ContentResolver.cpp:195-247 (GetContentPath per
-       platform), Sources/Jazz2/ContentResolver.cpp:455-531 (Unix layouts)
+  ref: Sources/Jazz2/ContentResolver.cpp:196-248 (GetContentPath per
+       platform), Sources/Jazz2/ContentResolver.cpp:495-571 (Unix layouts)
 
   Original Jazz Jackrabbit 2 data is read from Source/ and converted
   on first launch into the engine's own formats under Cache/: Anims.j2a
   and Data.j2d into a package, then every .j2e, .j2l and the tilesets
   the levels name. Music and cinematics are read from Source/ as they
   are.
-  ref: Sources/Jazz2/ContentResolver.cpp:324-353 (GetSourcePath),
-       Sources/Main.cpp:2241-2305 (RefreshCache),
-       Sources/Jazz2/Compatibility/AssetConverter.cpp:332-348,
-       Sources/Jazz2/Compatibility/AssetConverter.cpp:585-712
+  ref: Sources/Jazz2/ContentResolver.cpp:364-393 (GetSourcePath),
+       Sources/Main.cpp:2235-2299 (RefreshCache),
+       Sources/Jazz2/Compatibility/AssetConverter.cpp:477-493,
+       Sources/Jazz2/Compatibility/AssetConverter.cpp:642-768
 
   Content/ is the engine runtime, shipped with the release package.
   Source/ holds the user's own copy of the 1998 game data. Without
@@ -53,14 +53,14 @@ notes: |
   cache the engine starts but is not playable. A Content/ tree prepared
   by the AssetPacker tool carries Prebaked.pak: the conversion is then
   skipped and Source/ is not read.
-  ref: Sources/Main.cpp:2153-2159,
-       Sources/Jazz2/ContentResolver.cpp:698-706
+  ref: Sources/Main.cpp:2147-2153,
+       Sources/Jazz2/ContentResolver.cpp:738-746
 
   On Android, Apple, Unix, UWP, Switch and Vita a Content/ directory
   next to Cache/ (next to Source/ on iOS) is searched before the shipped
   one, its .pak files first.
-  ref: Sources/Jazz2/ContentResolver.cpp:708-747,
-       Sources/Jazz2/ContentResolver.cpp:813-860
+  ref: Sources/Jazz2/ContentResolver.cpp:748-787,
+       Sources/Jazz2/ContentResolver.cpp:853-902
 
   The libretro build looks for Content/ next to the loaded file, in the
   core assets directory or in <system>/jazz2/, and for the original
@@ -80,7 +80,7 @@ files:
     standalone_path: "Content/Animations/"
     mode: libretro
     required: true
-    source_ref: "Sources/Jazz2/ContentResolver.cpp:1352, Sources/Jazz2/ContentResolver.cpp:1501, Sources/Jazz2/ContentResolver.cpp:3274-3275"
+    source_ref: "Sources/Jazz2/ContentResolver.cpp:1394, Sources/Jazz2/ContentResolver.cpp:1543, Sources/Jazz2/ContentResolver.cpp:3371-3372"
     note: "Native graphics, sounds and the UI fonts, opened through OpenContentFile. No libretro build is published with the release, so the tree is placed by hand."
 
   - name: "Animations/"
@@ -91,7 +91,7 @@ files:
     mode: standalone
     bundled: true
     required: true
-    source_ref: "Sources/Jazz2/ContentResolver.cpp:1352, Sources/Jazz2/ContentResolver.cpp:1501, Sources/Jazz2/ContentResolver.cpp:3274-3275"
+    source_ref: "Sources/Jazz2/ContentResolver.cpp:1394, Sources/Jazz2/ContentResolver.cpp:1543, Sources/Jazz2/ContentResolver.cpp:3371-3372"
     note: "Native graphics, sounds and the UI fonts, opened through OpenContentFile. Shipped beside the executable in the 3.8.0 Windows and Linux zips."
 
   - name: "Metadata/"
@@ -101,7 +101,7 @@ files:
     standalone_path: "Content/Metadata/"
     mode: libretro
     required: true
-    source_ref: "Sources/Jazz2/ContentResolver.cpp:1099"
+    source_ref: "Sources/Jazz2/ContentResolver.cpp:1141"
     note: "Actor .res descriptors (Common, Enemy, Player, UI, Boss, ...). No libretro build is published with the release, so the tree is placed by hand."
 
   - name: "Metadata/"
@@ -112,7 +112,7 @@ files:
     mode: standalone
     bundled: true
     required: true
-    source_ref: "Sources/Jazz2/ContentResolver.cpp:1099"
+    source_ref: "Sources/Jazz2/ContentResolver.cpp:1141"
     note: "Actor .res descriptors (Common, Enemy, Player, UI, Boss, ...). Shipped beside the executable in the 3.8.0 Windows and Linux zips."
 
   - name: "Translations/"
@@ -122,7 +122,7 @@ files:
     standalone_path: "Content/Translations/"
     mode: libretro
     required: false
-    source_ref: "Sources/Main.cpp:2029-2037, Sources/Jazz2/UI/Menu/LanguageSelectSection.cpp:83-95"
+    source_ref: "Sources/Main.cpp:2023-2031, Sources/Jazz2/UI/Menu/LanguageSelectSection.cpp:83-95"
     note: "Language .mo bundles, searched in the user Content/Translations/ and in Cache/Translations/ first. Built-in English is used when none is loaded. No libretro build is published with the release, so the tree is placed by hand."
 
   - name: "Translations/"
@@ -133,7 +133,7 @@ files:
     mode: standalone
     bundled: true
     required: false
-    source_ref: "Sources/Main.cpp:2029-2037, Sources/Jazz2/UI/Menu/LanguageSelectSection.cpp:83-95"
+    source_ref: "Sources/Main.cpp:2023-2031, Sources/Jazz2/UI/Menu/LanguageSelectSection.cpp:83-95"
     note: "Language .mo bundles, searched in the user Content/Translations/ and in Cache/Translations/ first. Built-in English is used when none is loaded. Shipped beside the executable in the 3.8.0 Windows and Linux zips."
 
   # ================================================================
@@ -147,7 +147,7 @@ files:
     path: "jazz2/Source/Anims.j2a"
     standalone_path: "Source/Anims.j2a"
     required: true
-    source_ref: "Sources/Main.cpp:2241-2257, Sources/Jazz2/Compatibility/AssetConverter.cpp:336-339"
+    source_ref: "Sources/Main.cpp:2235-2251, Sources/Jazz2/Compatibility/AssetConverter.cpp:481-484"
     note: "Main animation archive. The cache cannot be created without it and the game is not flagged playable."
 
   - name: "AnimsSw.j2a"
@@ -156,7 +156,7 @@ files:
     path: "jazz2/Source/AnimsSw.j2a"
     standalone_path: "Source/AnimsSw.j2a"
     required: false
-    source_ref: "Sources/Main.cpp:2244-2246"
+    source_ref: "Sources/Main.cpp:2238-2240"
     note: "Animation archive of the shareware demo, read when Anims.j2a is absent."
 
   - name: "Data.j2d"
@@ -165,7 +165,7 @@ files:
     path: "jazz2/Source/Data.j2d"
     standalone_path: "Source/Data.j2d"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:341-344"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:486-489"
     note: "Converted into the cache package when present."
 
   - name: "Plus.j2d"
@@ -174,12 +174,12 @@ files:
     path: "jazz2/Source/Plus.j2d"
     standalone_path: "Source/Plus.j2d"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:271-316, 512-515, Sources/Jazz2/Compatibility/JJ2Level.cpp:1072"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:416-461, Sources/Jazz2/Compatibility/AssetConverter.cpp:614-617, Sources/Jazz2/Compatibility/JJ2Level.cpp:1115"
     note: "Data file of a JJ2+ installation. Read once a converted level names one of its TextureBG.<n> textures. Without it a texture is made up for that layer."
 
   # Episode descriptors (.j2e) and level files (.j2l) are optional per
   # episode. Every one present in Source/ is converted.
-  # ref: Sources/Jazz2/Compatibility/AssetConverter.cpp:585-712
+  # ref: Sources/Jazz2/Compatibility/AssetConverter.cpp:642-768
 
   - name: "prince.j2e"
     category: game_data
@@ -187,7 +187,7 @@ files:
     path: "jazz2/Source/prince.j2e"
     standalone_path: "Source/prince.j2e"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:364-371, 490-492, 592-621"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:44-47, Sources/Jazz2/Compatibility/AssetConverter.cpp:518-551, Sources/Jazz2/Compatibility/AssetConverter.cpp:592-594, Sources/Jazz2/Compatibility/AssetConverter.cpp:642-671"
     note: "First episode of the chain prince, rescue, flash, monk."
 
   - name: "rescue.j2e"
@@ -196,7 +196,7 @@ files:
     path: "jazz2/Source/rescue.j2e"
     standalone_path: "Source/rescue.j2e"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:373-379, 493-494, 592-621"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:44-47, Sources/Jazz2/Compatibility/AssetConverter.cpp:518-551, Sources/Jazz2/Compatibility/AssetConverter.cpp:595-596, Sources/Jazz2/Compatibility/AssetConverter.cpp:642-671"
     note: "Second episode of the chain."
 
   - name: "flash.j2e"
@@ -205,7 +205,7 @@ files:
     path: "jazz2/Source/flash.j2e"
     standalone_path: "Source/flash.j2e"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:381-388, 495-496, 592-621"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:518-545, Sources/Jazz2/Compatibility/AssetConverter.cpp:597-598, Sources/Jazz2/Compatibility/AssetConverter.cpp:642-671"
     note: "Third episode of the chain."
 
   - name: "monk.j2e"
@@ -214,7 +214,7 @@ files:
     path: "jazz2/Source/monk.j2e"
     standalone_path: "Source/monk.j2e"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:390-395, 497-498, 592-621"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:518-545, Sources/Jazz2/Compatibility/AssetConverter.cpp:599-600, Sources/Jazz2/Compatibility/AssetConverter.cpp:642-671"
     note: "Fourth episode of the chain."
 
   - name: "share.j2e"
@@ -223,7 +223,7 @@ files:
     path: "jazz2/Source/share.j2e"
     standalone_path: "Source/share.j2e"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:397-399, 470-471, 592-621"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:518-545, Sources/Jazz2/Compatibility/AssetConverter.cpp:572-573, Sources/Jazz2/Compatibility/AssetConverter.cpp:642-671"
     note: "Shareware Demo episode."
 
   - name: "xmas98.j2e"
@@ -232,7 +232,7 @@ files:
     path: "jazz2/Source/xmas98.j2e"
     standalone_path: "Source/xmas98.j2e"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:472-473, 597, 605-606, 619"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:574-575, Sources/Jazz2/Compatibility/AssetConverter.cpp:647, Sources/Jazz2/Compatibility/AssetConverter.cpp:655-656, Sources/Jazz2/Compatibility/AssetConverter.cpp:669"
     note: "Holiday Hare '98. Stored under the name xmas99 and skipped when xmas99.j2e is present."
 
   - name: "xmas99.j2e"
@@ -241,7 +241,7 @@ files:
     path: "jazz2/Source/xmas99.j2e"
     standalone_path: "Source/xmas99.j2e"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:362, 401-403, 474-475"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:507, Sources/Jazz2/Compatibility/AssetConverter.cpp:518-545, Sources/Jazz2/Compatibility/AssetConverter.cpp:576-577"
     note: "The Christmas Chronicles."
 
   - name: "secretf.j2e"
@@ -250,7 +250,7 @@ files:
     path: "jazz2/Source/secretf.j2e"
     standalone_path: "Source/secretf.j2e"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:405-413, 476-477, 592-621"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:518-545, Sources/Jazz2/Compatibility/AssetConverter.cpp:578-579, Sources/Jazz2/Compatibility/AssetConverter.cpp:642-671"
     note: "The Secret Files episode."
 
   - name: "home.j2e"
@@ -259,12 +259,12 @@ files:
     path: "jazz2/Source/home.j2e"
     standalone_path: "Source/home.j2e"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:608-614"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:658-664"
     note: "Entry that lists custom levels."
 
   # Levels of the Shareware Demo. Every .j2l present in Source/ is
   # converted, whatever its name.
-  # ref: Sources/Jazz2/Compatibility/AssetConverter.cpp:622-708
+  # ref: Sources/Jazz2/Compatibility/AssetConverter.cpp:672-768
 
   - name: "share1.j2l"
     category: game_data
@@ -272,8 +272,8 @@ files:
     path: "jazz2/Source/share1.j2l"
     standalone_path: "Source/share1.j2l"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:397, 622-691"
-    note: "First level of share.j2e, stored as share/01_share1. Its exit names share2."
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:518-556, Sources/Jazz2/Compatibility/AssetConverter.cpp:672-698, Sources/Jazz2/Compatibility/AssetConverter.cpp:721-735"
+    note: "First level of share.j2e, stored as share/share1. Its exit names share2."
 
   - name: "share2.j2l"
     category: game_data
@@ -281,7 +281,7 @@ files:
     path: "jazz2/Source/share2.j2l"
     standalone_path: "Source/share2.j2l"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:398, 622-691"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:518-556, Sources/Jazz2/Compatibility/AssetConverter.cpp:672-698, Sources/Jazz2/Compatibility/AssetConverter.cpp:721-735"
     note: "Second level of the Shareware Demo episode. Its exit names share3."
 
   - name: "share3.j2l"
@@ -290,7 +290,7 @@ files:
     path: "jazz2/Source/share3.j2l"
     standalone_path: "Source/share3.j2l"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:399, 622-691"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:518-556, Sources/Jazz2/Compatibility/AssetConverter.cpp:672-698, Sources/Jazz2/Compatibility/AssetConverter.cpp:721-735"
     note: "Third level of the Shareware Demo episode. Its exit ends the episode."
 
   - name: "sharectf.j2l"
@@ -299,7 +299,7 @@ files:
     path: "jazz2/Source/sharectf.j2l"
     standalone_path: "Source/sharectf.j2l"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:56, 622-691"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:76, Sources/Jazz2/Compatibility/AssetConverter.cpp:553-556, Sources/Jazz2/Compatibility/AssetConverter.cpp:672-698, Sources/Jazz2/Compatibility/AssetConverter.cpp:721-735"
     note: "Capture the flag level of the Shareware Demo, stored under unknown/."
 
   - name: "sharect2.j2l"
@@ -308,7 +308,7 @@ files:
     path: "jazz2/Source/sharect2.j2l"
     standalone_path: "Source/sharect2.j2l"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:56, 622-691"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:76, Sources/Jazz2/Compatibility/AssetConverter.cpp:553-556, Sources/Jazz2/Compatibility/AssetConverter.cpp:672-698, Sources/Jazz2/Compatibility/AssetConverter.cpp:721-735"
     note: "Capture the flag level of the Shareware Demo, stored under unknown/."
 
   - name: "sharetrs.j2l"
@@ -317,14 +317,14 @@ files:
     path: "jazz2/Source/sharetrs.j2l"
     standalone_path: "Source/sharetrs.j2l"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:56, 622-691"
+    source_ref: "Sources/Jazz2/Compatibility/AssetConverter.cpp:76, Sources/Jazz2/Compatibility/AssetConverter.cpp:553-556, Sources/Jazz2/Compatibility/AssetConverter.cpp:672-698, Sources/Jazz2/Compatibility/AssetConverter.cpp:721-735"
     note: "Treasure hunt level of the Shareware Demo, stored under unknown/."
 
   # Tilesets. Only those a converted level names are converted. The name
   # is read from the level, lowercased and looked up in Source/ without
   # regard to case.
-  # ref: Sources/Jazz2/Compatibility/JJ2Level.cpp:153, 818-821,
-  #      Sources/Jazz2/Compatibility/AssetConverter.cpp:684, 771-792
+  # ref: Sources/Jazz2/Compatibility/JJ2Level.cpp:178, 861-864,
+  #      Sources/Jazz2/Compatibility/AssetConverter.cpp:749, 817-844
 
   - name: "labrat1n.j2t"
     category: game_data
@@ -332,7 +332,7 @@ files:
     path: "jazz2/Source/labrat1n.j2t"
     standalone_path: "Source/labrat1n.j2t"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:153, Sources/Jazz2/Compatibility/JJ2Level.cpp:818-821, Sources/Jazz2/Compatibility/AssetConverter.cpp:684, 771-792"
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:178, Sources/Jazz2/Compatibility/JJ2Level.cpp:861-864, Sources/Jazz2/Compatibility/AssetConverter.cpp:749, Sources/Jazz2/Compatibility/AssetConverter.cpp:817-844"
     note: "Tileset named by share1.j2l, sharect2.j2l and sharetrs.j2l."
 
   - name: "psych2.j2t"
@@ -341,7 +341,7 @@ files:
     path: "jazz2/Source/psych2.j2t"
     standalone_path: "Source/psych2.j2t"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:153, Sources/Jazz2/Compatibility/JJ2Level.cpp:818-821, Sources/Jazz2/Compatibility/AssetConverter.cpp:684, 771-792"
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:178, Sources/Jazz2/Compatibility/JJ2Level.cpp:861-864, Sources/Jazz2/Compatibility/AssetConverter.cpp:749, Sources/Jazz2/Compatibility/AssetConverter.cpp:817-844"
     note: "Tileset named by share2.j2l."
 
   - name: "diam2.j2t"
@@ -350,11 +350,11 @@ files:
     path: "jazz2/Source/diam2.j2t"
     standalone_path: "Source/diam2.j2t"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:153, Sources/Jazz2/Compatibility/JJ2Level.cpp:818-821, Sources/Jazz2/Compatibility/AssetConverter.cpp:684, 771-792"
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:178, Sources/Jazz2/Compatibility/JJ2Level.cpp:861-864, Sources/Jazz2/Compatibility/AssetConverter.cpp:749, Sources/Jazz2/Compatibility/AssetConverter.cpp:817-844"
     note: "Tileset named by share3.j2l and sharectf.j2l."
 
   # Music, read from the user Content/Music/, then Content/Music/, then Source/
-  # ref: Sources/Jazz2/ContentResolver.cpp:3215-3231
+  # ref: Sources/Jazz2/ContentResolver.cpp:3307-3328
 
   - name: "menu.j2b"
     category: game_data
@@ -362,7 +362,7 @@ files:
     path: "jazz2/Source/menu.j2b"
     standalone_path: "Source/menu.j2b"
     required: false
-    source_ref: "Sources/Jazz2/UI/Menu/MainMenu.cpp:514-516, Sources/Jazz2/Compatibility/AssetConverter.cpp:731-734"
+    source_ref: "Sources/Jazz2/UI/Menu/MainMenu.cpp:514-516, Sources/Jazz2/Compatibility/AssetConverter.cpp:777-780"
     note: "Main menu music."
 
   - name: "bonus2.j2b"
@@ -371,7 +371,7 @@ files:
     path: "jazz2/Source/bonus2.j2b"
     standalone_path: "Source/bonus2.j2b"
     required: false
-    source_ref: "Sources/Jazz2/UI/Menu/MainMenu.cpp:508-509, Sources/Jazz2/Compatibility/AssetConverter.cpp:731-734"
+    source_ref: "Sources/Jazz2/UI/Menu/MainMenu.cpp:508-509, Sources/Jazz2/Compatibility/AssetConverter.cpp:777-780"
     note: "Menu music of the reforged main menu, picked at random with bonus3.j2b."
 
   - name: "bonus3.j2b"
@@ -380,7 +380,7 @@ files:
     path: "jazz2/Source/bonus3.j2b"
     standalone_path: "Source/bonus3.j2b"
     required: false
-    source_ref: "Sources/Jazz2/UI/Menu/MainMenu.cpp:508-509, Sources/Jazz2/Compatibility/AssetConverter.cpp:731-734"
+    source_ref: "Sources/Jazz2/UI/Menu/MainMenu.cpp:508-509, Sources/Jazz2/Compatibility/AssetConverter.cpp:777-780"
     note: "Menu music of the reforged main menu, picked at random with bonus2.j2b."
 
   - name: "intro.j2b"
@@ -389,7 +389,7 @@ files:
     path: "jazz2/Source/intro.j2b"
     standalone_path: "Source/intro.j2b"
     required: false
-    source_ref: "Sources/Jazz2/UI/Cinematics.cpp:549, Sources/Main.cpp:615, Sources/Jazz2/Compatibility/AssetConverter.cpp:731-734"
+    source_ref: "Sources/Jazz2/UI/Cinematics.cpp:549, Sources/Main.cpp:615, Sources/Jazz2/Compatibility/AssetConverter.cpp:777-780"
     note: "Music of the intro cinematic."
 
   - name: "ending.j2b"
@@ -398,12 +398,12 @@ files:
     path: "jazz2/Source/ending.j2b"
     standalone_path: "Source/ending.j2b"
     required: false
-    source_ref: "Sources/Jazz2/UI/Cinematics.cpp:549, Sources/Main.cpp:1098, Sources/Jazz2/Compatibility/AssetConverter.cpp:731-734"
+    source_ref: "Sources/Jazz2/UI/Cinematics.cpp:549, Sources/Main.cpp:1098, Sources/Jazz2/Compatibility/AssetConverter.cpp:777-780"
     note: "Music of the ending cinematic."
 
   # Level music. The name is read from the level, lowercased and given
   # the .j2b extension when it has none.
-  # ref: Sources/Jazz2/Compatibility/JJ2Level.cpp:157, 828-834
+  # ref: Sources/Jazz2/Compatibility/JJ2Level.cpp:182, 871-877
 
   - name: "labrat.j2b"
     category: game_data
@@ -411,7 +411,7 @@ files:
     path: "jazz2/Source/labrat.j2b"
     standalone_path: "Source/labrat.j2b"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:157, Sources/Jazz2/Compatibility/JJ2Level.cpp:828-834, Sources/Jazz2/LevelHandler.cpp:700-706, Sources/Jazz2/ContentResolver.cpp:3215-3225"
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:182, Sources/Jazz2/Compatibility/JJ2Level.cpp:871-877, Sources/Jazz2/LevelHandler.cpp:705-711, Sources/Jazz2/ContentResolver.cpp:3307-3320"
     note: "Music named by share1.j2l, sharect2.j2l and sharetrs.j2l."
 
   - name: "funkyg.j2b"
@@ -420,7 +420,7 @@ files:
     path: "jazz2/Source/funkyg.j2b"
     standalone_path: "Source/funkyg.j2b"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:157, Sources/Jazz2/Compatibility/JJ2Level.cpp:828-834, Sources/Jazz2/LevelHandler.cpp:700-706, Sources/Jazz2/ContentResolver.cpp:3215-3225"
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:182, Sources/Jazz2/Compatibility/JJ2Level.cpp:871-877, Sources/Jazz2/LevelHandler.cpp:705-711, Sources/Jazz2/ContentResolver.cpp:3307-3320"
     note: "Music named by share2.j2l."
 
   - name: "diamond.j2b"
@@ -429,7 +429,7 @@ files:
     path: "jazz2/Source/diamond.j2b"
     standalone_path: "Source/diamond.j2b"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:157, Sources/Jazz2/Compatibility/JJ2Level.cpp:828-834, Sources/Jazz2/LevelHandler.cpp:700-706, Sources/Jazz2/ContentResolver.cpp:3215-3225"
+    source_ref: "Sources/Jazz2/Compatibility/JJ2Level.cpp:182, Sources/Jazz2/Compatibility/JJ2Level.cpp:871-877, Sources/Jazz2/LevelHandler.cpp:705-711, Sources/Jazz2/ContentResolver.cpp:3307-3320"
     note: "Music named by share3.j2l and sharectf.j2l."
 
   - name: "boss2.j2b"
@@ -438,7 +438,7 @@ files:
     path: "jazz2/Source/boss2.j2b"
     standalone_path: "Source/boss2.j2b"
     required: false
-    source_ref: "Sources/Jazz2/Compatibility/EventConverter.cpp:413-423, Sources/Jazz2/Compatibility/AssetConverter.cpp:697-700, Sources/Jazz2/LevelHandler.cpp:1564-1567, Sources/Jazz2/ContentResolver.cpp:3215-3225"
+    source_ref: "Sources/Jazz2/Compatibility/EventConverter.cpp:413-423, Sources/Jazz2/Compatibility/AssetConverter.cpp:762-765, Sources/Jazz2/LevelHandler.cpp:1599-1602, Sources/Jazz2/ContentResolver.cpp:3307-3320"
     note: "Boss music. The boss activation event carries a music index that is converted to boss1.j2b or boss2.j2b and recorded as music the level uses. share3.j2l carries index 1."
 
   # Cinematics, read from Content/Cinematics/ then from Source/

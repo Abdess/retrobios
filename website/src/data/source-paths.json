@@ -2793,7 +2793,7 @@
   "main.cpp",
   "resource.cpp"
  ],
- "github.com/deathkiller/jazz2-native@27931b28c5bdfff2d82816d5f2bc2d5e45ced909": [
+ "github.com/deathkiller/jazz2-native@ff9ddb7be9c84bdcf71b22d9380da06135edeb62": [
   "CMakeLists.txt",
   "Sources/Jazz2/Compatibility/AssetConverter.cpp",
   "Sources/Jazz2/Compatibility/EventConverter.cpp",
