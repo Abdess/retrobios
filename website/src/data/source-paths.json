@@ -3318,7 +3318,7 @@
   "src/ui/storage.rs",
   "src/ui/video.rs"
  ],
- "github.com/habib256/pom2@886390a806714a57f0431f0ce8ef9527b4805620": [
+ "github.com/habib256/pom2@dbf7673d0ca938884419335f3d88e9029c15494f": [
   "packaging/bundle.manifest",
   "packaging/fujinet/stage.py",
   "src/AppleParallelCard.cpp",
@@ -3359,6 +3359,7 @@
   "src/TranswarpCard.h",
   "src/VidexVideotermCard.cpp",
   "src/VirtualIISoundCatalog.h",
+  "src/VirtualIISoundLoader.h",
   "src/WorkstationCard.cpp",
   "src/main.cpp",
   "src/pom2_headless.cpp",

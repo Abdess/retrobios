@@ -4,7 +4,7 @@ core_classification: other
 source: "https://github.com/habib256/pom2"
 upstream: "https://github.com/habib256/pom2"
 profiled_date: "2026-10-23"
-source_commit: "886390a806714a57f0431f0ce8ef9527b4805620"
+source_commit: "dbf7673d0ca938884419335f3d88e9029c15494f"
 core_version: "v0.9.9"
 display_name: "Apple - Apple II (POM2)"
 cores:
@@ -79,8 +79,8 @@ notes: |
   lists every name in probe order with the size the loader enforces,
   what a missing dump costs (degraded, card unavailable, unused) and,
   where POM2 vouches for a dump, its CRC32. The panel hashes each present
-  file (src/RomStatus_ImGui.cpp:185-212, 415) and lists the Virtual ][
-  recordings with a decode check (src/RomStatus_ImGui.cpp:323-391).
+  file (src/RomStatus_ImGui.cpp:176-203, 404) and lists the Virtual ][
+  recordings with a decode check (src/RomStatus_ImGui.cpp:314-380).
 
   Help > Download missing ROMs (src/RomFetch.cpp:68-301) fetches 45 files,
   43 distinct dumps, with curl from raw.githubusercontent.com/Abdess/retrobios,
@@ -102,18 +102,23 @@ notes: |
 
   The floppy mechanical sounds are MAME's samples/floppy set, read from
   roms/floppy_samples/ as two banks of ten WAV files prefixed 525_ and 35_
-  (src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364). A
+  (src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364). A
   missing sample is logged and the drive stays silent. A second bank, the
   Virtual ][ recordings, is read from the folder picked with Import
   sounds in the audio mixer, stored as mechanical_sound_path
-  (src/MainWindow_AudioPanels.cpp:349-378), then from roms/virtual_ii_sons/
-  (src/MainWindow.cpp:365-385): eight drive and switch takes under
-  lecteur/ and interface/ (src/VirtualIISoundCatalog.h:15-24) and one
-  printer loop under imprimante/ (src/VirtualIISoundCatalog.h:26-27). The
+  (src/MainWindow_AudioPanels.cpp:349-381), then from roms/virtual_ii_sons/,
+  and on macOS from Virtual ][.app/Contents/Resources/ under /Applications
+  and ~/Applications (src/MainWindow.cpp:365-381,
+  src/VirtualIISoundCatalog.h:34-45): eight drive and switch takes under
+  lecteur/ and interface/ (src/VirtualIISoundCatalog.h:19-28) and one
+  printer loop under imprimante/ (src/VirtualIISoundCatalog.h:30-31). The
   bank is selectable once Disk Rotation, Move arm, Disk Insertion and Disk
-  Removal have loaded (src/FloppySoundDevice.cpp:196-232). An .aiff name is
-  retried as .wav (src/FloppySoundDevice.cpp:173-194). The packaging
-  manifest keeps the directory out of release packages
+  Removal have loaded (src/FloppySoundDevice.cpp:192-228). Each take is
+  tried under its path, then an .aiff path as .wav, then the bare file
+  name, then the bare name with .aiff turned into .wav or .wav into .raw,
+  so a Virtual ][ Contents/Resources/ folder is read as it is
+  (src/VirtualIISoundCatalog.h:47-66, src/FloppySoundDevice.cpp:176-190).
+  The packaging manifest keeps the directory out of release packages
   (packaging/bundle.manifest:92-95).
 
   The nine takes come from Contents/Resources/ of Virtual ][.app in
@@ -126,8 +131,12 @@ notes: |
   files: every playWithSoundFile:sampleRate:sampleSize: call passes 44100.0
   and 16, and SoundRepeater fills an lpcm AudioStreamBasicDescription with
   one channel, the signed-integer flag for 16 bits and no big-endian flag.
-  POM2 decodes all nine through miniaudio into mono float at the file's own
-  rate (src/FloppySoundDevice.cpp:134-165, src/PrinterSoundDevice.cpp:79-101).
+  POM2 decodes the takes through miniaudio into mono float at the file's
+  own rate. An .aiff whose FORM chunk declares more bytes than the file
+  holds is rejected. A file miniaudio refuses is read as mono signed 16-bit
+  little-endian 44100 Hz when it ends in .raw, and through AudioToolbox
+  on macOS when it ends in .aiff (src/FloppySoundDevice.cpp:135-168,
+  src/PrinterSoundDevice.cpp:80-103, src/VirtualIISoundLoader.h:17-104).
 
   The screen sits in a Monitor II bezel, pic/retro/monitor/monitor2.png,
   on by default (src/MainWindow_Screen.cpp:371-372), and the Drives window
@@ -383,7 +392,7 @@ files:
     sha256: "d4d29771658372c6ab5d18ff3bdab6b3b2b02b8de30ed6b021efb8a415192432"
     sha1: "c81c1bbf237e70f8c3e5eef3c8fd5bd9b9f54d1e"
     validation: [size, sha256]
-    source_ref: "src/CharRomCatalog.cpp:81-84, src/CharRomCatalog.cpp:158-163, src/RomFetch.cpp:179-184, src/RomStatus_ImGui.cpp:282, src/Memory.cpp:343-376"
+    source_ref: "src/CharRomCatalog.cpp:81-84, src/CharRomCatalog.cpp:158-163, src/RomFetch.cpp:179-184, src/RomStatus_ImGui.cpp:273, src/Memory.cpp:343-376"
     note: "Locale picker entries select bank 0 or bank 1. Loaded whole, both banks stay live and annunciator 2 picks the set."
   - name: "apple2e_char_ft_blockascii.rom"
     path: "roms/apple2e_char_ft_blockascii.rom"
@@ -395,7 +404,7 @@ files:
     sha256: "c69c8e1eb26923c5df03d3507fdf86c5f768283a924a5fffdd80377cf2339321"
     sha1: "f79815457437e50404f4f537d8aabe34bff3a220"
     validation: [size, sha256]
-    source_ref: "src/CharRomCatalog.cpp:85-86, src/RomFetch.cpp:185-189, src/RomStatus_ImGui.cpp:282, src/Memory.cpp:343-376"
+    source_ref: "src/CharRomCatalog.cpp:85-86, src/RomFetch.cpp:185-189, src/RomStatus_ImGui.cpp:273, src/Memory.cpp:343-376"
     note: "Locale picker entry loaded dual-bank: annunciator 2 flips between the text set and the block glyphs."
   - name: "apple2e_char_us_mt_iigs.rom"
     path: "roms/apple2e_char_us_mt_iigs.rom"
@@ -407,7 +416,7 @@ files:
     sha1: "66eca035fd18024fceed4c30c32a4185792cb3ea"
     sha256: "097cd3500afe6c15d710d2e96af539a8e5065853986289294aac08ee7a1f070a"
     validation: [size]
-    source_ref: "src/CharRomCatalog.cpp:87-88, src/CharRomCatalog.cpp:165-180, src/RomStatus_ImGui.cpp:282, src/Memory.cpp:343-376"
+    source_ref: "src/CharRomCatalog.cpp:87-88, src/CharRomCatalog.cpp:165-180, src/RomStatus_ImGui.cpp:273, src/Memory.cpp:343-376"
     note: "Locale picker entry. Shipped in roms/. The fetcher does not serve it, so only the size is checked."
   - name: "apple2e_char_reactive.rom"
     path: "roms/apple2e_char_reactive.rom"
@@ -419,7 +428,7 @@ files:
     sha1: "02075efbfdb99af48360561323404a921b91a676"
     sha256: "49716e2804b119810c22ab668ae37cebadf0cd53bc8911b5f17c4a62a3acb514"
     validation: [size]
-    source_ref: "src/CharRomCatalog.cpp:89-90, src/CharRomCatalog.cpp:165-180, src/RomStatus_ImGui.cpp:282, src/Memory.cpp:343-376"
+    source_ref: "src/CharRomCatalog.cpp:89-90, src/CharRomCatalog.cpp:165-180, src/RomStatus_ImGui.cpp:273, src/Memory.cpp:343-376"
     note: "Locale picker entry. Shipped in roms/. The fetcher does not serve it, so only the size is checked."
   - name: "Videx Lower Case Chip ROM.bin"
     path: "roms/Videx Lower Case Chip ROM.bin"
@@ -431,7 +440,7 @@ files:
     sha256: "6a516bcd96382597af7a498fb1da7547490c830db0f9d22d541fb065b9cd048b"
     sha1: "447874fe0850c8add3fd5b13fa98f6648fe6f999"
     validation: [size, crc32, sha256]
-    source_ref: "src/CharRomCatalog.cpp:44-45, src/RomCatalog.h:208-214, src/RomFetch.cpp:190-194, src/RomStatus_ImGui.cpp:415"
+    source_ref: "src/CharRomCatalog.cpp:44-45, src/RomCatalog.h:208-214, src/RomFetch.cpp:190-194, src/RomStatus_ImGui.cpp:404"
     note: "Locale picker entry for the ][ and ][+ profiles. Without it the picker keeps the stock uppercase set."
   - name: "disk2.rom"
     path: "roms/disk2.rom"
@@ -688,7 +697,7 @@ files:
     sha256: "084587835c1d2c92f5708a9745fdd43ba32136fcdb861a12ee7d690de22dc172"
     sha1: "440c3f84176c7b9f542da0b6ddf4fb13ec326c46"
     validation: [size, crc32, sha256]
-    source_ref: "src/RomCatalog.h:105-111, src/RomStatus_ImGui.cpp:188-206, src/RomFetch.cpp:287-290"
+    source_ref: "src/RomCatalog.h:105-111, src/RomStatus_ImGui.cpp:179-197, src/RomFetch.cpp:287-290"
     note: "No card reads it. The ROM Status panel and the fetch gate check it."
   - name: "342-0326-a.f12"
     path: "roms/342-0326-a.f12"
@@ -700,7 +709,7 @@ files:
     sha256: "4ae7ff693a486b155a70a8833047b3d4363464dace6760ed64bfb68db233ed4b"
     sha1: "806a602195c18ffec637c03b6bb3405188b0dc1e"
     validation: [size, crc32, sha256]
-    source_ref: "src/RomCatalog.h:112-118, src/RomStatus_ImGui.cpp:188-206, src/RomStatus_ImGui.cpp:415, src/RomFetch.cpp:295-298"
+    source_ref: "src/RomCatalog.h:112-118, src/RomStatus_ImGui.cpp:179-197, src/RomStatus_ImGui.cpp:404, src/RomFetch.cpp:295-298"
     note: "Host keys are mapped directly, no keyboard decode ROM is emulated. The ROM Status panel and the fetch gate check the file only."
   - name: "525_seek_2ms.wav"
     path: "roms/floppy_samples/525_seek_2ms.wav"
@@ -710,7 +719,7 @@ files:
     bundled: true
     size: 5336
     sha1: "2d046a880476218685ed738fe8c8381962afd74a"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
     note: "One of ten samples per drive bank. A missing sample is logged and that sound stays silent."
   - name: "525_seek_6ms.wav"
     path: "roms/floppy_samples/525_seek_6ms.wav"
@@ -720,7 +729,7 @@ files:
     bundled: true
     size: 14860
     sha1: "6f698055fa6e9da6c5ae3fd6fb05de76b92a45a9"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "525_seek_12ms.wav"
     path: "roms/floppy_samples/525_seek_12ms.wav"
     description: "MAME floppy sample, 5.25 inch drive, 12 ms head seek"
@@ -729,7 +738,7 @@ files:
     bundled: true
     size: 22764
     sha1: "fbbbb5e8724c076d194e66a4443d299d54a8efd6"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "525_seek_20ms.wav"
     path: "roms/floppy_samples/525_seek_20ms.wav"
     description: "MAME floppy sample, 5.25 inch drive, 20 ms head seek"
@@ -738,7 +747,7 @@ files:
     bundled: true
     size: 30060
     sha1: "b6cd14944454c743861196edb4fcab1cc9b586d4"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "525_spin_empty.wav"
     path: "roms/floppy_samples/525_spin_empty.wav"
     description: "MAME floppy sample, 5.25 inch drive, motor running, no disk"
@@ -747,7 +756,7 @@ files:
     bundled: true
     size: 8864
     sha1: "4b13701d9a7f8ab0f0827f17ba80b5c32b4e0fa7"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "525_spin_loaded.wav"
     path: "roms/floppy_samples/525_spin_loaded.wav"
     description: "MAME floppy sample, 5.25 inch drive, motor running, disk loaded"
@@ -756,7 +765,7 @@ files:
     bundled: true
     size: 17708
     sha1: "875f90538a3ff5db863ad4c384e1808841ddea9b"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "525_spin_start_empty.wav"
     path: "roms/floppy_samples/525_spin_start_empty.wav"
     description: "MAME floppy sample, 5.25 inch drive, motor start, no disk"
@@ -765,7 +774,7 @@ files:
     bundled: true
     size: 11180
     sha1: "b87d89c4b46c36dd78dec3dc5170ca61501e7cd9"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "525_spin_start_loaded.wav"
     path: "roms/floppy_samples/525_spin_start_loaded.wav"
     description: "MAME floppy sample, 5.25 inch drive, motor start, disk loaded"
@@ -774,7 +783,7 @@ files:
     bundled: true
     size: 17708
     sha1: "510476098848e2b5cdfe9f1608f8dfa3207fe9b4"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "525_spin_end.wav"
     path: "roms/floppy_samples/525_spin_end.wav"
     description: "MAME floppy sample, 5.25 inch drive, motor stop"
@@ -783,7 +792,7 @@ files:
     bundled: true
     size: 8864
     sha1: "f8d9b94c4d92d35d9ffb1117b693fc74a93f613f"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "525_step_1_1.wav"
     path: "roms/floppy_samples/525_step_1_1.wav"
     description: "MAME floppy sample, 5.25 inch drive, single track step"
@@ -792,7 +801,7 @@ files:
     bundled: true
     size: 6628
     sha1: "669ee98fb9fac4371c72ed0b60be1bc8470bc7f8"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "35_seek_2ms.wav"
     path: "roms/floppy_samples/35_seek_2ms.wav"
     description: "MAME floppy sample, 3.5 inch drive, 2 ms head seek"
@@ -801,7 +810,7 @@ files:
     bundled: true
     size: 7450
     sha1: "55caafbd19486b8d517e4b33a6fa65250df55e25"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
     note: "One of ten samples per drive bank. A missing sample is logged and that sound stays silent."
   - name: "35_seek_6ms.wav"
     path: "roms/floppy_samples/35_seek_6ms.wav"
@@ -811,7 +820,7 @@ files:
     bundled: true
     size: 22230
     sha1: "87e5dec269e67497681c15849777ebfc301131c1"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "35_seek_12ms.wav"
     path: "roms/floppy_samples/35_seek_12ms.wav"
     description: "MAME floppy sample, 3.5 inch drive, 12 ms head seek"
@@ -820,7 +829,7 @@ files:
     bundled: true
     size: 26540
     sha1: "c6b34fc61496943134ac45cc836a24e743caf794"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "35_seek_20ms.wav"
     path: "roms/floppy_samples/35_seek_20ms.wav"
     description: "MAME floppy sample, 3.5 inch drive, 20 ms head seek"
@@ -829,7 +838,7 @@ files:
     bundled: true
     size: 44144
     sha1: "b2fe4c3a4185146a7d11483d92d4412dd79dbc78"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "35_spin_empty.wav"
     path: "roms/floppy_samples/35_spin_empty.wav"
     description: "MAME floppy sample, 3.5 inch drive, motor running, no disk"
@@ -838,7 +847,7 @@ files:
     bundled: true
     size: 17708
     sha1: "db04fc097bdd0411cff232f57525ded491b48c6c"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "35_spin_loaded.wav"
     path: "roms/floppy_samples/35_spin_loaded.wav"
     description: "MAME floppy sample, 3.5 inch drive, motor running, disk loaded"
@@ -847,7 +856,7 @@ files:
     bundled: true
     size: 17708
     sha1: "96ce04a5b02af0da6d311f06fc4906a3cf71c78f"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "35_spin_start_empty.wav"
     path: "roms/floppy_samples/35_spin_start_empty.wav"
     description: "MAME floppy sample, 3.5 inch drive, motor start, no disk"
@@ -856,7 +865,7 @@ files:
     bundled: true
     size: 17708
     sha1: "af770fd9261a8efee23d66cd39b27be7b2ab7853"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "35_spin_start_loaded.wav"
     path: "roms/floppy_samples/35_spin_start_loaded.wav"
     description: "MAME floppy sample, 3.5 inch drive, motor start, disk loaded"
@@ -865,7 +874,7 @@ files:
     bundled: true
     size: 35308
     sha1: "c82b1714378bf2507ed86dea1e9fe743c380abab"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "35_spin_end.wav"
     path: "roms/floppy_samples/35_spin_end.wav"
     description: "MAME floppy sample, 3.5 inch drive, motor stop"
@@ -874,7 +883,7 @@ files:
     bundled: true
     size: 17684
     sha1: "a8901b692de15eb7a9052f61283f0e7a2b63d67d"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "35_step_1_1.wav"
     path: "roms/floppy_samples/35_step_1_1.wav"
     description: "MAME floppy sample, 3.5 inch drive, single track step"
@@ -883,7 +892,7 @@ files:
     bundled: true
     size: 6878
     sha1: "40d756d0cb5f7998ca26ac1de142a96a83fa2b97"
-    source_ref: "src/FloppySoundDevice.cpp:82-120, src/MainWindow.cpp:351-364"
+    source_ref: "src/FloppySoundDevice.cpp:83-121, src/MainWindow.cpp:351-364"
   - name: "Disk Rotation.wav"
     path: "roms/virtual_ii_sons/lecteur/Disk Rotation.wav"
     description: "Virtual ][ recording, drive motor loop"
@@ -891,8 +900,8 @@ files:
     required: false
     size: 18420
     sha1: "553e664b2f41f1cc74e2525c966e9c71f9e3bd2f"
-    source_ref: "src/VirtualIISoundCatalog.h:16, src/FloppySoundDevice.cpp:173-194, src/FloppySoundDevice.cpp:196-232, src/MainWindow.cpp:365-385"
-    note: "The Virtual ][ bank is offered only when this file and the arm, insertion and removal takes have loaded. Virtual ][ Disk Rotation.raw (sha1 993b054ee6ecf3778186937593d591eba332bdd6) behind a mono 44100 Hz 16-bit PCM RIFF header."
+    source_ref: "src/VirtualIISoundCatalog.h:20, src/FloppySoundDevice.cpp:176-190, src/FloppySoundDevice.cpp:192-228, src/MainWindow.cpp:365-381"
+    note: "The Virtual ][ bank is offered only when this file and the arm, insertion and removal takes have loaded. The bare Disk Rotation.wav and Disk Rotation.raw in the folder are tried next, the .raw read as headerless PCM. Virtual ][ Disk Rotation.raw (sha1 993b054ee6ecf3778186937593d591eba332bdd6) behind a mono 44100 Hz 16-bit PCM RIFF header."
   - name: "Boot.wav"
     path: "roms/virtual_ii_sons/lecteur/Boot.wav"
     description: "Virtual ][ recording, boot one-shot"
@@ -900,8 +909,8 @@ files:
     required: false
     size: 6806
     sha1: "15c67468555494a9336d8f1981806ecd05a47da4"
-    source_ref: "src/VirtualIISoundCatalog.h:17, src/FloppySoundDevice.cpp:173-194, src/FloppySoundDevice.cpp:196-232, src/MainWindow.cpp:365-385"
-    note: "Virtual ][ Boot.raw (sha1 06db331ec01064661bf64ed39b58a9b35aaec067) behind a mono 44100 Hz 16-bit PCM RIFF header."
+    source_ref: "src/VirtualIISoundCatalog.h:21, src/FloppySoundDevice.cpp:176-190, src/FloppySoundDevice.cpp:192-228, src/MainWindow.cpp:365-381"
+    note: "The bare Boot.wav and Boot.raw in the folder are tried next, the .raw read as headerless PCM. Virtual ][ Boot.raw (sha1 06db331ec01064661bf64ed39b58a9b35aaec067) behind a mono 44100 Hz 16-bit PCM RIFF header."
   - name: "Move arm.aiff"
     path: "roms/virtual_ii_sons/lecteur/Move arm.aiff"
     description: "Virtual ][ recording, head arm step"
@@ -910,8 +919,8 @@ files:
     size: 36510
     sha1: "3e03cfef6a327adf9e2c09dd329a4c5b8e0aac52"
     aliases: ["Move arm.wav"]
-    source_ref: "src/VirtualIISoundCatalog.h:18, src/FloppySoundDevice.cpp:173-194, src/FloppySoundDevice.cpp:196-232, src/MainWindow.cpp:365-385"
-    note: "Needed for the bank. The .wav name is tried when the .aiff does not decode. Virtual ][ Move arm.aiff unchanged."
+    source_ref: "src/VirtualIISoundCatalog.h:22, src/FloppySoundDevice.cpp:176-190, src/FloppySoundDevice.cpp:192-228, src/MainWindow.cpp:365-381"
+    note: "Needed for the bank. When the .aiff does not decode, the .wav name and then both bare names in the folder are tried. Virtual ][ Move arm.aiff unchanged."
   - name: "Disk Insertion.aiff"
     path: "roms/virtual_ii_sons/lecteur/Disk Insertion.aiff"
     description: "Virtual ][ recording, drive lid, disk inserted"
@@ -920,8 +929,8 @@ files:
     size: 69146
     sha1: "3da6c2e5986c38b6c7200bacc95ef076d0429152"
     aliases: ["Disk Insertion.wav"]
-    source_ref: "src/VirtualIISoundCatalog.h:19, src/FloppySoundDevice.cpp:173-194, src/FloppySoundDevice.cpp:196-232, src/MainWindow.cpp:365-385"
-    note: "Needed for the bank. The .wav name is tried when the .aiff does not decode. Virtual ][ Disk Insertion.aiff unchanged."
+    source_ref: "src/VirtualIISoundCatalog.h:23, src/FloppySoundDevice.cpp:176-190, src/FloppySoundDevice.cpp:192-228, src/MainWindow.cpp:365-381"
+    note: "Needed for the bank. When the .aiff does not decode, the .wav name and then both bare names in the folder are tried. Virtual ][ Disk Insertion.aiff unchanged."
   - name: "Disk Removal.aiff"
     path: "roms/virtual_ii_sons/lecteur/Disk Removal.aiff"
     description: "Virtual ][ recording, drive lid, disk removed"
@@ -930,8 +939,8 @@ files:
     size: 243894
     sha1: "9c33c1c1d793c8b9d6ff2e7867ae3c51f2556355"
     aliases: ["Disk Removal.wav"]
-    source_ref: "src/VirtualIISoundCatalog.h:20, src/FloppySoundDevice.cpp:173-194, src/FloppySoundDevice.cpp:196-232, src/MainWindow.cpp:365-385"
-    note: "Needed for the bank. The .wav name is tried when the .aiff does not decode. Virtual ][ Disk Removal.aiff unchanged."
+    source_ref: "src/VirtualIISoundCatalog.h:24, src/FloppySoundDevice.cpp:176-190, src/FloppySoundDevice.cpp:192-228, src/MainWindow.cpp:365-381"
+    note: "Needed for the bank. When the .aiff does not decode, the .wav name and then both bare names in the folder are tried. Virtual ][ Disk Removal.aiff unchanged."
   - name: "I-O Error.wav"
     path: "roms/virtual_ii_sons/lecteur/I-O Error.wav"
     description: "Virtual ][ recording, read error one-shot"
@@ -939,8 +948,8 @@ files:
     required: false
     size: 4014
     sha1: "464e3d8f9b50d21cef706503058cef63a5d73995"
-    source_ref: "src/VirtualIISoundCatalog.h:21, src/FloppySoundDevice.cpp:173-194, src/FloppySoundDevice.cpp:196-232, src/MainWindow.cpp:365-385"
-    note: "Virtual ][ I-O Error.raw (sha1 b123ef605fa977bcda49617cb96c7bc898281dbc) behind a mono 44100 Hz 16-bit PCM RIFF header."
+    source_ref: "src/VirtualIISoundCatalog.h:25, src/FloppySoundDevice.cpp:176-190, src/FloppySoundDevice.cpp:192-228, src/MainWindow.cpp:365-381"
+    note: "The bare I-O Error.wav and I-O Error.raw in the folder are tried next, the .raw read as headerless PCM. Virtual ][ I-O Error.raw (sha1 b123ef605fa977bcda49617cb96c7bc898281dbc) behind a mono 44100 Hz 16-bit PCM RIFF header."
   - name: "PopOn2.aiff"
     path: "roms/virtual_ii_sons/interface/PopOn2.aiff"
     description: "Virtual ][ recording, power switch on"
@@ -949,7 +958,7 @@ files:
     size: 172338
     sha1: "7473f2ade668f9155729e6dfc56775f998bb9ac3"
     aliases: ["PopOn2.wav"]
-    source_ref: "src/VirtualIISoundCatalog.h:22, src/FloppySoundDevice.cpp:173-194, src/FloppySoundDevice.cpp:196-232, src/MainWindow.cpp:365-385"
+    source_ref: "src/VirtualIISoundCatalog.h:26, src/FloppySoundDevice.cpp:176-190, src/FloppySoundDevice.cpp:192-228, src/MainWindow.cpp:365-381"
     note: "Virtual ][ PopOn2.aiff unchanged."
   - name: "PopOff2.aiff"
     path: "roms/virtual_ii_sons/interface/PopOff2.aiff"
@@ -959,7 +968,7 @@ files:
     size: 144702
     sha1: "60b4b8bb589bcc3e4c6876a09d4aa4b391390798"
     aliases: ["PopOff2.wav"]
-    source_ref: "src/VirtualIISoundCatalog.h:23, src/FloppySoundDevice.cpp:173-194, src/FloppySoundDevice.cpp:196-232, src/MainWindow.cpp:365-385"
+    source_ref: "src/VirtualIISoundCatalog.h:27, src/FloppySoundDevice.cpp:176-190, src/FloppySoundDevice.cpp:192-228, src/MainWindow.cpp:365-381"
     note: "Virtual ][ PopOff2.aiff unchanged."
   - name: "Matrix Printer.wav"
     path: "roms/virtual_ii_sons/imprimante/Matrix Printer.wav"
@@ -968,8 +977,8 @@ files:
     required: false
     size: 1316870
     sha1: "0b0363772efc684ea0d21cb79e62a0df63f0c094"
-    source_ref: "src/VirtualIISoundCatalog.h:26-27, src/MainWindow.cpp:380-383, src/PrinterSoundDevice.cpp:79-101, src/PrinterSoundDevice.cpp:296-320"
-    note: "Loaded when present, otherwise the printer sound is generated. Virtual ][ Matrix Printer.raw (sha1 6f6d26237389435693469b4dd0e0b69083797bff) behind a mono 44100 Hz 16-bit PCM RIFF header."
+    source_ref: "src/VirtualIISoundCatalog.h:30-31, src/MainWindow.cpp:376-379, src/PrinterSoundDevice.cpp:80-103, src/PrinterSoundDevice.cpp:298-322"
+    note: "Loaded when present, otherwise the printer sound is generated. The bare Matrix Printer.wav and Matrix Printer.raw in the folder are tried next, the .raw read as headerless PCM. Virtual ][ Matrix Printer.raw (sha1 6f6d26237389435693469b4dd0e0b69083797bff) behind a mono 44100 Hz 16-bit PCM RIFF header."
   - name: "DejaVuSans.ttf"
     path: "fonts/DejaVuSans.ttf"
     description: "DejaVu Sans, the frontend text font"
