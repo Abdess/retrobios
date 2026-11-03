@@ -364,6 +364,24 @@ class ContributorChecksMatchCi(unittest.TestCase):
             workflow.index("python -m unittest discover"),
         )
 
+    def test_the_pr_checklist_generates_the_site_before_the_tests(self):
+        # validate.yml generates the pages before the suite. Without them
+        # the 228 tests that read the gitignored pages fail on a clone.
+        workflow = _read(".github/workflows/validate.yml")
+        self.assertLess(
+            workflow.index("run: python scripts/generate_site.py"),
+            workflow.index("python -m unittest discover"),
+        )
+        for text in (
+            contributing_text(lambda page: page, "# C", "here"),
+            _read("CONTRIBUTING.md"),
+        ):
+            block = _section(text, "## Before opening a PR")
+            self.assertIn("python scripts/generate_site.py", block)
+            self.assertLess(
+                block.index("generate_site.py"), block.index("unittest discover")
+            )
+
 
 class PagesOpenOnTheirContent(unittest.TestCase):
     """The download page said "This page picks the right pack for a setup"
@@ -382,3 +400,31 @@ class PagesOpenOnTheirContent(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CoreCountsReadFromTheData(unittest.TestCase):
+    """The cores page said "623 cores across 18 platforms": that was every
+    profile, and 91 of them no platform runs."""
+
+    def test_the_run_count_is_what_the_platforms_resolve(self):
+        import yaml
+        from common import load_emulator_profiles, load_platform_config, resolve_platform_cores
+
+        from tests import sitepages
+
+        sitepages.require()
+        text = sitepages.page("cross-reference.md").read_text(encoding="utf-8")
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        unique = {k: v for k, v in profiles.items() if v.get("type") not in ("alias", "test")}
+        registry = yaml.safe_load((REPO_ROOT / "platforms" / "_registry.yml").read_text(
+            encoding="utf-8"))["platforms"]
+        run = set()
+        for name in registry:
+            config = load_platform_config(name, str(REPO_ROOT / "platforms"))
+            run |= set(resolve_platform_cores(config, unique))
+        said = re.search(r"([\d,]+) cores are profiled, ([\d,]+) of them run by the (\d+) platforms",
+                         text)
+        self.assertIsNotNone(said, "the page says how many profiled cores the platforms run")
+        self.assertEqual(int(said[1].replace(",", "")), len(unique))
+        self.assertEqual(int(said[2].replace(",", "")), len(run))
+        self.assertEqual(int(said[3]), len(registry))
