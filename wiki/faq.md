@@ -9,7 +9,7 @@ terms: ios, iphone, ipad
 ## Do I need BIOS files?
 
 - **Yes** for PlayStation 1 and 2, Saturn and Neo Geo.
-- **Better with it** for Dreamcast: some games need it.
+- **Better with it** for Dreamcast. Some games need it.
 - **Usually not** for NES or Super Nintendo.
 
 [What is a BIOS?](what-are-bios-files.md)
@@ -43,7 +43,7 @@ Usually. The command installs each setup's own, like `neogeo.zip`.
 
 ## My arcade game fails (which MAME version?) { #my-arcade-game-does-not-start }
 
-Game sets must match the emulator's version:
+Game sets must match the emulator's version. See
 [the list](technical-faq.md#which-mame-version-do-the-arcade-bios-sets-match).
 
 ## Keys, firmware or BIOS?
@@ -61,7 +61,7 @@ Game sets must match the emulator's version:
 - It never touches games or saves.
 - It keeps each file it replaces in `retrobios-backup`, for `--restore`.
 
-Read them: [install.sh](https://github.com/Abdess/retrobios/blob/main/install.sh),
+Read them. [install.sh](https://github.com/Abdess/retrobios/blob/main/install.sh),
 [install.ps1](https://github.com/Abdess/retrobios/blob/main/install.ps1),
 [install.py](https://github.com/Abdess/retrobios/blob/main/install.py).
 
@@ -89,17 +89,17 @@ curl -fsSL https://abdess.github.io/retrobios/i \
 
 ## No internet on the device?
 
-Fill it from a computer or point `--from-pack` at your ZIP: [Without a network](installer.md#without-a-network-offline-install).
+Fill it from a computer, or point `--from-pack` at your ZIP. See [Without a network](installer.md#without-a-network-offline-install).
 
 ## Lost or wiped card?
 
-`--from` copies BIOS files from an old card or backup:
+`--from` copies BIOS files from an old card or backup. See
 [Copy from an old card](installer.md#copy-from-an-old-card).
 
 ## My setup is not in the list
 
 - Name your emulator's BIOS folder with `--dest`.
-- ES-DE, LaunchBox: the command fills their emulators' folders.
+- ES-DE or LaunchBox? The command fills their emulators' folders.
 - iPhone, iPad (iOS): no terminal.
   [Pick your consoles and copy them to the app](../which-pack.md#iphone-and-ipad).
 
@@ -109,11 +109,11 @@ Some come with the emulator.
 
 ## My game shows a black screen
 
-Often a missing BIOS: [When a game does not start](troubleshooting.md).
+Often a missing BIOS. See [When a game does not start](troubleshooting.md).
 
 ## Can I copy my own console's BIOS? { #copy-your-own-bios }
 
-Yes: [PCSX2](https://pcsx2.net/docs/setup/bios/) for PlayStation 2,
+Yes. See [PCSX2](https://pcsx2.net/docs/setup/bios/) for PlayStation 2,
 [melonDS](https://melonds.kuribo64.net/faq.php) for DS and DSi.
 
 ## Is this legal?
