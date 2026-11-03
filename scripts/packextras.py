@@ -1377,8 +1377,17 @@ class _ClaimRanks:
 
 
 def _names_content(entry: dict) -> bool:
-    """Whether a report entry declares the bytes it wants, not only a name."""
-    return any(entry.get(field) for field in ("sha1", "md5", "sha256", "crc32"))
+    """Whether a report entry declares the bytes it wants, not only a name.
+
+    The claims folded onto the entry count: bsnes asks for SGB1.sfc by name
+    and bsnes-hd pins its md5 under the same system, and the entry carrying
+    both went after nSide's SGB1.sfc/ tree, which took the path from the file.
+    """
+    return any(
+        claim.get(field)
+        for claim in (entry, *entry.get("other_claims", []))
+        for field in ("sha1", "md5", "sha256", "crc32")
+    )
 
 
 def _save_fields(extra: dict, pack_path: str, placement: ExtraPlacement) -> None:

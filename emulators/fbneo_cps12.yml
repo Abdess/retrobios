@@ -16,8 +16,8 @@ display_name: "Arcade (FinalBurn Neo) (CPS-1 / CPS-2)"
 cores:
   - fbneo_cps12
 systems:
-  - cps1
-  - cps2
+  - capcom-cps1
+  - capcom-cps2
   - arcade
 
 notes: |

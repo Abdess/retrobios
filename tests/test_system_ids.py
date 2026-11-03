@@ -16,8 +16,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
-from common import SYSTEM_ALIASES, load_emulator_profiles  # noqa: E402
-from packextras import _slug_for  # noqa: E402
+from common import SYSTEM_ALIASES, _norm_system_id, load_emulator_profiles  # noqa: E402
+from packextras import _names_content, _slug_for  # noqa: E402
 
 
 class ProfilesSpellEachMachineOnce(unittest.TestCase):
@@ -33,6 +33,61 @@ class ProfilesSpellEachMachineOnce(unittest.TestCase):
             if str(sid).lower() in SYSTEM_ALIASES
         )
         self.assertEqual(sorted(set(found)), [])
+
+
+class PlatformNamesReachTheProfileSystem(unittest.TestCase):
+    """Folder and system names a platform gives a machine, joined to the
+    profile that runs it there. Each pair fell back to the whole profile in
+    a survey of the rom folders of 38 setups, the two spellings not meeting
+    once normalized."""
+
+    # (name a platform uses, profile running it there)
+    PAIRS = [
+        ("apple-iigs", "mame"),
+        ("apple2gs", "gsplus-legacy"),
+        ("astrocde", "mame"),
+        ("astrocade", "mame"),
+        ("creativision", "mame"),
+        ("gamepocketcomputer", "mame"),
+        ("nintendo-sgb", "bsnes"),
+        ("nintendo-sgb", "mesen-s"),
+        ("capcom-cps1", "fbalpha2012_cps1"),
+        ("capcom-cps2", "fbalpha2012_cps2"),
+        ("capcom-cps3", "fbalpha2012_cps3"),
+        ("capcom-cps1", "fbalpha2012"),
+        ("igs-pgm", "fbalpha2012"),
+    ]
+
+    def test_each_name_meets_a_system_of_its_profile(self):
+        profiles = load_emulator_profiles(str(REPO_ROOT / "emulators"))
+        unmet = [
+            f"{name} -> {emulator}"
+            for name, emulator in self.PAIRS
+            if _norm_system_id(name)
+            not in {_norm_system_id(str(s)) for s in profiles[emulator].get("systems", [])}
+        ]
+        self.assertEqual(unmet, [])
+
+    def test_both_spellings_normalize_alike(self):
+        for alias, canonical in SYSTEM_ALIASES.items():
+            with self.subTest(alias=alias):
+                self.assertEqual(_norm_system_id(alias), _norm_system_id(canonical))
+
+
+class AFoldedClaimKeepsItsProof(unittest.TestCase):
+    """One spelling per machine folds bsnes-hd's SGB1.sfc onto bsnes's: the
+    entry still pins the bytes, so it is placed before nSide's SGB1.sfc/
+    tree and the file keeps its path."""
+
+    def test_a_hash_on_a_folded_claim_counts(self):
+        entry = {
+            "name": "SGB1.sfc", "md5": None, "sha1": None,
+            "other_claims": [{"name": "SGB1.sfc", "md5": "b15ddb15721c657d82c5bab6db982ee9"}],
+        }
+        self.assertTrue(_names_content(entry))
+
+    def test_names_alone_name_no_content(self):
+        self.assertFalse(_names_content({"name": "SGB1.sfc", "other_claims": [{"name": "SGB1.sfc"}]}))
 
 
 class AFileGoesToItsOwnSystemFolder(unittest.TestCase):

@@ -19,10 +19,10 @@ cores:
 systems:
   - arcade
   - neogeo
-  - cps1
-  - cps2
-  - cps3
-  - pgm
+  - capcom-cps1
+  - capcom-cps2
+  - capcom-cps3
+  - igs-pgm
 
 notes: |
   Frozen snapshot of Final Burn Alpha v0.2.97.29 (circa 2012), full version.

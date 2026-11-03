@@ -49,7 +49,7 @@ systems:
   - konami-twinkle
   - panasonic-3do
   - hyper-neogeo64
-  - apple2gs
+  - apple-iigs
   - apf-m1000
   - bally-astrocade
   - coleco-adam
@@ -275,8 +275,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - coco
       - coleco-adam
@@ -305,8 +305,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - coco
       - coleco-adam
@@ -330,8 +330,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - coco
       - coleco-adam
@@ -355,8 +355,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - coco
       - coleco-adam
@@ -380,8 +380,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - coco
       - coleco-adam
@@ -405,8 +405,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - coco
       - coleco-adam
@@ -430,8 +430,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - coco
       - coleco-adam
@@ -455,8 +455,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - coco
       - coleco-adam
@@ -480,8 +480,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - coco
       - coleco-adam
@@ -505,8 +505,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - coco
       - coleco-adam
@@ -531,8 +531,8 @@ files:
       - acorn-bbc-micro
       - andamiro-pumpitup
       - apf-m1000
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - camplynx
       - coco
@@ -561,8 +561,8 @@ files:
       - acorn-bbc-micro
       - andamiro-pumpitup
       - apf-m1000
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - camplynx
       - coco
@@ -591,8 +591,8 @@ files:
       - acorn-bbc-micro
       - andamiro-pumpitup
       - apf-m1000
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - camplynx
       - coco
@@ -621,8 +621,8 @@ files:
       - acorn-bbc-micro
       - andamiro-pumpitup
       - apf-m1000
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - camplynx
       - coco
@@ -651,8 +651,8 @@ files:
       - acorn-bbc-micro
       - andamiro-pumpitup
       - apf-m1000
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - camplynx
       - coco
@@ -681,8 +681,8 @@ files:
       - acorn-bbc-micro
       - andamiro-pumpitup
       - apf-m1000
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - camplynx
       - coco
@@ -711,8 +711,8 @@ files:
       - acorn-bbc-micro
       - andamiro-pumpitup
       - apf-m1000
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - camplynx
       - coco
@@ -741,8 +741,8 @@ files:
       - acorn-bbc-micro
       - andamiro-pumpitup
       - apf-m1000
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - camplynx
       - coco
@@ -771,8 +771,8 @@ files:
       - acorn-bbc-micro
       - andamiro-pumpitup
       - apf-m1000
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - camplynx
       - coco
@@ -3997,7 +3997,7 @@ files:
   - name: apple2gs.zip
     required: true
     category: bios_zip
-    system: apple2gs
+    system: apple-iigs
     source_ref: "source src/mame/apple/apple2gs.cpp:3865-3879"
     contents:
       - name: "341s0632-2.bin"
@@ -6469,42 +6469,42 @@ files:
     mode: libretro
     category: game_data
     required: false
-    system: apple2gs
+    system: apple-iigs
 
   - name: "apple2_flop_misc.xml"
     path: "mame/hash/apple2_flop_misc.xml"
     mode: libretro
     category: game_data
     required: false
-    system: apple2gs
+    system: apple-iigs
 
   - name: "apple2_flop_orig.xml"
     path: "mame/hash/apple2_flop_orig.xml"
     mode: libretro
     category: game_data
     required: false
-    system: apple2gs
+    system: apple-iigs
 
   - name: "apple2gs_flop_clcracked.xml"
     path: "mame/hash/apple2gs_flop_clcracked.xml"
     mode: libretro
     category: game_data
     required: false
-    system: apple2gs
+    system: apple-iigs
 
   - name: "apple2gs_flop_misc.xml"
     path: "mame/hash/apple2gs_flop_misc.xml"
     mode: libretro
     category: game_data
     required: false
-    system: apple2gs
+    system: apple-iigs
 
   - name: "apple2gs_flop_orig.xml"
     path: "mame/hash/apple2gs_flop_orig.xml"
     mode: libretro
     category: game_data
     required: false
-    system: apple2gs
+    system: apple-iigs
 
   - name: "archimedes.xml"
     path: "mame/hash/archimedes.xml"
@@ -7424,7 +7424,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2parprn.cpp:105-109"
     note: >-
@@ -7787,7 +7787,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2videoterm.cpp:91-97"
     note: >-
@@ -7807,7 +7807,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2videoterm.cpp:66-72"
     note: >-
@@ -7827,7 +7827,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2videoterm.cpp:74-80"
     note: >-
@@ -7847,7 +7847,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2applicard.cpp:28-31"
     note: >-
@@ -7876,7 +7876,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/booti.cpp:33-36"
     note: >-
@@ -7891,7 +7891,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/grappler.cpp:34-51"
     note: >-
@@ -7911,7 +7911,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/grappler.cpp:34-51"
     note: >-
@@ -7931,7 +7931,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2cffa.cpp:33-36"
     note: >-
@@ -7947,7 +7947,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2cffa.cpp:28-31"
     note: >-
@@ -7963,7 +7963,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2corvus.cpp:61-64"
     note: >-
@@ -7979,7 +7979,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2diskiing.cpp:40-43"
     note: >-
@@ -8012,7 +8012,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2zipdrive.cpp:86-89"
     note: >-
@@ -8028,7 +8028,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/grappler.cpp:15-18"
     note: >-
@@ -8044,7 +8044,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/grappler.cpp:21-31"
     note: >-
@@ -8066,7 +8066,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2hsscsi.cpp:59-62"
     note: >-
@@ -8082,7 +8082,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2ieee488.cpp:183-186"
     note: >-
@@ -8126,7 +8126,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2memexp.cpp:23-26"
     note: >-
@@ -8142,7 +8142,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/mouse.cpp:144-154"
     note: >-
@@ -8170,7 +8170,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2parprn.cpp:100-103"
     note: >-
@@ -8187,7 +8187,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/prodosromdrive.cpp:76-79"
     note: >-
@@ -8202,7 +8202,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2pic.cpp:86-89"
     note: >-
@@ -8218,7 +8218,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/q68.cpp:72-75"
     note: >-
@@ -8234,7 +8234,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/q68.cpp:72-75"
     note: >-
@@ -8250,7 +8250,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2memexp.cpp:28-34"
     note: >-
@@ -8353,7 +8353,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2scsi.cpp:57-60"
     note: >-
@@ -8411,7 +8411,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/sider.cpp:99-102"
     note: >-
@@ -8427,7 +8427,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/sider.cpp:94-97"
     note: >-
@@ -8443,7 +8443,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2ssc.cpp:88-91"
     note: >-
@@ -8459,7 +8459,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2superdrive.cpp:104-107"
     note: >-
@@ -8520,7 +8520,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2thunderclock.cpp:43-46"
     note: >-
@@ -8550,7 +8550,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/timemasterho.cpp:55-58"
     note: >-
@@ -8580,7 +8580,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2ultraterm.cpp:101-110"
     note: >-
@@ -8604,7 +8604,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2ultraterm.cpp:88-97"
     note: >-
@@ -8628,7 +8628,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/uniprint.cpp:56-59"
     note: >-
@@ -8644,7 +8644,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2videoterm.cpp:44-64"
     note: >-
@@ -8725,7 +8725,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2videoterm.cpp:82-89"
     note: >-
@@ -8748,7 +8748,7 @@ files:
   - name: a2vulcan.zip
     required: false
     category: bios_zip
-    system: apple2gs
+    system: apple-iigs
     source_ref: "upstream src/devices/bus/a2bus/a2vulcan.cpp:68-71"
     note: >-
       Device ROM set, loaded when a machine instantiates `Applied Engineering
@@ -8762,7 +8762,7 @@ files:
   - name: a2vulgld.zip
     required: false
     category: bios_zip
-    system: apple2gs
+    system: apple-iigs
     source_ref: "upstream src/devices/bus/a2bus/a2vulcan.cpp:78-81"
     note: >-
       Device ROM set, loaded when a machine instantiates `Applied Engineering
@@ -8791,7 +8791,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2zipdrive.cpp:81-84"
     note: >-
@@ -9641,7 +9641,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2applicard.cpp:33-36"
     note: >-
@@ -10568,7 +10568,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -10601,8 +10601,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -10620,7 +10620,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/a2ssc.cpp:93-96"
     note: >-
@@ -15018,7 +15018,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/ccs7710.cpp:169-181"
     note: >-
@@ -15131,8 +15131,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -15160,8 +15160,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -15183,8 +15183,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -15206,8 +15206,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -15228,8 +15228,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -15261,8 +15261,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -15347,8 +15347,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -15521,7 +15521,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -15861,7 +15861,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/cmsscsi.cpp:47-55"
     note: >-
@@ -16174,7 +16174,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -16267,7 +16267,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - atari-zn1
       - coco
@@ -16655,8 +16655,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -16826,8 +16826,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -16846,7 +16846,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/machine/wozfdc.cpp:31-34"
     note: >-
@@ -18403,7 +18403,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -18439,7 +18439,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -18527,7 +18527,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -18754,7 +18754,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -19576,8 +19576,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -19720,8 +19720,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -19773,8 +19773,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -19816,8 +19816,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -19859,8 +19859,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -19902,8 +19902,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -19945,8 +19945,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -20048,7 +20048,7 @@ files:
     category: bios_zip
     systems:
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - tab-silverball
     source_ref: "upstream src/devices/bus/ieee488/hp9122c.cpp:459-462"
@@ -20066,7 +20066,7 @@ files:
     category: bios_zip
     systems:
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - tab-silverball
     source_ref: "upstream src/devices/bus/ieee488/hp9133.cpp:866-870"
@@ -20141,7 +20141,7 @@ files:
     category: bios_zip
     systems:
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - tab-silverball
     source_ref: "upstream src/devices/bus/ieee488/hp9895.cpp:954-957"
@@ -20257,7 +20257,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
     source_ref: "upstream src/devices/bus/a2bus/ibsap2.cpp:167-170"
     note: >-
@@ -20294,8 +20294,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -20338,8 +20338,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -21823,7 +21823,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -21855,7 +21855,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -21979,7 +21979,7 @@ files:
     required: false
     category: bios_zip
     systems:
-      - apple2gs
+      - apple-iigs
       - arcade
       - exidy-maxaflex
     source_ref: "upstream src/devices/cpu/m6805/m68705.cpp:74-77"
@@ -22500,8 +22500,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -22535,8 +22535,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -23615,7 +23615,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -24521,7 +24521,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -24627,8 +24627,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -25072,7 +25072,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -25159,7 +25159,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - coco
       - coleco-adam
@@ -26364,7 +26364,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - atari-zn1
       - coco
@@ -27763,8 +27763,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -27806,8 +27806,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -28108,8 +28108,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -28742,8 +28742,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - elektronika-bk
       - tab-silverball
@@ -30243,8 +30243,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -31873,7 +31873,7 @@ files:
     category: bios_zip
     systems:
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - tab-silverball
     source_ref: "upstream src/devices/video/upd7220.cpp:173-176"
@@ -32269,8 +32269,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -32317,8 +32317,8 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
+      - apple-iigs
       - apple-macintosh-ii
-      - apple2gs
       - arcade
       - aristocrat-mk5
       - coco
@@ -33146,7 +33146,7 @@ files:
       - acorn-archimedes
       - acorn-bbc-micro
       - andamiro-pumpitup
-      - apple2gs
+      - apple-iigs
       - arcade
       - atari-zn1
       - coco
