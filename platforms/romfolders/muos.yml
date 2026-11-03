@@ -1,0 +1,1250 @@
+setup: muos
+name: muOS
+platform: retroarch
+sources:
+  os:
+    repo: "https://github.com/MustardOS/internal"
+    commit: f41f4a89334feecf91a81c7736d4f2c80b1ae10c
+  fe:
+    repo: "https://github.com/MustardOS/frontend"
+    commit: c128dfc13bd60cb8af66e7562bc8e8e5505e1f60
+    note: newest frontend commit at or before the internal pin date
+roms_root:
+  path: /mnt/mmc/ROMS
+  from_bios: ../../ROMS
+  source_ref: "fe common/content/content.c:522; fe common/base/options.h:101"
+case_sensitive: false
+case_ref: "fe common/content/core/common.c:396-398"
+hidden:
+- pattern: .*
+  source_ref: "os share/info/skip.ini:1"
+- pattern: _*
+  source_ref: "os share/info/skip.ini:2"
+- pattern: /img*
+  source_ref: "os share/info/skip.ini:3"
+- name: control.txt
+  source_ref: "os share/info/skip.ini:4"
+- name: neogeo.zip
+  source_ref: "os share/info/skip.ini:5"
+- name: pgm.zip
+  source_ref: "os share/info/skip.ini:6"
+- name: midssio.zip
+  source_ref: "os share/info/skip.ini:7"
+- pattern: '*.bps*'
+  source_ref: "os share/info/skip.ini:8"
+- pattern: '*.dat*'
+  source_ref: "os share/info/skip.ini:9"
+- pattern: '*.ips*'
+  source_ref: "os share/info/skip.ini:10"
+- pattern: '*.log*'
+  source_ref: "os share/info/skip.ini:11"
+- pattern: '*.msu*'
+  source_ref: "os share/info/skip.ini:12"
+- pattern: '*.pcm*'
+  source_ref: "os share/info/skip.ini:13"
+- pattern: '*.sav*'
+  source_ref: "os share/info/skip.ini:14"
+- pattern: '*.sbi*'
+  source_ref: "os share/info/skip.ini:15"
+- pattern: '*.srm*'
+  source_ref: "os share/info/skip.ini:16"
+- pattern: '*.state*'
+  source_ref: "os share/info/skip.ini:17"
+- pattern: '*.ups*'
+  source_ref: "os share/info/skip.ini:18"
+- pattern: '*.xml*'
+  source_ref: "os share/info/skip.ini:19"
+notes:
+- "core.json lists no extensions. The skip.ini globs are matched lowercased with fnmatch (fe common/base/strutil.c:31-104),\
+  \ and every other file is listed."
+- "A folder gets its core when its name, lowercased without space, '-', '_' and '+', is one of a system's\
+  \ friendly names (fe common/content/core/common.c:396-398). assign.json is built from every friendly\
+  \ name (os script/system/assign.sh:65-80)."
+- The roms root is ROMS on the card that holds MUOS/bios, or /mnt/sdcard/ROMS on the second card. RetroArch
+  sees the BIOS folder as /run/muos/storage/bios.
+folders:
+- folder: "2048"
+  core: "2048"
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: 3d0
+  name: The 3DO Company - 3DO
+  aliases:
+  - 3do
+  core: opera
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3530"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: amstrad
+  name: Amstrad
+  aliases:
+  - amstradcpc
+  - cpc
+  core: cap32
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:21"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: applemacintosh
+  name: Apple Macintosh
+  aliases:
+  - macintosh
+  - minivmac
+  core: minivmac
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:46"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: arcade
+  name: Arcade
+  aliases:
+  - arcadehbmame
+  - arcadevertical
+  - cps
+  - cps1
+  - cps2
+  - cps3
+  - fba
+  - fbneo
+  - harcade
+  - hbmame
+  - horizontal
+  - horizontalarcade
+  - mame
+  - pgm
+  - varcade
+  - vertarcade
+  - vertical
+  - verticalarcade
+  core: km_fbneo_xtreme_amped
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:72"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: arduboy
+  name: Arduboy
+  core: ardens
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:190"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: atari2600
+  name: Atari 2600
+  aliases:
+  - "2600"
+  - a2600
+  - atari
+  - twentysixhundred
+  core: stella2014
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:213"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: atari5200
+  name: Atari 5200
+  aliases:
+  - "5200"
+  - a5200
+  - fiftytwohundred
+  core: a5200
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:240"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: atari7800
+  name: Atari 7800
+  aliases:
+  - "7800"
+  - a7800
+  - seventyeighthundred
+  core: prosystem
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:287"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: atari800
+  name: Atari 800
+  aliases:
+  - "800"
+  - a800
+  - eighthundred
+  core: atari800
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:313"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: atarijaguar
+  name: Atari Jaguar
+  aliases:
+  - jaguar
+  core: virtualjaguar
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:355"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: atarilynx
+  name: Atari Lynx
+  aliases:
+  - lynx
+  core: handy
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:376"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: atarist
+  name: Atari ST-STE-TT-Falcon
+  aliases:
+  - ast
+  - aste
+  - atarifalcon
+  - atariste
+  - ataritt
+  - falcon
+  - st
+  - ste
+  - tt
+  core: hatari
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:405"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: bandaiwonderswancolor
+  name: Bandai WonderSwan Color
+  aliases:
+  - bandaiwonderswan
+  - bws
+  - bwsc
+  - wonderswan
+  - wonderswancolor
+  - ws
+  - wsc
+  core: mednafen_wswan
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:442"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: bennugd
+  name: BennuGD
+  aliases:
+  - BennuGD
+  core: bennugd
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:467"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: books
+  name: Book Reader
+  aliases:
+  - book
+  core: mreader landscape
+  emulator: external
+  source_ref: "os share/info/manifest/core.json:486"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: cannonball
+  name: Cannonball
+  aliases:
+  - outrun
+  core: cannonball
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:511"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: cavestory
+  name: Cave Story
+  core: nxengine
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:531"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: cdg
+  name: Karaoke
+  aliases:
+  - pocketcdg
+  core: pocketcdg
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1231"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: cglpsdl2
+  name: Crisp Game Lib
+  aliases:
+  - crisp
+  core: crisp game lib
+  emulator: external
+  source_ref: "os share/info/manifest/core.json:856"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: chailove
+  name: ChaiLove
+  core: chailove
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:555"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: chip8
+  name: CHIP-8
+  aliases:
+  - chipeight
+  - megachip8
+  - superchip
+  core: jaxe
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:573"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: coco
+  name: Dragon and Tandy
+  aliases:
+  - dragon
+  - dragon32
+  - dragon64
+  core: xroar
+  emulator: external
+  source_ref: "os share/info/manifest/core.json:914"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: colecovision
+  name: ColecoVision
+  aliases:
+  - coleco
+  core: gearcoleco
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:600"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: commodoreamiga
+  name: Commodore Amiga
+  aliases:
+  - amiga
+  - amiga500
+  core: puae2021
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:629"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: commodorec128
+  name: Commodore C128
+  aliases:
+  - c128
+  - commodore128
+  core: vice_x128
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:717"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: commodorec64
+  name: Commodore C64
+  aliases:
+  - c64
+  - commodore
+  - commodore64
+  core: vice_x64
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:737"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: commodorecbmii
+  name: Commodore CBM-II
+  aliases:
+  - cbmii
+  core: vice_xcbm2
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:775"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: commodorepet
+  name: Commodore PET
+  aliases:
+  - pet
+  core: vice_xpet
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:798"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: commodoreplus4
+  name: Commodore Plus-4
+  aliases:
+  - plus4
+  core: vice_xplus4
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:817"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: commodorevic20
+  name: Commodore VIC-20
+  aliases:
+  - vic20
+  core: vice_xvic
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:837"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: dice
+  name: Discrete Integrated Circuit Emulator
+  core: dice
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:877"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: doom
+  name: Doom
+  aliases:
+  - prboom
+  core: prboom
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:895"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: elektronikabk
+  name: Elektronika BK
+  aliases:
+  - bk
+  - elektronika
+  core: bk
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:955"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: enterprise128
+  name: Enterprise 128
+  aliases:
+  - enterprise
+  - ep128
+  core: ep128emu_core
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:976"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: epochsupercassettevision
+  name: Epoch Super Cassette Vision
+  aliases:
+  - scv
+  - supercassettevision
+  core: emuscv
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:997"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: externalports
+  name: External - Ports
+  aliases:
+  - app
+  - apps
+  - external
+  - externalport
+  - port
+  - ports
+  - script
+  - scripts
+  core: external
+  emulator: external
+  source_ref: "os share/info/manifest/core.json:1023"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: fairchildchannelf
+  name: Fairchild Channel F
+  aliases:
+  - channelf
+  - fairchild
+  core: freechaf
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1065"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: galaksija
+  name: Galaksija Retro Computer
+  aliases:
+  - galretro
+  - retcom
+  core: galaksija
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1103"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: gamemusic
+  name: Game Music
+  aliases:
+  - chiptune
+  - gme
+  core: gme
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1123"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: gametank
+  name: Game Tank
+  aliases:
+  - libgametank
+  core: libgametank
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1144"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: gcevectrex
+  name: GCE Vectrex
+  aliases:
+  - gce
+  - vectrex
+  core: vecx
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1163"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: java
+  name: Java J2ME
+  aliases:
+  - j2me
+  - mobile
+  core: freej2me
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1206"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: lowresnx
+  name: LowRes NX
+  core: lowresnx
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1250"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: luaengine
+  name: Lua Engine
+  aliases:
+  - lua
+  core: lutro
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1268"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: magnavox
+  name: Magnavox Odyssey - VideoPac
+  aliases:
+  - magnavoxodyssey
+  - magnavoxodyssey2
+  - magnavoxvideopac
+  - odyssey
+  - odyssey2
+  - videopac
+  core: o2em
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1287"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: mattelintellivision
+  name: Mattel Intellivision
+  aliases:
+  - intellivision
+  - intv
+  core: freeintv
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1329"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: megaduck
+  name: Mega Duck - Cougar Boy
+  aliases:
+  - cougarboy
+  core: sameduck
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1398"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: microsoftmsx
+  name: Microsoft MSX
+  aliases:
+  - msx
+  - msx1
+  - msx2
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1418"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: microw8
+  name: MicroW8
+  aliases:
+  - uw8
+  core: uw8
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1463"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: necpc98
+  name: NEC PC98
+  aliases:
+  - pc98
+  core: np2kai
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1654"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: necpcengine
+  name: NEC PC Engine
+  aliases:
+  - necpce
+  - nectg16
+  - necturbografx
+  - necturbografx16
+  - pce
+  - pcengine
+  - tg
+  - tg16
+  - tgfx
+  - tgrafx
+  - tgrafx16
+  - turbografx
+  - turbografx16
+  - turbographix
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1483"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: necpcenginecd
+  name: NEC PC Engine CD
+  aliases:
+  - necpcecd
+  - nectgcd
+  - necturbografxcd
+  - pcecd
+  - pcenginecd
+  - tgcd
+  - turbografxcd
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1520"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: necpcfx
+  name: NEC PC-FX
+  aliases:
+  - pcfx
+  core: mednafen_pcfx
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1626"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: nintendo3ds
+  name: Nintendo 3DS
+  aliases:
+  - 3ds
+  - n3ds
+  core: azahar - standalone
+  emulator: external
+  source_ref: "os share/info/manifest/core.json:1693"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: nintendods
+  name: Nintendo DS
+  aliases:
+  - ds
+  - dsi
+  - nds
+  - ninds
+  - nintendodsi
+  - nintendonintendodsi
+  core: drastic - standalone
+  emulator: external
+  source_ref: "os share/info/manifest/core.json:1720"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: nintendofamicomdisksystem
+  name: Nintendo Famicom Disk System
+  aliases:
+  - famicomdisksystem
+  - famicomds
+  - fcds
+  - fds
+  core: fceumm
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1782"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: nintendogameboy
+  name: Nintendo Game Boy
+  aliases:
+  - dmg
+  - gameboy
+  - gb
+  - gbdmg
+  - gbhacks
+  - ngb
+  - nintendogb
+  - originalgameboy
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1820"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: nintendogameboyadvance
+  name: Nintendo Game Boy Advance
+  aliases:
+  - gameboyadvance
+  - gba
+  - gbadvance
+  - gbahacks
+  - gbsp
+  - mgba
+  - ngba
+  - ningba
+  - nintendogba
+  core: mgba
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1883"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: nintendogameboycolor
+  name: Nintendo Game Boy Color
+  aliases:
+  - bgb
+  - gameboycolor
+  - gbc
+  - gbchacks
+  - gbcolor
+  - ngbc
+  - ningbc
+  - nintendogbc
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1945"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: nintendogw
+  name: Handheld Electronic - Game and Watch
+  aliases:
+  - gameandwatch
+  - gamenwatch
+  - gw
+  - handheldelectronic
+  - ngw
+  - nintendogameandwatch
+  core: gw
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1183"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: nintendon64
+  name: Nintendo N64
+  aliases:
+  - "64"
+  - 64dd
+  - n64
+  - n64dd
+  - n64hacks
+  - nintendo64
+  - nintendonintendo64
+  - nintendonintendo64dd
+  core: mupen64plus - standalone - glidemk2 - full
+  emulator: external
+  source_ref: "os share/info/manifest/core.json:2002"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: nintendonintendoentertainmentsystem
+  name: Nintendo NES - Famicom
+  aliases:
+  - famicom
+  - fc
+  - fcnes
+  - nes
+  - nescd
+  - nesds
+  - nesfc
+  - neshacks
+  - ninnes
+  - nintendoentertainmentsystem
+  - nintendofamicom
+  - nintendones
+  core: fceumm
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2075"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: nintendopokemonmini
+  name: Nintendo Pokemon Mini
+  aliases:
+  - nintendopokemini
+  - poke
+  - pokemini
+  - pokemonmini
+  core: pokemini
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2133"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: openbor
+  name: OpenBOR
+  aliases:
+  - openbeatsofrage
+  core: openbor v7530 - standalone
+  emulator: external
+  source_ref: "os share/info/manifest/core.json:2340"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: openlara
+  name: OpenLara
+  aliases:
+  - tombraider
+  core: openlara
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2375"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: palmos
+  name: Palm OS
+  aliases:
+  - palm
+  core: mu
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2395"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: pc
+  name: PC DOS
+  aliases:
+  - dos
+  - dosbox
+  - microsoftdos
+  - msdos
+  core: dosbox_pure
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2420"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: pc8000
+  name: NEC PC-8000 - PC-8800 Series
+  aliases:
+  - necpc8000
+  core: quasi88
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1583"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: philipscdi
+  name: Philips CDi
+  aliases:
+  - cdi
+  core: same_cdi
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2451"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: pico8
+  name: PICO-8
+  aliases:
+  - pico
+  core: picante8
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2485"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: puzzlescript
+  name: PuzzleScript
+  core: puzzlescript
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2521"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: pyxel
+  name: Pyxel
+  core: pyxel
+  emulator: external
+  source_ref: "os share/info/manifest/core.json:2540"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: quake
+  name: Quake
+  aliases:
+  - idquake
+  core: tyrquake
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2560"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: quake2
+  name: Quake II
+  aliases:
+  - idquake2
+  core: vitaquake2
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2578"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: rpgmaker
+  name: RPG Maker 2000 - 2003
+  aliases:
+  - easyrpg
+  core: easyrpg
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2608"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: scummvm
+  name: ScummVM
+  aliases:
+  - lucasart
+  - lucasarts
+  - scumm
+  core: scummvm
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2627"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: sega32x
+  name: Sega 32X
+  aliases:
+  - 32x
+  - gen32x
+  - md32x
+  - s32x
+  - sega32
+  - thirtytwox
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2657"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: segadreamcast
+  name: Sega Dreamcast
+  aliases:
+  - dc
+  - dreamcast
+  - flycast
+  - redream
+  - sdc
+  - segadc
+  core: flycastvl
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2747"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: segagamegear
+  name: Sega Game Gear
+  aliases:
+  - gamegear
+  - gamegearhacks
+  - gg
+  - segagg
+  - seggg
+  - sgg
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2804"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: segamastersystem
+  name: Sega Master System
+  aliases:
+  - ggsms
+  - mastersystem
+  - mastersystemhacks
+  - ms
+  - segams
+  - segasms
+  - segms
+  - sms
+  - smsgg
+  core: smsplus
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2839"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: segamegadrive
+  name: Sega Mega Drive - Genesis
+  aliases:
+  - gen
+  - genesis
+  - genesishacks
+  - genmd
+  - gens
+  - kega
+  - md
+  - mdgen
+  - mdmsu
+  - mdmsu1
+  - megadrive
+  - megadrivehacks
+  - nomad
+  - segagenesis
+  - segagenesismsu
+  - segamdmsu
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2936"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: seganaomi
+  name: Sega Atomiswave Naomi
+  aliases:
+  - arcadeatomiswave
+  - arcadenaomi
+  - arcadesegaatomiswave
+  - arcadeseganaomi
+  - arcatomiswave
+  - arcnaomi
+  - arcsegaatomiswave
+  - arcseganaomi
+  - atomiswave
+  - aw
+  - naomi
+  - segaatomiswave
+  core: flycastvl
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2680"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: segapico
+  name: Sega Pico
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2981"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: segasaturn
+  name: Sega Saturn
+  aliases:
+  - sat
+  - satourne
+  - saturn
+  - segasat
+  - ss
+  core: yabadabadoo
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3006"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: segasegacd
+  name: Sega Mega CD - Sega CD
+  aliases:
+  - gencd
+  - genesiscd
+  - gensegacd
+  - mdcd
+  - mdsegacd
+  - megacd
+  - megadrivecd
+  - scd
+  - segacd
+  - segamcd
+  - segamegacd
+  - segascd
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2883"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: segasg1000
+  name: Sega SG-1000
+  aliases:
+  - segasgone
+  - sg1000
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3071"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: sharpx1
+  name: Sharp X1
+  aliases:
+  - x1
+  core: x1
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3098"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: sharpx68000
+  name: Sharp X68000
+  aliases:
+  - x68000
+  - x68k
+  core: px68k
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3126"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: sinclairzx81
+  name: Sinclair ZX 81
+  aliases:
+  - zx81
+  core: "81"
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3155"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: snkneogeo
+  name: SNK Neo Geo
+  aliases:
+  - arcadeneogeo
+  - arcadesnk
+  - arcadesnkneogeo
+  - arcneogeo
+  - fbnneogeo
+  - neogeo
+  - ng
+  - sng
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3193"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: snkneogeocd
+  name: SNK Neo Geo CD
+  aliases:
+  - arcadeneogeocd
+  - arcneogeocd
+  - neocd
+  - neocdz
+  - neogeocd
+  - ngcd
+  - snkngcd
+  core: neocd
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3232"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: snkneogeopocketcolor
+  name: SNK Neo Geo Pocket - Color
+  aliases:
+  - neogeopocket
+  - neogeopocketcolor
+  - ngp
+  - ngpc
+  - ngpocket
+  - ngpocketcolor
+  - snkneogeopocket
+  - snkngp
+  - snkngpc
+  core: mednafen_ngp
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3305"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: sonyplaystation
+  name: Sony PlayStation
+  aliases:
+  - epsxe
+  - pbp
+  - pbps
+  - pcsx
+  - playstation
+  - playstationchds
+  - playstationpbps
+  - ps
+  - ps1
+  - pschd
+  - pschds
+  - psiso
+  - psisos
+  - pspbp
+  - pspbps
+  - psx
+  - psxchd
+  - psxchds
+  - psxiso
+  - psxisos
+  - psxpbp
+  - psxpbps
+  - sonyps
+  - sonyps1
+  - sonypsx
+  core: pcsx_rearmed
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3335"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: sonyplaystationportable
+  name: Sony PlayStation Portable
+  aliases:
+  - playstationportable
+  - ppsspp
+  - psp
+  - sonypsp
+  core: ppsspp
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3427"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: story
+  name: Onscripter
+  aliases:
+  - visualstory
+  core: onscripter
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2317"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: supergrafx
+  name: NEC PC Engine SuperGrafx
+  aliases:
+  - necsgfx
+  - necsupergrafx
+  - sgfx
+  core: mednafen_supergrafx
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:1555"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: supermariowar
+  name: Super Mario War
+  aliases:
+  - superbroswar
+  core: superbroswar
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3458"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: svi
+  name: SVI - ColecoVision - SG1000
+  aliases:
+  - svicoleco
+  - svicolecovision
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3478"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: texasinstrumentsti83
+  name: Texas Instruments TI-83
+  aliases:
+  - ti83
+  core: numero
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3498"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: thomsonmoto
+  name: Thomson MO-TO
+  aliases:
+  - theodore
+  - thomson
+  core: theodore
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3602"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: tic80
+  name: TIC-80
+  aliases:
+  - t80
+  core: tic80
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3623"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: uzebox
+  name: Uzebox
+  core: uzem
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3641"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: vemulator
+  name: VeMUlator
+  core: vemulator
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3659"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: video
+  name: Media Player
+  aliases:
+  - audio
+  - iptv
+  - media
+  - movie
+  - movies
+  - music
+  - sound
+  - videos
+  core: wasabi
+  emulator: external
+  source_ref: "os share/info/manifest/core.json:1359"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: vircon32
+  name: Vircon32
+  core: vircon32
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3677"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: virtualboy
+  name: Nintendo Virtual Boy
+  aliases:
+  - nintendovb
+  - nintendovitrualboy
+  - nvb
+  - vb
+  - virtboy
+  - virtuaboy
+  core: mednafen_vb
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2289"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: wasm4
+  name: WASM-4
+  core: wasm4
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3699"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: watarasupervision
+  name: Watara Supervision
+  aliases:
+  - supervision
+  core: potator
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3717"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: wolfenstein3d
+  name: Wolfenstein 3D
+  aliases:
+  - wolf
+  - wolf3d
+  - wolfenstein
+  core: ecwolf
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3735"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: zeldaclassic
+  name: Zelda Classic
+  aliases:
+  - zeldac
+  core: zc250x
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3756"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: zsnes
+  name: Nintendo SNES - SFC
+  aliases:
+  - ninsnes
+  - nintendosfc
+  - nintendosnes
+  - nintendosnesmsu
+  - nintendosnesmsu1
+  - nintendosupernintendo
+  - nintendosupernintendoentertainmentsystem
+  - nsnes
+  - nsv
+  - satella
+  - satellaview
+  - sfc
+  - snes
+  - snes9x
+  - sneshacks
+  - snesmsu
+  - snesmsu1
+  - sufami
+  - superfamicom
+  - supernes
+  - supernintendo
+  - supernintendoentertainmentsystem
+  - superpretendo
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:2160"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names
+- folder: zxs
+  name: Sinclair ZX Spectrum
+  aliases:
+  - spectrum
+  core: fuse
+  emulator: retroarch
+  source_ref: "os share/info/manifest/core.json:3174"
+  note: a folder matches when its name, lowercased without ' -_+', is one of the friendly names

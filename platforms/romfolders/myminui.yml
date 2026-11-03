@@ -1,0 +1,323 @@
+setup: myminui
+name: MyMinUI
+platform: myminui
+sources:
+  os:
+    repo: "https://github.com/Turro75/MyMinUI"
+    commit: 72ed4f3dd80d96646c11bf9363242565320d9566
+roms_root:
+  path: <SD>/Roms
+  from_bios: ../../Roms
+  source_ref: "os workspace/all/common/defines.h:13"
+case_sensitive: null
+case_ref: "os workspace/all/common/utils.c:130-157"
+hidden:
+- pattern: .*
+  source_ref: "os workspace/all/common/utils.c:30-35"
+- pattern: '*.disabled'
+  source_ref: "os workspace/all/common/utils.c:30-35"
+- name: map.txt
+  source_ref: "os workspace/all/common/utils.c:30-35"
+- name: Imgs
+  source_ref: "os workspace/all/common/utils.c:30-35"
+notes:
+- "MyMinUI has no extension filter. Every file of a Roms folder that is not hidden is listed as a game\
+  \ (os workspace/all/minui/minui.c:660-667), so the rows carry no extensions."
+- "A Roms folder starts the pak named by the text inside its last parentheses, or by its whole name without\
+  \ parentheses (getEmuName, os workspace/all/common/utils.c:130-157)."
+- BIOS sits in Bios/<TAG>/, two levels under the card root, so the roms root is ../../Roms from it.
+folders:
+- folder: A2600
+  core: stella2014
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/A2600.pak/launch.sh:3"
+  note: "any folder named A2600 or ending in '(A2600)' starts A2600.pak. Devices: h700, m21, miyoomini,\
+    \ my282, r36s, rg35xx"
+- folder: "Arcade (MAME)"
+  name: MAME
+  aliases:
+  - MAME
+  core: mame2003_plus
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/MAME.pak/launch.sh:3"
+  note: "any folder named MAME or ending in '(MAME)' starts MAME.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Atari5200 (A5200)"
+  name: A5200
+  aliases:
+  - A5200
+  core: a5200
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/A5200.pak/launch.sh:3"
+  note: "any folder named A5200 or ending in '(A5200)' starts A5200.pak. Devices: h700, m21, miyoomini,\
+    \ my282, r36s, rg35xx"
+- folder: "Atari7800 (A7800)"
+  name: A7800
+  aliases:
+  - A7800
+  core: prosystem
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/A7800.pak/launch.sh:3"
+  note: "any folder named A7800 or ending in '(A7800)' starts A7800.pak. Devices: h700, m21, miyoomini,\
+    \ my282, r36s, rg35xx"
+- folder: DC
+  emulator: standalone
+  source_ref: "os skeleton/EXTRAS/Emus/r36s/DC.pak/launch.sh:1"
+  note: "any folder named DC or ending in '(DC)' starts DC.pak. Devices: r36s"
+- folder: "Doom (DOOM)"
+  name: DOOM
+  aliases:
+  - DOOM
+  core: prboom
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/DOOM.pak/launch.sh:3"
+  note: "any folder named DOOM or ending in '(DOOM)' starts DOOM.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "FinalBurnNeo (FBN)"
+  name: FBN
+  aliases:
+  - FBN
+  core: fbneo
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/FBN.pak/launch.sh:3"
+  note: "any folder named FBN or ending in '(FBN)' starts FBN.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Game Boy (GB)"
+  name: GB
+  aliases:
+  - GB
+  core: gambatte
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/GB.pak/launch.sh:3"
+  note: "any folder named GB or ending in '(GB)' starts GB.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Game Boy Advance (GBA)"
+  name: GBA
+  aliases:
+  - GBA
+  core: gpsp
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/GBA.pak/launch.sh:3"
+  note: "any folder named GBA or ending in '(GBA)' starts GBA.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Game Boy Advance (MGBA)"
+  name: MGBA
+  aliases:
+  - MGBA
+  core: mgba
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/MGBA.pak/launch.sh:3"
+  note: "any folder named MGBA or ending in '(MGBA)' starts MGBA.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Game Boy Color (GBC)"
+  name: GBC
+  aliases:
+  - GBC
+  core: gambatte
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/GBC.pak/launch.sh:3"
+  note: "any folder named GBC or ending in '(GBC)' starts GBC.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "MSDOS (DOS)"
+  name: DOS
+  aliases:
+  - DOS
+  core: dosbox
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/DOS.pak/launch.sh:3"
+  note: "any folder named DOS or ending in '(DOS)' starts DOS.pak. Devices: h700, m21, miyoomini, r36s,\
+    \ rg35xx"
+- folder: N64
+  emulator: standalone
+  source_ref: "os skeleton/EXTRAS/Emus/r36s/N64.pak/launch.sh:1"
+  note: "any folder named N64 or ending in '(N64)' starts N64.pak. Devices: r36s"
+- folder: "Neo Geo Pocket Color (NGPC)"
+  name: NGPC
+  aliases:
+  - NGPC
+  core: mednafen_ngp
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/NGPC.pak/launch.sh:3"
+  note: "any folder named NGPC or ending in '(NGPC)' starts NGPC.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "NeoGeo (NG)"
+  name: NG
+  aliases:
+  - NG
+  core: fbneo
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/NG.pak/launch.sh:3"
+  note: "any folder named NG or ending in '(NG)' starts NG.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "NeoGeo CD (NGCD)"
+  name: NGCD
+  aliases:
+  - NGCD
+  core: neocd
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/NGCD.pak/launch.sh:3"
+  note: "any folder named NGCD or ending in '(NGCD)' starts NGCD.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: NGP
+  core: mednafen_ngp
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/NGP.pak/launch.sh:3"
+  note: "any folder named NGP or ending in '(NGP)' starts NGP.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Nintendo DS (NDS)"
+  name: NDS
+  aliases:
+  - NDS
+  emulator: standalone
+  source_ref: "os skeleton/EXTRAS/Emus/miyoomini/NDS.pak/launch.sh:1"
+  note: "any folder named NDS or ending in '(NDS)' starts NDS.pak. Devices: miyoomini, my282, r36s"
+- folder: "Nintendo Entertainment System (FC)"
+  name: FC
+  aliases:
+  - FC
+  core: fceumm
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/FC.pak/launch.sh:3"
+  note: "any folder named FC or ending in '(FC)' starts FC.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Pico-8 (P8)"
+  name: P8
+  aliases:
+  - P8
+  core: fake08
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/P8.pak/launch.sh:3"
+  note: "any folder named P8 or ending in '(P8)' starts P8.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Pico-8 Native (P8N)"
+  name: P8N
+  aliases:
+  - P8N
+  emulator: standalone
+  source_ref: "os skeleton/EXTRAS/Emus/h700/P8N.pak/launch.sh:1"
+  note: "any folder named P8N or ending in '(P8N)' starts P8N.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Pokémon mini (PKM)"
+  name: PKM
+  aliases:
+  - PKM
+  core: pokemini
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/PKM.pak/launch.sh:3"
+  note: "any folder named PKM or ending in '(PKM)' starts PKM.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: PSP
+  emulator: standalone
+  source_ref: "os skeleton/EXTRAS/Emus/r36s/PSP.pak/launch.sh:1"
+  note: "any folder named PSP or ending in '(PSP)' starts PSP.pak. Devices: r36s"
+- folder: PUAE
+  core: puae2021
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/PUAE.pak/launch.sh:3"
+  note: "any folder named PUAE or ending in '(PUAE)' starts PUAE.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Quake (QUAKE)"
+  name: QUAKE
+  aliases:
+  - QUAKE
+  core: tyrquake
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/QUAKE.pak/launch.sh:3"
+  note: "any folder named QUAKE or ending in '(QUAKE)' starts QUAKE.pak. Devices: h700, m21, miyoomini,\
+    \ r36s, rg35xx"
+- folder: "Sega Game Gear (GG)"
+  name: GG
+  aliases:
+  - GG
+  core: picodrive
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/GG.pak/launch.sh:3"
+  note: "any folder named GG or ending in '(GG)' starts GG.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Sega Genesis (MD)"
+  name: MD
+  aliases:
+  - MD
+  core: picodrive
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/MD.pak/launch.sh:3"
+  note: "any folder named MD or ending in '(MD)' starts MD.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Sega Master System (SMS)"
+  name: SMS
+  aliases:
+  - SMS
+  core: picodrive
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/SMS.pak/launch.sh:3"
+  note: "any folder named SMS or ending in '(SMS)' starts SMS.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Sony PlayStation (PS)"
+  name: PS
+  aliases:
+  - PS
+  core: pcsx_rearmed
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/PS.pak/launch.sh:3"
+  note: "any folder named PS or ending in '(PS)' starts PS.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Super Game Boy (SGB)"
+  name: SGB
+  aliases:
+  - SGB
+  core: mgba
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/SGB.pak/launch.sh:3"
+  note: "any folder named SGB or ending in '(SGB)' starts SGB.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Super Nintendo Entertainment System (SFC)"
+  name: SFC
+  aliases:
+  - SFC
+  core: snes9x2005_plus
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/SFC.pak/launch.sh:3"
+  note: "any folder named SFC or ending in '(SFC)' starts SFC.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Super Nintendo Entertainment System (SUPA)"
+  name: SUPA
+  aliases:
+  - SUPA
+  core: mednafen_supafaust
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/SUPA.pak/launch.sh:3"
+  note: "any folder named SUPA or ending in '(SUPA)' starts SUPA.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "TurboGrafx-16 (PCE)"
+  name: PCE
+  aliases:
+  - PCE
+  core: mednafen_pce_fast
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/PCE.pak/launch.sh:3"
+  note: "any folder named PCE or ending in '(PCE)' starts PCE.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "Virtual Boy (VB)"
+  name: VB
+  aliases:
+  - VB
+  core: mednafen_vb
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/VB.pak/launch.sh:3"
+  note: "any folder named VB or ending in '(VB)' starts VB.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: WS
+  core: mednafen_wswan
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/WS.pak/launch.sh:3"
+  note: "any folder named WS or ending in '(WS)' starts WS.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"
+- folder: "ZX Spectrum (ZXS)"
+  name: ZXS
+  aliases:
+  - ZXS
+  core: fuse
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/h700/ZXS.pak/launch.sh:3"
+  note: "any folder named ZXS or ending in '(ZXS)' starts ZXS.pak. Devices: h700, m21, miyoomini, my282,\
+    \ r36s, rg35xx"

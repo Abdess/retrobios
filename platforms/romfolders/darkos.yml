@@ -1,0 +1,1430 @@
+setup: darkos
+name: dArkOS
+platform: retroarch
+sources:
+  os:
+    repo: "https://github.com/christianhaitian/darkos"
+    commit: daecf488075f0194c164578b90617fa7002ce8bd
+  es:
+    repo: "https://github.com/christianhaitian/EmulationStation-fcamod"
+    commit: c4809d8ef33159385a2d516b4b3aec832f4ce2e8
+    note: the branch build_emulationstation.sh builds
+roms_root:
+  path: /roms
+  from_bios: ..
+  source_ref: "os retroarch/configs/retroarch.cfg.rgb10:3043; os build_emulationstation.sh:73"
+case_sensitive: null
+skip:
+- name: bios
+  reason: RetroArch's system directory
+  source_ref: "os retroarch/configs/retroarch.cfg.rgb10:3043"
+hidden:
+- pattern: .*
+  source_ref: "es es-app/src/SystemData.cpp:145-146,180"
+media:
+- name: media
+  source_ref: "es es-app/src/SystemData.cpp:180,184"
+- name: images
+  source_ref: "es es-app/src/SystemData.cpp:180,184"
+- name: videos
+  source_ref: "es es-app/src/SystemData.cpp:180,184"
+- name: ppsspp
+  source_ref: "es es-app/src/SystemData.cpp:180,184"
+- pattern: downloaded_*
+  source_ref: "es es-app/src/SystemData.cpp:180,184"
+notes:
+- "The BIOS folder is /roms/bios, inside the roms root: the scan skips it."
+- "Folders are read from the RK3566 list, build_emulationstation.sh copies es_systems.cfg.<chipset> (os\
+  \ build_emulationstation.sh:73-75). The RK3326 defaults that differ are board_defaults."
+- "A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:151)."
+- "Default core: the user's saved choice, else the first emulator and its first core (es es-app/src/SystemData.h:101-131)."
+folders:
+- folder: 3do
+  extensions:
+  - .bin
+  - .chd
+  - .cue
+  - .iso
+  core: opera
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:486"
+- folder: advision
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mess
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:4"
+- folder: alg
+  extensions:
+  - .alg
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:358"
+- folder: amiga
+  extensions:
+  - .adf
+  - .hdf
+  - .ipf
+  - .lha
+  - .m3u
+  - .zip
+  core: uae4arm
+  emulator: retroarch32
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:16"
+- folder: amigacd32
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .iso
+  - .lha
+  - .m3u
+  - .mds
+  - .nrg
+  core: puae2021
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:44"
+- folder: amstradcpc
+  extensions:
+  - .7z
+  - .cpc
+  - .dsk
+  - .zip
+  core: crocods
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:72"
+- folder: apple2
+  extensions:
+  - .apple2
+  - .do
+  - .dsk
+  - .hdv
+  - .po
+  - .sh
+  - .zip
+  core: linapple
+  emulator: linapple
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:92"
+- folder: arcade
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:189"
+  arcade: true
+- folder: arduboy
+  extensions:
+  - .hex
+  core: ardens
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2211"
+- folder: astrocde
+  name: astrocade
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mess
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:218"
+- folder: atari2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella2014
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:522"
+- folder: atari5200
+  extensions:
+  - .7z
+  - .a52
+  - .zip
+  core: a5200
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:542"
+- folder: atari7800
+  extensions:
+  - .7z
+  - .a78
+  - .zip
+  core: prosystem
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:562"
+- folder: atari800
+  extensions:
+  - .7z
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .rom
+  - .xex
+  - .zip
+  core: atari800
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:510"
+- folder: atarijaguar
+  name: jaguar
+  extensions:
+  - .abs
+  - .bin
+  - .cof
+  - .j64
+  - .jag
+  - .prg
+  - .rom
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:606"
+- folder: atarilynx
+  extensions:
+  - .7z
+  - .lnx
+  - .zip
+  core: handy
+  emulator: retroarch32
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:618"
+- folder: atarist
+  extensions:
+  - .dim
+  - .ipf
+  - .msa
+  - .st
+  - .stx
+  - .zip
+  core: hatari
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:574"
+- folder: atarixegs
+  extensions:
+  - .7z
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .rom
+  - .xex
+  - .zip
+  core: atari800
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:594"
+- folder: atomiswave
+  name: Sega Atomiswave
+  extensions:
+  - .7z
+  - .bin
+  - .ist
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:394"
+  arcade: true
+- folder: bbcmicro
+  extensions:
+  - .dsd
+  - .ssd
+  core: b2
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:120"
+- folder: c128
+  extensions:
+  - .7z
+  - .bin
+  - .cmd
+  - .crt
+  - .d2m
+  - .d4m
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .tcrt
+  - .vfl
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_x128
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2055"
+- folder: c16
+  extensions:
+  - .7z
+  - .bin
+  - .cmd
+  - .crt
+  - .d2m
+  - .d4m
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .tcrt
+  - .vfl
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xplus4
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2031"
+- folder: c64
+  extensions:
+  - .7z
+  - .bin
+  - .cmd
+  - .crt
+  - .d2m
+  - .d4m
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .tcrt
+  - .vfl
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_x64
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2043"
+- folder: cavestory
+  extensions:
+  - .dll
+  - .exe
+  - .so
+  core: doukutsu_rs
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:139"
+- folder: cdimono1
+  name: cdi
+  extensions:
+  - .chd
+  - .iso
+  core: same_cdi
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:474"
+- folder: channelf
+  extensions:
+  - .bin
+  - .chf
+  - .rom
+  - .zip
+  core: freechaf
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:230"
+- folder: coco3
+  name: coco
+  extensions:
+  - .bin
+  - .cas
+  - .ccc
+  - .dsk
+  - .rom
+  - .wav
+  - .zip
+  core: coco3
+  emulator: standalone
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2435"
+- folder: coleco
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .zip
+  core: coolcv
+  emulator: retroarch32
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1890"
+- folder: cps1
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:242"
+  arcade: true
+- folder: cps2
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:270"
+  arcade: true
+- folder: cps3
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:298"
+  arcade: true
+- folder: daphne
+  name: Daphne
+  extensions:
+  - .daphne
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:346"
+  arcade: true
+- folder: doom
+  extensions:
+  - .doom
+  - .sh
+  - .wad
+  core: standalone
+  emulator: standalone
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2167"
+- folder: dos
+  name: msdos
+  extensions:
+  - .bat
+  - .com
+  - .conf
+  - .cue
+  - .dosz
+  - .exe
+  - .iso
+  - .m3u
+  - .zip
+  core: dosbox_pure
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2123"
+- folder: dragon32
+  extensions:
+  - .bin
+  - .cas
+  - .ccc
+  - .dsk
+  - .rom
+  - .wav
+  - .zip
+  core: dragon32
+  emulator: standalone
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2415"
+- folder: dreamcast
+  extensions:
+  - .7z
+  - .cdi
+  - .chd
+  - .cue
+  - .gdi
+  - .m3u
+  core: flycast32_rumble
+  emulator: retroarch32
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1587"
+- folder: easyrpg
+  extensions:
+  - .easyrpg
+  - .zip
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2231"
+- folder: enterprise
+  extensions:
+  - '.128'
+  - .bas
+  - .com
+  - .dsk
+  - .dtf
+  - .img
+  - .tap
+  - .trn
+  core: ep128emu_core
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2367"
+- folder: famicom
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:861"
+- folder: fds
+  name: famicom disk system
+  extensions:
+  - .7z
+  - .fds
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:881"
+- folder: gameandwatch
+  extensions:
+  - .mgw
+  core: gw
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1321"
+- folder: gamegear
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1641"
+- folder: gametank
+  extensions:
+  - .7z
+  - .gtr
+  - .zip
+  core: standalone
+  emulator: standalone
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2460"
+- folder: gb
+  extensions:
+  - .7z
+  - .dmg
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1219"
+- folder: gba
+  extensions:
+  - .7z
+  - .gb
+  - .gba
+  - .gbc
+  - .zip
+  core: mgba_rumble
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1285"
+- folder: gbc
+  extensions:
+  - .7z
+  - .dmg
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1252"
+- folder: gc
+  name: Gamecube
+  extensions:
+  - .elf
+  - .gcz
+  - .iso
+  - .m3u
+  - .rvz
+  - .wad
+  - .wbfs
+  - .wia
+  core: Normal
+  emulator: standalone
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1173"
+- folder: genesis
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1460"
+- folder: gx4000
+  extensions:
+  - .cpr
+  - .dsk
+  - .zip
+  core: cap32
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:170"
+- folder: intellivision
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .zip
+  core: freeintv
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1878"
+- folder: j2me
+  extensions:
+  - .jar
+  core: freej2me-plus
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2347"
+- folder: love2d
+  extensions:
+  - .love
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1161"
+- folder: lowresnx
+  extensions:
+  - .nx
+  core: lowresnx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2493"
+- folder: mame
+  name: mame2010
+  extensions:
+  - .7z
+  - .chd
+  - .zip
+  core: mame2010
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:382"
+  arcade: true
+- folder: mame2003
+  extensions:
+  - .7z
+  - .zip
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:370"
+  arcade: true
+- folder: mastersystem
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1375"
+- folder: megadrive
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1412"
+- folder: megaduck
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: sameduck
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:326"
+- folder: movies
+  name: videos
+  extensions:
+  - .avi
+  - .mkv
+  - .mov
+  - .mp4
+  - .mpeg
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2573"
+- folder: msumd
+  name: megadrivemsu
+  extensions:
+  - .md
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1448"
+- folder: msx
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1939"
+- folder: msx2
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1961"
+- folder: mv
+  name: microvision
+  extensions:
+  - .bin
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2255"
+- folder: n64
+  extensions:
+  - .7z
+  - .n64
+  - .v64
+  - .z64
+  - .zip
+  core: parallel_n64
+  emulator: retroarch32
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1103"
+- folder: n64dd
+  extensions:
+  - .d64
+  - .n64
+  - .n64dd
+  - .ndd
+  - .z64
+  core: parallel_n64
+  emulator: retroarch32
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1135"
+- folder: naomi
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .ist
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:434"
+  arcade: true
+- folder: nds
+  extensions:
+  - .7z
+  - .nds
+  - .zip
+  core: drastic
+  emulator: drastic
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1345"
+- folder: neogeo
+  extensions:
+  - .7z
+  - .cue
+  - .neo
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1696"
+- folder: neogeocd
+  extensions:
+  - .chd
+  - .cue
+  - .m3u
+  core: neocd
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1719"
+- folder: nes
+  extensions:
+  - .7z
+  - .nes
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:947"
+- folder: ngp
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: mednafen_ngp
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1740"
+- folder: ngpc
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: mednafen_ngp
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1768"
+- folder: odyssey2
+  extensions:
+  - .bin
+  core: o2em
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:705"
+- folder: onscripter
+  extensions:
+  - .dat
+  - .txt
+  core: onscripter
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2267"
+- folder: openbor
+  extensions:
+  - .pak
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1796"
+- folder: palm
+  extensions:
+  - .img
+  - .prc
+  core: mu
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2311"
+- folder: pc98
+  extensions:
+  - .cmd
+  - .d88
+  - .fdi
+  - .hdi
+  - .zip
+  core: nekop2
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2091"
+- folder: pcengine
+  extensions:
+  - .7z
+  - .bin
+  - .pce
+  - .zip
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:717"
+- folder: pcenginecd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .pce
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:746"
+- folder: pcfx
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .toc
+  - .zip
+  core: mednafen_pcfx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2111"
+- folder: pico
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1672"
+- folder: pico-8/carts
+  name: pico-8
+  extensions:
+  - .p8
+  - .png
+  core: float-scaled
+  emulator: float-scaled
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2287"
+- folder: piece
+  extensions:
+  - .pex
+  - .pfi
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2323"
+- folder: pokemonmini
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:498"
+- folder: ports
+  extensions:
+  - .sh
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2517"
+- folder: psp
+  name: ppsspp
+  extensions:
+  - .chd
+  - .cso
+  - .iso
+  - .pbp
+  core: standalone-vulkan
+  emulator: standalone-vulkan
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1836"
+  board_defaults:
+    rk3326:
+      core: standalone
+      emulator: standalone
+      source_ref: "os Emulationstation/es_systems.cfg.rk3326:1801"
+- folder: pspminis
+  extensions:
+  - .chd
+  - .cso
+  - .iso
+  - .pbp
+  core: standalone-vulkan
+  emulator: standalone-vulkan
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1858"
+  board_defaults:
+    rk3326:
+      core: standalone
+      emulator: standalone
+      source_ref: "os Emulationstation/es_systems.cfg.rk3326:1821"
+- folder: psx
+  extensions:
+  - .7z
+  - .cbn
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .toc
+  - .zip
+  core: pcsx_rearmed_rumble
+  emulator: retroarch32
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1808"
+- folder: puzzlescript
+  extensions:
+  - .pz
+  - .pzp
+  core: puzzlescript
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2335"
+- folder: satellaview
+  extensions:
+  - .7z
+  - .bs
+  - .sfc
+  - .smc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1005"
+- folder: saturn
+  extensions:
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  core: standalone-nobios
+  emulator: standalone-nobios
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1547"
+- folder: scummvm
+  extensions:
+  - .scummvm
+  core: standalone
+  emulator: standalone
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2528"
+- folder: scv
+  extensions:
+  - '.0'
+  - .bin
+  - .cart
+  - .rom
+  - .zip
+  core: emuscv
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2243"
+- folder: sega32x
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .cue
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1523"
+- folder: segacd
+  extensions:
+  - .68k
+  - .7z
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .sg
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1496"
+- folder: sfc
+  extensions:
+  - .7z
+  - .sfc
+  - .smc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:910"
+- folder: sg-1000
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1363"
+- folder: sgb
+  extensions:
+  - .7z
+  - .dmg
+  - .gb
+  - .gbc
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1333"
+- folder: snes
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1017"
+  note: the list names 2 systems snes
+- folder: snes-hacks
+  extensions:
+  - .7z
+  - .bs
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .sfc
+  - .smc
+  - .st
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1066"
+- folder: snesmsu1
+  name: snesmsu
+  extensions:
+  - .7z
+  - .sfc
+  - .smc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1054"
+- folder: solarus
+  extensions:
+  - .solarus
+  - .zip
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2505"
+- folder: sufami
+  extensions:
+  - .7z
+  - .smc
+  - .zip
+  core: snes9x2010
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:976"
+  board_defaults:
+    rk3326:
+      core: snes9x
+      emulator: retroarch
+      source_ref: "os Emulationstation/es_systems.cfg.rk3326:1005"
+  note: the list names 2 systems snes
+- folder: supergrafx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .pce
+  - .sgx
+  - .zip
+  core: mednafen_supergrafx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:833"
+- folder: supervision
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: potator
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2155"
+- folder: thomson
+  extensions:
+  - .fd
+  - .k7
+  - .m5
+  - .m7
+  - .rom
+  - .sap
+  core: theodore
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2403"
+- folder: ti99
+  extensions:
+  - .ctg
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2143"
+- folder: tic80
+  name: tic-80
+  extensions:
+  - .tic
+  core: tic80
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1915"
+- folder: tigerlcd
+  extensions:
+  - .zip
+  core: mametiger
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2549"
+- folder: turbografx
+  name: turbografx16
+  extensions:
+  - .7z
+  - .chd
+  - .pce
+  - .zip
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:775"
+- folder: turbografxcd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .pce
+  - .zip
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:804"
+- folder: tvc
+  name: videoton
+  extensions:
+  - .cas
+  core: ep128emu_core
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2379"
+- folder: uzebox
+  extensions:
+  - .uze
+  core: uzem
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2561"
+- folder: vectrex
+  extensions:
+  - .7z
+  - .vec
+  - .zip
+  core: vecx
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1927"
+- folder: vic20
+  extensions:
+  - '.20'
+  - '.40'
+  - '.60'
+  - .7z
+  - .a0
+  - .b0
+  - .bin
+  - .cmd
+  - .crt
+  - .d2m
+  - .d4m
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .rom
+  - .t64
+  - .tap
+  - .tcrt
+  - .vfl
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xvic
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2067"
+- folder: videopac
+  extensions:
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2079"
+- folder: vircon32
+  extensions:
+  - .v32
+  core: vircon32
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2391"
+- folder: virtualboy
+  extensions:
+  - .7z
+  - .vb
+  - .vboy
+  - .zip
+  core: mednafen_vb
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1192"
+- folder: vmac
+  name: macintosh
+  extensions:
+  - .cmd
+  - .dsk
+  - .hvf
+  - .img
+  - .zip
+  core: minivmac
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:158"
+- folder: vmu
+  extensions:
+  - .bin
+  - .vms
+  core: vemulator
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1629"
+- folder: wasm4
+  name: wasm-4
+  extensions:
+  - .wasm
+  core: wasm4
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2481"
+- folder: wolf
+  extensions:
+  - .ecwolf
+  - .wolf
+  core: standalone
+  emulator: standalone
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2190"
+- folder: wonderswan
+  extensions:
+  - .7z
+  - .pc2
+  - .ws
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:651"
+- folder: wonderswancolor
+  extensions:
+  - .7z
+  - .pc2
+  - .ws
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:678"
+- folder: x1
+  extensions:
+  - .2d
+  - .2hd
+  - .88d
+  - .cmd
+  - .d88
+  - .dup
+  - .dx1
+  - .hdm
+  - .tfd
+  - .xdf
+  - .zip
+  core: x1
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2007"
+- folder: x68000
+  extensions:
+  - .2hd
+  - .88d
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:2019"
+- folder: zx81
+  extensions:
+  - .p
+  - .tzx
+  - .zip
+  core: "81"
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1983"
+- folder: zxspectrum
+  extensions:
+  - .7z
+  - .dsk
+  - .gz
+  - .img
+  - .mgt
+  - .scl
+  - .sna
+  - .szx
+  - .tap
+  - .trd
+  - .tzx
+  - .udi
+  - .z80
+  - .zip
+  core: fuse
+  emulator: retroarch
+  source_ref: "os Emulationstation/es_systems.cfg.rk3566:1995"

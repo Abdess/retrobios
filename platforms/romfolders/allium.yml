@@ -1,0 +1,916 @@
+setup: allium
+name: Allium
+platform: retroarch
+sources:
+  os:
+    repo: "https://github.com/goweiwen/Allium"
+    commit: ee0dda979bc02649fdda48b277eaa60938273465
+roms_root:
+  path: /mnt/SDCARD/Roms
+  from_bios: ../Roms
+  source_ref: "os crates/common/src/constants.rs:19-34"
+case_sensitive: false
+case_ref: "os crates/allium-launcher/src/consoles.rs:120-185"
+hidden:
+- pattern: .*
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+- pattern: _*
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+- name: gamelist.xml
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+- name: miyoogamelist.xml
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+- name: neogeo.zip
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+- pattern: '*.db'
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+- pattern: '*.sbi'
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+- pattern: '*.nfo'
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+- pattern: '*.msu'
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+- pattern: '*.pcm'
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+media:
+- name: Imgs
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+- name: Guides
+  source_ref: "os crates/allium-launcher/src/entry/mod.rs:31-62"
+notes:
+- "A file maps by its exact name, then by any dotted extension a console lists, then by the folder patterns\
+  \ walking up the path (os crates/allium-launcher/src/consoles.rs:138-185). A console with no folder\
+  \ pattern is matched by extension only and has no row."
+folders:
+- folder: AMIGA
+  name: Amiga
+  aliases:
+  - amiga
+  - amiga1200
+  - amiga600
+  - amigacd32
+  - cdtv
+  extensions:
+  - .adf
+  - .adz
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .info
+  - .ipf
+  - .lha
+  - .mds
+  - .nrg
+  - .rp9
+  - .slave
+  - .uae
+  core: puae2021
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:136"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: ARCADE
+  name: Arcade
+  aliases:
+  - arcade
+  - fba
+  - fbneo
+  - mame
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:13"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: ATARI
+  name: Atari 2600
+  aliases:
+  - atari2600
+  extensions:
+  - .a26
+  core: stella2014
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:36"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: ATARIST
+  name: Atari ST
+  core: hatari
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:66"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: CHAILOVE
+  name: ChaiLove
+  core: chailove
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:443"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: COLECO
+  name: ColecoVision
+  aliases:
+  - colecovision
+  extensions:
+  - .col
+  - .ri
+  - .sc
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:130"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: COMMODORE
+  name: Commodore 64
+  aliases:
+  - c64
+  core: vice_x64
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:157"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: CPC
+  name: Amstrad CPC
+  aliases:
+  - amstradcpc
+  extensions:
+  - .kcr
+  - .sna
+  core: crocods
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:7"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: CPS1
+  core: fbalpha2012_cps1
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:82"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: CPS2
+  core: fbalpha2012_cps2
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:98"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: CPS3
+  core: fbalpha2012_cps3
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:114"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: DAPHNE
+  name: Daphne
+  extensions:
+  - .daphne
+  core: daphne
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:448"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: DOOM
+  name: Doom
+  aliases:
+  - PRBOOM
+  extensions:
+  - .iwad
+  - .pwad
+  - .wad
+  core: prboom
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:491"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: DOS
+  name: MS-DOS
+  extensions:
+  - .bat
+  - .com
+  - .conf
+  - .dosz
+  - .exe
+  - .ima
+  - .ins
+  - .jrc
+  - .m3u8
+  - .tc
+  - .vhd
+  core: dosbox_pure
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:195"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: EASYRPG
+  name: EasyRPG
+  core: easyrpg
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:454"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: ECWOLF
+  name: Wolfenstein 3D
+  core: ecwolf
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:459"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: EIGHTHUNDRED
+  name: Atari - 800
+  aliases:
+  - atari800
+  - atarixe
+  extensions:
+  - .xex
+  core: atari800
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:30"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: FAIRCHILD
+  name: Fairchild ChannelF
+  aliases:
+  - channelf
+  extensions:
+  - .chf
+  core: freechaf
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:167"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: FC
+  name: NES
+  aliases:
+  - NES
+  - famicom
+  extensions:
+  - .nes
+  - .unf
+  - .unif
+  core: fceumm
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:271"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: FDS
+  name: Famicom Disk Syst.
+  extensions:
+  - .fds
+  core: fceumm
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:236"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: FIFTYTWOHUNDRED
+  name: Atari 5200
+  aliases:
+  - atari5200
+  extensions:
+  - .a52
+  core: a5200
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:42"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: FLASHBACK
+  name: Flashback
+  core: reminiscence
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:507"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: GAMETANK
+  name: Game Tank
+  extensions:
+  - .gtr
+  core: libgametank
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:1"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: GB
+  name: Game Boy
+  aliases:
+  - TGB_Dual
+  extensions:
+  - .gb
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:248"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: GBA
+  name: Game Boy Advance
+  extensions:
+  - .gba
+  core: gpsp
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:260"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: GBC
+  name: Game Boy Color
+  extensions:
+  - .gbc
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:254"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: GG
+  name: Game Gear
+  aliases:
+  - gamegear
+  extensions:
+  - .gg
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:343"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: GME
+  name: Game Music Emu
+  core: gme
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:464"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: GW
+  name: Game & Watch
+  aliases:
+  - gameandwatch
+  extensions:
+  - .mgw
+  core: gw
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:242"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: INTELLIVISION
+  name: Intellivision
+  extensions:
+  - .int
+  core: freeintv
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:184"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: JAGUAR
+  name: Atari Jaguar
+  aliases:
+  - atarijaguar
+  - atarijaguarcd
+  extensions:
+  - .j64
+  - .jag
+  core: virtualjaguar
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:54"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: LOVE
+  name: LÖVE
+  aliases:
+  - lutro
+  extensions:
+  - .love
+  core: lutro
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:469"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: LYNX
+  name: Atari Lynx
+  aliases:
+  - atarilynx
+  extensions:
+  - .lnx
+  core: handy
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:60"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: MD
+  name: Genesis
+  aliases:
+  - genesis
+  - megadrive
+  - megadrivejp
+  extensions:
+  - .gen
+  - .md
+  - .smd
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:349"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: MEDIA
+  name: Movies
+  aliases:
+  - Movies
+  extensions:
+  - .3g2
+  - .3gp
+  - .aac
+  - .avi
+  - .flv
+  - .m4a
+  - .mj2
+  - .mkv
+  - .mov
+  - .mp3
+  - .mp4
+  - .mpeg
+  - .ogg
+  - .oss
+  - .wav
+  - .webm
+  core: ffplay
+  emulator: standalone
+  source_ref: "os static/.allium/config/consoles.toml:548"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: MEGADUCK
+  name: Mega Duck
+  core: sameduck
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:190"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: MICROW8
+  name: MicroW8
+  core: uw8
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:522"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: MS
+  name: Master System
+  aliases:
+  - mark3
+  - mastersystem
+  extensions:
+  - .sms
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:355"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: MSX
+  aliases:
+  - msx1
+  - msx2
+  - msxturbor
+  extensions:
+  - .mx1
+  - .mx2
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:213"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: NDS
+  name: Nintendo DS
+  aliases:
+  - DS
+  extensions:
+  - .nds
+  core: drastic
+  emulator: standalone
+  source_ref: "os static/.allium/config/consoles.toml:542"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: NEOCD
+  name: Neo Geo CD
+  aliases:
+  - neogeocd
+  - neogeocdjp
+  core: neocd
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:383"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: NEOGEO
+  name: Neo Geo
+  core: fbalpha2012_neogeo
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:378"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: NGP
+  name: Neo Geo Pocket Color
+  aliases:
+  - NGC
+  - ngpc
+  extensions:
+  - .ngc
+  - .ngp
+  core: mednafen_ngp
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:388"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: NXENGINE
+  name: Cave Story
+  core: nxengine
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:427"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: ODYSSEY
+  name: Odyssey 2
+  aliases:
+  - odyssey2
+  core: o2em
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:179"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: PALMOS
+  name: Palm OS
+  aliases:
+  - palm
+  extensions:
+  - .pqa
+  - .prc
+  core: mu
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:475"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: PANASONIC
+  name: 3DO
+  aliases:
+  - 3DO
+  core: opera
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:486"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: PC8000
+  name: PC-8000
+  aliases:
+  - pc88
+  core: quasi88
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:412"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: PC98
+  name: PC-98
+  aliases:
+  - NINETYEIGHT
+  - PCNINETYEIGHT
+  core: np2kai
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:417"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: PCE
+  name: TurboGrafx-16
+  aliases:
+  - pcengine
+  - tg16
+  extensions:
+  - .pce
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:230"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: PCECD
+  name: TurboGrafx CD
+  aliases:
+  - pcenginecd
+  - tg-cd
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:225"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: PCFX
+  name: PC-FX
+  core: mednafen_pcfx
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:422"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: PICO
+  name: PICO-8
+  aliases:
+  - pico8
+  extensions:
+  - .p8
+  - .png
+  core: fake08
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:314"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: POKE
+  name: Pokémon Mini
+  aliases:
+  - PKM
+  - pokemini
+  extensions:
+  - .min
+  core: pokemini
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:277"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: PORTS
+  name: Ports Collection
+  aliases:
+  - NATIVE
+  - SH
+  extensions:
+  - .port
+  core: native
+  emulator: standalone
+  source_ref: "os static/.allium/config/consoles.toml:320"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: PSX
+  name: PlayStation
+  aliases:
+  - PS
+  - PS1
+  extensions:
+  - .cbn
+  - .mdf
+  - .pbp
+  - .toc
+  core: pcsx_rearmed
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:394"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: QUAKE
+  name: Quake
+  core: tyrquake
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:517"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SATELLAVIEW
+  name: Satellaview
+  extensions:
+  - .st
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:283"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SCUMMVM
+  name: ScummVM
+  extensions:
+  - .scummvm
+  - .target
+  core: scummvm
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:326"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SEGACD
+  name: Sega CD
+  aliases:
+  - megacd
+  - megacdjp
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:338"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SEGASGONE
+  name: SG-1000
+  aliases:
+  - sg-1000
+  extensions:
+  - .sg
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:361"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SEVENTYEIGHTHUNDRED
+  name: Atari 7800
+  aliases:
+  - atari7800
+  extensions:
+  - .a78
+  core: prosystem
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:48"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SFC
+  name: SNES
+  aliases:
+  - SNES
+  - snesna
+  extensions:
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  core: mednafen_supafaust
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:289"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SGB
+  name: Super Game Boy
+  core: mgba
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:266"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SGFX
+  name: SuperGrafx
+  aliases:
+  - supergrafx
+  extensions:
+  - .sgx
+  core: mednafen_supergrafx
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:219"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SHARPX1
+  name: Sharp X1
+  aliases:
+  - x1
+  core: x1
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:497"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SUFAMI
+  name: Sufami Turbo
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:71"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: SUPERVISION
+  name: Watara Supervision
+  extensions:
+  - .sv
+  core: potator
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:406"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: THIRTYTWOX
+  name: Genesis 32X
+  aliases:
+  - sega32x
+  - sega32xjp
+  - sega32xna
+  extensions:
+  - .32x
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:332"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: THOMSON
+  name: Thomson
+  aliases:
+  - moto
+  - to8
+  core: theodore
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:512"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: TI83
+  name: Texas Instruments TI-83
+  core: numero
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:481"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: TIC
+  name: TIC-80
+  aliases:
+  - tic80
+  extensions:
+  - .fd
+  - .k7
+  - .m7
+  - .sap
+  - .tic
+  core: tic80
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:400"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: UZEBOX
+  name: Uzebox
+  core: uzem
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:527"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: VB
+  name: Virtual Boy
+  aliases:
+  - virtualboy
+  extensions:
+  - .vb
+  - .vboy
+  core: mednafen_vb
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:303"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: VECRTEX
+  name: GCE Vectrex
+  core: vecx
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:532"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: VECTREX
+  name: Vectrex
+  extensions:
+  - .vec
+  core: vecx
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:173"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: VIC20
+  name: VIC-20
+  core: vice_xvic
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:162"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: VIDEOPAC
+  name: Phillips Videopac+
+  core: o2em
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:309"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: VMU
+  name: Sega VMU
+  core: vemulator
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:367"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: WS
+  name: WonderSwanColor
+  aliases:
+  - wonderswan
+  - wonderswancolor
+  extensions:
+  - .pc2
+  - .ws
+  core: mednafen_wswan
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:76"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: X68000
+  name: Sharp X68000
+  core: px68k
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:502"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: XRICK
+  name: Rick Dangerous
+  core: xrick
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:537"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: ZX81
+  name: Sinclair ZX81
+  aliases:
+  - ZXEIGHTYONE
+  core: zx81
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:438"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"
+- folder: ZXS
+  name: ZX Spectrum
+  aliases:
+  - zxspectrum
+  extensions:
+  - .rzx
+  - .scl
+  - .trd
+  - .tzx
+  - .z80
+  core: fuse
+  emulator: retroarch
+  source_ref: "os static/.allium/config/consoles.toml:372"
+  note: "a folder named any pattern, or ending in '(<pattern>)', is this console. A file's own extension\
+    \ wins over its folder"

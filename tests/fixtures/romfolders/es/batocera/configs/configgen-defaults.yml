@@ -1,0 +1,9 @@
+default:
+  emulator:
+  core:
+snes:
+  emulator: libretro
+  core:     snes9x
+mame:
+  emulator: libretro
+  core:     mame078plus

@@ -1,0 +1,23 @@
+name: BizHawk
+platform: bizhawk
+format: bizhawk
+params:
+  source: os
+  paths: src/BizHawk.Client.Common/config/PathEntryCollection.cs
+  rom_loader: src/BizHawk.Client.Common/RomLoader.cs
+  config: src/BizHawk.Client.Common/config/Config.cs
+sources:
+  os:
+    repo: https://github.com/TASEmulators/BizHawk
+    commit: bdddf4a58aa1a022afb11dc73294a81a5aa7bbd5
+    tag: 2.11.1
+roms_root:
+  path: <BizHawk>
+  from_bios: ..
+  source_ref: os src/BizHawk.Client.Common/config/PathEntryCollection.cs:96-97,179
+case_sensitive: null
+notes:
+  - Each system has a base folder under the BizHawk folder, and its ROM path is "." inside it (os src/BizHawk.Client.Common/config/PathEntryCollection.cs:77-85,96-97). Firmware sits in Firmware beside those bases, the folder the installer fills.
+  - BizHawk never scans a folder. The user opens one file, the open dialog filters by the RomFileExtensions lists, and the system follows from the extension and the game database (os src/BizHawk.Client.Common/RomLoader.cs:1143-1183).
+  - A row's extensions are the RomFileExtensions list named like its system. Systems whose list carries another name (32X, Game Gear, SG-1000) or none (Saturn, PC-FX, 3DO, Amstrad CPC, Channel F) have none here.
+  - The cores are BizHawk's own. The default named in a note is CoreNames[0] of CorePickerUIData (os src/BizHawk.Client.Common/config/Config.cs:20-50).

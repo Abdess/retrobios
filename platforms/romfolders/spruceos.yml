@@ -1,0 +1,1387 @@
+setup: spruceos
+name: spruceOS
+platform: retroarch
+sources:
+  os:
+    repo: "https://github.com/spruceUI/spruceOS"
+    commit: 824b1aaee9e1e9979a6b04979f581e60b8c23b87
+roms_root:
+  path: /mnt/SDCARD/Roms
+  from_bios: ../Roms
+  source_ref: "os App/PyUI/main-ui/games/utils/device_specific/miyoo_trim_game_system_utils.py:122-130"
+case_sensitive: null
+case_ref: "os App/PyUI/main-ui/games/utils/device_specific/miyoo_trim_game_system_utils.py:143-155"
+hidden:
+- pattern: .*
+  source_ref: "os App/PyUI/main-ui/games/utils/rom_utils.py:136-176"
+media:
+- name: Imgs
+  source_ref: "os App/PyUI/main-ui/games/utils/rom_utils.py:136-176"
+notes:
+- A folder is the Emu folder name or any alternativeFolderNames entry, tested with os.path.exists, so
+  case folds only on a FAT or exFAT card.
+- "A file counts when its lowercased suffix is in extlist. With an empty extlist every file counts except\
+  \ .xml, .txt and .db. Names in ignoreList (BIOS archives in arcade folders) are dropped (os App/PyUI/main-ui/games/utils/rom_utils.py:136-176)."
+- "default_emulator is the factory core. A per-device menu key overrides it (os spruce/scripts/emu/lib/general_functions.sh:135-160)."
+- The second card's /media/sdcard1/Roms is read too when present.
+folders:
+- folder: A30PORTS
+  aliases:
+  - a30
+  - a30ports
+  extensions:
+  - .sh
+  core: sh
+  source_ref: "os Emu/A30PORTS/config.json:26"
+  note: only on devices MIYOO_A30
+- folder: AMIGA
+  aliases:
+  - Amiga
+  - amiga
+  - amiga1200
+  - amiga500
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ccd
+  - .chd
+  - .cue
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .info
+  - .ipf
+  - .iso
+  - .lha
+  - .m3u
+  - .mds
+  - .nrg
+  - .rp9
+  - .slave
+  - .uae
+  - .zip
+  core: uae4arm
+  source_ref: "os Emu/AMIGA/config.json:63"
+- folder: ARCADE
+  aliases:
+  - Arcade
+  - arcade
+  extensions:
+  - .zip
+  core: fbneo
+  source_ref: "os Emu/ARCADE/config.json:86"
+  note: ignoreList neogeo.zip, neocdz.zip, neocd.zip
+- folder: ARDUBOY
+  aliases:
+  - Arduboy
+  - arduboy
+  extensions:
+  - .hex
+  - .zip
+  core: ardens
+  source_ref: "os Emu/ARDUBOY/config.json:34"
+- folder: ATARI
+  aliases:
+  - "2600"
+  - A2600
+  - ATARI2600
+  - Atari2600
+  - TWENTYSIXHUNDRED
+  - a2600
+  - atari
+  - atari2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella2014
+  source_ref: "os Emu/ATARI/config.json:25"
+- folder: ATARIST
+  aliases:
+  - Atari ST
+  - atarist
+  - st
+  extensions:
+  - .7z
+  - .dim
+  - .ipf
+  - .msa
+  - .st
+  - .stx
+  - .zip
+  core: hatari
+  source_ref: "os Emu/ATARIST/config.json:25"
+- folder: ATOMISWAVE
+  aliases:
+  - atomiswave
+  extensions:
+  - .cdi
+  - .chd
+  - .cue
+  - .dat
+  - .gdi
+  - .iso
+  - .m3u
+  - .zip
+  core: flycast
+  source_ref: "os Emu/ATOMISWAVE/config.json:87"
+- folder: CHAI
+  aliases:
+  - Chai Love
+  - chai
+  - chailove
+  extensions:
+  - .chailove
+  core: chailove
+  source_ref: "os Emu/CHAI/config.json:25"
+- folder: COCO
+  aliases:
+  - XROAR
+  - coco
+  - xroar
+  extensions:
+  - .cas
+  - .ccc
+  core: xroar
+  source_ref: "os Emu/COCO/config.json:26"
+  note: only on devices TRIMUI_A133P, TRIMUI_SMART_PRO_S, MIYOO_FLIP, GKD_PIXEL2, ANBERNIC_RGXX, DARKMOSS,
+    MAGICX_A133P
+- folder: COLECO
+  aliases:
+  - COLECOVISION
+  - CV
+  - Coleco Vision
+  - coleco
+  - colecovision
+  - cv
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .zip
+  core: bluemsx
+  source_ref: "os Emu/COLECO/config.json:34"
+- folder: COMMODORE
+  aliases:
+  - C64
+  - COMMODORE64
+  - Commodore64
+  - c64
+  - commodore
+  - commodore64
+  extensions:
+  - .7z
+  - .crt
+  - .d64
+  - .m3u
+  - .nib
+  - .prg
+  - .t64
+  - .tap
+  - .zip
+  core: vice_x64
+  source_ref: "os Emu/COMMODORE/config.json:25"
+- folder: CPC
+  aliases:
+  - AMSTRAD
+  - AMSTRADCPC
+  - amstrad
+  - amstradcpc
+  - cpc
+  extensions:
+  - .7z
+  - .bin
+  - .dsk
+  - .kcr
+  - .sna
+  - .zip
+  core: cap32
+  source_ref: "os Emu/CPC/config.json:34"
+- folder: CPS1
+  aliases:
+  - capcomcps1
+  - cps1
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  core: fbalpha2012
+  source_ref: "os Emu/CPS1/config.json:34"
+  note: ignoreList neogeo.zip, neocdz.zip, neocd.zip
+- folder: CPS2
+  aliases:
+  - capcomcps2
+  - cps2
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  core: fbalpha2012
+  source_ref: "os Emu/CPS2/config.json:34"
+  note: ignoreList neogeo.zip, neocdz.zip, neocd.zip
+- folder: CPS3
+  aliases:
+  - capcomcps3
+  - cps3
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  core: fbalpha2012
+  source_ref: "os Emu/CPS3/config.json:34"
+  note: ignoreList neogeo.zip, neocdz.zip, neocd.zip
+- folder: DC
+  aliases:
+  - DREAMCAST
+  - Dreamcast
+  - Sega Dreamcast
+  - dc
+  - dreamcast
+  extensions:
+  - .cdi
+  - .chd
+  - .cue
+  - .dat
+  - .gdi
+  - .iso
+  - .m3u
+  core: flycast
+  source_ref: "os Emu/DC/config.json:99"
+  note: only on devices TRIMUI_A133P, TRIMUI_SMART_PRO_S, MIYOO_A30, MIYOO_FLIP, GKD_PIXEL2, ANBERNIC_RGXX,
+    DARKMOSS, MAGICX_A133P
+- folder: DOOM
+  aliases:
+  - PRBOOM
+  - doom
+  - prboom
+  extensions:
+  - .exe
+  - .wad
+  - .zip
+  core: prboom
+  source_ref: "os Emu/DOOM/config.json:25"
+- folder: DOS
+  aliases:
+  - dos
+  - pc
+  extensions:
+  - .bat
+  - .com
+  - .conf
+  - .dosz
+  - .exe
+  - .ima
+  - .img
+  - .ins
+  - .iso
+  - .jrc
+  - .m3u
+  - .m3u8
+  - .tc
+  - .vhd
+  - .zip
+  core: dosbox_pure
+  source_ref: "os Emu/DOS/config.json:25"
+- folder: EASYRPG
+  aliases:
+  - easyrpg
+  extensions:
+  - .easyrpg
+  - .ldb
+  - .zip
+  core: easyrpg
+  source_ref: "os Emu/EASYRPG/config.json:26"
+- folder: EIGHTHUNDRED
+  aliases:
+  - "800"
+  - A800
+  - ATARI800
+  - a800
+  - atari800
+  - eighthundred
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .com
+  - .xex
+  - .xfd
+  - .zip
+  core: atari800
+  source_ref: "os Emu/EIGHTHUNDRED/config.json:25"
+- folder: FAIRCHILD
+  aliases:
+  - CHANNELF
+  - CHF
+  - channelf
+  - chf
+  - fairchild
+  - fairchildchannelf
+  extensions:
+  - .bin
+  - .chf
+  - .rom
+  - .zip
+  core: freechaf
+  source_ref: "os Emu/FAIRCHILD/config.json:25"
+- folder: FAKE08
+  aliases:
+  - RETRO8
+  - fake08
+  - retro8
+  extensions:
+  - .p8
+  - .png
+  core: fake08
+  source_ref: "os Emu/FAKE08/config.json:25"
+- folder: FBNEO
+  aliases:
+  - FINALBURNNEO
+  - fbneo
+  - finalburnneo
+  extensions:
+  - .zip
+  core: fbneo
+  source_ref: "os Emu/FBNEO/config.json:30"
+  note: ignoreList neogeo.zip, neocdz.zip, neocd.zip
+- folder: FC
+  aliases:
+  - FAMICOM
+  - Fat Plumber Shit
+  - NES
+  - famicom
+  - fc
+  - nes
+  extensions:
+  - .7z
+  - .fds
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: fceumm
+  source_ref: "os Emu/FC/config.json:35"
+- folder: FDS
+  aliases:
+  - DISKSYSTEM
+  - disksystem
+  - famicomdisk
+  - fds
+  extensions:
+  - .7z
+  - .fds
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: fceumm
+  source_ref: "os Emu/FDS/config.json:34"
+- folder: FIFTYTWOHUNDRED
+  aliases:
+  - A5200
+  - ATARI5200
+  - a5200
+  - atari5200
+  - fiftytwohundred
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .bin
+  - .zip
+  core: a5200
+  source_ref: "os Emu/FIFTYTWOHUNDRED/config.json:25"
+- folder: GAMETANK
+  aliases:
+  - gametank
+  - gt
+  - libgametank
+  extensions:
+  - .7z
+  - .gtr
+  - .zip
+  core: gametank
+  source_ref: "os Emu/GAMETANK/config.json:55"
+- folder: GB
+  aliases:
+  - DMG
+  - GAMEBOY
+  - dmg
+  - gameboy
+  - gb
+  extensions:
+  - .7z
+  - .bin
+  - .dmg
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  source_ref: "os Emu/GB/config.json:35"
+- folder: GBA
+  aliases:
+  - AGB
+  - GAMEBOYADVANCE
+  - agb
+  - gameboyadvance
+  - gba
+  extensions:
+  - .7z
+  - .bin
+  - .gba
+  - .zip
+  core: gpsp
+  source_ref: "os Emu/GBA/config.json:35"
+- folder: GBC
+  aliases:
+  - CGB
+  - GAMEBOYCOLOR
+  - cgb
+  - gameboycolor
+  - gbc
+  extensions:
+  - .7z
+  - .bin
+  - .dmg
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  source_ref: "os Emu/GBC/config.json:35"
+- folder: GG
+  aliases:
+  - GAMEGEAR
+  - gamegear
+  - gg
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: genesis_plus_gx
+  source_ref: "os Emu/GG/config.json:35"
+- folder: GW
+  aliases:
+  - GAMEANDWATCH
+  - gameandwatch
+  - gw
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: gw
+  source_ref: "os Emu/GW/config.json:25"
+- folder: INTELLIVISION
+  aliases:
+  - ITV
+  - intellivision
+  - itv
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .zip
+  core: freeintv
+  source_ref: "os Emu/INTELLIVISION/config.json:25"
+- folder: J2ME
+  aliases:
+  - JAVA
+  - j2me
+  - java
+  - midp
+  - mobile
+  extensions:
+  - .jar
+  - .kjx
+  core: freej2me_plus
+  source_ref: "os Emu/J2ME/config.json:49"
+  note: only on devices TRIMUI_A133P, TRIMUI_SMART_PRO_S, MIYOO_FLIP, GKD_PIXEL2, ANBERNIC_RGXX, DARKMOSS,
+    MIYOO_A30, MIYOO_MINI_FAMILY, MAGICX_A133P
+- folder: JAGUAR
+  aliases:
+  - Atari Jaguar
+  - JAG
+  - jag
+  - jaguar
+  extensions:
+  - .7z
+  - .abs
+  - .bin
+  - .cdi
+  - .cof
+  - .cue
+  - .iso
+  - .j64
+  - .jag
+  - .prg
+  - .rom
+  - .zip
+  core: virtualjaguar
+  source_ref: "os Emu/JAGUAR/config.json:67"
+- folder: LOOPY
+  aliases:
+  - casioloopy
+  - loopy
+  extensions:
+  - .7z
+  - .bin
+  - .loopy
+  - .zip
+  core: gloopy
+  source_ref: "os Emu/LOOPY/config.json:25"
+- folder: LYNX
+  aliases:
+  - ATARILYNX
+  - atarilynx
+  - lynx
+  extensions:
+  - .lnx
+  - .zip
+  core: handy
+  source_ref: "os Emu/LYNX/config.json:34"
+- folder: MAME2003PLUS
+  aliases:
+  - MAME
+  - mame
+  - mame2003plus
+  extensions:
+  - .zip
+  core: mame2003_plus
+  source_ref: "os Emu/MAME2003PLUS/config.json:25"
+  note: ignoreList neogeo.zip, neocdz.zip, neocd.zip
+- folder: MD
+  aliases:
+  - GENESIS
+  - MEGADRIVE
+  - md
+  - megadrive
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  source_ref: "os Emu/MD/config.json:34"
+- folder: MEDIA
+  aliases:
+  - MUSIC
+  - VIDEOS
+  - media
+  - music
+  - videos
+  extensions:
+  - .aac
+  - .avi
+  - .ay
+  - .flac
+  - .flv
+  - .gbs
+  - .gym
+  - .hes
+  - .kss
+  - .m4a
+  - .mka
+  - .mkv
+  - .mov
+  - .mp3
+  - .mp4
+  - .nsf
+  - .nsfe
+  - .ogg
+  - .opus
+  - .sap
+  - .spc
+  - .ts
+  - .vgm
+  - .vgz
+  - .wav
+  core: ffplay
+  source_ref: "os Emu/MEDIA/config.json:74"
+- folder: MEGADUCK
+  aliases:
+  - COUGARBOY
+  - cougarboy
+  - megaduck
+  - sameduck
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: sameduck
+  source_ref: "os Emu/MEGADUCK/config.json:25"
+- folder: MKXP-Z
+  aliases:
+  - RPGMAKER
+  - mkxp
+  - mkxp-z
+  - rpgmaker
+  extensions:
+  - .7z
+  - .ini
+  - .json
+  - .mkxp
+  - .mkxpz
+  - .rvproj
+  - .rvproj2
+  - .rxproj
+  - .zip
+  core: mkxp-z
+  source_ref: "os Emu/MKXP-Z/config.json:25"
+- folder: MS
+  aliases:
+  - MASTERSYSTEM
+  - SMS
+  - ms
+  - sms
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  source_ref: "os Emu/MS/config.json:35"
+- folder: MSU1
+  aliases:
+  - MSU
+  - msu
+  - msu1
+  extensions:
+  - .7z
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .zip
+  core: snes9x
+  source_ref: "os Emu/MSU1/config.json:25"
+- folder: MSUMD
+  aliases:
+  - msumd
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  source_ref: "os Emu/MSUMD/config.json:25"
+- folder: MSX
+  aliases:
+  - MSX1
+  - MSX2
+  - msx
+  - msx1
+  - msx2
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  source_ref: "os Emu/MSX/config.json:34"
+- folder: N64
+  aliases:
+  - NINTENDO64
+  - n64
+  - nintendo64
+  extensions:
+  - .7z
+  - .n64
+  - .v64
+  - .z64
+  - .zip
+  core: km_ludicrousn64_2k22_xtreme_amped
+  source_ref: "os Emu/N64/config.json:111"
+  note: only on devices TRIMUI_A133P, TRIMUI_SMART_PRO_S, MIYOO_A30, MIYOO_FLIP, GKD_PIXEL2, ANBERNIC_RGXX,
+    DARKMOSS, MAGICX_A133P
+- folder: NAOMI
+  aliases:
+  - naomi
+  extensions:
+  - .cdi
+  - .chd
+  - .cue
+  - .dat
+  - .gdi
+  - .iso
+  - .m3u
+  - .zip
+  core: flycast
+  source_ref: "os Emu/NAOMI/config.json:87"
+- folder: NDS
+  aliases:
+  - DS
+  - NINTENDODS
+  - ds
+  - nds
+  - nintendods
+  extensions:
+  - .7z
+  - .cia
+  - .dsi
+  - .nds
+  - .rar
+  - .srl
+  - .zip
+  core: DraStic-original
+  source_ref: "os Emu/NDS/config.json:122"
+- folder: NDSI
+  aliases:
+  - DSI
+  - DSi
+  - NINTENDODSI
+  - dsi
+  - ndsi
+  - nintendodsi
+  extensions:
+  - .7z
+  - .cia
+  - .dsi
+  - .nds
+  - .srl
+  - .zip
+  core: DSperate
+  source_ref: "os Emu/NDSI/config.json:61"
+  note: only on devices TRIMUI_A133P, TRIMUI_SMART_PRO_S, MIYOO_A30, MIYOO_FLIP, GKD_PIXEL2, ANBERNIC_RGXX,
+    DARKMOSS, MAGICX_A133P
+- folder: NEOCD
+  aliases:
+  - NEOGEOCD
+  - neocd
+  - neogeocd
+  extensions:
+  - .chd
+  - .cue
+  - .m3u
+  core: neocd
+  source_ref: "os Emu/NEOCD/config.json:30"
+  note: ignoreList neogeo.zip, neocdz.zip, neocd.zip
+- folder: NEOGEO
+  aliases:
+  - NG
+  - NeoGeo
+  - neogeo
+  - ng
+  extensions:
+  - .7z
+  - .zip
+  core: fbalpha2012
+  source_ref: "os Emu/NEOGEO/config.json:55"
+  note: ignoreList neogeo.zip, neocdz.zip, neocd.zip
+- folder: NGP
+  aliases:
+  - NEOGEOPOCKET
+  - neogeopocket
+  - ngp
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: mednafen_ngp
+  source_ref: "os Emu/NGP/config.json:34"
+- folder: NGPC
+  aliases:
+  - NEOGEOPOCKETCOLOR
+  - neogeopocketcolor
+  - ngpc
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: mednafen_ngp
+  source_ref: "os Emu/NGPC/config.json:34"
+- folder: ODYSSEY
+  aliases:
+  - ODYSSEY2
+  - odyssey
+  - odyssey2
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  source_ref: "os Emu/ODYSSEY/config.json:25"
+- folder: OPENBOR
+  aliases:
+  - OpenBOR
+  - openbor
+  extensions:
+  - .pak
+  core: OpenBOR
+  source_ref: "os Emu/OPENBOR/config.json:25"
+- folder: PC98
+  aliases:
+  - NECPC98
+  - necpc98
+  - pc98
+  extensions:
+  - .2hd
+  - .88d
+  - .98d
+  - .cmd
+  - .d88
+  - .d98
+  - .dup
+  - .fdd
+  - .fdi
+  - .hdd
+  - .hdi
+  - .hdm
+  - .hdn
+  - .nhd
+  - .tfd
+  - .thd
+  - .xdf
+  - .zip
+  core: np2kai
+  source_ref: "os Emu/PC98/config.json:25"
+- folder: PCE
+  aliases:
+  - PCENGINE
+  - TURBOGRAFX
+  - TURBOGRAFX16
+  - pce
+  - pcengine
+  - turbografx
+  - turbografx16
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .pce
+  - .zip
+  core: mednafen_pce_fast
+  source_ref: "os Emu/PCE/config.json:25"
+- folder: PCECD
+  aliases:
+  - PCENGINECD
+  - TGCD
+  - TURBOCD
+  - TURBOGRAFXCD
+  - pcecd
+  - pcenginecd
+  - tgcd
+  - turbocd
+  - turbografxcd
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .pce
+  - .zip
+  core: mednafen_pce_fast
+  source_ref: "os Emu/PCECD/config.json:30"
+- folder: PICO8
+  aliases:
+  - PICO-8
+  - pico-8
+  - pico8
+  extensions:
+  - .p8
+  - .png
+  - .splore
+  core: pico8
+  source_ref: "os Emu/PICO8/config.json:75"
+- folder: POKE
+  aliases:
+  - POKEMINI
+  - POKEMONMINI
+  - poke
+  - pokemini
+  - pokemonmini
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  source_ref: "os Emu/POKE/config.json:25"
+- folder: PORTS
+  aliases:
+  - ports
+  extensions:
+  - .sh
+  core: sh
+  source_ref: "os Emu/PORTS/config.json:36"
+  note: only on devices TRIMUI_A133P, TRIMUI_SMART_PRO_S, MIYOO_FLIP, GKD_PIXEL2, ANBERNIC_RGXX, DARKMOSS,
+    MAGICX_A133P
+- folder: PS
+  aliases:
+  - PLAYSTATION
+  - PSONE
+  - PSX
+  - playstation
+  - ps
+  - psone
+  - psx
+  extensions:
+  - .cbn
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .toc
+  core: pcsx_rearmed
+  source_ref: "os Emu/PS/config.json:99"
+- folder: PSP
+  aliases:
+  - PLAYSTATIONPORTABLE
+  - PPSSPP
+  - playstationportable
+  - ppsspp
+  - psp
+  extensions:
+  - .chd
+  - .cso
+  - .iso
+  - .pbp
+  core: PPSSPP-SA
+  source_ref: "os Emu/PSP/config.json:26"
+  note: only on devices TRIMUI_A133P, TRIMUI_SMART_PRO_S, MIYOO_A30, MIYOO_FLIP, GKD_PIXEL2, ANBERNIC_RGXX,
+    DARKMOSS, MAGICX_A133P
+- folder: QUAKE
+  aliases:
+  - TYRQUAKE
+  - quake
+  - tyrquake
+  extensions:
+  - .fbl
+  - .pak
+  core: tyrquake
+  source_ref: "os Emu/QUAKE/config.json:25"
+- folder: SATELLAVIEW
+  aliases:
+  - BSX
+  - SATELLA
+  - bsx
+  - satella
+  - satellaview
+  extensions:
+  - .7z
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .swc
+  - .zip
+  core: snes9x
+  source_ref: "os Emu/SATELLAVIEW/config.json:25"
+- folder: SATURN
+  aliases:
+  - SEGASATURN
+  - SS
+  - saturn
+  - segasaturn
+  - ss
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .iso
+  - .mds
+  - .zip
+  core: yabasanshiro-libretro
+  source_ref: "os Emu/SATURN/config.json:138"
+- folder: SCUMMVM
+  aliases:
+  - scummvm
+  extensions:
+  - .scummvm
+  core: scummvm
+  source_ref: "os Emu/SCUMMVM/config.json:121"
+  note: only on devices TRIMUI_A133P, TRIMUI_SMART_PRO_S, MIYOO_FLIP, MIYOO_A30, GKD_PIXEL2, ANBERNIC_RGXX,
+    MIYOO_MINI_, DARKMOSS, MAGICX_A133P
+- folder: SEGACD
+  aliases:
+  - MDCD
+  - MEGACD
+  - mdcd
+  - megacd
+  - segacd
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .chd
+  - .cue
+  - .gen
+  - .iso
+  - .m3u
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  source_ref: "os Emu/SEGACD/config.json:39"
+- folder: SEGASGONE
+  aliases:
+  - SEGASG1000
+  - SG1000
+  - SG1K
+  - SGONETHOUSAND
+  - segasg1000
+  - segasgone
+  - sg1000
+  - sg1k
+  - sgonethousand
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .mv
+  - .rom
+  - .sg
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  source_ref: "os Emu/SEGASGONE/config.json:35"
+- folder: SEVENTYEIGHTHUNDRED
+  aliases:
+  - "7800"
+  - A7800
+  - ATARI7800
+  - a7800
+  - atari7800
+  - seventyeighthundred
+  extensions:
+  - .7z
+  - .a78
+  - .bin
+  - .zip
+  core: prosystem
+  source_ref: "os Emu/SEVENTYEIGHTHUNDRED/config.json:25"
+- folder: SFC
+  aliases:
+  - SNES
+  - SUPERFAMICOM
+  - SUPERNES
+  - sfc
+  - snes
+  - superfamicom
+  - supernes
+  extensions:
+  - .7z
+  - .bs
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .sfc
+  - .smc
+  - .st
+  - .swc
+  - .zip
+  core: chimerasnes
+  source_ref: "os Emu/SFC/config.json:58"
+- folder: SGB
+  aliases:
+  - SUPERGAMEBOY
+  - sgb
+  - supergameboy
+  extensions:
+  - .7z
+  - .bin
+  - .gb
+  - .gba
+  - .gbc
+  - .zip
+  core: mgba
+  source_ref: "os Emu/SGB/config.json:25"
+- folder: SGFX
+  aliases:
+  - NECSGFX
+  - SGX
+  - SUPERGRAFX
+  - necsgfx
+  - sgfx
+  - sgx
+  - supergrafx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .pce
+  - .sgx
+  - .zip
+  core: mednafen_supergrafx
+  source_ref: "os Emu/SGFX/config.json:25"
+- folder: SUFAMI
+  aliases:
+  - SUFAMITURBO
+  - sufami
+  - sufamiturbo
+  extensions:
+  - .7z
+  - .smc
+  - .zip
+  core: snes9x
+  source_ref: "os Emu/SUFAMI/config.json:25"
+- folder: SUPERVISION
+  aliases:
+  - WATARA
+  - supervision
+  - watara
+  extensions:
+  - .7z
+  - .bin
+  - .sv
+  - .zip
+  core: potator
+  source_ref: "os Emu/SUPERVISION/config.json:25"
+- folder: THIRTYTWOX
+  aliases:
+  - 32X
+  - 32x
+  - SEGA32X
+  - sega32x
+  - thirtytwox
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  source_ref: "os Emu/THIRTYTWOX/config.json:25"
+- folder: TIC
+  aliases:
+  - TIC-80
+  - TIC80
+  - tic
+  - tic-80
+  extensions:
+  - .7z
+  - .fd
+  - .k7
+  - .m7
+  - .rom
+  - .sap
+  - .tic
+  - .zip
+  core: tic80
+  source_ref: "os Emu/TIC/config.json:25"
+- folder: VB
+  aliases:
+  - VIRTUALBOY
+  - vb
+  - virtualboy
+  extensions:
+  - .7z
+  - .vb
+  - .vboy
+  - .zip
+  core: mednafen_vb
+  source_ref: "os Emu/VB/config.json:25"
+- folder: VECTREX
+  aliases:
+  - VEC
+  - vec
+  - vectrex
+  extensions:
+  - .7z
+  - .vec
+  - .zip
+  core: vecx
+  source_ref: "os Emu/VECTREX/config.json:25"
+- folder: VIC20
+  aliases:
+  - vic20
+  extensions:
+  - '.20'
+  - '.40'
+  - '.60'
+  - .7z
+  - .a0
+  - .b0
+  - .bin
+  - .cmd
+  - .crt
+  - .d2m
+  - .d4m
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .rom
+  - .t64
+  - .tap
+  - .tcrt
+  - .vfl
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xvic
+  source_ref: "os Emu/VIC20/config.json:25"
+- folder: VIDEOPAC
+  aliases:
+  - videopac
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  source_ref: "os Emu/VIDEOPAC/config.json:25"
+- folder: WOLF
+  aliases:
+  - ECWOLF
+  - WOLF3D
+  - WOLFENSTEIN
+  - WOLFENSTEIN3D
+  - ecwolf
+  - wolf
+  - wolf3d
+  - wolfenstein
+  - wolfenstein3d
+  extensions:
+  - .ecwolf
+  - .exe
+  core: ecwolf
+  source_ref: "os Emu/WOLF/config.json:25"
+- folder: WS
+  aliases:
+  - WONDERSWAN
+  - wonderswan
+  - ws
+  extensions:
+  - .7z
+  - .pc2
+  - .ws
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  source_ref: "os Emu/WS/config.json:25"
+- folder: WSC
+  aliases:
+  - WONDERSWANC
+  - WONDERSWANCOLOR
+  - wonderswanc
+  - wonderswancolor
+  - wsc
+  extensions:
+  - .7z
+  - .pc2
+  - .ws
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  source_ref: "os Emu/WSC/config.json:25"
+- folder: X68000
+  aliases:
+  - SHARPX6800
+  - SHARPX68K
+  - X68K
+  - sharpx6800
+  - sharpx68k
+  - x68000
+  - x68k
+  extensions:
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  source_ref: "os Emu/X68000/config.json:25"
+- folder: ZXS
+  aliases:
+  - SPEC
+  - SPECTRUM
+  - ZXSPECTRUM
+  - spec
+  - spectrum
+  - zxs
+  - zxspectrum
+  extensions:
+  - .7z
+  - .rzx
+  - .scl
+  - .tap
+  - .trd
+  - .tzx
+  - .z80
+  - .zip
+  core: fuse
+  source_ref: "os Emu/ZXS/config.json:25"

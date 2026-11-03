@@ -1,0 +1,64 @@
+{
+  "onion": {
+    "static/packages/Emu/Nintendo - GBA (gpSP)/Emu/GBA/config.json": "{\n  \"label\": \"GBA\",\n  \"launch\": \"launch.sh\",\n  \"rompath\": \"../../Roms/GBA\",\n  \"extlist\": \"gba|GBA|zip|7z\"\n}\n",
+    "static/packages/Emu/Nintendo - GBA (gpSP)/Emu/GBA/launch.sh": "#!/bin/sh\ndefault_core=gpsp\ncore=\"$default_core\"\nretroarch -L .retroarch/cores/${default_core}_libretro.so \"$1\"\n",
+    "static/packages/RApp/Nintendo - GBA (VBA-M)/RApp/GBA_VBAM/config.json": "{\n  \"label\": \"VBA-M\",\n  \"rompath\": \"../../Roms/GBA\",\n  \"extlist\": \"gba\"\n}\n",
+    "static/packages/RApp/Nintendo - GBA (VBA-M)/RApp/GBA_VBAM/launch.sh": "retroarch -L .retroarch/cores/vbam_libretro.so \"$1\"\n",
+    "static/packages/RApp/NEC - PC-98 (Neko Project II)/RApp/NP2/config.json": "{\n  \"rompath\": \"/mnt/SDCARD/Roms/PCNINETYEIGHT\",\n  \"extlist\": \"d98|hdi\"\n}\n",
+    "static/packages/RApp/NEC - PC-98 (Neko Project II)/RApp/NP2/launch.sh": "retroarch -L .retroarch/cores/nekop2_libretro.so \"$1\"\n",
+    "static/packages/App/Clock/App/Clock/config.json": "{\"label\": \"Clock\"}\n"
+  },
+  "spruce": {
+    "Emu/PS/config.json": "{\n  \"label\": \"PlayStation\",\n  \"alternativeFolderNames\": [\"psx\", \"PS1\"],\n  \"extlist\": \"bin|cue|CHD\",\n  \"default_emulator\": \"pcsx_rearmed\",\n  \"ignoreList\": [\"neogeo.zip\"]\n}\n",
+    "Emu/-CUSTOM-SYSTEM-/config.json": "{\"label\": \"template\"}\n",
+    "Emu/PS/launch.sh": "echo\n"
+  },
+  "crossmix": {
+    "Emus/PS/config.json": "{\n  \"rompath\": \"../../Roms/PS\",\n  \"extlist\": \"cue|chd\",\n  \"launchlist\": [\n    {\"name\": \"--- libretro ---\", \"launch\": \"\"},\n    {\"name\": \"PCSX ReARMed\", \"launch\": \"pcsx.sh\"}\n  ]\n}\n",
+    "Emus/PS/pcsx.sh": "RA_CORE=\"$HOME/cores/pcsx_rearmed_libretro.so\"\n",
+    "Emus/_BootLogo/config.json": "{\"rompath\": \"../../Apps/x\"}\n"
+  },
+  "koriki": {
+    "base/.simplemenu/section_groups/apps and games.ini": "[CONSOLES]\nexecs = none\n\n[PS]\nexecs = /mnt/SDCARD/.simplemenu/launchers/pcsx_libretro.sh,/mnt/SDCARD/.simplemenu/launchers/pcsx_standalone.sh\nromDirs = /mnt/SDCARD/Roms/PS/\nromExts = .cue,.CHD,.pbp\n",
+    "base/.simplemenu/launchers/pcsx_libretro.sh": "retroarch -L /mnt/SDCARD/RetroArch/.retroarch/cores/pcsx_rearmed_libretro.so \"$1\"\n"
+  },
+  "allium": {
+    "consoles.toml": "[[consoles]]\nname = \"Arcade\"\ncores = [\n    \"mame2003_plus\",\n    \"fbneo\",\n]\npatterns = [\"ARCADE\", \"mame\"]\n\n[[consoles]]\nname = \"Game Boy Advance\"\ncores = [\"gpsp\"]\npatterns = [\"GBA\"]\nextensions = [\"gba\"]\n\n[[consoles]]\nname = \"Native\"\ncores = [\"native\"]\nextensions = [\"pak\"]\n",
+    "cores.toml": "[cores.native]\npath = \"/mnt/SDCARD/.allium/cores/pak/launch.sh\"\nname = \"Native\"\n\n[cores.\"dosbox_pure_0.9.7\"]\nretroarch = \"dosbox_pure_0.9.7\"\n\n[cores.mame2003_plus]\nretroarch = \"mame2003_plus\"\nname = \"MAME 2003+\"\n\n[cores.gpsp]\nretroarch = \"gpsp\"\n"
+  },
+  "minui": {
+    "skeleton/BASE/Roms/Sony PlayStation (PS)/.keep": "",
+    "skeleton/SYSTEM/rg35xx/paks/Emus/PS.pak/launch.sh": "#!/bin/sh\nEMU_EXE=pcsx_rearmed\nminarch.elf \"$CORES_PATH/${EMU_EXE}_libretro.so\" \"$1\"\n",
+    "skeleton/SYSTEM/miyoomini/paks/Emus/PS.pak/launch.sh": "#!/bin/sh\nEMU_EXE=pcsx_rearmed\nminarch.elf \"$CORES_PATH/${EMU_EXE}_libretro.so\" \"$1\"\n",
+    "skeleton/SYSTEM/tg5040/paks/Emus/PS.pak/launch.sh": "#!/bin/sh\nEMU_EXE=swanstation\nminarch.elf \"$CORES_PATH/${EMU_EXE}_libretro.so\" \"$1\"\n",
+    "skeleton/EXTRAS/Emus/miyoomini/A2600.pak/launch.sh": "#!/bin/sh\nEMU_EXE=stella2014\nminarch.elf \"$CORES_PATH/${EMU_EXE}_libretro.so\" \"$1\"\n"
+  },
+  "plumos": {
+    "systems.json": "{\n  \"systems\": [\n    {\n      \"id\": \"nes\",\n      \"enabled\": true,\n      \"directory_aliases\": [\n        {\"name\": \"nes\", \"priority\": 20},\n        {\"name\": \"FC\", \"priority\": 10, \"shared\": true}\n      ],\n      \"extensions\": [\"nes\", \"zip\"],\n      \"default_launch_profile\": \"retroarch:quicknes\"\n    },\n    {\n      \"id\": \"fds\",\n      \"enabled\": false,\n      \"directory_aliases\": [\n        {\"name\": \"FC\", \"priority\": 10, \"shared\": true},\n        {\"name\": \"fds\", \"priority\": 20}\n      ],\n      \"extensions\": [\"fds\"],\n      \"default_launch_profile\": \"standalone:fceux\"\n    }\n  ]\n}\n"
+  },
+  "muos": {
+    "core.json": "{\n    \"Sony PlayStation\": {\n        \"catalogue\": \"Sony PlayStation\",\n        \"default\": \"psx rearmed\",\n        \"friendly\": [\"ps\", \"psx\", \"sonyplaystation\"],\n        \"libretro\": {\"psx rearmed\": {\"core\": \"pcsx_rearmed_libretro.so\"}}\n    },\n    \"Nintendo DS\": {\n        \"catalogue\": \"Nintendo DS\",\n        \"default\": \"drastic\",\n        \"friendly\": [\"nds\", \"nintendods\"],\n        \"libretro\": {}\n    }\n}\n"
+  },
+  "gmenu2x": {
+    "board/miyoo/roms/GB/a.gb": "",
+    "board/miyoo/roms/GBA/b.gba": "",
+    "board/miyoo/roms/autorun.inf": ""
+  },
+  "gpsp": {
+    "miyoo/opkg_assets/gpsp.lnk": "title=gpSP\nexec=/mnt/emus/gpsp/gpsp\nselectordir=/mnt/roms/GBA\nselectorfilter=.gba,.zip\n"
+  },
+  "dist": {
+    "games/SNES/boot.rom": "",
+    "games/mame/.keep": "",
+    "games/readme.txt": ""
+  },
+  "romm": {
+    "index.ts": "const _EJS_CORES_MAP: Record<string, string[]> = {\n  \"3do\": [\"opera\"],\n  arcade: [\n    \"mame2003_plus\",\n    \"fbneo\",\n  ],\n};\n\nconst _EJS_NIGHTLY_CORES_MAP: Record<string, string[]> = {\n  \"3ds\": [\"azahar\"],\n};\n",
+    "known_bios_files.json": "{\"3do:panafz1.bin\": {}, \"64dd:IPL.n64\": {}}\n"
+  },
+  "bizhawk": {
+    "PathEntryCollection.cs": "\t\tprivate static readonly string COMBINED_SYSIDS_GB = string.Join(\"_\", VSystemID.Raw.GB, VSystemID.Raw.GBC, VSystemID.Raw.SGB);\n\t\t\tCommonEntriesFor(VSystemID.Raw.Sega32X, basePath: Path.Combine(\".\", \"32X\")),\n\t\t\tCommonEntriesFor(COMBINED_SYSIDS_GB, basePath: Path.Combine(\".\", \"Gameboy\")),\n\t\t\tCommonEntriesFor(VSystemID.Raw.NES, basePath: Path.Combine(\".\", \"NES\")),\n",
+    "RomLoader.cs": "\t\t\tpublic static readonly IReadOnlyCollection<string> GB = new[] { \"gb\", \"gbc\", \"sgb\" };\n\t\t\tpublic static readonly IReadOnlyCollection<string> NES = new[] { \"nes\", \"fds\", /*\"x\"*/ \"unf\" };\n",
+    "Config.cs": "\t\tpublic static readonly IReadOnlyList<(string[] AppliesTo, string[] CoreNames)> CorePickerUIData = new List<(string[], string[])>\n\t\t{\n\t\t\t([ VSystemID.Raw.GB, VSystemID.Raw.GBC ],\n\t\t\t\t[ CoreNames.Gambatte, CoreNames.Sameboy ]),\n\t\t\t([ VSystemID.Raw.NES ],\n\t\t\t\t[ CoreNames.QuickNes, CoreNames.NesHawk ]),\n\t\t};\n"
+  }
+}

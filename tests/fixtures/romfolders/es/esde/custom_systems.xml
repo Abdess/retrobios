@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<systemList>
+	<system>
+	<name>model2</name>
+	<path>%ROMPATH%/model2/roms</path>
+	<extension>.zip .ZIP</extension>
+	<command label="Model 2 (Standalone)">%EMULATOR_MODEL-2% %BASENAME% & exit</command>
+	</system>
+</systemList>

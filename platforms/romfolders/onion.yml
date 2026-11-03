@@ -1,0 +1,865 @@
+setup: onion
+name: Onion
+platform: retroarch
+sources:
+  os:
+    repo: "https://github.com/OnionUI/Onion"
+    commit: 07505ea58c7bba698d6b9220ff43946a43cac76b
+roms_root:
+  path: /mnt/SDCARD/Roms
+  from_bios: ../Roms
+  source_ref: "os static/packages/Emu/Commodore%20-%20Amiga%20(PUAE%202021)/Emu/AMIGA/config.json:3"
+case_sensitive: false
+case_ref: "os src/packageManager/fileActions.h:96-118"
+hidden:
+- pattern: .*
+  source_ref: "os src/packageManager/fileActions.h:130"
+media:
+- name: Imgs
+  source_ref: "os static/packages/Emu/Commodore%20-%20Amiga%20(PUAE%202021)/Emu/AMIGA/config.json:1-13"
+notes:
+- Each Emu/<SYS>/config.json points rompath at ../../Roms/<SYS> from /mnt/SDCARD/Emu/<SYS>. Emu packages
+  are optional and PackageManager installs them.
+- "The stock MainUI that lists the games is closed source. It reads extlist and hidebios from config.json.\
+  \ Only Onion's PackageManager rule is readable (os src/packageManager/fileActions.h:120-189)."
+- "The gpSP package names its core through default_core in launch.sh and switches to mGBA only after a\
+  \ save migration (os static/packages/Emu/Nintendo%20-%20GBA%20(gpSP)/Emu/GBA/launch.sh:25-30)."
+folders:
+- folder: ADVMAME
+  extensions:
+  - .7z
+  - .chd
+  - .miyoocmd
+  - .zip
+  source_ref: "os static/packages/RApp/Arcade%20(AdvanceMame)/RApp/advancemame/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: AMIGA
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ccd
+  - .chd
+  - .cue
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .info
+  - .ipf
+  - .iso
+  - .lha
+  - .m3u
+  - .mds
+  - .nrg
+  - .rp9
+  - .slave
+  - .uae
+  - .zip
+  core: puae2021
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Commodore%20-%20Amiga%20(PUAE%202021)/Emu/AMIGA/config.json:6"
+  note: "package 'Commodore - Amiga (PUAE 2021)' (Emu/, the stock menu entry). Other packages on this\
+    \ folder: Commodore - Amiga (PUAE 2021 xtreme), Commodore - Amiga (uae4arm)"
+- folder: AMIGACD
+  source_ref: "os static/packages/RApp/Commodore%20-%20Amiga%20CD32%20(uae4arm)/RApp/uae4arm_cd32/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: ARCADE
+  extensions:
+  - .zip
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Arcade%20(MAME%202003-Plus)/Emu/ARCADE/config.json:6"
+  note: "package 'Arcade (MAME 2003-Plus)' (Emu/, the stock menu entry). Other packages on this folder:\
+    \ Arcade (MAME 2003-xtreme)"
+- folder: ARDUBOY
+  source_ref: "os static/packages/RApp/Arduboy%20(Arduous)/RApp/arduous/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: ATARI
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella2014
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Atari%20-%202600%20(Stella%202014)/Emu/ATARI/config.json:6"
+  note: "package 'Atari - 2600 (Stella 2014)' (Emu/, the stock menu entry)"
+- folder: ATARIST
+  source_ref: "os static/packages/RApp/Atari%20-%20ST%20(hatari)/RApp/ATARIST/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: CHAI
+  source_ref: "os static/packages/RApp/Game%20engine%20-%20ChaiLove%20(ChaiLove)/RApp/chai/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: COLECO
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Coleco%20-%20ColecoVision%20(blueMSX)/Emu/COLECO/config.json:6"
+  note: "package 'Coleco - ColecoVision (blueMSX)' (Emu/, the stock menu entry)"
+- folder: COMMODORE
+  extensions:
+  - .7z
+  - .crt
+  - .d64
+  - .nib
+  - .prg
+  - .t64
+  - .tap
+  - .zip
+  core: vice_x64
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Commodore%20-%20C64%20(VICE%20x64)/Emu/COMMODORE/config.json:6"
+  note: "package 'Commodore - C64 (VICE x64)' (Emu/, the stock menu entry). Other packages on this folder:\
+    \ Commodore - C64 (Frodo)"
+- folder: CPC
+  extensions:
+  - .7z
+  - .bin
+  - .dsk
+  - .kcr
+  - .sna
+  - .zip
+  core: crocods
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Amstrad%20-%20CPC%20(CrocoDS)/Emu/CPC/config.json:6"
+  note: "package 'Amstrad - CPC (CrocoDS)' (Emu/, the stock menu entry). Other packages on this folder:\
+    \ Amstrad - CPC (Caprice32)"
+- folder: CPS1
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  core: fbalpha2012_cps1
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Capcom%20-%20CPS1%20(FB%20Alpha%202012%20CPS-1)/Emu/CPS1/config.json:6"
+  note: "package 'Capcom - CPS1 (FB Alpha 2012 CPS-1)' (Emu/, the stock menu entry)"
+- folder: CPS2
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  core: fbalpha2012_cps2
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Capcom%20-%20CPS2%20(FB%20Alpha%202012%20CPS-2)/Emu/CPS2/config.json:6"
+  note: "package 'Capcom - CPS2 (FB Alpha 2012 CPS-2)' (Emu/, the stock menu entry)"
+- folder: CPS3
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  core: fbalpha2012_cps3
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Capcom%20-%20CPS3%20(FB%20Alpha%202012%20CPS-3)/Emu/CPS3/config.json:6"
+  note: "package 'Capcom - CPS3 (FB Alpha 2012 CPS-3)' (Emu/, the stock menu entry)"
+- folder: DAPHNE
+  source_ref: "os static/packages/RApp/Arcade%20-%20LaserDisk%20(Daphne)/RApp/DAPHNE/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: DOS
+  extensions:
+  - .bat
+  - .com
+  - .conf
+  - .dosz
+  - .exe
+  - .ima
+  - .img
+  - .ins
+  - .iso
+  - .jrc
+  - .m3u
+  - .m3u8
+  - .tc
+  - .vhd
+  - .zip
+  core: dosbox_pure
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Microsoft%20-%20DOS%20(DOSBox-Pure)/Emu/DOS/config.json:6"
+  note: "package 'Microsoft - DOS (DOSBox-Pure)' (Emu/, the stock menu entry). Other packages on this\
+    \ folder: Microsoft - DOS (DOSBox-Pure 0.9.7)"
+- folder: EASYRPG
+  source_ref: "os static/packages/RApp/Game%20engine%20-%20EasyRPG%20(EasyRPG)/RApp/easyrpg/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: EBK
+  source_ref: "os static/packages/RApp/BK%20-%200010%20(BK)/RApp/bk/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: EIGHTHUNDRED
+  source_ref: "os static/packages/RApp/Atari%20-%20800%20(atari800)/RApp/atari800/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: FAIRCHILD
+  extensions:
+  - .bin
+  - .chf
+  - .rom
+  - .zip
+  core: freechaf
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Fairchild%20-%20ChannelF%20(FreeChaF)/Emu/FAIRCHILD/config.json:6"
+  note: "package 'Fairchild - ChannelF (FreeChaF)' (Emu/, the stock menu entry)"
+- folder: FBA2012
+  source_ref: "os static/packages/RApp/Arcade%20(FB%20Alpha%202012)/RApp/FBA2012/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: FBALPHA
+  extensions:
+  - .7z
+  - .cue
+  - .zip
+  source_ref: "os static/packages/RApp/.Arcade%20(Final%20Burn%20Alpha)/RApp/ARCADE/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: FBNEO
+  extensions:
+  - .zip
+  source_ref: "os static/packages/RApp/Arcade%20(Final%20Burn%20Neo)/RApp/fbneo/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: FC
+  extensions:
+  - .7z
+  - .fds
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: fceumm
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20NES%20(FCEUmm)/Emu/FC/config.json:6"
+  note: "package 'Nintendo - NES (FCEUmm)' (Emu/, the stock menu entry). Other packages on this folder:\
+    \ Nintendo - NES (Nestopia)"
+- folder: FDS
+  extensions:
+  - .7z
+  - .fds
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: fceumm
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20Famicom%20Disk%20Syst.%20(FCEUmm)/Emu/FDS/config.json:6"
+  note: "package 'Nintendo - Famicom Disk Syst. (FCEUmm)' (Emu/, the stock menu entry)"
+- folder: FIFTYTWOHUNDRED
+  extensions:
+  - .7z
+  - .a52
+  - .bin
+  - .zip
+  core: a5200
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Atari%20-%205200%20(a5200)/Emu/FIFTYTWOHUNDRED/config.json:6"
+  note: "package 'Atari - 5200 (a5200)' (Emu/, the stock menu entry). Other packages on this folder: Atari\
+    \ - 5200 (atari800)"
+- folder: GB
+  extensions:
+  - .7z
+  - .bin
+  - .dmg
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20Game%20Boy%20(Gambatte)/Emu/GB/config.json:6"
+  note: "package 'Nintendo - Game Boy (Gambatte)' (Emu/, the stock menu entry). Other packages on this\
+    \ folder: Nintendo - GB (Gearboy), Nintendo - GB (TGB Dual)"
+- folder: GBA
+  extensions:
+  - .7z
+  - .bin
+  - .gba
+  - .zip
+  core: gpsp
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20GBA%20(gpSP)/Emu/GBA/config.json:6"
+  note: "package 'Nintendo - GBA (gpSP)' (Emu/, the stock menu entry). Other packages on this folder:\
+    \ Nintendo - GBA (Mednafen GBA), Nintendo - GBA (Meteor), Nintendo - GBA (VBA Next), Nintendo - GBA\
+    \ (VBA-M)"
+- folder: GBC
+  extensions:
+  - .7z
+  - .bin
+  - .dmg
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20Game%20Boy%20Color%20(Gambatte)/Emu/GBC/config.json:6"
+  note: "package 'Nintendo - Game Boy Color (Gambatte)' (Emu/, the stock menu entry). Other packages on\
+    \ this folder: Nintendo - GBC (Gearboy), Nintendo - GBC (TGB Dual)"
+- folder: GG
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Sega%20-%20Game%20Gear%20(PicoDrive)/Emu/GG/config.json:6"
+  note: "package 'Sega - Game Gear (PicoDrive)' (Emu/, the stock menu entry). Other packages on this folder:\
+    \ Sega - Game Gear (Gearsystem), Sega - Game Gear (Genesis Plus GX)"
+- folder: GME
+  source_ref: "os static/packages/RApp/Game%20Music%20Emu%20(GME)/RApp/gme/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: GNGEO
+  extensions:
+  - .gno
+  source_ref: "os static/packages/RApp/SNK%20-%20Neo%20Geo%20(GnGeo)/RApp/gngeo/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: GW
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: gw
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20Game%20&%20Watch%20(gw)/Emu/GW/config.json:6"
+  note: "package 'Nintendo - Game & Watch (gw)' (Emu/, the stock menu entry)"
+- folder: INTELLIVISION
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .zip
+  core: freeintv
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Mattel%20-%20Intellivision%20(FreeIntv)/Emu/INTELLIVISION/config.json:6"
+  note: "package 'Mattel - Intellivision (FreeIntv)' (Emu/, the stock menu entry)"
+- folder: JAGUAR
+  source_ref: "os static/packages/RApp/Atari%20-%20Jaguar%20(Virtual%20Jaguar)/RApp/JAGUAR/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: JAVA
+  source_ref: "os static/packages/RApp/.Java%20-%20J2ME%20(SquirrelJME)/RApp/sqirreljme/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: LOWRESNX
+  extensions:
+  - .7z
+  - .nx
+  - .zip
+  source_ref: "os static/packages/RApp/Game%20engine%20-%20LowRes%20NX%20(LowRes%20NX)/RApp/lowresnx/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: LUTRO
+  source_ref: "os static/packages/RApp/Game%20engine%20-%20LÖVE%20(Lutro)/RApp/lutro/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: LYNX
+  extensions:
+  - .7z
+  - .lnx
+  - .zip
+  core: handy
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Atari%20-%20Lynx%20(Handy)/Emu/LYNX/config.json:6"
+  note: "package 'Atari - Lynx (Handy)' (Emu/, the stock menu entry). Other packages on this folder: Atari\
+    \ - Lynx (Mednafen Lynx)"
+- folder: MAME2000
+  source_ref: "os static/packages/RApp/Arcade%20(MAME%202000)/RApp/mame2000/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: MAME2003
+  extensions:
+  - .zip
+  source_ref: "os static/packages/RApp/.Arcade%20(MAME%202003)/RApp/mame2003/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: MBA
+  source_ref: "os static/packages/RApp/Arcade%20(M.B.A-mini)/RApp/mba-mini/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: MD
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Sega%20-%20Genesis%20(PicoDrive)/Emu/MD/config.json:6"
+  note: "package 'Sega - Genesis (PicoDrive)' (Emu/, the stock menu entry). Other packages on this folder:\
+    \ Sega - Genesis (Genesis Plus GX)"
+- folder: MDHACKS
+  source_ref: "os static/packages/RApp/Sega%20-%20Roms%20Hacks%20(Genesis%20Plus%20GX)/RApp/genesis_plus_gx_hacks/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: MEGADUCK
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: sameduck
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Mega%20Duck%20(SameDuck)/Emu/MEGADUCK/config.json:6"
+  note: "package 'Mega Duck (SameDuck)' (Emu/, the stock menu entry)"
+- folder: MICROW8
+  extensions:
+  - .uw8
+  - .wasm
+  source_ref: "os static/packages/RApp/Game%20engine%20-%20MicroW8%20(Uw8)/RApp/UW8/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: MS
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Sega%20-%20Master%20System%20(PicoDrive)/Emu/MS/config.json:6"
+  note: "package 'Sega - Master System (PicoDrive)' (Emu/, the stock menu entry). Other packages on this\
+    \ folder: Sega - Master System (Gearsystem), Sega - Master System (Genesis Plus GX)"
+- folder: MSX
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Microsoft%20-%20MSX%20(blueMSX)/Emu/MSX/config.json:6"
+  note: "package 'Microsoft - MSX (blueMSX)' (Emu/, the stock menu entry). Other packages on this folder:\
+    \ .Microsoft - MSX (blueMSX), Microsoft - MSX (fMSX)"
+- folder: NDS
+  extensions:
+  - .7z
+  - .nds
+  - .rar
+  - .zip
+  emulator: standalone
+  source_ref: "os static/packages/Emu/Nintendo%20-%20DS%20(Drastic)/Emu/NDS/config.json:5"
+  note: "package 'Nintendo - DS (Drastic)' (Emu/, the stock menu entry), launches static/packages/Emu/Nintendo\
+    \ - DS (Drastic)/Emu/NDS/launch.sh"
+- folder: NEOCD
+  extensions:
+  - .chd
+  - .cue
+  - .m3u
+  core: neocd
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/SNK%20-%20Neo%20Geo%20CD%20(NeoCD)/Emu/NEOCD/config.json:6"
+  note: "package 'SNK - Neo Geo CD (NeoCD)' (Emu/, the stock menu entry)"
+- folder: NEOGEO
+  extensions:
+  - .7z
+  - .zip
+  core: fbalpha2012_neogeo
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/SNK%20-%20Neo%20Geo%20(fbalpha2012%20neogeo)/Emu/NEOGEO/config.json:6"
+  note: "package 'SNK - Neo Geo (fbalpha2012 neogeo)' (Emu/, the stock menu entry)"
+- folder: NGP
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: mednafen_ngp
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/SNK%20-%20Neo%20Geo%20Pocket%20Color%20(B.%20NeoPop)/Emu/NGP/config.json:6"
+  note: "package 'SNK - Neo Geo Pocket Color (B. NeoPop)' (Emu/, the stock menu entry)"
+- folder: ODYSSEY
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Magnavox%20-%20Odyssey2%20(O2EM)/Emu/ODYSSEY/config.json:6"
+  note: "package 'Magnavox - Odyssey2 (O2EM)' (Emu/, the stock menu entry)"
+- folder: OPENBOR
+  source_ref: "os static/packages/RApp/Game%20engine%20-%20Open%20Beats%20of%20Rage/RApp/OpenBOR/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: PALM
+  source_ref: "os static/packages/RApp/Palm%20OS%20-%20m515%20(mu)/RApp/mu/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: PANASONIC
+  source_ref: "os static/packages/RApp/3DO%20(Opera)/RApp/opera/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: PCE
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .pce
+  - .zip
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/NEC%20-%20TurboGrafx-16%20(Beetle%20PCE%20FAST)/Emu/PCE/config.json:6"
+  note: "package 'NEC - TurboGrafx-16 (Beetle PCE FAST)' (Emu/, the stock menu entry). Other packages\
+    \ on this folder: NEC - TurboGrafx-16 (Beetle PCE)"
+- folder: PCECD
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .pce
+  - .zip
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/NEC%20-%20TurboGrafx%20CD%20(Beetle%20PCE%20FAST)/Emu/PCECD/config.json:6"
+  note: "package 'NEC - TurboGrafx CD (Beetle PCE FAST)' (Emu/, the stock menu entry)"
+- folder: PCEIGHTYEIGHT
+  source_ref: "os static/packages/RApp/NEC%20-%20PC-8000%20(Quasi88)/RApp/quasi88/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: PCFX
+  source_ref: "os static/packages/RApp/NEC%20-%20PC-FX%20(Mednafen%20PC-FX)/RApp/mednafen_pcfx/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: PCNINETYEIGHT
+  source_ref: "os static/packages/RApp/NEC%20-%20PC-98%20(Neko%20Project%20II%20Kai)/RApp/nekop2kai/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core. Other packages on this folder:\
+    \ NEC - PC-98 (Neko Project II)"
+- folder: PICO
+  extensions:
+  - .p8
+  - .png
+  core: fake08
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/PICO-8%20(Fake8)/Emu/PICO/config.json:6"
+  note: "package 'PICO-8 (Fake8)' (Emu/, the stock menu entry). Other packages on this folder: PICO-8\
+    \ (Fake8 standalone), PICO-8 (PICO-8 standalone)"
+- folder: POKE
+  extensions:
+  - .min
+  - .zip
+  core: pokemini
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20Pokemon%20Mini%20(PokeMini)/Emu/POKE/config.json:6"
+  note: "package 'Nintendo - Pokemon Mini (PokeMini)' (Emu/, the stock menu entry)"
+- folder: PORTS/Shortcuts
+  extensions:
+  - .miyoocmd
+  - .port
+  emulator: standalone
+  source_ref: "os static/packages/Emu/Ports%20Collection/Emu/PORTS/config.json:6"
+  note: "package 'Ports Collection' (Emu/, the stock menu entry), launches static/packages/Emu/Ports Collection/Emu/PORTS/launch.sh"
+- folder: PS
+  extensions:
+  - .cbn
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .toc
+  core: pcsx_rearmed
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Sony%20-%20PlayStation%20(PCSX%20ReARMed)/Emu/PSX/config.json:6"
+  note: "package 'Sony - PlayStation (PCSX ReARMed)' (Emu/, the stock menu entry). Other packages on this\
+    \ folder: Sony - PlayStation (PCSX standalone), Sony - PlayStation (SwanStation)"
+- folder: PUZZLE
+  extensions:
+  - .pz
+  source_ref: "os static/packages/RApp/Game%20engine%20-%20PuzzleScript%20(PuzzleScript)/RApp/PuzzleScript/config.json:5"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: SATELLAVIEW
+  extensions:
+  - .7z
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20Satellaview%20(Snes9x)/Emu/SATELLAVIEW/config.json:6"
+  note: "package 'Nintendo - Satellaview (Snes9x)' (Emu/, the stock menu entry)"
+- folder: SCUMMVM/Shortcuts
+  extensions:
+  - .miyoocmd
+  - .scummvm
+  - .target
+  core: scummvm
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/SCUMM%20(ScummVM)/Emu/SCUMMVM/config.json:6"
+  note: "package 'SCUMM (ScummVM)' (Emu/, the stock menu entry)"
+- folder: SCUMMVM/Shortcuts_Standalone
+  extensions:
+  - .miyoocmd
+  - .scummvm
+  source_ref: "os static/packages/RApp/SCUMM%20(ScummVM%20standalone)/RApp/scummvm/config.json:5"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: SEGACD
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .chd
+  - .cue
+  - .gen
+  - .iso
+  - .m3u
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Sega%20-%20CD%20(PicoDrive)/Emu/SEGACD/config.json:6"
+  note: "package 'Sega - CD (PicoDrive)' (Emu/, the stock menu entry). Other packages on this folder:\
+    \ Sega - Sega CD (Genesis Plus GX)"
+- folder: SEGASGONE
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .mv
+  - .rom
+  - .sg
+  - .sms
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Sega%20-%20SG-1000%20(Gearsystem)/Emu/SEGASGONE/config.json:6"
+  note: "package 'Sega - SG-1000 (Gearsystem)' (Emu/, the stock menu entry)"
+- folder: SEVENTYEIGHTHUNDRED
+  extensions:
+  - .a78
+  - .zip
+  core: prosystem
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Atari%20-%207800%20(ProSystem)/Emu/SEVENTYEIGHTHUNDRED/config.json:6"
+  note: "package 'Atari - 7800 (ProSystem)' (Emu/, the stock menu entry)"
+- folder: SFC
+  extensions:
+  - .7z
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .zip
+  core: mednafen_supafaust
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20SNES%20(Beetle%20Supafaust)/Emu/SFC/config.json:6"
+  note: "package 'Nintendo - SNES (Beetle Supafaust)' (Emu/, the stock menu entry). Other packages on\
+    \ this folder: Nintendo - SNES (ChimeraSNES), Nintendo - SNES (Snes9x 2002), Nintendo - SNES (Snes9x\
+    \ 2005 Plus), Nintendo - SNES (Snes9x 2005), Nintendo - SNES (Snes9x 2010), Nintendo - SNES (Snes9x)"
+- folder: SGB
+  extensions:
+  - .7z
+  - .bin
+  - .gb
+  - .gba
+  - .gbc
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20Super%20Game%20Boy%20(mGBA)/Emu/SGB/config.json:6"
+  note: "package 'Nintendo - Super Game Boy (mGBA)' (Emu/, the stock menu entry)"
+- folder: SGFX
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .pce
+  - .sgx
+  - .zip
+  core: mednafen_supergrafx
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/NEC%20-%20SuperGrafx%20(Beetle%20SuperGrafx)/Emu/SGFX/config.json:6"
+  note: "package 'NEC - SuperGrafx (Beetle SuperGrafx)' (Emu/, the stock menu entry)"
+- folder: SUFAMI
+  extensions:
+  - .7z
+  - .smc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Bandai%20-%20Sufami%20Turbo%20(snes9x)/Emu/SUFAMI/config.json:6"
+  note: "package 'Bandai - Sufami Turbo (snes9x)' (Emu/, the stock menu entry)"
+- folder: SUPERVISION
+  extensions:
+  - .7z
+  - .bin
+  - .sv
+  - .zip
+  core: potator
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Watara%20-%20Supervision%20(Potator)/Emu/SUPERVISION/config.json:6"
+  note: "package 'Watara - Supervision (Potator)' (Emu/, the stock menu entry)"
+- folder: THIRTYTWOX
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Sega%20-%2032X%20(PicoDrive)/Emu/THIRTYTWOX/config.json:6"
+  note: "package 'Sega - 32X (PicoDrive)' (Emu/, the stock menu entry)"
+- folder: THOMSON
+  source_ref: "os static/packages/RApp/Thomson%20-%20MOTO%20(Theodore)/RApp/theodore/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: TI83
+  extensions:
+  - .8xg
+  - .8xk
+  - .8xp
+  source_ref: "os static/packages/RApp/Texas%20Instruments%20TI-83%20(Numero)/RApp/TI-83/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: TIC
+  extensions:
+  - .7z
+  - .fd
+  - .k7
+  - .m7
+  - .rom
+  - .sap
+  - .tic
+  - .zip
+  core: tic80
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/TIC-80%20(TIC-80)/Emu/TIC/config.json:6"
+  note: "package 'TIC-80 (TIC-80)' (Emu/, the stock menu entry)"
+- folder: UZEBOX
+  source_ref: "os static/packages/RApp/Uzebox%20(Uzem)/RApp/uzem/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: VB
+  extensions:
+  - .7z
+  - .vb
+  - .vboy
+  - .zip
+  core: mednafen_vb
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Nintendo%20-%20Virtual%20Boy%20(Beetle%20VB)/Emu/VB/config.json:6"
+  note: "package 'Nintendo - Virtual Boy (Beetle VB)' (Emu/, the stock menu entry)"
+- folder: VECTREX
+  extensions:
+  - .7z
+  - .vec
+  - .zip
+  core: vecx
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/GCE%20-%20Vectrex%20(vecx)/Emu/VECTREX/config.json:6"
+  note: "package 'GCE - Vectrex (vecx)' (Emu/, the stock menu entry)"
+- folder: VIC20
+  extensions:
+  - '.20'
+  - '.40'
+  - '.60'
+  - .7z
+  - .a0
+  - .b0
+  - .bin
+  - .cmd
+  - .crt
+  - .d2m
+  - .d4m
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .rom
+  - .t64
+  - .tap
+  - .tcrt
+  - .vfl
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xvic
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Commodore%20-%20VIC-20%20(VICE%20xvic)/Emu/VIC20/config.json:6"
+  note: "package 'Commodore - VIC-20 (VICE xvic)' (Emu/, the stock menu entry)"
+- folder: VIDEOPAC
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Phillips%20-%20Videopac+%20(O2EM)/Emu/VIDEOPAC/config.json:6"
+  note: "package 'Phillips - Videopac+ (O2EM)' (Emu/, the stock menu entry)"
+- folder: VMU
+  source_ref: "os static/packages/RApp/Sega%20-%20Visual%20Memory%20Unit%20(VeMUlator)/RApp/vemulator/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: WS
+  extensions:
+  - .7z
+  - .pc2
+  - .ws
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Bandai%20-%20WonderSwanColor%20(B.%20Cygne)/Emu/WS/config.json:6"
+  note: "package 'Bandai - WonderSwanColor (B. Cygne)' (Emu/, the stock menu entry)"
+- folder: X68000
+  source_ref: "os static/packages/RApp/Sharp%20-%20X68000%20(PX68k)/RApp/X68000/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: XONE
+  source_ref: "os static/packages/RApp/Commodore%20-%20Sharp%20X1%20(x1)/RApp/x1/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: ZXEIGHTYONE
+  source_ref: "os static/packages/RApp/Sinclair%20-%20ZX81%20(81)/RApp/zx81/config.json:6"
+  note: "only RetroArch-section packages (RApp/), the user picks the core"
+- folder: ZXS
+  extensions:
+  - .7z
+  - .rzx
+  - .scl
+  - .tap
+  - .trd
+  - .tzx
+  - .z80
+  - .zip
+  core: fuse
+  emulator: retroarch
+  source_ref: "os static/packages/Emu/Sinclair%20-%20ZX%20Spectrum%20(Fuse)/Emu/ZXS/config.json:6"
+  note: "package 'Sinclair - ZX Spectrum (Fuse)' (Emu/, the stock menu entry)"

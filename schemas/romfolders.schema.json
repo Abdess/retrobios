@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abdess.github.io/retrobios/api/v1/schemas/romfolders.schema.json",
+  "title": "RetroBIOS rom folders of one setup",
+  "description": "What a frontend's own source says about its game folders, read at pinned revisions (platforms/romfolders/<setup>.yml, written by python -m scripts.scraper.romfolders). Names are the OS's own: scripts/romfolders.py resolves them to repository systems and profiles.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["setup", "name", "platform", "sources", "roms_root", "case_sensitive", "folders"],
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "description": "'<source key> <path>:<line>[-<line>]', several joined by '; '. The key names an entry of sources.",
+      "pattern": "^[a-z0-9][a-z0-9-]* \\S+(?:; [a-z0-9][a-z0-9-]* \\S+)*$"
+    },
+    "named_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_ref"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "pattern": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "source_ref": { "$ref": "#/$defs/ref" }
+      },
+      "oneOf": [{ "required": ["name"] }, { "required": ["pattern"] }]
+    },
+    "board_default": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["core", "source_ref"],
+      "properties": {
+        "core": { "type": "string", "minLength": 1 },
+        "emulator": { "type": "string", "minLength": 1 },
+        "source_ref": { "$ref": "#/$defs/ref" }
+      }
+    }
+  },
+  "properties": {
+    "setup": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "name": { "type": "string", "minLength": 1 },
+    "platform": {
+      "type": "string",
+      "description": "The install manifest (install/<platform>.json) the installer uses on this setup, as install.py's OS rules choose it. Empty for a setup the installer lays out with no manifest."
+    },
+    "sources": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["repo", "commit"],
+        "properties": {
+          "repo": { "type": "string", "pattern": "^https://" },
+          "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+          "tag": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "roms_root": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "from_bios", "source_ref"],
+      "properties": {
+        "path": { "type": ["string", "null"], "minLength": 1, "description": "Null for a setup with no rom folder of its own." },
+        "from_bios": {
+          "type": ["string", "null"],
+          "description": "The roms root relative to the BIOS folder the installer already knows. Null when no fixed relation exists."
+        },
+        "source_ref": { "$ref": "#/$defs/ref" }
+      }
+    },
+    "case_sensitive": {
+      "type": ["boolean", "null"],
+      "description": "Whether the OS opens a folder only under the spelling it lists. Null when the source does not settle it (filesystem dependent)."
+    },
+    "case_ref": { "$ref": "#/$defs/ref" },
+    "skip": {
+      "type": "array",
+      "description": "Folders under the roms root the scan never enters (the ELEC family's bios folder, the OS's own data).",
+      "items": { "$ref": "#/$defs/named_rule" }
+    },
+    "hidden": {
+      "type": "array",
+      "description": "File and folder name patterns (fnmatch, case-insensitive) the OS hides from its game list.",
+      "items": { "$ref": "#/$defs/named_rule" }
+    },
+    "media": {
+      "type": "array",
+      "description": "Folders inside a system folder that hold artwork, never games.",
+      "items": { "$ref": "#/$defs/named_rule" }
+    },
+    "notes": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "folders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["folder", "source_ref"],
+        "properties": {
+          "folder": { "type": "string", "minLength": 1, "description": "Path under the roms root, as the OS writes it." },
+          "name": { "type": "string", "minLength": 1, "description": "The OS's own system id when it differs from the folder." },
+          "aliases": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "extensions": {
+            "type": "array",
+            "description": "Lowercased, with the dot. Absent when the OS lists every file.",
+            "items": { "type": "string", "pattern": "^\\.[^A-Z\\s]+$" },
+            "uniqueItems": true
+          },
+          "core": { "type": "string", "minLength": 1, "description": "The core or emulator the OS starts by default, in its own spelling." },
+          "emulator": { "type": "string", "minLength": 1 },
+          "source_ref": { "$ref": "#/$defs/ref" },
+          "board_defaults": {
+            "type": "object",
+            "additionalProperties": { "$ref": "#/$defs/board_default" }
+          },
+          "arcade": { "type": "boolean" },
+          "note": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

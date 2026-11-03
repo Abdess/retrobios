@@ -1,0 +1,49 @@
+name: AmberELEC
+platform: amberelec
+format: es-xml
+params:
+  file: packages/ui/emulationstation/config/es_systems.cfg
+  path_prefixes:
+  - /storage/roms/
+  default: flagged
+sources:
+  os:
+    repo: https://github.com/AmberELEC/AmberELEC
+    commit: 5a3882cbb755dcd614aea8952ff20f5a4151505b
+  es:
+    repo: https://github.com/AmberELEC/emulationstation
+    commit: e3846751ce50fdced1f2bbd7a5bb51f4da2e7007
+    note: EmulationStation pinned by packages/ui/emulationstation/package.mk PKG_VERSION
+roms_root:
+  path: /storage/roms
+  from_bios: ..
+  source_ref: os packages/games/tools/retroarch/sources/retroarch.cfg:550,611
+case_sensitive: null
+skip:
+- name: bios
+  reason: RetroArch's system directory
+  source_ref: os packages/games/tools/retroarch/sources/retroarch.cfg:611
+hidden:
+- pattern: .*
+  source_ref: es es-app/src/SystemData.cpp:264
+media:
+- name: artwork
+  source_ref: es es-app/src/SystemData.cpp:294
+- name: media
+  source_ref: es es-app/src/SystemData.cpp:315
+- name: medias
+  source_ref: es es-app/src/SystemData.cpp:315
+- name: images
+  source_ref: es es-app/src/SystemData.cpp:315
+- name: manuals
+  source_ref: es es-app/src/SystemData.cpp:315
+- name: videos
+  source_ref: es es-app/src/SystemData.cpp:315
+- name: assets
+  source_ref: es es-app/src/SystemData.cpp:315
+- pattern: downloaded_*
+  source_ref: es es-app/src/SystemData.cpp:315
+notes:
+- 'The BIOS folder is /storage/roms/bios, inside the roms root: the scan skips it.'
+- A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:275).
+- 'Default core: the core marked default, else the first emulator''s first core (es es-app/src/SystemData.cpp:1829-1860).'

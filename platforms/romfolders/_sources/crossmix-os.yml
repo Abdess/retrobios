@@ -1,0 +1,19 @@
+name: CrossMix-OS
+platform: retroarch
+format: crossmix
+params:
+  source: os
+sources:
+  os:
+    repo: https://github.com/cizia64/CrossMix-OS
+    commit: 206d612fdef83972ed54a17de955125d0c0b3528
+roms_root:
+  path: /mnt/SDCARD/Roms
+  from_bios: ../Roms
+  source_ref: os RetroArch/retroarch.cfg:3202
+case_sensitive: false
+case_ref: os System/usr/trimui/scripts/load_launcher.sh:23-41
+notes:
+  - Each Emus/<SYS>/config.json points rompath at ../../Roms/<SYS>. Box art lives in /mnt/SDCARD/Imgs/<SYS>, outside Roms.
+  - The stock TrimUI MainUI that lists the games is closed source. It reads extlist and hidebios from config.json.
+  - The default core is the first launchlist entry with a launch script, unless a per-game or per-system preset exists (os System/usr/trimui/scripts/load_launcher.sh:23-41).

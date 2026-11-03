@@ -1,0 +1,65 @@
+name: ROCKNIX
+platform: rocknix
+format: elec-conf
+params:
+  package: projects/ROCKNIX/packages/virtual/emulators/package.mk
+  conf_dir: config/emulators
+  path_prefixes:
+  - /storage/roms/
+sources:
+  os:
+    repo: https://github.com/ROCKNIX/distribution
+    commit: c445081a59518f37d9776e5412dd7b14910696f7
+    tag: '20261001'
+  es:
+    repo: https://github.com/ROCKNIX/emulationstation-next
+    commit: cada856d86e3115fbbf0bce09dd761b0ee8fa9fd
+    note: EmulationStation pinned by the ui/emulationstation package.mk PKG_VERSION
+roms_root:
+  path: /storage/roms
+  from_bios: ..
+  source_ref: os projects/ROCKNIX/packages/virtual/emulators/package.mk:152
+case_sensitive: null
+skip:
+- name: bezels
+  reason: created by the emulators package, holds no game
+  source_ref: os projects/ROCKNIX/packages/virtual/emulators/package.mk:149
+- name: bios
+  reason: created by the emulators package, holds no game
+  source_ref: os projects/ROCKNIX/packages/virtual/emulators/package.mk:152
+- name: music
+  reason: created by the emulators package, holds no game
+  source_ref: os projects/ROCKNIX/packages/virtual/emulators/package.mk:155
+- name: savestates
+  reason: created by the emulators package, holds no game
+  source_ref: os projects/ROCKNIX/packages/virtual/emulators/package.mk:158
+- name: themes
+  reason: created by the emulators package, holds no game
+  source_ref: os projects/ROCKNIX/packages/virtual/emulators/package.mk:161
+hidden:
+- pattern: .*
+  source_ref: es es-app/src/SystemData.cpp:340
+- pattern: ._*
+  source_ref: es es-app/src/SystemData.cpp:334-336
+media:
+- name: artwork
+  source_ref: es es-app/src/SystemData.cpp:370
+- name: media
+  source_ref: es es-app/src/SystemData.cpp:390-393
+- name: medias
+  source_ref: es es-app/src/SystemData.cpp:390-393
+- name: images
+  source_ref: es es-app/src/SystemData.cpp:390-393
+- name: manuals
+  source_ref: es es-app/src/SystemData.cpp:390-393
+- name: videos
+  source_ref: es es-app/src/SystemData.cpp:390-393
+- name: assets
+  source_ref: es es-app/src/SystemData.cpp:390-393
+- pattern: downloaded_*
+  source_ref: es es-app/src/SystemData.cpp:390-393
+notes:
+- 'The BIOS folder is /storage/roms/bios, inside the roms root: the scan skips it.'
+- A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:351).
+- Each folder comes from SYSTEM_PATH of config/emulators/<system>.conf, written by add_es_system for every
+  system the emulators package adds.

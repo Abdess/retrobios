@@ -1,0 +1,45 @@
+name: KNULLI
+platform: knulli
+format: batocera-es
+params:
+  es_systems: package/emulationstation/knulli-es-system/es_systems.yml
+  configgen_dir: package/system/knulli-configgen/configs
+sources:
+  os:
+    repo: https://github.com/knulli-cfw/knulli-linux
+    commit: c1c7de479e56691c6665723046d9f25500e5ee74
+    tag: '20260511'
+  es:
+    repo: https://github.com/knulli-cfw/batocera-emulationstation
+    commit: 4041b56a714265de81de8165b34fbd10f313a891
+    note: pinned by package/emulationstation/knulli-emulationstation/knulli-emulationstation.mk
+roms_root:
+  path: /userdata/roms
+  from_bios: ../roms
+  source_ref: os package/emulationstation/knulli-es-system/knulli-es-system.py:31,163-173
+case_sensitive: null
+hidden:
+  - pattern: .*
+    source_ref: es es-core/src/utils/FileSystemUtil.cpp:410; es es-app/src/SystemData.cpp:279
+  - pattern: ._*
+    source_ref: es es-app/src/SystemData.cpp:273-275
+media:
+  - name: artwork
+    source_ref: es es-app/src/SystemData.cpp:314
+  - name: media
+    source_ref: es es-app/src/SystemData.cpp:335
+  - name: medias
+    source_ref: es es-app/src/SystemData.cpp:335
+  - name: images
+    source_ref: es es-app/src/SystemData.cpp:335
+  - name: manuals
+    source_ref: es es-app/src/SystemData.cpp:335
+  - name: videos
+    source_ref: es es-app/src/SystemData.cpp:335
+  - name: assets
+    source_ref: es es-app/src/SystemData.cpp:335
+  - pattern: downloaded_*
+    source_ref: es es-app/src/SystemData.cpp:335
+notes:
+  - A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:284-290).
+  - The default core is configgen's, the board file before configgen-defaults.yml (os package/emulationstation/knulli-es-system/knulli-es-system.py:53-64).

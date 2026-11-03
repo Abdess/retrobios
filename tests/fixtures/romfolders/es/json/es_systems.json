@@ -1,0 +1,31 @@
+{
+  "systems": [
+    {
+      "name": "psx",
+      "path": "/storage/roms/psx",
+      "extensions": [".cue", ".CUE"],
+      "emulators": [
+        {"name": "libretro", "cores": [{"name": "pcsx_rearmed"}, {"name": "duckstation", "default": true}]}
+      ]
+    },
+    {
+      "name": "imageviewer",
+      "path": "/storage/roms/screenshots",
+      "platform": "ignore",
+      "command": "ignore",
+      "extensions": [".png"]
+    },
+    {
+      "name": "pico8",
+      "path": "/storage/roms/pico-8",
+      "extensions": [".p8"],
+      "emulators": [{"name": "Pico-8", "cores": [{"name": "Pico-8", "default": true}]}]
+    },
+    {
+      "name": "pico8",
+      "path": "/storage/roms/pico",
+      "extensions": [".md"],
+      "emulators": [{"name": "libretro", "cores": [{"name": "genesis_plus_gx", "default": true}]}]
+    }
+  ]
+}

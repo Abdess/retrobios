@@ -1,0 +1,47 @@
+name: ArkOS
+platform: retroarch
+format: es-xml
+params:
+  file: rootfs/ArkOS/etc/emulationstation/es_systems.cfg
+  path_prefixes:
+  - /roms/
+  default: first
+sources:
+  os:
+    repo: https://github.com/lcdyk0517/arkos4clone
+    commit: c90db18361b53fbb6c66aca892819827e4ae0180
+    note: third-party copy of an ArkOS image's /etc, the only full es_systems.cfg published
+  arkos:
+    repo: https://github.com/christianhaitian/arkos
+    commit: dedf42784e4e3646413c029f0efdedc093cb4b86
+  es:
+    repo: https://github.com/christianhaitian/EmulationStation-fcamod
+    commit: c4809d8ef33159385a2d516b4b3aec832f4ce2e8
+roms_root:
+  path: /roms
+  from_bios: ..
+  source_ref: os rootfs/ArkOS/etc/emulationstation/es_systems.cfg:6; arkos Update-RG351MP.sh:339,2215
+case_sensitive: null
+skip:
+- name: bios
+  reason: BIOS folder the updates write to
+  source_ref: arkos Update-RG351MP.sh:339,2215
+hidden:
+- pattern: .*
+  source_ref: es es-app/src/SystemData.cpp:145-146,180
+media:
+- name: media
+  source_ref: es es-app/src/SystemData.cpp:180,184
+- name: images
+  source_ref: es es-app/src/SystemData.cpp:180,184
+- name: videos
+  source_ref: es es-app/src/SystemData.cpp:180,184
+- name: ppsspp
+  source_ref: es es-app/src/SystemData.cpp:180,184
+- pattern: downloaded_*
+  source_ref: es es-app/src/SystemData.cpp:180,184
+notes:
+- 'ArkOS publishes no image build source: the system list is the arkos4clone copy, which may carry overlay
+  edits.'
+- A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:151).
+- 'Default core: the user''s saved choice, else the first emulator and its first core (es es-app/src/SystemData.h:101-131).'

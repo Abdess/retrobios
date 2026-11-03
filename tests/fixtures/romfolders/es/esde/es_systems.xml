@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<systemList>
+    <system>
+        <name>psx</name>
+        <path>%ROMPATH%/psx</path>
+        <extension>.cue .CUE .chd .CHD</extension>
+        <command label="Beetle PSX">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mednafen_psx_libretro.so %ROM%</command>
+        <command label="DuckStation (Standalone)">%EMULATOR_DUCKSTATION% -batch %ROM%</command>
+    </system>
+    <system>
+        <name>model2</name>
+        <path>%ROMPATH%/model2</path>
+        <extension>.zip</extension>
+        <command label="MAME">%EMULATOR_RETROARCH% -L %CORE_RETROARCH%/mame_libretro.so %ROM%</command>
+    </system>
+</systemList>

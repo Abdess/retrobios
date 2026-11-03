@@ -1,0 +1,352 @@
+setup: bizhawk
+name: BizHawk
+platform: bizhawk
+sources:
+  os:
+    repo: "https://github.com/TASEmulators/BizHawk"
+    commit: bdddf4a58aa1a022afb11dc73294a81a5aa7bbd5
+    tag: 2.11.1
+roms_root:
+  path: <BizHawk>
+  from_bios: ..
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:96-97,179"
+case_sensitive: null
+notes:
+- "Each system has a base folder under the BizHawk folder, and its ROM path is \".\" inside it (os src/BizHawk.Client.Common/config/PathEntryCollection.cs:77-85,96-97).\
+  \ Firmware sits in Firmware beside those bases, the folder the installer fills."
+- "BizHawk never scans a folder. The user opens one file, the open dialog filters by the RomFileExtensions\
+  \ lists, and the system follows from the extension and the game database (os src/BizHawk.Client.Common/RomLoader.cs:1143-1183)."
+- "A row's extensions are the RomFileExtensions list named like its system. Systems whose list carries\
+  \ another name (32X, Game Gear, SG-1000) or none (Saturn, PC-FX, 3DO, Amstrad CPC, Channel F) have none\
+  \ here."
+- "The cores are BizHawk's own. The default named in a note is CoreNames[0] of CorePickerUIData (os src/BizHawk.Client.Common/config/Config.cs:20-50)."
+folders:
+- folder: 32X
+  name: Sega32X
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:198"
+  note: the open dialog starts here, nothing is scanned
+- folder: 3DO
+  name: Panasonic3DO
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:279"
+  note: the open dialog starts here, nothing is scanned
+- folder: 3DS
+  name: N3DS
+  extensions:
+  - .3ds
+  - .3dsx
+  - .app
+  - .axf
+  - .cci
+  - .cia
+  - .cxi
+  - .elf
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:193; os src/BizHawk.Client.Common/RomLoader.cs:1066"
+  note: the open dialog starts here, nothing is scanned
+- folder: Amiga
+  extensions:
+  - .adf
+  - .adz
+  - .dms
+  - .fdi
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:200; os src/BizHawk.Client.Common/RomLoader.cs:1038"
+  note: the open dialog starts here, nothing is scanned
+- folder: AmstradCPC
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:206"
+  note: the open dialog starts here, nothing is scanned
+- folder: Apple II
+  name: AppleII
+  extensions:
+  - .do
+  - .dsk
+  - .po
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:208; os src/BizHawk.Client.Common/RomLoader.cs:1040"
+  note: the open dialog starts here, nothing is scanned
+- folder: Arcade
+  extensions:
+  - .7z
+  - .chd
+  - .zip
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:210; os src/BizHawk.Client.Common/RomLoader.cs:1042"
+  note: the open dialog starts here, nothing is scanned
+- folder: Atari 2600
+  name: A26
+  extensions:
+  - .a26
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:202; os src/BizHawk.Client.Common/RomLoader.cs:1034"
+  note: "the open dialog starts here, nothing is scanned. Default core Atari2600Hawk (CorePickerUIData,\
+    \ CoreNames[0])"
+- folder: Atari 7800
+  name: A78
+  extensions:
+  - .a78
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:204; os src/BizHawk.Client.Common/RomLoader.cs:1036"
+  note: the open dialog starts here, nothing is scanned
+- folder: C64
+  extensions:
+  - .crt
+  - .d64
+  - .g64
+  - .prg
+  - .tap
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:212; os src/BizHawk.Client.Common/RomLoader.cs:1044"
+  note: the open dialog starts here, nothing is scanned
+- folder: Channel F
+  name: ChannelF
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:214"
+  note: the open dialog starts here, nothing is scanned
+- folder: Coleco
+  extensions:
+  - .col
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:216; os src/BizHawk.Client.Common/RomLoader.cs:1046"
+  note: the open dialog starts here, nothing is scanned
+- folder: Doom
+  extensions:
+  - .wad
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:218; os src/BizHawk.Client.Common/RomLoader.cs:1048"
+  note: the open dialog starts here, nothing is scanned
+- folder: DOS
+  extensions:
+  - .d88
+  - .dmf
+  - .fdd
+  - .fdi
+  - .hdd
+  - .ima
+  - .img
+  - .nfd
+  - .xdf
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:220; os src/BizHawk.Client.Common/RomLoader.cs:1050"
+  note: the open dialog starts here, nothing is scanned
+- folder: Dual Game Gear
+  name: GGL
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:238"
+  note: the open dialog starts here, nothing is scanned
+- folder: Game Gear
+  name: GG
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:236"
+  note: "the open dialog starts here, nothing is scanned. Default core Gpgx (CorePickerUIData, CoreNames[0])"
+- folder: Gameboy
+  name: GB
+  aliases:
+  - GBC
+  - SGB
+  extensions:
+  - .gb
+  - .gbc
+  - .sgb
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:227; os src/BizHawk.Client.Common/RomLoader.cs:1052"
+  note: "the open dialog starts here, nothing is scanned. Default core Gambatte (CorePickerUIData, CoreNames[0])"
+- folder: Gameboy Link
+  name: GBL
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:222"
+  note: "the open dialog starts here, nothing is scanned. Default core GambatteLink (CorePickerUIData,\
+    \ CoreNames[0])"
+- folder: GBA
+  extensions:
+  - .gba
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:232; os src/BizHawk.Client.Common/RomLoader.cs:1054"
+  note: the open dialog starts here, nothing is scanned
+- folder: Genesis
+  name: GEN
+  extensions:
+  - .32x
+  - .gen
+  - .md
+  - .smd
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:234; os src/BizHawk.Client.Common/RomLoader.cs:1056"
+  note: the open dialog starts here, nothing is scanned
+- folder: Intellivision
+  name: INTV
+  extensions:
+  - .bin
+  - .int
+  - .rom
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:240; os src/BizHawk.Client.Common/RomLoader.cs:1058"
+  note: the open dialog starts here, nothing is scanned
+- folder: Jaguar
+  extensions:
+  - .j64
+  - .jag
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:245; os src/BizHawk.Client.Common/RomLoader.cs:1060"
+  note: the open dialog starts here, nothing is scanned
+- folder: Lynx
+  extensions:
+  - .lnx
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:262; os src/BizHawk.Client.Common/RomLoader.cs:1062"
+  note: the open dialog starts here, nothing is scanned
+- folder: MSX
+  extensions:
+  - .cas
+  - .dsk
+  - .mx1
+  - .rom
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:264; os src/BizHawk.Client.Common/RomLoader.cs:1064"
+  note: the open dialog starts here, nothing is scanned
+- folder: N64
+  extensions:
+  - .n64
+  - .v64
+  - .z64
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:266; os src/BizHawk.Client.Common/RomLoader.cs:1068"
+  note: "the open dialog starts here, nothing is scanned. Default core Mupen64Plus (CorePickerUIData,\
+    \ CoreNames[0])"
+- folder: NDS
+  extensions:
+  - .dsi
+  - .ids
+  - .nds
+  - .srl
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:268; os src/BizHawk.Client.Common/RomLoader.cs:1072"
+  note: the open dialog starts here, nothing is scanned
+- folder: NES
+  extensions:
+  - .fds
+  - .nes
+  - .unf
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:270; os src/BizHawk.Client.Common/RomLoader.cs:1074"
+  note: "the open dialog starts here, nothing is scanned. Default core QuickNes (CorePickerUIData, CoreNames[0])"
+- folder: NGP
+  extensions:
+  - .ngc
+  - .ngp
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:275; os src/BizHawk.Client.Common/RomLoader.cs:1076"
+  note: the open dialog starts here, nothing is scanned
+- folder: O2
+  extensions:
+  - .o2
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:277; os src/BizHawk.Client.Common/RomLoader.cs:1078"
+  note: the open dialog starts here, nothing is scanned
+- folder: PC Engine
+  name: PCE
+  aliases:
+  - PCECD
+  - SGX
+  - SGXCD
+  extensions:
+  - .pce
+  - .sgx
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:281; os src/BizHawk.Client.Common/RomLoader.cs:1080"
+  note: "the open dialog starts here, nothing is scanned. Default core TurboNyma (CorePickerUIData, CoreNames[0])"
+- folder: PCFX
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:283"
+  note: the open dialog starts here, nothing is scanned
+- folder: PSX
+  extensions:
+  - .exe
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:285; os src/BizHawk.Client.Common/RomLoader.cs:1082"
+  note: "the open dialog starts here, nothing is scanned. Default core Nymashock (CorePickerUIData, CoreNames[0])"
+- folder: Satellaview
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:289"
+  note: "the open dialog starts here, nothing is scanned. Default core Bsnes115 (CorePickerUIData, CoreNames[0])"
+- folder: Saturn
+  name: SAT
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:287"
+  note: the open dialog starts here, nothing is scanned
+- folder: SG-1000
+  name: SG
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:291"
+  note: "the open dialog starts here, nothing is scanned. Default core Gpgx (CorePickerUIData, CoreNames[0])"
+- folder: SMS
+  extensions:
+  - .gg
+  - .sg
+  - .sms
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:293; os src/BizHawk.Client.Common/RomLoader.cs:1084"
+  note: "the open dialog starts here, nothing is scanned. Default core Gpgx (CorePickerUIData, CoreNames[0])"
+- folder: SNES
+  extensions:
+  - .bs
+  - .sfc
+  - .smc
+  - .xml
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:295; os src/BizHawk.Client.Common/RomLoader.cs:1086"
+  note: "the open dialog starts here, nothing is scanned. Default core Snes9X (CorePickerUIData, CoreNames[0])"
+- folder: TI83
+  extensions:
+  - .83g
+  - .83l
+  - .83p
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:297; os src/BizHawk.Client.Common/RomLoader.cs:1088"
+  note: "the open dialog starts here, nothing is scanned. Default core Emu83 (CorePickerUIData, CoreNames[0])"
+- folder: TIC80
+  extensions:
+  - .tic
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:299; os src/BizHawk.Client.Common/RomLoader.cs:1090"
+  note: the open dialog starts here, nothing is scanned
+- folder: Uzebox
+  name: UZE
+  extensions:
+  - .uze
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:301; os src/BizHawk.Client.Common/RomLoader.cs:1092"
+  note: the open dialog starts here, nothing is scanned
+- folder: VB
+  extensions:
+  - .vb
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:303; os src/BizHawk.Client.Common/RomLoader.cs:1094"
+  note: the open dialog starts here, nothing is scanned
+- folder: VEC
+  extensions:
+  - .vec
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:305; os src/BizHawk.Client.Common/RomLoader.cs:1096"
+  note: the open dialog starts here, nothing is scanned
+- folder: WonderSwan
+  name: WSWAN
+  extensions:
+  - .pc2
+  - .ws
+  - .wsc
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:307; os src/BizHawk.Client.Common/RomLoader.cs:1098"
+  note: the open dialog starts here, nothing is scanned
+- folder: ZXSpectrum
+  extensions:
+  - .dsk
+  - .ipf
+  - .pzx
+  - .tap
+  - .tzx
+  emulator: EmuHawk
+  source_ref: "os src/BizHawk.Client.Common/config/PathEntryCollection.cs:309; os src/BizHawk.Client.Common/RomLoader.cs:1100"
+  note: the open dialog starts here, nothing is scanned

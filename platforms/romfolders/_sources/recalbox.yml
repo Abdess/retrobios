@@ -1,0 +1,22 @@
+name: Recalbox
+platform: recalbox
+format: recalbox
+params:
+  systems_dir: package/recalbox-romfs2/systems
+sources:
+  os:
+    repo: https://gitlab.com/recalbox/recalbox
+    commit: a264d628ead7074b3c523c8b3311543fe2d3f972
+    tag: 10.1.1
+roms_root:
+  path: /recalbox/share/roms
+  from_bios: ../roms
+  source_ref: os projects/frontend/es-app/src/systems/SystemManager.h:114-119
+case_sensitive: null
+hidden:
+  - pattern: .*
+    source_ref: os projects/frontend/es-app/src/systems/SystemManager.cpp:1801-1803
+notes:
+  - "%ROOT% in roms.folder is /recalbox/share/roms (os projects/frontend/es-app/src/systems/SystemManager.h:114-117)."
+  - A folder holds games when a file's lowercased extension is in the system's list (os projects/frontend/es-app/src/systems/SystemManager.cpp:1790-1805).
+  - The default core is the lowest priority, the last listed on a tie, and priority.<board> applies on that board (os projects/frontend/es-app/src/emulators/EmulatorManager.cpp:94-111).

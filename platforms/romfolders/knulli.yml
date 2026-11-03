@@ -1,0 +1,2901 @@
+setup: knulli
+name: KNULLI
+platform: knulli
+sources:
+  os:
+    repo: "https://github.com/knulli-cfw/knulli-linux"
+    commit: c1c7de479e56691c6665723046d9f25500e5ee74
+    tag: "20260511"
+  es:
+    repo: "https://github.com/knulli-cfw/batocera-emulationstation"
+    commit: 4041b56a714265de81de8165b34fbd10f313a891
+    note: pinned by package/emulationstation/knulli-emulationstation/knulli-emulationstation.mk
+roms_root:
+  path: /userdata/roms
+  from_bios: ../roms
+  source_ref: "os package/emulationstation/knulli-es-system/knulli-es-system.py:31,163-173"
+case_sensitive: null
+hidden:
+- pattern: .*
+  source_ref: "es es-core/src/utils/FileSystemUtil.cpp:410; es es-app/src/SystemData.cpp:279"
+- pattern: ._*
+  source_ref: "es es-app/src/SystemData.cpp:273-275"
+media:
+- name: artwork
+  source_ref: "es es-app/src/SystemData.cpp:314"
+- name: media
+  source_ref: "es es-app/src/SystemData.cpp:335"
+- name: medias
+  source_ref: "es es-app/src/SystemData.cpp:335"
+- name: images
+  source_ref: "es es-app/src/SystemData.cpp:335"
+- name: manuals
+  source_ref: "es es-app/src/SystemData.cpp:335"
+- name: videos
+  source_ref: "es es-app/src/SystemData.cpp:335"
+- name: assets
+  source_ref: "es es-app/src/SystemData.cpp:335"
+- pattern: downloaded_*
+  source_ref: "es es-app/src/SystemData.cpp:335"
+notes:
+- "A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:284-290)."
+- "The default core is configgen's, the board file before configgen-defaults.yml (os package/emulationstation/knulli-es-system/knulli-es-system.py:53-64)."
+folders:
+- folder: 3do
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: opera
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2170; os package/system/knulli-configgen/configs/configgen-defaults.yml:18"
+- folder: 3ds
+  extensions:
+  - .3ds
+  - .3dsx
+  - .app
+  - .axf
+  - .cci
+  - .cxi
+  - .elf
+  - .squashfs
+  core: citra
+  emulator: citra
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2210; os package/system/knulli-configgen/configs/configgen-defaults.yml:21"
+  board_defaults:
+    rk3576:
+      core: azahar
+      emulator: azahar
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:12"
+    sm8250:
+      core: azahar
+      emulator: azahar
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:12"
+    t527:
+      core: azahar
+      emulator: azahar
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-t527.yml:11"
+- folder: abuse
+  extensions:
+  - .game
+  core: abuse
+  emulator: abuse
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3966; os package/system/knulli-configgen/configs/configgen-defaults.yml:24"
+- folder: adam
+  extensions:
+  - .1dd
+  - .7z
+  - .bin
+  - .col
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .ddp
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .rom
+  - .td0
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3620; os package/system/knulli-configgen/configs/configgen-defaults.yml:27"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:66"
+- folder: advision
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3304; os package/system/knulli-configgen/configs/configgen-defaults.yml:30"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:15"
+- folder: amiga
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2576"
+- folder: amiga1200
+  extensions:
+  - .adf
+  - .adz
+  - .dms
+  - .dmz
+  - .exe
+  - .hdf
+  - .ipf
+  - .lha
+  - .m3u
+  - .raw
+  - .scp
+  - .uae
+  - .zip
+  core: puae
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:137; os package/system/knulli-configgen/configs/configgen-defaults.yml:36"
+  board_defaults:
+    r16:
+      core: puae2021
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-r16.yml:17"
+    rk3128:
+      core: A1200
+      emulator: amiberry
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3128.yml:17"
+- folder: amiga500
+  extensions:
+  - .adf
+  - .adz
+  - .dms
+  - .dmz
+  - .exe
+  - .hdf
+  - .ipf
+  - .lha
+  - .m3u
+  - .raw
+  - .scp
+  - .uae
+  - .zip
+  core: puae
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:108; os package/system/knulli-configgen/configs/configgen-defaults.yml:33"
+  board_defaults:
+    r16:
+      core: puae2021
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-r16.yml:14"
+    rk3128:
+      core: A500
+      emulator: amiberry
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3128.yml:14"
+- folder: amigacd32
+  extensions:
+  - .bin
+  - .chd
+  - .cue
+  - .iso
+  core: puae
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:163; os package/system/knulli-configgen/configs/configgen-defaults.yml:39"
+  board_defaults:
+    r16:
+      core: puae2021
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-r16.yml:20"
+    rk3128:
+      core: CD32
+      emulator: amiberry
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3128.yml:20"
+- folder: amigacdtv
+  extensions:
+  - .bin
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: puae
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:179; os package/system/knulli-configgen/configs/configgen-defaults.yml:42"
+- folder: amstradcpc
+  extensions:
+  - .7z
+  - .cdt
+  - .dsk
+  - .m3u
+  - .sna
+  - .tap
+  - .voc
+  - .zip
+  core: cap32
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1526; os package/system/knulli-configgen/configs/configgen-defaults.yml:45"
+- folder: apfm1000
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3567; os package/system/knulli-configgen/configs/configgen-defaults.yml:48"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:60"
+- folder: apple2
+  extensions:
+  - .2mg
+  - .7z
+  - .chd
+  - .dfi
+  - .do
+  - .dsk
+  - .edd
+  - .hdv
+  - .mfi
+  - .nib
+  - .po
+  - .rti
+  - .wav
+  - .woz
+  - .zip
+  core: gsplus
+  emulator: gsplus
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1969; os package/system/knulli-configgen/configs/configgen-defaults.yml:51"
+- folder: apple2gs
+  extensions:
+  - .1dd
+  - .2mg
+  - '.360'
+  - .7z
+  - .cqm
+  - .cqui
+  - .d77
+  - .d88
+  - .dc42
+  - .dfi
+  - .do
+  - .dsk
+  - .edd
+  - .hfe
+  - .ima
+  - .imd
+  - .img
+  - .ipf
+  - .mfi
+  - .mfm
+  - .nib
+  - .po
+  - .rti
+  - .td0
+  - .ufi
+  - .woz
+  - .zip
+  core: gsplus
+  emulator: gsplus
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3257; os package/system/knulli-configgen/configs/configgen-defaults.yml:54"
+- folder: arcadia
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3638; os package/system/knulli-configgen/configs/configgen-defaults.yml:57"
+- folder: archimedes
+  extensions:
+  - .1dd
+  - '.360'
+  - .7z
+  - .adf
+  - .adl
+  - .adm
+  - .ads
+  - .apd
+  - .bbc
+  - .chd
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsd
+  - .dsk
+  - .hfe
+  - .ima
+  - .imd
+  - .img
+  - .ipf
+  - .jfd
+  - .mfi
+  - .mfm
+  - .msa
+  - .ssd
+  - .st
+  - .td0
+  - .ufi
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3507; os package/system/knulli-configgen/configs/configgen-defaults.yml:62"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:84"
+- folder: arduboy
+  extensions:
+  - .7z
+  - .hex
+  - .zip
+  core: arduous
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4546; os package/system/knulli-configgen/configs/configgen-defaults.yml:65"
+- folder: astrocde
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3666; os package/system/knulli-configgen/configs/configgen-defaults.yml:68"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:72"
+- folder: atari2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1102; os package/system/knulli-configgen/configs/configgen-defaults.yml:71"
+- folder: atari5200
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: a5200
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1115; os package/system/knulli-configgen/configs/configgen-defaults.yml:74"
+- folder: atari7800
+  extensions:
+  - .7z
+  - .a78
+  - .bin
+  - .zip
+  core: prosystem
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1126; os package/system/knulli-configgen/configs/configgen-defaults.yml:77"
+- folder: atari800
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .m3u
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: atari800
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1072; os package/system/knulli-configgen/configs/configgen-defaults.yml:80"
+- folder: atarist
+  extensions:
+  - .7z
+  - .dim
+  - .gemdos
+  - .hd
+  - .ipf
+  - .m3u
+  - .msa
+  - .st
+  - .stx
+  - .zip
+  core: hatari
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1506; os package/system/knulli-configgen/configs/configgen-defaults.yml:83"
+- folder: atom
+  extensions:
+  - .1dd
+  - .40t
+  - .7z
+  - .atm
+  - .bin
+  - .cqi
+  - .cqm
+  - .csw
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .rom
+  - .tap
+  - .td0
+  - .uef
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3527; os package/system/knulli-configgen/configs/configgen-defaults.yml:86"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:99"
+- folder: atomiswave
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:471; os package/system/knulli-configgen/configs/configgen-defaults.yml:89"
+  board_defaults:
+    a133:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a133.yml:22"
+    a527:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a527.yml:22"
+    h700:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h700.yml:22"
+    rk3326:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3326.yml:21"
+    rk3568:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3568.yml:22"
+    rk3576:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:24"
+  arcade: true
+- folder: bbc
+  extensions:
+  - .1dd
+  - '.360'
+  - .7z
+  - .adf
+  - .adl
+  - .adm
+  - .ads
+  - .bbc
+  - .bin
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsd
+  - .dsk
+  - .fsd
+  - .hfe
+  - .ima
+  - .imd
+  - .img
+  - .ipf
+  - .mfi
+  - .mfm
+  - .ssd
+  - .tap
+  - .td0
+  - .ufi
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3583; os package/system/knulli-configgen/configs/configgen-defaults.yml:92"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:63"
+- folder: bennugd
+  extensions:
+  - .dat
+  - .dcb
+  core: bennugd
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:6053; os package/system/knulli-configgen/configs/configgen-defaults.yml:95"
+- folder: bstone
+  extensions:
+  - .bstone
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5902"
+- folder: c128
+  extensions:
+  - .7z
+  - .d64
+  - .d81
+  - .lnx
+  - .m3u
+  - .prg
+  - .zip
+  core: x128
+  emulator: vice
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:69; os package/system/knulli-configgen/configs/configgen-defaults.yml:104"
+- folder: c20
+  extensions:
+  - '.20'
+  - '.40'
+  - '.60'
+  - .7z
+  - .a0
+  - .b0
+  - .crt
+  - .d64
+  - .d81
+  - .m3u
+  - .prg
+  - .rom
+  - .t64
+  - .tap
+  - .zip
+  core: xvic
+  emulator: vice
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:82; os package/system/knulli-configgen/configs/configgen-defaults.yml:107"
+- folder: c64
+  extensions:
+  - .7z
+  - .crt
+  - .d64
+  - .d71
+  - .d81
+  - .g64
+  - .m3u
+  - .nib
+  - .prg
+  - .t64
+  - .tap
+  - .zip
+  core: vice_x64
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:37; os package/system/knulli-configgen/configs/configgen-defaults.yml:98"
+  board_defaults:
+    r16:
+      core: x64
+      emulator: vice
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-r16.yml:35"
+    rk3128:
+      core: x64
+      emulator: vice
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3128.yml:35"
+- folder: camplynx
+  extensions:
+  - .7z
+  - .ldf
+  - .tap
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3602; os package/system/knulli-configgen/configs/configgen-defaults.yml:110"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:105"
+- folder: cannonball
+  extensions:
+  - .cannonball
+  core: cannonball
+  emulator: cannonball
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1388; os package/system/knulli-configgen/configs/configgen-defaults.yml:113"
+- folder: catacomb
+  extensions:
+  - .game
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5771"
+- folder: cave3rd
+  extensions:
+  - .7z
+  - .zip
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4363"
+  arcade: true
+- folder: cavestory
+  extensions:
+  - .exe
+  core: nxengine
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1476; os package/system/knulli-configgen/configs/configgen-defaults.yml:116"
+- folder: cdi
+  extensions:
+  - .cdr
+  - .chd
+  - .cue
+  - .gdi
+  - .iso
+  - .nrg
+  - .toc
+  core: mame
+  emulator: mame
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3287; os package/system/knulli-configgen/configs/configgen-defaults.yml:119"
+  board_defaults:
+    a133:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a133.yml:37"
+    a527:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a527.yml:37"
+    h700:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h700.yml:37"
+    rk3326:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3326.yml:33"
+    rk3568:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3568.yml:37"
+    rk3576:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:39"
+    sm8250:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:120"
+- folder: cdogs
+  extensions:
+  - .game
+  core: cdogs
+  emulator: cdogs
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3986; os package/system/knulli-configgen/configs/configgen-defaults.yml:122"
+- folder: cgenius
+  extensions:
+  - .cgenius
+  core: cgenius
+  emulator: cgenius
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2712; os package/system/knulli-configgen/configs/configgen-defaults.yml:125"
+- folder: channelf
+  extensions:
+  - .bin
+  - .chf
+  - .rom
+  - .zip
+  core: freechaf
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1378; os package/system/knulli-configgen/configs/configgen-defaults.yml:128"
+- folder: chihiro
+  extensions:
+  - .iso
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5619"
+  arcade: true
+- folder: coco
+  extensions:
+  - .7z
+  - .cas
+  - .ccc
+  - .dsk
+  - .rom
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3719; os package/system/knulli-configgen/configs/configgen-defaults.yml:131"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:81"
+- folder: colecovision
+  extensions:
+  - .7z
+  - .bin
+  - .col
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:993; os package/system/knulli-configgen/configs/configgen-defaults.yml:134"
+- folder: commanderx16
+  extensions:
+  - .bas
+  - .img
+  - .prg
+  core: x16emu
+  emulator: x16emu
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5682; os package/system/knulli-configgen/configs/configgen-defaults.yml:137"
+- folder: corsixth
+  extensions:
+  - .game
+  core: corsixth
+  emulator: corsixth
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4590; os package/system/knulli-configgen/configs/configgen-defaults.yml:140"
+- folder: cplus4
+  extensions:
+  - .7z
+  - .d64
+  - .m3u
+  - .prg
+  - .tap
+  - .zip
+  core: xplus4
+  emulator: vice
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:55; os package/system/knulli-configgen/configs/configgen-defaults.yml:101"
+- folder: crvision
+  extensions:
+  - .7z
+  - .bin
+  - .rom
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3373; os package/system/knulli-configgen/configs/configgen-defaults.yml:145"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:48"
+- folder: daphne
+  extensions:
+  - .daphne
+  - .squashfs
+  core: hypseus-singe
+  emulator: hypseus-singe
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2289; os package/system/knulli-configgen/configs/configgen-defaults.yml:151"
+  arcade: true
+- folder: devilutionx
+  extensions:
+  - .mpq
+  core: devilutionx
+  emulator: devilutionx
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:834; os package/system/knulli-configgen/configs/configgen-defaults.yml:156"
+- folder: dice
+  extensions:
+  - .dmy
+  - .zip
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2380"
+  arcade: true
+- folder: doom3
+  extensions:
+  - .d3
+  core: dhewm3
+  emulator: dhewm3
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5036; os package/system/knulli-configgen/configs/configgen-defaults.yml:159"
+- folder: dos
+  extensions:
+  - .cue
+  - .dos
+  - .dosz
+  - .iso
+  - .m3u
+  - .pc
+  - .squashfs
+  - .zip
+  core: dosbox_pure
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:750; os package/system/knulli-configgen/configs/configgen-defaults.yml:162"
+- folder: dreamcast
+  extensions:
+  - .cdi
+  - .chd
+  - .cue
+  - .gdi
+  - .m3u
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:434; os package/system/knulli-configgen/configs/configgen-defaults.yml:165"
+  board_defaults:
+    a133:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a133.yml:25"
+    a527:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a527.yml:25"
+    h700:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h700.yml:25"
+    rk3326:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3326.yml:24"
+    rk3568:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3568.yml:25"
+    rk3576:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:27"
+- folder: dxx-rebirth
+  extensions:
+  - .d1x
+  - .d2x
+  core: dxx-rebirth
+  emulator: dxx-rebirth
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5467; os package/system/knulli-configgen/configs/configgen-defaults.yml:170"
+- folder: easyrpg
+  extensions:
+  - .easyrpg
+  - .squashfs
+  - .zip
+  core: easyrpg
+  emulator: easyrpg
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2696; os package/system/knulli-configgen/configs/configgen-defaults.yml:173"
+- folder: ecwolf
+  extensions:
+  - .ecwolf
+  - .pk3
+  - .squashfs
+  core: ecwolf
+  emulator: ecwolf
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3043; os package/system/knulli-configgen/configs/configgen-defaults.yml:176"
+- folder: eduke32
+  extensions:
+  - .eduke32
+  core: eduke32
+  emulator: eduke32
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4609; os package/system/knulli-configgen/configs/configgen-defaults.yml:179"
+- folder: electron
+  extensions:
+  - .1dd
+  - .7z
+  - .adf
+  - .adl
+  - .adm
+  - .ads
+  - .bbc
+  - .bin
+  - .cqi
+  - .cqm
+  - .csw
+  - .d77
+  - .d88
+  - .dfi
+  - .dsd
+  - .dsk
+  - .hfe
+  - .imd
+  - .img
+  - .mfi
+  - .mfm
+  - .rom
+  - .ssd
+  - .td0
+  - .uef
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3547; os package/system/knulli-configgen/configs/configgen-defaults.yml:182"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:102"
+- folder: emulators
+  extensions:
+  - .sh
+  - .squashfs
+  core: sh
+  emulator: sh
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2557; os package/system/knulli-configgen/configs/configgen-defaults.yml:185"
+- folder: etlegacy
+  extensions:
+  - .etl
+  core: etlegacy
+  emulator: etlegacy
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5505; os package/system/knulli-configgen/configs/configgen-defaults.yml:190"
+- folder: fallout1-ce
+  extensions:
+  - .f1ce
+  core: fallout1-ce
+  emulator: fallout1-ce
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5409; os package/system/knulli-configgen/configs/configgen-defaults.yml:193"
+- folder: fallout2-ce
+  extensions:
+  - .f2ce
+  core: fallout2-ce
+  emulator: fallout2-ce
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5438; os package/system/knulli-configgen/configs/configgen-defaults.yml:196"
+- folder: fbneo
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:879; os package/system/knulli-configgen/configs/configgen-defaults.yml:199"
+  arcade: true
+- folder: fds
+  extensions:
+  - .7z
+  - .fds
+  - .zip
+  core: fceumm
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:384; os package/system/knulli-configgen/configs/configgen-defaults.yml:202"
+- folder: flash
+  extensions:
+  - .swf
+  core: ruffle
+  emulator: ruffle
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2937; os package/system/knulli-configgen/configs/configgen-defaults.yml:205"
+  board_defaults:
+    a133:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a133.yml:19"
+    a527:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a527.yml:19"
+    atm7039:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-atm7039.yml:17"
+    h616:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h616.yml:7"
+    h700:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h700.yml:19"
+    odin:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-odin.yml:1"
+    rk3128:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3128.yml:53"
+    rk3326:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3326.yml:30"
+    rk3399:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3399.yml:7"
+    rk3568:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3568.yml:19"
+    rk3576:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:21"
+    sm8250:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:18"
+    t527:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-t527.yml:20"
+- folder: flatpak
+  extensions:
+  - .flatpak
+  core: flatpak
+  emulator: flatpak
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2965; os package/system/knulli-configgen/configs/configgen-defaults.yml:210"
+- folder: fm7
+  extensions:
+  - .1dd
+  - .7z
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .t77
+  - .td0
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3490; os package/system/knulli-configgen/configs/configgen-defaults.yml:215"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:54"
+- folder: fmtowns
+  extensions:
+  - .1dd
+  - .7z
+  - .bin
+  - .cdr
+  - .chd
+  - .cqi
+  - .cqm
+  - .cue
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .gdi
+  - .hfe
+  - .imd
+  - .iso
+  - .m3u
+  - .mfi
+  - .mfm
+  - .nrg
+  - .td0
+  - .toc
+  - .xdf
+  - .zip
+  core: tsugaru
+  emulator: tsugaru
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2441; os package/system/knulli-configgen/configs/configgen-defaults.yml:218"
+  board_defaults:
+    a133:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a133.yml:16"
+    a527:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a527.yml:16"
+    atm7039:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-atm7039.yml:14"
+    h616:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h616.yml:4"
+    h700:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h700.yml:16"
+    odin:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-odin.yml:4"
+    rk3326:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3326.yml:18"
+    rk3399:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3399.yml:1"
+    rk3568:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3568.yml:16"
+    rk3576:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:18"
+    sm8250:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:21"
+    t527:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-t527.yml:17"
+- folder: fpinball
+  extensions:
+  - .fpt
+  core: fpinball
+  emulator: fpinball
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2921; os package/system/knulli-configgen/configs/configgen-defaults.yml:389"
+- folder: fury
+  extensions:
+  - .grp
+  core: fury
+  emulator: eduke32
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4697; os package/system/knulli-configgen/configs/configgen-defaults.yml:221"
+- folder: gaelco
+  extensions:
+  - .7z
+  - .zip
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4274"
+  arcade: true
+- folder: gamate
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3357; os package/system/knulli-configgen/configs/configgen-defaults.yml:224"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:45"
+- folder: gameandwatch
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: gw
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:420; os package/system/knulli-configgen/configs/configgen-defaults.yml:227"
+- folder: gamecom
+  extensions:
+  - .7z
+  - .bin
+  - .tgc
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3458; os package/system/knulli-configgen/configs/configgen-defaults.yml:232"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:51"
+- folder: gamecube
+  extensions:
+  - .ciso
+  - .dol
+  - .elf
+  - .gcm
+  - .gcz
+  - .iso
+  - .json
+  - .m3u
+  - .rvz
+  - .wbfs
+  core: dolphin
+  emulator: dolphin
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2032; os package/system/knulli-configgen/configs/configgen-defaults.yml:235"
+  board_defaults:
+    rk3576:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:48"
+- folder: gamegear
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:584; os package/system/knulli-configgen/configs/configgen-defaults.yml:238"
+- folder: gamepock
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3474; os package/system/knulli-configgen/configs/configgen-defaults.yml:241"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:57"
+- folder: gb
+  extensions:
+  - .7z
+  - .gb
+  - .zip
+  core: gambatte
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:289; os package/system/knulli-configgen/configs/configgen-defaults.yml:244"
+- folder: gb2players
+  extensions:
+  - .7z
+  - .gb
+  - .gb2
+  - .gbc2
+  - .zip
+  core: tgbdual
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:349; os package/system/knulli-configgen/configs/configgen-defaults.yml:247"
+- folder: gba
+  extensions:
+  - .7z
+  - .gba
+  - .zip
+  core: mgba
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:252; os package/system/knulli-configgen/configs/configgen-defaults.yml:250"
+- folder: gbc
+  extensions:
+  - .7z
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:270; os package/system/knulli-configgen/configs/configgen-defaults.yml:253"
+- folder: gbc2players
+  extensions:
+  - .7z
+  - .gb2
+  - .gbc
+  - .gbc2
+  - .zip
+  core: tgbdual
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:332; os package/system/knulli-configgen/configs/configgen-defaults.yml:256"
+- folder: gmaster
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3650; os package/system/knulli-configgen/configs/configgen-defaults.yml:259"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:69"
+- folder: gong
+  extensions:
+  - .game
+  core: gong
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3026; os package/system/knulli-configgen/configs/configgen-defaults.yml:262"
+- folder: gp32
+  extensions:
+  - .7z
+  - .smc
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4530; os package/system/knulli-configgen/configs/configgen-defaults.yml:265"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:114"
+- folder: gx4000
+  extensions:
+  - .7z
+  - .cpr
+  - .dsk
+  - .m3u
+  - .zip
+  core: cap32
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2279; os package/system/knulli-configgen/configs/configgen-defaults.yml:268"
+- folder: gzdoom
+  extensions:
+  - .gzdoom
+  - .iwad
+  - .pwad
+  - .wad
+  core: gzdoom
+  emulator: gzdoom
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4556; os package/system/knulli-configgen/configs/configgen-defaults.yml:271"
+- folder: hcl
+  extensions:
+  - .game
+  core: hcl
+  emulator: hcl
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3938; os package/system/knulli-configgen/configs/configgen-defaults.yml:274"
+- folder: hikaru
+  extensions:
+  - .7z
+  - .zip
+  core: demul
+  emulator: demul
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4184; os package/system/knulli-configgen/configs/configgen-defaults.yml:279"
+  arcade: true
+- folder: hurrican
+  extensions:
+  - .game
+  core: hurrican
+  emulator: hurrican
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3920; os package/system/knulli-configgen/configs/configgen-defaults.yml:282"
+- folder: ikemen
+  extensions:
+  - .ikemen
+  - .pc
+  core: ikemen
+  emulator: ikemen
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2907; os package/system/knulli-configgen/configs/configgen-defaults.yml:287"
+- folder: intellivision
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .rom
+  - .zip
+  core: freeintv
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2180; os package/system/knulli-configgen/configs/configgen-defaults.yml:292"
+- folder: iortcw
+  extensions:
+  - .rtcw
+  core: iortcw
+  emulator: iortcw
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5377; os package/system/knulli-configgen/configs/configgen-defaults.yml:295"
+- folder: j2me
+  extensions:
+  - .jar
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3847"
+- folder: jaguar
+  extensions:
+  - .7z
+  - .abs
+  - .cof
+  - .j64
+  - .jag
+  - .rom
+  - .zip
+  core: virtualjaguar
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2002; os package/system/knulli-configgen/configs/configgen-defaults.yml:298"
+- folder: jaguarcd
+  extensions:
+  - .bigpimg
+  - .cdi
+  - .cue
+  core: virtualjaguar
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2017; os package/system/knulli-configgen/configs/configgen-defaults.yml:301"
+- folder: jazz2
+  extensions:
+  - .game
+  core: jazz2-native
+  emulator: jazz2-native
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5749; os package/system/knulli-configgen/configs/configgen-defaults.yml:304"
+- folder: jkdf2
+  extensions:
+  - .jedi
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5931"
+- folder: jknight
+  extensions:
+  - .jedi
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5961"
+- folder: laser310
+  extensions:
+  - .7z
+  - .cas
+  - .vz
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3390; os package/system/knulli-configgen/configs/configgen-defaults.yml:312"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:117"
+- folder: lcdgames
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:407; os package/system/knulli-configgen/configs/configgen-defaults.yml:315"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:24"
+- folder: lindbergh
+  extensions:
+  - .game
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5799"
+  arcade: true
+- folder: lowresnx
+  extensions:
+  - .7z
+  - .nx
+  - .zip
+  core: lowresnx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1334; os package/system/knulli-configgen/configs/configgen-defaults.yml:320"
+- folder: lutro
+  extensions:
+  - .7z
+  - .lutro
+  - .zip
+  core: lutro
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1443; os package/system/knulli-configgen/configs/configgen-defaults.yml:323"
+- folder: lynx
+  extensions:
+  - .7z
+  - .bll
+  - .lnx
+  - .lyx
+  - .o
+  - .zip
+  core: mednafen_lynx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1136; os package/system/knulli-configgen/configs/configgen-defaults.yml:326"
+- folder: macintosh
+  extensions:
+  - .1dd
+  - .2mg
+  - '.360'
+  - .7z
+  - .cdr
+  - .chd
+  - .cqi
+  - .cqm
+  - .cue
+  - .d77
+  - .d88
+  - .dc42
+  - .dfi
+  - .dsk
+  - .gdi
+  - .hd
+  - .hdi
+  - .hdv
+  - .hfe
+  - .ima
+  - .imd
+  - .img
+  - .ipf
+  - .iso
+  - .mfi
+  - .mfm
+  - .nrg
+  - .td0
+  - .toc
+  - .ufi
+  - .woz
+  - .zip
+  core: minivmac
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4024; os package/system/knulli-configgen/configs/configgen-defaults.yml:332"
+- folder: mame
+  extensions:
+  - .7z
+  - .zip
+  core: mame078plus
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:912; os package/system/knulli-configgen/configs/configgen-defaults.yml:335"
+  arcade: true
+- folder: mastersystem
+  extensions:
+  - .7z
+  - .bin
+  - .sms
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:558; os package/system/knulli-configgen/configs/configgen-defaults.yml:338"
+  board_defaults:
+    r16:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-r16.yml:23"
+    rk3128:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3128.yml:23"
+- folder: megadrive
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:500; os package/system/knulli-configgen/configs/configgen-defaults.yml:341"
+  board_defaults:
+    r16:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-r16.yml:26"
+    rk3128:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3128.yml:26"
+- folder: megaduck
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: sameduck
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3332; os package/system/knulli-configgen/configs/configgen-defaults.yml:344"
+- folder: model2
+  extensions:
+  - .zip
+  core: model2emu
+  emulator: model2emu
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3116; os package/system/knulli-configgen/configs/configgen-defaults.yml:347"
+  arcade: true
+- folder: model3
+  extensions:
+  - .zip
+  core: supermodel
+  emulator: supermodel
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2789; os package/system/knulli-configgen/configs/configgen-defaults.yml:353"
+  arcade: true
+- folder: mohaa
+  extensions:
+  - .mohaa
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:6004"
+- folder: moonlight
+  extensions:
+  - .moonlight
+  core: moonlight
+  emulator: moonlight
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1953; os package/system/knulli-configgen/configs/configgen-defaults.yml:356"
+- folder: mpv
+  extensions:
+  - .3g2
+  - .3gp
+  - .asf
+  - .avi
+  - .f4a
+  - .f4b
+  - .f4p
+  - .f4v
+  - .flac
+  - .flv
+  - .gif
+  - .gifv
+  - .m2v
+  - .m3u
+  - .m4p
+  - .m4v
+  - .mkv
+  - .mng
+  - .mov
+  - .mp2
+  - .mp3
+  - .mp4
+  - .mpe
+  - .mpeg
+  - .mpg
+  - .mpv
+  - .mxf
+  - .nsv
+  - .ogg
+  - .ogv
+  - .qt
+  - .rm
+  - .rmvb
+  - .roq
+  - .svi
+  - .viv
+  - .vob
+  - .webm
+  - .wmv
+  - .yuv
+  core: mpv
+  emulator: mpv
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2456; os package/system/knulli-configgen/configs/configgen-defaults.yml:362"
+- folder: mrboom
+  extensions:
+  - .libretro
+  core: mrboom
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1284; os package/system/knulli-configgen/configs/configgen-defaults.yml:368"
+- folder: msu-md
+  extensions:
+  - .7z
+  - .md
+  - .squashfs
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:545; os package/system/knulli-configgen/configs/configgen-defaults.yml:371"
+- folder: msx
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2583"
+- folder: msx1
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx1
+  - .ogv
+  - .openmsx
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1545; os package/system/knulli-configgen/configs/configgen-defaults.yml:374"
+- folder: msx2
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx2
+  - .ogv
+  - .openmsx
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1644; os package/system/knulli-configgen/configs/configgen-defaults.yml:377"
+- folder: msx2+
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx2
+  - .openmsx
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1742; os package/system/knulli-configgen/configs/configgen-defaults.yml:380"
+- folder: msxturbor
+  extensions:
+  - .7z
+  - .dsk
+  - .m3u
+  - .mx2
+  - .openmsx
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1840; os package/system/knulli-configgen/configs/configgen-defaults.yml:383"
+- folder: mugen
+  extensions:
+  - .pc
+  core: wine-tkg
+  emulator: mugen
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2897; os package/system/knulli-configgen/configs/configgen-defaults.yml:386"
+- folder: multivision
+  extensions:
+  - .7z
+  - .bin
+  - .sg
+  - .zip
+  core: gearsystem
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:610; os package/system/knulli-configgen/configs/configgen-defaults.yml:392"
+- folder: n64
+  extensions:
+  - .7z
+  - .n64
+  - .v64
+  - .z64
+  - .zip
+  core: glide64mk2
+  emulator: mupen64plus
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:214; os package/system/knulli-configgen/configs/configgen-defaults.yml:395"
+  board_defaults:
+    a133:
+      core: parallel_n64
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a133.yml:31"
+    a527:
+      core: parallel_n64
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a527.yml:31"
+    h700:
+      core: parallel_n64
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h700.yml:31"
+    rk3568:
+      core: rice
+      emulator: mupen64plus
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3568.yml:31"
+    rk3576:
+      core: parallel_n64
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:33"
+    sm8250:
+      core: mupen64plus-next
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:27"
+- folder: n64dd
+  extensions:
+  - .7z
+  - .n64
+  - .ndd
+  - .z64
+  - .zip
+  core: glide64mk2
+  emulator: mupen64plus
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:237; os package/system/knulli-configgen/configs/configgen-defaults.yml:398"
+  board_defaults:
+    a133:
+      core: parallel_n64
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a133.yml:34"
+    a527:
+      core: parallel_n64
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a527.yml:34"
+    h700:
+      core: parallel_n64
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h700.yml:34"
+    rk3568:
+      core: rice
+      emulator: mupen64plus
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3568.yml:34"
+    rk3576:
+      core: parallel_n64
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:36"
+- folder: namco22
+  extensions:
+  - .7z
+  - .zip
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:6038"
+  arcade: true
+- folder: namco2x6
+  extensions:
+  - .zip
+  core: play
+  emulator: play
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5197; os package/system/knulli-configgen/configs/configgen-defaults.yml:401"
+  arcade: true
+- folder: naomi
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:456; os package/system/knulli-configgen/configs/configgen-defaults.yml:404"
+  board_defaults:
+    a133:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a133.yml:28"
+    a527:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a527.yml:28"
+    h700:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h700.yml:28"
+    rk3326:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3326.yml:27"
+    rk3568:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3568.yml:28"
+    rk3576:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:30"
+  arcade: true
+- folder: naomi2
+  extensions:
+  - .7z
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4067; os package/system/knulli-configgen/configs/configgen-defaults.yml:407"
+  arcade: true
+- folder: nds
+  extensions:
+  - .7z
+  - .bin
+  - .nds
+  - .zip
+  core: desmume
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:366; os package/system/knulli-configgen/configs/configgen-defaults.yml:410"
+  board_defaults:
+    a133:
+      core: advanced_drastic
+      emulator: advanced_drastic
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a133.yml:13"
+    a527:
+      core: advanced_drastic
+      emulator: advanced_drastic
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a527.yml:13"
+    atm7039:
+      core: drastic
+      emulator: drastic
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-atm7039.yml:11"
+    h616:
+      core: melonds
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h616.yml:1"
+    h700:
+      core: advanced_drastic
+      emulator: advanced_drastic
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-h700.yml:13"
+    r16:
+      core: drastic
+      emulator: drastic
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-r16.yml:29"
+    rk3128:
+      core: drastic
+      emulator: drastic
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3128.yml:29"
+    rk3326:
+      core: drastic
+      emulator: drastic
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3326.yml:15"
+    rk3399:
+      core: melonds
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3399.yml:4"
+    rk3568:
+      core: advanced_drastic
+      emulator: advanced_drastic
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3568.yml:13"
+    rk3576:
+      core: melonds
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:15"
+    sm8250:
+      core: melonds
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:30"
+    t527:
+      core: melonds
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-t527.yml:14"
+- folder: neogeo
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:962; os package/system/knulli-configgen/configs/configgen-defaults.yml:413"
+- folder: neogeocd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: neocd
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:983; os package/system/knulli-configgen/configs/configgen-defaults.yml:416"
+- folder: nes
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: fceumm
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:195; os package/system/knulli-configgen/configs/configgen-defaults.yml:419"
+- folder: ngage
+  extensions:
+  - .n-gage
+  - .sis
+  - .sisx
+  - .zip
+  core: eka2l1
+  emulator: eka2l1
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4501; os package/system/knulli-configgen/configs/configgen-defaults.yml:422"
+- folder: ngp
+  extensions:
+  - .7z
+  - .ngp
+  - .zip
+  core: mednafen_ngp
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1150; os package/system/knulli-configgen/configs/configgen-defaults.yml:425"
+- folder: ngpc
+  extensions:
+  - .7z
+  - .ngc
+  - .zip
+  core: mednafen_ngp
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1160; os package/system/knulli-configgen/configs/configgen-defaults.yml:428"
+- folder: o2em
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1853; os package/system/knulli-configgen/configs/configgen-defaults.yml:436"
+- folder: odcommander
+  extensions:
+  - .odc
+  core: odcommander
+  emulator: odcommander
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4513; os package/system/knulli-configgen/configs/configgen-defaults.yml:431"
+- folder: openbor
+  extensions:
+  - .pak
+  core: openbor6412
+  emulator: openbor
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2224; os package/system/knulli-configgen/configs/configgen-defaults.yml:439"
+- folder: openjazz
+  extensions:
+  - .game
+  core: openjazz
+  emulator: openjazz
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3880; os package/system/knulli-configgen/configs/configgen-defaults.yml:446"
+- folder: oricatmos
+  extensions:
+  - .dsk
+  - .tap
+  - .zip
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5883"
+- folder: pc88
+  extensions:
+  - .cmt
+  - .d88
+  - .m3u
+  - .u88
+  core: quasi88
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2419; os package/system/knulli-configgen/configs/configgen-defaults.yml:457"
+- folder: pc98
+  extensions:
+  - .2hd
+  - .88d
+  - .98d
+  - .cmd
+  - .d88
+  - .d98
+  - .dup
+  - .fdd
+  - .fdi
+  - .hdd
+  - .hdi
+  - .hdm
+  - .hdn
+  - .m3u
+  - .nhd
+  - .tfd
+  - .thd
+  - .xdf
+  - .zip
+  core: np2kai
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2430; os package/system/knulli-configgen/configs/configgen-defaults.yml:460"
+- folder: pcengine
+  extensions:
+  - .7z
+  - .bin
+  - .pce
+  - .zip
+  core: pce_fast
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:661; os package/system/knulli-configgen/configs/configgen-defaults.yml:463"
+- folder: pcenginecd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .pce
+  core: pce_fast
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:672; os package/system/knulli-configgen/configs/configgen-defaults.yml:466"
+- folder: pcfx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  - .zip
+  core: pcfx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:694; os package/system/knulli-configgen/configs/configgen-defaults.yml:469"
+- folder: pdp1
+  extensions:
+  - .7z
+  - .drm
+  - .rim
+  - .tap
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4452; os package/system/knulli-configgen/configs/configgen-defaults.yml:472"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:39"
+- folder: pet
+  extensions:
+  - .7z
+  - .a0
+  - .b0
+  - .crt
+  - .d64
+  - .d81
+  - .m3u
+  - .prg
+  - .t64
+  - .tap
+  - .zip
+  core: xpet
+  emulator: vice
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:95; os package/system/knulli-configgen/configs/configgen-defaults.yml:475"
+- folder: pico
+  extensions:
+  - .7z
+  - .bin
+  - .md
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:571; os package/system/knulli-configgen/configs/configgen-defaults.yml:478"
+- folder: pico8
+  extensions:
+  - .m3u
+  - .p8
+  - .png
+  core: fake08
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1318; os package/system/knulli-configgen/configs/configgen-defaults.yml:481"
+- folder: plugnplay
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3320; os package/system/knulli-configgen/configs/configgen-defaults.yml:484"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:36"
+- folder: pokemini
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2269; os package/system/knulli-configgen/configs/configgen-defaults.yml:487"
+- folder: ports
+  extensions:
+  - .sh
+  - .squashfs
+  core: sh
+  emulator: sh
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2509; os package/system/knulli-configgen/configs/configgen-defaults.yml:490"
+- folder: prboom
+  extensions:
+  - .iwad
+  - .pwad
+  - .wad
+  core: prboom
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1194; os package/system/knulli-configgen/configs/configgen-defaults.yml:495"
+- folder: ps2
+  extensions:
+  - .bin
+  - .chd
+  - .cso
+  - .dump
+  - .gz
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .nrg
+  core: pcsx2
+  emulator: pcsx2
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2117; os package/system/knulli-configgen/configs/configgen-defaults.yml:498"
+  board_defaults:
+    a527:
+      core: aethersx2
+      emulator: aethersx2
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-a527.yml:40"
+    rk3576:
+      core: aethersx2
+      emulator: aethersx2
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:42"
+    sm8250:
+      core: aethersx2
+      emulator: aethersx2
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:33"
+- folder: ps3
+  extensions:
+  - .ps3
+  - .psn
+  - .squashfs
+  core: rpcs3
+  emulator: rpcs3
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2140; os package/system/knulli-configgen/configs/configgen-defaults.yml:503"
+- folder: ps4
+  extensions:
+  - .ps4
+  core: shadps4
+  emulator: shadps4
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5716; os package/system/knulli-configgen/configs/configgen-defaults.yml:506"
+- folder: psp
+  extensions:
+  - .chd
+  - .cso
+  - .iso
+  - .pbp
+  core: ppsspp
+  emulator: ppsspp
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:622; os package/system/knulli-configgen/configs/configgen-defaults.yml:509"
+- folder: psvita
+  extensions:
+  - .psvita
+  - .zip
+  core: vita3k
+  emulator: vita3k
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4929; os package/system/knulli-configgen/configs/configgen-defaults.yml:512"
+- folder: psx
+  extensions:
+  - .cbn
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .toc
+  core: pcsx_rearmed
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:640; os package/system/knulli-configgen/configs/configgen-defaults.yml:515"
+- folder: pv1000
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3345; os package/system/knulli-configgen/configs/configgen-defaults.yml:518"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:42"
+- folder: pygame
+  extensions:
+  - .pygame
+  core: pygame
+  emulator: pygame
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2741; os package/system/knulli-configgen/configs/configgen-defaults.yml:521"
+- folder: pyxel
+  extensions:
+  - .py
+  - .pyxapp
+  core: pyxel
+  emulator: pyxel
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1354; os package/system/knulli-configgen/configs/configgen-defaults.yml:524"
+- folder: quake
+  extensions:
+  - .quake
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1221"
+- folder: quake2
+  extensions:
+  - .7zip
+  - .quake2
+  - .zip
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3809"
+- folder: quake3
+  extensions:
+  - .quake3
+  core: ioquake3
+  emulator: ioquake3
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5141; os package/system/knulli-configgen/configs/configgen-defaults.yml:527"
+- folder: raze
+  extensions:
+  - .raze
+  core: raze
+  emulator: raze
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4727; os package/system/knulli-configgen/configs/configgen-defaults.yml:530"
+- folder: reminiscence
+  extensions:
+  - .rem
+  core: reminiscence
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5090; os package/system/knulli-configgen/configs/configgen-defaults.yml:533"
+- folder: rott
+  extensions:
+  - .rott
+  core: taradino
+  emulator: taradino
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5654; os package/system/knulli-configgen/configs/configgen-defaults.yml:536"
+- folder: samcoupe
+  extensions:
+  - .cpm
+  - .dsk
+  - .mgt
+  - .sad
+  - .sbt
+  - .sdf
+  - .td0
+  - .zip
+  core: samcoupe
+  emulator: samcoupe
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3956; os package/system/knulli-configgen/configs/configgen-defaults.yml:539"
+- folder: satellaview
+  extensions:
+  - .7z
+  - .bs
+  - .sfc
+  - .smc
+  - .squashfs
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2245; os package/system/knulli-configgen/configs/configgen-defaults.yml:542"
+- folder: saturn
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  - .mds
+  - .zip
+  core: yabasanshiro
+  emulator: yabasanshiro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1986; os package/system/knulli-configgen/configs/configgen-defaults.yml:545"
+- folder: scummvm
+  extensions:
+  - .scummvm
+  - .squashfs
+  core: scummvm
+  emulator: scummvm
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:704; os package/system/knulli-configgen/configs/configgen-defaults.yml:548"
+- folder: scv
+  extensions:
+  - '.0'
+  - .bin
+  - .zip
+  core: emuscv
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3247; os package/system/knulli-configgen/configs/configgen-defaults.yml:551"
+- folder: sdlpop
+  extensions:
+  - .sdlpop
+  core: sdlpop
+  emulator: sdlpop
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1412; os package/system/knulli-configgen/configs/configgen-defaults.yml:554"
+- folder: sega32x
+  extensions:
+  - .32x
+  - .7z
+  - .bin
+  - .chd
+  - .md
+  - .smd
+  - .zip
+  core: picodrive
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:534; os package/system/knulli-configgen/configs/configgen-defaults.yml:559"
+- folder: segacd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:522; os package/system/knulli-configgen/configs/configgen-defaults.yml:562"
+- folder: sg1000
+  extensions:
+  - .7z
+  - .bin
+  - .sg
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:597; os package/system/knulli-configgen/configs/configgen-defaults.yml:565"
+- folder: sgb
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: mgba
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:308; os package/system/knulli-configgen/configs/configgen-defaults.yml:568"
+- folder: sgb-msu1
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .squashfs
+  - .zip
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:320"
+- folder: singe
+  extensions:
+  - .daphne
+  - .squashfs
+  core: hypseus-singe
+  emulator: hypseus-singe
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2351; os package/system/knulli-configgen/configs/configgen-defaults.yml:571"
+  arcade: true
+- folder: snes
+  extensions:
+  - .7z
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1; os package/system/knulli-configgen/configs/configgen-defaults.yml:606"
+- folder: snes-msu1
+  extensions:
+  - .sfc
+  - .smc
+  - .squashfs
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:23; os package/system/knulli-configgen/configs/configgen-defaults.yml:609"
+- folder: socrates
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3408; os package/system/knulli-configgen/configs/configgen-defaults.yml:576"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:87"
+- folder: solarus
+  extensions:
+  - .solarus
+  - .zip
+  core: solarus
+  emulator: solarus
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2686; os package/system/knulli-configgen/configs/configgen-defaults.yml:579"
+- folder: sonic-mania
+  extensions:
+  - .sman
+  core: sonic-mania
+  emulator: sonic-mania
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5562; os package/system/knulli-configgen/configs/configgen-defaults.yml:585"
+- folder: sonic3-air
+  extensions:
+  - .s3air
+  core: sonic3-air
+  emulator: sonic3-air
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5539; os package/system/knulli-configgen/configs/configgen-defaults.yml:582"
+- folder: sonicretro
+  extensions:
+  - .scd
+  - .son
+  core: sonic2013
+  emulator: sonic2013
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3055; os package/system/knulli-configgen/configs/configgen-defaults.yml:588"
+- folder: spectravideo
+  extensions:
+  - .7z
+  - .cas
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5312; os package/system/knulli-configgen/configs/configgen-defaults.yml:591"
+- folder: steam
+  extensions:
+  - .steam
+  core: steam
+  emulator: steam
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2999; os package/system/knulli-configgen/configs/configgen-defaults.yml:594"
+- folder: sufami
+  extensions:
+  - .7z
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2258; os package/system/knulli-configgen/configs/configgen-defaults.yml:600"
+- folder: superbroswar
+  extensions:
+  - .game
+  core: superbroswar
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3776; os package/system/knulli-configgen/configs/configgen-defaults.yml:597"
+- folder: supergrafx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .pce
+  - .sgx
+  - .zip
+  core: mednafen_supergrafx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:684; os package/system/knulli-configgen/configs/configgen-defaults.yml:612"
+- folder: supervision
+  extensions:
+  - .7z
+  - .sv
+  - .zip
+  core: potator
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3016; os package/system/knulli-configgen/configs/configgen-defaults.yml:615"
+- folder: supracan
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3442; os package/system/knulli-configgen/configs/configgen-defaults.yml:603"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:90"
+- folder: switch
+  extensions:
+  - .nsp
+  - .xci
+  core: suyu
+  emulator: suyu
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3795; os package/system/knulli-configgen/configs/configgen-defaults.yml:618"
+- folder: systemsp
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:486; os package/system/knulli-configgen/configs/configgen-defaults.yml:623"
+  arcade: true
+- folder: theforceengine
+  extensions:
+  - .tfe
+  core: theforceengine
+  emulator: theforceengine
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5326; os package/system/knulli-configgen/configs/configgen-defaults.yml:629"
+- folder: thextech
+  extensions:
+  - .smbx
+  - .squashfs
+  core: thextech
+  emulator: thextech
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2399; os package/system/knulli-configgen/configs/configgen-defaults.yml:632"
+- folder: thomson
+  extensions:
+  - .fd
+  - .k7
+  - .m5
+  - .m7
+  - .rom
+  - .sap
+  - .zip
+  core: theodore
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2409; os package/system/knulli-configgen/configs/configgen-defaults.yml:637"
+- folder: ti99
+  extensions:
+  - .7z
+  - .rpk
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3683; os package/system/knulli-configgen/configs/configgen-defaults.yml:640"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:75"
+- folder: tic80
+  extensions:
+  - .tic
+  core: tic80
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1302; os package/system/knulli-configgen/configs/configgen-defaults.yml:643"
+- folder: tools
+  extensions:
+  - .sh
+  - .squashfs
+  core: sh
+  emulator: sh
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2538; os package/system/knulli-configgen/configs/configgen-defaults.yml:646"
+- folder: traider1
+  extensions:
+  - .croft
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5108"
+- folder: traider2
+  extensions:
+  - .croft
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5865"
+- folder: triforce
+  extensions:
+  - .ciso
+  - .dol
+  - .elf
+  - .gcm
+  - .gcz
+  - .iso
+  - .m3u
+  - .wbfs
+  core: dolphin_triforce
+  emulator: dolphin_triforce
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2060; os package/system/knulli-configgen/configs/configgen-defaults.yml:651"
+  arcade: true
+- folder: tutor
+  extensions:
+  - .7z
+  - .bin
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3701; os package/system/knulli-configgen/configs/configgen-defaults.yml:654"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:78"
+- folder: tyrian
+  extensions:
+  - .game
+  core: tyrian
+  emulator: tyrian
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3902; os package/system/knulli-configgen/configs/configgen-defaults.yml:657"
+- folder: uqm
+  extensions:
+  - .game
+  core: uqm
+  emulator: uqm
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5604; os package/system/knulli-configgen/configs/configgen-defaults.yml:663"
+- folder: uzebox
+  extensions:
+  - .uze
+  core: uzem
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3277; os package/system/knulli-configgen/configs/configgen-defaults.yml:666"
+- folder: vaixterm
+  extensions:
+  - .vxt
+  core: vaixterm
+  emulator: vaixterm
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:6075; os package/system/knulli-configgen/configs/configgen-defaults.yml:669"
+- folder: vc4000
+  extensions:
+  - .7z
+  - .bin
+  - .pgm
+  - .rom
+  - .tvc
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3746; os package/system/knulli-configgen/configs/configgen-defaults.yml:674"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:111"
+- folder: vectrex
+  extensions:
+  - .7z
+  - .bin
+  - .gam
+  - .vec
+  - .zip
+  core: vecx
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1430; os package/system/knulli-configgen/configs/configgen-defaults.yml:677"
+- folder: vemulator
+  extensions:
+  - .bin
+  - .dci
+  - .vms
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3870"
+- folder: vgmplay
+  extensions:
+  - .7z
+  - .vgm
+  - .vgz
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3758; os package/system/knulli-configgen/configs/configgen-defaults.yml:680"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:108"
+- folder: videopacplus
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1865; os package/system/knulli-configgen/configs/configgen-defaults.yml:683"
+- folder: vircon32
+  extensions:
+  - .v32
+  - .zip
+  core: vircon32
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1368; os package/system/knulli-configgen/configs/configgen-defaults.yml:686"
+- folder: virtualboy
+  extensions:
+  - .7z
+  - .vb
+  - .zip
+  core: vb
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:397; os package/system/knulli-configgen/configs/configgen-defaults.yml:689"
+- folder: vis
+  extensions:
+  - .cdr
+  - .chd
+  - .cue
+  - .gdi
+  - .iso
+  - .nrg
+  - .toc
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5221; os package/system/knulli-configgen/configs/configgen-defaults.yml:692"
+- folder: vpinball
+  extensions:
+  - .vpx
+  core: vpinball
+  emulator: vpinball
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:5231; os package/system/knulli-configgen/configs/configgen-defaults.yml:765"
+- folder: vsmile
+  extensions:
+  - .7z
+  - .bin
+  - .u1
+  - .u3
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3426; os package/system/knulli-configgen/configs/configgen-defaults.yml:700"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:93"
+- folder: wasm4
+  extensions:
+  - .wasm
+  core: wasm4
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1344; os package/system/knulli-configgen/configs/configgen-defaults.yml:706"
+- folder: wii
+  extensions:
+  - .ciso
+  - .dol
+  - .elf
+  - .gcm
+  - .gcz
+  - .iso
+  - .json
+  - .m3u
+  - .rvz
+  - .wad
+  - .wbfs
+  core: dolphin
+  emulator: dolphin
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2081; os package/system/knulli-configgen/configs/configgen-defaults.yml:709"
+  board_defaults:
+    rk3576:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-rk3576.yml:45"
+- folder: wiiu
+  extensions:
+  - .rpx
+  - .squashfs
+  - .wua
+  - .wud
+  - .wuhb
+  - .wup
+  - .wux
+  core: cemu
+  emulator: cemu
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2668; os package/system/knulli-configgen/configs/configgen-defaults.yml:712"
+- folder: windows
+  extensions:
+  - .exe
+  - .pc
+  - .wine
+  - .wsquashfs
+  - .wtgz
+  core: wine-tkg
+  emulator: wine
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2590; os package/system/knulli-configgen/configs/configgen-defaults.yml:715"
+- folder: windows_installers
+  extensions:
+  - .exe
+  - .iso
+  - .msi
+  core: wine-tkg
+  emulator: wine
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2608; os package/system/knulli-configgen/configs/configgen-defaults.yml:720"
+- folder: wswan
+  extensions:
+  - .7z
+  - .ws
+  - .zip
+  core: mednafen_wswan
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1170; os package/system/knulli-configgen/configs/configgen-defaults.yml:725"
+- folder: wswanc
+  extensions:
+  - .7z
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1182; os package/system/knulli-configgen/configs/configgen-defaults.yml:728"
+- folder: x1
+  extensions:
+  - .2d
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dup
+  - .dx1
+  - .hdm
+  - .tfd
+  - .xdf
+  - .zip
+  core: x1
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2200; os package/system/knulli-configgen/configs/configgen-defaults.yml:731"
+- folder: x68000
+  extensions:
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2190; os package/system/knulli-configgen/configs/configgen-defaults.yml:734"
+- folder: xash3d_fwgs
+  extensions:
+  - .game
+  core: xash3d_fwgs
+  emulator: xash3d_fwgs
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2626; os package/system/knulli-configgen/configs/configgen-defaults.yml:737"
+- folder: xbox
+  extensions:
+  - .iso
+  - .squashfs
+  core: xemu
+  emulator: xemu
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:2949; os package/system/knulli-configgen/configs/configgen-defaults.yml:748"
+- folder: xbox360
+  extensions:
+  - .iso
+  - .xbox360
+  - .xex
+  - .zar
+  core: xenia-canary
+  emulator: xenia-canary
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4474; os package/system/knulli-configgen/configs/configgen-defaults.yml:751"
+- folder: xegs
+  extensions:
+  - .7z
+  - .atr
+  - .bin
+  - .car
+  - .dsk
+  - .rom
+  - .xfd
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1083; os package/system/knulli-configgen/configs/configgen-defaults.yml:742"
+  board_defaults:
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/system/knulli-configgen/configs/configgen-defaults-sm8250.yml:96"
+- folder: xrick
+  extensions:
+  - .zip
+  core: xrick
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:4004; os package/system/knulli-configgen/configs/configgen-defaults.yml:745"
+- folder: zc210
+  extensions:
+  - .qst
+  core: zc210
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:3858; os package/system/knulli-configgen/configs/configgen-defaults.yml:756"
+- folder: zx81
+  extensions:
+  - .7z
+  - .p
+  - .tzx
+  - .zip
+  core: "81"
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1877; os package/system/knulli-configgen/configs/configgen-defaults.yml:759"
+- folder: zxspectrum
+  extensions:
+  - .7z
+  - .dsk
+  - .rzx
+  - .scl
+  - .tap
+  - .trd
+  - .tzx
+  - .z80
+  - .zip
+  core: fuse
+  emulator: libretro
+  source_ref: "os package/emulationstation/knulli-es-system/es_systems.yml:1893; os package/system/knulli-configgen/configs/configgen-defaults.yml:762"

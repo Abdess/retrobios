@@ -1,0 +1,1295 @@
+setup: kolos
+name: KOLOS
+platform: retroarch
+sources:
+  os:
+    repo: "https://github.com/AnonLinuxOS/KOLOS"
+    commit: 7daf5950ae79bb8775f129468164f730dbc32298
+  es:
+    repo: "https://github.com/JustEnoughLinuxOS/emulationstation"
+    commit: b298647ee7988cf2a34fedd4442f357f63c66597
+    note: EmulationStation pinned by the ui/emulationstation package.mk PKG_VERSION
+roms_root:
+  path: /storage/roms
+  from_bios: ..
+  source_ref: "os packages/virtual/emulators/package.mk:111"
+case_sensitive: null
+skip:
+- name: bios
+  reason: created by the emulators package, holds no game
+  source_ref: "os packages/virtual/emulators/package.mk:111"
+- name: music
+  reason: created by the emulators package, holds no game
+  source_ref: "os packages/virtual/emulators/package.mk:114"
+- name: savestates
+  reason: created by the emulators package, holds no game
+  source_ref: "os packages/virtual/emulators/package.mk:117"
+hidden:
+- pattern: .*
+  source_ref: "es es-app/src/SystemData.cpp:225"
+media:
+- name: media
+  source_ref: "es es-app/src/SystemData.cpp:272"
+- name: medias
+  source_ref: "es es-app/src/SystemData.cpp:272"
+- name: images
+  source_ref: "es es-app/src/SystemData.cpp:272"
+- name: manuals
+  source_ref: "es es-app/src/SystemData.cpp:272"
+- name: videos
+  source_ref: "es es-app/src/SystemData.cpp:272"
+- name: assets
+  source_ref: "es es-app/src/SystemData.cpp:272"
+- pattern: downloaded_*
+  source_ref: "es es-app/src/SystemData.cpp:272"
+notes:
+- "The BIOS folder is /storage/roms/bios, inside the roms root: the scan skips it."
+- "A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:236)."
+- Each folder comes from SYSTEM_PATH of config/emulators/<system>.conf, written by add_es_system for every
+  system the emulators package adds.
+folders:
+- folder: 3do
+  extensions:
+  - .bin
+  - .chd
+  - .cue
+  - .iso
+  core: opera
+  emulator: retroarch
+  source_ref: "os config/emulators/3do.conf:6,7; os packages/virtual/emulators/package.mk:124; os packages/virtual/emulators/package.mk:123"
+- folder: 3ds
+  extensions:
+  - .3ds
+  - .3dsx
+  - .app
+  - .axf
+  - .cci
+  - .cxi
+  - .elf
+  core: citra
+  emulator: retroarch
+  source_ref: "os config/emulators/3ds.conf:6,7; os packages/virtual/emulators/package.mk:131,135; os\
+    \ packages/virtual/emulators/package.mk:129"
+  board_defaults:
+    DEVICE=S922X*:
+      core: citra-sa
+      emulator: citra
+      source_ref: "os packages/virtual/emulators/package.mk:134"
+- folder: amiga
+  extensions:
+  - .adf
+  - .adz
+  - .dms
+  - .hdf
+  - .hdz
+  - .ipf
+  - .lha
+  - .m3u
+  - .uae
+  - .zip
+  core: puae
+  emulator: retroarch
+  source_ref: "os config/emulators/amiga.conf:6,7; os packages/virtual/emulators/package.mk:156; os packages/virtual/emulators/package.mk:146"
+  board_defaults:
+    DEVICE=RK35*|RK3326|RK3399:
+      core: puae2021
+      emulator: retroarch
+      source_ref: "os packages/virtual/emulators/package.mk:142"
+- folder: amigacd32
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .lha
+  core: puae
+  emulator: retroarch
+  source_ref: "os config/emulators/amigacd32.conf:6,7; os packages/virtual/emulators/package.mk:174; os\
+    \ packages/virtual/emulators/package.mk:165"
+  board_defaults:
+    DEVICE=RK35*|RK3326|RK3399:
+      core: puae2021
+      emulator: retroarch
+      source_ref: "os packages/virtual/emulators/package.mk:161"
+- folder: amstradcpc
+  extensions:
+  - .7z
+  - .cdt
+  - .cpr
+  - .dsk
+  - .kcr
+  - .m3u
+  - .sna
+  - .tap
+  - .voc
+  - .zip
+  core: crocods
+  emulator: retroarch
+  source_ref: "os config/emulators/amstradcpc.conf:6,7; os packages/virtual/emulators/package.mk:179;\
+    \ os packages/virtual/emulators/package.mk:177"
+- folder: arcade
+  extensions:
+  - .7z
+  - .zip
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os config/emulators/arcade.conf:6,7; os packages/virtual/emulators/package.mk:189; os packages/virtual/emulators/package.mk:182"
+  arcade: true
+- folder: arduboy
+  extensions:
+  - .hex
+  core: arduous
+  emulator: retroarch
+  source_ref: "os config/emulators/arduboy.conf:6,7; os packages/virtual/emulators/package.mk:193; os\
+    \ packages/virtual/emulators/package.mk:192"
+- folder: atari2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella
+  emulator: retroarch
+  source_ref: "os config/emulators/atari2600.conf:6,7; os packages/virtual/emulators/package.mk:197; os\
+    \ packages/virtual/emulators/package.mk:196"
+- folder: atari5200
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: a5200
+  emulator: retroarch
+  source_ref: "os config/emulators/atari5200.conf:6,7; os packages/virtual/emulators/package.mk:202; os\
+    \ packages/virtual/emulators/package.mk:200"
+- folder: atari7800
+  extensions:
+  - .7z
+  - .a78
+  - .bin
+  - .zip
+  core: prosystem
+  emulator: retroarch
+  source_ref: "os config/emulators/atari7800.conf:6,7; os packages/virtual/emulators/package.mk:206; os\
+    \ packages/virtual/emulators/package.mk:205"
+- folder: atari800
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: atari800
+  emulator: retroarch
+  source_ref: "os config/emulators/atari800.conf:6,7; os packages/virtual/emulators/package.mk:210; os\
+    \ packages/virtual/emulators/package.mk:209"
+- folder: atarijaguar
+  extensions:
+  - .abs
+  - .bin
+  - .cof
+  - .j64
+  - .jag
+  - .prg
+  - .rom
+  core: virtualjaguar
+  emulator: retroarch
+  source_ref: "os config/emulators/atarijaguar.conf:6,7; os packages/virtual/emulators/package.mk:545;\
+    \ os packages/virtual/emulators/package.mk:544"
+- folder: atarilynx
+  extensions:
+  - .7z
+  - .lnx
+  - .lyx
+  - .o
+  - .zip
+  core: handy
+  emulator: retroarch
+  source_ref: "os config/emulators/atarilynx.conf:6,7; os packages/virtual/emulators/package.mk:555; os\
+    \ packages/virtual/emulators/package.mk:548"
+- folder: atarist
+  extensions:
+  - .7z
+  - .dim
+  - .ipf
+  - .m3u
+  - .msa
+  - .st
+  - .stx
+  - .zip
+  core: hatari
+  emulator: retroarch
+  source_ref: "os config/emulators/atarist.conf:6,7; os packages/virtual/emulators/package.mk:215; os\
+    \ packages/virtual/emulators/package.mk:213"
+- folder: atomiswave
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "os config/emulators/atomiswave.conf:6,7; os packages/virtual/emulators/package.mk:240;\
+    \ os packages/virtual/emulators/package.mk:236"
+  board_defaults:
+    DEVICE=S922X:
+      core: flycast-sa
+      emulator: flycast
+      source_ref: "os packages/virtual/emulators/package.mk:232"
+  arcade: true
+- folder: cdi
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: same_cdi
+  emulator: retroarch
+  source_ref: "os config/emulators/cdi.conf:6,7; os packages/virtual/emulators/package.mk:1146; os packages/virtual/emulators/package.mk:1145"
+- folder: channelf
+  extensions:
+  - .7z
+  - .bin
+  - .chf
+  - .zip
+  core: freechaf
+  emulator: retroarch
+  source_ref: "os config/emulators/channelf.conf:6,7; os packages/virtual/emulators/package.mk:244; os\
+    \ packages/virtual/emulators/package.mk:243"
+- folder: chip-8
+  extensions:
+  - .ch8
+  - .sc8
+  - .xo8
+  core: jaxe
+  emulator: retroarch
+  source_ref: "os config/emulators/chip-8.conf:6,7; os packages/virtual/emulators/package.mk:887; os packages/virtual/emulators/package.mk:886"
+- folder: coleco
+  name: colecovision
+  extensions:
+  - .7z
+  - .bin
+  - .col
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os config/emulators/colecovision.conf:6,7; os packages/virtual/emulators/package.mk:250;\
+    \ os packages/virtual/emulators/package.mk:247"
+- folder: cps1
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os config/emulators/cps1.conf:6,7; os packages/virtual/emulators/package.mk:262; os packages/virtual/emulators/package.mk:253"
+  arcade: true
+- folder: cps2
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os config/emulators/cps2.conf:6,7; os packages/virtual/emulators/package.mk:274; os packages/virtual/emulators/package.mk:265"
+  arcade: true
+- folder: cps3
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os config/emulators/cps3.conf:6,7; os packages/virtual/emulators/package.mk:286; os packages/virtual/emulators/package.mk:277"
+  arcade: true
+- folder: daphne
+  extensions:
+  - .daphne
+  - .singe
+  core: hypseus-singe
+  emulator: hypseus-singe
+  source_ref: "os config/emulators/daphne.conf:5,6; os packages/virtual/emulators/package.mk:291; os packages/virtual/emulators/package.mk:289"
+  arcade: true
+- folder: dreamcast
+  extensions:
+  - .cdi
+  - .chd
+  - .cue
+  - .gdi
+  - .m3u
+  core: flycast
+  emulator: retroarch
+  source_ref: "os config/emulators/dreamcast.conf:6,7; os packages/virtual/emulators/package.mk:316; os\
+    \ packages/virtual/emulators/package.mk:312"
+  board_defaults:
+    DEVICE=S922X:
+      core: flycast-sa
+      emulator: flycast
+      source_ref: "os packages/virtual/emulators/package.mk:307"
+- folder: easyrpg
+  extensions:
+  - .easyrpg
+  - .ldb
+  - .zip
+  core: easyrpg
+  emulator: retroarch
+  source_ref: "os config/emulators/easyrpg.conf:6,7; os packages/virtual/emulators/package.mk:320; os\
+    \ packages/virtual/emulators/package.mk:319"
+- folder: famicom
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os config/emulators/famicom.conf:6,7; os packages/virtual/emulators/package.mk:332; os\
+    \ packages/virtual/emulators/package.mk:323"
+- folder: fbneo
+  name: fbn
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os config/emulators/fbn.conf:6,7; os packages/virtual/emulators/package.mk:354; os packages/virtual/emulators/package.mk:347"
+  arcade: true
+- folder: fds
+  extensions:
+  - .7z
+  - .fds
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os config/emulators/fds.conf:6,7; os packages/virtual/emulators/package.mk:344; os packages/virtual/emulators/package.mk:335"
+- folder: gameandwatch
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: gw
+  emulator: retroarch
+  source_ref: "os config/emulators/gameandwatch.conf:6,7; os packages/virtual/emulators/package.mk:367;\
+    \ os packages/virtual/emulators/package.mk:365"
+- folder: gamecube
+  extensions:
+  - .ciso
+  - .dol
+  - .gcm
+  - .gcz
+  - .iso
+  - .rvz
+  - .wbfs
+  core: dolphin-sa-gc
+  emulator: dolphin
+  source_ref: "os config/emulators/gamecube.conf:6,7; os packages/virtual/emulators/package.mk:468,473;\
+    \ os packages/virtual/emulators/package.mk:466"
+- folder: gamegear
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os config/emulators/gamegear.conf:6,7; os packages/virtual/emulators/package.mk:521; os\
+    \ packages/virtual/emulators/package.mk:512"
+- folder: gamegearh
+  name: ggh
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os config/emulators/ggh.conf:6,7; os packages/virtual/emulators/package.mk:533; os packages/virtual/emulators/package.mk:524"
+- folder: gb
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os config/emulators/gb.conf:6,7; os packages/virtual/emulators/package.mk:381; os packages/virtual/emulators/package.mk:370"
+- folder: gba
+  extensions:
+  - .7z
+  - .gba
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "os config/emulators/gba.conf:6,7; os packages/virtual/emulators/package.mk:420; os packages/virtual/emulators/package.mk:398"
+- folder: gbah
+  extensions:
+  - .7z
+  - .gba
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "os config/emulators/gbah.conf:6,7; os packages/virtual/emulators/package.mk:433; os packages/virtual/emulators/package.mk:423"
+- folder: gbc
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os config/emulators/gbc.conf:6,7; os packages/virtual/emulators/package.mk:447; os packages/virtual/emulators/package.mk:436"
+- folder: gbch
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os config/emulators/gbch.conf:6,7; os packages/virtual/emulators/package.mk:461; os packages/virtual/emulators/package.mk:450"
+- folder: gbh
+  extensions:
+  - .7z
+  - .gb
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os config/emulators/gbh.conf:6,7; os packages/virtual/emulators/package.mk:395; os packages/virtual/emulators/package.mk:384"
+- folder: genesis
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/genesis.conf:6,7; os packages/virtual/emulators/package.mk:912; os\
+    \ packages/virtual/emulators/package.mk:904"
+- folder: genh
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/genh.conf:6,7; os packages/virtual/emulators/package.mk:923; os packages/virtual/emulators/package.mk:915"
+- folder: idtech
+  extensions:
+  - .sh
+  core: idtech
+  emulator: retroarch
+  source_ref: "os config/emulators/idtech.conf:6,7; os packages/virtual/emulators/package.mk:358; os packages/virtual/emulators/package.mk:357"
+- folder: intellivision
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .rom
+  - .zip
+  core: freeintv
+  emulator: retroarch
+  source_ref: "os config/emulators/intellivision.conf:6,7; os packages/virtual/emulators/package.mk:537;\
+    \ os packages/virtual/emulators/package.mk:536"
+- folder: j2me
+  extensions:
+  - .jar
+  core: freej2me
+  emulator: retroarch
+  source_ref: "os config/emulators/j2me.conf:6,7; os packages/virtual/emulators/package.mk:541; os packages/virtual/emulators/package.mk:540"
+- folder: mac
+  name: macintosh
+  extensions:
+  - .cmd
+  - .dsk
+  - .hfv
+  - .img
+  - .zip
+  core: minivmac
+  emulator: retroarch
+  source_ref: "os config/emulators/macintosh.conf:6,7; os packages/virtual/emulators/package.mk:362; os\
+    \ packages/virtual/emulators/package.mk:361"
+- folder: mame
+  extensions:
+  - .7z
+  - .zip
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os config/emulators/mame.conf:6,7; os packages/virtual/emulators/package.mk:569; os packages/virtual/emulators/package.mk:562"
+  arcade: true
+- folder: mastersystem
+  extensions:
+  - .7z
+  - .bin
+  - .sms
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os config/emulators/mastersystem.conf:6,7; os packages/virtual/emulators/package.mk:935;\
+    \ os packages/virtual/emulators/package.mk:926"
+- folder: megacd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/megacd.conf:6,7; os packages/virtual/emulators/package.mk:901; os packages/virtual/emulators/package.mk:899"
+- folder: megadrive
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/megadrive.conf:6,7; os packages/virtual/emulators/package.mk:946; os\
+    \ packages/virtual/emulators/package.mk:938"
+- folder: megadrive-japan
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/megadrive-japan.conf:6,7; os packages/virtual/emulators/package.mk:580;\
+    \ os packages/virtual/emulators/package.mk:572"
+- folder: megaduck
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: sameduck
+  emulator: retroarch
+  source_ref: "os config/emulators/megaduck.conf:6,7; os packages/virtual/emulators/package.mk:950; os\
+    \ packages/virtual/emulators/package.mk:949"
+- folder: moonlight
+  extensions:
+  - .sh
+  source_ref: "os config/emulators/moonlight.conf:6,7; os packages/virtual/emulators/package.mk:1204"
+- folder: mplayer
+  extensions:
+  - .aac
+  - .ac3
+  - .avi
+  - .dts
+  - .eac33
+  - .flac
+  - .m3u
+  - .m4a
+  - .mka
+  - .mkv
+  - .mov
+  - .mp3
+  - .mp4
+  - .mpg
+  - .ogg
+  - .opus
+  - .sh
+  - .thd
+  - .twi
+  - .wav
+  - .wmv
+  - .wv
+  - .ytb
+  core: mplayer
+  emulator: mplayer
+  source_ref: "os config/emulators/mplayer.conf:6,7; os packages/virtual/emulators/package.mk:1197; os\
+    \ packages/virtual/emulators/package.mk:1196"
+- folder: msx
+  extensions:
+  - .7z
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os config/emulators/msx.conf:6,7; os packages/virtual/emulators/package.mk:600; os packages/virtual/emulators/package.mk:598"
+- folder: msx2
+  extensions:
+  - .7z
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os config/emulators/msx2.conf:6,7; os packages/virtual/emulators/package.mk:605; os packages/virtual/emulators/package.mk:603"
+- folder: n64
+  extensions:
+  - .7z
+  - .n64
+  - .v64
+  - .z64
+  - .zip
+  core: mupen64plus_next
+  emulator: retroarch
+  source_ref: "os config/emulators/n64.conf:6,7; os packages/virtual/emulators/package.mk:672; os packages/virtual/emulators/package.mk:668"
+- folder: naomi
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "os config/emulators/naomi.conf:6,7; os packages/virtual/emulators/package.mk:630; os packages/virtual/emulators/package.mk:626"
+  board_defaults:
+    DEVICE=S922X:
+      core: flycast-sa
+      emulator: flycast
+      source_ref: "os packages/virtual/emulators/package.mk:621"
+  arcade: true
+- folder: nds
+  extensions:
+  - .7z
+  - .nds
+  - .zip
+  core: drastic-sa
+  emulator: drastic
+  source_ref: "os config/emulators/nds.conf:3,7; os packages/virtual/emulators/package.mk:703; os packages/virtual/emulators/package.mk:699"
+  board_defaults:
+    DEVICE=AMD64:
+      core: melonds
+      emulator: retroarch
+      source_ref: "os packages/virtual/emulators/package.mk:677"
+    DEVICE=RK3588:
+      core: melonds
+      emulator: retroarch
+      source_ref: "os packages/virtual/emulators/package.mk:689"
+- folder: neocd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: neocd
+  emulator: retroarch
+  source_ref: "os config/emulators/neocd.conf:6,7; os packages/virtual/emulators/package.mk:645; os packages/virtual/emulators/package.mk:643"
+- folder: neogeo
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os config/emulators/neogeo.conf:6,7; os packages/virtual/emulators/package.mk:640; os packages/virtual/emulators/package.mk:633"
+- folder: nes
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os config/emulators/nes.conf:6,7; os packages/virtual/emulators/package.mk:715; os packages/virtual/emulators/package.mk:706"
+- folder: nesh
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os config/emulators/nesh.conf:6,7; os packages/virtual/emulators/package.mk:727; os packages/virtual/emulators/package.mk:718"
+- folder: ngp
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: beetle_ngp
+  emulator: retroarch
+  source_ref: "os config/emulators/ngp.conf:6,7; os packages/virtual/emulators/package.mk:655; os packages/virtual/emulators/package.mk:648"
+- folder: ngpc
+  extensions:
+  - .7z
+  - .ngc
+  - .zip
+  core: beetle_ngp
+  emulator: retroarch
+  source_ref: "os config/emulators/ngpc.conf:6,7; os packages/virtual/emulators/package.mk:665; os packages/virtual/emulators/package.mk:658"
+- folder: odyssey
+  name: odyssey2
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "os config/emulators/odyssey2.conf:6,7; os packages/virtual/emulators/package.mk:731; os\
+    \ packages/virtual/emulators/package.mk:730"
+- folder: openbor
+  extensions:
+  - .pak
+  core: OpenBOR
+  emulator: OpenBOR
+  source_ref: "os config/emulators/openbor.conf:6,7; os packages/virtual/emulators/package.mk:735; os\
+    \ packages/virtual/emulators/package.mk:734"
+- folder: pc
+  extensions:
+  - .bat
+  - .com
+  - .dosz
+  - .exe
+  core: dosbox_pure
+  emulator: retroarch
+  source_ref: "os config/emulators/pc.conf:6,7; os packages/virtual/emulators/package.mk:585; os packages/virtual/emulators/package.mk:583"
+- folder: pc88
+  name: pc-8800
+  extensions:
+  - .d88
+  - .m3u
+  core: quasi88
+  emulator: retroarch
+  source_ref: "os config/emulators/pc-8800.conf:6,7; os packages/virtual/emulators/package.mk:739; os\
+    \ packages/virtual/emulators/package.mk:738"
+- folder: pc98
+  name: pc-9800
+  extensions:
+  - .2hd
+  - .d88
+  - .d98
+  - .dup
+  - .fdd
+  - .fdi
+  - .hdd
+  - .hdi
+  - .hdm
+  - .hdn
+  - .nhd
+  - .tfd
+  - .thd
+  - .xdf
+  - .zip
+  core: np2kai
+  emulator: retroarch
+  source_ref: "os config/emulators/pc-9800.conf:6,7; os packages/virtual/emulators/package.mk:743; os\
+    \ packages/virtual/emulators/package.mk:742"
+- folder: pcengine
+  extensions:
+  - .7z
+  - .bin
+  - .pce
+  - .zip
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os config/emulators/pcengine.conf:6,7; os packages/virtual/emulators/package.mk:755; os\
+    \ packages/virtual/emulators/package.mk:746"
+- folder: pcenginecd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os config/emulators/pcenginecd.conf:6,7; os packages/virtual/emulators/package.mk:767;\
+    \ os packages/virtual/emulators/package.mk:758"
+- folder: pcfx
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .toc
+  core: beetle_pcfx
+  emulator: retroarch
+  source_ref: "os config/emulators/pcfx.conf:6,7; os packages/virtual/emulators/package.mk:776; os packages/virtual/emulators/package.mk:770"
+- folder: pico-8
+  extensions:
+  - .p8
+  - .png
+  core: pico8
+  emulator: pico-8
+  source_ref: "os config/emulators/pico-8.conf:6,7; os packages/virtual/emulators/package.mk:781; os packages/virtual/emulators/package.mk:779"
+- folder: pokemini
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  emulator: retroarch
+  source_ref: "os config/emulators/pokemini.conf:6,7; os packages/virtual/emulators/package.mk:870; os\
+    \ packages/virtual/emulators/package.mk:869"
+- folder: ports
+  extensions:
+  - .sh
+  core: portmaster
+  emulator: portmaster
+  source_ref: "os config/emulators/ports.conf:6,7; os packages/virtual/emulators/package.mk:1193; os packages/virtual/emulators/package.mk:1190"
+- folder: ps2
+  extensions:
+  - .bin
+  - .chd
+  - .cso
+  - .dump
+  - .gz
+  - .img
+  - .iso
+  - .mdf
+  - .nrg
+  core: pcsx2-sa
+  emulator: pcsx2
+  source_ref: "os config/emulators/ps2.conf:6,7; os packages/virtual/emulators/package.mk:826,831; os\
+    \ packages/virtual/emulators/package.mk:824"
+  board_defaults:
+    DEVICE=RK3588|S922X|RK3399:
+      core: aethersx2-sa
+      emulator: aethersx2
+      source_ref: "os packages/virtual/emulators/package.mk:830"
+- folder: ps3
+  extensions:
+  - .ps3
+  - .psn
+  core: rpcs3-sa
+  emulator: rpcs3
+  source_ref: "os config/emulators/ps3.conf:6,7; os packages/virtual/emulators/package.mk:840; os packages/virtual/emulators/package.mk:839"
+- folder: psp
+  extensions:
+  - .chd
+  - .cso
+  - .iso
+  - .pbp
+  core: ppsspp-sa
+  emulator: ppsspp
+  source_ref: "os config/emulators/psp.conf:6,7; os packages/virtual/emulators/package.mk:852; os packages/virtual/emulators/package.mk:846"
+- folder: pspminis
+  extensions:
+  - .cso
+  - .iso
+  - .pbp
+  core: ppsspp-sa
+  emulator: ppsspp
+  source_ref: "os config/emulators/pspminis.conf:6,7; os packages/virtual/emulators/package.mk:858; os\
+    \ packages/virtual/emulators/package.mk:856"
+- folder: psx
+  extensions:
+  - .bin
+  - .cbn
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .toc
+  core: beetle_psx
+  emulator: retroarch
+  source_ref: "os config/emulators/psx.conf:6,7; os packages/virtual/emulators/package.mk:819; os packages/virtual/emulators/package.mk:786"
+  board_defaults:
+    DEVICE=S922X*:
+      core: pcsx_rearmed
+      emulator: retroarch
+      source_ref: "os packages/virtual/emulators/package.mk:791"
+    DEVICE=RK3588:
+      core: pcsx_rearmed32
+      emulator: retroarch
+      source_ref: "os packages/virtual/emulators/package.mk:796"
+    DEVICE=RK3399:
+      core: pcsx_rearmed32
+      emulator: retroarch
+      source_ref: "os packages/virtual/emulators/package.mk:802"
+    DEVICE=RK3566*:
+      core: pcsx_rearmed32
+      emulator: retroarch
+      source_ref: "os packages/virtual/emulators/package.mk:808"
+    DEVICE=RK3326:
+      core: pcsx_rearmed32
+      emulator: retroarch
+      source_ref: "os packages/virtual/emulators/package.mk:813"
+- folder: satellaview
+  extensions:
+  - .7z
+  - .bs
+  - .bsx
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/satellaview.conf:6,7; os packages/virtual/emulators/package.mk:1102;\
+    \ os packages/virtual/emulators/package.mk:1098"
+- folder: saturn
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: yabasanshiro-sa
+  emulator: yabasanshiro
+  source_ref: "os config/emulators/saturn.conf:6,7; os packages/virtual/emulators/package.mk:970; os packages/virtual/emulators/package.mk:955"
+  board_defaults:
+    TARGET_ARCH=x86_64:
+      core: yabasanshiro
+      emulator: retroarch
+      source_ref: "os packages/virtual/emulators/package.mk:960"
+    DEVICE=AMD64:
+      core: kronos-sa
+      emulator: kronos
+      source_ref: "os packages/virtual/emulators/package.mk:979"
+- folder: screenshots
+  name: imageviewer
+  extensions:
+  - .avi
+  - .bmp
+  - .gif
+  - .hdr
+  - .jpeg
+  - .jpg
+  - .mkv
+  - .mp4
+  - .pdf
+  - .pgm
+  - .pic
+  - .png
+  - .ppm
+  - .psd
+  - .tga
+  source_ref: "os config/emulators/imageviewer.conf:6,7; os packages/virtual/emulators/package.mk:1210"
+- folder: scv
+  extensions:
+  - '.0'
+  - .bin
+  - .cart
+  - .rom
+  - .zip
+  core: emuscv
+  emulator: retroarch
+  source_ref: "os config/emulators/scv.conf:6,7; os packages/virtual/emulators/package.mk:1185; os packages/virtual/emulators/package.mk:1184"
+- folder: sega32x
+  extensions:
+  - .32x
+  - .7z
+  - .bin
+  - .md
+  - .smd
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os config/emulators/sega32x.conf:6,7; os packages/virtual/emulators/package.mk:891; os\
+    \ packages/virtual/emulators/package.mk:890"
+- folder: segacd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/segacd.conf:6,7; os packages/virtual/emulators/package.mk:896; os packages/virtual/emulators/package.mk:894"
+- folder: sfc
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/sfc.conf:6,7; os packages/virtual/emulators/package.mk:1095; os packages/virtual/emulators/package.mk:1074"
+- folder: sg-1000
+  extensions:
+  - .7z
+  - .bin
+  - .sg
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os config/emulators/sg-1000.conf:6,7; os packages/virtual/emulators/package.mk:991; os\
+    \ packages/virtual/emulators/package.mk:988"
+- folder: sgfx
+  name: supergrafx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .pce
+  - .sgx
+  - .zip
+  core: beetle_supergrafx
+  emulator: retroarch
+  source_ref: "os config/emulators/supergrafx.conf:6,7; os packages/virtual/emulators/package.mk:1023;\
+    \ os packages/virtual/emulators/package.mk:1015"
+- folder: snes
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/snes.conf:6,7; os packages/virtual/emulators/package.mk:1047; os packages/virtual/emulators/package.mk:1026"
+- folder: snesh
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/snesh.conf:6,7; os packages/virtual/emulators/package.mk:1071; os packages/virtual/emulators/package.mk:1050"
+- folder: snesmsu1
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/snesmsu1.conf:6,7; os packages/virtual/emulators/package.mk:595; os\
+    \ packages/virtual/emulators/package.mk:588"
+- folder: st-v
+  extensions:
+  - .zip
+  core: beetle_saturn
+  emulator: retroarch
+  source_ref: "os config/emulators/st-v.conf:6,7; os packages/virtual/emulators/package.mk:985; os packages/virtual/emulators/package.mk:975"
+  arcade: true
+- folder: sufami
+  extensions:
+  - .7z
+  - .st
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/sufami.conf:6,7; os packages/virtual/emulators/package.mk:1106; os\
+    \ packages/virtual/emulators/package.mk:1105"
+- folder: supervision
+  extensions:
+  - .7z
+  - .sv
+  - .zip
+  core: potator
+  emulator: retroarch
+  source_ref: "os config/emulators/supervision.conf:6,7; os packages/virtual/emulators/package.mk:1110;\
+    \ os packages/virtual/emulators/package.mk:1109"
+- folder: switch
+  extensions:
+  - .nca
+  - .nro
+  - .nso
+  - .nsp
+  - .xci
+  core: yuzu-sa
+  emulator: yuzu
+  source_ref: "os config/emulators/switch.conf:6,7; os packages/virtual/emulators/package.mk:505; os packages/virtual/emulators/package.mk:503"
+- folder: tg16
+  extensions:
+  - .7z
+  - .bin
+  - .pce
+  - .zip
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os config/emulators/tg16.conf:6,7; os packages/virtual/emulators/package.mk:1122; os packages/virtual/emulators/package.mk:1113"
+- folder: tg16cd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os config/emulators/tg16cd.conf:6,7; os packages/virtual/emulators/package.mk:1134; os\
+    \ packages/virtual/emulators/package.mk:1125"
+- folder: uzebox
+  extensions:
+  - .uze
+  core: uzem
+  emulator: retroarch
+  source_ref: "os config/emulators/uzebox.conf:6,7; os packages/virtual/emulators/package.mk:1138; os\
+    \ packages/virtual/emulators/package.mk:1137"
+- folder: vectrex
+  extensions:
+  - .7z
+  - .bin
+  - .gam
+  - .vec
+  - .zip
+  core: vecx
+  emulator: retroarch
+  source_ref: "os config/emulators/vectrex.conf:6,7; os packages/virtual/emulators/package.mk:1142; os\
+    \ packages/virtual/emulators/package.mk:1141"
+- folder: videopac
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "os config/emulators/videopac.conf:6,7; os packages/virtual/emulators/package.mk:1150; os\
+    \ packages/virtual/emulators/package.mk:1149"
+- folder: virtualboy
+  extensions:
+  - .7z
+  - .vb
+  - .zip
+  core: beetle_vb
+  emulator: retroarch
+  source_ref: "os config/emulators/virtualboy.conf:6,7; os packages/virtual/emulators/package.mk:1159;\
+    \ os packages/virtual/emulators/package.mk:1153"
+- folder: wii
+  extensions:
+  - .ciso
+  - .dol
+  - .gcm
+  - .gcz
+  - .iso
+  - .rvz
+  - .wad
+  - .wbfs
+  core: dolphin-sa-wii
+  emulator: dolphin
+  source_ref: "os config/emulators/wii.conf:6,7; os packages/virtual/emulators/package.mk:482,487; os\
+    \ packages/virtual/emulators/package.mk:480"
+- folder: wiiu
+  extensions:
+  - .wua
+  - .wud
+  - .wux
+  core: cemu-sa
+  emulator: cemu
+  source_ref: "os config/emulators/wiiu.conf:6,7; os packages/virtual/emulators/package.mk:495; os packages/virtual/emulators/package.mk:494"
+- folder: wonderswan
+  extensions:
+  - .7z
+  - .ws
+  - .zip
+  core: beetle_wswan
+  emulator: retroarch
+  source_ref: "os config/emulators/wonderswan.conf:6,7; os packages/virtual/emulators/package.mk:1168;\
+    \ os packages/virtual/emulators/package.mk:1162"
+- folder: wonderswancolor
+  extensions:
+  - .7z
+  - .wsc
+  - .zip
+  core: beetle_wswan
+  emulator: retroarch
+  source_ref: "os config/emulators/wonderswancolor.conf:6,7; os packages/virtual/emulators/package.mk:1177;\
+    \ os packages/virtual/emulators/package.mk:1171"
+- folder: x1
+  extensions:
+  - .2d
+  - .2hd
+  - .7z
+  - .cmd
+  - .d88
+  - .dup
+  - .dx1
+  - .hdm
+  - .tap
+  - .tfd
+  - .xdf
+  - .zip
+  core: x1
+  emulator: retroarch
+  source_ref: "os config/emulators/x1.conf:6,7; os packages/virtual/emulators/package.mk:995; os packages/virtual/emulators/package.mk:994"
+- folder: x68000
+  extensions:
+  - .2hd
+  - .7z
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  emulator: retroarch
+  source_ref: "os config/emulators/x68000.conf:6,7; os packages/virtual/emulators/package.mk:1181; os\
+    \ packages/virtual/emulators/package.mk:1180"
+- folder: xbox
+  extensions:
+  - .iso
+  core: xemu-sa
+  emulator: xemu
+  source_ref: "os config/emulators/xbox.conf:6,7; os packages/virtual/emulators/package.mk:1001; os packages/virtual/emulators/package.mk:1000"
+- folder: zmachine
+  extensions:
+  - .dat
+  - .z1
+  - .z2
+  - .z3
+  - .z4
+  - .z5
+  - .z6
+  - .zip
+  core: mojozork
+  emulator: retroarch
+  source_ref: "os config/emulators/zmachine.conf:6,7; os packages/virtual/emulators/package.mk:559; os\
+    \ packages/virtual/emulators/package.mk:558"
+- folder: zx81
+  extensions:
+  - .7z
+  - .p
+  - .tzx
+  - .zip
+  core: "81"
+  emulator: retroarch
+  source_ref: "os config/emulators/zx81.conf:6,7; os packages/virtual/emulators/package.mk:1012; os packages/virtual/emulators/package.mk:1011"
+- folder: zxspectrum
+  extensions:
+  - .7z
+  - .dsk
+  - .rzx
+  - .scl
+  - .tap
+  - .trd
+  - .tzx
+  - .z80
+  - .zip
+  core: fuse
+  emulator: retroarch
+  source_ref: "os config/emulators/zxspectrum.conf:6,7; os packages/virtual/emulators/package.mk:1008;\
+    \ os packages/virtual/emulators/package.mk:1007"

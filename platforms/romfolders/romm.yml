@@ -1,0 +1,465 @@
+setup: romm
+name: RomM
+platform: romm
+sources:
+  os:
+    repo: "https://github.com/rommapp/romm"
+    commit: 68f71259f7c6de39fbeedff9cc9ac114c18ee250
+    tag: 5.4.0
+roms_root:
+  path: /romm/library/roms
+  from_bios: ../roms
+  source_ref: "os backend/config/__init__.py:46-48; os backend/config/config_manager.py:57-58"
+case_sensitive: true
+skip:
+- name: assets
+  source_ref: "os backend/config/config_manager.py:288-300"
+- name: __MACOSX
+  source_ref: "os backend/config/config_manager.py:288-300"
+- name: System Volume Information
+  source_ref: "os backend/config/config_manager.py:288-300"
+hidden:
+- pattern: .*
+  source_ref: "os backend/handler/filesystem/roms_handler.py:530-545"
+- pattern: '*.db'
+  source_ref: "os backend/config/config_manager.py:267-276"
+- pattern: '*.tmp'
+  source_ref: "os backend/config/config_manager.py:267-276"
+- pattern: '*.bak'
+  source_ref: "os backend/config/config_manager.py:267-276"
+- pattern: '*.lock'
+  source_ref: "os backend/config/config_manager.py:267-276"
+- pattern: '*.log'
+  source_ref: "os backend/config/config_manager.py:267-276"
+- pattern: '*.cache'
+  source_ref: "os backend/config/config_manager.py:267-276"
+- pattern: '*.crdownload'
+  source_ref: "os backend/config/config_manager.py:267-276"
+- name: gamelist.xml
+  source_ref: "os backend/config/config_manager.py:277-286"
+- name: metadata.pegasus.txt
+  source_ref: "os backend/config/config_manager.py:277-286"
+media:
+- name: images
+  source_ref: "os backend/config/config_manager.py:303-324"
+- name: covers
+  source_ref: "os backend/config/config_manager.py:303-324"
+- name: manuals
+  source_ref: "os backend/config/config_manager.py:303-324"
+- name: screenshots
+  source_ref: "os backend/config/config_manager.py:303-324"
+- name: videos
+  source_ref: "os backend/config/config_manager.py:303-324"
+notes:
+- "The default layout is roms/{platform}/{game} and bios/{platform} under /romm/library (os backend/config/config_manager.py:57-58).\
+  \ config.yml can switch to {platform}/roms and {platform}/bios (os backend/config/config_manager.py:1121-1122)."
+- RomM has no extension allow-list. Every file is a ROM except the excluded extensions and names, and
+  config.yml extends both lists.
+- "A folder is any IGDB or RomM platform slug. The rows are the slugs RomM plays in the browser (_EJS_CORES_MAP)\
+  \ or keeps BIOS for (known_bios_files.json), and the core is the first EmulatorJS core listed."
+folders:
+- folder: 3do
+  core: opera
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:406"
+- folder: 3ds
+  core: azahar
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:494"
+  note: core only with EmulatorJS nightly cores
+- folder: 64dd
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: acpc
+  core: cap32
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:407"
+- folder: amiga
+  core: puae
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:408"
+- folder: amiga-cd32
+  core: puae
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:409"
+- folder: arcade
+  core: mame2003_plus
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:410"
+- folder: atari-2600-plus
+  core: stella2014
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:420"
+- folder: atari-lynx-mkii
+  core: handy
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:434"
+- folder: atari-st
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: atari2600
+  core: stella2014
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:419"
+- folder: atari5200
+  core: a5200
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:421"
+- folder: atari7800
+  core: prosystem
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:422"
+- folder: atari8bit
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: c-plus-4
+  core: vice_xplus4
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:423"
+- folder: c128
+  core: vice_x128
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:427"
+- folder: c64
+  core: vice_x64sc
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:424"
+- folder: colecovision
+  core: gearcoleco
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:429"
+- folder: commmodore-128
+  core: vice_x128
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:428"
+- folder: commodore-64c
+  core: vice_x64sc
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:426"
+- folder: cpet
+  core: vice_xpet
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:425"
+- folder: dc
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: doom
+  core: prboom
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:430"
+- folder: dos
+  core: dosbox_pure
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:431"
+- folder: enterprise
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: fairchild-channel-f
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: famicom
+  core: fceumm
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:438"
+- folder: fds
+  core: fceumm
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:439"
+- folder: game-boy-adavance-sp
+  core: mgba
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:452"
+- folder: game-boy-light
+  core: gambatte
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:450"
+- folder: game-boy-micro
+  core: mgba
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:453"
+- folder: game-boy-pocket
+  core: gambatte
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:449"
+- folder: game-televisison
+  core: fceumm
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:440"
+- folder: gamegear
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:461"
+- folder: gb
+  core: gambatte
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:448"
+- folder: gba
+  core: mgba
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:451"
+- folder: gbc
+  core: gambatte
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:454"
+- folder: genesis
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:468"
+- folder: intellivision
+  core: freeintv
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:496"
+  note: core only with EmulatorJS nightly cores
+- folder: ique-player
+  core: mupen64plus_next
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:443"
+- folder: j2me
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: jaguar
+  core: virtualjaguar
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:432"
+- folder: lynx
+  core: handy
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:433"
+- folder: mac
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: master-system-girl
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:467"
+- folder: master-system-super-compact
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:466"
+- folder: mega-pc
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:471"
+- folder: msx
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: msx2
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: n64
+  core: mupen64plus_next
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:442"
+- folder: nds
+  core: melonds
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:444"
+- folder: neo-geo-cd
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: neo-geo-pocket
+  core: mednafen_ngp
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:435"
+- folder: neo-geo-pocket-color
+  core: mednafen_ngp
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:436"
+- folder: neogeoaes
+  core: fbneo
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:417"
+- folder: neogeomvs
+  core: fbneo
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:418"
+- folder: nes
+  core: fceumm
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:437"
+- folder: new-nintendo-3ds
+  core: azahar
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:495"
+  note: core only with EmulatorJS nightly cores
+- folder: new-style-nes
+  core: fceumm
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:441"
+- folder: new-style-super-nes-model-sns-101
+  core: snes9x
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:480"
+- folder: ngc
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: nintendo-ds-lite
+  core: melonds
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:445"
+- folder: nintendo-dsi
+  core: melonds
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:446"
+- folder: nintendo-dsi-xl
+  core: melonds
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:447"
+- folder: odyssey-2-slash-videopac-g7000
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: pc-9800-series
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: pc-fx
+  core: mednafen_pcfx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:455"
+- folder: philips-cd-i
+  core: same_cdi
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:457"
+- folder: pokemon-mini
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: ps2
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: psp
+  core: ppsspp
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:458"
+- folder: psx
+  core: pcsx_rearmed
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:456"
+- folder: satellaview
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: saturn
+  core: yabause
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:474"
+- folder: scummvm
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: sega-game-box-9
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:464"
+- folder: sega-mark-iii
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:463"
+- folder: sega-master-system-ii
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:465"
+- folder: sega-mega-drive-2-slash-genesis
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:469"
+- folder: sega-mega-jet
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:470"
+- folder: sega-nomad
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:473"
+- folder: sega32
+  core: picodrive
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:460"
+- folder: segacd
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:459"
+- folder: sfam
+  core: snes9x
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:476"
+- folder: sharp-x68000
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: sms
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:462"
+- folder: snes
+  core: snes9x
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:475"
+- folder: sufami-turbo
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: super-famicom-jr-model-shvc-101
+  core: snes9x
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:479"
+- folder: super-famicom-shvc-001
+  core: snes9x
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:478"
+- folder: super-gb
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: super-nintendo-original-european-version
+  core: snes9x
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:477"
+- folder: supergrafx
+  core: mednafen_pce
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:483"
+- folder: swancrystal
+  core: mednafen_wswan
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:487"
+- folder: tera-drive
+  core: genesis_plus_gx
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:472"
+- folder: tg16
+  core: mednafen_pce
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:481"
+- folder: turbografx-cd
+  core: mednafen_pce
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:482"
+- folder: tvc
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: vic-20
+  core: vice_xvic
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:484"
+- folder: videopac-g7400
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: virtualboy
+  core: beetle_vb
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:485"
+- folder: wolfenstein
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: wonderswan
+  core: mednafen_wswan
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:486"
+- folder: wonderswan-color
+  core: mednafen_wswan
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:488"
+- folder: x1
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: xbox
+  source_ref: os backend/models/fixtures/known_bios_files.json
+  note: no EmulatorJS core, RomM keeps BIOS for it
+- folder: zxs
+  core: fuse
+  emulator: emulatorjs
+  source_ref: "os frontend/src/utils/index.ts:489"

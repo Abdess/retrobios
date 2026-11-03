@@ -1,0 +1,27 @@
+name: spruceOS
+platform: retroarch
+format: spruce
+params:
+  source: os
+  skip: [-CUSTOM-SYSTEM-]
+sources:
+  os:
+    repo: https://github.com/spruceUI/spruceOS
+    commit: 824b1aaee9e1e9979a6b04979f581e60b8c23b87
+roms_root:
+  path: /mnt/SDCARD/Roms
+  from_bios: ../Roms
+  source_ref: os App/PyUI/main-ui/games/utils/device_specific/miyoo_trim_game_system_utils.py:122-130
+case_sensitive: null
+case_ref: os App/PyUI/main-ui/games/utils/device_specific/miyoo_trim_game_system_utils.py:143-155
+hidden:
+  - pattern: .*
+    source_ref: os App/PyUI/main-ui/games/utils/rom_utils.py:136-176
+media:
+  - name: Imgs
+    source_ref: os App/PyUI/main-ui/games/utils/rom_utils.py:136-176
+notes:
+  - A folder is the Emu folder name or any alternativeFolderNames entry, tested with os.path.exists, so case folds only on a FAT or exFAT card.
+  - A file counts when its lowercased suffix is in extlist. With an empty extlist every file counts except .xml, .txt and .db. Names in ignoreList (BIOS archives in arcade folders) are dropped (os App/PyUI/main-ui/games/utils/rom_utils.py:136-176).
+  - default_emulator is the factory core. A per-device menu key overrides it (os spruce/scripts/emu/lib/general_functions.sh:135-160).
+  - The second card's /media/sdcard1/Roms is read too when present.

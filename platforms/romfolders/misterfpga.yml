@@ -1,0 +1,512 @@
+setup: misterfpga
+name: MiSTer FPGA
+platform: misterfpga
+sources:
+  main:
+    repo: "https://github.com/MiSTer-devel/Main_MiSTer"
+    commit: a8ed7e9d4468f7a703af6e81ce42521e21e34f48
+  dist:
+    repo: "https://github.com/MiSTer-devel/Distribution_MiSTer"
+    commit: ab7a78093e95ac61696559a3403204a92a16fa30
+roms_root:
+  path: /media/fat/games
+  from_bios: .
+  source_ref: "main file_io.h:171; main file_io.cpp:1150-1170"
+case_sensitive: false
+case_ref: "main file_io.cpp:1715-1790"
+hidden:
+- pattern: .*
+  source_ref: "main file_io.cpp:1714-1715,1748-1749,1760-1761"
+- name: boot.rom
+  source_ref: "main file_io.cpp:1765-1772"
+- pattern: "boot[0-9].rom"
+  source_ref: "main file_io.cpp:1765-1772"
+notes:
+- "Games and BIOS share games/<core>/, so the roms root is the BIOS folder's own parent and every row\
+  \ is that core's folder. The folder is the core's name (main user_io.cpp:196-211). The rows are the\
+  \ folders the distribution ships."
+- "Only files whose extension is in the core's CONF_STR filter are listed, and a .zip is browsed as a\
+  \ folder (main file_io.cpp:1774-1785). Each core sets its filter in its own repository, so the rows\
+  \ carry no extensions."
+- "USB drives, network and CIFS mounts are searched for a games folder before /media/fat (main file_io.cpp:1060-1145)."
+folders:
+- folder: 3DO
+  emulator: mister-core
+  source_ref: dist games/3DO/
+- folder: AcornAtom
+  emulator: mister-core
+  source_ref: dist games/AcornAtom/
+- folder: AcornElectron
+  emulator: mister-core
+  source_ref: dist games/AcornElectron/
+- folder: Adam
+  emulator: mister-core
+  source_ref: dist games/Adam/
+- folder: AliceMC10
+  emulator: mister-core
+  source_ref: dist games/AliceMC10/
+- folder: Altair8800
+  emulator: mister-core
+  source_ref: dist games/Altair8800/
+- folder: Amiga
+  emulator: mister-core
+  source_ref: dist games/Amiga/
+- folder: Amstrad
+  emulator: mister-core
+  source_ref: dist games/Amstrad/
+- folder: Amstrad PCW
+  emulator: mister-core
+  source_ref: dist games/Amstrad%20PCW/
+- folder: AO486
+  emulator: mister-core
+  source_ref: dist games/AO486/
+- folder: APOGEE
+  emulator: mister-core
+  source_ref: dist games/APOGEE/
+- folder: APPLE-I
+  emulator: mister-core
+  source_ref: dist games/APPLE-I/
+- folder: Apple-II
+  emulator: mister-core
+  source_ref: dist games/Apple-II/
+- folder: Apple-IIgs
+  emulator: mister-core
+  source_ref: dist games/Apple-IIgs/
+- folder: Apple-III
+  emulator: mister-core
+  source_ref: dist games/Apple-III/
+- folder: Apple-Lisa
+  emulator: mister-core
+  source_ref: dist games/Apple-Lisa/
+- folder: AQUARIUS
+  emulator: mister-core
+  source_ref: dist games/AQUARIUS/
+- folder: Arcadia
+  emulator: mister-core
+  source_ref: dist games/Arcadia/
+- folder: ARCHIE
+  emulator: mister-core
+  source_ref: dist games/ARCHIE/
+- folder: Astrocade
+  emulator: mister-core
+  source_ref: dist games/Astrocade/
+- folder: Atari2600
+  emulator: mister-core
+  source_ref: dist games/Atari2600/
+- folder: ATARI5200
+  emulator: mister-core
+  source_ref: dist games/ATARI5200/
+- folder: ATARI7800
+  emulator: mister-core
+  source_ref: dist games/ATARI7800/
+- folder: ATARI800
+  emulator: mister-core
+  source_ref: dist games/ATARI800/
+- folder: AtariLynx
+  emulator: mister-core
+  source_ref: dist games/AtariLynx/
+- folder: AtariST
+  emulator: mister-core
+  source_ref: dist games/AtariST/
+- folder: AVision
+  emulator: mister-core
+  source_ref: dist games/AVision/
+- folder: AY-3-8500
+  emulator: mister-core
+  source_ref: dist games/AY-3-8500/
+- folder: BasicMasterJr
+  emulator: mister-core
+  source_ref: dist games/BasicMasterJr/
+- folder: BBCBridgeCompanion
+  emulator: mister-core
+  source_ref: dist games/BBCBridgeCompanion/
+- folder: BBCMicro
+  emulator: mister-core
+  source_ref: dist games/BBCMicro/
+- folder: BK0011M
+  emulator: mister-core
+  source_ref: dist games/BK0011M/
+- folder: C128
+  emulator: mister-core
+  source_ref: dist games/C128/
+- folder: C16
+  emulator: mister-core
+  source_ref: dist games/C16/
+- folder: C64
+  emulator: mister-core
+  source_ref: dist games/C64/
+- folder: Casio_PV-1000
+  emulator: mister-core
+  source_ref: dist games/Casio_PV-1000/
+- folder: Casio_PV-2000
+  emulator: mister-core
+  source_ref: dist games/Casio_PV-2000/
+- folder: CBM-II
+  emulator: mister-core
+  source_ref: dist games/CBM-II/
+- folder: CD-i
+  emulator: mister-core
+  source_ref: dist games/CD-i/
+- folder: ChannelF
+  emulator: mister-core
+  source_ref: dist games/ChannelF/
+- folder: CoCo2
+  emulator: mister-core
+  source_ref: dist games/CoCo2/
+- folder: COCO3
+  emulator: mister-core
+  source_ref: dist games/COCO3/
+- folder: Coleco
+  emulator: mister-core
+  source_ref: dist games/Coleco/
+- folder: Cray-XMP
+  emulator: mister-core
+  source_ref: dist games/Cray-XMP/
+- folder: CreatiVision
+  emulator: mister-core
+  source_ref: dist games/CreatiVision/
+- folder: EDSAC
+  emulator: mister-core
+  source_ref: dist games/EDSAC/
+- folder: eg2000
+  emulator: mister-core
+  source_ref: dist games/eg2000/
+- folder: Enterprise
+  emulator: mister-core
+  source_ref: dist games/Enterprise/
+- folder: EpochGalaxyII
+  emulator: mister-core
+  source_ref: dist games/EpochGalaxyII/
+- folder: FM-7
+  emulator: mister-core
+  source_ref: dist games/FM-7/
+- folder: Galaksija
+  emulator: mister-core
+  source_ref: dist games/Galaksija/
+- folder: Gamate
+  emulator: mister-core
+  source_ref: dist games/Gamate/
+- folder: Game And Watch
+  emulator: mister-core
+  source_ref: dist games/Game%20And%20Watch/
+- folder: GAMEBOY
+  emulator: mister-core
+  source_ref: dist games/GAMEBOY/
+- folder: GAMEBOY2P
+  emulator: mister-core
+  source_ref: dist games/GAMEBOY2P/
+- folder: GameCom
+  emulator: mister-core
+  source_ref: dist games/GameCom/
+- folder: GameGear
+  emulator: mister-core
+  source_ref: dist games/GameGear/
+- folder: GameGear2P
+  emulator: mister-core
+  source_ref: dist games/GameGear2P/
+- folder: GameKing
+  emulator: mister-core
+  source_ref: dist games/GameKing/
+- folder: GameNWatch
+  emulator: mister-core
+  source_ref: dist games/GameNWatch/
+- folder: GBA
+  emulator: mister-core
+  source_ref: dist games/GBA/
+- folder: GBA2P
+  emulator: mister-core
+  source_ref: dist games/GBA2P/
+- folder: GBC
+  emulator: mister-core
+  source_ref: dist games/GBC/
+- folder: hbmame
+  emulator: mister-core
+  source_ref: dist games/hbmame/
+  arcade: true
+  note: "ROM archives of the .mra files in _Arcade. The loader looks in games/mame, then beside the .mra\
+    \ (main support/arcade/mra_loader.cpp:168-187)"
+- folder: Homelab
+  emulator: mister-core
+  source_ref: dist games/Homelab/
+- folder: Intellivision
+  emulator: mister-core
+  source_ref: dist games/Intellivision/
+- folder: Interact
+  emulator: mister-core
+  source_ref: dist games/Interact/
+- folder: IQ151
+  emulator: mister-core
+  source_ref: dist games/IQ151/
+- folder: Jaguar
+  emulator: mister-core
+  source_ref: dist games/Jaguar/
+- folder: JR100
+  emulator: mister-core
+  source_ref: dist games/JR100/
+- folder: Jupiter
+  emulator: mister-core
+  source_ref: dist games/Jupiter/
+- folder: Laser
+  emulator: mister-core
+  source_ref: dist games/Laser/
+- folder: Loopy
+  emulator: mister-core
+  source_ref: dist games/Loopy/
+- folder: Lynx48
+  emulator: mister-core
+  source_ref: dist games/Lynx48/
+- folder: MACIICX
+  emulator: mister-core
+  source_ref: dist games/MACIICX/
+- folder: MacLC
+  emulator: mister-core
+  source_ref: dist games/MacLC/
+- folder: MACPLUS
+  emulator: mister-core
+  source_ref: dist games/MACPLUS/
+- folder: MacQuadra800
+  emulator: mister-core
+  source_ref: dist games/MacQuadra800/
+- folder: MACSE30
+  emulator: mister-core
+  source_ref: dist games/MACSE30/
+- folder: mame
+  emulator: mister-core
+  source_ref: dist games/mame/
+  arcade: true
+  note: "ROM archives of the .mra files in _Arcade. The loader looks in games/mame, then beside the .mra\
+    \ (main support/arcade/mra_loader.cpp:168-187)"
+- folder: Marty
+  emulator: mister-core
+  source_ref: dist games/Marty/
+- folder: MegaCD
+  emulator: mister-core
+  source_ref: dist games/MegaCD/
+- folder: MegaDrive
+  emulator: mister-core
+  source_ref: dist games/MegaDrive/
+- folder: MegaDuck
+  emulator: mister-core
+  source_ref: dist games/MegaDuck/
+- folder: MEMTEST
+  emulator: mister-core
+  source_ref: dist games/MEMTEST/
+- folder: MSX
+  emulator: mister-core
+  source_ref: dist games/MSX/
+- folder: MSX1
+  emulator: mister-core
+  source_ref: dist games/MSX1/
+- folder: MultiComp
+  emulator: mister-core
+  source_ref: dist games/MultiComp/
+- folder: MyVision
+  emulator: mister-core
+  source_ref: dist games/MyVision/
+- folder: N64
+  emulator: mister-core
+  source_ref: dist games/N64/
+- folder: NEOGEO
+  emulator: mister-core
+  source_ref: dist games/NEOGEO/
+- folder: NeoGeo-CD
+  emulator: mister-core
+  source_ref: dist games/NeoGeo-CD/
+- folder: Neon
+  emulator: mister-core
+  source_ref: dist games/Neon/
+- folder: NES
+  emulator: mister-core
+  source_ref: dist games/NES/
+- folder: NeXT
+  emulator: mister-core
+  source_ref: dist games/NeXT/
+- folder: NeXT-Color
+  emulator: mister-core
+  source_ref: dist games/NeXT-Color/
+- folder: NGPC
+  emulator: mister-core
+  source_ref: dist games/NGPC/
+- folder: ODYSSEY2
+  emulator: mister-core
+  source_ref: dist games/ODYSSEY2/
+- folder: Ondra_SPO186
+  emulator: mister-core
+  source_ref: dist games/Ondra_SPO186/
+- folder: ORAO
+  emulator: mister-core
+  source_ref: dist games/ORAO/
+- folder: Oric
+  emulator: mister-core
+  source_ref: dist games/Oric/
+- folder: PC8801
+  emulator: mister-core
+  source_ref: dist games/PC8801/
+- folder: PCjr
+  emulator: mister-core
+  source_ref: dist games/PCjr/
+- folder: PCXT
+  emulator: mister-core
+  source_ref: dist games/PCXT/
+- folder: PCXT-EGA
+  emulator: mister-core
+  source_ref: dist games/PCXT-EGA/
+- folder: PDP1
+  emulator: mister-core
+  source_ref: dist games/PDP1/
+- folder: PET2001
+  emulator: mister-core
+  source_ref: dist games/PET2001/
+- folder: PMD85
+  emulator: mister-core
+  source_ref: dist games/PMD85/
+- folder: PocketChallengeV2
+  emulator: mister-core
+  source_ref: dist games/PocketChallengeV2/
+- folder: PocketStation
+  emulator: mister-core
+  source_ref: dist games/PocketStation/
+- folder: PokemonMini
+  emulator: mister-core
+  source_ref: dist games/PokemonMini/
+- folder: PSX
+  emulator: mister-core
+  source_ref: dist games/PSX/
+- folder: QL
+  emulator: mister-core
+  source_ref: dist games/QL/
+- folder: RX78
+  emulator: mister-core
+  source_ref: dist games/RX78/
+- folder: S32X
+  emulator: mister-core
+  source_ref: dist games/S32X/
+- folder: SAMCOUPE
+  emulator: mister-core
+  source_ref: dist games/SAMCOUPE/
+- folder: Saturn
+  emulator: mister-core
+  source_ref: dist games/Saturn/
+- folder: SCV
+  emulator: mister-core
+  source_ref: dist games/SCV/
+- folder: SGB
+  emulator: mister-core
+  source_ref: dist games/SGB/
+- folder: SGIIndy
+  emulator: mister-core
+  source_ref: dist games/SGIIndy/
+- folder: SharpMZ
+  emulator: mister-core
+  source_ref: dist games/SharpMZ/
+- folder: SMS
+  emulator: mister-core
+  source_ref: dist games/SMS/
+- folder: SNES
+  emulator: mister-core
+  source_ref: dist games/SNES/
+- folder: Sord M5
+  emulator: mister-core
+  source_ref: dist games/Sord%20M5/
+- folder: Spectrum
+  emulator: mister-core
+  source_ref: dist games/Spectrum/
+- folder: SPMX
+  emulator: mister-core
+  source_ref: dist games/SPMX/
+- folder: Studio-II
+  emulator: mister-core
+  source_ref: dist games/Studio-II/
+- folder: Sun-2
+  emulator: mister-core
+  source_ref: dist games/Sun-2/
+- folder: Sun-3
+  emulator: mister-core
+  source_ref: dist games/Sun-3/
+- folder: SunSparcStation
+  emulator: mister-core
+  source_ref: dist games/SunSparcStation/
+- folder: SuperAcan
+  emulator: mister-core
+  source_ref: dist games/SuperAcan/
+- folder: SuperVision
+  emulator: mister-core
+  source_ref: dist games/SuperVision/
+- folder: SuperVision8000
+  emulator: mister-core
+  source_ref: dist games/SuperVision8000/
+- folder: SVI328
+  emulator: mister-core
+  source_ref: dist games/SVI328/
+- folder: Tandy1000
+  emulator: mister-core
+  source_ref: dist games/Tandy1000/
+- folder: TatungEinstein
+  emulator: mister-core
+  source_ref: dist games/TatungEinstein/
+- folder: TGFX16
+  emulator: mister-core
+  source_ref: dist games/TGFX16/
+- folder: TGFX16-CD
+  emulator: mister-core
+  source_ref: dist games/TGFX16-CD/
+- folder: TI-99_4A
+  emulator: mister-core
+  source_ref: dist games/TI-99_4A/
+- folder: TK2000
+  emulator: mister-core
+  source_ref: dist games/TK2000/
+- folder: TomyScramble
+  emulator: mister-core
+  source_ref: dist games/TomyScramble/
+- folder: TomyTutor
+  emulator: mister-core
+  source_ref: dist games/TomyTutor/
+- folder: TRS-80
+  emulator: mister-core
+  source_ref: dist games/TRS-80/
+- folder: TSConf
+  emulator: mister-core
+  source_ref: dist games/TSConf/
+- folder: UK101
+  emulator: mister-core
+  source_ref: dist games/UK101/
+- folder: UKNC
+  emulator: mister-core
+  source_ref: dist games/UKNC/
+- folder: VC4000
+  emulator: mister-core
+  source_ref: dist games/VC4000/
+- folder: VECTOR06
+  emulator: mister-core
+  source_ref: dist games/VECTOR06/
+- folder: VECTREX
+  emulator: mister-core
+  source_ref: dist games/VECTREX/
+- folder: VIC20
+  emulator: mister-core
+  source_ref: dist games/VIC20/
+- folder: VideoBrain
+  emulator: mister-core
+  source_ref: dist games/VideoBrain/
+- folder: VirtualBoy
+  emulator: mister-core
+  source_ref: dist games/VirtualBoy/
+- folder: VT52
+  emulator: mister-core
+  source_ref: dist games/VT52/
+- folder: WonderSwan
+  emulator: mister-core
+  source_ref: dist games/WonderSwan/
+- folder: WonderSwanColor
+  emulator: mister-core
+  source_ref: dist games/WonderSwanColor/
+- folder: X68000
+  emulator: mister-core
+  source_ref: dist games/X68000/
+- folder: ZX81
+  emulator: mister-core
+  source_ref: dist games/ZX81/
+- folder: ZXNext
+  emulator: mister-core
+  source_ref: dist games/ZXNext/

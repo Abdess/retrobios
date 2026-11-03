@@ -1,0 +1,201 @@
+setup: minui
+name: MinUI
+platform: minui
+sources:
+  os:
+    repo: "https://github.com/shauninman/MinUI"
+    commit: dbf89435a5179788418ff3573042cf9c7e75d9e0
+roms_root:
+  path: <SD>/Roms
+  from_bios: ../../Roms
+  source_ref: "os workspace/all/common/defines.h:13; os workspace/miyoomini/platform/platform.h:122"
+case_sensitive: null
+case_ref: "os workspace/all/common/utils.c:74-96"
+hidden:
+- pattern: .*
+  source_ref: "os workspace/all/common/utils.c:32-34"
+- pattern: '*.disabled'
+  source_ref: "os workspace/all/common/utils.c:32-34"
+- name: map.txt
+  source_ref: "os workspace/all/common/utils.c:32-34"
+notes:
+- "MinUI has no extension filter. Every file of a Roms folder that is not hidden is listed as a game (os\
+  \ workspace/all/minui/minui.c:475-535,615-680), so the rows carry no extensions."
+- "A Roms folder starts the pak named by the text inside its last parentheses, or by its whole name without\
+  \ parentheses (getEmuName, os workspace/all/common/utils.c:74-96). The pak is found at .system/<PLATFORM>/paks/Emus/<TAG>.pak\
+  \ then Emus/<PLATFORM>/<TAG>.pak."
+- BIOS sits in Bios/<TAG>/, two levels under the card root, so the roms root is ../../Roms from it.
+- "SDCARD_PATH differs per device (/mnt/SDCARD, /mnt/sdcard, /storage/roms, /sdcard, /media/roms, /storage/TF2).\
+  \ Roms sits under it."
+folders:
+- folder: "Game Boy (GB)"
+  name: GB
+  aliases:
+  - GB
+  core: gambatte
+  emulator: minarch
+  source_ref: "os skeleton/SYSTEM/gkdpixel/paks/Emus/GB.pak/launch.sh:3"
+  note: "any folder named GB or ending in '(GB)' starts GB.pak. Devices: gkdpixel, m17, magicmini, miyoomini,\
+    \ my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Game Boy Advance (GBA)"
+  name: GBA
+  aliases:
+  - GBA
+  core: gpsp
+  emulator: minarch
+  source_ref: "os skeleton/SYSTEM/gkdpixel/paks/Emus/GBA.pak/launch.sh:3"
+  note: "any folder named GBA or ending in '(GBA)' starts GBA.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Game Boy Advance (MGBA)"
+  name: MGBA
+  aliases:
+  - MGBA
+  core: mgba
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/gkdpixel/MGBA.pak/launch.sh:3"
+  note: "any folder named MGBA or ending in '(MGBA)' starts MGBA.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Game Boy Color (GBC)"
+  name: GBC
+  aliases:
+  - GBC
+  core: gambatte
+  emulator: minarch
+  source_ref: "os skeleton/SYSTEM/gkdpixel/paks/Emus/GBC.pak/launch.sh:3"
+  note: "any folder named GBC or ending in '(GBC)' starts GBC.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Native Games (PAK)"
+  name: PAK
+  aliases:
+  - PAK
+  emulator: standalone
+  source_ref: "os skeleton/SYSTEM/gkdpixel/paks/Emus/PAK.pak/launch.sh:1"
+  note: "any folder named PAK or ending in '(PAK)' starts PAK.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Neo Geo Pocket Color (NGPC)"
+  name: NGPC
+  aliases:
+  - NGPC
+  core: race
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/gkdpixel/NGPC.pak/launch.sh:3"
+  note: "any folder named NGPC or ending in '(NGPC)' starts NGPC.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: NGP
+  core: race
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/gkdpixel/NGP.pak/launch.sh:3"
+  note: "any folder named NGP or ending in '(NGP)' starts NGP.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Nintendo Entertainment System (FC)"
+  name: FC
+  aliases:
+  - FC
+  core: fceumm
+  emulator: minarch
+  source_ref: "os skeleton/SYSTEM/gkdpixel/paks/Emus/FC.pak/launch.sh:3"
+  note: "any folder named FC or ending in '(FC)' starts FC.pak. Devices: gkdpixel, m17, magicmini, miyoomini,\
+    \ my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: P8-NATIVE
+  emulator: standalone
+  source_ref: "os skeleton/EXTRAS/Emus/rgb30/P8-NATIVE.pak/launch.sh:1"
+  note: "any folder named P8-NATIVE or ending in '(P8-NATIVE)' starts P8-NATIVE.pak. Devices: rgb30"
+- folder: "Pico-8 (P8)"
+  name: P8
+  aliases:
+  - P8
+  core: fake08
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/m17/P8.pak/launch.sh:3"
+  note: "any folder named P8 or ending in '(P8)' starts P8.pak. Devices: m17, magicmini, miyoomini, my282,\
+    \ my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Pokémon mini (PKM)"
+  name: PKM
+  aliases:
+  - PKM
+  core: pokemini
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/gkdpixel/PKM.pak/launch.sh:3"
+  note: "any folder named PKM or ending in '(PKM)' starts PKM.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Sega Game Gear (GG)"
+  name: GG
+  aliases:
+  - GG
+  core: picodrive
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/gkdpixel/GG.pak/launch.sh:3"
+  note: "any folder named GG or ending in '(GG)' starts GG.pak. Devices: gkdpixel, m17, magicmini, miyoomini,\
+    \ my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Sega Genesis (MD)"
+  name: MD
+  aliases:
+  - MD
+  core: picodrive
+  emulator: minarch
+  source_ref: "os skeleton/SYSTEM/gkdpixel/paks/Emus/MD.pak/launch.sh:3"
+  note: "any folder named MD or ending in '(MD)' starts MD.pak. Devices: gkdpixel, m17, magicmini, miyoomini,\
+    \ my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Sega Master System (SMS)"
+  name: SMS
+  aliases:
+  - SMS
+  core: picodrive
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/gkdpixel/SMS.pak/launch.sh:3"
+  note: "any folder named SMS or ending in '(SMS)' starts SMS.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Sony PlayStation (PS)"
+  name: PS
+  aliases:
+  - PS
+  core: pcsx_rearmed
+  emulator: minarch
+  source_ref: "os skeleton/SYSTEM/gkdpixel/paks/Emus/PS.pak/launch.sh:3"
+  note: "any folder named PS or ending in '(PS)' starts PS.pak. Devices: gkdpixel, m17, magicmini, miyoomini,\
+    \ my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Super Game Boy (SGB)"
+  name: SGB
+  aliases:
+  - SGB
+  core: mgba
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/gkdpixel/SGB.pak/launch.sh:3"
+  note: "any folder named SGB or ending in '(SGB)' starts SGB.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Super Nintendo Entertainment System (SFC)"
+  name: SFC
+  aliases:
+  - SFC
+  core: snes9x2005_plus
+  emulator: minarch
+  source_ref: "os skeleton/SYSTEM/gkdpixel/paks/Emus/SFC.pak/launch.sh:3"
+  note: "any folder named SFC or ending in '(SFC)' starts SFC.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Super Nintendo Entertainment System (SUPA)"
+  name: SUPA
+  aliases:
+  - SUPA
+  core: mednafen_supafaust
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/m17/SUPA.pak/launch.sh:3"
+  note: "any folder named SUPA or ending in '(SUPA)' starts SUPA.pak. Devices: m17, magicmini, miyoomini,\
+    \ my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "TurboGrafx-16 (PCE)"
+  name: PCE
+  aliases:
+  - PCE
+  core: mednafen_pce_fast
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/gkdpixel/PCE.pak/launch.sh:3"
+  note: "any folder named PCE or ending in '(PCE)' starts PCE.pak. Devices: gkdpixel, m17, magicmini,\
+    \ miyoomini, my282, my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"
+- folder: "Virtual Boy (VB)"
+  name: VB
+  aliases:
+  - VB
+  core: mednafen_vb
+  emulator: minarch
+  source_ref: "os skeleton/EXTRAS/Emus/m17/VB.pak/launch.sh:3"
+  note: "any folder named VB or ending in '(VB)' starts VB.pak. Devices: m17, magicmini, miyoomini, my282,\
+    \ my355, rg35xx, rg35xxplus, rgb30, tg5040, trimuismart, zero28"

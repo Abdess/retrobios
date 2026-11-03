@@ -1,0 +1,26 @@
+name: Koriki
+platform: retroarch
+format: koriki
+params:
+  source: os
+  sections: base/.simplemenu/section_groups/apps and games.ini
+  launchers: base/.simplemenu/launchers
+  roms_prefix: /mnt/SDCARD/Roms/
+  skip: [CONSOLES, APPS, GAMES, OVERLAYS]
+sources:
+  os:
+    repo: https://github.com/Rparadise-Team/Koriki
+    commit: 8513071c9bcffe9603ec3b3b760ad9385906a6a5
+roms_root:
+  path: /mnt/SDCARD/Roms
+  from_bios: ../Roms
+  source_ref: os base/.simplemenu/section_groups/apps%20and%20games.ini:4
+case_sensitive: false
+case_ref: os src/simplemenu-beta/src/logic/logic.c:566-575
+media:
+  - name: Imgs
+    source_ref: os src/simplemenu-beta/src/logic/logic.c:760-775
+notes:
+  - SimpleMenu lists only files whose extension is in romExts, compared case-insensitively (os src/simplemenu-beta/src/logic/logic.c:990-1005).
+  - The first launcher of execs is the active one (os src/simplemenu-beta/src/logic/config.c:1127).
+  - The shipped SimpleMenu binary is built from a submodule this tree does not hold. The in-tree copy src/simplemenu-beta was read.
