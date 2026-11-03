@@ -1,0 +1,15 @@
+ RetroBIOS: RetroArch
+
+ 4 files to download, 1.0 MB
+ BIOS folder:
+   ~/.config/retroarch/system
+ For the 412 games on this card.
+ > Install
+   For the games on this card: yes  412
+   Only what starts: no
+   Show the games
+   Choose systems
+   Copy from your old card or a folder
+   Options
+   Quit
+ A Install  B Back  Y Options  ? Help

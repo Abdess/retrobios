@@ -25,3 +25,9 @@ os.environ.setdefault(
 (Path(__file__).resolve().parent.parent / "tmp" / "tests").mkdir(
     parents=True, exist_ok=True
 )
+# The installer's cache (the games index, what reading a card found) is the
+# suite's own: a run never reads nor fills the one of the person running it.
+os.environ.setdefault(
+    "RETROBIOS_CACHE",
+    str(Path(__file__).resolve().parent.parent / "tmp" / "tests" / "cache"),
+)

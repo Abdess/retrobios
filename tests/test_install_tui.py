@@ -371,6 +371,36 @@ def fresh_state() -> install.TuiState:
     return state
 
 
+GAMES = {"event": "games", "platform": "retroarch", "folder": "/media/user/SDCARD/Roms",
+         "games": 412, "recognised": 398,
+         "found": [{"system": "sony-playstation", "folder": "PS", "games": 400,
+                      "recognised": 390, "regions": []},
+                     {"system": "nintendo-gba", "folder": "GBA", "games": 12,
+                      "recognised": 8, "regions": ["europe"]}],
+         "fallback": [{"system": "nintendo-gba", "folder": "GBA", "name": "GBA/demo.gba",
+                       "reason": "not_recognised"},
+                      {"system": "nintendo-gba", "folder": "GBA", "name": "GBA/hack.gba",
+                       "reason": "not_recognised"}],
+         "not_games": 3, "required_only": False}
+
+
+def games_state() -> install.TuiState:
+    """The plan of a card whose games the check read (--for-games)."""
+    state = fresh_state()
+    state.stack = ["setup"]
+    with mock.patch.object(install.Path, "exists", return_value=True):
+        install.tui_update(state, Key("enter"))
+    install.tui_receive(state, ("games_here", "retroarch", SYSTEM_DIR, 2))
+    effects = install.tui_receive(state, ("manifest", "retroarch", MANIFEST))
+    assert effects == [("run", "check")], effects
+    for event in [GAMES, *FILES, *SYSTEMS, CHECK]:
+        install.tui_receive(state, ("event", state.run_id, event))
+    with mock.patch.object(install, "_tui_folder_facts", return_value={
+            "free": 50 * 1024 ** 3, "writable": True, "cores": ["pcsx_rearmed"]}):
+        install.tui_receive(state, ("ended", state.run_id, 1, []))
+    return state
+
+
 def checked_state(facts: dict | None = None) -> install.TuiState:
     """The plan screen of a RetroArch folder with files missing."""
     state = fresh_state()
@@ -989,6 +1019,10 @@ def golden_states() -> dict:
     helped = checked_state()
     helped.help = True
     states["help"] = helped
+    states["plan-games"] = games_state()
+    listed = games_state()
+    listed.stack.append("games")
+    states["games"] = listed
     return states
 
 
@@ -14489,6 +14523,187 @@ class AuditTwentyFourAndSeventeen(unittest.TestCase):
                          len(before.splitlines()) + 2)
         self.assertFalse(os.path.ismount("/media/x"))
 
+
+class GamesOnTheCard(unittest.TestCase):
+    """For the games on this card: the first choice where the card holds
+    games, the whole list one press away (--for-games)."""
+
+    def test_a_card_with_games_opens_on_them(self):
+        state = games_state()
+        self.assertTrue(state.for_games)
+        self.assertEqual(state.games_choice, "probe")
+        argv = install.tui_argv(state, "check", "py", "i.py")
+        self.assertEqual(argv[4:], ["--for-games", "--check", "--events"])
+        rows = install.tui_rows(state)
+        self.assertEqual([row.action for row in rows[:4]],
+                         ["install", "games", "startonly", "gameslist"])
+        self.assertEqual(rows[1].label, "For the games on this card: yes")
+        self.assertEqual(rows[1].right, "412 games")
+        text = "\n".join(install.tui_view(state, 80, 24))
+        self.assertIn("For the 412 games on this card.", text)
+        self.assertIn("2 games get every BIOS of their system: Show the games.", text)
+
+    def test_a_card_without_games_keeps_the_whole_list(self):
+        state = fresh_state()
+        with mock.patch.object(install.Path, "exists", return_value=True):
+            install.tui_update(state, Key("enter"))
+        install.tui_receive(state, ("games_here", "retroarch", SYSTEM_DIR, 0))
+        install.tui_receive(state, ("manifest", "retroarch", MANIFEST))
+        self.assertFalse(state.for_games)
+        self.assertNotIn("--for-games", install.tui_argv(state, "check", "py", "i.py"))
+        self.assertNotIn("games", [row.action for row in install.tui_rows(checked_state())])
+
+    def test_a_look_at_another_folder_is_ignored(self):
+        state = fresh_state()
+        with mock.patch.object(install.Path, "exists", return_value=True):
+            install.tui_update(state, Key("enter"))
+        install.tui_receive(state, ("games_here", "retroarch", HOME / "other", 5))
+        self.assertIsNone(state.for_games)
+
+    def test_everything_is_one_press_away(self):
+        state = games_state()
+        state.focus["plan"] = 1
+        self.assertEqual(press(state, "enter"), [("run", "check")])
+        self.assertFalse(state.for_games)
+        self.assertEqual(state.games_choice, "user")
+        self.assertNotIn("--for-games", install.tui_argv(state, "check", "py", "i.py"))
+        self.assertEqual(state.refocus, "games")
+
+    def test_only_what_starts_adds_its_flag(self):
+        state = games_state()
+        state.focus["plan"] = 2
+        self.assertEqual(press(state, "enter"), [("run", "check")])
+        self.assertIn("--required-only", install.tui_argv(state, "check", "py", "i.py"))
+        self.assertEqual(install.tui_command(state).split()[-2:],
+                         ["--for-games", "--required-only"])
+
+    def test_show_the_games_names_those_that_fell_back(self):
+        state = games_state()
+        state.focus["plan"] = 3
+        press(state, "enter")
+        self.assertEqual(state.screen, "games")
+        items = install._pager_items(state)
+        self.assertTrue(any(line.endswith("(GBA): 12 games, 8 recognised, Europe only")
+                            for line in items), items)
+        self.assertIn("GBA/demo.gba: not recognised", items)
+        press(state, "enter")
+        self.assertEqual(state.screen, "plan")
+
+    def test_the_result_names_them_too(self):
+        state = games_state()
+        state.stack.append("result")
+        state.code = 0
+        state.download = {"event": "download", "files": 4, "bytes": 1064964}
+        state.summary = {"event": "summary", "mode": "install", "installed": 4,
+                         "up_to_date": 1, "pending": 0, "failed": [], "skipped": [],
+                         "left_out": [], "kept": [], "interrupted": False}
+        lines = install.tui_outcome(state)[1]
+        self.assertIn("Not recognised, every BIOS of their system kept: GBA/demo.gba, "
+                      "GBA/hack.gba.", lines)
+
+    def test_the_command_line_decides_and_names_a_folder(self):
+        args = _args()
+        args.for_games, args.required_only = Path("games"), True
+        with mock.patch.object(install, "_mounted_cards", return_value=[]):
+            state, _effects = install.tui_start(args, "linux", detect=False)
+        self.assertEqual(state.games_choice, "cli")
+        flags = install.tui_flags(state)
+        self.assertIn(("--for-games", str(Path("games").absolute())), flags)
+        self.assertIn(("--required-only", None), flags)
+        state.platform, state.dest = "retroarch", SYSTEM_DIR
+        install.tui_receive(state, ("games_here", "retroarch", SYSTEM_DIR, 0))
+        self.assertTrue(state.for_games)
+
+    def test_another_folder_is_looked_at_from_what_was_read(self):
+        state = games_state()
+        state.dest = HOME / "card" / "BIOS"
+        with mock.patch.object(install, "games_probe", return_value=0) as probe:
+            self.assertEqual(install._start_check(state), [("run", "check")])
+        probe.assert_called_once_with("retroarch", HOME / "card" / "BIOS", network=False,
+                                      os_type="linux")
+        self.assertFalse(state.for_games)
+        self.assertEqual(state.games_probed, ("retroarch", HOME / "card" / "BIOS"))
+
+    def test_the_fetch_looks_at_the_card_before_the_list_arrives(self):
+        inbox: queue.Queue = queue.Queue()
+
+        def fetched(plat, held, log):
+            held.put(("manifest", plat, MANIFEST))
+
+        with mock.patch.object(install, "_tui_fetch", side_effect=fetched), \
+                mock.patch.object(install, "games_probe", return_value=3) as probe:
+            install._tui_fetch_games("retroarch", inbox, io.StringIO(), SYSTEM_DIR, True)
+        probe.assert_called_once_with("retroarch", SYSTEM_DIR, attempts=1)
+        self.assertEqual(inbox.get()[0], "games_here")
+        self.assertEqual(inbox.get()[0], "manifest")
+
+    def test_reading_the_games_is_counted_while_the_check_runs(self):
+        state = fresh_state()
+        state.platform, state.dest, state.stack = "retroarch", SYSTEM_DIR, ["checking"]
+        state.manifest, state.run, state.running = MANIFEST, "check", True
+        install.tui_receive(state, ("event", state.run_id, {
+            "event": "games_reading", "files_done": 40, "files_total": 412}))
+        self.assertIn("Reading the games: 40 of 412",
+                      "\n".join(install.tui_view(state, 80, 24)))
+
+    def test_what_the_games_need_not_known_is_said(self):
+        state = games_state()
+        state.games = None
+        state.games_unavailable = {"event": "games_unavailable", "platform": "retroarch",
+                                   "reason": "offline", "message": "the games index is "
+                                   "not on this machine"}
+        self.assertIn("What the games need is not known: the games index is not on this "
+                      "machine. Every file is kept.", install.games_plan_words(state))
+
+    def test_every_size_draws_the_rows(self):
+        state = games_state()
+        for cols, rows in SIZES:
+            with self.subTest(size=f"{cols}x{rows}"):
+                state.cols, state.rows = cols, rows
+                lines = install.tui_view(state, cols, rows)
+                self.assertTrue(any("For the games" in line for line in lines), lines)
+
+
+@unittest.skipUnless(pyte and pty, "the end-to-end screens need pyte and a pty")
+class GamesEndToEnd(unittest.TestCase):
+    """The real --tui on a card with games, against a loopback repository."""
+
+    def test_the_plan_opens_on_the_games_and_installs_only_them(self):
+        import test_install_games as games  # noqa: PLC0415
+
+        card = games.Card()
+        self.addCleanup(card.close)
+        card.game("SEGACD", "sonic.iso", games.mcd_iso(100))
+        root = card.root / "repo"
+        (root / "install").mkdir(parents=True)
+        shutil.copytree(card.lists / "games", root / "install" / "games")
+        listed = games.manifest()
+        (root / "bios").mkdir()
+        for entry in listed["files"]:
+            payload = entry["dest"].encode().ljust(entry["size"], b".")[:entry["size"]]
+            (root / entry["repo_path"]).write_bytes(payload)
+        (root / "install" / "retroarch.json").write_text(json.dumps(listed))
+        handler = functools.partial(_QuietHandler, directory=str(root))
+        server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), handler)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
+        self.addCleanup(server.server_close)
+        self.addCleanup(server.shutdown)
+        env = {**os.environ, "TERM": "xterm", "HOME": str(card.root), "RETROBIOS_OS": "linux",
+               "RETROBIOS_BASE_URL": f"http://127.0.0.1:{server.server_address[1]}",
+               "RETROBIOS_CACHE": str(card.cache)}
+        for name in ("DISPLAY", "WAYLAND_DISPLAY", "SSH_CONNECTION", "SSH_TTY", "NO_COLOR",
+                     install.TUI_PAD_ENV, install.OFFLINE_VARIABLE, *install._STEAM_MARKERS):
+            env.pop(name, None)
+        term = Pty(["--platform", "retroarch", "--dest", str(card.bios)], env)
+        self.addCleanup(lambda: term.status is None and os.kill(term.pid, 9))
+        screen = term.wait("For the games on this card: yes", timeout=40)
+        self.assertIn("For the 1 game on this card.", screen)
+        term.send("\r")
+        term.wait("A/Enter Exit", timeout=40)
+        term.send("\r")
+        self.assertEqual(term.close(), 0)
+        written = sorted(p.name for p in card.bios.rglob("*") if p.is_file())
+        self.assertEqual(written, ["bios_CD_E.bin", "cd_extra.bin"])
 
 if __name__ == "__main__":
     unittest.main()

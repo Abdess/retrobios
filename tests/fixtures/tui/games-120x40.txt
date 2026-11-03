@@ -1,0 +1,40 @@
+ RetroBIOS: Games on this card
+
+ 412 games in /media/user/SDCARD/Roms, 398 recognised by their content.
+
+ sony-playstation (PS): 400 games, 390 recognised, every region
+ nintendo-gba (GBA): 12 games, 8 recognised, Europe only
+
+ Every BIOS of their system kept, so that they start:
+ GBA/demo.gba: not recognised
+ GBA/hack.gba: not recognised
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A/Enter Back

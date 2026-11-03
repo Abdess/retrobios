@@ -21,6 +21,9 @@
         "file",
         "system",
         "checking",
+        "games_reading",
+        "games",
+        "games_unavailable",
         "check",
         "declared",
         "data",
@@ -70,6 +73,15 @@
     },
     {
       "$ref": "#/$defs/checking"
+    },
+    {
+      "$ref": "#/$defs/games_reading"
+    },
+    {
+      "$ref": "#/$defs/games"
+    },
+    {
+      "$ref": "#/$defs/games_unavailable"
     },
     {
       "$ref": "#/$defs/check"
@@ -434,6 +446,105 @@
         "files_total": {
           "type": "integer",
           "minimum": 0
+        }
+      }
+    },
+    "games_reading": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "files_done",
+        "files_total"
+      ],
+      "properties": {
+        "event": {
+          "const": "games_reading"
+        },
+        "files_done": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "files_total": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "games": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "folder",
+        "games",
+        "recognised",
+        "found",
+        "fallback",
+        "not_games",
+        "required_only"
+      ],
+      "properties": {
+        "event": {
+          "const": "games"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "folder": {
+          "type": "string"
+        },
+        "games": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "recognised": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "found": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "fallback": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "not_games": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "games_unavailable": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "reason",
+        "message"
+      ],
+      "properties": {
+        "event": {
+          "const": "games_unavailable"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
         }
       }
     },

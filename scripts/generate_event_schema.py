@@ -43,11 +43,12 @@ KEY_TYPES: dict[str, dict] = {
         "files", "files_done", "files_total", "bytes", "bytes_done", "bytes_total",
         "bytes_local", "bytes_network", "size", "present", "missing", "wrong_hash",
         "bytes_needed", "data_missing", "not_installable", "installed", "up_to_date",
-        "pending", "code",
+        "pending", "code", "games", "recognised", "not_games",
     ), _COUNT),
-    **dict.fromkeys(("truncated", "ok", "interrupted"), _FLAG),
+    **dict.fromkeys(("truncated", "ok", "interrupted", "required_only"), _FLAG),
     **dict.fromkeys(("systems", "other_drives", "dests", "written"), _NAMES),
-    **dict.fromkeys(("platforms", "failed", "skipped", "left_out", "kept"), _RECORDS),
+    **dict.fromkeys(("platforms", "failed", "skipped", "left_out", "kept", "found",
+                     "fallback"), _RECORDS),
 }
 
 

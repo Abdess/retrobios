@@ -839,6 +839,31 @@ python install.py --platform recalbox --region us,eu,jp
 python install.py --platform emuelec --no-game-data
 ```
 
+### For the games on this card { #for-the-games-on-this-card }
+
+When the card holds games in its rom folders, the plan opens on **For the
+games on this card: yes**, and Install takes only what those games need. One
+press on the row installs everything instead. Line mode asks the same: Enter
+installs for the games, `e` everything, `r` only what starts. On the command
+line it is `--for-games`, and `--for-games FOLDER` reads a games folder on a
+computer, one subfolder per system.
+
+The rule is that every game must start. Per system, the run keeps what the
+system's default core reads. One region is kept only where the game's own
+content proves it: a cartridge's crc32 found in No-Intro, a disc serial found
+in Redump, or a header the core reads. A file name such as `(Europe)` proves
+nothing. Where a core forces a region by an option, falls back to another
+region, or uses its own disc list, every region stays. An arcade set gets the
+BIOS sets of its parent chain (`neogeo.zip` for `mslug.zip`).
+
+A game that is not recognised gets every BIOS of its system, and the run names
+it. So does an arcade set the core does not know. **Only what starts**
+(`--required-only`) leaves out the files the cores mark optional.
+
+The games are read without hashing whole discs, and a cache keeps what was
+read, so a second run over the same card reads only new files. Offline, with
+no games index on this machine, the run keeps every file and says so.
+
 ### Firmware without game data
 
 Some platform lists name the files a game reads beside the firmware its
@@ -932,6 +957,8 @@ what the options name, everything by default.
 | <span id="option-core"></span>`--core NAMES` | Keep the platform's own list and only the extra files these cores load. `--list-cores` prints the names |
 | <span id="option-emulator"></span>`--emulator NAMES` | Install what these emulators read on the detected platform, and nothing else: their own files and the platform's files of the systems they run. Each emulator page on the site gives this command. `--list-emulators` prints the names, buildbot names such as `mednafen_psx` included |
 | <span id="option-region"></span>`--region LIST` | Preferred regions, best first (`us,eu,jp`): keep one BIOS per region where a system has several. Accepts the names and aliases of `generate_pack.py --region` |
+| <span id="option-for-games"></span>`--for-games FOLDER` | Install only what the games on the card need. See [For the games on this card](#for-the-games-on-this-card) |
+| <span id="option-required-only"></span>`--required-only` | With `--for-games`, only the files the games cannot start without |
 | <span id="option-no-game-data"></span>`--no-game-data` | Leave out game data (a game's own files, not firmware) and install the firmware only. What it leaves out is named. See [Firmware without game data](#firmware-without-game-data) |
 | <span id="option-declared-only"></span>`--declared-only` | Keep only the files the platform's own list names (`cores: null` in the manifest), not the extra files cores load. With `--check`, the answer is about the list the platform itself checks. Refused with `--core`, the listings it does not change, `--standalone-copies` and `--tui` |
 | <span id="option-list-systems"></span>`--list-systems` | Print a platform's systems with the files and size each holds, the files other systems share too counted apart |
@@ -1739,6 +1766,9 @@ other schemas under `api/v1/schemas/`.
 | `file` | `platform`, `dest`, `systems`, `size`, `state` | Each file of the list after the check. `state` is `present` (hash verified), `wrong_hash` or `missing` |
 | `system` | `platform`, `system`, `name`, `files`, `present`, `missing`, `wrong_hash`, `bytes_needed` | Each system, sorted by id, and with `--system` only the systems named. Files with no system count under `other`. `name` is the platform's own name for it |
 | `checking` | `files_done`, `files_total` | While the files already in the folder are read and hashed, at most every half second and once at the end. `files_total` counts the files found in place |
+| `games_reading` | `files_done`, `files_total` | With `--for-games`, while the games of the card are read (a cartridge hashed, a disc's header read), at most every half second and once at the end |
+| `games` | `platform`, `folder`, `games`, `recognised`, `found`, `fallback`, `not_games`, `required_only` | With `--for-games`, once the games are read, before `choices`. `found` lists per system its `folder`, `games`, `recognised` and the `regions` kept (empty for every region). `fallback` names each game that got every BIOS of its system, with a `reason` (`not_recognised`, `not_read`, `region_unknown`, `unknown_set`, `no_parent`) |
+| `games_unavailable` | `platform`, `reason`, `message` | With `--for-games`, what the games need could not be read (`offline`, `network`, `invalid`, `stale`, `no_sets`, `no_folder`): the run keeps every file of the list, except for a `FOLDER` that does not exist, where it stops |
 | `check` | `platform`, `name`, `bios_dir`, `files`, `present`, `missing`, `wrong_hash`, `bytes_needed`, `data_missing`, `not_installable` | The platform's totals. `data_missing` counts data-tree files to fetch, `not_installable` the files the collection cannot supply |
 | `declared` | `platform`, `files`, `present`, `missing`, `wrong_hash`, `bytes_needed`, `dests` | Right after `check`, the same counts over the files the platform's own list names (`cores: null`), and their `dests` in the order of the `file` events. A setup that checks its own list reads its answer here, with or without `--declared-only` |
 | `data` | `platform`, `files`, `bytes` | Right after `declared`: the data-tree files to fetch (the `data_missing` of `check`) and the bytes they write once in place |

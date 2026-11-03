@@ -1054,3 +1054,82 @@
 
 
  Any key closes this help
+=== plan-games 40x12
+ RetroBIOS: RetroArch
+
+ 4 files to download, 1.0 MB
+ BIOS folder:
+   ~/.config/retroarch/system
+
+ > Install
+   For the games on this card: yes  412
+   Only what starts: no
+   Show the games
+ 1-4 of 8
+ A Install  B Back  Y Options
+=== plan-games 40x15
+ RetroBIOS: RetroArch
+
+ 4 files to download, 1.0 MB
+ BIOS folder:
+   ~/.config/retroarch/system
+ For the 412 games on this card.
+ > Install
+   For the games on this card: yes  412
+   Only what starts: no
+   Show the games
+   Choose systems
+   Copy from your old card or a folder
+   Options
+   Quit
+ A Install  B Back  Y Options
+=== plan-games 80x24
+ RetroBIOS: RetroArch
+
+ 4 files to download, 1.0 MB
+ BIOS folder: ~/.config/retroarch/system
+ For the 412 games on this card.
+ One region where the games prove it: nintendo-gba Europe.
+ 2 games get every BIOS of their system: Show the games.
+ 1 in place, 3 missing, 1 wrong copy
+ The 1 wrong copy is replaced, the old one kept in a backup folder.
+ Free space: 50.0 GB
+
+ > Install
+   For the games on this card: yes                                    412 games
+   Only what starts: no
+   Show the games
+   Choose systems
+   Copy the BIOS files from your old card or a folder
+   Options
+   Quit
+
+
+
+
+ A Install  B Back  Y Options
+=== games 80x24
+ RetroBIOS: Games on this card
+
+ 412 games in /media/user/SDCARD/Roms, 398 recognised by their content.
+
+ sony-playstation (PS): 400 games, 390 recognised, every region
+ nintendo-gba (GBA): 12 games, 8 recognised, Europe only
+
+ Every BIOS of their system kept, so that they start:
+ GBA/demo.gba: not recognised
+ GBA/hack.gba: not recognised
+
+
+
+
+
+
+
+
+
+
+
+
+
+ A Back
