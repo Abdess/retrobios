@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<datafile><header><name>Ignored - System</name><version>1</version></header>
+<game name="X (USA)"><rom name="x.bin" size="1" crc="00000001" sha1="6666666666666666666666666666666666666666"/></game>
+</datafile>

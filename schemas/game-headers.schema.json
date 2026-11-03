@@ -1,0 +1,544 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abdess.github.io/retrobios/api/v1/schemas/game-headers.schema.json",
+  "title": "RetroBIOS game header readers",
+  "description": "Where a game file states what a core reads from it, and how each core's code turns those bytes into a region, a video standard or a label (games/headers.yml). Every rule cites the emulator source at the pin its profile records.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "containers",
+    "systems"
+  ],
+  "$defs": {
+    "ref": {
+      "type": "string",
+      "description": "owner/repo@<sha, 8+ hex> path:line[-line], further places joined by ', '.",
+      "pattern": "^[\\w.-]+/[\\w.-]+@[0-9a-f]{8,40} \\S"
+    },
+    "region_list": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z][a-z-]*$"
+      },
+      "uniqueItems": true
+    },
+    "outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "regions": {
+          "$ref": "#/$defs/region_list"
+        },
+        "standard": {
+          "enum": [
+            "ntsc",
+            "pal"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "fallback": {
+      "description": "What a decoder or a core answers when nothing matches: a region list, an outcome, or 'unknown' (the installer keeps every region).",
+      "oneOf": [
+        {
+          "const": "unknown"
+        },
+        {
+          "$ref": "#/$defs/region_list"
+        },
+        {
+          "$ref": "#/$defs/outcome"
+        }
+      ]
+    },
+    "value": {
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "integer"
+          ]
+        },
+        "regions": {
+          "$ref": "#/$defs/region_list"
+        },
+        "standard": {
+          "enum": [
+            "ntsc",
+            "pal"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "regions"
+          ]
+        },
+        {
+          "required": [
+            "standard"
+          ]
+        },
+        {
+          "required": [
+            "label"
+          ]
+        }
+      ]
+    },
+    "decode": {
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "exact-prefix",
+            "contains-normalized",
+            "prefix-nocase",
+            "char-at",
+            "letters",
+            "integer",
+            "bit",
+            "country-bits",
+            "serial",
+            "predicate"
+          ]
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        "otherwise": {
+          "$ref": "#/$defs/fallback"
+        },
+        "missing": {
+          "$ref": "#/$defs/fallback"
+        },
+        "normalize": {
+          "type": "string"
+        },
+        "requires": {
+          "type": "string"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "guard": {
+          "type": "string"
+        },
+        "words": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/value"
+          }
+        },
+        "letters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "hex_digits": {
+          "type": "boolean"
+        },
+        "priority": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "bit",
+              "regions"
+            ],
+            "properties": {
+              "bit": {
+                "type": "integer"
+              },
+              "regions": {
+                "$ref": "#/$defs/region_list"
+              }
+            }
+          }
+        },
+        "all": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          },
+          "minItems": 1
+        },
+        "then": {
+          "$ref": "#/$defs/outcome"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "serial"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "kind": true
+            },
+            "additionalProperties": false
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "predicate"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "all",
+              "then",
+              "otherwise"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "serial",
+                  "predicate"
+                ]
+              }
+            }
+          },
+          "else": {
+            "required": [
+              "otherwise"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "values"
+                ]
+              },
+              {
+                "required": [
+                  "words",
+                  "priority"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "reader": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "description",
+        "applies_to",
+        "location",
+        "decode",
+        "source_ref",
+        "re_read"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "applies_to": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "media",
+            "extensions"
+          ],
+          "properties": {
+            "media": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 1
+                }
+              ]
+            },
+            "extensions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^\\.[a-z0-9]+$"
+              },
+              "uniqueItems": true
+            }
+          }
+        },
+        "magic": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "location": {
+          "type": "object",
+          "minProperties": 1
+        },
+        "fields": {
+          "type": "object"
+        },
+        "decode": {
+          "$ref": "#/$defs/decode"
+        },
+        "note": {
+          "type": "string"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/ref"
+        },
+        "re_read": {
+          "type": "boolean"
+        }
+      }
+    },
+    "core": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "order",
+        "source_ref",
+        "re_read"
+      ],
+      "properties": {
+        "order": {
+          "type": "array",
+          "description": "Reader ids of the same system, in the order the core's code consults them.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "otherwise": {
+          "$ref": "#/$defs/fallback"
+        },
+        "selects_bios": {
+          "type": "boolean",
+          "description": "False when nothing the readers return changes which BIOS file the core opens."
+        },
+        "preference": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "default_preference": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "overridden_by": {
+          "type": "string"
+        },
+        "first_disc_only": {
+          "type": "boolean"
+        },
+        "note": {
+          "type": "string"
+        },
+        "source_ref": {
+          "$ref": "#/$defs/ref"
+        },
+        "re_read": {
+          "type": "boolean"
+        }
+      }
+    },
+    "condition": {
+      "description": "One test on the file. Byte tests read at offset (relative to the reader location's place when it lists candidates), or through the u32 at pointer. all and any nest tests.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "offset": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pointer": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "length": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "encoding": {
+          "enum": [
+            "u8",
+            "u32le",
+            "u32be"
+          ]
+        },
+        "mask": {
+          "type": "integer"
+        },
+        "equals": {
+          "type": "integer"
+        },
+        "not_equals": {
+          "type": "integer"
+        },
+        "in": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "minItems": 1
+        },
+        "min": {
+          "type": "integer"
+        },
+        "text": {
+          "type": "string"
+        },
+        "not_text": {
+          "type": "string"
+        },
+        "file_size": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "min": {
+              "type": "integer"
+            },
+            "max": {
+              "type": "integer"
+            }
+          }
+        },
+        "data_after_header": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "zero_run": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "all": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          },
+          "minItems": 1
+        },
+        "any": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/condition"
+          },
+          "minItems": 1
+        }
+      }
+    }
+  },
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "containers": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "description",
+          "source_ref",
+          "re_read"
+        ],
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "source_ref": {
+            "$ref": "#/$defs/ref"
+          },
+          "re_read": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "systems": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9][a-z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "readers",
+          "cores"
+        ],
+        "properties": {
+          "readers": {
+            "type": "object",
+            "propertyNames": {
+              "pattern": "^[a-z0-9][a-z0-9-]*$"
+            },
+            "additionalProperties": {
+              "$ref": "#/$defs/reader"
+            }
+          },
+          "cores": {
+            "type": "object",
+            "propertyNames": {
+              "pattern": "^[a-z0-9][a-z0-9_-]*$"
+            },
+            "additionalProperties": {
+              "$ref": "#/$defs/core"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abdess.github.io/retrobios/api/v1/schemas/game-catalog.schema.json",
+  "title": "RetroBIOS game catalog of one system",
+  "description": "Games of one No-Intro or Redump DAT, keyed by what identifies a game file (games/catalogs/<source>/<system>.json, written by python -m scripts.scraper.game_dat_importer). A row's region is the market the DAT names, never the value a core computes.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "system", "dat", "version", "fetched_from", "fetched", "archive", "licence", "fields", "regions", "games"],
+  "properties": {
+    "source": { "enum": ["no-intro", "redump"] },
+    "system": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "dat": { "type": "string", "minLength": 1 },
+    "version": { "type": "string" },
+    "fetched_from": { "type": "string" },
+    "fetched": { "type": "string" },
+    "archive": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "member": { "type": "string" },
+        "file": { "type": "string" },
+        "dat_date": { "type": "string" },
+        "asset_updated_at": { "type": "string" }
+      }
+    },
+    "licence": {
+      "type": "object",
+      "required": ["terms_url", "read", "quote"],
+      "properties": {
+        "terms_url": { "type": "string", "pattern": "^https://" },
+        "terms_title": { "type": "string" },
+        "terms_updated": { "type": "string" },
+        "read": { "type": "string" },
+        "quote": { "type": "string", "minLength": 1 },
+        "mirror": {
+          "type": "object",
+          "required": ["repo", "licence", "scope"],
+          "properties": {
+            "repo": { "type": "string" },
+            "licence": { "type": "string" },
+            "scope": { "type": "string" }
+          }
+        }
+      }
+    },
+    "fields": {
+      "oneOf": [
+        { "const": ["crc32", "size", "sha1", "region", "title"] },
+        { "const": ["crc32", "size", "sha1", "region", "title", "serials"] }
+      ]
+    },
+    "regions": {
+      "type": "array",
+      "description": "Region slug lists (scripts/region.py vocabulary) a row's region index points into.",
+      "items": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "type": "string", "pattern": "^[a-z][a-z-]*$" },
+        "uniqueItems": true
+      }
+    },
+    "serial_note": { "type": "string" },
+    "games": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "minItems": 5,
+        "maxItems": 6,
+        "prefixItems": [
+          { "type": "string", "pattern": "^[0-9a-f]{8}$" },
+          { "type": "integer", "minimum": 0 },
+          { "type": "string", "pattern": "^([0-9a-f]{40})?$" },
+          { "type": ["integer", "null"], "minimum": 0 },
+          { "type": "string", "minLength": 1 },
+          { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        ],
+        "items": false
+      }
+    }
+  }
+}

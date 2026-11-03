@@ -1,0 +1,20 @@
+{"source":"no-intro","system":"atari-lynx","dat":"Atari - Atari Lynx (LNX)","version":"20260625-122811","fetched_from":"https://github.com/hugo19941994/auto-datfile-generator/releases/download/Daily_Rebuild/no-intro.zip","fetched":"2026-11-03","archive":{"member":"Atari - Atari Lynx (LNX) (20260625-122811).dat","asset_updated_at":"2026-07-08T13:31:47Z"},"licence":{"terms_url":"https://datomatic.no-intro.org/terms.html","terms_title":"Data Usage License","terms_updated":"2026-09-11","read":"2026-11-03","quote":"Unless otherwise stated on the website, the data made available through this website (\"Data\") may be freely used, copied, reproduced, modified, adapted, combined, published, distributed, and otherwise reused by anyone for any lawful purpose, to the extent that the website operator owns or controls the applicable rights or is authorized to grant such permission. No permission, attribution, citation, backlink, or acknowledgment of the website or its operators is required for such use.","mirror":{"repo":"https://github.com/hugo19941994/auto-datfile-generator","licence":"MIT","scope":"the mirror's scripts only, the DATs it republishes stay under the terms above"}},"fields":["crc32","size","sha1","region","title"],"regions":[["north-america"],["world"],["europe","north-america"]],"games":[
+["1ddc4d0f",131136,"7554117d3e4dac4c9751b66aeab3e7d9b416093c",2,"Robotron 2084 (USA, Europe) (Beta)"],
+["2ff89d87",262208,"54782dbe5a1923be588bce6a0f35049345eec1b4",1,"Malibu Bikini Volleyball (World) (Atari Lynx Collection 1) (Unl)"],
+["3d82e190",524352,"6377dd0ef9bee6b6bd05736dadd2b36c0a02b8c3",1,"Zaku (World) (Unl)"],
+["55c41e59",262208,"55c7d7bdc246133c4454eb2eab1fe7eb7f24c9e3",1,"Awesome Golf (World) (Atari Lynx Collection 1) (Unl)"],
+["5ada9b79",262208,"f74cf43a8e9d58abf85b4ef95385d4fa804810ea",1,"Crystal Mines II - Buried Treasure (World) (Unl)"],
+["619f9194",524352,"83aaa48b215d7a062af509e96a2e756fc3e4d356",1,"Jimmy Connors' Tennis (World) (Atari Lynx Collection 1) (Unl)"],
+["86099145",262208,"da55e0b4f1312dc95c9ee2c99f7139a6d3b5f306",1,"T-Tris (World) (Pirate) (Alt)"],
+["8819e916",262208,"24c2f137d4a8040762b8b5f669918675e53637b4",1,"Zaku (World) (Beta) (Unl)"],
+["95b4a0e6",262208,"0b791c0ee0f71d9a564732ae41398f7193303d02",1,"Dracula - The Undead (World) (Atari Lynx Collection 1) (Unl)"],
+["a41b3d47",262208,"cfe4708a881564b1ad75cdbe6da526c06d19a9c1",1,"Basketbrawl (World) (Atari Lynx Collection 1) (Unl)"],
+["b90d79de",262208,"39170bbbc637833abc33f121a1c304562a769a02",1,"Gordo 106 (World) (Atari Lynx Collection 1) (Unl)"],
+["c95c82e6",131136,"9491fc8809258f98917b525a7472a43d495ba249",1,"Ishido - The Way of Stones (World) (Atari Lynx Collection 1) (Unl)"],
+["d62fe6bf",262208,"469aa2d72959de155466e84cc284a06609389a2d",0,"Raiden (USA) (Beta)"],
+["d7241881",262208,"0804caa4e15bcde2a51b475103787539c2578d0a",1,"Puzzler 2000 (World) (Proto) (Unl)"],
+["e0a31b32",262208,"b4526971a4f43ca1753d07a482ea2efdb603b6e7",1,"Mines 2 (World) (Demo) (Unl)"],
+["ef013e39",262208,"2006d1e0ec4277794917714a944e359cc7fe83de",1,"Power Factor (World) (Atari Lynx Collection 1) (Unl)"],
+["f0c52c73",262208,"2d9ddc4b6394f212afb7b1684adc79f47161a7eb",1,"Super Skweek (World) (Atari Lynx Collection 1) (Unl)"],
+["f4d80d0b",262208,"de0186250918daf76125d50ba2f3fc8f2f309110",1,"T-Tris (World) (Pirate)"]
+]}

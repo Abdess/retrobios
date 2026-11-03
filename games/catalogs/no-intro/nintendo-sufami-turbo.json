@@ -1,0 +1,15 @@
+{"source":"no-intro","system":"nintendo-sufami-turbo","dat":"Nintendo - Sufami Turbo","version":"20260529-125659","fetched_from":"https://github.com/hugo19941994/auto-datfile-generator/releases/download/Daily_Rebuild/no-intro.zip","fetched":"2026-11-03","archive":{"member":"Nintendo - Sufami Turbo (20260529-125659).dat","asset_updated_at":"2026-07-08T13:31:47Z"},"licence":{"terms_url":"https://datomatic.no-intro.org/terms.html","terms_title":"Data Usage License","terms_updated":"2026-09-11","read":"2026-11-03","quote":"Unless otherwise stated on the website, the data made available through this website (\"Data\") may be freely used, copied, reproduced, modified, adapted, combined, published, distributed, and otherwise reused by anyone for any lawful purpose, to the extent that the website operator owns or controls the applicable rights or is authorized to grant such permission. No permission, attribution, citation, backlink, or acknowledgment of the website or its operators is required for such use.","mirror":{"repo":"https://github.com/hugo19941994/auto-datfile-generator","licence":"MIT","scope":"the mirror's scripts only, the DATs it republishes stay under the terms above"}},"fields":["crc32","size","sha1","region","title"],"regions":[["japan"]],"games":[
+["04939d14",524288,"5527fcc136ff0c0ef53a1c9c2756d4a27afa1526",0,"SD Ultra Battle - Ultraman Densetsu (Japan)"],
+["14c66fca",524288,"50b9d6ebf0e3f4b9dad5d0660d6c834820cbe391",0,"Gekisou Sentai Carranger - Zenkai! Racer Senshi (Japan)"],
+["32b2b3dd",524288,"ae7421b87a9f4cc7c189680dfbb39453905aa5e6",0,"Poi Poi Ninja World (Japan)"],
+["4296500d",524288,"965b2582b13ee361eca93937b1b093049bc8d958",0,"Gegege no Kitarou - Youkai Donjara (Japan)"],
+["43ad5a45",524288,"bfe85a6e6e8c24584ed5983dbf56048c4c8f2287",0,"SD Ultra Battle - Seven Densetsu (Japan)"],
+["48ecae44",524288,"f280004dd92b70b1bf4518e054b4181a9bbba245",0,"SD Gundam Generation - Gryps Senki (Japan)"],
+["72b4235f",524288,"6f5be110a606f34bb797a30c1f07b84b2ff38425",0,"SD Gundam Generation - Axis Senki (Japan)"],
+["792d884c",524288,"f18f680b981077cfa025161cfe6c9594b6d18078",0,"SD Gundam Generation - Babylonia Kenkoku Senki (Japan)"],
+["8eb753f3",524288,"98a99807a958c1175a2b257166d7b08b2be6d442",0,"Crayon Shin-chan - Nagagutsu Dobon!! (Japan)"],
+["afd74dcb",524288,"adc7716a4b081aba5cde3525881c51ee6d600396",0,"SD Gundam Generation - Ichinen Sensouki (Japan)"],
+["bb5c4238",1048576,"f72ea67468cf34360042bdd7974fd588a2407566",0,"Bishoujo Senshi Sailor Moon Sailor Stars - Fuwafuwa Panic 2 (Japan)"],
+["c5dfa8fd",524288,"0a335ef645d058c2da5389ad622c62d0bffce944",0,"SD Gundam Generation - Colony Kakutouki (Japan)"],
+["efd3a865",524288,"d0ebe3cfcc76ec275151c3b9392fc2ff5d3b50da",0,"SD Gundam Generation - Zanscare Senki (Japan)"]
+]}

@@ -1,0 +1,15 @@
+{"source":"no-intro","system":"snk-neogeo-pocket","dat":"SNK - NeoGeo Pocket","version":"20250904-215533","fetched_from":"https://github.com/hugo19941994/auto-datfile-generator/releases/download/Daily_Rebuild/no-intro.zip","fetched":"2026-11-03","archive":{"member":"SNK - NeoGeo Pocket (20250904-215533).dat","asset_updated_at":"2026-07-08T13:31:47Z"},"licence":{"terms_url":"https://datomatic.no-intro.org/terms.html","terms_title":"Data Usage License","terms_updated":"2026-09-11","read":"2026-11-03","quote":"Unless otherwise stated on the website, the data made available through this website (\"Data\") may be freely used, copied, reproduced, modified, adapted, combined, published, distributed, and otherwise reused by anyone for any lawful purpose, to the extent that the website operator owns or controls the applicable rights or is authorized to grant such permission. No permission, attribution, citation, backlink, or acknowledgment of the website or its operators is required for such use.","mirror":{"repo":"https://github.com/hugo19941994/auto-datfile-generator","licence":"MIT","scope":"the mirror's scripts only, the DATs it republishes stay under the terms above"}},"fields":["crc32","size","sha1","region","title"],"regions":[["japan"],["europe","japan"]],"games":[
+["32e4696a",2097152,"2c6adfa69e7aeada7d4198b373436eee35b70d01",1,"Samurai Shodown! - Pocket Fighting Series (Japan, Europe) (En,Ja)"],
+["33add5bd",1048576,"445743119c65a6765a0bdc849a12e9038192840c",1,"NeoGeo Cup '98 (Japan, Europe) (En,Ja)"],
+["4b1eed05",524288,"67826f4c8e488938f7e1b26e331f79ebf0aa2565",1,"Pocket Tennis - Pocket Sports Series (Japan, Europe) (En,Ja)"],
+["6232df8d",65536,"2f6429b68446536d8b03f35d02f1e98beb6460a0",1,"[BIOS] SNK NeoGeo Pocket (Japan, Europe) (En)"],
+["836e47c6",65536,"50db9b1c267baf88a0d969dea4f72d92e46cdfaf",0,"[BIOS] SNK NeoGeo Pocket (Japan) (En) (Beta)"],
+["aedd3584",2097152,"d4d866b8eb1def6ca04613e83dd1dd12477af2b8",0,"King of Fighters R-1 - Pocket Kakutou Series & Melon-chan no Seichou Nikki (Japan) (Demo)"],
+["c4e58fd2",1048576,"f0353334c42730fb30c41229fb881183e11ad304",0,"Melon-chan no Seichou Nikki (Japan)"],
+["caa3a827",1048576,"d5a53c1b18626909b58fc73740d8c566357a7812",1,"Baseball Stars - Pocket Sports Series (Japan, Europe) (En,Ja)"],
+["cbe76b14",65536,"470781ddb614d4eca11e5a3d8a97be0e04314af6",1,"[BIOS] SNK NeoGeo Pocket (Japan, Europe) (En,Ja) (Monochrome)"],
+["ce09f534",524288,"cbe53b08d03ef684c08fc6ee28fca168a3d091a7",0,"Renketsu Puzzle Tsunagete Pon! (Japan)"],
+["d5b4696c",1048576,"30e8a0264922a050d3d674df4043c7d67ebde62b",0,"Neo Cherry Master - Real Casino Series (Japan) (En,Ja)"],
+["dceb7e11",2097152,"4a7adbcccb05b6047a38bb861523cbae7d956bfa",1,"King of Fighters R-1 - Pocket Fighting Series (Japan, Europe) (En,Ja)"],
+["f34d0c9b",524288,"ab0c33236f72d2b317d91d034756b56cfca1b0b4",0,"Shougi no Tatsujin (Japan)"]
+]}

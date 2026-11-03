@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<datafile>
+	<header>
+		<name>Nintendo - Super Nintendo Entertainment System</name>
+		<version>20260707-000000</version>
+	</header>
+	<game name="Zeta Quest (USA)">
+		<description>Zeta Quest (USA)</description>
+		<rom name="Zeta Quest (USA).sfc" size="1048576" crc="0000BEEF" md5="00000000000000000000000000000000" sha1="1111111111111111111111111111111111111111"/>
+	</game>
+	<game name="Alpha Run (Japan)">
+		<description>Alpha Run (Japan)</description>
+		<rom name="Alpha Run (Japan).sfc" size="524288" crc="0000CAFE" sha1="2222222222222222222222222222222222222222"/>
+	</game>
+	<game name="Both Worlds (USA, Europe) (Rev 1)">
+		<description>Both Worlds (USA, Europe) (Rev 1)</description>
+		<rom name="Both Worlds (USA, Europe) (Rev 1).sfc" size="524288" crc="0000CAFE" sha1="3333333333333333333333333333333333333333"/>
+	</game>
+	<game name="Everywhere (World)">
+		<description>Everywhere (World)</description>
+		<rom name="Everywhere (World).sfc" size="262144" crc="12345678" sha1="4444444444444444444444444444444444444444"/>
+	</game>
+	<game name="Untagged Demo">
+		<description>Untagged Demo</description>
+		<rom name="Untagged Demo.sfc" size="131072" crc="abcdef01" sha1="5555555555555555555555555555555555555555"/>
+	</game>
+</datafile>
