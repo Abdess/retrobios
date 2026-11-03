@@ -687,6 +687,15 @@ class Cleanup(Origin):
     def _decisions(self, busy=()) -> dict[str, cd.Decision]:
         return {d.path.name: d for d in cd.plan(self.repo, busy, self.HOURS, time.time())}
 
+    def test_generated_files_are_the_ones_a_run_rewrites(self):
+        """mkdocs.yml stayed in the list after the site moved to Starlight,
+        while CONTRIBUTING.md and website/src/data/*.json were left out."""
+        for path in ("README.md", "CONTRIBUTING.md", "database.json", "install/retroarch.json",
+                     "exports/batocera.json", "website/src/data/source-paths.json"):
+            self.assertTrue(cd.GENERATED.match(path), path)
+        for path in ("mkdocs.yml", "website/src/data/x/y.json", "scripts/verify.py"):
+            self.assertFalse(cd.GENERATED.match(path), path)
+
     def test_worktree_and_tmp_rules(self):
         old_clean = self._worktree("old-clean", 100)
         old_code = self._worktree("old-code", 100)

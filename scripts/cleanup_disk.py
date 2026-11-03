@@ -8,7 +8,8 @@ sessions create theirs. A worktree elsewhere on disk and the automation
 worktree (.cache/autorun/worktree) are never candidates. One is removed only
 when no process runs in or holds a file of it, it is older than --hours, and
 nothing tracked is modified in it except generated artifacts (database.json,
-install/*.json, exports/*.json, README.md, mkdocs.yml). Branches are always
+install/*.json, exports/*.json, README.md, CONTRIBUTING.md,
+website/src/data/*.json). Branches are always
 kept, so committed work stays reachable. A worktree with real uncommitted
 code is listed, never removed.
 
@@ -39,7 +40,8 @@ from dataclasses import dataclass
 from pathlib import Path
 
 GENERATED = re.compile(
-    r"^(database\.json|install/.*\.json|exports/.*\.json|README\.md|mkdocs\.yml)$"
+    r"^(database\.json|install/.*\.json|exports/.*\.json|README\.md|CONTRIBUTING\.md"
+    r"|website/src/data/[^/]+\.json)$"
 )
 KEPT_TMP = ("acquire",)
 AUTOMATION_WORKTREE = Path(".cache") / "autorun" / "worktree"
