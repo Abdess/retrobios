@@ -10,6 +10,7 @@ import io
 import json
 import os
 import stat
+import select
 import shlex
 import re
 import shutil
@@ -4182,17 +4183,35 @@ class AQuestionLeftWithCtrlDOrCtrlCIsAStop(unittest.TestCase):
 
         home = Path(_tempdir(self))
         master, slave = pty.openpty()
+        # Its output on the terminal too: piped, nothing is asked, and the
+        # test skipped on every machine.
         proc = subprocess.Popen(
-            [sys.executable, "install.py"], cwd=REPO_ROOT, stdin=slave,
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
-            env={**os.environ, "HOME": str(home), "RETROBIOS_OS": "linux"},
+            [sys.executable, "install.py", "--plain"], cwd=REPO_ROOT, stdin=slave,
+            stdout=slave, stderr=slave,
+            # No request leaves the machine: the standalone emulators' lists
+            # come from the network (code_audit_24 P3-13).
+            env={**os.environ, "HOME": str(home), "RETROBIOS_OS": "linux",
+                 "RETROBIOS_INSTALL_OFFLINE": "1"},
         )
         os.close(slave)
         self.addCleanup(os.close, master)
-        time.sleep(3)
+        out = ""
+        deadline = time.monotonic() + 60
+        while "Which setup?" not in out and proc.poll() is None \
+                and time.monotonic() < deadline:
+            if select.select([master], [], [], 0.2)[0]:
+                out += os.read(master, 65536).decode("utf-8", "replace")
         os.write(master, b"\x04")
-        out, _ = proc.communicate(timeout=60)
-        if "Choose the platform" not in out:
+        proc.wait(timeout=60)
+        while select.select([master], [], [], 0.2)[0]:
+            try:
+                chunk = os.read(master, 65536)
+            except OSError:
+                break
+            if not chunk:
+                break
+            out += chunk.decode("utf-8", "replace")
+        if "Which setup?" not in out:
             self.skipTest("a platform was detected on this machine")
         self.assertEqual(proc.returncode, 130, out)
         self.assertIn("Stopped", out)
@@ -5211,6 +5230,8 @@ class EventsDescribeTheRun(unittest.TestCase, _SyntheticTree):
             # The systems Choose systems lists, before the files are read.
             {"event": "choices", "platform": "retroarch",
              "systems": ["sys-a", "sys-b", "other"]},
+            # Nothing set aside before the choice (code_audit_24 P3-3).
+            {"event": "set_aside", "platform": "retroarch", "dests": []},
             # a.bin and b.bin are in place: the first read and the last.
             {"event": "checking", "files_done": 1, "files_total": 2},
             {"event": "checking", "files_done": 2, "files_total": 2},

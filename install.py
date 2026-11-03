@@ -6122,11 +6122,11 @@ def _report_outcome(
     # A failure the progress already named on its FAILED line is not named
     # again: line mode listed each one twice (tui_audit_17 P3-7).
     unsaid = [failure for failure in failures or [] if failure[0] not in SAID_FAILED]
-    if unsaid and len(unsaid) > 1 and len(reasons) == 1 and reasons != {""}:
+    if failures and len(failures) > 1 and len(reasons) == 1 and reasons != {""}:
         # One cause, said once: a read-only folder listed ten of its files
         # and "... and 266 more" above the advice that fixes them all.
-        say(f"  failed: {_plural(len(unsaid), 'file')} ({reasons.pop()}), "
-            f"first {unsaid[0][0]}")
+        said = f", first {unsaid[0][0]}" if unsaid else ""
+        say(f"  failed: {_plural(len(failures), 'file')} ({reasons.pop()}){said}")
     else:
         for dest, reason in unsaid[:10]:
             say(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
@@ -15547,7 +15547,7 @@ def core_count_words(cores: list[str], base: list[str]) -> str:
 
 def _tui_systems_chosen(state: TuiState) -> list[str]:
     """The systems the run is narrowed to, [] for every system."""
-    return [value for flag, value in _tui_system_flags(state) if value]
+    return [value for _flag, value in _tui_system_flags(state) if value]
 
 
 def _chosen_cores(state: TuiState) -> set[str] | None:

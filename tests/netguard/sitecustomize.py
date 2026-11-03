@@ -27,7 +27,9 @@ _SAVED: dict = {}
 
 def _refuse(host: object) -> None:
     where = os.environ.get(NETLOG)
-    if where:
+    # A name under .invalid never resolves (RFC 2606): a test names one to
+    # fail on purpose, refused here before its DNS query leaves.
+    if where and not str(host).endswith(".invalid"):
         with open(where, "a", encoding="utf-8") as log:
             log.write(f"{os.getpid()} {host} {' '.join(sys.argv)[:300]}\n")
     raise OSError(errno.ENETUNREACH, f"a test makes no request to {host}")

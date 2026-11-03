@@ -823,9 +823,16 @@ class Widgets(unittest.TestCase):
         state = fresh_state()
         press(state, "up")
         self.assertEqual(state.focus["setup"], 2)
-        state = self.systems_state(20)
+        state = fresh_state()
+        state.stack = ["setup", "platforms"]
         press(state, "up")
-        self.assertEqual(state.focus["systems"], 0)
+        self.assertEqual(state.focus["platforms"], 0)
+        # A list of ticks wraps at any length: None and Done, at its end,
+        # are a few presses up from its first item (tui_audit_17 P3-1).
+        state = self.systems_state(20)
+        state.focus["systems"] = 0
+        press(state, "up")
+        self.assertEqual(install.tui_rows(state)[state.focus["systems"]].action, "done")
 
     def test_filter_ignores_case_and_accents(self):
         state = self.systems_state(3)
@@ -6777,7 +6784,12 @@ class AuditSevenScreens(unittest.TestCase):
         with SaveDirectoryRepository() as repo:
             argv = ["install.py", "--platform", "retroarch", "--dest", str(repo.dest),
                     "--manifest", str(repo.root / "install" / "retroarch.json")]
+            # The files come from the repository on the loopback: the module
+            # read its base before the environment named it (code_audit_24
+            # P3-13).
+            served = repo.env()["RETROBIOS_BASE_URL"] + "/{path}"
             with mock.patch.dict(os.environ, repo.env()), \
+                    mock.patch.object(install, "RAW_FILE_URL", served), \
                     mock.patch.object(sys, "argv", argv), \
                     mock.patch.object(sys.stdin, "isatty", return_value=True), \
                     mock.patch.object(install, "_is_terminal", return_value=True), \
