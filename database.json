@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-10-28T08:22:38Z",
+  "generated_at": "2026-11-03T13:36:34Z",
   "total_files": 19916,
   "total_size": 16892318346,
   "bios_dir": "bios",
@@ -199455,7 +199455,7 @@
         "redump": {
           "dat": "Sony - PlayStation 2 - BIOS Images",
           "name": "ps2-dvd-212g.bin",
-          "description": "SCPH-30006R (Version 2.12G)"
+          "description": "SCPH-30006R/SCPH-30007R (Version 2.12G)"
         },
         "tosec": {
           "dat": "Sony PlayStation 2 - Firmware",
@@ -199584,6 +199584,11 @@
       "crc32": "1374e4f0",
       "adler32": "810c4e17",
       "provenance": {
+        "redump": {
+          "dat": "Sony - PlayStation 2 - BIOS Images",
+          "name": "ps2-dvd-302c.bin",
+          "description": "SCPH-50009 (Version 3.02C)"
+        },
         "tosec": {
           "dat": "Sony PlayStation 2 - Firmware",
           "name": "Sony PlayStation 2 DVD Player ROM v3.02C (2003-06-23)(Sony).bin",
@@ -200102,7 +200107,7 @@
         "redump": {
           "dat": "Sony - PlayStation 2 - BIOS Images",
           "name": "ps2-0101xd-20000224-172900.bin",
-          "description": "DTL-H10000 (Version 5.0 02/24/00 T)"
+          "description": "DTL-H10000S (Version 5.0 02/24/00 T)"
         },
         "tosec": {
           "dat": "Sony PlayStation 2 - Firmware",
@@ -200835,7 +200840,7 @@
         "redump": {
           "dat": "Sony - PlayStation 2 - BIOS Images",
           "name": "ps2-0180cd-20030224-185856.bin",
-          "description": "DTL-H50009 (Version 5.0 02/24/03 J)"
+          "description": "DTL-H50009J (Version 5.0 02/24/03 J)"
         },
         "tosec": {
           "dat": "Sony PlayStation 2 - Firmware",
@@ -200962,7 +200967,7 @@
         "redump": {
           "dat": "Sony - PlayStation 2 - BIOS Images",
           "name": "ps2-0190cd-20030623-142420.bin",
-          "description": "SCPH-50009 (Version 5.0 06/23/03 J)"
+          "description": "SCPH-50009 (Review) (Version 5.0 06/23/03 J)"
         }
       }
     },
@@ -201416,7 +201421,7 @@
         "redump": {
           "dat": "Sony - PlayStation 2 - BIOS Images",
           "name": "ps2-0220h-20050620-175641.bin",
-          "description": "SCPH-75006 (Version 5.0 06/20/05 J)"
+          "description": "SCPH-75006/SCPH-75007 (Version 5.0 06/20/05 J)"
         },
         "tosec": {
           "dat": "Sony PlayStation 2 - Firmware",
