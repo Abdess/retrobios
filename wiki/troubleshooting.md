@@ -69,7 +69,7 @@ version.
 - **A BIOS setting?** Some emulators can skip the BIOS. In PCSX ReARMed, set
   **BIOS Selection** to **Auto**.
 - **The screen says "Please insert PlayStation CD-ROM"?** The BIOS works.
-  The game did not load. Open its `.cue` or `.m3u` file, not a `.bin`.
+  The game did not load, so open its `.cue` or `.m3u` file, not a `.bin`.
 
 ## If the command fails { #installation-script-fails }
 
