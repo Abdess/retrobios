@@ -141,6 +141,44 @@
   "src/Ryujinx.Common/Configuration/AppDataManager.cs",
   "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs"
  ],
+ "git.ryujinx.app/projects/Kenji-NX@53d32a761e61dc8e9b5c0744199a890fc8d934d5": [
+  "README.md",
+  "src/KenjinxAndroid/app/build.gradle",
+  "src/KenjinxAndroid/app/src/main/AndroidManifest.xml",
+  "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/MainActivity.kt",
+  "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/MainViewModel.kt",
+  "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/QuickSettings.kt",
+  "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/SettingsViewModel.kt",
+  "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/viewmodels/VulkanDriverViewModel.kt",
+  "src/KenjinxAndroid/app/src/main/java/org/kenjinx/android/views/GameViews.kt",
+  "src/LibKenjinx/Android/JniExportedMethods.cs",
+  "src/LibKenjinx/LibKenjinx.Input.cs",
+  "src/LibKenjinx/LibKenjinx.cs",
+  "src/LibKenjinx/LibKenjinx.csproj",
+  "src/LibKenjinx/VulkanLoader.cs",
+  "src/Ryujinx.Audio.Backends.SDL3/SDL3HardwareDeviceDriver.cs",
+  "src/Ryujinx.Common/Configuration/AppDataManager.cs",
+  "src/Ryujinx.Common/ReleaseInformation.cs",
+  "src/Ryujinx.HLE/FileSystem/ContentManager.cs",
+  "src/Ryujinx.HLE/FileSystem/VirtualFileSystem.cs",
+  "src/Ryujinx.HLE/HOS/Horizon.cs",
+  "src/Ryujinx.HLE/HOS/Services/Nfc/AmiiboDecryption/AmiiboBinReader.cs",
+  "src/Ryujinx.HLE/HOS/Services/Nfc/AmiiboDecryption/AmiiboDecryptor.cs",
+  "src/Ryujinx.HLE/HOS/Services/Nfc/AmiiboDecryption/AmiiboMasterKey.cs",
+  "src/Ryujinx.HLE/HOS/Services/Nfc/Nfp/NfpManager/INfp.cs",
+  "src/Ryujinx.HLE/HOS/Services/Nfc/Nfp/NfpManager/KenjinxAmiiboShim.cs",
+  "src/Ryujinx.HLE/HOS/Services/Nfc/Nfp/VirtualAmiibo.cs",
+  "src/Ryujinx.HLE/HOS/Services/Sdb/Pl/SharedFontManager.cs",
+  "src/Ryujinx.HLE/HOS/Services/Ssl/BuiltInCertificateManager.cs",
+  "src/Ryujinx.HLE/HOS/Services/Time/TimeZone/TimeZoneContentManager.cs",
+  "src/Ryujinx.HLE/Kenjinx/AmiiboBridge.cs",
+  "src/Ryujinx.HLE/Loaders/Processes/ProcessLoader.cs",
+  "src/Ryujinx.Input.SDL3/SDL3GamepadDriver.cs",
+  "src/Ryujinx.SDL3.Common/SDL3Driver.cs",
+  "src/Ryujinx/UI/ViewModels/AmiiboWindowViewModel.cs",
+  "src/Ryujinx/UI/ViewModels/MainWindowViewModel.cs",
+  "src/Ryujinx/UI/Windows/MainWindow.axaml.cs"
+ ],
  "github.com/2ship2harkinian/2ship2harkinian@8a24047fbce8915993804e7819f4df4fa591551f": [
   "docs/supportedHashes.json",
   "mm/2s2h/BenPort.cpp",
@@ -4057,7 +4095,7 @@
  "github.com/libretro/beetle-psx-libretro@7fea57a541abb39b8c5035b6261c3e70962d221b": [
   "libretro.c"
  ],
- "github.com/libretro/beetle-saturn-libretro@2ce77e20a956dc9a67b8d3d527f477b984310feb": [
+ "github.com/libretro/beetle-saturn-libretro@30f4c12072d265c9e553dcb29386059114945dea": [
   "disc.c",
   "libretro.c",
   "mednafen/settings.c",
@@ -6257,6 +6295,7 @@
   "yabause/src/utils/src/db.c"
  ],
  "github.com/libretro/yabause@8926b0c6c347f8c5c755911ddb0ac695420ffbf8": [
+  "yabause/src/cs2.c",
   "yabause/src/libretro/libretro.c",
   "yabause/src/memory.c",
   "yabause/src/memory.h"
