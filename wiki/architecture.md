@@ -12,9 +12,9 @@ contents. The pack builder joins the three and ships every file a platform's
 emulators need, and the verifier checks the result the way the platform itself
 would.
 
-Example: libretro's `System.dat` names 526 RetroArch files. The cores RetroArch
-runs load 7,650 more, and the RetroArch pack carries both (counts of
-[What the packs do not hold](../gaps.md) on 2026-10-22).
+Example: libretro's `System.dat` names the files RetroArch checks. The cores
+RetroArch runs load many more, and the RetroArch pack carries both.
+[What the packs do not hold](../gaps.md) gives the current counts.
 
 ## Directory structure
 
@@ -26,30 +26,41 @@ emulators/               one YAML profile per core/engine
 platforms/               one YAML config per platform (scraped from upstream)
   _shared.yml            shared file groups across platforms
   _registry.yml          platform metadata (logos, scrapers, status, install config)
+  _guides.yml            the guide text of each platform's page
   _data_dirs.yml         data directory definitions (Dolphin Sys, PPSSPP...)
   targets/               hardware target configs + _overrides.yml
 provenance/              dump-catalog snapshots (redump, no-intro, tosec)
+recipes/                 romset recipes read from MAME and FBNeo DATs
+exports/                 each platform's own file, corrected, with a report of the changes
+measurements/            records of real runs, one JSONL file per emulator
 scripts/                 all tooling (Python and pyyaml, jsonschema for schema checks)
   scraper/               upstream scrapers (libretro, batocera, recalbox...)
-  scraper/targets/       hardware target scrapers (retroarch, batocera, emudeck, retropie)
+  scraper/targets/       hardware target scrapers (one *_targets_scraper.py per platform)
   exporter/              native format exporters (batocera, recalbox, emudeck...)
 install/                 JSON install manifests per platform
   targets/               JSON target manifests per platform (cores per architecture)
+install.py               the installer, with install.sh and install.ps1 to start it
+ports/                   launchers that run the installer on handhelds
+automation/              jobs.yml, the unattended jobs scripts/autorun.py runs
 data/                    cached data directories (not BIOS, fetched at build)
 schemas/                 JSON schemas for platform and emulator YAML (checked in CI)
 tests/                   test suite with synthetic fixtures
 wiki/                    hand-written documentation sources
+docs_assets/             logos, icons and images the site uses
 website/                 Astro Starlight project; pages, data and navigation
                          are generated into it (gitignored, rebuilt in CI)
 _mame_clones.json        MAME parent/clone set mappings
 database.json            file index built from bios/ (SHA1 primary key)
+derivable.json           files a held dump already contains, from provenance_report.py
+release.json             files, sizes and assets of each pack of the last release
+allowed_signers          public key that signs SHA256SUMS.txt
 dist/                    generated packs (gitignored)
 .cache/                  hash cache and large file downloads (gitignored)
 ```
 
-`docs/` is never edited by hand: `generate_site.py` rebuilds it from
-`platforms/`, `emulators/`, `database.json`, and the `wiki/` sources.
-Documentation changes belong in `wiki/` or in the generator.
+The generated pages in `website/` are never edited by hand: `generate_site.py`
+rebuilds them from `platforms/`, `emulators/`, `database.json`, and the `wiki/`
+sources. Documentation changes belong in `wiki/` or in the generator.
 
 The site search splits each page at its headings and sends a result to the
 heading above the match. Every file card is therefore a level 3 heading with
@@ -59,26 +70,26 @@ not the top of the page. On pages of cards (systems, emulators, platforms) the
 table of contents stops at level 2, and a page of cards under one or two
 headings has none (`scripts/sitestarlight.py`).
 
-The browser downloads and indexes the whole search index before it shows a
-first result, so the index holds names and prose only. Hashes, lists of other
-pages, install commands, member tables and long reference tables sit in
-`data-search-exclude` blocks. Those blocks are `section` elements: the search
-plugin compares elements by tag, and a `div` stopped excluding at the first
-`div` closed inside it. A hash goes to [Find a file](../files/index.md), which
+The search is Pagefind, which loads its index in pieces: the words typed pick
+the chunks it fetches. The index holds names and prose only. Hashes, lists of
+other pages, install commands, member tables and long reference tables carry
+`data-pagefind-ignore`. A hash goes to [Find a file](../files/index.md), which
 reads one shard of `api/v1/lookup/` named by the first two characters of the
 value.
 
-A page has a budget. A manufacturer page over 500 KB of Markdown becomes a
-summary: its largest consoles move to pages of their own, cut into parts when
-one console alone is over the budget, and every console keeps its heading on
-the summary. An emulator with more than 400 entries (MAME) lists them in a
-table on its page, each row holding the old anchor of the card, and the cards
-move to pages of 400. A platform system whose list is over 200 KB moves to a
-page of its own. A card anchor (`#sha1-...`) that a page no longer holds is
-looked up by content, so a link cited before a split still opens the card.
-`validate_site.py` fails a page over 1 MB of HTML, a search index over 8.5 MB
-(1.7 MB compressed), a skipped heading level, a table header without text, a
-script from another host and a diagram drawn at runtime.
+A page has a budget, set by constants in `scripts/generate_site.py`. A
+manufacturer page over `SYSTEM_PAGE_BUDGET` becomes a summary: its largest
+consoles move to pages of their own, cut into parts when one console alone is
+over the budget, and every console keeps its heading on the summary. An
+emulator with more than `EMULATOR_CARDS_PER_PAGE` entries (MAME) lists them in
+a table on its page, each row holding the old anchor of the card, and the cards
+move to pages of `EMULATOR_CARDS_PER_PART`. A platform system whose list passes
+`PLATFORM_SECTION_BUDGET` moves to a page of its own. A card anchor
+(`#sha1-...`) that a page no longer holds is looked up by content, so a link
+cited before a split still opens the card. `validate_site.py` fails a page over
+`MAX_PAGE_BYTES` of HTML or `MAX_PAGE_ELEMENTS` elements, a search index over
+`MAX_PAGEFIND_TOTAL_BYTES`, a skipped heading level, a table header without
+text, a script from another host and a diagram drawn at runtime.
 
 ## Data flow
 
@@ -105,10 +116,9 @@ truth.py generates       diff_truth.py         export_native.py
   emulator profiles       scraped platform      own file, updated
 ```
 
-Pipeline runs all steps in sequence: DB, provenance report, data dirs,
-MAME/FBNeo hashes, verify, packs, install manifests, target manifests,
-consistency check, pack integrity, README, site. See [tools](tools.md)
-for the full pipeline reference.
+`pipeline.py` runs every step in order, from the schema check to the rendered
+site. [Adding a platform](adding-a-platform.md#step-8-validate-the-full-pipeline)
+lists the steps, and [tools](tools.md) the options.
 
 <!-- image: pipeline -->
 
@@ -171,8 +181,8 @@ platform. Where the emulator source states something else, the profile and
 `_shared.yml` carry it.
 Another name for the same file is an `aliases:` entry in the profile, never a
 second entry in a platform YAML or in `_shared.yml`. A name a platform's own
-launcher reads, such as the 22 names Batocera's DuckStation generator tries
-per region, describes the platform and lives in its `launchers:` records (see
+launcher reads, such as the names Batocera's DuckStation generator tries
+for each region, describes the platform and lives in its `launchers:` records (see
 [launchers](adding-a-platform.md#launchers)).
 
 Some entries in a platform YAML are not the platform's own: files a
@@ -327,28 +337,16 @@ How files enter `bios/`, and why.
 | `embedded` (default) | file is in the `bios/` directory, included in packs |
 | `external` | file has a `source_url`, downloaded at pack build time |
 | `user_provided` | user must provide the file (instructions included in pack) |
+| `large_file`, `release` | file is an asset of the `large-files` release, listed in `.gitignore`, fetched at build time |
 
-## Verification severity
+## Verification severity and discrepancies
 
-How missing or mismatched files are reported:
-
-| Mode | required + missing | optional + missing | hash mismatch |
-|------|-------------------|-------------------|--------------|
-| existence | WARNING | INFO | N/A |
-| md5 | CRITICAL | WARNING | UNTESTED |
-
-Files with `hle_fallback: true` are downgraded to INFO when missing
-(the emulator has a software fallback).
-
-## Discrepancy detection
-
-When a file passes platform verification (MD5 match) but fails
-emulator-level validation (wrong CRC32, wrong size), a DISCREPANCY is reported.
-The pack generator searches the repo for a variant that satisfies both.
-If none exists, the platform version is kept and the discrepancy stays
-reported. A filename or destination never overrides a declared content hash
-during resolution. Whether a mismatch is packed is then decided by the
-platform's own verification mode.
+How a missing or mismatched file is reported, and what happens when the
+platform's check and the emulator's check disagree, follow the platform's
+verification mode: see the [severity matrix](verification-modes.md#severity-matrix)
+and [discrepancy detection](verification-modes.md#discrepancy-detection).
+A filename or destination never overrides a declared content hash during
+resolution.
 
 ## Security
 
@@ -408,7 +406,7 @@ not available on the target. Without `--target`, all systems are included.
 
 ## MAME clone map
 
-`_mame_clones.json` at repo root maps MAME clone ROM names to their canonical parent.
+`_mame_clones.json`, beside the `bios/` tree it describes, maps MAME clone ROM names to their canonical parent.
 When a clone ZIP was deduplicated, `resolve_local_file` uses this map to find the canonical file.
 
 ## Install manifests

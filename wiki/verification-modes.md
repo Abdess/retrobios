@@ -171,8 +171,8 @@ not a single digest gets a new `hash_rule` value, never a new mode.
 ROCKNIX derives its BIOS checker from Batocera's, so the logic has the same
 shape: `md5sum()` on the file, `checkInsideZip()` for archive entries, and an
 `altmd5` field that accepts a second hash for the same entry. Every entry the
-platform declares is mandatory in its own data, so the platform YAML marks all
-38 files `required: true` and none of them use `zippedFile`.
+platform declares is mandatory in its own data, so the platform YAML marks every
+file `required: true`, and none of them uses `zippedFile`.
 
 ### KNULLI, AmberELEC and EmuELEC verification
 
@@ -207,8 +207,8 @@ no required/optional distinction: an entry either matches or it does not.
 
 Scope note: only the BiosDB entries are in scope. They carry an explicit `url`
 because MiSTer cannot host them, which is exactly what the user has to supply.
-The 208 `games/` files shipped by the `Distribution_MiSTer` repository carry no
-URL and install themselves, so they are not part of the pack.
+The `games/` files shipped by the `Distribution_MiSTer` repository carry no URL
+and install themselves, so they are not part of the pack.
 
 
 ## SHA1 mode

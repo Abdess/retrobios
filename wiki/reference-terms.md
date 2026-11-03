@@ -22,7 +22,7 @@ everyday words (BIOS, emulator, core, hash) are in the [glossary](glossary.md).
     Every entry has a `source_ref`, the line of code that proves it, at the
     revision named by `source_commit` (the pin). Example:
     `emulators/duckstation.yml` lists `scph5501.bin` at
-    `src/core/bios.cpp:47`, commit `4122fed9`.
+    `src/core/bios.cpp:47`, read at its `source_commit`.
 
 **Alias**
 :   Another name the same emulator accepts for a file, listed under `aliases:`
@@ -92,9 +92,9 @@ everyday words (BIOS, emulator, core, hash) are in the [glossary](glossary.md).
 
 **hle_fallback**
 :   A flag on a profile entry: the emulator has HLE for this file, so its
-    absence is reported at INFO. It does not make the file optional: 13 of
-    the 778 entries that carry it are `required: true`, among them Beetle
-    PSX's `scph5501.bin`.
+    absence is reported at INFO. It does not make the file optional: a few
+    entries that carry it are `required: true`, among them Yabause's
+    `saturn_bios.bin`.
 
 **Variant**
 :   Another version of a BIOS file (a revision, a region or another dump), kept
@@ -117,7 +117,8 @@ everyday words (BIOS, emulator, core, hash) are in the [glossary](glossary.md).
 
 **Storage tier**
 :   Where a file comes from: `embedded` (in `bios/`), `external` (downloaded at
-    build time) or `user_provided`.
+    build time), `user_provided`, or `large_file` and `release` (an asset of
+    the `large-files` release).
 
 **Target**
 :   A hardware architecture a setup runs on, such as `switch`, `rpi4` or

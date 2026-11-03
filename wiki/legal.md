@@ -37,7 +37,7 @@ This is the most contested area, and the weakest part of the project's position.
 - **Keys come from consumer hardware.** They are extracted from retail devices their owners bought. *Chamberlain v. Skylink* (2004) held that a 1201 claim requires some nexus to copyright infringement, in a dispute over a garage-door opener. Later cases have narrowed its reach, and it is a weak foundation for a general post-sale right.
 - **Trade secret is not a live issue.** Keys embedded in millions of shipped devices and widely republished are not kept secret by reasonable measures.
 
-### Recent firmware (Switch 19.0.0, PS3UPDAT, PSVUPDAT)
+### Recent firmware (Switch firmware, PS3UPDAT, PSVUPDAT)
 
 - **Free download is not a licence.** Manufacturers publish these updates on open CDNs without authentication, which makes them easy to obtain but does not grant a right to redistribute them, and PlayStation firmware ships under an end-user licence agreement. The practical argument is that mirroring a file the manufacturer already gives away for free causes no identifiable loss, not that doing so is expressly permitted.
 - **Functional necessity.** Emulators cannot run the software these systems were built for without this firmware. That is why the files are collected. It is a statement of purpose, not a legal defence in itself.
