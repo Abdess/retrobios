@@ -10081,9 +10081,11 @@ def drawn(state: install.TuiState, cols: int, rows: int) -> list:
 
 
 def settled(state: install.TuiState) -> None:
-    """The clock moved on past TUI_TAP_SETTLE since the screen was drawn."""
+    """The clock moved on past TUI_TAP_SETTLE since the screen was drawn.
+    A millisecond past it: shown + 0.4 - shown is 0.39999 once the clock is
+    large, as a CI runner's uptime makes it, and the tap read as too early."""
     if state.hits is not None:
-        state.now = max(state.now, state.hits.shown + install.TUI_TAP_SETTLE)
+        state.now = max(state.now, state.hits.shown + install.TUI_TAP_SETTLE + 0.001)
 
 
 def tap(state: install.TuiState, col: int, row: int, button: int = 0) -> list:
@@ -11974,6 +11976,16 @@ class TwoTapsOnlyWhereFilesAreWritten(unittest.TestCase):
         painted = install.tui_paint(armed, "hint", True)
         self.assertIn(f"{install.COLOUR_ROLES['accent']}m{entry}\x1b[0m", painted)
         self.assertEqual(tap(state, 2, len(lines) - 1), [("run", "install")])
+
+    def test_a_tap_settles_on_a_clock_as_large_as_a_runners(self):
+        """CI's monotonic clock counts the runner's uptime: shown + 0.4 - shown
+        came out under 0.4 there and every deliberate tap was dropped."""
+        state = fresh_state()
+        state.mouse = True
+        state.now = 1234567.123456789
+        lines = drawn(state, 80, 24)
+        tap(state, str(lines[-1]).index("B/Esc"), len(lines) - 1)
+        self.assertEqual(state.screen, "quit")
 
     def test_quit_takes_two_activations(self):
         state = fresh_state()
