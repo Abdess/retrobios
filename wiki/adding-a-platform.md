@@ -629,7 +629,7 @@ They live in `scripts/scraper/targets/` and are auto-discovered by filename
 ```python
 from scripts.scraper.targets import BaseTargetScraper
 
-PLATFORM_NAME = "myplatform_targets"
+PLATFORM_NAME = "myplatform"  # the registry key, as the scraper module names it
 
 class Scraper(BaseTargetScraper):
     def fetch_targets(self) -> dict:
@@ -650,13 +650,16 @@ class Scraper(BaseTargetScraper):
         }
 ```
 
-Add `target_scraper` and `target_source` to the platform's registry entry.
+Add `target_scraper: myplatform_targets` (the module name without `_scraper`)
+and `target_source` to the platform's registry entry.
 
 ### Overrides
 
-Hardware-specific overrides go in `platforms/targets/_overrides.yml`. This file
-defines aliases (e.g. `arm64` maps to `aarch64`) and per-platform core
-additions/removals that the scraper cannot determine automatically.
+Hardware-specific overrides go in `platforms/targets/_overrides.yml`, which no
+scraper writes. Each target can list `aliases` (Batocera's `bcm2711` also
+answers to `rpi4`), `add_cores` and `remove_cores`, and `_default` applies to
+every target of the platform. `apply_target_overrides()` in `common.py` applies
+them, for the packs and for the published target lists alike.
 
 ### Single-target platforms
 
@@ -698,18 +701,35 @@ After all pieces are in place, run the full pipeline:
 python scripts/pipeline.py --offline
 ```
 
-This executes in sequence:
+This executes in sequence, numbered as the run prints them (`STEP_LABELS` in
+`scripts/pipeline.py`):
 
-0. `validate_schemas.py --source-only` - the schema check PR validation runs
-1. `generate_db.py` - rebuild `database.json` from `bios/`
-1b. `provenance_report.py` - dump-catalog coverage from `provenance/`
-2. `refresh_data_dirs.py` - update data directories (skipped with `--offline`)
-3. `verify.py --all` - verify all platforms including the new one
-4. `generate_pack.py --all` - build ZIP packs + install and target manifests
-5. Consistency check: verify and the pack agree on counts and on the paths each archive holds
-6. Pack integrity - extract ZIPs and verify hashes per platform mode
-7. `generate_readme.py` - regenerate README and CONTRIBUTING
-8. `generate_site.py` - regenerate the documentation site and its navigation
+- 0 `validate_schemas.py --source-only`, the schema check PR validation runs
+- 1 `generate_db.py`, rebuild `database.json` from `bios/`
+- 1b `provenance_report.py`, dump-catalog coverage from `provenance/`
+- 1c `romset_recipes.py`, which version each arcade archive is
+- 2 `refresh_data_dirs.py`, update data directories
+- 2a `mame_hash_scraper`, MAME BIOS hashes
+- 2a2 `fbneo_hash_scraper`, FBNeo BIOS hashes
+- 2b `check_buildbot_system.py`, with `--check-buildbot` only
+- 2b2 `check_release_assets.py`, release assets against gitignored files
+- 2c `generate_truth.py`, with `--with-truth` or `--with-export`
+- 2d `diff_truth.py`, truth against the scraped platforms
+- 2e `export_native.py`, with `--with-export`
+- 3 `verify.py --all`, verify all platforms including the new one
+- 3a `identity.py --strict`, one content under two identities
+- 3b `slots.py`, destinations both layers claim
+- 4 `generate_pack.py --all`, build the ZIP packs
+- 4b `generate_pack.py --manifest`, install manifests
+- 4c `generate_pack.py --manifest-targets`, target manifests
+- 4d `bundled_only.py --strict`, copies only an emulator install provides
+- 5 Consistency check: verify and the pack agree on counts and on the paths each archive holds
+- 6 Pack integrity: extract the ZIPs and check hashes per platform mode
+- 7 `generate_readme.py`, regenerate README and CONTRIBUTING
+- 8 `generate_site.py`, regenerate the site pages and navigation
+- 8b `npm run build` in `website/`, then `validate_site.py`
+
+`--offline` skips steps 2 to 2b2.
 
 A new platform is archived-by-default nowhere: `status: active` puts it in
 `list_platforms.py`, the CI matrix, and the scrapers. Set
