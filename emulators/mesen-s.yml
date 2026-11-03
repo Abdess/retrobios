@@ -17,7 +17,7 @@ version_basis:
   pattern: 'uint16_t major = (\d+);\s*\n\s*uint8_t minor = (\d+);\s*\n\s*uint8_t revision = (\d+);'
   format: "{1}.{2}.{3}"
 cores: [mesen-s, mesen_s]
-systems: [nintendo-snes, nintendo-gb, nintendo-gbc, nintendo-super-game-boy, nintendo-satellaview]
+systems: [nintendo-snes, nintendo-gb, nintendo-gbc, nintendo-sgb, nintendo-satellaview]
 
 notes: >
   High-accuracy SNES/SFC emulator with Game Boy/Color and Super Game Boy

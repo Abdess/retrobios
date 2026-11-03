@@ -272,6 +272,33 @@ def attribute_systems(
     return {name: sorted(found) for name, found in systems.items()}
 
 
+def device_systems(
+    machines: dict[str, MachineLinks],
+    seeds: dict[str, str],
+    fallback: str,
+) -> dict[str, list[str]]:
+    """Systems whose machines can load each set, unplaced machines under *fallback*.
+
+    attribute_systems files a set under the systems of the machines a seed
+    places. A machine no seed places (a computer no platform runs through
+    this profile, a game outside every BIOS family) still loads its devices,
+    and MAME starts it from its set name, the way an arcade folder passes a
+    game: it counts as a machine of *fallback*. A set only such machines
+    load (an Amiga keyboard, an ISA card) then goes under *fallback* alone,
+    and a set both kinds load (ym2413, for the CoCo and for arcade games)
+    under both. A set no runnable machine of the release instantiates keeps
+    no system: the document never names its machine.
+    """
+    if not fallback:
+        return attribute_systems(machines, seeds)
+    unplaced = {
+        name: fallback
+        for name, links in machines.items()
+        if not links.isdevice and not _seed_system(name, machines, seeds)
+    }
+    return attribute_systems(machines, {**seeds, **unplaced})
+
+
 def platform_seeds(
     stated: Iterable[tuple[str, str]],
     machines: dict[str, MachineLinks],

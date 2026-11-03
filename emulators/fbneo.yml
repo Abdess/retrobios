@@ -5,8 +5,8 @@ source: "https://github.com/libretro/FBNeo"
 upstream: "https://github.com/finalburnneo/FBNeo"
 logo: "https://raw.githubusercontent.com/finalburnneo/FBNeo/master/projectfiles/xcode/Emulator/Assets.xcassets/AppIcon.appiconset/icon_512.png"
 profiled_date: "2026-10-23"
-source_commit: "32958a89abd645ed20387c8d31d21ede3bc48161"
-upstream_commit: "697e385c8285bfc528343b96d948ee3a4f9e24c5"
+source_commit: "da14132bab6683980b1ad7e4d0d6fd47bf06dce7"
+upstream_commit: "c110542721d8674b6ff48e691ac032c040fecbba"
 core_version: "v1.0.0.03"
 version_basis:
   kind: file
@@ -59,16 +59,17 @@ notes: |
   FinalBurn Neo is a multi-system arcade and console emulator. BIOS files are
   expected as MAME-format ZIP archives containing individual ROM chips. The
   libretro core searches for BIOS ZIPs in this order
-  (src/burner/libretro/libretro.cpp:882-950):
-    1. {system_dir}/fbneo/patched/{romName}
-    2. {rom_dir}/{romName}
-    3. {system_dir}/fbneo/{romName}
-    4. {system_dir}/{romName}
-    5. directories listed in rom_path.opt
+  (src/burner/libretro/libretro.cpp:883-968, 1963):
+    1. {system_dir}/fbneo/romdata/{romName}, only while a RomData file is
+       being started with patched romsets enabled
+    2. {system_dir}/fbneo/patched/{romName}, with patched romsets enabled
+    3. {rom_dir}/{romName}
+    4. {system_dir}/fbneo/{romName}
+    5. {system_dir}/{romName}
 
   The per-type subdirectories the core used to try under {rom_dir} and
   {system_dir}/fbneo, arcade and consoles, are gone: a BIOS ZIP has to sit
-  directly in one of the four directories above.
+  directly in one of directories 3 to 5 above.
 
   Each game driver specifies a parent BIOS set via BurnDriver. The BIOS ZIP
   must contain the individual ROM chip files listed below. CRC32 values from
@@ -688,6 +689,15 @@ files:
     note: "SH-2 BIOS, SF3 2nd Impact Hispanic"
     source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:505"
 
+  - name: "sfiii2_asia.29f400.u2"
+    archive: sfiii2a.zip
+    system: capcom-cps3
+    required: true
+    size: 524288
+    crc32: "4518d589"
+    note: "SH-2 BIOS, SF3 2nd Impact Asia"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:520"
+
   - name: "sfiii2_asia_nocd.29f400.u2"
     archive: sfiii2n.zip
     system: capcom-cps3
@@ -695,7 +705,7 @@ files:
     size: 524288
     crc32: "fd297c0d"
     note: "SH-2 BIOS, SF3 2nd Impact Asia (No CD)"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:520"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:535"
 
   # Street Fighter III 3rd Strike
   - name: "sfiii3_euro.29f400.u2"
@@ -705,7 +715,7 @@ files:
     size: 524288
     crc32: "30bbf293"
     note: "SH-2 BIOS, SF3 3rd Strike Europe"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:579"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:594"
 
   - name: "sfiii3_usa.29f400.u2"
     archive: sfiii3u.zip
@@ -714,7 +724,7 @@ files:
     size: 524288
     crc32: "ecc545c1"
     note: "SH-2 BIOS, SF3 3rd Strike USA"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:594"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:609"
 
   - name: "sfiii3_japan.29f400.u2"
     archive: sfiii3j.zip
@@ -723,7 +733,7 @@ files:
     size: 524288
     crc32: "63f23d1f"
     note: "SH-2 BIOS, SF3 3rd Strike Japan"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:609"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:624"
 
   - name: "sfiii3_japan_nocd.29f400.u2"
     archive: sfiii3n.zip
@@ -732,7 +742,7 @@ files:
     size: 524288
     crc32: "1edc6366"
     note: "SH-2 BIOS, SF3 3rd Strike Japan (No CD)"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:624"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:639"
 
   - name: "sfiii3_asia_nocd.29f400.u2"
     archive: sfiii3na.zip
@@ -741,7 +751,7 @@ files:
     size: 524288
     crc32: "a12ebcd1"
     note: "SH-2 BIOS, SF3 3rd Strike Asia (No CD)"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:637"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:652"
 
   # JoJo's Bizarre Adventure
   - name: "jojo_euro.29f400.u2"
@@ -751,7 +761,7 @@ files:
     size: 524288
     crc32: "513e40ec"
     note: "SH-2 BIOS, JoJo's Venture Europe"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:799"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:814"
 
   - name: "jojo_usa.29f400.u2"
     archive: jojou.zip
@@ -760,7 +770,7 @@ files:
     size: 524288
     crc32: "8d40f7be"
     note: "SH-2 BIOS, JoJo's Venture USA"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:814"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:829"
 
   - name: "jojo_asia.29f400.u2"
     archive: jojoa.zip
@@ -769,7 +779,7 @@ files:
     size: 524288
     crc32: "789aa72a"
     note: "SH-2 BIOS, JoJo's Venture Asia"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:829"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:844"
 
   - name: "jojo_japan.29f400.u2"
     archive: jojoj.zip
@@ -778,7 +788,7 @@ files:
     size: 524288
     crc32: "02778f60"
     note: "SH-2 BIOS, JoJo's Venture Japan"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:844"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:859"
 
   - name: "jojo_asia_nocd.29f400.u2"
     archive: jojon.zip
@@ -787,7 +797,7 @@ files:
     size: 524288
     crc32: "05b4f953"
     note: "SH-2 BIOS, JoJo's Venture Asia (No CD)"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:859"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:874"
 
   # JoJo's Bizarre Adventure: Heritage for the Future
   - name: "jojoba_euro.29f400.u2"
@@ -797,7 +807,7 @@ files:
     size: 524288
     crc32: "63cc8800"
     note: "SH-2 BIOS, JoJo's BA: Heritage Europe"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1184"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1199"
 
   - name: "jojoba_japan.29f400.u2"
     archive: jojobajr1.zip
@@ -806,7 +816,7 @@ files:
     size: 524288
     crc32: "3085478c"
     note: "SH-2 BIOS, JoJo's BA: Heritage Japan"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1199"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1214"
 
   - name: "jojoba_euro_nocd.29f400.u2"
     archive: jojoba.zip
@@ -815,7 +825,7 @@ files:
     size: 524288
     crc32: "1ee2d679"
     note: "SH-2 BIOS, JoJo's BA: Heritage Europe (No CD)"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1120"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1135"
 
   - name: "jojoba_japan_nocd.29f400.u2"
     archive: jojoban.zip
@@ -824,7 +834,7 @@ files:
     size: 524288
     crc32: "4dab19f5"
     note: "SH-2 BIOS, JoJo's BA: Heritage Japan (No CD)"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1133"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1148"
 
   # Red Earth / Warzard
   - name: "redearth_euro.29f400.u2"
@@ -834,7 +844,7 @@ files:
     size: 524288
     crc32: "02e0f336"
     note: "SH-2 BIOS, Red Earth Europe"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1362"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1377"
 
   - name: "warzard_japan.29f400.u2"
     archive: warzard.zip
@@ -843,7 +853,7 @@ files:
     size: 524288
     crc32: "f8e2f0c6"
     note: "SH-2 BIOS, Warzard Japan"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1377"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1392"
 
   - name: "redearth_asia_nocd.29f400.u2"
     archive: redearthn.zip
@@ -852,7 +862,7 @@ files:
     size: 524288
     crc32: "7a4f0851"
     note: "SH-2 BIOS, Red Earth Asia (No CD)"
-    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1392"
+    source_ref: "upstream src/burn/drv/cps3/d_cps3.cpp:1407"
 
   # -------------------------------------------------------
   # Super Kaneko Nova System (skns.zip)
@@ -1478,7 +1488,7 @@ files:
     sha1: "30c6ad697439de7c2158192ecdb48f5edd37478e"
     md5: "f5cdce5b3749d673ad8f073ccc7371e4"
     note: "High score database, enables persistent high scores across all arcade games. The hash is that of metadata/hiscore.dat at source_commit."
-    source_ref: "source src/burn/hiscore.cpp:154-161, 407, source src/burn/burn.cpp:876"
+    source_ref: "source src/burn/hiscore.cpp:154-161, 407, source src/burn/burn.cpp:893"
 
   # Large audio samples (>50MB, stored as release assets)
   - name: "donpachi.zip"

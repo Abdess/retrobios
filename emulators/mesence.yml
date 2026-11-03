@@ -32,7 +32,7 @@ systems:
   - nintendo-snes
   - nintendo-satellaview
   - nintendo-sufami-turbo
-  - nintendo-super-game-boy
+  - nintendo-sgb
   - nintendo-gb
   - nintendo-gbc
   - nintendo-gba
@@ -411,7 +411,7 @@ files:
   - name: "SGB1.sfc"
     standalone_path: "Firmware/SGB1.sfc"
     mode: standalone
-    system: nintendo-super-game-boy
+    system: nintendo-sgb
     required: false
     size: 262144
     validation: [size]
@@ -422,7 +422,7 @@ files:
   - name: "SGB2.sfc"
     path: "SGB2.sfc"
     standalone_path: "Firmware/SGB2.sfc"
-    system: nintendo-super-game-boy
+    system: nintendo-sgb
     required: false
     size: 524288
     validation: [size]
@@ -461,7 +461,7 @@ files:
     standalone_path: "Firmware/sgb_boot.bin"
     mode: standalone
     aliases: ["sgb_bios.bin"]
-    system: nintendo-super-game-boy
+    system: nintendo-sgb
     required: false
     size: 256
     validation: [size]
@@ -473,7 +473,7 @@ files:
     path: "sgb2_boot.bin"
     standalone_path: "Firmware/sgb2_boot.bin"
     aliases: ["sgb_bios.bin"]
-    system: nintendo-super-game-boy
+    system: nintendo-sgb
     required: false
     size: 256
     validation: [size]

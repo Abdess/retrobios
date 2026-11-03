@@ -2663,6 +2663,20 @@ SYSTEM_ALIASES: dict[str, str] = {
     # profiles use only through these.
     "sega-segacd": "sega-megacd",
     "nes-fds": "nintendo-fds",
+    # One machine, two spellings across platform folders and profiles:
+    # Recalbox's apple2gs, Batocera's astrocade, KNULLI and RetroBat's
+    # astrocde, MiSTer's creativision, Batocera's gamepocketcomputer
+    # folder, BizHawk's Super Game Boy, the FBA 2012 board names.
+    "apple2gs": "apple-iigs",
+    "astrocade": "bally-astrocade",
+    "astrocde": "bally-astrocade",
+    "creativision": "crvision",
+    "gamepocketcomputer": "gamepock",
+    "nintendo-super-game-boy": "nintendo-sgb",
+    "cps1": "capcom-cps1",
+    "cps2": "capcom-cps2",
+    "cps3": "capcom-cps3",
+    "pgm": "igs-pgm",
 }
 
 

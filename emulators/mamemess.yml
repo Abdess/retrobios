@@ -17,9 +17,8 @@ cores:
   - mamemess
 systems:
   - apple2
-  - apple2gs
-  - astrocde
-  - astrocade
+  - apple-iigs
+  - bally-astrocade
   - coleco-adam
   - crvision
   - entex-advision
@@ -667,7 +666,7 @@ files:
   - name: astrocde.zip
     required: true
     category: bios_zip
-    system: astrocde
+    system: bally-astrocade
     source_ref: "upstream src/mame/bally/astrohome.cpp:244-247"
     contents:
       - name: astro.bin
@@ -678,7 +677,7 @@ files:
   - name: astrocdl.zip
     required: false
     category: bios_zip
-    system: astrocde
+    system: bally-astrocade
     source_ref: "upstream src/mame/bally/astrohome.cpp:249-251"
     contents:
       - name: ballyhlc.bin
@@ -689,7 +688,7 @@ files:
   - name: astrocdw.zip
     required: false
     category: bios_zip
-    system: astrocde
+    system: bally-astrocade
     source_ref: "upstream src/mame/bally/astrohome.cpp:254-257"
     contents:
       - name: bioswhit.bin
@@ -875,7 +874,7 @@ files:
   - name: apple2gs.zip
     required: true
     category: bios_zip
-    system: apple2gs
+    system: apple-iigs
     source_ref: "source src/mame/apple/apple2gs.cpp:3893-3907"
     contents:
       - name: 341s0632-2.bin
