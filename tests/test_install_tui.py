@@ -13967,7 +13967,9 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
                     small = " ".join(str(line) for line in install.tui_view(state, 40, 12))
                 folder = str(state.folder_default)
                 self.assertIn("reads its BIOS files", small)
-                self.assertIn(folder[-12:], small)
+                # The folder wraps after a separator wherever the temporary
+                # path's length puts it: read it with the line breaks out.
+                self.assertIn(folder, "".join(small.split()))
 
     # The owner's note: Cores drew every box empty when no core narrows the
     # run, read as "nothing is ticked, tick them all".
