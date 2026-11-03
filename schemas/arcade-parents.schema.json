@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abdess.github.io/retrobios/api/v1/schemas/arcade-parents.schema.json",
+  "title": "RetroBIOS arcade parent index of one core version",
+  "description": "games/arcade/<profile>.json, written by python -m scripts.scraper.arcade_parent_importer from the DAT the profile pins. A game set needs every BIOS set it is listed under (the romof chain read to its end) and, for the MAME family, every device set with ROMs it is listed under.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "profile", "core_version", "source", "bios", "devices", "chd", "missing_parents", "counts"],
+  "$defs": {
+    "set_name": { "type": "string", "minLength": 1, "pattern": "^[^\\s/\\\\]+$" },
+    "set_list": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/set_name" },
+      "uniqueItems": true
+    },
+    "sets_by_archive": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/set_name" },
+      "additionalProperties": { "$ref": "#/$defs/set_list", "minItems": 1 }
+    },
+    "sha1": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "count": { "type": "integer", "minimum": 0 }
+  },
+  "properties": {
+    "schema": { "const": 1 },
+    "profile": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_.-]*$" },
+    "core_version": { "type": ["string", "null"] },
+    "source": {
+      "oneOf": [
+        {
+          "type": "object",
+          "description": "A MAME -listxml release asset.",
+          "additionalProperties": false,
+          "required": ["release", "url", "sha256"],
+          "properties": {
+            "release": { "type": "string", "minLength": 1 },
+            "url": { "type": "string", "pattern": "^https://" },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          }
+        },
+        {
+          "type": "object",
+          "description": "Files of a repository at a commit, each with its git blob sha.",
+          "additionalProperties": false,
+          "required": ["repo", "commit", "files"],
+          "properties": {
+            "repo": { "type": "string", "pattern": "^https://" },
+            "commit": { "$ref": "#/$defs/sha1" },
+            "files": {
+              "type": "object",
+              "minProperties": 1,
+              "additionalProperties": { "$ref": "#/$defs/sha1" }
+            }
+          }
+        }
+      ]
+    },
+    "bios": {
+      "$ref": "#/$defs/sets_by_archive",
+      "description": "BIOS set -> the game sets whose romof chain reaches it."
+    },
+    "devices": {
+      "$ref": "#/$defs/sets_by_archive",
+      "description": "Device set with ROMs -> the game sets that instantiate it."
+    },
+    "chd": {
+      "$ref": "#/$defs/set_list",
+      "description": "Game sets that also need a CHD, which is game content and is not installed."
+    },
+    "missing_parents": {
+      "type": "object",
+      "description": "Game set -> the romof target the DAT does not carry.",
+      "propertyNames": { "$ref": "#/$defs/set_name" },
+      "additionalProperties": { "$ref": "#/$defs/set_name" }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sets", "games", "games_with_bios", "bios_sets", "bios_roots_used", "games_with_devices", "chd_games", "missing_parents"],
+      "properties": {
+        "sets": { "$ref": "#/$defs/count" },
+        "games": { "$ref": "#/$defs/count" },
+        "games_with_bios": { "$ref": "#/$defs/count" },
+        "bios_sets": { "$ref": "#/$defs/count" },
+        "bios_roots_used": { "$ref": "#/$defs/count" },
+        "games_with_devices": { "$ref": "#/$defs/count" },
+        "chd_games": { "$ref": "#/$defs/count" },
+        "missing_parents": { "$ref": "#/$defs/count" }
+      }
+    }
+  }
+}

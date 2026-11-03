@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE mame [
+<!ELEMENT mame (game+)>
+]>
+<mame build="0.78 (fixture)">
+	<game name="kof98" sourcefile="neogeo.c" romof="neogeo">
+		<description>KOF 98</description>
+		<rom name="242-p1.bin" size="2097152" crc="61ac868a"/>
+	</game>
+	<game runnable="no" name="neogeo">
+		<description>Neo-Geo</description>
+		<rom name="neo-geo.rom" size="131072" crc="9036d879"/>
+	</game>
+	<game runnable="no" name="psarc95x">
+		<description>A root no game names</description>
+		<rom name="x.bin" size="16" crc="55555555"/>
+	</game>
+	<game name="brvblade" sourcefile="zn.c" romof="psarc95">
+		<description>Brave Blade</description>
+		<rom name="b.bin" size="16" crc="66666666"/>
+	</game>
+</mame>
