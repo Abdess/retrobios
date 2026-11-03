@@ -7905,7 +7905,8 @@ def fold_line(text: str, hang: str = "  ") -> str:
     at /media/moi/ONION/BIOS" broke inside "(RetroArch files)" and a folder
     inside its name (tui_audit_17 P3-8)."""
     cols = max(terminal_size()[0] - 1, 8)
-    if cell_width(text) <= cols:
+    if cell_width(text) <= cols or not _is_terminal(sys.stdout):
+        # A pipe or a log folds nothing: the line is kept whole there.
         return text
     lead = text[:len(text) - len(text.lstrip(" "))]
     prefix = lead + hang

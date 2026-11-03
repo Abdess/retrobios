@@ -480,7 +480,9 @@ On a first install nothing is in place. On a later run the line counts what
 is already there, and only the rest is downloaded. A download of 1 GB or more
 is confirmed first, the size and the folder in the question.
 
-The second phase downloads what is missing, one line per file:
+The second phase downloads what is missing. At a terminal one progress line
+moves with the count and the size. A pipe or a log gets one line per file,
+as the log of the run below:
 
 <!-- generated: run-download -->
 
@@ -525,9 +527,10 @@ RetroArch with `--system sony-playstation`, from the list of 2026-10-27:
 
 `--dry-run` prints the same line under its plan.
 
-When some files came from this machine rather than the network, a line under
-`Done` says where each came from (`38 files copied from E:\, 3 copied from
-the wrong place in the BIOS folder, 4 downloaded.`). See
+When some files came from this machine rather than the network, the run says
+where each came from: on the `Done` line when all came from one place
+(`Done. 22 files copied from /home/me/old.`), on a line under it otherwise
+(`2 files copied from /home/me/old, 2 downloaded.`). See
 [Copy from an old card](#copy-from-an-old-card).
 
 The word `Done` and the BIOS folder are the confirmation. Any other ending
@@ -565,20 +568,27 @@ replaces it and keeps the old one, see
 ### Why a file is refused { #why-a-file-is-refused }
 
 Each file `--check` flags comes with the reason it found and the place each
-core opens it:
+core reads it. A RetroArch folder holding a copy of each kind, checked
+against a list of four files:
+
+<!-- generated: check-refused -->
 
 ```
   3 files to download:
+  2 of these files are in the BIOS folder in the wrong place: a run without --check copies them where the cores open them, and leaves your copies as they are.
     wrong copy: scph5501.bin
       another region: the contents of scph5500.bin (japan)
-      opened at /home/me/.config/retroarch/system/scph5501.bin by beetle_psx, pcsx_rearmed
+      read by beetle_psx, pcsx_rearmed at /home/me/.config/retroarch/system/scph5501.bin
     missing: gba_bios.bin
       nested folder: it is at system/system/gba_bios.bin, a system folder inside system
-      opened at /home/me/.config/retroarch/system/gba_bios.bin by mgba
+      a run without --check copies it into place
+      read by mgba at /home/me/.config/retroarch/system/gba_bios.bin
     missing: pcsx/extra.bin
       still zipped: it is inside PSX BIOS.zip
-      opened at /home/me/.config/retroarch/system/pcsx/extra.bin by pcsx_rearmed
+      a run without --check copies it into place
+      read by pcsx_rearmed at /home/me/.config/retroarch/system/pcsx/extra.bin
 ```
+<!-- /generated: check-refused -->
 
 | Reason | What the folder holds |
 |--------|-----------------------|
@@ -699,12 +709,15 @@ other contents is kept aside first, as a download would replace it (see
 [Files you already had](#files-you-already-had)). What no folder holds is
 downloaded as usual, or taken from the pack with `--from-pack`. Several
 `--from` are read in the order given, and the end of the run says where each
-file came from:
+file came from. A run of a list of four files, two of them in `old`:
+
+<!-- generated: from-run -->
 
 ```
-Done. 44 files installed.
-  38 files copied from E:\, 4 downloaded, 2 still missing.
+Done. 4 files installed.
+  2 files copied from /home/me/old, 2 downloaded.
 ```
+<!-- /generated: from-run -->
 
 `--check --from FOLDER` writes nothing and says how many files the folder
 would give (`E:\ holds 38 of these files: a run without --check copies
@@ -1056,6 +1069,8 @@ gives for the device, below the card's root instead of its mount point:
 | `.tmp_update/onionVersion/version.txt` | Onion | `BIOS`, RetroArch's list |
 | `.allium/` | Allium | `BIOS`, RetroArch's list |
 | `Koriki/version.txt` | Koriki | `BIOS`, RetroArch's list |
+| `bgmusic/` beside `bios/`, on a drive that is not a fixed disk | ArkOS | `bios`, RetroArch's list |
+| `launchimages/` beside `bios/`, on a drive that is not a fixed disk | ArkOS | `bios`, RetroArch's list |
 | `gamedata/`, `homebrew/` beside `bios/`, on a drive that is not a fixed disk | AmberELEC | `bios`, AmberELEC's list |
 | `bezels/default.cfg` beside `bios/`, on a drive that is not a fixed disk | EmuELEC | `bios`, EmuELEC's list |
 | `system/batocera.conf` holding `system.hostname=BATOCERA` or no hostname line, and no KNULLI file above | Batocera SHARE drive | `bios`, Batocera's list |
@@ -1635,14 +1650,20 @@ The build scripts need 3.9 and are not bound by this.
 Every change to `install.py` recomputes the SHA-256 pinned in `install.sh` and
 `install.ps1` in the same commit. The tests compare the pins with the file.
 
-The tables of options, events, exit codes and keys on this page sit between
-`generated` markers and are written from `install.py` by
-`scripts/generate_installer_doc.py`: the options from its parser, the events
-from `EVENT_KEYS`, the codes from its `sys.exit` calls, the keys from
-`TUI_ROUTES`. The prose cells stay as written. A row the code gains stops the
-script until its text is added inside the markers, and `--check`, which a
-test runs, fails on a table behind the code. `--page FILE` renders another
-copy of the page, which the tests use.
+The tables of options, events, exit codes, keys and card markers, the line
+menu and the run samples on this page sit between `generated` markers and are
+written from `install.py` by `scripts/generate_installer_doc.py`: the options
+from its parser, the events from `EVENT_KEYS`, the codes from its `sys.exit`
+calls, the keys from `TUI_ROUTES`, the card markers from its card rules. The
+run samples (a dry run, a first install, a check, the reasons a file is
+refused, a copy from an old card) are printed by `install.py` itself, in a
+sandbox under `tmp/` served on the loopback from the committed
+`install/*.json`. A new list therefore rewrites this page, and `--check`
+fails until the script has run. Pipeline step 7 runs it after the README.
+The prose cells stay as written. A row the code gains stops the script until
+its text is added inside the markers, and `--check`, which a test runs, fails
+on a table behind the code. `--page FILE` renders another copy of the page,
+which the tests use.
 
 The [handheld](#on-a-handheld-the-retrobios-port) archives each carry
 `install.py`, the one the one-line command of the same commit downloads:
@@ -1714,6 +1735,7 @@ other schemas under `api/v1/schemas/`.
 | `scanned` | `folder`, `files`, `truncated`, `other_drives` | Each folder named with `--from`, once read and before `detect`. `files` counts the files found, `truncated` is true when the search stopped at 200,000 of them, and `other_drives` lists the folders below it on another drive, which were not entered |
 | `version` | `platform`, `list_version`, `installed_version`, `message` | Before `choices`, when the system here runs another version than the one the list was built for: `list_version` is the list's, `installed_version` the one the system's version file states, and `message` says it and what it means. Not written when either version is unknown. The run goes on |
 | `choices` | `platform`, `systems` | Before `checking`: the systems the run's list lets one choose among, sorted by id, `other` last for the files no system names. The run's other options apply (`--core`, `--region`, `--no-game-data`, the files left out for an unknown save directory), `--system` does not: these are the systems a screen lists to choose from, and the count a `--system` is out of |
+| `set_aside` | `platform`, `dests` | Right after `choices`: the files of the list the run sets aside before any choice, in list order, those read from a save directory whose place is not known among them. A screen chooses its cores among the rest, the cores `--core` accepts |
 | `file` | `platform`, `dest`, `systems`, `size`, `state` | Each file of the list after the check. `state` is `present` (hash verified), `wrong_hash` or `missing` |
 | `system` | `platform`, `system`, `name`, `files`, `present`, `missing`, `wrong_hash`, `bytes_needed` | Each system, sorted by id, and with `--system` only the systems named. Files with no system count under `other`. `name` is the platform's own name for it |
 | `checking` | `files_done`, `files_total` | While the files already in the folder are read and hashed, at most every half second and once at the end. `files_total` counts the files found in place |
