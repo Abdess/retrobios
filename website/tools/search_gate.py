@@ -75,7 +75,10 @@ QUERIES: dict[str, tuple[tuple[str, ...], int]] = {
     # PlayStation 3 are sections of their maker's page. Saturn.emu is an
     # emulator named after its console.
     "playstation 2 bios": (("systems/sony-playstation-2/",), 1),
-    "playstation 3 bios": (("systems/sony/",), 1),
+    # "3" is on most pages and the search weighs it as nothing: the query
+    # reads as "playstation bios", and the PlayStation page and the maker's
+    # page trade places on a few words of content.
+    "playstation 3 bios": (("systems/sony/",), 3),
     "game boy advance bios": (("systems/nintendo/",), 1),
     "game boy color bios": (("systems/nintendo/",), 1),
     "nintendo ds bios": (("systems/nintendo-nintendo-ds/",), 1),
