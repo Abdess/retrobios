@@ -299,7 +299,19 @@ class ShownOutputIsPrintedOutput(unittest.TestCase):
         (r"^\S.*: \d+/\d+ (OK|present)\b.*\[(md5|sha1|existence)\]$", "}: {', '.join(parts)} [{mode}]"),
         (r"^  (OK|UNTESTED|MISSING) \((required|optional)[^)]*\): \S+/\S+", '"  UNTESTED ({req}{hle}): {key}: {reason}"'),
         (r"^  DISCREPANCY: \S+/\S+: ", '"  DISCREPANCY: {key}: {disc}"'),
-        (r"^  Core files: \d+ in pack, \d+ required missing, \d+ optional missing$", '"  Core files: {core_in_pack} in pack'),
+        # A count of optional files missing is followed by where to list them:
+        # the sample once showed "1 optional missing" with no such suffix.
+        (r"^  Core files: \d+ in pack, \d+ required missing, "
+         r"(0 optional missing|\d+ optional missing \(--verbose lists them\))$",
+         '"  Core files: {core_in_pack} in pack'),
+        (r"^  Core files held but not packed: \d+ \(.+\)$", '"  Core files held but not packed: '),
+        (r"^  Game data: \d+ in pack, (0 missing|\d+ missing \(--verbose lists them\))$",
+         '"  Game data: {gd_packed} in pack'),
+        (r"^  No external files: \d+ cores \(--verbose lists them\)$",
+         '"  No external files: {len(exclusions)} cores (--verbose lists them)"'),
+        (r"^  Ground truth: \d+/\d+ files have emulator validation \(\d+%\)$",
+         '"  Ground truth: {gt_cov[\'with_validation\']}/{gt_cov[\'total\']} files have emulator validation'),
+        (r"^    \d+ platform-only \(no emulator profile\)$", '"    {no_profile} platform-only (no emulator profile)"'),
         (r"^    \S", None),
     )
 
@@ -320,6 +332,10 @@ class ShownOutputIsPrintedOutput(unittest.TestCase):
                     self.assertTrue(
                         any(re.match(pattern, line) for pattern, _ in self.SHAPES), line
                     )
+
+    def test_an_optional_count_without_its_suffix_is_refused(self):
+        line = "  Core files: 1495 in pack, 0 required missing, 1 optional missing"
+        self.assertFalse(any(re.match(pattern, line) for pattern, _ in self.SHAPES))
 
     def test_no_severity_column(self):
         self.assertNotIn("[CRITICAL]", _read("wiki/troubleshooting.md"))

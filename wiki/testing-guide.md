@@ -256,9 +256,10 @@ in the platform YAML:
 Handles inner ZIP verification for MAME/FBNeo ROM sets (checkInsideZip,
 md5_composite, inner ROM MD5) and path collision deduplication.
 
-One test per distinct pack contract: RetroArch, Batocera, BizHawk, EmuDeck,
-Recalbox, RetroBat, RetroDECK, RomM. Inherited aliases such as Lakka reuse the
-same artifact and are not counted twice.
+One test walks every platform the registry knows, each a subtest, rather than
+a list written by hand: eight names were once written out, and ROCKNIX and
+MiSTer FPGA, both released, were never checked. A platform with no pack in
+`dist/` is skipped, and so is a pack older than a profile it depends on.
 
 ```bash
 python -m unittest tests.test_pack_integrity -v
@@ -266,8 +267,8 @@ python -m unittest tests.test_pack_integrity -v
 python scripts/generate_pack.py --all --verify-packs --output-dir dist/
 ```
 
-Integrated as pipeline step 6/8 (runs after consistency check, before
-README generation). Requires packs in `dist/`, skip with `--skip-packs`.
+The pipeline runs the same check as step 6, after the consistency check and
+before the README. It needs packs in `dist/`, and `--skip-packs` skips it.
 
 ### test_handheld_launchers.py
 
@@ -384,7 +385,7 @@ the door open.
 The Start here pages and the guide part of each setup page are read by someone
 who knows nothing about BIOS files, often on a phone. Each word costs that
 reader attention, so `tests/test_site_copy.py` holds them to numbers measured
-on the generated pages in `docs/`, code blocks left out:
+on the generated pages in `website/src/content/docs/`, code blocks left out:
 
 | Budget | Start here | Setup guide |
 |--------|-----------:|------------:|
@@ -411,7 +412,8 @@ a pack is a ZIP and a platform is a setup.
 The reasons: a reader holds about four things at once, scans more than reads,
 and reads less on a phone. Facts a newcomer does not act on (legal analysis,
 source lines, annotated runs) are kept, on the page one level down. To see
-the numbers of every page, run `python -m tests.test_site_copy --report docs`.
+the numbers of every page, run
+`python -m tests.test_site_copy --report website/src/content/docs`.
 
 ### Adding a wiki page
 
@@ -468,8 +470,11 @@ files it points at gives the installer a 404.
 The `validate.yml` workflow runs `python -m unittest discover -s tests -t . -v` on both
 roads into main: every pull request, and every direct push, that touches
 `bios/`, `platforms/`, `emulators/`, `schemas/`, `scripts/`, `tests/`,
-`install.py` or an input of the site build such as `wiki/`. The same job then
-builds the site with `npm run build --prefix website`, so a page that would fail the
+`ports/`, the installer and its bootstraps, or an input of the site build such
+as `wiki/` or `measurements/`. The `paths:` lists of `validate.yml` are the
+reference, and `tests/test_workflow_paths.py` holds them to the site's inputs. The same job then
+generates the site before the suite, since the tests read its pages, and builds
+it with `npm run build --prefix website` after, so a page that would fail the
 deploy fails the pull request. Work reaches main by push as often as by pull request, so a suite
 wired to pull requests alone would guard the road nobody takes. The test job
 (`run-tests`) runs in parallel with schema validation, and on a pull request

@@ -16,7 +16,8 @@ A page that relies on a run says so in a **Proof** line. Every run is on the
 ## What a test does
 
 - A script runs the emulator with no window and no sound.
-- It starts a game and runs it for a set time, at least twice.
+- It starts a game and runs it for a set time.
+- A test that compares files runs each case at least twice.
 - It compares the screens with ones we checked by eye.
 - It reads the emulator's log to see which BIOS it ran.
 
