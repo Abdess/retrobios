@@ -117,6 +117,46 @@ class ASplitEmulatorListsItsCardsAsRows(unittest.TestCase):
         self.assertIn(">missing</span>", page)
 
 
+class APartIsCutByTheWordsItsRowsShow(unittest.TestCase):
+    """MAME's rows said "required for <system>" once 888 entries named a
+    system, and its first part showed 1,931 words for the 180 cards a
+    count allowed."""
+
+    def setUp(self):
+        systems = ["nintendo-nes", "sega-mega-drive", "sony-playstation"]
+        self.files = [_archive(i, members=1, system=systems[i % 3], region="japan",
+                               md5=f"{i:032x}")
+                      for i in range(gs.EMULATOR_CARDS_PER_PART * 2)]
+        self.profile = {"emulator": "Wide", "type": "standalone", "systems": systems,
+                        "files": self.files}
+
+    def test_rows_that_say_more_take_more_parts(self):
+        parts = gs.emulator_parts("wide", self.files, self.profile, lambda _f: False)
+        self.assertGreater(len(parts), -(-len(self.files) // gs.EMULATOR_CARDS_PER_PART))
+        words = gs._entry_row_words(self.files, self.profile, lambda _f: False)
+        shown = [sum(words[i] for i in entries) for _stem, entries in parts]
+        self.assertLessEqual(max(shown), gs.EMULATOR_PART_WORDS)
+        # Balanced: no part a remainder of a few rows.
+        self.assertLess(max(shown) - min(shown), max(words) * 3)
+        self.assertEqual(sorted(i for _stem, entries in parts for i in entries),
+                         list(range(len(self.files))))
+
+    def test_each_part_page_stays_under_the_built_ceiling(self):
+        pages = gs.emulator_pages("wide", self.profile, EMPTY_DB)
+        parts = gs.emulator_parts("wide", self.files, self.profile, lambda _f: False)
+        self.assertEqual(sorted(pages), sorted(["wide", *(stem for stem, _e in parts)]))
+        ceiling = VISIBLE_CEILINGS["emulator card parts"][1]
+        for stem, _entries in parts:
+            with self.subTest(stem=stem):
+                parser = _Visible()
+                parser.feed(f"<main>{pages[stem]}</main>")
+                self.assertLessEqual(parser.words, ceiling)
+
+    def test_the_budget_leaves_room_for_the_frame(self):
+        self.assertLessEqual(gs.EMULATOR_PART_WORDS + 200,
+                             VISIBLE_CEILINGS["emulator card parts"][1])
+
+
 class ALongEmulatorPageIsOneTable(unittest.TestCase):
     def test_rows_replace_the_index_and_the_cards(self):
         files = ([_archive(i) for i in range(gs.EMULATOR_TABLE_MIN)]

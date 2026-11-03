@@ -36,6 +36,7 @@ from collections import Counter
 from collections.abc import Callable, Iterator
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import TypeVar
 
 sys.path.insert(0, os.path.dirname(__file__))
 from common import (
@@ -6137,6 +6138,7 @@ def _install_box_weight(lines: list[str]) -> int:
 
 # A system card: whether it is a variant, its lines, its sha1.
 Card = tuple[bool, list[str], str]
+_Item = TypeVar("_Item")
 
 
 def _reading_entries(sha1: str, consumers: FileConsumers) -> list[dict]:
@@ -6901,10 +6903,12 @@ def _cards_markdown(cards: list[Card]) -> list[str]:
     return lines
 
 
-def _parts(cards: list[Card], budget: int, sizes: list[int] | None = None) -> list[list[Card]]:
+def _parts(cards: list[_Item], budget: int,
+           sizes: list[int] | None = None) -> list[list[_Item]]:
     """Cards in runs of at most ``budget`` bytes of Markdown, in order.
-    ``sizes`` gives each card's weight when it is not its own Markdown."""
-    parts: list[list[Card]] = [[]]
+    ``sizes`` gives each card's weight when it is not its own Markdown,
+    and is required for items other than cards."""
+    parts: list[list[_Item]] = [[]]
     size = 0
     for index, card in enumerate(cards):
         weight = sizes[index] if sizes else sum(len(line) + 1 for line in card[1])
@@ -7811,6 +7815,17 @@ def _build_rows(profile: dict) -> list[str]:
     return rows
 
 
+def _entry_label(f: dict, profile: dict) -> str:
+    """The name a file card goes by, its title without the badges."""
+    fname = f.get("name", "")
+    if f is any_name_bios(profile):
+        # Found by content: the name is an example, any image of the system works.
+        system = system_name((profile.get("systems") or [""])[0])
+        return (f"a {system} BIOS (example: {_code(fname)})" if _named_example(str(fname))
+                else f"a {system} BIOS, any file name")
+    return _code(fname)
+
+
 def _render_emulator_file(
     f: dict,
     profile: dict,
@@ -7872,12 +7887,7 @@ def _render_emulator_file(
     lines.append(markup.block_open("div", 'class="rb-file-entry"'))
     lines.append("")
     marker = f'<span id="{alias}"></span>' if alias else ""
-    label = _code(fname)
-    if f is any_name_bios(profile):
-        # Found by content: the name is an example, any image of the system works.
-        system = system_name((profile.get("systems") or [""])[0])
-        label = (f"a {system} BIOS (example: {_code(fname)})" if _named_example(str(fname))
-                 else f"a {system} BIOS, any file name")
+    label = _entry_label(f, profile)
     title = f"{marker}{label}" if badges_apart else f"{marker}{label} {badge_str}"
     lines.append(_card_title(title, anchor, weight=5))
     lines.append("")
@@ -9218,6 +9228,14 @@ EMULATOR_CARDS_PER_PAGE = 220
 # since siteentries.py, about five elements and 60 bytes more: at 220 a
 # part, MAME's first was 612 KB and 9,777 elements.
 EMULATOR_CARDS_PER_PART = 180
+# The words a part's rows may show, every card closed. A count of cards
+# held while the rows did not grow: once 888 of MAME's entries named
+# their system, each row said "for <system>" and the first part showed
+# 1,931 words for 1,180 before. The frame of a part (headings, filter
+# boxes, the links to the other parts, the footer) shows 100 to 170 more,
+# and tests/test_site_entry_tables.py holds a part under 1,693: about a
+# tenth is left as margin.
+EMULATOR_PART_WORDS = 1_350
 
 
 # The headings an emulator's cards go under, in page order: what it needs
@@ -9242,16 +9260,56 @@ def _display_order(files: list) -> list[int]:
     return sorted(range(len(files)), key=lambda i: _SECTION_RANK[_card_section(files[i])])
 
 
-def emulator_parts(name: str, files: list) -> list[tuple[str, list[int]]]:
+def _html_words(fragment: str) -> int:
+    """The words a browser shows for an HTML fragment, each tag a break."""
+    return len(html.unescape(re.sub(r"<[^>]*>", " ", fragment)).split())
+
+
+def _entry_row_words(files: list[dict], profile: dict,
+                     available: Callable[[dict], bool]) -> list[int]:
+    """The words each entry's row shows with its card closed: its title
+    and its cells, an empty cell written "-" in a column another row of
+    its section fills. A part's table drops a column its own rows leave
+    empty: counted over the whole section, a row never shows more."""
+    cells = [_entry_cells(f, profile, available) for f in files]
+    filled: dict[str, set[int]] = {}
+    for f, row in zip(files, cells):
+        filled.setdefault(_card_section(f), set()).update(
+            column for column, cell in enumerate(row) if cell)
+    return [_html_words(_entry_label(f, profile)) + sum(
+                _html_words(cell) or column in filled[_card_section(f)]
+                for column, cell in enumerate(row))
+            for f, row in zip(files, cells)]
+
+
+def emulator_parts(name: str, files: list, profile: dict | None = None,
+                   available: Callable[[dict], bool] | None = None,
+                   ) -> list[tuple[str, list[int]]]:
     """The pages an emulator's cards go to, with the entries each holds,
-    or none when they fit on the emulator's page. Balanced, in page order."""
+    or none when they fit on the emulator's page. In page order, at most
+    EMULATOR_PART_WORDS shown and EMULATOR_CARDS_PER_PART entries a part,
+    the parts balanced by words. ``available`` is the page's own test of
+    a held file, the status a row shows: without it every row is weighed
+    "in repo", the longest status."""
     if len(files) <= EMULATOR_CARDS_PER_PAGE:
         return []
+    profile = profile if profile is not None else {"files": files}
     order = _display_order(files)
-    count = -(-len(files) // EMULATOR_CARDS_PER_PART)
-    size = -(-len(files) // count)
-    return [(f"{name}-files-{index + 1}", order[start:start + size])
-            for index, start in enumerate(range(0, len(files), size))]
+    words = _entry_row_words(files, profile, available or (lambda _f: True))
+    sizes = [words[i] for i in order]
+    ceiling = max(EMULATOR_PART_WORDS, max(sizes))
+    count = max(len(_parts(order, ceiling, sizes)), -(-len(files) // EMULATOR_CARDS_PER_PART))
+    while True:
+        # The fewest words a part can hold for the parts to be ``count``:
+        # cut at the ceiling, the last part took what the others left.
+        share = min(-(-sum(sizes) // count), ceiling)
+        runs = _parts(order, share, sizes)
+        while len(runs) > count:
+            share = min(share + max(1, share // 50), ceiling)
+            runs = _parts(order, share, sizes)
+        if max(len(run) for run in runs) <= EMULATOR_CARDS_PER_PART:
+            return [(f"{name}-files-{index}", run) for index, run in enumerate(runs, 1)]
+        count += 1
 
 
 # From this many entries an emulator page lists them as one table, each
@@ -9270,24 +9328,26 @@ def _entry_rows(files: list[dict], cards: list[list[str]], profile: dict,
                 available: Callable[[dict], bool]) -> list[siteentries.Row]:
     """Each entry as a table row: its card's title and body, the number of
     members an archive holds, its badges and its hash."""
-    many = len(profile.get("systems") or []) > 1
     rows = []
     for f, card in zip(files, cards):
         title, body = siteentries.card_title_and_body(card)
-        for_system = system_name(str(f["system"])) if f.get("system") and many else ""
-        contents = f.get("contents") or []
-        badges = _file_badges(f, available(f), for_system)
-        # The first badge says whether the entry is needed: under Required,
-        # Optional or Comes with the app it repeats the section heading.
-        # One element and two words fewer on each of MAME's 1,563 rows.
-        if badges and badges[0].endswith(_SECTION_BADGE.get(_card_section(f), "\0")):
-            badges = badges[1:]
-        rows.append(siteentries.Row(title, body, [
-            f"{len(contents):,}" if contents else "",
-            " ".join(badges),
-            _hash_short(f),
-        ]))
+        rows.append(siteentries.Row(title, body, _entry_cells(f, profile, available)))
     return rows
+
+
+def _entry_cells(f: dict, profile: dict, available: Callable[[dict], bool]) -> list[str]:
+    """An entry's cells beside its title: the members an archive holds,
+    its badges and its hash."""
+    many = len(profile.get("systems") or []) > 1
+    for_system = system_name(str(f["system"])) if f.get("system") and many else ""
+    contents = f.get("contents") or []
+    badges = _file_badges(f, available(f), for_system)
+    # The first badge says whether the entry is needed: under Required,
+    # Optional or Comes with the app it repeats the section heading.
+    # One element and two words fewer on each of MAME's 1,563 rows.
+    if badges and badges[0].endswith(_SECTION_BADGE.get(_card_section(f), "\0")):
+        badges = badges[1:]
+    return [f"{len(contents):,}" if contents else "", " ".join(badges), _hash_short(f)]
 
 
 def _entries_table(files: list[dict], group: list[int], rows: list[siteentries.Row]) -> list[str]:
@@ -9357,15 +9417,17 @@ def _summary_table(files: list[dict], indexes: list[int], cell: Callable[[int, s
     ]
 
 
-def plan_emulator_pages(profiles: dict) -> None:
-    """Record which page holds each emulator card, before any page links one."""
+def plan_emulator_pages(profiles: dict,
+                        available: Callable[[dict], bool] | None = None) -> None:
+    """Record which page holds each emulator card, before any page links one.
+    ``available`` is the test the pages use for a held file."""
     stems = set()
     for name, profile in sorted(profiles.items()):
         if profile.get("type") in ("alias", "test"):
             continue
         files = profile.get("files") or []
         anchors = emulator_file_anchors(files)
-        for stem, entries in emulator_parts(name, files):
+        for stem, entries in emulator_parts(name, files, profile, available):
             stems.add(stem)
             record_emulator_cards(name, stem, [anchors[i] for i in entries])
     clash = stems & set(profiles)
@@ -9721,7 +9783,7 @@ def emulator_pages(
 
         anchors = emulator_file_anchors(files)
         aliases = emulator_file_aliases(files, anchors)
-        parts = emulator_parts(name, files)
+        parts = emulator_parts(name, files, profile, _file_available)
         data_href = f"{name}.md#data-folder" if parts else "#data-folder"
         table_form = markup.starlight() and (bool(parts) or len(files) >= EMULATOR_TABLE_MIN)
         cards = [
@@ -11832,8 +11894,11 @@ def _generate(args: argparse.Namespace) -> None:
     # report the same files.
     gap_report = build_emulator_gap_report(profiles, coverages, db, suppl_names)
 
+    # The test each emulator page builds for itself: the parts a page is
+    # cut into weigh the status its rows show.
+    file_held = _availability_check(db, suppl_names)
+    plan_emulator_pages(profiles, file_held)
     # Build system_id -> manufacturer page map (needed by all generators)
-    plan_emulator_pages(profiles)
     print("Building system cross-reference map...")
     manufacturers = _group_by_manufacturer(db)
     set_system_page_map(
@@ -11999,7 +12064,7 @@ def _generate(args: argparse.Namespace) -> None:
                 or profile.get("pin_frozen")):
             SEARCH_DEMOTED.add(f"emulators/{name}.md")
         files = profile.get("files") or []
-        for stem, entries in emulator_parts(name, files):
+        for stem, entries in emulator_parts(name, files, profile, file_held):
             PAGE_DATA[f"emulators/{stem}.md"] = emulator_structured_data(
                 {**profile, "files": [files[i] for i in entries]})
             PART_PAGES.add(f"emulators/{stem}.md")
