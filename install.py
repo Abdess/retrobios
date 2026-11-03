@@ -4009,7 +4009,7 @@ def fetch_manifest(plat: str) -> dict:
                     else f"the file list could not be fetched: {words}")
         if code == "offline":
             print(f"  No file list for {plat}: {offline_words()}. Give it with "
-                  "--manifest FILE (a copy of install/<platform>.json) or "
+                  f"--manifest FILE (a copy of install/{plat}.json) or "
                   f"--from-pack PACK, or run {offline_undo()}.", file=sys.stderr)
             sys.exit(1)
         if code != "network":
@@ -17918,17 +17918,28 @@ def _armed_hint(state: TuiState, parts: tuple, width: int) -> tuple:
         return parts
     part = parts[at]
     verb = part.split(" ", 1)[1]
-    forms = (f"{part}: {TUI_ARMED}", f"{part}: {TUI_ARMED_SHORT}",
-             f"{part.split(' ', 1)[0]} {' '.join(verb.split()[:3])}: {TUI_ARMED_SHORT}")
-    # Every entry kept first, then the armed one whole.
-    for whole in (True, False):
+    said = armed_words(state, width)
+    forms = (f"{part}: {said}",
+             f"{part.split(' ', 1)[0]} {' '.join(verb.split()[:3])}: {said}")
+    # Every entry kept first, then every one but the help, then the armed
+    # one whole: on a phone at 40 columns Esc Quit went first
+    # (tui_audit_17 P3-11).
+    for keep in (len(parts), len([p for p in parts if not p.startswith("? ")]), 1):
         for form in forms:
             armed = (*parts[:at], form, *parts[at + 1:])
             drawn = _hint(width, *armed)
-            if form.split(" ", 1)[1] in drawn and (
-                    not whole or len(drawn.split("  ")) == len(armed)):
+            if form.split(" ", 1)[1] in drawn and len(drawn.split("  ")) >= keep:
                 return armed
     return (*parts[:at], forms[-1], *parts[at + 1:])
+
+
+def armed_words(state: TuiState, width: int) -> str:
+    """What a first tap says on the row and on the bar alike: "tap again" on
+    a phone, where nothing clicks, and where the bar is short, "click or
+    tap again" else. The row said one and the bar the other."""
+    if state.os_type == "android" or width < TUI_LONG_BAR_WIDTH:
+        return TUI_ARMED_SHORT
+    return TUI_ARMED
 
 
 def _armed_label(state: TuiState, row: TuiRow, width: int) -> TuiRow:
@@ -17937,12 +17948,13 @@ def _armed_label(state: TuiState, row: TuiRow, width: int) -> TuiRow:
     keeps its name where the words do not fit beside it, the bar saying
     them: "Continue: tap again" in its place hid which setup was tapped."""
     verb = _ROW_VERBS.get(row.action, row.label)
-    for label in (f"{row.label}: {TUI_ARMED}", f"{row.label}: {TUI_ARMED_SHORT}"):
-        if cell_width(f"> {label}") <= width:
-            return row._replace(label=label)
+    said = armed_words(state, width)
+    label = f"{row.label}: {said}"
+    if cell_width(f"> {label}") <= width:
+        return row._replace(label=label)
     if row.action not in ("install", "addapp"):
         return row
-    return row._replace(label=f"{verb}: {TUI_ARMED_SHORT}")
+    return row._replace(label=f"{verb}: {said}")
 
 
 # What an armed bar entry adds to its name, drawn in the accent: a mouse
@@ -20739,7 +20751,7 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
                 f"This run makes no network request ({offline_named()}), and the list "
                 "of BIOS files comes from the network.",
                 "Run the installer again with the list saved as a file "
-                "(--manifest FILE, a copy of install/<platform>.json) or with a pack "
+                f"(--manifest FILE, a copy of install/{plat}.json) or with a pack "
                 f"(--from-pack PACK), or {offline_undo()}."], 1))
             return
         title = {"clock": "The clock is wrong",
