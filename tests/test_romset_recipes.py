@@ -374,6 +374,26 @@ class ListXmlRecipes(unittest.TestCase):
             [m["name"] for m in by_name["parentset.zip"]["members"]], ["shared.rom"]
         )
 
+    def test_a_machine_larger_than_the_window_is_kept(self):
+        """Each machine here spans several reads: the window grows until the
+        element closes instead of cutting its start tag away."""
+        from scripts.scraper import romset_dat_importer
+
+        expected = listxml_entries(self._opener(self._document()), "MAME 0.289", None)
+        saved = romset_dat_importer.LISTXML_CHUNK
+        try:
+            for window in (1, 7, 16, 64):
+                romset_dat_importer.LISTXML_CHUNK = window
+                entries = listxml_entries(
+                    self._opener(self._document()), "MAME 0.289", None
+                )
+                self.assertEqual(entries, expected, window)
+        finally:
+            romset_dat_importer.LISTXML_CHUNK = saved
+        self.assertEqual(
+            [entry["name"] for entry in entries], ["childset.zip", "parentset.zip"]
+        )
+
     def test_an_undumped_only_set_is_dropped(self):
         entries = listxml_entries(self._opener(self._document()), "MAME 0.289", None)
         self.assertNotIn("undumped.zip", {entry["name"] for entry in entries})
