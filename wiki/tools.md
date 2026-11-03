@@ -973,6 +973,11 @@ more than its one line:
 | `--record [DIR]` | append the record as one line of `measurements/<emulator>.jsonl` in the checkout `DIR`, by default this one. `DIR` must be the root of a git checkout, never its `measurements/` folder. Commit it |
 | `--emulator` | the profile the record is filed under. By default the profile whose `cores:` names the `.so`, else the core's library name |
 | `--subject` | a slug naming the test, shared by its reruns. By default derived from the claim and method, or from the inputs of a run or bench |
+| `--core-artifact URL` | where a downloaded `.so` came from, such as a buildbot nightly, copied into the record |
+| `--joypad-ports N` | ports given a joypad after loading, as RetroArch does (default 2). |
+| `--state-var SECTION.VAR`, `--state-dir` | a variable of a Mednafen save state as an observable, and a folder that keeps the state of the first repetition to read it again |
+| `--max-load` | refuse to record above this 1-minute load average (default a quarter of the CPUs). Never raise it: a busy host computes wrong hashes |
+| `--no-trace` | run without strace. The record then says that tracing was unavailable |
 | `@FILE` | read arguments from FILE, one per line |
 
 Observables are `frame_sha1` (last frame), `video_sha1` (every frame, chained),
@@ -1161,7 +1166,9 @@ python scripts/region_check.py report        # the outcome of every region recor
 ```
 
 `region_check.py run --help` lists the options. The nightly `--core-name`
-names is downloaded once into `.cache/region/cores/`. A run refused on a busy
+names is downloaded once into `.cache/region/cores/`. `--core` and
+`--core-artifact` run a core built elsewhere instead, `--content-dir` points
+at another romfetch folder, and `--variants` reruns some of the four runs only. A run refused on a busy
 host is tried again every 15 seconds for `--max-load-wait` seconds, and the
 load threshold stays core_probe's.
 
@@ -1210,9 +1217,10 @@ python scripts/standalone_probe.py check pcsx2 \
 | Files | `strace -f` inside the sandbox: the files the emulator opened in the staged BIOS folder, and the ones it looked for there and did not find |
 | Verdict | `core_probe.judge` on each repetition, with the oracle of `tests/campaign/oracle.yml` looked up by the content's sha1 and the emulator's name, plus the emulator's own error strings this script lists (DuckStation's "No BIOS image found for", PCSX2's "Unable to auto locate a BIOS image"). An emulator that exits before the last sample is a crash |
 
-`standalone_probe.py <mode> --help` lists the options. The ones it shares
-with `core_probe.py` mean the same there, and `check` compares on `verdict`
-by default.
+`standalone_probe.py <mode> --help` lists the options. `--sha256` runs an
+older fetched asset than the newest. The ones it shares with `core_probe.py`
+(`--record`, `--max-load`, `--no-trace`, `--require-sandbox`) mean the same
+there, and `check` compares on `verdict` by default.
 
 Supported: DuckStation and PCSX2. Dolphin, Flycast, PPSSPP, melonDS, xemu and
 MAME are installed by EmuDeck from Flathub, Ryujinx from a Codeberg tarball and
