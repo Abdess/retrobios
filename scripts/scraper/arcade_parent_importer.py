@@ -49,6 +49,7 @@ from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from ..artifacts import write_text_atomic
 from ..common import load_emulator_profiles
 from .romset_dat_importer import (
     LISTXML_CHUNK,
@@ -1117,21 +1118,24 @@ def write_if_changed(path: Path, text: str) -> bool:
     if path.is_file() and path.read_text(encoding="utf-8") == text:
         return False
     path.parent.mkdir(parents=True, exist_ok=True)
-    scratch = path.with_suffix(path.suffix + ".part")
-    scratch.write_text(text, encoding="utf-8")
-    scratch.replace(path)
+    write_text_atomic(str(path), text)
     return True
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.splitlines()[0])
     which = parser.add_mutually_exclusive_group(required=True)
-    which.add_argument("--profile", action="append", choices=sorted(PROFILES))
-    which.add_argument("--all", action="store_true")
-    parser.add_argument("--emulators-dir", default="emulators")
-    parser.add_argument("--database", default="database.json")
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE)
+    which.add_argument("--profile", action="append", choices=sorted(PROFILES),
+                       help="profile to import (repeatable)")
+    which.add_argument("--all", action="store_true", help="every profile with an arcade source")
+    parser.add_argument("--emulators-dir", default="emulators",
+                        help="profiles whose BIOS sets are read (default emulators)")
+    parser.add_argument("--database", default="database.json",
+                        help="collection index, to name BIOS sets the collection lacks")
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT,
+                        help=f"where the parent maps are written (default {DEFAULT_OUTPUT})")
+    parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE,
+                        help=f"downloaded DATs and sources (default {DEFAULT_CACHE})")
     parser.add_argument("--offline", action="store_true", help="read the download cache only")
     parser.add_argument("--dry-run", action="store_true", help="print coverage, write nothing")
     args = parser.parse_args()

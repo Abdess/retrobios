@@ -237,10 +237,14 @@ def summary(regions: dict, extras: dict) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.splitlines()[0])
-    parser.add_argument("--regions", type=Path, default=REGIONS_FILE)
-    parser.add_argument("--extras", type=Path, default=EXTRAS_FILE)
-    parser.add_argument("--headers", type=Path, default=HEADERS_FILE)
-    parser.add_argument("--emulators-dir", default="emulators")
+    parser.add_argument("--regions", type=Path, default=REGIONS_FILE,
+                        help=f"region rules to check (default {REGIONS_FILE})")
+    parser.add_argument("--extras", type=Path, default=EXTRAS_FILE,
+                        help=f"extra-file rules to check (default {EXTRAS_FILE})")
+    parser.add_argument("--headers", type=Path, default=HEADERS_FILE,
+                        help=f"header readers the triggers name (default {HEADERS_FILE})")
+    parser.add_argument("--emulators-dir", default="emulators",
+                        help="profiles the rules are checked against (default emulators)")
     parser.add_argument("--json", action="store_true", help="print the summary as JSON")
     args = parser.parse_args()
 

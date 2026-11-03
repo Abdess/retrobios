@@ -26,7 +26,6 @@ import gzip
 import io
 import json
 import re
-import shutil
 import sys
 import urllib.request
 import zipfile
@@ -39,6 +38,7 @@ _SCRIPTS_DIR = str(Path(__file__).resolve().parents[1])
 if _SCRIPTS_DIR not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
 
+from artifacts import copy_stream_atomic, write_text_atomic  # noqa: E402
 from common import parse_untrusted_xml  # noqa: E402
 from region import REGIONS, WORLD  # noqa: E402
 from region_audit import NOINTRO  # noqa: E402
@@ -279,9 +279,7 @@ def write_if_changed(path: Path, text: str) -> bool:
     if path.is_file() and path.read_text(encoding="utf-8") == text:
         return False
     path.parent.mkdir(parents=True, exist_ok=True)
-    scratch = path.with_suffix(path.suffix + ".part")
-    scratch.write_text(text, encoding="utf-8")
-    scratch.replace(path)
+    write_text_atomic(str(path), text)
     return True
 
 
@@ -296,15 +294,9 @@ def _download(url: str, destination: Path, headers: dict[str, str] | None = None
     """Stream url to destination and return the response headers kept."""
     destination.parent.mkdir(parents=True, exist_ok=True)
     request = urllib.request.Request(url, headers={"User-Agent": "retrobios", **(headers or {})})
-    scratch = destination.with_suffix(destination.suffix + ".part")
-    try:
-        with urllib.request.urlopen(request, timeout=300) as response, scratch.open("wb") as out:
-            shutil.copyfileobj(response, out)
-            kept = {"content_disposition": response.headers.get("Content-Disposition", "")}
-        scratch.replace(destination)
-    finally:
-        scratch.unlink(missing_ok=True)
-    return kept
+    with urllib.request.urlopen(request, timeout=300) as response:
+        copy_stream_atomic(response, str(destination))
+        return {"content_disposition": response.headers.get("Content-Disposition", "")}
 
 
 def _today() -> str:
@@ -340,7 +332,7 @@ def fetch_nointro(cache_dir: Path, offline: bool, refresh: bool) -> tuple[Path, 
         "asset_size": asset["size"],
         "fetched": _today(),
     }
-    meta_path.write_text(json.dumps(meta, indent=1) + "\n", encoding="utf-8")
+    write_text_atomic(str(meta_path), json.dumps(meta, indent=1) + "\n")
     return pack, meta
 
 
@@ -359,7 +351,7 @@ def fetch_redump(code: str, cache_dir: Path, offline: bool, refresh: bool) -> tu
     if not match:
         raise RuntimeError(f"{url} answered without a datfile name")
     meta = {"file": match["file"], "url": url, "fetched": _today()}
-    meta_path.write_text(json.dumps(meta, indent=1) + "\n", encoding="utf-8")
+    write_text_atomic(str(meta_path), json.dumps(meta, indent=1) + "\n")
     return pack, meta
 
 
@@ -459,8 +451,10 @@ def main() -> int:
     parser.add_argument("--refresh", action="store_true", help="ask the servers again")
     parser.add_argument("--floor", action="store_true",
                         help="fail when a system holds fewer games than its stored floor")
-    parser.add_argument("--cache-dir", type=Path, default=CACHE_DIR)
-    parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR)
+    parser.add_argument("--cache-dir", type=Path, default=CACHE_DIR,
+                        help=f"downloaded packs (default {CACHE_DIR})")
+    parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR,
+                        help=f"where the catalogs are written (default {OUTPUT_DIR})")
     parser.add_argument("--dry-run", action="store_true", help="print coverage, write nothing")
     args = parser.parse_args()
 

@@ -587,7 +587,8 @@ def print_coverage(coverage: dict, files: dict[Path, str]) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__.splitlines()[0])
-    parser.add_argument("--output-dir", type=Path, default=OUTPUT)
+    parser.add_argument("--output-dir", type=Path, default=OUTPUT,
+                        help=f"where the index is written (default {OUTPUT})")
     parser.add_argument("--check", action="store_true", help="exit 1 when a file would change")
     parser.add_argument("--quiet", action="store_true", help="print only failures")
     args = parser.parse_args()

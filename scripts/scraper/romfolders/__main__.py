@@ -14,6 +14,8 @@ from pathlib import Path
 import yaml
 
 from . import Fetcher, SourceError, load_sources, scrape_setup
+from upstream import UpstreamError  # noqa: E402  (the package puts scripts/ on sys.path)
+from artifacts import write_text_atomic  # noqa: E402
 from ..base_scraper import _PlatformDumper
 
 DEFAULT_DIR = Path("platforms") / "romfolders"
@@ -31,8 +33,10 @@ def main() -> int:
     which.add_argument("--setup", action="append", help="setup id (repeatable)")
     which.add_argument("--all", action="store_true", help="every setup of the sources file")
     which.add_argument("--list", action="store_true", help="list the setups and their format")
-    parser.add_argument("--sources", type=Path, default=DEFAULT_DIR / "_sources")
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_DIR)
+    parser.add_argument("--sources", type=Path, default=DEFAULT_DIR / "_sources",
+                        help="the setups, their repositories and pinned revisions")
+    parser.add_argument("--output-dir", type=Path, default=DEFAULT_DIR,
+                        help=f"where <setup>.yml is written (default {DEFAULT_DIR})")
     parser.add_argument("--offline", action="store_true", help="read the revision cache only")
     parser.add_argument("--dry-run", action="store_true", help="print counts, write nothing")
     args = parser.parse_args()
@@ -53,7 +57,7 @@ def main() -> int:
         fetcher = Fetcher(spec.get("sources", {}), offline=args.offline)
         try:
             doc = scrape_setup(setup, spec, fetcher)
-        except (SourceError, ValueError, KeyError, OSError) as exc:
+        except (SourceError, UpstreamError, ValueError, KeyError, OSError) as exc:
             print(f"FAIL {setup}: {exc}", file=sys.stderr)
             failed += 1
             continue
@@ -63,7 +67,7 @@ def main() -> int:
             target = args.output_dir / f"{setup}.yml"
             text = dump_setup(doc)
             if not target.exists() or target.read_text(encoding="utf-8") != text:
-                target.write_text(text, encoding="utf-8")
+                write_text_atomic(str(target), text)
     return 1 if failed else 0
 
 

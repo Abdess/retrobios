@@ -27,7 +27,6 @@ import zlib
 from pathlib import Path
 from unittest import mock
 
-import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
@@ -529,6 +528,12 @@ class KeepEveryRegionCases(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
+        # The installer's own jobs (Python 3.8 with pyte alone) import this
+        # module for its card builders, and install.py needs no pyyaml.
+        try:
+            import yaml  # noqa: PLC0415
+        except ImportError as exc:
+            raise unittest.SkipTest("pyyaml reads games/regions.yml") from exc
         with open(REPO_ROOT / "games" / "regions.yml", encoding="utf-8") as handle:
             cls.rules = yaml.safe_load(handle)
 
