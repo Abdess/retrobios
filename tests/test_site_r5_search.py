@@ -189,7 +189,7 @@ class GateQueries(unittest.TestCase):
         "3ds bios": (("systems/nintendo-3ds/",), 1),
         "playstation bios": (("systems/sony-playstation/",), 1),
         "playstation 2 bios": (("systems/sony-playstation-2/",), 1),
-        "playstation 3 bios": (("systems/sony/",), 1),
+        "playstation 3 bios": (("systems/sony/",), 3),
         "game boy advance bios": (("systems/nintendo/",), 1),
         "game boy color bios": (("systems/nintendo/",), 1),
         "nintendo ds bios": (("systems/nintendo-nintendo-ds/",), 1),
