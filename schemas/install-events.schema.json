@@ -17,6 +17,7 @@
         "scanned",
         "version",
         "choices",
+        "set_aside",
         "file",
         "system",
         "checking",
@@ -57,6 +58,9 @@
     },
     {
       "$ref": "#/$defs/choices"
+    },
+    {
+      "$ref": "#/$defs/set_aside"
     },
     {
       "$ref": "#/$defs/file"
@@ -292,6 +296,29 @@
           "type": "string"
         },
         "systems": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "set_aside": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "platform",
+        "dests"
+      ],
+      "properties": {
+        "event": {
+          "const": "set_aside"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "dests": {
           "type": "array",
           "items": {
             "type": "string"

@@ -175,6 +175,59 @@ class InstallerOutputExample(unittest.TestCase):
         self.assertLessEqual(abs(added - float(total) * units[unit]), 0.15 * units[unit])
 
 
+class InstallerSamplesSayWhatTheCodePrints(unittest.TestCase):
+    """code_audit_24 P3-8 to P3-12: samples typed by hand outside the
+    generated blocks, a sentence on a log read as the terminal's, pages that
+    described the generator as tables alone, and a sandbox that asked DNS."""
+
+    def test_the_refused_and_from_samples_are_generated(self):
+        import install
+
+        page = _page("installer.md")
+        refused = _generated(page, "check-refused")
+        self.assertRegex(refused, r"\n  \d+ files? [a-z ]+:\n")
+        self.assertIn("read by beetle_psx, pcsx_rearmed at", refused)
+        self.assertNotRegex(page, r"opened at /\S+ by ")
+        self.assertIn('"read by ', inspect.getsource(install.opened_line))
+        ending = _generated(page, "from-run")
+        self.assertRegex(ending, r"Done\. \d+ files installed\.\n  \d+ files copied from ")
+        self.assertNotIn("a line under\n`Done`", page)
+        self.assertNotIn("38 files copied from E:\\, 4 downloaded", page)
+
+    def test_one_line_per_file_is_said_of_a_log(self):
+        page = _page("installer.md")
+        at = page.index("<!-- generated: run-download -->")
+        before = page[page.rindex("\n\n", 0, at - 2):at]
+        self.assertIn("At a terminal one progress line", before)
+        self.assertIn("A pipe or a log gets one line per file", before)
+
+    def test_the_generator_pages_name_the_run_samples_and_step_7(self):
+        tools = _page("tools.md")
+        row = next(line for line in tools.splitlines()
+                   if line.startswith("| `generate_installer_doc.py`"))
+        self.assertIn("run samples", row)
+        self.assertIn("generate_installer_doc.py", next(
+            line for line in tools.splitlines() if line.startswith("| 7 |")))
+        self.assertIn("run samples", _page("installer.md").split(
+            "The tables of options, events, exit codes, keys and card markers", 1)[1][:600])
+        self.assertIn("generate_installer_doc.py", next(
+            line for line in _page("adding-a-platform.md").splitlines()
+            if line.startswith("7. ")))
+
+    def test_the_sandbox_looks_nothing_up(self):
+        import socket
+        from unittest import mock
+
+        import generate_installer_doc
+
+        def no_lookup(*_args: object) -> str:
+            raise AssertionError("the sandbox asked for a name")
+
+        with mock.patch.object(socket, "getfqdn", no_lookup), \
+                generate_installer_doc.Sandbox() as box:
+            self.assertEqual(box.server.server_name, "127.0.0.1")
+
+
 class OneResolutionChain(unittest.TestCase):
     """architecture.md drew path_suffix as the first step, before SHA1, while
     the code and verification-modes.md try it after every hash."""

@@ -49,7 +49,7 @@ Pipeline steps:
 | 4d | Collected copies only an emulator install provides (`bundled_only.py --strict`, gates the run) | - |
 | 5 | Consistency check: counts, paths per archive, every emulator pack | if verify or pack skipped |
 | 6 | Pack integrity (extract + hash) | `--skip-packs` |
-| 7 | Generate README | `--skip-docs` |
+| 7 | Generate README and CONTRIBUTING, then the installer page's tables and run samples (`generate_installer_doc.py`) | `--skip-docs` |
 | 8 | Generate site | `--skip-docs` |
 | 8b | Render the site with `npm run build --prefix website`, then `validate_site.py`, as the deploy does | `--skip-docs`, or Node not set up (`npm ci --prefix website`) |
 
@@ -1301,7 +1301,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `validate_pr.py` | Validate BIOS files in pull requests, post markdown report |
 | `validate_schemas.py` | Validate the data contracts: schemas and semantic invariants. `--source-only` checks `emulators/` and `platforms/` alone, which is what PR validation runs |
 | `generate_event_schema.py` | Write `schemas/install-events.schema.json` from `EVENT_KEYS` in `install.py` (`--check` exits 1 when the file is stale, which `validate_schemas.py` also reports) |
-| `generate_installer_doc.py` | Rewrite the generated tables of `wiki/installer.md` (options, events, exit codes, keys per route) from `install.py` (`--check` exits 1 when a table is stale, `--page FILE` writes another copy of the page) |
+| `generate_installer_doc.py` | Rewrite the generated blocks of `wiki/installer.md` from `install.py`: the tables (options, events, exit codes, keys per route, card markers), the line menu, and the run samples `install.py` prints in a sandbox against the committed `install/*.json`, so a new list rewrites the page (`--check` exits 1 when a block is stale, `--page FILE` writes another copy of the page). Pipeline step 7 |
 | `auto_fetch.py` | Fetch missing BIOS files from known sources (4-step pipeline). A download is accepted only when every cryptographic hash the entry declares (sha256, sha1, md5) matches. crc32 and size find a file the database already holds, never accept a download. An entry with no cryptographic hash is reported and not searched |
 | `list_platforms.py` | List active platforms (`--include-archived` adds the archived ones, used by CI) |
 | `download.py` | Download a pack from GitHub releases, every part checked (Python, stdlib only) |

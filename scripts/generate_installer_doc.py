@@ -14,12 +14,15 @@ install.py gains has no prose yet: the generator names it and writes nothing,
 and the row is added by hand inside the markers, its first cell holding the
 option, kind, code or value alone.
 
-The run samples (a dry run, a first install, a later check) are printed by
-install.py itself, run in its own process against the committed
-install/<platform>.json served on the loopback, from a home and a card made
-under tmp/ and shown as /home/me and /userdata. Only the transport and the
-machine are stood in for, see _child. Each is dated by the `generated` field
-of its list, so a rendering is the same from one day to the next.
+The run samples (a dry run, a first install, a later check, the reasons a
+file is refused, a run copying from an old card) are printed by install.py
+itself, run in its own process against the committed install/<platform>.json
+served on the loopback, from a home and a card made under tmp/ and shown as
+/home/me and /userdata. The reasons and the copy are read from a four-file
+list laid out in that home (SMALL_LIST), whose files are written there. Only
+the transport and the machine are stood in for, see _child. Each is dated by
+the `generated` field of its list, so a rendering is the same from one day
+to the next.
 """
 
 from __future__ import annotations
@@ -33,10 +36,12 @@ import json
 import os
 import re
 import shutil
+import socketserver
 import subprocess
 import sys
 import tempfile
 import threading
+import zipfile
 from pathlib import Path, PurePosixPath
 from typing import Callable
 
@@ -282,6 +287,44 @@ class _ListHandler(http.server.SimpleHTTPRequestHandler):
         return
 
 
+class _LoopbackServer(http.server.ThreadingHTTPServer):
+    """The list server, named by its number: HTTPServer.server_bind looks
+    127.0.0.1 up with socket.getfqdn, a DNS query wherever /etc/hosts does
+    not name it (code_audit_24 P3-12)."""
+
+    def server_bind(self) -> None:
+        socketserver.TCPServer.server_bind(self)
+        host, port = self.server_address[:2]
+        self.server_name, self.server_port = host, port
+
+
+# The list the reasons and the copy are shown with: four files, each with
+# the contents its name says, read as RetroArch's.
+SMALL_LIST = {
+    "scph5500.bin": (b"J" * 64, ["sony-playstation"], ["japan"], None),
+    "scph5501.bin": (b"U" * 64, ["sony-playstation"], ["north-america"],
+                     ["beetle_psx", "pcsx_rearmed"]),
+    "gba_bios.bin": (b"G" * 32, ["nintendo-gba"], None, ["mgba"]),
+    "pcsx/extra.bin": (b"E" * 8, ["sony-playstation"], None, ["pcsx_rearmed"]),
+}
+
+
+def write_small_list(path: Path) -> None:
+    import hashlib  # noqa: PLC0415
+
+    files = []
+    for dest, (data, systems, regions, cores) in SMALL_LIST.items():
+        files.append({"dest": dest, "size": len(data), "sha1": hashlib.sha1(data).hexdigest(),
+                      "sha256": hashlib.sha256(data).hexdigest(),
+                      "md5": hashlib.md5(data).hexdigest(), "systems": systems,
+                      "cores": cores, "repo_path": f"bios/{dest}",
+                      **({"regions": regions} if regions else {})})
+    path.write_text(json.dumps({
+        "manifest_version": 2, "platform": "retroarch", "display_name": "RetroArch",
+        "base_destination": "system", "files": files, "total_files": len(files),
+        "total_size": sum(entry["size"] for entry in files)}), encoding="utf-8")
+
+
 def _child(spec: dict) -> int:
     """install.main() as the sample runs it, in its own process. Only the
     transport and the machine are stood in for: no connection leaves the
@@ -300,8 +343,13 @@ def _child(spec: dict) -> int:
             raise OSError(f"the sample makes no request to {address[0]}")
         return real_connect(address, *args, **kwargs)
 
-    def landed(f: dict, _bios: Path, _verbose: bool = False, progress: object = None,
-               _copy: object = None) -> tuple[str, bool, str]:
+    real_download = _install._download_one
+
+    def landed(f: dict, bios: Path, verbose: bool = False, progress: object = None,
+               copy: object = None) -> tuple[str, bool, str]:
+        if copy is not None:
+            # A copy from this machine is made for real: it is local.
+            return real_download(f, bios, verbose, progress, copy)
         if progress is not None:
             progress.add(f["size"])
         return f["dest"], True, ""
@@ -353,7 +401,7 @@ class Sandbox:
         config = self.home / ".config" / "retroarch" / "retroarch.cfg"
         config.parent.mkdir(parents=True)
         config.write_text(RETROARCH_CFG, encoding="utf-8")
-        self.server = http.server.ThreadingHTTPServer(("127.0.0.1", 0), _ListHandler)
+        self.server = _LoopbackServer(("127.0.0.1", 0), _ListHandler)
         threading.Thread(target=self.server.serve_forever, daemon=True).start()
         return self
 
@@ -362,26 +410,55 @@ class Sandbox:
         self.server.server_close()
         shutil.rmtree(self.root)
 
+    def small(self, kind: str) -> str:
+        """A run over SMALL_LIST in a home of its own: "refused", a --check
+        of a folder holding a copy of each kind a check names, or "from", a
+        run copying from an old card what it holds and downloading the rest."""
+        home = self.root / kind
+        system = home / ".config" / "retroarch" / "system"
+        system.mkdir(parents=True)
+        (system.parent / "retroarch.cfg").write_text(RETROARCH_CFG, encoding="utf-8")
+        listed = home / "list.json"
+        write_small_list(listed)
+        data = {dest: entry[0] for dest, entry in SMALL_LIST.items()}
+        if kind == "refused":
+            (system / "scph5500.bin").write_bytes(data["scph5500.bin"])
+            (system / "scph5501.bin").write_bytes(data["scph5500.bin"])
+            (system / "system").mkdir()
+            (system / "system" / "gba_bios.bin").write_bytes(data["gba_bios.bin"])
+            with zipfile.ZipFile(system / "PSX BIOS.zip", "w") as archive:
+                archive.writestr("extra.bin", data["pcsx/extra.bin"])
+            # A check that flags a file ends on 1, as documented.
+            return self.run("retroarch", "--check", "--manifest", str(listed), home=home,
+                            codes=(1,))
+        old = home / "old"
+        old.mkdir()
+        for dest in ("scph5500.bin", "scph5501.bin"):
+            (old / dest).write_bytes(data[dest])
+        return self.run("retroarch", "--yes", "--manifest", str(listed), "--from", str(old),
+                        home=home, landed=True)
+
     def run(self, platform: str, *argv: str, landed: bool = False,
-            held: bool = False) -> str:
+            held: bool = False, home: Path | None = None, codes: tuple = (0,)) -> str:
         """What install.py prints for the run, the sandbox read as a user's
         home and card."""
+        home = home or self.home
         card = self.card / "userdata" / "bios" if platform != "retroarch" else None
         if card is not None:
             card.mkdir(parents=True, exist_ok=True)
         spec = {"platform": platform, "argv": ["--plain", "--platform", platform, *argv],
                 "card": str(card) if card else None, "landed": landed, "held": held}
-        env = {"PATH": os.environ.get("PATH", ""), "HOME": str(self.home),
+        env = {"PATH": os.environ.get("PATH", ""), "HOME": str(home),
                "RETROBIOS_OS": "linux", "LANG": "C.UTF-8",
                "RETROBIOS_BASE_URL": f"http://127.0.0.1:{self.server.server_address[1]}"}
         done = subprocess.run(
             [sys.executable, "-s", "-c", CHILD, json.dumps(spec)],
             cwd=ROOT, env=env, stdin=subprocess.DEVNULL, capture_output=True, text=True,
             check=False)
-        if done.returncode != 0:
+        if done.returncode not in codes:
             raise SampleFailed(f"install.py {' '.join(spec['argv'])} exited "
                                f"{done.returncode}: {done.stderr.strip()[-2000:]}")
-        return done.stdout.replace(str(self.home), SHOWN_HOME).replace(str(self.card), SHOWN_CARD)
+        return done.stdout.replace(str(home), SHOWN_HOME).replace(str(self.card), SHOWN_CARD)
 
 
 # The runs printed in this process, by what they read: the page is rendered
@@ -409,6 +486,14 @@ class _LazySandbox:
         if self.box is None:
             self.box = self.stack.enter_context(Sandbox())
         _RUNS[key] = self.box.run(platform, *argv, **kinds)
+        return _RUNS[key]
+
+    def small(self, kind: str) -> str:
+        key = ("small", kind, _stamp("retroarch"))
+        if key not in _RUNS:
+            if self.box is None:
+                self.box = self.stack.enter_context(Sandbox())
+            _RUNS[key] = self.box.small(kind)
         return _RUNS[key]
 
 
@@ -487,7 +572,21 @@ def sample_writers(box: Sandbox) -> dict[str, Callable[[str], str]]:
             + _fenced([_bulk_line(box)])),
         "run-check": lambda _body: _fenced(
             _lines_from(check_run(), "Checking existing files", "  Everything is in place")),
+        "check-refused": lambda _body: _fenced(_refused_lines(box.small("refused"))),
+        "from-run": lambda _body: _fenced(
+            _lines_from(box.small("from"), "Done.", count=2)),
     }
+
+
+def _refused_lines(text: str) -> list[str]:
+    """The files a check flags, each with its reason and where its cores read it."""
+    lines = text.splitlines()
+    start = next((i for i, line in enumerate(lines)
+                  if re.fullmatch(r"  \d+ files? [a-z ]+:", line)), None)
+    if start is None:
+        raise SampleFailed("the check printed no files not in place")
+    end = max(i for i, line in enumerate(lines) if line.lstrip().startswith("read by "))
+    return lines[start:end + 1]
 
 
 def render(page: str) -> str:

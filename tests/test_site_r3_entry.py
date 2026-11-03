@@ -160,7 +160,9 @@ class SetupPagesOfferPartOfThePack(unittest.TestCase):
                 self.assertIn(f"/retrobios/which-pack/?platform={key}#only-some-consoles", text)
                 # The screen's own row: the line menu's c is not what the
                 # one-liner opens.
-                self.assertIn("or choose **Choose systems** in the command.", text)
+                self.assertIn("or the command's **Choose systems**.", text)
+                # Never "choose **Choose systems**" (tui_audit_17 P3-9).
+                self.assertNotIn("choose **Choose systems**", text)
 
     def test_the_anchor_exists(self):
         self.assertIn("## Only some consoles?", _page("which-pack.md"))

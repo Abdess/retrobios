@@ -675,7 +675,7 @@ This executes in sequence:
 4. `generate_pack.py --all` - build ZIP packs + install and target manifests
 5. Consistency check: verify and the pack agree on counts and on the paths each archive holds
 6. Pack integrity - extract ZIPs and verify hashes per platform mode
-7. `generate_readme.py` - regenerate README and CONTRIBUTING
+7. `generate_readme.py` - regenerate README and CONTRIBUTING, then `generate_installer_doc.py` rewrites the tables and run samples of `wiki/installer.md` from the new lists
 8. `generate_site.py` - regenerate the documentation site and its navigation
 
 A new platform is archived-by-default nowhere: `status: active` puts it in
