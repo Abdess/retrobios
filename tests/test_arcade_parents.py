@@ -108,27 +108,27 @@ class OfflineImport(unittest.TestCase):
     def setUp(self) -> None:
         self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
         self.cache = Path(self.temp.name)
-        dat = self.cache / "repo" / "libretro" / "mame2003-libretro" / COMMIT / "metadata"
+        dat = self.cache / "repo" / "libretro" / "mame2010-libretro" / COMMIT / "metadata"
         dat.mkdir(parents=True)
-        (dat / "mame2003.xml").write_bytes((FIXTURES / "runnable_no.dat").read_bytes())
+        (dat / "mame2010.xml").write_bytes((FIXTURES / "listxml.xml").read_bytes())
         with zipfile.ZipFile(self.cache / "mame0000lx.zip", "w") as archive:
             archive.write(FIXTURES / "listxml.xml", "mame0000.xml")
+        self.profile = {
+            "source": "https://github.com/libretro/mame2010-libretro",
+            "source_commit": COMMIT,
+            "core_version": "0.139",
+        }
 
     def tearDown(self) -> None:
         self.temp.cleanup()
 
     def test_repo_profile_is_deterministic(self) -> None:
-        profile = {
-            "source": "https://github.com/libretro/mame2003-libretro",
-            "source_commit": COMMIT,
-            "core_version": "0.78",
-        }
-        first = api.dump(api.import_profile("mame2003", profile, self.cache, offline=True))
-        second = api.dump(api.import_profile("mame2003", profile, self.cache, offline=True))
+        first = api.dump(api.import_profile("mame2010", self.profile, self.cache, offline=True))
+        second = api.dump(api.import_profile("mame2010", self.profile, self.cache, offline=True))
         self.assertEqual(first, second)
         doc = json.loads(first)
-        self.assertEqual(doc["bios"], {"neogeo": ["kof98"]})
-        self.assertEqual(list(doc["source"]["files"]), ["metadata/mame2003.xml"])
+        self.assertEqual(doc["bios"]["neogeo"], ["mslug", "mslugh"])
+        self.assertEqual(list(doc["source"]["files"]), ["metadata/mame2010.xml"])
 
     def test_listxml_release_from_the_cache(self) -> None:
         doc = api.import_profile("mame", {"core_version": "0.000"}, self.cache, offline=True)
@@ -137,14 +137,233 @@ class OfflineImport(unittest.TestCase):
 
     @unittest.skipIf(Draft202012Validator is None, "jsonschema not installed")
     def test_fixture_output_matches_the_schema(self) -> None:
-        profile = {
+        doc = api.import_profile("mame2010", self.profile, self.cache, offline=True)
+        schema = json.loads((ROOT / "schemas" / "arcade-parents.schema.json").read_text())
+        self.assertEqual(list(Draft202012Validator(schema).iter_errors(doc)), [])
+
+
+DRIVER_C = """/* driver.c is read twice, the list comes from the second pass */
+#ifndef DRIVER_RECURSIVE
+#define DRIVER_RECURSIVE
+#include "driver.c"
+#else
+#ifdef TINY_COMPILE
+	DRIVER( tinyonly )
+#else
+	DRIVER( game1 )
+	DRIVER( clone1 )
+	DRIVER( game2 )
+	DRIVER( hacked )
+	DRIVER( built1 )
+	DRIVER( diskgame )
+#endif
+#endif
+"""
+
+DRIVER_FILE = """#include "driver.h"
+#include "board.h"
+
+#define BOARD_BIOS \\
+	ROM_REGION( 0x100, REGION_USER1, 0 ) \\
+	ROM_LOAD( "b1.bin", 0, 0x100, CRC(12345678) SHA1(0000000000000000000000000000000000000000) )
+
+ROM_START( bios1 )
+	BOARD_BIOS
+ROM_END
+
+ROM_START( bios2 )
+	ROM_REGION( 0x100, REGION_USER1, 0 )
+	ROM_LOAD( "b2.bin", 0, 0x100, NO_DUMP )
+ROM_END
+
+ROM_START( game1 )
+	ROM_LOAD( "g1.bin", 0, 0x100, CRC(11111111) SHA1(0000000000000000000000000000000000000000) )
+ROM_END
+
+ROM_START( clone1 )
+	ROM_LOAD( "c1.bin", 0, 0x100, CRC(22222222) SHA1(0000000000000000000000000000000000000000) )
+ROM_END
+
+ROM_START( game2 )
+	ROM_LOAD( "g2.bin", 0, 0x100, CRC(33333333) SHA1(0000000000000000000000000000000000000000) )
+ROM_END
+
+ROM_START( hacked )
+	ROM_LOAD( "h.bin", 0, 0x100, CRC(44444444) SHA1(0000000000000000000000000000000000000000) )
+ROM_END
+
+ROM_START( diskgame )
+	DISK_REGION( REGION_DISKS )
+	DISK_IMAGE( "disk", 0, MD5(00000000000000000000000000000000) )
+ROM_END
+
+#define SET( name, program ) \\
+ROM_START( name ) \\
+	program \\
+ROM_END
+
+#define PROGRAM_A ROM_LOAD( "p.bin", 0, 0x100, CRC(55555555) SHA1(0000000000000000000000000000000000000000) )
+SET( built1, PROGRAM_A )
+
+GAMEX( 1995, bios1,  0,     m, i, n, ROT0, "Maker", "Board BIOS", NOT_A_DRIVER )
+GAMEX( 1995, bios2,  0,     m, i, n, ROT0, "Maker", "Undumped BIOS", NOT_A_DRIVER )
+GAMEX( 1995, game1,  bios1, m, i, n, ROT0, "Maker", "Game (one, two)", 0 )
+GAME(  1995, clone1, game1, m, i, n, ROT0, "Maker", "Clone" )
+GAME(  1995, game2,  bios2, m, i, n, ROT0, "Maker", "Game on an undumped BIOS" )
+#if BOARD_HACK
+GAME(  1995, hacked, bios1, m, i, n, ROT0, "Maker", "Hacked" )
+#else
+GAME(  1995, hacked, 0,     m, i, n, ROT0, "Maker", "Not hacked" )
+#endif
+GAME(  1995, built1, bios1, m, i, n, ROT0, "Maker", "Built by a macro" )
+GAME(  1995, diskgame, 0,   m, i, n, ROT0, "Maker", "Disk game" )
+"""
+
+STALE_DAT = """<?xml version="1.0"?>
+<mame>
+	<game name="game1" sourcefile="board.c" romof="oldbios">
+		<rom name="g1.bin" size="256" crc="11111111"/>
+	</game>
+	<game runnable="no" name="oldbios">
+		<rom name="o.bin" size="256" crc="77777777"/>
+	</game>
+</mame>
+"""
+
+
+def _write_tarball(path: Path, files: dict[str, str]) -> None:
+    import tarfile
+
+    with tarfile.open(path, "w:gz") as archive:
+        for name, text in files.items():
+            data = text.encode("latin-1")
+            info = tarfile.TarInfo(f"repo-{COMMIT}/{name}")
+            info.size = len(data)
+            info.mode = 0o644
+            archive.addfile(info, io.BytesIO(data))
+
+
+class DriverSource(unittest.TestCase):
+    """mame2000, mame2003 and mame2003-plus are read from their driver code:
+    the DATs those repositories carry contradict it."""
+
+    def setUp(self) -> None:
+        self.temp = tempfile.TemporaryDirectory(dir=TMP_ROOT)
+        self.cache = Path(self.temp.name)
+        slug = "libretro/mame2003-libretro"
+        tarball = self.cache / "src" / slug / f"{COMMIT}.tar.gz"
+        tarball.parent.mkdir(parents=True)
+        _write_tarball(tarball, {
+            "src/driver.c": DRIVER_C,
+            "src/driver.h": "#define NOT_A_DRIVER 0x4000\n",
+            "src/includes/board.h": "#define BOARD_HACK 0\n",
+            "src/drivers/board.c": DRIVER_FILE,
+        })
+        dat = self.cache / "repo" / slug / COMMIT / "metadata"
+        dat.mkdir(parents=True)
+        (dat / "mame2003.xml").write_text(STALE_DAT)
+        self.profile = {
             "source": "https://github.com/libretro/mame2003-libretro",
             "source_commit": COMMIT,
             "core_version": "0.78",
         }
-        doc = api.import_profile("mame2003", profile, self.cache, offline=True)
+        self.report: dict = {}
+        self.doc = api.import_profile("mame2003", self.profile, self.cache, True, self.report)
+
+    def tearDown(self) -> None:
+        self.temp.cleanup()
+
+    def test_parents_come_from_the_game_macros(self) -> None:
+        self.assertEqual(self.doc["bios"], {"bios1": ["built1", "clone1", "game1"]})
+
+    def test_a_bios_without_a_dump_needs_no_archive(self) -> None:
+        self.assertNotIn("bios2", self.doc["bios"])
+        self.assertEqual(self.doc["counts"]["bios_sets"], 2)
+
+    def test_the_branch_the_build_compiles(self) -> None:
+        """BOARD_HACK is 0 in the header the driver includes."""
+        self.assertNotIn("hacked", self.doc["bios"]["bios1"])
+
+    def test_the_tiny_build_list_is_left_out(self) -> None:
+        self.assertEqual(self.doc["counts"]["games"], 6)
+
+    def test_a_disk_image_is_a_chd(self) -> None:
+        self.assertEqual(self.doc["chd"], ["diskgame"])
+
+    def test_the_source_is_named_by_its_tree(self) -> None:
+        tree = self.doc["source"]["files"]["src"]
+        source = api.read_driver_source(self.cache / "src" / "libretro" / "mame2003-libretro" / f"{COMMIT}.tar.gz")
+        self.assertEqual(tree, source.tree)
+        self.assertEqual(list(self.doc["source"]["files"]), ["src"])
+
+    def test_the_committed_dat_is_reported_where_it_disagrees(self) -> None:
+        gaps = self.report["dat_gaps"]
+        self.assertEqual(gaps["romof"], ["game1"])
+        self.assertEqual(gaps["dat_only"], ["oldbios"])
+        self.assertIn("built1", gaps["code_only"])
+
+    def test_an_undeclared_driver_is_refused(self) -> None:
+        with self.assertRaises(api.DriverSourceError):
+            api.driver_source_sets("DRIVER( nosuch )", {"src/drivers/a.c": ""}, {})
+
+    def test_the_empty_tree(self) -> None:
+        self.assertEqual(api.git_tree_sha({}), "4b825dc642cb6eb9a060e54bf8d69288fbee4904")
+
+    @unittest.skipIf(Draft202012Validator is None, "jsonschema not installed")
+    def test_output_matches_the_schema(self) -> None:
         schema = json.loads((ROOT / "schemas" / "arcade-parents.schema.json").read_text())
-        self.assertEqual(list(Draft202012Validator(schema).iter_errors(doc)), [])
+        self.assertEqual(list(Draft202012Validator(schema).iter_errors(self.doc)), [])
+
+
+FBNEO_LIST = """\t{ "1942", "pre90s/d_1942.cpp"},
+\t{ "msx_1942", "msx/d_msx.cpp"},
+\t{ "msx_msx", "msx/d_msx.cpp"},
+\t{ "nes_zelda", "nes/d_nes.cpp"},
+\t{ "fds_zelda", "nes/d_nes.cpp"},
+\t{ "nes_smb", "nes/d_nes.cpp"},
+"""
+
+
+def _dat(*games: str) -> bytes:
+    return ("<datafile>" + "".join(games) + "</datafile>").encode()
+
+
+def _game(name: str, source: str, romof: str | None = None) -> str:
+    parent = f' romof="{romof}"' if romof else ""
+    return (
+        f'<game name="{name}" sourcefile="{source}"{parent}>'
+        f'<rom name="{name}.bin" size="1" crc="12345678"/></game>'
+    )
+
+
+class FbneoNamespaces(unittest.TestCase):
+    """Each FBNeo DAT is its own namespace, a console set is its driver."""
+
+    def setUp(self) -> None:
+        names = api.fbneo_drivers(FBNEO_LIST)
+        arcade = _dat(_game("1942", "pre90s/d_1942.cpp"))
+        msx = _dat(
+            _game("1942", "msx/d_msx.cpp", "msx"),
+            '<game name="msx" sourcefile="msx/d_msx.cpp" isbios="yes">'
+            '<rom name="msx.rom" size="1" crc="87654321"/></game>',
+        )
+        nes = _dat(_game("zelda", "nes/d_nes.cpp"), _game("smb", "nes/d_nes.cpp"))
+        sets, self.archives = api.fbneo_sets(
+            [lambda d=d: io.BytesIO(d) for d in (arcade, msx, nes)], names
+        )
+        self.sets = sets
+        self.index = api.build_index(sets, "isbios", self.archives)
+
+    def test_the_msx_set_needs_the_msx_bios_and_the_arcade_one_does_not(self) -> None:
+        self.assertEqual(self.index["bios"], {"msx": ["msx_1942"]})
+        self.assertIn("1942", self.sets)
+
+    def test_the_bios_is_named_by_its_archive(self) -> None:
+        self.assertEqual(self.archives["msx_msx"], "msx")
+
+    def test_a_shared_source_file_takes_the_prefix_of_its_dat(self) -> None:
+        self.assertIn("nes_zelda", self.sets)
+        self.assertNotIn("fds_zelda", self.sets)
 
 
 class DeclaredArchives(unittest.TestCase):

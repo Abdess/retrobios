@@ -1634,7 +1634,7 @@ python scripts/generate_games_index.py --check              # exit 1 when a publ
 | `games/catalogs/<source>/<system>.json` | `scraper/game_dat_importer.py` | crc32, size, sha1, region and title per game, disc serials |
 | `games/headers.yml` | hand, cited | header fields each core reads and the region each value means |
 | `games/regions.yml`, `games/extras.yml` | hand, cited | region routes, the cases that keep every region, per-game files |
-| `games/arcade/<profile>.json` | `scraper/arcade_parent_importer.py` | BIOS parent and device sets of each game set |
+| `games/arcade/<profile>.json` | `scraper/arcade_parent_importer.py` | BIOS parent and device sets of each game set, from the DAT the pin names or, for mame2000, mame2003 and mame2003-plus, from the driver code |
 
 Folder names resolve to systems through `SYSTEM_ALIASES` and `_norm_system_id`
 in `common.py`, the one alias table, and core names to profiles through the

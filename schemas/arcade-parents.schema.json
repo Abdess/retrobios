@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://abdess.github.io/retrobios/api/v1/schemas/arcade-parents.schema.json",
   "title": "RetroBIOS arcade parent index of one core version",
-  "description": "games/arcade/<profile>.json, written by python -m scripts.scraper.arcade_parent_importer from the DAT the profile pins. A game set needs every BIOS set it is listed under (the romof chain read to its end) and, for the MAME family, every device set with ROMs it is listed under.",
+  "description": "games/arcade/<profile>.json, written by python -m scripts.scraper.arcade_parent_importer from the DAT or the driver code the profile pins. A game set needs every BIOS set it is listed under (the romof chain read to its end) and, for the MAME family, every device set with ROMs it is listed under.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema", "profile", "core_version", "source", "bios", "devices", "chd", "missing_parents", "no_bios", "bios_sets", "counts"],
@@ -40,7 +40,7 @@
         },
         {
           "type": "object",
-          "description": "Files of a repository at a commit, each with its git blob sha.",
+          "description": "Files or directories of a repository at a commit, each with its git blob or tree sha.",
           "additionalProperties": false,
           "required": ["repo", "commit", "files"],
           "properties": {
