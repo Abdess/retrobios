@@ -17686,7 +17686,9 @@ def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
     row = rows[focus]
     last = len(rows) - 1
     page = _page_step(state) if key.name in ("pgup", "pgdn") else 1
-    wrap = len(rows) < 10
+    # A list of ticks wraps at any length: None and Done, at its end, are
+    # a few presses up from its first item on a pad (tui_audit_17 P3-1).
+    wrap = len(rows) < 10 or screen in (*_CHECKLISTS, "regions")
     name = key.name
     if name == "up" or char == "k":
         focus = last if wrap and focus == 0 else max(0, focus - 1)

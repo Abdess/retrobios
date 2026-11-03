@@ -3493,7 +3493,10 @@ class OneSystemInFewPresses(unittest.TestCase):
         # On its first system (tui_audit_17 P3-1), None at the list's end.
         self.assertEqual(install.tui_rows(state)[state.focus["systems"]].action, "system")
         paging = pad != "muxterm" or fast
-        count += self.go_to(state, pad, "none", paging)
+        # Up from the first item wraps to the list's end: Done, then None.
+        while install.tui_rows(state)[state.focus["systems"]].action != "none":
+            self.press_button(state, pad, "up")
+            count += 1
         self.press_button(state, pad, "A")
         count += 1
         count += self.go_to(state, pad, "sys-45", paging)
@@ -3513,10 +3516,11 @@ class OneSystemInFewPresses(unittest.TestCase):
         # focus, and muxterm had no page key).
         # A page is the rows drawn since tui_audit_9 P2-2, ten here where it
         # was nine: sys-45 is four pages and five Downs away, not five pages.
-        # None now at the list's end (tui_audit_17 P3-1): reached by pages.
-        self.assertEqual(self.presses("gptokeyb", fast=True), self.presses("gptokeyb", False))
-        self.assertLessEqual(self.presses("gptokeyb", fast=True), 22)
-        self.assertLessEqual(self.presses("muxterm", fast=True), 22)
+        # None now at the list's end (tui_audit_17 P3-1), three presses up
+        # from the first system: the list wraps. fast pages down to sys-45.
+        self.assertEqual(self.presses("gptokeyb", fast=True), 21)
+        self.assertEqual(self.presses("muxterm", fast=False), 57)
+        self.assertEqual(self.presses("muxterm", fast=True), 21)
 
     def test_a_on_a_system_with_none_ticked_takes_it_alone(self):
         state = self.long_list("keys")
@@ -4832,7 +4836,7 @@ class EndToEnd(unittest.TestCase):
         self.assertIn("> [ ] nintendo-gba", screen)
         self.assertIn("[x] sony-playstation", screen)
         term.send("\x1b")
-        term.wait("for 1 of 2 systems")
+        term.wait("About 3 files")
         # Install counts the choice on Confirm first.
         term.send("\r")
         screen = term.wait("files to download")
@@ -12070,7 +12074,11 @@ class TwoTapsOnlyWhereFilesAreWritten(unittest.TestCase):
         lines = drawn(state, 80, 24)
         self.assertEqual(tap(state, 2, len(lines) - 1), [("run", "confirm")])
         self.assertEqual(state.screen, "confirm")
-        install.tui_receive(state, ("event", state.run_id, CHECK))
+        # Counted for the choice: another plan than the check's, so Confirm
+        # waits for its own Install.
+        install.tui_receive(state, ("event", state.run_id, {
+            **CHECK, "files": 1, "present": 0, "missing": 1, "wrong_hash": 0,
+            "bytes_needed": 16384}))
         install.tui_receive(state, ("ended", state.run_id, 1, []))
         lines = drawn(state, 80, 24)
         self.assertIn("A/Enter Install", str(lines[-1]))
@@ -12817,8 +12825,8 @@ class AuditTwentyTwoAndFifteen(unittest.TestCase):
         self.assertIn("ArkOS SD card (ROMS2", text)
         text, asked = self.line_run(_args(manifest=self.game_listing(), dry_run=True,
                                           declared_only=False), [], mounts=mounts)
-        self.assertIn("ArkOS SD card (EASYROMS)", text)
-        self.assertIn("ArkOS SD card (ROMS2)", text)
+        self.assertIn("1) ArkOS SD card (EASYROMS", text)
+        self.assertIn("2) ArkOS SD card (ROMS2", text)
         self.assertNotIn("in the reader", text)
 
     def test_a_fixed_partition_is_told_from_a_card(self):
@@ -13848,7 +13856,9 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
     def test_nothing_found_is_said_once(self):
         """tui_audit_16 P3-2: "Nothing was found here." twice, and after "A
         card is in the reader"."""
-        text, _asked = self.line_run(_args(declared_only=False), [])
+        # The standalone emulators' lists come from the network: none here.
+        with mock.patch.object(install, "_install_standalone_folders", return_value=False):
+            text, _asked = self.line_run(_args(declared_only=False), [])
         self.assertEqual(text.count("Nothing was found here."), 1)
         card = games_part(self.root / "media" / "EASYROMS")
         text, _asked = self.line_run(_args(declared_only=False), [], mounts=[card])
