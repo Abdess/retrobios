@@ -6,7 +6,7 @@
   "platform": "myminui",
   "display_name": "MyMinUI",
   "version": "2026-08-09",
-  "generated": "2026-10-27T10:27:58Z",
+  "generated": "2026-11-03T13:36:34Z",
   "base_destination": "",
   "detect": [
     {
@@ -21,7 +21,7 @@
   "total_size": 1484127899,
   "pack_files": 476,
   "pack_size": 1484127899,
-  "total_omitted": 4,
+  "total_omitted": 6,
   "omitted_files": [
     {
       "dest": "Bios/DOOM/doomu.wad",
@@ -46,10 +46,30 @@
       "category": "game_data"
     },
     {
+      "dest": "Bios/FBN/sfiii2a.zip",
+      "name": "sfiii2a.zip",
+      "system": "capcom-cps3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
       "dest": "Bios/FBN/svgpcb.zip",
       "name": "svgpcb.zip",
       "system": "igs-pgm",
       "required": false,
+      "reason": "not_found",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
+      "dest": "Bios/NG/sfiii2a.zip",
+      "name": "sfiii2a.zip",
+      "system": "capcom-cps3",
+      "required": true,
       "reason": "not_found",
       "cores": [
         "fbneo"

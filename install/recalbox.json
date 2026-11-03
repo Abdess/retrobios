@@ -6,7 +6,7 @@
   "platform": "recalbox",
   "display_name": "Recalbox",
   "version": "10.1.1",
-  "generated": "2026-10-27T10:27:58Z",
+  "generated": "2026-11-03T13:36:34Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -283,7 +283,7 @@
   "total_size": 4682430801,
   "pack_files": 3745,
   "pack_size": 4682430801,
-  "total_omitted": 61,
+  "total_omitted": 62,
   "omitted_files": [
     {
       "dest": "a1060-bios-2.07.rom",
@@ -897,6 +897,16 @@
       ]
     },
     {
+      "dest": "sfiii2a.zip",
+      "name": "sfiii2a.zip",
+      "system": "capcom-cps3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "fbneo"
+      ]
+    },
+    {
       "dest": "svgpcb.zip",
       "name": "svgpcb.zip",
       "system": "igs-pgm",
@@ -1420,7 +1430,11 @@
       "sixtyforce"
     ],
     "apple2gs": [
+      "clk",
       "groovymame",
+      "gsplus",
+      "gsplus-legacy",
+      "kegs",
       "mame",
       "mame0258",
       "mame0278",
@@ -40337,6 +40351,9 @@
       "repo_path": "bios/Apple/Apple IIGS/ROM",
       "cores": [
         "gsplus-legacy"
+      ],
+      "systems": [
+        "apple2gs"
       ]
     },
     {
@@ -40347,6 +40364,9 @@
       "repo_path": "bios/Apple/Apple II/AppleIIe_DiskII.rom",
       "cores": [
         "gsplus-legacy"
+      ],
+      "systems": [
+        "apple2gs"
       ]
     },
     {
@@ -40357,6 +40377,9 @@
       "repo_path": "bios/Apple/Apple IIGS/parallel.rom",
       "cores": [
         "gsplus-legacy"
+      ],
+      "systems": [
+        "apple2gs"
       ]
     },
     {
@@ -40367,6 +40390,9 @@
       "repo_path": "bios/Other/gsplus-legacy/letgothl.ttf",
       "cores": [
         "gsplus-legacy"
+      ],
+      "systems": [
+        "apple2gs"
       ]
     },
     {
@@ -40377,6 +40403,9 @@
       "repo_path": "bios/Other/dosbox-x/FONTS/sansserif.ttf",
       "cores": [
         "gsplus-legacy"
+      ],
+      "systems": [
+        "apple2gs"
       ]
     },
     {
@@ -40387,6 +40416,9 @@
       "repo_path": "bios/Other/dosbox-x/FONTS/courier.ttf",
       "cores": [
         "gsplus-legacy"
+      ],
+      "systems": [
+        "apple2gs"
       ]
     },
     {
@@ -40397,6 +40429,9 @@
       "repo_path": "bios/Other/dosbox-x/FONTS/script.ttf",
       "cores": [
         "gsplus-legacy"
+      ],
+      "systems": [
+        "apple2gs"
       ]
     },
     {
@@ -40407,6 +40442,9 @@
       "repo_path": "bios/Other/dosbox-x/FONTS/ocra.ttf",
       "cores": [
         "gsplus-legacy"
+      ],
+      "systems": [
+        "apple2gs"
       ]
     },
     {
@@ -42543,6 +42581,17 @@
       ]
     },
     {
+      "dest": "namcoc76.zip",
+      "sha1": "21d5d4b13286e39b6c91c6bf0bcf8fa376800dfb",
+      "sha256": "6791156b4602e06a2649ebe3216b6ede0cedb2e17ba35a3c99105f6e25819320",
+      "size": 9579,
+      "repo_path": "bios/Arcade/Arcade/namcoc76.zip",
+      "cores": [
+        "mame2003",
+        "mame2003_plus"
+      ]
+    },
+    {
       "dest": "mame2003-plus/mameinfo.dat",
       "sha1": "65323366553276719c72fb11447de1eaa6931fa8",
       "sha256": "459157c15abecc73e90a1c564a4f95ef7d7015397abfce11aa13206cfc69d16f",
@@ -42569,16 +42618,6 @@
       "sha256": "1bcb201866ae36a32c73e1413a36b65b5eb25da50ed2996e1381d666a1fb6121",
       "size": 17058,
       "repo_path": "bios/Arcade/Arcade/model1io2.zip",
-      "cores": [
-        "mame2003_plus"
-      ]
-    },
-    {
-      "dest": "namcoc76.zip",
-      "sha1": "21d5d4b13286e39b6c91c6bf0bcf8fa376800dfb",
-      "sha256": "6791156b4602e06a2649ebe3216b6ede0cedb2e17ba35a3c99105f6e25819320",
-      "size": 9579,
-      "repo_path": "bios/Arcade/Arcade/namcoc76.zip",
       "cores": [
         "mame2003_plus"
       ]
