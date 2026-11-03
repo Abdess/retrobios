@@ -5898,6 +5898,8 @@ TUI_SYSTEMS_ROW = "Choose systems"
 # which-pack names them from here.
 TUI_FOUND_TITLE = "Where do you play?"
 TUI_CHOOSE_TITLE = "Which setup?"
+# Asked after Which setup? where nothing was found, and on a card.
+TUI_FOLDER_TITLE = "Which folder?"
 
 
 def _on_read_only_mount(path: Path) -> bool:
@@ -18954,7 +18956,7 @@ def _view_folder(state: TuiState, width: int, height: int) -> tuple:
     first: list = []
     if bound and state.folder_default is not None and state.folder_kind == "found":
         # On the device itself: its own folder, which is no card to look for.
-        title = "Which folder?"
+        title = TUI_FOLDER_TITLE
         before = [f"{bound[0]} reads its BIOS files from:", str(state.folder_default)]
     elif bound:
         title = "Where is the SD card?"
@@ -18978,10 +18980,10 @@ def _view_folder(state: TuiState, width: int, height: int) -> tuple:
                            else "No card or drive is mounted.")
                           + " Insert it, then choose Look again.")
     elif state.folder_kind == "share":
-        title = "Which folder?"
+        title = TUI_FOLDER_TITLE
         before = [share_words(state.platform)]
     elif state.folder_default is not None:
-        title = "Which folder?"
+        title = TUI_FOLDER_TITLE
         lead = {"found": f"{name} reads its BIOS files from:",
                 "chosen": f"The BIOS folder chosen for {name}:"}.get(
                     state.folder_kind,
@@ -18989,10 +18991,10 @@ def _view_folder(state: TuiState, width: int, height: int) -> tuple:
                     "files from:")
         before = [lead, str(state.folder_default)]
     elif state.folder_kind == "closed":
-        title = "Which folder?"
+        title = TUI_FOLDER_TITLE
         before = [f"Choose another folder for {name}: browse for it or type it."]
     else:
-        title = "Which folder?"
+        title = TUI_FOLDER_TITLE
         before = [f"No usual {name} folder here: browse for it or type it."]
     notes: list = []
     if not bound and state.folder_kind != "share":

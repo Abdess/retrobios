@@ -3943,8 +3943,11 @@ def first_screen_words() -> list[str]:
     # The screen it opens first: the setup found, or the list when none
     # is. Install comes on the next one, Choose systems beside it and named
     # above on the page (tui_audit_16 P3-10).
-    return [f"It asks **{installer.TUI_FOUND_TITLE}** (or **{installer.TUI_CHOOSE_TITLE}**), "
-            f"then offers **{installer.TUI_INSTALL_ROW}**."]
+    # Nothing found, the folder comes before Install: which-pack left it
+    # out (tui_audit_17 P3-9).
+    return [f"It asks **{installer.TUI_FOUND_TITLE}**, or **{installer.TUI_CHOOSE_TITLE}** "
+            f"and **{installer.TUI_FOLDER_TITLE}** when it finds nothing, then offers "
+            f"**{installer.TUI_INSTALL_ROW}**."]
 
 
 def check_pass_line() -> str:
@@ -4113,8 +4116,8 @@ def only_some_consoles(name: str, prefix: str = "") -> list[str]:
     """The way to a smaller download, in the words Get your files uses."""
     return [
         f"Only some consoles? [Pick them]({prefix}which-pack.md?platform={name}"
-        f"#only-some-consoles), or choose **{_installer().TUI_SYSTEMS_ROW}** in the "
-        "command.",
+        f"#only-some-consoles), or run the command: **{_installer().TUI_SYSTEMS_ROW}** "
+        "is on its second screen.",
         "",
     ]
 
@@ -11412,7 +11415,7 @@ def generate_which_pack() -> str:
         "## Only some consoles?",
         "",
         "Pick them here, and get the files and the command. Or run the command "
-        f"below and choose **{_installer().TUI_SYSTEMS_ROW}**.",
+        f"below: **{_installer().TUI_SYSTEMS_ROW}** is on its second screen.",
         "",
         "<FilePicker />",
         "",

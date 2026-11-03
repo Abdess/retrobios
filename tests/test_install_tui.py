@@ -13952,6 +13952,10 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertLess(words.index(install.TUI_FOUND_TITLE),
                         words.index(install.TUI_INSTALL_ROW))
         self.assertNotIn("opens a screen", words)
+        # Nothing found, Which folder? comes before the plan (tui_audit_17 P3-9).
+        self.assertIn(f"**{install.TUI_FOLDER_TITLE}**", words)
+        self.assertLess(words.index(install.TUI_FOLDER_TITLE),
+                        words.index(install.TUI_INSTALL_ROW))
 
 
 if __name__ == "__main__":
