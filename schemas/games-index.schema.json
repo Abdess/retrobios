@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abdess.github.io/retrobios/api/v1/schemas/games-index.schema.json",
+  "title": "RetroBIOS games index",
+  "description": "What the installer reads for the games on a card, published under install/games/ by scripts/generate_games_index.py. index.json lists every other file. Each document kind is a $defs entry: index, setup, fallback, system. Arcade files follow arcade-parents.schema.json.",
+  "$defs": {
+    "listed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "size", "gzip_size", "sha256"],
+      "properties": {
+        "file": { "type": "string", "pattern": "^(setups|fallback|systems|arcade)/[^/]+\\.json$" },
+        "size": { "type": "integer", "minimum": 1 },
+        "gzip_size": { "type": "integer", "minimum": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format_version", "data_version", "setups", "fallback", "systems", "arcade", "licences"],
+      "properties": {
+        "format_version": { "const": 1 },
+        "data_version": { "type": "string", "pattern": "^[0-9a-f]{16}$", "description": "Digest of every listed file: a cache made under another value is stale." },
+        "setups": { "type": "object", "additionalProperties": { "$ref": "#/$defs/listed" } },
+        "fallback": { "type": "object", "additionalProperties": { "$ref": "#/$defs/listed" } },
+        "systems": { "type": "object", "additionalProperties": { "$ref": "#/$defs/listed" } },
+        "arcade": { "type": "object", "additionalProperties": { "$ref": "#/$defs/listed" } },
+        "licences": { "type": "array", "items": { "type": "object" } },
+        "containers": { "type": "object", "description": "How to reach the bytes a header reader names inside a disc image, a CHD or an archive (games/headers.yml containers)." }
+      }
+    },
+    "setup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format_version", "setup", "name", "platform", "sources", "roms_root", "case_sensitive", "folders"],
+      "properties": {
+        "format_version": { "const": 1 },
+        "setup": { "type": "string" },
+        "name": { "type": "string" },
+        "platform": { "type": "string" },
+        "sources": { "type": "object" },
+        "roms_root": { "type": "object", "required": ["path", "from_bios"] },
+        "case_sensitive": { "type": ["boolean", "null"] },
+        "skip": { "type": "array" },
+        "hidden": { "type": "array" },
+        "media": { "type": "array" },
+        "notes": { "type": "array", "items": { "type": "string" } },
+        "folders": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["folder", "systems", "basis", "source_ref"],
+            "properties": {
+              "folder": { "type": "string", "minLength": 1 },
+              "systems": { "type": "array", "items": { "type": "string" }, "description": "Repository system ids, empty when the name resolves to none." },
+              "basis": { "type": "string", "description": "How the name resolved: id, native name of <platform>, normalized id, or unresolved." },
+              "name": { "type": "string" },
+              "aliases": { "type": "array", "items": { "type": "string" } },
+              "extensions": { "type": "array", "items": { "type": "string" } },
+              "core": { "type": "string" },
+              "emulator": { "type": "string" },
+              "profile": { "type": "string", "description": "Repository profile of the default core." },
+              "board_defaults": { "type": "object" },
+              "arcade": { "type": ["string", "boolean"], "description": "Name of the arcade index (install/games/arcade/<name>.json) when the default core has one, true when the OS marks the folder arcade and no index exists." },
+              "fallback": { "type": "array", "items": { "type": "string", "pattern": "^[^|]+\\|[^|]*$" }, "description": "Keys of fallback/<platform>.json sets: '<system>|<profile>'." },
+              "note": { "type": "string" },
+              "source_ref": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "fallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format_version", "platform", "files", "sets"],
+      "properties": {
+        "format_version": { "const": 1 },
+        "platform": { "type": "string" },
+        "files": {
+          "type": "array",
+          "description": "[dest, size, category] per install-list entry some set keeps.",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              { "type": "string" },
+              { "type": "integer", "minimum": 0 },
+              { "type": "string" }
+            ],
+            "minItems": 3,
+            "maxItems": 3
+          }
+        },
+        "sets": {
+          "type": "object",
+          "description": "Keyed '<system>|<profile>': what an unrecognised game of that system keeps under that default core.",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["files", "optional", "bytes", "required_bytes"],
+            "properties": {
+              "files": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+              "optional": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "description": "Indices the declaring layer marks required: false. The just-what-starts option leaves them out." },
+              "bytes": { "type": "integer", "minimum": 0 },
+              "required_bytes": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "system": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["format_version", "system"],
+      "properties": {
+        "format_version": { "const": 1 },
+        "system": { "type": "string" },
+        "identify": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sources", "regions", "games", "serials"],
+          "properties": {
+            "sources": { "type": "array", "items": { "type": "object", "required": ["source", "dat"] } },
+            "regions": { "type": "array", "items": { "type": "array", "items": { "type": "string" } } },
+            "games": {
+              "type": "array",
+              "description": "[crc32, size, region index, title], sorted.",
+              "items": {
+                "type": "array",
+                "prefixItems": [
+                  { "type": "string", "pattern": "^[0-9a-f]{8}$" },
+                  { "type": "integer", "minimum": 0 },
+                  { "type": "integer", "minimum": 0 },
+                  { "type": "string" }
+                ],
+                "minItems": 4,
+                "maxItems": 4
+              }
+            },
+            "serials": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "integer", "minimum": 0 } } }
+          }
+        },
+        "headers": { "type": "object", "description": "games/headers.yml readers of this system." },
+        "region_rules": { "type": "object", "description": "games/regions.yml rules, per profile." },
+        "cases": { "type": "object", "description": "Definitions of the keep_all_regions cases the rules name." },
+        "region_files": {
+          "type": "object",
+          "description": "Per profile, region slug to the file names its region: fields tag, 'any' for untagged files.",
+          "additionalProperties": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } }
+        },
+        "extras": { "type": "array", "description": "games/extras.yml entries of this system (game-extras.schema.json).", "items": { "type": "object", "required": ["system", "profile", "trigger"] } }
+      }
+    }
+  }
+}

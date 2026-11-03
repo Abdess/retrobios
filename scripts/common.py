@@ -2746,6 +2746,23 @@ SYSTEM_ALIASES: dict[str, str] = {
     "mame2003": "arcade",
     "mame2003plus": "arcade",
     "mame2010": "arcade",
+    "mame-libretro": "arcade",
+    "mame-mame4all": "arcade",
+    "c20": "commodore-vic20",
+    "segamodel3": "sega-model3",
+    "pspminis": "sony-psp",
+    "ndsiware": "nintendo-dsi",
+    "wiiware": "nintendo-wii",
+    "x16": "commanderx16",
+    "zxnext": "sinclair-zx-spectrum-next",
+    "vemulator": "sega-vmu",
+    "ep64-128": "enterprise-64-128",
+    "easyrpg": "rpgmaker",
+    "ggh": "sega-gamegear",
+    "gba2players": "nintendo-gba",
+    "snesmsu": "nintendo-snes",
+    "megadrivemsu": "sega-megadrive",
+    "sgb-msu1": "nintendo-sgb",
 }
 
 

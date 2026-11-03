@@ -1,0 +1,1 @@
+{"extras":[{"files":["DISK.ROM"],"profile":"fmsx","required":true,"source_ref":"libretro/fmsx-libretro@4de11755 libretro.c:1220-1225, libretro.c:1303-1304, fMSX/MSX.c:514, fMSX/MSX.c:778-791","system":"msx","trigger":{"extensions":[".dsk",".fdi"]}}],"format_version":1,"system":"msx"}

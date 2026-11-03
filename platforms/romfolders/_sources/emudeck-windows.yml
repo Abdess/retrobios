@@ -20,7 +20,7 @@ sources:
     repo: https://gitlab.com/es-de/emulationstation-de
     commit: 50e4b600ae533d772bae3ff880d11a09b05dbe84
     tag: v3.5.0
-    note: EmuDeck installs the newest ES-DE release at run time; the list is read at this tag
+    note: EmuDeck installs the newest ES-DE release at run time. The list is read at this tag
 roms_root:
   path: <drive>:\Emulation\roms
   from_bios: ../roms

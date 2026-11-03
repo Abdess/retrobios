@@ -1,0 +1,1 @@
+{"extras":[{"files":["dsi_bios7.bin","dsi_bios9.bin","dsi_firmware.bin","dsi_nand.bin"],"profile":"melonds_ds","required":true,"source_ref":"JesseTG/melonds-ds@f394adba src/libretro/config/console.cpp:238-256","system":"nintendo-dsi","trigger":{"header":{"reader":"nds-unit-code","values":["dsi"]}}}],"format_version":1,"system":"nintendo-dsi"}
