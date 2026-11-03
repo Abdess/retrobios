@@ -31,7 +31,7 @@ platforms/               one YAML config per platform (scraped from upstream)
   targets/               hardware target configs + _overrides.yml
 provenance/              dump-catalog snapshots (redump, no-intro, tosec)
 recipes/                 romset recipes read from MAME and FBNeo DATs
-exports/                 each platform's own file, corrected, with a report of the changes
+exports/                 each platform's own file, updated, with a report of the changes
 measurements/            records of real runs, one JSONL file per emulator
 scripts/                 all tooling (Python and pyyaml, jsonschema for schema checks)
   scraper/               upstream scrapers (libretro, batocera, recalbox...)
@@ -207,9 +207,9 @@ step with every emulator release is a large amount of work, and the files are
 written to make it lighter.
 
 An entry a platform declares is never removed from its file on the strength of
-a missing match. When this was measured, an entry the generated data did not
-pair was still read in 1189 of 2776 cases, by an alias, a hash, a directory
-entry or a core outside the resolved set. A removal needs positive proof:
+a missing match. When this was measured, entries the generated data did not
+pair were often still read, by an alias, a hash, a directory entry or a core
+outside the resolved set. A removal needs positive proof:
 every core of the system profiled, each with a reference showing the closed
 set of names it opens. Until then the entry is listed as a removal candidate
 with the cores examined (see [export_native.py](tools.md#export_nativepy)).

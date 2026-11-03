@@ -860,5 +860,332 @@ class RetroArchWindowsSystemFolder(unittest.TestCase):
         self.assertEqual(folders["macOS"], "`~/Documents/RetroArch/system/`")
 
 
+# The contributor and reference pages state fields, scripts, options, paths,
+# platform lists and examples that the code and the data already hold. Each
+# check below reads both sides, so a page falls out of step the day the code
+# moves rather than the day a reader trips on it.
+
+CONTRIBUTOR_PAGES = (
+    "profiling.md", "adding-a-platform.md", "adding-a-scraper.md", "architecture.md",
+    "verification-modes.md", "reference-terms.md", "glossary.md", "legal.md", "index.md",
+    "what-are-bios-files.md", "community-tools.md",
+)
+REPO_DIRS = (
+    "scripts/", "platforms/", "emulators/", "schemas/", "tests/", "wiki/", "install/",
+    "provenance/", "recipes/", "exports/", "measurements/", "website/", "automation/",
+    "ports/", "docs_assets/", "docs/",
+)
+PLACEHOLDER = re.compile(r"[<>*{}]|myplatform|\bNAME\b|\.\.\.")
+
+
+def _schema(name: str) -> dict:
+    return json.loads((ROOT / "schemas" / f"{name}.schema.json").read_text(encoding="utf-8"))
+
+
+def _schema_keys(schema: object, keys: set[str]) -> set[str]:
+    if isinstance(schema, dict):
+        keys.update(schema.get("properties", {}))
+        for value in schema.values():
+            _schema_keys(value, keys)
+    elif isinstance(schema, list):
+        for value in schema:
+            _schema_keys(value, keys)
+    return keys
+
+
+def _registry() -> dict:
+    import yaml
+
+    return yaml.safe_load((ROOT / "platforms" / "_registry.yml").read_text(encoding="utf-8"))["platforms"]
+
+
+def _table_fields(section: str) -> set[str]:
+    fields = set()
+    for line in section.splitlines():
+        cell = re.match(r"^\| ((?:`[a-z_0-9]+`(?:, )?)+) \|", line)
+        if cell:
+            fields |= set(re.findall(r"`([a-z_0-9]+)`", cell.group(1)))
+    return fields
+
+
+def _code_spans(text: str) -> list[str]:
+    """Inline code and every line of fenced code."""
+    spans = re.findall(r"`([^`\n]+)`", FENCED.sub("", text))
+    for block in FENCED.findall(text):
+        spans.extend(block.splitlines()[1:-1])
+    return spans
+
+
+def missing_repo_paths(text: str) -> list[str]:
+    missing = []
+    for span in _code_spans(text):
+        for token in re.findall(r"[\w./-]+", span):
+            if PLACEHOLDER.search(span) and "myplatform" in token:
+                continue
+            path = re.sub(r":[\d,-]+$", "", token).rstrip(".,")
+            if path.startswith(REPO_DIRS) and not PLACEHOLDER.search(path):
+                if not (ROOT / path).exists():
+                    missing.append(path)
+            elif re.fullmatch(r"test_\w+\.py", path) and not (ROOT / "tests" / path).exists():
+                missing.append(path)
+    return sorted(set(missing))
+
+
+def _script_source(line: str) -> tuple[str, str] | None:
+    """The command a line runs and the source its options must come from."""
+    match = re.search(r"python3? (scripts/[\w/]+\.py)", line)
+    if match:
+        return match.group(1), (ROOT / match.group(1)).read_text(encoding="utf-8") \
+            if (ROOT / match.group(1)).is_file() else ""
+    match = re.search(r"python3? -m (scripts\.scraper\.[\w.]+)", line)
+    if match:
+        module = match.group(1)
+        path = ROOT / (module.replace(".", "/") + ".py")
+        source = path.read_text(encoding="utf-8") if path.is_file() else ""
+        if "scraper_cli" in source or "myplatform" in module:
+            source += (ROOT / "scripts/scraper/base_scraper.py").read_text(encoding="utf-8")
+        return module, source
+    return None
+
+
+def unknown_commands(text: str) -> list[str]:
+    wrong = []
+    for span in _code_spans(text):
+        for command in re.split(r"\||&&|;", span):
+            found = _script_source(command)
+            if found is None:
+                continue
+            name, source = found
+            if not source:
+                wrong.append(name)
+                continue
+            for option in re.findall(r"(?<![\w-])(--[a-z][a-z0-9-]*)", command):
+                if f'"{option}"' not in source:
+                    wrong.append(f"{name} {option}")
+    return sorted(set(wrong))
+
+
+def fields_of_colon_tokens(text: str) -> set[str]:
+    """`key:` and `key: value` spans: the page naming a YAML key."""
+    return {
+        m.group(1) for span in re.findall(r"`([^`\n]+)`", FENCED.sub("", text))
+        if (m := re.fullmatch(r"([a-z][a-z0-9_]*):(?:\s.*)?", span))
+    }
+
+
+class PagesNameWhatExists(unittest.TestCase):
+    """The pages named a target scraper PLATFORM_NAME the discovery does
+    not use, a docs/ folder the site left, exporter methods that no longer
+    exist and profile fields in the wrong table. Every path, script and
+    option a page names is looked up."""
+
+    def test_every_repository_path_exists(self):
+        for name in CONTRIBUTOR_PAGES:
+            with self.subTest(page=name):
+                self.assertEqual(missing_repo_paths(_page(name)), [])
+
+    def test_every_command_and_option_exists(self):
+        for name in CONTRIBUTOR_PAGES:
+            with self.subTest(page=name):
+                self.assertEqual(unknown_commands(_page(name)), [])
+
+    def test_the_checks_catch_the_old_text(self):
+        self.assertEqual(missing_repo_paths("`scripts/scraper/targets/foo_targets.py`"),
+                         ["scripts/scraper/targets/foo_targets.py"])
+        self.assertEqual(unknown_commands("```bash\npython scripts/verify.py --no-such-flag\n```"),
+                         ["scripts/verify.py --no-such-flag"])
+
+    def test_every_yaml_key_a_page_names_is_a_schema_key(self):
+        keys = set()
+        for name in ("emulator", "platform", "registry"):
+            _schema_keys(_schema(name), keys)
+        keys |= {key for entry in _registry().values() for key in entry}
+        for name in ("profiling.md", "reference-terms.md", "verification-modes.md"):
+            with self.subTest(page=name):
+                self.assertEqual(sorted(fields_of_colon_tokens(_page(name)) - keys), [])
+        self.assertEqual(fields_of_colon_tokens("`bios_md5: abc`"), {"bios_md5"})
+
+
+class ProfileFieldTables(unittest.TestCase):
+    """Seven profile-level fields (pin_frozen, data_root, version_source and
+    four more) sat in the file entry table, where a reader wrote them on a
+    file and the schema refused it."""
+
+    def test_each_table_holds_its_level_of_the_schema(self):
+        schema = _schema("emulator")
+        top = set(schema["properties"])
+        entry = set(schema["properties"]["files"]["items"]["properties"])
+        page = _page("profiling.md")
+        profile_section = page.split("### Profile fields")[1].split("\n### ")[0]
+        described = _table_fields(profile_section)
+        described |= set(re.findall(r"`([a-z_0-9]+)`", profile_section.split("Descriptive fields")[1]))
+        self.assertEqual(sorted(described ^ top), [])
+        file_section = page.split("### File entry fields")[1].split("\n## ")[0]
+        self.assertEqual(sorted(_table_fields(file_section) ^ entry), [])
+        self.assertIn("pin_frozen", _table_fields("| `pin_frozen` | why |") - entry)
+
+
+class PlatformListsFollowTheRegistry(unittest.TestCase):
+    """The mode lists and the list of platforms naming their cores were
+    written by hand: KNULLI, AmberELEC, EmuELEC and the MinUI family were
+    missing from the core list."""
+
+    def _names(self) -> dict[str, str]:
+        import yaml
+
+        names = {}
+        for key, entry in _registry().items():
+            config = yaml.safe_load((ROOT / "platforms" / entry["config"]).read_text(encoding="utf-8"))
+            names[str(config.get("platform") or key)] = key
+        return names
+
+    def _modes(self) -> dict[str, str]:
+        import common
+
+        return {key: common.load_platform_config(key, str(ROOT / "platforms")).get("verification_mode")
+                for key in _registry()}
+
+    def _split(self, text: str) -> set[str]:
+        names = self._names()
+        listed = {n.strip() for n in re.split(r",|\band\b", text) if n.strip()}
+        unknown = listed - set(names)
+        self.assertEqual(unknown, set(), "not in platforms/_registry.yml")
+        return {names[n] for n in listed}
+
+    def test_verification_mode_sections(self):
+        page = _page("verification-modes.md")
+        modes = self._modes()
+        seen = set()
+        for mode, heading in (("existence", "Existence mode"), ("md5", "MD5 mode"), ("sha1", "SHA1 mode")):
+            line = re.search(r"\*\*Platforms\*\*: (.+)", _section(page, heading)).group(1)
+            keys = self._split(line)
+            self.assertEqual({k for k in keys if modes[k] != mode}, set(), mode)
+            seen |= keys
+        self.assertEqual(seen, set(_registry()))
+
+    def test_adding_a_platform_mode_table(self):
+        section = _section(_page("adding-a-platform.md"), "Step 4: Add verification logic")
+        modes = self._modes()
+        seen = set()
+        for row in _table_rows(section):
+            keys = self._split(row[2])
+            self.assertEqual({k for k in keys if modes[k] != row[0].strip("`")}, set(), row[0])
+            seen |= keys
+        self.assertEqual(seen, set(_registry()))
+
+    def test_the_explicit_core_lists(self):
+        import yaml
+
+        section = _section(_page("adding-a-platform.md"), "Required fields")
+        bullet = next(p for p in section.split("\n- ") if p.startswith("**Explicit list**"))
+        used_by = re.search(r"Used by ([^.]+)\.", bullet.replace("\n", " ")).group(1)
+        listing = set()
+        for key, entry in _registry().items():
+            config = yaml.safe_load((ROOT / "platforms" / entry["config"]).read_text(encoding="utf-8"))
+            cores = entry.get("cores", config.get("cores"))
+            if isinstance(cores, list) and cores:
+                listing.add(key)
+        self.assertEqual(self._split(used_by), listing)
+
+    def test_the_check_refuses_an_unknown_platform(self):
+        with self.assertRaises(AssertionError):
+            self._split("RetroArch, Lakka, Batocera Plus")
+
+
+class ListsFollowTheCode(unittest.TestCase):
+    """The detection table named three of the eight methods the registry
+    uses, the pipeline list stopped at eleven of its steps and the target
+    scraper table at four of seven scrapers."""
+
+    def test_install_detection_methods(self):
+        used = {rule["method"] for entry in _registry().values()
+                for rule in (entry.get("install") or {}).get("detect") or []}
+        section = _section(_page("adding-a-platform.md"), "Step 7: Add install detection (optional)")
+        self.assertEqual({row[0].strip("`") for row in _table_rows(section)}, used)
+
+    def test_pipeline_steps(self):
+        from pipeline import STEP_LABELS
+
+        section = _section(_page("adding-a-platform.md"), "Step 8: Validate the full pipeline")
+        listed = re.findall(r"^- (\d\w*) ", section, re.M)
+        self.assertEqual(listed, [label.split(" ", 1)[0] for label in STEP_LABELS.values()])
+
+    def test_target_scrapers(self):
+        modules = {p.stem.removesuffix("_scraper") for p in (ROOT / "scripts/scraper/targets").glob("*_targets_scraper.py")}
+        section = _section(_page("adding-a-scraper.md"), "Existing target scrapers")
+        self.assertEqual({row[0].strip("`") for row in _table_rows(section)}, modules)
+        for path in (ROOT / "scripts/scraper/targets").glob("*_targets_scraper.py"):
+            name = re.search(r'^PLATFORM_NAME = "(\w+)"', path.read_text(encoding="utf-8"), re.M).group(1)
+            self.assertIn(name, _registry())
+        for page in ("adding-a-platform.md", "adding-a-scraper.md"):
+            self.assertNotIn('PLATFORM_NAME = "myplatform_targets"', _page(page))
+
+    def test_exporter_contract(self):
+        from exporter.base_exporter import BaseExporter
+
+        section = _page("adding-a-platform.md").split("## Step 5: Create an exporter")[1].split("### Round-trip")[0]
+        for method in set(re.findall(r"def (\w+)\(", section)) | set(re.findall(r"`(\w+)\(\)`", section)):
+            self.assertTrue(hasattr(BaseExporter, method), method)
+        self.assertTrue(BaseExporter.__abstractmethods__ <= set(re.findall(r"def (\w+)\(", section)))
+
+
+class ExamplesComeFromTheData(unittest.TestCase):
+    """The Dolphin example carried a source_ref, an Adler-32 and a region
+    the profile never had, the launcher paragraph said 22 names per region
+    for 22 in all, and two pages cited Beetle PSX as a required HLE file
+    after the profile made it optional."""
+
+    def _profile(self, name: str) -> dict:
+        import yaml
+
+        return yaml.safe_load((ROOT / "emulators" / f"{name}.yml").read_text(encoding="utf-8"))
+
+    def _yaml_blocks(self, page: str) -> list[str]:
+        return [b.split("\n", 1)[1].rsplit("```", 1)[0] for b in FENCED.findall(_page(page)) if b.startswith("```yaml")]
+
+    def _subset(self, shown: dict, actual: dict) -> None:
+        for key, value in shown.items():
+            self.assertEqual(value, actual.get(key), key)
+
+    def test_profile_excerpts(self):
+        import yaml
+
+        blocks = self._yaml_blocks("profiling.md")
+        duck = yaml.safe_load(blocks[0])[0]
+        entry = next(f for f in self._profile("duckstation")["files"] if f["name"] == duck["name"])
+        self._subset(duck, entry)
+        dolphin = yaml.safe_load(next(b for b in blocks if b.startswith("emulator: Dolphin")))
+        profile = self._profile("dolphin")
+        self._subset({k: v for k, v in dolphin.items() if k != "files"}, profile)
+        for shown in dolphin["files"]:
+            actual = next(f for f in profile["files"] if f.get("path") == shown["path"])
+            self._subset(shown, actual)
+
+    def test_launcher_excerpt(self):
+        import yaml
+
+        shown = yaml.safe_load(next(b for b in self._yaml_blocks("adding-a-platform.md")
+                                    if b.startswith("launchers:")))["launchers"][0]
+        config = yaml.safe_load((ROOT / "platforms/batocera.yml").read_text(encoding="utf-8"))
+        record = next(r for r in config["launchers"]
+                      if r["emulator"] == shown["emulator"] and r.get("slot") == shown["slot"])
+        self._subset({k: v for k, v in shown.items() if k != "source_ref"}, record)
+        self.assertTrue(record["source_ref"].endswith(shown["source_ref"].split("...")[-1]))
+
+    def test_required_hle_examples(self):
+        for page in ("profiling.md", "reference-terms.md"):
+            text = _page(page).replace("\n", " ")
+            match = re.search(r"among them (\w+)'s +`([^`]+)`", text)
+            entry = next(f for f in self._profile(match.group(1).lower())["files"]
+                         if f["name"] == match.group(2))
+            self.assertTrue(entry.get("required") and entry.get("hle_fallback"), page)
+
+    def test_reference_terms_source_ref(self):
+        text = _section(_page("reference-terms.md"), "Terms of the reference pages").replace("\n", " ")
+        cited = re.search(r"lists `scph5501.bin` at\s+`([^`]+)`", text).group(1)
+        entry = next(f for f in self._profile("duckstation")["files"] if f["name"] == "scph5501.bin")
+        self.assertEqual(cited, entry["source_ref"])
+
+
 if __name__ == "__main__":
     unittest.main()
