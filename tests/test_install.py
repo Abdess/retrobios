@@ -3658,6 +3658,21 @@ class WindowsSeenFromWsl(unittest.TestCase):
         install._detect_by_path("wsl", found)
         self.assertIn(("retrobat", self.root / "c" / "RetroBat" / "bios"), found)
 
+    def test_retroarch_beside_its_exe_on_the_windows_side_is_detected(self):
+        """The installer page said both sides are searched under WSL, and
+        RetroArch's install folders were looked in on Windows only: a
+        C:\\RetroArch-Win64 was never found from WSL."""
+        exe_dir = self.root / "c" / "RetroArch-Win64"
+        exe_dir.mkdir(parents=True)
+        (exe_dir / "retroarch.exe").write_bytes(b"MZ")
+        home = Path(_tempdir(self))
+        cleared = {name: "" for name in (*install._WINDOWS_VARIABLES, "SCOOP", "SCOOP_GLOBAL",
+                                         "ProgramData")}
+        with unittest.mock.patch.dict(os.environ, {**cleared, "HOME": str(home)}), \
+                unittest.mock.patch.object(Path, "home", return_value=home):
+            found = install.detect_platforms("wsl")
+        self.assertIn(("retroarch", exe_dir / "system"), found)
+
     def test_the_windows_variables_are_read_through_cmd(self):
         answers = {"USERPROFILE": "C:\\Users\\me", "APPDATA": "C:\\Users\\me\\AppData\\Roaming"}
 
