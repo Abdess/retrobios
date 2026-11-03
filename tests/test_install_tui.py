@@ -13968,8 +13968,10 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
                 folder = str(state.folder_default)
                 self.assertIn("reads its BIOS files", small)
                 # The folder wraps after a separator wherever the temporary
-                # path's length puts it: read it with the line breaks out.
-                self.assertIn(folder, "".join(small.split()))
+                # path's length puts it, and a long one keeps its last
+                # folders after "...": read its tail with the breaks out.
+                tail = "/".join(Path(folder).parts[-2:])
+                self.assertIn(tail, "".join(small.split()))
 
     # The owner's note: Cores drew every box empty when no core narrows the
     # run, read as "nothing is ticked, tick them all".
