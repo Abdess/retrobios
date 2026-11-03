@@ -61,6 +61,14 @@ class ListxmlIndex(unittest.TestCase):
         self.assertEqual(counts["games_with_bios"], 3)
         self.assertEqual(counts["bios_sets"], 3)
 
+    def test_games_without_a_bios_and_the_bios_sets_are_named(self) -> None:
+        # A set on a card is then a game that needs nothing, a BIOS set,
+        # or a name the DAT does not hold: only the last falls back.
+        self.assertEqual(self.index["no_bios"], ["pacman"])
+        self.assertEqual(len(self.index["bios_sets"]), self.index["counts"]["bios_sets"])
+        self.assertIn("neogeo", self.index["bios_sets"])
+        self.assertNotIn("orphan", self.index["no_bios"])
+
     def test_small_window_reads_the_same(self) -> None:
         small = api.build_index(_sets("listxml.xml", chunk=64), "isbios")
         self.assertEqual(api.dump(small), api.dump(self.index))

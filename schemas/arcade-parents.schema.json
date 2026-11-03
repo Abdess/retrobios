@@ -5,7 +5,7 @@
   "description": "games/arcade/<profile>.json, written by python -m scripts.scraper.arcade_parent_importer from the DAT or the driver code the profile pins. A game set needs every BIOS set it is listed under (the romof chain read to its end) and, for the MAME family, every device set with ROMs it is listed under.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "profile", "core_version", "source", "bios", "devices", "chd", "missing_parents", "counts"],
+  "required": ["schema", "profile", "core_version", "source", "bios", "devices", "chd", "missing_parents", "no_bios", "bios_sets", "counts"],
   "$defs": {
     "set_name": { "type": "string", "minLength": 1, "pattern": "^[^\\s/\\\\]+$" },
     "set_list": {
@@ -72,6 +72,14 @@
       "description": "Game set -> the romof target the DAT does not carry.",
       "propertyNames": { "$ref": "#/$defs/set_name" },
       "additionalProperties": { "$ref": "#/$defs/set_name" }
+    },
+    "no_bios": {
+      "$ref": "#/$defs/set_list",
+      "description": "Game sets whose romof chain reaches no BIOS set: a game that needs no BIOS archive."
+    },
+    "bios_sets": {
+      "$ref": "#/$defs/set_list",
+      "description": "Every BIOS set of the DAT, used by a game or not: an archive of that name on a card is not a game."
     },
     "counts": {
       "type": "object",

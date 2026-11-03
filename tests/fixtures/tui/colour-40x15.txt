@@ -350,3 +350,35 @@
  
  
  Any key closes this help
+=== plan-games
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: RetroArch^[[0m
+
+^[[0;1m ^[[0;1;35m4^[[0;1m files to download, ^[[0;1;35m1.0 MB^[[0m
+ BIOS folder:
+   ^[[0;1m~/.config/retroarch/system^[[0m
+ For the 412 games on this card.
+^[[0;7;35m > Install^[[0m
+   For the games on this card: yes  412
+   Only what starts: no
+   Show the games
+   Choose systems
+   Copy from your old card or a folder
+   Options
+   Quit
+ ^[[0;1;35mA^[[0m Install  ^[[0;2mB^[[0m Back  ^[[0;2mY^[[0m Options  ^[[0;2m?^[[0m Help
+=== games
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Games on this card^[[0m
+
+ 412 games in /media/user/SDCARD/Roms,
+   398 recognised by their content.
+ 
+ sony-playstation (PS): 400 games, 390
+   recognised, every region
+ nintendo-gba (GBA): 12 games, 8
+   recognised, Europe only
+ 
+ Every BIOS of their system kept, so
+   that they start:
+ GBA/demo.gba: not recognised
+ GBA/hack.gba: not recognised
+ ^[[0;1;35mA^[[0m Back
