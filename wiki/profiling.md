@@ -163,9 +163,9 @@ and consistent across all profiles.
 When a core has HLE (high-level emulation), code of its own that stands
 in for the file, mark the entry `hle_fallback: true`. The flag records the
 stand-in. It does not decide `required`, which still comes from what the
-code does without the file: most of the 778 entries that carry the flag
-are optional, and 13 are required, among them Beetle PSX's three region
-BIOS (`emulators/beetle_psx.yml`). The file still ships in packs, and
+code does without the file: most entries that carry the flag are optional,
+and a few are required, among them Yabause's `saturn_bios.bin`
+(`emulators/yabause.yml`). The file still ships in packs, and
 verification reports its absence at INFO whatever `required` says.
 
 MAME is read the same way. A missing ROM is fatal only when it is neither
@@ -275,29 +275,32 @@ what the user actually needs to provide.
 emulator: Dolphin
 type: standalone + libretro
 core_classification: community_fork
-source: https://github.com/libretro/dolphin
-upstream: https://github.com/dolphin-emu/dolphin
-profiled_date: 2026-03-25
+source: "https://github.com/libretro/dolphin"
+upstream: "https://github.com/dolphin-emu/dolphin"
+profiled_date: "2026-03-23"
+source_commit: "3aac3f052f733f8df2f1616843a4d2e14002ed11"
+upstream_commit: "0d93fc035539f25790deca638d06ee3b3b45ee64"
 core_version: "2609-437-g3aac3f0"
 version_basis:
   kind: tag
   tag: "2609"
   distance: 437
-systems:
-  - nintendo-gamecube
-  - nintendo-wii
+systems: [nintendo-gamecube, nintendo-wii, sega-triforce]
 
 files:
-  - name: GC/USA/IPL.bin
+  - name: "IPL.bin"
+    path: "dolphin-emu/Sys/GC/USA/IPL.bin"
+    standalone_path: "GC/USA/IPL.bin"
     system: nintendo-gamecube
+    region: [north-america, latin-america]
+    size: 2097152
     required: false
     hle_fallback: true
-    size: 2097152
-    validation: [size, adler32]
-    known_hash_adler32: 0x4f1f6f5c
-    region: [north-america]
-    source_ref: Source/Core/Core/Boot/Boot_BS2Emu.cpp:42
+    source_ref: "upstream Source/Core/Common/CommonPaths.h:139, source Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:108"
 ```
+
+This excerpt of `emulators/dolphin.yml` leaves out the notes and the other
+entries.
 
 Record `source_commit` when profiling: upstream code moves, and a
 `source_ref` line number only stays checkable against the commit it was
@@ -517,6 +520,15 @@ reports the profile as uncheckable, and the CI job that runs
 | `version_basis` | every profile (`tests/test_version_basis.py`) | where `core_version` is read: `file` (`path`, `pattern`, optional `format`), `tag` (the nearest `tag` in the pin's history and its `distance`, `core_version` in git describe's form), `alias` (`of`), `package` (`artifact`, the APK or binary read) or `none`. `repo` names `upstream` when the version is the upstream tree's. `profile_sync --verify-version` reads it again, and a pin advance rewrites `core_version` from it |
 | `source_commit` | see above | commit SHA of `source` the code was read at. Anchors every `source_ref` line number |
 | `upstream_commit` | no | same, for `upstream` |
+| `pin_frozen` | no | why `source_commit` is held on purpose rather than followed. The profile is then judged against its own revision, like one pinned to a superseded tag |
+| `data_root` | no | per operating system (`android`, `ios`, `windows`, `macos`, `linux`), the folder the app reads its user data from, under which `standalone_path` destinations sit: `path` as the user finds it (`Android/data/<package>/files`, `%APPDATA%/...`), with the `source_ref` that builds it. Only the systems the app runs on are keyed |
+| `upstream_frozen` | no | why `upstream_commit` is held: the port vendors that upstream tree, synced to that release, or merged that commit. The upstream view is read at its own pin and a bump leaves it. Without it, a port that is a GitHub fork of its upstream follows the merge base of the two |
+| `prose_written_at` | no | the pin a reader confirmed the prose citations against. When the profile's history shows a text living under several pins, profile_sync takes this one as the revision the text describes, so a bump is no longer refused for a citation already reread. It never overrides a history with a single candidate |
+| `version_source` | no | for a project published outside any forge, `{url, pattern}`: the page that announces releases and a regular expression whose first group is the latest version. `profile_sync --check-version` compares it with `core_version`, and `check_freshness --profiles` calls the profile stale when they differ. `no_genuine_copy` names an announced version found only rebuilt or re-signed: the profile stays on the newest unmodified build and is not stale until the page announces a later one |
+| `upstream_gone` | no | why the declared upstream can no longer be reached, when that is settled rather than transient. Records the death instead of leaving the profile failing every pass. profile_sync reports it as declared, and reports the contradiction if the forge answers again |
+| `source_mirror` | no | a repository carrying the same tree, consulted after `source` and `upstream`. What keeps a profile checkable once its own forge stops answering |
+| `source_ref` | no | the code a profile with no file entry rests on: the load routine that opens nothing from outside (`emulators/craft.yml`) |
+| `found_by` | no | the default `found_by` of every file entry (see the file entry fields) |
 | `source_branch` | no | branch `source` was read from when it is not the default one (a port living on a pull request branch). profile_sync follows it |
 | `built_by` | no | platforms that ship this build under its core name, compiled by them or installed from the project's own release (Recalbox's `mame0278`, the GSplus legacy build). On those platforms the name resolves to this profile, never through `all_libretro`: the buildbot does not publish it |
 | `bios_mode` | no | `agnostic` when the core takes any file of the right shape in its BIOS folder instead of a fixed name (PCSX2). Packs then carry every matching dump, and a `<bios>.bin` placeholder stands for them |
@@ -576,10 +588,11 @@ system that runs the core there, so libretro Dolphin's `User/GBA/gba_bios.bin`
 lands in both `saves/gamecube/User/GBA/` and `saves/wii/User/GBA/` on Batocera.
 RetroBat sorts Dolphin's saves by core too, which adds `dolphin-emu/`.
 
-RetroPie, ROCKNIX, AmberELEC and EmuELEC keep saves beside each game, and RomM
-runs cores in the browser: no single place exists, so those entries are listed
-as omitted (`no_save_directory`), never placed in the BIOS tree where the core
-does not look.
+A platform whose registry entry has no `save_directory` keeps no single save
+place: RetroPie, ROCKNIX, AmberELEC and EmuELEC keep saves beside each game,
+and RomM runs cores in the browser. Those entries are listed as omitted
+(`no_save_directory`), never placed in the BIOS tree where the core does not
+look.
 
 ### File entry fields
 
@@ -593,15 +606,8 @@ does not look.
 | `size` | expected size in bytes, or a list when the code accepts several exact sizes |
 | `min_size`, `max_size` | size range when the code accepts a range |
 | `md5`, `sha1`, `crc32`, `sha256` | expected hashes from source code |
-| `known_hash_adler32` | expected Adler-32 hash (Dolphin's DSP ROMs). Pair with `adler32_byteswap` when the code hashes 16-bit byte-swapped data |
+| `known_hash_adler32`, `adler32_byteswap` | expected Adler-32 hash (Dolphin's DSP ROMs). Pair with `adler32_byteswap` when the code hashes 16-bit byte-swapped data |
 | `adler32_pairs_with`, `adler32_pairs` | the file hashed together with this one and the combinations the code accepts, this file's value first, in table order: Dolphin warns on a DSP ROM pair outside its `known_roms` even when each file passes alone |
-| `pin_frozen` | why `source_commit` is held on purpose rather than followed. The profile is then judged against its own revision, like one pinned to a superseded tag |
-| `data_root` | per operating system (`android`, `ios`, `windows`, `macos`, `linux`), the folder the app reads its user data from, under which `standalone_path` destinations sit: `path` as the user finds it (`Android/data/<package>/files`, `%APPDATA%/...`), with the `source_ref` that builds it. Only the systems the app runs on are keyed |
-| `upstream_frozen` | why `upstream_commit` is held: the port vendors that upstream tree, synced to that release, or merged that commit. The upstream view is read at its own pin and a bump leaves it. Without it, a port that is a GitHub fork of its upstream follows the merge base of the two |
-| `prose_written_at` | the pin a reader confirmed the prose citations against. When the profile's history shows a text living under several pins, profile_sync takes this one as the revision the text describes, so a bump is no longer refused for a citation already reread. It never overrides a history with a single candidate |
-| `version_source` | for a project published outside any forge, `{url, pattern}`: the page that announces releases and a regular expression whose first group is the latest version. `profile_sync --check-version` compares it with `core_version`, and `check_freshness --profiles` calls the profile stale when they differ. `no_genuine_copy` names an announced version found only rebuilt or re-signed: the profile stays on the newest unmodified build and is not stale until the page announces a later one |
-| `upstream_gone` | why the declared upstream can no longer be reached, when that is settled rather than transient. Records the death instead of leaving the profile failing every pass. profile_sync reports it as declared, and reports the contradiction if the forge answers again |
-| `source_mirror` | a repository carrying the same tree, consulted after `source` and `upstream`. What keeps a profile checkable once its own forge stops answering |
 | `validation` | checks the code performs: `size`, `crc32`, `md5`, `sha1`, `adler32`, `signature`, `crypto`. Can be a list or dict `{core: [...], upstream: [...]}` for divergent checks |
 | `aliases` | alternate filenames for the same file |
 | `mode` | `libretro`, `standalone`, or `both` |

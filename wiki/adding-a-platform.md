@@ -57,6 +57,10 @@ class Scraper(BaseScraper):
 - `compare_with_config(config) -> ChangeSet` - diffs scraped requirements against
   an existing platform YAML, returning added/removed/modified entries.
 - `test_connection() -> bool` - checks if the source URL is reachable.
+- `lists_files` - `True` by default, and an empty read then stops the scrape.
+  A scraper whose platform lists no file of its own sets it to `False`: RetroPie
+  inherits RetroArch's files and reads only its packages, and MinUI names no
+  file at all.
 
 Two abstract methods must be implemented:
 
@@ -193,7 +197,8 @@ resolved. Three strategies exist:
 - **Explicit list**: `cores: [beetle_psx, dolphin, ...]` - match by profile key name
   or by any name in a profile's `cores:`. When a profile's `built_by` names this
   platform, that profile answers for the name. Used by Batocera, Recalbox, RetroBat,
-  RomM, RetroPie, EmuDeck, RetroDECK, ROCKNIX. A list that names `retroarch` (the last
+  RomM, KNULLI, AmberELEC, EmuELEC, MinUI, NextUI, MyMinUI, RetroPie, EmuDeck,
+  RetroDECK, ROCKNIX. A list that names `retroarch` (the last
   four) also takes every libretro profile, as `all_libretro` does. An empty list
   (BizHawk, MiSTer FPGA) resolves no profile, and the pack holds the platform's own
   files.
@@ -291,7 +296,8 @@ that text belongs in a guide field.
 
 ```yaml
     logo: https://...                # SVG or PNG for UI/docs
-    inherits_from: retroarch         # inherit systems/cores from another platform
+    inherits_from: retroarch         # the parent, for readers: the merge reads
+                                     # inherits: in the platform YAML
     case_insensitive_fs: true        # if the platform runs on case-insensitive filesystems
     extract_to: /userdata/bios/      # folder the pack extracts into, shown in the README,
                                      # the site and the release notes
@@ -379,8 +385,8 @@ AmberELEC and EmuELEC declare `neogeo/` and `ports/` beside `bios/`, and set
 
 Between the file a user drops in the BIOS folder and the emulator, a
 platform's own launch code often decides which name is read and where it is
-handed over. Batocera's DuckStation generator tries 22 names per region, first
-found wins, and writes the hit into `settings.ini`. That behaviour belongs to
+handed over. Batocera's DuckStation generator tries a list of names for each
+region, first found wins, and writes the hit into `settings.ini`. That behaviour belongs to
 the platform, not to the emulator, so the scraper records it from the
 platform's code under `launchers:`, never as an alias in an emulator profile.
 
@@ -494,10 +500,10 @@ RetroPie, EmuDeck and RetroDECK spell it, and a path from a root
 ### Inheritance
 
 If the new platform inherits from an existing one (e.g. Lakka inherits RetroArch),
-set `inherits_from` in the registry AND add `inherits: retroarch` in the platform
-YAML itself. `load_platform_config()` reads the `inherits:` field from the YAML to
-merge parent systems and shared groups into the child. The child YAML only needs to
-declare overrides.
+add `inherits: retroarch` in the platform YAML. `load_platform_config()` reads that
+field to merge the parent's systems and shared groups into the child, and the child
+YAML only declares what differs. The registry's `inherits_from` names the parent
+for readers and is read by no tool.
 
 ## Step 3: Generate the platform YAML
 
@@ -507,9 +513,9 @@ Run the scraper with `--output` to produce the initial platform configuration:
 python -m scripts.scraper.myplatform_scraper --output platforms/myplatform.yml
 ```
 
-If a file already exists at the output path, the CLI preserves fields that the
-scraper does not generate (e.g. `data_directories`, manually added metadata).
-Only the `systems` section is replaced.
+If a file already exists at the output path, every top-level key the scraper
+writes is replaced, and the keys it does not write are kept. A system's
+`data_directories` is kept as well when the new scrape does not carry one.
 
 The YAML is the scraper's output and is never edited by hand: the next scrape
 would undo the edit, and the file would stop describing the platform. Anything
@@ -546,37 +552,59 @@ to `verify.py` in the platform-specific verification path.
 
 Read the platform's source code to understand its exact verification behavior before writing any logic. Batocera's `checkInsideZip` uses `casefold()` for case-insensitive matching. Recalbox supports comma-separated MD5 lists. RomM checks file size before hashing. These details matter: the project replicates native behavior, not an approximation of it.
 
-## Step 5: Create an exporter (optional)
+## Step 5: Create an exporter
 
-Exporters convert truth data back to the platform's native format. They live in
-`scripts/exporter/` and follow the same auto-discovery pattern (`*_exporter.py`).
+An exporter writes the platform's own BIOS file back, corrected by what the
+emulator code shows. Every registered platform has one, unless its registry
+entry says `native_list: none`: `tests/test_exporters.py` fails otherwise.
+Exporters live in `scripts/exporter/` and are found the same way as scrapers
+(`*_exporter.py`).
 
 ### Module contract
 
-The module must export an `Exporter` class inheriting `BaseExporter`:
+The module exports an `Exporter` class that extends `BaseExporter`
+(`scripts/exporter/base_exporter.py`):
 
 ```python
-from scripts.exporter.base_exporter import BaseExporter
+from .base_exporter import BaseExporter
+from .baseline import NativeSystem, Report
+
 
 class Exporter(BaseExporter):
     @staticmethod
     def platform_name() -> str:
         return "myplatform"
 
-    def export(self, truth_data: dict, output_path: str, scraped_data: dict | None = None) -> None:
-        # Write truth_data in the platform's native format to output_path
+    @staticmethod
+    def native_filename() -> str:
+        return "bios_list.json"            # the name the platform gives its file
+
+    @staticmethod
+    def native_sources() -> dict[str, str]:
+        return {"bios_list.json": "https://..."}  # the original it patches
+
+    def render(self, systems: dict[str, NativeSystem], report: Report,
+               originals: dict[str, str], scraped: dict | None = None) -> dict[str, str]:
+        # Return {relative output path: file content}
         ...
 
-    def validate(self, truth_data: dict, output_path: str) -> list[str]:
+    def validate(self, systems: dict[str, NativeSystem], produced: dict[str, str]) -> list[str]:
         # Return a list of issues (empty = valid)
         ...
 ```
 
-`BaseExporter` provides helper methods:
+`platform_name`, `native_filename`, `render` and `validate` are abstract. The
+other methods say what the format can hold, and their defaults fit a plain list
+of files:
 
-- `_is_pattern(name)` - True if the filename contains wildcards or placeholders.
-- `_dest(fe)` - resolve destination path from a file entry dict.
-- `_display_name(sys_id, scraped_sys)` - convert a system slug to a display name.
+- `carries()` - the fields the format has a place for (`md5` by default). A
+  correction to a field it cannot hold is not counted as made.
+- `requires()` - the hash a new entry cannot be written without.
+- `can_add()` - `False` when an entry is code rather than a row of data
+  (BizHawk), so nothing is added.
+- `keys_by_system()` - `True` when the platform finds a file by the name of its
+  own system, so an entry filed under one of our system ids is never written.
+- `needs_original()` - `True` as soon as `native_sources()` names a file.
 
 ### Round-trip validation
 
@@ -584,11 +612,10 @@ The scraper and the exporter are checked against each other as
 [round-trip testing](adding-a-scraper.md#round-trip-testing) describes. The
 export must not lose anything the platform already declares. If your
 format carries code as well as data (a script, a C# database, a manifest
-whose BIOS list sits beside launch configuration), say so with
-`needs_original()` and patch the platform's original file rather than writing
-a new one. An
-exporter that regenerates such a file from BIOS data alone hands the
-maintainer something that no longer runs.
+whose BIOS list sits beside launch configuration), name the file in
+`native_sources()` and patch it rather than writing a new one. An exporter
+that regenerates such a file from BIOS data alone hands the maintainer
+something that no longer runs.
 
 ## Step 6: Create a target scraper (optional)
 
@@ -643,19 +670,25 @@ cores the pack ships.
 
 ## Step 7: Add install detection (optional)
 
-The `install` section in `_registry.yml` tells `install.py` how to detect
-the platform on the user's machine and locate its BIOS directory.
+The `install.detect` rules in `_registry.yml` say how `install.py` finds the
+platform on the user's machine and where its BIOS folder is. The installer
+runs before it fetches any manifest, so it carries the same rules in its own
+tables, and `tests/test_install.py` holds the two equal.
 
-Three detection methods are available:
+| Method | Finds the platform when | Fields |
+|--------|-------------------------|--------|
+| `config_file` | a key of a config file names the folder | `config`, `parse_key`, optionally `bios_subdir` or `bios_path` |
+| `path_exists` | a folder exists | `path`, optionally `bios_path` |
+| `file_exists` | a file exists | `file`, `bios_path`, optionally `name`, `config`, `home` |
+| `os_release` | `/etc/os-release` holds one of the `match` pairs | `match`, `name`, `bios_path`, optionally `config`, `home` |
+| `file_matches` | a file's text matches `pattern` | `file`, `pattern`, `name`, `bios_path` |
+| `executable` | a portable install's program is found | `file` (glob patterns), `bios_subdir` |
+| `registry` | a Windows registry value names the install folder | `key`, `value`, `bios_subdir` |
+| `card_marker` | a file on the SD card starts with a prefix | `file`, `first_line_prefix` |
 
-| Method | Description | Fields |
-|--------|-------------|--------|
-| `config_file` | Parse a key from a config file | `config`, `parse_key`, optionally `bios_subdir` |
-| `path_exists` | Check if a directory exists | `path`, optionally `bios_path` |
-| `file_exists` | Check if a file exists | `file`, optionally `bios_path` |
-
-Each entry is scoped to an OS (`linux`, `darwin`, `windows`). Multiple entries
-per OS are tried in order.
+Each rule names its `os`: `linux`, `darwin`, `windows`, or `any` for a card
+read from another computer. Rules for one OS are tried in order.
+`derives_from` names the system a rule's system is built on.
 
 ## Step 8: Validate the full pipeline
 
@@ -708,6 +741,6 @@ Verification is not optional. A platform that passes `pipeline.py` today may bre
 - [ ] Guide added to `platforms/_guides.yml`
 - [ ] Platform YAML generated and verified
 - [ ] `python scripts/pipeline.py --offline` passes
-- [ ] Exporter in `scripts/exporter/<name>_exporter.py` (if applicable)
+- [ ] Exporter in `scripts/exporter/<name>_exporter.py`, unless the registry says `native_list: none`
 - [ ] Target scraper in `scripts/scraper/targets/<name>_targets_scraper.py` (if applicable)
 - [ ] Install detection entries in `_registry.yml` (if applicable)
