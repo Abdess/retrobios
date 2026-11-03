@@ -48,6 +48,7 @@ from .mame_devices import (
     attribute_softlists,
     attribute_systems,
     default_floppy_samples,
+    device_systems,
     drive_form_factor,
     floppy_drives,
     floppy_sample_systems,
@@ -70,6 +71,9 @@ _CLONE_DIR = _ROOT / "tmp" / f"mame-{os.getpid()}"
 _EMULATORS_DIR = _ROOT / "emulators"
 _PLATFORMS_DIR = _ROOT / "platforms"
 _FLOPPY_SOURCE = "src/devices/imagedev/floppy.cpp"
+# Where a device set goes when only machines no seed places load it: MAME
+# starts such a machine from its set name, as an arcade folder passes one.
+UNPLACED_SYSTEM = "arcade"
 _REPO_URL = "https://github.com/mamedev/mame.git"
 _STALE_HOURS = 24
 
@@ -570,9 +574,14 @@ def _merge_devices(args: argparse.Namespace) -> None:
     stated, conflicts = platform_seeds(
         _platform_archives(), machines, profile.get("systems") or [], written
     )
-    systems = attribute_systems(machines, {**stated, **written})
+    seeds = {**stated, **written}
+    systems = attribute_systems(machines, seeds)
+    listed = profile.get("systems") or []
+    filed = device_systems(
+        machines, seeds, UNPLACED_SYSTEM if UNPLACED_SYSTEM in listed else ""
+    )
     for set_name, device in devices.items():
-        device["systems"] = systems.get(set_name, [])
+        device["systems"] = filed.get(set_name, [])
     report = merge_mame_devices(str(profile_path), devices, write=not args.dry_run)
 
     shipped = upstream.list_directory(repo, commit, "hash", upstream.CACHE_DIR)
@@ -602,10 +611,12 @@ def _merge_devices(args: argparse.Namespace) -> None:
     for set_name in report["conflict"]:
         print(f"    ! {set_name}.zip is listed under another category, left as written")
     by_count = Counter(len(device["systems"]) for device in devices.values())
+    fallen = sum(1 for device in devices.values() if UNPLACED_SYSTEM in device["systems"])
     print(
         f"  systems: {by_count[1]} sets under one system, "
         f"{sum(n for k, n in by_count.items() if k > 1)} under several, "
-        f"{by_count[0]} loaded by no placed machine "
+        f"{fallen} of them under {UNPLACED_SYSTEM} (loaded by machines no entry places), "
+        f"{by_count[0]} instantiated by no machine of the release "
         "(they serve every system of the profile)"
     )
     print(
