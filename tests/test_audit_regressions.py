@@ -6576,7 +6576,8 @@ class SkipPacksHelpSaysWhatRuns(unittest.TestCase):
         )
         text = " ".join(proc.stdout.split())
         self.assertNotIn("Only regenerate DB and verify", text)
-        self.assertIn("Steps 7 and 8 still rewrite README.md and docs/", text)
+        self.assertIn("Steps 7 and 8 still rewrite README.md and the site pages in website/", text)
+        self.assertNotIn("docs/", text)
 
     def test_every_step_it_names_is_one_it_skips(self):
         sys.path.insert(0, str(ROOT / "scripts"))
