@@ -7904,9 +7904,11 @@ def fold_line(text: str, hang: str = "  ") -> str:
     cut after a slash: left to the terminal, below 40 columns "Found Onion
     at /media/moi/ONION/BIOS" broke inside "(RetroArch files)" and a folder
     inside its name (tui_audit_17 P3-8)."""
-    cols = max(terminal_size()[0] - 1, 8)
-    if cell_width(text) <= cols or not _is_terminal(sys.stdout):
-        # A pipe or a log folds nothing: the line is kept whole there.
+    width = terminal_size()[0]
+    cols = max(width - 1, 8)
+    if cell_width(text) <= cols or width >= TUI_MIN_COLS or not _is_terminal(sys.stdout):
+        # A pipe or a log folds nothing, and from 40 columns a folder is left
+        # whole for the terminal to fold, copied as one line.
         return text
     lead = text[:len(text) - len(text.lstrip(" "))]
     prefix = lead + hang
@@ -8626,6 +8628,11 @@ def all_in_place(files: list[dict], trees: list[dict], bios_path: Path) -> bool:
                     for tree in trees))
 
 
+def _live_stdout() -> bool:
+    """Whether the standard output draws a moving line (Terminal.live)."""
+    return Terminal(sys.stdout).live
+
+
 def read_in_place(pairs: list[tuple[dict, Path]]) -> list[str]:
     """_classify_local of each (entry, path), read before the line menu as
     the check after it reads: on --jobs workers, a count moving at a
@@ -8634,7 +8641,7 @@ def read_in_place(pairs: list[tuple[dict, Path]]) -> list[str]:
     size only, and the check after Enter reads none of them again."""
     if not pairs:
         return []
-    live = _is_terminal(sys.stdout)
+    live = _live_stdout()
     verdicts: list[str] = []
     last = 0.0
     with concurrent.futures.ThreadPoolExecutor(max_workers=LOCAL.jobs) as pool:
