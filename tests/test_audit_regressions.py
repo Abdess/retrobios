@@ -5002,6 +5002,19 @@ class GapsPageCountsOneWay(unittest.TestCase):
         self.assertIn("Other revisions of a held destination", text)
         self.assertIn("`cdibios.zip`", text)
 
+    def test_missing_says_the_destination_count_of_the_opening_sentence(self):
+        # The page opened on "48 are missing" (by destination) above a
+        # heading that said "10 files": one row per name.
+        from scripts.generate_site import _render_problem_files
+
+        problems = [{"platform": "AmberELEC", "name": "hardwareconfig.xml",
+                     "status": "missing", "required": True, "reason": "",
+                     "discrepancy": "", "category": "unread"}] * 3
+        text = "\n".join(_render_problem_files(problems, missing_total=3))
+        self.assertIn("3 missing under 1 name,", text)
+        self.assertIn('rb-badge-danger">1 name</span>', text)
+        self.assertNotIn("1 missing", text)
+
     def test_verify_marks_the_settled_entry(self):
         sys.path.insert(0, str(ROOT / "scripts"))
         import verify
