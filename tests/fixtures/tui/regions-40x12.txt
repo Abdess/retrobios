@@ -8,5 +8,5 @@
 
  > [1] North America
    [ ] Japan
-
+ 1-2 of 2
  A Tick  B Done  <> Order  ? Help

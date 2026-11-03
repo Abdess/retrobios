@@ -12164,8 +12164,12 @@ def card_setups() -> list[CardSetup]:
         below = next((rule.bios[len(_card_mount(rule.bios)):] for rule in _EMBEDDED_RULES
                       if rule.name == name and rule.bios and _card_mount(rule.bios)), "")
         if below:
-            setups.append(CardSetup(name, "retroarch", below,
-                                    tuple(rule for rule in rules if rule.name == name)))
+            own = tuple(rule for rule in rules if rule.name in (name, _built_on(name)))
+            # Told by the games part alone, as AmberELEC's: a card that holds
+            # none of it yet is taken as named, said so (tui_audit_17 P2-3).
+            setups.append(CardSetup(name, "retroarch", below, own,
+                                    bool(own) and all(rule.method == "games_part"
+                                                      for rule in own)))
     return setups
 
 
@@ -19173,7 +19177,13 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
                     for event in events}
             held = [event for event in chosen if event["dest"] in took]
             rest = len(chosen) - len(held) + data
+            # Nothing at hand: the head the whole list's plan says, for the
+            # systems ticked. "About 0 files, 0 B" stood over 20 files the
+            # internet would bring (tui_audit_17 P3-5).
             lines[0] = _styled(
+                f"{agree(rest, 'file needs', 'files need')} the internet, which "
+                f"{offline_named()} does not use, for {len(state.ticked)} of "
+                f"{len(state.systems)} systems", "title") if not held else _styled(
                 f"About {_plural(len(held), 'file')}, "
                 f"{format_size(sum(e['size'] for e in held))}, for {len(state.ticked)} of "
                 f"{len(state.systems)} systems"

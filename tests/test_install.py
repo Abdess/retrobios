@@ -31,6 +31,13 @@ _spec = importlib.util.spec_from_file_location("install", REPO_ROOT / "install.p
 install = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(install)
 
+sys.path.insert(0, str(REPO_ROOT / "tests"))
+from netguard import module_guard  # noqa: E402
+
+# No connection off the loopback and no card of the host reaches a test
+# (code_audit_24 P3-13): the module fails at its end otherwise.
+setUpModule, tearDownModule = module_guard("test_install")
+
 
 def _tempdir(test: unittest.TestCase) -> str:
     """A scratch directory under the repository's tmp/, removed after the test.

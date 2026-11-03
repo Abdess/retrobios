@@ -35,7 +35,7 @@ import types
 import unittest
 import warnings
 import zipfile
-from pathlib import Path, PureWindowsPath
+from pathlib import Path, PurePosixPath, PureWindowsPath
 from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -45,6 +45,13 @@ sys.path.insert(0, str(REPO_ROOT / "tests"))
 import install  # noqa: E402
 from test_install_app import make_card  # noqa: E402
 from test_install_selection import FakeRepository, _QuietHandler  # noqa: E402
+from netguard import module_guard  # noqa: E402
+
+# No connection off the loopback and no card of the host reaches a test, in
+# this process or one it starts (code_audit_24 P3-13): 261 connections to
+# GitHub left this module in a run, and two tests failed with an AmberELEC
+# card in the reader. The module fails at its end when one is tried.
+setUpModule, tearDownModule = module_guard("test_install_tui")
 
 try:
     import pyte
@@ -5801,9 +5808,15 @@ def _card_from_rules(root: Path, setup: install.CardSetup) -> Path:
             (root / path).parent.mkdir(parents=True, exist_ok=True)
             (root / path).write_text(text + "\n", encoding="utf-8")
             continue
+        if rule.method == "games_part":
+            # What the system writes beside its bios folder on that part.
+            (root / "bios").mkdir(exist_ok=True)
         for value in rule.values:
             (root / value).parent.mkdir(parents=True, exist_ok=True)
-            (root / value).write_text("", encoding="utf-8")
+            if rule.method == "games_part" and "." not in PurePosixPath(value).name:
+                (root / value).mkdir(exist_ok=True)
+            else:
+                (root / value).write_text("", encoding="utf-8")
     return root
 
 
@@ -13968,6 +13981,421 @@ class AuditTwentyThreeAndSixteen(unittest.TestCase):
         self.assertIn(f"**{install.TUI_FOLDER_TITLE}**", words)
         self.assertLess(words.index(install.TUI_FOLDER_TITLE),
                         words.index(install.TUI_INSTALL_ROW))
+
+
+def core_list(path: Path, files: list) -> Path:
+    path.write_text(json.dumps({"manifest_version": 2, "platform": "retroarch",
+                                "categorized": True, "base_destination": "system",
+                                "save_directory": {"folder": "saves", "by_core": True},
+                                "files": files}), encoding="utf-8")
+    return path
+
+
+class AuditTwentyFourAndSeventeen(unittest.TestCase):
+    """code_audit_24 and tui_audit_17: the cores the run accepts, one tick
+    list, a folder failure said as it happened, every proven card named,
+    reads that show, and tests that leave the host alone."""
+
+    setUp = LineModeAndScreenDecideAlike.setUp
+    line_run = LineModeAndScreenDecideAlike.line_run
+    entry = staticmethod(LineModeAndScreenDecideAlike.entry)
+    drive = AuditTwentyTwoAndFifteen.drive
+    first_screen = AuditTwentyTwoAndFifteen.first_screen
+    line_from = AuditTwentyThreeAndSixteen.line_from
+
+    # Root cause 1: the cores a choice is made among are the run's.
+
+    def files(self) -> list:
+        entry = self.entry
+        return [
+            entry("scph5501.bin", b"S" * 8, ["sony-playstation"]),
+            entry("pcsx/extra.bin", b"P" * 4, ["sony-playstation"], cores=["pcsx_rearmed"]),
+            entry("fc/disksys.rom", b"F" * 8, ["nintendo-famicom-disk"], cores=["mesen"]),
+            # Read from the save directory alone: set aside where it is not known.
+            entry("3ds/aes_keys.txt", b"K" * 4, ["nintendo-3ds"], cores=["azahar"],
+                  root="save"),
+            # Game data alone: --no-game-data leaves its core no file.
+            entry("quake/pak0.pak", b"Q" * 4, ["other"], cores=["tyrquake"],
+                  category="game_data"),
+        ]
+
+    def check_events(self, *extra: str) -> list:
+        listing = core_list(self.root / "cores.json", self.files())
+        dest = self.root / "dest"
+        dest.mkdir(exist_ok=True)
+        done = install_run("--platform", "retroarch", "--dest", str(dest), "--manifest",
+                           str(listing), "--check", "--events", *extra,
+                           env={"HOME": str(self.root / "home"),
+                                "RETROBIOS_INSTALL_OFFLINE": "1"})
+        return [json.loads(line) for line in done.stdout.splitlines() if line.startswith("{")]
+
+    def cores_state(self, events: list, no_game_data: bool = False) -> install.TuiState:
+        state = checked_state()
+        state.manifest = {"manifest_version": 2, "platform": "retroarch", "categorized": True,
+                          "files": self.files()}
+        state.set_aside = set(next(event for event in events
+                                   if event["event"] == "set_aside")["dests"])
+        state.no_game_data = no_game_data
+        return state
+
+    def test_cores_lists_what_the_run_accepts_and_an_untick_runs(self):
+        """tui_audit_17 P1-1: Cores listed 189 cores where --core accepted 181,
+        and an untick sent the 8 save-folder-only cores: "unknown core"."""
+        events = self.check_events()
+        self.assertEqual(next(e for e in events if e["event"] == "set_aside")["dests"],
+                         ["3ds/aes_keys.txt"])
+        state = self.cores_state(events)
+        self.assertNotIn("azahar", install.tui_choices(state)["cores"])
+        state.stack = ["setup", "plan", "options", "cores"]
+        row = next(r for r in install.tui_rows(state) if r.value == "mesen")
+        install._tick(state, row, False)
+        cores = [value for flag, value in install.tui_flags(state) if flag == "--core"]
+        self.assertEqual(sorted(cores), ["pcsx_rearmed", "tyrquake"])
+        listing = self.root / "cores.json"
+        done = install_run("--platform", "retroarch", "--dest", str(self.root / "dest"),
+                           "--manifest", str(listing), "--dry-run",
+                           *[f"--core={core}" for core in cores],
+                           env={"HOME": str(self.root / "home"),
+                                "RETROBIOS_INSTALL_OFFLINE": "1"})
+        self.assertNotIn("unknown core", done.stdout + done.stderr)
+
+    def test_both_modes_count_out_of_the_cores_the_run_keeps(self):
+        """code_audit_24 P3-3: line mode said "1 of 181 cores", the screen
+        "1 of 189", and 22 more under --no-game-data."""
+        for no_game_data in (False, True):
+            with self.subTest(no_game_data=no_game_data):
+                extra = ("--no-game-data",) if no_game_data else ()
+                state = self.cores_state(self.check_events(*extra), no_game_data)
+                expected = ["mesen", "pcsx_rearmed"] + ([] if no_game_data else ["tyrquake"])
+                self.assertEqual(install.tui_choices(state)["cores"], expected)
+                listing = core_list(self.root / "line.json", self.files())
+                # A folder not named system: the save directory is not known.
+                text, _asked = self.line_run(
+                    _args(manifest=listing, dest=self.root / "dest", declared_only=False,
+                          dry_run=True, no_game_data=no_game_data), ["c", "", "1"])
+                head = text.rsplit("Counted again for your choices", 1)[1]
+                self.assertIn(f"1 of {len(expected)} cores", head)
+                state.cores = ["mesen"]
+                self.assertIn(f"1 of {len(expected)}",
+                              next(r.label for r in install.tui_rows(
+                                  self.options(state)) if r.action == "cores"))
+
+    @staticmethod
+    def text(state: install.TuiState, cols: int, rows: int) -> str:
+        """The frame drawn, its folded lines joined into one text."""
+        return " ".join(" ".join(str(line).split()) for line in
+                        install.tui_view(state, cols, rows))
+
+    @staticmethod
+    def options(state: install.TuiState) -> install.TuiState:
+        state.stack = ["setup", "plan", "options"]
+        return state
+
+    def test_an_untick_keeps_the_other_systems_cores(self):
+        """code_audit_24 P3-1: with --system sony-playstation, one untick on
+        pcsx_rearmed cleared mesen, drawn ticked under the other systems."""
+        state = checked_state()
+        state.ticked = {"sony-playstation"}
+        state.stack = ["setup", "plan", "options", "cores"]
+        state.cores_all = True
+        boxes = {r.value: r.label[:3] for r in install.tui_rows(state) if r.action == "core"}
+        self.assertEqual(boxes, {"mesen": "[x]", "pcsx_rearmed": "[x]"})
+        row = next(r for r in install.tui_rows(state) if r.value == "pcsx_rearmed")
+        install._tick(state, row, None)
+        boxes = {r.value: r.label[:3] for r in install.tui_rows(state) if r.action == "core"}
+        self.assertEqual(boxes, {"mesen": "[x]", "pcsx_rearmed": "[ ]"})
+        # The --core given is the cores ticked, exactly.
+        self.assertEqual([v for f, v in install.tui_flags(state) if f == "--core"], ["mesen"])
+
+    def test_a_core_of_another_system_is_not_all_cores(self):
+        """code_audit_24 P3-2: mesen ticked alone with the PlayStation chosen
+        read "Cores: all", the run keeping none of pcsx_rearmed's files."""
+        state = checked_state()
+        state.ticked = {"sony-playstation"}
+        state.cores = ["mesen"]
+        options = self.options(state)
+        self.assertIn("Cores: 0 of 1", [r.label for r in install.tui_rows(options)])
+        state.stack = ["setup", "plan"]
+        self.assertIn("0 of 1 cores", self.text(state, 100, 30))
+        self.assertEqual(install.core_count_words(["mesen"], ["pcsx_rearmed"]), "0 of 1 cores")
+
+    def test_none_then_done_says_why_on_a_long_list(self):
+        """tui_audit_17 P2-4: on 189 cores the status and the sentence were
+        dropped, Done with nothing ticked did nothing visible."""
+        state = checked_state()
+        state.manifest = {**MANIFEST, "files": [
+            *MANIFEST["files"],
+            *({"dest": f"x/{n}.bin", "size": 1, "systems": ["sony-playstation"],
+               "cores": [f"core{n:03}"]} for n in range(60))]}
+        state.stack = ["setup", "plan", "options", "cores"]
+        state.focus["cores"] = install._first_item(state)
+        press(state, "n")
+        done = next(i for i, r in enumerate(install.tui_rows(state)) if r.action == "done")
+        state.focus["cores"] = done
+        press(state, "enter")
+        self.assertEqual(state.screen, "cores")
+        for cols, rows in ((80, 24), (40, 12)):
+            text = self.text(state, cols, rows)
+            self.assertIn("No core is ticked", text)
+            self.assertIn("Untick the cores", text)
+        press(state, "esc")
+        self.assertEqual(state.screen, "cores")
+
+    def test_core_rows_say_what_each_core_adds(self):
+        """tui_audit_17 P3-2: line mode counted each core's files, the
+        screen named the cores alone."""
+        state = checked_state()
+        state.stack = ["setup", "plan", "options", "cores"]
+        rows = {r.value: r.right for r in install.tui_rows(state) if r.action == "core"}
+        self.assertEqual(rows["pcsx_rearmed"], "1 file, 4 B")
+        state.cores_all = True
+        rows = {r.value: r.right for r in install.tui_rows(state) if r.action == "core"}
+        self.assertEqual(rows["mesen"], "1 file, 8.0 KB")
+
+    def test_one_core_has_no_cores_row(self):
+        """tui_audit_17 P3-3: a list with one core offered Cores, where line
+        mode asks nothing."""
+        state = checked_state()
+        state.manifest = {**MANIFEST, "files": [
+            entry for entry in MANIFEST["files"] if entry["dest"] != "fc/disksys.rom"]}
+        self.assertNotIn("cores", [r.action for r in install.tui_rows(self.options(state))])
+
+    # Root cause 2: one tick list.
+
+    def test_the_three_lists_open_and_answer_alike(self):
+        """tui_audit_17 P3-1: Choose systems opened on None, A unticking
+        every system, Cores closed on A, regions ticked on A."""
+        for route in ("both", "gptokeyb", "muxterm", "miyoo"):
+            for screen, opener in (("systems", ("plan", "systems")),
+                                   ("cores", ("options", "cores")),
+                                   ("regions", ("options", "regions"))):
+                with self.subTest(route=route, screen=screen):
+                    state = checked_state()
+                    state.pad = route
+                    if opener[0] == "options":
+                        press(state, "o")
+                    state.focus[state.screen] = next(
+                        i for i, r in enumerate(install.tui_rows(state))
+                        if r.action == opener[1])
+                    press(state, "enter")
+                    self.assertEqual(state.screen, screen)
+                    rows = install.tui_rows(state)
+                    focused = rows[state.focus[screen]]
+                    self.assertIn(focused.action, install.TUI_TICK_ROWS)
+                    self.assertEqual([r.action for r in rows[-2:]], ["none", "done"])
+                    hint = install._TUI_VIEWS[screen](state, 78, 21)[2]
+                    self.assertEqual(hint[:2], ("A/Enter Tick", "B/Esc Done"))
+                    before = install.tui_flags(state)
+                    press(state, "enter")
+                    self.assertEqual(state.screen, screen)
+                    self.assertNotEqual(install.tui_flags(state), before)
+
+    # Root cause 3: a folder failure as it happened.
+
+    def test_a_folder_that_cannot_be_created_ends_on_its_reason(self):
+        """tui_audit_17 P2-1: the result said "22 files not fetched
+        (RETROBIOS_INSTALL_OFFLINE=1)" and sent the user for a pack."""
+        for os_type in ("linux", "android"):
+            with self.subTest(os_type=os_type):
+                state = checked_state()
+                state.os_type = os_type
+                install.tui_update(state, Key("enter"))
+                for event in ({"event": "error", "stage": "dest", "reason": "not_writable",
+                               "platform": "retroarch",
+                               "message": f"{SYSTEM_DIR} cannot be created: Permission denied"},
+                              {"event": "summary", "mode": "install", "installed": 0,
+                               "up_to_date": 0, "pending": 4, "failed": [], "skipped": [],
+                               "left_out": [], "kept": [], "interrupted": False}):
+                    install.tui_receive(state, ("event", state.run_id, event))
+                install.tui_receive(state, ("ended", state.run_id, 2, []))
+                title, lines = install.tui_outcome(state)
+                text = " ".join(map(str, lines))
+                self.assertEqual(title, "Nothing installed")
+                self.assertIn("cannot be created (permission denied)", text)
+                self.assertNotIn("not fetched", text)
+                self.assertNotIn("not in", text.split("cannot be created")[0])
+                self.assertEqual("termux-setup-storage" in text, os_type == "android")
+                self.assertNotIn("sudo", text if os_type == "android" else "")
+
+    def test_android_never_offers_sudo_and_a_phone_plan_says_why(self):
+        """tui_audit_17 P2-2: Termux was offered sudo, and at 40x12 the plan
+        offered Install anyway with no word of why."""
+        hint = install.Invocation()
+        hint.os_type = "android"
+        remedy = install.write_remedy(Path("/storage/emulated/0/RetroArch/system"),
+                                      "retroarch", hint)
+        self.assertEqual(remedy, [install.TERMUX_STORAGE_WORDS])
+        state = checked_state({"free": 50 * 1024 ** 3, "writable": False, "cores": []})
+        state.os_type = "android"
+        for cols, rows in ((40, 12), (80, 24)):
+            text = self.text(state, cols, rows)
+            self.assertIn("You cannot write to this folder", text)
+            self.assertNotIn("sudo", text)
+
+    # Root cause 4: every proven card named, the real marker said.
+
+    def test_an_arkos_card_is_found_beside_an_amberelec_card(self):
+        """tui_audit_17 P2-3, code_audit_24 P3-6: an ArkOS card its bgmusic
+        or launchimages prove was named nowhere, and its route said it
+        could not tell it."""
+        games = games_part(self.root / "media" / "GAMES")
+        for marker in ("bgmusic", "launchimages"):
+            with self.subTest(marker=marker):
+                ark = self.drive(f"ARK_{marker}", ("bios", "nes", marker))
+                self.assertEqual(install.card_system(ark), ("retroarch", ark / "bios", "ArkOS"))
+                for name in ("ArkOS", "dArkOS"):
+                    setup = install.card_setup(name, "retroarch")
+                    self.assertEqual(install._card_is(setup, ark)[0], "own", name)
+                state = self.first_screen([games, ark])
+                text = self.text(state, 80, 24)
+                self.assertIn(f"ArkOS SD card (ARK_{marker})", text)
+                self.assertIn("AmberELEC SD card (GAMES)", text)
+
+    def test_the_emuelec_refusal_names_its_file(self):
+        """code_audit_24 P3-7: the refusal named bezels, which AmberELEC's
+        card holds too."""
+        games = games_part(self.root / "media" / "GAMES")
+        (games / "bezels").mkdir()
+        setup = install.card_setup("EmuELEC", "emuelec")
+        choice = install._not_the_card(setup, games, games, "AmberELEC")
+        self.assertIn("bezels/default.cfg", choice.detail)
+
+    # Root cause 5: the reads before the menu show.
+
+    def test_the_reads_before_the_menu_show_a_count(self):
+        """code_audit_24 P3-4: a rerun read every file before the menu, one at
+        a time and with nothing on screen."""
+        payload = b"R" * 16
+        (self.here / "a.bin").write_bytes(payload)
+        listing = core_list(self.root / "read.json",
+                            [self.entry("a.bin", payload, ["sony-playstation"])])
+        text, _asked = self.line_run(_args(manifest=listing, dest=self.here,
+                                           declared_only=False), [])
+        self.assertIn("\r  read 1/1", text)
+        self.assertLess(text.index("read 1/1"), text.index("every one in place"))
+
+    # Root cause 6: every other item.
+
+    def test_offline_the_plan_promises_no_replacement_it_cannot_make(self):
+        """code_audit_24 P3-5: offline, the plan said a wrong copy no folder
+        holds "is replaced"."""
+        state = checked_state()
+        with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
+            text = self.text(state, 100, 30)
+        self.assertIn("1 wrong copy", text)
+        self.assertNotIn("wrong copy is replaced", text)
+
+    def test_options_name_the_plans_bios_folder(self):
+        """tui_audit_17 P3-6: AmberELEC's Options read the games part, its
+        plan the bios folder below it."""
+        state = checked_state()
+        state.manifest = {**MANIFEST, "files": [
+            {**entry, "dest": f"bios/{entry['dest']}"} for entry in MANIFEST["files"]]}
+        state.dest = Path("/media/me/GAMES")
+        row = next(r for r in install.tui_rows(self.options(state)) if r.action == "folder")
+        self.assertEqual(row.label, "BIOS folder: /media/me/GAMES/bios")
+
+    def test_finished_with_errors_says_a_rerun_retries(self):
+        """tui_audit_17 P3-7: the screen never said a rerun retries the files
+        that failed, and line mode named each failure twice."""
+        state = checked_state()
+        install.tui_update(state, Key("enter"))
+        install.tui_receive(state, ("event", state.run_id, {
+            "event": "summary", "mode": "install", "installed": 3, "up_to_date": 0,
+            "pending": 1, "failed": [{"dest": "gba_bios.bin", "reason": "timed out"}],
+            "skipped": [], "left_out": [], "kept": [], "interrupted": False}))
+        install.tui_receive(state, ("ended", state.run_id, 1, []))
+        title, lines = install.tui_outcome(state)
+        self.assertEqual(title, "Finished with errors")
+        self.assertIn("Run it again to retry only those.", lines)
+        # Line mode: the FAILED line of the progress names it, the end not again.
+        install.SAID_FAILED.clear()
+        install.SAID_FAILED.add("gba_bios.bin")
+        self.addCleanup(install.SAID_FAILED.clear)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out), \
+                contextlib.suppress(SystemExit):
+            install._report_outcome([Path("/b")], 3, 0, 1, 0, False,
+                                    failures=[("gba_bios.bin", "timed out")])
+        self.assertNotIn("gba_bios.bin", out.getvalue())
+        self.assertIn("Run the same command again to retry only those.", out.getvalue())
+
+    def test_below_40_columns_no_word_is_broken(self):
+        """tui_audit_17 P3-8: the reason line, Found and Install for were
+        left to the terminal, which broke "/media/moi/" and "ONION/BIOS"."""
+        with mock.patch.object(install, "terminal_size", return_value=(39, 11)), \
+                mock.patch.object(install, "_is_terminal", return_value=True):
+            for text in ("  Found Onion at /media/moi/ONION/BIOS (RetroArch files)",
+                         "The window is 39x11: questions come line by line "
+                         "(40x12 for the full screen)."):
+                lines = install.fold_line(text).split("\n")
+                self.assertTrue(all(len(line) <= 38 for line in lines), lines)
+                self.assertEqual(" ".join(" ".join(lines).split()), " ".join(text.split()))
+
+    def test_the_narrowing_line_is_a_sentence(self):
+        """tui_audit_17 P3-4: the plan read "--region." on a line alone."""
+        state = checked_state()
+        state.regions = ["japan"]
+        text = self.text(state, 100, 30)
+        self.assertIn("For your choice: regions ranked.", text)
+        self.assertNotIn(" --region.", text)
+
+    def test_offline_choice_of_systems_is_never_about_0_files(self):
+        """tui_audit_17 P3-5: "About 0 files, 0 B, for 10 of 11 systems"."""
+        state = checked_state()
+        state.ticked = {"sony-playstation"}
+        with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
+            text = self.text(state, 100, 30)
+        self.assertNotIn("About 0 files", text)
+        self.assertIn("need the internet", text)
+
+    def test_a_phone_bar_after_a_tap_keeps_quit_and_one_wording(self):
+        """tui_audit_17 P3-11: at 40 columns on Android the armed bar dropped
+        Esc Quit and said "click", the row "tap again"."""
+        state = fresh_state()
+        state.os_type = "android"
+        state.mouse = True
+        state.stack = ["setup"]
+        install.tui_view(state, 40, 12)
+        state.tapped = install._tapped_row(state)
+        frame = install.tui_view(state, 40, 12)
+        text = "\n".join(map(str, frame))
+        self.assertNotIn("click", text)
+        self.assertIn("tap again", text)
+        self.assertIn("Esc Quit", str(frame[-1]))
+
+    def test_the_offline_screen_names_the_setups_list(self):
+        """tui_audit_17 P3-12: the offline screen said install/<platform>.json
+        for AmberELEC, chosen one screen before."""
+        inbox: queue.Queue = queue.Queue()
+        install.LOCAL.reset()
+        with mock.patch.dict(os.environ, {install.OFFLINE_VARIABLE: "1"}):
+            install._tui_fetch("amberelec", inbox, io.StringIO())
+        message = inbox.get_nowait()
+        self.assertIn("install/amberelec.json", " ".join(message[3]))
+
+    # Root cause 7: the tests leave the host alone.
+
+    def test_no_connection_leaves_the_loopback_nor_a_card_comes_in(self):
+        """code_audit_24 P3-13: 261 connections to GitHub left this module,
+        and tests failed with an AmberELEC card in the reader."""
+        import socket  # noqa: PLC0415
+
+        log = Path(os.environ["RETROBIOS_TEST_NETLOG"])
+        before = log.read_text(encoding="utf-8")
+        self.addCleanup(log.write_text, before, encoding="utf-8")
+        with self.assertRaisesRegex(OSError, "makes no request"):
+            socket.create_connection(("192.0.2.1", 80), timeout=1)
+        child = subprocess.run(
+            [sys.executable, "-c", "import os, socket\n"
+             "print(os.path.ismount('/media/x'), os.path.ismount('/mnt/d'))\n"
+             "socket.create_connection(('192.0.2.1', 80), 1)"],
+            capture_output=True, text=True, check=False, timeout=60)
+        self.assertEqual(child.stdout.strip(), "False False")
+        self.assertIn("makes no request", child.stderr)
+        self.assertEqual(len(log.read_text(encoding="utf-8").splitlines()),
+                         len(before.splitlines()) + 2)
+        self.assertFalse(os.path.ismount("/media/x"))
 
 
 if __name__ == "__main__":

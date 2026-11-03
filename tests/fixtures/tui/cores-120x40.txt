@@ -1,13 +1,14 @@
  RetroBIOS: Cores
 
- Every core ticked keeps every core's files. Untick the cores you do not use: the platform's own
-   files are always kept.
+ Untick the cores you do not use: the platform's own files are always kept, and a core with no
+   extra file reads only those.
 
- > All
+ > Filter (/ to type)
+   [ ] mesen                                                     1 file, 8.0 KB
+   [x] pcsx_rearmed                                                 1 file, 4 B
+   All
    None
-   Filter (/ to type)
-   [ ] mesen
-   [x] pcsx_rearmed
+   Done
 
 
 
@@ -36,5 +37,4 @@
 
 
 
-
- A/Enter Tick all  B/Esc Back  X/Space Tick  ? Help
+ A/Enter Filter  B/Esc Done  ? Help
