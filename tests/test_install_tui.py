@@ -11816,7 +11816,9 @@ class AuditTwentyAndThirteen(unittest.TestCase):
         self.assertEqual(said.returncode, 1, said.stdout + said.stderr)
         self.assertIn("No supported platform detected: RetroArch was not found here, and "
                       "the pack does not say where it goes.", said.stderr)
-        alone = install_run("--yes", env=env)
+        # The standalone emulators' lists come from the network: offline,
+        # no request leaves the machine (code_audit_24 P3-13).
+        alone = install_run("--yes", env={**env, install.OFFLINE_VARIABLE: "1"})
         self.assertIn("No supported platform detected", alone.stdout + alone.stderr)
         hint = install._manual_usage_hint("linux")
         self.assertTrue(hint[0].startswith("  Name the setup with --platform and its folder "

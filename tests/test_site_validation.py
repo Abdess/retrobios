@@ -279,6 +279,7 @@ class EveryTestDependencyIsInstalledInCi(unittest.TestCase):
             {p.stem for p in (root / "scripts").rglob("*.py")}
             | {p.name for p in (root / "scripts").iterdir() if p.is_dir()}
             | {p.stem for p in (root / "tests").glob("*.py")}
+            | {p.name for p in (root / "tests").iterdir() if p.is_dir()}
             | {"scripts", "tests", "install"}
         )
         imported: set[str] = set()
