@@ -573,6 +573,7 @@ class Progress:
             if not ok and not self.term.quiet:
                 why = f" ({reason})" if reason else ""
                 line = f"  {self.term.bad('FAILED')} {dest}{why}"
+                SAID_FAILED.add(dest)
             elif not self.term.live and not self.term.quiet:
                 line = f"  [{self.files}/{self.total_files}] {dest} {self.term.ok('ok')}"
             if line is not None:
@@ -6116,16 +6117,19 @@ def _report_outcome(
         say(f"\n{format_size(transferred)} {verb} in "
             f"{format_duration(seconds)} ({format_size(int(transferred / seconds))}/s).")
     reasons = {reason for _dest, reason in failures or []}
-    if failures and len(failures) > 1 and len(reasons) == 1 and reasons != {""}:
+    # A failure the progress already named on its FAILED line is not named
+    # again: line mode listed each one twice (tui_audit_17 P3-7).
+    unsaid = [failure for failure in failures or [] if failure[0] not in SAID_FAILED]
+    if unsaid and len(unsaid) > 1 and len(reasons) == 1 and reasons != {""}:
         # One cause, said once: a read-only folder listed ten of its files
         # and "... and 266 more" above the advice that fixes them all.
-        say(f"  failed: {_plural(len(failures), 'file')} ({reasons.pop()}), "
-            f"first {failures[0][0]}")
+        say(f"  failed: {_plural(len(unsaid), 'file')} ({reasons.pop()}), "
+            f"first {unsaid[0][0]}")
     else:
-        for dest, reason in (failures or [])[:10]:
+        for dest, reason in unsaid[:10]:
             say(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
-        if failures and len(failures) > 10:
-            say(f"  ... and {len(failures) - 10} more")
+        if len(unsaid) > 10:
+            say(f"  ... and {len(unsaid) - 10} more")
     if declined and not downloaded and not errors and not interrupted and not offline:
         say(f"\nNothing installed: {_plural(declined, 'file')} not downloaded, as answered.")
         if up_to_date:
@@ -6321,6 +6325,11 @@ def _offline_remedy(folders: list[str] | None = None, named: bool = False) -> st
                 f"(--from-pack) or {offline_undo()}.")
     return ("Copy them from your old card or a folder (--from), or run the installer "
             f"again with a pack (--from-pack) or {offline_undo()}.")
+
+
+# The files a FAILED line of the progress named in this run: the end of
+# the run names the others.
+SAID_FAILED: set[str] = set()
 
 
 def _retry_words(failures: list | None) -> str:
@@ -7862,7 +7871,8 @@ def _prompt_platform_choice(
     for i, ((plat, path), label) in enumerate(zip(platforms, named), 1):
         # The label and its folder, as the screen shows them: "Onion SD card
         # (ONION) (/media/me/ONION/BIOS)" put two pairs of brackets in a row.
-        print(f"  {i}) {label}: {shown_path(setup_bios_folder(plat, path))}")
+        print(fold_line(f"  {i}) {label}: {shown_path(setup_bios_folder(plat, path))}",
+                     " " * (len(str(i)) + 2)))
     if other is not None:
         print("  o) another setup or folder")
     print("  q) quit")
@@ -7884,6 +7894,33 @@ def _prompt_platform_choice(
         # A wrong answer used to bring back a bare prompt, and nothing said
         # how to leave it.
         print(usage)
+
+
+def fold_line(text: str, hang: str = "  ") -> str:
+    """A line wrapped between words at the terminal's width, the lines after
+    the first indented by hang under its own lead, a word wider than a line
+    cut after a slash: left to the terminal, below 40 columns "Found Onion
+    at /media/moi/ONION/BIOS" broke inside "(RetroArch files)" and a folder
+    inside its name (tui_audit_17 P3-8)."""
+    cols = max(terminal_size()[0] - 1, 8)
+    if cell_width(text) <= cols:
+        return text
+    lead = text[:len(text) - len(text.lstrip(" "))]
+    prefix = lead + hang
+    lines: list[str] = []
+    line = lead
+    for word in text.split():
+        joined = f"{line} {word}" if line.strip() else line + word
+        if cell_width(joined) <= cols:
+            line = joined
+            continue
+        if line.strip():
+            lines.append(line)
+        pieces = _split_word(word, max(cols - len(prefix), 1))
+        lines += [prefix + piece for piece in pieces[:-1]]
+        line = prefix + pieces[-1]
+    lines.append(line)
+    return "\n".join(lines)
 
 
 def _ask(prompt: str) -> str:
@@ -8521,15 +8558,21 @@ def found_head(files: list[dict], trees: list[dict], bios_path: Path) -> str:
         except OSError:
             return False
 
-    needed = []
+    needed, sized = [], []
     for entry in files:
         try:
             path = _entry_path(bios_path, entry)
         except ValueError:
             continue
-        if not held(path, entry.get("size")) or \
-                _classify_local(entry, path, remember=True) != "up_to_date":
+        if held(path, entry.get("size")):
+            sized.append((entry, path))
+        else:
             needed.append(entry)
+    # Only a copy of the right size is read, on the check's workers and
+    # with its count: one at a time and silent, 400 files of a card read
+    # as a hung run before the menu (code_audit_24 P3-4).
+    needed += [entry for (entry, _path), verdict in zip(sized, read_in_place(sized))
+               if verdict != "up_to_date"]
     copies = plan_local_copies(needed, bios_path, None, LOCAL.folders)
     if not copies:
         return ""
@@ -8575,10 +8618,33 @@ def all_in_place(files: list[dict], trees: list[dict], bios_path: Path) -> bool:
                     return False
             except OSError:
                 return False
-    return (all(_classify_local(entry, path, remember=True) == "up_to_date"
-                for entry, path in paths)
+    return (all(verdict == "up_to_date" for verdict in read_in_place(paths))
             and all(not data_directory_state(tree, bios_path, remember=True)[1]
                     for tree in trees))
+
+
+def read_in_place(pairs: list[tuple[dict, Path]]) -> list[str]:
+    """_classify_local of each (entry, path), read before the line menu as
+    the check after it reads: on --jobs workers, a count moving at a
+    terminal, what is read kept for that check (_HEAD_READS). Each file is
+    read once whatever the question: the head reads the files of the right
+    size only, and the check after Enter reads none of them again."""
+    if not pairs:
+        return []
+    live = _is_terminal(sys.stdout)
+    verdicts: list[str] = []
+    last = 0.0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=LOCAL.jobs) as pool:
+        for done, verdict in enumerate(pool.map(
+                lambda pair: _classify_local(pair[0], pair[1], remember=True), pairs), 1):
+            verdicts.append(verdict)
+            now = time.monotonic()
+            if live and (now - last >= 0.1 or done == len(pairs)):
+                last = now
+                print(f"\r  read {done}/{len(pairs)}", end="", flush=True)
+    if live:
+        print("\r\033[K", end="", flush=True)
+    return verdicts
 
 
 def menu_choice(
@@ -9293,6 +9359,8 @@ class LocalSources:
         self.pack: PackSource | None = None
         # The folders named with --from, read once for every platform.
         self.folders: list[FolderIndex] = []
+        # The reads at once of the files in place (--jobs).
+        self.jobs: int = 8
         # Every folder index of the run still in use, closed at its end.
         self.indexes: weakref.WeakSet[FolderIndex] = weakref.WeakSet()
         self._serves: tuple = (None, None, frozenset())
@@ -9322,6 +9390,7 @@ class LocalSources:
         self.manifest = None
         self.pack = None
         self.folders = []
+        self.jobs = 8
 
     def close_indexes(self) -> None:
         for index in list(self.indexes):
@@ -11464,7 +11533,7 @@ def main() -> None:
         # unset or dumb said nothing (tui_audit_12 P3-14).
         said = line_mode_reason(blocker)
         if said:
-            print(said)
+            print(fold_line(said))
     if args.events:
         # The events own stdout. The text a person reads goes to stderr, so a
         # program never has to tell one from the other.
@@ -11527,6 +11596,8 @@ def _open_local_sources(args: argparse.Namespace) -> None:
     """Take the file list and the pack this run was given, and the platform
     they are for when none is named."""
     LOCAL.reset()
+    LOCAL.jobs = getattr(args, "jobs", 8) or 8
+    SAID_FAILED.clear()
     _open_from_folders(getattr(args, "from", None) or [])
     if args.manifest is not None:
         LOCAL.manifest = args.manifest
@@ -12794,7 +12865,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             platforms = matched
             offer = getattr(args, "platform_from_list", False)
             for name, path in matched:
-                print(f"  Found {found_label(name, path)}")
+                print(fold_line(f"  Found {found_label(name, path)}"))
         elif listing:
             # A listing reads the manifest and writes nothing: no folder is
             # needed, and asking BizHawk's for one refused a question asked
@@ -12948,7 +13019,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             offer = False
         else:
             for name, path in platforms:
-                print(f"  Found {found_label(name, path)}")
+                print(fold_line(f"  Found {found_label(name, path)}"))
 
     if len(platforms) > 1 and not interactive and not listing:
         # A run without questions installs for one setup, the one a person
@@ -18647,7 +18718,15 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
         lines.append(f"Free space: {format_size(free)}")
         if check["bytes_needed"] > free:
             lines.append(space_words(check["bytes_needed"], free, _on_its_card(state)))
-    backup = wrong and not (offline and not copied)
+    # The wrong copies something replaces: offline, those a folder copied
+    # from holds, else those the network or the pack brings too. "The 1
+    # wrong copy is replaced" stood over a copy no folder held, which the
+    # result then said was left (code_audit_24 P3-5).
+    wrong_dests = [event["dest"] for event in (state.dry_files if dry else state.files)
+                   if event.get("state") == "wrong_hash"]
+    backup = (sum(1 for dest_ in wrong_dests if dest_ in copied) if offline
+              else sum(1 for dest_ in wrong_dests if dest_ in copied or dest_ not in lacking)
+              if wrong_dests else wrong)
     misplaced = _tui_misplaced(state) if check is state.check else []
     if misplaced:
         lines.insert(after_counts, f"{_plural(len(misplaced), 'file')} "
@@ -18660,9 +18739,10 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
     if backup:
         # With its subject: "They are replaced" sat lines under the count.
         # Not where nothing can be installed: nothing is replaced then.
-        lines.insert(count_at, f"The {_plural(wrong, 'wrong copy')} "
-                     f"{'is' if wrong == 1 else 'are'} replaced, the old "
-                     f"{'one' if wrong == 1 else 'ones'} kept in a backup folder.")
+        lines.insert(count_at, (f"The {_plural(wrong, 'wrong copy')} " if backup == wrong
+                                else f"{backup} of the {_plural(wrong, 'wrong copy')} ")
+                     + f"{'is' if backup == 1 else 'are'} replaced, the old "
+                     f"{'one' if backup == 1 else 'ones'} kept in a backup folder.")
     if state.facts.get("writable") is False and dest is not None:
         lines += _commands(state, write_remedy(dest, state.platform, tui_hint(state),
                                                state.pad not in TUI_PAD_ROUTES))
@@ -19817,6 +19897,15 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
             shown += 1
     if shown > 20:
         lines.append(f"  ... and {shown - 20} more")
+    if title == "Finished with errors":
+        # What a rerun does, as line mode and the first install page say
+        # it: the screen never did (tui_audit_17 P3-7).
+        pairs = [(failure["dest"], failure["reason"]) for failure in failed]
+        retry = _retry_words(pairs)
+        if retry:
+            lines.append(retry)
+        elif not all(str(reason).startswith(NOT_KEPT) for _dest, reason in pairs):
+            lines.append("Run it again to retry only those.")
     expected = (state.dry if state.dry is not None else state.check or {}).get(
         "data_missing", 0)
     landed = max(0, installed - sum(1 for _dest, good, _why in state.finished if good))
