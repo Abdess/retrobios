@@ -34,6 +34,7 @@ systems:
   - zn1-tecmo
   - zn1-video-system
   - zn1-acclaim
+  - namco-system11
   - arcade
 
 notes: |
@@ -271,5 +272,18 @@ files:
     system: zn1-acclaim
     note: "Acclaim PSX BIOS (PS1-based). NOT_WORKING"
     source_ref: "src/drivers/zn.c:1925"
+
+  - name: namcoc76.zip
+    required: false
+    category: bios_zip
+    system: namco-system11
+    note: "Namco C76 sound MCU BIOS, parent of the Tekken sets. Each game also loads c76.bin as ROM_LOAD_OPTIONAL from its own archive"
+    source_ref: "src/drivers/namcos11.c:1604-1607, 1609-1610, 1427"
+    contents:
+      - name: "c76.bin"
+        description: C76 internal BIOS
+        size: 16384
+        crc32: "399faac7"
+        sha1: "ceb184ef0486caf715dd997101999785f67a40b8"
 
   # psarc95.zip and atpsx.zip have NO_DUMP BIOS ROMs (coh1002e.bin, coh1000t.bin)
