@@ -34,7 +34,8 @@ case_sensitive: true
 skip:
 - {name: bios, source_ref: os main.c:20}
 folders:
-- {folder: psx, extensions: [.cue, .chd], core: mednafen_psx_hw, source_ref: os es_systems.cfg:10}
+- {folder: psx, extensions: [.cue, .chd], core: mednafen_psx_hw, source_ref: os es_systems.cfg:10,
+   board_defaults: {rpi1: {core: pcsx_rearmed}}}
 - {folder: mame, extensions: [.zip], core: mame, arcade: true, source_ref: os es_systems.cfg:30}
 - {folder: zzunknownzz, extensions: [.bin], core: nosuchcore, source_ref: os es_systems.cfg:40}
 """
@@ -124,6 +125,22 @@ class GamesIndexFixture(unittest.TestCase):
         kept = [table["files"][i][0] for i in chosen["files"]]
         self.assertEqual(kept, ["psxonpsp660.bin", "scph5501.bin"])
         self.assertEqual(chosen["bytes"], 2 * 524288)
+
+    def test_a_board_default_core_has_its_own_fallback_set(self) -> None:
+        files, _ = self.render()
+        folders = {f["folder"]: f for f in self.doc(files, "setups/fixture.json")["folders"]}
+        board = folders["psx"]["board_defaults"]["rpi1"]
+        self.assertEqual(board["profile"], "pcsx_rearmed")
+        self.assertEqual(board["fallback"], ["sony-playstation|pcsx_rearmed"])
+        table = self.doc(files, "fallback/fixtureplat.json")
+        self.assertIn("sony-playstation|pcsx_rearmed", table["sets"])
+
+    def test_index_names_the_systems_of_every_folder_name(self) -> None:
+        files, _ = self.render()
+        folders = self.doc(files, "index.json")["folders"]
+        self.assertEqual(folders["psx"], ["sony-playstation"])
+        self.assertEqual(folders["sony-playstation"], ["sony-playstation"])
+        self.assertNotIn("zzunknownzz", folders)
 
     def test_catalog_rows_are_published_sorted_with_serials(self) -> None:
         files, _ = self.render()

@@ -21,7 +21,9 @@ when it differs from the name (naomi_cart.cpp:75).
 
 Output: games/arcade/<profile>.json. CHD games are listed, not resolved: a
 CHD is game content. A ``romof`` pointing outside the DAT is listed with its
-target, never guessed.
+target, never guessed. The games that load no BIOS set (``no_bios``) and
+every BIOS set (``bios_sets``) are listed too: a set name on a card that
+none of the lists holds is one the core's DAT does not know.
 """
 
 from __future__ import annotations
@@ -202,6 +204,8 @@ def build_index(sets: dict[str, SetEntry], marker: str) -> dict:
         "devices": {k: sorted(v) for k, v in sorted(devices.items())},
         "chd": sorted(n for n, e in games.items() if e.disks),
         "missing_parents": dict(sorted(missing.items())),
+        "no_bios": sorted(set(games) - with_bios - set(missing)),
+        "bios_sets": sorted(bios_names),
         "counts": {
             "sets": len(sets),
             "games": len(games),
@@ -321,6 +325,8 @@ def flycast_index(source: str) -> dict:
         "devices": {},
         "chd": sorted(chd),
         "missing_parents": dict(sorted(unknown.items())),
+        "no_bios": [],
+        "bios_sets": sorted(set(archive_of.values())),
         "counts": {
             "sets": len(games) + len(archive_of),
             "games": len(games),

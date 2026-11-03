@@ -27,7 +27,12 @@
         "systems": { "type": "object", "additionalProperties": { "$ref": "#/$defs/listed" } },
         "arcade": { "type": "object", "additionalProperties": { "$ref": "#/$defs/listed" } },
         "licences": { "type": "array", "items": { "type": "object" } },
-        "containers": { "type": "object", "description": "How to reach the bytes a header reader names inside a disc image, a CHD or an archive (games/headers.yml containers)." }
+        "containers": { "type": "object", "description": "How to reach the bytes a header reader names inside a disc image, a CHD or an archive (games/headers.yml containers)." },
+        "folders": {
+          "type": "object",
+          "description": "Casefolded folder name -> the systems any setup reads there, each system id under its own name too. What a games folder is read with when its setup names no folder of its own.",
+          "additionalProperties": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+        }
       }
     },
     "setup": {
@@ -62,7 +67,21 @@
               "core": { "type": "string" },
               "emulator": { "type": "string" },
               "profile": { "type": "string", "description": "Repository profile of the default core." },
-              "board_defaults": { "type": "object" },
+              "board_defaults": {
+                "type": "object",
+                "description": "Board -> the default core the OS gives the folder on that board, its profile, its arcade index and the keys of its fallback sets.",
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["core"],
+                  "properties": {
+                    "core": { "type": "string" },
+                    "profile": { "type": "string" },
+                    "arcade": { "type": "string" },
+                    "fallback": { "type": "array", "items": { "type": "string", "pattern": "^[^|]+\\|[^|]*$" } }
+                  }
+                }
+              },
               "arcade": { "type": ["string", "boolean"], "description": "Name of the arcade index (install/games/arcade/<name>.json) when the default core has one, true when the OS marks the folder arcade and no index exists." },
               "fallback": { "type": "array", "items": { "type": "string", "pattern": "^[^|]+\\|[^|]*$" }, "description": "Keys of fallback/<platform>.json sets: '<system>|<profile>'." },
               "note": { "type": "string" },

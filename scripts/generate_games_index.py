@@ -311,27 +311,42 @@ def build_setups(
                 counts["profile"] += 1
             if resolution.systems:
                 counts["resolved"] += 1
+
+            def fallback_keys(chosen: str | None) -> list[str]:
+                """The fallback sets of the folder's systems under one core,
+                computed once per platform."""
+                keys = []
+                table = fallbacks.setdefault(platform, {})
+                for system in resolution.systems:
+                    key = f"{system}|{chosen or ''}"
+                    if key not in table:
+                        table[key] = fallback_set(manifest, required[platform], profiles, system, chosen)
+                    keys.append(key)
+                return keys
+
+            sets_known = manifest is not None and bool(resolution.systems)
             boards = {}
             for board, spec in sorted((row.get("board_defaults") or {}).items()):
                 boards[board] = {"core": spec["core"]}
-                if cores.resolve(spec["core"]):
-                    boards[board]["profile"] = cores.resolve(spec["core"])
+                board_profile = cores.resolve(spec["core"])
+                if board_profile:
+                    boards[board]["profile"] = board_profile
+                    if board_profile in arcade:
+                        boards[board]["arcade"] = board_profile
+                if sets_known:
+                    # A card moves between boards, and the installer reads
+                    # it on a computer: each board's core has its set.
+                    boards[board]["fallback"] = fallback_keys(board_profile)
             if boards:
                 published["board_defaults"] = boards
             if profile and profile in arcade:
                 published["arcade"] = profile
             elif row.get("arcade"):
                 published["arcade"] = True
-            if manifest is not None and resolution.systems:
-                keys = []
-                table = fallbacks.setdefault(platform, {})
-                for system in resolution.systems:
-                    key = f"{system}|{profile or ''}"
-                    if key not in table:
-                        table[key] = fallback_set(manifest, required[platform], profiles, system, profile)
-                    keys.append(key)
+            if sets_known:
+                keys = fallback_keys(profile)
                 published["fallback"] = keys
-                if any(table[k]["files"] for k in keys):
+                if any(fallbacks[platform][k]["files"] for k in keys):
                     counts["fallback"] += 1
             published["source_ref"] = row["source_ref"]
             folders.append(published)
@@ -476,6 +491,27 @@ def _entry(text: str) -> dict:
     }
 
 
+def folder_systems(setups: dict[str, dict]) -> dict[str, list[str]]:
+    """Every folder name a setup gives a system, casefolded, with the systems
+    any setup reads there, and each system id under its own name.
+
+    What a games folder on a computer is read with when its setup names no
+    folder of its own (RetroArch): a name two setups give two systems keeps
+    both.
+    """
+    names: dict[str, set[str]] = {}
+    for doc in setups.values():
+        for row in doc["folders"]:
+            systems = row["systems"]
+            if not systems:
+                continue
+            for name in [row["folder"], *(row.get("aliases") or [])]:
+                names.setdefault(str(name).casefold(), set()).update(systems)
+            for system in systems:
+                names.setdefault(system.casefold(), set()).add(system)
+    return {name: sorted(systems) for name, systems in sorted(names.items())}
+
+
 def render(output: Path = OUTPUT, inputs: Inputs = Inputs()) -> tuple[dict[Path, str], dict]:
     """Every published file's text, keyed by its path, and the coverage."""
     resolver = SystemResolver.from_repo(inputs.emulators, inputs.platforms)
@@ -514,6 +550,7 @@ def render(output: Path = OUTPUT, inputs: Inputs = Inputs()) -> tuple[dict[Path,
     containers = _load_yaml(inputs.games / "headers.yml").get("containers")
     if containers:
         index["containers"] = containers
+    index["folders"] = folder_systems(setups)
     files[output / "index.json"] = dumps(index)
     coverage = {"setups": setup_cov, "systems": system_cov, "arcade": sorted(arcade)}
     return files, coverage
