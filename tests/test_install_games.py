@@ -66,6 +66,7 @@ FILES = {
     "neogeo.zip": (300, None, None, ["snk-neogeo"]),
     "fbneo/neogeo.zip": (300, None, ["fbneo"], None),
     "fbneo/pgm.zip": (200, None, ["fbneo"], None),
+    "fbneo/msx.zip": (150, None, ["fbneo"], None),
     "fbneo/samples/big.zip": (9000, None, ["fbneo"], None),
     "gba_bios.bin": (100, None, None, ["nintendo-gba"]),
 }
@@ -79,6 +80,7 @@ SETS = {
     "nintendo-gamecube|dolphin": (["dolphin/GC/USA/IPL.bin", "dolphin/GC/EUR/IPL.bin",
                                    "dolphin/GC/JAP/IPL.bin"], []),
     "arcade|fbneo": (["fbneo/samples/big.zip"], ["fbneo/samples/big.zip"]),
+    "msx|fbneo": (["fbneo/msx.zip"], []),
     "nintendo-gba|mgba": (["gba_bios.bin"], ["gba_bios.bin"]),
     "nintendo-gba|gpsp": (["gba_bios.bin"], []),
 }
@@ -153,9 +155,10 @@ SYSTEMS = {
 }
 
 ARCADE = {
-    "bios": {"neogeo": ["mslug", "mslug2"], "pgm": ["orlegend"], "nobios": ["lost"]},
+    "bios": {"neogeo": ["mslug", "mslug2"], "pgm": ["orlegend"], "nobios": ["lost"],
+             "msx": ["msx_1942"]},
     "devices": {}, "chd": [], "missing_parents": {},
-    "no_bios": ["pacman"], "bios_sets": ["neogeo", "pgm", "nobios"],
+    "no_bios": ["1942", "nes_1942", "pacman"], "bios_sets": ["msx", "neogeo", "nobios", "pgm"],
 }
 
 SETUP = {
@@ -178,6 +181,9 @@ SETUP = {
          "fallback": ["nintendo-gamecube|dolphin"], "source_ref": "x"},
         {"folder": "FBNEO", "systems": ["arcade"], "basis": "id", "profile": "fbneo",
          "arcade": "fbneo", "extensions": [".zip", ".7z"], "fallback": ["arcade|fbneo"],
+         "source_ref": "x"},
+        {"folder": "MSX", "systems": ["msx"], "basis": "id", "profile": "fbneo",
+         "arcade": "fbneo", "extensions": [".zip"], "fallback": ["msx|fbneo"],
          "source_ref": "x"},
         {"folder": "GBA", "systems": ["nintendo-gba"], "basis": "id", "profile": "mgba",
          "extensions": [".gba"], "fallback": ["nintendo-gba|mgba"],
@@ -615,9 +621,27 @@ class Arcade(GamesTestCase):
         self.card.game("FBNEO", "zzzz.zip", b"PK")
         plan = self.plan()
         self.assertEqual(self.kept(plan),
-                         ["fbneo/neogeo.zip", "fbneo/pgm.zip", "fbneo/samples/big.zip"])
+                         ["fbneo/msx.zip", "fbneo/neogeo.zip", "fbneo/pgm.zip",
+                          "fbneo/samples/big.zip"])
         self.assertEqual([(g.shown, g.reason) for g in plan.fallback],
                          [("FBNEO/zzzz.zip", "unknown_set")])
+
+    def test_a_console_set_is_read_under_its_driver_name(self):
+        # msx_1942 loads the MSX BIOS, the arcade 1942 needs none.
+        self.card.game("MSX", "1942.zip", b"PK")
+        plan = self.plan()
+        self.assertEqual(self.kept(plan), ["fbneo/msx.zip"])
+        self.assertEqual(plan.games[0].title, "msx_1942")
+
+    def test_an_arcade_folder_reads_the_bare_set_name(self):
+        self.card.game("FBNEO", "1942.zip", b"PK")
+        plan = self.plan()
+        self.assertEqual(self.kept(plan), [])
+        self.assertTrue(plan.games[0].recognised)
+
+    def test_a_console_bios_on_the_card_is_not_a_game(self):
+        self.card.game("MSX", "msx.zip", b"PK")
+        self.assertEqual(self.plan().support, 1)
 
     def test_a_parent_the_list_does_not_hold_falls_back(self):
         self.card.game("FBNEO", "lost.zip", b"PK")

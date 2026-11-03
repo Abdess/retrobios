@@ -3950,7 +3950,9 @@ def _fetch_json(
         tries = attempts
         try:
             with urllib.request.urlopen(url, timeout=timeout) as resp:
-                return _read_limited_json(resp, limit, label, raw)
+                if raw:
+                    return _read_limited_json(resp, limit, label, raw=True)
+                return _read_limited_json(resp, limit, label)
         except urllib.error.HTTPError as exc:
             if exc.code < 500 and exc.code != 429 or attempt == attempts:
                 raise
@@ -10221,8 +10223,16 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
                 for device, members in (doc.get("devices") or {}).items():
                     for member in members:
                         devices.setdefault(member, []).append(device)
+                known = set(parents) | set(devices) | set(doc.get("no_bios") or [])
+                # FBNeo keys a console game by its driver (msx_1942): the
+                # MSX, NES and Arcade lists each hold a 1942.
+                consoles: dict[str, list[str]] = {}
+                for key in known:
+                    driver, cut, stem = key.partition("_")
+                    if cut and stem:
+                        consoles.setdefault(stem, []).append(driver)
                 arcades[name] = {
-                    "parents": parents, "devices": devices,
+                    "parents": parents, "devices": devices, "consoles": consoles,
                     "plain": set(doc.get("no_bios") or []),
                     "support": (set(doc.get("bios_sets") or []) | set(doc.get("bios") or {})
                                 | set(doc.get("devices") or {})),
@@ -10265,7 +10275,8 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
             facts = GameFacts(path, shown, game_folder)
             progress["done"] += 1
             if row.get("arcade"):
-                _read_arcade(facts, arcade_index(arcade) if arcade else None)
+                _read_arcade(facts, arcade_index(arcade) if arcade else None,
+                             _console_hints(game_folder))
             elif row_systems:
                 read_game(facts, row_systems[0], system_data(row_systems[0]), readers, cache)
             step()
@@ -10300,9 +10311,30 @@ def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None =
     return plan
 
 
-def _read_arcade(facts: GameFacts, index: dict | None) -> None:
+# Systems whose folder an arcade core reads as arcade sets, by their bare
+# set name. Any other system's sets are console games, keyed by driver.
+_ARCADE_SYSTEMS = frozenset({"arcade", "neogeo", "snk-neogeo", "sega-naomi", "sega-naomi2",
+                             "sammy-atomiswave", "sega-stv", "cps1", "cps2", "cps3"})
+
+
+def _console_hints(folder: GameFolder) -> tuple[str, ...] | None:
+    """None for an arcade folder, else the words of its systems and its
+    name, which tell one console's driver prefix from another's."""
+    systems = [str(s) for s in folder.row.get("systems") or []]
+    if not systems or any(s in _ARCADE_SYSTEMS or s.startswith("arcade") for s in systems):
+        return None
+    words = {word for system in systems for word in system.split("-")}
+    words.add(folder.path.name.lower())
+    return tuple(sorted(words))
+
+
+def _read_arcade(facts: GameFacts, index: dict | None,
+                 console: tuple[str, ...] | None = None) -> None:
     """An arcade set: a BIOS or device set (not a game), a game and the BIOS
-    sets its romof chain reaches, or a name the core's DAT does not hold."""
+    sets its romof chain reaches, or a name the core's DAT does not hold. In
+    a console's folder (console, the words of its systems) a set is looked
+    for under the core's driver name for it (msx_1942): the bare name is an
+    arcade set's."""
     if _suffix(facts.path.name) not in ARCADE_SUFFIXES:
         facts.kind = "support"
         return
@@ -10313,11 +10345,19 @@ def _read_arcade(facts: GameFacts, index: dict | None) -> None:
     if name in index["support"]:
         facts.kind = "support"
         return
-    facts.parents = tuple(sorted(index["parents"].get(name, ())))
-    facts.devices = tuple(sorted(index["devices"].get(name, ())))
-    if facts.parents or facts.devices or name in index["plain"]:
+    keys = [name]
+    if console is not None:
+        drivers = index.get("consoles", {}).get(name, [])
+        hinted = [d for d in drivers if d in console]
+        # A prefix no word of the folder names: every console's driver of
+        # that name, so that the right one is among them.
+        keys = [f"{d}_{name}" for d in sorted(hinted or drivers)] or [name]
+    parents = {p for key in keys for p in index["parents"].get(key, ())}
+    devices = {d for key in keys for d in index["devices"].get(key, ())}
+    facts.parents, facts.devices = tuple(sorted(parents)), tuple(sorted(devices))
+    if parents or devices or any(key in index["plain"] for key in keys):
         facts.recognised = True
-        facts.title = name
+        facts.title = keys[0] if len(keys) == 1 else name
     else:
         facts.reason = "unknown_set"
 
@@ -10555,7 +10595,8 @@ def read_games(args: argparse.Namespace, plat: str, bios_path: Path, manifest: d
     if folder is None and not asked and not games_probe(plat, bios_path, network,
                                                        os_type=os_type):
         return None
-    print(f"\nReading the games {'on the card' if folder is None else f'in {folder}'}...")
+    where = "on the card" if folder is None else f"in {folder}"
+    print(f"\nReading the games {where}...")
     try:
         plan = plan_games(plat, bios_path, manifest, folder, term, os_type=os_type,
                           network=network)
