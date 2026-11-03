@@ -860,5 +860,253 @@ class RetroArchWindowsSystemFolder(unittest.TestCase):
         self.assertEqual(folders["macOS"], "`~/Documents/RetroArch/system/`")
 
 
+# The pages that describe the installer, and the ones that cite its options.
+INSTALLER_PAGES = ("installer.md", "first-install.md", "troubleshooting.md", "faq.md")
+OPTION_PAGES = INSTALLER_PAGES + ("advanced-usage.md", "technical-faq.md")
+INSTALLER_SOURCES = ("install.py", "install.sh", "install.ps1")
+OPTION = re.compile(r"(?<![\w-])(--[a-z][a-z0-9-]+)")
+SCRIPT = re.compile(r"(?<![\w/.-])(?:scripts/)?([a-z_]+\.(?:py|sh))\b")
+# Programs whose own options a page quotes: what follows them is theirs.
+FOREIGN_COMMANDS = ("curl --", "xcode-select", "wget", "git ", "npm ", "gh ", "uvx ", "sha256sum")
+# Variables the standard library reads for the installer, which install.py
+# never spells: NO_PROXY reaches urllib through getproxies().
+STDLIB_VARIABLES = {"NO_PROXY": "urllib.request"}
+# Messages a page quotes from another program, with the program.
+FOREIGN_MESSAGES = {"A positional parameter cannot be found": "PowerShell, on `irm ... | iex --x`"}
+# Words the operating system hands the installer to print (strerror).
+OS_WORDS = ("Permission denied",)
+
+
+def _prose(text: str) -> str:
+    """A page without its fenced blocks and comments."""
+    return re.sub(r"<!--.*?-->", "", FENCED.sub("", text), flags=re.S)
+
+
+def _parser_options() -> set[str]:
+    import install
+
+    return {name for action in install.build_parser()._actions
+            for name in action.option_strings if name.startswith("--")}
+
+
+def _script_options(name: str) -> set[str]:
+    """The options a build script spells, in its file or a module beside it
+    that it imports."""
+    path = next((p for p in (ROOT / "scripts" / name, ROOT / name) if p.is_file()), None)
+    if path is None:
+        return set()
+    text = path.read_text(encoding="utf-8")
+    for module in re.findall(r"(?m)^(?:from|import) (\w+)", text):
+        beside = path.parent / f"{module}.py"
+        if beside.is_file() and beside != path:
+            text += beside.read_text(encoding="utf-8")
+    if path.suffix == ".sh":
+        return set(OPTION.findall(text))
+    return set(re.findall(r"""["'](--[a-z][a-z0-9-]+)["'=]""", text)) | {"--help"}
+
+
+def _owner(command: str) -> str | None:
+    """The program a command line runs: install.py for the one-liners."""
+    if re.search(r"install\.py|\| *sh\b|scriptblock|install\.(?:sh|ps1)\b", command):
+        return "install.py"
+    named = SCRIPT.search(command)
+    return named.group(1) if named else None
+
+
+def stale_options(text: str, default: str | None) -> list[str]:
+    """Options a page cites that the program it names does not have.
+
+    A command line answers for the program it runs. An option in prose
+    answers for the scripts its paragraph names, for default (the
+    installer, on its own pages) and for the scripts the page runs."""
+    known = {"install.py": _parser_options()}
+
+    def has(program: str, option: str) -> bool:
+        if program not in known:
+            known[program] = _script_options(program)
+        return option in known[program]
+
+    commands = []
+    for block in FENCED.findall(text):
+        commands += [line for line in block.splitlines()[1:-1] if not line.lstrip().startswith("#")]
+    page_scripts = {_owner(command) for command in commands} - {None}
+    stale = []
+    for line in commands:
+        for part in re.split(r"\s+&&\s+|;\s+|\|\s+(?!sh\b)", line):
+            if not part or part.lstrip().startswith(FOREIGN_COMMANDS):
+                continue
+            program = _owner(part) or default
+            for option in OPTION.findall(part):
+                if program is None or not has(program, option):
+                    stale.append(f"{option} ({program}): {part.strip()}")
+    for paragraph in re.split(r"\n\s*\n", _prose(text)):
+        named = {m.group(1) for m in SCRIPT.finditer(paragraph)} - {"install.sh", "install.ps1"}
+        owners = named | page_scripts | ({default} if default else set())
+        for span in re.findall(r"`([^`]+)`", paragraph.replace("\n", " ")):
+            if span.startswith(FOREIGN_COMMANDS):
+                continue
+            own = _owner(span)
+            candidates = {own} if own else owners
+            for option in OPTION.findall(span):
+                if not any(has(program, option) for program in candidates):
+                    stale.append(f"{option} ({', '.join(sorted(candidates))}): {span}")
+    return stale
+
+
+def stale_variables(text: str) -> list[str]:
+    """Environment variables a page names that neither the installer nor
+    its bootstraps and launchers read."""
+    sources = "".join((ROOT / name).read_text(encoding="utf-8") for name in INSTALLER_SOURCES)
+    sources += "".join(path.read_text(encoding="utf-8", errors="replace")
+                       for path in sorted((ROOT / "ports").rglob("*")) if path.is_file())
+    found: set[str] = set()
+    for span in re.findall(r"`([^`]+)`", _prose(text)):
+        found |= set(re.findall(r"(?<![\w$%.-])([A-Z][A-Z0-9]*_[A-Z0-9_]+|NO_COLOR|TERM|ACCESSIBLE)"
+                                r"(?![\w.(])", span))
+    return sorted(name for name in found if name not in sources and name not in STDLIB_VARIABLES)
+
+
+def _literals() -> str:
+    """Every string the installer and its bootstraps print, a placeholder
+    (\\x01) where an f-string or the shell inserts a value, joined by \\x00."""
+    texts = []
+    for node in ast.walk(ast.parse((ROOT / "install.py").read_text(encoding="utf-8"))):
+        if isinstance(node, ast.JoinedStr):
+            texts.append("".join(value.value if isinstance(value, ast.Constant) else "\x01"
+                                 for value in node.values))
+        elif isinstance(node, ast.Constant) and isinstance(node.value, str):
+            texts.append(node.value)
+    for name in ("install.sh", "install.ps1"):
+        for match in re.finditer(r'"((?:[^"\\]|\\.)*)"|\'([^\']*)\'',
+                                 (ROOT / name).read_text(encoding="utf-8")):
+            quoted = match.group(1) if match.group(1) is not None else match.group(2)
+            texts.append(re.sub(r"\$\{[^}]*\}|\$\([^)]*\)|\$\w+", "\x01", quoted))
+    return "\x00".join(re.sub(r"\s+", " ", text) for text in texts)
+
+
+# A word a message fills in: a number, a path, a name in capitals, an option.
+VALUE = re.compile(r"^(?:\S*[\d/\\~<>{}=]\S*|--?[\w-]+\S*|\S*[A-Z]{2,}\S*|\.\.\.|"
+                   r"\S*\.\w{2,4}[,.:;)]?|[A-Z][a-z]+[A-Z]\S*|\(\S*)$")
+# A code span that is a command, a path or a shape, not a message.
+NOT_A_MESSAGE = re.compile(r"^(?:\{|-|\.|/|~|<|\$|%|python|py |curl|irm|sh |pkg |sudo|ls |"
+                           r"xcode|winget|termux|install\.py|scripts/|generate_|&\()")
+
+
+def unprinted_messages(text: str, corpus: str) -> list[str]:
+    """Code spans that read as installer messages and that no string of
+    the installer prints.
+
+    The values a message fills in (counts, paths, names) are free. Between
+    them, the words must be printed together by one string, each pair of
+    them at least, or beside a value that string inserts."""
+
+    def pair_printed(first: str, second: str) -> bool:
+        pair = f"{first} {second}".rstrip(".,:;")
+        forms = {pair, re.sub(r"s\b", "", pair), re.sub(r"s( |$)", r"\1", pair),
+                 f"{first} \x01", f"\x01 {second}".rstrip(".,:;")}
+        return any(form in corpus for form in forms)
+
+    stale = []
+    for span in sorted({re.sub(r"\s+", " ", s) for s in re.findall(r"`([^`]+)`", _prose(text))}):
+        if NOT_A_MESSAGE.match(span) or len(span.split()) < 3 or span in FOREIGN_MESSAGES:
+            continue
+        words = span
+        for given in OS_WORDS:
+            words = words.replace(given, "1")
+        run: list[str] = []
+        for word in [*words.split(" "), "1"]:
+            if word and not VALUE.match(word):
+                run.append(word)
+                continue
+            joined = " ".join(run)
+            if len(run) > 1 and joined.rstrip(".,:;") not in corpus and not all(
+                    pair_printed(a, b) for a, b in zip(run, run[1:])):
+                stale.append(f"{span!r}: {joined!r}")
+            run = []
+    return stale
+
+
+def unserved_one_liners(page: str, text: str) -> list[str]:
+    """One-line commands whose address the site does not serve. The raw
+    address of the repository stays as the fallback of the One line
+    section, and must name a bootstrap the repository holds."""
+    import sitebootstrap
+    from siteguides import INSTALL_BASE
+
+    served = {f"{INSTALL_BASE}/{name}" for name in sitebootstrap.SOURCES}
+    fallback = _section(text, "One line") if page == "installer.md" else ""
+    stale = []
+    for line in text.splitlines():
+        if not re.search(r"\|\s*(?:sh|iex)\b|\\$|scriptblock\]::Create", line):
+            continue
+        for url in re.findall(r"https?://[^\s)`'\"]+", line):
+            if url in served:
+                continue
+            raw = re.fullmatch(rf"{re.escape(sitebootstrap.REPO_RAW)}/main/(install\.(?:sh|ps1))", url)
+            if raw and line in fallback and (ROOT / raw.group(1)).is_file():
+                continue
+            stale.append(f"{url}: {line.strip()}")
+    return stale
+
+
+class InstallerPagesFollowTheCode(unittest.TestCase):
+    """The installer page described an installer that had moved on, and
+    nothing failed. Options, variables, messages and addresses are words
+    the code owns, so each page is read against the code here."""
+
+    def test_every_option_is_the_programs(self):
+        for name in OPTION_PAGES:
+            default = "install.py" if name in INSTALLER_PAGES else None
+            with self.subTest(page=name):
+                self.assertEqual(stale_options(_page(name), default), [])
+
+    def test_an_option_the_program_lacks_fails(self):
+        old = "Add `--resume` to carry on.\n\n```bash\npython install.py --keep-going\n```\n"
+        self.assertEqual(len(stale_options(old, "install.py")), 2)
+        self.assertEqual(stale_options("`curl --tlsv1.2` and `--check`.\n", "install.py"), [])
+        self.assertEqual(stale_options("```bash\npython scripts/verify.py --all\n```\n", None), [])
+        self.assertEqual(len(stale_options("```bash\npython scripts/verify.py --sideways\n```\n",
+                                           None)), 1)
+
+    def test_every_variable_is_read(self):
+        import urllib.request
+
+        for variable in STDLIB_VARIABLES:
+            self.assertIn(variable.lower(), inspect.getsource(urllib.request.proxy_bypass_environment))
+        for name in INSTALLER_PAGES:
+            with self.subTest(page=name):
+                self.assertEqual(stale_variables(_page(name)), [])
+
+    def test_a_variable_nothing_reads_fails(self):
+        self.assertEqual(stale_variables("Set `RETROBIOS_MIRROR` to another host.\n"),
+                         ["RETROBIOS_MIRROR"])
+
+    def test_every_quoted_message_is_printed(self):
+        corpus = _literals()
+        for name in INSTALLER_PAGES:
+            with self.subTest(page=name):
+                self.assertEqual(unprinted_messages(_page(name), corpus), [])
+
+    def test_a_message_the_installer_does_not_print_fails(self):
+        corpus = _literals()
+        self.assertEqual(unprinted_messages("It ends `Everything is in place.` here.\n", corpus), [])
+        self.assertEqual(len(unprinted_messages("It says `All BIOS files are present.`\n", corpus)), 1)
+        self.assertEqual(unprinted_messages(
+            "`E:\\ holds 38 of these files: a run without --check copies them.`\n", corpus), [])
+
+    def test_every_one_liner_is_served(self):
+        for name in OPTION_PAGES:
+            with self.subTest(page=name):
+                self.assertEqual(unserved_one_liners(name, _page(name)), [])
+
+    def test_a_one_liner_the_site_does_not_serve_fails(self):
+        """Before the site served `i`, every page gave the raw address."""
+        old = ("## One line\n\nIntro.\n\n## Passing options\n\n```bash\ncurl -fsSL "
+               "https://raw.githubusercontent.com/Abdess/retrobios/main/install.sh \\\n"
+               "  | sh -s -- --platform retroarch\n```\n\n"
+               "```bash\ncurl -fsSL https://abdess.github.io/retrobios/install | sh\n```\n")
+        self.assertEqual(len(unserved_one_liners("installer.md", old)), 2)
+
+
 if __name__ == "__main__":
     unittest.main()
