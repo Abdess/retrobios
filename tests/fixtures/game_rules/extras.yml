@@ -1,0 +1,8 @@
+extras:
+  - system: nintendo-fds
+    profile: fdscore
+    trigger:
+      extensions: [.fds]
+    files: [disksys.rom]
+    required: true
+    source_ref: "example/fdscore@22222222 fds.c:5"

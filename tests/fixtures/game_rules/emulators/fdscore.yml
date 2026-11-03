@@ -1,0 +1,9 @@
+emulator: FDS Core
+type: libretro
+source: https://github.com/example/fdscore
+source_commit: 2222222222222222222222222222222222222222
+systems: [nintendo-nes, nintendo-fds]
+files:
+  - name: disksys.rom
+    system: nintendo-fds
+    required: true

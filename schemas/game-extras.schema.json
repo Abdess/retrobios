@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abdess.github.io/retrobios/api/v1/schemas/game-extras.schema.json",
+  "title": "RetroBIOS per-game extra files",
+  "description": "games/extras.yml: files a game needs beyond its system's region BIOS, decided by the game's extension, header bytes or presence, with the core that reads them. A header trigger names a reader of games/headers.yml and the labels or values it returns.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["extras"],
+  "properties": {
+    "extras": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["system", "profile", "trigger", "required", "source_ref"],
+        "properties": {
+          "system": { "type": "string", "minLength": 1 },
+          "profile": { "type": "string", "minLength": 1 },
+          "trigger": {
+            "type": "object",
+            "additionalProperties": false,
+            "minProperties": 1,
+            "maxProperties": 1,
+            "properties": {
+              "extensions": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "pattern": "^\\.[a-z0-9]+$" },
+                "uniqueItems": true
+              },
+              "header": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["reader", "values"],
+                "properties": {
+                  "reader": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+                  "field": { "type": "string", "pattern": "^[a-z0-9_]+$", "description": "A field of the reader, when the value is read there rather than from the reader's own location." },
+                  "values": { "type": "array", "minItems": 1, "items": { "type": ["string", "integer"] } }
+                }
+              },
+              "every_game": { "const": true }
+            }
+          },
+          "files": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+          "region_files": { "const": true, "description": "The files are the system's region files for the game's region (games/regions.yml)." },
+          "one_of": { "type": "boolean", "description": "Any single file of the list serves." },
+          "filename_override": { "type": "boolean", "description": "Tags in the file name can change the choice: the installer keeps every file listed for this system and core." },
+          "required": { "type": "boolean" },
+          "note": { "type": "string", "minLength": 1 },
+          "source_ref": {
+            "type": "string",
+            "pattern": "^[\\w.-]+/[\\w.-]+@[0-9a-f]{8,40} \\S.*$"
+          }
+        },
+        "oneOf": [{ "required": ["files"] }, { "required": ["region_files"] }]
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+systems:
+  nintendo-fds:
+    readers:
+      fds-image:
+        location: {offset: 0, length: 14, encoding: ascii}
+        decode:
+          kind: exact-prefix
+          values:
+            - {value: "FDS\x1a", label: fds}
+          otherwise: unknown
+  sega-dreamcast:
+    readers:
+      dc-product-id:
+        location: {offset: 64, length: 10, encoding: ascii}
+        fields:
+          disk_type: {offset: 37, length: 6, encoding: ascii, mil_cd: MIL CD}
+        decode:
+          kind: serial

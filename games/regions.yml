@@ -1,0 +1,327 @@
+# Which BIOS region a core opens for a game, beyond what the profiles say.
+#
+# The files of each region come from the profiles' `region:` fields
+# (scripts/region.py build_region_index), never from this file. What is
+# recorded here is what the code does around them: the game regions it
+# sends to another region's file (`routes`), the region it falls back to
+# when the game names none it knows (`default_region`), the order it picks
+# from a multi-region disc (`preference`), the files it opens whatever the
+# region (`region_free`), whether a missing region file is replaced by
+# another region's (`fallback_across_regions`), and the cases where even a
+# proven game region does not settle the file (`keep_all_regions`).
+#
+# Only cores whose region code was read at the profile's pin are listed.
+# Every source_ref names the profile's own pin.
+
+cases:
+  user-region-option:
+    title: A core option forces the console region
+    reason: The forced region decides the file, and the option is device state the installer does not read.
+  psx-override-bios:
+    title: Region-free override BIOS
+    reason: An option swaps in a region-free image for every region.
+  duckstation-custom-region:
+    title: Per-game custom region
+    reason: A region the user set for one game in the game list replaces the region read from the disc.
+  cross-region-fallback:
+    title: Missing region file replaced by another region's image
+    reason: The game still starts without the precise file, on another region's BIOS with a warning.
+  first-disc-region:
+    title: Only the first disc sets the region
+    reason: For a multi-disc game the region is read from disc 1 alone.
+  multi-area-disc:
+    title: Disc listing several areas
+    reason: The core picks among the disc's areas by its own preference order.
+  saturn-kr-ipl:
+    title: Asia NTSC and Korea discs ask for an undeclared IPL
+    reason: The KR IPL is not declared by the profile, so the core falls back to a region-free image, then a mismatched one.
+  saturn-disc-database:
+    title: A disc or cartridge database overrides the header
+    reason: The core's own database decides the area, so a header read is not enough without that table.
+  sms-crc-list:
+    title: CRC32 list overrides the cartridge header
+    reason: A list of whole-ROM CRC32s forces Europe or Japan before the header is read.
+  megacd-region-list:
+    title: Mega CD region from the disc's region list
+    reason: The file follows the disc's list of regions and the preferred-region option, not one header byte.
+  gamecube-unknown-region:
+    title: GameCube disc with an unknown region field
+    reason: An unknown value at 0x458 falls back to the host locale, which differs per device.
+  naomi-one-archive:
+    title: One BIOS archive serves every region
+    reason: The region filters blobs inside one archive, so the archive is the unit.
+  nds-header-decides:
+    title: NDS BIOS decided by header bytes, not region
+    reason: An encrypted secure area or a DSi unit code decides the files, not the game region.
+  optional-pif:
+    title: Optional boot image
+    reason: The core runs HLE without the file, and dropping it saves under 4 KB.
+
+systems:
+  sony-playstation:
+    beetle_psx:
+      routes:
+        south-korea: japan
+      default_region: north-america
+      region_free: [psxonpsp660.bin, ps1_rom.bin, openbios.bin]
+      fallback_across_regions: false
+      source_ref: "libretro/beetle-psx-libretro@7fea57a5 libretro.c:2426-2446, libretro.c:2497-2540, libretro.c:768-821, libretro.c:3425-3458, mednafen/settings.c:42"
+      keep_all_regions:
+        - case: psx-override-bios
+          condition: option
+          option: beetle_psx_override_bios
+          default: disabled
+          keeps: region-free-files
+          files: [psxonpsp660.bin, ps1_rom.bin, openbios.bin]
+          source_ref: "libretro/beetle-psx-libretro@7fea57a5 libretro.c:694-765, libretro_core_options.h:259-274"
+        - case: first-disc-region
+          condition: disc
+          when: multi-disc game (.m3u)
+          keeps: first-disc
+          source_ref: "libretro/beetle-psx-libretro@7fea57a5 libretro.c:2426-2446"
+    swanstation:
+      default_region: north-america
+      region_free: [psxonpsp660.bin, ps1_rom.bin]
+      fallback_across_regions: true
+      source_ref: "libretro/swanstation@631f0fb3 src/core/system.cpp:400-456, src/core/system.cpp:621-640, src/core/host_interface.cpp:100-196, src/core/bios.cpp:28-71"
+      keep_all_regions:
+        - case: user-region-option
+          condition: option
+          option: swanstation_Console_Region
+          default: Auto
+          keeps: all-regions
+          source_ref: "libretro/swanstation@631f0fb3 src/libretro/libretro_core_options.h:82-136"
+        - case: cross-region-fallback
+          condition: always
+          keeps: precise
+          source_ref: "libretro/swanstation@631f0fb3 src/core/host_interface.cpp:100-196"
+    duckstation:
+      default_region: north-america
+      region_free: [openbios.bin]
+      fallback_across_regions: true
+      source_ref: "stenzek/duckstation@526b4a12 src/core/system.cpp:939-1009, src/core/system.cpp:664-680, src/core/bios.cpp:34-139, src/core/bios.cpp:397-460"
+      keep_all_regions:
+        - case: user-region-option
+          condition: option
+          option: Console/Region
+          default: Auto
+          keeps: all-regions
+          source_ref: "stenzek/duckstation@526b4a12 src/core/system.cpp:1739-1771, src/core/settings.h:608"
+        - case: duckstation-custom-region
+          condition: user-state
+          when: the user set a custom region for the game in the game list
+          keeps: all-regions
+          source_ref: "stenzek/duckstation@526b4a12 src/core/bios.cpp:397-460"
+    pcsx_rearmed:
+      default_region: north-america
+      fallback_across_regions: true
+      source_ref: "libretro/pcsx_rearmed@c8816799 libpcsxcore/misc.c:415-455, frontend/libretro.c:3604-3680, frontend/libretro.c:3864-3885, libpcsxcore/psxmem.c:291-327"
+      keep_all_regions:
+        - case: cross-region-fallback
+          condition: always
+          keeps: precise
+          source_ref: "libretro/pcsx_rearmed@c8816799 libpcsxcore/psxmem.c:291-327"
+
+  sega-megacd:
+    genesis_plus_gx:
+      default_region: north-america
+      fallback_across_regions: false
+      source_ref: "libretro/Genesis-Plus-GX@60bee4c7 core/loadrom.c:1056-1078, core/loadrom.c:394-418, core/loadrom.c:724-734, core/cd_hw/cdd.c:556-561"
+      keep_all_regions:
+        - case: user-region-option
+          condition: option
+          option: genesis_plus_gx_region_detect
+          default: auto
+          keeps: all-regions
+          source_ref: "libretro/Genesis-Plus-GX@60bee4c7 libretro/libretro_core_options.h:120-134, libretro/libretro.c:1574-1585, core/loadrom.c:1160-1164"
+    genesis_plus_gx_wide:
+      default_region: north-america
+      fallback_across_regions: false
+      source_ref: "libretro/Genesis-Plus-GX-Wide@b7ad0054 core/loadrom.c:393-414, core/loadrom.c:1050-1070"
+    genesis_plus_gx_expanded:
+      default_region: north-america
+      fallback_across_regions: false
+      source_ref: "BillyTimeGames/Genesis-Plus-GX-Expanded-Rom-Size@dea3528c core/loadrom.c:393-414, core/loadrom.c:1048-1068"
+    picodrive:
+      default_region: north-america
+      fallback_across_regions: false
+      source_ref: "libretro/picodrive@1890c293 pico/media.c:185-258, pico/media.c:288-312, platform/libretro/libretro.c:1273-1335"
+    blastem:
+      preference: [north-america, europe, japan]
+      fallback_across_regions: false
+      source_ref: "libretro/blastem@ab743653 genesis.c:3245-3268, segacd.c:1573-1593, romdb.c:175-216, libblastem.c:501-503"
+      keep_all_regions:
+        - case: megacd-region-list
+          condition: option
+          option: blastem_region
+          default: U
+          keeps: listed-areas
+          source_ref: "libretro/blastem@ab743653 segacd.c:1573-1593, libblastem.c:85-90, libblastem.c:195-198"
+
+  mega-cd:
+    ares:
+      preference: [north-america]
+      source_ref: "ares-emulator/ares@d400eee9 mia/medium/mega-cd.cpp:40-58, desktop-ui/emulator/mega-cd.cpp:17-19, desktop-ui/emulator/mega-cd.cpp:70-81, desktop-ui/emulator/emulator.cpp:86-106"
+      keep_all_regions:
+        - case: multi-area-disc
+          condition: disc
+          when: the security code matches none of the three known CRC32s, so the disc lists every region
+          keeps: listed-areas
+          source_ref: "ares-emulator/ares@d400eee9 mia/medium/mega-cd.cpp:40-58, desktop-ui/settings/settings.hpp:71"
+
+  sega-mastersystem:
+    genesis_plus_gx:
+      default_region: north-america
+      source_ref: "libretro/Genesis-Plus-GX@60bee4c7 core/cart_hw/sms_cart.c:831-874, core/loadrom.c:300-347, core/loadrom.c:498-520"
+      keep_all_regions:
+        - case: sms-crc-list
+          condition: always
+          keeps: all-regions
+          source_ref: "libretro/Genesis-Plus-GX@60bee4c7 core/cart_hw/sms_cart.c:160-264, core/cart_hw/sms_cart.c:831-851"
+        - case: user-region-option
+          condition: option
+          option: genesis_plus_gx_region_detect
+          default: auto
+          keeps: all-regions
+          source_ref: "libretro/Genesis-Plus-GX@60bee4c7 libretro/libretro_core_options.h:120-162, core/cart_hw/sms_cart.c:618-623"
+
+  master-system:
+    ares:
+      source_ref: "ares-emulator/ares@d400eee9 mia/medium/master-system.cpp:50-104, desktop-ui/emulator/master-system.cpp:14-16, desktop-ui/emulator/master-system.cpp:100-107"
+
+  sega-saturn:
+    beetle_saturn:
+      preference: [north-america, japan, south-korea, europe, brazil, asia-ntsc, asia-pal, latin-america]
+      source_ref: "libretro/beetle-saturn-libretro@30f4c120 disc.c:155-172, disc.c:686-734, mednafen/ss/ss.c:1846-1849"
+      keep_all_regions:
+        - case: saturn-disc-database
+          condition: always
+          keeps: all-regions
+          source_ref: "libretro/beetle-saturn-libretro@30f4c120 mednafen/ss/db.c:36-55, mednafen/ss/db.c:1731-1745"
+        - case: user-region-option
+          condition: option
+          option: beetle_saturn_region
+          default: Auto Detect
+          keeps: all-regions
+          source_ref: "libretro/beetle-saturn-libretro@30f4c120 libretro_core_options.h:79-97, libretro.c:454-475"
+    mednafen_stv:
+      source_ref: "beudbeud/libretro-stv@e6571347 mednafen/ss/ss.cpp:1532-1537, mednafen/ss/ss.cpp:2599-2600, mednafen/ss/ss.cpp:1596-1630, mednafen/ss/db.cpp:48"
+      keep_all_regions:
+        - case: user-region-option
+          condition: option
+          option: mednafen_stv_region
+          default: auto
+          keeps: all-regions
+          source_ref: "beudbeud/libretro-stv@e6571347 libretro/libretro.cpp:428-437, libretro/libretro_core_options.h:36-37"
+    ymir:
+      fallback_across_regions: true
+      source_ref: "ymir-emu/Ymir@fe439e98 libs/ymir-core/src/ymir/media/saturn_header.cpp:29-40, libs/ymir-core/src/ymir/sys/saturn.cpp:308-350, apps/ymir-sdl3/src/app/services/rom_service.cpp:127-200"
+      keep_all_regions:
+        - case: multi-area-disc
+          condition: disc
+          when: the disc lists more than one area, picked by a user-configurable order
+          keeps: listed-areas
+          source_ref: "ymir-emu/Ymir@fe439e98 apps/ymir-sdl3/src/app/settings.cpp:1052-1055, libs/ymir-core/src/ymir/sys/saturn.cpp:308-350"
+        - case: saturn-kr-ipl
+          condition: disc
+          when: area T (Asia NTSC) or K (Korea)
+          keeps: all-regions
+          source_ref: "ymir-emu/Ymir@fe439e98 apps/ymir-sdl3/src/app/services/rom_service.cpp:127-200"
+    kronos:
+      region_free: [saturn_bios.bin, sega_101.bin, mpr-17933.bin]
+      source_ref: "libretro/yabause@3791ffb2 yabause/src/libretro/libretro.c:1618-1636"
+
+  sega-stv:
+    beetle_saturn:
+      source_ref: "libretro/beetle-saturn-libretro@30f4c120 libretro.c:1175-1195, libretro.c:1230-1255, mednafen/ss/ss.c:1830-1845"
+      keep_all_regions:
+        - case: saturn-disc-database
+          condition: always
+          keeps: all-regions
+          source_ref: "libretro/beetle-saturn-libretro@30f4c120 mednafen/ss/db.c:382-1640, libretro.c:1175-1195"
+    mednafen_stv:
+      source_ref: "beudbeud/libretro-stv@e6571347 mednafen/ss/ss.cpp:1800-1820, mednafen/ss/ss.cpp:1521-1531, mednafen/ss/ss.cpp:2602-2605"
+      keep_all_regions:
+        - case: saturn-disc-database
+          condition: always
+          keeps: all-regions
+          source_ref: "beudbeud/libretro-stv@e6571347 mednafen/ss/ss.cpp:1800-1820, mednafen/ss/db.cpp:169-1633"
+        - case: user-region-option
+          condition: option
+          option: mednafen_stv_region
+          default: auto
+          keeps: all-regions
+          source_ref: "beudbeud/libretro-stv@e6571347 libretro/libretro.cpp:428-437"
+    kronos:
+      region_free: [stvbios.zip]
+      source_ref: "libretro/yabause@3791ffb2 yabause/src/ctrl/src/stv.c:112-136, yabause/src/ctrl/src/stv.c:2560-2570, yabause/src/libretro/libretro.c:1039-1051"
+
+  nintendo-gamecube:
+    dolphin:
+      source_ref: "libretro/dolphin@3aac3f05 Source/Core/DiscIO/VolumeGC.cpp:91-109, Source/Core/DiscIO/Enums.h:45-53, Source/Core/Core/Config/MainSettings.cpp:721-768"
+      keep_all_regions:
+        - case: gamecube-unknown-region
+          condition: disc
+          when: the u32 at disc offset 0x458 is not 0, 1, 2 or 4
+          keeps: all-regions
+          source_ref: "libretro/dolphin@3aac3f05 Source/Core/Core/ConfigManager.cpp:489-490, Source/Core/Core/Config/DefaultLocale.cpp:148-191, Source/Core/Core/HW/EXI/EXI_DeviceIPL.cpp:100-131"
+    primehack:
+      source_ref: "shiiion/dolphin@53f53e0f Source/Core/DiscIO/VolumeGC.cpp:108, Source/Core/Core/ConfigManager.cpp:458"
+    dolphin-mmjr2:
+      source_ref: "nachoverdon/Dolphin-MMJR2@4d0fdb8e Source/Core/DiscIO/VolumeGC.cpp:82, Source/Core/Core/ConfigManager.cpp:337"
+    triforce:
+      source_ref: "REG-Linux/dolphin-triforce@5c456e8f Source/Core/DiscIO/VolumeGC.cpp:89, Source/Core/Core/ConfigManager.cpp:355"
+
+  nintendo-64:
+    simple64:
+      default_region: north-america
+      source_ref: "simple64/simple64@d8c969c7 mupen64plus-core/src/main/rom.c:190, mupen64plus-core/src/main/rom.c:502-526, mupen64plus-core/src/main/main.c:1565-1580"
+      keep_all_regions:
+        - case: optional-pif
+          condition: always
+          keeps: all-regions
+          source_ref: "simple64/simple64@d8c969c7 mupen64plus-core/src/main/main.c:1624-1633"
+
+  nintendo-64dd:
+    ares:
+      default_region: north-america
+      source_ref: "ares-emulator/ares@d400eee9 mia/medium/nintendo-64dd.cpp:57-77, desktop-ui/emulator/nintendo-64dd.cpp:17-19, desktop-ui/emulator/nintendo-64dd.cpp:64-80"
+    project64:
+      source_ref: "project64/project64@24376e86 Source/Project64-core/N64System/N64Disk.cpp:828-840, Source/Project64-core/N64System/N64System.cpp:641-662"
+    rosalies-mupen-gui:
+      source_ref: "Rosalie241/RMG@4777ed3f Source/3rdParty/mupen64plus-core/src/device/dd/disk.c:405-480, Source/RMG-Core/MediaLoader.cpp:47-63"
+    mupen64plus_next:
+      region_free: [IPL.n64]
+      source_ref: "libretro/mupen64plus-libretro-nx@15bada85 mupen64plus-core/src/main/main.c:953-973"
+    parallel_n64:
+      region_free: [64DD_IPL.bin]
+      source_ref: "libretro/parallel-n64@f87550d9 libretro/libretro.c:951"
+
+  laseractive:
+    geargrafx:
+      source_ref: "drhelius/Geargrafx@7c447b0b platforms/libretro/libretro.cpp:830-850, platforms/libretro/libretro.cpp:513-529"
+      keep_all_regions:
+        - case: user-region-option
+          condition: option
+          option: geargrafx_laseractive_region
+          default: Auto
+          keeps: all-regions
+          source_ref: "drhelius/Geargrafx@7c447b0b platforms/libretro/libretro.cpp:830-850"
+
+  sega-naomi:
+    flycast:
+      source_ref: "flyinghead/flycast@e88b0ced core/hw/naomi/naomi_cart.cpp:61-133"
+      keep_all_regions:
+        - case: naomi-one-archive
+          condition: always
+          keeps: one-archive
+          source_ref: "flyinghead/flycast@e88b0ced core/hw/naomi/naomi_cart.cpp:61-133"
+
+  nintendo-ds:
+    melonds_ds:
+      source_ref: "JesseTG/melonds-ds@f394adba src/libretro/config/console.cpp:238-256, src/libretro/config/console.cpp:379-424"
+      keep_all_regions:
+        - case: nds-header-decides
+          condition: always
+          keeps: by-header
+          source_ref: "JesseTG/melonds-ds@f394adba src/libretro/config/console.cpp:238-256, src/libretro/config/console.cpp:419-424"
