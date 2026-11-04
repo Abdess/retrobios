@@ -266,6 +266,20 @@ class RecalboxPerBoard(unittest.TestCase):
         self.assertEqual(defconfig_arch("BR2_arm=y\n"), "armhf")
         self.assertEqual(defconfig_arch("BR2_aarch64=y\n"), "aarch64")
 
+    def test_board_sections_read_key_by_key_as_romfs_does(self):
+        from scraper.recalbox_scraper import board_cores  # noqa: PLC0415
+
+        ini = (
+            "[core.0]\npackage = BR2_PACKAGE_LIBRETRO_GAMBATTE\nemulator = \"libretro\"\n"
+            "core = \"gambatte\"\n"
+            "[core.0.x86_64]\npriority = 2\n"
+            "[core.5.x86_64]\npackage = BR2_PACKAGE_LIBRETRO_BSNES\nemulator = \"libretro\"\n"
+            "core = \"bsnes\"\n"
+        )
+        enabled = {"BR2_PACKAGE_LIBRETRO_GAMBATTE", "BR2_PACKAGE_LIBRETRO_BSNES"}
+        self.assertEqual(board_cores(ini, "x86_64", enabled), {"gambatte", "bsnes"})
+        self.assertEqual(board_cores(ini, "rpi3", enabled), {"gambatte"})
+
 
 class RetroPieModuleFlags(unittest.TestCase):
     """The RetroPie target list read flags as requirements and libretro alone.

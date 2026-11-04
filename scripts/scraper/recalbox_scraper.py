@@ -211,25 +211,34 @@ def system_ini_cores(text: str) -> tuple[set[str], set[str]]:
     return cores, standalone
 
 
+# romfs2 systemholder.py reads core.0 to core.19.
+CORE_SLOTS = 20
+
+
 def board_cores(text: str, board: str, enabled: set[str]) -> set[str]:
     """The cores of one system.ini a board's image builds.
 
-    A core is built when the Buildroot package its section names is enabled
-    in the board's defconfig. ``[core.N.<board>]`` replaces the section on
-    that board and ``package.<board>`` its package.
+    romfs2 builds each board's list as systemholder.py does: a slot exists
+    as ``[core.N]`` or as ``[core.N.<board>]`` alone (gb's bsnes on x86_64),
+    each key is read from the board's section, then as ``<key>.<board>``,
+    then plain, and a core is kept when the Buildroot package it names is
+    enabled in the board's defconfig.
     """
-    import re
-
     sections = _ini_sections(text)
     cores: set[str] = set()
-    for section, values in sections.items():
-        match = re.fullmatch(r"core\.(\d+)", section)
-        if not match:
+    for slot in range(CORE_SLOTS):
+        plain, own = f"core.{slot}", f"core.{slot}.{board}"
+        if plain not in sections and own not in sections:
             continue
-        values = sections.get(f"{section}.{board}", values)
-        package = values.get(f"package.{board}", values.get("package", ""))
-        if package in enabled:
-            cores |= _core_names(values)[0]
+
+        def read(key: str, plain: str = plain, own: str = own) -> str:
+            for where, name in ((own, key), (plain, f"{key}.{board}"), (plain, key)):
+                if name in sections.get(where, {}):
+                    return sections[where][name]
+            return ""
+
+        if read("package") in enabled:
+            cores |= _core_names({"emulator": read("emulator"), "core": read("core")})[0]
     return cores
 
 
