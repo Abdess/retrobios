@@ -1,9 +1,11 @@
 """Fetch Redump BIOS DAT files and write a provenance snapshot.
 
-Redump serves BIOS DATs as static clrmamepro files linked from
-https://redump.info/downloads under /static/bios/. The downloads page
-is scanned for those links, so new BIOS DATs are picked up without
-code changes.
+Redump serves BIOS DATs as Logiqx files linked from
+https://redump.info/downloads. The links were static files under
+/static/bios/<name>.dat and are now one route per system,
+/bios/<CODE> (PSX, PS2, GC, XBOX), served as an attachment. The
+downloads page is scanned for either shape, so new BIOS DATs are
+picked up without code changes.
 
 Run manually, then commit the snapshot:
     python -m scripts.scraper.redump_dat_scraper --dry-run
@@ -40,6 +42,7 @@ def _fetch(url: str) -> str:
 def discover_bios_datfiles(downloads_html: str) -> list[str]:
     """Extract BIOS DAT paths from the downloads page."""
     paths = set(re.findall(r'href="(/static/bios/[^"]+\.dat)"', downloads_html))
+    paths.update(re.findall(r'href="(/bios/[A-Za-z0-9_-]+)"', downloads_html))
     return sorted(paths)
 
 

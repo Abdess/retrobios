@@ -14,7 +14,7 @@ version_basis:
   pattern: 'static const string Version\s*=\s*"([^"]+)"'
 display_name: "Nintendo - SNES / SFC (bsnes)"
 cores: [bsnes]
-systems: [nintendo-snes, nintendo-super-game-boy, nintendo-satellaview]
+systems: [nintendo-snes, nintendo-sgb, nintendo-satellaview]
 
 # bsnes supports HLE for DSP1/DSP1B/DSP2/DSP4, ST010, and Cx4.
 # When HLE is enabled (core option bsnes_coprocessor_prefer_hle) or
@@ -203,13 +203,13 @@ files:
   # Core option bsnes_sgb_bios selects between SGB1.sfc and SGB2.sfc.
 
   - name: "SGB1.sfc"
-    system: nintendo-super-game-boy
+    system: nintendo-sgb
     required: false
     note: "Super Game Boy 1 cartridge ROM, loaded when playing .gb/.gbc via SGB mode"
     source_ref: "source bsnes/target-libretro/libretro.cpp:937-946 (system_dir + sgb_bios), source bsnes/target-libretro/libretro.cpp:393 (core option bsnes_sgb_bios)"
 
   - name: "SGB2.sfc"
-    system: nintendo-super-game-boy
+    system: nintendo-sgb
     required: false
     note: "Super Game Boy 2 cartridge ROM, uses dedicated oscillator for accurate GB speed"
     source_ref: "source bsnes/target-libretro/libretro.cpp:937-946 (system_dir + sgb_bios), source bsnes/target-libretro/libretro.cpp:393 (core option bsnes_sgb_bios)"

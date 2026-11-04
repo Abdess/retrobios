@@ -1,0 +1,4212 @@
+setup: batocera
+name: Batocera
+platform: batocera
+sources:
+  os:
+    repo: "https://github.com/batocera-linux/batocera.linux"
+    commit: 155c2d8d304cbb53db52e9479dcf683392821d5c
+    tag: batocera-43.1
+  es:
+    repo: "https://github.com/batocera-linux/batocera-emulationstation"
+    commit: 2c29a330e487210a7d51ad2650bb7b280ea44c86
+    note: pinned by package/batocera/emulationstation/batocera-emulationstation/batocera-emulationstation.mk
+roms_root:
+  path: /userdata/roms
+  from_bios: ../roms
+  source_ref: "os python-src/batocera-es-system/batocera_es_system/es_systems.py:27,76-80"
+case_sensitive: null
+hidden:
+- pattern: .*
+  source_ref: "es es-core/src/utils/FileSystemUtil.cpp:418; es es-app/src/SystemData.cpp:325"
+media:
+- name: artwork
+  source_ref: "es es-app/src/SystemData.cpp:355"
+- name: media
+  source_ref: "es es-app/src/SystemData.cpp:375"
+- name: medias
+  source_ref: "es es-app/src/SystemData.cpp:375"
+- name: images
+  source_ref: "es es-app/src/SystemData.cpp:375"
+- name: manuals
+  source_ref: "es es-app/src/SystemData.cpp:375"
+- name: videos
+  source_ref: "es es-app/src/SystemData.cpp:375"
+- name: assets
+  source_ref: "es es-app/src/SystemData.cpp:375"
+- name: bezels
+  source_ref: "es es-app/src/SystemData.cpp:375"
+- name: screenshots
+  source_ref: "es es-app/src/SystemData.cpp:375"
+- pattern: downloaded_*
+  source_ref: "es es-app/src/SystemData.cpp:378"
+notes:
+- "A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:330-336)."
+- "The default core is configgen's, the board file before configgen-defaults.yml (os python-src/batocera-es-system/batocera_es_system/shared.py:193-198)."
+folders:
+- folder: 3do
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: opera
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2335; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:18"
+- folder: 3ds
+  extensions:
+  - .3ds
+  - .app
+  - .axf
+  - .cci
+  - .cia
+  - .cxi
+  - .elf
+  - .squashfs
+  - .zcci
+  - .zcia
+  - .zcxi
+  core: azahar
+  emulator: azahar
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2375; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:21"
+- folder: abuse
+  extensions:
+  - .game
+  core: abuse
+  emulator: abuse
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4157; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:24"
+- folder: adam
+  extensions:
+  - .1dd
+  - .7z
+  - .bin
+  - .col
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .ddp
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .rom
+  - .td0
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3685; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:27"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:58"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:58"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:56"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:68"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:68"
+- folder: advision
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3316; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:30"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:1"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:1"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:5"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:32"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:32"
+- folder: amiga1200
+  extensions:
+  - .adf
+  - .adz
+  - .dms
+  - .dmz
+  - .exe
+  - .hdf
+  - .ipf
+  - .lha
+  - .m3u
+  - .raw
+  - .scp
+  - .uae
+  - .zip
+  core: puae
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:137; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:36"
+  board_defaults:
+    bcm2836:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2836.yml:10"
+    bcm2837:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2837.yml:10"
+    h3:
+      core: A1200
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:11"
+    h5:
+      core: A1200
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:10"
+    rk3128:
+      core: A1200
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3128.yml:17"
+    rk3288:
+      core: A1200
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3288.yml:4"
+    s812:
+      core: A1200
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s812.yml:12"
+    s905:
+      core: A1200
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905.yml:12"
+    s912:
+      core: A1200
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:10"
+- folder: amiga500
+  extensions:
+  - .adf
+  - .adz
+  - .dms
+  - .dmz
+  - .exe
+  - .hdf
+  - .ipf
+  - .lha
+  - .m3u
+  - .raw
+  - .scp
+  - .uae
+  - .zip
+  core: puae
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:108; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:33"
+  board_defaults:
+    bcm2836:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2836.yml:7"
+    bcm2837:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2837.yml:7"
+    h3:
+      core: A500
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:8"
+    h5:
+      core: A500
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:7"
+    rk3128:
+      core: A500
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3128.yml:14"
+    rk3288:
+      core: A500
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3288.yml:1"
+    s812:
+      core: A500
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s812.yml:9"
+    s905:
+      core: A500
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905.yml:9"
+    s912:
+      core: A500
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:7"
+- folder: amigacd32
+  extensions:
+  - .bin
+  - .chd
+  - .cue
+  - .iso
+  core: puae
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:163; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:39"
+  board_defaults:
+    bcm2836:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2836.yml:13"
+    bcm2837:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2837.yml:13"
+    h3:
+      core: CD32
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:14"
+    h5:
+      core: CD32
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:13"
+    rk3128:
+      core: CD32
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3128.yml:20"
+    rk3288:
+      core: CD32
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3288.yml:7"
+    s812:
+      core: CD32
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s812.yml:15"
+    s905:
+      core: CD32
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905.yml:15"
+    s912:
+      core: CD32
+      emulator: amiberry
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:13"
+- folder: amigacdtv
+  extensions:
+  - .bin
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: puae
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:179; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:42"
+  board_defaults:
+    bcm2836:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2836.yml:16"
+    bcm2837:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2837.yml:16"
+    h3:
+      core: uae4arm
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:17"
+- folder: amstradcpc
+  extensions:
+  - .7z
+  - .cdt
+  - .dsk
+  - .m3u
+  - .sna
+  - .tap
+  - .voc
+  - .zip
+  core: cap32
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1578; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:45"
+- folder: apfm1000
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3629; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:51"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:52"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:52"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:50"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:62"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:62"
+- folder: apple2
+  extensions:
+  - .2mg
+  - .7z
+  - .chd
+  - .dfi
+  - .do
+  - .dsk
+  - .edd
+  - .hdv
+  - .mfi
+  - .nib
+  - .po
+  - .rti
+  - .wav
+  - .woz
+  - .zip
+  core: gsplus
+  emulator: gsplus
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2138; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:54"
+- folder: apple2gs
+  extensions:
+  - .2mg
+  - .do
+  - .dsk
+  - .nib
+  - .po
+  core: gsplus
+  emulator: gsplus
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3270; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:57"
+- folder: arcadia
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3703; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:60"
+- folder: archimedes
+  extensions:
+  - .1dd
+  - '.360'
+  - .7z
+  - .adf
+  - .adl
+  - .adm
+  - .ads
+  - .apd
+  - .bbc
+  - .chd
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsd
+  - .dsk
+  - .hfe
+  - .ima
+  - .imd
+  - .img
+  - .ipf
+  - .jfd
+  - .mfi
+  - .mfm
+  - .msa
+  - .ssd
+  - .st
+  - .td0
+  - .ufi
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3565; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:65"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:76"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:76"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:74"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:94"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:94"
+- folder: arduboy
+  extensions:
+  - .7z
+  - .hex
+  - .zip
+  core: arduous
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4613; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:68"
+- folder: astrocade
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3743; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:71"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:64"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:64"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:62"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:79"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:79"
+- folder: atari2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1148; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:74"
+  board_defaults:
+    bcm2835:
+      core: stella2014
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:53"
+- folder: atari5200
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: a5200
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1161; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:77"
+- folder: atari7800
+  extensions:
+  - .7z
+  - .a78
+  - .bin
+  - .zip
+  core: prosystem
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1172; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:80"
+- folder: atari800
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .m3u
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: atari800
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1118; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:83"
+- folder: atarist
+  extensions:
+  - .7z
+  - .dim
+  - .gemdos
+  - .hd
+  - .ipf
+  - .m3u
+  - .msa
+  - .st
+  - .stx
+  - .zip
+  core: hatari
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1555; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:86"
+- folder: atom
+  extensions:
+  - .1dd
+  - .40t
+  - .7z
+  - .atm
+  - .bin
+  - .cqi
+  - .cqm
+  - .csw
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .rom
+  - .tap
+  - .td0
+  - .uef
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3587; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:89"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:91"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:91"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:89"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:109"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:109"
+- folder: atomiswave
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:465; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:92"
+  board_defaults:
+    bcm2836:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2836.yml:29"
+    bcm2837:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2837.yml:29"
+    h3:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:50"
+    h5:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:43"
+    h6:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h6.yml:7"
+    jh7110:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-jh7110.yml:10"
+    rk3326:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3326.yml:18"
+    s912:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:43"
+  arcade: true
+- folder: bbcmicro
+  extensions:
+  - .1dd
+  - '.360'
+  - .7z
+  - .adf
+  - .adl
+  - .adm
+  - .ads
+  - .bbc
+  - .bin
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsd
+  - .dsk
+  - .fsd
+  - .hfe
+  - .ima
+  - .imd
+  - .img
+  - .ipf
+  - .mfi
+  - .mfm
+  - .ssd
+  - .tap
+  - .td0
+  - .ufi
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3645; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:95"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:55"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:55"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:53"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:65"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:65"
+- folder: beena
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:652; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:653"
+- folder: bennugd
+  extensions:
+  - .dat
+  - .dcb
+  core: bennugd
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:6136; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:101"
+- folder: bk
+  extensions:
+  - .7z
+  - .bin
+  - .bkd
+  - .dsk
+  - .img
+  - .zip
+  core: bk
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2040; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:98"
+- folder: bstone
+  extensions:
+  - .bstone
+  core: bstone
+  emulator: bstone
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5985; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:104"
+- folder: c128
+  extensions:
+  - .7z
+  - .d64
+  - .d81
+  - .lnx
+  - .m3u
+  - .prg
+  - .zip
+  core: x128
+  emulator: vice
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:69; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:113"
+  board_defaults:
+    bcm2835:
+      core: vice_x128
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:44"
+- folder: c20
+  extensions:
+  - '.20'
+  - '.40'
+  - '.60'
+  - .7z
+  - .a0
+  - .b0
+  - .crt
+  - .d64
+  - .d81
+  - .m3u
+  - .prg
+  - .rom
+  - .t64
+  - .tap
+  - .zip
+  core: xvic
+  emulator: vice
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:82; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:116"
+  board_defaults:
+    bcm2835:
+      core: vice_xvic
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:41"
+- folder: c64
+  extensions:
+  - .7z
+  - .crt
+  - .d64
+  - .d71
+  - .d81
+  - .g64
+  - .m3u
+  - .nib
+  - .prg
+  - .t64
+  - .tap
+  - .zip
+  core: vice_x64
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:37; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:107"
+  board_defaults:
+    h3:
+      core: x64
+      emulator: vice
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:29"
+    h5:
+      core: x64
+      emulator: vice
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:25"
+    rk3128:
+      core: x64
+      emulator: vice
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3128.yml:32"
+    s812:
+      core: x64
+      emulator: vice
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s812.yml:27"
+    s905:
+      core: x64
+      emulator: vice
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905.yml:27"
+    s912:
+      core: x64
+      emulator: vice
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:25"
+- folder: camplynx
+  extensions:
+  - .7z
+  - .ldf
+  - .tap
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3667; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:119"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:97"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:97"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:95"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:115"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:115"
+- folder: cannonball
+  extensions:
+  - .cannonball
+  core: cannonball
+  emulator: cannonball
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1436; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:128"
+- folder: cassettevision
+  extensions:
+  - .bin777
+  - .zip
+  core: pd777
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3112; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:122"
+- folder: catacomb
+  extensions:
+  - .game
+  core: catacombgl
+  emulator: catacombgl
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5849; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:125"
+- folder: cave3rd
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4424; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:131"
+  arcade: true
+- folder: cavestory
+  extensions:
+  - .exe
+  core: nxengine
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1525; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:134"
+- folder: cdi
+  extensions:
+  - .cdr
+  - .chd
+  - .cue
+  - .gdi
+  - .iso
+  - .nrg
+  - .toc
+  core: mame
+  emulator: mame
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3299; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:137"
+  board_defaults:
+    a3gen2:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-a3gen2.yml:28"
+    h5:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:64"
+    h6:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h6.yml:22"
+    rk3326:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3326.yml:30"
+    rk3328:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3328.yml:7"
+    rk3399:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3399.yml:10"
+    s905:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905.yml:48"
+    s9gen4:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s9gen4.yml:24"
+    x86:
+      core: same_cdi
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86.yml:16"
+- folder: cdogs
+  extensions:
+  - .game
+  core: cdogs
+  emulator: cdogs
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4177; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:140"
+- folder: cgenie
+  extensions:
+  - .7z
+  - .cas
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3832; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:146"
+- folder: cgenius
+  extensions:
+  - .cgenius
+  core: cgenius
+  emulator: cgenius
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2782; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:143"
+- folder: channelf
+  extensions:
+  - .bin
+  - .chf
+  - .rom
+  - .zip
+  core: freechaf
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1426; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:149"
+- folder: chihiro
+  extensions:
+  - .iso
+  core: xemu
+  emulator: xemu
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5685; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:844"
+  arcade: true
+- folder: coco
+  extensions:
+  - .7z
+  - .cas
+  - .ccc
+  - .dsk
+  - .rom
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3796; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:152"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:73"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:73"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:71"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:88"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:88"
+- folder: colecovision
+  extensions:
+  - .7z
+  - .bin
+  - .col
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1036; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:155"
+- folder: commanderx16
+  extensions:
+  - .bas
+  - .img
+  - .prg
+  core: x16emu
+  emulator: x16emu
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5760; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:158"
+- folder: corsixth
+  extensions:
+  - .game
+  core: corsixth
+  emulator: corsixth
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4657; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:161"
+- folder: cplus4
+  extensions:
+  - .7z
+  - .d64
+  - .m3u
+  - .prg
+  - .tap
+  - .zip
+  core: xplus4
+  emulator: vice
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:55; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:110"
+  board_defaults:
+    bcm2835:
+      core: vice_xplus4
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:47"
+- folder: crvision
+  extensions:
+  - .7z
+  - .bin
+  - .rom
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3417; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:166"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:40"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:40"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:38"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:50"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:50"
+- folder: ctvboy
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3434; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:169"
+- folder: daphne
+  extensions:
+  - .daphne
+  - .squashfs
+  core: hypseus-singe
+  emulator: hypseus-singe
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2450; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:175"
+  arcade: true
+- folder: devilutionx
+  extensions:
+  - .mpq
+  core: devilutionx
+  emulator: devilutionx
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:881; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:180"
+- folder: dice
+  extensions:
+  - .dmy
+  - .zip
+  core: dice
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2541; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:183"
+  arcade: true
+- folder: doom3
+  extensions:
+  - .d3
+  core: dhewm3
+  emulator: dhewm3
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5103; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:186"
+- folder: dos
+  extensions:
+  - .cue
+  - .dos
+  - .dosz
+  - .iso
+  - .m3u
+  - .pc
+  - .squashfs
+  - .zip
+  core: dosbox_pure
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:797; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:189"
+- folder: dragon64
+  extensions:
+  - .7z
+  - .bin
+  - .cas
+  - .ccc
+  - .dmk
+  - .dsk
+  - .rom
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3848; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:192"
+- folder: dreamcast
+  extensions:
+  - .cdi
+  - .chd
+  - .cue
+  - .gdi
+  - .m3u
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:430; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:198"
+  board_defaults:
+    bcm2836:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2836.yml:32"
+    bcm2837:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2837.yml:32"
+    h3:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:53"
+    h5:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:46"
+    h6:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h6.yml:10"
+    jh7110:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-jh7110.yml:13"
+    rk3326:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3326.yml:21"
+    s912:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:46"
+- folder: dxx-rebirth
+  extensions:
+  - .d1x
+  - .d2x
+  core: dxx-rebirth
+  emulator: dxx-rebirth
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5533; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:201"
+- folder: easyrpg
+  extensions:
+  - .easyrpg
+  - .squashfs
+  - .zip
+  core: easyrpg
+  emulator: easyrpg
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2766; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:204"
+- folder: ecwolf
+  extensions:
+  - .ecwolf
+  - .pk3
+  - .squashfs
+  core: ecwolf
+  emulator: ecwolf
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3100; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:207"
+- folder: eduke32
+  extensions:
+  - .eduke32
+  core: eduke32
+  emulator: eduke32
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4676; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:210"
+- folder: electron
+  extensions:
+  - .1dd
+  - .7z
+  - .adf
+  - .adl
+  - .adm
+  - .ads
+  - .bbc
+  - .bin
+  - .cqi
+  - .cqm
+  - .csw
+  - .d77
+  - .d88
+  - .dfi
+  - .dsd
+  - .dsk
+  - .hfe
+  - .imd
+  - .img
+  - .mfi
+  - .mfm
+  - .rom
+  - .ssd
+  - .td0
+  - .uef
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3607; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:213"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:94"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:94"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:92"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:112"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:112"
+- folder: enterprise
+  extensions:
+  - '.128'
+  - .bas
+  - .cas
+  - .cdt
+  - .com
+  - .dsk
+  - .dtf
+  - .img
+  - .tap
+  - .trn
+  - .tzx
+  - .zip
+  core: clk
+  emulator: clk
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:6206; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:216"
+- folder: etlegacy
+  extensions:
+  - .etl
+  core: etlegacy
+  emulator: etlegacy
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5571; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:219"
+- folder: fallout1-ce
+  extensions:
+  - .f1ce
+  core: fallout1-ce
+  emulator: fallout1-ce
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5475; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:222"
+- folder: fallout2-ce
+  extensions:
+  - .f2ce
+  core: fallout2-ce
+  emulator: fallout2-ce
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5504; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:225"
+- folder: fbneo
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:926; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:228"
+  board_defaults:
+    bcm2835:
+      core: fba2x
+      emulator: fba2x
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:56"
+  arcade: true
+- folder: fds
+  extensions:
+  - .7z
+  - .fds
+  - .zip
+  core: fceumm
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:380; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:231"
+- folder: flash
+  extensions:
+  - .swf
+  core: ruffle
+  emulator: ruffle
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2994; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:234"
+  board_defaults:
+    a3gen2:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-a3gen2.yml:22"
+    bcm2711:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2711.yml:8"
+    bcm2712:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2712.yml:8"
+    bcm2836:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2836.yml:38"
+    bcm2837:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2837.yml:38"
+    h3:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:59"
+    h5:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:61"
+    h6:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h6.yml:4"
+    h616:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h616.yml:7"
+    h700:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h700.yml:7"
+    jh7110:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-jh7110.yml:7"
+    odin:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-odin.yml:4"
+    odroidxu4:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-odroidxu4.yml:29"
+    qcs6490:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:4"
+    rk3128:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3128.yml:50"
+    rk3288:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3288.yml:13"
+    rk3326:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3326.yml:27"
+    rk3328:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3328.yml:4"
+    rk3399:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3399.yml:7"
+    rk3568:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3568.yml:19"
+    rk3588:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:19"
+    rk3588-sdio:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:19"
+    s812:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s812.yml:45"
+    s905:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905.yml:45"
+    s905gen2:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905gen2.yml:7"
+    s905gen3:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905gen3.yml:7"
+    s922x:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s922x.yml:19"
+    s9gen4:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s9gen4.yml:21"
+    sm8250:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:4"
+    sm8550:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:8"
+    t527:
+      core: lightspark
+      emulator: lightspark
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-t527.yml:7"
+- folder: flatpak
+  extensions:
+  - .flatpak
+  core: flatpak
+  emulator: flatpak
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3022; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:239"
+- folder: fm7
+  extensions:
+  - .1dd
+  - .7z
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .t77
+  - .td0
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3548; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:244"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:46"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:46"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:44"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:56"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:56"
+- folder: fmtowns
+  extensions:
+  - .1dd
+  - .7z
+  - .bin
+  - .cdr
+  - .chd
+  - .cqi
+  - .cqm
+  - .cue
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .gdi
+  - .hfe
+  - .imd
+  - .iso
+  - .m3u
+  - .mfi
+  - .mfm
+  - .nrg
+  - .td0
+  - .toc
+  - .xdf
+  - .zip
+  core: tsugaru
+  emulator: tsugaru
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2616; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:247"
+  board_defaults:
+    a3gen2:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-a3gen2.yml:13"
+    bcm2711:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2711.yml:11"
+    bcm2712:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2712.yml:11"
+    bcm2836:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2836.yml:19"
+    bcm2837:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2837.yml:19"
+    h3:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:47"
+    h5:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:40"
+    h6:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h6.yml:1"
+    h616:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h616.yml:4"
+    h700:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h700.yml:4"
+    jh7110:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-jh7110.yml:4"
+    odin:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-odin.yml:7"
+    odroidxu4:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-odroidxu4.yml:22"
+    qcs6490:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:7"
+    rk3288:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3288.yml:10"
+    rk3326:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3326.yml:15"
+    rk3328:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3328.yml:1"
+    rk3399:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3399.yml:1"
+    rk3568:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3568.yml:10"
+    rk3588:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:10"
+    rk3588-sdio:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:10"
+    s812:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s812.yml:42"
+    s905:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905.yml:42"
+    s905gen2:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905gen2.yml:4"
+    s905gen3:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905gen3.yml:4"
+    s912:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:40"
+    s922x:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s922x.yml:10"
+    s9gen4:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s9gen4.yml:9"
+    sm8250:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:7"
+    sm8550:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:11"
+    t527:
+      core: mame
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-t527.yml:4"
+- folder: fury
+  extensions:
+  - .grp
+  core: fury
+  emulator: eduke32
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4764; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:250"
+- folder: gaelco
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4352; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:253"
+  arcade: true
+- folder: gamate
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3401; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:256"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:37"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:37"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:35"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:47"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:47"
+- folder: gameandwatch
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: gw
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:416; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:259"
+- folder: gamecom
+  extensions:
+  - .7z
+  - .bin
+  - .tgc
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3516; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:264"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:43"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:43"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:41"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:53"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:53"
+- folder: gamecube
+  extensions:
+  - .ciso
+  - .dol
+  - .elf
+  - .gcm
+  - .gcz
+  - .iso
+  - .json
+  - .m3u
+  - .rvz
+  - .wbfs
+  core: dolphin
+  emulator: dolphin
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2199; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:267"
+  board_defaults:
+    a3gen2:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-a3gen2.yml:1"
+    rk3568:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3568.yml:1"
+    rk3588:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:1"
+    rk3588-sdio:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:1"
+    s922x:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s922x.yml:1"
+- folder: gamegear
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:580; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:270"
+  board_defaults:
+    bcm2835:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:17"
+- folder: gamepock
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3532; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:273"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:49"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:49"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:47"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:59"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:59"
+- folder: gb
+  extensions:
+  - .7z
+  - .gb
+  - .zip
+  core: gambatte
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:289; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:276"
+- folder: gb2players
+  extensions:
+  - .7z
+  - .gb
+  - .gb2
+  - .gbc2
+  - .zip
+  core: tgbdual
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:349; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:279"
+- folder: gba
+  extensions:
+  - .7z
+  - .gba
+  - .zip
+  core: mgba
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:252; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:282"
+  board_defaults:
+    bcm2835:
+      core: gpsp
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:11"
+- folder: gbc
+  extensions:
+  - .7z
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:270; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:285"
+- folder: gbc2players
+  extensions:
+  - .7z
+  - .gb2
+  - .gbc
+  - .gbc2
+  - .zip
+  core: tgbdual
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:332; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:288"
+- folder: gmaster
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3727; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:291"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:61"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:61"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:59"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:76"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:76"
+- folder: gong
+  extensions:
+  - .game
+  core: gong
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3083; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:294"
+- folder: gp32
+  extensions:
+  - .7z
+  - .smc
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4597; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:297"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:106"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:106"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:104"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:124"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:124"
+- folder: gx4000
+  extensions:
+  - .7z
+  - .cpr
+  - .dsk
+  - .m3u
+  - .zip
+  core: cap32
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2440; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:300"
+- folder: gzdoom
+  extensions:
+  - .gzdoom
+  - .iwad
+  - .pwad
+  - .wad
+  core: gzdoom
+  emulator: gzdoom
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4623; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:303"
+- folder: halflife
+  extensions:
+  - .game
+  core: xash3d_fwgs
+  emulator: xash3d_fwgs
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2696; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:306"
+- folder: hcl
+  extensions:
+  - .game
+  core: hcl
+  emulator: hcl
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4125; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:311"
+- folder: hikaru
+  extensions:
+  - .7z
+  - .zip
+  core: demul
+  emulator: demul
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4283; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:316"
+  arcade: true
+- folder: hurrican
+  extensions:
+  - .game
+  core: hurrican
+  emulator: hurrican
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4107; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:319"
+- folder: ikemen
+  extensions:
+  - .ikemen
+  - .pc
+  core: ikemen
+  emulator: ikemen
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2980; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:324"
+- folder: intellivision
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .rom
+  - .zip
+  core: freeintv
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2345; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:329"
+- folder: j2me
+  extensions:
+  - .jar
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4034"
+- folder: jaguar
+  extensions:
+  - .7z
+  - .abs
+  - .cof
+  - .j64
+  - .jag
+  - .rom
+  - .zip
+  core: virtualjaguar
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2169; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:332"
+  board_defaults:
+    x86_64:
+      core: bigpemu
+      emulator: bigpemu
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:133"
+    zen3:
+      core: bigpemu
+      emulator: bigpemu
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:133"
+- folder: jaguarcd
+  extensions:
+  - .bigpimg
+  - .cdi
+  - .cue
+  core: virtualjaguar
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2184; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:335"
+  board_defaults:
+    x86_64:
+      core: bigpemu
+      emulator: bigpemu
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:136"
+    zen3:
+      core: bigpemu
+      emulator: bigpemu
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:136"
+- folder: jazz2
+  extensions:
+  - .game
+  core: jazz2-native
+  emulator: jazz2-native
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5827; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:338"
+- folder: jkdf2
+  extensions:
+  - .jedi
+  core: openjkdf2
+  emulator: openjkdf2
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:6014; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:341"
+- folder: jknight
+  extensions:
+  - .jedi
+  core: openjk
+  emulator: openjk
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:6044; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:344"
+- folder: laser310
+  extensions:
+  - .7z
+  - .cas
+  - .vz
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3448; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:352"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:109"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:109"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:107"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:127"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:127"
+- folder: lcdgames
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:403; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:355"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:10"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:10"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:14"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:26"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:26"
+- folder: lindbergh
+  extensions:
+  - .game
+  core: lindbergh-loader
+  emulator: lindbergh-loader
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5877; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:360"
+  arcade: true
+- folder: loopy
+  extensions:
+  - .7z
+  - .bin
+  - .ic1
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:6158; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:365"
+- folder: lowresnx
+  extensions:
+  - .7z
+  - .nx
+  - .zip
+  core: lowresnx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1382; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:368"
+- folder: lutro
+  extensions:
+  - .7z
+  - .lutro
+  - .zip
+  core: lutro
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1492; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:371"
+- folder: lynx
+  extensions:
+  - .7z
+  - .bll
+  - .lnx
+  - .lyx
+  - .o
+  - .zip
+  core: mednafen_lynx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1182; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:374"
+- folder: macintosh
+  extensions:
+  - .1dd
+  - .2mg
+  - '.360'
+  - .7z
+  - .cdr
+  - .chd
+  - .cqi
+  - .cqm
+  - .cue
+  - .d77
+  - .d88
+  - .dc42
+  - .dfi
+  - .dsk
+  - .gdi
+  - .hd
+  - .hdi
+  - .hdv
+  - .hfe
+  - .ima
+  - .imd
+  - .img
+  - .ipf
+  - .iso
+  - .mfi
+  - .mfm
+  - .nrg
+  - .td0
+  - .toc
+  - .ufi
+  - .woz
+  - .zip
+  core: minivmac
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4215; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:380"
+  board_defaults:
+    qcs6490:
+      core: clk
+      emulator: clk
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:115"
+    sm8250:
+      core: clk
+      emulator: clk
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:115"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:91"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:91"
+- folder: mame
+  extensions:
+  - .7z
+  - .zip
+  core: mame078plus
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:958; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:383"
+  board_defaults:
+    bcm2835:
+      core: imame4all
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:14"
+  arcade: true
+- folder: mastersystem
+  extensions:
+  - .7z
+  - .bin
+  - .sms
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:552; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:386"
+  board_defaults:
+    bcm2835:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:20"
+    h3:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:20"
+    h5:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:16"
+    rk3128:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3128.yml:23"
+    s812:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s812.yml:18"
+    s905:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905.yml:18"
+    s912:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:16"
+- folder: mc10
+  extensions:
+  - .7z
+  - .bin
+  - .cas
+  - .rom
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3881; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:195"
+- folder: megacd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:514; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:644"
+  board_defaults:
+    bcm2835:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:26"
+- folder: megadrive
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:492; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:389"
+  board_defaults:
+    bcm2835:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:23"
+    h3:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:23"
+    h5:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:19"
+    rk3128:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3128.yml:26"
+    s812:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s812.yml:21"
+    s905:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s905.yml:21"
+    s912:
+      core: picodrive
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:19"
+- folder: megadrive-msu
+  extensions:
+  - .7z
+  - .md
+  - .squashfs
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:538; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:392"
+- folder: megaduck
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: sameduck
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3344; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:395"
+  board_defaults:
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:38"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:38"
+- folder: model2
+  extensions:
+  - .zip
+  core: model2emu
+  emulator: model2emu
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3183; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:398"
+  arcade: true
+- folder: model3
+  extensions:
+  - .zip
+  core: supermodel
+  emulator: supermodel
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2861; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:404"
+  board_defaults:
+    bcm2711:
+      core: supermodel-legacy
+      emulator: supermodel
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2711.yml:14"
+    bcm2712:
+      core: supermodel-legacy
+      emulator: supermodel
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2712.yml:14"
+    h700:
+      core: supermodel-legacy
+      emulator: supermodel
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h700.yml:10"
+    rk3568:
+      core: supermodel-legacy
+      emulator: supermodel
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3568.yml:22"
+    rk3588:
+      core: supermodel-legacy
+      emulator: supermodel
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:22"
+    rk3588-sdio:
+      core: supermodel-legacy
+      emulator: supermodel
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:22"
+    t527:
+      core: supermodel-legacy
+      emulator: supermodel
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-t527.yml:10"
+  arcade: true
+- folder: mohaa
+  extensions:
+  - .mohaa
+  core: openmohaa
+  emulator: openmohaa
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:6087; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:407"
+- folder: moonlight
+  extensions:
+  - .moonlight
+  core: moonlight
+  emulator: moonlight
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2122; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:410"
+- folder: mrboom
+  extensions:
+  - .libretro
+  core: mrboom
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1330; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:416"
+- folder: msx1
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx1
+  - .ogv
+  - .openmsx
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1614; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:419"
+- folder: msx2
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx2
+  - .ogv
+  - .openmsx
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1715; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:422"
+- folder: msx2+
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .m3u
+  - .mx2
+  - .openmsx
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1815; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:425"
+- folder: msxturbor
+  extensions:
+  - .7z
+  - .dsk
+  - .m3u
+  - .mx2
+  - .openmsx
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1913; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:428"
+- folder: mugen
+  extensions:
+  - .pc
+  core: wine-tkg
+  emulator: mugen
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2970; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:446"
+- folder: multivision
+  extensions:
+  - .7z
+  - .bin
+  - .sg
+  - .zip
+  core: gearsystem
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:606; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:449"
+- folder: mz2000
+  extensions:
+  - .7z
+  - .d88
+  - .dsk
+  - .m12
+  - .mzf
+  - .mzt
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1926; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:431"
+- folder: mz2500
+  extensions:
+  - .1dd
+  - .7z
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .td0
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1941; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:434"
+- folder: mz700
+  extensions:
+  - .7z
+  - .m12
+  - .mzf
+  - .mzt
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1956; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:437"
+- folder: mz800
+  extensions:
+  - .7z
+  - .m12
+  - .mzf
+  - .mzt
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1971; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:440"
+- folder: mz80k
+  extensions:
+  - .7z
+  - .m12
+  - .mzf
+  - .mzt
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1986; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:443"
+- folder: n64
+  extensions:
+  - .7z
+  - .n64
+  - .v64
+  - .z64
+  - .zip
+  core: glide64mk2
+  emulator: mupen64plus
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:214; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:452"
+  board_defaults:
+    qcs6490:
+      core: mupen64plus-next
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:13"
+    sm8250:
+      core: mupen64plus-next
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:13"
+    sm8550:
+      core: mupen64plus-next
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:17"
+- folder: n64dd
+  extensions:
+  - .7z
+  - .n64
+  - .ndd
+  - .z64
+  - .zip
+  core: glide64mk2
+  emulator: mupen64plus
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:237; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:455"
+- folder: namco22
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:6121; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:458"
+  arcade: true
+- folder: namco2x6
+  extensions:
+  - .zip
+  core: play
+  emulator: play
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5262; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:461"
+  arcade: true
+- folder: naomi
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:451; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:464"
+  board_defaults:
+    bcm2836:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2836.yml:35"
+    bcm2837:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2837.yml:35"
+    h3:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h3.yml:56"
+    h5:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:49"
+    h6:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h6.yml:13"
+    jh7110:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-jh7110.yml:16"
+    rk3326:
+      core: flycastvl
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3326.yml:24"
+    s912:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:49"
+  arcade: true
+- folder: naomi2
+  extensions:
+  - .7z
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4260; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:467"
+  board_defaults:
+    h5:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:52"
+    h6:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h6.yml:16"
+    s912:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s912.yml:52"
+  arcade: true
+- folder: nds
+  extensions:
+  - .7z
+  - .bin
+  - .nds
+  - .zip
+  core: melonds
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:366; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:470"
+- folder: neogeo
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1007; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:473"
+  board_defaults:
+    bcm2835:
+      core: fba2x
+      emulator: fba2x
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:59"
+- folder: neogeocd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: neocd
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1026; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:476"
+- folder: nes
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: fceumm
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:195; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:479"
+- folder: ngage
+  extensions:
+  - .n-gage
+  - .sis
+  - .sisx
+  - .zip
+  core: eka2l1
+  emulator: eka2l1
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4568; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:482"
+- folder: ngp
+  extensions:
+  - .7z
+  - .ngp
+  - .zip
+  core: mednafen_ngp
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1196; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:485"
+- folder: ngpc
+  extensions:
+  - .7z
+  - .ngc
+  - .zip
+  core: mednafen_ngp
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1206; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:488"
+- folder: odcommander
+  extensions:
+  - .odc
+  core: odcommander
+  emulator: odcommander
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4580; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:491"
+- folder: odyssey2
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2001; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:496"
+- folder: openbor
+  extensions:
+  - .pak
+  core: openbor6412
+  emulator: openbor
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2385; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:499"
+- folder: openjazz
+  extensions:
+  - .game
+  core: openjazz
+  emulator: openjazz
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4067; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:506"
+- folder: oricatmos
+  extensions:
+  - .dsk
+  - .tap
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5961; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:509"
+  board_defaults:
+    qcs6490:
+      core: clk
+      emulator: clk
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:124"
+    sm8250:
+      core: clk
+      emulator: clk
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:124"
+    sm8550:
+      core: clk
+      emulator: clk
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:119"
+    x86_64:
+      core: clk
+      emulator: clk
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:148"
+    zen3:
+      core: clk
+      emulator: clk
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:148"
+- folder: pc60
+  extensions:
+  - .1dd
+  - .2hd
+  - .7z
+  - .bin
+  - .cas
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .fdi
+  - .hdm
+  - .imd
+  - .mfi
+  - .mfm
+  - .p6
+  - .td0
+  - .xdf
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:6180; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:515"
+- folder: pc80
+  extensions:
+  - .1dd
+  - .7z
+  - .bin
+  - .d77
+  - .d88
+  - .dsk
+  - .n80
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3385; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:584"
+- folder: pc88
+  extensions:
+  - .cmt
+  - .d88
+  - .m3u
+  - .u88
+  core: quasi88
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2594; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:518"
+- folder: pc98
+  extensions:
+  - .2hd
+  - .88d
+  - .98d
+  - .cmd
+  - .d88
+  - .d98
+  - .dup
+  - .fdd
+  - .fdi
+  - .hdd
+  - .hdi
+  - .hdm
+  - .hdn
+  - .m3u
+  - .nhd
+  - .tfd
+  - .thd
+  - .xdf
+  - .zip
+  core: np2kai
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2605; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:521"
+- folder: pcengine
+  extensions:
+  - .7z
+  - .bin
+  - .pce
+  - .zip
+  core: pce_fast
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:708; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:524"
+  board_defaults:
+    x86:
+      core: pce
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86.yml:1"
+    x86_64:
+      core: pce
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:8"
+    zen3:
+      core: pce
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:8"
+- folder: pcenginecd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .pce
+  core: pce_fast
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:719; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:527"
+  board_defaults:
+    x86:
+      core: pce
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86.yml:4"
+    x86_64:
+      core: pce
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:11"
+    zen3:
+      core: pce
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:11"
+- folder: pcfx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  - .zip
+  core: pcfx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:741; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:530"
+- folder: pcw
+  extensions:
+  - .1dd
+  - .7z
+  - .86f
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .imd
+  - .mfi
+  - .mfm
+  - .td0
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1599; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:48"
+- folder: pdp1
+  extensions:
+  - .7z
+  - .drm
+  - .rim
+  - .tap
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4519; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:533"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:31"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:31"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:29"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:41"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:41"
+- folder: pet
+  extensions:
+  - .7z
+  - .a0
+  - .b0
+  - .crt
+  - .d64
+  - .d81
+  - .m3u
+  - .prg
+  - .t64
+  - .tap
+  - .zip
+  core: xpet
+  emulator: vice
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:95; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:536"
+  board_defaults:
+    bcm2835:
+      core: vice_xpet
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:50"
+- folder: pico
+  extensions:
+  - .7z
+  - .bin
+  - .md
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:567; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:539"
+- folder: pico8
+  extensions:
+  - .m3u
+  - .p8
+  - .png
+  core: fake08
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1366; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:542"
+- folder: pokemini
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2430; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:545"
+- folder: ports
+  extensions:
+  - .sh
+  - .squashfs
+  core: sh
+  emulator: sh
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2631; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:548"
+- folder: prboom
+  extensions:
+  - .iwad
+  - .pwad
+  - .wad
+  core: prboom
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1240; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:553"
+- folder: ps2
+  extensions:
+  - .bin
+  - .chd
+  - .cso
+  - .dump
+  - .gz
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .nrg
+  core: pcsx2
+  emulator: pcsx2
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2284; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:556"
+  board_defaults:
+    a3gen2:
+      core: play
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-a3gen2.yml:19"
+    qcs6490:
+      core: play
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:25"
+    rk3568:
+      core: play
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3568.yml:16"
+    rk3588:
+      core: play
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:16"
+    rk3588-sdio:
+      core: play
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:16"
+    s922x:
+      core: play
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s922x.yml:16"
+    sm8250:
+      core: play
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:25"
+    sm8550:
+      core: play
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:23"
+- folder: ps3
+  extensions:
+  - .iso
+  - .ps3
+  - .psn
+  - .squashfs
+  core: rpcs3
+  emulator: rpcs3
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2305; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:561"
+- folder: ps4
+  extensions:
+  - .ps4
+  core: shadps4
+  emulator: shadps4
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5794; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:566"
+- folder: psp
+  extensions:
+  - .chd
+  - .cso
+  - .iso
+  - .pbp
+  core: ppsspp
+  emulator: ppsspp
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:669; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:569"
+  board_defaults:
+    qcs6490:
+      core: ppsspp
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:22"
+    sm8250:
+      core: ppsspp
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:22"
+- folder: psvita
+  extensions:
+  - .psvita
+  - .zip
+  core: vita3k
+  emulator: vita3k
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4996; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:572"
+- folder: psx
+  extensions:
+  - .cbn
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .toc
+  core: pcsx_rearmed
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:687; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:575"
+- folder: pv1000
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3357; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:578"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:34"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:34"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:32"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:44"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:44"
+- folder: pv2000
+  extensions:
+  - .7z
+  - .bin
+  - .cas
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3369; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:581"
+- folder: pygame
+  extensions:
+  - .pygame
+  core: pygame
+  emulator: pygame
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2812; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:587"
+- folder: pyxel
+  extensions:
+  - .py
+  - .pyxapp
+  core: pyxel
+  emulator: pyxel
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1402; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:590"
+- folder: quake
+  extensions:
+  - .quake
+  core: tyrquake
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1267; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:593"
+- folder: quake2
+  extensions:
+  - .7zip
+  - .quake2
+  - .zip
+  core: yquake2
+  emulator: yquake2
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3992; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:596"
+- folder: quake3
+  extensions:
+  - .quake3
+  core: ioquake3
+  emulator: ioquake3
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5206; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:601"
+  board_defaults:
+    a3gen2:
+      core: vkquake3
+      emulator: vkquake3
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-a3gen2.yml:31"
+    bcm2711:
+      core: vkquake3
+      emulator: vkquake3
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2711.yml:27"
+    bcm2712:
+      core: vkquake3
+      emulator: vkquake3
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2712.yml:25"
+    qcs6490:
+      core: vkquake3
+      emulator: vkquake3
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:112"
+    rk3588:
+      core: vkquake3
+      emulator: vkquake3
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:29"
+    rk3588-sdio:
+      core: vkquake3
+      emulator: vkquake3
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:29"
+    sm8250:
+      core: vkquake3
+      emulator: vkquake3
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:112"
+    sm8550:
+      core: vkquake3
+      emulator: vkquake3
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:110"
+    x86_64:
+      core: vkquake3
+      emulator: vkquake3
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:145"
+    zen3:
+      core: vkquake3
+      emulator: vkquake3
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:145"
+- folder: raze
+  extensions:
+  - .raze
+  core: raze
+  emulator: raze
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4794; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:604"
+- folder: reminiscence
+  extensions:
+  - .rem
+  core: reminiscence
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5157; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:607"
+- folder: rott
+  extensions:
+  - .rott
+  emulator: taradino
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5720; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:610"
+- folder: rtcw
+  extensions:
+  - .rtcw
+  core: taradino
+  emulator: iortcw
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5442; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:612"
+- folder: rx78
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5748; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:616"
+- folder: samcoupe
+  extensions:
+  - .cpm
+  - .dsk
+  - .mgt
+  - .sad
+  - .sbt
+  - .sdf
+  - .td0
+  - .zip
+  core: samcoupe
+  emulator: samcoupe
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4143; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:621"
+- folder: satellaview
+  extensions:
+  - .7z
+  - .bs
+  - .sfc
+  - .smc
+  - .squashfs
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2406; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:624"
+  board_defaults:
+    bcm2835:
+      core: pocketsnes
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:29"
+- folder: saturn
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  - .mds
+  - .zip
+  core: yabasanshiro
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2155; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:627"
+  board_defaults:
+    bcm2712:
+      core: ymir
+      emulator: ymir
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2712.yml:40"
+    qcs6490:
+      core: ymir
+      emulator: ymir
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:118"
+    rk3588:
+      core: ymir
+      emulator: ymir
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:32"
+    rk3588-sdio:
+      core: ymir
+      emulator: ymir
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:32"
+    sm8250:
+      core: ymir
+      emulator: ymir
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:118"
+    sm8550:
+      core: ymir
+      emulator: ymir
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:113"
+    x86:
+      core: beetle-saturn
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86.yml:7"
+    x86_64:
+      core: beetle-saturn
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:14"
+    zen3:
+      core: beetle-saturn
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:14"
+- folder: sc3000
+  extensions:
+  - .7z
+  - .bin
+  - .bit
+  - .cas
+  - .sg
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:618; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:647"
+- folder: scummvm
+  extensions:
+  - .scummvm
+  - .squashfs
+  core: scummvm
+  emulator: scummvm
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:751; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:630"
+  board_defaults:
+    bcm2835:
+      core: scummvm
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:62"
+- folder: scv
+  extensions:
+  - '.0'
+  - .bin
+  - .zip
+  core: emuscv
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3260; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:633"
+- folder: sdlpop
+  extensions:
+  - .sdlpop
+  core: sdlpop
+  emulator: sdlpop
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1460; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:636"
+- folder: sega32x
+  extensions:
+  - .32x
+  - .7z
+  - .bin
+  - .chd
+  - .md
+  - .smd
+  - .zip
+  core: picodrive
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:527; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:641"
+- folder: segaai
+  extensions:
+  - .7z
+  - .bin
+  - .cas
+  - .flac
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:635; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:650"
+- folder: sg1000
+  extensions:
+  - .7z
+  - .bin
+  - .sg
+  - .zip
+  core: genesisplusgx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:593; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:656"
+- folder: sgb
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: mgba
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:308; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:659"
+  board_defaults:
+    x86_64:
+      core: mesen-s
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:23"
+    zen3:
+      core: mesen-s
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:23"
+- folder: sgb-msu1
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .squashfs
+  - .zip
+  core: bsnes
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:320; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:662"
+- folder: singe
+  extensions:
+  - .daphne
+  - .squashfs
+  core: hypseus-singe
+  emulator: hypseus-singe
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2512; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:665"
+  arcade: true
+- folder: snes
+  extensions:
+  - .7z
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:700"
+  board_defaults:
+    bcm2835:
+      core: pocketsnes
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:32"
+- folder: snes-msu1
+  extensions:
+  - .sfc
+  - .smc
+  - .squashfs
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:23; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:703"
+  board_defaults:
+    bcm2835:
+      core: pocketsnes
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-bcm2835.yml:35"
+- folder: socrates
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3466; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:670"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:79"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:79"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:77"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:97"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:97"
+- folder: solarus
+  extensions:
+  - .solarus
+  - .zip
+  core: solarus
+  emulator: solarus
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2756; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:673"
+- folder: sonic-mania
+  extensions:
+  - .sman
+  core: sonic-mania
+  emulator: sonic-mania
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5628; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:679"
+- folder: sonic3-air
+  extensions:
+  - .s3air
+  core: sonic3-air
+  emulator: sonic3-air
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5605; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:676"
+- folder: sonicretro
+  extensions:
+  - .scd
+  - .son
+  core: sonic2013
+  emulator: sonic2013
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3122; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:682"
+- folder: spectravideo
+  extensions:
+  - .7z
+  - .cas
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5377; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:685"
+  board_defaults:
+    x86_64:
+      core: openmsx
+      emulator: openmsx
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:142"
+    zen3:
+      core: openmsx
+      emulator: openmsx
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:142"
+- folder: steam
+  extensions:
+  - .steam
+  core: steam
+  emulator: steam
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3056; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:688"
+- folder: sufami
+  extensions:
+  - .7z
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2419; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:694"
+- folder: superbroswar
+  extensions:
+  - .game
+  core: superbroswar
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3959; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:691"
+- folder: supergrafx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .pce
+  - .sgx
+  - .zip
+  core: mednafen_supergrafx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:731; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:706"
+- folder: supervision
+  extensions:
+  - .7z
+  - .sv
+  - .zip
+  core: potator
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3073; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:709"
+- folder: supracan
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3500; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:697"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:82"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:82"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:80"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:100"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:100"
+- folder: sv8000
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3715; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:712"
+- folder: switch
+  extensions:
+  - .nsp
+  - .xci
+  core: citron
+  emulator: citron
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3978; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:717"
+- folder: systemsp
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:479; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:722"
+  board_defaults:
+    h5:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h5.yml:55"
+    h6:
+      core: flycast
+      emulator: flycast
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-h6.yml:19"
+  arcade: true
+- folder: theforceengine
+  extensions:
+  - .tfe
+  core: theforceengine
+  emulator: theforceengine
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5391; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:728"
+- folder: thextech
+  extensions:
+  - .smbx
+  - .squashfs
+  core: thextech
+  emulator: thextech
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2560; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:731"
+- folder: thomson
+  extensions:
+  - .fd
+  - .k7
+  - .m5
+  - .m7
+  - .rom
+  - .sap
+  - .zip
+  core: theodore
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2584; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:736"
+- folder: ti99
+  extensions:
+  - .7z
+  - .rpk
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3760; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:739"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:67"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:67"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:65"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:82"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:82"
+- folder: tic80
+  extensions:
+  - .tic
+  core: tic80
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1348; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:742"
+- folder: traider1
+  extensions:
+  - .croft
+  core: tr1x
+  emulator: tr1x
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5175; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:745"
+- folder: traider2
+  extensions:
+  - .croft
+  core: tr2x
+  emulator: tr2x
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5943; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:748"
+- folder: triforce
+  extensions:
+  - .iso
+  - .rvz
+  core: dolphin
+  emulator: dolphin
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2227; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:751"
+  arcade: true
+- folder: trs80
+  extensions:
+  - .7z
+  - .bas
+  - .cas
+  - .cmd
+  - .dmk
+  - .dsk
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3900; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:754"
+- folder: tutor
+  extensions:
+  - .7z
+  - .bin
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3778; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:757"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:70"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:70"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:68"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:85"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:85"
+- folder: tvc
+  extensions:
+  - .cas
+  - .dsk
+  - .img
+  - .tap
+  - .zip
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:6252"
+- folder: tvgames
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3332; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:760"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:28"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:28"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:26"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:35"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:35"
+- folder: tyrian
+  extensions:
+  - .game
+  core: tyrian
+  emulator: tyrian
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4089; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:763"
+- folder: uqm
+  extensions:
+  - .game
+  core: uqm
+  emulator: uqm
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5670; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:766"
+- folder: uzebox
+  extensions:
+  - .bin
+  - .uze
+  - .zip
+  core: uzem
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3286; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:769"
+- folder: vc4000
+  extensions:
+  - .7z
+  - .bin
+  - .pgm
+  - .rom
+  - .tvc
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3929; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:772"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:103"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:103"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:101"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:121"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:121"
+- folder: vectrex
+  extensions:
+  - .7z
+  - .bin
+  - .gam
+  - .vec
+  - .zip
+  core: vecx
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1478; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:775"
+- folder: vemulator
+  extensions:
+  - .bin
+  - .dci
+  - .vms
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4057"
+- folder: vgmplay
+  extensions:
+  - .7z
+  - .vgm
+  - .vgz
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3941; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:778"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:100"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:100"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:98"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:118"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:118"
+- folder: videopacplus
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2012; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:781"
+- folder: vircon32
+  extensions:
+  - .v32
+  - .zip
+  core: vircon32
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1416; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:784"
+- folder: virtualboy
+  extensions:
+  - .7z
+  - .vb
+  - .zip
+  core: vb
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:393; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:787"
+- folder: vis
+  extensions:
+  - .cdr
+  - .chd
+  - .cue
+  - .gdi
+  - .iso
+  - .nrg
+  - .toc
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5286; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:790"
+- folder: vpinball
+  extensions:
+  - .vpx
+  core: vpinball
+  emulator: vpinball
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:5296; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:856"
+- folder: vsmile
+  extensions:
+  - .7z
+  - .bin
+  - .u1
+  - .u3
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3484; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:793"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:85"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:85"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:83"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:103"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:103"
+- folder: wasm4
+  extensions:
+  - .wasm
+  core: wasm4
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1392; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:799"
+- folder: wii
+  extensions:
+  - .ciso
+  - .dol
+  - .elf
+  - .gcm
+  - .gcz
+  - .iso
+  - .json
+  - .m3u
+  - .rvz
+  - .wad
+  - .wbfs
+  core: dolphin
+  emulator: dolphin
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2248; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:802"
+  board_defaults:
+    a3gen2:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-a3gen2.yml:10"
+    rk3568:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3568.yml:7"
+    rk3588:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:7"
+    rk3588-sdio:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-rk3588.yml:7"
+    s922x:
+      core: dolphin
+      emulator: libretro
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-s922x.yml:7"
+- folder: wiiu
+  extensions:
+  - .rpx
+  - .squashfs
+  - .wua
+  - .wud
+  - .wuhb
+  - .wup
+  - .wux
+  core: cemu
+  emulator: cemu
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2738; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:805"
+- folder: windows
+  extensions:
+  - .exe
+  - .pc
+  - .wine
+  - .wsquashfs
+  - .wtgz
+  core: wine-tkg
+  emulator: wine
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2660; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:808"
+- folder: windows_installers
+  extensions:
+  - .exe
+  - .iso
+  - .msi
+  core: wine-tkg
+  emulator: wine
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2678; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:813"
+- folder: wswan
+  extensions:
+  - .7z
+  - .ws
+  - .zip
+  core: mednafen_wswan
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1216; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:818"
+- folder: wswanc
+  extensions:
+  - .7z
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1228; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:821"
+- folder: x1
+  extensions:
+  - .2d
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dup
+  - .dx1
+  - .hdm
+  - .tfd
+  - .xdf
+  - .zip
+  core: x1
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2365; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:824"
+- folder: x68000
+  extensions:
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2355; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:827"
+- folder: xbox
+  extensions:
+  - .iso
+  - .squashfs
+  core: xemu
+  emulator: xemu
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:3006; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:836"
+- folder: xbox360
+  extensions:
+  - .iso
+  - .xbox360
+  - .xex
+  - .zar
+  core: xenia-canary
+  emulator: xenia-canary
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4541; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:839"
+- folder: xegs
+  extensions:
+  - .7z
+  - .atr
+  - .bin
+  - .car
+  - .dsk
+  - .rom
+  - .xfd
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:1129; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:830"
+  board_defaults:
+    qcs6490:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-qcs6490.yml:88"
+    sm8250:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8250.yml:88"
+    sm8550:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-sm8550.yml:86"
+    x86_64:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:106"
+    zen3:
+      core: mame
+      emulator: mame
+      source_ref: "os package/batocera/core/batocera-configgen/configs/configgen-defaults-x86_64.yml:106"
+- folder: xrick
+  extensions:
+  - .zip
+  core: xrick
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4195; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:833"
+- folder: zc210
+  extensions:
+  - .qst
+  core: zc210
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:4045; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:847"
+- folder: zx81
+  extensions:
+  - .7z
+  - .p
+  - .tzx
+  - .zip
+  core: "81"
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2024; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:850"
+- folder: zxspectrum
+  extensions:
+  - .7z
+  - .dsk
+  - .rzx
+  - .scl
+  - .tap
+  - .trd
+  - .tzx
+  - .z80
+  - .zip
+  core: fuse
+  emulator: libretro
+  source_ref: "os package/batocera/emulationstation/batocera-es-system/es_systems.yml:2060; os package/batocera/core/batocera-configgen/configs/configgen-defaults.yml:853"

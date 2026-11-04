@@ -24,20 +24,22 @@ from cross_reference import (  # noqa: E402
 
 class FlatDeclaredSet(unittest.TestCase):
     def test_a_name_declared_under_another_system_id_is_not_a_gap(self):
-        """A platform files the Super Game Boy BIOS under nintendo-sgb, the
-        profile under nintendo-super-game-boy: the ids never meet."""
+        """A platform files a BIOS under one system id, the profile under
+        another that no alias joins: per system the ids never meet.
+        nintendo-sgb and nintendo-super-game-boy were such a pair until
+        SYSTEM_ALIASES joined them."""
         import tempfile  # noqa: PLC0415
 
         with tempfile.TemporaryDirectory(dir=REPO_ROOT / "tmp") as tmp:
             platforms = Path(tmp)
             (platforms / "fx.yml").write_text(
                 "platform: Fx\nverification_mode: existence\nsystems:\n"
-                "  nintendo-sgb:\n    files:\n    - name: sgb.boot.rom\n"
+                "  fx-console:\n    files:\n    - name: sgb.boot.rom\n"
                 "      destination: sgb.boot.rom\n"
             )
             profiles = {"sgbcore": {
-                "emulator": "SGB", "type": "libretro", "systems": ["nintendo-super-game-boy"],
-                "files": [{"name": "sgb.boot.rom", "system": "nintendo-super-game-boy"}],
+                "emulator": "SGB", "type": "libretro", "systems": ["fy-console"],
+                "files": [{"name": "sgb.boot.rom", "system": "fy-console"}],
             }}
             db = {"files": {}, "indexes": {"by_name": {}, "by_md5": {}, "by_crc32": {},
                                            "by_path_suffix": {}}}

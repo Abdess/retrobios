@@ -1,0 +1,10 @@
+{"source":"no-intro","system":"atari-7800","dat":"Atari - Atari 7800 (A78)","version":"20260601-051249","fetched_from":"https://github.com/hugo19941994/auto-datfile-generator/releases/download/Daily_Rebuild/no-intro.zip","fetched":"2026-11-03","archive":{"member":"Atari - Atari 7800 (A78) (20260601-051249).dat","asset_updated_at":"2026-07-08T13:31:47Z"},"licence":{"terms_url":"https://datomatic.no-intro.org/terms.html","terms_title":"Data Usage License","terms_updated":"2026-09-11","read":"2026-11-03","quote":"Unless otherwise stated on the website, the data made available through this website (\"Data\") may be freely used, copied, reproduced, modified, adapted, combined, published, distributed, and otherwise reused by anyone for any lawful purpose, to the extent that the website operator owns or controls the applicable rights or is authorized to grant such permission. No permission, attribution, citation, backlink, or acknowledgment of the website or its operators is required for such use.","mirror":{"repo":"https://github.com/hugo19941994/auto-datfile-generator","licence":"MIT","scope":"the mirror's scripts only, the DATs it republishes stay under the terms above"}},"fields":["crc32","size","sha1","region","title"],"regions":[["north-america"]],"games":[
+["048b2bd8",16512,"72f340c9f873ad691982d786c6f258e231eaabb6",0,"Commando (USA) (Beta) (1988-04-29)"],
+["0ab7b0a4",65664,"9995e4c1401e2c8dbb77d51f5e447d7f2052e32f",0,"Super Stunt Cycle (USA) (Proto) (1988-11-03)"],
+["2d07ccca",49280,"c43d7970573dc3cae9221f0902f94dd9280ee377",0,"Hat Trick (USA) (Beta) (1987-05-01)"],
+["3718ffca",49280,"e3486d9422f9cc6d61fcfade553f2e73b0eadaa4",0,"Desert Falcon (USA) (Beta) (1987-03-09) [b]"],
+["850af1b9",65664,"838fb405d7dd807c46c8e724c6ac58ab41393673",0,"Super Stunt Cycle (USA) (Proto) (1989-04-14)"],
+["867c2107",65664,"2f772b44d26369d2ff626dbd43a48707a0653ca7",0,"Super Stunt Cycle (USA) (Proto) (1989-05-26)"],
+["a7a4adb5",131200,"2ae7d2fa3f0b6682491abbd773c43982a68249e1",0,"Impossible Mission (USA) (Rev 1) (Proto)"],
+["c5a9c969",49280,"7c677b7812880e6871882e3e32966fb1ae23db5f",0,"Desert Falcon (USA) (Beta) (1987-03-25)"]
+]}

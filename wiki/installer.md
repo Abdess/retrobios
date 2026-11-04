@@ -393,18 +393,18 @@ lists record these files as omitted.
 
 <!-- generated: dry-run -->
 
-A RetroArch dry run into an empty folder, with the list of 2026-10-27, printed this:
+A RetroArch dry run into an empty folder, with the list of 2026-11-03, printed this:
 
 ```
 Fetching file index for retroarch...
   106 files read from RetroArch's save directory go to a folder per core under /home/me/.config/retroarch/saves
-  10994 files (6.7 GB)
-    3269 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 2636 data files (38.5 MB).
+  10995 files (6.7 GB)
+    3269 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 2637 data files (39.6 MB).
     Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
-  Not installable: 37 files are not in the collection, 1 of them required.
+  Not installable: 38 files are not in the collection, 2 of them required.
 
 Checking existing files...
-  0 in place, 10994 missing, 0 wrong copies
+  0 in place, 10995 missing, 0 wrong copies
 ```
 <!-- /generated: dry-run -->
 
@@ -423,7 +423,7 @@ the installer can fetch them.
 <!-- generated: run-date -->
 
 Each line a first install prints, and what it means. The run below is a
-Batocera install into an empty folder, from the list of 2026-10-27.
+Batocera install into an empty folder, from the list of 2026-11-03.
 The figures change with each release.
 <!-- /generated: run-date -->
 
@@ -466,7 +466,7 @@ Fetching file index for batocera...
   14723 files (9.2 GB)
     3179 BIOS files (4.4 GB) and 11544 game data files (4.8 GB).
     Game data: files a game or a game engine reads, of no use to the other cores.
-  Not installable: 425 files are not in the collection, 79 of them required.
+  Not installable: 426 files are not in the collection, 80 of them required.
 
 Checking existing files...
   0 in place, 14723 missing, 0 wrong copies
@@ -480,7 +480,9 @@ On a first install nothing is in place. On a later run the line counts what
 is already there, and only the rest is downloaded. A download of 1 GB or more
 is confirmed first, the size and the folder in the question.
 
-The second phase downloads what is missing, one line per file:
+The second phase downloads what is missing. At a terminal one progress line
+moves with the count and the size. A pipe or a log gets one line per file,
+as the log of the run below:
 
 <!-- generated: run-download -->
 
@@ -503,7 +505,10 @@ command again picks up where it stopped.
 Done. 14723 files installed.
   Installed: 3179 BIOS files and 11544 game data files.
 BIOS folder: /userdata/bios
-425 files were not installed: the collection does not hold them, or its copy fails their check.
+426 files were not installed: the collection does not hold them, or its copy fails their check.
+  Needed to start an emulator (1 file):
+    capcom-cps3 (fbneo): sfiii2a.zip
+  Each emulator's page says what these files are: https://abdess.github.io/retrobios/emulators/
   Not available here: DARK.GOB, DARKWAR.RTL, DARKWAR.WAD and 76 more, game data their games read. Copy them from your own copy of the game into /userdata/bios/, /userdata/bios/Source/, /userdata/bios/base/ and 10 more folders.
   Game data: files a game or a game engine reads, of no use to the other cores.
 To check this later, run the same command with --check.
@@ -516,7 +521,7 @@ would save, once that saving is over half.
 
 <!-- generated: bulk-hint -->
 
-RetroArch with `--system sony-playstation`, from the list of 2026-10-27:
+RetroArch with `--system sony-playstation`, from the list of 2026-11-03:
 
 ```
   duckstation pulls 316.5 MB of this 329.0 MB download for sony-playstation. --core pcsx1 keeps 11.0 MB of it and saves 318.0 MB (96%).
@@ -525,9 +530,10 @@ RetroArch with `--system sony-playstation`, from the list of 2026-10-27:
 
 `--dry-run` prints the same line under its plan.
 
-When some files came from this machine rather than the network, a line under
-`Done` says where each came from (`38 files copied from E:\, 3 copied from
-the wrong place in the BIOS folder, 4 downloaded.`). See
+When some files came from this machine rather than the network, the run says
+where each came from: on the `Done` line when all came from one place
+(`Done. 22 files copied from /home/me/old.`), on a line under it otherwise
+(`2 files copied from /home/me/old, 2 downloaded.`). See
 [Copy from an old card](#copy-from-an-old-card).
 
 The word `Done` and the BIOS folder are the confirmation. Any other ending
@@ -565,20 +571,27 @@ replaces it and keeps the old one, see
 ### Why a file is refused { #why-a-file-is-refused }
 
 Each file `--check` flags comes with the reason it found and the place each
-core opens it:
+core reads it. A RetroArch folder holding a copy of each kind, checked
+against a list of four files:
+
+<!-- generated: check-refused -->
 
 ```
   3 files to download:
+  2 of these files are in the BIOS folder in the wrong place: a run without --check copies them where the cores open them, and leaves your copies as they are.
     wrong copy: scph5501.bin
       another region: the contents of scph5500.bin (japan)
-      opened at /home/me/.config/retroarch/system/scph5501.bin by beetle_psx, pcsx_rearmed
+      read by beetle_psx, pcsx_rearmed at /home/me/.config/retroarch/system/scph5501.bin
     missing: gba_bios.bin
       nested folder: it is at system/system/gba_bios.bin, a system folder inside system
-      opened at /home/me/.config/retroarch/system/gba_bios.bin by mgba
+      a run without --check copies it into place
+      read by mgba at /home/me/.config/retroarch/system/gba_bios.bin
     missing: pcsx/extra.bin
       still zipped: it is inside PSX BIOS.zip
-      opened at /home/me/.config/retroarch/system/pcsx/extra.bin by pcsx_rearmed
+      a run without --check copies it into place
+      read by pcsx_rearmed at /home/me/.config/retroarch/system/pcsx/extra.bin
 ```
+<!-- /generated: check-refused -->
 
 | Reason | What the folder holds |
 |--------|-----------------------|
@@ -699,12 +712,15 @@ other contents is kept aside first, as a download would replace it (see
 [Files you already had](#files-you-already-had)). What no folder holds is
 downloaded as usual, or taken from the pack with `--from-pack`. Several
 `--from` are read in the order given, and the end of the run says where each
-file came from:
+file came from. A run of a list of four files, two of them in `old`:
+
+<!-- generated: from-run -->
 
 ```
-Done. 44 files installed.
-  38 files copied from E:\, 4 downloaded, 2 still missing.
+Done. 4 files installed.
+  2 files copied from /home/me/old, 2 downloaded.
 ```
+<!-- /generated: from-run -->
 
 `--check --from FOLDER` writes nothing and says how many files the folder
 would give (`E:\ holds 38 of these files: a run without --check copies
@@ -731,10 +747,11 @@ by `scripts/generate_installer_doc.py`):
 <!-- generated: line-menu -->
 
 ```
-RetroArch: 10994 files, 6.7 GB.
-  3269 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 2636 data files (38.5 MB).
+RetroArch: 10995 files, 6.7 GB.
+  3269 BIOS files (4.1 GB), 5089 game data files (2.5 GB) and 2637 data files (39.6 MB).
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
+  Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). Your own copy goes in the BIOS folder.
   Not available here: jazz2/Source/Anims.j2a (Jazz Jackrabbit 2), game data its game reads. Copy it from your own copy of the game into /home/me/.config/retroarch/system/jazz2/Source/.
   Enter) install everything
   c) choose systems, cores and regions
@@ -745,10 +762,11 @@ RetroArch: 10994 files, 6.7 GB.
 
   Counted again for your choices. Nothing is written before Enter.
 
-RetroArch: 5905 files, 4.2 GB.
-  3269 BIOS files (4.1 GB) and 2636 data files (38.5 MB). 5089 game data files left out.
+RetroArch: 5906 files, 4.2 GB.
+  3269 BIOS files (4.1 GB) and 2637 data files (39.6 MB). 5089 game data files left out.
   Game data: files a game or a game engine reads, of no use to the other cores. Data files: the files an emulator reads from a data folder of its own, such as Dolphin's Sys and PPSSPP's assets.
   BIOS folder: /home/me/.config/retroarch/system
+  Not available here, and needed to start its emulator: sfiii2a.zip (Capcom Cps3). Your own copy goes in the BIOS folder.
   Same choice without questions: python3 install.py --platform retroarch --dest /home/me/.config/retroarch/system --no-game-data
   Enter) install everything
   c) choose systems, cores and regions
@@ -825,6 +843,31 @@ python install.py --platform retroarch --system sony-playstation --core pcsx_rea
 python install.py --platform recalbox --region us,eu,jp
 python install.py --platform emuelec --no-game-data
 ```
+
+### For the games on this card { #for-the-games-on-this-card }
+
+When the card holds games in its rom folders, the plan opens on **For the
+games on this card: yes**, and Install takes only what those games need. One
+press on the row installs everything instead. Line mode asks the same: Enter
+installs for the games, `e` everything, `r` only what starts. On the command
+line it is `--for-games`, and `--for-games FOLDER` reads a games folder on a
+computer, one subfolder per system.
+
+The rule is that every game must start. Per system, the run keeps what the
+system's default core reads. One region is kept only where the game's own
+content proves it: a cartridge's crc32 found in No-Intro, a disc serial found
+in Redump, or a header the core reads. A file name such as `(Europe)` proves
+nothing. Where a core forces a region by an option, falls back to another
+region, or uses its own disc list, every region stays. An arcade set gets the
+BIOS sets of its parent chain (`neogeo.zip` for `mslug.zip`).
+
+A game that is not recognised gets every BIOS of its system, and the run names
+it. So does an arcade set the core does not know. **Only what starts**
+(`--required-only`) leaves out the files the cores mark optional.
+
+The games are read without hashing whole discs, and a cache keeps what was
+read, so a second run over the same card reads only new files. Offline, with
+no games index on this machine, the run keeps every file and says so.
 
 ### Firmware without game data
 
@@ -919,6 +962,8 @@ what the options name, everything by default.
 | <span id="option-core"></span>`--core NAMES` | Keep the platform's own list and only the extra files these cores load. `--list-cores` prints the names |
 | <span id="option-emulator"></span>`--emulator NAMES` | Install what these emulators read on the detected platform, and nothing else: their own files and the platform's files of the systems they run. Each emulator page on the site gives this command. `--list-emulators` prints the names, buildbot names such as `mednafen_psx` included |
 | <span id="option-region"></span>`--region LIST` | Preferred regions, best first (`us,eu,jp`): keep one BIOS per region where a system has several. Accepts the names and aliases of `generate_pack.py --region` |
+| <span id="option-for-games"></span>`--for-games FOLDER` | Install only what the games on the card need. See [For the games on this card](#for-the-games-on-this-card) |
+| <span id="option-required-only"></span>`--required-only` | With `--for-games`, only the files the games cannot start without |
 | <span id="option-no-game-data"></span>`--no-game-data` | Leave out game data (a game's own files, not firmware) and install the firmware only. What it leaves out is named. See [Firmware without game data](#firmware-without-game-data) |
 | <span id="option-declared-only"></span>`--declared-only` | Keep only the files the platform's own list names (`cores: null` in the manifest), not the extra files cores load. With `--check`, the answer is about the list the platform itself checks. Refused with `--core`, the listings it does not change, `--standalone-copies` and `--tui` |
 | <span id="option-list-systems"></span>`--list-systems` | Print a platform's systems with the files and size each holds, the files other systems share too counted apart |
@@ -1056,6 +1101,8 @@ gives for the device, below the card's root instead of its mount point:
 | `.tmp_update/onionVersion/version.txt` | Onion | `BIOS`, RetroArch's list |
 | `.allium/` | Allium | `BIOS`, RetroArch's list |
 | `Koriki/version.txt` | Koriki | `BIOS`, RetroArch's list |
+| `bgmusic/` beside `bios/`, on a drive that is not a fixed disk | ArkOS | `bios`, RetroArch's list |
+| `launchimages/` beside `bios/`, on a drive that is not a fixed disk | ArkOS | `bios`, RetroArch's list |
 | `gamedata/`, `homebrew/` beside `bios/`, on a drive that is not a fixed disk | AmberELEC | `bios`, AmberELEC's list |
 | `bezels/default.cfg` beside `bios/`, on a drive that is not a fixed disk | EmuELEC | `bios`, EmuELEC's list |
 | `system/batocera.conf` holding `system.hostname=BATOCERA` or no hostname line, and no KNULLI file above | Batocera SHARE drive | `bios`, Batocera's list |
@@ -1635,14 +1682,20 @@ The build scripts need 3.9 and are not bound by this.
 Every change to `install.py` recomputes the SHA-256 pinned in `install.sh` and
 `install.ps1` in the same commit. The tests compare the pins with the file.
 
-The tables of options, events, exit codes and keys on this page sit between
-`generated` markers and are written from `install.py` by
-`scripts/generate_installer_doc.py`: the options from its parser, the events
-from `EVENT_KEYS`, the codes from its `sys.exit` calls, the keys from
-`TUI_ROUTES`. The prose cells stay as written. A row the code gains stops the
-script until its text is added inside the markers, and `--check`, which a
-test runs, fails on a table behind the code. `--page FILE` renders another
-copy of the page, which the tests use.
+The tables of options, events, exit codes, keys and card markers, the line
+menu and the run samples on this page sit between `generated` markers and are
+written from `install.py` by `scripts/generate_installer_doc.py`: the options
+from its parser, the events from `EVENT_KEYS`, the codes from its `sys.exit`
+calls, the keys from `TUI_ROUTES`, the card markers from its card rules. The
+run samples (a dry run, a first install, a check, the reasons a file is
+refused, a copy from an old card) are printed by `install.py` itself, in a
+sandbox under `tmp/` served on the loopback from the committed
+`install/*.json`. A new list therefore rewrites this page, and `--check`
+fails until the script has run. Pipeline step 7 runs it after the README.
+The prose cells stay as written. A row the code gains stops the script until
+its text is added inside the markers, and `--check`, which a test runs, fails
+on a table behind the code. `--page FILE` renders another copy of the page,
+which the tests use.
 
 The [handheld](#on-a-handheld-the-retrobios-port) archives each carry
 `install.py`, the one the one-line command of the same commit downloads:
@@ -1714,9 +1767,13 @@ other schemas under `api/v1/schemas/`.
 | `scanned` | `folder`, `files`, `truncated`, `other_drives` | Each folder named with `--from`, once read and before `detect`. `files` counts the files found, `truncated` is true when the search stopped at 200,000 of them, and `other_drives` lists the folders below it on another drive, which were not entered |
 | `version` | `platform`, `list_version`, `installed_version`, `message` | Before `choices`, when the system here runs another version than the one the list was built for: `list_version` is the list's, `installed_version` the one the system's version file states, and `message` says it and what it means. Not written when either version is unknown. The run goes on |
 | `choices` | `platform`, `systems` | Before `checking`: the systems the run's list lets one choose among, sorted by id, `other` last for the files no system names. The run's other options apply (`--core`, `--region`, `--no-game-data`, the files left out for an unknown save directory), `--system` does not: these are the systems a screen lists to choose from, and the count a `--system` is out of |
+| `set_aside` | `platform`, `dests` | Right after `choices`: the files of the list the run sets aside before any choice, in list order, those read from a save directory whose place is not known among them. A screen chooses its cores among the rest, the cores `--core` accepts |
 | `file` | `platform`, `dest`, `systems`, `size`, `state` | Each file of the list after the check. `state` is `present` (hash verified), `wrong_hash` or `missing` |
 | `system` | `platform`, `system`, `name`, `files`, `present`, `missing`, `wrong_hash`, `bytes_needed` | Each system, sorted by id, and with `--system` only the systems named. Files with no system count under `other`. `name` is the platform's own name for it |
 | `checking` | `files_done`, `files_total` | While the files already in the folder are read and hashed, at most every half second and once at the end. `files_total` counts the files found in place |
+| `games_reading` | `files_done`, `files_total` | With `--for-games`, while the games of the card are read (a cartridge hashed, a disc's header read), at most every half second and once at the end |
+| `games` | `platform`, `folder`, `games`, `recognised`, `found`, `fallback`, `not_games`, `required_only` | With `--for-games`, once the games are read, before `choices`. `found` lists per system its `folder`, `games`, `recognised` and the `regions` kept (empty for every region). `fallback` names each game that got every BIOS of its system, with a `reason` (`not_recognised`, `not_read`, `region_unknown`, `unknown_set`, `no_parent`) |
+| `games_unavailable` | `platform`, `reason`, `message` | With `--for-games`, what the games need could not be read (`offline`, `network`, `invalid`, `stale`, `no_sets`, `no_folder`): the run keeps every file of the list, except for a `FOLDER` that does not exist, where it stops |
 | `check` | `platform`, `name`, `bios_dir`, `files`, `present`, `missing`, `wrong_hash`, `bytes_needed`, `data_missing`, `not_installable` | The platform's totals. `data_missing` counts data-tree files to fetch, `not_installable` the files the collection cannot supply |
 | `declared` | `platform`, `files`, `present`, `missing`, `wrong_hash`, `bytes_needed`, `dests` | Right after `check`, the same counts over the files the platform's own list names (`cores: null`), and their `dests` in the order of the `file` events. A setup that checks its own list reads its answer here, with or without `--declared-only` |
 | `data` | `platform`, `files`, `bytes` | Right after `declared`: the data-tree files to fetch (the `data_missing` of `check`) and the bytes they write once in place |

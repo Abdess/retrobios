@@ -1,0 +1,20 @@
+setup: retroarch
+name: RetroArch
+platform: retroarch
+sources:
+  os:
+    repo: "https://github.com/libretro/RetroArch"
+    commit: 69a4f0ea1e8aaf442ae4858f2e7f2b31a1776576
+    tag: v1.22.2
+roms_root:
+  path: null
+  from_bios: null
+  source_ref: "os configuration.c:3126,3295-3298"
+case_sensitive: null
+notes:
+- "RetroArch alone defines no rom folder. rgui_browser_directory starts empty and only a platform default\
+  \ fills it, which no desktop driver sets (os configuration.c:3126,3295-3298)."
+- "Content reaches a core through playlists built by scanning against the content databases (os tasks/task_database.c),\
+  \ or from the file browser with a core the user picks. The system can only come from the game itself\
+  \ or from a folder the user names."
+folders: []

@@ -1,0 +1,1752 @@
+setup: rocknix
+name: ROCKNIX
+platform: rocknix
+sources:
+  os:
+    repo: "https://github.com/ROCKNIX/distribution"
+    commit: c445081a59518f37d9776e5412dd7b14910696f7
+    tag: "20261001"
+  es:
+    repo: "https://github.com/ROCKNIX/emulationstation-next"
+    commit: cada856d86e3115fbbf0bce09dd761b0ee8fa9fd
+    note: EmulationStation pinned by the ui/emulationstation package.mk PKG_VERSION
+roms_root:
+  path: /storage/roms
+  from_bios: ..
+  source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:152"
+case_sensitive: null
+skip:
+- name: bezels
+  reason: created by the emulators package, holds no game
+  source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:149"
+- name: bios
+  reason: created by the emulators package, holds no game
+  source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:152"
+- name: music
+  reason: created by the emulators package, holds no game
+  source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:155"
+- name: savestates
+  reason: created by the emulators package, holds no game
+  source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:158"
+- name: themes
+  reason: created by the emulators package, holds no game
+  source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:161"
+hidden:
+- pattern: .*
+  source_ref: "es es-app/src/SystemData.cpp:340"
+- pattern: ._*
+  source_ref: "es es-app/src/SystemData.cpp:334-336"
+media:
+- name: artwork
+  source_ref: "es es-app/src/SystemData.cpp:370"
+- name: media
+  source_ref: "es es-app/src/SystemData.cpp:390-393"
+- name: medias
+  source_ref: "es es-app/src/SystemData.cpp:390-393"
+- name: images
+  source_ref: "es es-app/src/SystemData.cpp:390-393"
+- name: manuals
+  source_ref: "es es-app/src/SystemData.cpp:390-393"
+- name: videos
+  source_ref: "es es-app/src/SystemData.cpp:390-393"
+- name: assets
+  source_ref: "es es-app/src/SystemData.cpp:390-393"
+- pattern: downloaded_*
+  source_ref: "es es-app/src/SystemData.cpp:390-393"
+notes:
+- "The BIOS folder is /storage/roms/bios, inside the roms root: the scan skips it."
+- "A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:351)."
+- Each folder comes from SYSTEM_PATH of config/emulators/<system>.conf, written by add_es_system for every
+  system the emulators package adds.
+folders:
+- folder: 3do
+  extensions:
+  - .bin
+  - .chd
+  - .cue
+  - .iso
+  core: opera
+  emulator: retroarch
+  source_ref: "os config/emulators/3do.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:172;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:171"
+- folder: 3ds
+  extensions:
+  - .3ds
+  - .3dsx
+  - .app
+  - .axf
+  - .cci
+  - .cia
+  - .cxi
+  - .elf
+  - .z3dsx
+  - .zcci
+  - .zcia
+  - .zcxi
+  core: azahar-sa
+  emulator: azahar
+  source_ref: "os config/emulators/3ds.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:178;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:177"
+- folder: amiga
+  extensions:
+  - .adf
+  - .adz
+  - .dms
+  - .hdf
+  - .hdz
+  - .ipf
+  - .lha
+  - .m3u
+  - .uae
+  - .zip
+  core: puae
+  emulator: retroarch
+  source_ref: "os config/emulators/amiga.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:196;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:191"
+  board_defaults:
+    DEVICE=H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750:
+      core: puae2021
+      emulator: retroarch
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:186"
+- folder: amigacd32
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .lha
+  core: puae
+  emulator: retroarch
+  source_ref: "os config/emulators/amigacd32.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:210;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:205"
+  board_defaults:
+    DEVICE=H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM4450|SM6115|SM8250|SM8550|SM8650|SM8750:
+      core: puae2021
+      emulator: retroarch
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:201"
+- folder: amstradcpc
+  extensions:
+  - .7z
+  - .cdt
+  - .cpr
+  - .dsk
+  - .kcr
+  - .m3u
+  - .sna
+  - .tap
+  - .voc
+  - .zip
+  core: crocods
+  emulator: retroarch
+  source_ref: "os config/emulators/amstradcpc.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:215;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:213"
+- folder: arcade
+  extensions:
+  - .7z
+  - .zip
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os config/emulators/arcade.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:230;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:218"
+  arcade: true
+- folder: arduboy
+  extensions:
+  - .hex
+  core: arduous
+  emulator: retroarch
+  source_ref: "os config/emulators/arduboy.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:234;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:233"
+- folder: atari2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella
+  emulator: retroarch
+  source_ref: "os config/emulators/atari2600.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:238;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:237"
+- folder: atari5200
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: a5200
+  emulator: retroarch
+  source_ref: "os config/emulators/atari5200.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:243;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:241"
+- folder: atari7800
+  extensions:
+  - .7z
+  - .a78
+  - .bin
+  - .zip
+  core: prosystem
+  emulator: retroarch
+  source_ref: "os config/emulators/atari7800.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:247;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:246"
+- folder: atari800
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: atari800
+  emulator: retroarch
+  source_ref: "os config/emulators/atari800.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:251;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:250"
+- folder: atarijaguar
+  extensions:
+  - .abs
+  - .bin
+  - .cof
+  - .j64
+  - .jag
+  - .prg
+  - .rom
+  core: virtualjaguar
+  emulator: retroarch
+  source_ref: "os config/emulators/atarijaguar.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:759;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:752"
+- folder: atarilynx
+  extensions:
+  - .7z
+  - .lnx
+  - .lyx
+  - .o
+  - .zip
+  core: handy
+  emulator: retroarch
+  source_ref: "os config/emulators/atarilynx.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:770;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:762"
+- folder: atarist
+  extensions:
+  - .7z
+  - .dim
+  - .ipf
+  - .m3u
+  - .msa
+  - .st
+  - .stx
+  - .zip
+  core: hatari
+  emulator: retroarch
+  source_ref: "os config/emulators/atarist.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:256;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:254"
+- folder: atomiswave
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "os config/emulators/atomiswave.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:280;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:276"
+  board_defaults:
+    DEVICE=H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM6115:
+      core: flycast2021
+      emulator: retroarch
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:262"
+    DEVICE=SM4450|SM8250|SM8550|SM8650|SM8750|S922X:
+      core: flycast-sa
+      emulator: flycast
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:267"
+    DEVICE=AMD64:
+      core: flycast-sa
+      emulator: flycast
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:272"
+  arcade: true
+- folder: bbcmicro
+  extensions:
+  - .dsd
+  - .ssd
+  core: b2
+  emulator: retroarch
+  source_ref: "os config/emulators/bbcmicro.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:168;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:167"
+- folder: bk
+  extensions:
+  - .7z
+  - .bin
+  - .bkd
+  - .dsk
+  - .img
+  - .zip
+  core: bk
+  emulator: retroarch
+  source_ref: "os config/emulators/bk.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:380;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:379"
+- folder: c128
+  extensions:
+  - .bin
+  - .cmd
+  - .crt
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_x128
+  emulator: retroarch
+  source_ref: "os config/emulators/c128.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:300;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:298"
+- folder: c16
+  extensions:
+  - .bin
+  - .cmd
+  - .crt
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xplus4
+  emulator: retroarch
+  source_ref: "os config/emulators/c16.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:305;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:303"
+- folder: c64
+  extensions:
+  - .bin
+  - .cmd
+  - .crt
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_x64
+  emulator: retroarch
+  source_ref: "os config/emulators/c64.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:310;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:308"
+- folder: cdi
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: same_cdi
+  emulator: retroarch
+  source_ref: "os config/emulators/cdi.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1599;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1598"
+- folder: channelf
+  extensions:
+  - .7z
+  - .bin
+  - .chf
+  - .zip
+  core: freechaf
+  emulator: retroarch
+  source_ref: "os config/emulators/channelf.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:284;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:283"
+- folder: chip-8
+  extensions:
+  - .ch8
+  - .sc8
+  - .xo8
+  core: jaxe
+  emulator: retroarch
+  source_ref: "os config/emulators/chip-8.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1244;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1243"
+- folder: coleco
+  name: colecovision
+  extensions:
+  - .7z
+  - .bin
+  - .col
+  - .rom
+  - .zip
+  core: gearcoleco
+  emulator: retroarch
+  source_ref: "os config/emulators/colecovision.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:295;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:287"
+- folder: cps1
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os config/emulators/cps1.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:327;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:322"
+  arcade: true
+- folder: cps2
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os config/emulators/cps2.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:335;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:330"
+  arcade: true
+- folder: cps3
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os config/emulators/cps3.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:343;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:338"
+  arcade: true
+- folder: daphne
+  extensions:
+  - .daphne
+  - .singe
+  core: hypseus-singe
+  emulator: hypseus-singe
+  source_ref: "os config/emulators/daphne.conf:5,6; os projects/ROCKNIX/packages/virtual/emulators/package.mk:348;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:346"
+  arcade: true
+- folder: doom
+  extensions:
+  - .doom
+  - .iwad
+  - .pwad
+  - .wad
+  core: gzdoom-sa
+  emulator: gzdoom
+  source_ref: "os config/emulators/doom.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1677;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1675"
+- folder: dreamcast
+  extensions:
+  - .cdi
+  - .chd
+  - .cue
+  - .gdi
+  - .m3u
+  core: flycast
+  emulator: retroarch
+  source_ref: "os config/emulators/dreamcast.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:372;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:367"
+  board_defaults:
+    DEVICE=H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM6115:
+      core: flycast2021
+      emulator: retroarch
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:353"
+    DEVICE=SM4450|SM8250|SM8550|SM8650|SM8750|S922X:
+      core: flycast-sa
+      emulator: flycast
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:358"
+    DEVICE=AMD64:
+      core: flycast-sa
+      emulator: flycast
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:363"
+- folder: easyrpg
+  extensions:
+  - .easyrpg
+  - .ldb
+  - .zip
+  core: easyrpg
+  emulator: retroarch
+  source_ref: "os config/emulators/easyrpg.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:376;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:375"
+- folder: famicom
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os config/emulators/famicom.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:397;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:383"
+- folder: fbneo
+  name: fbn
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os config/emulators/fbn.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:424;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:417"
+  arcade: true
+- folder: fds
+  extensions:
+  - .7z
+  - .fds
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os config/emulators/fds.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:414;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:400"
+- folder: gameandwatch
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: gw
+  emulator: retroarch
+  source_ref: "os config/emulators/gameandwatch.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:438;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:436"
+- folder: gamecube
+  extensions:
+  - .ciso
+  - .dol
+  - .gcm
+  - .gcz
+  - .iso
+  - .m3u
+  - .rvz
+  - .wbfs
+  core: dolphin-sa-gc
+  emulator: dolphin
+  source_ref: "os config/emulators/gamecube.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:652;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:648"
+- folder: gamegear
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os config/emulators/gamegear.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:704;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:690"
+- folder: gamegearh
+  name: ggh
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os config/emulators/ggh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:721;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:707"
+- folder: gb
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os config/emulators/gb.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:472;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:441"
+- folder: gba
+  extensions:
+  - .7z
+  - .gba
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "os config/emulators/gba.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:540;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:508"
+- folder: gbah
+  extensions:
+  - .7z
+  - .gba
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "os config/emulators/gbah.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:567;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:543"
+- folder: gbav
+  extensions:
+  - .7z
+  - .gba
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "os config/emulators/gbav.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:589;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:570"
+- folder: gbc
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os config/emulators/gbc.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:616;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:592"
+- folder: gbch
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os config/emulators/gbch.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:643;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:619"
+- folder: gbh
+  extensions:
+  - .7z
+  - .gb
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os config/emulators/gbh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:505;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:475"
+- folder: genesis
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/genesis.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1289;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1276"
+- folder: genh
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/genh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1305;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1292"
+- folder: gp32
+  extensions:
+  - .7z
+  - .smc
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "os config/emulators/gp32.conf:5,6; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1664;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1663"
+- folder: heroic
+  extensions:
+  - .sh
+  core: heroic
+  emulator: heroic
+  source_ref: "os config/emulators/heroic.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:739;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:735"
+- folder: intellivision
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .rom
+  - .zip
+  core: freeintv
+  emulator: retroarch
+  source_ref: "os config/emulators/intellivision.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:745;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:744"
+- folder: ios
+  extensions:
+  - .app
+  - .ipa
+  core: touchhle-sa
+  emulator: touchhle
+  source_ref: "os config/emulators/ios.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:726;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:724"
+- folder: j2me
+  extensions:
+  - .jar
+  core: freej2me
+  emulator: retroarch
+  source_ref: "os config/emulators/j2me.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:749;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:748"
+- folder: mac
+  name: macintosh
+  extensions:
+  - .cmd
+  - .dsk
+  - .hfv
+  - .img
+  - .zip
+  core: minivmac
+  emulator: retroarch
+  source_ref: "os config/emulators/macintosh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:433;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:432"
+- folder: mame
+  extensions:
+  - .7z
+  - .zip
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os config/emulators/mame.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:784;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:777"
+  arcade: true
+- folder: mastersystem
+  extensions:
+  - .7z
+  - .bin
+  - .sms
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os config/emulators/mastersystem.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1322;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1308"
+- folder: megacd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/megacd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1273;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1266"
+- folder: megadrive
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/megadrive.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1333;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1325"
+- folder: megadrive-japan
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/megadrive-japan.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:795;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:787"
+- folder: megadriveh
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/megadriveh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1344;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1336"
+- folder: megaduck
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: sameduck
+  emulator: retroarch
+  source_ref: "os config/emulators/megaduck.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1348;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1347"
+- folder: moonlight
+  extensions:
+  - .sh
+  core: moonlight
+  emulator: moonlight
+  source_ref: "os config/emulators/moonlight.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1691;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1690"
+- folder: moto
+  extensions:
+  - .fd
+  - .k7
+  - .m5
+  - .m7
+  - .rom
+  - .sap
+  core: theodore
+  emulator: retroarch
+  source_ref: "os config/emulators/moto.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1656;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1655"
+- folder: mplayer
+  extensions:
+  - .3g2
+  - .3gp
+  - .aac
+  - .ac3
+  - .asf
+  - .avi
+  - .divx
+  - .dts
+  - .eac33
+  - .f4f
+  - .f4v
+  - .flac
+  - .flv
+  - .m2p
+  - .m2ts
+  - .m3u
+  - .m4a
+  - .m4v
+  - .mka
+  - .mkv
+  - .mov
+  - .mp3
+  - .mp4
+  - .mpeg
+  - .mpg
+  - .mxf
+  - .ogg
+  - .ogm
+  - .opus
+  - .ps
+  - .sh
+  - .thd
+  - .ts
+  - .twi
+  - .vob
+  - .wav
+  - .webm
+  - .wma
+  - .wmv
+  - .wv
+  - .ytb
+  core: mplayer
+  emulator: mplayer
+  source_ref: "os config/emulators/mplayer.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1683;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1680"
+- folder: msx
+  extensions:
+  - .7z
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os config/emulators/msx.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:829;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:822"
+- folder: msx2
+  extensions:
+  - .7z
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os config/emulators/msx2.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:839;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:832"
+- folder: n64
+  extensions:
+  - .7z
+  - .n64
+  - .v64
+  - .z64
+  - .zip
+  core: mupen64plus_next
+  emulator: retroarch
+  source_ref: "os config/emulators/n64.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:941;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:918"
+- folder: n64dd
+  extensions:
+  - .7z
+  - .n64
+  - .ndd
+  - .v64
+  - .z64
+  - .zip
+  core: mupen64plus_next
+  emulator: retroarch
+  source_ref: "os config/emulators/n64dd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:952;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:944"
+- folder: naomi
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "os config/emulators/naomi.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:862;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:858"
+  board_defaults:
+    DEVICE=H700|RK3326|RK3399|RK3576|RK3566|RK3588|SM6115:
+      core: flycast2021
+      emulator: retroarch
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:844"
+    DEVICE=SM4450|SM8250|SM8550|SM8650|SM8750|S922X:
+      core: flycast-sa
+      emulator: flycast
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:849"
+    DEVICE=AMD64:
+      core: flycast-sa
+      emulator: flycast
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:854"
+  arcade: true
+- folder: nds
+  extensions:
+  - .7z
+  - .nds
+  - .zip
+  core: drastic-sa
+  emulator: drastic
+  source_ref: "os config/emulators/nds.conf:3,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1019;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1012"
+  board_defaults:
+    DEVICE=SM4450|SM8250|SM8550:
+      core: melonds-sa
+      emulator: melonds
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:975"
+    DEVICE=SM8650|SM8750:
+      core: melonds-sa
+      emulator: melonds
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:986"
+    DEVICE=AMD64:
+      core: melonds-sa
+      emulator: melonds
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:995"
+- folder: ndsiware
+  extensions:
+  - .7z
+  - .nds
+  - .zip
+  core: melondsds
+  emulator: retroarch
+  source_ref: "os config/emulators/ndsiware.conf:3,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1037;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1032"
+- folder: neocd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: neocd
+  emulator: retroarch
+  source_ref: "os config/emulators/neocd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:885;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:882"
+- folder: neogeo
+  extensions:
+  - .7z
+  - .neo
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os config/emulators/neogeo.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:879;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:865"
+- folder: nes
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os config/emulators/nes.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1054;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1040"
+- folder: nesh
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os config/emulators/nesh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1071;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1057"
+- folder: ngp
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: beetle_ngp
+  emulator: retroarch
+  source_ref: "os config/emulators/ngp.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:900;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:888"
+- folder: ngpc
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: beetle_ngp
+  emulator: retroarch
+  source_ref: "os config/emulators/ngpc.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:915;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:903"
+- folder: odyssey
+  name: odyssey2
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "os config/emulators/odyssey2.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1075;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1074"
+- folder: openbor
+  extensions:
+  - .pak
+  core: OpenBOR
+  emulator: OpenBOR
+  source_ref: "os config/emulators/openbor.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1079;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1078"
+- folder: palm
+  extensions:
+  - .img
+  - .pdb
+  - .pqa
+  - .prc
+  - .zip
+  core: mu
+  emulator: retroarch
+  source_ref: "os config/emulators/palm.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1660;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1659"
+- folder: pc
+  extensions:
+  - .bat
+  - .com
+  - .dosz
+  - .exe
+  core: dosbox_pure
+  emulator: retroarch
+  source_ref: "os config/emulators/pc.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:808;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:806"
+- folder: pc88
+  name: pc-8800
+  extensions:
+  - .d88
+  - .m3u
+  - .u88
+  core: quasi88
+  emulator: retroarch
+  source_ref: "os config/emulators/pc-8800.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1083;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1082"
+- folder: pc98
+  name: pc-9800
+  extensions:
+  - .2hd
+  - .cmd
+  - .d88
+  - .d98
+  - .dup
+  - .fdd
+  - .fdi
+  - .hdd
+  - .hdi
+  - .hdm
+  - .hdn
+  - .nhd
+  - .tfd
+  - .thd
+  - .xdf
+  - .zip
+  core: np2kai
+  emulator: retroarch
+  source_ref: "os config/emulators/pc-9800.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1087;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1086"
+- folder: pcengine
+  extensions:
+  - .7z
+  - .bin
+  - .pce
+  - .zip
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os config/emulators/pcengine.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1105;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1090"
+- folder: pcenginecd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os config/emulators/pcenginecd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1123;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1108"
+- folder: pcfx
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .toc
+  core: beetle_pcfx
+  emulator: retroarch
+  source_ref: "os config/emulators/pcfx.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1132;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1126"
+- folder: pet
+  extensions:
+  - '.20'
+  - .a0
+  - .b0
+  - .bin
+  - .cmd
+  - .crt
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xpet
+  emulator: retroarch
+  source_ref: "os config/emulators/pet.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:314;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:313"
+- folder: pico-8
+  extensions:
+  - .p8
+  - .png
+  core: pico8
+  emulator: pico-8
+  source_ref: "os config/emulators/pico-8.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1137;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1135"
+- folder: pokemini
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  emulator: retroarch
+  source_ref: "os config/emulators/pokemini.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1232;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1231"
+- folder: ports
+  extensions:
+  - .appimage
+  - .sh
+  core: portmaster
+  emulator: portmaster
+  source_ref: "os config/emulators/ports.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1668;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1667"
+- folder: ps2
+  extensions:
+  - .bin
+  - .chd
+  - .cso
+  - .dump
+  - .gz
+  - .img
+  - .iso
+  - .mdf
+  - .nrg
+  core: armsx2-sa
+  emulator: armsx2
+  source_ref: "os config/emulators/ps2.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1190,1195;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1188"
+- folder: ps3
+  extensions:
+  - .m3u
+  - .ps3
+  - .psn
+  core: rpcs3-sa
+  emulator: rpcs3
+  source_ref: "os config/emulators/ps3.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1205;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1204"
+- folder: psp
+  extensions:
+  - .chd
+  - .cso
+  - .iso
+  - .pbp
+  core: ppsspp-sa
+  emulator: ppsspp
+  source_ref: "os config/emulators/psp.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1213;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1211"
+- folder: pspminis
+  extensions:
+  - .chd
+  - .cso
+  - .iso
+  - .pbp
+  core: ppsspp-sa
+  emulator: ppsspp
+  source_ref: "os config/emulators/pspminis.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1219;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1217"
+- folder: psvita
+  extensions:
+  - .pkg
+  - .psvita
+  - .zip
+  core: vita3k-sa
+  emulator: vita3k
+  source_ref: "os config/emulators/psvita.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1225;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1224"
+- folder: psx
+  extensions:
+  - .bin
+  - .cbn
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .toc
+  core: pcsx_rearmed32
+  emulator: retroarch
+  source_ref: "os config/emulators/psx.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1183;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1142"
+  board_defaults:
+    DEVICE=RK3399|RK3588|SM6115:
+      core: pcsx_rearmed
+      emulator: retroarch
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1147"
+    DEVICE=SM8650|SM8750:
+      core: pcsx_rearmed
+      emulator: retroarch
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1166"
+    DEVICE=S922X:
+      core: pcsx_rearmed
+      emulator: retroarch
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1172"
+    DEVICE=AMD64:
+      core: pcsx_rearmed
+      emulator: retroarch
+      source_ref: "os projects/ROCKNIX/packages/virtual/emulators/package.mk:1177"
+- folder: satellaview
+  extensions:
+  - .7z
+  - .bs
+  - .bsx
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/satellaview.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1539;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1528"
+- folder: saturn
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .zip
+  core: yabasanshiro-sa
+  emulator: yabasanshiro
+  source_ref: "os config/emulators/saturn.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1367;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1351"
+- folder: screenshots
+  name: imageviewer
+  extensions:
+  - .avi
+  - .bmp
+  - .gif
+  - .hdr
+  - .jpeg
+  - .jpg
+  - .mkv
+  - .mp4
+  - .pdf
+  - .pgm
+  - .pic
+  - .png
+  - .ppm
+  - .psd
+  - .tga
+  source_ref: "os config/emulators/imageviewer.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1697"
+- folder: scv
+  extensions:
+  - '.0'
+  - .bin
+  - .cart
+  - .rom
+  - .zip
+  core: emuscv
+  emulator: retroarch
+  source_ref: "os config/emulators/scv.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1648;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1647"
+- folder: sega32x
+  extensions:
+  - .32x
+  - .7z
+  - .bin
+  - .md
+  - .smd
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os config/emulators/sega32x.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1253;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1247"
+- folder: segacd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os config/emulators/segacd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1263;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1256"
+- folder: segamodel3
+  extensions:
+  - .zip
+  core: supermodel-sa
+  emulator: supermodel
+  source_ref: "os config/emulators/segamodel3.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:801;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:800"
+  arcade: true
+- folder: sfc
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/sfc.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1525;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1496"
+- folder: sg-1000
+  extensions:
+  - .7z
+  - .bin
+  - .sg
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os config/emulators/sg-1000.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1386;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1378"
+- folder: sgfx
+  name: supergrafx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .pce
+  - .sgx
+  - .zip
+  core: beetle_supergrafx
+  emulator: retroarch
+  source_ref: "os config/emulators/supergrafx.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1429;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1415"
+- folder: snes
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/snes.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1461;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1432"
+- folder: snesh
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/snesh.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1493;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1464"
+- folder: snesmsu1
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/snesmsu1.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:819;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:811"
+- folder: st-v
+  extensions:
+  - .zip
+  core: ss
+  emulator: mednafen
+  source_ref: "os config/emulators/st-v.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1375;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1372"
+  arcade: true
+- folder: sufami
+  extensions:
+  - .7z
+  - .st
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os config/emulators/sufami.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1549;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1542"
+- folder: supervision
+  extensions:
+  - .7z
+  - .sv
+  - .zip
+  core: potator
+  emulator: retroarch
+  source_ref: "os config/emulators/supervision.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1553;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1552"
+- folder: tg16
+  extensions:
+  - .7z
+  - .bin
+  - .pce
+  - .zip
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os config/emulators/tg16.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1574;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1564"
+- folder: tg16cd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os config/emulators/tg16cd.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1587;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1577"
+- folder: tic-80
+  extensions:
+  - .tic
+  core: tic80
+  emulator: retroarch
+  source_ref: "os config/emulators/tic-80.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1557;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1556"
+- folder: triforce
+  extensions:
+  - .ciso
+  - .dol
+  - .gcm
+  - .gcz
+  - .iso
+  - .m3u
+  - .rvz
+  - .wbfs
+  core: dolphin-sa-gc
+  emulator: dolphin
+  source_ref: "os config/emulators/triforce.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:662;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:659"
+  arcade: true
+- folder: uzebox
+  extensions:
+  - .uze
+  core: uzem
+  emulator: retroarch
+  source_ref: "os config/emulators/uzebox.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1591;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1590"
+- folder: vectrex
+  extensions:
+  - .7z
+  - .bin
+  - .gam
+  - .vec
+  - .zip
+  core: vecx
+  emulator: retroarch
+  source_ref: "os config/emulators/vectrex.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1595;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1594"
+- folder: vic20
+  extensions:
+  - '.20'
+  - .a0
+  - .b0
+  - .bin
+  - .cmd
+  - .crt
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xvic
+  emulator: retroarch
+  source_ref: "os config/emulators/vic20.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:319;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:317"
+- folder: videopac
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "os config/emulators/videopac.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1603;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1602"
+- folder: vircon32
+  extensions:
+  - .v32
+  core: vircon32
+  emulator: retroarch
+  source_ref: "os config/emulators/vircon32.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1652;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1651"
+- folder: virtualboy
+  extensions:
+  - .7z
+  - .vb
+  - .zip
+  core: beetle_vb
+  emulator: retroarch
+  source_ref: "os config/emulators/virtualboy.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1612;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1606"
+- folder: wasm4
+  extensions:
+  - .wasm
+  - .wat
+  core: wasm4
+  emulator: retroarch
+  source_ref: "os config/emulators/wasm4.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1561;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1560"
+- folder: wii
+  extensions:
+  - .ciso
+  - .dol
+  - .gcm
+  - .gcz
+  - .iso
+  - .m3u
+  - .rvz
+  - .wad
+  - .wbfs
+  core: dolphin-sa-wii
+  emulator: dolphin
+  source_ref: "os config/emulators/wii.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:675;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:669"
+- folder: wiiu
+  extensions:
+  - .rpx
+  - .wua
+  - .wud
+  - .wux
+  core: cemu-sa
+  emulator: cemu
+  source_ref: "os config/emulators/wiiu.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:684;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:683"
+- folder: wiiware
+  extensions:
+  - .ciso
+  - .dol
+  - .gcm
+  - .gcz
+  - .iso
+  - .m3u
+  - .rvz
+  - .wad
+  - .wbfs
+  core: dolphin-sa-wii
+  emulator: dolphin
+  source_ref: "os config/emulators/wiiware.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:676;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:670"
+- folder: windows
+  extensions:
+  - .sh
+  core: wine
+  emulator: wine
+  source_ref: "os config/emulators/windows.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1672;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1671"
+- folder: wonderswan
+  extensions:
+  - .7z
+  - .ws
+  - .wsc
+  - .zip
+  core: beetle_wswan
+  emulator: retroarch
+  source_ref: "os config/emulators/wonderswan.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1626;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1615"
+- folder: wonderswancolor
+  extensions:
+  - .7z
+  - .ws
+  - .wsc
+  - .zip
+  core: beetle_wswan
+  emulator: retroarch
+  source_ref: "os config/emulators/wonderswancolor.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1640;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1629"
+- folder: x1
+  extensions:
+  - .2d
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dup
+  - .dx1
+  - .hdm
+  - .tap
+  - .tfd
+  - .xdf
+  - .zip
+  core: x1
+  emulator: retroarch
+  source_ref: "os config/emulators/x1.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1390;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1389"
+- folder: x68000
+  extensions:
+  - .2hd
+  - .7z
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  emulator: retroarch
+  source_ref: "os config/emulators/x68000.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1644;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1643"
+- folder: xbox
+  extensions:
+  - .iso
+  core: xemu-sa
+  emulator: xemu
+  source_ref: "os config/emulators/xbox.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1396;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1395"
+- folder: zmachine
+  extensions:
+  - .dat
+  - .z1
+  - .z2
+  - .z3
+  - .z4
+  - .z5
+  - .z6
+  - .zip
+  core: mojozork
+  emulator: retroarch
+  source_ref: "os config/emulators/zmachine.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:774;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:773"
+- folder: zx81
+  extensions:
+  - .7z
+  - .p
+  - .t81
+  - .tzx
+  - .zip
+  core: "81"
+  emulator: retroarch
+  source_ref: "os config/emulators/zx81.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1412;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1411"
+- folder: zxspectrum
+  extensions:
+  - .7z
+  - .dsk
+  - .rzx
+  - .scl
+  - .tap
+  - .trd
+  - .tzx
+  - .z80
+  - .zip
+  core: fuse
+  emulator: retroarch
+  source_ref: "os config/emulators/zxspectrum.conf:6,7; os projects/ROCKNIX/packages/virtual/emulators/package.mk:1408;\
+    \ os projects/ROCKNIX/packages/virtual/emulators/package.mk:1402"

@@ -882,8 +882,9 @@ GLANCE_HEADING = "## Options at a glance"
 GLANCE_GROUPS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("Where and for what", ("--platform", "--dest", "--target", "--every-board", "--save-dir",
                             "--romm-firmware", "--standalone-copies", "--add-app")),
-    ("Fewer files", ("--system", "--core", "--emulator", "--region", "--no-game-data",
-                     "--declared-only", "--installed-cores", "--cores-dir")),
+    ("Fewer files", ("--for-games", "--required-only", "--system", "--core", "--emulator",
+                     "--region", "--no-game-data", "--declared-only", "--installed-cores",
+                     "--cores-dir")),
     ("Look first", ("--check", "--dry-run", "--list-platforms", "--list-targets",
                     "--list-systems", "--list-cores", "--list-emulators")),
     ("From files you have", ("--from", "--from-pack", "--manifest", "--offline", "--restore")),

@@ -16,7 +16,7 @@ cores:
   - jollycv
 systems:
   - colecovision
-  - creativision
+  - crvision
   - myvision
 
 notes: |
@@ -67,7 +67,7 @@ files:
     note: "Mapped at 0x0000-0x1FFF, replaced by the lower 8K of SGM RAM when the Super Game Module enables it. The MD5 is the value the JG bioslist declares, and the core compares the size only."
 
   - name: "bioscv.rom"
-    system: creativision
+    system: crvision
     description: "VTech CreatiVision BIOS ROM"
     required: true
     size: 2048

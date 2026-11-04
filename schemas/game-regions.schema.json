@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://abdess.github.io/retrobios/api/v1/schemas/game-regions.schema.json",
+  "title": "RetroBIOS region rules per system and core",
+  "description": "games/regions.yml: what a core does around its region files (routes, default region, preference order, region-free files, cross-region fallback) and the cases where a proven game region does not settle the file. Files per region come from the profiles' region: fields, never from here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cases", "systems"],
+  "$defs": {
+    "region": { "type": "string", "pattern": "^[a-z]+(?:-[a-z]+)*$" },
+    "ref": {
+      "type": "string",
+      "description": "'owner/repo@sha path:line[, path:line]', several repositories joined by '; '. The sha is a prefix of the profile's source_commit or upstream_commit.",
+      "pattern": "^[\\w.-]+/[\\w.-]+@[0-9a-f]{8,40} \\S.*$"
+    },
+    "keep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case", "condition", "keeps", "source_ref"],
+      "properties": {
+        "case": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "condition": {
+          "enum": ["always", "option", "disc", "user-state"],
+          "description": "always: whatever the game. option: when a core option leaves its default. disc: for the games 'when' describes. user-state: per-game state the user set on the device."
+        },
+        "option": { "type": "string", "minLength": 1 },
+        "default": { "type": "string", "minLength": 1 },
+        "when": { "type": "string", "minLength": 1 },
+        "keeps": {
+          "enum": ["all-regions", "listed-areas", "region-free-files", "first-disc", "precise", "by-header", "one-archive"],
+          "description": "all-regions: every region file of the system. listed-areas: every region the disc lists. region-free-files: the files named, never dropped. first-disc: read disc 1 of a multi-disc set. precise: the precise file is enough, the game still starts without it. by-header: decided by header bytes (games/extras.yml). one-archive: one archive serves every region."
+        },
+        "files": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 },
+        "source_ref": { "$ref": "#/$defs/ref" }
+      },
+      "allOf": [
+        { "if": { "properties": { "condition": { "const": "option" } } }, "then": { "required": ["option", "default"] } },
+        { "if": { "properties": { "condition": { "enum": ["disc", "user-state"] } } }, "then": { "required": ["when"] } },
+        { "if": { "properties": { "keeps": { "const": "region-free-files" } } }, "then": { "required": ["files"] } }
+      ]
+    },
+    "core": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_ref"],
+      "properties": {
+        "routes": {
+          "type": "object",
+          "description": "Game region the core computes -> the region whose files it opens, where the profile's tags do not already say so.",
+          "propertyNames": { "$ref": "#/$defs/region" },
+          "additionalProperties": { "$ref": "#/$defs/region" }
+        },
+        "default_region": { "$ref": "#/$defs/region" },
+        "preference": { "type": "array", "items": { "$ref": "#/$defs/region" }, "uniqueItems": true, "minItems": 1 },
+        "region_free": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+        "fallback_across_regions": { "type": "boolean" },
+        "source_ref": { "$ref": "#/$defs/ref" },
+        "keep_all_regions": { "type": "array", "items": { "$ref": "#/$defs/keep" } }
+      }
+    }
+  },
+  "properties": {
+    "cases": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "reason"],
+        "properties": {
+          "title": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "systems": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": { "$ref": "#/$defs/core" }
+      }
+    }
+  }
+}

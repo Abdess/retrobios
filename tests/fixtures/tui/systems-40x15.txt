@@ -1,15 +1,15 @@
  RetroBIOS: Choose systems
 
+   Filter (/ to type)
+   [x] nintendo-gba (gba)       16.0 KB
+   [x] sony-playstation          1.0 MB
+ > [ ] nintendo-famicom-disk   in place
    All
    None
-   Filter (/ to type)
- > [x] nintendo-gba (gba)       16.0 KB
-   [x] sony-playstation          1.0 MB
-   [ ] nintendo-famicom-disk   in place
+   Done
 
 
-
-
-
+ nintendo-famicom-disk (ファミコン): in
+   place
  2 of 3 systems: 4 files, 1.0 MB
- A Continue  B Back  X Tick  ? Help
+ A Tick  B Done  ? Help

@@ -1,0 +1,54 @@
+name: JELOS
+platform: retroarch
+format: elec-conf
+params:
+  package: packages/virtual/emulators/package.mk
+  conf_dir: config/emulators
+  path_prefixes:
+  - /storage/roms/
+sources:
+  os:
+    repo: https://github.com/JustEnoughLinuxOS/distribution
+    commit: 7b2e116ce6996d56e642a0e2a07288c926db926b
+  es:
+    repo: https://github.com/JustEnoughLinuxOS/emulationstation
+    commit: 2532471157e7df15ca70e0881e2411b81a1d2daa
+    note: EmulationStation pinned by the ui/emulationstation package.mk PKG_VERSION
+roms_root:
+  path: /storage/roms
+  from_bios: ..
+  source_ref: os packages/virtual/emulators/package.mk:112
+case_sensitive: null
+skip:
+- name: bios
+  reason: created by the emulators package, holds no game
+  source_ref: os packages/virtual/emulators/package.mk:112
+- name: music
+  reason: created by the emulators package, holds no game
+  source_ref: os packages/virtual/emulators/package.mk:115
+- name: savestates
+  reason: created by the emulators package, holds no game
+  source_ref: os packages/virtual/emulators/package.mk:118
+hidden:
+- pattern: .*
+  source_ref: es es-app/src/SystemData.cpp:225
+media:
+- name: media
+  source_ref: es es-app/src/SystemData.cpp:272
+- name: medias
+  source_ref: es es-app/src/SystemData.cpp:272
+- name: images
+  source_ref: es es-app/src/SystemData.cpp:272
+- name: manuals
+  source_ref: es es-app/src/SystemData.cpp:272
+- name: videos
+  source_ref: es es-app/src/SystemData.cpp:272
+- name: assets
+  source_ref: es es-app/src/SystemData.cpp:272
+- pattern: downloaded_*
+  source_ref: es es-app/src/SystemData.cpp:272
+notes:
+- 'The BIOS folder is /storage/roms/bios, inside the roms root: the scan skips it.'
+- A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:236).
+- Each folder comes from SYSTEM_PATH of config/emulators/<system>.conf, written by add_es_system for every
+  system the emulators package adds.

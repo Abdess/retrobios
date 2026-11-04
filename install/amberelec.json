@@ -6,7 +6,7 @@
   "platform": "amberelec",
   "display_name": "AmberELEC",
   "version": "prerelease-20261019_1835",
-  "generated": "2026-10-27T10:27:58Z",
+  "generated": "2026-11-03T13:36:34Z",
   "base_destination": "",
   "detect": [
     {
@@ -33,7 +33,7 @@
   "total_size": 5347576528,
   "pack_files": 5149,
   "pack_size": 5347576528,
-  "total_omitted": 93,
+  "total_omitted": 94,
   "omitted_files": [
     {
       "dest": "FB Alpha 2012/hiscore.dat",
@@ -956,6 +956,16 @@
       "reason": "not_found",
       "cores": [
         "amiberry"
+      ]
+    },
+    {
+      "dest": "bios/sfiii2a.zip",
+      "name": "sfiii2a.zip",
+      "system": "capcom-cps3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "fbneo"
       ]
     },
     {
@@ -27825,20 +27835,6 @@
       "category": "game_data"
     },
     {
-      "dest": "bios/mame/hash/channelf.xml",
-      "sha1": "8d25cd528e76dbe10d3b19737193825c0c44a22d",
-      "sha256": "4893415530bb395824101e006638883cb600e79af588b4bf43faee6eb6a3034b",
-      "size": 20040,
-      "repo_path": "bios/Other/mame/hash/channelf.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
       "dest": "bios/mame/hash/chessking_cart.xml",
       "sha1": "fd9777311b5ef75c764901d2a7d6a6115e07f388",
       "sha256": "3056e454a5968b81d33df813561da9faac52fe947695023b0daff4782b6a6a2a",
@@ -28259,20 +28255,6 @@
       "category": "game_data"
     },
     {
-      "dest": "bios/mame/hash/ekara_cart.xml",
-      "sha1": "f4224ce01ef27ee0fb37d1031e7b30102e59e163",
-      "sha256": "fee14e40196c11587cf4770b3ff8392b60c91ec7340aab26c1e5e76cc40cc585",
-      "size": 193645,
-      "repo_path": "bios/Other/mame/hash/ekara_cart.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
       "dest": "bios/mame/hash/entex_sag.xml",
       "sha1": "6681e03849aab15b58efc8533b9feb3da6d8df94",
       "sha256": "60fc217aaabf6c3eae2fc7949866114ac3f7a4b6e4aca64848a296d2e2c9e312",
@@ -28306,20 +28288,6 @@
       "sha256": "ff4f0e9b2e57ad5e0a66fb1b0c73a91fa65b842eea5b0ae7431b2fa127752bbe",
       "size": 2480,
       "repo_path": "bios/Other/mame/hash/eti660_quik.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/evio.xml",
-      "sha1": "6e22ae92048498d0b6f745352809a6e5f711a9b3",
-      "sha256": "2fac6c6d639b643cb41a44bb5311689be8c5695072dfcf97b70e3fbf63796ea7",
-      "size": 10523,
-      "repo_path": "bios/Other/mame/hash/evio.xml",
       "cores": [
         "mame"
       ],
@@ -28651,20 +28619,6 @@
       "category": "game_data"
     },
     {
-      "dest": "bios/mame/hash/gcslottv.xml",
-      "sha1": "c8488b18cd7dd23f96988eba148164de964c8c35",
-      "sha256": "3bca7f3fe710d9716e76577c3024fad6e1af18edc9e660b680f50f893156c29a",
-      "size": 2531,
-      "repo_path": "bios/Other/mame/hash/gcslottv.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
       "dest": "bios/mame/hash/generic_cdrom.xml",
       "sha1": "588620a0d4ea797822c1b24ce573bed8b795cf07",
       "sha256": "0fcc709ef0de09d8724eca4812a6f59a7248ae09ac601dd3bdf80f595e8b0a58",
@@ -28922,20 +28876,6 @@
       "sha256": "d5680bee22a8d19760c5c6c4f0075dec2881f809fdb9be02210725a2fa22641d",
       "size": 6198,
       "repo_path": "bios/Other/mame/hash/h88_cass.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/hikara.xml",
-      "sha1": "0f50eecb19f412194131f3e8c0afe96f5d9909d5",
-      "sha256": "88136cf1874adc89c71081adb77dd7b9ae46f721a58c5f4c3b865f46d3c36b4f",
-      "size": 23854,
-      "repo_path": "bios/Other/mame/hash/hikara.xml",
       "cores": [
         "mame"
       ],
@@ -29888,20 +29828,6 @@
       "sha256": "f8cbc220e21653431150c07d0de38df0298875b6c170bb6b779fcc3eb5eea0ad",
       "size": 8743,
       "repo_path": "bios/Other/mame/hash/korvet_flop.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/kpython2.xml",
-      "sha1": "382804bf081cc68f71f5f2e8eaf8d98f59b5a3d6",
-      "sha256": "0c4119d35143527361eef299b3fa8c372e831b1cbbd986083e2feb9fa189a7c5",
-      "size": 3610,
-      "repo_path": "bios/Other/mame/hash/kpython2.xml",
       "cores": [
         "mame"
       ],
@@ -31437,20 +31363,6 @@
       "category": "game_data"
     },
     {
-      "dest": "bios/mame/hash/neocd.xml",
-      "sha1": "e43f8a5913f68c3cf1926c6b3c93fa4244c40e16",
-      "sha256": "ebf7fe83ff38e988aa027312951e5bec57222111d483e40eeee35b12741f0f4f",
-      "size": 69767,
-      "repo_path": "bios/Other/mame/hash/neocd.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
       "dest": "bios/mame/hash/nes.hsi",
       "sha1": "91e14b3cda5a2d8a8ad69e56919fa564f53e6511",
       "sha256": "0cc6d2ad39bd7e98a1f3b64f75c2ecddbf96139c41e2c98a271c8aceb1f99bf9",
@@ -31582,34 +31494,6 @@
       "sha256": "f78e9921dc539aee2f2940d037a38cdc9f774a68e768d01e133d2549c3a7f0cf",
       "size": 5837,
       "repo_path": "bios/Other/mame/hash/next_hdd.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/ngp.xml",
-      "sha1": "daf89059bead4c82c9266aaf21c2699baa8776d7",
-      "sha256": "00f0ea8db34de7f2757b784875354d4203528153a47368cb94dc3c3084027825",
-      "size": 6692,
-      "repo_path": "bios/Other/mame/hash/ngp.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/ngpc.xml",
-      "sha1": "98675abbaf2cca0b172fa2cdf1b9253e860e306a",
-      "sha256": "bb5885656af9f839c9b61e2b6d0a0156803419efa08a7dee8ea74d25f55d642c",
-      "size": 69520,
-      "repo_path": "bios/Other/mame/hash/ngpc.xml",
       "cores": [
         "mame"
       ],
@@ -32305,20 +32189,6 @@
       "category": "game_data"
     },
     {
-      "dest": "bios/mame/hash/pce_tourvision.xml",
-      "sha1": "63802fa14aefe48ce6679d34d947ce81fc72ab79",
-      "sha256": "cf5b0dc7402a8a6446e00ebad0afeadd9b001af5565a2d0148813aa923888de7",
-      "size": 64224,
-      "repo_path": "bios/Other/mame/hash/pce_tourvision.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
       "dest": "bios/mame/hash/pcecd.xml",
       "sha1": "2da275959c6ca57c74e7c3f633bfd0267cda5687",
       "sha256": "d59d9bdb0712c67fb3fbd021a46eb71f809fdf3cdfb6ddf0790195b03cfef0ae",
@@ -32436,20 +32306,6 @@
       "sha256": "da918fe66fa28680b2eeb3bae197f2fb6a5275f400ea18566aa7af89b7d840b4",
       "size": 7881,
       "repo_path": "bios/Other/mame/hash/pencil2_cass.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/pentagon_cass.xml",
-      "sha1": "e709a9208235a592cdad200ba8ffda79460e39d4",
-      "sha256": "9251e56c6da3c1c585b366271352963d60283f91ed8235fe97b7623386ea0494",
-      "size": 1246,
-      "repo_path": "bios/Other/mame/hash/pentagon_cass.xml",
       "cores": [
         "mame"
       ],
@@ -33747,20 +33603,6 @@
       "category": "game_data"
     },
     {
-      "dest": "bios/mame/hash/sms.xml",
-      "sha1": "4636a8da45a783125983e3d8d76fb43fa4a464b2",
-      "sha256": "0b404337afd4744ff3ea54a784f51663325cc25927bf11506b8b5d25e54afff5",
-      "size": 350397,
-      "repo_path": "bios/Other/mame/hash/sms.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
       "dest": "bios/mame/hash/snes.xml",
       "sha1": "82357dad415d4efa48ffdd1ea157b93a1b94b9a9",
       "sha256": "b890a4514a66a3699fbd3b7998d7ce41656d932e32ef5a4aef8748dda3a0ed9f",
@@ -34032,104 +33874,6 @@
       "sha256": "8eb9a2f3e3bc84d011aa8e153f83dc11e954eabe9540a1ea7da423e259a3a805",
       "size": 813283,
       "repo_path": "bios/Other/mame/hash/specpls3_flop.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/spectrum_betadisc_flop.xml",
-      "sha1": "bf8744e4c8cc062f4aa86f38796bdb1e1e662f9e",
-      "sha256": "61762bf50094d76005d43f4ec1e0033ba5ccf402d5efde1b193f90303ca34323",
-      "size": 51683,
-      "repo_path": "bios/Other/mame/hash/spectrum_betadisc_flop.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/spectrum_cart.xml",
-      "sha1": "528b9eb3b4cffb344e3c04e754eeb186be1016b5",
-      "sha256": "1a175a1b45ef90054d0395f49e3df6752ee1b5979a334a23a83815dc630e67ab",
-      "size": 9023,
-      "repo_path": "bios/Other/mame/hash/spectrum_cart.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/spectrum_cass.xml",
-      "sha1": "7f4f84c5277a07631a72d1410c1872ed229f5abb",
-      "sha256": "fd9167562e6493c3afffd750d1bb0d53306ac66cf743d1d5d78fb4fa79900b44",
-      "size": 6897158,
-      "repo_path": "bios/Other/mame/hash/spectrum_cass.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/spectrum_flop_opus.xml",
-      "sha1": "ab44305cad973344b7b74789a6e5bc6a9c7f79ce",
-      "sha256": "95e8a24808f0912ea656b65efa024c13b9599368428bb22e671facbb84c9a349",
-      "size": 30500,
-      "repo_path": "bios/Other/mame/hash/spectrum_flop_opus.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/spectrum_mgt_flop.xml",
-      "sha1": "4437ff021a7a8f6ee1c69a39bd1df49951fa9978",
-      "sha256": "138cfbc301f9308ebd6a7c966a1bd247cf5a44a2fd0192e443bea407393eb76d",
-      "size": 4836,
-      "repo_path": "bios/Other/mame/hash/spectrum_mgt_flop.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/spectrum_microdrive.xml",
-      "sha1": "cad869c94e93a91e91cfce9a719de1a28bf217d0",
-      "sha256": "61ec52ad60b179598905ca1d20bdbf33aec58f9bf5dc4a8fef6bf62356085dd1",
-      "size": 28256,
-      "repo_path": "bios/Other/mame/hash/spectrum_microdrive.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/spectrum_wafadrive.xml",
-      "sha1": "c4214aa0cf26d26ecb78d22a4fedb47ba212eab3",
-      "sha256": "5ac5db0835c40e0f882e0a1eb5275e42dad10dd1128fb2d442123c95db076d06",
-      "size": 701,
-      "repo_path": "bios/Other/mame/hash/spectrum_wafadrive.xml",
       "cores": [
         "mame"
       ],
@@ -34447,20 +34191,6 @@
       "category": "game_data"
     },
     {
-      "dest": "bios/mame/hash/takara_daigunder_dx_cart.xml",
-      "sha1": "65f00e8fe1c28606152107d1134062657dab048d",
-      "sha256": "7990245a341f4d7c0033af06a4ed0ab059d1f7a687bb7b0dbed35dccdd85edc9",
-      "size": 1843,
-      "repo_path": "bios/Other/mame/hash/takara_daigunder_dx_cart.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
       "dest": "bios/mame/hash/tandy200.xml",
       "sha1": "1a9e265cf07e0e31b9e9c9fbf0dffec12a2ffaf8",
       "sha256": "18b6ff17b8a56e443a2724d3b8a689745d724170b7ddc0cf2f9371addcd9f471",
@@ -34648,34 +34378,6 @@
       "sha256": "f220358e32df5bb40ace0acb818ccf7e138a6e5e668e5d567ec48b3f315dcf31",
       "size": 33003,
       "repo_path": "bios/Other/mame/hash/tiki100.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/timex_cass.xml",
-      "sha1": "59dc71c31c5c2ca7569f888db734d043d02ac10d",
-      "sha256": "b393d8bfaf2f9193994aed6a381a4fa41b349f735d14910c71186d4e6cb34da2",
-      "size": 53889,
-      "repo_path": "bios/Other/mame/hash/timex_cass.xml",
-      "cores": [
-        "mame"
-      ],
-      "systems": [
-        "3do"
-      ],
-      "category": "game_data"
-    },
-    {
-      "dest": "bios/mame/hash/timex_dock.xml",
-      "sha1": "acf91ce06785fd2236710d410abdd312b52bbb2d",
-      "sha256": "385bb689412f7c36c91986dd8849bc9870f9444c378a899694bd0615884b0227",
-      "size": 17721,
-      "repo_path": "bios/Other/mame/hash/timex_dock.xml",
       "cores": [
         "mame"
       ],
@@ -42991,9 +42693,6 @@
       "cores": [
         "advancemame"
       ],
-      "systems": [
-        "3do"
-      ],
       "alternatives": [
         {
           "sha1": "470da2042487c17fce84d8d10fc5af46b4594c9c",
@@ -44266,9 +43965,6 @@
         "fbneo",
         "fbalpha2019",
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -44340,9 +44036,6 @@
       "cores": [
         "fbneo"
       ],
-      "systems": [
-        "3do"
-      ],
       "alternatives": [
         {
           "sha1": "489256f5e2001070d2ad94c90d255282c71ed274",
@@ -44409,9 +44102,6 @@
         "fbneo",
         "fbalpha2019",
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -44423,9 +44113,6 @@
       "cores": [
         "fbneo",
         "fbalpha2019"
-      ],
-      "systems": [
-        "3do"
       ],
       "alternatives": [
         {
@@ -46396,9 +46083,6 @@
       "repo_path": "bios/Arcade/MAME/systemy2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -46577,9 +46261,6 @@
       "repo_path": "bios/Arcade/Arcade/konendev.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -46590,9 +46271,6 @@
       "repo_path": "bios/Arcade/Arcade/kpython.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -46603,9 +46281,6 @@
       "repo_path": "bios/Arcade/Arcade/kpython2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -46659,9 +46334,6 @@
       "cores": [
         "mame"
       ],
-      "systems": [
-        "3do"
-      ],
       "alternatives": [
         {
           "sha1": "c6d884d7b7ea46338efd116d6ddfa1392c624649",
@@ -46682,9 +46354,6 @@
       "repo_path": "bios/Arcade/MAME/coh1000a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ],
       "alternatives": [
         {
@@ -46707,9 +46376,6 @@
       "cores": [
         "mame"
       ],
-      "systems": [
-        "3do"
-      ],
       "alternatives": [
         {
           "sha1": "13bf28e3528c385b642046c2e0f96f44b33df0f2",
@@ -46730,9 +46396,6 @@
       "repo_path": "bios/Arcade/MAME/coh1001l.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ],
       "alternatives": [
         {
@@ -46755,9 +46418,6 @@
       "cores": [
         "mame"
       ],
-      "systems": [
-        "3do"
-      ],
       "alternatives": [
         {
           "sha1": "1f15b3acc75031633387b372ea71e537f4f96220",
@@ -46778,9 +46438,6 @@
       "repo_path": "bios/Arcade/MAME/coh1002m.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ],
       "alternatives": [
         {
@@ -46803,9 +46460,6 @@
       "cores": [
         "mame",
         "mame2003_plus"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -46817,9 +46471,6 @@
       "cores": [
         "mame",
         "mame2003_plus"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -47003,9 +46654,6 @@
       "repo_path": "bios/Arcade/MAME/aristmk7.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -47091,9 +46739,6 @@
       "repo_path": "bios/Arcade/MAME/recel.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -47104,9 +46749,6 @@
       "repo_path": "bios/Arcade/MAME/slvrball.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -47117,9 +46759,6 @@
       "repo_path": "bios/Arcade/Arcade/nichidvd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -47130,9 +46769,6 @@
       "repo_path": "bios/Arcade/Arcade/cedmag.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -47233,9 +46869,6 @@
       "repo_path": "bios/Arcade/MAME/miuchiz.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -47246,9 +46879,6 @@
       "repo_path": "bios/Arcade/MAME/pumpitup.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48281,9 +47911,6 @@
       "repo_path": "bios/Arcade/MAME/qsound.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48294,9 +47921,6 @@
       "repo_path": "bios/Arcade/MAME/ym2413.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48307,9 +47931,6 @@
       "repo_path": "bios/Arcade/Arcade/ekara.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48320,9 +47941,6 @@
       "repo_path": "bios/Arcade/Arcade/ekaraa.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48333,9 +47951,6 @@
       "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48346,9 +47961,6 @@
       "repo_path": "bios/Arcade/Arcade/ekarag.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48359,9 +47971,6 @@
       "repo_path": "bios/Arcade/Arcade/ekaras.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48372,9 +47981,6 @@
       "repo_path": "bios/Arcade/Arcade/isinger.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48385,9 +47991,6 @@
       "repo_path": "bios/Arcade/Arcade/ekaraphs.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48398,9 +48001,6 @@
       "repo_path": "bios/Arcade/Arcade/ekaraj.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48411,9 +48011,6 @@
       "repo_path": "bios/Arcade/Arcade/ekaramix.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48424,9 +48021,6 @@
       "repo_path": "bios/Arcade/Arcade/ddrfammt.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48437,9 +48031,6 @@
       "repo_path": "bios/Arcade/Arcade/popira.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48450,9 +48041,6 @@
       "repo_path": "bios/Arcade/Arcade/popirak.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48463,9 +48051,6 @@
       "repo_path": "bios/Arcade/Arcade/popira2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48476,9 +48061,6 @@
       "repo_path": "bios/Arcade/Arcade/taikodp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48489,9 +48071,6 @@
       "repo_path": "bios/Arcade/Arcade/jpopira.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48502,9 +48081,6 @@
       "repo_path": "bios/Arcade/Arcade/evio.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48515,9 +48091,6 @@
       "repo_path": "bios/Arcade/Arcade/tak_daig.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48528,9 +48101,6 @@
       "repo_path": "bios/Arcade/Arcade/gcslottv.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48541,9 +48111,6 @@
       "repo_path": "bios/Arcade/Arcade/hikara.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -48554,9 +48121,6 @@
       "repo_path": "bios/Arcade/MAME/galgames.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49036,6 +48600,17 @@
       "category": "game_data"
     },
     {
+      "dest": "bios/mame/hash/channelf.xml",
+      "sha1": "8d25cd528e76dbe10d3b19737193825c0c44a22d",
+      "sha256": "4893415530bb395824101e006638883cb600e79af588b4bf43faee6eb6a3034b",
+      "size": 20040,
+      "repo_path": "bios/Other/mame/hash/channelf.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "bios/mame/hash/coco_cart.xml",
       "sha1": "35c6819f1307b933021ce12970d1ede9f7b36135",
       "sha256": "59e203dea371afa3631123d1a0309d545c5cc7ea77a0c4d502e9070f61f039b0",
@@ -49168,6 +48743,17 @@
       "category": "game_data"
     },
     {
+      "dest": "bios/mame/hash/ekara_cart.xml",
+      "sha1": "f4224ce01ef27ee0fb37d1031e7b30102e59e163",
+      "sha256": "fee14e40196c11587cf4770b3ff8392b60c91ec7340aab26c1e5e76cc40cc585",
+      "size": 193645,
+      "repo_path": "bios/Other/mame/hash/ekara_cart.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "bios/mame/hash/electron_cart.xml",
       "sha1": "ee322936f29534da4719aadc0bf2db92e90ce3ec",
       "sha256": "5caa2242045ce6933709e50af7eaeccf629514391ce0dd690c6588d30657cadd",
@@ -49239,6 +48825,17 @@
       "sha256": "63ba3aef25b3328eaeea8d805c32ca45ae30a28a263b2a4357788187b0712ab1",
       "size": 73009,
       "repo_path": "bios/Other/mame/hash/ep64_flop.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/evio.xml",
+      "sha1": "6e22ae92048498d0b6f745352809a6e5f711a9b3",
+      "sha256": "2fac6c6d639b643cb41a44bb5311689be8c5695072dfcf97b70e3fbf63796ea7",
+      "size": 10523,
+      "repo_path": "bios/Other/mame/hash/evio.xml",
       "cores": [
         "mame"
       ],
@@ -49322,6 +48919,17 @@
       "category": "game_data"
     },
     {
+      "dest": "bios/mame/hash/gcslottv.xml",
+      "sha1": "c8488b18cd7dd23f96988eba148164de964c8c35",
+      "sha256": "3bca7f3fe710d9716e76577c3024fad6e1af18edc9e660b680f50f893156c29a",
+      "size": 2531,
+      "repo_path": "bios/Other/mame/hash/gcslottv.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "bios/mame/hash/gmaster.xml",
       "sha1": "fbbb36f305198babd53e8aa0dc9fd3ce7906b52f",
       "sha256": "2ae8c1f8dd96dbecc4478860d2d470aa55495fe1700104870e795ded38345c7b",
@@ -49344,11 +48952,33 @@
       "category": "game_data"
     },
     {
+      "dest": "bios/mame/hash/hikara.xml",
+      "sha1": "0f50eecb19f412194131f3e8c0afe96f5d9909d5",
+      "sha256": "88136cf1874adc89c71081adb77dd7b9ae46f721a58c5f4c3b865f46d3c36b4f",
+      "size": 23854,
+      "repo_path": "bios/Other/mame/hash/hikara.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "bios/mame/hash/ibm5150.xml",
       "sha1": "0b5ca1da47d90bc64a612478e8487885a622c753",
       "sha256": "851cdf45cbb5e71f7595761a4991ebd87e9e558c62d46a53a71b239ba521de84",
       "size": 824234,
       "repo_path": "bios/Other/mame/hash/ibm5150.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/kpython2.xml",
+      "sha1": "382804bf081cc68f71f5f2e8eaf8d98f59b5a3d6",
+      "sha256": "0c4119d35143527361eef299b3fa8c372e831b1cbbd986083e2feb9fa189a7c5",
+      "size": 3610,
+      "repo_path": "bios/Other/mame/hash/kpython2.xml",
       "cores": [
         "mame"
       ],
@@ -49465,11 +49095,44 @@
       "category": "game_data"
     },
     {
+      "dest": "bios/mame/hash/neocd.xml",
+      "sha1": "e43f8a5913f68c3cf1926c6b3c93fa4244c40e16",
+      "sha256": "ebf7fe83ff38e988aa027312951e5bec57222111d483e40eeee35b12741f0f4f",
+      "size": 69767,
+      "repo_path": "bios/Other/mame/hash/neocd.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "bios/mame/hash/neogeo.xml",
       "sha1": "9db1d49f2e64da0e3880b6654305da8b0108d3a3",
       "sha256": "f2b78a6a5f64e1fa146298878e83e0ef4b472a4dae85437708fd2d8768082326",
       "size": 861636,
       "repo_path": "bios/Other/mame/hash/neogeo.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/ngp.xml",
+      "sha1": "daf89059bead4c82c9266aaf21c2699baa8776d7",
+      "sha256": "00f0ea8db34de7f2757b784875354d4203528153a47368cb94dc3c3084027825",
+      "size": 6692,
+      "repo_path": "bios/Other/mame/hash/ngp.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/ngpc.xml",
+      "sha1": "98675abbaf2cca0b172fa2cdf1b9253e860e306a",
+      "sha256": "bb5885656af9f839c9b61e2b6d0a0156803419efa08a7dee8ea74d25f55d642c",
+      "size": 69520,
+      "repo_path": "bios/Other/mame/hash/ngpc.xml",
       "cores": [
         "mame"
       ],
@@ -49509,6 +49172,17 @@
       "category": "game_data"
     },
     {
+      "dest": "bios/mame/hash/pce_tourvision.xml",
+      "sha1": "63802fa14aefe48ce6679d34d947ce81fc72ab79",
+      "sha256": "cf5b0dc7402a8a6446e00ebad0afeadd9b001af5565a2d0148813aa923888de7",
+      "size": 64224,
+      "repo_path": "bios/Other/mame/hash/pce_tourvision.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "bios/mame/hash/pcw.xml",
       "sha1": "d212d60fc23abb3ce417085780d2ca0fab155a83",
       "sha256": "8c2e3871e37edb7d9a14c524ddb4273eb5caba9b7af207ada9c673221c148010",
@@ -49525,6 +49199,17 @@
       "sha256": "0487e1316f53fe4555e9bdcd98052a89beba2ad96ecdf564ee235d51f41ae6eb",
       "size": 8532,
       "repo_path": "bios/Other/mame/hash/pegasus_cart.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/pentagon_cass.xml",
+      "sha1": "e709a9208235a592cdad200ba8ffda79460e39d4",
+      "sha256": "9251e56c6da3c1c585b366271352963d60283f91ed8235fe97b7623386ea0494",
+      "size": 1246,
+      "repo_path": "bios/Other/mame/hash/pentagon_cass.xml",
       "cores": [
         "mame"
       ],
@@ -49622,11 +49307,99 @@
       "category": "game_data"
     },
     {
+      "dest": "bios/mame/hash/sms.xml",
+      "sha1": "4636a8da45a783125983e3d8d76fb43fa4a464b2",
+      "sha256": "0b404337afd4744ff3ea54a784f51663325cc25927bf11506b8b5d25e54afff5",
+      "size": 350397,
+      "repo_path": "bios/Other/mame/hash/sms.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "bios/mame/hash/socrates.xml",
       "sha1": "f1f7594cb700755335d9b50f11982c871df99a01",
       "sha256": "fcabc90101fe382278a062effa92d378471dee182bd19dca1366f70a9e3e093d",
       "size": 4963,
       "repo_path": "bios/Other/mame/hash/socrates.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/spectrum_betadisc_flop.xml",
+      "sha1": "bf8744e4c8cc062f4aa86f38796bdb1e1e662f9e",
+      "sha256": "61762bf50094d76005d43f4ec1e0033ba5ccf402d5efde1b193f90303ca34323",
+      "size": 51683,
+      "repo_path": "bios/Other/mame/hash/spectrum_betadisc_flop.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/spectrum_cart.xml",
+      "sha1": "528b9eb3b4cffb344e3c04e754eeb186be1016b5",
+      "sha256": "1a175a1b45ef90054d0395f49e3df6752ee1b5979a334a23a83815dc630e67ab",
+      "size": 9023,
+      "repo_path": "bios/Other/mame/hash/spectrum_cart.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/spectrum_cass.xml",
+      "sha1": "7f4f84c5277a07631a72d1410c1872ed229f5abb",
+      "sha256": "fd9167562e6493c3afffd750d1bb0d53306ac66cf743d1d5d78fb4fa79900b44",
+      "size": 6897158,
+      "repo_path": "bios/Other/mame/hash/spectrum_cass.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/spectrum_flop_opus.xml",
+      "sha1": "ab44305cad973344b7b74789a6e5bc6a9c7f79ce",
+      "sha256": "95e8a24808f0912ea656b65efa024c13b9599368428bb22e671facbb84c9a349",
+      "size": 30500,
+      "repo_path": "bios/Other/mame/hash/spectrum_flop_opus.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/spectrum_mgt_flop.xml",
+      "sha1": "4437ff021a7a8f6ee1c69a39bd1df49951fa9978",
+      "sha256": "138cfbc301f9308ebd6a7c966a1bd247cf5a44a2fd0192e443bea407393eb76d",
+      "size": 4836,
+      "repo_path": "bios/Other/mame/hash/spectrum_mgt_flop.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/spectrum_microdrive.xml",
+      "sha1": "cad869c94e93a91e91cfce9a719de1a28bf217d0",
+      "sha256": "61ec52ad60b179598905ca1d20bdbf33aec58f9bf5dc4a8fef6bf62356085dd1",
+      "size": 28256,
+      "repo_path": "bios/Other/mame/hash/spectrum_microdrive.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/spectrum_wafadrive.xml",
+      "sha1": "c4214aa0cf26d26ecb78d22a4fedb47ba212eab3",
+      "sha256": "5ac5db0835c40e0f882e0a1eb5275e42dad10dd1128fb2d442123c95db076d06",
+      "size": 701,
+      "repo_path": "bios/Other/mame/hash/spectrum_wafadrive.xml",
       "cores": [
         "mame"
       ],
@@ -49644,11 +49417,44 @@
       "category": "game_data"
     },
     {
+      "dest": "bios/mame/hash/takara_daigunder_dx_cart.xml",
+      "sha1": "65f00e8fe1c28606152107d1134062657dab048d",
+      "sha256": "7990245a341f4d7c0033af06a4ed0ab059d1f7a687bb7b0dbed35dccdd85edc9",
+      "size": 1843,
+      "repo_path": "bios/Other/mame/hash/takara_daigunder_dx_cart.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
       "dest": "bios/mame/hash/ti99_cart.xml",
       "sha1": "1d01689b8d55dd10a2962acad5f60362e138650e",
       "sha256": "efa7a94d47417f02c5f4086c0840dfa932773121609cf431e1efae54ed7dbb57",
       "size": 229953,
       "repo_path": "bios/Other/mame/hash/ti99_cart.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/timex_cass.xml",
+      "sha1": "59dc71c31c5c2ca7569f888db734d043d02ac10d",
+      "sha256": "b393d8bfaf2f9193994aed6a381a4fa41b349f735d14910c71186d4e6cb34da2",
+      "size": 53889,
+      "repo_path": "bios/Other/mame/hash/timex_cass.xml",
+      "cores": [
+        "mame"
+      ],
+      "category": "game_data"
+    },
+    {
+      "dest": "bios/mame/hash/timex_dock.xml",
+      "sha1": "acf91ce06785fd2236710d410abdd312b52bbb2d",
+      "sha256": "385bb689412f7c36c91986dd8849bc9870f9444c378a899694bd0615884b0227",
+      "size": 17721,
+      "repo_path": "bios/Other/mame/hash/timex_dock.xml",
       "cores": [
         "mame"
       ],
@@ -49794,9 +49600,6 @@
       "repo_path": "bios/Arcade/Arcade/22vp931.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49807,9 +49610,6 @@
       "repo_path": "bios/Arcade/MAME/3c505.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49820,9 +49620,6 @@
       "repo_path": "bios/Arcade/MAME/3xtwin.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49843,9 +49640,6 @@
       "repo_path": "bios/Arcade/Arcade/a1000kbd_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49856,9 +49650,6 @@
       "repo_path": "bios/Arcade/Arcade/a1000kbd_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49869,9 +49660,6 @@
       "repo_path": "bios/Arcade/Arcade/a1000kbd_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49882,9 +49670,6 @@
       "repo_path": "bios/Arcade/Arcade/a1000kbd_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49895,9 +49680,6 @@
       "repo_path": "bios/Arcade/Arcade/a1000kbd_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49908,9 +49690,6 @@
       "repo_path": "bios/Arcade/Arcade/a1000kbd_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49921,9 +49700,6 @@
       "repo_path": "bios/Arcade/Arcade/a1000kbd_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49934,9 +49710,6 @@
       "repo_path": "bios/Arcade/Arcade/a1200kbd_rb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49947,9 +49720,6 @@
       "repo_path": "bios/Arcade/Arcade/a1cass.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49960,9 +49730,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49973,9 +49740,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49986,9 +49750,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -49999,9 +49760,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50012,9 +49770,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50025,9 +49780,6 @@
       "repo_path": "bios/Arcade/Arcade/a2000kbd_g80_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50038,9 +49790,6 @@
       "repo_path": "bios/Arcade/Arcade/a2000kbd_g80_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50051,9 +49800,6 @@
       "repo_path": "bios/Arcade/Arcade/a2000kbd_g80_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50064,9 +49810,6 @@
       "repo_path": "bios/Arcade/Arcade/a2000kbd_g80_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50077,9 +49820,6 @@
       "repo_path": "bios/Arcade/Arcade/a2000kbd_g80_de.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50090,9 +49830,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50103,9 +49840,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50116,9 +49850,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50129,9 +49860,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50142,9 +49870,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50195,9 +49920,6 @@
       "repo_path": "bios/Arcade/MAME/a2autokbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50278,9 +50000,6 @@
       "repo_path": "bios/Arcade/MAME/a2excel9.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50341,9 +50060,6 @@
       "repo_path": "bios/Apple/Apple II/a2diskiing.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50354,9 +50070,6 @@
       "repo_path": "bios/Arcade/MAME/a2kb200.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50447,9 +50160,6 @@
       "repo_path": "bios/Arcade/MAME/a2romfp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50460,9 +50170,6 @@
       "repo_path": "bios/Arcade/MAME/a2romint.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50483,9 +50190,6 @@
       "repo_path": "bios/Arcade/MAME/a2sd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50496,9 +50200,6 @@
       "repo_path": "bios/Arcade/MAME/a2sic.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50549,9 +50250,6 @@
       "repo_path": "bios/Arcade/MAME/a2suprterm.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50562,9 +50260,6 @@
       "repo_path": "bios/Arcade/MAME/a2surance.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50575,9 +50270,6 @@
       "repo_path": "bios/Arcade/Arcade/a2swyft.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50598,9 +50290,6 @@
       "repo_path": "bios/Arcade/MAME/a2tk10.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50621,9 +50310,6 @@
       "repo_path": "bios/Arcade/Arcade/a2twarp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50674,9 +50360,6 @@
       "repo_path": "bios/Arcade/MAME/a2vistaa800.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50717,9 +50400,6 @@
       "repo_path": "bios/Arcade/MAME/a2vuliie.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50740,9 +50420,6 @@
       "repo_path": "bios/Arcade/Arcade/a3fdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50753,9 +50430,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50766,9 +50440,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50779,9 +50450,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50792,9 +50460,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50805,9 +50470,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50818,9 +50480,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50831,9 +50490,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50844,9 +50500,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50857,9 +50510,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50870,9 +50520,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50883,9 +50530,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50896,9 +50540,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50909,9 +50550,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50922,9 +50560,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50935,9 +50570,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50948,9 +50580,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50961,9 +50590,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50974,9 +50600,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -50987,9 +50610,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51000,9 +50620,6 @@
       "repo_path": "bios/Arcade/Arcade/a500kbd_ch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51013,9 +50630,6 @@
       "repo_path": "bios/Arcade/Arcade/abc1600mac.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51026,9 +50640,6 @@
       "repo_path": "bios/Arcade/Arcade/abc1600mover.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51039,9 +50650,6 @@
       "repo_path": "bios/Arcade/Arcade/abc55.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51052,9 +50660,6 @@
       "repo_path": "bios/Arcade/Arcade/abc55.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51065,9 +50670,6 @@
       "repo_path": "bios/Arcade/Arcade/abc800kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51078,9 +50680,6 @@
       "repo_path": "bios/Arcade/MAME/abc80kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51091,9 +50690,6 @@
       "repo_path": "bios/Arcade/MAME/abc830.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51104,9 +50700,6 @@
       "repo_path": "bios/Arcade/MAME/abc830.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51117,9 +50710,6 @@
       "repo_path": "bios/Arcade/MAME/abc830.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51130,9 +50720,6 @@
       "repo_path": "bios/Arcade/MAME/abc830.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51156,9 +50743,6 @@
       "repo_path": "bios/Arcade/Arcade/abc99.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51169,9 +50753,6 @@
       "repo_path": "bios/Arcade/MAME/abc_db4106.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51182,9 +50763,6 @@
       "repo_path": "bios/Arcade/MAME/abc_db4107.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51195,9 +50773,6 @@
       "repo_path": "bios/Arcade/MAME/abc_db4112.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51208,9 +50783,6 @@
       "repo_path": "bios/Arcade/Arcade/abc_fd2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51221,9 +50793,6 @@
       "repo_path": "bios/Arcade/Arcade/slutprov.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51234,9 +50803,6 @@
       "repo_path": "bios/Arcade/MAME/abcexp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51247,9 +50813,6 @@
       "repo_path": "bios/Arcade/Arcade/uni800.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51260,9 +50823,6 @@
       "repo_path": "bios/Arcade/Arcade/unidisk.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51273,9 +50833,6 @@
       "repo_path": "bios/Arcade/Arcade/abcsio.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51286,9 +50843,6 @@
       "repo_path": "bios/Arcade/MAME/acb2072.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51309,9 +50863,6 @@
       "repo_path": "bios/Arcade/MAME/ace_sp_reelctrl.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51322,9 +50873,6 @@
       "repo_path": "bios/Arcade/MAME/ace_sp_reelctrl_pcp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51335,9 +50883,6 @@
       "repo_path": "bios/Arcade/Arcade/acorn_vdu80.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51348,9 +50893,6 @@
       "repo_path": "bios/Arcade/Arcade/acs8600_ics.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51361,9 +50903,6 @@
       "repo_path": "bios/Arcade/MAME/agat7_flop.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51374,9 +50913,6 @@
       "repo_path": "bios/Arcade/Arcade/agat840k_hle.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51387,9 +50923,6 @@
       "repo_path": "bios/Arcade/MAME/agat9_flop.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51400,9 +50933,6 @@
       "repo_path": "bios/Arcade/MAME/agat_fdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51413,9 +50943,6 @@
       "repo_path": "bios/Arcade/MAME/aha1542a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51426,9 +50953,6 @@
       "repo_path": "bios/Arcade/MAME/aha1542b.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51439,9 +50963,6 @@
       "repo_path": "bios/Arcade/MAME/aha1542c.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51452,9 +50973,6 @@
       "repo_path": "bios/Arcade/MAME/aha1542cf.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51465,9 +50983,6 @@
       "repo_path": "bios/Arcade/MAME/aha1542cp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51478,9 +50993,6 @@
       "repo_path": "bios/Arcade/MAME/aha1740.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51491,9 +51003,6 @@
       "repo_path": "bios/Arcade/MAME/aha1742a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51504,9 +51013,6 @@
       "repo_path": "bios/Arcade/MAME/aha2940.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51517,9 +51023,6 @@
       "repo_path": "bios/Arcade/MAME/aha2940au.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51530,9 +51033,6 @@
       "repo_path": "bios/Arcade/Arcade/alto2_cpu.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51543,9 +51043,6 @@
       "repo_path": "bios/Arcade/MAME/altos2_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51556,9 +51053,6 @@
       "repo_path": "bios/Arcade/MAME/am100kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51569,9 +51063,6 @@
       "repo_path": "bios/Arcade/MAME/amiga_a2091.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51582,9 +51073,6 @@
       "repo_path": "bios/Arcade/MAME/amiga_a570.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51595,9 +51083,6 @@
       "repo_path": "bios/Arcade/MAME/amiga_a590.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51608,9 +51093,6 @@
       "repo_path": "bios/Arcade/Arcade/amiga_ar1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51621,9 +51103,6 @@
       "repo_path": "bios/Arcade/Arcade/amiga_ar2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51634,9 +51113,6 @@
       "repo_path": "bios/Arcade/MAME/amiga_ar3.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51647,9 +51123,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/amiga_buddha.zip.0ed12578",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51660,9 +51133,6 @@
       "repo_path": "bios/Arcade/MAME/amiga_oktagon2008.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51673,9 +51143,6 @@
       "repo_path": "bios/Arcade/MAME/amiga_ripple.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -51686,9 +51153,6 @@
       "repo_path": "bios/Arcade/MAME/ampex230_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -52249,9 +51713,6 @@
       "repo_path": "bios/Arcade/MAME/asc88.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -52262,9 +51723,6 @@
       "repo_path": "bios/Arcade/MAME/ascsasi.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -52305,9 +51763,6 @@
       "repo_path": "bios/Arcade/Arcade/atom_discpack.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -52318,9 +51773,6 @@
       "repo_path": "bios/Arcade/MAME/atom_gdos.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -52331,9 +51783,6 @@
       "repo_path": "bios/Arcade/MAME/atom_gdos2015.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -52344,9 +51793,6 @@
       "repo_path": "bios/Arcade/MAME/voicebox.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -52357,9 +51803,6 @@
       "repo_path": "bios/Arcade/MAME/atom_vdu80.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -52370,9 +51813,6 @@
       "repo_path": "bios/Arcade/MAME/ax208.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -52396,9 +51836,6 @@
       "repo_path": "bios/Arcade/MAME/banshee_x86.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -52409,9 +51846,6 @@
       "repo_path": "bios/Arcade/MAME/basf7100_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53195,9 +52629,6 @@
       "repo_path": "bios/Arcade/Arcade/betadisk.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53208,9 +52639,6 @@
       "repo_path": "bios/Arcade/MAME/bingoct.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53251,9 +52679,6 @@
       "repo_path": "bios/Arcade/MAME/bluechip.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53264,9 +52689,6 @@
       "repo_path": "bios/Arcade/Arcade/bml3kanji.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53277,9 +52699,6 @@
       "repo_path": "bios/Arcade/Arcade/bml3mp1802.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53290,9 +52709,6 @@
       "repo_path": "bios/Arcade/Arcade/bml3mp1805.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53303,9 +52719,6 @@
       "repo_path": "bios/Arcade/Arcade/bsmt2000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53316,9 +52729,6 @@
       "repo_path": "bios/Arcade/MAME/bt542b.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53329,9 +52739,6 @@
       "repo_path": "bios/Arcade/MAME/bt542bh.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53342,9 +52749,6 @@
       "repo_path": "bios/Arcade/MAME/bt545s.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53355,9 +52759,6 @@
       "repo_path": "bios/Arcade/Arcade/bw2_ramcard.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53368,9 +52769,6 @@
       "repo_path": "bios/Arcade/Arcade/bwtwo.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53381,9 +52779,6 @@
       "repo_path": "bios/Arcade/Arcade/c1526.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53394,9 +52789,6 @@
       "repo_path": "bios/Arcade/Arcade/c1540.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53407,9 +52799,6 @@
       "repo_path": "bios/Arcade/Arcade/c1541.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53420,9 +52809,6 @@
       "repo_path": "bios/Arcade/Arcade/c1541c.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53433,9 +52819,6 @@
       "repo_path": "bios/Arcade/Arcade/c1541dd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53446,9 +52829,6 @@
       "repo_path": "bios/Arcade/Arcade/c1541ii.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53459,9 +52839,6 @@
       "repo_path": "bios/Arcade/Arcade/c1541pd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53472,9 +52849,6 @@
       "repo_path": "bios/Arcade/Arcade/c1541pdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53485,9 +52859,6 @@
       "repo_path": "bios/Arcade/Arcade/c1551.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53498,9 +52869,6 @@
       "repo_path": "bios/Arcade/Arcade/c1563.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53511,9 +52879,6 @@
       "repo_path": "bios/Arcade/Arcade/c1570.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53524,9 +52889,6 @@
       "repo_path": "bios/Arcade/Arcade/c1571.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53550,9 +52912,6 @@
       "repo_path": "bios/Arcade/Arcade/c1581.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53636,9 +52995,6 @@
       "repo_path": "bios/Arcade/MAME/c64_tdos.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53649,9 +53005,6 @@
       "repo_path": "bios/Arcade/MAME/c64_tdos.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53688,9 +53041,6 @@
       "repo_path": "bios/Arcade/Arcade/c64_nl10.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53701,9 +53051,6 @@
       "repo_path": "bios/Arcade/MAME/c64_tdos.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53770,9 +53117,6 @@
       "repo_path": "bios/Arcade/Arcade/c8250lp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53793,9 +53137,6 @@
       "repo_path": "bios/Arcade/Arcade/cadabc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53806,9 +53147,6 @@
       "repo_path": "bios/Arcade/MAME/cbm2_hrga.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53819,9 +53157,6 @@
       "repo_path": "bios/Arcade/MAME/cbm2_hrga.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53832,9 +53167,6 @@
       "repo_path": "bios/Arcade/MAME/cbm8000_hsg_a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53845,9 +53177,6 @@
       "repo_path": "bios/Arcade/MAME/cbm8000_hsg_a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53858,9 +53187,6 @@
       "repo_path": "bios/Arcade/MAME/cbm_interpod.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53871,9 +53197,6 @@
       "repo_path": "bios/Arcade/Arcade/serbox.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53904,9 +53227,6 @@
       "repo_path": "bios/Arcade/MAME/cd90_015.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53917,9 +53237,6 @@
       "repo_path": "bios/Arcade/MAME/cd90_351.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -53930,9 +53247,6 @@
       "repo_path": "bios/Arcade/MAME/cd90_640.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54003,9 +53317,6 @@
       "repo_path": "bios/Arcade/MAME/centennial_sl01m_15_11194.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54016,9 +53327,6 @@
       "repo_path": "bios/Arcade/MAME/centennial_sl02m_15_11194.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54029,9 +53337,6 @@
       "repo_path": "bios/Arcade/MAME/centennial_sl04m_15_11194.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54042,9 +53347,6 @@
       "repo_path": "bios/Arcade/Arcade/cffa1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54065,9 +53367,6 @@
       "repo_path": "bios/Arcade/Arcade/cga.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54078,9 +53377,6 @@
       "repo_path": "bios/Arcade/Arcade/cga_iskr1030m.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54091,9 +53387,6 @@
       "repo_path": "bios/Arcade/Arcade/cga_iskr1031.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54104,9 +53397,6 @@
       "repo_path": "bios/Arcade/Arcade/cga_m24.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54117,9 +53407,6 @@
       "repo_path": "bios/Arcade/Arcade/cga_mc1502.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54130,9 +53417,6 @@
       "repo_path": "bios/Arcade/Arcade/cga_poisk2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54156,9 +53440,6 @@
       "repo_path": "bios/Arcade/MAME/cgenie_fdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54169,9 +53450,6 @@
       "repo_path": "bios/Arcade/Arcade/cgthree.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54192,9 +53470,6 @@
       "repo_path": "bios/Arcade/MAME/cit101_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54205,9 +53480,6 @@
       "repo_path": "bios/Arcade/MAME/cit101e_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54218,9 +53490,6 @@
       "repo_path": "bios/Arcade/MAME/cit220p_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54231,9 +53500,6 @@
       "repo_path": "bios/Arcade/MAME/clgd5401.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54244,9 +53510,6 @@
       "repo_path": "bios/Arcade/MAME/clgd542x.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54257,9 +53520,6 @@
       "repo_path": "bios/Arcade/MAME/clgd5434_pci.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54270,9 +53530,6 @@
       "repo_path": "bios/Arcade/MAME/clgd5446_pci.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54283,9 +53540,6 @@
       "repo_path": "bios/Arcade/MAME/clgd5465_laguna.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54296,9 +53550,6 @@
       "repo_path": "bios/Arcade/Arcade/cmdhd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54309,9 +53560,6 @@
       "repo_path": "bios/Arcade/MAME/cmdrc2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54322,9 +53570,6 @@
       "repo_path": "bios/Arcade/MAME/cmi_ankbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54335,9 +53580,6 @@
       "repo_path": "bios/Arcade/MAME/cmi_mkbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54468,9 +53710,6 @@
       "repo_path": "bios/Arcade/Arcade/compiskb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54481,9 +53720,6 @@
       "repo_path": "bios/Arcade/Arcade/comx_clm.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54494,9 +53730,6 @@
       "repo_path": "bios/Arcade/Arcade/comx_eb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54507,9 +53740,6 @@
       "repo_path": "bios/Arcade/Arcade/comx_epr.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54520,9 +53750,6 @@
       "repo_path": "bios/Arcade/Arcade/comx_fd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54543,9 +53770,6 @@
       "repo_path": "bios/Arcade/Arcade/comx_prn.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54556,9 +53780,6 @@
       "repo_path": "bios/Arcade/Arcade/comx_thm.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54569,9 +53790,6 @@
       "repo_path": "bios/Arcade/MAME/concept_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54592,9 +53810,6 @@
       "repo_path": "bios/Arcade/MAME/cp31.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54615,9 +53830,6 @@
       "repo_path": "bios/Arcade/Arcade/cpc_brunword4.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54628,9 +53840,6 @@
       "repo_path": "bios/Arcade/Arcade/cpc_ddi1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54641,9 +53850,6 @@
       "repo_path": "bios/Arcade/MAME/cpc_rom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54654,9 +53860,6 @@
       "repo_path": "bios/Arcade/Arcade/cpc_hd20.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54667,9 +53870,6 @@
       "repo_path": "bios/Arcade/MAME/cpc_rom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54680,9 +53880,6 @@
       "repo_path": "bios/Arcade/MAME/cpc_rom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54693,9 +53890,6 @@
       "repo_path": "bios/Arcade/MAME/cpc_rom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54706,9 +53900,6 @@
       "repo_path": "bios/Arcade/Arcade/cpc_smartwatch.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54719,9 +53910,6 @@
       "repo_path": "bios/Arcade/MAME/cpc_rom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54732,9 +53920,6 @@
       "repo_path": "bios/Arcade/Arcade/cpc_transtape.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54745,9 +53930,6 @@
       "repo_path": "bios/Arcade/MAME/cpuap.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54758,9 +53940,6 @@
       "repo_path": "bios/Arcade/MAME/cq90_028.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54781,9 +53960,6 @@
       "repo_path": "bios/Arcade/Arcade/crvfdc01.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54794,9 +53970,6 @@
       "repo_path": "bios/Arcade/Arcade/crvfdc02.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54807,9 +53980,6 @@
       "repo_path": "bios/Arcade/Arcade/csd1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54820,9 +53990,6 @@
       "repo_path": "bios/Arcade/Arcade/sb16.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54833,9 +54000,6 @@
       "repo_path": "bios/Arcade/MAME/cuda.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54872,9 +54036,6 @@
       "repo_path": "bios/Arcade/MAME/cv8lc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54925,9 +54086,6 @@
       "repo_path": "bios/Arcade/MAME/db50xg.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54938,9 +54096,6 @@
       "repo_path": "bios/Arcade/MAME/db60xg.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54951,9 +54106,6 @@
       "repo_path": "bios/Arcade/MAME/dc320b.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54964,9 +54116,6 @@
       "repo_path": "bios/Arcade/MAME/dc320e.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54977,9 +54126,6 @@
       "repo_path": "bios/Arcade/MAME/dc820.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -54990,9 +54136,6 @@
       "repo_path": "bios/Arcade/MAME/dc820b.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55003,9 +54146,6 @@
       "repo_path": "bios/Arcade/Arcade/dectalk_isa.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55016,9 +54156,6 @@
       "repo_path": "bios/Arcade/MAME/dg640.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55029,9 +54166,6 @@
       "repo_path": "bios/Arcade/MAME/digilog_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55042,9 +54176,6 @@
       "repo_path": "bios/Arcade/MAME/dim68k_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55055,9 +54186,6 @@
       "repo_path": "bios/Arcade/Arcade/dio98543.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55068,9 +54196,6 @@
       "repo_path": "bios/Arcade/Arcade/dio98544.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55081,9 +54206,6 @@
       "repo_path": "bios/Arcade/MAME/dio98550.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55094,9 +54216,6 @@
       "repo_path": "bios/Arcade/Arcade/dio98603a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55107,9 +54226,6 @@
       "repo_path": "bios/Arcade/Arcade/dio98603b.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55120,9 +54236,6 @@
       "repo_path": "bios/Arcade/MAME/dio98628.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55133,9 +54246,6 @@
       "repo_path": "bios/Arcade/MAME/dio98629.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55146,9 +54256,6 @@
       "repo_path": "bios/Arcade/Arcade/diskii13.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55159,9 +54266,6 @@
       "repo_path": "bios/Arcade/Arcade/dm_clgd5430.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55172,9 +54276,6 @@
       "repo_path": "bios/Arcade/Arcade/dmv_k220.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55185,9 +54286,6 @@
       "repo_path": "bios/Arcade/Arcade/dmv_k230.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55198,9 +54296,6 @@
       "repo_path": "bios/Arcade/Arcade/dmv_k231.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55211,9 +54306,6 @@
       "repo_path": "bios/Arcade/Arcade/dmv_k235.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55224,9 +54316,6 @@
       "repo_path": "bios/Arcade/Arcade/dmv_k806.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55237,9 +54326,6 @@
       "repo_path": "bios/Arcade/Arcade/dmv_keyboard.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55323,9 +54409,6 @@
       "repo_path": "bios/Arcade/MAME/dsd5217.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55336,9 +54419,6 @@
       "repo_path": "bios/Arcade/MAME/dsp56303.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55349,9 +54429,6 @@
       "repo_path": "bios/Arcade/MAME/dsp56311.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55372,9 +54449,6 @@
       "repo_path": "bios/Arcade/MAME/duodock.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55395,9 +54469,6 @@
       "repo_path": "bios/Arcade/Arcade/dw_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55408,9 +54479,6 @@
       "repo_path": "bios/Arcade/Arcade/cga.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55421,9 +54489,6 @@
       "repo_path": "bios/Arcade/Arcade/ecb_grip21.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55454,9 +54519,6 @@
       "repo_path": "bios/Arcade/MAME/ef9340_1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55477,9 +54539,6 @@
       "repo_path": "bios/Arcade/Arcade/ega.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55490,9 +54549,6 @@
       "repo_path": "bios/Arcade/MAME/eidemax.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55503,9 +54559,6 @@
       "repo_path": "bios/Arcade/Arcade/einstein_sd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55516,9 +54569,6 @@
       "repo_path": "bios/Arcade/MAME/voicebox.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55529,9 +54579,6 @@
       "repo_path": "bios/Arcade/MAME/eispc_kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55682,9 +54729,6 @@
       "repo_path": "bios/Arcade/MAME/enh2000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55695,9 +54739,6 @@
       "repo_path": "bios/Arcade/MAME/enp10.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55728,9 +54769,6 @@
       "repo_path": "bios/Arcade/Arcade/epson_pf10.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55741,9 +54779,6 @@
       "repo_path": "bios/Arcade/MAME/epson_qx_option_multifont.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55764,9 +54799,6 @@
       "repo_path": "bios/Arcade/Arcade/epson_pf10.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55777,9 +54809,6 @@
       "repo_path": "bios/Arcade/Arcade/ergoline_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55790,9 +54819,6 @@
       "repo_path": "bios/Arcade/MAME/esq2x40_vfx.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55803,9 +54829,6 @@
       "repo_path": "bios/Arcade/MAME/et4000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55816,9 +54839,6 @@
       "repo_path": "bios/Arcade/MAME/et4000_kasan16.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55829,9 +54849,6 @@
       "repo_path": "bios/Arcade/MAME/et4kw32i.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55842,9 +54859,6 @@
       "repo_path": "bios/Arcade/MAME/et532_board.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55855,9 +54869,6 @@
       "repo_path": "bios/Arcade/MAME/ethudock.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55868,9 +54879,6 @@
       "repo_path": "bios/Arcade/MAME/europc_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55881,9 +54889,6 @@
       "repo_path": "bios/Arcade/MAME/ev346.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55894,9 +54899,6 @@
       "repo_path": "bios/Arcade/MAME/everdrive_md.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55907,9 +54909,6 @@
       "repo_path": "bios/Arcade/MAME/ex1280.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55930,9 +54929,6 @@
       "repo_path": "bios/Arcade/MAME/executive10_102_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55943,9 +54939,6 @@
       "repo_path": "bios/Arcade/MAME/exorterm155_device.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55956,9 +54949,6 @@
       "repo_path": "bios/Arcade/MAME/exos201.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55969,9 +54959,6 @@
       "repo_path": "bios/Arcade/MAME/f4431_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55982,9 +54969,6 @@
       "repo_path": "bios/Arcade/Arcade/fc_disksys.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -55995,9 +54979,6 @@
       "repo_path": "bios/Arcade/MAME/fd148.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56008,9 +54989,6 @@
       "repo_path": "bios/Arcade/Arcade/fd2000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56021,9 +54999,6 @@
       "repo_path": "bios/Arcade/Arcade/fd4000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56034,9 +55009,6 @@
       "repo_path": "bios/Arcade/Arcade/fdc344.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56047,9 +55019,6 @@
       "repo_path": "bios/Arcade/Arcade/fdcmag.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56060,9 +55029,6 @@
       "repo_path": "bios/Arcade/MAME/fga4he.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56073,9 +55039,6 @@
       "repo_path": "bios/Arcade/Arcade/filetto_cga.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56086,9 +55049,6 @@
       "repo_path": "bios/Arcade/MAME/freedom220_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56099,9 +55059,6 @@
       "repo_path": "bios/Arcade/Arcade/fsd1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56112,9 +55069,6 @@
       "repo_path": "bios/Arcade/Arcade/fsd2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56125,9 +55079,6 @@
       "repo_path": "bios/Arcade/MAME/g80_1500.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56138,9 +55089,6 @@
       "repo_path": "bios/Arcade/MAME/gamtor_vga.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56151,9 +55099,6 @@
       "repo_path": "bios/Arcade/MAME/geforce256.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56164,9 +55109,6 @@
       "repo_path": "bios/Arcade/MAME/geforce256ddr.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56177,9 +55119,6 @@
       "repo_path": "bios/Arcade/Arcade/gfxultra.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56190,9 +55129,6 @@
       "repo_path": "bios/Arcade/Arcade/gfxultrap.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56203,9 +55139,6 @@
       "repo_path": "bios/Arcade/Arcade/gic.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56246,9 +55179,6 @@
       "repo_path": "bios/Arcade/MAME/gpl16250va.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56259,9 +55189,6 @@
       "repo_path": "bios/Arcade/MAME/gpl951xx.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56282,9 +55209,6 @@
       "repo_path": "bios/Arcade/MAME/h89bus_io_decoder_444_43.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56295,9 +55219,6 @@
       "repo_path": "bios/Arcade/MAME/h89bus_io_decoder_444_61.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56308,9 +55229,6 @@
       "repo_path": "bios/Arcade/MAME/h89bus_io_decoder_cdr86.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56321,9 +55239,6 @@
       "repo_path": "bios/Arcade/MAME/h89bus_io_decoder_mms_61c.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56334,9 +55249,6 @@
       "repo_path": "bios/Arcade/MAME/h8_cpu_8080.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56347,9 +55259,6 @@
       "repo_path": "bios/Arcade/MAME/h8_ha_8_6.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56360,9 +55269,6 @@
       "repo_path": "bios/Arcade/Arcade/hcpu30.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56383,9 +55289,6 @@
       "repo_path": "bios/Arcade/MAME/hd44780u.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56396,9 +55299,6 @@
       "repo_path": "bios/Arcade/Arcade/hd61830.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56409,9 +55309,6 @@
       "repo_path": "bios/Arcade/MAME/hdae5000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56422,9 +55319,6 @@
       "repo_path": "bios/Arcade/MAME/he191_3425.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56445,9 +55339,6 @@
       "repo_path": "bios/Arcade/MAME/heath_super19_tlb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56458,9 +55349,6 @@
       "repo_path": "bios/Arcade/MAME/heath_tlb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56471,9 +55359,6 @@
       "repo_path": "bios/Arcade/MAME/heath_ultra_tlb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56484,9 +55369,6 @@
       "repo_path": "bios/Arcade/MAME/heath_watz_tlb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56557,9 +55439,6 @@
       "repo_path": "bios/Arcade/MAME/hk68v10.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56570,9 +55449,6 @@
       "repo_path": "bios/Arcade/MAME/hp82900.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56583,9 +55459,6 @@
       "repo_path": "bios/Arcade/MAME/hp82937.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56596,9 +55469,6 @@
       "repo_path": "bios/Arcade/MAME/hp82939.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56629,9 +55499,6 @@
       "repo_path": "bios/Arcade/MAME/hp98034.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56642,9 +55509,6 @@
       "repo_path": "bios/Arcade/Arcade/hp98035.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56655,9 +55519,6 @@
       "repo_path": "bios/Arcade/MAME/hp98046.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56668,9 +55529,6 @@
       "repo_path": "bios/Arcade/Arcade/hp9845_prt.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56691,9 +55549,6 @@
       "repo_path": "bios/Arcade/MAME/hpblp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56704,9 +55559,6 @@
       "repo_path": "bios/Arcade/MAME/human_interface.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56717,9 +55569,6 @@
       "repo_path": "bios/Arcade/MAME/i8244.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56730,9 +55579,6 @@
       "repo_path": "bios/Arcade/MAME/i8244.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56743,9 +55589,6 @@
       "repo_path": "bios/Arcade/Arcade/ibm_mfc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56756,9 +55599,6 @@
       "repo_path": "bios/Arcade/Arcade/ibm_vga.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56779,9 +55619,6 @@
       "repo_path": "bios/Arcade/MAME/idpart_video.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56812,9 +55649,6 @@
       "repo_path": "bios/Arcade/Arcade/imds2ioc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56825,9 +55659,6 @@
       "repo_path": "bios/Arcade/MAME/imi7000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56838,9 +55669,6 @@
       "repo_path": "bios/Arcade/MAME/in207100kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56851,9 +55679,6 @@
       "repo_path": "bios/Arcade/MAME/in213kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56864,9 +55689,6 @@
       "repo_path": "bios/Arcade/Arcade/indusgt.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56877,9 +55699,6 @@
       "repo_path": "bios/Arcade/Arcade/intv_ecs.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56890,9 +55709,6 @@
       "repo_path": "bios/Arcade/Arcade/intv_voice.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56903,9 +55719,6 @@
       "repo_path": "bios/Arcade/Arcade/iq151_disc2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56916,9 +55729,6 @@
       "repo_path": "bios/Arcade/Arcade/iq151_minigraf.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56929,9 +55739,6 @@
       "repo_path": "bios/Arcade/Arcade/iq151_ms15a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56942,9 +55749,6 @@
       "repo_path": "bios/Arcade/Arcade/iq151_video32.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56955,9 +55759,6 @@
       "repo_path": "bios/Arcade/Arcade/iq151_video64.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56968,9 +55769,6 @@
       "repo_path": "bios/Arcade/MAME/iris_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56981,9 +55779,6 @@
       "repo_path": "bios/Arcade/Arcade/aga.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -56994,9 +55789,6 @@
       "repo_path": "bios/Arcade/Arcade/aga_pc200.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57007,9 +55799,6 @@
       "repo_path": "bios/Arcade/MAME/isa_epc_mda.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57020,9 +55809,6 @@
       "repo_path": "bios/Arcade/MAME/isa_finalchs.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57033,9 +55819,6 @@
       "repo_path": "bios/Arcade/Arcade/isa_hdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57046,9 +55829,6 @@
       "repo_path": "bios/Arcade/Arcade/isa_hercules.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57059,9 +55839,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/isa_ibm_mda.zip.cbc72d7d",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57072,9 +55849,6 @@
       "repo_path": "bios/Arcade/Arcade/isa_ibm_pgc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57085,9 +55859,6 @@
       "repo_path": "bios/Arcade/MAME/isa_ibm_speech.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57098,9 +55869,6 @@
       "repo_path": "bios/Arcade/MAME/isa_pcmidi.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57111,9 +55879,6 @@
       "repo_path": "bios/Arcade/MAME/isa_prose4001.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57124,9 +55889,6 @@
       "repo_path": "bios/Arcade/MAME/isbc202.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57137,9 +55899,6 @@
       "repo_path": "bios/Arcade/MAME/isbc8024.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57150,9 +55909,6 @@
       "repo_path": "bios/Arcade/Arcade/isbc_215g.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57163,9 +55919,6 @@
       "repo_path": "bios/Arcade/MAME/ivelultrkb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57176,9 +55929,6 @@
       "repo_path": "bios/Arcade/MAME/jaleco_vj_pc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57189,9 +55939,6 @@
       "repo_path": "bios/Arcade/MAME/jc1310.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57252,9 +55999,6 @@
       "repo_path": "bios/Arcade/Arcade/k7659_keyboard.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57265,9 +56009,6 @@
       "repo_path": "bios/Arcade/MAME/kaypro10kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57278,9 +56019,6 @@
       "repo_path": "bios/Arcade/MAME/kayproiikbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57291,9 +56029,6 @@
       "repo_path": "bios/Arcade/Arcade/kb_3270pc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57304,9 +56039,6 @@
       "repo_path": "bios/Arcade/Arcade/kb_ec1841.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57317,9 +56049,6 @@
       "repo_path": "bios/Arcade/Arcade/kb_iskr1030.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57330,9 +56059,6 @@
       "repo_path": "bios/Arcade/Arcade/kb_ms_natural.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57343,9 +56069,6 @@
       "repo_path": "bios/Arcade/MAME/kb_pcat101.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57356,9 +56079,6 @@
       "repo_path": "bios/Arcade/Arcade/kb_pcat84.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57369,9 +56089,6 @@
       "repo_path": "bios/Arcade/Arcade/kb_pcxt83.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57382,9 +56099,6 @@
       "repo_path": "bios/Arcade/Arcade/kbd_lle_en_us.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57395,9 +56109,6 @@
       "repo_path": "bios/Arcade/Arcade/kc_d004.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57408,9 +56119,6 @@
       "repo_path": "bios/Arcade/Arcade/kc_d004_gide.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57421,9 +56129,6 @@
       "repo_path": "bios/Arcade/MAME/keytronic_l2207.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57434,9 +56139,6 @@
       "repo_path": "bios/Arcade/Arcade/keytronic_pc3270.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57447,9 +56149,6 @@
       "repo_path": "bios/Arcade/Arcade/keytronic_pc3270.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57460,9 +56159,6 @@
       "repo_path": "bios/Arcade/Arcade/km035.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57473,9 +56169,6 @@
       "repo_path": "bios/Arcade/MAME/ks0066.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57486,9 +56179,6 @@
       "repo_path": "bios/Arcade/MAME/labtam_3232.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57499,9 +56189,6 @@
       "repo_path": "bios/Arcade/MAME/labtam_8086cpu.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57512,9 +56199,6 @@
       "repo_path": "bios/Arcade/MAME/labtam_vducom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57525,9 +56209,6 @@
       "repo_path": "bios/Arcade/MAME/labtam_z80sbc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57538,9 +56219,6 @@
       "repo_path": "bios/Arcade/Arcade/lba_enhancer.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57551,9 +56229,6 @@
       "repo_path": "bios/Arcade/MAME/lc7985.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57564,9 +56239,6 @@
       "repo_path": "bios/Arcade/Arcade/ldv1000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57577,9 +56249,6 @@
       "repo_path": "bios/Arcade/MAME/lha201.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57590,9 +56259,6 @@
       "repo_path": "bios/Arcade/MAME/lisa2fdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57603,9 +56269,6 @@
       "repo_path": "bios/Arcade/MAME/lisafdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57616,9 +56279,6 @@
       "repo_path": "bios/Arcade/MAME/lisavideo.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57629,9 +56289,6 @@
       "repo_path": "bios/Arcade/Arcade/lk201.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57642,9 +56299,6 @@
       "repo_path": "bios/Arcade/MAME/lm24014h.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57655,9 +56309,6 @@
       "repo_path": "bios/Arcade/MAME/lrk331.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57668,9 +56319,6 @@
       "repo_path": "bios/Arcade/MAME/luna_68k_cmc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57681,9 +56329,6 @@
       "repo_path": "bios/Arcade/MAME/luna_68k_gpu.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57694,9 +56339,6 @@
       "repo_path": "bios/Arcade/MAME/luna_68k_ioc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57707,9 +56349,6 @@
       "repo_path": "bios/Arcade/Arcade/lux10828.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57733,9 +56372,6 @@
       "repo_path": "bios/Arcade/Arcade/lux21056.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57766,9 +56402,6 @@
       "repo_path": "bios/Arcade/Arcade/m1comm.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57779,9 +56412,6 @@
       "repo_path": "bios/Arcade/Arcade/m20_8086.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57792,9 +56422,6 @@
       "repo_path": "bios/Arcade/Arcade/m24_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57805,9 +56432,6 @@
       "repo_path": "bios/Arcade/Arcade/m24_z8000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57828,9 +56452,6 @@
       "repo_path": "bios/Arcade/MAME/m50dass.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57851,9 +56472,6 @@
       "repo_path": "bios/Arcade/Arcade/m68705p5.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57864,9 +56482,6 @@
       "repo_path": "bios/Arcade/Arcade/m68705r3.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57877,9 +56492,6 @@
       "repo_path": "bios/Arcade/Arcade/m68705r3.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57890,9 +56502,6 @@
       "repo_path": "bios/Arcade/MAME/m68hc05pge.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57903,9 +56512,6 @@
       "repo_path": "bios/Arcade/Arcade/mach64isa.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57986,9 +56592,6 @@
       "repo_path": "bios/Arcade/MAME/macxlfdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -57999,9 +56602,6 @@
       "repo_path": "bios/Arcade/MAME/macxlvideo.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58012,9 +56612,6 @@
       "repo_path": "bios/Arcade/Arcade/mc1502_rom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58025,9 +56622,6 @@
       "repo_path": "bios/Arcade/MAME/mc_mk4_hopper.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58048,9 +56642,6 @@
       "repo_path": "bios/Arcade/MAME/md_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58074,9 +56665,6 @@
       "repo_path": "bios/Arcade/MAME/mdisplay3.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58087,9 +56675,6 @@
       "repo_path": "bios/Arcade/MAME/mg1_kbd_device.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58100,9 +56685,6 @@
       "repo_path": "bios/Arcade/MAME/mga2064w.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58113,9 +56695,6 @@
       "repo_path": "bios/Arcade/MAME/microtan_kbd_mt009.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58136,9 +56715,6 @@
       "repo_path": "bios/Arcade/Arcade/midcsd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58159,9 +56735,6 @@
       "repo_path": "bios/Arcade/MAME/mindset_sound_module.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58172,9 +56745,6 @@
       "repo_path": "bios/Arcade/Arcade/minichif.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58185,9 +56755,6 @@
       "repo_path": "bios/Arcade/MAME/mks3.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58198,9 +56765,6 @@
       "repo_path": "bios/Arcade/Arcade/mm1kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58232,9 +56796,6 @@
       "cores": [
         "mame",
         "mame2003_plus"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58246,9 +56807,6 @@
       "cores": [
         "mame",
         "mame2003_plus"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58259,9 +56817,6 @@
       "repo_path": "bios/Arcade/Arcade/mpcb828.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58272,9 +56827,6 @@
       "repo_path": "bios/Arcade/Arcade/mpcb896.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58285,9 +56837,6 @@
       "repo_path": "bios/Arcade/Arcade/mpcb963.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58298,9 +56847,6 @@
       "repo_path": "bios/Arcade/Arcade/mpcba79.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58311,9 +56857,6 @@
       "repo_path": "bios/Arcade/Arcade/mpcbb68.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58324,9 +56867,6 @@
       "repo_path": "bios/Arcade/Arcade/mpcbb92.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58337,9 +56877,6 @@
       "repo_path": "bios/Arcade/MAME/mpf1_epb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58350,9 +56887,6 @@
       "repo_path": "bios/Arcade/MAME/mpf1_epb_ibp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58363,9 +56897,6 @@
       "repo_path": "bios/Arcade/MAME/mpf1_iom_ip.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58376,9 +56907,6 @@
       "repo_path": "bios/Arcade/MAME/mpf1_prt.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58389,9 +56917,6 @@
       "repo_path": "bios/Arcade/MAME/mpf1_prt_ip.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58402,9 +56927,6 @@
       "repo_path": "bios/Arcade/MAME/mpf1_sgb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58415,9 +56937,6 @@
       "repo_path": "bios/Arcade/MAME/mpf1_ssb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58428,9 +56947,6 @@
       "repo_path": "bios/Arcade/MAME/mpf1_ssb_ip.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58441,9 +56957,6 @@
       "repo_path": "bios/Arcade/MAME/mpf1_tva_ip.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58454,9 +56967,6 @@
       "repo_path": "bios/Arcade/MAME/mpf1_vid.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58467,9 +56977,6 @@
       "repo_path": "bios/Arcade/MAME/mps1200.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58480,9 +56987,6 @@
       "repo_path": "bios/Arcade/MAME/mps1250.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58493,9 +56997,6 @@
       "repo_path": "bios/Arcade/Arcade/mpu401.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58506,9 +57007,6 @@
       "repo_path": "bios/Arcade/MAME/mr9735_002.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58519,9 +57017,6 @@
       "repo_path": "bios/Arcade/Arcade/ms7004.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58532,9 +57027,6 @@
       "repo_path": "bios/Arcade/MAME/msdsd1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58545,9 +57037,6 @@
       "repo_path": "bios/Arcade/MAME/msdsd2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58558,9 +57047,6 @@
       "repo_path": "bios/Arcade/Arcade/msm6222b01.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58571,9 +57057,6 @@
       "repo_path": "bios/Arcade/MAME/msmt070.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58584,9 +57067,6 @@
       "repo_path": "bios/Arcade/Arcade/msmt071.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58597,9 +57077,6 @@
       "repo_path": "bios/Arcade/Arcade/msmt081.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58610,9 +57087,6 @@
       "repo_path": "bios/Arcade/Arcade/msmt094.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58623,9 +57097,6 @@
       "repo_path": "bios/Arcade/Arcade/msx_cart_bm_012.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58649,9 +57120,6 @@
       "repo_path": "bios/Arcade/Arcade/msx_cart_sfg01.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58662,9 +57130,6 @@
       "repo_path": "bios/Arcade/MAME/msx_cart_sfg05.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58675,9 +57140,6 @@
       "repo_path": "bios/Arcade/MAME/msx_cart_skw01.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58688,9 +57150,6 @@
       "repo_path": "bios/Arcade/MAME/msx_cart_sunrise_ataide.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58701,9 +57160,6 @@
       "repo_path": "bios/Arcade/Arcade/msx_moonsound.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58714,9 +57170,6 @@
       "repo_path": "bios/Arcade/MAME/mtx_cfx.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58727,9 +57180,6 @@
       "repo_path": "bios/Arcade/MAME/mtx_sdxbas.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58740,9 +57190,6 @@
       "repo_path": "bios/Arcade/MAME/mtx_sdxcpm.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58753,9 +57200,6 @@
       "repo_path": "bios/Arcade/MAME/mu5lcd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58766,9 +57210,6 @@
       "repo_path": "bios/Arcade/MAME/mulcd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58779,9 +57220,6 @@
       "repo_path": "bios/Arcade/MAME/mvme120.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58792,9 +57230,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/mvme120.zip.c77c25e1",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58805,9 +57240,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/mvme120.zip.c77c25e1",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58818,9 +57250,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/mvme120.zip.c77c25e1",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58831,9 +57260,6 @@
       "repo_path": "bios/Arcade/MAME/mvme147.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58844,9 +57270,6 @@
       "repo_path": "bios/Arcade/MAME/mvme180.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58857,9 +57280,6 @@
       "repo_path": "bios/Arcade/MAME/mvme181.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58870,9 +57290,6 @@
       "repo_path": "bios/Arcade/MAME/mvme187.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58883,9 +57300,6 @@
       "repo_path": "bios/Arcade/MAME/mvme327a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58896,9 +57310,6 @@
       "repo_path": "bios/Arcade/MAME/mvme328.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58909,9 +57320,6 @@
       "repo_path": "bios/Arcade/Arcade/mvme350.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58922,9 +57330,6 @@
       "repo_path": "bios/Arcade/MAME/mz1e30.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58945,9 +57350,6 @@
       "repo_path": "bios/Arcade/MAME/mzr8105.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58958,9 +57360,6 @@
       "repo_path": "bios/Arcade/MAME/nabupc_keyboard.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58971,9 +57370,6 @@
       "repo_path": "bios/Arcade/Arcade/namco50.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58984,9 +57380,6 @@
       "repo_path": "bios/Arcade/Arcade/namco51.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -58997,9 +57390,6 @@
       "repo_path": "bios/Arcade/Arcade/namco52.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59010,9 +57400,6 @@
       "repo_path": "bios/Arcade/Arcade/namco53.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59023,9 +57410,6 @@
       "repo_path": "bios/Arcade/Arcade/namco54.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59036,9 +57420,6 @@
       "repo_path": "bios/Arcade/Arcade/namco62.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59049,9 +57430,6 @@
       "repo_path": "bios/Arcade/MAME/namco_amc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59062,9 +57440,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59075,9 +57450,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59088,9 +57460,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59101,9 +57470,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59114,9 +57480,6 @@
       "repo_path": "bios/Arcade/MAME/namco_csz1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59127,9 +57490,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59140,9 +57500,6 @@
       "repo_path": "bios/Arcade/MAME/namco_cyberlead_led.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59153,9 +57510,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59166,9 +57520,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59179,9 +57530,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59192,9 +57540,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59205,9 +57550,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59218,9 +57560,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59231,9 +57570,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/namco_amc.zip.0eeea2ed",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59244,9 +57580,6 @@
       "repo_path": "bios/Arcade/Arcade/namcoc65.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59257,9 +57590,6 @@
       "repo_path": "bios/Arcade/Arcade/namcoc67.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59270,9 +57600,6 @@
       "repo_path": "bios/Arcade/Arcade/namcoc68.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59284,9 +57611,6 @@
       "cores": [
         "fbneo",
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59298,9 +57622,6 @@
       "cores": [
         "fbneo",
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59311,9 +57632,6 @@
       "repo_path": "bios/Arcade/MAME/namcoc71.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59324,9 +57642,6 @@
       "repo_path": "bios/Arcade/Arcade/namcoc74.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59338,9 +57653,6 @@
       "cores": [
         "fbneo",
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59352,9 +57664,6 @@
       "cores": [
         "mame",
         "mame2003_plus"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59365,9 +57674,6 @@
       "repo_path": "bios/Arcade/MAME/nanoreseau_mo.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59378,9 +57684,6 @@
       "repo_path": "bios/Arcade/MAME/nanoreseau_to.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59574,9 +57877,6 @@
       "repo_path": "bios/Arcade/MAME/ncr53c825_pci.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59587,9 +57887,6 @@
       "repo_path": "bios/Arcade/MAME/neon250.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59600,9 +57897,6 @@
       "repo_path": "bios/Arcade/MAME/nes_rob.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59613,9 +57907,6 @@
       "repo_path": "bios/Arcade/Arcade/newbrain_eim.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59626,9 +57917,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/newbrain_eim.zip.0fb3e93f",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59649,9 +57937,6 @@
       "repo_path": "bios/Arcade/MAME/nokia_crtc186.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59662,9 +57947,6 @@
       "repo_path": "bios/Arcade/MAME/novell_dcb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59675,9 +57957,6 @@
       "repo_path": "bios/Arcade/MAME/np600a3.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59698,9 +57977,6 @@
       "repo_path": "bios/Arcade/MAME/omniwave.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59711,9 +57987,6 @@
       "repo_path": "bios/Arcade/MAME/omti8621isa.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59724,9 +57997,6 @@
       "repo_path": "bios/Arcade/Arcade/jasmin.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59737,9 +58007,6 @@
       "repo_path": "bios/Arcade/Arcade/microdisc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59750,9 +58017,6 @@
       "repo_path": "bios/Arcade/MAME/osa_analyst.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59763,9 +58027,6 @@
       "repo_path": "bios/Arcade/MAME/osa_bforce.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59776,9 +58037,6 @@
       "repo_path": "bios/Arcade/MAME/osa_maestro.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59789,9 +58047,6 @@
       "repo_path": "bios/Arcade/MAME/osa_maestroa.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59802,9 +58057,6 @@
       "repo_path": "bios/Arcade/MAME/osa_sparc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59815,9 +58067,6 @@
       "repo_path": "bios/Arcade/MAME/oti64111_pci.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59828,9 +58077,6 @@
       "repo_path": "bios/Arcade/Arcade/p1_fdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59841,9 +58087,6 @@
       "repo_path": "bios/Arcade/Arcade/p1_hdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59854,9 +58097,6 @@
       "repo_path": "bios/Arcade/Arcade/p1_rom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59877,9 +58117,6 @@
       "repo_path": "bios/Arcade/MAME/pa7234.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59890,9 +58127,6 @@
       "repo_path": "bios/Arcade/MAME/partner_gdp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59903,9 +58137,6 @@
       "repo_path": "bios/Arcade/Arcade/pc1512kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59916,9 +58147,6 @@
       "repo_path": "bios/Arcade/Arcade/pc1640_iga.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59949,9 +58177,6 @@
       "repo_path": "bios/Arcade/MAME/pc80s31k.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59975,9 +58200,6 @@
       "repo_path": "bios/Arcade/MAME/pc9801_14.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -59988,9 +58210,6 @@
       "repo_path": "bios/Arcade/Arcade/pc9801_26.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60001,9 +58220,6 @@
       "repo_path": "bios/Arcade/MAME/pc9801_27.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60014,9 +58230,6 @@
       "repo_path": "bios/Arcade/MAME/pc9801_55l.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60027,9 +58240,6 @@
       "repo_path": "bios/Arcade/MAME/pc9801_55u.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60040,9 +58250,6 @@
       "repo_path": "bios/Arcade/Arcade/pc9801_86.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60053,9 +58260,6 @@
       "repo_path": "bios/Arcade/MAME/pc98_fdd_2dd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60066,9 +58270,6 @@
       "repo_path": "bios/Arcade/MAME/pc98_fdd_2hd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60079,9 +58280,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/speakboard.zip.7018498d",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60092,9 +58290,6 @@
       "repo_path": "bios/Arcade/Arcade/pcd_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60105,9 +58300,6 @@
       "repo_path": "bios/Arcade/Arcade/pcd_video.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60118,9 +58310,6 @@
       "repo_path": "bios/Arcade/Arcade/pcx_video.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60131,9 +58320,6 @@
       "repo_path": "bios/Arcade/MAME/pd32.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60224,9 +58410,6 @@
       "repo_path": "bios/Arcade/MAME/pdc20262.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60237,9 +58420,6 @@
       "repo_path": "bios/Arcade/MAME/pdc20268.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60290,9 +58470,6 @@
       "repo_path": "bios/Arcade/MAME/pencil2_coleco.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60303,9 +58480,6 @@
       "repo_path": "bios/Arcade/MAME/permedia2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60316,9 +58490,6 @@
       "repo_path": "bios/Arcade/Arcade/pet_superpet.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60329,9 +58500,6 @@
       "repo_path": "bios/Arcade/MAME/pg200.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60342,9 +58510,6 @@
       "repo_path": "bios/Arcade/MAME/plg100_vl.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60355,9 +58520,6 @@
       "repo_path": "bios/Arcade/MAME/plg150_ap.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60368,9 +58530,6 @@
       "repo_path": "bios/Arcade/MAME/polyvti.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60381,9 +58540,6 @@
       "repo_path": "bios/Arcade/Arcade/pr8210.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60394,9 +58550,6 @@
       "repo_path": "bios/Arcade/MAME/prav8ckb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60417,9 +58570,6 @@
       "repo_path": "bios/Arcade/MAME/profighterq.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60430,9 +58580,6 @@
       "repo_path": "bios/Arcade/MAME/profighterqa.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60443,9 +58590,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/profighterqa.zip.ffb37620",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60456,9 +58600,6 @@
       "repo_path": "bios/Arcade/MAME/profighterx.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60469,9 +58610,6 @@
       "repo_path": "bios/Arcade/MAME/promotion3210.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60482,9 +58620,6 @@
       "repo_path": "bios/Arcade/MAME/ps2_keybc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60495,9 +58630,6 @@
       "repo_path": "bios/Arcade/MAME/psion_3fax.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60508,9 +58640,6 @@
       "repo_path": "bios/Arcade/MAME/psion_3link_ser.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60521,9 +58650,6 @@
       "repo_path": "bios/Arcade/Arcade/psx_cd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60534,9 +58660,6 @@
       "repo_path": "bios/Arcade/Arcade/psxgboost.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60547,9 +58670,6 @@
       "repo_path": "bios/Arcade/MAME/pvga1a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60560,9 +58680,6 @@
       "repo_path": "bios/Arcade/MAME/pvga1a_jk.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60593,9 +58710,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_cumanafdi.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60606,9 +58720,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_gold.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60619,9 +58730,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_kdi.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60632,9 +58740,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_mhd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60645,9 +58750,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_mpfdi.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60658,9 +58760,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_opdbm.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60671,9 +58770,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_pcmlqdi.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60684,9 +58780,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_qldisc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60697,9 +58790,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_qplus4.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60710,9 +58800,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_qubide.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60723,9 +58810,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_sdisk.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60736,9 +58820,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/ql_sqmouse.zip.25fbfbc4",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60749,9 +58830,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/ql_sqmouse.zip.25fbfbc4",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60762,9 +58840,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_sqmouse.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60775,9 +58850,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/ql_sqmouse.zip.25fbfbc4",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60788,9 +58860,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_trump.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60801,9 +58870,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_trump.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60814,9 +58880,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_trump.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60827,9 +58890,6 @@
       "repo_path": "bios/Arcade/Arcade/ql_trump.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60860,9 +58920,6 @@
       "repo_path": "bios/Arcade/MAME/quadro.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60873,9 +58930,6 @@
       "repo_path": "bios/Arcade/MAME/qvision_wavestar.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60886,9 +58940,6 @@
       "repo_path": "bios/Arcade/MAME/qx10_keyboard_ascii.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60899,9 +58950,6 @@
       "repo_path": "bios/Arcade/MAME/qx10_keyboard_ascii.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60912,9 +58960,6 @@
       "repo_path": "bios/Arcade/MAME/rageiidvd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60925,9 +58970,6 @@
       "repo_path": "bios/Arcade/MAME/rc2014_micro.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60938,9 +58980,6 @@
       "repo_path": "bios/Arcade/MAME/rc2014_mini_cpm.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60951,9 +58990,6 @@
       "repo_path": "bios/Arcade/MAME/rc2014_pagable_rom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60964,9 +59000,6 @@
       "repo_path": "bios/Arcade/MAME/rc2014_rom_ram_512k.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60977,9 +59010,6 @@
       "repo_path": "bios/Arcade/MAME/rc2014_switchable_rom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -60990,9 +59020,6 @@
       "repo_path": "bios/Arcade/MAME/riva128.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61003,9 +59030,6 @@
       "repo_path": "bios/Arcade/MAME/riva128zx.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61016,9 +59040,6 @@
       "repo_path": "bios/Arcade/MAME/rivatnt.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61029,9 +59050,6 @@
       "repo_path": "bios/Arcade/MAME/rivatnt2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61042,9 +59060,6 @@
       "repo_path": "bios/Arcade/MAME/rivatnt2_m64.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61055,9 +59070,6 @@
       "repo_path": "bios/Arcade/MAME/rivatnt2_ultra.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61068,9 +59080,6 @@
       "repo_path": "bios/Arcade/MAME/rm_mq2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61081,9 +59090,6 @@
       "repo_path": "bios/Arcade/MAME/robotron_k7070.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61094,9 +59100,6 @@
       "repo_path": "bios/Arcade/MAME/robotron_k7071.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61107,9 +59110,6 @@
       "repo_path": "bios/Arcade/Arcade/rolm_pdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61120,9 +59120,6 @@
       "repo_path": "bios/Arcade/Arcade/rolm_smioc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61133,9 +59130,6 @@
       "repo_path": "bios/Arcade/MAME/rt1000b.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61146,9 +59140,6 @@
       "repo_path": "bios/Arcade/MAME/rtpc_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61159,9 +59150,6 @@
       "repo_path": "bios/Arcade/MAME/rtpc_kls.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61172,9 +59160,6 @@
       "repo_path": "bios/Arcade/MAME/rx01.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61185,9 +59170,6 @@
       "repo_path": "bios/Arcade/MAME/s100_am310.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61198,9 +59180,6 @@
       "repo_path": "bios/Arcade/Arcade/s100_djdma.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61211,9 +59190,6 @@
       "repo_path": "bios/Arcade/Arcade/s100_nsmdsa.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61224,9 +59200,6 @@
       "repo_path": "bios/Arcade/Arcade/s100_nsmdsad.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61237,9 +59210,6 @@
       "repo_path": "bios/Arcade/Arcade/s100_sj2db.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61250,9 +59220,6 @@
       "repo_path": "bios/Arcade/MAME/s1410.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61263,9 +59230,6 @@
       "repo_path": "bios/Arcade/MAME/s3_764.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61276,9 +59240,6 @@
       "repo_path": "bios/Arcade/MAME/s8k_cpu.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61289,9 +59250,6 @@
       "repo_path": "bios/Arcade/MAME/s8k_cpu10.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61302,9 +59260,6 @@
       "repo_path": "bios/Arcade/MAME/s8k_hpcpu.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61315,9 +59270,6 @@
       "repo_path": "bios/Arcade/Arcade/s97269pb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61371,9 +59323,6 @@
       "repo_path": "bios/Arcade/Arcade/saa5052.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61410,9 +59359,6 @@
       "repo_path": "bios/Arcade/Arcade/saa5055.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61449,9 +59395,6 @@
       "repo_path": "bios/Arcade/MAME/saa5240a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61462,9 +59405,6 @@
       "repo_path": "bios/Arcade/MAME/saa5240b.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61488,9 +59428,6 @@
       "repo_path": "bios/Arcade/Arcade/sad8852.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61501,9 +59438,6 @@
       "repo_path": "bios/Arcade/Arcade/satcdb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61514,9 +59448,6 @@
       "repo_path": "bios/Arcade/Arcade/sb300p.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61527,9 +59458,6 @@
       "repo_path": "bios/Arcade/Arcade/sbus_hme.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61540,9 +59468,6 @@
       "repo_path": "bios/Arcade/Arcade/sbus_sunpc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61553,9 +59478,6 @@
       "repo_path": "bios/Arcade/MAME/sc119.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61586,9 +59508,6 @@
       "repo_path": "bios/Arcade/Arcade/sed1200da.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61599,9 +59518,6 @@
       "repo_path": "bios/Arcade/Arcade/sed1200db.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61638,9 +59554,6 @@
       "repo_path": "bios/Arcade/MAME/sed1278.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61661,9 +59574,6 @@
       "repo_path": "bios/Arcade/MAME/sega_sp400.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61704,9 +59614,6 @@
       "repo_path": "bios/Arcade/MAME/sente6vb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61717,9 +59624,6 @@
       "repo_path": "bios/Arcade/MAME/serad.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61740,9 +59644,6 @@
       "repo_path": "bios/Arcade/MAME/sgi_gm1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61753,9 +59654,6 @@
       "repo_path": "bios/Arcade/MAME/sgi_ip2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61766,9 +59664,6 @@
       "repo_path": "bios/Arcade/MAME/sgi_ip4.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61779,9 +59674,6 @@
       "repo_path": "bios/Arcade/MAME/sgi_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61805,9 +59697,6 @@
       "repo_path": "bios/Arcade/MAME/sgi_pm2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61818,9 +59707,6 @@
       "repo_path": "bios/Arcade/Arcade/side116.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61831,9 +59717,6 @@
       "repo_path": "bios/Arcade/Arcade/simutrek.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61844,9 +59727,6 @@
       "repo_path": "bios/Arcade/MAME/sis630_gui.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61857,9 +59737,6 @@
       "repo_path": "bios/Arcade/MAME/sis6326_agp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61870,9 +59747,6 @@
       "repo_path": "bios/Arcade/MAME/sis6326_dvd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61883,9 +59757,6 @@
       "repo_path": "bios/Arcade/MAME/sis6326_pci.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61896,9 +59767,6 @@
       "repo_path": "bios/Arcade/MAME/sis900_eth.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61919,9 +59787,6 @@
       "repo_path": "bios/Arcade/MAME/sms_diypaddle.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61932,9 +59797,6 @@
       "repo_path": "bios/Arcade/MAME/smvme2000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61945,9 +59807,6 @@
       "repo_path": "bios/Arcade/MAME/sn74s262.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -61958,9 +59817,6 @@
       "repo_path": "bios/Arcade/MAME/sn74s263.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62101,9 +59957,6 @@
       "repo_path": "bios/Arcade/MAME/softcard3.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62114,9 +59967,6 @@
       "repo_path": "bios/Arcade/MAME/sound_orchestra.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62127,9 +59977,6 @@
       "repo_path": "bios/Arcade/Arcade/spc1000_fdd_exp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62140,9 +59987,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/speakboard.zip.7018498d",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62153,9 +59997,6 @@
       "repo_path": "bios/Arcade/MAME/spectred_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62166,9 +60007,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62179,9 +60017,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62192,9 +60027,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62205,9 +60037,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62218,9 +60047,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62231,9 +60057,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62244,9 +60067,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_d40.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62257,9 +60077,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_d40.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62270,9 +60087,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_d80v2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62283,9 +60097,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62296,9 +60107,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62309,9 +60117,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62322,9 +60127,6 @@
       "repo_path": "bios/Arcade/Arcade/spectrum_intf1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62335,9 +60137,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_kempcentref.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62348,9 +60147,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_kempcentreu.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62361,9 +60157,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62374,9 +60167,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_lprint.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62387,9 +60177,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62400,9 +60187,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62413,9 +60197,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62426,9 +60207,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62439,9 +60217,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62452,9 +60227,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62465,9 +60237,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62478,9 +60247,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_mface3.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62491,9 +60257,6 @@
       "repo_path": "bios/Arcade/Arcade/spectrum_mikroplus.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62504,9 +60267,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_mpoker.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62517,9 +60277,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62530,9 +60287,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_opus.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62543,9 +60297,6 @@
       "repo_path": "bios/Arcade/Arcade/spectrum_plus2test.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62556,9 +60307,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_plusd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62569,9 +60317,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_proceed.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62582,9 +60327,6 @@
       "repo_path": "bios/Arcade/MAME/spectrum_sdi.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62595,9 +60337,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62608,9 +60347,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62621,9 +60357,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62634,9 +60367,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62647,9 +60377,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62660,9 +60387,6 @@
       "repo_path": "bios/Arcade/Arcade/spectrum_usource.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62673,9 +60397,6 @@
       "repo_path": "bios/Arcade/Arcade/spectrum_uspeech.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62686,9 +60407,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62699,9 +60417,6 @@
       "repo_path": "bios/Arcade/MAME/.variants/spectrum_opus.zip.389e7c72",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62712,9 +60427,6 @@
       "repo_path": "bios/Arcade/MAME/st_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62725,9 +60437,6 @@
       "repo_path": "bios/Arcade/Arcade/stereo_fx.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62738,9 +60447,6 @@
       "repo_path": "bios/Arcade/Arcade/stic.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62751,9 +60457,6 @@
       "repo_path": "bios/Arcade/MAME/sun1cpu.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62764,9 +60467,6 @@
       "repo_path": "bios/Arcade/MAME/sun_gem.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62777,9 +60477,6 @@
       "repo_path": "bios/Arcade/Arcade/sv603.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62790,9 +60487,6 @@
       "repo_path": "bios/Arcade/Arcade/sv806.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62803,9 +60497,6 @@
       "repo_path": "bios/Arcade/MAME/sw1000xg.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62816,9 +60507,6 @@
       "repo_path": "bios/Arcade/MAME/swp30.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62839,9 +60527,6 @@
       "repo_path": "bios/Arcade/Arcade/sx1541.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62852,9 +60537,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62865,9 +60547,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu20.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62878,9 +60557,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu20.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62891,9 +60567,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu20.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62904,9 +60577,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu20.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62917,9 +60587,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu20.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62930,9 +60597,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu20.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62943,9 +60607,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu20.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62956,9 +60617,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu30.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62969,9 +60627,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu30.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62982,9 +60637,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu30.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -62995,9 +60647,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu30.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63008,9 +60657,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu30.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63021,9 +60667,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_cpu33.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63034,9 +60677,6 @@
       "repo_path": "bios/Arcade/Arcade/fcscsi1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63047,9 +60687,6 @@
       "repo_path": "bios/Arcade/MAME/sys68k_isio1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63060,9 +60697,6 @@
       "repo_path": "bios/Arcade/Arcade/t5182.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63073,9 +60707,6 @@
       "repo_path": "bios/Arcade/MAME/tanbus_ra32krom.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63086,9 +60717,6 @@
       "repo_path": "bios/Arcade/MAME/tanbus_tandos.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63099,9 +60727,6 @@
       "repo_path": "bios/Arcade/MAME/tanbus_tanex.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63112,9 +60737,6 @@
       "repo_path": "bios/Arcade/MAME/tanbus_vid8082.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63125,9 +60747,6 @@
       "repo_path": "bios/Arcade/MAME/tandberg_tdv2100_disp_logic.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63138,9 +60757,6 @@
       "repo_path": "bios/Arcade/MAME/tandberg_tdv2100_keyboard.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63151,9 +60767,6 @@
       "repo_path": "bios/Arcade/MAME/tandy_1000_graphics.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63164,9 +60777,6 @@
       "repo_path": "bios/Arcade/MAME/tandy_1000x_graphics.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63187,9 +60797,6 @@
       "repo_path": "bios/Arcade/MAME/technica.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63200,9 +60807,6 @@
       "repo_path": "bios/Arcade/MAME/tek410x_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63213,9 +60817,6 @@
       "repo_path": "bios/Arcade/MAME/tek_msu_fdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63226,9 +60827,6 @@
       "repo_path": "bios/Arcade/MAME/teletex800.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63239,9 +60837,6 @@
       "repo_path": "bios/Arcade/Arcade/tetriskr_cga.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63252,9 +60847,6 @@
       "repo_path": "bios/Arcade/Arcade/tgui9680.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63415,9 +61007,6 @@
       "repo_path": "bios/Arcade/Arcade/ti_hx5102.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63428,9 +61017,6 @@
       "repo_path": "bios/Arcade/MAME/tiki100_8088.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63441,9 +61027,6 @@
       "repo_path": "bios/Arcade/MAME/tim011_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63454,9 +61037,6 @@
       "repo_path": "bios/Arcade/Arcade/tk02.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63467,9 +61047,6 @@
       "repo_path": "bios/Arcade/Arcade/tms32030.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63480,9 +61057,6 @@
       "repo_path": "bios/Arcade/Arcade/tms32031.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63493,9 +61067,6 @@
       "repo_path": "bios/Arcade/Arcade/tms32032.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63519,9 +61090,6 @@
       "repo_path": "bios/Arcade/MAME/tp880v.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63532,9 +61100,6 @@
       "repo_path": "bios/Arcade/MAME/tp881v.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63545,9 +61110,6 @@
       "repo_path": "bios/Arcade/MAME/trio64dx_pci.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63558,9 +61120,6 @@
       "repo_path": "bios/Arcade/Arcade/trs80m2kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63571,9 +61130,6 @@
       "repo_path": "bios/Arcade/MAME/tsvme104.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63584,9 +61140,6 @@
       "repo_path": "bios/Arcade/Arcade/turbogx.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63597,9 +61150,6 @@
       "repo_path": "bios/Arcade/Arcade/turbogxp.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63610,9 +61160,6 @@
       "repo_path": "bios/Arcade/MAME/tv950kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63623,9 +61170,6 @@
       "repo_path": "bios/Arcade/MAME/tv955kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63636,9 +61180,6 @@
       "repo_path": "bios/Arcade/Arcade/tvc_hbf.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63649,9 +61190,6 @@
       "repo_path": "bios/Arcade/MAME/tvga9000.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63662,9 +61200,6 @@
       "repo_path": "bios/Arcade/MAME/ubpnic.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63675,9 +61210,6 @@
       "repo_path": "bios/Arcade/MAME/ultra12f.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63688,9 +61220,6 @@
       "repo_path": "bios/Arcade/MAME/ultra12f32.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63701,9 +61230,6 @@
       "repo_path": "bios/Arcade/MAME/ultra14f.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63714,9 +61240,6 @@
       "repo_path": "bios/Arcade/MAME/ultra24f.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63727,9 +61250,6 @@
       "repo_path": "bios/Arcade/MAME/umc6650.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63740,9 +61260,6 @@
       "repo_path": "bios/Arcade/MAME/uniap2ti.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63763,9 +61280,6 @@
       "repo_path": "bios/Arcade/MAME/uts_400kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63776,9 +61290,6 @@
       "repo_path": "bios/Arcade/MAME/uts_extw.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63789,9 +61300,6 @@
       "repo_path": "bios/Arcade/MAME/v102_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63802,9 +61310,6 @@
       "repo_path": "bios/Arcade/MAME/v50_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63815,9 +61320,6 @@
       "repo_path": "bios/Arcade/MAME/v550_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63828,9 +61330,6 @@
       "repo_path": "bios/Arcade/MAME/vanta.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63841,9 +61340,6 @@
       "repo_path": "bios/Arcade/MAME/vector4_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63854,9 +61350,6 @@
       "repo_path": "bios/Arcade/Arcade/vic1515.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63867,9 +61360,6 @@
       "repo_path": "bios/Arcade/Arcade/vic1520.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63880,9 +61370,6 @@
       "repo_path": "bios/Arcade/Arcade/vic20_fe3.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63893,9 +61380,6 @@
       "repo_path": "bios/Arcade/Arcade/vic20_videopak.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63906,9 +61390,6 @@
       "repo_path": "bios/Arcade/Arcade/victor9k_fdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63919,9 +61400,6 @@
       "repo_path": "bios/Arcade/Arcade/victor9k_kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63932,9 +61410,6 @@
       "repo_path": "bios/Arcade/MAME/videnh2.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63945,9 +61420,6 @@
       "repo_path": "bios/Arcade/Arcade/s3virge.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63958,9 +61430,6 @@
       "repo_path": "bios/Arcade/MAME/virgedx_pci.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63971,9 +61440,6 @@
       "repo_path": "bios/Arcade/MAME/virgevx_pci.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63984,9 +61450,6 @@
       "repo_path": "bios/Arcade/MAME/vision864.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -63997,9 +61460,6 @@
       "repo_path": "bios/Arcade/MAME/vision964.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64010,9 +61470,6 @@
       "repo_path": "bios/Arcade/MAME/vision968.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64023,9 +61480,6 @@
       "repo_path": "bios/Arcade/MAME/voicebox.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64059,9 +61513,6 @@
       "repo_path": "bios/Apple/Apple II/votrsc01.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64082,9 +61533,6 @@
       "repo_path": "bios/Arcade/Arcade/vp575.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64145,9 +61593,6 @@
       "repo_path": "bios/Arcade/Arcade/wangpc_lic.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64158,9 +61603,6 @@
       "repo_path": "bios/Arcade/Arcade/wangpc_rtc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64171,9 +61613,6 @@
       "repo_path": "bios/Arcade/Arcade/wangpc_wdc.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64184,9 +61623,6 @@
       "repo_path": "bios/Arcade/Arcade/wangpckb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64197,9 +61633,6 @@
       "repo_path": "bios/Arcade/Arcade/wd1002a_wx1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64210,9 +61643,6 @@
       "repo_path": "bios/Arcade/Arcade/wd1007a.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64223,9 +61653,6 @@
       "repo_path": "bios/Arcade/MAME/wd90c00_jk.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64236,9 +61663,6 @@
       "repo_path": "bios/Arcade/MAME/wd90c11_lr.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64249,9 +61673,6 @@
       "repo_path": "bios/Arcade/MAME/wd90c30_lr.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64262,9 +61683,6 @@
       "repo_path": "bios/Arcade/MAME/wd90c31_lr.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64275,9 +61693,6 @@
       "repo_path": "bios/Arcade/MAME/wd90c31a_lr.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64288,9 +61703,6 @@
       "repo_path": "bios/Arcade/MAME/wd90c31a_zs.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64301,9 +61713,6 @@
       "repo_path": "bios/Arcade/MAME/wd90c33_zz.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64314,9 +61723,6 @@
       "repo_path": "bios/Arcade/MAME/wd90c90_jk.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64327,9 +61733,6 @@
       "repo_path": "bios/Arcade/MAME/wd9710_pci.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64340,9 +61743,6 @@
       "repo_path": "bios/Arcade/Arcade/wdxt_gen.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64353,9 +61753,6 @@
       "repo_path": "bios/Arcade/MAME/wg130.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64366,9 +61763,6 @@
       "repo_path": "bios/Arcade/Arcade/wyse700.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64379,9 +61773,6 @@
       "repo_path": "bios/Arcade/Arcade/x68k_cz6bs1.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64392,9 +61783,6 @@
       "repo_path": "bios/Arcade/Arcade/x820kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64405,9 +61793,6 @@
       "repo_path": "bios/Arcade/Arcade/x820kb.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64418,9 +61803,6 @@
       "repo_path": "bios/Arcade/MAME/xerox820_16_8.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64431,9 +61813,6 @@
       "repo_path": "bios/Arcade/MAME/xerox820_emii_rgd5.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64444,9 +61823,6 @@
       "repo_path": "bios/Arcade/MAME/xerox820_emii_rgd5.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64457,9 +61833,6 @@
       "repo_path": "bios/Arcade/MAME/xetec_c5181.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64470,9 +61843,6 @@
       "repo_path": "bios/Arcade/MAME/xt446.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64483,9 +61853,6 @@
       "repo_path": "bios/Arcade/Arcade/xtide.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64522,9 +61889,6 @@
       "repo_path": "bios/Arcade/Arcade/z8671.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64535,9 +61899,6 @@
       "repo_path": "bios/Arcade/MAME/z8682.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64558,9 +61919,6 @@
       "repo_path": "bios/Arcade/MAME/zorba_kbd.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {
@@ -64571,9 +61929,6 @@
       "repo_path": "bios/Arcade/MAME/zxbus_neogs.zip",
       "cores": [
         "mame"
-      ],
-      "systems": [
-        "3do"
       ]
     },
     {

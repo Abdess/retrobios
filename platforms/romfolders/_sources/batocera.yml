@@ -1,0 +1,47 @@
+name: Batocera
+platform: batocera
+format: batocera-es
+params:
+  es_systems: package/batocera/emulationstation/batocera-es-system/es_systems.yml
+  configgen_dir: package/batocera/core/batocera-configgen/configs
+sources:
+  os:
+    repo: https://github.com/batocera-linux/batocera.linux
+    commit: 155c2d8d304cbb53db52e9479dcf683392821d5c
+    tag: batocera-43.1
+  es:
+    repo: https://github.com/batocera-linux/batocera-emulationstation
+    commit: 2c29a330e487210a7d51ad2650bb7b280ea44c86
+    note: pinned by package/batocera/emulationstation/batocera-emulationstation/batocera-emulationstation.mk
+roms_root:
+  path: /userdata/roms
+  from_bios: ../roms
+  source_ref: os python-src/batocera-es-system/batocera_es_system/es_systems.py:27,76-80
+case_sensitive: null
+hidden:
+  - pattern: .*
+    source_ref: es es-core/src/utils/FileSystemUtil.cpp:418; es es-app/src/SystemData.cpp:325
+media:
+  - name: artwork
+    source_ref: es es-app/src/SystemData.cpp:355
+  - name: media
+    source_ref: es es-app/src/SystemData.cpp:375
+  - name: medias
+    source_ref: es es-app/src/SystemData.cpp:375
+  - name: images
+    source_ref: es es-app/src/SystemData.cpp:375
+  - name: manuals
+    source_ref: es es-app/src/SystemData.cpp:375
+  - name: videos
+    source_ref: es es-app/src/SystemData.cpp:375
+  - name: assets
+    source_ref: es es-app/src/SystemData.cpp:375
+  - name: bezels
+    source_ref: es es-app/src/SystemData.cpp:375
+  - name: screenshots
+    source_ref: es es-app/src/SystemData.cpp:375
+  - pattern: downloaded_*
+    source_ref: es es-app/src/SystemData.cpp:378
+notes:
+  - A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:330-336).
+  - The default core is configgen's, the board file before configgen-defaults.yml (os python-src/batocera-es-system/batocera_es_system/shared.py:193-198).

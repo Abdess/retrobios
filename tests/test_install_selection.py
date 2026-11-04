@@ -1632,10 +1632,12 @@ class SomethingElseAtADestination(unittest.TestCase):
             proc = repo.run("--yes")
             self.assertEqual(proc.returncode, 1, proc.stderr)
             self.assertNotIn("Traceback", proc.stderr)
-            self.assertIn("failed: scph5500.bin (a folder sits where this file goes",
+            # Each failure named once, on its FAILED line (tui_audit_17 P3-7).
+            self.assertIn("FAILED scph5500.bin (a folder sits where this file goes",
                           proc.stdout)
-            self.assertIn("failed: scph5501.bin (file in place could not be kept aside",
+            self.assertIn("FAILED scph5501.bin (file in place could not be kept aside",
                           proc.stdout)
+            self.assertEqual(proc.stdout.count("scph5500.bin ("), 1, proc.stdout)
             self.assertTrue((repo.dest / "scph5500.bin").is_dir())
             self.assertIn("gba_bios.bin", repo.installed())
 

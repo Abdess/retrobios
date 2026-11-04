@@ -491,11 +491,11 @@
  BIOS folder:
    ~/.config/retroarch/system
  5 in place, 0 missing, 0 wrong copies
+ 1 of the 0 wrong copies is replaced,
+   the old one kept in a backup folder.
  Free space: 50.0 GB
-
  > Close
    Options
-
  Start Close  B Back
 === plan-in-place 40x15
  RetroBIOS: RetroArch
@@ -504,12 +504,12 @@
  BIOS folder:
    ~/.config/retroarch/system
  5 in place, 0 missing, 0 wrong copies
+ 1 of the 0 wrong copies is replaced,
+   the old one kept in a backup folder.
  Free space: 50.0 GB
 
  > Close
    Options
-
-
 
 
  Start Close  B Back
@@ -519,11 +519,11 @@
  Everything is in place
  BIOS folder: ~/.config/retroarch/system
  5 in place, 0 missing, 0 wrong copies
+ 1 of the 0 wrong copies is replaced, the old one kept in a backup folder.
  Free space: 50.0 GB
 
  > Close
    Options
-
 
 
 
@@ -541,42 +541,42 @@
 === systems 40x12
  RetroBIOS: Choose systems
 
+   [x] nintendo-gba (gba)       16.0 KB
+   [x] sony-playstation          1.0 MB
+ > [ ] nintendo-famicom-disk   in place
    All
    None
-   Filter (Select shows a keyboard)
- > [x] nintendo-gba (gba)       16.0 KB
-   [x] sony-playstation          1.0 MB
-   [ ] nintendo-famicom-disk   in place
-
-
+ 1-3 of 3
+ nintendo-famicom-disk (ファミコン): in
+   place
  2 of 3 systems: 4 files, 1.0 MB
- Start Continue  B Back  Y Tick
+ Start Tick  B Done
 === systems 40x15
  RetroBIOS: Choose systems
 
+   Filter (Select shows a keyboard)
+   [x] nintendo-gba (gba)       16.0 KB
+   [x] sony-playstation          1.0 MB
+ > [ ] nintendo-famicom-disk   in place
    All
    None
-   Filter (Select shows a keyboard)
- > [x] nintendo-gba (gba)       16.0 KB
-   [x] sony-playstation          1.0 MB
-   [ ] nintendo-famicom-disk   in place
+   Done
 
 
-
-
-
+ nintendo-famicom-disk (ファミコン): in
+   place
  2 of 3 systems: 4 files, 1.0 MB
- Start Continue  B Back  Y Tick
+ Start Tick  B Done
 === systems 80x24
  RetroBIOS: Choose systems
 
+   Filter (Select shows a keyboard)
+   [x] nintendo-gba (gba)                                       1 file, 16.0 KB
+   [x] sony-playstation                                         3 files, 1.0 MB
+ > [ ] nintendo-famicom-disk (ファミコン)                              in place
    All
    None
-   Filter (Select shows a keyboard)
- > [x] nintendo-gba (gba)                                       1 file, 16.0 KB
-   [x] sony-playstation                                         3 files, 1.0 MB
-   [ ] nintendo-famicom-disk (ファミコン)                              in place
-
+   Done
 
 
 
@@ -591,7 +591,7 @@
 
 
  2 of 3 systems: 4 files, 1.0 MB
- Start Continue  B Back  Y Tick
+ Start Tick  B Done
 === options 40x12
  RetroBIOS: Options
 
@@ -657,7 +657,7 @@
 
  > [1] North America
    [ ] Japan
-
+ 1-2 of 2
  Start Tick  B Done  <> Order
 === regions 40x15
  RetroBIOS: Preferred regions
@@ -670,8 +670,8 @@
 
  > [1] North America
    [ ] Japan
-
-
+   None
+   Done
 
 
  Start Tick  B Done  <> Order
@@ -684,8 +684,8 @@
 
  > [1] North America
    [ ] Japan
-
-
+   None
+   Done
 
 
 
@@ -703,43 +703,44 @@
 === cores 40x12
  RetroBIOS: Cores
 
- Every core ticked keeps every core's
-   files. Untick the cores you do not
-   use: the platform's own files are
-   always kept.
- > All
-   None
-   Filter (Select shows a keyboard)
-   [ ] mesen
-   [x] pcsx_rearmed
- Start Tick all  B Back  Y Tick
+ Untick the cores you do not use: the
+   platform's own files are always
+   kept, and a core with no extra file
+   reads only those.
+
+ > Filter (Select shows a keyboard)
+   [ ] mesen             1 file, 8.0 KB
+   [x] pcsx_rearmed         1 file, 4 B
+ 1-2 of 2
+ Start Filter  B Done
 === cores 40x15
  RetroBIOS: Cores
 
- Every core ticked keeps every core's
-   files. Untick the cores you do not
-   use: the platform's own files are
-   always kept.
+ Untick the cores you do not use: the
+   platform's own files are always
+   kept, and a core with no extra file
+   reads only those.
 
- > All
+ > Filter (Select shows a keyboard)
+   [ ] mesen             1 file, 8.0 KB
+   [x] pcsx_rearmed         1 file, 4 B
+   All
    None
-   Filter (Select shows a keyboard)
-   [ ] mesen
-   [x] pcsx_rearmed
+   Done
 
-
- Start Tick all  B Back  Y Tick
+ Start Filter  B Done
 === cores 80x24
  RetroBIOS: Cores
 
- Every core ticked keeps every core's files. Untick the cores you do not use:
-   the platform's own files are always kept.
+ Untick the cores you do not use: the platform's own files are always kept, and
+   a core with no extra file reads only those.
 
- > All
+ > Filter (Select shows a keyboard)
+   [ ] mesen                                                     1 file, 8.0 KB
+   [x] pcsx_rearmed                                                 1 file, 4 B
+   All
    None
-   Filter (Select shows a keyboard)
-   [ ] mesen
-   [x] pcsx_rearmed
+   Done
 
 
 
@@ -752,8 +753,7 @@
 
 
 
-
- Start Tick all  B Back  Y Tick
+ Start Filter  B Done
 === preview 40x12
  RetroBIOS: Preview
 
@@ -977,11 +977,11 @@
  BIOS folder:
    /home/user/.config/retroarch/system
    failed: scph5500.bin (HTTP 404)
+ Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/
    retrobios-backup/2026-10-23_1200
  Details: /tmp/retrobios-x/install.log
-
  Start Exit
 === result 40x15
  RetroBIOS: Finished with errors
@@ -990,11 +990,11 @@
  BIOS folder:
    /home/user/.config/retroarch/system
    failed: scph5500.bin (HTTP 404)
+ Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/
    retrobios-backup/2026-10-23_1200
  Details: /tmp/retrobios-x/install.log
-
 
 
 
@@ -1005,10 +1005,10 @@
  3 installed, 1 failed.
  BIOS folder: /home/user/.config/retroarch/system
    failed: scph5500.bin (HTTP 404)
+ Run it again to retry only those.
  The files it replaced are kept in
    /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
  Details: /tmp/retrobios-x/install.log
-
 
 
 
@@ -1186,3 +1186,111 @@
 
 
  Any key closes this help
+=== plan-games 40x12
+ RetroBIOS: RetroArch
+
+ 4 files to download, 1.0 MB
+ BIOS folder:
+   ~/.config/retroarch/system
+
+ > Install
+   For the games on this card: yes  412
+   Only what starts: no
+   Show the games
+ 1-4 of 8
+ Start Install  B Back
+=== plan-games 40x15
+ RetroBIOS: RetroArch
+
+ 4 files to download, 1.0 MB
+ BIOS folder:
+   ~/.config/retroarch/system
+ For the 412 games on this card.
+ > Install
+   For the games on this card: yes  412
+   Only what starts: no
+   Show the games
+   Choose systems
+   Copy from your old card or a folder
+   Options
+   Quit
+ Start Install  B Back
+=== plan-games 80x24
+ RetroBIOS: RetroArch
+
+ 4 files to download, 1.0 MB
+ BIOS folder: ~/.config/retroarch/system
+ For the 412 games on this card.
+ One region where the games prove it: nintendo-gba Europe.
+ 2 games get every BIOS of their system: Show the games.
+ 1 in place, 3 missing, 1 wrong copy
+ The 1 wrong copy is replaced, the old one kept in a backup folder.
+ Free space: 50.0 GB
+
+ > Install
+   For the games on this card: yes                                    412 games
+   Only what starts: no
+   Show the games
+   Choose systems
+   Copy the BIOS files from your old card or a folder
+   Options
+   Quit
+
+
+
+
+ Start Install  B Back
+=== games 40x12
+ RetroBIOS: Games on this card
+
+ 412 games in /media/user/SDCARD/Roms,
+   398 recognised by their content.
+
+ sony-playstation (PS): 400 games, 390
+   recognised, every region
+ nintendo-gba (GBA): 12 games, 8
+   recognised, Europe only
+
+ 1-5 of 9
+ Start Back  ^v Scroll
+=== games 40x15
+ RetroBIOS: Games on this card
+
+ 412 games in /media/user/SDCARD/Roms,
+   398 recognised by their content.
+
+ sony-playstation (PS): 400 games, 390
+   recognised, every region
+ nintendo-gba (GBA): 12 games, 8
+   recognised, Europe only
+
+ Every BIOS of their system kept, so
+   that they start:
+ GBA/demo.gba: not recognised
+ GBA/hack.gba: not recognised
+ Start Back
+=== games 80x24
+ RetroBIOS: Games on this card
+
+ 412 games in /media/user/SDCARD/Roms, 398 recognised by their content.
+
+ sony-playstation (PS): 400 games, 390 recognised, every region
+ nintendo-gba (GBA): 12 games, 8 recognised, Europe only
+
+ Every BIOS of their system kept, so that they start:
+ GBA/demo.gba: not recognised
+ GBA/hack.gba: not recognised
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Start Back

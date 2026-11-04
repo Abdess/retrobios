@@ -1,0 +1,38 @@
+name: EmuDeck (Linux / SteamOS)
+platform: emudeck
+format: esde
+params:
+  systems:
+    source: esde
+    path: resources/systems/linux/es_systems.xml
+  custom:
+  - source: os
+    path: configs/emulationstation/custom_systems/es_systems.xml
+  alternatives:
+    source: os
+    path: functions/ToolScripts/emuDeckESDE.sh
+    function: ESDE_setDefaultEmulators
+sources:
+  os:
+    repo: https://github.com/dragoonDorise/EmuDeck
+    commit: dddb30229adbbd54d5ff7283cfd70e11c4322c26
+  esde:
+    repo: https://gitlab.com/es-de/emulationstation-de
+    commit: 50e4b600ae533d772bae3ff880d11a09b05dbe84
+    tag: v3.5.0
+    note: EmuDeck installs the newest ES-DE release at run time. The list is read at this tag
+roms_root:
+  path: $HOME/Emulation/roms
+  from_bios: ../roms
+  source_ref: os functions/helperFunctions.sh:345,347
+case_sensitive: true
+hidden:
+- pattern: .*
+  source_ref: esde es-app/src/SystemData.cpp:657
+notes:
+- 'The emulation path is a setting: roms and bios stay siblings under it.'
+- 'ES-DE matches the extension as written (esde es-app/src/SystemData.cpp:666): its lists carry both cases,
+  kept here lowercased.'
+- A system folder holding noload.txt is not loaded (esde es-app/src/SystemData.cpp:629-631).
+- 'Default emulator: the alternativeEmulator label written for the system, else the first <command>.'
+- Some alternative emulators are set only when the standalone is installed (os functions/ToolScripts/emuDeckESDE.sh:316-318).

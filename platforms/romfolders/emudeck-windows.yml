@@ -1,0 +1,2584 @@
+setup: emudeck-windows
+name: "EmuDeck (Windows)"
+platform: emudeck
+sources:
+  os:
+    repo: "https://github.com/EmuDeck/emudeck-we"
+    commit: 037460efc88c1ab70256ab0833f8f10e7f2904b2
+  esde:
+    repo: "https://gitlab.com/es-de/emulationstation-de"
+    commit: 50e4b600ae533d772bae3ff880d11a09b05dbe84
+    tag: v3.5.0
+    note: EmuDeck installs the newest ES-DE release at run time. The list is read at this tag
+roms_root:
+  path: "<drive>:\\Emulation\\roms"
+  from_bios: ../roms
+  source_ref: "os functions/JSONtoPS1.ps1:173,175,195,197"
+case_sensitive: false
+hidden:
+- pattern: .*
+  source_ref: "esde es-app/src/SystemData.cpp:657"
+notes:
+- Windows folders are case-insensitive.
+- "ES-DE matches the extension as written (esde es-app/src/SystemData.cpp:666): its lists carry both cases,\
+  \ kept here lowercased."
+- "A system folder holding noload.txt is not loaded (esde es-app/src/SystemData.cpp:629-631)."
+- "Default emulator: the alternativeEmulator label written for the system, else the first <command>."
+- "Some alternative emulators are set only when the standalone is installed (os functions/ToolScripts/emuDeckESDE.ps1:306-309)."
+folders:
+- folder: 3do
+  extensions:
+  - .7z
+  - .bin
+  - .chd
+  - .cue
+  - .iso
+  - .zip
+  core: opera
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:5"
+- folder: adam
+  extensions:
+  - .1dd
+  - .7z
+  - .bin
+  - .col
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .ddp
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .rom
+  - .td0
+  - .wav
+  - .zip
+  core: mame
+  emulator: mame
+  source_ref: "esde resources/systems/windows/es_systems.xml:14"
+- folder: ags
+  extensions:
+  - .bat
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:27"
+- folder: amiga
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ccd
+  - .chd
+  - .cue
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .ipf
+  - .iso
+  - .lha
+  - .m3u
+  - .mds
+  - .nrg
+  - .rp9
+  - .uae
+  - .zip
+  core: puae
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:36"
+- folder: amiga1200
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ccd
+  - .chd
+  - .cue
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .ipf
+  - .iso
+  - .lha
+  - .m3u
+  - .mds
+  - .nrg
+  - .rp9
+  - .uae
+  - .zip
+  core: puae
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:49"
+- folder: amiga600
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ccd
+  - .chd
+  - .cue
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .ipf
+  - .iso
+  - .lha
+  - .m3u
+  - .mds
+  - .nrg
+  - .rp9
+  - .uae
+  - .zip
+  core: puae
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:62"
+- folder: amigacd32
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ccd
+  - .chd
+  - .cue
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .ipf
+  - .iso
+  - .lha
+  - .m3u
+  - .mds
+  - .nrg
+  - .rp9
+  - .uae
+  - .zip
+  core: puae
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:75"
+- folder: amstradcpc
+  extensions:
+  - .7z
+  - .cdt
+  - .cpr
+  - .dsk
+  - .kcr
+  - .m3u
+  - .sna
+  - .tap
+  - .tar
+  - .voc
+  - .zip
+  core: cap32
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:88"
+- folder: android
+  extensions:
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:101"
+- folder: androidapps
+  extensions:
+  - .7z
+  - .zip
+  source_ref: "esde resources/systems/windows/es_systems.xml:110"
+- folder: androidgames
+  extensions:
+  - .7z
+  - .zip
+  source_ref: "esde resources/systems/windows/es_systems.xml:119"
+- folder: apple2
+  extensions:
+  - .7z
+  - .do
+  - .dsk
+  - .nib
+  - .po
+  - .zip
+  core: applewin
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:128"
+- folder: apple2gs
+  extensions:
+  - .2mg
+  - .7z
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:142"
+- folder: arcade
+  extensions:
+  - .7z
+  - .acgame
+  - .arcadedef
+  - .bat
+  - .cmd
+  - .gam
+  - .lindbergh
+  - .lnk
+  - .neo
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:155"
+- folder: arcadia
+  extensions:
+  - .7z
+  - .bin
+  - .tvc
+  - .zip
+  core: amiarcadia
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:191"
+- folder: archimedes
+  extensions:
+  - .1dd
+  - '.360'
+  - .7z
+  - .adf
+  - .adl
+  - .adm
+  - .ads
+  - .apd
+  - .bbc
+  - .chd
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsd
+  - .dsk
+  - .hfe
+  - .ima
+  - .imd
+  - .img
+  - .ipf
+  - .jfd
+  - .mfi
+  - .mfm
+  - .msa
+  - .ssd
+  - .st
+  - .td0
+  - .ufi
+  - .zip
+  core: mame
+  emulator: mame
+  source_ref: "esde resources/systems/windows/es_systems.xml:203"
+- folder: arduboy
+  extensions:
+  - .7z
+  - .arduboy
+  - .hex
+  - .zip
+  core: arduous
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:215"
+- folder: astrocde
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:225"
+- folder: atari2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:235"
+- folder: atari5200
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .com
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: a5200
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:250"
+- folder: atari7800
+  extensions:
+  - .7z
+  - .a78
+  - .bin
+  - .zip
+  core: prosystem
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:262"
+- folder: atari800
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .com
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: atari800
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:274"
+- folder: atarijaguar
+  extensions:
+  - .7z
+  - .abs
+  - .bigpimg
+  - .bin
+  - .cdi
+  - .cof
+  - .cue
+  - .j64
+  - .jag
+  - .prg
+  - .rom
+  - .zip
+  core: virtualjaguar
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:285"
+- folder: atarijaguarcd
+  extensions:
+  - .abs
+  - .bigpimg
+  - .bin
+  - .cdi
+  - .cof
+  - .cue
+  - .j64
+  - .jag
+  - .prg
+  - .rom
+  core: virtualjaguar
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:296"
+- folder: atarilynx
+  extensions:
+  - .7z
+  - .lnx
+  - .lyx
+  - .o
+  - .zip
+  core: mednafen_lynx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:306; os functions/ToolScripts/emuDeckESDE.ps1:311"
+- folder: atarist
+  extensions:
+  - .7z
+  - .dim
+  - .ipf
+  - .m3u
+  - .msa
+  - .st
+  - .stx
+  - .zip
+  core: hatari
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:319"
+- folder: atarixe
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .com
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: atari800
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:330"
+- folder: atomiswave
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .elf
+  - .lst
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:341"
+- folder: bbcmicro
+  extensions:
+  - .7z
+  - .dsd
+  - .img
+  - .ssd
+  - .zip
+  core: mame
+  emulator: mame
+  source_ref: "esde resources/systems/windows/es_systems.xml:353"
+- folder: c64
+  extensions:
+  - .7z
+  - .bin
+  - .cmd
+  - .crt
+  - .d2m
+  - .d4m
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .lnx
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vfl
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_x64sc
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:364"
+- folder: cdimono1
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: same_cdi
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:378"
+- folder: cdtv
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ccd
+  - .chd
+  - .cue
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .ipf
+  - .iso
+  - .lha
+  - .m3u
+  - .mds
+  - .nrg
+  - .rp9
+  - .uae
+  - .zip
+  core: puae
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:389"
+- folder: chailove
+  extensions:
+  - .7z
+  - .chai
+  - .chailove
+  - .zip
+  core: chailove
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:402"
+- folder: channelf
+  extensions:
+  - .7z
+  - .bin
+  - .chf
+  - .zip
+  core: freechaf
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:411"
+- folder: coco
+  extensions:
+  - .cas
+  - .ccc
+  - .dsk
+  - .rom
+  core: xroar
+  emulator: xroar
+  source_ref: "esde resources/systems/windows/es_systems.xml:422"
+- folder: colecovision
+  extensions:
+  - .7z
+  - .bin
+  - .cas
+  - .col
+  - .cv
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .myv
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:434"
+- folder: consolearcade
+  extensions:
+  - .7z
+  - .acgame
+  - .arcadedef
+  - .bat
+  - .iso
+  - .lnk
+  - .ps3
+  - .xbe
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:451"
+- folder: cps
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:479"
+- folder: cps1
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:499"
+- folder: cps2
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:517"
+- folder: cps3
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:535"
+- folder: crvision
+  extensions:
+  - .7z
+  - .bin
+  - .rom
+  - .zip
+  core: jollycv
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:553"
+- folder: daphne
+  extensions:
+  - .7z
+  - .daphne
+  - .dirksimple
+  - .mmi
+  - .ogv
+  - .singe
+  - .zip
+  core: hypseus-singe
+  emulator: hypseus-singe
+  source_ref: "esde resources/systems/windows/es_systems.xml:564"
+- folder: desktop
+  extensions:
+  - .bat
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:579"
+- folder: doom
+  extensions:
+  - .bat
+  - .ipk3
+  - .iwad
+  - .lnk
+  - .pk3
+  - .pk4
+  - .pwad
+  - .wad
+  core: prboom
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:589"
+- folder: dos
+  extensions:
+  - .7z
+  - .bat
+  - .com
+  - .conf
+  - .cue
+  - .dosz
+  - .exe
+  - .img
+  - .iso
+  - .zip
+  core: dosbox_pure
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:602"
+- folder: dragon32
+  extensions:
+  - .7z
+  - .cas
+  - .ccc
+  - .dsk
+  - .rom
+  - .zip
+  core: mame
+  emulator: mame
+  source_ref: "esde resources/systems/windows/es_systems.xml:618"
+- folder: dreamcast
+  extensions:
+  - .7z
+  - .cdi
+  - .chd
+  - .cue
+  - .dat
+  - .elf
+  - .gdi
+  - .iso
+  - .lst
+  - .m3u
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:632"
+- folder: easyrpg
+  extensions:
+  - .easyrpg
+  - .zip
+  core: easyrpg
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:645"
+- folder: electron
+  extensions:
+  - .1dd
+  - .7z
+  - .adf
+  - .adl
+  - .adm
+  - .ads
+  - .bbc
+  - .bin
+  - .cqi
+  - .cqm
+  - .csw
+  - .d77
+  - .d88
+  - .dfi
+  - .dsd
+  - .dsk
+  - .hfe
+  - .imd
+  - .img
+  - .mfi
+  - .mfm
+  - .rom
+  - .ssd
+  - .td0
+  - .uef
+  - .wav
+  - .zip
+  core: mame
+  emulator: mame
+  source_ref: "esde resources/systems/windows/es_systems.xml:655"
+- folder: emulators
+  extensions:
+  - .bat
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:666"
+- folder: epic
+  extensions:
+  - .bat
+  - .lnk
+  - .url
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:676"
+- folder: famicom
+  extensions:
+  - .3dsen
+  - .7z
+  - .fds
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: mesen
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:685"
+- folder: fba
+  extensions:
+  - .7z
+  - .iso
+  - .zip
+  core: fbalpha2012
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:706"
+- folder: fbneo
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:719"
+- folder: fds
+  extensions:
+  - .7z
+  - .fds
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: mesen
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:729"
+- folder: flash
+  extensions:
+  - .ruf
+  - .swf
+  core: ruffle
+  emulator: ruffle
+  source_ref: "esde resources/systems/windows/es_systems.xml:745"
+- folder: fm7
+  extensions:
+  - .1dd
+  - .7z
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .t77
+  - .td0
+  - .wav
+  - .zip
+  core: mame
+  emulator: mame
+  source_ref: "esde resources/systems/windows/es_systems.xml:755"
+- folder: fmtowns
+  extensions:
+  - .cdr
+  - .chd
+  - .cue
+  - .gdi
+  - .iso
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:769"
+- folder: fpinball
+  extensions:
+  - .fpt
+  core: future-pinball
+  emulator: future-pinball
+  source_ref: "esde resources/systems/windows/es_systems.xml:780"
+- folder: gamate
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:790"
+- folder: gameandwatch
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:800"
+- folder: gamecom
+  extensions:
+  - .7z
+  - .tgc
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:812"
+- folder: gamegear
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .bms
+  - .chd
+  - .col
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .rom
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:822"
+- folder: gb
+  extensions:
+  - .7z
+  - .bs
+  - .cgb
+  - .dmg
+  - .gb
+  - .gbc
+  - .gbx
+  - .sfc
+  - .sgb
+  - .smc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:843"
+- folder: gba
+  extensions:
+  - .7z
+  - .agb
+  - .bin
+  - .cgb
+  - .dmg
+  - .gb
+  - .gba
+  - .gbc
+  - .gbx
+  - .sgb
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:873"
+- folder: gbc
+  extensions:
+  - .7z
+  - .bs
+  - .cgb
+  - .dmg
+  - .gb
+  - .gbc
+  - .gbx
+  - .sfc
+  - .sgb
+  - .smc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:895"
+- folder: gc
+  extensions:
+  - .7z
+  - .ciso
+  - .dff
+  - .dol
+  - .elf
+  - .gcm
+  - .gcz
+  - .iso
+  - .json
+  - .m3u
+  - .rvz
+  - .tgc
+  - .wad
+  - .wbfs
+  - .wia
+  - .zip
+  core: dolphin
+  emulator: dolphin
+  source_ref: "esde resources/systems/windows/es_systems.xml:925; os functions/ToolScripts/emuDeckESDE.ps1:301"
+- folder: genesis
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .bms
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:937"
+- folder: gmaster
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:954"
+- folder: gx4000
+  extensions:
+  - .7z
+  - .bin
+  - .cdt
+  - .cpr
+  - .dsk
+  - .kcr
+  - .m3u
+  - .sna
+  - .tap
+  - .tar
+  - .voc
+  - .zip
+  core: cap32
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:964"
+- folder: intellivision
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .rom
+  - .zip
+  core: freeintv
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:975"
+- folder: j2me
+  extensions:
+  - .7z
+  - .jar
+  - .zip
+  core: squirreljme
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:986"
+- folder: kodi
+  extensions:
+  - .bat
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:996"
+- folder: laserdisc
+  extensions:
+  - .7z
+  - .daphne
+  - .dirksimple
+  - .mmi
+  - .ogv
+  - .singe
+  - .zip
+  core: hypseus-singe
+  emulator: hypseus-singe
+  source_ref: "esde resources/systems/windows/es_systems.xml:1005"
+- folder: lcdgames
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1020"
+- folder: lowresnx
+  extensions:
+  - .nx
+  core: lowresnx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1032"
+- folder: lutris
+  extensions:
+  - .7z
+  - .zip
+  source_ref: "esde resources/systems/windows/es_systems.xml:1041"
+- folder: lutro
+  extensions:
+  - .7z
+  - .lua
+  - .lutro
+  - .zip
+  core: lutro
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1050"
+- folder: macintosh
+  extensions:
+  - .dsk
+  - .game
+  - .img
+  core: mame
+  emulator: mame
+  source_ref: "esde resources/systems/windows/es_systems.xml:1059"
+- folder: mame
+  extensions:
+  - .7z
+  - .acgame
+  - .arcadedef
+  - .bat
+  - .cmd
+  - .gam
+  - .lindbergh
+  - .lnk
+  - .neo
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1074"
+- folder: mame-advmame
+  extensions:
+  - .7z
+  - .zip
+  core: advancemame
+  emulator: advancemame
+  source_ref: "esde resources/systems/windows/es_systems.xml:1110"
+- folder: mark3
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .bms
+  - .chd
+  - .col
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .rom
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1119"
+- folder: mastersystem
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .bms
+  - .chd
+  - .col
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .rom
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1140"
+- folder: megacd
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .bms
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1161"
+- folder: megacdjp
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .bms
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1177"
+- folder: megadrive
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .bms
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1193"
+- folder: megadrivejp
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .bms
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1210"
+- folder: megaduck
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: sameduck
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1227"
+- folder: mess
+  extensions:
+  - .7z
+  - .chd
+  - .zip
+  core: mess2015
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1238"
+- folder: model2
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1247"
+- folder: model3
+  extensions:
+  - .7z
+  - .zip
+  core: supermodel
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1259"
+- folder: moto
+  extensions:
+  - .7z
+  - .fd
+  - .k7
+  - .m5
+  - .m7
+  - .rom
+  - .sap
+  - .zip
+  core: theodore
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1272"
+- folder: msx
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .di1
+  - .di2
+  - .dmk
+  - .dsk
+  - .fd1
+  - .fd2
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ogv
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .wav
+  - .xsa
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1281"
+- folder: msx1
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .di1
+  - .di2
+  - .dmk
+  - .dsk
+  - .fd1
+  - .fd2
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ogv
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .wav
+  - .xsa
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1295"
+- folder: msx2
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .di1
+  - .di2
+  - .dmk
+  - .dsk
+  - .fd1
+  - .fd2
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ogv
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .wav
+  - .xsa
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1309"
+- folder: msxturbor
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .di1
+  - .di2
+  - .dmk
+  - .dsk
+  - .fd1
+  - .fd2
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ogv
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .wav
+  - .xsa
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1323"
+- folder: mugen
+  extensions:
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:1334"
+- folder: multivision
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .rom
+  - .sg
+  - .sms
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1343"
+- folder: n3ds
+  extensions:
+  - .3ds
+  - .3dsx
+  - .7z
+  - .app
+  - .axf
+  - .cci
+  - .cxi
+  - .elf
+  - .z3dsx
+  - .zcci
+  - .zcxi
+  - .zip
+  core: azahar
+  emulator: azahar
+  source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:53; os functions/ToolScripts/emuDeckESDE.ps1:310"
+- folder: n64
+  extensions:
+  - .7z
+  - .bin
+  - .d64
+  - .exe
+  - .lnk
+  - .n64
+  - .ndd
+  - .u1
+  - .v64
+  - .z64
+  - .zip
+  core: mupen64plus_next
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1371"
+- folder: n64dd
+  extensions:
+  - .7z
+  - .bin
+  - .d64
+  - .n64
+  - .ndd
+  - .u1
+  - .v64
+  - .z64
+  - .zip
+  core: parallel_n64
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1390"
+- folder: naomi
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .elf
+  - .lst
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1402"
+- folder: naomi2
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .elf
+  - .lst
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1414"
+- folder: naomigd
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .elf
+  - .lst
+  - .zip
+  core: flycast
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1426"
+- folder: nds
+  extensions:
+  - .7z
+  - .app
+  - .bin
+  - .dsi
+  - .ids
+  - .nds
+  - .zip
+  core: melonds
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1437; os functions/ToolScripts/emuDeckESDE.ps1:308"
+- folder: neogeo
+  extensions:
+  - .7z
+  - .neo
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1454"
+- folder: neogeocd
+  extensions:
+  - .chd
+  - .cue
+  core: neocd
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1467"
+- folder: neogeocdjp
+  extensions:
+  - .chd
+  - .cue
+  core: neocd
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1480"
+- folder: nes
+  extensions:
+  - .3dsen
+  - .7z
+  - .fds
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: mesen
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1493"
+- folder: ngage
+  extensions:
+  - .ngage
+  - .zip
+  core: eka2l1
+  emulator: eka2l1
+  source_ref: "esde resources/systems/windows/es_systems.xml:1514"
+- folder: ngp
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .ngpc
+  - .npc
+  - .zip
+  core: mednafen_ngp
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1524"
+- folder: ngpc
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .ngpc
+  - .npc
+  - .zip
+  core: mednafen_ngp
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1536"
+- folder: odyssey2
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1548"
+- folder: openbor
+  extensions:
+  - .exe
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:1559"
+- folder: oric
+  extensions:
+  - .dsk
+  - .ort
+  - .tap
+  - .wav
+  core: mame
+  emulator: mame
+  source_ref: "esde resources/systems/windows/es_systems.xml:1568"
+- folder: palm
+  extensions:
+  - .7z
+  - .img
+  - .pqa
+  - .prc
+  - .zip
+  core: mu
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1578"
+- folder: pc
+  extensions:
+  - .7z
+  - .bat
+  - .com
+  - .conf
+  - .cue
+  - .dosz
+  - .exe
+  - .img
+  - .iso
+  - .zip
+  core: dosbox_pure
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1587"
+- folder: pc88
+  extensions:
+  - .88d
+  - .cmt
+  - .d88
+  - .m3u
+  - .t88
+  - .u88
+  core: quasi88
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1603"
+- folder: pc98
+  extensions:
+  - .2hd
+  - .7z
+  - .88d
+  - .98d
+  - .cmd
+  - .d88
+  - .d98
+  - .dup
+  - .fdd
+  - .fdi
+  - .hdd
+  - .hdi
+  - .hdm
+  - .hdn
+  - .m3u
+  - .nhd
+  - .tfd
+  - .thd
+  - .xdf
+  - .zip
+  core: np2kai
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1613"
+- folder: pcarcade
+  extensions:
+  - .bat
+  - .lindbergh
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:1623"
+- folder: pcengine
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .pce
+  - .rom
+  - .sgx
+  - .toc
+  - .zip
+  core: mednafen_pce
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1633"
+- folder: pcenginecd
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .pce
+  - .sgx
+  - .toc
+  - .zip
+  core: mednafen_pce
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1650"
+- folder: pcfx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  - .zip
+  core: mednafen_pcfx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1667"
+- folder: pico8
+  extensions:
+  - .p8
+  - .png
+  core: pico-8
+  emulator: pico-8
+  source_ref: "esde resources/systems/windows/es_systems.xml:1677"
+- folder: plus4
+  extensions:
+  - .7z
+  - .bin
+  - .cmd
+  - .crt
+  - .d2m
+  - .d4m
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .lnx
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vfl
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xplus4
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1688"
+- folder: pokemini
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1698"
+- folder: ports
+  extensions:
+  - .bat
+  - .exe
+  - .game
+  - .lnk
+  - .phd
+  - .psx
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:1707"
+- folder: ps2
+  extensions:
+  - .bin
+  - .chd
+  - .ciso
+  - .cso
+  - .dump
+  - .elf
+  - .gz
+  - .img
+  - .iso
+  - .isz
+  - .lnk
+  - .m3u
+  - .mdf
+  - .ngr
+  - .nrg
+  - .zso
+  core: pcsx2
+  emulator: pcsx2
+  source_ref: "esde resources/systems/windows/es_systems.xml:1724; os functions/ToolScripts/emuDeckESDE.ps1:304"
+- folder: ps3
+  extensions:
+  - .iso
+  - .ps3
+  core: rpcs3
+  emulator: rpcs3
+  source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:4"
+- folder: ps3/shortcuts
+  name: ps3-shortcut
+  extensions:
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:14"
+- folder: ps4/shortcuts
+  name: ps4
+  extensions:
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:23"
+- folder: psp
+  extensions:
+  - .7z
+  - .chd
+  - .cso
+  - .elf
+  - .iso
+  - .pbp
+  - .prx
+  - .zip
+  core: ppsspp
+  emulator: ppsspp
+  source_ref: "esde resources/systems/windows/es_systems.xml:1764; os functions/ToolScripts/emuDeckESDE.ps1:302"
+- folder: psvita
+  extensions:
+  - .psvita
+  core: vita3k
+  emulator: vita3k
+  source_ref: "esde resources/systems/windows/es_systems.xml:1774"
+- folder: psx
+  extensions:
+  - .7z
+  - .bin
+  - .cbn
+  - .ccd
+  - .chd
+  - .cue
+  - .ecm
+  - .exe
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .mds
+  - .minipsf
+  - .pbp
+  - .psexe
+  - .psf
+  - .toc
+  - .z
+  - .zip
+  - .znx
+  core: duckstation
+  emulator: duckstation
+  source_ref: "esde resources/systems/windows/es_systems.xml:1783; os functions/ToolScripts/emuDeckESDE.ps1:312"
+- folder: pv1000
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1798"
+- folder: quake
+  extensions:
+  - .bat
+  - .lnk
+  - .pak
+  - .pk3
+  core: tyrquake
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1808"
+- folder: samcoupe
+  extensions:
+  - .7z
+  - .dsk
+  - .mgt
+  - .sad
+  - .sbt
+  - .zip
+  core: simcoupe
+  emulator: simcoupe
+  source_ref: "esde resources/systems/windows/es_systems.xml:1823"
+- folder: satellaview
+  extensions:
+  - .7z
+  - .bml
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1832"
+- folder: saturn
+  extensions:
+  - .7z
+  - .bin
+  - .ccd
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  - .mds
+  - .toc
+  - .zip
+  core: mednafen_saturn
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1853; os functions/ToolScripts/emuDeckESDE.ps1:313"
+- folder: saturnjp
+  extensions:
+  - .7z
+  - .bin
+  - .ccd
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  - .mds
+  - .toc
+  - .zip
+  core: mednafen_saturn
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1870"
+- folder: scummvm
+  extensions:
+  - .scummvm
+  - .svm
+  core: scummvm
+  emulator: scummvm
+  source_ref: "esde resources/systems/windows/es_systems.xml:1887; os functions/ToolScripts/emuDeckESDE.ps1:314"
+- folder: scv
+  extensions:
+  - '.0'
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1898"
+- folder: sega32x
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .cue
+  - .gen
+  - .iso
+  - .m3u
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1908"
+- folder: sega32xjp
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .cue
+  - .gen
+  - .iso
+  - .m3u
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1920"
+- folder: sega32xna
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .cue
+  - .gen
+  - .iso
+  - .m3u
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1932"
+- folder: segacd
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .bms
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1944"
+- folder: sfc
+  extensions:
+  - .7z
+  - .bin
+  - .bml
+  - .bs
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .mgd
+  - .sfc
+  - .smc
+  - .st
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1960"
+- folder: sg-1000
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .bms
+  - .chd
+  - .cue
+  - .gen
+  - .gg
+  - .iso
+  - .m3u
+  - .md
+  - .mdx
+  - .ri
+  - .rom
+  - .sg
+  - .sgd
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:1985"
+- folder: sgb
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .sgb
+  - .zip
+  core: mesen-s
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2001"
+- folder: snes
+  extensions:
+  - .7z
+  - .bin
+  - .bml
+  - .bs
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .mgd
+  - .sfc
+  - .smc
+  - .st
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2015"
+- folder: snesna
+  extensions:
+  - .7z
+  - .bin
+  - .bml
+  - .bs
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .mgd
+  - .sfc
+  - .smc
+  - .st
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2040"
+- folder: solarus
+  extensions:
+  - .solarus
+  core: solarus
+  emulator: solarus
+  source_ref: "esde resources/systems/windows/es_systems.xml:2065"
+- folder: spectravideo
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2074"
+- folder: steam
+  extensions:
+  - .bat
+  - .lnk
+  - .url
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:2083"
+- folder: stv
+  extensions:
+  - .7z
+  - .zip
+  core: kronos
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2092"
+- folder: sufami
+  extensions:
+  - .7z
+  - .bml
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2104"
+- folder: supergrafx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .pce
+  - .rom
+  - .sgx
+  - .zip
+  core: mednafen_supergrafx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2122"
+- folder: supervision
+  extensions:
+  - .7z
+  - .bin
+  - .sv
+  - .zip
+  core: potator
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2138"
+- folder: supracan
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2149"
+- folder: switch
+  extensions:
+  - .nca
+  - .nro
+  - .nso
+  - .nsp
+  - .xci
+  core: yuzu
+  emulator: yuzu
+  source_ref: "os configs/emulationstation/custom_systems/es_systems.xml:41"
+- folder: symbian
+  extensions:
+  - .sis
+  - .sisx
+  - .symbian
+  core: eka2l1
+  emulator: eka2l1
+  source_ref: "esde resources/systems/windows/es_systems.xml:2170"
+- folder: tanodragon
+  extensions:
+  - .7z
+  - .cas
+  - .ccc
+  - .dsk
+  - .rom
+  - .zip
+  core: mame
+  emulator: mame
+  source_ref: "esde resources/systems/windows/es_systems.xml:2182"
+- folder: tg-cd
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .pce
+  - .sgx
+  - .toc
+  - .zip
+  core: mednafen_pce
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2210"
+- folder: tg16
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .pce
+  - .rom
+  - .sgx
+  - .toc
+  - .zip
+  core: mednafen_pce
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2193"
+- folder: ti99
+  extensions:
+  - .7z
+  - .rpk
+  - .zip
+  core: mame
+  emulator: mame
+  source_ref: "esde resources/systems/windows/es_systems.xml:2227"
+- folder: tic80
+  extensions:
+  - .png
+  - .tic
+  core: tic80
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2237"
+- folder: to8
+  extensions:
+  - .7z
+  - .fd
+  - .k7
+  - .m5
+  - .m7
+  - .rom
+  - .sap
+  - .zip
+  core: theodore
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2247"
+- folder: triforce
+  extensions:
+  - .7z
+  - .ciso
+  - .dff
+  - .dol
+  - .elf
+  - .gcm
+  - .gcz
+  - .iso
+  - .json
+  - .m3u
+  - .rvz
+  - .tgc
+  - .wad
+  - .wbfs
+  - .wia
+  - .zip
+  core: dolphin
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2256"
+- folder: trs-80
+  extensions:
+  - .cmd
+  - .dsk
+  core: sdl2trs
+  emulator: sdl2trs
+  source_ref: "esde resources/systems/windows/es_systems.xml:2267"
+- folder: type-x
+  extensions:
+  - .bat
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:2278"
+- folder: uzebox
+  extensions:
+  - .7z
+  - .uze
+  - .zip
+  core: uzem
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2287"
+- folder: vectrex
+  extensions:
+  - .7z
+  - .bin
+  - .gam
+  - .vc
+  - .vec
+  - .zip
+  core: vecx
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2296"
+- folder: vic20
+  extensions:
+  - .7z
+  - .a0
+  - .b0
+  - .bin
+  - .cmd
+  - .crt
+  - .d2m
+  - .d4m
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .lnx
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .rom
+  - .t64
+  - .tap
+  - .vfl
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xvic
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2307"
+- folder: videopac
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2317"
+- folder: vircon32
+  extensions:
+  - .7z
+  - .v32
+  - .zip
+  core: vircon32
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2328"
+- folder: virtualboy
+  extensions:
+  - .7z
+  - .bin
+  - .vb
+  - .vboy
+  - .zip
+  core: mednafen_vb
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2338"
+- folder: vpinball
+  extensions:
+  - .vpt
+  - .vpx
+  core: visual-pinball
+  emulator: visual-pinball
+  source_ref: "esde resources/systems/windows/es_systems.xml:2348"
+- folder: vsmile
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2357"
+- folder: wasm4
+  extensions:
+  - .7z
+  - .wasm
+  - .zip
+  core: wasm4
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2368"
+- folder: wii
+  extensions:
+  - .7z
+  - .ciso
+  - .dff
+  - .dol
+  - .elf
+  - .gcm
+  - .gcz
+  - .iso
+  - .json
+  - .m3u
+  - .rvz
+  - .tgc
+  - .wad
+  - .wbfs
+  - .wia
+  - .zip
+  core: dolphin
+  emulator: dolphin
+  source_ref: "esde resources/systems/windows/es_systems.xml:2377; os functions/ToolScripts/emuDeckESDE.ps1:303"
+- folder: wiiu
+  extensions:
+  - .elf
+  - .rpx
+  - .tmd
+  - .wua
+  - .wud
+  - .wuhb
+  - .wux
+  core: cemu
+  emulator: cemu
+  source_ref: "esde resources/systems/windows/es_systems.xml:2388"
+- folder: windows
+  extensions:
+  - .bat
+  - .lnk
+  core: os-shell
+  emulator: os-shell
+  source_ref: "esde resources/systems/windows/es_systems.xml:2398"
+- folder: windows3x
+  extensions:
+  - .7z
+  - .bat
+  - .dosz
+  - .lnk
+  - .zip
+  core: dosbox-x
+  emulator: dosbox-x
+  source_ref: "esde resources/systems/windows/es_systems.xml:2408"
+- folder: windows9x
+  extensions:
+  - .7z
+  - .bat
+  - .dosz
+  - .lnk
+  - .zip
+  core: dosbox-x
+  emulator: dosbox-x
+  source_ref: "esde resources/systems/windows/es_systems.xml:2421"
+- folder: wonderswan
+  extensions:
+  - .7z
+  - .pc2
+  - .ws
+  - .zip
+  core: mednafen_wswan
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2434"
+- folder: wonderswancolor
+  extensions:
+  - .7z
+  - .pc2
+  - .ws
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2448"
+- folder: x1
+  extensions:
+  - .2d
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dup
+  - .dx1
+  - .hdm
+  - .tap
+  - .tfd
+  - .xdf
+  - .zip
+  core: x1
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2461"
+- folder: x68000
+  extensions:
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2472"
+- folder: xbox
+  extensions:
+  - .iso
+  - .lnk
+  - .xbe
+  - .xiso
+  core: xemu
+  emulator: xemu
+  source_ref: "esde resources/systems/windows/es_systems.xml:2484"
+- folder: xbox360
+  extensions:
+  - .iso
+  - .lnk
+  - .xex
+  - .zar
+  core: xenia
+  emulator: xenia
+  source_ref: "esde resources/systems/windows/es_systems.xml:2495"
+  note: "files without an extension are games too ('.' in the list)"
+- folder: xboxone
+  extensions:
+  - .7z
+  - .zip
+  source_ref: "esde resources/systems/windows/es_systems.xml:2506"
+- folder: zmachine
+  extensions:
+  - .dat
+  - .z1
+  - .z2
+  - .z3
+  - .z4
+  - .z5
+  - .z6
+  - .z7
+  - .z8
+  - .zblorb
+  - .zlb
+  core: mojozork
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2515"
+- folder: zx81
+  extensions:
+  - .7z
+  - .p
+  - .tzx
+  - .zip
+  core: "81"
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2525"
+- folder: zxnext
+  extensions:
+  - .nex
+  - .sna
+  core: cspect
+  emulator: cspect
+  source_ref: "esde resources/systems/windows/es_systems.xml:2534"
+- folder: zxspectrum
+  extensions:
+  - .7z
+  - .dsk
+  - .gz
+  - .img
+  - .mgt
+  - .rzx
+  - .scl
+  - .sh
+  - .sna
+  - .szx
+  - .tap
+  - .trd
+  - .tzx
+  - .udi
+  - .z80
+  - .zip
+  core: fuse
+  emulator: retroarch
+  source_ref: "esde resources/systems/windows/es_systems.xml:2544"

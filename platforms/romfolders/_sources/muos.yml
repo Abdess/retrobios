@@ -1,0 +1,63 @@
+name: muOS
+platform: retroarch
+format: muos
+params:
+  source: os
+  path: share/info/manifest/core.json
+sources:
+  os:
+    repo: https://github.com/MustardOS/internal
+    commit: f41f4a89334feecf91a81c7736d4f2c80b1ae10c
+  fe:
+    repo: https://github.com/MustardOS/frontend
+    commit: c128dfc13bd60cb8af66e7562bc8e8e5505e1f60
+    note: newest frontend commit at or before the internal pin date
+roms_root:
+  path: /mnt/mmc/ROMS
+  from_bios: ../../ROMS
+  source_ref: fe common/content/content.c:522; fe common/base/options.h:101
+case_sensitive: false
+case_ref: fe common/content/core/common.c:396-398
+hidden:
+  - pattern: .*
+    source_ref: os share/info/skip.ini:1
+  - pattern: _*
+    source_ref: os share/info/skip.ini:2
+  - pattern: /img*
+    source_ref: os share/info/skip.ini:3
+  - name: control.txt
+    source_ref: os share/info/skip.ini:4
+  - name: neogeo.zip
+    source_ref: os share/info/skip.ini:5
+  - name: pgm.zip
+    source_ref: os share/info/skip.ini:6
+  - name: midssio.zip
+    source_ref: os share/info/skip.ini:7
+  - pattern: '*.bps*'
+    source_ref: os share/info/skip.ini:8
+  - pattern: '*.dat*'
+    source_ref: os share/info/skip.ini:9
+  - pattern: '*.ips*'
+    source_ref: os share/info/skip.ini:10
+  - pattern: '*.log*'
+    source_ref: os share/info/skip.ini:11
+  - pattern: '*.msu*'
+    source_ref: os share/info/skip.ini:12
+  - pattern: '*.pcm*'
+    source_ref: os share/info/skip.ini:13
+  - pattern: '*.sav*'
+    source_ref: os share/info/skip.ini:14
+  - pattern: '*.sbi*'
+    source_ref: os share/info/skip.ini:15
+  - pattern: '*.srm*'
+    source_ref: os share/info/skip.ini:16
+  - pattern: '*.state*'
+    source_ref: os share/info/skip.ini:17
+  - pattern: '*.ups*'
+    source_ref: os share/info/skip.ini:18
+  - pattern: '*.xml*'
+    source_ref: os share/info/skip.ini:19
+notes:
+  - core.json lists no extensions. The skip.ini globs are matched lowercased with fnmatch (fe common/base/strutil.c:31-104), and every other file is listed.
+  - A folder gets its core when its name, lowercased without space, '-', '_' and '+', is one of a system's friendly names (fe common/content/core/common.c:396-398). assign.json is built from every friendly name (os script/system/assign.sh:65-80).
+  - The roms root is ROMS on the card that holds MUOS/bios, or /mnt/sdcard/ROMS on the second card. RetroArch sees the BIOS folder as /run/muos/storage/bios.

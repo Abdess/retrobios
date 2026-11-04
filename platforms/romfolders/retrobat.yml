@@ -1,0 +1,2454 @@
+setup: retrobat
+name: RetroBat
+platform: retrobat
+sources:
+  os:
+    repo: "https://github.com/RetroBat-Official/retrobat"
+    commit: ec36b1310a72c9ba5cd159525f96bbf0246170aa
+    tag: 8.3.1
+  es:
+    repo: "https://github.com/RetroBat-Official/emulationstation"
+    commit: 45f37fd74819ee07118ca2e7680a907b25733ac5
+    note: branch retrobat-8.3
+roms_root:
+  path: <RetroBat>\roms
+  from_bios: ../roms
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:10"
+case_sensitive: false
+hidden:
+- pattern: .*
+  source_ref: "es es-app/src/SystemData.cpp:350"
+media:
+- name: artwork
+  source_ref: "es es-app/src/SystemData.cpp:380"
+- name: media
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- name: medias
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- name: images
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- name: manuals
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- name: videos
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- name: assets
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- name: html_arrm
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- name: bezels
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- name: fonts
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- name: logs
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- name: screenshots
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+- pattern: downloaded_*
+  source_ref: "es es-app/src/SystemData.cpp:400-403"
+notes:
+- ~ is the EmulationStation home, <RetroBat>\emulationstation, so ~\..\roms is <RetroBat>\roms beside
+  <RetroBat>\bios.
+- Windows folders are case-insensitive.
+- "A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:355)."
+- "Default core: the core marked default, else the first emulator's first core (es es-app/src/SystemData.cpp:1923-1960)."
+folders:
+- folder: 2ship
+  extensions:
+  - .n64
+  - .z64
+  core: 2ship
+  emulator: 2ship
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5376"
+- folder: 3do
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: opera
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1598"
+- folder: 3ds
+  extensions:
+  - .3ds
+  - .3dsx
+  - .7z
+  - .app
+  - .axf
+  - .cci
+  - .cia
+  - .cxi
+  - .elf
+  - .m3u
+  - .squashfs
+  - .z3dsx
+  - .zcci
+  - .zcia
+  - .zcxi
+  - .zip
+  core: azahar
+  emulator: azahar
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3031"
+- folder: actionmax
+  extensions:
+  - .actionmax
+  core: hypseus
+  emulator: hypseus
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:246"
+- folder: adam
+  extensions:
+  - .1dd
+  - .7z
+  - .bin
+  - .col
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .ddp
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .m3u
+  - .mfi
+  - .mfm
+  - .rom
+  - .td0
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4690"
+- folder: advision
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4194"
+- folder: amazon
+  extensions:
+  - .bat
+  - .lnk
+  - .url
+  core: windows
+  emulator: windows
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3854"
+- folder: amiga1200
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .dms
+  - .hdf
+  - .ipf
+  - .lha
+  - .m3u
+  - .rp9
+  - .uae
+  - .zip
+  core: puae
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1642"
+- folder: amiga4000
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .dms
+  - .hdf
+  - .ipf
+  - .lha
+  - .m3u
+  - .rp9
+  - .uae
+  - .zip
+  core: puae
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1667"
+- folder: amiga500
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ags
+  - .dms
+  - .hdf
+  - .ipf
+  - .lha
+  - .m3u
+  - .rp9
+  - .uae
+  - .zip
+  core: puae
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1618"
+- folder: amigacd32
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cso
+  - .cue
+  - .iso
+  - .lha
+  - .mds
+  - .nrg
+  - .rp9
+  - .zip
+  core: puae
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1690"
+- folder: amigacdtv
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cso
+  - .cue
+  - .iso
+  - .m3u
+  - .mds
+  - .nrg
+  - .rp9
+  - .zip
+  core: puae
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1715"
+- folder: amstradcpc
+  extensions:
+  - .7z
+  - .cdt
+  - .dsk
+  - .kcr
+  - .m3u
+  - .sna
+  - .tap
+  - .voc
+  - .zip
+  core: cap32
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1740"
+- folder: apfm1000
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4614"
+- folder: apple2
+  extensions:
+  - .do
+  - .dsk
+  - .hdv
+  - .m3u
+  - .nib
+  - .po
+  - .woz
+  - .zip
+  core: applewin
+  emulator: applewin
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1781"
+- folder: apple2gs
+  extensions:
+  - .2mg
+  - .hdv
+  - .m3u
+  - .woz
+  - .zip
+  core: gsplus
+  emulator: gsplus
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1818"
+- folder: aquarius
+  extensions:
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2211"
+- folder: arcadia
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: amiarcadia
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4767"
+- folder: archimedes
+  extensions:
+  - .1dd
+  - '.360'
+  - .7z
+  - .adf
+  - .adl
+  - .adm
+  - .ads
+  - .apd
+  - .bbc
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsd
+  - .dsk
+  - .hfe
+  - .ima
+  - .imd
+  - .img
+  - .ipf
+  - .jfd
+  - .mfi
+  - .mfm
+  - .msa
+  - .ssd
+  - .st
+  - .td0
+  - .ufi
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4741"
+- folder: arduboy
+  extensions:
+  - .7z
+  - .hex
+  - .zip
+  core: arduous
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4269"
+- folder: astrocade
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4818"
+- folder: atari2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .gz
+  - .rom
+  - .zip
+  core: stella
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1864"
+- folder: atari5200
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .cas
+  - .cdm
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: a5200
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1890"
+- folder: atari7800
+  extensions:
+  - .7z
+  - .a78
+  - .bin
+  - .zip
+  core: prosystem
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1912"
+- folder: atari800
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .cas
+  - .cdm
+  - .m3u
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: atari800
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1844"
+- folder: atarist
+  extensions:
+  - .7z
+  - .dim
+  - .gemdos
+  - .ipf
+  - .m3u
+  - .msa
+  - .st
+  - .stx
+  - .zip
+  core: hatari
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1936"
+- folder: atom
+  extensions:
+  - .1dd
+  - .40t
+  - .7z
+  - .atm
+  - .bin
+  - .cqi
+  - .cqm
+  - .csw
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .rom
+  - .tap
+  - .td0
+  - .uef
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4716"
+- folder: atomiswave
+  extensions:
+  - .7z
+  - .bin
+  - .lst
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:448"
+  arcade: true
+- folder: bbcmicro
+  extensions:
+  - .7z
+  - .dsd
+  - .ssd
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4639"
+- folder: bennugd
+  extensions:
+  - .dat
+  - .dcb
+  core: bennugd
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5188"
+- folder: bk
+  extensions:
+  - .bin
+  - .zip
+  core: bk
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4375"
+- folder: bstone
+  extensions:
+  - .bstone
+  core: bstone
+  emulator: bstone
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3554"
+- folder: bsyndrome
+  extensions:
+  - .game
+  core: bsyndrome
+  emulator: bsyndrome
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5208"
+- folder: c128
+  extensions:
+  - .7z
+  - .d64
+  - .d81
+  - .lnx
+  - .m3u
+  - .prg
+  - .tap
+  - .zip
+  core: vice_x128
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2167"
+- folder: c16
+  extensions:
+  - .7z
+  - .d64
+  - .m3u
+  - .prg
+  - .tap
+  - .zip
+  core: vice_xplus4
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2070"
+- folder: c20
+  extensions:
+  - .a0
+  - .b0
+  - .crt
+  - .d64
+  - .d81
+  - .nib
+  - .prg
+  - .t64
+  - .tap
+  - .zip
+  core: vice_xvic
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2089"
+- folder: c64
+  extensions:
+  - .7z
+  - .crt
+  - .d64
+  - .d71
+  - .d81
+  - .g64
+  - .m3u
+  - .nib
+  - .prg
+  - .t64
+  - .tap
+  - .zip
+  core: vice_x64
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2108"
+- folder: camplynx
+  extensions:
+  - .bin
+  - .squashfs
+  - .tap
+  - .zip
+  core: jynx
+  emulator: jynx
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5014"
+- folder: cannonball
+  extensions:
+  - .game
+  core: cannonball
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5224"
+- folder: cassettevision
+  extensions:
+  - .bin777
+  - .zip
+  core: pd777
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4545"
+- folder: cave
+  extensions:
+  - .7z
+  - .fba
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:147"
+  arcade: true
+- folder: cavestory
+  extensions:
+  - .exe
+  - .libretro
+  core: nxengine
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3571"
+- folder: cdi
+  extensions:
+  - .cdr
+  - .chd
+  - .cue
+  - .gdi
+  - .iso
+  - .nrg
+  - .toc
+  core: same_cdi
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4153"
+- folder: cdogs
+  extensions:
+  - .game
+  core: cdogs
+  emulator: cdogs
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5244"
+- folder: cgenius
+  extensions:
+  - .cgenius
+  core: cgenius
+  emulator: cgenius
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5260"
+- folder: channelf
+  extensions:
+  - .7z
+  - .bin
+  - .rom
+  - .zip
+  core: freechaf
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2236"
+- folder: chihiro
+  extensions:
+  - .bin
+  - .iso
+  - .xbe
+  core: xemu-chihiro
+  emulator: xemu-chihiro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:563"
+  arcade: true
+- folder: coco
+  extensions:
+  - .7z
+  - .cas
+  - .ccc
+  - .dsk
+  - .rom
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4892"
+- folder: colecovision
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .ddp
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .zip
+  core: gearcoleco
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2036"
+- folder: corsixth
+  extensions:
+  - .game
+  core: corsixth
+  emulator: corsixth
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5276"
+- folder: cplus4
+  extensions:
+  - .7z
+  - .d64
+  - .m3u
+  - .prg
+  - .tap
+  - .zip
+  core: vice_xplus4
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2129"
+- folder: cps1
+  extensions:
+  - .7z
+  - .fba
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:266"
+  arcade: true
+- folder: cps2
+  extensions:
+  - .7z
+  - .fba
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:288"
+  arcade: true
+- folder: cps3
+  extensions:
+  - .7z
+  - .decomp
+  - .fba
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:310"
+  arcade: true
+- folder: crvision
+  extensions:
+  - .7z
+  - .bin
+  - .rom
+  - .zip
+  core: jollycv
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4421"
+- folder: daphne
+  extensions:
+  - .7z
+  - .daphne
+  - .hypseus
+  - .rar
+  - .squashfs
+  core: hypseus
+  emulator: hypseus
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:193"
+  arcade: true
+- folder: devilutionx
+  extensions:
+  - .game
+  - .win
+  core: devilutionx
+  emulator: devilutionx
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3315"
+- folder: dice
+  extensions:
+  - .dmy
+  - .zip
+  core: dice
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:332"
+  arcade: true
+- folder: dinothawr
+  extensions:
+  - .game
+  core: dinothawr
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5491"
+- folder: doom
+  extensions:
+  - .gzdoom
+  - .ipk3
+  - .iwad
+  - .pk3
+  - .pwad
+  - .uzdoom
+  - .wad
+  core: uzdoom
+  emulator: uzdoom
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3416"
+- folder: doom3
+  extensions:
+  - .boom3
+  - .game
+  core: boom3
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3454"
+- folder: dos
+  extensions:
+  - .bat
+  - .cmd
+  - .dos
+  - .dosbox
+  - .dosz
+  - .m3u8
+  - .pc
+  - .zip
+  core: dosbox_pure
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3784"
+- folder: dragon32
+  extensions:
+  - .cas
+  - .dmk
+  - .dsk
+  - .jvc
+  - .os9
+  - .vdk
+  - .wav
+  core: xroar
+  emulator: xroar
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4918"
+- folder: dreamcast
+  extensions:
+  - .cdi
+  - .chd
+  - .cue
+  - .gdi
+  - .m3u
+  - .mdf
+  - .mds
+  core: flycast
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:900"
+- folder: dusklight
+  extensions:
+  - .iso
+  - .m3u
+  - .rvz
+  core: dusklight
+  emulator: dusklight
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5392"
+- folder: eagames
+  extensions:
+  - .bat
+  - .lnk
+  - .url
+  core: windows
+  emulator: windows
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3918"
+- folder: easyrpg
+  extensions:
+  - .7z
+  - .easyrpg
+  - .lbd
+  - .rar
+  - .squashfs
+  - .zip
+  core: easyrpg
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3335"
+- folder: ecwolf
+  extensions:
+  - .exe
+  - .pk3
+  core: ecwolf
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3355"
+- folder: eduke32
+  extensions:
+  - .eduke32
+  core: eduke32
+  emulator: eduke32
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5507"
+- folder: electron
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4665"
+- folder: enterprise
+  extensions:
+  - .bas
+  - .com
+  - .dsk
+  - .dtf
+  - .img
+  - .tap
+  - .zip
+  core: ep128emu_core
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2260"
+- folder: epic
+  extensions:
+  - .bat
+  - .lnk
+  - .url
+  core: windows
+  emulator: windows
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3902"
+- folder: exodos
+  extensions:
+  - .lnk
+  core: exodos
+  emulator: exodos
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3806"
+- folder: exowin3x
+  extensions:
+  - .lnk
+  core: exodos
+  emulator: exodos
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3822"
+- folder: exowin9x
+  extensions:
+  - .lnk
+  core: exodos
+  emulator: exodos
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3838"
+- folder: fbneo
+  extensions:
+  - .7z
+  - .bin
+  - .chd
+  - .fba
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:120"
+  arcade: true
+- folder: fds
+  extensions:
+  - .7z
+  - .fds
+  - .nes
+  - .zip
+  core: fceumm
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:928"
+- folder: flash
+  extensions:
+  - .swf
+  core: arcadeflashweb
+  emulator: arcadeflashweb
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5"
+- folder: fm7
+  extensions:
+  - .1dd
+  - .7z
+  - .cqi
+  - .cqm
+  - .d77
+  - .d88
+  - .dfi
+  - .dsk
+  - .hfe
+  - .imd
+  - .mfi
+  - .mfm
+  - .t77
+  - .td0
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4589"
+- folder: fmtowns
+  extensions:
+  - .cd
+  - .chd
+  - .cue
+  - .d77
+  - .d88
+  - .game
+  - .iso
+  - .m3u
+  - .xdf
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4934"
+- folder: fpinball
+  extensions:
+  - .7z
+  - .fpt
+  - .rar
+  - .zip
+  core: bam
+  emulator: fpinball
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3969"
+- folder: gaelco
+  extensions:
+  - .zip
+  core: gaelco
+  emulator: demul
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:540"
+  arcade: true
+- folder: gamate
+  extensions:
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5091"
+- folder: gameandwatch
+  name: gw
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: gw
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2741"
+- folder: gamecom
+  extensions:
+  - .7z
+  - .bin
+  - .tgc
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4446"
+- folder: gamecube
+  extensions:
+  - .7z
+  - .ciso
+  - .decomp
+  - .dol
+  - .gcz
+  - .iso
+  - .json
+  - .m3u
+  - .rvz
+  - .squashfs
+  - .wad
+  - .wbfs
+  - .wia
+  - .zip
+  core: dolphin
+  emulator: dolphin
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1238"
+- folder: gamegear
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: genesis_plus_gx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2702"
+- folder: gamepock
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4471"
+- folder: gb
+  extensions:
+  - .7z
+  - .gb
+  - .zip
+  core: gambatte
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2762"
+- folder: gb2players
+  extensions:
+  - .7z
+  - .gb
+  - .m3u
+  - .zip
+  core: tgbdual
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2811"
+- folder: gba
+  extensions:
+  - .7z
+  - .decomp
+  - .gba
+  - .zip
+  core: mgba
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2902"
+- folder: gba2players
+  extensions:
+  - .gba
+  core: nosgba
+  emulator: nosgba
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2947"
+- folder: gbc
+  extensions:
+  - .7z
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2833"
+- folder: gbc2players
+  extensions:
+  - .7z
+  - .gbc
+  - .m3u
+  - .zip
+  core: tgbdual
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2880"
+- folder: gemrb
+  extensions:
+  - .auto
+  - .bg1
+  - .bg2
+  - .how
+  - .iwd
+  - .iwd2
+  - .pst
+  core: gemrb
+  emulator: gemrb
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3376"
+- folder: ghostship
+  extensions:
+  - .z64
+  core: ghostship
+  emulator: ghostship
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5459"
+  note: the list names 2 systems starship
+- folder: gmaster
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4793"
+- folder: gog
+  extensions:
+  - .bat
+  - .lnk
+  - .url
+  core: windows
+  emulator: windows
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3886"
+- folder: gp32
+  extensions:
+  - .smc
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4496"
+- folder: gx4000
+  extensions:
+  - .7z
+  - .cpr
+  - .dsk
+  - .m3u
+  - .zip
+  core: cap32
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1761"
+- folder: halflife
+  extensions:
+  - .game
+  core: xash3d
+  emulator: xash3d
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3538"
+- folder: hbmame
+  extensions:
+  - .hb
+  - .zip
+  core: hbmame
+  emulator: hbmame
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:100"
+  arcade: true
+- folder: hikaru
+  extensions:
+  - .zip
+  core: hikaru
+  emulator: demul
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:523"
+  arcade: true
+- folder: ikemen
+  extensions:
+  - .game
+  - .ikemen
+  - .pc
+  - .win
+  core: ikemen
+  emulator: ikemen
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3608"
+- folder: intellivision
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .rom
+  - .zip
+  core: freeintv
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2186"
+- folder: j2me
+  extensions:
+  - .jar
+  core: freej2me
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:21"
+- folder: jaguar
+  extensions:
+  - .7z
+  - .abs
+  - .bin
+  - .cdi
+  - .cof
+  - .cue
+  - .j64
+  - .jag
+  - .prg
+  - .rom
+  - .squashfs
+  - .zip
+  core: virtualjaguar
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1983"
+- folder: jaguarcd
+  extensions:
+  - .7z
+  - .bigpimg
+  - .cdi
+  - .cue
+  - .squashfs
+  - .zip
+  core: bigpemu
+  emulator: bigpemu
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2010"
+- folder: karaoke
+  extensions:
+  - .cdg
+  core: pocketcdg
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2963"
+- folder: laseractive
+  extensions:
+  - .mmi
+  core: MegaLD
+  emulator: ares
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:173"
+- folder: lcdgames
+  extensions:
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4964"
+- folder: lindbergh
+  extensions:
+  - .game
+  core: linuxloader
+  emulator: linuxloader
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:610"
+  arcade: true
+- folder: loopy
+  name: casloopy
+  extensions:
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4396"
+- folder: love
+  extensions:
+  - .7z
+  - .exe
+  - .love
+  - .lua
+  - .lutro
+  - .zip
+  core: love
+  emulator: love
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3281"
+- folder: lowresnx
+  extensions:
+  - .nx
+  core: lowresnx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4313"
+- folder: lutro
+  extensions:
+  - .7z
+  - .love
+  - .lua
+  - .lutro
+  - .zip
+  core: lutro
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3296"
+- folder: lynx
+  extensions:
+  - .7z
+  - .lnx
+  - .o
+  - .zip
+  core: mednafen_lynx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2671"
+- folder: mame
+  extensions:
+  - .7z
+  - .decomp
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:72"
+  arcade: true
+- folder: mastersystem
+  extensions:
+  - .7z
+  - .bin
+  - .sms
+  - .wad
+  - .zip
+  core: genesis_plus_gx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:671"
+- folder: megacd
+  extensions:
+  - .7z
+  - .chd
+  - .cso
+  - .cue
+  - .iso
+  - .m3u
+  - .zip
+  core: genesis_plus_gx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:775"
+- folder: megadrive
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .sgd
+  - .smd
+  - .wad
+  - .zip
+  core: genesis_plus_gx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:711"
+- folder: megadrive-msu
+  extensions:
+  - .68k
+  - .7z
+  - .bin
+  - .cue
+  - .gen
+  - .md
+  - .sg
+  - .sgd
+  - .smd
+  - .wad
+  - .zip
+  core: genesis_plus_gx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:752"
+- folder: megaduck
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: sameduck
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4244"
+- folder: model2
+  extensions:
+  - .decomp
+  - .zip
+  core: multicpu
+  emulator: m2emulator
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:402"
+  arcade: true
+- folder: model3
+  extensions:
+  - .decomp
+  - .zip
+  core: supermodel
+  emulator: supermodel
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:428"
+  arcade: true
+- folder: msx1
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ogv
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .wav
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2279"
+- folder: msx2
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ogv
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .wav
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2301"
+- folder: msx2+
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ogv
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .wav
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2323"
+- folder: msxturbor
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ogv
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .wav
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2345"
+- folder: mugen
+  extensions:
+  - .game
+  - .mugen
+  - .pc
+  - .win
+  core: mugen
+  emulator: mugen
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3627"
+- folder: multivision
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .rom
+  - .sg
+  - .sms
+  - .zip
+  core: gearsystem
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:652"
+- folder: n64
+  extensions:
+  - .7z
+  - .decomp
+  - .n64
+  - .v64
+  - .wad
+  - .z64
+  - .zip
+  core: mupen64plus_next
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1158"
+- folder: n64dd
+  extensions:
+  - .7z
+  - .n64
+  - .ndd
+  - .v64
+  - .wad
+  - .z64
+  - .zip
+  core: mupen64
+  emulator: mupen64
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1210"
+- folder: namco2x6
+  extensions:
+  - .acgame
+  - .m3u
+  - .zip
+  core: namco2x6
+  emulator: pcsx2x6
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3741"
+  arcade: true
+- folder: namco3xx
+  extensions:
+  - .game
+  core: namco3xx
+  emulator: teknoparrot
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3766"
+  arcade: true
+- folder: naomi
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .decomp
+  - .lst
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:473"
+  arcade: true
+- folder: naomi2
+  extensions:
+  - .7z
+  - .decomp
+  - .zip
+  core: flycast
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:498"
+  arcade: true
+- folder: nds
+  extensions:
+  - .7z
+  - .bin
+  - .nds
+  - .zip
+  core: melondsds
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3001"
+- folder: neogeo
+  extensions:
+  - .7z
+  - .neo
+  - .wad
+  - .zip
+  core: fbneo
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:351"
+- folder: neogeo64
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5148"
+  arcade: true
+- folder: neogeocd
+  extensions:
+  - .7z
+  - .chd
+  - .cso
+  - .cue
+  - .iso
+  - .m3u
+  - .zip
+  core: neocd
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:380"
+- folder: nes
+  extensions:
+  - .7z
+  - .fds
+  - .nes
+  - .wad
+  - .zip
+  core: fceumm
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:954"
+- folder: ngage
+  extensions:
+  - .ngage
+  - .symbian
+  core: eka2l1
+  emulator: eka2l1
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4178"
+- folder: ngp
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: mednafen_ngp
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3084"
+- folder: ngpc
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: mednafen_ngp
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3120"
+- folder: odyssey2
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2550"
+- folder: openbor
+  extensions:
+  - .exe
+  - .pak
+  core: openbor
+  emulator: openbor
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3646"
+- folder: opengoal
+  extensions:
+  - .opengoal
+  core: opengoal
+  emulator: opengoal
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5312"
+- folder: openjazz
+  extensions:
+  - .openjazz
+  core: openjazz
+  emulator: openjazz
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5328"
+- folder: openlara
+  extensions:
+  - .croft
+  core: openlara
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5292"
+- folder: oricatmos
+  extensions:
+  - .dsk
+  - .tap
+  core: oricutron
+  emulator: oricutron
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2387"
+- folder: p2000t
+  extensions:
+  - .cas
+  - .zip
+  core: m2000
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2580"
+- folder: pb
+  name: powerbomberman
+  extensions:
+  - .pb
+  core: powerbomberman
+  emulator: powerbomberman
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3592"
+- folder: pc88
+  extensions:
+  - .d88
+  - .m3u
+  - .u88
+  core: quasi88
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2411"
+- folder: pc98
+  extensions:
+  - .2hd
+  - .88d
+  - .98d
+  - .cmd
+  - .cue
+  - .d88
+  - .d98
+  - .dup
+  - .fdd
+  - .fdi
+  - .hdd
+  - .hdi
+  - .hdm
+  - .hdn
+  - .m3u
+  - .nhd
+  - .tfd
+  - .thd
+  - .xdf
+  - .zip
+  core: np2kai
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2429"
+- folder: pcengine
+  extensions:
+  - .7z
+  - .bin
+  - .pce
+  - .squashfs
+  - .wad
+  - .zip
+  core: mednafen_pce
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1317"
+- folder: pcenginecd
+  extensions:
+  - .7z
+  - .bin
+  - .ccd
+  - .chd
+  - .cso
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .pce
+  - .squashfs
+  - .zip
+  core: mednafen_pce
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1358"
+- folder: pcfx
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  core: mednafen_pcfx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1439"
+- folder: pdark
+  extensions:
+  - .z64
+  core: pdark
+  emulator: pdark
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5344"
+- folder: pegasus
+  extensions:
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4520"
+- folder: pet
+  extensions:
+  - .7z
+  - .a0
+  - .b0
+  - .crt
+  - .d64
+  - .d81
+  - .m3u
+  - .prg
+  - .t64
+  - .tap
+  - .zip
+  core: vice_xpet
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2148"
+- folder: pico8
+  extensions:
+  - .exe
+  - .p8
+  - .png
+  core: retro8
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4089"
+- folder: pinballfx
+  extensions:
+  - .table
+  core: steam
+  emulator: pinballfx
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3989"
+- folder: pinballfx2
+  extensions:
+  - .pxp
+  - .table
+  core: steam
+  emulator: pinballfx
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4029"
+- folder: pinballfx3
+  extensions:
+  - .pxp
+  - .table
+  core: steam
+  emulator: pinballfx
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4049"
+- folder: pinballm
+  extensions:
+  - .table
+  core: steam
+  emulator: pinballfx
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4009"
+- folder: pokemini
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2982"
+- folder: ports
+  extensions:
+  - .libretro
+  core: libretro
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3269"
+- folder: ps2
+  extensions:
+  - .7z
+  - .bin
+  - .chd
+  - .cso
+  - .decomp
+  - .gz
+  - .iso
+  - .m3u
+  - .mdf
+  - .squashfs
+  - .zip
+  core: pcsx2
+  emulator: pcsx2
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1502"
+- folder: ps3
+  extensions:
+  - .7z
+  - .decomp
+  - .iso
+  - .lnk
+  - .m3u
+  - .ps3
+  - .rar
+  - .squashfs
+  - .zip
+  core: rpcs3
+  emulator: rpcs3
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1528"
+- folder: ps4
+  extensions:
+  - .lnk
+  - .m3u
+  - .ps4
+  - .zar
+  core: shadps4
+  emulator: shadps4
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1543"
+- folder: psp
+  extensions:
+  - .7z
+  - .chd
+  - .cso
+  - .elf
+  - .iso
+  - .pbp
+  - .prx
+  - .squashfs
+  - .zip
+  core: ppsspp
+  emulator: ppsspp
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3064"
+- folder: psvita
+  extensions:
+  - .m3u
+  - .psvita
+  - .vpk
+  core: vita3k
+  emulator: vita3k
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5169"
+- folder: psx
+  extensions:
+  - .7z
+  - .cbn
+  - .ccd
+  - .chd
+  - .cso
+  - .cue
+  - .decomp
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .squashfs
+  - .toc
+  - .zip
+  core: mednafen_psx_hw
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1468"
+- folder: pv1000
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4351"
+- folder: quake
+  extensions:
+  - .pak
+  - .quake
+  core: tyrquake
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3476"
+- folder: quake2
+  extensions:
+  - .pak
+  - .quake2
+  core: vitaquake2
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3498"
+- folder: raze
+  extensions:
+  - .raze
+  core: raze
+  emulator: raze
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3438"
+- folder: recomp
+  extensions:
+  - .lnk
+  core: quiverlauncher
+  emulator: quiverlauncher
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1194"
+- folder: reminiscence
+  extensions:
+  - .rem
+  core: reminiscence
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5563"
+- folder: rtcw
+  extensions:
+  - .rtcw
+  core: rtcw
+  emulator: rtcw
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3522"
+- folder: samcoupe
+  extensions:
+  - .dsk
+  - .mgt
+  - .sad
+  - .sbt
+  core: simcoupe
+  emulator: simcoupe
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2449"
+- folder: satellaview
+  extensions:
+  - .7z
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1082"
+- folder: saturn
+  extensions:
+  - .ccd
+  - .chd
+  - .cso
+  - .cue
+  - .iso
+  - .m3u
+  - .mds
+  - .squashfs
+  - .toc
+  - .zip
+  core: kronos
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:839"
+- folder: scummvm
+  extensions:
+  - .7z
+  - .rar
+  - .scummvm
+  - .squashfs
+  - .zip
+  core: scummvm
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3245"
+- folder: scv
+  extensions:
+  - .bin
+  - .zip
+  core: emuscv
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4564"
+- folder: sega32x
+  extensions:
+  - .32x
+  - .7z
+  - .bin
+  - .md
+  - .smd
+  - .zip
+  core: picodrive
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:808"
+- folder: segastv
+  extensions:
+  - .zip
+  core: kronos
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:871"
+  arcade: true
+- folder: sg1000
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .rom
+  - .sg
+  - .sms
+  - .zip
+  core: gearsystem
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:626"
+- folder: sgb
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: mgba
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5117"
+- folder: sgb-msu1
+  extensions:
+  - .gb
+  - .gbc
+  - .squashfs
+  core: bsnes
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1061"
+- folder: singe
+  extensions:
+  - .hypseus
+  - .zip
+  core: hypseus
+  emulator: hypseus
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:222"
+  arcade: true
+- folder: snes
+  extensions:
+  - .7z
+  - .bsx
+  - .decomp
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .rom
+  - .sfc
+  - .smc
+  - .swc
+  - .wad
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:990"
+- folder: snes-msu1
+  extensions:
+  - .m3u
+  - .sfc
+  - .smc
+  - .squashfs
+  core: snes9x
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1036"
+- folder: soh
+  extensions:
+  - .n64
+  - .z64
+  core: soh
+  emulator: soh
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5360"
+- folder: solarus
+  extensions:
+  - .solarus
+  - .zip
+  core: solarus
+  emulator: solarus
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3666"
+- folder: sonic-mania
+  extensions:
+  - .rsdk
+  core: sonicmania
+  emulator: sonicmania
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5420"
+- folder: sonic3-air
+  extensions:
+  - .bin
+  core: sonic3air
+  emulator: sonic3air
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5408"
+- folder: sonicretro
+  extensions:
+  - .rsdk
+  core: sonicretro
+  emulator: sonicretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5437"
+- folder: spectravideo
+  extensions:
+  - .7z
+  - .bin
+  - .cas
+  - .zip
+  core: bluemsx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2368"
+- folder: starship
+  extensions:
+  - .z64
+  core: starship
+  emulator: starship
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5475"
+  note: the list names 2 systems starship
+- folder: steam
+  extensions:
+  - .bat
+  - .url
+  core: windows
+  emulator: windows
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3870"
+- folder: sufami
+  extensions:
+  - .7z
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .zip
+  core: snes9x
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1108"
+- folder: superbroswar
+  extensions:
+  - .sbw
+  core: superbroswar
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5543"
+- folder: supergrafx
+  extensions:
+  - .7z
+  - .fba
+  - .pce
+  - .zip
+  core: mednafen_supergrafx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1398"
+- folder: supervision
+  extensions:
+  - .7z
+  - .sv
+  - .zip
+  core: potator
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3156"
+- folder: supracan
+  extensions:
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5066"
+- folder: switch
+  extensions:
+  - .decomp
+  - .kip
+  - .nca
+  - .nro
+  - .nso
+  - .nsp
+  - .xci
+  core: eden
+  emulator: eden
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1297"
+- folder: teknoparrot
+  extensions:
+  - .7z
+  - .game
+  - .parrot
+  - .rar
+  - .teknoparrot
+  - .zip
+  core: teknoparrot
+  emulator: teknoparrot
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3703"
+  arcade: true
+- folder: theforceengine
+  extensions:
+  - .game
+  core: theforceengine
+  emulator: theforceengine
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5527"
+- folder: thomson
+  extensions:
+  - .7z
+  - .fd
+  - .k7
+  - .m5
+  - .m7
+  - .rom
+  - .sap
+  - .zip
+  core: theodore
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2507"
+- folder: ti99
+  extensions:
+  - .rpk
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4842"
+- folder: tic80
+  extensions:
+  - .tic
+  core: tic80
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4110"
+- folder: triforce
+  extensions:
+  - .7z
+  - .cue
+  - .iso
+  - .zip
+  core: dolphin
+  emulator: dolphin
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:586"
+  arcade: true
+- folder: tutor
+  extensions:
+  - .7z
+  - .bin
+  - .wav
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4867"
+- folder: tvgames
+  extensions:
+  - .7z
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4219"
+- folder: uzebox
+  extensions:
+  - .uze
+  core: uzem
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4289"
+- folder: vc4000
+  extensions:
+  - .bin
+  - .zip
+  core: amiarcadia
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:5040"
+- folder: vectrex
+  extensions:
+  - .7z
+  - .bin
+  - .gam
+  - .vec
+  - .zip
+  core: vecx
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2526"
+- folder: vg5k
+  extensions:
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2599"
+- folder: vircon32
+  extensions:
+  - .v32
+  - .zip
+  core: vircon32
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4332"
+- folder: virtualboy
+  extensions:
+  - .7z
+  - .bin
+  - .vb
+  - .vboy
+  - .zip
+  core: mednafen_vb
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1134"
+- folder: vpinball
+  extensions:
+  - .7z
+  - .rar
+  - .vpx
+  - .zip
+  core: vpinball
+  emulator: vpinball
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3950"
+- folder: vsmile
+  extensions:
+  - .bin
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4989"
+- folder: wasm4
+  extensions:
+  - .wasm
+  - .zip
+  core: wasm4
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4134"
+- folder: wii
+  extensions:
+  - .7z
+  - .ciso
+  - .decomp
+  - .dol
+  - .elf
+  - .gcz
+  - .iso
+  - .json
+  - .rvz
+  - .squashfs
+  - .wad
+  - .wbfs
+  - .wia
+  - .zip
+  core: dolphin
+  emulator: dolphin
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1260"
+- folder: wiiu
+  extensions:
+  - .iso
+  - .m3u
+  - .rpx
+  - .wua
+  - .wud
+  - .wux
+  core: cemu
+  emulator: cemu
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1282"
+- folder: windows
+  name: Windows
+  extensions:
+  - .7z
+  - .bat
+  - .cmd
+  - .exe
+  - .game
+  - .lnk
+  - .pc
+  - .rar
+  - .url
+  - .win
+  - .windows
+  - .wine
+  - .wsquashfs
+  - .zip
+  core: windows
+  emulator: windows
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3934"
+- folder: wswan
+  extensions:
+  - .7z
+  - .ws
+  - .zip
+  core: mednafen_wswan
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3175"
+- folder: wswanc
+  extensions:
+  - .7z
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3210"
+- folder: x1
+  extensions:
+  - .2d
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dup
+  - .dx1
+  - .hdm
+  - .tfd
+  - .xdf
+  - .zip
+  core: x1
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2488"
+- folder: x68000
+  extensions:
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2468"
+- folder: xbox
+  extensions:
+  - .decomp
+  - .iso
+  - .xbe
+  core: xemu
+  emulator: xemu
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1558"
+- folder: xbox360
+  extensions:
+  - .decomp
+  - .iso
+  - .m3u
+  - .xbox360
+  - .xcp
+  - .xex
+  - .zar
+  core: xenia-canary
+  emulator: xenia-canary
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1574"
+- folder: xegs
+  extensions:
+  - .7z
+  - .atr
+  - .bin
+  - .car
+  - .dsk
+  - .rom
+  - .xfd
+  - .zip
+  core: mame
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:1957"
+- folder: zaccariapinball
+  extensions:
+  - .table
+  core: steam
+  emulator: zaccariapinball
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:4069"
+- folder: zeldaclassic
+  extensions:
+  - .7z
+  - .qst
+  - .zip
+  core: zquestclassic
+  emulator: zquestclassic
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3682"
+- folder: zinc
+  extensions:
+  - .zip
+  core: arcadeduck
+  emulator: arcadeduck
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:3718"
+  arcade: true
+- folder: zx81
+  extensions:
+  - .7z
+  - .p
+  - .rzx
+  - .scl
+  - .tap
+  - .trd
+  - .tzx
+  - .z80
+  - .zip
+  core: "81"
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2624"
+- folder: zxspectrum
+  extensions:
+  - .7z
+  - .dsk
+  - .rzx
+  - .scl
+  - .tap
+  - .trd
+  - .tzx
+  - .z80
+  - .zip
+  core: fuse
+  emulator: libretro
+  source_ref: "os system/templates/emulationstation/es_systems.cfg:2645"

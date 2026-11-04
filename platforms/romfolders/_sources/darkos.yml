@@ -1,0 +1,47 @@
+name: dArkOS
+platform: retroarch
+format: es-xml
+params:
+  file: Emulationstation/es_systems.cfg.rk3566
+  path_prefixes:
+  - /roms/
+  default: first
+  boards:
+    rk3326: Emulationstation/es_systems.cfg.rk3326
+sources:
+  os:
+    repo: https://github.com/christianhaitian/darkos
+    commit: daecf488075f0194c164578b90617fa7002ce8bd
+  es:
+    repo: https://github.com/christianhaitian/EmulationStation-fcamod
+    commit: c4809d8ef33159385a2d516b4b3aec832f4ce2e8
+    note: the branch build_emulationstation.sh builds
+roms_root:
+  path: /roms
+  from_bios: ..
+  source_ref: os retroarch/configs/retroarch.cfg.rgb10:3043; os build_emulationstation.sh:73
+case_sensitive: null
+skip:
+- name: bios
+  reason: RetroArch's system directory
+  source_ref: os retroarch/configs/retroarch.cfg.rgb10:3043
+hidden:
+- pattern: .*
+  source_ref: es es-app/src/SystemData.cpp:145-146,180
+media:
+- name: media
+  source_ref: es es-app/src/SystemData.cpp:180,184
+- name: images
+  source_ref: es es-app/src/SystemData.cpp:180,184
+- name: videos
+  source_ref: es es-app/src/SystemData.cpp:180,184
+- name: ppsspp
+  source_ref: es es-app/src/SystemData.cpp:180,184
+- pattern: downloaded_*
+  source_ref: es es-app/src/SystemData.cpp:180,184
+notes:
+- 'The BIOS folder is /roms/bios, inside the roms root: the scan skips it.'
+- Folders are read from the RK3566 list, build_emulationstation.sh copies es_systems.cfg.<chipset> (os
+  build_emulationstation.sh:73-75). The RK3326 defaults that differ are board_defaults.
+- A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:151).
+- 'Default core: the user''s saved choice, else the first emulator and its first core (es es-app/src/SystemData.h:101-131).'

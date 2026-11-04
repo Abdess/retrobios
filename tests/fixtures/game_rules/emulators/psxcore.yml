@@ -1,0 +1,18 @@
+emulator: PSX Core
+type: libretro
+source: https://github.com/example/psxcore
+source_commit: 1111111111111111111111111111111111111111
+systems: [sony-playstation]
+files:
+  - name: scph5500.bin
+    region: [japan]
+    required: false
+  - name: scph5501.bin
+    aliases: [scph7003.bin]
+    region: [north-america]
+    required: false
+  - name: scph5502.bin
+    region: [europe]
+    required: false
+  - name: openbios.bin
+    required: false

@@ -1,0 +1,27 @@
+name: MinUI
+platform: minui
+format: minui
+params:
+  source: os
+sources:
+  os:
+    repo: https://github.com/shauninman/MinUI
+    commit: dbf89435a5179788418ff3573042cf9c7e75d9e0
+roms_root:
+  path: <SD>/Roms
+  from_bios: ../../Roms
+  source_ref: os workspace/all/common/defines.h:13; os workspace/miyoomini/platform/platform.h:122
+case_sensitive: null
+case_ref: os workspace/all/common/utils.c:74-96
+hidden:
+  - pattern: .*
+    source_ref: os workspace/all/common/utils.c:32-34
+  - pattern: '*.disabled'
+    source_ref: os workspace/all/common/utils.c:32-34
+  - name: map.txt
+    source_ref: os workspace/all/common/utils.c:32-34
+notes:
+  - MinUI has no extension filter. Every file of a Roms folder that is not hidden is listed as a game (os workspace/all/minui/minui.c:475-535,615-680), so the rows carry no extensions.
+  - A Roms folder starts the pak named by the text inside its last parentheses, or by its whole name without parentheses (getEmuName, os workspace/all/common/utils.c:74-96). The pak is found at .system/<PLATFORM>/paks/Emus/<TAG>.pak then Emus/<PLATFORM>/<TAG>.pak.
+  - BIOS sits in Bios/<TAG>/, two levels under the card root, so the roms root is ../../Roms from it.
+  - SDCARD_PATH differs per device (/mnt/SDCARD, /mnt/sdcard, /storage/roms, /sdcard, /media/roms, /storage/TF2). Roms sits under it.

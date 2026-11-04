@@ -1,0 +1,50 @@
+name: EmuELEC
+platform: emuelec
+format: es-json
+params:
+  file: packages/sx05re/emuelec-emulationstation/config/es_systems.json
+  path_prefixes:
+  - /storage/roms/
+  default: flagged
+sources:
+  os:
+    repo: https://github.com/EmuELEC/EmuELEC
+    commit: d4c7b2f143029e4e4d922a077d89eed42c9e37b9
+  es:
+    repo: https://github.com/EmuELEC/emuelec-emulationstation
+    commit: 3de652c69481de5fad2178ceebb9470950b3e683
+    note: pinned by packages/sx05re/emuelec-emulationstation/package.mk PKG_VERSION
+roms_root:
+  path: /storage/roms
+  from_bios: ..
+  source_ref: os packages/sx05re/libretro_base/retroarch/package.mk:112,117
+case_sensitive: null
+skip:
+- name: bios
+  reason: RetroArch's system directory
+  source_ref: os packages/sx05re/libretro_base/retroarch/package.mk:117
+hidden:
+- pattern: .*
+  source_ref: es es-app/src/SystemData.cpp:264
+media:
+- name: artwork
+  source_ref: es es-app/src/SystemData.cpp:294
+- name: media
+  source_ref: es es-app/src/SystemData.cpp:315
+- name: medias
+  source_ref: es es-app/src/SystemData.cpp:315
+- name: images
+  source_ref: es es-app/src/SystemData.cpp:315
+- name: manuals
+  source_ref: es es-app/src/SystemData.cpp:315
+- name: videos
+  source_ref: es es-app/src/SystemData.cpp:315
+- name: assets
+  source_ref: es es-app/src/SystemData.cpp:315
+- pattern: downloaded_*
+  source_ref: es es-app/src/SystemData.cpp:315
+notes:
+- 'The BIOS folder is /storage/roms/bios, inside the roms root: the scan skips it.'
+- A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:275).
+- Systems whose command or platform is 'ignore' (screenshots, music) are no game folder.
+- 'Default core: the core marked default, else the first emulator''s first core (es es-app/src/SystemData.cpp:1828-1860).'

@@ -6,7 +6,7 @@
   "platform": "nextui",
   "display_name": "NextUI",
   "version": "2026-10-20",
-  "generated": "2026-10-27T10:27:58Z",
+  "generated": "2026-11-03T13:36:34Z",
   "base_destination": "",
   "detect": [
     {
@@ -21,8 +21,18 @@
   "total_size": 708038193,
   "pack_files": 404,
   "pack_size": 708038193,
-  "total_omitted": 3,
+  "total_omitted": 4,
   "omitted_files": [
+    {
+      "dest": "Bios/FBN/sfiii2a.zip",
+      "name": "sfiii2a.zip",
+      "system": "capcom-cps3",
+      "required": true,
+      "reason": "not_found",
+      "cores": [
+        "fbneo"
+      ]
+    },
     {
       "dest": "Bios/FBN/svgpcb.zip",
       "name": "svgpcb.zip",

@@ -47,9 +47,10 @@ Pipeline steps:
 | 4b | Generate install manifests | `--skip-packs` |
 | 4c | Generate target manifests | `--skip-packs` |
 | 4d | Collected copies only an emulator install provides (`bundled_only.py --strict`, gates the run) | - |
+| 4e | Games index: what the installer reads for the games on a card (`generate_games_index.py`, fails under its coverage floor) | - (reads the committed install lists) |
 | 5 | Consistency check: counts, paths per archive, every emulator pack | if verify or pack skipped |
 | 6 | Pack integrity (extract + hash) | `--skip-packs` |
-| 7 | Generate README | `--skip-docs` |
+| 7 | Generate README and CONTRIBUTING, then the installer page's tables and run samples (`generate_installer_doc.py`) | `--skip-docs` |
 | 8 | Generate site | `--skip-docs` |
 | 8b | Render the site with `npm run build --prefix website`, then `validate_site.py`, as the deploy does | `--skip-docs`, or Node not set up (`npm ci --prefix website`) |
 
@@ -1301,7 +1302,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `validate_pr.py` | Validate BIOS files in pull requests, post markdown report |
 | `validate_schemas.py` | Validate the data contracts: schemas and semantic invariants. `--source-only` checks `emulators/` and `platforms/` alone, which is what PR validation runs |
 | `generate_event_schema.py` | Write `schemas/install-events.schema.json` from `EVENT_KEYS` in `install.py` (`--check` exits 1 when the file is stale, which `validate_schemas.py` also reports) |
-| `generate_installer_doc.py` | Rewrite the generated tables of `wiki/installer.md` (options, events, exit codes, keys per route) from `install.py` (`--check` exits 1 when a table is stale, `--page FILE` writes another copy of the page) |
+| `generate_installer_doc.py` | Rewrite the generated blocks of `wiki/installer.md` from `install.py`: the tables (options, events, exit codes, keys per route, card markers), the line menu, and the run samples `install.py` prints in a sandbox against the committed `install/*.json`, so a new list rewrites the page (`--check` exits 1 when a block is stale, `--page FILE` writes another copy of the page). Pipeline step 7 |
 | `auto_fetch.py` | Fetch missing BIOS files from known sources (4-step pipeline). A download is accepted only when every cryptographic hash the entry declares (sha256, sha1, md5) matches. crc32 and size find a file the database already holds, never accept a download. An entry with no cryptographic hash is reported and not searched |
 | `list_platforms.py` | List active platforms (`--include-archived` adds the archived ones, used by CI) |
 | `download.py` | Download a pack from GitHub releases, every part checked (Python, stdlib only) |
@@ -1359,6 +1360,11 @@ Further options, by script:
 | `scraper/coreinfo_scraper.py` | `--compare-db database.json` lists the `.info` firmware the database lacks |
 | `scraper/mame_hash_scraper.py` | `--release mameNNNN --profile FILE --source-commit SHA --core NAME --built-by PLATFORM` writes the profile of a MAME build a platform compiles. `--devices --listxml FILE` documents in `mame.yml` every device set with dumped ROMs that the release's `-listxml` names (`isdevice="yes"`), with `--dry-run` to preview |
 | `scraper/romset_dat_importer.py` | `--cache-dir` (downloaded listxml and DATs) |
+| `scraper/game_dat_importer.py` | `--source no-intro\|redump` (repeatable), `--pack FILE` imports a local ZIP, directory or DAT, `--refresh` asks the servers again, `--cache-dir`, `--output-dir`, `--dry-run` |
+| `scraper/arcade_parent_importer.py` | `--profile NAME` (one core version), `--emulators-dir`, `--database` (BIOS roots checked against it by archive name), `--output-dir`, `--cache-dir`, `--offline`, `--dry-run` |
+| `scraper/romfolders` | `--sources DIR` (default `platforms/romfolders/_sources`), `--output-dir`, `--dry-run` |
+| `game_rules.py` | `--regions`, `--extras`, `--headers` (files checked against the profiles and the header readers), `--emulators-dir`, `--json` |
+| `generate_games_index.py` | `--output-dir` (default `install/games`), `--check`, `--quiet` |
 
 ## Installation tools
 
@@ -1602,6 +1608,40 @@ The join is by SHA1, then by MD5 + size. A match sets the `provenance` field
 on the database entry and renders a verified dump badge on the system pages.
 It never overrides the emulator source code: see
 [architecture](architecture.md#dump-catalog-provenance).
+
+## Games on the card
+
+The installer's games-on-card mode reads the rom folders of a card, identifies
+each game and installs only the BIOS those games need. Its data is generated
+from sources and published under `install/games/` by pipeline step 4e.
+
+```bash
+python -m scripts.scraper.romfolders --list                 # setups and the format each is read in
+python -m scripts.scraper.romfolders --all                  # platforms/romfolders/<setup>.yml at the pins of _sources/
+python -m scripts.scraper.romfolders --setup batocera --offline
+python -m scripts.scraper.game_dat_importer --fetch --floor # games/catalogs/: No-Intro and Redump game DATs
+python -m scripts.scraper.game_dat_importer --floor         # same from .cache/game-dats/ only
+python -m scripts.scraper.arcade_parent_importer --all      # games/arcade/: game set to BIOS parent, per core
+python scripts/game_rules.py                                # games/regions.yml and games/extras.yml against the profiles
+python scripts/generate_games_index.py                      # install/games/ (pipeline step 4e)
+python scripts/generate_games_index.py --check              # exit 1 when a published file would change
+```
+
+| Source | Written by | Holds |
+|--------|-----------|-------|
+| `platforms/romfolders/_sources/<setup>.yml` | hand, each fact with its `source_ref` | pins, roms root, case rule, folders never scanned |
+| `platforms/romfolders/<setup>.yml` | `scraper/romfolders` | folders, extensions and default core as the OS writes them |
+| `games/catalogs/<source>/<system>.json` | `scraper/game_dat_importer.py` | crc32, size, sha1, region and title per game, disc serials |
+| `games/headers.yml` | hand, cited | header fields each core reads and the region each value means |
+| `games/regions.yml`, `games/extras.yml` | hand, cited | region routes, the cases that keep every region, per-game files |
+| `games/arcade/<profile>.json` | `scraper/arcade_parent_importer.py` | BIOS parent and device sets of each game set, from the DAT the pin names or, for mame2000, mame2003 and mame2003-plus, from the driver code |
+
+Folder names resolve to systems through `SYSTEM_ALIASES` and `_norm_system_id`
+in `common.py`, the one alias table, and core names to profiles through the
+profiles' `cores:`. The fallback set of a folder, what an unrecognised game
+keeps, is computed from `install/<platform>.json` with the installer's own
+core narrowing. Every published file is listed in `install/games/index.json`
+with its size, its gzip size and its sha256.
 
 ## Target scrapers
 

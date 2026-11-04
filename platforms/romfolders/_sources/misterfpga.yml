@@ -1,0 +1,31 @@
+name: MiSTer FPGA
+platform: misterfpga
+format: mister
+params:
+  source: dist
+  arcade: [mame, hbmame]
+  arcade_note: ROM archives of the .mra files in _Arcade. The loader looks in games/mame, then beside the .mra (main support/arcade/mra_loader.cpp:168-187)
+sources:
+  main:
+    repo: https://github.com/MiSTer-devel/Main_MiSTer
+    commit: a8ed7e9d4468f7a703af6e81ce42521e21e34f48
+  dist:
+    repo: https://github.com/MiSTer-devel/Distribution_MiSTer
+    commit: ab7a78093e95ac61696559a3403204a92a16fa30
+roms_root:
+  path: /media/fat/games
+  from_bios: .
+  source_ref: main file_io.h:171; main file_io.cpp:1150-1170
+case_sensitive: false
+case_ref: main file_io.cpp:1715-1790
+hidden:
+  - pattern: .*
+    source_ref: main file_io.cpp:1714-1715,1748-1749,1760-1761
+  - name: boot.rom
+    source_ref: main file_io.cpp:1765-1772
+  - pattern: boot[0-9].rom
+    source_ref: main file_io.cpp:1765-1772
+notes:
+  - Games and BIOS share games/<core>/, so the roms root is the BIOS folder's own parent and every row is that core's folder. The folder is the core's name (main user_io.cpp:196-211). The rows are the folders the distribution ships.
+  - Only files whose extension is in the core's CONF_STR filter are listed, and a .zip is browsed as a folder (main file_io.cpp:1774-1785). Each core sets its filter in its own repository, so the rows carry no extensions.
+  - USB drives, network and CIFS mounts are searched for a games folder before /media/fat (main file_io.cpp:1060-1145).

@@ -1,0 +1,27 @@
+name: RetroDECK
+platform: retrodeck
+format: esde
+params:
+  systems:
+    source: esde
+    path: resources/systems/linux/es_systems.xml
+sources:
+  esde:
+    repo: https://github.com/RetroDECK/ES-DE
+    commit: 15e1b236eafd2864bd99ffcc9853d2efa2a3916c
+    note: branch retrodeck-main at release retrodeck-main-20260926-172324
+  os:
+    repo: https://github.com/RetroDECK/RetroDECK
+    commit: 7786a849179eb2ca94e8ca413259e28adbcb1e39
+roms_root:
+  path: ~/retrodeck/roms
+  from_bios: ../roms
+  source_ref: os config/retrodeck/retrodeck.json:5,9
+case_sensitive: true
+hidden:
+- pattern: .*
+  source_ref: esde es-app/src/SystemData.cpp:657
+notes:
+- 'roms_path and bios_path are settings: their defaults are siblings.'
+- Extensions are matched as written (esde es-app/src/SystemData.cpp:666), kept here lowercased.
+- 'Default emulator: the first <command> of each system.'

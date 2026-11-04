@@ -1,0 +1,29 @@
+name: RetroPie
+platform: retropie
+format: retropie
+params:
+  platforms_cfg: platforms.cfg
+  module_dirs: [emulators, libretrocores]
+  install_sections: [core, main, opt, exp]
+  platform_flags: [native, 64bit, gl, vulkan, x11, x86]
+sources:
+  os:
+    repo: https://github.com/RetroPie/RetroPie-Setup
+    commit: 46128cd252cdecae852a4d0bafa2aaf9d03ab563
+  es:
+    repo: https://github.com/RetroPie/EmulationStation
+    commit: a31c36a77b385a6ea3f6667e75ef468ff79678a6
+    note: branch stable, the one scriptmodules/supplementary/emulationstation.sh builds
+roms_root:
+  path: ~/RetroPie/roms
+  from_bios: ../roms
+  source_ref: os retropie_packages.sh:47-49; os scriptmodules/helpers.sh:1412
+case_sensitive: true
+case_ref: os scriptmodules/helpers.sh:1435-1437
+hidden:
+  - pattern: .*
+    source_ref: es es-app/src/SystemData.cpp:102-104
+notes:
+  - addSystem appends the upper-case form of each extension because EmulationStation compares them as written (os scriptmodules/helpers.sh:1435-1437).
+  - Each folder is <romdir>/<system> for a system platforms.cfg lists (os scriptmodules/helpers.sh:1406-1413). A folder appears only once a module calls addSystem for it.
+  - The default is the first module installed that calls addEmulator with 1 (os scriptmodules/helpers.sh:1565-1570). Rows give it for a basic install on x86_64, the core section then the main one, in registration order (os scriptmodules/admin/setup.sh:606-611; os scriptmodules/packages.sh:1037-1038; flags from os scriptmodules/system.sh:537,673-683). A system no basic-install module serves takes the first optional (opt, then exp) module.

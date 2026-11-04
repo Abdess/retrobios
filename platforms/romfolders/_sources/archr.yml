@@ -1,0 +1,64 @@
+name: ArchR
+platform: retroarch
+format: elec-conf
+params:
+  package: projects/ArchR/packages/virtual/emulators/package.mk
+  conf_dir: config/emulators
+  path_prefixes:
+  - /storage/roms/
+sources:
+  os:
+    repo: https://github.com/archr-linux/Arch-R
+    commit: dbd45d454f0fea1e61c0b35e429f6be18f3e997e
+  es:
+    repo: https://github.com/archr-linux/emulationstation-next
+    commit: f25c4475a348f534de8ff724e9e42808b7a80a12
+    note: EmulationStation pinned by the ui/emulationstation package.mk PKG_VERSION
+roms_root:
+  path: /storage/roms
+  from_bios: ..
+  source_ref: os projects/ArchR/packages/virtual/emulators/package.mk:130
+case_sensitive: null
+skip:
+- name: bezels
+  reason: created by the emulators package, holds no game
+  source_ref: os projects/ArchR/packages/virtual/emulators/package.mk:127
+- name: bios
+  reason: created by the emulators package, holds no game
+  source_ref: os projects/ArchR/packages/virtual/emulators/package.mk:130
+- name: music
+  reason: created by the emulators package, holds no game
+  source_ref: os projects/ArchR/packages/virtual/emulators/package.mk:133
+- name: savestates
+  reason: created by the emulators package, holds no game
+  source_ref: os projects/ArchR/packages/virtual/emulators/package.mk:136
+- name: themes
+  reason: created by the emulators package, holds no game
+  source_ref: os projects/ArchR/packages/virtual/emulators/package.mk:139
+hidden:
+- pattern: .*
+  source_ref: es es-app/src/SystemData.cpp:272
+- pattern: ._*
+  source_ref: es es-app/src/SystemData.cpp:266-268
+media:
+- name: artwork
+  source_ref: es es-app/src/SystemData.cpp:302
+- name: media
+  source_ref: es es-app/src/SystemData.cpp:323
+- name: medias
+  source_ref: es es-app/src/SystemData.cpp:323
+- name: images
+  source_ref: es es-app/src/SystemData.cpp:323
+- name: manuals
+  source_ref: es es-app/src/SystemData.cpp:323
+- name: videos
+  source_ref: es es-app/src/SystemData.cpp:323
+- name: assets
+  source_ref: es es-app/src/SystemData.cpp:323
+- pattern: downloaded_*
+  source_ref: es es-app/src/SystemData.cpp:323
+notes:
+- 'The BIOS folder is /storage/roms/bios, inside the roms root: the scan skips it.'
+- A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:283).
+- Each folder comes from SYSTEM_PATH of config/emulators/<system>.conf, written by add_es_system for every
+  system the emulators package adds.

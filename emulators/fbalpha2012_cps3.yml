@@ -16,7 +16,7 @@ library_name: "FB Alpha 2012 CPS-3"
 cores:
   - fbalpha2012_cps3
 systems:
-  - cps3
+  - capcom-cps3
 
 notes: |
   Frozen snapshot of Final Burn Alpha v0.2.97.29 (circa 2012), CPS-3 only.

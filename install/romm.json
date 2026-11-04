@@ -6,7 +6,7 @@
   "platform": "romm",
   "display_name": "RomM",
   "version": "5.4.0",
-  "generated": "2026-10-27T10:27:58Z",
+  "generated": "2026-11-03T13:36:34Z",
   "base_destination": "bios",
   "detect": [
     {
@@ -3276,10 +3276,10 @@
       "dest": "namcoc76.zip",
       "name": "namcoc76.zip",
       "system": "namco-system11",
-      "required": true,
+      "required": false,
       "reason": "no_platform_slug",
       "cores": [
-        "mame2003_plus"
+        "mame2003"
       ]
     },
     {
@@ -8708,6 +8708,7 @@
       "fbneo_cps12",
       "fbneo_neogeo",
       "hbmame",
+      "mame",
       "mame2000",
       "mame2003",
       "mame2003_midway",
@@ -9034,6 +9035,7 @@
       "supersnes9x"
     ],
     "nintendo-sgb": [
+      "bsnes",
       "bsnes-jg",
       "bsnes2014",
       "bsnes_hd_beta",
@@ -9041,6 +9043,8 @@
       "higan_sfc",
       "higan_sfc_balanced",
       "linkboy",
+      "mesen-s",
+      "mesence",
       "mgba",
       "my-oldboy",
       "pizza-boy-gbc",

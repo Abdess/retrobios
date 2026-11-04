@@ -623,6 +623,109 @@ def _measurement_errors(root: Path | None = None) -> list[str]:
     return out
 
 
+def _defs_validator(name: str, definition: str) -> Draft202012Validator:
+    """A validator for one $defs entry of a schema file."""
+    schema = _load_json(SCHEMAS / name)
+    Draft202012Validator.check_schema(schema)
+    return Draft202012Validator(
+        {**schema, "$ref": f"#/$defs/{definition}"}, format_checker=FormatChecker()
+    )
+
+
+def _romfolder_errors() -> list[str]:
+    """Every scraped setup against its schema, and every source_ref against
+    the sources the file declares: a ref naming no declared repository can
+    never be read back at a pin."""
+    directory = ROOT / "platforms" / "romfolders"
+    if not directory.is_dir():
+        return []
+    validator = _validator("romfolders.schema.json")
+    out: list[str] = []
+    for path in sorted(directory.glob("*.yml")):
+        label = str(path.relative_to(ROOT))
+        with path.open(encoding="utf-8") as handle:
+            data = yaml_load(handle)
+        errors = _errors(validator, data, label)
+        out.extend(errors)
+        if errors:
+            continue
+        declared = set(data["sources"])
+        refs = [data["roms_root"]["source_ref"]]
+        refs += [data["case_ref"]] if data.get("case_ref") else []
+        refs += [r["source_ref"] for key in ("skip", "hidden", "media") for r in data.get(key, [])]
+        for row in data["folders"]:
+            refs.append(row["source_ref"])
+            refs += [b["source_ref"] for b in (row.get("board_defaults") or {}).values()]
+        for ref in refs:
+            for part in ref.split("; "):
+                key = part.split(" ", 1)[0]
+                if key not in declared:
+                    out.append(f"{label}: source_ref {part!r} names undeclared source {key!r}")
+    return out
+
+
+# Source data of the games-on-card mode: file pattern -> schema.
+_GAMES_SOURCES = (
+    ("games/catalogs/*/*.json", "game-catalog.schema.json"),
+    ("games/arcade/*.json", "arcade-parents.schema.json"),
+    ("games/headers.yml", "game-headers.schema.json"),
+    ("games/regions.yml", "game-regions.schema.json"),
+    ("games/extras.yml", "game-extras.schema.json"),
+)
+
+
+def _games_source_errors() -> list[str]:
+    out: list[str] = []
+    for pattern, schema in _GAMES_SOURCES:
+        paths = sorted(ROOT.glob(pattern))
+        if not paths:
+            continue
+        validator = _validator(schema)
+        for path in paths:
+            with path.open(encoding="utf-8") as handle:
+                data = json.load(handle) if path.suffix == ".json" else yaml_load(handle)
+            out.extend(_errors(validator, data, str(path.relative_to(ROOT))))
+    return out
+
+
+def _games_index_errors() -> list[str]:
+    """install/games/: each document against its kind, and the index
+    against the files it lists (size and sha256)."""
+    import hashlib
+
+    base = ROOT / "install" / "games"
+    index_path = base / "index.json"
+    if not index_path.exists():
+        return []
+    out: list[str] = []
+    index = _load_json(index_path)
+    out.extend(_errors(_defs_validator("games-index.schema.json", "index"), index,
+                       str(index_path.relative_to(ROOT))))
+    kinds = {
+        "setups": _defs_validator("games-index.schema.json", "setup"),
+        "fallback": _defs_validator("games-index.schema.json", "fallback"),
+        "systems": _defs_validator("games-index.schema.json", "system"),
+        "arcade": _validator("arcade-parents.schema.json"),
+    }
+    listed: set[Path] = set()
+    for kind, validator in kinds.items():
+        for entry in (index.get(kind) or {}).values():
+            path = base / entry["file"]
+            listed.add(path)
+            label = str(path.relative_to(ROOT))
+            if not path.exists():
+                out.append(f"{label}: listed in index.json, absent")
+                continue
+            data = path.read_bytes()
+            if len(data) != entry["size"] or hashlib.sha256(data).hexdigest() != entry["sha256"]:
+                out.append(f"{label}: size or sha256 differs from index.json")
+            out.extend(_errors(validator, json.loads(data), label))
+    for path in sorted(base.rglob("*.json")):
+        if path != index_path and path not in listed:
+            out.append(f"{path.relative_to(ROOT)}: not listed in index.json")
+    return out
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(allow_abbrev=False, description=__doc__)
     parser.add_argument(
@@ -647,6 +750,8 @@ def main() -> int:
     errors.extend(_registry_contract())
     errors.extend(_event_schema_errors())
     errors.extend(_measurement_errors())
+    errors.extend(_romfolder_errors())
+    errors.extend(_games_source_errors())
 
     if not args.source_only:
         database_path = ROOT / "database.json"
@@ -702,6 +807,7 @@ def main() -> int:
             )
         )
 
+        errors.extend(_games_index_errors())
         errors.extend(_validate_pack_manifests(ROOT / "dist"))
 
     if errors:

@@ -1,0 +1,25 @@
+name: Onion
+platform: retroarch
+format: onion
+params:
+  source: os
+sources:
+  os:
+    repo: https://github.com/OnionUI/Onion
+    commit: 07505ea58c7bba698d6b9220ff43946a43cac76b
+roms_root:
+  path: /mnt/SDCARD/Roms
+  from_bios: ../Roms
+  source_ref: os static/packages/Emu/Commodore%20-%20Amiga%20(PUAE%202021)/Emu/AMIGA/config.json:3
+case_sensitive: false
+case_ref: os src/packageManager/fileActions.h:96-118
+hidden:
+  - pattern: .*
+    source_ref: os src/packageManager/fileActions.h:130
+media:
+  - name: Imgs
+    source_ref: os static/packages/Emu/Commodore%20-%20Amiga%20(PUAE%202021)/Emu/AMIGA/config.json:1-13
+notes:
+  - Each Emu/<SYS>/config.json points rompath at ../../Roms/<SYS> from /mnt/SDCARD/Emu/<SYS>. Emu packages are optional and PackageManager installs them.
+  - The stock MainUI that lists the games is closed source. It reads extlist and hidebios from config.json. Only Onion's PackageManager rule is readable (os src/packageManager/fileActions.h:120-189).
+  - The gpSP package names its core through default_core in launch.sh and switches to mGBA only after a save migration (os static/packages/Emu/Nintendo%20-%20GBA%20(gpSP)/Emu/GBA/launch.sh:25-30).

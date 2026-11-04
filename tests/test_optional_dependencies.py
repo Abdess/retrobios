@@ -75,6 +75,9 @@ class ScriptsNeedOnlyPyyaml(unittest.TestCase):
         local = {p.stem for p in scripts.rglob("*.py")} | {
             p.name for p in scripts.iterdir() if p.is_dir()
         } | {"scripts", "__future__"}
+        # install.py is the repository's own single file, stdlib only (its
+        # tests hold it to that): generate_games_index reads its narrowing.
+        local.add("install")
         allowed = {"yaml"}
         found = []
         for path in sorted(scripts.rglob("*.py")):

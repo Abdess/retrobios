@@ -32,6 +32,7 @@ from scripts.scraper.mame_devices import (
     attribute_softlists,
     attribute_systems,
     default_floppy_samples,
+    device_systems,
     drive_form_factor,
     find_rom_block,
     floppy_drives,
@@ -497,6 +498,37 @@ class DeviceSetsFollowTheMachinesThatLoadThem(unittest.TestCase):
         )
         self.assertEqual(
             profile_seeds(text), {"neogeo": "snk-neogeo-mvs", "qsound": "capcom-cps2"}
+        )
+
+
+class MachinesNoEntryPlacesCountUnderArcade(unittest.TestCase):
+    """MAME starts any machine from its set name: a machine no seed places
+    is one an arcade folder can pass it, so its devices go under arcade."""
+
+    def test_a_set_only_unplaced_machines_load(self):
+        systems = device_systems(_release().machines, SEEDS, "arcade")
+        # ibm5150 is no system of the profile, and pc_kbd only it loads.
+        self.assertEqual(systems["pc_kbd"], ["arcade"])
+
+    def test_a_set_both_kinds_load_keeps_both(self):
+        # aes is placed by no seed and loads ym2610, as the MVS does.
+        systems = device_systems(_release().machines, SEEDS, "arcade")
+        self.assertEqual(systems["ym2610"], ["arcade", "snk-neogeo-mvs"])
+        self.assertEqual(systems["a2diskii"], ["apple2gs"])
+        self.assertEqual(systems["cart_dev"], ["snk-neogeo-mvs"])
+
+    def test_a_set_no_machine_instantiates_keeps_none(self):
+        machines = {
+            **_release().machines,
+            "orphan": MachineLinks("", True, ()),
+        }
+        systems = device_systems(machines, SEEDS, "arcade")
+        self.assertNotIn("orphan", systems)
+
+    def test_no_fallback_listed_is_attribute_systems(self):
+        machines = _release().machines
+        self.assertEqual(
+            device_systems(machines, SEEDS, ""), attribute_systems(machines, SEEDS)
         )
 
 

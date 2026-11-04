@@ -1,0 +1,45 @@
+name: Allium
+platform: retroarch
+format: allium
+params:
+  source: os
+  consoles: static/.allium/config/consoles.toml
+  cores: static/.allium/config/cores.toml
+sources:
+  os:
+    repo: https://github.com/goweiwen/Allium
+    commit: ee0dda979bc02649fdda48b277eaa60938273465
+roms_root:
+  path: /mnt/SDCARD/Roms
+  from_bios: ../Roms
+  source_ref: os crates/common/src/constants.rs:19-34
+case_sensitive: false
+case_ref: os crates/allium-launcher/src/consoles.rs:120-185
+hidden:
+  - pattern: .*
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+  - pattern: _*
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+  - name: gamelist.xml
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+  - name: miyoogamelist.xml
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+  - name: neogeo.zip
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+  - pattern: '*.db'
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+  - pattern: '*.sbi'
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+  - pattern: '*.nfo'
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+  - pattern: '*.msu'
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+  - pattern: '*.pcm'
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+media:
+  - name: Imgs
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+  - name: Guides
+    source_ref: os crates/allium-launcher/src/entry/mod.rs:31-62
+notes:
+  - A file maps by its exact name, then by any dotted extension a console lists, then by the folder patterns walking up the path (os crates/allium-launcher/src/consoles.rs:138-185). A console with no folder pattern is matched by extension only and has no row.

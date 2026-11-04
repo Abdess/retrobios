@@ -1,0 +1,58 @@
+name: RetroBat
+platform: retrobat
+format: es-xml
+params:
+  file: system/templates/emulationstation/es_systems.cfg
+  path_prefixes:
+  - ~\..\roms\
+  default: flagged
+sources:
+  os:
+    repo: https://github.com/RetroBat-Official/retrobat
+    commit: ec36b1310a72c9ba5cd159525f96bbf0246170aa
+    tag: 8.3.1
+  es:
+    repo: https://github.com/RetroBat-Official/emulationstation
+    commit: 45f37fd74819ee07118ca2e7680a907b25733ac5
+    note: branch retrobat-8.3
+roms_root:
+  path: <RetroBat>\roms
+  from_bios: ../roms
+  source_ref: os system/templates/emulationstation/es_systems.cfg:10
+case_sensitive: false
+hidden:
+- pattern: .*
+  source_ref: es es-app/src/SystemData.cpp:350
+media:
+- name: artwork
+  source_ref: es es-app/src/SystemData.cpp:380
+- name: media
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- name: medias
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- name: images
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- name: manuals
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- name: videos
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- name: assets
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- name: html_arrm
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- name: bezels
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- name: fonts
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- name: logs
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- name: screenshots
+  source_ref: es es-app/src/SystemData.cpp:400-403
+- pattern: downloaded_*
+  source_ref: es es-app/src/SystemData.cpp:400-403
+notes:
+- ~ is the EmulationStation home, <RetroBat>\emulationstation, so ~\..\roms is <RetroBat>\roms beside
+  <RetroBat>\bios.
+- Windows folders are case-insensitive.
+- A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:355).
+- 'Default core: the core marked default, else the first emulator''s first core (es es-app/src/SystemData.cpp:1923-1960).'

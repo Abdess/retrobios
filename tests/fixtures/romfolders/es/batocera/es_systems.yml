@@ -1,0 +1,25 @@
+snes:
+  name: Super Nintendo
+  hardware: console
+  extensions: [smc, SFC, zip]
+  emulators:
+    libretro:
+      snes9x: { requireAnyOf: [X] }
+      pocketsnes: { requireAnyOf: [Y] }
+mame:
+  name: MAME
+  hardware: arcade
+  extensions: [zip, 7z]
+  emulators:
+    libretro:
+      mame078plus: { requireAnyOf: [Z] }
+nogame:
+  name: Has no emulator
+  extensions: [txt]
+elsewhere:
+  name: Outside the roms root
+  path: /userdata/library
+  extensions: [lnk]
+  emulators:
+    flatpak:
+      flatpak: { requireAnyOf: [W] }

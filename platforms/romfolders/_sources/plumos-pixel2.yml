@@ -1,0 +1,19 @@
+name: plumOS (Pixel 2 build)
+platform: retroarch
+format: plumos
+params:
+  source: os
+  path: package/frontend-pixel2/systems.json
+sources:
+  os:
+    repo: https://github.com/game-de-it/plumOS-pixel2_v2
+    commit: dec872c042229c1d38443f7e8e3fe962fc369e81
+roms_root:
+  path: /mnt/plumos-user/roms
+  from_bios: ../roms
+  source_ref: os package/app-layer-pixel2/bin/plumos-retroarch-launch:6-7,66-73
+case_sensitive: null
+notes:
+  - Each system lists its folders in directory_aliases by priority, upper case Miyoo spellings and lower case ROCKNIX ones. The frontend that resolves them is built from a separate component this repository does not hold, so its case and hidden-file rules are unread.
+  - A folder marked shared serves several systems (FC for NES and FDS). The row goes to the first system, the later ones list it among their aliases.
+  - Artwork is looked up in Images/<id> at the card root, outside roms.

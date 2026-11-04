@@ -1,0 +1,60 @@
+name: RomM
+platform: romm
+format: romm
+params:
+  source: os
+  cores_map: frontend/src/utils/index.ts
+  bios_fixture: backend/models/fixtures/known_bios_files.json
+sources:
+  os:
+    repo: https://github.com/rommapp/romm
+    commit: 68f71259f7c6de39fbeedff9cc9ac114c18ee250
+    tag: 5.4.0
+roms_root:
+  path: /romm/library/roms
+  from_bios: ../roms
+  source_ref: os backend/config/__init__.py:46-48; os backend/config/config_manager.py:57-58
+case_sensitive: true
+hidden:
+  - pattern: .*
+    source_ref: os backend/handler/filesystem/roms_handler.py:530-545
+  - pattern: '*.db'
+    source_ref: os backend/config/config_manager.py:267-276
+  - pattern: '*.tmp'
+    source_ref: os backend/config/config_manager.py:267-276
+  - pattern: '*.bak'
+    source_ref: os backend/config/config_manager.py:267-276
+  - pattern: '*.lock'
+    source_ref: os backend/config/config_manager.py:267-276
+  - pattern: '*.log'
+    source_ref: os backend/config/config_manager.py:267-276
+  - pattern: '*.cache'
+    source_ref: os backend/config/config_manager.py:267-276
+  - pattern: '*.crdownload'
+    source_ref: os backend/config/config_manager.py:267-276
+  - name: gamelist.xml
+    source_ref: os backend/config/config_manager.py:277-286
+  - name: metadata.pegasus.txt
+    source_ref: os backend/config/config_manager.py:277-286
+skip:
+  - name: assets
+    source_ref: os backend/config/config_manager.py:288-300
+  - name: __MACOSX
+    source_ref: os backend/config/config_manager.py:288-300
+  - name: System Volume Information
+    source_ref: os backend/config/config_manager.py:288-300
+media:
+  - name: images
+    source_ref: os backend/config/config_manager.py:303-324
+  - name: covers
+    source_ref: os backend/config/config_manager.py:303-324
+  - name: manuals
+    source_ref: os backend/config/config_manager.py:303-324
+  - name: screenshots
+    source_ref: os backend/config/config_manager.py:303-324
+  - name: videos
+    source_ref: os backend/config/config_manager.py:303-324
+notes:
+  - The default layout is roms/{platform}/{game} and bios/{platform} under /romm/library (os backend/config/config_manager.py:57-58). config.yml can switch to {platform}/roms and {platform}/bios (os backend/config/config_manager.py:1121-1122).
+  - RomM has no extension allow-list. Every file is a ROM except the excluded extensions and names, and config.yml extends both lists.
+  - A folder is any IGDB or RomM platform slug. The rows are the slugs RomM plays in the browser (_EJS_CORES_MAP) or keeps BIOS for (known_bios_files.json), and the core is the first EmulatorJS core listed.

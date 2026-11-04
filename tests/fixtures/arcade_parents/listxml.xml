@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE mame [
+<!ELEMENT mame (machine+)>
+]>
+<mame build="0.000 (fixture)">
+	<machine name="neogeo" sourcefile="neogeo/neogeo.cpp" isbios="yes">
+		<description>Neo-Geo</description>
+		<rom name="sp-s2.sp1" size="131072" crc="9036d879" sha1="4f5ed7105b7128794654ce82b51723e16e389543"/>
+		<device_ref name="ym2610"/>
+	</machine>
+	<machine name="naomi" sourcefile="sega/naomi.cpp" isbios="yes">
+		<description>Naomi</description>
+		<rom name="epr-21576h.ic27" size="2097152" crc="d4895685"/>
+	</machine>
+	<machine name="naomigd" sourcefile="sega/naomi.cpp" isbios="yes" romof="naomi">
+		<description>Naomi GD-ROM</description>
+		<rom name="epr-21576h.ic27" merge="epr-21576h.ic27" size="2097152" crc="d4895685"/>
+	</machine>
+	<machine name="mslug" sourcefile="neogeo/neogeo.cpp" romof="neogeo">
+		<description>Metal Slug</description>
+		<rom name="201-p1.p1" size="2097152" crc="08d8daa5"/>
+		<device_ref name="ym2610"/>
+		<device_ref name="m68705p3"/>
+	</machine>
+	<machine name="mslugh" sourcefile="neogeo/neogeo.cpp" cloneof="mslug" romof="mslug">
+		<description>Metal Slug (clone)</description>
+		<rom name="201-p1h.p1" size="2097152" crc="11111111"/>
+		<device_ref name="ym2610"/>
+	</machine>
+	<machine name="ikaruga" sourcefile="sega/naomi.cpp" romof="naomigd">
+		<description>Ikaruga</description>
+		<rom name="317-0323-jpn.pic" size="7665" crc="22222222"/>
+		<disk name="gdl-0010" sha1="0000000000000000000000000000000000000000"/>
+	</machine>
+	<machine name="orphan" sourcefile="misc/x.cpp" romof="gonebios">
+		<description>Orphan</description>
+		<rom name="o.bin" size="16" crc="33333333"/>
+	</machine>
+	<machine name="pacman" sourcefile="namco/pacman.cpp">
+		<description>Pac-Man</description>
+		<rom name="pacman.6e" size="4096" crc="c1e6ab10"/>
+		<device_ref name="ym2610"/>
+	</machine>
+	<machine name="nodumponly" sourcefile="misc/x.cpp">
+		<description>Nothing dumped</description>
+		<rom name="u1" size="16" status="nodump"/>
+		<disk name="d" status="nodump"/>
+	</machine>
+	<machine name="ym2610" sourcefile="sound/ym2610.cpp" isdevice="yes" runnable="no">
+		<description>YM2610</description>
+	</machine>
+	<machine name="m68705p3" sourcefile="cpu/m6805.cpp" isdevice="yes" runnable="no">
+		<description>M68705P3</description>
+		<rom name="m68705p3.bin" size="2048" crc="44444444"/>
+	</machine>
+</mame>

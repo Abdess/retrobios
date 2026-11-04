@@ -50,7 +50,7 @@ systems:
   - konami-twinkle
   - panasonic-3do
   - hyper-neogeo64
-  - apple2gs
+  - apple-iigs
   - apf-m1000
   - bally-astrocade
   - coleco-adam
@@ -3328,7 +3328,7 @@ files:
   - name: apple2gs.zip
     required: true
     category: bios_zip
-    system: apple2gs
+    system: apple-iigs
     source_ref: "source src/mame/apple/apple2gs.cpp:4012"
     contents:
       - name: 341s0632-2.bin

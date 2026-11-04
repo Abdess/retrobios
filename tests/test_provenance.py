@@ -134,6 +134,21 @@ class TestRedumpScraper(unittest.TestCase):
             ["/static/bios/Nintendo%20GC.dat", "/static/bios/Sony%20PSX.dat"],
         )
 
+    def test_discover_bios_routes(self):
+        html = (
+            '<td><a href="/bios/XBOX">Datfile</a></td>'
+            '<td><a href="/bios/GC">Datfile</a></td>'
+            '<td><a href="/bios/PSX">Datfile</a></td>'
+            '<td><a href="/bios/PS2">Datfile</a></td>'
+            '<td><a href="/bios/PSX">Datfile</a></td>'
+            '<td><a href="/datfile/psx">Datfile</a></td>'
+            '<td><a href="/bios/">Index</a></td>'
+        )
+        self.assertEqual(
+            discover_bios_datfiles(html),
+            ["/bios/GC", "/bios/PS2", "/bios/PSX", "/bios/XBOX"],
+        )
+
     def test_parse_redump_dat(self):
         name, version, entries = parse_redump_dat(LOGIQX_MACHINE_FIXTURE)
         self.assertEqual(name, "Sony - PlayStation - BIOS Images")

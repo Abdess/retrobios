@@ -1,12 +1,12 @@
  RetroBIOS: Choose systems
 
+   Filter (/ to type)
+   [x] nintendo-gba (gba)                                       1 file, 16.0 KB
+   [x] sony-playstation                                         3 files, 1.0 MB
+ > [ ] nintendo-famicom-disk (ファミコン)                              in place
    All
    None
-   Filter (/ to type)
- > [x] nintendo-gba (gba)                                       1 file, 16.0 KB
-   [x] sony-playstation                                         3 files, 1.0 MB
-   [ ] nintendo-famicom-disk (ファミコン)                              in place
-
+   Done
 
 
 
@@ -21,4 +21,4 @@
 
 
  2 of 3 systems: 4 files, 1.0 MB
- A/Enter Continue  B/Esc Back  X/Space Tick  ? Help
+ A/Enter Tick  B/Esc Done  ? Help

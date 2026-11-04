@@ -1,0 +1,836 @@
+setup: crossmix-os
+name: CrossMix-OS
+platform: retroarch
+sources:
+  os:
+    repo: "https://github.com/cizia64/CrossMix-OS"
+    commit: 206d612fdef83972ed54a17de955125d0c0b3528
+roms_root:
+  path: /mnt/SDCARD/Roms
+  from_bios: ../Roms
+  source_ref: "os RetroArch/retroarch.cfg:3202"
+case_sensitive: false
+case_ref: "os System/usr/trimui/scripts/load_launcher.sh:23-41"
+notes:
+- Each Emus/<SYS>/config.json points rompath at ../../Roms/<SYS>. Box art lives in /mnt/SDCARD/Imgs/<SYS>,
+  outside Roms.
+- The stock TrimUI MainUI that lists the games is closed source. It reads extlist and hidebios from config.json.
+- "The default core is the first launchlist entry with a launch script, unless a per-game or per-system\
+  \ preset exists (os System/usr/trimui/scripts/load_launcher.sh:23-41)."
+folders:
+- folder: ADVMAME
+  extensions:
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/ADVMAME/config.json:9"
+  note: "default launcher default.sh (Emus/ADVMAME/default.sh), names no libretro core"
+- folder: AMIGA
+  emulator: standalone
+  source_ref: "os Emus/AMIGA/config.json:9"
+  note: "default launcher default.sh (Emus/AMIGA/default.sh), names no libretro core"
+- folder: AMIGACD
+  emulator: standalone
+  source_ref: "os Emus/AMIGACD/config.json:7"
+  note: "default launcher default.sh (Emus/AMIGACD/default.sh), names no libretro core"
+- folder: AMIGACDTV
+  emulator: standalone
+  source_ref: "os Emus/AMIGACDTV/config.json:7"
+  note: "default launcher default.sh (Emus/AMIGACDTV/default.sh), names no libretro core"
+- folder: ARDUBOY
+  core: ardens
+  emulator: retroarch
+  source_ref: "os Emus/ARDUBOY/config.json:7"
+  note: "default launcher Ardens (Emus/ARDUBOY/ardens.sh)"
+- folder: ATARI2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella2014
+  emulator: retroarch
+  source_ref: "os Emus/ATARI2600/config.json:9"
+  note: "default launcher Stella2014 (Emus/ATARI2600/stella2014.sh)"
+- folder: ATARI5200
+  emulator: standalone
+  source_ref: "os Emus/ATARI5200/config.json:9"
+  note: "default launcher default.sh (Emus/ATARI5200/default.sh), names no libretro core"
+- folder: ATARI7800
+  emulator: standalone
+  source_ref: "os Emus/ATARI7800/config.json:9"
+  note: "default launcher default.sh (Emus/ATARI7800/default.sh), names no libretro core"
+- folder: ATARI800
+  emulator: standalone
+  source_ref: "os Emus/ATARI800/config.json:9"
+  note: "default launcher default.sh (Emus/ATARI800/default.sh), names no libretro core"
+- folder: ATARIST
+  emulator: standalone
+  source_ref: "os Emus/ATARIST/config.json:7"
+  note: "default launcher default.sh (Emus/ATARIST/default.sh), names no libretro core"
+- folder: ATOMISWAVE
+  core: flycast
+  emulator: retroarch
+  source_ref: "os Emus/ATOMISWAVE/config.json:10"
+  note: "default launcher Flycast (Libretro) (Emus/ATOMISWAVE/flycast.sh)"
+- folder: C64
+  emulator: standalone
+  source_ref: "os Emus/C64/config.json:9"
+  note: "default launcher default.sh (Emus/C64/default.sh), names no libretro core"
+- folder: CANNONBALL
+  extensions:
+  - '.88'
+  - .game
+  emulator: standalone
+  source_ref: "os Emus/CANNONBALL/config.json:9"
+  note: "default launcher default.sh (Emus/CANNONBALL/default.sh), names no libretro core"
+- folder: CAVESTORY
+  emulator: standalone
+  source_ref: "os Emus/CAVESTORY/config.json:9"
+  note: "default launcher default.sh (Emus/CAVESTORY/default.sh), names no libretro core"
+- folder: CHAILOVE
+  emulator: standalone
+  source_ref: "os Emus/CHAILOVE/config.json:9"
+  note: "default launcher default.sh (Emus/CHAILOVE/default.sh), names no libretro core"
+- folder: CHANNELF
+  emulator: standalone
+  source_ref: "os Emus/CHANNELF/config.json:9"
+  note: "default launcher default.sh (Emus/CHANNELF/default.sh), names no libretro core"
+- folder: COLECO
+  emulator: standalone
+  source_ref: "os Emus/COLECO/config.json:9"
+  note: "default launcher default.sh (Emus/COLECO/default.sh), names no libretro core"
+- folder: COLSGM
+  emulator: standalone
+  source_ref: "os Emus/COLSGM/config.json:9"
+  note: "default launcher default.sh (Emus/COLSGM/default.sh), names no libretro core"
+- folder: CPC
+  emulator: standalone
+  source_ref: "os Emus/CPC/config.json:7"
+  note: "default launcher default.sh (Emus/CPC/default.sh), names no libretro core"
+- folder: CPET
+  emulator: standalone
+  source_ref: "os Emus/CPET/config.json:9"
+  note: "default launcher default.sh (Emus/CPET/default.sh), names no libretro core"
+- folder: CPLUS4
+  emulator: standalone
+  source_ref: "os Emus/CPLUS4/config.json:9"
+  note: "default launcher default.sh (Emus/CPLUS4/default.sh), names no libretro core"
+- folder: CPS1
+  extensions:
+  - .zip
+  core: fbalpha2012
+  emulator: retroarch
+  source_ref: "os Emus/CPS1/config.json:9"
+  note: "default launcher FB Alpha 2012 (Emus/CPS1/fba2012.sh)"
+- folder: CPS2
+  extensions:
+  - .zip
+  core: fbalpha2012
+  emulator: retroarch
+  source_ref: "os Emus/CPS2/config.json:10"
+  note: "default launcher FB Alpha 2012 (Emus/CPS2/fba2012.sh)"
+- folder: CPS3
+  extensions:
+  - .zip
+  core: fbalpha2012
+  emulator: retroarch
+  source_ref: "os Emus/CPS3/config.json:10"
+  note: "default launcher FB Alpha 2012 (Emus/CPS3/fba2012.sh)"
+- folder: DAPHNE/roms
+  name: DAPHNE
+  extensions:
+  - .daphne
+  core: km_daphne_xtreme
+  emulator: retroarch
+  source_ref: "os Emus/DAPHNE/config.json:5"
+  note: "default launcher Daphne       (Emus/DAPHNE/daphne.sh)"
+- folder: DC
+  core: flycast
+  emulator: retroarch
+  source_ref: "os Emus/DC/config.json:10"
+  note: "default launcher Flycast (Libretro) (Emus/DC/flycast.sh)"
+- folder: DINOTHAWR
+  emulator: standalone
+  source_ref: "os Emus/DINOTHAWR/config.json:9"
+  note: "default launcher default.sh (Emus/DINOTHAWR/default.sh), names no libretro core"
+- folder: DOOM
+  extensions:
+  - .7z
+  - .ipk3
+  - .iwad
+  - .pk3
+  - .pwad
+  - .wad
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/DOOM/config.json:9"
+  note: "default launcher default.sh (Emus/DOOM/default.sh), names no libretro core"
+- folder: DOS
+  emulator: standalone
+  source_ref: "os Emus/DOS/config.json:9"
+  note: "default launcher default.sh (Emus/DOS/default.sh), names no libretro core"
+- folder: EASYRPG
+  extensions:
+  - .easyrpg
+  - .ldb
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/EASYRPG/config.json:7"
+  note: "default launcher default.sh (Emus/EASYRPG/default.sh), names no libretro core"
+- folder: ENTERPRISE
+  emulator: standalone
+  source_ref: "os Emus/ENTERPRISE/config.json:9"
+  note: "default launcher default.sh (Emus/ENTERPRISE/default.sh), names no libretro core"
+- folder: FBNEO
+  extensions:
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os Emus/FBNEO/config.json:8"
+  note: "default launcher FB NEO (Emus/FBNEO/FBNEO.sh)"
+- folder: FC
+  extensions:
+  - .7z
+  - .fds
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: fceumm
+  emulator: retroarch
+  source_ref: "os Emus/FC/config.json:7"
+  note: "default launcher FCEUMM (Emus/FC/fceumm.sh)"
+- folder: FDS
+  extensions:
+  - .7z
+  - .fds
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/FDS/config.json:7"
+  note: "default launcher default.sh (Emus/FDS/default.sh), names no libretro core"
+- folder: FLASHBACK
+  extensions:
+  - .aba
+  - .lev
+  - .map
+  - .seq
+  emulator: standalone
+  source_ref: "os Emus/FLASHBACK/config.json:9"
+  note: "default launcher default.sh (Emus/FLASHBACK/default.sh), names no libretro core"
+- folder: GB
+  extensions:
+  - .7z
+  - .bin
+  - .dmg
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os Emus/GB/config.json:7"
+  note: "default launcher GAMBATTE (Emus/GB/gambatte.sh)"
+- folder: GBA
+  extensions:
+  - .7z
+  - .agb
+  - .bin
+  - .gba
+  - .gbz
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "os Emus/GBA/config.json:7"
+  note: "default launcher mGBA (Emus/GBA/mgba.sh)"
+- folder: GBC
+  extensions:
+  - .7z
+  - .bin
+  - .dmg
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os Emus/GBC/config.json:7"
+  note: "default launcher GAMBATTE (Emus/GBC/gambatte.sh)"
+- folder: GG
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os Emus/GG/config.json:9"
+  note: "default launcher PicoDrive (Emus/GG/picodrive.sh)"
+- folder: GW
+  emulator: standalone
+  source_ref: "os Emus/GW/config.json:9"
+  note: "default launcher default.sh (Emus/GW/default.sh), names no libretro core"
+- folder: INTELLIVISION
+  emulator: standalone
+  source_ref: "os Emus/INTELLIVISION/config.json:7"
+  note: "default launcher default.sh (Emus/INTELLIVISION/default.sh), names no libretro core"
+- folder: JAVA
+  extensions:
+  - .jar
+  emulator: standalone
+  source_ref: "os Emus/JAVA/config.json:9"
+  note: "default launcher Launch freej2me (Emus/JAVA/launch.sh), names no libretro core"
+- folder: LOWRESNX
+  extensions:
+  - .nx
+  emulator: standalone
+  source_ref: "os Emus/LOWRESNX/config.json:9"
+  note: "default launcher default.sh (Emus/LOWRESNX/default.sh), names no libretro core"
+- folder: LUTRO
+  emulator: standalone
+  source_ref: "os Emus/LUTRO/config.json:7"
+  note: "default launcher default.sh (Emus/LUTRO/default.sh), names no libretro core"
+- folder: LYNX
+  emulator: standalone
+  source_ref: "os Emus/LYNX/config.json:9"
+  note: "default launcher default.sh (Emus/LYNX/default.sh), names no libretro core"
+- folder: MAME
+  core: mame
+  emulator: retroarch
+  source_ref: "os Emus/MAME/config.json:7"
+  note: "default launcher MAME - default(0.259) (Emus/MAME/mame.sh)"
+- folder: MAME2003PLUS
+  extensions:
+  - .zip
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os Emus/MAME2003PLUS/config.json:9"
+  note: "default launcher MAME 2003-Plus (Emus/MAME2003PLUS/MAME2003-Plus.sh)"
+- folder: MAME2010
+  extensions:
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/MAME2010/config.json:9"
+  note: "default launcher default.sh (Emus/MAME2010/default.sh), names no libretro core"
+- folder: MD
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os Emus/MD/config.json:9"
+  note: "default launcher PicoDrive (Emus/MD/picodrive.sh)"
+- folder: MDMSU
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os Emus/MDMSU/config.json:9"
+  note: "default launcher GenesisPlusGX (Emus/MDMSU/genplus.sh)"
+- folder: MEGADUCK
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/MEGADUCK/config.json:9"
+  note: "default launcher default.sh (Emus/MEGADUCK/default.sh), names no libretro core"
+- folder: MS
+  extensions:
+  - .7z
+  - .gg
+  - .rom
+  - .sg
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os Emus/MS/config.json:8"
+  note: "default launcher PicoDrive (Emus/MS/picodrive.sh)"
+- folder: MSX
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os Emus/MSX/config.json:9"
+  note: "default launcher Bluemsx (Emus/MSX/bluemsx.sh)"
+- folder: MSX2
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os Emus/MSX2/config.json:9"
+  note: "default launcher Bluemsx (Emus/MSX2/bluemsx.sh)"
+- folder: MUSIC
+  extensions:
+  - .asf
+  - .avi
+  - .bmp
+  - .flac
+  - .jpg
+  - .m3u
+  - .m4v
+  - .mkv
+  - .mp3
+  - .mp4
+  - .mpeg
+  - .mpg
+  - .ogg
+  - .png
+  - .rm
+  - .rmvb
+  - .ts
+  - .wma
+  - .wmv
+  emulator: standalone
+  source_ref: "os Emus/MUSIC/config.json:8"
+  note: "default launcher GMU Player (Emus/MUSIC/gmu.sh), names no libretro core"
+- folder: N64
+  extensions:
+  - .7z
+  - .n64
+  - .v64
+  - .z64
+  - .zip
+  core: parallel_n64
+  emulator: retroarch
+  source_ref: "os Emus/N64/config.json:9"
+  note: "default launcher ParaLLEl N64                                  (Emus/N64/paralleln64.sh)"
+- folder: N64DD
+  extensions:
+  - .7z
+  - .n64
+  - .ndd
+  - .v64
+  - .z64
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/N64DD/config.json:9"
+  note: "default launcher default.sh (Emus/N64DD/default.sh), names no libretro core"
+- folder: NAOMI
+  core: flycast
+  emulator: retroarch
+  source_ref: "os Emus/NAOMI/config.json:10"
+  note: "default launcher Flycast (Libretro) (Emus/NAOMI/flycast.sh)"
+- folder: NDS
+  extensions:
+  - .7z
+  - .nds
+  - .rar
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/NDS/config.json:8"
+  note: "default launcher Drastic Advanced (Emus/NDS/drastic.sh), names no libretro core"
+- folder: NEOCD
+  emulator: standalone
+  source_ref: "os Emus/NEOCD/config.json:9"
+  note: "default launcher default.sh (Emus/NEOCD/default.sh), names no libretro core"
+- folder: NEOGEO
+  extensions:
+  - .7z
+  - .neo
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os Emus/NEOGEO/config.json:9"
+  note: "default launcher FBNEO (Emus/NEOGEO/fbneo.sh)"
+- folder: NGC
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/NGC/config.json:7"
+  note: "default launcher default.sh (Emus/NGC/default.sh), names no libretro core"
+- folder: NGP
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/NGP/config.json:9"
+  note: "default launcher default.sh (Emus/NGP/default.sh), names no libretro core"
+- folder: OPENBOR
+  extensions:
+  - .pak
+  emulator: standalone
+  source_ref: "os Emus/OPENBOR/config.json:8"
+  note: "default launcher default.sh (Emus/OPENBOR/default.sh), names no libretro core"
+- folder: PALMOS
+  emulator: standalone
+  source_ref: "os Emus/PALMOS/config.json:9"
+  note: "default launcher default.sh (Emus/PALMOS/default.sh), names no libretro core"
+- folder: PANASONIC
+  emulator: standalone
+  source_ref: "os Emus/PANASONIC/config.json:9"
+  note: "default launcher default.sh (Emus/PANASONIC/default.sh), names no libretro core"
+- folder: PC88
+  extensions:
+  - .d88
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/PC88/config.json:9"
+  note: "default launcher default.sh (Emus/PC88/default.sh), names no libretro core"
+- folder: PC98
+  extensions:
+  - .hdi
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/PC98/config.json:9"
+  note: "default launcher default.sh (Emus/PC98/default.sh), names no libretro core"
+- folder: PCE
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .pce
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/PCE/config.json:9"
+  note: "default launcher default.sh (Emus/PCE/default.sh), names no libretro core"
+- folder: PCECD
+  extensions:
+  - .chd
+  - .cue
+  - .pce
+  emulator: standalone
+  source_ref: "os Emus/PCECD/config.json:7"
+  note: "default launcher default.sh (Emus/PCECD/default.sh), names no libretro core"
+- folder: PCFX
+  emulator: standalone
+  source_ref: "os Emus/PCFX/config.json:9"
+  note: "default launcher default.sh (Emus/PCFX/default.sh), names no libretro core"
+- folder: PGM
+  extensions:
+  - .zip
+  core: fbalpha2012
+  emulator: retroarch
+  source_ref: "os Emus/PGM/config.json:8"
+  note: "default launcher FB ALPHA 2012 (Emus/PGM/fba2012.sh)"
+- folder: PICO
+  extensions:
+  - .launch
+  - .p8
+  - .png
+  core: fake08
+  emulator: retroarch
+  source_ref: "os Emus/PICO/config.json:7"
+  note: "default launcher FAKE-08                            (Emus/PICO/fake08.sh)"
+- folder: POKEMINI
+  emulator: standalone
+  source_ref: "os Emus/POKEMINI/config.json:9"
+  note: "default launcher default.sh (Emus/POKEMINI/default.sh), names no libretro core"
+- folder: PORTS
+  extensions:
+  - .sh
+  emulator: standalone
+  source_ref: "os Emus/PORTS/config.json:9"
+  note: "default launcher Battery Saver (Emus/PORTS/launch.sh), names no libretro core"
+- folder: PS
+  extensions:
+  - .cbn
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .toc
+  core: pcsx_rearmed
+  emulator: retroarch
+  source_ref: "os Emus/PS/config.json:9"
+  note: "default launcher PCSX-ReArmed (Emus/PS/pcsx.sh)"
+- folder: PSP
+  emulator: standalone
+  source_ref: "os Emus/PSP/config.json:9"
+  note: "default launcher PPSSPP 1.17.1 - OpenGL (Emus/PSP/ppsspp_1.17.1_gl.sh), names no libretro core"
+- folder: PSPMINIS
+  emulator: standalone
+  source_ref: "os Emus/PSPMINIS/config.json:8"
+  note: "default launcher default.sh (Emus/PSPMINIS/default.sh), names no libretro core"
+- folder: SATELLAVIEW
+  extensions:
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/SATELLAVIEW/config.json:9"
+  note: "default launcher default.sh (Emus/SATELLAVIEW/default.sh), names no libretro core"
+- folder: SATURN
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  - .mds
+  - .zip
+  core: yabasanshiro
+  emulator: retroarch
+  source_ref: "os Emus/SATURN/config.json:9"
+  note: "default launcher Yabasanshiro (Emus/SATURN/yabasanshiro.sh)"
+- folder: SCUMMVM
+  extensions:
+  - .launch
+  - .scummvm
+  - .squashfs
+  core: scummvm
+  emulator: retroarch
+  source_ref: "os Emus/SCUMMVM/config.json:7"
+  note: "default launcher ScummVM 2.8       (Emus/SCUMMVM/scummvm-2.8.sh)"
+- folder: SEGA32X
+  extensions:
+  - .32x
+  - .68k
+  - .7z
+  - .bin
+  - .chd
+  - .gen
+  - .iso
+  - .md
+  - .smd
+  - .sms
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/SEGA32X/config.json:7"
+  note: "default launcher default.sh (Emus/SEGA32X/default.sh), names no libretro core"
+- folder: SEGACD
+  extensions:
+  - .7z
+  - .bin
+  - .ccd
+  - .chd
+  - .cue
+  - .iso
+  - .sub
+  - .wav
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os Emus/SEGACD/config.json:9"
+  note: "default launcher PicoDrive (Emus/SEGACD/picodrive.sh)"
+- folder: SFC
+  extensions:
+  - .7z
+  - .bs
+  - .fig
+  - .sfc
+  - .smc
+  - .st
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os Emus/SFC/config.json:7"
+  note: "default launcher SNES9x (Emus/SFC/snes9x.sh)"
+- folder: SFCMSU
+  extensions:
+  - .7z
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/SFCMSU/config.json:9"
+  note: "default launcher default.sh (Emus/SFCMSU/default.sh), names no libretro core"
+- folder: SFX
+  emulator: standalone
+  source_ref: "os Emus/SFX/config.json:9"
+  note: "default launcher default.sh (Emus/SFX/default.sh), names no libretro core"
+- folder: SG1000
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .mv
+  - .rom
+  - .sg
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os Emus/SG1000/config.json:7"
+  note: "default launcher PicoDrive (Emus/SG1000/picodrive.sh)"
+- folder: SGB
+  emulator: standalone
+  source_ref: "os Emus/SGB/config.json:7"
+  note: "default launcher default.sh (Emus/SGB/default.sh), names no libretro core"
+- folder: SUFAMI
+  extensions:
+  - .7z
+  - .bsx
+  - .dx2
+  - .fig
+  - .gd3
+  - .gd7
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/SUFAMI/config.json:9"
+  note: "default launcher default.sh (Emus/SUFAMI/default.sh), names no libretro core"
+- folder: SUPERVISION
+  extensions:
+  - .7z
+  - .bin
+  - .sv
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/SUPERVISION/config.json:9"
+  note: "default launcher default.sh (Emus/SUPERVISION/default.sh), names no libretro core"
+- folder: THOMSON
+  emulator: standalone
+  source_ref: "os Emus/THOMSON/config.json:7"
+  note: "default launcher default.sh (Emus/THOMSON/default.sh), names no libretro core"
+- folder: TI83
+  extensions:
+  - .83p
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/TI83/config.json:9"
+  note: "default launcher default.sh (Emus/TI83/default.sh), names no libretro core"
+- folder: TIC
+  emulator: standalone
+  source_ref: "os Emus/TIC/config.json:9"
+  note: "default launcher default.sh (Emus/TIC/default.sh), names no libretro core"
+- folder: TYRQUAKE
+  emulator: standalone
+  source_ref: "os Emus/TYRQUAKE/config.json:9"
+  note: "default launcher default.sh (Emus/TYRQUAKE/default.sh), names no libretro core"
+- folder: UZEBOX
+  emulator: standalone
+  source_ref: "os Emus/UZEBOX/config.json:7"
+  note: "default launcher default.sh (Emus/UZEBOX/default.sh), names no libretro core"
+- folder: VB
+  extensions:
+  - .7z
+  - .bin
+  - .vb
+  - .vboy
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/VB/config.json:9"
+  note: "default launcher default.sh (Emus/VB/default.sh), names no libretro core"
+- folder: VECTREX
+  emulator: standalone
+  source_ref: "os Emus/VECTREX/config.json:7"
+  note: "default launcher default.sh (Emus/VECTREX/default.sh), names no libretro core"
+- folder: VIC20
+  emulator: standalone
+  source_ref: "os Emus/VIC20/config.json:9"
+  note: "default launcher default.sh (Emus/VIC20/default.sh), names no libretro core"
+- folder: VIDEOPAC
+  emulator: standalone
+  source_ref: "os Emus/VIDEOPAC/config.json:7"
+  note: "default launcher default.sh (Emus/VIDEOPAC/default.sh), names no libretro core"
+- folder: VIDEOS
+  extensions:
+  - .7z
+  - .asf
+  - .avi
+  - .bmp
+  - .jpg
+  - .launch
+  - .m3u
+  - .m3u8
+  - .m4v
+  - .mkv
+  - .mp3
+  - .mp4
+  - .mpeg
+  - .mpg
+  - .png
+  - .rm
+  - .rmvb
+  - .ts
+  - .wma
+  - .wmv
+  emulator: standalone
+  source_ref: "os Emus/VIDEOS/config.json:8"
+  note: "default launcher mpv (Emus/VIDEOS/mpv.sh), names no libretro core"
+- folder: VIDEOTON
+  emulator: standalone
+  source_ref: "os Emus/VIDEOTON/config.json:9"
+  note: "default launcher default.sh (Emus/VIDEOTON/default.sh), names no libretro core"
+- folder: VMAC
+  emulator: standalone
+  source_ref: "os Emus/VMAC/config.json:9"
+  note: "default launcher default.sh (Emus/VMAC/default.sh), names no libretro core"
+- folder: WS
+  extensions:
+  - .7z
+  - .pc2
+  - .ws
+  - .wsc
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/WS/config.json:7"
+  note: "default launcher default.sh (Emus/WS/default.sh), names no libretro core"
+- folder: WSC
+  extensions:
+  - .7z
+  - .pc2
+  - .ws
+  - .wsc
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/WSC/config.json:9"
+  note: "default launcher default.sh (Emus/WSC/default.sh), names no libretro core"
+- folder: X1
+  emulator: standalone
+  source_ref: "os Emus/X1/config.json:9"
+  note: "default launcher default.sh (Emus/X1/default.sh), names no libretro core"
+- folder: X68000
+  emulator: standalone
+  source_ref: "os Emus/X68000/config.json:7"
+  note: "default launcher default.sh (Emus/X68000/default.sh), names no libretro core"
+- folder: XRICK
+  emulator: standalone
+  source_ref: "os Emus/XRICK/config.json:9"
+  note: "default launcher default.sh (Emus/XRICK/default.sh), names no libretro core"
+- folder: ZQUEST
+  extensions:
+  - .launch
+  - .qst
+  - .zip
+  emulator: standalone
+  source_ref: "os Emus/ZQUEST/config.json:9"
+  note: "default launcher default.sh (Emus/ZQUEST/default.sh), names no libretro core"
+- folder: ZXS
+  emulator: standalone
+  source_ref: "os Emus/ZXS/config.json:7"
+  note: "default launcher default.sh (Emus/ZXS/default.sh), names no libretro core"

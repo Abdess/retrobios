@@ -1,0 +1,999 @@
+# Header readers: where a game file states what a core reads from it.
+#
+# Each reader names bytes at fixed places in a game file and how the code of
+# a core turns them into a region, a video standard or a label. `cores:` per
+# system gives, for each repository profile, the readers its code consults in
+# the order it consults them and what it assumes when none answers. The
+# region is the value the CODE computes, in the scripts/region.py vocabulary,
+# never the market a DAT or a file name gives.
+#
+# Citations are owner/repo@<sha> path:line at the pin the profile records
+# (emulators/<profile>.yml source_commit, or upstream_commit when the code
+# lives upstream). `re_read: true` means the code was read at that pin for
+# this file. `re_read: false` restates the profile's own source_ref and was
+# not reread. Offsets are byte offsets. A CD offset is into the 2048-byte
+# user data of the named sector (see containers.cd-sector).
+version: 1
+
+containers:
+  cd-sector:
+    description: >-
+      User data of a CD sector. In a 2048-byte image (.iso) sector N starts at
+      N * 2048. In a raw 2352-byte image it starts at N * 2352 plus 16 for Mode 1
+      and plus 24 for Mode 2 Form 1 (12 sync bytes, a 4-byte header, and for
+      Mode 2 an 8-byte subheader).
+    sector_size: {iso: 2048, raw: 2352}
+    user_data_offset: {mode1: 16, mode2: 24}
+    source_ref: stenzek/duckstation@526b4a12 src/util/iso_reader.cpp:157-171, src/util/cd_image.h:28-34
+    re_read: true
+  iso9660:
+    description: >-
+      Primary volume descriptor in sector 16 ('CD001' at offset 1), root
+      directory record at PVD offset 156 (34 bytes). A file is found by name in
+      the root directory, with the ';1' version suffix.
+    pvd_sector: 16
+    root_record_offset: 156
+    source_ref: stenzek/duckstation@526b4a12 src/util/iso_reader.cpp:68-90, src/util/iso_reader.h:60-99
+    re_read: true
+  chd-v5:
+    description: >-
+      MAME compressed hunks, big-endian. The header holds sizes, codecs and
+      hashes only, never the system or the region. The overall SHA-1 is what
+      MAME software lists record. Neither SHA-1 equals a Redump track hash:
+      chdman hashes 2448-byte frames (subcode included, zero-filled), pads each
+      track to 4 frames and byte-swaps audio, all tracks in one stream.
+    magic: {offset: 0x00, bytes: "MComprHD"}
+    fields:
+      header_length: {offset: 0x08, length: 4, encoding: u32be, value: 124}
+      version: {offset: 0x0C, length: 4, encoding: u32be, value: 5}
+      compressors: {offset: 0x10, length: 16, encoding: fourcc4}
+      logical_bytes: {offset: 0x20, length: 8, encoding: u64be}
+      map_offset: {offset: 0x28, length: 8, encoding: u64be}
+      metadata_offset: {offset: 0x30, length: 8, encoding: u64be}
+      hunk_bytes: {offset: 0x38, length: 4, encoding: u32be}
+      unit_bytes: {offset: 0x3C, length: 4, encoding: u32be}
+      raw_sha1: {offset: 0x40, length: 20, encoding: hex}
+      overall_sha1: {offset: 0x54, length: 20, encoding: hex}
+      parent_sha1: {offset: 0x68, length: 20, encoding: hex}
+    metadata_entry:
+      description: 16-byte entry header, payload follows. Linked list from metadata_offset.
+      tag: {offset: 0, length: 4, encoding: ascii}
+      flags: {offset: 4, length: 1, encoding: u8}
+      length: {offset: 5, length: 3, encoding: u24be}
+      next: {offset: 8, length: 8, encoding: u64be}
+    media_tags:
+      CHT2: cd
+      CHTR: cd
+      CHCD: cd
+      CHGD: gd-rom
+      CHGT: gd-rom
+      "DVD ": dvd
+      GDDD: hard-disk
+    source_ref: >-
+      mamedev/mame@f34f0250 src/lib/util/chd.h:148-162, src/lib/util/chd.cpp:2021-2061,
+      src/lib/util/chd.cpp:2822-2831, src/lib/util/chd.h:212-235, src/lib/util/chd.cpp:1709-1749,
+      src/tools/chdman.cpp:443-445, src/tools/chdman.cpp:2195-2203, src/lib/util/cdrom.cpp:2669-2672,
+      src/emu/romload.cpp:1211
+    re_read: true
+  zip:
+    description: >-
+      The central directory gives each member's CRC-32 (offset 16) and
+      uncompressed size (offset 24) without inflating. Python's zipfile reads
+      it on open (ZipInfo.CRC, ZipInfo.file_size).
+    source_ref: python/cpython@fa919fdf Lib/zipfile.py:99-115, Lib/zipfile.py:1293-1347
+    re_read: true
+  7z:
+    description: >-
+      Per-file CRCs and sizes sit in the header at the end of the archive,
+      LZMA-compressed by default (kEncodedHeader). One LZMA decode of the
+      header, independent of the archive size, gives them. Python's lzma is an
+      optional module.
+    signature: {offset: 0x00, bytes_hex: "377abcaf271c"}
+    source_ref: ip7z/7zip@b88c6bc0 DOC/7zFormat.txt:171-189, DOC/7zFormat.txt:318-334, CPP/7zip/Archive/7z/7zHandlerOut.cpp:859
+    re_read: true
+  gamecube-disc:
+    description: Where disc offset 0 sits inside each container Dolphin opens.
+    formats:
+      iso: {magic: null, disc_header_at: 0x00}
+      rvz: {magic: "RVZ\x01", disc_header_at: 0x58, note: first 0x80 disc bytes copied into header 2}
+      wia: {magic: "WIA\x01", disc_header_at: 0x58, note: first 0x80 disc bytes copied into header 2}
+      ciso: {magic: "CISO", disc_header_at: 0x8000}
+      gcz: {magic_u32le: 0xB10BC001, disc_header_at: null, note: block 0 is zlib unless bit 63 of its pointer is set}
+      wbfs: {magic: "WBFS", disc_header_at: null, note: "disc offset 0 at wlba[0] << wbfs_sector_shift"}
+    source_ref: >-
+      dolphin-emu/dolphin@0d93fc03 Source/Core/DiscIO/WIABlob.h:80-119, Source/Core/DiscIO/WIABlob.cpp:320-330,
+      Source/Core/DiscIO/CISOBlob.cpp:66-69, Source/Core/DiscIO/CompressedBlob.cpp:140-150,
+      Source/Core/DiscIO/WbfsBlob.cpp:148-155
+    re_read: true
+
+systems:
+  sony-playstation:
+    readers:
+      psx-licence-exact:
+        description: Sector 4 compared byte for byte with Sony's three licence strings.
+        applies_to: {media: cd, extensions: [.cue, .bin, .img, .iso, .chd, .m3u]}
+        location: {sector: 4, offset: 0, length: 68, encoding: ascii}
+        decode:
+          kind: exact-prefix
+          values:
+            - {value: "          Licensed  by          Sony Computer Entertainment Amer  ica ", regions: [north-america]}
+            - {value: "          Licensed  by          Sony Computer Entertainment Inc.", regions: [japan]}
+            - {value: "          Licensed  by          Sony Computer Entertainment Euro pe", regions: [europe]}
+          otherwise: unknown
+        source_ref: stenzek/duckstation@526b4a12 src/core/system.cpp:961-986
+        re_read: true
+      psx-licence-text:
+        description: >-
+          First 0x48 bytes of sector 4, printable characters lowercased and
+          spaces dropped, must hold 'licensedby'. Then the first of the words
+          below found decides.
+        applies_to: {media: cd, extensions: [.cue, .bin, .img, .iso, .chd, .m3u]}
+        location: {sector: 4, offset: 0, length: 0x48, encoding: ascii}
+        decode:
+          kind: contains-normalized
+          normalize: printable-lowercase-no-spaces
+          requires: licensedby
+          values:
+            - {value: america, regions: [north-america]}
+            - {value: europe, regions: [europe]}
+            - {value: japan, regions: [japan]}
+            - {value: sonycomputerentertainmentinc., regions: [japan]}
+          otherwise: unknown
+        source_ref: libretro/beetle-psx-libretro@7fea57a5 libretro.c:2497-2540
+        re_read: true
+      psx-licence-offset60:
+        description: Sector 4 at user-data offset 60, the word after 'Entertainment '.
+        applies_to: {media: cd, extensions: [.cue, .bin, .img, .iso, .chd, .pbp, .m3u]}
+        location: {sector: 4, offset: 60, length: 10, encoding: ascii}
+        decode:
+          kind: exact-prefix
+          values:
+            - {value: "Inc.", regions: [japan]}
+            - {value: "Amer  ica", regions: [north-america]}
+            - {value: "of America", regions: [north-america]}
+            - {value: "Euro pe", regions: [europe]}
+          otherwise: unknown
+        source_ref: libretro/pcsx_rearmed@c8816799 libpcsxcore/misc.c:421-454
+        re_read: true
+      psx-serial-prefix:
+        description: >-
+          SYSTEM.CNF 'BOOT' value, file name after the last backslash, compared
+          case-insensitively with the prefixes below. SCES_123.45 is the serial
+          SCES-12345.
+        applies_to: {media: cd, extensions: [.cue, .bin, .img, .iso, .chd, .m3u]}
+        location: {iso_file: SYSTEM.CNF, key: BOOT, take: basename}
+        decode:
+          kind: prefix-nocase
+          values:
+            - {value: sces, regions: [europe]}
+            - {value: sced, regions: [europe]}
+            - {value: sles, regions: [europe]}
+            - {value: sled, regions: [europe]}
+            - {value: scps, regions: [japan]}
+            - {value: slps, regions: [japan]}
+            - {value: slpm, regions: [japan]}
+            - {value: sczs, regions: [japan]}
+            - {value: papx, regions: [japan]}
+            - {value: scus, regions: [north-america]}
+            - {value: slus, regions: [north-america]}
+          otherwise: unknown
+        source_ref: stenzek/duckstation@526b4a12 src/core/system.cpp:940-959, src/core/system.cpp:988-1009, src/core/system.cpp:710-731
+        re_read: true
+      psx-serial-letter:
+        description: >-
+          SYSTEM.CNF 'BOOT = cdrom:\' value. When its first four characters are
+          S, then C, L or I, then any letter, the third character decides.
+        applies_to: {media: cd, extensions: [.cue, .bin, .img, .iso, .chd, .m3u]}
+        location: {iso_file: SYSTEM.CNF, key: BOOT, take: after-cdrom-prefix, requires: "cdrom:\\"}
+        decode:
+          kind: char-at
+          index: 2
+          guard: "^S[CLI].."
+          values:
+            - {value: E, regions: [europe]}
+            - {value: U, regions: [north-america]}
+            - {value: P, regions: [japan]}
+            - {value: B, regions: [japan]}
+            - {value: K, regions: [japan]}
+          otherwise: unknown
+        source_ref: libretro/beetle-psx-libretro@7fea57a5 libretro.c:2400-2446
+        re_read: true
+    cores:
+      beetle_psx:
+        order: [psx-serial-letter, psx-licence-text]
+        otherwise: [north-america]
+        first_disc_only: true
+        note: >-
+          The fallback is psx.region_default, north-america unless the core
+          option says otherwise. Only the first disc of a playlist sets the region.
+        source_ref: libretro/beetle-psx-libretro@7fea57a5 libretro.c:2459-2571, libretro.c:3290-3295, libretro.c:2426-2446, mednafen/settings.c:42, mednafen/settings.c:109-110
+        re_read: true
+      swanstation:
+        order: [psx-licence-exact, psx-serial-prefix]
+        otherwise: [north-america]
+        source_ref: libretro/swanstation@631f0fb3 src/core/system.cpp:400-456, src/core/system.cpp:621-640
+        re_read: true
+      duckstation:
+        order: [psx-licence-exact, psx-serial-prefix]
+        otherwise: [north-america]
+        note: A per-game custom region set by the user in the game list wins over both readers.
+        source_ref: stenzek/duckstation@526b4a12 src/core/system.cpp:988-1009, src/core/system.cpp:664-680
+        re_read: true
+      pcsx_rearmed:
+        order: [psx-licence-offset60]
+        otherwise: [north-america]
+        note: The serial sets only the NTSC or PAL timing, never the region.
+        source_ref: libretro/pcsx_rearmed@c8816799 libpcsxcore/misc.c:413-454, libpcsxcore/misc.c:525-534
+        re_read: true
+
+  sony-playstation-2:
+    readers:
+      ps2-serial:
+        description: >-
+          SYSTEM.CNF 'BOOT2 = cdrom0:\SLUS_200.62;1' marks a PS2 disc ('BOOT'
+          alone a PS1 disc). The file name gives the serial SLUS-20062. 'VMODE'
+          is a video standard, not a territory.
+        applies_to: {media: [cd, dvd], extensions: [.iso, .chd, .bin, .cue, .cso, .gz]}
+        location: {iso_file: SYSTEM.CNF, key: BOOT2, take: basename}
+        decode: {kind: serial}
+        source_ref: PCSX2/pcsx2@f0523f8a pcsx2/CDVD/CDVD.cpp:470-575
+        re_read: true
+    cores:
+      pcsx2:
+        order: []
+        selects_bios: false
+        note: The configured BIOS, else the first valid one in the folder. No game region is compared with it.
+        source_ref: PCSX2/pcsx2@f0523f8a pcsx2/ps2/BiosTools.cpp:258-283, pcsx2/ps2/BiosTools.cpp:317-335
+        re_read: true
+      lrps2:
+        order: []
+        selects_bios: false
+        note: The pcsx2_bios option lists the files found and defaults to the first.
+        source_ref: libretro/parallel-ps2@8c2b6796 libretro/main.cpp:488-498, libretro/main.cpp:2373-2395
+        re_read: true
+
+  sega-saturn:
+    readers:
+      saturn-area:
+        description: >-
+          Sector 0 starts with 'SEGA SEGASATURN '. The 16 bytes at 0x40 hold area
+          symbols. Each letter adds its area, and the core picks the first area
+          of its own preference order the disc lists.
+        applies_to: {media: cd, extensions: [.cue, .bin, .iso, .chd, .ccd, .mds, .m3u]}
+        magic: {sector: 0, offset: 0x00, bytes: "SEGA SEGASATURN "}
+        location: {sector: 0, offset: 0x40, length: 16, encoding: ascii}
+        decode:
+          kind: letters
+          values:
+            - {value: U, regions: [north-america]}
+            - {value: J, regions: [japan]}
+            - {value: K, regions: [south-korea]}
+            - {value: E, regions: [europe]}
+            - {value: B, regions: [brazil]}
+            - {value: T, regions: [asia-ntsc]}
+            - {value: A, regions: [asia-pal]}
+            - {value: L, regions: [latin-america]}
+          otherwise: unknown
+        source_ref: libretro/beetle-saturn-libretro@30f4c120 disc.c:155-172, disc.c:686-734
+        re_read: true
+    cores:
+      beetle_saturn:
+        order: [saturn-area]
+        preference: [U, J, K, E, B, T, A, L]
+        otherwise: unknown
+        overridden_by: >-
+          a disc-id database (mednafen/ss/db.c) that can force the area of a
+          listed disc, then the beetle_saturn_region option when not Auto Detect
+        note: >-
+          B is the SMPC area Central/South America NTSC ('Brazil' in the
+          table), L Central/South America PAL.
+        source_ref: libretro/beetle-saturn-libretro@30f4c120 disc.c:686-734, mednafen/ss/db.c:36-55, libretro.c:1113-1121
+        re_read: true
+      mednafen_stv:
+        order: [saturn-area]
+        preference: [U, J, K, E, B, T, A, L]
+        otherwise: unknown
+        overridden_by: the mednafen_stv_region option when not auto. Its disc database is empty in this fork.
+        source_ref: beudbeud/libretro-stv@e6571347 mednafen/ss/db.cpp:48, mednafen/ss/ss.cpp:1532-1537, libretro/libretro.cpp:428-437
+        re_read: true
+      ymir:
+        order: [saturn-area]
+        preference: user-configurable
+        default_preference: [U, J, E, T]
+        otherwise: unknown
+        source_ref: >-
+          ymir-emu/Ymir@fe439e98 libs/ymir-core/src/ymir/media/saturn_header.cpp:29-40,
+          libs/ymir-core/src/ymir/sys/saturn.cpp:308-350, apps/ymir-sdl3/src/app/settings.cpp:1052-1055
+        re_read: true
+      kronos:
+        order: []
+        selects_bios: false
+        note: The first of kronos/saturn_bios.bin, saturn_bios.bin, sega_101.bin, mpr-17933.bin found serves every disc.
+        source_ref: libretro/yabause@3791ffb2 yabause/src/libretro/libretro.c:1618-1636
+        re_read: true
+
+  sega-megacd:
+    readers:
+      mcd-security-code:
+        description: >-
+          Sector 0 starts with 'SEGADISCSYSTEM'. Byte 0x20B of its user data is
+          part of the region-specific security code.
+        applies_to: {media: cd, extensions: [.cue, .bin, .iso, .chd, .m3u]}
+        magic: {sector: 0, offset: 0x00, bytes: "SEGADISCSYSTEM"}
+        location: {sector: 0, offset: 0x20B, length: 1, encoding: u8}
+        decode:
+          kind: integer
+          values:
+            - {value: 0x64, regions: [europe]}
+            - {value: 0xA1, regions: [japan]}
+          otherwise: [north-america]
+        source_ref: libretro/Genesis-Plus-GX@60bee4c7 core/loadrom.c:1056-1078, core/cd_hw/cdd.c:556-623
+        re_read: true
+      mcd-security-code-blastem:
+        description: Same byte as mcd-security-code, with an explicit USA value.
+        applies_to: {media: cd, extensions: [.cue, .bin, .iso, .chd]}
+        magic: {sector: 0, offset: 0x00, bytes: "SEGADISCSYSTEM"}
+        location: {sector: 0, offset: 0x20B, length: 1, encoding: u8}
+        decode:
+          kind: integer
+          values:
+            - {value: 0x7A, regions: [north-america]}
+            - {value: 0xA1, regions: [japan]}
+            - {value: 0x64, regions: [europe]}
+          otherwise: unknown
+        source_ref: libretro/blastem@ab743653 genesis.c:3245-3268
+        re_read: true
+      mcd-header-country:
+        description: The Mega Drive style country field of the boot sector, 0x1F0.
+        applies_to: {media: cd, extensions: [.cue, .bin, .iso, .chd]}
+        location: {sector: 0, offset: 0x1F0, length: 3, encoding: ascii}
+        decode:
+          kind: letters
+          values:
+            - {value: J, regions: [japan]}
+            - {value: U, regions: [north-america]}
+            - {value: E, regions: [europe]}
+          otherwise: unknown
+        note: blastem also reads W and a hex nibble here. Those forms are not transcribed.
+        source_ref: libretro/blastem@ab743653 romdb.c:30, romdb.c:175-216
+        re_read: true
+    cores:
+      genesis_plus_gx:
+        order: [mcd-security-code]
+        otherwise: [north-america]
+        overridden_by: the genesis_plus_gx_region_detect option when not auto
+        source_ref: libretro/Genesis-Plus-GX@60bee4c7 core/loadrom.c:1056-1078, libretro/libretro.c:1574-1585
+        re_read: true
+      picodrive:
+        order: [mcd-security-code]
+        otherwise: [north-america]
+        source_ref: libretro/picodrive@1890c293 pico/media.c:185-258, pico/media.c:288-312
+        re_read: true
+      blastem:
+        order: [mcd-header-country, mcd-security-code-blastem]
+        preference: the default region U when the disc lists it, else E, then J, then U
+        otherwise: [north-america]
+        note: blastem_force_region is not consulted when the CD BIOS is chosen.
+        source_ref: libretro/blastem@ab743653 genesis.c:3245-3268, segacd.c:1573-1593, libblastem.c:85-90
+        re_read: true
+
+  sega-megadrive:
+    readers:
+      md-country:
+        description: >-
+          Country field at 0x1F0, after a 512-byte copier header is dropped
+          (console name absent at 0x100 and the size an odd multiple of 512).
+          'EUR', 'JAP', 'USA' (either case, three letters) name one region.
+          Otherwise each of the 4 characters adds bits: U 4, J 1, K 1, E 8, a hex
+          digit its value. The highest-priority bit set wins.
+        applies_to: {media: cartridge, extensions: [.md, .gen, .bin, .smd, .zip]}
+        location: {offset: 0x1F0, length: 4, encoding: ascii, copier_header: 512}
+        decode:
+          kind: country-bits
+          words:
+            - {value: eur, regions: [europe]}
+            - {value: jap, regions: [japan]}
+            - {value: usa, regions: [north-america]}
+          letters: {U: 4, J: 1, K: 1, E: 8}
+          hex_digits: true
+          priority:
+            - {bit: 4, regions: [north-america]}
+            - {bit: 1, regions: [japan]}
+            - {bit: 8, regions: [europe]}
+            - {bit: 2, regions: [japan]}
+          otherwise: [north-america]
+        note: A short list of product codes forces the region of games with a wrong header (loadrom.c:1127-1144).
+        source_ref: libretro/Genesis-Plus-GX@60bee4c7 core/loadrom.c:1080-1144, core/loadrom.c:674-678
+        re_read: true
+    cores:
+      genesis_plus_gx:
+        order: [md-country]
+        otherwise: [north-america]
+        selects_bios: false
+        note: Cartridges need no BIOS. The reader identifies the game only.
+        source_ref: libretro/Genesis-Plus-GX@60bee4c7 core/loadrom.c:1080-1144
+        re_read: true
+
+  sega-mastersystem:
+    readers:
+      sms-tmr-sega:
+        description: >-
+          'TMR SEGA' at the first of 0x1FF0, 0x3FF0, 0x7FF0 that holds it. The
+          high nibble of header byte +0x0F is the region code.
+        applies_to: {media: cartridge, extensions: [.sms, .gg, .bin, .zip]}
+        location: {candidates: [0x1FF0, 0x3FF0, 0x7FF0], magic: "TMR SEGA", offset_in_header: 0x0F, length: 1, take: high-nibble}
+        decode:
+          kind: integer
+          values:
+            - {value: 3, regions: [japan], label: sms-japan}
+            - {value: 4, regions: [north-america], label: sms-export}
+            - {value: 5, regions: [japan], label: gg-japan}
+            - {value: 6, regions: [north-america], label: gg-export}
+            - {value: 7, regions: [north-america], label: gg-international}
+          missing: [japan]
+          otherwise: [north-america]
+        source_ref: libretro/Genesis-Plus-GX@60bee4c7 core/loadrom.c:300-347, core/cart_hw/sms_cart.c:861-874
+        re_read: true
+    cores:
+      genesis_plus_gx:
+        order: [sms-tmr-sega]
+        otherwise: [north-america]
+        overridden_by: >-
+          a CRC32 list of whole ROMs (sms_cart.c game_list) that forces Europe
+          or Japan for listed games, then the genesis_plus_gx_region_detect option
+        note: The boot ROM is loaded only with genesis_plus_gx_bios enabled, disabled by default.
+        source_ref: libretro/Genesis-Plus-GX@60bee4c7 core/cart_hw/sms_cart.c:160-264, core/cart_hw/sms_cart.c:831-874, core/cart_hw/sms_cart.c:618-623
+        re_read: true
+
+  sega-gamegear:
+    readers:
+      gg-tmr-sega:
+        description: Same header as the Master System, read by the same code.
+        applies_to: {media: cartridge, extensions: [.gg, .zip]}
+        location: {candidates: [0x1FF0, 0x3FF0, 0x7FF0], magic: "TMR SEGA", offset_in_header: 0x0F, length: 1, take: high-nibble}
+        decode:
+          kind: integer
+          values:
+            - {value: 5, regions: [japan], label: gg-japan}
+            - {value: 6, regions: [north-america], label: gg-export}
+            - {value: 7, regions: [north-america], label: gg-international}
+          missing: [japan]
+          otherwise: [north-america]
+        source_ref: libretro/Genesis-Plus-GX@60bee4c7 core/loadrom.c:300-347, core/cart_hw/sms_cart.c:861-874
+        re_read: true
+    cores:
+      genesis_plus_gx:
+        order: [gg-tmr-sega]
+        otherwise: [north-america]
+        overridden_by: the same CRC32 list and region option as the Master System
+        source_ref: libretro/Genesis-Plus-GX@60bee4c7 core/cart_hw/sms_cart.c:831-874
+        re_read: true
+
+  sega-dreamcast:
+    readers:
+      dc-ip-bin:
+        description: >-
+          IP.BIN, the first sector of the high-density area (FAD 45150 on a
+          GD-ROM, track03 of a Redump GDI). Area symbols at 0x30, product number
+          at 0x40.
+        applies_to: {media: gd-rom, extensions: [.gdi, .chd, .cdi, .cue]}
+        magic: {offset: 0x00, bytes: "SEGA SEGAKATANA "}
+        location: {file: ip.bin, offset: 0x30, length: 8, encoding: ascii}
+        fields:
+          product_number: {offset: 0x40, length: 10, encoding: ascii}
+          version: {offset: 0x4A, length: 6, encoding: ascii}
+        decode:
+          kind: letters
+          values:
+            - {value: J, regions: [japan]}
+            - {value: U, regions: [north-america]}
+            - {value: E, regions: [europe]}
+          otherwise: unknown
+        source_ref: flyinghead/flycast@e88b0ced core/reios/reios.h:18-43, core/reios/reios.cpp:50-61, core/reios/reios.cpp:141-159
+        re_read: true
+      dc-product-id:
+        description: >-
+          Product number of IP.BIN (10 bytes at 0x40), trailing spaces cut and
+          the value cut at a NUL, as flycast keys its per-game settings. The
+          disk type at 0x25 reads 'MIL CD' on a MIL-CD disc.
+        applies_to: {media: gd-rom, extensions: [.gdi, .chd, .cdi, .cue]}
+        magic: {offset: 0x00, bytes: "SEGA SEGAKATANA "}
+        location: {file: ip.bin, offset: 0x40, length: 10, encoding: ascii, trim: trailing-whitespace}
+        fields:
+          disk_type: {offset: 0x25, length: 6, encoding: ascii, mil_cd: "MIL CD"}
+        decode: {kind: serial}
+        source_ref: flyinghead/flycast@e88b0ced core/emulator.cpp:856-860, core/reios/reios.h:18-43
+        re_read: true
+    cores:
+      flycast:
+        order: [dc-ip-bin]
+        selects_bios: false
+        note: >-
+          The area symbols and flycast_region set the console region written
+          into dc_nvmem.bin. One boot ROM serves every region.
+        source_ref: flyinghead/flycast@e88b0ced core/emulator.cpp:199-240, core/hw/flashrom/nvmem.cpp:298-314
+        re_read: true
+
+  nintendo-gamecube:
+    readers:
+      gc-game-id:
+        description: Game id, 6 ASCII bytes at disc offset 0. The fourth character is the country code.
+        applies_to: {media: disc, extensions: [.iso, .gcm, .rvz, .wia, .ciso, .gcz]}
+        location: {disc_offset: 0x00, length: 6, encoding: ascii, container: gamecube-disc}
+        decode: {kind: serial}
+        source_ref: dolphin-emu/dolphin@0d93fc03 Source/Core/DiscIO/VolumeDisc.cpp:19-59
+        re_read: true
+      gc-region:
+        description: Region field of bi2, big-endian u32 at disc offset 0x458.
+        applies_to: {media: disc, extensions: [.iso, .gcm, .rvz, .wia, .ciso, .gcz]}
+        magic: {disc_offset: 0x1C, u32be: 0xC2339F3D}
+        location: {disc_offset: 0x458, length: 4, encoding: u32be, container: gamecube-disc}
+        decode:
+          kind: integer
+          values:
+            - {value: 0, regions: [japan]}
+            - {value: 1, regions: [north-america]}
+            - {value: 2, regions: [europe]}
+            - {value: 4, regions: [south-korea]}
+          otherwise: unknown
+        source_ref: libretro/dolphin@3aac3f05 Source/Core/DiscIO/VolumeGC.cpp:91-109, Source/Core/DiscIO/Enums.h:45-53
+        re_read: true
+    cores:
+      dolphin:
+        order: [gc-region]
+        otherwise: unknown
+        note: >-
+          Unknown falls back to the host locale (MAIN_FALLBACK_REGION), which the
+          installer cannot see. Triforce media are forced to the DEV region.
+        source_ref: libretro/dolphin@3aac3f05 Source/Core/Core/ConfigManager.cpp:489-493, Source/Core/Core/Config/DefaultLocale.cpp:148-191
+        re_read: true
+
+  nintendo-wii:
+    readers:
+      wii-game-id:
+        description: Game id, 6 ASCII bytes at disc offset 0, as on GameCube.
+        applies_to: {media: disc, extensions: [.iso, .rvz, .wia, .wbfs, .ciso, .gcz]}
+        magic: {disc_offset: 0x18, u32be: 0x5D1C9EA3}
+        location: {disc_offset: 0x00, length: 6, encoding: ascii, container: gamecube-disc}
+        decode: {kind: serial}
+        source_ref: dolphin-emu/dolphin@0d93fc03 Source/Core/DiscIO/VolumeDisc.cpp:19-59, Source/Core/DiscIO/Volume.cpp:121
+        re_read: true
+      wii-region:
+        description: Unencrypted region data, big-endian u32 at disc offset 0x4E000, with the GameCube codes.
+        applies_to: {media: disc, extensions: [.iso, .rvz, .wia, .wbfs, .ciso, .gcz]}
+        location: {disc_offset: 0x4E000, length: 4, encoding: u32be, container: gamecube-disc}
+        decode:
+          kind: integer
+          values:
+            - {value: 0, regions: [japan]}
+            - {value: 1, regions: [north-america]}
+            - {value: 2, regions: [europe]}
+            - {value: 4, regions: [south-korea]}
+          otherwise: unknown
+        source_ref: dolphin-emu/dolphin@0d93fc03 Source/Core/DiscIO/VolumeWii.cpp:330-333, Source/Core/DiscIO/DiscUtils.h:50-51, Source/Core/DiscIO/Enums.h:45-53
+        re_read: true
+    cores: {}
+
+  nintendo-satellaview:
+    readers:
+      snes-bsx-header:
+        description: >-
+          snes9x's BS-X test on the 32 bytes at 0x7FC0, then at 0xFFC0, of the
+          file as loaded (no copier header is dropped first). The cartridge is a
+          Satellaview game when either place passes and the file is not a
+          Sufami Turbo cartridge, which is tested first.
+        applies_to: {media: cartridge, extensions: [.bs, .sfc, .smc, .zip]}
+        location: {candidates: [0x7FC0, 0xFFC0], length: 32, encoding: bytes, relative_offsets: true}
+        decode:
+          kind: predicate
+          all:
+            - {offset: 26, in: [0x33, 0xFF]}
+            - any:
+                - {offset: 21, equals: 0}
+                - {offset: 21, mask: 0x83, equals: 0x80}
+            - {offset: 24, in: [32, 33, 48, 49]}
+            - any:
+                - all:
+                    - {offset: 22, equals: 0xFF}
+                    - {offset: 23, equals: 0xFF}
+                - {offset: 22, in: [0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70, 0x80, 0x90, 0xA0, 0xB0, 0xC0]}
+                - all:
+                    - {offset: 22, equals: 0}
+                    - {offset: 23, not_equals: 0}
+          then: {label: bsx}
+          otherwise: unknown
+        note: >-
+          is_bsx returns 2 when bytes 22 and 23 are both zero, and the load path
+          accepts 1 only. The 0x10 to 0xC0 list spells out its high-nibble test
+          ((m >> 4) - 1 < 12 with the low nibble zero).
+        source_ref: libretro/snes9x@fae2fea0 libretro/libretro.cpp:1388-1422, libretro/libretro.cpp:1505-1514
+        re_read: true
+    cores:
+      snes9x:
+        order: [snes-bsx-header]
+        note: A passing cartridge loads BS-X.bin (0x100000 bytes) as the base cartridge.
+        source_ref: libretro/snes9x@fae2fea0 libretro/libretro.cpp:1505-1514
+        re_read: true
+
+  nintendo-sufami-turbo:
+    readers:
+      sufami-magic:
+        description: >-
+          A Sufami Turbo cartridge is 0x80000 to 0x100000 bytes, starts with
+          'BANDAI SFC-ADX', and does not hold 'SFC-ADX BACKUP' at 0x10.
+        applies_to: {media: cartridge, extensions: [.st, .sfc, .smc, .zip]}
+        location: {offset: 0x00, length: 0x20, encoding: ascii}
+        decode:
+          kind: predicate
+          all:
+            - {file_size: {min: 0x80000, max: 0x100000}}
+            - {offset: 0x00, text: "BANDAI SFC-ADX"}
+            - {offset: 0x10, not_text: "SFC-ADX BACKUP"}
+          then: {label: sufami-turbo}
+          otherwise: unknown
+        source_ref: libretro/snes9x@fae2fea0 libretro/libretro.cpp:1458-1464, libretro/libretro.cpp:1505-1508
+        re_read: true
+    cores:
+      snes9x:
+        order: [sufami-magic]
+        note: A passing cartridge loads STBIOS.bin (0x40000 bytes) first.
+        source_ref: libretro/snes9x@fae2fea0 libretro/libretro.cpp:1505-1508
+        re_read: true
+
+  nintendo-sgb:
+    readers:
+      gb-sgb-flag:
+        description: >-
+          With the model left on autodetect, mGBA reads the cartridge header at
+          0x100. CGB flag bit 7 at 0x143 picks the Game Boy Color first. Else
+          0x146 equal to 0x03 with the old licensee code 0x33 at 0x14B picks the
+          Super Game Boy, and anything else the original Game Boy.
+        applies_to: {media: cartridge, extensions: [.gb, .gbc, .sgb, .zip]}
+        location: {offset: 0x143, length: 9, encoding: bytes}
+        decode:
+          kind: predicate
+          all:
+            - {offset: 0x143, mask: 0x80, equals: 0}
+            - {offset: 0x146, equals: 0x03}
+            - {offset: 0x14B, equals: 0x33}
+          then: {label: sgb}
+          otherwise: {label: not-sgb}
+        source_ref: libretro/mgba@7a12d6d4 src/gb/gb.c:938-946
+        re_read: true
+    cores:
+      mgba:
+        order: [gb-sgb-flag]
+        note: Only when the model option is autodetect. A forced model decides alone.
+        source_ref: libretro/mgba@7a12d6d4 src/gb/gb.c:938-946
+        re_read: true
+
+  atari-lynx:
+    readers:
+      lynx-header:
+        description: >-
+          'LYNX' at 0x00 marks an LNX image (64-byte header), 'BS93' at 0x06 a
+          homebrew file, anything else a raw image. howard.o is read only for an
+          LNX or raw image whose cartridge data, after the LNX header, starts
+          with at least 410 zero bytes (a header-less EPYX cartridge).
+        applies_to: {media: cartridge, extensions: [.lnx, .lyx, .o, .zip]}
+        location: {offset: 0x00, length: 11, encoding: ascii}
+        decode:
+          kind: predicate
+          all:
+            - {offset: 0x06, length: 4, not_text: "BS93"}
+            - {data_after_header: {LYNX: 64}, zero_run: 410}
+          then: {label: headerless}
+          otherwise: {label: has-header}
+        source_ref: libretro/libretro-handy@bc55d462 lynx/system.cpp:163-178, lynx/system.cpp:193-238, lynx/cart.cpp:283-296
+        re_read: true
+    cores:
+      handy:
+        order: [lynx-header]
+        source_ref: libretro/libretro-handy@bc55d462 lynx/system.cpp:193-238
+        re_read: true
+
+  nintendo-64:
+    readers:
+      n64-country:
+        description: >-
+          Byte 0x3E of the header after the byte order is normalised (0x00 reads
+          80 37 12 40 in .z64, 37 80 40 12 in .v64, 40 12 37 80 in .n64). The
+          core knows only PAL and NTSC.
+        applies_to: {media: cartridge, extensions: [.z64, .n64, .v64, .zip]}
+        location: {offset: 0x3E, length: 1, encoding: u8, byte_order_magic: {z64: "80371240", v64: "37804012", n64: "40123780"}}
+        decode:
+          kind: integer
+          values:
+            - {value: 0x44, standard: pal}
+            - {value: 0x46, standard: pal}
+            - {value: 0x49, standard: pal}
+            - {value: 0x50, standard: pal}
+            - {value: 0x53, standard: pal}
+            - {value: 0x55, standard: pal}
+            - {value: 0x58, standard: pal}
+            - {value: 0x59, standard: pal}
+          otherwise: {standard: ntsc}
+        source_ref: mupen64plus/mupen64plus-core@3be6336a src/main/rom.c:75-130, src/main/rom.c:395-418, src/api/m64p_types.h:255-273
+        re_read: true
+    cores:
+      simple64:
+        order: [n64-country]
+        otherwise: {standard: ntsc}
+        note: PAL opens pif.pal.rom, NTSC and MPAL pif.ntsc.rom. Both are optional, HLE runs without them.
+        source_ref: simple64/simple64@d8c969c7 mupen64plus-core/src/main/rom.c:190, mupen64plus-core/src/main/rom.c:502-526, mupen64plus-core/src/main/main.c:1565-1580, mupen64plus-core/src/main/main.c:1624-1633
+        re_read: true
+
+  nintendo-64dd:
+    readers:
+      n64dd-system-block:
+        description: >-
+          System blocks 0, 1, 8, 9 at block * 0x4D08 that the error table does
+          not mark. Byte 0 of the first good block is 0xE8 on a Japanese disk.
+        applies_to: {media: disk, extensions: [.ndd, .d64]}
+        location: {candidates: [0x0, 0x4D08, 0x26840, 0x2B548], length: 1, encoding: u8}
+        decode:
+          kind: integer
+          values:
+            - {value: 0xE8, regions: [japan]}
+          otherwise: [north-america]
+        source_ref: ares-emulator/ares@d400eee9 mia/medium/nintendo-64dd.cpp:57-77
+        re_read: true
+    cores:
+      ares:
+        order: [n64dd-system-block]
+        otherwise: [north-america]
+        source_ref: ares-emulator/ares@d400eee9 mia/medium/nintendo-64dd.cpp:57-77, desktop-ui/emulator/nintendo-64dd.cpp:17-19
+        re_read: true
+      project64:
+        order: []
+        otherwise: unknown
+        note: >-
+          GetDiskCountryCode reads a u32 of the disk system area (JPN, USA, DEV).
+          Its byte position was not transcribed here, so the installer has no
+          reader for this core.
+        source_ref: project64/project64@24376e86 Source/Project64-core/N64System/N64Disk.cpp:828-840
+        re_read: true
+      mupen64plus_next:
+        order: []
+        selects_bios: false
+        note: One fixed IPL path serves every disk.
+        source_ref: libretro/mupen64plus-libretro-nx@15bada85 per profile source_ref
+        re_read: false
+
+  nintendo-snes:
+    readers:
+      snes-region:
+        description: >-
+          Header at 0x7FB0 (LoROM) or 0xFFB0 (HiROM), plus 0x200 when a copier
+          header is present. Byte +0x29 (0x7FD9 or 0xFFD9) is the region.
+        applies_to: {media: cartridge, extensions: [.sfc, .smc, .swc, .fig, .zip]}
+        location: {candidates: [0x7FD9, 0xFFD9], length: 1, encoding: u8, copier_header: 512}
+        decode:
+          kind: integer
+          values:
+            - {value: 2, standard: pal}
+            - {value: 3, standard: pal}
+            - {value: 4, standard: pal}
+            - {value: 5, standard: pal}
+            - {value: 6, standard: pal}
+            - {value: 7, standard: pal}
+            - {value: 8, standard: pal}
+            - {value: 9, standard: pal}
+            - {value: 10, standard: pal}
+            - {value: 11, standard: pal}
+            - {value: 12, standard: pal}
+            - {value: 18, standard: pal}
+          otherwise: {standard: ntsc}
+        fields:
+          game_code: {offset_in_header: 0x02, length: 4, encoding: ascii}
+          rom_type: {offset_in_header: 0x26, length: 1, encoding: u8}
+        source_ref: libretro/snes9x@fae2fea0 memmap.cpp:2025-2099, memmap.cpp:2365-2376, memmap.cpp:1212-1234
+        re_read: true
+    cores:
+      snes9x:
+        order: [snes-region]
+        selects_bios: false
+        note: The region sets the video standard only. Satellaview and Sufami Turbo BIOS follow the game type, not the region.
+        source_ref: libretro/snes9x@fae2fea0 memmap.cpp:2365-2376
+        re_read: true
+
+  nintendo-gb:
+    readers:
+      gb-cgb-flag:
+        description: CGB flag at 0x143, bit 7 set means the cartridge runs in Game Boy Color mode.
+        applies_to: {media: cartridge, extensions: [.gb, .gbc, .zip]}
+        location: {offset: 0x143, length: 1, encoding: u8}
+        decode:
+          kind: bit
+          values:
+            - {value: 0x80, label: cgb}
+          otherwise: {label: dmg}
+        note: >-
+          The destination code at 0x14A is not read by gambatte. Its meaning is
+          documentation, not code, so no region is decoded from it.
+        source_ref: libretro/gambatte-libretro@7809bb68 libgambatte/src/mem/cartridge.cpp:947-949
+        re_read: true
+    cores:
+      gambatte:
+        order: [gb-cgb-flag]
+        selects_bios: false
+        note: The boot ROM follows the model (gb_bios.bin or gbc_bios.bin), not a region.
+        source_ref: libretro/gambatte-libretro@7809bb68 libgambatte/libretro/libretro.cpp:1452-1457
+        re_read: true
+
+  nintendo-gba:
+    readers:
+      gba-game-code:
+        description: Game code at 0xAC, 4 characters. The fourth is a region letter that mGBA copies but does not use for the BIOS.
+        applies_to: {media: cartridge, extensions: [.gba, .zip]}
+        location: {offset: 0xAC, length: 4, encoding: ascii}
+        decode: {kind: serial}
+        source_ref: libretro/mgba@7a12d6d4 include/mgba/internal/gba/gba.h:130-143, src/gba/gba.c:875-877
+        re_read: true
+    cores:
+      mgba:
+        order: []
+        selects_bios: false
+        source_ref: libretro/mgba@7a12d6d4 src/gba/gba.c:875-877
+        re_read: true
+
+  nintendo-ds:
+    readers:
+      nds-unit-code:
+        description: Unit code at 0x12. DSi-only titles need the DSi firmware set.
+        applies_to: {media: cartridge, extensions: [.nds, .dsi, .zip]}
+        location: {offset: 0x12, length: 1, encoding: u8}
+        decode:
+          kind: integer
+          values:
+            - {value: 0, label: nds}
+            - {value: 2, label: nds-dsi}
+            - {value: 3, label: dsi}
+          otherwise: unknown
+        fields:
+          game_code: {offset: 0x0C, length: 4, encoding: ascii}
+          nds_region: {offset: 0x1D, length: 1, encoding: u8}
+          dsi_region_mask: {offset: 0x1B0, length: 4, encoding: u32le}
+        source_ref: libretro/melonDS@66b5d263 src/NDS_Header.h:25-37, src/NDS_Header.h:107
+        re_read: true
+      nds-secure-area:
+        description: >-
+          The ARM9 ROM offset is the u32 at 0x20. A retail cartridge whose ARM9
+          area is still encrypted needs the real ARM7 and ARM9 BIOS. The area
+          reads decrypted when the u32 at that offset is 0xE7FFDEFF and the u32
+          0x10 bytes later is not. Homebrew (ARM9 ROM offset under 0x4000, or
+          game code '####') never needs them.
+        applies_to: {media: cartridge, extensions: [.nds, .zip]}
+        location: {pointer: {offset: 0x20, encoding: u32le}, length: 0x14, encoding: bytes}
+        decode:
+          kind: predicate
+          all:
+            - {offset: 0x20, encoding: u32le, min: 0x4000}
+            - {offset: 0x0C, length: 4, not_text: "####"}
+            - any:
+                - {pointer: 0x20, offset: 0, encoding: u32le, not_equals: 0xE7FFDEFF}
+                - {pointer: 0x20, offset: 0x10, encoding: u32le, equals: 0xE7FFDEFF}
+          then: {label: encrypted}
+          otherwise: {label: not-encrypted}
+        source_ref: JesseTG/melonds-ds@f394adba src/libretro/config/console.cpp:415-424
+        re_read: true
+    cores:
+      melonds_ds:
+        order: [nds-secure-area, nds-unit-code]
+        note: >-
+          The secure-area test refuses an encrypted retail cartridge without
+          bios7.bin and bios9.bin. The unit code decides the DSi set.
+        source_ref: JesseTG/melonds-ds@f394adba src/libretro/config/console.cpp:379-424
+        re_read: true
+      melonds:
+        order: [nds-unit-code]
+        note: The unit code decides the DSi set, not a region.
+        source_ref: libretro/melonDS@66b5d263 src/NDS_Header.h:25-37
+        re_read: true
+
+  nintendo-3ds:
+    readers:
+      n3ds-product-code:
+        description: >-
+          NCSD 'NCSD' at 0x100, partition table at 0x120 (offset and size in
+          0x200 units). The NCCH of partition 0 holds the product code
+          (CTR-P-XXXX) at +0x150, usually file offset 0x4150 in a .3ds.
+        applies_to: {media: cartridge, extensions: [.3ds, .cci]}
+        location: {ncch_partition: 0, offset_in_ncch: 0x150, length: 16, encoding: ascii}
+        decode: {kind: serial}
+        source_ref: azahar-emu/azahar@219d743a src/core/file_sys/ncch_container.h:25-56
+        re_read: true
+    cores:
+      azahar:
+        order: []
+        selects_bios: false
+        note: The shared font follows the console's configured system region, not the game.
+        source_ref: azahar-emu/azahar@219d743a src/core/file_sys/ncch_container.h:43-56
+        re_read: true
+
+  nec-pc-engine-cd:
+    readers:
+      pce-games-express:
+        description: >-
+          Sector 0x10 reading 'HACKER CD ROM SYSTEM' (or a CRC of sector 0x14)
+          marks a Games Express disc, which loads gexpress.pce.
+        applies_to: {media: cd, extensions: [.cue, .ccd, .chd, .toc, .m3u]}
+        location: {sector: 0x10, offset: 0, length: 20, encoding: ascii}
+        decode:
+          kind: exact-prefix
+          values:
+            - {value: "HACKER CD ROM SYSTEM", label: games-express}
+          otherwise: {label: system-card}
+        source_ref: libretro/beetle-pce-libretro@b96c11e0 mednafen/pce/pce.cpp:374-410
+        re_read: true
+    cores:
+      beetle_pce:
+        order: [pce-games-express]
+        note: >-
+          The System Card is the pce_cdbios option (default System Card 3), never
+          the disc's region. The core reports NTSC always.
+        source_ref: libretro/beetle-pce-libretro@b96c11e0 libretro.cpp:1047-1063, libretro.cpp:1873-1875
+        re_read: true
+      geargrafx:
+        order: []
+        selects_bios: false
+        note: geargrafx_cdrom_bios defaults to System Card 3 and always loads gexpress.pce beside it.
+        source_ref: drhelius/Geargrafx@7c447b0b platforms/libretro/libretro.cpp:761-802, platforms/libretro/libretro.cpp:1645-1668
+        re_read: true
+
+  snk-neogeo-cd:
+    readers: {}
+    cores:
+      neocd:
+        order: []
+        selects_bios: false
+        note: No region is read from the disc. The BIOS family is the user's choice among the files found.
+        source_ref: libretro/neocd_libretro@b1e04c73 src/libretro.cpp:233-235, src/bios.cpp:16-68
+        re_read: true
+
+  nintendo-nes:
+    readers:
+      nes-timing:
+        description: >-
+          'NES\x1A' at 0x00. When byte 7 & 0x0C is 0x08 the file is NES 2.0 and
+          byte 12 & 3 is the timing. iNES 1.0 has no reliable region field.
+        applies_to: {media: cartridge, extensions: [.nes, .zip]}
+        magic: {offset: 0x00, bytes_hex: "4e45531a"}
+        location: {offset: 0x0C, length: 1, encoding: u8, mask: 3, requires_nes2: true}
+        decode:
+          kind: integer
+          values:
+            - {value: 0, standard: ntsc}
+            - {value: 1, standard: pal}
+            - {value: 2, label: multi}
+            - {value: 3, label: dendy}
+          otherwise: unknown
+        source_ref: libretro/libretro-fceumm@ac0d00a7 src/ines.c:1084-1116, src/ines.c:1190
+        re_read: true
+    cores:
+      fceumm:
+        order: []
+        selects_bios: false
+        source_ref: libretro/libretro-fceumm@ac0d00a7 src/ines.c:1084-1116
+        re_read: true
+
+  nintendo-fds:
+    readers:
+      fds-image:
+        description: A disk image starts with 'FDS\x1A' (fwNES header, side count at 0x04) or carries '*NINTENDO-HVC*' at 0x01 (raw).
+        applies_to: {media: disk, extensions: [.fds, .zip]}
+        location: {candidates: [0x00, 0x01], length: 14, encoding: ascii}
+        decode:
+          kind: exact-prefix
+          values:
+            - {value: "FDS\x1A", label: fds}
+            - {value: "*NINTENDO-HVC*", label: fds}
+          otherwise: unknown
+        source_ref: libretro/libretro-fceumm@ac0d00a7 src/fds.c:624-635
+        re_read: true
+    cores:
+      fceumm:
+        order: [fds-image]
+        note: disksys.rom is needed for every disk image, whatever its region.
+        source_ref: libretro/libretro-fceumm@ac0d00a7 src/fds.c:624-635
+        re_read: true

@@ -1,0 +1,1368 @@
+setup: pan4elec
+name: PAN4ELEC
+platform: amberelec
+sources:
+  os:
+    repo: "https://github.com/Kegg1701/P4ELEC"
+    commit: 9c19bfb2717a8790d96ee6104090e575966d5d00
+  es:
+    repo: "https://github.com/AmberELEC/emulationstation"
+    commit: e3846751ce50fdced1f2bbd7a5bb51f4da2e7007
+    note: "PAN4ELEC overlays an AmberELEC image and ships no EmulationStation source: AmberELEC's"
+roms_root:
+  path: /storage/roms
+  from_bios: ..
+  source_ref: "os AmberELEC/usr/config/retroarch/retroarch.cfg:3055,3119"
+case_sensitive: null
+skip:
+- name: bios
+  reason: RetroArch's system directory
+  source_ref: "os AmberELEC/usr/config/retroarch/retroarch.cfg:3119"
+hidden:
+- pattern: .*
+  source_ref: "es es-app/src/SystemData.cpp:264"
+media:
+- name: artwork
+  source_ref: "es es-app/src/SystemData.cpp:294"
+- name: media
+  source_ref: "es es-app/src/SystemData.cpp:315"
+- name: medias
+  source_ref: "es es-app/src/SystemData.cpp:315"
+- name: images
+  source_ref: "es es-app/src/SystemData.cpp:315"
+- name: manuals
+  source_ref: "es es-app/src/SystemData.cpp:315"
+- name: videos
+  source_ref: "es es-app/src/SystemData.cpp:315"
+- name: assets
+  source_ref: "es es-app/src/SystemData.cpp:315"
+- pattern: downloaded_*
+  source_ref: "es es-app/src/SystemData.cpp:315"
+notes:
+- "The BIOS folder is /storage/roms/bios, inside the roms root: the scan skips it."
+- "A file is a game only when its lowercased extension is in the folder's list (es es-app/src/SystemData.cpp:275)."
+- "Default core: the core marked default, else the first emulator's first core (es es-app/src/SystemData.cpp:1829-1860)."
+folders:
+- folder: 3do
+  extensions:
+  - .bin
+  - .chd
+  - .cue
+  - .iso
+  core: opera
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:5"
+- folder: advision
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: advision
+  emulator: mame
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:25"
+- folder: amiga
+  extensions:
+  - .adf
+  - .adz
+  - .dms
+  - .hdf
+  - .hdz
+  - .ipf
+  - .lha
+  - .m3u
+  - .uae
+  - .zip
+  core: puae2021
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:45"
+- folder: amiga1200
+  extensions:
+  - .adf
+  - .adz
+  - .dms
+  - .hdf
+  - .hdz
+  - .ipf
+  - .lha
+  - .m3u
+  - .uae
+  - .zip
+  core: puae2021
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:72"
+- folder: amigacd32
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .lha
+  core: puae2021
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:99"
+- folder: amstradcpc
+  extensions:
+  - .7z
+  - .cdt
+  - .dsk
+  - .kcr
+  - .m3u
+  - .sna
+  - .tap
+  - .voc
+  - .zip
+  core: cap32
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:121"
+- folder: arcade
+  extensions:
+  - .7z
+  - .zip
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:166"
+  arcade: true
+- folder: arduboy
+  extensions:
+  - .hex
+  core: arduous
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:264"
+- folder: atari2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella2014
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:284"
+- folder: atari5200
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: a5200
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:311"
+- folder: atari7800
+  extensions:
+  - .7z
+  - .a78
+  - .bin
+  - .zip
+  core: prosystem
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:332"
+- folder: atari800
+  extensions:
+  - .7z
+  - .a52
+  - .atr
+  - .atx
+  - .bin
+  - .car
+  - .cas
+  - .cdm
+  - .rom
+  - .xex
+  - .xfd
+  - .zip
+  core: atari800
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:358"
+- folder: atarijaguar
+  extensions:
+  - .7z
+  - .j64
+  - .jag
+  - .zip
+  core: virtualjaguar
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:403"
+- folder: atarilynx
+  extensions:
+  - .7z
+  - .lnx
+  - .o
+  - .zip
+  core: handy
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1104"
+- folder: atarist
+  extensions:
+  - .7z
+  - .dim
+  - .ipf
+  - .m3u
+  - .msa
+  - .st
+  - .stx
+  - .zip
+  core: hatari
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:378"
+- folder: atomiswave
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast2021
+  emulator: retrorun
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:428"
+  arcade: true
+- folder: build
+  extensions:
+  - .build
+  core: raze
+  emulator: raze
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2863"
+- folder: c128
+  extensions:
+  - .bin
+  - .cmd
+  - .crt
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_x128
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:539"
+- folder: c16
+  extensions:
+  - .bin
+  - .cmd
+  - .crt
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xplus4
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:499"
+- folder: c64
+  extensions:
+  - .bin
+  - .cmd
+  - .crt
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_x64
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:519"
+- folder: cdi
+  extensions:
+  - .chd
+  - .iso
+  core: same_cdi
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2663"
+- folder: channelf
+  extensions:
+  - .7z
+  - .bin
+  - .chf
+  - .zip
+  core: freechaf
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:457"
+- folder: chip-8
+  name: chip8
+  extensions:
+  - .ch8
+  - .sc8
+  - .xo8
+  core: jaxe
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2215"
+- folder: coleco
+  name: colecovision
+  extensions:
+  - .7z
+  - .bin
+  - .col
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:477"
+- folder: cps1
+  name: CPS1
+  extensions:
+  - .7z
+  - .zip
+  core: fbalpha2012
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:204"
+  arcade: true
+- folder: cps2
+  name: CPS2
+  extensions:
+  - .7z
+  - .zip
+  core: fbalpha2012
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:224"
+  arcade: true
+- folder: cps3
+  name: CPS3
+  extensions:
+  - .7z
+  - .zip
+  core: fbalpha2012
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:244"
+  arcade: true
+- folder: doom
+  extensions:
+  - .doom
+  core: gzdoom
+  emulator: gzdoom
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2833"
+- folder: dreamcast
+  extensions:
+  - .cdi
+  - .chd
+  - .gdi
+  - .m3u
+  core: flycast2021
+  emulator: retrorun
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:598"
+- folder: easyrpg
+  extensions:
+  - .easyrpg
+  - .ldb
+  - .zip
+  core: easyrpg
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:627"
+- folder: ecwolf
+  extensions:
+  - .ecwolf
+  core: ecwolf
+  emulator: ecwolf
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2808"
+- folder: ep64-128
+  extensions:
+  - '.128'
+  - .bas
+  - .com
+  - .dsk
+  - .dtf
+  - .epi
+  - .ima
+  - .img
+  - .imz
+  - .tap
+  - .trn
+  - .zip
+  core: ep128emu_core
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2175"
+- folder: famicom
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:647"
+- folder: fbneo
+  name: fbn
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:691"
+  arcade: true
+- folder: fds
+  extensions:
+  - .7z
+  - .fds
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:669"
+- folder: gamate
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: gamate
+  emulator: mame
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:717"
+- folder: gameandwatch
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: gw
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:737"
+- folder: gamegear
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:945"
+- folder: gamegearh
+  name: ggh
+  extensions:
+  - .7z
+  - .bin
+  - .gg
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:974"
+- folder: gameking
+  extensions:
+  - .7z
+  - .bin
+  - .gk
+  - .zip
+  core: gameking
+  emulator: mame
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1003"
+- folder: gamemaster
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: gmaster
+  emulator: mame
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1023"
+- folder: gamepocketcomputer
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: gamepock
+  emulator: mame
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1043"
+- folder: gb
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:757"
+- folder: gba
+  extensions:
+  - .7z
+  - .gba
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:821"
+- folder: gbah
+  extensions:
+  - .7z
+  - .gba
+  - .zip
+  core: mgba
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:851"
+- folder: gbc
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:881"
+- folder: gbch
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:913"
+- folder: gbh
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:789"
+- folder: genesis
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1925"
+- folder: genh
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1953"
+- folder: gx4000
+  extensions:
+  - .7z
+  - .cdt
+  - .cpr
+  - .dsk
+  - .kcr
+  - .m3u
+  - .rom
+  - .sna
+  - .tap
+  - .voc
+  - .zip
+  core: cap32
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:143"
+- folder: homebrew
+  extensions:
+  - .sh
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2883"
+- folder: intellivision
+  extensions:
+  - .7z
+  - .bin
+  - .int
+  - .rom
+  - .zip
+  core: freeintv
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1063"
+- folder: j2me
+  extensions:
+  - .jar
+  core: freej2me-plus
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1083"
+- folder: laserdisc
+  extensions:
+  - .daphne
+  - .ld
+  core: hypseus_singe
+  emulator: hypseus_singe
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:579"
+  arcade: true
+- folder: lowresnx
+  extensions:
+  - .nx
+  core: lowresnx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2539"
+- folder: lutro
+  extensions:
+  - .love
+  - .lua
+  - .lutro
+  - .o
+  core: lutro
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1125"
+- folder: mame
+  extensions:
+  - .7z
+  - .zip
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1145"
+  arcade: true
+- folder: mastersystem
+  extensions:
+  - .7z
+  - .bin
+  - .sms
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1981"
+- folder: megacd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1898"
+- folder: megadrive
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2010"
+- folder: megadrive-japan
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .sg
+  - .smd
+  - .zip
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2038"
+- folder: megaduck
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: sameduck
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2066"
+- folder: microw8
+  extensions:
+  - .uw8
+  - .wasm
+  core: uw8
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2519"
+- folder: mplayer
+  extensions:
+  - .avi
+  - .flac
+  - .flv
+  - .m3u
+  - .m4a
+  - .mkv
+  - .mov
+  - .mp3
+  - .mp4
+  - .mpg
+  - .ogg
+  - .rm
+  - .wmv
+  core: mpv
+  emulator: mpv
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2909"
+- folder: msx
+  extensions:
+  - .7z
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1230"
+- folder: msx2
+  extensions:
+  - .7z
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .rom
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1251"
+- folder: n64
+  extensions:
+  - .7z
+  - .n64
+  - .v64
+  - .z64
+  - .zip
+  core: m64p_rice
+  emulator: mupen64plussa
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1391"
+- folder: naomi
+  extensions:
+  - .7z
+  - .bin
+  - .dat
+  - .lst
+  - .zip
+  core: flycast2021
+  emulator: retrorun
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1272"
+  arcade: true
+- folder: nds
+  extensions:
+  - .nds
+  - .zip
+  core: drastic
+  emulator: drastic
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1423"
+- folder: neocd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: neocd
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1328"
+- folder: neogeo
+  extensions:
+  - .7z
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1301"
+- folder: nes
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1443"
+- folder: nesh
+  extensions:
+  - .7z
+  - .nes
+  - .unf
+  - .unif
+  - .zip
+  core: nestopia
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1465"
+- folder: ngp
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .zip
+  core: beetle_ngp
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1349"
+- folder: ngpc
+  extensions:
+  - .7z
+  - .ngc
+  - .zip
+  core: beetle_ngp
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1370"
+- folder: odyssey
+  name: odyssey2
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1487"
+- folder: openbor
+  extensions:
+  - .pak
+  core: OPENBOR
+  emulator: OPENBOR
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1507"
+- folder: pc
+  extensions:
+  - .bat
+  - .com
+  - .dosz
+  - .exe
+  - .zip
+  core: dosbox_pure
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1182"
+- folder: pc88
+  name: pc-8800
+  extensions:
+  - .d88
+  - .m3u
+  - .u88
+  core: quasi88
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1527"
+- folder: pc98
+  name: pc-9800
+  extensions:
+  - .2hd
+  - .88d
+  - .98d
+  - .d88
+  - .d98
+  - .dup
+  - .fdd
+  - .fdi
+  - .hdd
+  - .hdi
+  - .hdm
+  - .hdn
+  - .nhd
+  - .tfd
+  - .thd
+  - .xdf
+  - .zip
+  core: np2kai
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1547"
+- folder: pcengine
+  extensions:
+  - .7z
+  - .bin
+  - .pce
+  - .zip
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1568"
+- folder: pcenginecd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1590"
+- folder: pcfx
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .toc
+  core: beetle_pcfx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1612"
+- folder: pico-8
+  name: pico8
+  extensions:
+  - .p8
+  - .png
+  core: fake08
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1632"
+- folder: piece
+  extensions:
+  - .pex
+  - .pfi
+  core: piemu
+  emulator: piemu
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1657"
+- folder: pokemini
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1761"
+- folder: ports
+  extensions:
+  - .sh
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2896"
+- folder: psp
+  extensions:
+  - .chd
+  - .cso
+  - .iso
+  - .pbp
+  core: PPSSPPSDL
+  emulator: PPSSPPSDL
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1706"
+- folder: pspminis
+  extensions:
+  - .chd
+  - .cso
+  - .iso
+  - .pbp
+  core: PPSSPPSDL
+  emulator: PPSSPPSDL
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1736"
+- folder: psx
+  extensions:
+  - .bin
+  - .cbn
+  - .ccd
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .toc
+  core: pcsx_rearmed
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1677"
+- folder: pv1000
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: pv1000
+  emulator: mame
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1781"
+- folder: satellaview
+  extensions:
+  - .7z
+  - .bs
+  - .bsx
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2356"
+- folder: saturn
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  core: yabasanshiroSA
+  emulator: yabasanshiroSA
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2086"
+- folder: sc-3000
+  extensions:
+  - .7z
+  - .bin
+  - .sg
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1801"
+- folder: scummvm
+  extensions:
+  - .scummvm
+  core: SCUMMVMSA
+  emulator: SCUMMVMSA
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1821"
+- folder: scv
+  extensions:
+  - '.0'
+  - .7z
+  - .bin
+  - .rom
+  - .zip
+  core: emuscv
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2419"
+- folder: sega32x
+  extensions:
+  - .32x
+  - .7z
+  - .bin
+  - .md
+  - .smd
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1846"
+- folder: segacd
+  extensions:
+  - .chd
+  - .cue
+  - .iso
+  - .m3u
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1871"
+- folder: sfc
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2332"
+- folder: sg-1000
+  extensions:
+  - .7z
+  - .bin
+  - .sg
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2106"
+- folder: sgfx
+  name: supergrafx
+  extensions:
+  - .7z
+  - .ccd
+  - .chd
+  - .cue
+  - .pce
+  - .sgx
+  - .zip
+  core: beetle_supergrafx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2255"
+- folder: snes
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2276"
+- folder: snesh
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2308"
+- folder: snesmsu1
+  extensions:
+  - .7z
+  - .fig
+  - .sfc
+  - .smc
+  - .swc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:1209"
+- folder: solarus
+  extensions:
+  - .solarus
+  core: solarus
+  emulator: solarus
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2399"
+- folder: sufami
+  extensions:
+  - .7z
+  - .st
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2379"
+- folder: supervision
+  extensions:
+  - .7z
+  - .sv
+  - .zip
+  core: potator
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2439"
+- folder: tg16
+  extensions:
+  - .7z
+  - .bin
+  - .pce
+  - .zip
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2559"
+- folder: tg16cd
+  extensions:
+  - .ccd
+  - .chd
+  - .cue
+  - .m3u
+  - .toc
+  core: beetle_pce_fast
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2581"
+- folder: thomson
+  name: moto
+  extensions:
+  - .7z
+  - .fd
+  - .k7
+  - .m5
+  - .m7
+  - .rom
+  - .sap
+  - .zip
+  core: theodore
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2459"
+- folder: tic-80
+  extensions:
+  - .tic
+  core: tic80
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2479"
+- folder: tvc
+  extensions:
+  - .7z
+  - .cas
+  - .dsk
+  - .img
+  - .tvcwav
+  - .zip
+  core: ep128emu_core
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2195"
+- folder: uzebox
+  extensions:
+  - .uze
+  core: uzem
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2603"
+- folder: vectrex
+  extensions:
+  - .7z
+  - .bin
+  - .gam
+  - .vec
+  - .zip
+  core: vecx
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2623"
+- folder: vic20
+  extensions:
+  - '.20'
+  - '.40'
+  - '.60'
+  - .a0
+  - .b0
+  - .bin
+  - .cmd
+  - .crt
+  - .d64
+  - .d6z
+  - .d71
+  - .d7z
+  - .d80
+  - .d81
+  - .d82
+  - .d8z
+  - .g41
+  - .g4z
+  - .g64
+  - .g6z
+  - .gz
+  - .m3u
+  - .nbz
+  - .nib
+  - .p00
+  - .prg
+  - .t64
+  - .tap
+  - .vsf
+  - .x64
+  - .x6z
+  - .zip
+  core: vice_xvic
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:559"
+- folder: videopac
+  extensions:
+  - .7z
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2643"
+- folder: vircon32
+  extensions:
+  - .7z
+  - .v32
+  - .zip
+  core: vircon32
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2788"
+- folder: virtualboy
+  extensions:
+  - .7z
+  - .vb
+  - .zip
+  core: beetle_vb
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2683"
+- folder: wasm4
+  name: wasm-4
+  extensions:
+  - .wasm
+  core: wasm4
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2499"
+- folder: wonderswan
+  extensions:
+  - .7z
+  - .ws
+  - .zip
+  core: beetle_wswan
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2708"
+- folder: wonderswancolor
+  extensions:
+  - .7z
+  - .wsc
+  - .zip
+  core: beetle_wswan
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2728"
+- folder: x1
+  extensions:
+  - .2d
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dup
+  - .dx1
+  - .hdm
+  - .tap
+  - .tfd
+  - .xdf
+  - .zip
+  core: x1
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2134"
+- folder: x68000
+  extensions:
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2748"
+- folder: zmachine
+  extensions:
+  - .7z
+  - .dat
+  - .z1
+  - .z3
+  - .zip
+  core: mojozork
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2768"
+- folder: zx81
+  extensions:
+  - .7z
+  - .p
+  - .t81
+  - .tzx
+  - .zip
+  core: "81"
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2235"
+- folder: zxspectrum
+  extensions:
+  - .7z
+  - .dsk
+  - .rzx
+  - .scl
+  - .tap
+  - .trd
+  - .tzx
+  - .z80
+  - .zip
+  core: fuse
+  emulator: retroarch
+  source_ref: "os AmberELEC/usr/config/emulationstation/es_systems.cfg:2154"

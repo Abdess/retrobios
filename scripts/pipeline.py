@@ -21,6 +21,7 @@ Steps, numbered as the run prints them:
   4b   generate_pack.py --manifest  install manifests
   4c   --manifest-targets           per-target core lists
   4d   bundled_only.py --strict     copies only an emulator install provides
+  4e   generate_games_index.py      install/games/: what the games-on-card mode reads
   5    consistency check            verify == pack: counts, paths, every emulator pack
   6    --verify-packs               pack integrity, extraction and hashes
   7    generate_readme.py           README.md and CONTRIBUTING.md
@@ -125,6 +126,7 @@ STEP_LABELS: dict[str, str] = {
     "generate_manifests": "4b generate install manifests",
     "generate_target_manifests": "4c generate target manifests",
     "bundled_only": "4d copies only an emulator install provides",
+    "games_index": "4e games index",
     "consistency": "5 consistency check",
     "pack_integrity": "6 pack integrity",
     "generate_readme": "7 generate readme",
@@ -1038,6 +1040,18 @@ def main() -> None:
         STEP_LABELS["bundled_only"],
     )
     results["bundled_only"] = ok
+    all_ok &= ok
+
+    # Step 4e: What the installer reads for the games on a card: rom folders,
+    # game catalogs, header and region rules, arcade parents, and the
+    # fallback sets, which read the install lists. Runs under --skip-packs
+    # too, on the committed lists, so a rescrape of the rom folders or a DAT
+    # import reaches install/games/ in the same run.
+    ok, _ = run(
+        [sys.executable, "scripts/generate_games_index.py", "--quiet"],
+        STEP_LABELS["games_index"],
+    )
+    results["games_index"] = ok
     all_ok &= ok
 
     # Step 5: Consistency check. verify describes the full pack, and a run that

@@ -1,0 +1,278 @@
+# Files a game needs beyond its system's region BIOS, decided by the game.
+#
+# Each entry names the core (profile), the system, what in the game
+# decides it (`trigger`), and the files by the names the profile declares.
+# `required: true` means the code refuses or fails the game without the
+# file. A trigger is one of:
+#   extensions   the file's lowercased extension
+#   header       bytes of the game: `reader` names a reader of games/headers.yml and
+#                `values` the labels or values it must return (`field` for one of its fields)
+#   every_game   every game of the system, with `one_of` when any single file serves
+# `filename_override: true` marks a choice the core also takes from tags in
+# the file name: a tag is a guess, so the installer keeps every file listed
+# for that system and core.
+#
+# Every source_ref names the profile's own pin.
+
+extras:
+  - system: nintendo-fds
+    profile: fceumm
+    trigger:
+      header:
+        reader: fds-image
+        values: [fds]
+    files: [disksys.rom]
+    required: true
+    source_ref: "libretro/libretro-fceumm@ac0d00a7 src/fds.c:624-625, src/fds.c:680-690, src/fceu.c:275-281"
+  - system: nintendo-fds
+    profile: mesen
+    trigger:
+      header:
+        reader: fds-image
+        values: [fds]
+    files: [disksys.rom]
+    required: true
+    source_ref: "libretro/Mesen@0102910c Core/RomLoader.cpp:40, Core/FdsLoader.cpp:44-58"
+  - system: nintendo-fds
+    profile: nestopia
+    trigger:
+      extensions: [.fds]
+    files: [disksys.rom]
+    required: true
+    source_ref: "libretro/nestopia@2110d21b libretro/libretro.cpp:2171, libretro/libretro.cpp:2182"
+
+  - system: nintendo-satellaview
+    profile: snes9x
+    trigger:
+      header:
+        reader: snes-bsx-header
+        values: [bsx]
+    files: [BS-X.bin]
+    required: true
+    source_ref: "libretro/snes9x@fae2fea0 libretro/libretro.cpp:1417, libretro/libretro.cpp:1511-1514"
+  - system: nintendo-satellaview
+    profile: bsnes
+    trigger:
+      extensions: [.bs]
+    files: [BS-X.bin]
+    required: true
+    source_ref: "libretro/bsnes-libretro@05439f96 bsnes/target-libretro/libretro.cpp:955-966"
+
+  - system: nintendo-sufami-turbo
+    profile: snes9x
+    trigger:
+      header:
+        reader: sufami-magic
+        values: [sufami-turbo]
+    files: [STBIOS.bin]
+    required: true
+    source_ref: "libretro/snes9x@fae2fea0 libretro/libretro.cpp:1458-1462, libretro/libretro.cpp:1505-1507"
+
+  - system: nintendo-sgb
+    profile: bsnes
+    trigger:
+      extensions: [.gb, .gbc]
+    files: [SGB1.sfc]
+    required: true
+    note: SGB1.sfc is the default of the bsnes_sgb_bios option, SGB2.sfc when the user picks it.
+    source_ref: "libretro/bsnes-libretro@05439f96 bsnes/target-libretro/libretro.cpp:937-952, bsnes/target-libretro/libretro.cpp:395-400, bsnes/target-libretro/libretro_core_options.h:689-693"
+  - system: nintendo-sgb
+    profile: mgba
+    trigger:
+      header:
+        reader: gb-sgb-flag
+        values: [sgb]
+    files: [sgb_bios.bin]
+    required: false
+    source_ref: "libretro/mgba@7a12d6d4 src/gb/gb.c:938-946, src/platform/libretro/libretro.c:2066-2116"
+
+  - system: nintendo-64dd
+    profile: mupen64plus_next
+    trigger:
+      extensions: [.ndd]
+    files: [IPL.n64]
+    required: true
+    note: The disk reaches the core through the N64 Disk Drive subsystem or a <game>.ndd beside the cartridge, never as content of its own.
+    source_ref: "libretro/mupen64plus-libretro-nx@15bada85 mupen64plus-core/src/main/main.c:953-985, libretro/libretro.c:643, libretro/libretro.c:1890-1904, libretro/libretro.c:658"
+  - system: nintendo-64dd
+    profile: parallel_n64
+    trigger:
+      extensions: [.ndd]
+    files: [64DD_IPL.bin]
+    required: false
+    source_ref: "libretro/parallel-n64@f87550d9 libretro/libretro.c:1370, libretro/libretro.c:951"
+  - system: nintendo-64dd
+    profile: ares
+    trigger:
+      extensions: [.ndd]
+    region_files: true
+    required: true
+    note: The IPL follows the disk's region word, see games/regions.yml.
+    source_ref: "ares-emulator/ares@d400eee9 mia/medium/nintendo-64dd.cpp:57-77, desktop-ui/emulator/nintendo-64dd.cpp:64-80"
+  - system: nintendo-64dd
+    profile: project64
+    trigger:
+      extensions: [.ndd]
+    region_files: true
+    required: true
+    source_ref: "project64/project64@24376e86 Source/Project64-core/N64System/N64Disk.cpp:828-840, Source/Project64-core/N64System/N64System.cpp:641-662"
+  - system: nintendo-64dd
+    profile: rosalies-mupen-gui
+    trigger:
+      extensions: [.ndd]
+    region_files: true
+    required: true
+    source_ref: "Rosalie241/RMG@4777ed3f Source/3rdParty/mupen64plus-core/src/device/dd/disk.c:405-480, Source/RMG-Core/MediaLoader.cpp:47-63"
+
+  - system: msx
+    profile: fmsx
+    trigger:
+      extensions: [.dsk, .fdi]
+    files: [DISK.ROM]
+    required: true
+    source_ref: "libretro/fmsx-libretro@4de11755 libretro.c:1220-1225, libretro.c:1303-1304, fMSX/MSX.c:514, fMSX/MSX.c:778-791"
+  - system: msx2plus
+    profile: bluemsx
+    trigger:
+      extensions: [.dsk]
+    files: [MSX2P.rom, MSX2PEXT.rom, MSX2PMUS.rom, PANASONICDISK.rom]
+    required: true
+    note: With the Auto machine a disk picks MSX2+ and never falls back to C-BIOS. The machine's ROM list is the profile's, from Machines/MSX2+/config.ini.
+    source_ref: "libretro/blueMSX-libretro@e3086eb5 libretro.c:156-235, libretro.c:1410-1446"
+
+  - system: snk-neogeo-cd
+    profile: neocd
+    trigger:
+      every_game: true
+    one_of: true
+    files: [neocd_f.rom, front-sp1.bin, neocd_sf.rom, neocd_t.rom, top-sp1.bin, neocd_st.rom, neocd_z.rom, neocd.bin, neocd_sz.rom, uni-bioscd.rom]
+    required: true
+    note: Drive models, not regions. The core option picks among the files found, the first listed by default.
+    source_ref: "libretro/neocd_libretro@b1e04c73 src/libretro_variables.cpp:143-176, src/libretro_variables.cpp:244-273, src/memory_cdintf.cpp:111-116"
+
+  - system: nintendo-ds
+    profile: melonds_ds
+    trigger:
+      header:
+        reader: nds-secure-area
+        values: [encrypted]
+    files: [bios7.bin, bios9.bin]
+    required: true
+    source_ref: "JesseTG/melonds-ds@f394adba src/libretro/config/console.cpp:379-392, src/libretro/config/console.cpp:419-424"
+  - system: nintendo-dsi
+    profile: melonds_ds
+    trigger:
+      header:
+        reader: nds-unit-code
+        values: [dsi]
+    files: [dsi_bios7.bin, dsi_bios9.bin, dsi_firmware.bin, dsi_nand.bin]
+    required: true
+    source_ref: "JesseTG/melonds-ds@f394adba src/libretro/config/console.cpp:238-256"
+
+  - system: nec-pc-engine
+    profile: mednafen_pce_fast
+    trigger:
+      extensions: [.cue, .ccd, .chd, .toc, .m3u]
+    files: [syscard3.pce]
+    required: true
+    note: syscard3.pce is the default of the pce_fast_cdbios option. HuCards need no file.
+    source_ref: "libretro/beetle-pce-fast-libretro@4eee99c4 libretro.c:1620-1628, libretro.c:65, libretro.c:1283-1290, libretro.c:1172-1180"
+  - system: nec-pc-engine
+    profile: beetle_pce
+    trigger:
+      extensions: [.cue, .ccd, .chd, .toc, .m3u]
+    files: [syscard3.pce]
+    required: true
+    note: syscard3.pce is the default of the pce_cdbios option. HuCards need no file.
+    source_ref: "libretro/beetle-pce-libretro@b96c11e0 libretro.cpp:1047-1063, libretro_core_options.h:659-674"
+  - system: nec-pc-engine
+    profile: beetle_pce
+    trigger:
+      header:
+        reader: pce-games-express
+        values: [games-express]
+    files: [gexpress.pce]
+    required: true
+    source_ref: "libretro/beetle-pce-libretro@b96c11e0 mednafen/pce/pce.cpp:374-410, mednafen/pce/pce.cpp:447-455"
+  - system: nec-pc-engine-cd
+    profile: geargrafx
+    trigger:
+      every_game: true
+    files: [syscard3.pce]
+    required: true
+    note: syscard3.pce is the default of the geargrafx_cdrom_bios option.
+    source_ref: "drhelius/Geargrafx@7c447b0b platforms/libretro/libretro.cpp:761-802, platforms/libretro/libretro.cpp:1645-1668"
+  - system: nec-pc-engine-cd
+    profile: geargrafx
+    trigger:
+      every_game: true
+    files: [gexpress.pce]
+    required: false
+    note: Loaded beside the System Card whenever present.
+    source_ref: "drhelius/Geargrafx@7c447b0b platforms/libretro/libretro.cpp:761-802, platforms/libretro/libretro.cpp:1645-1668"
+
+  - system: sega-dreamcast
+    profile: flycast
+    trigger:
+      header:
+        reader: dc-product-id
+        values: ["T7001D  50", "T40505D 50", T18702M, T0019M, T0020M, HDR-0187, "T15104D 50", MK-51152]
+    files: [dc_boot.bin]
+    required: true
+    note: For these product ids the core asks for the real BIOS and warns "This game requires a real BIOS" when it boots HLE.
+    source_ref: "flyinghead/flycast@e88b0ced core/emulator.cpp:267-279, core/emulator.cpp:613-622"
+  - system: sega-dreamcast
+    profile: flycast
+    trigger:
+      header:
+        reader: dc-product-id
+        field: disk_type
+        values: [MIL CD]
+    files: [dc_boot.bin]
+    required: true
+    note: Every MIL-CD disc asks for the real BIOS, as the product ids above do.
+    source_ref: "flyinghead/flycast@e88b0ced core/emulator.cpp:275-279, core/emulator.cpp:613-622"
+
+  - system: commodore-amiga
+    profile: puae
+    trigger:
+      extensions: [.adf, .adz, .fdi, .dms, .raw, .ipf]
+    files: [kick34005.A500]
+    required: true
+    filename_override: true
+    source_ref: "libretro/libretro-uae@73879370 libretro/libretro-dc.c:847-882, libretro/libretro-core.c:865-917, libretro/libretro-core.c:6526-6601, libretro/libretro-core.c:5609-5679"
+  - system: commodore-amiga
+    profile: puae
+    trigger:
+      extensions: [.hdf, .hdz, .lha, .slave, .info]
+    files: [kick40068.A1200]
+    required: true
+    filename_override: true
+    source_ref: "libretro/libretro-uae@73879370 libretro/libretro-dc.c:847-882, libretro/libretro-core.c:865-917, libretro/libretro-core.c:6526-6601, libretro/libretro-core.c:5609-5679"
+  - system: commodore-amiga-cd32
+    profile: puae
+    trigger:
+      extensions: [.cue, .ccd, .nrg, .mds, .iso, .chd]
+    files: [kick40060.CD32, kick40060.CD32.ext]
+    required: true
+    filename_override: true
+    source_ref: "libretro/libretro-uae@73879370 libretro/libretro-dc.c:847-882, libretro/libretro-core.c:865-917, libretro/libretro-core.c:6526-6601, libretro/libretro-core.c:5609-5679"
+
+  - system: atari-jaguar
+    profile: virtualjaguar
+    trigger:
+      extensions: [.cue, .cdi, .chd]
+    files: ["[BIOS] Atari Jaguar CD (World).j64"]
+    required: false
+    note: HLE boot by default, and an embedded CD BIOS when the real one is absent.
+    source_ref: "libretro/virtualjaguar-libretro@e7db5367 libretro.c:113, libretro.c:7081, libretro.c:6587-6604"
+
+  - system: atari-lynx
+    profile: handy
+    trigger:
+      header:
+        reader: lynx-header
+        values: [headerless]
+    files: [howard.o]
+    required: false
+    source_ref: "libretro/libretro-handy@bc55d462 lynx/cart.cpp:283-296, lynx/system.cpp:197-238"

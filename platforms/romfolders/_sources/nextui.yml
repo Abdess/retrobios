@@ -1,0 +1,29 @@
+name: NextUI
+platform: nextui
+format: minui
+params:
+  source: os
+sources:
+  os:
+    repo: https://github.com/LoveRetro/NextUI
+    commit: 5291344b3aceae5fa197437a70824afb41e2d338
+roms_root:
+  path: <SD>/Roms
+  from_bios: ../../Roms
+  source_ref: os workspace/all/common/defines.h:16; os workspace/tg5040/platform/platform.h:156
+case_sensitive: null
+case_ref: os workspace/all/common/utils.c:352-379
+hidden:
+  - pattern: .*
+    source_ref: os workspace/all/common/utils.c:36-38
+  - pattern: '*.disabled'
+    source_ref: os workspace/all/common/utils.c:36-38
+  - name: map.txt
+    source_ref: os workspace/all/common/utils.c:36-38
+media:
+  - name: .media
+    source_ref: os workspace/all/nextui/nextui.c:3011-3034
+notes:
+  - NextUI has no extension filter. Every file of a Roms folder that is not hidden is listed as a game (os workspace/all/nextui/nextui.c:535-547), so the rows carry no extensions.
+  - A Roms folder starts the pak named by the text inside its last parentheses, or by its whole name without parentheses (getEmuName, os workspace/all/common/utils.c:352-379).
+  - BIOS sits in Bios/<TAG>/, two levels under the card root, so the roms root is ../../Roms from it.

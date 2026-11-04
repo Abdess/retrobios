@@ -573,6 +573,7 @@ class Progress:
             if not ok and not self.term.quiet:
                 why = f" ({reason})" if reason else ""
                 line = f"  {self.term.bad('FAILED')} {dest}{why}"
+                SAID_FAILED.add(dest)
             elif not self.term.live and not self.term.quiet:
                 line = f"  [{self.files}/{self.total_files}] {dest} {self.term.ok('ok')}"
             if line is not None:
@@ -670,12 +671,36 @@ EVENT_KEYS: dict[str, tuple[str, ...]] = {
     # a --system out of: it said 12 where Choose systems listed 11. A kind
     # of its own, since schema 1 never adds a key to check.
     "choices": ("platform", "systems"),
+    # Right after choices: the dests of the list's files the run sets aside
+    # before any choice, those read from a save directory whose place is
+    # not known among them, in list order. What Cores lists and counts is
+    # the list without them: it listed 189 cores where --core accepted 181,
+    # and an untick sent the 8 others to a run that refused them. A kind of
+    # its own, since schema 1 never adds a key to choices.
+    "set_aside": ("platform", "dests"),
     # state: present (hash verified), wrong_hash or missing.
     "file": ("platform", "dest", "systems", "size", "state"),
     "system": ("platform", "system", "name", "files", "present", "missing",
                "wrong_hash", "bytes_needed"),
     # The files in place being read, at most every half second, and the last.
     "checking": ("files_done", "files_total"),
+    # --for-games: the games of the card being read (a cartridge hashed, a
+    # disc's header read), at most every half second, and the last.
+    "games_reading": ("files_done", "files_total"),
+    # --for-games, once the games are read, before choices: the games
+    # folder, the games found and those recognised by their content.
+    # found: [{"system", "folder", "games", "recognised", "regions"}],
+    # regions the ones kept where the games prove one, empty for every
+    # region. fallback: [{"system", "folder", "name", "reason"}], each game
+    # that got every BIOS of its system (reason: not_recognised, not_read,
+    # region_unknown, unknown_set, no_parent). not_games: the other files
+    # of the game folders. required_only: --required-only given.
+    "games": ("platform", "folder", "games", "recognised", "found", "fallback",
+              "not_games", "required_only"),
+    # --for-games could not read what the games need (reason: offline,
+    # network, invalid, stale, no_sets, no_folder): the run keeps every
+    # file of the list, and message says why.
+    "games_unavailable": ("platform", "reason", "message"),
     "check": ("platform", "name", "bios_dir", "files", "present", "missing",
               "wrong_hash", "bytes_needed", "data_missing", "not_installable"),
     # Right after check: the same counts over the files the platform's own
@@ -3047,9 +3072,9 @@ def normalize_platform(name: str, say: bool = True) -> str:
 
 
 def _read_limited_json(
-    response: http.client.HTTPResponse, limit: int, label: str
+    response: http.client.HTTPResponse, limit: int, label: str, raw: bool = False
 ) -> object:
-    """Read a bounded UTF-8 JSON response.
+    """Read a bounded UTF-8 JSON response, its bytes as they came with raw.
 
     A body shorter than its Content-Length is a dropped connection, raised
     as one so the caller retries: parsed, the cut read as an invalid file
@@ -3074,6 +3099,8 @@ def _read_limited_json(
         raise ValueError(f"{label} exceeds {limit} bytes")
     if expected is not None and len(payload) < expected:
         raise ConnectionError(f"{label} cut after {len(payload)} of {expected} bytes")
+    if raw:
+        return payload
     try:
         return json.loads(payload.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
@@ -3906,9 +3933,10 @@ def _stalled(exc: BaseException) -> bool:
 
 def _fetch_json(
     url: str, limit: int, label: str, attempts: int = MAX_RETRIES,
-    timeout: float | None = None,
-) -> object:
+    timeout: float | None = None, raw: bool = False,
+) -> Any:
     """A JSON document, tried MAX_RETRIES times like every file download.
+    raw gives its bytes, for a document checked against a digest.
 
     A file list fetched once ended the run on one timeout over flaky Wi-Fi.
     A 4xx answer or an invalid document is final: asking again changes
@@ -3922,6 +3950,8 @@ def _fetch_json(
         tries = attempts
         try:
             with urllib.request.urlopen(url, timeout=timeout) as resp:
+                if raw:
+                    return _read_limited_json(resp, limit, label, raw=True)
                 return _read_limited_json(resp, limit, label)
         except urllib.error.HTTPError as exc:
             if exc.code < 500 and exc.code != 429 or attempt == attempts:
@@ -4001,7 +4031,7 @@ def fetch_manifest(plat: str) -> dict:
                     else f"the file list could not be fetched: {words}")
         if code == "offline":
             print(f"  No file list for {plat}: {offline_words()}. Give it with "
-                  "--manifest FILE (a copy of install/<platform>.json) or "
+                  f"--manifest FILE (a copy of install/{plat}.json) or "
                   f"--from-pack PACK, or run {offline_undo()}.", file=sys.stderr)
             sys.exit(1)
         if code != "network":
@@ -4414,6 +4444,26 @@ def available_choices(files: list[dict], omitted: list[dict]) -> dict[str, list[
         "cores": sorted(cores),
         "regions": sorted(regions),
     }
+
+
+def choosable_cores(files: list[dict], omitted: list[dict],
+                    systems: list[str] = ()) -> list[str]:
+    """The cores a choice is made among, for the files a run keeps once
+    the save entries it cannot place and the game data --no-game-data cuts
+    are left out, of the systems chosen (every system for none). Cores on
+    the screen and c in line mode list these and count "N of M" out of
+    them: the screen listed the whole file list's 189 where the run
+    accepted 181."""
+    if systems:
+        files, omitted = narrow(files, omitted, list(systems), [], [])
+    return available_choices(files, omitted)["cores"]
+
+
+def core_files(files: list[dict], core: str) -> list[dict]:
+    """The files one core adds to the platform's own: what line mode's
+    Cores question and the screen's Cores rows size."""
+    return _filter_by_target([entry for entry in files if entry.get("cores") is not None],
+                             [core])
 
 
 def resolve_choices(
@@ -5750,7 +5800,7 @@ _VALUED_OPTIONS = (
 
 
 # The options a choice at the questions sets, which replace the command's.
-_CHOICE_OPTIONS = ("--system", "--core", "--region")
+_CHOICE_OPTIONS = ("--system", "--core", "--region", "--for-games", "--required-only")
 
 # The order every command given back writes its options in: the list, what
 # narrows it, where files are copied from, then how the run goes. The screen
@@ -5758,7 +5808,7 @@ _CHOICE_OPTIONS = ("--system", "--core", "--region")
 # (tui_audit_16 P3-14). An option not named here comes after them.
 _COMMAND_ORDER = (
     "--manifest", "--from-pack", "--system", "--core", "--emulator", "--region",
-    "--target", "--no-game-data", "--installed-cores", "--cores-dir", "--every-board",
+    "--for-games", "--required-only", "--target", "--no-game-data", "--installed-cores", "--cores-dir", "--every-board",
     "--declared-only", "--standalone-copies", "--save-dir", "--jobs", "--from",
     "--add-app", "--offline", "--check", "--dry-run",
 )
@@ -5790,7 +5840,11 @@ class Invocation:
             value = getattr(args, flag[2:].replace("-", "_"), None)
             values = value if isinstance(value, list) else [value] if value else []
             options += [(flag, str(v)) for v in values]
+        games = getattr(args, "for_games", None)
+        if games is not None:
+            options.append(("--for-games", None if games is True else str(games)))
         for flag, on in (
+            ("--required-only", getattr(args, "required_only", False)),
             ("--every-board", args.every_board),
             ("--installed-cores", args.installed_cores and not args.cores_dir),
             ("--no-game-data", args.no_game_data),
@@ -5870,6 +5924,8 @@ TUI_SYSTEMS_ROW = "Choose systems"
 # which-pack names them from here.
 TUI_FOUND_TITLE = "Where do you play?"
 TUI_CHOOSE_TITLE = "Which setup?"
+# Asked after Which setup? where nothing was found, and on a card.
+TUI_FOLDER_TITLE = "Which folder?"
 
 
 def _on_read_only_mount(path: Path) -> bool:
@@ -5896,6 +5952,12 @@ def read_only_words(path: Path) -> str:
             "read-write, then run again.")
 
 
+# What Termux needs to write shared storage, said by the plan, the result
+# and line mode alike.
+TERMUX_STORAGE_WORDS = ("Run termux-setup-storage once and allow the storage permission "
+                        "Android asks for, then run it again.")
+
+
 def write_remedy(path: Path, plat: str, hint: Invocation, commands: bool = True) -> list[str]:
     """What the screens say a user can do about a folder they cannot write:
     the read-only remedy, or the same choice run as an administrator, the
@@ -5904,6 +5966,10 @@ def write_remedy(path: Path, plat: str, hint: Invocation, commands: bool = True)
     --offline. commands is False where no command can be typed (a pad)."""
     if _on_read_only_mount(path):
         return [read_only_words(path)]
+    if hint.os_type == "android":
+        # Termux has no sudo: its shared storage is reached once Android
+        # gives it the storage permission (tui_audit_17 P2-2).
+        return [TERMUX_STORAGE_WORDS]
     if not commands:
         return []
     if hint.os_type == "windows":
@@ -5944,8 +6010,7 @@ def _write_advice(path: Path, assumed: bool, plat: str = "",
                 f"    {hint.command(plat, path)}\n"
                 "  Or choose another folder with --dest.")
     if plat and hint.os_type == "android":
-        return ("  This user cannot write there. Run termux-setup-storage once to give "
-                "Termux the shared storage, then run it again:\n"
+        return (f"  This user cannot write there. {TERMUX_STORAGE_WORDS}\n"
                 f"    {hint.command(plat, path)}\n"
                 "  Or choose another folder with --dest.")
     if plat:
@@ -6080,16 +6145,19 @@ def _report_outcome(
         say(f"\n{format_size(transferred)} {verb} in "
             f"{format_duration(seconds)} ({format_size(int(transferred / seconds))}/s).")
     reasons = {reason for _dest, reason in failures or []}
+    # A failure the progress already named on its FAILED line is not named
+    # again: line mode listed each one twice (tui_audit_17 P3-7).
+    unsaid = [failure for failure in failures or [] if failure[0] not in SAID_FAILED]
     if failures and len(failures) > 1 and len(reasons) == 1 and reasons != {""}:
         # One cause, said once: a read-only folder listed ten of its files
         # and "... and 266 more" above the advice that fixes them all.
-        say(f"  failed: {_plural(len(failures), 'file')} ({reasons.pop()}), "
-            f"first {failures[0][0]}")
+        said = f", first {unsaid[0][0]}" if unsaid else ""
+        say(f"  failed: {_plural(len(failures), 'file')} ({reasons.pop()}){said}")
     else:
-        for dest, reason in (failures or [])[:10]:
+        for dest, reason in unsaid[:10]:
             say(f"  failed: {dest}" + (f" ({reason})" if reason else ""))
-        if failures and len(failures) > 10:
-            say(f"  ... and {len(failures) - 10} more")
+        if len(unsaid) > 10:
+            say(f"  ... and {len(unsaid) - 10} more")
     if declined and not downloaded and not errors and not interrupted and not offline:
         say(f"\nNothing installed: {_plural(declined, 'file')} not downloaded, as answered.")
         if up_to_date:
@@ -6285,6 +6353,11 @@ def _offline_remedy(folders: list[str] | None = None, named: bool = False) -> st
                 f"(--from-pack) or {offline_undo()}.")
     return ("Copy them from your old card or a folder (--from), or run the installer "
             f"again with a pack (--from-pack) or {offline_undo()}.")
+
+
+# The files a FAILED line of the progress named in this run: the end of
+# the run names the others.
+SAID_FAILED: set[str] = set()
 
 
 def _retry_words(failures: list | None) -> str:
@@ -7397,7 +7470,6 @@ def drive_targets(plat: str) -> list[tuple[str, Path]]:
     P1-2). Another system's card or drive, and one two systems fit, are
     reached through their own setup (drives_left_out)."""
     targets = []
-    cards = unnamed_cards()
     for mount in _mounted_cards():
         found = card_system(mount)
         if (found is not None and found[0] != plat) or share_doubt(mount)[0]:
@@ -7410,23 +7482,16 @@ def drive_targets(plat: str) -> list[tuple[str, Path]]:
             # A drive its files show to be no card is called a drive, under
             # the note that says so: "card or drive" sat under "nothing on
             # it shows a handheld's card" (tui_audit_16 P3-9).
-            what = "SD card" if mount in cards else "drive"
-            targets.append((f"{_drive_folder(mount, 'bios')} ({what})", mount / "bios"))
-    # A handheld's card no file names first: its bios folder is where its
-    # system reads (unnamed_cards).
-    first = {mount / "bios" for mount in cards}
-    return sorted(targets, key=lambda target: target[1] not in first)
+            targets.append((f"{_drive_folder(mount, 'bios')} (drive)", mount / "bios"))
+    return targets
 
 
 def folder_drives(os_type: str, plat: str, side: bool = True) -> list[tuple[str, Path]]:
     """The folders the folder question numbers for a setup that runs from no
-    card, in the one order both modes give them: a handheld's card in the
-    reader first, then the other side's usual folder (side, under WSL),
-    then the other drives. Line mode put Windows RetroArch before the card
-    the screen put first (code_audit_23 P3-6)."""
-    drives = [*(other_side(os_type, plat) if side else []), *drive_targets(plat)]
-    first = {mount / "bios" for mount in unnamed_cards()}
-    return sorted(drives, key=lambda target: target[1] not in first)
+    card, in the one order both modes give them: the other side's usual
+    folder (side, under WSL), then the drives. Line mode and the screen
+    gave them in two orders (code_audit_23 P3-6)."""
+    return [*(other_side(os_type, plat) if side else []), *drive_targets(plat)]
 
 
 # What a handheld system writes on the games part a computer mounts, beside
@@ -7447,8 +7512,9 @@ _GAMES_PART_RULES = (
     # themes/ is no proof: the 12262020 update left it on the system part of
     # a card with under 1 GB free (Update-RGB10.sh:59-69), and 2020's trees
     # hold none (code_audit_23 P3-1).
-    _OsRule("retroarch", "ArkOS", "games_part", ("bgmusic",), ""),
-    _OsRule("retroarch", "ArkOS", "games_part", ("launchimages",), ""),
+    # Its list is RetroArch's, written in the bios folder of that part.
+    _OsRule("retroarch", "ArkOS", "games_part", ("bgmusic",), "bios"),
+    _OsRule("retroarch", "ArkOS", "games_part", ("launchimages",), "bios"),
     # AmberELEC 5a3882cb fills GAMES at every boot: homebrew/ from its ports
     # with gamelist.xml (packages/amberelec/sources/autostart.sh:93-94,
     # 110-113) and gamedata/ for RetroArch, PPSSPP, DOSBox and Hatari
@@ -7526,42 +7592,20 @@ def _games_part_matches(rule: _OsRule, root: Path) -> bool:
 def games_part(root: Path) -> _OsRule | None:
     """The rule naming the handheld system whose games part root is, by the
     files that system writes there, None for none (_GAMES_PART_RULES). The
-    one reading of a games part: AmberELEC's and EmuELEC's are their own
-    cards everywhere (card_system, their card routes, line mode), ArkOS's a
-    card of a system that reads RetroArch's list (unnamed_cards)."""
+    one reading of a games part, for the three systems alike: each is its
+    system's own card everywhere (card_system, the first screen, the card
+    routes, line mode). ArkOS's was a card "of a system that reads
+    RetroArch's list", named nowhere and called a card RetroBIOS cannot
+    tell on the ArkOS route (tui_audit_17 P2-3)."""
     return next((rule for rule in _GAMES_PART_RULES if _games_part_matches(rule, root)), None)
 
 
-def _unnamed_candidates() -> list[Path]:
-    """The mounted drives no file names, no SHARE either, holding a bios
-    folder: a handheld's card, or any drive someone keeps an emulation
-    library on."""
+def unproven_drives() -> list[Path]:
+    """The drives with a bios folder nothing shows to be a handheld's card,
+    no SHARE either: offered at the folder question, never its default."""
     return [mount for mount in _mounted_cards()
             if card_system(mount) is None and not share_doubt(mount)[0]
             and _is_dir(mount / "bios")]
-
-
-def unnamed_cards() -> list[Path]:
-    """The mounted drives no file names that are a handheld's games part
-    read with RetroArch's list: ArkOS's EASYROMS, told by the folders it
-    writes there (games_part). Which of the systems that read RetroArch's
-    list runs them cannot be told, but they are a handheld's card:
-    "Nothing was found here" over one, and two presses of Enter filled this
-    computer's folder for a RetroArch that was not there (tui_audit_14
-    P2-3). A bios folder and a console folder were the rule, and a data
-    drive or WSL's D: disk with bios/, snes/ and Music/ took the list
-    (code_audit_22 P2-1). AmberELEC's GAMES and EmuELEC's EEROMS are their
-    systems' own cards (card_system): RetroArch's list went on them under
-    Enter (tui_audit_16 P2-1)."""
-    return [mount for mount in _unnamed_candidates()
-            if getattr(games_part(mount), "manifest", "") == "retroarch"]
-
-
-def unproven_drives() -> list[Path]:
-    """The drives with a bios folder nothing shows to be a handheld's card:
-    offered at the folder question, never its default."""
-    cards = unnamed_cards()
-    return [mount for mount in _unnamed_candidates() if mount not in cards]
 
 
 def _names_and(names: list[str]) -> str:
@@ -7581,15 +7625,6 @@ def unproven_words() -> str:
             f"Pick {it} below if your files go there.")
 
 
-def card_folder_words(cards: list[Path], card: Path) -> str:
-    """Where card, one of the handhelds' cards in the reader, keeps the
-    files, as both modes say it: the card named where it is one of two
-    (code_audit_22 P3-2), BIOS files named where "keeps them" followed the
-    title Which folder? and no noun (tui_audit_16 P3-9)."""
-    which = "The card in the reader" if len(cards) == 1 else _mount_name(card)
-    return f"{which} keeps BIOS files in its bios folder"
-
-
 def _said_with(label: str, words: str) -> str:
     """label with words in its parenthesis, or in one of their own: two side
     by side read as a slip (tui_audit_16 P3-9)."""
@@ -7607,23 +7642,6 @@ def numbered_folder(label: str, folder: Path) -> str:
     said = [] if shown in label else [shown]
     said += [] if _is_dir(folder) else ["does not exist yet"]
     return _said_with(label, ", ".join(said)) if said else label
-
-
-def unnamed_card_words(cards: list[Path], tail: str = ".") -> str:
-    """What the first screen and line mode say of those cards: one card,
-    its system, two cards, their systems (code_audit_22 P3-2)."""
-    names = ", ".join(_mount_name(mount) for mount in cards)
-    if len(cards) == 1:
-        return f"A card is in the reader ({names}): choose its system{tail}"
-    return f"Cards are in the reader ({names}): choose their systems{tail}"
-
-
-def say_unnamed_cards() -> None:
-    """Line mode's words for the cards no file names, where it says what
-    was not found here."""
-    cards = unnamed_cards()
-    if cards:
-        print(f"  {unnamed_card_words(cards)}")
 
 
 def _drive_folder(mount: Path, below: str) -> str:
@@ -7678,18 +7696,9 @@ def ask_platform_folder(os_type: str, plat: str, ask: bool = True,
     name = display_name(plat)
     shared = plat in _SHARE_FOLDERS and found is None
     default = found if found is not None else None if shared else _default_dest(os_type, plat)
-    # A handheld's card in the reader and no setup found here: Enter puts
-    # the files on the card, never in this computer's folder for a RetroArch
-    # that is not there (tui_audit_14 P2-3).
-    cards = [] if shared or found is not None else unnamed_cards()
     print(f"\nWhich folder do {name}'s BIOS files go to?")
     if shared:
         print(f"  {share_words(plat)}")
-    elif cards:
-        default = cards[0] / "bios"
-        # Two cards: the one Enter takes is named, "The card" was one of
-        # two (code_audit_22 P3-2).
-        print(f"  {card_folder_words(cards, cards[0])}: {shown_path(default)}.")
     elif found is not None:
         print(f"  {name} reads its BIOS files from: {shown_path(found)}.")
     elif default is not None:
@@ -7699,11 +7708,6 @@ def ask_platform_folder(os_type: str, plat: str, ask: bool = True,
     # A drive is offered by the BIOS folder its system reads, the screen's
     # rows: never its root, and never for a system that reads another list.
     targets = (share_targets(plat) if shared else folder_drives(os_type, plat, found is None))
-    if cards:
-        # The card first, this computer's usual folder after it.
-        targets = [*targets, (f"{side_name(os_type, plat)}'s usual folder",
-                              _default_dest(os_type, plat))]
-        targets = [target for target in targets if target[1] is not None]
     for index, (label, folder) in enumerate(targets, 1):
         print(f"    {index}) {numbered_folder(label, folder)}")
     left_out = "" if shared else drives_left_out(plat)
@@ -7717,8 +7721,7 @@ def ask_platform_folder(os_type: str, plat: str, ask: bool = True,
     why = ("" if default is not None or shared
            else " (no default, a folder above could not be opened)"
            if _default_set_aside(os_type, plat) else " (no default on this system)")
-    enter = (f"the folder {name} reads" if found is not None
-             else "the card's bios folder" if cards else "the default above")
+    enter = f"the folder {name} reads" if found is not None else "the default above"
     prompt = (f"BIOS folder{numbers}, q to quit (Enter for {enter}): " if default
               else f"BIOS folder{numbers}, q to quit{why}: ")
     usage = f"  Type a folder{', a number' if targets else ''}, or q to quit."
@@ -7896,7 +7899,8 @@ def _prompt_platform_choice(
     for i, ((plat, path), label) in enumerate(zip(platforms, named), 1):
         # The label and its folder, as the screen shows them: "Onion SD card
         # (ONION) (/media/me/ONION/BIOS)" put two pairs of brackets in a row.
-        print(f"  {i}) {label}: {shown_path(setup_bios_folder(plat, path))}")
+        print(fold_line(f"  {i}) {label}: {shown_path(setup_bios_folder(plat, path))}",
+                     " " * (len(str(i)) + 2)))
     if other is not None:
         print("  o) another setup or folder")
     print("  q) quit")
@@ -7918,6 +7922,36 @@ def _prompt_platform_choice(
         # A wrong answer used to bring back a bare prompt, and nothing said
         # how to leave it.
         print(usage)
+
+
+def fold_line(text: str, hang: str = "  ") -> str:
+    """A line wrapped between words at the terminal's width, the lines after
+    the first indented by hang under its own lead, a word wider than a line
+    cut after a slash: left to the terminal, below 40 columns "Found Onion
+    at /media/moi/ONION/BIOS" broke inside "(RetroArch files)" and a folder
+    inside its name (tui_audit_17 P3-8)."""
+    width = terminal_size()[0]
+    cols = max(width - 1, 8)
+    if cell_width(text) <= cols or width >= TUI_MIN_COLS or not _is_terminal(sys.stdout):
+        # A pipe or a log folds nothing, and from 40 columns a folder is left
+        # whole for the terminal to fold, copied as one line.
+        return text
+    lead = text[:len(text) - len(text.lstrip(" "))]
+    prefix = lead + hang
+    lines: list[str] = []
+    line = lead
+    for word in text.split():
+        joined = f"{line} {word}" if line.strip() else line + word
+        if cell_width(joined) <= cols:
+            line = joined
+            continue
+        if line.strip():
+            lines.append(line)
+        pieces = _split_word(word, max(cols - len(prefix), 1))
+        lines += [prefix + piece for piece in pieces[:-1]]
+        line = prefix + pieces[-1]
+    lines.append(line)
+    return "\n".join(lines)
 
 
 def _ask(prompt: str) -> str:
@@ -8228,6 +8262,9 @@ def folder_warnings(plat: str, bios_path: Path, files: list[dict], hint: Invocat
     return lines
 
 
+CANNOT_WRITE = "You cannot write to this folder"
+
+
 def cannot_write_words(bios_path: Path, plat: str, hint: Invocation, commands: bool,
                        card: bool, screen: bool = False, remedy: bool = True) -> list[str]:
     """What the plan says of a folder this user cannot write, one remedy
@@ -8240,7 +8277,7 @@ def cannot_write_words(bios_path: Path, plat: str, hint: Invocation, commands: b
     another = ("choose another one" if screen
                else "run it again with another --dest" if commands
                else "run it again and choose another one")
-    return [f"You cannot write to this folder: {another}."] + said
+    return [f"{CANNOT_WRITE}: {another}."] + said
 
 
 def space_words(needed: int, free: int, card: bool) -> str:
@@ -8318,8 +8355,8 @@ def _prompt_custom_selection(
     given: tuple[list[str], list[str], list[str]] | None = None,
     manifest: dict | None = None, narrowed: bool = False,
     command: Callable[[object], str] | None = None, cut: list[bool] | None = None,
-    note: str = "",
-) -> tuple[list[str], list[str], list[str]] | str | None:
+    note: str = "", played: GamesPlan | None = None,
+) -> tuple[list[str], list[str], list[str]] | str | GamesChoice | None:
     """Offer to narrow the install by system, core and region.
 
     cut, given for a list that marks its game data, holds whether g left
@@ -8342,10 +8379,14 @@ def _prompt_custom_selection(
     for all" read as a choice. narrowed says the list was narrowed before
     the menu (--target, --no-game-data): the data trees kept are then those
     of the systems kept, as the plan and --dry-run count them. note is said
-    under the head (game_data_only_words).
+    under the head (game_data_only_words). played, the games of the card
+    when it holds some, is the first choice (h), the whole list one key
+    away (e), and r keeps only what the games cannot start without.
     """
     trees = data_trees or []
     current = given
+    if current is None and played is not None and played.games:
+        current = GamesChoice(played)
     toggled = False
     if bios_path is not None and not dry_run and current != INSTALLED_ONLY:
         kept = menu_choice(files, omitted, installed, current, False)[0]
@@ -8395,7 +8436,9 @@ def _prompt_custom_selection(
         # A dry run installs nothing: "install everything" was asked before it.
         # Offline with nothing to copy from, nothing can be installed but
         # what is in place already.
-        whole = "everything" if current is None else "these"
+        whole = ("everything" if current is None
+                 else f"what the games {played.where()} need"
+                 if isinstance(current, GamesChoice) and played is not None else "these")
         if emptied:
             pass
         elif dry_run:
@@ -8407,6 +8450,15 @@ def _prompt_custom_selection(
             print("  Enter) check the BIOS folder, nothing can be downloaded")
         else:
             print(f"  Enter) install {whole}")
+        playing = bool(played is not None and played.games)
+        if playing and isinstance(current, GamesChoice):
+            other = GamesChoice(current.plan, not current.required)
+            print(f"  r) {GAMES_REQUIRED_WORDS if other.required else 'every file the games read'}"
+                  f": {_sized(menu_choice(files, omitted, installed, other, cutting)[0])}")
+            print(f"  e) everything, whatever the games: {_sized(shown)}")
+        elif playing and played is not None:
+            kept_games = menu_choice(files, omitted, installed, GamesChoice(played), cutting)[0]
+            print(f"  h) only for the games {played.where()}: {_sized(kept_games)}")
         if installed is not None and current != INSTALLED_ONLY:
             print(f"  i) only what the installed cores read: {_sized(installed[0])}")
         # What c asks, named: "systems, cores and regions" was offered with
@@ -8425,6 +8477,7 @@ def _prompt_custom_selection(
                   f"{'keep it' if cut[0] else 'leave it out'}")
         print("  q) quit")
         keys = [*([] if emptied else [""]), "q", *(["c"] if choosable else []),
+                *((["r", "e"] if isinstance(current, GamesChoice) else ["h"]) if playing else []),
                 *(["i"] if installed is not None and current != INSTALLED_ONLY else []),
                 *(["f"] if copying else []), *(["g"] if games.games else [])]
         others = [key for key in keys if key not in ("", "q")]
@@ -8439,6 +8492,12 @@ def _prompt_custom_selection(
         if answer == "g" and cut is not None and games.games:
             cut[0] = not cut[0]
             toggled = True
+        elif answer == "r" and isinstance(current, GamesChoice):
+            current = GamesChoice(current.plan, not current.required)
+        elif answer == "e":
+            current = None
+        elif answer == "h" and played is not None:
+            current = GamesChoice(played)
         elif answer == "i":
             current = INSTALLED_ONLY
         elif answer == "c":
@@ -8469,6 +8528,8 @@ def _print_menu_head(
     named = ""
     if current == INSTALLED_ONLY:
         named = ", only what the installed cores read"
+    elif isinstance(current, GamesChoice):
+        named = f", {current.words()}" + (" (--for-games)" if current is given else "")
     elif isinstance(current, tuple):
         systems, cores, regions = current
         flag = current is given
@@ -8482,10 +8543,12 @@ def _print_menu_head(
             f"for {held} of {total} systems" + (" (--system)" if flag else "")
             if systems else "",
             # Out of the cores the systems chosen offered, as Cores counts
-            # them: "1 core chosen" read as one of one.
-            ("--core" if flag else cores_words(len(cores), len(available_choices(
-                *narrow(files, omitted, systems, [], []))["cores"]))) if cores else "",
-            ("--region" if flag else "regions ranked") if regions else ""]))
+            # them: "1 core chosen" read as one of one. A flag typed is
+            # named after the words, never alone: "--region." stood as a
+            # sentence of its own (tui_audit_17 P3-4).
+            core_count_words(cores, choosable_cores(files, omitted, systems))
+            + (" (--core)" if flag else "") if cores else "",
+            "regions ranked" + (" (--region)" if flag else "") if regions else ""]))
         named = "" if named == ", " else named
     if current is not given:
         print("\n  Counted again for your choices. Nothing is written before Enter.")
@@ -8550,15 +8613,21 @@ def found_head(files: list[dict], trees: list[dict], bios_path: Path) -> str:
         except OSError:
             return False
 
-    needed = []
+    needed, sized = [], []
     for entry in files:
         try:
             path = _entry_path(bios_path, entry)
         except ValueError:
             continue
-        if not held(path, entry.get("size")) or \
-                _classify_local(entry, path, remember=True) != "up_to_date":
+        if held(path, entry.get("size")):
+            sized.append((entry, path))
+        else:
             needed.append(entry)
+    # Only a copy of the right size is read, on the check's workers and
+    # with its count: one at a time and silent, 400 files of a card read
+    # as a hung run before the menu (code_audit_24 P3-4).
+    needed += [entry for (entry, _path), verdict in zip(sized, read_in_place(sized))
+               if verdict != "up_to_date"]
     copies = plan_local_copies(needed, bios_path, None, LOCAL.folders)
     if not copies:
         return ""
@@ -8604,10 +8673,38 @@ def all_in_place(files: list[dict], trees: list[dict], bios_path: Path) -> bool:
                     return False
             except OSError:
                 return False
-    return (all(_classify_local(entry, path, remember=True) == "up_to_date"
-                for entry, path in paths)
+    return (all(verdict == "up_to_date" for verdict in read_in_place(paths))
             and all(not data_directory_state(tree, bios_path, remember=True)[1]
                     for tree in trees))
+
+
+def _live_stdout() -> bool:
+    """Whether the standard output draws a moving line (Terminal.live)."""
+    return Terminal(sys.stdout).live
+
+
+def read_in_place(pairs: list[tuple[dict, Path]]) -> list[str]:
+    """_classify_local of each (entry, path), read before the line menu as
+    the check after it reads: on --jobs workers, a count moving at a
+    terminal, what is read kept for that check (_HEAD_READS). Each file is
+    read once whatever the question: the head reads the files of the right
+    size only, and the check after Enter reads none of them again."""
+    if not pairs:
+        return []
+    live = _live_stdout()
+    verdicts: list[str] = []
+    last = 0.0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=LOCAL.jobs) as pool:
+        for done, verdict in enumerate(pool.map(
+                lambda pair: _classify_local(pair[0], pair[1], remember=True), pairs), 1):
+            verdicts.append(verdict)
+            now = time.monotonic()
+            if live and (now - last >= 0.1 or done == len(pairs)):
+                last = now
+                print(f"\r  read {done}/{len(pairs)}", end="", flush=True)
+    if live:
+        print("\r\033[K", end="", flush=True)
+    return verdicts
 
 
 def menu_choice(
@@ -8620,6 +8717,8 @@ def menu_choice(
     kept, kept_omitted = files, omitted
     if current == INSTALLED_ONLY and installed is not None:
         kept, kept_omitted = installed
+    elif isinstance(current, GamesChoice):
+        kept, kept_omitted = current.apply(files, omitted)
     elif isinstance(current, tuple):
         kept, kept_omitted = narrow(files, omitted, *current)
     return leave_out_game_data(kept, kept_omitted)[:2] if cut else (kept, kept_omitted)
@@ -8665,18 +8764,15 @@ def _choose_narrowing(files: list[dict], omitted: list[dict], manifest: dict | N
     kept, kept_omitted = narrow(files, omitted, systems, [], [])
 
     cores: list[str] = []
-    core_names = available_choices(kept, kept_omitted)["cores"]
+    core_names = choosable_cores(kept, kept_omitted)
     if len(core_names) > 1:
         print("\nThe platform's own files for these systems are always kept.")
         # Every core is kept, as Cores draws them all ticked: a list of
         # numbers read as nothing chosen yet.
         print("Every core's extra files are kept: Enter keeps them all, numbers keep "
               "only those cores.")
-        cores = _pick("Cores:", [
-            (core, _filter_by_target(
-                [f for f in kept if f.get("cores") is not None], [core]))
-            for core in core_names
-        ], sizer=_core_sized)
+        cores = _pick("Cores:", [(core, core_files(kept, core)) for core in core_names],
+                      sizer=_core_sized)
         kept, kept_omitted = narrow(kept, kept_omitted, [], cores, [])
 
     regions: list[str] = []
@@ -8695,6 +8791,8 @@ def chosen_flags(choice: object) -> list[tuple[str, str | None]]:
     """The options a choice made at the questions stands for."""
     if choice == INSTALLED_ONLY:
         return [("--installed-cores", None)]
+    if isinstance(choice, GamesChoice):
+        return choice.flags()
     systems, cores, regions = choice  # type: ignore[misc]
     return [*(("--system", name) for name in systems), *(("--core", name) for name in cores),
             *([("--region", ",".join(regions))] if regions else [])]
@@ -9004,6 +9102,1523 @@ def _requested_narrowing(
         print(f"Error: {plat}: {exc}", file=sys.stderr)
         sys.exit(1)
     return systems, cores, regions
+
+
+# --- Games on the card -------------------------------------------------------
+#
+# --for-games keeps what the games of a card need, read from install/games/
+# (scripts/generate_games_index.py): per system the files its default core
+# reads (a fallback set), one region where the game's own bytes prove it,
+# and for an arcade set the BIOS sets its romof chain reaches. Any doubt
+# keeps the wider set: the game must run.
+
+GAMES_URL = f"{BASE_URL}/install/games/{{path}}"
+GAMES_FORMAT = 1
+MAX_GAMES_INDEX_BYTES = 4 * 1024 * 1024
+MAX_GAMES_DOC_BYTES = 32 * 1024 * 1024
+CACHE_VARIABLE = "RETROBIOS_CACHE"
+# A card is read up to this many files, and this deep below each rom folder
+# (EmuDeck keeps some games in roms/<system>/roms).
+MAX_GAME_FILES = 200_000
+GAME_FOLDER_DEPTH = 3
+# A cartridge dump is hashed whole, never a file larger than this: a disc
+# image is read at its header only.
+MAX_HASHED_GAME = 256 * 1024 * 1024
+GAMES_SCAN_FILE = "games-scan-1.json"
+MAX_GAMES_SCAN_BYTES = 64 * 1024 * 1024
+_GAMES_DOC_NAME = re.compile(r"^(setups|fallback|systems|arcade)/[A-Za-z0-9_.+-]+\.json$")
+# Where a setup lists no extension (MinUI and its forks list every file),
+# what is never a game.
+_NOT_GAME_SUFFIXES = frozenset({
+    ".txt", ".xml", ".png", ".jpg", ".jpeg", ".gif", ".bmp", ".webp", ".mp4", ".pdf",
+    ".nfo", ".db", ".srm", ".sav", ".state", ".cfg", ".ini", ".html", ".url",
+    ".lnk", ".disabled",
+})
+ARCADE_SUFFIXES = (".zip", ".7z")
+# Files whose bytes are not the game's at an offset: an archive, a CHD.
+_PACKED_SUFFIXES = frozenset({".zip", ".7z", ".rar", ".gz", ".chd", ".cso", ".rvz", ".wia",
+                              ".gcz", ".wbfs", ".pbp"})
+# Why a game got every BIOS of its system: said with its name.
+GAMES_REASONS = {
+    "not_recognised": "not recognised",
+    "not_read": "format not read",
+    "region_unknown": "region not proven",
+    "unknown_set": "set unknown to the core",
+    "no_parent": "BIOS set not in the list",
+}
+GAMES_REQUIRED_WORDS = "only what the games need to start"
+
+
+class GamesUnavailable(Exception):
+    """install/games/ could not be read: the run keeps the wider set."""
+
+    def __init__(self, reason: str, words: str) -> None:
+        super().__init__(words)
+        self.reason = reason
+        self.words = words
+
+
+def cache_folder() -> Path | None:
+    """Where this machine keeps what a later run reuses: RETROBIOS_CACHE,
+    else the system's cache folder. None where none is known."""
+    named = os.environ.get(CACHE_VARIABLE, "")
+    if named:
+        return Path(named)
+    try:
+        if os.name == "nt":
+            base = os.environ.get("LOCALAPPDATA")
+            return Path(base) / "retrobios" if base else None
+        if sys.platform == "darwin":
+            return Path.home() / "Library" / "Caches" / "retrobios"
+        xdg = os.environ.get("XDG_CACHE_HOME")
+        return (Path(xdg) if xdg else Path.home() / ".cache") / "retrobios"
+    except RuntimeError:
+        # No home folder to name.
+        return None
+
+
+def _read_capped(path: Path, limit: int) -> bytes | None:
+    try:
+        with open(path, "rb") as handle:
+            data = handle.read(limit + 1)
+    except OSError:
+        return None
+    return data if len(data) <= limit else None
+
+
+def _cache_write(path: Path, data: bytes) -> None:
+    """Kept for the next run, or not at all: a cache that cannot be written
+    costs a second read, never the run."""
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        scratch = path.with_name(f"{path.name}.{os.getpid()}.part")
+        scratch.write_bytes(data)
+        os.replace(scratch, path)
+    except OSError as exc:
+        if os.environ.get("RETROBIOS_DEBUG"):
+            print(f"  Not cached: {path} ({exc.strerror or exc})", file=sys.stderr)
+
+
+class GamesData:
+    """install/games/ for this run: index.json, then each document it lists,
+    checked against the sha256 the index gives. Read from the games folder
+    beside --manifest, the cache, or the network, in that order."""
+
+    def __init__(self) -> None:
+        self.index: dict | None = None
+        self.docs: dict[str, dict] = {}
+
+    def reset(self) -> None:
+        self.index = None
+        self.docs = {}
+
+    @staticmethod
+    def beside() -> Path | None:
+        return LOCAL.manifest.parent / "games" if LOCAL.manifest is not None else None
+
+    @staticmethod
+    def cached(name: str) -> Path | None:
+        root = cache_folder()
+        return root / "games" / name if root is not None else None
+
+    def load_index(self, network: bool = True, attempts: int = 2) -> dict:
+        if self.index is not None:
+            return self.index
+        raw = None
+        beside = self.beside()
+        if beside is not None:
+            raw = _read_capped(beside / "index.json", MAX_GAMES_INDEX_BYTES)
+        cached = self.cached("index.json")
+        reason = "offline"
+        if raw is None and network:
+            try:
+                raw = _fetch_json(GAMES_URL.format(path="index.json"), MAX_GAMES_INDEX_BYTES,
+                                  "games index", attempts=attempts, raw=True)
+            except _Offline:
+                reason = "offline"
+            except (urllib.error.URLError, OSError, ValueError,
+                    http.client.HTTPException) as exc:
+                reason = "network"
+                if os.environ.get("RETROBIOS_DEBUG"):
+                    print(f"  Games index: {exc}", file=sys.stderr)
+            else:
+                if cached is not None:
+                    _cache_write(cached, raw)
+        if raw is None and cached is not None:
+            raw = _read_capped(cached, MAX_GAMES_INDEX_BYTES)
+        if raw is None:
+            raise GamesUnavailable(reason, (
+                f"the games index is not on this machine and {offline_words()}"
+                if reason == "offline" else "the games index could not be downloaded"))
+        try:
+            data = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise GamesUnavailable("invalid", f"the games index is not valid ({exc})") from exc
+        if (not isinstance(data, dict) or data.get("format_version") != GAMES_FORMAT
+                or not all(isinstance(data.get(kind), dict)
+                           for kind in ("setups", "fallback", "systems", "arcade"))):
+            raise GamesUnavailable("invalid", "the games index is of another format")
+        self.index = data
+        return data
+
+    def doc(self, kind: str, key: str, network: bool = True,
+            attempts: int = 2) -> dict | None:
+        """One listed document, None when the index lists none of that name."""
+        entry = self.load_index(network, attempts).get(kind, {}).get(key)
+        if not isinstance(entry, dict):
+            return None
+        name = str(entry.get("file", ""))
+        digest = str(entry.get("sha256", ""))
+        if not _GAMES_DOC_NAME.match(name) or not _SHA256_RE.match(digest):
+            raise GamesUnavailable("invalid", f"the games index names {name!r}")
+        if name in self.docs:
+            return self.docs[name]
+        limit = min(int(entry.get("size") or 0), MAX_GAMES_DOC_BYTES)
+        raw = None
+        beside = self.beside()
+        cached = self.cached(f"{digest}.json")
+        for source in (beside / name if beside is not None else None, cached):
+            if source is None:
+                continue
+            found = _read_capped(source, limit)
+            if found is not None and hashlib.sha256(found).hexdigest() == digest:
+                raw = found
+                break
+        if raw is None and network:
+            try:
+                fetched = _fetch_json(GAMES_URL.format(path=name), limit, f"games {kind}",
+                                      attempts=attempts, raw=True)
+            except _Offline:
+                pass
+            except (urllib.error.URLError, OSError, ValueError,
+                    http.client.HTTPException) as exc:
+                raise GamesUnavailable(
+                    "network", f"install/games/{name} could not be downloaded ({exc})") from exc
+            else:
+                if hashlib.sha256(fetched).hexdigest() != digest:
+                    raise GamesUnavailable("invalid", f"install/games/{name} is not the one "
+                                           "the games index lists")
+                raw = fetched
+                if cached is not None:
+                    _cache_write(cached, raw)
+        if raw is None:
+            raise GamesUnavailable("offline", f"install/games/{name} is not on this machine "
+                                   f"and {offline_words()}")
+        try:
+            data = json.loads(raw.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            raise GamesUnavailable("invalid", f"install/games/{name} is not valid") from exc
+        if not isinstance(data, dict):
+            raise GamesUnavailable("invalid", f"install/games/{name} is not valid")
+        self.docs[name] = data
+        return data
+
+
+GAMES = GamesData()
+
+
+# --- Where the games are -----------------------------------------------------
+
+
+def _setup_key(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def games_setups(index: dict, plat: str, bios_path: Path, os_type: str = "") -> list[str]:
+    """The setups whose rom folders this BIOS folder's games may sit in,
+    best first: the system detection named (muOS, ArkOS), else the
+    platform's own."""
+    setups = index.get("setups") or {}
+    named = detected_os(plat, bios_path)
+    if not named:
+        above = card_root_above(bios_path)
+        named = above[0] if above else ""
+    key = _setup_key(named) if named else ""
+    found = [name for name in sorted(setups) if key and (name == key or name.startswith(key + "-"))]
+    if not found and plat in setups:
+        found = [plat]
+        windows = f"{plat}-windows"
+        if (os_type or detect_os()) == "windows" and windows in setups:
+            found.insert(0, windows)
+    return found
+
+
+def _list_dir(path: Path) -> list[os.DirEntry]:
+    try:
+        with os.scandir(path) as listing:
+            return list(listing)
+    except OSError:
+        return []
+
+
+def _entry_is_dir(entry: os.DirEntry) -> bool:
+    try:
+        return entry.is_dir()
+    except OSError:
+        return False
+
+
+def _root_tail(setup: dict) -> str:
+    """The last name of the setup's rom folder path: Roms, roms, ROMS, games."""
+    text = str((setup.get("roms_root") or {}).get("path") or "")
+    return re.split(r"[\\/]", text.rstrip("\\/"))[-1] if text else ""
+
+
+def games_root(setup: dict, bios_path: Path) -> Path | None:
+    """The setup's rom folder for this BIOS folder: where the setup puts it
+    from the BIOS folder, else a folder of its name at most three levels up
+    (a card mounted on a computer keeps its own layout)."""
+    relative = (setup.get("roms_root") or {}).get("from_bios")
+    if isinstance(relative, str) and relative:
+        candidate = Path(os.path.normpath(str(bios_path / relative)))
+        if _is_dir(candidate):
+            return candidate
+    tail = _root_tail(setup).casefold()
+    if not tail or tail.startswith("<") or tail == "none":
+        return None
+    for holder in [bios_path, *list(bios_path.absolute().parents)[:3]]:
+        for entry in _list_dir(holder):
+            if entry.name.casefold() == tail and _entry_is_dir(entry):
+                return Path(entry.path)
+    return None
+
+
+def _may_hold_games(bios_path: Path) -> bool:
+    """Whether a rom folder could sit near this BIOS folder, said without the
+    network: a folder named roms in it or up to two levels above it, or a
+    path that runs through one (roms, games)."""
+    holders = [bios_path, *list(bios_path.absolute().parents)[:2]]
+    if any(part.casefold() in ("roms", "games") for part in bios_path.absolute().parts[-3:]):
+        return True
+    return any(entry.name.casefold() == "roms" and _entry_is_dir(entry)
+               for holder in holders for entry in _list_dir(holder))
+
+
+class GameFolder(NamedTuple):
+    """A folder of games and the row that says what reads it."""
+
+    path: Path
+    row: dict
+
+
+def game_folders(setup: dict | None, index: dict, root: Path,
+                 named: bool) -> list[GameFolder]:
+    """Each folder below root that a setup row reads. named is a folder the
+    user gave: one the setup does not list is then read by the name every
+    setup gives it, and the folder itself when it is one system's."""
+    rows = list((setup or {}).get("folders") or [])
+    exact = (setup or {}).get("case_sensitive") is True
+    skipped = {str(item.get("name", "")).casefold()
+               for key in ("skip", "media") for item in (setup or {}).get(key) or []
+               if isinstance(item, dict) and item.get("name")}
+    by_name: dict[str, list[dict]] = {}
+    for row in rows:
+        if not (row.get("systems") or row.get("profile")):
+            # A folder of the OS that no system and no core reads: apps, media.
+            continue
+        for name in [row.get("folder"), *(row.get("aliases") or [])]:
+            if isinstance(name, str) and name:
+                by_name.setdefault(name if exact else name.casefold(), []).append(row)
+    names = index.get("folders") or {}
+
+    def rows_for(name: str) -> list[dict]:
+        matched = by_name.get(name if exact else name.casefold())
+        if matched:
+            return matched
+        systems = names.get(name.casefold()) if named or not rows else None
+        return [{"folder": name, "systems": list(systems)}] if systems else []
+
+    found = []
+    for entry in sorted(_list_dir(root), key=lambda item: item.name):
+        if entry.name.startswith(".") or entry.name.casefold() in skipped:
+            continue
+        if not _entry_is_dir(entry):
+            continue
+        found += [GameFolder(Path(entry.path), row) for row in rows_for(entry.name)]
+    if named and not found:
+        found = [GameFolder(root, row) for row in rows_for(root.name)]
+    return found
+
+
+# --- The games in a folder ---------------------------------------------------
+
+
+def _suffix(name: str) -> str:
+    return os.path.splitext(name)[1].lower()
+
+
+def _listed_names(path: Path) -> list[str]:
+    """The files a .cue, .m3u or .gdi names, as written."""
+    data = _read_capped(path, 1024 * 1024)
+    if data is None:
+        return []
+    text = data.decode("utf-8", errors="replace")
+    kind = _suffix(path.name)
+    names = []
+    for line in text.splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if kind == ".cue":
+            match = re.match(r'(?i)^FILE\s+(?:"([^"]+)"|(\S+))', line)
+            if match:
+                names.append(match.group(1) or match.group(2))
+        elif kind == ".gdi":
+            parts = shlex.split(line, posix=True) if '"' in line else line.split()
+            if len(parts) >= 5:
+                names.append(parts[4])
+        else:
+            names.append(line)
+    return names
+
+
+def folder_games(folder: GameFolder, setup: dict | None,
+                 budget: int) -> tuple[list[Path], int]:
+    """The games of one folder, and how many other files it holds. A file
+    a .cue, .m3u or .gdi names is part of that game, not a game."""
+    row = folder.row
+    extensions = {str(ext).lower() for ext in row.get("extensions") or []}
+    if not extensions and row.get("arcade"):
+        extensions = set(ARCADE_SUFFIXES)
+    skipped = {str(item.get("name", "")).casefold()
+               for key in ("skip", "media") for item in (setup or {}).get(key) or []
+               if isinstance(item, dict) and item.get("name")}
+    games: list[Path] = []
+    others = 0
+    pending = [(folder.path, 0)]
+    while pending and len(games) < budget:
+        where, depth = pending.pop()
+        for entry in sorted(_list_dir(where), key=lambda item: item.name):
+            name = entry.name
+            lowered = name.casefold()
+            if name.startswith(".") or lowered == "map.txt" or lowered.endswith(".disabled"):
+                continue
+            if _entry_is_dir(entry):
+                if depth + 1 < GAME_FOLDER_DEPTH and lowered not in skipped:
+                    pending.append((Path(entry.path), depth + 1))
+                continue
+            game = (any(lowered.endswith(ext) for ext in extensions) if extensions
+                    else _suffix(name) not in _NOT_GAME_SUFFIXES)
+            if game:
+                games.append(Path(entry.path))
+            else:
+                others += 1
+    named: set[str] = set()
+    for game in games:
+        if _suffix(game.name) in (".cue", ".m3u", ".gdi"):
+            for listed in _listed_names(game):
+                target = Path(os.path.normpath(str(game.parent / listed)))
+                if target != game:
+                    named.add(os.path.normcase(str(target)))
+    kept = [game for game in games if os.path.normcase(str(game)) not in named]
+    return kept, others
+
+
+# --- Reading a game ----------------------------------------------------------
+
+
+class _ScanCache:
+    """What hashing a game found, kept between runs by path, size and time:
+    a second run over the same card reads nothing that has not changed."""
+
+    def __init__(self, path: Path | None) -> None:
+        self.path = path
+        self.entries: dict[str, list] = {}
+        self.seen: dict[str, list] = {}
+        self.changed = False
+        data = _read_capped(path, MAX_GAMES_SCAN_BYTES) if path is not None else None
+        if data is not None:
+            try:
+                loaded = json.loads(data.decode("utf-8"))
+            except (UnicodeDecodeError, json.JSONDecodeError):
+                loaded = {}
+            if isinstance(loaded, dict):
+                self.entries = {k: v for k, v in loaded.items()
+                                if isinstance(v, list) and len(v) == 4}
+
+    @staticmethod
+    def stamp(path: Path) -> tuple[int, int] | None:
+        try:
+            info = path.stat()
+        except OSError:
+            return None
+        return info.st_size, info.st_mtime_ns
+
+    def get(self, path: Path, stamp: tuple[int, int]) -> list | None:
+        key = str(path)
+        found = self.entries.get(key)
+        if found is not None and found[0] == stamp[0] and found[1] == stamp[1]:
+            self.seen[key] = found
+            return found
+        return None
+
+    def put(self, path: Path, stamp: tuple[int, int], crc: str | None,
+            members: list | None) -> None:
+        value = [stamp[0], stamp[1], crc, members]
+        self.seen[str(path)] = value
+        self.changed = True
+
+    def save(self) -> None:
+        if self.path is None or not self.changed:
+            return
+        # The entries of other cards stay: one cache serves every card.
+        merged = {**self.entries, **self.seen}
+        _cache_write(self.path, json.dumps(merged, separators=(",", ":")).encode("utf-8"))
+
+
+def _crc32_file(path: Path) -> str | None:
+    crc = 0
+    try:
+        with open(path, "rb") as handle:
+            for block in iter(lambda: handle.read(1024 * 1024), b""):
+                crc = zlib.crc32(block, crc)
+    except OSError:
+        return None
+    return f"{crc & 0xFFFFFFFF:08x}"
+
+
+def _zip_members(path: Path) -> list | None:
+    """Each member's crc32 and size, from the central directory alone."""
+    try:
+        with zipfile.ZipFile(path) as archive:
+            return [[f"{info.CRC:08x}", info.file_size] for info in archive.infolist()
+                    if not info.is_dir()]
+    except (OSError, zipfile.BadZipFile, ValueError):
+        return None
+
+
+class DiscImage:
+    """The bytes a header reader names in a disc image: a sector of a CD
+    image (2048-byte, or 2352-byte raw with its mode), or an offset of a
+    GameCube disc. None where the format is one this file does not read
+    (CHD, RVZ, PBP and the other compressed forms)."""
+
+    def __init__(self, path: Path) -> None:
+        self.path = path
+        self.data_path: Path | None = None
+        self.sector_size = 2048
+        self.user_offset = 0
+        self.disc_offset = 0
+        suffix = _suffix(path.name)
+        if suffix == ".m3u":
+            listed = _listed_names(path)
+            if listed:
+                first = Path(os.path.normpath(str(path.parent / listed[0])))
+                inner = DiscImage(first) if _suffix(first.name) != ".m3u" else None
+                if inner is not None:
+                    self.__dict__.update(inner.__dict__)
+            return
+        if suffix == ".cue":
+            self._cue(path)
+        elif suffix in (".iso", ".gcm"):
+            self.data_path = path
+        elif suffix == ".ciso":
+            self.data_path, self.disc_offset = path, 0x8000
+        elif suffix in (".bin", ".img"):
+            self.data_path = path
+            self._raw_mode()
+
+    def _cue(self, path: Path) -> None:
+        data = _read_capped(path, 1024 * 1024)
+        text = (data or b"").decode("utf-8", errors="replace")
+        current = None
+        for line in text.splitlines():
+            words = line.strip()
+            match = re.match(r'(?i)^FILE\s+(?:"([^"]+)"|(\S+))', words)
+            if match:
+                current = Path(os.path.normpath(str(path.parent / (match.group(1)
+                                                                    or match.group(2)))))
+                continue
+            track = re.match(r"(?i)^TRACK\s+\d+\s+(\S+)", words)
+            if track and current is not None:
+                mode = track.group(1).upper()
+                if mode == "AUDIO":
+                    continue
+                self.data_path = current
+                if mode.endswith("/2352"):
+                    self.sector_size = 2352
+                    self.user_offset = 16 if mode.startswith("MODE1") else 24
+                return
+
+    def _raw_mode(self) -> None:
+        head = self.read_raw(0, 16)
+        if head is not None and head[:12] == b"\x00" + b"\xff" * 10 + b"\x00":
+            self.sector_size = 2352
+            self.user_offset = 16 if head[15] == 1 else 24
+
+    def read_raw(self, offset: int, length: int) -> bytes | None:
+        if self.data_path is None or offset < 0:
+            return None
+        try:
+            with open(self.data_path, "rb") as handle:
+                handle.seek(offset)
+                data = handle.read(length)
+        except OSError:
+            return None
+        return data if len(data) == length else None
+
+    def read_sector(self, sector: int, offset: int, length: int) -> bytes | None:
+        """User data of one sector of a CD image, from offset."""
+        if offset + length > 2048:
+            return None
+        return self.read_raw(sector * self.sector_size + self.user_offset + offset, length)
+
+    def read_disc(self, offset: int, length: int) -> bytes | None:
+        """Bytes of a GameCube or Wii disc, in an ISO or the first block of a CISO."""
+        return self.read_raw(self.disc_offset + offset, length)
+
+    def iso_file(self, name: str, limit: int = 64 * 1024) -> bytes | None:
+        """A file of the ISO 9660 root directory, found by name."""
+        volume = self.read_sector(16, 0, 2048)
+        if volume is None or volume[1:6] != b"CD001":
+            return None
+        record = volume[156:190]
+        extent = int.from_bytes(record[2:6], "little")
+        size = int.from_bytes(record[10:14], "little")
+        wanted = name.upper().encode("ascii")
+        for sector in range(extent, extent + min((size + 2047) // 2048, 16)):
+            block = self.read_sector(sector, 0, 2048)
+            if block is None:
+                return None
+            position = 0
+            while position < 2048 and block[position]:
+                length = block[position]
+                found = block[position + 33:position + 33 + block[position + 32]]
+                if found.split(b";")[0].upper() == wanted:
+                    start = int.from_bytes(block[position + 2:position + 6], "little")
+                    count = min(int.from_bytes(block[position + 10:position + 14], "little"),
+                                limit)
+                    parts = []
+                    for index in range((count + 2047) // 2048):
+                        part = self.read_sector(start + index, 0, 2048)
+                        if part is None:
+                            return None
+                        parts.append(part)
+                    return b"".join(parts)[:count]
+                position += length
+        return None
+
+
+def _boot_name(image: DiscImage, location: dict) -> str | None:
+    """The executable SYSTEM.CNF boots (BOOT, BOOT2), as the reader takes it."""
+    data = image.iso_file(str(location.get("iso_file") or ""))
+    if data is None:
+        return None
+    key = str(location.get("key") or "BOOT")
+    for line in data.decode("ascii", errors="replace").splitlines():
+        match = re.match(rf"^\s*{re.escape(key)}\s*=\s*(\S+)", line)
+        if not match:
+            continue
+        value = match.group(1)
+        required = location.get("requires")
+        if required and not value.lower().startswith(str(required).lower()):
+            return None
+        value = re.split(r"[\\/:]", value)[-1]
+        return value.split(";")[0]
+    return None
+
+
+_INT_FORMS = {"u8": (1, "big"), "u16le": (2, "little"), "u16be": (2, "big"),
+              "u32le": (4, "little"), "u32be": (4, "big")}
+
+
+def _located(image: DiscImage | None, game: Path, location: dict) -> bytes | str | None:
+    """The bytes a reader's location names, or the text for an iso_file."""
+    length = int(location.get("length") or 0)
+    if "iso_file" in location:
+        return _boot_name(image, location) if image is not None else None
+    if location.get("container") == "gamecube-disc":
+        return image.read_disc(int(location.get("disc_offset", 0)), length) \
+            if image is not None else None
+    if "sector" in location:
+        return image.read_sector(int(location["sector"]), int(location.get("offset", 0)),
+                                 length) if image is not None else None
+    if location.get("copier_header") or location.get("relative_offsets") \
+            or set(location) - {"offset", "length", "encoding", "candidates"}:
+        # A copier header, a pointer, a partition: forms this file leaves to
+        # the core, so the reading proves nothing.
+        return None
+    offsets = location.get("candidates") or [location.get("offset", 0)]
+    reads = set()
+    for offset in offsets:
+        try:
+            with open(game, "rb") as handle:
+                handle.seek(int(offset))
+                data = handle.read(length)
+        except OSError:
+            return None
+        if len(data) != length:
+            return None
+        reads.add(data)
+    # Several places that disagree say nothing the reader could rely on.
+    return reads.pop() if len(reads) == 1 else None
+
+
+def _magic_holds(image: DiscImage | None, magic: dict | None) -> bool:
+    if not magic:
+        return True
+    if image is None:
+        return False
+    if "u32be" in magic:
+        data = image.read_disc(int(magic.get("disc_offset", 0)), 4)
+        return data is not None and int.from_bytes(data, "big") == int(magic["u32be"])
+    wanted = str(magic.get("bytes", "")).encode("latin-1")
+    data = image.read_sector(int(magic.get("sector", 0)), int(magic.get("offset", 0)),
+                             len(wanted))
+    return data == wanted
+
+
+def _decoded(reader: dict, value: bytes | str) -> frozenset | str | None:
+    """Regions a reader's value stands for, "unknown" for a value the code
+    reads as none, the serial for a serial reader, None when undecided."""
+    decode = reader.get("decode") or {}
+    kind = decode.get("kind")
+    encoding = (reader.get("location") or {}).get("encoding", "ascii")
+    if isinstance(value, bytes):
+        if encoding in _INT_FORMS:
+            size, order = _INT_FORMS[encoding]
+            number: object = int.from_bytes(value[:size], order)
+            text = ""
+        else:
+            number = None
+            text = value.decode("latin-1")
+    else:
+        number, text = None, value
+    if kind == "serial":
+        serial = text.strip().rstrip("\x00").strip()
+        return serial or None
+    values = [item for item in decode.get("values") or [] if item.get("regions")]
+    found: set[str] = set()
+    if kind == "integer" and number is not None:
+        found = {region for item in values if item.get("value") == number
+                 for region in item["regions"]}
+    elif kind == "letters":
+        found = {region for item in values if str(item.get("value")) in text
+                 for region in item["regions"]}
+    elif kind == "exact-prefix":
+        match = next((item for item in values if text.startswith(str(item.get("value")))), None)
+        found = set(match["regions"]) if match else set()
+    elif kind == "prefix-nocase":
+        match = next((item for item in values
+                      if text.lower().startswith(str(item.get("value")).lower())), None)
+        found = set(match["regions"]) if match else set()
+    elif kind == "char-at":
+        guard = decode.get("guard")
+        index = int(decode.get("index", 0))
+        if (guard and not re.match(str(guard), text)) or len(text) <= index:
+            return "unknown"
+        match = next((item for item in values if text[index] == str(item.get("value"))), None)
+        found = set(match["regions"]) if match else set()
+    else:
+        return None
+    if found:
+        return frozenset(found)
+    otherwise = decode.get("otherwise")
+    if isinstance(otherwise, list) and otherwise:
+        return frozenset(str(region) for region in otherwise)
+    return "unknown"
+
+
+def _serial_key(serial: str) -> str:
+    """A serial as the disc and the DAT both spell it once only letters and
+    digits are kept: SLPS_022.51 and SLPS 02251 are one."""
+    return re.sub(r"[^0-9A-Z]", "", serial.upper())
+
+
+class GameFacts:
+    """What one game file says: its identity and region from the catalogs,
+    each header reader's reading, the BIOS sets of an arcade set."""
+
+    def __init__(self, path: Path, shown: str, folder: GameFolder) -> None:
+        self.path = path
+        self.shown = shown
+        self.folder = folder
+        # The system whose catalog and readers read it.
+        self.system = ""
+        self.kind = "game"
+        self.recognised = False
+        self.title = ""
+        self.dat_regions: frozenset | None = None
+        self.readings: dict[str, object] = {}
+        self.read = True
+        self.parents: tuple[str, ...] = ()
+        self.devices: tuple[str, ...] = ()
+        self.reason = ""
+
+
+class SystemData:
+    """The parts of a systems/<system>.json document a scan reads, indexed."""
+
+    def __init__(self, doc: dict | None) -> None:
+        doc = doc or {}
+        identify = doc.get("identify") or {}
+        self.regions = [frozenset(str(r) for r in group)
+                        for group in identify.get("regions") or []]
+        sources = identify.get("sources") or []
+        # Redump catalogs index a disc's first data track: hashing it would
+        # read the whole disc, so a disc is known by its serial.
+        self.discs = any(source.get("source") == "redump" for source in sources)
+        self.games: dict[tuple[str, int], tuple[int, str]] = {}
+        self.sizes: set[int] = set()
+        if not self.discs:
+            for row in identify.get("games") or []:
+                if isinstance(row, list) and len(row) == 4:
+                    self.games[(str(row[0]), int(row[1]))] = (int(row[2]), str(row[3]))
+                    self.sizes.add(int(row[1]))
+        self.serials: dict[str, frozenset] = {}
+        for serial, indices in (identify.get("serials") or {}).items():
+            key = _serial_key(serial)
+            joined = frozenset(region for i in indices if 0 <= i < len(self.regions)
+                               for region in self.regions[i])
+            self.serials[key] = self.serials.get(key, frozenset()) | joined
+        headers = doc.get("headers") or {}
+        self.readers: dict[str, dict] = headers.get("readers") or {}
+        self.cores: dict[str, dict] = headers.get("cores") or {}
+        self.rules: dict[str, dict] = doc.get("region_rules") or {}
+        self.extras: list[dict] = doc.get("extras") or []
+
+    def region_of(self, index: int) -> frozenset | None:
+        if 0 <= index < len(self.regions) and self.regions[index]:
+            return self.regions[index]
+        return None
+
+
+def identity_readers(system: SystemData) -> set[str]:
+    """The readers that give a serial, which the catalog turns into a game."""
+    return {name for name, reader in system.readers.items()
+            if isinstance(reader, dict)
+            and ((reader.get("decode") or {}).get("kind") == "serial"
+                 or "iso_file" in (reader.get("location") or {}))}
+
+
+def read_game(facts: GameFacts, system_id: str, system: SystemData, readers: set[str],
+              cache: _ScanCache) -> None:
+    """Fill facts from the file: its crc32 and size (a cartridge, a ZIP's
+    members), its serial and the header readings the cores use (a disc)."""
+    path = facts.path
+    facts.system = system_id
+    suffix = _suffix(path.name)
+    stamp = cache.stamp(path)
+    if stamp is None:
+        facts.read = False
+        return
+    packed = suffix in _PACKED_SUFFIXES
+    if system.games and suffix in (".7z", ".rar", ".chd"):
+        facts.read = False
+    elif system.games:
+        cached = cache.get(path, stamp)
+        crc = members = None
+        if cached is not None:
+            crc, members = cached[2], cached[3]
+        elif suffix == ".zip":
+            members = _zip_members(path)
+            cache.put(path, stamp, crc, members)
+        elif stamp[0] in system.sizes and stamp[0] <= MAX_HASHED_GAME:
+            crc = _crc32_file(path)
+            cache.put(path, stamp, crc, members)
+        candidates = [(crc, stamp[0])] if crc else []
+        candidates += [(str(m[0]), int(m[1])) for m in members or []
+                       if isinstance(m, list) and len(m) == 2]
+        for key in candidates:
+            found = system.games.get(key)
+            if found is not None:
+                facts.recognised = True
+                facts.dat_regions = system.region_of(found[0])
+                facts.title = found[1]
+                break
+    wanted = readers | identity_readers(system)
+    if not wanted:
+        return
+    image = DiscImage(path) if system.discs else None
+    if system.discs and (image is None or image.data_path is None):
+        # A CHD, an RVZ, a PBP: read by the core, not by this file.
+        facts.read = False
+        image = None
+    for name in sorted(wanted):
+        reader = system.readers.get(name)
+        if not isinstance(reader, dict):
+            continue
+        location = reader.get("location") or {}
+        if image is None and (packed or "sector" in location or "iso_file" in location
+                              or location.get("container")):
+            # Bytes at an offset of a ZIP are not the game's.
+            facts.readings[name] = None
+            continue
+        magic = reader.get("magic")
+        if magic and not _magic_holds(image, magic):
+            facts.readings[name] = None
+            continue
+        raw = _located(image, path, location)
+        if raw is None:
+            facts.readings[name] = None
+            continue
+        decoded = _decoded(reader, raw)
+        is_serial = (reader.get("decode") or {}).get("kind") == "serial"
+        facts.readings[name] = None if is_serial else decoded
+        serial = raw if isinstance(raw, str) else decoded if is_serial else None
+        found = system.serials.get(_serial_key(serial)) if isinstance(serial, str) else None
+        if found is not None:
+            facts.recognised = True
+            facts.title = facts.title or str(serial)
+            facts.dat_regions = found or facts.dat_regions
+
+
+def core_regions(facts: GameFacts, system_id: str, system: SystemData,
+                 profile: str) -> frozenset | None:
+    """The regions a game is proven to need under one core: the catalog's
+    tag of the content matched, the region the core's own readers compute
+    from its bytes, or both when they agree. None for no proof or for two
+    proofs that disagree."""
+    if facts.system != system_id:
+        return None
+    core = system.cores.get(profile) or {}
+    header: frozenset | None = None
+    order = [name for name in core.get("order") or [] if isinstance(name, str)]
+    all_read = bool(order)
+    for name in order:
+        value = facts.readings.get(name)
+        if value is None:
+            all_read = False
+            continue
+        if isinstance(value, frozenset):
+            header = value
+            break
+    otherwise = core.get("otherwise")
+    if header is None and all_read and isinstance(otherwise, list) and otherwise:
+        header = frozenset(str(region) for region in otherwise)
+    proofs = [proof for proof in (facts.dat_regions, header) if proof]
+    if not proofs:
+        return None
+    if len(proofs) == 2 and not any(_region_comparable(a, b)
+                                    for a in proofs[0] for b in proofs[1]):
+        return None
+    return frozenset().union(*proofs)
+
+
+# Cases of games/regions.yml a proven region does not settle whatever the
+# game: device state (an option, a per-game setting) or the code itself.
+_ALWAYS_WIDE = ("always", "option", "user-state")
+
+
+def region_rule_keeps_all(rule: dict | None, games: list[GameFacts]) -> bool:
+    """Whether the core keeps every region whatever its games prove: no rule
+    read at its pin, or one of the cases games/regions.yml names (a region
+    option, an override BIOS, a fallback across regions, a disc database)."""
+    if not isinstance(rule, dict):
+        return True
+    for case in rule.get("keep_all_regions") or []:
+        if not isinstance(case, dict):
+            return True
+        name, condition = case.get("case"), case.get("condition")
+        if condition in _ALWAYS_WIDE:
+            return True
+        if name == "first-disc-region":
+            if any(_suffix(game.path.name) == ".m3u" for game in games):
+                return True
+        elif name not in ("multi-area-disc", "gamecube-unknown-region", "saturn-kr-ipl"):
+            return True
+    return False
+
+
+def needed_regions(rule: dict, proofs: list[frozenset | None]) -> frozenset | None:
+    """The regions the games of one core prove, routed as the core routes
+    them, None when one game proves none."""
+    if not proofs or any(proof is None for proof in proofs):
+        return None
+    routes = rule.get("routes") or {}
+    needed = frozenset(str(routes.get(region, region))
+                       for proof in proofs for region in proof or ())
+    wide = {str(case.get("case")) for case in rule.get("keep_all_regions") or []
+            if isinstance(case, dict)}
+    if "saturn-kr-ipl" in wide and needed & {"asia-ntsc", "south-korea"}:
+        return None
+    return needed
+
+
+def keep_regions(dests: list[str], entries: dict[str, dict], needed: frozenset,
+                 region_free: set[str]) -> list[str]:
+    """The files of a set the proven regions keep: every file with no region
+    tag, a world or region-free file, and those whose tag a needed region
+    matches. A needed region no file matches keeps the whole set."""
+
+    def regions(dest: str) -> list[str]:
+        entry = entries.get(dest) or {}
+        if Path(dest).name.casefold() in region_free:
+            return []
+        tags = [str(r) for r in entry.get("regions") or []]
+        return [] if WORLD_REGION in tags else tags
+
+    tagged = {dest: regions(dest) for dest in dests if regions(dest)}
+    for region in needed:
+        if not any(_region_comparable(region, tag) for tags in tagged.values() for tag in tags):
+            return list(dests)
+    return [dest for dest in dests
+            if dest not in tagged
+            or any(_region_comparable(region, tag) for region in needed for tag in tagged[dest])]
+
+
+class GamesPlan:
+    """What the games of a card need, and what was read to say so."""
+
+    def __init__(self, root: Path, card: bool) -> None:
+        self.root = root
+        self.card = card
+        self.games: list[GameFacts] = []
+        self.not_games = 0
+        self.support = 0
+        # Per system: folder names, game count, recognised, regions kept
+        # (empty for every region), and the cores whose sets were read.
+        self.systems: dict[str, dict] = {}
+        self.keep: set[str] = set()
+        self.required: set[str] = set()
+        self.unknown_core: list[str] = []
+        self.truncated = False
+
+    @property
+    def fallback(self) -> list[GameFacts]:
+        return [game for game in self.games if game.reason]
+
+    def where(self) -> str:
+        return "on this card" if self.card else "in this folder"
+
+    def wanted(self, required_only: bool) -> set[str]:
+        return self.required if required_only else self.keep
+
+    def apply(self, files: list[dict], omitted: list[dict],
+              required_only: bool) -> tuple[list[dict], list[dict]]:
+        """The files and omissions of the list the games need."""
+        wanted = self.wanted(required_only)
+        folded = {dest.casefold() for dest in wanted}
+        kept = [entry for entry in files if entry.get("dest") in wanted
+                or (entry.get("case_variant") and str(entry.get("dest")).casefold() in folded)]
+        systems = {system for entry in kept for system in entry_systems(entry)}
+        kept_omitted = [entry for entry in omitted
+                        if (entry.get("dest") in wanted
+                            or bool(set(entry_systems(entry)) & systems))
+                        and (entry.get("required") or not required_only)]
+        return kept, kept_omitted
+
+    def event_systems(self) -> list[dict]:
+        return [{"system": system, "folder": ", ".join(info["folders"]),
+                 "games": info["games"], "recognised": info["recognised"],
+                 "regions": sorted(info["regions"] or ())}
+                for system, info in sorted(self.systems.items())]
+
+    def event_fallback(self) -> list[dict]:
+        return [{"system": game_system(game), "folder": game.folder.path.name,
+                 "name": game.shown, "reason": game.reason} for game in self.fallback]
+
+
+def game_system(game: GameFacts) -> str:
+    systems = game.folder.row.get("systems") or []
+    return str(systems[0]) if systems else ""
+
+
+def _folder_profiles(row: dict) -> list[str | None]:
+    """The cores a folder's games may run on: its default, and each board's
+    (a card moves between boards, and is often read on a computer)."""
+    found: list[str | None] = [row.get("profile")]
+    for spec in (row.get("board_defaults") or {}).values():
+        if isinstance(spec, dict) and spec.get("profile") not in found:
+            found.append(spec.get("profile"))
+    return found
+
+
+def _folder_set_keys(row: dict, fallback: dict) -> list[str]:
+    """The fallback sets of a folder: its own and its boards', else, for a
+    folder no setup names a core for, every set of its systems."""
+    keys = list(row.get("fallback") or [])
+    for spec in (row.get("board_defaults") or {}).values():
+        if isinstance(spec, dict):
+            keys += [key for key in spec.get("fallback") or [] if key not in keys]
+    if keys or "fallback" in row:
+        return keys
+    systems = set(row.get("systems") or [])
+    return sorted(key for key in fallback.get("sets") or {}
+                  if key.split("|", 1)[0] in systems)
+
+
+def _set_rows(fallback: dict, key: str) -> tuple[list[str], set[str]]:
+    """A fallback set's destinations and those the declaring layer marks optional."""
+    table = fallback.get("files") or []
+    chosen = (fallback.get("sets") or {}).get(key) or {}
+
+    def dest(index: object) -> str | None:
+        if isinstance(index, int) and 0 <= index < len(table):
+            return str(table[index][0])
+        return None
+
+    files = [d for d in (dest(i) for i in chosen.get("files") or []) if d]
+    optional = {d for d in (dest(i) for i in chosen.get("optional") or []) if d}
+    return files, optional
+
+
+def _named_dests(names: Iterable[str], pool: Iterable[str]) -> list[str]:
+    wanted = {name.casefold() for name in names}
+    return [dest for dest in pool if Path(dest).name.casefold() in wanted]
+
+
+def plan_games(plat: str, bios_path: Path, manifest: dict, folder: Path | None = None,
+               term: Terminal | None = None, data: GamesData | None = None,
+               os_type: str = "", network: bool = True) -> GamesPlan | None:
+    """What the games of the card (or of folder) need, from install/games/.
+
+    None when the card has no rom folder this setup reads and no folder was
+    named. Raises GamesUnavailable when the index cannot be read, or does
+    not describe this list (a destination it names is not in the list).
+    """
+    data = data or GAMES
+    index = data.load_index(network)
+    fallback = data.doc("fallback", plat, network)
+    if fallback is None:
+        raise GamesUnavailable("no_sets", f"install/games/ holds no BIOS sets for {plat}")
+    setup = None
+    root = folder
+    for key in games_setups(index, plat, bios_path, os_type):
+        candidate = data.doc("setups", key, network)
+        if candidate is None:
+            continue
+        setup = setup or candidate
+        if folder is None:
+            found = games_root(candidate, bios_path)
+            if found is not None:
+                setup, root = candidate, found
+                break
+    if root is None:
+        return None
+    folders = game_folders(setup, index, root, folder is not None)
+    plan = GamesPlan(root, folder is None)
+    entries = {str(entry.get("dest")): entry for entry in manifest.get("files") or []}
+    listed = set(entries)
+    budget = MAX_GAME_FILES
+    found: list[tuple[GameFolder, list[Path]]] = []
+    for game_folder in folders:
+        games, others = folder_games(game_folder, setup, budget)
+        budget -= len(games)
+        plan.not_games += others
+        found.append((game_folder, games))
+        if budget <= 0:
+            plan.truncated = True
+            break
+    systems: dict[str, SystemData] = {}
+
+    def system_data(system: str) -> SystemData:
+        if system not in systems:
+            systems[system] = SystemData(data.doc("systems", system, network))
+        return systems[system]
+
+    arcades: dict[str, dict] = {}
+
+    def arcade_index(name: str) -> dict | None:
+        if name not in arcades:
+            doc = data.doc("arcade", name, network)
+            if doc is None:
+                arcades[name] = {}
+            else:
+                parents: dict[str, list[str]] = {}
+                for root_set, members in (doc.get("bios") or {}).items():
+                    for member in members:
+                        parents.setdefault(member, []).append(root_set)
+                devices: dict[str, list[str]] = {}
+                for device, members in (doc.get("devices") or {}).items():
+                    for member in members:
+                        devices.setdefault(member, []).append(device)
+                known = set(parents) | set(devices) | set(doc.get("no_bios") or [])
+                # FBNeo keys a console game by its driver (msx_1942): the
+                # MSX, NES and Arcade lists each hold a 1942.
+                consoles: dict[str, list[str]] = {}
+                for key in known:
+                    driver, cut, stem = key.partition("_")
+                    if cut and stem:
+                        consoles.setdefault(stem, []).append(driver)
+                arcades[name] = {
+                    "parents": parents, "devices": devices, "consoles": consoles,
+                    "plain": set(doc.get("no_bios") or []),
+                    "support": (set(doc.get("bios_sets") or []) | set(doc.get("bios") or {})
+                                | set(doc.get("devices") or {})),
+                }
+        return arcades[name] or None
+
+    cache_root = cache_folder()
+    cache = _ScanCache(cache_root / GAMES_SCAN_FILE if cache_root is not None else None)
+    total = sum(len(games) for _folder, games in found)
+    progress = {"done": 0, "evented": 0.0, "drawn": 0.0}
+    live = term is not None and term.live and not term.quiet
+
+    def step(final: bool = False) -> None:
+        now = time.monotonic()
+        if EVENTS.on and (final or now - progress["evented"] >= EVENT_PROGRESS_INTERVAL):
+            progress["evented"] = now
+            EVENTS.emit("games_reading", files_done=progress["done"], files_total=total)
+        if live and (final or now - progress["drawn"] >= 0.1):
+            progress["drawn"] = now
+            print(f"\r  read {progress['done']}/{total} games", end="", file=term.stream,
+                  flush=True)
+
+    read: list[tuple[GameFolder, list[GameFacts]]] = []
+    for game_folder, games in found:
+        row = game_folder.row
+        row_systems = [str(s) for s in row.get("systems") or []]
+        arcade = row.get("arcade") if isinstance(row.get("arcade"), str) else None
+        profiles = _folder_profiles(row)
+        if row_systems and not row.get("profile") and "fallback" not in row:
+            plan.unknown_core += [s for s in row_systems if s not in plan.unknown_core]
+        readers: set[str] = set()
+        if row_systems:
+            cores = system_data(row_systems[0]).cores
+            for profile in profiles:
+                readers |= {name for name in (cores.get(profile or "") or {}).get("order") or []
+                            if isinstance(name, str)}
+        group: list[GameFacts] = []
+        for path in games:
+            shown = os.path.relpath(path, root).replace(os.sep, "/")
+            facts = GameFacts(path, shown, game_folder)
+            progress["done"] += 1
+            if row.get("arcade"):
+                _read_arcade(facts, arcade_index(arcade) if arcade else None,
+                             _console_hints(game_folder))
+            elif row_systems:
+                read_game(facts, row_systems[0], system_data(row_systems[0]), readers, cache)
+            step()
+            if facts.kind == "support":
+                plan.support += 1
+                continue
+            plan.games.append(facts)
+            group.append(facts)
+            for system in row_systems:
+                info = plan.systems.setdefault(system, {"folders": [], "games": 0,
+                                                        "recognised": 0, "regions": None})
+                if game_folder.path.name not in info["folders"]:
+                    info["folders"].append(game_folder.path.name)
+                info["games"] += 1
+                info["recognised"] += int(facts.recognised)
+        read.append((game_folder, group))
+    if total:
+        step(final=True)
+        if live:
+            print("\r\033[K", end="", file=term.stream, flush=True)
+    cache.save()
+    for game_folder, group in read:
+        if group:
+            arcade = game_folder.row.get("arcade")
+            sets = (arcade_index(arcade) or {}).get("support", set()) \
+                if isinstance(arcade, str) else set()
+            _plan_game_folder(plan, game_folder, group, fallback, entries, system_data, sets)
+    missing = sorted((plan.keep | plan.required) - listed)
+    if missing:
+        raise GamesUnavailable("stale", "the games index does not describe this file list "
+                                        f"({missing[0]} is not in it)")
+    return plan
+
+
+# Systems whose folder an arcade core reads as arcade sets, by their bare
+# set name. Any other system's sets are console games, keyed by driver.
+_ARCADE_SYSTEMS = frozenset({"arcade", "neogeo", "snk-neogeo", "sega-naomi", "sega-naomi2",
+                             "sammy-atomiswave", "sega-stv", "cps1", "cps2", "cps3"})
+
+
+def _console_hints(folder: GameFolder) -> tuple[str, ...] | None:
+    """None for an arcade folder, else the words of its systems and its
+    name, which tell one console's driver prefix from another's."""
+    systems = [str(s) for s in folder.row.get("systems") or []]
+    if not systems or any(s in _ARCADE_SYSTEMS or s.startswith("arcade") for s in systems):
+        return None
+    words = {word for system in systems for word in system.split("-")}
+    words.add(folder.path.name.lower())
+    return tuple(sorted(words))
+
+
+def _read_arcade(facts: GameFacts, index: dict | None,
+                 console: tuple[str, ...] | None = None) -> None:
+    """An arcade set: a BIOS or device set (not a game), a game and the BIOS
+    sets its romof chain reaches, or a name the core's DAT does not hold. In
+    a console's folder (console, the words of its systems) a set is looked
+    for under the core's driver name for it (msx_1942): the bare name is an
+    arcade set's."""
+    if _suffix(facts.path.name) not in ARCADE_SUFFIXES:
+        facts.kind = "support"
+        return
+    name = os.path.splitext(facts.path.name)[0].lower()
+    if index is None:
+        facts.reason = "not_recognised"
+        return
+    if name in index["support"]:
+        facts.kind = "support"
+        return
+    keys = [name]
+    if console is not None:
+        drivers = index.get("consoles", {}).get(name, [])
+        hinted = [d for d in drivers if d in console]
+        # A prefix no word of the folder names: every console's driver of
+        # that name, so that the right one is among them.
+        keys = [f"{d}_{name}" for d in sorted(hinted or drivers)] or [name]
+    parents = {p for key in keys for p in index["parents"].get(key, ())}
+    devices = {d for key in keys for d in index["devices"].get(key, ())}
+    facts.parents, facts.devices = tuple(sorted(parents)), tuple(sorted(devices))
+    if parents or devices or any(key in index["plain"] for key in keys):
+        facts.recognised = True
+        facts.title = keys[0] if len(keys) == 1 else name
+    else:
+        facts.reason = "unknown_set"
+
+
+def _plan_game_folder(plan: GamesPlan, game_folder: GameFolder, games: list[GameFacts],
+                      fallback: dict, entries: dict[str, dict],
+                      system_data: Callable[[str], SystemData],
+                      arcade_sets: Collection[str] = ()) -> None:
+    """Add to the plan what one folder's games need. arcade_sets are the
+    BIOS and device sets of the folder's arcade index."""
+    row = game_folder.row
+    profiles = [name for name in _folder_profiles(row) if name]
+
+    def read_by_core(dest: str) -> bool:
+        cores = (entries.get(dest) or {}).get("cores")
+        return cores is None or any(name in cores for name in profiles)
+
+    if not row.get("systems"):
+        # A port's own folder, read by one core and named by no system: what
+        # that core loads.
+        named = [dest for dest, entry in entries.items()
+                 if any(name in (entry.get("cores") or []) for name in profiles)]
+        plan.keep.update(named)
+        plan.required.update(named)
+        return
+    keys = _folder_set_keys(row, fallback)
+    sets: dict[str, tuple[list[str], set[str]]] = {key: _set_rows(fallback, key) for key in keys}
+    if row.get("arcade"):
+        # A BIOS set is looked for in the whole list, as the platform's own
+        # declaration (neogeo.zip) and as the core's (fbneo/neogeo.zip).
+        usable = [dest for dest in entries if read_by_core(dest)]
+        whole = False
+        for game in games:
+            if game.reason:
+                whole = True
+                continue
+            names = set(game.parents + game.devices)
+            needed = _named_dests([f"{name}.zip" for name in names], usable)
+            held = {Path(dest).name.casefold() for dest in needed}
+            if any(f"{name}.zip".casefold() not in held for name in names):
+                game.reason = "no_parent"
+                whole = True
+                continue
+            plan.keep.update(needed)
+            plan.required.update(needed)
+        if whole:
+            # Every set of the folder, and every BIOS set the core reads.
+            own = _named_dests([f"{name}.zip" for name in arcade_sets],
+                               [dest for dest in usable
+                                if (entries.get(dest) or {}).get("cores") is not None])
+            plan.keep.update(own)
+            plan.required.update(own)
+            for files, optional in sets.values():
+                plan.keep.update(files)
+                plan.required.update(dest for dest in files if dest not in optional)
+        return
+    narrowed: dict[str, set[str]] = {}
+    wide: set[str] = set()
+    for key, (files, optional) in sets.items():
+        system, _, profile = key.partition("|")
+        info = system_data(system)
+        rule = info.rules.get(profile)
+        region_free = {str(name).casefold() for name in (rule or {}).get("region_free") or []}
+        tagged = any((entries.get(dest) or {}).get("regions") for dest in files)
+        kept = list(files)
+        if tagged and region_rule_keeps_all(rule, games):
+            wide.add(system)
+        elif tagged:
+            proofs = [core_regions(game, system, info, profile) for game in games]
+            needed = needed_regions(rule or {}, proofs)
+            if needed is None:
+                wide.add(system)
+                for game, proof in zip(games, proofs):
+                    if proof is None and not game.reason:
+                        game.reason = ("not_read" if not game.read
+                                       else "not_recognised" if not game.recognised
+                                       else "region_unknown")
+            else:
+                kept = keep_regions(files, entries, needed, region_free)
+                if len(kept) < len(files):
+                    narrowed.setdefault(system, set()).update(needed)
+                else:
+                    wide.add(system)
+        plan.keep.update(kept)
+        plan.required.update(dest for dest in kept if dest not in optional)
+        for extra in info.extras:
+            if extra.get("profile") != profile or not _extra_fires(extra, games):
+                continue
+            if extra.get("region_files"):
+                named = [dest for dest in kept if (entries.get(dest) or {}).get("regions")]
+            else:
+                names = extra.get("files") or []
+                named = _named_dests(names, files) or _named_dests(
+                    names, [dest for dest in entries if read_by_core(dest)])
+            plan.keep.update(named)
+            if extra.get("required") or extra.get("filename_override"):
+                plan.required.update(named)
+    for system, regions in narrowed.items():
+        state = plan.systems.get(system)
+        # Said only where no core of the folder keeps the other regions.
+        if state is not None and system not in wide:
+            state["regions"] = sorted(set(state["regions"] or ()) | regions)
+
+
+def _extra_fires(extra: dict, games: list[GameFacts]) -> bool:
+    """Whether a games/extras.yml entry applies to these games. A trigger on
+    header bytes this file does not read applies: the file stays."""
+    trigger = extra.get("trigger") or {}
+    if trigger.get("every_game") or trigger.get("header"):
+        return True
+    extensions = {str(ext).lower() for ext in trigger.get("extensions") or []}
+    return any(_suffix(game.path.name) in extensions for game in games)
+
+
+def games_lines(plan: GamesPlan, manifest: dict | None, every: bool = False) -> list[str]:
+    """The games read, in words: the head of the plan and of --check."""
+    count = len(plan.games)
+    if not count:
+        lines = [f"No game found {plan.where()} ({shown_path(plan.root)})."]
+        if plan.not_games:
+            lines.append(f"  {_plural(plan.not_games, 'other file')} in its game folders: "
+                         "none has an extension its system reads.")
+        return lines
+    recognised = sum(1 for game in plan.games if game.recognised)
+    lines = [f"Games {plan.where()}: {count} in {_plural(len(plan.systems), 'system')}, "
+             f"{recognised} recognised by their content ({shown_path(plan.root)})."]
+    narrowed = [f"{system_title(system, manifest)} {', '.join(map(region_title, info['regions']))}"
+                for system, info in sorted(plan.systems.items()) if info["regions"]]
+    if narrowed:
+        lines.append(f"  One region where the games prove it: {'; '.join(narrowed)}.")
+    if plan.unknown_core:
+        titles = ", ".join(system_title(system, manifest) for system in plan.unknown_core)
+        lines.append(f"  No default core is known for {titles}: the files of each of its "
+                     "cores are kept.")
+    lines += fallback_lines(plan, every)
+    if plan.truncated:
+        lines.append(f"  Read up to {MAX_GAME_FILES} files: the others are left out of the count.")
+    return lines
+
+
+def fallback_lines(plan: GamesPlan, every: bool = False) -> list[str]:
+    """The games that got every BIOS of their system, named."""
+    fallback = plan.fallback
+    if not fallback:
+        return []
+    shown = fallback if every else fallback[:3]
+    names = ", ".join(f"{game.shown} ({GAMES_REASONS.get(game.reason, game.reason)})"
+                      for game in shown)
+    more = "" if len(shown) == len(fallback) else f" and {len(fallback) - len(shown)} more"
+    their = "its" if len(fallback) == 1 else "their"
+    return [f"  {agree(len(fallback), 'game gets', 'games get')} every BIOS of {their} "
+            f"system: {names}{more}."]
+
+
+def emit_games(plat: str, plan: GamesPlan, required_only: bool) -> None:
+    EVENTS.emit("games", platform=plat, folder=str(plan.root), games=len(plan.games),
+                recognised=sum(1 for game in plan.games if game.recognised),
+                found=plan.event_systems(), fallback=plan.event_fallback(),
+                not_games=plan.not_games, required_only=required_only)
+
+
+def games_probe(plat: str, bios_path: Path, network: bool = True,
+                data: GamesData | None = None, os_type: str = "",
+                attempts: int = 2) -> int | None:
+    """How many folders of the card hold a game, read by name alone (no
+    file opened), None when it cannot be said: no rom folder near the BIOS
+    folder, or install/games/ out of reach. What makes "For the games on this
+    card" the first choice."""
+    if not _may_hold_games(bios_path):
+        return None
+    data = data or GAMES
+    try:
+        index = data.load_index(network, attempts)
+        for key in games_setups(index, plat, bios_path, os_type):
+            setup = data.doc("setups", key, network, attempts)
+            root = games_root(setup, bios_path) if setup is not None else None
+            if root is None:
+                continue
+            held = 0
+            for game_folder in game_folders(setup, index, root, False):
+                games, _others = folder_games(game_folder, setup, 1)
+                held += bool(games)
+            return held
+    except GamesUnavailable:
+        return None
+    return None
+
+
+class GamesChoice:
+    """The line menu's choice of what the games of the card need, all of it
+    or only what they cannot start without (required)."""
+
+    def __init__(self, plan: GamesPlan, required: bool = False) -> None:
+        self.plan = plan
+        self.required = required
+
+    def __eq__(self, other: object) -> bool:
+        return (isinstance(other, GamesChoice) and other.plan is self.plan
+                and other.required == self.required)
+
+    def __hash__(self) -> int:
+        return hash((id(self.plan), self.required))
+
+    def apply(self, files: list[dict], omitted: list[dict]) -> tuple[list[dict], list[dict]]:
+        return self.plan.apply(files, omitted, self.required)
+
+    def flags(self) -> list[tuple[str, str | None]]:
+        folder = None if self.plan.card else str(self.plan.root)
+        return [("--for-games", folder), *([("--required-only", None)] if self.required else [])]
+
+    def words(self) -> str:
+        """What the choice keeps, after a comma on the menu's head."""
+        named = f"for the {_plural(len(self.plan.games), 'game')} {self.plan.where()}"
+        return f"{named}, {GAMES_REQUIRED_WORDS}" if self.required else named
+
+
+def read_games(args: argparse.Namespace, plat: str, bios_path: Path, manifest: dict,
+               term: Terminal | None, os_type: str) -> GamesPlan | None:
+    """The games of the card read for this run, their lines said. None when
+    there are none to read, or what they need cannot be known: the run then
+    keeps every file, and says so where --for-games asked."""
+    asked = args.for_games is not None
+    folder = args.for_games if isinstance(args.for_games, Path) else None
+    if folder is not None:
+        folder = Path(os.path.expanduser(str(folder))).absolute()
+        if not _is_dir(folder):
+            message = f"the games folder {folder} does not exist or cannot be opened"
+            EVENTS.emit("games_unavailable", platform=plat, reason="no_folder", message=message)
+            print(f"Error: {message}.", file=sys.stderr)
+            sys.exit(1)
+    # Not asked for, a run given its list as a file looks for the games index
+    # beside it and in the cache only: one fetched now could describe another
+    # list.
+    network = asked or LOCAL.manifest is None
+    if folder is None and not asked and not games_probe(plat, bios_path, network,
+                                                       os_type=os_type):
+        return None
+    where = "on the card" if folder is None else f"in {folder}"
+    print(f"\nReading the games {where}...")
+    try:
+        plan = plan_games(plat, bios_path, manifest, folder, term, os_type=os_type,
+                          network=network)
+    except GamesUnavailable as exc:
+        if asked:
+            EVENTS.emit("games_unavailable", platform=plat, reason=exc.reason,
+                        message=exc.words)
+            print(fold_line(f"  What the games need is not known: {exc.words}. Every file "
+                            "of the list is kept."))
+        return None
+    if plan is None:
+        if asked:
+            message = (f"no games folder was found beside {shown_path(bios_path)}: name it "
+                       "with --for-games FOLDER")
+            EVENTS.emit("games_unavailable", platform=plat, reason="no_folder", message=message)
+            print(fold_line(f"  {message[0].upper()}{message[1:]}. Every file of the list "
+                            "is kept."))
+        return None
+    emit_games(plat, plan, bool(args.required_only))
+    for line in games_lines(plan, manifest, bool(args.verbose)):
+        print(fold_line(line if line.startswith("  ") else f"  {line}"))
+    return plan
 
 
 # A pack too large for one release file is published as ZIP parts
@@ -9325,6 +10940,8 @@ class LocalSources:
         self.pack: PackSource | None = None
         # The folders named with --from, read once for every platform.
         self.folders: list[FolderIndex] = []
+        # The reads at once of the files in place (--jobs).
+        self.jobs: int = 8
         # Every folder index of the run still in use, closed at its end.
         self.indexes: weakref.WeakSet[FolderIndex] = weakref.WeakSet()
         self._serves: tuple = (None, None, frozenset())
@@ -9354,6 +10971,7 @@ class LocalSources:
         self.manifest = None
         self.pack = None
         self.folders = []
+        self.jobs = 8
 
     def close_indexes(self) -> None:
         for index in list(self.indexes):
@@ -11207,6 +12825,22 @@ def build_parser() -> argparse.ArgumentParser:
              "region where a system has several",
     )
     parser.add_argument(
+        "--for-games",
+        nargs="?",
+        const=True,
+        type=Path,
+        metavar="FOLDER",
+        help="install only what the games on the card need: the systems of its "
+             "game folders, one region where a game's content proves it, an "
+             "arcade set's BIOS sets. FOLDER names a games folder (on a computer, "
+             "one subfolder per system), else the card's own beside the BIOS folder",
+    )
+    parser.add_argument(
+        "--required-only",
+        action="store_true",
+        help="with --for-games, only the files the games cannot start without",
+    )
+    parser.add_argument(
         "--no-game-data",
         action="store_true",
         help="leave out game data (files a game reads, not firmware) and "
@@ -11405,6 +13039,13 @@ def main() -> None:
         parser.error("--quiet applies to an install, not to --check, --dry-run or a listing")
     if args.tui and args.plain:
         parser.error("--tui and --plain ask for two different interfaces")
+    if args.required_only and args.for_games is None:
+        parser.error("--required-only applies to --for-games: the list alone does not "
+                     "say which files a game cannot start without")
+    if args.for_games is not None:
+        if (args.list_platforms or args.list_targets or args.list_systems
+                or args.list_cores or args.list_emulators):
+            parser.error("--for-games narrows an install, not a listing")
     if args.declared_only:
         # Applied or refused, never ignored.
         for given, reason in (
@@ -11434,10 +13075,12 @@ def main() -> None:
         alone = ("platform", "dest", "target", "every_board", "check", "list_platforms",
                  "list_targets", "standalone_copies", "emulator", "installed_cores",
                  "cores_dir", "save_dir", "system", "core", "region", "no_game_data",
-                 "declared_only", "list_systems",
+                 "declared_only", "list_systems", "required_only",
                  "list_cores", "romm_firmware", "list_emulators", "events", "quiet",
                  "yes", "verbose", "from_pack", "manifest", "from", "add_app")
         given = [name for name in alone if getattr(args, name)]
+        if args.for_games is not None:
+            given.append("for_games")
         if args.jobs != 8:
             given.append("jobs")
         if given:
@@ -11496,7 +13139,7 @@ def main() -> None:
         # unset or dumb said nothing (tui_audit_12 P3-14).
         said = line_mode_reason(blocker)
         if said:
-            print(said)
+            print(fold_line(said))
     if args.events:
         # The events own stdout. The text a person reads goes to stderr, so a
         # program never has to tell one from the other.
@@ -11559,6 +13202,8 @@ def _open_local_sources(args: argparse.Namespace) -> None:
     """Take the file list and the pack this run was given, and the platform
     they are for when none is named."""
     LOCAL.reset()
+    LOCAL.jobs = getattr(args, "jobs", 8) or 8
+    SAID_FAILED.clear()
     _open_from_folders(getattr(args, "from", None) or [])
     if args.manifest is not None:
         LOCAL.manifest = args.manifest
@@ -11865,9 +13510,10 @@ def _card_rules() -> list[_OsRule]:
             rules.append(rule._replace(
                 values=tuple(value[len(mount):] for value in rule.values),
                 bios=rule.bios[len(mount):], configs=()))
-    # The games part of a system whose own list is written below it: its
-    # files name the card as surely as Onion's .tmp_update (games_part).
-    rules += [rule for rule in _GAMES_PART_RULES if rule.name in _GAMES_PART_CARDS]
+    # The games part of a handheld system: the files it writes there name
+    # the card as surely as Onion's .tmp_update (games_part), ArkOS's as
+    # AmberELEC's (tui_audit_17 P2-3).
+    rules += list(_GAMES_PART_RULES)
     return rules
 
 
@@ -12121,8 +13767,12 @@ def card_setups() -> list[CardSetup]:
         below = next((rule.bios[len(_card_mount(rule.bios)):] for rule in _EMBEDDED_RULES
                       if rule.name == name and rule.bios and _card_mount(rule.bios)), "")
         if below:
-            setups.append(CardSetup(name, "retroarch", below,
-                                    tuple(rule for rule in rules if rule.name == name)))
+            own = tuple(rule for rule in rules if rule.name in (name, _built_on(name)))
+            # Told by the games part alone, as AmberELEC's: a card that holds
+            # none of it yet is taken as named, said so (tui_audit_17 P2-3).
+            setups.append(CardSetup(name, "retroarch", below, own,
+                                    bool(own) and all(rule.method == "games_part"
+                                                      for rule in own)))
     return setups
 
 
@@ -12191,7 +13841,8 @@ def _card_is(setup: CardSetup, card: Path, above: bool = False) -> tuple[str, st
     if family:
         return ("own" if setup.plat in CARD_PLATFORMS else "other"), display_name(family)
     names = sorted({rule.name for rule in _card_matches(card, above)})
-    if setup.name in names:
+    if setup.name in names or _built_on(setup.name) in names:
+        # dArkOS writes ArkOS's games part: an ArkOS card is its own.
         return "own", setup.name
     share = share_drive(card)
     if not names and share and not (share == "batocera" and setup.name == "KNULLI"):
@@ -12202,6 +13853,11 @@ def _card_is(setup: CardSetup, card: Path, above: bool = False) -> tuple[str, st
     return ("other", " and ".join(names)) if names else ("unknown", "")
 
 
+def _built_on(name: str) -> str:
+    """The system name is built on (dArkOS on ArkOS), "" for none."""
+    return next((rule.base for rule in _EMBEDDED_RULES if rule.name == name and rule.base), "")
+
+
 def _not_the_card(setup: CardSetup, folder: Path, card: Path, other: str) -> CardChoice:
     """folder refused for setup: card, its root, is another system's card
     (other names it) or names no system at all. The detail names what is
@@ -12210,9 +13866,15 @@ def _not_the_card(setup: CardSetup, folder: Path, card: Path, other: str) -> Car
     marker = (CARD_MARKER if setup.plat in CARD_PLATFORMS
               else setup.rules[0].values[0].split("/")[0] if setup.rules else "")
     detail = f"{name} keeps {marker} at the root of its card" if marker else ""
-    if setup.name in _GAMES_PART_CARDS and setup.rules:
-        held = _names_and([value.split("/")[0] for value in setup.rules[0].values])
-        detail = f"{name} keeps {held} beside bios on the games part of its card"
+    games = [rule for rule in setup.rules if rule.method == "games_part"]
+    if games:
+        # The file the rule reads, never its first folder: AmberELEC's card
+        # holds a bezels folder too, and EmuELEC's refusal named it as the
+        # mark of an EmuELEC card (code_audit_24 P3-7).
+        held = " or ".join(dict.fromkeys(_names_and(list(rule.values)) for rule in games))
+        where = ("on the games part of its card" if setup.name in _GAMES_PART_CARDS
+                 else "on its card")
+        detail = f"{name} keeps {held} beside bios {where}"
     if " and " in other:
         return CardChoice(setup.plat, folder, refused=f"{shown} holds the files of {other}, "
                           f"not of {name}", detail=detail,
@@ -12734,6 +14396,9 @@ def _output_kind(stream: TextIO) -> str:
 def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
     """One run of the installer, once the options are read."""
     KEPT.reset()
+    # A namespace built by a caller that predates --for-games has neither.
+    args.for_games = getattr(args, "for_games", None)
+    args.required_only = getattr(args, "required_only", False)
     term = Terminal(real_stdout, quiet=args.quiet)
     interactive = sys.stdin.isatty() and not args.no_input and not args.quiet
     listing = (args.list_targets or args.list_systems or args.list_cores
@@ -12813,7 +14478,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             platforms = matched
             offer = getattr(args, "platform_from_list", False)
             for name, path in matched:
-                print(f"  Found {found_label(name, path)}")
+                print(fold_line(f"  Found {found_label(name, path)}"))
         elif listing:
             # A listing reads the manifest and writes nothing: no folder is
             # needed, and asking BizHawk's for one refused a question asked
@@ -12831,7 +14496,6 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             # RetroArch first, as the screen offers them. Its folder question
             # alone left ArkOS, muOS and JELOS out of reach (tui_audit_11 P1-2).
             print(f"  {display_name(args.platform)} was not found here.")
-            say_unnamed_cards()
             platforms = _prompt_manual_platform(
                 os_type, not (args.check or args.dry_run or args.yes), True,
                 f"Which setup is the {display_name(args.platform)} list for?", setups, mounted)
@@ -12840,7 +14504,6 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             # filled with a card mounted in the reader, and with nothing
             # found here, without a question.
             print(f"  {display_name(args.platform)} was not found here.")
-            say_unnamed_cards()
             platforms = [(args.platform, ask_platform_folder(
                 os_type, args.platform, not (args.check or args.dry_run or args.yes)))]
         elif getattr(args, "platform_from_list", False):
@@ -12938,9 +14601,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         if not platforms:
             # The screen's words where a person answers: "platform" was said
             # nowhere else.
-            unnamed = unnamed_cards() if interactive and not listing else []
-            print(f"  {unnamed_card_words(unnamed)}"
-                  if unnamed else "  Nothing was found here." if interactive and not listing
+            print("  Nothing was found here." if interactive and not listing
                   else "  No supported platform detected.")
             EVENTS.emit("detect", os=os_type, os_name=_os_name(), platforms=[])
             # Standalone emulators read their BIOS from folders of their own,
@@ -12971,7 +14632,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             offer = False
         else:
             for name, path in platforms:
-                print(f"  Found {found_label(name, path)}")
+                print(fold_line(f"  Found {found_label(name, path)}"))
 
     if len(platforms) > 1 and not interactive and not listing:
         # A run without questions installs for one setup, the one a person
@@ -13236,6 +14897,25 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         display = display_name(plat_name, manifest)
         files, unplaced = place_save_entries(
             files, bios_path, manifest, args.save_dir, display, say=False)
+        # The games of the card, read before the choices: where it holds
+        # some, what they need is the menu's first choice, and --for-games
+        # narrows the list here, before the systems are counted.
+        will_ask = interactive and not args.check and not listing
+        games_plan = None
+        if args.for_games is not None or (will_ask and not (
+                args.installed_cores or args.no_game_data or LOCAL.pack is not None)):
+            games_plan = read_games(args, plat_name, bios_path, manifest, term, os_type)
+        games_applied = False
+        # Given with --system, --core or --region, the games narrow first and
+        # those choose among what they keep, as the screen's ticks do.
+        if games_plan is not None and (not will_ask or args.system or args.core or args.region
+                                       or args.emulator or args.declared_only):
+            files, omitted_files = games_plan.apply(files, omitted_files, args.required_only)
+            unplaced = games_plan.apply([], unplaced, args.required_only)[1]
+            games_applied = True
+            print(f"  For the games: {_plural(len(files), 'file')} of the list"
+                  + (f", {GAMES_REQUIRED_WORDS}" if args.required_only else ""))
+            version_notes += [line.strip() for line in fallback_lines(games_plan)]
         # --no-game-data leaves the game data out once the list is narrowed
         # to the choice: taken out first, its line named the 5099 game data
         # files of every system under a run for the PlayStation alone
@@ -13252,9 +14932,15 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
         # systems: the screen reads it from this event.
         EVENTS.emit("choices", platform=plat_name, systems=choosable_systems(
             bare, bare_omitted, *(selection[1:] if selection else ())))
+        kept_dests = {entry.get("dest") for entry in files}
+        EVENTS.emit("set_aside", platform=plat_name, dests=[
+            entry.get("dest") for entry in manifest.get("files") or []
+            if entry.get("dest") not in kept_dests])
         # What declining the size question points back at, when it was asked.
         smaller = ""
         given = selection
+        if games_plan is not None and not games_applied and args.for_games is not None:
+            given = GamesChoice(games_plan, args.required_only)
         # g at the menu: whether it left the game data out.
         cut: list[bool] | None = None
         menu = interactive and not args.check and not listing
@@ -13290,8 +14976,10 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                      or len(files) + game_data_cut + len(unplaced) != listed),
                 command_for, cut,
                 game_data_only_words([system_title(system, manifest) for system in
-                                      game_data_only(given[0] if given else [], files)])
+                                      game_data_only(given[0] if isinstance(given, tuple)
+                                                     else [], files)])
                 if args.no_game_data else "",
+                None if games_applied else games_plan,
             )
             if selection is None and LOCAL.pack is not None:
                 smaller = "  Nothing copied."
@@ -13306,8 +14994,22 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
                 files, omitted_files = whole_installed
                 _INVOCATION.chosen[plat_name] = chosen_flags(INSTALLED_ONLY)
                 selection = None
+            elif isinstance(selection, GamesChoice):
+                files, omitted_files = selection.apply(files, omitted_files)
+                unplaced = selection.apply([], unplaced)[1]
+                games_applied = True
+                version_notes += [line.strip() for line in fallback_lines(selection.plan)]
+                if selection != given:
+                    _INVOCATION.chosen[plat_name] = chosen_flags(selection)
+                else:
+                    _INVOCATION.chosen.pop(plat_name, None)
+                selection = None
             elif selection is not None and selection != given:
                 _INVOCATION.chosen[plat_name] = chosen_flags(selection)
+            elif selection is None and isinstance(given, GamesChoice):
+                # Everything, where --for-games was given: the command
+                # without it makes the same choice.
+                _INVOCATION.chosen[plat_name] = []
             else:
                 _INVOCATION.chosen.pop(plat_name, None)
         if selection is not None:
@@ -13350,6 +15052,7 @@ def _install(args: argparse.Namespace, real_stdout: TextIO) -> None:
             target or args.system or args.core or args.region or args.installed_cores
             or args.declared_only or len(files) + game_data_cut + len(unplaced)
             != len(manifest.get("files", [])) + len(variants if case_kept else [])
+            or games_applied
         )
         data_dirs = select_data_directories(manifest, files, narrowed)
         # The kinds as the plan and the menu head say them (parts_words),
@@ -14529,9 +16232,9 @@ def _folded(text: str) -> str:
 
 # What a check run tells the screen, kept whole when Choose systems widens a
 # --system plan: Back with the same ticks gives that plan back.
-_CHECK_FIELDS = ("check", "files", "systems", "choices", "found", "scanned", "unreadable",
-                 "saves", "check_summary", "checked_flags", "cli_systems", "facts", "ticked",
-                 "version", "checked_dests")
+_CHECK_FIELDS = ("check", "files", "systems", "choices", "set_aside", "found", "scanned",
+                 "unreadable", "saves", "check_summary", "checked_flags", "cli_systems",
+                 "facts", "ticked", "version", "checked_dests", "games", "games_unavailable")
 
 
 class TuiState:
@@ -14565,9 +16268,6 @@ class TuiState:
         # (platform, folder) of the setups that are a card in a reader, not
         # this machine: a setup chosen for that system asks for its card.
         self.mounted_setups: set = set()
-        # The mounted drives that are a handheld's card no file names
-        # (unnamed_cards): their bios folder comes first at Which folder?.
-        self.unnamed: list = []
         self.notes: list = []
         # The folders detection could not look in, one line each.
         self.refused: list = []
@@ -14671,6 +16371,15 @@ class TuiState:
         self.check: dict | None = None
         # The systems the check's list lets one choose among (choices event).
         self.choices: list | None = None
+        # The install's error event when its BIOS folder could not be made.
+        self.dest_error: dict | None = None
+        # The dests the check set aside before any choice (the set_aside
+        # event), None before it says: Cores chooses among the rest.
+        self.set_aside: set | None = None
+        # The run's file list and the Cores rows' sizes, kept while the
+        # list, the set aside files and the game data choice stay.
+        self.run_files_cache: tuple | None = None
+        self.core_sizes_cache: tuple | None = None
         self.files: list = []
         # Every destination the check named, in place or not: the second
         # spellings a folder that keeps case installs are among them.
@@ -14740,6 +16449,23 @@ class TuiState:
         self.app_running: bool = False
         self.card_for: Path | None = None
         self.card: CardApp | None = None
+        # The games on the card (--for-games): None until a look at the card
+        # or the user decides, then whether the runs read them. games_choice
+        # says who decided: "probe", "user" or "cli".
+        self.for_games: bool | None = None
+        self.games_choice: str = ""
+        # A games folder named with --for-games FOLDER.
+        self.games_folder: Path | None = None
+        self.required_only: bool = False
+        # The (platform, folder) the card was looked at for, and how many of
+        # its folders hold a game.
+        self.games_probed: tuple | None = None
+        self.games_here: int = 0
+        # The check's games event, its reading progress, and why what the
+        # games need could not be read.
+        self.games: dict | None = None
+        self.games_reading: tuple | None = None
+        self.games_unavailable: dict | None = None
 
     @property
     def screen(self) -> str:
@@ -15170,18 +16896,26 @@ def tui_wants_mouse(state: TuiState, lines: list[str]) -> bool:
     return not any(getattr(line, "command", False) for line in lines)
 
 
-def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
-    """The options that carry the choices made on screen, CLI ones included."""
-    flags = list(state.passthrough)
+def _tui_system_flags(state: TuiState) -> list[tuple[str, str | None]]:
+    """The --system the screen's ticks stand for."""
     needed = {row["system"] for row in state.systems
               if row["missing"] + row["wrong_hash"] > 0}
     if state.systems and not needed <= state.ticked:
-        flags += [("--system", name) for name in sorted(state.ticked)]
-    else:
-        flags += [("--system", name) for name in state.cli_systems]
-    flags += [("--core", name) for name in state.cores]
+        return [("--system", name) for name in sorted(state.ticked)]
+    return [("--system", name) for name in state.cli_systems]
+
+
+def tui_flags(state: TuiState) -> list[tuple[str, str | None]]:
+    """The options that carry the choices made on screen, CLI ones included."""
+    flags = list(state.passthrough)
+    flags += _tui_system_flags(state)
+    flags += [("--core", name) for name in tui_core_flags(state)]
     if state.regions:
         flags.append(("--region", ",".join(state.regions)))
+    if state.for_games:
+        flags.append(("--for-games", str(state.games_folder) if state.games_folder else None))
+        if state.required_only:
+            flags.append(("--required-only", None))
     if state.no_game_data:
         flags.append(("--no-game-data", None))
     if state.installed_only and not any(flag == "--cores-dir" for flag, _v in flags):
@@ -15292,7 +17026,7 @@ class TuiRow(NamedTuple):
 
 
 # Screens that scroll text instead of listing rows.
-_PAGERS = ("preview", "command", "result", "misplaced", "unreadable")
+_PAGERS = ("preview", "command", "result", "misplaced", "unreadable", "games")
 _CHECKLISTS = ("systems", "cores")
 
 
@@ -15369,10 +17103,27 @@ def region_title(name: str) -> str:
         word.capitalize() for word in name.split("-"))
 
 
-def tui_choices(state: TuiState) -> dict[str, list[str]]:
-    """What the file list lets one narrow to, read from the list itself."""
+def tui_run_files(state: TuiState) -> tuple[list[dict], list[dict]]:
+    """The files and omissions the run chooses among, as the check counted
+    them: the list without what it set aside before any choice (the save
+    entries of a save directory it cannot place), the game data left out
+    when the plan leaves it out. Line mode chooses among the same (bare)."""
     manifest = state.manifest or {}
-    return available_choices(manifest.get("files", []), manifest.get("omitted_files", []))
+    key = (id(state.manifest), frozenset(state.set_aside or ()), state.no_game_data)
+    if state.run_files_cache is not None and state.run_files_cache[0] == key:
+        return state.run_files_cache[1]
+    aside = state.set_aside or set()
+    files = [entry for entry in manifest.get("files") or [] if entry.get("dest") not in aside]
+    omitted = list(manifest.get("omitted_files") or [])
+    if state.no_game_data:
+        files, omitted = leave_out_game_data(files, omitted)[:2]
+    state.run_files_cache = (key, (files, omitted))
+    return files, omitted
+
+
+def tui_choices(state: TuiState) -> dict[str, list[str]]:
+    """What the run lets one narrow to, read from the files it chooses among."""
+    return available_choices(*tui_run_files(state))
 
 
 def core_ticked(state: TuiState, name: str) -> bool:
@@ -15383,26 +17134,85 @@ def core_ticked(state: TuiState, name: str) -> bool:
 
 def _core_base(state: TuiState) -> list[str]:
     """The cores a choice on Cores is made among: those of the systems
-    chosen, every core of the list else."""
-    every = tui_choices(state)["cores"]
-    theirs = _chosen_cores(state)
-    return every if theirs is None else [name for name in every if name in theirs]
+    chosen, every core the run accepts else (choosable_cores, as line
+    mode counts them)."""
+    return choosable_cores(*tui_run_files(state), _tui_systems_chosen(state))
+
+
+def tui_cores_ticked(state: TuiState) -> int:
+    """The cores of the systems chosen that are ticked: a core of another
+    system ticked counted toward "all cores" (code_audit_24 P3-2)."""
+    base = _core_base(state)
+    if not state.cores:
+        return 0 if state.no_cores else len(base)
+    return len(set(state.cores) & set(base))
+
+
+def tui_core_flags(state: TuiState) -> list[str]:
+    """The --core the run is given: the cores ticked, none when every core
+    of the systems chosen is (the run keeps the same files)."""
+    if not state.cores or set(_core_base(state)) <= set(state.cores):
+        return []
+    return list(state.cores)
+
+
+def _core_right(size: str | None) -> str:
+    """A Cores row's right-hand text: what the core adds, or that it adds
+    nothing (line mode's NO_CORE_FILES, in the room of a row)."""
+    return size if size and size != NO_CORE_FILES else "no extra file"
+
+
+def _core_narrow(size: str | None) -> tuple:
+    if not size or size == NO_CORE_FILES:
+        return ("none",)
+    return tuple(form for form in [re.sub(r"^\d+ files?, ", "", size)] if form != size)
+
+
+def tui_core_sizes(state: TuiState) -> dict[str, str]:
+    """What each core adds for the systems chosen, in line mode's words."""
+    systems = _tui_systems_chosen(state)
+    files = tui_run_files(state)
+    key = (id(files), tuple(systems))
+    if state.core_sizes_cache is not None and state.core_sizes_cache[0] == key:
+        return state.core_sizes_cache[1]
+    kept = narrow(*files, systems, [], [])[0] if systems else files[0]
+    extra = [entry for entry in kept if entry.get("cores") is not None]
+    by_core: dict[str, list[dict]] = {}
+    for entry in extra:
+        for copy in [entry, *entry.get("alternatives", []), *entry.get("slot_choices", [])]:
+            for core in copy.get("cores") or []:
+                listed = by_core.setdefault(core, [])
+                if not listed or listed[-1] is not entry:
+                    listed.append(entry)
+    sizes = {core: _core_sized(core_files(held, core))
+             for core, held in by_core.items()}
+    state.core_sizes_cache = (key, sizes)
+    return sizes
 
 
 def cores_words(chosen: int, total: int) -> str:
     """The cores a run keeps, as the plan, Options and line mode say it:
     all cores, or 3 of 12 cores."""
-    return "all cores" if not chosen or chosen >= total else f"{chosen} of {total} cores"
+    return "all cores" if chosen >= total else f"{chosen} of {total} cores"
+
+
+def core_count_words(cores: list[str], base: list[str]) -> str:
+    """cores_words for the cores named out of those the systems chosen
+    offer: a core of another system counted toward "all cores", the run
+    keeping none of the system's own (code_audit_24 P3-2)."""
+    return cores_words(len(set(cores) & set(base)), len(base))
+
+
+def _tui_systems_chosen(state: TuiState) -> list[str]:
+    """The systems the run is narrowed to, [] for every system."""
+    return [value for _flag, value in _tui_system_flags(state) if value]
 
 
 def _chosen_cores(state: TuiState) -> set[str] | None:
-    """The cores the files of the systems chosen name, None when every
-    system is chosen."""
-    systems = [value for flag, value in tui_flags(state) if flag == "--system" and value]
-    if not systems:
+    """The cores of the systems chosen, None when every system is chosen."""
+    if not _tui_systems_chosen(state):
         return None
-    files = narrow((state.manifest or {}).get("files") or [], [], systems, [], [])[0]
-    return set(available_choices(files, [])["cores"])
+    return set(_core_base(state))
 
 
 def tui_systems(state: TuiState) -> list[str]:
@@ -15451,14 +17261,6 @@ def tui_rows(state: TuiState) -> list[TuiRow]:
                        value=folder)
                 for label, folder in folder_drives(state.os_type, state.platform,
                                                    state.folder_kind == "usual")]
-            cards = {mount / "bios" for mount in state.unnamed}
-            if state.folder_kind == "usual" and any(row.value in cards for row in drives):
-                # A handheld's card in the reader, no setup found here: the
-                # card first, under A (tui_audit_14 P2-3).
-                first = [row for row in drives if row.value in cards]
-                return first + rows + [TuiRow("browse", "Browse for a folder"),
-                                       TuiRow("type", "Type a path")] + [
-                    row for row in drives if row not in first]
             return rows + [TuiRow("browse", "Browse for a folder"),
                            TuiRow("type", "Type a path")] + drives
         # Only the cards whose own files say they run the system: A on the
@@ -15512,27 +17314,35 @@ def tui_rows(state: TuiState) -> list[TuiRow]:
         order += [name for name in [*state.regions, *known] if name not in order]
         ranks = {name: str(rank) for rank, name in enumerate(state.regions, 1)}
         return [TuiRow("region", f"[{ranks.get(name, ' ')}] {region_title(name)}", value=name)
-                for name in order]
+                for name in order] + _REGIONS_END
     if screen == "cores":
         needle = state.filters.get(screen, "")
+        # The cores the run accepts (choosable_cores): the whole list's
+        # 189 held 8 that read only the save directory the run set aside,
+        # and an untick sent them to a run that refused them (tui_audit_17
+        # P1-1).
         every = tui_choices(state)["cores"]
         theirs = _chosen_cores(state)
         # The cores of the systems chosen first, the others behind a row:
         # with --system sony-playstation the list opened on a5200 and
-        # amiberry, 189 cores long (tui_audit_13 P3-12). A core ticked
-        # stays in view.
+        # amiberry, 189 cores long (tui_audit_13 P3-12). A core the command
+        # line named stays in view.
         shown = every if theirs is None or state.cores_all else [
-            name for name in every if name in theirs or name in state.cores]
+            name for name in every if name in theirs or name in state.cli_cores]
+        sizes = tui_core_sizes(state)
         # Every core ticked when no core narrows the run, as Choose systems
         # ticks every system: all boxes empty read as nothing chosen, and
-        # the owner ticked each one by hand.
-        rows = [TuiRow("all", "All"), TuiRow("none", "None"), _filter_row(state)] + [
-            TuiRow("core", f"[{'x' if core_ticked(state, name) else ' '}] {name}", value=name)
+        # the owner ticked each one by hand. Each with what it adds, as
+        # line mode sizes it (tui_audit_17 P3-2).
+        rows = [_filter_row(state)] + [
+            TuiRow("core", f"[{'x' if core_ticked(state, name) else ' '}] {name}",
+                   _core_right(sizes.get(name)), name, "" if sizes.get(name) else "dim",
+                   _core_narrow(sizes.get(name)), keep_right=bool(sizes.get(name)))
             for name in shown if _matches(name, needle)]
         hidden = len(every) - len(shown)
         if hidden:
             rows.append(TuiRow("morecores", f"Cores of the other systems: {hidden}"))
-        return rows
+        return rows + _CHECKLIST_END
     if screen == "confirm":
         if state.running or state.dry is None:
             return []
@@ -15599,7 +17409,7 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
         return rows + ([game_data] if game_data is not None else []) + [
             TuiRow("options", "Options"), TuiRow("quit", "Quit")]
     if not (_needed(check) if check else 0) and not check.get("data_missing"):
-        return [TuiRow("close", "Close"), TuiRow("options", "Options")]
+        return [TuiRow("close", "Close"), *_games_rows(state), TuiRow("options", "Options")]
     # The size the pack can give: "Install 6.6 GB" from a pack holding
     # none of the files (tui_audit_13 P3-8).
     lacking = set(_tui_pack_lacks(state, [event["dest"] for event in state.files]))
@@ -15640,6 +17450,9 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
         # in focus. Choose systems was, whose systems need the internet
         # too (tui_audit_11 P3-8).
         rows.append(copy)
+    # Right under Install: the choice the plan opened on, the whole list one
+    # press away.
+    rows += _games_rows(state)
     if "systems" in recorded_axes((state.manifest or {}).get("files", [])) and (
             len(state.systems) > 1 or state.cli_systems):
         rows.append(TuiRow("systems", TUI_SYSTEMS_ROW))
@@ -15653,6 +17466,73 @@ def _plan_rows(state: TuiState) -> list[TuiRow]:
     if state.unreadable:
         rows.append(TuiRow("unreadable", "Show the files that could not be read"))
     return rows + [TuiRow("options", "Options"), TuiRow("quit", "Quit")]
+
+
+def games_where(state: TuiState) -> str:
+    """Where the games are, as the plan's rows say it."""
+    return f"in {state.games_folder.name}" if state.games_folder else "on this card"
+
+
+def _games_rows(state: TuiState) -> list[TuiRow]:
+    """The plan's games rows, for a card that holds games or a run told to
+    read them: one press for every file instead, one for only what starts,
+    and the games themselves."""
+    if not (state.for_games or state.games_here):
+        return []
+    games = state.games or {}
+    count = games.get("games") if state.for_games else None
+    rows = [TuiRow("games", f"For the games {games_where(state)}: {_yes(bool(state.for_games))}",
+                   _plural(count, "game") if count else "", narrow=(str(count),) if count else ())]
+    if state.for_games and count:
+        rows.append(TuiRow("startonly", f"Only what starts: {_yes(state.required_only)}"))
+    if state.for_games and count:
+        rows.append(TuiRow("gameslist", "Show the games"))
+    return rows
+
+
+def games_pager_lines(state: TuiState) -> list[str]:
+    """The games read, per system, then those that got every BIOS of their
+    system with why: the screen behind Show the games."""
+    games = state.games or {}
+    lines = [f"{games.get('games', 0)} games in {games.get('folder', '')}, "
+             f"{games.get('recognised', 0)} recognised by their content.", ""]
+    for row in games.get("found") or []:
+        title = system_title(str(row.get("system")), state.manifest)
+        regions = ", ".join(region_title(str(r)) for r in row.get("regions") or [])
+        lines.append(f"{title} ({row.get('folder')}): {_plural(int(row.get('games', 0)), 'game')}"
+                     f", {row.get('recognised', 0)} recognised"
+                     + (f", {regions} only" if regions else ", every region"))
+    fallback = games.get("fallback") or []
+    if fallback:
+        lines += ["", "Every BIOS of their system kept, so that they start:"]
+        lines += [f"{item.get('name')}: {GAMES_REASONS.get(str(item.get('reason')), '')}"
+                  for item in fallback]
+    return lines
+
+
+def games_plan_words(state: TuiState) -> list[str]:
+    """What the plan says of the games, under the counts."""
+    if not state.for_games:
+        return []
+    if state.games_unavailable:
+        return [f"What the games need is not known: {state.games_unavailable['message']}. "
+                "Every file is kept."]
+    games = state.games or {}
+    if not games:
+        return []
+    if not games.get("games"):
+        return [f"No game found {games_where(state)}: For the games installs nothing."]
+    words = []
+    narrowed = [f"{system_title(str(row['system']), state.manifest)} "
+                f"{', '.join(region_title(str(r)) for r in row['regions'])}"
+                for row in games.get("found") or [] if row.get("regions")]
+    if narrowed:
+        words.append(f"One region where the games prove it: {'; '.join(narrowed)}.")
+    fallback = len(games.get("fallback") or [])
+    if fallback:
+        words.append(f"{agree(fallback, 'game gets', 'games get')} every BIOS of "
+                     f"{'its' if fallback == 1 else 'their'} system: Show the games.")
+    return words
 
 
 def _tui_categories(state: TuiState) -> dict[str, str]:
@@ -15777,7 +17657,7 @@ def _short_of_space(state: TuiState, check: dict) -> bool:
 def _system_rows(state: TuiState) -> list[TuiRow]:
     needle = state.filters.get("systems", "")
     titles = _system_titles(state)
-    rows = [TuiRow("all", "All"), TuiRow("none", "None"), _filter_row(state)]
+    rows = [_filter_row(state)]
     shared = _shared_needed(state)
     for row in _sorted_systems(state):
         label = _tui_system_label(row, titles)
@@ -15805,7 +17685,22 @@ def _system_rows(state: TuiState) -> list[TuiRow]:
         # beside a total of 2.7 KB. The name is cut instead.
         rows.append(TuiRow("system", f"{box} {label}", right, row["system"],
                            "" if need else "dim", narrow, keep_right=bool(need)))
-    return rows
+    return rows + _CHECKLIST_END
+
+
+# The rows a list of ticks ends on, the same on Choose systems, Cores and
+# Preferred regions: below the items, so the focus a list opens on is its
+# first item and A there ticks it. All and None sat above the items, and A
+# on the None the systems opened on unticked every system (tui_audit_17
+# P3-1). Preferred regions has no All: every region ranked in the order
+# drawn is no choice anyone made, and none ticked keeps every region.
+_CHECKLIST_END = [TuiRow("all", "All"), TuiRow("none", "None"), TuiRow("done", "Done")]
+_REGIONS_END = [TuiRow("none", "None"), TuiRow("done", "Done")]
+
+
+def _first_item(state: TuiState) -> int:
+    """The row a list of ticks opens on: its first item."""
+    return next((i for i, row in enumerate(tui_rows(state)) if row.action in TUI_TICK_ROWS), 0)
 
 
 def _shared_needed(state: TuiState) -> dict[str, tuple[int, int]]:
@@ -15851,10 +17746,12 @@ def _option_rows(state: TuiState) -> list[TuiRow]:
         rows.append(TuiRow("installed", f"Installed cores only: "
                            f"{_yes(state.installed_only)} ({found} found)",
                            "--installed-cores"))
-    if choices["cores"]:
-        # The plan's words, the noun left to the row's own label.
+    if len(choices["cores"]) > 1:
+        # The plan's words, the noun left to the row's own label. A list
+        # with one core asks nothing, as line mode does not (tui_audit_17
+        # P3-3).
         rows.append(TuiRow("cores", "Cores: " + cores_words(
-            len(state.cores), len(_core_base(state))).replace(" cores", ""), "--core"))
+            tui_cores_ticked(state), len(_core_base(state))).replace(" cores", ""), "--core"))
     copied = ", ".join(str(folder) for folder in state.from_folders) or "none"
     if manifest.get("save_directory"):
         # The interface said "Name it with --save-dir" and had no row for it.
@@ -15864,8 +17761,12 @@ def _option_rows(state: TuiState) -> list[TuiRow]:
         # From a pack, or offline, nothing is downloaded (tui_audit_11 P3-16).
         rows.append(TuiRow("jobs", f"Parallel downloads: {state.jobs}", "--jobs"))
     rows += [
-        TuiRow("folder", f"BIOS folder: {_short_path(state.dest, state.home)}", "--dest",
-               style="path"),
+        # The plan's folder: AmberELEC's read the games part here and its
+        # bios folder on the plan, two values under one name (tui_audit_17
+        # P3-6). --dest stays the games part, as the command line takes it.
+        TuiRow("folder", "BIOS folder: "
+               + _short_path(_plan_folder(state, state.dest), state.home),
+               "--dest", style="path"),
         TuiRow("from", f"Copy from: {copied}", "--from", style="path"),
         *([TuiRow("addapp", f"Put RetroBIOS on this card: {_yes(state.add_app)}",
                   "--add-app")] if _tui_app_ready(state) else []),
@@ -15928,10 +17829,13 @@ def _back(state: TuiState) -> list[tuple]:
         state.stack.append("quit")
         state.focus["quit"] = 0
         return effects
-    if state.screen == "systems" and not state.ticked and state.ticked_before:
-        # Enter on None, then Esc: the plan kept its headline over an
-        # Install the run refused.
-        state.ticked = set(state.ticked_before)
+    refused = _none_ticked(state)
+    if refused:
+        # Done and B leave a list of ticks alike, never with nothing
+        # ticked: said on every length of list, in the line the rows
+        # leave (tui_audit_17 P2-4).
+        state.status = refused
+        return effects
     chose = state.screen == "systems" and state.ticked != (state.ticked_before or set())
     if state.screen == "systems" and state.widened_from is not None:
         before, state.widened_from = state.widened_from, None
@@ -15943,9 +17847,6 @@ def _back(state: TuiState) -> list[tuple]:
             chose = False
     if state.screen == "regions":
         state.region_order = []
-    if state.screen == "cores" and state.no_cores:
-        # None, then Esc: no core ticked is no choice, and every core is kept.
-        state.no_cores = False
     state.stack.pop()
     if chose and state.screen == "plan":
         # The systems chosen, the next press is Install: Back left the focus
@@ -16022,17 +17923,18 @@ def _start_run(state: TuiState, run: str) -> list[tuple]:
         # dropped the --system the command line gave.
         state.check, state.files, state.systems, state.reading = None, [], [], None
         state.checked_dests = set()
-        state.choices = None
+        state.choices = state.set_aside = None
         state.found, state.scanned, state.unreadable = [], [], []
         state.check_summary = state.saves = None
         state.version = state.version_short = ""
+        state.games = state.games_reading = state.games_unavailable = None
         state.checked_flags = tui_flags(state)
     elif run in ("confirm", "preview"):
         state.dry, state.dry_files, state.dry_summary = None, [], None
         state.dry_saves = None
     else:
-        state.done_saves = None
-        state.download = state.progress = state.reading = None
+        state.done_saves = state.dest_error = None
+        state.download = state.progress = state.reading = state.games_reading = None
         state.samples, state.local_dests, state.network = [], {}, 0
         state.finished, state.summary, state.code, state.stopping = [], None, None, False
     return [("run", run)]
@@ -16042,6 +17944,7 @@ def _start_check(state: TuiState) -> list[tuple]:
     """Check the chosen folder, after fetching the file list once, the
     systems ticked kept (_keep_choice)."""
     _keep_choice(state)
+    _games_look(state)
     state.refocus = ""
     if "plan" in state.stack:
         del state.stack[state.stack.index("plan"):]
@@ -16055,6 +17958,20 @@ def _start_check(state: TuiState) -> list[tuple]:
     state.run, state.run_id = "check", state.run_id + 1
     state.started = state.now
     return [("fetch", state.platform)]
+
+
+def _games_look(state: TuiState) -> None:
+    """For a folder chosen once a card was looked at for games, the new one
+    looked at too, from what this run already read (no network): its games
+    make "For the games on this card" the choice, unless the user or the
+    command line decided."""
+    if (state.games_choice in ("user", "cli") or state.games_probed is None
+            or state.dest is None or state.games_probed == (state.platform, state.dest)):
+        return
+    count = games_probe(state.platform, state.dest, network=False, os_type=state.os_type)
+    state.games_probed = (state.platform, state.dest)
+    state.games_here = count or 0
+    state.for_games, state.games_choice = bool(count), "probe"
 
 
 def _closed_status(state: TuiState, closed: tuple[Path, str]) -> TuiLine:
@@ -16648,6 +18565,20 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
             return _push(state, action)
         if action == "recheck":
             return _start_check(state)
+        if action in ("games", "startonly"):
+            # One press, then counted again: the games decide the systems,
+            # so the ticks start again from every system they need.
+            if action == "games":
+                state.for_games, state.games_choice = not state.for_games, "user"
+            else:
+                state.required_only = not state.required_only
+            state.ticked = {row["system"] for row in state.systems if _needed(row)}
+            state.hidden_ticks = set()
+            effects = _start_check(state)
+            state.refocus = action
+            return effects
+        if action == "gameslist":
+            return _push(state, "games")
         if action == "gamedata":
             # One press, then counted again, as Back from Options counts,
             # the systems ticked kept: the check set them back to every
@@ -16666,56 +18597,15 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
             return _start_check(state)
         if action == "systems":
             state.ticked_before = set(state.ticked)
-        if action == "systems" and len(state.systems) > TUI_LONG_LIST:
-            # On None: picking one system of 66 began with Up, Up, A.
-            return _push(state, action, 1)
-        # On the first system, so A continues and the D-pad ticks.
-        return _push(state, action, 3 if action == "systems" else 0)
-    if screen == "systems":
-        if action == "all":
-            state.ticked = {row["system"] for row in state.systems}
-        elif action == "none":
-            state.ticked = set()
-            # On the first system: the next A takes the one in focus alone.
-            state.focus["systems"] = next(
-                (i for i, item in enumerate(tui_rows(state)) if item.action == "system"),
-                state.focus.get("systems", 0))
-        else:
-            if action == "system" and not state.ticked:
-                # Nothing ticked: A takes the system in focus, and only it.
-                state.ticked = {row.value}
-            # Continue, never Install: with the ticks unchanged A here
-            # installed 6.6 GB at once, offline too where the plan offered
-            # no Install. The confirm screen counts the choice and waits.
-            if state.systems and not state.ticked:
-                state.status = "No system is ticked: tick one, or choose All."
-                return []
-            state.must_confirm = True
-            _push(state, "confirm")
-            return _start_run(state, "confirm")
+        # On the first system, A ticking it: Choose systems opened on None,
+        # and A there unticked every system (tui_audit_17 P3-1).
+        _push(state, action)
+        state.focus[action] = _first_item(state)
         return []
+    if screen in (*_CHECKLISTS, "regions"):
+        return _checklist(state, row)
     if screen == "options":
         return _option(state, action, 0)
-    if screen == "regions":
-        _toggle_region(state, row.value)
-        return []
-    if screen == "cores":
-        if action == "morecores":
-            state.cores_all = True
-            return []
-        if action == "all":
-            state.cores, state.no_cores = [], False
-            return []
-        if action == "none":
-            state.cores, state.no_cores = [], True
-            state.focus["cores"] = next(
-                (i for i, item in enumerate(tui_rows(state)) if item.action == "core"),
-                state.focus.get("cores", 0))
-            return []
-        if state.no_cores:
-            state.status = "No core is ticked: tick one, or choose All."
-            return []
-        return _back(state)
     if screen == "confirm":
         if action == "install":
             state.stack.pop()
@@ -16740,6 +18630,45 @@ def _activate(state: TuiState, row: TuiRow) -> list[tuple]:
             return [("app", _tui_card(state))]
         return tui_quit(state)
     return []
+
+
+def _checklist(state: TuiState, row: TuiRow) -> list[tuple]:
+    """A and Enter on Choose systems, Cores and Preferred regions, one rule
+    for the three: an item is ticked or unticked, All and None set every
+    box, Done leaves as B does (_back), refused while nothing is ticked."""
+    screen, action = state.screen, row.action
+    if action == "done":
+        return _back(state)
+    if action == "morecores":
+        state.cores_all = True
+        return []
+    if action == "region":
+        _toggle_region(state, row.value)
+    elif action in TUI_TICK_ROWS:
+        _tick(state, row, None)
+    elif action == "all" and screen == "systems":
+        state.ticked = {item["system"] for item in state.systems}
+    elif action == "all":
+        state.cores, state.no_cores = [], False
+    elif action == "none" and screen == "regions":
+        state.regions = []
+    elif action == "none":
+        if screen == "systems":
+            state.ticked = set()
+        else:
+            state.cores, state.no_cores = [], True
+        # On the first item: the next A ticks the one in focus alone.
+        state.focus[screen] = _first_item(state)
+    return []
+
+
+def _none_ticked(state: TuiState) -> str:
+    """Why Done is refused on a list of ticks, "" when it is not."""
+    if state.screen == "systems" and state.systems and not state.ticked:
+        return "No system is ticked: tick one, or choose All."
+    if state.screen == "cores" and state.no_cores:
+        return "No core is ticked: tick one, or choose All."
+    return ""
 
 
 def _systems_reading() -> dict[str, list[str]]:
@@ -17198,12 +19127,13 @@ def _option(state: TuiState, action: str, step: int) -> list[tuple]:
     elif action == "cores":
         # On the first core: the filter row under A opened a field a
         # controller cannot type into.
-        return _push(state, action, 3 if tui_choices(state)["cores"] else 2)
+        _push(state, action)
+        state.focus[action] = _first_item(state)
     elif action == "regions":
         state.region_order = []
         _push(state, action)
-        state.region_order = [row.value for row in tui_rows(state)]
-        return []
+        state.region_order = [row.value for row in tui_rows(state) if row.action == "region"]
+        state.focus[action] = _first_item(state)
     elif action == "command":
         return _push(state, action)
     elif action == "folder":
@@ -17316,12 +19246,15 @@ def _tick(state: TuiState, row: TuiRow, on: bool | None) -> None:
         if value not in state.cores:
             state.cores.append(value)
         state.no_cores = False
-        if set(_core_base(state)) <= set(state.cores):
+        if set(tui_choices(state)["cores"]) <= set(state.cores):
             # Every core ticked again: no narrowing, as before.
             state.cores = []
     elif not state.cores and not state.no_cores:
-        # Every core was ticked: one untick keeps the others.
-        state.cores = [name for name in _core_base(state) if name != value]
+        # Every core was ticked, those of the other systems too: one
+        # untick keeps every other one ticked. Kept to the systems chosen,
+        # it cleared the other systems' cores drawn ticked (code_audit_24
+        # P3-1).
+        state.cores = [name for name in tui_choices(state)["cores"] if name != value]
         state.no_cores = not state.cores
     elif value in state.cores:
         state.cores.remove(value)
@@ -17511,7 +19444,9 @@ def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
     row = rows[focus]
     last = len(rows) - 1
     page = _page_step(state) if key.name in ("pgup", "pgdn") else 1
-    wrap = len(rows) < 10
+    # A list of ticks wraps at any length: None and Done, at its end, are
+    # a few presses up from its first item on a pad (tui_audit_17 P3-1).
+    wrap = len(rows) < 10 or screen in (*_CHECKLISTS, "regions")
     name = key.name
     if name == "up" or char == "k":
         focus = last if wrap and focus == 0 else max(0, focus - 1)
@@ -17544,7 +19479,7 @@ def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
         state.editing = screen
         state.focus[screen] = next(i for i, item in enumerate(rows) if item.action == "filter")
         return []
-    elif screen == "regions" and (name == "enter" or char == " "):
+    elif screen == "regions" and char == " " and row.action == "region":
         return _activate(state, row)
     elif screen == "regions" and name in ("left", "shift-up"):
         _move_region(state, row.value, -1)
@@ -17556,11 +19491,14 @@ def tui_update(state: TuiState, key: TuiKey) -> list[tuple]:
             char == " " or name in ("right", "left")):
         _tick(state, row, None if char == " " else name == "right")
         return []
-    elif screen in _CHECKLISTS and char == " ":
-        # X on All, None or the filter: only A, an explicit choice, acts there.
+    elif screen in (*_CHECKLISTS, "regions") and char == " ":
+        # X on All, None, Done or the filter: only A, an explicit choice,
+        # acts there.
         return []
-    elif screen == "systems" and char in ("a", "n"):
-        return _activate(state, rows[0 if char == "a" else 1])
+    elif screen in (*_CHECKLISTS, "regions") and char in ("a", "n"):
+        # All and None by name, at the end of a list of 189 rows.
+        named = [item for item in rows if item.action == ("all" if char == "a" else "none")]
+        return _checklist(state, named[0]) if named else []
     elif screen == "options" and name in ("left", "right"):
         return _option(state, row.action, 1 if name == "right" else -1) \
             if row.action in ("game_data", "installed", "jobs", "addapp") \
@@ -17754,17 +19692,28 @@ def _armed_hint(state: TuiState, parts: tuple, width: int) -> tuple:
         return parts
     part = parts[at]
     verb = part.split(" ", 1)[1]
-    forms = (f"{part}: {TUI_ARMED}", f"{part}: {TUI_ARMED_SHORT}",
-             f"{part.split(' ', 1)[0]} {' '.join(verb.split()[:3])}: {TUI_ARMED_SHORT}")
-    # Every entry kept first, then the armed one whole.
-    for whole in (True, False):
+    said = armed_words(state, width)
+    forms = (f"{part}: {said}",
+             f"{part.split(' ', 1)[0]} {' '.join(verb.split()[:3])}: {said}")
+    # Every entry kept first, then every one but the help, then the armed
+    # one whole: on a phone at 40 columns Esc Quit went first
+    # (tui_audit_17 P3-11).
+    for keep in (len(parts), len([p for p in parts if not p.startswith("? ")]), 1):
         for form in forms:
             armed = (*parts[:at], form, *parts[at + 1:])
             drawn = _hint(width, *armed)
-            if form.split(" ", 1)[1] in drawn and (
-                    not whole or len(drawn.split("  ")) == len(armed)):
+            if form.split(" ", 1)[1] in drawn and len(drawn.split("  ")) >= keep:
                 return armed
     return (*parts[:at], forms[-1], *parts[at + 1:])
+
+
+def armed_words(state: TuiState, width: int) -> str:
+    """What a first tap says on the row and on the bar alike: "tap again" on
+    a phone, where nothing clicks, and where the bar is short, "click or
+    tap again" else. The row said one and the bar the other."""
+    if state.os_type == "android" or width < TUI_LONG_BAR_WIDTH:
+        return TUI_ARMED_SHORT
+    return TUI_ARMED
 
 
 def _armed_label(state: TuiState, row: TuiRow, width: int) -> TuiRow:
@@ -17773,12 +19722,13 @@ def _armed_label(state: TuiState, row: TuiRow, width: int) -> TuiRow:
     keeps its name where the words do not fit beside it, the bar saying
     them: "Continue: tap again" in its place hid which setup was tapped."""
     verb = _ROW_VERBS.get(row.action, row.label)
-    for label in (f"{row.label}: {TUI_ARMED}", f"{row.label}: {TUI_ARMED_SHORT}"):
-        if cell_width(f"> {label}") <= width:
-            return row._replace(label=label)
+    said = armed_words(state, width)
+    label = f"{row.label}: {said}"
+    if cell_width(f"> {label}") <= width:
+        return row._replace(label=label)
     if row.action not in ("install", "addapp"):
         return row
-    return row._replace(label=f"{verb}: {TUI_ARMED_SHORT}")
+    return row._replace(label=f"{verb}: {said}")
 
 
 # What an armed bar entry adds to its name, drawn in the accent: a mouse
@@ -17875,8 +19825,19 @@ def _take_event(state: TuiState, event: dict) -> None:
     if kind == "app" and state.run == "install":
         state.app = event
         return
+    if kind == "error" and state.run == "install" and event.get("stage") == "dest":
+        # The BIOS folder could not be created: every file fails for that
+        # one reason, said as it happened (tui_audit_17 P2-1).
+        state.dest_error = event
+        return
     if kind == "checking" and state.run in ("check", "install"):
         state.reading = (event["files_done"], event["files_total"])
+    elif kind == "games_reading" and state.run in ("check", "install"):
+        state.games_reading = (event["files_done"], event["files_total"])
+    elif kind == "games" and state.run == "check":
+        state.games = event
+    elif kind == "games_unavailable" and state.run == "check":
+        state.games_unavailable = event
     elif kind == "found" and state.run == "check":
         state.found.append(event)
     elif kind == "scanned" and state.run == "check":
@@ -17885,6 +19846,8 @@ def _take_event(state: TuiState, event: dict) -> None:
         state.unreadable.append(event)
     elif kind == "choices" and state.run == "check":
         state.choices = list(event["systems"])
+    elif kind == "set_aside" and state.run == "check":
+        state.set_aside = set(event["dests"])
     elif kind == "version" and state.run == "check":
         state.version = str(event["message"])
         state.version_short = (f"List for {display_name(state.platform, state.manifest)} "
@@ -17938,11 +19901,21 @@ def _take_event(state: TuiState, event: dict) -> None:
 def tui_receive(state: TuiState, message: tuple) -> list[tuple]:
     """What the file list fetch and the child runs report back."""
     kind = message[0]
+    if kind == "games_here":
+        _kind, plat, dest, count = message
+        if plat == state.platform and dest == state.dest:
+            state.games_probed = (plat, dest)
+            if state.games_choice not in ("user", "cli"):
+                state.games_here = count or 0
+                state.for_games, state.games_choice = bool(count), "probe"
+        return []
     if kind == "manifest":
         _kind, plat, manifest = message
         if plat != state.platform or state.screen != "checking":
             return []
         state.manifest, state.manifest_for = manifest, plat
+        if state.games_probed is None:
+            state.games_probed = (plat, state.dest)
         return _start_run(state, "check")
     if kind == "app":
         # Put from the result screen, in this process.
@@ -18012,15 +19985,6 @@ _SHORT_KEYS = (("A/Enter/tap ", "A/tap "), ("A/Enter ", "A "), ("B/Esc ", "B "),
                ("X/Space ", "X "), ("Y/o ", "Y "), ("Left/Right ", "<> "), ("Up/Down ", "^v "))
 
 
-def _focus_ticks(state: TuiState) -> bool:
-    """Whether the row in focus is one X or Space ticks."""
-    rows = tui_rows(state)
-    if not rows:
-        return False
-    row = rows[max(0, min(state.focus.get(state.screen, 0), len(rows) - 1))]
-    return row.action in ("system", "core")
-
-
 def _back_hint(state: TuiState, parts: tuple) -> tuple:
     """The bar's B/Esc entry as Esc acts on this screen: a filter typed or
     set is cleared first, and the first screen quits. Two first screens
@@ -18052,25 +20016,16 @@ def _route_hint(state: TuiState, parts: tuple, width: int | None = None) -> tupl
         return parts
     names = route.bar
     named = []
-    ticks = state.pad == "miyoo" and state.screen in _CHECKLISTS and _focus_ticks(state)
-    if state.pad == "miyoo" and state.screen in _CHECKLISTS and not ticks:
-        # A is Enter on All, None and the filter (_miyoo_key): the bar said
-        # A Tick there, and A unticked every system.
-        parts = tuple(part for part in parts if not part.startswith("X/Space "))
     for part in parts:
         key, sep, what = part.partition(" ")
         if key in names:
-            # On a Miyoo A is Space, which ticks a system: Start continues.
-            mine = "Start" if ticks and key == "A/Enter" else names[key]
+            mine = names[key]
             if mine is None:
                 continue
             key = mine
         named.append(key + sep + what)
     if state.pad == "muxterm" and state.screen == "path":
         named.append("Select Keyboard")
-    if ticks:
-        tick = [entry for entry in named if entry.startswith("A ")]
-        named = named[:1] + tick + [entry for entry in named[1:] if entry not in tick]
     return tuple(named)
 
 
@@ -18080,14 +20035,14 @@ def _tap_hint(state: TuiState, parts: tuple) -> tuple:
     a finger, which went to the row and continued."""
     if not state.mouse or state.help or state.screen not in (*_CHECKLISTS, "regions"):
         return parts
-    keys = ("A/Enter", "A") if state.screen == "regions" else ("X/Space", "Space")
+    keys = ("A/Enter", "A", "Enter", "Start")
     return tuple(f"{part.split(' ', 1)[0]}/tap {part.split(' ', 1)[1]}"
                  if part.endswith(" Tick") and part.split(" ", 1)[0] in keys
                  else part for part in parts)
 
 
 # Shorter verbs for a narrow bar, tried before an entry is dropped.
-_SHORT_VERBS = ((" Only this system", " Only this"), (" First system", " First"))
+_SHORT_VERBS = ((" Untick all", " None"), (" Tick all", " All"))
 
 
 # Below this many columns of text the bar always uses the short key names.
@@ -18128,14 +20083,15 @@ _ROW_VERBS = {
     "default": "Use this folder", "browse": "Browse", "type": "Type a path",
     "use": "Use this folder", "up": "Go up", "dir": "Open", "create": "Create",
     "other": "Choose another", "cardroot": "Use the root", "all": "Tick all",
-    "none": "Untick all", "filter": "Filter", "system": "Continue", "core": "Done",
-    "region": "Tick", "regions": "Open", "cores": "Open", "command": "Open",
+    "none": "Untick all", "filter": "Filter", "system": "Tick", "core": "Tick",
+    "region": "Tick", "done": "Done", "regions": "Open", "cores": "Open", "command": "Open",
     "preview": "Open", "folder": "Choose", "game_data": "Change", "installed": "Change",
     "jobs": "Change", "retry": "Try again", "back": "Back", "stay": "Stay",
     "fromcard": "Choose", "from": "Add a folder", "misplaced": "Show", "zip": "Copy from it",
     "unreadable": "Show", "exit": "Exit", "addapp": "Put it on the card",
     "cardsystem": "Choose", "rescan": "Look again", "elsewhere": "Choose", "drive": "Choose",
     "recheck": "Check again", "gamedata": "Change", "share": "Choose", "morecores": "Show",
+    "games": "Change", "startonly": "Change", "gameslist": "Show",
 }
 
 
@@ -18242,16 +20198,19 @@ def _whole_words(state: TuiState) -> bool:
     return state.screen in ("result", "command")
 
 
-def _scrolled(lines: list[TuiLine], first: int, height: int, lead: int = 0) -> list[TuiLine]:
+def _scrolled(lines: list[TuiLine], first: int, height: int, lead: int = 0,
+              count: int | None = None) -> list[TuiLine]:
     """height lines of a longer list from first, the last one saying where.
-    The lead rows (All, None, Filter) are not counted among the entries."""
+    The lead rows (a Filter) are not counted among the entries, nor what
+    follows the count entries (All, None and Done)."""
     if len(lines) <= height:
         return lines
     shown = max(1, height - 1)
     first = max(0, min(first, len(lines) - shown))
     end = first + shown
-    count = len(lines) - lead
-    where = f"{max(1, first + 1 - lead)}-{max(1, end - lead)} of {count}"
+    count = len(lines) - lead if count is None else count
+    start = min(count, max(1, first + 1 - lead))
+    where = f"{start}-{max(start, min(count, end - lead))} of {count}"
     return lines[first:end] + [_styled(where, "dim")]
 
 
@@ -18295,9 +20254,12 @@ def _compose(
             first = top
         else:
             state.list_top.pop(state.screen, None)
-        lead = next((i for i, row in enumerate(rows)
-                     if row.action not in ("all", "none", "filter")), 0)
-        body = _scrolled(row_lines, first, room, lead)
+        ticks = [i for i, row in enumerate(rows) if row.action in TUI_TICK_ROWS]
+        lead = ticks[0] if ticks else next(
+            (i for i, row in enumerate(rows) if row.action not in ("all", "none", "filter")), 0)
+        # A list of ticks counts its items: the Filter above them and All,
+        # None and Done below are no entries of it.
+        body = _scrolled(row_lines, first, room, lead, len(ticks) if ticks else None)
         if len(row_lines) > room:
             body[-1].mark = ("scroll", "list", len(rows))
     else:
@@ -18559,7 +20521,15 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
         lines.append(f"Free space: {format_size(free)}")
         if check["bytes_needed"] > free:
             lines.append(space_words(check["bytes_needed"], free, _on_its_card(state)))
-    backup = wrong and not (offline and not copied)
+    # The wrong copies something replaces: offline, those a folder copied
+    # from holds, else those the network or the pack brings too. "The 1
+    # wrong copy is replaced" stood over a copy no folder held, which the
+    # result then said was left (code_audit_24 P3-5).
+    wrong_dests = [event["dest"] for event in (state.dry_files if dry else state.files)
+                   if event.get("state") == "wrong_hash"]
+    backup = (sum(1 for dest_ in wrong_dests if dest_ in copied) if offline
+              else sum(1 for dest_ in wrong_dests if dest_ in copied or dest_ not in lacking)
+              if wrong_dests else wrong)
     misplaced = _tui_misplaced(state) if check is state.check else []
     if misplaced:
         lines.insert(after_counts, f"{_plural(len(misplaced), 'file')} "
@@ -18572,9 +20542,10 @@ def _plan_lines(check: dict, dest: Path | None, state: TuiState) -> list:
     if backup:
         # With its subject: "They are replaced" sat lines under the count.
         # Not where nothing can be installed: nothing is replaced then.
-        lines.insert(count_at, f"The {_plural(wrong, 'wrong copy')} "
-                     f"{'is' if wrong == 1 else 'are'} replaced, the old "
-                     f"{'one' if wrong == 1 else 'ones'} kept in a backup folder.")
+        lines.insert(count_at, (f"The {_plural(wrong, 'wrong copy')} " if backup == wrong
+                                else f"{backup} of the {_plural(wrong, 'wrong copy')} ")
+                     + f"{'is' if backup == 1 else 'are'} replaced, the old "
+                     f"{'one' if backup == 1 else 'ones'} kept in a backup folder.")
     if state.facts.get("writable") is False and dest is not None:
         lines += _commands(state, write_remedy(dest, state.platform, tui_hint(state),
                                                state.pad not in TUI_PAD_ROUTES))
@@ -18752,11 +20723,7 @@ def _view_platforms(state: TuiState, width: int, height: int) -> tuple:
         # A handheld's owner knows its device, not its system's name: the
         # filter finds it, and a pad that cannot type finds the cards right
         # after RetroArch (_cards_first).
-        pinned.append(unnamed_card_words(state.unnamed, ", or type your device's name (/)."
-                                         if state.pad in ("both", "keys") else
-                                         ", handhelds after RetroArch.")
-                      if state.unnamed else
-                      "Nothing was found here. Choose the setup, or type your device's "
+        pinned.append("Nothing was found here. Choose the setup, or type your device's "
                       "name (/)." if state.pad in ("both", "keys") else
                       "Nothing was found here. Choose the setup: handhelds come after "
                       "RetroArch.")
@@ -18778,7 +20745,7 @@ def _view_folder(state: TuiState, width: int, height: int) -> tuple:
     first: list = []
     if bound and state.folder_default is not None and state.folder_kind == "found":
         # On the device itself: its own folder, which is no card to look for.
-        title = "Which folder?"
+        title = TUI_FOLDER_TITLE
         before = [f"{bound[0]} reads its BIOS files from:", str(state.folder_default)]
     elif bound:
         title = "Where is the SD card?"
@@ -18802,26 +20769,21 @@ def _view_folder(state: TuiState, width: int, height: int) -> tuple:
                            else "No card or drive is mounted.")
                           + " Insert it, then choose Look again.")
     elif state.folder_kind == "share":
-        title = "Which folder?"
+        title = TUI_FOLDER_TITLE
         before = [share_words(state.platform)]
     elif state.folder_default is not None:
-        title = "Which folder?"
+        title = TUI_FOLDER_TITLE
         lead = {"found": f"{name} reads its BIOS files from:",
                 "chosen": f"The BIOS folder chosen for {name}:"}.get(
                     state.folder_kind,
                     f"{side_name(state.os_type, state.platform)} usually reads its BIOS "
                     "files from:")
         before = [lead, str(state.folder_default)]
-        if (state.folder_kind == "usual" and tui_rows(state)
-                and tui_rows(state)[0].value in {mount / "bios" for mount in state.unnamed}):
-            cards = [mount for mount in state.unnamed
-                     if mount / "bios" == tui_rows(state)[0].value]
-            first = [f"{card_folder_words(state.unnamed, cards[0])}, first below."]
     elif state.folder_kind == "closed":
-        title = "Which folder?"
+        title = TUI_FOLDER_TITLE
         before = [f"Choose another folder for {name}: browse for it or type it."]
     else:
-        title = "Which folder?"
+        title = TUI_FOLDER_TITLE
         before = [f"No usual {name} folder here: browse for it or type it."]
     notes: list = []
     if not bound and state.folder_kind != "share":
@@ -18953,6 +20915,9 @@ def _view_checking(state: TuiState, width: int, height: int) -> tuple:
 
 
 def _reading_line(state: TuiState, elapsed: str) -> str:
+    if state.games_reading and not state.reading:
+        done, total = state.games_reading
+        return f"Reading the games: {done} of {total}"
     if state.reading:
         done, total = state.reading
         return f"Reading the files already in the folder: {done} of {total}"
@@ -18999,7 +20964,13 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
                     for event in events}
             held = [event for event in chosen if event["dest"] in took]
             rest = len(chosen) - len(held) + data
+            # Nothing at hand: the head the whole list's plan says, for the
+            # systems ticked. "About 0 files, 0 B" stood over 20 files the
+            # internet would bring (tui_audit_17 P3-5).
             lines[0] = _styled(
+                f"{agree(rest, 'file needs', 'files need')} the internet, which "
+                f"{offline_named()} does not use, for {len(state.ticked)} of "
+                f"{len(state.systems)} systems", "title") if not held else _styled(
                 f"About {_plural(len(held), 'file')}, "
                 f"{format_size(sum(e['size'] for e in held))}, for {len(state.ticked)} of "
                 f"{len(state.systems)} systems"
@@ -19023,15 +20994,25 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
                if str(line).startswith("BIOS folder:")), 1)
     if at < len(lines) and str(lines[at]).startswith("Named by "):
         at += 1
-    named = [*([f"for {len(state.systems)} of {len(tui_systems(state))} systems (--system)"]
+    games_count = (state.games or {}).get("games") if state.for_games else None
+    named = [*([f"for the {_plural(games_count, 'game')} {games_where(state)}"
+                + (", only what starts" if state.required_only else "")
+                + (" (--for-games)" if state.games_choice == "cli" else "")]
+               if games_count else []),
+             *([f"for {len(state.systems)} of {len(tui_systems(state))} systems (--system)"]
                 if state.cli_systems and state.systems else []),
-             # Named on the command line as line mode names it, chosen on
-             # Cores out of how many: "--core" said nothing of the count.
-             *([("--core" if state.cores == state.cli_cores else
-                 cores_words(len(state.cores), len(_core_base(state))))]
-               if state.cores else []),
-             *(["--region"] if state.regions else [])]
+             # Named as line mode names it, out of how many, the flag after
+             # the words where the command line gave it: "--core" said
+             # nothing of the count, and "--region." stood alone
+             # (tui_audit_17 P3-4).
+             *([core_count_words(state.cores, _core_base(state))
+                + (" (--core)" if state.cores == state.cli_cores else "")]
+               if tui_core_flags(state) else []),
+             *(["regions ranked" + (" (--region)" if state.regions == state.cli_regions
+                                    else "")] if state.regions else [])]
     said = ", ".join(named)
+    if said and not said.startswith("for "):
+        said = f"for your choice: {said}"
     # A system --system named that --no-game-data left empty, in line mode's
     # words (tui_audit_16 P3-7).
     listed = {row["system"] for row in state.systems}
@@ -19074,7 +21055,7 @@ def _view_plan(state: TuiState, width: int, height: int) -> tuple:
                       and state.card_note != state.status else []),
                     *([f"{said[0].upper()}{said[1:]}."] if said else []),
                     *([emptied_named] if emptied_named else []), *choice,
-                    *([parts] if parts else [])]
+                    *([parts] if parts else []), *games_plan_words(state)]
     if state.version:
         # Before the free space, which gives way first: appended last, the
         # note was cut from the 40x12 plan with no sign (tui_audit_13 P3-1).
@@ -19147,6 +21128,10 @@ def _plan_body(state: TuiState, width: int, height: int, lines: list,
         kept += lines[at:end]
     kept += [line for line in lines if state.version
              and str(line) in (state.version, state.version_short)]
+    # Why the folder rows are offered, before Install anyway: at 40x12 the
+    # plan offered Choose another folder and Install anyway and no word of
+    # why (tui_audit_17 P2-2).
+    kept += [line for line in lines if str(line).startswith(CANNOT_WRITE)]
     top = _text_lines(kept, width)
     drawn = [str(line).strip() for line in body]
     # Three lines at least for the rows: two of them and where the list is,
@@ -19271,12 +21256,15 @@ def _view_systems(state: TuiState, width: int, height: int) -> tuple:
         # held 4, 3 and 5 systems as the note came and went.
         footer.insert(0, " ")
     needle = state.filters.get("systems", "")
-    after = [f"No system matches '{needle}'."] if len(rows) == 3 and needle else []
+    if needle and not any(row.action == "system" for row in rows):
+        footer.insert(0, f"No system matches '{needle}'.")
+    # In the lines the rows leave on every length of list: below the rows
+    # it was dropped once they filled the screen (tui_audit_17 P2-4).
     if state.status:
-        after.append(state.status)
+        footer.insert(0, _styled(str(state.status), "refusal"))
     return ("Choose systems",
-            _compose(state, width, height, [], rows, after, footer),
-            ("A/Enter Continue", "B/Esc Back", "X/Space Tick", "? Help"))
+            _compose(state, width, height, [], rows, (), footer),
+            _CHECKLIST_BAR)
 
 
 def _view_options(state: TuiState, width: int, height: int) -> tuple:
@@ -19312,16 +21300,27 @@ def _view_regions(state: TuiState, width: int, height: int) -> tuple:
               "per region, the best one found is installed. With none ticked, every "
               "region's BIOS is kept."]
     return ("Preferred regions",
-            _compose(state, width, height, before, tui_rows(state)),
-            ("A/Enter Tick", "B/Esc Done", "Left/Right Order", "? Help"))
+            _compose(state, width, height, [], tui_rows(state), (), _status_footer(state),
+                     before),
+            (*_CHECKLIST_BAR[:2], "Left/Right Order", "? Help"))
+
+
+# The bar of the three lists of ticks, one wording (tui_audit_17 P3-1).
+_CHECKLIST_BAR = ("A/Enter Tick", "B/Esc Done", "? Help")
+
+
+def _status_footer(state: TuiState) -> list:
+    return [_styled(str(state.status), "refusal")] if state.status else []
 
 
 def _view_cores(state: TuiState, width: int, height: int) -> tuple:
-    before = ["Every core ticked keeps every core's files. Untick the cores you do not "
-              "use: the platform's own files are always kept."]
-    status = [state.status] if state.status else []
-    return ("Cores", _compose(state, width, height, before, tui_rows(state), status),
-            ("A/Enter Done", "B/Esc Back", "X/Space Tick", "? Help"))
+    # Kept above a list that scrolls: dropped once the rows filled the
+    # screen, 189 cores never said what unticking does (tui_audit_17 P2-4).
+    pinned = ["Untick the cores you do not use: the platform's own files are always kept, "
+              "and a core with no extra file reads only those."]
+    return ("Cores", _compose(state, width, height, [], tui_rows(state), (),
+                              _status_footer(state), pinned),
+            _CHECKLIST_BAR)
 
 
 _STATE_WORDS = {"missing": "missing", "wrong_hash": "wrong copy"}
@@ -19336,6 +21335,8 @@ def _pager_items(state: TuiState) -> list:
     if state.screen == "unreadable":
         return [f"{event['path']}" + (f", {event['member']}" if event["member"] else "")
                 + f": {event['reason']}" for event in state.unreadable]
+    if state.screen == "games":
+        return games_pager_lines(state)
     if state.screen == "result":
         return tui_outcome(state)[1]
     if state.screen == "command":
@@ -19375,6 +21376,12 @@ def _view_preview(state: TuiState, width: int, height: int) -> tuple:
 def _view_unreadable(state: TuiState, width: int, height: int) -> tuple:
     items = _pager_items(state)
     return ("Files that could not be read", _pager(state, width, height, items),
+            ("A/Enter Back", *_scroll(state, items, width, height)))
+
+
+def _view_games(state: TuiState, width: int, height: int) -> tuple:
+    items = _pager_items(state)
+    return (f"Games {games_where(state)}", _pager(state, width, height, items, 2),
             ("A/Enter Back", *_scroll(state, items, width, height)))
 
 
@@ -19597,6 +21604,8 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
     total = (state.download or {}).get("files", 0)
     space = "" if summary else _space_words(state)
     errors = f", {len(failed)} failed" if failed else ""
+    if state.dest_error is not None:
+        return _dest_error_outcome(state, installed)
     if summary.get("interrupted") or state.code == 130:
         title = "Stopped"
         head = (f"Stopped: {installed} of {total} installed, run again to finish."
@@ -19694,6 +21703,14 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
         # Said again with the result, as line mode ends: the system's own
         # BIOS check may mark the files just put in place.
         lines.append(state.version)
+    fallback = (state.games or {}).get("fallback") or [] if state.for_games else []
+    if fallback:
+        # Named with the result, as line mode ends: they got every BIOS of
+        # their system, so that they start.
+        names = ", ".join(str(item.get("name")) for item in fallback[:3])
+        more = f" and {len(fallback) - 3} more" if len(fallback) > 3 else ""
+        their = "its" if len(fallback) == 1 else "their"
+        lines.append(f"Not recognised, every BIOS of {their} system kept: {names}{more}.")
     if space:
         lines.append("Free some space on the card, then run again." if _on_its_card(state)
                      else "Free some space, or run again and choose another folder.")
@@ -19713,6 +21730,15 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
             shown += 1
     if shown > 20:
         lines.append(f"  ... and {shown - 20} more")
+    if title == "Finished with errors":
+        # What a rerun does, as line mode and the first install page say
+        # it: the screen never did (tui_audit_17 P3-7).
+        pairs = [(failure["dest"], failure["reason"]) for failure in failed]
+        retry = _retry_words(pairs)
+        if retry:
+            lines.append(retry)
+        elif not all(str(reason).startswith(NOT_KEPT) for _dest, reason in pairs):
+            lines.append("Run it again to retry only those.")
     expected = (state.dry if state.dry is not None else state.check or {}).get(
         "data_missing", 0)
     landed = max(0, installed - sum(1 for _dest, good, _why in state.finished if good))
@@ -19759,6 +21785,31 @@ def tui_outcome(state: TuiState) -> tuple[str, list[str]]:
         lines.append(_styled(TUI_RESULT_AGAIN if state.os_type == "android"
                              else TUI_RESULT_COPY, "dim"))
     return title, lines
+
+
+def _dest_error_outcome(state: TuiState, installed: int) -> tuple[str, list[str]]:
+    """The result of a run whose BIOS folder could not be created: that
+    reason for every file, and its remedy. It said "22 files not fetched
+    (RETROBIOS_INSTALL_OFFLINE=1)" and sent the user for a pack holding all
+    22 (tui_audit_17 P2-1)."""
+    message = str((state.dest_error or {}).get("message", ""))
+    folder = shown_path(_plan_folder(state, state.dest))
+    _where, _sep, why = message.rpartition(": ")
+    head = (f"Nothing was installed: {folder} cannot be created ({why.lower() or 'no reason'})."
+            if not installed else f"{installed} installed, then {folder} could not be "
+            f"created ({why.lower() or 'no reason'}).")
+    lines = [head]
+    remedy = (write_remedy(state.dest, state.platform, tui_hint(state),
+                           state.pad not in TUI_PAD_ROUTES) if state.dest is not None else [])
+    if not remedy or str(remedy[0]).startswith("Or "):
+        lines.append("Run it again and choose another folder.")
+    lines += _commands(state, remedy)
+    if state.pad not in TUI_PAD_ROUTES:
+        lines += ["Same choice without questions:",
+                  _command_line(f"  {tui_command(state)}", tui_hint(state))]
+    if tui_keeps_log(state):
+        lines.append(f"Details: {state.log}")
+    return ("Nothing installed" if not installed else "Finished with errors"), lines
 
 
 # How to copy from the result, under its command while the mouse is on.
@@ -19861,7 +21912,7 @@ _TUI_VIEWS: dict[str, Callable[[TuiState, int, int], tuple]] = {
     "preview": _view_preview, "command": _view_command, "confirm": _view_confirm,
     "installing": _view_installing, "result": _view_result, "error": _view_error,
     "quit": _view_quit, "cardroot": _view_cardroot, "misplaced": _view_misplaced,
-    "unreadable": _view_unreadable,
+    "unreadable": _view_unreadable, "games": _view_games,
 }
 
 
@@ -19901,8 +21952,6 @@ def _help_lines(state: TuiState) -> list[tuple[str, str]]:
                    else [])]
     primary = _primary(state) or _TUI_VIEWS[screen](state, 80, 24)[2][0]
     ok = names["ok"]
-    if state.pad == "miyoo" and screen in _CHECKLISTS:
-        ok = names["enter"]
     if primary.startswith("A/"):
         # A bar that offers no A (Confirm while it counts) names none here.
         keys.append((ok, primary.split(" ", 1)[-1]))
@@ -19911,8 +21960,10 @@ def _help_lines(state: TuiState) -> list[tuple[str, str]]:
     # How a tap acts, before what the list says elsewhere: last, it was the
     # line a 40x12 help cut (code_audit_20 P3-1).
     keys += _tap_help(state)
-    if screen == "systems":
+    if screen in _CHECKLISTS:
         keys.append(("a, n", "All, none"))
+    elif screen == "regions":
+        keys.append(("n", "None"))
     if screen == "platforms":
         keys.append(("/", "Filter by setup or device name"))
     elif screen in ("systems", "cores"):
@@ -19936,10 +21987,8 @@ def _tap_help(state: TuiState) -> list[tuple[str, str]]:
     """How a tap acts on this screen, where the terminal reports clicks."""
     if not state.mouse:
         return []
-    if state.screen in _CHECKLISTS:
-        return [("Tap", "Tick or untick a row, as Space")]
-    if state.screen == "regions":
-        # Its keys name no Space: A ticks there (code_audit_20 P3-2).
+    if state.screen in (*_CHECKLISTS, "regions"):
+        # One rule for the three lists of ticks: A ticks, a tap as A.
         return [("Tap", "Tick or untick a row, as A")]
     if state.screen in _PAGERS and not tui_rows(state):
         return [("Tap", "A bottom line entry presses its key"),
@@ -19971,11 +22020,6 @@ def _primary(state: TuiState) -> str | None:
     verb = _ROW_VERBS.get(row.action)
     if row.action == "filter" and _only_match(state) is not None:
         verb = "Choose"
-    if state.screen == "systems" and row.action == "system" and not state.ticked:
-        verb = "Only this system"
-    if state.screen == "systems" and row.action == "none" and not state.ticked:
-        # Nothing left to untick: A goes to the first system.
-        verb = "First system"
     return f"A/Enter {verb}" if verb else None
 
 
@@ -20309,6 +22353,11 @@ def tui_start(
     state.jobs = args.jobs
     state.add_app = bool(getattr(args, "add_app", False))
     state.passthrough = _tui_passthrough(args)
+    if getattr(args, "for_games", None) is not None:
+        state.for_games, state.games_choice = True, "cli"
+        if isinstance(args.for_games, Path):
+            state.games_folder = Path(os.path.normpath(args.for_games.absolute()))
+    state.required_only = bool(getattr(args, "required_only", False))
     if args.manifest is not None:
         state.manifest_path = Path(args.manifest).absolute()
         state.manifest_given = True
@@ -20317,7 +22366,6 @@ def tui_start(
         captured = io.StringIO()
         with contextlib.redirect_stdout(captured), contextlib.redirect_stderr(captured):
             state.setups, state.mounted_setups = found_setups(os_type)
-            state.unnamed = unnamed_cards()
             frontends = detect_frontends(os_type)
         # Said on the normal screen before this one covered it, and kept
         # above the list: a status line under 18 setups was never drawn.
@@ -20529,7 +22577,7 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
                 f"This run makes no network request ({offline_named()}), and the list "
                 "of BIOS files comes from the network.",
                 "Run the installer again with the list saved as a file "
-                "(--manifest FILE, a copy of install/<platform>.json) or with a pack "
+                f"(--manifest FILE, a copy of install/{plat}.json) or with a pack "
                 f"(--from-pack PACK), or {offline_undo()}."], 1))
             return
         title = {"clock": "The clock is wrong",
@@ -20553,6 +22601,21 @@ def _tui_fetch(plat: str, inbox: queue.Queue, log: io.StringIO) -> None:
     if os.environ.get("RETROBIOS_BASE_URL"):
         lines.append(f"RETROBIOS_BASE_URL chose the address: {url}")
     inbox.put(("manifest_failed", plat, title, lines, 1))
+
+
+def _tui_fetch_games(plat: str, inbox: queue.Queue, log: io.StringIO, dest: Path | None,
+                     look: bool) -> None:
+    """The file list, then, once it came, a look at the card for games
+    (look), said before the list so that the check reads them."""
+    held: queue.Queue = queue.Queue()
+    _tui_fetch(plat, held, log)
+    message = held.get()
+    if look and message[0] == "manifest" and dest is not None:
+        # One attempt, as the list's own: a retry says so on stderr, under
+        # the screen.
+        count = games_probe(plat, dest, attempts=1)
+        inbox.put(("games_here", plat, dest, count))
+    inbox.put(message)
 
 
 class _TuiTerminal:
@@ -20949,7 +23012,9 @@ def run_tui(args: argparse.Namespace) -> int:
         for effect in todo:
             kind = effect[0]
             if kind == "fetch":
-                threading.Thread(target=_tui_fetch, args=(effect[1], inbox, buffer),
+                threading.Thread(target=_tui_fetch_games,
+                                 args=(effect[1], inbox, buffer, state.dest,
+                                       state.games_choice not in ("user", "cli")),
                                  daemon=True).start()
             elif kind == "run":
                 for run in current:

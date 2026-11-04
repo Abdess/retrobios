@@ -725,7 +725,7 @@ This executes in sequence, numbered as the run prints them (`STEP_LABELS` in
 - 4d `bundled_only.py --strict`, copies only an emulator install provides
 - 5 Consistency check: verify and the pack agree on counts and on the paths each archive holds
 - 6 Pack integrity: extract the ZIPs and check hashes per platform mode
-- 7 `generate_readme.py`, regenerate README and CONTRIBUTING
+- 7 `generate_readme.py`, regenerate README and CONTRIBUTING, then `generate_installer_doc.py` rewrites the tables and run samples of `wiki/installer.md`
 - 8 `generate_site.py`, regenerate the site pages and navigation
 - 8b `npm run build` in `website/`, then `validate_site.py`
 

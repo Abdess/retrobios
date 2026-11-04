@@ -1,0 +1,20 @@
+cases:
+  psx-override-bios:
+    title: Region-free override BIOS
+    reason: An option swaps in a region-free image for every region.
+systems:
+  sony-playstation:
+    psxcore:
+      routes:
+        south-korea: japan
+      default_region: north-america
+      region_free: [openbios.bin]
+      source_ref: "example/psxcore@11111111 core.c:10-20"
+      keep_all_regions:
+        - case: psx-override-bios
+          condition: option
+          option: psxcore_override
+          default: disabled
+          keeps: region-free-files
+          files: [openbios.bin]
+          source_ref: "example/psxcore@11111111 core.c:30"

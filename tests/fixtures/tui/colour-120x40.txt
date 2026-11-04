@@ -373,6 +373,7 @@
 ^[[0;1m ^[[0;1;32mEverything is in place^[[0m
  BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m
  ^[[0;32m5 in place^[[0m, 0 missing, 0 wrong copies
+ 1 of the 0 wrong copies is replaced, the old one kept in a backup folder.
  Free space: 50.0 GB
  
 ^[[0;7;35m > Close^[[0m
@@ -406,18 +407,17 @@
  
  
  
- 
  ^[[0;1;35mA/Enter^[[0m Close  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Options  ^[[0;2m?^[[0m Help
 === systems
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Choose systems^[[0m
 
+   Filter (/ to type)
+   [x] nintendo-gba (gba)                                       1 file, 16.0 KB
+   [x] sony-playstation                                         3 files, 1.0 MB
+^[[0;7;35m > [ ] nintendo-famicom-disk (ファミコン)                              in place^[[0m
    All
    None
-   Filter (/ to type)
-^[[0;7;35m > [x] nintendo-gba (gba)                                       1 file, 16.0 KB^[[0m
-   [x] sony-playstation                                         3 files, 1.0 MB
-^[[0;2m   [ ] nintendo-famicom-disk (ファミコン)                              in place^[[0m
- 
+   ^[[0;32mDone^[[0m
  
  
  
@@ -448,7 +448,7 @@
  
  
 ^[[0;1m ^[[0;1;35m2^[[0;1m of ^[[0;1;35m3^[[0;1m systems: ^[[0;1;35m4^[[0;1m files, ^[[0;1;35m1.0 MB^[[0m
- ^[[0;1;35mA/Enter^[[0m Continue  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mX/Space^[[0m Tick  ^[[0;2m?^[[0m Help
+ ^[[0;1;35mA/Enter^[[0m Tick  ^[[0;2mB/Esc^[[0m Done  ^[[0;2m?^[[0m Help
 === options
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Options^[[0m
 
@@ -498,8 +498,8 @@
  
 ^[[0;7;35m > [1] North America^[[0m
    [ ] Japan
- 
- 
+   None
+   ^[[0;32mDone^[[0m
  
  
  
@@ -534,14 +534,15 @@
 === cores
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Cores^[[0m
 
- Every core ticked keeps every core's files. Untick the cores you do not use: the platform's own
-   files are always kept.
+ Untick the cores you do not use: the platform's own files are always kept, and a core with no
+   extra file reads only those.
  
-^[[0;7;35m > All^[[0m
+^[[0;7;35m > Filter (/ to type)^[[0m
+   [ ] mesen                                                     1 file, 8.0 KB
+   [x] pcsx_rearmed                                                 1 file, 4 B
+   All
    None
-   Filter (/ to type)
-   [ ] mesen
-   [x] pcsx_rearmed
+   ^[[0;32mDone^[[0m
  
  
  
@@ -570,8 +571,7 @@
  
  
  
- 
- ^[[0;1;35mA/Enter^[[0m Tick all  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mX/Space^[[0m Tick  ^[[0;2m?^[[0m Help
+ ^[[0;1;35mA/Enter^[[0m Filter  ^[[0;2mB/Esc^[[0m Done  ^[[0;2m?^[[0m Help
 === preview
 ^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Preview^[[0m
 
@@ -742,13 +742,13 @@
 ^[[0;1m ^[[0;1;32m3 installed^[[0;1m, ^[[0;1;31m1 failed^[[0;1m.^[[0m
  BIOS folder: ^[[0;1m/home/user/.config/retroarch/system^[[0m
    ^[[0;1;31mfailed:^[[0m scph5500.bin (HTTP 404)
+ Run it again to retry only those.
  The files it replaced are kept in /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
  To put them back: python3 install.py \
    --restore /home/user/.config/retroarch/retrobios-backup/2026-10-23_1200
  Same choice without questions:
    python3 install.py --platform retroarch --dest /home/user/.config/retroarch/system
  Details: /tmp/retrobios-x/install.log
-
 
 
 
@@ -900,3 +900,85 @@
  
  
  Any key closes this help
+=== plan-games
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: RetroArch^[[0m
+
+^[[0;1m ^[[0;1;35m4^[[0;1m files to download, ^[[0;1;35m1.0 MB^[[0m
+ BIOS folder: ^[[0;1m~/.config/retroarch/system^[[0m
+ For the 412 games on this card.
+ One region where the games prove it: nintendo-gba Europe.
+ 2 games get every BIOS of their system: Show the games.
+ ^[[0;32m1 in place^[[0m, ^[[0;33m3 missing^[[0m, ^[[0;33m1 wrong copy^[[0m
+ The ^[[0;33m1 wrong copy^[[0m is replaced, the old one kept in a backup folder.
+ Free space: 50.0 GB
+ 
+^[[0;7;35m > Install^[[0m
+   For the games on this card: yes                                    412 games
+   Only what starts: no
+   Show the games
+   Choose systems
+   Copy the BIOS files from your old card or a folder
+   Options
+   Quit
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ ^[[0;1;35mA/Enter^[[0m Install  ^[[0;2mB/Esc^[[0m Back  ^[[0;2mY/o^[[0m Options  ^[[0;2m?^[[0m Help
+=== games
+^[[0;1m ^[[0;1;35mRetroBIOS^[[0;1m: Games on this card^[[0m
+
+ 412 games in /media/user/SDCARD/Roms, 398 recognised by their content.
+ 
+ sony-playstation (PS): 400 games, 390 recognised, every region
+ nintendo-gba (GBA): 12 games, 8 recognised, Europe only
+ 
+ Every BIOS of their system kept, so that they start:
+ GBA/demo.gba: not recognised
+ GBA/hack.gba: not recognised
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ ^[[0;1;35mA/Enter^[[0m Back

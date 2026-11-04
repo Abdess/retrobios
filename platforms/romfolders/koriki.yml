@@ -1,0 +1,646 @@
+setup: koriki
+name: Koriki
+platform: retroarch
+sources:
+  os:
+    repo: "https://github.com/Rparadise-Team/Koriki"
+    commit: 8513071c9bcffe9603ec3b3b760ad9385906a6a5
+roms_root:
+  path: /mnt/SDCARD/Roms
+  from_bios: ../Roms
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:4"
+case_sensitive: false
+case_ref: "os src/simplemenu-beta/src/logic/logic.c:566-575"
+media:
+- name: Imgs
+  source_ref: "os src/simplemenu-beta/src/logic/logic.c:760-775"
+notes:
+- "SimpleMenu lists only files whose extension is in romExts, compared case-insensitively (os src/simplemenu-beta/src/logic/logic.c:990-1005)."
+- "The first launcher of execs is the active one (os src/simplemenu-beta/src/logic/config.c:1127)."
+- The shipped SimpleMenu binary is built from a submodule this tree does not hold. The in-tree copy src/simplemenu-beta
+  was read.
+folders:
+- folder: AMIGA
+  extensions:
+  - .7z
+  - .adf
+  - .adz
+  - .ccd
+  - .chd
+  - .cue
+  - .dms
+  - .fdi
+  - .hdf
+  - .hdz
+  - .info
+  - .ipf
+  - .iso
+  - .lha
+  - .m3u
+  - .mds
+  - .nrg
+  - .rp9
+  - .slave
+  - .uae
+  - .zip
+  core: puae
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:4"
+  note: launchers puae_libretro, uae4arm_libretro, puae2021_libretro
+- folder: ARCADE
+  name: MAME
+  extensions:
+  - .zip
+  core: mame2003_plus
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:156"
+  note: launchers mame2003_plus_libretro, fbneo_libretro, fbalpha2012_libretro, km_mame2003_xtreme_amped_libretro,
+    km_mame2003_xtreme_libretro, mame2000_libretro, mame2010_libretro, mame2003_libretro, mame2003_xtreme_libretro
+- folder: ARDUBOY
+  name: ARDUINO
+  extensions:
+  - .hex
+  core: arduous
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:19"
+  note: launchers arduous_libretro
+- folder: ATARI
+  name: ATARI 2600
+  extensions:
+  - .7z
+  - .a26
+  - .bin
+  - .zip
+  core: stella2014
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:24"
+  note: launchers stella2014_libretro
+- folder: ATARIST
+  name: ATARI ST
+  extensions:
+  - .7z
+  - .a78
+  - .rom
+  - .zip
+  core: hatari
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:45"
+  note: launchers hatari_libretro, hatari_plus_libretro
+- folder: C64
+  name: COMMODORE 64
+  extensions:
+  - .7z
+  - .bin
+  - .crt
+  - .d64
+  - .g64
+  - .t64
+  - .zip
+  core: vice_x64
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:50"
+  note: launchers vice_x64_libretro
+- folder: CPC
+  name: AMSTRAD CPC
+  extensions:
+  - .7z
+  - .cdt
+  - .cpr
+  - .dsk
+  - .m3u
+  - .sna
+  - .tap
+  - .voc
+  - .zip
+  core: crocods
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:9"
+  note: launchers crocods_libretro
+- folder: CPS1
+  extensions:
+  - .zip
+  core: fbalpha2012_cps1
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:60"
+  note: launchers fbalpha2012_cps1_libretro, fbneo_libretro, fbalpha_libretro, fbneo_miyoo_libretro, fbneo_standalone
+- folder: CPS2
+  extensions:
+  - .zip
+  core: fbalpha2012_cps2
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:66"
+  note: launchers fbalpha2012_cps2_libretro, fbneo_libretro, fbalpha_libretro, fbneo_miyoo_libretro, fbneo_standalone
+- folder: CPS3
+  extensions:
+  - .zip
+  core: fbalpha2012_cps3
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:72"
+  note: launchers fbalpha2012_cps3_libretro, fbneo_libretro, fbalpha_libretro, fbneo_miyoo_libretro, fbneo_standalone
+- folder: DAPHNE
+  extensions:
+  - .zip
+  core: daphne
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:78"
+  note: launchers daphne_libretro
+- folder: DOOM
+  extensions:
+  - .7z
+  - .wad
+  - .zip
+  core: prboom
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:88"
+  note: launchers prboom_libretro. romDirs DOOM/DOOM, DOOM/DOOM2
+- folder: DOS
+  extensions:
+  - .7z
+  - .bat
+  - .com
+  - .cue
+  - .dosz
+  - .exe
+  - .iso
+  - .m3u
+  - .vhd
+  - .zip
+  core: dosbox_pure
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:83"
+  note: launchers dosbox_pure_libretro, dosbox_pure_miyoo_libretro, dosbox_standalone
+- folder: FBA
+  name: FINALBURN ALPHA
+  extensions:
+  - .zip
+  core: fbalpha2012
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:98"
+  note: launchers fbalpha2012_libretro, fbalpha_libretro, fbneo_libretro, fbneo_miyoo_libretro, fb_32b_libretro,
+    fbneo_standalone
+- folder: FBNEO
+  name: FINALBURN NEO
+  extensions:
+  - .zip
+  core: fbneo
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:104"
+  note: launchers fbneo_libretro, fb_32b_libretro, fbalpha_libretro, fbneo_miyoo_libretro, fbneo_standalone
+- folder: FC
+  name: NES
+  extensions:
+  - .7z
+  - .nes
+  - .zip
+  core: fceumm
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:184"
+  note: launchers fceumm_libretro, nestopia_libretro, nestopia_miyoo_libretro
+- folder: FDS
+  extensions:
+  - .7z
+  - .fds
+  - .zip
+  core: fceumm
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:93"
+  note: launchers fceumm_libretro, nestopia_libretro, nestopia_miyoo_libretro
+- folder: FIFTYTWOHUNDRED
+  name: ATARI 5200
+  extensions:
+  - .7z
+  - .a52
+  - .bin
+  - .zip
+  core: a5200
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:29"
+  note: launchers a5200_libretro, atari800_libretro
+- folder: GB
+  name: GAME BOY
+  extensions:
+  - .7z
+  - .gb
+  - .gz
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:116"
+  note: launchers gambatte_libretro, gearboy_libretro, sameboy_libretro, tgbdual_libretro, tgbdual_libretro_server,
+    tgbdual_libretro_client, DoubleCherryGB_miyoo_libretro, DoubleCherryGB_libretro
+- folder: GBA
+  name: GAME BOY ADVANCE
+  extensions:
+  - .7z
+  - .gba
+  - .zip
+  core: gpsp_plus
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:128"
+  note: launchers gpsp_plus_libretro, mgba_plus_libretro, gpsp_libretro, mgba_libretro, mednafen_gba_libretro,
+    meteor_libretro, vbam_libretro, vba_next_libretro
+- folder: GBC
+  name: GAME BOY COLOR
+  extensions:
+  - .7z
+  - .gbc
+  - .zip
+  core: gambatte
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:122"
+  note: launchers gambatte_libretro, gearboy_libretro, sameboy_libretro, tgbdual_libretro, tgbdual_libretro_server,
+    tgbdual_libretro_client, DoubleCherryGB_miyoo_libretro, DoubleCherryGB_libretro
+- folder: GG
+  name: GAME GEAR
+  extensions:
+  - .7z
+  - .gg
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:140"
+  note: launchers picodrive_libretro, genesis_plus_gx_libretro, gearsystem_libretro, picodrive_standalone,
+    picodrive_netplay_libretro
+- folder: GW
+  name: GAME & WATCH
+  extensions:
+  - .7z
+  - .mgw
+  - .zip
+  core: gw
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:110"
+  note: launchers gw_libretro, gw_miyoo_libretro
+- folder: INTELLI
+  name: INTELLIVISION
+  extensions:
+  - .bin
+  - .int
+  core: freeintv
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:151"
+  note: launchers freeintv_libretro
+- folder: LYNX
+  name: ATARI LYNX
+  extensions:
+  - .7z
+  - .lnx
+  - .zip
+  core: handy
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:39"
+  note: launchers handy_libretro, mednafen_lynx_libretro
+- folder: MD
+  name: SEGA GENESIS
+  extensions:
+  - .7z
+  - .bin
+  - .gen
+  - .md
+  - .mdx
+  - .smd
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:268"
+  note: launchers picodrive_libretro, genesis_plus_gx_libretro, picodrive_standalone, picodrive_netplay_libretro,
+    genesis_plus_gx_mod_libretro
+- folder: MS
+  name: MASTER SYSTEM
+  extensions:
+  - .7z
+  - .sms
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:162"
+  note: launchers picodrive_libretro, genesis_plus_gx_libretro, gearsystem_libretro, picodrive_standalone,
+    picodrive_netplay_libretro, smsplus_libretro
+- folder: MSU1
+  name: MSU-1
+  extensions:
+  - .7z
+  - .sfc
+  - .smc
+  - .zip
+  core: snes9x
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:189"
+  note: launchers msu1_libretro, snes9x_libretro
+- folder: MSUMD
+  name: MSU-MD
+  extensions:
+  - .md
+  core: genesis_plus_gx
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:195"
+  note: launchers MSU-MD_libretro
+- folder: MSX
+  extensions:
+  - .7z
+  - .cas
+  - .col
+  - .dsk
+  - .m3u
+  - .mx1
+  - .mx2
+  - .ri
+  - .rom
+  - .sc
+  - .sg
+  - .zip
+  core: bluemsx
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:201"
+  note: launchers bluemsx_libretro, fmsx_libretro
+- folder: NDS
+  name: NINTENDO DS
+  extensions:
+  - .7z
+  - .nds
+  - .rar
+  - .zip
+  core: drastic_standalone
+  emulator: standalone
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:134"
+  note: launchers drastic_standalone
+- folder: NEOCD
+  name: NEO GEO CD
+  extensions:
+  - .chd
+  - .zip
+  core: neocd
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:173"
+  note: launchers neocd_libretro
+- folder: NEOGEO
+  name: NEO GEO
+  extensions:
+  - .7z
+  - .zip
+  core: fbalpha2012_neogeo
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:167"
+  note: launchers fbalpha2012_neogeo_libretro, fbneo_libretro, fb_32b_libretro, fbalpha2012_neogeo_miyoo_libretro,
+    fbalpha_libretro, fbneo_miyoo_libretro, fbneo_standalone
+- folder: NGP
+  name: NEO GEO POCKET
+  extensions:
+  - .7z
+  - .ngc
+  - .ngp
+  - .ngpc
+  - .npc
+  - .zip
+  core: race
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:178"
+  note: launchers race_libretro, mednafen_ngp_libretro
+- folder: ODYSSEY2
+  extensions:
+  - .bin
+  - .zip
+  core: o2em
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:55"
+  note: launchers o2em_libretro
+- folder: OPENBOR
+  extensions:
+  - .pak
+  core: openbor_standalone_plus
+  emulator: standalone
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:206"
+  note: launchers openbor_standalone_plus, openbor_standalone, openbor_standalone_old, openbor_standalone_lns
+- folder: PC98
+  extensions:
+  - .fdi
+  - .hdi
+  core: nekop2
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:216"
+  note: launchers nekop2_libretro, np2kai_libretro
+- folder: PCE
+  name: PC ENGINE
+  extensions:
+  - .7z
+  - .cue
+  - .pce
+  - .tg16
+  - .zip
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:221"
+  note: launchers mednafen_pce_fast_libretro, mednafen_pce_libretro, mednafen_supergrafx_libretro
+- folder: PCECD
+  name: PC ENGINE CD
+  extensions:
+  - .7z
+  - .chd
+  - .cue
+  - .pce
+  - .tg16
+  - .zip
+  core: mednafen_pce_fast
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:226"
+  note: launchers mednafen_pce_fast_libretro, mednafen_pce_libretro, mednafen_supergrafx_libretro
+- folder: PICO
+  name: PICO-8
+  extensions:
+  - .p8
+  - .p8.png
+  - .png
+  core: pico_standalone
+  emulator: standalone
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:231"
+  note: launchers pico_standalone, fake08_libretro, retro8_libretro
+- folder: POKE
+  name: POKEMON MINI
+  extensions:
+  - .7z
+  - .min
+  - .zip
+  core: pokemini
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:242"
+  note: launchers pokemini_libretro
+- folder: PS
+  name: PLAYSTATION
+  extensions:
+  - .chd
+  - .cue
+  - .img
+  - .iso
+  - .m3u
+  - .mdf
+  - .pbp
+  - .zip
+  core: pcsx_standalone
+  emulator: standalone
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:237"
+  note: launchers pcsx_standalone, pcsx_rearmed_miyoo_libretro, pcsx_rearmed_libretro, pcsx_rearmed_libretro_old,
+    pcsx_rearmed_libretro_shaun
+- folder: QUAKE
+  extensions:
+  - .fbl
+  core: tyrquake
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:248"
+  note: launchers tyrquake_libretro. romDirs QUAKE/id1, QUAKE/hipnotic, QUAKE/rogue, QUAKE/dopa
+- folder: SCUMMVM
+  extensions:
+  - .scummvm
+  core: scummvm
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:253"
+  note: launchers scummvm_libretro
+- folder: SEGACD
+  name: SEGA CD
+  extensions:
+  - .bin
+  - .chd
+  - .cue
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:263"
+  note: launchers picodrive_libretro, genesis_plus_gx_libretro, picodrive_standalone, picodrive_netplay_libretro
+- folder: SEGASGONE
+  name: SEGA SG-1000
+  extensions:
+  - .7z
+  - .sg
+  - .zip
+  core: gearsystem
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:273"
+  note: launchers gearsystem_libretro, genesis_plus_gx_libretro, picodrive_libretro, picodrive_standalone,
+    picodrive_netplay_libretro
+- folder: SEVENTYEIGHTHUNDRED
+  name: ATARI 7800
+  extensions:
+  - .7z
+  - .a78
+  - .bin
+  - .zip
+  core: prosystem
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:34"
+  note: launchers prosystem_libretro
+- folder: SFC
+  name: SNES
+  extensions:
+  - .7z
+  - .sfc
+  - .smc
+  - .zip
+  core: snes9x2005_plus
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:283"
+  note: launchers snes9x2005_plus_libretro, snes9x2005_libretro, snes9x2002_libretro, snes9x2010_libretro,
+    snes9x_libretro, snes9x_next_libretro, mednafen_supafaust_plus_libretro, mednafen_supafaust_libretro,
+    pocketsnes_standalone
+- folder: SGB
+  extensions:
+  - .7z
+  - .gb
+  - .gbc
+  - .zip
+  core: msgb
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:278"
+  note: launchers msgb_libretro, tgbdual_libretro
+- folder: SUPERVISION
+  extensions:
+  - .7z
+  - .bin
+  - .sv
+  - .zip
+  core: potator
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:288"
+  note: launchers potator_libretro
+- folder: THIRTYTWOX
+  name: SEGA 32X
+  extensions:
+  - .32x
+  - .7z
+  - .zip
+  core: picodrive
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:258"
+  note: launchers picodrive_libretro, picodrive_standalone, picodrive_netplay_libretro
+- folder: TIC
+  name: TIC-80
+  extensions:
+  - .7z
+  - .tic
+  core: tic80
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:294"
+  note: launchers tic80_libretro
+- folder: VB
+  name: VIRTUAL BOY
+  extensions:
+  - .7z
+  - .bin
+  - .vb
+  - .vboy
+  - .zip
+  core: mednafen_vb
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:299"
+  note: launchers mednafen_vb_libretro
+- folder: WOLF3D
+  extensions:
+  - .ecwolf
+  core: ecwolf
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:304"
+  note: launchers ecwolf_libretro
+- folder: WS
+  name: WONDERSWAN
+  extensions:
+  - .7z
+  - .pc2
+  - .ws
+  - .wsc
+  - .zip
+  core: mednafen_wswan
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:309"
+  note: launchers mednafen_wswan_libretro
+- folder: X68000
+  extensions:
+  - .2hd
+  - .7z
+  - .88d
+  - .cmd
+  - .d88
+  - .dim
+  - .dup
+  - .hdf
+  - .hdm
+  - .img
+  - .m3u
+  - .xdf
+  - .zip
+  core: px68k
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:315"
+  note: launchers px68k_libretro, px68k_miyoo_libretro
+- folder: ZXS
+  name: ZX SPECTRUM
+  extensions:
+  - .7z
+  - .dsk
+  - .rzx
+  - .scl
+  - .tap
+  - .trd
+  - .tzx
+  - .z80
+  - .zip
+  core: fuse
+  emulator: retroarch
+  source_ref: "os base/.simplemenu/section_groups/apps%20and%20games.ini:320"
+  note: launchers fuse_libretro

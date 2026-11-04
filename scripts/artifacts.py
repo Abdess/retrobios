@@ -7,6 +7,7 @@ it is only meaningful if the comparison ignores the hour."""
 from __future__ import annotations
 
 from collections.abc import Callable, Iterator
+from typing import BinaryIO
 import contextlib
 import json
 import os
@@ -158,6 +159,29 @@ def copy_file_atomic(source: str, path: str) -> None:
         with contextlib.suppress(OSError):
             os.unlink(scratch)
         raise
+
+
+def copy_stream_atomic(stream: BinaryIO, path: str) -> None:
+    """Stream a download into place whole or not at all.
+
+    A fixed scratch name let two runs interleave their bytes in one file of
+    the right size, which the rename then promoted."""
+    import shutil
+
+    directory = os.path.dirname(os.path.abspath(path))
+    handle, scratch = tempfile.mkstemp(
+        dir=directory, prefix=f".{os.path.basename(path)}.", suffix=".tmp"
+    )
+    try:
+        with os.fdopen(handle, "wb") as f:
+            shutil.copyfileobj(stream, f)
+        set_plain_mode(scratch)
+        os.replace(scratch, path)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            os.unlink(scratch)
+        raise
+
 
 def _strip_timestamps(text: str) -> str:
     """Remove known timestamp patterns for content comparison."""

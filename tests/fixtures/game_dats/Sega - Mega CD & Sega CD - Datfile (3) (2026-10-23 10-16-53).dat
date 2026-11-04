@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE datafile PUBLIC "-//Logiqx//DTD ROM Management Datafile//EN" "http://www.logiqx.com/Dats/datafile.dtd">
+<datafile>
+	<header>
+		<name>Sega - Mega CD &amp; Sega CD</name>
+		<version>2026-10-23 10-16-53</version>
+	</header>
+	<game name="Sonic CD (Europe)">
+		<serial>4407</serial>
+		<rom name="Sonic CD (Europe).cue" size="1000" crc="99999999" sha1="7777777777777777777777777777777777777777"/>
+		<rom name="Sonic CD (Europe) (Track 01).bin" size="129590496" crc="0060ac74" sha1="1ab058c8228af31a50def1b01f1f33961f2f23d7"/>
+		<rom name="Sonic CD (Europe) (Track 02).bin" size="1000" crc="88888888" sha1="8888888888888888888888888888888888888888"/>
+	</game>
+	<game name="Sonic CD (USA)">
+		<serial>4407, T-0000</serial>
+		<rom name="Sonic CD (USA).cue" size="1000" crc="99999990" sha1="9999999999999999999999999999999999999999"/>
+		<rom name="Sonic CD (USA) (Track 01).bin" size="129590496" crc="0060ac75" sha1="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"/>
+	</game>
+	<game name="Fresh Cleaner (Japan)">
+		<serial>M-20001</serial>
+		<rom name="Fresh Cleaner (Japan).cue" size="100" crc="11111110" sha1="bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"/>
+		<rom name="Fresh Cleaner (Japan) (Track 1).bin" size="6644400" crc="020ca333" sha1="ba09041ae84fc5798a0c88b688ac0c7b9d42b873"/>
+	</game>
+</datafile>

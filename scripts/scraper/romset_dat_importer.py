@@ -200,20 +200,22 @@ def _scan_listxml(
     and those holding one of *targets*.
 
     The document is 311 MB for MAME 0.289, so it is never held whole: the
-    reader keeps a sliding window just large enough to close the element it
-    is in the middle of.
+    window keeps the element still open from its start tag, and grows until
+    that element closes, whatever its size.
     """
     found: dict[str, tuple[str | None, list[dict]]] = {}
     buffer = b""
     while chunk := stream.read(LISTXML_CHUNK):
         buffer += chunk
         position = 0
+        keep_from = None
         while True:
             match = _MACHINE.search(buffer, position)
             if not match:
                 break
             end = buffer.find(b"</machine>", match.end())
             if end == -1:
+                keep_from = match.start()
                 break
             name = match.group(1).decode()
             wanted = selector(name)
@@ -223,7 +225,12 @@ def _scan_listxml(
                     parent = _ROMOF.search(match.group(2).decode())
                     found[name] = (parent.group(1) if parent else None, roms)
             position = end + len(b"</machine>")
-        buffer = buffer[position:] if position else buffer[-(2 * LISTXML_CHUNK) :]
+        if keep_from is None:
+            # No element open: only a start tag cut by the read can follow.
+            start = buffer.rfind(b"<machine", position)
+            tail = max(position, len(buffer) - len(b"<machine"))
+            keep_from = start if start != -1 else tail
+        buffer = buffer[keep_from:]
     return found
 
 
