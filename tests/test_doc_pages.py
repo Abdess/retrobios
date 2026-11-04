@@ -1270,7 +1270,9 @@ class CitedScriptsExist(unittest.TestCase):
         found = []
         for number, target, module, _args in _commands(text):
             path = ROOT / (target.replace(".", "/") + ".py" if module else target)
-            if not path.is_file():
+            # `python -m` also runs a package by its __main__.py.
+            package = ROOT / target.replace(".", "/") / "__main__.py" if module else None
+            if not path.is_file() and not (package and package.is_file()):
                 found.append(f"{number}: {target}")
         found += [
             f"{number}: {name}"
