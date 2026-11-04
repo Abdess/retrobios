@@ -678,7 +678,8 @@ def main() -> None:
         "--skip-packs",
         action="store_true",
         help="Skip steps 4 to 6 except 4d: packs, manifests and their checks. "
-        "Steps 7 and 8 still rewrite README.md and docs/, add --skip-docs to "
+        "Steps 7 and 8 still rewrite README.md and the site pages in website/, "
+        "add --skip-docs to "
         "stop after verify",
     )
     parser.add_argument(
@@ -734,7 +735,8 @@ def main() -> None:
     # hold lasts until this process exits: taken step by step, it let another
     # run purge the packs between the build and the integrity check, which
     # then reported every platform SKIP and passed.
-    # database.json, install/, README.md and docs/ sit at fixed paths, so
+    # database.json, install/, README.md, CONTRIBUTING.md and website/ sit at
+    # fixed paths (artifacts.REPOSITORY_OUTPUTS), so
     # every run holds them too: a run on a scratch --output-dir otherwise
     # rewrote them beside the run on dist/.
     held = contextlib.ExitStack()

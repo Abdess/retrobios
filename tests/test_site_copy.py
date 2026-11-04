@@ -6,8 +6,8 @@ every platform's check. Each budget below is a number on the built page:
 words before the first action, sentence and block length, words per page, and
 a list of words a newcomer does not know or does not need.
 
-Run ``python -m tests.test_site_copy --report docs`` to print the measures of
-every page held here.
+Run ``python -m tests.test_site_copy --report website/src/content/docs`` to
+print the measures of every page held here.
 """
 
 from __future__ import annotations

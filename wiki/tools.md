@@ -43,13 +43,13 @@ Pipeline steps:
 | 3 | Verify all platforms (`--strict`) | - |
 | 3a | File identity: one content under two identities (`identity.py --strict`, gates the run) | - |
 | 3b | Slot arbitration: destinations both layers claim (`slots.py`, reports only) | - |
-| 4 | Generate packs | `--skip-packs` |
+| 4 | Generate the packs of the platforms marked `release_pack` | `--skip-packs` |
 | 4b | Generate install manifests | `--skip-packs` |
 | 4c | Generate target manifests | `--skip-packs` |
 | 4d | Collected copies only an emulator install provides (`bundled_only.py --strict`, gates the run) | - |
 | 4e | Games index: what the installer reads for the games on a card (`generate_games_index.py`, fails under its coverage floor) | - (reads the committed install lists) |
-| 5 | Consistency check: counts, paths per archive, every emulator pack | if verify or pack skipped |
-| 6 | Pack integrity (extract + hash) | `--skip-packs` |
+| 5 | Consistency check: counts, paths per archive, every emulator pack | `--skip-packs`, or no full pack built (`--source platform` or `truth`) |
+| 6 | Pack integrity (extract + hash) | `--skip-packs`, or no full pack built |
 | 7 | Generate README and CONTRIBUTING, then the installer page's tables and run samples (`generate_installer_doc.py`) | `--skip-docs` |
 | 8 | Generate site | `--skip-docs` |
 | 8b | Render the site with `npm run build --prefix website`, then `validate_site.py`, as the deploy does | `--skip-docs`, or Node not set up (`npm ci --prefix website`) |
@@ -58,7 +58,7 @@ Pipeline flags:
 
 | Flag | Effect |
 |------|--------|
-| `--offline` | skip every step that needs the network (2, 2a, 2a2, 2b, 2b2) |
+| `--offline` | skip every step that needs the network (2, 2a, 2a2, 2b, 2b2), and pack only the release assets already in `.cache/large/` |
 | `--skip-packs` | skip steps 4, 4b, 4c, 6 and the consistency check. README and site are still rewritten unless `--skip-docs` is given too |
 | `--skip-docs` | skip steps 7 and 8 |
 | `--include-archived` | include archived platforms in verify, packs, truth and export |
@@ -96,8 +96,8 @@ alone, run `python scripts/check_buildbot_system.py`.
   `<output-dir>/.lock`, and a second run on the same folder stops at once
   rather than read a half-written ZIP. Pack experiments with
   `generate_pack.py` use a scratch `--output-dir` under `tmp/`. A pipeline
-  run also writes `database.json`, `install/`, `README.md` and `docs/` at
-  fixed paths, so it holds the repository's `.lock` as well, and a second
+  run also writes `database.json`, `install/`, `README.md`, `CONTRIBUTING.md`
+  and `website/` at fixed paths, so it holds the repository's `.lock` as well, and a second
   pipeline is refused whatever its `--output-dir`.
 - **Read the exit status before the output.** A generator that crashed leaves
   the previous artifact in place, which reads exactly like a run that changed
@@ -172,7 +172,7 @@ database or source tree, which is how the tests drive it against fixtures.
 Build platform-specific BIOS ZIP packs.
 
 ```bash
-# Full platform packs
+# Full platform packs (--all: the platforms marked release_pack)
 python scripts/generate_pack.py --all --output-dir dist/
 python scripts/generate_pack.py --platform batocera
 python scripts/generate_pack.py --emulator dolphin
@@ -643,6 +643,12 @@ python scripts/refresh_data_dirs.py --platform batocera    # single platform onl
 python scripts/refresh_data_dirs.py --registry path/to/_data_dirs.yml
 ```
 
+A download that fails or does not read as an archive is tried three times,
+after waits of 5 and 20 seconds: a mirror once answered with a page instead of
+`ScummVM.zip` and served the archive minutes later. An archive that reads but
+holds nothing under the expected path fails at once, since a retry gets the
+same bytes.
+
 ### check_freshness.py
 
 Ask every transcribed layer whether the local copy is the one upstream serves
@@ -793,7 +799,7 @@ the linked worktrees placed inside the checkout, where sessions create
 theirs. One is removed only when no process uses it, it is older than
 `--hours`, and nothing tracked changed in it but generated files
 (`database.json`, `install/*.json`, `exports/*.json`, `README.md`,
-`mkdocs.yml`). One holding real changes is listed, never removed. Branches
+`CONTRIBUTING.md`, `website/src/data/*.json`). One holding real changes is listed, never removed. Branches
 are always kept. A worktree elsewhere on disk and the automation worktree are
 never candidates. `tmp/` entries older than `--hours` that no process uses
 are removed, except `tmp/acquire`, `*.bundle` and an entry that holds a
@@ -953,30 +959,26 @@ python scripts/core_probe.py rejudge --dry-run
 python scripts/core_probe.py rejudge --emulator beetle_psx
 ```
 
+`python scripts/core_probe.py <mode> --help` lists every option. These need
+more than its one line:
+
 | Option | Effect |
 |--------|--------|
-| `--system-file DEST=SRC` | copy SRC into a staged system directory as DEST |
-| `--content-label` | identity of the content, such as its Redump name, copied into the record |
-| `--work-dir`, `--timeout` | scratch directory for the staged runs, and seconds allowed per repetition (default 1800), after which the run is killed and judged a hang |
-| `--oracle FILE` | reference frames, error patterns and error screens the verdicts are judged against (default `tests/campaign/oracle.yml`) |
+| `--timeout` | seconds allowed per repetition (default 1800), after which the run is killed and judged a hang |
 | `--repeat N` | runs of each variant, each in a fresh process (`run` defaults to 1, `check` to 2, `bench` to 5) |
 | `--vary DEST=SRC` | (`check`) one variant per occurrence. An empty SRC leaves DEST absent, `@zeros:SIZE` stages SIZE zero bytes and `@head:SIZE:PATH` the first SIZE bytes of PATH |
 | `--option KEY=VALUE` | core option. Unset options take the first value the core declares |
-| `--frames`, `--warmup` | frames timed, and frames run before timing starts |
 | `--press FRAME:BUTTON[:LEN]` | hold a libretro joypad button on port 0 (`a`, `b`, `start`, `up`...). A menu may need 15 frames or more to see it |
-| `--joypad-ports N` | ports given a joypad after loading, as RetroArch does (default 2) |
 | `--env KEY=VALUE` | environment of the core process. A core that reads the host clock repeats only with the clock fixed, for example `LD_PRELOAD` of a clock shim. `LD_PRELOAD` must name each library by an absolute path to a file, or the run is refused: the loader skips a library it cannot find without a word. A value naming a file is recorded by file name and sha256 |
-| `--frame-hash-every K`, `--png-dir` | sha1 of every K-th frame, and those frames as PNG |
-| `--state-var SECTION.VAR` | a variable of a Mednafen save state, as an observable |
-| `--state-dir` | keep the save state taken at the end of the first repetition |
-| `--core-repo`, `--core-commit`, `--build-command` | where the core build comes from, copied into the record |
-| `--core-artifact URL` | where a downloaded `.so` came from, such as a buildbot nightly, copied into the record |
+| `--core-repo`, `--core-commit`, `--build-command` | where the core build comes from, copied into the record. No core binary is kept in the repository: a record is reproduced by building the core again at that commit, so a nightly recorded without its commit cannot be |
 | `--record [DIR]` | append the record as one line of `measurements/<emulator>.jsonl` in the checkout `DIR`, by default this one. `DIR` must be the root of a git checkout, never its `measurements/` folder. Commit it |
 | `--emulator` | the profile the record is filed under. By default the profile whose `cores:` names the `.so`, else the core's library name |
 | `--subject` | a slug naming the test, shared by its reruns. By default derived from the claim and method, or from the inputs of a run or bench |
-| `--supersedes ID` | the id of an earlier record of the same emulator this one corrects |
-| `--max-load` | refuse to record when the 1-minute load average is above it (default: a quarter of the CPU count) |
-| `--no-trace` | run without strace |
+| `--core-artifact URL` | where a downloaded `.so` came from, such as a buildbot nightly, copied into the record |
+| `--joypad-ports N` | ports given a joypad after loading, as RetroArch does (default 2). |
+| `--state-var SECTION.VAR`, `--state-dir` | a variable of a Mednafen save state as an observable, and a folder that keeps the state of the first repetition to read it again |
+| `--max-load` | refuse to record above this 1-minute load average (default a quarter of the CPUs). Never raise it: a busy host computes wrong hashes |
+| `--no-trace` | run without strace. The record then says that tracing was unavailable |
 | `@FILE` | read arguments from FILE, one per line |
 
 Observables are `frame_sha1` (last frame), `video_sha1` (every frame, chained),
@@ -1164,14 +1166,12 @@ python scripts/region_check.py run \
 python scripts/region_check.py report        # the outcome of every region record, as JSON
 ```
 
-| Option | Effect |
-|--------|--------|
-| `--core-name` | the buildbot name of the core, whose x86_64 nightly is downloaded once into `.cache/region/cores/` and named in the record |
-| `--core`, `--core-artifact` | a core `.so` to use instead, and where it was downloaded from |
-| `--content-dir` | where romfetch keeps the test games (default `.cache/test-content`) |
-| `--variants` | a subset of `full`, `own`, `others` and `pack` |
-| `--timeout` | seconds per run (default 900) |
-| `--max-load-wait` | seconds a run refused on a busy host is tried again, every 15 seconds, before it is given up (default 1800). The load threshold stays core_probe's |
+`region_check.py run --help` lists the options. The nightly `--core-name`
+names is downloaded once into `.cache/region/cores/`. `--core` and
+`--core-artifact` run a core built elsewhere instead, `--content-dir` points
+at another romfetch folder, and `--variants` reruns some of the four runs only. A run refused on a busy
+host is tried again every 15 seconds for `--max-load-wait` seconds, and the
+load threshold stays core_probe's.
 
 The file the core opened in the `full` run, read from strace, settles the
 claim: `confirmed` when its `region:` holds the game's region, `contradicted`
@@ -1218,16 +1218,10 @@ python scripts/standalone_probe.py check pcsx2 \
 | Files | `strace -f` inside the sandbox: the files the emulator opened in the staged BIOS folder, and the ones it looked for there and did not find |
 | Verdict | `core_probe.judge` on each repetition, with the oracle of `tests/campaign/oracle.yml` looked up by the content's sha1 and the emulator's name, plus the emulator's own error strings this script lists (DuckStation's "No BIOS image found for", PCSX2's "Unable to auto locate a BIOS image"). An emulator that exits before the last sample is a crash |
 
-| Option | Effect |
-|--------|--------|
-| `--bios-file DEST=SRC` | copy SRC into the staged BIOS folder as DEST |
-| `--setting SECTION.KEY=VALUE` | an emulator setting written before the run |
-| `--sha256` | the fetched asset to run (default: the newest fetched) |
-| `--samples`, `--interval` | screen samples per repetition (default 60), and seconds between two (default 1) |
-| `--oracle` | the boot oracle file (default `tests/campaign/oracle.yml`, as `core_probe.py`) |
-| `--png-dir` | each distinct sampled screen of the first repetition as PNG |
-| `--record`, `--subject`, `--supersedes`, `--max-load`, `--work-dir`, `--no-trace`, `--require-sandbox` | as in `core_probe.py` |
-| `check`: `--vary`, `--observable`, `--claim`, `--method`, `--repeat` | as in `core_probe.py`, compared on `verdict` by default |
+`standalone_probe.py <mode> --help` lists the options. `--sha256` runs an
+older fetched asset than the newest. The ones it shares with `core_probe.py`
+(`--record`, `--max-load`, `--no-trace`, `--require-sandbox`) mean the same
+there, and `check` compares on `verdict` by default.
 
 Supported: DuckStation and PCSX2. Dolphin, Flycast, PPSSPP, melonDS, xemu and
 MAME are installed by EmuDeck from Flathub, Ryujinx from a Codeberg tarball and
@@ -1304,7 +1298,7 @@ before a release (wiki/release-process.md). Its lines stay in
 | `generate_event_schema.py` | Write `schemas/install-events.schema.json` from `EVENT_KEYS` in `install.py` (`--check` exits 1 when the file is stale, which `validate_schemas.py` also reports) |
 | `generate_installer_doc.py` | Rewrite the generated blocks of `wiki/installer.md` from `install.py`: the tables (options, events, exit codes, keys per route, card markers), the line menu, and the run samples `install.py` prints in a sandbox against the committed `install/*.json`, so a new list rewrites the page (`--check` exits 1 when a block is stale, `--page FILE` writes another copy of the page). Pipeline step 7 |
 | `auto_fetch.py` | Fetch missing BIOS files from known sources (4-step pipeline). A download is accepted only when every cryptographic hash the entry declares (sha256, sha1, md5) matches. crc32 and size find a file the database already holds, never accept a download. An entry with no cryptographic hash is reported and not searched |
-| `list_platforms.py` | List active platforms (`--include-archived` adds the archived ones, used by CI) |
+| `list_platforms.py` | List active platforms (`--include-archived` adds the archived ones) |
 | `download.py` | Download a pack from GitHub releases, every part checked (Python, stdlib only) |
 | `download.sh` | Same, as a shell one-liner (`curl` + `unzip`) |
 | `split_pack.py` | Cut a pack over the release asset limit into parts that are each a ZIP of whole files, each with a marker naming every part, read back before the pack is removed |
@@ -1343,7 +1337,7 @@ Further options, by script:
 | `export_native.py` | `--truth-dir`, `--upstream-dir` (where the platforms' own files are cached) |
 | `find_pinned_revision.py` | `--repo URL --path FILE --md5 HASH`, `--write PATH`, `--cache-dir` |
 | `generate_db.py` | `--provenance-dir` (dump-catalog snapshots joined into the database) |
-| `generate_site.py` | `--docs-dir` (output, `docs/` by default) |
+| `generate_site.py` | `--site-dir` (the Starlight project, `website/` by default), `--docs-dir` (the pages, `src/content/docs` of that project by default) |
 | `mame_ref_audit.py` | `--write` points each stale ref at the line declaring its set, `--offline`, `--cache-dir` |
 | `migrate.py` | `--dry-run`, `--include-branches` also reads BIOS files from every remote branch |
 | `provenance_report.py` | `--provenance-dir`, `--write-derivable PATH` (with `--derive`, and the pipeline writes `derivable.json`) |
@@ -1473,8 +1467,11 @@ release. `.gitignore` is the list of them: a `bios/` path listed there is a
 release asset, whatever its size, and a committed file is served from the
 repository even past 50 MB.
 `generate_db.py` downloads them from the release when rebuilding the database,
-using `fetch_large_file()` from `common.py`. The same function is used by
-`generate_pack.py` when a file has a hash mismatch with the local variant.
+using `fetch_large_file()` from `largefiles.py`. `generate_pack.py` calls the
+same function when the file is absent locally or holds another revision than
+the entry declares, and keeps the asset only when it matches a declared hash.
+The rules for asset names, uploads and checks are on the
+[release process](release-process.md#large-files-management) page.
 
 ## Scrapers
 

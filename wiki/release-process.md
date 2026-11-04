@@ -10,16 +10,20 @@ built, checked and uploaded from the maintainer's machine.
 
 ## CI workflows overview
 
-Both workflows use only official GitHub
-actions (`actions/checkout`, `actions/setup-python`, `actions/upload-pages-artifact`,
-`actions/deploy-pages`). No third-party actions.
+Both workflows use only official GitHub actions (`actions/checkout`,
+`actions/setup-python`, `actions/setup-node`, `actions/configure-pages`,
+`actions/upload-pages-artifact`, `actions/deploy-pages`), each pinned to a
+commit. No third-party actions.
 
 Budget target: ~175 minutes/month on the GitHub free tier.
 
 | Workflow | File | Trigger |
 |----------|------|---------|
-| Deploy Site | `deploy-site.yml` | Push to main (platforms, emulators, provenance, wiki, scripts, database.json, website), manual |
-| Validation | `validate.yml` | PR and push to main touching `bios/**`, `platforms/**`, `emulators/**`, `schemas/**`, `scripts/**`, `tests/**`, `install.py`, `install.sh`, `install.ps1`, or any other input of the site build (`wiki/**`, `docs_assets/**`, `provenance/**`, `exports/**`, `install/**`, `database.json`, `release.json`, `derivable.json`, `website/**`) |
+| Deploy Site | `deploy-site.yml` | Push to main touching an input of the site, manual |
+| Validation | `validate.yml` | PR and push to main touching the collection, the code, the tests, the installer, `ports/` or an input of the site |
+
+Each workflow's `paths:` lists are the reference, and
+`tests/test_workflow_paths.py` holds them to what the site build reads.
 
 Upstream BIOS lists are not scraped on a schedule. A maintainer runs the
 scrapers by hand (see [adding a scraper](adding-a-scraper.md)), reviews the
@@ -30,12 +34,13 @@ hosted runner should rebuild and re-upload.
 
 ## deploy-site.yml - Deploy documentation site
 
-**Trigger.** Push to `main` when any of these paths change: `platforms/`,
-`emulators/`, `provenance/`, `wiki/`, `schemas/`, `tests/`, `docs_assets/`,
-`install/`, `install.py`, `database.json`, `release.json`, `website/` (the
-Starlight project: configuration, components, styles, lockfile), the
-workflow itself, and every script the build runs or imports. Also manual
-dispatch.
+**Trigger.** Push to `main` when an input of the site changes: the data
+(`platforms/`, `emulators/`, `provenance/`, `exports/`, `measurements/`,
+`database.json`, `release.json`, `derivable.json`, `install/`), the pages and
+their assets (`wiki/`, `docs_assets/`, `website/`), the installer and its two
+bootstraps the site serves, `tests/campaign/observations.yml` (the Proof lines
+of the emulator pages), the workflow itself, and every script the build runs
+or imports. Also manual dispatch.
 
 The list is the set of inputs the site is generated from. A script that
 `generate_site.py`, `generate_readme.py` or another build step starts to import
@@ -61,11 +66,17 @@ is missing.
 8. Run `validate_site.py --site-dir website/dist` on the rendered HTML
    (metadata, headings, image alternatives, duplicate ids, every local link
    and fragment again, page and search index budgets)
-9. Require the committed README and CONTRIBUTING to match what the generator
+9. Run `tests.test_site_bootstrap`: the one-line installers the site serves
+   pin their own `install.py`, and a copy that refuses every install stops
+   the deploy, the last good pair staying served
+10. Run `website/tools/search_gate.py`: the queries a visitor types must reach
+    the page that answers them through the site's own search box, and the home
+    page must stay under its weight budget
+11. Require the committed README and CONTRIBUTING to match what the generator
    just produced. `write_if_changed()` compares content with the timestamp line
    stripped, so a run that only moves the clock leaves the files untouched and
    the check stays meaningful
-10. Upload artifact, deploy to GitHub Pages
+12. Upload artifact, deploy to GitHub Pages
 
 Data contracts are validated with `scripts/validate_schemas.py` at step 3, before
 the site is generated. It refuses to run without the checkers for the `date-time`
@@ -98,18 +109,24 @@ scripts stay Python.
 **Trigger.** Pull requests and direct pushes to main that modify `bios/**`,
 `platforms/**`, `emulators/**`, `schemas/**`, `scripts/**`, `tests/**`,
 `install.py`, `install.sh` or `install.ps1` (the bootstraps pin the
-installer's SHA-256, so editing one without the other fails the run). The
-path lists are spelled out once per event because the workflow parser reads
-no YAML anchor.
+installer's SHA-256, so editing one without the other fails the run),
+`ports/**` (the handheld port bundles the installer), or any input of the site
+build. The path lists are spelled out once per event because the workflow
+parser reads no YAML anchor, and a test holds the two equal.
 
-**Concurrency.** Per-PR group on a pull request, per-ref on a push, cancel
-in-progress either way: a push series collapses to the tip.
+**Concurrency.** Per-PR group on a pull request, per-ref on a push. A pull
+request cancels its run in progress. A push to main does not: GitHub keeps one
+pending run per group and replaces it with each newer push, so main always gets
+a finished run and then its tip.
 
 Five jobs, two of which read pull request context and carry an event guard:
 
-**validate-bios** (pull requests only). Diffs the PR to find changed BIOS
-files, runs `validate_pr.py --markdown` on each, and posts the validation
-report as a PR comment (hash verification, database match status).
+**validate-bios** (pull requests only). Diffs the PR to find added,
+modified or renamed BIOS files, runs `validate_pr.py --markdown` on them and
+writes the report (hash verification, database match status) to the job
+summary. The report is also posted as a PR comment when the branch lives in
+this repository, since a fork's token cannot write one. The job fails after
+the report when a file did not validate.
 
 **validate-configs.** Runs `python scripts/validate_schemas.py --source-only`,
 which validates every platform YAML against `schemas/platform.schema.json` and
@@ -125,12 +142,19 @@ A profile written from a clone can cite lines that do not hold the value it
 declares while schemas and tests pass it. This job confronts it with its
 upstream. An edited profile is not held to it.
 
-**run-tests.** Runs `python -m unittest discover -s tests -t . -v`, then builds the
-site as Deploy Site does (`generate_site.py`, `npm run build --prefix website`,
-`validate_site.py`) whatever the suite returned. Must pass before a merge, and
-again on the commit a direct push puts at the head of main.
+**run-tests.** On Python 3.8, 3.9 and 3.12: holds `install.py` to 3.8 with
+`vermin`, sets up bubblewrap for the sandbox tests, fetches the platforms' own
+files (allowed to fail, the fidelity tests then skip) and the data
+directories, generates the site, then runs
+`python -m unittest discover -s tests -t . -v` with `RETROBIOS_OFFLINE=1`, the
+full-screen installer tests again under 3.8, and the site build
+(`npm run build --prefix website`, `validate_site.py`). The site generation,
+the suite and the build each run whatever the step before returned, so one
+red step does not hide another. Must pass before a merge, and again on the
+commit a direct push puts at the head of main.
 
-**label-pr** (pull requests only). Auto-labels the PR based on changed paths:
+**label-pr** (pull requests from a branch of this repository). Auto-labels the
+PR based on changed paths:
 
 | Path pattern | Label |
 |-------------|-------|
@@ -287,8 +311,9 @@ gh release list --json tagName,createdAt \
   | tail -n +2 | while read tag; do gh release delete "$tag" --yes --cleanup-tag; done
 ```
 
-Before a release, since 2026-10-28, a maintainer runs `python scripts/pack_probe.py run
---platform <name>` on the platforms that get a pack, and reads its findings before cutting.
+Before a release, a maintainer runs `python scripts/pack_probe.py run --platform
+<name>` on the released platforms it supports (RetroArch, Batocera and RetroBat),
+and reads its findings before cutting.
 
 ## Which platforms get a pack { #which-platforms-get-a-pack }
 

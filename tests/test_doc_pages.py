@@ -1240,5 +1240,191 @@ class ExamplesComeFromTheData(unittest.TestCase):
         self.assertEqual(cited, entry["source_ref"])
 
 
+
+
+# A command a page gives: `python scripts/X.py ...` or `python -m scripts.x.y ...`,
+# up to a comment, a pipe or the end of the line. A placeholder module
+# (`myplatform_scraper`) is what a guide asks the reader to write.
+_COMMAND = re.compile(
+    r"python3? (?:(scripts/[\w/]+\.py)|-m (scripts(?:\.\w+)+)(?![.*\w]))((?:[ \t]+[^\s#|&;`]+)*)"
+)
+_OPTION = re.compile(r"(?<![\w-])--[a-z0-9][a-z0-9-]*")
+_PLACEHOLDER = ("myplatform",)
+
+
+def _commands(text: str):
+    for number, line in enumerate(text.splitlines(), 1):
+        for match in _COMMAND.finditer(line):
+            target = match.group(1) or match.group(2)
+            if any(word in target for word in _PLACEHOLDER):
+                continue
+            yield number, target, bool(match.group(2)), match.group(3).split()
+
+
+class CitedScriptsExist(unittest.TestCase):
+    """The wiki names scripts by path. A script renamed or removed leaves a
+    command that fails, and the page says nothing until a reader runs it."""
+
+    @staticmethod
+    def missing(text: str) -> list[str]:
+        found = []
+        for number, target, module, _args in _commands(text):
+            path = ROOT / (target.replace(".", "/") + ".py" if module else target)
+            if not path.is_file():
+                found.append(f"{number}: {target}")
+        found += [
+            f"{number}: {name}"
+            for number, line in enumerate(text.splitlines(), 1)
+            for name in re.findall(r"(?<![\w./-])scripts/[\w/]+\.py", line)
+            if not (ROOT / name).is_file()
+        ]
+        return found
+
+    def test_every_cited_script_exists(self):
+        for page in sorted(WIKI.glob("*.md")):
+            with self.subTest(page=page.name):
+                self.assertEqual(self.missing(page.read_text(encoding="utf-8")), [])
+
+    def test_a_removed_script_is_named(self):
+        self.assertEqual(self.missing("python scripts/no_such_tool.py --all\n"),
+                         ["1: scripts/no_such_tool.py", "1: scripts/no_such_tool.py"])
+
+
+class CitedOptionsExist(unittest.TestCase):
+    """Every option a command on a wiki page passes is one the script's own
+    parser lists, read from its --help (a subcommand's when the command names
+    one). A renamed flag otherwise survives on the page as a command that
+    exits 2."""
+
+    _helps: dict[tuple[str, str], str] = {}
+
+    @classmethod
+    def help_text(cls, target: str, module: bool, sub: str = "") -> str:
+        key = (target, sub)
+        if key not in cls._helps:
+            import subprocess  # noqa: PLC0415
+
+            argv = [sys.executable, *(["-m", target] if module else [target])]
+            proc = subprocess.run(
+                [*argv, *([sub] if sub else []), "--help"],
+                cwd=ROOT, capture_output=True, text=True, timeout=120,
+            )
+            cls._helps[key] = proc.stdout if proc.returncode == 0 else ""
+        return cls._helps[key]
+
+    @classmethod
+    def subcommands(cls, target: str, module: bool) -> list[str]:
+        usage = cls.help_text(target, module).split("\n\n", 1)[0]
+        choice = re.search(r"\{([\w,-]+)\}", usage)
+        return choice.group(1).split(",") if choice else []
+
+    @classmethod
+    def unknown(cls, text: str) -> list[str]:
+        found = []
+        for number, target, module, args in _commands(text):
+            subs = cls.subcommands(target, module)
+            sub = args[0] if args and args[0] in subs else ""
+            known = set(_OPTION.findall(cls.help_text(target, module, sub)))
+            if not sub:
+                for other in subs:
+                    if not other.startswith("_"):
+                        known |= set(_OPTION.findall(cls.help_text(target, module, other)))
+            if not known:
+                found.append(f"{number}: {target} prints no --help")
+                continue
+            found += [
+                f"{number}: {target} {sub} {option}".replace("  ", " ")
+                for arg in args
+                for option in _OPTION.findall(arg.split("=", 1)[0])
+                if arg.startswith(option) and option not in known
+            ]
+        return found
+
+    def test_every_cited_option_is_in_the_parser(self):
+        for page in sorted(WIKI.glob("*.md")):
+            with self.subTest(page=page.name):
+                self.assertEqual(self.unknown(page.read_text(encoding="utf-8")), [])
+
+    def test_an_unknown_option_is_named(self):
+        self.assertEqual(
+            self.unknown("python scripts/campaign.py status --budget 6h\n"),
+            ["1: scripts/campaign.py status --budget"],
+        )
+
+
+class PipelineStepsMatchTheRun(unittest.TestCase):
+    """The step numbers the pages give are the ones pipeline.py prints. The
+    testing guide called the integrity check "step 6/8" in a run of 24 steps
+    numbered by label, and the tools table can lose or keep a step the run
+    no longer has."""
+
+    @staticmethod
+    def labels() -> list[str]:
+        import pipeline  # noqa: PLC0415
+
+        return [pipeline.step_number(key) for key in pipeline.STEP_LABELS]
+
+    @staticmethod
+    def cited(text: str) -> list[str]:
+        """Step numbers a sentence attributes to the pipeline."""
+        found = []
+        for match in re.finditer(
+            r"(?i)pipeline steps? ((?:\d[a-z0-9]*(?:/\d+)?(?:, | and | or )?)+)"
+            r"|steps? (\d[a-z0-9]*(?:/\d+)?) of the pipeline",
+            text,
+        ):
+            found += re.findall(r"\d[a-z0-9]*(?:/\d+)?", match.group(1) or match.group(2))
+        return found
+
+    def test_the_table_lists_every_step_in_order(self):
+        section = _section(_page("tools.md"), "Pipeline")
+        table = re.findall(r"^\| (\d[a-z0-9]*) \|", section, re.M)
+        self.assertEqual(table, self.labels())
+
+    def test_steps_named_in_the_pipeline_section_exist(self):
+        section = _section(_page("tools.md"), "Pipeline")
+        labels = set(self.labels())
+        named = [
+            step
+            for clause in re.findall(r"(?i)\bsteps? ((?:\(?\d[a-z0-9]*\)?(?:, | and |, and )?)+)", section)
+            for step in re.findall(r"\d[a-z0-9]*", clause)
+        ]
+        named += [step for group in re.findall(r"\(((?:\d[a-z0-9]*, )+\d[a-z0-9]*)\)", section)
+                  for step in group.split(", ")]
+        self.assertTrue(named)
+        self.assertEqual(sorted(set(named) - labels), [])
+
+    def test_every_page_cites_a_step_the_run_has(self):
+        labels = set(self.labels())
+        for page in sorted(WIKI.glob("*.md")):
+            with self.subTest(page=page.name):
+                self.assertEqual(
+                    [step for step in self.cited(page.read_text(encoding="utf-8"))
+                     if step not in labels], [])
+
+    def test_a_fraction_of_steps_is_refused(self):
+        self.assertEqual(self.cited("Integrated as pipeline step 6/8 (runs after"), ["6/8"])
+        self.assertEqual(self.cited("pipeline steps 3a and 4d"), ["3a", "4d"])
+
+
+class SiteOutputIsTheStarlightProject(unittest.TestCase):
+    """generate_site.py writes into website/ since the move to Starlight,
+    while tools.md still gave `docs/` as the default of --docs-dir and as a
+    path the pipeline holds, and the testing guide measured pages in `docs/`."""
+
+    PAGES = ("tools.md", "testing-guide.md", "release-process.md",
+             "reading-reports.md", "measurements.md")
+    BARE_DOCS = re.compile(r"(?<![\w/.-])docs/(?!\w)")
+
+    def test_no_page_names_a_docs_folder(self):
+        for name in self.PAGES:
+            with self.subTest(page=name):
+                self.assertEqual(self.BARE_DOCS.findall(_page(name)), [])
+
+    def test_the_old_wording_is_caught(self):
+        self.assertTrue(self.BARE_DOCS.search("| `--docs-dir` (output, `docs/` by default) |"))
+        self.assertFalse(self.BARE_DOCS.search("`website/src/content/docs/`"))
+
+
 if __name__ == "__main__":
     unittest.main()
