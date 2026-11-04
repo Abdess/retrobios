@@ -371,19 +371,19 @@
 	.sl-markdown-content :is(td.rb-reason, td[data-label='Reason'], td:has(> .rb-reason)) { min-width: 12rem; }
 
 	/* Get your files: every group table shares one set of columns. */
-	.sl-markdown-content :is(table.rb-packs, table:has(td[data-label='Runs on']):has(td[data-label='ZIP'])) {
+	.sl-markdown-content table:has(td[data-label='Runs on']):has(td[data-label='ZIP']) {
 		display: table;
 		table-layout: fixed;
 		width: 100%;
 	}
-	.sl-markdown-content :is(table.rb-packs, table:has(td[data-label='Runs on']):has(td[data-label='ZIP'])) th:nth-child(1) { width: 18%; }
-	.sl-markdown-content :is(table.rb-packs, table:has(td[data-label='Runs on']):has(td[data-label='ZIP'])) th:nth-child(2) { width: 20%; }
-	.sl-markdown-content :is(table.rb-packs, table:has(td[data-label='Runs on']):has(td[data-label='ZIP'])) th:nth-child(3) { width: 40%; }
-	.sl-markdown-content :is(table.rb-packs, table:has(td[data-label='Runs on']):has(td[data-label='ZIP'])) th:nth-child(4) { width: 22%; }
-	.sl-markdown-content :is(table.rb-packs, table:has(td[data-label='Runs on']):has(td[data-label='ZIP'])) td { overflow-wrap: break-word; }
+	.sl-markdown-content table:has(td[data-label='Runs on']):has(td[data-label='ZIP']) th:nth-child(1) { width: 18%; }
+	.sl-markdown-content table:has(td[data-label='Runs on']):has(td[data-label='ZIP']) th:nth-child(2) { width: 20%; }
+	.sl-markdown-content table:has(td[data-label='Runs on']):has(td[data-label='ZIP']) th:nth-child(3) { width: 40%; }
+	.sl-markdown-content table:has(td[data-label='Runs on']):has(td[data-label='ZIP']) th:nth-child(4) { width: 22%; }
+	.sl-markdown-content table:has(td[data-label='Runs on']):has(td[data-label='ZIP']) td { overflow-wrap: break-word; }
 }
 /* A ZIP part link or button never breaks across two lines. */
-.sl-markdown-content :is(table.rb-packs, table:has(td[data-label='Runs on']):has(td[data-label='ZIP'])) td:last-child :is(a, .rb-button) { white-space: nowrap; }
+.sl-markdown-content table:has(td[data-label='Runs on']):has(td[data-label='ZIP']) td:last-child :is(a, .rb-button) { white-space: nowrap; }
 
 /* Key and value cards: the empty header row is not drawn */
 .rb-meta-card thead,
@@ -636,8 +636,8 @@ body:has(table.rb-entries) { --sl-content-width: var(--rb-grid-width); }
 .sl-markdown-content details.rb-details > summary::before { background-color: var(--rb-text-secondary); }
 .sl-markdown-content details.rb-details[open] > summary { margin-bottom: 0.6rem; }
 
-/* A platform's file list (generate_site._platform_file_list), on the
-   pattern of the Tested block: each row a details whose summary is the
+/* A platform's file list (generate_site._platform_file_list): each row
+   a details whose summary is the
    row (name, folder, status), its body the evidence across the whole
    list. The short hash sits on its copy button (site.ts) beside the
    summary, since a summary is itself a control. The details reaches under

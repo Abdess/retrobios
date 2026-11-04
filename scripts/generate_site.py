@@ -5295,12 +5295,19 @@ def generate_provenance_page(
                 kept.append(entry)
         data["missing"] = kept
     total_missing = distinct_missing(report)
+    # The three counts below added up to more than the total above it.
+    listed = sum(len(data["missing"]) for data in report.values())
+    overlap = (
+        f" A dump two catalogs describe is listed under each, so the lists "
+        f"hold {listed:,} rows."
+        if listed != total_missing else ""
+    )
     lines.extend(
         [
             "## Wanted: catalogued dumps this project does not have",
             "",
             f"The tables below list **{total_missing:,}** dumps a catalog "
-            "describes and the collection lacks. Nothing here ships in any "
+            f"describes and the collection lacks.{overlap} Nothing here ships in any "
             "pack: it is an acquisition list, published with hashes so anyone "
             "can check a personal collection against it. A contribution "
             "matching one of these hashes is welcome: see "
@@ -10060,7 +10067,8 @@ def _copy_cell(path: str, algos: list[str], db: dict | None) -> str:
 
 
 def _render_problem_files(
-    platform_problems: list, settled: list | None = None, db: dict | None = None
+    platform_problems: list, settled: list | None = None, db: dict | None = None,
+    missing_total: int | None = None,
 ) -> list[str]:
     """Files a platform declares that its own check then rejects.
 
@@ -10106,12 +10114,17 @@ def _render_problem_files(
             entry["platforms"].append(p["platform"])
 
     total_problems = len(missing_files) + len(untested_files) + len(mismatch_files)
+    # One row per name: the page opened on "48 are missing", counted by
+    # destination, above a heading that said "10 files". Both are said.
+    names = _count(len(missing_files), "name")
+    missing_said = (f"{missing_total:,} missing under {names}"
+                    if missing_total is not None else f"{len(missing_files)} missing")
 
     if total_problems > 0:
         lines.extend([
             "## Problem files",
             "",
-            f"{len(missing_files)} missing, {len(untested_files)} untested, "
+            f"{missing_said}, {len(untested_files)} untested, "
             f"{len(mismatch_files)} discrepancy.",
             "",
         ])
@@ -10119,13 +10132,14 @@ def _render_problem_files(
         if missing_files:
             lines.extend([
                 f'### Missing <span class="rb-badge rb-badge-danger">'
-                f"{_count(len(missing_files), 'file')}</span>",
+                f"{_count(len(missing_files), 'name')}</span>",
                 "",
                 "Required is the platform's own flag. Category says what the "
                 "platform's emulators do with the file: `bios` is firmware they "
                 "load, `game_data` comes from a copy of the game, `unread` is "
                 "opened by none of them. Only a missing `bios` entry stops a "
-                "console from starting.",
+                "console from starting. A name a list declares in several "
+                "folders is one row.",
                 "",
                 "| File | Category | Required | Platforms |",
                 "|------|----------|----------|-----------|",
@@ -10440,9 +10454,9 @@ def generate_gap_analysis(
             prof_cell = gt_cell = "-"
         elif gt["total"]:
             prof_pct = f"{gt.get('with_profile', 0) / gt['total'] * 100:.0f}%"
-            prof_cell = f"{gt.get('with_profile', 0)} ({prof_pct})"
+            prof_cell = f"{gt.get('with_profile', 0):,} ({prof_pct})"
             gt_pct = f"{gt['with_validation'] / gt['total'] * 100:.0f}%"
-            gt_cell = f"{gt['with_validation']} ({gt_pct})"
+            gt_cell = f"{gt['with_validation']:,} ({gt_pct})"
         else:
             prof_cell = gt_cell = "0"
         lines.append(
@@ -10513,14 +10527,14 @@ def generate_gap_analysis(
         "so there is nothing to compare: the platform's own source is the "
         "only authority for its files.",
         "",
-        "The same comparison drives `scripts/exporter/`: each platform's "
-        "own file can be regenerated in its native format with these "
-        "differences applied (System.dat, es_bios.xml, "
-        "batocera-systems.json, ...).",
+        "The same comparison feeds the [updated platform files](exports.md): "
+        "each platform's own file, patched with these differences and kept "
+        "in its native format (System.dat, es_bios.xml, batocera-systems, ...).",
         "",
     ])
 
-    lines.extend(_render_problem_files(platform_problems, settled_problems, db))
+    lines.extend(_render_problem_files(platform_problems, settled_problems, db,
+                                       total_missing_verify))
 
     # ---- Section 3: Core complement (cross-reference provenance) ----
 
@@ -10572,8 +10586,8 @@ def generate_gap_analysis(
             f"{src_totals['missing']:,} to source.",
             "",
             "This counts every profiled emulator, including those no platform "
-            "ships yet, so it reaches past what the pack tables above measure: "
-            "those cover only the emulators each platform actually ships. "
+            "ships yet, so it reaches past what the first table above counts: "
+            "it covers only the emulators each platform actually ships. "
             "Whatever is not in the collection is an acquisition target, named "
             "per emulator below.",
             "",
@@ -11027,6 +11041,12 @@ def generate_cross_reference(
     total_upstreams = len({
         upstream_project(_xref_upstream(p))[0] for p in unique.values() if _xref_upstream(p)
     })
+    # "623 cores across 18 platforms" counted every profile: 91 of them
+    # no platform runs.
+    run_cores = len({
+        key for cov in coverages.values()
+        for key in resolve_platform_cores(cov["config"], unique)
+    })
 
     lines = [
         "# Cores by platform",
@@ -11035,8 +11055,9 @@ def generate_cross_reference(
         "it comes from. A core built for RetroArch is often a port of another "
         "emulator, and the two can differ in the files they read and the checks "
         "they make, so each core names its upstream project. "
-        f"{total_cores} cores across {len(coverages)} platforms come from "
-        f"{total_upstreams} upstream projects.",
+        f"{total_cores} cores are profiled, {run_cores} of them run by the "
+        f"{len(coverages)} platforms, and they come from {total_upstreams} "
+        "upstream projects.",
         "",
         "The files a platform's emulators load and its own list does not name are "
         "counted on [What the packs do not hold](gaps.md).",

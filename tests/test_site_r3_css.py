@@ -11,7 +11,9 @@ import unittest
 
 from tests.test_site_r2_css import CSS_PATH, PAGE_BG, _blocks, _ratio, _rules, _strip_comments, _theme_tokens
 
-PACKS = "table.rb-packs"
+# The Get your files tables: no class reaches them, the Markdown table is
+# matched by the cells the generator labels.
+PACKS = "table:has(td[data-label='Runs on']):has(td[data-label='ZIP'])"
 
 
 class ThemeStylesheetRound3(unittest.TestCase):
